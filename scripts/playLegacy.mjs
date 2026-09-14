@@ -37,6 +37,8 @@ const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
 const errors = [];
 
+const legacyTile = page => page.locator('[data-tile]', { hasText: 'Legacy' });
+
 async function openGame() {
   const page = await ctx.newPage();
   page.on('pageerror', e => errors.push(String(e)));
@@ -72,7 +74,8 @@ async function doctorSave(mutate) {
 console.log('1) A fresh club: the boardroom is there, locked, honest');
 {
   const page = await openGame();
-  const drawerBtn = page.locator('[data-legacy-drawer]');
+  /* Round 583: the boardroom is a tile in the office now, opened by its title. */
+  const drawerBtn = legacyTile(page);
   say(await drawerBtn.count() === 1, 'the Legacy drawer button is on the page');
   say(!/pts/.test(await drawerBtn.innerText()), 'no point balance is shown when there is nothing to spend');
   await drawerBtn.click();
@@ -95,8 +98,8 @@ console.log('2) A banked balance buys a perk through the real screen');
 {
   say(await doctorSave('s.legacyPoints = 10;'), 'the farewell save existed to doctor');
   const page = await openGame();
-  say(/10 pts/.test(await page.locator('[data-legacy-drawer]').innerText()), 'the drawer button carries the 10 point balance');
-  await page.locator('[data-legacy-drawer]').click();
+  say(/10 pts/.test(await legacyTile(page).innerText()), 'the drawer button carries the 10 point balance');
+  await legacyTile(page).click();
   await page.waitForTimeout(500);
   const swayCard = page.locator('[data-legacy-board] [data-perk="sway"]');
   say(await swayCard.count() === 1, 'the Sway card is addressable');
@@ -118,7 +121,7 @@ console.log('3) The sell-up button quotes its legacy, and selling banks it');
   say(/\+1 legacy point/.test(sellText), `a bottom-league sale quotes +1 legacy point (${sellText.trim().slice(0, 60)})`);
   await sell.click();
   await page.waitForTimeout(800);
-  await page.locator('[data-legacy-drawer]').click();
+  await legacyTile(page).click();
   await page.waitForTimeout(500);
   const banked = await page.locator('[data-legacy-board]').innerText();
   say(/8 points to spend/.test(banked), 'the sale banked its point (7 held + 1 for the sale = 8)');

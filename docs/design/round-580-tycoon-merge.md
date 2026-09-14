@@ -890,8 +890,42 @@ rows above:
   hook, the engine and the help read one number each.
 - **The academy guide** has only its two corrected lines claimed ("about a quarter more", and the
   move up leaving cash behind). Its full table comes with the 589 fold.
-- **Goal and conceded events carry `minute`** from this half, for the replays in part two, where
-  `simTycoonLeague` section 2 also starts checking goal minutes.
+- **Goal and conceded events carry `minute`** from this half, for the replays in part two.
+
+**As built, part two: the pitch, the office tiles, and every number on the screen.**
+- **`src/components/tycoon/TycoonPitch.tsx`** carries the pitch: a vertical halfway line, centre
+  circle, both penalty areas, six yard boxes and nets; 22 players from a static 11 entry 4-3-3,
+  mirrored; idle drift by CSS keyframes with `seatRand` phases; the ball at a spot hashed from
+  `totalMatches` and the minute, so it moves with the match clock; the scoring side's shape pushed
+  up by a class during its replay. The 1900 ms interval is gone.
+- **Replays come from the hook's queue**, one entry per `goal` or `conceded` event with its side and
+  minute, written only while the Stadium room is visible (`watchReplays`), so a goal scored under
+  the League or Academy tab is on the scoreboard on return and never replayed late. A replay runs
+  1.3 seconds; with more than two queued the head lands on its final frame for 0.25 seconds. The
+  goal floater reads "GOAL 34' +$X" and a conceded one "34' they score".
+- **Tap feedback**: a 1.02 pop over 120 ms (two identical keyframes alternate so every tap restarts
+  it), six sparks at `seatRand` angles, and a "12 taps" chip that clears after 1.5 seconds idle.
+  The keyboard button from part one shares it. The contract's `role="button"` on the pitch was not
+  used, for the reason part one gave.
+- **The office**: five tiles (Upgrades, Payroll, Badges, Legacy, Records), one panel open at a
+  time, Upgrades on arrival. The Legacy tile keeps `data-legacy-drawer`, `data-sell-up` and
+  `data-perk` stay, and `playLegacy` opens the boardroom by the tile's title.
+- **Every number on the screen**, not only in the modal: `simTycoonHelp` section M2 parses the page,
+  the hook and the pitch with the TypeScript compiler and fails on any digit or number word in
+  player-facing text that no claim backs, and section L1 does the same for the engine's blurbs. It
+  found the away card's "half speed" (wrong for anyone holding the Away Day Deal, which pays 65 or
+  80 percent), the Sell up button's typed "+50%", the boardroom's typed "1 for the sale plus 1 per
+  division, so a Summit sale pays 10", the badge panel's "+2% to everything you earn", and the
+  sale note's `pointsForSale(s) + 1`; each now reads the engine. `HYPE_MULT`, `FRENZY_MULT` and
+  `TAP_RUSH_MULT` are exported so the payout and the words that name it are one number, and the
+  tap comment now says reputation counts twice in a tap on purpose.
+- **Harness `scripts/simTycoonPitch.mjs`** (suite `src/test/tycoonPitch.test.tsx`): 186 goals over
+  30 watched matches replayed one for one by end and minute with no goal waiting over 7 frames; 15
+  goals under the League tab and none replayed on return; reduced motion holds the ball in play
+  with no sparks or pop while floaters land; the chip, sparks, pop and 22 players; the tiles; a
+  360 goal storm shown in order with 179 landing on their final frame. Controls `decor`, `backlog`,
+  `motion`, `xchip`, `deadtiles`, `nolanding`, and source controls `interval` and `random`.
+  `simTycoonHelp` adds controls `typedscreen` and `typedblurb`.
 
 ### Round 584: Away matchdays (rides alone)
 

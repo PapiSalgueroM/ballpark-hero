@@ -150,7 +150,7 @@ describe('Stadium Tycoon tells the truth', () => {
     const missing: string[] = [];
     for (const e of paid) {
       const money = fmtMoney(e.amount as number);
-      const want = e.kind === 'goal' ? `GOAL! +${money}` : e.kind === 'win' ? `FULL TIME WIN +${money}` : e.kind === 'milestone' ? `🏁 ${e.label} +${money}` : `${e.label} +${money}`;
+      const want = e.kind === 'goal' ? `GOAL ${e.minute}' +${money}` : e.kind === 'win' ? `FULL TIME WIN +${money}` : e.kind === 'milestone' ? `🏁 ${e.label} +${money}` : `${e.label} +${money}`;
       if (!seen.has(want) && missing.length < 5) missing.push(`${e.kind} paid ${e.amount} and no floater read "${want}"`);
     }
     expect(missing, missing.join('; ')).toEqual([]);

@@ -11,7 +11,7 @@ import {
   TycoonState, TickEvent, newTycoon, tick, buy, tap, prestige,
   offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,
   activateBoost, hire, catchGolden, rollGoldenKind, goldenActive, ACH_BONUS,
-  GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName, GOLDEN_CATCH_SEC, GOLDEN_MEAN_GAP_SEC,
+  GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName, GOLDEN_CATCH_SEC, GOLDEN_MEAN_GAP_SEC, HYPE_MULT,
 } from '@/lib/stadiumTycoon';
 import type { GoldenKind, LeagueClub } from '@/lib/stadiumTycoon';
 
@@ -45,6 +45,9 @@ export interface BadgeEarned { label: string; seq: number }
 /** Round 582 review: the season that just ended, so the League tab can show how
  *  it finished instead of silently wiping the table. This sitting only. */
 export interface LastSeason { label: string; position: number; table: LeagueClub[] }
+/** Round 583: one goal the pitch replays, straight off the engine's event: which
+ *  end it went in and the minute the engine committed it. Never a second roll. */
+export interface Replay { id: number; side: 'for' | 'against'; minute: number }
 
 export function useStadiumTycoon() {
   const [state, setState] = useState<TycoonState>(() => {
@@ -62,6 +65,11 @@ export function useStadiumTycoon() {
   const [promotion, setPromotion] = useState<Promotion | null>(null);
   const [badge, setBadge] = useState<BadgeEarned | null>(null);
   const [lastSeason, setLastSeason] = useState<LastSeason | null>(null);
+  /* Round 583: goals waiting for the pitch. Queued only while the pitch is on
+     screen: a goal scored while you are in another room is on the scoreboard
+     when you come back, and is never replayed late. */
+  const [replays, setReplays] = useState<Replay[]>([]);
+  const replaysOnRef = useRef(true);
   /* Round 581: the ref is the truth and it is written FIRST. Every change
      computes from the ref, assigns the ref, saves if it has to, and only then
      tells React. It used to be assigned during render, so between an action and
@@ -170,8 +178,12 @@ export function useStadiumTycoon() {
       if ((e.kind === 'title' || e.kind === 'seasonEnd') && e.table && e.position !== undefined) {
         setLastSeason({ label: e.label ?? 'Season over', position: e.position, table: e.table });
       }
+      if ((e.kind === 'goal' || e.kind === 'conceded') && e.minute !== undefined && replaysOnRef.current) {
+        const replay: Replay = { id: floaterSeq++, side: e.kind === 'goal' ? 'for' : 'against', minute: e.minute };
+        setReplays(q => [...q, replay]);
+      }
       if (e.kind === 'goal') {
-        pushFloater(`GOAL! +${fmtMoney(e.amount ?? 0)}`, 'goal', 30 + Math.random() * 40, 20 + Math.random() * 25);
+        pushFloater(`GOAL ${e.minute}' +${fmtMoney(e.amount ?? 0)}`, 'goal', 30 + Math.random() * 40, 20 + Math.random() * 25);
         setConfetti(c => c + 1);
       } else if (e.kind === 'win') {
         pushFloater(`FULL TIME WIN +${fmtMoney(e.amount ?? 0)}`, 'win', 32, 12);
@@ -201,7 +213,7 @@ export function useStadiumTycoon() {
         setConfetti(c => c + 1);
         setBadge({ label: e.label, seq: floaterSeq++ });
       } else if (e.kind === 'conceded') {
-        pushFloater('they score', 'bad', 25 + Math.random() * 50, 55 + Math.random() * 25);
+        pushFloater(`${e.minute}' they score`, 'bad', 25 + Math.random() * 50, 55 + Math.random() * 25);
       } else if (e.kind === 'loss') {
         pushFloater('full time. beaten', 'bad', 34, 14);
       }
@@ -283,7 +295,7 @@ export function useStadiumTycoon() {
     const before = stateRef.current;
     const after = activateBoost(before);
     if (after !== before) {
-      pushFloater('MATCHDAY HYPE x2!', 'win', 30, 18);
+      pushFloater(`MATCHDAY HYPE x${HYPE_MULT}!`, 'win', 30, 18);
       setConfetti(c => c + 1);
       commit(after);
     }
@@ -329,11 +341,19 @@ export function useStadiumTycoon() {
   const dismissAway = useCallback(() => setAwayPay(null), []);
   const dismissPromotion = useCallback(() => setPromotion(null), []);
   const dismissBadge = useCallback(() => setBadge(null), []);
+  /* Round 583: the pitch says when a replay has finished, and whether it is on
+     screen at all. Turning it on or off drops anything queued. */
+  const endReplay = useCallback((id: number) => setReplays(q => q.filter(r => r.id !== id)), []);
+  const watchReplays = useCallback((on: boolean) => {
+    replaysOnRef.current = on;
+    setReplays(q => (q.length ? [] : q));
+  }, []);
 
   return {
     state, floaters, awayPay, dismissAway, confetti,
     doBuy, doTap, doPrestige, doBoost,
     golden, doCatchGolden, doHire, doLegacyPerk,
     promotion, dismissPromotion, badge, dismissBadge, doSetClubName, lastSeason,
+    replays, endReplay, watchReplays,
   };
 }

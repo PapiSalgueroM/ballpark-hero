@@ -208,7 +208,17 @@ instead, shipped live as `79bddedc`, so the tycoon arc is 580 to 589 and the con
   bonuses ("everything pays x2", "everything pays x7"), the guide's worked example was false at
   its own clock, and "400 fans and $12/s" could not happen. `scripts/simTycoonHelp.mjs`: 5 page
   tests over 1,196 taps to $9.8T and 553 paying events, 49 engine claims with an untracked-number
-  scan, 9 controls. Part two (the pitch, replays, tiles) follows with `simTycoonPitch`. I have skipped 570 to 579 on purpose, because the
+  scan, 9 controls. Part two (the pitch, replays, tiles) follows with `simTycoonPitch`.
+- **583 part two: the pitch plays the engine's match.** A new `TycoonPitch` with 22 players in a
+  4-3-3, a vertical halfway line and nets replays every goal the engine commits once, at the end it
+  went in, stamped with its minute, and only while the pitch is on screen; the old 1900ms
+  decoration timer is gone. Taps pop the pitch, throw six sparks and count on a "12 taps" chip.
+  The Stadium tab's lower half is five tiles (Upgrades, Payroll, Badges, Legacy, Records). The
+  number scan now covers every word on the screen and the engine's blurbs, and it found the away
+  card's "half speed" (wrong with the Away Day Deal), a typed +50% on Sell up and a typed legacy
+  point rule; all read the engine now. `scripts/simTycoonPitch.mjs`: 6 page tests (186 goals over
+  30 matches one for one, no late replays after another tab, reduced motion, a 360 goal storm), 8
+  controls; `simTycoonHelp` gains sections M2 and L1 with 2 more controls. I have skipped 570 to 579 on purpose, because the
 note directly below offered 570 onward to the tablet lane as overflow and I do not want to take
 numbers somebody may already be holding. Tablet lane: 551 to 559 and 570 to 579 are yours.
 

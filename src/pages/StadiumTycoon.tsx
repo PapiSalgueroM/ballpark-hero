@@ -23,7 +23,7 @@
 import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { cn } from '@/lib/utils';
-import { HelpCircle, Star, Flame, X } from 'lucide-react';
+import { HelpCircle, Star, X } from 'lucide-react';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -38,11 +38,13 @@ import {
   STAFF, staffLevelOf, staffCostOf, canHire, totalStaffLevels,
   ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
-  totalPerkLevels, pointsForSale,
+  totalPerkLevels, pointsForSale, HYPE_MULT,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
+import TycoonPitch from '@/components/tycoon/TycoonPitch';
+import type { TapFx } from '@/components/tycoon/TycoonPitch';
 import type { AcademyStatus, Room } from '@/lib/tycoonRooms';
 
 const AcademyPanel = lazy(() => import('@/components/tycoon/AcademyPanel'));
@@ -62,7 +64,16 @@ function seatRand(i: number): number {
   return x - Math.floor(x);
 }
 
+/** Round 583: a rate under ten dollars a second keeps its cents, so a new club
+ *  reads $4.50 a second as the rules say, and a Turnstile Steward $0.60, not $0. */
+function fmtRate(n: number): string {
+  return n < 10 ? `$${n.toFixed(2)}` : fmtMoney(n);
+}
+
 const CONFETTI_COLORS = ['#22c55e', '#eab308', '#3b82f6', '#ef4444', '#a855f7', '#f97316'];
+
+/** Round 583: the Stadium tab's office panels, one open at a time. */
+type OfficePanel = 'upgrades' | 'payroll' | 'ach' | 'legacy' | 'stats';
 
 export default function StadiumTycoon() {
   const g = useStadiumTycoon();
@@ -287,15 +298,32 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
   useEffect(() => {
     try { if (!localStorage.getItem(TYCOON_SAVE_KEY)) setShowHelp(true); } catch { /* storage blocked: leave it closed */ }
   }, []);
-  /* Round 162: the drawers (Round 196 added the boardroom). Tiles per the
-     house style: each opens its own panel instead of stretching the page. */
-  const [drawer, setDrawer] = useState<'none' | 'ach' | 'stats' | 'legacy'>('none');
+  /* Round 162: the drawers (Round 196 added the boardroom). Round 583: all five
+     rooms of the office are tiles now, one panel open at a time, Upgrades first
+     because buying is the loop. */
+  const [panel, setPanel] = useState<OfficePanel>('upgrades');
   const [burst, setBurst] = useState<{ id: number; pieces: { x: number; d: number; c: string; r: number }[] } | null>(null);
   const pitchRef = useRef<HTMLDivElement | null>(null);
   /* Round 583: floaters are positioned inside the pitch, so the tap is measured
      on the pitch too. It was measured on the stand-plus-pitch wrapper, which put
      every tap floater below where the finger landed. */
   const pitchAreaRef = useRef<HTMLDivElement | null>(null);
+  /* Round 583: a tap's pop and sparks, and the taps chip. Display only: the tap
+     is the hook's, and the chip counts taps, it never multiplies them. */
+  const [tapFx, setTapFx] = useState<TapFx | null>(null);
+  const [tapRun, setTapRun] = useState(0);
+  const tapRunTimer = useRef<number | undefined>(undefined);
+  useEffect(() => () => window.clearTimeout(tapRunTimer.current), []);
+  const tapAt = (x: number, y: number) => {
+    g.doTap(x, y);
+    setTapFx(f => ({ seq: (f?.seq ?? 0) + 1, x, y }));
+    setTapRun(r => r + 1);
+    window.clearTimeout(tapRunTimer.current);
+    tapRunTimer.current = window.setTimeout(() => setTapRun(0), 1500);
+  };
+  /* Round 583: goals are replayed only while the pitch is on screen. */
+  const { watchReplays } = g;
+  useEffect(() => { watchReplays(visible); }, [visible, watchReplays]);
 
   const fans = attendance(s);
   const cap = capacity(s);
@@ -307,6 +335,17 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
   const lgPos = lg ? leaguePosition(lg) : 0;
   const atSummit = divisionIndex(s) >= DIVISIONS.length - 1;
   const achCount = (s.ach ?? []).length;
+  const pts = legacyPointsOf(s);
+  const affordable = TRACKS.filter(t => canBuy(s, t.id)).length;
+  const officeTiles: { key: OfficePanel; icon: string; title: string; value: string; accent: boolean }[] = [
+    { key: 'upgrades', icon: '🏗️', title: 'Upgrades', value: affordable > 0 ? `${affordable} ready` : 'saving up', accent: false },
+    { key: 'payroll', icon: '🧑‍🤝‍🧑', title: 'Payroll', value: `${totalStaffLevels(s)} hired`, accent: false },
+    { key: 'ach', icon: '🏅', title: 'Badges', value: `${achCount}/${ACHIEVEMENTS.length}`, accent: false },
+    { key: 'legacy', icon: '🏛️', title: 'Legacy', value: pts > 0 ? `${pts} pts` : 'boardroom', accent: pts > 0 },
+    { key: 'stats', icon: '📊', title: 'Records', value: `${s.totalWins.toLocaleString()} wins`, accent: false },
+  ];
+  /* What a sale pays once this league is won: the engine's answer one division up. */
+  const saleAfterTitle = lg ? pointsForSale({ ...s, league: { ...lg, division: Math.min(lg.division + 1, DIVISIONS.length - 1) } }) : pointsForSale(s);
 
   // Goal confetti: a fresh burst every time the hook's counter moves.
   useEffect(() => {
@@ -322,32 +361,9 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
     return () => clearTimeout(t);
   }, [g.confetti]);
 
-  /* The toy match: 10 dots and a ball, all eased toward posts that reshuffle
-     every couple of seconds, biased toward whichever end the score momentum
-     points at. Pure decoration driven by real sim state. */
-  const [phase, setPhase] = useState(0);
-  useEffect(() => {
-    const id = setInterval(() => setPhase(p => p + 1), 1900);
-    return () => clearInterval(id);
-  }, []);
-  const dots = useMemo(() => {
-    const attacking = s.goalsFor >= s.goalsAgainst;
-    return Array.from({ length: 10 }, (_, i) => {
-      const ours = i < 5;
-      const jitterX = seatRand(phase * 17 + i * 3) * 30;
-      const jitterY = seatRand(phase * 29 + i * 7) * 56;
-      const homeBase = ours ? (attacking ? 48 : 28) : (attacking ? 62 : 40);
-      return {
-        x: Math.max(6, Math.min(94, homeBase + jitterX - 15)),
-        y: Math.max(12, Math.min(88, 22 + jitterY)),
-        ours,
-      };
-    });
-  }, [phase, s.goalsFor, s.goalsAgainst]);
-  const ball = useMemo(() => ({
-    x: 20 + seatRand(phase * 41) * 60,
-    y: 25 + seatRand(phase * 53) * 50,
-  }), [phase]);
+  /* Round 583: the toy match used to reshuffle ten dots and a ball on a 1900ms
+     timer that knew nothing about the goals. The pitch is TycoonPitch now, and
+     everything on it moves with the engine's match. */
 
   /* The crowd: one dot per ~14 fans, placed deterministically so the stand
      fills seat by seat as attendance really grows. Capped for perf. */
@@ -384,7 +400,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
     if (!el) return;
     const r = el.getBoundingClientRect();
     const pct = (v: number) => (Number.isFinite(v) ? Math.min(100, Math.max(0, v)) : 50);
-    g.doTap(pct(((e.clientX - r.left) / r.width) * 100), pct(((e.clientY - r.top) / r.height) * 100));
+    tapAt(pct(((e.clientX - r.left) / r.width) * 100), pct(((e.clientY - r.top) / r.height) * 100));
   };
 
   if (!visible) return null;
@@ -419,8 +435,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           <div>
             <div className="text-3xl md:text-4xl font-bold font-display text-gold tabular-nums">{fmtMoney(s.money)}</div>
             <div className="text-[11px] text-muted-foreground">
-              +{fmtMoney(rate)}/s
-              {boostActive(s) && <span className="text-yellow-400 font-bold"> · HYPE x2 ({Math.ceil(s.boostLeftSec)}s)</span>}
+              +{fmtRate(rate)}/s
+              {boostActive(s) && <span className="text-yellow-400 font-bold"> · HYPE x{HYPE_MULT} ({Math.ceil(s.boostLeftSec)}s)</span>}
               {goldenActive(s) && s.goldenKind && (
                 <span className="text-amber-300 font-bold"> · {GOLDEN_INFO[s.goldenKind].label} ({Math.ceil(s.goldenLeftSec ?? 0)}s)</span>
               )}
@@ -451,8 +467,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
             <span className="absolute inset-y-0 left-0 bg-yellow-500/15 transition-all duration-700" style={{ width: `${Math.min(100, ((s.boostChargeSec ?? 0) / boostChargeSecOf(s)) * 100)}%` }} />
           )}
           <span className="relative">
-            {boostActive(s) ? `🔥 HYPE IS LIVE: income pays x2 (${Math.ceil(s.boostLeftSec)}s)`
-              : boostReady(s) ? '📣 MATCHDAY HYPE READY: press for x2'
+            {boostActive(s) ? `🔥 HYPE IS LIVE: income pays x${HYPE_MULT} (${Math.ceil(s.boostLeftSec)}s)`
+              : boostReady(s) ? `📣 MATCHDAY HYPE READY: press for x${HYPE_MULT}`
               : `📣 Matchday Hype charging: ${Math.floor(((s.boostChargeSec ?? 0) / boostChargeSecOf(s)) * 100)}%`}
           </span>
         </button>
@@ -462,7 +478,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
             pitch rather than making the pitch a button, because the pitch holds
             buttons of its own (the golden whistle, the promotion card's Continue)
             and a button inside a button is not a control anyone can use. */}
-        <button type="button" data-tap-key onClick={() => g.doTap(50, 50)} className="sr-only focus:not-sr-only focus:mb-2 focus:block focus:w-full focus:rounded-xl focus:border focus:border-primary focus:py-2 focus:text-sm focus:font-bold">
+        <button type="button" data-tap-key onClick={() => tapAt(50, 50)} className="sr-only focus:not-sr-only focus:mb-2 focus:block focus:w-full focus:rounded-xl focus:border focus:border-primary focus:py-2 focus:text-sm focus:font-bold">
           Tap the stadium for {fmtMoney(tapValue(s))}
         </button>
         <div ref={pitchRef} onClick={onPitchClick} className="relative rounded-2xl overflow-hidden border border-border cursor-pointer select-none mb-3 group">
@@ -474,30 +490,19 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
             {fans < 30 && <span className="absolute inset-0 flex items-center justify-center text-[10px] text-muted-foreground">the stand is nearly empty. build something worth watching</span>}
           </div>
           {/* Pitch */}
-          <div ref={pitchAreaRef} className="relative h-44 md:h-56 bg-emerald-700">
-            {/* stripes + lines */}
-            <div className="absolute inset-0 opacity-20" style={{ backgroundImage: 'repeating-linear-gradient(90deg, transparent 0 12%, rgba(255,255,255,0.25) 12% 24%)' }} />
-            <div className="absolute inset-x-0 top-1/2 h-px bg-white/40" />
-            <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full border border-white/40" />
-            <div className="absolute left-0 top-1/4 bottom-1/4 w-8 border border-white/40 border-l-0" />
-            <div className="absolute right-0 top-1/4 bottom-1/4 w-8 border border-white/40 border-r-0" />
-            {/* scoreboard */}
-            <div className="absolute top-1.5 left-1/2 -translate-x-1/2 flex items-center gap-2 bg-black/50 rounded-full px-3 py-1 text-xs font-bold text-white tabular-nums max-w-[92%]">
-              <span className="text-[hsl(152,60%,52%)] shrink-0">YOU {s.goalsFor}</span>
-              <span className="text-white/90 shrink-0">{Math.min(s.minute, 90)}'</span>
-              <span className="text-red-400 truncate">{s.goalsAgainst} {opponentName(s)}</span>
-              {s.streak >= 2 && <span className="inline-flex items-center text-orange-400"><Flame className={cn('w-3.5 h-3.5', s.streak >= 5 && 'animate-pulse')} />{s.streak}</span>}
-            </div>
-            {/* players */}
-            {dots.map((d, i) => (
-              <span
-                key={i}
-                className={cn('absolute w-2.5 h-2.5 rounded-full shadow transition-all ease-in-out', d.ours ? 'bg-blue-400' : 'bg-red-400')}
-                style={{ left: `${d.x}%`, top: `${d.y}%`, transitionDuration: '1800ms' }}
-              />
-            ))}
-            {/* ball */}
-            <span className="absolute w-2 h-2 rounded-full bg-white shadow transition-all ease-in-out" style={{ left: `${ball.x}%`, top: `${ball.y}%`, transitionDuration: '1700ms' }} />
+          <TycoonPitch
+            areaRef={pitchAreaRef}
+            goalsFor={s.goalsFor}
+            goalsAgainst={s.goalsAgainst}
+            minute={s.minute}
+            totalMatches={s.totalMatches ?? 0}
+            streak={s.streak}
+            opponent={opponentName(s)}
+            replays={g.replays}
+            onReplayEnd={g.endReplay}
+            tapFx={tapFx}
+            tapRun={tapRun}
+          >
             {/* tap hint */}
             <div className="absolute bottom-1.5 right-2 text-[10px] text-white/90 group-hover:text-white transition-colors">tap anywhere: +{fmtMoney(tapValue(s))}</div>
             {/* floaters */}
@@ -575,14 +580,14 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                 </div>
               </div>
             )}
-          </div>
+          </TycoonPitch>
         </div>
 
         {/* Prestige bar */}
         <div className="mb-3">
           {canPrestige(s) ? (
             <button onClick={g.doPrestige} data-sell-up className="w-full py-2.5 rounded-xl font-bold bg-yellow-500 text-black hover:opacity-90 transition-opacity st-glow">
-              ⭐ Sell up: permanent +50% income, +{pointsForSale(s)} legacy point{pointsForSale(s) === 1 ? '' : 's'}
+              ⭐ Sell up: permanent +{Math.round((repMult({ ...s, rep: s.rep + 1 }) - repMult(s)) * 100)}% income, +{pointsForSale(s)} legacy point{pointsForSale(s) === 1 ? '' : 's'}
             </button>
           ) : (
             <div className="relative h-2 rounded-full bg-secondary overflow-hidden" title="Progress to your next reputation star">
@@ -591,13 +596,37 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           )}
           <div className="text-[10px] text-muted-foreground text-center mt-1">
             {canPrestige(s)
-              ? `the club has outgrown this ground${!atSummit ? `. Win this league first and the sale pays ${pointsForSale(s) + 1} legacy points instead` : ''}`
+              ? `the club has outgrown this ground${!atSummit ? `. Win this league first and the sale pays ${saleAfterTitle} legacy points instead` : ''}`
               : `next star at ${fmtMoney(prestigeThreshold(s))} lifetime earnings (${fmtMoney(s.lifetime)} so far)`}
           </div>
         </div>
 
-        {/* Upgrades */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pb-6">
+        {/* Round 583: the office. Each tile's title is contract: the browser walks
+            open a panel by it. */}
+        <div className="grid grid-cols-5 gap-1.5 mb-2" role="group" aria-label="The club office">
+          {officeTiles.map(t => (
+            <button
+              key={t.key}
+              type="button"
+              data-tile={t.key}
+              {...(t.key === 'legacy' ? { 'data-legacy-drawer': '' } : {})}
+              aria-pressed={panel === t.key}
+              onClick={() => setPanel(t.key)}
+              className={cn(
+                'min-h-[52px] min-w-0 rounded-xl border px-1 py-1.5 text-center transition-all',
+                panel === t.key ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary',
+                t.accent && panel !== t.key && 'border-gold text-gold',
+              )}
+            >
+              <span className="block text-sm leading-none" aria-hidden="true">{t.icon}</span>
+              <span className="mt-1 block text-[10px] font-bold leading-tight">{t.title}</span>
+              <span className={cn('block truncate text-[9px] leading-tight tabular-nums', panel === t.key ? 'text-primary-foreground/80' : 'text-muted-foreground')}>{t.value}</span>
+            </button>
+          ))}
+        </div>
+
+        {panel === 'upgrades' && (
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 pb-4">
           {TRACKS.map(t => {
             const lvl = levelOf(s, t.id);
             const cost = costOf(s, t.id);
@@ -623,13 +652,15 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
             );
           })}
         </div>
+        )}
 
         {/* Round 162: the payroll. Staff earn every second, forever, and the
             tiers escalate the way an idle game should: each one about five
             times the price and four and a half times the pay of the last. */}
+        {panel === 'payroll' && (<>
         <div className="mb-1 flex items-center justify-between px-1">
           <div className="text-xs font-bold text-foreground">🧑‍🤝‍🧑 The payroll</div>
-          <div className="text-[10px] text-muted-foreground">{totalStaffLevels(s)} hired · earning {fmtMoney(STAFF.reduce((sum, t) => sum + staffLevelOf(s, t.id) * t.rate, 0))}/s base</div>
+          <div className="text-[10px] text-muted-foreground">{totalStaffLevels(s)} hired · earning {fmtRate(STAFF.reduce((sum, t) => sum + staffLevelOf(s, t.id) * t.rate, 0))}/s base</div>
         </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pb-4">
           {STAFF.map(t => {
@@ -654,45 +685,17 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                 <div className="text-[9px] text-muted-foreground mt-1 leading-snug min-h-[22px]">{t.blurb}</div>
                 <div className="flex items-center justify-between mt-1">
                   <span className={cn('text-[11px] font-bold tabular-nums', ok ? 'text-gold' : 'text-muted-foreground')}>{fmtMoney(cost)}</span>
-                  <span className="text-[9px] text-emerald-400 tabular-nums">+{fmtMoney(t.rate)}/s</span>
+                  <span className="text-[9px] text-emerald-400 tabular-nums">+{fmtRate(t.rate)}/s</span>
                 </div>
               </button>
             );
           })}
         </div>
+        </>)}
 
-        {/* Round 162: the drawers. Achievements are the long game's long game:
-            every badge is a standing income bonus, across every ground.
-            Round 196: the boardroom joins them. */}
-        <div className="grid grid-cols-3 gap-2 mb-3">
-          <button
-            onClick={() => setDrawer(d => (d === 'ach' ? 'none' : 'ach'))}
-            className={cn('rounded-xl border py-2 text-xs font-bold transition-all',
-              drawer === 'ach' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
-          >
-            🏅 Badges {achCount}/{ACHIEVEMENTS.length}
-          </button>
-          <button
-            data-legacy-drawer
-            onClick={() => setDrawer(d => (d === 'legacy' ? 'none' : 'legacy'))}
-            className={cn('rounded-xl border py-2 text-xs font-bold transition-all',
-              drawer === 'legacy' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary',
-              legacyPointsOf(s) > 0 && drawer !== 'legacy' && 'border-gold text-gold')}
-          >
-            🏛️ Legacy{legacyPointsOf(s) > 0 ? ` (${legacyPointsOf(s)} pts)` : ''}
-          </button>
-          <button
-            onClick={() => setDrawer(d => (d === 'stats' ? 'none' : 'stats'))}
-            className={cn('rounded-xl border py-2 text-xs font-bold transition-all',
-              drawer === 'stats' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
-          >
-            📊 Records
-          </button>
-        </div>
-
-        {drawer === 'ach' && (
+        {panel === 'ach' && (
           <div className="bg-card border border-border rounded-xl p-3 mb-3">
-            <div className="text-[10px] text-muted-foreground mb-2">Every badge is a permanent +2% to everything you earn, on every ground, forever. {achCount} of {ACHIEVEMENTS.length} earned.</div>
+            <div className="text-[10px] text-muted-foreground mb-2">Every badge is a permanent +{Math.round(ACH_BONUS * 100)}% income, on every ground, forever. {achCount} of {ACHIEVEMENTS.length} earned.</div>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 max-h-72 overflow-y-auto pr-1">
               {ACHIEVEMENTS.map(a => {
                 const got = (s.ach ?? []).includes(a.id);
@@ -712,10 +715,12 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
         )}
 
         {/* Round 196: the boardroom. Legacy points buy permanent perks. */}
-        {drawer === 'legacy' && (
+        {panel === 'legacy' && (() => {
+          const hf = helpFacts();
+          return (
           <div data-legacy-board className="bg-card border border-border rounded-xl p-3 mb-3">
             <div className="text-[10px] text-muted-foreground mb-2">
-              Selling up pays legacy points: 1 for the sale plus 1 per division that ground climbed, so a Summit sale pays 10.
+              Selling up pays legacy points: {hf.saleBase} for the sale plus {hf.perDivision} per division that ground climbed, so a sale from {hf.lastDivision} pays {hf.summitPoints}.
               Every perk bought here is permanent, on every future ground, forever.
               You have <b className="text-gold">{legacyPointsOf(s)} point{legacyPointsOf(s) === 1 ? '' : 's'}</b> to spend.
             </div>
@@ -750,9 +755,10 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               })}
             </div>
           </div>
-        )}
+          );
+        })()}
 
-        {drawer === 'stats' && (
+        {panel === 'stats' && (
           <div className="bg-card border border-border rounded-xl p-3 mb-3">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-center">
               {[
@@ -788,7 +794,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           <div role="dialog" aria-modal="true" aria-label="While you were away" tabIndex={-1} ref={focusDialogOnMount} onKeyDown={escapeCloses(g.dismissAway)} className="bg-card border border-border rounded-2xl p-6 max-w-sm w-full text-center" onClick={e => e.stopPropagation()}>
             <div className="text-4xl mb-2">🏟️</div>
             <div className="text-lg font-bold font-display text-foreground">While you were away</div>
-            <p className="text-sm text-muted-foreground mt-1">The turnstiles kept spinning at half speed.</p>
+            <p className="text-sm text-muted-foreground mt-1">The turnstiles kept spinning at {Math.round(offlineRateOf(s) * 100)}% speed.</p>
             <div className="text-3xl font-bold font-display text-gold mt-3">+{fmtMoney(g.awayPay)}</div>
             <button onClick={g.dismissAway} className="mt-4 w-full py-2.5 rounded-xl font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity">Back to work</button>
           </div>
@@ -817,7 +823,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>The payroll hires {h.staff} staff, from a {h.firstStaff} to a {h.lastStaff}. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>
               <p>While you play, a golden whistle drifts onto the pitch every couple of minutes. You get about {h.catchSec} seconds to catch it, for one of {h.prizes} prizes: {GOLDEN_INFO.frenzy.label} ({GOLDEN_INFO.frenzy.blurb} for {GOLDEN_INFO.frenzy.duration} seconds), {GOLDEN_INFO.tapRush.label} ({GOLDEN_INFO.tapRush.blurb} for {GOLDEN_INFO.tapRush.duration} seconds), {GOLDEN_INFO.windfall.label} ({h.windfallMin} minutes of income, instantly), {GOLDEN_INFO.fanWave.label} ({GOLDEN_INFO.fanWave.blurb}) or {GOLDEN_INFO.freeLevel.label} ({GOLDEN_INFO.freeLevel.blurb}).</p>
               <p>Milestones pay once each for the club's firsts, like {h.milestoneExamples}. {h.milestones} in all, and they stay earned even after you sell up.</p>
-              <p>Badges are the long game: {h.badges} of them, from {h.firstBadge} to {h.lastBadge}, and each one earned is +{h.badgePct}% income forever. Check them in the Badges drawer, and your career numbers in Club records.</p>
+              <p>Badges are the long game: {h.badges} of them, from {h.firstBadge} to {h.lastBadge}, and each one earned is +{h.badgePct}% income forever. Check them on the Badges tile, and your career numbers on Records.</p>
               <p>When lifetime earnings hit the bar, sell up: fans, ground, staff and division reset, but you keep a permanent Reputation star worth +{h.starPct}% income each, every badge, and your club records. The ladder is faster every run.</p>
               <p>Selling up also pays legacy points: {h.saleBase} for the sale plus {h.perDivision} per division that ground climbed, so cashing out early pays {h.saleBase} and a sale from {h.lastDivision} pays {h.summitPoints}. Spend them in the Legacy boardroom on {h.perks} permanent perks, from {h.firstPerk} (+{h.swayPct}% income per level, forever) to {h.shieldPerk}, which keeps half your streak through a loss. The whole board costs exactly {h.boardCost} points. Perks survive every future sale.</p>
               <p>Away from the game, you earn at {h.awayPct}% speed for up to {h.awayHours} hours (the {h.awayPerk} perk raises both, up to {h.awayMaxPct}% for {h.awayMaxHours} hours). Progress saves on this device.</p>

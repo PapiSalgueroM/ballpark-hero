@@ -61,6 +61,11 @@ export default defineConfig({
       ...(process.env.TYCOON_LOADS_ACADEMY_LIB
         ? { "@/lib/wonderkidFactory": path.resolve(process.env.TYCOON_LOADS_ACADEMY_LIB) }
         : {}),
+      /* Round 583 negative controls: scripts/simTycoonPitch.mjs writes a broken
+         copy of the pitch. Same ordering rule: above "@". */
+      ...(process.env.TYCOON_PITCH_COMPONENT
+        ? { "@/components/tycoon/TycoonPitch": path.resolve(process.env.TYCOON_PITCH_COMPONENT) }
+        : {}),
       "@": path.resolve(__dirname, "./src"),
     },
   },

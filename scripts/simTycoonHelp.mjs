@@ -24,12 +24,19 @@
  *         phrases are removed, no digit and no number word is left
  *      M1 the rules modal types no digit in its text, every number word it
  *         types is claimed, and helpFacts computes every fact it hands over
+ *      M2 (part two) the same for every word a player can read on the Stadium
+ *         tab: the page, the hook's floaters and the pitch, parsed with the
+ *         TypeScript compiler so class names, styles and ids are not prose
+ *      L1 (part two) the engine's own blurbs, printed on the tiles and in the
+ *         boardroom, carry no number the engine does not pay
  *    and a control for each:
  *      typed      a sentence with a typed number is added to the guide   red G3
  *      stale      the guide's twelve second catch becomes twenty         red G1, G3
  *      engine     the engine's hype lasts 45 seconds instead of 60       red G2
  *      typedmodal the modal types "60 seconds"                           red M1
  *      typedfact  helpFacts hands over a typed 60 for the hype length    red M1
+ *      typedscreen the away card says "half speed" again                 red M2
+ *      typedblurb Boardroom Sway's blurb says 12% while the engine pays 10%  red L1
  *
  * Control copies go to dist/.tycoon-help-control-<name>/. Never run this while a
  * build is running.
@@ -41,11 +48,13 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import ts from 'typescript';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TESTS = ['src/test/tycoonHelp.test.tsx'];
 const HOOK = path.join(ROOT, 'src/hooks/useStadiumTycoon.ts');
 const PAGE = path.join(ROOT, 'src/pages/StadiumTycoon.tsx');
+const PITCH = path.join(ROOT, 'src/components/tycoon/TycoonPitch.tsx');
 const LIB = path.join(ROOT, 'src/lib/stadiumTycoon.ts');
 const ACADEMY_LIB = path.join(ROOT, 'src/lib/wonderkidFactory.ts');
 const GUIDES = path.join(ROOT, 'src/data/gameContent/soccer2.ts');
@@ -99,9 +108,9 @@ function detail(messages) {
 const sectionOf = title => Number((title.match(/^(\d+)/) || [])[1] || 0);
 
 const TAP_FLOATER = 'pushFloater(`+${fmtMoney(after.money - before.money)}`';
-const GOAL_FLOATER = '`GOAL! +${fmtMoney(e.amount ?? 0)}`';
+const GOAL_FLOATER = "`GOAL ${e.minute}' +${fmtMoney(e.amount ?? 0)}`";
 const HELP_OPENS = "    try { if (!localStorage.getItem(TYCOON_SAVE_KEY)) setShowHelp(true); } catch { /* storage blocked: leave it closed */ }\n";
-const TAP_KEY = '<button type="button" data-tap-key onClick={() => g.doTap(50, 50)}';
+const TAP_KEY = '<button type="button" data-tap-key onClick={() => tapAt(50, 50)}';
 
 const CONTROLS = [
   {
@@ -118,7 +127,7 @@ const CONTROLS = [
     why: 'a goal floater prints the raw bonus again',
     env: 'TYCOON_LOADS_STADIUM_HOOK',
     file: 'useStadiumTycoon.ts',
-    build: () => mustReplace(read(HOOK), GOAL_FLOATER, '`GOAL! +$${e.amount ?? 0}`', 'useStadiumTycoon.ts'),
+    build: () => mustReplace(read(HOOK), GOAL_FLOATER, "`GOAL ${e.minute}' +${e.amount ?? 0}`", 'useStadiumTycoon.ts'),
     red: [2],
     green: [1, 3, 4, 5],
   },
@@ -206,6 +215,9 @@ const IDIOMS = [
   { where: 'modal', phrase: 'each new one is', why: '"one" standing for a division' },
   { where: 'modal', phrase: 'each one earned', why: '"one" standing for a badge' },
   { where: 'modal', phrase: 'to catch it, for one of', why: 'a catch pays a single prize; how many prizes there are is computed' },
+  { where: 'screen', phrase: 'matchday 1 of', why: 'the first matchday of a season is matchday one' },
+  { where: 'lib', phrase: 'The half time pie', why: 'half time is the interval, not a share' },
+  { where: 'lib', phrase: 'Third kits, fourth kits', why: 'a joke about kit counts, not a rule' },
 ];
 
 const strings = v => (typeof v === 'string' ? [v] : Array.isArray(v) ? v.flatMap(strings) : v && typeof v === 'object' ? Object.values(v).flatMap(strings) : []);
@@ -430,6 +442,35 @@ const CLAIMS = [
     },
   },
 
+  /* ---- words anywhere else on the screen: the page, the hook's floaters, the pitch ---- */
+  { where: 'screen', phrase: 'ten divisions', check: T => (T.DIVISIONS.length === 10 ? '' : `${T.DIVISIONS.length} divisions`) },
+  { where: 'screen', phrase: '47 badges', check: T => (T.ACHIEVEMENTS.length === 47 ? '' : `${T.ACHIEVEMENTS.length} badges`) },
+
+  /* ---- the engine's own blurbs, which the tiles and the boardroom print ---- */
+  {
+    where: 'lib', phrase: 'Every level adds room for 40 more fans',
+    check: (T, m) => { const one = { ...m.fresh, levels: { ...m.fresh.levels, stands: 1 } }; return T.capacity(one) - T.capacity(m.fresh) === 40 ? '' : `a Stands level adds ${T.capacity(one) - T.capacity(m.fresh)} seats`; },
+  },
+  { where: 'lib', phrase: 'Matchday income pays 10% more per level', check: (T, m) => perLevel(T, m, 'sway', s => T.swayMult(s), 0.1) },
+  { where: 'lib', phrase: 'The fanbase grows 15% faster per level', check: (T, m) => perLevel(T, m, 'roots', s => T.rootsMult(s), 0.15) },
+  { where: 'lib', phrase: 'Every staff member earns 20% more per level', check: (T, m) => perLevel(T, m, 'payroll', s => T.payrollMult(s), 0.2) },
+  { where: 'lib', phrase: 'Timed golden whistles run 25% longer per level', check: (T, m) => perLevel(T, m, 'charm', s => T.catchGolden(s, 'frenzy').state.goldenLeftSec / T.GOLDEN_INFO.frenzy.duration, 0.25) },
+  {
+    where: 'lib', phrase: 'A loss keeps half the win streak instead of ending it',
+    check: (T, m) => { const s = { ...m.crowd, streak: 8 }; const kept = fullTime(T, { ...s, legacyPerks: { shield: 1 } }, 0, 1).st.streak; return kept === 4 ? '' : `a loss on a streak of 8 leaves ${kept}`; },
+  },
+  {
+    where: 'lib', phrase: 'Away pay rises to 65 then 80 percent, trips cap at 10 then 12 hours',
+    check: (T, m) => { const at = l => ({ ...m.fresh, legacyPerks: { away: l } }); const got = [1, 2].map(l => `${T.offlineRateOf(at(l))}/${T.offlineCapHoursOf(at(l))}`).join(' '); return got === '0.65/10 0.8/12' ? '' : `the two levels pay ${got}`; },
+  },
+  {
+    where: 'lib', phrase: 'Matchday Hype charges a full minute faster per level',
+    check: (T, m) => { const at = l => T.boostChargeSecOf({ ...m.fresh, legacyPerks: { voltage: l } }); return at(0) - at(1) === 60 && at(1) - at(2) === 60 ? '' : `the charge is ${at(0)}, ${at(1)}, ${at(2)} seconds`; },
+  },
+  { where: 'lib', phrase: 'fifteen minutes of income, instantly', check: (T, m) => windfall(T, m) },
+  { where: 'lib', phrase: 'income pays x7', check: (T, m) => frenzy(T, m) },
+  { where: 'lib', phrase: 'taps pay x25', check: (T, m) => tapRush(T, m) },
+
   /* ---- the two academy lines this round corrected (589 claims the rest) ---- */
   {
     where: 'academy', phrase: 'about a quarter more than the day one fee: the rating grew, but the promise premium shrank with his age',
@@ -452,6 +493,15 @@ const CLAIMS = [
     },
   },
 ];
+
+/** A perk that promises a step per level: each of its first two levels must add it. */
+function perLevel(T, m, id, measureOf, step) {
+  const at = l => measureOf({ ...m.crowd, legacyPerks: { [id]: l } });
+  const steps = [at(1) - at(0), at(2) - at(1)].filter(Number.isFinite);
+  const max = T.LEGACY_PERKS.find(p => p.id === id)?.costs.length ?? 0;
+  const checked = max >= 2 ? steps : steps.slice(0, 1);
+  return checked.every(d => near(d, step, 1e-9)) ? '' : `${id} steps by ${checked.map(d => d.toFixed(3)).join(', ')} per level`;
+}
 
 function frenzy(T, m) {
   const lit = T.catchGolden(m.crowd, 'frenzy').state;
@@ -520,15 +570,72 @@ function typedFacts(page) {
   return page.slice(a, b).split('\n').filter(l => /^\s+\w+:\s*(?:-?[\d.]+|'[^']*'|"[^"]*"|`[^`$]*`),?\s*$/.test(l)).map(l => l.trim());
 }
 
-function claimSections({ T, W, guides, page, m }) {
-  const out = { G1: [], G2: [], G3: [], M1: [] };
+/* Round 583 part two: every word a player can read on the Stadium tab, not only the
+   modal's. Parsed with the TypeScript compiler rather than regexes, because the page
+   mixes prose with class names, CSS and ids: JSX text, and the string and template
+   literals outside class names, styles, ids, storage keys, comparisons and CSS. */
+const SKIP_ATTRS = new Set(['className', 'style', 'key', 'ref', 'type', 'role', 'tabIndex', 'id', 'path', 'aria-hidden', 'aria-modal']);
+const SKIP_CALLS = new Set(['cn', 'matchMedia', 'querySelector', 'querySelectorAll', 'getItem', 'setItem', 'removeItem', 'addEventListener', 'removeEventListener', 'lazy', 'import']);
+const classy = t => { const toks = t.split(' '); return toks.filter(x => /[-:[\]/]/.test(x)).length > toks.length / 2; };
+function proseOf(source, file) {
+  const sf = ts.createSourceFile(file, source, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+  const out = [];
+  const skipped = node => {
+    if (node.parent && ts.isPropertyAssignment(node.parent) && node.parent.name === node) return true;
+    for (let p = node.parent; p; p = p.parent) {
+      if (ts.isImportDeclaration(p) || ts.isExportDeclaration(p) || ts.isLiteralTypeNode(p)) return true;
+      if (ts.isJsxAttribute(p)) { const n = p.name.getText(sf); if (SKIP_ATTRS.has(n) || n.startsWith('data-')) return true; }
+      if (ts.isJsxElement(p) && p.openingElement.tagName.getText(sf) === 'style') return true;
+      if (ts.isCallExpression(p)) {
+        const e = p.expression;
+        const name = ts.isIdentifier(e) ? e.text : ts.isPropertyAccessExpression(e) ? e.name.text : '';
+        if (SKIP_CALLS.has(name)) return true;
+      }
+      if (ts.isBinaryExpression(p) && [ts.SyntaxKind.EqualsEqualsEqualsToken, ts.SyntaxKind.ExclamationEqualsEqualsToken].includes(p.operatorToken.kind)) return true;
+    }
+    return false;
+  };
+  const keep = (node, text) => {
+    const t = text.replace(/\s+/g, ' ').trim();
+    if (t.includes(' ') && /[A-Za-z]{3,}/.test(t) && !classy(t) && !skipped(node)) out.push(t);
+  };
+  const visit = node => {
+    if (ts.isJsxText(node)) return keep(node, node.text);
+    if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) return keep(node, node.text);
+    if (ts.isTemplateExpression(node)) {
+      keep(node, [node.head.text, ...node.templateSpans.map(s => s.literal.text)].join(' '));
+      for (const s of node.templateSpans) visit(s.expression);
+      return;
+    }
+    ts.forEachChild(node, visit);
+  };
+  visit(sf);
+  return out;
+}
+/** The engine's words the screen prints: every blurb, and the whistles' labels. */
+const libWords = T => [
+  ...T.TRACKS.map(t => t.blurb), ...T.STAFF.map(t => t.blurb), ...T.LEGACY_PERKS.map(p => p.blurb),
+  ...Object.values(T.GOLDEN_INFO).flatMap(g => [g.label, g.blurb]),
+];
+
+function claimSections({ T, W, guides, page, m, hook = read(HOOK), pitch = read(PITCH) }) {
+  const out = { G1: [], G2: [], G3: [], M1: [], M2: [], L1: [] };
+  const screen = [...proseOf(page, 'StadiumTycoon.tsx'), ...proseOf(hook, 'useStadiumTycoon.ts'), ...proseOf(pitch, 'TycoonPitch.tsx')].join('\n');
+  const lib = libWords(T).join('\n');
+  const onScreen = [...CLAIMS, ...IDIOMS].filter(c => c.where === 'modal' || c.where === 'screen');
+  for (const c of [...CLAIMS, ...IDIOMS].filter(x => x.where === 'screen' || x.where === 'lib')) {
+    if (!(c.where === 'lib' ? lib : screen).includes(c.phrase)) (c.where === 'lib' ? out.L1 : out.M2).push(`the ${c.where === 'lib' ? 'engine\'s blurbs no longer say' : 'screen no longer says'} "${c.phrase}"`);
+  }
+  out.M2.push(...untracked(screen, onScreen).map(x => `the screen types an unclaimed number: ${x}`));
+  out.L1.push(...untracked(lib, [...CLAIMS, ...IDIOMS].filter(c => c.where === 'lib')).map(x => `an engine blurb types an unclaimed number: ${x}`));
+  if (screen.length < 2000) out.M2.push(`only ${screen.length} characters of screen text were found, so the parser is not reading the page`);
   const texts = { stadium: strings(guides['/stadium-tycoon']).join('\n'), academy: strings(guides['/wonderkid-factory']).join('\n') };
   const modal = modalText(page);
   if (modal === null) out.M1.push('the rules modal is not in the page between data-tycoon-rules and Let\'s go');
   for (const c of CLAIMS) {
     const phrase = c.phrase;
     const hay = c.where === 'modal' ? (modal ?? '') : texts[c.where];
-    if (!hay.includes(phrase)) (c.where === 'modal' ? out.M1 : out.G1).push(`the ${c.where} text no longer says "${phrase}"`);
+    if (hay !== undefined && !hay.includes(phrase)) (c.where === 'modal' ? out.M1 : out.G1).push(`the ${c.where} text no longer says "${phrase}"`);
     let answer;
     try { answer = c.check(T, m, W); } catch (e) { answer = `the check threw: ${e.message}`; }
     if (answer) out.G2.push(`"${phrase}": ${answer}`);
@@ -540,7 +647,7 @@ function claimSections({ T, W, guides, page, m }) {
   }
   for (const i of IDIOMS) {
     const hay = i.where === 'modal' ? (modal ?? '') : texts[i.where];
-    if (!hay.includes(i.phrase)) (i.where === 'modal' ? out.M1 : out.G1).push(`the excused idiom "${i.phrase}" is no longer in the ${i.where} text, so drop it from IDIOMS`);
+    if (hay !== undefined && !hay.includes(i.phrase)) (i.where === 'modal' ? out.M1 : out.G1).push(`the excused idiom "${i.phrase}" is no longer in the ${i.where} text, so drop it from IDIOMS`);
   }
   out.G3.push(...untracked(texts.stadium, [...CLAIMS.filter(c => c.where === 'stadium'), ...IDIOMS.filter(i => i.where === 'stadium')]));
   if (modal !== null) {
@@ -552,7 +659,7 @@ function claimSections({ T, W, guides, page, m }) {
   return out;
 }
 
-const SECTIONS = ['G1', 'G2', 'G3', 'M1'];
+const SECTIONS = ['G1', 'G2', 'G3', 'M1', 'M2', 'L1'];
 const report = result => {
   for (const k of SECTIONS) console.log(`   ${result[k].length ? 'RED ' : 'ok  '} ${k}${result[k].length ? `: ${result[k][0]}` : ''}`);
 };
@@ -571,7 +678,7 @@ const plain = claimSections({ T, W, guides, page, m });
 report(plain);
 for (const k of SECTIONS) for (const msg of plain[k]) fail(`${k}: ${msg}`);
 const tracked = CLAIMS.filter(c => c.where === 'stadium').length;
-console.log(`   ${CLAIMS.length} claims hold (${tracked} in the stadium guide, ${CLAIMS.filter(c => c.where === 'modal').length} in the modal's own words, ${CLAIMS.filter(c => c.where === 'academy').length} academy corrections); ${IDIOMS.length} idiom${IDIOMS.length === 1 ? '' : 's'} excused`);
+console.log(`   ${CLAIMS.length} claims hold (${tracked} in the stadium guide, ${CLAIMS.filter(c => c.where === 'modal').length} in the modal's own words, ${CLAIMS.filter(c => c.where === 'academy').length} academy corrections, ${CLAIMS.filter(c => c.where === 'screen').length} elsewhere on the screen, ${CLAIMS.filter(c => c.where === 'lib').length} engine blurbs); ${IDIOMS.length} idiom${IDIOMS.length === 1 ? '' : 's'} excused`);
 if (tracked < 30) fail(`only ${tracked} stadium claims, so the table is not covering the guide`);
 
 const clone = v => JSON.parse(JSON.stringify(v));
@@ -581,19 +688,19 @@ const CLAIM_CONTROLS = [
   {
     name: 'typed',
     why: 'the guide gains a sentence with a typed number in it',
-    red: ['G3'], green: ['G1', 'G2', 'M1'],
+    red: ['G3'], green: ['G1', 'G2', 'M1', 'M2', 'L1'],
     guides: g => { const i = g['/stadium-tycoon'].howToPlay.findIndex(x => x.startsWith('Tap the stadium for instant cash.')); if (i < 0) abort('  control typed: the tap line is gone'); g['/stadium-tycoon'].howToPlay[i] = g['/stadium-tycoon'].howToPlay[i].replace('Tap the stadium for instant cash.', 'Tap the stadium for instant cash, about 3 dollars a tap at the start.'); },
   },
   {
     name: 'stale',
     why: 'the guide says the whistle gives you twenty seconds',
-    red: ['G1', 'G3'], green: ['G2', 'M1'],
+    red: ['G1', 'G3'], green: ['G2', 'M1', 'M2', 'L1'],
     guides: g => { const before = JSON.stringify(g['/stadium-tycoon']); const after = before.split('about twelve seconds').join('about twenty seconds'); if (after === before) abort('  control stale: no twelve seconds to change'); g['/stadium-tycoon'] = JSON.parse(after); },
   },
   {
     name: 'engine',
     why: 'the engine\'s Matchday Hype lasts 45 seconds',
-    red: ['G2'], green: ['G1', 'G3', 'M1'],
+    red: ['G2'], green: ['G1', 'G3', 'M1', 'M2'],
     engine: async () => {
       const dir = path.join(ROOT, 'dist', '.tycoon-help-control-engine');
       controlDirs.push(dir);
@@ -608,14 +715,26 @@ const CLAIM_CONTROLS = [
   {
     name: 'typedmodal',
     why: 'the rules modal types "60 seconds"',
-    red: ['M1'], green: ['G1', 'G2', 'G3'],
+    red: ['M1', 'M2'], green: ['G1', 'G2', 'G3', 'L1'],
     page: p => mustReplace(p, HYPE_JSX, 'Press it and your income pays double for 60 seconds', 'StadiumTycoon.tsx'),
   },
   {
     name: 'typedfact',
     why: 'helpFacts hands the modal a typed 60 for the hype length',
-    red: ['M1'], green: ['G1', 'G2', 'G3'],
+    red: ['M1'], green: ['G1', 'G2', 'G3', 'M2', 'L1'],
     page: p => mustReplace(p, HYPE_FACT, '    hypeSec: 60,\n', 'StadiumTycoon.tsx'),
+  },
+  {
+    name: 'typedscreen',
+    why: 'the away card says half speed again, which is wrong with the Away Day Deal',
+    red: ['M2'], green: ['G1', 'G2', 'G3', 'M1', 'L1'],
+    page: p => mustReplace(p, 'The turnstiles kept spinning at {Math.round(offlineRateOf(s) * 100)}% speed.', 'The turnstiles kept spinning at half speed.', 'StadiumTycoon.tsx'),
+  },
+  {
+    name: 'typedblurb',
+    why: 'Boardroom Sway\'s blurb promises 12% a level while the engine pays 10%',
+    red: ['L1'], green: ['G1', 'G2', 'G3', 'M1', 'M2'],
+    lib: t => ({ ...t, LEGACY_PERKS: t.LEGACY_PERKS.map(p => (p.id === 'sway' ? { ...p, blurb: p.blurb.replace('10%', '12%') } : p)) }),
   },
 ];
 for (const control of CLAIM_CONTROLS) {
@@ -623,7 +742,7 @@ for (const control of CLAIM_CONTROLS) {
   console.log(`B.${control.name}) negative control: ${control.why}`);
   const g = clone(guides);
   if (control.guides) control.guides(g);
-  const eng = control.engine ? await control.engine() : T;
+  const eng = control.engine ? await control.engine() : control.lib ? control.lib(T) : T;
   const pg = control.page ? control.page(page) : page;
   const result = claimSections({ T: eng, W, guides: g, page: pg, m: control.engine ? measure(eng) : m });
   report(result);

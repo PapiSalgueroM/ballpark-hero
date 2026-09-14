@@ -35,8 +35,8 @@ export interface TycoonTrack {
 }
 
 /* The nine tracks. Costs and effects are tuned together with the harness:
- * the measured first prestige on a greedy strategy lands around 20 to 30
- * minutes of active play, and no state exists where nothing is affordable
+ * the measured first prestige on a greedy strategy lands around a quarter
+ * of an hour of active play (12.7 to 13.3 minutes, measured in Round 583), and no state exists where nothing is affordable
  * within a minute of income. */
 export const TRACKS: TycoonTrack[] = [
   { id: 'stands', name: 'Stands', emoji: '\u{1F3DF}\u{FE0F}', blurb: 'Seats. Every level adds room for 40 more fans', baseCost: 30, growth: 1.15, maxLevel: 200 },
@@ -184,9 +184,13 @@ export function staffBaseIncome(s: TycoonState): number {
 
 export type GoldenKind = 'frenzy' | 'tapRush' | 'windfall' | 'fanWave' | 'freeLevel';
 
+/** Round 583: what the two timed whistles multiply, read by the engine and by
+ *  the words that name them, so the blurb cannot drift from the payout. */
+export const FRENZY_MULT = 7;
+export const TAP_RUSH_MULT = 25;
 export const GOLDEN_INFO: Record<GoldenKind, { label: string; blurb: string; duration: number }> = {
-  frenzy: { label: 'DERBY DAY', blurb: 'income pays x7', duration: 77 },
-  tapRush: { label: 'CROWD SURGE', blurb: 'taps pay x25', duration: 30 },
+  frenzy: { label: 'DERBY DAY', blurb: `income pays x${FRENZY_MULT}`, duration: 77 },
+  tapRush: { label: 'CROWD SURGE', blurb: `taps pay x${TAP_RUSH_MULT}`, duration: 30 },
   windfall: { label: 'TV WINDFALL', blurb: 'fifteen minutes of income, instantly', duration: 0 },
   fanWave: { label: 'WONDERGOAL GOES VIRAL', blurb: 'the fanbase jumps', duration: 0 },
   freeLevel: { label: 'SPONSOR GIFT', blurb: 'a free upgrade level', duration: 0 },
@@ -910,12 +914,14 @@ export function ordinal(n: number): string {
 }
 
 /* Round 150: Matchday Hype. The crowd builds it over eight minutes of play,
- * one button spends it, and for sixty seconds income pays double: the
- * per-second income, the taps that scale off it, the goal and win bonuses.
+ * one button spends it, and for sixty seconds income pays double, and the
+ * taps that scale off it rise with it. Goal and win bonuses never read it.
  * The numbers sit where the harness measured them fair: a dedicated player
  * gets about one boost per upgrade wall, never a boost economy. */
 export const BOOST_CHARGE_SEC = 8 * 60;
 export const BOOST_DURATION_SEC = 60;
+/** Round 583: what Hype multiplies income by. The screen reads this too. */
+export const HYPE_MULT = 2;
 
 export function boostReady(s: TycoonState): boolean {
   /* Round 196: Stadium Voltage shortens the charge a full hype needs. */
@@ -989,13 +995,13 @@ export function incomePerSec(s: TycoonState): number {
   // Round 150: an active Matchday Hype doubles this line. Taps ride it through
   // tapValue (the Megaphone's flat part is not doubled), and goal and win
   // bonuses never read it (Round 583 corrected the copy that said they did).
-  const hype = boostActive(s) ? 2 : 1;
+  const hype = boostActive(s) ? HYPE_MULT : 1;
   /* Round 162: the payroll earns alongside the crowd, the division you have
      climbed to pays its stage multiplier, every achievement is +2 percent
      forever, and a lit DERBY DAY golden whistle multiplies the lot by 7.
      Order matters not at all (it is one product), but the frenzy sits last
      in the line so the code reads the way the screen explains it. */
-  const golden = goldenActive(s) && s.goldenKind === 'frenzy' ? 7 : 1;
+  const golden = goldenActive(s) && s.goldenKind === 'frenzy' ? FRENZY_MULT : 1;
   /* Round 196: Boardroom Sway rides the same product as everything else. */
   return (fans * perFan + parking + staffBaseIncome(s))
     * repMult(s) * streakMult(s) * divisionOf(s).incomeMult * achMult(s) * swayMult(s) * hype * golden;
@@ -1010,8 +1016,11 @@ export function tapValue(s: TycoonState): number {
   // economy, with first prestige landing at minute three. Now a tap pays
   // about 0.7s of income plus the megaphone's flat power.
   // Round 162: a CROWD SURGE golden whistle makes taps the whole show for
-  // thirty seconds. x25 on the tap only, never on the passive line.
-  const rush = goldenActive(s) && s.goldenKind === 'tapRush' ? 25 : 1;
+  // thirty seconds, on the tap only, never on the passive line.
+  // Round 583: reputation counts twice in a tap on purpose, once inside
+  // incomePerSec and once below. It has since Round 146, and taking one out
+  // would shrink every tap a starred club makes, so it stays.
+  const rush = goldenActive(s) && s.goldenKind === 'tapRush' ? TAP_RUSH_MULT : 1;
   return Math.max(1, Math.round((incomePerSec(s) * 0.7 + mg * 2) * repMult(s) * rush));
 }
 
