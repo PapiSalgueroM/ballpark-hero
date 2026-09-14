@@ -1,8 +1,14 @@
 # Project state
 
-## 2026-09-14 night: Round 582, the Stadium Tycoon league
+## LIVE as of 2026-09-14 night: Round 582, the Stadium Tycoon league
 
-**Built and gated; commit and live proof go here.**
+**`origin/main` is `d1b9742f` and douknowball.com is serving it.** Deployment
+`2bf9cf21-0629-4587-be24-bd49bef82dfb`, called only after `get_project` showed `latest_commit_sha`
+matching. Home bundle `index-B-PAZeul.js` to `index-DzmN1KOa.js`. Proof: the live
+`/stadium-tycoon` snapshot carries "Win your league to climb the divisions" (absent just before), and
+`StadiumTycoon-CiAAskhq.js` holds `data-league-room` and "Name your club". Suite 305 of 305, vitest
+239 of 239, `playSessionMarks`, `playLegacy`, `playIphone`, `playReducedMotion` and
+`playRenderStability` green, phone check of the League tab at 390 by 844 green.
 
 - **Promotion is by winning your league.** Each division is a small league of named generated
   rivals with a real table on a new League tab, and only the champion goes up. No relegation, a
