@@ -1,5 +1,40 @@
 # Project state
 
+## LIVE as of 2026-09-14 afternoon: Round 580, Stadium Tycoon's Academy tab (first round of the tycoon merge)
+
+**`origin/main` is `0e46121e` and douknowball.com is serving it.** Deployment
+`2893fdb9-ae07-47bf-a2db-e609f2c5ba6f`, called only after `get_project` showed `latest_commit_sha`
+matching. Home bundle `index-Bgviz6S2.js` to `index-BBM6U-Zm.js`. Proof from the live site: the
+`/stadium-tycoon` snapshot carries the new FAQ, the `/wonderkid-factory` snapshot carries the
+tycoon link line, `StadiumTycoon-BVEjCanC.js` holds the tab strip and lazy imports
+`AcademyPanel-dfKFmTuF.js`, which holds `data-academy-panel`.
+
+- **What shipped.** `/stadium-tycoon` has a Stadium tab and an Academy tab. The Academy is
+  Wonderkid Factory's screen moved verbatim into `src/components/tycoon/AcademyPanel.tsx`, and
+  `/wonderkid-factory` renders the same panel, so the two doors cannot drift. Both libs, both
+  hooks and both V1 saves are untouched. The stadium hook lives on the page, so the match clock
+  runs while you are in the Academy; the panel stays mounted once opened, so kids keep ageing
+  under the Stadium tab; a dot lights on the tab behind you when that room needs you.
+- **Proof.** `scripts/simTycoonRooms.mjs`: 7 real page tests at the real frame cadence (clock
+  drift 0.000s against 180s straight on the Stadium tab, academy saves byte identical to the
+  standalone page), five page controls and five save controls, all firing exactly where the
+  contract says. It also freezes V1 copies of both libs plus an eight save corpus
+  (`scripts/fixtures/tycoonV1/`, `src/test/fixtures/tycoonSaves.json`) so Rounds 581 onward can
+  prove their saves still load in the build they replace. Suite 303 of 303, vitest 225 of 225,
+  tsc zero, `playSessionMarks`, `playLegacy`, `playIphone`, `playReducedMotion` and
+  `playRenderStability` green on both routes, phone check at 390 by 844 green.
+- **Known red, NOT from this round: `sweepWeight` (outside the suite, run by hand).**
+  `/wonderkid-factory` loads 287K of gzipped JavaScript against a 270K budget and `/club-manager`
+  705K against 620K. Measured on a worktree build of `2ccf2938`, the commit before this round:
+  286K and 705K, so both were already over. This round adds 1K to Wonderkid Factory (the panel is
+  now its own shared chunk) and nothing to Stadium Tycoon (286K of 290K). The budgets were left
+  alone rather than raised to fit. Note for anyone rerunning it: `BASE=` pointed at another server
+  reads 0K, because it takes file names from the page and sizes from the local `dist`.
+- **Next in the arc: Round 581, safe loads and the academy's away clock** (contract section 14).
+  The corpus already shows what it fixes: the doctored stadium save loads today with
+  `squad: "abc"`, minute 400 and streak -3, and the academy hook pays a fixed 0.25s per
+  interval, so a hidden tab (one callback a minute) barely trains at all.
+
 ## LIVE as of 2026-09-14 morning: Round 569, signed in points save in one call
 
 **`origin/main` is `79bddedc` and douknowball.com is serving it.** Deployment
@@ -21,6 +56,22 @@ Round 568 had already shipped the same night (deployment `520cd106`, `entityIds-
   46ms, year and value 23ms to 7ms. Migration files are in `supabase/migrations/20260914*`.
 - **Past points are NOT restored.** 34 accounts are short 19,857 points; the owner decision with
   a recommended default is further down this file.
+- **Seen in production after the deploy (edge logs, 10:10 to 10:50 UTC):** an iPad saved through
+  `record_auth_completion` (200, rows landed in all four tables in one transaction). One Android
+  device kept writing the old four-request way at 10:20 and 10:47; it also wrote at 10:11, before
+  the deploy, so it is a tab left open on the old bundle, not a second writer. Those age out as
+  tabs reload.
+- **Follow-up this surfaced, not yet done:** the row policies still let a signed in player PATCH
+  their own `user_scores.total_points` (and `user_best_scores`) to any number, and the Profile
+  page ranks by that column. The public world leaderboard is not affected: it reads
+  `game_completions` capped by `game_denominators`. Once old tabs have aged out (give it 48
+  hours, check the edge logs for direct POST or PATCH on those tables first), make the function
+  the only way in and cap `p_score` inside it by `game_denominators.max_score`. **Careful:** the
+  function is SECURITY INVOKER and runs under exactly those policies, so dropping them alone
+  breaks every signed in save. It has to become a narrow SECURITY DEFINER first (fixed
+  `search_path = ''`, touches only `auth.uid()`'s rows, no dynamic SQL, execute for
+  authenticated only), and `simAuthSave` section 3, which currently forbids a definer, changes
+  in the same round.
 - **Gates:** tsc zero, build green, vitest 218 of 218, and every harness that references
   completions (19) green. Three vitest timeouts on the way turned out to be two runaway probe
   scripts from 2026-09-12 pinning two cores; killed, suite went from 41s to 18s.

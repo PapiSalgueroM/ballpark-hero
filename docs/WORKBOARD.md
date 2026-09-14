@@ -159,7 +159,18 @@ Tycoon plus Wonderkid Factory merge (`docs/TWEAKS-2026-08-28.md`, "weeks of work
 row on his list still fully OPEN, so it gets a block of its own: 580 onward. (This note first
 said 569 would be the design contract and round one. 569 went to the signed in points fix
 instead, shipped live as `79bddedc`, so the tycoon arc is 580 to 589 and the contract is
-`docs/design/round-580-tycoon-merge.md`. Round 580, two tabs, is in progress.) I have skipped 570 to 579 on purpose, because the
+`docs/design/round-580-tycoon-merge.md`. Round 580, two tabs, is in progress.)
+
+- **580: two tabs, one tycoon.** `/stadium-tycoon` gets a Stadium and an Academy tab. The
+  Academy tab is Wonderkid Factory's screen moved verbatim into
+  `src/components/tycoon/AcademyPanel.tsx`, which `/wonderkid-factory` now renders too, so the two
+  doors cannot drift. No save is touched: both libs and both hooks are unchanged and both V1 keys
+  stay the source of truth. The stadium hook sits on the page, so the match clock never stops in
+  the Academy; the panel stays mounted once opened, so the kids keep ageing under the Stadium tab;
+  each tab lights when the room behind it needs you. Fenced by `scripts/simTycoonRooms.mjs` (7
+  real page tests, drift 0.000s, byte identical academies) with five page controls and five save
+  controls, over a committed save corpus and frozen V1 copies of both libs for the rounds that
+  follow. `RIVAL_NAMES` gains the owner's cited idle app, full name with boundaries. I have skipped 570 to 579 on purpose, because the
 note directly below offered 570 onward to the tablet lane as overflow and I do not want to take
 numbers somebody may already be holding. Tablet lane: 551 to 559 and 570 to 579 are yours.
 
