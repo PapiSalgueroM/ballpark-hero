@@ -1,0 +1,60 @@
+{
+  "note": "Pre-league pace (win-count promotion, Rounds 162 to 581). Greedy floor bot at the hook cadence, 90 simulated minutes per seed. Minutes of watched play.",
+  "capturedAt": "2026-09-14",
+  "commit": "de6f4bfa020eaf040a39dfe389e09b8b94b50824",
+  "dt": 0.2,
+  "medianFirstPromotionMin": 14.7,
+  "medianFirstSellUpMin": 13.436666666666667,
+  "runs": [
+    {
+      "seed": 1,
+      "firstPromotionMin": 12.6,
+      "firstSellUpMin": 12.92
+    },
+    {
+      "seed": 2,
+      "firstPromotionMin": 12.6,
+      "firstSellUpMin": 12.92
+    },
+    {
+      "seed": 3,
+      "firstPromotionMin": 12.6,
+      "firstSellUpMin": 12.936666666666667
+    },
+    {
+      "seed": 4,
+      "firstPromotionMin": 14.7,
+      "firstSellUpMin": 13.703333333333335
+    },
+    {
+      "seed": 5,
+      "firstPromotionMin": 14.7,
+      "firstSellUpMin": 13.680000000000001
+    },
+    {
+      "seed": 6,
+      "firstPromotionMin": 12.6,
+      "firstSellUpMin": 12.903333333333334
+    },
+    {
+      "seed": 7,
+      "firstPromotionMin": 16.8,
+      "firstSellUpMin": 14.290000000000001
+    },
+    {
+      "seed": 8,
+      "firstPromotionMin": 12.6,
+      "firstSellUpMin": 12.936666666666667
+    },
+    {
+      "seed": 9,
+      "firstPromotionMin": 14.7,
+      "firstSellUpMin": 13.736666666666668
+    },
+    {
+      "seed": 10,
+      "firstPromotionMin": 14.7,
+      "firstSellUpMin": 13.436666666666667
+    }
+  ]
+}
