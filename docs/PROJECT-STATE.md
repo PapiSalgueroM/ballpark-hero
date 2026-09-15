@@ -3,7 +3,7 @@
 ## PRIORITY CORRECTION 2026-09-15 15:19 EDT: accurate guides and usable phone tables
 
 The five published format guides had factual errors or summaries that omitted
-important exceptions. Corrections are implemented at `253790d7` on
+important exceptions. Corrections are implemented at `a35693a5` on
 `codex/nfl-guide-format-correction`, based on main `9f828738`. This also fixes
 three copy claims about browser saves and Record Books. The guide tables now
 have readable column widths, contained horizontal scrolling, a phone hint and
@@ -16,8 +16,8 @@ claims, working keyboard scrolling, no runtime errors and zero page overflow.
 All 33 guide mutation controls have passed, including the saved-HTML control.
 Research and exact evidence are in [the release record](adsense/guide-correction-release-checks-2026-09-15.md).
 
-[Full correction verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35011097191)
-runs at `506f79ef`. Types, snapshot build and all five default guide guards plus
+[Full correction verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35013330789)
+runs at `a5863797`. Types, snapshot build and all five default guide guards plus
 33 controls passed; the full node suite and Vitest remain pending. The narrow
 correction takes publication priority over the feature queue. It is not yet
 confirmed published. Google alone decides approval, and these fixes do not

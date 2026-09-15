@@ -2,11 +2,11 @@
 
 **2026-09-15 15:19 EDT, Codex correction release check update.** The five
 guide corrections and three save/Record Books copy fixes are implemented at
-`253790d7`. Phone tables now scroll within keyboard-accessible regions with
+`a35693a5`. Phone tables now scroll within keyboard-accessible regions with
 readable columns. Types, six-route SEO regeneration, final build, 21 local
 release fences, all 33 guide controls and 20 real built-page browser cases
-passed. Full suite verification is still running at `506f79ef` in
-[run 35011097191](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35011097191).
+passed. Full suite verification is still running at `a5863797` in
+[run 35013330789](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35013330789).
 This is not yet a publish-ready handoff. Source evidence is in
 `docs/adsense/guide-correction-release-checks-2026-09-15.md`.
 

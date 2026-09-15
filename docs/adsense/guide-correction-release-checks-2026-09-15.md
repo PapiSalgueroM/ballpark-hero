@@ -7,8 +7,9 @@ guides, plus three homepage or Soccer Career claims about browser saves and
 Record Books. It makes the five guide tables usable on narrow screens. It does
 not add articles, change simulation results or submit another AdSense review.
 
-App source is `efe74fc8` plus `b05c10a9`. Commit `253790d7` adds the regenerated
-five guide snapshots, Soccer Career snapshot, sitemap and lastmod ledger.
+App source is `efe74fc8`, `b05c10a9` and `774b6dd0`. Commit `253790d7` adds the
+five guide snapshots, Soccer Career snapshot, sitemap and lastmod ledger;
+`a35693a5` updates the MLB snapshot and ledger after the final source-note fix.
 It is based on main `9f828738`. The correction is not yet confirmed published.
 
 The factual evidence is recorded in [the NFL research record](nfl-guide-correction-2026-09-15.md)
@@ -28,7 +29,7 @@ their original full-guide verification dates were retained.
   memory and was caught by the exact saved-claim assertion. All 19 NFL source
   controls and 13 controls for the other guides also passed their intended
   failure checks. Controls did not modify production files.
-- A browser sweep used the real final production JS and CSS from `253790d7`,
+- A browser sweep used the real final production JS and CSS from `a35693a5`,
   with external requests blocked. All five guides passed at 320, 390, 430 and
   1440 pixels: 20 cases, correct affected cells or FAQ, visible sources, one
   main heading, no runtime or asset errors and zero page overflow.
@@ -49,16 +50,23 @@ non-reproducing local timing failure, not a code fix or an omitted check.
 Local evidence is under
 `C:/Users/antho/.codex/visualizations/2026/09/15/01a0a304-8aa4-7612-a558-91eac041eec2/guide-correction-readable/`
 (`verification.json` and 20 screenshots). Final harness logs are in
-`C:/Users/antho/AppData/Local/Temp/dukb-guide-final-fences/`.
+`C:/Users/antho/AppData/Local/Temp/dukb-guide-final-provenance-fences/`.
+
+The final independent review caught an outdated MLB note saying blocked
+articles were uncited even though one had since been read and cited. The note
+now records the actual September 15 recheck. Its snapshot was regenerated.
+All 21 fences and 20 browser cases were repeated on the final build, including
+a check that the obsolete blanket claim is absent from the real MLB page.
 
 ## Full release verification
 
-[Run 35011097191](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35011097191)
-uses verification commit `506f79ef`, with the same corrected app inputs and
-table styles. Its app type check, six-route SEO build, five default guide
-harnesses and all 33 effective controls passed. At 15:19 EDT the full node
-suite was still running, with full Vitest and success-only artifact packaging
-pending. The workflow rejects missing, skipped, duplicate or failed harness
+[Run 35013330789](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35013330789)
+uses verification commit `a5863797`, with the final corrected app inputs and
+table styles. Full verification and success-only artifact packaging remain
+pending. It supersedes run `35011097191`, which was cancelled after the
+independent review caught the stale MLB source note. That prior run passed
+types, the six-route build, five default guide guards and all 33 controls;
+it is not final-source release approval. The workflow rejects missing, skipped, duplicate or failed harness
 results. Its workflow file belongs only to the verification branch.
 
 Publication remains subject to the full result and artifact verification.
