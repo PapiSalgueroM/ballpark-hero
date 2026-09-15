@@ -1,5 +1,40 @@
 # Project state
 
+## Publish-ready 2026-09-15: Round 585, source commit `5cee2838`
+
+Round 585 is committed on main with its regenerated saved pages. Publishing is
+pending. The previous live version remains Round 584 until a publish is verified.
+The original full 310-harness run passed 308, and all 264 Vitest tests passed.
+The two failing assertions have been repaired and proved with negative controls:
+confidence has a deliberate floor of one, and guide fingerprints now normalize
+Git line endings. No game engine rule was changed for either repair.
+
+The Linux league-table clipping was fixed in the real card. Names wrap, and
+phones below 375 pixels reserve more room for names. The new browser guard
+renders the actual component: 4,128 name cells across 320, 390, 430 and 1440
+pixels pass, including every current and era club and every tycoon league name.
+Restoring truncation fails with 549 findings on Linux. A nonzero season row
+also fits at 320 and 390 pixels, including 150-25, +125 and 114.
+
+[Repair run 34944024680](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34944024680)
+passed types, production build and affected-page prerender, all 17 selected node
+guards, confidence controls, snapshot boot, iPhone layout, table fit and its
+control, and tycoon render stability. Its artifact was checked against all
+1,866 recorded inputs and 661 outputs, then 1,673 build inputs were matched
+against this checkout before importing the generated pages. Earlier full-suite,
+pack storage, pacing and reduced-motion results remain recorded below.
+
+Rounds 600, 601 and 602 are also built and their combined repair run
+[34944031029](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34944031029)
+is green at `3589b305`. Their artifact matches 1,869 inputs and 663 outputs.
+The final offline guide checks are underway. They remain on the release branch.
+
+Publishing access: Lovable's dashboard, settings and domain panels work in
+Codex, but opening this project's editor stalls or closes the browser target.
+The built-preview alternative failed too; Live preview was restored to its
+original ON state and the temporary diagnostic tabs were closed. No publish
+or new AdSense review was submitted. The publisher handoff is on WORKBOARD.
+
 ## Owner update 2026-09-15: new AdSense rejection and parallel work
 
 Anthony confirmed a new rejection since the last review and supplied the AdSense

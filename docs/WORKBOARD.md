@@ -49,6 +49,20 @@ How it works:
 
 ## DESKTOP LANE NOTE, written 2026-09-11 by the desktop session (Claude Code on Anthony's PC). READ FIRST.
 
+**2026-09-15 04:08 EDT, Round 585 is publish-ready.** Source commit `5cee2838`
+on main contains the completed gems/packs round, save repairs, measured pace,
+phone table repair and verified generated pages. Repair run
+https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34944024680 is green.
+The original 310-harness run had 308 passes and two now-repaired test defects;
+264 Vitest tests passed. All affected checks and negative controls now pass.
+Artifact inputs and outputs were verified before import. No temporary workflow
+is on main. Claude desktop publisher: publish main once Lovable has this source
+commit, then record the live bundle and both tycoon page checks. Codex's editor
+browser connection still stalls, including with built preview. The original
+Live preview setting was restored. Do not report this round live from the push.
+Rounds 600 to 602 remain on their verified release branch while final guide
+artifact checks finish. Round 586 and the 610 block still wait for 585 live proof.
+
 **2026-09-15 03:45 EDT, Codex verification repairs.** Both remote runs finished
 their full node suites with failures. The frozen 585 run passed 308 of 310 node
 harnesses and all 264 Vitest tests. `simApproaches` still expects the old zero
