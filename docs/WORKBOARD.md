@@ -43,8 +43,9 @@ The earlier 586 and animation runs passed 313/314 node harnesses and
 279/296 Vitest cases, then failed packaging. Their replacement runs include
 the roster scratch repair and exact artifact diagnostics. The previous 587
 run passed 315 of 316 node harnesses and all 305 Vitest cases; its lone failure
-was an undersized older-keeper sample. A test-only deterministic sampling
-repair is isolated and being measured, with game behavior and thresholds
+was an undersized older-keeper sample. Test-only repair `a46c59a0` now passes
+all nine sections, exact deterministic replay and five effective controls.
+It is isolated on `codex/era-sampling-repair`, with game behavior and thresholds
 unchanged. Fresh runs 35022622364, 35022671056 and 35022769249 are still in
 progress. Full results and log hashes are in
 `docs/feature-verification-2026-09-15.md`. No pending run inherits an older pass.

@@ -37,10 +37,15 @@ diagnostics record the precise paths if another test changes build output.
 
 Round 587's sole node failure does not report the exact keeper count. Its
 message means fewer than 20 observations, not necessarily zero. The same
-harness and engine passed in the earlier 588 run. An isolated repair is
-measuring predetermined cohorts to make the sample repeatable, while
-retaining the existing age-curve and retirement standards. It is not part of
-the currently running replacement releases.
+harness and engine passed in the earlier 588 run. Isolated repair `a46c59a0`
+uses two predetermined cohorts, keeping every age-curve and retirement
+standard. Its full nine-section replay passed in 966.817 seconds on Windows;
+five assertion controls prove the sample and outcome fences. Exact raw
+observations repeat with SHA-256
+`7d93e7e847bf9e1cc2d4a17bbf00285c94242bf7d30e71fdc458704906d81c94`.
+Keeper counts are 56 at age 33 and 47 at age 35. Each cohort independently
+passes the original retirement floor, with 271 and 262 retirements. The repair
+is not part of main or the currently running replacement releases.
 
 Round 588 source `8a4e00a53331e2bb6a7a694dc4602e3994434c68` includes the
 loading repair and both fixture repairs. Local type/build, all 11 original
@@ -59,3 +64,18 @@ the loading repair. Local source, log and built-CSS hashes are recorded in
 
 The current heads and replacement run links are in `PROJECT-STATE.md`.
 Publication order remains the content correction, 586, 603 to 605, 587, 588.
+
+## Next match-action work, read-only reconnaissance
+
+At source `8a4e00a5`, NFL `simSeason` and NBA `simNbaSeason` return season
+totals or averages. NFL Front Office `simGame` returns a final opponent,
+score and winner; NBA Front Office `simRound` and `playSeries` return win/loss
+or series totals. These modes do not retain scoring sequences or player
+attribution. The Conquest play feeds do not belong to these career modes.
+
+A future final-whistle scene can use the committed NFL weekly result, and
+an NBA court celebration can use a committed playoff-series win. Throws,
+catches, baskets and blocks require engine-owned event records first. Do
+not reconstruct individual actions from season totals. Preserve RNG calls,
+result/save timing, immediate Skip and reduced motion. This is preparation,
+not a new feature claim, reservation or implementation beyond 588.

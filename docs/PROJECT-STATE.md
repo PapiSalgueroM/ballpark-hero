@@ -76,9 +76,18 @@ The previous 586 and animation runs completed with all 313/314 node
 harnesses and 279/296 Vitest cases passing, respectively. Both failed only
 at packaging because generated files changed. The previous 587 run passed
 305 Vitest cases and 315 of 316 node harnesses; its sole failure was fewer
-than 20 age-35 keeper observations in `simEras`. An isolated deterministic
-sample repair is being measured without changing the game engine or its
-existing standards. It is not in the currently running releases.
+than 20 age-35 keeper observations in `simEras`. The isolated deterministic
+sample repair below preserves the game engine and existing standards.
+It is not in the currently running releases.
+
+The isolated repair is now committed as `a46c59a0` on
+`codex/era-sampling-repair`. Its complete nine-section Windows replay passed
+in 966.817 seconds, with identical raw observations on the two deterministic
+runs and five effective assertion controls. Keeper samples are 56 at age 33
+and 47 at age 35; the two cohorts produce 271 and 262 retirements. Every
+original threshold remains, with the retirement minimum also enforced per
+cohort. Only the harness and its state record changed. This repair is kept
+separate from main and the running release refs.
 
 The newer 586, animation and 587 runs in the table include the roster scratch
 repair and exact artifact diagnostics. At 17:28 EDT their types, builds,
