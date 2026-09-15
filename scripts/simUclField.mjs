@@ -27,9 +27,11 @@
  *   3. The field is a full eight group draw of 32 with no club twice.
  *   4. My own group's three opponents come out of that field and none of them
  *      is from my own league, which is how the real draw works.
- *   5. Season one and a historic era still fall back to the pool, because there
- *      is no previous season to read and an era draws from its own verified
- *      period pool. Nothing that worked before this round stops working.
+ *   5. A historic era still falls back to the pool, because an era draws from
+ *      its own verified period pool. Nothing that worked before this round
+ *      stops working. (Season one also fell back here until Round 612, which
+ *      gave a 2026-27 career the field off the real 2025-26 tables; that is
+ *      held in detail by simUclSeasonOne.)
  *   6. The KNOCKOUT draws from the field too. Two more places re-seeded from
  *      the prestige pool (the top up in uclBracketField and the opponent draw
  *      in drawUclKoOpponent), so fixing the group stage alone would have left
@@ -235,24 +237,28 @@ console.log('4) My group opponents come out of the field and avoid my own league
 }
 
 /* ------------------------------------------------------------------ */
-console.log('5) Season one and a historic era still fall back to the pool');
+console.log('5) A historic era still falls back to the pool');
 {
   const before = failures;
+  /* Round 612 changed the season one half of this on purpose: a 2026-27
+     career now reads its field off the real 2025-26 final tables through the
+     same rule, so the old "season one carries no field" line was retired, and
+     simUclSeasonOne holds that field to the data with its own controls. */
   const seasonOne = startCareer('Real Madrid');
-  if (seasonOne.uclField) fail('season one carries a derived field, but there is no previous season to read one from');
-  if (!seasonOne.uclGroup) fail('Real Madrid did not start season one in the Champions League, so the fallback path was not exercised');
+  if (!seasonOne.uclGroup) fail('Real Madrid did not start season one in the Champions League');
   const era = startCareer('Barcelona', 'era2015');
   if (era.uclField) fail('a historic era carries a derived field instead of drawing from its own verified period pool');
   if (!era.uclGroup) fail('the 2015-16 career did not start in the Champions League');
-  if (failures === before) console.log('   season one and 2015-16 both still draw from the pool, unchanged');
+  if (failures === before) console.log('   2015-16 still draws from its pool, and Real Madrid still start season one in Europe');
 }
 
 /* ------------------------------------------------------------------ */
 console.log('6) The knockout draws from the field too, not from the pool');
 {
   const before = failures;
-  /* Season one draws from the pool by design, so the knockout can only be
-     checked on a season that HAS a field. One career is played a second season
+  /* The knockout is checked on a season whose field this save derived itself.
+     (Round 612 gave season one a field too, but from data, so the rollover's
+     own field is the one this section is about.) One career is played a second season
      through to its end for that, which is the only place the top up in
      uclBracketField and the opponent draw in drawUclKoOpponent can be seen. */
   const base = runs.find(r => r.next.uclField && r.next.uclGroup);

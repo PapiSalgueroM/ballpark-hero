@@ -7,9 +7,31 @@ guides, plus three homepage or Soccer Career claims about browser saves and
 Record Books. It makes the five guide tables usable on narrow screens. It does
 not add articles, change simulation results or submit another AdSense review.
 
-App source is `efe74fc8` plus `b05c10a9`. Commit `253790d7` adds the regenerated
-five guide snapshots, Soccer Career snapshot, sitemap and lastmod ledger.
-It is based on main `9f828738`. The correction is not yet confirmed published.
+App source is `efe74fc8`, `b05c10a9` and `774b6dd0`. Commit `253790d7` adds the
+five guide snapshots, Soccer Career snapshot, sitemap and lastmod ledger;
+`a35693a5` updates the MLB snapshot and ledger after the final source-note fix.
+It is based on main `9f828738`. The correction was independently confirmed
+published at 18:47 EDT; see the public verification below.
+
+## Public verification, 18:47 EDT
+
+[The recorded public response proof](guide-publication-proof-2026-09-15.json)
+passes all seven affected routes: exact reviewed text, links and structured
+metadata, HTTP 200, no noindex and one expected canonical. The live entry
+`index-jZ501OVb.js` references six successfully loaded route scripts. The
+Soccer Career script contains the corrected browser-save claim.
+
+The host's injected `aside#lovable-badge` was the only difference found by
+the initial exact text comparison. Only that precise aside is excluded from
+the fingerprint. Fourteen controls verify that the badge is ignored and
+other added content is retained; seven old-version controls remain effective.
+No unrelated part of the page is dropped to make the comparison pass.
+
+Proof SHA-256: `43ba6cc0a71b6ce34d0844541640bcd27f7704e7f3b9862541eb27a4d4fb89a7`.
+Verifier SHA-256: `50f045f83f28be37703397da7baa59a36dacac48b05d7308a5605d7aab06e5e3`.
+This proves the content correction reached the public site. It does not
+certify new Claude features or any pending Codex feature branch. Codex did
+not trigger the publication and has not submitted another AdSense review.
 
 The factual evidence is recorded in [the NFL research record](nfl-guide-correction-2026-09-15.md)
 and [the four other guide corrections](other-guide-corrections-2026-09-15.md).
@@ -28,7 +50,7 @@ their original full-guide verification dates were retained.
   memory and was caught by the exact saved-claim assertion. All 19 NFL source
   controls and 13 controls for the other guides also passed their intended
   failure checks. Controls did not modify production files.
-- A browser sweep used the real final production JS and CSS from `253790d7`,
+- A browser sweep used the real final production JS and CSS from `a35693a5`,
   with external requests blocked. All five guides passed at 320, 390, 430 and
   1440 pixels: 20 cases, correct affected cells or FAQ, visible sources, one
   main heading, no runtime or asset errors and zero page overflow.
@@ -49,20 +71,83 @@ non-reproducing local timing failure, not a code fix or an omitted check.
 Local evidence is under
 `C:/Users/antho/.codex/visualizations/2026/09/15/01a0a304-8aa4-7612-a558-91eac041eec2/guide-correction-readable/`
 (`verification.json` and 20 screenshots). Final harness logs are in
-`C:/Users/antho/AppData/Local/Temp/dukb-guide-final-fences/`.
+`C:/Users/antho/AppData/Local/Temp/dukb-guide-final-provenance-fences/`.
 
-## Full release verification
+The final independent review caught an outdated MLB note saying blocked
+articles were uncited even though one had since been read and cited. The note
+now records the actual September 15 recheck. Its snapshot was regenerated.
+All 21 fences and 20 browser cases were repeated on the final build, including
+a check that the obsolete blanket claim is absent from the real MLB page.
 
-[Run 35011097191](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35011097191)
-uses verification commit `506f79ef`, with the same corrected app inputs and
-table styles. Its app type check, six-route SEO build, five default guide
-harnesses and all 33 effective controls passed. At 15:19 EDT the full node
-suite was still running, with full Vitest and success-only artifact packaging
-pending. The workflow rejects missing, skipped, duplicate or failed harness
+## Narrow release decision and complete output checks
+
+At 15:56 EDT the correction passed all 31 applicable checks recorded in
+[the output evidence](guide-correction-output-checks-2026-09-15.json). An
+independent AST inventory covered all 369 discovered harnesses and 56 helper
+or test files. This is the complete current generated-output sim reader set,
+plus the home-copy and fallback-404 checks, rather than only the older 15-name
+list in AGENTS.md.
+
+The added checks passed for dependency weight, account claims, hub depth,
+redirect links, record books, grid archives, login return, FAQ schema and draw
+order. The archive verified 4,032 answers in 504 cells across four sports
+against the current public game data. The FAQ check covered 154 documents and
+ten runtime head states. The draw-order check covered the six changed routes
+plus home, with three takes at each offset: no changing head or readable blocks.
+The fallback check blocked app JavaScript and confirmed both dead addresses
+are marked correctly while home and seven real routes remain unaffected.
+
+This narrow publication uses AGENTS.md's between-big-ships verification path.
+The diff changes guide facts, citations, table layout and three copy claims,
+with dedicated guards and derived documents. It changes no engine rules, RNG,
+saves, hooks, dependencies, routes or ad/consent behavior. The shared UCL
+reference module retains all engine-consumed format values and functions;
+its added citation and optional table exception are presentation data only.
+
+This decision replaces the earlier self-imposed full-simulation/artifact hold
+for this content correction. The complete local build and affected-output
+evidence establish its release basis. The larger game releases retain their
+full simulation, browser and exact-artifact gates. No pending CI result is
+being counted as a pass, and no pending artifact is being accepted.
+
+## Additional full verification
+
+The replacement [run 35022421148](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022421148)
+at `27f814be` now passes every step, including strict artifact packaging.
+All 311 unique node harness rows, 272 Vitest tests in 32 files and 33 guide
+controls pass. The retrieved build archive matches its published digest;
+all 1,893 inputs and 663 outputs match the exact verification commit and run.
+The 170 repository outputs already match main `9a39db19` after CRLF
+normalization, so no generated-file import is needed. Main retains newer
+documentation and excludes the verification-only workflow. The artifact is
+accepted as verification evidence, not publication. See
+[the artifact record](guide-correction-verified-artifact-2026-09-15.json).
+
+The following describes the earlier failed packaging run, retained as history.
+
+[Run 35013330789](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35013330789)
+uses verification commit `a5863797`, with the final corrected app inputs and
+table styles. Its types, six-route build, 33 guide controls, all 311 node
+harnesses and all 272 Vitest tests in 32 files passed. The strict node parser
+confirmed 311 unique PASS rows, with no failed, empty or skipped node results.
+See [the full check record](guide-correction-full-checks-2026-09-15.json).
+
+The workflow itself failed at artifact packaging: generated files changed
+after the build during verification. It produced a verified logs archive,
+not a successful build artifact. A definite cause is the healthy roster test
+leaving `dist/.foroster/entry.mjs` and `engine.mjs` behind. Its isolated repair
+moves test bundles into temporary storage while retaining strict output
+integrity checks. No CI build output from this failed packaging step has been
+accepted or imported. The earlier local narrow-release evidence remains
+separate from this additional run.
+
+It supersedes run `35011097191`, which was cancelled after the
+independent review caught the stale MLB source note. That prior run passed
+types, the six-route build, five default guide guards and all 33 controls;
+it is not final-source release approval. The workflow rejects missing, skipped, duplicate or failed harness
 results. Its workflow file belongs only to the verification branch.
 
-Publication remains subject to the full result and artifact verification.
-After main lands, Lovable must publish the matching commit, and public HTTP
+Main contains the correction, but Lovable must publish the matching commit, and public HTTP
 checks must confirm the corrected claims and current app assets. A main push
 alone does not update the published site.
 

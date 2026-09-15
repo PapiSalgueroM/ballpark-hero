@@ -1,0 +1,134 @@
+{
+  "checkedAt": "2026-09-15T22:47:44.395Z",
+  "sourceCommit": "e3c7769b469870b4b9dc865fd246f189a2f13f0e",
+  "routes": [
+    {
+      "route": "/",
+      "status": 200,
+      "canonical": [
+        "https://douknowball.com/"
+      ],
+      "indexable": true,
+      "injectedHostingBadges": 1,
+      "expected": "d9cbb67b3f522482",
+      "actual": "d9cbb67b3f522482",
+      "matches": true
+    },
+    {
+      "route": "/nfl-playoff-format-history",
+      "status": 200,
+      "canonical": [
+        "https://douknowball.com/nfl-playoff-format-history"
+      ],
+      "indexable": true,
+      "injectedHostingBadges": 1,
+      "expected": "abeecdb2cbbe134c",
+      "actual": "abeecdb2cbbe134c",
+      "matches": true
+    },
+    {
+      "route": "/nba-playoff-format-history",
+      "status": 200,
+      "canonical": [
+        "https://douknowball.com/nba-playoff-format-history"
+      ],
+      "indexable": true,
+      "injectedHostingBadges": 1,
+      "expected": "3c1fe6ed9f05cfdf",
+      "actual": "3c1fe6ed9f05cfdf",
+      "matches": true
+    },
+    {
+      "route": "/champions-league-format-history",
+      "status": 200,
+      "canonical": [
+        "https://douknowball.com/champions-league-format-history"
+      ],
+      "indexable": true,
+      "injectedHostingBadges": 1,
+      "expected": "3e863f66653d060a",
+      "actual": "3e863f66653d060a",
+      "matches": true
+    },
+    {
+      "route": "/mlb-postseason-format-history",
+      "status": 200,
+      "canonical": [
+        "https://douknowball.com/mlb-postseason-format-history"
+      ],
+      "indexable": true,
+      "injectedHostingBadges": 1,
+      "expected": "1e36c8a4c9734687",
+      "actual": "1e36c8a4c9734687",
+      "matches": true
+    },
+    {
+      "route": "/nhl-playoff-format-history",
+      "status": 200,
+      "canonical": [
+        "https://douknowball.com/nhl-playoff-format-history"
+      ],
+      "indexable": true,
+      "injectedHostingBadges": 1,
+      "expected": "d04478ff3a91e074",
+      "actual": "d04478ff3a91e074",
+      "matches": true
+    },
+    {
+      "route": "/soccer-career",
+      "status": 200,
+      "canonical": [
+        "https://douknowball.com/soccer-career"
+      ],
+      "indexable": true,
+      "injectedHostingBadges": 1,
+      "expected": "a3093b54096436eb",
+      "actual": "a3093b54096436eb",
+      "matches": true
+    }
+  ],
+  "scripts": [
+    {
+      "stem": "NflPlayoffFormatHistory",
+      "file": "NflPlayoffFormatHistory-D6EVB-dV.js",
+      "status": 200,
+      "javascript": true
+    },
+    {
+      "stem": "NbaPlayoffFormatHistory",
+      "file": "NbaPlayoffFormatHistory-BOYCZDVz.js",
+      "status": 200,
+      "javascript": true
+    },
+    {
+      "stem": "ChampionsLeagueFormatHistory",
+      "file": "ChampionsLeagueFormatHistory-Bu3XTbDs.js",
+      "status": 200,
+      "javascript": true
+    },
+    {
+      "stem": "MlbPostseasonFormatHistory",
+      "file": "MlbPostseasonFormatHistory-2LyeLLuX.js",
+      "status": 200,
+      "javascript": true
+    },
+    {
+      "stem": "NhlPlayoffFormatHistory",
+      "file": "NhlPlayoffFormatHistory-uLCx73O_.js",
+      "status": 200,
+      "javascript": true
+    },
+    {
+      "stem": "SoccerCareer",
+      "file": "SoccerCareer-CgqDSaK6.js",
+      "status": 200,
+      "javascript": true,
+      "browserSaveCopy": true
+    }
+  ],
+  "oldContentControls": 7,
+  "hostBadgeControls": 14,
+  "entry": "/assets/index-jZ501OVb.js",
+  "entryStatus": 200,
+  "published": true
+}

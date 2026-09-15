@@ -2,7 +2,7 @@
 
 ## Scope and status
 
-Source base: `6bedf221`, branch `codex/nfl-guide-format-correction`. The published page at [NFL playoff format history](https://douknowball.com/nfl-playoff-format-history) was read over HTTP at approximately 14:16 EDT. It still contained the old claims described below. This record describes the correction in source, not a confirmed published update.
+Source base: `9f828738`, branch `codex/nfl-guide-format-correction`. The published page at [NFL playoff format history](https://douknowball.com/nfl-playoff-format-history) was read over HTTP at approximately 14:16 EDT. It still contained the old claims described below. This record describes the correction in source, not a confirmed published update.
 
 The earlier HTTP document audit established that content reached the response. It did not establish that the sports history was accurate. This correction addresses that specific gap. It does not establish AdSense approval, trigger another review, or change indexing requests. The last account state supplied by the release lane was review requested at 04:19 EDT and still Getting ready at 12:37 EDT.
 

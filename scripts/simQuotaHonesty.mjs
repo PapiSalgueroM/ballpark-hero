@@ -14,11 +14,12 @@
         college-grid-validate carry an unverified(exhausted) helper whose
         refusal names the allowance, retry a 429 once, and return
         unverified(true) on a second 429 before the generic refusal.
-     2. THE HOOKS LISTEN. useSoccerGrid.ts and useCollegeGrid.ts read
+     2. THE HOOKS LISTEN. useSoccerGrid.ts (and useCollegeGrid.ts until
+        Round 611 moved College Grid off the validator) read
         data.exhausted, set checkingDown, and show the allowance message
         rather than the retry one; the guess is never counted either way.
-     3. THE PAGES STOP INVITING. SoccerGrid.tsx and CollegeGrid.tsx render
-        the notice in place of the search box when checkingDown is set.
+     3. THE PAGES STOP INVITING. SoccerGrid.tsx renders the notice in place
+        of the search box when checkingDown is set.
      4. THE NFL GRID IS NOT IN THIS. useFootballGrid.ts invokes no edge
         function at all (Round 406), so it needs none of the above.
 
@@ -54,8 +55,13 @@ const VALIDATORS = [
   { file: 'supabase/functions/college-grid-validate/index.ts', nameGuard: true },
   { file: 'supabase/functions/validate-player/index.ts', nameGuard: false },
 ];
-const HOOKS = ['src/hooks/useSoccerGrid.ts', 'src/hooks/useCollegeGrid.ts', 'src/hooks/useLineupBuilder.ts'];
-const PAGES = ['src/pages/SoccerGrid.tsx', 'src/pages/CollegeGrid.tsx', 'src/pages/LineupBuilder.tsx'];
+/* Round 611: useCollegeGrid.ts and CollegeGrid.tsx left these two lists. College
+   Grid judges in the browser against its answer key and calls no validator,
+   so it has no allowance to run out of (scripts/simCollegeGridPage.mjs fences
+   that). Its validator stays in VALIDATORS while v16 is deployed as the
+   rollback. */
+const HOOKS = ['src/hooks/useSoccerGrid.ts', 'src/hooks/useLineupBuilder.ts'];
+const PAGES = ['src/pages/SoccerGrid.tsx', 'src/pages/LineupBuilder.tsx'];
 
 section = 1;
 console.log('1) The validators say which: exhausted on a second 429, a blip otherwise');
@@ -155,4 +161,4 @@ if (CONTROL) {
   abort(`\ncontrol "${CONTROL}": changed NOTHING in section ${own}, the check is dead`);
 }
 if (total > 0) { console.error(`\nsimQuotaHonesty: ${total} failure(s)`); process.exit(1); }
-console.log('\nsimQuotaHonesty: green. When the allowance is gone, the two AI grids and Build Your XI say so and stop asking for retries.');
+console.log('\nsimQuotaHonesty: green. When the allowance is gone, Soccer Grid and Build Your XI say so and stop asking for retries.');
