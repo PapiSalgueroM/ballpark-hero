@@ -27,15 +27,24 @@
  * (Wikipedia squad templates through the API, and Al Jazeera's 2026-06-02 squad
  * article, with Yahoo Sports 2026-06-11 as the third voice on disagreements)
  * and the club is Wikipedia's. It covers only men picked for the tournament,
- * which is why it settles 23 of the 356 and leaves 332 openly pending rather
+ * which is why it settled 23 of the 356 and left 332 openly pending rather
  * than guessed.
+ *
+ * ROUND 616, 2026-09-15. The 18 pending Premier League rows were settled on the
+ * web by two source families that had to agree on status and club (A, official:
+ * the Premier League squad feed, club, league and UEFA pages; B, independent
+ * press), each row carrying its own URLs and read dates. The same pass found two
+ * World Cup table rows the summer window had overtaken: Julio Enciso moved on
+ * from Strasbourg to Ipswich Town, and David Alaba left Real Madrid and is
+ * unattached. Mykhaylo Mudryk is on a season-long loan, listed at the club he
+ * plays for (Tottenham), the ledger's loanPolicy. 314 stay pending.
  *
  * WHAT THIS HOLDS, reading only committed files, no database and no build:
  *   1. Every adjudicated MOVE is at its new club and gone from the old one.
  *   2. Every player whose real club the game does not model is in no squad.
  *   3. Every NOT CURRENT name is in no squad at all.
- *   4. Every player the World Cup table CONFIRMED is still in his squad, so a
- *      later sweep cannot quietly drop a man two sources placed there.
+ *   4. Every player two sources CONFIRMED is still in his squad, so a later
+ *      sweep cannot quietly drop a man two sources placed there.
  *   5. Every PENDING player is still at exactly the club the ledger records.
  *      This is the one that stops the ledger rotting: adjudicate a player and
  *      you must move his row out of `pending`, you cannot just edit the roster.
@@ -43,11 +52,24 @@
  *      the recorded population.
  *   7. Every club the changes left under 8 players is marked CM_PARTIAL, which
  *      is the existing convention for a squad the game pads and says so.
+ *   8. CM_ROSTER_META agrees with the file.
+ *   9. Julio Enciso is at Ipswich Town and in no Strasbourg block.
+ *  10. David Alaba is in no squad.
+ *  11. Mykhaylo Mudryk is at Tottenham and not at Chelsea.
+ *  Sections 9 to 11 name the players outright, so they hold even if a later
+ *  edit to the ledger drops or rewrites the row.
  *
- * NEGATIVE CONTROL: ROSTER_ADJ_CONTROL=stale puts Joao Felix back in the
- * Chelsea block of the in-memory roster copy, which is the exact row the player
- * reported, and section 1 must go red. It asserts the injection really changed
- * the source first and refuses to run otherwise.
+ * NEGATIVE CONTROLS, each on the in-memory roster copy, each required to turn
+ * its own section red:
+ *   ROSTER_ADJ_CONTROL=stale   Joao Felix back in the Chelsea block, the exact
+ *                              row the player reported. Section 1.
+ *   ROSTER_ADJ_CONTROL=enciso  Enciso out of Ipswich Town and back in the
+ *                              Strasbourg block, as shipped before Round 616. Section 9.
+ *   ROSTER_ADJ_CONTROL=alaba   Alaba back in the Real Madrid block. Section 10.
+ *   ROSTER_ADJ_CONTROL=mudryk  Mudryk out of Tottenham and back in the Chelsea
+ *                              block. Section 11.
+ * A control refuses to run unless every block and row it touches appears exactly
+ * once, and unless the edit really changes the source.
  *
  * Run: node scripts/simRosterAdjudication.mjs      (no database, no build)
  */
@@ -57,30 +79,63 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 let failures = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+/* Which sections went red, so a control can prove its own section fired. */
+let section = '';
+const redSections = new Set();
+const fail = m => { failures += 1; redSections.add(section); console.error('  FAIL: ' + m); };
+const begin = (id, title) => { section = id; console.log(title); };
 
+/* Each control puts back rows exactly as they shipped before the round that
+   fixed them, and names the section that must catch it. */
+const CONTROLS = {
+  stale: { expect: '1', what: 'Joao Felix put back in the Chelsea block',
+    add: [['Chelsea', `    { n: 'João Félix', p: 'CF', a: 26, v: 19.2, r: 82 },`]] },
+  enciso: { expect: '9', what: 'Julio Enciso taken out of Ipswich Town and put back in the Strasbourg block',
+    remove: [['Ipswich Town', 'Julio Enciso']],
+    add: [['Strasbourg', `    { n: 'Julio Enciso', p: 'CAM', a: 21, v: 17.1, r: 81 },`]] },
+  alaba: { expect: '10', what: 'David Alaba put back in the Real Madrid block',
+    add: [['Real Madrid', `    { n: 'David Alaba', p: 'CB', a: 33, v: 4.3, r: 74 },`]] },
+  mudryk: { expect: '11', what: 'Mykhaylo Mudryk taken out of Tottenham and put back in the Chelsea block',
+    remove: [['Tottenham', 'Mykhaylo Mudryk']],
+    add: [['Chelsea', `    { n: 'Mykhaylo Mudryk', p: 'LW', a: 24, v: 13.5, r: 80 },`]] },
+};
 const CONTROL = process.env.ROSTER_ADJ_CONTROL || '';
-const KNOWN_CONTROLS = ['stale'];
-if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
+if (CONTROL && !Object.hasOwn(CONTROLS, CONTROL)) {
   console.error(`ROSTER_ADJ_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
 
 const ROSTER_PATH = path.join(ROOT, 'src/data/clubManagerRosters.ts');
-let source = fs.readFileSync(ROSTER_PATH, 'utf8');
+/* LF, so the controls' block anchors match a CRLF checkout too. */
+let source = fs.readFileSync(ROSTER_PATH, 'utf8').split('\r\n').join('\n');
 
-if (CONTROL === 'stale') {
-  /* The row exactly as it shipped before this round, put back where it was. */
-  const anchor = `  'Chelsea': [\n`;
-  if (!source.includes(anchor)) { console.error('CONTROL stale cannot find the Chelsea block'); process.exit(1); }
-  if (/n: 'João Félix'/.test(source.slice(source.indexOf(anchor), source.indexOf(anchor) + 4000))) {
-    console.error('CONTROL stale would change nothing: Joao Felix is already in the Chelsea block');
-    process.exit(1);
+if (CONTROL) {
+  const c = CONTROLS[CONTROL];
+  const refuse = m => { console.error(`CONTROL ${CONTROL} refuses to run: ${m}`); process.exit(1); };
+  const count = (hay, needle) => hay.split(needle).length - 1;
+  const block = club => {
+    const head = `  '${club}': [\n`;
+    if (count(source, head) !== 1) refuse(`the ${club} block appears ${count(source, head)} times, not exactly once`);
+    const start = source.indexOf(head) + head.length;
+    return { start, end: source.indexOf('  ],\n', start) };
+  };
+  for (const [club, name] of c.remove || []) {
+    const prefix = `    { n: '${name}',`;
+    if (count(source, prefix) !== 1) refuse(`${name} appears ${count(source, prefix)} times in the file, not exactly once`);
+    const { start, end } = block(club);
+    const at = source.indexOf(prefix);
+    if (at < start || at >= end) refuse(`${name} is not in the ${club} block`);
+    source = source.slice(0, at) + source.slice(source.indexOf('\n', at) + 1);
   }
-  const mutated = source.replace(anchor, anchor + `    { n: 'João Félix', p: 'CF', a: 26, v: 19.2, r: 82 },\n`);
-  if (mutated === source) { console.error('CONTROL stale changed nothing'); process.exit(1); }
-  source = mutated;
-  console.log('   NEGATIVE CONTROL ON: Joao Felix put back in the Chelsea block, section 1 must go red');
+  for (const [club, row] of c.add || []) {
+    const before = source;
+    const { start, end } = block(club);
+    const name = row.match(/n: '([^']+)'/)[1];
+    if (source.slice(start, end).includes(`n: '${name}'`)) refuse(`${name} is already in the ${club} block, the edit would change nothing`);
+    source = source.slice(0, start) + row + '\n' + source.slice(start);
+    if (source === before) refuse('the edit changed nothing');
+  }
+  console.log(`   NEGATIVE CONTROL ON: ${c.what}, section ${c.expect} must go red`);
 }
 
 /* ------------------------------------------------------------------ */
@@ -111,17 +166,17 @@ const totalPlayers = Object.values(ROSTERS).reduce((s, a) => s + a.length, 0);
 console.log(`Roster: ${Object.keys(ROSTERS).length} clubs, ${totalPlayers} players. Ledger measured ${L.measuredOn}, population ${L.population}.`);
 
 /* ------------------------------------------------------------------ */
-console.log('\n1) Every adjudicated move is at its new club and gone from the old one');
+begin('1', '\n1) Every adjudicated move is at its new club and gone from the old one');
 for (const m of L.movedTo) {
   const at = clubsOf(m.name);
-  if (at.includes(m.from)) fail(`${m.name} is still in the ${m.from} squad, but the 2026 World Cup squads put him at ${m.to}`);
+  if (at.includes(m.from)) fail(`${m.name} is still in the ${m.from} squad, but the ledger's sources put him at ${m.to}`);
   if (!at.includes(m.to)) fail(`${m.name} should be at ${m.to} and is not (found: ${at.join(', ') || 'no squad'})`);
   if (at.length > 1) fail(`${m.name} is in ${at.length} squads at once: ${at.join(', ')}`);
 }
 if (!failures) console.log(`   ${L.movedTo.length} moves all landed`);
 
 /* ------------------------------------------------------------------ */
-console.log('2) Players whose real club the game does not model are in no squad');
+begin('2', '2) Players whose real club the game does not model are in no squad');
 let before = failures;
 for (const r of L.removedClubNotModelled) {
   const at = clubsOf(r.name);
@@ -130,7 +185,7 @@ for (const r of L.removedClubNotModelled) {
 if (failures === before) console.log(`   ${L.removedClubNotModelled.length} correctly absent`);
 
 /* ------------------------------------------------------------------ */
-console.log('3) Every not-current name is in no squad at all');
+begin('3', '3) Every not-current name is in no squad at all');
 before = failures;
 for (const n of L.notCurrent) {
   const at = clubsOf(n.name);
@@ -139,18 +194,19 @@ for (const n of L.notCurrent) {
 if (failures === before) console.log(`   ${L.notCurrent.length} correctly absent`);
 
 /* ------------------------------------------------------------------ */
-console.log('4) Players the World Cup table confirmed are still in their squad');
+begin('4', '4) Players two sources confirmed are still in their squad');
 before = failures;
 for (const c of L.confirmedStill) {
   const at = clubsOf(c.name);
   if (!at.includes(c.club)) {
-    fail(`${c.name} is no longer in the ${c.club} squad, but the 2026 World Cup squads put him there (${c.wc2026}). Two sources placed him: do not drop him on an absence.`);
+    const by = c.wc2026 ? `the 2026 World Cup squads (${c.wc2026})` : `the ledger's sources (read ${c.adjudicatedOn})`;
+    fail(`${c.name} is no longer in the ${c.club} squad, but ${by} put him there. Two sources placed him: do not drop him on an absence.`);
   }
 }
 if (failures === before) console.log(`   ${L.confirmedStill.length} confirmed players still present`);
 
 /* ------------------------------------------------------------------ */
-console.log('5) Every pending player is still at exactly the club the ledger records');
+begin('5', '5) Every pending player is still at exactly the club the ledger records');
 before = failures;
 let drifted = 0;
 for (const p of L.pending) {
@@ -164,7 +220,7 @@ if (drifted > 8) fail(`...and ${drifted - 8} more pending rows that no longer de
 if (failures === before) console.log(`   all ${L.pending.length} pending rows still describe the shipped file`);
 
 /* ------------------------------------------------------------------ */
-console.log('6) The five categories are disjoint and still add up');
+begin('6', '6) The five categories are disjoint and still add up');
 before = failures;
 const buckets = {
   confirmedStill: L.confirmedStill.map(x => x.name),
@@ -185,7 +241,7 @@ if (sum !== L.population) fail(`the categories hold ${sum} names but the recorde
 if (failures === before) console.log(`   ${sum} names across five categories, none repeated`);
 
 /* ------------------------------------------------------------------ */
-console.log('7) Every club left under 8 players is marked CM_PARTIAL');
+begin('7', '7) Every club left under 8 players is marked CM_PARTIAL');
 before = failures;
 const partial = new Set(PARTIAL);
 for (const club of Object.keys(ROSTERS)) {
@@ -196,16 +252,46 @@ for (const club of Object.keys(ROSTERS)) {
 if (failures === before) console.log(`   ${PARTIAL.length} clubs marked, none missing`);
 
 /* ------------------------------------------------------------------ */
-console.log('8) The file metadata matches the file');
+begin('8', '8) The file metadata matches the file');
 before = failures;
 if (META.players !== totalPlayers) fail(`CM_ROSTER_META says ${META.players} players, the file has ${totalPlayers}`);
 if (META.clubs !== Object.keys(ROSTERS).length) fail(`CM_ROSTER_META says ${META.clubs} clubs, the file has ${Object.keys(ROSTERS).length}`);
 if (failures === before) console.log(`   ${totalPlayers} players, ${META.clubs} clubs, metadata agrees`);
 
 /* ------------------------------------------------------------------ */
-if (CONTROL === 'stale') {
-  if (failures > 0) { console.log('\n   CONTROL FIRED: the reported row was caught'); process.exit(0); }
-  console.error('\n   CONTROL DID NOT FIRE: the harness cannot see the very row the player reported');
+/* Round 616 by name. Two sources each, recorded on the ledger rows.   */
+/* ------------------------------------------------------------------ */
+begin('9', '9) Julio Enciso is at Ipswich Town and in no Strasbourg block');
+before = failures;
+{
+  const at = clubsOf('Julio Enciso');
+  if (at.length !== 1 || at[0] !== 'Ipswich Town') fail(`Julio Enciso should be at Ipswich Town alone, who signed him from Strasbourg on 2026-08-17, and is at ${at.join(', ') || 'no club'}`);
+  if (at.includes('Strasbourg')) fail('Julio Enciso is in the Strasbourg block, the June 2026 club the summer window overtook');
+}
+if (failures === before) console.log('   at Ipswich Town, not Strasbourg');
+
+begin('10', '10) David Alaba is in no squad');
+before = failures;
+{
+  const at = clubsOf('David Alaba');
+  if (at.length) fail(`David Alaba is in the ${at.join(', ')} squad, but he left Real Madrid when his contract ran out in 2026 and is unattached`);
+}
+if (failures === before) console.log('   in no squad');
+
+begin('11', '11) Mykhaylo Mudryk is at Tottenham and not at Chelsea');
+before = failures;
+{
+  const at = clubsOf('Mykhaylo Mudryk');
+  if (!at.includes('Tottenham')) fail(`Mykhaylo Mudryk should be at Tottenham, on a season-long loan from Chelsea, and is at ${at.join(', ') || 'no club'}`);
+  if (at.includes('Chelsea')) fail('Mykhaylo Mudryk is in the Chelsea block, but a season-long loanee is listed at the club he plays for (the ledger loanPolicy)');
+}
+if (failures === before) console.log('   at Tottenham, not Chelsea');
+
+/* ------------------------------------------------------------------ */
+if (CONTROL) {
+  const { expect } = CONTROLS[CONTROL];
+  if (redSections.has(expect)) { console.log(`\n   CONTROL FIRED: section ${expect} caught it (red: ${[...redSections].join(', ')})`); process.exit(0); }
+  console.error(`\n   CONTROL DID NOT FIRE: section ${expect} stayed green (red: ${[...redSections].join(', ') || 'none'})`);
   process.exit(1);
 }
 

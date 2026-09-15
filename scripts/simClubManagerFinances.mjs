@@ -48,22 +48,64 @@
        takes the wage bill out of the kitty. Sections 2 and 7 must go red.
      CM_FINANCES_CONTROL=nosum bundles a copy whose income total is the sum
        plus one. Section 1 must go red.
-     Either control refuses to run if its rewrite did not find its text.
+     CM_FINANCES_CONTROL=nogate bundles a copy that never counts a home gate
+       in the ledger. Sections 2 and 6 must go red.
+     A control refuses to run if its rewrite did not find its text.
 
-   Bands (this harness's own seeded stream, 6 clubs x 3 seeds, 13 seasons
-   that reached the last day, measured on 2026-09-05): relative error of the
-   projection against the closed ledger, income abs median 4.9 / 5.9 / 1.7
-   percent and p90 9.2 / 7.9 / 4.5 percent at weeks 5 / 15 / 30; spend abs
-   median 0.3 / 0.4 / 0.1 percent and p90 0.5 / 0.4 / 0.4 percent. The spend
-   side is wages, which the calendar fixes, so it lands within half a
-   percent from week 5; the income side leans on the average gate and the
-   certain home games, so it undershoots a little when a cup run adds home
-   ties. The bands sit at roughly twice those numbers: income median 10 /
-   12 / 5 and p90 18 / 16 / 9 percent, spend median 1 / 1 / 0.5 and p90
-   2 / 2 / 1 percent. Re-measured on SIM_SEED=2 (15 seasons: income abs
-   median 4.4 / 6.6 / 1.1, p90 9.3 / 9.1 / 4.0) and SIM_SEED=3 (17 seasons:
-   income abs median 6.4 / 8.3 / 1.7, p90 12.2 / 11.4 / 3.3; spend p90 0.6
-   at worst) before the bands were kept.
+   Bands, re-measured 2026-09-15 on 6 clubs x 6 seeds over SIM_SEED 0 to 7 on
+   the Round 612 tree (31 to 35 seasons reached the last day per run at weeks
+   5 and 30; 25 to 29 at week 15, because a club outside Europe in an 18 club
+   league never stops at week 15, so the week 15 p90 is the third worst run
+   and the week 5 and 30 p90 the fourth): relative error of the projection
+   against the closed ledger, income abs median 5.7 to 7.9 / 6.2 to 8.9 /
+   1.5 to 3.3 percent and p90 11.2 to 14.0 / 12.2 to 14.5 / 5.7 to 7.8
+   percent at weeks 5 / 15 / 30 (the signed median runs minus 5.7 to minus
+   8.5 at weeks 5 and 15: the cup and European ties the projection never
+   counts before they are drawn); spend abs median 0.2 / 0.1 to 0.2 / 0.0
+   and p90 1.1 to 1.5 / 0.3 to 0.7 / 0.3 to 0.4 percent. The desk itself is
+   untouched by Round 612: its diff against main for
+   src/lib/clubManagerFinances.ts is empty. The bands: income median
+   14 / 14 / 6 and p90 25 / 26 / 13 percent, spend median 0.5 at every week
+   and p90 2.5 / 2 / 1 percent. Each is roughly twice the eight seed mean of
+   its statistic and 1.6 to 1.8 times the worst seed, except the spend p90
+   bands at weeks 15 and 30, kept from 2026-09-05 at 2 and 1 (2.9 and 2.5
+   times the worst run on file). What the wider income bands give up: an
+   extra 5 points of under projection at the median now passes at weeks 5
+   and 15 where 10 and 12 caught it, and the week 30 p90 fires at a 67
+   percent growth of the tail where 9 fired at 15 percent. The main tree
+   measured the same way on 2026-09-15 (SIM_SEED 0 to 2, 36 runs):
+   income abs median 7.2 to 8.4 / 7.1 to 8.2 / 3.1 to 3.3 and p90 11.1 to
+   14.5 / 12.4 to 13.3 / 5.5 to 6.5 percent, spend the same as above. The
+   distribution the bands describe is the one main had, not a tighter one.
+
+   Why the sample doubled and the bands moved, 2026-09-15. The first bands
+   (income median 10 / 12 / 5 and p90 18 / 16 / 9, measured 2026-09-05 on 3
+   seeds per club) were set three days before Round 507 made European ties
+   two legged, which added an uncounted home leg per semi finalist and an
+   uncounted European away trip per quarter finalist, and they were never
+   re-measured. Run over SIM_SEED 0 to 8 on the tree before Round 612 and on
+   the Round 612 tree, the old gate was red on 2 of 9 seeds before (a week 5
+   median of 11.8 on seed 1, the old spend rule on seed 8) and on 3 of 9
+   after: a coin toss on a healthy desk either way, with main at 11.1 to
+   14.8 on the week 5 p90 over 18 runs today. What was behind the reds, none
+   of it a wrong number in the desk: a p90 over 15 to 18 runs is the second
+   worst run, so one club whose early gates ran high moved it ten points,
+   and six seeds per club make it the fourth worst. The release tree's
+   section 3 reds were clubs outside Europe, Ajax and Brentford, whose early
+   gates stood in for the season and whose domestic cup home ties were not
+   yet drawn. Round 612 changed which clubs are in Europe (Napoli in,
+   Brentford and Newcastle out) and who the opponents are, not how often a
+   run goes deep: over the seeds traced on both trees the knockout runs per
+   season are the same and the release tree has slightly fewer home knockout
+   ties per run. And roundPairs in the engine hands every club but one a
+   same venue run of up to nineteen league rounds (the club at shuffled slot
+   k plays k rounds at one venue and the rest at the other, mirrored after
+   the turn), so a club whose home run comes late projects a whole season
+   from a few early gates through the desk's three gate switch
+   (projectFinances, perHome): Ajax, tier 4 in the data (an attendance draw
+   with a 23 percent spread), had banked seven gates by week 30 that ran 0.8
+   sd high and projected 10 percent over. The schedule is Round 617's fix
+   and the estimator Round 618's; re-measure here after each lands.
 
    Run: node scripts/simClubManagerFinances.mjs
 */
@@ -79,7 +121,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
 const CONTROL = process.env.CM_FINANCES_CONTROL || '';
-if (CONTROL && CONTROL !== 'leak' && CONTROL !== 'nosum') {
+if (CONTROL && CONTROL !== 'leak' && CONTROL !== 'nosum' && CONTROL !== 'nogate') {
   console.error(`CM_FINANCES_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -97,14 +139,18 @@ if (CONTROL) {
   const src = lf(fs.readFileSync(path.join(ROOT, 'src/lib/clubManagerFinances.ts'), 'utf8'));
   const fixed = CONTROL === 'leak'
     ? '  s.playerWages = round3(s.playerWages + wageBill(state) / 1000);'
-    : "  const incomeProjected = sum(income, 'projected');";
+    : CONTROL === 'nogate'
+      ? '  s.homeGames += 1;'
+      : "  const incomeProjected = sum(income, 'projected');";
   const broken = CONTROL === 'leak'
     ? '  s.playerWages = round3(s.playerWages + wageBill(state) / 1000);\n  state.budget = round2(state.budget - wageBill(state) / 1000);'
-    : "  const incomeProjected = round2(sum(income, 'projected') + 1);";
+    : CONTROL === 'nogate'
+      ? '  s.homeGames += 0;'
+      : "  const incomeProjected = round2(sum(income, 'projected') + 1);";
   if (!src.includes(fixed)) { console.error(`control cannot run: clubManagerFinances.ts is not in the shape CM_FINANCES_CONTROL=${CONTROL} rewrites`); process.exit(1); }
   deskPath = `${TMP}/clubManagerFinances.${CONTROL}.ts`;
   fs.writeFileSync(deskPath, src.replace(fixed, broken));
-  console.log(CONTROL === 'leak' ? 'NEGATIVE CONTROL ON: the weekly tick takes wages out of the kitty' : 'NEGATIVE CONTROL ON: the income total is the sum plus one');
+  console.log(CONTROL === 'leak' ? 'NEGATIVE CONTROL ON: the weekly tick takes wages out of the kitty' : CONTROL === 'nogate' ? 'NEGATIVE CONTROL ON: the ledger never counts a home gate' : 'NEGATIVE CONTROL ON: the income total is the sum plus one');
 }
 const ENTRY = `${TMP}/clubManagerFinances.entry.mjs`;
 const BUNDLE = `${TMP}/clubManagerFinances.bundle.mjs`;
@@ -119,7 +165,7 @@ execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm -
 const mod = await import(pathToFileURL(BUNDLE).href);
 const cm = mod.engine;
 const fin = mod.desk;
-const { startCareer, playNextEntry, finishSeason, startNextSeason, loadCareer, sponsorOffers, signSponsor } = cm;
+const { startCareer, playNextEntry, finishSeason, startNextSeason, loadCareer, sponsorOffers, signSponsor, fixtureFor } = cm;
 const {
   projectFinances, closeLedger, booksOf, ensureBooks, isValidBooks, tickBooks, fanCrowdMult, gateMoodTarget,
   setTicketPolicy, setConcessionTier, sponsorTable, pushSponsor, acceptSponsor, FAN_MOOD_START,
@@ -252,7 +298,7 @@ console.log('3) The projection at week N against the closed ledger, over clubs a
   const CLUBS = ['Real Madrid', 'Manchester City', 'Arsenal', 'Brentford', 'Napoli', 'Ajax'];
   let runs = 0, sackedRuns = 0;
   for (const [i, club] of CLUBS.entries()) {
-    for (let seed = 0; seed < 3; seed++) {
+    for (let seed = 0; seed < 6; seed++) {
       withStream(1000 + i * 10 + seed, () => {
         const snaps = {};
         const end = playSeason(startCareer(club), s => { if (AT.includes(s.week)) snaps[s.week] = projectFinances(s); });
@@ -275,11 +321,12 @@ console.log('3) The projection at week N against the closed ledger, over clubs a
     console.log(`   week ${w}: income error median ${(median(err.income[w]) * 100).toFixed(1)}% (abs median ${(median(ai) * 100).toFixed(1)}%, p90 ${(pct(ai, 0.9) * 100).toFixed(1)}%), spend error median ${(median(err.spend[w]) * 100).toFixed(1)}% (abs median ${(median(as) * 100).toFixed(1)}%, p90 ${(pct(as, 0.9) * 100).toFixed(1)}%) over ${ai.length} runs`);
   }
   console.log(`   ${runs} seasons reached the last day, ${sackedRuns} ended in a sacking and are left out`);
-  if (runs < 12) fail(`only ${runs} seasons projected`);
-  /* Bands: [abs median, p90] of the relative error, set at roughly twice
-     the distribution measured on 2026-09-05 (see the header) rather than
-     beside it, and re-measured on SIM_SEED=2 and 3 before they were kept. */
-  const BAND = { income: { 5: [0.10, 0.18], 15: [0.12, 0.16], 30: [0.05, 0.09] }, spend: { 5: [0.01, 0.02], 15: [0.01, 0.02], 30: [0.005, 0.01] } };
+  if (runs < 24) fail(`only ${runs} seasons projected`);
+  /* Bands: [abs median, p90] of the relative error, roughly twice the mean
+     and 1.6 to 1.8 times the worst of SIM_SEED 0 to 7 measured 2026-09-15
+     (see the header) rather than beside them; the spend p90 at weeks 15 and
+     30 kept from 2026-09-05. */
+  const BAND = { income: { 5: [0.14, 0.25], 15: [0.14, 0.26], 30: [0.06, 0.13] }, spend: { 5: [0.005, 0.025], 15: [0.005, 0.02], 30: [0.005, 0.01] } };
   for (const w of AT) {
     for (const side of ['income', 'spend']) {
       const abs = err[side][w].map(Math.abs);
@@ -288,10 +335,17 @@ console.log('3) The projection at week N against the closed ledger, over clubs a
       if (!(pct(abs, 0.9) <= p90)) fail(`week ${w} ${side}: p90 error ${(pct(abs, 0.9) * 100).toFixed(1)}% is over the ${p90 * 100}% band`);
     }
   }
-  /* And the projection tightens as the season goes on, which is the whole point of projecting from actuals. */
+  /* And the income projection tightens as the season goes on, which is the whole point of projecting from actuals.
+     Spend is not held to that comparison since 2026-09-15. Its week 5 residual is small and mostly one club's
+     wage bill moving during the season (the week 5 p90 of 1.1 to 1.6 percent is Manchester City over projecting
+     spend with no European tie in sight). Its week 30 residual is a different number: the away leg of a European
+     semi final or final not yet drawn, at Europe's travel rate, 0.3 to 0.4 percent of a season's spend when it
+     happens, and on some clubs out of Europe an over projection of about 0.4 to 0.5 percent whose cause is not
+     traced. Whether the week 30 median landed on those or on zero depended on how many of the sampled clubs
+     carried a residual, not on the desk, so the rule was a coin toss on the sample. The spend claim is the band
+     above instead: within half a percent at the median from week 5 on. */
   const tight = side => median(err[side][30].map(Math.abs)) <= median(err[side][5].map(Math.abs));
   if (!tight('income')) fail('the income projection is no tighter at week 30 than at week 5');
-  if (!tight('spend')) fail('the spend projection is no tighter at week 30 than at week 5');
 }
 
 /* ---------- 4. Prices, the fans and the board ---------- */
@@ -415,9 +469,35 @@ console.log('6) A save from before the desk, and a mangled block, both open fres
     if (!isValidBooks(b) || b.fanMood !== FAN_MOOD_START || b.concessionTier !== 1 || b.season.weeks !== 0) fail(`wreckage ${JSON.stringify(w)} repaired to ${JSON.stringify(b).slice(0, 80)}`);
   }
   const old = { ...clone(base), books: undefined };
-  const played = withStream(31, () => playSeason(old));
+  /* Every match the season played, judged on the state it was played from: a
+     call to playNextEntry consumes the weeks the club is not involved in and
+     then at most one match of its own, so each consumed entry is read off the
+     state before the call. The ledger must hold exactly these. */
+  let homePlayed = 0, awayPlayed = 0;
+  const played = withStream(31, () => {
+    let s = old, guard = 0;
+    while (guard < 120 && s.week < s.calendar.length && !s.sacked) {
+      guard++;
+      const before = s;
+      const r = playNextEntry(s, { skipHalftime: true });
+      s = r.state;
+      for (let w = before.week; w < s.week; w++) {
+        const fx = fixtureFor(before, before.calendar[w]);
+        if (fx?.home === true) homePlayed++;
+        else if (fx?.home === false) awayPlayed++;
+      }
+      if (r.kind === 'seasonOver') break;
+    }
+    return s;
+  });
   const c = closeLedger(played);
-  if (!(c.weeks === played.week && c.homeGames >= 5 && c.playerWages > 0)) fail(`an old save's ledger did not fill (${c.weeks} weeks, ${c.homeGames} home, ${c.playerWages}m wages)`);
+  /* Filled means every week played was charged and every match went in: the ledger's home gates and away
+     trips equal the fixtures the season really played at home and away (a neutral final is neither). Until
+     2026-09-15 this wanted five home gates, which hung on the fixture list rather than on the books: a club's
+     shuffled slot can send it away for its first fifteen league rounds (roundPairs, see the header), so on
+     SIM_SEED=0 and 4 a season a sacking cut short at week 17 or 21 held one home gate with the books exactly
+     right, and the check was red on a healthy desk. */
+  if (!(c.weeks === played.week && c.playerWages > 0 && c.homeGames === homePlayed && c.awayTrips === awayPlayed)) fail(`an old save's ledger did not fill (${c.weeks} weeks of ${played.week}, ${c.homeGames} home gates for ${homePlayed} home fixtures, ${c.awayTrips} away trips for ${awayPlayed} away fixtures, ${c.playerWages}m wages)`);
   const store = new Map();
   globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) => store.set(k, v), removeItem: k => store.delete(k) };
   store.set('dukb-club-manager-save', JSON.stringify({ ...played, books: 'garbage' }));
@@ -446,7 +526,7 @@ console.log('6) A save from before the desk, and a mangled block, both open fres
   const probe = { ...clone(base), books: undefined };
   booksOf(probe);
   if (probe.books !== undefined) fail('booksOf wrote into the state it was handed');
-  console.log(`   ${WRECK.length} wreckages repaired to fresh books; an old save filled ${c.weeks} weeks, ${c.homeGames} home games, ${c.playerWages.toFixed(1)}m wages; garbage loads; stay closes and carries, move drops; summer sponsor money lands in the new ledger`);
+  console.log(`   ${WRECK.length} wreckages repaired to fresh books; an old save filled ${c.weeks} weeks, ${c.homeGames} home gates for ${homePlayed} home fixtures, ${c.awayTrips} away trips for ${awayPlayed}, ${c.playerWages.toFixed(1)}m wages; garbage loads; stay closes and carries, move drops; summer sponsor money lands in the new ledger`);
 }
 
 /* ---------- 7. Words match code ---------- */

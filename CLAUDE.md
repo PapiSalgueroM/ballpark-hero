@@ -679,6 +679,7 @@ current:**
 | File | Status |
 |---|---|
 | `docs/HANDOFF-2026-09-15.md` | **LIVE UNTIL THE NEXT HANDOFF.** Where the desktop lane left the build early on 2026-09-15: Rounds 580 to 584 of the Stadium Tycoon merge live, Round 585 (gems and packs) built, reviewed and uncommitted in the working tree with the exact steps to land it, what comes next (586 to 589), the open follow-ups, and every trap hit with its fix. Read it right after this file. |
+| `docs/HANDOFF-2026-09-15-AFTERNOON.md` | **LIVE FOR THE CLAUDE 610 TO 619 LANE.** Where that lane left things on the afternoon of 2026-09-15: Round 610 live, Rounds 611, 612 and 616 on the pushed branch `release-611-612-616` with their gate triage (one real Round 612 blocker in `simClubManagerFinances`), Round 613's refuted contract and work in progress branch, 614 and 615 queued, the post-publish College Grid purge, and every trap hit that day. Read it with the one above if you are continuing that lane. |
 | `docs/HANDOFF-2026-09-10.md` | HISTORICAL. The 2026-09-10 handoff, superseded by the one above. |
 | `docs/HANDOFF-2026-09-05.md` | HISTORICAL. The 2026-09-05 handoff, superseded by the one above. |
 | `docs/SHIP-PIPELINE.md` | **LIVE.** The deploy runbook. Read before packaging. |

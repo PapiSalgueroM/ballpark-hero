@@ -4,6 +4,8 @@
  "population": 356,
  "source": "public.player_market_values_dedup, read through the Supabase MCP on 2026-09-11.",
  "adjudicator": "public.world_cup_players where world_cup_year = 2026: the 2026 World Cup squads of all 48 nations, applied Round 389 (supabase/migrations/20260901_round_389_world_cup_2026_squads.sql). Every row there is a player two independent sources agree on, Wikipedia squad templates read through the API and Al Jazeera 2026-06-02, with Yahoo Sports 2026-06-11 as the third voice where they differed. Clubs are Wikipedia's. It covers only players picked for the World Cup, which is why it resolves 23 of the 356 and no more.",
+ "adjudicatorWeb2026_09_15": "Web adjudication, 2026-09-15, for the 18 pending Premier League rows. Two independent source families were read with WebFetch and WebSearch only: A, official (the premierleague.com squad data feed for season 2026, which lists a loaned-out player at his loan club and not at his parent, plus club, league and UEFA pages) and B, independent press (Sky Sports, ESPN, Sports Illustrated and others; Sky Sport Deutschland never counted as independent of Sky Sports UK). A row moved out of pending only where both families agreed on status and club. Each row carries its own URLs and read dates.",
+ "loanPolicy": "A baked roster row has no loan concept: BakedPlayer is {n,p,a,v,r} and bakedToCMPlayer never sets onLoan or loanFrom, which exist on CMPlayer only for loans a manager makes inside a career (Rounds 71 and 506). The convention the repo already uses is to place a season-long loanee at the club he plays for: scripts/transferOverlay2026.mjs documents its loan field as informational, lists the club a player is playing for (Marmoush at Tottenham, ter Stegen at Ajax), and writes a loan that ended with the parent keeping the player as the parent club. The Premier League feed does the same (Mudryk absent from Chelsea 2026/27, present at Tottenham with loan 1). So Mudryk is movedTo Tottenham, with informational loan: true and loanFrom: Chelsea on the ledger row. The bake and harness read only name, from and to, so no code change is needed. The honest limit to record: in game he is a normal Tottenham player, who can be sold and does not go back to Chelsea at season end. A baked loan flag would be its own round (BakedPlayer, the bake emit and bakedToCMPlayer), not part of this data fix. A loan from a modelled club to an unmodelled one would be removedClubNotModelled with realClub naming both, for example 'X, on loan from Y'.",
  "confirmedStill": [
   {
    "name": "Abdul Mumin",
@@ -21,11 +23,6 @@
    "wc2026": "Atalanta"
   },
   {
-   "name": "David Alaba",
-   "club": "Real Madrid",
-   "wc2026": "Real Madrid"
-  },
-  {
    "name": "Facundo Pellistri",
    "club": "Panathinaikos",
    "wc2026": "Panathinaikos"
@@ -36,14 +33,260 @@
    "wc2026": "Club Brugge"
   },
   {
+   "name": "Harry Amass",
+   "club": "Manchester United",
+   "adjudicatedOn": "2026-09-15",
+   "note": "Medium-risk because Sporting CP were interested while Portugal's window stayed open to 15 Sep. ESPN has him playing for Man Utd on 10 Sep, A Bola (3 Sep) says Sporting signed someone else, and a WebSearch on 2026-09-15 found no Sporting loan.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/1/squad",
+     "publisher": "Premier League data feed (premierleague.com)",
+     "readOn": "2026-09-15",
+     "says": "Manchester United 2026/27: shirt 41, Defender, loan 0; feed already carries 1 Sep deadline moves"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/356940/harry-amass",
+     "publisher": "ESPN",
+     "readOn": "2026-09-15",
+     "says": "Man Utd substitute v Sabah FK, Champions League, 10 Sep 2026"
+    },
+    {
+     "family": "B",
+     "url": "https://www.abola.pt/noticias/mercado-sporting-jovem-lancado-por-amorim-era-alternativa-a-zekri-2026090310583108814",
+     "publisher": "A Bola (2026-09-03)",
+     "readOn": "2026-09-15",
+     "says": "Sporting signed Moncef Zekri instead; Amass stayed at United"
+    },
+    {
+     "family": "third",
+     "url": "https://sports.yahoo.com/articles/man-united-plans-harry-amass-210500411.html",
+     "publisher": "Yahoo Sports (found with WebSearch, not needed for agreement)",
+     "readOn": "2026-09-15",
+     "says": "search for a Sporting loan in September 2026 returned no such move"
+    }
+   ]
+  },
+  {
+   "name": "Jason Steele",
+   "club": "Brighton",
+   "adjudicatedOn": "2026-09-15",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/36/squad",
+     "publisher": "Premier League data feed (premierleague.com)",
+     "readOn": "2026-09-15",
+     "says": "Brighton 2026/27: shirt 23, Goalkeeper, loan 0"
+    },
+    {
+     "family": "A",
+     "url": "https://www.brightonandhovealbion.com/media-article/mft-news-kit-numbers-premier-league-2026-27-season-august-2026",
+     "publisher": "Brighton & Hove Albion FC",
+     "readOn": "2026-09-15",
+     "says": "2026-08-20 squad numbers: Steele 23"
+    },
+    {
+     "family": "B",
+     "url": "https://www.skysports.com/football/coventry-city-vs-brighton-and-hove-albion/teams/559477",
+     "publisher": "Sky Sports (lineup 2026-09-13)",
+     "readOn": "2026-09-15",
+     "says": "Brighton substitute at Coventry"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/331/brighton-hove-albion",
+     "publisher": "ESPN",
+     "readOn": "2026-09-15",
+     "says": "Brighton 2026-27 squad: #23"
+    }
+   ]
+  },
+  {
+   "name": "Jay Dasilva",
+   "club": "Coventry City",
+   "adjudicatedOn": "2026-09-15",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/9/squad",
+     "publisher": "Premier League data feed (premierleague.com)",
+     "readOn": "2026-09-15",
+     "says": "Coventry City 2026/27: shirt 3, Defender, loan 0"
+    },
+    {
+     "family": "A",
+     "url": "https://www.ccfc.co.uk/news/2026/february/19/milan-van-ewijk--jay-dasilva-and-liam-kitching-sign-new-contracts-with-coventry-city/",
+     "publisher": "Coventry City FC (found with WebSearch)",
+     "readOn": "2026-09-15",
+     "says": "new contract, 2026-02-19"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/206172/jay-da-silva",
+     "publisher": "ESPN",
+     "readOn": "2026-09-15",
+     "says": "started all four Coventry league games 21 Aug to 13 Sep 2026"
+    },
+    {
+     "family": "B",
+     "url": "https://www.skysports.com/football/coventry-city-vs-brighton-and-hove-albion/teams/559477",
+     "publisher": "Sky Sports (lineup 2026-09-13)",
+     "readOn": "2026-09-15",
+     "says": "in Coventry starting XI"
+    }
+   ]
+  },
+  {
    "name": "John Yeboah",
    "club": "Venezia",
    "wc2026": "Venezia"
   },
   {
+   "name": "Josh Dasilva",
+   "club": "Brentford",
+   "adjudicatedOn": "2026-09-15",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/94/squad",
+     "publisher": "Premier League data feed (premierleague.com)",
+     "readOn": "2026-09-15",
+     "says": "Brentford 2026/27: shirt 10, Midfielder, loan 0"
+    },
+    {
+     "family": "A",
+     "url": "https://www.brentfordfc.com/en/news/article/first-team-2026-27-premier-league-squad-numbers-confirmed",
+     "publisher": "Brentford FC",
+     "readOn": "2026-09-15",
+     "says": "2026/27 squad numbers: Dasilva 10"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/337/brentford",
+     "publisher": "ESPN",
+     "readOn": "2026-09-15",
+     "says": "Brentford 2026-27 squad: #10"
+    },
+    {
+     "family": "B",
+     "url": "https://sports.yahoo.com/articles/brentford-team-news-mathias-jensen-163028625.html",
+     "publisher": "Roundtable Sports via Yahoo Sports (2026-09-04)",
+     "readOn": "2026-09-15",
+     "says": "hamstring injury playing for Brentford Under-21s"
+    }
+   ]
+  },
+  {
+   "name": "Lewis Dunk",
+   "club": "Brighton",
+   "adjudicatedOn": "2026-09-15",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/36/squad",
+     "publisher": "Premier League data feed (premierleague.com)",
+     "readOn": "2026-09-15",
+     "says": "Brighton 2026/27: shirt 5, Defender, loan 0"
+    },
+    {
+     "family": "A",
+     "url": "https://www.brightonandhovealbion.com/media-article/mft-news-kit-numbers-premier-league-2026-27-season-august-2026",
+     "publisher": "Brighton & Hove Albion FC",
+     "readOn": "2026-09-15",
+     "says": "2026-08-20 squad numbers: Dunk 5"
+    },
+    {
+     "family": "B",
+     "url": "https://www.skysports.com/football/coventry-city-vs-brighton-and-hove-albion/report/559477",
+     "publisher": "Sky Sports (2026-09-13)",
+     "readOn": "2026-09-15",
+     "says": "scored in Coventry 0-5 Brighton"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/147106/lewis-dunk",
+     "publisher": "ESPN",
+     "readOn": "2026-09-15",
+     "says": "started every Brighton match 23 Aug to 13 Sep 2026"
+    }
+   ]
+  },
+  {
+   "name": "Michael Keane",
+   "club": "Everton",
+   "adjudicatedOn": "2026-09-15",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/11/squad",
+     "publisher": "Premier League data feed (premierleague.com)",
+     "readOn": "2026-09-15",
+     "says": "Everton 2026/27: shirt 5, Defender, loan 0"
+    },
+    {
+     "family": "A",
+     "url": "https://www.evertonfc.com/news/2026/april/23/keane-extends-everton-career-into-10th-season/",
+     "publisher": "Everton FC (found with WebSearch)",
+     "readOn": "2026-09-15",
+     "says": "extension, 2026-04-23"
+    },
+    {
+     "family": "B",
+     "url": "https://www.skysports.com/football/tottenham-hotspur-vs-everton/teams/559483",
+     "publisher": "Sky Sports (lineup 2026-09-12)",
+     "readOn": "2026-09-15",
+     "says": "Everton substitute at Tottenham"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/368/everton",
+     "publisher": "ESPN",
+     "readOn": "2026-09-15",
+     "says": "Everton 2026-27 squad: #5"
+    }
+   ]
+  },
+  {
    "name": "Ross Stewart",
    "club": "Southampton",
    "wc2026": "Southampton"
+  },
+  {
+   "name": "Tyrone Mings",
+   "club": "Aston Villa",
+   "adjudicatedOn": "2026-09-15",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/7/squad",
+     "publisher": "Premier League data feed (premierleague.com)",
+     "readOn": "2026-09-15",
+     "says": "Aston Villa 2026/27: shirt 5, Defender, loan 0"
+    },
+    {
+     "family": "A",
+     "url": "https://www.avfc.co.uk/news/2026/september/06/postmatch-tyrone-mings-hull-city",
+     "publisher": "Aston Villa FC (found with WebSearch)",
+     "readOn": "2026-09-15",
+     "says": "post-match Mings piece, 2026-09-06"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/181312/tyrone-mings",
+     "publisher": "ESPN",
+     "readOn": "2026-09-15",
+     "says": "Aston Villa #5, 2026-27 appearances to 12 Sep"
+    },
+    {
+     "family": "B",
+     "url": "https://www.skysports.com/football/hull-city-vs-aston-villa/teams/559469",
+     "publisher": "Sky Sports (lineup 2026-09-05)",
+     "readOn": "2026-09-15",
+     "says": "in Aston Villa starting XI at Hull"
+    }
+   ]
   },
   {
    "name": "Wout Weghorst",
@@ -58,9 +301,159 @@
  ],
  "movedTo": [
   {
+   "name": "Abu Kamara",
+   "from": "Hull City",
+   "to": "Portsmouth",
+   "realClub": "Portsmouth",
+   "adjudicatedOn": "2026-09-15",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.portsmouthfc.co.uk/news/2026/august/10/kamara-returns-to-pompey/",
+     "publisher": "Portsmouth FC (found with WebSearch)",
+     "readOn": "2026-09-15",
+     "says": "Kamara Returns To Pompey, 2026-08-10"
+    },
+    {
+     "family": "A",
+     "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/88/squad",
+     "publisher": "Premier League data feed (premierleague.com)",
+     "readOn": "2026-09-15",
+     "says": "absent from Hull City 2026/27"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+     "publisher": "ESPN (2026-09-04)",
+     "readOn": "2026-09-15",
+     "says": "Hull City out: Abu Kamara (Portsmouth), undisclosed"
+    },
+    {
+     "family": "B",
+     "url": "https://www.skysports.com/football/news/11095/13584355/charlton-athletic-0-0-portsmouth-goalless-at-the-valley",
+     "publisher": "Sky Sports (2026-09-12)",
+     "readOn": "2026-09-15",
+     "says": "played for Portsmouth at Charlton"
+    }
+   ]
+  },
+  {
+   "name": "Chris Mepham",
+   "from": "Sunderland",
+   "to": "West Brom",
+   "realClub": "West Bromwich Albion",
+   "adjudicatedOn": "2026-09-15",
+   "note": "Sunderland was a 2024/25 loan from Bournemouth; West Brom signed him in August 2025.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.wba.co.uk/news/albion-mens-first-team-squad-numbers-confirmed-202627-campaign",
+     "publisher": "West Bromwich Albion FC",
+     "readOn": "2026-09-15",
+     "says": "2026/27 squad numbers: Mepham 2"
+    },
+    {
+     "family": "A",
+     "url": "https://www.wba.co.uk/news/albion-sign-chris-mepham-afc-bournemouth",
+     "publisher": "West Bromwich Albion FC",
+     "readOn": "2026-09-15",
+     "says": "signed from Bournemouth 2025-08-28, three years"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/team/squad/_/id/383/west-bromwich-albion",
+     "publisher": "ESPN",
+     "readOn": "2026-09-15",
+     "says": "West Brom 2026-27 squad: #2, 4 appearances"
+    },
+    {
+     "family": "B",
+     "url": "https://www.skysports.com/football/newcastle-united-vs-west-bromwich-albion/teams/577432",
+     "publisher": "Sky Sports (lineup 2026-08-26)",
+     "readOn": "2026-09-15",
+     "says": "in West Brom starting XI at Newcastle"
+    }
+   ]
+  },
+  {
    "name": "Derek Cornelius",
    "from": "Marseille",
    "to": "Rangers"
+  },
+  {
+   "name": "Ethan Pinnock",
+   "from": "Brentford",
+   "to": "Coventry City",
+   "realClub": "Coventry City",
+   "adjudicatedOn": "2026-09-15",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/9/squad",
+     "publisher": "Premier League data feed (premierleague.com)",
+     "readOn": "2026-09-15",
+     "says": "Coventry City 2026/27: shirt 2, loan 0, joined 2026-08-26; absent from Brentford feed"
+    },
+    {
+     "family": "A",
+     "url": "https://www.brentfordfc.com/en/news/article/first-team-ethan-pinnock-brentford-coventry-city-transfer",
+     "publisher": "Brentford FC",
+     "readOn": "2026-09-15",
+     "says": "permanent move to Coventry City"
+    },
+    {
+     "family": "B",
+     "url": "https://www.skysports.com/football/news/11667/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs",
+     "publisher": "Sky Sports (2026-09-03)",
+     "readOn": "2026-09-15",
+     "says": "Brentford out: Ethan Pinnock, Coventry, 6m pounds"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+     "publisher": "ESPN (2026-09-04)",
+     "readOn": "2026-09-15",
+     "says": "Coventry in: Ethan Pinnock (Brentford), undisclosed"
+    }
+   ]
+  },
+  {
+   "name": "İlkay Gündoğan",
+   "from": "Manchester City",
+   "to": "Galatasaray",
+   "realClub": "Galatasaray",
+   "adjudicatedOn": "2026-09-15",
+   "note": "Moved in September 2025.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.galatasaray.org/p/20-ilkay-gundogan/3549",
+     "publisher": "Galatasaray SK",
+     "readOn": "2026-09-15",
+     "says": "current squad profile, #20"
+    },
+    {
+     "family": "A",
+     "url": "https://www.uefa.com/uefachampionsleague/clubs/players/250005335--ilkay-gundogan/",
+     "publisher": "UEFA",
+     "readOn": "2026-09-15",
+     "says": "Champions League 2026/27, Galatasaray, #20"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/131424/ilkay-gundogan",
+     "publisher": "ESPN",
+     "readOn": "2026-09-15",
+     "says": "Galatasaray appearances 14 Aug and 9 Sep 2026"
+    },
+    {
+     "family": "B",
+     "url": "https://www.kicker.de/ilkay-guendogan/spieler",
+     "publisher": "kicker (found with WebSearch, fetch 403)",
+     "readOn": "2026-09-15",
+     "says": "profile titled Galatasaray SK 2026/27"
+    }
+   ]
   },
   {
    "name": "Jayden Nelson",
@@ -75,12 +468,82 @@
   {
    "name": "Julio Enciso",
    "from": "Brighton",
-   "to": "Strasbourg"
+   "to": "Ipswich Town",
+   "realClub": "Ipswich Town",
+   "adjudicatedOn": "2026-09-15",
+   "note": "Ipswich Town signed him permanently from Strasbourg on 2026-08-17, on a five-year deal. The World Cup table's Strasbourg was right in June 2026 but the window overtook it.",
+   "sources": [
+    {
+     "family": "B",
+     "url": "https://www.skysports.com/football/news/11667/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs",
+     "publisher": "Sky Sports (2026-09-03)",
+     "readOn": "2026-09-15",
+     "says": "Ipswich in: Julio Enciso, Strasbourg, undisclosed"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/story/_/id/48955344/premier-league-2026-summer-transfers-all-confirmed-ins-outs-every-club",
+     "publisher": "ESPN (2026-09-04)",
+     "readOn": "2026-09-15",
+     "says": "Ipswich in: Julio Enciso (Strasbourg), undisclosed"
+    },
+    {
+     "family": "third",
+     "url": "https://www.eadt.co.uk/sport/26471247.ipswich-town-sign-julio-enciso-26m-strasbourg/",
+     "publisher": "East Anglian Daily Times (2026-08-17)",
+     "readOn": "2026-09-15",
+     "says": "permanent from Strasbourg, 26m pounds, five years"
+    },
+    {
+     "family": "A",
+     "url": "https://www.itfc.co.uk/news/2026/august/17/julio-returns-to-town/",
+     "publisher": "Ipswich Town FC (found with WebSearch; fetch returned the headline and date only)",
+     "readOn": "2026-09-15",
+     "says": "JULIO ENCISO RETURNS TO TOWN, 2026-08-17"
+    }
+   ]
   },
   {
    "name": "Louicius Deedson",
    "from": "OB",
    "to": "FC Dallas"
+  },
+  {
+   "name": "Maximilian Wöber",
+   "from": "Leeds United",
+   "to": "Schalke 04",
+   "realClub": "Schalke 04",
+   "adjudicatedOn": "2026-09-15",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://schalke04.de/personal/maximilian-woeber-unterschreibt-auf-schalke/",
+     "publisher": "FC Schalke 04",
+     "readOn": "2026-09-15",
+     "says": "signed from Leeds United until 2027, July 2026"
+    },
+    {
+     "family": "A",
+     "url": "https://www.leedsunited.com/en/news/max-woeber-leaves-leeds-united",
+     "publisher": "Leeds United FC",
+     "readOn": "2026-09-15",
+     "says": "contract mutually terminated, 2026-07-22"
+    },
+    {
+     "family": "B",
+     "url": "https://sport.sky.de/fussball/artikel/fc-schalke-verpflichtet-nach-sky-sport-informationen-leeds-verteidiger-maximilian-woeber/13565901/34943",
+     "publisher": "Sky Sport Deutschland (2026-07-22)",
+     "readOn": "2026-09-15",
+     "says": "Schalke sign Wöber permanently"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/231674/maximilian-wober",
+     "publisher": "ESPN",
+     "readOn": "2026-09-15",
+     "says": "Schalke Bundesliga appearances 30 Aug to 11 Sep 2026"
+    }
+   ]
   },
   {
    "name": "Mehdi Taremi",
@@ -98,9 +561,139 @@
    "to": "Augsburg"
   },
   {
+   "name": "Mykhaylo Mudryk",
+   "from": "Chelsea",
+   "to": "Tottenham",
+   "realClub": "Tottenham Hotspur, on a season-long loan from Chelsea",
+   "loan": true,
+   "loanFrom": "Chelsea",
+   "adjudicatedOn": "2026-09-15",
+   "note": "Sources spell him Mykhailo; the dataset and roster name is Mykhaylo Mudryk. Informational loan fields follow scripts/transferOverlay2026.mjs; the bake and the harness ignore them. See loanPolicy.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/6/squad",
+     "publisher": "Premier League data feed (premierleague.com)",
+     "readOn": "2026-09-15",
+     "says": "Tottenham 2026/27: shirt 27, loan 1, joined 2026-09-01; absent from Chelsea 2026/27 feed"
+    },
+    {
+     "family": "A",
+     "url": "https://www.tottenhamhotspur.com/news/1088045/mudryk-arrives-on-loan",
+     "publisher": "Tottenham Hotspur FC",
+     "readOn": "2026-09-15",
+     "says": "season-long loan from Chelsea, 2026-09-01"
+    },
+    {
+     "family": "A",
+     "url": "https://www.chelseafc.com/en/news/article/mykhailo-mudryk-completes-season-long-loan-switch-tottenham",
+     "publisher": "Chelsea FC",
+     "readOn": "2026-09-15",
+     "says": "season-long loan to Tottenham Hotspur"
+    },
+    {
+     "family": "B",
+     "url": "https://www.skysports.com/football/news/11675/13579537/mykhailo-mudryk-transfer-news-tottenham-sign-chelsea-winger-on-loan-as-tosin-joins-in-permanent-deal",
+     "publisher": "Sky Sports (2026-09-02)",
+     "readOn": "2026-09-15",
+     "says": "season-long loan from Chelsea with an option to buy"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/story/_/id/49787439/tottenham-sign-mykhailo-mudryk-tosin-adarabioyo-chelsea",
+     "publisher": "ESPN (2026-09-01)",
+     "readOn": "2026-09-15",
+     "says": "season-long loan, option to make permanent"
+    }
+   ]
+  },
+  {
    "name": "Sontje Hansen",
    "from": "NEC Nijmegen",
    "to": "Middlesbrough"
+  },
+  {
+   "name": "Steven Alzate",
+   "from": "Hull City",
+   "to": "Atlanta United",
+   "realClub": "Atlanta United",
+   "adjudicatedOn": "2026-09-15",
+   "note": "Moved in August 2025. MLS plays a calendar year, so his 2026-27 club means the 2026 MLS season.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.atlutd.com/news/atlanta-united-signs-midfielder-steven-alzate",
+     "publisher": "Atlanta United FC",
+     "readOn": "2026-09-15",
+     "says": "signed from Hull City 2025-08-04, through 2030"
+    },
+    {
+     "family": "A",
+     "url": "https://www.atlutd.com/players/steven-alzate/",
+     "publisher": "Atlanta United FC",
+     "readOn": "2026-09-15",
+     "says": "current roster, #7, senior roster"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/243384/steven-alzate",
+     "publisher": "ESPN",
+     "readOn": "2026-09-15",
+     "says": "Atlanta United sub appearances 15 Aug to 5 Sep 2026"
+    },
+    {
+     "family": "B",
+     "url": "https://www.ajc.com/sports/2026/01/steven-alzate-working-to-impress-gerardo-martino-colombia/",
+     "publisher": "Atlanta Journal-Constitution (2026-01-24)",
+     "readOn": "2026-09-15",
+     "says": "plays for Atlanta United"
+    }
+   ]
+  },
+  {
+   "name": "Timo Werner",
+   "from": "Tottenham",
+   "to": "San Jose Earthquakes",
+   "realClub": "San Jose Earthquakes",
+   "adjudicatedOn": "2026-09-15",
+   "note": "Tottenham was a loan from RB Leipzig; San Jose signed him from Leipzig in January 2026. MLS plays a calendar year.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.mlssoccer.com/news/san-jose-earthquakes-acquire-timo-werner-from-rb-leipzig",
+     "publisher": "Major League Soccer",
+     "readOn": "2026-09-15",
+     "says": "acquired from RB Leipzig 2026-01-29, Designated Player"
+    },
+    {
+     "family": "A",
+     "url": "https://www.sjearthquakes.com/players/timo-werner/",
+     "publisher": "San Jose Earthquakes",
+     "readOn": "2026-09-15",
+     "says": "current roster, #11"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/story/_/id/47765041/san-jose-earthquakes-sign-timo-werner-leipzig-2028",
+     "publisher": "ESPN (2026-01-29)",
+     "readOn": "2026-09-15",
+     "says": "San Jose sign Werner from Leipzig through 2028"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/191088/timo-werner",
+     "publisher": "ESPN",
+     "readOn": "2026-09-15",
+     "says": "San Jose #11, MLS matches to 22 Aug 2026"
+    },
+    {
+     "family": "B",
+     "url": "https://www.kicker.de/timo-werner/spieler",
+     "publisher": "kicker (found with WebSearch, fetch 403)",
+     "readOn": "2026-09-15",
+     "says": "profile titled San Jose Earthquakes 2026"
+    }
+   ]
   },
   {
    "name": "Yuito Suzuki",
@@ -120,6 +713,43 @@
    "realClub": "Cremonese"
   },
   {
+   "name": "Conor Chaplin",
+   "from": "Ipswich Town",
+   "realClub": "Leicester City",
+   "adjudicatedOn": "2026-09-15",
+   "note": "Free transfer after leaving Ipswich. Leicester City are in League One in 2026-27 (Sky Sports 2026-08-13) and the game does not model them.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.lcfc.com/media-article/leicester-city-lcfc-conor-chaplin-sign-transfer",
+     "publisher": "Leicester City FC",
+     "readOn": "2026-09-15",
+     "says": "signed 2026-07-16, three-year deal"
+    },
+    {
+     "family": "A",
+     "url": "https://www.itfc.co.uk/news/2026/may/15/conor-chaplin-to-depart-town/",
+     "publisher": "Ipswich Town FC",
+     "readOn": "2026-09-15",
+     "says": "Conor Chaplin to depart Town, 2026-05-15"
+    },
+    {
+     "family": "B",
+     "url": "https://www.skysports.com/football/news/11667/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs",
+     "publisher": "Sky Sports (2026-09-03)",
+     "readOn": "2026-09-15",
+     "says": "Ipswich out: Conor Chaplin, Leicester, free"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/player/_/id/211756/conor-chaplin",
+     "publisher": "ESPN",
+     "readOn": "2026-09-15",
+     "says": "Leicester City #8, League One start 29 Aug 2026"
+    }
+   ]
+  },
+  {
    "name": "Ramón Sosa",
    "from": "Nottingham Forest",
    "realClub": "Palmeiras"
@@ -127,9 +757,170 @@
  ],
  "notCurrent": [
   {
+   "name": "David Alaba",
+   "from": "Real Madrid",
+   "why": "Unattached. Real Madrid announced in May 2026 that he would leave when his contract expired that summer, and Austrian press on 2026-09-14 describes him as currently without a club. The World Cup table's Real Madrid was right in June 2026, before the contract ran out. A free agent can sign at any time, so re-check at the next adjudication.",
+   "adjudicatedOn": "2026-09-15",
+   "note": "Real Madrid's own statement (22 May 2026) and beIN SPORTS (23 May 2026) confirm he left on contract expiry. Ligaportal (30 Aug 2026) and VOL.AT (14 Sep 2026) both say he is without a club, and Sports Illustrated (28 Jul 2026) listed him as unattached.",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.realmadrid.com/en-US/news/club/announcements/comunicado-oficial-alaba-22-05-2026",
+     "publisher": "Real Madrid CF (found with WebSearch; fetch returned a site error page)",
+     "readOn": "2026-09-15",
+     "says": "Official Statement: Alaba, 2026-05-22"
+    },
+    {
+     "family": "third",
+     "url": "https://www.beinsports.com/en-us/soccer/la-liga/articles/real-madrid-confirm-alaba-departure-2026-05-23",
+     "publisher": "beIN SPORTS (2026-05-23)",
+     "readOn": "2026-09-15",
+     "says": "will leave as a free agent at the end of the season; no next club"
+    },
+    {
+     "family": "third",
+     "url": "https://www.vol.at/rangnick-mischt-oefb-kader-neu-prominenter-name-fehlt/10464947",
+     "publisher": "VOL.AT (2026-09-14)",
+     "readOn": "2026-09-15",
+     "says": "Der derzeit vereinslose Kapitaen David Alaba fehlt (the captain, currently without a club, is left out)"
+    },
+    {
+     "family": "third",
+     "url": "https://www.ligaportal.at/international/ligen-mix/93448-oefb-kapitaen-alaba-weiter-ohne-verein-mls-fenster-laeuft-nur-noch-bis-mittwoch",
+     "publisher": "Ligaportal (2026-08-30)",
+     "readOn": "2026-09-15",
+     "says": "still without a club after leaving Real Madrid"
+    },
+    {
+     "family": "B",
+     "url": "https://www.si.com/soccer/best-free-agents-still-available-sign-summer-2026",
+     "publisher": "Sports Illustrated (2026-07-28)",
+     "readOn": "2026-09-15",
+     "says": "lists Alaba among unattached defenders"
+    }
+   ]
+  },
+  {
    "name": "Diogo Jota",
    "from": "Liverpool",
-   "why": "Removed from every 2026-27 squad because he is not a current player. NOT adjudicated by the World Cup table, which covers only players picked for the 2026 tournament, and NOT confirmable from this sandbox, which has no web egress. A session with egress must confirm this entry and record its two sources here. It is removed rather than left pending because the cost of shipping this particular row wrongly is not the same as the cost of a stale transfer."
+   "why": "Diogo Jota died on 3 July 2025, aged 28, in a road traffic accident in Spain. His brother, Andre Silva, also died. He is in no 2026-27 squad. Confirmed on 2026-09-15 by two independent sources, as the earlier entry asked.",
+   "adjudicatedOn": "2026-09-15",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.liverpoolfc.com/news/diogo-jota-1996-2025",
+     "publisher": "Liverpool FC",
+     "readOn": "2026-09-15",
+     "says": "died aged 28 in a road traffic accident in Spain, with his brother Andre Silva"
+    },
+    {
+     "family": "B",
+     "url": "https://www.skysports.com/football/news/11095/13391754/diogo-jota-liverpool-forward-dies-in-car-accident-in-spain",
+     "publisher": "Sky Sports (2025-07-03)",
+     "readOn": "2026-09-15",
+     "says": "died in a car accident near Zamora, Spain, 3 July 2025, aged 28; brother Andre Silva also died"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com/soccer/story/_/id/45654499/liverpool-forward-diogo-jota-brother-die-car-crash-civil-guard",
+     "publisher": "ESPN (2025-07-03)",
+     "readOn": "2026-09-15",
+     "says": "Jota, 28, and his brother Andre Silva, 25, died in a car crash near Zamora"
+    }
+   ]
+  },
+  {
+   "name": "Emil Krafth",
+   "from": "Newcastle",
+   "why": "Unattached. Newcastle released him when his contract expired in summer 2026, and English and Swedish searches found no new club up to 2026-09-15. Medium confidence: no source dated after 1 September states outright that he is still without a club, and a free agent can sign at any time, so re-check at the next adjudication.",
+   "adjudicatedOn": "2026-09-15",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://www.newcastleunited.com/en/news/newcastle-united-confirm-mens-first-team-retained-list",
+     "publisher": "Newcastle United FC (2026-06-02)",
+     "readOn": "2026-09-15",
+     "says": "departs on contract expiry"
+    },
+    {
+     "family": "A",
+     "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/4/squad",
+     "publisher": "Premier League data feed (premierleague.com)",
+     "readOn": "2026-09-15",
+     "says": "absent from Newcastle 2026/27"
+    },
+    {
+     "family": "A",
+     "url": "https://www.365scores.com/football/player/emil-krafth-38352",
+     "publisher": "365Scores (not official)",
+     "readOn": "2026-09-15",
+     "says": "Free Agent"
+    },
+    {
+     "family": "B",
+     "url": "https://fotbolltransfers.com/spelare/emil-krafth/4146",
+     "publisher": "Fotbolltransfers",
+     "readOn": "2026-09-15",
+     "says": "Kontraktslös since 2026-07-01, page news to 2026-08-31"
+    },
+    {
+     "family": "B",
+     "url": "https://www.skysports.com/football/news/11667/13546618/transfer-news-summer-transfer-window-2026-premier-league-deals-ins-and-outs",
+     "publisher": "Sky Sports (2026-09-03)",
+     "readOn": "2026-09-15",
+     "says": "Newcastle out: Emil Krafth, released"
+    }
+   ]
+  },
+  {
+   "name": "Neto",
+   "from": "Arsenal",
+   "why": "Unattached. Arsenal was a 2024/25 loan from Bournemouth; he joined Botafogo in August 2025 and that contract was ended by mutual agreement on 2026-06-26. Free agent lists published after the 1 September deadline still name him, he is not in Arsenal's 2026/27 Premier League squad, and no signing was found up to 2026-09-15. Medium confidence: a free agent can sign at any time, so re-check at the next adjudication.",
+   "adjudicatedOn": "2026-09-15",
+   "sources": [
+    {
+     "family": "A",
+     "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v2/competitions/8/seasons/2026/teams/3/squad",
+     "publisher": "Premier League data feed (premierleague.com)",
+     "readOn": "2026-09-15",
+     "says": "Arsenal 2026/27 goalkeepers Raya, Arrizabalaga, Meslier; Neto absent"
+    },
+    {
+     "family": "A",
+     "url": "https://www.botafogo.com.br/elenco/futebol/neto",
+     "publisher": "Botafogo (HTTP 404)",
+     "readOn": "2026-09-15",
+     "says": "no squad profile"
+    },
+    {
+     "family": "A",
+     "url": "https://www.sportsmole.co.uk/football/feature/best-players-still-available-as-free-agents-after-deadline-day_604437.html",
+     "publisher": "Sports Mole (not official, 2026-09-04)",
+     "readOn": "2026-09-15",
+     "says": "free agent after the deadline"
+    },
+    {
+     "family": "B",
+     "url": "https://sports.yahoo.com/articles/ranking-best-free-agents-transfer-203548085.html",
+     "publisher": "The Sporting News via Yahoo Sports (2026-09-02)",
+     "readOn": "2026-09-15",
+     "says": "free agent after the window"
+    },
+    {
+     "family": "B",
+     "url": "https://www.espn.com.br/futebol/botafogo/artigo/_/id/16917230/botafogo-rescinde-contrato-neto-pode-dar-adeus-bastos-veja-os-bastidores",
+     "publisher": "ESPN Brasil (2026-06-27)",
+     "readOn": "2026-09-15",
+     "says": "Botafogo contract ended by agreement on 26 June"
+    },
+    {
+     "family": "third",
+     "url": "https://tmc.com.br/esporte/botafogo-e-neto-firmam-acordo-para-recisao-de-contrato-do-goleiro/",
+     "publisher": "TMC (found with WebSearch, spot check, not needed for agreement)",
+     "readOn": "2026-09-15",
+     "says": "Portuguese-language search for a new club: newest item is the June termination, no signing"
+    }
+   ]
   }
  ],
  "pending": [
@@ -246,16 +1037,8 @@
    "club": "Arouca"
   },
   {
-   "name": "Neto",
-   "club": "Arsenal"
-  },
-  {
    "name": "Michael Gardawski",
    "club": "Asteras Tripolis"
-  },
-  {
-   "name": "Tyrone Mings",
-   "club": "Aston Villa"
   },
   {
    "name": "Nicolò Zaniolo",
@@ -430,14 +1213,6 @@
    "club": "Braga"
   },
   {
-   "name": "Ethan Pinnock",
-   "club": "Brentford"
-  },
-  {
-   "name": "Josh Dasilva",
-   "club": "Brentford"
-  },
-  {
    "name": "Jordan Amavi",
    "club": "Brest"
   },
@@ -448,14 +1223,6 @@
   {
    "name": "Romain Del Castillo",
    "club": "Brest"
-  },
-  {
-   "name": "Jason Steele",
-   "club": "Brighton"
-  },
-  {
-   "name": "Lewis Dunk",
-   "club": "Brighton"
   },
   {
    "name": "Jeremy Sarmiento",
@@ -526,10 +1293,6 @@
    "club": "Charleroi"
   },
   {
-   "name": "Mykhaylo Mudryk",
-   "club": "Chelsea"
-  },
-  {
    "name": "Simon Mignolet",
    "club": "Club Brugge"
   },
@@ -552,10 +1315,6 @@
   {
    "name": "Alessio Iovine",
    "club": "Como"
-  },
-  {
-   "name": "Jay Dasilva",
-   "club": "Coventry City"
   },
   {
    "name": "David Schnegg",
@@ -612,10 +1371,6 @@
   {
    "name": "Marash Kumbulla",
    "club": "Espanyol"
-  },
-  {
-   "name": "Michael Keane",
-   "club": "Everton"
   },
   {
    "name": "Rafa Soares",
@@ -802,14 +1557,6 @@
    "club": "Holstein Kiel"
   },
   {
-   "name": "Abu Kamara",
-   "club": "Hull City"
-  },
-  {
-   "name": "Steven Alzate",
-   "club": "Hull City"
-  },
-  {
    "name": "Jordi Alba",
    "club": "Inter Miami"
   },
@@ -824,10 +1571,6 @@
   {
    "name": "Stefan de Vrij",
    "club": "Inter Milan"
-  },
-  {
-   "name": "Conor Chaplin",
-   "club": "Ipswich Town"
   },
   {
    "name": "Louey Ben Farhat",
@@ -918,10 +1661,6 @@
    "club": "Lecce"
   },
   {
-   "name": "Maximilian Wöber",
-   "club": "Leeds United"
-  },
-  {
    "name": "Wesley Saïd",
    "club": "Lens"
   },
@@ -982,14 +1721,6 @@
    "club": "Málaga"
   },
   {
-   "name": "İlkay Gündoğan",
-   "club": "Manchester City"
-  },
-  {
-   "name": "Harry Amass",
-   "club": "Manchester United"
-  },
-  {
    "name": "Luiz Felipe",
    "club": "Marseille"
   },
@@ -1048,10 +1779,6 @@
   {
    "name": "Lewis Morgan",
    "club": "New York Red Bulls"
-  },
-  {
-   "name": "Emil Krafth",
-   "club": "Newcastle"
   },
   {
    "name": "Taxiarchis Fountas",
@@ -1286,10 +2013,6 @@
    "club": "Stuttgart"
   },
   {
-   "name": "Chris Mepham",
-   "club": "Sunderland"
-  },
-  {
    "name": "Florian Bianchini",
    "club": "Swansea City"
   },
@@ -1300,10 +2023,6 @@
   {
    "name": "Lorenzo Insigne",
    "club": "Toronto FC"
-  },
-  {
-   "name": "Timo Werner",
-   "club": "Tottenham"
   },
   {
    "name": "Shavy Babicka",

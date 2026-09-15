@@ -323,6 +323,30 @@ if (!reachable && listsById.size === 0) {
     reachable = false;
   }
 
+  /* the college football champions roll is the Round 232 rebuild, season by
+     season, 1981 through 2025 with split years carried per selector. These
+     pins lived in scripts/simCollegeGrid.mjs until Round 611 retired College
+     Grid's National Champion column and deleted that harness; the table still
+     feeds this quiz, so they moved here unchanged. The corrupted scrape had
+     USC for the 2005 season Texas won, Ohio State for the 2006 season Florida
+     won, and Oregon, who has never won one. */
+  try {
+    const { data, error } = await supabase.from("cfb_national_champions").select("year, champion");
+    if (error) throw new Error(error.message);
+    const rows = data ?? [];
+    const PINS = [["Texas", 2005], ["Florida", 2006], ["Indiana", 2025], ["Clemson", 1981], ["Penn State", 1982]];
+    for (const [school, year] of PINS) {
+      if (!rows.some(c => c.champion === school && c.year === year)) fail(`cfb_national_champions lost the verified ${year} ${school} row, the corrupted scrape may be back`);
+    }
+    if (rows.some(c => c.champion === "Oregon")) fail("cfb_national_champions: Oregon appears as a national champion, which never happened");
+    const distinct = new Set(rows.map(c => c.champion)).size;
+    if (distinct < 20) fail(`cfb_national_champions: only ${distinct} distinct champions, the rebuilt table carries 22`);
+    console.log(`   cfb_national_champions: ${rows.length} rows, ${distinct} champions, the ${PINS.length} pinned seasons hold, no Oregon`);
+  } catch {
+    console.log("   cfb_national_champions: UNREACHABLE, NOT CHECKED.");
+    reachable = false;
+  }
+
   /* ------------------------------------ 4: the finals-table shape fences */
   console.log("3) shape fences on the finals-series tables");
   /* [table, person column that must never carry digits, row floor, floor

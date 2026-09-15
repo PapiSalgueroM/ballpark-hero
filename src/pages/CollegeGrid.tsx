@@ -14,6 +14,8 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HelpCircle, Trophy } from 'lucide-react';
 
+const RULES_SEEN_KEY = 'cg-rules-seen-611';
+
 const CollegeGrid = () => {
   const {
     puzzle,
@@ -27,16 +29,21 @@ const CollegeGrid = () => {
     correctCount,
     rarityScore,
     isLoading,
-    checkingDown,
+    dataError,
   } = useCollegeGrid();
 
   const [showRules, setShowRules] = useState(false);
 
+  /* Round 611 rewrote the rules (the columns and what costs a guess), so the
+     seen flag is new and every player gets the new rules once. */
   useEffect(() => {
-    const seen = localStorage.getItem('cg-rules-seen');
-    if (!seen) {
+    try {
+      if (!localStorage.getItem(RULES_SEEN_KEY)) {
+        setShowRules(true);
+        localStorage.setItem(RULES_SEEN_KEY, '1');
+      }
+    } catch {
       setShowRules(true);
-      localStorage.setItem('cg-rules-seen', '1');
     }
   }, []);
 
@@ -72,7 +79,11 @@ const CollegeGrid = () => {
           </>
         }
       >
-        {isLoading ? (
+        {dataError ? (
+          <p className="text-center text-sm text-muted-foreground py-10">
+            The player records could not load. Refresh the page to try again.
+          </p>
+        ) : isLoading ? (
           <GridBoardSkeleton variant="square" />
         ) : (
           <>
@@ -91,11 +102,7 @@ const CollegeGrid = () => {
                   Find a player who: <span className="text-[hsl(var(--cg-green))] font-semibold">{puzzle.rows[Math.floor(activeCell / 3)].label}</span>{' '}
                   + <span className="text-[hsl(var(--cg-green))] font-semibold">{puzzle.cols[activeCell % 3].label}</span>
                 </p>
-                {checkingDown ? (
-                  <p className="text-center text-sm text-muted-foreground">Answer checking has used up its allowance for today. Your board is saved; come back tomorrow.</p>
-                ) : (
-                  <CollegeGridSearch onSelect={submitGuess} disabled={validating} />
-                )}
+                <CollegeGridSearch onSelect={submitGuess} disabled={validating} />
               </div>
             )}
 
@@ -130,25 +137,26 @@ const CollegeGrid = () => {
         <GameSeoContent
           pageHasOwnH1
           title="College Football Grid | DoUKnowBall"
-          description="A daily 3×3 grid puzzle where each cell requires a college football player matching both the row and column criteria: schools, Heisman winners, All-Americans, draft picks and more."
+          description="A daily 3×3 grid puzzle where each cell needs a college football player who fits both the row and the column: a school, plus a position, the Heisman or a draft pick."
           howToPlay={[
-            'Each cell requires a college football player who satisfies both the row and column attribute',
-            'Attributes include schools, conferences, awards (Heisman, All-American), draft status and positions',
+            'Each cell needs a player who fits both the row and the column',
+            'Rows are schools. Columns are positions, Heisman Winner, or draft picks like First Round Pick and Top 10 Pick',
+            'A guess only costs a turn when the records say no. If they cannot settle it, it is free',
             'Correct answers show a rarity percentage. Rarer picks earn a better overall score',
-            'New grid at midnight, same challenge for everyone. 15 guesses to complete it.',
+            'New grid at midnight, same challenge for everyone. 15 guesses to fill it, and each player goes on the board once.',
           ]}
           examples={[
-            "Alabama + Heisman Winner = Derrick Henry, Mark Ingram",
-            "Ohio State + 1st Round Pick = Chase Young, Joey Bosa",
-            "SEC + Quarterback = Tim Tebow, Joe Burrow",
+            "Alabama + Heisman Winner = Derrick Henry, DeVonta Smith",
+            "Ohio State + First Round Pick = Chase Young, Joey Bosa",
+            "LSU + Quarterback = Joe Burrow, JaMarcus Russell",
             "Clemson + Wide Receiver = DeAndre Hopkins, Sammy Watkins",
-            "Big Ten + Running Back = Saquon Barkley, Jonathan Taylor",
+            "Florida State + Defensive Back = Deion Sanders, Jalen Ramsey",
             "Notre Dame + Linebacker = Manti Te'o, Jeremiah Owusu-Koramoah"
           ]}
         />
 
         <p className="text-sm text-muted-foreground mt-4 max-w-2xl mx-auto">
-          DoUKnowBall's College Football Grid is a free daily CFB puzzle game where you name NFL players who attended a given college program and meet a second criteria like position, draft round, or award. Where the pro version asks which team a player suited up for, this college one asks which campus he came from, and it tests your knowledge of players from Alabama, Ohio State, Clemson, Georgia, and dozens more programs. A new grid is available every day.
+          DoUKnowBall's College Football Grid is a free daily CFB puzzle game where you name football players who went to a given college program and fit a second column: a position, the Heisman, or where they went in the NFL draft. Where the pro version asks which team a player suited up for, this college one asks which campus he came from, and it tests your knowledge of players from Alabama, Ohio State, Clemson, Georgia, and dozens more programs. A new grid is available every day.
         </p>
 
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
