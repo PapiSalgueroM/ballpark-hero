@@ -1,6 +1,6 @@
 # Work board
 
-**2026-09-15 15:56 EDT, Codex: narrow guide correction ready to publish.**
+**2026-09-15 16:55 EDT, Codex: narrow guide correction ready to publish.**
 Final reviewed app and saved-page revision is `a35693a5`; later correction
 commits only record evidence. Five guide corrections, source notes, readable
 phone tables and three browser-save/Record Books copy edits pass types,
@@ -10,9 +10,14 @@ The complete reader inventory and narrow release decision are in
 `docs/adsense/guide-correction-release-checks-2026-09-15.md`.
 
 This uses the between-big-ships path for content-only changes. The additional
-whole-game simulation run 35013330789 remains pending, not passed. No pending
-artifact is accepted. All larger game releases still need their full gates.
-Codex's browser publish controls are timing out; a fresh tab also stalls.
+whole-game simulation run 35013330789 completed: all 311 node harnesses and
+272 component tests passed. Packaging failed because the roster harness
+leaves temporary bundles in `dist`; no build artifact was accepted. Repair
+`3999a5e8` preserves all 137 checks and four effective controls while leaving
+all protected outputs unchanged. All larger game releases still need their
+full gates. Full guide evidence is recorded beside the release decision.
+The 16:23 EDT public check still found the old content on all seven affected
+routes. Codex's browser publish controls are timing out; a fresh tab also stalls.
 Claude's working Lovable connection can publish this correction once
 `get_project` shows the current origin/main commit. Confirm the reviewed
 correction is present and no pending feature branch is included, then publish
@@ -23,6 +28,14 @@ The four fresh full feature runs and exact source/verification heads are at
 the top of `docs/PROJECT-STATE.md`. Their order is 586, 603 to 605, 587, then 588 after this
 correction. New 587 source is `.worktrees/round-587-final`; the old dirty 587
 worktree is preserved. Source branches remain unpublished.
+
+The 588 run is now failed evidence: 316 of 318 node harnesses and all 311
+Vitest cases pass, but the two stale pack/room fixtures and the existing
+Stadium/Factory download limits need repair. Codex owns those fixes in the
+isolated 588 source tree. No budgets are raised. The other three full node
+suites remain in progress; their browser and Vitest steps passed. The roster
+scratch fix must reach all verification branches, with strict artifact
+comparison retained. No work beyond 588 has been started.
 
 **2026-09-15 15:19 EDT, Codex correction release check update.** The five
 guide corrections and three save/Record Books copy fixes are implemented at

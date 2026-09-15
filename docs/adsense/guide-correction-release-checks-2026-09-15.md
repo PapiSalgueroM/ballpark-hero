@@ -93,15 +93,27 @@ being counted as a pass, and no pending artifact is being accepted.
 
 [Run 35013330789](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35013330789)
 uses verification commit `a5863797`, with the final corrected app inputs and
-table styles. Full verification and success-only artifact packaging remain
-pending. It supersedes run `35011097191`, which was cancelled after the
+table styles. Its types, six-route build, 33 guide controls, all 311 node
+harnesses and all 272 Vitest tests in 32 files passed. The strict node parser
+confirmed 311 unique PASS rows, with no failed, empty or skipped node results.
+See [the full check record](guide-correction-full-checks-2026-09-15.json).
+
+The workflow itself failed at artifact packaging: generated files changed
+after the build during verification. It produced a verified logs archive,
+not a successful build artifact. A definite cause is the healthy roster test
+leaving `dist/.foroster/entry.mjs` and `engine.mjs` behind. Its isolated repair
+moves test bundles into temporary storage while retaining strict output
+integrity checks. No CI build output from this failed packaging step has been
+accepted or imported. The earlier local narrow-release evidence remains
+separate from this additional run.
+
+It supersedes run `35011097191`, which was cancelled after the
 independent review caught the stale MLB source note. That prior run passed
 types, the six-route build, five default guide guards and all 33 controls;
 it is not final-source release approval. The workflow rejects missing, skipped, duplicate or failed harness
 results. Its workflow file belongs only to the verification branch.
 
-This run continues as additional regression coverage. After main lands,
-Lovable must publish the matching commit, and public HTTP
+Main contains the correction, but Lovable must publish the matching commit, and public HTTP
 checks must confirm the corrected claims and current app assets. A main push
 alone does not update the published site.
 
