@@ -41,6 +41,10 @@
  *  10. A European league marked in CM_FINAL_TABLES_PARTIAL (none is today, so
  *      the harness marks one in memory) sends nobody off a table, its own
  *      clubs keep the old squad tier rule, and every other league is untouched.
+ *  11. Liverpool and Real Betis, 5th and really in through their country's
+ *      European Performance Spot, start outside Europe because the game gives
+ *      England and Spain 4 places. That is held on purpose until the owner
+ *      decides whether to model the extra spots, so it cannot change by accident.
  *
  * THE REFERENCE, for sections 6 to 9, is the day one from before Round 612.
  *   Before Round 612 is on main: a real bundle of origin/main as this branch
@@ -76,6 +80,8 @@
  *   partial   ignore CM_FINAL_TABLES_PARTIAL                            10
  *   fill      your club qualifies off the whole field, fill included   3, 10
  *   ownholders  your club's qualification drops the holders' route     4
+ *   places    give the Premier League a fifth place (others go red too:
+ *             no fill place is left, the rollover changes)               11
  *   vacuous   the reference is this engine as it stands, season one on,
  *             which is what the harness compared against after a merge
  *             before the Round 612 review                               9
@@ -169,6 +175,12 @@ const CONTROLS = {
     what: "your club's own qualification ignores the holders' route",
     re: /uclDirectQualifiersFromTables\(seasonOneTables\(\), CM_FINAL_TABLES_2025_26\.holders\)/g,
     to: () => 'uclDirectQualifiersFromTables(seasonOneTables(), null)',
+  },
+  places: {
+    red: ['11'],
+    what: 'the Premier League gets a fifth Champions League place',
+    re: /premier: \{ ucl: 4, uel: 5, uecl: 6 \}/g,
+    to: () => 'premier: { ucl: 5, uel: 6, uecl: 7 }',
   },
   vacuous: {
     red: ['9'],
@@ -678,6 +690,31 @@ await run('10', 'A league with no verified table falls back to the old day one, 
   if (!bigOnes) fail('no Premier League club has a squad tier that qualifies it, so the fallback was never seen letting a club in');
   if (json(mine.seasonOneUclField('now')) !== json(expected.field)) fail('unmarking the Premier League did not restore the field');
   return `Premier League marked partial: none of its clubs in the field, ${bigOnes} in Europe by squad tier, La Liga still by its table`;
+});
+
+/* ------------------------------------------------------------------ */
+await run('11', 'Liverpool and Real Betis start outside Europe, a decision on the game\'s place count', async () => {
+  /* Round 612 review. England and Spain each really had a fifth place in
+     2025-26 (the European Performance Spot), so Liverpool and Real Betis, both
+     5th, are in the real 2026-27 league phase. The game gives both leagues 4
+     (EURO_SLOTS), and the rule reads that. Modelling the extra spots is owed
+     to the owner, not slipped in here: it makes 33 earned places for a 32
+     club field, so somebody real would have to be cut, and reconciled.json
+     carries the spot itself on one source family only. Until that is decided
+     this section holds today's answer on purpose, so it changes only when
+     someone means it to (control: places). */
+  const cases = [['premier', 'Liverpool'], ['laliga', 'Real Betis']];
+  for (const [leagueId, club] of cases) {
+    const table = DATA.CM_FINAL_TABLES_2025_26.leagues[leagueId].table;
+    const places = mine.uclPlacesIn({ id: leagueId, euro: true });
+    if (table.indexOf(club) !== 4) { fail(`${club} are no longer 5th in the ${leagueId} data, so this decision needs a fresh look`); continue; }
+    if (places !== 4) fail(`${leagueId} now has ${places} Champions League places, so ${club}'s status is no longer today's decision; update this section on purpose`);
+    const s = pinned(1100, () => mine.startCareer(club));
+    if (s.uclGroup !== null) fail(`${club} (5th, with ${places} places in the game) start season one in the Champions League`);
+    if (s.boardObjectives.some(o => o.id === 'ucl')) fail(`${club}'s board sets a Champions League objective on day one`);
+    if ((s.uclField || []).includes(club)) fail(`${club} are in the AI field although the fill place goes to the deepest league first`);
+  }
+  return 'both 5th, one below the game\'s 4 places, both start outside Europe and outside the field (decision owed: the 2025-26 European Performance Spots)';
 });
 
 /* ------------------------------------------------------------------ */
