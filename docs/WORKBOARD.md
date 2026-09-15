@@ -58,8 +58,10 @@ https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34934422369.
 Neither is a completed release. Primary `main` still contains the uncommitted
 585 changes; do not overwrite them. Source hashes stayed intact. The local
 targeted batch finished 13/14, with a match test failing under memory pressure;
-the cloud run must resolve it. Eight pack browser cases and the 16-route
-reduced-motion gate passed locally.
+the isolated local retry has since passed all six page cases and eight mutation
+controls without changing source or assertions. Eight pack browser cases and
+the 16-route reduced-motion gate passed locally. Both remote full SEO builds
+have passed, and their full node harness suites are running.
 
 Publishing coordination: this Codex session has no callable Lovable deploy tool,
 and the project's browser webview still will not attach after its stalled tabs

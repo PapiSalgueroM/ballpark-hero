@@ -63,10 +63,12 @@ the pack card. All three fixes are complete: `simTycoonPacks` passes all 12 page
 tests and proves all 22 mutation controls. A separate hook review passed five
 storage-recovery probes. The full SEO build passed, including saved pages and
 the final production bundle (`index-DEcxjmNi.js`). The local targeted batch finished
-13 of 14 green. `simTycoonPitch` reported `STACK_TRACE_ERROR` in its first page
-case under severe host memory pressure; its intended mutation controls still
-failed at their expected assertions. This remains an unresolved gate, not a
-waived failure. The full node suite and Vitest did not start locally.
+13 of 14 green. `simTycoonPitch` initially reported `STACK_TRACE_ERROR` in its
+first page case under severe host memory pressure. A complete isolated retry
+passed all six page cases and all eight mutation controls, with unchanged source
+and assertions: 202 committed goals replayed once over 30 matches, with the
+correct side and minute. Its final exit code was zero. The full node suite and
+Vitest did not start locally.
 
 The exact frozen source is committed as `fb793c50` on the verification branch.
 All 1,427 primary source hashes remained unchanged, and a fresh checkout differs
@@ -75,7 +77,9 @@ only by Git line endings. Remote run
 is checking it on a standard public GitHub runner. The first attempt failed
 because installing Playwright in the project changed locked dependency versions;
 the workflow now installs it separately, and the rerun's app type check passed.
-No application source was changed for that setup error.
+No application source was changed for that setup error. Both remote runs have
+now passed the app type check and full SEO build. Their full node harness suites
+are running; full Vitest and portable browser checks remain pending.
 
 Local browser evidence: both pack doors pass reveal, single-save, geometry and
 no-completion-write checks at 320, 390, 430 and 1440 pixels (eight cases). The
