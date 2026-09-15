@@ -91,6 +91,19 @@ being counted as a pass, and no pending artifact is being accepted.
 
 ## Additional full verification
 
+The replacement [run 35022421148](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022421148)
+at `27f814be` now passes every step, including strict artifact packaging.
+All 311 unique node harness rows, 272 Vitest tests in 32 files and 33 guide
+controls pass. The retrieved build archive matches its published digest;
+all 1,893 inputs and 663 outputs match the exact verification commit and run.
+The 170 repository outputs already match main `9a39db19` after CRLF
+normalization, so no generated-file import is needed. Main retains newer
+documentation and excludes the verification-only workflow. The artifact is
+accepted as verification evidence, not publication. See
+[the artifact record](guide-correction-verified-artifact-2026-09-15.json).
+
+The following describes the earlier failed packaging run, retained as history.
+
 [Run 35013330789](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35013330789)
 uses verification commit `a5863797`, with the final corrected app inputs and
 table styles. Its types, six-route build, 33 guide controls, all 311 node

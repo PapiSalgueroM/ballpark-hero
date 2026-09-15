@@ -31,11 +31,15 @@ limits are recorded in the release decision. The larger feature releases
 retain all their full gates.
 
 Fresh guide verification with the roster repair and unchanged artifact checks
-is running at `27f814be` in
+has passed at `27f814be` in
 [run 35022421148](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022421148).
-It records before/after manifests and changed paths when packaging fails.
-The earlier passing game tests remain evidence for their exact earlier source;
-this new run must complete on its own.
+All 311 unique node harnesses, 272 Vitest cases and 33 guide controls passed,
+including the exact packaging step. Downloaded build artifact `10420966119`
+matches its SHA-256 digest, all 1,893 build inputs and all 663 outputs. Its 170
+repository outputs already match main `9a39db19` after CRLF normalization;
+no generated-file import is needed. Newer main documentation is preserved,
+and the verification workflow stays off main. See
+[the accepted artifact record](adsense/guide-correction-verified-artifact-2026-09-15.json).
 
 The correction is not yet published: the 17:33 EDT public check still found
 the old content on all seven affected routes and entry `index-KIfwLt2Q.js`.
@@ -55,14 +59,14 @@ passes all eleven existing budgets, including Factory 270K/270K and Club
 Manager 620K/620K. One initial Club Manager navigation timed out; an exact
 unchanged-build retry passed. No extra headroom or budget increase is claimed.
 
-| Release | Source | Verification | Fresh full run |
-| --- | --- | --- | --- |
-| 586 | `48afb5a9` | `5ced7657` | [35022622364](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022622364) |
-| 603 to 605 | `40685be8` | `7cf1f43f` | [35022671056](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022671056) |
-| 587 | `77b43142` | `ab3c8dba` | [35022769249](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022769249) |
-| 588 | `8a4e00a5` | `75d4f3c6` | [35026622660](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35026622660) |
+| Release | Source | Verification | Full run | Current result |
+| --- | --- | --- | --- | --- |
+| 586 | `48afb5a9` | `5ced7657` | [35022622364](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022622364) | Passed; downloaded artifact intake in progress |
+| 603 to 605 | `40685be8` | `7cf1f43f` | [35022671056](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022671056) | 313/314 node checks; leaderboard RPC timeout |
+| 587 | `77b43142` | `ab3c8dba` | [35022769249](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022769249) | In progress |
+| 588 | `8a4e00a5` | `75d4f3c6` | [35026622660](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35026622660) | In progress |
 
-These are pending full verification, not published. All existing workflow
+These are not published. All existing workflow
 gates remain, with strict result parsing and eleven rebuilt routes. The old
 586/603-605/587 runs are failed evidence, not release approval. Their exact
 results and remaining sampling issue are recorded below. The new 587 source
@@ -71,6 +75,21 @@ is in `.worktrees/round-587-final`; the old
 remain untouched. Publish correction, 586, 603 to 605, 587, then 588, separately.
 No feature beyond 588 is started. Claude's reserved work and Cursor's formatting
 remain separate. Verification workflows stay off main.
+
+At 18:25 EDT the new 586 run passed every step, including strict packaging.
+Build artifact `10421332445` is downloaded with its verified archive hash;
+its manifest and delayed-loading browser checks are being checked before intake.
+The new animation run passed types, build, browser, 296 Vitest cases and
+dedicated controls. Its only node failure was `simLeaderboardCache`: the
+live `global_leaderboard` RPC timed out after the existing three attempts.
+An unchanged targeted rerun passes, but read-only database evidence also shows
+recurring three-second statement timeouts. An isolated query-performance
+repair is being investigated; no timeout limit or retry count is increased.
+
+The owner will fix Lovable later and asked work to continue. Official Lovable
+MCP supports editor-free `deploy_project`, but no authenticated Lovable tool
+is callable here. There is no existing alternate hosting deployment configured
+in tracked main. No host, DNS or account configuration has been changed.
 
 The previous 586 and animation runs completed with all 313/314 node
 harnesses and 279/296 Vitest cases passing, respectively. Both failed only
