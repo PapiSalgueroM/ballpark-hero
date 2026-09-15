@@ -62,6 +62,18 @@ Round 587 animation preparation may continue independently, but its gameplay
 integration follows 586's separate release. Claude's 610 to 619 block and
 Cursor's formatting files remain separate. AdSense stays Review requested.
 
+**2026-09-15, owner clarification: animate the match action itself.** Codex
+claims Round 603 for Club Manager's existing live sim: kicking, passing,
+goalkeeper saves and goals driven by its committed event feed. Round 604 covers
+Soccer Career's existing interactive drills: striking, tackling and glove saves
+from their actual engine coordinates. Work stays in separate worktrees, outside
+the Round 586 release and Claude's Club Manager engine/data work. Preserve
+scores, randomness, controls, player selection, readable results and all guide
+pages. Original local SVG/CSS only, with reduced motion and fixed pitch sizes.
+The React set-piece scene is also prepared for Round 587. US season summaries
+do not contain individual plays; match actions there need an explicit event
+trace before a faithful simcast can be added. AdSense approval remains pending.
+
 **2026-09-15 04:20 EDT, Rounds 585 and 600 to 602 complete and live.** Claude
 desktop published 585 at 08:07 UTC (`e7e24c5d-8857-4899-8d4e-2832433c689a`)
 and 600 to 602 at 08:13 UTC (`8513312c-7669-4b54-b4e4-420c1a547b8b`). The
