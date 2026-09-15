@@ -9121,24 +9121,16 @@ export function uclFieldFromTables(
   tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[],
   holder?: string | null,
 ): string[] {
-  const seen = new Set<string>();
-  const field: string[] = [];
+  /* The league places, then the holders (uclDirectQualifiersFromTables). */
+  const field = uclDirectQualifiersFromTables(tables, holder);
+  if (!field.length) return [];
+  const seen = new Set<string>(field);
   const take = (club: string) => {
     if (!club || seen.has(club)) return;
     seen.add(club);
     field.push(club);
   };
-
-  /* Each European league's own qualifiers, in its own finishing order. */
   const ranked = tables.filter(t => t.league.euro && t.clubs.length);
-  for (const t of ranked) {
-    for (const club of t.clubs.slice(0, uclPlacesIn(t.league))) take(club);
-  }
-  if (!field.length) return [];
-
-  /* The holders go in whatever their league did, which is the real rule and
-     the one route that is not a finishing position. */
-  if (holder) take(holder);
 
   /* A 32 club field needs a few more than the league places give. They go to
      the next placed clubs in the leagues with the most places, deepest first,
@@ -9154,6 +9146,42 @@ export function uclFieldFromTables(
     }
   }
   return field.slice(0, UCL_FIELD_SIZE);
+}
+
+/**
+ * Round 612 review: the first two steps of THE RULE on their own, the clubs
+ * that earned a place: each European league's top uclPlacesIn clubs, then the
+ * holders. uclFieldFromTables tops this up with the fill.
+ *
+ * WHY IT IS SEPARATE. The fill is the stand-in for the coefficient and playoff
+ * routes this game does not model, so it hands the AI field a club and never
+ * hands one to the manager. Without this, a 2026-27 Hoffenheim career (5th in
+ * a four place Bundesliga) started in the group stage off the fill, which is
+ * the very bug Round 612 set out to fix, and from season two the rollover only
+ * ever lets my club in on a league place. startCareer reads this list.
+ */
+export function uclDirectQualifiersFromTables(
+  tables: { league: Pick<LeagueDef, 'id' | 'euro'>; clubs: string[] }[],
+  holder?: string | null,
+): string[] {
+  const seen = new Set<string>();
+  const field: string[] = [];
+  const take = (club: string) => {
+    if (!club || seen.has(club)) return;
+    seen.add(club);
+    field.push(club);
+  };
+
+  /* Each European league's own qualifiers, in its own finishing order. */
+  for (const t of tables.filter(x => x.league.euro && x.clubs.length)) {
+    for (const club of t.clubs.slice(0, uclPlacesIn(t.league))) take(club);
+  }
+  if (!field.length) return [];
+
+  /* The holders go in whatever their league did, which is the real rule and
+     the one route that is not a finishing position. */
+  if (holder) take(holder);
+  return field;
 }
 
 /**
@@ -9181,9 +9209,14 @@ export function uclFieldFromTables(
 export function seasonOneUclField(eraId: string): string[] | null {
   const era = eraById(eraId);
   if (isHistoricEra(era.id) || era.startYear !== CM_FINAL_TABLES_2025_26.startYear + 1) return null;
-  const tables = REAL_LEAGUES.filter(l => l.euro).map(league => ({ league, clubs: seasonOneTableOf(league.id) ?? [] }));
+  const tables = seasonOneTables();
   const field = uclFieldFromTables(tables, CM_FINAL_TABLES_2025_26.holders);
   return field.length ? field : null;
+}
+
+/** The European leagues in world order with their verified 2025-26 finishing orders. */
+function seasonOneTables() {
+  return REAL_LEAGUES.filter(l => l.euro).map(league => ({ league, clubs: seasonOneTableOf(league.id) ?? [] }));
 }
 
 /** The verified 2025-26 finishing order of a league, or null when it has none. */
@@ -13394,15 +13427,18 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     ? league.clubs.map(c => (c === custom!.replacedClub ? custom!.name : c))
     : [...league.clubs]);
   /* Round 612: season one's Champions League is who really qualified off the
-     2025-26 tables, by the rule the rollover uses from season two, and my club
-     is in it only if it is in that field. Chelsea finished 10th and stay home.
+     2025-26 tables, by the rule the rollover uses from season two. Chelsea
+     finished 10th and stay home.
      A historic era gets null and keeps its period pool; a custom club gets
      null because it has qualified for nothing (Round 154). A club whose
      European league has no verified table keeps the old squad tier rule, the
-     honest fallback CM_FINAL_TABLES_PARTIAL marks. */
+     honest fallback CM_FINAL_TABLES_PARTIAL marks.
+     Round 612 review: my club is in only on a league place or as the holders,
+     never through the fill, which tops up the AI field (see
+     uclDirectQualifiersFromTables). Hoffenheim finished 5th and stay home. */
   const seasonOneField = custom ? null : seasonOneUclField(era.id);
   const qualifiedSeasonOne = seasonOneField && seasonOneTableOf(league.id)
-    ? seasonOneField.includes(club.name)
+    ? uclDirectQualifiersFromTables(seasonOneTables(), CM_FINAL_TABLES_2025_26.holders).includes(club.name)
     : club.tier <= 2 && league.euro;
   const state: CareerState = {
     saveVersion: SAVE_VERSION,
