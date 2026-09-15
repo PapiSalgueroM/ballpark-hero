@@ -16,8 +16,11 @@ leaves temporary bundles in `dist`; no build artifact was accepted. Repair
 `3999a5e8` preserves all 137 checks and four effective controls while leaving
 all protected outputs unchanged. All larger game releases still need their
 full gates. Full guide evidence is recorded beside the release decision.
-Fresh guide verification `27f814be`, run 35022421148, is running with the
-roster repair and unchanged strict artifact checks. Main `edbe5c16` contains
+Fresh guide verification `27f814be`, run 35022421148, passed all 311 node
+harnesses, 272 Vitest cases, 33 guide controls and strict artifact packaging.
+Artifact `10420966119` passes digest, 1,893-input and 663-output verification.
+All 170 generated repository outputs already match main after CRLF
+normalization, so no import is needed. Main `edbe5c16` contains
 the same harness repair; the publishable app and saved pages stay `a35693a5`.
 The 17:33 EDT public check still found the old content on all seven affected
 routes. Codex's browser publish controls are timing out; a fresh tab also stalls.
@@ -50,6 +53,16 @@ unchanged. Fresh runs 35022622364, 35022671056 and 35022769249 are still in
 progress. Full results and log hashes are in
 `docs/feature-verification-2026-09-15.md`. No pending run inherits an older pass.
 No work beyond 588 has been started.
+
+**18:25 EDT update:** the correction's full run and exact artifact verification
+are green. Round 586's full run is also green; downloaded-artifact validation
+and its final slow-loading browser check are in progress. The animation run's
+only remaining node failure is a recurring live leaderboard RPC timeout.
+Codex is investigating an isolated performance repair, preserving scoring,
+period semantics and independent cache checks. No database mutation has been
+made. The owner will fix Lovable later; keep building within these release
+lanes. Editor-free publication through official Lovable MCP is supported but
+not connected in this session. No alternate host or DNS cutover is configured.
 
 **2026-09-15 15:19 EDT, Codex correction release check update.** The five
 guide corrections and three save/Record Books copy fixes are implemented at
