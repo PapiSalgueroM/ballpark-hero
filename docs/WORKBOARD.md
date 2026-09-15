@@ -49,18 +49,26 @@ run passed 315 of 316 node harnesses and all 305 Vitest cases; its lone failure
 was an undersized older-keeper sample. Test-only repair `a46c59a0` now passes
 all nine sections, exact deterministic replay and five effective controls.
 It is isolated on `codex/era-sampling-repair`, with game behavior and thresholds
-unchanged. Fresh runs 35022622364, 35022671056 and 35022769249 are still in
-progress. Full results and log hashes are in
+unchanged. Current results for replacement runs 35022622364, 35022671056 and
+35022769249 are in the update below. Full results and log hashes are in
 `docs/feature-verification-2026-09-15.md`. No pending run inherits an older pass.
 No work beyond 588 has been started.
 
-**18:25 EDT update:** the correction's full run and exact artifact verification
-are green. Round 586's full run is also green; downloaded-artifact validation
-and its final slow-loading browser check are in progress. The animation run's
+**18:43 EDT update:** the correction, 586 and 587 full runs and exact artifact
+verification are green. The 586 downloaded build also passes the final
+slow-loading browser check, including unchanged saves and three effective
+controls. Release `ded5d78d` is [draft PR 94](https://github.com/PapiSalgueroM/ballpark-hero/pull/94).
+It stays separate from main and waits for the correction publication.
+The 587 release branch is being prepared after all 316 node harnesses,
+305 Vitest cases and the 1,932-input/710-output artifact check passed.
+Its integration worktree is `.worktrees/release-round-587-final`; do not
+touch the old dirty 587 worktree. The animation run's
 only remaining node failure is a recurring live leaderboard RPC timeout.
 Codex is investigating an isolated performance repair, preserving scoring,
 period semantics and independent cache checks. No database mutation has been
-made. The owner will fix Lovable later; keep building within these release
+made. The fresh-query draft matches all 100 output rows in one snapshot but
+still exceeds three seconds. An index and rollback plan are under independent
+review. The owner will fix Lovable later; keep building within these release
 lanes. Editor-free publication through official Lovable MCP is supported but
 not connected in this session. No alternate host or DNS cutover is configured.
 

@@ -61,9 +61,9 @@ unchanged-build retry passed. No extra headroom or budget increase is claimed.
 
 | Release | Source | Verification | Full run | Current result |
 | --- | --- | --- | --- | --- |
-| 586 | `48afb5a9` | `5ced7657` | [35022622364](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022622364) | Passed; downloaded artifact intake in progress |
+| 586 | `48afb5a9` | `5ced7657` | [35022622364](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022622364) | Passed; artifact accepted; draft PR 94 |
 | 603 to 605 | `40685be8` | `7cf1f43f` | [35022671056](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022671056) | 313/314 node checks; leaderboard RPC timeout |
-| 587 | `77b43142` | `ab3c8dba` | [35022769249](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022769249) | In progress |
+| 587 | `77b43142` | `ab3c8dba` | [35022769249](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022769249) | Passed; exact artifact accepted; release branch being prepared |
 | 588 | `8a4e00a5` | `75d4f3c6` | [35026622660](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35026622660) | In progress |
 
 These are not published. All existing workflow
@@ -76,15 +76,33 @@ remain untouched. Publish correction, 586, 603 to 605, 587, then 588, separately
 No feature beyond 588 is started. Claude's reserved work and Cursor's formatting
 remain separate. Verification workflows stay off main.
 
-At 18:25 EDT the new 586 run passed every step, including strict packaging.
-Build artifact `10421332445` is downloaded with its verified archive hash;
-its manifest and delayed-loading browser checks are being checked before intake.
+At 18:43 EDT the new 586 run and artifact intake are complete: 313 node
+harnesses, 279 Vitest cases, all 1,909 artifact inputs and 706 outputs pass.
+The downloaded build also passes the held-chunk browser check, with 41 scripts
+matching actual artifact bytes and the 46,741-byte save unchanged after Home
+and pagehide. All three effective controls pass. Prepared release `ded5d78d`
+is [draft PR 94](https://github.com/PapiSalgueroM/ballpark-hero/pull/94), held
+for the separate correction publication. Its evidence record is committed
+on that release branch. No application feature is merged into main.
+
+The new 587 run also passed every step: 316 unique node harnesses and 305
+Vitest cases across 36 files. Artifact `10421791486` passes its archive hash,
+all 1,932 inputs, all 710 outputs and exact file-set validation. Integration
+worktree `.worktrees/release-round-587-final` reconciles current main through
+`fb595610`, with only eight documentation paths differing from its verified
+source before output import. Its release still follows 603 to 605.
+
 The new animation run passed types, build, browser, 296 Vitest cases and
 dedicated controls. Its only node failure was `simLeaderboardCache`: the
 live `global_leaderboard` RPC timed out after the existing three attempts.
 An unchanged targeted rerun passes, but read-only database evidence also shows
 recurring three-second statement timeouts. An isolated query-performance
 repair is being investigated; no timeout limit or retry count is increased.
+The draft groups each player's best score per game and Eastern day before
+applying unchanged score caps. A one-snapshot comparison returned the same
+100 rows and output hash, but the fresh query still exceeded three seconds.
+No query replacement or index has been applied; an index and rollback plan
+are under independent review. This is not a green animation run.
 
 The owner will fix Lovable later and asked work to continue. Official Lovable
 MCP supports editor-free `deploy_project`, but no authenticated Lovable tool
