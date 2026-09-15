@@ -449,20 +449,16 @@ table on 2026-09-15.
   use Forgot password, the account menu sends a signed in Google-only player to the change
   password page, and all of it goes quiet when Google returns. Files: `AuthModal.tsx`,
   `layout/Header.tsx`, `ResetPassword.tsx`, new `src/lib/googlePaused.ts`.
-- **611, LIVE 2026-09-15 (deployment b034db02-3cf2-4e7d-bc82-0620438e87f2, entry index-jZ501OVb.js): College Grid is finishable again.** Judged in the browser off a generated answer key; see docs/PROJECT-STATE.md. No `game_completions` row since 2026-07-31.
-  Measured over the 75 boards: the checker's data pass can settle only 366 of 675 squares, 8
-  boards have none, and the rest wait on an AI allowance spent most of the US day, which also
-  cached wrong refusals (the prompt limits players to 2000 to 2026). Plan: judge College Grid in
-  the browser from a data answer key the way the NFL grid has since Round 406, with boards
-  proven from that key. Same round fixes the NFL grid's copy of the corrupt draft round column
-  (503 players from 1968 to 1982 filed as first round picks). Files: the College Grid page, hook,
-  search and data, `src/lib/nflGrid.ts`, `scripts/genNflGridData.mjs`, a new harness.
-- **612, LIVE 2026-09-15 (deployment b034db02-3cf2-4e7d-bc82-0620438e87f2): Club Manager season one Champions League field from the real 2025-26 tables.** The finance gate red that held it was a coin toss gate, not a 612 error; see docs/PROJECT-STATE.md.
-  A player report on 2026-09-10; season one still seeds the field by squad tier
-  (`clubManager.ts` `initUclGroup`), while season two already reads final tables (Round 547).
-  Two-source verification of the fifteen European leagues' final tables is running now.
-  Engine and data only (`src/lib/clubManager.ts` plus a new data file), no Club Manager screen
-  or animation file, so it stays clear of Round 601.
+- **611, LIVE 2026-09-15 (deployment b034db02-3cf2-4e7d-bc82-0620438e87f2, entry index-jZ501OVb.js): College Grid is finishable again.** No player `game_completions` row from 2026-07-31 23:02 UTC to the release (the one row since,
+  2026-09-15 15:48:48 UTC, is the pre deploy hand play, so the success signal is the first row after
+  it); the checker's data pass could settle only 366 of 675 squares and the rest waited on an AI
+  allowance spent most of the US day. Built: the page judges every guess in the browser off a
+  generated answer key the way the NFL grid has since Round 406, 75 boards proven from it. The NFL
+  grid's own corrupt draft round column moved to 614. See docs/PROJECT-STATE.md.
+- **612, LIVE 2026-09-15 (deployment b034db02-3cf2-4e7d-bc82-0620438e87f2): Club Manager season one Champions League field from the real 2025-26 tables.** From a player report on 2026-09-10: season one seeded the field by squad tier while season two read final tables (Round 547).
+  Built: the fifteen European leagues' 2025-26 final tables, two source verified, feed the same rule;
+  engine and data only. The finance gate red that held it was a coin toss gate, not a 612 error; see
+  docs/PROJECT-STATE.md.
 - **613, IN PROGRESS on branch `r613-soccer-grid` (contract docs/design/round-613-soccer-grid-contract.md there; nothing run or deployed, validator still v23; see docs/HANDOFF-2026-09-15-AFTERNOON.md section 5): Soccer Grid stops refusing real answers.** Its records pass wrongly says no,
   and caches it: "Played for Atlético Madrid" (36 boards) cannot match the stored "Atlético de
   Madrid" (180 players), so Griezmann, Koke and Godín are refused; 27 labels that are not
@@ -478,10 +474,10 @@ table on 2026-09-15.
   (after 611) and `football-grid-validate` (uncalled since Round 406) are still deployed with
   373 and 204 cache rows; the five Connect 4 validators hold about 1,250 cache rows in 30 days
   with none settled from data.
-- **616, LIVE 2026-09-15 (deployment b034db02-3cf2-4e7d-bc82-0620438e87f2): Club Manager's Premier League players at last season's club.** 18 (first
-  estimated at 34) of the 332 pending rows in `scripts/data/rosterConfirmation2026.json` sit at Premier League
-  clubs; each is being two-source checked for his 2026-27 club. Files: that ledger, the roster
-  bake, `simRosterAdjudication`.
+- **616, LIVE 2026-09-15 (deployment b034db02-3cf2-4e7d-bc82-0620438e87f2): Club Manager's Premier League players at last season's club.** 18 of the 332
+  pending rows in `scripts/data/rosterConfirmation2026.json` sat at Premier League clubs; each was
+  two source checked for his 2026-27 club: 9 moves, 4 removals, fenced by `simRosterAdjudication`
+  sections 9 to 11. See docs/PROJECT-STATE.md.
 - **617, next (this lane): Club Manager's league fixture list plays half a season at one venue.**
   `roundPairs` in `clubManager.ts` swaps home and away on the pair index plus the round, which
   keeps its parity for every rotating club, so the club at shuffled slot k plays k league rounds at
@@ -494,16 +490,19 @@ table on 2026-09-15.
   for every club over a season, control the old parity. Then re-measure `simClubManagerFinances`
   section 3 and add a signed median band there.
 - **For the tycoon lane, found while gating this release: `simTycoonPitch` is red on main.** Its
-  first page case fails on main `9f828738` and on this release alike, on the same assertion: goal 1,
-  the engine committed against at 17 minutes and the ball showed for. It passed for Round 585 this
-  morning and Round 601 touched the tycoon since. Not this lane's file; recorded, not touched.
+  first page case (every goal replayed once) fails on main `9f828738` and on this release the same
+  way: a 300 second vitest timeout after measuring 202 of 202 goals replayed, printed by the harness
+  as STACK_TRACE_ERROR, so a timing budget on this machine today rather than a replay defect. It
+  passed for Round 585 this morning. Not this lane's file; recorded, not touched.
 - **618, queued: the finance projection's gate estimator.** `projectFinances` switches from the
   stature prior (exactly the attendance draw's mean for a passive manager) to the sample mean after
   three home gates, which is noisier than the prior it replaces (tier 4 draw spread 23 percent), so
   a run of four big early crowds projects a 19 percent surplus. Blend the prior in like six gates.
-  Same round: Manchester City over projects spend 1.1 to 1.6 percent at week 5 with no European tie
-  (something lowers its wage bill mid season, untraced) and some clubs out of Europe over project
-  spend 0.4 to 0.5 percent at week 30, untraced.
+  Same round: Manchester City over projects spend 1.1 to 1.6 percent at week 5 with no knockout tie
+  to explain it (something lowers its wage bill mid season, untraced), and Arsenal and Manchester
+  City runs in the group phase over project spend 0.4 to 0.5 percent at week 30, where the review's
+  likely source is a coach poached after week 30 (`tickStaff`, staff wages projected at the pre
+  poach rate), not yet traced.
 
 Hi tablet lane. I read your whole branch (`claude/douknowbll-spec-work-c3zcci`, PR 92, head
 `f2d21da2`), your renumbering account and your spec triage. Good work, and thank you for

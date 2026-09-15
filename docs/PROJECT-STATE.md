@@ -250,12 +250,16 @@ not factual accuracy, indexing or approval. Google makes the approval decision.
 
 ## LIVE 2026-09-15: Rounds 611, 612 and 616, main `b528bda1`
 
-**douknowball.com is serving it.** Deployment `b034db02-3cf2-4e7d-bc82-0620438e87f2` at 22:41 UTC, called only after
-`get_project` showed `latest_commit_sha` `b528bda1`. The entry moved from `index-KIfwLt2Q.js` to
+**douknowball.com is serving it.** Deployment `b034db02-3cf2-4e7d-bc82-0620438e87f2`, called at 22:40 UTC only after
+`get_project` showed `latest_commit_sha` `b528bda1` (shown at 22:40:38, the call returned at 22:40:48). The entry moved from `index-KIfwLt2Q.js` to
 `index-jZ501OVb.js`. Proof on the live site: the College Grid chunk (CollegeGrid-OfXyGEYU.js) carries the college_grid_players source and the cg-rules-seen-611 key, the Club Manager chunk (clubManager-Bl19YjWl.js) carries the Premier League 2025-26 table source host and the 3,658 player roster meta, https://douknowball.com/college-grid/ serves the new entry and the Round 611 FAQ line, and no chunk references college-grid-validate any more (entry moved at 22:41:48 UTC).
+The same deployment published Codex's guide correction, since main `b528bda1` carried it (Codex's
+"LIVE CHECK 18:47 EDT" section above records that side); the merged tree was gated before the
+push, see the gates bullet below. Main has moved on since (Codex, records and a leaderboard index
+migration); those later heads are not deployed.
 
-- **611, College Grid is finishable again.** Zero `game_completions` rows for `college-grid` from
-  2026-07-31 23:02 UTC to the release: 282 of 675 cells could only be judged by the AI validator,
+- **611, College Grid is finishable again.** No player `game_completions` row for `college-grid` from
+  2026-07-31 23:02 UTC until this round's own hand play on release day: 282 of 675 cells could only be judged by the AI validator,
   whose free allowance runs out most of the US day, and unverified guesses are free retries, so no
   board ever ended. The page now judges every guess in the browser against a generated answer key
   (`scripts/genCollegeGridData.mjs`, 35,611 rows in `public.college_grid_players`, RLS on, public
@@ -276,7 +280,8 @@ not factual accuracy, indexing or approval. Google makes the approval decision.
   qualifies only on a league place or as the holders, never through the fill. Napoli (2nd) start
   in Europe; Brentford (9th), Chelsea (10th) and Newcastle do not; on the old tier rule Brentford
   and Newcastle were in and Napoli was out. Fence `simUclSeasonOne` (11 sections, 13 controls;
-  run it with `UCL_S1_BASE=HEAD` on a branch that also changes Club Manager data). Held as an
+  before 612 was on main it had to run as `UCL_S1_BASE=HEAD` on the combined branch, and now that
+  main carries 612 it compares against its own engine and needs nothing). Held as an
   owner decision: Liverpool and Real Betis (5th, in through the European Performance Spot) start
   outside Europe while the game gives England and Spain 4 places; the 32nd place goes to Hoffenheim
   by the fill's alphabetical league order. Answering that changes the season one field and the
@@ -293,28 +298,37 @@ not factual accuracy, indexing or approval. Google makes the approval decision.
   season, because `roundPairs` gives every club but one a same venue run of up to 19 league
   rounds and the desk switches to the sample mean after three gates; and section 6's five home
   gate proxy read a Newcastle season sacked at week 21 after fifteen straight away rounds as an
-  unfilled ledger. Round 612 changed which clubs are in Europe and who the opponents are, not how
+  unfilled ledger. One more red (seed 2, and main's seed 8) was the old rule that spend must tighten
+  from week 5 to week 30, failing on 0.3 against 0.2 percent; the half percent band replaced it. Round 612 changed which clubs are in Europe and who the opponents are, not how
   often a run goes deep (the same knockout runs per season on both trees). The harness now plays
   six seeds per club (36 runs), its bands are re-measured on both trees (the same distribution on
   main), spend is held to the header's own half percent claim, section 6 counts the fixtures the
-  season really played, and a third control (nogate) proves it. Green on seeds 0 to 7, all three
-  controls fire. Two adversarial review passes (50 agents in the second) changed the header's
-  recipe, the cause, and section 6 before it was committed.
+  season really played, and a third control (nogate) proves it. Green with the committed harness on
+  the default seed and on seeds 0 and 4, and on seeds 1 to 3 and 5 to 7 with the previous version
+  (59449f68), whose section 3 numbers are identical; all three controls fire. Two adversarial review
+  passes (three lenses, two refuters per finding and a critic in the second) changed the header's
+  recipe, the cause and section 6: the reviewed version had landed as 59449f68, the review's changes
+  are 3c8956e8.
 - **Gates on the release tree (a full clone at `C:\Users\antho\dukb-release`):** tsc 0,
-  production build 0, `runAllSims` 309 of 312 green: `simCareerFallback` and `simLoginReturn` were
-  network timeouts under a saturated CPU and pass alone; `simTycoonPitch` fails on main too, on the
-  identical assertion (goal 1: the engine committed against at 17 minutes and the ball showed for),
-  run on a checkout of main inside the same clone, so it predates this release and belongs to the
-  tycoon lane (it passed for Round 585 this morning; Round 601 touched the tycoon since). vitest
-  273 of 274, the one red the same tycoon pitch test. `playGridCls` green, `playGames` for
+  production build 0, `runAllSims` 309 of 312 green: `simCareerFallback` failed one Supabase fetch
+  and `simLoginReturn` one timeout while the suite ran its long harnesses, and both pass alone;
+  `simTycoonPitch` fails on main too, the same way, run on a checkout of main inside the same clone:
+  its first page case (every goal replayed once) times out at 300 seconds after measuring 202 of 202
+  goals replayed, which the harness prints as STACK_TRACE_ERROR, so it is a timing budget on this
+  machine today rather than a replay defect, and it predates this release (it passed for Round 585
+  this morning). Not this lane's file. vitest 273 of 274, the one red the same tycoon pitch test. `playGridCls` green, `playGames` for
   `/college-grid` and `/club-manager` clean (14 interactions each), and the hand play above.
   After main moved again (Codex's guide correction, 15 commits touching the format history guides,
-  their snapshots and a Soccer Career line), the merged tree was gated once more: tsc 0, build 0,
-  and all 30 selected harnesses green (the fifteen snapshot fences, simSiteSearch, simClubManagerFinances, simUclSeasonOne, simUclField, simRosterAdjudication, both College Grid fences, the five format history harnesses, simFrontOfficeRoster, simHomeCopy, simLegalPages, simNoInventedQuotes).
-- **Follow ups opened by this release (claimed on the board under the 610 block):** 617 the
-  league fixture list's venue streak, 618 the finance projection's gate estimator, a note that
-  the Champions League knockout draw is uniform over the field, and the harness temp file race
-  (one harness run twice at once bundles the other run's entry; give each run its own TEMP).
+  their snapshots and a Soccer Career line), the merged tree was gated once more at `ffec3ffe` (the
+  final merge `b528bda1` added only `83658d7b`, four docs files): tsc 0, build 0, and 30 of the 31
+  selected harnesses green, `simPrerenderBoot` skipped as a browser harness (the other snapshot fences, simSiteSearch, simClubManagerFinances, simUclSeasonOne, simUclField, simRosterAdjudication, both College Grid fences, the five format history harnesses, simFrontOfficeRoster, simHomeCopy, simLegalPages, simNoInventedQuotes).
+- **Follow ups opened by this release.** 617 (the league fixture list's venue streak) and 618 (the
+  finance projection's gate estimator) are claimed on the board under the 610 block. Recorded here
+  and nowhere else: the Champions League knockout draw is uniform over the field
+  (`drawUclKoOpponent` picks any field club with equal chance, so a giant can draw LASK in a semi
+  final; a modelling shortcut from Round 547, not wrong data), and the harness temp file race (one
+  harness run twice at once bundles the other run's entry, so give each concurrent run its own TEMP
+  and TMP; the suite runner is safe on its own because it never runs one harness twice).
 - **After 611 is live (contract sections 5 and 7):** `college-grid-validate` POSTs should fall to
   0 over 24 hours (baseline 102 to 107 a day; the edge logs held 184 rows naming it in the 21 hours
   before the publish, last call 22:04:50 UTC); no new `ai_validation_cache` rows for `college-grid`
