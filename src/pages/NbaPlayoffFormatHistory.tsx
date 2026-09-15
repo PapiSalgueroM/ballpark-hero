@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
+import ReferenceSources from '@/components/seo/ReferenceSources';
 import {
   NBA_PLAYOFF_PERIODS, NBA_PLAYOFF_SOURCES, NBA_LOTTERY, NBA_PLAYOFF_VERIFIED_ON,
   seasonRange, sourceById,
@@ -97,6 +98,7 @@ const NbaPlayoffFormatHistory = () => {
                 <ul className="mt-2 space-y-1 text-sm text-muted-foreground leading-relaxed list-disc pl-5">
                   {p.notes.map(n => <li key={n}>{n}</li>)}
                 </ul>
+                <ReferenceSources label={seasonRange(p)} sourceIds={p.sources} sourceById={sourceById} />
               </article>
             ))}
           </div>
@@ -110,6 +112,7 @@ const NbaPlayoffFormatHistory = () => {
               <article key={e.id} id={`lottery-${e.id}`} className="rounded-xl border border-border bg-card p-4">
                 <h3 className="text-base font-bold text-foreground">{e.year}: {e.title}</h3>
                 <p className="text-sm text-muted-foreground mt-2 leading-relaxed">{e.text}</p>
+                <ReferenceSources label={`the ${e.year} lottery`} sourceIds={e.sources} sourceById={sourceById} />
               </article>
             ))}
           </div>

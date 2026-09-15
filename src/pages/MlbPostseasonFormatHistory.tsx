@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
+import ReferenceSources from '@/components/seo/ReferenceSources';
 import {
   MLB_POSTSEASON_PERIODS, MLB_POSTSEASON_SOURCES, MLB_SERIES_LENGTHS, MLB_POSTSEASON_VERIFIED_ON,
   seasonRange, sourceById,
@@ -97,6 +98,7 @@ const MlbPostseasonFormatHistory = () => {
                 <ul className="mt-2 space-y-1 text-sm text-muted-foreground leading-relaxed list-disc pl-5">
                   {p.notes.map(n => <li key={n}>{n}</li>)}
                 </ul>
+                <ReferenceSources label={seasonRange(p)} sourceIds={p.sources} sourceById={sourceById} />
               </article>
             ))}
           </div>
@@ -105,6 +107,7 @@ const MlbPostseasonFormatHistory = () => {
         <section className="mb-10">
           <h2 className="text-lg font-display font-bold text-foreground mb-2">How long each round has been</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">{MLB_SERIES_LENGTHS.text}</p>
+          <ReferenceSources label="series lengths" sourceIds={MLB_SERIES_LENGTHS.sources} sourceById={sourceById} />
         </section>
 
         <section className="mb-10">

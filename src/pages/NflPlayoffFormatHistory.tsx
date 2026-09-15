@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
+import ReferenceSources from '@/components/seo/ReferenceSources';
 import {
   NFL_PLAYOFF_PERIODS, NFL_PLAYOFF_SOURCES, NFL_OVERTIME, NFL_PLAYOFF_VERIFIED_ON,
   seasonRange, sourceById,
@@ -97,6 +98,7 @@ const NflPlayoffFormatHistory = () => {
                 <ul className="mt-2 space-y-1 text-sm text-muted-foreground leading-relaxed list-disc pl-5">
                   {p.notes.map(n => <li key={n}>{n}</li>)}
                 </ul>
+                <ReferenceSources label={seasonRange(p)} sourceIds={p.sources} sourceById={sourceById} />
               </article>
             ))}
           </div>
@@ -105,6 +107,7 @@ const NflPlayoffFormatHistory = () => {
         <section className="mb-10">
           <h2 className="text-lg font-display font-bold text-foreground mb-2">The overtime rule</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">{NFL_OVERTIME.text}</p>
+          <ReferenceSources label="the overtime rule" sourceIds={NFL_OVERTIME.sources} sourceById={sourceById} />
         </section>
 
         <section className="mb-10">
