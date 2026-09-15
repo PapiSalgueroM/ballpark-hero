@@ -42,6 +42,7 @@
  * build is running.
  *
  * Run: node scripts/simTycoonHelp.mjs
+ * Claims only: TYCOON_HELP_CLAIMS_ONLY=1 node scripts/simTycoonHelp.mjs
  */
 import { execSync, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
@@ -60,6 +61,7 @@ const ACADEMY_LIB = path.join(ROOT, 'src/lib/wonderkidFactory.ts');
 const STADIUM_GUIDE = path.join(ROOT, 'src/data/gameContent/stadiumManagement.ts');
 const ACADEMY_GUIDE = path.join(ROOT, 'src/data/gameContent/academyManagement.ts');
 const TEST_COUNT = 5;
+const CLAIMS_ONLY = process.env.TYCOON_HELP_CLAIMS_ONLY === '1';
 /** Round 585: the gem ledger, bundled with the engine below and read by the gem claim. */
 let REWARDS = null;
 
@@ -155,6 +157,7 @@ const CONTROLS = [
 ];
 
 console.log('Round 583: Stadium Tycoon says what the engine does');
+if (!CLAIMS_ONLY) {
 console.log(`   suite: ${TESTS.join(', ')}`);
 console.log('');
 console.log('A) the shipped code');
@@ -192,6 +195,7 @@ for (const control of CONTROLS) {
     }
     if (control.green.includes(n) && row.status !== 'passed') fail(`control ${control.name}: "${row.title}" went red too (${detail(row.messages)})`);
   }
+}
 }
 
 /* ======================================================================
@@ -281,11 +285,75 @@ function fullTime(T, s, goalsFor, goalsAgainst) {
 const near = (a, b, eps = 1e-9) => Math.abs(a - b) <= eps;
 const shapes = (T, from, to) => Array.from({ length: to - from + 1 }, (_, i) => T.leagueShape(from + i));
 
+/** A real offered kick, with the guide's tied score and a crowd that pays a bonus. */
+function kickCase(T, m, match = 0) {
+  for (let minute = 0; minute < 90; minute += 1) {
+    const state = { ...m.crowd, totalMatches: match, minute, matchSec: 0, goalsFor: 1, goalsAgainst: 1 };
+    const offer = T.setPieceOffer(state, true);
+    if (offer) return { state, offer, opened: T.beginSetPiece(state, offer) };
+  }
+  throw new Error('no watched kick was offered in a full match');
+}
+
+function kickClaimCase(T, m, match) {
+  const { state, offer, opened } = kickCase(T, m, match);
+  const reload = s => T.deserializeTycoon(T.serializeTycoon(s, 0), 0);
+  const minuteLater = T.setPieceOffer({ ...state, minute: state.minute + 1 }, true);
+  const minuteSec = offer.remainingSec - (minuteLater?.remainingSec ?? NaN);
+  const minutes = Math.floor(12 / minuteSec);
+  const remainder = 12 - minutes * minuteSec;
+  const nearEnd = delta => ({ ...state, minute: state.minute + minutes, matchSec: remainder + delta });
+  const window = T.SET_PIECE_WINDOW_SEC === 12 && offer.remainingSec === 12
+    && T.setPieceOffer(nearEnd(-0.001), true) !== null && T.setPieceOffer(nearEnd(0.001), true) === null;
+  const loaded = reload(opened);
+  const attempt = opened !== state && opened.setPieceAttemptedMatch === offer.match
+    && T.setPieceOffer(opened, true) === null && loaded && T.setPieceOffer(loaded, true) === null
+    && T.beginSetPiece(opened, offer) === opened && T.setPieceOffer(state, false) === null;
+  const result = T.awardSetPieceGoal(opened, offer);
+  const changed = new Set(['money', 'lifetime', 'goalsFor', 'totalGoals', 'setPieceUsedMatch']);
+  const unchanged = result && [...new Set([...Object.keys(opened), ...Object.keys(result.state)])]
+    .filter(key => !changed.has(key)).every(key => JSON.stringify(opened[key]) === JSON.stringify(result.state[key]));
+  const paid = result && result.state.money - opened.money === T.goalBonus(opened)
+    && result.state.lifetime - opened.lifetime === T.goalBonus(opened)
+    && result.state.goalsFor - opened.goalsFor === 1 && result.state.totalGoals - opened.totalGoals === 1
+    && result.event.amount === T.goalBonus(opened) && unchanged;
+  const awardedReload = result && reload(result.state);
+  const once = result && awardedReload && T.awardSetPieceGoal(result.state, offer) === null
+    && T.awardSetPieceGoal(awardedReload, offer) === null;
+  const deadline = T.awardSetPieceGoal({ ...opened, minute: 90 }, offer) === null
+    && T.awardSetPieceGoal({ ...opened, totalMatches: offer.match + 1 }, offer) === null
+    && T.awardSetPieceGoal({ ...opened, rep: offer.rep + 1 }, offer) === null;
+  const miss = opened.goalsFor === 1 && opened.goalsAgainst === 1 && opened.money === state.money && opened.lifetime === state.lifetime;
+  return {
+    offer: window && attempt ? '' : `kick window/attempt mismatch: ${JSON.stringify({ window, attempt, remainingSec: offer.remainingSec })}`,
+    award: paid && once && deadline && miss ? '' : `kick award mismatch: ${JSON.stringify({ paid, once, deadline, miss })}`,
+    example: paid && miss && result.state.goalsFor === 2 && result.state.goalsAgainst === 1 ? '' : `the tied kick example became ${result?.state.goalsFor}-${result?.state.goalsAgainst}`,
+  };
+}
+
+function kickClaims(T, m) {
+  const cases = [0, 1].map(match => kickClaimCase(T, m, match));
+  return Object.fromEntries(['offer', 'award', 'example'].map(key => [key, cases.map(result => result[key]).filter(Boolean).join('; ')]));
+}
+
 /** Each row: the exact phrase in the guide (or the modal text), and what the
  *  engine must say for it to be true. A check returns '' when the claim holds,
  *  or the engine's answer when it does not. */
 const CLAIMS = [
   /* ---- the stadium guide ---- */
+  {
+    where: 'stadium', phrase: "Open a penalty or free-kick offer during a watched match. You have twelve seconds to open it, then choose your aim, power and curve while the match clock keeps running. Opening uses that match's one attempt, even if you leave or reload.",
+    check: (T, m) => kickClaims(T, m).offer,
+  },
+  {
+    where: 'stadium', phrase: 'A scored set piece before full time adds one goal and the usual goal bonus. A miss, save or block costs nothing. A saved shot result cannot pay twice, and a kick left open past full time cannot change the next match. Away matches have no kick offers; these kicks have no daily record or direct gem reward.',
+    check: (T, m) => kickClaims(T, m).award,
+    source: [HOOK, "if (!scored || before.setPieceUsedMatch === offer.match) return 'accepted';"],
+  },
+  {
+    where: 'stadium', phrase: 'You are drawing 1-1 when a penalty offer appears. Open it and aim inside the right post with medium power. If it beats the keeper before full time, your club leads 2-1 and gets its normal goal bonus. If the keeper saves it, the score stays 1-1. The match carries on either way.',
+    check: (T, m) => kickClaims(T, m).example,
+  },
   {
     where: 'stadium', phrase: 'Promote academy players aged 18 to 23 into five first-team places',
     check: (T, m, W) => W.PROMOTE_AGE === 18 && W.LEAVE_AGE === 24 && W.FIRST_TEAM_SLOTS === 5 ? '' : 'the promotion ages or team capacity changed',
@@ -498,6 +566,19 @@ const CLAIMS = [
   },
 
   /* ---- the rules modal's own words (its numbers are computed) ---- */
+  {
+    where: 'modal', phrase: 'A penalty or free-kick offer appears once per watched match.',
+    check: (T, m) => kickClaims(T, m).offer,
+    source: [PAGE, 'You have {SET_PIECE_WINDOW_SEC} seconds to open it.'],
+  },
+  {
+    where: 'modal', phrase: "Pick your aim, power and curve for one shot while the match clock keeps running. Opening uses that match's attempt, including if you leave or reload.",
+    check: (T, m) => kickClaims(T, m).offer,
+  },
+  {
+    where: 'modal', phrase: 'A goal before full time adds one goal and the usual goal bonus',
+    check: (T, m) => kickClaims(T, m).award,
+  },
   {
     where: 'modal', phrase: 'Matchdays keep playing while you are away, one every',
     check: (T, m) => { const s = { ...m.fresh, league: T.newLeague(0, 6, 0) }; const r = T.playAwayMatchdays(s, 1, () => 0.5); return r.results.length === 1 && (r.state.totalMatches ?? 0) - (s.totalMatches ?? 0) === 1 ? '' : `one away matchday played ${r.results.length}`; },
@@ -770,7 +851,70 @@ if (tracked < 30) fail(`only ${tracked} stadium claims, so the table is not cove
 const clone = v => JSON.parse(JSON.stringify(v));
 const HYPE_JSX = 'Press it and your income pays double for {h.hypeSec} seconds';
 const HYPE_FACT = '    hypeSec: BOOST_DURATION_SEC,\n';
+function changedKickEngine(T, name, replacement, probe) {
+  const changed = { ...T, [name]: replacement };
+  if (JSON.stringify(probe(changed)) === JSON.stringify(probe(T))) abort(`  control: ${name} did not change its measured kick outcome`);
+  return changed;
+}
 const CLAIM_CONTROLS = [
+  {
+    name: 'kickcopy', why: 'the new kick instructions promise twenty seconds instead of twelve',
+    red: ['G1', 'G3'], green: ['G2', 'M1', 'M2', 'L1'],
+    guides: g => {
+      const steps = g['/stadium-tycoon'].howToPlay;
+      const i = steps.findIndex(text => text.startsWith('Open a penalty or free-kick offer'));
+      if (i < 0) abort('  control kickcopy: the new kick step is missing');
+      steps[i] = mustReplace(steps[i], 'twelve seconds', 'twenty seconds', 'kick guide step');
+    },
+  },
+  {
+    name: 'kickwindow', why: 'a real offered kick reports a shorter window',
+    red: ['G2'], green: ['G1', 'G3', 'M1', 'M2', 'L1'],
+    lib: t => {
+      const { state } = kickCase(t, m);
+      return changedKickEngine(t, 'setPieceOffer', (s, watched) => {
+        const offer = t.setPieceOffer(s, watched);
+        return offer ? { ...offer, remainingSec: offer.remainingSec - 1 } : offer;
+      }, e => e.setPieceOffer(state, true));
+    },
+  },
+  {
+    name: 'kickreopen', why: 'an opened kick becomes available again',
+    red: ['G2'], green: ['G1', 'G3', 'M1', 'M2', 'L1'],
+    lib: t => {
+      const { opened } = kickCase(t, m);
+      return changedKickEngine(t, 'setPieceOffer', (s, watched) => t.setPieceOffer({ ...s, setPieceAttemptedMatch: undefined, setPieceUsedMatch: undefined }, watched), e => e.setPieceOffer(opened, true));
+    },
+  },
+  {
+    name: 'kickgoal', why: 'one scored kick adds two goals',
+    red: ['G2'], green: ['G1', 'G3', 'M1', 'M2', 'L1'],
+    lib: t => {
+      const { opened, offer } = kickCase(t, m);
+      return changedKickEngine(t, 'awardSetPieceGoal', (s, kick) => {
+        const awarded = t.awardSetPieceGoal(s, kick);
+        return awarded ? { ...awarded, state: { ...awarded.state, goalsFor: awarded.state.goalsFor + 1 } } : awarded;
+      }, e => e.awardSetPieceGoal(opened, offer));
+    },
+  },
+  {
+    name: 'kickrepeat', why: 'a scored kick pays again after it was already awarded',
+    red: ['G2'], green: ['G1', 'G3', 'M1', 'M2', 'L1'],
+    lib: t => {
+      const { opened, offer } = kickCase(t, m);
+      const paid = t.awardSetPieceGoal(opened, offer);
+      if (!paid) abort('  control kickrepeat: a valid kick did not pay');
+      return changedKickEngine(t, 'awardSetPieceGoal', (s, kick) => t.awardSetPieceGoal({ ...s, setPieceUsedMatch: undefined }, kick), e => e.awardSetPieceGoal(paid.state, offer));
+    },
+  },
+  {
+    name: 'kickdeadline', why: 'a kick left open at full time can still pay',
+    red: ['G2'], green: ['G1', 'G3', 'M1', 'M2', 'L1'],
+    lib: t => {
+      const { opened, offer } = kickCase(t, m);
+      return changedKickEngine(t, 'awardSetPieceGoal', (s, kick) => t.awardSetPieceGoal({ ...s, minute: Math.min(s.minute, 89) }, kick), e => e.awardSetPieceGoal({ ...opened, minute: 90 }, offer));
+    },
+  },
   {
     name: 'typed',
     why: 'the guide gains a sentence with a typed number in it',
@@ -842,7 +986,9 @@ if (failures > 0) {
   process.exit(1);
 }
 console.log('simTycoonHelp: green.');
+if (!CLAIMS_ONLY) {
 console.log('   Every money floater prints what the engine paid, the way the balance prints it, up to trillions.');
 console.log('   The rules open before first play and not after; a keyboard can tap.');
+}
 console.log('   Every number in the stadium guide and the rules modal is tied to the engine, and nothing typed is left over.');
-console.log(`   All ${CONTROLS.length + CLAIM_CONTROLS.length} controls fired exactly where they should.`);
+console.log(`   All ${(CLAIMS_ONLY ? 0 : CONTROLS.length) + CLAIM_CONTROLS.length} controls fired exactly where they should.`);

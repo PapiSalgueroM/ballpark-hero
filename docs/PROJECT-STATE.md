@@ -40,6 +40,12 @@ pass; a twelfth page control removes that memo and detects a replay that keeps
 restarting. The daily-record write control remains effective. Final rebuilt
 download size and actual-page fit will be checked again in release CI.
 
+The final content audit found the new guide and modal quantities were missing
+from the existing measured-claims table. `simTycoonHelp` now checks real penalty
+and free-kick windows, reload consumption, a single normal bonus, duplicate
+rejection and full-time boundaries. Its scoped run passes all 76 claims and
+13 effective controls. The default real-page tests remain part of full CI.
+
 AdSense remains Review requested after the September 15 04:19 EDT submission,
 confirmed again in the fully loaded console at 12:37 EDT.
 No second request is made, no indexable route is retired, and no ad slot is
