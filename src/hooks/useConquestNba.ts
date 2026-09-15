@@ -87,7 +87,7 @@ function buildInitialPowerRankDrift(): Record<string, number> {
 
 function buildInitialTerritories(): Record<string, string | null> {
   const t: Record<string, string | null> = {};
-  STATE_POSITIONS.forEach(s => { t[s.id] = INITIAL_TERRITORIES_NBA[s.id] || null; });
+  NBA_STATES.forEach(s => { t[s.id] = INITIAL_TERRITORIES_NBA[s.id] || null; });
   return t;
 }
 
