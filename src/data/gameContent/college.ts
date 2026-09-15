@@ -60,7 +60,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
   '/college-grid': {
     intro: [
       "The College Football Grid is a daily 3x3 puzzle for fans who remember where guys played on Saturdays. Rows are schools like Alabama, LSU or Notre Dame. Columns are positions, the Heisman and draft picks. Each of the 9 cells needs one player who fits both.",
-      "If you came looking for a college football grid, this is that idea built on where players went to school. Every answer is checked against our own records: NFL draft picks back to 1936, NFL careers from 1970 on, and every Heisman winner since 1935. The columns run from Quarterback and Defensive Back to Heisman Winner, First Round Pick and 1st Overall Pick.",
+      "If you came looking for a college football grid, this is that idea built on where players went to school. Every answer is checked against our own records: NFL draft picks back to 1936, NFL careers from 1970 on, and every Heisman winner since 1935. The columns run from Quarterback and Defensive Back to Heisman Winner, First Round Pick and Top 5 Pick.",
       "One grid a day, the same for everyone, 15 guesses, and a rarity score for style points. A fresh college football grid game lands every day at midnight Eastern.",
     ],
     howToPlay: [
@@ -76,7 +76,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
       "A cell only takes a player who matches its row and its column at the same time.",
       "A guess costs a turn only when the records say no. If they can't tell, it's free.",
       "Each player goes on the board once. Pick someone who's already on your grid and you just get a reminder.",
-      "Rows are schools. Columns are one of eight positions (Quarterback, Running Back, Wide Receiver, Tight End, Offensive Lineman, Defensive Lineman, Linebacker, Defensive Back), Heisman Winner, or a draft column: First Round Pick, Top 10 Pick, Top 5 Pick or 1st Overall Pick.",
+      "Rows are schools. Columns are one of eight positions (Quarterback, Running Back, Wide Receiver, Tight End, Offensive Lineman, Defensive Lineman, Linebacker, Defensive Back), Heisman Winner, or a draft column: First Round Pick, Top 10 Pick or Top 5 Pick.",
       "Draft columns go by overall pick number. A player drafted twice counts his best pick, and First Round Pick means that pick came inside that year's first round.",
       "Each correct answer shows a rarity percentage, the share of players who used the same name there. Your Rarity Score averages your correct cells, and lower is better.",
     ],
@@ -88,7 +88,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
     tips: [
       "Fight the first instinct. The obvious name is the one everyone types, and rarity rewards the road less traveled.",
       "Heisman Winner is the tightest column on the board. There's one winner a year, so even the big programs only have a handful.",
-      "First Round Pick is usually the roomiest draft column. Top 5 Pick and 1st Overall Pick get thin fast.",
+      "First Round Pick is usually the roomiest draft column. Top 10 Pick and Top 5 Pick get thin fast.",
       "Players who changed schools count for every school our records have them at, which can open up a thin cell.",
       "Each player goes on the board once, so if a name fits two cells, spend him on the harder one.",
     ],

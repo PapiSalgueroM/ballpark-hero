@@ -26,6 +26,9 @@
         against the committed key, and each named player is first asserted to
         still be in that copy. The page's examples are parsed out of the page
         itself; the prose claims are listed below with the file they live in.
+        Every criterion the guide, the page or the dialog names (First Round
+        Pick, Top 5 Pick and so on) is dealt on at least one board, so the
+        copy never promises a column the pool cannot deal.
      5. A SAVE FROM ANOTHER BOARD IS NOT SHOWN. Both action shapes carry the
         board id, every addDailyGuess call passes it, and a restored log with
         a different id is compared, cleared with reset(), held off the screen
@@ -37,6 +40,7 @@
      chargeunknown  plants an addDailyGuess x in the unknown branch                  section 2
      typedlist      plants the nflCareerPlayers import in the search box             section 3
      copy           plants "SEC Conference" into the guide intro                     section 4
+     undealt        plants a criterion no board deals into the guide intro           section 4
      noboardid      removes the board id comparison from the hook                    section 5
    SIM_CGPAGE_CONTROL=<name> runs just that control and exits 0 only if it fired.
 
@@ -56,7 +60,7 @@ const DIALOG = 'src/components/college-grid/CollegeGridHowToPlay.tsx';
 const SEARCH = 'src/components/college-grid/CollegeGridSearch.tsx';
 const GUIDE = 'src/data/gameContent/college.ts';
 
-const CONTROLS = { invoke: 1, chargeunknown: 2, typedlist: 3, copy: 4, noboardid: 5 };
+const CONTROLS = { invoke: 1, chargeunknown: 2, typedlist: 3, copy: 4, undealt: 4, noboardid: 5 };
 const ONLY = process.env.SIM_CGPAGE_CONTROL || '';
 if (ONLY && !CONTROLS[ONLY]) {
   console.error(`SIM_CGPAGE_CONTROL=${ONLY} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -215,15 +219,17 @@ async function loadJudge() {
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 export const lib = await import('${abs('src/lib/collegeGrid.ts')}');
 export const engine = await import('${abs('src/lib/gridEngine.ts')}');
+export const puzzles = await import('${abs('src/data/collegeGridPuzzles.ts')}');
 `);
   const r = spawnSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${entry}" --bundle --format=esm --platform=node --outfile="${bundle}" --log-level=error`, { shell: true, encoding: 'utf8' });
   if (r.status !== 0) abort(`esbuild could not bundle the College Grid judge:\n${r.stderr || r.stdout}`);
-  const { lib, engine } = await import(pathToFileURL(bundle).href);
+  const { lib, engine, puzzles } = await import(pathToFileURL(bundle).href);
   const raws = readKeyFile(JSON.parse(read('scripts/data/collegeGridPlayers.json')));
   const entries = lib.indexCollegeEntries(raws);
   const byName = new Map(entries.map(e => [engine.normalizeGridName(e.name), e]));
   const proofById = new Map(raws.map(p => [p.id, p.proof]));
-  return { lib, engine, byName, proofById, size: entries.length };
+  const dealt = new Set(puzzles.collegeGridPuzzles.flatMap(b => [...b.rows, ...b.cols].map(a => a.label)));
+  return { lib, engine, byName, proofById, size: entries.length, dealt, boards: puzzles.collegeGridPuzzles.length };
 }
 
 function sectionFour(texts) {
@@ -233,6 +239,16 @@ function sectionFour(texts) {
     for (const [re, label] of RETIRED) {
       const m = text.match(re);
       if (m) out.push(`${where} names a retired label (${label}): "${text.slice(Math.max(0, m.index - 30), m.index + 40).replace(/\s+/g, ' ')}"`);
+    }
+  }
+  /* A column the copy promises has to be one a board deals (1st Overall Pick
+     clears the floor at one school, so no board can carry it). */
+  const named = [];
+  for (const l of judge.lib.CRITERIA_LABELS) {
+    for (const [where, text] of places.slice(0, 3)) {
+      if (!text.includes(l.label)) continue;
+      named.push(l.label);
+      if (!judge.dealt.has(l.label)) out.push(`${where} names ${l.label}, which none of the ${judge.boards} boards deals`);
     }
   }
   const examples = texts.page.match(/examples=\{\[([\s\S]*?)\]\}/);
@@ -266,7 +282,7 @@ function sectionFour(texts) {
     const p = e && judge.proofById.get(e.id);
     if (!e || !ok(e, p)) out.push(`${f} says ${name} ${phrase}, and the key holds ${e ? what(e, p) : 'no such player'}`);
   }
-  return { out, judged, parsed: claims.length };
+  return { out, judged, parsed: claims.length, named: new Set(named).size };
 }
 
 function sectionFive(hook) {
@@ -298,7 +314,7 @@ if (!ONLY) {
   report(2, 'Only a no costs a guess', sectionTwo(source.hook), 'submitGuess read branch by branch');
   report(3, "The key's names: COLLEGE_GRID_PLAYER_SOURCE with validateOnly, no typed list", sectionThree(source.search), 'search box read as code');
   const four = sectionFour(source);
-  report(4, 'The copy only asks what the pool offers', four.out, `${four.parsed} example claims parsed from the page and ${PROSE_CLAIMS.length} prose claims, ${four.judged} judged against the ${judge.size} row key; ${PROSE_FACTS.length} stated facts read`);
+  report(4, 'The copy only asks what the pool offers', four.out, `${four.parsed} example claims parsed from the page and ${PROSE_CLAIMS.length} prose claims, ${four.judged} judged against the ${judge.size} row key; ${PROSE_FACTS.length} stated facts read; ${four.named} criteria named in the copy, each checked against the labels the ${judge.boards} boards deal`);
   report(5, 'A save from another board is not shown', sectionFive(source.hook), 'action shapes, guesses and the stale log read');
 }
 
@@ -330,6 +346,16 @@ if (want('copy')) {
   console.log('\ncopy) "SEC Conference" planted into the guide intro');
   const guide = mustReplace(source.guide, '    intro: [\n', '    intro: [\n      "Rows can be the SEC Conference.",\n', `${GUIDE} '/college-grid' entry`);
   grade('copy', sectionFour({ ...source, guide }).out);
+}
+if (want('undealt')) {
+  const label = judge.lib.CRITERIA_LABELS.map(l => l.label).find(l => !judge.dealt.has(l));
+  if (!label) abort('control undealt cannot run: every criterion is dealt on some board, so there is no undealt label to plant');
+  console.log(`\nundealt) "${label}", which no board deals, planted into the guide intro`);
+  const guide = mustReplace(source.guide, '    intro: [\n', `    intro: [\n      "Columns include ${label}.",\n`, `${GUIDE} '/college-grid' entry`);
+  const hits = texts => sectionFour(texts).out.filter(m => m.startsWith(`the guide entry names ${label}, which none`));
+  const before = hits(source).length;
+  const after = hits({ ...source, guide });
+  grade('undealt', after.length > before ? after : []);
 }
 if (want('noboardid')) {
   console.log('\nnoboardid) the board id comparison removed from the hook');

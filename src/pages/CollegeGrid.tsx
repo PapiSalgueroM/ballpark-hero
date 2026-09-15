@@ -133,7 +133,7 @@ const CollegeGrid = () => {
           description="A daily 3×3 grid puzzle where each cell needs a college football player who fits both the row and the column: a school, plus a position, the Heisman or a draft pick."
           howToPlay={[
             'Each cell needs a player who fits both the row and the column',
-            'Rows are schools. Columns are positions, Heisman Winner, or draft picks like First Round Pick and 1st Overall Pick',
+            'Rows are schools. Columns are positions, Heisman Winner, or draft picks like First Round Pick and Top 10 Pick',
             'A guess only costs a turn when the records say no. If they cannot settle it, it is free',
             'Correct answers show a rarity percentage. Rarer picks earn a better overall score',
             'New grid at midnight, same challenge for everyone. 15 guesses to fill it, and each player goes on the board once.',

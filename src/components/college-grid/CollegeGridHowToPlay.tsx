@@ -22,7 +22,7 @@ export function CollegeGridHowToPlay({ open, onOpenChange }: Props) {
         <div className="space-y-4 text-sm text-muted-foreground">
           <p>
             Each cell needs a player who matches <strong>both</strong> its row and column. Rows are schools. Columns
-            are a position, Heisman Winner, or a draft pick like First Round Pick or 1st Overall Pick.
+            are a position, Heisman Winner, or a draft pick like First Round Pick or Top 10 Pick.
           </p>
           <ul className="list-disc list-inside space-y-1">
             <li>Tap a cell, start typing, and pick a player from the list</li>
