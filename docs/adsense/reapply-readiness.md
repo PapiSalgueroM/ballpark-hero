@@ -7,6 +7,13 @@ Request review is available. No individual URL or decision date is shown, so thi
 is the date reported, not an asserted Google decision date. Earlier submitted or
 pending statuses are superseded.
 
+**Fresh console evidence on September 15:** the Sites row gives September 9,
+2026 at 4:47 PM EDT as the last approval-status update. The help popup confirms
+that meaning. This predates the September 12 guide additions. Ads.txt is
+Authorized, the payment profile is complete, and a European regulations message
+for this domain is Published. See [the direct console check](console-check-2026-09-15.md).
+No settings or review status were changed during that check.
+
 The live site already has readable saved pages, guides, About and Privacy content.
 Round 600 is claimed to place the existing verified source links beside the format
 periods and exceptions they support in the five explainers. This improves

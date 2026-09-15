@@ -8,6 +8,14 @@ content**, and Request review is available. The screen names no individual URL
 and shows no decision date. September 15 is the report date. Older rows saying the
 review is submitted or pending are historical, not current approval status.
 
+A later direct console check in this session supplied the missing timing:
+AdSense says the approval status was last updated on September 9 at 4:47 PM EDT,
+before the September 12 guide additions. Ads.txt is Authorized, the payment
+profile is complete, and this domain's European regulations message is Published.
+The current detail page still says Low value content, with Request review
+available and no individual URL named. No new review has been sent. Evidence:
+`docs/adsense/console-check-2026-09-15.md`.
+
 The live site already serves readable guides and publisher pages without running
 JavaScript. The next claimed improvement is Round 600: contextual links to the
 existing verified sources in the five format explainers. Search Console is now
