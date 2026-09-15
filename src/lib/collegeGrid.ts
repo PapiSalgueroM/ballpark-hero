@@ -59,7 +59,9 @@ import {
  * key starts in 1970). When an entry shares its folded name with an entry of
  * the other kind (a career and a non-career), its position and pick facts may
  * be split across the two, so they never say no for it: identityOpen turns
- * those no verdicts into unknown. Yes verdicts are untouched.
+ * those no verdicts into unknown. Two non-career entries with one folded name
+ * at one school are open the same way (Merv Pregulman is a 1944 and a 1950
+ * Michigan draft row, split by the gap between them). Yes verdicts are untouched.
  */
 
 // ---------------------------------------------------------------------------
@@ -99,7 +101,7 @@ export interface CollegeGridEntry extends FranchisePlayer {
   firstSeason: number | null;
   seasons: number;
   dup: boolean;
-  /** Shares a folded name with an entry of the other kind: position and pick facts never say no. */
+  /** Shares a folded name with an entry of the other kind, or is a non-career sharing one with another at a school: position and pick facts never say no. */
   identityOpen: boolean;
   /** Heisman Winner never says no (a winner's name, or a lone winner's surname at one of its schools). */
   heismanOpen: boolean;
@@ -189,12 +191,17 @@ const surnameOf = (nameNorm: string) => nameNorm.split(' ').pop() ?? '';
 /** Sets identityOpen and heismanOpen from the whole key; each flag only ever turns a no into unknown. */
 export function markCollegeNamesakes(entries: CollegeGridEntry[]): void {
   const kindsByName = new Map<string, { career: number; other: number }>();
+  /* Non-career entries per folded name and school. */
+  const othersAtSchool = new Map<string, number>();
   const winnerNames = new Set<string>();
   const loneWinners = new Set<string>();
   for (const e of entries) {
     const k = kindsByName.get(e.nameNorm) ?? { career: 0, other: 0 };
     if (e.firstSeason !== null) k.career += 1;
-    else k.other += 1;
+    else {
+      k.other += 1;
+      for (const c of new Set(e.colleges)) othersAtSchool.set(`${e.nameNorm}|${c}`, (othersAtSchool.get(`${e.nameNorm}|${c}`) ?? 0) + 1);
+    }
     kindsByName.set(e.nameNorm, k);
     if (e.heismanYear !== null) {
       winnerNames.add(e.nameNorm);
@@ -204,7 +211,9 @@ export function markCollegeNamesakes(entries: CollegeGridEntry[]): void {
   }
   for (const e of entries) {
     const k = kindsByName.get(e.nameNorm) ?? { career: 0, other: 0 };
-    e.identityOpen = e.firstSeason !== null ? k.other > 0 : k.career > 0;
+    e.identityOpen = e.firstSeason !== null
+      ? k.other > 0
+      : k.career > 0 || e.colleges.some((c) => (othersAtSchool.get(`${e.nameNorm}|${c}`) ?? 0) > 1);
     e.heismanOpen = e.heismanYear === null
       && (winnerNames.has(e.nameNorm) || e.colleges.some((c) => loneWinners.has(`${surnameOf(e.nameNorm)}|${c}`)));
   }

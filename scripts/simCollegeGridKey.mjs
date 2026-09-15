@@ -76,6 +76,11 @@
         and "Matt Snell 3"). Pin: Paul Warfield's 1964 draft row reads as
         Paul Warfield and shares his 1970 to 1977 career's folded name, so
         both carry identityOpen.
+    13. SAME NAME, SAME SCHOOL, NO SPLIT VERDICT. Two entries with one folded
+        name at one board school, at least one of them not an NFL career, may
+        be one man (Merv Pregulman is a 1944 and a 1950 Michigan draft row), so
+        no criterion judges yes for one and no for the other. Pin: the 1950
+        entry is not no on Michigan x Top 10 Pick.
 
    NEGATIVE CONTROLS. Every one runs on EVERY invocation, in memory or against
    copies written under a temp folder that is removed on exit, and each one
@@ -101,6 +106,8 @@
                    school; section 11 must list Will Grier at Florida State
      hofname       the raw draft name "Paul Warfield HOF" is planted back on
                    his 1964 draft entry; section 12 must list it
+     noschoolopen  identityOpen is cleared on every non-career entry whose
+                   name no career shares; section 13 must list Pregulman
    SIM_CGKEY_CONTROL=<name> runs just that control and exits 0 only if it fired.
 
    SUPABASE UNREACHABLE: the source pull fails, the harness says NOTHING WAS
@@ -150,7 +157,7 @@ const PINS = [
   ['Jalen Hurts', 'Alabama', 'Quarterback'],
 ];
 
-const CONTROLS = { roundcol: 1, entity: 2, thinalias: 2, emptycell: 3, nocount: 4, window: 5, nomerge: 6, plantdrafted: 7, droprow: 8, noslotjoin: 9, nocfbpos: 10, keeplistonly: 11, hofname: 12 };
+const CONTROLS = { roundcol: 1, entity: 2, thinalias: 2, emptycell: 3, nocount: 4, window: 5, nomerge: 6, plantdrafted: 7, droprow: 8, noslotjoin: 9, nocfbpos: 10, keeplistonly: 11, hofname: 12, noschoolopen: 13 };
 const ONLY = process.env.SIM_CGKEY_CONTROL || '';
 if (ONLY && !CONTROLS[ONLY]) {
   console.error(`SIM_CGKEY_CONTROL=${ONLY} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -572,6 +579,37 @@ function sectionTwelve(list) {
   return { out, raw, marked };
 }
 
+/** Namesakes at one school, one of them not a career: no criterion says yes for one and no for the other. */
+function sectionThirteen(list, tamper = () => 0) {
+  const out = [];
+  const entries = index(list);
+  const tampered = tamper(entries);
+  const byName = new Map();
+  for (const e of entries) byName.set(e.nameNorm, [...(byName.get(e.nameNorm) ?? []), e]);
+  const split = [];
+  let pairs = 0;
+  for (const group of byName.values()) {
+    for (let i = 0; i < group.length; i += 1) for (let j = i + 1; j < group.length; j += 1) {
+      const a = group[i];
+      const b = group[j];
+      if (a.firstSeason !== null && b.firstSeason !== null) continue;
+      const shared = a.colleges.filter(s => b.colleges.includes(s) && lib.labelOf(s)?.kind === 'college');
+      if (!shared.length) continue;
+      pairs += 1;
+      for (const s of shared) for (const c of lib.CRITERIA_LABELS) {
+        const va = lib.judgeCollegeCell(a, s, c);
+        const vb = lib.judgeCollegeCell(b, s, c);
+        if ((va === 'no' && vb === 'yes') || (va === 'yes' && vb === 'no')) split.push(`${a.name} [${a.id}] ${va}, [${b.id}] ${vb} on ${s} x ${c.label}`);
+      }
+    }
+  }
+  if (split.length) out.push(`${split.length} cells judge yes for one namesake and no for another at the same school: ${show(split, 6)}`);
+  const merv = entries.find(e => e.id === 'draft:1950-261');
+  const v = merv ? lib.judgeCollegeCell(merv, 'Michigan', 'Top 10 Pick') : 'not in the key';
+  if (v === 'no') out.push('pin Merv Pregulman (1950) x Michigan x Top 10 Pick judges no');
+  return { out, pairs, split, tampered };
+}
+
 const judgedHash = rows => {
   const canonRows = rows.map(r => TABLE_COLUMNS.map(c => r[c] ?? null)).sort((x, y) => (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));
   return crypto.createHash('sha256').update(JSON.stringify(canonRows)).digest('hex').slice(0, 16);
@@ -775,6 +813,13 @@ if (!ONLY) {
     r.out.forEach(fail);
     console.log(`   ${r.raw} raw draft names end in a marker; ${r.marked.length} names in the key do; pin: Paul Warfield's 1964 row and career share a folded name, both open`);
   }
+
+  console.log('\n13) Same name, same school, no split verdict');
+  {
+    const r = sectionThirteen(players);
+    r.out.forEach(fail);
+    console.log(`   ${r.pairs} namesake pairs share a board school with at least one non-career; ${r.split.length} split verdicts; pin: Merv Pregulman (1950) not no on Michigan x Top 10 Pick`);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -943,6 +988,20 @@ if (want('hofname')) {
   row.name_norm = foldName(rawName);
   const r = sectionTwelve(list);
   grade('hofname', r.marked.some(p => p.id === 'draft:1964-11') && r.out.some(m => /^pin Paul Warfield/.test(m)), r.out.map(m => m.slice(0, 200)).join(' | ') || 'section 12 stayed green');
+}
+
+if (want('noschoolopen')) {
+  console.log('\nnoschoolopen) identityOpen cleared on every non-career entry whose name no career shares');
+  const clear = entries => {
+    const careerNames = new Set(entries.filter(e => e.firstSeason !== null).map(e => e.nameNorm));
+    let n = 0;
+    for (const e of entries) if (e.firstSeason === null && !careerNames.has(e.nameNorm) && e.identityOpen) { e.identityOpen = false; n += 1; }
+    return n;
+  };
+  const r = sectionThirteen(players, clear);
+  mustChange('noschoolopen', r.tampered > 0, 'no non-career entry is open without a career namesake');
+  console.log(`   ${r.tampered} entries closed; ${r.split.length} split verdicts`);
+  grade('noschoolopen', r.split.some(m => /^Merv Pregulman .* on Michigan x Top 10 Pick/.test(m)) && r.out.some(m => /^pin Merv Pregulman/.test(m)), r.out.map(m => m.slice(0, 200)).join(' | ') || 'section 13 stayed green');
 }
 
 // ---------------------------------------------------------------------------
