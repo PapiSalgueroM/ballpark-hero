@@ -17,10 +17,21 @@ use their already revealed plays for catches, runs, kicks, interceptions,
 shots, blocks and steals. The NBA engine adds only an action label to an
 existing branch, with no extra random draw or scoring change.
 
-Focused runtime and geometry checks are recorded with each source commit.
+Frozen source commits are `26094c9f` (603), `547aee9a` (604) and `be49e8ad`
+(605). The live sim has 17 passing runtime cases and nine effective controls.
+The drills retain their actual saved outcomes across motion preferences and
+the 700ms settlement boundary, with six shot outcomes checked in full motion,
+reduced motion and a preference change during flight. Conquest retains all
+256 frozen battle outcomes and random-draw counts. Geometry checks cover
+3,333 arm poses and 808 post-contact carry samples; 13 effective controls catch
+scoring, randomness, contact, motion, Skip and phone layout regressions.
+Root review fixed balls trailing behind their carriers after catches or steals.
+
 The full combined build, harness suite and generated-page verification remain
 owed until the release workflow finishes. Keep this distinct from the passing
-focused checks and preview videos.
+focused checks and preview videos. The older league guard's neutral-arm anchor
+repair from `cd4e7043` is included, so the combined suite exercises the current
+defensive formula correctly.
 
 AdSense remains Review requested following the September 15 04:19 EDT
 submission. The [bounded animation audit](adsense/animation-regression-2026-09-15.md)
