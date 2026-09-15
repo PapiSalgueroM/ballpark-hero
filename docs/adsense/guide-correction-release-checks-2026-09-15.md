@@ -1,0 +1,76 @@
+# Guide correction release checks, 2026-09-15
+
+## Scope and status
+
+This release corrects existing NFL, NBA, Champions League, MLB and NHL format
+guides, plus three homepage or Soccer Career claims about browser saves and
+Record Books. It makes the five guide tables usable on narrow screens. It does
+not add articles, change simulation results or submit another AdSense review.
+
+App source is `efe74fc8` plus `b05c10a9`. Commit `253790d7` adds the regenerated
+five guide snapshots, Soccer Career snapshot, sitemap and lastmod ledger.
+It is based on main `9f828738`. The correction is not yet confirmed published.
+
+The factual evidence is recorded in [the NFL research record](nfl-guide-correction-2026-09-15.md)
+and [the four other guide corrections](other-guide-corrections-2026-09-15.md).
+The NFL guide was rechecked broadly. The other four received targeted corrections;
+their original full-guide verification dates were retained.
+
+## Completed local checks
+
+- The real app type check passed. The six-route SEO build completed with zero
+  failed pages. A final production build after the table change also passed.
+- All 21 final focused harnesses passed: the 15 required built-document fences,
+  `simHomeCopy` and all five format-guide harnesses. These include the actual
+  saved HTML, metadata, internal links, robots rules, sitemap, consent/ad gates,
+  brand checks, stable snapshot assets and successful browser boot.
+- The final NFL snapshot negative control restored the old 1990 bye claim in
+  memory and was caught by the exact saved-claim assertion. All 19 NFL source
+  controls and 13 controls for the other guides also passed their intended
+  failure checks. Controls did not modify production files.
+- A browser sweep used the real final production JS and CSS from `253790d7`,
+  with external requests blocked. All five guides passed at 320, 390, 430 and
+  1440 pixels: 20 cases, correct affected cells or FAQ, visible sources, one
+  main heading, no runtime or asset errors and zero page overflow.
+- On the three phone widths, the table region took keyboard focus and scrolled
+  horizontally with the arrow key. The swipe hint was visible. The smallest
+  measured explanation column was 279.95 pixels. The page itself stayed fixed
+  horizontally. The 320-pixel NFL, MLB and Champions League screenshots were
+  opened and inspected after the change.
+- Raw homepage copy and the actual guest Soccer Career screen passed at 320,
+  390 and 1440 pixels. The account copy now matches localStorage career saves
+  and optional account score profiles.
+
+An earlier local `simPrerenderBoot` attempt hit two 25-second navigation
+timeouts. An unchanged-artifact retry passed, and the complete final fence run
+also passed all sampled boots and eleven retired-route redirects. This was a
+non-reproducing local timing failure, not a code fix or an omitted check.
+
+Local evidence is under
+`C:/Users/antho/.codex/visualizations/2026/09/15/01a0a304-8aa4-7612-a558-91eac041eec2/guide-correction-readable/`
+(`verification.json` and 20 screenshots). Final harness logs are in
+`C:/Users/antho/AppData/Local/Temp/dukb-guide-final-fences/`.
+
+## Full release verification
+
+[Run 35011097191](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35011097191)
+uses verification commit `506f79ef`, with the same corrected app inputs and
+table styles. Its app type check, six-route SEO build, five default guide
+harnesses and all 33 effective controls passed. At 15:19 EDT the full node
+suite was still running, with full Vitest and success-only artifact packaging
+pending. The workflow rejects missing, skipped, duplicate or failed harness
+results. Its workflow file belongs only to the verification branch.
+
+Publication remains subject to the full result and artifact verification.
+After main lands, Lovable must publish the matching commit, and public HTTP
+checks must confirm the corrected claims and current app assets. A main push
+alone does not update the published site.
+
+## AdSense status
+
+The last fully loaded account read was 12:37 EDT: Getting ready and Review
+requested, following the 04:19 EDT submission. Later browser connection
+timeouts did not establish a newer status. There has been no second request.
+Google decides approval. None of the local guards, source corrections or
+148-document HTTP audit establishes indexing or approval, or identifies which
+pages caused the previous low-value-content rejection.
