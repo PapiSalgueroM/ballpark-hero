@@ -8,6 +8,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { Loader2, AlertCircle, KeyRound } from 'lucide-react';
 import PageSeo from '@/components/seo/PageSeo';
+import { PASSWORD_SET_FLAG, sendPasswordLink } from '@/lib/googlePaused';
 
 const MIN_PASSWORD_LENGTH = 6;
 
@@ -32,6 +33,11 @@ export default function ResetPassword() {
   const [confirm, setConfirm] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  /* Round 610: set when the server wants a fresh sign in before it will change
+     the password (a session older than a day, if the project requires that).
+     The email link is the one route that always satisfies it. */
+  const [linkInstead, setLinkInstead] = useState(false);
+  const [sendingLink, setSendingLink] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -76,18 +82,33 @@ export default function ResetPassword() {
       return;
     }
     setSaving(true);
-    const { error: updateError } = await supabase.auth.updateUser({ password });
+    /* Round 610: the flag tells the account menu this player has a password
+       now, so it stops offering Google-only accounts a link to set one. */
+    const { error: updateError } = await supabase.auth.updateUser({ password, data: { [PASSWORD_SET_FLAG]: true } });
     setSaving(false);
     if (updateError) {
+      const reauth = /reauthenticat/i.test(updateError.message);
       const msg = /same password/i.test(updateError.message)
         ? 'That is already your password. Pick a different one.'
-        : updateError.message;
+        : reauth
+          ? 'For safety this needs a fresh link. Tap below and we will email you one.'
+          : updateError.message;
+      setLinkInstead(reauth);
       setError(msg);
       toast.error(msg);
       return;
     }
     toast.success('Password updated! You are signed in.');
     navigate('/');
+  };
+
+  const handleEmailLink = async () => {
+    setSendingLink(true);
+    const { data } = await supabase.auth.getSession();
+    const email = data.session?.user.email;
+    if (email) await sendPasswordLink(email);
+    else toast.error('Could not find the email on this account. Log out, then use Forgot password on Log In.');
+    setSendingLink(false);
   };
 
   return (
@@ -153,6 +174,11 @@ export default function ResetPassword() {
                   <p className="flex items-start gap-1.5 text-sm text-destructive bg-destructive/10 border border-destructive/20 rounded-md px-3 py-2">
                     <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" /> {error}
                   </p>
+                )}
+                {linkInstead && (
+                  <Button type="button" variant="outline" className="w-full" onClick={handleEmailLink} disabled={sendingLink} data-email-link-instead>
+                    {sendingLink ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Email me a link instead'}
+                  </Button>
                 )}
                 <Button type="submit" className="w-full h-11" disabled={saving}>
                   {saving ? <Loader2 className="w-4 h-4 animate-spin" /> : 'Save new password'}

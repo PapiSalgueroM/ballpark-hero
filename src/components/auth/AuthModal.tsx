@@ -9,6 +9,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { OAUTH_PROVIDERS, ANY_OAUTH_ENABLED } from '@/lib/authProviders';
 import { renderGoogleIdentityButton } from '@/lib/googleIdentity';
+import { sendPasswordLink } from '@/lib/googlePaused';
 import { toast } from 'sonner';
 import { Loader2, AlertCircle } from 'lucide-react';
 
@@ -62,11 +63,17 @@ function validate(email: string, password: string): FieldErrors {
  */
 function readableAuthError(message: string): string {
   const lower = message.toLowerCase();
+  /* Round 610: while Google is hidden, a player who joined with Google has no
+     password to type, so these two messages point at the only way back in. */
   if (lower.includes('invalid login credentials')) {
-    return 'Incorrect email or password. Double-check and try again.';
+    return OAUTH_PROVIDERS.google
+      ? 'Incorrect email or password. Double-check and try again.'
+      : 'Incorrect email or password. If you joined with Google, tap Forgot password to set one.';
   }
   if (lower.includes('user already registered')) {
-    return 'An account with this email already exists. Try logging in instead.';
+    return OAUTH_PROVIDERS.google
+      ? 'An account with this email already exists. Try logging in instead.'
+      : 'An account with this email already exists. If you joined with Google, go to Log In and tap Forgot password.';
   }
   if (lower.includes('email not confirmed')) {
     return 'Please confirm your email before logging in. Check your inbox for the confirmation link.';
@@ -304,30 +311,16 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
       return;
     }
     setResetLoading(true);
-    try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
-      if (error) {
-        const rateLimited = /rate limit|too many/i.test(error.message);
-        toast.error(
-          rateLimited
-            ? 'Too many emails going out right now. Give it an hour and try again.'
-            : readableAuthError(error.message)
-        );
-      } else {
-        toast.success('Reset link sent! Check your inbox (and spam) for an email from Supabase.');
-      }
-    } catch {
-      toast.error('Could not send the reset email. Check your connection and try again.');
-    } finally {
-      setResetLoading(false);
-    }
+    await sendPasswordLink(email);
+    setResetLoading(false);
   };
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <DialogContent className="sm:max-w-md">
+      {/* Round 610: the dialog is pinned to the middle of the screen with no
+          height limit, so on a short phone a taller form clipped its own title
+          and footer with no way to reach them. It scrolls inside itself now. */}
+      <DialogContent className="sm:max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-center font-display text-2xl">
             {tab === 'login' ? 'Welcome Back!' : 'Join DoUKnowBall'}
@@ -451,6 +444,11 @@ export function AuthModal({ isOpen, onClose, defaultTab = 'login' }: AuthModalPr
                     {resetLoading ? 'Sending reset link...' : 'Forgot password?'}
                   </button>
                 </div>
+              )}
+              {tab === 'login' && !OAUTH_PROVIDERS.google && (
+                <p data-google-paused-hint className="text-xs text-muted-foreground">
+                  Joined with Google? It's paused for now. Type that email and tap Forgot password to set one. Your account and points are still there.
+                </p>
               )}
             </div>
             {tab === 'signup' && (
