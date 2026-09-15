@@ -1,5 +1,13 @@
 # Work board
 
+**19:56 EDT, Codex animation preview is public:**
+https://douknowball.anacatu2025.chatgpt.site now serves the accepted full 588
+feature stack. All 543 public response checks pass; proof is in
+`docs/hosting/animation-preview-proof-2026-09-15.json`. This historical source
+is a preview only while final source `03fa0efa` preserves live Claude features
+and receives one combined full CI with reviewed database-read reductions.
+The main domain and AdSense review are unchanged. DNS access is pending.
+
 **19:47 EDT, Codex hosting and disk I/O coordination:** Anthony confirms the
 Supabase warning arrived today and requests publication outside Lovable.
 The alternative host is running at https://douknowball.anacatu2025.chatgpt.site,

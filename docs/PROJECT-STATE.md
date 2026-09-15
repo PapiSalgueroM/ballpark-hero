@@ -1,5 +1,24 @@
 # Project state
 
+## ANIMATION PREVIEW LIVE 2026-09-15 19:56 EDT
+
+The accepted frozen 588 build is public at
+https://douknowball.anacatu2025.chatgpt.site. It contains first-team progression,
+the 603 to 605 action scenes, watched set pieces and title gear. All 543 public
+responses pass: 374 exact assets and 169 exact HTML documents after removing
+the known Cloudflare detection script, with four effective normalization
+controls. See [the preview proof](hosting/animation-preview-proof-2026-09-15.json).
+This is a functional alternate-host preview, not the main-domain cutover or
+AdSense approval. The final combined source is frozen at `03fa0efa`, including
+the reviewed harness read-load fixes, and one fresh full CI is being launched.
+
+Claude's latest receipt corrects the earlier tycoon concern: it was a local
+300s timeout after all 202 goals were measured, not a replay mismatch. The
+accepted 588 source already passed this wrapper and its six page tests. A
+redundant local union run completed the healthy six cases correctly, then
+was canceled during controls; it is not claimed as a full pass and produced
+no source change. Full combined CI retains the existing checks and timeouts.
+
 ## HOSTING AND DATABASE 2026-09-15 19:47 EDT
 
 Anthony confirms today's Supabase Disk IO warning and requests another host.

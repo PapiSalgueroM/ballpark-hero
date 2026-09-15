@@ -19,12 +19,15 @@ is public at https://douknowball.anacatu2025.chatgpt.site.
   mask snapshots or assets on this deployment.
 - Independent static review verified all 493 output files and all 148 sitemap
   documents, including canonical URLs, indexability, local assets and ads.txt.
-- The accepted 588 animation build is being prepared for the same preview.
+- The accepted 588 animation build is now live on the same preview, published
+  at 23:54:57 UTC. All 374 non-HTML responses match exactly, and all 169 HTML
+  responses match after the narrowly controlled Cloudflare script removal.
+  All return 200. See [the publication proof](animation-preview-proof-2026-09-15.json).
   That exact source passed 318 node harnesses, 311 Vitest tests, 15 explicit
   browser programs and 74 effective controls. This is not approval of the new
   combined tree.
 
-**Do not move the main domain to either historical preview.** That would undo
+**Do not move the main domain to this preview yet.** That would undo
 Claude's live 611, 612 and 616 changes. The final integrated tree contains them
 and the full animation stack. Its type check and production build pass; its
 fresh full verification and accepted artifact are still pending.
