@@ -31,6 +31,7 @@ async function settle() {
 async function openAcademy() {
   await click(document.querySelector('[data-room="academy"]')!);
   await settle();
+  await act(async () => { await vi.dynamicImportSettled(); });
 }
 async function openFirstTeam() {
   await click(button(document, /First team.*players/));
