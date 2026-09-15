@@ -1,0 +1,117 @@
+name: Verify Round 585 once
+
+on:
+  push:
+    branches: [codex/verify-round-585]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    env:
+      CI: 'true'
+      ENGINES: chromium
+      VITEST_MAX_THREADS: '1'
+      VITEST_MIN_THREADS: '1'
+      VITEST_MAX_FORKS: '1'
+      VITEST_MIN_FORKS: '1'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6, verified official tag
+        with:
+          fetch-depth: 0 # simNewBadge reads route introduction history
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6, verified official tag
+        with:
+          node-version: '24.14.1'
+          package-manager-cache: false
+      - name: Install verification dependencies
+        timeout-minutes: 20
+        run: |
+          mkdir -p "$RUNNER_TEMP/round585-logs"
+          git rev-parse HEAD > "$RUNNER_TEMP/round585-logs/commit.txt"
+          npm ci --no-audit --no-fund 2>&1 | tee "$RUNNER_TEMP/round585-logs/install.log"
+          npm install --no-save --package-lock=false --no-audit --no-fund playwright@1.63.0
+          npx --no-install playwright install --with-deps chromium
+          python3 -m venv "$RUNNER_TEMP/round585-python"
+          "$RUNNER_TEMP/round585-python/bin/python" -m pip install fonttools==4.63.0 pillow==12.3.0
+          echo "$RUNNER_TEMP/round585-python/bin" >> "$GITHUB_PATH"
+      - name: App type check
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$RUNNER_TEMP/round585-logs/types.log"
+      - name: Build and regenerate snapshots
+        id: build
+        timeout-minutes: 65
+        run: npm run build:seo 2>&1 | tee "$RUNNER_TEMP/round585-logs/build-seo.log"
+      - name: Full node harness suite
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 180
+        run: node scripts/runAllSims.mjs 2>&1 | tee "$RUNNER_TEMP/round585-logs/node-sims.log"
+      - name: Full Vitest, one worker
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 40
+        run: node node_modules/vitest/vitest.mjs run --maxWorkers=1 --minWorkers=1 --no-file-parallelism 2>&1 | tee "$RUNNER_TEMP/round585-logs/vitest.log"
+      - name: Portable browser gates, isolated contexts and intercepted writes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 30
+        run: |
+          cat > "$RUNNER_TEMP/round585-browser.mjs" <<'JS'
+          import path from 'node:path';
+          import { pathToFileURL } from 'node:url';
+          import { createRequire } from 'node:module';
+          const require = createRequire(path.join(process.cwd(), 'package.json'));
+          const pw = require('playwright');
+          async function protect(surface) {
+            await surface.route('**/*', async route => {
+              const request = route.request();
+              const url = new URL(request.url());
+              if (!['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)
+                && !['GET', 'HEAD'].includes(request.method())) {
+                await route.fulfill({ status: request.method() === 'OPTIONS' ? 204 : 200,
+                  headers: { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*',
+                    'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS' },
+                  contentType: 'application/json', body: request.method() === 'OPTIONS' ? '' : '[]' });
+              } else await route.continue();
+            });
+            return surface;
+          }
+          const launch = pw.chromium.launch.bind(pw.chromium);
+          pw.chromium.launch = async options => {
+            const browser = await launch(options);
+            const newContext = browser.newContext.bind(browser);
+            browser.newContext = async options => protect(await newContext({ ...options, serviceWorkers: 'block' }));
+            const newPage = browser.newPage.bind(browser);
+            browser.newPage = async options => protect(await newPage({ ...options, serviceWorkers: 'block' }));
+            return browser;
+          };
+          await import(pathToFileURL(path.resolve(process.argv[2])).href);
+          JS
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$RUNNER_TEMP/round585-logs/browser-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4173/robots.txt >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4173/robots.txt >/dev/null
+          export BASE=http://127.0.0.1:4173
+          status=0
+          for gate in playSessionMarks playLegacy playIphone playLeagueTableFit; do
+            node "$RUNNER_TEMP/round585-browser.mjs" "scripts/$gate.mjs" 2>&1 | tee "$RUNNER_TEMP/round585-logs/$gate.log" || status=1
+          done
+          ONLY=/stadium-tycoon,/wonderkid-factory node "$RUNNER_TEMP/round585-browser.mjs" scripts/playRenderStability.mjs 2>&1 | tee "$RUNNER_TEMP/round585-logs/playRenderStability.log" || status=1
+          printf '%s\n' 'NOT RUN: playReducedMotion.mjs has hardcoded C:/Users/antho paths at lines 33 and 40; this gate remains owed locally.' | tee "$RUNNER_TEMP/round585-logs/platform-limitations.txt"
+          exit "$status"
+      - name: Preserve verification logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6, verified official tag
+        with:
+          name: round585-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/round585-logs/
+          retention-days: 7
+          if-no-files-found: warn
+          include-hidden-files: false
