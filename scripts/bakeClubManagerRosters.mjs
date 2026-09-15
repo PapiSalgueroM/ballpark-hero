@@ -211,8 +211,11 @@ console.log(`Overlay applied: ${overlayMoved} moved, ${overlayDropped} left the 
    not evidence of a transfer: the 2026 World Cup squads confirm ten of them,
    David Alaba and Wout Weghorst among them, are exactly where the bake put
    them. Only rows a named source actually resolves are changed here, and the
-   332 still unresolved stay in the file and stay listed as pending, so nobody
-   mistakes "not yet checked" for "checked and fine".
+   rows still unresolved (332 after Round 542, 314 after Round 616's two source
+   web pass over the Premier League rows) stay in the file and stay listed as
+   pending, so nobody mistakes "not yet checked" for "checked and fine".
+   A season-long loanee is placed at the club he plays for; the ledger's
+   loan and loanFrom fields are information only and this step ignores them.
 
    scripts/data/rosterConfirmation2026.json is the ledger and
    scripts/simRosterAdjudication.mjs holds the shipped file to it. */
