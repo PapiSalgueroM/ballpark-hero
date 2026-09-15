@@ -7,6 +7,8 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { recordCompletion } from '@/lib/completions';
+import { recordFullTimes } from '@/lib/tycoonRewards';
+import type { FullTime } from '@/lib/tycoonRewards';
 import {
   TycoonState, TickEvent, newTycoon, tick, buy, tap, prestige,
   offlineEarnings, serializeTycoon, deserializeTycoon, TYCOON_SAVE_KEY,
@@ -55,6 +57,8 @@ export interface Replay { id: number; side: 'for' | 'against'; minute: number }
 export interface AwayTrip {
   results: AwayMatch[];
   milestonePay: number;
+  /** Round 585: the gems the away wins earned. */
+  gems: number;
   standing: { position: number; clubs: number; left: number } | null;
 }
 
@@ -139,8 +143,17 @@ export function useStadiumTycoon() {
     const paid = { ...cur, money: cur.money + Math.max(0, pay), lifetime: cur.lifetime + Math.max(0, pay), savedAt: now };
     const away = matchdays > 0 ? playAwayMatchdays(paid, matchdays, Math.random) : null;
     const lg = away?.state.league;
+    /* Round 585: an away win earns its gem, credited once per match. */
+    const awayGems = away
+      ? recordFullTimes(away.results.map((m, i) => ({
+        totalMatches: (paid.totalMatches ?? 0) + i + 1,
+        result: m.result === 'W' ? 'win' : m.result === 'D' ? 'draw' : 'loss',
+        away: true,
+      })))
+      : 0;
     setAwayTrip(away && away.results.length > 0 ? {
       results: away.results,
+      gems: awayGems,
       milestonePay: away.events.reduce((sum, e) => sum + (e.kind === 'milestone' ? e.amount ?? 0 : 0), 0),
       standing: lg && away.results.some(r => !r.friendly)
         ? { position: leaguePosition(lg), clubs: lg.clubs.length, left: leagueShape(lg.division).matchdays - lg.matchday }
@@ -179,6 +192,14 @@ export function useStadiumTycoon() {
         const { state: next, events } = tick(stateRef.current, use, Math.random);
         stateRef.current = next;
         for (const e of events) reactToEvent(e);
+        /* Round 585: a watched full time earns its gems, once, keyed on the
+           career match count. A tick settles at most one full time. */
+        const ft = events.find(e => e.kind === 'win' || e.kind === 'draw' || e.kind === 'loss');
+        if (ft) {
+          const season = events.find(e => (e.kind === 'title' || e.kind === 'seasonEnd') && e.position !== undefined);
+          const gems = recordFullTimes([{ totalMatches: next.totalMatches ?? 0, result: ft.kind as FullTime['result'], away: false, position: season?.position }]);
+          if (gems > 0) pushFloater(`+${gems} gems`, 'money', 62, 10);
+        }
         setState(next);
         /* Round 162: the golden whistle. One drifts in every couple of
            minutes of real play (mean ~150s), only while nothing golden is

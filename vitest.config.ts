@@ -66,6 +66,14 @@ export default defineConfig({
       ...(process.env.TYCOON_PITCH_COMPONENT
         ? { "@/components/tycoon/TycoonPitch": path.resolve(process.env.TYCOON_PITCH_COMPONENT) }
         : {}),
+      /* Round 585 negative controls: scripts/simTycoonPacks.mjs writes a broken copy
+         of the gem ledger or the Packs panel. Same ordering rule: above "@". */
+      ...(process.env.TYCOON_PACKS_REWARDS
+        ? { "@/lib/tycoonRewards": path.resolve(process.env.TYCOON_PACKS_REWARDS) }
+        : {}),
+      ...(process.env.TYCOON_PACKS_PANEL
+        ? { "@/components/tycoon/PacksPanel": path.resolve(process.env.TYCOON_PACKS_PANEL) }
+        : {}),
       "@": path.resolve(__dirname, "./src"),
     },
   },

@@ -44,6 +44,8 @@ import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import TycoonPitch from '@/components/tycoon/TycoonPitch';
+import { useTycoonRewards } from '@/hooks/useTycoonRewards';
+import { balance, GEM_PAY } from '@/lib/tycoonRewards';
 import type { TapFx } from '@/components/tycoon/TycoonPitch';
 import type { AcademyStatus, Room } from '@/lib/tycoonRooms';
 
@@ -293,6 +295,8 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
    timers until you are looking again. Its hooks keep running either way. */
 function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadiumTycoon>; visible: boolean; onNeedsYou: (v: boolean) => void }) {
   const s = g.state;
+  /* Round 585: the gems this club's results have earned. */
+  const gems = balance(useTycoonRewards());
   const [showHelp, setShowHelp] = useState(false);
   /* Round 583: the rules open themselves once, before first play, the way the
      academy's always have. A save on this device means somebody has played. */
@@ -432,6 +436,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           <div className="flex items-center justify-center gap-3 mt-1 text-xs text-muted-foreground">
             <span className="inline-flex items-center gap-1">{Array.from({ length: Math.min(s.rep, 6) }, (_, i) => <Star key={i} className="w-3 h-3 fill-yellow-500 text-yellow-500" />)}{s.rep > 6 && <span className="font-bold text-yellow-500">x{s.rep}</span>}{s.rep > 0 && <span className="text-yellow-500 font-bold">rep {Math.round((repMult(s) - 1) * 100)}%</span>}</span>
             {achCount > 0 && <span className="text-emerald-400 font-bold">badges +{Math.round(achCount * ACH_BONUS * 100)}%</span>}
+            <span data-gem-chip className="font-bold text-sky-300">💎 {gems} gem{gems === 1 ? '' : 's'}</span>
             <button onClick={() => setShowHelp(true)} className="inline-flex items-center gap-1 px-2 py-2 transition-colors hover:text-foreground"><HelpCircle className="w-3.5 h-3.5" /> How it works</button>
           </div>
         </div>
@@ -821,6 +826,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                 </div>
                 {g.awayTrip.results[0]?.friendly && <p className="mt-1 text-[11px] text-muted-foreground">The faded result was a friendly, played outside the table.</p>}
                 {g.awayTrip.milestonePay > 0 && <p className="mt-2 text-xs font-bold text-gold">Milestones reached on the road: +{fmtMoney(g.awayTrip.milestonePay)}</p>}
+                {g.awayTrip.gems > 0 && <p className="mt-1 text-xs font-bold text-sky-300">Away wins earned 💎 {g.awayTrip.gems} gem{g.awayTrip.gems === 1 ? '' : 's'}</p>}
                 {awayTableLine && <p className="mt-2 text-xs text-muted-foreground">{awayTableLine}</p>}
               </div>
             )}
@@ -855,6 +861,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>When lifetime earnings hit the bar, sell up: fans, ground, staff and division reset, but you keep a permanent Reputation star worth +{h.starPct}% income each, every badge, and your club records. The ladder is faster every run.</p>
               <p>Selling up also pays legacy points: {h.saleBase} for the sale plus {h.perDivision} per division that ground climbed, so cashing out early pays {h.saleBase} and a sale from {h.lastDivision} pays {h.summitPoints}. Spend them in the Legacy boardroom on {h.perks} permanent perks, from {h.firstPerk} (+{h.swayPct}% income per level, forever) to {h.shieldPerk}, which keeps half your streak through a loss. The whole board costs exactly {h.boardCost} points. Perks survive every future sale.</p>
               <p>Away from the game, you earn at {h.awayPct}% speed for up to {h.awayHours} hours (the {h.awayPerk} perk raises both, up to {h.awayMaxPct}% for {h.awayMaxHours} hours). Matchdays keep playing while you are away, one every {h.awayMatchMin} minutes with no goal or win bonuses, and the final matchday of a season always waits for you. Progress saves on this device.</p>
+              <p>Gems come only from results: a watched win earns {GEM_PAY.win}, a watched draw {GEM_PAY.draw}, and a win played while you were away {GEM_PAY.awayWin}. Winning a league adds {GEM_PAY.title} and finishing second adds {GEM_PAY.runnerUp}. They open packs of generated kids in the Academy tab, where every pack prints its odds before you open it, and gems are never for sale.</p>
               <p>The Academy tab runs your youth academy inside this game, on its own save, with its own How it works button.</p>
               <p>Worked example: a new club has {h.freshFans} fans paying ${h.perFan} each, ${h.freshRate} a second. The first Stands level costs ${h.standsCost} and adds {h.seatsPerStand} seats you cannot fill yet, so the Ticket Office pays first. Later, a full ground of {h.exampleFans} fans pays {fmtMoney(h.rate400)} a second, a goal pays {fmtMoney(h.goal400)} before any streak, and a win pays {fmtMoney(h.win400)}.</p>
             </div>

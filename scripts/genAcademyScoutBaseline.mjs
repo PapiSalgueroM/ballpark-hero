@@ -24,10 +24,6 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'scripts/data/academyScoutBaseline.json');
-if (fs.existsSync(OUT) && !process.argv.includes('--force')) {
-  console.error(`${path.relative(ROOT, OUT)} already exists. It is a pre-packs record; rerunning it now would not be one.`);
-  process.exit(1);
-}
 
 export function scoutFinds(W, count = 500) {
   const finds = [];
@@ -49,6 +45,10 @@ export function scoutFinds(W, count = 500) {
 
 const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 if (isMain) {
+  if (fs.existsSync(OUT) && !process.argv.includes('--force')) {
+    console.error(`${path.relative(ROOT, OUT)} already exists. It is a pre-packs record; rerunning it now would not be one.`);
+    process.exit(1);
+  }
   const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'academy-baseline-'));
   const bundle = path.join(tmp, 'academy.mjs');
   execSync(`npx --no-install esbuild "${path.join(ROOT, 'src/lib/wonderkidFactory.ts')}" --bundle --format=esm --platform=node --alias:@=${ROOT}/src --outfile="${bundle}" --log-level=error`, { cwd: ROOT, shell: true });

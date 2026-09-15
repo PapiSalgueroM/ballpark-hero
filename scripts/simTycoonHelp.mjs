@@ -59,6 +59,8 @@ const LIB = path.join(ROOT, 'src/lib/stadiumTycoon.ts');
 const ACADEMY_LIB = path.join(ROOT, 'src/lib/wonderkidFactory.ts');
 const GUIDES = path.join(ROOT, 'src/data/gameContent/soccer2.ts');
 const TEST_COUNT = 5;
+/** Round 585: the gem ledger, bundled with the engine below and read by the gem claim. */
+let REWARDS = null;
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -417,6 +419,17 @@ const CLAIMS = [
     check: (T, m) => { const r = T.tapValue(m.crowd) / T.tapValue(m.fresh); return T.attendance(m.crowd) === 400 && r >= 3 ? '' : `a tap at ${T.attendance(m.crowd)} fans is x${r.toFixed(2)} a tap at 90`; },
   },
 
+  /* ---- Round 585: gems ---- */
+  {
+    where: 'stadium', phrase: 'Gems are earned only by results: three for a watched win, one for a watched draw, one for a win played while you were away, twenty for a league title and six for second place',
+    check: () => {
+      const R = REWARDS;
+      const one = ft => R.creditFullTimes({ ...R.newLedger(), lastMatch: 1 }, [{ totalMatches: 2, ...ft }]).earned;
+      const got = [one({ result: 'win', away: false }), one({ result: 'draw', away: false }), one({ result: 'win', away: true }), one({ result: 'loss', away: false, position: 1 }), one({ result: 'loss', away: false, position: 2 })];
+      return got.join(',') === '3,1,1,20,6' ? '' : `a watched win, a draw, an away win, a title and second place pay ${got.join(', ')}`;
+    },
+  },
+
   /* ---- Round 584: the league keeps playing while you are away ---- */
   {
     where: 'stadium', phrase: 'Matchdays keep playing while you are away, one for every half hour of the trip and inside the same cap',
@@ -699,6 +712,7 @@ console.log('');
 console.log('B) the claims');
 const T = await bundle(LIB, 'stadium');
 const W = await bundle(ACADEMY_LIB, 'academy');
+REWARDS = await bundle(path.join(ROOT, 'src/lib/tycoonRewards.ts'), 'rewards');
 const content = await bundle(GUIDES, 'guides');
 const guides = content.SOCCER_CONTENT_2;
 if (!guides?.['/stadium-tycoon'] || !guides?.['/wonderkid-factory']) abort('  FAIL: the guides did not load from soccer2.ts');
