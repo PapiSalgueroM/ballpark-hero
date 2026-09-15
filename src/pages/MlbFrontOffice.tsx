@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import MlbFrontOfficeBoard from '@/components/mlb-front-office/MlbFrontOfficeBoard';
@@ -43,6 +44,9 @@ const MlbFrontOffice = () => {
               'Keep a juggernaut under the tax line three winters running',
             ]}
           />
+          <p className="text-xs text-center mb-6">
+            <Link to="/mlb-postseason-format-history" className="inline-flex items-center min-h-[32px] max-w-full px-2 text-primary hover:underline">MLB postseason format history and the rules this game uses</Link>
+          </p>
           <GameNav />
         </main>
       </div>

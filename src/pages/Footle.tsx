@@ -103,7 +103,7 @@ const Index = () => {
       <GameShell help="none"
         width="wide"
         title="FOOTLE"
-        subtitle="Guess the soccer player in 8 tries. One of 10+ free sports trivia games across soccer, NBA and UFC. No login. No tracking. Just play."
+        subtitle="Guess the soccer player in 8 tries. Each guess gives you club, nationality and stat clues."
         headerExtra={
           <>
             <HowToPlayPopover title="How to Play Footle" open={showRules} onOpenChange={setShowRules}>
