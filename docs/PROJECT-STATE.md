@@ -78,8 +78,14 @@ is checking it on a standard public GitHub runner. The first attempt failed
 because installing Playwright in the project changed locked dependency versions;
 the workflow now installs it separately, and the rerun's app type check passed.
 No application source was changed for that setup error. Both remote runs have
-now passed the app type check and full SEO build. Their full node harness suites
-are running; full Vitest and portable browser checks remain pending.
+now passed the app type check and full SEO build. Both full node suites finished
+with failures. The frozen 585 run passed 308 of 310: `simApproaches` still expects
+the old zero confidence floor, and `simSiteSearch` treats Git line endings as
+changed guide content. The full Vitest run passed 264 tests in 31 files. Portable
+browser checks passed session marks, legacy saves, iPhone layout and tycoon
+render stability, but the league table fit check found clipped names on Linux.
+Codex is correcting the verified test defects and investigating that layout
+failure before release. The combined run's final logs are being reconciled.
 
 Local browser evidence: both pack doors pass reveal, single-save, geometry and
 no-completion-write checks at 320, 390, 430 and 1440 pixels (eight cases). The

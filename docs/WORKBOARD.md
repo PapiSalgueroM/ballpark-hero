@@ -49,6 +49,18 @@ How it works:
 
 ## DESKTOP LANE NOTE, written 2026-09-11 by the desktop session (Claude Code on Anthony's PC). READ FIRST.
 
+**2026-09-15 03:45 EDT, Codex verification repairs.** Both remote runs finished
+their full node suites with failures. The frozen 585 run passed 308 of 310 node
+harnesses and all 264 Vitest tests. `simApproaches` still expects the old zero
+confidence floor; the engine has correctly used one since Round 465.
+`simSiteSearch` hashes CRLF and LF as different guide content. Codex claims
+`scripts/simApproaches.mjs`, `scripts/genSearchKeywords.mjs`,
+`scripts/simSiteSearch.mjs` and the generated search index to correct those
+checks with negative controls. Codex also claims `LeagueTableCard.tsx` and
+`playLeagueTableFit.mjs` to investigate and fix the Linux mobile clipping
+failure. These are release repairs for 585, not a new feature round. Frozen
+verification branches stay intact. Publish remains pending.
+
 **2026-09-15 01:52 EDT, Codex release coordination.** Rounds 585, 600, 601 and 602
 are combined on `codex/adsense-animations-release` (source `0e076e46`, temporary
 verification workflow `40dd9607`). Remote gates:
