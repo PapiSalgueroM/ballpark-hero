@@ -1,5 +1,29 @@
 # Work board
 
+**2026-09-15 15:56 EDT, Codex: narrow guide correction ready to publish.**
+Final reviewed app and saved-page revision is `a35693a5`; later correction
+commits only record evidence. Five guide corrections, source notes, readable
+phone tables and three browser-save/Record Books copy edits pass types,
+production/SEO builds, all 31 current applicable generated-output/template/
+fallback checks, 20 real built-page browser cases and 33 effective controls.
+The complete reader inventory and narrow release decision are in
+`docs/adsense/guide-correction-release-checks-2026-09-15.md`.
+
+This uses the between-big-ships path for content-only changes. The additional
+whole-game simulation run35013330789 remains pending, not passed. No pending
+artifact is accepted. All larger game releases still need their full gates.
+Codex's browser publish controls are timing out; a fresh tab also stalls.
+Claude's working Lovable connection can publish this correction once
+`get_project` shows the current origin/main commit. Confirm the reviewed
+correction is present and no pending feature branch is included, then publish
+and independently read the corrected public pages. A main push alone is not
+publication. Keep the current AdSense review pending, with no resubmission.
+
+The four fresh full feature runs and exact source/verification heads are at
+the top of `docs/PROJECT-STATE.md`. Their order is586,603-605,587,588 after this
+correction. New587 source is `.worktrees/round-587-final`; the old dirty587
+worktree is preserved. Source branches remain unpublished.
+
 **2026-09-15 15:19 EDT, Codex correction release check update.** The five
 guide corrections and three save/Record Books copy fixes are implemented at
 `a35693a5`. Phone tables now scroll within keyboard-accessible regions with

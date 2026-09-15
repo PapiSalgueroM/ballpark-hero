@@ -58,7 +58,38 @@ now records the actual September 15 recheck. Its snapshot was regenerated.
 All 21 fences and 20 browser cases were repeated on the final build, including
 a check that the obsolete blanket claim is absent from the real MLB page.
 
-## Full release verification
+## Narrow release decision and complete output checks
+
+At 15:56 EDT the correction passed all 31 applicable checks recorded in
+[the output evidence](guide-correction-output-checks-2026-09-15.json). An
+independent AST inventory covered all 369 discovered harnesses and 56 helper
+or test files. This is the complete current generated-output sim reader set,
+plus the home-copy and fallback-404 checks, rather than only the older 15-name
+list in AGENTS.md.
+
+The added checks passed for dependency weight, account claims, hub depth,
+redirect links, record books, grid archives, login return, FAQ schema and draw
+order. The archive verified 4,032 answers in 504 cells across four sports
+against the current public game data. The FAQ check covered 154 documents and
+ten runtime head states. The draw-order check covered the six changed routes
+plus home, with three takes at each offset: no changing head or readable blocks.
+The fallback check blocked app JavaScript and confirmed both dead addresses
+are marked correctly while home and seven real routes remain unaffected.
+
+This narrow publication uses AGENTS.md's between-big-ships verification path.
+The diff changes guide facts, citations, table layout and three copy claims,
+with dedicated guards and derived documents. It changes no engine rules, RNG,
+saves, hooks, dependencies, routes or ad/consent behavior. The shared UCL
+reference module retains all engine-consumed format values and functions;
+its added citation and optional table exception are presentation data only.
+
+This decision replaces the earlier self-imposed full-simulation/artifact hold
+for this content correction. The complete local build and affected-output
+evidence establish its release basis. The larger game releases retain their
+full simulation, browser and exact-artifact gates. No pending CI result is
+being counted as a pass, and no pending artifact is being accepted.
+
+## Additional full verification
 
 [Run 35013330789](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35013330789)
 uses verification commit `a5863797`, with the final corrected app inputs and
@@ -69,8 +100,8 @@ types, the six-route build, five default guide guards and all 33 controls;
 it is not final-source release approval. The workflow rejects missing, skipped, duplicate or failed harness
 results. Its workflow file belongs only to the verification branch.
 
-Publication remains subject to the full result and artifact verification.
-After main lands, Lovable must publish the matching commit, and public HTTP
+This run continues as additional regression coverage. After main lands,
+Lovable must publish the matching commit, and public HTTP
 checks must confirm the corrected claims and current app assets. A main push
 alone does not update the published site.
 
