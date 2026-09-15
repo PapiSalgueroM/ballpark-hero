@@ -23,8 +23,9 @@
        iv dropped, a quoted nickname dropped. The draft table stores 3,278 old
        names mirrored as "Last, FirstFirst Last"; a name that repeats itself
        exactly that way is read as "First Last" before folding, and a Hall of
-       Fame marker glued to the end of a name ("Roger StaubachHOF") is
-       dropped. Every dash character is read as a hyphen.
+       Fame marker at the end of a name ("Roger StaubachHOF", "Paul Warfield
+       HOF") and a trailing lone number ("Matt Snell 3") are dropped. Every
+       dash character is read as a hyphen.
 
      IDENTITY.
        A draft row joins a career on folded name plus either the key's own
@@ -175,9 +176,9 @@ export function unmirrorName(s) {
   return m ? `${m[2]} ${m[1]}` : name;
 }
 
-/** A draft table name as a person's name: entities decoded, a mirrored name read once, a Hall of Fame marker glued to the end ("Roger StaubachHOF") dropped. */
+/** A draft table name as a person's name: entities decoded, a mirrored name read once, a Hall of Fame marker at the end ("Roger StaubachHOF", "Paul Warfield HOF") and a trailing lone number ("Matt Snell 3") dropped. */
 export function readDraftName(s) {
-  return unmirrorName(decodeText(s)).replace(/([a-z])HOF$/, '$1').trim();
+  return unmirrorName(decodeText(s)).trim().replace(/([a-z])HOF$/, '$1').replace(/\s+HOF$/, '').replace(/\s+\d+$/, '').trim();
 }
 
 const DASHES = new RegExp('[' + String.fromCharCode(0x2010, 0x2011, 0x2012, 0x2013, 0x2014, 0x2015, 0x2212) + ']', 'g');
@@ -296,7 +297,8 @@ export function buildCollegeKey(src, { control = {} } = {}) {
     rawCollege: String(p.college ?? '').trim(),
   }));
   stats.mirroredNames = picks.filter(p => unmirrorName(p.player_name) !== String(p.player_name ?? '').trim()).length;
-  stats.hofMarkers = picks.filter(p => /[a-z]HOF$/.test(String(p.player_name ?? '').trim())).length;
+  stats.hofMarkers = picks.filter(p => /([a-z]|\s)HOF$/.test(String(p.player_name ?? '').trim())).length;
+  stats.trailingNumbers = picks.filter(p => /\s\d+$/.test(String(p.player_name ?? '').trim())).length;
 
   /* Roster facts by gsis_id from nflfastr_rosters. */
   const rosterColleges = new Map();
@@ -681,7 +683,7 @@ export async function pullSources(log = () => {}) {
 }
 
 export const RULES = {
-  names: 'foldName: accents stripped, lower case, apostrophes and periods dropped, other non alphanumerics a space, runs of single letters joined, a trailing jr, sr, ii, iii or iv dropped, a quoted nickname dropped; a draft name mirrored as "Last, FirstFirst Last" is read as "First Last" and a Hall of Fame marker glued to its end (StaubachHOF) is dropped; every dash character read as a hyphen',
+  names: 'foldName: accents stripped, lower case, apostrophes and periods dropped, other non alphanumerics a space, runs of single letters joined, a trailing jr, sr, ii, iii or iv dropped, a quoted nickname dropped; a draft name mirrored as "Last, FirstFirst Last" is read as "First Last" and a Hall of Fame marker at its end (StaubachHOF, Warfield HOF) and a trailing lone number (Snell 3) are dropped; every dash character read as a hyphen',
   draftRows: 'nfl_draft_picks with forfeit rows dropped, then one row per (year, pick), the lowest id (scripts/lib/draftRounds.mjs)',
   identity: `a draft row joins a career on folded name plus the key's equal draft year and pick, or a first season 0 to ${JOIN_WINDOW_YEARS} years after the draft with a compatible position group; tiers both, pick, then window after every equal-pick join, where a career already holding a row from that draft year is no candidate; two careers in the first non empty tier is ambiguous and the row joins and forms nothing; an undrafted career takes no window join; window joins leaving a career with rows sharing no college are dropped; a row that could be a career's but joined nobody turns that career's false first_round to null unless the row is past its boundary too, and its best_pick to null if the row's pick is smaller. A row still unjoined then joins the one career holding its slot (the NFL key draft year and pick, or the roster draft number in the year before or the year of the first season) whose surname folds alike and that holds no row from that year. Unjoined rows with one folded name, one college and years within ${JOIN_WINDOW_YEARS} of each other form a draft-only entry. A Heisman row joins the one entry of the same folded name whose colleges hold its school (a quoted nickname also tried as nickname plus surname; two such entries told apart by the winner's listed position group when exactly one holds it), else stands alone. A cfb stats row adds its schools when its folded name matches the entry's name or a name on one of its draft rows, its last season is in the ${JOIN_WINDOW_YEARS} seasons before one of the entry's draft years and its list holds that row's college; a row fitting two entries adds to neither`,
   colleges: `HTML entities decoded before splitting on semicolons; canonical spellings from a derived alias table (a roster spelling maps to a draft spelling on at least ${ALIAS_MIN_ENTRIES} joined careers and at least ${ALIAS_MIN_SHARE * 100} percent of that roster spelling's joined careers; on a career whose roster already spells one of its draft colleges exactly, its other roster spellings are transfer schools and not evidence), applied to every source; no alias typed by hand; a school held only inside a roster transfer list (a college string naming two or more schools) and by no other source is left out when the cfb stats tables cover it and a joined cfb row lists two or more schools without it`,
@@ -741,7 +743,7 @@ export function renderFile(players, sources, stats) {
 function printStats(players, stats, log = console.log) {
   const pct = (a, b) => `${a} of ${b} (${b ? ((100 * a) / b).toFixed(1) : '0.0'} percent)`;
   log(`${players.length} entries: ${players.filter(p => p.id.startsWith('draft:')).length} draft-only, ${players.filter(p => p.id.startsWith('heisman:')).length} Heisman-only, ${players.filter(p => !p.id.includes(':') || p.id.startsWith('nb:')).length} careers`);
-  log(`draft rows after cleaning ${stats.picks}; mirrored names read ${stats.mirroredNames}; Hall of Fame markers dropped ${stats.hofMarkers}`);
+  log(`draft rows after cleaning ${stats.picks}; mirrored names read ${stats.mirroredNames}; Hall of Fame markers dropped ${stats.hofMarkers}; trailing numbers dropped ${stats.trailingNumbers}`);
   log(`joins: ${JSON.stringify(stats.joins)}; ambiguous rows: ${stats.ambiguousRowList.join(', ')}`);
   log(`draft-only entries sharing a folded name with a career: ${JSON.stringify(stats.draftOnlySharingCareerName)} (withCareerAtFloor: the career starts at the key's ${stats.floorSeason} floor and the draft is earlier)`);
   log(`split year for draft and Heisman positions: ${stats.splitYear}`);

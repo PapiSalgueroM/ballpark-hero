@@ -71,6 +71,11 @@
         lists two or more schools without it. Pins: Will Grier judges yes on
         West Virginia x Quarterback and not yes on Florida State x
         Quarterback (his cfb row: Florida, West Virginia).
+    12. DRAFT NAMES READ AS NAMES. No name in the key ends in a Hall of Fame
+        marker or a lone number (the draft table stores "Paul Warfield HOF"
+        and "Matt Snell 3"). Pin: Paul Warfield's 1964 draft row reads as
+        Paul Warfield and shares his 1970 to 1977 career's folded name, so
+        both carry identityOpen.
 
    NEGATIVE CONTROLS. Every one runs on EVERY invocation, in memory or against
    copies written under a temp folder that is removed on exit, and each one
@@ -94,6 +99,8 @@
                    10 must charge Matt Jones on Arkansas x Quarterback
      keeplistonly  the key is rebuilt keeping every roster transfer list
                    school; section 11 must list Will Grier at Florida State
+     hofname       the raw draft name "Paul Warfield HOF" is planted back on
+                   his 1964 draft entry; section 12 must list it
    SIM_CGKEY_CONTROL=<name> runs just that control and exits 0 only if it fired.
 
    SUPABASE UNREACHABLE: the source pull fails, the harness says NOTHING WAS
@@ -143,7 +150,7 @@ const PINS = [
   ['Jalen Hurts', 'Alabama', 'Quarterback'],
 ];
 
-const CONTROLS = { roundcol: 1, entity: 2, thinalias: 2, emptycell: 3, nocount: 4, window: 5, nomerge: 6, plantdrafted: 7, droprow: 8, noslotjoin: 9, nocfbpos: 10, keeplistonly: 11 };
+const CONTROLS = { roundcol: 1, entity: 2, thinalias: 2, emptycell: 3, nocount: 4, window: 5, nomerge: 6, plantdrafted: 7, droprow: 8, noslotjoin: 9, nocfbpos: 10, keeplistonly: 11, hofname: 12 };
 const ONLY = process.env.SIM_CGKEY_CONTROL || '';
 if (ONLY && !CONTROLS[ONLY]) {
   console.error(`SIM_CGKEY_CONTROL=${ONLY} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -550,6 +557,21 @@ function sectionEleven(list) {
   return { out, listOnly, invented };
 }
 
+/** Names in the key carry no Hall of Fame marker and no trailing lone number. */
+function sectionTwelve(list) {
+  const out = [];
+  const marked = list.filter(p => /(HOF|\s\d+)$/.test(p.name) || /(HOF|\s\d+)$/.test(p.display_name.replace(/ \(.*\)$/, '')));
+  if (marked.length) out.push(`${marked.length} names in the key still carry a marker: ${show(marked.map(p => `${p.display_name} [${p.id}]`), 6)}`);
+  const raw = src.picks.filter(p => /(HOF|\s\d+)$/.test(String(p.player_name ?? '').trim())).length;
+  const entries = index(list);
+  const warfield = entries.filter(e => e.nameNorm === 'paul warfield');
+  const draftRow = warfield.find(e => e.id === 'draft:1964-11');
+  if (!draftRow || !warfield.some(e => e.firstSeason !== null) || !warfield.every(e => e.identityOpen)) {
+    out.push(`pin Paul Warfield: the key holds ${warfield.map(e => `${e.name} [${e.id}] identityOpen ${e.identityOpen}`).join('; ') || 'no paul warfield'}; the 1964 draft entry and the career should share the folded name and both be open`);
+  }
+  return { out, raw, marked };
+}
+
 const judgedHash = rows => {
   const canonRows = rows.map(r => TABLE_COLUMNS.map(c => r[c] ?? null)).sort((x, y) => (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));
   return crypto.createHash('sha256').update(JSON.stringify(canonRows)).digest('hex').slice(0, 16);
@@ -746,6 +768,13 @@ if (!ONLY) {
     r.out.forEach(fail);
     console.log(`   ${r.listOnly} schools sit only in a roster transfer list; ${r.invented.length} contradicted ones kept; the generator left out: ${built.stats.contradictedColleges.join(', ') || 'none'}; pins: Will Grier yes at West Virginia, not yes at Florida State`);
   }
+
+  console.log('\n12) Draft names read as names: no Hall of Fame marker or lone number in the key');
+  {
+    const r = sectionTwelve(players);
+    r.out.forEach(fail);
+    console.log(`   ${r.raw} raw draft names end in a marker; ${r.marked.length} names in the key do; pin: Paul Warfield's 1964 row and career share a folded name, both open`);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -901,6 +930,19 @@ if (want('keeplistonly')) {
   const r = sectionEleven(wrong.players);
   console.log(`   ${r.invented.length} contradicted schools kept`);
   grade('keeplistonly', r.invented.some(m => /^Will Grier at Florida State/.test(m)) && r.out.some(m => /^pin Will Grier x Florida State x Quarterback judges yes/.test(m)), r.out.map(m => m.slice(0, 200)).join(' | ') || 'section 11 stayed green');
+}
+
+if (want('hofname')) {
+  console.log('\nhofname) "Paul Warfield HOF" planted back on his 1964 draft entry');
+  const list = clonePlayers();
+  const row = list.find(p => p.id === 'draft:1964-11');
+  const rawName = String(src.picks.find(p => Number(p.year) === 1964 && Number(p.pick) === 11)?.player_name ?? '').trim();
+  mustChange('hofname', row && rawName === 'Paul Warfield HOF' && row.name !== rawName, `draft:1964-11 is ${row ? row.name : 'missing'} and the raw row reads ${JSON.stringify(rawName)}`);
+  row.name = rawName;
+  row.display_name = rawName;
+  row.name_norm = foldName(rawName);
+  const r = sectionTwelve(list);
+  grade('hofname', r.marked.some(p => p.id === 'draft:1964-11') && r.out.some(m => /^pin Paul Warfield/.test(m)), r.out.map(m => m.slice(0, 200)).join(' | ') || 'section 12 stayed green');
 }
 
 // ---------------------------------------------------------------------------
