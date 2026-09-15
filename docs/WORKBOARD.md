@@ -1,5 +1,13 @@
 # Work board
 
+**2026-09-15 13:37 EDT, Codex claims Round 588 preparation.** The next
+approved tycoon-plan slice is fixed-schedule boots earned from league titles.
+Work stays isolated on `codex/round-588-title-boots` after the combined 587
+source. Scope: title reward ledger, senior boot assignment and defensive edge,
+First team equipment tiles, actual help and measured save/fee/reward guards.
+No pack, gem purchase or random gear award. It publishes separately after 587;
+the current release branches and verification sources remain frozen.
+
 **2026-09-15 13:22 EDT, Codex verification update.** The management loading
 repair is committed at `f66bab76`. Three fresh GitHub runs are active:
 [586](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999864639),

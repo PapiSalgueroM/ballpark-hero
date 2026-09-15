@@ -1,5 +1,17 @@
 # Project state
 
+## NEXT IN PREPARATION 2026-09-15: Round 588, title-earned boots
+
+Codex is preparing the next slice of the existing tycoon design while the
+earlier release checks run remotely. It is isolated from their frozen source
+branches and will publish separately after 587. The scope is fixed title
+rewards, fictional boots, first-team equipment and measured fee/save guards.
+It is not implemented or published at this checkpoint.
+
+The fresh public HTTP audit at 13:22 to 13:23 EDT passed all 148 sitemap URLs,
+with zero findings. This checks document access and missing-content signals,
+not indexing or approval. See [the audit record](adsense/live-document-audit-2026-09-15.md).
+
 ## IN VERIFICATION 2026-09-15 13:22 EDT: first team, action scenes and watched kicks
 
 The management download repair is committed at `f66bab76`. Club Manager's
