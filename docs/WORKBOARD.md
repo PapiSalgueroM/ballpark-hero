@@ -1,5 +1,21 @@
 # Work board
 
+**18:58 EDT database repair:** migration `20260915225210` is applied. Its
+covering index gives the unchanged public leaderboard measurable headroom
+under the existing anonymous three-second limit (764.481ms in one warm
+profile). All four unchanged cache/rank checks pass. No ranking formula,
+function, permission, timeout or retry policy changed. The draft query
+rewrite is outside the repo. See the evidence and rollback in
+`docs/audits/leaderboard-index-repair-2026-09-15.md`.
+
+Integrated 586 is being checked in `.worktrees/integrate-round-586-main`.
+Claude's new field data increased initial Club Manager download to 624K
+against its unchanged 620K limit. Codex is moving the existing later Manager
+career panel and trophy confetti behind lazy boundaries; exact JSX and
+handlers are preserved. Fresh type/build/weight, delayed-loading browser
+proof and full combined-tree CI are required before merging draft PR 94.
+The frozen watched-kick release is prepared at `970707f0`; it is not merged.
+
 **18:47 EDT live proof:** the content correction is now verified on all seven
 public routes, with exact content/link/metadata matches, valid canonical and
 robots tags, entry `index-jZ501OVb.js` and all six route scripts loading. The
