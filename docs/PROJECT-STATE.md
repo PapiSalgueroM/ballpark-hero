@@ -55,8 +55,12 @@ phones, with a real saved first-team sale and no horizontal overflow.
 The full release workflow is
 [34983397450](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34983397450),
 testing source `be0c2378` with verification-only workflow commit `9bd3c802`.
-Its app type check and SEO build pass; the complete harness suite is still
-running. No final artifact has been accepted yet. Publication remains owed.
+Its app type check, SEO build, all 279 Vitest tests and browser steps pass.
+The full node run passed 312 of 313 harnesses. The sole failure was the older
+league strength control looking for a return expression that Round 586 moved
+into a local `base` variable. The control's exact anchor is being repaired;
+the application formula and test thresholds are unchanged. The repair must
+pass before generated output is accepted. Publication remains owed.
 The workflow's locally owed reduced-motion gate has now passed all 16 routes.
 Its deliberate removed-guard control detected six isolated CSS failures and
 three route failures. The local wrapper changed only hardcoded paths in a
