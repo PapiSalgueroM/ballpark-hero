@@ -12,6 +12,8 @@ import type {
 import { HalftimeScreen } from '@/components/club-manager/HalftimeScreen';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';
+import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';
 
 /**
  * Round 158: the Live Sim. His words, the ones he said to really pay
@@ -58,6 +60,7 @@ interface Man {
   slot: FormationSlot;
   /** Last name, or '' for an opposition with no named eleven. */
   label: string;
+  name?: string;
   number: number;
   /** Mine only. */
   id?: string;
@@ -65,7 +68,7 @@ interface Man {
   /** Theirs only: a man the game made up, tagged the way the ratings sheet tags him. */
   gen?: boolean;
 }
-interface Placed extends Man { x: number; y: number; }
+interface Placed extends Man { x: number; y: number; keeper: boolean; }
 interface Carrier { side: Side; index: number; }
 interface Beat { n: number; carrier: Carrier; drift: number[]; }
 /** A run of banner or event line text; `gen` hangs the MADE UP tag after it. */
@@ -147,7 +150,7 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
       const slot = myFormation.slots[i];
       if (!slot || gone.has(id)) return;
       const p = career.squad.find(q => q.id === id);
-      mine.push({ key: `m${i}`, slot, label: p ? lastName(p.name) : slot.label, number: numbers.get(id) ?? i + 1, id, side: 'me' });
+      mine.push({ key: `m${i}`, slot, label: p ? lastName(p.name) : slot.label, name: p?.name, number: numbers.get(id) ?? i + 1, id, side: 'me' });
     });
     const oppFormation = FORMATIONS[live.oppFormationIndex ?? DEFAULT_OPP_FORMATION] ?? FORMATIONS[DEFAULT_OPP_FORMATION];
     if (live.oppXi) {
@@ -159,7 +162,7 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
         if (!slot || sentOff.has(p.n)) return;
         const started = live.oppXi?.[i]?.n === p.n;
         const benchIdx = (live.oppBench ?? []).findIndex(b => b.n === p.n);
-        theirs.push({ key: `o${i}`, slot, label: lastName(p.n), number: started ? i + 1 : 12 + Math.max(0, benchIdx), side: 'opp', gen: p.g });
+        theirs.push({ key: `o${i}`, slot, label: lastName(p.n), name: p.n, number: started ? i + 1 : 12 + Math.max(0, benchIdx), side: 'opp', gen: p.g });
       });
     } else {
       oppFormation.slots.forEach((slot, i) => theirs.push({ key: `o${i}`, slot, label: '', number: i + 1, side: 'opp' }));
@@ -170,13 +173,13 @@ function menAt(career: CareerState, live: LiveMatch | null, report: MatchWeekRep
   const xi = resolveXI(career);
   myFormation.slots.forEach((slot, i) => {
     const p = xi[i];
-    mine.push({ key: `m${i}`, slot, label: p ? lastName(p.name) : slot.label, number: i + 1, id: p?.id, side: 'me' });
+    mine.push({ key: `m${i}`, slot, label: p ? lastName(p.name) : slot.label, name: p?.name, number: i + 1, id: p?.id, side: 'me' });
   });
   const d = report?.detail;
   const oppFormation = FORMATIONS[d?.oppFormationIndex ?? DEFAULT_OPP_FORMATION] ?? FORMATIONS[DEFAULT_OPP_FORMATION];
   oppFormation.slots.forEach((slot, i) => {
     const p = d?.oppXi?.[i];
-    theirs.push({ key: `o${i}`, slot, label: p ? lastName(p.n) : '', number: i + 1, side: 'opp', gen: p?.g });
+    theirs.push({ key: `o${i}`, slot, label: p ? lastName(p.n) : '', name: p?.n, number: i + 1, side: 'opp', gen: p?.g });
   });
   return { mine, theirs };
 }
@@ -207,7 +210,7 @@ function placeSide(men: Man[], hasBall: boolean, mentality: Mentality, drift: nu
     const k = (offset + i) * 2;
     x += drift[k] ?? 0;
     y += drift[k + 1] ?? 0;
-    return { ...m, x: clampPct(x), y: clampPct(y) };
+    return { ...m, x: clampPct(x), y: clampPct(y), keeper: line === 'keeper' };
   });
 }
 
@@ -289,6 +292,7 @@ export function LiveSimScreen({
      minute opens again at the 30th. No randomness in here. */
   const [stage, setStage] = useState<Stage>(() => initialStage(live, report));
   const [clock, setClock] = useState<number>(() => (report ? 90 : live?.minute ?? 0));
+  const openedAt = useRef(clock);
   const [speed, setSpeed] = useState<(typeof SPEEDS)[number]>(2);
   const [paused, setPaused] = useState(false);
   const [finished, setFinished] = useState(false);
@@ -296,6 +300,7 @@ export function LiveSimScreen({
   const [banner, setBanner] = useState<Banner | null>(null);
   const [eventLine, setEventLine] = useState<Seg[] | null>(null);
   const [eventBall, setEventBall] = useState<{ x: number; y: number } | null>(null);
+  const [motionEvent, setMotionEvent] = useState<MotionEvent | null>(null);
   const [beat, setBeat] = useState<Beat>(() => ({ n: 0, carrier: { side: 'me', index: 9 }, drift: [] }));
   const [picking, setPicking] = useState<string | null>(null);
   const rafRef = useRef<number | null>(null);
@@ -323,6 +328,19 @@ export function LiveSimScreen({
 
   /* ---- the truth this walk goes through ---- */
   const feed: LiveFeedEvent[] = useMemo(() => (liveNow ? liveFeed(liveNow) : []), [liveNow]);
+  const terminalMinute = stage === 'first' ? 45 : 90;
+  // The last action at the whistle gets its wind-up before the clock reaches it.
+  // Feed order gives a goal priority over another chance at the same minute.
+  const terminalAction = useMemo(() => [...feed].reverse().find(e => e.minute === terminalMinute
+    && (e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save')), [feed, terminalMinute]);
+  const terminalWindup = !!terminalAction && clock >= terminalMinute - 1.05 && clock < terminalMinute;
+  useEffect(() => {
+    if (!running || finished || !terminalWindup || !terminalAction) return;
+    const at = terminalMinute - 1.05;
+    const key = `${terminalAction.kind}:${terminalAction.side}:${terminalAction.minute}:${terminalAction.text}`;
+    setMotionEvent(current => current?.event === terminalAction && current.at === at
+      ? current : { event: terminalAction, key, at });
+  }, [running, finished, terminalWindup, terminalAction, terminalMinute]);
 
   /* Round 505: the feed carries a name and a minute per event, so the flank
      of a corner, a saved penalty, and a goal from the spot or a direct free
@@ -507,6 +525,7 @@ export function LiveSimScreen({
       const key = `${e.kind}:${e.side}:${e.minute}:${e.text}`;
       if (firedRef.current.has(key)) continue;
       firedRef.current.add(key);
+      if (!terminalWindup && e.minute !== hi && e.minute >= openedAt.current && (e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save')) setMotionEvent({ event: e, key, at: clock });
       const club = e.side === 'me' ? career.clubName : opponent;
       const side: Side = e.side === 'me' ? 'me' : 'opp';
       const who: Seg = e.text ? named(side, e.text) : { t: club };
@@ -571,7 +590,7 @@ export function LiveSimScreen({
     }
     // The feed, its extras and the clock are the inputs; the rest are stable per render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clock, stage, feed, extras, running, finished]);
+  }, [clock, stage, feed, extras, running, finished, terminalWindup]);
   useEffect(() => () => { if (bannerTimer.current) clearTimeout(bannerTimer.current); }, []);
 
   /* ---- the beat: who has the ball, and the drift. The only place this file draws. ---- */
@@ -613,6 +632,9 @@ export function LiveSimScreen({
     return { mine, theirs, ball, holderKey: holder?.key ?? null };
   }, [men, beat, eventBall, mentality]);
   useEffect(() => { ballRef.current = scene.ball; }, [scene.ball]);
+  // A tactics change can replace a future terminal chance during its wind-up.
+  const motionStillCommitted = !motionEvent || motionEvent.event.minute <= clock || feed.includes(motionEvent.event);
+  const motion = useLiveSimMotion(scene, motionEvent, clock, running && !finished && motionStillCommitted);
 
   /* ---- the change sheet: tap one of your dots ---- */
   const sheetRef = useRevealScroll<HTMLDivElement>(`pick:${picking ?? ''}`, { skipFirst: true });
@@ -702,7 +724,7 @@ export function LiveSimScreen({
       <div className="max-w-md mx-auto space-y-3" data-cm-live-stage="interval">
         <div className="bg-card border border-border rounded-2xl p-3 text-center">
           <div className="text-[10px] text-muted-foreground uppercase tracking-widest">{compLabel} · Half time</div>
-          <div className="text-2xl font-display font-bold text-foreground tabular-nums mt-1">
+          <div data-cm-live-score className="text-2xl font-display font-bold text-foreground tabular-nums mt-1">
             {myGoalsNow} - {oppGoalsNow}
           </div>
           <div className="text-[10px] text-muted-foreground">{career.clubName} vs {opponent}</div>
@@ -745,7 +767,7 @@ export function LiveSimScreen({
         </div>
         <div className="flex items-center justify-center gap-3 mt-1">
           <div className="flex-1 text-right text-sm font-bold text-primary truncate">{career.clubName}</div>
-          <div className="px-3 py-1 rounded-xl bg-secondary font-display text-xl font-bold text-foreground shrink-0 tabular-nums">
+          <div data-cm-live-score className="px-3 py-1 rounded-xl bg-secondary font-display text-xl font-bold text-foreground shrink-0 tabular-nums">
             {myGoalsNow} - {oppGoalsNow}
           </div>
           <div className="flex-1 text-left text-sm font-bold text-foreground truncate">{opponent}</div>
@@ -759,24 +781,24 @@ export function LiveSimScreen({
       </div>
 
       {/* The pitch */}
-      <div className="relative w-full rounded-2xl overflow-hidden border border-border select-none" style={{ aspectRatio: '3 / 4', background: 'linear-gradient(180deg, #14532d 0%, #166534 50%, #14532d 100%)' }}>
+      <div data-cm-live-pitch="1" data-cm-motion={motion.action} data-cm-motion-phase={motion.phase} className="relative w-full rounded-2xl overflow-hidden border border-border select-none" style={{ aspectRatio: '3 / 4', background: 'linear-gradient(180deg, #14532d 0%, #166534 50%, #14532d 100%)' }}>
         {/* markings */}
         <div className="absolute inset-x-0 top-1/2 h-px bg-white/25" />
         <div className="absolute left-1/2 top-1/2 w-16 h-16 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/25" />
         <div className="absolute left-1/4 right-1/4 top-0 h-10 border-b border-x border-white/25" />
         <div className="absolute left-1/4 right-1/4 bottom-0 h-10 border-t border-x border-white/25" />
-        <div className="absolute left-[38%] right-[38%] top-0 h-1 bg-white/60" />
-        <div className="absolute left-[38%] right-[38%] bottom-0 h-1 bg-white/60" />
+        <div className="cm-live-net cm-live-net--top" data-cm-net={motion.net === 'opp' ? 'goal' : undefined} style={{ transform: `scaleY(${1 + (motion.net === 'opp' ? motion.netPulse : 0) * .7})` }} />
+        <div className="cm-live-net cm-live-net--bottom" data-cm-net={motion.net === 'me' ? 'goal' : undefined} style={{ transform: `scaleY(${1 + (motion.net === 'me' ? motion.netPulse : 0) * .7})` }} />
 
         {/* their dots: numbers, and names when the engine has an eleven for them */}
-        {scene.theirs.map(d => (
+        {motion.theirs.map(d => (
           <div
             key={d.key}
             data-cm-dot-opp={d.number}
             className="absolute flex flex-col items-center pointer-events-none"
-            style={{ left: `${d.x}%`, top: `${d.y}%`, transform: 'translate(-50%, -5px)', transition: 'left 0.7s linear, top 0.7s linear' }}
+            style={{ left: `${d.x}%`, top: `${d.y}%`, transform: 'translate(-50%, -24px)' }}
           >
-            <span className="w-2.5 h-2.5 rounded-full border border-white/70" style={{ backgroundColor: '#111827' }} />
+            <LivePitchPlayer color="#d6e6ed" keeper={d.keeper} pose={motion.poses[d.key]} />
             <span className="text-[7px] text-white/80 leading-none mt-0.5 max-w-[48px] truncate tabular-nums">
               {d.number}{d.label ? ` ${d.label}` : ''}{d.gen ? '*' : ''}
             </span>
@@ -784,7 +806,7 @@ export function LiveSimScreen({
         ))}
 
         {/* my dots: a tap area a thumb can hit around a dot that stays small */}
-        {scene.mine.map(d => (
+        {motion.mine.map(d => (
           <button
             key={d.key}
             type="button"
@@ -797,12 +819,9 @@ export function LiveSimScreen({
               'absolute flex flex-col items-center w-9 min-h-[28px] bg-transparent border-0 p-0 rounded-md',
               canChange ? 'cursor-pointer' : 'cursor-default',
             )}
-            style={{ left: `${d.x}%`, top: `${d.y}%`, transform: 'translate(-50%, -5px)', transition: 'left 0.7s linear, top 0.7s linear' }}
+            style={{ left: `${d.x}%`, top: `${d.y}%`, transform: 'translate(-50%, -24px)' }}
           >
-            <span
-              className={cn('w-2.5 h-2.5 rounded-full border border-black/30', picking === d.id && 'ring-2 ring-white')}
-              style={{ backgroundColor: clubColor }}
-            />
+            <LivePitchPlayer color={clubColor} keeper={d.keeper} pose={motion.poses[d.key]} selected={picking === d.id} />
             <span className="text-[7px] text-white/90 leading-none mt-0.5 max-w-[48px] truncate tabular-nums">
               {d.number} {d.label}
               {d.id && d.id === captainId && (
@@ -814,8 +833,9 @@ export function LiveSimScreen({
 
         {/* ball, at somebody's feet */}
         <div
-          className="absolute w-1.5 h-1.5 rounded-full bg-white shadow -translate-x-1/2 -translate-y-1/2 pointer-events-none z-10"
-          style={{ left: `${scene.ball.x}%`, top: `${scene.ball.y}%`, transition: 'left 0.55s ease-in-out, top 0.55s ease-in-out' }}
+          data-cm-ball="1"
+          className="cm-live-ball"
+          style={{ left: `${motion.ball.x}%`, top: `${motion.ball.y}%` }}
         />
 
         {/* event banner */}
