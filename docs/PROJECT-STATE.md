@@ -1,5 +1,19 @@
 # Project state
 
+## RELEASE CHECK UPDATE 2026-09-15 12:43 EDT
+
+The new Round 586 release sweep found three initial JavaScript downloads above
+their existing phone budgets: Club Manager 708K/620K, Stadium Tycoon 312K/290K
+and Wonderkid Factory 297K/270K. Codex is repairing eager presentation and guide
+imports before publication, preserving the budgets and content. The type gate,
+SEO build, 279 Vitest tests, repaired league harness and other browser checks
+passed. A fresh full suite will cover the changed loading code. No Round 586,
+587 or 603 to 605 action source is confirmed published yet.
+
+AdSense was checked directly at 12:37 EDT. The fully loaded site detail panel
+still shows Getting ready and Review requested. The review submitted at 04:19
+EDT is pending, with no new rejection or approval shown and no new submission.
+
 ## LIVE 2026-09-15: Round 610, players who joined with Google can get back in, main `7b268106`
 
 **douknowball.com is serving it.** Deployment `bd4b549a-1e2c-416d-b9a0-ff041e50d911` at 08:28 UTC,

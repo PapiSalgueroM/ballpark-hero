@@ -1,5 +1,19 @@
 # Work board
 
+**2026-09-15 12:43 EDT, Codex release performance repair.** Round 586's type,
+SEO build, 279 Vitest cases and repaired league gate pass. The added phone
+download sweep found Club Manager at 708K against 620K, Stadium Tycoon at
+312K against 290K and Wonderkid Factory at 297K against 270K. Codex owns the
+repair in `.worktrees/round-586-first-team`: presentation-only lazy imports
+in `ClubManager.tsx`, guide chunk splitting in `src/data/gameContent/` and
+the exhaustive guide-mapping list in `sweepWeight.mjs`. Budgets, gameplay,
+guide prose and Claude's engine/data scope stay intact. The source change
+requires fresh full-suite verification; old unchanged-source evidence cannot
+approve it. Rounds 603 to 605 follow this fix, with Round 587 separate.
+
+A fresh signed-in AdSense console read at 12:37 EDT still shows Getting ready
+and Review requested. No new rejection, approval or repeat submission.
+
 **2026-09-15, Codex: Round 587 is in development after 586.** Worktree
 `.worktrees/round-587-set-pieces`, branch `codex/round-587-set-pieces`.
 One playable penalty or free kick per watched stadium match, using the existing
