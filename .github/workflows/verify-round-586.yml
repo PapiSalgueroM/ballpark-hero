@@ -1,0 +1,228 @@
+name: Verify Round 586 first team
+
+on:
+  push:
+    branches: [codex/verify-round-586]
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    env:
+      CI: 'true'
+      ENGINES: chromium
+      PRERENDER_ONLY: '/stadium-tycoon,/wonderkid-factory'
+      VITEST_MAX_THREADS: '1'
+      VITEST_MIN_THREADS: '1'
+      VITEST_MAX_FORKS: '1'
+      VITEST_MIN_FORKS: '1'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6, verified official tag
+        with:
+          fetch-depth: 0 # simNewBadge reads route introduction history
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6, verified official tag
+        with:
+          node-version: '24.14.1'
+          package-manager-cache: false
+      - name: Install verification dependencies
+        timeout-minutes: 20
+        run: |
+          mkdir -p "$RUNNER_TEMP/round586-logs"
+          git rev-parse HEAD > "$RUNNER_TEMP/round586-logs/commit.txt"
+          npm ci --no-audit --no-fund 2>&1 | tee "$RUNNER_TEMP/round586-logs/install.log"
+          npm install --prefix "$RUNNER_TEMP/round586-browser-deps" --no-save --package-lock=false --no-audit --no-fund playwright@1.63.0
+          ln -s "$RUNNER_TEMP/round586-browser-deps/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/round586-browser-deps/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/round586-browser-deps/node_modules/playwright/cli.js" install --with-deps chromium
+          python3 -m venv "$RUNNER_TEMP/round586-python"
+          "$RUNNER_TEMP/round586-python/bin/python" -m pip install fonttools==4.63.0 pillow==12.3.0
+          echo "$RUNNER_TEMP/round586-python/bin" >> "$GITHUB_PATH"
+      - name: App type check
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$RUNNER_TEMP/round586-logs/types.log"
+      - name: Record the exact build inputs
+        run: |
+          cat > "$RUNNER_TEMP/release-artifact.py" <<'PY'
+          import hashlib, json, os, pathlib, shutil, subprocess, sys
+          root = pathlib.Path.cwd()
+          temp = pathlib.Path(os.environ['RUNNER_TEMP'])
+          before_path = temp / 'release-inputs.json'
+          built_path = temp / 'release-outputs.json'
+          def generated(name):
+              return (name.startswith('public/') and name.endswith('.html')) or name in ('public/sitemap.xml', 'scripts/data/lastmod.json') or name.startswith('dist/')
+          def tracked_inputs():
+              names = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+              return sorted(name for name in names if name and not generated(name))
+          def record(name):
+              file = root / name
+              if file.is_symlink() or not file.is_file():
+                  raise RuntimeError('Expected a regular file: ' + name)
+              data = file.read_bytes()
+              result = {'path': name, 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+              try:
+                  data.decode('utf-8')
+                  result['sha256Lf'] = hashlib.sha256(data.replace(b'\r\n', b'\n')).hexdigest()
+              except UnicodeDecodeError:
+                  pass
+              return result
+          def inputs():
+              return [record(name) for name in tracked_inputs()]
+          def output_names():
+              snapshots = sorted(file.relative_to(root).as_posix() for file in (root / 'public').rglob('*.html'))
+              dist = sorted(file.relative_to(root).as_posix() for file in (root / 'dist').rglob('*') if file.is_file())
+              names = sorted(set(snapshots + ['public/sitemap.xml', 'scripts/data/lastmod.json'] + dist))
+              if not snapshots or 'dist/index.html' not in names or 'dist/sitemap.xml' not in names:
+                  raise RuntimeError('Expected generated snapshots and complete dist output.')
+              return names
+          if sys.argv[1] == 'before':
+              before_path.write_text(json.dumps(inputs(), indent=2) + '\n')
+              print('Recorded input hashes before build.')
+          elif sys.argv[1] == 'built':
+              built_path.write_text(json.dumps([record(name) for name in output_names()], indent=2) + '\n')
+              print('Recorded generated file hashes after build.')
+          elif sys.argv[1] == 'package':
+              before = json.loads(before_path.read_text())
+              if inputs() != before:
+                  raise RuntimeError('Tracked build inputs changed during verification.')
+              out = temp / 'release-build-output'
+              out.mkdir(exist_ok=False)
+              names = output_names()
+              built = json.loads(built_path.read_text())
+              if [record(name) for name in names] != built:
+                  raise RuntimeError('Generated files changed after build during verification.')
+              outputs = []
+              for name in names:
+                  outputs.append(record(name))
+                  dest = out / name
+                  dest.parent.mkdir(parents=True, exist_ok=True)
+                  shutil.copyfile(root / name, dest)
+              manifest = {
+                  'schemaVersion': 1,
+                  'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+                  'tree': subprocess.check_output(['git', 'rev-parse', 'HEAD^{tree}'], text=True).strip(),
+                  'runUrl': os.environ['GITHUB_SERVER_URL'] + '/' + os.environ['GITHUB_REPOSITORY'] + '/actions/runs/' + os.environ['GITHUB_RUN_ID'],
+                  'runAttempt': os.environ['GITHUB_RUN_ATTEMPT'],
+                  'node': subprocess.check_output(['node', '--version'], text=True).strip(),
+                  'python': sys.version.split()[0],
+                  'artifactScope': 'Generated repository snapshots plus exact dist files. Consult matching run logs for every gate and any explicitly reported skips.',
+                  'inputsBeforeBuild': before,
+                  'outputsAfterBuildAndUnchangedAfterGates': outputs,
+              }
+              (out / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+              print('Packaged ' + str(len(outputs)) + ' files; tracked inputs unchanged.')
+          else:
+              raise RuntimeError('Expected before, built or package mode.')
+          PY
+          python3 "$RUNNER_TEMP/release-artifact.py" before
+      - name: Build and regenerate snapshots
+        id: build
+        timeout-minutes: 65
+        run: npm run build:seo 2>&1 | tee "$RUNNER_TEMP/round586-logs/build-seo.log"
+      - name: Record generated files before tests
+        run: python3 "$RUNNER_TEMP/release-artifact.py" built
+      - name: Full node harness suite
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 180
+        run: node scripts/runAllSims.mjs 2>&1 | tee "$RUNNER_TEMP/round586-logs/node-sims.log"
+      - name: Full Vitest, one worker
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 45
+        run: node node_modules/vitest/vitest.mjs run --maxWorkers=1 2>&1 | tee "$RUNNER_TEMP/round586-logs/vitest.log"
+      - name: Prove value curve controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 30
+        run: |
+          for control in noprime flatedge; do
+            if VALUE_CONTROL="$control" node scripts/simAllPlayersValue.mjs > "$RUNNER_TEMP/round586-logs/value-$control.log" 2>&1; then
+              cat "$RUNNER_TEMP/round586-logs/value-$control.log"
+              echo "Negative control did not fail: $control"
+              exit 1
+            fi
+            cat "$RUNNER_TEMP/round586-logs/value-$control.log"
+            grep -F 'FAIL' "$RUNNER_TEMP/round586-logs/value-$control.log"
+          done
+      - name: Portable browser gates, isolated contexts and intercepted writes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 30
+        run: |
+          cat > "$RUNNER_TEMP/round586-browser.mjs" <<'JS'
+          import path from 'node:path';
+          import { pathToFileURL } from 'node:url';
+          import { createRequire } from 'node:module';
+          const require = createRequire(path.join(process.cwd(), 'package.json'));
+          const pw = require('playwright');
+          async function protect(surface) {
+            await surface.route('**/*', async route => {
+              const request = route.request();
+              const url = new URL(request.url());
+              if (!['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)
+                && !['GET', 'HEAD'].includes(request.method())) {
+                await route.fulfill({ status: request.method() === 'OPTIONS' ? 204 : 200,
+                  headers: { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*',
+                    'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS' },
+                  contentType: 'application/json', body: request.method() === 'OPTIONS' ? '' : '[]' });
+              } else await route.continue();
+            });
+            return surface;
+          }
+          const launch = pw.chromium.launch.bind(pw.chromium);
+          pw.chromium.launch = async options => {
+            const browser = await launch(options);
+            const newContext = browser.newContext.bind(browser);
+            browser.newContext = async options => protect(await newContext({ ...options, serviceWorkers: 'block' }));
+            const newPage = browser.newPage.bind(browser);
+            browser.newPage = async options => protect(await newPage({ ...options, serviceWorkers: 'block' }));
+            return browser;
+          };
+          await import(pathToFileURL(path.resolve(process.argv[2])).href);
+          JS
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$RUNNER_TEMP/round586-logs/browser-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4173/robots.txt >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4173/robots.txt >/dev/null
+          export BASE=http://127.0.0.1:4173
+          status=0
+          for gate in simPrerenderBoot playIphone playLeagueTableFit playFirstTeamFit; do
+            node "$RUNNER_TEMP/round586-browser.mjs" "scripts/$gate.mjs" 2>&1 | tee "$RUNNER_TEMP/round586-logs/$gate.log" || status=1
+          done
+          if FIRST_TEAM_CONTROL=nowrap node "$RUNNER_TEMP/round586-browser.mjs" scripts/playFirstTeamFit.mjs > "$RUNNER_TEMP/round586-logs/first-team-nowrap.log" 2>&1; then
+            echo 'First team negative control did not fail'
+            status=1
+          fi
+          cat "$RUNNER_TEMP/round586-logs/first-team-nowrap.log"
+          grep -F 'CONTROL nowrap: actual tile-name wrapping replaced' "$RUNNER_TEMP/round586-logs/first-team-nowrap.log" || status=1
+          grep -F 'from intentional nowrap control' "$RUNNER_TEMP/round586-logs/first-team-nowrap.log" || status=1
+          ONLY=/stadium-tycoon,/wonderkid-factory node "$RUNNER_TEMP/round586-browser.mjs" scripts/playRenderStability.mjs 2>&1 | tee "$RUNNER_TEMP/round586-logs/playRenderStability.log" || status=1
+          printf '%s\n' 'NOT RUN: playReducedMotion.mjs has hardcoded C:/Users/antho paths at lines 33 and 40; this gate remains owed locally.' | tee "$RUNNER_TEMP/round586-logs/platform-limitations.txt"
+          exit "$status"
+      - name: Package the verified build outputs
+        if: ${{ success() }}
+        run: python3 "$RUNNER_TEMP/release-artifact.py" package
+      - name: Preserve generated snapshots and the exact built site
+        if: ${{ success() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6, verified official tag
+        with:
+          name: release-build-output-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/release-build-output/
+          retention-days: 3
+          if-no-files-found: error
+          include-hidden-files: false
+      - name: Preserve verification logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6, verified official tag
+        with:
+          name: release-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/round586-logs/
+          retention-days: 7
+          if-no-files-found: warn
+          include-hidden-files: false
