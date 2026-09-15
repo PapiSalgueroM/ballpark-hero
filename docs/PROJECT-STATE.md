@@ -37,6 +37,20 @@ The original publish order for our changes remains below, subject to this
 new integration requirement. No new application changes from Codex have
 landed in main. AdSense has not been resubmitted.
 
+## LIVE DATABASE REPAIR 2026-09-15 18:55 EDT: leaderboard covering index
+
+Applied migration `20260915225210` adds one positive-score covering index.
+The old index stays in place. The unchanged live leaderboard passed its
+anonymous 3s budget and measured 764.481ms in one warm database profile.
+The unchanged cache harness passed all four sections, including eight exact
+rank/point comparisons and the filtered live-rank branch, in 3.25757 seconds.
+No ranking, function, permission, public timeout or retry policy changed.
+The investigated faster query rewrite remains unapplied and outside the
+migration folder. See [evidence and rollback](audits/leaderboard-index-repair-2026-09-15.md).
+These observations do not claim sustained-load performance or approve the
+older failed animation run. Pending feature sources still need their own
+fresh verification and artifact acceptance.
+
 ## READY TO PUBLISH 2026-09-15 16:55 EDT: guide facts, source notes and phone tables
 
 The narrow content correction is ready for the between-big-ships release path.
@@ -135,8 +149,9 @@ repair is being investigated; no timeout limit or retry count is increased.
 The draft groups each player's best score per game and Eastern day before
 applying unchanged score caps. A one-snapshot comparison returned the same
 100 rows and output hash, but the fresh query still exceeded three seconds.
-No query replacement or index has been applied; an index and rollback plan
-are under independent review. This is not a green animation run.
+The covering index has since been applied and the unchanged public query now
+passes its three-second budget, as recorded above. The query rewrite remains
+unapplied. This does not turn the older failed animation run green.
 
 The owner will fix Lovable later and asked work to continue. Official Lovable
 MCP supports editor-free `deploy_project`, but no authenticated Lovable tool
