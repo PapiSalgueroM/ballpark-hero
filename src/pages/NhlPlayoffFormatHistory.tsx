@@ -27,7 +27,7 @@ const RELATED = [
 const FAQS = [
   {
     q: 'How many teams make the NHL playoffs?',
-    a: 'Sixteen, and it has been sixteen since 1979-80 apart from the 24 club return to play in 2020. Since 2013-14 they are the top three in each of the four divisions plus the two best remaining records in each conference as wild cards.',
+    a: 'Sixteen in a normal season since 1979-80, with 24 clubs in the 2020 return to play. The top three in each division plus two wild cards per conference qualified from 2013-14 through 2018-19 and again from 2021-22. In 2020-21, the top four in each temporary division qualified.',
   },
   {
     q: 'When did the NHL start using wild cards?',
@@ -70,8 +70,9 @@ const NhlPlayoffFormatHistory = () => {
 
         <section className="mb-10">
           <h2 className="text-lg font-display font-bold text-foreground mb-3">The timeline at a glance</h2>
-          <div className="overflow-x-auto rounded-xl border border-border">
-            <table className="w-full text-sm">
+          <p className="sm:hidden mb-2 text-xs text-muted-foreground">Swipe sideways to see every column.</p>
+          <div tabIndex={0} role="region" aria-label="NHL playoff format timeline" className="overflow-x-auto rounded-xl border border-border focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
+            <table className="w-full min-w-[560px] text-sm">
               <thead>
                 <tr className="bg-secondary/50 text-left">
                   <th className="px-3 py-2 font-semibold text-foreground whitespace-nowrap">Seasons</th>

@@ -1,5 +1,102 @@
 # Project state
 
+## CURRENT INTEGRATION 2026-09-15: corrections merged into the Round 586 source
+
+This local tree combines Round 586 source `25533a22` with factual correction
+`a35693a5`, including the five corrected guide snapshots and honest career-save
+copy. The academy prospect-card split, exact player callbacks and lazy-panel
+test waits remain intact. No verification workflow was imported.
+
+The factual correction still takes publication priority. None of this merge
+is a publication or proof of final download weight. The release coordinator
+owns correction readability checks and the next integrated weight/build gates.
+Fresh full verification must use this merged source; previous artifacts cannot
+approve the new tree. The completed combined 587 run `35001991548` failed the
+old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
+Its expected negative controls passed. The records below retain earlier
+verification context and do not supersede this current integration note.
+
+## PRIORITY CORRECTION 2026-09-15 15:19 EDT: accurate guides and usable phone tables
+
+The five published format guides had factual errors or summaries that omitted
+important exceptions. Corrections are implemented at `253790d7` on
+`codex/nfl-guide-format-correction`, based on main `9f828738`. This also fixes
+three copy claims about browser saves and Record Books. The guide tables now
+have readable column widths, contained horizontal scrolling, a phone hint and
+keyboard focus. No new article or simulation rule is involved.
+
+The real type check, six-route SEO regeneration, final production build,
+21 focused release fences and 20 browser cases passed locally. Browser cases
+cover all five guides at 320/390/430/1440 with actual built JS/CSS, correct
+claims, working keyboard scrolling, no runtime errors and zero page overflow.
+All 33 guide mutation controls have passed, including the saved-HTML control.
+Research and exact evidence are in [the release record](adsense/guide-correction-release-checks-2026-09-15.md).
+
+[Full correction verification](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35011097191)
+runs at `506f79ef`. Types, snapshot build and all five default guide guards plus
+33 controls passed; the full node suite and Vitest remain pending. The narrow
+correction takes publication priority over the feature queue. It is not yet
+confirmed published. Google alone decides approval, and these fixes do not
+identify which pages caused the previous rejection.
+
+## RELEASE QUEUE 2026-09-15: first team, match action, watched kicks and boots
+
+The older verification runs finished with actionable failures, not release
+approval. Source repairs add missing lazy-import waits in tests, keep Academy
+prospect cards off the initial download, and narrow the region-map guard so it
+does not reject original player/ball SVG artwork. Existing download budgets,
+game outcomes and saved data are preserved. The new prospect split still needs
+an exact final-build weight measurement.
+
+- Round 586 is now `eabde5cd`, including the guide correction and lazy-panel
+  test/Academy fixes. It awaits final weight and fresh full release checks.
+- Rounds 603 to 605 are at `f27a0f87`, with a narrowly scoped map-guard repair
+  under test. They animate the committed live sim, existing drills and the
+  basketball/football battle feed.
+- Round 587 is at `56172c0a`, with the lazy-panel fixes. Its earlier
+  [run 35001991548](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35001991548)
+  passed types/build and dedicated action/browser controls, but failed the
+  old map guard, first-team/pack lazy tests and Factory's 271K/270K budget.
+- Round 588 is implemented at `dc767d6a`: title-earned fictional boots and a
+  first-team equipment room. Its focused engine, hook and component checks
+  passed. Final production build and full release checks remain required.
+
+The latter three source branches still need the correction merged before
+fresh release verification. Publish the guide correction first, then 586,
+603 to 605, 587 and 588, each with its own passing checks and publish proof.
+No new feature beyond 588 is being started. Claude's reserved 610 to 619 work
+and Cursor's formatting remain separate. Verification workflows stay off main.
+
+## ADSENSE STATUS, last confirmed 2026-09-15 12:37 EDT
+
+The fully loaded site detail panel showed Getting ready and Review requested,
+following the 04:19 EDT submission. Later browser connection timeouts did not
+establish a newer state. No second review or duplicate indexing request was
+submitted. The 13:22 to 13:23 EDT HTTP audit passed all 148 sitemap documents
+with zero findings; it checks document availability and content signals,
+not factual accuracy, indexing or approval. See [the audit record](adsense/live-document-audit-2026-09-15.md).
+
+## Earlier Round 586 verification history
+
+The following run notes are retained as history, not current approval.
+
+- Round 586 source `24e17ff6`, verification `6c0165d7`,
+  [run 34999864639](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999864639).
+- Combined Rounds 603 to 605 source `4a99788f`, verification `4ebbb1df`,
+  [run 34999930238](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999930238).
+- Round 587 source `9a2f6da1`, verification `418bdf77`,
+  [run 35001991548](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35001991548).
+  This final source includes 603 to 605 and measured guide claims. The earlier
+  run `35000569315` was cancelled and is superseded.
+
+All three runs have passed app types and rebuilt snapshots and are in the
+full node suite. Full suites, browser download
+budgets, effective failure controls and artifact checks remain required.
+Round 586 also needs slow-chunk navigation checked against its final artifact.
+Publish 586 separately first, then the action scenes, then 587. Verification
+workflows stay off main. Claude's `release-611-612-616` is not part of these
+release sources. AdSense remains pending as confirmed at 12:37 EDT below.
+
 ## IN VERIFICATION 2026-09-15: Round 586, academy first team
 
 Built in `.worktrees/round-586-first-team`, branch `codex/round-586-first-team`.
@@ -40,6 +137,7 @@ temporary copy and retained every assertion; external writes were intercepted.
 Rounds 603 and 604 are independent action-animation
 worktrees for Club Manager live matches and Soccer Career drills; they do not
 share this round's save changes or release.
+
 ## RELEASE CHECK UPDATE 2026-09-15 12:43 EDT
 
 The new Round 586 release sweep found three initial JavaScript downloads above

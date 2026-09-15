@@ -27,7 +27,8 @@
  *
  * Run: node scripts/simMlbPostseasonFormatHistory.mjs
  */
-import { execSync } from 'node:child_process';
+import { build } from 'esbuild';
+import { renderFormatGuide, parseFormatGuide, tableCell, replaceGuideClaim } from './lib/renderFormatGuide.mjs';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -42,7 +43,9 @@ const BUNDLE = `${TMP}/mlbPostseason.${PID}.bundle.mjs`;
 const LIB = `${ROOT}/src/lib/mlbPostseasonFormatHistory.ts`;
 
 const CONTROL = process.env.MLB_POSTSEASON_CONTROL || '';
-const KNOWN = ['gap', 'onesrc'];
+const KNOWN = ['gap', 'onesrc', 'field'];
+// Source-only mode renders production components but does not claim the saved HTML was rebuilt.
+const SOURCE_ONLY = process.env.FORMAT_GUIDE_SOURCE_ONLY === '1';
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`MLB_POSTSEASON_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -70,7 +73,7 @@ if (CONTROL === 'gap') {
 }
 
 fs.writeFileSync(ENTRY, `export const lib = await import('${libPath.replaceAll('\\', '/')}');`);
-execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`, { stdio: 'inherit' });
+await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': `${ROOT_URL}/src` } });
 const { lib } = await import(pathToFileURL(BUNDLE).href);
 const { MLB_POSTSEASON_PERIODS, MLB_POSTSEASON_SOURCES, MLB_SERIES_LENGTHS, MLB_UNPLAYED_SEASONS, MLB_POSTSEASON_VERIFIED_ON, seasonRange, sourceById } = lib;
 
@@ -154,8 +157,8 @@ console.log('2) every period rests on at least two publishers, and the provenanc
 
 /* ---------- 3. The shipped snapshot ---------- */
 section = '3';
-if (CONTROL) {
-  console.log('3) snapshot check skipped under a control');
+if (CONTROL || SOURCE_ONLY) {
+  console.log('3) snapshot check skipped: ' + (CONTROL ? 'control run' : 'SOURCE-ONLY verification, saved HTML pending build'));
 } else {
   console.log('3) the shipped snapshot carries every row, the source list and the page');
   const snap = path.join(ROOT, 'public', 'mlb-postseason-format-history', 'index.html');
@@ -181,11 +184,33 @@ if (CONTROL) {
   }
 }
 
+/* Actual guide cells and answers, not matching correct notes elsewhere on the page.
+   The new controls restore the old wrong summary while leaving those notes intact. */
+section = '4';
+console.log('4) production guide rendering and saved summary claims');
+{
+  const page = path.join(ROOT, 'src/pages', 'MlbPostseasonFormatHistory.tsx');
+  const overrides = {};
+  if (CONTROL === 'field') overrides[page] = replaceGuideClaim(page,
+    '{p.fieldSize} clubs {p.fieldNote && <span className="block whitespace-normal text-xs font-normal mt-1">{p.fieldNote}</span>}',
+    '{p.fieldSize} clubs');
+  const documents = [['production component', await renderFormatGuide(ROOT, 'MlbPostseasonFormatHistory.tsx', overrides)]];
+  const snapshot = path.join(ROOT, 'public', 'mlb-postseason-format-history', 'index.html');
+  if (!CONTROL && !SOURCE_ONLY && fs.existsSync(snapshot)) documents.push(['saved HTML', parseFormatGuide(fs.readFileSync(snapshot, 'utf8'))]);
+  for (const [label, document] of documents) {
+    const field = tableCell(document, '1969 to 1984', 1);
+    if (!/4 clubs/.test(field) || !/Eight clubs in 1981/.test(field)) fail(label + ': 1981 table field must show eight clubs within the usual four-club period');
+    console.log('   inspected ' + label + ' at the affected table cell or answer');
+  }
+}
+
 console.log('');
 if (CONTROL) {
-  const want = CONTROL === 'gap'
-    ? { section: '1', signal: 'a hole or an overlap' }
-    : { section: '2', signal: 'rests on' };
+  const want = ({
+    gap: { section: '1', signal: 'a hole or an overlap' },
+    onesrc: { section: '2', signal: 'rests on' },
+    field: { section: '4', signal: '1981 table field' },
+  })[CONTROL];
   const hits = (sectionMessages[want.section] ?? []).filter(m => m.includes(want.signal)).length;
   if (hits > 0) {
     console.log(`simMlbPostseasonFormatHistory control: green. MLB_POSTSEASON_CONTROL=${CONTROL} was reported by section ${want.section} with "${want.signal}" (${hits} finding${hits === 1 ? '' : 's'}).`);

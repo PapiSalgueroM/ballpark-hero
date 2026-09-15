@@ -31,6 +31,7 @@ async function settle() {
 async function openAcademy() {
   await click(document.querySelector('[data-room="academy"]')!);
   await settle();
+  await act(async () => { await vi.dynamicImportSettled(); });
 }
 async function openFirstTeam() {
   await click(button(document, /First team.*players/));
@@ -134,6 +135,7 @@ describe('First team on the real Stadium Tycoon page', () => {
     mountPage(<StadiumTycoon />, '/stadium-tycoon');
     await openAcademy();
     await click(button(document, /Reputation/));
+    await act(async () => { await vi.dynamicImportSettled(); });
     await click(button(document, /Move up to/));
     expect(savedAcademy().rep).toBe(1);
     expect(savedAcademy().firstTeam).toEqual(s.firstTeam);

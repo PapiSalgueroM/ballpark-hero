@@ -16,14 +16,15 @@
  * charts and its World Series index, MLB.com's own postseason format FAQ,
  * ESPN's wild card explainer, and CBS Sports' report of the 2020 agreement.
  *
- * WHAT COULD NOT BE READ, AND SO IS NOT CITED. Seven fetches were blocked or
+ * WHAT COULD NOT BE READ AT THE ORIGINAL CHECK. Seven fetches were blocked or
  * came back as something other than the page asked for: four MLB.com pages
  * (the postseason format glossary entry, the wild card and Division Series
  * history pages, and the "complete history of postseason formats" article, all
  * 406), Baseball Reference's postseason index (403), the Hall of Fame's World
  * Series history page (404), and one ESPN explainer that answered with the
- * news hub rather than the article. None of them appears below. Nothing here
- * rests on a source that was not actually read.
+ * news hub rather than the article. The postseason formats article was read
+ * on 2026-09-15 for the 1981 table correction and is now cited below. The
+ * other blocked pages remain uncited.
  *
  * WHAT WAS LEFT OUT FOR HAVING ONE READING. Three details were seen in one
  * publisher only and are deliberately absent: the length of the extra 1981
@@ -53,6 +54,7 @@ export interface MlbPostseasonSource {
 }
 
 export const MLB_POSTSEASON_SOURCES: MlbPostseasonSource[] = [
+  { id: 'mlbhistory', publisher: 'MLB.com', title: 'A complete history of MLB postseason formats', url: 'https://www.mlb.com/amp/news/baseball-postseason-format-changes.html' },
   { id: 'wpost', publisher: 'Wikipedia', title: 'Major League Baseball postseason', url: 'https://en.wikipedia.org/wiki/Major_League_Baseball_postseason' },
   { id: 'wpws', publisher: 'Wikipedia', title: 'World Series', url: 'https://en.wikipedia.org/wiki/World_Series' },
   { id: 'wpwc', publisher: 'Wikipedia', title: 'Major League Baseball wild card', url: 'https://en.wikipedia.org/wiki/Major_League_Baseball_wild_card' },
@@ -77,6 +79,8 @@ export interface MlbPostseasonPeriod {
   title: string;
   /** Total clubs that qualify across both leagues. */
   fieldSize: MlbPostseasonFieldSize;
+  /** A season-specific exception to the usual field in the table. */
+  fieldNote?: string;
   /** How the field breaks down and what rounds it plays, one or two sentences. */
   qualifying: string;
   notes: string[];
@@ -109,12 +113,13 @@ export const MLB_POSTSEASON_PERIODS: MlbPostseasonPeriod[] = [
     to: 1984,
     title: 'Divisions, and a series for the pennant',
     fieldSize: 4,
+    fieldNote: 'Eight clubs in 1981, with an extra split-season round.',
     qualifying: 'Each league split into an East and a West division. The two division winners in each league met in a best of five League Championship Series for the pennant, and the two pennant winners went to the World Series as before.',
     notes: [
       'For the first time a club could finish with the best record in its league and not reach the World Series, because the pennant was now decided by a short series rather than by the standings.',
       'The 1981 season was the odd one out. A midseason strike split the year in half, and the winners of each half in each division met in an extra round before the League Championship Series, so eight clubs played that October instead of four. The shape went back to four clubs in 1982.',
     ],
-    sources: ['wplcs', 'wpost', 'almanacpost', 'wp1981'],
+    sources: ['wplcs', 'wpost', 'almanacpost', 'wp1981', 'mlbhistory'],
   },
   {
     id: 'lcs-seven',
