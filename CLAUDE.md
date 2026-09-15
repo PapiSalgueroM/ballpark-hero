@@ -273,8 +273,14 @@ errors.
 
 **Build.** `npm run build`.
 
-**Sims.** `node scripts/runAllSims.mjs` auto-discovers every `scripts/sim*.mjs` harness. All of
-them must be green before a big ship. Note the naming rule: a harness named `test*` will be
+**Sims.** Select reviewed harnesses explicitly, for example
+`ONLY=simConquestNbaArcade,simConquestNbaRegions node scripts/runAllSims.mjs`.
+In PowerShell, set `$env:ONLY='simConquestNbaArcade,simConquestNbaRegions'` first.
+Since Round 528, an empty selection is refused before any database probe or child
+process starts. The discovered suite includes production write/cache probes, so
+selecting a harness does not make it offline or authorize those writes. Review
+its behavior before running it. All required selected checks must pass before
+shipping. Note the naming rule: a harness named `test*` will be
 **silently skipped** by the runner. That is how `testBallonDorFairness.mjs` went unnoticed.
 
 Between big ships, when a round rebuilds `dist` and the snapshots in `public/`, run **all** of
