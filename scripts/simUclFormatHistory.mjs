@@ -40,7 +40,8 @@
  *
  * Run: node scripts/simUclFormatHistory.mjs
  */
-import { execSync } from 'node:child_process';
+import { build } from 'esbuild';
+import { renderFormatGuide, parseFormatGuide, tableCell, replaceGuideClaim } from './lib/renderFormatGuide.mjs';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -57,7 +58,9 @@ const ENGINE = `${ROOT}/src/lib/clubManager.ts`;
 const SHAPES_JSON = path.join(ROOT, 'src', 'data', 'uclEngineShapes.json');
 
 const CONTROL = process.env.UCL_FORMAT_CONTROL || '';
-const KNOWN = ['gap', 'legs'];
+const KNOWN = ['gap', 'legs', 'table'];
+// Source-only mode renders production components but does not claim the saved HTML was rebuilt.
+const SOURCE_ONLY = process.env.FORMAT_GUIDE_SOURCE_ONLY === '1';
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`UCL_FORMAT_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -100,10 +103,10 @@ export const lib = await import('@/lib/uclFormatHistory');
 export const engineLib = await import('@/lib/uclFormatHistoryEngine');
 export const engine = await import('@/lib/clubManager');
 `);
-execSync(
-  `"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error ${aliases.join(' ')}`,
-  { stdio: 'inherit' },
-);
+await build({
+  entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error',
+  alias: Object.fromEntries(aliases.map(value => value.slice('--alias:'.length).split('='))),
+});
 const { lib, engineLib, engine } = await import(pathToFileURL(BUNDLE).href);
 const {
   UCL_FORMAT_PERIODS, UCL_FORMAT_SOURCES, UCL_AWAY_GOALS, UCL_FORMAT_VERIFIED_ON,
@@ -255,8 +258,8 @@ console.log('3) the generated block equals the engine, every era plays its real 
 
 /* ---------- 4. The shipped snapshot ---------- */
 section = '4';
-if (CONTROL) {
-  console.log('4) snapshot check skipped under a control');
+if (CONTROL || SOURCE_ONLY) {
+  console.log('4) snapshot check skipped: ' + (CONTROL ? 'control run' : 'SOURCE-ONLY verification, saved HTML pending build'));
 } else {
   console.log('4) the shipped snapshot carries every row, the source list and the page');
   const snap = path.join(ROOT, 'public', 'champions-league-format-history', 'index.html');
@@ -288,13 +291,35 @@ if (CONTROL) {
   }
 }
 
+/* Actual guide cells and answers, not matching correct notes elsewhere on the page.
+   The new controls restore the old wrong summary while leaving those notes intact. */
+section = '5';
+console.log('5) production guide rendering and saved summary claims');
+{
+  const page = path.join(ROOT, 'src/pages', 'ChampionsLeagueFormatHistory.tsx');
+  const overrides = {};
+  if (CONTROL === 'table') overrides[page] = replaceGuideClaim(page,
+    'return p.knockoutException ? `${usual}. ${p.knockoutException}` : usual;',
+    'return usual;');
+  const documents = [['production component', await renderFormatGuide(ROOT, 'ChampionsLeagueFormatHistory.tsx', overrides)]];
+  const snapshot = path.join(ROOT, 'public', 'champions-league-format-history', 'index.html');
+  if (!CONTROL && !SOURCE_ONLY && fs.existsSync(snapshot)) documents.push(['saved HTML', parseFormatGuide(fs.readFileSync(snapshot, 'utf8'))]);
+  for (const [label, document] of documents) {
+    const knockout = tableCell(document, '2003-04 to 2023-24', 3);
+    if (!/Two legs from the round of 16/.test(knockout) || !/2019-20 quarter-finals and semi-finals were single matches/.test(knockout)) fail(label + ': UCL table knockout cell must name the 2019-20 single-match exception');
+    console.log('   inspected ' + label + ' at the affected table cell or answer');
+  }
+}
+
 console.log('');
 if (CONTROL) {
   /* each control names the section AND the message it must have produced, so
      a control cannot pass on a neighbouring finding */
-  const want = CONTROL === 'gap'
-    ? { section: '1', signal: 'a hole or an overlap' }
-    : { section: '3', signal: 'the real season ran' };
+  const want = ({
+    gap: { section: '1', signal: 'a hole or an overlap' },
+    legs: { section: '3', signal: 'the real season ran' },
+    table: { section: '5', signal: 'UCL table knockout cell' },
+  })[CONTROL];
   const hits = (sectionMessages[want.section] ?? []).filter(m => m.includes(want.signal)).length;
   if (hits > 0) {
     console.log(`simUclFormatHistory control: green. UCL_FORMAT_CONTROL=${CONTROL} was reported by section ${want.section} with "${want.signal}" (${hits} finding${hits === 1 ? '' : 's'}).`);

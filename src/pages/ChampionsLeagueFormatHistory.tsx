@@ -49,7 +49,8 @@ function knockoutLine(p: UclFormatPeriod): string {
   if (p.stage === 'knockout') return 'Two legs in every round, then a one match final';
   if (p.stage === 'leaguePhase') return 'Two legs from the play-offs to the semi-finals';
   if (p.koLegs === 1) return 'One off semi-finals at the group winners\' grounds';
-  return p.roundOf16 ? 'Two legs from the round of 16 to the semi-finals' : 'Two legged quarter-finals and semi-finals';
+  const usual = p.roundOf16 ? 'Two legs from the round of 16 to the semi-finals' : 'Two legged quarter-finals and semi-finals';
+  return p.knockoutException ? `${usual}. ${p.knockoutException}` : usual;
 }
 
 /* The tap target floor the phone sweep holds every control to. */
@@ -120,8 +121,9 @@ const ChampionsLeagueFormatHistory = () => {
 
         <section className="mb-10">
           <h2 className="text-lg font-display font-bold text-foreground mb-3">The timeline at a glance</h2>
-          <div className="overflow-x-auto rounded-xl border border-border">
-            <table className="w-full text-sm">
+          <p className="sm:hidden mb-2 text-xs text-muted-foreground">Swipe sideways to see every column.</p>
+          <div tabIndex={0} role="region" aria-label="Champions League format timeline" className="overflow-x-auto rounded-xl border border-border focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
+            <table className="w-full min-w-[700px] text-sm">
               <thead>
                 <tr className="bg-secondary/50 text-left">
                   <th className="px-3 py-2 font-semibold text-foreground whitespace-nowrap">Seasons</th>
