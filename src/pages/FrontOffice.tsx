@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import FrontOfficeBoard from '@/components/front-office/FrontOfficeBoard';
@@ -44,6 +45,9 @@ const FrontOffice = () => {
               'Win back-to-back titles and start a threepeat conversation',
             ]}
           />
+          <p className="text-xs text-center mb-6">
+            <Link to="/nfl-playoff-format-history" className="inline-flex items-center min-h-[32px] max-w-full px-2 text-primary hover:underline">NFL playoff format history and the rules this game uses</Link>
+          </p>
           <GameNav />
         </main>
       </div>

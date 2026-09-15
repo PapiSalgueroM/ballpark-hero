@@ -147,6 +147,22 @@ const Records = () => {
           <Link to="/champions-league-format-history" className="inline-flex items-center min-h-[32px] font-semibold text-primary hover:underline">Champions League format history</Link>
           : every shape the European Cup and the Champions League have taken since 1955, season by season, each checked against two sources.
         </p>
+        <p>
+          <Link to="/nfl-playoff-format-history" className="inline-flex items-center min-h-[32px] font-semibold text-primary hover:underline">NFL playoff format history</Link>
+          : how the field, seeding and overtime rules changed.
+        </p>
+        <p>
+          <Link to="/nba-playoff-format-history" className="inline-flex items-center min-h-[32px] font-semibold text-primary hover:underline">NBA playoff format history</Link>
+          : the playoff bracket, play-in and draft lottery through the years.
+        </p>
+        <p>
+          <Link to="/mlb-postseason-format-history" className="inline-flex items-center min-h-[32px] font-semibold text-primary hover:underline">MLB postseason format history</Link>
+          : the changing postseason field, series lengths and years without a World Series.
+        </p>
+        <p>
+          <Link to="/nhl-playoff-format-history" className="inline-flex items-center min-h-[32px] font-semibold text-primary hover:underline">NHL playoff format history</Link>
+          : the playoff bracket through the years, including seasons that broke the pattern.
+        </p>
       </div>
       <div className="mt-10 text-sm text-muted-foreground leading-relaxed space-y-3">
         <h2 className="text-lg font-semibold text-foreground">Where this comes from</h2>

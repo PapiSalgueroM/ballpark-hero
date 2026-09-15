@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import NhlFrontOfficeBoard from '@/components/nhl-front-office/NhlFrontOfficeBoard';
@@ -43,6 +44,9 @@ const NhlFrontOffice = () => {
               'Repeat as champions with a goalie who refuses to age',
             ]}
           />
+          <p className="text-xs text-center mb-6">
+            <Link to="/nhl-playoff-format-history" className="inline-flex items-center min-h-[32px] max-w-full px-2 text-primary hover:underline">NHL playoff format history and the rules this game uses</Link>
+          </p>
           <GameNav />
         </main>
       </div>

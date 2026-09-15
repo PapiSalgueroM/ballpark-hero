@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import NbaFrontOfficeBoard from '@/components/nba-front-office/NbaFrontOfficeBoard';
@@ -43,6 +44,9 @@ const NbaFrontOffice = () => {
               'Build back-to-back champions and chase a dynasty',
             ]}
           />
+          <p className="text-xs text-center mb-6">
+            <Link to="/nba-playoff-format-history" className="inline-flex items-center min-h-[32px] max-w-full px-2 text-primary hover:underline">NBA playoff format history and the rules this game uses</Link>
+          </p>
           <GameNav />
         </main>
       </div>
