@@ -48,6 +48,15 @@
         derivation. (8b) public.college_grid_players row count and a hash of
         its judged columns equal the file. 8b SKIPS LOUDLY while the table
         does not exist or Supabase is unreachable.
+     9. ONE DRAFT SLOT, ONE PERSON. No career is split from a draft row of its
+        own draft slot (its NFL key draft, or its roster draft number in the
+        year before or the year of its first season) held by a non-career
+        entry under the same folded surname. The two tables spell some first
+        names two ways, and a split lets one spelling cost a guess where the
+        other is right, and lets one man fill two cells. Every cell judging
+        yes for one half and no for the other is listed. Pins: Nate Gerry
+        (the draft table's Nathan Gerry, 2017 pick 184) judges yes on Nebraska
+        x Linebacker and Nebraska x Defensive Back.
 
    NEGATIVE CONTROLS. Every one runs on EVERY invocation, in memory or against
    copies written under a temp folder that is removed on exit, and each one
@@ -65,6 +74,8 @@
                    Salaam's entry must judge no
      plantdrafted  Joe Burrow is marked undrafted; the probe must list him
      droprow       one row is removed from the file in memory
+     noslotjoin    the key is rebuilt without the draft slot join; section 9
+                   must list Nate Gerry split from Nathan Gerry
    SIM_CGKEY_CONTROL=<name> runs just that control and exits 0 only if it fired.
 
    SUPABASE UNREACHABLE: the source pull fails, the harness says NOTHING WAS
@@ -97,8 +108,9 @@ const AGREEMENT_FLOOR_PCT = 97.9;
 /* First run 2026-09-15, two listed: DJ Pumphrey, who is Donnel Pumphrey, 2017
    pick 132 (a real miss in the NFL key), and Lavert Hill (Michigan, from
    2022) against Daxton Hill 2022 pick 31, a different Michigan player with
-   the same surname, which is what a surname probe lists and not a defect. */
-const UNDRAFTED_PROBE_BASELINE = 2;
+   the same surname. Since the draft slot join, that row sits on the key's Dax
+   Hill career, so the probe no longer lists Lavert Hill and the baseline is 1. */
+const UNDRAFTED_PROBE_BASELINE = 1;
 const ALIAS_MIN_CAREERS = 3;
 const MIN_TWO_SOURCE = 3;
 const FAME_SEASONS = 5;
@@ -112,7 +124,7 @@ const PINS = [
   ['Jalen Hurts', 'Alabama', 'Quarterback'],
 ];
 
-const CONTROLS = { roundcol: 1, entity: 2, thinalias: 2, emptycell: 3, nocount: 4, window: 5, nomerge: 6, plantdrafted: 7, droprow: 8 };
+const CONTROLS = { roundcol: 1, entity: 2, thinalias: 2, emptycell: 3, nocount: 4, window: 5, nomerge: 6, plantdrafted: 7, droprow: 8, noslotjoin: 9 };
 const ONLY = process.env.SIM_CGKEY_CONTROL || '';
 if (ONLY && !CONTROLS[ONLY]) {
   console.error(`SIM_CGKEY_CONTROL=${ONLY} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -396,6 +408,48 @@ function sectionSeven(list) {
   return { out, listed };
 }
 
+/** Careers split from a non-career entry holding a row of the career's own draft slot, under the same folded surname. */
+function sectionNine(list) {
+  const out = [];
+  const entries = index(list);
+  const byId = new Map(entries.map(e => [e.id, e]));
+  const careers = new Map(src.careers.map(c => [c.id, c]));
+  const held = heldBy(list);
+  const lastWord = n => n.split(' ').pop();
+  const pairs = new Map();
+  for (const p of list) {
+    if (p.first_season == null) continue;
+    const d = careers.get(p.id)?.draft;
+    const slots = d && typeof d === 'object' ? [[d.year, d.pick]] : [];
+    if (p.proof.roster_pick != null) slots.push([p.first_season - 1, p.proof.roster_pick], [p.first_season, p.proof.roster_pick]);
+    for (const [y, k] of slots) {
+      const other = held.get(keyOf(y, k));
+      if (!other || other.first_season != null || lastWord(other.name_norm) !== lastWord(p.name_norm)) continue;
+      pairs.set(`${p.id}|${other.id}`, { p, other, slot: `${y} pick ${k}` });
+    }
+  }
+  const dealt = new Set(BOARDS.flatMap(b => b.rows.flatMap(r => b.cols.map(c => `${r.label}|${c.label}`))));
+  const split = [];
+  for (const { p, other } of pairs.values()) {
+    const a = byId.get(p.id);
+    const b = byId.get(other.id);
+    for (const s of lib.COLLEGE_LABELS) for (const c of lib.CRITERIA_LABELS) {
+      const va = lib.judgeCollegeCell(a, s, c);
+      const vb = lib.judgeCollegeCell(b, s, c);
+      if ((va === 'no' && vb === 'yes') || (va === 'yes' && vb === 'no')) split.push(`${a.name} ${va}, ${b.name} ${vb} on ${s.label} x ${c.label}${dealt.has(`${s.label}|${c.label}`) ? ' (dealt)' : ''}`);
+    }
+  }
+  if (pairs.size) out.push(`${pairs.size} careers are split from a draft row of their own draft slot under the same surname: ${show([...pairs.values()].map(x => `${x.p.display_name} and ${x.other.display_name} (${x.slot})`), 6)}`);
+  if (split.length) out.push(`${split.length} cells judge yes for one half of a split and no for the other: ${show(split, 6)}`);
+  const d = byDisplay(entries);
+  const gerry = d.get(engine.normalizeGridName('Nate Gerry'));
+  for (const col of ['Linebacker', 'Defensive Back']) {
+    const v = gerry ? lib.judgeCollegeCell(gerry, 'Nebraska', col) : 'not in the key';
+    if (v !== 'yes') out.push(`pin Nate Gerry x Nebraska x ${col} judges ${v}`);
+  }
+  return { out, pairs: pairs.size, split };
+}
+
 const judgedHash = rows => {
   const canonRows = rows.map(r => TABLE_COLUMNS.map(c => r[c] ?? null)).sort((x, y) => (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));
   return crypto.createHash('sha256').update(JSON.stringify(canonRows)).digest('hex').slice(0, 16);
@@ -571,6 +625,13 @@ if (!ONLY) {
       console.log(`   8b: the table holds ${tableRead.rows.length} rows; judged columns hash ${b.hash} in the file`);
     }
   }
+
+  console.log('\n9) One draft slot, one person: no career split from a draft row of its own slot');
+  {
+    const r = sectionNine(players);
+    r.out.forEach(fail);
+    console.log(`   ${r.pairs} splits, ${r.split.length} yes and no cells between halves; ${built.stats.joins.slot} rows joined on their draft slot; pins: Nate Gerry yes on Nebraska x Linebacker and x Defensive Back`);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -698,6 +759,15 @@ if (want('droprow')) {
     if (!b.out.length) fail('control droprow: 8b stayed green against a file one row short');
     else console.log(`   fired in 8b too: ${b.out.join(' | ')}`);
   }
+}
+
+if (want('noslotjoin')) {
+  console.log('\nnoslotjoin) the key rebuilt without the draft slot join');
+  const wrong = buildCollegeKey(src, { control: { noSlotJoin: true } });
+  mustChange('noslotjoin', built.stats.joins.slot > 0 && wrong.stats.joins.slot === 0 && wrong.players.length > players.length, 'the plain build joins no row on its draft slot');
+  const r = sectionNine(wrong.players);
+  console.log(`   ${wrong.players.length - players.length} more entries; ${r.pairs} splits, ${r.split.length} yes and no cells between halves`);
+  grade('noslotjoin', r.pairs > 0 && r.split.some(m => /^Nate Gerry no, Nathan Gerry yes on Nebraska x Defensive Back/.test(m)) && r.out.some(m => /^pin Nate Gerry x Nebraska x Defensive Back judges no/.test(m)), r.out.map(m => m.slice(0, 200)).join(' | ') || 'section 9 stayed green');
 }
 
 // ---------------------------------------------------------------------------

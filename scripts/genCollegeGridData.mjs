@@ -41,14 +41,19 @@
        nobody keeps that career's pick facts from reading as complete: a
        false first_round becomes null unless that row is past its boundary
        too, and best_pick becomes null if that row's pick is smaller.
+       Last, a draft slot belongs to one player: a row still unjoined joins
+       the one career holding that slot (its NFL key draft year and pick, or
+       its roster draft number in the year before or the year of its first
+       season) whose surname folds alike and that holds no row from that year
+       (Nathan Gerry in the draft table is the key's Nate Gerry, 2017 pick 184).
        Unjoined, unambiguous draft rows with one folded name, one college
        and years within 3 of each other form a draft-only entry.
        A Heisman row joins the one entry with the same folded name whose
        colleges hold its school (a quoted nickname is also tried as nickname
        plus surname; two such entries are told apart by the winner's listed
        position group when exactly one holds it); otherwise it stands alone.
-       A cfb stats row adds its schools only when its folded name matches,
-       its last season falls in the 3 seasons before one of the entry's
+       A cfb stats row adds its schools only when its folded name matches
+       the entry's name or a name on one of its draft rows, its last season falls in the 3 seasons before one of the entry's
        draft years, and its list already holds that draft row's college;
        a row that fits two entries adds to neither.
 
@@ -398,9 +403,35 @@ export function buildCollegeKey(src, { control = {} } = {}) {
   const rawAgree = pairs.filter(p => [...p.rawDraft].some(d => p.rawRoster.has(d))).length;
   stats.agreement = { entries: pairs.length, raw: rawAgree, beforeAliases: agreeCount(x => x), afterAliases: agreeCount(canon) };
 
+  /* The draft slot tier, after the alias table so the agreement above is
+     measured on name joins alone. A draft slot belongs to one player, and the
+     two tables can spell his first name two ways (the draft table's Nathan
+     Gerry is the key's Nate Gerry, 2017 pick 184). A career's slots are its
+     NFL key draft and its roster draft number in the year before or the year
+     of its first season (the key dates Josh Allen of Kentucky to 2018 pick 7;
+     his rosters say pick 7 and he starts in 2019, where the draft table has
+     Josh Hines-Allen). A row still unjoined joins the one career holding its
+     slot whose surname folds alike and that holds no row from that year. */
+  const careersBySlot = new Map();
+  for (const e of entries) {
+    const slots = new Set();
+    if (e.keyDraft) slots.add(`${e.keyDraft.year}|${e.keyDraft.pick}`);
+    if (e.rosterPick != null) for (const y of [e.first - 1, e.first]) slots.add(`${y}|${e.rosterPick}`);
+    for (const k of slots) careersBySlot.set(k, [...(careersBySlot.get(k) ?? []), e]);
+  }
+  const surnameOf = fold => fold.split(' ').pop();
+  const draftOnlyRows = [];
+  let slotJoins = 0;
+  for (const row of unjoined) {
+    const cands = control.noSlotJoin ? [] : (careersBySlot.get(`${row.year}|${row.pick}`) ?? [])
+      .filter(e => surnameOf(e.fold) === surnameOf(row.fold) && !e.rows.some(r => r.year === row.year));
+    if (cands.length === 1) { cands[0].rows.push(row); slotJoins += 1; } else draftOnlyRows.push(row);
+  }
+  stats.joins.slot = slotJoins;
+
   /* Draft-only entries: unjoined rows grouped by folded name and canonical college, clustered by year. */
   const groups = new Map();
-  for (const row of unjoined) {
+  for (const row of draftOnlyRows) {
     const key = JSON.stringify([row.fold, row.colleges.map(canon).sort()]);
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(row);
@@ -484,11 +515,14 @@ export function buildCollegeKey(src, { control = {} } = {}) {
 
   /* cfb stats rows. */
   let cfbAdded = 0, cfbAmbiguous = 0, cfbNewSchools = 0;
+  /* An entry answers to its own name and to the names on its draft rows (a slot join brings a second spelling). */
+  const byAnyFold = new Map();
+  for (const e of entries) for (const f of new Set([e.fold, ...e.rows.map(r => r.fold)])) byAnyFold.set(f, [...(byAnyFold.get(f) ?? []), e]);
   for (const s of [...src.qb, ...src.rb]) {
     const fold = foldName(s.player_name);
     const schools = uniq(splitSchoolList(s.schools).map(canon));
     const last = Number(s.year_max);
-    const fits = (byFold.get(fold) ?? []).filter(e => e.rows.some(r => last >= r.year - JOIN_WINDOW_YEARS && last <= r.year - 1 && r.colleges.map(canon).some(c => schools.includes(c))));
+    const fits = (byAnyFold.get(fold) ?? []).filter(e => e.rows.some(r => last >= r.year - JOIN_WINDOW_YEARS && last <= r.year - 1 && r.colleges.map(canon).some(c => schools.includes(c))));
     if (fits.length > 1) { cfbAmbiguous += 1; continue; }
     if (fits.length === 1) {
       const e = fits[0];
@@ -620,7 +654,7 @@ export async function pullSources(log = () => {}) {
 export const RULES = {
   names: 'foldName: accents stripped, lower case, apostrophes and periods dropped, other non alphanumerics a space, runs of single letters joined, a trailing jr, sr, ii, iii or iv dropped, a quoted nickname dropped; a draft name mirrored as "Last, FirstFirst Last" is read as "First Last" and a Hall of Fame marker glued to its end (StaubachHOF) is dropped; every dash character read as a hyphen',
   draftRows: 'nfl_draft_picks with forfeit rows dropped, then one row per (year, pick), the lowest id (scripts/lib/draftRounds.mjs)',
-  identity: `a draft row joins a career on folded name plus the key's equal draft year and pick, or a first season 0 to ${JOIN_WINDOW_YEARS} years after the draft with a compatible position group; tiers both, pick, then window after every equal-pick join, where a career already holding a row from that draft year is no candidate; two careers in the first non empty tier is ambiguous and the row joins and forms nothing; an undrafted career takes no window join; window joins leaving a career with rows sharing no college are dropped; a row that could be a career's but joined nobody turns that career's false first_round to null unless the row is past its boundary too, and its best_pick to null if the row's pick is smaller. Unjoined rows with one folded name, one college and years within ${JOIN_WINDOW_YEARS} of each other form a draft-only entry. A Heisman row joins the one entry of the same folded name whose colleges hold its school (a quoted nickname also tried as nickname plus surname; two such entries told apart by the winner's listed position group when exactly one holds it), else stands alone. A cfb stats row adds its schools when its folded name matches, its last season is in the ${JOIN_WINDOW_YEARS} seasons before one of the entry's draft years and its list holds that row's college; a row fitting two entries adds to neither`,
+  identity: `a draft row joins a career on folded name plus the key's equal draft year and pick, or a first season 0 to ${JOIN_WINDOW_YEARS} years after the draft with a compatible position group; tiers both, pick, then window after every equal-pick join, where a career already holding a row from that draft year is no candidate; two careers in the first non empty tier is ambiguous and the row joins and forms nothing; an undrafted career takes no window join; window joins leaving a career with rows sharing no college are dropped; a row that could be a career's but joined nobody turns that career's false first_round to null unless the row is past its boundary too, and its best_pick to null if the row's pick is smaller. A row still unjoined then joins the one career holding its slot (the NFL key draft year and pick, or the roster draft number in the year before or the year of the first season) whose surname folds alike and that holds no row from that year. Unjoined rows with one folded name, one college and years within ${JOIN_WINDOW_YEARS} of each other form a draft-only entry. A Heisman row joins the one entry of the same folded name whose colleges hold its school (a quoted nickname also tried as nickname plus surname; two such entries told apart by the winner's listed position group when exactly one holds it), else stands alone. A cfb stats row adds its schools when its folded name matches the entry's name or a name on one of its draft rows, its last season is in the ${JOIN_WINDOW_YEARS} seasons before one of the entry's draft years and its list holds that row's college; a row fitting two entries adds to neither`,
   colleges: `HTML entities decoded before splitting on semicolons; canonical spellings from a derived alias table (a roster spelling maps to a draft spelling on at least ${ALIAS_MIN_ENTRIES} joined careers and at least ${ALIAS_MIN_SHARE * 100} percent of that roster spelling's joined careers; on a career whose roster already spells one of its draft colleges exactly, its other roster spellings are transfer schools and not evidence), applied to every source; no alias typed by hand`,
   collegesAgreed: 'a draft college also held by the roster, the joined Heisman row or a joined cfb stats row',
   groups: `POSITION_GROUPS of src/lib/nflGrid.ts over roster codes, the draft position (word forms and slash lists included) and the Heisman position (HB and FB count as RB); side free words (Back, End, Tackle, B, E, WB, BB, TB, Tailback), kickers, punters and snappers add nothing, and nothing is read from a draft or Heisman position before the derived split year (the first year from which every draft lists at least ${SPLIT_MIN_DEFENSIVE_SHARE * 100} percent of its rows at a defensive code)`,

@@ -71,7 +71,7 @@ export const collegeGridPuzzles: GridPuzzle[] = [
       { label: 'Georgia', type: 'college' },
     ],
     cols: [
-      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
       { label: 'Tight End', type: 'position' },
       { label: 'Offensive Lineman', type: 'position' },
     ],
@@ -86,7 +86,7 @@ export const collegeGridPuzzles: GridPuzzle[] = [
     cols: [
       { label: 'Running Back', type: 'position' },
       { label: 'Linebacker', type: 'position' },
-      { label: 'Defensive Back', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
     ],
   },
   {
@@ -176,8 +176,8 @@ export const collegeGridPuzzles: GridPuzzle[] = [
     ],
     cols: [
       { label: 'Linebacker', type: 'position' },
-      { label: 'Defensive Back', type: 'position' },
       { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
     ],
   },
   {
@@ -188,35 +188,35 @@ export const collegeGridPuzzles: GridPuzzle[] = [
       { label: 'Oklahoma State', type: 'college' },
     ],
     cols: [
-      { label: 'Wide Receiver', type: 'position' },
-      { label: 'Top 10 Pick', type: 'draft' },
       { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'First Round Pick', type: 'draft' },
     ],
   },
   {
     id: 'cg611-015',
     rows: [
       { label: 'Houston', type: 'college' },
-      { label: 'Virginia Tech', type: 'college' },
       { label: 'LSU', type: 'college' },
+      { label: 'BYU', type: 'college' },
     ],
     cols: [
-      { label: 'First Round Pick', type: 'draft' },
       { label: 'Linebacker', type: 'position' },
       { label: 'Running Back', type: 'position' },
+      { label: 'Quarterback', type: 'position' },
     ],
   },
   {
     id: 'cg611-016',
     rows: [
-      { label: 'Arizona State', type: 'college' },
-      { label: 'BYU', type: 'college' },
+      { label: 'Ohio State', type: 'college' },
       { label: 'USC', type: 'college' },
+      { label: 'Notre Dame', type: 'college' },
     ],
     cols: [
-      { label: 'Wide Receiver', type: 'position' },
-      { label: 'Defensive Lineman', type: 'position' },
-      { label: 'Quarterback', type: 'position' },
+      { label: 'Tight End', type: 'position' },
+      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'Heisman Winner', type: 'award' },
     ],
   },
   {
@@ -227,22 +227,22 @@ export const collegeGridPuzzles: GridPuzzle[] = [
       { label: 'Oklahoma', type: 'college' },
     ],
     cols: [
-      { label: 'Top 10 Pick', type: 'draft' },
-      { label: 'Top 5 Pick', type: 'draft' },
       { label: 'Wide Receiver', type: 'position' },
+      { label: 'Top 5 Pick', type: 'draft' },
+      { label: 'Top 10 Pick', type: 'draft' },
     ],
   },
   {
     id: 'cg611-018',
     rows: [
-      { label: 'Nebraska', type: 'college' },
+      { label: 'Virginia Tech', type: 'college' },
       { label: 'Syracuse', type: 'college' },
       { label: 'Iowa', type: 'college' },
     ],
     cols: [
       { label: 'Defensive Back', type: 'position' },
       { label: 'Running Back', type: 'position' },
-      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Quarterback', type: 'position' },
     ],
   },
   {
@@ -254,21 +254,21 @@ export const collegeGridPuzzles: GridPuzzle[] = [
     ],
     cols: [
       { label: 'Tight End', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Defensive Back', type: 'position' },
       { label: 'Top 10 Pick', type: 'draft' },
     ],
   },
   {
     id: 'cg611-020',
     rows: [
-      { label: 'Notre Dame', type: 'college' },
       { label: 'Michigan', type: 'college' },
+      { label: 'Georgia', type: 'college' },
       { label: 'Alabama', type: 'college' },
     ],
     cols: [
       { label: 'Tight End', type: 'position' },
-      { label: 'Linebacker', type: 'position' },
-      { label: 'Heisman Winner', type: 'award' },
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Top 5 Pick', type: 'draft' },
     ],
   },
   {
@@ -279,34 +279,34 @@ export const collegeGridPuzzles: GridPuzzle[] = [
       { label: 'Penn State', type: 'college' },
     ],
     cols: [
+      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Offensive Lineman', type: 'position' },
       { label: 'Defensive Lineman', type: 'position' },
-      { label: 'Defensive Back', type: 'position' },
-      { label: 'Quarterback', type: 'position' },
     ],
   },
   {
     id: 'cg611-022',
     rows: [
-      { label: 'Clemson', type: 'college' },
+      { label: 'Texas', type: 'college' },
       { label: 'Miami (FL)', type: 'college' },
-      { label: 'Georgia', type: 'college' },
+      { label: 'Clemson', type: 'college' },
     ],
     cols: [
       { label: 'Top 5 Pick', type: 'draft' },
       { label: 'Tight End', type: 'position' },
-      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'Linebacker', type: 'position' },
     ],
   },
   {
     id: 'cg611-023',
     rows: [
-      { label: 'Stanford', type: 'college' },
+      { label: 'Wisconsin', type: 'college' },
       { label: 'Mississippi State', type: 'college' },
-      { label: 'Ohio State', type: 'college' },
+      { label: 'Stanford', type: 'college' },
     ],
     cols: [
       { label: 'Linebacker', type: 'position' },
-      { label: 'Running Back', type: 'position' },
+      { label: 'Defensive Lineman', type: 'position' },
       { label: 'First Round Pick', type: 'draft' },
     ],
   },
@@ -314,13 +314,13 @@ export const collegeGridPuzzles: GridPuzzle[] = [
     id: 'cg611-024',
     rows: [
       { label: 'Boise State', type: 'college' },
-      { label: 'West Virginia', type: 'college' },
+      { label: 'Colorado', type: 'college' },
       { label: 'Oregon', type: 'college' },
     ],
     cols: [
-      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
       { label: 'Running Back', type: 'position' },
-      { label: 'Offensive Lineman', type: 'position' },
     ],
   },
   {
@@ -328,24 +328,24 @@ export const collegeGridPuzzles: GridPuzzle[] = [
     rows: [
       { label: 'Michigan State', type: 'college' },
       { label: 'Arkansas', type: 'college' },
-      { label: 'Wisconsin', type: 'college' },
+      { label: 'UCLA', type: 'college' },
     ],
     cols: [
       { label: 'Quarterback', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
       { label: 'Tight End', type: 'position' },
-      { label: 'Wide Receiver', type: 'position' },
     ],
   },
   {
     id: 'cg611-026',
     rows: [
-      { label: 'Stanford', type: 'college' },
+      { label: 'West Virginia', type: 'college' },
       { label: 'South Carolina', type: 'college' },
-      { label: 'Texas', type: 'college' },
+      { label: 'Auburn', type: 'college' },
     ],
     cols: [
-      { label: 'Tight End', type: 'position' },
       { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
       { label: 'Top 10 Pick', type: 'draft' },
     ],
   },
@@ -353,90 +353,90 @@ export const collegeGridPuzzles: GridPuzzle[] = [
     id: 'cg611-027',
     rows: [
       { label: 'Oklahoma State', type: 'college' },
-      { label: 'Auburn', type: 'college' },
-      { label: 'Florida', type: 'college' },
+      { label: 'Ole Miss', type: 'college' },
+      { label: 'Houston', type: 'college' },
     ],
     cols: [
-      { label: 'Top 10 Pick', type: 'draft' },
       { label: 'Quarterback', type: 'position' },
       { label: 'First Round Pick', type: 'draft' },
+      { label: 'Running Back', type: 'position' },
     ],
   },
   {
     id: 'cg611-028',
     rows: [
       { label: 'BYU', type: 'college' },
+      { label: 'Arizona State', type: 'college' },
       { label: 'Purdue', type: 'college' },
-      { label: 'UCLA', type: 'college' },
     ],
     cols: [
-      { label: 'Linebacker', type: 'position' },
-      { label: 'Wide Receiver', type: 'position' },
       { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Linebacker', type: 'position' },
     ],
   },
   {
     id: 'cg611-029',
     rows: [
-      { label: 'Ole Miss', type: 'college' },
+      { label: 'Nebraska', type: 'college' },
+      { label: 'TCU', type: 'college' },
       { label: 'Pittsburgh', type: 'college' },
-      { label: 'Houston', type: 'college' },
     ],
     cols: [
+      { label: 'Defensive Lineman', type: 'position' },
       { label: 'Running Back', type: 'position' },
-      { label: 'Offensive Lineman', type: 'position' },
       { label: 'Defensive Back', type: 'position' },
     ],
   },
   {
     id: 'cg611-030',
     rows: [
-      { label: 'Colorado', type: 'college' },
+      { label: 'Cincinnati', type: 'college' },
       { label: 'Miami (FL)', type: 'college' },
-      { label: 'Oklahoma State', type: 'college' },
+      { label: 'LSU', type: 'college' },
     ],
     cols: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
-      { label: 'Defensive Back', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Tight End', type: 'position' },
     ],
   },
   {
     id: 'cg611-031',
     rows: [
-      { label: 'Arizona State', type: 'college' },
-      { label: 'TCU', type: 'college' },
+      { label: 'Penn State', type: 'college' },
       { label: 'Georgia', type: 'college' },
+      { label: 'Florida', type: 'college' },
     ],
     cols: [
-      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Top 5 Pick', type: 'draft' },
       { label: 'First Round Pick', type: 'draft' },
-      { label: 'Linebacker', type: 'position' },
+      { label: 'Top 10 Pick', type: 'draft' },
     ],
   },
   {
     id: 'cg611-032',
     rows: [
-      { label: 'LSU', type: 'college' },
+      { label: 'Ohio State', type: 'college' },
       { label: 'USC', type: 'college' },
-      { label: 'Cincinnati', type: 'college' },
+      { label: 'Nebraska', type: 'college' },
     ],
     cols: [
+      { label: 'Running Back', type: 'position' },
       { label: 'Wide Receiver', type: 'position' },
-      { label: 'Defensive Lineman', type: 'position' },
-      { label: 'Tight End', type: 'position' },
+      { label: 'Linebacker', type: 'position' },
     ],
   },
   {
     id: 'cg611-033',
     rows: [
       { label: 'Tennessee', type: 'college' },
-      { label: 'Ohio State', type: 'college' },
+      { label: 'Oklahoma', type: 'college' },
       { label: 'Texas', type: 'college' },
     ],
     cols: [
-      { label: 'Top 10 Pick', type: 'draft' },
       { label: 'Tight End', type: 'position' },
+      { label: 'Quarterback', type: 'position' },
       { label: 'Top 5 Pick', type: 'draft' },
     ],
   },
@@ -448,8 +448,8 @@ export const collegeGridPuzzles: GridPuzzle[] = [
       { label: 'Oregon', type: 'college' },
     ],
     cols: [
-      { label: 'Top 10 Pick', type: 'draft' },
       { label: 'Linebacker', type: 'position' },
+      { label: 'Top 10 Pick', type: 'draft' },
       { label: 'Top 5 Pick', type: 'draft' },
     ],
   },
@@ -474,9 +474,9 @@ export const collegeGridPuzzles: GridPuzzle[] = [
       { label: 'Wisconsin', type: 'college' },
     ],
     cols: [
-      { label: 'Defensive Lineman', type: 'position' },
-      { label: 'Offensive Lineman', type: 'position' },
       { label: 'Tight End', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Defensive Lineman', type: 'position' },
     ],
   },
   {
@@ -484,20 +484,20 @@ export const collegeGridPuzzles: GridPuzzle[] = [
     rows: [
       { label: 'Pittsburgh', type: 'college' },
       { label: 'Baylor', type: 'college' },
-      { label: 'Nebraska', type: 'college' },
+      { label: 'South Carolina', type: 'college' },
     ],
     cols: [
       { label: 'Linebacker', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
       { label: 'Running Back', type: 'position' },
-      { label: 'Defensive Back', type: 'position' },
     ],
   },
   {
     id: 'cg611-038',
     rows: [
-      { label: 'Michigan', type: 'college' },
+      { label: 'Notre Dame', type: 'college' },
       { label: 'Auburn', type: 'college' },
-      { label: 'Oklahoma', type: 'college' },
+      { label: 'Michigan', type: 'college' },
     ],
     cols: [
       { label: 'Heisman Winner', type: 'award' },
@@ -513,8 +513,8 @@ export const collegeGridPuzzles: GridPuzzle[] = [
       { label: 'West Virginia', type: 'college' },
     ],
     cols: [
-      { label: 'Running Back', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
       { label: 'Quarterback', type: 'position' },
     ],
   },
@@ -522,19 +522,19 @@ export const collegeGridPuzzles: GridPuzzle[] = [
     id: 'cg611-040',
     rows: [
       { label: 'Louisville', type: 'college' },
-      { label: 'Ole Miss', type: 'college' },
       { label: 'Syracuse', type: 'college' },
+      { label: 'Oklahoma State', type: 'college' },
     ],
     cols: [
-      { label: 'Defensive Lineman', type: 'position' },
-      { label: 'Running Back', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
       { label: 'Quarterback', type: 'position' },
+      { label: 'Defensive Lineman', type: 'position' },
     ],
   },
   {
     id: 'cg611-041',
     rows: [
-      { label: 'Notre Dame', type: 'college' },
+      { label: 'UCLA', type: 'college' },
       { label: 'Purdue', type: 'college' },
       { label: 'Florida State', type: 'college' },
     ],
@@ -547,26 +547,26 @@ export const collegeGridPuzzles: GridPuzzle[] = [
   {
     id: 'cg611-042',
     rows: [
-      { label: 'Penn State', type: 'college' },
-      { label: 'UCLA', type: 'college' },
-      { label: 'Mississippi State', type: 'college' },
+      { label: 'Ole Miss', type: 'college' },
+      { label: 'Boise State', type: 'college' },
+      { label: 'Arizona State', type: 'college' },
     ],
     cols: [
-      { label: 'First Round Pick', type: 'draft' },
       { label: 'Running Back', type: 'position' },
       { label: 'Linebacker', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
     ],
   },
   {
     id: 'cg611-043',
     rows: [
-      { label: 'Miami (FL)', type: 'college' },
-      { label: 'South Carolina', type: 'college' },
-      { label: 'Florida State', type: 'college' },
+      { label: 'Stanford', type: 'college' },
+      { label: 'Michigan State', type: 'college' },
+      { label: 'Arkansas', type: 'college' },
     ],
     cols: [
-      { label: 'Wide Receiver', type: 'position' },
-      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'Running Back', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
       { label: 'Tight End', type: 'position' },
     ],
   },
@@ -574,8 +574,8 @@ export const collegeGridPuzzles: GridPuzzle[] = [
     id: 'cg611-044',
     rows: [
       { label: 'BYU', type: 'college' },
-      { label: 'Michigan State', type: 'college' },
-      { label: 'Arkansas', type: 'college' },
+      { label: 'Notre Dame', type: 'college' },
+      { label: 'LSU', type: 'college' },
     ],
     cols: [
       { label: 'Wide Receiver', type: 'position' },
@@ -586,8 +586,8 @@ export const collegeGridPuzzles: GridPuzzle[] = [
   {
     id: 'cg611-045',
     rows: [
-      { label: 'Boise State', type: 'college' },
       { label: 'TCU', type: 'college' },
+      { label: 'Mississippi State', type: 'college' },
       { label: 'Baylor', type: 'college' },
     ],
     cols: [
@@ -638,26 +638,26 @@ export const collegeGridPuzzles: GridPuzzle[] = [
   {
     id: 'cg611-049',
     rows: [
-      { label: 'LSU', type: 'college' },
       { label: 'Florida', type: 'college' },
-      { label: 'Notre Dame', type: 'college' },
+      { label: 'USC', type: 'college' },
+      { label: 'Louisville', type: 'college' },
     ],
     cols: [
-      { label: 'Heisman Winner', type: 'award' },
       { label: 'Wide Receiver', type: 'position' },
-      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
     ],
   },
   {
     id: 'cg611-050',
     rows: [
       { label: 'Washington', type: 'college' },
-      { label: 'Arkansas', type: 'college' },
       { label: 'Oklahoma', type: 'college' },
+      { label: 'Miami (FL)', type: 'college' },
     ],
     cols: [
       { label: 'Defensive Lineman', type: 'position' },
-      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Top 10 Pick', type: 'draft' },
       { label: 'Tight End', type: 'position' },
     ],
   },
@@ -671,13 +671,13 @@ export const collegeGridPuzzles: GridPuzzle[] = [
     cols: [
       { label: 'Heisman Winner', type: 'award' },
       { label: 'Linebacker', type: 'position' },
-      { label: 'Defensive Back', type: 'position' },
+      { label: 'Top 10 Pick', type: 'draft' },
     ],
   },
   {
     id: 'cg611-052',
     rows: [
-      { label: 'USC', type: 'college' },
+      { label: 'Wisconsin', type: 'college' },
       { label: 'Boise State', type: 'college' },
       { label: 'UCLA', type: 'college' },
     ],
@@ -695,9 +695,9 @@ export const collegeGridPuzzles: GridPuzzle[] = [
       { label: 'Tennessee', type: 'college' },
     ],
     cols: [
-      { label: 'Tight End', type: 'position' },
-      { label: 'Quarterback', type: 'position' },
       { label: 'Wide Receiver', type: 'position' },
+      { label: 'Tight End', type: 'position' },
+      { label: 'Top 10 Pick', type: 'draft' },
     ],
   },
   {
@@ -705,77 +705,77 @@ export const collegeGridPuzzles: GridPuzzle[] = [
     rows: [
       { label: 'Texas A&M', type: 'college' },
       { label: 'Pittsburgh', type: 'college' },
-      { label: 'Louisville', type: 'college' },
+      { label: 'TCU', type: 'college' },
     ],
     cols: [
+      { label: 'Linebacker', type: 'position' },
       { label: 'Defensive Lineman', type: 'position' },
-      { label: 'Quarterback', type: 'position' },
       { label: 'Defensive Back', type: 'position' },
     ],
   },
   {
     id: 'cg611-055',
     rows: [
-      { label: 'West Virginia', type: 'college' },
-      { label: 'Michigan State', type: 'college' },
-      { label: 'TCU', type: 'college' },
+      { label: 'Georgia', type: 'college' },
+      { label: 'Auburn', type: 'college' },
+      { label: 'Florida State', type: 'college' },
     ],
     cols: [
-      { label: 'Running Back', type: 'position' },
-      { label: 'Linebacker', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Top 5 Pick', type: 'draft' },
+      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'Quarterback', type: 'position' },
     ],
   },
   {
     id: 'cg611-056',
     rows: [
-      { label: 'Georgia', type: 'college' },
-      { label: 'Virginia Tech', type: 'college' },
-      { label: 'Oklahoma State', type: 'college' },
+      { label: 'Michigan State', type: 'college' },
+      { label: 'Cincinnati', type: 'college' },
+      { label: 'Arkansas', type: 'college' },
     ],
     cols: [
-      { label: 'Defensive Back', type: 'position' },
       { label: 'Wide Receiver', type: 'position' },
-      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'Tight End', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
     ],
   },
   {
     id: 'cg611-057',
     rows: [
-      { label: 'Nebraska', type: 'college' },
-      { label: 'Auburn', type: 'college' },
+      { label: 'West Virginia', type: 'college' },
+      { label: 'Virginia Tech', type: 'college' },
       { label: 'BYU', type: 'college' },
     ],
     cols: [
-      { label: 'Wide Receiver', type: 'position' },
-      { label: 'Offensive Lineman', type: 'position' },
       { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Running Back', type: 'position' },
+      { label: 'Quarterback', type: 'position' },
     ],
   },
   {
     id: 'cg611-058',
     rows: [
       { label: 'Colorado', type: 'college' },
+      { label: 'Miami (FL)', type: 'college' },
       { label: 'Iowa', type: 'college' },
-      { label: 'Wisconsin', type: 'college' },
     ],
     cols: [
-      { label: 'Running Back', type: 'position' },
       { label: 'Quarterback', type: 'position' },
       { label: 'Offensive Lineman', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
     ],
   },
   {
     id: 'cg611-059',
     rows: [
-      { label: 'Cincinnati', type: 'college' },
+      { label: 'Oklahoma State', type: 'college' },
+      { label: 'Virginia Tech', type: 'college' },
       { label: 'Penn State', type: 'college' },
-      { label: 'Florida State', type: 'college' },
     ],
     cols: [
-      { label: 'Offensive Lineman', type: 'position' },
-      { label: 'Tight End', type: 'position' },
-      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'Defensive Back', type: 'position' },
     ],
   },
   {
@@ -786,22 +786,22 @@ export const collegeGridPuzzles: GridPuzzle[] = [
       { label: 'Mississippi State', type: 'college' },
     ],
     cols: [
-      { label: 'Running Back', type: 'position' },
       { label: 'First Round Pick', type: 'draft' },
       { label: 'Linebacker', type: 'position' },
+      { label: 'Running Back', type: 'position' },
     ],
   },
   {
     id: 'cg611-061',
     rows: [
-      { label: 'Michigan', type: 'college' },
-      { label: 'Georgia', type: 'college' },
+      { label: 'Baylor', type: 'college' },
       { label: 'Wisconsin', type: 'college' },
+      { label: 'Nebraska', type: 'college' },
     ],
     cols: [
+      { label: 'Offensive Lineman', type: 'position' },
       { label: 'Wide Receiver', type: 'position' },
       { label: 'Defensive Back', type: 'position' },
-      { label: 'Tight End', type: 'position' },
     ],
   },
   {
@@ -809,10 +809,10 @@ export const collegeGridPuzzles: GridPuzzle[] = [
     rows: [
       { label: 'Texas', type: 'college' },
       { label: 'Florida', type: 'college' },
-      { label: 'Miami (FL)', type: 'college' },
+      { label: 'Florida State', type: 'college' },
     ],
     cols: [
-      { label: 'Linebacker', type: 'position' },
+      { label: 'Tight End', type: 'position' },
       { label: 'Top 5 Pick', type: 'draft' },
       { label: 'Top 10 Pick', type: 'draft' },
     ],
@@ -820,39 +820,39 @@ export const collegeGridPuzzles: GridPuzzle[] = [
   {
     id: 'cg611-063',
     rows: [
-      { label: 'Oklahoma', type: 'college' },
+      { label: 'Syracuse', type: 'college' },
       { label: 'Arkansas', type: 'college' },
-      { label: 'Stanford', type: 'college' },
+      { label: 'Oklahoma', type: 'college' },
     ],
     cols: [
+      { label: 'Defensive Lineman', type: 'position' },
       { label: 'First Round Pick', type: 'draft' },
       { label: 'Quarterback', type: 'position' },
-      { label: 'Tight End', type: 'position' },
     ],
   },
   {
     id: 'cg611-064',
     rows: [
-      { label: 'Virginia Tech', type: 'college' },
-      { label: 'Syracuse', type: 'college' },
+      { label: 'Tennessee', type: 'college' },
+      { label: 'Clemson', type: 'college' },
       { label: 'Arizona State', type: 'college' },
     ],
     cols: [
+      { label: 'Offensive Lineman', type: 'position' },
       { label: 'Running Back', type: 'position' },
       { label: 'Linebacker', type: 'position' },
-      { label: 'Offensive Lineman', type: 'position' },
     ],
   },
   {
     id: 'cg611-065',
     rows: [
-      { label: 'LSU', type: 'college' },
-      { label: 'Ohio State', type: 'college' },
       { label: 'USC', type: 'college' },
+      { label: 'Stanford', type: 'college' },
+      { label: 'Ohio State', type: 'college' },
     ],
     cols: [
+      { label: 'Defensive Back', type: 'position' },
       { label: 'Tight End', type: 'position' },
-      { label: 'Heisman Winner', type: 'award' },
       { label: 'Top 10 Pick', type: 'draft' },
     ],
   },
@@ -860,47 +860,47 @@ export const collegeGridPuzzles: GridPuzzle[] = [
     id: 'cg611-066',
     rows: [
       { label: 'Iowa', type: 'college' },
-      { label: 'Houston', type: 'college' },
-      { label: 'Ole Miss', type: 'college' },
+      { label: 'Michigan State', type: 'college' },
+      { label: 'LSU', type: 'college' },
     ],
     cols: [
       { label: 'First Round Pick', type: 'draft' },
-      { label: 'Defensive Back', type: 'position' },
+      { label: 'Tight End', type: 'position' },
       { label: 'Defensive Lineman', type: 'position' },
     ],
   },
   {
     id: 'cg611-067',
     rows: [
-      { label: 'TCU', type: 'college' },
+      { label: 'Michigan', type: 'college' },
       { label: 'Alabama', type: 'college' },
-      { label: 'West Virginia', type: 'college' },
+      { label: 'USC', type: 'college' },
     ],
     cols: [
-      { label: 'Wide Receiver', type: 'position' },
-      { label: 'Defensive Back', type: 'position' },
-      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Heisman Winner', type: 'award' },
+      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'Linebacker', type: 'position' },
     ],
   },
   {
     id: 'cg611-068',
     rows: [
-      { label: 'Texas A&M', type: 'college' },
-      { label: 'Tennessee', type: 'college' },
-      { label: 'Oregon', type: 'college' },
+      { label: 'Georgia', type: 'college' },
+      { label: 'Pittsburgh', type: 'college' },
+      { label: 'Purdue', type: 'college' },
     ],
     cols: [
-      { label: 'Top 5 Pick', type: 'draft' },
-      { label: 'Top 10 Pick', type: 'draft' },
       { label: 'Quarterback', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Running Back', type: 'position' },
     ],
   },
   {
     id: 'cg611-069',
     rows: [
       { label: 'Nebraska', type: 'college' },
+      { label: 'Houston', type: 'college' },
       { label: 'South Carolina', type: 'college' },
-      { label: 'Boise State', type: 'college' },
     ],
     cols: [
       { label: 'Defensive Lineman', type: 'position' },
@@ -911,53 +911,53 @@ export const collegeGridPuzzles: GridPuzzle[] = [
   {
     id: 'cg611-070',
     rows: [
-      { label: 'Michigan State', type: 'college' },
-      { label: 'Pittsburgh', type: 'college' },
       { label: 'Oklahoma State', type: 'college' },
+      { label: 'Texas A&M', type: 'college' },
+      { label: 'Colorado', type: 'college' },
     ],
     cols: [
       { label: 'Quarterback', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
       { label: 'First Round Pick', type: 'draft' },
-      { label: 'Wide Receiver', type: 'position' },
     ],
   },
   {
     id: 'cg611-071',
     rows: [
+      { label: 'Oregon', type: 'college' },
       { label: 'Washington', type: 'college' },
-      { label: 'Purdue', type: 'college' },
-      { label: 'UCLA', type: 'college' },
+      { label: 'Georgia', type: 'college' },
     ],
     cols: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Top 10 Pick', type: 'draft' },
       { label: 'Tight End', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
     ],
   },
   {
     id: 'cg611-072',
     rows: [
-      { label: 'Louisville', type: 'college' },
-      { label: 'Colorado', type: 'college' },
-      { label: 'Baylor', type: 'college' },
+      { label: 'Ole Miss', type: 'college' },
+      { label: 'TCU', type: 'college' },
+      { label: 'West Virginia', type: 'college' },
     ],
     cols: [
-      { label: 'Running Back', type: 'position' },
       { label: 'Defensive Back', type: 'position' },
-      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Defensive Lineman', type: 'position' },
     ],
   },
   {
     id: 'cg611-073',
     rows: [
-      { label: 'Mississippi State', type: 'college' },
-      { label: 'BYU', type: 'college' },
-      { label: 'Clemson', type: 'college' },
+      { label: 'UCLA', type: 'college' },
+      { label: 'Louisville', type: 'college' },
+      { label: 'Alabama', type: 'college' },
     ],
     cols: [
-      { label: 'Linebacker', type: 'position' },
-      { label: 'Offensive Lineman', type: 'position' },
-      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Running Back', type: 'position' },
+      { label: 'Quarterback', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
     ],
   },
   {
@@ -965,25 +965,25 @@ export const collegeGridPuzzles: GridPuzzle[] = [
     rows: [
       { label: 'Cincinnati', type: 'college' },
       { label: 'Michigan State', type: 'college' },
-      { label: 'Alabama', type: 'college' },
+      { label: 'Tennessee', type: 'college' },
     ],
     cols: [
-      { label: 'Defensive Lineman', type: 'position' },
-      { label: 'Tight End', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
       { label: 'Wide Receiver', type: 'position' },
+      { label: 'Tight End', type: 'position' },
     ],
   },
   {
     id: 'cg611-075',
     rows: [
       { label: 'Ohio State', type: 'college' },
-      { label: 'Cincinnati', type: 'college' },
+      { label: 'BYU', type: 'college' },
       { label: 'Miami (FL)', type: 'college' },
     ],
     cols: [
-      { label: 'Tight End', type: 'position' },
-      { label: 'Offensive Lineman', type: 'position' },
-      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Running Back', type: 'position' },
+      { label: 'Linebacker', type: 'position' },
+      { label: 'Quarterback', type: 'position' },
     ],
   },
 ];
