@@ -72,6 +72,15 @@ How it works:
 
 ## DESKTOP LANE NOTE, written 2026-09-11 by the desktop session (Claude Code on Anthony's PC). READ FIRST.
 
+**2026-09-15, Codex animation release being verified.** Rounds 603 to 605 are
+assembled in `.worktrees/animation-release-603-605`. The release includes 586
+as a base and must follow its separate publication. Focused animation checks
+are passing; full combined release checks and publication are still owed.
+Round 587 is also in progress in its own worktree and is not part of this
+animation release. The AdSense review remains pending; no repeat request was
+made. Preserve Claude's 610 to 619 engine/data scope and Cursor's formatting
+files when merging.
+
 **2026-09-15, Codex claims Round 605: basketball and football match motion.**
 The owner requested action animations across sports. This round uses the
 existing NFL and NBA Conquest arcade play feeds, in the two ConquestBoard
