@@ -1,0 +1,481 @@
+name: Verify integrated first team, animations, set pieces and boots
+
+on:
+  push:
+    branches: [codex/verify-integrated-588]
+
+concurrency:
+  group: dukb-integrated-release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 300
+    env:
+      CI: 'true'
+      ENGINES: chromium
+      UCL_S1_BASE: 'b528bda156d900cf8925191e3f4edd1d32245ac9'
+      PRERENDER_ONLY: '/stadium-tycoon,/wonderkid-factory,/club-manager,/soccer-career,/conquest,/conquest-nba,/champions-league-format-history,/nfl-playoff-format-history,/nba-playoff-format-history,/mlb-postseason-format-history,/nhl-playoff-format-history,/college-grid'
+      VITEST_MAX_THREADS: '1'
+      VITEST_MIN_THREADS: '1'
+      VITEST_MAX_FORKS: '1'
+      VITEST_MIN_FORKS: '1'
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6, verified official tag
+        with:
+          fetch-depth: 0 # simNewBadge reads route introduction history
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6, verified official tag
+        with:
+          node-version: '24.14.1'
+          package-manager-cache: false
+      - name: Install verification dependencies
+        timeout-minutes: 20
+        run: |
+          mkdir -p "$RUNNER_TEMP/round588-logs"
+          git rev-parse HEAD > "$RUNNER_TEMP/round588-logs/commit.txt"
+          npm ci --no-audit --no-fund 2>&1 | tee "$RUNNER_TEMP/round588-logs/install.log"
+          npm install --prefix "$RUNNER_TEMP/round588-browser-deps" --no-save --package-lock=false --no-audit --no-fund playwright@1.63.0
+          ln -s "$RUNNER_TEMP/round588-browser-deps/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/round588-browser-deps/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/round588-browser-deps/node_modules/playwright/cli.js" install --with-deps chromium
+          python3 -m venv "$RUNNER_TEMP/round588-python"
+          "$RUNNER_TEMP/round588-python/bin/python" -m pip install fonttools==4.63.0 pillow==12.3.0
+          echo "$RUNNER_TEMP/round588-python/bin" >> "$GITHUB_PATH"
+      - name: App type check
+        run: node_modules/.bin/tsc --noEmit -p tsconfig.app.json 2>&1 | tee "$RUNNER_TEMP/round588-logs/types.log"
+      - name: Verify clean checkout before recording build inputs
+        run: |
+          git diff --exit-code
+          git diff --cached --exit-code
+      - name: Record the exact build inputs
+        run: |
+          cat > "$RUNNER_TEMP/release-artifact.py" <<'PY'
+          import hashlib, json, os, pathlib, shutil, subprocess, sys
+          root = pathlib.Path.cwd()
+          temp = pathlib.Path(os.environ['RUNNER_TEMP'])
+          before_path = temp / 'release-inputs.json'
+          built_path = temp / 'release-outputs.json'
+          logs = temp / 'round588-logs'
+          logs.mkdir(parents=True, exist_ok=True)
+          def save_manifest_diagnostics(kind, expected, current):
+              previous = {row['path']: row for row in expected}
+              observed = {row['path']: row for row in current}
+              delta = {
+                  'added': sorted(set(observed) - set(previous)),
+                  'removed': sorted(set(previous) - set(observed)),
+                  'modified': sorted(name for name in previous.keys() & observed.keys() if previous[name] != observed[name]),
+              }
+              for label, value in [('before', expected), ('current', current), ('delta', delta)]:
+                  (logs / ('artifact-' + kind + '-' + label + '.json')).write_text(json.dumps(value, indent=2) + '\n')
+              print('Artifact ' + kind + ' delta: ' + json.dumps(delta, sort_keys=True), flush=True)
+
+          def generated(name):
+              return (name.startswith('public/') and name.endswith('.html')) or name in ('public/sitemap.xml', 'scripts/data/lastmod.json') or name.startswith('dist/')
+          def tracked_inputs():
+              names = subprocess.check_output(['git', 'ls-files', '-z']).decode().split('\0')
+              return sorted(name for name in names if name and not generated(name))
+          def record(name):
+              file = root / name
+              if file.is_symlink() or not file.is_file():
+                  raise RuntimeError('Expected a regular file: ' + name)
+              data = file.read_bytes()
+              result = {'path': name, 'bytes': len(data), 'sha256': hashlib.sha256(data).hexdigest()}
+              try:
+                  data.decode('utf-8')
+                  result['sha256Lf'] = hashlib.sha256(data.replace(b'\r\n', b'\n')).hexdigest()
+              except UnicodeDecodeError:
+                  pass
+              return result
+          def inputs():
+              return [record(name) for name in tracked_inputs()]
+          def output_names():
+              snapshots = sorted(file.relative_to(root).as_posix() for file in (root / 'public').rglob('*.html'))
+              dist = sorted(file.relative_to(root).as_posix() for file in (root / 'dist').rglob('*') if file.is_file())
+              names = sorted(set(snapshots + ['public/sitemap.xml', 'scripts/data/lastmod.json'] + dist))
+              if not snapshots or 'dist/index.html' not in names or 'dist/sitemap.xml' not in names:
+                  raise RuntimeError('Expected generated snapshots and complete dist output.')
+              return names
+          if sys.argv[1] == 'before':
+              before_path.write_text(json.dumps(inputs(), indent=2) + '\n')
+              shutil.copyfile(before_path, logs / 'artifact-inputs-before.json')
+              print('Recorded input hashes before build.')
+          elif sys.argv[1] == 'built':
+              built_path.write_text(json.dumps([record(name) for name in output_names()], indent=2) + '\n')
+              shutil.copyfile(built_path, logs / 'artifact-outputs-before.json')
+              print('Recorded generated file hashes after build.')
+          elif sys.argv[1] == 'package':
+              before = json.loads(before_path.read_text())
+              current_inputs = inputs()
+              save_manifest_diagnostics('inputs', before, current_inputs)
+              if current_inputs != before:
+                  raise RuntimeError('Tracked build inputs changed during verification.')
+              out = temp / 'release-build-output'
+              out.mkdir(exist_ok=False)
+              names = output_names()
+              built = json.loads(built_path.read_text())
+              current_outputs = [record(name) for name in names]
+              save_manifest_diagnostics('outputs', built, current_outputs)
+              if current_outputs != built:
+                  raise RuntimeError('Generated files changed after build during verification.')
+              outputs = []
+              for name in names:
+                  outputs.append(record(name))
+                  dest = out / name
+                  dest.parent.mkdir(parents=True, exist_ok=True)
+                  shutil.copyfile(root / name, dest)
+              manifest = {
+                  'schemaVersion': 1,
+                  'commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], text=True).strip(),
+                  'tree': subprocess.check_output(['git', 'rev-parse', 'HEAD^{tree}'], text=True).strip(),
+                  'runUrl': os.environ['GITHUB_SERVER_URL'] + '/' + os.environ['GITHUB_REPOSITORY'] + '/actions/runs/' + os.environ['GITHUB_RUN_ID'],
+                  'runAttempt': os.environ['GITHUB_RUN_ATTEMPT'],
+                  'node': subprocess.check_output(['node', '--version'], text=True).strip(),
+                  'python': sys.version.split()[0],
+                  'artifactScope': 'Generated repository snapshots plus exact dist files. Consult matching run logs for every gate and any explicitly reported skips.',
+                  'inputsBeforeBuild': before,
+                  'outputsAfterBuildAndUnchangedAfterGates': outputs,
+              }
+              (out / 'manifest.json').write_text(json.dumps(manifest, indent=2) + '\n')
+              print('Packaged ' + str(len(outputs)) + ' files; tracked inputs unchanged.')
+          else:
+              raise RuntimeError('Expected before, built or package mode.')
+          PY
+          python3 "$RUNNER_TEMP/release-artifact.py" before
+      - name: Build and regenerate snapshots
+        id: build
+        timeout-minutes: 65
+        run: npm run build:seo 2>&1 | tee "$RUNNER_TEMP/round588-logs/build-seo.log"
+      - name: Record generated files before tests
+        run: python3 "$RUNNER_TEMP/release-artifact.py" built
+      - name: Portable browser gates, isolated contexts and intercepted writes
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 60
+        run: |
+          cat > "$RUNNER_TEMP/round588-browser.mjs" <<'JS'
+          import path from 'node:path';
+          import { pathToFileURL } from 'node:url';
+          import { createRequire } from 'node:module';
+          const require = createRequire(path.join(process.cwd(), 'package.json'));
+          const pw = require('playwright');
+          async function protect(surface) {
+            await surface.route('**/*', async route => {
+              const request = route.request();
+              const url = new URL(request.url());
+              if (!['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)
+                && !['GET', 'HEAD'].includes(request.method())) {
+                await route.fulfill({ status: request.method() === 'OPTIONS' ? 204 : 200,
+                  headers: { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*',
+                    'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS' },
+                  contentType: 'application/json', body: request.method() === 'OPTIONS' ? '' : '[]' });
+              } else await route.continue();
+            });
+            return surface;
+          }
+          const launch = pw.chromium.launch.bind(pw.chromium);
+          pw.chromium.launch = async options => {
+            const browser = await launch(options);
+            const newContext = browser.newContext.bind(browser);
+            browser.newContext = async options => protect(await newContext({ ...options, serviceWorkers: 'block' }));
+            const newPage = browser.newPage.bind(browser);
+            browser.newPage = async options => protect(await newPage({ ...options, serviceWorkers: 'block' }));
+            return browser;
+          };
+          await import(pathToFileURL(path.resolve(process.argv[2])).href);
+          JS
+          node scripts/lib/hostLikeServer.mjs dist 4173 > "$RUNNER_TEMP/round588-logs/browser-server.log" 2>&1 &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for attempt in {1..30}; do
+            if curl --fail --silent http://127.0.0.1:4173/robots.txt >/dev/null; then break; fi
+            sleep 1
+          done
+          curl --fail --silent http://127.0.0.1:4173/robots.txt >/dev/null
+          export BASE=http://127.0.0.1:4173
+          export TYCOON_GEAR_CSS_KIND=built
+          export TYCOON_GEAR_CSS="$(python3 - <<'PY'
+          import pathlib, re
+          html = pathlib.Path('dist/index.html').read_text()
+          refs = re.findall(r'<link[^>]*href="(/assets/index-[^"]+\.css)"', html)
+          assert len(refs) == 1, 'Expected one exact built index stylesheet: ' + repr(refs)
+          css = pathlib.Path('dist') / refs[0].lstrip('/')
+          assert css.is_file(), 'Built stylesheet is missing: ' + str(css)
+          print(css.resolve())
+          PY
+          )"
+          test -f "$TYCOON_GEAR_CSS"
+          status=0
+          for gate in simPrerenderBoot playIphone playLeagueTableFit playFirstTeamFit playNationJob sweepWeight simDrawOrder simFaqSchema simSetPiecePresentation playTycoonSetPieceFit simDrillMotion simConquestMotion playTycoonGearFit simVictoryMoment; do
+            node "$RUNNER_TEMP/round588-browser.mjs" "scripts/$gate.mjs" 2>&1 | tee "$RUNNER_TEMP/round588-logs/$gate.log" || status=1
+          done
+          for control in motion frozen promotion loading late flash packstyle; do
+            case "$control" in
+              motion) assertion='Reduced motion has no running animations' ;;
+              frozen) assertion='Cup visibly lifts' ;;
+              promotion) assertion='entire promotion card fits pitch' ;;
+              loading) assertion='Pending trophy keeps committed title visible exactly once' ;;
+              late) assertion='Original parent dismissal or four-second lifetime wins over a held import' ;;
+              flash) assertion='Late CSS never hides or restarts an already visible cold notice' ;;
+              packstyle) assertion='First standalone pack owns its rise styles before reveal' ;;
+            esac
+            result=0
+            VICTORY_CONTROL="$control" node "$RUNNER_TEMP/round588-browser.mjs" scripts/simVictoryMoment.mjs > "$RUNNER_TEMP/round588-logs/victory-$control.log" 2>&1 || result=$?
+            cat "$RUNNER_TEMP/round588-logs/victory-$control.log"
+            test "$result" -eq 1 || status=1
+            grep -F "CONTROL $control:" "$RUNNER_TEMP/round588-logs/victory-$control.log" || status=1
+            grep -F 'AssertionError' "$RUNNER_TEMP/round588-logs/victory-$control.log" || status=1
+            grep -F "$assertion" "$RUNNER_TEMP/round588-logs/victory-$control.log" || status=1
+          done
+          if FIRST_TEAM_CONTROL=nowrap node "$RUNNER_TEMP/round588-browser.mjs" scripts/playFirstTeamFit.mjs > "$RUNNER_TEMP/round588-logs/first-team-nowrap.log" 2>&1; then
+            echo 'First team negative control did not fail'
+            status=1
+          fi
+          cat "$RUNNER_TEMP/round588-logs/first-team-nowrap.log"
+          grep -F 'CONTROL nowrap: actual tile-name wrapping replaced' "$RUNNER_TEMP/round588-logs/first-team-nowrap.log" || status=1
+          grep -F 'from intentional nowrap control' "$RUNNER_TEMP/round588-logs/first-team-nowrap.log" || status=1
+          ONLY=/stadium-tycoon,/wonderkid-factory,/club-manager,/soccer-career,/conquest,/conquest-nba,/champions-league-format-history,/nfl-playoff-format-history,/nba-playoff-format-history,/mlb-postseason-format-history,/nhl-playoff-format-history,/college-grid node "$RUNNER_TEMP/round588-browser.mjs" scripts/playRenderStability.mjs 2>&1 | tee "$RUNNER_TEMP/round588-logs/playRenderStability.log" || status=1
+          for control in wide clock; do
+            result=0
+            TYCOON_SET_PIECE_FIT_CONTROL="$control" node "$RUNNER_TEMP/round588-browser.mjs" scripts/playTycoonSetPieceFit.mjs > "$RUNNER_TEMP/round588-logs/set-piece-fit-$control.log" 2>&1 || result=$?
+            cat "$RUNNER_TEMP/round588-logs/set-piece-fit-$control.log"
+            test "$result" -eq 1 || status=1
+            grep -F "CONTROL $control: actual built page chunk mutated once before browser evaluation" "$RUNNER_TEMP/round588-logs/set-piece-fit-$control.log" || status=1
+            grep -F "CONTROL PROVED $control:" "$RUNNER_TEMP/round588-logs/set-piece-fit-$control.log" || status=1
+          done
+          for control in wide move upgrade floor cap max; do
+            case "$control" in
+              wide) assertion='Boot room: no horizontal overflow' ;;
+              move) assertion='UI moves the selected pair to selected wearer' ;;
+              upgrade) assertion='One click raises level exactly one' ;;
+              floor) assertion='Rating60 shows the no-defense threshold explanation' ;;
+              cap) assertion='Displayed match rating is capped at99' ;;
+              max) assertion='Maximum level3 disables another upgrade' ;;
+            esac
+            result=0
+            TYCOON_GEAR_FIT_CONTROL="$control" node "$RUNNER_TEMP/round588-browser.mjs" scripts/playTycoonGearFit.mjs > "$RUNNER_TEMP/round588-logs/gear-fit-$control.log" 2>&1 || result=$?
+            cat "$RUNNER_TEMP/round588-logs/gear-fit-$control.log"
+            test "$result" -eq 1 || status=1
+            grep -F "CONTROL MUTATION APPLIED: $control" "$RUNNER_TEMP/round588-logs/gear-fit-$control.log" || status=1
+            grep -F 'AssertionError' "$RUNNER_TEMP/round588-logs/gear-fit-$control.log" || status=1
+            grep -F "$assertion" "$RUNNER_TEMP/round588-logs/gear-fit-$control.log" || status=1
+          done
+          cat > "$RUNNER_TEMP/reduced-motion.mjs" <<'JS'
+          import fs from 'node:fs/promises';
+          import os from 'node:os';
+          import path from 'node:path';
+          import assert from 'node:assert/strict';
+          import { pathToFileURL } from 'node:url';
+
+          const root = path.resolve(process.argv[2]);
+          const pw = (await import(pathToFileURL(path.join(root, 'scripts/lib/playwrightLoader.mjs')).href)).default;
+          const launch = pw.chromium.launch.bind(pw.chromium);
+          async function protect(surface) {
+            await surface.route('**/*', async route => {
+              const request = route.request();
+              if (!['localhost', '127.0.0.1', '[::1]'].includes(new URL(request.url()).hostname)
+                && !['GET', 'HEAD'].includes(request.method())) {
+                await route.fulfill({ status: request.method() === 'OPTIONS' ? 204 : 200,
+                  headers: { 'access-control-allow-origin': '*', 'access-control-allow-headers': '*',
+                    'access-control-allow-methods': 'GET, POST, PUT, PATCH, DELETE, OPTIONS' },
+                  contentType: 'application/json', body: request.method() === 'OPTIONS' ? '' : '[]' });
+              } else await route.continue();
+            });
+            return surface;
+          }
+          pw.chromium.launch = async options => {
+            const browser = await launch(options);
+            const context = browser.newContext.bind(browser);
+            const page = browser.newPage.bind(browser);
+            browser.newContext = async options => protect(await context({ ...options, serviceWorkers: 'block' }));
+            browser.newPage = async options => protect(await page({ ...options, serviceWorkers: 'block' }));
+            return browser;
+          };
+          let source = await fs.readFile(path.join(root, 'scripts/playReducedMotion.mjs'), 'utf8');
+          function replace(before, after) {
+            assert.equal(source.split(before).length, 2, 'Portable harness anchor must match once: ' + before);
+            source = source.replace(before, after);
+          }
+          replace("'file:///C:/Users/antho/ballpark-hero/scripts/lib/playwrightLoader.mjs'", JSON.stringify(pathToFileURL(path.join(root, 'scripts/lib/playwrightLoader.mjs')).href));
+          replace("'C:/Users/antho/ballpark-hero/src/components/club-manager/Celebration.tsx'", JSON.stringify(path.join(root, 'src/components/club-manager/Celebration.tsx')));
+          replace("const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');", 'const ROOT = ' + JSON.stringify(root) + ';');
+          const folder = await fs.mkdtemp(path.join(os.tmpdir(), 'dukb-reduced-motion-'));
+          const file = path.join(folder, 'portable.mjs');
+          await fs.writeFile(file, source);
+          console.log('Portable reduced-motion harness, unchanged assertions:', root);
+          await import(pathToFileURL(file).href);
+          JS
+          node "$RUNNER_TEMP/reduced-motion.mjs" "$PWD" 2>&1 | tee "$RUNNER_TEMP/round588-logs/reduced-motion.log" || status=1
+          REDUCED_MOTION_CONTROL=noguard node "$RUNNER_TEMP/reduced-motion.mjs" "$PWD" 2>&1 | tee "$RUNNER_TEMP/round588-logs/reduced-motion-control.log" || status=1
+          grep -F 'playReducedMotion control: green.' "$RUNNER_TEMP/round588-logs/reduced-motion-control.log" || status=1
+          exit "$status"
+      - name: Full Vitest, one worker
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 45
+        run: node node_modules/vitest/vitest.mjs run --maxWorkers=1 2>&1 | tee "$RUNNER_TEMP/round588-logs/vitest.log"
+      - name: Full node harness suite
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 180
+        run: |
+          node scripts/runAllSims.mjs 2>&1 | tee "$RUNNER_TEMP/round588-logs/node-sims.log"
+          python3 - <<'PY'
+          import json, os, pathlib, re
+          def node_rows(log):
+              heading = re.search(r'Running (\d+) node harnesses', log)
+              assert heading, 'No full node-suite heading in the output'
+              ending = re.search(r'Skipping \d+ browser harnesses', log[heading.end():])
+              assert ending, 'No browser-category boundary after the node table'
+              table = log[heading.end():heading.end() + ending.start()]
+              rows = re.findall(r'\s(PASS|FAIL|EMPTY|SKIP)\s+([A-Za-z0-9]+\.mjs)\s+[0-9.]+s\s*$', table, re.MULTILINE)
+              expected = int(heading.group(1))
+              assert expected > 0 and len(rows) == expected, (expected, len(rows))
+              assert len({name for _, name in rows}) == expected, 'Duplicate node result rows'
+              return rows
+          def require_complete(rows):
+              bad = [(status, name) for status, name in rows if status != 'PASS']
+              assert not bad, 'Fresh node suite has incomplete or failed results: ' + repr(bad)
+          folder = pathlib.Path(os.environ['RUNNER_TEMP']) / 'round588-logs'
+          rows = node_rows((folder / 'node-sims.log').read_text())
+          require_complete(rows)
+          (folder / 'fresh-node-results.json').write_text(json.dumps(rows, indent=2) + '\n')
+          print('Verified ' + str(len(rows)) + ' fresh PASS rows; no failed, empty or skipped node checks.')
+          PY
+      - name: Require the live College Grid table comparison
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 15
+        run: |
+          node scripts/simCollegeGridKey.mjs 2>&1 | tee "$RUNNER_TEMP/round588-logs/college-grid-live.log"
+          python3 - <<'PY'
+          import json, os, pathlib, re
+          folder = pathlib.Path(os.environ['RUNNER_TEMP']) / 'round588-logs'
+          log = (folder / 'college-grid-live.log').read_text()
+          expected_rows = len(json.loads(pathlib.Path('scripts/data/collegeGridPlayers.json').read_text())['rows'])
+          assert expected_rows > 0, 'Committed College Grid key has no rows'
+          pattern = re.compile(r'^[ \t]*8b: the table holds (\d+) rows; judged columns hash ([0-9a-f]{16}) in the file[ \t]*$', re.M)
+          def require_live_check(text):
+              assert not re.search(r'^.*\b8b\b[^\r\n]*\bSKIPPED\b', text, re.M | re.I), 'College Grid 8b was skipped'
+              matches = list(pattern.finditer(text))
+              assert len(matches) == 1, 'Expected exactly one College Grid 8b rows/hash result'
+              match = matches[0]
+              assert int(match.group(1)) == expected_rows, 'College Grid 8b row count differs from committed JSON'
+              return match
+          healthy = require_live_check(log)
+          skipped = '   8b: SKIPPED, NOT CHECKED: parser negative control'
+          controls = {
+              'replace': log[:healthy.start()] + skipped + log[healthy.end():],
+              'append': log + '\n' + skipped + '\n',
+          }
+          for name, changed in controls.items():
+              assert changed != log, 'College Grid parser control did not change the log: ' + name
+              try:
+                  require_live_check(changed)
+              except AssertionError as error:
+                  assert str(error) == 'College Grid 8b was skipped', (name, str(error))
+                  print('CONTROL PROVED: College Grid 8b ' + name + ' skip rejected')
+              else:
+                  raise AssertionError('College Grid parser accepted a skip: ' + name)
+          (folder / 'college-grid-live-proof.json').write_text(json.dumps({
+              'rows': expected_rows, 'judgedColumnsHash': healthy.group(2),
+              'resultCount': 1, 'skipped': False, 'parserControls': list(controls),
+          }, indent=2) + '\n')
+          print('Verified live College Grid 8b rows/hash result against committed row count; no skip.')
+          PY
+      - name: Prove value curve controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 30
+        run: |
+          for control in noprime flatedge; do
+            if VALUE_CONTROL="$control" node scripts/simAllPlayersValue.mjs > "$RUNNER_TEMP/round588-logs/value-$control.log" 2>&1; then
+              cat "$RUNNER_TEMP/round588-logs/value-$control.log"
+              echo "Negative control did not fail: $control"
+              exit 1
+            fi
+            cat "$RUNNER_TEMP/round588-logs/value-$control.log"
+            grep -F 'FAIL' "$RUNNER_TEMP/round588-logs/value-$control.log"
+          done
+      - name: Prove watched-kick engine and actual-page controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 30
+        run: |
+          for control in twice retry away window nogain bonus forget loader ignored random daily; do
+            result=0
+            SETPIECE_CONTROL="$control" node scripts/simTycoonSetPiece.mjs > "$RUNNER_TEMP/round588-logs/set-piece-engine-$control.log" 2>&1 || result=$?
+            cat "$RUNNER_TEMP/round588-logs/set-piece-engine-$control.log"
+            test "$result" -eq 1
+            grep -F "CONTROL $control: one unique executable mutation applied" "$RUNNER_TEMP/round588-logs/set-piece-engine-$control.log"
+            grep -F "CONTROL PROVED $control:" "$RUNNER_TEMP/round588-logs/set-piece-engine-$control.log"
+          done
+          for control in opening openearly roundtrip goalearly retry close clock fulltime rep score minute setup; do
+            result=0
+            SETPIECE_PAGE_CONTROL="$control" node scripts/simTycoonSetPiecePage.mjs > "$RUNNER_TEMP/round588-logs/set-piece-page-$control.log" 2>&1 || result=$?
+            cat "$RUNNER_TEMP/round588-logs/set-piece-page-$control.log"
+            test "$result" -eq 1
+            grep -F "CONTROL $control: one unique executable mutation applied outside src" "$RUNNER_TEMP/round588-logs/set-piece-page-$control.log"
+            grep -F "CONTROL PROVED $control:" "$RUNNER_TEMP/round588-logs/set-piece-page-$control.log"
+          done
+      - name: Live sim runtime controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 30
+        run: |
+          for control in trigger save pause mutation lineup speed reduced terminal redraw; do
+            if LIVE_MOTION_CONTROL="$control" node scripts/simLiveSimMotion.mjs > "$RUNNER_TEMP/round588-logs/live-$control.log" 2>&1; then
+              cat "$RUNNER_TEMP/round588-logs/live-$control.log"
+              echo "Negative control did not fail: $control"
+              exit 1
+            fi
+            grep -F "Negative control changed temporary source: $control" "$RUNNER_TEMP/round588-logs/live-$control.log"
+            grep -E 'AssertionError|expected .* to' "$RUNNER_TEMP/round588-logs/live-$control.log"
+          done
+      - name: Prove the moved season binding guard
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 20
+        run: |
+          EARLY_RETURN_CONTROL=tdz node scripts/simEarlyReturnScope.mjs 2>&1 | tee "$RUNNER_TEMP/round588-logs/early-return-control.log"
+          grep -F 'CONTROL FIRED: the injected temporal dead zone was caught' "$RUNNER_TEMP/round588-logs/early-return-control.log"
+      - name: Prove title gear engine and actual-page controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 30
+        run: |
+          for control in fee edge cap duplicate repeat title summit pack upgrade locked save cache writer catalog order; do
+            result=0
+            GEAR_CONTROL="$control" node scripts/simTycoonGear.mjs > "$RUNNER_TEMP/round588-logs/gear-engine-$control.log" 2>&1 || result=$?
+            cat "$RUNNER_TEMP/round588-logs/gear-engine-$control.log"
+            test "$result" -eq 1
+            grep -F "CONTROL $control: one unique executable mutation applied" "$RUNNER_TEMP/round588-logs/gear-engine-$control.log"
+            grep -F "CONTROL PROVED $control:" "$RUNNER_TEMP/round588-logs/gear-engine-$control.log"
+          done
+          for control in division order stadium notice equip upgrade edge; do
+            result=0
+            GEAR_PAGE_CONTROL="$control" node scripts/simTycoonGearPage.mjs > "$RUNNER_TEMP/round588-logs/gear-page-$control.log" 2>&1 || result=$?
+            cat "$RUNNER_TEMP/round588-logs/gear-page-$control.log"
+            test "$result" -eq 1
+            grep -F "CONTROL $control: one unique executable mutation applied outside src" "$RUNNER_TEMP/round588-logs/gear-page-$control.log"
+            grep -F "CONTROL PROVED $control:" "$RUNNER_TEMP/round588-logs/gear-page-$control.log"
+          done
+      - name: Package the verified build outputs
+        if: ${{ success() }}
+        run: python3 "$RUNNER_TEMP/release-artifact.py" package
+      - name: Preserve generated snapshots and the exact built site
+        if: ${{ success() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6, verified official tag
+        with:
+          name: round588-build-output-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/release-build-output/
+          retention-days: 3
+          if-no-files-found: error
+          include-hidden-files: false
+      - name: Preserve verification logs
+        if: ${{ always() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6, verified official tag
+        with:
+          name: round588-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: ${{ runner.temp }}/round588-logs/
+          retention-days: 7
+          if-no-files-found: warn
+          include-hidden-files: false
