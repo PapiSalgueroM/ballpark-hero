@@ -1099,6 +1099,8 @@ rows above:
 - `VALUE_CONTROL=noprime`: 2 and the earn half of 3 red.
 - `VALUE_CONTROL=flatedge`: the win half of 3, and 5, red.
 
+Round 586 implementation evidence and contract corrections are in section 18.
+
 ### Round 587: Set pieces (rides alone)
 
 **Files:** `src/components/tycoon/SetPieceBoard.tsx`, `stadiumTycoon.ts` (`setPieceOffer`, `awardSetPieceGoal`, `setPieceUsedMatch` in `prestige`), the hook, the page, help.
@@ -1284,3 +1286,53 @@ Only two items genuinely need Anthony, because both touch the money side of the 
 2. **Ad slots on the tycoon page.**
    - The page has no ad slot today.
    - **Default:** add none in this arc. If one is ever added, it sits below the guide, never beside the tab strip, the pitch or the pack panel, and never offers gems for viewing.
+
+## 18. Round 586 implementation evidence, 2026-09-15
+
+Source and focused tests are complete; release gates and publication are separate.
+The original contract above stays as the proposal. These measured corrections
+describe the implementation and supersede its unsupported numerical assumptions.
+
+- The old 52,920 quote sample cannot be reproduced because its sampling definition
+  was never stored. The harness instead checks 334,620 explicitly enumerated youth
+  quotes against a frozen pre-round fee function, with the original multiplication
+  order. It also checks 18,920 senior age comparisons.
+- Twelve frozen stadium histories cover watched and away play with zero edge.
+  All 195 one-point rating steps from 60 through 99 use the real tick consumer;
+  the away consumer is tested too. No empty-roster result changes.
+- The policy comparison fixes ten mid-division seasons, fixtures, upgrades, random
+  streams and a greedy refill rule. It uses a mature pack cohort and local scout
+  replacements, not an unrestricted optimal-play claim. In 32 independent holdout
+  seeds, holding to 33 gains 3.1875 wins per ten seasons. Selling at 28 yields mean
+  transfer cash of 25,346.47 versus 22,479.63 for holding. The initial-cohort cash
+  advantage is 2,016.06, above the 1,010.34375 floor set from half the separate
+  calibration effect. The win floor is 1.828125. Both floors pass the holdout.
+- Removing the prime curve leaves some cash advantage from rating decline and
+  replacement timing. It does not reverse the direction as the proposal assumed.
+  The no-prime control instead fails the measured cash-effect floor and prime
+  checks; the flat-edge control fails the wins floor and direct edge checks.
+- The first five region goals stay unchanged. The old 400M World Stage goal misses
+  the 100-hour sixth-star target. Twelve seeds had earned only 48.71M to 49.36M
+  there at 100 watched hours. The goal is now 45M. All twelve reach star six in
+  96.756 to 97.239 watched hours, median 96.982, with real packs in the loop.
+  Because the final region repeats, this also lowers the goal for stars 7 to 60.
+  One representative seed reaches all 60 at 705.153 watched hours and 1,754 packs.
+  This is a deterministic simulation estimate, not a promise to every player.
+- The first-team panel shows five selectable places and one detailed player card.
+  Promotion, senior sale and academy move-up write the full save successfully
+  before changing the visible roster. Failed writes leave the action available
+  for retry. The existing save version and keys stay unchanged. First-team fields
+  remain absent from untouched older saves; move-up and Sell up keep graduates.
+- A returning first team mounts the Academy clock even if its tab never opens.
+  Before that lazy panel loads, a separate read-only snapshot applies the same
+  offline training as the actual hook. Review found that deserialize alone could
+  commit away draws using an old rating while a warm Academy produced wins.
+  The real-page test now measures that cold-load result and verifies training
+  is saved once. Seven page cases have six effective mutation controls.
+- The guide says career totals survive move-up. It no longer says the best single
+  sale survives, because that run-level record resets in the existing engine.
+
+Evidence: `scripts/simAllPlayersValue.mjs`, its frozen fixture and baseline JSON,
+`src/test/firstTeam.test.tsx`, `scripts/simFirstTeamPage.mjs` and the extended
+`scripts/simTycoonHelp.mjs`. The release entry in PROJECT-STATE records final
+build, full-suite, browser and publication evidence when those gates finish.

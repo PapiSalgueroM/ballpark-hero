@@ -27,6 +27,9 @@
  */
 
 import { intlName, NATION_FAMILY } from '@/lib/intlNames';
+import { ensureUniqueIds, makeIdMinter } from '@/lib/entityIds';
+import { basePrice } from '@/lib/playerValue';
+export { basePrice } from '@/lib/playerValue';
 
 /* ------------------------------------------------------------------ tuning */
 
@@ -48,7 +51,7 @@ export const REGIONS: Region[] = [
   { name: 'Port City', emoji: '⚓', potMin: 66, potMax: 86, goal: 700_000 },
   { name: 'The Capital', emoji: '🏛️', potMin: 70, potMax: 91, goal: 5_500_000 },
   { name: 'Continental Hub', emoji: '✈️', potMin: 74, potMax: 95, goal: 45_000_000 },
-  { name: 'World Stage', emoji: '🌍', potMin: 78, potMax: 99, goal: 400_000_000 },
+  { name: 'World Stage', emoji: '🌍', potMin: 78, potMax: 99, goal: 45_000_000 },
 ];
 
 export type FacilityId = 'scouting' | 'coaching' | 'dorms' | 'agents';
@@ -76,6 +79,12 @@ const TRAIN_BASE = 0.085;
 export const YEAR_SEC = 300;
 /** kids leave on a free at this age. The clock is the pressure. */
 export const LEAVE_AGE = 24;
+/** First team years run only while the academy is watched. */
+export const SENIOR_YEAR_SEC = 900;
+export const FIRST_TEAM_SLOTS = 5;
+export const PROMOTE_AGE = 18;
+export const RETIRE_AGE = 34;
+export const SENIOR_DECLINE = 1.2;
 
 export const SHOWCASE_COOLDOWN = 150;
 export const SHOWCASE_SEC = 25;
@@ -175,6 +184,11 @@ export interface Prospect {
   tier?: TierId;
 }
 
+/** A graduate keeps his name and ability, with a separate first team id. */
+export interface Senior extends Omit<Prospect, 'id'> {
+  id: string;
+}
+
 export interface FactoryState {
   v: number;
   seed: number;
@@ -206,6 +220,9 @@ export interface FactoryState {
    *  opened once is delivered once, whatever reloads in between. Optional, so
    *  every older save loads as it did. */
   packsDelivered?: number;
+  /** Optional so untouched V1 saves keep their original shape. */
+  firstTeam?: Senior[];
+  retired?: number;
 }
 
 /* -------------------------------------------------------------------- prng */
@@ -232,16 +249,13 @@ const NATIONS: string[] = [
 ];
 const POSITIONS: Pos[] = ['GK', 'DF', 'DF', 'MF', 'MF', 'MF', 'FW', 'FW'];
 
-/** price flavour by position, mild on purpose and measured in the harness */
-const POS_PRICE: Record<Pos, number> = { GK: 0.95, DF: 1.0, MF: 1.04, FW: 1.08 };
-
 /** Round 206's rule for Round 216: no two kids in the academy share a name.
  *  Reroll a dozen times, then walk deterministically, so this can neither
  *  fail nor loop. The walk crosses into OTHER nations if it has to, because
  *  intlName's stride arithmetic gives one nation only twelve distinct names
  *  and a twelve bed academy can in principle drain one nation dry. */
 function uniqueKidName(s: FactoryState, nation: string, rng: () => number): string {
-  const taken = new Set(s.prospects.map(p => p.name));
+  const taken = new Set([...s.prospects, ...(s.firstTeam ?? [])].map(p => p.name));
   for (let i = 0; i < 12; i++) {
     const n = intlName(nation, Math.floor(rng() * 100_000));
     if (!taken.has(n)) return n;
@@ -252,7 +266,7 @@ function uniqueKidName(s: FactoryState, nation: string, rng: () => number): stri
       if (!taken.has(n)) return n;
     }
   }
-  /* thirty two nations of twelve names against at most a dozen beds: the
+  /* thirty two nations of twelve names against at most seventeen players: the
      walk always finds one, this line is for the type checker */
   return intlName(nation, 0);
 }
@@ -273,7 +287,7 @@ export function makeProspectInBand(s: FactoryState, potMin: number, potMax: numb
   const potential = Math.round(potMin + rng() * (potMax - potMin));
   const rating = Math.round(40 + rng() * Math.min(18, potential - 42));
   return {
-    id: s.nextId++,
+    id: mintKidId(s),
     name: uniqueKidName(s, nation, rng),
     nation,
     pos,
@@ -302,7 +316,7 @@ export function cleanPackKid(kid: Prospect, tier: TierId): Prospect | null {
   const potential = Math.min(band.potMax, Math.max(band.potMin, Math.round(Number.isFinite(kid.potential) ? kid.potential : band.potMin)));
   return {
     id: Number.isSafeInteger(kid.id) && kid.id > 0 ? kid.id : 1,
-    name: typeof kid.name === 'string' ? kid.name : '',
+    name: isPlayerName(kid.name) ? kid.name : '',
     nation,
     pos: POSITIONS.includes(kid.pos) ? kid.pos : 'MF',
     age: Number.isFinite(kid.age) ? Math.min(LEAVE_AGE - 1, Math.max(15, Math.floor(kid.age))) : 16,
@@ -326,10 +340,10 @@ export function deliverPack(s: FactoryState, seq: number, kid: Prospect, tier: T
      generator of his own rather than the academy's, so the scouts never move. */
   let own = seq | 0;
   const ownRng = () => { own = (own + 0x6d2b79f5) | 0; return ((Math.imul(own ^ (own >>> 15), own | 1) >>> 0) % 1000) / 1000; };
-  const name = clean.name && !s.prospects.some(p => p.name === clean.name) ? clean.name : uniqueKidName(s, clean.nation, ownRng);
+  const name = clean.name && ![...s.prospects, ...(s.firstTeam ?? [])].some(p => p.name === clean.name) ? clean.name : uniqueKidName(s, clean.nation, ownRng);
   s.prospects.push({
     ...clean,
-    id: s.nextId++,
+    id: mintKidId(s),
     name,
   });
   s.packsDelivered = seq;
@@ -361,7 +375,7 @@ export function findSec(s: FactoryState): number {
 }
 
 /** what the scouts can tell you about a ceiling at this level */
-export function potentialRead(s: FactoryState, p: Prospect): { kind: 'hidden' | 'range' | 'exact'; lo?: number; hi?: number } {
+export function potentialRead(s: FactoryState, p: Prospect | Senior): { kind: 'hidden' | 'range' | 'exact'; lo?: number; hi?: number } {
   if (s.levels.scouting >= 6) return { kind: 'exact', lo: p.potential, hi: p.potential };
   /* Round 585: a pack kid comes with his tier, so below Scouting 6 his band is known. */
   const band = p.tier ? TIERS.find(t => t.id === p.tier) : undefined;
@@ -373,25 +387,23 @@ export function potentialRead(s: FactoryState, p: Prospect): { kind: 'hidden' | 
   return { kind: 'hidden' };
 }
 
-/** The age premium: a 16 year old with room to grow is the prize, a 23 year
- *  old is just his rating. Fades linearly from 21 to 23. */
-function ageFactor(age: number): number {
-  if (age <= 20) return 1;
-  if (age >= 23) return 0;
-  return (23 - age) / 3;
-}
-
-/** the raw curve, exported so the help copy quotes the exact same maths */
-export function basePrice(rating: number, potential: number, age: number, pos: Pos = 'MF'): number {
-  const skill = Math.pow(rating, 2.35) / 60;
-  /* 0.022 sits under 2.35/99, the exact bound that keeps the fee strictly
-     rising in rating: training a kid must never cut his price */
-  const promise = 1 + (potential - rating) * 0.022 * ageFactor(age);
-  return skill * promise * POS_PRICE[pos];
-}
-
-export function salePrice(s: FactoryState, p: Prospect): number {
+export function salePrice(s: FactoryState, p: Prospect | Senior): number {
   return Math.round(basePrice(p.rating, p.potential, p.age, p.pos) * priceMult(s));
+}
+
+/** The next birthday without further training or a change in sale bonuses. */
+export function seniorBirthdayPreview(s: FactoryState, p: Senior): { age: number; rating: number; price: number; retiring: boolean } {
+  const age = p.age + 1;
+  const rating = age >= 30 ? Math.max(30, p.rating - SENIOR_DECLINE) : p.rating;
+  const retiring = age >= RETIRE_AGE;
+  return { age, rating, price: retiring ? 0 : salePrice(s, { ...p, age, rating }), retiring };
+}
+
+/** This defensive edge belongs to the first team, not a purchasable track. */
+export function squadEdge(s: FactoryState): number {
+  const total = (s.firstTeam ?? []).slice(0, FIRST_TEAM_SLOTS).reduce((sum, p) =>
+    sum + Math.max(0, Math.min(99, p.rating) - 60), 0);
+  return Math.min(0.40, total * 0.002);
 }
 
 export function facilityCost(s: FactoryState, id: FacilityId): number {
@@ -449,6 +461,47 @@ export function sellProspect(s: FactoryState, id: number): number | null {
   return price;
 }
 
+let seniorIdMinter: (() => string) | undefined;
+function freshSeniorId(taken: Set<string>): string {
+  seniorIdMinter ??= makeIdMinter('sr');
+  let id = seniorIdMinter();
+  while (taken.has(id)) id = seniorIdMinter();
+  taken.add(id);
+  return id;
+}
+
+/** Promote a graduate without changing his age or his progress to a birthday. */
+export function promote(s: FactoryState, id: number): boolean {
+  const firstTeam = s.firstTeam ?? [];
+  if (firstTeam.length >= FIRST_TEAM_SLOTS) return false;
+  const i = s.prospects.findIndex(p => p.id === id);
+  if (i === -1) return false;
+  const p = s.prospects[i];
+  if (p.age < PROMOTE_AGE || p.age >= LEAVE_AGE) return false;
+  firstTeam.push({
+    ...p,
+    id: freshSeniorId(new Set(firstTeam.map(player => player.id))),
+    ageClock: p.ageClock * SENIOR_YEAR_SEC / YEAR_SEC,
+  });
+  s.firstTeam = firstTeam;
+  s.prospects.splice(i, 1);
+  return true;
+}
+
+export function sellSenior(s: FactoryState, id: string): number | null {
+  const i = s.firstTeam?.findIndex(p => p.id === id) ?? -1;
+  if (i === -1) return null;
+  const price = salePrice(s, s.firstTeam![i]);
+  s.firstTeam!.splice(i, 1);
+  s.cash += price;
+  s.lifetime += price;
+  s.careerEarned += price;
+  s.sold += 1;
+  s.soldCareer += 1;
+  if (price > s.best) s.best = price;
+  return price;
+}
+
 export function startShowcase(s: FactoryState): boolean {
   if (s.showcaseCooldown > 0 || s.showcaseLeft > 0) return false;
   s.showcaseLeft = SHOWCASE_SEC;
@@ -464,7 +517,7 @@ export function canMoveUp(s: FactoryState): boolean {
 export function moveUp(s: FactoryState): boolean {
   if (!canMoveUp(s)) return false;
   const now = s.lastSeen;
-  const carried: Pick<FactoryState, 'rep' | 'careerEarned' | 'soldCareer' | 'seed' | 'nextId' | 'awayMs' | 'packsDelivered'> = {
+  const carried: Pick<FactoryState, 'rep' | 'careerEarned' | 'soldCareer' | 'seed' | 'nextId' | 'awayMs' | 'packsDelivered' | 'firstTeam' | 'retired'> = {
     rep: s.rep + 1,
     careerEarned: s.careerEarned,
     soldCareer: s.soldCareer,
@@ -472,9 +525,13 @@ export function moveUp(s: FactoryState): boolean {
     nextId: s.nextId,
     awayMs: s.awayMs ?? 0,
     packsDelivered: s.packsDelivered,
+    firstTeam: s.firstTeam,
+    retired: s.retired,
   };
   Object.assign(s, newFactory(now), carried);
   if (carried.packsDelivered === undefined) delete s.packsDelivered;
+  if (carried.firstTeam === undefined) delete s.firstTeam;
+  if (carried.retired === undefined) delete s.retired;
   return true;
 }
 
@@ -483,7 +540,7 @@ export function moveUp(s: FactoryState): boolean {
 /** Advance the academy by dt seconds of play. Never called with wall-clock
  *  gaps: applyOffline handles those under its own cap. */
 export function tick(s: FactoryState, dt: number, opts?: { offline?: boolean }): void {
-  if (!(dt > 0)) return;
+  if (!(dt > 0) || !Number.isFinite(dt)) return;
   const offline = opts?.offline === true;
 
   /* clocks that only run while someone is watching */
@@ -551,6 +608,36 @@ export function tick(s: FactoryState, dt: number, opts?: { offline?: boolean }):
     if (i !== -1) {
       s.prospects.splice(i, 1);
       s.leftFree += 1;
+    }
+  }
+
+  /* Seniors use the same academy session, with half the growth rate. Split at
+     birthdays so a long watched tick cannot train through a holding year or
+     miss one of the later declines. Away sessions never move this calendar. */
+  for (const p of s.firstTeam ?? []) {
+    let left = dt;
+    while (left > 0 && p.age < RETIRE_AGE) {
+      const seconds = offline ? left : Math.min(left, SENIOR_YEAR_SEC - p.ageClock);
+      if (p.age <= 27 && p.rating < p.potential) {
+        const headroom = Math.max(0.12, (p.potential - p.rating) / Math.max(1, p.potential - 40));
+        p.rating = Math.min(p.potential, p.rating + TRAIN_BASE * tm * headroom * seconds * 0.5);
+      }
+      left -= seconds;
+      if (offline) break;
+      p.ageClock += seconds;
+      if (p.ageClock >= SENIOR_YEAR_SEC) {
+        p.ageClock = 0;
+        p.age += 1;
+        if (p.age >= 30) p.rating = Math.max(30, p.rating - SENIOR_DECLINE);
+      }
+    }
+  }
+  if (s.firstTeam) {
+    const active = s.firstTeam.filter(p => p.age < RETIRE_AGE);
+    const retired = s.firstTeam.length - active.length;
+    if (retired > 0) {
+      s.retired = (s.retired ?? 0) + retired;
+      s.firstTeam = active;
     }
   }
 }
@@ -647,12 +734,18 @@ export function deserialize(raw: string | null, now: number): FactoryState | nul
     if (s.packsDelivered !== undefined) {
       s.packsDelivered = Number.isSafeInteger(s.packsDelivered) && (s.packsDelivered as number) > 0 ? (s.packsDelivered as number) : 0;
     }
+    if (s.retired !== undefined) {
+      s.retired = Number.isFinite(s.retired) && (s.retired as number) > 0 ? Math.min(1e9, Math.floor(s.retired as number)) : 0;
+    }
     /* Round 581, Round 568's rule for a persisted counter: the next id must sit
        above every id already written, or the next kid scouted is handed an id a
        saved kid already wears and selling one sells the other. */
+    const reservedKidIds = new Set<number>();
     for (const k of Array.isArray(s.prospects) ? s.prospects : []) {
       if (k && isKidId(k.id) && k.id >= s.nextId) s.nextId = k.id + 1;
+      if (k && isKidId(k.id)) reservedKidIds.add(k.id);
     }
+    if (s.nextId >= MAX_KID_ID) s.nextId = 1;
     if (!Number.isFinite(s.seed)) s.seed = Math.floor(now % 2147483647) | 0;
     s.seed = s.seed | 0;
     if (!Number.isFinite(s.scoutProgress) || s.scoutProgress < 0) s.scoutProgress = 0;
@@ -669,9 +762,9 @@ export function deserialize(raw: string | null, now: number): FactoryState | nul
     const clean: Prospect[] = [];
     for (const k of Array.isArray(s.prospects) ? s.prospects : []) {
       if (!k || typeof k !== 'object') continue;
-      if (typeof k.name !== 'string' || !k.name || seen.has(k.name)) continue;
+      if (!isPlayerName(k.name) || seen.has(k.name)) continue;
       if (!POSITIONS.includes(k.pos)) continue;
-      if (typeof k.nation !== 'string' || !(k.nation in NATION_FAMILY)) continue;
+      if (typeof k.nation !== 'string' || !Object.prototype.hasOwnProperty.call(NATION_FAMILY, k.nation)) continue;
       if (!Number.isFinite(k.rating) || !Number.isFinite(k.potential)) continue;
       const potential = Math.min(99, Math.max(45, Math.round(k.potential)));
       const rating = Math.min(potential, Math.max(30, k.rating));
@@ -679,7 +772,7 @@ export function deserialize(raw: string | null, now: number): FactoryState | nul
       /* First holder wins (entityIds.ts): the first kid under an id keeps it,
          so nothing already pointing at it moves, and a shadowed or broken id
          is re-minted rather than the kid dropped. */
-      const id = isKidId(k.id) && !ids.has(k.id) ? k.id : s.nextId++;
+      const id = isKidId(k.id) && !ids.has(k.id) ? k.id : mintKidId(s, reservedKidIds);
       ids.add(id);
       clean.push({
         id,
@@ -696,6 +789,36 @@ export function deserialize(raw: string | null, now: number): FactoryState | nul
       if (clean.length >= cap) break;
     }
     s.prospects = clean;
+    if (p.firstTeam !== undefined) {
+      const seniors: Senior[] = [];
+      for (const player of Array.isArray(p.firstTeam) ? p.firstTeam : []) {
+        if (!player || typeof player !== 'object' || !isPlayerName(player.name)) continue;
+        if (!POSITIONS.includes(player.pos)) continue;
+        if (typeof player.nation !== 'string' || !Object.prototype.hasOwnProperty.call(NATION_FAMILY, player.nation)) continue;
+        if (!Number.isFinite(player.rating) || !Number.isFinite(player.potential) || !Number.isFinite(player.age)) continue;
+        if (player.age >= RETIRE_AGE) continue;
+        const potential = Math.min(99, Math.max(45, Math.round(player.potential)));
+        const name = seen.has(player.name)
+          ? uniqueKidName({ ...s, firstTeam: seniors }, player.nation, () => 0)
+          : player.name;
+        seniors.push({
+          id: typeof player.id === 'string' && player.id.length <= 100 && !/\s/.test(player.id) ? player.id : '',
+          name,
+          nation: player.nation,
+          pos: player.pos,
+          age: Math.max(18, Math.floor(player.age)),
+          ageClock: clampClock(player.ageClock, SENIOR_YEAR_SEC),
+          rating: Math.min(potential, Math.max(30, player.rating)),
+          potential,
+          ...(typeof player.tier === 'string' && TIER_IDS.includes(player.tier as TierId) ? { tier: player.tier as TierId } : {}),
+        });
+        seen.add(name);
+        if (seniors.length >= FIRST_TEAM_SLOTS) break;
+      }
+      const reserved = new Set(seniors.map(player => player.id));
+      ensureUniqueIds(() => freshSeniorId(reserved), [seniors]);
+      s.firstTeam = seniors;
+    }
     return s;
   } catch {
     return null;
@@ -703,8 +826,24 @@ export function deserialize(raw: string | null, now: number): FactoryState | nul
 }
 
 const MAX_KID_ID = 1e9;
+function isPlayerName(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length > 0 && value.length <= 100 && !/[\u0000-\u001f\u007f]/.test(value);
+}
 function isKidId(v: unknown): v is number {
   return Number.isSafeInteger(v) && (v as number) >= 0 && (v as number) < MAX_KID_ID;
+}
+
+/** Reserve before minting, including when a doctored counter reaches its cap. */
+function mintKidId(s: FactoryState, reserved = new Set(s.prospects.map(p => p.id))): number {
+  if (!Number.isSafeInteger(s.nextId) || s.nextId < 1 || s.nextId >= MAX_KID_ID) s.nextId = 1;
+  while (reserved.has(s.nextId)) {
+    s.nextId += 1;
+    if (s.nextId >= MAX_KID_ID) s.nextId = 1;
+  }
+  const id = s.nextId++;
+  reserved.add(id);
+  if (s.nextId >= MAX_KID_ID) s.nextId = 1;
+  return id;
 }
 
 function clampClock(v: unknown, max: number): number {

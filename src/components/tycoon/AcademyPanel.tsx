@@ -16,18 +16,20 @@
  * runs its hooks and renders nothing, and it tells the page through `onStatus`
  * when something in here needs you, so the tab can light up.
  */
-import { useEffect, useRef, useState } from 'react';
+import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Star, HelpCircle, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ConfettiBurst } from '@/components/club-manager/Celebration';
 import { HubTiles, HubPanelHeader, HubTile } from '@/components/hub/HubTiles';
 import { useWonderkidFactory } from '@/hooks/useWonderkidFactory';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
 import {
   FACILITIES, REGIONS, SAVE_KEY, MAX_REP,
   basePrice, capacity, facilityCost, findSec, fmtCash, potentialRead, priceMult,
   regionIndex, salePrice, trainMult, canMoveUp, REP_TRAIN_BONUS, REP_FEE_BONUS,
-  SHOWCASE_COOLDOWN,
+  SHOWCASE_COOLDOWN, FIRST_TEAM_SLOTS, PROMOTE_AGE, LEAVE_AGE, SENIOR_YEAR_SEC, RETIRE_AGE, squadEdge,
 } from '@/lib/wonderkidFactory';
+import type { FactoryState } from '@/lib/wonderkidFactory';
 import { academyStatus } from '@/lib/tycoonRooms';
 import type { AcademyStatus } from '@/lib/tycoonRooms';
 import PacksPanel from '@/components/tycoon/PacksPanel';
@@ -35,13 +37,19 @@ import { useTycoonRewards } from '@/hooks/useTycoonRewards';
 import { balance, priceOf, canOpen } from '@/lib/tycoonRewards';
 import { PACKS, TIERS, bedFree } from '@/lib/wonderkidFactory';
 
-type Panel = 'scouting' | 'coaching' | 'dorms' | 'agents' | 'legacy' | 'packs' | null;
+const FirstTeamPanel = lazy(() => import('@/components/tycoon/FirstTeamPanel'));
 
-export default function AcademyPanel({ visible = true, onStatus }: { visible?: boolean; onStatus?: (s: AcademyStatus) => void }) {
-  const { state: s, floaters, doBuy, doSell, doShowcase, doMoveUp, doOpenPack, doDismissPack, packSaveBlocked } = useWonderkidFactory();
+type Panel = 'scouting' | 'coaching' | 'dorms' | 'agents' | 'legacy' | 'packs' | 'firstTeam' | null;
+
+export default function AcademyPanel({ visible = true, onStatus, onSnapshot }: { visible?: boolean; onStatus?: (s: AcademyStatus) => void; onSnapshot?: (s: FactoryState) => void }) {
+  const { state: s, floaters, doBuy, doSell, doShowcase, doMoveUp, doOpenPack, doDismissPack, packSaveBlocked, doPromote, doSellSenior, academySaveBlocked } = useWonderkidFactory();
   /* Round 585: the gem ledger, shared with the stadium that earns it. */
   const ledger = useTycoonRewards();
   const [panel, setPanel] = useState<Panel>(null);
+  const firstTeamRef = useRevealScroll(panel === 'firstTeam', { enabled: visible });
+  const onSnapshotRef = useRef(onSnapshot);
+  onSnapshotRef.current = onSnapshot;
+  useEffect(() => { onSnapshotRef.current?.(s); });
   /* the rules open themselves exactly once, before first play */
   const [showHelp, setShowHelp] = useState(false);
   useEffect(() => {
@@ -120,6 +128,12 @@ export default function AcademyPanel({ visible = true, onStatus }: { visible?: b
   });
   /* Round 585: packs of generated kids, opened with gems won at the ground. */
   const firstFree = PACKS.find(p => priceOf(ledger, p.id) === 0);
+  tiles.unshift({
+    key: 'firstTeam', icon: '⚽', title: 'First team',
+    value: `${s.firstTeam?.length ?? 0} / ${FIRST_TEAM_SLOTS} players`,
+    sub: `up to ${(squadEdge(s) * 100).toFixed(1)}% fewer rival chances`,
+    accent: (s.firstTeam?.length ?? 0) < FIRST_TEAM_SLOTS && s.prospects.some(p => p.age >= PROMOTE_AGE),
+  });
   tiles.push({
     key: 'packs',
     icon: '🎁',
@@ -139,6 +153,7 @@ export default function AcademyPanel({ visible = true, onStatus }: { visible?: b
 
   return (
     <div data-academy-panel>
+      {academySaveBlocked && <p role="alert" className="mb-2 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">The academy could not save that change. Free some browser storage, then try again. Your player stayed where he was.</p>}
       <div className="text-center mb-3">
         <div className="inline-flex items-center gap-1.5 mt-1 text-xs font-bold text-foreground bg-secondary rounded-full px-3 py-0.5">
           {region.emoji} {region.name}
@@ -201,7 +216,13 @@ export default function AcademyPanel({ visible = true, onStatus }: { visible?: b
         </div>
       )}
 
-      {/* the academy */}
+      <div ref={firstTeamRef}>
+      {panel === 'firstTeam' ? (
+        <Suspense fallback={<p className="min-h-48 p-3 text-sm text-muted-foreground">Opening the first team...</p>}>
+          <FirstTeamPanel state={s} onSell={doSellSenior} onBack={() => setPanel(null)} />
+        </Suspense>
+      ) : (
+      /* the academy */
       <div className="relative rounded-2xl border border-border bg-card p-3 mb-3">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold">The academy</span>
@@ -255,16 +276,26 @@ export default function AcademyPanel({ visible = true, onStatus }: { visible?: b
                   >
                     Sell for {fmtCash(price)}
                   </button>
+                  <button
+                    type="button"
+                    onClick={() => doPromote(p.id)}
+                    disabled={p.age < PROMOTE_AGE || (s.firstTeam?.length ?? 0) >= FIRST_TEAM_SLOTS}
+                    className="mt-1.5 min-h-[40px] w-full rounded-lg border border-border px-2 py-2 text-xs font-bold text-foreground hover:border-primary disabled:cursor-default disabled:opacity-50"
+                  >
+                    {p.age < PROMOTE_AGE ? `First team at ${PROMOTE_AGE}` : (s.firstTeam?.length ?? 0) >= FIRST_TEAM_SLOTS ? 'First team full' : 'Promote to first team'}
+                  </button>
                 </div>
               );
             })}
           </div>
         )}
       </div>
+      )}
+      </div>
 
       {/* the boxes, or the one opened panel in their place, or the move up
           card (Round 530) while the new region is being announced */}
-      {moved ? (
+      {panel === 'firstTeam' ? null : moved ? (
         <div key={`moved|${moved.seq}`} className="relative overflow-hidden rounded-2xl border border-gold/60 bg-card p-4 text-center">
           <ConfettiBurst seed={moved.seq} count={30} />
           <p className="cm-slam font-display text-xl font-black text-gold" style={{ animationDelay: '0.05s' }}>
@@ -302,7 +333,7 @@ export default function AcademyPanel({ visible = true, onStatus }: { visible?: b
               </div>
             </div>
             <p className="text-xs text-muted-foreground leading-snug">
-              Move up and the academy starts again in a bigger place: cash, facilities and every kid stay behind.
+              Move up and the academy starts again in a bigger place: cash, facilities and academy kids stay behind. Your first team comes with you.
               The star is forever: +15% training and +10% fees each, and the next region's scouts find higher ceilings.
             </p>
             {s.rep < REGIONS.length - 1 && (
@@ -396,6 +427,9 @@ export default function AcademyPanel({ visible = true, onStatus }: { visible?: b
               <p>Earn the region's target and you can move the whole academy up in the world: cash, facilities and kids stay behind, the reputation star is forever (+15% training, +10% fees each) and the new region's kids have higher ceilings.</p>
               <p>Away from the game the scouts and coaches keep working at half speed for up to 8 hours, and the calendar waits for you: nobody ages while you are gone. Nothing sells itself either, the money moments are always yours.</p>
               <p>Packs bring generated kids straight into a free bed. They cost gems, which only results at Stadium Tycoon's ground earn, and each pack prints its odds before you open it: the {PACKS.map(p => p.name).join(', ')} climb from {TIERS[0].label} kids toward {TIERS[TIERS.length - 1].label}s, and a pack kid arrives with his ceiling's band already known.</p>
+              <p>Promote a player aged {PROMOTE_AGE} to {LEAVE_AGE - 1} into your first team, with room for {FIRST_TEAM_SLOTS}. His bed opens for a new kid. First-team players above 60 rating cut opponents' scoring chances in watched and away stadium matches, so keeping a graduate can help win the next title.</p>
+              <p>A first-team year lasts {SENIOR_YEAR_SEC / 60} watched academy minutes. Seniors train at half the academy rate until their 28th birthday, hold their rating at 28 and 29, then lose 1.2 rating each birthday from 30. Sale value starts falling at 28 and they retire at {RETIRE_AGE} without a fee. Their cards show the next birthday and its fee without further training. The first team survives both an academy move and selling the ground.</p>
+              <p>First-team example: promoting a graduate frees his bed without paying a transfer fee. Holding him can protect the lead in a title race; selling him pays the quote on his card and opens a first-team place for your next graduate. Away time trains your seniors but never ages them.</p>
               <p>Worked example: a 17 year old rated 58 with a ceiling of 74 sells for about {fmtCash(salePriceExample(58, 74))} today. Coached to 71 he is worth about {fmtCash(salePriceExample(71, 74))}, and on deadline day that fee pays half as much again. Held to 23, the promise premium is gone and only the rating pays.</p>
             </div>
             <button

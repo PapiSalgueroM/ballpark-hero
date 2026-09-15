@@ -62,7 +62,9 @@ export interface AwayTrip {
   standing: { position: number; clubs: number; left: number } | null;
 }
 
-export function useStadiumTycoon() {
+export function useStadiumTycoon(getEdge?: () => number) {
+  const getEdgeRef = useRef(getEdge);
+  getEdgeRef.current = getEdge;
   const [state, setState] = useState<TycoonState>(() => {
     const now = Date.now();
     const loaded = deserializeTycoon(
@@ -141,7 +143,7 @@ export function useStadiumTycoon() {
     if (!(pay > 0) && matchdays === 0) return;
     setAwayPay(Math.max(0, pay));
     const paid = { ...cur, money: cur.money + Math.max(0, pay), lifetime: cur.lifetime + Math.max(0, pay), savedAt: now };
-    const away = matchdays > 0 ? playAwayMatchdays(paid, matchdays, Math.random) : null;
+    const away = matchdays > 0 ? playAwayMatchdays(paid, matchdays, Math.random, getEdgeRef.current?.() ?? 0) : null;
     const lg = away?.state.league;
     /* Round 585: an away win earns its gem, credited once per match. */
     const awayGems = away
@@ -189,7 +191,7 @@ export function useStadiumTycoon() {
         // Round 439: the loop has now paid for these seconds, so the away
         // settle must not bill for them again.
         paidUntilRef.current += use * 1000;
-        const { state: next, events } = tick(stateRef.current, use, Math.random);
+        const { state: next, events } = tick(stateRef.current, use, Math.random, getEdgeRef.current?.() ?? 0);
         stateRef.current = next;
         for (const e of events) reactToEvent(e);
         /* Round 585: a watched full time earns its gems, once, keyed on the

@@ -762,6 +762,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Catch the golden whistle when it drifts onto the pitch. You get about twelve seconds, and it carries one of five prizes, from seven times the income to fifteen minutes of income in one lump.",
       "When lifetime earnings fill the yellow bar, sell up and move grounds: the club resets, but Reputation stars (plus 50 percent income each, forever), your badges and your club records all survive.",
       "Open the Academy tab to run your youth academy beside the stadium.",
+      "Promote academy players aged 18 to 23 into five first-team places. A graduate frees his bed, keeps developing and helps reduce the opposition's scoring chances. Open First team in the Academy to compare his current fee with the fee at his next birthday.",
     ],
     rules: [
       "Attendance is the smaller of your seats and your fanbase, so Stands matter only when the ground is full and spending tracks matter only when it is not.",
@@ -774,7 +775,9 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Away earnings run at half your unboosted income rate, with hype and golden whistles excluded, capped at eight hours, and only count after you have been gone at least thirty seconds.",
       "Matchdays keep playing while you are away, one for every half hour of the trip and inside the same cap. They pay no goal or win bonuses, and the final matchday of a season always waits for you, so every title is won with you watching.",
       "Gems are earned only by results: three for a watched win, one for a watched draw, one for a win played while you were away, twenty for a league title and six for second place. They open packs of generated kids in the Academy tab, every pack prints its odds before you open it, and gems can never be bought.",
-      "Progress saves on this device automatically. Selling up is permanent: only Reputation, badges, club records and your lifetime totals survive.",
+      "Your first team helps in watched and away matches. Each rating point above 60 adds to its defensive edge. With five players rated 80, opponents get twenty percent fewer chances before the minimum chance is applied. This changes the odds, not a match's guaranteed result.",
+      "First-team players train at half the academy rate through age 27. Their years take fifteen watched academy minutes, compared with five minutes for academy kids. They hold their rating at 28 and 29, lose 1.2 rating at each birthday from 30, and retire at 34 without a fee. Away time trains them without ageing them.",
+      "Progress saves on this device automatically. Selling up resets the ground while Reputation, badges, club records and lifetime totals survive. Your academy save, including its first team, stays with you.",
     ],
     example: [
       "You open the game to 90 fans paying five cents each, $4.50 a second. The first Stands level costs 30 and adds 40 seats nobody fills yet, so you buy the Ticket Office instead and watch the rate tick up.",
@@ -792,7 +795,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     faqs: [
       {
         q: "Do I lose everything when I sell up?",
-        a: "Levels, money, fanbase, staff and your place on the division ladder reset. Reputation stars, all 47 badges, club records and lifetime totals stay. Each star is a permanent 50 percent income boost and each badge a permanent two percent, so runs get faster every time.",
+        a: "Levels, money, fanbase, staff and your place on the division ladder reset. Reputation stars, all 47 badges, club records and lifetime totals stay, along with the separate academy and its first team. Each star is a permanent 50 percent income boost and each badge a permanent two percent, so runs get faster every time.",
       },
       {
         q: "What is the golden whistle?",
@@ -824,13 +827,14 @@ export const SOCCER_CONTENT_2: GameContentMap = {
   '/wonderkid-factory': {
     intro: [
       'Wonderkid Factory is a free idle football academy game. Scouts bring kids through the door, coaches make every one of them a little better every second, and each kid has a ceiling he will never grow past. The whole game is one repeated decision: sell him now, or let him cook a bit longer.',
-      'A transfer fee pays for the rating on the day plus a promise premium for the room he still has to grow, and that premium is fattest while he is young. From 21 it starts to fade, at 23 it is gone completely, and on his 24th birthday he walks out on a free and pays you nothing. Patience prints money right up until it does not.',
+      'A transfer fee pays for the rating on the day plus a promise premium for the room he still has to grow, and that premium is fattest while he is young. From 21 it starts to fade and at 23 it is gone completely. A kid still in an academy bed on his 24th birthday walks out on a free. Promote him before then and his first-team career can last until 34.',
       'Cash buys four upgrades, reputation stars make every future run faster, and six regions raise the ceilings your scouts can find, from District Fields all the way to the World Stage. Every kid is generated, so no real footballer ever appears in your academy.',
     ],
     howToPlay: [
       'Wait for the scouts: kids arrive on their own, faster with every Scouting network level.',
       'Watch each kid grow toward his hidden ceiling. Scouting level 3 reads the ceiling as a range, level 6 reads it exactly, and a kid from a pack arrives with his tier\'s band already known.',
       'Press Sell on a kid when the price looks right. The fee is quoted live on his card.',
+      'From age 18 to 23, you can promote a kid into one of five first-team places instead. Promotion frees his bed without paying a fee. Open First team to select a graduate, see his next birthday and decide when to sell him.',
       'Spend the cash on Scouting, Coaching, Dorms and the Agent office. Costs climb with every level.',
       'Press Showcase Day when it charges: training runs x3 for 25 seconds.',
       'Hold your best kids for Deadline Day, which arrives every few minutes and pays x1.5 on every fee for 50 seconds.',
@@ -838,7 +842,10 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     ],
     rules: [
       'Every kid has a fixed ceiling, hidden until your scouts or his pack tier tell you where it sits. Training slows as he approaches it and can never pass it.',
-      'The promise premium fades from age 21 and is gone at 23. At 24 a kid leaves on a free.',
+      'The promise premium fades from age 21 and is gone at 23. At 24 a kid still in the academy leaves on a free. Promoted players follow the longer first-team career.',
+      'A senior trains at half the academy rate through age 27, holds his rating at 28 and 29, then loses 1.2 rating at each birthday from 30. A senior year lasts fifteen watched academy minutes. He retires at 34 for no fee, and nobody ages while you are away.',
+      'Senior fees use the same rating, potential, position and academy bonuses as youth fees. The age multiplier stays at one through 27, then falls to 0.90 at 28, 0.78 at 29, 0.64 at 30, 0.50 at 31, 0.36 at 32 and 0.22 at 33. The next-birthday quote assumes no further training and keeps today\'s fee multiplier, so a later Deadline Day can change the actual offer.',
+      'The first team reduces opponents\' scoring chances in Stadium Tycoon. Each rating point above 60 helps, across up to five players. Selling a senior funds academy upgrades but removes his contribution immediately. The first team travels with you when you move the academy up or sell the ground.',
       'A full academy stops scouting: beds come from the Dorms.',
       'Reputation stars pay +15% training speed and +10% on every fee, each, forever.',
       'Each region raises the ceilings scouts can find. The World Stage can produce a 99.',
@@ -849,6 +856,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       'Say the scouts drop off a 17 year old midfielder rated 58, and your level 3 scouts read his ceiling as somewhere between 68 and 75. Selling on the spot pays a modest fee: decent rating, healthy promise premium.',
       'You leave him with the coaches while you upgrade the Agent office. By the time he is 19 he is rated 71 and the growth has visibly slowed, which tells you the ceiling is close. His card now quotes about a quarter more than the day one fee: the rating grew, but the promise premium shrank with his age.',
       'Deadline Day lights up. You press Sell inside the window and the fee pays half as much again. That one sale funds two Scouting levels, and the next kid through the door is found faster and read more precisely.',
+      'For a first-team decision, picture five graduates rated 80. Their combined edge cuts the opponent\'s scoring chance by twenty percent before the match minimum. Selling one funds facilities but drops that edge to sixteen percent. A player nearing 28 may still help win a title even as his resale multiplier begins to fall, so the bigger fee and the stronger team are different rewards.',
     ],
     tips: [
       'Early on, sell quickly and often: volume beats patience until Coaching has some levels.',
@@ -860,9 +868,9 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     faqs: [
       { q: 'Are the players real?', a: 'No. Every kid is generated, names and all, and the game checks its generated names against every real player on the site so a made up kid can never wear a real name.' },
       { q: 'What do reputation stars do?', a: 'Each star is +15% training speed and +10% on every fee, forever, and stars also unlock the next region, where scouts find kids with higher ceilings.' },
-      { q: 'Do I lose everything when I move up?', a: 'Cash, facility levels and the kids in the academy stay behind. Stars, your career totals and your best sale record travel with you.' },
+      { q: 'Do I lose everything when I move up?', a: 'Cash, facility levels and the kids still in academy beds stay behind. Your promoted first team, stars and career totals travel with you.' },
       { q: 'Does the game progress while I am away?', a: 'Scouting and training keep running at half speed for up to 8 hours, and the calendar pauses so nobody ages out while you sleep. Sales are always yours to make, so no money moves while you are gone.' },
-      { q: 'When exactly should I sell?', a: 'The fee peaks somewhere between rating growth and age decay. A young kid far from his ceiling gains value fast; past 21 the promise premium drains away, and at 24 he leaves for nothing.' },
+      { q: 'When exactly should I sell?', a: 'A trained academy kid can keep gaining value up to the eve of his 24th birthday, so watch the fee and the birthday together. First-team players create a different choice: their sale multiplier falls from 28, but keeping a strong graduate can still help win matches. Compare the current fee, the next-birthday quote and your title race.' },
     ],
   },
   '/search-and-discard': {
