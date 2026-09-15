@@ -1,8 +1,8 @@
 {
   "__version": 3,
   "/": {
-    "hash": "96c1e8d646fda611",
-    "date": "2026-09-07"
+    "hash": "d9cbb67b3f522482",
+    "date": "2026-09-15"
   },
   "/about": {
     "hash": "26b6575a336ad5ee",
@@ -81,7 +81,7 @@
     "date": "2026-09-05"
   },
   "/champions-league-format-history": {
-    "hash": "a2d0705c1e56400f",
+    "hash": "3e863f66653d060a",
     "date": "2026-09-15"
   },
   "/club-manager": {
@@ -301,7 +301,7 @@
     "date": "2026-09-06"
   },
   "/mlb-postseason-format-history": {
-    "hash": "2c2e1fd58340ed46",
+    "hash": "1c9e779c201f93eb",
     "date": "2026-09-15"
   },
   "/mystery-box": {
@@ -353,7 +353,7 @@
     "date": "2026-09-11"
   },
   "/nba-playoff-format-history": {
-    "hash": "ce4e7a4375673543",
+    "hash": "3c1fe6ed9f05cfdf",
     "date": "2026-09-15"
   },
   "/nba-starting-5": {
@@ -389,7 +389,7 @@
     "date": "2026-09-05"
   },
   "/nfl-playoff-format-history": {
-    "hash": "21e55a0c52b97b34",
+    "hash": "abeecdb2cbbe134c",
     "date": "2026-09-15"
   },
   "/nhl-connect-4": {
@@ -409,7 +409,7 @@
     "date": "2026-09-06"
   },
   "/nhl-playoff-format-history": {
-    "hash": "2c4ac4c7691aee27",
+    "hash": "d04478ff3a91e074",
     "date": "2026-09-15"
   },
   "/olympics": {
@@ -509,8 +509,8 @@
     "date": "2026-09-11"
   },
   "/soccer-career": {
-    "hash": "d47614011aa60eb1",
-    "date": "2026-09-07"
+    "hash": "a3093b54096436eb",
+    "date": "2026-09-15"
   },
   "/soccer-conquest": {
     "hash": "9beb322ca59252c9",

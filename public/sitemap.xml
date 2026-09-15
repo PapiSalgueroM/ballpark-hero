@@ -7,7 +7,7 @@
   Regenerate with: node scripts/genSitemap.mjs
 -->
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://douknowball.com/</loc><lastmod>2026-09-07</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://douknowball.com/</loc><lastmod>2026-09-15</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
   <url><loc>https://douknowball.com/leaderboard</loc><lastmod>2026-09-12</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
   <url><loc>https://douknowball.com/college</loc><lastmod>2026-09-11</lastmod><changefreq>weekly</changefreq><priority>0.6</priority></url>
   <url><loc>https://douknowball.com/soccer</loc><lastmod>2026-09-11</lastmod><changefreq>weekly</changefreq><priority>0.7</priority></url>
@@ -57,7 +57,7 @@
   <url><loc>https://douknowball.com/free-kick</loc><lastmod>2026-09-04</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/soccer-grid</loc><lastmod>2026-09-02</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/world-cup-bracket</loc><lastmod>2026-09-07</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
-  <url><loc>https://douknowball.com/soccer-career</loc><lastmod>2026-09-07</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
+  <url><loc>https://douknowball.com/soccer-career</loc><lastmod>2026-09-15</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/fantasy-draft</loc><lastmod>2026-08-29</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/transfer-path</loc><lastmod>2026-09-07</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
   <url><loc>https://douknowball.com/squad-deal</loc><lastmod>2026-09-05</lastmod><changefreq>daily</changefreq><priority>0.8</priority></url>
