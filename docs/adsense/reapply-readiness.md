@@ -1,5 +1,31 @@
 # AdSense re-application readiness
 
+**Status update, 2026-09-15: the owner confirms another rejection.** Anthony
+supplied a new screenshot and confirmed this is a new rejection since the last
+submission. Ownership is verified, the policy card says **Low value content**, and
+Request review is available. No individual URL or decision date is shown, so this
+is the date reported, not an asserted Google decision date. Earlier submitted or
+pending statuses are superseded.
+
+The live site already has readable saved pages, guides, About and Privacy content.
+Round 600 is claimed to place the existing verified source links beside the format
+periods and exceptions they support in the five explainers. This improves
+verifiability for readers; it does not establish the cause of rejection or promise
+approval. Fresh Search Console inspection is now complete: all five guides show
+discovered with no recorded crawl. All five live tests passed, and Google accepted
+all five indexing requests. The sitemap reports Success, 148 discovered pages,
+and September 15 as its last read. The aggregate indexing report is still dated
+September 3, so its 58 indexed / 91 not indexed totals predate the newest guides.
+Full evidence is in [the September 15 inspection](../seo/gsc-indexing-2026-09-15.md).
+
+The live audit found no accidental noindex, missing canonical or empty snapshot
+among the ten active games in the older crawled examples. Intentional retired and
+hidden routes keep their existing controls. Round 602 corrects Footle's broad
+"No tracking" claim and improves links to the existing guides. The next useful
+evidence is a recorded crawl after these requests and the next publish. Indexing
+is not a guarantee or a published AdSense approval prerequisite. No new AdSense
+review request has been sent from this session.
+
 **Status update, 2026-09-12: two of the verdict's three conditions are now met, and the
 third is Anthony's to produce.** The verdict below, written after the second rejection, said
 not to request another review until three things were true. Where they stand after the

@@ -1,5 +1,59 @@
 # Project state
 
+## Owner update 2026-09-15: new AdSense rejection and parallel work
+
+Anthony confirmed a new rejection since the last review and supplied the AdSense
+screen: site ownership is verified, the site needs attention for **Low value
+content**, and Request review is available. The screen names no individual URL
+and shows no decision date. September 15 is the report date. Older rows saying the
+review is submitted or pending are historical, not current approval status.
+
+The live site already serves readable guides and publisher pages without running
+JavaScript. The next claimed improvement is Round 600: contextual links to the
+existing verified sources in the five format explainers. Search Console is now
+accessible: its aggregate report is dated September 3, with 58 indexed and 91 not
+indexed (17 crawled, 71 discovered, 3 redirects). Those totals predate the newest
+guides. Fresh URL Inspection shows all five format guides discovered with no
+recorded crawl. All five Google live tests passed and all five indexing requests
+were accepted. The sitemap shows Success, 148 discovered pages, last read on
+September 15. Evidence is in `docs/seo/gsc-indexing-2026-09-15.md`. These are crawl
+requests, not proof of indexing or AdSense approval. An AdSense review has not
+been requested here.
+
+Cursor owns formatting in the separate OneDrive checkout. At Anthony's further
+request, GPT-6 Astra owns Round 601: animation improvements to existing career,
+manager and tycoon outcomes, in an isolated worktree. The planned Round 587
+set-piece board still follows Round 586. The file split is in `docs/WORKBOARD.md`.
+Round 600's contextual citations and Round 601's trophy animations are built in
+their worktrees and have passed their scoped checks; integration is pending.
+The live audit also found a broad "No tracking" claim in Footle and useful
+missing reciprocal links from the four US Front Office pages. Round 602 owns
+those copy and navigation changes, with no simulation or sports-data changes.
+
+## In progress 2026-09-15: Codex continues the Round 585 handoff
+
+Round 585 gems and packs are still local, not published. Codex resumed the owner's
+`docs/HANDOFF-2026-09-15.md` handoff, posted the claim in `docs/WORKBOARD.md`, and is
+finishing release verification before Round 586. The app type check passed on the
+final source tree.
+
+The missing twice-daily visitor measurement is now a permanent harness,
+`scripts/simTycoonPackPace.mjs`, green with all six price controls proved red.
+Two five-minute visits per day, 100 seeds per policy: immediate Sell up reaches a
+paid Scout by day 2 in 92/100 runs and a Club by day 5 in 100/100; waiting for the
+season final reaches both in 100/100. Full measurement and assumptions are in the
+585 As built section of `docs/design/round-580-tycoon-merge.md`.
+
+Independent review reproduced two storage problems and a reveal crash: a failed
+academy save could lose a paid kid after Welcome, a failed gem-ledger save could
+persist a kid without the debit, and malformed stored player fields could crash
+the pack card. All three fixes are complete: `simTycoonPacks` passes all 12 page
+tests and proves all 22 mutation controls. A separate hook review passed five
+storage-recovery probes. The full SEO build passed, including saved pages and
+the final production bundle (`index-DEcxjmNi.js`). The targeted harness batch is
+running, followed by the full suite and Vitest. Browser walks, commit and live
+verification are still pending. The source remains frozen during these checks.
+
 ## LIVE as of 2026-09-15: Round 584, the tycoon league keeps playing while you are away
 
 **`origin/main` is `a4bbcd76` (Round 584 at `7509f1e1` plus the Round 585 scout baseline) and
@@ -1454,7 +1508,7 @@ an area moves; the round numbers stay for traceability.
 | Grid category (Milestone 0) | 86% | Round 406: the NFL grid runs on the shared engine over a 1970 to 2025 answer key, no AI in the loop; the archive with answer keys (design phase 4) is next. |
 | Indexing and SEO | 48% | Round 496, against Search Console ground truth read 2026-09-06: sitemap clean (140 of 140, Success), 58 indexed against 91 not. The home page was linking to /jeopardy, a redirect to /quiz-board, so the most crawled document on the domain spent an outbound vote on a URL that only bounces; that is the Page with redirect bucket and it is fixed and fenced. Measured in the same pass and worth not re-chasing: the link graph is healthy (zero orphans, every page 2 or more inbound, deepest page 3 clicks from home), so the 71 discovered-not-crawled pages are a crawl budget and quality question, not a structure one. |
 | Profiles and leaderboard | 45% | Rounds 392 and 399 stopped the earlier per-match and per-visit leaks. Round 509 also stops restored retired NFL, NBA, MLB and NHL My Career saves from paying their legacy score on every visit, but that code is pending PR and deploy. The measured leak is 61,964 points across 30 accounts; no retroactive subtraction was performed. The broader history repair remains an owner decision. |
-| AdSense recovery | 100% submitted, site-side ready | Round 400 is live and the review is submitted. The 2026-09-07 re-audit passed 17 AdSense, legal, SEO, crawler, content and brand checks; all 14 negative controls fired; 140 of 140 live sitemap routes were clean; 139 substantive documents carried publisher verification; all 75 `AdBanner` callers use slot `7540487748`; and the live representative browser checks found no accidental noindex, orphan or page error. One nonblocking Club Manager spacing follow-up is assigned to its claimed lane. This is site-side readiness, not an approval guarantee. Google still decides. |
+| AdSense recovery | REJECTED, recovery active | New Low value content rejection confirmed by Anthony's screenshot on 2026-09-15. Ownership is verified; no offending URLs are named. Existing prerendering and five sourced format explainers are live. Round 600 adds contextual source links using their existing mappings. Fresh Search Console indexing evidence is still needed before the next review decision. Prior technical checks remain evidence of implementation, not proof of Google approval. |
 | In game reporting UX | 78% | Round 447: game pages now use the shared report flow in GameShell on the latest touched games, with board context passed for game-specific issues and a standard placement pattern before SEO footer blocks. |
 | Club Manager | 49% | Round 505: the tactics tab reads the way the match does (a man read in his slot at 0, 2, 6 or 14 rating points on him alone, the bench under the pitch ordered same position first, seventeen shapes that carry the eleven across, the armband and four takers that reach the stream, a duty on every slot capped at 0.12, a second position learned over counted weeks and real players starting with none), fenced by simTacticsEngine with seven controls and the Round 114 pitch guard brought back from a false green. Before it, Round 504: the live match is football, each half committed as a stream the viewer walks and the report is counted off, both elevens named and numbered, the ball at a carrier's feet, corners and throw ins and fouls, live stats, a sub or shape change at any minute with the rest of the half redrawn, and the other dugout's own subs; fenced by simLiveMatch (nine sections, five controls). Before it, Rounds 465 to 467: two meters on every tab (the board meter is the sacking number itself, the fans move with results at r = 0.93 against points per game), goals for and against on every table, a calendar you tap to sim to any day on the one loop the four fast forwards use, four facilities with start levels derived from the club's tier and money and effects that are real and bounded, ticket and concession pricing with fan and board reactions, generated sponsors, and a projected finances screen whose lines sum. Before them, Round 462: the era Champions League plays its round of 16, the group tables stay up through the knockouts, and level points split the way each league says (Spain and Italy head to head) on a per pair ledger with a save migration. Before it: quick sim stops at a sacking and the title band is a measured gap plus a stature list (399); the bake owns every league it ships (394). |
 | Soccer Career | 16% | Round 468 added three position specific training drills you actually play. Round 509's branch connects the wall visually without changing its legal gap, replays the real daily wall draws across 90 dates and 900 rounds with zero unwinnable walls, and adds controls for the two previously unfenced sections. That code is pending PR and deploy. Round 469 lifted the money app, social feed, rival and badge shapes into shared modules so the US careers can reach the same loop. Per season ping is activity, not completion (392). |
@@ -1529,8 +1583,8 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | NEW a draft mode game per sport | PART | Gauntlet Draft and Fantasy Draft; not yet one per sport |
 | Rebuild format (starting XI, spin for position) | PART, the loop and the table shipped | Round 461 seats two to four players at one table on one phone (pass and play, or the CPU playing the very policy the harness measures), a later seat's market cuts out what earlier seats hold, the hand over screen shows shut windows as numbers only, every finished XI plays one shared season through the solo fixture player with records and trophies, and the trophy goes only to a rise (simRebuildSeats, 960 tables, five controls). Round 435 fixed the economy; Round 456 built his loop (starting XI only, spin for a shirt, keep or sell, selling final with three priced offers plus a free bench pick, "take a 40 overall", board and finance envelopes with club specific flavour only where documented, demands, punishment deck with one safe card, force sales in debt, the whole market of 2914 valued rows, three perks, two more presets) and replaced six real coaches the game had been rating and joking about with generated managers. Still open: online play across two phones, real manager names (needs a documented per club manager table), a Europe only preset (the rows carry no league) |
 | Player Stock Market format | DONE | Round 434 fixed the scoring; Round 458 built his format: pick a start season (2015 to 2022, each measured for at least 16 real choices per slot), cards show numbers only (position, age, matches, goals, assists, cards, price) and never a name, club, country or flag, buy one per position to a full XI, step year by year on the table's real rows ("no row for 2019" where there is none), then the reveal. Boot went from 40 requests and 7 MB to 1 request and 24 KiB on the wire |
-| Stadium Tycoon depth | PART | Round 439 away rules; depth open |
-| Wonderkid merge | OPEN | |
+| Stadium Tycoon depth | PART | Rounds 580 to 584 are live: rooms, safe saves, the league, pitch replays and away matchdays. Round 585 gems and packs is built and under final verification. Rounds 586 to 588 add the first team, selling curve, set pieces and gear. |
+| Wonderkid merge | PART | Rounds 580 to 584 share the Academy panel and save between both doors. Round 585 adds packs and is under final verification. Full retirement of the standalone route is Round 589, held on the AdSense decision. |
 | Transfer Path special rule modes (active players only, Europe only) | PART, RECOVERY READY FOR DEPLOY | Round 460's shared rule engine is live. Round 509 found that its active coverage relied on an unverified 77-row 2025-2026 projection tranche. All 77 rows are now quarantined live, 17 paths made unreachable by that correction are gone, and all 885 retained hints are refreshed. The replacement verifies 78 active identities by normalized name plus nationality and can safely restore 203 of 885 paths after the matching frontend deploys. Its guarded restore migration remains unapplied on purpose. Europe mode retains 872 verified hints. |
 | World XI: eligibility from real positions, more in the season report, respin count customizable | PART | eligibility Rounds 319 and 345 (shared with Build Your XI in Round 442); the respin budget picker already exists on the page; more in the season report shipped in Round 455 (worldXi.ts), and Round 449 removed the invented conduct line from it |
 | Fantasy Draft scrolling | DONE | Round 326 |
