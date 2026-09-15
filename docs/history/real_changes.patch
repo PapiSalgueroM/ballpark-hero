@@ -1,0 +1,1445 @@
+diff --git a/CLAUDE.md b/CLAUDE.md
+index 1622f88..10176e3 100644
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -32,8 +32,11 @@ Note: the publish script uses an explicit file list (not `git add -A`) so untrac
+ 
+ ## Hard-won gotchas (July 2026 incident)
+ - The Lovable build injects VITE_SUPABASE_* env vars that point at a DELETED project (pzzadswiradjnvvfybol). Never read those env vars. `client.ts` hardcodes the live project URL + anon key on purpose, and all edge-function fetches use the same hardcoded values. If you add code that calls Supabase, import SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY from `@/integrations/supabase/client`.
+-- All 22 edge functions are deployed on flawuiqbvjobmkfkauhw (deployed 2026-07-01 via Supabase MCP from `supabase/functions/`). Redeploy through the MCP `deploy_edge_function` tool if they change.
++- All edge functions are deployed on flawuiqbvjobmkfkauhw via the Supabase MCP. The DEPLOYED source is the source of truth; `supabase/functions/` was re-synced to match on 2026-07-22 — keep it synced when redeploying, and redeploy through the MCP `deploy_edge_function` tool.
+ - React error #310 on a game page means hooks after a conditional return. TransferPathBoard had this exact bug (early loading return above useState); the loading check must sit BELOW every hook.
++- VALIDATORS FAIL CLOSED (2026-07-22): every AI-backed grid/connect4 validator returns `{valid:false, unverified:true, reason:"…try again"}` when it cannot verify (Gemini quota, parse failure, error). Grid hooks treat `unverified` as a no-penalty retry (no guess burned); connect4/chain hooks reject-without-ending on network errors. NEVER reintroduce accept-on-error ("fail open") in a validator or its client catch — that was the July 2026 P1 (nonsense answers accepted while the free Gemini quota was exhausted).
++- Sandbox quirks (cost a session to diagnose): the Linux bash mount can serve STALE/TRUNCATED reads for repo files edited via the Write/Edit tools in the same session (a file ended mid-word under `tail` while the Read tool showed it complete) — trust Read/Grep for file content, never bash cat/grep, and don't panic over bogus "syntax errors" from bash-side compiles. Sandbox git can't use the index ("unknown index entry format") — use `git ls-remote` / `git cat-file` for remote truth and run the commit .bats Windows-side.
++- Tables created with CREATE TABLE AS (e.g. `*_bak_*` backups) have RLS OFF by default — a public-schema write hole via the anon key. Enable RLS immediately after creating any backup table (the 2026-07-22 baks were caught by `get_advisors` and locked down; advisors are worth running after any DDL).
+ 
+ ## Database (Supabase)
+ - Most game data lives in Postgres tables read via `src/lib/fetch*.ts` and game hooks.
+diff --git a/docs/ANTHONY_TODO.md b/docs/ANTHONY_TODO.md
+index 9b87c0b..2b7ef86 100644
+--- a/docs/ANTHONY_TODO.md
++++ b/docs/ANTHONY_TODO.md
+@@ -10,11 +10,16 @@
+    deploy didn\'t catch them — check douknowball.com/sign-the-player: if it
+    still shows the value-guessing game, tell Claude "publish" (or hit Publish
+    in Lovable).
+-2. The Gemini free key works but its daily quota runs out by evening — grids
+-   then accept answers unverified until midnight PT. If you want validation
+-   24/7: either add a second free key from another Google account (tell
+-   Claude, the shim can rotate keys) or we build the validation-cache table
+-   (queued item 7).
++2. UPDATE 2026-07-22: the "grids accept answers unverified" hole is CLOSED.
++   All grid/connect4/chain validators now FAIL CLOSED — when the Gemini quota
++   is out they refuse the answer with "couldn't verify, try again" instead of
++   accepting nonsense, and the player doesn't lose a guess. The verified-verdict
++   cache table is live too, so repeat answers don't burn quota. Remaining ask:
++   with the quota exhausted, AI-backed games can't accept NEW answers until
++   the quota resets — so validation 24/7 still needs a second free Gemini key
++   from another Google account (tell Claude; the shim can rotate keys).
++   Also 2 minutes while in Supabase: Authentication > Settings > enable
++   "Leaked password protection" (security advisor flags it; free toggle).
+ 3. The 9:07am daily poll-fixer task runs only while the Claude Cowork app is
+    open on this PC. Leave it open in the morning through the World Cup final
+    (Jul 19) and the polls maintain themselves.
+diff --git a/src/App.tsx b/src/App.tsx
+index cd09bf5..5ba4d5f 100644
+--- a/src/App.tsx
++++ b/src/App.tsx
+@@ -118,6 +118,7 @@ import NflConnect4 from "./pages/NflConnect4";
+ import MissingFive from "./pages/MissingFive";
+ import MissingNine from "./pages/MissingNine";
+ import MissingEleven from "./pages/MissingEleven";
++import RankEm from "./pages/RankEm";
+ import PlayerStockMarket from "./pages/PlayerStockMarket";
+ import NhlConnect4 from "./pages/NhlConnect4";
+ 
+@@ -322,6 +323,7 @@ const AppContent = () => {
+         <Route path="/missing-five" element={<MissingFive />} />
+         <Route path="/missing-nine" element={<MissingNine />} />
+         <Route path="/missing-eleven" element={<MissingEleven />} />
++        <Route path="/rank-em" element={<RankEm />} />
+         <Route path="/player-stock-market" element={<PlayerStockMarket />} />
+         <Route path="/nhl-connect-4" element={<NhlConnect4 />} />
+         <Route path="*" element={<NotFound />} />
+diff --git a/src/data/gameRegistry.ts b/src/data/gameRegistry.ts
+index 12f00e5..1b85f75 100644
+--- a/src/data/gameRegistry.ts
++++ b/src/data/gameRegistry.ts
+@@ -197,6 +197,7 @@ export const CATEGORIES: GameCategory[] = [
+     title: 'World & Olympic Games',
+     emoji: '🌍',
+     games: [
++      { path: '/rank-em', label: "Rank 'Em", emoji: '📊', description: 'Put five players in order by a career stat, most to fewest', daily: true, isNew: true },
+       { path: '/teammates', label: 'Teammates or Not?', emoji: '🤝', description: 'Were they ever teammates?', isNew: true },
+       { path: '/olympics', label: 'The Medal Games', emoji: '🏅', description: 'Guess the mystery athlete from clues', daily: true, isNew: true },
+       { path: '/guess-the-year', label: 'Guess The Year', emoji: '📅', description: 'What year did these happen?', daily: true, isNew: true },
+diff --git a/src/hooks/useCareerGame.ts b/src/hooks/useCareerGame.ts
+index 117e02d..1caa222 100644
+--- a/src/hooks/useCareerGame.ts
++++ b/src/hooks/useCareerGame.ts
+@@ -250,7 +250,7 @@ export function useCareerGame() {
+   const completionScore = dailyGameStatus === 'won'
+     ? Math.max(100, (MAX_GUESSES - dailyGuessesUsed) * 100)
+     : 0;
+-  useGameCompletion('career-path', rawDailyStatus !== 'playing', completionScore);
++  useGameCompletion('career', rawDailyStatus !== 'playing', completionScore);
+ 
+   return {
+     mode, switchMode,
+diff --git a/src/hooks/useCbbProgram.ts b/src/hooks/useCbbProgram.ts
+index 75fab47..af92e33 100644
+--- a/src/hooks/useCbbProgram.ts
++++ b/src/hooks/useCbbProgram.ts
+@@ -144,7 +144,7 @@ export function useCbbProgram() {
+     return ensureAnswerInList(allPrograms, gameState.puzzle.school_name, p => p.school_name, gameState.puzzle);
+   }, [allPrograms, gameState?.puzzle]);
+ 
+-  useGameCompletion('cbb-program', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
++  useGameCompletion('guess-cbb-team', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+ 
+   return { gameState, startGame, makeGuess, giveUp, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPrograms: validatedPrograms, loading, programsStatus, reloadPrograms: loadPrograms };
+ }
+diff --git a/src/hooks/useFootballConnect4.ts b/src/hooks/useFootballConnect4.ts
+index b52b0b8..88654f8 100644
+--- a/src/hooks/useFootballConnect4.ts
++++ b/src/hooks/useFootballConnect4.ts
+@@ -298,7 +298,7 @@ export function useFootballConnect4() {
+     return `⚽ Soccer Connect 4\n${result}\n\n${grid}\n\nPlay at douknowball.com/football-connect-4`;
+   }, [board, winner, isDraw]);
+ 
+-  useGameCompletion('football-connect4', rawDailyStatus !== 'playing', winner ? 500 : 0);
++  useGameCompletion('football-connect-4', rawDailyStatus !== 'playing', winner ? 500 : 0);
+ 
+   return {
+     mode, switchMode,
+diff --git a/src/hooks/useLineupBuilder.ts b/src/hooks/useLineupBuilder.ts
+index 701b627..a51b4dc 100644
+--- a/src/hooks/useLineupBuilder.ts
++++ b/src/hooks/useLineupBuilder.ts
+@@ -209,7 +209,7 @@ export function useLineupBuilder() {
+     setIsSpinning(false);
+   }, []);
+ 
+-  useGameCompletion('lineup-builder', phase === 'result', verdict ? 500 : 0);
++  useGameCompletion('build-your-xi', phase === 'result', verdict ? 500 : 0);
+ 
+   return {
+     formation, phase, selectedPositionIndex, currentTeam, positions,
+diff --git a/src/hooks/useNascarChain.ts b/src/hooks/useNascarChain.ts
+index d4e2b7b..03e884a 100644
+--- a/src/hooks/useNascarChain.ts
++++ b/src/hooks/useNascarChain.ts
+@@ -3,6 +3,7 @@ import { NascarChainState, NascarChainMode, getNascarChainMultiplier, getNascarE
+ import { supabase } from '@/integrations/supabase/client';
+ import { useGameCompletion } from '@/hooks/useGameCompletion';
+ import type { PlayerSourceConfig } from '@/lib/playerSearch';
++import { toast } from 'sonner';
+ 
+ /**
+  * NASCAR driver pool for the shared PlayerAutocomplete input (see
+@@ -119,20 +120,10 @@ export function useNascarChain() {
+         }) : null);
+       }
+     } catch {
+-      const newChain = [...gameState.chain];
+-      newChain.push({ driverName: guessedName });
+-      const newRawScore = gameState.rawScore + 100;
+-      const chainLength = newChain.length - 1;
+-      const multiplier = getNascarChainMultiplier(chainLength);
+-
+-      setGameState(prev => prev ? ({
+-        ...prev,
+-        currentDriver: guessedName,
+-        chain: newChain,
+-        score: Math.floor(newRawScore * multiplier),
+-        rawScore: newRawScore,
+-        usedDrivers: new Set([...prev.usedDrivers, guessedName.toLowerCase()]),
+-      }) : null);
++      // FAIL CLOSED: a network failure is not a wrong answer — don't accept
++      // an unverified guess (that farms score) and don't end the game.
++      // Leave the chain untouched and ask the player to retry.
++      toast.error("Couldn't verify that guess right now — please try again.");
+     } finally {
+       setValidating(false);
+     }
+diff --git a/src/hooks/useNascarDriver.ts b/src/hooks/useNascarDriver.ts
+index 1273721..a019482 100644
+--- a/src/hooks/useNascarDriver.ts
++++ b/src/hooks/useNascarDriver.ts
+@@ -144,7 +144,7 @@ export function useNascarDriver() {
+     return ensureAnswerInList(allDrivers, gameState.puzzle.driver_name, d => d.driver_name, gameState.puzzle);
+   }, [allDrivers, gameState?.puzzle]);
+ 
+-  useGameCompletion('nascar-driver', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
++  useGameCompletion('guess-nascar-driver', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+ 
+   return { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allDrivers: validatedDrivers, loading, status, reloadDrivers: loadDrivers };
+ }
+diff --git a/src/hooks/useNbaChain.ts b/src/hooks/useNbaChain.ts
+index 09ad415..d483e14 100644
+--- a/src/hooks/useNbaChain.ts
++++ b/src/hooks/useNbaChain.ts
+@@ -167,15 +167,12 @@ export function useNbaChain() {
+           setGameOverReason('Round complete!');
+         }
+       } catch {
+-        // Allow on network error
+-        const newLink: ChainLink = { playerName: trimmed, connection: 'Connection unverified' };
+-        const newScore = score + 1;
+-        setChain((prev) => [...prev, newLink]);
+-        setUsedPlayers((prev) => new Set(prev).add(normalized));
+-        if (mode === 'round' && newScore >= ROUND_PICK_COUNT) {
+-          setPhase('ended');
+-          setGameOverReason('Round complete!');
+-        }
++        // FAIL CLOSED: a network failure is not a wrong answer — don't accept
++        // an unverified link (that inflates streaks) and don't end the game.
++        // Surface a retry message and leave the chain untouched.
++        setIsValidating(false);
++        setValidationError("Couldn't verify that link right now — please try again.");
++        return;
+       }
+ 
+       setIsValidating(false);
+diff --git a/src/hooks/useNbaLineup.ts b/src/hooks/useNbaLineup.ts
+index 311210d..78f4692 100644
+--- a/src/hooks/useNbaLineup.ts
++++ b/src/hooks/useNbaLineup.ts
+@@ -369,7 +369,7 @@ export function useNbaLineup() {
+     }, 100);
+   }, []);
+ 
+-  useGameCompletion('nba-lineup', phase === 'result', verdict ? 500 : 0);
++  useGameCompletion('nba-starting-5', phase === 'result', verdict ? 500 : 0);
+ 
+   return {
+     phase, challenge, selectedPosition, currentTeam, filledSlots, filledSlotsArray,
+diff --git a/src/hooks/useTennisChain.ts b/src/hooks/useTennisChain.ts
+index a03215a..8fce5aa 100644
+--- a/src/hooks/useTennisChain.ts
++++ b/src/hooks/useTennisChain.ts
+@@ -3,6 +3,7 @@ import { TennisChainState, TennisChainMode, getTennisChainMultiplier, getTennisE
+ import { supabase } from '@/integrations/supabase/client';
+ import { useGameCompletion } from '@/hooks/useGameCompletion';
+ import type { PlayerSourceConfig } from '@/lib/playerSearch';
++import { toast } from 'sonner';
+ 
+ /**
+  * Tennis player pool for the shared PlayerAutocomplete input (see
+@@ -118,21 +119,10 @@ export function useTennisChain() {
+         }) : null);
+       }
+     } catch {
+-      // On error, allow the guess
+-      const newChain = [...gameState.chain];
+-      newChain.push({ playerName: guessedName });
+-      const newRawScore = gameState.rawScore + 100;
+-      const chainLength = newChain.length - 1;
+-      const multiplier = getTennisChainMultiplier(chainLength);
+-
+-      setGameState(prev => prev ? ({
+-        ...prev,
+-        currentPlayer: guessedName,
+-        chain: newChain,
+-        score: Math.floor(newRawScore * multiplier),
+-        rawScore: newRawScore,
+-        usedPlayers: new Set([...prev.usedPlayers, guessedName.toLowerCase()]),
+-      }) : null);
++      // FAIL CLOSED: a network failure is not a wrong answer — don't accept
++      // an unverified guess (that farms score) and don't end the game.
++      // Leave the chain untouched and ask the player to retry.
++      toast.error("Couldn't verify that guess right now — please try again.");
+     } finally {
+       setValidating(false);
+     }
+diff --git a/src/hooks/useTennisPlayer.ts b/src/hooks/useTennisPlayer.ts
+index 042aedf..0550fe8 100644
+--- a/src/hooks/useTennisPlayer.ts
++++ b/src/hooks/useTennisPlayer.ts
+@@ -144,7 +144,7 @@ export function useTennisPlayer() {
+     return ensureAnswerInList(allPlayers, gameState.puzzle.player_name, p => p.player_name, gameState.puzzle);
+   }, [allPlayers, gameState?.puzzle]);
+ 
+-  useGameCompletion('tennis-player', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
++  useGameCompletion('guess-tennis-player', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+ 
+   return { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, maxClues: MAX_CLUES, pointsForCurrentClue, allPlayers: validatedPlayers, loading, status, reloadPlayers: loadPlayers };
+ }
+diff --git a/src/hooks/useUfcGame.ts b/src/hooks/useUfcGame.ts
+index 5bb38fc..181f8b1 100644
+--- a/src/hooks/useUfcGame.ts
++++ b/src/hooks/useUfcGame.ts
+@@ -109,7 +109,7 @@ export function useUfcGame() {
+   const dailyScore = effectiveDailyStatus === 'won'
+     ? Math.max(100, (MAX_GUESSES - dailyGuesses.length) * 100)
+     : 0;
+-  useGameCompletion('ufc-game', effectiveDailyStatus !== 'playing', dailyScore);
++  useGameCompletion('ufc', effectiveDailyStatus !== 'playing', dailyScore);
+ 
+   return {
+     mode,
+diff --git a/src/lib/missingXi.ts b/src/lib/missingXi.ts
+index 2be20ae..ecb899c 100644
+--- a/src/lib/missingXi.ts
++++ b/src/lib/missingXi.ts
+@@ -560,7 +560,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Eduardo Camavinga', slotIndex: 5, nationality: 'France', clubAtTime: 'Real Madrid' },
+       { name: 'Nacho', slotIndex: 3, nationality: 'Spain', clubAtTime: 'Real Madrid' },
+-      { name: 'Rodrygo', slotIndex: 9, nationality: 'Brazil', clubAtTime: 'Real Madrid' },
++      { name: 'Rodrygo', slotIndex: 10, nationality: 'Brazil', clubAtTime: 'Real Madrid' },
+     ],
+     source: 'Wikipedia + Sky Sports + Managing Madrid confirmed-lineups (Camavinga in for Tchouameni) + CBS/NBC Sports, unanimous.',
+   },
+@@ -1495,7 +1495,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Fernandinho', slotIndex: 3, nationality: 'Brazil', clubAtTime: 'Manchester City' },
+       { name: 'João Cancelo', slotIndex: 4, nationality: 'Portugal', clubAtTime: 'Manchester City' },
+-      { name: 'Phil Foden', slotIndex: 9, nationality: 'England', clubAtTime: 'Manchester City' },
++      { name: 'Phil Foden', slotIndex: 10, nationality: 'England', clubAtTime: 'Manchester City' },
+     ],
+     source: 'Man City official site + Sky Sports + ESPN + Sports Mole + Coaches Voice, all agree.',
+   },
+@@ -2275,7 +2275,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Freddie Ljungberg', slotIndex: 5, nationality: 'Sweden', clubAtTime: 'Arsenal' },
+       { name: 'Kolo Touré', slotIndex: 2, nationality: "Cote d'Ivoire", clubAtTime: 'Arsenal' },
+-      { name: 'Gilberto Silva', slotIndex: 6, nationality: 'Brazil', clubAtTime: 'Arsenal' },
++      { name: 'Gilberto Silva', slotIndex: 7, nationality: 'Brazil', clubAtTime: 'Arsenal' },
+     ],
+     source: 'Wikipedia match report + Arsenal.com official retrospective + 11v11.com archive, unanimous on the final home match of the unbeaten season.',
+   },
+@@ -3176,7 +3176,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Sulley Muntari', slotIndex: 6, nationality: 'Ghana', clubAtTime: 'AC Milan' },
+       { name: 'Luca Antonini', slotIndex: 4, nationality: 'Italy', clubAtTime: 'AC Milan' },
+-      { name: 'Antonio Nocerino', slotIndex: 9, nationality: 'Italy', clubAtTime: 'AC Milan' },
++      { name: 'Antonio Nocerino', slotIndex: 10, nationality: 'Italy', clubAtTime: 'AC Milan' },
+     ],
+     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on the starting XI that eliminated Arsenal after the 4-0 first-leg shock.',
+   },
+@@ -3239,7 +3239,7 @@ export const LINEUPS: Lineup[] = [
+     ],
+     blankCandidates: [
+       { name: 'Lucas Vazquez', slotIndex: 8, nationality: 'Spain', clubAtTime: 'Real Madrid' },
+-      { name: 'Marco Asensio', slotIndex: 9, nationality: 'Spain', clubAtTime: 'Real Madrid' },
++      { name: 'Marco Asensio', slotIndex: 10, nationality: 'Spain', clubAtTime: 'Real Madrid' },
+       { name: 'Ferland Mendy', slotIndex: 4, nationality: 'France', clubAtTime: 'Real Madrid' },
+     ],
+     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on the starting XI for this quarterfinal-clinching win.',
+@@ -3431,8 +3431,8 @@ export const LINEUPS: Lineup[] = [
+     ],
+     blankCandidates: [
+       { name: 'Willy Sagnol', slotIndex: 4, nationality: 'France', clubAtTime: 'Bayern Munich' },
+-      { name: 'Giovane Elber', slotIndex: 8, nationality: 'Brazil', clubAtTime: 'Bayern Munich' },
+-      { name: 'Mehmet Scholl', slotIndex: 7, nationality: 'Germany', clubAtTime: 'Bayern Munich' },
++      { name: 'Giovane Elber', slotIndex: 9, nationality: 'Brazil', clubAtTime: 'Bayern Munich' },
++      { name: 'Mehmet Scholl', slotIndex: 8, nationality: 'Germany', clubAtTime: 'Bayern Munich' },
+     ],
+     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on the starting XI and the penalty shootout win.',
+   },
+@@ -3528,8 +3528,8 @@ export const LINEUPS: Lineup[] = [
+     ],
+     blankCandidates: [
+       { name: 'Ricardo Carvalho', slotIndex: 2, nationality: 'Portugal', clubAtTime: 'Porto' },
+-      { name: 'Maniche', slotIndex: 6, nationality: 'Portugal', clubAtTime: 'Porto' },
+-      { name: 'Nuno Gomes', slotIndex: 8, nationality: 'Portugal', clubAtTime: 'Benfica' },
++      { name: 'Maniche', slotIndex: 7, nationality: 'Portugal', clubAtTime: 'Porto' },
++      { name: 'Nuno Gomes', slotIndex: 9, nationality: 'Portugal', clubAtTime: 'Benfica' },
+     ],
+     source: 'Wikipedia infobox for the Euro 2004 Final, agrees on the host nation\'s starting XI in the shock defeat to Greece.',
+   },
+@@ -3626,7 +3626,7 @@ export const LINEUPS: Lineup[] = [
+     // Casillas started ahead of the injured Bodo Illgner, a surprise for a 19-year-old in a European Cup final - real, well-documented.
+     blankCandidates: [
+       { name: 'Iker Casillas', slotIndex: 0, nationality: 'Spain', clubAtTime: 'Real Madrid' },
+-      { name: 'Fernando Morientes', slotIndex: 7, nationality: 'Spain', clubAtTime: 'Real Madrid' },
++      { name: 'Fernando Morientes', slotIndex: 8, nationality: 'Spain', clubAtTime: 'Real Madrid' },
+       { name: 'Ivan Helguera', slotIndex: 2, nationality: 'Spain', clubAtTime: 'Real Madrid' },
+     ],
+     source: 'Wikipedia dedicated match article, confirms 19-year-old Casillas started in goal ahead of the injured Illgner.',
+@@ -3788,7 +3788,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Rio Ferdinand', slotIndex: 2, nationality: 'England', clubAtTime: 'Manchester United' },
+       { name: 'Antonio Valencia', slotIndex: 5, nationality: 'Ecuador', clubAtTime: 'Manchester United' },
+-      { name: 'Wayne Rooney', slotIndex: 8, nationality: 'England', clubAtTime: 'Manchester United' },
++      { name: 'Wayne Rooney', slotIndex: 9, nationality: 'England', clubAtTime: 'Manchester United' },
+     ],
+     source: 'Wikipedia dedicated match article + Manchester United official archive, confirms Fabio (not Rafael) started at right back.',
+   },
+@@ -3852,7 +3852,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Willy Sagnol', slotIndex: 1, nationality: 'France', clubAtTime: 'Bayern Munich' },
+       { name: 'Eric Abidal', slotIndex: 4, nationality: 'France', clubAtTime: 'Lyon' },
+-      { name: 'Florent Malouda', slotIndex: 8, nationality: 'France', clubAtTime: 'Lyon' },
++      { name: 'Florent Malouda', slotIndex: 9, nationality: 'France', clubAtTime: 'Lyon' },
+     ],
+     source: 'Wikipedia infobox for the 2006 Final, confirms Zidane\'s headbutt on Materazzi came from this starting XI in his last match.',
+   },
+@@ -3917,7 +3917,6 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Sime Vrsaljko', slotIndex: 1, nationality: 'Croatia', clubAtTime: 'Atletico Madrid' },
+       { name: 'Domagoj Vida', slotIndex: 3, nationality: 'Croatia', clubAtTime: 'Besiktas' },
+-      { name: 'Andrej Kramaric', slotIndex: 8, nationality: 'Croatia', clubAtTime: 'Hoffenheim' },
+     ],
+     source: 'Wikipedia infobox for the 2018 Final, agrees on Croatia\'s starting XI in their first-ever World Cup final.',
+   },
+@@ -3981,7 +3980,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Samuel Umtiti', slotIndex: 2, nationality: 'France', clubAtTime: 'Lyon' },
+       { name: 'Blaise Matuidi', slotIndex: 5, nationality: 'France', clubAtTime: 'Paris Saint-Germain' },
+-      { name: 'Olivier Giroud', slotIndex: 9, nationality: 'France', clubAtTime: 'Arsenal' },
++      { name: 'Olivier Giroud', slotIndex: 10, nationality: 'France', clubAtTime: 'Arsenal' },
+     ],
+     source: 'Wikipedia infobox for the Euro 2016 Final, agrees on France\'s starting XI as host nation runners-up.',
+   },
+@@ -4078,8 +4077,8 @@ export const LINEUPS: Lineup[] = [
+     ],
+     blankCandidates: [
+       { name: 'Dejan Lovren', slotIndex: 3, nationality: 'Croatia', clubAtTime: 'Zenit Saint Petersburg' },
+-      { name: 'Andrej Kramaric', slotIndex: 8, nationality: 'Croatia', clubAtTime: 'Hoffenheim' },
+-      { name: 'Ivan Perišić', slotIndex: 7, nationality: 'Croatia', clubAtTime: 'Tottenham Hotspur' },
++      { name: 'Andrej Kramaric', slotIndex: 9, nationality: 'Croatia', clubAtTime: 'Hoffenheim' },
++      { name: 'Ivan Perišić', slotIndex: 8, nationality: 'Croatia', clubAtTime: 'Tottenham Hotspur' },
+     ],
+     source: 'Wikipedia dedicated match article, agrees on Croatia\'s starting XI in a lopsided semifinal loss to Messi\'s Argentina.',
+   },
+@@ -4144,7 +4143,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Daryl Janmaat', slotIndex: 1, nationality: 'Netherlands', clubAtTime: 'Feyenoord' },
+       { name: 'Bruno Martins Indi', slotIndex: 4, nationality: 'Netherlands', clubAtTime: 'Feyenoord' },
+-      { name: 'Wesley Sneijder', slotIndex: 9, nationality: 'Netherlands', clubAtTime: 'Galatasaray' },
++      { name: 'Wesley Sneijder', slotIndex: 10, nationality: 'Netherlands', clubAtTime: 'Galatasaray' },
+     ],
+     source: 'Wikipedia dedicated match article, confirms Cillessen played the full match (Krul\'s sub appearance was the prior round vs Costa Rica).',
+   },
+@@ -4306,7 +4305,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Ibrahima Konate', slotIndex: 2, nationality: 'France', clubAtTime: 'Liverpool' },
+       { name: 'Thiago Alcántara', slotIndex: 7, nationality: 'Spain', clubAtTime: 'Liverpool' },
+-      { name: 'Luis Diaz', slotIndex: 9, nationality: 'Colombia', clubAtTime: 'Liverpool' },
++      { name: 'Luis Diaz', slotIndex: 10, nationality: 'Colombia', clubAtTime: 'Liverpool' },
+     ],
+     source: 'Wikipedia dedicated match article + Liverpool FC official archive, confirms Courtois\' heroics denied this starting XI.',
+   },
+@@ -4371,7 +4370,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Nico Schlotterbeck', slotIndex: 3, nationality: 'Germany', clubAtTime: 'Borussia Dortmund' },
+       { name: 'Ian Maatsen', slotIndex: 4, nationality: 'Netherlands', clubAtTime: 'Borussia Dortmund (loan)' },
+-      { name: 'Karim Adeyemi', slotIndex: 9, nationality: 'Germany', clubAtTime: 'Borussia Dortmund' },
++      { name: 'Karim Adeyemi', slotIndex: 10, nationality: 'Germany', clubAtTime: 'Borussia Dortmund' },
+     ],
+     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on Dortmund\'s starting XI in their Wembley final.',
+   },
+@@ -4435,7 +4434,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Andrea Barzagli', slotIndex: 3, nationality: 'Italy', clubAtTime: 'Juventus' },
+       { name: 'Dani Alves', slotIndex: 4, nationality: 'Brazil', clubAtTime: 'Juventus' },
+-      { name: 'Mario Mandžukić', slotIndex: 9, nationality: 'Croatia', clubAtTime: 'Juventus' },
++      { name: 'Mario Mandžukić', slotIndex: 10, nationality: 'Croatia', clubAtTime: 'Juventus' },
+     ],
+     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on Juventus\'s starting XI in the semifinal 1st leg away win.',
+   },
+@@ -4627,7 +4626,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Cristian Chivu', slotIndex: 4, nationality: 'Romania', clubAtTime: 'Inter Milan' },
+       { name: 'Thiago Motta', slotIndex: 6, nationality: 'Brazil', clubAtTime: 'Inter Milan' },
+-      { name: 'Goran Pandev', slotIndex: 9, nationality: 'North Macedonia', clubAtTime: 'Inter Milan' },
++      { name: 'Goran Pandev', slotIndex: 10, nationality: 'North Macedonia', clubAtTime: 'Inter Milan' },
+     ],
+     source: 'Wikipedia match report + Inter official retrospective + Football Italia archive, unanimous on the Scudetto-clinching XI en route to the 2010 treble.',
+   },
+@@ -4787,7 +4786,7 @@ export const LINEUPS: Lineup[] = [
+     ],
+     blankCandidates: [
+       { name: 'Josko Gvardiol', slotIndex: 4, nationality: 'Croatia', clubAtTime: 'Manchester City' },
+-      { name: 'Jeremy Doku', slotIndex: 9, nationality: 'Belgium', clubAtTime: 'Manchester City' },
++      { name: 'Jeremy Doku', slotIndex: 10, nationality: 'Belgium', clubAtTime: 'Manchester City' },
+       { name: 'Ruben Dias', slotIndex: 2, nationality: 'Portugal', clubAtTime: 'Manchester City' },
+     ],
+     source: 'Wikipedia match report + Manchester City official archive + Sky Sports lineup graphic, unanimous on a record fourth straight title.',
+@@ -4820,7 +4819,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Alejandro Balde', slotIndex: 4, nationality: 'Spain', clubAtTime: 'Barcelona' },
+       { name: 'Andreas Christensen', slotIndex: 2, nationality: 'Denmark', clubAtTime: 'Barcelona' },
+-      { name: 'Raphinha', slotIndex: 9, nationality: 'Brazil', clubAtTime: 'Barcelona' },
++      { name: 'Raphinha', slotIndex: 10, nationality: 'Brazil', clubAtTime: 'Barcelona' },
+     ],
+     source: 'Wikipedia match report + FC Barcelona official archive + Marca, unanimous on the title-clinching starting XI.',
+   },
+@@ -4852,7 +4851,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Samuel Umtiti', slotIndex: 3, nationality: 'France', clubAtTime: 'Barcelona' },
+       { name: 'Sergi Roberto', slotIndex: 1, nationality: 'Spain', clubAtTime: 'Barcelona' },
+-      { name: 'Ousmane Dembele', slotIndex: 9, nationality: 'France', clubAtTime: 'Barcelona' },
++      { name: 'Ousmane Dembele', slotIndex: 10, nationality: 'France', clubAtTime: 'Barcelona' },
+     ],
+     source: 'Wikipedia match report + FC Barcelona official archive + Marca, agree on the title-clinching starting XI during the unbeaten league season.',
+   },
+@@ -5110,7 +5109,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'Dante', slotIndex: 3, nationality: 'Brazil', clubAtTime: 'Bayern Munich' },
+       { name: 'Toni Kroos', slotIndex: 6, nationality: 'Germany', clubAtTime: 'Bayern Munich' },
+-      { name: 'Mario Mandžukić', slotIndex: 9, nationality: 'Croatia', clubAtTime: 'Bayern Munich' },
++      { name: 'Mario Mandžukić', slotIndex: 10, nationality: 'Croatia', clubAtTime: 'Bayern Munich' },
+     ],
+     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on Bayern\'s starting XI for the semifinal 1st leg loss.',
+   },
+@@ -5206,7 +5205,7 @@ export const LINEUPS: Lineup[] = [
+     blankCandidates: [
+       { name: 'David Luiz', slotIndex: 3, nationality: 'Brazil', clubAtTime: 'Paris Saint-Germain' },
+       { name: 'Marco Verratti', slotIndex: 6, nationality: 'Italy', clubAtTime: 'Paris Saint-Germain' },
+-      { name: 'Lucas Moura', slotIndex: 9, nationality: 'Brazil', clubAtTime: 'Paris Saint-Germain' },
++      { name: 'Lucas Moura', slotIndex: 10, nationality: 'Brazil', clubAtTime: 'Paris Saint-Germain' },
+     ],
+     source: 'Wikipedia dedicated match article + UEFA.com archive, agree on PSG\'s starting XI for the 2nd-leg draw that eliminated a struggling Chelsea.',
+   },
+diff --git a/src/pages/HockeyCareer.tsx b/src/pages/HockeyCareer.tsx
+index 811029a..1f5bfa4 100644
+--- a/src/pages/HockeyCareer.tsx
++++ b/src/pages/HockeyCareer.tsx
+@@ -208,4 +208,13 @@ const HockeyCareer = () => {
+ 
+         <AdBanner slot="1234567901" format="horizontal" className="mt-8" />
+         <div className="flex justify-center mt-6">
+-          <ReportQuestion gameType="hockey-career" gameContext={{ p
+\ No newline at end of file
++          <ReportQuestion gameType="hockey-career" gameContext={{ puzzleId: puzzle.id }} />
++        </div>
++        <GameNav />
++      </GameShell>
++      <HockeyCareerHowToPlay open={showRules} onOpenChange={setShowRules} />
++    </>
++  );
++};
++
++export default HockeyCareer;
+\ No newline at end of file
+diff --git a/src/pages/Profile.tsx b/src/pages/Profile.tsx
+index a6b6d80..7eab1f2 100644
+--- a/src/pages/Profile.tsx
++++ b/src/pages/Profile.tsx
+@@ -46,6 +46,10 @@ const GAME_LABELS: Record<string, string> = {
+   'cbb-program': '🏀 CBB Program', 'conquest': '🗺️ Conquest',
+   'guess-the-year': '📆 Guess the Year', 'nba-lineup': '🏀 NBA Lineup',
+   'guess-nfl-team': '🏈 Guess NFL Team', 'fantasy-draft': '⚽ Fantasy Draft',
++  // QA 2026-07-15: completion slugs now match registry route paths; old keys above
++  // are kept so historical rows still label. New-convention keys:
++  'guess-cbb-team': '🏀 CBB Program', 'guess-tennis-player': '🎾 Tennis Player',
++  'guess-nascar-driver': '🏁 NASCAR Driver',
+ };
+ 
+ const SPORT_CATEGORIES: Record<string, string> = {
+@@ -66,6 +70,9 @@ const SPORT_CATEGORIES: Record<string, string> = {
+   'nascar-driver': 'motorsport', 'nascar-chain': 'motorsport',
+   'tennis-player': 'tennis', 'tennis-chain': 'tennis',
+   'guess-the-year': 'general',
++  // New-convention slugs (see GAME_LABELS note above):
++  'guess-cbb-team': 'college', 'guess-tennis-player': 'tennis',
++  'guess-nascar-driver': 'motorsport',
+ };
+ 
+ const SPORT_LABELS: Record<string, string> = {
+diff --git a/supabase/functions/college-grid-validate/index.ts b/supabase/functions/college-grid-validate/index.ts
+index 5d86916..ca4091b 100644
+--- a/supabase/functions/college-grid-validate/index.ts
++++ b/supabase/functions/college-grid-validate/index.ts
+@@ -1,9 +1,12 @@
+ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+ 
+-// College Football (NCAA/FBS) 3x3 grid validator. FREE Gemini key ->
+-// gemini-2.5-flash (2.0-flash has no free quota on this key). Falls back to
+-// Lovable gateway, then accept-unverified so the daily grid never 500s.
++/**
++ * College Football 3x3 grid validator (colleges are CONFIRM-ONLY).
++ * FAIL CLOSED (2026-07-22): when the model can't verify, do NOT accept -
++ * return an explicit unverified verdict instead of accept-unverified.
++ */
++
+ const GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
+ const AI_URL = GEMINI_KEY
+   ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+@@ -11,9 +14,6 @@ const AI_URL = GEMINI_KEY
+ const AI_MODEL = GEMINI_KEY ? "gemini-2.5-flash" : "google/gemini-2.5-flash";
+ const AI_KEY = GEMINI_KEY || Deno.env.get("LOVABLE_API_KEY");
+ 
+-// Verified-verdict cache (2026-07-10): repeat guesses are answered from
+-// Postgres instead of burning the free Gemini quota (10 requests/min).
+-// SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are auto-injected in edge runtime.
+ const sb = createClient(Deno.env.get("SUPABASE_URL") ?? "", Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "");
+ const CACHE_GAME = "college-grid";
+ const cacheKeyOf = (p: string, r: string, c: string) =>
+@@ -23,15 +23,12 @@ const allowedOrigins = [
+   "https://douknowball.com",
+   "https://www.douknowball.com",
+   "https://douknowball.lovable.app",
+-  "https://id-preview--d69b1c20-4988-43ae-947e-7c6feb3ed683.lovable.app",
++  "https://ballpark-hero.lovable.app",
+   "http://localhost:8080",
+   "http://localhost:5173",
+ ];
+-function isAllowedOrigin(origin: string): boolean {
+-  if (allowedOrigins.includes(origin)) return true;
+-  if (origin.endsWith(".lovableproject.com")) return true;
+-  if (origin.endsWith(".lovable.app")) return true;
+-  return false;
++function isAllowedOrigin(o: string) {
++  return allowedOrigins.includes(o) || o.endsWith(".lovableproject.com") || o.endsWith(".lovable.app");
+ }
+ function getCorsHeaders(req: Request) {
+   const origin = req.headers.get("origin") || "";
+@@ -43,55 +40,135 @@ function getCorsHeaders(req: Request) {
+ }
+ 
+ const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+-const RATE_LIMIT_MAX = 20;
+-const RATE_LIMIT_WINDOW_MS = 60_000;
+-function isRateLimited(ip: string): boolean {
++function isRateLimited(ip: string) {
+   const now = Date.now();
+   const e = rateLimitMap.get(ip);
+-  if (!e || now > e.resetAt) {
+-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+-    return false;
+-  }
++  if (!e || now > e.resetAt) { rateLimitMap.set(ip, { count: 1, resetAt: now + 60_000 }); return false; }
+   e.count++;
+-  return e.count > RATE_LIMIT_MAX;
++  return e.count > 30;
++}
++
++const norm = (s: string) =>
++  (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
++
++const COLLEGE_ALIASES: Record<string, string[]> = {
++  "lsu": ["louisiana state"],
++  "usc": ["southern california", "usc"],
++  "miami fl": ["miami", "miami fla"],
++  "miami florida": ["miami", "miami fla"],
++  "ole miss": ["mississippi"],
++  "pitt": ["pittsburgh"],
++  "ucf": ["central florida"],
++  "smu": ["southern methodist"],
++  "tcu": ["texas christian"],
++  "byu": ["brigham young"],
++  "texas a m": ["texas a m"],
++  "ohio state": ["ohio state"],
++  "penn state": ["penn state"],
++  "florida state": ["florida state"],
++  "notre dame": ["notre dame"],
++  "michigan": ["michigan"],
++  "alabama": ["alabama"],
++  "georgia": ["georgia"],
++  "clemson": ["clemson"],
++  "oklahoma": ["oklahoma"],
++  "texas": ["texas"],
++  "florida": ["florida"],
++  "oregon": ["oregon"],
++  "stanford": ["stanford"],
++  "wisconsin": ["wisconsin"],
++  "auburn": ["auburn"],
++};
++
++const POSITIONS: Record<string, string[]> = {
++  "quarterback": ["qb"],
++  "running back": ["rb", "fb", "hb"],
++  "wide receiver": ["wr"],
++  "tight end": ["te"],
++  "offensive lineman": ["t", "g", "c", "ol", "ot", "og"],
++  "defensive end": ["de", "edge"],
++  "defensive tackle": ["dt", "nt", "dl"],
++  "linebacker": ["lb", "ilb", "olb", "mlb"],
++  "cornerback": ["cb", "db"],
++  "safety": ["s", "fs", "ss", "db"],
++};
++
++type Verdict = true | false | "unknown";
++
++function json(obj: unknown, corsHeaders: Record<string, string>, status = 200) {
++  return new Response(JSON.stringify(obj), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
++}
++
++function schoolsOf(raw: string | null): string[] {
++  return (raw ?? "").split(";").map((s) => norm(s)).filter(Boolean);
+ }
+-setInterval(() => {
+-  const now = Date.now();
+-  for (const [ip, e] of rateLimitMap) if (now > e.resetAt) rateLimitMap.delete(ip);
+-}, 300_000);
+ 
+ serve(async (req) => {
+   const corsHeaders = getCorsHeaders(req);
+   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+-  const json = (obj: unknown, status = 200) =>
+-    new Response(JSON.stringify(obj), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+ 
+   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+-  if (isRateLimited(ip)) return json({ valid: false, error: "Too many requests" }, 429);
++  if (isRateLimited(ip)) return json({ valid: false, error: "Too many requests" }, corsHeaders, 429);
+ 
+   let sanitized = { player: "", row: "", col: "" };
+   try {
+     const { playerName, rowAttribute, colAttribute } = await req.json();
+-    if (!playerName || !rowAttribute || !colAttribute) return json({ valid: false, error: "Missing required fields" });
++    if (!playerName || !rowAttribute || !colAttribute) return json({ valid: false, error: "Missing required fields" }, corsHeaders);
+     sanitized = {
+       player: String(playerName).slice(0, 80).replace(/[\n\r]/g, ""),
+       row: String(rowAttribute).slice(0, 100).replace(/[\n\r]/g, ""),
+       col: String(colAttribute).slice(0, 100).replace(/[\n\r]/g, ""),
+     };
+   } catch {
+-    return json({ valid: false, error: "Bad request" }, 400);
++    return json({ valid: false, error: "Bad request" }, corsHeaders, 400);
+   }
+ 
+-  const accept = () => json({ valid: true, unverified: true, reason: "Accepted (answer-checking offline).", fullName: sanitized.player });
++  // FAIL CLOSED: when the model can't verify, do NOT accept.
++  const unverified = () =>
++    json({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again.", fullName: null }, corsHeaders);
+ 
+   const cacheKey = cacheKeyOf(sanitized.player, sanitized.row, sanitized.col);
+   try {
+     const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
+       .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
+-    if (hit?.verdict) return json({ ...(hit.verdict as Record<string, unknown>), cached: true });
+-  } catch { /* cache down -> fall through to AI */ }
++    if (hit?.verdict) return json({ ...(hit.verdict as Record<string, unknown>), cached: true }, corsHeaders);
++  } catch { /* cache down */ }
++
++  try {
++    const { data } = await sb.from("nfl_player_team_stints")
++      .select("player_name, position, college")
++      .ilike("player_name", sanitized.player).limit(40);
++    const stints = (data ?? []) as { player_name: string; position: string | null; college: string | null }[];
++
++    if (stints.length > 0) {
++      const properName = stints[0].player_name;
++      const schools = [...new Set(stints.flatMap((s) => schoolsOf(s.college)))];
++      const positions = stints.map((s) => norm(s.position ?? "")).filter(Boolean);
++
++      const evaluate = (label: string): Verdict => {
++        const l = norm(label);
++        if (POSITIONS[l]) {
++          if (positions.length === 0) return "unknown";
++          return positions.some((p) => POSITIONS[l].includes(p)) ? true : "unknown";
++        }
++        if (/heisman|all american|national champion|pick|undrafted|conference/.test(l)) return "unknown";
++        if (schools.length === 0) return "unknown";
++        const wanted = COLLEGE_ALIASES[l] ?? [l];
++        return schools.some((s) => wanted.includes(s)) ? true : "unknown";
++      };
++
++      const rowV = evaluate(sanitized.row);
++      const colV = evaluate(sanitized.col);
++
++      if (rowV === true && colV === true) {
++        const verdict = { valid: true, reason: "Verified from college and NFL records.", fullName: properName };
++        try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
++        return json(verdict, corsHeaders);
++      }
++    }
++  } catch { /* deterministic pass unavailable -> AI */ }
+ 
+-  if (!AI_KEY) return accept();
++  if (!AI_KEY) return unverified();
+ 
+   const prompt = `You are a college football (NCAA/FBS) trivia expert (2000-2026). Does "${sanitized.player}" satisfy BOTH criteria?\n1. "${sanitized.row}"\n2. "${sanitized.col}"\nConsider the player's college career: school(s) attended, conference, position, Heisman/All-American/National Champion honours, and NFL draft status (round/pick/undrafted). Be lenient with spelling and accept an unambiguous surname.\nReply with ONLY JSON: {"valid":true,"fullName":"First Last"} or {"valid":false,"reason":"brief"}`;
+ 
+@@ -103,21 +180,19 @@ serve(async (req) => {
+     });
+     let resp = await callAI();
+     if (resp.status === 429) {
+-      // free-tier RPM hit: wait once and retry before failing open
+       await new Promise((r) => setTimeout(r, 1200));
+       resp = await callAI();
+     }
+-    if (!resp.ok) return accept();
++    if (!resp.ok) return unverified();
+     const data = await resp.json();
+     const content = data.choices?.[0]?.message?.content?.trim() || "";
+     const m = content.match(/\{[\s\S]*\}/);
+-    if (!m) return accept();
++    if (!m) return unverified();
+     const result = JSON.parse(m[0]);
+     const verdict = { valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null };
+-    // cache VERIFIED verdicts only — never the fail-open acceptances
+     try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
+-    return json(verdict);
++    return json(verdict, corsHeaders);
+   } catch {
+-    return accept();
++    return unverified();
+   }
+ });
+diff --git a/supabase/functions/football-connect4-validate/index.ts b/supabase/functions/football-connect4-validate/index.ts
+index 7f1b86b..28b9b89 100644
+--- a/supabase/functions/football-connect4-validate/index.ts
++++ b/supabase/functions/football-connect4-validate/index.ts
+@@ -223,7 +223,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+ 
+     if (!response.ok) {
+       return new Response(
+-        JSON.stringify({ valid: false, reason: "Could not verify. Please try again." }),
++        JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
+         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+       );
+     }
+@@ -238,7 +238,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+       parsed = JSON.parse(jsonMatch[1].trim());
+       aiVerdict = true;
+     } catch {
+-      parsed = { valid: false, reason: "Could not parse response. Please try again." };
++      parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." };
+     }
+ 
+     // cache VERIFIED verdicts only — never the unverified fallbacks
+@@ -252,7 +252,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+   } catch (e) {
+     console.error("football-connect4-validate error:", e);
+     return new Response(
+-      JSON.stringify({ valid: false, reason: "Validation error. Please try again." }),
++      JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
+       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+     );
+   }
+diff --git a/supabase/functions/football-grid-validate/index.ts b/supabase/functions/football-grid-validate/index.ts
+index 867ef07..3d032b5 100644
+--- a/supabase/functions/football-grid-validate/index.ts
++++ b/supabase/functions/football-grid-validate/index.ts
+@@ -1,9 +1,11 @@
+ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+ 
+-// Pro Football (NFL) 3x3 grid validator. FREE Gemini key -> gemini-2.5-flash
+-// (2.0-flash has no free quota on this key). Falls back to Lovable gateway,
+-// then accept-unverified so the daily grid never 500s.
++/**
++ * Pro Football (NFL) 3x3 grid validator. FAIL CLOSED (2026-07-22): when the
++ * model can't verify, do NOT accept - return an explicit unverified verdict.
++ */
++
+ const GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
+ const AI_URL = GEMINI_KEY
+   ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+@@ -11,9 +13,6 @@ const AI_URL = GEMINI_KEY
+ const AI_MODEL = GEMINI_KEY ? "gemini-2.5-flash" : "google/gemini-2.5-flash";
+ const AI_KEY = GEMINI_KEY || Deno.env.get("LOVABLE_API_KEY");
+ 
+-// Verified-verdict cache (2026-07-10): repeat guesses are answered from
+-// Postgres instead of burning the free Gemini quota (10 requests/min).
+-// SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are auto-injected in edge runtime.
+ const sb = createClient(Deno.env.get("SUPABASE_URL") ?? "", Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "");
+ const CACHE_GAME = "football-grid";
+ const cacheKeyOf = (p: string, r: string, c: string) =>
+@@ -23,15 +22,12 @@ const allowedOrigins = [
+   "https://douknowball.com",
+   "https://www.douknowball.com",
+   "https://douknowball.lovable.app",
+-  "https://id-preview--d69b1c20-4988-43ae-947e-7c6feb3ed683.lovable.app",
++  "https://ballpark-hero.lovable.app",
+   "http://localhost:8080",
+   "http://localhost:5173",
+ ];
+-function isAllowedOrigin(origin: string): boolean {
+-  if (allowedOrigins.includes(origin)) return true;
+-  if (origin.endsWith(".lovableproject.com")) return true;
+-  if (origin.endsWith(".lovable.app")) return true;
+-  return false;
++function isAllowedOrigin(o: string) {
++  return allowedOrigins.includes(o) || o.endsWith(".lovableproject.com") || o.endsWith(".lovable.app");
+ }
+ function getCorsHeaders(req: Request) {
+   const origin = req.headers.get("origin") || "";
+@@ -43,55 +39,128 @@ function getCorsHeaders(req: Request) {
+ }
+ 
+ const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+-const RATE_LIMIT_MAX = 20;
+-const RATE_LIMIT_WINDOW_MS = 60_000;
+-function isRateLimited(ip: string): boolean {
++function isRateLimited(ip: string) {
+   const now = Date.now();
+   const e = rateLimitMap.get(ip);
+-  if (!e || now > e.resetAt) {
+-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+-    return false;
+-  }
++  if (!e || now > e.resetAt) { rateLimitMap.set(ip, { count: 1, resetAt: now + 60_000 }); return false; }
+   e.count++;
+-  return e.count > RATE_LIMIT_MAX;
++  return e.count > 30;
++}
++
++const norm = (s: string) =>
++  (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
++
++const POSITIONS: Record<string, string[]> = {
++  "quarterback": ["qb"],
++  "running back": ["rb", "fb", "hb"],
++  "wide receiver": ["wr"],
++  "tight end": ["te"],
++  "offensive lineman": ["t", "g", "c", "ol", "ot", "og"],
++  "defensive end": ["de", "edge"],
++  "defensive tackle": ["dt", "nt", "dl"],
++  "linebacker": ["lb", "ilb", "olb", "mlb"],
++  "cornerback": ["cb", "db"],
++  "safety": ["s", "fs", "ss", "db"],
++  "kicker": ["k", "pk"],
++  "punter": ["p"],
++};
++
++type Verdict = true | false | "unknown";
++interface Stint {
++  player_name: string; team: string; position: string | null; college: string | null;
++  first_season: number; last_season: number; debut_season: number | null; debut_age: number | null;
++}
++
++function json(obj: unknown, corsHeaders: Record<string, string>, status = 200) {
++  return new Response(JSON.stringify(obj), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+ }
+-setInterval(() => {
+-  const now = Date.now();
+-  for (const [ip, e] of rateLimitMap) if (now > e.resetAt) rateLimitMap.delete(ip);
+-}, 300_000);
+ 
+ serve(async (req) => {
+   const corsHeaders = getCorsHeaders(req);
+   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
+-  const json = (obj: unknown, status = 200) =>
+-    new Response(JSON.stringify(obj), { status, headers: { ...corsHeaders, "Content-Type": "application/json" } });
+ 
+   const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "unknown";
+-  if (isRateLimited(ip)) return json({ valid: false, error: "Too many requests" }, 429);
++  if (isRateLimited(ip)) return json({ valid: false, error: "Too many requests" }, corsHeaders, 429);
+ 
+   let sanitized = { player: "", row: "", col: "" };
+   try {
+     const { playerName, rowAttribute, colAttribute } = await req.json();
+-    if (!playerName || !rowAttribute || !colAttribute) return json({ valid: false, error: "Missing required fields" });
++    if (!playerName || !rowAttribute || !colAttribute) return json({ valid: false, error: "Missing required fields" }, corsHeaders);
+     sanitized = {
+       player: String(playerName).slice(0, 80).replace(/[\n\r]/g, ""),
+       row: String(rowAttribute).slice(0, 100).replace(/[\n\r]/g, ""),
+       col: String(colAttribute).slice(0, 100).replace(/[\n\r]/g, ""),
+     };
+   } catch {
+-    return json({ valid: false, error: "Bad request" }, 400);
++    return json({ valid: false, error: "Bad request" }, corsHeaders, 400);
+   }
+ 
+-  const accept = () => json({ valid: true, unverified: true, reason: "Accepted (answer-checking offline).", fullName: sanitized.player });
++  // FAIL CLOSED: when the model can't verify, do NOT accept. Return an explicit
++  // unverified verdict so the grid shows "couldn't verify, try again".
++  const unverified = () =>
++    json({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again.", fullName: null }, corsHeaders);
+ 
+   const cacheKey = cacheKeyOf(sanitized.player, sanitized.row, sanitized.col);
+   try {
+     const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
+       .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
+-    if (hit?.verdict) return json({ ...(hit.verdict as Record<string, unknown>), cached: true });
+-  } catch { /* cache down -> fall through to AI */ }
++    if (hit?.verdict) return json({ ...(hit.verdict as Record<string, unknown>), cached: true }, corsHeaders);
++  } catch { /* cache down */ }
++
++  try {
++    const { data } = await sb.from("nfl_player_team_stints")
++      .select("player_name, team, position, college, first_season, last_season, debut_season, debut_age")
++      .ilike("player_name", sanitized.player).limit(40);
++    const stints = (data ?? []) as Stint[];
++
++    if (stints.length > 0) {
++      const debut = stints[0].debut_season ?? Math.min(...stints.map((s) => s.first_season));
++      const age = stints[0].debut_age;
++      const careerComplete = debut >= 2003 || (age != null && age <= 23);
++      const properName = stints[0].player_name;
++
++      const evaluate = async (label: string): Promise<Verdict> => {
++        const l = norm(label);
++        const teamMatch = l.match(/^played for\s+(.+)$/);
++        if (teamMatch) {
++          const nick = teamMatch[1];
++          const { data: codes } = await sb.from("nfl_team_codes").select("team_code, team_name, franchise");
++          const wanted = (codes ?? []).filter((c: any) =>
++            norm(c.team_name).includes(nick) || norm(c.franchise).includes(nick));
++          if (wanted.length === 0) return "unknown";
++          const codeSet = new Set(wanted.map((c: any) => c.team_code));
++          if (stints.some((s) => codeSet.has(s.team))) return true;
++          return careerComplete ? false : "unknown";
++        }
++        if (POSITIONS[l]) {
++          const want = POSITIONS[l];
++          const have = stints.map((s) => norm(s.position ?? "")).filter(Boolean);
++          if (have.length === 0) return "unknown";
++          return have.some((p) => want.includes(p)) ? true : "unknown";
++        }
++        const colleges = stints.map((s) => norm(s.college ?? "")).filter(Boolean);
++        if (colleges.length > 0 && colleges.some((c) => c === l || c.includes(l) || l.includes(c))) return true;
++        return "unknown";
++      };
++
++      const rowV = await evaluate(sanitized.row);
++      const colV = await evaluate(sanitized.col);
++
++      if (rowV === true && colV === true) {
++        const verdict = { valid: true, reason: "Verified from NFL career records.", fullName: properName };
++        try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
++        return json(verdict, corsHeaders);
++      }
++      if (rowV === false || colV === false) {
++        const which = rowV === false ? sanitized.row : sanitized.col;
++        const verdict = { valid: false, reason: `${properName} does not satisfy "${which}".`, fullName: properName };
++        try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
++        return json(verdict, corsHeaders);
++      }
++    }
++  } catch { /* deterministic pass unavailable -> AI */ }
+ 
+-  if (!AI_KEY) return accept();
++  if (!AI_KEY) return unverified();
+ 
+   const prompt = `You are a pro football (NFL) trivia expert. Does "${sanitized.player}" satisfy BOTH criteria?\n1. "${sanitized.row}"\n2. "${sanitized.col}"\nConsider the player's whole NFL career: every team, college, draft status/round/pick, position, Pro Bowls, All-Pro, MVP/OPOY/DPOY/ROY awards, and Super Bowl wins. Be lenient with spelling and accept an unambiguous surname.\nReply with ONLY JSON: {"valid":true,"fullName":"First Last"} or {"valid":false,"reason":"brief"}`;
+ 
+@@ -103,21 +172,19 @@ serve(async (req) => {
+     });
+     let resp = await callAI();
+     if (resp.status === 429) {
+-      // free-tier RPM hit: wait once and retry before failing open
+       await new Promise((r) => setTimeout(r, 1200));
+       resp = await callAI();
+     }
+-    if (!resp.ok) return accept();
++    if (!resp.ok) return unverified();
+     const data = await resp.json();
+     const content = data.choices?.[0]?.message?.content?.trim() || "";
+     const m = content.match(/\{[\s\S]*\}/);
+-    if (!m) return accept();
++    if (!m) return unverified();
+     const result = JSON.parse(m[0]);
+     const verdict = { valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null };
+-    // cache VERIFIED verdicts only — never the fail-open acceptances
+     try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
+-    return json(verdict);
++    return json(verdict, corsHeaders);
+   } catch {
+-    return accept();
++    return unverified();
+   }
+ });
+diff --git a/supabase/functions/mlb-connect4-validate/index.ts b/supabase/functions/mlb-connect4-validate/index.ts
+index 65ffeef..814b69a 100644
+--- a/supabase/functions/mlb-connect4-validate/index.ts
++++ b/supabase/functions/mlb-connect4-validate/index.ts
+@@ -191,7 +191,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+ 
+     if (!response.ok) {
+       return new Response(
+-        JSON.stringify({ valid: true, reason: "Could not verify, allowing." }),
++        JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
+         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+       );
+     }
+@@ -206,7 +206,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+       parsed = JSON.parse(jsonMatch[1].trim());
+       aiVerdict = true;
+     } catch {
+-      parsed = { valid: true, reason: "Could not parse validation response." };
++      parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." };
+     }
+ 
+     // cache VERIFIED verdicts only — never the fail-open fallbacks
+@@ -220,7 +220,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+   } catch (e) {
+     console.error("mlb-connect4-validate error:", e);
+     return new Response(
+-      JSON.stringify({ valid: true, reason: "Validation error, allowing." }),
++      JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
+       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+     );
+   }
+diff --git a/supabase/functions/nba-connect4-validate/index.ts b/supabase/functions/nba-connect4-validate/index.ts
+index 481bc0b..aaba371 100644
+--- a/supabase/functions/nba-connect4-validate/index.ts
++++ b/supabase/functions/nba-connect4-validate/index.ts
+@@ -4,23 +4,12 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+ const __GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
+ const __AI_URL = __GEMINI_KEY ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions" : "https://ai.gateway.lovable.dev/v1/chat/completions";
+ 
+-// ---------------------------------------------------------------------------
+-// LIVE-BUG FIX (2026-07-22): the previous deployed version (v6) was a clone
+-// of nba-validate-player — it required {playerName, teamName} and returned
+-// 400 "Invalid teamName" for every request, because useNbaConnect4 sends
+-// {playerName, columnAttribute, rowAttribute}. Every NBA Connect 4 guess was
+-// being rejected, making the game unplayable. This rewrite restores the
+-// attribute-pair contract, modeled on football-connect4-validate (the
+-// working soccer validator), with NBA attribute definitions covering every
+-// attribute string used in src/data/nbaConnect4Boards.ts.
+-// ---------------------------------------------------------------------------
+-
+-// Verified-verdict cache: repeat guesses are answered from Postgres instead
+-// of burning the free Gemini quota (10 requests/min).
++// FAIL CLOSED (2026-07-22): when the AI backend can't verify (quota/parse/error),
++// do NOT accept. Return {valid:false, unverified:true} so the client shows
++// "couldn't verify, try again" instead of silently accepting an unchecked answer.
++
+ const sb = createClient(Deno.env.get("SUPABASE_URL") ?? "", Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "");
+ const CACHE_GAME = "nba-connect4";
+-// New key format `${player}|${row}|${col}` (2 pipes) can never collide with
+-// the old broken version's 3-pipe keys, so stale rows are simply dead.
+ const cacheKeyOf = (p: string, row: string, col: string) =>
+   `${p}|${row}|${col}`.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+ 
+@@ -203,14 +192,14 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+     );
+     let response = await callAI();
+     if (response.status === 429) {
+-      // free-tier RPM hit: wait once and retry before falling back
++      // free-tier RPM hit: wait once and retry before failing closed
+       await new Promise((r) => setTimeout(r, 1200));
+       response = await callAI();
+     }
+ 
+     if (!response.ok) {
+       return new Response(
+-        JSON.stringify({ valid: true, reason: "Could not verify, allowing." }),
++        JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
+         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+       );
+     }
+@@ -225,10 +214,10 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+       parsed = JSON.parse(jsonMatch[1].trim());
+       aiVerdict = true;
+     } catch {
+-      parsed = { valid: true, reason: "Could not parse validation response." };
++      parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." };
+     }
+ 
+-    // cache VERIFIED verdicts only — never the fail-open fallbacks
++    // cache VERIFIED verdicts only — never the fail-closed fallbacks
+     if (aiVerdict && parsed && typeof parsed === "object") {
+       try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict: parsed }); } catch { /* non-fatal */ }
+     }
+@@ -239,7 +228,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+   } catch (e) {
+     console.error("nba-connect4-validate error:", e);
+     return new Response(
+-      JSON.stringify({ valid: true, reason: "Validation error, allowing." }),
++      JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
+       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+     );
+   }
+diff --git a/supabase/functions/nfl-connect4-validate/index.ts b/supabase/functions/nfl-connect4-validate/index.ts
+index bdd127f..05639f6 100644
+--- a/supabase/functions/nfl-connect4-validate/index.ts
++++ b/supabase/functions/nfl-connect4-validate/index.ts
+@@ -184,7 +184,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+ 
+     if (!response.ok) {
+       return new Response(
+-        JSON.stringify({ valid: true, reason: "Could not verify, allowing." }),
++        JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
+         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+       );
+     }
+@@ -199,7 +199,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+       parsed = JSON.parse(jsonMatch[1].trim());
+       aiVerdict = true;
+     } catch {
+-      parsed = { valid: true, reason: "Could not parse validation response." };
++      parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." };
+     }
+ 
+     // cache VERIFIED verdicts only — never the fail-open fallbacks
+@@ -213,7 +213,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+   } catch (e) {
+     console.error("nfl-connect4-validate error:", e);
+     return new Response(
+-      JSON.stringify({ valid: true, reason: "Validation error, allowing." }),
++      JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
+       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+     );
+   }
+diff --git a/supabase/functions/nhl-connect4-validate/index.ts b/supabase/functions/nhl-connect4-validate/index.ts
+index e553222..6549ec6 100644
+--- a/supabase/functions/nhl-connect4-validate/index.ts
++++ b/supabase/functions/nhl-connect4-validate/index.ts
+@@ -184,7 +184,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+ 
+     if (!response.ok) {
+       return new Response(
+-        JSON.stringify({ valid: true, reason: "Could not verify, allowing." }),
++        JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
+         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+       );
+     }
+@@ -199,7 +199,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+       parsed = JSON.parse(jsonMatch[1].trim());
+       aiVerdict = true;
+     } catch {
+-      parsed = { valid: true, reason: "Could not parse validation response." };
++      parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." };
+     }
+ 
+     // cache VERIFIED verdicts only — never the fail-open fallbacks
+@@ -213,7 +213,7 @@ Respond with ONLY a valid JSON object (no markdown, no code blocks):
+   } catch (e) {
+     console.error("nhl-connect4-validate error:", e);
+     return new Response(
+-      JSON.stringify({ valid: true, reason: "Validation error, allowing." }),
++      JSON.stringify({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again." }),
+       { status: 200, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+     );
+   }
+diff --git a/supabase/functions/soccer-grid-validate/index.ts b/supabase/functions/soccer-grid-validate/index.ts
+index ed7d124..d6a194a 100644
+--- a/supabase/functions/soccer-grid-validate/index.ts
++++ b/supabase/functions/soccer-grid-validate/index.ts
+@@ -1,9 +1,26 @@
+ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+ 
+-// Soccer 3x3 grid validator. FREE Gemini key (GEMINI_API_KEY) -> gemini-2.5-flash
+-// (2.0-flash has no free quota on this key; 2.5-flash does). Falls back to the
+-// Lovable gateway, then to accept-unverified so the daily grid never 500s.
++/**
++ * Soccer 3x3 grid validator (2026-07-15 rewrite, v2).
++ *
++ * Resolution order:
++ *   1. verified-verdict cache (Postgres)
++ *   2. DETERMINISTIC check against public.soccer_player_club_stints
++ *      (80,577 stints / 27,850 players / 4,923 clubs, 2004-2026)
++ *   3. AI (free Gemini) only for what the data cannot settle
++ *   4. FAIL CLOSED when the model can't verify (2026-07-22): do NOT accept an
++ *      unchecked answer. Return an explicit unverified verdict so the client
++ *      shows "couldn't verify, try again" instead of silently accepting.
++ *
++ * Negative-safety: player_market_values starts in 2004, so a bare 2004 debut is
++ * ambiguous - the player may have played earlier (Rijkaard, Hagi) and must NOT
++ * be rejected. We therefore treat a career as fully covered when the player
++ * either debuted in 2005+, or debuted at the 2004 floor while 21 or younger
++ * (Messi was 16, Ronaldo 18, Sneijder 19 - those careers plainly start here).
++ * Everything still uncertain falls through and is never falsely rejected.
++ */
++
+ const GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
+ const AI_URL = GEMINI_KEY
+   ? "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions"
+@@ -11,27 +28,21 @@ const AI_URL = GEMINI_KEY
+ const AI_MODEL = GEMINI_KEY ? "gemini-2.5-flash" : "google/gemini-2.5-flash";
+ const AI_KEY = GEMINI_KEY || Deno.env.get("LOVABLE_API_KEY");
+ 
+-// Verified-verdict cache (2026-07-10): repeat guesses are answered from
+-// Postgres instead of burning the free Gemini quota (10 requests/min).
+-// SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY are auto-injected in edge runtime.
+ const sb = createClient(Deno.env.get("SUPABASE_URL") ?? "", Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "");
+ const CACHE_GAME = "soccer-grid";
+ const cacheKeyOf = (p: string, r: string, c: string) =>
+-  `${p}|${r}|${c}`.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
++  `${p}|${r}|${c}`.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+ 
+ const allowedOrigins = [
+   "https://douknowball.com",
+   "https://www.douknowball.com",
+   "https://douknowball.lovable.app",
+-  "https://id-preview--d69b1c20-4988-43ae-947e-7c6feb3ed683.lovable.app",
++  "https://ballpark-hero.lovable.app",
+   "http://localhost:8080",
+   "http://localhost:5173",
+ ];
+-function isAllowedOrigin(origin: string): boolean {
+-  if (allowedOrigins.includes(origin)) return true;
+-  if (origin.endsWith(".lovableproject.com")) return true;
+-  if (origin.endsWith(".lovable.app")) return true;
+-  return false;
++function isAllowedOrigin(o: string) {
++  return allowedOrigins.includes(o) || o.endsWith(".lovableproject.com") || o.endsWith(".lovable.app");
+ }
+ function getCorsHeaders(req: Request) {
+   const origin = req.headers.get("origin") || "";
+@@ -43,22 +54,90 @@ function getCorsHeaders(req: Request) {
+ }
+ 
+ const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
+-const RATE_LIMIT_MAX = 20;
+-const RATE_LIMIT_WINDOW_MS = 60_000;
+-function isRateLimited(ip: string): boolean {
++function isRateLimited(ip: string) {
+   const now = Date.now();
+   const e = rateLimitMap.get(ip);
+-  if (!e || now > e.resetAt) {
+-    rateLimitMap.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+-    return false;
+-  }
++  if (!e || now > e.resetAt) { rateLimitMap.set(ip, { count: 1, resetAt: now + 60_000 }); return false; }
+   e.count++;
+-  return e.count > RATE_LIMIT_MAX;
++  return e.count > 30;
++}
++
++const norm = (s: string) =>
++  (s || "").normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase().replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
++
++const DEMONYM: Record<string, string> = {
++  dutch: "netherlands", french: "france", brazilian: "brazil", english: "england",
++  spanish: "spain", german: "germany", italian: "italy", portuguese: "portugal",
++  argentine: "argentina", argentinian: "argentina", belgian: "belgium", croatian: "croatia",
++  serbian: "serbia", swedish: "sweden", norwegian: "norway", danish: "denmark",
++  polish: "poland", turkish: "turkey", russian: "russia", ukrainian: "ukraine",
++  scottish: "scotland", welsh: "wales", irish: "ireland", uruguayan: "uruguay",
++  colombian: "colombia", chilean: "chile", mexican: "mexico", american: "united states",
++  japanese: "japan", korean: "south korea", nigerian: "nigeria", ghanaian: "ghana",
++  senegalese: "senegal", ivorian: "ivory coast", moroccan: "morocco", algerian: "algeria",
++  egyptian: "egypt", cameroonian: "cameroon", swiss: "switzerland", austrian: "austria",
++  greek: "greece", czech: "czech republic", slovak: "slovakia", romanian: "romania",
++  hungarian: "hungary", finnish: "finland", icelandic: "iceland", australian: "australia",
++  canadian: "canada", paraguayan: "paraguay", peruvian: "peru", ecuadorian: "ecuador",
++  venezuelan: "venezuela", bosnian: "bosnia-herzegovina", slovenian: "slovenia",
++  albanian: "albania", bulgarian: "bulgaria", israeli: "israel", iranian: "iran",
++};
++
++type Verdict = true | false | "unknown";
++interface Stint {
++  player_name: string; club: string; nationality: string | null; position: string | null;
++  first_year: number; last_year: number; debut_year: number | null; debut_age: number | null;
++}
++
++function parseCriterion(label: string): { kind: "club" | "league" | "position" | "nationality"; value: string } {
++  const l = label.trim();
++  const club = l.match(/^played for\s+(.+)$/i);
++  if (club) return { kind: "club", value: club[1] };
++  const league = l.match(/^played in\s+(.+)$/i);
++  if (league) return { kind: "league", value: league[1] };
++  if (/goalkeeper|\(GK\)/i.test(l)) return { kind: "position", value: "gk" };
++  if (/defender|\(DEF\)/i.test(l)) return { kind: "position", value: "def" };
++  if (/midfield|\(MID\)/i.test(l)) return { kind: "position", value: "mid" };
++  if (/forward|striker|winger|\(FWD\)/i.test(l)) return { kind: "position", value: "fwd" };
++  return { kind: "nationality", value: l };
++}
++
++function positionBucket(pos: string | null): string | null {
++  const p = norm(pos ?? "");
++  if (!p) return null;
++  if (p.includes("keeper")) return "gk";
++  if (p.includes("back") || p.includes("defend")) return "def";
++  if (p.includes("midfield")) return "mid";
++  if (p.includes("forward") || p.includes("winger") || p.includes("striker")) return "fwd";
++  return null;
++}
++
++function clubMatches(stintClub: string, wanted: string): boolean {
++  const a = norm(stintClub), b = norm(wanted);
++  if (!a || !b) return false;
++  return a === b || a.includes(b) || b.includes(a);
++}
++
++function evaluate(crit: { kind: string; value: string }, stints: Stint[], careerComplete: boolean): Verdict {
++  if (stints.length === 0) return "unknown";
++  if (crit.kind === "club") {
++    if (stints.some((s) => clubMatches(s.club, crit.value))) return true;
++    return careerComplete ? false : "unknown";
++  }
++  if (crit.kind === "nationality") {
++    const want = DEMONYM[norm(crit.value)] ?? norm(crit.value);
++    const have = stints.map((s) => norm(s.nationality ?? "")).filter(Boolean);
++    if (have.length === 0) return "unknown";
++    if (have.some((n) => n === want || n.includes(want) || want.includes(n))) return true;
++    return false; // nationality does not change over a career
++  }
++  if (crit.kind === "position") {
++    const buckets = stints.map((s) => positionBucket(s.position)).filter(Boolean) as string[];
++    if (buckets.length === 0) return "unknown";
++    return buckets.includes(crit.value) ? true : "unknown"; // players change roles; never hard-reject
++  }
++  return "unknown"; // league: no league data held
+ }
+-setInterval(() => {
+-  const now = Date.now();
+-  for (const [ip, e] of rateLimitMap) if (now > e.resetAt) rateLimitMap.delete(ip);
+-}, 300_000);
+ 
+ serve(async (req) => {
+   const corsHeaders = getCorsHeaders(req);
+@@ -82,16 +161,58 @@ serve(async (req) => {
+     return json({ valid: false, error: "Bad request" }, 400);
+   }
+ 
+-  const accept = () => json({ valid: true, unverified: true, reason: "Accepted (answer-checking offline).", fullName: sanitized.player });
++  // FAIL CLOSED: when the model can't verify, do NOT accept the answer. Return an
++  // explicit unverified verdict (valid:false + unverified:true) so the grid shows
++  // "couldn't verify, try again" and never records it as a wrong guess.
++  const unverified = () =>
++    json({ valid: false, unverified: true, reason: "Couldn't verify your answer right now — please try again.", fullName: null });
+ 
+   const cacheKey = cacheKeyOf(sanitized.player, sanitized.row, sanitized.col);
+   try {
+     const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
+       .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
+     if (hit?.verdict) return json({ ...(hit.verdict as Record<string, unknown>), cached: true });
+-  } catch { /* cache down -> fall through to AI */ }
++  } catch { /* cache down -> continue */ }
++
++  const COLS = "player_name, club, nationality, position, first_year, last_year, debut_year, debut_age";
++
++  try {
++    const { data } = await sb.from("soccer_player_club_stints").select(COLS)
++      .ilike("player_name", sanitized.player).limit(60);
++    let stints = (data ?? []) as Stint[];
++
++    // surname fallback, only when it resolves to exactly one player
++    if (stints.length === 0 && sanitized.player.trim().split(/\s+/).length === 1) {
++      const { data: bySurname } = await sb.from("soccer_player_club_stints").select(COLS)
++        .ilike("player_name", `% ${sanitized.player.trim()}`).limit(60);
++      const names = new Set((bySurname ?? []).map((r: any) => norm(r.player_name)));
++      if (names.size === 1) stints = (bySurname ?? []) as Stint[];
++    }
++
++    if (stints.length > 0) {
++      const debutYear = stints[0].debut_year ?? Math.min(...stints.map((s) => s.first_year));
++      const debutAge = stints[0].debut_age;
++      const careerComplete = debutYear >= 2005 || (debutAge != null && debutAge <= 21);
++
++      const rowV = evaluate(parseCriterion(sanitized.row), stints, careerComplete);
++      const colV = evaluate(parseCriterion(sanitized.col), stints, careerComplete);
++      const properName = stints[0].player_name;
++
++      if (rowV === true && colV === true) {
++        const verdict = { valid: true, reason: "Verified from career records.", fullName: properName };
++        try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
++        return json(verdict);
++      }
++      if (rowV === false || colV === false) {
++        const which = rowV === false ? sanitized.row : sanitized.col;
++        const verdict = { valid: false, reason: `${properName} does not satisfy "${which}".`, fullName: properName };
++        try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
++        return json(verdict);
++      }
++    }
++  } catch { /* deterministic pass unavailable -> AI */ }
+ 
+-  if (!AI_KEY) return accept();
++  if (!AI_KEY) return unverified();
+ 
+   const prompt = `You are a football/soccer trivia expert (knowledge through 2026). Does "${sanitized.player}" satisfy BOTH criteria?\n1. "${sanitized.row}"\n2. "${sanitized.col}"\nConsider all clubs (including loans), nationality, position (GK/DEF/MID/FWD), and honours (Champions League, World Cup, Ballon d'Or, league titles, Golden Boot, 100+ caps, leagues played in). Be lenient with spelling and accept an unambiguous surname.\nReply with ONLY JSON: {"valid":true,"fullName":"First Last"} or {"valid":false,"reason":"brief"}`;
+ 
+@@ -101,17 +222,16 @@ serve(async (req) => {
+       headers: { "Content-Type": "application/json", Authorization: `Bearer ${AI_KEY}` },
+       body: JSON.stringify({ model: AI_MODEL, messages: [{ role: "user", content: prompt }], temperature: 0.1, max_tokens: 150 }),
+     });
+-    if (!resp.ok) return accept();
++    if (!resp.ok) return unverified();
+     const data = await resp.json();
+     const content = data.choices?.[0]?.message?.content?.trim() || "";
+     const m = content.match(/\{[\s\S]*\}/);
+-    if (!m) return accept();
++    if (!m) return unverified();
+     const result = JSON.parse(m[0]);
+     const verdict = { valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null };
+-    // cache VERIFIED verdicts only — never the fail-open acceptances
+     try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
+     return json(verdict);
+   } catch {
+-    return accept();
++    return unverified();
+   }
+ });
