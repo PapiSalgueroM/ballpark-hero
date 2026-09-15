@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
+import ReferenceSources from '@/components/seo/ReferenceSources';
 import {
   UCL_FORMAT_PERIODS, UCL_FORMAT_SOURCES, UCL_AWAY_GOALS, UCL_FORMAT_VERIFIED_ON,
   periodFor, seasonRange, sourceById,
@@ -156,6 +157,7 @@ const ChampionsLeagueFormatHistory = () => {
                 <ul className="mt-2 space-y-1 text-sm text-muted-foreground leading-relaxed list-disc pl-5">
                   {p.notes.map(n => <li key={n}>{n}</li>)}
                 </ul>
+                <ReferenceSources label={seasonRange(p)} sourceIds={p.sources} sourceById={sourceById} />
               </article>
             ))}
           </div>
@@ -164,6 +166,7 @@ const ChampionsLeagueFormatHistory = () => {
         <section className="mb-10">
           <h2 className="text-lg font-display font-bold text-foreground mb-2">The away goals rule</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">{UCL_AWAY_GOALS.text}</p>
+          <ReferenceSources label="the away goals rule" sourceIds={UCL_AWAY_GOALS.sources} sourceById={sourceById} />
         </section>
 
         <section className="mb-10">
