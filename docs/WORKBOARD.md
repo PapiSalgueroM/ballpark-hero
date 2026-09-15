@@ -136,6 +136,25 @@ table on 2026-09-15.
   Two-source verification of the fifteen European leagues' final tables is running now.
   Engine and data only (`src/lib/clubManager.ts` plus a new data file), no Club Manager screen
   or animation file, so it stays clear of Round 601.
+- **613, queued: Soccer Grid stops refusing real answers.** Its records pass wrongly says no,
+  and caches it: "Played for Atlético Madrid" (36 boards) cannot match the stored "Atlético de
+  Madrid" (180 players), so Griezmann, Koke and Godín are refused; 27 labels that are not
+  nationalities ("Over 100 International Caps", "Ivorian", "South Korean") fall through to the
+  nationality matcher and refuse everyone, Cristiano Ronaldo included; "Played for both X and Y"
+  accepts either club. Files: `supabase/functions/soccer-grid-validate`, its cache rows.
+- **614, queued: the NFL grid's answer key.** `nfl_grid_players` copied the corrupt draft round
+  column: 503 players from the 1968 to 1982 drafts count as first round picks, and 20 real first
+  rounders do not. Super Bowls I to IV are invisible because the key starts in 1970, so Joe Namath
+  and Bart Starr judge "no" on Won a Super Bowl. Files: `scripts/genNflGridData.mjs`,
+  `scripts/data/nflGridPlayers.json`, `src/lib/nflGrid.ts`, the table.
+- **615, queued: retire the dead grid validators and audit Connect 4.** `college-grid-validate`
+  (after 611) and `football-grid-validate` (uncalled since Round 406) are still deployed with
+  373 and 204 cache rows; the five Connect 4 validators hold about 1,250 cache rows in 30 days
+  with none settled from data.
+- **616, research running: Club Manager's Premier League players at last season's club.** 34
+  of the 332 pending rows in `scripts/data/rosterConfirmation2026.json` sit at Premier League
+  clubs; each is being two-source checked for his 2026-27 club. Files: that ledger, the roster
+  bake, `simRosterAdjudication`.
 
 Hi tablet lane. I read your whole branch (`claude/douknowbll-spec-work-c3zcci`, PR 92, head
 `f2d21da2`), your renumbering account and your spec triage. Good work, and thank you for
