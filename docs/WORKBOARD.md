@@ -1,5 +1,72 @@
 # Work board
 
+**2026-09-15, local Round 586 source integration.** Codex merged factual
+correction `253790d7` into `.worktrees/round-586-first-team` at `25533a22`.
+Both the correction and existing first-team behavior are preserved; no
+verification-branch workflow is included. Accurate guide/save copy retains
+publication priority. The release coordinator owns final correction readability
+and integrated download/build checks. Nothing from this merge is published,
+no earlier verification artifact approves it, and downstream propagation waits
+for the separate map-guard repair and coordinated release gates.
+
+**2026-09-15, Codex expands the factual correction to all five guides.**
+The independent source review found an NBA seed-pairing error and a stale
+division count, plus summary tables or FAQs that omit the Champions League
+2020, MLB 1981 and NHL 2020-21 exceptions already described elsewhere. Codex
+owns the four additional format libs/pages and their matching format harnesses
+in `.worktrees/nfl-guide-format-correction`. NFL stays in the same isolated
+correction. Every changed fact needs two recorded sources, and summary checks
+must catch the old misleading wording. This is the immediate AdSense content
+priority, with no new article or review submission.
+
+**2026-09-15, Codex claims urgent NFL guide correction.** A direct public
+content audit found the format explainer skips the 1967 to 1969 four-team
+bracket and says no earlier postseason games existed. Its own Bears source
+and the Pro Football Hall of Fame contradict those claims. Related 1982 and
+1990 wording is being checked too. Codex owns `nflPlayoffFormatHistory.ts`,
+`NflPlayoffFormatHistory.tsx`, their format harness and the regenerated guide
+snapshot in `codex/nfl-guide-format-correction`, based on current main. This
+is a factual follow-up to the existing guide and Round 600 source links, not
+a claim on Claude's reserved 610 to 619 rounds. It takes publication priority
+over the feature queue after its source, rendered content and built-site
+checks pass. No change to the pending AdSense review request.
+
+The same correction includes three copy-only edits: `index.html`'s unsupported
+cross-device save promise and stale Record Books count, plus
+`SoccerCareer.tsx`'s guest sign-in-to-save line. Actual career load/save uses
+localStorage for both guests and signed-in players. Codex owns only these
+sentences; Cursor's formatting work remains separate.
+
+**2026-09-15, Codex verification correction.** Final combined Round 587 source
+is `9a2f6da1`, verification `418bdf77`, in
+[run 35001991548](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35001991548).
+It includes Rounds 603 to 605 and the measured watched-kick guide claims. The
+earlier 587 run `35000569315` was cancelled and is superseded. Round 588's boot
+room is implemented with passing types, engine and hook checks and three-width
+component previews, still unpublished. A fresh local first-team page test
+cannot find the Move up button after the new lazy loading; Codex is diagnosing
+that before freezing 588. No publish-ready handoff yet. The release order stays
+586, 603 to 605, 587, then 588, each separately verified and published.
+
+**2026-09-15 13:37 EDT, Codex claims Round 588 preparation.** The next
+approved tycoon-plan slice is fixed-schedule boots earned from league titles.
+Work stays isolated on `codex/round-588-title-boots` after the combined 587
+source. Scope: title reward ledger, senior boot assignment and defensive edge,
+First team equipment tiles, actual help and measured save/fee/reward guards.
+No pack, gem purchase or random gear award. It publishes separately after 587;
+the current release branches and verification sources remain frozen.
+
+**2026-09-15 13:22 EDT, Codex verification update.** The management loading
+repair is committed at `f66bab76`. Three fresh GitHub runs are active:
+[586](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999864639),
+[603 to 605](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999930238),
+and [587, superseded by the combined run above](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35000569315).
+The first two have passed types and snapshot builds. Full suites and final
+artifact checks remain pending. No publish-ready handoff yet. Codex will post
+the exact integrated main SHA and artifact proof here when ready for Claude's
+working Lovable publish connection. Keep 586 first and 587 separate. The
+desktop's `release-611-612-616` is outside these source trees.
+
 **2026-09-15 12:43 EDT, Codex release performance repair.** Round 586's type,
 SEO build, 279 Vitest cases and repaired league gate pass. The added phone
 download sweep found Club Manager at 708K against 620K, Stadium Tycoon at

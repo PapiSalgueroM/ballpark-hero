@@ -1,5 +1,87 @@
 # Project state
 
+## CURRENT INTEGRATION 2026-09-15: corrections merged into the Round 586 source
+
+This local tree combines Round 586 source `25533a22` with factual correction
+`253790d7`, including the five corrected guide snapshots and honest career-save
+copy. The academy prospect-card split, exact player callbacks and lazy-panel
+test waits remain intact. No verification workflow was imported.
+
+The factual correction still takes publication priority. None of this merge
+is a publication or proof of final download weight. The release coordinator
+owns correction readability checks and the next integrated weight/build gates.
+Fresh full verification must use this merged source; previous artifacts cannot
+approve the new tree. The completed combined 587 run `35001991548` failed the
+old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
+Its expected negative controls passed. The records below retain earlier
+verification context and do not supersede this current integration note.
+
+## PRIORITY CORRECTION 2026-09-15: published reference guides and save claims
+
+An independent public content audit found the guide incorrectly treats 1933
+through 1969 as one title-game format. The Chicago Bears' official history
+and Pro Football Hall of Fame results confirm four NFL playoff teams and
+conference championship games in 1967 to 1969. Related early tiebreaker, 1982
+and 1990 wording is being checked against primary sources. Codex is preparing
+a factual correction on `codex/nfl-guide-format-correction` from current main.
+The independent review also found incorrect NBA opening pairings, an obsolete
+NBA division claim and missing Champions League 2020, MLB 1981 and NHL 2020-21
+exceptions in summary tables or FAQs. The lower notes already describe those
+last three exceptions; the summaries need to match. Source records accompany
+the corrections in `docs/adsense/`.
+
+The homepage's cross-device career-save promise and Soccer Career's guest
+sign-in-to-save line contradict the actual localStorage load/save path. Both
+are corrected to describe browser saves and optional account scores. The
+homepage Record Books description now includes award winners and avoids a
+stale competition count. These are three copy-only edits, with Cursor's
+formatting work kept separate.
+
+This has priority over the feature releases because accurate, useful content
+is central to the pending AdSense review. The changes are under verification
+and are not published. Nothing in this finding proves which pages Google
+used in its earlier rejection.
+
+## NEXT IN PREPARATION 2026-09-15: Round 588, title-earned boots
+
+Codex is preparing the next slice of the existing tycoon design while the
+earlier release checks run remotely. It is isolated from their frozen source
+branches and will publish separately after 587. The scope is fixed title
+rewards, fictional boots, first-team equipment and measured fee/save guards.
+It is implemented in the isolated worktree and not published. Types, focused
+gear engine and hook checks, and component previews pass. The final freeze is
+waiting on diagnosis of an existing first-team test that cannot find the Move
+up button after lazy loading. Complete production release gates are still owed.
+
+The fresh public HTTP audit at 13:22 to 13:23 EDT passed all 148 sitemap URLs,
+with zero findings. This checks document access and missing-content signals,
+not indexing or approval. See [the audit record](adsense/live-document-audit-2026-09-15.md).
+
+## IN VERIFICATION 2026-09-15 13:22 EDT: first team, action scenes and watched kicks
+
+The management download repair is committed at `f66bab76`. Club Manager's
+later screens, the Academy's later panels and three management guides load
+when needed. Guide prose, game outcomes and the existing size budgets remain
+intact. Fresh full verification is running on GitHub to avoid competing with
+the other lane's local simulations. No new source below is published yet.
+
+- Round 586 source `24e17ff6`, verification `6c0165d7`,
+  [run 34999864639](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999864639).
+- Combined Rounds 603 to 605 source `4a99788f`, verification `4ebbb1df`,
+  [run 34999930238](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999930238).
+- Round 587 source `9a2f6da1`, verification `418bdf77`,
+  [run 35001991548](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35001991548).
+  This final source includes 603 to 605 and measured guide claims. The earlier
+  run `35000569315` was cancelled and is superseded.
+
+All three runs have passed app types and rebuilt snapshots and are in the
+full node suite. Full suites, browser download
+budgets, effective failure controls and artifact checks remain required.
+Round 586 also needs slow-chunk navigation checked against its final artifact.
+Publish 586 separately first, then the action scenes, then 587. Verification
+workflows stay off main. Claude's `release-611-612-616` is not part of these
+release sources. AdSense remains pending as confirmed at 12:37 EDT below.
+
 ## IN VERIFICATION 2026-09-15: Round 586, academy first team
 
 Built in `.worktrees/round-586-first-team`, branch `codex/round-586-first-team`.
@@ -40,6 +122,7 @@ temporary copy and retained every assertion; external writes were intercepted.
 Rounds 603 and 604 are independent action-animation
 worktrees for Club Manager live matches and Soccer Career drills; they do not
 share this round's save changes or release.
+
 ## RELEASE CHECK UPDATE 2026-09-15 12:43 EDT
 
 The new Round 586 release sweep found three initial JavaScript downloads above

@@ -66,8 +66,9 @@ const MlbPostseasonFormatHistory = () => {
 
         <section className="mb-10">
           <h2 className="text-lg font-display font-bold text-foreground mb-3">The timeline at a glance</h2>
-          <div className="overflow-x-auto rounded-xl border border-border">
-            <table className="w-full text-sm">
+          <p className="sm:hidden mb-2 text-xs text-muted-foreground">Swipe sideways to see every column.</p>
+          <div tabIndex={0} role="region" aria-label="MLB postseason format timeline" className="overflow-x-auto rounded-xl border border-border focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
+            <table className="w-full min-w-[560px] text-sm">
               <thead>
                 <tr className="bg-secondary/50 text-left">
                   <th className="px-3 py-2 font-semibold text-foreground whitespace-nowrap">Seasons</th>
@@ -79,7 +80,7 @@ const MlbPostseasonFormatHistory = () => {
                 {MLB_POSTSEASON_PERIODS.map(p => (
                   <tr key={p.id} className="border-t border-border/60 align-top">
                     <td className="px-3 py-1.5 text-muted-foreground whitespace-nowrap">{seasonRange(p)}</td>
-                    <td className="px-3 py-1.5 font-medium text-foreground whitespace-nowrap">{p.fieldSize} clubs</td>
+                    <td className="min-w-[120px] px-3 py-1.5 font-medium text-foreground whitespace-nowrap">{p.fieldSize} clubs {p.fieldNote && <span className="block whitespace-normal text-xs font-normal mt-1">{p.fieldNote}</span>}</td>
                     <td className="px-3 py-1.5 text-muted-foreground">{p.qualifying}</td>
                   </tr>
                 ))}
