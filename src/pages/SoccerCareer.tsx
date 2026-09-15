@@ -1911,7 +1911,7 @@ function CreationScreen({ playerName, setPlayerName, nationality, setNationality
         {saving ? "Creating..." : "⚽ Begin Career"}
       </Button>
       {rolledOvr === null && canGenerate && <p className="text-xs text-muted-foreground text-center">Generate your starting potential to begin</p>}
-      {!user && <p className="text-xs text-muted-foreground text-center">Sign in to save your career</p>}
+      {!user && <p className="text-xs text-muted-foreground text-center">Your career saves in this browser. No account needed.</p>}
     </div>
   );
 }
