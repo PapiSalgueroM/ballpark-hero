@@ -1046,14 +1046,16 @@ export function goalChancePerMin(s: TycoonState): number {
 }
 
 /** Chance the opponent scores in one minute; opponents scale forever. */
-export function oppChancePerMin(s: TycoonState): number {
+export function oppChancePerMin(s: TycoonState, edge = 0): number {
   const sq = levelOf(s, 'squad');
   // Round 162: the division you climbed into shoots back. Promotion is a
   // real thing, not a bigger number with the same Sunday opposition.
   // Round 582: plus the strength of the league rival you are playing today.
   const opp = 0.024 + leagueMatchNo(s) * 0.0011 + divisionOf(s).oppBoost + currentOpponentOffset(s);
   // Your squad defends too: half its levels push the opponent back down.
-  return Math.max(0.008, Math.min(0.14, opp - sq * 0.0008));
+  const base = Math.max(0.008, Math.min(0.14, opp - sq * 0.0008));
+  const defence = Number.isFinite(edge) ? Math.max(0, Math.min(0.40, edge)) : 0;
+  return Math.max(0.008, base * (1 - defence));
 }
 
 /** Bonus paid the moment we score: the crowd goes up as one. */
@@ -1110,7 +1112,7 @@ export interface TickEvent {
  * the goals, the result, the streak, the fans a win brings and the table all
  * happen, and no money moves: no goal bonus and no win bonus.
  */
-export function playMinute(st: TycoonState, roll: () => number, events: TickEvent[], opts: { pay: boolean }): void {
+export function playMinute(st: TycoonState, roll: () => number, events: TickEvent[], opts: { pay: boolean }, edge = 0): void {
   st.minute += 1;
   if (st.minute <= 90) {
     if (roll() < goalChancePerMin(st)) {
@@ -1125,7 +1127,7 @@ export function playMinute(st: TycoonState, roll: () => number, events: TickEven
         events.push({ kind: 'goal', minute: st.minute });
       }
     }
-    if (roll() < oppChancePerMin(st)) {
+    if (roll() < oppChancePerMin(st, edge)) {
       st.goalsAgainst += 1;
       events.push({ kind: 'conceded', minute: st.minute });
     }
@@ -1197,7 +1199,7 @@ export function awayMatchdaysPlayable(s: TycoonState, count: number): number {
  *  doctored totalMatches of 2^53 does not change when one is added, and the
  *  review found away play then spilling into the final matchday). After each
  *  one the milestones and badges it reached settle as they would have live. */
-export function playAwayMatchdays(s: TycoonState, count: number, roll: () => number): { state: TycoonState; results: AwayMatch[]; events: TickEvent[] } {
+export function playAwayMatchdays(s: TycoonState, count: number, roll: () => number, edge = 0): { state: TycoonState; results: AwayMatch[]; events: TickEvent[] } {
   const st: TycoonState = { ...s, levels: { ...s.levels } };
   const events: TickEvent[] = [];
   const results: AwayMatch[] = [];
@@ -1207,7 +1209,7 @@ export function playAwayMatchdays(s: TycoonState, count: number, roll: () => num
     let result: TickEvent['kind'] | null = null;
     for (let guard = 0; guard <= 90 && result === null; guard += 1) {
       const k = events.length;
-      playMinute(st, roll, events, { pay: false });
+      playMinute(st, roll, events, { pay: false }, edge);
       for (let j = k; j < events.length; j += 1) {
         if (events[j].kind === 'win' || events[j].kind === 'draw' || events[j].kind === 'loss') result = events[j].kind;
       }
@@ -1223,7 +1225,7 @@ export function playAwayMatchdays(s: TycoonState, count: number, roll: () => num
  * passes Math.random, the harness passes a seeded stream). Match minutes run
  * at 1.4 real seconds each, so a full match is about two minutes of play.
  */
-export function tick(s: TycoonState, dt: number, roll: () => number): { state: TycoonState; events: TickEvent[] } {
+export function tick(s: TycoonState, dt: number, roll: () => number, edge = 0): { state: TycoonState; events: TickEvent[] } {
   const events: TickEvent[] = [];
   let st = { ...s, levels: { ...s.levels } };
 
@@ -1271,7 +1273,7 @@ export function tick(s: TycoonState, dt: number, roll: () => number): { state: T
   // A huge dt (returning from background) fast-forwards at most one match.
   if (minutes > 120) { minutes = 120; st.matchSec = 0; }
   minutes = Math.max(0, minutes);
-  for (let i = 0; i < minutes; i++) playMinute(st, roll, events, { pay: true });
+  for (let i = 0; i < minutes; i++) playMinute(st, roll, events, { pay: true }, edge);
   settleFirsts(st, events);
   return { state: st, events };
 }

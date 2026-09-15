@@ -506,8 +506,8 @@ if (rowsChecked < 60) fail(`only ${rowsChecked} rows rendered`);
 console.log('5) The How to Play copy and the game content say what the meters do');
 {
   const strip = s => lf(s).replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^\s*\/\/.*$/gm, ' ');
-  const page = strip(fs.readFileSync(path.join(ROOT, 'src', 'pages', 'ClubManager.tsx'), 'utf8'));
-  const content = strip(fs.readFileSync(path.join(ROOT, 'src', 'data', 'gameContent', 'soccer1.ts'), 'utf8'));
+  const page = strip(fs.readFileSync(path.join(ROOT, 'src', 'components', 'club-manager', 'ClubManagerHelp.tsx'), 'utf8'));
+  const content = strip(fs.readFileSync(path.join(ROOT, 'src', 'data', 'gameContent', 'clubManagement.ts'), 'utf8'));
   const pageClaims = [
     `Safe is ${BOARD_SAFE} and above`,
     `Under pressure is ${BOARD_EDGE} to ${BOARD_SAFE - 1}`,

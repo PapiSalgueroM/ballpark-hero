@@ -371,7 +371,7 @@ if (live.length < 8) fail(`only ${live.length} of the 8 away tests ran`);
 for (const note of live.notes.filter(n => /matchday/.test(n))) console.log(`     ${note}`);
 
 const PLAYABLE = '  const n = awayMatchdaysPlayable(s, count);';
-const AWAY_MINUTE = 'playMinute(st, roll, events, { pay: false })';
+const AWAY_MINUTE = 'playMinute(st, roll, events, { pay: false }, edge)';
 const FINAL = '  const beforeFinal = Math.max(0, leagueShape(lg.division).matchdays - 1 - lg.matchday);';
 function copyLoop(text) {
   const start = text.indexOf('export function playMinute(');
@@ -379,14 +379,14 @@ function copyLoop(text) {
   if (start < 0 || end < 0) abort('  control copy: playMinute is not in stadiumTycoon.ts, so this control would prove nothing');
   const body = text.slice(start, end + 3)
     .replace('export function playMinute(', 'function awayMinuteCopy(')
-    .split('roll() < oppChancePerMin(st)').join("roll() < Math.max(0.008, Math.min(0.14, oppChancePerMin(st) + levelOf(st, 'squad') * 0.0008))");
+    .split('roll() < oppChancePerMin(st, edge)').join("roll() < Math.max(0.008, Math.min(0.14, oppChancePerMin(st, edge) + levelOf(st, 'squad') * 0.0008))");
   if (!body.includes("levelOf(st, 'squad') * 0.0008")) abort('  control copy: the opponent roll is not in playMinute, so the copy would match the original');
-  return mustReplace(text, AWAY_MINUTE, 'awayMinuteCopy(st, roll, events, { pay: false })', 'stadiumTycoon.ts') + '\n' + body;
+  return mustReplace(text, AWAY_MINUTE, 'awayMinuteCopy(st, roll, events, { pay: false }, edge)', 'stadiumTycoon.ts') + '\n' + body;
 }
 const CONTROLS = [
   { name: 'off', why: 'away matchdays never play', build: t => mustReplace(t, PLAYABLE, '  const n = 0;', 'stadiumTycoon.ts'), red: ['S1', 'S2', 'S3', 'S5', 'S6'], green: ['S4'], vRed: [7, 8], vGreen: [1, 2, 3, 4, 5, 6] },
   { name: 'copy', why: 'the away minutes run a private loop that forgets the squad\'s defence', build: copyLoop, red: ['S1'], green: ['S2', 'S3', 'S4', 'S5', 'S6'], vRed: [], vGreen: [1, 2, 3, 4, 5, 6, 7, 8] },
-  { name: 'cash', why: 'away minutes pay their goal and win bonuses', build: t => mustReplace(t, AWAY_MINUTE, 'playMinute(st, roll, events, { pay: true })', 'stadiumTycoon.ts'), red: ['S3'], green: ['S1', 'S2', 'S4', 'S5', 'S6'], vRed: [3], vGreen: [1, 2, 4, 5, 6, 7, 8] },
+  { name: 'cash', why: 'away minutes pay their goal and win bonuses', build: t => mustReplace(t, AWAY_MINUTE, 'playMinute(st, roll, events, { pay: true }, edge)', 'stadiumTycoon.ts'), red: ['S3'], green: ['S1', 'S2', 'S4', 'S5', 'S6'], vRed: [3], vGreen: [1, 2, 4, 5, 6, 7, 8] },
   {
     name: 'counter',
     why: 'a matchday ends when the match counter moves, the review\'s overrun on a doctored counter',
