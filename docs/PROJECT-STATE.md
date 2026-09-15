@@ -29,6 +29,10 @@ The full release workflow is
 testing source `be0c2378` with verification-only workflow commit `9bd3c802`.
 Its app type check and SEO build pass; the complete harness suite is still
 running. No final artifact has been accepted yet. Publication remains owed.
+The workflow's locally owed reduced-motion gate has now passed all 16 routes.
+Its deliberate removed-guard control detected six isolated CSS failures and
+three route failures. The local wrapper changed only hardcoded paths in a
+temporary copy and retained every assertion; external writes were intercepted.
 Rounds 603 and 604 are independent action-animation
 worktrees for Club Manager live matches and Soccer Career drills; they do not
 share this round's save changes or release.
