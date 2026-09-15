@@ -246,8 +246,9 @@ const SKIP_DIRS = new Set(['node_modules', 'dist', 'dist-ssr', '.git', '.playwri
    player whose surname is Madden is a person, not a product. It carries no
    prose (every string is a name, a code or a rule the generator wrote), so
    it is skipped by name rather than line by line. scripts/.cache holds the
-   downloaded nflverse files, gitignored, never shipped. */
-const SKIP_FILES = new Set(['simNoRivalNames.mjs', 'nflGridPlayers.json']);
+   downloaded nflverse files, gitignored, never shipped. Round 611: the
+   College Grid answer key is the same kind of file (it holds Maddens too). */
+const SKIP_FILES = new Set(['simNoRivalNames.mjs', 'nflGridPlayers.json', 'collegeGridPlayers.json']);
 const BINARY = /\.(png|jpe?g|gif|ico|webp|avif|svg|woff2?|ttf|eot|mp3|mp4|webm|pdf|zip|lockb)$/i;
 
 /* docs/ is deliberately NOT scanned. It holds competitor research whose entire
