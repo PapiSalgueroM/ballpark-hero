@@ -164,7 +164,12 @@ if (CONTROL && !CONTROLS[CONTROL]) {
 /* origin/main as this branch left it: the merge base, so commits that land on
    main after the branch was cut are not mistaken for this branch's changes. */
 const BASE = process.env.UCL_S1_BASE || 'origin/main';
-const baseSha = git(`merge-base HEAD ${BASE}`).trim();
+let baseSha = '';
+try { baseSha = git(`merge-base HEAD ${BASE}`).trim(); } catch { /* reported below */ }
+if (!baseSha) {
+  console.error(`Cannot find where this branch left ${BASE} (a shallow clone, or no such ref), so sections 6 to 9 have nothing to compare against. Fetch it or set UCL_S1_BASE.`);
+  process.exit(1);
+}
 const changedFromBase = new Set(git(`diff --name-only ${baseSha} -- src`).split('\n').map(s => s.trim()).filter(Boolean));
 const existsAtBase = rel => { try { git(`cat-file -e ${baseSha}:${rel}`); return true; } catch { return false; } };
 
