@@ -1,6 +1,6 @@
 # Project state
 
-## READY TO PUBLISH 2026-09-15 15:56 EDT: guide facts, source notes and phone tables
+## READY TO PUBLISH 2026-09-15 16:55 EDT: guide facts, source notes and phone tables
 
 The narrow content correction is ready for the between-big-ships release path.
 Final app/source and saved-page revision is `a35693a5`; subsequent commits are
@@ -21,10 +21,17 @@ The change touches no engine rules, RNG, saves, routes, dependencies or ad
 behavior. Its earlier full-simulation hold is replaced by the complete
 between-big-ships output checks. The additional
 [full run 35013330789](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35013330789)
-at `a5863797` remains pending and is not being claimed as a pass or accepted
-artifact. The larger feature releases retain all their full gates.
+at `a5863797` completed with all 311 node harnesses and all 272 component tests
+passing. Its packaging step failed because a roster harness leaves test bundles
+inside `dist`; no build artifact was accepted. Repair `3999a5e8` moves that
+scratch work into OS temp. Its 137 healthy checks and four effective controls
+pass with no changes to the protected output files. Full-run evidence and its
+limits are recorded in the release decision. The larger feature releases
+retain all their full gates.
 
-The correction is not yet confirmed published. Codex's Lovable tab operations
+The correction is not yet published: the 16:23 EDT public check still found
+the old content on all seven affected routes and entry `index-KIfwLt2Q.js`.
+Codex's Lovable tab operations
 are timing out, including a fresh tab. The publisher must first check that
 Lovable has the current origin/main commit and the reviewed correction, then
 publish and verify the actual public claims and app assets. Do not include the
@@ -55,6 +62,21 @@ approval. The new 587 source is in `.worktrees/round-587-final`; the old
 remain untouched. Publish correction, 586, 603 to 605, 587, then 588, separately.
 No feature beyond 588 is started. Claude's reserved work and Cursor's formatting
 remain separate. Verification workflows stay off main.
+
+Latest checks at 16:55 EDT: the 586, 603 to 605 and 587 runs passed their
+browser and Vitest steps, with the node suites still running. The 588 run
+finished with 316 of 318 node harnesses passing and 311 of 311 Vitest cases
+passing. Its browser gate failed the existing Stadium/Factory download
+limits; the two node failures are stale fixtures in `simTycoonPacks` and
+`simTycoonRooms`. Those fixes and a presentation-only loading repair are in
+progress. No failed or pending artifact is accepted. All four workflows
+also need the isolated roster scratch repair before packaging can pass.
+
+The 586 delayed-loading check now passes locally on source `3530aacc`:
+Back and Home work while panel chunks are held, the final saved career stays
+byte-identical, and all 41 loaded scripts match the built files. Its three
+negative controls fail for their intended reason. Repeat this against the
+final downloaded release artifact before accepting that artifact.
 
 ## ADSENSE STATUS, last confirmed 2026-09-15 12:37 EDT
 
