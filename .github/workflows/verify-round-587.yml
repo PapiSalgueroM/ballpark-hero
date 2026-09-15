@@ -14,7 +14,7 @@ jobs:
     env:
       CI: 'true'
       ENGINES: chromium
-      PRERENDER_ONLY: '/stadium-tycoon,/wonderkid-factory,/club-manager,/soccer-career,/conquest,/conquest-nba'
+      PRERENDER_ONLY: '/stadium-tycoon,/wonderkid-factory,/club-manager,/soccer-career,/conquest,/conquest-nba,/champions-league-format-history,/nfl-playoff-format-history,/nba-playoff-format-history,/mlb-postseason-format-history,/nhl-playoff-format-history'
       VITEST_MAX_THREADS: '1'
       VITEST_MIN_THREADS: '1'
       VITEST_MAX_FORKS: '1'
@@ -130,89 +130,6 @@ jobs:
         run: npm run build:seo 2>&1 | tee "$RUNNER_TEMP/round587-logs/build-seo.log"
       - name: Record generated files before tests
         run: python3 "$RUNNER_TEMP/release-artifact.py" built
-      - name: Full node harness suite
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        timeout-minutes: 180
-        run: |
-          node scripts/runAllSims.mjs 2>&1 | tee "$RUNNER_TEMP/round587-logs/node-sims.log"
-          python3 - <<'PY'
-          import json, os, pathlib, re
-          def node_rows(log):
-              heading = re.search(r'Running (\d+) node harnesses', log)
-              assert heading, 'No full node-suite heading in the output'
-              ending = re.search(r'Skipping \d+ browser harnesses', log[heading.end():])
-              assert ending, 'No browser-category boundary after the node table'
-              table = log[heading.end():heading.end() + ending.start()]
-              rows = re.findall(r'\s(PASS|FAIL|EMPTY|SKIP)\s+([A-Za-z0-9]+\.mjs)\s+[0-9.]+s\s*$', table, re.MULTILINE)
-              expected = int(heading.group(1))
-              assert expected > 0 and len(rows) == expected, (expected, len(rows))
-              assert len({name for _, name in rows}) == expected, 'Duplicate node result rows'
-              return rows
-          def require_complete(rows):
-              bad = [(status, name) for status, name in rows if status != 'PASS']
-              assert not bad, 'Fresh node suite has incomplete or failed results: ' + repr(bad)
-          folder = pathlib.Path(os.environ['RUNNER_TEMP']) / 'round587-logs'
-          rows = node_rows((folder / 'node-sims.log').read_text())
-          require_complete(rows)
-          (folder / 'fresh-node-results.json').write_text(json.dumps(rows, indent=2) + '\n')
-          print('Verified ' + str(len(rows)) + ' fresh PASS rows; no failed, empty or skipped node checks.')
-          PY
-      - name: Full Vitest, one worker
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        timeout-minutes: 45
-        run: node node_modules/vitest/vitest.mjs run --maxWorkers=1 2>&1 | tee "$RUNNER_TEMP/round587-logs/vitest.log"
-      - name: Prove value curve controls
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        timeout-minutes: 30
-        run: |
-          for control in noprime flatedge; do
-            if VALUE_CONTROL="$control" node scripts/simAllPlayersValue.mjs > "$RUNNER_TEMP/round587-logs/value-$control.log" 2>&1; then
-              cat "$RUNNER_TEMP/round587-logs/value-$control.log"
-              echo "Negative control did not fail: $control"
-              exit 1
-            fi
-            cat "$RUNNER_TEMP/round587-logs/value-$control.log"
-            grep -F 'FAIL' "$RUNNER_TEMP/round587-logs/value-$control.log"
-          done
-      - name: Prove watched-kick engine and actual-page controls
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        timeout-minutes: 30
-        run: |
-          for control in twice retry away window nogain bonus forget loader ignored random daily; do
-            result=0
-            SETPIECE_CONTROL="$control" node scripts/simTycoonSetPiece.mjs > "$RUNNER_TEMP/round587-logs/set-piece-engine-$control.log" 2>&1 || result=$?
-            cat "$RUNNER_TEMP/round587-logs/set-piece-engine-$control.log"
-            test "$result" -eq 1
-            grep -F "CONTROL $control: one unique executable mutation applied" "$RUNNER_TEMP/round587-logs/set-piece-engine-$control.log"
-            grep -F "CONTROL PROVED $control:" "$RUNNER_TEMP/round587-logs/set-piece-engine-$control.log"
-          done
-          for control in opening openearly roundtrip goalearly retry close clock fulltime rep score minute setup; do
-            result=0
-            SETPIECE_PAGE_CONTROL="$control" node scripts/simTycoonSetPiecePage.mjs > "$RUNNER_TEMP/round587-logs/set-piece-page-$control.log" 2>&1 || result=$?
-            cat "$RUNNER_TEMP/round587-logs/set-piece-page-$control.log"
-            test "$result" -eq 1
-            grep -F "CONTROL $control: one unique executable mutation applied outside src" "$RUNNER_TEMP/round587-logs/set-piece-page-$control.log"
-            grep -F "CONTROL PROVED $control:" "$RUNNER_TEMP/round587-logs/set-piece-page-$control.log"
-          done
-      - name: Live sim runtime controls
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        timeout-minutes: 30
-        run: |
-          for control in trigger save pause mutation lineup speed reduced terminal redraw; do
-            if LIVE_MOTION_CONTROL="$control" node scripts/simLiveSimMotion.mjs > "$RUNNER_TEMP/round587-logs/live-$control.log" 2>&1; then
-              cat "$RUNNER_TEMP/round587-logs/live-$control.log"
-              echo "Negative control did not fail: $control"
-              exit 1
-            fi
-            grep -F "Negative control changed temporary source: $control" "$RUNNER_TEMP/round587-logs/live-$control.log"
-            grep -E 'AssertionError|expected .* to' "$RUNNER_TEMP/round587-logs/live-$control.log"
-          done
-      - name: Prove the moved season binding guard
-        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        timeout-minutes: 20
-        run: |
-          EARLY_RETURN_CONTROL=tdz node scripts/simEarlyReturnScope.mjs 2>&1 | tee "$RUNNER_TEMP/round587-logs/early-return-control.log"
-          grep -F 'CONTROL FIRED: the injected temporal dead zone was caught' "$RUNNER_TEMP/round587-logs/early-return-control.log"
       - name: Portable browser gates, isolated contexts and intercepted writes
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         timeout-minutes: 60
@@ -268,7 +185,7 @@ jobs:
           cat "$RUNNER_TEMP/round587-logs/first-team-nowrap.log"
           grep -F 'CONTROL nowrap: actual tile-name wrapping replaced' "$RUNNER_TEMP/round587-logs/first-team-nowrap.log" || status=1
           grep -F 'from intentional nowrap control' "$RUNNER_TEMP/round587-logs/first-team-nowrap.log" || status=1
-          ONLY=/stadium-tycoon,/wonderkid-factory,/club-manager,/soccer-career,/conquest,/conquest-nba node "$RUNNER_TEMP/round587-browser.mjs" scripts/playRenderStability.mjs 2>&1 | tee "$RUNNER_TEMP/round587-logs/playRenderStability.log" || status=1
+          ONLY=/stadium-tycoon,/wonderkid-factory,/club-manager,/soccer-career,/conquest,/conquest-nba,/champions-league-format-history,/nfl-playoff-format-history,/nba-playoff-format-history,/mlb-postseason-format-history,/nhl-playoff-format-history node "$RUNNER_TEMP/round587-browser.mjs" scripts/playRenderStability.mjs 2>&1 | tee "$RUNNER_TEMP/round587-logs/playRenderStability.log" || status=1
           for control in wide clock; do
             result=0
             TYCOON_SET_PIECE_FIT_CONTROL="$control" node "$RUNNER_TEMP/round587-browser.mjs" scripts/playTycoonSetPieceFit.mjs > "$RUNNER_TEMP/round587-logs/set-piece-fit-$control.log" 2>&1 || result=$?
@@ -283,7 +200,7 @@ jobs:
           import path from 'node:path';
           import assert from 'node:assert/strict';
           import { pathToFileURL } from 'node:url';
-          
+
           const root = path.resolve(process.argv[2]);
           const pw = (await import(pathToFileURL(path.join(root, 'scripts/lib/playwrightLoader.mjs')).href)).default;
           const launch = pw.chromium.launch.bind(pw.chromium);
@@ -326,6 +243,89 @@ jobs:
           REDUCED_MOTION_CONTROL=noguard node "$RUNNER_TEMP/reduced-motion.mjs" "$PWD" 2>&1 | tee "$RUNNER_TEMP/round587-logs/reduced-motion-control.log" || status=1
           grep -F 'playReducedMotion control: green.' "$RUNNER_TEMP/round587-logs/reduced-motion-control.log" || status=1
           exit "$status"
+      - name: Full Vitest, one worker
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 45
+        run: node node_modules/vitest/vitest.mjs run --maxWorkers=1 2>&1 | tee "$RUNNER_TEMP/round587-logs/vitest.log"
+      - name: Full node harness suite
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 180
+        run: |
+          node scripts/runAllSims.mjs 2>&1 | tee "$RUNNER_TEMP/round587-logs/node-sims.log"
+          python3 - <<'PY'
+          import json, os, pathlib, re
+          def node_rows(log):
+              heading = re.search(r'Running (\d+) node harnesses', log)
+              assert heading, 'No full node-suite heading in the output'
+              ending = re.search(r'Skipping \d+ browser harnesses', log[heading.end():])
+              assert ending, 'No browser-category boundary after the node table'
+              table = log[heading.end():heading.end() + ending.start()]
+              rows = re.findall(r'\s(PASS|FAIL|EMPTY|SKIP)\s+([A-Za-z0-9]+\.mjs)\s+[0-9.]+s\s*$', table, re.MULTILINE)
+              expected = int(heading.group(1))
+              assert expected > 0 and len(rows) == expected, (expected, len(rows))
+              assert len({name for _, name in rows}) == expected, 'Duplicate node result rows'
+              return rows
+          def require_complete(rows):
+              bad = [(status, name) for status, name in rows if status != 'PASS']
+              assert not bad, 'Fresh node suite has incomplete or failed results: ' + repr(bad)
+          folder = pathlib.Path(os.environ['RUNNER_TEMP']) / 'round587-logs'
+          rows = node_rows((folder / 'node-sims.log').read_text())
+          require_complete(rows)
+          (folder / 'fresh-node-results.json').write_text(json.dumps(rows, indent=2) + '\n')
+          print('Verified ' + str(len(rows)) + ' fresh PASS rows; no failed, empty or skipped node checks.')
+          PY
+      - name: Prove value curve controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 30
+        run: |
+          for control in noprime flatedge; do
+            if VALUE_CONTROL="$control" node scripts/simAllPlayersValue.mjs > "$RUNNER_TEMP/round587-logs/value-$control.log" 2>&1; then
+              cat "$RUNNER_TEMP/round587-logs/value-$control.log"
+              echo "Negative control did not fail: $control"
+              exit 1
+            fi
+            cat "$RUNNER_TEMP/round587-logs/value-$control.log"
+            grep -F 'FAIL' "$RUNNER_TEMP/round587-logs/value-$control.log"
+          done
+      - name: Prove watched-kick engine and actual-page controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 30
+        run: |
+          for control in twice retry away window nogain bonus forget loader ignored random daily; do
+            result=0
+            SETPIECE_CONTROL="$control" node scripts/simTycoonSetPiece.mjs > "$RUNNER_TEMP/round587-logs/set-piece-engine-$control.log" 2>&1 || result=$?
+            cat "$RUNNER_TEMP/round587-logs/set-piece-engine-$control.log"
+            test "$result" -eq 1
+            grep -F "CONTROL $control: one unique executable mutation applied" "$RUNNER_TEMP/round587-logs/set-piece-engine-$control.log"
+            grep -F "CONTROL PROVED $control:" "$RUNNER_TEMP/round587-logs/set-piece-engine-$control.log"
+          done
+          for control in opening openearly roundtrip goalearly retry close clock fulltime rep score minute setup; do
+            result=0
+            SETPIECE_PAGE_CONTROL="$control" node scripts/simTycoonSetPiecePage.mjs > "$RUNNER_TEMP/round587-logs/set-piece-page-$control.log" 2>&1 || result=$?
+            cat "$RUNNER_TEMP/round587-logs/set-piece-page-$control.log"
+            test "$result" -eq 1
+            grep -F "CONTROL $control: one unique executable mutation applied outside src" "$RUNNER_TEMP/round587-logs/set-piece-page-$control.log"
+            grep -F "CONTROL PROVED $control:" "$RUNNER_TEMP/round587-logs/set-piece-page-$control.log"
+          done
+      - name: Live sim runtime controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 30
+        run: |
+          for control in trigger save pause mutation lineup speed reduced terminal redraw; do
+            if LIVE_MOTION_CONTROL="$control" node scripts/simLiveSimMotion.mjs > "$RUNNER_TEMP/round587-logs/live-$control.log" 2>&1; then
+              cat "$RUNNER_TEMP/round587-logs/live-$control.log"
+              echo "Negative control did not fail: $control"
+              exit 1
+            fi
+            grep -F "Negative control changed temporary source: $control" "$RUNNER_TEMP/round587-logs/live-$control.log"
+            grep -E 'AssertionError|expected .* to' "$RUNNER_TEMP/round587-logs/live-$control.log"
+          done
+      - name: Prove the moved season binding guard
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 20
+        run: |
+          EARLY_RETURN_CONTROL=tdz node scripts/simEarlyReturnScope.mjs 2>&1 | tee "$RUNNER_TEMP/round587-logs/early-return-control.log"
+          grep -F 'CONTROL FIRED: the injected temporal dead zone was caught' "$RUNNER_TEMP/round587-logs/early-return-control.log"
       - name: Package the verified build outputs
         if: ${{ success() }}
         run: python3 "$RUNNER_TEMP/release-artifact.py" package
