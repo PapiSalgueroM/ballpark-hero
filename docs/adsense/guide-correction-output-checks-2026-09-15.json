@@ -1,0 +1,204 @@
+{
+  "date": "2026-09-15",
+  "sourceWithFinalSnapshots": "a35693a52bdd65855e2457670b1d7fc61d026843",
+  "scope": "All current generated-output sim readers, source home-copy guard and fallback-404 browser check. simDrawOrder scoped to the six changed routes plus home with FULL=1, three takes per offset.",
+  "gates": [
+    {
+      "gate": "simAdsense",
+      "exitCode": 0,
+      "successMarker": "simAdsense: green",
+      "logSha256": "1f9d25f22e1a7ce3e6173a5fea8b56f392287dc7a709ce782853d16a28b2128f"
+    },
+    {
+      "gate": "simBrand",
+      "exitCode": 0,
+      "successMarker": "simBrand: green",
+      "logSha256": "fc649ff128f805e9029132ced87b5bfd2190699cf8e5fccc3f3f20c9a393ca83"
+    },
+    {
+      "gate": "simHeadTags",
+      "exitCode": 0,
+      "successMarker": "simHeadTags: green",
+      "logSha256": "0e71a9142bab363caf31e262b299d133baa01c8d0a5ae0be3a432f5b7f981b06"
+    },
+    {
+      "gate": "simHiddenPages",
+      "exitCode": 0,
+      "successMarker": "simHiddenPages: green",
+      "logSha256": "3907b91782ee4e22bb931fe38190917c025941fea9a7687af13d811878cc3ce6"
+    },
+    {
+      "gate": "simHomeCopy",
+      "exitCode": 0,
+      "successMarker": "simHomeCopy: green",
+      "logSha256": "49ee051034e77a4a21353fdf4995830419bead1f8bc68a0e828655c6d08dab86"
+    },
+    {
+      "gate": "simHubs",
+      "exitCode": 0,
+      "successMarker": "simHubs: green",
+      "logSha256": "35ee2c1fed01bcea885c692aadd6b163322657080d69be7052de1903d4dfe32f"
+    },
+    {
+      "gate": "simIndexing",
+      "exitCode": 0,
+      "successMarker": "simIndexing: green",
+      "logSha256": "81856d3ad23db0ea2bde7a16ec6da9d080cd09fe7d78039d95ef421636880893"
+    },
+    {
+      "gate": "simIndexNow",
+      "exitCode": 0,
+      "successMarker": "simIndexNow: green",
+      "logSha256": "d02bcc241787d3bba98340e6ab78c365814628c4eed1c9d8221d3b8f45b5640e"
+    },
+    {
+      "gate": "simInternalLinks",
+      "exitCode": 0,
+      "successMarker": "simInternalLinks: green",
+      "logSha256": "dce7b258606251efecb66f9495e7df76bc604aed3c42ae9fd2cc2d3e4e4ecee4"
+    },
+    {
+      "gate": "simMlbPostseasonFormatHistory",
+      "exitCode": 0,
+      "successMarker": "simMlbPostseasonFormatHistory: green",
+      "logSha256": "b2e345c2b8287d7fc1aadca4642e311d74bea91f9076f75f3297f3f1401797a2"
+    },
+    {
+      "gate": "simNbaPlayoffFormatHistory",
+      "exitCode": 0,
+      "successMarker": "simNbaPlayoffFormatHistory: green",
+      "logSha256": "3bd4d6147c2080a288e42fb6ebec1919ebc37be69198c89d23a4936c9e674445"
+    },
+    {
+      "gate": "simNflPlayoffFormatHistory",
+      "exitCode": 0,
+      "successMarker": "simNflPlayoffFormatHistory: green",
+      "logSha256": "317b0bbfc0b8af5d943c44df6f2c77ca954446a409c9d5f8aea400d62fd912ed"
+    },
+    {
+      "gate": "simNhlPlayoffFormatHistory",
+      "exitCode": 0,
+      "successMarker": "simNhlPlayoffFormatHistory: green",
+      "logSha256": "cf79e675424b67fda98ef1f6d31b359cc028fad01a1d4a364b65d8b5693a114f"
+    },
+    {
+      "gate": "simNoRivalNames",
+      "exitCode": 0,
+      "successMarker": "No rival product names found. 0 findings.",
+      "logSha256": "252eb5df281b4467154fb10314dd43b4e2d644f7cdebfb2887b826ff11c86016"
+    },
+    {
+      "gate": "simPrerender",
+      "exitCode": 0,
+      "successMarker": "simPrerender: green",
+      "logSha256": "ef1bce04711495402a8471ef763edfaaa5e30888777fce3938ba469a18dba188"
+    },
+    {
+      "gate": "simPrerenderBoot",
+      "exitCode": 0,
+      "successMarker": "simPrerenderBoot: green",
+      "logSha256": "0cb451b7f72ac6ef729ad872c1a4681d26bee57674514b40a84a8195f142aebb"
+    },
+    {
+      "gate": "simRetiredRoutes",
+      "exitCode": 0,
+      "successMarker": "simRetiredRoutes: all green",
+      "logSha256": "1ec445ac633ab0cf66299cabba30b171bb88f344a27b953846bbd477d89c0ccb"
+    },
+    {
+      "gate": "simSchema",
+      "exitCode": 0,
+      "successMarker": "simSchema: green",
+      "logSha256": "213dc96e8052ab967483ce8ab756a2ba6fa6aeb2eab51819adb7acae06eb7a44"
+    },
+    {
+      "gate": "simSitemap",
+      "exitCode": 0,
+      "successMarker": "simSitemap: green",
+      "logSha256": "c65ebbb4cfb2d9131ed2d483a7c0f6fa153c823b8c7dc3183f3e92d5e3c60e5b"
+    },
+    {
+      "gate": "simSnapshotAssets",
+      "exitCode": 0,
+      "successMarker": "simSnapshotAssets: green",
+      "logSha256": "70233be213182156d0262e82689763aa07b77f75b00c2a6d81a4af1b3575df39"
+    },
+    {
+      "gate": "simUclFormatHistory",
+      "exitCode": 0,
+      "successMarker": "simUclFormatHistory: green",
+      "logSha256": "6d59e3f28db7ff15895b3b7db246755f28babc263cb338818a5fba3479998980"
+    },
+    {
+      "gate": "playSoftFourOhFour",
+      "exitCode": 0,
+      "successMarker": "playSoftFourOhFour: green",
+      "logSha256": "e3f31ed4ee8b81fc6a64955e15359708a77d7e5ee408a8e0edab1080b56489a0"
+    },
+    {
+      "gate": "simDrawOrder",
+      "exitCode": 0,
+      "successMarker": "simDrawOrder: green",
+      "logSha256": "d4311bbc45554feb144600698ce48043ab379057ec2c69a24ed58171e96298d5"
+    },
+    {
+      "gate": "simFaqSchema",
+      "exitCode": 0,
+      "successMarker": "simFaqSchema: green",
+      "logSha256": "c520092ce50309ed4d3332e1c9114d6f8d1af7fa543f8410ac7fedcf528edb9a"
+    },
+    {
+      "gate": "simFlagshipWeight",
+      "exitCode": 0,
+      "successMarker": "simFlagshipWeight: green",
+      "logSha256": "f59584d0377e81df5756457cb1ed8311baa02d94dcbff6ea2adf76551b8985cb"
+    },
+    {
+      "gate": "simGoogleIdentity",
+      "exitCode": 0,
+      "successMarker": "Google popup sign in: 4 of 4 rendered checks green",
+      "logSha256": "5004fcac8907cf20537e76f749654c98002870fda88fb5fb4776735dbe9f8883"
+    },
+    {
+      "gate": "simGridArchive",
+      "exitCode": 0,
+      "successMarker": "simGridArchive: green",
+      "logSha256": "565012c7d18e04f36d1e532f938d4cd41002b3db32b53b36403e1b0980b27b4d"
+    },
+    {
+      "gate": "simHubDepth",
+      "exitCode": 0,
+      "successMarker": "simHubDepth: green",
+      "logSha256": "65f1589e548b7394ba04531a8efa5e2966d27f9ece99104d9958321a1bbe7e00"
+    },
+    {
+      "gate": "simLoginReturn",
+      "exitCode": 0,
+      "successMarker": "simLoginReturn: green",
+      "logSha256": "6ada966fbda498b8027e56949ae0258be83766905bbbdd1845f23bba4c689f0c"
+    },
+    {
+      "gate": "simNoRedirectLinks",
+      "exitCode": 0,
+      "successMarker": "simNoRedirectLinks: green",
+      "logSha256": "6bb95dab36c0eaf0c6051da1cd1f60f4fcea4aa6d1503b76dfe6a6d49047d9b9"
+    },
+    {
+      "gate": "simRecordBooks",
+      "exitCode": 0,
+      "successMarker": "simRecordBooks: green",
+      "logSha256": "c1ad2f631be4b4a7937687cdb4d8c45572569a5274e9c0c78192c91e5fa315b9"
+    }
+  ],
+  "browserCases": 20,
+  "browserViewports": [
+    320,
+    390,
+    430,
+    1440
+  ],
+  "minimumExplanationColumnPx": 279.953125,
+  "maximumPageOverflowPx": 0,
+  "fullSimulationCi": "https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35013330789",
+  "fullSimulationStatus": "Pending, not release approval or an accepted artifact."
+}

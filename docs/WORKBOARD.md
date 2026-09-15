@@ -1,33 +1,76 @@
 # Work board
 
-**2026-09-15, clean Round 587 release source.** Work continues for release
-in `.worktrees/round-587-final` on `codex/round-587-final`, created from
-`c5d97526` and merged with animation source `a7453087`. This carries corrected
-586 source `3530aacc` and factual follow-up `a35693a5`. The old 587 worktree and
-its 14 generated draft edits remain untouched. Existing watched-kick and map
-behavior is preserved; no workflow, test rerun or publication is claimed.
-Correction priority and fresh separate release verification still apply.
+**2026-09-15 17:36 EDT, Codex: narrow guide correction ready to publish.**
+Final reviewed app and saved-page revision is `a35693a5`; later correction
+commits record evidence and isolate roster-test scratch work. Five guide corrections, source notes, readable
+phone tables and three browser-save/Record Books copy edits pass types,
+production/SEO builds, all 31 current applicable generated-output/template/
+fallback checks, 20 real built-page browser cases and 33 effective controls.
+The complete reader inventory and narrow release decision are in
+`docs/adsense/guide-correction-release-checks-2026-09-15.md`.
 
-**2026-09-15, animation source integration.** The 603 to 605 branch now
-combines map-guard repair `08216535` with Round 586 `3530aacc` and factual
-follow-up `a35693a5`. Existing action code is unchanged by this merge.
-Correction priority, separate feature releases and fresh full gates remain.
-No verification workflow or publication is included.
+This uses the between-big-ships path for content-only changes. The additional
+whole-game simulation run 35013330789 completed: all 311 node harnesses and
+272 component tests passed. Packaging failed because the roster harness
+leaves temporary bundles in `dist`; no build artifact was accepted. Repair
+`3999a5e8` preserves all 137 checks and four effective controls while leaving
+all protected outputs unchanged. All larger game releases still need their
+full gates. Full guide evidence is recorded beside the release decision.
+Fresh guide verification `27f814be`, run 35022421148, passed all 311 node
+harnesses, 272 Vitest cases, 33 guide controls and strict artifact packaging.
+Artifact `10420966119` passes digest, 1,893-input and 663-output verification.
+All 170 generated repository outputs already match main after CRLF
+normalization, so no import is needed. Main `edbe5c16` contains
+the same harness repair; the publishable app and saved pages stay `a35693a5`.
+The 17:33 EDT public check still found the old content on all seven affected
+routes. Codex's browser publish controls are timing out; a fresh tab also stalls.
+Claude's working Lovable connection can publish this correction once
+`get_project` shows the current origin/main commit. Confirm the reviewed
+correction is present and no pending feature branch is included, then publish
+and independently read the corrected public pages. A main push alone is not
+publication. Keep the current AdSense review pending, with no resubmission.
 
-**2026-09-15, factual follow-up integrated into Round 586.** The local
-first-team branch now includes correction `a35693a5`, following `eabde5cd`.
-The last MLB provenance sentence and matching saved page are included. The
-map-guard repair has passed and is committed in the animation branch; source
-integration through 588 is proceeding before fresh full verification. No
-workflow or publication is part of this merge. Correction priority is intact.
+The fresh full feature runs and exact source/verification heads are at
+the top of `docs/PROJECT-STATE.md`. Their order is 586, 603 to 605, 587, then 588 after this
+correction. New 587 source is `.worktrees/round-587-final`; the old dirty 587
+worktree is preserved. Source branches remain unpublished.
+
+The 588 loading and fixture repairs are committed at `8a4e00a5`. All eleven
+original download limits and local checks pass, including slow artwork,
+early dismissal and reduced motion. Factory has only 31 bytes before the
+existing rounding boundary. Verification `75d4f3c6` retains all prior gates
+and adds the seven effective celebration controls and two catalog controls.
+Fresh full run `35026622660` is in progress. The old failed run is not approval.
+
+The earlier 586 and animation runs passed 313/314 node harnesses and
+279/296 Vitest cases, then failed packaging. Their replacement runs include
+the roster scratch repair and exact artifact diagnostics. The previous 587
+run passed 315 of 316 node harnesses and all 305 Vitest cases; its lone failure
+was an undersized older-keeper sample. Test-only repair `a46c59a0` now passes
+all nine sections, exact deterministic replay and five effective controls.
+It is isolated on `codex/era-sampling-repair`, with game behavior and thresholds
+unchanged. Fresh runs 35022622364, 35022671056 and 35022769249 are still in
+progress. Full results and log hashes are in
+`docs/feature-verification-2026-09-15.md`. No pending run inherits an older pass.
+No work beyond 588 has been started.
+
+**18:25 EDT update:** the correction's full run and exact artifact verification
+are green. Round 586's full run is also green; downloaded-artifact validation
+and its final slow-loading browser check are in progress. The animation run's
+only remaining node failure is a recurring live leaderboard RPC timeout.
+Codex is investigating an isolated performance repair, preserving scoring,
+period semantics and independent cache checks. No database mutation has been
+made. The owner will fix Lovable later; keep building within these release
+lanes. Editor-free publication through official Lovable MCP is supported but
+not connected in this session. No alternate host or DNS cutover is configured.
 
 **2026-09-15 15:19 EDT, Codex correction release check update.** The five
 guide corrections and three save/Record Books copy fixes are implemented at
-`253790d7`. Phone tables now scroll within keyboard-accessible regions with
+`a35693a5`. Phone tables now scroll within keyboard-accessible regions with
 readable columns. Types, six-route SEO regeneration, final build, 21 local
 release fences, all 33 guide controls and 20 real built-page browser cases
-passed. Full suite verification is still running at `506f79ef` in
-[run 35011097191](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35011097191).
+passed. Full suite verification is still running at `a5863797` in
+[run 35013330789](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35013330789).
 This is not yet a publish-ready handoff. Source evidence is in
 `docs/adsense/guide-correction-release-checks-2026-09-15.md`.
 

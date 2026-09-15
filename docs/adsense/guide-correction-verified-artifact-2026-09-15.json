@@ -1,0 +1,34 @@
+{
+  "run": "https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022421148",
+  "verificationCommit": "27f814beb113ab0aa6899797717029ba7e6910e5",
+  "appSourceRevision": "a35693a52bdd65855e2457670b1d7fc61d026843",
+  "workflowConclusion": "success",
+  "nodeHarnesses": { "passed": 311, "failed": 0, "uniqueRows": 311 },
+  "vitest": { "passed": 272, "filesPassed": 32 },
+  "guideControls": 33,
+  "buildArtifact": {
+    "id": 10420966119,
+    "sha256": "5071ab40f6da58ed5dec36e1934b3e6bf4679bb6bbc0f23ccf51ab90a32b47d4",
+    "manifestSha256": "6e84c530166d4f59d38c8f4aa5d8fd4cc30cf46933a1ac70eb7e66ce47790e79",
+    "verifiedInputs": 1893,
+    "verifiedOutputs": 663,
+    "repositoryOutputs": 170,
+    "exactFileSetVerified": true
+  },
+  "logsArtifact": {
+    "id": 10420886213,
+    "sha256": "b59c1446b9915cae70afa8c9b5f4d07a1787302e570c25424d535ed919d65011",
+    "nodeLogSha256": "47e2584ed044d8e176e05637ef8b294796e6382a373038726e585174f5b033b8",
+    "nodeResultRowsSha256": "95661fcb97491b368efe945cf1802d8dfec54d78e4597386bd6fd94ec5be4965",
+    "vitestLogSha256": "f6a76b1db94c9299de3d8c5fc2a88bfbaa5f76d9ce2cec4b61f7cd3ecaa33954"
+  },
+  "mainReconciliation": {
+    "commit": "9a39db1946103b87fecbd8e95eb32de41cc5f948",
+    "allRepositoryOutputsIdenticalAfterCrLfNormalization": true,
+    "repositoryOutputImportNeeded": false,
+    "sourceDifferenceScope": "Documentation and the verification-only workflow; regenerated repository outputs were compared separately.",
+    "workflowImported": false
+  },
+  "published": false,
+  "adsenseApprovalEstablished": false
+}
