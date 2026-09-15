@@ -45,7 +45,8 @@ await page.waitForTimeout(500);
 const essential = page.locator('button:has-text("Essential only")');
 if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
 await page.locator('text=Take the job').click();
-await page.waitForTimeout(2000);
+await page.getByRole('button', { name: 'Skip: just manage', exact: true }).click();
+await page.locator('button').filter({ hasText: 'MANAGER' }).first().waitFor({ state: 'visible' });
 say(await page.locator('button:has-text("Manager")').count() > 0, 'the career is running');
 
 /* A record a federation would call about, written the way a long career
@@ -79,8 +80,8 @@ say(await tile.count() > 0, 'the manager tile is on the hub');
 const tileText = await tile.innerText();
 say(/country is calling/i.test(tileText), `the tile says the country is calling (${tileText.replace(/\n/g, ' ').slice(0, 60)})`);
 await tile.click();
-await page.waitForTimeout(800);
 const offer = page.locator('[data-nation-offer]');
+await offer.waitFor({ state: 'visible' });
 say(await offer.count() === 1, 'the offer card is on the manager panel');
 const offerText = await offer.innerText();
 say(/England/.test(offerText), `an English club's manager is offered England (${offerText.split('\n')[1] ?? ''})`);
@@ -104,7 +105,7 @@ await page.waitForTimeout(1600);
 const resume2 = page.locator('button:has-text("Resume Career")');
 if (await resume2.count()) { await resume2.first().click(); await page.waitForTimeout(1200); }
 await page.locator('button').filter({ hasText: 'MANAGER' }).first().click();
-await page.waitForTimeout(800);
+await page.locator('[data-nation-job]').waitFor({ state: 'visible' });
 say(await page.locator('[data-nation-job]').count() === 1, 'the international job survived a reload');
 
 const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));

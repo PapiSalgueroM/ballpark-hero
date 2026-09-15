@@ -3,7 +3,7 @@ import { lazy, Suspense, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
-import { Play, ChevronRight, ChevronLeft, Trophy, Briefcase, ShieldAlert, ClipboardList } from 'lucide-react';
+import { Play, ChevronRight, ChevronLeft, Trophy, Briefcase } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useClubManager } from '@/hooks/useClubManager';
 import type { HubTab } from '@/hooks/useClubManager';
@@ -21,9 +21,7 @@ import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { fanMeter } from '@/lib/clubManagerMeters';
 import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
-import { askExplainer, isBoardAsk } from '@/lib/clubManagerBoardAsks';
-import type { NationDef, ObjectiveStatus, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
-import { MANAGER_BACKGROUNDS, CLUB_IDENTITIES } from '@/lib/clubManager';
+import type { NationDef, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
 import { eraRealShareLabel, eraHonestyLine } from '@/lib/clubManagerEras';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
@@ -32,11 +30,14 @@ import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { ConfettiBurst } from '@/components/club-manager/Celebration';
 import { CURRENCIES, STRICTNESS_INFO, startOptionsOf } from '@/lib/clubManagerStart';
 import { levelFor, pointsFree, xpOf, MAX_LEVEL } from '@/lib/clubManagerXp';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
+const ClubManagerTreatmentPanel = lazy(() => import('@/components/club-manager/ClubManagerTreatmentPanel'));
+const ClubManagerBoardPanel = lazy(() => import('@/components/club-manager/ClubManagerBoardPanel'));
+const ClubManagerCareerPanel = lazy(() => import('@/components/club-manager/ClubManagerCareerPanel'));
+const ConfettiBurst = lazy(() => import('@/components/club-manager/Celebration').then(m => ({ default: m.ConfettiBurst })));
 const ClubManagerHelp = lazy(() => import('@/components/club-manager/ClubManagerHelp'));
 const ClubManagerSeasonSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary'));
 const SackedCareerSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary').then(m => ({ default: m.SackedCareerSummary })));
@@ -80,14 +81,6 @@ function ScreenLoading({ children, compact = false }: { children: ReactNode; com
 
 const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
   W: 'bg-emerald-500', D: 'bg-yellow-500', L: 'bg-red-500',
-};
-
-// Round 70: board objective status chips.
-const OBJ_CHIP: Record<ObjectiveStatus, { label: string; cls: string }> = {
-  done: { label: 'Done', cls: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/40' },
-  onTrack: { label: 'On track', cls: 'bg-secondary text-muted-foreground border-border' },
-  behind: { label: 'Behind', cls: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/40' },
-  failed: { label: 'Failed', cls: 'bg-red-500/10 text-red-400 border-red-500/40' },
 };
 
 /** Round 74: one hub box (the tile rule). Tap it, it becomes its own screen. */
@@ -676,7 +669,7 @@ const ClubManager = () => {
     return shell(
       <div ref={revealRef} className="text-center relative">
         {/* Round 147: a season that ends with silverware rains on the summary. */}
-        {sm.trophies.length > 0 && <ConfettiBurst seed={sm.season * 13 + sm.trophies.length} count={40} />}
+        {sm.trophies.length > 0 && <Suspense fallback={null}><ConfettiBurst seed={sm.season * 13 + sm.trophies.length} count={40} /></Suspense>}
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">SEASON {sm.season} COMPLETE</h1>
         <p className="text-muted-foreground text-sm mb-5">{sm.club} · finished <span className="text-foreground font-bold">#{sm.position}</span> with {sm.points} pts</p>
         <ScreenLoading><ClubManagerSeasonSummary sm={sm} c={c} g={g} /></ScreenLoading>
@@ -1109,47 +1102,7 @@ const ClubManager = () => {
               </button>
 
               {hubPanel === 'board' && objStatuses.length > 0 && (
-                <div className="bg-card border border-border rounded-xl p-3">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                    <ClipboardList className="w-3 h-3" /> Board expectations · {TIER_INFO[club.tier].blurb}
-                  </div>
-                  <div className="space-y-1.5">
-                    {objStatuses.filter(s => !isBoardAsk(s.objective.id)).map(({ objective, status }) => (
-                      <div key={objective.id} className="flex items-center justify-between gap-2">
-                        <span className="text-xs text-foreground min-w-0 truncate">{objective.label}</span>
-                        <span className={cn('shrink-0 text-[9px] font-bold border rounded-full px-2 py-0.5', OBJ_CHIP[status].cls)}>
-                          {OBJ_CHIP[status].label}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  {/* Round 474: the two asks you go out and DO, kept apart from
-                      the demands the season hands you, with the line that says
-                      how each one is judged so nobody has to guess. */}
-                  {objStatuses.some(s => isBoardAsk(s.objective.id)) && (
-                    <div className="mt-3 pt-2.5 border-t border-border">
-                      <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">
-                        🛒 In the market
-                      </div>
-                      <div className="space-y-2">
-                        {objStatuses.filter(s => isBoardAsk(s.objective.id)).map(({ objective, status }) => (
-                          <div key={objective.id}>
-                            <div className="flex items-center justify-between gap-2">
-                              <span className="text-xs text-foreground min-w-0">{objective.label}</span>
-                              <span className={cn('shrink-0 text-[9px] font-bold border rounded-full px-2 py-0.5', OBJ_CHIP[status].cls)}>
-                                {OBJ_CHIP[status].label}
-                              </span>
-                            </div>
-                            <p className="text-[9px] text-muted-foreground mt-0.5 leading-relaxed">
-                              {objective.promised ? 'You gave them your word on this one. ' : ''}
-                              {askExplainer(objective)}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <ScreenLoading><ClubManagerBoardPanel club={club} objStatuses={objStatuses} /></ScreenLoading>
               )}
 
               {hubPanel === 'inbox' && <ScreenLoading><InboxCard career={c} onAnswer={g.answer} /></ScreenLoading>}
@@ -1187,19 +1140,7 @@ const ClubManager = () => {
               )}
 
               {hubPanel === 'treatment' && (
-                <div className="bg-card border border-border rounded-xl p-3">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                    <ShieldAlert className="w-3 h-3" /> Treatment room
-                  </div>
-                  {unavailable.length === 0 && <p className="text-xs text-muted-foreground">Everyone is fit and available. Enjoy it while it lasts.</p>}
-                  <div className="flex flex-wrap gap-1.5">
-                    {unavailable.map(p => (
-                      <span key={p.id} className="text-[10px] bg-secondary rounded-full px-2 py-1 text-foreground">
-                        {p.injuryWeeks > 0 ? `🩹 ${p.name} (${p.injuryWeeks}w)` : `🟥 ${p.name} (${p.suspendedMatches})`}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                <ScreenLoading><ClubManagerTreatmentPanel unavailable={unavailable} /></ScreenLoading>
               )}
 
               {hubPanel === 'cups' && (
@@ -1302,121 +1243,7 @@ const ClubManager = () => {
               )}
 
               {hubPanel === 'manager' && (
-                <>
-                {/* Round 202: the international job. Club football is
-                    unchanged; the country only plays in the summer. */}
-                {c.nationJob ? (
-                  <div data-nation-job className="bg-card border border-primary/40 rounded-xl p-3 mb-2">
-                    <div className="text-[10px] text-primary uppercase tracking-wider mb-1.5 font-bold">🌐 {c.nationJob.nation} manager</div>
-                    <p className="text-xs text-foreground">
-                      In charge since season {c.nationJob.since}. {c.nationJob.played === 0
-                        ? 'Your first tournament summer is still to come.'
-                        : `${c.nationJob.played} tournament${c.nationJob.played === 1 ? '' : 's'} taken charge of, ${c.nationJob.won} won.`}
-                    </p>
-                    {c.nationJob.lastResult && (
-                      <p className="text-[11px] text-muted-foreground mt-1">
-                        Last summer ({c.nationJob.lastYear}): {c.nationJob.lastResult}.
-                      </p>
-                    )}
-                    <p className="text-[10px] text-muted-foreground mt-1">
-                      Tournaments run between club seasons. Miss one your country should have reached and the federation will not wait around.
-                    </p>
-                    <button
-                      onClick={g.resignNation}
-                      className="mt-2 w-full py-2 rounded-lg bg-secondary text-foreground text-xs font-bold hover:opacity-90 transition-opacity"
-                    >
-                      Step down from the national team
-                    </button>
-                  </div>
-                ) : nationOffer ? (
-                  <div data-nation-offer className="bg-card border border-primary/50 rounded-xl p-3 mb-2">
-                    <div className="text-[10px] text-primary uppercase tracking-wider mb-1.5 font-bold">🌐 Your country is calling</div>
-                    <p className="text-sm text-foreground font-bold mb-0.5">{nationOffer.nation} want you.</p>
-                    <p className="text-[11px] text-muted-foreground mb-2">{nationOffer.blurb}</p>
-                    <button
-                      onClick={g.acceptNation}
-                      className="w-full py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
-                    >
-                      🌐 Take the {nationOffer.nation} job as well
-                    </button>
-                  </div>
-                ) : null}
-                {/* Round 168: mid-season approaches land here, his CM-10. */}
-                {c.approach && (
-                  <div className="bg-card border border-primary/50 rounded-xl p-3 mb-2">
-                    <div className="text-[10px] text-primary uppercase tracking-wider mb-1.5 font-bold">📞 An approach has come in</div>
-                    <p className="text-sm text-foreground font-bold mb-0.5">{c.approach.club} want you as their manager.</p>
-                    <p className="text-[11px] text-muted-foreground mb-2">{c.approach.blurb}</p>
-                    <p className="text-[10px] text-muted-foreground mb-2">Commit and it becomes a summer pre-agreement: the move happens when the season ends, the news breaks today, and your current board will not love it. Ignore it and they move on in a few weeks.</p>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => g.answerApproach(true)}
-                        className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
-                      >
-                        🤝 Shake hands for the summer
-                      </button>
-                      <button
-                        onClick={() => g.answerApproach(false)}
-                        className="flex-1 py-2 rounded-lg border border-border bg-card text-xs font-bold text-foreground hover:border-primary transition-colors"
-                      >
-                        Turn them down
-                      </button>
-                    </div>
-                  </div>
-                )}
-                {c.pendingMove && (
-                  <div className="bg-card border border-gold/40 rounded-xl p-3 mb-2 text-xs text-foreground">
-                    🤝 <span className="font-bold">Pre-agreement signed:</span> you take over at <span className="font-bold">{c.pendingMove.club}</span> when the season ends. Finish the job here first.
-                  </div>
-                )}
-                <div className="bg-card border border-border rounded-xl p-3">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">💼 Manager career</div>
-                  {/* Round 303: the created manager's card line. Absent spec, the
-                      panel reads exactly as it always has. */}
-                  {c.manager && (
-                    <div className="flex items-center gap-2 mb-2 rounded-lg border border-border bg-background/60 px-2.5 py-1.5">
-                      <FlagImg name={c.manager.nationality} size={14} />
-                      <span className="text-xs font-bold text-foreground truncate">{c.manager.name}</span>
-                      <span className="text-[9px] text-muted-foreground truncate">
-                        {MANAGER_BACKGROUNDS[c.manager.background]?.emoji} {MANAGER_BACKGROUNDS[c.manager.background]?.label}
-                        {' · '}{CLUB_IDENTITIES[c.manager.style]?.emoji} {CLUB_IDENTITIES[c.manager.style]?.label}
-                      </span>
-                    </div>
-                  )}
-                  <div className="grid grid-cols-3 gap-2 text-center mb-2">
-                    <div>
-                      <div className="text-sm font-bold font-display text-foreground">{c.careerStats.wins}W {c.careerStats.draws}D {c.careerStats.losses}L</div>
-                      <div className="text-[9px] text-muted-foreground">Record</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold font-display text-foreground">{c.careerStats.played > 0 ? Math.round((c.careerStats.wins / c.careerStats.played) * 100) : 0}%</div>
-                      <div className="text-[9px] text-muted-foreground">Win rate</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold font-display text-foreground">{c.trophies.length}</div>
-                      <div className="text-[9px] text-muted-foreground">Trophies</div>
-                    </div>
-                  </div>
-                  <div className="space-y-0.5 text-[10px] text-muted-foreground">
-                    {c.careerStats.biggestWin && (
-                      <p>🎉 Biggest win: <span className="text-foreground font-semibold">{c.careerStats.biggestWin.score}</span> vs {c.careerStats.biggestWin.opp}</p>
-                    )}
-                    {c.careerStats.biggestDefeat && (
-                      <p>💀 Worst defeat: <span className="text-foreground font-semibold">{c.careerStats.biggestDefeat.score}</span> vs {c.careerStats.biggestDefeat.opp}</p>
-                    )}
-                    {c.careerStats.mostExpensiveBuy && (
-                      <p>💸 Priciest buy: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveBuy.name}</span> ({money(c.careerStats.mostExpensiveBuy.fee, c)})</p>
-                    )}
-                    {c.careerStats.mostExpensiveSale && (
-                      <p>🤑 Best sale: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveSale.name}</span> ({money(c.careerStats.mostExpensiveSale.fee, c)})</p>
-                    )}
-                    {(c.careerStats.clubsManaged?.length ?? 0) > 1 && (
-                      <p>🧳 Clubs managed: <span className="text-foreground">{c.careerStats.clubsManaged!.join(', ')}</span></p>
-                    )}
-                    {c.careerStats.played === 0 && <p>Take charge of your first match and the numbers start here.</p>}
-                  </div>
-                </div>
-                </>
+                <ScreenLoading><ClubManagerCareerPanel c={c} g={g} nationOffer={nationOffer} /></ScreenLoading>
               )}
             </div>
           )}

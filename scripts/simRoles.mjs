@@ -652,7 +652,7 @@ console.log('11) Copy check');
     'src/hooks/useClubManager.ts',
     'src/pages/ClubManager.tsx',
     'src/components/club-manager/ClubManagerHelp.tsx',
-    'src/components/club-manager/ClubManagerSeasonSummary.tsx',
+    'src/components/club-manager/ClubManagerSeasonSummary.tsx', 'src/components/club-manager/ClubManagerCareerPanel.tsx', 'src/components/club-manager/ClubManagerBoardPanel.tsx', 'src/components/club-manager/ClubManagerTreatmentPanel.tsx',
     'scripts/simRoles.mjs',
   ];
   let dashes = 0;

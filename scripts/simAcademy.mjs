@@ -443,7 +443,7 @@ console.log('8) Copy check');
     'src/hooks/useClubManager.ts',
     'src/pages/ClubManager.tsx',
     'src/components/club-manager/ClubManagerHelp.tsx',
-    'src/components/club-manager/ClubManagerSeasonSummary.tsx',
+    'src/components/club-manager/ClubManagerSeasonSummary.tsx', 'src/components/club-manager/ClubManagerCareerPanel.tsx', 'src/components/club-manager/ClubManagerBoardPanel.tsx', 'src/components/club-manager/ClubManagerTreatmentPanel.tsx',
   ];
   let dashes = 0;
   for (const f of files) {
