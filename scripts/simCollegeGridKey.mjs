@@ -64,6 +64,13 @@
         row judges no on the row's position group. Pins: Matt Jones (Arkansas)
         x Arkansas x Quarterback and Scott Frost x Stanford x Quarterback
         judge yes (college quarterbacks the NFL lists at WR and DB).
+    11. A TRANSFER LIST CANNOT INVENT A SCHOOL. A school a career holds only
+        inside a roster transfer list ("West Virginia; Florida State"), in no
+        single school roster string, draft row, Heisman row or cfb row, that
+        the cfb tables cover, is not in colleges when one of his cfb rows
+        lists two or more schools without it. Pins: Will Grier judges yes on
+        West Virginia x Quarterback and not yes on Florida State x
+        Quarterback (his cfb row: Florida, West Virginia).
 
    NEGATIVE CONTROLS. Every one runs on EVERY invocation, in memory or against
    copies written under a temp folder that is removed on exit, and each one
@@ -85,6 +92,8 @@
                    must list Nate Gerry split from Nathan Gerry
      nocfbpos      the key is rebuilt without the cfb row positions; section
                    10 must charge Matt Jones on Arkansas x Quarterback
+     keeplistonly  the key is rebuilt keeping every roster transfer list
+                   school; section 11 must list Will Grier at Florida State
    SIM_CGKEY_CONTROL=<name> runs just that control and exits 0 only if it fired.
 
    SUPABASE UNREACHABLE: the source pull fails, the harness says NOTHING WAS
@@ -134,7 +143,7 @@ const PINS = [
   ['Jalen Hurts', 'Alabama', 'Quarterback'],
 ];
 
-const CONTROLS = { roundcol: 1, entity: 2, thinalias: 2, emptycell: 3, nocount: 4, window: 5, nomerge: 6, plantdrafted: 7, droprow: 8, noslotjoin: 9, nocfbpos: 10 };
+const CONTROLS = { roundcol: 1, entity: 2, thinalias: 2, emptycell: 3, nocount: 4, window: 5, nomerge: 6, plantdrafted: 7, droprow: 8, noslotjoin: 9, nocfbpos: 10, keeplistonly: 11 };
 const ONLY = process.env.SIM_CGKEY_CONTROL || '';
 if (ONLY && !CONTROLS[ONLY]) {
   console.error(`SIM_CGKEY_CONTROL=${ONLY} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -466,25 +475,19 @@ function sectionTen(list) {
   const entries = index(list);
   const byId = new Map(entries.map(e => [e.id, e]));
   const positionGroups = readPositionGroups();
-  const byFold = new Map();
-  for (const p of list) {
-    const folds = new Set([p.name_norm, ...p.proof.draft_rows.map(([y, k]) => draftFold(pickAt.get(keyOf(y, k))))]);
-    for (const f of folds) byFold.set(f, [...(byFold.get(f) ?? []), p]);
-  }
   let rows = 0;
   const charged = [];
-  for (const s of [...src.qb, ...src.rb]) {
-    const groups = groupsOfListedPosition(s.pos, positionGroups);
-    if (!groups.size) continue;
-    const schools = [...new Set(splitSchoolList(s.schools).map(canon))];
-    const on = (byFold.get(foldName(s.player_name)) ?? []).filter(p => schools.every(x => p.proof.cfb_schools.includes(x)));
-    if (on.length !== 1) continue;
-    rows += 1;
-    const e = byId.get(on[0].id);
-    for (const g of groups) {
-      const col = lib.CRITERIA_LABELS.find(l => l.group === g);
-      for (const school of schools.filter(x => lib.labelOf(x)?.kind === 'college')) {
-        if (lib.judgeCollegeCell(e, school, col) === 'no') charged.push(`${e.name} x ${school} x ${col.label} (college ${s.pos}, ${s.schools}; key groups ${[...e.groups].join('/')})`);
+  for (const [id, cfbRows] of cfbRowsByEntry(list)) {
+    const e = byId.get(id);
+    for (const s of cfbRows) {
+      const groups = groupsOfListedPosition(s.pos, positionGroups);
+      if (!groups.size) continue;
+      rows += 1;
+      for (const g of groups) {
+        const col = lib.CRITERIA_LABELS.find(l => l.group === g);
+        for (const school of s.schoolList.filter(x => lib.labelOf(x)?.kind === 'college')) {
+          if (lib.judgeCollegeCell(e, school, col) === 'no') charged.push(`${e.name} x ${school} x ${col.label} (college ${s.pos}, ${s.schools}; key groups ${[...e.groups].join('/')})`);
+        }
       }
     }
   }
@@ -497,6 +500,54 @@ function sectionTen(list) {
     if (v !== 'yes') out.push(`pin ${name} x ${school} x Quarterback judges ${v}`);
   }
   return { out, rows, charged: unique };
+}
+
+/** The cfb rows sitting on exactly one entry: folded name the entry's or a draft row's, every school inside its cfb schools. */
+function cfbRowsByEntry(list) {
+  const byFold = new Map();
+  for (const p of list) {
+    const folds = new Set([p.name_norm, ...p.proof.draft_rows.map(([y, k]) => draftFold(pickAt.get(keyOf(y, k))))]);
+    for (const f of folds) byFold.set(f, [...(byFold.get(f) ?? []), p]);
+  }
+  const out = new Map();
+  for (const s of [...src.qb, ...src.rb]) {
+    const schools = [...new Set(splitSchoolList(s.schools).map(canon))];
+    const on = (byFold.get(foldName(s.player_name)) ?? []).filter(p => schools.every(x => p.proof.cfb_schools.includes(x)));
+    if (on.length === 1) out.set(on[0].id, [...(out.get(on[0].id) ?? []), { ...s, schoolList: schools }]);
+  }
+  return out;
+}
+
+/** Schools a career holds only through a roster transfer list, contradicted by his own multi school cfb row. */
+function sectionEleven(list) {
+  const out = [];
+  const singles = new Map();
+  const lists = new Map();
+  const add = (m, id, s) => m.set(id, (m.get(id) ?? new Set()).add(s));
+  for (const r of [...src.rosters.map(x => ({ id: x.gsis_id, college: x.college })), ...src.careers.map(c => ({ id: c.id, college: c.college }))]) {
+    if (!r.id) continue;
+    const parts = splitColleges(r.college).map(canon);
+    for (const s of parts) add(parts.length === 1 ? singles : lists, r.id, s);
+  }
+  const covered = new Set([...src.qb, ...src.rb].flatMap(s => splitSchoolList(s.schools).map(canon)));
+  const cfbOn = cfbRowsByEntry(list);
+  const invented = [];
+  let listOnly = 0;
+  for (const p of list) {
+    const draft = new Set(p.proof.draft_rows.flatMap(([y, k]) => splitColleges(pickAt.get(keyOf(y, k))?.college).map(canon)));
+    const only = [...(lists.get(p.id) ?? [])].filter(s => !singles.get(p.id)?.has(s) && !draft.has(s) && !p.proof.heisman_schools.includes(s) && !p.proof.cfb_schools.includes(s));
+    listOnly += only.length;
+    const transfers = (cfbOn.get(p.id) ?? []).filter(s => s.schoolList.length > 1);
+    if (!transfers.length) continue;
+    for (const s of only.filter(x => covered.has(x) && p.colleges.includes(x))) invented.push(`${p.display_name} at ${s} (roster list only; cfb row ${transfers.map(t => t.schools).join(' | ')})`);
+  }
+  if (invented.length) out.push(`${invented.length} schools come only from a roster transfer list that the player's own cfb row contradicts: ${show(invented, 6)}`);
+  const grier = byDisplay(index(list)).get(engine.normalizeGridName('Will Grier'));
+  const fsu = grier ? lib.judgeCollegeCell(grier, 'Florida State', 'Quarterback') : 'not in the key';
+  const wvu = grier ? lib.judgeCollegeCell(grier, 'West Virginia', 'Quarterback') : 'not in the key';
+  if (fsu === 'yes') out.push('pin Will Grier x Florida State x Quarterback judges yes');
+  if (wvu !== 'yes') out.push(`pin Will Grier x West Virginia x Quarterback judges ${wvu}`);
+  return { out, listOnly, invented };
 }
 
 const judgedHash = rows => {
@@ -688,6 +739,13 @@ if (!ONLY) {
     r.out.forEach(fail);
     console.log(`   ${r.rows} cfb rows with a position group sit on one entry; ${r.charged.length} judge no; pins: Matt Jones (Arkansas) and Scott Frost yes at Quarterback`);
   }
+
+  console.log('\n11) A transfer list cannot invent a school: roster list only schools contradicted by his cfb row stay out');
+  {
+    const r = sectionEleven(players);
+    r.out.forEach(fail);
+    console.log(`   ${r.listOnly} schools sit only in a roster transfer list; ${r.invented.length} contradicted ones kept; the generator left out: ${built.stats.contradictedColleges.join(', ') || 'none'}; pins: Will Grier yes at West Virginia, not yes at Florida State`);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -834,6 +892,15 @@ if (want('nocfbpos')) {
   const r = sectionTen(wrong.players);
   console.log(`   ${changed} entries lose a group; ${r.charged.length} college positions now judge no`);
   grade('nocfbpos', r.charged.some(m => /^Matt Jones \(Arkansas\) x Arkansas x Quarterback/.test(m)) && r.out.some(m => /^pin Scott Frost x Stanford x Quarterback judges no/.test(m)), r.out.map(m => m.slice(0, 200)).join(' | ') || 'section 10 stayed green');
+}
+
+if (want('keeplistonly')) {
+  console.log('\nkeeplistonly) the key rebuilt keeping every roster transfer list school');
+  const wrong = buildCollegeKey(src, { control: { keepListOnly: true } });
+  mustChange('keeplistonly', built.stats.contradictedColleges.length > 0 && wrong.stats.contradictedColleges.length === 0, 'the plain build leaves no roster list school out');
+  const r = sectionEleven(wrong.players);
+  console.log(`   ${r.invented.length} contradicted schools kept`);
+  grade('keeplistonly', r.invented.some(m => /^Will Grier at Florida State/.test(m)) && r.out.some(m => /^pin Will Grier x Florida State x Quarterback judges yes/.test(m)), r.out.map(m => m.slice(0, 200)).join(' | ') || 'section 11 stayed green');
 }
 
 // ---------------------------------------------------------------------------

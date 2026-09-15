@@ -66,6 +66,12 @@
        draft colleges exactly, the other roster spellings are schools he
        transferred from and are not evidence either way. The table applies
        to every source's spellings. No alias is typed by hand.
+       One source is left out: a school held only inside a roster transfer
+       list (a college string naming two or more schools), in no other
+       source, that the cfb stats tables cover (some row names it), when a
+       joined cfb row lists two or more schools without it. The 2025 roster
+       has Will Grier at "West Virginia; Florida State"; his cfb row has
+       Florida and West Virginia, so Florida State is not his school.
      COLLEGES_AGREED. A draft college also held by a second source: the
        roster, the joined Heisman row, or a joined cfb stats row.
      GROUPS. POSITION_GROUPS of src/lib/nflGrid.ts applied to the key's
@@ -296,16 +302,20 @@ export function buildCollegeKey(src, { control = {} } = {}) {
   const rosterColleges = new Map();
   const rosterRaw = new Map();
   const rosterPicks = new Map();
+  /* Schools a roster names on its own, as opposed to inside a transfer list ("West Virginia; Florida State"). */
+  const rosterSingles = new Map();
   for (const r of src.rosters) {
     if (!r.gsis_id) continue;
     if (String(r.college ?? '').trim()) {
       if (!rosterRaw.has(r.gsis_id)) rosterRaw.set(r.gsis_id, new Set());
       rosterRaw.get(r.gsis_id).add(String(r.college).trim());
     }
-    for (const c of splitColleges(r.college, { decodeFirst })) {
+    const parts = splitColleges(r.college, { decodeFirst });
+    for (const c of parts) {
       if (!rosterColleges.has(r.gsis_id)) rosterColleges.set(r.gsis_id, new Set());
       rosterColleges.get(r.gsis_id).add(c);
     }
+    if (parts.length === 1) rosterSingles.set(r.gsis_id, (rosterSingles.get(r.gsis_id) ?? new Set()).add(parts[0]));
     const n = Number(String(r.draft_number ?? '').trim());
     if (Number.isFinite(n) && n > 0 && String(r.draft_club ?? '').trim()) {
       if (!rosterPicks.has(r.gsis_id)) rosterPicks.set(r.gsis_id, new Set());
@@ -315,12 +325,14 @@ export function buildCollegeKey(src, { control = {} } = {}) {
 
   const floorSeason = Math.min(...careers.map(c => c.seasons[0]));
   const entries = careers.map(c => {
-    const roster = new Set(splitColleges(c.college, { decodeFirst }));
+    const own = splitColleges(c.college, { decodeFirst });
+    const roster = new Set(own);
     for (const x of rosterColleges.get(c.id) ?? []) roster.add(x);
     const rp = rosterPicks.get(c.id);
     const raw = new Set([...(c.college ? [String(c.college).trim()] : []), ...(rosterRaw.get(c.id) ?? [])]);
     return {
       rawRoster: raw,
+      rosterSingles: new Set([...(own.length === 1 ? own : []), ...(rosterSingles.get(c.id) ?? [])]),
       kind: 'career', id: c.id, name: c.name, fold: foldName(c.name),
       rosterGroups: new Set(c.pos.map(x => positionGroups[x]).filter(Boolean)),
       rosterColleges: roster, rosterPick: rp && rp.size === 1 ? [...rp][0] : null,
@@ -536,6 +548,9 @@ export function buildCollegeKey(src, { control = {} } = {}) {
     }
   }
   stats.cfb = { rows: src.qb.length + src.rb.length, joined: cfbAdded, ambiguous: cfbAmbiguous, schoolsAdded: cfbNewSchools };
+  /* Every school a cfb stats row names anywhere: the schools those tables cover. */
+  const cfbCovered = new Set([...src.qb, ...src.rb].flatMap(s => splitSchoolList(s.schools).map(canon)));
+  const contradictedColleges = [];
 
   /* Final rows. */
   const players = entries.map(e => {
@@ -543,7 +558,15 @@ export function buildCollegeKey(src, { control = {} } = {}) {
     const roster = uniq([...e.rosterColleges].map(canon));
     const heismanSchools = uniq(e.heisman.map(h => h.school));
     const cfbSchools = uniq(e.cfb.flatMap(c => c.schools));
-    const colleges = uniq([...draftColleges, ...roster, ...heismanSchools, ...cfbSchools]);
+    /* A school only a roster transfer list holds, that the cfb tables cover,
+       is left out when a joined cfb row records his transfers (two or more
+       schools) without it: the 2025 roster lists Will Grier at "West
+       Virginia; Florida State", and his cfb row has Florida and West Virginia. */
+    const singles = new Set([...(e.rosterSingles ?? [])].map(canon));
+    const contradicted = control.keepListOnly || !e.cfb.some(c => c.schools.length > 1) ? [] : roster.filter(s => !singles.has(s)
+      && !draftColleges.includes(s) && !heismanSchools.includes(s) && !cfbSchools.includes(s) && cfbCovered.has(s));
+    for (const s of contradicted) contradictedColleges.push(`${e.name}: ${s}`);
+    const colleges = uniq([...draftColleges, ...roster, ...heismanSchools, ...cfbSchools]).filter(s => !contradicted.includes(s));
     const second = new Set([...roster, ...heismanSchools, ...cfbSchools]);
     const draftGroups = new Set(e.rows.flatMap(r => [...r.groups]));
     const heismanGroups = new Set(e.heisman.flatMap(h => [...h.groups]));
@@ -597,6 +620,7 @@ export function buildCollegeKey(src, { control = {} } = {}) {
   players.sort((a, b) => a.name.localeCompare(b.name, 'en') || a.id.localeCompare(b.id));
   assignDisplayNames(players);
 
+  stats.contradictedColleges = contradictedColleges;
   stats.aliases = aliasList;
   stats.splitYear = splitYear;
   stats.defensiveShares = shares;
@@ -660,7 +684,7 @@ export const RULES = {
   names: 'foldName: accents stripped, lower case, apostrophes and periods dropped, other non alphanumerics a space, runs of single letters joined, a trailing jr, sr, ii, iii or iv dropped, a quoted nickname dropped; a draft name mirrored as "Last, FirstFirst Last" is read as "First Last" and a Hall of Fame marker glued to its end (StaubachHOF) is dropped; every dash character read as a hyphen',
   draftRows: 'nfl_draft_picks with forfeit rows dropped, then one row per (year, pick), the lowest id (scripts/lib/draftRounds.mjs)',
   identity: `a draft row joins a career on folded name plus the key's equal draft year and pick, or a first season 0 to ${JOIN_WINDOW_YEARS} years after the draft with a compatible position group; tiers both, pick, then window after every equal-pick join, where a career already holding a row from that draft year is no candidate; two careers in the first non empty tier is ambiguous and the row joins and forms nothing; an undrafted career takes no window join; window joins leaving a career with rows sharing no college are dropped; a row that could be a career's but joined nobody turns that career's false first_round to null unless the row is past its boundary too, and its best_pick to null if the row's pick is smaller. A row still unjoined then joins the one career holding its slot (the NFL key draft year and pick, or the roster draft number in the year before or the year of the first season) whose surname folds alike and that holds no row from that year. Unjoined rows with one folded name, one college and years within ${JOIN_WINDOW_YEARS} of each other form a draft-only entry. A Heisman row joins the one entry of the same folded name whose colleges hold its school (a quoted nickname also tried as nickname plus surname; two such entries told apart by the winner's listed position group when exactly one holds it), else stands alone. A cfb stats row adds its schools when its folded name matches the entry's name or a name on one of its draft rows, its last season is in the ${JOIN_WINDOW_YEARS} seasons before one of the entry's draft years and its list holds that row's college; a row fitting two entries adds to neither`,
-  colleges: `HTML entities decoded before splitting on semicolons; canonical spellings from a derived alias table (a roster spelling maps to a draft spelling on at least ${ALIAS_MIN_ENTRIES} joined careers and at least ${ALIAS_MIN_SHARE * 100} percent of that roster spelling's joined careers; on a career whose roster already spells one of its draft colleges exactly, its other roster spellings are transfer schools and not evidence), applied to every source; no alias typed by hand`,
+  colleges: `HTML entities decoded before splitting on semicolons; canonical spellings from a derived alias table (a roster spelling maps to a draft spelling on at least ${ALIAS_MIN_ENTRIES} joined careers and at least ${ALIAS_MIN_SHARE * 100} percent of that roster spelling's joined careers; on a career whose roster already spells one of its draft colleges exactly, its other roster spellings are transfer schools and not evidence), applied to every source; no alias typed by hand; a school held only inside a roster transfer list (a college string naming two or more schools) and by no other source is left out when the cfb stats tables cover it and a joined cfb row lists two or more schools without it`,
   collegesAgreed: 'a draft college also held by the roster, the joined Heisman row or a joined cfb stats row',
   groups: `POSITION_GROUPS of src/lib/nflGrid.ts over roster codes, the draft position (word forms and slash lists included), the Heisman position (HB and FB count as RB) and the college position on each joined cfb stats row; side free words (Back, End, Tackle, B, E, WB, BB, TB, Tailback), kickers, punters and snappers add nothing, and nothing is read from a draft or Heisman position before the derived split year (the first year from which every draft lists at least ${SPLIT_MIN_DEFENSIVE_SHARE * 100} percent of its rows at a defensive code)`,
   draft: 'best_pick the smallest pick across the entry\'s draft rows; first_round true when any row is inside its year\'s firstRoundEnds, false when every row has a boundary and none is inside it, else null; undrafted copied from nflGridPlayers.json',
@@ -730,6 +754,7 @@ function printStats(players, stats, log = console.log) {
   log(`first_round true ${players.filter(p => p.first_round === true).length}, false ${players.filter(p => p.first_round === false).length}, null ${players.filter(p => p.first_round === null).length}; undrafted ${players.filter(p => p.undrafted).length}`);
   log(`heisman: ${JSON.stringify(stats.heisman)}; entries with heisman_year ${players.filter(p => p.heisman_year != null).length} (on careers ${players.filter(p => p.heisman_year != null && p.first_season != null).length}, draft-only ${players.filter(p => p.heisman_year != null && p.id.startsWith('draft:')).length}); standing alone: ${players.filter(p => p.id.startsWith('heisman:')).map(p => `${p.name} ${p.heisman_year}`).join(', ')}`);
   log(`cfb: ${JSON.stringify(stats.cfb)}`);
+  log(`roster transfer list schools left out, contradicted by a joined cfb row: ${stats.contradictedColleges.length} (${stats.contradictedColleges.join(', ')})`);
   log(`namesakes flagged (dup) ${players.filter(p => p.dup).length}; distinct display names ${new Set(players.map(p => p.display_name)).size}`);
 }
 
