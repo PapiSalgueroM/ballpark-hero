@@ -1,5 +1,27 @@
 # Project state
 
+## ISOLATED HARNESS REPAIR 2026-09-15: deterministic era ageing sample
+
+On `codex/era-sampling-repair` from `6cddc7b5`, only `simEras` section 2
+sampling and diagnostics change. Game engines and every original threshold
+remain unchanged. The predetermined 13200 cohort passed but had only 25 keeper
+observations at age 35, so the already selected 13300 cohort was added without
+a seed search. Both use the same ten clubs and 24 seasons. The minimum stays
+20; keeper age 33/35 buckets now hold 56/47 observations. Each original-size
+cohort must still clear 120 retirements, and measured 271/262.
+
+The complete nine-section harness passed in 966.8 seconds on Windows,
+including the existing 480-season-per-arm frozen/ticking comparison. A second
+raw measurement matched exactly, SHA256
+`7d93e7e847bf9e1cc2d4a17bbf00285c94242bf7d30e71fdc458704906d81c94`.
+The full run used an exact temporary copy with only ROOT resolution and a
+read-only data report added. Five controls against the actual assertion block
+proved thin-sample, flat-curve, keeper-advantage and both retirement-count
+failures. They mutate measured fixtures, not the game engine. Syntax and diff
+checks pass. Evidence is in `%TEMP%/dukb-era-sampling-20260915`. The older
+381-second Linux CI result is not a comparable speed baseline. This repair is
+isolated and unpushed; current release verification refs remain unchanged.
+
 ## READY TO PUBLISH 2026-09-15 16:55 EDT: guide facts, source notes and phone tables
 
 The narrow content correction is ready for the between-big-ships release path.

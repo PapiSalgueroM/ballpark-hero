@@ -163,42 +163,49 @@ console.log('2) A thirty three year old declines, a twenty two year old does not
   const drift = {};
   const driftGK = {};
   const retireAges = [];
-  clearSeed();
-  for (const club of CLUBS) {
-    let s = startCareer(club);
-    s = { ...s, squad: s.squad.map(p => ({ ...p, contractYears: 40 })) };
-    const seen = new Map(s.squad.map(p => [p.name, { r: p.rating, pos: p.position }]));
-    for (let y = 0; y < SEASONS; y++) {
-      s = startNextSeason(playSeason(s, { renew: false }).state);
+  const COHORT_SEEDS = [13200, 13300];
+  const cohortRetirements = [];
+  // Each club gets a fixed stream so every age bucket and retirement is reproducible.
+  for (const COHORT_SEED of COHORT_SEEDS) {
+    const before = retireAges.length;
+    for (const [clubIndex, club] of CLUBS.entries()) {
+      setSeed(COHORT_SEED + clubIndex);
+      let s = startCareer(club);
       s = { ...s, squad: s.squad.map(p => ({ ...p, contractYears: 40 })) };
-      for (const [name, was] of seen) {
-        const now = s.squad.find(x => x.name === name);
-        if (!now) continue;
-        const table = was.pos === 'GK' ? driftGK : drift;
-        (table[now.age] ||= []).push(now.rating - was.r);
-        seen.set(name, { r: now.rating, pos: was.pos });
+      const seen = new Map(s.squad.map(p => [p.name, { r: p.rating, pos: p.position }]));
+      for (let y = 0; y < SEASONS; y++) {
+        s = startNextSeason(playSeason(s, { renew: false }).state);
+        s = { ...s, squad: s.squad.map(p => ({ ...p, contractYears: 40 })) };
+        for (const [name, was] of seen) {
+          const now = s.squad.find(x => x.name === name);
+          if (!now) continue;
+          const table = was.pos === 'GK' ? driftGK : drift;
+          (table[now.age] ||= []).push(now.rating - was.r);
+          seen.set(name, { r: now.rating, pos: was.pos });
+        }
+        for (const r of (s.retiredLastSummer ?? [])) retireAges.push(r.age);
+        for (const p of s.squad) if (!seen.has(p.name)) seen.set(p.name, { r: p.rating, pos: p.position });
       }
-      for (const r of (s.retiredLastSummer ?? [])) retireAges.push(r.age);
-      for (const p of s.squad) if (!seen.has(p.name)) seen.set(p.name, { r: p.rating, pos: p.position });
     }
+    cohortRetirements.push({ seed: COHORT_SEED, count: retireAges.length - before });
   }
+  clearSeed();
   const at = (t, a) => (t[a] && t[a].length >= 20 ? mean(t[a]) : null);
   const show = t => Object.keys(t).map(Number).sort((a, b) => a - b)
-    .filter(a => t[a].length >= 20)
-    .map(a => `${a}:${fx(mean(t[a]))}`).join(' ');
-  console.log(`   ${CLUBS.length} clubs x ${SEASONS} seasons, mean rating change per season by the age he turned`);
+    .map(a => `${a}:n=${t[a].length},mean=${fx(mean(t[a]))}`).join(' ');
+  console.log(`   ${COHORT_SEEDS.length} cohorts x ${CLUBS.length} clubs x ${SEASONS} seasons, seeds ${COHORT_SEEDS.join(", ")} + club index; age:count,mean rating change`);
   console.log(`   outfield  ${show(drift)}`);
   console.log(`   keepers   ${show(driftGK)}`);
 
   // A young player still gets better.
   for (const age of [21, 22, 23]) {
     const v = at(drift, age);
-    if (v === null) { fail(`no sample at age ${age}`); continue; }
+    if (v === null) { fail(`insufficient sample at age ${age}: outfield n=${drift[age]?.length ?? 0}, need 20`); continue; }
     if (v <= 0.2) fail(`a ${age} year old gains only ${fx(v)} a season, that is not development`);
   }
   // A thirty three year old measurably declines.
   const d33 = at(drift, 33);
-  if (d33 === null) fail('no sample at age 33');
+  if (d33 === null) fail(`insufficient sample at age 33: outfield n=${drift[33]?.length ?? 0}, need 20`);
   else if (d33 > -1.2) fail(`a 33 year old only loses ${fx(d33)} a season, that is not a decline`);
   // And it is a CURVE, not the flat minus two the old engine ran. Each of
   // these steps has 130 plus samples and about 0.5 of headroom, so the
@@ -207,7 +214,7 @@ console.log('2) A thirty three year old declines, a twenty two year old does not
   for (const [a, b] of steps) {
     const va = at(drift, a);
     const vb = at(drift, b);
-    if (va === null || vb === null) { fail(`no sample for the ${a} to ${b} step`); continue; }
+    if (va === null || vb === null) { fail(`insufficient sample for the ${a} to ${b} step: n=${drift[a]?.length ?? 0}/${drift[b]?.length ?? 0}, need 20 each`); continue; }
     if (vb >= va - 0.15) fail(`decline does not steepen from ${a} (${fx(va)}) to ${b} (${fx(vb)})`);
   }
   if (at(drift, 37) === null || at(drift, 37) > -3.5) fail('a 37 year old is not falling off a cliff');
@@ -216,7 +223,7 @@ console.log('2) A thirty three year old declines, a twenty two year old does not
   for (const age of [33, 35]) {
     const out = at(drift, age);
     const gk = at(driftGK, age);
-    if (out === null || gk === null) { fail(`no keeper sample at ${age}`); continue; }
+    if (out === null || gk === null) { fail(`insufficient keeper comparison at ${age}: outfield n=${drift[age]?.length ?? 0}, keeper n=${driftGK[age]?.length ?? 0}, need 20 each`); continue; }
     if (gk <= out + 0.4) fail(`keepers at ${age} decline ${fx(gk)} against outfielders ${fx(out)}, no difference`);
   }
   if (declineScale('GK') >= declineScale('ST')) fail('the keeper decline scale is not gentler than a striker');
@@ -228,7 +235,11 @@ console.log('2) A thirty three year old declines, a twenty two year old does not
   retireAges.sort((a, b) => a - b);
   const med = retireAges[Math.floor(retireAges.length / 2)];
   console.log(`   ${retireAges.length} retirements: youngest ${retireAges[0]}, median ${med}, oldest ${retireAges[retireAges.length - 1]}`);
-  if (retireAges.length < 120) fail(`only ${retireAges.length} retirements in ${CLUBS.length * SEASONS} club seasons`);
+  for (const { seed, count } of cohortRetirements) {
+    console.log(`   cohort ${seed}: ${count} retirements in ${CLUBS.length * SEASONS} club seasons`);
+    if (count < 120) fail(`cohort ${seed}: only ${count} retirements in ${CLUBS.length * SEASONS} club seasons`);
+  }
+  if (retireAges.length < 120) fail(`only ${retireAges.length} retirements in ${COHORT_SEEDS.length * CLUBS.length * SEASONS} club seasons`);
   if (retireAges[0] < 32) fail(`somebody retired at ${retireAges[0]}`);
   if (med < 34 || med > 39) fail(`the median retirement age is ${med}`);
   if (retireAges[retireAges.length - 1] > 42) fail(`somebody played on to ${retireAges[retireAges.length - 1]}`);
