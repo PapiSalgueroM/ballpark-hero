@@ -67,7 +67,7 @@ function onRecord(entry: CollegeGridEntry, attrs: GridAttribute[]): string {
       facts.push(entry.groups.size > 0 ? `Position on record: ${[...entry.groups].map((g) => GROUP_WORDS.get(g) ?? g).join(', ')}.` : 'No position on record.');
       namesake = namesake || entry.identityOpen;
     } else if (l.kind === 'heisman') {
-      facts.push('A Heisman winner shares his name.');
+      facts.push('A Heisman winner on record has the same last name.');
     } else {
       if (entry.bestPick !== null) {
         facts.push(l.kind === 'firstRound' && entry.firstRound === null

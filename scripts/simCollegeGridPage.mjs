@@ -37,6 +37,11 @@
         rules dialog seen under RULES_SEEN_KEY, which is not 'cg-rules-seen'
         (the flag players already hold from the pre-611 rules), and reads
         and writes it inside a try.
+     7. THE HEISMAN UNKNOWN TOAST ONLY SAYS WHAT IS TRUE. The sentence the hook
+        prints when Heisman Winner cannot be settled is read out of the hook,
+        and its claim is tested on every player in the key the toast can show
+        for (heismanOpen). A winner's surname at one of his schools opens the
+        label too, so "shares his name" is false for DaShaun White.
 
    NEGATIVE CONTROLS. Every one runs on EVERY invocation, in memory, and each
    refuses to run unless its target text appears exactly once:
@@ -47,6 +52,7 @@
      undealt        plants a criterion no board deals into the guide intro           section 4
      noboardid      removes the board id comparison from the hook                    section 5
      oldseenkey     sets the rules flag back to 'cg-rules-seen'                      section 6
+     heismanname    sets the Heisman sentence back to "shares his name"              section 7
    SIM_CGPAGE_CONTROL=<name> runs just that control and exits 0 only if it fired.
 
    Run: node scripts/simCollegeGridPage.mjs
@@ -65,7 +71,7 @@ const DIALOG = 'src/components/college-grid/CollegeGridHowToPlay.tsx';
 const SEARCH = 'src/components/college-grid/CollegeGridSearch.tsx';
 const GUIDE = 'src/data/gameContent/college.ts';
 
-const CONTROLS = { invoke: 1, chargeunknown: 2, typedlist: 3, copy: 4, undealt: 4, noboardid: 5, oldseenkey: 6 };
+const CONTROLS = { invoke: 1, chargeunknown: 2, typedlist: 3, copy: 4, undealt: 4, noboardid: 5, oldseenkey: 6, heismanname: 7 };
 const ONLY = process.env.SIM_CGPAGE_CONTROL || '';
 if (ONLY && !CONTROLS[ONLY]) {
   console.error(`SIM_CGPAGE_CONTROL=${ONLY} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -236,7 +242,7 @@ export const puzzles = await import('${abs('src/data/collegeGridPuzzles.ts')}');
   const byName = new Map(entries.map(e => [engine.normalizeGridName(e.name), e]));
   const proofById = new Map(raws.map(p => [p.id, p.proof]));
   const dealt = new Set(puzzles.collegeGridPuzzles.flatMap(b => [...b.rows, ...b.cols].map(a => a.label)));
-  return { lib, engine, byName, proofById, size: entries.length, dealt, boards: puzzles.collegeGridPuzzles.length };
+  return { lib, engine, entries, byName, proofById, size: entries.length, dealt, boards: puzzles.collegeGridPuzzles.length };
 }
 
 function sectionFour(texts) {
@@ -307,6 +313,28 @@ function sectionSix(page) {
   return out;
 }
 
+/* What each Heisman sentence the toast may print claims about the player, as a
+   test over the key. heismanOpen is set by a winner's full folded name OR by a
+   lone winner's surname at one of his schools, so only a surname claim is true
+   for every open entry. */
+const HEISMAN_CLAIMS = [
+  [/shares his name/i, 'a winner has his folded name', (e, winners) => winners.some(w => w.nameNorm === e.nameNorm)],
+  [/last name/i, 'a winner has his last name', (e, winners) => winners.some(w => w.nameNorm.split(' ').pop() === e.nameNorm.split(' ').pop())],
+];
+
+function sectionSeven(hook) {
+  const out = [];
+  const m = hook.match(/l\.kind === 'heisman'\) \{\s*facts\.push\('([^']+)'\);/);
+  if (!m) return ["the hook's Heisman unknown branch no longer pushes one plain sentence; update this check"];
+  const claim = HEISMAN_CLAIMS.find(([re]) => re.test(m[1]));
+  if (!claim) return [`the Heisman unknown sentence "${m[1]}" makes a claim this check does not know; add it to HEISMAN_CLAIMS`];
+  const winners = judge.entries.filter(e => e.heismanYear !== null);
+  const open = judge.entries.filter(e => e.heismanOpen);
+  const untrue = open.filter(e => !claim[2](e, winners));
+  if (untrue.length) out.push(`the toast says "${m[1]}" (${claim[1]}), which is false for ${untrue.length} of ${open.length} players it can show for: ${untrue.slice(0, 5).map(e => `${e.name} [${e.colleges.join('/')}]`).join('; ')}`);
+  return { out, sentence: m[1], open: open.length };
+}
+
 function sectionFive(hook) {
   const out = [];
   if (!/\{ t: 'ok';[^}]*\bboard: string[^}]*\}/.test(hook)) out.push("the ok action shape does not carry board: string");
@@ -339,6 +367,8 @@ if (!ONLY) {
   report(4, 'The copy only asks what the pool offers', four.out, `${four.parsed} example claims parsed from the page and ${PROSE_CLAIMS.length} prose claims, ${four.judged} judged against the ${judge.size} row key; ${PROSE_FACTS.length} stated facts read; ${four.named} criteria named in the copy, each checked against the labels the ${judge.boards} boards deal`);
   report(5, 'A save from another board is not shown', sectionFive(source.hook), 'action shapes, guesses and the stale log read');
   report(6, 'Returning players see the rewritten rules once', sectionSix(source.page), `the rules flag is not '${OLD_RULES_SEEN_KEY}' and storage is read inside a try`);
+  const seven = sectionSeven(source.hook);
+  report(7, 'The Heisman unknown toast only says what is true', Array.isArray(seven) ? seven : seven.out, Array.isArray(seven) ? '' : `"${seven.sentence}" checked against all ${seven.open} players it can show for`);
 }
 
 const fired = [];
@@ -384,6 +414,14 @@ if (want('oldseenkey')) {
   console.log(`\noldseenkey) the rules flag set back to '${OLD_RULES_SEEN_KEY}'`);
   const page = mustReplace(source.page, "const RULES_SEEN_KEY = 'cg-rules-seen-611';", `const RULES_SEEN_KEY = '${OLD_RULES_SEEN_KEY}';`, PAGE);
   grade('oldseenkey', sectionSix(page));
+}
+if (want('heismanname')) {
+  console.log('\nheismanname) the Heisman unknown sentence set back to "A Heisman winner shares his name."');
+  const m = source.hook.match(/l\.kind === 'heisman'\) \{\s*facts\.push\('([^']+)'\);/);
+  if (!m) abort('control heismanname cannot run: no Heisman sentence in the hook');
+  const hook = mustReplace(source.hook, `facts.push('${m[1]}');`, "facts.push('A Heisman winner shares his name.');", HOOK);
+  const r = sectionSeven(hook);
+  grade('heismanname', Array.isArray(r) ? r : r.out);
 }
 if (want('noboardid')) {
   console.log('\nnoboardid) the board id comparison removed from the hook');
