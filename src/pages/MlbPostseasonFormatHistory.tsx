@@ -139,7 +139,7 @@ const MlbPostseasonFormatHistory = () => {
             Every change above rests on at least two independent publishers agreeing: Wikipedia's postseason, World Series, wild card and League Championship Series pages, cross-checked against Baseball Almanac's year by year charts, MLB.com's own format FAQ, ESPN's wild card explainer and CBS Sports' report of the 2020 agreement. {sources.length} sources across {publishers} publishers, last checked {MLB_POSTSEASON_VERIFIED_ON}.
           </p>
           <p className="text-sm text-muted-foreground leading-relaxed mb-3">
-            Three details had only one reading and are not on this page: how long the extra 1981 strike round was, the 1995 to 2011 rule about a wild card and its own division winner meeting early, and how many clubs each league had in 1969. Baseball Reference, the Hall of Fame and four MLB.com history pages could not be fetched on the day, so none of them is cited.
+            Three details had only one reading and are not on this page: how long the extra 1981 strike round was, the 1995 to 2011 rule about a wild card and its own division winner meeting early, and how many clubs each league had in 1969. The 1981 table exception was checked again on September 15, 2026 against MLB.com's postseason format history and Baseball Almanac.
           </p>
           <ol className="text-xs text-muted-foreground space-y-1 list-decimal pl-5">
             {sources.map(s => (
