@@ -37,7 +37,7 @@ It records before/after manifests and changed paths when packaging fails.
 The earlier passing game tests remain evidence for their exact earlier source;
 this new run must complete on its own.
 
-The correction is not yet published: the 16:23 EDT public check still found
+The correction is not yet published: the 17:33 EDT public check still found
 the old content on all seven affected routes and entry `index-KIfwLt2Q.js`.
 Codex's Lovable tab operations
 are timing out, including a fresh tab. The publisher must first check that
@@ -60,7 +60,7 @@ unchanged-build retry passed. No extra headroom or budget increase is claimed.
 | 586 | `48afb5a9` | `5ced7657` | [35022622364](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022622364) |
 | 603 to 605 | `40685be8` | `7cf1f43f` | [35022671056](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022671056) |
 | 587 | `77b43142` | `ab3c8dba` | [35022769249](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022769249) |
-| 588 | `67be4bcd` | `4b5c8b40` | [35015717663](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35015717663) |
+| 588 | `8a4e00a5` | `75d4f3c6` | [35026622660](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35026622660) |
 
 These are pending full verification, not published. All existing workflow
 gates remain, with strict result parsing and eleven rebuilt routes. The old
@@ -71,20 +71,30 @@ remain untouched. Publish correction, 586, 603 to 605, 587, then 588, separately
 No feature beyond 588 is started. Claude's reserved work and Cursor's formatting
 remain separate. Verification workflows stay off main.
 
-At 16:55 EDT the previous 586, 603 to 605 and 587 runs (35015669643,
-35015688372 and 35015700619) had passed their browser and Vitest steps,
-with the node suites still running. Those runs were retained. The three
-newer runs in the table include the roster scratch repair and extra artifact
-diagnostics, with all original gates intact; they are in progress and have
-not inherited a pass from the older runs. The 588 run
-finished with 316 of 318 node harnesses passing and 311 of 311 Vitest cases
-passing. Its browser gate failed the existing Stadium/Factory download
-limits. The pack control's formerly unique text anchor now matches two writes;
-the room control removes a hook but leaves the equipment notice using it.
-The apparent React child error in the aggregate log was an earlier expected
-negative control. Both fixture repairs and a presentation-only loading repair are in
-progress. No failed or pending artifact is accepted. The replacement 588
-source and workflow also need the isolated roster repair before freezing.
+The previous 586 and animation runs completed with all 313/314 node
+harnesses and 279/296 Vitest cases passing, respectively. Both failed only
+at packaging because generated files changed. The previous 587 run passed
+305 Vitest cases and 315 of 316 node harnesses; its sole failure was fewer
+than 20 age-35 keeper observations in `simEras`. An isolated deterministic
+sample repair is being measured without changing the game engine or its
+existing standards. It is not in the currently running releases.
+
+The newer 586, animation and 587 runs in the table include the roster scratch
+repair and exact artifact diagnostics. At 17:28 EDT their types, builds,
+browser and Vitest steps had passed; their full node suites were in progress.
+They have not inherited a pass from the older runs. Completed run details
+and verified log archive hashes are in
+[the feature verification record](feature-verification-2026-09-15.md).
+
+The old 588 run passed 316 of 318 node harnesses and all 311 Vitest cases,
+but failed two stale mutation fixtures and the existing download limits.
+Those fixture and loading repairs are now committed at `8a4e00a5`, including
+the isolated roster fix. All 11 unchanged download budgets pass locally,
+along with type/build, gear/creation/reveal checks, phone layouts, reduced
+motion, 15 gear controls and seven celebration controls. Pack and room
+controls pass 22 and 11 cases. Factory has only 31 bytes of room before its
+existing rounded limit. A fresh full run remains required; no failed or
+pending build artifact is accepted.
 
 The 586 delayed-loading check now passes locally on source `3530aacc`:
 Back and Home work while panel chunks are held, the final saved career stays
@@ -94,7 +104,9 @@ final downloaded release artifact before accepting that artifact.
 
 The repaired verification branches match every source blob and file mode,
 with only their workflow added: 2,078 files for 586, 2,092 for the animations,
-and 2,101 for 587. The prepared 586 integration `b208b85e` matches all 1,876
+2,101 for 587 and 2,111 for 588. The 588 frozen manifest's 20 source, 32 log
+and one built-CSS hashes also match after commit. The prepared 586 integration
+`b208b85e` matches all 1,876
 non-documentation source files; six documentation differences preserve newer
 main records. Artifact intake must still compare against the exact verification
 commit, with that documentation reconciliation recorded separately.

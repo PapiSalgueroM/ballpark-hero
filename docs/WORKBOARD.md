@@ -1,6 +1,6 @@
 # Work board
 
-**2026-09-15 16:55 EDT, Codex: narrow guide correction ready to publish.**
+**2026-09-15 17:36 EDT, Codex: narrow guide correction ready to publish.**
 Final reviewed app and saved-page revision is `a35693a5`; later correction
 commits record evidence and isolate roster-test scratch work. Five guide corrections, source notes, readable
 phone tables and three browser-save/Record Books copy edits pass types,
@@ -19,7 +19,7 @@ full gates. Full guide evidence is recorded beside the release decision.
 Fresh guide verification `27f814be`, run 35022421148, is running with the
 roster repair and unchanged strict artifact checks. Main `edbe5c16` contains
 the same harness repair; the publishable app and saved pages stay `a35693a5`.
-The 16:23 EDT public check still found the old content on all seven affected
+The 17:33 EDT public check still found the old content on all seven affected
 routes. Codex's browser publish controls are timing out; a fresh tab also stalls.
 Claude's working Lovable connection can publish this correction once
 `get_project` shows the current origin/main commit. Confirm the reviewed
@@ -32,15 +32,23 @@ the top of `docs/PROJECT-STATE.md`. Their order is 586, 603 to 605, 587, then 58
 correction. New 587 source is `.worktrees/round-587-final`; the old dirty 587
 worktree is preserved. Source branches remain unpublished.
 
-The 588 run is now failed evidence: 316 of 318 node harnesses and all 311
-Vitest cases pass, but the two stale pack/room fixtures and the existing
-Stadium/Factory download limits need repair. Codex owns those fixes in the
-isolated 588 source tree. No budgets are raised. The older three full node
-suites remain in progress; their browser and Vitest steps passed. Fresh runs
-35022622364, 35022671056 and 35022769249 now include the roster repair and
-artifact diagnostics, with every original gate retained. Source branches
-include the same harness-only fix. No pending run inherits a pass from an
-earlier source. No work beyond 588 has been started.
+The 588 loading and fixture repairs are committed at `8a4e00a5`. All eleven
+original download limits and local checks pass, including slow artwork,
+early dismissal and reduced motion. Factory has only 31 bytes before the
+existing rounding boundary. Verification `75d4f3c6` retains all prior gates
+and adds the seven effective celebration controls and two catalog controls.
+Fresh full run `35026622660` is in progress. The old failed run is not approval.
+
+The earlier 586 and animation runs passed 313/314 node harnesses and
+279/296 Vitest cases, then failed packaging. Their replacement runs include
+the roster scratch repair and exact artifact diagnostics. The previous 587
+run passed 315 of 316 node harnesses and all 305 Vitest cases; its lone failure
+was an undersized older-keeper sample. A test-only deterministic sampling
+repair is isolated and being measured, with game behavior and thresholds
+unchanged. Fresh runs 35022622364, 35022671056 and 35022769249 are still in
+progress. Full results and log hashes are in
+`docs/feature-verification-2026-09-15.md`. No pending run inherits an older pass.
+No work beyond 588 has been started.
 
 **2026-09-15 15:19 EDT, Codex correction release check update.** The five
 guide corrections and three save/Record Books copy fixes are implemented at
