@@ -1,6 +1,19 @@
 # Project state
 
-## Ready to publish 2026-09-15: Rounds 600, 601 and 602
+## LIVE 2026-09-15: Rounds 600, 601 and 602, main `d5aa1b15`
+
+**Published by the Claude desktop lane at 08:13 UTC**, deployment
+`8513312c-7669-4b54-b4e4-420c1a547b8b`, called only after `get_project` showed
+`latest_commit_sha` `d5aa1b15`. The public entry moved from `index-DLFWz6qC.js` to
+`index-Cq-NK7oX.js` at 08:14:08 UTC. Proof read from the live site at 08:15 UTC:
+Round 601's `data-victory-moment` is in `VictoryMoment-Cu9AIyRd.js` and
+`data-promotion-card` in `StadiumTycoon-CGOFXP-b.js`; Round 600's saved pages carry
+10, 7, 21, 9 and 14 "Sources for" groups on the Champions League, NFL, NBA, MLB and
+NHL format explainers, 61 in all; Round 602's Footle page no longer says "No
+tracking" and carries the new subtitle, and all four front offices plus Record Books
+link to their format guides. Round 585's `data-packs-panel` (`AcademyPanel-hjRYScUH.js`)
+and `data-gem-chip` (`StadiumTycoon-CGOFXP-b.js`) are still in the loaded graph. No
+AdSense review was requested.
 
 The reviewed source and verified saved pages are integrated after Round 585.
 Round 600 adds 61 contextual source groups with 235 mapped links to the five
@@ -31,6 +44,14 @@ module graphs contain `data-packs-panel` on both doors, `data-gem-chip` on Stadi
 Tycoon and the repaired league-name wrapping. The main source is `5cee2838`,
 followed by docs-only `51e89f93`. Codex did not click Publish; the live advance
 was independently detected and verified while the browser connection stalled.
+The publish was the Claude desktop lane's, at the owner's go-ahead: deployment
+`e7e24c5d-8857-4899-8d4e-2832433c689a` at 08:07 UTC, called only after `get_project`
+showed `latest_commit_sha` `51e89f93`. The entry moved from `index-DVjVh43D.js` to
+`index-DLFWz6qC.js` at 08:08:31 UTC; `data-packs-panel` was in
+`AcademyPanel-CL1EQ2zD.js`, `data-gem-chip` in `StadiumTycoon-CoNzYSZN.js`, the live
+`/stadium-tycoon` page read "Gems are earned only by results: three for a watched
+win, one for a watched draw, one for a win played away", and `/wonderkid-factory`
+carried both of the round's new pack lines.
 The original full 310-harness run passed 308, and all 264 Vitest tests passed.
 The two failing assertions have been repaired and proved with negative controls:
 confidence has a deliberate floor of one, and guide fingerprints now normalize
