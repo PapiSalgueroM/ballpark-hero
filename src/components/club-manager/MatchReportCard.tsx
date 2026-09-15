@@ -5,6 +5,7 @@ import { confidenceLabel } from '@/lib/clubManager';
 import type { MatchWeekReport, MatchStats } from '@/lib/clubManager';
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
+import VictoryMoment from '@/components/game/VictoryMoment';
 
 /** Round 157: one stat as two bars meeting in the middle, matchday-app style. */
 function StatBar({ label, mine, theirs, decimals = 0, suffix = '' }: {
@@ -294,8 +295,10 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
         )}
 
         {r.trophyWon && (
-          <div className={cn('mt-4 py-2.5 px-3 rounded-xl bg-gold/10 border border-gold/40 text-gold font-bold text-sm', verdict && 'cm-gold-glow')}>
-            🏆 {r.trophyWon} WON!
+          <div className="mt-4 py-2.5 px-3 rounded-xl bg-gold/10 border border-gold/40 text-gold font-bold text-sm">
+            <VictoryMoment key={`${r.home}-${r.away}-${r.trophyWon}-${r.homeGoals}-${r.awayGoals}`}>
+              {r.trophyWon} WON!
+            </VictoryMoment>
           </div>
         )}
 

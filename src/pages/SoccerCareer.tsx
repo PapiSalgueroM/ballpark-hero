@@ -6,6 +6,7 @@ import PageSeo from "@/components/seo/PageSeo";
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { GameNavbar } from "@/components/game/GameNavbar";
 import { GameHelp } from "@/components/game/GameHelp";
+import VictoryMoment from '@/components/game/VictoryMoment';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -79,7 +80,7 @@ import {
 } from "@/lib/soccerCareerAppearance";
 import PlayerAvatar from "@/components/soccer-career/PlayerAvatar";
 import AppearanceBuilder from "@/components/soccer-career/AppearanceBuilder";
-import { Confetti, ShineWrap } from "@/components/soccer-career/CareerFx";
+import { Confetti } from "@/components/soccer-career/CareerFx";
 import { CelebrationStyles, revealDelay } from "@/components/club-manager/Celebration";
 import { SignedSlip } from "@/components/soccer-career/SignedSlip";
 import type { SignedNote } from "@/components/soccer-career/SignedSlip";
@@ -546,9 +547,11 @@ function SeasonSummaryCard({ season, position, onContinue, appearance }: { seaso
       )}
 
       {trophies.length > 0 && (
-        <ShineWrap className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center">
-          <span className="text-sm font-bold">{trophies.join(" · ")}</span>
-        </ShineWrap>
+        <div className="bg-amber-500/10 border border-amber-500/20 rounded-lg p-2 text-center text-amber-400">
+          <VictoryMoment key={`${season.year}-${season.club}`}>
+            <span className="text-sm font-bold text-foreground">{trophies.join(" · ")}</span>
+          </VictoryMoment>
+        </div>
       )}
 
       <Button onClick={onContinue} className="w-full h-10 text-sm font-bold bg-emerald-600 hover:bg-emerald-500 text-black">
