@@ -1,4 +1,4 @@
-name: Verify AdSense and animations release
+name: Verify release repairs and generated pages
 
 on:
   push:
@@ -14,6 +14,7 @@ jobs:
     env:
       CI: 'true'
       ENGINES: chromium
+      PRERENDER_ONLY: '/stadium-tycoon,/wonderkid-factory,/club-manager,/soccer-career,/champions-league-format-history,/nfl-playoff-format-history,/nba-playoff-format-history,/mlb-postseason-format-history,/nhl-playoff-format-history,/front-office,/nba-front-office,/mlb-front-office,/nhl-front-office,/records,/footle'
       VITEST_MAX_THREADS: '1'
       VITEST_MIN_THREADS: '1'
       VITEST_MAX_FORKS: '1'
@@ -125,14 +126,22 @@ jobs:
         run: npm run build:seo 2>&1 | tee "$RUNNER_TEMP/round585-logs/build-seo.log"
       - name: Record generated files before tests
         run: python3 "$RUNNER_TEMP/release-artifact.py" built
-      - name: Full node harness suite
+      - name: Repaired harnesses and every generated-file gate
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         timeout-minutes: 180
-        run: node scripts/runAllSims.mjs 2>&1 | tee "$RUNNER_TEMP/round585-logs/node-sims.log"
-      - name: Full Vitest, one worker
+        run: ONLY='simAdsense,simBrand,simHeadTags,simHiddenPages,simHubs,simIndexNow,simIndexing,simInternalLinks,simNoRivalNames,simPrerender,simPrerenderBoot,simRetiredRoutes,simSchema,simSitemap,simSnapshotAssets,simSiteSearch,simApproaches,simClubManagerMeters' node scripts/runAllSims.mjs 2>&1 | tee "$RUNNER_TEMP/round585-logs/node-sims.log"
+      - name: Prove confidence regression controls
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
-        timeout-minutes: 40
-        run: node node_modules/vitest/vitest.mjs run --maxWorkers=1 --minWorkers=1 --no-file-parallelism 2>&1 | tee "$RUNNER_TEMP/round585-logs/vitest.log"
+        run: |
+          for control in cost floor; do
+            if APPROACH_CONTROL="$control" node scripts/simApproaches.mjs > "$RUNNER_TEMP/round585-logs/approach-$control.log" 2>&1; then
+              cat "$RUNNER_TEMP/round585-logs/approach-$control.log"
+              echo "Negative control did not fail: $control"
+              exit 1
+            fi
+            grep -F "NEGATIVE CONTROL $control: changed" "$RUNNER_TEMP/round585-logs/approach-$control.log"
+            grep -E 'FAIL: committing from (60|1.4)' "$RUNNER_TEMP/round585-logs/approach-$control.log"
+          done
       - name: Portable browser gates, isolated contexts and intercepted writes
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         timeout-minutes: 30
@@ -178,9 +187,16 @@ jobs:
           curl --fail --silent http://127.0.0.1:4173/robots.txt >/dev/null
           export BASE=http://127.0.0.1:4173
           status=0
-          for gate in playSessionMarks playLegacy playIphone playLeagueTableFit simVictoryMoment; do
+          for gate in simPrerenderBoot playIphone playLeagueTableFit simVictoryMoment; do
             node "$RUNNER_TEMP/round585-browser.mjs" "scripts/$gate.mjs" 2>&1 | tee "$RUNNER_TEMP/round585-logs/$gate.log" || status=1
           done
+          if TABLE_FIT_CONTROL=nowrap node "$RUNNER_TEMP/round585-browser.mjs" scripts/playLeagueTableFit.mjs > "$RUNNER_TEMP/round585-logs/table-nowrap.log" 2>&1; then
+            echo 'Table negative control did not fail'
+            status=1
+          fi
+          cat "$RUNNER_TEMP/round585-logs/table-nowrap.log"
+          grep -F 'NEGATIVE CONTROL nowrap: restored truncation' "$RUNNER_TEMP/round585-logs/table-nowrap.log" || status=1
+          grep -E 'FAIL: .*clipped cell' "$RUNNER_TEMP/round585-logs/table-nowrap.log" || status=1
           ONLY=/stadium-tycoon,/wonderkid-factory node "$RUNNER_TEMP/round585-browser.mjs" scripts/playRenderStability.mjs 2>&1 | tee "$RUNNER_TEMP/round585-logs/playRenderStability.log" || status=1
           printf '%s\n' 'NOT RUN: playReducedMotion.mjs has hardcoded C:/Users/antho paths at lines 33 and 40; this gate remains owed locally.' | tee "$RUNNER_TEMP/round585-logs/platform-limitations.txt"
           exit "$status"

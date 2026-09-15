@@ -10,6 +10,8 @@
  * ignored approaches expire; and none of it survives into a new season.
  *
  * Run: node scripts/simApproaches.mjs
+ * Negative controls: APPROACH_CONTROL=cost or APPROACH_CONTROL=floor changes
+ * the executed temporary bundle. Each must fail the confidence checks.
  */
 import { execSync } from 'node:child_process';
 import os from 'node:os';
@@ -27,6 +29,18 @@ const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts')
 export const cm = mod;
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+
+const control = process.env.APPROACH_CONTROL || '';
+if (control) {
+  if (!['cost', 'floor'].includes(control)) throw new Error(`Unknown APPROACH_CONTROL: ${control}`);
+  const built = fs.readFileSync(BUNDLE, 'utf8');
+  const needle = 'state.boardConfidence - 6, 1, 100';
+  if (built.split(needle).length !== 2) throw new Error('Approach control must match exactly one confidence calculation');
+  const changed = built.replace(needle, control === 'cost' ? 'state.boardConfidence - 5, 1, 100' : 'state.boardConfidence - 6, 0, 100');
+  if (changed === built) throw new Error('Approach control did not change the bundle');
+  fs.writeFileSync(BUNDLE, changed);
+  console.log(`NEGATIVE CONTROL ${control}: changed the confidence calculation in the temporary bundle`);
+}
 
 const { cm } = await import(pathToFileURL(BUNDLE).href);
 const {
@@ -93,8 +107,13 @@ if (hotSave) {
   if (committed.approach) fail('the approach survived being answered');
   if (!committed.pendingMove) fail('no pre-agreement after committing');
   else if (committed.pendingMove.club !== hotSave.approach.club) fail('the pre-agreement names the wrong club');
-  const drop = before - committed.boardConfidence;
-  if (Math.abs(drop - 6) > 0.001 && committed.boardConfidence > 0) fail(`committing cost ${drop} confidence, the design says 6`);
+  const expectedConfidence = Math.max(1, before - 6);
+  if (Math.abs(committed.boardConfidence - expectedConfidence) > 0.001) fail(`committing left ${committed.boardConfidence} confidence from ${before}, expected ${expectedConfidence}`);
+  // The random hot save can be near the floor. Exercise both rules every run.
+  for (const [confidence, expected] of [[60, 54], [1.4, 1]]) {
+    const result = respondApproach({ ...hotSave, boardConfidence: confidence }, true);
+    if (Math.abs(result.boardConfidence - expected) > 0.001) fail(`committing from ${confidence} left ${result.boardConfidence} confidence, expected ${expected}`);
+  }
   if (!committed.aiHeadlines[0]?.includes('Done deal for the summer')) fail('the news did not break');
 
   // Ride the season out and the pre-agreement leads the offers.
