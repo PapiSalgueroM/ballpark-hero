@@ -144,12 +144,12 @@ if (CONTROL === 'tdz') {
   /* The season end block declares its own `c` since Round 541. Take that line
    * away and the block falls through to the function body binding below it,
    * which is precisely the shape that shipped and crashed. */
-  const needle = `    const c = g.career;\n    const trophyLine =`;
+  const needle = `    const c = g.career;\n    // Round 66:`;
   if (!src.includes(needle)) {
     console.error('CONTROL tdz cannot find the season end career binding to remove, so it would change nothing');
     process.exit(1);
   }
-  const mutated = src.replace(needle, `    const trophyLine =`);
+  const mutated = src.replace(needle, `    // Round 66:`);
   if (mutated === src) { console.error('CONTROL tdz changed nothing'); process.exit(1); }
   overrides.set(target, mutated);
   console.log(`   NEGATIVE CONTROL ON: ${target} loses the season end block's own career binding, the check must go red`);

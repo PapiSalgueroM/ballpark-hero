@@ -460,9 +460,9 @@ console.log('9) static wiring: the mark, the route, the words');
   const reg = fs.readFileSync(path.join(ROOT, 'src/data/gameRegistry.ts'), 'utf8');
   if (!reg.includes("path: '/wonderkid-factory'")) fail('no registry row');
   const loader = fs.readFileSync(path.join(ROOT, 'src/data/gameContent/loader.ts'), 'utf8');
-  if (!loader.includes("'/wonderkid-factory': 'soccer2'")) fail('no PATH_BUNDLE entry, the guide would be unreachable');
-  const soccer2 = fs.readFileSync(path.join(ROOT, 'src/data/gameContent/soccer2.ts'), 'utf8');
-  if (!soccer2.includes("'/wonderkid-factory': {")) fail('no guide in soccer2.ts');
+  if (!loader.includes("'/wonderkid-factory': 'academyManagement'")) fail('no PATH_BUNDLE entry, the guide would be unreachable');
+  const academyGuide = fs.readFileSync(path.join(ROOT, 'src/data/gameContent/academyManagement.ts'), 'utf8');
+  if (!academyGuide.includes("'/wonderkid-factory': {")) fail('no guide in academyManagement.ts');
   console.log('   mark shape, route, registry row, bundle entry and guide all present');
 }
 

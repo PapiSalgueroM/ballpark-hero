@@ -105,7 +105,7 @@ function detail(messages) {
 const sectionOf = title => Number((title.match(/^(\d+)/) || [])[1] || 0);
 
 const PAGE_LINES = {
-  hook: '  const g = useStadiumTycoon();\n',
+  hook: '  const g = useStadiumTycoon(getEdge);\n',
   roomSignature: 'function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadiumTycoon>; visible: boolean; onNeedsYou: (v: boolean) => void }) {\n',
   roomMount: "<StadiumRoom g={g} visible={room === 'stadium'} onNeedsYou={setStadiumNeedsYou} />",
   academyMount: '{academyOpened && (',

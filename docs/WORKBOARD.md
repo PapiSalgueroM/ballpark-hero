@@ -83,6 +83,15 @@ is started. AdSense's last confirmed state remains Getting ready at 12:37 EDT;
 no review was resubmitted. Lovable publication still needs a working connection
 and independent public checks after main lands.
 
+**2026-09-15, local Round 586 source integration.** Codex merged factual
+correction `253790d7` into `.worktrees/round-586-first-team` at `25533a22`.
+Both the correction and existing first-team behavior are preserved; no
+verification-branch workflow is included. Accurate guide/save copy retains
+publication priority. The release coordinator owns final correction readability
+and integrated download/build checks. Nothing from this merge is published,
+no earlier verification artifact approves it, and downstream propagation waits
+for the separate map-guard repair and coordinated release gates.
+
 **2026-09-15, Codex expands the factual correction to all five guides.**
 The independent source review found an NBA seed-pairing error and a stale
 division count, plus summary tables or FAQs that omit the Champions League
