@@ -19,12 +19,15 @@
  *      CM_FINAL_TABLES_PARTIAL is exactly the European leagues with no table.
  *   2. A new 2026-27 career's field equals the rule applied to the data file,
  *      computed here independently, in order, whoever you manage.
- *   3. Your club is in Europe exactly when it is in that field, for every club
- *      of every European league, and the board's Champions League objective
- *      follows. Chelsea start outside it, Aston Villa inside, with their group
+ *   3. Your club is in Europe exactly when it earned a place (a league place
+ *      or the holders), for every club of every European league, and the
+ *      board's Champions League objective follows. The fill place tops up the
+ *      AI field and never hands you a group: Hoffenheim (5th, fill) start
+ *      outside. Chelsea start outside it, Aston Villa inside, with their group
  *      and the other seven groups drawn from the field.
  *   4. PSG are in as the holders, and the holders' route really runs: with PSG
- *      moved out of Ligue 1's places in memory, they are still in.
+ *      moved out of Ligue 1's places in memory, they are still in, and so is
+ *      a PSG career.
  *   5. Every European league's verified qualifiers are in the field.
  *   6. A historic era's season one is byte identical to origin/main's.
  *   7. A custom club starts outside Europe, byte identical to origin/main's.
@@ -59,6 +62,8 @@
  *   rollover  make the shared rule skip every league's champion         8
  *   rewrite   make loadCareer rewrite a pre Round 612 season one group  9
  *   partial   ignore CM_FINAL_TABLES_PARTIAL                            10
+ *   fill      your club qualifies off the whole field, fill included   3, 10
+ *   ownholders  your club's qualification drops the holders' route     4
  *
  * Run: node scripts/simUclSeasonOne.mjs      (no database)
  */
@@ -137,6 +142,18 @@ const CONTROLS = {
     what: "the shared rule skips every league's champion",
     re: /(\w+)\.clubs\.slice\(0, uclPlacesIn\(\1\.league\)\)/g,
     to: (_m, t) => `${t}.clubs.slice(1, 1 + uclPlacesIn(${t}.league))`,
+  },
+  fill: {
+    red: ['3', '10'],
+    what: "your club qualifies off the whole field again, fill place included",
+    re: /(\w+) && seasonOneTableOf\((\w+)\.id\) \? uclDirectQualifiersFromTables\(seasonOneTables\(\), CM_FINAL_TABLES_2025_26\.holders\)\.includes\((\w+)\.name\)/g,
+    to: (_m, field, league, club) => `${field} && seasonOneTableOf(${league}.id) ? ${field}.includes(${club}.name)`,
+  },
+  ownholders: {
+    red: ['4'],
+    what: "your club's own qualification ignores the holders' route",
+    re: /uclDirectQualifiersFromTables\(seasonOneTables\(\), CM_FINAL_TABLES_2025_26\.holders\)/g,
+    to: () => 'uclDirectQualifiersFromTables(seasonOneTables(), null)',
   },
   partial: {
     red: ['10'],
@@ -313,6 +330,8 @@ function ruleFromData(data) {
 }
 const expected = ruleFromData(DATA);
 const expectedSet = new Set(expected.field);
+/* The clubs that earned a place: a league place or the holders, never the fill. */
+const expectedDirect = new Set(expected.field.filter(c => !expected.reason.get(c).endsWith('fill')));
 
 /* ------------------------------------------------------------------ */
 await run('1', 'The data file the engine ships is well formed', async () => {
@@ -365,7 +384,7 @@ await run('2', 'A new 2026-27 career\'s field is the rule applied to the data fi
 });
 
 /* ------------------------------------------------------------------ */
-await run('3', 'Your club is in Europe exactly when it is in the field', async () => {
+await run('3', 'Your club is in Europe exactly when it earned a place, never through the fill', async () => {
   const chelsea = pinned(1, () => mine.startCareer('Chelsea'));
   if (chelsea.uclGroup !== null) fail('Chelsea, 10th in 2025-26, start season one in the Champions League');
   if (chelsea.uclWorld !== undefined) fail('Chelsea are out of Europe but the save carries the other groups');
@@ -388,19 +407,32 @@ await run('3', 'Your club is in Europe exactly when it is in the field', async (
     if (!villa.boardObjectives.some(o => o.id === 'ucl')) fail('Aston Villa are in the Champions League and their board sets no objective for it');
   }
 
+  /* Round 612 review: the fill place tops up the AI field and must never hand
+     the manager a group. A 2026-27 Hoffenheim (5th, four places) started in
+     the Champions League off it, the reported bug in a new shirt. */
+  const fills = expected.field.filter(c => !expectedDirect.has(c));
+  if (!fills.length) fail('the rule gives no fill place on the real tables, so "never through the fill" was not exercised');
+  for (const club of fills) {
+    const s = pinned(300, () => mine.startCareer(club));
+    if (s.uclGroup !== null) fail(`${club} (${expected.reason.get(club)}) start season one in the Champions League through the fill, without a league place`);
+    if (s.boardObjectives.some(o => o.id === 'ucl')) fail(`${club} have no place and the board sets a Champions League objective`);
+    if (json(s.uclField) !== json(expected.field)) fail(`${club}: the AI field lost its fill place when this club is managed`);
+  }
+
   let checked = 0;
   let inEurope = 0;
   for (const lg of euroLeagues) {
     for (const club of lg.clubs) {
       const s = pinned(checked + 100, () => mine.startCareer(club));
       checked += 1;
-      const inField = expectedSet.has(s.clubName);
-      if (!!s.uclGroup !== inField) fail(`${club} (${lg.id}): ${s.uclGroup ? 'starts in Europe outside the field' : 'is in the field and starts outside Europe'}`);
+      const earned = expectedDirect.has(s.clubName);
+      if (!!s.uclGroup !== earned) fail(`${club} (${lg.id}): ${s.uclGroup ? `starts in Europe without a league place or the holders' route${expectedSet.has(club) ? ' (a fill place)' : ''}` : 'earned a place and starts outside Europe'}`);
       if (s.boardObjectives.some(o => o.id === 'ucl') !== !!s.uclGroup) fail(`${club}: the board's Champions League objective does not match the group`);
+      if (s.uclGroup && !expectedSet.has(s.clubName)) fail(`${club} are in Europe but not in the field their opponents are drawn from`);
       if (s.uclGroup) inEurope += 1;
     }
   }
-  return `Chelsea out, Aston Villa in with 8 groups of qualifiers; ${checked} clubs across ${euroLeagues.length} leagues, ${inEurope} in Europe, each exactly when in the field`;
+  return `Chelsea out, Aston Villa in with 8 groups of qualifiers; fill ${fills.join(', ')} kept out; ${checked} clubs across ${euroLeagues.length} leagues, ${inEurope} in Europe, each exactly when it earned a place`;
 });
 
 /* ------------------------------------------------------------------ */
@@ -421,11 +453,17 @@ await run('4', 'PSG are in as the holders, and the holders\' route really runs',
       if (!field.includes(c)) fail(`with PSG moved down, ${c} took a Ligue 1 place and is not in the field`);
     }
     if (field.length !== 32) fail(`with PSG moved down the field has ${field.length} clubs`);
+    /* Round 612 review: the holders' route is a place earned, so it lets the
+       manager's own club in too, where the fill never does. */
+    const psg = pinned(401, () => mine.startCareer('PSG'));
+    if (!psg.uclGroup) fail('with PSG last in Ligue 1, a PSG career starts outside Europe although PSG are the holders');
+    const lyon = pinned(402, () => mine.startCareer('Lyon'));
+    if (!lyon.uclGroup) fail('with PSG moved down, Lyon take a Ligue 1 place and a Lyon career starts outside Europe');
   } finally {
     ligue1.splice(0, ligue1.length, ...saved);
   }
   if (json(mine.seasonOneUclField('now')) !== json(expected.field)) fail('restoring Ligue 1 did not restore the field');
-  return 'PSG in; moved to last in Ligue 1 they stay in as holders and Lens, Lille and Lyon take the places';
+  return 'PSG in; moved to last in Ligue 1 they stay in as holders (a PSG career too) and Lens, Lille and Lyon take the places';
 });
 
 /* ------------------------------------------------------------------ */
@@ -539,9 +577,15 @@ await run('10', 'A league with no verified table falls back to the old day one, 
     }
     const villaSpain = pinned(10100, () => mine.startCareer('Villarreal'));
     if (!villaSpain.uclGroup) fail('Villarreal, whose league is still verified, lost their place because another league went partial');
+    /* Round 612 review: in the field is not enough, a club must have earned
+       its place; the fill clubs the partial league frees up stay home. */
+    const marked = ruleFromData({ ...DATA, CM_FINAL_TABLES_PARTIAL: ['premier'] });
+    if (json(field) !== json(marked.field)) fail(`with the Premier League partial the field is not the rule applied to the other leagues (${firstDiff(json(field), json(marked.field))})`);
     for (const c of field) {
       const s = pinned(10200, () => mine.startCareer(c));
-      if (!s.uclGroup) fail(`${c} is in the field with the Premier League partial and starts outside Europe`);
+      const byFill = marked.reason.get(c)?.endsWith('fill');
+      if (!byFill && !s.uclGroup) fail(`${c} earned a place with the Premier League partial and starts outside Europe`);
+      if (byFill && s.uclGroup) fail(`${c} is only a fill place with the Premier League partial and starts in Europe`);
     }
   } finally {
     partial.splice(partial.indexOf('premier'), 1);
