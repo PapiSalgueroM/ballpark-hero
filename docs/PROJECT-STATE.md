@@ -71,11 +71,43 @@ phones, with a real saved first-team sale and no horizontal overflow.
 The full release workflow is
 [34983397450](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34983397450),
 testing source `be0c2378` with verification-only workflow commit `9bd3c802`.
-Its app type check and SEO build pass; the complete harness suite is still
-running. No final artifact has been accepted yet. Publication remains owed.
+Its app type check, SEO build, all 279 Vitest tests and browser steps pass.
+The full node run passed 312 of 313 harnesses. The sole failure was the older
+league strength control looking for a return expression that Round 586 moved
+into a local `base` variable. The control's exact anchor was repaired in
+`cd4e7043` and passed locally and in run `34994125996`. The application formula
+and test thresholds are unchanged. Publication remains owed.
+The workflow's locally owed reduced-motion gate has now passed all 16 routes.
+Its deliberate removed-guard control detected six isolated CSS failures and
+three route failures. The local wrapper changed only hardcoded paths in a
+temporary copy and retained every assertion; external writes were intercepted.
 Rounds 603 and 604 are independent action-animation
 worktrees for Club Manager live matches and Soccer Career drills; they do not
 share this round's save changes or release.
+## RELEASE CHECK UPDATE 2026-09-15 12:43 EDT
+
+The new Round 586 release sweep found three initial JavaScript downloads above
+their existing phone budgets: Club Manager 708K/620K, Stadium Tycoon 312K/290K
+and Wonderkid Factory 297K/270K. Codex is repairing eager presentation and guide
+imports before publication, preserving the budgets and content. The type gate,
+SEO build, 279 Vitest tests, repaired league harness and other browser checks
+passed. A fresh full suite will cover the changed loading code. No Round 586,
+587 or 603 to 605 action source is confirmed published yet.
+
+AdSense was checked directly at 12:37 EDT. The fully loaded site detail panel
+still shows Getting ready and Review requested. The review submitted at 04:19
+EDT is pending, with no new rejection or approval shown and no new submission.
+
+The performance source is now committed as `f66bab76`. Closed management
+screens and academy panels load when opened; the three management guides each
+have their own small download, with every original guide entry unchanged.
+Local loading boundaries keep the existing headings, navigation and scroll
+refs mounted. Twelve existing guards follow the moved copy or source anchors.
+The last local measurement before the final two panel extractions was
+621K/620K, 288K/290K and 271K/270K in the order above. These are not final
+passing measurements. Fresh full type, SEO build, node, Vitest, browser,
+download and moved-binding control checks run remotely before artifact
+acceptance or publication. Earlier unchanged-source reuse is no longer valid.
 
 ## LIVE 2026-09-15: Round 610, players who joined with Google can get back in, main `7b268106`
 
