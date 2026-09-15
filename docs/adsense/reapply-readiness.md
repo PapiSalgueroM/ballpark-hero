@@ -2,13 +2,24 @@
 
 ## Current status: review requested September 15, 2026
 
+**18:47 EDT publication follow-up:** the factual corrections to all five
+format guides, their phone-table improvements and the three save/account
+claims are now independently verified live. All seven affected pages match
+the reviewed content, links and metadata. The current observed entry is
+`index-jZ501OVb.js`. See [the public proof](guide-publication-proof-2026-09-15.json)
+and [the full correction evidence](guide-correction-release-checks-2026-09-15.md).
+The last direct AdSense observation remains **Getting ready, Review requested**
+at 12:37 EDT. The account has not been checked again successfully since then,
+and no further request was submitted. This publication check does not prove
+a new Google crawl, indexing or approval.
+
 **AdSense accepted the new request at 4:19 AM EDT.** After confirming the
 improvements were live, Codex checked the fixed-issues box and selected Request
 review. The site detail page changed from Needs attention to **Getting ready**
 and displayed **Review requested**. Google has not approved the site yet. This
 status supersedes the historical rejection and waiting recommendations below.
 
-Rounds 585 and 600 to 602 are live from source `d5aa1b15`, with public entry
+At the original 4:18 AM check, Rounds 585 and 600 to 602 were live from source `d5aa1b15`, with public entry
 `index-Cq-NK7oX.js`. Claude's desktop lane published them; Codex independently
 verified all eleven affected guide/navigation pages and the actual animation
 module graphs at 4:18 AM EDT. The five guides contain 61 contextual citation

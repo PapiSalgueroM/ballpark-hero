@@ -6,6 +6,13 @@ submitted later, after the release and public-site checks below.
 
 ## Current status: review requested at 4:19 AM EDT
 
+The last successful direct account check at 12:37 PM EDT still showed
+Getting ready and Review requested. Later browser-control timeouts provide
+no newer account status. The 18:47 EDT public check confirmed the additional
+guide corrections and accurate browser-save wording are live, with entry
+`index-jZ501OVb.js`; see [that public proof](guide-publication-proof-2026-09-15.json).
+No second review request was submitted.
+
 On September 15, 2026, Codex reopened the site detail page and confirmed it
 still showed Needs attention, Low value content, an unchecked fixed-issues box
 and Request review. After verifying the released improvements on the public
@@ -14,7 +21,7 @@ the site heading to **Getting ready** and showed **Review requested**. That
 visible response confirms submission, not approval. No new terms, payment or
 consent settings were accepted or changed.
 
-The live release is main source `d5aa1b15`, public entry
+The release verified before the 4:19 AM submission was main source `d5aa1b15`, public entry
 `index-Cq-NK7oX.js`. All eleven changed guide/navigation pages passed checks for
 HTTP status, canonical, indexing controls, saved content and their exact source
 or guide links. The three actual game module graphs contain the new trophy
