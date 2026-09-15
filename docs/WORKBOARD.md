@@ -1,5 +1,15 @@
 # Work board
 
+**2026-09-15, Codex expands the factual correction to all five guides.**
+The independent source review found an NBA seed-pairing error and a stale
+division count, plus summary tables or FAQs that omit the Champions League
+2020, MLB 1981 and NHL 2020-21 exceptions already described elsewhere. Codex
+owns the four additional format libs/pages and their matching format harnesses
+in `.worktrees/nfl-guide-format-correction`. NFL stays in the same isolated
+correction. Every changed fact needs two recorded sources, and summary checks
+must catch the old misleading wording. This is the immediate AdSense content
+priority, with no new article or review submission.
+
 **2026-09-15, Codex claims urgent NFL guide correction.** A direct public
 content audit found the format explainer skips the 1967 to 1969 four-team
 bracket and says no earlier postseason games existed. Its own Bears source
