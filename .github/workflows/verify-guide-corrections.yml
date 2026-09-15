@@ -156,7 +156,30 @@ jobs:
       - name: Full node harness suite
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         timeout-minutes: 180
-        run: node scripts/runAllSims.mjs 2>&1 | tee "$RUNNER_TEMP/guide-correction-logs/node-sims.log"
+        run: |
+          node scripts/runAllSims.mjs 2>&1 | tee "$RUNNER_TEMP/guide-correction-logs/node-sims.log"
+          python3 - <<'PY'
+          import json, os, pathlib, re
+          def node_rows(log):
+              heading = re.search(r'Running (\d+) node harnesses', log)
+              assert heading, 'No full node-suite heading in the output'
+              ending = re.search(r'Skipping \d+ browser harnesses', log[heading.end():])
+              assert ending, 'No browser-category boundary after the node table'
+              table = log[heading.end():heading.end() + ending.start()]
+              rows = re.findall(r'\s(PASS|FAIL|EMPTY|SKIP)\s+([A-Za-z0-9]+\.mjs)\s+[0-9.]+s\s*$', table, re.MULTILINE)
+              expected = int(heading.group(1))
+              assert expected > 0 and len(rows) == expected, (expected, len(rows))
+              assert len({name for _, name in rows}) == expected, 'Duplicate node result rows'
+              return rows
+          def require_complete(rows):
+              bad = [(status, name) for status, name in rows if status != 'PASS']
+              assert not bad, 'Fresh node suite has incomplete or failed results: ' + repr(bad)
+          folder = pathlib.Path(os.environ['RUNNER_TEMP']) / 'guide-correction-logs'
+          rows = node_rows((folder / 'node-sims.log').read_text())
+          require_complete(rows)
+          (folder / 'fresh-node-results.json').write_text(json.dumps(rows, indent=2) + '\n')
+          print('Verified ' + str(len(rows)) + ' fresh PASS rows; no failed, empty or skipped node checks.')
+          PY
       - name: Full Vitest, one worker
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         timeout-minutes: 45
