@@ -71,7 +71,10 @@
      GROUPS. POSITION_GROUPS of src/lib/nflGrid.ts applied to the key's
        roster codes, to the draft position (word forms such as "Defensive
        end" read as their code, a slash or comma list read as each part) and
-       to the Heisman position (HB and FB count as RB). A code that does not
+       to the Heisman position (HB and FB count as RB) and to the position a
+       joined cfb stats row lists for his college career (Matt Jones threw
+       755 passes as Arkansas's quarterback and was a receiver in the NFL,
+       so a college grid has him at both). A code that does not
        name one group adds nothing: kickers, punters and snappers, the side
        free old words (Back, End, Tackle and their one letter forms, the
        single wing backs), and every position listed in a draft year before
@@ -527,7 +530,7 @@ export function buildCollegeKey(src, { control = {} } = {}) {
     if (fits.length === 1) {
       const e = fits[0];
       const before = new Set(baseColleges(e));
-      e.cfb.push({ slug: s.player_slug, schools });
+      e.cfb.push({ slug: s.player_slug, schools, groups: control.noCfbGroups ? new Set() : groupsOfListedPosition(s.pos, positionGroups) });
       cfbAdded += 1;
       cfbNewSchools += schools.filter(x => !before.has(x)).length;
     }
@@ -544,7 +547,8 @@ export function buildCollegeKey(src, { control = {} } = {}) {
     const second = new Set([...roster, ...heismanSchools, ...cfbSchools]);
     const draftGroups = new Set(e.rows.flatMap(r => [...r.groups]));
     const heismanGroups = new Set(e.heisman.flatMap(h => [...h.groups]));
-    const groupsAll = new Set([...e.rosterGroups, ...draftGroups, ...heismanGroups]);
+    const cfbGroups = new Set(e.cfb.flatMap(c => [...c.groups]));
+    const groupsAll = new Set([...e.rosterGroups, ...draftGroups, ...heismanGroups, ...cfbGroups]);
     const verdicts = e.rows.map(r => inFirstRound(r.year, r.pick, ends));
     let firstRound = verdicts.some(v => v === true) ? true : (verdicts.length && verdicts.every(v => v === false) ? false : null);
     const bestRow = e.rows.length ? [...e.rows].sort((a, b) => a.pick - b.pick || a.year - b.year)[0] : null;
@@ -581,6 +585,7 @@ export function buildCollegeKey(src, { control = {} } = {}) {
         roster_colleges: roster,
         heisman_schools: heismanSchools,
         cfb_schools: cfbSchools,
+        cfb_groups: sortedGroups(cfbGroups),
       },
     };
   });
@@ -645,8 +650,8 @@ export async function pullSources(log = () => {}) {
   const rosters = await pullAll('nflfastr_rosters', 'id,gsis_id,college,draft_number,draft_club', 'id', '', n => { if (n % 20000 === 0) log(`rosters ${n}`); });
   log(`roster rows ${rosters.length}`);
   const heisman = await pullAll('cfb_heisman_winners', 'id,year,winner,school,position', 'id');
-  const qb = await pullAll('cfb_qb_stats', 'player_name,player_slug,year_max,schools', 'player_slug');
-  const rb = await pullAll('cfb_rb_stats', 'player_name,player_slug,year_max,schools', 'player_slug');
+  const qb = await pullAll('cfb_qb_stats', 'player_name,player_slug,year_max,schools,pos', 'player_slug');
+  const rb = await pullAll('cfb_rb_stats', 'player_name,player_slug,year_max,schools,pos', 'player_slug');
   log(`heisman ${heisman.length}, cfb qb ${qb.length}, cfb rb ${rb.length}`);
   return { careers, picks, rosters, heisman, qb, rb };
 }
@@ -657,7 +662,7 @@ export const RULES = {
   identity: `a draft row joins a career on folded name plus the key's equal draft year and pick, or a first season 0 to ${JOIN_WINDOW_YEARS} years after the draft with a compatible position group; tiers both, pick, then window after every equal-pick join, where a career already holding a row from that draft year is no candidate; two careers in the first non empty tier is ambiguous and the row joins and forms nothing; an undrafted career takes no window join; window joins leaving a career with rows sharing no college are dropped; a row that could be a career's but joined nobody turns that career's false first_round to null unless the row is past its boundary too, and its best_pick to null if the row's pick is smaller. A row still unjoined then joins the one career holding its slot (the NFL key draft year and pick, or the roster draft number in the year before or the year of the first season) whose surname folds alike and that holds no row from that year. Unjoined rows with one folded name, one college and years within ${JOIN_WINDOW_YEARS} of each other form a draft-only entry. A Heisman row joins the one entry of the same folded name whose colleges hold its school (a quoted nickname also tried as nickname plus surname; two such entries told apart by the winner's listed position group when exactly one holds it), else stands alone. A cfb stats row adds its schools when its folded name matches the entry's name or a name on one of its draft rows, its last season is in the ${JOIN_WINDOW_YEARS} seasons before one of the entry's draft years and its list holds that row's college; a row fitting two entries adds to neither`,
   colleges: `HTML entities decoded before splitting on semicolons; canonical spellings from a derived alias table (a roster spelling maps to a draft spelling on at least ${ALIAS_MIN_ENTRIES} joined careers and at least ${ALIAS_MIN_SHARE * 100} percent of that roster spelling's joined careers; on a career whose roster already spells one of its draft colleges exactly, its other roster spellings are transfer schools and not evidence), applied to every source; no alias typed by hand`,
   collegesAgreed: 'a draft college also held by the roster, the joined Heisman row or a joined cfb stats row',
-  groups: `POSITION_GROUPS of src/lib/nflGrid.ts over roster codes, the draft position (word forms and slash lists included) and the Heisman position (HB and FB count as RB); side free words (Back, End, Tackle, B, E, WB, BB, TB, Tailback), kickers, punters and snappers add nothing, and nothing is read from a draft or Heisman position before the derived split year (the first year from which every draft lists at least ${SPLIT_MIN_DEFENSIVE_SHARE * 100} percent of its rows at a defensive code)`,
+  groups: `POSITION_GROUPS of src/lib/nflGrid.ts over roster codes, the draft position (word forms and slash lists included), the Heisman position (HB and FB count as RB) and the college position on each joined cfb stats row; side free words (Back, End, Tackle, B, E, WB, BB, TB, Tailback), kickers, punters and snappers add nothing, and nothing is read from a draft or Heisman position before the derived split year (the first year from which every draft lists at least ${SPLIT_MIN_DEFENSIVE_SHARE * 100} percent of its rows at a defensive code)`,
   draft: 'best_pick the smallest pick across the entry\'s draft rows; first_round true when any row is inside its year\'s firstRoundEnds, false when every row has a boundary and none is inside it, else null; undrafted copied from nflGridPlayers.json',
   seasons: 'first_season and seasons (last minus first plus one) from nflGridPlayers.json; 0 seasons when the NFL key holds no career for the entry',
   display: 'the name alone when nobody shares its folded form; else per name group the first level that tells every namesake apart: name (college), name (college, draft year), name (college, draft year, seasons), a missing part skipped; a group still tied gets #2, #3 in id order',
@@ -668,7 +673,7 @@ export const RULES = {
    rule) and proof (an array in PROOF_FIELDS order, or 0 when every field is
    empty). readKeyFile turns a parsed file back into player objects. */
 export const COLUMNS = ['id', 'display_name', 'name', 'name_norm', 'colleges', 'colleges_agreed', 'groups', 'best_pick', 'first_round', 'undrafted', 'heisman_year', 'first_season', 'seasons', 'dup', 'proof'];
-export const PROOF_FIELDS = ['draft_rows', 'draft_best_year', 'draft_groups', 'roster_groups', 'heisman_groups', 'roster_pick', 'roster_colleges', 'heisman_schools', 'cfb_schools'];
+export const PROOF_FIELDS = ['draft_rows', 'draft_best_year', 'draft_groups', 'roster_groups', 'heisman_groups', 'roster_pick', 'roster_colleges', 'heisman_schools', 'cfb_schools', 'cfb_groups'];
 const emptyProofValue = v => v == null || (Array.isArray(v) && v.length === 0);
 
 export function toRows(players) {

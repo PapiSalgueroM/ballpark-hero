@@ -57,6 +57,13 @@
         yes for one half and no for the other is listed. Pins: Nate Gerry
         (the draft table's Nathan Gerry, 2017 pick 184) judges yes on Nebraska
         x Linebacker and Nebraska x Defensive Back.
+    10. COLLEGE POSITIONS COUNT. A cfb_qb_stats or cfb_rb_stats row lists the
+        position a player held in college. For every row that sits on exactly
+        one entry (its folded name is the entry's or a draft row's, and the
+        entry's cfb schools hold every school on the row), no school on the
+        row judges no on the row's position group. Pins: Matt Jones (Arkansas)
+        x Arkansas x Quarterback and Scott Frost x Stanford x Quarterback
+        judge yes (college quarterbacks the NFL lists at WR and DB).
 
    NEGATIVE CONTROLS. Every one runs on EVERY invocation, in memory or against
    copies written under a temp folder that is removed on exit, and each one
@@ -76,6 +83,8 @@
      droprow       one row is removed from the file in memory
      noslotjoin    the key is rebuilt without the draft slot join; section 9
                    must list Nate Gerry split from Nathan Gerry
+     nocfbpos      the key is rebuilt without the cfb row positions; section
+                   10 must charge Matt Jones on Arkansas x Quarterback
    SIM_CGKEY_CONTROL=<name> runs just that control and exits 0 only if it fired.
 
    SUPABASE UNREACHABLE: the source pull fails, the harness says NOTHING WAS
@@ -91,7 +100,8 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import {
-  buildCollegeKey, COLUMNS, decodeText, foldName, pullSources, readDraftName, readKeyFile, splitColleges, toRows,
+  buildCollegeKey, COLUMNS, decodeText, foldName, groupsOfListedPosition, pullSources, readDraftName, readKeyFile,
+  readPositionGroups, splitColleges, splitSchoolList, toRows,
 } from './genCollegeGridData.mjs';
 import { cleanDraftPicks, firstRoundEnds, inFirstRound } from './lib/draftRounds.mjs';
 
@@ -124,7 +134,7 @@ const PINS = [
   ['Jalen Hurts', 'Alabama', 'Quarterback'],
 ];
 
-const CONTROLS = { roundcol: 1, entity: 2, thinalias: 2, emptycell: 3, nocount: 4, window: 5, nomerge: 6, plantdrafted: 7, droprow: 8, noslotjoin: 9 };
+const CONTROLS = { roundcol: 1, entity: 2, thinalias: 2, emptycell: 3, nocount: 4, window: 5, nomerge: 6, plantdrafted: 7, droprow: 8, noslotjoin: 9, nocfbpos: 10 };
 const ONLY = process.env.SIM_CGKEY_CONTROL || '';
 if (ONLY && !CONTROLS[ONLY]) {
   console.error(`SIM_CGKEY_CONTROL=${ONLY} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -450,6 +460,45 @@ function sectionNine(list) {
   return { out, pairs: pairs.size, split };
 }
 
+/** College positions: a cfb stats row's position never judges no at a school on that row. */
+function sectionTen(list) {
+  const out = [];
+  const entries = index(list);
+  const byId = new Map(entries.map(e => [e.id, e]));
+  const positionGroups = readPositionGroups();
+  const byFold = new Map();
+  for (const p of list) {
+    const folds = new Set([p.name_norm, ...p.proof.draft_rows.map(([y, k]) => draftFold(pickAt.get(keyOf(y, k))))]);
+    for (const f of folds) byFold.set(f, [...(byFold.get(f) ?? []), p]);
+  }
+  let rows = 0;
+  const charged = [];
+  for (const s of [...src.qb, ...src.rb]) {
+    const groups = groupsOfListedPosition(s.pos, positionGroups);
+    if (!groups.size) continue;
+    const schools = [...new Set(splitSchoolList(s.schools).map(canon))];
+    const on = (byFold.get(foldName(s.player_name)) ?? []).filter(p => schools.every(x => p.proof.cfb_schools.includes(x)));
+    if (on.length !== 1) continue;
+    rows += 1;
+    const e = byId.get(on[0].id);
+    for (const g of groups) {
+      const col = lib.CRITERIA_LABELS.find(l => l.group === g);
+      for (const school of schools.filter(x => lib.labelOf(x)?.kind === 'college')) {
+        if (lib.judgeCollegeCell(e, school, col) === 'no') charged.push(`${e.name} x ${school} x ${col.label} (college ${s.pos}, ${s.schools}; key groups ${[...e.groups].join('/')})`);
+      }
+    }
+  }
+  const unique = [...new Set(charged)];
+  if (unique.length) out.push(`${unique.length} college positions judge no at their own school: ${show(unique, 6)}`);
+  const d = byDisplay(entries);
+  for (const [name, school] of [['Matt Jones (Arkansas)', 'Arkansas'], ['Scott Frost', 'Stanford']]) {
+    const e = d.get(engine.normalizeGridName(name));
+    const v = e ? lib.judgeCollegeCell(e, school, 'Quarterback') : 'not in the key';
+    if (v !== 'yes') out.push(`pin ${name} x ${school} x Quarterback judges ${v}`);
+  }
+  return { out, rows, charged: unique };
+}
+
 const judgedHash = rows => {
   const canonRows = rows.map(r => TABLE_COLUMNS.map(c => r[c] ?? null)).sort((x, y) => (x[0] < y[0] ? -1 : x[0] > y[0] ? 1 : 0));
   return crypto.createHash('sha256').update(JSON.stringify(canonRows)).digest('hex').slice(0, 16);
@@ -632,6 +681,13 @@ if (!ONLY) {
     r.out.forEach(fail);
     console.log(`   ${r.pairs} splits, ${r.split.length} yes and no cells between halves; ${built.stats.joins.slot} rows joined on their draft slot; pins: Nate Gerry yes on Nebraska x Linebacker and x Defensive Back`);
   }
+
+  console.log('\n10) College positions count: a cfb stats row\'s position never judges no at its own school');
+  {
+    const r = sectionTen(players);
+    r.out.forEach(fail);
+    console.log(`   ${r.rows} cfb rows with a position group sit on one entry; ${r.charged.length} judge no; pins: Matt Jones (Arkansas) and Scott Frost yes at Quarterback`);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -768,6 +824,16 @@ if (want('noslotjoin')) {
   const r = sectionNine(wrong.players);
   console.log(`   ${wrong.players.length - players.length} more entries; ${r.pairs} splits, ${r.split.length} yes and no cells between halves`);
   grade('noslotjoin', r.pairs > 0 && r.split.some(m => /^Nate Gerry no, Nathan Gerry yes on Nebraska x Defensive Back/.test(m)) && r.out.some(m => /^pin Nate Gerry x Nebraska x Defensive Back judges no/.test(m)), r.out.map(m => m.slice(0, 200)).join(' | ') || 'section 9 stayed green');
+}
+
+if (want('nocfbpos')) {
+  console.log('\nnocfbpos) the key rebuilt without the cfb row positions');
+  const wrong = buildCollegeKey(src, { control: { noCfbGroups: true } });
+  const changed = wrong.players.filter((p, i) => JSON.stringify(p.groups) !== JSON.stringify(players[i]?.groups)).length;
+  mustChange('nocfbpos', changed > 0, 'no entry holds a group from a cfb row');
+  const r = sectionTen(wrong.players);
+  console.log(`   ${changed} entries lose a group; ${r.charged.length} college positions now judge no`);
+  grade('nocfbpos', r.charged.some(m => /^Matt Jones \(Arkansas\) x Arkansas x Quarterback/.test(m)) && r.out.some(m => /^pin Scott Frost x Stanford x Quarterback judges no/.test(m)), r.out.map(m => m.slice(0, 200)).join(' | ') || 'section 10 stayed green');
 }
 
 // ---------------------------------------------------------------------------

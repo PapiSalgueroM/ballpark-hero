@@ -197,6 +197,8 @@ const PROSE_CLAIMS = [
   [GUIDE, 'Chase Young', 'Ohio State', 'First Round Pick'],
   [GUIDE, 'Chase Young', 'Ohio State', 'Defensive Lineman'],
   [GUIDE, 'Chase Young', 'Ohio State', 'Linebacker'],
+  [GUIDE, 'Scott Frost', 'Nebraska', 'Quarterback'],
+  [GUIDE, 'Scott Frost', 'Nebraska', 'Defensive Back'],
   [GUIDE, 'JaMarcus Russell', 'LSU', 'Quarterback'],
   [GUIDE, 'JaMarcus Russell', 'LSU', '1st Overall Pick'],
   [GUIDE, 'Joe Burrow', 'LSU', 'Quarterback'],
