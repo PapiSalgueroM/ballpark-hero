@@ -20,7 +20,7 @@
  * never stops while you are at the ground. scripts/simTycoonRooms.mjs holds
  * both to it, and its controls rewrite the exact lines marked below.
  */
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { cn } from '@/lib/utils';
 import { HelpCircle, Star, X } from 'lucide-react';
@@ -49,6 +49,8 @@ import { useTycoonRewards } from '@/hooks/useTycoonRewards';
 import { balance, GEM_PAY } from '@/lib/tycoonRewards';
 import type { TapFx } from '@/components/tycoon/TycoonPitch';
 import type { AcademyStatus, Room } from '@/lib/tycoonRooms';
+import { deserialize as deserializeAcademy, applyOffline as applyAcademyOffline, SAVE_KEY as ACADEMY_SAVE_KEY, squadEdge } from '@/lib/wonderkidFactory';
+import type { FactoryState } from '@/lib/wonderkidFactory';
 
 const AcademyPanel = lazy(() => import('@/components/tycoon/AcademyPanel'));
 
@@ -79,9 +81,22 @@ const CONFETTI_COLORS = ['#22c55e', '#eab308', '#3b82f6', '#ef4444', '#a855f7', 
 type OfficePanel = 'upgrades' | 'payroll' | 'ach' | 'legacy' | 'stats';
 
 export default function StadiumTycoon() {
-  const g = useStadiumTycoon();
+  const [savedAcademy] = useState(() => {
+    try {
+      const now = Date.now();
+      const snapshot = deserializeAcademy(localStorage.getItem(ACADEMY_SAVE_KEY), now);
+      if (snapshot) applyAcademyOffline(snapshot, now);
+      return snapshot;
+    }
+    catch { return null; }
+  });
+  const academyRef = useRef(savedAcademy);
+  const getEdge = useCallback(() => academyRef.current ? squadEdge(academyRef.current) : 0, []);
+  const onAcademySnapshot = useCallback((snapshot: FactoryState) => { academyRef.current = snapshot; }, []);
+  const g = useStadiumTycoon(getEdge);
   const [room, setRoom] = useState<Room>('stadium');
-  const [academyOpened, setAcademyOpened] = useState(false);
+  /* A returning first team keeps its clock even before the Academy tab opens. */
+  const [academyOpened, setAcademyOpened] = useState(() => Boolean(savedAcademy?.firstTeam?.length));
   const [academyStatus, setAcademyStatus] = useState<AcademyStatus | null>(null);
   const [stadiumNeedsYou, setStadiumNeedsYou] = useState(false);
 
@@ -143,7 +158,7 @@ export default function StadiumTycoon() {
         <LeagueRoom g={g} visible={room === 'league'} />
         {academyOpened && (
           <Suspense fallback={<div className="h-40" />}>
-            <AcademyPanel visible={room === 'academy'} onStatus={setAcademyStatus} />
+            <AcademyPanel visible={room === 'academy'} onStatus={setAcademyStatus} onSnapshot={onAcademySnapshot} />
           </Suspense>
         )}
 

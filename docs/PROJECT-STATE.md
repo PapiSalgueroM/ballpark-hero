@@ -1,5 +1,28 @@
 # Project state
 
+## IN VERIFICATION 2026-09-15: Round 586, academy first team
+
+Built in `.worktrees/round-586-first-team`, branch `codex/round-586-first-team`.
+Not published. AdSense remains Review requested following the September 15
+04:19 EDT submission. No new review was requested by this round.
+
+Players aged 18 to 23 can enter five first-team places. Their ratings reduce
+opponent scoring chances in watched and away stadium matches. Senior training,
+birthday decline, selling and retirement create the hold-versus-sell decision.
+Promotion, senior sale and move-up save before showing the change; first-team
+players survive both reset actions. Returning graduates keep aging without an
+Academy tab visit. Review caught and fixed cold-load away results using ratings
+from before offline training, and removed an inaccurate guide claim about the
+best single sale surviving move-up.
+
+Measured balance and contract corrections are in section 18 of
+`docs/design/round-580-tycoon-merge.md`: 334,620 exact youth quotes, independent
+policy holdouts, the measured 45M final-region goal and its effect on repeated
+stars. Type check and focused engine/help/page tests precede full release gates.
+Publication remains owed. Rounds 603 and 604 are independent action-animation
+worktrees for Club Manager live matches and Soccer Career drills; they do not
+share this round's save changes or release.
+
 ## LIVE 2026-09-15: Round 610, players who joined with Google can get back in, main `7b268106`
 
 **douknowball.com is serving it.** Deployment `bd4b549a-1e2c-416d-b9a0-ff041e50d911` at 08:28 UTC,

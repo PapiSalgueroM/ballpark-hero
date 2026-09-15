@@ -285,6 +285,45 @@ const shapes = (T, from, to) => Array.from({ length: to - from + 1 }, (_, i) => 
  *  or the engine's answer when it does not. */
 const CLAIMS = [
   /* ---- the stadium guide ---- */
+  {
+    where: 'stadium', phrase: 'Promote academy players aged 18 to 23 into five first-team places',
+    check: (T, m, W) => W.PROMOTE_AGE === 18 && W.LEAVE_AGE === 24 && W.FIRST_TEAM_SLOTS === 5 ? '' : 'the promotion ages or team capacity changed',
+  },
+  {
+    where: 'stadium', phrase: 'Each rating point above 60 adds to its defensive edge. With five players rated 80, opponents get twenty percent fewer chances before the minimum chance is applied',
+    check: (T, m, W) => {
+      const s = W.newFactory(0, 7);
+      s.firstTeam = Array.from({ length: 5 }, () => ({ rating: 80 }));
+      const before = W.squadEdge(s);
+      s.firstTeam[0].rating = 81;
+      const after = W.squadEdge(s);
+      s.firstTeam = [{ rating: 60 }];
+      return near(before, 0.20) && near(after - before, 0.002) && W.squadEdge(s) === 0 ? '' : `five 80s give ${before}, an extra point gives ${after - before}`;
+    },
+  },
+  {
+    where: 'stadium', phrase: 'First-team players train at half the academy rate through age 27. Their years take fifteen watched academy minutes, compared with five minutes for academy kids. They hold their rating at 28 and 29, lose 1.2 rating at each birthday from 30, and retire at 34 without a fee',
+    check: (T, m, W) => {
+      const player = age => ({ id: 'sr-help', name: 'Help Graduate', nation: 'England', pos: 'MF', age, ageClock: 0, rating: 80, potential: 90 });
+      const s = W.newFactory(0, 7);
+      s.prospects = [{ ...player(18), id: 1 }];
+      s.firstTeam = [player(18)];
+      W.tick(s, 0.1);
+      const halfRate = near((s.firstTeam[0].rating - 80) * 2, s.prospects[0].rating - 80);
+      const at = age => {
+        const a = W.newFactory(0, 7);
+        a.firstTeam = [{ ...player(age), ageClock: W.SENIOR_YEAR_SEC - 0.5 }];
+        W.tick(a, 0.5);
+        return a;
+      };
+      const growing = at(27), holding = at(28), declining = at(29), retiring = at(33);
+      return halfRate && W.SENIOR_YEAR_SEC === 900 && W.YEAR_SEC === 300
+        && growing.firstTeam[0].age === 28 && growing.firstTeam[0].rating > 80
+        && holding.firstTeam[0].rating === 80 && near(declining.firstTeam[0].rating, 78.8)
+        && retiring.firstTeam.length === 0 && retiring.retired === 1 && retiring.cash === 0
+        ? '' : 'senior training, birthdays or retirement no longer match the guide';
+    },
+  },
   { where: 'stadium', phrase: 'ninety loyal fans', check: (T, m) => (m.fresh.fanbase === 90 && T.attendance(m.fresh) === 90 ? '' : `a new club has ${m.fresh.fanbase} fans`) },
   { where: 'stadium', phrase: 'at half speed for up to eight hours', check: (T, m) => (T.offlineRateOf(m.fresh) === 0.5 && T.offlineCapHoursOf(m.fresh) === 8 ? '' : `away pays ${T.offlineRateOf(m.fresh)} for ${T.offlineCapHoursOf(m.fresh)} hours`) },
   { where: 'stadium', phrase: 'at half rate for up to eight hours', check: (T, m) => (T.offlineRateOf(m.fresh) === 0.5 && T.offlineCapHoursOf(m.fresh) === 8 ? '' : `away pays ${T.offlineRateOf(m.fresh)} for ${T.offlineCapHoursOf(m.fresh)} hours`) },
