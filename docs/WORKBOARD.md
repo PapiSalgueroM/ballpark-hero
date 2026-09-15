@@ -10,7 +10,7 @@ The complete reader inventory and narrow release decision are in
 `docs/adsense/guide-correction-release-checks-2026-09-15.md`.
 
 This uses the between-big-ships path for content-only changes. The additional
-whole-game simulation run35013330789 remains pending, not passed. No pending
+whole-game simulation run 35013330789 remains pending, not passed. No pending
 artifact is accepted. All larger game releases still need their full gates.
 Codex's browser publish controls are timing out; a fresh tab also stalls.
 Claude's working Lovable connection can publish this correction once
@@ -20,8 +20,8 @@ and independently read the corrected public pages. A main push alone is not
 publication. Keep the current AdSense review pending, with no resubmission.
 
 The four fresh full feature runs and exact source/verification heads are at
-the top of `docs/PROJECT-STATE.md`. Their order is586,603-605,587,588 after this
-correction. New587 source is `.worktrees/round-587-final`; the old dirty587
+the top of `docs/PROJECT-STATE.md`. Their order is 586, 603 to 605, 587, then 588 after this
+correction. New 587 source is `.worktrees/round-587-final`; the old dirty 587
 worktree is preserved. Source branches remain unpublished.
 
 **2026-09-15 15:19 EDT, Codex correction release check update.** The five
