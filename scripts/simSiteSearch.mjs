@@ -352,7 +352,7 @@ console.log('7) the generated keyword index');
        it catches the edit case that coverage structurally cannot. */
     const liveHash = createHash('sha256')
       .update(fs.readdirSync(path.join(ROOT, 'src/data/gameContent')).sort()
-        .map(f => fs.readFileSync(path.join(ROOT, 'src/data/gameContent', f), 'utf8')).join('\n'))
+        .map(f => fs.readFileSync(path.join(ROOT, 'src/data/gameContent', f), 'utf8').replace(/\r\n/g, '\n')).join('\n'))
       .digest('hex').slice(0, 16);
     if (kw.source !== liveHash) {
       fail(`the guides have changed since the keyword index was built (index ${kw.source}, guides now ${liveHash}). Rerun: node scripts/genSearchKeywords.mjs`);

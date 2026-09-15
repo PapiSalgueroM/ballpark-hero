@@ -30,11 +30,17 @@ import {
 } from '@/lib/wonderkidFactory';
 import { academyStatus } from '@/lib/tycoonRooms';
 import type { AcademyStatus } from '@/lib/tycoonRooms';
+import PacksPanel from '@/components/tycoon/PacksPanel';
+import { useTycoonRewards } from '@/hooks/useTycoonRewards';
+import { balance, priceOf, canOpen } from '@/lib/tycoonRewards';
+import { PACKS, TIERS, bedFree } from '@/lib/wonderkidFactory';
 
-type Panel = 'scouting' | 'coaching' | 'dorms' | 'agents' | 'legacy' | null;
+type Panel = 'scouting' | 'coaching' | 'dorms' | 'agents' | 'legacy' | 'packs' | null;
 
 export default function AcademyPanel({ visible = true, onStatus }: { visible?: boolean; onStatus?: (s: AcademyStatus) => void }) {
-  const { state: s, floaters, doBuy, doSell, doShowcase, doMoveUp } = useWonderkidFactory();
+  const { state: s, floaters, doBuy, doSell, doShowcase, doMoveUp, doOpenPack, doDismissPack, packSaveBlocked } = useWonderkidFactory();
+  /* Round 585: the gem ledger, shared with the stadium that earns it. */
+  const ledger = useTycoonRewards();
   const [panel, setPanel] = useState<Panel>(null);
   /* the rules open themselves exactly once, before first play */
   const [showHelp, setShowHelp] = useState(false);
@@ -111,6 +117,16 @@ export default function AcademyPanel({ visible = true, onStatus }: { visible?: b
       sub: maxed ? 'nothing left to buy' : `next: ${fmtCash(cost)}`,
       accent: !maxed && s.cash >= cost,
     };
+  });
+  /* Round 585: packs of generated kids, opened with gems won at the ground. */
+  const firstFree = PACKS.find(p => priceOf(ledger, p.id) === 0);
+  tiles.push({
+    key: 'packs',
+    icon: '🎁',
+    title: 'Packs',
+    value: `${balance(ledger)} gem${balance(ledger) === 1 ? '' : 's'}`,
+    sub: ledger.pending ? 'a new kid is waiting' : firstFree ? `your first ${firstFree.name} is free` : 'odds on every pack',
+    accent: ledger.pending !== null || PACKS.some(p => canOpen(ledger, p.id, bedFree(s))),
   });
   tiles.push({
     key: 'legacy',
@@ -267,6 +283,11 @@ export default function AcademyPanel({ visible = true, onStatus }: { visible?: b
         </div>
       ) : panel === null ? (
         <HubTiles tiles={tiles} onOpen={k => setPanel(k as Panel)} />
+      ) : panel === 'packs' ? (
+        <div className="space-y-2">
+          <HubPanelHeader title="Packs" onBack={() => setPanel(null)} />
+          <PacksPanel ledger={ledger} bedFree={bedFree(s)} delivered={ledger.pending !== null && (s.packsDelivered ?? 0) >= ledger.pending.seq} saveBlocked={packSaveBlocked} onOpen={doOpenPack} onDismiss={doDismissPack} />
+        </div>
       ) : panel === 'legacy' ? (
         <div className="space-y-2">
           <HubPanelHeader title="Reputation" onBack={() => setPanel(null)} />
@@ -374,6 +395,7 @@ export default function AcademyPanel({ visible = true, onStatus }: { visible?: b
               <p>Showcase day is the button: press it and training runs x3 for 25 seconds. Deadline day arrives on its own every few minutes and pays x1.5 on every sale for 50 seconds, so hold your stars for it when you can.</p>
               <p>Earn the region's target and you can move the whole academy up in the world: cash, facilities and kids stay behind, the reputation star is forever (+15% training, +10% fees each) and the new region's kids have higher ceilings.</p>
               <p>Away from the game the scouts and coaches keep working at half speed for up to 8 hours, and the calendar waits for you: nobody ages while you are gone. Nothing sells itself either, the money moments are always yours.</p>
+              <p>Packs bring generated kids straight into a free bed. They cost gems, which only results at Stadium Tycoon's ground earn, and each pack prints its odds before you open it: the {PACKS.map(p => p.name).join(', ')} climb from {TIERS[0].label} kids toward {TIERS[TIERS.length - 1].label}s, and a pack kid arrives with his ceiling's band already known.</p>
               <p>Worked example: a 17 year old rated 58 with a ceiling of 74 sells for about {fmtCash(salePriceExample(58, 74))} today. Coached to 71 he is worth about {fmtCash(salePriceExample(71, 74))}, and on deadline day that fee pays half as much again. Held to 23, the promise premium is gone and only the rating pays.</p>
             </div>
             <button

@@ -12,7 +12,10 @@ import {
   FactoryState, FacilityId, SAVE_KEY,
   newFactory, deserialize, serialize, applyOffline, advanceClock,
   buyFacility, sellProspect, startShowcase, moveUp,
+  bedFree, deliverPack, makeProspectInBand,
 } from '@/lib/wonderkidFactory';
+import type { PackId } from '@/lib/wonderkidFactory';
+import { commitOpenPack, clearPendingPack, loadLedger } from '@/lib/tycoonRewards';
 import { recordCompletion } from '@/lib/completions';
 
 export interface Floater {
@@ -34,6 +37,23 @@ export function useWonderkidFactory() {
   }
   const [, setVersion] = useState(0);
   const bump = useCallback(() => setVersion(v => v + 1), []);
+  const [packSaveBlocked, setPackSaveBlocked] = useState(false);
+
+  /** Round 585: a pack opened and not yet in a bed (a reload between the draw
+   *  and the delivery, or a bed that filled) moves in as soon as a bed is free. */
+  const deliverWaiting = useCallback((s: FactoryState): boolean => {
+    const pending = loadLedger().pending;
+    if (!pending) return false;
+    const next = { ...s, prospects: [...s.prospects] };
+    if (!deliverPack(next, pending.seq, pending.kid, pending.tier)) return false;
+    try { localStorage.setItem(SAVE_KEY, serialize(next)); } catch {
+      setPackSaveBlocked(true);
+      return false;
+    }
+    Object.assign(s, next);
+    setPackSaveBlocked(false);
+    return true;
+  }, []);
 
   const [floaters, setFloaters] = useState<Floater[]>([]);
   const floaterId = useRef(1);
@@ -59,7 +79,9 @@ export function useWonderkidFactory() {
       const now = Date.now();
       advanceClock(s, now - s.lastSeen, document.visibilityState !== 'hidden');
       s.lastSeen = now;
-      if (s.prospects.length > before) pushFloater('🔭 the scouts found someone', 'find');
+      const scouted = s.prospects.length > before;
+      if (deliverWaiting(s)) pushFloater('🎁 your pack kid moved into a free bed', 'win');
+      if (scouted) pushFloater('🔭 the scouts found someone', 'find');
       if (s.prospects.length < before && s.leftFree > 0) {
         /* only the leaver path shrinks the academy inside a tick */
         pushFloater('a kid ran out of time and left on a free', 'bad');
@@ -79,7 +101,7 @@ export function useWonderkidFactory() {
       window.removeEventListener('pagehide', save);
       save();
     };
-  }, [bump, pushFloater]);
+  }, [bump, pushFloater, deliverWaiting]);
 
   /* Round 195's S-1 rule, the tycoon shape exactly: one unscored mark per
      sitting, on the first meaningful action, behind a ref so marking never
@@ -125,6 +147,38 @@ export function useWonderkidFactory() {
     }
   }, [bump, markSessionPlay, pushFloater]);
 
+  /* Round 585: open a pack. The ledger stores the draw first, then the kid moves
+     into a free bed and the academy is saved, all before anything is shown. */
+  /* Review: no session mark here. Safeguard 2 keeps packs and gems away from
+     streaks, and a mark is what a streak counts. */
+  const doOpenPack = useCallback((id: PackId) => {
+    const s = stateRef.current!;
+    let pending;
+    try {
+      pending = commitOpenPack(
+        id, bedFree(s),
+        (potMin, potMax, rng) => makeProspectInBand({ ...s, prospects: [...s.prospects] }, potMin, potMax, rng),
+        (s.packsDelivered ?? 0) + 1,
+      );
+    } catch {
+      setPackSaveBlocked(true);
+      return;
+    }
+    if (!pending) return;
+    deliverWaiting(s);
+    bump();
+  }, [bump, deliverWaiting]);
+
+  const doDismissPack = useCallback(() => {
+    const s = stateRef.current!;
+    try { localStorage.setItem(SAVE_KEY, serialize(s)); } catch {
+      setPackSaveBlocked(true);
+      return;
+    }
+    setPackSaveBlocked(false);
+    if (clearPendingPack(s.packsDelivered ?? 0)) bump();
+  }, [bump]);
+
   return {
     state: stateRef.current,
     floaters,
@@ -132,5 +186,8 @@ export function useWonderkidFactory() {
     doSell,
     doShowcase,
     doMoveUp,
+    doOpenPack,
+    doDismissPack,
+    packSaveBlocked,
   };
 }

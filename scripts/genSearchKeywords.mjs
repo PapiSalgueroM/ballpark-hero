@@ -156,7 +156,7 @@ for (const g of games) {
    that the guides moved since this ran. Coverage is the thing that is actually
    asserted, in simSiteSearch. */
 const srcHash = createHash('sha256')
-  .update(fs.readdirSync(CONTENT_DIR).sort().map(f => fs.readFileSync(path.join(CONTENT_DIR, f), 'utf8')).join('\n'))
+  .update(fs.readdirSync(CONTENT_DIR).sort().map(f => fs.readFileSync(path.join(CONTENT_DIR, f), 'utf8').replace(/\r\n/g, '\n')).join('\n'))
   .digest('hex')
   .slice(0, 16);
 

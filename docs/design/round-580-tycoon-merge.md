@@ -1007,6 +1007,75 @@ rows above:
 - `PACKS_CONTROL=reroll` (drawn at reveal): 7 red.
 - `PACKS_CONTROL=refund` (a gem credit planted in open): 5 red.
 
+**As built, and what the adversarial review changed.**
+- **`src/lib/tycoonRewards.ts`** holds the ledger (`tycoonRewardsV1`): `earned`, `spent`,
+  `lastMatch` (the career match count of the last full time credited), packs `opened`, `dry`
+  counters for the guarantees, a `seed`, `nextSeq` and a `pending` draw. `TIERS` and `PACKS` live in
+  `wonderkidFactory.ts` beside `makeProspectInBand`, `deliverPack` and the optional `tier` and
+  `packsDelivered` fields; the scouts call the same generator with their region band and the academy
+  seed, and 500 finds captured before the edit (`scripts/data/academyScoutBaseline.json`, committed
+  first) are byte identical. The stadium hook credits a watched full time (with the season's final
+  place when it ends one) and the away settle credits away wins; nothing else calls
+  `recordFullTimes`. The Packs panel (`PacksPanel.tsx`) is a tile in the academy on both doors, and
+  the stadium header carries a gem chip.
+- **Measured**: 200,000 draws per pack within 0.149 points of every odd (a one point shift reads
+  1.03); expected ceilings 67.8, 76.4, 83.3; mean packs between Stars 6.49 and 1.95 against the exact
+  6.51 and 1.96; every guarantee on pack 10 and pack 3, never a pack early; 100,000 action sequences
+  moved `earned` 0 times.
+- **The review found every player drawing the same packs.** The ledger seed was the constant 585,
+  so every new player's free Scout Pack was the same Grassroots kid and the whole sequence could be
+  read off the public repo (4.6 times the published Phenom rate per gem for a player who planned
+  around it). A ledger now takes `freshSeed()` the first time it is stored; section 12 and the
+  `sameseed` control.
+- **The review found "Welcome him in" deleting a kid who never reached a bed**, and a ledger lost
+  while the academy remembered its packs swallowing every later pack until its numbers caught up.
+  A pack can only be dismissed once delivered (the card says he moves in when a bed frees), and
+  the next pack's number runs past `packsDelivered` (`nextSeq`, `minSeq`); section 13, vitest 6 and
+  7, controls `forgetful`, `wavedaway` and `seqreuse`.
+- **Also from the review**: opening a pack no longer records a session (safeguard 2 keeps packs
+  away from streaks); a stored kid is sanitised into his tier's band before he moves in, and a name
+  clash no longer draws from the academy's seed; a pack kid moving in from the clock gets his own
+  floater; "a draw" reads "a watched draw" (an away draw pays nothing); the academy guide says a
+  pack kid's band is known; a blocked storage keeps gems for the visit. The harness gained the
+  call-site fence on `recordFullTimes`, the banned words across `AcademyPanel.tsx`, the `moveUp`
+  carry, vitest 8 (away wins and a watched title through the real hook), and controls for every
+  page test (`panelodds`, `freeprice`, `tiercard`, `gemtap`).
+- **The Codex continuation reproduced three more save defects before release.** A malformed
+  stored nation or position crashed the reveal; both the card and delivery now use the same
+  `cleanPackKid` normalization, including own-key checks for nation names. A refused academy
+  write used to count a kid as delivered in memory, then Welcome cleared the only durable
+  copy. Delivery now saves a candidate academy before accepting it, and dismissal saves the
+  current academy before clearing the draw. Conversely, a refused ledger write could still
+  persist the kid without its debit; opening now requires the ledger write to succeed. The
+  page explains when storage is full or blocked and retries keep the original draw. Result
+  earnings retain the existing memory fallback. Four real-page regression cases and the
+  `rawkid`, `unsaveddelivery`, `unsaveddismiss` and `unsaveddebit` controls cover these paths;
+  an independent reviewer also passed five isolated reload and recovery probes. The watched
+  match test now mocks both `performance.now` and frame timestamps, removing a test-clock race.
+- **The dry-spell fence** is the contract's: a greedy bot plays 40 hours of stadium, academy and
+  packs over 50 seeds; the 90th percentile of its longest stretch without an unlock measured 52.8
+  minutes (every longest stretch ended in an affordable pack), so the fence is 79 (1.5 times). The
+  `dear` control (every price times four) turns it red.
+- **The controls run in process on every invocation**, with no `PACKS_CONTROL` variable: `skew` moves
+  Star by 3 points; the contract's `reorder` became `scoutdrift` (S8), `fallback` became `tiercard`
+  (vitest 3), `refund` became `leak` (S5), and `reroll` drops a stored draw on load (S13, vitest 4 and
+  6 and 9). Twenty-two controls in all, with twelve real-page tests.
+- **The twice-daily pace is now measured**, by `scripts/simTycoonPackPace.mjs`: 100 seeds per
+  policy, two five-minute visits twelve hours apart, real 0.2s ticks, capped away matchdays and
+  the final-match hold. With immediate Sell up, 92/100 reach a paid Scout by day 2, 100/100
+  can afford a Club by day 5, and 99/100 can afford that Club after opening a paid Scout first.
+  Waiting until a season ends before Sell up reaches all three deadlines in 100/100 runs;
+  median visits are 2, 5 and 7 respectively. Each policy buys the cheapest useful upgrade,
+  without taps, staff, boosts, whistles or legacy purchases. The test measures affordability
+  with a bed available, after the free Scout, not how fast a newcomer learns the controls.
+  Its explicit population target is p90, with the missed tail printed rather than hidden;
+  this is not a guarantee to every player. Fourfold prices break all six pace checks, with
+  0/100 meeting each deadline. No prices or gem sources changed.
+- **Stated, not fixed**: a stale background tab that saves last can roll the stadium's match count
+  back, and gems then pay nothing until live play passes the credited count again; the ledger is
+  written before the stadium save, so a crash in that window loses gems, never gains them; two
+  visible tabs can each play a match on the same save.
+
 ### Round 586: Every player on one value curve (rides alone)
 
 **Files.**

@@ -117,6 +117,46 @@ const AWAY_STEP_SEC = 5;
 
 export const MAX_REP = 60;
 
+/* ------------------------------------------------------------ packs (585) */
+
+/** Round 585: a pack kid's tier is a band of potential, drawn through the same
+ *  generator the scouts use. */
+export type TierId = 'grassroots' | 'prospect' | 'talent' | 'star' | 'phenom';
+export interface Tier { id: TierId; label: string; potMin: number; potMax: number }
+export const TIERS: Tier[] = [
+  { id: 'grassroots', label: 'Grassroots', potMin: 58, potMax: 70 },
+  { id: 'prospect', label: 'Prospect', potMin: 66, potMax: 78 },
+  { id: 'talent', label: 'Talent', potMin: 74, potMax: 86 },
+  { id: 'star', label: 'Star', potMin: 82, potMax: 92 },
+  { id: 'phenom', label: 'Phenom', potMin: 90, potMax: 99 },
+];
+export const TIER_IDS: TierId[] = TIERS.map(t => t.id);
+
+export type PackId = 'scout' | 'club' | 'elite';
+export interface Pack {
+  id: PackId;
+  name: string;
+  emoji: string;
+  /** gems */
+  price: number;
+  /** the first one of this pack costs nothing */
+  firstFree: boolean;
+  /** whole percents per tier, summing to 100, printed on the panel as they are */
+  odds: Record<TierId, number>;
+  /** a Star or better arrives on or before this many packs since the last one */
+  guarantee: number | null;
+}
+/** Round 585: the published odds. The Packs panel prints these numbers and no
+ *  others, and scripts/simTycoonPacks.mjs draws against them. A better pack has
+ *  strictly better odds; nothing about a pack is ever sold for money. */
+export const PACKS: Pack[] = [
+  { id: 'scout', name: 'Scout Pack', emoji: '🔭', price: 30, firstFree: true, odds: { grassroots: 62, prospect: 30, talent: 7, star: 1, phenom: 0 }, guarantee: null },
+  { id: 'club', name: 'Club Pack', emoji: '🏟️', price: 100, firstFree: false, odds: { grassroots: 0, prospect: 55, talent: 35, star: 9, phenom: 1 }, guarantee: 10 },
+  { id: 'elite', name: 'Elite Pack', emoji: '👑', price: 250, firstFree: false, odds: { grassroots: 0, prospect: 0, talent: 60, star: 34, phenom: 6 }, guarantee: 3 },
+];
+/** The tiers a guarantee counts: a Star or better. */
+export const GUARANTEED_TIERS: TierId[] = ['star', 'phenom'];
+
 /* ------------------------------------------------------------------- state */
 
 export type Pos = 'GK' | 'DF' | 'MF' | 'FW';
@@ -131,6 +171,8 @@ export interface Prospect {
   ageClock: number;
   rating: number;
   potential: number;
+  /** Round 585: the pack tier a kid came from. Scouted kids have none. */
+  tier?: TierId;
 }
 
 export interface FactoryState {
@@ -160,6 +202,10 @@ export interface FactoryState {
    *  callback inside it. The first watched tick sets it back to zero. Optional,
    *  so every older save loads and older builds carry it through untouched. */
   awayMs?: number;
+  /** Round 585: the highest pack sequence delivered into this academy, so a pack
+   *  opened once is delivered once, whatever reloads in between. Optional, so
+   *  every older save loads as it did. */
+  packsDelivered?: number;
 }
 
 /* -------------------------------------------------------------------- prng */
@@ -194,10 +240,10 @@ const POS_PRICE: Record<Pos, number> = { GK: 0.95, DF: 1.0, MF: 1.04, FW: 1.08 }
  *  fail nor loop. The walk crosses into OTHER nations if it has to, because
  *  intlName's stride arithmetic gives one nation only twelve distinct names
  *  and a twelve bed academy can in principle drain one nation dry. */
-function uniqueKidName(s: FactoryState, nation: string): string {
+function uniqueKidName(s: FactoryState, nation: string, rng: () => number): string {
   const taken = new Set(s.prospects.map(p => p.name));
   for (let i = 0; i < 12; i++) {
-    const n = intlName(nation, Math.floor(rand(s) * 100_000));
+    const n = intlName(nation, Math.floor(rng() * 100_000));
     if (!taken.has(n)) return n;
   }
   for (const nat of [nation, ...NATIONS]) {
@@ -215,23 +261,79 @@ export function capacity(s: FactoryState): number {
   return 3 + s.levels.dorms;
 }
 
-function makeProspect(s: FactoryState): Prospect {
-  const region = REGIONS[regionIndex(s)];
-  const nation = NATIONS[Math.floor(rand(s) * NATIONS.length)];
-  const pos = POSITIONS[Math.floor(rand(s) * POSITIONS.length)];
-  const age = 15 + Math.floor(rand(s) * 4);
-  const potential = Math.round(region.potMin + rand(s) * (region.potMax - region.potMin));
-  const rating = Math.round(40 + rand(s) * Math.min(18, potential - 42));
+/** Round 585: one generated kid with a ceiling drawn inside [potMin, potMax],
+ *  every draw from `rng`. The scouts call it with their region's band and the
+ *  academy's own seed, in exactly the order they always drew
+ *  (scripts/data/academyScoutBaseline.json holds 500 finds to it); a pack calls
+ *  it with its tier's band and the pack ledger's generator. */
+export function makeProspectInBand(s: FactoryState, potMin: number, potMax: number, rng: () => number): Prospect {
+  const nation = NATIONS[Math.floor(rng() * NATIONS.length)];
+  const pos = POSITIONS[Math.floor(rng() * POSITIONS.length)];
+  const age = 15 + Math.floor(rng() * 4);
+  const potential = Math.round(potMin + rng() * (potMax - potMin));
+  const rating = Math.round(40 + rng() * Math.min(18, potential - 42));
   return {
     id: s.nextId++,
-    name: uniqueKidName(s, nation),
+    name: uniqueKidName(s, nation, rng),
     nation,
     pos,
     age,
-    ageClock: rand(s) * YEAR_SEC * 0.5,
+    ageClock: rng() * YEAR_SEC * 0.5,
     rating,
     potential: Math.max(potential, rating + 4),
   };
+}
+
+function makeProspect(s: FactoryState): Prospect {
+  const region = REGIONS[regionIndex(s)];
+  return makeProspectInBand(s, region.potMin, region.potMax, () => rand(s));
+}
+
+/** Round 585: a free bed for a pack kid. */
+export function bedFree(s: FactoryState): boolean {
+  return s.prospects.length < capacity(s);
+}
+
+/** A stored pack kid must be safe both on his reveal card and in the academy. */
+export function cleanPackKid(kid: Prospect, tier: TierId): Prospect | null {
+  const band = TIERS.find(t => t.id === tier);
+  if (!band) return null;
+  const nation = typeof kid.nation === 'string' && Object.prototype.hasOwnProperty.call(NATION_FAMILY, kid.nation) ? kid.nation : NATIONS[0];
+  const potential = Math.min(band.potMax, Math.max(band.potMin, Math.round(Number.isFinite(kid.potential) ? kid.potential : band.potMin)));
+  return {
+    id: Number.isSafeInteger(kid.id) && kid.id > 0 ? kid.id : 1,
+    name: typeof kid.name === 'string' ? kid.name : '',
+    nation,
+    pos: POSITIONS.includes(kid.pos) ? kid.pos : 'MF',
+    age: Number.isFinite(kid.age) ? Math.min(LEAVE_AGE - 1, Math.max(15, Math.floor(kid.age))) : 16,
+    ageClock: clampClock(kid.ageClock, YEAR_SEC),
+    rating: Math.min(potential, Math.max(30, Number.isFinite(kid.rating) ? kid.rating : 40)),
+    potential,
+    tier,
+  };
+}
+
+/** Round 585: move a drawn pack kid into the academy, exactly once per pack.
+ *  He gets this academy's next id and, in the rare case a scout brought in his
+ *  name first, a fresh name from the same nation. Returns false when the pack is
+ *  already delivered or there is no bed (the hook tries again when one frees). */
+export function deliverPack(s: FactoryState, seq: number, kid: Prospect, tier: TierId): boolean {
+  if ((s.packsDelivered ?? 0) >= seq || !bedFree(s)) return false;
+  const clean = cleanPackKid(kid, tier);
+  if (!clean) return false;
+  /* Review: a stored kid is data from storage, so he moves in only as the loader
+     would keep him, inside his tier's band, and a name clash is walked with a
+     generator of his own rather than the academy's, so the scouts never move. */
+  let own = seq | 0;
+  const ownRng = () => { own = (own + 0x6d2b79f5) | 0; return ((Math.imul(own ^ (own >>> 15), own | 1) >>> 0) % 1000) / 1000; };
+  const name = clean.name && !s.prospects.some(p => p.name === clean.name) ? clean.name : uniqueKidName(s, clean.nation, ownRng);
+  s.prospects.push({
+    ...clean,
+    id: s.nextId++,
+    name,
+  });
+  s.packsDelivered = seq;
+  return true;
 }
 
 /* ------------------------------------------------------------- multipliers */
@@ -261,6 +363,9 @@ export function findSec(s: FactoryState): number {
 /** what the scouts can tell you about a ceiling at this level */
 export function potentialRead(s: FactoryState, p: Prospect): { kind: 'hidden' | 'range' | 'exact'; lo?: number; hi?: number } {
   if (s.levels.scouting >= 6) return { kind: 'exact', lo: p.potential, hi: p.potential };
+  /* Round 585: a pack kid comes with his tier, so below Scouting 6 his band is known. */
+  const band = p.tier ? TIERS.find(t => t.id === p.tier) : undefined;
+  if (band) return { kind: 'range', lo: band.potMin, hi: band.potMax };
   if (s.levels.scouting >= 3) {
     const lo = Math.max(40, Math.floor(p.potential / 5) * 5 - 2);
     return { kind: 'range', lo, hi: Math.min(99, lo + 7) };
@@ -359,15 +464,17 @@ export function canMoveUp(s: FactoryState): boolean {
 export function moveUp(s: FactoryState): boolean {
   if (!canMoveUp(s)) return false;
   const now = s.lastSeen;
-  const carried: Pick<FactoryState, 'rep' | 'careerEarned' | 'soldCareer' | 'seed' | 'nextId' | 'awayMs'> = {
+  const carried: Pick<FactoryState, 'rep' | 'careerEarned' | 'soldCareer' | 'seed' | 'nextId' | 'awayMs' | 'packsDelivered'> = {
     rep: s.rep + 1,
     careerEarned: s.careerEarned,
     soldCareer: s.soldCareer,
     seed: s.seed,
     nextId: s.nextId,
     awayMs: s.awayMs ?? 0,
+    packsDelivered: s.packsDelivered,
   };
   Object.assign(s, newFactory(now), carried);
+  if (carried.packsDelivered === undefined) delete s.packsDelivered;
   return true;
 }
 
@@ -536,6 +643,10 @@ export function deserialize(raw: string | null, now: number): FactoryState | nul
     if (s.awayMs !== undefined) {
       s.awayMs = Number.isFinite(s.awayMs) && (s.awayMs as number) > 0 ? Math.min(s.awayMs as number, OFFLINE_CAP_SEC * 1000) : 0;
     }
+    /* Round 585: absent on every older save, and left absent. */
+    if (s.packsDelivered !== undefined) {
+      s.packsDelivered = Number.isSafeInteger(s.packsDelivered) && (s.packsDelivered as number) > 0 ? (s.packsDelivered as number) : 0;
+    }
     /* Round 581, Round 568's rule for a persisted counter: the next id must sit
        above every id already written, or the next kid scouted is handed an id a
        saved kid already wears and selling one sells the other. */
@@ -579,6 +690,7 @@ export function deserialize(raw: string | null, now: number): FactoryState | nul
         ageClock: clampClock(k.ageClock, YEAR_SEC),
         rating,
         potential,
+        ...(typeof k.tier === 'string' && TIER_IDS.includes(k.tier as TierId) ? { tier: k.tier as TierId } : {}),
       });
       seen.add(k.name);
       if (clean.length >= cap) break;

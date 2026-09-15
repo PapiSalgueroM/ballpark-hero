@@ -773,6 +773,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Badges pay no cash. Each of the 47 is a permanent two percent income multiplier, earned exactly once per career, and they never reset.",
       "Away earnings run at half your unboosted income rate, with hype and golden whistles excluded, capped at eight hours, and only count after you have been gone at least thirty seconds.",
       "Matchdays keep playing while you are away, one for every half hour of the trip and inside the same cap. They pay no goal or win bonuses, and the final matchday of a season always waits for you, so every title is won with you watching.",
+      "Gems are earned only by results: three for a watched win, one for a watched draw, one for a win played while you were away, twenty for a league title and six for second place. They open packs of generated kids in the Academy tab, every pack prints its odds before you open it, and gems can never be bought.",
       "Progress saves on this device automatically. Selling up is permanent: only Reputation, badges, club records and your lifetime totals survive.",
     ],
     example: [
@@ -806,6 +807,10 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         a: "Each division is tougher than the last, and a division drawn later in a club's life is tougher again, so eventually the next title stops coming. That is the signal the current ground has peaked and the sell-up bar is the way forward.",
       },
       {
+        q: "Can I buy gems?",
+        a: "No. Gems only come from match results at your ground, and all they do is open packs of generated academy kids, each pack showing its odds before you open it. No real money ever touches them.",
+      },
+      {
         q: "Is anything in it real players or clubs?",
         a: "No. Stadium Tycoon is entirely our own toy world, which is exactly why the crowd can throw confetti at whatever it likes.",
       },
@@ -824,7 +829,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     ],
     howToPlay: [
       'Wait for the scouts: kids arrive on their own, faster with every Scouting network level.',
-      'Watch each kid grow toward his hidden ceiling. Scouting level 3 reads the ceiling as a range, level 6 reads it exactly.',
+      'Watch each kid grow toward his hidden ceiling. Scouting level 3 reads the ceiling as a range, level 6 reads it exactly, and a kid from a pack arrives with his tier\'s band already known.',
       'Press Sell on a kid when the price looks right. The fee is quoted live on his card.',
       'Spend the cash on Scouting, Coaching, Dorms and the Agent office. Costs climb with every level.',
       'Press Showcase Day when it charges: training runs x3 for 25 seconds.',
@@ -832,7 +837,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       'Earn the region target, then move the academy up in the Reputation box: kids, cash and facilities stay behind, the star is forever.',
     ],
     rules: [
-      'Every kid has a fixed hidden ceiling. Training slows as he approaches it and can never pass it.',
+      'Every kid has a fixed ceiling, hidden until your scouts or his pack tier tell you where it sits. Training slows as he approaches it and can never pass it.',
       'The promise premium fades from age 21 and is gone at 23. At 24 a kid leaves on a free.',
       'A full academy stops scouting: beds come from the Dorms.',
       'Reputation stars pay +15% training speed and +10% on every fee, each, forever.',
