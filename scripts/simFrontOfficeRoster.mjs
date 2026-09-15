@@ -57,6 +57,7 @@
      SIM_FO_CONTROL=shortseason    crossover cut to seven weeks -> section 11 red
 */
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { execSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
@@ -672,16 +673,15 @@ if (odd) {
    Finder ends up with nothing defensive to show. The floor and the cycle
    now match the shape the data ships. This runs the REAL engine over ten
    offseasons and counts what is left. */
-const BUNDLE_DIR = path.join(ROOT, 'dist', '.foroster');
+const BUNDLE_DIR = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-foroster-'));
 let engine = null;
 try {
-  fs.mkdirSync(BUNDLE_DIR, { recursive: true });
   const entry = path.join(BUNDLE_DIR, 'entry.mjs');
-  let importPath = '../../src/lib/frontOffice.ts';
+  let importPath = path.join(ROOT, 'src', 'lib', 'frontOffice.ts').replaceAll('\\', '/');
   /* The control bundles a DEGRADED copy of the engine: the skill filter put
      back to the pre 416 shape, which swept defenders into the skill average
      while team.defense counted them again. src/ is never touched; the copy
-     lives in dist/. It refuses to run if the current filter is not there. */
+     lives in OS temp. It refuses to run if the current filter is not there. */
   if (CONTROL === 'unitdefence' || CONTROL === 'offencecycle' || CONTROL === 'meandefence' || CONTROL === 'shortseason') {
     const enginePath = path.join(ROOT, 'src', 'lib', 'frontOffice.ts');
     /* normalise the line endings before matching. The swaps below are
@@ -751,7 +751,7 @@ try {
       ? '   control unitdefence: the pre 418 engine put back, strength reads the stored team number again'
       : '   control offencecycle: the pre 416 replenishment put back, offence only cycle and a floor of nine');
   }
-  fs.writeFileSync(entry, `export * from '${importPath}';\n`);
+  fs.writeFileSync(entry, `export * from ${JSON.stringify(importPath)};\n`);
   const out = path.join(BUNDLE_DIR, 'engine.mjs');
   /* the alias is spelled out rather than left to tsconfig, so a copy of the
      engine bundled from outside src still resolves its own imports */
@@ -759,6 +759,8 @@ try {
   engine = await import(pathToFileURL(out).href);
 } catch (e) {
   ok(9, 'the engine can be bundled and run', false, `esbuild or import failed: ${String(e).slice(0, 140)}`);
+} finally {
+  fs.rmSync(BUNDLE_DIR, { recursive: true, force: true });
 }
 if (engine) {
   let seed = 20260902;
