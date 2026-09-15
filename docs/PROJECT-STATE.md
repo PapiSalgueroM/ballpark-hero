@@ -1,5 +1,37 @@
 # Project state
 
+## HOSTING AND DATABASE 2026-09-15 19:47 EDT
+
+Anthony confirms today's Supabase Disk IO warning and requests another host.
+An alternate public site is running at
+https://douknowball.anacatu2025.chatgpt.site. Its first accepted build passes
+all 492 public response checks and an independent static review. The main
+domain remains on the existing host. Domain ownership validation is pending;
+no DNS record, paid plan or AdSense review request has changed. See the
+[cutover record](hosting/sites-cutover-2026-09-15.md).
+
+All previous CI is finished. Fresh database-heavy runs are held while Codex
+reduces repeated harness reads. A current read-only snapshot found the
+database healthy with no active client query or I/O wait, but this does not
+prove the daily disk budget has recovered. Today's logs show substantial
+automated reads and earlier timeouts; the exact budget percentage is not
+available through the connected tools. Do not blame a specific job from user
+agent strings alone.
+
+The frozen 588 run `35026622660` passed. Artifact intake verifies 1,942 inputs,
+714 outputs, both ZIP hashes, 318 node harnesses, 311 Vitest tests, 15 explicit
+browser programs and 74 controls. Its accepted source is `8a4e00a5`; it does
+not approve the new combined tree. The final integration is `9314c758` in
+`codex/integrate-round-588-main`, with type and production build passing.
+One combined full verification will replace four duplicate runs after the
+read-load fixes are reviewed. Claude's newer main `8b32a375` adds release
+receipts only, with no application changes relative to `97d68894`.
+
+The alternate preview must not replace the main domain until the integrated
+build preserves Claude's live 611, 612 and 616 features. All animation sources
+remain intact. The recent main tycoon-pitch warning is being checked against
+the integrated source with production requests blocked.
+
 ## LIVE CHECK 2026-09-15 18:47 EDT: the guide correction is published
 
 Independent public verification now passes all seven affected routes. Their

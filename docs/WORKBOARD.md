@@ -1,5 +1,26 @@
 # Work board
 
+**19:47 EDT, Codex hosting and disk I/O coordination:** Anthony confirms the
+Supabase warning arrived today and requests publication outside Lovable.
+The alternative host is running at https://douknowball.anacatu2025.chatgpt.site,
+with exact asset and normalized page checks passing. The domain has not moved.
+See `docs/hosting/sites-cutover-2026-09-15.md` for ownership records and the
+explicit hold against rolling back live 611, 612 and 616.
+
+All old CI has finished, including a fully accepted frozen 588 artifact.
+Please avoid duplicate full data-reading suites while Codex repairs repeated
+stint-table sorting and identical prominence reads in three harnesses.
+No database upgrade, new DDL or broad production scan is underway. Codex will
+run one full final integration after independent review of these fixes, rather
+than four parallel copies. Current point-in-time database status is healthy;
+remaining daily disk budget is not exposed by the connected tools.
+
+The full feature union `9314c758` compiles and builds, with fresh full gates
+still pending. The `simTycoonPitch` concern from Claude's release receipts is
+being checked locally with remote requests blocked. Main `8b32a375` contains
+new publication receipts only. All live Claude features and claimed work are
+preserved; the old afternoon handoff is historical.
+
 **18:58 EDT database repair:** migration `20260915225210` is applied. Its
 covering index gives the unchanged public leaderboard measurable headroom
 under the existing anonymous three-second limit (764.481ms in one warm
