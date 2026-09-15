@@ -553,29 +553,27 @@ export const INITIAL_TERRITORIES_NBA: Record<string, string> = {
 // so useConquestNba.ts imports those directly from conquestData.ts rather
 // than duplicating them here.
 
-// ── Free Agency pool (mirrors NFL's CONQUEST_FREE_AGENCY_POOL shape) ──
-// 12 real, notable current/recent NBA free agents and journeyman veterans,
-// text-only, no photos.
+// Arcade free agency pool
+// Arcade signing candidates. Availability follows this run's active rosters.
 export interface ConquestFreeAgentCandidateNba {
   name: string;
   position: string;
   overall: number;
-  blurb: string;
 }
 
 export const CONQUEST_FREE_AGENCY_POOL_NBA: ConquestFreeAgentCandidateNba[] = [
-  { name: 'Russell Westbrook', position: 'G', overall: 77, blurb: 'Former MVP, still finding one-year deals as a bench spark' },
-  { name: 'Ben Simmons', position: 'G-F', overall: 72, blurb: 'Former All-Star point-forward, unsigned through 2025-26' },
-  { name: 'LeBron James', position: 'F', overall: 94, blurb: 'All-time leading scorer weighing his next team after leaving the Lakers' },
-  { name: 'Jordan Clarkson', position: 'G', overall: 75, blurb: 'Champion sixth man back on the open market' },
-  { name: 'PJ Tucker', position: 'F', overall: 71, blurb: 'Championship-tested locker room presence, minimal role now' },
-  { name: 'Patty Mills', position: 'G', overall: 70, blurb: 'Veteran shooter and clubhouse leader on the open market' },
-  { name: 'Delon Wright', position: 'G', overall: 73, blurb: 'Long, versatile defensive guard, journeyman of recent years' },
-  { name: 'Robin Lopez', position: 'C', overall: 69, blurb: 'Well-traveled backup center, always a locker-room favorite' },
-  { name: 'Wesley Matthews', position: 'G', overall: 68, blurb: 'Three-and-D veteran, picked up by contenders down the stretch' },
-  { name: 'Danilo Gallinari', position: 'F', overall: 74, blurb: 'Sweet-shooting forward, recovering from multiple injuries' },
-  { name: 'Kemba Walker', position: 'G', overall: 72, blurb: 'Former All-Star scorer, quietly stepped away then flirted with returns' },
-  { name: 'JaVale McGee', position: 'C', overall: 69, blurb: 'Multiple-time champion big man, still lobbing for a roster spot' },
+  { name: 'Russell Westbrook', position: 'G', overall: 77 },
+  { name: 'Ben Simmons', position: 'G-F', overall: 72 },
+  { name: 'LeBron James', position: 'F', overall: 94 },
+  { name: 'Jordan Clarkson', position: 'G', overall: 75 },
+  { name: 'PJ Tucker', position: 'F', overall: 71 },
+  { name: 'Patty Mills', position: 'G', overall: 70 },
+  { name: 'Delon Wright', position: 'G', overall: 73 },
+  { name: 'Robin Lopez', position: 'C', overall: 69 },
+  { name: 'Wesley Matthews', position: 'G', overall: 68 },
+  { name: 'Danilo Gallinari', position: 'F', overall: 74 },
+  { name: 'Kemba Walker', position: 'G', overall: 72 },
+  { name: 'JaVale McGee', position: 'C', overall: 69 },
 ];
 
 // ── Franchise legends (mirrors NFL's TEAM_LEGENDS shape in conquestPowerups.ts) ──

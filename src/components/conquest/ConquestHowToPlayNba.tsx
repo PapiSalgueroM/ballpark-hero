@@ -66,6 +66,13 @@ export function ConquestHowToPlayNba({ open, onOpenChange }: ConquestHowToPlayNb
           </section>
 
           <section>
+            <h3 className="font-bold text-foreground mb-2">✍️ Free Agency Panel</h3>
+            <p className="text-muted-foreground">
+              This separate Arcade player pool follows the rosters in your run. Pick an active team and settle 3 battles to unlock a signing. Signing waives that team's lowest-rated in-game player and adds a +2 team rating bonus, within the rating cap. Any queued upgrade for the waived player is lost. Then settle 3 more battles before signing again. You can change teams between turns, including after your pick gets eliminated. Changing teams does not reset the cooldown.
+            </p>
+          </section>
+
+          <section>
             <h3 className="font-bold text-foreground mb-2">💡 Example Turn</h3>
             <p className="text-muted-foreground">
               Your attacker wins at the defender's home. Choose a player or skip, then the attacker takes that empire and earns Upgrade. Save it, tap the saved arrow between battles, tap Use Now, and choose a player. That player uses 99 OVR when their team next plays, even if they are defending. A loss while attacking would keep both empires intact and award no power.
