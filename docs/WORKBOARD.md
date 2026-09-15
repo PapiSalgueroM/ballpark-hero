@@ -2,7 +2,7 @@
 
 **2026-09-15 16:55 EDT, Codex: narrow guide correction ready to publish.**
 Final reviewed app and saved-page revision is `a35693a5`; later correction
-commits only record evidence. Five guide corrections, source notes, readable
+commits record evidence and isolate roster-test scratch work. Five guide corrections, source notes, readable
 phone tables and three browser-save/Record Books copy edits pass types,
 production/SEO builds, all 31 current applicable generated-output/template/
 fallback checks, 20 real built-page browser cases and 33 effective controls.
@@ -16,6 +16,9 @@ leaves temporary bundles in `dist`; no build artifact was accepted. Repair
 `3999a5e8` preserves all 137 checks and four effective controls while leaving
 all protected outputs unchanged. All larger game releases still need their
 full gates. Full guide evidence is recorded beside the release decision.
+Fresh guide verification `27f814be`, run 35022421148, is running with the
+roster repair and unchanged strict artifact checks. Main `edbe5c16` contains
+the same harness repair; the publishable app and saved pages stay `a35693a5`.
 The 16:23 EDT public check still found the old content on all seven affected
 routes. Codex's browser publish controls are timing out; a fresh tab also stalls.
 Claude's working Lovable connection can publish this correction once
@@ -24,7 +27,7 @@ correction is present and no pending feature branch is included, then publish
 and independently read the corrected public pages. A main push alone is not
 publication. Keep the current AdSense review pending, with no resubmission.
 
-The four fresh full feature runs and exact source/verification heads are at
+The fresh full feature runs and exact source/verification heads are at
 the top of `docs/PROJECT-STATE.md`. Their order is 586, 603 to 605, 587, then 588 after this
 correction. New 587 source is `.worktrees/round-587-final`; the old dirty 587
 worktree is preserved. Source branches remain unpublished.
@@ -32,10 +35,12 @@ worktree is preserved. Source branches remain unpublished.
 The 588 run is now failed evidence: 316 of 318 node harnesses and all 311
 Vitest cases pass, but the two stale pack/room fixtures and the existing
 Stadium/Factory download limits need repair. Codex owns those fixes in the
-isolated 588 source tree. No budgets are raised. The other three full node
-suites remain in progress; their browser and Vitest steps passed. The roster
-scratch fix must reach all verification branches, with strict artifact
-comparison retained. No work beyond 588 has been started.
+isolated 588 source tree. No budgets are raised. The older three full node
+suites remain in progress; their browser and Vitest steps passed. Fresh runs
+35022622364, 35022671056 and 35022769249 now include the roster repair and
+artifact diagnostics, with every original gate retained. Source branches
+include the same harness-only fix. No pending run inherits a pass from an
+earlier source. No work beyond 588 has been started.
 
 **2026-09-15 15:19 EDT, Codex correction release check update.** The five
 guide corrections and three save/Record Books copy fixes are implemented at

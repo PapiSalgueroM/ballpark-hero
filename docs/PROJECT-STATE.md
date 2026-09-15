@@ -3,8 +3,9 @@
 ## READY TO PUBLISH 2026-09-15 16:55 EDT: guide facts, source notes and phone tables
 
 The narrow content correction is ready for the between-big-ships release path.
-Final app/source and saved-page revision is `a35693a5`; subsequent commits are
-documentation only. It corrects five existing format guides and three
+Final app/source and saved-page revision is `a35693a5`; subsequent commits
+record evidence and isolate roster-test scratch files. They do not change the
+app or its saved pages. The correction fixes five existing format guides and three
 homepage/Soccer Career claims. Tables have readable columns, contained
 horizontal scrolling, a phone hint and keyboard access. The independent final
 review also caught and fixed the outdated MLB source-note sentence.
@@ -29,6 +30,13 @@ pass with no changes to the protected output files. Full-run evidence and its
 limits are recorded in the release decision. The larger feature releases
 retain all their full gates.
 
+Fresh guide verification with the roster repair and unchanged artifact checks
+is running at `27f814be` in
+[run 35022421148](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022421148).
+It records before/after manifests and changed paths when packaging fails.
+The earlier passing game tests remain evidence for their exact earlier source;
+this new run must complete on its own.
+
 The correction is not yet published: the 16:23 EDT public check still found
 the old content on all seven affected routes and entry `index-KIfwLt2Q.js`.
 Codex's Lovable tab operations
@@ -49,9 +57,9 @@ unchanged-build retry passed. No extra headroom or budget increase is claimed.
 
 | Release | Source | Verification | Fresh full run |
 | --- | --- | --- | --- |
-| 586 | `3530aacc` | `f5ba388c` | [35015669643](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35015669643) |
-| 603 to 605 | `a7453087` | `83a7927d` | [35015688372](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35015688372) |
-| 587 | `5f3a9a12` | `47d23496` | [35015700619](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35015700619) |
+| 586 | `48afb5a9` | `5ced7657` | [35022622364](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022622364) |
+| 603 to 605 | `40685be8` | `7cf1f43f` | [35022671056](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022671056) |
+| 587 | `77b43142` | `ab3c8dba` | [35022769249](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022769249) |
 | 588 | `67be4bcd` | `4b5c8b40` | [35015717663](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35015717663) |
 
 These are pending full verification, not published. All existing workflow
@@ -63,20 +71,33 @@ remain untouched. Publish correction, 586, 603 to 605, 587, then 588, separately
 No feature beyond 588 is started. Claude's reserved work and Cursor's formatting
 remain separate. Verification workflows stay off main.
 
-Latest checks at 16:55 EDT: the 586, 603 to 605 and 587 runs passed their
-browser and Vitest steps, with the node suites still running. The 588 run
+At 16:55 EDT the previous 586, 603 to 605 and 587 runs (35015669643,
+35015688372 and 35015700619) had passed their browser and Vitest steps,
+with the node suites still running. Those runs were retained. The three
+newer runs in the table include the roster scratch repair and extra artifact
+diagnostics, with all original gates intact; they are in progress and have
+not inherited a pass from the older runs. The 588 run
 finished with 316 of 318 node harnesses passing and 311 of 311 Vitest cases
 passing. Its browser gate failed the existing Stadium/Factory download
-limits; the two node failures are stale fixtures in `simTycoonPacks` and
-`simTycoonRooms`. Those fixes and a presentation-only loading repair are in
-progress. No failed or pending artifact is accepted. All four workflows
-also need the isolated roster scratch repair before packaging can pass.
+limits. The pack control's formerly unique text anchor now matches two writes;
+the room control removes a hook but leaves the equipment notice using it.
+The apparent React child error in the aggregate log was an earlier expected
+negative control. Both fixture repairs and a presentation-only loading repair are in
+progress. No failed or pending artifact is accepted. The replacement 588
+source and workflow also need the isolated roster repair before freezing.
 
 The 586 delayed-loading check now passes locally on source `3530aacc`:
 Back and Home work while panel chunks are held, the final saved career stays
 byte-identical, and all 41 loaded scripts match the built files. Its three
 negative controls fail for their intended reason. Repeat this against the
 final downloaded release artifact before accepting that artifact.
+
+The repaired verification branches match every source blob and file mode,
+with only their workflow added: 2,078 files for 586, 2,092 for the animations,
+and 2,101 for 587. The prepared 586 integration `b208b85e` matches all 1,876
+non-documentation source files; six documentation differences preserve newer
+main records. Artifact intake must still compare against the exact verification
+commit, with that documentation reconciliation recorded separately.
 
 ## ADSENSE STATUS, last confirmed 2026-09-15 12:37 EDT
 
