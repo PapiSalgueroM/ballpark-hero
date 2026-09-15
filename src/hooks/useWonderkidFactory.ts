@@ -12,10 +12,10 @@ import {
   FactoryState, FacilityId, SAVE_KEY,
   newFactory, deserialize, serialize, applyOffline, advanceClock,
   buyFacility, sellProspect, startShowcase, moveUp,
-  bedFree, deliverPack, makeProspectInBand, promote, sellSenior,
+  bedFree, deliverPack, makeProspectInBand, promote, sellSenior, equipBoot,
 } from '@/lib/wonderkidFactory';
 import type { PackId } from '@/lib/wonderkidFactory';
-import { commitOpenPack, clearPendingPack, loadLedger } from '@/lib/tycoonRewards';
+import { commitOpenPack, clearPendingPack, loadLedger, commitUpgradeBoot } from '@/lib/tycoonRewards';
 import { recordCompletion } from '@/lib/completions';
 
 export interface Floater {
@@ -29,7 +29,7 @@ export function useWonderkidFactory() {
   if (stateRef.current === null) {
     const now = Date.now();
     let loaded: FactoryState | null = null;
-    try { loaded = deserialize(localStorage.getItem(SAVE_KEY), now); } catch { loaded = null; }
+    try { loaded = deserialize(localStorage.getItem(SAVE_KEY), now, loadLedger().gearLevel); } catch { loaded = null; }
     const s = loaded ?? newFactory(now);
     const applied = applyOffline(s, now);
     if (applied > 60) s.scoutProgress = Math.max(s.scoutProgress, 0);
@@ -39,6 +39,7 @@ export function useWonderkidFactory() {
   const bump = useCallback(() => setVersion(v => v + 1), []);
   const [packSaveBlocked, setPackSaveBlocked] = useState(false);
   const [academySaveBlocked, setAcademySaveBlocked] = useState(false);
+  const [gearSaveBlocked, setGearSaveBlocked] = useState(false);
 
   /* Moving a player only reaches the screen after the whole academy is saved. */
   const commitAcademy = useCallback((next: FactoryState): boolean => {
@@ -177,6 +178,21 @@ export function useWonderkidFactory() {
     }
   }, [commitAcademy, markSessionPlay, pushFloater]);
 
+  const doEquipBoot = useCallback((seniorId: string, bootId: string | null) => {
+    const next = copyAcademy(stateRef.current!);
+    if (!equipBoot(next, seniorId, bootId, loadLedger().gearLevel ?? {})) return;
+    setGearSaveBlocked(!commitAcademy(next));
+  }, [commitAcademy]);
+
+  const doUpgradeBoot = useCallback((bootId: string) => {
+    try {
+      if (commitUpgradeBoot(bootId)) {
+        setGearSaveBlocked(false);
+        bump();
+      }
+    } catch { setGearSaveBlocked(true); }
+  }, [bump]);
+
   /* Round 585: open a pack. The ledger stores the draw first, then the kid moves
      into a free bed and the academy is saved, all before anything is shown. */
   /* Review: no session mark here. Safeguard 2 keeps packs and gems away from
@@ -222,6 +238,9 @@ export function useWonderkidFactory() {
     doPromote,
     doSellSenior,
     academySaveBlocked,
+    doEquipBoot,
+    doUpgradeBoot,
+    gearSaveBlocked,
   };
 }
 

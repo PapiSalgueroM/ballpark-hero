@@ -20,6 +20,7 @@ export const STADIUM_MANAGEMENT_CONTENT: GameContentMap = {
       "When lifetime earnings fill the yellow bar, sell up and move grounds: the club resets, but Reputation stars (plus 50 percent income each, forever), your badges and your club records all survive.",
       "Open the Academy tab to run your youth academy beside the stadium.",
       "Promote academy players aged 18 to 23 into five first-team places. A graduate frees his bed, keeps developing and helps reduce the opposition's scoring chances. Open First team in the Academy to compare his current fee with the fee at his next birthday.",
+      "League titles earn fictional boots and kit upgrades. Open First team, then Boot room, to equip a graduate or improve a pair. Boots add to match rating for defense while leaving every transfer fee unchanged. Move a pair to another player whenever you like; it stays with the club when its wearer leaves.",
     ],
     rules: [
       "Attendance is the smaller of your seats and your fanbase, so Stands matter only when the ground is full and spending tracks matter only when it is not.",

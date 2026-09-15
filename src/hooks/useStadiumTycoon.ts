@@ -82,6 +82,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
   const [golden, setGolden] = useState<PendingGolden | null>(null);
   const [activeSetPiece, setActiveSetPiece] = useState<SetPieceOffer | null>(null);
   const [setPieceError, setSetPieceError] = useState<string | null>(null);
+  const [gearSaveBlocked, setGearSaveBlocked] = useState(false);
   const [promotion, setPromotion] = useState<Promotion | null>(null);
   const [badge, setBadge] = useState<BadgeEarned | null>(null);
   const [lastSeason, setLastSeason] = useState<LastSeason | null>(null);
@@ -194,6 +195,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
         // Round 439: the loop has now paid for these seconds, so the away
         // settle must not bill for them again.
         paidUntilRef.current += use * 1000;
+        const playedDivision = stateRef.current.league?.division;
         const { state: next, events } = tick(stateRef.current, use, Math.random, getEdgeRef.current?.() ?? 0);
         stateRef.current = next;
         for (const e of events) reactToEvent(e);
@@ -202,7 +204,16 @@ export function useStadiumTycoon(getEdge?: () => number) {
         const ft = events.find(e => e.kind === 'win' || e.kind === 'draw' || e.kind === 'loss');
         if (ft) {
           const season = events.find(e => (e.kind === 'title' || e.kind === 'seasonEnd') && e.position !== undefined);
-          const gems = recordFullTimes([{ totalMatches: next.totalMatches ?? 0, result: ft.kind as FullTime['result'], away: false, position: season?.position }]);
+          let allowGear = true;
+          if (season?.kind === 'title') {
+            // The completed stadium match is durable before its title can award gear.
+            try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); } catch { allowGear = false; }
+            setGearSaveBlocked(!allowGear);
+          }
+          const gems = recordFullTimes([{
+            totalMatches: next.totalMatches ?? 0, result: ft.kind as FullTime['result'], away: false,
+            position: season?.position, division: season?.kind === 'title' ? playedDivision : undefined,
+          }], allowGear, () => setGearSaveBlocked(true));
           if (gems > 0) pushFloater(`+${gems} gems`, 'money', 62, 10);
         }
         setState(next);
@@ -437,7 +448,7 @@ export function useStadiumTycoon(getEdge?: () => number) {
   }, [pendingSetPiece?.match, pendingSetPiece?.rep]);
 
   return {
-    state, floaters, awayPay, awayTrip, dismissAway, confetti,
+    state, floaters, awayPay, awayTrip, dismissAway, confetti, gearSaveBlocked,
     doBuy, doTap, doPrestige, doBoost,
     golden, doCatchGolden, doHire, doLegacyPerk,
     promotion, dismissPromotion, badge, dismissBadge, doSetClubName, lastSeason,

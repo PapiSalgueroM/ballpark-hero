@@ -29,6 +29,7 @@
 import { intlName, NATION_FAMILY } from '@/lib/intlNames';
 import { ensureUniqueIds, makeIdMinter } from '@/lib/entityIds';
 import { basePrice } from '@/lib/playerValue';
+import { BOOTS } from '@/lib/soccerCareerAppearance';
 export { basePrice } from '@/lib/playerValue';
 
 /* ------------------------------------------------------------------ tuning */
@@ -187,7 +188,11 @@ export interface Prospect {
 /** A graduate keeps his name and ability, with a separate first team id. */
 export interface Senior extends Omit<Prospect, 'id'> {
   id: string;
+  bootId?: string;
 }
+
+export type GearLevels = Readonly<Partial<Record<string, number>>>;
+export const MAX_BOOT_LEVEL = 3;
 
 export interface FactoryState {
   v: number;
@@ -400,10 +405,46 @@ export function seniorBirthdayPreview(s: FactoryState, p: Senior): { age: number
 }
 
 /** This defensive edge belongs to the first team, not a purchasable track. */
-export function squadEdge(s: FactoryState): number {
-  const total = (s.firstTeam ?? []).slice(0, FIRST_TEAM_SLOTS).reduce((sum, p) =>
-    sum + Math.max(0, Math.min(99, p.rating) - 60), 0);
+export function squadEdge(s: FactoryState, levels: GearLevels = {}): number {
+  const worn = new Set<string>();
+  const total = (s.firstTeam ?? []).slice(0, FIRST_TEAM_SLOTS).reduce((sum, p) => {
+    const level = p.bootId && !worn.has(p.bootId) ? bootLevel(levels, p.bootId) : 0;
+    if (level && p.bootId) worn.add(p.bootId);
+    const effectiveRating = Math.min(99, p.rating + level);
+    return sum + Math.max(0, effectiveRating - 60);
+  }, 0);
   return Math.min(0.40, total * 0.002);
+}
+
+function bootLevel(levels: GearLevels, id: string): number {
+  if (!BOOTS.some(b => b.id === id) || !Object.prototype.hasOwnProperty.call(levels, id)) return 0;
+  const level = levels[id];
+  return Number.isInteger(level) && level! >= 1 && level! <= MAX_BOOT_LEVEL ? level! : 0;
+}
+
+/** Each unlocked line is one pair. Moving it takes it off its previous wearer. */
+export function equipBoot(s: FactoryState, seniorId: string, bootId: string | null, levels: GearLevels): boolean {
+  const player = s.firstTeam?.find(p => p.id === seniorId);
+  if (!player || (bootId !== null && !bootLevel(levels, bootId)) || (player.bootId ?? null) === bootId) return false;
+  if (bootId !== null) {
+    for (const other of s.firstTeam ?? []) if (other.bootId === bootId) delete other.bootId;
+    player.bootId = bootId;
+  } else delete player.bootId;
+  return true;
+}
+
+/** Load order is stable: the first valid wearer keeps a pair if a save duplicates it. */
+export function normalizeBoots(s: FactoryState, levels: GearLevels = {}): boolean {
+  const worn = new Set<string>();
+  let changed = false;
+  for (const player of s.firstTeam ?? []) {
+    if (player.bootId === undefined) continue;
+    if (!bootLevel(levels, player.bootId) || worn.has(player.bootId)) {
+      delete player.bootId;
+      changed = true;
+    } else worn.add(player.bootId);
+  }
+  return changed;
 }
 
 export function facilityCost(s: FactoryState, id: FacilityId): number {
@@ -694,7 +735,7 @@ export function serialize(s: FactoryState): string {
 /** Fail closed: anything not exactly right comes back sane or the whole
  *  save is refused. A doctored save gets a working game, never a printing
  *  press. */
-export function deserialize(raw: string | null, now: number): FactoryState | null {
+export function deserialize(raw: string | null, now: number, gear: GearLevels = {}): FactoryState | null {
   if (!raw) return null;
   try {
     const p = JSON.parse(raw) as Partial<FactoryState>;
@@ -811,6 +852,7 @@ export function deserialize(raw: string | null, now: number): FactoryState | nul
           rating: Math.min(potential, Math.max(30, player.rating)),
           potential,
           ...(typeof player.tier === 'string' && TIER_IDS.includes(player.tier as TierId) ? { tier: player.tier as TierId } : {}),
+          ...(typeof player.bootId === 'string' ? { bootId: player.bootId } : {}),
         });
         seen.add(name);
         if (seniors.length >= FIRST_TEAM_SLOTS) break;
@@ -818,6 +860,7 @@ export function deserialize(raw: string | null, now: number): FactoryState | nul
       const reserved = new Set(seniors.map(player => player.id));
       ensureUniqueIds(() => freshSeniorId(reserved), [seniors]);
       s.firstTeam = seniors;
+      normalizeBoots(s, gear);
     }
     return s;
   } catch {

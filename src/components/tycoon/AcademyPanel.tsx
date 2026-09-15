@@ -44,7 +44,7 @@ const FirstTeamPanel = lazy(() => import('@/components/tycoon/FirstTeamPanel'));
 type Panel = 'scouting' | 'coaching' | 'dorms' | 'agents' | 'legacy' | 'packs' | 'firstTeam' | null;
 
 export default function AcademyPanel({ visible = true, onStatus, onSnapshot }: { visible?: boolean; onStatus?: (s: AcademyStatus) => void; onSnapshot?: (s: FactoryState) => void }) {
-  const { state: s, floaters, doBuy, doSell, doShowcase, doMoveUp, doOpenPack, doDismissPack, packSaveBlocked, doPromote, doSellSenior, academySaveBlocked } = useWonderkidFactory();
+  const { state: s, floaters, doBuy, doSell, doShowcase, doMoveUp, doOpenPack, doDismissPack, packSaveBlocked, doPromote, doSellSenior, academySaveBlocked, doEquipBoot, doUpgradeBoot, gearSaveBlocked } = useWonderkidFactory();
   /* Round 585: the gem ledger, shared with the stadium that earns it. */
   const ledger = useTycoonRewards();
   const [panel, setPanel] = useState<Panel>(null);
@@ -133,7 +133,7 @@ export default function AcademyPanel({ visible = true, onStatus, onSnapshot }: {
   tiles.unshift({
     key: 'firstTeam', icon: '⚽', title: 'First team',
     value: `${s.firstTeam?.length ?? 0} / ${FIRST_TEAM_SLOTS} players`,
-    sub: `up to ${(squadEdge(s) * 100).toFixed(1)}% fewer rival chances`,
+    sub: `up to ${(squadEdge(s, ledger.gearLevel) * 100).toFixed(1)}% fewer rival chances`,
     accent: (s.firstTeam?.length ?? 0) < FIRST_TEAM_SLOTS && s.prospects.some(p => p.age >= PROMOTE_AGE),
   });
   tiles.push({
@@ -221,7 +221,7 @@ export default function AcademyPanel({ visible = true, onStatus, onSnapshot }: {
       <div ref={firstTeamRef}>
       {panel === 'firstTeam' ? (
         <Suspense fallback={<p className="min-h-48 p-3 text-sm text-muted-foreground">Opening the first team...</p>}>
-          <FirstTeamPanel state={s} onSell={doSellSenior} onBack={() => setPanel(null)} />
+          <FirstTeamPanel state={s} ledger={ledger} onSell={doSellSenior} onEquip={doEquipBoot} onUpgrade={doUpgradeBoot} gearSaveBlocked={gearSaveBlocked} onBack={() => setPanel(null)} />
         </Suspense>
       ) : (
       /* the academy */
@@ -376,6 +376,7 @@ export default function AcademyPanel({ visible = true, onStatus, onSnapshot }: {
               <p>Promote a player aged {PROMOTE_AGE} to {LEAVE_AGE - 1} into your first team, with room for {FIRST_TEAM_SLOTS}. His bed opens for a new kid. First-team players above 60 rating cut opponents' scoring chances in watched and away stadium matches, so keeping a graduate can help win the next title.</p>
               <p>A first-team year lasts {SENIOR_YEAR_SEC / 60} watched academy minutes. Seniors train at half the academy rate until their 28th birthday, hold their rating at 28 and 29, then lose 1.2 rating each birthday from 30. Sale value starts falling at 28 and they retire at {RETIRE_AGE} without a fee. Their cards show the next birthday and its fee without further training. The first team survives both an academy move and selling the ground.</p>
               <p>First-team example: promoting a graduate frees his bed without paying a transfer fee. Holding him can protect the lead in a title race; selling him pays the quote on his card and opens a first-team place for your next graduate. Away time trains your seniors but never ages them.</p>
+              <p>League titles at Stadium Tycoon earn fictional boots and kit upgrades. Open First team, then Boot room, to choose a wearer or improve a pair. A pair can move between graduates and stays with the club when its wearer leaves. Boots add to match rating for defense, without changing a transfer fee.</p>
               <p>Worked example: a 17 year old rated 58 with a ceiling of 74 sells for about {fmtCash(salePriceExample(58, 74))} today. Coached to 71 he is worth about {fmtCash(salePriceExample(71, 74))}, and on deadline day that fee pays half as much again. Held to 23, the promise premium is gone and only the rating pays.</p>
             </div>
             <button

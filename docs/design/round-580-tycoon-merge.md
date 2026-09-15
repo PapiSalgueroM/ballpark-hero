@@ -1387,3 +1387,58 @@ preferences. It verifies 42 reachable controls, an advancing visible clock,
 six real legal goals saved once and reloaded, and exact nonzero scroll restore.
 Both served-chunk layout and clock controls fail their intended checks. Full
 release verification and publication remain separate gates.
+
+## 20. Round 588 implementation decisions and verification
+
+This round follows 587 as a separate release. It uses the existing fictional
+`BOOTS` catalog and reward ledger, with no new currency or random gear draw.
+
+- Each boot line is a pair with at most one senior wearer. Equipping it on a
+  different graduate removes it from the previous wearer in the same academy
+  save. Selling or retiring the wearer frees the pair; its level remains in the
+  reward ledger. This makes allocating equipment a decision instead of giving
+  every graduate the same best pair.
+- Awards are prospective. The first observed title in a division unlocks the
+  next catalog entry. Every Summit title keeps unlocking entries while any
+  remain. A new career therefore earns its tenth pair at its first Summit
+  title. A returning Summit career starts on its next title and can continue
+  collecting without reconstructing historical results. Other titles grant a
+  kit upgrade; after the catalog is complete, every title grants an upgrade.
+- One kit upgrade raises one owned pair by one level, up to three. Neither
+  equipping nor upgrading spends gems. Gear never enters a transfer fee.
+- The optional gear fields stay absent from untouched old ledgers. Title
+  receipts use the completed match count and division; replayed results cannot
+  award again. A title's stadium state is saved before its equipment reward.
+  Failed equipment writes do not add usable equipment to the memory-only gem
+  fallback. A successful stadium save followed by a failed ledger save can
+  lose that title reward, matching the existing cross-key failure limit. The
+  page explains that storage must work before earning another title.
+- The earlier wording that every level changes the edge needs a bound. A level
+  adds 0.002 only above the rating floor and below the effective-rating cap.
+  Neutral steps at those boundaries are correct. Five legal wearers capped at
+  rating 99 reach an edge of 0.39, so the existing defensive bound of 0.40 is
+  not reachable by a legal team.
+
+The independent pure-engine check currently passes 11,444,400 exact fee
+comparisons, 8,262 uncapped level steps, 6,372 neutral steps and 324 fractional
+transitions. Three separating-roll cases exercise both watched and away match
+outcomes. Thirteen effective controls cover fees, neutralized edge, the rating
+cap, duplicate equipment, repeated awards, non-title grants, Summit progression,
+pack grants, upgrades, locked pairs, failed writes, stale memory-only gear and
+unauthorized gear writers. Six actual hook/page cases and seven effective page
+controls verify title write order, failed stadium and ledger saves, atomic
+reassignment, upgrades and gear use in watched and away matches. These are
+scoped results, not completed release verification.
+
+The actual First team and Boot room component preview passes at 320, 390 and
+1440 pixels with source-generated preview CSS. It checks all 18 pairs, six
+tiles per page, player changes, atomic movement, saved upgrades, unchanged
+fees, blocked saves and Back. Clean panel heights are 949, 932 and 722 pixels,
+with every reachable button and rules summary at least 44 pixels high and
+no horizontal overflow. Boundary fixtures compare displayed ratings and
+controls against the real edge: 59 plus level one is 60 with no benefit,
+59 plus level two is 61 with edge 0.002, and 98 plus level three caps at 99
+with edge 0.078. A successful level-three upgrade consumes one kit and
+disables further upgrades. Six effective UI controls cover width, movement,
+double upgrades, the floor, cap and maximum. Production CSS and full page
+release checks remain required before publication.

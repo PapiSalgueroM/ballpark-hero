@@ -1,30 +1,43 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { HubPanelHeader } from '@/components/hub/HubTiles';
 import { cn } from '@/lib/utils';
+import { useRevealScroll } from '@/hooks/useRevealScroll';
+import type { RewardsLedger } from '@/lib/tycoonRewards';
 import {
   FIRST_TEAM_SLOTS, SENIOR_YEAR_SEC, RETIRE_AGE, PROMOTE_AGE, LEAVE_AGE, fmtCash, potentialRead,
   salePrice, seniorBirthdayPreview, squadEdge,
 } from '@/lib/wonderkidFactory';
 import type { FactoryState } from '@/lib/wonderkidFactory';
 
-export default function FirstTeamPanel({ state: s, onSell, onBack }: {
+const BootRoom = lazy(() => import('@/components/tycoon/BootRoom'));
+
+export default function FirstTeamPanel({ state: s, ledger, onSell, onEquip, onUpgrade, onBack, gearSaveBlocked }: {
   state: FactoryState;
+  ledger: RewardsLedger;
   onSell: (id: string) => void;
+  onEquip: (playerId: string, bootId: string | null) => void;
+  onUpgrade: (bootId: string) => void;
   onBack: () => void;
+  gearSaveBlocked: boolean;
 }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [bootRoom, setBootRoom] = useState(false);
+  const roomRef = useRevealScroll(bootRoom);
   const { pathname } = useLocation();
   const team = s.firstTeam ?? [];
   const selected = team.find(p => p.id === selectedId) ?? team[0];
   const birthday = selected ? seniorBirthdayPreview(s, selected) : null;
   const seconds = selected ? Math.max(0, Math.ceil(SENIOR_YEAR_SEC - selected.ageClock)) : 0;
-  const edge = (squadEdge(s) * 100).toFixed(1);
+  const edge = (squadEdge(s, ledger.gearLevel) * 100).toFixed(1);
   const read = selected ? potentialRead(s, selected) : null;
 
   return (
-    <section data-first-team-panel data-no-prerender className="space-y-3">
-      <HubPanelHeader title="First team" onBack={onBack} />
+    <section ref={roomRef} data-first-team-panel data-no-prerender className="space-y-3">
+      {bootRoom ? <Suspense fallback={<div className="min-h-[600px]"><div className="[&_button]:min-h-[44px]"><HubPanelHeader title="Boot room" onBack={() => setBootRoom(false)} /></div><p className="p-3 text-sm text-muted-foreground">Opening the boot room...</p></div>}>
+        <BootRoom state={s} ledger={ledger} selectedId={selected?.id} onEquip={onEquip} onUpgrade={onUpgrade} onBack={() => setBootRoom(false)} saveBlocked={gearSaveBlocked} />
+      </Suspense> : <>
+      <div className="[&_button]:min-h-[44px]"><HubPanelHeader title="First team" onBack={onBack} /></div>
       <div className="rounded-2xl border border-primary/30 bg-card p-3">
         <div className="flex items-center justify-between gap-2">
           <h2 className="font-display text-lg font-bold">Your graduates</h2>
@@ -56,6 +69,11 @@ export default function FirstTeamPanel({ state: s, onSell, onBack }: {
           })}
         </div>
       </div>
+
+      <button type="button" onClick={() => setBootRoom(true)} className="flex min-h-[56px] w-full items-center justify-between gap-3 rounded-xl border border-primary/30 bg-primary/5 px-3 py-2 text-left">
+        <span className="text-sm font-bold">Boot room<span className="block text-xs font-normal text-muted-foreground">Title rewards for your graduates</span></span>
+        <span className="shrink-0 text-xs font-bold text-primary">{ledger.gearUnlocked?.length ?? 0} pairs</span>
+      </button>
 
       {selected && birthday ? (
         <article data-senior-card className="rounded-2xl border border-border bg-card p-3">
@@ -99,6 +117,7 @@ export default function FirstTeamPanel({ state: s, onSell, onBack }: {
         {(s.retired ?? 0) > 0 && <> Retired players: {s.retired}.</>}
       </p>
       {pathname !== '/stadium-tycoon' && <Link to="/stadium-tycoon" className="inline-flex min-h-[44px] items-center text-xs font-bold text-primary underline underline-offset-4">Watch them at Stadium Tycoon</Link>}
+      </>}
     </section>
   );
 }

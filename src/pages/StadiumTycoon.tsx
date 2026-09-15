@@ -47,7 +47,7 @@ import VictoryMoment from '@/components/game/VictoryMoment';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import TycoonPitch from '@/components/tycoon/TycoonPitch';
 import { useTycoonRewards } from '@/hooks/useTycoonRewards';
-import { balance, GEM_PAY } from '@/lib/tycoonRewards';
+import { balance, GEM_PAY, loadLedger } from '@/lib/tycoonRewards';
 import type { TapFx } from '@/components/tycoon/TycoonPitch';
 import type { AcademyStatus, Room } from '@/lib/tycoonRooms';
 import { deserialize as deserializeAcademy, applyOffline as applyAcademyOffline, SAVE_KEY as ACADEMY_SAVE_KEY, squadEdge } from '@/lib/wonderkidFactory';
@@ -86,14 +86,14 @@ export default function StadiumTycoon() {
   const [savedAcademy] = useState(() => {
     try {
       const now = Date.now();
-      const snapshot = deserializeAcademy(localStorage.getItem(ACADEMY_SAVE_KEY), now);
+      const snapshot = deserializeAcademy(localStorage.getItem(ACADEMY_SAVE_KEY), now, loadLedger().gearLevel);
       if (snapshot) applyAcademyOffline(snapshot, now);
       return snapshot;
     }
     catch { return null; }
   });
   const academyRef = useRef(savedAcademy);
-  const getEdge = useCallback(() => academyRef.current ? squadEdge(academyRef.current) : 0, []);
+  const getEdge = useCallback(() => academyRef.current ? squadEdge(academyRef.current, loadLedger().gearLevel) : 0, []);
   const onAcademySnapshot = useCallback((snapshot: FactoryState) => { academyRef.current = snapshot; }, []);
   const g = useStadiumTycoon(getEdge);
   const [room, setRoom] = useState<Room>('stadium');
@@ -156,6 +156,7 @@ export default function StadiumTycoon() {
           ))}
         </div>
 
+        {g.gearSaveBlocked && <p role="alert" data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">Title equipment could not be saved, so no new equipment was added. Your existing pairs are safe. Allow device storage before earning another title.</p>}
         <StadiumRoom g={g} visible={room === 'stadium'} onNeedsYou={setStadiumNeedsYou} />
         <LeagueRoom g={g} visible={room === 'league'} />
         {academyOpened && (

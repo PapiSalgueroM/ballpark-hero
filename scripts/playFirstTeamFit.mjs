@@ -42,6 +42,7 @@ await build({
     import { MemoryRouter } from 'react-router-dom';
     import FirstTeamPanel from './src/components/tycoon/FirstTeamPanel';
     import * as W from './src/lib/wonderkidFactory';
+    import { newLedger } from './src/lib/tycoonRewards';
     import { intlName, NATION_FAMILY } from './src/lib/intlNames';
     let seed = 586;
     const roll = () => { seed = (seed + 0x6d2b79f5) | 0; let t = Math.imul(seed ^ (seed >>> 15), seed | 1); t ^= t + Math.imul(t ^ (t >>> 7), t | 61); return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
@@ -71,7 +72,7 @@ await build({
         quote: id => W.salePrice(current.current, current.current.firstTeam.find(p => p.id === id)),
         initialNames: longest.map(pair => pair[0]),
       };
-      return back ? <p data-back="true">Back at the academy</p> : <FirstTeamPanel state={state} onBack={() => { calls.current.push('back'); setBack(true); }} onSell={id => {
+      return back ? <p data-back="true">Back at the academy</p> : <FirstTeamPanel state={state} ledger={newLedger()} onEquip={() => {}} onUpgrade={() => {}} gearSaveBlocked={false} onBack={() => { calls.current.push('back'); setBack(true); }} onSell={id => {
         const next = { ...current.current, firstTeam: current.current.firstTeam.map(p => ({ ...p })) };
         const fee = W.sellSenior(next, id);
         if (fee === null) throw new Error('selected senior did not sell');

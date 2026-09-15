@@ -1,5 +1,45 @@
 # Project state
 
+## IN DEVELOPMENT 2026-09-15: Round 588, title-earned boots
+
+Worktree `.worktrees/round-588-title-boots`, branch
+`codex/round-588-title-boots`, follows the combined Round 587 source. This
+round publishes separately after 586, 603 to 605 and 587. It is not live.
+
+League titles earn the existing fictional boot pairs on a fixed schedule.
+The first observed title in each division unlocks the next pair; Summit
+titles continue the collection. Other titles earn kit upgrades. The Boot
+room opens from First team, with six pairs per page, one wearer per pair,
+free reassignment and upgrades capped at level three. Equipment adds match
+rating for defense, with the existing rating floor and cap, and never changes
+a transfer fee. Past titles are not reconstructed for old saves.
+
+Equipment saves before appearing on screen. Failed writes leave the previous
+equipment intact and show an explanation. The completed stadium title saves
+before its reward; the existing two-save failure limit can lose a title's
+equipment reward when only the ledger write fails. The page says so instead
+of displaying an unsaved reward.
+
+Independent focused checks pass ten engine sections, 11,444,400 exact fee
+comparisons, 13 effective engine controls, six actual hook/page cases and
+seven effective page controls. The actual component preview passes at 320,
+390 and 1440 pixels with 44-pixel targets, no overflow, real equip/upgrade
+actions and the rating 60/99 and level-three boundaries. Six deliberate UI
+mutations fail their intended checks. This preview uses source-generated
+CSS. The current app type gate passes; the final built CSS, a fresh full build
+and all release gates remain owed. Section 20 of the tycoon merge design records the schedule,
+storage tradeoff and measured edge limits.
+
+The older first-team save test now waits for the lazy Reputation panel before
+finding its Move up button. Its seven healthy cases and all six intended
+failure controls pass on this tree. The final source also passes the app type
+gate. Fresh release CI will follow integration of the urgent reference-guide
+corrections, so this branch cannot restore the known published content errors.
+
+AdSense review remains pending. The public HTTP audit at 13:22 to 13:23 EDT
+passed all 148 sitemap URLs with zero findings; that result establishes
+document checks, not indexing or approval. No additional review request.
+
 ## IN DEVELOPMENT 2026-09-15: Round 587, playable watched-match kicks
 
 Worktree `.worktrees/round-587-set-pieces`, branch `codex/round-587-set-pieces`.

@@ -12,6 +12,7 @@ export const ACADEMY_MANAGEMENT_CONTENT: GameContentMap = {
       'Watch each kid grow toward his hidden ceiling. Scouting level 3 reads the ceiling as a range, level 6 reads it exactly, and a kid from a pack arrives with his tier\'s band already known.',
       'Press Sell on a kid when the price looks right. The fee is quoted live on his card.',
       'From age 18 to 23, you can promote a kid into one of five first-team places instead. Promotion frees his bed without paying a fee. Open First team to select a graduate, see his next birthday and decide when to sell him.',
+      'Titles at Stadium Tycoon earn fictional boots and kit upgrades. Open the Boot room from First team to choose a wearer, move a pair or improve its level. Boots add to match rating for the defensive edge, without changing the player\'s transfer fee. Your collection survives sales, retirement and moving either ground.',
       'Spend the cash on Scouting, Coaching, Dorms and the Agent office. Costs climb with every level.',
       'Press Showcase Day when it charges: training runs x3 for 25 seconds.',
       'Hold your best kids for Deadline Day, which arrives every few minutes and pays x1.5 on every fee for 50 seconds.',

@@ -25,7 +25,7 @@ const controls = [
   { name: 'stoppedclock', file: page, env: 'TYCOON_ROOMS_PAGE',
     from: 'useState(() => Boolean(savedAcademy?.firstTeam?.length))', to: 'useState(false)', red: [4, 7] },
   { name: 'noedge', file: page, env: 'TYCOON_ROOMS_PAGE',
-    from: 'const getEdge = useCallback(() => academyRef.current ? squadEdge(academyRef.current) : 0, []);',
+    from: 'const getEdge = useCallback(() => academyRef.current ? squadEdge(academyRef.current, loadLedger().gearLevel) : 0, []);',
     to: 'const getEdge = useCallback(() => 0, []);', red: [5, 6, 7] },
   { name: 'untrained', file: page, env: 'TYCOON_ROOMS_PAGE',
     from: 'if (snapshot) applyAcademyOffline(snapshot, now);', to: 'void snapshot;', red: [7] },
