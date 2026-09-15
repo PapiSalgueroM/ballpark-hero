@@ -134,6 +134,7 @@ describe('First team on the real Stadium Tycoon page', () => {
     mountPage(<StadiumTycoon />, '/stadium-tycoon');
     await openAcademy();
     await click(button(document, /Reputation/));
+    await act(async () => { await vi.dynamicImportSettled(); });
     await click(button(document, /Move up to/));
     expect(savedAcademy().rep).toBe(1);
     expect(savedAcademy().firstTeam).toEqual(s.firstTeam);
