@@ -79,7 +79,9 @@ have a two-link path from home through their sport hub.
 The next evidence to obtain is a recorded crawl or indexing result after these
 requests and the next publish. The current result is that the five guides had
 not received a recorded crawl when inspected, not that Google rejected their
-content after reading it. No AdSense re-review has been submitted in this session.
+content after reading it. After this inspection and live release verification,
+AdSense accepted a fresh review request at 04:19 EDT. See
+[the console record](../adsense/console-check-2026-09-15.md). Approval is pending.
 
 ## Evidence and interpretation
 
