@@ -36,8 +36,10 @@ jobs:
           mkdir -p "$RUNNER_TEMP/round585-logs"
           git rev-parse HEAD > "$RUNNER_TEMP/round585-logs/commit.txt"
           npm ci --no-audit --no-fund 2>&1 | tee "$RUNNER_TEMP/round585-logs/install.log"
-          npm install --no-save --package-lock=false --no-audit --no-fund playwright@1.63.0
-          npx --no-install playwright install --with-deps chromium
+          npm install --prefix "$RUNNER_TEMP/round585-browser-deps" --no-save --package-lock=false --no-audit --no-fund playwright@1.63.0
+          ln -s "$RUNNER_TEMP/round585-browser-deps/node_modules/playwright" node_modules/playwright
+          ln -s "$RUNNER_TEMP/round585-browser-deps/node_modules/playwright-core" node_modules/playwright-core
+          node "$RUNNER_TEMP/round585-browser-deps/node_modules/playwright/cli.js" install --with-deps chromium
           python3 -m venv "$RUNNER_TEMP/round585-python"
           "$RUNNER_TEMP/round585-python/bin/python" -m pip install fonttools==4.63.0 pillow==12.3.0
           echo "$RUNNER_TEMP/round585-python/bin" >> "$GITHUB_PATH"
