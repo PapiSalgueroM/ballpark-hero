@@ -10,8 +10,15 @@
  * It holds both directions on purpose. A validator that answers everything
  * from records would be worse than one that answers nothing, so each round
  * also carries a case that must NOT be confirmed: Haaland was never at
- * Liverpool, Tom Brady never won a slam, Richard Petty and Kyle Larson never
- * raced together, and Derrick Henry went 45th overall in the second round.
+ * Liverpool, Tom Brady never won a slam, and Richard Petty and Kyle Larson
+ * never raced together.
+ *
+ * ROUND 611 REMOVED THE ROUND 490 BLOCK. It POSTed to college-grid-validate,
+ * and every one of those calls writes ai_validation_cache and spends the
+ * players' AI allowance. College Grid no longer calls that validator: it
+ * judges in the browser against its answer key, and scripts/simCollegeGridKey.mjs
+ * holds what the block held (Derrick Henry, 2016 pick 45, is not a first
+ * rounder; Joe Burrow, 2020 pick 1, is) straight from the tables.
  *
  * A LESSON FROM WRITING IT, kept because it cost two false alarms: a records
  * answer is recognised by its REASON, not by the source field. That field is
@@ -143,16 +150,6 @@ const check = (round, what, ok, detail) => {
   check('489', 'PSG is answerable', a.valid === true, String(a.reason || '').slice(0, 40));
   const b = await call('soccer-grid-validate', { playerName: 'Iago Aspas', rowAttribute: 'Played for Celta Vigo', colAttribute: 'Forward (FWD)' });
   check('489', 'Celta Vigo is answerable', b.valid === true, String(b.reason || '').slice(0, 40));
-}
-
-// 490: College Grid answers from its own tables
-{
-  const a = await call('college-grid-validate', { playerName: 'Joe Burrow', rowAttribute: 'Heisman Winner', colAttribute: 'First Round Pick' });
-  const fromData = a.valid === true && (a.cached === true || /Verified from college/.test(String(a.reason || '')));
-  check('490', 'Burrow settled without the model', fromData, String(a.reason || '').slice(0, 40));
-  const b = await call('college-grid-validate', { playerName: 'Derrick Henry', rowAttribute: 'First Round Pick', colAttribute: 'Alabama' });
-  const wrong = b.valid === true && /Verified from college/.test(String(b.reason || ''));
-  check('490', 'a second round pick is not confirmed', CONTROL === 'nofallthrough' ? wrong : !wrong, wrong ? 'WRONGLY CONFIRMED' : 'not confirmed');
 }
 
 if (CONTROL) {
