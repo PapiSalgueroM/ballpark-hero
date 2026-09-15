@@ -1,5 +1,27 @@
 # Project state
 
+## ROUND 586 RELEASE ARTIFACT ACCEPTED 2026-09-15
+
+Release branch `codex/release-round-586-final` combines reviewed source
+`48afb5a9`, main documentation through `83658d7b`, and exact generated output
+from successful full run `35022622364` at verification `5ced7657`.
+All 313 node harnesses, 279 Vitest cases, browser checks and dedicated
+controls passed. Artifact `10421332445` passes its archive digest, all 1,909
+inputs, all 706 outputs and the exact file-set check. Before output import,
+the integration differs from source only in eight documentation paths.
+
+The 170 generated repository outputs were imported without the workflow or
+dist. Only the two tycoon snapshots and their content-ledger hashes change.
+The final downloaded-build browser check held all three manager panel chunks:
+Back and Home worked, layouts stayed still, the saved career remained exactly
+46,741 bytes, and all 41 served scripts matched artifact bytes. The three
+effective failure controls also passed. See
+`docs/round-586-release-evidence-2026-09-15.json` for exact hashes.
+
+This branch is ready for release after the content correction is published.
+It is not on main or live. The animation, watched-kick and equipment releases
+remain separate, with their own checked artifacts and publication steps.
+
 ## READY TO PUBLISH 2026-09-15 16:55 EDT: guide facts, source notes and phone tables
 
 The narrow content correction is ready for the between-big-ships release path.

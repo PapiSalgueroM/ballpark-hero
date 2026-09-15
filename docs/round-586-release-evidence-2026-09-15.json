@@ -1,0 +1,49 @@
+{
+  "sourceCommit": "48afb5a92f658644a814c10fd2acba39aa84f49a",
+  "verificationCommit": "5ced7657712182560bd2be657351a9b677c41448",
+  "run": "https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022622364",
+  "workflowConclusion": "success",
+  "nodeHarnessesPassed": 313,
+  "vitest": { "passed": 279, "filesPassed": 33 },
+  "buildArtifact": {
+    "id": 10421332445,
+    "archiveSha256": "a15a44bf46d046b471a2f13be738efdf033f0a35b0f661ecca2e5374f3b0ef14",
+    "manifestSha256": "74917263e21fb69fc20a228b9072f1243b89817422904b62f350b4930d501764",
+    "verifiedInputs": 1909,
+    "verifiedOutputs": 706,
+    "exactFileSetVerified": true
+  },
+  "logsArtifact": {
+    "id": 10420939573,
+    "archiveSha256": "cf133c03cafb5ac71c374ac8467c42f94380dd7fb04e9939abf49b8c6a115126",
+    "nodeLogSha256": "45a4d64632069404a232bcd4ec2a25cf657afc3174f7a2bd7fa3074d7ca0c09d",
+    "vitestLogSha256": "1198d56a0588ddb71f142986e8b2ba4ed3809cba8afc3819965adc780ef2cc5c"
+  },
+  "integration": {
+    "beforeArtifactCommit": "ff7c52f5bf4956db44a99d319dbcf54a2b23109c",
+    "reconciledMain": "83658d7b946cd34d915beeabc42a8ab13a050f2e",
+    "sourceDifferencesBeforeImport": "Eight documentation paths only; all application, test and generated inputs match the source commit.",
+    "nonDocumentationArtifactInputsMatched": 1697,
+    "repositoryOutputsImported": 170,
+    "meaningfulGeneratedChanges": [
+      "public/stadium-tycoon/index.html",
+      "public/wonderkid-factory/index.html",
+      "scripts/data/lastmod.json"
+    ],
+    "distImported": false,
+    "workflowImported": false
+  },
+  "downloadedArtifactBrowserCheck": {
+    "helperSha256": "4232a4b0d0c7c5b931182459e687c5485f6763df241ead5477ddfcece752dd36",
+    "summarySha256": "797284bd56c563553441dd9a5ecab08fdb58f341d32c4f0d2fb475ecf1d2f0b0",
+    "actualScriptsByteMatched": 41,
+    "savedBytes": 46741,
+    "savedSha256": "457b6481380c35f1db692c241ef13581b8f5f01d1609ba6d58e3c78018beca26",
+    "saveUnchangedAfterHomeAndPagehide": true,
+    "layoutStationary": true,
+    "backAndHomeWhileChunksHeld": true,
+    "effectiveControls": ["early", "navigation", "script"],
+    "ownedServerStopped": true
+  },
+  "published": false
+}
