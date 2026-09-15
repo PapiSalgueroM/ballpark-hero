@@ -24,6 +24,7 @@ const targets = {
   rep: '6 selling up expires',
   score: '3 a scored kick survives reload',
   minute: '5 the clock continues',
+  setup: '3 a scored kick survives reload',
 };
 assert(!CONTROL || CONTROL in targets, `Unknown SETPIECE_PAGE_CONTROL=${CONTROL}`);
 const replace = (source, before, after) => {
@@ -69,6 +70,14 @@ try {
     delete alias['@'];
     alias['@/hooks/useStadiumTycoon'] = hookPath;
     alias['@/pages/StadiumTycoon'] = pagePath;
+    if (CONTROL === 'setup') {
+      const board = fs.readFileSync(path.join(ROOT, 'src/components/tycoon/SetPieceBoard.tsx'), 'utf8');
+      const boardPath = path.join(TEMP, 'SetPieceBoard.tsx');
+      fs.writeFileSync(boardPath, replace(board,
+        'const kick = useMemo(() => buildRun(seed)[kickIndex], [seed, kickIndex]);',
+        'const kick = buildRun(seed)[kickIndex];'));
+      alias['@/components/tycoon/SetPieceBoard'] = boardPath;
+    }
     alias['@'] = path.join(ROOT, 'src');
     console.log(`CONTROL ${CONTROL}: one unique executable mutation applied outside src`);
   }

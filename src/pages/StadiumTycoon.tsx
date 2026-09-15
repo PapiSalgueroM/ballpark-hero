@@ -52,10 +52,9 @@ import type { TapFx } from '@/components/tycoon/TycoonPitch';
 import type { AcademyStatus, Room } from '@/lib/tycoonRooms';
 import { deserialize as deserializeAcademy, applyOffline as applyAcademyOffline, SAVE_KEY as ACADEMY_SAVE_KEY, squadEdge } from '@/lib/wonderkidFactory';
 import type { FactoryState } from '@/lib/wonderkidFactory';
-import { buildRun as buildKicks } from '@/lib/freeKick';
 
 const AcademyPanel = lazy(() => import('@/components/tycoon/AcademyPanel'));
-const SetPieceBoard = lazy(() => import('@/components/tycoon/SetPieceBoard'));
+const SetPieceBoard = lazy(() => import('@/components/tycoon/SetPieceBoard').then(module => ({ default: module.WatchedSetPieceBoard })));
 
 /* ---------- tiny animation helpers ---------- */
 
@@ -314,8 +313,6 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
    timers until you are looking again. Its hooks keep running either way. */
 function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadiumTycoon>; visible: boolean; onNeedsYou: (v: boolean) => void }) {
   const s = g.state;
-  const kick = useMemo(() => g.activeSetPiece
-    ? buildKicks(g.activeSetPiece.seed)[g.activeSetPiece.kickIndex] : null, [g.activeSetPiece]);
   const kickClosed = !g.activeSetPiece || s.rep !== g.activeSetPiece.rep || (s.totalMatches ?? 0) !== g.activeSetPiece.match || s.minute >= 90;
   /* Round 585: the gems this club's results have earned. */
   const gems = balance(useTycoonRewards());
@@ -834,8 +831,8 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           <DialogDescription data-set-piece-match className="text-xs tabular-nums text-muted-foreground">
             {kickClosed ? 'Kick closed' : `Match ${s.minute}' · ${s.goalsFor} - ${s.goalsAgainst}`}
           </DialogDescription>
-          {g.activeSetPiece && kick && <Suspense fallback={<p className="text-sm">Getting the kick ready...</p>}>
-            <SetPieceBoard key={`${g.activeSetPiece.rep}:${g.activeSetPiece.match}`} kick={kick} seed={g.activeSetPiece.seed}
+          {g.activeSetPiece && <Suspense fallback={<p className="text-sm">Getting the kick ready...</p>}>
+            <SetPieceBoard key={`${g.activeSetPiece.rep}:${g.activeSetPiece.match}`} kickIndex={g.activeSetPiece.kickIndex} seed={g.activeSetPiece.seed}
               expired={kickClosed}
               onResult={scored => g.doSetPieceResult(g.activeSetPiece!, scored)} onBack={g.closeSetPiece} />
           </Suspense>}

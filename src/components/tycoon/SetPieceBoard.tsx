@@ -1,7 +1,13 @@
-import { useId, useRef, useState } from 'react';
+import { useId, useMemo, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { lehmer, takeShot, type Aim, type KickSetup, type ShotResult } from '@/lib/freeKick';
+import { buildRun, lehmer, takeShot, type Aim, type KickSetup, type ShotResult } from '@/lib/freeKick';
 import { SetPieceScene } from '@/components/tycoon/SetPieceScene';
+
+/** Build the offered setup only after this lazy module opens. */
+export function WatchedSetPieceBoard({ kickIndex, seed, ...props }: Omit<Parameters<typeof SetPieceBoard>[0], 'kick'> & { kickIndex: number }) {
+  const kick = useMemo(() => buildRun(seed)[kickIndex], [seed, kickIndex]);
+  return <SetPieceBoard {...props} kick={kick} seed={seed} />;
+}
 
 /** One shot. The parent owns the live match, deadline and goal commit. */
 export default function SetPieceBoard({ kick, seed, onResult, onBack, expired = false }: {

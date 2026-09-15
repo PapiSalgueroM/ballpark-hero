@@ -253,7 +253,7 @@ try {
     const args = [path.join(ROOT, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/tycoonSetPieceBoard.test.tsx', '--reporter=verbose', '--reporter=json', `--outputFile.json=${path.join(TEMP, 'board-report.json')}`];
     if (CONTROL === 'daily') {
       let source = fs.readFileSync(board, 'utf8');
-      source = replaceOnce(source, "import { useId, useRef, useState } from 'react';", "import { useId, useRef, useState } from 'react';\nimport { writeArcadeRun } from '@/lib/arcadeRecord';");
+      source = replaceOnce(source, "import { useId, useMemo, useRef, useState } from 'react';", "import { useId, useMemo, useRef, useState } from 'react';\nimport { writeArcadeRun } from '@/lib/arcadeRecord';");
       source = replaceOnce(source, 'const shot = takeShot(aim, kick, lehmer(seed));', "const shot = takeShot(aim, kick, lehmer(seed));\n    writeArcadeRun('free-kick', 'control', 'goals', { score: shot.points, count: Number(shot.scored) });");
       board = path.join(TEMP, 'SetPieceBoard.tsx');
       fs.writeFileSync(board, source);

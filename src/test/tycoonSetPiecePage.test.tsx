@@ -114,6 +114,10 @@ describe('set pieces on the real Stadium Tycoon page', () => {
     expect(after.lifetime).toBe(before.lifetime + goalBonus(before));
     expect(after.setPieceUsedMatch).toBe(offer.match);
     expect(document.querySelector('[data-set-piece-match]')).toHaveTextContent(`Match ${after.minute}' · ${after.goalsFor} - ${after.goalsAgainst}`);
+    expect(document.querySelector('.set-piece-scene')).toHaveAttribute('data-motion', 'playing');
+    step(4000);
+    expect(document.querySelector('.set-piece-scene')).toHaveAttribute('data-motion', 'static');
+    expect(saved().goalsFor).toBe(after.goalsFor);
     page.unmount();
     mountPage(<StadiumTycoon />, '/stadium-tycoon');
     await settle();

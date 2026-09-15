@@ -31,6 +31,14 @@ no overflow or runtime error, and exact restoration of nonzero scroll positions
 its clock fails the intended checks. Full release gates and publication are
 still owed.
 
+The offered kick setup now loads inside the lazy Board module. This removes
+the eager Free Kick and arcade dependencies from the page's initial import
+graph (1,398 gzipped bytes in the prior build). The setup stays memoized so
+clock updates cannot restart the replay. All nine focused Board/page tests
+pass; a twelfth page control removes that memo and detects a replay that keeps
+restarting. The daily-record write control remains effective. Final rebuilt
+download size and actual-page fit will be checked again in release CI.
+
 AdSense remains Review requested after the September 15 04:19 EDT submission,
 confirmed again in the fully loaded console at 12:37 EDT.
 No second request is made, no indexable route is retired, and no ad slot is
