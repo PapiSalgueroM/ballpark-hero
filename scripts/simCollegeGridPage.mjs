@@ -33,6 +33,10 @@
         board id, every addDailyGuess call passes it, and a restored log with
         a different id is compared, cleared with reset(), held off the screen
         while it clears, and cannot be played on.
+     6. RETURNING PLAYERS SEE THE REWRITTEN RULES ONCE. The page marks its
+        rules dialog seen under RULES_SEEN_KEY, which is not 'cg-rules-seen'
+        (the flag players already hold from the pre-611 rules), and reads
+        and writes it inside a try.
 
    NEGATIVE CONTROLS. Every one runs on EVERY invocation, in memory, and each
    refuses to run unless its target text appears exactly once:
@@ -42,6 +46,7 @@
      copy           plants "SEC Conference" into the guide intro                     section 4
      undealt        plants a criterion no board deals into the guide intro           section 4
      noboardid      removes the board id comparison from the hook                    section 5
+     oldseenkey     sets the rules flag back to 'cg-rules-seen'                      section 6
    SIM_CGPAGE_CONTROL=<name> runs just that control and exits 0 only if it fired.
 
    Run: node scripts/simCollegeGridPage.mjs
@@ -60,7 +65,7 @@ const DIALOG = 'src/components/college-grid/CollegeGridHowToPlay.tsx';
 const SEARCH = 'src/components/college-grid/CollegeGridSearch.tsx';
 const GUIDE = 'src/data/gameContent/college.ts';
 
-const CONTROLS = { invoke: 1, chargeunknown: 2, typedlist: 3, copy: 4, undealt: 4, noboardid: 5 };
+const CONTROLS = { invoke: 1, chargeunknown: 2, typedlist: 3, copy: 4, undealt: 4, noboardid: 5, oldseenkey: 6 };
 const ONLY = process.env.SIM_CGPAGE_CONTROL || '';
 if (ONLY && !CONTROLS[ONLY]) {
   console.error(`SIM_CGPAGE_CONTROL=${ONLY} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -287,6 +292,21 @@ function sectionFour(texts) {
   return { out, judged, parsed: claims.length, named: new Set(named).size };
 }
 
+/* Players who saw the pre-611 dialog ("Retry costs a guess", "Players from
+   2000 to 2026") hold cg-rules-seen=1, so the rewritten rules need a new flag. */
+const OLD_RULES_SEEN_KEY = 'cg-rules-seen';
+
+function sectionSix(page) {
+  const out = [];
+  const m = page.match(/const RULES_SEEN_KEY = '([^']+)';/);
+  if (!m) return ['the page has no RULES_SEEN_KEY constant for its rules dialog'];
+  if (m[1] === OLD_RULES_SEEN_KEY) out.push(`the rules dialog is marked seen under '${OLD_RULES_SEEN_KEY}', the flag players set on the pre-611 rules, so returning players never see the new ones`);
+  if (page.split(`'${OLD_RULES_SEEN_KEY}'`).length > 1) out.push(`the page still reads or writes '${OLD_RULES_SEEN_KEY}'`);
+  const effect = page.match(/useEffect\(\(\) => \{\s*try \{[\s\S]*?localStorage\.getItem\(RULES_SEEN_KEY\)[\s\S]*?localStorage\.setItem\(RULES_SEEN_KEY, '1'\)[\s\S]*?\} catch/);
+  if (!effect) out.push('the rules flag is not read and written inside a try, so blocked storage throws on load');
+  return out;
+}
+
 function sectionFive(hook) {
   const out = [];
   if (!/\{ t: 'ok';[^}]*\bboard: string[^}]*\}/.test(hook)) out.push("the ok action shape does not carry board: string");
@@ -318,6 +338,7 @@ if (!ONLY) {
   const four = sectionFour(source);
   report(4, 'The copy only asks what the pool offers', four.out, `${four.parsed} example claims parsed from the page and ${PROSE_CLAIMS.length} prose claims, ${four.judged} judged against the ${judge.size} row key; ${PROSE_FACTS.length} stated facts read; ${four.named} criteria named in the copy, each checked against the labels the ${judge.boards} boards deal`);
   report(5, 'A save from another board is not shown', sectionFive(source.hook), 'action shapes, guesses and the stale log read');
+  report(6, 'Returning players see the rewritten rules once', sectionSix(source.page), `the rules flag is not '${OLD_RULES_SEEN_KEY}' and storage is read inside a try`);
 }
 
 const fired = [];
@@ -358,6 +379,11 @@ if (want('undealt')) {
   const before = hits(source).length;
   const after = hits({ ...source, guide });
   grade('undealt', after.length > before ? after : []);
+}
+if (want('oldseenkey')) {
+  console.log(`\noldseenkey) the rules flag set back to '${OLD_RULES_SEEN_KEY}'`);
+  const page = mustReplace(source.page, "const RULES_SEEN_KEY = 'cg-rules-seen-611';", `const RULES_SEEN_KEY = '${OLD_RULES_SEEN_KEY}';`, PAGE);
+  grade('oldseenkey', sectionSix(page));
 }
 if (want('noboardid')) {
   console.log('\nnoboardid) the board id comparison removed from the hook');

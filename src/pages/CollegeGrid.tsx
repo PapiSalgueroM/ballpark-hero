@@ -14,6 +14,8 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { HelpCircle, Trophy } from 'lucide-react';
 
+const RULES_SEEN_KEY = 'cg-rules-seen-611';
+
 const CollegeGrid = () => {
   const {
     puzzle,
@@ -32,11 +34,16 @@ const CollegeGrid = () => {
 
   const [showRules, setShowRules] = useState(false);
 
+  /* Round 611 rewrote the rules (the columns and what costs a guess), so the
+     seen flag is new and every player gets the new rules once. */
   useEffect(() => {
-    const seen = localStorage.getItem('cg-rules-seen');
-    if (!seen) {
+    try {
+      if (!localStorage.getItem(RULES_SEEN_KEY)) {
+        setShowRules(true);
+        localStorage.setItem(RULES_SEEN_KEY, '1');
+      }
+    } catch {
       setShowRules(true);
-      localStorage.setItem('cg-rules-seen', '1');
     }
   }, []);
 
