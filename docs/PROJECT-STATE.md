@@ -1,5 +1,41 @@
 # Project state
 
+## IN DEVELOPMENT 2026-09-15: Round 587, playable watched-match kicks
+
+Worktree `.worktrees/round-587-set-pieces`, branch `codex/round-587-set-pieces`.
+This follows Round 586's separate publication. It is not published or fully
+verified yet. Rounds 603 to 605 remain a separate animation release.
+
+A watched stadium match offers a penalty or free kick for 12 seconds. Players
+aim, set power and curve, and take one shot using the existing Free Kick
+engine. The kick window shows the live minute and score while the match keeps
+running. An original animated scene shows the committed result, including
+keeper contact, wall blocks, post hits and misses. Reduced motion and a direct
+result button remain available.
+
+Opening and scoring save before changing the live state. Closing or reloading
+cannot reopen an attempt. A failed goal save permits retrying that same shot,
+and stale matches cannot receive the goal. A score pays the existing goal
+bonus, with no direct gems or daily-game writes. Pure-engine balance, ignored
+offer parity and effective controls are recorded in section 19 of
+`docs/design/round-580-tycoon-merge.md`. All six real-page cases and eleven
+effective page controls pass, alongside the three Board cases. Scene checks
+cover 36 rendered cases and eight effective controls for boot, glove, wall,
+net, anatomy and reduced-motion behavior. A final independent hook/page/Board
+review found no additional score or deadline callback. The app type gate and
+scoped SEO production build pass. All six actual built-page cases pass at
+320, 390 and 1440 pixels with normal and reduced motion: 42 reachable targets
+of at least 44 pixels, a visible advancing clock, one durable goal per case,
+no overflow or runtime error, and exact restoration of nonzero scroll positions
+(409, 373 and 417 pixels). Deliberately widening the served dialog or hiding
+its clock fails the intended checks. Full release gates and publication are
+still owed.
+
+AdSense remains Review requested after the September 15 04:19 EDT submission,
+confirmed again in the fully loaded console at 12:37 EDT.
+No second request is made, no indexable route is retired, and no ad slot is
+added by this round. Approval remains pending with Google.
+
 ## IN VERIFICATION 2026-09-15: Round 586, academy first team
 
 Built in `.worktrees/round-586-first-team`, branch `codex/round-586-first-team`.

@@ -760,6 +760,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Win your league to climb the divisions. Each division is a small league of named rival clubs with a table on the League tab, and only the champion goes up. Every division multiplies all income up to five and a half times, each promotion pays a bonus on the spot, and higher divisions send tougher opponents.",
       "Hire from the payroll: eight staff from a Turnstile Steward to a Club Legend Ambassador, each level adding steady income of its own before the multipliers touch it.",
       "Catch the golden whistle when it drifts onto the pitch. You get about twelve seconds, and it carries one of five prizes, from seven times the income to fifteen minutes of income in one lump.",
+      "Open a penalty or free-kick offer during a watched match. You have twelve seconds to open it, then choose your aim, power and curve while the match clock keeps running. Opening uses that match's one attempt, even if you leave or reload.",
       "When lifetime earnings fill the yellow bar, sell up and move grounds: the club resets, but Reputation stars (plus 50 percent income each, forever), your badges and your club records all survive.",
       "Open the Academy tab to run your youth academy beside the stadium.",
       "Promote academy players aged 18 to 23 into five first-team places. A graduate frees his bed, keeps developing and helps reduce the opposition's scoring chances. Open First team in the Academy to compare his current fee with the fee at his next birthday.",
@@ -776,6 +777,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Matchdays keep playing while you are away, one for every half hour of the trip and inside the same cap. They pay no goal or win bonuses, and the final matchday of a season always waits for you, so every title is won with you watching.",
       "Gems are earned only by results: three for a watched win, one for a watched draw, one for a win played while you were away, twenty for a league title and six for second place. They open packs of generated kids in the Academy tab, every pack prints its odds before you open it, and gems can never be bought.",
       "Your first team helps in watched and away matches. Each rating point above 60 adds to its defensive edge. With five players rated 80, opponents get twenty percent fewer chances before the minimum chance is applied. This changes the odds, not a match's guaranteed result.",
+      "A scored set piece before full time adds one goal and the usual goal bonus. A miss, save or block costs nothing. A saved shot result cannot pay twice, and a kick left open past full time cannot change the next match. Away matches have no kick offers; these kicks have no daily record or direct gem reward.",
       "First-team players train at half the academy rate through age 27. Their years take fifteen watched academy minutes, compared with five minutes for academy kids. They hold their rating at 28 and 29, lose 1.2 rating at each birthday from 30, and retire at 34 without a fee. Away time trains them without ageing them.",
       "Progress saves on this device automatically. Selling up resets the ground while Reputation, badges, club records and lifetime totals survive. Your academy save, including its first team, stays with you.",
     ],
@@ -783,6 +785,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "You open the game to 90 fans paying five cents each, $4.50 a second. The first Stands level costs 30 and adds 40 seats nobody fills yet, so you buy the Ticket Office instead and watch the rate tick up.",
       "Once Floodlights pull your fanbase past your seats, the ground is full and Stands become the best purchase on the board. With 280 in the ground a goal pays a 168 dollar bonus before any streak, and the league's fifth matchday comes about ten minutes in: top the table then and the Muddy Meadows title lifts you into the Gravel Lane League, with a promotion bonus and a bigger multiplier on every dollar after it.",
       "Around a quarter of an hour in, lifetime earnings crest four million and the yellow bar glows. You sell up, keep a star, and the ninety-fan fence starts again at one and a half times the speed.",
+      "You are drawing 1-1 when a penalty offer appears. Open it and aim inside the right post with medium power. If it beats the keeper before full time, your club leads 2-1 and gets its normal goal bonus. If the keeper saves it, the score stays 1-1. The match carries on either way.",
     ],
     tips: [
       "Balance seats against spend. A full ground with a poor Snack Bar wastes fans; a rich concourse with empty seats wastes upgrades.",

@@ -510,6 +510,10 @@ export interface TycoonState {
   goldenCaught?: number;
   boostsUsed?: number;
   totalMatches?: number;
+  /** Round 587: opening consumes this career match's one set-piece attempt. */
+  setPieceAttemptedMatch?: number;
+  /** Round 587: the career match whose set-piece goal was paid. */
+  setPieceUsedMatch?: number;
   /** Round 196: unspent legacy points. Earned at every sale, spent in the
    *  boardroom, forever like the badges. */
   legacyPoints?: number;
@@ -1063,6 +1067,66 @@ export function goalBonus(s: TycoonState): number {
   return Math.round(attendance(s) * 0.6 * repMult(s) * streakMult(s));
 }
 
+/** Round 587: the offer counts watched match seconds, just like the clock. */
+export const SET_PIECE_WINDOW_SEC = 12;
+
+export interface SetPieceOffer {
+  match: number;
+  rep: number;
+  minute: number;
+  kind: 'penalty' | 'free-kick';
+  kickIndex: number;
+  seed: number;
+  remainingSec: number;
+}
+
+function setPieceDetails(s: TycoonState): SetPieceOffer | null {
+  const match = s.totalMatches ?? 0;
+  if (!Number.isSafeInteger(match) || match < 0 || match >= Number.MAX_SAFE_INTEGER || !Number.isInteger(s.rep) || s.rep < 0) return null;
+  const minute = 20 + hash32(match) % 61;
+  const penalty = match % 3 === 0;
+  return {
+    match, rep: s.rep, minute,
+    kind: penalty ? 'penalty' : 'free-kick',
+    kickIndex: penalty ? 0 : 2 + hash32(match, 587) % 5,
+    seed: hash32(match, 587, 1),
+    remainingSec: SET_PIECE_WINDOW_SEC - ((s.minute - minute) * MATCH_MINUTE_SEC + (s.matchSec ?? 0)),
+  };
+}
+
+/** Only watched play exposes an offer. Reading it changes no state or rolls. */
+export function setPieceOffer(s: TycoonState, watched: boolean): SetPieceOffer | null {
+  if (!watched) return null;
+  const offer = setPieceDetails(s);
+  if (!offer || s.setPieceAttemptedMatch === offer.match || s.setPieceUsedMatch === offer.match || s.minute >= 90) return null;
+  return offer.remainingSec > 0 && offer.remainingSec <= SET_PIECE_WINDOW_SEC ? offer : null;
+}
+
+function sameSetPiece(a: SetPieceOffer, b: SetPieceOffer): boolean {
+  return a.match === b.match && a.rep === b.rep && a.minute === b.minute && a.kind === b.kind && a.kickIndex === b.kickIndex && a.seed === b.seed;
+}
+
+/** The hook persists this new state before opening the board. Misses and closing
+ *  need no second write: the attempt has already been consumed. */
+export function beginSetPiece(s: TycoonState, offer: SetPieceOffer): TycoonState {
+  const current = setPieceOffer(s, true);
+  if (!current || !sameSetPiece(current, offer)) return s;
+  return { ...s, setPieceAttemptedMatch: current.match };
+}
+
+/** A committed shot can finish after the offer closes, but never after full time
+ *  or selling up. The hook publishes this result only after its save succeeds. */
+export function awardSetPieceGoal(s: TycoonState, offer: SetPieceOffer): { state: TycoonState; event: TickEvent } | null {
+  const current = setPieceDetails(s);
+  if (!current || !sameSetPiece(current, offer) || s.minute < current.minute || s.minute >= 90 || s.setPieceAttemptedMatch !== current.match) return null;
+  if (s.setPieceUsedMatch === current.match) return null;
+  const amount = goalBonus(s);
+  return {
+    state: { ...s, money: s.money + amount, lifetime: s.lifetime + amount, goalsFor: s.goalsFor + 1, totalGoals: s.totalGoals + 1, setPieceUsedMatch: current.match },
+    event: { kind: 'goal', amount, minute: s.minute },
+  };
+}
+
 /** Bonus for winning a match, on top of the streak continuing. */
 export function winBonus(s: TycoonState): number {
   return Math.round(attendance(s) * 2.2 * repMult(s));
@@ -1353,6 +1417,8 @@ export function prestige(s: TycoonState, now: number): TycoonState {
     goldenCaught: s.goldenCaught ?? 0,
     boostsUsed: s.boostsUsed ?? 0,
     totalMatches: s.totalMatches ?? 0,
+    ...(s.setPieceAttemptedMatch !== undefined ? { setPieceAttemptedMatch: s.setPieceAttemptedMatch } : {}),
+    ...(s.setPieceUsedMatch !== undefined ? { setPieceUsedMatch: s.setPieceUsedMatch } : {}),
     /* Round 196: the sale pays its legacy, read off the ground BEFORE the
        reset, and the boardroom is forever like the badges. The Rolling
        Investment perk seeds the new till. */
@@ -1518,6 +1584,14 @@ export function deserializeTycoon(raw: string | null, now: number): TycoonState 
     for (const k of ['groundWins', 'bestDivision', 'goldenCaught', 'boostsUsed', 'totalMatches'] as const) {
       if (!Number.isFinite(s[k]) || (s[k] as number) < 0) s[k] = 0;
     }
+    // Round 587: absence keeps old saves unchanged. A malformed latch consumes
+    // the current attempt instead of silently reopening it after a reload.
+    for (const key of ['setPieceAttemptedMatch', 'setPieceUsedMatch'] as const) {
+      const value = p[key];
+      if (value === undefined) delete s[key];
+      else s[key] = Number.isSafeInteger(value) && value >= 0 && value <= (s.totalMatches ?? 0) ? value : (s.totalMatches ?? 0);
+    }
+    if (s.setPieceUsedMatch !== undefined && (s.setPieceAttemptedMatch === undefined || s.setPieceAttemptedMatch < s.setPieceUsedMatch)) s.setPieceAttemptedMatch = s.setPieceUsedMatch;
     s.bestDivision = Math.min(s.bestDivision ?? 0, DIVISIONS.length - 1);
     if (!Number.isFinite(s.goldenLeftSec) || (s.goldenLeftSec ?? 0) < 0) s.goldenLeftSec = 0;
     /* Round 196: the honest ceiling is a frenzy at full Gold Polish. */

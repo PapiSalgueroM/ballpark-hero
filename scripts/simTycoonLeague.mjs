@@ -408,7 +408,7 @@ function sectionLoader(T) {
 
 const FLAT_REWRITES = [
   ["  const sq = levelOf(s, 'squad');\n  return Math.min(0.16, 0.028 + sq * 0.0016);", '  return Math.min(0.16, 0.028);'],
-  ['  return Math.max(0.008, Math.min(0.14, opp - sq * 0.0008));', '  return Math.max(0.008, Math.min(0.14, opp));'],
+  ['  const base = Math.max(0.008, Math.min(0.14, opp - sq * 0.0008));', '  const base = Math.max(0.008, Math.min(0.14, opp));'],
 ];
 const CONTROLS = [
   { name: 'threshold', why: 'a club that did not win the league goes up when its home win count would have promoted it', section: 1,

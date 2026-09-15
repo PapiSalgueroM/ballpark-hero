@@ -1336,3 +1336,54 @@ Evidence: `scripts/simAllPlayersValue.mjs`, its frozen fixture and baseline JSON
 `src/test/firstTeam.test.tsx`, `scripts/simFirstTeamPage.mjs` and the extended
 `scripts/simTycoonHelp.mjs`. The release entry in PROJECT-STATE records final
 build, full-suite, browser and publication evidence when those gates finish.
+
+## 19. Round 587 implementation evidence, 2026-09-15
+
+This round is in development and follows Round 586's separate release. The
+figures here describe the checked pure engine; rendered-page and release gates
+are recorded separately when complete.
+
+- A watched match offers one kick for 12 real seconds. The deterministic minute
+  is between 20 and 80. Every third career match offers a penalty; other matches
+  choose one of the existing Free Kick setups at indices 2 through 6. This uses
+  the existing shot engine, with no new random draw in the stadium minute loop.
+- Opening saves the attempt before the board appears. Closing or reloading
+  consumes that attempt. A goal can be accepted later than the opening window,
+  provided the same match and reputation are still active and full time has not
+  arrived. The clock keeps running during aiming and replay.
+- A scored shot adds one goal and the existing normal goal bonus. It has no
+  direct gems, daily score, arcade record or separate completion write. The
+  normal full-time result may improve because the match score improved.
+- The engine rejected 40,000 duplicate awards across 10,000 measured matches.
+  Twelve frozen pre-round watched and away histories remain byte identical
+  when the offer is ignored. Away matches never receive an offer.
+- The balance check measures a perfect-kicker ceiling at fixed division 3,
+  squad 40 and match strength 70, with identical minute-roll streams in the
+  paired arms. It is not a prediction of ordinary players' scoring rates.
+  Calibration batches of 2,000 matches gained 12.25 and 11.00 percentage points
+  of wins. An independent 2,000-match holdout gained 10.65 points (967 baseline
+  wins versus 1,180 with every offered kick scored). Its acceptance band was
+  fixed from calibration at 5.8125 to 17.4375 points, before the holdout.
+- The no-gain control produced 967 versus 967 wins and failed that measured
+  band. Ten other effective controls cover duplicate goals, reopened attempts,
+  away offers, the window, bonus size, lost latches, malformed loads, ignored
+  offers, added randomness and daily-score writes. The daily-score control
+  fails both the actual module graph and a runtime write spy.
+- Optional attempt and goal latches stay absent from untouched saves. Malformed
+  or future latches consume the current attempt rather than reopening it.
+  Both reset paths preserve the latches, and reputation is part of the active
+  board's identity, so a board cannot score after selling up.
+
+Pure-engine evidence: `scripts/simTycoonSetPiece.mjs`. Real Board and page
+coverage: `src/test/tycoonSetPieceBoard.test.tsx`,
+`src/test/tycoonSetPiecePage.test.tsx` and `scripts/simTycoonSetPiecePage.mjs`.
+Presentation evidence: `scripts/simSetPiecePresentation.mjs`. Six real-page
+cases, eleven effective page controls, three Board cases, 36 rendered scene
+cases and eight effective scene controls pass. A final independent combined
+review found no scoring callback in replay, Skip or Back. The app type gate
+and scoped SEO production build pass. `scripts/playTycoonSetPieceFit.mjs`
+passes six actual built-page cases at 320, 390 and 1440 pixels with both motion
+preferences. It verifies 42 reachable controls, an advancing visible clock,
+six real legal goals saved once and reloaded, and exact nonzero scroll restore.
+Both served-chunk layout and clock controls fail their intended checks. Full
+release verification and publication remain separate gates.
