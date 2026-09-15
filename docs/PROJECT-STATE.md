@@ -1,5 +1,71 @@
 # Project state
 
+## PRIORITY CORRECTION 2026-09-15: published NFL format guide
+
+An independent public content audit found the guide incorrectly treats 1933
+through 1969 as one title-game format. The Chicago Bears' official history
+and Pro Football Hall of Fame results confirm four NFL playoff teams and
+conference championship games in 1967 to 1969. Related early tiebreaker, 1982
+and 1990 wording is being checked against primary sources. Codex is preparing
+a factual correction on `codex/nfl-guide-format-correction` from current main.
+This has priority over the feature releases because accurate, useful content
+is central to the pending AdSense review. Nothing in this finding proves
+which pages Google used in its earlier rejection.
+
+## NEXT IN PREPARATION 2026-09-15: Round 588, title-earned boots
+
+Codex is preparing the next slice of the existing tycoon design while the
+earlier release checks run remotely. It is isolated from their frozen source
+branches and will publish separately after 587. The scope is fixed title
+rewards, fictional boots, first-team equipment and measured fee/save guards.
+It is implemented in the isolated worktree and not published. Types, focused
+gear engine and hook checks, and component previews pass. The final freeze is
+waiting on diagnosis of an existing first-team test that cannot find the Move
+up button after lazy loading. Complete production release gates are still owed.
+
+The fresh public HTTP audit at 13:22 to 13:23 EDT passed all 148 sitemap URLs,
+with zero findings. This checks document access and missing-content signals,
+not indexing or approval. See [the audit record](adsense/live-document-audit-2026-09-15.md).
+
+## IN VERIFICATION 2026-09-15 13:22 EDT: first team, action scenes and watched kicks
+
+The management download repair is committed at `f66bab76`. Club Manager's
+later screens, the Academy's later panels and three management guides load
+when needed. Guide prose, game outcomes and the existing size budgets remain
+intact. Fresh full verification is running on GitHub to avoid competing with
+the other lane's local simulations. No new source below is published yet.
+
+- Round 586 source `24e17ff6`, verification `6c0165d7`,
+  [run 34999864639](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999864639).
+- Combined Rounds 603 to 605 source `4a99788f`, verification `4ebbb1df`,
+  [run 34999930238](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999930238).
+- Round 587 source `9a2f6da1`, verification `418bdf77`,
+  [run 35001991548](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35001991548).
+  This final source includes 603 to 605 and measured guide claims. The earlier
+  run `35000569315` was cancelled and is superseded.
+
+All three runs have passed app types and rebuilt snapshots and are in the
+full node suite. Full suites, browser download
+budgets, effective failure controls and artifact checks remain required.
+Round 586 also needs slow-chunk navigation checked against its final artifact.
+Publish 586 separately first, then the action scenes, then 587. Verification
+workflows stay off main. Claude's `release-611-612-616` is not part of these
+release sources. AdSense remains pending as confirmed at 12:37 EDT below.
+
+## RELEASE CHECK UPDATE 2026-09-15 12:43 EDT
+
+The new Round 586 release sweep found three initial JavaScript downloads above
+their existing phone budgets: Club Manager 708K/620K, Stadium Tycoon 312K/290K
+and Wonderkid Factory 297K/270K. Codex is repairing eager presentation and guide
+imports before publication, preserving the budgets and content. The type gate,
+SEO build, 279 Vitest tests, repaired league harness and other browser checks
+passed. A fresh full suite will cover the changed loading code. No Round 586,
+587 or 603 to 605 action source is confirmed published yet.
+
+AdSense was checked directly at 12:37 EDT. The fully loaded site detail panel
+still shows Getting ready and Review requested. The review submitted at 04:19
+EDT is pending, with no new rejection or approval shown and no new submission.
+
 ## LIVE 2026-09-15: Round 610, players who joined with Google can get back in, main `7b268106`
 
 **douknowball.com is serving it.** Deployment `bd4b549a-1e2c-416d-b9a0-ff041e50d911` at 08:28 UTC,
