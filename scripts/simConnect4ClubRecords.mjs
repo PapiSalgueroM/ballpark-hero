@@ -50,6 +50,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { stintPages, stintPageUrl } from './lib/stintPages.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FN = path.join(ROOT, 'supabase', 'functions', 'football-connect4-validate', 'index.ts');
@@ -114,25 +115,27 @@ for (const [label, strings] of CLUB_MAP) for (const s of strings) exactToLabel.s
 const allClubs = new Set();
 const byPlayer = new Map();
 let rows = 0;
-for (let from = 0; from < 200000; from += 1000) {
+for await (const page of stintPages(async afterId => {
   let page = null;
   for (let attempt = 0; attempt < 4 && page === null; attempt += 1) {
     try {
-      const r = await fetch(`${URL_}/rest/v1/soccer_player_club_stints?select=player_name,club&order=player_name.asc,club.asc`,
-        { headers: { ...HEAD, Range: `${from}-${from + 999}` } });
+      const r = await fetch(stintPageUrl(URL_, 'player_name,club', afterId),
+        { headers: HEAD });
       if (r.ok) page = await r.json();
       else if (attempt === 3) {
-        console.error(`could not read soccer_player_club_stints at offset ${from} (HTTP ${r.status}) after 4 attempts; refusing to run rather than report findings against an empty table`);
+        console.error(`could not read soccer_player_club_stints after id ${afterId} (HTTP ${r.status}) after 4 attempts; refusing to run rather than report findings against an empty table`);
         process.exit(1);
       }
     } catch (e) {
       if (attempt === 3) {
-        console.error(`could not read soccer_player_club_stints at offset ${from} (${e.message}); refusing to run`);
+        console.error(`could not read soccer_player_club_stints after id ${afterId} (${e.message}); refusing to run`);
         process.exit(1);
       }
     }
     if (page === null) await new Promise(r => setTimeout(r, 900 * (attempt + 1)));
   }
+  return page;
+})) {
   rows += page.length;
   for (const row of page) {
     for (const raw of String(row.club ?? '').split(' / ')) {
@@ -145,7 +148,6 @@ for (let from = 0; from < 200000; from += 1000) {
       byPlayer.get(row.player_name).add(label);
     }
   }
-  if (page.length < 1000) break;
 }
 console.log(`   ${rows} stint rows read, ${allClubs.size} distinct club strings`);
 if (allClubs.size < 1000) {

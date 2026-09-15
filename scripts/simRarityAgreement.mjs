@@ -38,6 +38,7 @@ import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+import { rarityProminenceMemo } from './lib/rarityProminenceMemo.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
@@ -58,6 +59,8 @@ export { supabase } from '${ROOT_URL}/src/integrations/supabase/client.ts';
 `);
 execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
+const prominenceMemo = rarityProminenceMemo(globalThis.fetch);
+globalThis.fetch = prominenceMemo.fetch;
 const { CATEGORIES, searchPlayers, normalizeName, supabase } = await import(pathToFileURL(BUNDLE).href);
 
 const nothingChecked = () => abort('\nSUPABASE UNREACHABLE. NOTHING WAS CHECKED.');
@@ -197,6 +200,8 @@ console.log('3) player_peak_values carries the tags of the row the dropdown show
   if (mismatches > 3) fail(`${mismatches - 3} more tag mismatches`);
   console.log(`   ${wanted.size} offered players, ${compared} whose peak row the dropdown showed, ${mismatches} mismatches, ${namesakeTies} namesake ties`);
 }
+
+console.log(`   prominence requests: ${prominenceMemo.stats.live} live, ${prominenceMemo.stats.hits} reused within this invocation`);
 
 if (CONTROL) {
   const target = { peakonly: 1 }[CONTROL];

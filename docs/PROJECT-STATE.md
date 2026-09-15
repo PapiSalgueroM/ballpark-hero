@@ -1,5 +1,23 @@
 # Project state
 
+## LOCAL HARNESS REPAIR 2026-09-15: reduce repeated database reads
+
+Today's Supabase Disk I/O warning prompted a bounded read-only statistics and
+log audit. It found substantial repeated Node-style market-value and stint
+reads, without proving their share of the daily burst budget. No current
+budget percentage or host swap measurement was available. See the
+[audit and limitations](audits/supabase-disk-io-2026-09-15.md).
+
+An isolated harness-only patch changes the two complete stint readers to
+existing-primary-key pagination and memoizes only identical successful rarity
+prominence responses within one invocation. All direct searches, outcome
+assertions and the independent accent/order harness remain intact. Local
+fake-fetch checks pass four sections and 11 effective controls. Live database
+runs, a production performance claim and publication are still pending review;
+this does not change site code or database settings. The static model saves
+1,155 prominence requests in rarity section 1 while keeping all 1,188 direct
+queries. Changed traversal order can change eligible live sample identities.
+
 ## HOSTING AND DATABASE 2026-09-15 19:47 EDT
 
 Anthony confirms today's Supabase Disk IO warning and requests another host.
