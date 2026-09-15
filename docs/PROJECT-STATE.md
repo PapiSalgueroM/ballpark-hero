@@ -1,5 +1,17 @@
 # Project state
 
+## PRIORITY CORRECTION 2026-09-15: published NFL format guide
+
+An independent public content audit found the guide incorrectly treats 1933
+through 1969 as one title-game format. The Chicago Bears' official history
+and Pro Football Hall of Fame results confirm four NFL playoff teams and
+conference championship games in 1967 to 1969. Related early tiebreaker, 1982
+and 1990 wording is being checked against primary sources. Codex is preparing
+a factual correction on `codex/nfl-guide-format-correction` from current main.
+This has priority over the feature releases because accurate, useful content
+is central to the pending AdSense review. Nothing in this finding proves
+which pages Google used in its earlier rejection.
+
 ## NEXT IN PREPARATION 2026-09-15: Round 588, title-earned boots
 
 Codex is preparing the next slice of the existing tycoon design while the

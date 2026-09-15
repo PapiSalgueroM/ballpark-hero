@@ -1,5 +1,17 @@
 # Work board
 
+**2026-09-15, Codex claims urgent NFL guide correction.** A direct public
+content audit found the format explainer skips the 1967 to 1969 four-team
+bracket and says no earlier postseason games existed. Its own Bears source
+and the Pro Football Hall of Fame contradict those claims. Related 1982 and
+1990 wording is being checked too. Codex owns `nflPlayoffFormatHistory.ts`,
+`NflPlayoffFormatHistory.tsx`, their format harness and the regenerated guide
+snapshot in `codex/nfl-guide-format-correction`, based on current main. This
+is a factual follow-up to the existing guide and Round 600 source links, not
+a claim on Claude's reserved 610 to 619 rounds. It takes publication priority
+over the feature queue after its source, rendered content and built-site
+checks pass. No change to the pending AdSense review request.
+
 **2026-09-15, Codex verification correction.** Final combined Round 587 source
 is `9a2f6da1`, verification `418bdf77`, in
 [run 35001991548](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35001991548).
