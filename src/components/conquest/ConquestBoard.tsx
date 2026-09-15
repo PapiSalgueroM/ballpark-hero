@@ -6,6 +6,7 @@ import { TEAM_LEGENDS } from '@/data/conquestPowerups';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ShareButtons from '@/components/game/ShareButtons';
 import { HOME_FIELD_BUMP } from '@/lib/conquestBattle';
+import { getNflRosterPlayer } from '@/lib/conquestRosterNfl';
 
 function useSpinner(items: string[], isSpinning: boolean, finalValue: string): string {
   const [display, setDisplay] = useState(items[0] || '');
@@ -30,8 +31,6 @@ function useSpinner(items: string[], isSpinning: boolean, finalValue: string): s
 function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
   title: string; color: string; rosterNames: string[]; teamId: string; upgradedPlayer?: string | null;
 }) {
-  const team = TEAM_MAP.get(teamId);
-  const playerMap = new Map((team?.players || []).map(p => [p.name, p]));
   const legend = TEAM_LEGENDS[teamId];
 
   return (
@@ -51,7 +50,7 @@ function RosterTable({ title, color, rosterNames, teamId, upgradedPlayer }: {
           </thead>
           <tbody>
             {rosterNames.map(name => {
-              const p = playerMap.get(name);
+              const p = getNflRosterPlayer(name, teamId);
               const isLegend = legend && name === legend.name;
               const isUpgraded = name === upgradedPlayer;
               const ovr = isUpgraded ? 99 : (isLegend ? 99 : p?.overall);
@@ -660,8 +659,7 @@ export default function ConquestBoard() {
 
           <div className="space-y-2 mt-2 max-h-48 overflow-y-auto">
             {(game.rosters[game.battleResult?.loser || ''] || []).map(player => {
-              const loserTeamData = TEAM_MAP.get(game.battleResult?.loser || '');
-              const playerData = loserTeamData?.players?.find(p => p.name === player);
+              const playerData = getNflRosterPlayer(player, game.battleResult?.loser || '');
               return (
                 <button
                   key={player}
@@ -671,7 +669,7 @@ export default function ConquestBoard() {
                   <span className="font-medium">{player}</span>
                   {playerData && (
                     <span className="text-xs text-muted-foreground">
-                      {playerData.position} · {playerData.overall} OVR · {playerData.keyStat}
+                      {playerData.position} · {playerData.overall} OVR{playerData.keyStat && <> · {playerData.keyStat}</>}
                     </span>
                   )}
                 </button>
@@ -818,8 +816,7 @@ export default function ConquestBoard() {
           </p>
           <div className="space-y-1.5 max-h-72 overflow-y-auto">
             {(game.rosters[game.powerupTeam || ''] || []).map(player => {
-              const teamData = TEAM_MAP.get(game.powerupTeam || '');
-              const playerData = teamData?.players?.find(p => p.name === player);
+              const playerData = getNflRosterPlayer(player, game.powerupTeam || '');
               return (
                 <button
                   key={player}
