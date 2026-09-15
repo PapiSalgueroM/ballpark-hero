@@ -9,6 +9,7 @@
 // instead of passing/rushing/receiving yards) differ.
 
 import { useState, useEffect, useRef } from 'react';
+import ConquestActionScene from '@/components/conquest/ConquestActionScene';
 import { useConquestNba, PowerRankEntry } from '@/hooks/useConquestNba';
 import ConquestRegionMap, { useOwnerTakeover, type ConquestBattleView } from './ConquestRegionMap';
 import { NBA_TEAM_MAP, NBA_TEAMS, NBA_CONQUEST_MAP, ConquestFreeAgentCandidateNba, CONQUEST_FREE_AGENCY_POOL_NBA, TEAM_LEGENDS_NBA } from '@/data/conquestDataNba';
@@ -404,6 +405,8 @@ export default function ConquestBoardNba() {
             </div>
           </div>
 
+          <ConquestActionScene sport="nba" plays={game.visiblePlays} active={game.playByPlayActive}
+            attacker={game.attackingTeam || 'Attacker'} defender={game.defendingTeam || 'Defender'} />
           <div ref={playLogRef} className="rounded-xl border border-border p-3 bg-card max-h-52 overflow-y-auto">
             <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 text-center">
               {game.playByPlayActive ? '🔴 LIVE' : '📋 Plays'}

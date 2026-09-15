@@ -1,0 +1,6 @@
+.cm-pitch-player{display:block;width:24px;height:32px;overflow:visible;pointer-events:none}
+.cm-live-net{position:absolute;left:38%;right:38%;height:2.5%;border:1px solid #e1edf1b3;background-image:linear-gradient(#d8e9ed44 1px,transparent 1px),linear-gradient(90deg,#d8e9ed44 1px,transparent 1px);background-size:5px 5px;pointer-events:none}
+.cm-live-net--top{top:0;transform-origin:center top}
+.cm-live-net--bottom{bottom:0;transform-origin:center bottom}
+.cm-live-ball{position:absolute;width:7px;height:7px;border-radius:50%;background:radial-gradient(circle at 60% 35%,#fff 0 27%,#17394c 29% 42%,#f7efde 44%);box-shadow:0 2px 2px #06242b80;transform:translate(-50%,-50%);pointer-events:none;z-index:10}
+@media(prefers-reduced-motion:reduce){[data-cm-live-pitch] *,[data-cm-live-pitch] *::before,[data-cm-live-pitch] *::after{animation:none!important;transition:none!important}}

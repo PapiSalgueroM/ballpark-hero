@@ -4,7 +4,8 @@
 
 Worktree `.worktrees/round-587-set-pieces`, branch `codex/round-587-set-pieces`.
 This follows Round 586's separate publication. It is not published or fully
-verified yet. Rounds 603 to 605 remain a separate animation release.
+verified yet. Rounds 603 to 605 publish separately first and are included in
+this final source tree so the last verification checks the actual combined app.
 
 A watched stadium match offers a penalty or free kick for 12 seconds. Players
 aim, set power and curve, and take one shot using the existing Free Kick
@@ -43,6 +44,47 @@ AdSense remains Review requested after the September 15 04:19 EDT submission,
 confirmed again in the fully loaded console at 12:37 EDT.
 No second request is made, no indexable route is retired, and no ad slot is
 added by this round. Approval remains pending with Google.
+
+## IN VERIFICATION 2026-09-15: Rounds 603 to 605, match action animations
+
+The animation release is assembled in `.worktrees/animation-release-603-605`,
+branch `codex/animation-release-603-605`. It includes Round 586 as its base and
+must be published after 586's separate release. None of these new action
+renderers is confirmed live yet.
+
+Club Manager's live feed now drives original players striking, passing and
+making goalkeeper saves. Pausing, speed changes, tactics redraws and the final
+event before half time or full time preserve the committed result and clock.
+Soccer Career's wall shots, tackles and glove drills use visible player poses
+and actual ball contact. Wall blocks stop at the wall, weak shots fall short,
+and the existing 700ms scoring deadline stays unchanged. NFL and NBA Conquest
+use their already revealed plays for catches, runs, kicks, interceptions,
+shots, blocks and steals. The NBA engine adds only an action label to an
+existing branch, with no extra random draw or scoring change.
+
+Frozen source commits are `26094c9f` (603), `547aee9a` (604) and `be49e8ad`
+(605). The live sim has 17 passing runtime cases and nine effective controls.
+The drills retain their actual saved outcomes across motion preferences and
+the 700ms settlement boundary, with six shot outcomes checked in full motion,
+reduced motion and a preference change during flight. Conquest retains all
+256 frozen battle outcomes and random-draw counts. Geometry checks cover
+3,333 arm poses and 808 post-contact carry samples; 13 effective controls catch
+scoring, randomness, contact, motion, Skip and phone layout regressions.
+Root review fixed balls trailing behind their carriers after catches or steals.
+
+The full combined build, harness suite and generated-page verification remain
+owed until the release workflow finishes. Keep this distinct from the passing
+focused checks and preview videos. The older league guard's neutral-arm anchor
+repair from `cd4e7043` is included, so the combined suite exercises the current
+defensive formula correctly.
+
+AdSense remains Review requested following the September 15 04:19 EDT
+submission. A fresh signed-in console inspection at 12:37 EDT confirmed
+Getting ready and Review requested, with no new rejection or approval shown.
+The [bounded animation audit](adsense/animation-regression-2026-09-15.md)
+found no new placement or crawler-access blocker on the five checked pages.
+It does not establish approval. Do not submit a
+second review while this one is pending.
 
 ## IN VERIFICATION 2026-09-15: Round 586, academy first team
 
