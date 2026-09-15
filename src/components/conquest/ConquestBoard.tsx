@@ -6,6 +6,7 @@ import { TEAM_LEGENDS } from '@/data/conquestPowerups';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import ShareButtons from '@/components/game/ShareButtons';
 import { HOME_FIELD_BUMP } from '@/lib/conquestBattle';
+import ConquestActionScene from '@/components/conquest/ConquestActionScene';
 
 function useSpinner(items: string[], isSpinning: boolean, finalValue: string): string {
   const [display, setDisplay] = useState(items[0] || '');
@@ -445,6 +446,8 @@ export default function ConquestBoard() {
           </div>
 
           {/* Play-by-play log */}
+          <ConquestActionScene sport="nfl" plays={game.visiblePlays} active={game.playByPlayActive}
+            attacker={game.attackingTeam || 'Attacker'} defender={game.defendingTeam || 'Defender'} />
           <div ref={playLogRef} className="rounded-xl border border-border p-3 bg-card max-h-52 overflow-y-auto">
             <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2 text-center">
               {game.playByPlayActive ? '🔴 LIVE' : '📋 Plays'}
