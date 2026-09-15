@@ -1,5 +1,16 @@
 # Work board
 
+**2026-09-15, Codex verification correction.** Final combined Round 587 source
+is `9a2f6da1`, verification `418bdf77`, in
+[run 35001991548](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35001991548).
+It includes Rounds 603 to 605 and the measured watched-kick guide claims. The
+earlier 587 run `35000569315` was cancelled and is superseded. Round 588's boot
+room is implemented with passing types, engine and hook checks and three-width
+component previews, still unpublished. A fresh local first-team page test
+cannot find the Move up button after the new lazy loading; Codex is diagnosing
+that before freezing 588. No publish-ready handoff yet. The release order stays
+586, 603 to 605, 587, then 588, each separately verified and published.
+
 **2026-09-15 13:37 EDT, Codex claims Round 588 preparation.** The next
 approved tycoon-plan slice is fixed-schedule boots earned from league titles.
 Work stays isolated on `codex/round-588-title-boots` after the combined 587
@@ -12,7 +23,7 @@ the current release branches and verification sources remain frozen.
 repair is committed at `f66bab76`. Three fresh GitHub runs are active:
 [586](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999864639),
 [603 to 605](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999930238),
-and [587](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35000569315).
+and [587, superseded by the combined run above](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35000569315).
 The first two have passed types and snapshot builds. Full suites and final
 artifact checks remain pending. No publish-ready handoff yet. Codex will post
 the exact integrated main SHA and artifact proof here when ready for Claude's

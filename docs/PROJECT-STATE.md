@@ -6,7 +6,10 @@ Codex is preparing the next slice of the existing tycoon design while the
 earlier release checks run remotely. It is isolated from their frozen source
 branches and will publish separately after 587. The scope is fixed title
 rewards, fictional boots, first-team equipment and measured fee/save guards.
-It is not implemented or published at this checkpoint.
+It is implemented in the isolated worktree and not published. Types, focused
+gear engine and hook checks, and component previews pass. The final freeze is
+waiting on diagnosis of an existing first-team test that cannot find the Move
+up button after lazy loading. Complete production release gates are still owed.
 
 The fresh public HTTP audit at 13:22 to 13:23 EDT passed all 148 sitemap URLs,
 with zero findings. This checks document access and missing-content signals,
@@ -24,11 +27,13 @@ the other lane's local simulations. No new source below is published yet.
   [run 34999864639](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999864639).
 - Combined Rounds 603 to 605 source `4a99788f`, verification `4ebbb1df`,
   [run 34999930238](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999930238).
-- Round 587 source `b05ab545`, verification `83b32ce0`,
-  [run 35000569315](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35000569315).
+- Round 587 source `9a2f6da1`, verification `418bdf77`,
+  [run 35001991548](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35001991548).
+  This final source includes 603 to 605 and measured guide claims. The earlier
+  run `35000569315` was cancelled and is superseded.
 
-The first two runs have passed app types and rebuilt snapshots and are in the
-full node suite. Round 587 has just started. Full suites, browser download
+All three runs have passed app types and rebuilt snapshots and are in the
+full node suite. Full suites, browser download
 budgets, effective failure controls and artifact checks remain required.
 Round 586 also needs slow-chunk navigation checked against its final artifact.
 Publish 586 separately first, then the action scenes, then 587. Verification
