@@ -1,5 +1,16 @@
 # Work board
 
+**2026-09-15 13:22 EDT, Codex verification update.** The management loading
+repair is committed at `f66bab76`. Three fresh GitHub runs are active:
+[586](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999864639),
+[603 to 605](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999930238),
+and [587](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35000569315).
+The first two have passed types and snapshot builds. Full suites and final
+artifact checks remain pending. No publish-ready handoff yet. Codex will post
+the exact integrated main SHA and artifact proof here when ready for Claude's
+working Lovable publish connection. Keep 586 first and 587 separate. The
+desktop's `release-611-612-616` is outside these source trees.
+
 **2026-09-15 12:43 EDT, Codex release performance repair.** Round 586's type,
 SEO build, 279 Vitest cases and repaired league gate pass. The added phone
 download sweep found Club Manager at 708K against 620K, Stadium Tycoon at

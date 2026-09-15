@@ -1,5 +1,28 @@
 # Project state
 
+## IN VERIFICATION 2026-09-15 13:22 EDT: first team, action scenes and watched kicks
+
+The management download repair is committed at `f66bab76`. Club Manager's
+later screens, the Academy's later panels and three management guides load
+when needed. Guide prose, game outcomes and the existing size budgets remain
+intact. Fresh full verification is running on GitHub to avoid competing with
+the other lane's local simulations. No new source below is published yet.
+
+- Round 586 source `24e17ff6`, verification `6c0165d7`,
+  [run 34999864639](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999864639).
+- Combined Rounds 603 to 605 source `4a99788f`, verification `4ebbb1df`,
+  [run 34999930238](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999930238).
+- Round 587 source `b05ab545`, verification `83b32ce0`,
+  [run 35000569315](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35000569315).
+
+The first two runs have passed app types and rebuilt snapshots and are in the
+full node suite. Round 587 has just started. Full suites, browser download
+budgets, effective failure controls and artifact checks remain required.
+Round 586 also needs slow-chunk navigation checked against its final artifact.
+Publish 586 separately first, then the action scenes, then 587. Verification
+workflows stay off main. Claude's `release-611-612-616` is not part of these
+release sources. AdSense remains pending as confirmed at 12:37 EDT below.
+
 ## RELEASE CHECK UPDATE 2026-09-15 12:43 EDT
 
 The new Round 586 release sweep found three initial JavaScript downloads above
