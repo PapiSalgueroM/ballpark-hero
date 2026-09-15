@@ -678,7 +678,8 @@ current:**
 
 | File | Status |
 |---|---|
-| `docs/HANDOFF-2026-09-10.md` | **LIVE UNTIL THE NEXT HANDOFF.** Where the desktop lane left the build on the night of 2026-09-10: what is live, Round 523 built and uncommitted in the working tree with the exact steps to land it, the AdSense state and the explainers still unbuilt, the branch archaeology verdicts, every trap hit that night with its fix, and the decisions owed. Read it right after this file. |
+| `docs/HANDOFF-2026-09-15.md` | **LIVE UNTIL THE NEXT HANDOFF.** Where the desktop lane left the build early on 2026-09-15: Rounds 580 to 584 of the Stadium Tycoon merge live, Round 585 (gems and packs) built, reviewed and uncommitted in the working tree with the exact steps to land it, what comes next (586 to 589), the open follow-ups, and every trap hit with its fix. Read it right after this file. |
+| `docs/HANDOFF-2026-09-10.md` | HISTORICAL. The 2026-09-10 handoff, superseded by the one above. |
 | `docs/HANDOFF-2026-09-05.md` | HISTORICAL. The 2026-09-05 handoff, superseded by the one above. |
 | `docs/SHIP-PIPELINE.md` | **LIVE.** The deploy runbook. Read before packaging. |
 | `docs/PROJECT-STATE.md` | **LIVE.** Current head, pending rounds, open bugs, roadmap. Update every round. Since 2026-09-05 it also carries **his 2026-08-28 list item by item** (under the 2026-08-28 owner feedback section): every item he asked for with DONE, PART, OPEN or OWNER DECISION and the round behind it. That table is the backlog; pick the next round from it and move the row when you ship. |
