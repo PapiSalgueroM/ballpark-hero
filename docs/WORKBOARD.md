@@ -12,6 +12,12 @@ a claim on Claude's reserved 610 to 619 rounds. It takes publication priority
 over the feature queue after its source, rendered content and built-site
 checks pass. No change to the pending AdSense review request.
 
+The same correction includes three copy-only edits: `index.html`'s unsupported
+cross-device save promise and stale Record Books count, plus
+`SoccerCareer.tsx`'s guest sign-in-to-save line. Actual career load/save uses
+localStorage for both guests and signed-in players. Codex owns only these
+sentences; Cursor's formatting work remains separate.
+
 **2026-09-15, Codex verification correction.** Final combined Round 587 source
 is `9a2f6da1`, verification `418bdf77`, in
 [run 35001991548](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35001991548).
