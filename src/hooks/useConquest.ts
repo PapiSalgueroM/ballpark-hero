@@ -293,7 +293,17 @@ export function useConquest() {
   const [rosters, setRosters] = useState(buildInitialRosters);
   const [eliminated, setEliminated] = useState<string[]>([]);
   const [turn, setTurn] = useState(0);
-  const [phase, setPhase] = useState<Phase>('ready');
+  const [phase, setPhaseState] = useState<Phase>('ready');
+  const phaseRef = useRef<Phase>('ready');
+  // Only the current render can spend an unconsumed signing opportunity.
+  const freeAgencyToken = {};
+  const freeAgencyTokenRef = useRef<object | null>(freeAgencyToken);
+  freeAgencyTokenRef.current = freeAgencyToken;
+  const setPhase = useCallback((next: Phase) => {
+    freeAgencyTokenRef.current = null;
+    phaseRef.current = next;
+    setPhaseState(next);
+  }, []);
   const [attackingTeam, setAttackingTeam] = useState<string | null>(null);
   const [direction, setDirection] = useState<string | null>(null);
   const [defendingTeam, setDefendingTeam] = useState<string | null>(null);
@@ -348,7 +358,7 @@ export function useConquest() {
   const [powerRankDrift, setPowerRankDrift] = useState<Record<string, number>>(() => buildInitialPowerRankDrift());
   const [powerRankRecord, setPowerRankRecord] = useState<Record<string, { wins: number; losses: number }>>({});
 
-  // Free Agency tab (item 87): a docked panel of notable unattached players.
+  // Free Agency tab (item 87): players available in this Arcade run.
   // `favoriteTeam` is user-selected (defaults to null until chosen, so the
   // panel can prompt for a pick); `conquestsSinceSign` counts resolved
   // battles since the last sign and gates the once-per-3 cadence;
@@ -356,6 +366,9 @@ export function useConquest() {
   const [favoriteTeam, setFavoriteTeamState] = useState<string | null>(null);
   const [conquestsSinceSign, setConquestsSinceSign] = useState(0);
   const [signedFreeAgents, setSignedFreeAgents] = useState<string[]>([]);
+  const freeAgencyActionReady = phase === 'ready' && !pendingPowerup && !powerupUseType;
+
+  useEffect(() => () => { freeAgencyTokenRef.current = null; }, []);
 
   const timeoutsRef = useRef<number[]>([]);
   const clearTimeouts = () => { timeoutsRef.current.forEach(clearTimeout); timeoutsRef.current = []; };
@@ -629,6 +642,7 @@ export function useConquest() {
   const useSavedPowerup = useCallback((teamId: string, index: number) => {
     const saved = teamSavedPowerups[teamId];
     if (!saved || !saved[index]) return;
+    freeAgencyTokenRef.current = null;
     const pu = saved[index];
     setTeamSavedPowerups(prev => ({
       ...prev,
@@ -659,18 +673,23 @@ export function useConquest() {
   // Set (or change) which team the Free Agency tab (item 87) signs for.
   // Pass null to clear the pick and navigate back to the team picker.
   const setFavoriteTeam = useCallback((teamId: string | null) => {
+    if (freeAgencyTokenRef.current !== freeAgencyToken || phaseRef.current !== 'ready'
+      || !freeAgencyActionReady || teamId === favoriteTeam
+      || (teamId !== null && !getAliveTeamsFrom(territories).includes(teamId))) return;
+    freeAgencyTokenRef.current = null;
     setFavoriteTeamState(teamId);
-  }, []);
+  }, [freeAgencyToken, freeAgencyActionReady, favoriteTeam, territories]);
 
   // Whether a sign is currently allowed: needs a chosen favorite team, that
-  // team must still be alive, and the once-per-3-conquests cooldown must
+  // team must still be alive, and the once-per-3-battles cooldown must
   // have elapsed. Exposed as a function (not derived state) so the panel
   // can call it fresh on every render without another effect.
   const canSignFreeAgent = useCallback((): boolean => {
-    if (!favoriteTeam) return false;
+    if (freeAgencyTokenRef.current !== freeAgencyToken || phaseRef.current !== 'ready'
+      || !freeAgencyActionReady || !favoriteTeam) return false;
     if (!getAliveTeamsFrom(territories).includes(favoriteTeam)) return false;
     return conquestsSinceSign >= FREE_AGENCY_SIGN_COOLDOWN;
-  }, [favoriteTeam, territories, conquestsSinceSign]);
+  }, [freeAgencyToken, freeAgencyActionReady, favoriteTeam, territories, conquestsSinceSign]);
 
   // Sign a Free Agency tab candidate (item 87) to the favorite team: drops
   // the current weakest roster player (lowest overall, via conquestData's
@@ -681,6 +700,8 @@ export function useConquest() {
   // rating system instead of a bolted-on second one.
   const signFreeAgencyCandidate = useCallback((candidate: ConquestFreeAgentCandidate) => {
     if (!canSignFreeAgent() || !favoriteTeam) return;
+    const available = freeAgencyPool().find(player => player.name === candidate.name);
+    if (!available) return;
 
     const roster = rosters[favoriteTeam] || [];
     if (roster.length === 0) return;
@@ -694,22 +715,27 @@ export function useConquest() {
       if (ovr < weakestOvr) { weakestOvr = ovr; weakestName = name; }
     }
 
+    freeAgencyTokenRef.current = null;
     setRosters(prev => ({
       ...prev,
-      [favoriteTeam]: [...(prev[favoriteTeam] || []).filter(n => n !== weakestName), candidate.name],
+      [favoriteTeam]: [...(prev[favoriteTeam] || []).filter(n => n !== weakestName), available.name],
     }));
+    if (upgradeActiveTeam === favoriteTeam && upgradedPlayer === weakestName) {
+      setUpgradeActiveTeam(null);
+      setUpgradedPlayer(null);
+    }
     setPowerRankDrift(prev => ({
       ...prev,
       [favoriteTeam]: clampDrift((prev[favoriteTeam] || 0) + FREE_AGENCY_SIGN_BUMP),
     }));
     setConquestsSinceSign(0);
-    setSignedFreeAgents(prev => [...prev, candidate.name]);
+    setSignedFreeAgents(prev => [...prev, available.name]);
     setGameLog(prev => [...prev, {
       turn: prev.length + 1, attacker: favoriteTeam, defender: 'powerup',
       winner: favoriteTeam,
-      score: `✍️ Free agency: signed ${candidate.name}, waived ${weakestName} (+${FREE_AGENCY_SIGN_BUMP} OVR)`,
+      score: `✍️ Free agency: signed ${available.name}, waived ${weakestName} (+${FREE_AGENCY_SIGN_BUMP} OVR)`,
     }]);
-  }, [canSignFreeAgent, favoriteTeam, rosters]);
+  }, [canSignFreeAgent, favoriteTeam, rosters, freeAgencyPool, upgradeActiveTeam, upgradedPlayer]);
 
   const startBattle = useCallback(() => {
     const alive = getAliveTeamsFrom(territories);
@@ -1036,6 +1062,7 @@ export function useConquest() {
 
   const reset = useCallback(() => {
     clearTimeouts();
+    freeAgencyTokenRef.current = null;
     setTerritories(buildInitialTerritories());
     setRosters(buildInitialRosters());
     setEliminated([]);
@@ -1088,7 +1115,7 @@ export function useConquest() {
     powerRankings,
     // Free Agency tab (item 87)
     favoriteTeam, setFavoriteTeam, conquestsSinceSign, signedFreeAgents,
-    canSignFreeAgent, signFreeAgencyCandidate, freeAgencyPool,
+    canSignFreeAgent, signFreeAgencyCandidate, freeAgencyPool, freeAgencyActionReady,
     freeAgencyCooldownRemaining: Math.max(0, FREE_AGENCY_SIGN_COOLDOWN - conquestsSinceSign),
     // Skip to result (item 89)
     canSkipBattle, skipToResult,
