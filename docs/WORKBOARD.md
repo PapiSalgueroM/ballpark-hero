@@ -1,8 +1,8 @@
 # Work board
 
-**2026-09-15 16:55 EDT, Codex: narrow guide correction ready to publish.**
+**2026-09-15 17:36 EDT, Codex: narrow guide correction ready to publish.**
 Final reviewed app and saved-page revision is `a35693a5`; later correction
-commits only record evidence. Five guide corrections, source notes, readable
+commits record evidence and isolate roster-test scratch work. Five guide corrections, source notes, readable
 phone tables and three browser-save/Record Books copy edits pass types,
 production/SEO builds, all 31 current applicable generated-output/template/
 fallback checks, 20 real built-page browser cases and 33 effective controls.
@@ -16,7 +16,13 @@ leaves temporary bundles in `dist`; no build artifact was accepted. Repair
 `3999a5e8` preserves all 137 checks and four effective controls while leaving
 all protected outputs unchanged. All larger game releases still need their
 full gates. Full guide evidence is recorded beside the release decision.
-The 16:23 EDT public check still found the old content on all seven affected
+Fresh guide verification `27f814be`, run 35022421148, passed all 311 node
+harnesses, 272 Vitest cases, 33 guide controls and strict artifact packaging.
+Artifact `10420966119` passes digest, 1,893-input and 663-output verification.
+All 170 generated repository outputs already match main after CRLF
+normalization, so no import is needed. Main `edbe5c16` contains
+the same harness repair; the publishable app and saved pages stay `a35693a5`.
+The 17:33 EDT public check still found the old content on all seven affected
 routes. Codex's browser publish controls are timing out; a fresh tab also stalls.
 Claude's working Lovable connection can publish this correction once
 `get_project` shows the current origin/main commit. Confirm the reviewed
@@ -24,18 +30,39 @@ correction is present and no pending feature branch is included, then publish
 and independently read the corrected public pages. A main push alone is not
 publication. Keep the current AdSense review pending, with no resubmission.
 
-The four fresh full feature runs and exact source/verification heads are at
+The fresh full feature runs and exact source/verification heads are at
 the top of `docs/PROJECT-STATE.md`. Their order is 586, 603 to 605, 587, then 588 after this
 correction. New 587 source is `.worktrees/round-587-final`; the old dirty 587
 worktree is preserved. Source branches remain unpublished.
 
-The 588 run is now failed evidence: 316 of 318 node harnesses and all 311
-Vitest cases pass, but the two stale pack/room fixtures and the existing
-Stadium/Factory download limits need repair. Codex owns those fixes in the
-isolated 588 source tree. No budgets are raised. The other three full node
-suites remain in progress; their browser and Vitest steps passed. The roster
-scratch fix must reach all verification branches, with strict artifact
-comparison retained. No work beyond 588 has been started.
+The 588 loading and fixture repairs are committed at `8a4e00a5`. All eleven
+original download limits and local checks pass, including slow artwork,
+early dismissal and reduced motion. Factory has only 31 bytes before the
+existing rounding boundary. Verification `75d4f3c6` retains all prior gates
+and adds the seven effective celebration controls and two catalog controls.
+Fresh full run `35026622660` is in progress. The old failed run is not approval.
+
+The earlier 586 and animation runs passed 313/314 node harnesses and
+279/296 Vitest cases, then failed packaging. Their replacement runs include
+the roster scratch repair and exact artifact diagnostics. The previous 587
+run passed 315 of 316 node harnesses and all 305 Vitest cases; its lone failure
+was an undersized older-keeper sample. Test-only repair `a46c59a0` now passes
+all nine sections, exact deterministic replay and five effective controls.
+It is isolated on `codex/era-sampling-repair`, with game behavior and thresholds
+unchanged. Fresh runs 35022622364, 35022671056 and 35022769249 are still in
+progress. Full results and log hashes are in
+`docs/feature-verification-2026-09-15.md`. No pending run inherits an older pass.
+No work beyond 588 has been started.
+
+**18:25 EDT update:** the correction's full run and exact artifact verification
+are green. Round 586's full run is also green; downloaded-artifact validation
+and its final slow-loading browser check are in progress. The animation run's
+only remaining node failure is a recurring live leaderboard RPC timeout.
+Codex is investigating an isolated performance repair, preserving scoring,
+period semantics and independent cache checks. No database mutation has been
+made. The owner will fix Lovable later; keep building within these release
+lanes. Editor-free publication through official Lovable MCP is supported but
+not connected in this session. No alternate host or DNS cutover is configured.
 
 **2026-09-15 15:19 EDT, Codex correction release check update.** The five
 guide corrections and three save/Record Books copy fixes are implemented at
