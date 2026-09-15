@@ -1,0 +1,523 @@
+{
+  "meta": {
+    "task": "Club Manager season one Champions League field: reconcile the real 2025-26 final league tables from two independent source families and map every verified club to the exact Club Manager name string.",
+    "reconciledOn": "2026-09-15",
+    "rule": "A position is verified only when source family A (official league or UEFA data) and source family B (press and stats sites) name the same club. Where one family was missing a position, a third independent source fetched on 2026-09-15 settled it. positionsNeeded = game Champions League places + 3 (the uclQualifiersFrom fill rule reads the next placed clubs).",
+    "gameNameSource": "REAL_LEAGUES in src/lib/clubManager.ts (league clubs arrays, lines 2295 to 2432) and the CM_ROSTERS keys in src/data/clubManagerRosters.ts. Every mapped name was checked by scratchpad/cm-tables/checknames.mjs to be an exact member of that league's clubs array and an exact roster key.",
+    "placesSource": "EURO_SLOTS at src/lib/clubManager.ts:9527, read by uclPlacesIn at :9582",
+    "familyA": "scratchpad/cm-tables/official.json",
+    "familyB": "scratchpad/cm-tables/press.json"
+  },
+  "uclHolder": {
+    "competition": "2025-26 UEFA Champions League",
+    "winner": { "sourceName": "Paris Saint-Germain", "gameClubName": "PSG", "verified": true },
+    "runnerUp": { "sourceName": "Arsenal", "gameClubName": "Arsenal", "verified": true },
+    "detail": "Final 30 May 2026, Puskas Arena, Budapest: 1-1 after extra time, PSG won on penalties. Shoot-out score 4-3 in the UEFA match API and ESPN; one WebFetch summary of the UEFA report said 4-2, so the shoot-out score is not shipped. Winner and runner-up agree in every source.",
+    "nameTrap": "The game string is 'PSG' (ligue1 clubs at clubManager.ts:2321, CLUBS at :2170, roster key at clubManagerRosters.ts:3011). 'Paris Saint-Germain' is not a club string anywhere in REAL_LEAGUES; it only appears folded in CLUB_NAME_ALIASES (:3606), which guards custom club names and is not a lookup map. Second trap: the historic era2015 continental field (clubManager.ts:8390) spells it 'Paris Saint-Germain'; that is an era pool, not the modern 2026-27 world, so the modern fix must use 'PSG'. PSG also qualified as Ligue 1 champions, so the holders' route adds no extra club for 2026-27.",
+    "sourceA": [
+      { "url": "https://match.uefa.com/v5/matches?competitionId=1&seasonYear=2026&offset=0&limit=3&order=DESC", "publisher": "UEFA match data API", "readOn": "2026-09-15" },
+      { "url": "https://www.uefa.com/uefachampionsleague/news/02a5-20c02e59f219-15e92acdc717-1000--paris-retain-champions-league-holders-edge-arsenal-on-pena/", "publisher": "UEFA", "readOn": "2026-09-15" }
+    ],
+    "sourceB": [
+      { "url": "https://www.espn.com/soccer/story/_/id/48920506/psg-arsenal-champions-league-final-penalty-shootout", "publisher": "ESPN", "readOn": "2026-09-15" },
+      { "url": "https://www.cbssports.com/soccer/news/psg-arsenal-live-updates-champions-league-final-2026-score/live/", "publisher": "CBS Sports", "readOn": "2026-09-15" }
+    ]
+  },
+  "leagues": [
+    {
+      "league": "Premier League (England)",
+      "gameLeagueId": "premier",
+      "gamePlaces": 4,
+      "positionsNeeded": 7,
+      "status": "verified",
+      "champion": { "sourceName": "Arsenal", "gameClubName": "Arsenal" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "Arsenal", "sourceNameB": "Arsenal", "gameClubName": "Arsenal", "played": 38, "points": 85 },
+        { "pos": 2, "sourceNameA": "Manchester City", "sourceNameB": "Manchester City", "gameClubName": "Manchester City", "played": 38, "points": 78 },
+        { "pos": 3, "sourceNameA": "Manchester United", "sourceNameB": "Manchester United", "gameClubName": "Manchester United", "played": 38, "points": 71 },
+        { "pos": 4, "sourceNameA": "Aston Villa", "sourceNameB": "Aston Villa", "gameClubName": "Aston Villa", "played": 38, "points": 65 },
+        { "pos": 5, "sourceNameA": "Liverpool", "sourceNameB": "Liverpool", "gameClubName": "Liverpool", "played": 38, "points": 60 },
+        { "pos": 6, "sourceNameA": "Bournemouth", "sourceNameB": "AFC Bournemouth", "gameClubName": "Bournemouth", "played": 38, "points": 57 },
+        { "pos": 7, "sourceNameA": "Sunderland", "sourceNameB": "Sunderland", "gameClubName": "Sunderland", "played": 38, "points": 54 },
+        { "pos": 8, "sourceNameA": "Brighton and Hove Albion", "sourceNameB": "Brighton & Hove Albion", "gameClubName": "Brighton", "played": 38, "points": 53 },
+        { "pos": 9, "sourceNameA": "Brentford", "sourceNameB": "Brentford", "gameClubName": "Brentford", "played": 38, "points": 53 },
+        { "pos": 10, "sourceNameA": "Chelsea", "sourceNameB": "Chelsea", "gameClubName": "Chelsea", "played": 38, "points": 52 }
+      ],
+      "deductions": "None. The Premier League API returns deductions [] and no press source mentions one.",
+      "splitNote": "No split.",
+      "uclQualifiersReal": "Arsenal, Manchester City, Manchester United, Aston Villa (4th, also 2025-26 Europa League winners) and Liverpool (5th, England's European Performance Spot), all league phase. England really had 5 places; the game gives 4, so Liverpool is the real qualifier the game's place count leaves out.",
+      "disagreements": "None on positions or points. Name spellings only (Bournemouth versus AFC Bournemouth, Brighton and Hove Albion versus Brighton & Hove Albion). Chelsea finished 10th, which confirms they did not qualify.",
+      "sourceA": [
+        { "url": "https://sdp-prem-prod.premier-league-prod.pulselive.com/api/v5/competitions/8/seasons/2025/standings", "publisher": "Premier League official data API", "readOn": "2026-09-15" },
+        { "url": "https://www.uefa.com/uefachampionsleague/news/02a8-2171a88881a0-c70193b972c6-1000--meet-the-2026-27-champions-league-league-phase-teams/", "publisher": "UEFA", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.espn.com/soccer/standings/_/league/eng.1/season/2025", "publisher": "ESPN", "readOn": "2026-09-15" },
+        { "url": "https://www.nbcsports.com/premier-league-table-2025-26-season-standings", "publisher": "NBC Sports", "readOn": "2026-09-15" }
+      ]
+    },
+    {
+      "league": "La Liga (Spain)",
+      "gameLeagueId": "laliga",
+      "gamePlaces": 4,
+      "positionsNeeded": 7,
+      "status": "verified",
+      "champion": { "sourceName": "FC Barcelona", "gameClubName": "Barcelona" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "FC Barcelona", "sourceNameB": "Barcelona", "gameClubName": "Barcelona", "played": 38, "points": 94 },
+        { "pos": 2, "sourceNameA": "Real Madrid", "sourceNameB": "Real Madrid", "gameClubName": "Real Madrid", "played": 38, "points": 86 },
+        { "pos": 3, "sourceNameA": "Villarreal CF", "sourceNameB": "Villarreal", "gameClubName": "Villarreal", "played": 38, "points": 72 },
+        { "pos": 4, "sourceNameA": "Atlético de Madrid", "sourceNameB": "Atlético Madrid", "gameClubName": "Atlético Madrid", "played": 38, "points": 69 },
+        { "pos": 5, "sourceNameA": "Real Betis", "sourceNameB": "Real Betis", "gameClubName": "Real Betis", "played": 38, "points": 60 },
+        { "pos": 6, "sourceNameA": "Celta", "sourceNameB": "Celta Vigo", "gameClubName": "Celta Vigo", "played": 38, "points": 54 },
+        { "pos": 7, "sourceNameA": "Getafe CF", "sourceNameB": "Getafe", "gameClubName": "Getafe", "played": 38, "points": 51 },
+        { "pos": 8, "sourceNameA": "Rayo Vallecano", "sourceNameB": "Rayo Vallecano", "gameClubName": "Rayo Vallecano", "played": 38, "points": 50 },
+        { "pos": 9, "sourceNameA": "Valencia CF", "sourceNameB": "Valencia", "gameClubName": "Valencia", "played": 38, "points": 49 },
+        { "pos": 10, "sourceNameA": "Real Sociedad", "sourceNameB": "Real Sociedad", "gameClubName": "Real Sociedad", "played": 38, "points": 46 }
+      ],
+      "deductions": "None shown or mentioned.",
+      "splitNote": "No split.",
+      "uclQualifiersReal": "Barcelona, Real Madrid, Villarreal, Atlético Madrid and Real Betis (5th, Spain's European Performance Spot), all league phase. Spain really had 5 places; the game gives 4.",
+      "disagreements": "None on positions or points. Name spellings only.",
+      "sourceA": [
+        { "url": "https://apim.laliga.com/public-service/api/v1/subscriptions/laliga-easports-2025/standing?contentLanguage=en&countryCode=GB", "publisher": "LALIGA API behind laliga.com", "readOn": "2026-09-15" },
+        { "url": "https://www.uefa.com/uefachampionsleague/news/02a8-2171a88881a0-c70193b972c6-1000--meet-the-2026-27-champions-league-league-phase-teams/", "publisher": "UEFA", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.espn.com/soccer/standings/_/league/esp.1/season/2025", "publisher": "ESPN", "readOn": "2026-09-15" },
+        { "url": "https://www.sportinglife.com/football/league-tables/spanish-la-liga/74/seasons/2025-2026/107", "publisher": "Sporting Life", "readOn": "2026-09-15" }
+      ]
+    },
+    {
+      "league": "Serie A (Italy)",
+      "gameLeagueId": "seriea",
+      "gamePlaces": 4,
+      "positionsNeeded": 7,
+      "status": "verified",
+      "champion": { "sourceName": "Inter (officialName Internazionale)", "gameClubName": "Inter Milan" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "Inter", "sourceNameB": "Internazionale", "gameClubName": "Inter Milan", "played": 38, "points": 87 },
+        { "pos": 2, "sourceNameA": "Napoli", "sourceNameB": "Napoli", "gameClubName": "Napoli", "played": 38, "points": 76 },
+        { "pos": 3, "sourceNameA": "Roma", "sourceNameB": "AS Roma", "gameClubName": "Roma", "played": 38, "points": 73 },
+        { "pos": 4, "sourceNameA": "Como", "sourceNameB": "Como", "gameClubName": "Como", "played": 38, "points": 71 },
+        { "pos": 5, "sourceNameA": "Milan", "sourceNameB": "AC Milan", "gameClubName": "AC Milan", "played": 38, "points": 70 },
+        { "pos": 6, "sourceNameA": "Juventus", "sourceNameB": "Juventus", "gameClubName": "Juventus", "played": 38, "points": 69 },
+        { "pos": 7, "sourceNameA": "Atalanta", "sourceNameB": "Atalanta", "gameClubName": "Atalanta", "played": 38, "points": 59 },
+        { "pos": 8, "sourceNameA": "Bologna", "sourceNameB": "Bologna", "gameClubName": "Bologna", "played": 38, "points": 56 },
+        { "pos": 9, "sourceNameA": "Lazio", "sourceNameB": "Lazio", "gameClubName": "Lazio", "played": 38, "points": 54 },
+        { "pos": 10, "sourceNameA": "Udinese", "sourceNameB": "Udinese", "gameClubName": "Udinese", "played": 38, "points": 50 }
+      ],
+      "deductions": "None shown or mentioned.",
+      "splitNote": "No split.",
+      "uclQualifiersReal": "Inter, Napoli, Roma and Como, all league phase. Matches the game's 4.",
+      "disagreements": "None on positions or points. Trap: the game string is 'Inter Milan', not 'Inter' or 'Internazionale'; 'AC Milan', not 'Milan'.",
+      "sourceA": [
+        { "url": "https://api-sdp.legaseriea.it/v1/serie-a/football/seasons/serie-a::Football_Season::5f0e080fc3a44073984b75b3a8e06a8a/standings", "publisher": "Lega Serie A API behind legaseriea.it", "readOn": "2026-09-15" },
+        { "url": "https://www.uefa.com/uefachampionsleague/news/02a8-2171a88881a0-c70193b972c6-1000--meet-the-2026-27-champions-league-league-phase-teams/", "publisher": "UEFA", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.espn.com/soccer/standings/_/league/ita.1/season/2025", "publisher": "ESPN", "readOn": "2026-09-15" },
+        { "url": "https://www.sportinglife.com/football/league-tables/serie-a/6/seasons/2025-2026/107", "publisher": "Sporting Life", "readOn": "2026-09-15" }
+      ]
+    },
+    {
+      "league": "Bundesliga (Germany)",
+      "gameLeagueId": "bundesliga",
+      "gamePlaces": 4,
+      "positionsNeeded": 7,
+      "status": "verified",
+      "champion": { "sourceName": "Bayern Munich", "gameClubName": "Bayern Munich" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "Bayern Munich", "sourceNameB": "Bayern Munich", "gameClubName": "Bayern Munich", "played": 34, "points": 89 },
+        { "pos": 2, "sourceNameA": "Borussia Dortmund", "sourceNameB": "Borussia Dortmund", "gameClubName": "Borussia Dortmund", "played": 34, "points": 73 },
+        { "pos": 3, "sourceNameA": "RB Leipzig", "sourceNameB": "RB Leipzig", "gameClubName": "RB Leipzig", "played": 34, "points": 65 },
+        { "pos": 4, "sourceNameA": "VfB Stuttgart", "sourceNameB": "VfB Stuttgart", "gameClubName": "Stuttgart", "played": 34, "points": 62 },
+        { "pos": 5, "sourceNameA": "Hoffenheim", "sourceNameB": "TSG Hoffenheim", "gameClubName": "Hoffenheim", "played": 34, "points": 61 },
+        { "pos": 6, "sourceNameA": "Bayer Leverkusen", "sourceNameB": "Bayer Leverkusen", "gameClubName": "Bayer Leverkusen", "played": 34, "points": 59 },
+        { "pos": 7, "sourceNameA": "Freiburg", "sourceNameB": "SC Freiburg", "gameClubName": "Freiburg", "played": 34, "points": 47 },
+        { "pos": 8, "sourceNameA": "Eintracht Frankfurt", "sourceNameB": "Eintracht Frankfurt", "gameClubName": "Eintracht Frankfurt", "played": 34, "points": 44 },
+        { "pos": 9, "sourceNameA": "Augsburg", "sourceNameB": "FC Augsburg", "gameClubName": "Augsburg", "played": 34, "points": 43 },
+        { "pos": 10, "sourceNameA": "Mainz", "sourceNameB": "Mainz", "gameClubName": "Mainz", "played": 34, "points": 40 }
+      ],
+      "deductions": "None shown or mentioned.",
+      "splitNote": "No split.",
+      "uclQualifiersReal": "Bayern Munich, Borussia Dortmund, RB Leipzig and VfB Stuttgart, all league phase. Matches the game's 4.",
+      "disagreements": "None on positions or points. Trap: the game string is 'Stuttgart', not 'VfB Stuttgart'. One B search summary gave Bayern 86 points, which is their goal difference; both fetched B tables and A say 89.",
+      "sourceA": [
+        { "url": "https://www.bundesliga.com/en/bundesliga/table/2025-2026", "publisher": "DFL / bundesliga.com", "readOn": "2026-09-15" },
+        { "url": "https://www.uefa.com/uefachampionsleague/news/02a8-2171a88881a0-c70193b972c6-1000--meet-the-2026-27-champions-league-league-phase-teams/", "publisher": "UEFA", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.espn.com/soccer/standings/_/league/ger.1/season/2025", "publisher": "ESPN", "readOn": "2026-09-15" },
+        { "url": "https://www.sportinglife.com/football/league-tables/german-bundesliga/11/seasons/2025-2026/107", "publisher": "Sporting Life", "readOn": "2026-09-15" }
+      ]
+    },
+    {
+      "league": "Ligue 1 (France)",
+      "gameLeagueId": "ligue1",
+      "gamePlaces": 3,
+      "positionsNeeded": 6,
+      "status": "verified",
+      "champion": { "sourceName": "Paris Saint-Germain", "gameClubName": "PSG" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "Paris Saint-Germain", "sourceNameB": "Paris SG", "gameClubName": "PSG", "played": 34, "points": 76 },
+        { "pos": 2, "sourceNameA": "RC Lens", "sourceNameB": "Lens", "gameClubName": "Lens", "played": 34, "points": 70 },
+        { "pos": 3, "sourceNameA": "LOSC Lille", "sourceNameB": "Lille", "gameClubName": "Lille", "played": 34, "points": 61 },
+        { "pos": 4, "sourceNameA": "Olympique Lyonnais", "sourceNameB": "Lyon", "gameClubName": "Lyon", "played": 34, "points": 60 },
+        { "pos": 5, "sourceNameA": "Olympique de Marseille", "sourceNameB": "Marseille", "gameClubName": "Marseille", "played": 34, "points": 59 },
+        { "pos": 6, "sourceNameA": "Stade Rennais FC", "sourceNameB": "Rennes", "gameClubName": "Rennes", "played": 34, "points": 59 },
+        { "pos": 7, "sourceNameA": "AS Monaco", "sourceNameB": "Monaco", "gameClubName": "Monaco", "played": 34, "points": 54 },
+        { "pos": 8, "sourceNameA": "RC Strasbourg Alsace", "sourceNameB": "Strasbourg", "gameClubName": "Strasbourg", "played": 34, "points": 53 },
+        { "pos": 9, "sourceNameA": "Toulouse FC", "sourceNameB": "Toulouse", "gameClubName": "Toulouse", "played": 34, "points": 45 },
+        { "pos": 10, "sourceNameA": "FC Lorient", "sourceNameB": "Lorient", "gameClubName": "Lorient", "played": 34, "points": 45 }
+      ],
+      "deductions": "None shown. Nantes v Toulouse (17 May 2026) was abandoned at 0-0 after a pitch invasion; Foot Mercato (27 May 2026) reports the LFP disciplinary commission confirmed the 0-0. A search summary says Toulouse kept a right of appeal; no appeal outcome was found. The LFP API (A) counts 34 played for Toulouse, matching B's final table.",
+      "splitNote": "No split. 16th Nice went to the promotion and relegation play-off.",
+      "uclQualifiersReal": "PSG (also UCL winners), Lens and Lille, league phase; Lyon (4th) entered the third qualifying round, league path, and lost the play-off to Fenerbahce. The game's 3 match the direct league phase places.",
+      "disagreements": "Positions 9 and 10 were contested inside family B (ESPN stale: Toulouse on 33 played, Lorient 9th). B's final (Sporting Life and BeSoccer) and A (LFP API) agree: Toulouse 9th, Lorient 10th, both 45. Neither position is needed by the game. Marseille and Rennes both 59 in the same order in A and B.",
+      "sourceA": [
+        { "url": "https://ma-api.ligue1.fr/championship-standings/1/general?season=2025", "publisher": "LFP data API", "readOn": "2026-09-15" },
+        { "url": "https://match.uefa.com/v5/matches?competitionId=1&seasonYear=2027&offset=0&limit=200&order=ASC", "publisher": "UEFA match data API", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.sportinglife.com/football/league-tables/french-ligue-1/8/seasons/2025-2026/107", "publisher": "Sporting Life", "readOn": "2026-09-15" },
+        { "url": "https://www.besoccer.com/competition/table/ligue_1/2026", "publisher": "BeSoccer", "readOn": "2026-09-15" },
+        { "url": "https://www.footmercato.net/a206742058948473313-commission-de-discipline-nantes-sanctionne-mais-le-0-0-enterine-contre-toulouse", "publisher": "Foot Mercato (2026-05-27)", "readOn": "2026-09-15" }
+      ]
+    },
+    {
+      "league": "Eredivisie (Netherlands)",
+      "gameLeagueId": "eredivisie",
+      "gamePlaces": 2,
+      "positionsNeeded": 5,
+      "status": "verified",
+      "champion": { "sourceName": "PSV (A) / PSV Eindhoven (B)", "gameClubName": "PSV" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "PSV", "sourceNameB": "PSV Eindhoven", "sourceNameThird": "PSV", "gameClubName": "PSV", "played": 34, "points": 84, "settledBy": "A and B" },
+        { "pos": 2, "sourceNameA": "Feyenoord", "sourceNameB": "Feyenoord Rotterdam", "sourceNameThird": "Feyenoord", "gameClubName": "Feyenoord", "played": 34, "points": 65, "settledBy": "A and B" },
+        { "pos": 3, "sourceNameA": "N.E.C.", "sourceNameB": "NEC Nijmegen", "sourceNameThird": "NEC", "gameClubName": "NEC Nijmegen", "played": 34, "points": 59, "settledBy": "A and B" },
+        { "pos": 4, "sourceNameA": null, "sourceNameB": "FC Twente", "sourceNameThird": "FC Twente", "gameClubName": "Twente", "played": 34, "points": 58, "settledBy": "B and third source (Voetbal International), Wikipedia agrees" },
+        { "pos": 5, "sourceNameA": null, "sourceNameB": "Ajax Amsterdam", "sourceNameThird": "Ajax", "gameClubName": "Ajax", "played": 34, "points": 56, "settledBy": "B and third source (Voetbal International), Wikipedia agrees" },
+        { "pos": 6, "sourceNameA": null, "sourceNameB": "FC Utrecht", "sourceNameThird": "FC Utrecht", "gameClubName": "Utrecht", "played": 34, "points": 53, "settledBy": "B and third source" },
+        { "pos": 7, "sourceNameA": null, "sourceNameB": "AZ Alkmaar", "sourceNameThird": "AZ", "gameClubName": "AZ Alkmaar", "played": 34, "points": 52, "settledBy": "B and third source" },
+        { "pos": 8, "sourceNameA": null, "sourceNameB": "Heerenveen", "sourceNameThird": "SC Heerenveen", "gameClubName": "Heerenveen", "played": 34, "points": 51, "settledBy": "B and third source" },
+        { "pos": 9, "sourceNameA": null, "sourceNameB": "FC Groningen", "sourceNameThird": "FC Groningen", "gameClubName": "Groningen", "played": 34, "points": 48, "settledBy": "B and third source" },
+        { "pos": 10, "sourceNameA": null, "sourceNameB": "Sparta Rotterdam", "sourceNameThird": "Sparta Rotterdam", "gameClubName": "Sparta Rotterdam", "played": 34, "points": 43, "settledBy": "B and third source" }
+      ],
+      "deductions": "None shown or mentioned in B, VI or Wikipedia.",
+      "splitNote": "No split. 16th Volendam went to the relegation play-off.",
+      "uclQualifiersReal": "PSV and Feyenoord, league phase; NEC (3rd) entered the third qualifying round, league path, and lost the play-off to Bodo/Glimt. The game's 2 match the direct league phase places.",
+      "disagreements": "Family A was partial (official article gave 1 PSV, 2 Feyenoord, 3 N.E.C., no points). Positions 4 to 10 and all points came only from B, so a third independent source was fetched: Voetbal International's final 2025-2026 table (all 18 clubs on 34 played) names the same clubs with the same points in all ten places, and the Wikipedia season page agrees. Trap: the game string is 'PSV', not 'PSV Eindhoven'; 'Twente' and 'Utrecht' have no FC prefix; 'AZ Alkmaar' is the long form.",
+      "sourceA": [
+        { "url": "https://eredivisie.nl/nieuws/deze-momenten-uit-2025-26-mogen-niet-worden-vergeten/", "publisher": "Eredivisie CV (positions 1 to 3 only)", "readOn": "2026-09-15" },
+        { "url": "https://www.uefa.com/uefachampionsleague/news/02a8-2171a88881a0-c70193b972c6-1000--meet-the-2026-27-champions-league-league-phase-teams/", "publisher": "UEFA", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.espn.com/soccer/standings/_/league/ned.1/season/2025", "publisher": "ESPN", "readOn": "2026-09-15" },
+        { "url": "https://www.sportinglife.com/football/league-tables/dutch-eredivisie/46/seasons/2025-2026/107", "publisher": "Sporting Life", "readOn": "2026-09-15" }
+      ],
+      "thirdSources": [
+        { "url": "https://www.vi.nl/competities/eredivisie/2025-2026/stand", "publisher": "Voetbal International (vi.nl)", "readOn": "2026-09-15" },
+        { "url": "https://en.wikipedia.org/wiki/2025%E2%80%9326_Eredivisie", "publisher": "Wikipedia (corroborating only)", "readOn": "2026-09-15" }
+      ]
+    },
+    {
+      "league": "Primeira Liga (Portugal)",
+      "gameLeagueId": "primeira",
+      "gamePlaces": 2,
+      "positionsNeeded": 5,
+      "status": "verified",
+      "champion": { "sourceName": "FC Porto", "gameClubName": "Porto" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "FC Porto", "sourceNameB": "FC Porto", "gameClubName": "Porto", "played": 34, "points": 88 },
+        { "pos": 2, "sourceNameA": "Sporting CP", "sourceNameB": "Sporting CP", "gameClubName": "Sporting CP", "played": 34, "points": 82 },
+        { "pos": 3, "sourceNameA": "SL Benfica", "sourceNameB": "Benfica", "gameClubName": "Benfica", "played": 34, "points": 80 },
+        { "pos": 4, "sourceNameA": "SC Braga", "sourceNameB": "Braga", "gameClubName": "Braga", "played": 34, "points": 59 },
+        { "pos": 5, "sourceNameA": "FC Famalicão", "sourceNameB": "FC Famalicao", "gameClubName": "Famalicão", "played": 34, "points": 56 },
+        { "pos": 6, "sourceNameA": "Gil Vicente FC", "sourceNameB": "Gil Vicente", "gameClubName": "Gil Vicente", "played": 34, "points": 50 },
+        { "pos": 7, "sourceNameA": "Moreirense FC", "sourceNameB": "Moreirense", "gameClubName": "Moreirense", "played": 34, "points": 43 },
+        { "pos": 8, "sourceNameA": "FC Arouca", "sourceNameB": "Arouca", "gameClubName": "Arouca", "played": 34, "points": 42 },
+        { "pos": 9, "sourceNameA": "Vitória SC", "sourceNameB": "Vitória de Guimaraes", "gameClubName": "Vitória Guimarães", "played": 34, "points": 42 },
+        { "pos": 10, "sourceNameA": "Estoril Praia", "sourceNameB": "Estoril", "gameClubName": "Estoril", "played": 34, "points": 39 }
+      ],
+      "deductions": "None shown or mentioned.",
+      "splitNote": "No split.",
+      "uclQualifiersReal": "Porto and Sporting CP, league phase (UEFA list). Benfica finished 3rd unbeaten and are not in the 2026-27 Champions League. Matches the game's 2.",
+      "disagreements": "None on positions or points. Name spellings only (accents, FC and SC prefixes).",
+      "sourceA": [
+        { "url": "https://www.ligaportugal.pt/competition/854/liga-portugal-betclic/round/20252026?tab=standings", "publisher": "Liga Portugal (LPFP)", "readOn": "2026-09-15" },
+        { "url": "https://www.uefa.com/uefachampionsleague/news/02a8-2171a88881a0-c70193b972c6-1000--meet-the-2026-27-champions-league-league-phase-teams/", "publisher": "UEFA", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.espn.com/soccer/standings/_/league/por.1/season/2025", "publisher": "ESPN", "readOn": "2026-09-15" },
+        { "url": "https://www.sportinglife.com/football/league-tables/portuguese-primeira-liga/14/seasons/2025-2026/107", "publisher": "Sporting Life", "readOn": "2026-09-15" }
+      ]
+    },
+    {
+      "league": "Scottish Premiership",
+      "gameLeagueId": "scottish",
+      "gamePlaces": 1,
+      "positionsNeeded": 4,
+      "status": "verified",
+      "champion": { "sourceName": "Celtic", "gameClubName": "Celtic" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "Celtic", "sourceNameB": "Celtic", "gameClubName": "Celtic", "played": 38, "points": 82 },
+        { "pos": 2, "sourceNameA": "Hearts", "sourceNameB": "Heart of Midlothian", "gameClubName": "Hearts", "played": 38, "points": 80 },
+        { "pos": 3, "sourceNameA": "Rangers", "sourceNameB": "Rangers", "gameClubName": "Rangers", "played": 38, "points": 72 },
+        { "pos": 4, "sourceNameA": "Motherwell", "sourceNameB": "Motherwell", "gameClubName": "Motherwell", "played": 38, "points": 61 },
+        { "pos": 5, "sourceNameA": "Hibernian", "sourceNameB": "Hibernian", "gameClubName": "Hibernian", "played": 38, "points": 57 },
+        { "pos": 6, "sourceNameA": "Falkirk", "sourceNameB": "Falkirk", "gameClubName": "Falkirk", "played": 38, "points": 49 },
+        { "pos": 7, "sourceNameA": "Dundee Utd", "sourceNameB": "Dundee United", "gameClubName": "Dundee United", "played": 38, "points": 45 },
+        { "pos": 8, "sourceNameA": "Dundee", "sourceNameB": "Dundee", "gameClubName": "Dundee", "played": 38, "points": 42 },
+        { "pos": 9, "sourceNameA": "Aberdeen", "sourceNameB": "Aberdeen", "gameClubName": "Aberdeen", "played": 38, "points": 40 },
+        { "pos": 10, "sourceNameA": "Kilmarnock", "sourceNameB": "Kilmarnock", "gameClubName": "Kilmarnock", "played": 38, "points": 40 }
+      ],
+      "deductions": "None shown or mentioned.",
+      "splitNote": "Final 38 game table after the split at 33 games: top six are 1 to 6, bottom six 7 to 12 regardless of points (Dundee United 45 is 7th below Falkirk 49). Celtic beat Hearts 3-1 on the last day (16 May 2026) to win the title. 11th St Mirren went to the relegation play-off.",
+      "uclQualifiersReal": "Celtic (champions) entered the play-off round, champions path, and lost to LASK; Hearts (2nd) entered the second qualifying round, league path, and lost to Sturm Graz. The game's 1 place is the champion.",
+      "disagreements": "None on positions or points. Name spellings only. Note on independence: A's SPFL table is rendered by an Opta widget and B's press tables may share a commercial feed; the SPFL's own articles (16 and 18 May 2026) independently confirm 1 Celtic, 3 Rangers, 4 Motherwell 61.",
+      "sourceA": [
+        { "url": "https://spfl.co.uk/league/premiership/archive/390", "publisher": "SPFL", "readOn": "2026-09-15" },
+        { "url": "https://spfl.co.uk/news/celtic-clinch-the-title-51235", "publisher": "SPFL", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.espn.com/soccer/standings/_/league/sco.1/season/2025", "publisher": "ESPN", "readOn": "2026-09-15" },
+        { "url": "https://www.sportinglife.com/football/league-tables/scottish-premiership/62/seasons/2025-2026/107", "publisher": "Sporting Life", "readOn": "2026-09-15" }
+      ]
+    },
+    {
+      "league": "Super Lig (Turkey)",
+      "gameLeagueId": "superlig",
+      "gamePlaces": 1,
+      "positionsNeeded": 4,
+      "status": "verified",
+      "champion": { "sourceName": "GALATASARAY A.Ş.", "gameClubName": "Galatasaray" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "GALATASARAY A.Ş.", "sourceNameB": "Galatasaray", "gameClubName": "Galatasaray", "played": 34, "points": 77 },
+        { "pos": 2, "sourceNameA": "FENERBAHÇE A.Ş.", "sourceNameB": "Fenerbahce", "gameClubName": "Fenerbahçe", "played": 34, "points": 74 },
+        { "pos": 3, "sourceNameA": "TRABZONSPOR A.Ş.", "sourceNameB": "Trabzonspor", "gameClubName": "Trabzonspor", "played": 34, "points": 69 },
+        { "pos": 4, "sourceNameA": "BEŞİKTAŞ A.Ş.", "sourceNameB": "Besiktas", "gameClubName": "Beşiktaş", "played": 34, "points": 60 },
+        { "pos": 5, "sourceNameA": "RAMS BAŞAKŞEHİR FUTBOL KULÜBÜ", "sourceNameB": "Istanbul Basaksehir", "gameClubName": "Başakşehir", "played": 34, "points": 57 },
+        { "pos": 6, "sourceNameA": "GÖZTEPE A.Ş.", "sourceNameB": "Goztepe", "gameClubName": "Göztepe", "played": 34, "points": 55 },
+        { "pos": 7, "sourceNameA": "SAMSUNSPOR A.Ş.", "sourceNameB": "Samsunspor", "gameClubName": "Samsunspor", "played": 34, "points": 51 },
+        { "pos": 8, "sourceNameA": "ÇAYKUR RİZESPOR A.Ş.", "sourceNameB": "Caykur Rizespor", "gameClubName": "Rizespor", "played": 34, "points": 41 },
+        { "pos": 9, "sourceNameA": "TÜMOSAN KONYASPOR", "sourceNameB": "Konyaspor", "gameClubName": "Konyaspor", "played": 34, "points": 40 },
+        { "pos": 10, "sourceNameA": "KOCAELİSPOR", "sourceNameB": "Kocaelispor", "gameClubName": "Kocaelispor", "played": 34, "points": 37 }
+      ],
+      "deductions": "No deduction column in TFF; B found no top flight deduction.",
+      "splitNote": "No split. 10th to 12th all on 37 points (Kocaelispor, Alanyaspor, Gaziantep) in the same order in A and B.",
+      "uclQualifiersReal": "Galatasaray (champions), league phase; Fenerbahce (2nd) entered the second qualifying round, league path, and reached the league phase through the play-off. The game's 1 place is the champion.",
+      "disagreements": "None on positions or points. Trap: game strings carry Turkish letters ('Fenerbahçe', 'Beşiktaş', 'Başakşehir', 'Göztepe') and 'Rizespor' drops the sponsor prefix Caykur.",
+      "sourceA": [
+        { "url": "https://www.tff.org/default.aspx?pageID=1768", "publisher": "Turkiye Futbol Federasyonu (TFF)", "readOn": "2026-09-15" },
+        { "url": "https://www.uefa.com/uefachampionsleague/news/02a8-2171a88881a0-c70193b972c6-1000--meet-the-2026-27-champions-league-league-phase-teams/", "publisher": "UEFA", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.espn.com/soccer/standings/_/league/tur.1/season/2025", "publisher": "ESPN", "readOn": "2026-09-15" },
+        { "url": "https://www.sportinglife.com/football/league-tables/turkish-super-lig/15/seasons/2025-2026/107", "publisher": "Sporting Life", "readOn": "2026-09-15" }
+      ]
+    },
+    {
+      "league": "Belgian Pro League",
+      "gameLeagueId": "proleague",
+      "gamePlaces": 1,
+      "positionsNeeded": 4,
+      "status": "verified",
+      "champion": { "sourceName": "Club Brugge", "gameClubName": "Club Brugge" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "Club Brugge", "sourceNameB": "Club Brugge", "sourceNameThird": "Club Brugge", "gameClubName": "Club Brugge", "played": 40, "points": 57, "settledBy": "A and B" },
+        { "pos": 2, "sourceNameA": "Union SG", "sourceNameB": "Union St.-Gilloise", "sourceNameThird": "Union Sint-Gillis", "gameClubName": "Union Saint-Gilloise", "played": 40, "points": 53, "settledBy": "A and B" },
+        { "pos": 3, "sourceNameA": "STVV", "sourceNameB": "Sint-Truidense", "sourceNameThird": "Sint-Truiden VV", "gameClubName": "Sint-Truiden", "played": 40, "points": 43, "settledBy": "A and B" },
+        { "pos": 4, "sourceNameA": null, "sourceNameB": "Anderlecht", "sourceNameThird": "RSC Anderlecht", "gameClubName": "Anderlecht", "played": 40, "points": 33, "settledBy": "B and third source (Voetbalexpress Champions Play-off final table), Wikipedia agrees" },
+        { "pos": 5, "sourceNameA": null, "sourceNameB": "KAA Gent", "sourceNameThird": "AA Gent", "gameClubName": "Gent", "played": 40, "points": 29, "settledBy": "B and third source" },
+        { "pos": 6, "sourceNameA": null, "sourceNameB": "KV Mechelen", "sourceNameThird": "KV Mechelen", "gameClubName": "Mechelen", "played": 40, "points": 29, "settledBy": "B and third source" }
+      ],
+      "groupOrderOnlyNotShipped": [
+        { "europePlayoffRank": 1, "sourceNameB": "Racing Genk", "sourceNameThird": "Racing Genk", "gameClubName": "Genk", "points": 38 },
+        { "europePlayoffRank": 2, "sourceNameB": "Standard Liege", "sourceNameThird": "Standard Luik", "gameClubName": "Standard Liège", "points": 37 },
+        { "europePlayoffRank": 3, "sourceNameB": "Royal Charleroi SC", "sourceNameThird": "Sporting Charleroi", "gameClubName": "Charleroi", "points": 34 },
+        { "europePlayoffRank": 4, "sourceNameB": "KVC Westerlo", "sourceNameThird": "KVC Westerlo", "gameClubName": "Westerlo", "points": 33 }
+      ],
+      "deductions": "None mentioned. Points are play-off totals after the regular season halving (regular season: Union SG 66, Club Brugge 63, Sint-Truiden 57), not season totals; played 40 = 30 regular plus 10 play-off.",
+      "splitNote": "30 regular season games, then points halved into the Champions' Play-offs (6 clubs) and Europe Play-offs (6 clubs), 10 more games. Union SG led the regular season; Club Brugge won the Champions' Play-offs and the title. Positions 1 to 6 are the Champions' Play-off order. Every source read prints the Europe Play-off as a separate group table, not as overall places 7 to 12, so those are recorded as group order only and not shipped as positions (none is needed by the game).",
+      "uclQualifiersReal": "Club Brugge (champions), league phase; Union SG (2nd) entered the third qualifying round, league path, and lost to Bodo/Glimt. The game's 1 place is the champion.",
+      "disagreements": "Family A was partial (Pro League champion article gave 1 Club Brugge, 2 Union SG, 3 STVV, no points). Position 4 and all points came only from B, so a third independent source was fetched: Voetbalexpress's final Champions Play-off table (10 matchdays) names 1 Club Brugge 57, 2 Union Sint-Gillis 53, 3 Sint-Truiden VV 43, 4 RSC Anderlecht 33, 5 AA Gent 29, 6 KV Mechelen 29, matching B exactly, and the Wikipedia season page agrees. Its Europe Play-off page (Genk 38, Standard 37, Charleroi 34, Westerlo 33) also matches B. Trap: game strings are 'Union Saint-Gilloise' (not Union SG or Union St.-Gilloise), 'Sint-Truiden' (not STVV or Sint-Truidense), 'Club Brugge' (not Club Brugge KV), 'Gent' (not KAA Gent).",
+      "sourceA": [
+        { "url": "https://www.proleague.be/nieuws/club-brugge-na-ijzersterke-play-offs-voor-de-twintigste-keer-landskampioen", "publisher": "Pro League (positions 1 to 3 only)", "readOn": "2026-09-15" },
+        { "url": "https://match.uefa.com/v5/matches?competitionId=1&seasonYear=2027&offset=0&limit=200&order=ASC", "publisher": "UEFA match data API", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.espn.com/soccer/standings/_/league/bel.1/season/2025", "publisher": "ESPN", "readOn": "2026-09-15" },
+        { "url": "https://www.sportinglife.com/football/league-tables/belgian-jupiler-pro-league/78/seasons/2025-2026/107", "publisher": "Sporting Life", "readOn": "2026-09-15" }
+      ],
+      "thirdSources": [
+        { "url": "https://www.voetbalexpress.be/seizoen2025-2026/championsplayoff2026.html", "publisher": "Voetbalexpress", "readOn": "2026-09-15" },
+        { "url": "https://www.voetbalexpress.be/seizoen2025-2026/europaleagueplayoff2026.html", "publisher": "Voetbalexpress", "readOn": "2026-09-15" },
+        { "url": "https://en.wikipedia.org/wiki/2025%E2%80%9326_Belgian_Pro_League", "publisher": "Wikipedia (corroborating only)", "readOn": "2026-09-15" }
+      ]
+    },
+    {
+      "league": "Austrian Bundesliga",
+      "gameLeagueId": "austria",
+      "gamePlaces": 1,
+      "positionsNeeded": 4,
+      "status": "verified",
+      "champion": { "sourceName": "LASK", "gameClubName": "LASK" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "LASK", "sourceNameB": "LASK Linz", "gameClubName": "LASK", "played": 32, "points": 39 },
+        { "pos": 2, "sourceNameA": "SK Puntigamer Sturm Graz", "sourceNameB": "SK Sturm Graz", "gameClubName": "Sturm Graz", "played": 32, "points": 37 },
+        { "pos": 3, "sourceNameA": "FC Red Bull Salzburg", "sourceNameB": "RB Salzburg", "gameClubName": "RB Salzburg", "played": 32, "points": 29 },
+        { "pos": 4, "sourceNameA": "FK Austria Wien", "sourceNameB": "Austria Vienna", "gameClubName": "Austria Wien", "played": 32, "points": 29 },
+        { "pos": 5, "sourceNameA": "SK Rapid", "sourceNameB": "Rapid Vienna", "gameClubName": "Rapid Wien", "played": 32, "points": 27 },
+        { "pos": 6, "sourceNameA": "TSV Egger Glas Hartberg", "sourceNameB": "TSV Hartberg", "gameClubName": "Hartberg", "played": 32, "points": 25 },
+        { "pos": 7, "sourceNameA": "SV Oberbank Ried", "sourceNameB": "SV Josko Ried", "gameClubName": "Ried", "played": 32, "points": 28 },
+        { "pos": 8, "sourceNameA": "RZ Pellets WAC", "sourceNameB": "Wolfsberger", "gameClubName": "Wolfsberger AC", "played": 32, "points": 28 },
+        { "pos": 9, "sourceNameA": "SCR Altach", "sourceNameB": "SC Rheindorf Altach", "gameClubName": "Altach", "played": 32, "points": 27 },
+        { "pos": 10, "sourceNameA": "Grazer AK 1902", "sourceNameB": "Grazer AK", "gameClubName": "Grazer AK", "played": 32, "points": 27 }
+      ],
+      "deductions": "None shown or mentioned. The official page's 'Halbe Punkte' marker (points rounded down at the halving) is the first tie-break and puts Salzburg above Austria Wien on 29.",
+      "splitNote": "22 regular rounds, points halved, then Meistergruppe (places 1 to 6) and Qualifikationsgruppe (places 7 to 12) for 10 more rounds. Places 7 and 8 finish with more points than 5 and 6 because of the halving. Sturm led the regular season; LASK won the title after the split.",
+      "uclQualifiersReal": "LASK (champions) entered the play-off round, champions path, and reached the league phase beating Celtic; Sturm Graz (2nd) entered the second qualifying round, league path, beat Hearts, then lost the third qualifying round to Fenerbahce. The game's 1 place is the champion.",
+      "disagreements": "None on positions or points. Sponsor names differ (Puntigamer, Egger Glas, Oberbank or Josko, RZ Pellets). Trap: game strings are 'Rapid Wien' and 'Austria Wien' (not Vienna), 'Wolfsberger AC' (not WAC or Wolfsberger).",
+      "sourceA": [
+        { "url": "https://www.bundesliga.at/de/tabelle/saison-2025-2026", "publisher": "Osterreichische Fussball-Bundesliga", "readOn": "2026-09-15" },
+        { "url": "https://match.uefa.com/v5/matches?competitionId=1&seasonYear=2027&offset=0&limit=200&order=ASC", "publisher": "UEFA match data API", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.espn.com/soccer/standings/_/league/aut.1/season/2025", "publisher": "ESPN", "readOn": "2026-09-15" },
+        { "url": "https://www.sportinglife.com/football/league-tables/austrian-bundesliga/40/seasons/2025-2026/107", "publisher": "Sporting Life", "readOn": "2026-09-15" }
+      ]
+    },
+    {
+      "league": "Super League Greece",
+      "gameLeagueId": "greece",
+      "gamePlaces": 1,
+      "positionsNeeded": 4,
+      "status": "verified",
+      "champion": { "sourceName": "A.E.K.", "gameClubName": "AEK Athens" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "A.E.K.", "sourceNameB": "AEK Athens", "gameClubName": "AEK Athens", "played": 32, "points": 72 },
+        { "pos": 2, "sourceNameA": "OLYMPIACOS", "sourceNameB": "Olympiacos", "gameClubName": "Olympiacos", "played": 32, "points": 66 },
+        { "pos": 3, "sourceNameA": "P.A.O.K.", "sourceNameB": "PAOK", "gameClubName": "PAOK", "played": 32, "points": 64 },
+        { "pos": 4, "sourceNameA": "PANATHINAIKOS", "sourceNameB": "Panathinaikos", "gameClubName": "Panathinaikos", "played": 32, "points": 52 },
+        { "pos": 5, "sourceNameA": "ARIS", "sourceNameB": "Aris", "gameClubName": "Aris", "played": 32, "points": 31 },
+        { "pos": 6, "sourceNameA": "LEVADIAKOS", "sourceNameB": "Levadiakos", "gameClubName": "Levadiakos", "played": 32, "points": 31 },
+        { "pos": 7, "sourceNameA": "O.F.I.", "sourceNameB": "OFI Crete", "gameClubName": "OFI", "played": 32, "points": 23 },
+        { "pos": 8, "sourceNameA": "VOLOS NFC", "sourceNameB": "Volos NFC", "gameClubName": "Volos", "played": 32, "points": 17 },
+        { "pos": 9, "sourceNameA": "ATROMITOS ATH.", "sourceNameB": "Atromitos", "gameClubName": "Atromitos", "played": 36, "points": 46 },
+        { "pos": 10, "sourceNameA": "KIFISIA", "sourceNameB": "Kifisia", "gameClubName": "Kifisia", "played": 36, "points": 41 }
+      ],
+      "deductions": "None shown or mentioned.",
+      "splitNote": "26 regular season games, then a top four championship play-off (places 1 to 4, points carried over, 32 games), a 5 to 8 play-off group (points not full season totals, 32 games) and a relegation group (places 9 to 14, 36 games). Played for 5 to 8 is A's count; B's sources counted differently and omitted it.",
+      "uclQualifiersReal": "AEK Athens (champions) entered the play-off round, champions path, and reached the league phase beating Levski Sofia; Olympiacos (2nd) entered the third qualifying round, league path, and lost to NEC. The game's 1 place is the champion.",
+      "disagreements": "Positions 5 and 6 (Aris and Levadiakos, both 31) were contested inside family B (ESPN Aris first, Sporting Life Levadiakos first); B settled it with Proto Thema's final 5 to 8 table (Aris 5th), and A's official slgr.gr table also has Aris 5th on the head to head tie-break (6 to 3). A and B final agree on all ten. Neither position is needed by the game. Trap: game strings are 'AEK Athens' (not A.E.K. or AEK), 'OFI' (not OFI Crete), 'Volos' (not Volos NFC).",
+      "sourceA": [
+        { "url": "https://www.slgr.gr/en/scoreboard/24/", "publisher": "Super League Greece (slgr.gr)", "readOn": "2026-09-15" },
+        { "url": "https://match.uefa.com/v5/matches?competitionId=1&seasonYear=2027&offset=0&limit=200&order=ASC", "publisher": "UEFA match data API", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.espn.com/soccer/standings/_/league/gre.1/season/2025", "publisher": "ESPN", "readOn": "2026-09-15" },
+        { "url": "https://www.sportinglife.com/football/league-tables/greek-super-league/41/seasons/2025-2026/107", "publisher": "Sporting Life", "readOn": "2026-09-15" },
+        { "url": "https://www.protothema.gr/sports/article/1820097/stin-5i-thesi-o-aris-7os-o-ofi-i-teliki-vathmologia-ton-playoffs/", "publisher": "Proto Thema (2026-05-17)", "readOn": "2026-09-15" }
+      ]
+    },
+    {
+      "league": "Danish Superliga",
+      "gameLeagueId": "denmark",
+      "gamePlaces": 1,
+      "positionsNeeded": 4,
+      "status": "verified",
+      "champion": { "sourceName": "AGF", "gameClubName": "AGF" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "AGF", "sourceNameB": "AGF", "gameClubName": "AGF", "played": 32, "points": 67 },
+        { "pos": 2, "sourceNameA": "FC Midtjylland", "sourceNameB": "FC Midtjylland", "gameClubName": "FC Midtjylland", "played": 32, "points": 60 },
+        { "pos": 3, "sourceNameA": "FC Nordsjælland", "sourceNameB": "FC Nordsjælland", "gameClubName": "FC Nordsjælland", "played": 32, "points": 50 },
+        { "pos": 4, "sourceNameA": "Brøndby IF", "sourceNameB": "Brøndby IF", "gameClubName": "Brøndby IF", "played": 32, "points": 45 },
+        { "pos": 5, "sourceNameA": "Viborg FF", "sourceNameB": "Viborg FF", "gameClubName": "Viborg FF", "played": 32, "points": 44 },
+        { "pos": 6, "sourceNameA": "Sønderjyske Fodbold", "sourceNameB": "Sønderjyske Fodbold", "gameClubName": "SønderjyskE", "played": 32, "points": 44 },
+        { "pos": 7, "sourceNameA": "F.C. København", "sourceNameB": "F.C. København", "gameClubName": "FC Copenhagen", "played": 32, "points": 51 },
+        { "pos": 8, "sourceNameA": "OB", "sourceNameB": "Odense Boldklub", "gameClubName": "OB", "played": 32, "points": 41 },
+        { "pos": 9, "sourceNameA": "Silkeborg IF", "sourceNameB": "Silkeborg IF", "gameClubName": "Silkeborg IF", "played": 32, "points": 36 },
+        { "pos": 10, "sourceNameA": "Randers FC", "sourceNameB": "Randers FC", "gameClubName": "Randers FC", "played": 32, "points": 35 }
+      ],
+      "deductions": "None shown or mentioned.",
+      "splitNote": "22 regular rounds, then a championship group (places 1 to 6) and a qualification group (places 7 to 12), 10 more rounds, points carried over in full. FC Copenhagen finish 7th with 51, more than places 3 to 6, because they were 7th after the regular rounds.",
+      "uclQualifiersReal": "AGF (champions) entered the second qualifying round, champions path, beat Lech Poznan, then lost the third qualifying round to Sabah. Midtjylland (2nd) are tagged for UEFA qualification but do not appear in UCL match data. The game's 1 place is the champion.",
+      "disagreements": "None on positions or points. Trap: game strings are 'SønderjyskE' (capital E, not Sønderjyske Fodbold) and 'FC Copenhagen' (not F.C. København).",
+      "sourceA": [
+        { "url": "https://api.superliga.dk/tournaments/46/standings?seasonId=27018", "publisher": "Superligaen A/S data API (behind superliga.dk/stilling)", "readOn": "2026-09-15" },
+        { "url": "https://match.uefa.com/v5/matches?competitionId=1&seasonYear=2027&offset=0&limit=200&order=ASC", "publisher": "UEFA match data API", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.espn.com/soccer/standings/_/league/den.1/season/2025", "publisher": "ESPN", "readOn": "2026-09-15" },
+        { "url": "https://www.sportinglife.com/football/league-tables/danish-superligaen/73/seasons/2025-2026/107", "publisher": "Sporting Life", "readOn": "2026-09-15" }
+      ]
+    },
+    {
+      "league": "Swiss Super League",
+      "gameLeagueId": "switzerland",
+      "gamePlaces": 1,
+      "positionsNeeded": 4,
+      "status": "verified",
+      "champion": { "sourceName": "FC Thun", "gameClubName": "Thun" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "FC Thun", "sourceNameB": "FC Thun", "gameClubName": "Thun", "played": 38, "points": 75 },
+        { "pos": 2, "sourceNameA": "FC St.Gallen 1879", "sourceNameB": "FC Sankt Gallen", "gameClubName": "St. Gallen", "played": 38, "points": 70 },
+        { "pos": 3, "sourceNameA": "FC Lugano", "sourceNameB": "FC Lugano", "gameClubName": "Lugano", "played": 38, "points": 67 },
+        { "pos": 4, "sourceNameA": "FC Sion", "sourceNameB": "FC Sion", "gameClubName": "Sion", "played": 38, "points": 63 },
+        { "pos": 5, "sourceNameA": "FC Basel 1893", "sourceNameB": "FC Basel", "gameClubName": "Basel", "played": 38, "points": 56 },
+        { "pos": 6, "sourceNameA": "BSC Young Boys", "sourceNameB": "BSC Young Boys", "gameClubName": "Young Boys", "played": 38, "points": 55 },
+        { "pos": 7, "sourceNameA": "FC Luzern", "sourceNameB": "FC Luzern", "gameClubName": "Luzern", "played": 38, "points": 53 },
+        { "pos": 8, "sourceNameA": "Servette FC", "sourceNameB": "Servette FC", "gameClubName": "Servette", "played": 38, "points": 53 },
+        { "pos": 9, "sourceNameA": "FC Lausanne-Sport", "sourceNameB": "FC Lausanne-Sport", "gameClubName": "Lausanne-Sport", "played": 38, "points": 42 },
+        { "pos": 10, "sourceNameA": "FC Zürich", "sourceNameB": "FC Zürich", "gameClubName": "FC Zürich", "played": 38, "points": 38 }
+      ],
+      "deductions": "No row has deduction points (A); none mentioned (B).",
+      "splitNote": "33 regular rounds, then a championship round (places 1 to 6) and a relegation round (places 7 to 12), 5 more rounds each, points carried over in full. Sion passed Basel in the final stage.",
+      "uclQualifiersReal": "Thun (champions) entered the second qualifying round, champions path, and lost to GNK Dinamo. The game's 1 place is the champion.",
+      "disagreements": "None on positions or points. Trap: the game drops FC on most clubs ('Thun', 'Lugano', 'Sion', 'Basel', 'Luzern') but keeps it on 'FC Zürich'; 'St. Gallen' has a dot and a space.",
+      "sourceA": [
+        { "url": "https://sfl.ch/de/superleague-tabelle", "publisher": "Swiss Football League (season selector 2025/2026)", "readOn": "2026-09-15" },
+        { "url": "https://origins-widgets-orchestrator.origins-digital.com/api/ranking?competitionId=undefined&tournamentCalendarId=d5ju52a9misru35821zuqysd0", "publisher": "SFL ranking feed loaded by sfl.ch", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.tntsports.co.uk/football/swiss-super-league/2025-2026/standings.shtml", "publisher": "TNT Sports", "readOn": "2026-09-15" },
+        { "url": "https://www.sportinglife.com/football/league-tables/swiss-super-league/36/seasons/2025-2026/107", "publisher": "Sporting Life", "readOn": "2026-09-15" }
+      ]
+    },
+    {
+      "league": "SuperSport HNL (Croatia)",
+      "gameLeagueId": "croatia",
+      "gamePlaces": 1,
+      "positionsNeeded": 4,
+      "status": "verified",
+      "champion": { "sourceName": "DINAMO", "gameClubName": "Dinamo Zagreb" },
+      "verifiedPositions": [
+        { "pos": 1, "sourceNameA": "DINAMO", "sourceNameB": "Dinamo Zagreb", "gameClubName": "Dinamo Zagreb", "played": 36, "points": 86 },
+        { "pos": 2, "sourceNameA": "HAJDUK", "sourceNameB": "HNK Hajduk Split", "gameClubName": "Hajduk Split", "played": 36, "points": 68 },
+        { "pos": 3, "sourceNameA": "VARAŽDIN", "sourceNameB": "NK Varazdin", "gameClubName": "Varaždin", "played": 36, "points": 54 },
+        { "pos": 4, "sourceNameA": "RIJEKA", "sourceNameB": "HNK Rijeka", "gameClubName": "Rijeka", "played": 36, "points": 53 },
+        { "pos": 5, "sourceNameA": "LOKOMOTIVA", "sourceNameB": "Lokomotiva", "gameClubName": "Lokomotiva Zagreb", "played": 36, "points": 44 },
+        { "pos": 6, "sourceNameA": "ISTRA 1961", "sourceNameB": "NK Istra 1961", "gameClubName": "Istra 1961", "played": 36, "points": 43 },
+        { "pos": 7, "sourceNameA": "GORICA", "sourceNameB": "HNK Gorica", "gameClubName": "Gorica", "played": 36, "points": 41 },
+        { "pos": 8, "sourceNameA": "SLAVEN BELUPO", "sourceNameB": "NK Slaven Belupo", "gameClubName": "Slaven Belupo", "played": 36, "points": 41 },
+        { "pos": 9, "sourceNameA": "OSIJEK", "sourceNameB": "NK Osijek", "gameClubName": "Osijek", "played": 36, "points": 35 },
+        { "pos": 10, "sourceNameA": "VUKOVAR 1991", "sourceNameB": "Vukovar '91", "gameClubName": "NOT IN GAME", "played": 36, "points": 28 }
+      ],
+      "deductions": "No deduction column (A); none mentioned (B).",
+      "splitNote": "No split. 10 clubs play each other four times over 36 rounds, so the top 10 is the whole table.",
+      "uclQualifiersReal": "Dinamo Zagreb (champions) entered the second qualifying round, champions path, beat Thun and Kauno Zalgiris, then lost the play-off to Viking. The game's 1 place is the champion.",
+      "disagreements": "None on positions or points. Vukovar 1991 (10th, relegated) is not in the game's 2026-27 league (Rudes replaced them); it is outside the positions the game needs. Trap: 'Lokomotiva Zagreb' is the long form while the sources print 'Lokomotiva'; 'Varaždin' keeps the accent.",
+      "sourceA": [
+        { "url": "https://hnl.hr/povijest/rezultati-i-poretci/?sid=35", "publisher": "HNS / SuperSport HNL (hnl.hr)", "readOn": "2026-09-15" },
+        { "url": "https://match.uefa.com/v5/matches?competitionId=1&seasonYear=2027&offset=0&limit=200&order=ASC", "publisher": "UEFA match data API", "readOn": "2026-09-15" }
+      ],
+      "sourceB": [
+        { "url": "https://www.besoccer.com/competition/table/1_hnl/2026", "publisher": "BeSoccer", "readOn": "2026-09-15" },
+        { "url": "https://zgnogomet.com/natjecanje/supersport-hnl-sezona-2025-2026/", "publisher": "ZGnogomet", "readOn": "2026-09-15" }
+      ]
+    }
+  ],
+  "uclRunnerUp": { "sourceName": "Arsenal", "gameClubName": "Arsenal" },
+  "whatTheGameWouldDerive": "With these tables, uclQualifiersFrom's rule (top uclPlacesIn per league, then the holder, then fill by depth) gives 31 league places (4+4+4+4+3+2+2+1*8) with PSG already in as Ligue 1 champions, so one fill place goes to the first deep league alphabetically: bundesliga position 5, Hoffenheim. This is arithmetic on the rule as written at clubManager.ts:9074 to :9128, not a claim about the real 2026-27 field."
+}
