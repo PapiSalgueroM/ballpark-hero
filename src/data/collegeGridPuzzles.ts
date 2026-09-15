@@ -1,984 +1,989 @@
-import { GridPuzzle } from '@/types/footballGrid';
+/* College Grid boards. GENERATED, do not edit by hand.
+
+   Command: node scripts/genCollegeGridBoards.mjs (seed cg611)
+   Check:   node scripts/genCollegeGridBoards.mjs --check
+
+   75 boards dealt from scripts/data/collegeGridPlayers.json and judged by
+   judgeCollegeCell in src/lib/collegeGrid.ts. Every cell holds at least
+   3 two-source yes answers, one of them a first round pick or a player of
+   5 or more NFL seasons, and the nine cells can be filled by nine
+   different players. The rules are in the generator's header. */
+import type { GridPuzzle } from '@/types/footballGrid';
 
 export const collegeGridPuzzles: GridPuzzle[] = [
   {
-    id: 'cgrid-001',
+    id: 'cg611-001',
     rows: [
-      { label: 'Alabama', type: 'college' },
-      { label: 'Ohio State', type: 'college' },
-      { label: 'LSU', type: 'college' },
+      { label: 'Pittsburgh', type: 'college' },
+      { label: 'Florida State', type: 'college' },
+      { label: 'Oklahoma', type: 'college' },
     ],
     cols: [
+      { label: 'Defensive Lineman', type: 'position' },
       { label: 'Quarterback', type: 'position' },
-      { label: 'Heisman Winner', type: 'award' },
       { label: 'First Round Pick', type: 'draft' },
     ],
   },
   {
-    id: 'cgrid-002',
+    id: 'cg611-002',
     rows: [
-      { label: 'Clemson', type: 'college' },
-      { label: 'Georgia', type: 'college' },
-      { label: 'USC', type: 'college' },
+      { label: 'Michigan', type: 'college' },
+      { label: 'Notre Dame', type: 'college' },
+      { label: 'Alabama', type: 'college' },
     ],
     cols: [
-      { label: 'Wide Receiver', type: 'position' },
-      { label: 'National Champion', type: 'award' },
-      { label: 'All-American', type: 'award' },
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Heisman Winner', type: 'award' },
+      { label: 'Top 10 Pick', type: 'draft' },
     ],
   },
   {
-    id: 'cgrid-003',
+    id: 'cg611-003',
     rows: [
-      { label: 'Oklahoma', type: 'college' },
-      { label: 'Michigan', type: 'college' },
-      { label: 'Texas', type: 'college' },
+      { label: 'Penn State', type: 'college' },
+      { label: 'Oregon', type: 'college' },
+      { label: 'Purdue', type: 'college' },
     ],
     cols: [
       { label: 'Running Back', type: 'position' },
-      { label: 'Top 10 Pick', type: 'draft' },
-      { label: 'Heisman Winner', type: 'award' },
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
     ],
   },
   {
-    id: 'cgrid-004',
+    id: 'cg611-004',
     rows: [
-      { label: 'Notre Dame', type: 'college' },
-      { label: 'Florida', type: 'college' },
-      { label: 'Penn State', type: 'college' },
+      { label: 'Clemson', type: 'college' },
+      { label: 'Baylor', type: 'college' },
+      { label: 'Louisville', type: 'college' },
     ],
     cols: [
       { label: 'Linebacker', type: 'position' },
-      { label: 'All-American', type: 'award' },
-      { label: 'Went Undrafted', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-005',
-    rows: [
-      { label: 'SEC Conference', type: 'misc' },
-      { label: 'Big Ten Conference', type: 'misc' },
-      { label: 'ACC Conference', type: 'misc' },
-    ],
-    cols: [
+      { label: 'Defensive Lineman', type: 'position' },
       { label: 'Quarterback', type: 'position' },
-      { label: '1st Overall Pick', type: 'draft' },
-      { label: 'National Champion', type: 'award' },
     ],
   },
   {
-    // Round 60 fix: this puzzle used to pair Oregon with National Champion.
-    // Oregon has never won a national title (they lost the 2011 and 2015 title
-    // games), so that cell was unfillable and this daily was impossible to
-    // complete, once every fifteen days. Florida State has three titles and a
-    // deep first round defensive end line, so every cell now has real answers.
-    id: 'cgrid-006',
+    id: 'cg611-005',
     rows: [
-      { label: 'Alabama', type: 'college' },
-      { label: 'Clemson', type: 'college' },
-      { label: 'Florida State', type: 'college' },
-    ],
-    cols: [
-      { label: 'Defensive End', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
-      { label: 'National Champion', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-007',
-    rows: [
-      { label: 'Miami (FL)', type: 'college' },
-      { label: 'Florida State', type: 'college' },
+      { label: 'Cincinnati', type: 'college' },
+      { label: 'Michigan State', type: 'college' },
       { label: 'Georgia', type: 'college' },
     ],
     cols: [
-      { label: 'Cornerback', type: 'position' },
-      { label: 'All-American', type: 'award' },
-      { label: 'Top 10 Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-008',
-    rows: [
-      { label: 'Stanford', type: 'college' },
-      { label: 'Wisconsin', type: 'college' },
-      { label: 'Auburn', type: 'college' },
-    ],
-    cols: [
-      { label: 'Running Back', type: 'position' },
-      { label: 'Heisman Winner', type: 'award' },
-      { label: 'All-American', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-009',
-    rows: [
-      { label: 'Ohio State', type: 'college' },
-      { label: 'Alabama', type: 'college' },
-      { label: 'Michigan', type: 'college' },
-    ],
-    cols: [
-      { label: 'Offensive Lineman', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
-      { label: 'National Champion', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-010',
-    rows: [
-      { label: 'Texas A&M', type: 'college' },
-      { label: 'LSU', type: 'college' },
-      { label: 'Oklahoma', type: 'college' },
-    ],
-    cols: [
+      { label: 'Wide Receiver', type: 'position' },
       { label: 'Tight End', type: 'position' },
-      { label: 'All-American', type: 'award' },
-      { label: 'Went Undrafted', type: 'draft' },
+      { label: 'Offensive Lineman', type: 'position' },
     ],
   },
   {
-    id: 'cgrid-011',
-    rows: [
-      { label: 'USC', type: 'college' },
-      { label: 'Texas', type: 'college' },
-      { label: 'Florida', type: 'college' },
-    ],
-    cols: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'Heisman Winner', type: 'award' },
-      { label: 'National Champion', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-012',
-    rows: [
-      { label: 'Georgia', type: 'college' },
-      { label: 'Clemson', type: 'college' },
-      { label: 'Penn State', type: 'college' },
-    ],
-    cols: [
-      { label: 'Safety', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
-      { label: 'All-American', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-013',
-    rows: [
-      { label: 'Big 12 Conference', type: 'misc' },
-      { label: 'Big Ten Conference', type: 'misc' },
-      { label: 'SEC Conference', type: 'misc' },
-    ],
-    cols: [
-      { label: 'Wide Receiver', type: 'position' },
-      { label: 'Heisman Winner', type: 'award' },
-      { label: 'Top 5 Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-014',
-    rows: [
-      { label: 'Notre Dame', type: 'college' },
-      { label: 'Michigan', type: 'college' },
-      { label: 'Alabama', type: 'college' },
-    ],
-    cols: [
-      { label: 'Defensive Tackle', type: 'position' },
-      { label: 'All-American', type: 'award' },
-      { label: 'National Champion', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-015',
-    rows: [
-      { label: 'Oregon', type: 'college' },
-      { label: 'Ohio State', type: 'college' },
-      { label: 'LSU', type: 'college' },
-    ],
-    cols: [
-      { label: 'Running Back', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
-      { label: 'Heisman Winner', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-016',
-    rows: [
-      { label: 'Alabama', type: 'college' },
-      { label: 'Georgia', type: 'college' },
-      { label: 'Texas', type: 'college' },
-    ],
-    cols: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
-      { label: 'National Champion', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-017',
-    rows: [
-      { label: 'Ohio State', type: 'college' },
-      { label: 'Michigan', type: 'college' },
-      { label: 'Penn State', type: 'college' },
-    ],
-    cols: [
-      { label: 'Running Back', type: 'position' },
-      { label: 'Pro Bowler', type: 'misc' },
-      { label: 'All-American', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-018',
-    rows: [
-      { label: 'USC', type: 'college' },
-      { label: 'UCLA', type: 'college' },
-      { label: 'Oregon', type: 'college' },
-    ],
-    cols: [
-      { label: 'Wide Receiver', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
-      { label: 'Pro Bowler', type: 'misc' },
-    ],
-  },
-  {
-    id: 'cgrid-019',
+    id: 'cg611-006',
     rows: [
       { label: 'Nebraska', type: 'college' },
-      { label: 'Oklahoma', type: 'college' },
+      { label: 'Arkansas', type: 'college' },
+      { label: 'Ohio State', type: 'college' },
+    ],
+    cols: [
+      { label: 'Running Back', type: 'position' },
+      { label: 'Linebacker', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-007',
+    rows: [
+      { label: 'Stanford', type: 'college' },
+      { label: 'TCU', type: 'college' },
+      { label: 'Syracuse', type: 'college' },
+    ],
+    cols: [
+      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
+    ],
+  },
+  {
+    id: 'cg611-008',
+    rows: [
+      { label: 'Wisconsin', type: 'college' },
+      { label: 'UCLA', type: 'college' },
+      { label: 'USC', type: 'college' },
+    ],
+    cols: [
+      { label: 'Running Back', type: 'position' },
+      { label: 'Tight End', type: 'position' },
+      { label: 'Linebacker', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-009',
+    rows: [
+      { label: 'Florida', type: 'college' },
+      { label: 'Tennessee', type: 'college' },
+      { label: 'Texas A&M', type: 'college' },
+    ],
+    cols: [
+      { label: 'Top 5 Pick', type: 'draft' },
+      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'Offensive Lineman', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-010',
+    rows: [
+      { label: 'Virginia Tech', type: 'college' },
+      { label: 'LSU', type: 'college' },
       { label: 'Colorado', type: 'college' },
     ],
     cols: [
-      { label: 'Running Back', type: 'position' },
-      { label: 'Heisman Winner', type: 'award' },
-      { label: 'All-American', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-020',
-    rows: [
-      { label: 'Miami (FL)', type: 'college' },
-      { label: 'Florida State', type: 'college' },
-      { label: 'Florida', type: 'college' },
-    ],
-    cols: [
-      { label: 'Defensive End', type: 'position' },
-      { label: 'Pro Football Hall of Famer', type: 'misc' },
-      { label: 'First Round Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-021',
-    rows: [
-      { label: 'Notre Dame', type: 'college' },
-      { label: 'Syracuse', type: 'college' },
-      { label: 'Pittsburgh', type: 'college' },
-    ],
-    cols: [
       { label: 'Quarterback', type: 'position' },
-      { label: 'Heisman Winner', type: 'award' },
-      { label: 'Pro Football Hall of Famer', type: 'misc' },
-    ],
-  },
-  {
-    id: 'cgrid-022',
-    rows: [
-      { label: 'Wisconsin', type: 'college' },
-      { label: 'Iowa', type: 'college' },
-      { label: 'Michigan State', type: 'college' },
-    ],
-    cols: [
-      { label: 'Running Back', type: 'position' },
-      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
       { label: 'First Round Pick', type: 'draft' },
     ],
   },
   {
-    id: 'cgrid-023',
+    id: 'cg611-011',
     rows: [
-      { label: 'Alabama', type: 'college' },
-      { label: 'Clemson', type: 'college' },
-      { label: 'LSU', type: 'college' },
-    ],
-    cols: [
-      { label: 'Wide Receiver', type: 'position' },
-      { label: 'National Champion', type: 'award' },
-      { label: 'Top 10 Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-024',
-    rows: [
-      { label: 'Auburn', type: 'college' },
-      { label: 'Tennessee', type: 'college' },
-      { label: 'Arkansas', type: 'college' },
-    ],
-    cols: [
-      { label: 'Running Back', type: 'position' },
-      { label: 'Pro Bowler', type: 'misc' },
-      { label: 'First Round Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-025',
-    rows: [
-      { label: 'Ohio State', type: 'college' },
-      { label: 'Alabama', type: 'college' },
-      { label: 'Georgia', type: 'college' },
-    ],
-    cols: [
-      { label: 'Cornerback', type: 'position' },
-      { label: 'Jim Thorpe Award', type: 'award' },
-      { label: 'First Round Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-026',
-    rows: [
-      { label: 'Texas A&M', type: 'college' },
+      { label: 'West Virginia', type: 'college' },
+      { label: 'Texas', type: 'college' },
       { label: 'Ole Miss', type: 'college' },
+    ],
+    cols: [
+      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Quarterback', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-012',
+    rows: [
+      { label: 'Iowa', type: 'college' },
+      { label: 'Washington', type: 'college' },
       { label: 'Mississippi State', type: 'college' },
     ],
     cols: [
+      { label: 'Running Back', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Offensive Lineman', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-013',
+    rows: [
+      { label: 'Boise State', type: 'college' },
+      { label: 'Arizona State', type: 'college' },
+      { label: 'Auburn', type: 'college' },
+    ],
+    cols: [
+      { label: 'Linebacker', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-014',
+    rows: [
+      { label: 'Miami (FL)', type: 'college' },
+      { label: 'South Carolina', type: 'college' },
+      { label: 'Oklahoma State', type: 'college' },
+    ],
+    cols: [
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'Defensive Lineman', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-015',
+    rows: [
+      { label: 'Houston', type: 'college' },
+      { label: 'Virginia Tech', type: 'college' },
+      { label: 'LSU', type: 'college' },
+    ],
+    cols: [
+      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Linebacker', type: 'position' },
+      { label: 'Running Back', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-016',
+    rows: [
+      { label: 'Arizona State', type: 'college' },
+      { label: 'BYU', type: 'college' },
+      { label: 'USC', type: 'college' },
+    ],
+    cols: [
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Defensive Lineman', type: 'position' },
       { label: 'Quarterback', type: 'position' },
-      { label: 'All-American', type: 'award' },
+    ],
+  },
+  {
+    id: 'cg611-017',
+    rows: [
+      { label: 'Tennessee', type: 'college' },
+      { label: 'Texas A&M', type: 'college' },
+      { label: 'Oklahoma', type: 'college' },
+    ],
+    cols: [
+      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'Top 5 Pick', type: 'draft' },
+      { label: 'Wide Receiver', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-018',
+    rows: [
+      { label: 'Nebraska', type: 'college' },
+      { label: 'Syracuse', type: 'college' },
+      { label: 'Iowa', type: 'college' },
+    ],
+    cols: [
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Running Back', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-019',
+    rows: [
+      { label: 'Florida', type: 'college' },
+      { label: 'Washington', type: 'college' },
+      { label: 'Florida State', type: 'college' },
+    ],
+    cols: [
+      { label: 'Tight End', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Top 10 Pick', type: 'draft' },
+    ],
+  },
+  {
+    id: 'cg611-020',
+    rows: [
+      { label: 'Notre Dame', type: 'college' },
+      { label: 'Michigan', type: 'college' },
+      { label: 'Alabama', type: 'college' },
+    ],
+    cols: [
+      { label: 'Tight End', type: 'position' },
+      { label: 'Linebacker', type: 'position' },
+      { label: 'Heisman Winner', type: 'award' },
+    ],
+  },
+  {
+    id: 'cg611-021',
+    rows: [
+      { label: 'Louisville', type: 'college' },
+      { label: 'Baylor', type: 'college' },
+      { label: 'Penn State', type: 'college' },
+    ],
+    cols: [
+      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Quarterback', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-022',
+    rows: [
+      { label: 'Clemson', type: 'college' },
+      { label: 'Miami (FL)', type: 'college' },
+      { label: 'Georgia', type: 'college' },
+    ],
+    cols: [
+      { label: 'Top 5 Pick', type: 'draft' },
+      { label: 'Tight End', type: 'position' },
+      { label: 'Top 10 Pick', type: 'draft' },
+    ],
+  },
+  {
+    id: 'cg611-023',
+    rows: [
+      { label: 'Stanford', type: 'college' },
+      { label: 'Mississippi State', type: 'college' },
+      { label: 'Ohio State', type: 'college' },
+    ],
+    cols: [
+      { label: 'Linebacker', type: 'position' },
+      { label: 'Running Back', type: 'position' },
       { label: 'First Round Pick', type: 'draft' },
     ],
   },
   {
-    id: 'cgrid-027',
+    id: 'cg611-024',
     rows: [
-      { label: 'Washington', type: 'college' },
+      { label: 'Boise State', type: 'college' },
+      { label: 'West Virginia', type: 'college' },
       { label: 'Oregon', type: 'college' },
-      { label: 'Stanford', type: 'college' },
+    ],
+    cols: [
+      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Running Back', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-025',
+    rows: [
+      { label: 'Michigan State', type: 'college' },
+      { label: 'Arkansas', type: 'college' },
+      { label: 'Wisconsin', type: 'college' },
     ],
     cols: [
       { label: 'Quarterback', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
-      { label: 'Pro Bowler', type: 'misc' },
+      { label: 'Tight End', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
     ],
   },
   {
-    id: 'cgrid-028',
+    id: 'cg611-026',
     rows: [
-      { label: 'Louisville', type: 'college' },
-      { label: 'Cincinnati', type: 'college' },
+      { label: 'Stanford', type: 'college' },
+      { label: 'South Carolina', type: 'college' },
+      { label: 'Texas', type: 'college' },
+    ],
+    cols: [
+      { label: 'Tight End', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Top 10 Pick', type: 'draft' },
+    ],
+  },
+  {
+    id: 'cg611-027',
+    rows: [
+      { label: 'Oklahoma State', type: 'college' },
+      { label: 'Auburn', type: 'college' },
+      { label: 'Florida', type: 'college' },
+    ],
+    cols: [
+      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'Quarterback', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
+    ],
+  },
+  {
+    id: 'cg611-028',
+    rows: [
+      { label: 'BYU', type: 'college' },
+      { label: 'Purdue', type: 'college' },
+      { label: 'UCLA', type: 'college' },
+    ],
+    cols: [
+      { label: 'Linebacker', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Defensive Lineman', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-029',
+    rows: [
+      { label: 'Ole Miss', type: 'college' },
+      { label: 'Pittsburgh', type: 'college' },
       { label: 'Houston', type: 'college' },
     ],
     cols: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'Pro Bowler', type: 'misc' },
-      { label: 'All-American', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-029',
-    rows: [
-      { label: 'Virginia Tech', type: 'college' },
-      { label: 'West Virginia', type: 'college' },
-      { label: 'Pittsburgh', type: 'college' },
-    ],
-    cols: [
-      { label: 'Defensive End', type: 'position' },
-      { label: 'Pro Bowler', type: 'misc' },
-      { label: 'First Round Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-030',
-    rows: [
-      { label: 'Alabama', type: 'college' },
-      { label: 'Ohio State', type: 'college' },
-      { label: 'USC', type: 'college' },
-    ],
-    cols: [
-      { label: 'Offensive Lineman', type: 'position' },
-      { label: '1st Overall Pick', type: 'draft' },
-      { label: 'Pro Football Hall of Famer', type: 'misc' },
-    ],
-  },
-  {
-    id: 'cgrid-031',
-    rows: [
-      { label: 'Georgia', type: 'college' },
-      { label: 'Florida', type: 'college' },
-      { label: 'South Carolina', type: 'college' },
-    ],
-    cols: [
       { label: 'Running Back', type: 'position' },
-      { label: 'Heisman Winner', type: 'award' },
-      { label: 'Pro Bowler', type: 'misc' },
+      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
     ],
   },
   {
-    id: 'cgrid-032',
+    id: 'cg611-030',
     rows: [
-      { label: 'Texas', type: 'college' },
-      { label: 'Texas A&M', type: 'college' },
-      { label: 'TCU', type: 'college' },
-    ],
-    cols: [
-      { label: 'Wide Receiver', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
-      { label: 'All-American', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-033',
-    rows: [
-      { label: 'Michigan', type: 'college' },
-      { label: 'Notre Dame', type: 'college' },
-      { label: 'Michigan State', type: 'college' },
-    ],
-    cols: [
-      { label: 'Linebacker', type: 'position' },
-      { label: 'Pro Bowler', type: 'misc' },
-      { label: 'Played Two Sports', type: 'misc' },
-    ],
-  },
-  {
-    id: 'cgrid-034',
-    rows: [
-      { label: 'Baylor', type: 'college' },
-      { label: 'Oklahoma State', type: 'college' },
       { label: 'Colorado', type: 'college' },
-    ],
-    cols: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'Heisman Winner', type: 'award' },
-      { label: 'First Round Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-035',
-    rows: [
       { label: 'Miami (FL)', type: 'college' },
-      { label: 'Clemson', type: 'college' },
-      { label: 'Florida State', type: 'college' },
-    ],
-    cols: [
-      { label: 'Linebacker', type: 'position' },
-      { label: 'National Champion', type: 'award' },
-      { label: 'Top 10 Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-036',
-    rows: [
-      { label: 'SEC Conference', type: 'misc' },
-      { label: 'Big Ten Conference', type: 'misc' },
-      { label: 'Pac-12 Conference', type: 'misc' },
+      { label: 'Oklahoma State', type: 'college' },
     ],
     cols: [
       { label: 'Quarterback', type: 'position' },
-      { label: 'Heisman Winner', type: 'award' },
       { label: 'First Round Pick', type: 'draft' },
+      { label: 'Defensive Back', type: 'position' },
     ],
   },
   {
-    id: 'cgrid-037',
+    id: 'cg611-031',
     rows: [
-      { label: 'ACC Conference', type: 'misc' },
-      { label: 'Big 12 Conference', type: 'misc' },
-      { label: 'SEC Conference', type: 'misc' },
+      { label: 'Arizona State', type: 'college' },
+      { label: 'TCU', type: 'college' },
+      { label: 'Georgia', type: 'college' },
     ],
     cols: [
       { label: 'Wide Receiver', type: 'position' },
-      { label: 'All-American', type: 'award' },
+      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Linebacker', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-032',
+    rows: [
+      { label: 'LSU', type: 'college' },
+      { label: 'USC', type: 'college' },
+      { label: 'Cincinnati', type: 'college' },
+    ],
+    cols: [
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Tight End', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-033',
+    rows: [
+      { label: 'Tennessee', type: 'college' },
+      { label: 'Ohio State', type: 'college' },
+      { label: 'Texas', type: 'college' },
+    ],
+    cols: [
+      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'Tight End', type: 'position' },
       { label: 'Top 5 Pick', type: 'draft' },
     ],
   },
   {
-    id: 'cgrid-038',
+    id: 'cg611-034',
     rows: [
-      { label: 'Big Ten Conference', type: 'misc' },
-      { label: 'Pac-12 Conference', type: 'misc' },
-      { label: 'Notre Dame', type: 'college' },
-    ],
-    cols: [
-      { label: 'Offensive Lineman', type: 'position' },
-      { label: 'Pro Football Hall of Famer', type: 'misc' },
-      { label: 'First Round Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-039',
-    rows: [
-      { label: 'SEC Conference', type: 'misc' },
-      { label: 'Ohio State', type: 'college' },
-      { label: 'USC', type: 'college' },
-    ],
-    cols: [
-      { label: 'Running Back', type: 'position' },
-      { label: 'National Champion', type: 'award' },
-      { label: 'Pro Bowler', type: 'misc' },
-    ],
-  },
-  {
-    id: 'cgrid-040',
-    rows: [
-      { label: 'Big 12 Conference', type: 'misc' },
-      { label: 'Michigan', type: 'college' },
-      { label: 'Florida State', type: 'college' },
-    ],
-    cols: [
-      { label: 'Defensive Tackle', type: 'position' },
-      { label: 'All-American', type: 'award' },
-      { label: 'Top 10 Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-041',
-    rows: [
-      { label: 'ACC Conference', type: 'misc' },
-      { label: 'Big Ten Conference', type: 'misc' },
-      { label: 'Texas', type: 'college' },
-    ],
-    cols: [
-      { label: 'Safety', type: 'position' },
-      { label: 'Pro Bowler', type: 'misc' },
-      { label: 'First Round Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-042',
-    rows: [
-      { label: 'Pac-12 Conference', type: 'misc' },
-      { label: 'Penn State', type: 'college' },
-      { label: 'Miami (FL)', type: 'college' },
-    ],
-    cols: [
-      { label: 'Linebacker', type: 'position' },
-      { label: 'Butkus Award', type: 'award' },
-      { label: 'Pro Bowler', type: 'misc' },
-    ],
-  },
-  {
-    id: 'cgrid-043',
-    rows: [
-      { label: 'SEC Conference', type: 'misc' },
-      { label: 'ACC Conference', type: 'misc' },
-      { label: 'Big 12 Conference', type: 'misc' },
-    ],
-    cols: [
-      { label: 'Tight End', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
-      { label: 'Pro Bowler', type: 'misc' },
-    ],
-  },
-  {
-    id: 'cgrid-044',
-    rows: [
-      { label: 'Pac-12 Conference', type: 'misc' },
-      { label: 'SEC Conference', type: 'misc' },
-      { label: 'Notre Dame', type: 'college' },
-    ],
-    cols: [
-      { label: 'Defensive End', type: 'position' },
-      { label: 'National Champion', type: 'award' },
-      { label: 'Top 10 Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-045',
-    rows: [
-      { label: 'Big Ten Conference', type: 'misc' },
-      { label: 'Florida', type: 'college' },
+      { label: 'Alabama', type: 'college' },
+      { label: 'Clemson', type: 'college' },
       { label: 'Oregon', type: 'college' },
     ],
     cols: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'Transferred Schools', type: 'misc' },
-      { label: 'First Round Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-046',
-    rows: [
-      { label: 'SEC Conference', type: 'misc' },
-      { label: 'Big Ten Conference', type: 'misc' },
-      { label: 'Miami (FL)', type: 'college' },
-    ],
-    cols: [
-      { label: 'Wide Receiver', type: 'position' },
-      { label: 'Won a Super Bowl', type: 'misc' },
-      { label: 'Pro Bowler', type: 'misc' },
-    ],
-  },
-  {
-    id: 'cgrid-047',
-    rows: [
-      { label: 'Big 12 Conference', type: 'misc' },
-      { label: 'Alabama', type: 'college' },
-      { label: 'Washington', type: 'college' },
-    ],
-    cols: [
-      { label: 'Running Back', type: 'position' },
-      { label: 'All-American', type: 'award' },
       { label: 'Top 10 Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-048',
-    rows: [
-      { label: 'ACC Conference', type: 'misc' },
-      { label: 'Ohio State', type: 'college' },
-      { label: 'Nebraska', type: 'college' },
-    ],
-    cols: [
-      { label: 'Offensive Lineman', type: 'position' },
-      { label: 'Outland Trophy', type: 'award' },
-      { label: 'Pro Bowler', type: 'misc' },
-    ],
-  },
-  {
-    id: 'cgrid-049',
-    rows: [
-      { label: 'Pac-12 Conference', type: 'misc' },
-      { label: 'Big Ten Conference', type: 'misc' },
-      { label: 'Auburn', type: 'college' },
-    ],
-    cols: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'National Champion', type: 'award' },
-      { label: 'Conference Player of the Year', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-050',
-    rows: [
-      { label: 'SEC Conference', type: 'misc' },
-      { label: 'Pac-12 Conference', type: 'misc' },
-      { label: 'Notre Dame', type: 'college' },
-    ],
-    cols: [
-      { label: 'Safety', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
-      { label: 'All-American', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-051',
-    rows: [
-      { label: 'Big Ten Conference', type: 'misc' },
-      { label: 'Georgia', type: 'college' },
-      { label: 'BYU', type: 'college' },
-    ],
-    cols: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'NFL MVP', type: 'misc' },
-      { label: 'Played 10+ NFL Seasons', type: 'misc' },
-    ],
-  },
-  {
-    id: 'cgrid-052',
-    rows: [
-      { label: 'ACC Conference', type: 'misc' },
-      { label: 'SEC Conference', type: 'misc' },
-      { label: 'Michigan', type: 'college' },
-    ],
-    cols: [
-      { label: 'Cornerback', type: 'position' },
-      { label: 'Top 5 Pick', type: 'draft' },
-      { label: 'Pro Bowler', type: 'misc' },
-    ],
-  },
-  {
-    id: 'cgrid-053',
-    rows: [
-      { label: 'Big 12 Conference', type: 'misc' },
-      { label: 'Pac-12 Conference', type: 'misc' },
-      { label: 'Penn State', type: 'college' },
-    ],
-    cols: [
-      { label: 'Running Back', type: 'position' },
-      { label: 'Doak Walker Award', type: 'award' },
-      { label: 'First Round Pick', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-054',
-    rows: [
-      { label: 'SEC Conference', type: 'misc' },
-      { label: 'Big Ten Conference', type: 'misc' },
-      { label: 'Boise State', type: 'college' },
-    ],
-    cols: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'All-American', type: 'award' },
-      { label: 'Went Undrafted', type: 'draft' },
-    ],
-  },
-  {
-    id: 'cgrid-055',
-    rows: [
-      { label: 'Pac-12 Conference', type: 'misc' },
-      { label: 'ACC Conference', type: 'misc' },
-      { label: 'Alabama', type: 'college' },
-    ],
-    cols: [
-      { label: 'Tight End', type: 'position' },
-      { label: 'First Round Pick', type: 'draft' },
-      { label: 'National Champion', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-056',
-    rows: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'Running Back', type: 'position' },
-      { label: 'Wide Receiver', type: 'position' },
-    ],
-    cols: [
-      { label: 'Alabama', type: 'college' },
-      { label: 'Ohio State', type: 'college' },
-      { label: 'USC', type: 'college' },
-    ],
-  },
-  {
-    id: 'cgrid-057',
-    rows: [
       { label: 'Linebacker', type: 'position' },
-      { label: 'Cornerback', type: 'position' },
-      { label: 'Safety', type: 'position' },
-    ],
-    cols: [
-      { label: 'Miami (FL)', type: 'college' },
-      { label: 'Ohio State', type: 'college' },
-      { label: 'LSU', type: 'college' },
+      { label: 'Top 5 Pick', type: 'draft' },
     ],
   },
   {
-    id: 'cgrid-058',
+    id: 'cg611-035',
     rows: [
-      { label: 'Defensive End', type: 'position' },
-      { label: 'Defensive Tackle', type: 'position' },
+      { label: 'Virginia Tech', type: 'college' },
+      { label: 'Texas A&M', type: 'college' },
+      { label: 'Colorado', type: 'college' },
+    ],
+    cols: [
       { label: 'Offensive Lineman', type: 'position' },
-    ],
-    cols: [
-      { label: 'Alabama', type: 'college' },
-      { label: 'Nebraska', type: 'college' },
-      { label: 'Pittsburgh', type: 'college' },
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Quarterback', type: 'position' },
     ],
   },
   {
-    id: 'cgrid-059',
+    id: 'cg611-036',
     rows: [
-      { label: 'Quarterback', type: 'position' },
+      { label: 'Washington', type: 'college' },
+      { label: 'Cincinnati', type: 'college' },
+      { label: 'Wisconsin', type: 'college' },
+    ],
+    cols: [
+      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Tight End', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-037',
+    rows: [
+      { label: 'Pittsburgh', type: 'college' },
+      { label: 'Baylor', type: 'college' },
+      { label: 'Nebraska', type: 'college' },
+    ],
+    cols: [
+      { label: 'Linebacker', type: 'position' },
       { label: 'Running Back', type: 'position' },
-      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-038',
+    rows: [
+      { label: 'Michigan', type: 'college' },
+      { label: 'Auburn', type: 'college' },
+      { label: 'Oklahoma', type: 'college' },
     ],
     cols: [
       { label: 'Heisman Winner', type: 'award' },
-      { label: 'First Round Pick', type: 'draft' },
-      { label: 'Pro Football Hall of Famer', type: 'misc' },
-    ],
-  },
-  {
-    id: 'cgrid-060',
-    rows: [
-      { label: 'Defensive End', type: 'position' },
-      { label: 'Linebacker', type: 'position' },
-      { label: 'Cornerback', type: 'position' },
-    ],
-    cols: [
-      { label: 'Auburn', type: 'college' },
-      { label: 'Tennessee', type: 'college' },
-      { label: 'Virginia Tech', type: 'college' },
-    ],
-  },
-  {
-    id: 'cgrid-061',
-    rows: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'Running Back', type: 'position' },
-      { label: 'Linebacker', type: 'position' },
-    ],
-    cols: [
-      { label: 'Georgia', type: 'college' },
-      { label: 'Penn State', type: 'college' },
-      { label: 'Michigan', type: 'college' },
-    ],
-  },
-  {
-    id: 'cgrid-062',
-    rows: [
       { label: 'Wide Receiver', type: 'position' },
-      { label: 'Tight End', type: 'position' },
-      { label: 'Safety', type: 'position' },
-    ],
-    cols: [
-      { label: 'Notre Dame', type: 'college' },
-      { label: 'Miami (FL)', type: 'college' },
-      { label: 'Oklahoma', type: 'college' },
+      { label: 'Top 10 Pick', type: 'draft' },
     ],
   },
   {
-    id: 'cgrid-063',
+    id: 'cg611-039',
     rows: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'Wide Receiver', type: 'position' },
-      { label: 'Cornerback', type: 'position' },
-    ],
-    cols: [
-      { label: 'Transferred Schools', type: 'misc' },
-      { label: 'First Round Pick', type: 'draft' },
-      { label: 'National Champion', type: 'award' },
-    ],
-  },
-  {
-    id: 'cgrid-064',
-    rows: [
-      { label: 'Running Back', type: 'position' },
-      { label: 'Offensive Lineman', type: 'position' },
-      { label: 'Defensive Tackle', type: 'position' },
-    ],
-    cols: [
-      { label: 'Wisconsin', type: 'college' },
       { label: 'Iowa', type: 'college' },
-      { label: 'Nebraska', type: 'college' },
+      { label: 'Houston', type: 'college' },
+      { label: 'West Virginia', type: 'college' },
+    ],
+    cols: [
+      { label: 'Running Back', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Quarterback', type: 'position' },
     ],
   },
   {
-    id: 'cgrid-065',
+    id: 'cg611-040',
     rows: [
-      { label: 'Defensive End', type: 'position' },
-      { label: 'Safety', type: 'position' },
+      { label: 'Louisville', type: 'college' },
+      { label: 'Ole Miss', type: 'college' },
+      { label: 'Syracuse', type: 'college' },
+    ],
+    cols: [
+      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Running Back', type: 'position' },
+      { label: 'Quarterback', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-041',
+    rows: [
+      { label: 'Notre Dame', type: 'college' },
+      { label: 'Purdue', type: 'college' },
+      { label: 'Florida State', type: 'college' },
+    ],
+    cols: [
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Tight End', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-042',
+    rows: [
+      { label: 'Penn State', type: 'college' },
+      { label: 'UCLA', type: 'college' },
+      { label: 'Mississippi State', type: 'college' },
+    ],
+    cols: [
+      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Running Back', type: 'position' },
+      { label: 'Linebacker', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-043',
+    rows: [
+      { label: 'Miami (FL)', type: 'college' },
+      { label: 'South Carolina', type: 'college' },
+      { label: 'Florida State', type: 'college' },
+    ],
+    cols: [
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Top 10 Pick', type: 'draft' },
       { label: 'Tight End', type: 'position' },
     ],
-    cols: [
-      { label: 'Clemson', type: 'college' },
-      { label: 'Georgia', type: 'college' },
-      { label: 'Tennessee', type: 'college' },
-    ],
   },
   {
-    id: 'cgrid-066',
+    id: 'cg611-044',
     rows: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'Running Back', type: 'position' },
-      { label: 'Defensive End', type: 'position' },
+      { label: 'BYU', type: 'college' },
+      { label: 'Michigan State', type: 'college' },
+      { label: 'Arkansas', type: 'college' },
     ],
     cols: [
-      { label: 'Went Undrafted', type: 'draft' },
-      { label: 'Pro Bowler', type: 'misc' },
-      { label: 'Played 10+ NFL Seasons', type: 'misc' },
-    ],
-  },
-  {
-    id: 'cgrid-067',
-    rows: [
-      { label: 'Offensive Lineman', type: 'position' },
-      { label: 'Linebacker', type: 'position' },
       { label: 'Wide Receiver', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Quarterback', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-045',
+    rows: [
+      { label: 'Boise State', type: 'college' },
+      { label: 'TCU', type: 'college' },
+      { label: 'Baylor', type: 'college' },
     ],
     cols: [
+      { label: 'Linebacker', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
+    ],
+  },
+  {
+    id: 'cg611-046',
+    rows: [
+      { label: 'Penn State', type: 'college' },
+      { label: 'South Carolina', type: 'college' },
+      { label: 'Clemson', type: 'college' },
+    ],
+    cols: [
+      { label: 'Top 10 Pick', type: 'draft' },
+      { label: 'Tight End', type: 'position' },
+      { label: 'Defensive Lineman', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-047',
+    rows: [
+      { label: 'Houston', type: 'college' },
       { label: 'Texas', type: 'college' },
-      { label: 'Florida State', type: 'college' },
+      { label: 'Syracuse', type: 'college' },
+    ],
+    cols: [
+      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Running Back', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-048',
+    rows: [
+      { label: 'Ole Miss', type: 'college' },
+      { label: 'Purdue', type: 'college' },
       { label: 'Arizona State', type: 'college' },
     ],
+    cols: [
+      { label: 'Linebacker', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Quarterback', type: 'position' },
+    ],
   },
   {
-    id: 'cgrid-068',
+    id: 'cg611-049',
     rows: [
-      { label: 'Cornerback', type: 'position' },
-      { label: 'Safety', type: 'position' },
-      { label: 'Linebacker', type: 'position' },
+      { label: 'LSU', type: 'college' },
+      { label: 'Florida', type: 'college' },
+      { label: 'Notre Dame', type: 'college' },
     ],
     cols: [
-      { label: 'Pro Football Hall of Famer', type: 'misc' },
+      { label: 'Heisman Winner', type: 'award' },
+      { label: 'Wide Receiver', type: 'position' },
       { label: 'Top 10 Pick', type: 'draft' },
-      { label: 'National Champion', type: 'award' },
     ],
   },
   {
-    id: 'cgrid-069',
+    id: 'cg611-050',
     rows: [
-      { label: 'Quarterback', type: 'position' },
-      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Washington', type: 'college' },
+      { label: 'Arkansas', type: 'college' },
+      { label: 'Oklahoma', type: 'college' },
+    ],
+    cols: [
+      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
       { label: 'Tight End', type: 'position' },
     ],
+  },
+  {
+    id: 'cg611-051',
+    rows: [
+      { label: 'Alabama', type: 'college' },
+      { label: 'Michigan', type: 'college' },
+      { label: 'Ohio State', type: 'college' },
+    ],
     cols: [
-      { label: 'LSU', type: 'college' },
-      { label: 'Oklahoma', type: 'college' },
+      { label: 'Heisman Winner', type: 'award' },
+      { label: 'Linebacker', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-052',
+    rows: [
+      { label: 'USC', type: 'college' },
+      { label: 'Boise State', type: 'college' },
+      { label: 'UCLA', type: 'college' },
+    ],
+    cols: [
+      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Running Back', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-053',
+    rows: [
+      { label: 'Oregon', type: 'college' },
+      { label: 'Stanford', type: 'college' },
+      { label: 'Tennessee', type: 'college' },
+    ],
+    cols: [
+      { label: 'Tight End', type: 'position' },
+      { label: 'Quarterback', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-054',
+    rows: [
+      { label: 'Texas A&M', type: 'college' },
+      { label: 'Pittsburgh', type: 'college' },
+      { label: 'Louisville', type: 'college' },
+    ],
+    cols: [
+      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Quarterback', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-055',
+    rows: [
+      { label: 'West Virginia', type: 'college' },
+      { label: 'Michigan State', type: 'college' },
+      { label: 'TCU', type: 'college' },
+    ],
+    cols: [
+      { label: 'Running Back', type: 'position' },
+      { label: 'Linebacker', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
+    ],
+  },
+  {
+    id: 'cg611-056',
+    rows: [
+      { label: 'Georgia', type: 'college' },
+      { label: 'Virginia Tech', type: 'college' },
+      { label: 'Oklahoma State', type: 'college' },
+    ],
+    cols: [
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Top 10 Pick', type: 'draft' },
+    ],
+  },
+  {
+    id: 'cg611-057',
+    rows: [
+      { label: 'Nebraska', type: 'college' },
+      { label: 'Auburn', type: 'college' },
+      { label: 'BYU', type: 'college' },
+    ],
+    cols: [
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Defensive Lineman', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-058',
+    rows: [
+      { label: 'Colorado', type: 'college' },
+      { label: 'Iowa', type: 'college' },
       { label: 'Wisconsin', type: 'college' },
     ],
-  },
-  {
-    id: 'cgrid-070',
-    rows: [
-      { label: 'Running Back', type: 'position' },
-      { label: 'Linebacker', type: 'position' },
-      { label: 'Safety', type: 'position' },
-    ],
     cols: [
-      { label: 'All-American', type: 'award' },
-      { label: 'Pro Bowler', type: 'misc' },
-      { label: 'Won a Super Bowl', type: 'misc' },
-    ],
-  },
-  {
-    id: 'cgrid-071',
-    rows: [
+      { label: 'Running Back', type: 'position' },
       { label: 'Quarterback', type: 'position' },
       { label: 'Offensive Lineman', type: 'position' },
-      { label: 'Defensive Tackle', type: 'position' },
-    ],
-    cols: [
-      { label: '1st Overall Pick', type: 'draft' },
-      { label: 'Pro Bowler', type: 'misc' },
-      { label: 'National Champion', type: 'award' },
     ],
   },
   {
-    id: 'cgrid-072',
+    id: 'cg611-059',
     rows: [
-      { label: 'Wide Receiver', type: 'position' },
-      { label: 'Running Back', type: 'position' },
-      { label: 'Cornerback', type: 'position' },
+      { label: 'Cincinnati', type: 'college' },
+      { label: 'Penn State', type: 'college' },
+      { label: 'Florida State', type: 'college' },
     ],
     cols: [
-      { label: 'Florida', type: 'college' },
+      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Tight End', type: 'position' },
+      { label: 'Defensive Lineman', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-060',
+    rows: [
       { label: 'Auburn', type: 'college' },
+      { label: 'Notre Dame', type: 'college' },
+      { label: 'Mississippi State', type: 'college' },
+    ],
+    cols: [
+      { label: 'Running Back', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Linebacker', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-061',
+    rows: [
+      { label: 'Michigan', type: 'college' },
+      { label: 'Georgia', type: 'college' },
+      { label: 'Wisconsin', type: 'college' },
+    ],
+    cols: [
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Tight End', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-062',
+    rows: [
+      { label: 'Texas', type: 'college' },
+      { label: 'Florida', type: 'college' },
+      { label: 'Miami (FL)', type: 'college' },
+    ],
+    cols: [
+      { label: 'Linebacker', type: 'position' },
+      { label: 'Top 5 Pick', type: 'draft' },
+      { label: 'Top 10 Pick', type: 'draft' },
+    ],
+  },
+  {
+    id: 'cg611-063',
+    rows: [
+      { label: 'Oklahoma', type: 'college' },
+      { label: 'Arkansas', type: 'college' },
+      { label: 'Stanford', type: 'college' },
+    ],
+    cols: [
+      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Quarterback', type: 'position' },
+      { label: 'Tight End', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-064',
+    rows: [
+      { label: 'Virginia Tech', type: 'college' },
+      { label: 'Syracuse', type: 'college' },
+      { label: 'Arizona State', type: 'college' },
+    ],
+    cols: [
+      { label: 'Running Back', type: 'position' },
+      { label: 'Linebacker', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-065',
+    rows: [
+      { label: 'LSU', type: 'college' },
+      { label: 'Ohio State', type: 'college' },
+      { label: 'USC', type: 'college' },
+    ],
+    cols: [
+      { label: 'Tight End', type: 'position' },
+      { label: 'Heisman Winner', type: 'award' },
+      { label: 'Top 10 Pick', type: 'draft' },
+    ],
+  },
+  {
+    id: 'cg611-066',
+    rows: [
+      { label: 'Iowa', type: 'college' },
+      { label: 'Houston', type: 'college' },
       { label: 'Ole Miss', type: 'college' },
     ],
+    cols: [
+      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Defensive Lineman', type: 'position' },
+    ],
   },
   {
-    id: 'cgrid-073',
+    id: 'cg611-067',
     rows: [
-      { label: 'Defensive End', type: 'position' },
-      { label: 'Linebacker', type: 'position' },
-      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'TCU', type: 'college' },
+      { label: 'Alabama', type: 'college' },
+      { label: 'West Virginia', type: 'college' },
     ],
     cols: [
-      { label: 'Big Ten Conference', type: 'misc' },
-      { label: 'SEC Conference', type: 'misc' },
-      { label: 'Pac-12 Conference', type: 'misc' },
+      { label: 'Wide Receiver', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
     ],
   },
   {
-    id: 'cgrid-074',
+    id: 'cg611-068',
     rows: [
+      { label: 'Texas A&M', type: 'college' },
+      { label: 'Tennessee', type: 'college' },
+      { label: 'Oregon', type: 'college' },
+    ],
+    cols: [
+      { label: 'Top 5 Pick', type: 'draft' },
+      { label: 'Top 10 Pick', type: 'draft' },
       { label: 'Quarterback', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-069',
+    rows: [
+      { label: 'Nebraska', type: 'college' },
+      { label: 'South Carolina', type: 'college' },
+      { label: 'Boise State', type: 'college' },
+    ],
+    cols: [
+      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Linebacker', type: 'position' },
       { label: 'Running Back', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-070',
+    rows: [
+      { label: 'Michigan State', type: 'college' },
+      { label: 'Pittsburgh', type: 'college' },
+      { label: 'Oklahoma State', type: 'college' },
+    ],
+    cols: [
+      { label: 'Quarterback', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
       { label: 'Wide Receiver', type: 'position' },
     ],
-    cols: [
-      { label: 'Nebraska', type: 'college' },
-      { label: 'Michigan State', type: 'college' },
+  },
+  {
+    id: 'cg611-071',
+    rows: [
+      { label: 'Washington', type: 'college' },
       { label: 'Purdue', type: 'college' },
+      { label: 'UCLA', type: 'college' },
+    ],
+    cols: [
+      { label: 'Quarterback', type: 'position' },
+      { label: 'First Round Pick', type: 'draft' },
+      { label: 'Tight End', type: 'position' },
     ],
   },
   {
-    id: 'cgrid-075',
+    id: 'cg611-072',
     rows: [
-      { label: 'Tight End', type: 'position' },
-      { label: 'Offensive Lineman', type: 'position' },
-      { label: 'Defensive End', type: 'position' },
+      { label: 'Louisville', type: 'college' },
+      { label: 'Colorado', type: 'college' },
+      { label: 'Baylor', type: 'college' },
     ],
     cols: [
-      { label: 'All-American', type: 'award' },
-      { label: 'Pro Bowler', type: 'misc' },
-      { label: 'Played 10+ NFL Seasons', type: 'misc' },
+      { label: 'Running Back', type: 'position' },
+      { label: 'Defensive Back', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-073',
+    rows: [
+      { label: 'Mississippi State', type: 'college' },
+      { label: 'BYU', type: 'college' },
+      { label: 'Clemson', type: 'college' },
+    ],
+    cols: [
+      { label: 'Linebacker', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Defensive Lineman', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-074',
+    rows: [
+      { label: 'Cincinnati', type: 'college' },
+      { label: 'Michigan State', type: 'college' },
+      { label: 'Alabama', type: 'college' },
+    ],
+    cols: [
+      { label: 'Defensive Lineman', type: 'position' },
+      { label: 'Tight End', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
+    ],
+  },
+  {
+    id: 'cg611-075',
+    rows: [
+      { label: 'Ohio State', type: 'college' },
+      { label: 'Cincinnati', type: 'college' },
+      { label: 'Miami (FL)', type: 'college' },
+    ],
+    cols: [
+      { label: 'Tight End', type: 'position' },
+      { label: 'Offensive Lineman', type: 'position' },
+      { label: 'Wide Receiver', type: 'position' },
     ],
   },
 ];
