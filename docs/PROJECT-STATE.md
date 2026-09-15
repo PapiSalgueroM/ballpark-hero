@@ -1,5 +1,25 @@
 # Project state
 
+## PREPARED RELEASE 2026-09-15 18:45 EDT: watched-match kicks
+
+Round 587 passed full verification at `ab3c8dba` in
+[run 35022769249](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022769249):
+316 unique node harnesses and 305 Vitest cases across 36 files, plus all type,
+build, browser, control and strict packaging gates. Downloaded artifact
+`10421791486` matches its archive digest, 1,932 inputs and all 710 outputs.
+Integration before import is `fb595610`, reconciled with main `83658d7b`.
+All 1,719 non-documentation inputs match the artifact. Its 170 generated
+repository outputs are imported; only the two tycoon pages and their
+lastmod hashes change. No `dist` or verification workflow is imported.
+See [the exact release record](round-587-release-evidence-2026-09-15.json).
+
+This release adds optional penalty and free-kick chances during watched
+stadium matches, with aim, power, curve and an animated result. The attempt
+is saved before play; a goal earns the normal goal and bonus, while a miss
+costs nothing. The match clock continues, and reduced motion and Skip work.
+This branch is prepared, not merged or published. Release after the content
+correction, 586 and 603 to 605, with 588 following separately.
+
 ## READY TO PUBLISH 2026-09-15 16:55 EDT: guide facts, source notes and phone tables
 
 The narrow content correction is ready for the between-big-ships release path.

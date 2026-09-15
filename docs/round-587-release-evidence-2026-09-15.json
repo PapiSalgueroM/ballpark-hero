@@ -1,0 +1,38 @@
+{
+  "sourceCommit": "77b43142aa50670eeff1242f970a1d0d4cbbbec2",
+  "verificationCommit": "ab3c8dba6096fdb86a1860592e81b2409a391dc1",
+  "run": "https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022769249",
+  "workflowConclusion": "success",
+  "nodeHarnessesPassed": 316,
+  "vitest": { "passed": 305, "filesPassed": 36 },
+  "buildArtifact": {
+    "id": 10421791486,
+    "archiveSha256": "12213540255bbbb34a96ccccd01d0d9ec535cd75032be43a363333178e49a6af",
+    "manifestSha256": "c64b085bd7c1d27d39564510e9753155094d5d3b9509d24bf94793a4df422a79",
+    "verifiedInputs": 1932,
+    "verifiedOutputs": 710,
+    "exactFileSetVerified": true
+  },
+  "logsArtifact": {
+    "id": 10422085235,
+    "archiveSha256": "f7dd61c3c206a5aaadaa308ef831592d3befeb2e56eecdea3f9bedf55d4b5612",
+    "nodeLogSha256": "643fd87c414de0a3893c4c545768e144d6b5fe23b7bfe2333144e86d86ec6e84",
+    "vitestLogSha256": "327151d35b4ed57de595a8aab031f390f0191df2768f2c7d98b48982aa093fac",
+    "nodeResultsSha256": "5fa4a1c5f755e695b1221564d94de4757209649aa12d6340896b62a8dbb70399"
+  },
+  "integration": {
+    "beforeArtifactCommit": "fb595610c653baabc285211a512988f109db8764",
+    "reconciledMain": "83658d7b946cd34d915beeabc42a8ab13a050f2e",
+    "sourceDifferencesBeforeImport": "Eight documentation paths only; all application, test and generated inputs match the source commit.",
+    "nonDocumentationArtifactInputsMatched": 1719,
+    "repositoryOutputsImported": 170,
+    "meaningfulGeneratedChanges": [
+      "public/stadium-tycoon/index.html",
+      "public/wonderkid-factory/index.html",
+      "scripts/data/lastmod.json"
+    ],
+    "distImported": false,
+    "workflowImported": false
+  },
+  "published": false
+}
