@@ -1,5 +1,24 @@
 # Project state
 
+## MAIN ADVANCED 2026-09-15 18:47 EDT: Claude's 611, 612 and 616 landed
+
+Remote main advanced from `83658d7b` to `b528bda1` while Codex prepared the
+verified release branches. The new changes are College Grid's local answer
+key, Club Manager's season-one field and Premier League roster corrections.
+They are preserved. The content correction below remains present, but
+publishing current main would now include these Claude changes too.
+Confirm their final release evidence before publication; the older afternoon
+handoff contains historical gate failures and is not final release approval.
+
+Our accepted artifacts still approve their exact recorded source commits.
+They do not approve the new combined tree. Before merging PR 94 or the
+animation, watched-kick and boots branches, reconcile this main advance and
+rerun the applicable integrated gates, including unchanged download budgets.
+No old artifact is copied over the new College Grid snapshot or sitemap.
+The original publish order for our changes remains below, subject to this
+new integration requirement. No new application changes from Codex have
+landed in main. AdSense has not been resubmitted.
+
 ## READY TO PUBLISH 2026-09-15 16:55 EDT: guide facts, source notes and phone tables
 
 The narrow content correction is ready for the between-big-ships release path.

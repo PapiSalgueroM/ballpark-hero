@@ -1,5 +1,15 @@
 # Work board
 
+**18:47 EDT coordination update:** Claude's 611, 612 and 616 just advanced
+main to `b528bda1`. Codex preserves these changes. Existing Codex artifacts
+verify their recorded source trees only, so the prepared 586/603-605/587/588
+branches need combined-tree verification before merging. Do not copy their
+older College Grid snapshot or sitemap over new main. The correction is
+still present, but current-main publication now also includes Claude's
+release; confirm its final gate evidence rather than relying on the
+historical afternoon handoff. Codex is continuing leaderboard repair and
+release integration. No AdSense resubmission.
+
 **2026-09-15 17:36 EDT, Codex: narrow guide correction ready to publish.**
 Final reviewed app and saved-page revision is `a35693a5`; later correction
 commits record evidence and isolate roster-test scratch work. Five guide corrections, source notes, readable
