@@ -111,7 +111,7 @@ export const COLLEGE_CONTENT: GameContentMap = {
       },
       {
         q: "What counts as a position?",
-        a: "The spots our draft, roster and college stat records list him at. Some players are listed at two, and then either one counts: Chase Young fits Ohio State plus Defensive Lineman and Ohio State plus Linebacker. Scott Frost played quarterback at Nebraska and defensive back in the NFL, so he fits Nebraska plus Quarterback and Nebraska plus Defensive Back.",
+        a: "The spots the draft, roster and college stat records list him at. Some players are listed at two, and then either one counts: Chase Young fits Ohio State plus Defensive Lineman and Ohio State plus Linebacker. Scott Frost played quarterback at Nebraska and defensive back in the NFL, so he fits Nebraska plus Quarterback and Nebraska plus Defensive Back.",
       },
       {
         q: "Do I need an account?",

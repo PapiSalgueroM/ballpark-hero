@@ -99,7 +99,7 @@ export const CM_FINAL_TABLES_2025_26: FinalTables = {
     laliga: {
       table: ["Barcelona", "Real Madrid", "Villarreal", "Atlético Madrid", "Real Betis", "Celta Vigo", "Getafe", "Rayo Vallecano", "Valencia", "Real Sociedad"],
       official: [
-        { publisher: "LALIGA API behind laliga.com", url: "https://apim.laliga.com/public-service/api/v1/subscriptions/laliga-easports-2025/standing?contentLanguage=en&countryCode=GB", readOn: "2026-09-15" },
+        { publisher: "LALIGA public standings API behind laliga.com, first division 2025-26 (full request in docs/design/round-612-final-tables-2025-26.json)", url: "https://apim.laliga.com/public-service/api/v1/", readOn: "2026-09-15" },
         { publisher: "UEFA", url: "https://www.uefa.com/uefachampionsleague/news/02a8-2171a88881a0-c70193b972c6-1000--meet-the-2026-27-champions-league-league-phase-teams/", readOn: "2026-09-15" },
       ],
       press: [
