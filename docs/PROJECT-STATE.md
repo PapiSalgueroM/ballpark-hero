@@ -1,70 +1,134 @@
 # Project state
 
-## PRIORITY CORRECTION 2026-09-15: published NFL format guide
+## READY TO PUBLISH 2026-09-15 16:55 EDT: guide facts, source notes and phone tables
 
-An independent public content audit found the guide incorrectly treats 1933
-through 1969 as one title-game format. The Chicago Bears' official history
-and Pro Football Hall of Fame results confirm four NFL playoff teams and
-conference championship games in 1967 to 1969. Related early tiebreaker, 1982
-and 1990 wording is being checked against primary sources. Codex is preparing
-a factual correction on `codex/nfl-guide-format-correction` from current main.
-This has priority over the feature releases because accurate, useful content
-is central to the pending AdSense review. Nothing in this finding proves
-which pages Google used in its earlier rejection.
+The narrow content correction is ready for the between-big-ships release path.
+Final app/source and saved-page revision is `a35693a5`; subsequent commits
+record evidence and isolate roster-test scratch files. They do not change the
+app or its saved pages. The correction fixes five existing format guides and three
+homepage/Soccer Career claims. Tables have readable columns, contained
+horizontal scrolling, a phone hint and keyboard access. The independent final
+review also caught and fixed the outdated MLB source-note sentence.
 
-## NEXT IN PREPARATION 2026-09-15: Round 588, title-earned boots
+Types and production/SEO builds pass. All 31 current applicable output,
+source-template and fallback checks pass, plus 20 actual built-page browser
+cases at 320/390/430/1440 and all 33 guide mutation controls. The 31-check set
+comes from an independent inventory of 369 harnesses and their helpers, not
+just the older 15-name list. It includes archive answers against live public
+data, FAQ/head stability, draw-order stability and pre-app 404 behavior.
+See [the release decision and evidence](adsense/guide-correction-release-checks-2026-09-15.md).
 
-Codex is preparing the next slice of the existing tycoon design while the
-earlier release checks run remotely. It is isolated from their frozen source
-branches and will publish separately after 587. The scope is fixed title
-rewards, fictional boots, first-team equipment and measured fee/save guards.
-It is implemented in the isolated worktree and not published. Types, focused
-gear engine and hook checks, and component previews pass. The final freeze is
-waiting on diagnosis of an existing first-team test that cannot find the Move
-up button after lazy loading. Complete production release gates are still owed.
+The change touches no engine rules, RNG, saves, routes, dependencies or ad
+behavior. Its earlier full-simulation hold is replaced by the complete
+between-big-ships output checks. The additional
+[full run 35013330789](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35013330789)
+at `a5863797` completed with all 311 node harnesses and all 272 component tests
+passing. Its packaging step failed because a roster harness leaves test bundles
+inside `dist`; no build artifact was accepted. Repair `3999a5e8` moves that
+scratch work into OS temp. Its 137 healthy checks and four effective controls
+pass with no changes to the protected output files. Full-run evidence and its
+limits are recorded in the release decision. The larger feature releases
+retain all their full gates.
 
-The fresh public HTTP audit at 13:22 to 13:23 EDT passed all 148 sitemap URLs,
-with zero findings. This checks document access and missing-content signals,
-not indexing or approval. See [the audit record](adsense/live-document-audit-2026-09-15.md).
+Fresh guide verification with the roster repair and unchanged artifact checks
+is running at `27f814be` in
+[run 35022421148](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022421148).
+It records before/after manifests and changed paths when packaging fails.
+The earlier passing game tests remain evidence for their exact earlier source;
+this new run must complete on its own.
 
-## IN VERIFICATION 2026-09-15 13:22 EDT: first team, action scenes and watched kicks
+The correction is not yet published: the 17:33 EDT public check still found
+the old content on all seven affected routes and entry `index-KIfwLt2Q.js`.
+Codex's Lovable tab operations
+are timing out, including a fresh tab. The publisher must first check that
+Lovable has the current origin/main commit and the reviewed correction, then
+publish and verify the actual public claims and app assets. Do not include the
+feature queue in this corrective publication. AdSense has not been resubmitted.
 
-The management download repair is committed at `f66bab76`. Club Manager's
-later screens, the Academy's later panels and three management guides load
-when needed. Guide prose, game outcomes and the existing size budgets remain
-intact. Fresh full verification is running on GitHub to avoid competing with
-the other lane's local simulations. No new source below is published yet.
+## FULL VERIFICATION 2026-09-15: first team, action scenes, watched kicks and boots
 
-- Round 586 source `24e17ff6`, verification `6c0165d7`,
-  [run 34999864639](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999864639).
-- Combined Rounds 603 to 605 source `4a99788f`, verification `4ebbb1df`,
-  [run 34999930238](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999930238).
-- Round 587 source `9a2f6da1`, verification `418bdf77`,
-  [run 35001991548](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35001991548).
-  This final source includes 603 to 605 and measured guide claims. The earlier
-  run `35000569315` was cancelled and is superseded.
+All four source trees include the guide correction and repaired lazy-panel
+awaits. The region-map guard now distinguishes geographic outlines from
+original player/ball artwork, with its effective private-map control passing.
+The Academy prospect grid loads when needed. The 586 production weight sweep
+passes all eleven existing budgets, including Factory 270K/270K and Club
+Manager 620K/620K. One initial Club Manager navigation timed out; an exact
+unchanged-build retry passed. No extra headroom or budget increase is claimed.
 
-All three runs have passed app types and rebuilt snapshots and are in the
-full node suite. Full suites, browser download
-budgets, effective failure controls and artifact checks remain required.
-Round 586 also needs slow-chunk navigation checked against its final artifact.
-Publish 586 separately first, then the action scenes, then 587. Verification
-workflows stay off main. Claude's `release-611-612-616` is not part of these
-release sources. AdSense remains pending as confirmed at 12:37 EDT below.
+| Release | Source | Verification | Fresh full run |
+| --- | --- | --- | --- |
+| 586 | `48afb5a9` | `5ced7657` | [35022622364](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022622364) |
+| 603 to 605 | `40685be8` | `7cf1f43f` | [35022671056](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022671056) |
+| 587 | `77b43142` | `ab3c8dba` | [35022769249](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022769249) |
+| 588 | `8a4e00a5` | `75d4f3c6` | [35026622660](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35026622660) |
 
-## RELEASE CHECK UPDATE 2026-09-15 12:43 EDT
+These are pending full verification, not published. All existing workflow
+gates remain, with strict result parsing and eleven rebuilt routes. The old
+586/603-605/587 runs are failed evidence, not release approval. Their exact
+results and remaining sampling issue are recorded below. The new 587 source
+is in `.worktrees/round-587-final`; the old
+`.worktrees/round-587-set-pieces` and its fourteen generated draft modifications
+remain untouched. Publish correction, 586, 603 to 605, 587, then 588, separately.
+No feature beyond 588 is started. Claude's reserved work and Cursor's formatting
+remain separate. Verification workflows stay off main.
 
-The new Round 586 release sweep found three initial JavaScript downloads above
-their existing phone budgets: Club Manager 708K/620K, Stadium Tycoon 312K/290K
-and Wonderkid Factory 297K/270K. Codex is repairing eager presentation and guide
-imports before publication, preserving the budgets and content. The type gate,
-SEO build, 279 Vitest tests, repaired league harness and other browser checks
-passed. A fresh full suite will cover the changed loading code. No Round 586,
-587 or 603 to 605 action source is confirmed published yet.
+The previous 586 and animation runs completed with all 313/314 node
+harnesses and 279/296 Vitest cases passing, respectively. Both failed only
+at packaging because generated files changed. The previous 587 run passed
+305 Vitest cases and 315 of 316 node harnesses; its sole failure was fewer
+than 20 age-35 keeper observations in `simEras`. The isolated deterministic
+sample repair below preserves the game engine and existing standards.
+It is not in the currently running releases.
 
-AdSense was checked directly at 12:37 EDT. The fully loaded site detail panel
-still shows Getting ready and Review requested. The review submitted at 04:19
-EDT is pending, with no new rejection or approval shown and no new submission.
+The isolated repair is now committed as `a46c59a0` on
+`codex/era-sampling-repair`. Its complete nine-section Windows replay passed
+in 966.817 seconds, with identical raw observations on the two deterministic
+runs and five effective assertion controls. Keeper samples are 56 at age 33
+and 47 at age 35; the two cohorts produce 271 and 262 retirements. Every
+original threshold remains, with the retirement minimum also enforced per
+cohort. Only the harness and its state record changed. This repair is kept
+separate from main and the running release refs.
+
+The newer 586, animation and 587 runs in the table include the roster scratch
+repair and exact artifact diagnostics. At 17:28 EDT their types, builds,
+browser and Vitest steps had passed; their full node suites were in progress.
+They have not inherited a pass from the older runs. Completed run details
+and verified log archive hashes are in
+[the feature verification record](feature-verification-2026-09-15.md).
+
+The old 588 run passed 316 of 318 node harnesses and all 311 Vitest cases,
+but failed two stale mutation fixtures and the existing download limits.
+Those fixture and loading repairs are now committed at `8a4e00a5`, including
+the isolated roster fix. All 11 unchanged download budgets pass locally,
+along with type/build, gear/creation/reveal checks, phone layouts, reduced
+motion, 15 gear controls and seven celebration controls. Pack and room
+controls pass 22 and 11 cases. Factory has only 31 bytes of room before its
+existing rounded limit. A fresh full run remains required; no failed or
+pending build artifact is accepted.
+
+The 586 delayed-loading check now passes locally on source `3530aacc`:
+Back and Home work while panel chunks are held, the final saved career stays
+byte-identical, and all 41 loaded scripts match the built files. Its three
+negative controls fail for their intended reason. Repeat this against the
+final downloaded release artifact before accepting that artifact.
+
+The repaired verification branches match every source blob and file mode,
+with only their workflow added: 2,078 files for 586, 2,092 for the animations,
+2,101 for 587 and 2,111 for 588. The 588 frozen manifest's 20 source, 32 log
+and one built-CSS hashes also match after commit. The prepared 586 integration
+`b208b85e` matches all 1,876
+non-documentation source files; six documentation differences preserve newer
+main records. Artifact intake must still compare against the exact verification
+commit, with that documentation reconciliation recorded separately.
+
+## ADSENSE STATUS, last confirmed 2026-09-15 12:37 EDT
+
+The fully loaded site detail panel showed Getting ready and Review requested,
+following the 04:19 EDT submission. Later browser connection timeouts did not
+establish a newer state. No second review or duplicate indexing request was
+submitted. The 13:22 to 13:23 EDT HTTP audit passed all 148 sitemap documents
+with zero findings; it checks document availability and content signals,
+not factual accuracy, indexing or approval. Google makes the approval decision.
 
 ## LIVE 2026-09-15: Round 610, players who joined with Google can get back in, main `7b268106`
 

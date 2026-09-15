@@ -53,6 +53,7 @@ export interface UclFormatSource {
 /** Every source the timeline cites, so the page can print them and the
  *  harness can check that each period rests on two publishers. */
 export const UCL_FORMAT_SOURCES: UclFormatSource[] = [
+  { id: 'uefa2020', publisher: 'UEFA', title: 'Champions League to resume on 7 August', url: 'https://www.uefa.com/uefachampionsleague/news/025e-0f9a3f8c5c4d-3323c8a96a4d-1000--final-eight-in-lisbon/' },
   { id: 'wp5556', publisher: 'Wikipedia', title: '1955-56 European Cup', url: 'https://en.wikipedia.org/wiki/1955%E2%80%9356_European_Cup' },
   { id: 'rs5556', publisher: 'RSSSF', title: 'European Champions Cup 1955-56', url: 'https://www.rsssf.org/ec/ec195556.html' },
   { id: 'wp1957', publisher: 'Wikipedia', title: '1957 European Cup final', url: 'https://en.wikipedia.org/wiki/1957_European_Cup_final' },
@@ -115,6 +116,8 @@ export interface UclFormatPeriod {
   /** Legs per knockout tie after the group stage and before the final; null
    *  where the groups fed the final directly. */
   koLegs: 1 | 2 | null;
+  /** A season-specific exception to the usual knockout ties in the table. */
+  knockoutException?: string;
   /** Who was in the competition proper. */
   entrants: string;
   /** How a club got from the first stage to the final, one sentence. */
@@ -267,6 +270,7 @@ export const UCL_FORMAT_PERIODS: UclFormatPeriod[] = [
     secondGroupStage: false,
     roundOf16: true,
     koLegs: 2,
+    knockoutException: 'The 2019-20 quarter-finals and semi-finals were single matches.',
     entrants: 'Thirty two clubs in the group stage.',
     path: 'Eight groups of four, the top two into a round of 16, then two legged quarter-finals and semi-finals and a one match final.',
     notes: [
@@ -274,7 +278,7 @@ export const UCL_FORMAT_PERIODS: UclFormatPeriod[] = [
       'The 2019-20 season finished as a one city tournament in Lisbon: single match quarter-finals and semi-finals behind closed doors, and Bayern Munich beat Paris Saint-Germain 1-0 in the final.',
       'Away goals stopped counting double from 2021-22, so a tie level after two legs now goes to extra time and then penalties.',
     ],
-    sources: ['wp0304', 'rs0304', 'uefanew', 'wpucl', 'wp1920', 'rs1920', 'uefaaway', 'wpaway'],
+    sources: ['wp0304', 'rs0304', 'uefanew', 'wpucl', 'wp1920', 'rs1920', 'uefa2020', 'uefaaway', 'wpaway'],
   },
   {
     id: 'league-phase',

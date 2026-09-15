@@ -26,7 +26,8 @@
  *
  * Run: node scripts/simNhlPlayoffFormatHistory.mjs
  */
-import { execSync } from 'node:child_process';
+import { build } from 'esbuild';
+import { renderFormatGuide, parseFormatGuide, guideText, replaceGuideClaim } from './lib/renderFormatGuide.mjs';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -41,7 +42,9 @@ const BUNDLE = `${TMP}/nhlPlayoff.${PID}.bundle.mjs`;
 const LIB = `${ROOT}/src/lib/nhlPlayoffFormatHistory.ts`;
 
 const CONTROL = process.env.NHL_PLAYOFF_CONTROL || '';
-const KNOWN = ['gap', 'onesrc'];
+const KNOWN = ['gap', 'onesrc', 'faq'];
+// Source-only mode renders production components but does not claim the saved HTML was rebuilt.
+const SOURCE_ONLY = process.env.FORMAT_GUIDE_SOURCE_ONLY === '1';
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`NHL_PLAYOFF_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -69,7 +72,7 @@ if (CONTROL === 'gap') {
 }
 
 fs.writeFileSync(ENTRY, `export const lib = await import('${libPath.replaceAll('\\', '/')}');`);
-execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`, { stdio: 'inherit' });
+await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': `${ROOT_URL}/src` } });
 const { lib } = await import(pathToFileURL(BUNDLE).href);
 const { NHL_PLAYOFF_PERIODS, NHL_PLAYOFF_SOURCES, NHL_PLAYOFF_EXCEPTIONS, NHL_PLAYOFF_VERIFIED_ON, seasonRange, sourceById } = lib;
 
@@ -159,8 +162,8 @@ console.log('2) every period and every exception rests on at least two publisher
 
 /* ---------- 3. The shipped snapshot ---------- */
 section = '3';
-if (CONTROL) {
-  console.log('3) snapshot check skipped under a control');
+if (CONTROL || SOURCE_ONLY) {
+  console.log('3) snapshot check skipped: ' + (CONTROL ? 'control run' : 'SOURCE-ONLY verification, saved HTML pending build'));
 } else {
   console.log('3) the shipped snapshot carries every row, the source list and the page');
   const snap = path.join(ROOT, 'public', 'nhl-playoff-format-history', 'index.html');
@@ -189,11 +192,35 @@ if (CONTROL) {
   }
 }
 
+/* Actual guide cells and answers, not matching correct notes elsewhere on the page.
+   The new controls restore the old wrong summary while leaving those notes intact. */
+section = '4';
+console.log('4) production guide rendering and saved summary claims');
+{
+  const page = path.join(ROOT, 'src/pages', 'NhlPlayoffFormatHistory.tsx');
+  const overrides = {};
+  if (CONTROL === 'faq') overrides[page] = replaceGuideClaim(page,
+    'The top three in each division plus two wild cards per conference qualified from 2013-14 through 2018-19 and again from 2021-22. In 2020-21, the top four in each temporary division qualified.',
+    'Since 2013-14 they are the top three in each of the four divisions plus the two best remaining records in each conference as wild cards.');
+  const documents = [['production component', await renderFormatGuide(ROOT, 'NhlPlayoffFormatHistory.tsx', overrides)]];
+  const snapshot = path.join(ROOT, 'public', 'nhl-playoff-format-history', 'index.html');
+  if (!CONTROL && !SOURCE_ONLY && fs.existsSync(snapshot)) documents.push(['saved HTML', parseFormatGuide(fs.readFileSync(snapshot, 'utf8'))]);
+  for (const [label, document] of documents) {
+    const questions = [...document.querySelectorAll('h3')].filter(node => guideText(node) === 'How many teams make the NHL playoffs?');
+    if (questions.length !== 1) throw new Error('Expected one NHL field FAQ question');
+    const answer = guideText(questions[0].nextElementSibling);
+    if (!/2013-14 through 2018-19/.test(answer) || !/again from 2021-22/.test(answer) || !/2020-21, the top four in each temporary division qualified/.test(answer)) fail(label + ': NHL field FAQ must name the temporary 2020-21 qualifying rule and return date');
+    console.log('   inspected ' + label + ' at the affected table cell or answer');
+  }
+}
+
 console.log('');
 if (CONTROL) {
-  const want = CONTROL === 'gap'
-    ? { section: '1', signal: 'a hole or an overlap' }
-    : { section: '2', signal: 'rests on' };
+  const want = ({
+    gap: { section: '1', signal: 'a hole or an overlap' },
+    onesrc: { section: '2', signal: 'rests on' },
+    faq: { section: '4', signal: 'NHL field FAQ must name' },
+  })[CONTROL];
   const hits = (sectionMessages[want.section] ?? []).filter(m => m.includes(want.signal)).length;
   if (hits > 0) {
     console.log(`simNhlPlayoffFormatHistory control: green. NHL_PLAYOFF_CONTROL=${CONTROL} was reported by section ${want.section} with "${want.signal}" (${hits} finding${hits === 1 ? '' : 's'}).`);

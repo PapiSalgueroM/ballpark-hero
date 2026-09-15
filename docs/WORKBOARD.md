@@ -1,5 +1,75 @@
 # Work board
 
+**2026-09-15 17:36 EDT, Codex: narrow guide correction ready to publish.**
+Final reviewed app and saved-page revision is `a35693a5`; later correction
+commits record evidence and isolate roster-test scratch work. Five guide corrections, source notes, readable
+phone tables and three browser-save/Record Books copy edits pass types,
+production/SEO builds, all 31 current applicable generated-output/template/
+fallback checks, 20 real built-page browser cases and 33 effective controls.
+The complete reader inventory and narrow release decision are in
+`docs/adsense/guide-correction-release-checks-2026-09-15.md`.
+
+This uses the between-big-ships path for content-only changes. The additional
+whole-game simulation run 35013330789 completed: all 311 node harnesses and
+272 component tests passed. Packaging failed because the roster harness
+leaves temporary bundles in `dist`; no build artifact was accepted. Repair
+`3999a5e8` preserves all 137 checks and four effective controls while leaving
+all protected outputs unchanged. All larger game releases still need their
+full gates. Full guide evidence is recorded beside the release decision.
+Fresh guide verification `27f814be`, run 35022421148, is running with the
+roster repair and unchanged strict artifact checks. Main `edbe5c16` contains
+the same harness repair; the publishable app and saved pages stay `a35693a5`.
+The 17:33 EDT public check still found the old content on all seven affected
+routes. Codex's browser publish controls are timing out; a fresh tab also stalls.
+Claude's working Lovable connection can publish this correction once
+`get_project` shows the current origin/main commit. Confirm the reviewed
+correction is present and no pending feature branch is included, then publish
+and independently read the corrected public pages. A main push alone is not
+publication. Keep the current AdSense review pending, with no resubmission.
+
+The fresh full feature runs and exact source/verification heads are at
+the top of `docs/PROJECT-STATE.md`. Their order is 586, 603 to 605, 587, then 588 after this
+correction. New 587 source is `.worktrees/round-587-final`; the old dirty 587
+worktree is preserved. Source branches remain unpublished.
+
+The 588 loading and fixture repairs are committed at `8a4e00a5`. All eleven
+original download limits and local checks pass, including slow artwork,
+early dismissal and reduced motion. Factory has only 31 bytes before the
+existing rounding boundary. Verification `75d4f3c6` retains all prior gates
+and adds the seven effective celebration controls and two catalog controls.
+Fresh full run `35026622660` is in progress. The old failed run is not approval.
+
+The earlier 586 and animation runs passed 313/314 node harnesses and
+279/296 Vitest cases, then failed packaging. Their replacement runs include
+the roster scratch repair and exact artifact diagnostics. The previous 587
+run passed 315 of 316 node harnesses and all 305 Vitest cases; its lone failure
+was an undersized older-keeper sample. Test-only repair `a46c59a0` now passes
+all nine sections, exact deterministic replay and five effective controls.
+It is isolated on `codex/era-sampling-repair`, with game behavior and thresholds
+unchanged. Fresh runs 35022622364, 35022671056 and 35022769249 are still in
+progress. Full results and log hashes are in
+`docs/feature-verification-2026-09-15.md`. No pending run inherits an older pass.
+No work beyond 588 has been started.
+
+**2026-09-15 15:19 EDT, Codex correction release check update.** The five
+guide corrections and three save/Record Books copy fixes are implemented at
+`a35693a5`. Phone tables now scroll within keyboard-accessible regions with
+readable columns. Types, six-route SEO regeneration, final build, 21 local
+release fences, all 33 guide controls and 20 real built-page browser cases
+passed. Full suite verification is still running at `a5863797` in
+[run 35013330789](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35013330789).
+This is not yet a publish-ready handoff. Source evidence is in
+`docs/adsense/guide-correction-release-checks-2026-09-15.md`.
+
+Round 586 now includes the correction at `eabde5cd` and repairs lazy-panel
+awaits plus initial Academy loading. Final Factory download measurement and
+fresh full checks remain. The old 586/603-605/587 runs are failed evidence,
+not approval; the map guard is being narrowed and retested separately.
+Publish order stays correction, 586, 603 to 605, 587, then 588. No later feature
+is started. AdSense's last confirmed state remains Getting ready at 12:37 EDT;
+no review was resubmitted. Lovable publication still needs a working connection
+and independent public checks after main lands.
+
 **2026-09-15, Codex expands the factual correction to all five guides.**
 The independent source review found an NBA seed-pairing error and a stale
 division count, plus summary tables or FAQs that omit the Champions League
