@@ -42,6 +42,7 @@ import {
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
+import VictoryMoment from '@/components/game/VictoryMoment';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import TycoonPitch from '@/components/tycoon/TycoonPitch';
 import { useTycoonRewards } from '@/hooks/useTycoonRewards';
@@ -574,17 +575,18 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                 className="absolute inset-0 z-20 flex items-center justify-center bg-black/60 p-3 cursor-default"
               >
                 <ConfettiBurst seed={g.promotion.seq} count={30} />
-                <div className="relative rounded-2xl border border-yellow-500/70 bg-card px-4 py-3 text-center shadow-lg">
-                  <p className="cm-slam font-display text-lg font-black text-yellow-400" style={{ animationDelay: '0.05s' }}>
-                    {g.promotion.label}
-                  </p>
+                <div className="relative max-w-full rounded-2xl border border-yellow-500/70 bg-card px-3 py-2 text-center text-yellow-400 shadow-lg">
+                  <VictoryMoment compact>
+                    <p className="font-display text-base font-black leading-tight text-yellow-400">
+                      {g.promotion.label}
+                    </p>
+                  </VictoryMoment>
                   <p className="cm-rise mt-1 text-xs text-muted-foreground" style={{ animationDelay: '0.45s' }}>
                     +{fmtMoney(g.promotion.amount)} promotion bonus, every payout scaled up from here
                   </p>
                   <button
                     onClick={g.dismissPromotion}
-                    className="cm-rise mt-2 inline-flex min-h-[36px] items-center rounded-full bg-primary px-5 py-1.5 text-sm font-bold text-primary-foreground hover:brightness-110"
-                    style={{ animationDelay: '0.7s' }}
+                    className="mt-1 inline-flex min-h-[36px] items-center rounded-full bg-primary px-5 py-1.5 text-sm font-bold text-primary-foreground hover:brightness-110"
                   >
                     Continue
                   </button>
