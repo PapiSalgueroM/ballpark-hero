@@ -1,5 +1,10 @@
 # Search Console inspection, September 15, 2026
 
+Status scope: these Search Console observations precede the 4:19 AM EDT
+AdSense review submission. The later guide corrections were independently
+confirmed live at 18:47 EDT, but this document does not contain a newer
+Google crawl or indexing result. The five indexing requests were not repeated.
+
 Observed through the owner's signed-in Search Console for the domain property
 `douknowball.com`. This is an indexing diagnostic, not an AdSense rejection
 diagnosis. The new AdSense screenshot names only **Low value content**, with no

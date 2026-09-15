@@ -1,5 +1,42 @@
 # Work board
 
+**18:58 EDT database repair:** migration `20260915225210` is applied. Its
+covering index gives the unchanged public leaderboard measurable headroom
+under the existing anonymous three-second limit (764.481ms in one warm
+profile). All four unchanged cache/rank checks pass. No ranking formula,
+function, permission, timeout or retry policy changed. The draft query
+rewrite is outside the repo. See the evidence and rollback in
+`docs/audits/leaderboard-index-repair-2026-09-15.md`.
+
+Integrated 586 is being checked in `.worktrees/integrate-round-586-main`.
+Claude's new field data increased initial Club Manager download to 624K
+against its unchanged 620K limit. Codex is moving the existing later Manager
+career panel and trophy confetti behind lazy boundaries; exact JSX and
+handlers are preserved. Fresh type/build/weight, delayed-loading browser
+proof and full combined-tree CI are required before merging draft PR 94.
+The frozen watched-kick release is prepared at `970707f0`; it is not merged.
+
+**18:47 EDT live proof:** the content correction is now verified on all seven
+public routes, with exact content/link/metadata matches, valid canonical and
+robots tags, entry `index-jZ501OVb.js` and all six route scripts loading. The
+corrected Soccer Career browser-save claim is in the actual public script.
+See `docs/adsense/guide-publication-proof-2026-09-15.json`. The host added a
+Lovable badge; only that exact injected aside is excluded from comparison,
+with 14 controls retaining other content changes and seven old-content
+controls. Codex did not trigger publication. This clears the content-specific
+publication hold, not the integrated feature gates below. AdSense's last
+directly observed state remains Review requested at 12:37 EDT.
+
+**18:47 EDT coordination update:** Claude's 611, 612 and 616 just advanced
+main to `b528bda1`. Codex preserves these changes. Existing Codex artifacts
+verify their recorded source trees only, so the prepared 586/603-605/587/588
+branches need combined-tree verification before merging. Do not copy their
+older College Grid snapshot or sitemap over new main. The correction is
+still present, but current-main publication now also includes Claude's
+release; confirm its final gate evidence rather than relying on the
+historical afternoon handoff. Codex is continuing leaderboard repair and
+release integration. No AdSense resubmission.
+
 **2026-09-15 17:36 EDT, Codex: narrow guide correction ready to publish.**
 Final reviewed app and saved-page revision is `a35693a5`; later correction
 commits record evidence and isolate roster-test scratch work. Five guide corrections, source notes, readable
@@ -49,18 +86,26 @@ run passed 315 of 316 node harnesses and all 305 Vitest cases; its lone failure
 was an undersized older-keeper sample. Test-only repair `a46c59a0` now passes
 all nine sections, exact deterministic replay and five effective controls.
 It is isolated on `codex/era-sampling-repair`, with game behavior and thresholds
-unchanged. Fresh runs 35022622364, 35022671056 and 35022769249 are still in
-progress. Full results and log hashes are in
+unchanged. Current results for replacement runs 35022622364, 35022671056 and
+35022769249 are in the update below. Full results and log hashes are in
 `docs/feature-verification-2026-09-15.md`. No pending run inherits an older pass.
 No work beyond 588 has been started.
 
-**18:25 EDT update:** the correction's full run and exact artifact verification
-are green. Round 586's full run is also green; downloaded-artifact validation
-and its final slow-loading browser check are in progress. The animation run's
+**18:43 EDT update:** the correction, 586 and 587 full runs and exact artifact
+verification are green. The 586 downloaded build also passes the final
+slow-loading browser check, including unchanged saves and three effective
+controls. Release `ded5d78d` is [draft PR 94](https://github.com/PapiSalgueroM/ballpark-hero/pull/94).
+It stays separate from main and waits for the correction publication.
+The 587 release branch is being prepared after all 316 node harnesses,
+305 Vitest cases and the 1,932-input/710-output artifact check passed.
+Its integration worktree is `.worktrees/release-round-587-final`; do not
+touch the old dirty 587 worktree. The animation run's
 only remaining node failure is a recurring live leaderboard RPC timeout.
 Codex is investigating an isolated performance repair, preserving scoring,
 period semantics and independent cache checks. No database mutation has been
-made. The owner will fix Lovable later; keep building within these release
+made. The fresh-query draft matches all 100 output rows in one snapshot but
+still exceeds three seconds. An index and rollback plan are under independent
+review. The owner will fix Lovable later; keep building within these release
 lanes. Editor-free publication through official Lovable MCP is supported but
 not connected in this session. No alternate host or DNS cutover is configured.
 

@@ -1,5 +1,56 @@
 # Project state
 
+## LIVE CHECK 2026-09-15 18:47 EDT: the guide correction is published
+
+Independent public verification now passes all seven affected routes. Their
+readable content, links and structured metadata match the reviewed source;
+each returns 200, is indexable and has the expected single canonical. The
+entry is `index-jZ501OVb.js`; all six route scripts load as JavaScript, and
+the Soccer Career script contains the corrected browser-save wording.
+See [the public proof](adsense/guide-publication-proof-2026-09-15.json).
+
+The first check detected the changed entry but rejected all content hashes.
+An exact text diff showed only the host's injected `aside#lovable-badge`.
+The verifier now excludes that specific badge, with 14 controls proving
+other added content still changes the hash; all seven old-content controls
+still fail as intended. This verifies the correction, not all new Claude
+features or any Codex feature branch. Codex did not trigger this publication.
+The last directly observed AdSense status remains Review requested at
+12:37 EDT. No new submission was made.
+
+## MAIN ADVANCED 2026-09-15 18:47 EDT: Claude's 611, 612 and 616 landed
+
+Remote main advanced from `83658d7b` to `b528bda1` while Codex prepared the
+verified release branches. The new changes are College Grid's local answer
+key, Club Manager's season-one field and Premier League roster corrections.
+They are preserved. The content correction below remains present, but
+publishing current main would now include these Claude changes too.
+Confirm their final release evidence before publication; the older afternoon
+handoff contains historical gate failures and is not final release approval.
+
+Our accepted artifacts still approve their exact recorded source commits.
+They do not approve the new combined tree. Before merging PR 94 or the
+animation, watched-kick and boots branches, reconcile this main advance and
+rerun the applicable integrated gates, including unchanged download budgets.
+No old artifact is copied over the new College Grid snapshot or sitemap.
+The original publish order for our changes remains below, subject to this
+new integration requirement. No new application changes from Codex have
+landed in main. AdSense has not been resubmitted.
+
+## LIVE DATABASE REPAIR 2026-09-15 18:55 EDT: leaderboard covering index
+
+Applied migration `20260915225210` adds one positive-score covering index.
+The old index stays in place. The unchanged live leaderboard passed its
+anonymous 3s budget and measured 764.481ms in one warm database profile.
+The unchanged cache harness passed all four sections, including eight exact
+rank/point comparisons and the filtered live-rank branch, in 3.25757 seconds.
+No ranking, function, permission, public timeout or retry policy changed.
+The investigated faster query rewrite remains unapplied and outside the
+migration folder. See [evidence and rollback](audits/leaderboard-index-repair-2026-09-15.md).
+These observations do not claim sustained-load performance or approve the
+older failed animation run. Pending feature sources still need their own
+fresh verification and artifact acceptance.
+
 ## READY TO PUBLISH 2026-09-15 16:55 EDT: guide facts, source notes and phone tables
 
 The narrow content correction is ready for the between-big-ships release path.
@@ -41,13 +92,10 @@ no generated-file import is needed. Newer main documentation is preserved,
 and the verification workflow stays off main. See
 [the accepted artifact record](adsense/guide-correction-verified-artifact-2026-09-15.json).
 
-The correction is not yet published: the 17:33 EDT public check still found
-the old content on all seven affected routes and entry `index-KIfwLt2Q.js`.
-Codex's Lovable tab operations
-are timing out, including a fresh tab. The publisher must first check that
-Lovable has the current origin/main commit and the reviewed correction, then
-publish and verify the actual public claims and app assets. Do not include the
-feature queue in this corrective publication. AdSense has not been resubmitted.
+The correction was independently confirmed published at 18:47 EDT, as recorded
+above. The earlier 17:33 EDT check still found old content on all seven routes
+and entry `index-KIfwLt2Q.js`. Codex's Lovable controls were timing out and
+Codex did not trigger the publication. AdSense has not been resubmitted.
 
 ## FULL VERIFICATION 2026-09-15: first team, action scenes, watched kicks and boots
 
@@ -61,9 +109,9 @@ unchanged-build retry passed. No extra headroom or budget increase is claimed.
 
 | Release | Source | Verification | Full run | Current result |
 | --- | --- | --- | --- | --- |
-| 586 | `48afb5a9` | `5ced7657` | [35022622364](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022622364) | Passed; downloaded artifact intake in progress |
+| 586 | `48afb5a9` | `5ced7657` | [35022622364](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022622364) | Passed; artifact accepted; draft PR 94 |
 | 603 to 605 | `40685be8` | `7cf1f43f` | [35022671056](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022671056) | 313/314 node checks; leaderboard RPC timeout |
-| 587 | `77b43142` | `ab3c8dba` | [35022769249](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022769249) | In progress |
+| 587 | `77b43142` | `ab3c8dba` | [35022769249](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35022769249) | Passed; exact artifact accepted; release branch being prepared |
 | 588 | `8a4e00a5` | `75d4f3c6` | [35026622660](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35026622660) | In progress |
 
 These are not published. All existing workflow
@@ -76,15 +124,34 @@ remain untouched. Publish correction, 586, 603 to 605, 587, then 588, separately
 No feature beyond 588 is started. Claude's reserved work and Cursor's formatting
 remain separate. Verification workflows stay off main.
 
-At 18:25 EDT the new 586 run passed every step, including strict packaging.
-Build artifact `10421332445` is downloaded with its verified archive hash;
-its manifest and delayed-loading browser checks are being checked before intake.
+At 18:43 EDT the new 586 run and artifact intake are complete: 313 node
+harnesses, 279 Vitest cases, all 1,909 artifact inputs and 706 outputs pass.
+The downloaded build also passes the held-chunk browser check, with 41 scripts
+matching actual artifact bytes and the 46,741-byte save unchanged after Home
+and pagehide. All three effective controls pass. Prepared release `ded5d78d`
+is [draft PR 94](https://github.com/PapiSalgueroM/ballpark-hero/pull/94), held
+for the separate correction publication. Its evidence record is committed
+on that release branch. No application feature is merged into main.
+
+The new 587 run also passed every step: 316 unique node harnesses and 305
+Vitest cases across 36 files. Artifact `10421791486` passes its archive hash,
+all 1,932 inputs, all 710 outputs and exact file-set validation. Integration
+worktree `.worktrees/release-round-587-final` reconciles current main through
+`fb595610`, with only eight documentation paths differing from its verified
+source before output import. Its release still follows 603 to 605.
+
 The new animation run passed types, build, browser, 296 Vitest cases and
 dedicated controls. Its only node failure was `simLeaderboardCache`: the
 live `global_leaderboard` RPC timed out after the existing three attempts.
 An unchanged targeted rerun passes, but read-only database evidence also shows
 recurring three-second statement timeouts. An isolated query-performance
 repair is being investigated; no timeout limit or retry count is increased.
+The draft groups each player's best score per game and Eastern day before
+applying unchanged score caps. A one-snapshot comparison returned the same
+100 rows and output hash, but the fresh query still exceeded three seconds.
+The covering index has since been applied and the unchanged public query now
+passes its three-second budget, as recorded above. The query rewrite remains
+unapplied. This does not turn the older failed animation run green.
 
 The owner will fix Lovable later and asked work to continue. Official Lovable
 MCP supports editor-free `deploy_project`, but no authenticated Lovable tool

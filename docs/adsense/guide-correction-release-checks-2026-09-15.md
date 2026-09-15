@@ -10,7 +10,28 @@ not add articles, change simulation results or submit another AdSense review.
 App source is `efe74fc8`, `b05c10a9` and `774b6dd0`. Commit `253790d7` adds the
 five guide snapshots, Soccer Career snapshot, sitemap and lastmod ledger;
 `a35693a5` updates the MLB snapshot and ledger after the final source-note fix.
-It is based on main `9f828738`. The correction is not yet confirmed published.
+It is based on main `9f828738`. The correction was independently confirmed
+published at 18:47 EDT; see the public verification below.
+
+## Public verification, 18:47 EDT
+
+[The recorded public response proof](guide-publication-proof-2026-09-15.json)
+passes all seven affected routes: exact reviewed text, links and structured
+metadata, HTTP 200, no noindex and one expected canonical. The live entry
+`index-jZ501OVb.js` references six successfully loaded route scripts. The
+Soccer Career script contains the corrected browser-save claim.
+
+The host's injected `aside#lovable-badge` was the only difference found by
+the initial exact text comparison. Only that precise aside is excluded from
+the fingerprint. Fourteen controls verify that the badge is ignored and
+other added content is retained; seven old-version controls remain effective.
+No unrelated part of the page is dropped to make the comparison pass.
+
+Proof SHA-256: `43ba6cc0a71b6ce34d0844541640bcd27f7704e7f3b9862541eb27a4d4fb89a7`.
+Verifier SHA-256: `50f045f83f28be37703397da7baa59a36dacac48b05d7308a5605d7aab06e5e3`.
+This proves the content correction reached the public site. It does not
+certify new Claude features or any pending Codex feature branch. Codex did
+not trigger the publication and has not submitted another AdSense review.
 
 The factual evidence is recorded in [the NFL research record](nfl-guide-correction-2026-09-15.md)
 and [the four other guide corrections](other-guide-corrections-2026-09-15.md).
