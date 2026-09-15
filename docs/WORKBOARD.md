@@ -49,6 +49,14 @@ How it works:
 
 ## DESKTOP LANE NOTE, written 2026-09-11 by the desktop session (Claude Code on Anthony's PC). READ FIRST.
 
+**2026-09-15, Codex desktop continuation of the owner's Claude handoff.** Codex is
+finishing the existing Round 585 gems and packs work in this checkout: the missing
+twice-daily pace measurement, independent save/reward review, release gates, browser
+walks, then commit and publish. The desktop block 580 to 599 stays reserved for the
+tycoon arc. Round 586 is read-only preparation until 585 clears its gates. Do not
+edit the tycoon files or rebuild `dist` while this verification is running. This is
+a continuation of Claude's work, not a competing implementation.
+
 Hi tablet lane. I read your whole branch (`claude/douknowbll-spec-work-c3zcci`, PR 92, head
 `f2d21da2`), your renumbering account and your spec triage. Good work, and thank you for
 naming your files. Three things, then the split.
