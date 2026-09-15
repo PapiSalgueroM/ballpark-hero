@@ -1,0 +1,113 @@
+{
+ "holds": false,
+ "problems": [
+  {
+   "severity": "blocker",
+   "problem": "The pairing rule 'YES only when one single stints row satisfies both' is applied to every pair of records criteria. A club x club cell can never have both clubs on one row, so records can never confirm any of those cells. If you switch to an any-row rule instead, you start confirming namesake merges. The contract calls this Round 482's rule, but validate-player only uses it for one team plus one position.",
+   "evidence": "There are 713 club x club cells on 208 of the 710 boards. There are 1,707 club x position cells, which is the only shape the same-row rule was built for (validate-player index.ts line 248). Five of the 361 cached records YES rows are club x club. With an any-row rule, rows from different men would be combined. player_market_values birth years (year minus age) show this: 'rodri' is FC Barcelona 2006 born 1985 plus Manchester City 2020-22 born 1997. 'koke' is Marseille/Sporting/Aris born 1984 plus Atlético de Madrid born 1993. No section 5 pin covers a club x club cell, so the loss would go unnoticed.",
+   "fix": "Split the rule in two. (1) Two criteria that both live on one row (club, 'either' compound part, position, nationality, excluding two club-type criteria): YES only when a single row satisfies both. (2) Club-type pairs (club x club, club x compound, and any 'both' compound): YES only when the rows used are one person. That means the rows share a non-null person_key, or every row used has player_market_values birth years (same name_folded, club equal to the row's club or one ' / ' part, year inside the row's span) and they all fall within 2 of each other. Otherwise unknown. Measured spread per name_folded: 0 for 26,382 names, 1 for 123, 2 for 754, 3 for 85, 4 to 6 for 82, above 6 for 378. 78,670 of the 80,586 stint rows have a birth year. Add pins: Tevez x Manchester United x Juventus YES, Messi x Barcelona x PSG YES, Rodri x Barcelona x Manchester City not YES."
+  },
+  {
+   "severity": "blocker",
+   "problem": "The World Cup name bands, as written, give hard, cached NOs to real winners. They also contradict the contract's own section 7 gate. The readings quoted for the bands (E 22, F 137) came from a pg_trgm similarity probe, not from the stated Levenshtein, prefix and token rules.",
+   "evidence": "probe_wc_bands.mjs applies the stated rules to the 11 squads. 'mcallister' (2022) and 'sweinsteiger' (2014) both land in F, a definite false. Both are cached, and section 7 lists them among the misspellings that must never be false. Common spellings 'Dimaria', 'MacAllister', 'DePaul' (2022), 'Delpiero' and 'DeRossi' (2006) also land in F, because nospace(g) is only compared with a single token or with the whole name.",
+   "fix": "Band B also accepts nospace(g) equal to nospace of a run of two or more consecutive squad-name tokens ending with the last token, when exactly one squad row qualifies. Band E compares nospace(g) against nospace of every run of consecutive tokens, within Levenshtein max(1, floor(maxlen / 6)), and token pairs of length 4 or more use the same scale instead of 1. Re-derived readings on the cached records rows (distinct typed name and year pairs): YES A 64, B 30, D 4, E 3; NO F 116, E 27, B 1 ('n‘zonzi', now YES). Dimaria, MacAllister, DePaul, Delpiero, DeRossi and Guivarch become B. McAllister and Sweinsteiger become E."
+  },
+  {
+   "severity": "should fix",
+   "problem": "The identity check when pairing with a World Cup row uses debut_year minus debut_age. Those values are stored per name, not per row, so for a merged name they describe only one of the men.",
+   "evidence": "All 9 'pedro' rows carry debut 2008 at age 23 (born 1985). player_market_values ages give Sporting Gijón born 1985, Barcelona/Chelsea/Roma/Lazio 1988, Fluminense/Flamengo 1998, and Corinthians/Zenit 2007. The squad row Pedro 2010 is born 1987-07-28, and |1985 - 1987| = 2 passes. So 'Pedro x 2010 World Cup Winner x Played for Flamengo' (or Corinthians, or Zenit St. Petersburg, all board labels) would be a records YES. No current board pairs those labels with 2010. 46 names carry more than one debut pair.",
+   "fix": "Take the birth year from player_market_values for the specific stints row that satisfies the paired criterion, and require it within 2 of year(R.date_of_birth). If that row has no birth year, the criterion is unknown. Add pins: Pedro x 2010 x Played for Flamengo not YES; Pedro x 2010 x Played for Barcelona YES; Ronaldo x 2002 x Played for Real Madrid YES."
+  },
+  {
+   "severity": "should fix",
+   "problem": "A nationality NO is not honest when the stored string is a territory whose people hold the asked citizenship, or Northern Ireland for 'Irish'. Every guard in the contract still returns false for these players.",
+   "evidence": "French citizens stored as: Martinique 34, Guadeloupe 23, French Guiana 9, New Caledonia 3, Saint-Martin 1, Tahiti 1, Réunion 1. Dutch: Curacao 34, Aruba 2. Danish: Faroe Islands 11. American: Puerto Rico 2, Guam 1, American Virgin Islands 1. Gibraltar 1 (Danny Higginbotham, English-born). Northern Ireland 68 (Irish citizenship by entitlement). Examples: Aurélien Capoue and Andreaw Gravillon (Guadeloupe), Angelo Fulgini (New Caledonia) and Jean-Claude Darcheville (French Guiana) as French; Armando Obispo (Curacao) as Dutch.",
+   "fix": "Add a typed SHARED_CITIZENSHIP table inside the judge block, next to WC_WINNER_BY_YEAR. It rests on citizenship law, and no table in the database holds it. Contents: France: Martinique, Guadeloupe, French Guiana, New Caledonia, Saint-Martin, Tahiti, Réunion. Netherlands: Curacao, Aruba. Denmark: Faroe Islands. United States: Puerto Rico, Guam, American Virgin Islands. England: Gibraltar, Jersey. Ireland: Northern Ireland. A stored string listed under the wanted country gives unknown. The generator fails if any key is not a stored stints nationality. Pins: Capoue x French and Jonny Evans x Irish must be neither YES nor false."
+  },
+  {
+   "severity": "should fix",
+   "problem": "The World Cup nationality exception compares world_cup_players.player_name to the stints player_name exactly, so accent and hyphen differences defeat it.",
+   "evidence": "Of 3,801 joins between world_cup_players (2006 onward) and single-nationality stints names on the folded name, 345 differ in the raw string. Examples: Carlos Tevez / Carlos Tévez, Théo Hernandez / Theo Hernández, Vinícius Júnior / Vinicius Junior, Hans-Jörg Butt / Hans Jörg Butt.",
+   "fix": "Read world_cup_players.player_name where nationality is in NATION_IDS.wc (a bounded read, at most about 26 rows per tournament) and compare norm() of both names in the function. Add a sweep test: no single-nationality stints name whose folded name matches a world_cup_players row of a labelled nation is ever false on that nation's label."
+  },
+  {
+   "severity": "should fix",
+   "problem": "If a table re-import renames a stored nationality string, the generated NATION_IDS map goes stale and every player of that nation gets a hard NO. That is the exact v23 Ivorian failure, and nothing at runtime prevents it.",
+   "evidence": "v23 'Ivorian' pointed at 'ivory coast' while the stored string was Cote d'Ivoire, and 221 names were refused. In v24, false is 'r.nationality differs from NATION_IDS.stints'. A rename makes every row differ, and genSoccerGridIds --check only catches it when someone runs it.",
+   "fix": "Before returning a nationality false, read one row (limit 1) to confirm the wanted string still exists in soccer_player_club_stints. If it does not, or the read fails, return unknown. Section 6 control 'renamed': change the wanted string in memory; the pin must turn unknown, not false."
+  },
+  {
+   "severity": "should fix",
+   "problem": "The contract never says what a failed read inside the records pass returns. The new reads (the nationality exception, the existence check, the player_market_values birth years) must never produce a false.",
+   "evidence": "v23 ignores the error field on the stints read and treats an error as empty rows, which is the safe direction only because an empty read gives unknown. v24 adds reads whose absence would otherwise permit a false or a cross-row YES.",
+   "fix": "State that any read error or null data in the records pass makes the affected criterion unknown. If the whole pass throws, the AI branch runs, as in v23. Add a control 'readfail' that makes each added read return an error; no verdict may change to false or YES."
+  },
+  {
+   "severity": "should fix",
+   "problem": "The purge misses cached verdicts that records contradict but that do not carry a records reason.",
+   "evidence": "(1) 'nicholas jackson|played for bayern munich|forward (fwd)' is an AI NO. stints has Nicolas Jackson, Bayern Munich 2026, Centre-Forward, and world_cup_players 2026 (Senegal) lists his club as Bayern Munich. (2) 'acheampong|played for chelsea|defender (def)' is an AI NO ('No player named Acheampong has played for Chelsea FC'). stints and player_market_values have Josh Acheampong, Chelsea FC 2025-2026, Right-Back. (3) 'vard|played for leicester city|played in premier league' is a pre-Round 501 name-guard refusal ('That name did not match a player we could verify.') cached as a hard NO with no unverified flag. It is the only one of 642 rows. The cache now holds 642 rows, not 640.",
+   "fix": "Extend the replay to every AI row as well: purge any whose v24 records verdict is definite and disagrees. Add the Jackson and Acheampong keys to P4 with the evidence above. Add P6: verdict->>'reason' = 'That name did not match a player we could verify.' with no unverified flag."
+  },
+  {
+   "severity": "should fix",
+   "problem": "The purge SQL inlines cache keys typed by players as string literals.",
+   "evidence": "The keys include apostrophes ('n'golo kante|...', 'n‘zonzi|...'). The P3 array is built from keys the replay prints and runs under the service role through execute_sql. An unescaped key breaks the statement, and a crafted 80-character key is SQL injection.",
+   "fix": "The replay prints each key base64-encoded. The SQL decodes it with convert_from(decode('<b64>', 'base64'), 'UTF8') inside the array, so no player text ever reaches the statement as SQL."
+  },
+  {
+   "severity": "should fix",
+   "problem": "The read-back of version 24 does not prove that no v23 worker is still writing. v23 rows written after the export are missed, and the plan does not look for them.",
+   "evidence": "The purge guard is 'not (verdict ? rule)'. That protects v24 rows from deletion, but a v23 isolate still warm after deploy can write a new records row (for example a club refusal) after step 1. The step 5 recount only reruns the P1 and P2 patterns, and P3 comes from a fixed list.",
+   "fix": "Record the deploy time. 30 minutes after step 4, rerun step 1 restricted to created_at after the deploy time. If any row lacks the rule marker, replay and purge those keys with the same guarded delete."
+  },
+  {
+   "severity": "should fix",
+   "problem": "The risk list says post-allowance guesses become free retries. In the page, a single exhausted answer locks the whole board's input for the session. v24 sends many more guesses to the model (every club miss, near-miss World Cup name, event label), so after 15:59Z far more sessions will lock, including cells records could still settle. Charging does not change; what the player sees does.",
+   "evidence": "src/hooks/useSoccerGrid.ts lines 316-322: unverified is not counted, and exhausted calls setCheckingDown(true). src/pages/SoccerGrid.tsx line 216: while checkingDown is true, the input is replaced by 'come back tomorrow'. In v23 a club miss was a counted wrong guess and play continued.",
+   "fix": "Rewrite the risk to say this plainly. Report exhausted responses per day and sessions reaching one ('ai refused 429 DAY' log lines against soccer-grid-validate calls). Add a follow-up src round so checkingDown blocks only the cell that needed the model. It stays out of this round because this round makes no src changes."
+  },
+  {
+   "severity": "should fix",
+   "problem": "The section 7 prefix check would fail on healthy code: for short names, the 3- or 4-letter prefix is the whole token, and that is a correct YES.",
+   "evidence": "From probe_wc_bands.mjs, 17 squad members whose prefix is a band A or B YES: Ado, Caju, Edu, Leão, Pelé (1970); Olaf Thon, Uwe Bein (1990); Cafu, Raí (1994); Cafu, Dida, Kaká (2002); Luca Toni (2006); Juan Mata, Xavi (2010); Erik Durm (2014); Adil Rami (2018).",
+   "fix": "Test only prefixes strictly shorter than the member's longest token that are not themselves a whole token of any member of that squad."
+  },
+  {
+   "severity": "should fix",
+   "problem": "Two existing harnesses lift TRANSLIT and norm out of the grid function by line position. Moving norm into an indented judge block, or reordering it, makes both exit 1. Only one of them is on the must-stay-green list.",
+   "evidence": "scripts/simTeammatesPairs.mjs lines 152-162 and scripts/simSoccerStintNameFold.mjs lines 74-89 find the line starting 'const TRANSLIT' and read through the first line containing '.trim();'.",
+   "fix": "Keep TRANSLIT immediately followed by norm, at column 0 with no indentation, inside the judge block. Add simTeammatesPairs to the harnesses that must stay green unchanged."
+  },
+  {
+   "severity": "should fix",
+   "problem": "The generator computes co-occurrence shares over REST pages. A short or partial read changes the shares and could admit an impostor string, and the contract never says the generator refuses to write.",
+   "evidence": "The admission rule is n >= 3 and share >= 0.3 of the joined players for a spelling. Small spellings sit near the line: Corinthians 4/11 accepted, West Ham United 2/11 rejected, Inter Miami CF 3/7, São Paulo 5/7. simSoccerStintNameFold already refuses to run below 50,000 rows for the same reason.",
+   "fix": "The generator reads each table's exact row count (Prefer: count=exact). If any paged read returns fewer rows, it exits 1 without writing the block or soccerGridIds.json."
+  },
+  {
+   "severity": "nit",
+   "problem": "The exact-label rule accepts short stored strings that look like youth rows or single manually added rows. Nothing lists them for review.",
+   "evidence": "Roma 4 names, Napoli 3, Torino 3, Genoa 3, Sampdoria 2, Lazio 2, Bologna 1, Atalanta 1, Udinese 1, Parma 1. They are mostly Second Striker, aged 16 to 19, one season each (Gianluca Caprari at 'Roma' 2010 aged 16, Lorenzo Peli at 'Atalanta' 2019 aged 18). Barcelona, Liverpool, Ajax, Atlético Madrid, Grêmio and Inter Miami are each one Luis Suárez row (person_key 'luis suarez 1987'). 'Juventus' has 10 names, first team and youth mixed.",
+   "fix": "soccerGridIds.json lists every accepted string with fewer than 10 names, together with those names. Section 3 ratchets that list, so a new small string needs review."
+  },
+  {
+   "severity": "nit",
+   "problem": "The co-occurrence window [year - 1, year] is out of step with the stints year convention for the winter 2022 World Cup.",
+   "evidence": "The stints year is the season end year: Messi PSG first_year 2022 after an August 2021 move, Haaland Manchester City 2023. With a season-aligned window (2022 uses 2023), the lowest accepted share rises from 0.36 to 0.67, but Corinthians and Al-Ittihad fall below n >= 3.",
+   "fix": "Keep the current window, since it admits no wrong club today. Record the convention and both readings in the generator header, and have section 4 print the season-aligned lowest share too."
+  },
+  {
+   "severity": "nit",
+   "problem": "A nationality NO from exact name resolution is honest only about the man the name resolves to. Mononyms and dual nationals remain exposed.",
+   "evidence": "stints 'mariano' is a Brazilian right-back (2008-20), while Mariano Díaz is stored as 'mariano diaz' with Dominican Republic and was capped by Spain. 'eusebio' is a Portuguese left-back at Marítimo in 2005; 'bebeto' is a Brazilian right-back at Marítimo 2017-19. The stints read is limit(60), and 'juninho' has more rows than that.",
+   "fix": "Record this under risks. No change this round."
+  },
+  {
+   "severity": "nit",
+   "problem": "Two statements conflict: 'Keep the whole AI branch verbatim' and 'every verdict object this version caches, records or AI, gains rule: v24'. Also, several readings are hardcoded where the replay should produce them.",
+   "evidence": "Part 2 lists the AI branch among the things kept verbatim, then asks for a rule marker on AI verdicts. Part 4 hardcodes P3 as 'at least 34' and 'the 22 near refusals', which the corrected bands change to 27.",
+   "fix": "The AI branch stays verbatim except that its cached verdict object gains rule: 'v24'. P3 counts come from the replay output, not from the contract."
+  }
+ ]
+}

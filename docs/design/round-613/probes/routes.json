@@ -1,0 +1,2684 @@
+[
+ {
+  "label": "1970 World Cup Winner",
+  "typ": "world_cup",
+  "boards": 31,
+  "e": 0,
+  "n": 23,
+  "h": 8,
+  "kind": "wc_winner",
+  "value": "1970"
+ },
+ {
+  "label": "1986 World Cup Winner",
+  "typ": "world_cup",
+  "boards": 29,
+  "e": 0,
+  "n": 22,
+  "h": 7,
+  "kind": "wc_winner",
+  "value": "1986"
+ },
+ {
+  "label": "1990 World Cup Winner",
+  "typ": "world_cup",
+  "boards": 32,
+  "e": 0,
+  "n": 25,
+  "h": 7,
+  "kind": "wc_winner",
+  "value": "1990"
+ },
+ {
+  "label": "1994 World Cup Winner",
+  "typ": "world_cup",
+  "boards": 33,
+  "e": 0,
+  "n": 27,
+  "h": 6,
+  "kind": "wc_winner",
+  "value": "1994"
+ },
+ {
+  "label": "1998 World Cup Winner",
+  "typ": "world_cup",
+  "boards": 32,
+  "e": 0,
+  "n": 27,
+  "h": 5,
+  "kind": "wc_winner",
+  "value": "1998"
+ },
+ {
+  "label": "2002 World Cup Winner",
+  "typ": "world_cup",
+  "boards": 27,
+  "e": 0,
+  "n": 21,
+  "h": 6,
+  "kind": "wc_winner",
+  "value": "2002"
+ },
+ {
+  "label": "2006 World Cup Winner",
+  "typ": "world_cup",
+  "boards": 33,
+  "e": 0,
+  "n": 25,
+  "h": 8,
+  "kind": "wc_winner",
+  "value": "2006"
+ },
+ {
+  "label": "2010 World Cup Winner",
+  "typ": "world_cup",
+  "boards": 30,
+  "e": 0,
+  "n": 23,
+  "h": 7,
+  "kind": "wc_winner",
+  "value": "2010"
+ },
+ {
+  "label": "2014 World Cup Winner",
+  "typ": "world_cup",
+  "boards": 28,
+  "e": 0,
+  "n": 23,
+  "h": 5,
+  "kind": "wc_winner",
+  "value": "2014"
+ },
+ {
+  "label": "2018 World Cup Winner",
+  "typ": "world_cup",
+  "boards": 31,
+  "e": 0,
+  "n": 25,
+  "h": 6,
+  "kind": "wc_winner",
+  "value": "2018"
+ },
+ {
+  "label": "2022 World Cup Winner",
+  "typ": "world_cup",
+  "boards": 32,
+  "e": 0,
+  "n": 23,
+  "h": 9,
+  "kind": "wc_winner",
+  "value": "2022"
+ },
+ {
+  "label": "African",
+  "typ": "nationality",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "African",
+  "want": "african",
+  "matched": [
+   "Central African Republic(8)"
+  ],
+  "matchedNames": 8,
+  "refusedNames": 28066
+ },
+ {
+  "label": "African Cup of Nations Winner",
+  "typ": "misc",
+  "boards": 2,
+  "e": 0,
+  "n": 2,
+  "h": 0,
+  "kind": "honour",
+  "value": "African Cup of Nations Winner"
+ },
+ {
+  "label": "African player",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "African player",
+  "want": "african player",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Algerian",
+  "typ": "nationality",
+  "boards": 1,
+  "e": 0,
+  "n": 1,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Algerian",
+  "want": "algeria",
+  "matched": [
+   "Algeria(172)"
+  ],
+  "matchedNames": 172,
+  "refusedNames": 27902
+ },
+ {
+  "label": "American",
+  "typ": "nationality",
+  "boards": 2,
+  "e": 2,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "American",
+  "want": "united states",
+  "matched": [
+   "United States(349)"
+  ],
+  "matchedNames": 349,
+  "refusedNames": 27725
+ },
+ {
+  "label": "Argentine",
+  "typ": "nationality",
+  "boards": 73,
+  "e": 60,
+  "n": 10,
+  "h": 3,
+  "kind": "nationality",
+  "value": "Argentine",
+  "want": "argentina",
+  "matched": [
+   "Argentina(1567)"
+  ],
+  "matchedNames": 1567,
+  "refusedNames": 26507
+ },
+ {
+  "label": "Asian player",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Asian player",
+  "want": "asian player",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Ballon d'Or Winner",
+  "typ": "award",
+  "boards": 7,
+  "e": 0,
+  "n": 5,
+  "h": 2,
+  "kind": "honour",
+  "value": "Ballon d'Or Winner"
+ },
+ {
+  "label": "Became a Premier League manager after retiring",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Became a Premier League manager after retiring",
+  "want": "became a premier league manager after retiring",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Belgian",
+  "typ": "nationality",
+  "boards": 15,
+  "e": 14,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Belgian",
+  "want": "belgium",
+  "matched": [
+   "Belgium(568)"
+  ],
+  "matchedNames": 568,
+  "refusedNames": 27506
+ },
+ {
+  "label": "Brazilian",
+  "typ": "nationality",
+  "boards": 112,
+  "e": 96,
+  "n": 11,
+  "h": 5,
+  "kind": "nationality",
+  "value": "Brazilian",
+  "want": "brazil",
+  "matched": [
+   "Brazil(1702)"
+  ],
+  "matchedNames": 1702,
+  "refusedNames": 26372
+ },
+ {
+  "label": "Cameroonian",
+  "typ": "nationality",
+  "boards": 1,
+  "e": 0,
+  "n": 1,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Cameroonian",
+  "want": "cameroon",
+  "matched": [
+   "Cameroon(186)"
+  ],
+  "matchedNames": 186,
+  "refusedNames": 27888
+ },
+ {
+  "label": "Captained a World Cup winning team",
+  "typ": "world_cup",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Captained a World Cup winning team"
+ },
+ {
+  "label": "Captained their national team",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 1,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Captained their national team",
+  "want": "captained their national team",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Champions League Winner",
+  "typ": "champions_league",
+  "boards": 11,
+  "e": 0,
+  "n": 10,
+  "h": 1,
+  "kind": "honour",
+  "value": "Champions League Winner"
+ },
+ {
+  "label": "Chilean",
+  "typ": "nationality",
+  "boards": 1,
+  "e": 0,
+  "n": 1,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Chilean",
+  "want": "chile",
+  "matched": [
+   "Chile(178)"
+  ],
+  "matchedNames": 178,
+  "refusedNames": 27896
+ },
+ {
+  "label": "Colombian",
+  "typ": "nationality",
+  "boards": 3,
+  "e": 2,
+  "n": 1,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Colombian",
+  "want": "colombia",
+  "matched": [
+   "Colombia(401)"
+  ],
+  "matchedNames": 401,
+  "refusedNames": 27673
+ },
+ {
+  "label": "Copa América Winner",
+  "typ": "misc",
+  "boards": 2,
+  "e": 0,
+  "n": 2,
+  "h": 0,
+  "kind": "honour",
+  "value": "Copa América Winner"
+ },
+ {
+  "label": "Cost more than 50 million euros",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Cost more than 50 million euros",
+  "want": "cost more than 50 million euros",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Croatian",
+  "typ": "nationality",
+  "boards": 7,
+  "e": 7,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Croatian",
+  "want": "croatia",
+  "matched": [
+   "Croatia(407)"
+  ],
+  "matchedNames": 407,
+  "refusedNames": 27667
+ },
+ {
+  "label": "Czech",
+  "typ": "nationality",
+  "boards": 2,
+  "e": 2,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Czech",
+  "want": "czech republic",
+  "matched": [
+   "Czech Republic(447)"
+  ],
+  "matchedNames": 447,
+  "refusedNames": 27627
+ },
+ {
+  "label": "Danish",
+  "typ": "nationality",
+  "boards": 9,
+  "e": 9,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Danish",
+  "want": "denmark",
+  "matched": [
+   "Denmark(389)"
+  ],
+  "matchedNames": 389,
+  "refusedNames": 27685
+ },
+ {
+  "label": "Defender (DEF)",
+  "typ": "position",
+  "boards": 287,
+  "e": 95,
+  "n": 167,
+  "h": 25,
+  "kind": "position",
+  "value": "def"
+ },
+ {
+  "label": "Dutch",
+  "typ": "nationality",
+  "boards": 30,
+  "e": 27,
+  "n": 1,
+  "h": 2,
+  "kind": "nationality",
+  "value": "Dutch",
+  "want": "netherlands",
+  "matched": [
+   "Netherlands(672)"
+  ],
+  "matchedNames": 672,
+  "refusedNames": 27402
+ },
+ {
+  "label": "Earned 100 or more international caps",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 1,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Earned 100 or more international caps",
+  "want": "earned 100 or more international caps",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Egyptian",
+  "typ": "nationality",
+  "boards": 1,
+  "e": 1,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Egyptian",
+  "want": "egypt",
+  "matched": [
+   "Egypt(84)"
+  ],
+  "matchedNames": 84,
+  "refusedNames": 27990
+ },
+ {
+  "label": "English",
+  "typ": "nationality",
+  "boards": 18,
+  "e": 8,
+  "n": 9,
+  "h": 1,
+  "kind": "nationality",
+  "value": "English",
+  "want": "england",
+  "matched": [
+   "England(1175)"
+  ],
+  "matchedNames": 1175,
+  "refusedNames": 26899
+ },
+ {
+  "label": "Europa League Winner",
+  "typ": "award",
+  "boards": 3,
+  "e": 0,
+  "n": 2,
+  "h": 1,
+  "kind": "honour",
+  "value": "Europa League Winner"
+ },
+ {
+  "label": "Forward (FWD)",
+  "typ": "position",
+  "boards": 301,
+  "e": 104,
+  "n": 170,
+  "h": 27,
+  "kind": "position",
+  "value": "fwd"
+ },
+ {
+  "label": "French",
+  "typ": "nationality",
+  "boards": 66,
+  "e": 50,
+  "n": 11,
+  "h": 5,
+  "kind": "nationality",
+  "value": "French",
+  "want": "france",
+  "matched": [
+   "France(1266)"
+  ],
+  "matchedNames": 1266,
+  "refusedNames": 26808
+ },
+ {
+  "label": "From the CONCACAF region (North/Central America or Caribbean)",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "From the CONCACAF region (North/Central America or Caribbean)",
+  "want": "from the concacaf region north central america or caribbean",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Full-back or wing-back",
+  "typ": "position",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Full-back or wing-back",
+  "want": "full back or wing back",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "German",
+  "typ": "nationality",
+  "boards": 21,
+  "e": 8,
+  "n": 12,
+  "h": 1,
+  "kind": "nationality",
+  "value": "German",
+  "want": "germany",
+  "matched": [
+   "Germany(1323)"
+  ],
+  "matchedNames": 1323,
+  "refusedNames": 26751
+ },
+ {
+  "label": "Goalkeeper (GK)",
+  "typ": "position",
+  "boards": 98,
+  "e": 94,
+  "n": 4,
+  "h": 0,
+  "kind": "position",
+  "value": "gk"
+ },
+ {
+  "label": "Golden Boot Winner",
+  "typ": "award",
+  "boards": 2,
+  "e": 0,
+  "n": 2,
+  "h": 0,
+  "kind": "honour",
+  "value": "Golden Boot Winner"
+ },
+ {
+  "label": "Greek",
+  "typ": "nationality",
+  "boards": 1,
+  "e": 1,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Greek",
+  "want": "greece",
+  "matched": [
+   "Greece(372)"
+  ],
+  "matchedNames": 372,
+  "refusedNames": 27702
+ },
+ {
+  "label": "Irish",
+  "typ": "nationality",
+  "boards": 1,
+  "e": 1,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Irish",
+  "want": "ireland",
+  "matched": [
+   "Ireland(196)",
+   "Northern Ireland(68)"
+  ],
+  "matchedNames": 264,
+  "refusedNames": 27810
+ },
+ {
+  "label": "Italian",
+  "typ": "nationality",
+  "boards": 19,
+  "e": 8,
+  "n": 10,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Italian",
+  "want": "italy",
+  "matched": [
+   "Italy(1571)"
+  ],
+  "matchedNames": 1571,
+  "refusedNames": 26503
+ },
+ {
+  "label": "Ivorian",
+  "typ": "nationality",
+  "boards": 2,
+  "e": 1,
+  "n": 1,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Ivorian",
+  "want": "ivory coast",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Japanese",
+  "typ": "nationality",
+  "boards": 2,
+  "e": 1,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Japanese",
+  "want": "japan",
+  "matched": [
+   "Japan(516)"
+  ],
+  "matchedNames": 516,
+  "refusedNames": 27558
+ },
+ {
+  "label": "Lost a World Cup final",
+  "typ": "world_cup",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Lost a World Cup final"
+ },
+ {
+  "label": "Mexican",
+  "typ": "nationality",
+  "boards": 4,
+  "e": 2,
+  "n": 1,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Mexican",
+  "want": "mexico",
+  "matched": [
+   "Mexico(524)"
+  ],
+  "matchedNames": 524,
+  "refusedNames": 27550
+ },
+ {
+  "label": "Midfielder (MID)",
+  "typ": "position",
+  "boards": 300,
+  "e": 104,
+  "n": 169,
+  "h": 27,
+  "kind": "position",
+  "value": "mid"
+ },
+ {
+  "label": "Missed a penalty at a World Cup (shootouts count)",
+  "typ": "world_cup",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Missed a penalty at a World Cup (shootouts count)"
+ },
+ {
+  "label": "Moroccan",
+  "typ": "nationality",
+  "boards": 1,
+  "e": 1,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Moroccan",
+  "want": "morocco",
+  "matched": [
+   "Morocco(281)"
+  ],
+  "matchedNames": 281,
+  "refusedNames": 27793
+ },
+ {
+  "label": "Named African Player of the Year",
+  "typ": "award",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Named African Player of the Year",
+  "want": "named african player of the year",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Nigerian",
+  "typ": "nationality",
+  "boards": 2,
+  "e": 1,
+  "n": 1,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Nigerian",
+  "want": "nigeria",
+  "matched": [
+   "Nigeria(248)",
+   "Niger(6)"
+  ],
+  "matchedNames": 254,
+  "refusedNames": 27820
+ },
+ {
+  "label": "Norwegian",
+  "typ": "nationality",
+  "boards": 1,
+  "e": 1,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Norwegian",
+  "want": "norway",
+  "matched": [
+   "Norway(298)"
+  ],
+  "matchedNames": 298,
+  "refusedNames": 27776
+ },
+ {
+  "label": "Over 100 International Caps",
+  "typ": "misc",
+  "boards": 5,
+  "e": 0,
+  "n": 3,
+  "h": 2,
+  "kind": "nationality",
+  "value": "Over 100 International Caps",
+  "want": "over 100 international caps",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Played at both the 2010 and 2018 World Cups",
+  "typ": "world_cup",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Played at both the 2010 and 2018 World Cups"
+ },
+ {
+  "label": "Played at the 2006 World Cup",
+  "typ": "world_cup",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Played at the 2006 World Cup"
+ },
+ {
+  "label": "Played at the 2022 World Cup",
+  "typ": "world_cup",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Played at the 2022 World Cup"
+ },
+ {
+  "label": "Played club football in three or more countries",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Played club football in three or more countries",
+  "want": "played club football in three or more countries",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Played for AC Milan",
+  "typ": "club",
+  "boards": 38,
+  "e": 20,
+  "n": 18,
+  "h": 0,
+  "kind": "club",
+  "value": "AC Milan"
+ },
+ {
+  "label": "Played for Ajax",
+  "typ": "club",
+  "boards": 23,
+  "e": 22,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Ajax"
+ },
+ {
+  "label": "Played for Al-Hilal",
+  "typ": "club",
+  "boards": 11,
+  "e": 11,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Al-Hilal"
+ },
+ {
+  "label": "Played for Al-Ittihad",
+  "typ": "club",
+  "boards": 8,
+  "e": 8,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Al-Ittihad"
+ },
+ {
+  "label": "Played for Al-Nassr",
+  "typ": "club",
+  "boards": 11,
+  "e": 11,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Al-Nassr"
+ },
+ {
+  "label": "Played for Anderlecht",
+  "typ": "club",
+  "boards": 16,
+  "e": 16,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Anderlecht"
+ },
+ {
+  "label": "Played for Arsenal",
+  "typ": "club",
+  "boards": 37,
+  "e": 23,
+  "n": 13,
+  "h": 1,
+  "kind": "club",
+  "value": "Arsenal"
+ },
+ {
+  "label": "Played for AS Roma",
+  "typ": "club",
+  "boards": 10,
+  "e": 0,
+  "n": 10,
+  "h": 0,
+  "kind": "club",
+  "value": "AS Roma"
+ },
+ {
+  "label": "Played for Aston Villa",
+  "typ": "club",
+  "boards": 20,
+  "e": 20,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Aston Villa"
+ },
+ {
+  "label": "Played for Atalanta",
+  "typ": "club",
+  "boards": 13,
+  "e": 13,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Atalanta"
+ },
+ {
+  "label": "Played for Athletic Bilbao",
+  "typ": "club",
+  "boards": 11,
+  "e": 11,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Athletic Bilbao"
+ },
+ {
+  "label": "Played for Atletico Madrid",
+  "typ": "club",
+  "boards": 1,
+  "e": 0,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Atletico Madrid"
+ },
+ {
+  "label": "Played for Atlético Madrid",
+  "typ": "club",
+  "boards": 35,
+  "e": 23,
+  "n": 12,
+  "h": 0,
+  "kind": "club",
+  "value": "Atlético Madrid"
+ },
+ {
+  "label": "Played for Atlético Mineiro",
+  "typ": "club",
+  "boards": 18,
+  "e": 17,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Atlético Mineiro"
+ },
+ {
+  "label": "Played for Barcelona",
+  "typ": "club",
+  "boards": 37,
+  "e": 20,
+  "n": 16,
+  "h": 1,
+  "kind": "club",
+  "value": "Barcelona"
+ },
+ {
+  "label": "Played for Bayer Leverkusen",
+  "typ": "club",
+  "boards": 21,
+  "e": 20,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Bayer Leverkusen"
+ },
+ {
+  "label": "Played for Bayern Munich",
+  "typ": "club",
+  "boards": 33,
+  "e": 16,
+  "n": 14,
+  "h": 3,
+  "kind": "club",
+  "value": "Bayern Munich"
+ },
+ {
+  "label": "Played for Benfica",
+  "typ": "club",
+  "boards": 22,
+  "e": 21,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Benfica"
+ },
+ {
+  "label": "Played for Beşiktaş",
+  "typ": "club",
+  "boards": 18,
+  "e": 18,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Beşiktaş"
+ },
+ {
+  "label": "Played for Boca Juniors",
+  "typ": "club",
+  "boards": 15,
+  "e": 15,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Boca Juniors"
+ },
+ {
+  "label": "Played for Boca Juniors or River Plate",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "club",
+  "value": "Boca Juniors or River Plate"
+ },
+ {
+  "label": "Played for Bologna",
+  "typ": "club",
+  "boards": 16,
+  "e": 16,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Bologna"
+ },
+ {
+  "label": "Played for Bordeaux",
+  "typ": "club",
+  "boards": 18,
+  "e": 18,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Bordeaux"
+ },
+ {
+  "label": "Played for Borussia Dortmund",
+  "typ": "club",
+  "boards": 29,
+  "e": 17,
+  "n": 12,
+  "h": 0,
+  "kind": "club",
+  "value": "Borussia Dortmund"
+ },
+ {
+  "label": "Played for Borussia Mönchengladbach",
+  "typ": "club",
+  "boards": 14,
+  "e": 14,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Borussia Mönchengladbach"
+ },
+ {
+  "label": "Played for both AC Milan and Inter",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "club",
+  "value": "both AC Milan and Inter"
+ },
+ {
+  "label": "Played for both Manchester United and Manchester City",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "club",
+  "value": "both Manchester United and Manchester City"
+ },
+ {
+  "label": "Played for both Real Madrid and Atletico Madrid",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "club",
+  "value": "both Real Madrid and Atletico Madrid"
+ },
+ {
+  "label": "Played for Celta Vigo",
+  "typ": "club",
+  "boards": 17,
+  "e": 17,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Celta Vigo"
+ },
+ {
+  "label": "Played for Celtic",
+  "typ": "club",
+  "boards": 13,
+  "e": 13,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Celtic"
+ },
+ {
+  "label": "Played for Chelsea",
+  "typ": "club",
+  "boards": 37,
+  "e": 20,
+  "n": 15,
+  "h": 2,
+  "kind": "club",
+  "value": "Chelsea"
+ },
+ {
+  "label": "Played for Club Brugge",
+  "typ": "club",
+  "boards": 14,
+  "e": 14,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Club Brugge"
+ },
+ {
+  "label": "Played for Corinthians",
+  "typ": "club",
+  "boards": 14,
+  "e": 14,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Corinthians"
+ },
+ {
+  "label": "Played for Crystal Palace",
+  "typ": "club",
+  "boards": 13,
+  "e": 13,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Crystal Palace"
+ },
+ {
+  "label": "Played for Eintracht Frankfurt",
+  "typ": "club",
+  "boards": 16,
+  "e": 16,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Eintracht Frankfurt"
+ },
+ {
+  "label": "Played for England at a World Cup",
+  "typ": "world_cup",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "club",
+  "value": "England at a World Cup"
+ },
+ {
+  "label": "Played for Espanyol",
+  "typ": "club",
+  "boards": 18,
+  "e": 18,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Espanyol"
+ },
+ {
+  "label": "Played for Everton",
+  "typ": "club",
+  "boards": 18,
+  "e": 17,
+  "n": 0,
+  "h": 1,
+  "kind": "club",
+  "value": "Everton"
+ },
+ {
+  "label": "Played for FC Basel",
+  "typ": "club",
+  "boards": 16,
+  "e": 16,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "FC Basel"
+ },
+ {
+  "label": "Played for Fenerbahçe",
+  "typ": "club",
+  "boards": 19,
+  "e": 19,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Fenerbahçe"
+ },
+ {
+  "label": "Played for Feyenoord",
+  "typ": "club",
+  "boards": 17,
+  "e": 17,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Feyenoord"
+ },
+ {
+  "label": "Played for Fiorentina",
+  "typ": "club",
+  "boards": 20,
+  "e": 20,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Fiorentina"
+ },
+ {
+  "label": "Played for Flamengo",
+  "typ": "club",
+  "boards": 14,
+  "e": 13,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Flamengo"
+ },
+ {
+  "label": "Played for Fulham",
+  "typ": "club",
+  "boards": 21,
+  "e": 21,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Fulham"
+ },
+ {
+  "label": "Played for Galatasaray",
+  "typ": "club",
+  "boards": 23,
+  "e": 23,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Galatasaray"
+ },
+ {
+  "label": "Played for Genoa",
+  "typ": "club",
+  "boards": 18,
+  "e": 18,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Genoa"
+ },
+ {
+  "label": "Played for Grêmio",
+  "typ": "club",
+  "boards": 17,
+  "e": 17,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Grêmio"
+ },
+ {
+  "label": "Played for Hamburger SV",
+  "typ": "club",
+  "boards": 15,
+  "e": 15,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Hamburger SV"
+ },
+ {
+  "label": "Played for Hoffenheim",
+  "typ": "club",
+  "boards": 17,
+  "e": 17,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Hoffenheim"
+ },
+ {
+  "label": "Played for Inter Miami",
+  "typ": "club",
+  "boards": 11,
+  "e": 11,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Inter Miami"
+ },
+ {
+  "label": "Played for Inter Milan",
+  "typ": "club",
+  "boards": 33,
+  "e": 19,
+  "n": 13,
+  "h": 1,
+  "kind": "club",
+  "value": "Inter Milan"
+ },
+ {
+  "label": "Played for Juventus",
+  "typ": "club",
+  "boards": 33,
+  "e": 17,
+  "n": 14,
+  "h": 2,
+  "kind": "club",
+  "value": "Juventus"
+ },
+ {
+  "label": "Played for LA Galaxy",
+  "typ": "club",
+  "boards": 7,
+  "e": 7,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "LA Galaxy"
+ },
+ {
+  "label": "Played for Lazio",
+  "typ": "club",
+  "boards": 19,
+  "e": 18,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Lazio"
+ },
+ {
+  "label": "Played for Leeds United",
+  "typ": "club",
+  "boards": 16,
+  "e": 16,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Leeds United"
+ },
+ {
+  "label": "Played for Leicester City",
+  "typ": "club",
+  "boards": 13,
+  "e": 13,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Leicester City"
+ },
+ {
+  "label": "Played for Lille",
+  "typ": "club",
+  "boards": 20,
+  "e": 20,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Lille"
+ },
+ {
+  "label": "Played for Liverpool",
+  "typ": "club",
+  "boards": 38,
+  "e": 23,
+  "n": 13,
+  "h": 2,
+  "kind": "club",
+  "value": "Liverpool"
+ },
+ {
+  "label": "Played for Lyon",
+  "typ": "club",
+  "boards": 23,
+  "e": 22,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Lyon"
+ },
+ {
+  "label": "Played for Manchester City",
+  "typ": "club",
+  "boards": 39,
+  "e": 25,
+  "n": 13,
+  "h": 1,
+  "kind": "club",
+  "value": "Manchester City"
+ },
+ {
+  "label": "Played for Manchester United",
+  "typ": "club",
+  "boards": 34,
+  "e": 18,
+  "n": 14,
+  "h": 2,
+  "kind": "club",
+  "value": "Manchester United"
+ },
+ {
+  "label": "Played for Marseille",
+  "typ": "club",
+  "boards": 19,
+  "e": 19,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Marseille"
+ },
+ {
+  "label": "Played for Monaco",
+  "typ": "club",
+  "boards": 26,
+  "e": 25,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Monaco"
+ },
+ {
+  "label": "Played for Napoli",
+  "typ": "club",
+  "boards": 19,
+  "e": 18,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Napoli"
+ },
+ {
+  "label": "Played for Newcastle",
+  "typ": "club",
+  "boards": 17,
+  "e": 17,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Newcastle"
+ },
+ {
+  "label": "Played for Newcastle United",
+  "typ": "club",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "club",
+  "value": "Newcastle United"
+ },
+ {
+  "label": "Played for Nice",
+  "typ": "club",
+  "boards": 16,
+  "e": 16,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Nice"
+ },
+ {
+  "label": "Played for Olympiacos",
+  "typ": "club",
+  "boards": 19,
+  "e": 19,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Olympiacos"
+ },
+ {
+  "label": "Played for Palmeiras",
+  "typ": "club",
+  "boards": 17,
+  "e": 17,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Palmeiras"
+ },
+ {
+  "label": "Played for Paris Saint-Germain",
+  "typ": "club",
+  "boards": 8,
+  "e": 0,
+  "n": 7,
+  "h": 1,
+  "kind": "club",
+  "value": "Paris Saint-Germain"
+ },
+ {
+  "label": "Played for Parma",
+  "typ": "club",
+  "boards": 17,
+  "e": 17,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Parma"
+ },
+ {
+  "label": "Played for Porto",
+  "typ": "club",
+  "boards": 17,
+  "e": 16,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Porto"
+ },
+ {
+  "label": "Played for PSG",
+  "typ": "club",
+  "boards": 25,
+  "e": 22,
+  "n": 3,
+  "h": 0,
+  "kind": "club",
+  "value": "PSG"
+ },
+ {
+  "label": "Played for PSV",
+  "typ": "club",
+  "boards": 21,
+  "e": 21,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "PSV"
+ },
+ {
+  "label": "Played for Rangers",
+  "typ": "club",
+  "boards": 12,
+  "e": 12,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Rangers"
+ },
+ {
+  "label": "Played for RB Leipzig",
+  "typ": "club",
+  "boards": 13,
+  "e": 13,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "RB Leipzig"
+ },
+ {
+  "label": "Played for Real Betis",
+  "typ": "club",
+  "boards": 17,
+  "e": 17,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Real Betis"
+ },
+ {
+  "label": "Played for Real Madrid",
+  "typ": "club",
+  "boards": 37,
+  "e": 18,
+  "n": 15,
+  "h": 4,
+  "kind": "club",
+  "value": "Real Madrid"
+ },
+ {
+  "label": "Played for Real Sociedad",
+  "typ": "club",
+  "boards": 14,
+  "e": 14,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Real Sociedad"
+ },
+ {
+  "label": "Played for Red Bull Salzburg",
+  "typ": "club",
+  "boards": 16,
+  "e": 16,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Red Bull Salzburg"
+ },
+ {
+  "label": "Played for Rennes",
+  "typ": "club",
+  "boards": 17,
+  "e": 17,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Rennes"
+ },
+ {
+  "label": "Played for River Plate",
+  "typ": "club",
+  "boards": 16,
+  "e": 16,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "River Plate"
+ },
+ {
+  "label": "Played for Roma",
+  "typ": "club",
+  "boards": 24,
+  "e": 23,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Roma"
+ },
+ {
+  "label": "Played for Saint-Étienne",
+  "typ": "club",
+  "boards": 14,
+  "e": 14,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Saint-Étienne"
+ },
+ {
+  "label": "Played for Sampdoria",
+  "typ": "club",
+  "boards": 13,
+  "e": 13,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Sampdoria"
+ },
+ {
+  "label": "Played for Santos",
+  "typ": "club",
+  "boards": 16,
+  "e": 15,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Santos"
+ },
+ {
+  "label": "Played for São Paulo",
+  "typ": "club",
+  "boards": 20,
+  "e": 20,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "São Paulo"
+ },
+ {
+  "label": "Played for Schalke",
+  "typ": "club",
+  "boards": 19,
+  "e": 19,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Schalke"
+ },
+ {
+  "label": "Played for Sevilla",
+  "typ": "club",
+  "boards": 26,
+  "e": 25,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Sevilla"
+ },
+ {
+  "label": "Played for Shakhtar Donetsk",
+  "typ": "club",
+  "boards": 15,
+  "e": 15,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Shakhtar Donetsk"
+ },
+ {
+  "label": "Played for Southampton",
+  "typ": "club",
+  "boards": 14,
+  "e": 14,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Southampton"
+ },
+ {
+  "label": "Played for Sporting CP",
+  "typ": "club",
+  "boards": 18,
+  "e": 17,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Sporting CP"
+ },
+ {
+  "label": "Played for Stuttgart",
+  "typ": "club",
+  "boards": 17,
+  "e": 17,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Stuttgart"
+ },
+ {
+  "label": "Played for Sunderland",
+  "typ": "club",
+  "boards": 11,
+  "e": 11,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Sunderland"
+ },
+ {
+  "label": "Played for Torino",
+  "typ": "club",
+  "boards": 15,
+  "e": 15,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Torino"
+ },
+ {
+  "label": "Played for Tottenham",
+  "typ": "club",
+  "boards": 22,
+  "e": 20,
+  "n": 2,
+  "h": 0,
+  "kind": "club",
+  "value": "Tottenham"
+ },
+ {
+  "label": "Played for Tottenham Hotspur",
+  "typ": "club",
+  "boards": 10,
+  "e": 0,
+  "n": 10,
+  "h": 0,
+  "kind": "club",
+  "value": "Tottenham Hotspur"
+ },
+ {
+  "label": "Played for Trabzonspor",
+  "typ": "club",
+  "boards": 18,
+  "e": 18,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Trabzonspor"
+ },
+ {
+  "label": "Played for Udinese",
+  "typ": "club",
+  "boards": 19,
+  "e": 19,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Udinese"
+ },
+ {
+  "label": "Played for Valencia",
+  "typ": "club",
+  "boards": 21,
+  "e": 20,
+  "n": 1,
+  "h": 0,
+  "kind": "club",
+  "value": "Valencia"
+ },
+ {
+  "label": "Played for Villarreal",
+  "typ": "club",
+  "boards": 19,
+  "e": 19,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Villarreal"
+ },
+ {
+  "label": "Played for Werder Bremen",
+  "typ": "club",
+  "boards": 19,
+  "e": 19,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Werder Bremen"
+ },
+ {
+  "label": "Played for West Ham",
+  "typ": "club",
+  "boards": 19,
+  "e": 19,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "West Ham"
+ },
+ {
+  "label": "Played for Wolfsburg",
+  "typ": "club",
+  "boards": 17,
+  "e": 17,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Wolfsburg"
+ },
+ {
+  "label": "Played for Zenit St. Petersburg",
+  "typ": "club",
+  "boards": 15,
+  "e": 15,
+  "n": 0,
+  "h": 0,
+  "kind": "club",
+  "value": "Zenit St. Petersburg"
+ },
+ {
+  "label": "Played in a World Cup knockout game",
+  "typ": "world_cup",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "league",
+  "value": "a World Cup knockout game"
+ },
+ {
+  "label": "Played in Bundesliga",
+  "typ": "league",
+  "boards": 41,
+  "e": 39,
+  "n": 2,
+  "h": 0,
+  "kind": "league",
+  "value": "Bundesliga"
+ },
+ {
+  "label": "Played in Eredivisie",
+  "typ": "league",
+  "boards": 42,
+  "e": 42,
+  "n": 0,
+  "h": 0,
+  "kind": "league",
+  "value": "Eredivisie"
+ },
+ {
+  "label": "Played in La Liga",
+  "typ": "league",
+  "boards": 71,
+  "e": 66,
+  "n": 3,
+  "h": 2,
+  "kind": "league",
+  "value": "La Liga"
+ },
+ {
+  "label": "Played in Ligue 1",
+  "typ": "league",
+  "boards": 66,
+  "e": 62,
+  "n": 4,
+  "h": 0,
+  "kind": "league",
+  "value": "Ligue 1"
+ },
+ {
+  "label": "Played in MLS",
+  "typ": "misc",
+  "boards": 2,
+  "e": 0,
+  "n": 0,
+  "h": 2,
+  "kind": "league",
+  "value": "MLS"
+ },
+ {
+  "label": "Played in Premier League",
+  "typ": "league",
+  "boards": 83,
+  "e": 76,
+  "n": 7,
+  "h": 0,
+  "kind": "league",
+  "value": "Premier League"
+ },
+ {
+  "label": "Played in Primeira Liga",
+  "typ": "league",
+  "boards": 43,
+  "e": 41,
+  "n": 2,
+  "h": 0,
+  "kind": "league",
+  "value": "Primeira Liga"
+ },
+ {
+  "label": "Played in Saudi Pro League",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 1,
+  "h": 0,
+  "kind": "league",
+  "value": "Saudi Pro League"
+ },
+ {
+  "label": "Played in Serie A",
+  "typ": "league",
+  "boards": 63,
+  "e": 57,
+  "n": 4,
+  "h": 2,
+  "kind": "league",
+  "value": "Serie A"
+ },
+ {
+  "label": "Played in Süper Lig",
+  "typ": "league",
+  "boards": 58,
+  "e": 58,
+  "n": 0,
+  "h": 0,
+  "kind": "league",
+  "value": "Süper Lig"
+ },
+ {
+  "label": "Played in the Premier League",
+  "typ": "league",
+  "boards": 3,
+  "e": 0,
+  "n": 0,
+  "h": 3,
+  "kind": "league",
+  "value": "the Premier League"
+ },
+ {
+  "label": "Played under Carlo Ancelotti",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Played under Carlo Ancelotti",
+  "want": "played under carlo ancelotti",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Played under Diego Simeone",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Played under Diego Simeone",
+  "want": "played under diego simeone",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Played under Jose Mourinho",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Played under Jose Mourinho",
+  "want": "played under jose mourinho",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Played under Pep Guardiola",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Played under Pep Guardiola",
+  "want": "played under pep guardiola",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Played under Sir Alex Ferguson",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Played under Sir Alex Ferguson",
+  "want": "played under sir alex ferguson",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Polish",
+  "typ": "nationality",
+  "boards": 4,
+  "e": 4,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Polish",
+  "want": "poland",
+  "matched": [
+   "Poland(516)"
+  ],
+  "matchedNames": 516,
+  "refusedNames": 27558
+ },
+ {
+  "label": "Portuguese",
+  "typ": "nationality",
+  "boards": 21,
+  "e": 12,
+  "n": 7,
+  "h": 2,
+  "kind": "nationality",
+  "value": "Portuguese",
+  "want": "portugal",
+  "matched": [
+   "Portugal(634)"
+  ],
+  "matchedNames": 634,
+  "refusedNames": 27440
+ },
+ {
+  "label": "Scored 100 or more Premier League goals",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Scored 100 or more Premier League goals",
+  "want": "scored 100 or more premier league goals",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Scored 20 or more goals in one Premier League season",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Scored 20 or more goals in one Premier League season",
+  "want": "scored 20 or more goals in one premier league season",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Scored 50 or more goals for their national team",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Scored 50 or more goals for their national team",
+  "want": "scored 50 or more goals for their national team",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Scored a Champions League hat-trick",
+  "typ": "champions_league",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Scored a Champions League hat-trick"
+ },
+ {
+  "label": "Scored at two or more World Cups",
+  "typ": "world_cup",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Scored at two or more World Cups"
+ },
+ {
+  "label": "Scored in a Champions League final",
+  "typ": "champions_league",
+  "boards": 2,
+  "e": 0,
+  "n": 0,
+  "h": 2,
+  "kind": "honour",
+  "value": "Scored in a Champions League final"
+ },
+ {
+  "label": "Scored in a World Cup final",
+  "typ": "world_cup",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Scored in a World Cup final"
+ },
+ {
+  "label": "Scored in El Clasico",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Scored in El Clasico",
+  "want": "scored in el clasico",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Scored in the Manchester derby",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Scored in the Manchester derby",
+  "want": "scored in the manchester derby",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Scored in the Milan derby",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Scored in the Milan derby",
+  "want": "scored in the milan derby",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Scottish",
+  "typ": "nationality",
+  "boards": 1,
+  "e": 1,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Scottish",
+  "want": "scotland",
+  "matched": [
+   "Scotland(337)"
+  ],
+  "matchedNames": 337,
+  "refusedNames": 27737
+ },
+ {
+  "label": "Senegalese",
+  "typ": "nationality",
+  "boards": 2,
+  "e": 1,
+  "n": 1,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Senegalese",
+  "want": "senegal",
+  "matched": [
+   "Senegal(224)"
+  ],
+  "matchedNames": 224,
+  "refusedNames": 27850
+ },
+ {
+  "label": "Sent off at a World Cup",
+  "typ": "world_cup",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Sent off at a World Cup"
+ },
+ {
+  "label": "Serbian",
+  "typ": "nationality",
+  "boards": 3,
+  "e": 3,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Serbian",
+  "want": "serbia",
+  "matched": [
+   "Serbia(468)"
+  ],
+  "matchedNames": 468,
+  "refusedNames": 27606
+ },
+ {
+  "label": "South Korean",
+  "typ": "nationality",
+  "boards": 1,
+  "e": 1,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "South Korean",
+  "want": "south korean",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Spanish",
+  "typ": "nationality",
+  "boards": 31,
+  "e": 17,
+  "n": 12,
+  "h": 2,
+  "kind": "nationality",
+  "value": "Spanish",
+  "want": "spain",
+  "matched": [
+   "Spain(1542)"
+  ],
+  "matchedNames": 1542,
+  "refusedNames": 26532
+ },
+ {
+  "label": "Swedish",
+  "typ": "nationality",
+  "boards": 1,
+  "e": 1,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Swedish",
+  "want": "sweden",
+  "matched": [
+   "Sweden(411)"
+  ],
+  "matchedNames": 411,
+  "refusedNames": 27663
+ },
+ {
+  "label": "Swiss",
+  "typ": "nationality",
+  "boards": 1,
+  "e": 1,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Swiss",
+  "want": "switzerland",
+  "matched": [
+   "Switzerland(362)"
+  ],
+  "matchedNames": 362,
+  "refusedNames": 27712
+ },
+ {
+  "label": "Transferred for more than 80 million euros",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Transferred for more than 80 million euros",
+  "want": "transferred for more than 80 million euros",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Tunisian",
+  "typ": "nationality",
+  "boards": 1,
+  "e": 0,
+  "n": 1,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Tunisian",
+  "want": "tunisian",
+  "matched": [
+   "Tunisia(141)"
+  ],
+  "matchedNames": 141,
+  "refusedNames": 27933
+ },
+ {
+  "label": "UEFA Euro Winner",
+  "typ": "misc",
+  "boards": 2,
+  "e": 0,
+  "n": 1,
+  "h": 1,
+  "kind": "honour",
+  "value": "UEFA Euro Winner"
+ },
+ {
+  "label": "Uruguayan",
+  "typ": "nationality",
+  "boards": 8,
+  "e": 5,
+  "n": 2,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Uruguayan",
+  "want": "uruguay",
+  "matched": [
+   "Uruguay(444)"
+  ],
+  "matchedNames": 444,
+  "refusedNames": 27630
+ },
+ {
+  "label": "Was a club teammate of Lionel Messi",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "nationality",
+  "value": "Was a club teammate of Lionel Messi",
+  "want": "was a club teammate of lionel messi",
+  "matched": [],
+  "matchedNames": 0,
+  "refusedNames": 28074
+ },
+ {
+  "label": "Welsh",
+  "typ": "nationality",
+  "boards": 2,
+  "e": 2,
+  "n": 0,
+  "h": 0,
+  "kind": "nationality",
+  "value": "Welsh",
+  "want": "wales",
+  "matched": [
+   "Wales(103)"
+  ],
+  "matchedNames": 103,
+  "refusedNames": 27971
+ },
+ {
+  "label": "Won a domestic cup in Europe",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won a domestic cup in Europe"
+ },
+ {
+  "label": "Won a league title",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won a league title"
+ },
+ {
+  "label": "Won a league title in two different countries",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won a league title in two different countries"
+ },
+ {
+  "label": "Won a major trophy",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won a major trophy"
+ },
+ {
+  "label": "Won Ligue 1",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won Ligue 1"
+ },
+ {
+  "label": "Won the Ballon d'Or",
+  "typ": "award",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the Ballon d'Or"
+ },
+ {
+  "label": "Won the Bundesliga",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the Bundesliga"
+ },
+ {
+  "label": "Won the Champions League",
+  "typ": "champions_league",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the Champions League"
+ },
+ {
+  "label": "Won the Champions League as club captain",
+  "typ": "champions_league",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the Champions League as club captain"
+ },
+ {
+  "label": "Won the Champions League with Chelsea",
+  "typ": "champions_league",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the Champions League with Chelsea"
+ },
+ {
+  "label": "Won the Champions League with Liverpool",
+  "typ": "champions_league",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the Champions League with Liverpool"
+ },
+ {
+  "label": "Won the Champions League with Manchester City",
+  "typ": "champions_league",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the Champions League with Manchester City"
+ },
+ {
+  "label": "Won the Champions League with two different clubs",
+  "typ": "champions_league",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the Champions League with two different clubs"
+ },
+ {
+  "label": "Won the Copa America or the Euros",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the Copa America or the Euros"
+ },
+ {
+  "label": "Won the Copa Libertadores",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the Copa Libertadores"
+ },
+ {
+  "label": "Won the Europa League or UEFA Cup",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the Europa League or UEFA Cup"
+ },
+ {
+  "label": "Won the European Championship",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the European Championship"
+ },
+ {
+  "label": "Won the FA Cup",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the FA Cup"
+ },
+ {
+  "label": "Won the FIFA Puskas Award",
+  "typ": "award",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the FIFA Puskas Award"
+ },
+ {
+  "label": "Won the Golden Boy award",
+  "typ": "award",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the Golden Boy award"
+ },
+ {
+  "label": "Won the PFA Player of the Year",
+  "typ": "award",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the PFA Player of the Year"
+ },
+ {
+  "label": "Won the Premier League",
+  "typ": "misc",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the Premier League"
+ },
+ {
+  "label": "Won the World Cup as a player",
+  "typ": "world_cup",
+  "boards": 1,
+  "e": 0,
+  "n": 0,
+  "h": 1,
+  "kind": "honour",
+  "value": "Won the World Cup as a player"
+ },
+ {
+  "label": "World Cup Winner",
+  "typ": "world_cup",
+  "boards": 10,
+  "e": 0,
+  "n": 8,
+  "h": 2,
+  "kind": "honour",
+  "value": "World Cup Winner"
+ }
+]

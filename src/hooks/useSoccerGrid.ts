@@ -119,7 +119,10 @@ export function useSoccerGrid() {
 
   const [activeCell, setActiveCell] = useState<number | null>(null);
   const [validating, setValidating] = useState(false);
-  const [checkingDown, setCheckingDown] = useState(false);
+  // Round 613: cells whose last guess came back exhausted. Only those lose the
+  // search box; every other cell can still be settled from records.
+  const [exhaustedCells, setExhaustedCells] = useState<Set<number>>(() => new Set());
+  const checkingDown = activeCell !== null && exhaustedCells.has(activeCell);
   const [wrongFlash, setWrongFlash] = useState<{ cellIndex: number; playerName: string } | null>(null);
 
   const correctActions = useMemo(
@@ -318,7 +321,7 @@ export function useSoccerGrid() {
              retry; the day's allowance is not, and the guess was never
              counted either way. */
           if (data?.exhausted) {
-            setCheckingDown(true);
+            setExhaustedCells((prev) => new Set(prev).add(capturedCell));
             toast.error('Answer checking has used up its allowance for today. This guess was not counted; your board is saved, come back tomorrow.');
           } else {
             toast.error("Couldn't verify that answer, please try again.");

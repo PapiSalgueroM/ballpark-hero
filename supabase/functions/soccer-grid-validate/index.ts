@@ -2,26 +2,32 @@ import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 /**
- * Soccer 3x3 grid validator (2026-08-13 v13).
+ * Soccer 3x3 grid validator, v24 (2026-09-15, Round 613).
  *
  * Resolution order:
- *   1. verified-verdict cache (Postgres)
- *   2. DETERMINISTIC checks:
- *      a. "YYYY World Cup Winner" against public.world_cup_players squad rows
- *         (complete winner squads 1970-2026, era-correct nationality strings).
- *         The squad row also settles the paired POSITION criterion when the
- *         player is missing from the stints table (v13).
- *      b. club / nationality / position against public.soccer_player_club_stints
- *   3. AI (free Gemini) only for what the data cannot settle
- *   4. FAIL CLOSED when the model can't verify (2026-07-22): do NOT accept an
- *      unchecked answer.
+ *   1. verified-verdict cache (Postgres), served first as before
+ *   2. RECORDS PASS. Every label goes through a closed classifier (World Cup
+ *      winner year, position, club, compound club, league, nationality, other)
+ *      and only the kinds built for records get a records verdict. All judging
+ *      lives in the pure block between the @judge markers: serve() does the
+ *      reads, judge() asks for more when it needs them.
+ *      a. clubs match exact stored strings from the generated CLUB_IDS block
+ *         (scripts/genSoccerGridIds.mjs), never a substring. A club miss is
+ *         never a no.
+ *      b. nationality matches one exact stored string, and only says no when
+ *         the full name is one man with one nationality that no shared
+ *         citizenship and no World Cup squad row contradicts.
+ *      c. "YYYY World Cup Winner" reads that year's complete winning squad.
+ *         A name is a match when it equals a member, is his whole tokens, or
+ *         his joined surname; extra tokens and near misses go to the model;
+ *         only a name near nobody is a no.
+ *      d. two facts off different rows count only for one person: a shared
+ *         person_key, or market value birth years within 2 years.
+ *   3. AI (free Gemini) only for what the records cannot settle
+ *   4. FAIL CLOSED when the model can't verify: nothing unchecked is accepted.
  *
- * v12 fix (four user reports, sg-622/636/678/685): honours labels like
- * "2002 World Cup Winner" used to fall through parseCriterion into the
- * NATIONALITY matcher, which returned a hard cached FALSE. Roberto Carlos as
- * a 2002 winner was rejected by string comparison, not by football. Honours
- * now route to their own deterministic check (World Cup) or the AI, never to
- * the nationality matcher.
+ * Every verdict this version caches carries rule: "v24", so a purge can tell
+ * its rows from the ones v23 wrote.
  */
 
 const GEMINI_KEY = Deno.env.get("GEMINI_API_KEY");
@@ -65,6 +71,11 @@ function isRateLimited(ip: string) {
   return e.count > 30;
 }
 
+// @judge-begin
+/* From here to @judge-end is pure: no reads, no env, no network. serve() does
+   the reads and calls judge(); a node harness can bundle this block and call
+   judge() with rows it read itself. */
+
 /* ROUND 498: the transliteration step this fold was missing.
    Postgres unaccent folds the letters that have NO canonical decomposition
    (Turkish dotless i, German sharp s, Danish ae and slashed o, Polish barred
@@ -81,24 +92,6 @@ const norm = (s: string) =>
   (s || "").toLowerCase().replace(/[ıßøłđæœþð]/g, (c) => TRANSLIT[c] ?? c)
     .normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[^a-z0-9 ]+/g, " ").replace(/\s+/g, " ").trim();
 
-const DEMONYM: Record<string, string> = {
-  dutch: "netherlands", french: "france", brazilian: "brazil", english: "england",
-  spanish: "spain", german: "germany", italian: "italy", portuguese: "portugal",
-  argentine: "argentina", argentinian: "argentina", belgian: "belgium", croatian: "croatia",
-  serbian: "serbia", swedish: "sweden", norwegian: "norway", danish: "denmark",
-  polish: "poland", turkish: "turkey", russian: "russia", ukrainian: "ukraine",
-  scottish: "scotland", welsh: "wales", irish: "ireland", uruguayan: "uruguay",
-  colombian: "colombia", chilean: "chile", mexican: "mexico", american: "united states",
-  japanese: "japan", korean: "south korea", nigerian: "nigeria", ghanaian: "ghana",
-  senegalese: "senegal", ivorian: "ivory coast", moroccan: "morocco", algerian: "algeria",
-  egyptian: "egypt", cameroonian: "cameroon", swiss: "switzerland", austrian: "austria",
-  greek: "greece", czech: "czech republic", slovak: "slovakia", romanian: "romania",
-  hungarian: "hungary", finnish: "finland", icelandic: "iceland", australian: "australia",
-  canadian: "canada", paraguayan: "paraguay", peruvian: "peru", ecuadorian: "ecuador",
-  venezuelan: "venezuela", bosnian: "bosnia-herzegovina", slovenian: "slovenia",
-  albanian: "albania", bulgarian: "bulgaria", israeli: "israel", iranian: "iran",
-};
-
 /** Indisputable public record, nationality strings matching world_cup_players
  *  era naming exactly (West Germany through 1990, Germany from 1994). */
 const WC_WINNER_BY_YEAR: Record<string, string> = {
@@ -108,32 +101,196 @@ const WC_WINNER_BY_YEAR: Record<string, string> = {
   "2018": "France", "2022": "Argentina", "2026": "Spain",
 };
 
-type Verdict = true | false | "unknown";
+/* Citizenship law, same standing as the winners above: no table holds it.
+   Key is the wanted stints nationality, values are stored strings whose
+   holders share that citizenship, so they never get a hard no for the key.
+   genSoccerGridIds.mjs fails if any of these stops being a stored string. */
+const SHARED_CITIZENSHIP: Record<string, string[]> = {
+  "France": ["Martinique", "Guadeloupe", "French Guiana", "New Caledonia", "Saint-Martin", "Tahiti", "Réunion"],
+  "Netherlands": ["Curacao", "Aruba"],
+  "Denmark": ["Faroe Islands"],
+  "United States": ["Puerto Rico", "Guam", "American Virgin Islands"],
+  "England": ["Gibraltar", "Jersey"],
+  "Ireland": ["Northern Ireland"],
+};
+
+/* Written by scripts/genSoccerGridIds.mjs from the tables. Never edit it by
+   hand: rerun the generator, and its --check catches a stale block. */
+// @generated-ids-begin
+const CLUB_IDS: Record<string, string[]> = {
+  "ac milan": ["AC Milan"],
+  "ajax": ["Ajax", "Ajax Amsterdam"],
+  "al hilal": ["Al-Hilal SFC"],
+  "al ittihad": ["Al-Ittihad Club"],
+  "al nassr": ["Al-Nassr FC"],
+  "anderlecht": ["RSC Anderlecht"],
+  "arsenal": ["Arsenal FC"],
+  "as roma": ["AS Roma"],
+  "aston villa": ["Aston Villa"],
+  "atalanta": ["Atalanta", "Atalanta BC"],
+  "athletic bilbao": ["Athletic Bilbao"],
+  "atletico madrid": ["Atlético Madrid", "Atlético de Madrid"],
+  "atletico mineiro": ["Clube Atlético Mineiro"],
+  "barcelona": ["Barcelona", "FC Barcelona"],
+  "bayer leverkusen": ["Bayer 04 Leverkusen"],
+  "bayern munich": ["Bayern Munich"],
+  "benfica": ["SL Benfica"],
+  "besiktas": ["Besiktas JK"],
+  "boca juniors": ["CA Boca Juniors"],
+  "bologna": ["Bologna", "Bologna FC 1909"],
+  "bordeaux": ["FC Girondins Bordeaux"],
+  "borussia dortmund": ["Borussia Dortmund"],
+  "borussia monchengladbach": ["Borussia Mönchengladbach"],
+  "celta vigo": ["Celta de Vigo"],
+  "celtic": ["Celtic FC"],
+  "chelsea": ["Chelsea FC"],
+  "club brugge": ["Club Brugge KV"],
+  "corinthians": ["Sport Club Corinthians Paulista"],
+  "crystal palace": ["Crystal Palace"],
+  "eintracht frankfurt": ["Eintracht Frankfurt"],
+  "espanyol": ["RCD Espanyol Barcelona"],
+  "everton": ["Everton FC"],
+  "fc basel": ["FC Basel 1893"],
+  "fenerbahce": ["Fenerbahce"],
+  "feyenoord": ["Feyenoord Rotterdam"],
+  "fiorentina": ["ACF Fiorentina"],
+  "flamengo": ["CR Flamengo"],
+  "fulham": ["Fulham FC"],
+  "galatasaray": ["Galatasaray"],
+  "genoa": ["Genoa", "Genoa CFC"],
+  "gremio": ["Grêmio"],
+  "hamburger sv": ["Hamburger SV"],
+  "hoffenheim": ["TSG 1899 Hoffenheim"],
+  "inter miami": ["Inter Miami", "Inter Miami CF"],
+  "inter milan": ["Inter Milan"],
+  "juventus": ["Juventus", "Juventus FC"],
+  "la galaxy": ["Los Angeles Galaxy"],
+  "lazio": ["Lazio", "SS Lazio"],
+  "leeds united": ["Leeds United"],
+  "leicester city": ["Leicester City"],
+  "lille": ["LOSC Lille"],
+  "liverpool": ["Liverpool", "Liverpool FC"],
+  "lyon": ["Olympique Lyon"],
+  "manchester city": ["Manchester City"],
+  "manchester united": ["Manchester United"],
+  "marseille": ["Olympique Marseille"],
+  "monaco": ["AS Monaco"],
+  "napoli": ["Napoli", "SSC Napoli"],
+  "newcastle": ["Newcastle United"],
+  "newcastle united": ["Newcastle United"],
+  "nice": ["OGC Nice"],
+  "olympiacos": ["Olympiacos Piraeus"],
+  "palmeiras": ["SE Palmeiras", "Sociedade Esportiva Palmeiras"],
+  "paris saint germain": ["Paris Saint-Germain"],
+  "parma": ["Parma", "Parma Calcio 1913"],
+  "porto": ["FC Porto"],
+  "psg": ["Paris Saint-Germain"],
+  "psv": ["PSV Eindhoven"],
+  "rangers": ["Rangers FC"],
+  "rb leipzig": ["RB Leipzig"],
+  "real betis": ["Real Betis Balompié"],
+  "real madrid": ["Real Madrid"],
+  "real sociedad": ["Real Sociedad"],
+  "red bull salzburg": ["Red Bull Salzburg"],
+  "rennes": ["Stade Rennais FC"],
+  "river plate": ["CA River Plate"],
+  "roma": ["AS Roma", "Roma"],
+  "saint etienne": ["AS Saint-Étienne"],
+  "sampdoria": ["Sampdoria", "UC Sampdoria"],
+  "sao paulo": ["São Paulo FC", "São Paulo Futebol Clube"],
+  "schalke": ["FC Schalke 04"],
+  "sevilla": ["Sevilla", "Sevilla FC"],
+  "shakhtar donetsk": ["Shakhtar Donetsk"],
+  "southampton": ["Southampton FC"],
+  "sporting cp": ["Sporting CP"],
+  "stuttgart": ["VfB Stuttgart"],
+  "sunderland": ["Sunderland AFC"],
+  "torino": ["Torino", "Torino FC"],
+  "tottenham": ["Tottenham Hotspur"],
+  "tottenham hotspur": ["Tottenham Hotspur"],
+  "trabzonspor": ["Trabzonspor"],
+  "udinese": ["Udinese", "Udinese Calcio"],
+  "valencia": ["Valencia CF"],
+  "villarreal": ["Villarreal CF"],
+  "werder bremen": ["SV Werder Bremen"],
+  "west ham": ["West Ham United"],
+  "wolfsburg": ["VfL Wolfsburg"],
+  "zenit st petersburg": ["Zenit St. Petersburg"],
+};
+const CLUB_COMPOUND: Record<string, { mode: "both" | "either"; parts: string[][] }> = {
+  "boca juniors or river plate": { mode: "either", parts: [["CA Boca Juniors"], ["CA River Plate"]] },
+  "both manchester united and manchester city": { mode: "both", parts: [["Manchester United"], ["Manchester City"]] },
+  "both real madrid and atletico madrid": { mode: "both", parts: [["Real Madrid"], ["Atlético Madrid", "Atlético de Madrid"]] },
+};
+const NATION_IDS: Record<string, { label: string; stints: string; wc: string[] }> = {
+  "algerian": { label: "Algerian", stints: "Algeria", wc: ["Algeria"] },
+  "american": { label: "American", stints: "United States", wc: ["United States"] },
+  "argentine": { label: "Argentine", stints: "Argentina", wc: ["Argentina"] },
+  "belgian": { label: "Belgian", stints: "Belgium", wc: ["Belgium"] },
+  "brazilian": { label: "Brazilian", stints: "Brazil", wc: ["Brazil"] },
+  "cameroonian": { label: "Cameroonian", stints: "Cameroon", wc: ["Cameroon"] },
+  "chilean": { label: "Chilean", stints: "Chile", wc: ["Chile"] },
+  "colombian": { label: "Colombian", stints: "Colombia", wc: ["Colombia"] },
+  "croatian": { label: "Croatian", stints: "Croatia", wc: ["Croatia"] },
+  "czech": { label: "Czech", stints: "Czech Republic", wc: ["Czech Republic"] },
+  "danish": { label: "Danish", stints: "Denmark", wc: ["Denmark"] },
+  "dutch": { label: "Dutch", stints: "Netherlands", wc: ["Netherlands"] },
+  "egyptian": { label: "Egyptian", stints: "Egypt", wc: ["Egypt"] },
+  "english": { label: "English", stints: "England", wc: ["England"] },
+  "french": { label: "French", stints: "France", wc: ["France"] },
+  "german": { label: "German", stints: "Germany", wc: ["Germany"] },
+  "greek": { label: "Greek", stints: "Greece", wc: ["Greece"] },
+  "irish": { label: "Irish", stints: "Ireland", wc: ["Republic of Ireland"] },
+  "italian": { label: "Italian", stints: "Italy", wc: ["Italy"] },
+  "ivorian": { label: "Ivorian", stints: "Cote d'Ivoire", wc: ["Ivory Coast"] },
+  "japanese": { label: "Japanese", stints: "Japan", wc: ["Japan"] },
+  "mexican": { label: "Mexican", stints: "Mexico", wc: ["Mexico"] },
+  "moroccan": { label: "Moroccan", stints: "Morocco", wc: ["Morocco"] },
+  "nigerian": { label: "Nigerian", stints: "Nigeria", wc: ["Nigeria"] },
+  "norwegian": { label: "Norwegian", stints: "Norway", wc: ["Norway"] },
+  "polish": { label: "Polish", stints: "Poland", wc: ["Poland"] },
+  "portuguese": { label: "Portuguese", stints: "Portugal", wc: ["Portugal"] },
+  "scottish": { label: "Scottish", stints: "Scotland", wc: ["Scotland"] },
+  "senegalese": { label: "Senegalese", stints: "Senegal", wc: ["Senegal"] },
+  "serbian": { label: "Serbian", stints: "Serbia", wc: ["FR Yugoslavia", "Serbia", "Serbia and Montenegro"] },
+  "south korean": { label: "South Korean", stints: "Korea, South", wc: ["South Korea"] },
+  "spanish": { label: "Spanish", stints: "Spain", wc: ["Spain"] },
+  "swedish": { label: "Swedish", stints: "Sweden", wc: ["Sweden"] },
+  "swiss": { label: "Swiss", stints: "Switzerland", wc: ["Switzerland"] },
+  "tunisian": { label: "Tunisian", stints: "Tunisia", wc: ["Tunisia"] },
+  "uruguayan": { label: "Uruguayan", stints: "Uruguay", wc: ["Uruguay"] },
+  "welsh": { label: "Welsh", stints: "Wales", wc: ["Wales"] },
+};
+// @generated-ids-end
+
 interface Stint {
-  player_name: string; club: string; nationality: string | null; position: string | null;
-  first_year: number; last_year: number; debut_year: number | null; debut_age: number | null;
+  player_name: string; name_folded: string | null; club: string; nationality: string | null;
+  position: string | null; first_year: number; last_year: number; person_key: string | null;
 }
+interface SquadRow { player_name: string; position: string | null; date_of_birth: string | null; nationality: string | null }
+interface MarketRow { club: string | null; year: number | null; age: number | null }
+interface NationRead { stintsExists: boolean; wcNames: string[] }
 
-interface Criterion { kind: "club" | "league" | "position" | "nationality" | "wc_winner" | "honour"; value: string }
-
-function parseCriterion(label: string): Criterion {
-  const l = label.trim();
-  const club = l.match(/^played for\s+(.+)$/i);
-  if (club) return { kind: "club", value: club[1] };
-  const league = l.match(/^played in\s+(.+)$/i);
-  if (league) return { kind: "league", value: league[1] };
-  if (/goalkeeper|\(GK\)/i.test(l)) return { kind: "position", value: "gk" };
-  if (/defender|\(DEF\)/i.test(l)) return { kind: "position", value: "def" };
-  if (/midfield|\(MID\)/i.test(l)) return { kind: "position", value: "mid" };
-  if (/forward|striker|winger|\(FWD\)/i.test(l)) return { kind: "position", value: "fwd" };
-  // v12: honours must NEVER fall into the nationality matcher
-  const wc = l.match(/^(\d{4})\s+world cup winner$/i);
-  if (wc && WC_WINNER_BY_YEAR[wc[1]]) return { kind: "wc_winner", value: wc[1] };
-  if (/world cup|champions league|ballon|golden boot|golden glove|100\+?\s*caps|winner|\bwon\b|champion|title|trophy|top scorer/i.test(l)) {
-    return { kind: "honour", value: l };
-  }
-  return { kind: "nationality", value: l };
+/* undefined means not read yet, null means the read failed. A failed read only
+   ever makes a criterion unknown, never true and never false. */
+interface JudgeReads {
+  stints: Stint[] | null;
+  byFullName: boolean;
+  squads: Record<string, SquadRow[] | null | undefined>;
+  nations: Record<string, NationRead | null | undefined>;
+  market: MarketRow[] | null | undefined;
 }
+type Need =
+  | { read: "squad"; year: string }
+  | { read: "nation"; key: string }
+  | { read: "market"; nameFolded: string };
+type JudgeResult =
+  | { status: "need"; needs: Need[] }
+  | { status: "yes"; fullName: string | null }
+  | { status: "no"; side: "row" | "col"; fullName: string | null }
+  | { status: "unknown" };
+
+const has = (o: object, k: string) => Object.prototype.hasOwnProperty.call(o, k);
 
 function positionBucket(pos: string | null): string | null {
   const p = norm(pos ?? "");
@@ -145,97 +302,267 @@ function positionBucket(pos: string | null): string | null {
   return null;
 }
 
-/* ROUND 489: five of the grid's own club labels could not be satisfied by
-   ANYBODY, which is 87 of its 1,883 club cells, 4.6 percent of the board.
-   Measured 2026-09-06 by running the live rule below over all 4,931 stored club
-   strings and all 100 labels the 710 puzzles use:
-     "PSG"              25 cells, stored as Paris Saint-Germain
-     "Bayer Leverkusen" 21 cells, stored as Bayer 04 Leverkusen
-     "Celta Vigo"       17 cells, stored as Celta de Vigo
-     "Rennes"           17 cells, stored as Stade Rennais FC
-     "LA Galaxy"         7 cells, stored as Los Angeles Galaxy
-   Each fails for the same reason: the substring test cannot cross an inserted
-   word. "bayer leverkusen" is not inside "bayer 04 leverkusen", and neither
-   contains the other. A player dealt one of those rows could not fill it with
-   any spelling of any player, and the game never said why.
-   Build Your XI already knew three of these five: src/data/lineupTeams.ts has
-   carried PSG and Bayer Leverkusen aliases since Round 442. The knowledge
-   existed in one game and not in its neighbour.
-   The aliases are EXACT and additive: they only ever add a match, so nothing
-   that works today can break, and a reserve side stays out because
-   "paris saint germain b" is not the alias. Tightening the loose rule so the
-   Barcelona square stops accepting Espanyol is the other half and is specced
-   separately, because a naive tightening kills 27 of the 100 labels. */
-const CLUB_ALIASES: Record<string, string[]> = {
-  "psg": ["Paris Saint-Germain"],
-  "bayer leverkusen": ["Bayer 04 Leverkusen"],
-  "celta vigo": ["Celta de Vigo"],
-  "rennes": ["Stade Rennais FC"],
-  "la galaxy": ["Los Angeles Galaxy"],
+type Kind = "wc_winner" | "position" | "club" | "compound" | "league" | "nationality" | "other";
+interface Crit { kind: Kind; label: string; key: string }
+
+const POSITION_LABELS: Record<string, string> = {
+  "forward fwd": "fwd", "midfielder mid": "mid", "defender def": "def", "goalkeeper gk": "gk",
 };
 
-function clubMatches(stintClub: string, wanted: string): boolean {
-  const b = norm(wanted);
-  if (!b) return false;
-  const aliases = (CLUB_ALIASES[b] ?? []).map(norm);
-  /* A season split between two clubs is stored as "A / B", so each side is
-     read on its own. That can only add matches: no label contains a slash. */
-  return String(stintClub || "").split(" / ").some((part) => {
-    const a = norm(part);
-    if (!a) return false;
-    if (a === b || a.includes(b) || b.includes(a)) return true;
-    return aliases.includes(a);
+/* Closed routing, first match wins. League and other never get a records
+   verdict, so no label lands in a matcher that was not built for it. */
+function classify(label: string): Crit {
+  const l = label.trim();
+  const wc = l.match(/^(\d{4}) World Cup Winner$/);
+  if (wc && has(WC_WINNER_BY_YEAR, wc[1])) return { kind: "wc_winner", label: l, key: wc[1] };
+  const f = norm(l);
+  if (has(POSITION_LABELS, f)) return { kind: "position", label: l, key: POSITION_LABELS[f] };
+  const club = l.match(/^Played for (.+)$/);
+  if (club) {
+    const k = norm(club[1]);
+    if (has(CLUB_IDS, k)) return { kind: "club", label: l, key: k };
+    if (has(CLUB_COMPOUND, k)) return { kind: "compound", label: l, key: k };
+    return { kind: "other", label: l, key: "" };
+  }
+  if (/^Played in /.test(l)) return { kind: "league", label: l, key: "" };
+  if (has(NATION_IDS, f)) return { kind: "nationality", label: l, key: f };
+  return { kind: "other", label: l, key: "" };
+}
+
+type RowTest = (r: Stint) => boolean;
+
+const clubParts = (club: string) => String(club || "").split(" / ").map((p) => p.trim());
+const hasClub = (r: Stint, ids: string[]) => clubParts(r.club).some((p) => ids.includes(p));
+
+/* One test per row a criterion needs: a compound "both" needs a row per part,
+   everything else needs one row. */
+function rowTests(c: Crit): RowTest[] {
+  if (c.kind === "club") { const ids = CLUB_IDS[c.key]; return [(r) => hasClub(r, ids)]; }
+  if (c.kind === "compound") {
+    const cc = CLUB_COMPOUND[c.key];
+    if (cc.mode === "either") { const all = cc.parts.flat(); return [(r) => hasClub(r, all)]; }
+    return cc.parts.map((ids) => (r: Stint) => hasClub(r, ids));
+  }
+  if (c.kind === "position") return [(r) => positionBucket(r.position) === c.key];
+  if (c.kind === "nationality") { const want = NATION_IDS[c.key].stints; return [(r) => r.nationality === want]; }
+  return [];
+}
+const clubType = (c: Crit) => c.kind === "club" || c.kind === "compound";
+const bothParts = (c: Crit) => c.kind === "compound" && CLUB_COMPOUND[c.key].mode === "both";
+
+/* Birth years off market value rows at the row's club (or a side of a split
+   season) inside the row's years. Rows with no match have none. */
+function birthYears(r: Stint, market: MarketRow[]): number[] {
+  const clubs = new Set([r.club, ...clubParts(r.club)]);
+  return market
+    .filter((m) => m.club != null && clubs.has(m.club) && m.year != null && m.age != null && m.year >= r.first_year && m.year <= r.last_year)
+    .map((m) => (m.year as number) - (m.age as number));
+}
+
+/* Edit distance where swapping two neighbouring letters is one edit, so a
+   typed "busqeuts" sits as near Busquets as "busqets" does. */
+function editDistance(a: string, b: string): number {
+  const d: number[][] = [];
+  for (let i = 0; i <= a.length; i++) d.push([i]);
+  for (let j = 1; j <= b.length; j++) d[0][j] = j;
+  for (let i = 1; i <= a.length; i++) {
+    for (let j = 1; j <= b.length; j++) {
+      let v = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1, d[i - 1][j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) v = Math.min(v, d[i - 2][j - 2] + 1);
+      d[i][j] = v;
+    }
+  }
+  return d[a.length][b.length];
+}
+const nearEnough = (a: string, b: string) => editDistance(a, b) <= Math.max(1, Math.floor(Math.max(a.length, b.length) / 6));
+const spaceless = (s: string) => s.replace(/ /g, "");
+
+type Band = "A" | "B" | "D" | "E" | "F" | "ambiguous";
+
+/* A name against one year's complete winning squad. A: the name, B: whole
+   tokens, a single token or a joined surname, of exactly one member. D (extra
+   tokens) and E (near) are unknown. F, near nobody, is the only no. */
+function wcBand(typed: string, squad: SquadRow[]): { band: Band; row: SquadRow | null } {
+  const g = norm(typed);
+  if (!g) return { band: "ambiguous", row: null };
+  const gt = g.split(" ");
+  const gn = spaceless(g);
+  const members = squad
+    .map((r) => { const f = norm(r.player_name); return { r, f, t: f ? f.split(" ") : [], n: spaceless(f) }; })
+    .filter((m) => m.f);
+  const runs = (t: string[], tailOnly: boolean) => {
+    const out: string[] = [];
+    for (let i = 0; i < t.length; i++) {
+      for (let j = i + 2; j <= t.length; j++) if (!tailOnly || j === t.length) out.push(t.slice(i, j).join(""));
+    }
+    return out;
+  };
+  const one = (hits: typeof members, band: Band) => hits.length === 1 ? { band, row: hits[0].r } : { band: "ambiguous" as Band, row: null };
+
+  const a = members.filter((m) => m.f === g || m.n === gn);
+  if (a.length) return one(a, "A");
+  const b = members.filter((m) => gt.every((t) => m.t.includes(t)) || m.t.includes(gn) || runs(m.t, true).includes(gn));
+  if (b.length) return one(b, "B");
+  if (members.some((m) => m.t.every((t) => gt.includes(t)) && gt.some((t) => !m.t.includes(t)))) return { band: "D", row: null };
+  const near = members.some((m) => {
+    if (gt.some((t) => m.t.includes(t))) return true;
+    if (gn.length >= 3 && (m.t.some((t) => t.startsWith(gn)) || m.n.startsWith(gn))) return true;
+    if ([...m.t, ...runs(m.t, false), m.n].some((x) => nearEnough(gn, x))) return true;
+    return gt.some((x) => x.length >= 4 && m.t.some((y) => y.length >= 4 && nearEnough(x, y)));
   });
+  return { band: near ? "E" : "F", row: null };
 }
 
-function evaluate(crit: Criterion, stints: Stint[], careerComplete: boolean): Verdict {
-  if (crit.kind === "wc_winner" || crit.kind === "honour") return "unknown"; // resolved elsewhere
-  if (stints.length === 0) return "unknown";
-  if (crit.kind === "club") {
-    if (stints.some((s) => clubMatches(s.club, crit.value))) return true;
-    return careerComplete ? false : "unknown";
-  }
-  if (crit.kind === "nationality") {
-    const want = DEMONYM[norm(crit.value)] ?? norm(crit.value);
-    const have = stints.map((s) => norm(s.nationality ?? "")).filter(Boolean);
-    if (have.length === 0) return "unknown";
-    if (have.some((n) => n === want || n.includes(want) || want.includes(n))) return true;
+/* The whole records verdict for one guess. Pure: it reads only what serve()
+   hands in, and when it needs a read it has not got it says so and serve()
+   calls it again with that read filled in. */
+function judge(player: string, rowLabel: string, colLabel: string, reads: JudgeReads): JudgeResult {
+  const crits = [classify(rowLabel), classify(colLabel)];
+  const rows = reads.stints ?? [];
+  const needs: Need[] = [];
+  const unknown: JudgeResult = { status: "unknown" };
+  const yes = (fullName: string | null): JudgeResult => ({ status: "yes", fullName });
+
+  const wc = crits.map((c) => {
+    if (c.kind !== "wc_winner") return null;
+    const squad = reads.squads[c.key];
+    if (squad === undefined) { needs.push({ read: "squad", year: c.key }); return { state: "pending" as const, row: null }; }
+    if (squad === null || squad.length < 15) return { state: "unknown" as const, row: null };
+    const hit = wcBand(player, squad);
+    if (hit.row) return { state: true as const, row: hit.row };
+    return { state: hit.band === "F" ? (false as const) : ("unknown" as const), row: null };
+  });
+
+  const natFalse = (c: Crit): false | "unknown" | "pending" => {
+    if (!reads.stints || rows.length === 0 || !reads.byFullName) return "unknown";
+    const id = NATION_IDS[c.key];
+    if (new Set(rows.map((r) => r.nationality)).size !== 1) return "unknown";
+    const held = rows[0].nationality;
+    if (!held || held === id.stints) return "unknown";
+    if (has(SHARED_CITIZENSHIP, id.stints) && SHARED_CITIZENSHIP[id.stints].includes(held)) return "unknown";
+    const read = reads.nations[c.key];
+    if (read === undefined) { needs.push({ read: "nation", key: c.key }); return "pending"; }
+    if (read === null || !read.stintsExists) return "unknown";
+    const name = norm(rows[0].player_name);
+    if (read.wcNames.some((n) => norm(n) === name)) return "unknown";
     return false;
-  }
-  if (crit.kind === "position") {
-    const buckets = stints.map((s) => positionBucket(s.position)).filter(Boolean) as string[];
-    if (buckets.length === 0) return "unknown";
-    return buckets.includes(crit.value) ? true : "unknown";
-  }
-  return "unknown";
-}
+  };
 
-/** Deterministic "YYYY World Cup Winner": squad membership in that year's
- *  winning squad. Squads in the table are complete (22-26 rows per winner),
- *  so "not in the squad" is a real false, not a data gap. Also returns the
- *  matched squad row's position so a paired position criterion can be settled
- *  even when the player is missing from the stints table (v13). */
-async function checkWorldCupWinner(year: string, player: string): Promise<{ verdict: Verdict; properName: string | null; squadPos: string | null }> {
-  const nation = WC_WINNER_BY_YEAR[year];
-  if (!nation) return { verdict: "unknown", properName: null, squadPos: null };
+  const falsity = crits.map((c, i) => {
+    if (c.kind === "wc_winner") return wc[i]!.state === false ? false : wc[i]!.state === "pending" ? "pending" : "unknown";
+    if (c.kind === "nationality") return natFalse(c);
+    return "unknown";
+  });
+  if (needs.some((n) => n.read === "squad")) return { status: "need", needs };
+
+  const squadName = wc.find((w) => w && w.row)?.row?.player_name ?? null;
+  const shownName = squadName ?? rows[0]?.player_name ?? null;
+  if (falsity[0] === false) return { status: "no", side: "row", fullName: shownName };
+  if (falsity[0] === "pending") return { status: "need", needs };
+  if (falsity[1] === false) return { status: "no", side: "col", fullName: shownName };
+  if (falsity[1] === "pending") return { status: "need", needs };
+
+  const [A, B] = crits;
+  if (A.kind === "league" || A.kind === "other" || B.kind === "league" || B.kind === "other") return unknown;
+  if ((wc[0] && wc[0].state !== true) || (wc[1] && wc[1].state !== true)) return unknown;
+
+  const market = (): MarketRow[] | null | "need" => {
+    if (reads.market !== undefined) return reads.market;
+    needs.push({ read: "market", nameFolded: rows[0].name_folded ?? norm(rows[0].player_name) });
+    return "need";
+  };
+
+  if (wc[0]?.row && wc[1]?.row) {
+    const x = wc[0].row, y = wc[1].row;
+    return norm(x.player_name) === norm(y.player_name) && x.date_of_birth != null && x.date_of_birth === y.date_of_birth ? yes(x.player_name) : unknown;
+  }
+
+  const squadRow = wc[0]?.row ?? wc[1]?.row ?? null;
+  if (squadRow) {
+    const other = wc[0]?.row ? B : A;
+    if (other.kind === "position") return positionBucket(squadRow.position) === other.key ? yes(squadRow.player_name) : unknown;
+    const born = squadRow.date_of_birth ? Number(String(squadRow.date_of_birth).slice(0, 4)) : NaN;
+    const same = rows.filter((r) => norm(r.player_name) === norm(squadRow.player_name));
+    const candidates = rowTests(other).map((test) => same.filter(test));
+    if (!Number.isFinite(born) || candidates.length === 0 || candidates.some((c) => c.length === 0)) return unknown;
+    const m = market();
+    if (m === "need") return { status: "need", needs };
+    if (m === null) return unknown;
+    const fits = (r: Stint) => { const ys = birthYears(r, m); return ys.length > 0 && ys.every((y) => Math.abs(y - born) <= 2); };
+    return candidates.every((c) => c.some(fits)) ? yes(squadRow.player_name) : unknown;
+  }
+
+  /* Rows used together must be one person: a shared person_key, or birth years
+     on every row all within 2 of each other. "paired" must hold on one of them. */
+  const onePerson = (tests: RowTest[], paired: RowTest | null): JudgeResult => {
+    const candidates = tests.map((test) => rows.filter(test));
+    if (candidates.length === 0 || candidates.some((c) => c.length === 0)) return unknown;
+    if (paired && !candidates.some((c) => c.some(paired))) return unknown;
+    const settled = (keep: RowTest) => {
+      const mine = candidates.map((c) => c.filter(keep));
+      return mine.every((c) => c.length > 0) && (!paired || mine.some((c) => c.some(paired)));
+    };
+    const keys = new Set(candidates.flat().map((r) => r.person_key).filter((k): k is string => !!k));
+    for (const k of keys) if (settled((r) => r.person_key === k)) return yes(rows[0].player_name);
+    const m = market();
+    if (m === "need") return { status: "need", needs };
+    if (m === null) return unknown;
+    const years = new Map(candidates.flat().map((r) => [r, birthYears(r, m)] as const));
+    const starts = new Set([...years.values()].filter((ys) => ys.length > 0).map((ys) => Math.min(...ys)));
+    for (const s of starts) {
+      if (settled((r) => { const ys = years.get(r) ?? []; return ys.length > 0 && ys.every((y) => y >= s && y <= s + 2); })) return yes(rows[0].player_name);
+    }
+    return unknown;
+  };
+
+  const testsA = rowTests(A), testsB = rowTests(B);
+  if (clubType(A) && clubType(B)) return onePerson([...testsA, ...testsB], null);
+  if (bothParts(A)) return onePerson(testsA, testsB[0]);
+  if (bothParts(B)) return onePerson(testsB, testsA[0]);
+  /* Round 482's rule from validate-player: both facts off one single row. */
+  return rows.some((r) => testsA[0](r) && testsB[0](r)) ? yes(rows[0].player_name) : unknown;
+}
+// @judge-end
+
+/* The reads judge() can ask for. Each returns null on any error, and a read
+   that could have been cut short counts as failed. */
+async function readSquad(year: string): Promise<SquadRow[] | null> {
   try {
     const { data, error } = await sb.from("world_cup_players")
-      .select("player_name, position")
+      .select("player_name, position, date_of_birth, nationality")
       .eq("world_cup_year", Number(year))
-      .eq("nationality", nation)
+      .eq("nationality", WC_WINNER_BY_YEAR[year])
       .limit(40);
-    if (error) return { verdict: "unknown", properName: null, squadPos: null };
-    const squad = (data ?? []) as { player_name: string; position: string | null }[];
-    if (squad.length < 15) return { verdict: "unknown", properName: null, squadPos: null }; // incomplete squad, do not judge
-    const guess = norm(player);
-    const hit = squad.find((r) => {
-      const nn = norm(r.player_name);
-      return nn === guess || nn.includes(guess) || guess.includes(nn);
-    });
-    if (hit) return { verdict: true, properName: hit.player_name, squadPos: hit.position };
-    return { verdict: false, properName: null, squadPos: null };
+    return error || !data ? null : (data as SquadRow[]);
   } catch {
-    return { verdict: "unknown", properName: null, squadPos: null };
+    return null;
+  }
+}
+
+async function readNation(key: string): Promise<NationRead | null> {
+  const id = NATION_IDS[key];
+  try {
+    const held = await sb.from("soccer_player_club_stints").select("id").eq("nationality", id.stints).limit(1);
+    if (held.error || !held.data) return null;
+    let wcNames: string[] = [];
+    if (id.wc.length > 0) {
+      const w = await sb.from("world_cup_players").select("player_name").in("nationality", id.wc).limit(1000);
+      if (w.error || !w.data || w.data.length >= 1000) return null;
+      wcNames = (w.data as { player_name: string }[]).map((r) => r.player_name);
+    }
+    return { stintsExists: held.data.length > 0, wcNames };
+  } catch {
+    return null;
+  }
+}
+
+async function readMarket(nameFolded: string): Promise<MarketRow[] | null> {
+  try {
+    const { data, error } = await sb.from("player_market_values").select("club, year, age")
+      .eq("name_folded", nameFolded).limit(200);
+    return error || !data || data.length >= 200 ? null : (data as MarketRow[]);
+  } catch {
+    return null;
   }
 }
 
@@ -275,88 +602,56 @@ serve(async (req) => {
     if (hit?.verdict) return json({ ...(hit.verdict as Record<string, unknown>), cached: true });
   } catch { /* cache down -> continue */ }
 
-  const COLS = "player_name, club, nationality, position, first_year, last_year, debut_year, debut_age";
+  const COLS = "player_name, name_folded, club, nationality, position, first_year, last_year, person_key";
 
   try {
     /* ROUND 498: matched on the folded column, not the raw one. Measured over
        all 80,586 rows: 6,270 of 27,851 distinct names (22.5 percent) could not
        be reached by any plain spelling, and it is not only accents, a hyphen
        does it too ("Aaron Wan-Bissaka"). */
-    const { data } = await sb.from("soccer_player_club_stints").select(COLS)
+    const { data, error } = await sb.from("soccer_player_club_stints").select(COLS)
       .eq("name_folded", norm(sanitized.player)).limit(60);
-    let stints = (data ?? []) as Stint[];
+    let stints: Stint[] | null = error || !data ? null : (data as Stint[]);
+    const byFullName = !!stints && stints.length > 0;
 
-    if (stints.length === 0 && sanitized.player.trim().split(/\s+/).length === 1) {
-      const { data: bySurname } = await sb.from("soccer_player_club_stints").select(COLS)
+    if (stints && stints.length === 0 && sanitized.player.trim().split(/\s+/).length === 1) {
+      const { data: bySurname, error: surnameError } = await sb.from("soccer_player_club_stints").select(COLS)
         .like("name_folded", `% ${norm(sanitized.player)}`).limit(60);
-      const names = new Set((bySurname ?? []).map((r: { player_name: string }) => norm(r.player_name)));
-      if (names.size === 1) stints = (bySurname ?? []) as Stint[];
-    }
-
-    const rowCrit = parseCriterion(sanitized.row);
-    const colCrit = parseCriterion(sanitized.col);
-
-    const debutYear = stints.length ? (stints[0].debut_year ?? Math.min(...stints.map((s) => s.first_year))) : 0;
-    const debutAge = stints.length ? stints[0].debut_age : null;
-    /* ROUND 489: A NAME IS NOT A PERSON, and careerComplete is what turns that
-       into a wrong answer. It is read off stints[0] and it is the switch that
-       lets a missing club become a definite NO rather than an honest "we do not
-       know". When one name covers several men those rows are several careers,
-       and one man's debut year then decides another man's verdict.
-       Measured 2026-09-06: "Vitinha" is three men in this table, a Brazilian
-       winger at Feirense in 2008 and two Portuguese players, and the PSG
-       midfielder's move is not in the table at all. The grid answered "Vitinha
-       does not satisfy Played for PSG" as a hard, cached NO, on the strength of
-       a different man's debut year.
-       So when the fetched rows carry more than one nationality they are more
-       than one person, and nothing here is allowed to say a hard no. The
-       criterion falls through as unknown, which is the fail-closed direction:
-       the guess is not counted rather than wrongly refused and remembered. */
-    const identities = new Set(stints.map((s) => norm(s.nationality ?? "")).filter(Boolean));
-    const oneManOnly = identities.size <= 1;
-    const careerComplete = oneManOnly && stints.length > 0 && (debutYear >= 2005 || (debutAge != null && debutAge <= 21));
-
-    let rowV = evaluate(rowCrit, stints, careerComplete);
-    let colV = evaluate(colCrit, stints, careerComplete);
-    let properName = stints.length ? stints[0].player_name : null;
-
-    // v12: deterministic World Cup winner resolution, independent of stints.
-    // v13: the winner squad row also settles a paired position criterion when
-    // the stints table has nothing on the player.
-    let squadPos: string | null = null;
-    if (rowCrit.kind === "wc_winner") {
-      const r = await checkWorldCupWinner(rowCrit.value, sanitized.player);
-      rowV = r.verdict;
-      if (!properName && r.properName) properName = r.properName;
-      if (r.squadPos) squadPos = r.squadPos;
-    }
-    if (colCrit.kind === "wc_winner") {
-      const c = await checkWorldCupWinner(colCrit.value, sanitized.player);
-      colV = c.verdict;
-      if (!properName && c.properName) properName = c.properName;
-      if (c.squadPos) squadPos = c.squadPos;
-    }
-    if (squadPos && stints.length === 0) {
-      const bucket = positionBucket(squadPos);
-      if (bucket) {
-        if (rowCrit.kind === "position" && rowV === "unknown") rowV = rowCrit.value === bucket ? true : "unknown";
-        if (colCrit.kind === "position" && colV === "unknown") colV = colCrit.value === bucket ? true : "unknown";
+      if (surnameError || !bySurname) stints = null;
+      else {
+        const names = new Set(bySurname.map((r: { player_name: string }) => norm(r.player_name)));
+        if (names.size === 1) stints = bySurname as Stint[];
       }
     }
 
-    if (rowV === true && colV === true) {
-      const verdict = { valid: true, reason: "Verified from career records.", fullName: properName };
-      try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
-      return json(verdict);
+    /* v24: judge() is pure and asks for what it needs; the loop fetches it and
+       asks again. Three passes cover squad, nation and market reads. */
+    const reads: JudgeReads = { stints, byFullName, squads: {}, nations: {}, market: undefined };
+    for (let pass = 0; pass < 4; pass++) {
+      const out = judge(sanitized.player, sanitized.row, sanitized.col, reads);
+      if (out.status === "need") {
+        await Promise.all(out.needs.map(async (n) => {
+          if (n.read === "squad") reads.squads[n.year] = await readSquad(n.year);
+          else if (n.read === "nation") reads.nations[n.key] = await readNation(n.key);
+          else reads.market = await readMarket(n.nameFolded);
+        }));
+        continue;
+      }
+      if (out.status === "yes") {
+        const verdict = { valid: true, reason: "Verified from career records.", fullName: out.fullName, rule: "v24" };
+        try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
+        return json(verdict);
+      }
+      if (out.status === "no") {
+        const which = out.side === "row" ? sanitized.row : sanitized.col;
+        const shown = out.fullName ?? sanitized.player;
+        const verdict = { valid: false, reason: `${shown} does not satisfy "${which}".`, fullName: out.fullName, rule: "v24" };
+        try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
+        return json(verdict);
+      }
+      break;
     }
-    if (rowV === false || colV === false) {
-      const which = rowV === false ? sanitized.row : sanitized.col;
-      const shown = properName ?? sanitized.player;
-      const verdict = { valid: false, reason: `${shown} does not satisfy "${which}".`, fullName: properName };
-      try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
-      return json(verdict);
-    }
-  } catch { /* deterministic pass unavailable -> AI */ }
+  } catch { /* records pass unavailable -> AI */ }
 
   if (!AI_KEY) return unverified();
 
@@ -429,7 +724,7 @@ serve(async (req) => {
     if (result.valid && !sameName) {
       return json({ valid: false, unverified: true, reason: "That name did not match a player we could verify.", fullName: null });
     }
-    const verdict = { valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null };
+    const verdict = { valid: !!result.valid, reason: result.reason || null, fullName: result.fullName || null, rule: "v24" };
     try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
     return json(verdict);
   } catch (err) {

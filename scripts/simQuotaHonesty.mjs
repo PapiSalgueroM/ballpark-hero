@@ -17,6 +17,8 @@
      2. THE HOOKS LISTEN. useSoccerGrid.ts and useCollegeGrid.ts read
         data.exhausted, set checkingDown, and show the allowance message
         rather than the retry one; the guess is never counted either way.
+        Since Round 613 the soccer hook marks only the exhausted cell, and
+        checkingDown is read for the active cell.
      3. THE PAGES STOP INVITING. SoccerGrid.tsx and CollegeGrid.tsx render
         the notice in place of the search box when checkingDown is set.
      4. THE NFL GRID IS NOT IN THIS. useFootballGrid.ts invokes no edge
@@ -27,6 +29,8 @@
                                validator in memory; section 1 must go red.
      SIM_QUOTA_CONTROL=mute    removes the exhausted branch from the soccer
                                hook in memory; section 2 must go red.
+     SIM_QUOTA_CONTROL=wholesession  lets one exhausted cell block the whole
+                               soccer board again; section 2 must go red.
 
    Run: node scripts/simQuotaHonesty.mjs
 */
@@ -55,6 +59,7 @@ const VALIDATORS = [
   { file: 'supabase/functions/validate-player/index.ts', nameGuard: false },
 ];
 const HOOKS = ['src/hooks/useSoccerGrid.ts', 'src/hooks/useCollegeGrid.ts', 'src/hooks/useLineupBuilder.ts'];
+const PER_CELL = new Set(['src/hooks/useSoccerGrid.ts']);
 const PAGES = ['src/pages/SoccerGrid.tsx', 'src/pages/CollegeGrid.tsx', 'src/pages/LineupBuilder.tsx'];
 
 section = 1;
@@ -121,9 +126,24 @@ for (const f of HOOKS) {
     code = cut;
     console.log('   NEGATIVE CONTROL ON: the exhausted branch removed from the soccer hook, in memory');
   }
-  if (!/const \[checkingDown, setCheckingDown\] = useState\(false\)/.test(code)) fail(`${f}: no checkingDown state`);
+  if (CONTROL === 'wholesession' && f.includes('Soccer')) {
+    const cut = code.replace('exhaustedCells.has(activeCell)', 'exhaustedCells.size > 0');
+    if (cut === code) abort('control cannot run: the soccer hook does not read checkingDown for the active cell');
+    code = cut;
+    console.log('   NEGATIVE CONTROL ON: one exhausted cell blocks the whole soccer board again, in memory');
+  }
+  /* Round 613: the soccer grid blocks only the cell whose guess came back
+     exhausted, since v24 sends more guesses to the model and records can still
+     settle the other cells. So its hook holds a set of cells, not one flag. */
+  if (PER_CELL.has(f)) {
+    if (!/const \[exhaustedCells, setExhaustedCells\] = useState<Set<number>>/.test(code)) fail(`${f}: no per-cell exhausted state`);
+    if (!/const checkingDown = activeCell !== null && exhaustedCells\.has\(activeCell\);/.test(code)) fail(`${f}: checkingDown is not read for the active cell only`);
+    if (!/if \(data\?\.exhausted\) \{\s*setExhaustedCells\(\(prev\) => new Set\(prev\)\.add\(capturedCell\)\);/.test(code)) fail(`${f}: an exhausted answer does not mark its own cell`);
+  } else {
+    if (!/const \[checkingDown, setCheckingDown\] = useState\(false\)/.test(code)) fail(`${f}: no checkingDown state`);
+    if (!/setCheckingDown\(true\)/.test(code)) fail(`${f}: checkingDown is never set`);
+  }
   if (!/\b(data|result)\??\.exhausted\b/.test(code)) fail(`${f}: the exhausted flag is not read`);
-  if (!/setCheckingDown\(true\)/.test(code)) fail(`${f}: checkingDown is never set`);
   if (!/allowance for today/.test(code)) fail(`${f}: the allowance message is missing`);
   if (/toast\.error\("Couldn't verify that answer, please try again\."\)[\s\S]{0,80}$/.test(code)) fail(`${f}: the blip message is the only one left`);
   if (!/checkingDown,/.test(code.slice(code.lastIndexOf('return {')))) fail(`${f}: checkingDown is not returned to the page`);
@@ -147,10 +167,10 @@ console.log('4) The NFL grid is not in this: no edge function call at all');
   console.log('   useFootballGrid read');
 }
 
-const own = { blind: 1, lenient: 1, mute: 2 }[CONTROL];
+const own = { blind: 1, lenient: 1, mute: 2, wholesession: 2 }[CONTROL];
 const total = failures[1] + failures[2] + failures[3] + failures[4];
 if (CONTROL) {
-  if (!own) abort(`unknown control "${CONTROL}" (blind, lenient, mute)`);
+  if (!own) abort(`unknown control "${CONTROL}" (blind, lenient, mute, wholesession)`);
   if (failures[own] > 0) { console.log(`\ncontrol "${CONTROL}": ${failures[own]} failure(s) fired in section ${own} as expected, the check works`); process.exit(0); }
   abort(`\ncontrol "${CONTROL}": changed NOTHING in section ${own}, the check is dead`);
 }

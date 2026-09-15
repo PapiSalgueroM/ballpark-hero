@@ -1,0 +1,2920 @@
+{
+  "_header": {
+    "command": "node scripts/genSoccerGridIds.mjs",
+    "check": "node scripts/genSoccerGridIds.mjs --check",
+    "generated": "2026-09-15",
+    "thresholds": {
+      "clubMinPlayers": 3,
+      "clubMinShare": 0.3,
+      "nationMinPlayers": 3,
+      "nationMinShare": 0.9,
+      "reviewBelowNames": 10
+    },
+    "stintsYears": "soccer_player_club_stints first_year and last_year are season END years (Messi at PSG starts 2022, Haaland at Manchester City starts 2023). The club window is first_year <= World Cup year and last_year >= year minus 1, which is not season aligned for the winter 2022 tournament; both readings are below.",
+    "windowReadings": {
+      "draft": {
+        "lowestAccepted": {
+          "spelling": "Corinthians",
+          "stored": "Sport Club Corinthians Paulista",
+          "reading": "4/11",
+          "share": 0.364
+        },
+        "highestRejected": {
+          "spelling": "Grêmio",
+          "stored": "Grêmio Foot-Ball Porto Alegrense",
+          "reading": "1/2",
+          "share": 0.5
+        },
+        "rejectedWithTwoOrMore": [
+          {
+            "spelling": "Santos",
+            "stored": "Santos FC",
+            "reading": "2/4",
+            "share": 0.5
+          },
+          {
+            "spelling": "Parma",
+            "stored": "Inter Milan",
+            "reading": "2/10",
+            "share": 0.2
+          },
+          {
+            "spelling": "Leeds United",
+            "stored": "Red Bull Salzburg",
+            "reading": "2/11",
+            "share": 0.182
+          },
+          {
+            "spelling": "Corinthians",
+            "stored": "West Ham United",
+            "reading": "2/11",
+            "share": 0.182
+          },
+          {
+            "spelling": "Bordeaux",
+            "stored": "FC Toulouse",
+            "reading": "2/12",
+            "share": 0.167
+          },
+          {
+            "spelling": "Shakhtar Donetsk",
+            "stored": "Clube Atlético Mineiro",
+            "reading": "2/16",
+            "share": 0.125
+          },
+          {
+            "spelling": "Flamengo",
+            "stored": "Dynamo Moscow",
+            "reading": "2/17",
+            "share": 0.118
+          },
+          {
+            "spelling": "Beşiktaş",
+            "stored": "Wolverhampton Wanderers",
+            "reading": "2/18",
+            "share": 0.111
+          },
+          {
+            "spelling": "Lazio",
+            "stored": "Hellas Verona",
+            "reading": "2/21",
+            "share": 0.095
+          },
+          {
+            "spelling": "Lazio",
+            "stored": "Real Zaragoza",
+            "reading": "2/21",
+            "share": 0.095
+          },
+          {
+            "spelling": "Fenerbahçe",
+            "stored": "Besiktas JK",
+            "reading": "2/24",
+            "share": 0.083
+          },
+          {
+            "spelling": "Borussia Mönchengladbach",
+            "stored": "Borussia Dortmund",
+            "reading": "2/29",
+            "share": 0.069
+          },
+          {
+            "spelling": "Marseille",
+            "stored": "Stade Rennais FC",
+            "reading": "2/30",
+            "share": 0.067
+          },
+          {
+            "spelling": "Valencia",
+            "stored": "Sporting CP",
+            "reading": "2/31",
+            "share": 0.065
+          },
+          {
+            "spelling": "Monaco",
+            "stored": "FC Porto",
+            "reading": "2/32",
+            "share": 0.063
+          },
+          {
+            "spelling": "Rennes",
+            "stored": "Tottenham Hotspur",
+            "reading": "2/32",
+            "share": 0.063
+          },
+          {
+            "spelling": "PSV Eindhoven",
+            "stored": "FC Twente Enschede",
+            "reading": "2/35",
+            "share": 0.057
+          },
+          {
+            "spelling": "Roma",
+            "stored": "Manchester City",
+            "reading": "2/36",
+            "share": 0.056
+          },
+          {
+            "spelling": "Napoli",
+            "stored": "Getafe CF",
+            "reading": "2/38",
+            "share": 0.053
+          },
+          {
+            "spelling": "Napoli",
+            "stored": "Real Madrid",
+            "reading": "2/38",
+            "share": 0.053
+          },
+          {
+            "spelling": "Juventus",
+            "stored": "Paris Saint-Germain",
+            "reading": "3/64",
+            "share": 0.047
+          },
+          {
+            "spelling": "Benfica",
+            "stored": "SL Benfica B",
+            "reading": "2/45",
+            "share": 0.044
+          },
+          {
+            "spelling": "Galatasaray",
+            "stored": "SSC Napoli",
+            "reading": "2/45",
+            "share": 0.044
+          },
+          {
+            "spelling": "Galatasaray",
+            "stored": "Trabzonspor",
+            "reading": "2/45",
+            "share": 0.044
+          },
+          {
+            "spelling": "Borussia Dortmund",
+            "stored": "FC Basel 1893",
+            "reading": "2/48",
+            "share": 0.042
+          },
+          {
+            "spelling": "Atlético Madrid",
+            "stored": "Chelsea FC",
+            "reading": "2/52",
+            "share": 0.038
+          },
+          {
+            "spelling": "Atlético Madrid",
+            "stored": "FC Barcelona",
+            "reading": "2/52",
+            "share": 0.038
+          },
+          {
+            "spelling": "Atlético Madrid",
+            "stored": "Udinese Calcio",
+            "reading": "2/52",
+            "share": 0.038
+          },
+          {
+            "spelling": "Tottenham Hotspur",
+            "stored": "Newcastle United",
+            "reading": "2/54",
+            "share": 0.037
+          },
+          {
+            "spelling": "Real Madrid",
+            "stored": "Liverpool FC",
+            "reading": "2/60",
+            "share": 0.033
+          },
+          {
+            "spelling": "Paris Saint-Germain",
+            "stored": "FC Barcelona",
+            "reading": "2/63",
+            "share": 0.032
+          },
+          {
+            "spelling": "Paris Saint-Germain",
+            "stored": "Sporting CP",
+            "reading": "2/63",
+            "share": 0.032
+          },
+          {
+            "spelling": "Juventus",
+            "stored": "ACF Fiorentina",
+            "reading": "2/64",
+            "share": 0.031
+          },
+          {
+            "spelling": "Manchester United",
+            "stored": "Ajax Amsterdam",
+            "reading": "2/64",
+            "share": 0.031
+          },
+          {
+            "spelling": "Juventus",
+            "stored": "Bayern Munich",
+            "reading": "2/64",
+            "share": 0.031
+          },
+          {
+            "spelling": "Manchester United",
+            "stored": "Chelsea FC",
+            "reading": "2/64",
+            "share": 0.031
+          },
+          {
+            "spelling": "Manchester United",
+            "stored": "Everton FC",
+            "reading": "2/64",
+            "share": 0.031
+          },
+          {
+            "spelling": "Manchester United",
+            "stored": "Real Madrid",
+            "reading": "2/64",
+            "share": 0.031
+          },
+          {
+            "spelling": "Chelsea",
+            "stored": "Anzhi Makhachkala",
+            "reading": "2/68",
+            "share": 0.029
+          },
+          {
+            "spelling": "Chelsea",
+            "stored": "Borussia Mönchengladbach",
+            "reading": "2/68",
+            "share": 0.029
+          },
+          {
+            "spelling": "Inter Milan",
+            "stored": "CD Nacional",
+            "reading": "2/69",
+            "share": 0.029
+          },
+          {
+            "spelling": "Bayern Munich",
+            "stored": "FC Bayern Munich II",
+            "reading": "2/70",
+            "share": 0.029
+          },
+          {
+            "spelling": "Inter Milan",
+            "stored": "FC Porto",
+            "reading": "2/69",
+            "share": 0.029
+          },
+          {
+            "spelling": "Chelsea",
+            "stored": "Manchester City",
+            "reading": "2/68",
+            "share": 0.029
+          },
+          {
+            "spelling": "Bayern Munich",
+            "stored": "Real Madrid",
+            "reading": "2/70",
+            "share": 0.029
+          },
+          {
+            "spelling": "Inter Milan",
+            "stored": "Real Madrid",
+            "reading": "2/69",
+            "share": 0.029
+          },
+          {
+            "spelling": "Bayern Munich",
+            "stored": "TSG 1899 Hoffenheim",
+            "reading": "2/70",
+            "share": 0.029
+          },
+          {
+            "spelling": "Bayern Munich",
+            "stored": "VfB Stuttgart",
+            "reading": "2/70",
+            "share": 0.029
+          },
+          {
+            "spelling": "Barcelona",
+            "stored": "FC Barcelona Atlètic",
+            "reading": "2/76",
+            "share": 0.026
+          },
+          {
+            "spelling": "Barcelona",
+            "stored": "Manchester City",
+            "reading": "2/76",
+            "share": 0.026
+          },
+          {
+            "spelling": "Barcelona",
+            "stored": "Sevilla FC",
+            "reading": "2/76",
+            "share": 0.026
+          },
+          {
+            "spelling": "Manchester City",
+            "stored": "AS Monaco",
+            "reading": "2/83",
+            "share": 0.024
+          },
+          {
+            "spelling": "Manchester City",
+            "stored": "Aston Villa",
+            "reading": "2/83",
+            "share": 0.024
+          }
+        ],
+        "spellingsWithTwoTargets": []
+      },
+      "seasonAligned": {
+        "lowestAccepted": {
+          "spelling": "Espanyol",
+          "stored": "RCD Espanyol Barcelona",
+          "reading": "4/6",
+          "share": 0.667
+        },
+        "highestRejected": {
+          "spelling": "Al-Ittihad",
+          "stored": "Al-Ittihad Club",
+          "reading": "2/2",
+          "share": 1
+        },
+        "rejectedWithTwoOrMore": [
+          {
+            "spelling": "Al-Ittihad",
+            "stored": "Al-Ittihad Club",
+            "reading": "2/2",
+            "share": 1
+          },
+          {
+            "spelling": "Santos",
+            "stored": "Santos FC",
+            "reading": "2/3",
+            "share": 0.667
+          },
+          {
+            "spelling": "Corinthians",
+            "stored": "Sport Club Corinthians Paulista",
+            "reading": "2/6",
+            "share": 0.333
+          },
+          {
+            "spelling": "Corinthians",
+            "stored": "West Ham United",
+            "reading": "2/6",
+            "share": 0.333
+          },
+          {
+            "spelling": "Inter Milan",
+            "stored": "FC Porto",
+            "reading": "2/47",
+            "share": 0.043
+          }
+        ],
+        "spellingsWithTwoTargets": [],
+        "lostAgainstDraft": [
+          "Al-Ittihad -> Al-Ittihad Club",
+          "Corinthians -> Sport Club Corinthians Paulista"
+        ]
+      }
+    },
+    "rows": {
+      "stints": 80586,
+      "worldCupPlayers": 9613,
+      "clubPuzzles": 364,
+      "gridPuzzles": 710,
+      "fallbackLabels": 40
+    }
+  },
+  "clubs": {
+    "Played for AC Milan": {
+      "key": "ac milan",
+      "slots": 38,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "AC Milan",
+          "names": 185,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name AC Milan",
+            "world_cup_players club AC Milan (label) 9/15",
+            "world_cup_players club AC Milan (puzzle full_name AC Milan) 9/15"
+          ]
+        }
+      ],
+      "names": 185
+    },
+    "Played for AS Roma": {
+      "key": "as roma",
+      "slots": 10,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "AS Roma",
+          "names": 223,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name AS Roma"
+          ]
+        }
+      ],
+      "names": 223
+    },
+    "Played for Ajax": {
+      "key": "ajax",
+      "slots": 23,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Ajax",
+          "names": 1,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "Ajax Amsterdam",
+          "names": 202,
+          "evidence": [
+            "world_cup_players club Ajax (label) 35/45"
+          ]
+        }
+      ],
+      "names": 202
+    },
+    "Played for Al-Hilal": {
+      "key": "al hilal",
+      "slots": 11,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Al-Hilal SFC",
+          "names": 52,
+          "evidence": [
+            "world_cup_players club Al Hilal | Al-Hilal (label) 11/14",
+            "world_cup_players club Al Hilal | Al-Hilal (puzzle full_name Al Hilal) 11/14"
+          ]
+        }
+      ],
+      "names": 52
+    },
+    "Played for Al-Ittihad": {
+      "key": "al ittihad",
+      "slots": 8,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Al-Ittihad Club",
+          "names": 47,
+          "evidence": [
+            "exact puzzle full_name Al-Ittihad Club",
+            "world_cup_players club Al-Ittihad (label) 4/5"
+          ]
+        }
+      ],
+      "names": 47
+    },
+    "Played for Al-Nassr": {
+      "key": "al nassr",
+      "slots": 11,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Al-Nassr FC",
+          "names": 58,
+          "evidence": [
+            "world_cup_players club Al Nassr | Al-Nassr (label) 6/9",
+            "world_cup_players club Al Nassr | Al-Nassr (puzzle full_name Al Nassr) 6/9"
+          ]
+        }
+      ],
+      "names": 58
+    },
+    "Played for Anderlecht": {
+      "key": "anderlecht",
+      "slots": 16,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "RSC Anderlecht",
+          "names": 188,
+          "evidence": [
+            "exact puzzle full_name RSC Anderlecht",
+            "world_cup_players club Anderlecht (label) 8/9"
+          ]
+        }
+      ],
+      "names": 188
+    },
+    "Played for Arsenal": {
+      "key": "arsenal",
+      "slots": 37,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Arsenal FC",
+          "names": 212,
+          "evidence": [
+            "world_cup_players club Arsenal (label) 53/67",
+            "world_cup_players club Arsenal (puzzle full_name Arsenal) 53/67"
+          ]
+        }
+      ],
+      "names": 212
+    },
+    "Played for Aston Villa": {
+      "key": "aston villa",
+      "slots": 20,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Aston Villa",
+          "names": 195,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Aston Villa",
+            "world_cup_players club Aston Villa (label) 19/27",
+            "world_cup_players club Aston Villa (puzzle full_name Aston Villa) 19/27"
+          ]
+        }
+      ],
+      "names": 195
+    },
+    "Played for Atalanta": {
+      "key": "atalanta",
+      "slots": 13,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Atalanta",
+          "names": 1,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "Atalanta BC",
+          "names": 180,
+          "evidence": [
+            "exact puzzle full_name Atalanta BC",
+            "world_cup_players club Atalanta (label) 13/18"
+          ]
+        }
+      ],
+      "names": 181
+    },
+    "Played for Athletic Bilbao": {
+      "key": "athletic bilbao",
+      "slots": 11,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Athletic Bilbao",
+          "names": 112,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Athletic Bilbao",
+            "world_cup_players club Athletic Bilbao (label) 7/9",
+            "world_cup_players club Athletic Bilbao (puzzle full_name Athletic Bilbao) 7/9"
+          ]
+        }
+      ],
+      "names": 112
+    },
+    "Played for Atletico Madrid": {
+      "key": "atletico madrid",
+      "slots": 1,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Atlético Madrid",
+          "names": 1,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "Atlético de Madrid",
+          "names": 180,
+          "evidence": [
+            "exact puzzle full_name Atlético de Madrid",
+            "world_cup_players club Atlético Madrid (label) 35/52"
+          ]
+        }
+      ],
+      "names": 180
+    },
+    "Played for Atlético Madrid": {
+      "key": "atletico madrid",
+      "slots": 35,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Atlético Madrid",
+          "names": 1,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "Atlético de Madrid",
+          "names": 180,
+          "evidence": [
+            "exact puzzle full_name Atlético de Madrid",
+            "world_cup_players club Atlético Madrid (label) 35/52"
+          ]
+        }
+      ],
+      "names": 180
+    },
+    "Played for Atlético Mineiro": {
+      "key": "atletico mineiro",
+      "slots": 18,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Clube Atlético Mineiro",
+          "names": 132,
+          "evidence": [
+            "exact puzzle full_name Clube Atlético Mineiro",
+            "world_cup_players club Atlético Mineiro (label) 5/9"
+          ]
+        }
+      ],
+      "names": 132
+    },
+    "Played for Barcelona": {
+      "key": "barcelona",
+      "slots": 37,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Barcelona",
+          "names": 1,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "FC Barcelona",
+          "names": 191,
+          "evidence": [
+            "exact puzzle full_name FC Barcelona",
+            "world_cup_players club Barcelona (label) 48/76"
+          ]
+        }
+      ],
+      "names": 191
+    },
+    "Played for Bayer Leverkusen": {
+      "key": "bayer leverkusen",
+      "slots": 21,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Bayer 04 Leverkusen",
+          "names": 155,
+          "evidence": [
+            "world_cup_players club Bayer Leverkusen (label) 25/36",
+            "world_cup_players club Bayer Leverkusen (puzzle full_name Bayer Leverkusen) 25/36"
+          ]
+        }
+      ],
+      "names": 155
+    },
+    "Played for Bayern Munich": {
+      "key": "bayern munich",
+      "slots": 33,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Bayern Munich",
+          "names": 152,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Bayern Munich",
+            "world_cup_players club Bayern Munich (label) 52/70",
+            "world_cup_players club Bayern Munich (puzzle full_name Bayern Munich) 52/70"
+          ]
+        }
+      ],
+      "names": 152
+    },
+    "Played for Benfica": {
+      "key": "benfica",
+      "slots": 22,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "SL Benfica",
+          "names": 241,
+          "evidence": [
+            "exact puzzle full_name SL Benfica",
+            "world_cup_players club Benfica (label) 30/45"
+          ]
+        }
+      ],
+      "names": 241
+    },
+    "Played for Beşiktaş": {
+      "key": "besiktas",
+      "slots": 18,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Besiktas JK",
+          "names": 193,
+          "evidence": [
+            "exact puzzle full_name Besiktas JK",
+            "world_cup_players club Beşiktaş (label) 10/18"
+          ]
+        }
+      ],
+      "names": 193
+    },
+    "Played for Boca Juniors": {
+      "key": "boca juniors",
+      "slots": 15,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "CA Boca Juniors",
+          "names": 157,
+          "evidence": [
+            "world_cup_players club Boca Juniors (label) 9/13",
+            "world_cup_players club Boca Juniors (puzzle full_name Boca Juniors) 9/13"
+          ]
+        }
+      ],
+      "names": 157
+    },
+    "Played for Bologna": {
+      "key": "bologna",
+      "slots": 16,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Bologna",
+          "names": 1,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "Bologna FC 1909",
+          "names": 177,
+          "evidence": [
+            "exact puzzle full_name Bologna FC 1909",
+            "world_cup_players club Bologna (label) 13/17"
+          ]
+        }
+      ],
+      "names": 178
+    },
+    "Played for Bordeaux": {
+      "key": "bordeaux",
+      "slots": 18,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "FC Girondins Bordeaux",
+          "names": 146,
+          "evidence": [
+            "world_cup_players club Bordeaux (label) 8/12"
+          ]
+        }
+      ],
+      "names": 146
+    },
+    "Played for Borussia Dortmund": {
+      "key": "borussia dortmund",
+      "slots": 29,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Borussia Dortmund",
+          "names": 157,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Borussia Dortmund",
+            "world_cup_players club Borussia Dortmund (label) 37/48",
+            "world_cup_players club Borussia Dortmund (puzzle full_name Borussia Dortmund) 37/48"
+          ]
+        }
+      ],
+      "names": 157
+    },
+    "Played for Borussia Mönchengladbach": {
+      "key": "borussia monchengladbach",
+      "slots": 14,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Borussia Mönchengladbach",
+          "names": 154,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Borussia Mönchengladbach",
+            "world_cup_players club Borussia Mönchengladbach (label) 20/29",
+            "world_cup_players club Borussia Mönchengladbach (puzzle full_name Borussia Mönchengladbach) 20/29"
+          ]
+        }
+      ],
+      "names": 154
+    },
+    "Played for Celta Vigo": {
+      "key": "celta vigo",
+      "slots": 17,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Celta de Vigo",
+          "names": 164,
+          "evidence": [
+            "exact puzzle full_name Celta de Vigo",
+            "world_cup_players club Celta Vigo (label) 7/8"
+          ]
+        }
+      ],
+      "names": 164
+    },
+    "Played for Celtic": {
+      "key": "celtic",
+      "slots": 13,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Celtic FC",
+          "names": 158,
+          "evidence": [
+            "exact puzzle full_name Celtic FC",
+            "world_cup_players club Celtic (label) 20/28"
+          ]
+        }
+      ],
+      "names": 158
+    },
+    "Played for Chelsea": {
+      "key": "chelsea",
+      "slots": 37,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Chelsea FC",
+          "names": 200,
+          "evidence": [
+            "world_cup_players club Chelsea (label) 51/68",
+            "world_cup_players club Chelsea (puzzle full_name Chelsea) 51/68"
+          ]
+        }
+      ],
+      "names": 200
+    },
+    "Played for Club Brugge": {
+      "key": "club brugge",
+      "slots": 14,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Club Brugge KV",
+          "names": 169,
+          "evidence": [
+            "exact puzzle full_name Club Brugge KV",
+            "world_cup_players club Club Brugge (label) 14/22"
+          ]
+        }
+      ],
+      "names": 169
+    },
+    "Played for Corinthians": {
+      "key": "corinthians",
+      "slots": 14,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Sport Club Corinthians Paulista",
+          "names": 148,
+          "evidence": [
+            "exact puzzle full_name Sport Club Corinthians Paulista",
+            "world_cup_players club Corinthians (label) 4/11"
+          ]
+        }
+      ],
+      "names": 148
+    },
+    "Played for Crystal Palace": {
+      "key": "crystal palace",
+      "slots": 13,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Crystal Palace",
+          "names": 144,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Crystal Palace",
+            "world_cup_players club Crystal Palace (label) 14/20",
+            "world_cup_players club Crystal Palace (puzzle full_name Crystal Palace) 14/20"
+          ]
+        }
+      ],
+      "names": 144
+    },
+    "Played for Eintracht Frankfurt": {
+      "key": "eintracht frankfurt",
+      "slots": 16,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Eintracht Frankfurt",
+          "names": 172,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Eintracht Frankfurt",
+            "world_cup_players club Eintracht Frankfurt (label) 21/30",
+            "world_cup_players club Eintracht Frankfurt (puzzle full_name Eintracht Frankfurt) 21/30"
+          ]
+        }
+      ],
+      "names": 172
+    },
+    "Played for Espanyol": {
+      "key": "espanyol",
+      "slots": 18,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "RCD Espanyol Barcelona",
+          "names": 196,
+          "evidence": [
+            "exact puzzle full_name RCD Espanyol Barcelona",
+            "world_cup_players club Espanyol (label) 3/6"
+          ]
+        }
+      ],
+      "names": 196
+    },
+    "Played for Everton": {
+      "key": "everton",
+      "slots": 18,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Everton FC",
+          "names": 160,
+          "evidence": [
+            "world_cup_players club Everton (label) 17/29",
+            "world_cup_players club Everton (puzzle full_name Everton) 17/29"
+          ]
+        }
+      ],
+      "names": 160
+    },
+    "Played for FC Basel": {
+      "key": "fc basel",
+      "slots": 16,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "FC Basel 1893",
+          "names": 141,
+          "evidence": [
+            "exact puzzle full_name FC Basel 1893"
+          ]
+        }
+      ],
+      "names": 141
+    },
+    "Played for Fenerbahçe": {
+      "key": "fenerbahce",
+      "slots": 19,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Fenerbahce",
+          "names": 183,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Fenerbahçe",
+            "world_cup_players club Fenerbahçe (label) 14/24",
+            "world_cup_players club Fenerbahçe (puzzle full_name Fenerbahçe) 14/24"
+          ]
+        }
+      ],
+      "names": 183
+    },
+    "Played for Feyenoord": {
+      "key": "feyenoord",
+      "slots": 17,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Feyenoord Rotterdam",
+          "names": 177,
+          "evidence": [
+            "world_cup_players club Feyenoord (label) 20/25",
+            "world_cup_players club Feyenoord (puzzle full_name Feyenoord) 20/25"
+          ]
+        }
+      ],
+      "names": 177
+    },
+    "Played for Fiorentina": {
+      "key": "fiorentina",
+      "slots": 20,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "ACF Fiorentina",
+          "names": 213,
+          "evidence": [
+            "exact puzzle full_name ACF Fiorentina",
+            "world_cup_players club Fiorentina (label) 14/22"
+          ]
+        }
+      ],
+      "names": 213
+    },
+    "Played for Flamengo": {
+      "key": "flamengo",
+      "slots": 14,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "CR Flamengo",
+          "names": 145,
+          "evidence": [
+            "world_cup_players club Flamengo (label) 12/17",
+            "world_cup_players club Flamengo (puzzle full_name Flamengo) 12/17"
+          ]
+        }
+      ],
+      "names": 145
+    },
+    "Played for Fulham": {
+      "key": "fulham",
+      "slots": 21,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Fulham FC",
+          "names": 202,
+          "evidence": [
+            "exact puzzle full_name Fulham FC",
+            "world_cup_players club Fulham (label) 15/20"
+          ]
+        }
+      ],
+      "names": 202
+    },
+    "Played for Galatasaray": {
+      "key": "galatasaray",
+      "slots": 23,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Galatasaray",
+          "names": 201,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Galatasaray",
+            "world_cup_players club Galatasaray (label) 23/45",
+            "world_cup_players club Galatasaray (puzzle full_name Galatasaray) 23/45"
+          ]
+        }
+      ],
+      "names": 201
+    },
+    "Played for Genoa": {
+      "key": "genoa",
+      "slots": 18,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Genoa",
+          "names": 3,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "Genoa CFC",
+          "names": 215,
+          "evidence": [
+            "exact puzzle full_name Genoa CFC",
+            "world_cup_players club Genoa (label) 10/16"
+          ]
+        }
+      ],
+      "names": 218
+    },
+    "Played for Grêmio": {
+      "key": "gremio",
+      "slots": 17,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Grêmio",
+          "names": 1,
+          "evidence": [
+            "exact label"
+          ]
+        }
+      ],
+      "names": 1
+    },
+    "Played for Hamburger SV": {
+      "key": "hamburger sv",
+      "slots": 15,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Hamburger SV",
+          "names": 160,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Hamburger SV",
+            "world_cup_players club Hamburger SV (label) 21/26",
+            "world_cup_players club Hamburger SV (puzzle full_name Hamburger SV) 21/26"
+          ]
+        }
+      ],
+      "names": 160
+    },
+    "Played for Hoffenheim": {
+      "key": "hoffenheim",
+      "slots": 17,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "TSG 1899 Hoffenheim",
+          "names": 152,
+          "evidence": [
+            "exact puzzle full_name TSG 1899 Hoffenheim"
+          ]
+        }
+      ],
+      "names": 152
+    },
+    "Played for Inter Miami": {
+      "key": "inter miami",
+      "slots": 11,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Inter Miami",
+          "names": 1,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "Inter Miami CF",
+          "names": 37,
+          "evidence": [
+            "exact puzzle full_name Inter Miami CF",
+            "world_cup_players club Inter Miami CF (puzzle full_name Inter Miami CF) 3/7"
+          ]
+        }
+      ],
+      "names": 38
+    },
+    "Played for Inter Milan": {
+      "key": "inter milan",
+      "slots": 33,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Inter Milan",
+          "names": 207,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Inter Milan",
+            "world_cup_players club Inter Milan (label) 33/69",
+            "world_cup_players club Inter Milan (puzzle full_name Inter Milan) 33/69"
+          ]
+        }
+      ],
+      "names": 207
+    },
+    "Played for Juventus": {
+      "key": "juventus",
+      "slots": 33,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Juventus",
+          "names": 10,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Juventus"
+          ]
+        },
+        {
+          "stored": "Juventus FC",
+          "names": 177,
+          "evidence": [
+            "world_cup_players club Juventus (label) 43/64",
+            "world_cup_players club Juventus (puzzle full_name Juventus) 43/64"
+          ]
+        }
+      ],
+      "names": 183
+    },
+    "Played for LA Galaxy": {
+      "key": "la galaxy",
+      "slots": 7,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Los Angeles Galaxy",
+          "names": 45,
+          "evidence": [
+            "world_cup_players club LA Galaxy (label) 4/8",
+            "world_cup_players club LA Galaxy (puzzle full_name LA Galaxy) 4/8"
+          ]
+        }
+      ],
+      "names": 45
+    },
+    "Played for Lazio": {
+      "key": "lazio",
+      "slots": 19,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Lazio",
+          "names": 2,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "SS Lazio",
+          "names": 166,
+          "evidence": [
+            "exact puzzle full_name SS Lazio",
+            "world_cup_players club Lazio (label) 13/21"
+          ]
+        }
+      ],
+      "names": 168
+    },
+    "Played for Leeds United": {
+      "key": "leeds united",
+      "slots": 16,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Leeds United",
+          "names": 156,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Leeds United",
+            "world_cup_players club Leeds United (label) 6/11",
+            "world_cup_players club Leeds United (puzzle full_name Leeds United) 6/11"
+          ]
+        }
+      ],
+      "names": 156
+    },
+    "Played for Leicester City": {
+      "key": "leicester city",
+      "slots": 13,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Leicester City",
+          "names": 154,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Leicester City",
+            "world_cup_players club Leicester City (label) 16/21",
+            "world_cup_players club Leicester City (puzzle full_name Leicester City) 16/21"
+          ]
+        }
+      ],
+      "names": 154
+    },
+    "Played for Lille": {
+      "key": "lille",
+      "slots": 20,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "LOSC Lille",
+          "names": 170,
+          "evidence": [
+            "exact puzzle full_name LOSC Lille",
+            "world_cup_players club Lille (label) 16/20"
+          ]
+        }
+      ],
+      "names": 170
+    },
+    "Played for Liverpool": {
+      "key": "liverpool",
+      "slots": 38,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Liverpool",
+          "names": 1,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Liverpool"
+          ]
+        },
+        {
+          "stored": "Liverpool FC",
+          "names": 182,
+          "evidence": [
+            "world_cup_players club Liverpool (label) 38/61",
+            "world_cup_players club Liverpool (puzzle full_name Liverpool) 38/61"
+          ]
+        }
+      ],
+      "names": 182
+    },
+    "Played for Lyon": {
+      "key": "lyon",
+      "slots": 23,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Olympique Lyon",
+          "names": 176,
+          "evidence": [
+            "world_cup_players club Lyon (label) 23/31"
+          ]
+        }
+      ],
+      "names": 176
+    },
+    "Played for Manchester City": {
+      "key": "manchester city",
+      "slots": 39,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Manchester City",
+          "names": 171,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Manchester City",
+            "world_cup_players club Manchester City (label) 49/83",
+            "world_cup_players club Manchester City (puzzle full_name Manchester City) 49/83"
+          ]
+        }
+      ],
+      "names": 171
+    },
+    "Played for Manchester United": {
+      "key": "manchester united",
+      "slots": 34,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Manchester United",
+          "names": 158,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Manchester United",
+            "world_cup_players club Manchester United (label) 44/64",
+            "world_cup_players club Manchester United (puzzle full_name Manchester United) 44/64"
+          ]
+        }
+      ],
+      "names": 158
+    },
+    "Played for Marseille": {
+      "key": "marseille",
+      "slots": 19,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Olympique Marseille",
+          "names": 223,
+          "evidence": [
+            "world_cup_players club Marseille (label) 20/30"
+          ]
+        }
+      ],
+      "names": 223
+    },
+    "Played for Monaco": {
+      "key": "monaco",
+      "slots": 26,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "AS Monaco",
+          "names": 230,
+          "evidence": [
+            "exact puzzle full_name AS Monaco",
+            "world_cup_players club Monaco (label) 21/32"
+          ]
+        }
+      ],
+      "names": 230
+    },
+    "Played for Napoli": {
+      "key": "napoli",
+      "slots": 19,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Napoli",
+          "names": 3,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "SSC Napoli",
+          "names": 151,
+          "evidence": [
+            "exact puzzle full_name SSC Napoli",
+            "world_cup_players club Napoli (label) 24/38"
+          ]
+        }
+      ],
+      "names": 154
+    },
+    "Played for Newcastle": {
+      "key": "newcastle",
+      "slots": 17,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Newcastle United",
+          "names": 171,
+          "evidence": [
+            "exact puzzle full_name Newcastle United",
+            "world_cup_players club Newcastle United (puzzle full_name Newcastle United) 18/28"
+          ]
+        }
+      ],
+      "names": 171
+    },
+    "Played for Newcastle United": {
+      "key": "newcastle united",
+      "slots": 1,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Newcastle United",
+          "names": 171,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Newcastle United",
+            "world_cup_players club Newcastle United (label) 18/28",
+            "world_cup_players club Newcastle United (puzzle full_name Newcastle United) 18/28"
+          ]
+        }
+      ],
+      "names": 171
+    },
+    "Played for Nice": {
+      "key": "nice",
+      "slots": 16,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "OGC Nice",
+          "names": 174,
+          "evidence": [
+            "exact puzzle full_name OGC Nice",
+            "world_cup_players club Nice (label) 10/16"
+          ]
+        }
+      ],
+      "names": 174
+    },
+    "Played for Olympiacos": {
+      "key": "olympiacos",
+      "slots": 19,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Olympiacos Piraeus",
+          "names": 202,
+          "evidence": [
+            "exact puzzle full_name Olympiacos Piraeus",
+            "world_cup_players club Olympiacos (label) 9/14"
+          ]
+        }
+      ],
+      "names": 202
+    },
+    "Played for PSG": {
+      "key": "psg",
+      "slots": 25,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Paris Saint-Germain",
+          "names": 189,
+          "evidence": [
+            "exact puzzle full_name Paris Saint-Germain",
+            "world_cup_players club Paris Saint-Germain (puzzle full_name Paris Saint-Germain) 40/63"
+          ]
+        }
+      ],
+      "names": 189
+    },
+    "Played for PSV": {
+      "key": "psv",
+      "slots": 21,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "PSV Eindhoven",
+          "names": 180,
+          "evidence": [
+            "exact puzzle full_name PSV Eindhoven",
+            "world_cup_players club PSV Eindhoven (puzzle full_name PSV Eindhoven) 23/35"
+          ]
+        }
+      ],
+      "names": 180
+    },
+    "Played for Palmeiras": {
+      "key": "palmeiras",
+      "slots": 17,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "SE Palmeiras",
+          "names": 1,
+          "evidence": [
+            "exact puzzle full_name SE Palmeiras"
+          ]
+        },
+        {
+          "stored": "Sociedade Esportiva Palmeiras",
+          "names": 159,
+          "evidence": [
+            "world_cup_players club Palmeiras (label) 8/13"
+          ]
+        }
+      ],
+      "names": 159
+    },
+    "Played for Paris Saint-Germain": {
+      "key": "paris saint germain",
+      "slots": 8,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Paris Saint-Germain",
+          "names": 189,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Paris Saint-Germain",
+            "world_cup_players club Paris Saint-Germain (label) 40/63",
+            "world_cup_players club Paris Saint-Germain (puzzle full_name Paris Saint-Germain) 40/63"
+          ]
+        }
+      ],
+      "names": 189
+    },
+    "Played for Parma": {
+      "key": "parma",
+      "slots": 17,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Parma",
+          "names": 1,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "Parma Calcio 1913",
+          "names": 174,
+          "evidence": [
+            "exact puzzle full_name Parma Calcio 1913",
+            "world_cup_players club Parma (label) 8/10"
+          ]
+        }
+      ],
+      "names": 175
+    },
+    "Played for Porto": {
+      "key": "porto",
+      "slots": 17,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "FC Porto",
+          "names": 220,
+          "evidence": [
+            "exact puzzle full_name FC Porto",
+            "world_cup_players club Porto (label) 23/40"
+          ]
+        }
+      ],
+      "names": 220
+    },
+    "Played for RB Leipzig": {
+      "key": "rb leipzig",
+      "slots": 13,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "RB Leipzig",
+          "names": 85,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name RB Leipzig",
+            "world_cup_players club RB Leipzig (label) 13/20",
+            "world_cup_players club RB Leipzig (puzzle full_name RB Leipzig) 13/20"
+          ]
+        }
+      ],
+      "names": 85
+    },
+    "Played for Rangers": {
+      "key": "rangers",
+      "slots": 12,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Rangers FC",
+          "names": 130,
+          "evidence": [
+            "exact puzzle full_name Rangers FC",
+            "world_cup_players club Rangers (label) 8/10"
+          ]
+        }
+      ],
+      "names": 130
+    },
+    "Played for Real Betis": {
+      "key": "real betis",
+      "slots": 17,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Real Betis Balompié",
+          "names": 195,
+          "evidence": [
+            "exact puzzle full_name Real Betis Balompié",
+            "world_cup_players club Real Betis (label) 13/19"
+          ]
+        }
+      ],
+      "names": 195
+    },
+    "Played for Real Madrid": {
+      "key": "real madrid",
+      "slots": 37,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Real Madrid",
+          "names": 168,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Real Madrid",
+            "world_cup_players club Real Madrid (label) 46/60",
+            "world_cup_players club Real Madrid (puzzle full_name Real Madrid) 46/60"
+          ]
+        }
+      ],
+      "names": 168
+    },
+    "Played for Real Sociedad": {
+      "key": "real sociedad",
+      "slots": 14,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Real Sociedad",
+          "names": 151,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Real Sociedad",
+            "world_cup_players club Real Sociedad (label) 10/17",
+            "world_cup_players club Real Sociedad (puzzle full_name Real Sociedad) 10/17"
+          ]
+        }
+      ],
+      "names": 151
+    },
+    "Played for Red Bull Salzburg": {
+      "key": "red bull salzburg",
+      "slots": 16,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Red Bull Salzburg",
+          "names": 168,
+          "evidence": [
+            "exact label",
+            "world_cup_players club Red Bull Salzburg (label) 8/14"
+          ]
+        }
+      ],
+      "names": 168
+    },
+    "Played for Rennes": {
+      "key": "rennes",
+      "slots": 17,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Stade Rennais FC",
+          "names": 211,
+          "evidence": [
+            "exact puzzle full_name Stade Rennais FC",
+            "world_cup_players club Rennes (label) 19/32"
+          ]
+        }
+      ],
+      "names": 211
+    },
+    "Played for River Plate": {
+      "key": "river plate",
+      "slots": 16,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "CA River Plate",
+          "names": 149,
+          "evidence": [
+            "world_cup_players club River Plate (label) 6/12",
+            "world_cup_players club River Plate (puzzle full_name River Plate) 6/12"
+          ]
+        }
+      ],
+      "names": 149
+    },
+    "Played for Roma": {
+      "key": "roma",
+      "slots": 24,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "AS Roma",
+          "names": 223,
+          "evidence": [
+            "exact puzzle full_name AS Roma",
+            "world_cup_players club Roma (label) 22/36"
+          ]
+        },
+        {
+          "stored": "Roma",
+          "names": 4,
+          "evidence": [
+            "exact label"
+          ]
+        }
+      ],
+      "names": 226
+    },
+    "Played for Saint-Étienne": {
+      "key": "saint etienne",
+      "slots": 14,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "AS Saint-Étienne",
+          "names": 169,
+          "evidence": [
+            "exact puzzle full_name AS Saint-Étienne",
+            "world_cup_players club Saint-Étienne (label) 8/9"
+          ]
+        }
+      ],
+      "names": 169
+    },
+    "Played for Sampdoria": {
+      "key": "sampdoria",
+      "slots": 13,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Sampdoria",
+          "names": 2,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "UC Sampdoria",
+          "names": 190,
+          "evidence": [
+            "exact puzzle full_name UC Sampdoria",
+            "world_cup_players club Sampdoria (label) 11/14"
+          ]
+        }
+      ],
+      "names": 191
+    },
+    "Played for Schalke": {
+      "key": "schalke",
+      "slots": 19,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "FC Schalke 04",
+          "names": 175,
+          "evidence": [
+            "exact puzzle full_name FC Schalke 04"
+          ]
+        }
+      ],
+      "names": 175
+    },
+    "Played for Sevilla": {
+      "key": "sevilla",
+      "slots": 26,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Sevilla",
+          "names": 2,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "Sevilla FC",
+          "names": 203,
+          "evidence": [
+            "exact puzzle full_name Sevilla FC",
+            "world_cup_players club Sevilla (label) 25/39"
+          ]
+        }
+      ],
+      "names": 205
+    },
+    "Played for Shakhtar Donetsk": {
+      "key": "shakhtar donetsk",
+      "slots": 15,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Shakhtar Donetsk",
+          "names": 117,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Shakhtar Donetsk",
+            "world_cup_players club Shakhtar Donetsk (label) 10/16",
+            "world_cup_players club Shakhtar Donetsk (puzzle full_name Shakhtar Donetsk) 10/16"
+          ]
+        }
+      ],
+      "names": 117
+    },
+    "Played for Southampton": {
+      "key": "southampton",
+      "slots": 14,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Southampton FC",
+          "names": 170,
+          "evidence": [
+            "world_cup_players club Southampton (label) 12/15"
+          ]
+        }
+      ],
+      "names": 170
+    },
+    "Played for Sporting CP": {
+      "key": "sporting cp",
+      "slots": 18,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Sporting CP",
+          "names": 230,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Sporting CP",
+            "world_cup_players club Sporting CP (label) 21/31",
+            "world_cup_players club Sporting CP (puzzle full_name Sporting CP) 21/31"
+          ]
+        }
+      ],
+      "names": 230
+    },
+    "Played for Stuttgart": {
+      "key": "stuttgart",
+      "slots": 17,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "VfB Stuttgart",
+          "names": 178,
+          "evidence": [
+            "exact puzzle full_name VfB Stuttgart",
+            "world_cup_players club VfB Stuttgart (puzzle full_name VfB Stuttgart) 27/36"
+          ]
+        }
+      ],
+      "names": 178
+    },
+    "Played for Sunderland": {
+      "key": "sunderland",
+      "slots": 11,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Sunderland AFC",
+          "names": 187,
+          "evidence": [
+            "exact puzzle full_name Sunderland AFC",
+            "world_cup_players club Sunderland (label) 13/24"
+          ]
+        }
+      ],
+      "names": 187
+    },
+    "Played for São Paulo": {
+      "key": "sao paulo",
+      "slots": 20,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "São Paulo FC",
+          "names": 1,
+          "evidence": [
+            "exact puzzle full_name São Paulo FC"
+          ]
+        },
+        {
+          "stored": "São Paulo Futebol Clube",
+          "names": 166,
+          "evidence": [
+            "world_cup_players club São Paulo (label) 5/7"
+          ]
+        }
+      ],
+      "names": 167
+    },
+    "Played for Torino": {
+      "key": "torino",
+      "slots": 15,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Torino",
+          "names": 3,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "Torino FC",
+          "names": 182,
+          "evidence": [
+            "exact puzzle full_name Torino FC",
+            "world_cup_players club Torino (label) 13/20"
+          ]
+        }
+      ],
+      "names": 185
+    },
+    "Played for Tottenham": {
+      "key": "tottenham",
+      "slots": 22,
+      "fallback": true,
+      "strings": [
+        {
+          "stored": "Tottenham Hotspur",
+          "names": 183,
+          "evidence": [
+            "exact puzzle full_name Tottenham Hotspur",
+            "world_cup_players club Tottenham Hotspur (puzzle full_name Tottenham Hotspur) 37/54"
+          ]
+        }
+      ],
+      "names": 183
+    },
+    "Played for Tottenham Hotspur": {
+      "key": "tottenham hotspur",
+      "slots": 10,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Tottenham Hotspur",
+          "names": 183,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Tottenham Hotspur",
+            "world_cup_players club Tottenham Hotspur (label) 37/54",
+            "world_cup_players club Tottenham Hotspur (puzzle full_name Tottenham Hotspur) 37/54"
+          ]
+        }
+      ],
+      "names": 183
+    },
+    "Played for Trabzonspor": {
+      "key": "trabzonspor",
+      "slots": 18,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Trabzonspor",
+          "names": 196,
+          "evidence": [
+            "exact label",
+            "exact puzzle full_name Trabzonspor",
+            "world_cup_players club Trabzonspor (label) 7/11",
+            "world_cup_players club Trabzonspor (puzzle full_name Trabzonspor) 7/11"
+          ]
+        }
+      ],
+      "names": 196
+    },
+    "Played for Udinese": {
+      "key": "udinese",
+      "slots": 19,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Udinese",
+          "names": 1,
+          "evidence": [
+            "exact label"
+          ]
+        },
+        {
+          "stored": "Udinese Calcio",
+          "names": 173,
+          "evidence": [
+            "exact puzzle full_name Udinese Calcio",
+            "world_cup_players club Udinese (label) 11/14"
+          ]
+        }
+      ],
+      "names": 174
+    },
+    "Played for Valencia": {
+      "key": "valencia",
+      "slots": 21,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Valencia CF",
+          "names": 190,
+          "evidence": [
+            "exact puzzle full_name Valencia CF",
+            "world_cup_players club Valencia (label) 21/31"
+          ]
+        }
+      ],
+      "names": 190
+    },
+    "Played for Villarreal": {
+      "key": "villarreal",
+      "slots": 19,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Villarreal CF",
+          "names": 194,
+          "evidence": [
+            "exact puzzle full_name Villarreal CF",
+            "world_cup_players club Villarreal (label) 24/32"
+          ]
+        }
+      ],
+      "names": 194
+    },
+    "Played for Werder Bremen": {
+      "key": "werder bremen",
+      "slots": 19,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "SV Werder Bremen",
+          "names": 163,
+          "evidence": [
+            "exact puzzle full_name SV Werder Bremen",
+            "world_cup_players club Werder Bremen (label) 18/23"
+          ]
+        }
+      ],
+      "names": 163
+    },
+    "Played for West Ham": {
+      "key": "west ham",
+      "slots": 19,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "West Ham United",
+          "names": 190,
+          "evidence": [
+            "exact puzzle full_name West Ham United",
+            "world_cup_players club West Ham United (puzzle full_name West Ham United) 12/21"
+          ]
+        }
+      ],
+      "names": 190
+    },
+    "Played for Wolfsburg": {
+      "key": "wolfsburg",
+      "slots": 17,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "VfL Wolfsburg",
+          "names": 196,
+          "evidence": [
+            "exact puzzle full_name VfL Wolfsburg",
+            "world_cup_players club VfL Wolfsburg (puzzle full_name VfL Wolfsburg) 23/33"
+          ]
+        }
+      ],
+      "names": 196
+    },
+    "Played for Zenit St. Petersburg": {
+      "key": "zenit st petersburg",
+      "slots": 15,
+      "fallback": false,
+      "strings": [
+        {
+          "stored": "Zenit St. Petersburg",
+          "names": 129,
+          "evidence": [
+            "exact label"
+          ]
+        }
+      ],
+      "names": 129
+    }
+  },
+  "compounds": {
+    "Played for Boca Juniors or River Plate": {
+      "key": "boca juniors or river plate",
+      "slots": 1,
+      "mode": "either",
+      "parts": [
+        {
+          "part": "Boca Juniors",
+          "names": 157,
+          "strings": [
+            {
+              "stored": "CA Boca Juniors",
+              "names": 157,
+              "evidence": [
+                "world_cup_players club Boca Juniors (label) 9/13",
+                "world_cup_players club Boca Juniors (puzzle full_name Boca Juniors) 9/13"
+              ]
+            }
+          ]
+        },
+        {
+          "part": "River Plate",
+          "names": 149,
+          "strings": [
+            {
+              "stored": "CA River Plate",
+              "names": 149,
+              "evidence": [
+                "world_cup_players club River Plate (label) 6/12",
+                "world_cup_players club River Plate (puzzle full_name River Plate) 6/12"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Played for both Manchester United and Manchester City": {
+      "key": "both manchester united and manchester city",
+      "slots": 1,
+      "mode": "both",
+      "parts": [
+        {
+          "part": "Manchester United",
+          "names": 158,
+          "strings": [
+            {
+              "stored": "Manchester United",
+              "names": 158,
+              "evidence": [
+                "exact label",
+                "exact puzzle full_name Manchester United",
+                "world_cup_players club Manchester United (label) 44/64",
+                "world_cup_players club Manchester United (puzzle full_name Manchester United) 44/64"
+              ]
+            }
+          ]
+        },
+        {
+          "part": "Manchester City",
+          "names": 171,
+          "strings": [
+            {
+              "stored": "Manchester City",
+              "names": 171,
+              "evidence": [
+                "exact label",
+                "exact puzzle full_name Manchester City",
+                "world_cup_players club Manchester City (label) 49/83",
+                "world_cup_players club Manchester City (puzzle full_name Manchester City) 49/83"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "Played for both Real Madrid and Atletico Madrid": {
+      "key": "both real madrid and atletico madrid",
+      "slots": 1,
+      "mode": "both",
+      "parts": [
+        {
+          "part": "Real Madrid",
+          "names": 168,
+          "strings": [
+            {
+              "stored": "Real Madrid",
+              "names": 168,
+              "evidence": [
+                "exact label",
+                "exact puzzle full_name Real Madrid",
+                "world_cup_players club Real Madrid (label) 46/60",
+                "world_cup_players club Real Madrid (puzzle full_name Real Madrid) 46/60"
+              ]
+            }
+          ]
+        },
+        {
+          "part": "Atletico Madrid",
+          "names": 180,
+          "strings": [
+            {
+              "stored": "Atlético Madrid",
+              "names": 1,
+              "evidence": [
+                "exact label"
+              ]
+            },
+            {
+              "stored": "Atlético de Madrid",
+              "names": 180,
+              "evidence": [
+                "exact puzzle full_name Atlético de Madrid",
+                "world_cup_players club Atlético Madrid (label) 35/52"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "nations": {
+    "Algerian": {
+      "key": "algerian",
+      "country": "algeria",
+      "slots": 1,
+      "stints": "Algeria",
+      "via": "fold",
+      "names": 172,
+      "wc": [
+        "Algeria"
+      ]
+    },
+    "American": {
+      "key": "american",
+      "country": "united states",
+      "slots": 2,
+      "stints": "United States",
+      "via": "fold",
+      "names": 349,
+      "wc": [
+        "United States"
+      ]
+    },
+    "Argentine": {
+      "key": "argentine",
+      "country": "argentina",
+      "slots": 73,
+      "stints": "Argentina",
+      "via": "fold",
+      "names": 1567,
+      "wc": [
+        "Argentina"
+      ]
+    },
+    "Belgian": {
+      "key": "belgian",
+      "country": "belgium",
+      "slots": 15,
+      "stints": "Belgium",
+      "via": "fold",
+      "names": 568,
+      "wc": [
+        "Belgium"
+      ]
+    },
+    "Brazilian": {
+      "key": "brazilian",
+      "country": "brazil",
+      "slots": 112,
+      "stints": "Brazil",
+      "via": "fold",
+      "names": 1702,
+      "wc": [
+        "Brazil"
+      ]
+    },
+    "Cameroonian": {
+      "key": "cameroonian",
+      "country": "cameroon",
+      "slots": 1,
+      "stints": "Cameroon",
+      "via": "fold",
+      "names": 186,
+      "wc": [
+        "Cameroon"
+      ]
+    },
+    "Chilean": {
+      "key": "chilean",
+      "country": "chile",
+      "slots": 1,
+      "stints": "Chile",
+      "via": "fold",
+      "names": 178,
+      "wc": [
+        "Chile"
+      ]
+    },
+    "Colombian": {
+      "key": "colombian",
+      "country": "colombia",
+      "slots": 3,
+      "stints": "Colombia",
+      "via": "fold",
+      "names": 401,
+      "wc": [
+        "Colombia"
+      ]
+    },
+    "Croatian": {
+      "key": "croatian",
+      "country": "croatia",
+      "slots": 7,
+      "stints": "Croatia",
+      "via": "fold",
+      "names": 407,
+      "wc": [
+        "Croatia"
+      ]
+    },
+    "Czech": {
+      "key": "czech",
+      "country": "czech republic",
+      "slots": 2,
+      "stints": "Czech Republic",
+      "via": "fold",
+      "names": 447,
+      "wc": [
+        "Czech Republic"
+      ]
+    },
+    "Danish": {
+      "key": "danish",
+      "country": "denmark",
+      "slots": 9,
+      "stints": "Denmark",
+      "via": "fold",
+      "names": 389,
+      "wc": [
+        "Denmark"
+      ]
+    },
+    "Dutch": {
+      "key": "dutch",
+      "country": "netherlands",
+      "slots": 30,
+      "stints": "Netherlands",
+      "via": "fold",
+      "names": 672,
+      "wc": [
+        "Netherlands"
+      ]
+    },
+    "Egyptian": {
+      "key": "egyptian",
+      "country": "egypt",
+      "slots": 1,
+      "stints": "Egypt",
+      "via": "fold",
+      "names": 84,
+      "wc": [
+        "Egypt"
+      ]
+    },
+    "English": {
+      "key": "english",
+      "country": "england",
+      "slots": 18,
+      "stints": "England",
+      "via": "fold",
+      "names": 1175,
+      "wc": [
+        "England"
+      ]
+    },
+    "French": {
+      "key": "french",
+      "country": "france",
+      "slots": 66,
+      "stints": "France",
+      "via": "fold",
+      "names": 1266,
+      "wc": [
+        "France"
+      ]
+    },
+    "German": {
+      "key": "german",
+      "country": "germany",
+      "slots": 21,
+      "stints": "Germany",
+      "via": "fold",
+      "names": 1323,
+      "wc": [
+        "Germany"
+      ]
+    },
+    "Greek": {
+      "key": "greek",
+      "country": "greece",
+      "slots": 1,
+      "stints": "Greece",
+      "via": "fold",
+      "names": 372,
+      "wc": [
+        "Greece"
+      ]
+    },
+    "Irish": {
+      "key": "irish",
+      "country": "ireland",
+      "slots": 1,
+      "stints": "Ireland",
+      "via": "fold",
+      "names": 196,
+      "wc": [
+        "Republic of Ireland"
+      ]
+    },
+    "Italian": {
+      "key": "italian",
+      "country": "italy",
+      "slots": 19,
+      "stints": "Italy",
+      "via": "fold",
+      "names": 1571,
+      "wc": [
+        "Italy"
+      ]
+    },
+    "Ivorian": {
+      "key": "ivorian",
+      "country": "ivory coast",
+      "slots": 2,
+      "stints": "Cote d'Ivoire",
+      "via": "world_cup_players Ivory Coast 64/65",
+      "names": 221,
+      "wc": [
+        "Ivory Coast"
+      ]
+    },
+    "Japanese": {
+      "key": "japanese",
+      "country": "japan",
+      "slots": 2,
+      "stints": "Japan",
+      "via": "fold",
+      "names": 516,
+      "wc": [
+        "Japan"
+      ]
+    },
+    "Mexican": {
+      "key": "mexican",
+      "country": "mexico",
+      "slots": 4,
+      "stints": "Mexico",
+      "via": "fold",
+      "names": 524,
+      "wc": [
+        "Mexico"
+      ]
+    },
+    "Moroccan": {
+      "key": "moroccan",
+      "country": "morocco",
+      "slots": 1,
+      "stints": "Morocco",
+      "via": "fold",
+      "names": 281,
+      "wc": [
+        "Morocco"
+      ]
+    },
+    "Nigerian": {
+      "key": "nigerian",
+      "country": "nigeria",
+      "slots": 2,
+      "stints": "Nigeria",
+      "via": "fold",
+      "names": 248,
+      "wc": [
+        "Nigeria"
+      ]
+    },
+    "Norwegian": {
+      "key": "norwegian",
+      "country": "norway",
+      "slots": 1,
+      "stints": "Norway",
+      "via": "fold",
+      "names": 298,
+      "wc": [
+        "Norway"
+      ]
+    },
+    "Polish": {
+      "key": "polish",
+      "country": "poland",
+      "slots": 4,
+      "stints": "Poland",
+      "via": "fold",
+      "names": 516,
+      "wc": [
+        "Poland"
+      ]
+    },
+    "Portuguese": {
+      "key": "portuguese",
+      "country": "portugal",
+      "slots": 21,
+      "stints": "Portugal",
+      "via": "fold",
+      "names": 634,
+      "wc": [
+        "Portugal"
+      ]
+    },
+    "Scottish": {
+      "key": "scottish",
+      "country": "scotland",
+      "slots": 1,
+      "stints": "Scotland",
+      "via": "fold",
+      "names": 337,
+      "wc": [
+        "Scotland"
+      ]
+    },
+    "Senegalese": {
+      "key": "senegalese",
+      "country": "senegal",
+      "slots": 2,
+      "stints": "Senegal",
+      "via": "fold",
+      "names": 224,
+      "wc": [
+        "Senegal"
+      ]
+    },
+    "Serbian": {
+      "key": "serbian",
+      "country": "serbia",
+      "slots": 3,
+      "stints": "Serbia",
+      "via": "fold",
+      "names": 468,
+      "wc": [
+        "FR Yugoslavia",
+        "Serbia",
+        "Serbia and Montenegro"
+      ]
+    },
+    "South Korean": {
+      "key": "south korean",
+      "country": "south korea",
+      "slots": 1,
+      "stints": "Korea, South",
+      "via": "token set",
+      "names": 175,
+      "wc": [
+        "South Korea"
+      ]
+    },
+    "Spanish": {
+      "key": "spanish",
+      "country": "spain",
+      "slots": 31,
+      "stints": "Spain",
+      "via": "fold",
+      "names": 1542,
+      "wc": [
+        "Spain"
+      ]
+    },
+    "Swedish": {
+      "key": "swedish",
+      "country": "sweden",
+      "slots": 1,
+      "stints": "Sweden",
+      "via": "fold",
+      "names": 411,
+      "wc": [
+        "Sweden"
+      ]
+    },
+    "Swiss": {
+      "key": "swiss",
+      "country": "switzerland",
+      "slots": 1,
+      "stints": "Switzerland",
+      "via": "fold",
+      "names": 362,
+      "wc": [
+        "Switzerland"
+      ]
+    },
+    "Tunisian": {
+      "key": "tunisian",
+      "country": "tunisia",
+      "slots": 1,
+      "stints": "Tunisia",
+      "via": "fold",
+      "names": 141,
+      "wc": [
+        "Tunisia"
+      ]
+    },
+    "Uruguayan": {
+      "key": "uruguayan",
+      "country": "uruguay",
+      "slots": 8,
+      "stints": "Uruguay",
+      "via": "fold",
+      "names": 444,
+      "wc": [
+        "Uruguay"
+      ]
+    },
+    "Welsh": {
+      "key": "welsh",
+      "country": "wales",
+      "slots": 2,
+      "stints": "Wales",
+      "via": "fold",
+      "names": 103,
+      "wc": [
+        "Wales"
+      ]
+    }
+  },
+  "unresolved": [
+    {
+      "label": "Played for England at a World Cup",
+      "slots": 1,
+      "reason": "\"England at a World Cup\" matches no stored club string and no world_cup_players spelling at threshold"
+    },
+    {
+      "label": "Played for Santos",
+      "slots": 16,
+      "reason": "\"Santos\" names 2 club puzzle rows: Santos FC, Santos Laguna"
+    },
+    {
+      "label": "Played for both AC Milan and Inter",
+      "slots": 1,
+      "reason": "\"Inter\" names 2 club puzzle rows: Inter Milan, Sport Club Internacional"
+    }
+  ],
+  "lowCoverage": [
+    {
+      "label": "Played for Grêmio",
+      "names": 1,
+      "strings": [
+        "Grêmio"
+      ]
+    }
+  ],
+  "smallStrings": [
+    {
+      "stored": "Ajax",
+      "labels": [
+        "Played for Ajax"
+      ],
+      "names": [
+        "Luis Suarez"
+      ]
+    },
+    {
+      "stored": "Atalanta",
+      "labels": [
+        "Played for Atalanta"
+      ],
+      "names": [
+        "Lorenzo Peli"
+      ]
+    },
+    {
+      "stored": "Atlético Madrid",
+      "labels": [
+        "Played for Atletico Madrid",
+        "Played for Atlético Madrid",
+        "Played for both Real Madrid and Atletico Madrid"
+      ],
+      "names": [
+        "Luis Suarez"
+      ]
+    },
+    {
+      "stored": "Barcelona",
+      "labels": [
+        "Played for Barcelona"
+      ],
+      "names": [
+        "Luis Suarez"
+      ]
+    },
+    {
+      "stored": "Bologna",
+      "labels": [
+        "Played for Bologna"
+      ],
+      "names": [
+        "Leonardo Stanzani"
+      ]
+    },
+    {
+      "stored": "Genoa",
+      "labels": [
+        "Played for Genoa"
+      ],
+      "names": [
+        "Michael Ventre",
+        "Tiberio Velocci",
+        "Óscar Torres"
+      ]
+    },
+    {
+      "stored": "Grêmio",
+      "labels": [
+        "Played for Grêmio"
+      ],
+      "names": [
+        "Luis Suarez"
+      ]
+    },
+    {
+      "stored": "Inter Miami",
+      "labels": [
+        "Played for Inter Miami"
+      ],
+      "names": [
+        "Luis Suarez"
+      ]
+    },
+    {
+      "stored": "Lazio",
+      "labels": [
+        "Played for Lazio"
+      ],
+      "names": [
+        "Adrian Przyborek",
+        "Sani Emmanuel"
+      ]
+    },
+    {
+      "stored": "Liverpool",
+      "labels": [
+        "Played for Liverpool"
+      ],
+      "names": [
+        "Luis Suarez"
+      ]
+    },
+    {
+      "stored": "Napoli",
+      "labels": [
+        "Played for Napoli"
+      ],
+      "names": [
+        "Ciro Palmieri",
+        "Lorenzo Sgarbi",
+        "Umberto Varriale"
+      ]
+    },
+    {
+      "stored": "Parma",
+      "labels": [
+        "Played for Parma"
+      ],
+      "names": [
+        "Matías Mir"
+      ]
+    },
+    {
+      "stored": "Roma",
+      "labels": [
+        "Played for Roma"
+      ],
+      "names": [
+        "Daniele Sciarra",
+        "Gianluca Caprari",
+        "Ludovico D'Orazio",
+        "Simone Bezziccheri"
+      ]
+    },
+    {
+      "stored": "SE Palmeiras",
+      "labels": [
+        "Played for Palmeiras"
+      ],
+      "names": [
+        "Luís Guilherme"
+      ]
+    },
+    {
+      "stored": "Sampdoria",
+      "labels": [
+        "Played for Sampdoria"
+      ],
+      "names": [
+        "Luca Scarlino",
+        "Ognjen Stijepovic"
+      ]
+    },
+    {
+      "stored": "Sevilla",
+      "labels": [
+        "Played for Sevilla"
+      ],
+      "names": [
+        "Borja Lasso",
+        "Ivi López"
+      ]
+    },
+    {
+      "stored": "São Paulo FC",
+      "labels": [
+        "Played for São Paulo"
+      ],
+      "names": [
+        "Rodriguinho"
+      ]
+    },
+    {
+      "stored": "Torino",
+      "labels": [
+        "Played for Torino"
+      ],
+      "names": [
+        "Filippo Iacovoni",
+        "Mattia De Rigo",
+        "Nicola Rauti"
+      ]
+    },
+    {
+      "stored": "Udinese",
+      "labels": [
+        "Played for Udinese"
+      ],
+      "names": [
+        "Petar Micin"
+      ]
+    }
+  ]
+}
