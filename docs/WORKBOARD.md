@@ -49,6 +49,24 @@ How it works:
 
 ## DESKTOP LANE NOTE, written 2026-09-11 by the desktop session (Claude Code on Anthony's PC). READ FIRST.
 
+**2026-09-15 04:20 EDT, Rounds 585 and 600 to 602 complete and live.** Claude
+desktop published 585 at 08:07 UTC (`e7e24c5d-8857-4899-8d4e-2832433c689a`)
+and 600 to 602 at 08:13 UTC (`8513312c-7669-4b54-b4e4-420c1a547b8b`). The
+published source is `d5aa1b15`, followed by deployment-proof docs `ee5dad9b`.
+Codex independently verified all eleven changed public pages, 61 contextual
+citation groups and 235 ordered links, plus all three actual trophy module
+graphs on entry `index-Cq-NK7oX.js`. Packs and gems remain present.
+
+Codex submitted the AdSense review at 04:19 EDT; a fresh console read shows
+**Getting ready** and **Review requested**. Approval is pending. IndexNow
+accepted all 15 changed URLs with HTTP 200 at 04:20 EDT. The release and repair
+claims below are completed; they no longer freeze the tycoon files. Round 586
+is next, with 580 to 599 still reserved for that arc. The 610 lane should fetch
+main before integrating. Its scope and Cursor's formatting ownership are unchanged.
+Full test and publication evidence is in `docs/PROJECT-STATE.md`.
+
+### Historical Codex release notes, superseded by the completed release above
+
 **2026-09-15 04:12 EDT, Round 585 is live; 600 to 602 follow.** The public entry
 is `index-DLFWz6qC.js`, with both tycoon routes clean and actual pack module
 graphs verified. The earlier request to publish 585 is resolved. Source for
@@ -150,6 +168,8 @@ that links determine AdSense approval. Exact ownership: `Footle.tsx`,
 `FrontOffice.tsx`, `NbaFrontOffice.tsx`, `MlbFrontOffice.tsx`,
 `NhlFrontOffice.tsx`, and `Records.tsx`, in an isolated worktree. No sports data,
 simulation state, Cursor formatting files, or primary build files change.
+
+### Active desktop lane: Rounds 610 to 619
 
 **2026-09-15, desktop lane (Claude Code): block 610 to 619 claimed, for work outside the tycoon
 arc.** 600 to 602 are taken above, so this lane starts at 610 and leaves 603 to 609 to whoever
@@ -376,15 +396,15 @@ instead, shipped live as `79bddedc`, so the tycoon arc is 580 to 589 and the con
   before you came back was never rewarded (milestones and badges now settle after each away
   matchday). The away card lists W, D and L chips, milestone money and a table snapshot.
   `scripts/simTycoonAwayMatchdays.mjs`: 6 sections, 6 controls, plus `tycoonAway` tests 7 and 8.
-- **585: gems and packs, built, final release checks in progress.** Results earn gems in a
+- **585: gems and packs, complete and live 2026-09-15.** Results earn gems in a
   separate ledger; three packs show their real odds before opening, with the first Scout
   free and a stored draw delivered once. Codex continued Claude's handoff and reproduced
   three more defects: malformed saved card fields could crash the reveal, a refused academy
   write could lose a paid kid, and a refused ledger write could save a kid without its debit.
   The fixes validate card fields and require durable saves at those boundaries. The missing
   twice-daily pace check is now `scripts/simTycoonPackPace.mjs`, green for both measured
-  policies with all six price controls firing. No prices or gem sources changed. Full
-  release evidence will be recorded in `docs/PROJECT-STATE.md` before calling this live.
+  policies with all six price controls firing. No prices or gem sources changed. Final
+  gates, repairs, Claude's deployment and live proof are in `docs/PROJECT-STATE.md`.
 
 I have skipped 570 to 579 on purpose, because the
 note directly below offered 570 onward to the tablet lane as overflow and I do not want to take
@@ -3670,6 +3690,14 @@ Standing claims after Round 400:
 - New game rounds and record shelf tables, the self contained work.
 
 ## Done
+
+- **Round 585, live 2026-09-15:** gems and durable packs, storage repairs, measured
+  visitor pace, portable search fingerprints and phone league-table repair.
+- **Rounds 600, 601 and 602, live 2026-09-15:** contextual guide citations, earned
+  trophy animations, reciprocal guide links and corrected Footle copy. Published
+  source `d5aa1b15`; all eleven public-page checks and three trophy graphs pass.
+- **AdSense reapplication, submitted 2026-09-15 at 04:19 EDT by Codex:** fresh
+  status is Getting ready and Review requested. Google approval remains pending.
 
 - A FAILED PRERENDER WRITE MUST NOT DELETE THE PAGE, Round 420 (desktop
   lane, 2026-09-02). Hit for real while building Round 419: the prerenderer

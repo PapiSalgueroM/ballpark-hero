@@ -1,12 +1,39 @@
 # AdSense re-application readiness
 
-**Release check, 2026-09-15:** Rounds 600 and 602 now include verified generated
-pages. All five existing format-history harnesses pass; offline inspection of
-all eleven changed guide/navigation pages confirms 61 contextual citation
-groups, 235 ordered source links, the new guide links and the corrected Footle
-subtitle. The combined build and affected browser checks are green, and its
-artifact matches its recorded inputs and outputs. Publishing and the same
-checks against the public site are next. No new review request has been sent.
+## Current status: review requested September 15, 2026
+
+**AdSense accepted the new request at 4:19 AM EDT.** After confirming the
+improvements were live, Codex checked the fixed-issues box and selected Request
+review. The site detail page changed from Needs attention to **Getting ready**
+and displayed **Review requested**. Google has not approved the site yet. This
+status supersedes the historical rejection and waiting recommendations below.
+
+Rounds 585 and 600 to 602 are live from source `d5aa1b15`, with public entry
+`index-Cq-NK7oX.js`. Claude's desktop lane published them; Codex independently
+verified all eleven affected guide/navigation pages and the actual animation
+module graphs at 4:18 AM EDT. The five guides contain 61 contextual citation
+groups and 235 ordered source links. The four US manager pages and Record Books
+link to the guides, and Footle describes its game rules without the broad
+tracking claim. Trophy animations are present in Soccer Career, Club Manager
+and Stadium Tycoon, with pack and gem code still present on the tycoon route.
+
+The combined build, affected browser checks, all five format-history harnesses
+and exact saved-page inspections passed before release. The artifact was
+verified against its recorded inputs and outputs. Live evidence is recorded in
+`docs/PROJECT-STATE.md`; the console action is in
+[the direct console record](console-check-2026-09-15.md).
+
+All five Google URL Inspection live tests passed earlier in this session, and
+Google accepted one indexing request per guide. Those requests were not
+repeated. The sitemap reports Success and 148 discovered pages. IndexNow also
+accepted the 15 changed routes with HTTP 200 at 4:20 AM EDT after live checks.
+Neither crawl-request acceptance nor these site improvements guarantee approval.
+
+Next: let Google process the submitted review and inspect its actual decision.
+Do not submit again while Review requested is shown. No particular wait length,
+word count or number of indexed pages is a published approval guarantee.
+
+## Historical investigation before this request
 
 **Status update, 2026-09-15: the owner confirms another rejection.** Anthony
 supplied a new screenshot and confirmed this is a new rejection since the last
@@ -23,7 +50,7 @@ for this domain is Published. See [the direct console check](console-check-2026-
 No settings or review status were changed during that check.
 
 The live site already has readable saved pages, guides, About and Privacy content.
-Round 600 is claimed to place the existing verified source links beside the format
+Round 600 was claimed to place the existing verified source links beside the format
 periods and exceptions they support in the five explainers. This improves
 verifiability for readers; it does not establish the cause of rejection or promise
 approval. Fresh Search Console inspection is now complete: all five guides show
@@ -41,7 +68,7 @@ evidence is a recorded crawl after these requests and the next publish. Indexing
 is not a guarantee or a published AdSense approval prerequisite. No new AdSense
 review request has been sent from this session.
 
-Rounds 600 and 602 are now built and reviewed in the combined release branch:
+Before publication, Rounds 600 and 602 were built and reviewed in the combined release branch:
 61 source groups make the five guides' existing evidence easier to follow;
 the four US manager games and Record Books link back to those guides; Footle's
 subtitle describes its actual rules without the broad tracking claim. Publishing

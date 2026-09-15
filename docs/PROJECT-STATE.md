@@ -13,7 +13,8 @@ NHL format explainers, 61 in all; Round 602's Footle page no longer says "No
 tracking" and carries the new subtitle, and all four front offices plus Record Books
 link to their format guides. Round 585's `data-packs-panel` (`AcademyPanel-hjRYScUH.js`)
 and `data-gem-chip` (`StadiumTycoon-CGOFXP-b.js`) are still in the loaded graph. No
-AdSense review was requested.
+AdSense review had been requested at that publication check; Codex submitted it
+at 04:19 EDT below.
 
 The reviewed source and verified saved pages are integrated after Round 585.
 Round 600 adds 61 contextual source groups with 235 mapped links to the five
@@ -32,11 +33,24 @@ Five additional format-history harnesses and offline inspection of all eleven
 affected guide/navigation snapshots pass, including every ordered contextual
 source link. No temporary CI workflow is included in this release.
 
-Publish and final live checks are pending for these three rounds. An AdSense
-review has not been requested. The original league-table and fingerprint
-failures, their fixes and the earlier full test evidence are recorded below.
+Codex independently confirmed all eleven public guide/navigation pages at
+08:18 UTC: HTTP 200, self-canonicals, no noindex, saved content, all 61 contextual
+source groups and 235 ordered links, and the Round 602 copy and guide links. At
+08:18:24 UTC, the actual module graphs of `SoccerCareer-DxRUr1o8.js`,
+`ClubManager-emkztMsL.js` and `StadiumTycoon-CGOFXP-b.js` all include VictoryMoment.
+The Stadium Tycoon graph still includes packs and gems. The live entry is
+`index-Cq-NK7oX.js`.
 
-## LIVE 2026-09-15: Round 585, source commit `5cee2838`
+Codex submitted the authorized AdSense review at 04:19 EDT on September 15. A
+fresh console read confirmed **Getting ready** and **Review requested**. Google
+has not decided approval. IndexNow accepted all 15 changed URLs with HTTP 200
+at 04:20 EDT; this is receipt of the notification, not proof of indexing.
+
+Rounds 585 and 600 to 602 are complete and live. Round 586 is the next tycoon
+engine round. The earlier release notes below are historical; their pending
+statuses are superseded by this entry.
+
+## Historical release record, 2026-09-15: Round 585, source commit `5cee2838`
 
 Round 585 is live, observed at 08:10 UTC on September 15. The public entry is
 `index-DLFWz6qC.js`. Both tycoon pages pass the live HTTP audit. The actual loaded
@@ -75,16 +89,18 @@ pack storage, pacing and reduced-motion results remain recorded below.
 Rounds 600, 601 and 602 are also built and their combined repair run
 [34944031029](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34944031029)
 is green at `3589b305`. Their artifact matches 1,869 inputs and 663 outputs.
-The final offline guide checks are underway. They remain on the release branch.
+At this earlier checkpoint, offline guide checks and release integration were
+pending. Both are complete, with publication and live proof recorded above.
 
 Publishing access: Lovable's dashboard, settings and domain panels work in
 Codex, but opening this project's editor stalls or closes the browser target.
 The built-preview alternative failed too; Live preview was restored to its
-original ON state and the temporary diagnostic tabs were closed. No publish
-button or new AdSense review was submitted by Codex. The live result above
-supersedes earlier pending-publish notes. The handoff is on WORKBOARD.
+original ON state and the temporary diagnostic tabs were closed. Codex made no
+publish call; Claude desktop published both releases as recorded above. No
+AdSense review had been requested at this earlier checkpoint; Codex submitted
+it at 04:19 EDT after the final live checks. The handoff is on WORKBOARD.
 
-## Owner update 2026-09-15: new AdSense rejection and parallel work
+## Historical owner update, 2026-09-15: rejection and pre-release parallel work
 
 Anthony confirmed a new rejection since the last review and supplied the AdSense
 screen: site ownership is verified, the site needs attention for **Low value
@@ -126,7 +142,7 @@ The live audit also found a broad "No tracking" claim in Footle and useful
 missing reciprocal links from the four US Front Office pages. Round 602 owns
 those copy and navigation changes, with no simulation or sports-data changes.
 
-## In progress 2026-09-15: Codex continues the Round 585 handoff
+## Historical verification record, 2026-09-15: the Round 585 handoff
 
 Round 585 gems and packs are still local, not published. Codex resumed the owner's
 `docs/HANDOFF-2026-09-15.md` handoff, posted the claim in `docs/WORKBOARD.md`, and is
