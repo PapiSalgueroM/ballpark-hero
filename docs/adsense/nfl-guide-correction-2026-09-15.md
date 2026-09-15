@@ -61,3 +61,10 @@ At 14:37 EDT, the focused source run passed: nine periods covering all 94 season
 The default harness was run against the existing, unrebuilt public snapshot and correctly failed on missing corrected claims. That expected failure proves the source-only option has not disabled the release gate. The additional in-memory `snapshot` mutation must be run after the release lane regenerates the real page; it intentionally refuses the stale baseline. Evidence logs are in the local temporary `dukb-nfl-guide-correction-checks` directory.
 
 Public snapshot regeneration, type/build checks, default snapshot verification and the snapshot mutation belong to the release lane and remain required before publication. No approval or live correction is claimed here.
+
+## Release coordinator update, 15:19 EDT
+
+The source and saved-HTML checks described above are complete locally. Types,
+SEO regeneration, final production build, all five default guide guards, all
+33 effective controls and the 20-case built-page browser sweep passed. Full
+release CI and publication remain pending. See [the exact release record](guide-correction-release-checks-2026-09-15.md).

@@ -72,3 +72,10 @@ Every new mutation requires exactly one changed anchor. Controls follow the exis
 Validation on 2026-09-15: all four source-only healthy harnesses passed, including the real UCL engine comparison. All 13 controls passed their intended-failure checks (eight existing controls and the five above). After the final MLB whitespace change, its field control was rerun and passed. Default runs rejected all four old snapshots at the affected saved cell or answer; the old source-count gates also rejected the missing new NBA and MLB citations. The saved-HTML adapter follows the actual prerenderer, which flattens table cells to consecutive paragraphs, and confines each lookup to its exact season label and column. It reads only the conferences note list and the NHL answer following its exact question.
 
 Full type/build and regenerated snapshot verification remain with the release coordinator. No generated public files have been changed by this task.
+
+## Release coordinator update, 15:19 EDT
+
+The source and saved-HTML checks described above are complete locally. Types,
+SEO regeneration, final production build, all five default guide guards, all
+33 effective controls and the 20-case built-page browser sweep passed. Full
+release CI and publication remain pending. See [the exact release record](guide-correction-release-checks-2026-09-15.md).

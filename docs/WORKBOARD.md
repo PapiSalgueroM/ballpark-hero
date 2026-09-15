@@ -1,5 +1,31 @@
 # Work board
 
+**2026-09-15, factual follow-up integrated into Round 586.** The local
+first-team branch now includes correction `a35693a5`, following `eabde5cd`.
+The last MLB provenance sentence and matching saved page are included. The
+map-guard repair has passed and is committed in the animation branch; source
+integration through 588 is proceeding before fresh full verification. No
+workflow or publication is part of this merge. Correction priority is intact.
+
+**2026-09-15 15:19 EDT, Codex correction release check update.** The five
+guide corrections and three save/Record Books copy fixes are implemented at
+`253790d7`. Phone tables now scroll within keyboard-accessible regions with
+readable columns. Types, six-route SEO regeneration, final build, 21 local
+release fences, all 33 guide controls and 20 real built-page browser cases
+passed. Full suite verification is still running at `506f79ef` in
+[run 35011097191](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35011097191).
+This is not yet a publish-ready handoff. Source evidence is in
+`docs/adsense/guide-correction-release-checks-2026-09-15.md`.
+
+Round 586 now includes the correction at `eabde5cd` and repairs lazy-panel
+awaits plus initial Academy loading. Final Factory download measurement and
+fresh full checks remain. The old 586/603-605/587 runs are failed evidence,
+not approval; the map guard is being narrowed and retested separately.
+Publish order stays correction, 586, 603 to 605, 587, then 588. No later feature
+is started. AdSense's last confirmed state remains Getting ready at 12:37 EDT;
+no review was resubmitted. Lovable publication still needs a working connection
+and independent public checks after main lands.
+
 **2026-09-15, local Round 586 source integration.** Codex merged factual
 correction `253790d7` into `.worktrees/round-586-first-team` at `25533a22`.
 Both the correction and existing first-team behavior are preserved; no
