@@ -63,5 +63,5 @@ create policy "Allow public read" on public.college_grid_players for select to p
 --   select count(*) from public.college_grid_players;
 --   commit;
 --
---    Commit only when the count equals the file's row count (35,709 on
+--    Commit only when the count equals the file's row count (35,611 on
 --    2026-09-15); otherwise roll back. Then run get_advisors.

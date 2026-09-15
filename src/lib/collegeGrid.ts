@@ -22,7 +22,7 @@ import {
  *
  * EXPORTS
  *   COLLEGE_GRID_PLAYER_SOURCE  the PlayerAutocomplete source: the key's display names.
- *   MIN_POOL_SIZE               fewer rows than this means a broken fetch (the key holds 35,709).
+ *   MIN_POOL_SIZE               fewer rows than this means a broken fetch (the key holds 35,611).
  *   fetchCollegeGridData()      pages the whole key once through gridEngine and indexes it; null on failure.
  *   toCollegeEntry(raw)         one table row (or one row of the JSON file read back into
  *                               column keys) to an entry, namesake flags not yet set.
@@ -274,7 +274,7 @@ export function schoolsOnRecord(entry: CollegeGridEntry): string[] {
 // Fetch
 // ---------------------------------------------------------------------------
 
-// The key holds 35,709 rows (2026-09-15); far fewer means a broken fetch.
+// The key holds 35,611 rows (2026-09-15); far fewer means a broken fetch.
 export const MIN_POOL_SIZE = 25000;
 
 const COLLEGE_GRID: FranchiseGridConfig<CollegeGridEntry> = {
