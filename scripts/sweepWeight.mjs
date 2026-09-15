@@ -145,7 +145,7 @@ console.log('3) Every guide is still reachable, one sport at a time');
   const loader = fs.readFileSync(path.join(dir, 'loader.ts'), 'utf-8');
   const mapped = new Map();
   for (const m of loader.matchAll(/^\s*'([^']+)': '([a-zA-Z0-9]+)',$/gm)) mapped.set(m[1], m[2]);
-  const BUNDLES = ['soccer1', 'soccer2', 'football', 'college', 'basketball', 'baseball', 'hockey', 'moreSports', 'world'];
+  const BUNDLES = ['soccer1', 'soccer2', 'football', 'college', 'basketball', 'baseball', 'hockey', 'moreSports', 'world', 'clubManagement', 'stadiumManagement', 'academyManagement'];
   let keys = 0;
   for (const b of BUNDLES) {
     const src = fs.readFileSync(path.join(dir, `${b}.ts`), 'utf-8');

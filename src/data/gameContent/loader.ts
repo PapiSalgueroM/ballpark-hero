@@ -22,7 +22,8 @@ import type { GameContent, GameContentMap } from './types';
  */
 export type ContentBundle =
   | 'soccer1' | 'soccer2' | 'football' | 'college' | 'basketball'
-  | 'baseball' | 'hockey' | 'moreSports' | 'world';
+  | 'baseball' | 'hockey' | 'moreSports' | 'world'
+  | 'clubManagement' | 'stadiumManagement' | 'academyManagement';
 
 /** Which sport file holds each route's guide. */
 export const PATH_BUNDLE: Record<string, ContentBundle> = {
@@ -107,7 +108,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/alphabet-sprint': 'soccer1',
   '/budget-builder': 'soccer1',
   '/career-ladder': 'soccer1',
-  '/club-manager': 'soccer1',
+  '/club-manager': 'clubManagement',
   '/clue-auction': 'soccer1',
   '/dart-draft': 'soccer1',
   '/missing-xi': 'soccer1',
@@ -134,8 +135,8 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/soccer-grid': 'soccer2',
   '/search-and-discard': 'soccer2',
   '/squad-deal': 'soccer2',
-  '/stadium-tycoon': 'soccer2',
-  '/wonderkid-factory': 'soccer2',
+  '/stadium-tycoon': 'stadiumManagement',
+  '/wonderkid-factory': 'academyManagement',
   '/transfer-path': 'soccer2',
   '/world-cup-bracket': 'soccer2',
   /* world */
@@ -161,8 +162,11 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   '/teammates': 'world',
 };
 
-/** One dynamic import per sport file. Rollup splits each into its own chunk. */
+/** Sport guides share chunks; the three management games each load only their own guide. */
 const LOADERS: Record<ContentBundle, () => Promise<Record<string, GameContentMap>>> = {
+  clubManagement: () => import('./clubManagement'),
+  stadiumManagement: () => import('./stadiumManagement'),
+  academyManagement: () => import('./academyManagement'),
   soccer1: () => import('./soccer1'),
   soccer2: () => import('./soccer2'),
   football: () => import('./football'),
@@ -187,7 +191,7 @@ export async function loadGameContent(path: string): Promise<GameContent | null>
     const mod = await LOADERS[bundle]();
     /* Each file exports exactly one record under its own name, so the
        first export IS the map. Reading it positionally keeps this file
-       from having to know nine export names that add nothing. */
+       from having to know each export name. */
     map = Object.values(mod)[0] as GameContentMap;
     cache.set(bundle, map);
   }
