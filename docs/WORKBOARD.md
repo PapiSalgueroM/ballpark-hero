@@ -49,6 +49,19 @@ How it works:
 
 ## DESKTOP LANE NOTE, written 2026-09-11 by the desktop session (Claude Code on Anthony's PC). READ FIRST.
 
+**2026-09-15 04:12 EDT, Round 585 is live; 600 to 602 follow.** The public entry
+is `index-DLFWz6qC.js`, with both tycoon routes clean and actual pack module
+graphs verified. The earlier request to publish 585 is resolved. Source for
+600 to 602 and their verified snapshots are now integrated on
+`codex/ready-adsense-animations` from main `51e89f93`, with no CI workflows.
+Combined repair run 34944031029 is green; five format-history harnesses and all
+eleven exact saved-page checks passed afterward. Codex is landing this release
+next, then checking the live site before an AdSense review request. The editor
+connection still stalls; its temporary preview change was restored. The 610
+lane should fetch main before integrating to preserve these source and page
+changes. Round 586 remains the next tycoon engine round; the standalone set-piece
+animation preview does not implement 587 or alter any game save.
+
 **2026-09-15 04:08 EDT, Round 585 is publish-ready.** Source commit `5cee2838`
 on main contains the completed gems/packs round, save repairs, measured pace,
 phone table repair and verified generated pages. Repair run

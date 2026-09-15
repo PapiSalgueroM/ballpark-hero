@@ -1,9 +1,36 @@
 # Project state
 
-## Publish-ready 2026-09-15: Round 585, source commit `5cee2838`
+## Ready to publish 2026-09-15: Rounds 600, 601 and 602
 
-Round 585 is committed on main with its regenerated saved pages. Publishing is
-pending. The previous live version remains Round 584 until a publish is verified.
+The reviewed source and verified saved pages are integrated after Round 585.
+Round 600 adds 61 contextual source groups with 235 mapped links to the five
+format explainers. Round 602 links the four US manager pages and Record Books
+to those guides and replaces Footle's broad tracking claim with its game rules.
+Round 601 adds earned-trophy animation to Soccer Career, Club Manager and
+Stadium Tycoon, with immediate result text, working Continue controls and
+reduced-motion support. No simulation outcome or reward calculation changed.
+
+The combined full run passed 309 of 310 node harnesses and all 264 Vitest tests;
+the single failure was the repaired cross-platform guide fingerprint. Repair
+run [34944031029](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34944031029)
+is fully green. Its artifact matches 1,869 inputs and 663 outputs. All 1,676
+application build inputs match this release branch before generated-file import.
+Five additional format-history harnesses and offline inspection of all eleven
+affected guide/navigation snapshots pass, including every ordered contextual
+source link. No temporary CI workflow is included in this release.
+
+Publish and final live checks are pending for these three rounds. An AdSense
+review has not been requested. The original league-table and fingerprint
+failures, their fixes and the earlier full test evidence are recorded below.
+
+## LIVE 2026-09-15: Round 585, source commit `5cee2838`
+
+Round 585 is live, observed at 08:10 UTC on September 15. The public entry is
+`index-DLFWz6qC.js`. Both tycoon pages pass the live HTTP audit. The actual loaded
+module graphs contain `data-packs-panel` on both doors, `data-gem-chip` on Stadium
+Tycoon and the repaired league-name wrapping. The main source is `5cee2838`,
+followed by docs-only `51e89f93`. Codex did not click Publish; the live advance
+was independently detected and verified while the browser connection stalled.
 The original full 310-harness run passed 308, and all 264 Vitest tests passed.
 The two failing assertions have been repaired and proved with negative controls:
 confidence has a deliberate floor of one, and guide fingerprints now normalize
@@ -33,7 +60,8 @@ Publishing access: Lovable's dashboard, settings and domain panels work in
 Codex, but opening this project's editor stalls or closes the browser target.
 The built-preview alternative failed too; Live preview was restored to its
 original ON state and the temporary diagnostic tabs were closed. No publish
-or new AdSense review was submitted. The publisher handoff is on WORKBOARD.
+button or new AdSense review was submitted by Codex. The live result above
+supersedes earlier pending-publish notes. The handoff is on WORKBOARD.
 
 ## Owner update 2026-09-15: new AdSense rejection and parallel work
 

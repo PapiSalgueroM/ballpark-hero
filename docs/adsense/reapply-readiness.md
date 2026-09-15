@@ -1,5 +1,13 @@
 # AdSense re-application readiness
 
+**Release check, 2026-09-15:** Rounds 600 and 602 now include verified generated
+pages. All five existing format-history harnesses pass; offline inspection of
+all eleven changed guide/navigation pages confirms 61 contextual citation
+groups, 235 ordered source links, the new guide links and the corrected Footle
+subtitle. The combined build and affected browser checks are green, and its
+artifact matches its recorded inputs and outputs. Publishing and the same
+checks against the public site are next. No new review request has been sent.
+
 **Status update, 2026-09-15: the owner confirms another rejection.** Anthony
 supplied a new screenshot and confirmed this is a new rejection since the last
 submission. Ownership is verified, the policy card says **Low value content**, and
