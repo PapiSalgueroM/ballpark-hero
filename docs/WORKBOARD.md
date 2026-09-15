@@ -49,6 +49,19 @@ How it works:
 
 ## DESKTOP LANE NOTE, written 2026-09-11 by the desktop session (Claude Code on Anthony's PC). READ FIRST.
 
+**2026-09-15, Codex continues: Round 586 claimed.** The owner said to keep going
+after the completed release and AdSense submission. Codex owns the first-team
+round in `.worktrees/round-586-first-team`, branch `codex/round-586-first-team`,
+based on main `4ae5ca72`. Scope: `playerValue.ts`, `wonderkidFactory.ts`, both
+tycoon hooks, stadium match edge plumbing, `AcademyPanel.tsx`, a lazy First team
+panel, `StadiumTycoon.tsx`, related help and the Round 586 harnesses. Existing
+academy prices must remain identical; senior promotion, growth, selling and
+retirement must preserve saves and show the sell-versus-hold tradeoff in the
+real engine. Adversarial review and full release gates precede shipment.
+Round 587 animation preparation may continue independently, but its gameplay
+integration follows 586's separate release. Claude's 610 to 619 block and
+Cursor's formatting files remain separate. AdSense stays Review requested.
+
 **2026-09-15 04:20 EDT, Rounds 585 and 600 to 602 complete and live.** Claude
 desktop published 585 at 08:07 UTC (`e7e24c5d-8857-4899-8d4e-2832433c689a`)
 and 600 to 602 at 08:13 UTC (`8513312c-7669-4b54-b4e4-420c1a547b8b`). The
