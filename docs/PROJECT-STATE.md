@@ -1,5 +1,28 @@
 # Project state
 
+## CURRENT ROUND 588 LOADING REPAIR 2026-09-15
+
+The final local repair separates the unchanged 18-item boot catalog from its
+ordered IDs and loads celebration artwork when needed. Cold academy notices
+keep their text visible for their original lifetime; late styles cannot hide
+or restart them. The standalone pack panel owns its reveal styles. Pending
+trophy artwork keeps the committed result and Continue action visible.
+
+All 11 existing download budgets pass locally with their original limits.
+Wonderkid Factory is only 31 bytes below its rounding boundary, so this is
+not spare capacity. Type checking, production build, gear and creation checks,
+reveal checks, normal and reduced motion, phone layouts, 15 gear controls and
+seven celebration failure controls pass. The pack and room mutation fixtures
+were repaired without changing production saving behavior; their 22 and 11
+controls pass. Evidence is frozen in the local file
+`dukb-588-final-local-evidence.json` (SHA-256
+`0a019271c79eca701e206c909a76a58ba270a5cefc14825eab53cc42d126e0fb`).
+
+The previous full run `35015717663` passed 311 Vitest cases and 316 of 318
+node harnesses, but failed the two repaired fixtures and the original download
+limits. It is not release approval. A fresh full run and accepted artifact are
+required for this repaired source. Nothing in this section is published.
+
 ## CURRENT ROUND 588 SOURCE INTEGRATION 2026-09-15
 
 The boots worktree combines its committed source `c03d2ff0` with clean Round

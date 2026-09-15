@@ -113,6 +113,7 @@ const PAGE_LINES = {
   unseenTimer: 'if (!g.promotion || !visible) return;',
   hookImport: "import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';\n",
   leagueMount: "        <LeagueRoom g={g} visible={room === 'league'} />\n",
+  gearNotice: '        {g.gearSaveBlocked && <p role="alert" data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">Title equipment could not be saved, so no new equipment was added. Your existing pairs are safe. Allow device storage before earning another title.</p>}\n',
 };
 
 /** Each control: the rewrites it plants, and the sections it must turn red and
@@ -127,6 +128,8 @@ const PAGE_CONTROLS = [
       [PAGE_LINES.roomMount, "{room === 'stadium' && <StadiumRoom visible onNeedsYou={setStadiumNeedsYou} />}"],
       /* Round 582: the League room reads the page's hook too, so it goes with it. */
       [PAGE_LINES.leagueMount, ''],
+      /* Round 588: the page-level equipment notice also reads the moved hook. */
+      [PAGE_LINES.gearNotice, ''],
     ],
     red: [2],
     green: [1, 3, 4, 5, 6],
@@ -425,4 +428,4 @@ console.log('simTycoonRooms: green.');
 console.log('   The stadium clock runs the same whether or not the Academy tab was open, to the thousandth of a second.');
 console.log('   The Academy tab and the Wonderkid Factory page leave byte identical academies, and the academy keeps its watched clock under the Stadium tab.');
 console.log('   Today\'s loaders and the frozen V1 libs give the recorded answer for every save in the corpus.');
-console.log('   All ten controls fired exactly where they should.');
+console.log('   All eleven controls fired exactly where they should.');

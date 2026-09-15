@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { HubPanelHeader } from '@/components/hub/HubTiles';
-import { BOOTS } from '@/lib/soccerCareerAppearance';
+import { BOOTS } from '@/lib/soccerBoots';
 import { MAX_BOOT_LEVEL } from '@/lib/tycoonRewards';
 import type { RewardsLedger } from '@/lib/tycoonRewards';
 import type { FactoryState } from '@/lib/wonderkidFactory';

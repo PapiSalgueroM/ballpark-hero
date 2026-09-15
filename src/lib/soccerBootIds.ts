@@ -1,0 +1,21 @@
+/** Stable fictional pair order shared by career appearance and title rewards. */
+export const BOOT_IDS = [
+  "vortex_strike",
+  "vortex_ghost",
+  "kinetiq_blaze",
+  "kinetiq_void",
+  "aurora_nine",
+  "aurora_royal",
+  "pulse_gold",
+  "pulse_venom",
+  "retro_classica",
+  "bubblegum",
+  "vortex_frost",
+  "kinetiq_flare",
+  "aurora_dusk",
+  "pulse_copper",
+  "terrace_navy",
+  "sunday_league",
+  "carnival",
+  "midnight_chrome",
+] as const;

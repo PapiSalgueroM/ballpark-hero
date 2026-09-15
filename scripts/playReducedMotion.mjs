@@ -37,7 +37,8 @@ import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 const { chromium } = pw;
 
-const src = fs.readFileSync('C:/Users/antho/ballpark-hero/src/components/club-manager/Celebration.tsx', 'utf8');
+const kitPath = 'C:/Users/antho/ballpark-hero/src/components/club-manager/Celebration.tsx';
+const src = [kitPath, path.join(path.dirname(kitPath), 'CelebrationStyles.tsx')].map(file => fs.readFileSync(file, 'utf8')).join('\n');
 const blocks = [...src.matchAll(/<style>\{`([\s\S]*?)`\}<\/style>/g)].map(m => m[1]);
 if (blocks.length !== 2) { console.error(`expected 2 style blocks, found ${blocks.length}`); process.exit(1); }
 const css = blocks.join('\n');

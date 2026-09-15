@@ -9,7 +9,6 @@
  */
 import { Link } from 'react-router-dom';
 import { GameNavbar } from '@/components/game/GameNavbar';
-import { CelebrationStyles } from '@/components/club-manager/Celebration';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import AcademyPanel from '@/components/tycoon/AcademyPanel';
@@ -24,7 +23,6 @@ const WonderkidFactory = () => {
         path="/wonderkid-factory"
       />
       <main id="dukb-main" className="max-w-2xl mx-auto px-4 py-4 md:py-8">
-        <CelebrationStyles />
         <header className="text-center mb-1">
           <h1 className="text-3xl md:text-5xl font-bold tracking-[0.08em] text-primary font-display">WONDERKID FACTORY</h1>
         </header>

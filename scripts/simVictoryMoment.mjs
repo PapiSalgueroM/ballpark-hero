@@ -1,6 +1,7 @@
 /* Round 601: exercise the rendered component in Chromium, including instant
    dismissal, stable layout, unchanged facts, motion and the settled frame.
-   Controls: VICTORY_CONTROL=motion, frozen or promotion must fail their checks.
+   Controls: VICTORY_CONTROL=motion, frozen, promotion, loading, late, flash
+   or packstyle must fail their specific check after a confirmed mutation.
    Bundles stay in memory. This harness never writes shared dependency caches. */
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -16,7 +17,7 @@ import { chromium } from './lib/playwrightLoader.mjs';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const component = path.join(root, 'src/components/game/VictoryMoment.tsx');
 const control = process.env.VICTORY_CONTROL || '';
-assert(['', 'motion', 'frozen', 'promotion'].includes(control), 'Unknown control');
+assert(['', 'motion', 'frozen', 'promotion', 'loading', 'late', 'flash', 'packstyle'].includes(control), 'Unknown control');
 // Read actual JSX ancestors, not comments describing when a trophy is awarded.
 for (const [file, condition] of [
   ['src/pages/SoccerCareer.tsx', 'trophies.length > 0'],
@@ -47,6 +48,7 @@ if (control === 'motion' || control === 'frozen') {
     ? source.replace('prefers-reduced-motion: reduce', 'prefers-reduced-motion: no-such-preference')
     : source.replace('animation: victory-lift 900ms', 'animation: victory-lift 0ms');
   assert.notEqual(source, before, 'Control must change the source');
+  console.log(`CONTROL ${control}: changed actual trophy animation rule`);
 }
 const bundle = await build({
   stdin: {
@@ -78,6 +80,157 @@ const bundle = await build({
 });
 const browser = await chromium.launch({ args: ['--no-sandbox'] });
 try {
+  if (!control || ['late', 'flash', 'packstyle'].includes(control)) {
+    const academyPath = path.join(root, 'src/components/tycoon/AcademyPanel.tsx');
+    let academy = fs.readFileSync(academyPath, 'utf8');
+    const importAnchor = "import('@/components/club-manager/Celebration')";
+    assert.equal(academy.split(importAnchor).length, 2, 'One actual optional academy decoration import');
+    academy = academy.replace(importAnchor, "new Promise(resolve => { window.releaseConfetti = () => import('@/components/club-manager/Celebration').then(resolve); })");
+    const stylesAnchor = "import('@/components/club-manager/CelebrationStyles')";
+    assert.equal(academy.split(stylesAnchor).length, 2, 'One actual optional notice style import');
+    academy = academy.replace(stylesAnchor, "new Promise(resolve => { window.releaseStyles = () => import('@/components/club-manager/CelebrationStyles').then(resolve); })");
+    if (control === 'late') {
+      const before = 'window.setTimeout(() => setMoved(null), 4000)';
+      assert.equal(academy.split(before).length, 2, 'One actual promotion lifetime');
+      academy = academy.replace(before, 'window.setTimeout(() => setMoved(null), 8000)');
+      console.log('CONTROL late: extended actual parent promotion lifetime');
+    }
+    if (control === 'flash') {
+      const anchor = 'animate: stylesReady || decorationReady';
+      assert.equal(academy.split(anchor).length, 3, 'Two actual captured notice animation flags');
+      academy = academy.replaceAll(anchor, 'animate: true');
+      console.log('CONTROL flash: enabled notice classes before their styles arrive');
+    }
+    const packsPath = path.join(root, 'src/components/tycoon/PacksPanel.tsx');
+    let packs = fs.readFileSync(packsPath, 'utf8');
+    if (control === 'packstyle') {
+      const anchor = '<CelebrationStyles />';
+      assert.equal(packs.split(anchor).length, 2, 'One actual pack-owned style mount');
+      packs = packs.replace(anchor, '');
+      console.log('CONTROL packstyle: removed actual pack-owned style mount');
+    }
+    const heldAcademy = await build({
+      stdin: { contents: `import React from 'react'; import {createRoot} from 'react-dom/client'; import {MemoryRouter} from 'react-router-dom';
+        import AcademyPanel from './src/components/tycoon/AcademyPanel';
+        import {CelebrationStyles} from './src/components/club-manager/CelebrationStyles';
+        import {newFactory, REGIONS, SAVE_KEY, serialize} from './src/lib/wonderkidFactory';
+        const state = newFactory(Date.now(), 588); state.lifetime = REGIONS[0].goal;
+        localStorage.setItem(SAVE_KEY, serialize(state));
+        window.academySaved = () => JSON.parse(localStorage.getItem(SAVE_KEY));
+        window.nextTarget = () => { window.academyState.lifetime = REGIONS[window.academyState.rep].goal; };
+        createRoot(document.getElementById('root')).render(<MemoryRouter>{window.globalStyles && <CelebrationStyles />}<AcademyPanel stylesReady={window.globalStyles} onSnapshot={state => { window.academyState = state; }} /></MemoryRouter>);`, resolveDir: root, loader: 'tsx' },
+      bundle: true, write: false, format: 'iife', platform: 'browser', jsx: 'automatic', alias: { '@': path.join(root, 'src') },
+      plugins: [{ name: 'hold-actual-academy-confetti', setup(b) { b.onLoad({ filter: /AcademyPanel\.tsx$/ }, () => ({ contents: academy, loader: 'tsx', resolveDir: path.dirname(academyPath) })); b.onLoad({ filter: /PacksPanel\.tsx$/ }, () => ({ contents: packs, loader: 'tsx', resolveDir: path.dirname(packsPath) })); } }],
+    });
+    if (!control || control === 'packstyle') for (const motion of ['no-preference', 'reduce']) {
+      const page = await browser.newPage({ viewport: { width: 320, height: 700 }, reducedMotion: motion });
+      await page.route('**/*', route => route.fulfill({ status: 200, contentType: 'text/html', body: '<div id="root"></div>' }));
+      await page.goto('http://127.0.0.1:4173/cold-pack-fixture');
+      await page.addScriptTag({ content: heldAcademy.outputFiles[0].text });
+      await page.getByRole('button', { name: /Packs/ }).click();
+      await page.getByRole('button', { name: 'Open free', exact: true }).click();
+      await page.locator('[data-pack-reveal]').waitFor();
+      const reveal = await page.locator('[data-pack-reveal]').evaluate(node => ({ animation: getComputedStyle(node).animationName, opacity: getComputedStyle(node).opacity }));
+      assert.equal(reveal.animation, motion === 'reduce' ? 'none' : 'cmRise', 'First standalone pack owns its rise styles before reveal');
+      if (motion === 'reduce') assert.equal(reveal.opacity, '1', 'Reduced-motion pack starts visible');
+      assert.equal(await page.evaluate(() => typeof window.releaseStyles), 'undefined', 'First pack does not depend on a notice style request');
+      await page.getByRole('button', { name: 'Welcome him in', exact: true }).click();
+      assert.equal(await page.locator('[data-pack-reveal]').count(), 0, 'Real pack dismissal still clears the card');
+      await page.close();
+      console.log(`PASS cold standalone pack: ${motion}, actual free draw and dismissal`);
+    }
+    if (control !== 'packstyle') for (const motion of ['no-preference', 'reduce']) for (const [mode, globalStyles] of [['dismiss', false], ['expire', false], ['resolve', false], ['resolve', true]]) {
+      const page = await browser.newPage({ viewport: { width: 320, height: 700 }, reducedMotion: motion });
+      await page.route('**/*', route => route.fulfill({ status: 200, contentType: 'text/html', body: '<div id="root"></div>' }));
+      await page.goto('http://127.0.0.1:4173/late-art-fixture');
+      await page.evaluate(value => { window.globalStyles = value; }, globalStyles);
+      await page.addScriptTag({ content: heldAcademy.outputFiles[0].text });
+      await page.locator('[data-academy-panel]').waitFor();
+      assert.equal(await page.evaluate(() => typeof window.releaseConfetti), 'undefined', 'Decoration import stays cold before a real academy move');
+      await page.getByRole('button', { name: /Reputation/ }).click();
+      await page.getByRole('button', { name: /Move up to/ }).click();
+      await page.getByText(/Welcome to/).waitFor();
+      assert.equal(await page.evaluate(() => window.academySaved().rep), 1, 'Real academy move saves its reward before decoration loads');
+      await page.waitForFunction(() => typeof window.releaseConfetti === 'function');
+      assert.equal(await page.locator('.cm-confetti').count(), 0, 'Confetti import is actually pending');
+      await page.waitForFunction(() => typeof window.releaseStyles === 'function');
+      const visibleCopy = () => page.getByText(/Welcome to/).evaluate(node => ({ opacity: getComputedStyle(node).opacity, animation: getComputedStyle(node).animationName }));
+      if (!globalStyles) assert.deepEqual(await visibleCopy(), { opacity: '1', animation: 'none' }, 'Cold notice copy starts fully visible without waiting for CSS');
+      if (mode === 'dismiss') await page.getByRole('button', { name: 'Continue', exact: true }).click();
+      if (mode === 'expire') await page.waitForTimeout(4200);
+      if (mode !== 'resolve') assert.equal(await page.getByText(/Welcome to/).count(), 0, 'Original parent dismissal or four-second lifetime wins over a held import');
+      await page.evaluate(() => Promise.all([window.releaseConfetti(), window.releaseStyles()]));
+      if (mode !== 'resolve') {
+        assert.equal(await page.locator('.cm-confetti').count(), 0, 'Late confetti cannot revive an expired academy promotion');
+        assert.equal(await page.getByText(/Welcome to/).count(), 0, 'Late styles cannot revive an expired academy promotion');
+      } else {
+        await page.waitForFunction(() => [...document.querySelectorAll('style')].some(node => node.textContent.includes('@keyframes cmRise')));
+        if (!globalStyles) assert.deepEqual(await visibleCopy(), { opacity: '1', animation: 'none' }, 'Late CSS never hides or restarts an already visible cold notice');
+        else assert.equal((await visibleCopy()).animation, motion === 'reduce' ? 'none' : 'cmSlam', 'Stadium Academy keeps its already available notice animation');
+        await page.getByRole('button', { name: 'Continue', exact: true }).click();
+        await page.evaluate(() => window.nextTarget());
+        await page.getByRole('button', { name: /Move up to/ }).click();
+        await page.getByText(/Welcome to/).waitFor();
+        assert.equal((await visibleCopy()).animation, motion === 'reduce' ? 'none' : 'cmSlam', 'Warm notices retain normal motion and respect reduced motion');
+        assert.equal(await page.evaluate(() => window.academySaved().rep), 2, 'Second real move pays exactly its own next star');
+      }
+      if (mode !== 'resolve') assert.equal(await page.evaluate(() => window.academySaved().rep), 1, 'Decoration never repeats the move reward');
+      await page.close();
+      console.log(`PASS delayed academy: ${motion}/${mode}/${globalStyles ? 'Stadium styles' : 'cold standalone'}, saved moves and notice lifetime intact`);
+    }
+  }
+  if (!control || control === 'loading') {
+    const wrapperPath = path.join(root, 'src/components/tycoon/TycoonVictoryMoment.tsx');
+    let wrapper = fs.readFileSync(wrapperPath, 'utf8');
+    const importAnchor = "import('@/components/game/VictoryMoment')";
+    assert.equal(wrapper.split(importAnchor).length, 2, 'One real optional trophy import');
+    wrapper = wrapper.replace(importAnchor, "new Promise(resolve => { window.releaseArt = () => import('@/components/game/VictoryMoment').then(resolve); })");
+    if (control === 'loading') {
+      const before = '<div className="min-w-0 break-words">{children}</div>';
+      assert.equal(wrapper.split(before).length, 2, 'One real result-copy fallback');
+      wrapper = wrapper.replace(before, '<div className="min-w-0 break-words" />');
+      console.log('CONTROL loading: removed actual fallback result copy');
+    }
+    const lazyBundle = await build({
+      stdin: { contents: `import React, {useState} from 'react'; import {createRoot} from 'react-dom/client';
+        import VictoryMoment from './src/components/tycoon/TycoonVictoryMoment';
+        function Fixture() { const [open, setOpen] = useState(true);
+          return open ? <section><VictoryMoment compact><p>CHAMPIONS OF THE SUMMIT</p><p>Title bonus: 1,234,567</p></VictoryMoment><button onClick={() => setOpen(false)}>Continue</button></section> : <p data-dismissed>Ground ready</p>; }
+        createRoot(document.getElementById('root')).render(<Fixture />);`, resolveDir: root, loader: 'tsx' },
+      bundle: true, write: false, format: 'iife', platform: 'browser', jsx: 'automatic', alias: { '@': path.join(root, 'src') },
+      plugins: [{ name: 'hold-actual-trophy-import', setup(b) { b.onLoad({ filter: /TycoonVictoryMoment\.tsx$/ }, () => ({ contents: wrapper, loader: 'tsx', resolveDir: path.dirname(wrapperPath) })); } }],
+    });
+    const builtCss = fs.readdirSync(path.join(root, 'dist/assets')).filter(name => /^index-.*\.css$/.test(name));
+    assert.equal(builtCss.length, 1, 'One production index stylesheet for delayed-art geometry');
+    const css = fs.readFileSync(path.join(root, 'dist/assets', builtCss[0]), 'utf8');
+    for (const width of [320, 390]) for (const dismiss of [false, true]) {
+      const page = await browser.newPage({ viewport: { width, height: 700 }, reducedMotion: 'reduce' });
+      await page.route('**/*', route => route.abort());
+      await page.setContent(`<style>${css}</style><style>section { padding: 12px; text-align: center; } button { min-height:44px; }</style><div id="root"></div>`);
+      await page.addScriptTag({ content: lazyBundle.outputFiles[0].text });
+      await page.getByRole('button', { name: 'Continue', exact: true }).waitFor();
+      assert.equal(await page.getByText('CHAMPIONS OF THE SUMMIT', { exact: true }).count(), 1, 'Pending trophy keeps committed title visible exactly once');
+      assert.equal(await page.getByText('Title bonus: 1,234,567', { exact: true }).count(), 1, 'Pending trophy keeps committed bonus visible exactly once');
+      assert.equal(await page.locator('[data-victory-moment]').count(), 0, 'Trophy import is actually pending');
+      const measure = () => page.evaluate(() => {
+        const box = node => { const r = node.getBoundingClientRect(); return [r.x, r.y, r.width, r.height]; };
+        return { card: box(document.querySelector('section')), button: box(document.querySelector('button')) };
+      });
+      const pending = await measure();
+      if (dismiss) await page.getByRole('button', { name: 'Continue', exact: true }).click();
+      await page.evaluate(() => window.releaseArt());
+      if (dismiss) {
+        await page.locator('[data-dismissed]').waitFor();
+        assert.equal(await page.locator('[data-victory-moment]').count(), 0, 'Late trophy cannot revive a dismissed result');
+      } else {
+        await page.locator('[data-victory-moment]').waitFor();
+        assert.deepEqual(await measure(), pending, 'Late trophy preserves card and Continue bounds');
+        assert.equal(await page.getByText('CHAMPIONS OF THE SUMMIT', { exact: true }).count(), 1);
+      }
+      await page.close();
+      console.log(`PASS delayed trophy: ${width}px, ${dismiss ? 'dismissed before import' : 'stationary resolved card'}, built CSS`);
+    }
+  }
   if (!control || control === 'promotion') {
     // Render the actual promotion JSX inside the actual fixed-height pitch.
     // Only the already-committed event is a fixture; markup and CSS are source.
@@ -103,16 +256,17 @@ try {
         .replace('text-base font-black leading-tight', 'text-lg font-black')
         .replace('className="mt-1 inline-flex', 'className="mt-2 inline-flex');
       assert.notEqual(promotionMarkup, before, 'Promotion control restores the oversized presentation');
+      console.log('CONTROL promotion: restored actual oversized promotion card');
     }
     const configOutput = await build({ entryPoints: [path.join(root, 'tailwind.config.ts')], write: false, format: 'cjs', platform: 'node' });
     const configModule = { exports: {} };
     new Function('module', 'exports', 'require', configOutput.outputFiles[0].text)(configModule, configModule.exports, createRequire(import.meta.url));
-    const css = await postcss([tailwind({ ...configModule.exports.default, content: [{ raw: stadiumSource + promotionMarkup + fs.readFileSync(path.join(root, 'src/components/tycoon/TycoonPitch.tsx'), 'utf8'), extension: 'tsx' }] })])
+    const css = await postcss([tailwind({ ...configModule.exports.default, content: [{ raw: stadiumSource + promotionMarkup + fs.readFileSync(path.join(root, 'src/components/tycoon/TycoonVictoryMoment.tsx'), 'utf8') + fs.readFileSync(path.join(root, 'src/components/tycoon/TycoonPitch.tsx'), 'utf8'), extension: 'tsx' }] })])
       .process(fs.readFileSync(path.join(root, 'src/index.css'), 'utf8'), { from: path.join(root, 'src/index.css') });
     const promotionBundle = await build({
       stdin: { contents: `import React from 'react'; import {createRoot} from 'react-dom/client';
         import TycoonPitch from './src/components/tycoon/TycoonPitch';
-        import VictoryMoment from './src/components/game/VictoryMoment';
+        import VictoryMoment from './src/components/tycoon/TycoonVictoryMoment';
         import {ConfettiBurst, CelebrationStyles} from './src/components/club-manager/Celebration';
         import {DIVISIONS, fmtMoney} from './src/lib/stadiumTycoon';
         const root = createRoot(document.getElementById('root'));
@@ -137,6 +291,7 @@ try {
       for (const [index, title] of [[1, false], [9, false], [9, true]]) {
         await page.evaluate(([index, title]) => window.promotion(index, title), [index, title]);
         await page.getByRole('button', { name: 'Continue', exact: true }).waitFor();
+        await page.locator('[data-victory-moment]').waitFor();
         await page.evaluate(() => new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve))));
         const measure = time => page.evaluate(time => {
           for (const animation of document.getAnimations()) { animation.pause(); animation.currentTime = time; }

@@ -9,6 +9,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { createRequire } from 'node:module';
+import { createHash } from 'node:crypto';
 import { build } from 'esbuild';
 import { feeBeforeGear } from './fixtures/tycoonGear587Fee.mjs';
 
@@ -48,6 +49,8 @@ function replaceOnce(source, before, after) {
 }
 
 const controls = {
+  order: { file: 'src/lib/soccerBootIds.ts', section: 'catalog', before: '  "vortex_strike",\n  "vortex_ghost",', after: '  "vortex_ghost",\n  "vortex_strike",' },
+  catalog: { file: 'src/lib/soccerBoots.ts', section: 'catalog', before: '{ id: BOOT_IDS[0],', after: '{ id: BOOT_IDS[1],' },
   fee: { file: 'src/lib/wonderkidFactory.ts', section: 'fees', before: 'basePrice(p.rating, p.potential, p.age, p.pos)', after: 'basePrice(p.rating + ("bootId" in p && p.bootId ? 1 : 0), p.potential, p.age, p.pos)' },
   edge: { file: 'src/lib/wonderkidFactory.ts', section: 'consumers', before: 'const effectiveRating = Math.min(99, p.rating + level);', after: 'const effectiveRating = Math.min(99, p.rating);' },
   cap: { file: 'src/lib/wonderkidFactory.ts', section: 'edge', before: 'const effectiveRating = Math.min(99, p.rating + level);', after: 'const effectiveRating = p.rating + level;' },
@@ -55,12 +58,12 @@ const controls = {
   repeat: { file: 'src/lib/tycoonRewards.ts', section: 'schedule', before: 'ft.totalMatches <= out.lastMatch', after: 'ft.totalMatches < out.lastMatch' },
   title: { file: 'src/lib/tycoonRewards.ts', section: 'schedule', before: 'allowGear && !ft.away && ft.position === 1 &&', after: 'allowGear && !ft.away &&' },
   summit: { file: 'src/lib/tycoonRewards.ts', section: 'schedule', before: '(!titles[division] || division === GEAR_DIVISIONS - 1)', after: '(!titles[division])' },
-  pack: { file: 'src/lib/tycoonRewards.ts', section: ['packs', 'source writers'], before: 'spent: l.spent + priceOf(l, id),', after: 'spent: l.spent + priceOf(l, id), gearUnlocked: [BOOTS[0].id], gearLevel: { [BOOTS[0].id]: 1 },' },
+  pack: { file: 'src/lib/tycoonRewards.ts', section: ['packs', 'source writers'], before: 'spent: l.spent + priceOf(l, id),', after: 'spent: l.spent + priceOf(l, id), gearUnlocked: [BOOT_IDS[0]], gearLevel: { [BOOT_IDS[0]]: 1 },' },
   upgrade: { file: 'src/lib/tycoonRewards.ts', section: 'upgrades', before: 'kitUpgrades: l.kitUpgrades! - 1', after: 'kitUpgrades: l.kitUpgrades!' },
-  locked: { file: 'src/lib/wonderkidFactory.ts', section: 'equipment', before: 'if (!BOOTS.some(b => b.id === id) || !Object.prototype.hasOwnProperty.call(levels, id)) return 0;', after: 'if (!Object.prototype.hasOwnProperty.call(levels, id)) return 0;' },
+  locked: { file: 'src/lib/wonderkidFactory.ts', section: 'equipment', before: 'if (!BOOT_IDS.some(bootId => bootId === id) || !Object.prototype.hasOwnProperty.call(levels, id)) return 0;', after: 'if (!Object.prototype.hasOwnProperty.call(levels, id)) return 0;' },
   save: { file: 'src/lib/tycoonRewards.ts', section: 'durability', before: 'if (mustPersist) throw error;', after: 'if (false) throw error;' },
   cache: { file: 'src/lib/tycoonRewards.ts', section: 'durability', before: 'if (memoryOnly && cached) {', after: 'if (memoryOnly && cached) { return cached.ledger;' },
-  writer: { file: 'src/lib/wonderkidFactory.ts', section: 'source writers', before: 'v: SAVE_VERSION,', after: 'v: SAVE_VERSION, gearUnlocked: [BOOTS[0].id],' },
+  writer: { file: 'src/lib/wonderkidFactory.ts', section: 'source writers', before: 'v: SAVE_VERSION,', after: 'v: SAVE_VERSION, gearUnlocked: [BOOT_IDS[0]],' },
 };
 assert(!CONTROL || CONTROL in controls, `unknown GEAR_CONTROL=${CONTROL}`);
 let selected = null;
@@ -68,7 +71,7 @@ if (CONTROL) {
   const c = controls[CONTROL];
   const original = path.join(ROOT, c.file);
   const copy = path.join(TEMP, path.basename(original));
-  fs.writeFileSync(copy, replaceOnce(fs.readFileSync(original, 'utf8'), c.before, c.after));
+  fs.writeFileSync(copy, replaceOnce(fs.readFileSync(original, 'utf8').replaceAll('\r\n', '\n'), c.before, c.after));
   selected = { original: path.resolve(original), copy, sections: Array.isArray(c.section) ? c.section : [c.section] };
 }
 const out = path.join(TEMP, 'engines.mjs');
@@ -77,12 +80,13 @@ await build({
     "export * as W from '@/lib/wonderkidFactory';",
     "export * as R from '@/lib/tycoonRewards';",
     "export * as T from '@/lib/stadiumTycoon';",
+    "export { BOOT_IDS } from '@/lib/soccerBootIds';",
     "export { BOOTS } from '@/lib/soccerCareerAppearance';",
   ].join('\n'), loader: 'ts', resolveDir: ROOT },
   outfile: out, platform: 'node', format: 'esm', bundle: true, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') },
   plugins: selected ? [{ name: 'temporary-control', setup(b) { b.onLoad({ filter: /\.tsx?$/ }, args => path.resolve(args.path) === selected.original ? { contents: fs.readFileSync(selected.copy, 'utf8'), loader: 'ts', resolveDir: path.dirname(args.path) } : undefined); } }] : [],
 });
-const { W, R, T, BOOTS } = await import(pathToFileURL(out).href);
+const { W, R, T, BOOTS, BOOT_IDS } = await import(pathToFileURL(out).href);
 const ids = BOOTS.map(b => b.id);
 const title = (match, division, extra = {}) => ({ totalMatches: match, result: 'win', away: false, position: 1, division, ...extra });
 const award = (l, match, division, extra) => R.creditFullTimes(l, [title(match, division, extra)]);
@@ -96,6 +100,14 @@ async function check(name, work) {
   try { console.log(`PASS ${name}: ${await work()}`); }
   catch (error) { failures.push(name); console.error(`FAIL ${name}: ${error.stack ?? error.message}`); }
 }
+
+await check('catalog', () => {
+  assert.deepEqual(BOOT_IDS, ids, 'Every ordered engine boot ID has exactly one complete visible record');
+  assert.equal(new Set(ids).size, ids.length, 'Boot IDs are unique');
+  assert.equal(createHash('sha256').update(JSON.stringify(BOOTS)).digest('hex'), '938a2d682bfb78a4dd7562dc1cf7d049ce6143995dd9479a05c078f7772be8c4', 'Complete boot catalog preserves frozen pre-split IDs, order and visible details');
+  assert(BOOTS.every(b => b.label && b.color && b.flavor), 'Every boot retains visible details');
+  return `${ids.length} ordered unique engine IDs match all visible records`;
+});
 
 await check('fees', () => {
   const a = W.newFactory(NOW, 588);
