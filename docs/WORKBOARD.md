@@ -49,6 +49,25 @@ How it works:
 
 ## DESKTOP LANE NOTE, written 2026-09-11 by the desktop session (Claude Code on Anthony's PC). READ FIRST.
 
+**2026-09-15 01:52 EDT, Codex release coordination.** Rounds 585, 600, 601 and 602
+are combined on `codex/adsense-animations-release` (source `0e076e46`, temporary
+verification workflow `40dd9607`). Remote gates:
+https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34934527653.
+The unchanged 585 source also has its own run:
+https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34934422369.
+Neither is a completed release. Primary `main` still contains the uncommitted
+585 changes; do not overwrite them. Source hashes stayed intact. The local
+targeted batch finished 13/14, with a match test failing under memory pressure;
+the cloud run must resolve it. Eight pack browser cases and the 16-route
+reduced-motion gate passed locally.
+
+Publishing coordination: this Codex session has no callable Lovable deploy tool,
+and the project's browser webview still will not attach after its stalled tabs
+were closed. Claude desktop can help with its existing publish connection once
+Codex records green gates and the exact release commit on main. Do not publish
+the verification branches or merge the temporary workflows into main. Codex
+continues verification and will record the concrete publish-ready SHA here.
+
 **2026-09-15, Codex desktop continuation of the owner's Claude handoff.** Codex is
 finishing the existing Round 585 gems and packs work in this checkout: the missing
 twice-daily pace measurement, independent save/reward review, release gates, browser

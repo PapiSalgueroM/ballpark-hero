@@ -26,6 +26,16 @@ evidence is a recorded crawl after these requests and the next publish. Indexing
 is not a guarantee or a published AdSense approval prerequisite. No new AdSense
 review request has been sent from this session.
 
+Rounds 600 and 602 are now built and reviewed in the combined release branch:
+61 source groups make the five guides' existing evidence easier to follow;
+the four US manager games and Record Books link back to those guides; Footle's
+subtitle describes its actual rules without the broad tracking claim. Publishing
+is pending full integration gates. Once live, verify the saved HTML and the
+actual game pages before another AdSense request. The older recommendation below
+to wait for a particular indexing state was a project judgment, not a published
+Google approval requirement. No fixed waiting period or indexing count is a
+guarantee of approval.
+
 **Status update, 2026-09-12: two of the verdict's three conditions are now met, and the
 third is Anthony's to produce.** The verdict below, written after the second rejection, said
 not to request another review until three things were true. Where they stand after the

@@ -25,7 +25,11 @@ request, GPT-6 Astra owns Round 601: animation improvements to existing career,
 manager and tycoon outcomes, in an isolated worktree. The planned Round 587
 set-piece board still follows Round 586. The file split is in `docs/WORKBOARD.md`.
 Round 600's contextual citations and Round 601's trophy animations are built in
-their worktrees and have passed their scoped checks; integration is pending.
+their worktrees and have passed their scoped checks. Round 602 is also built.
+All three are integrated with Round 585 on `codex/adsense-animations-release`,
+source commit `0e076e46`. The isolated release verification run is
+[34934527653](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34934527653),
+workflow commit `40dd9607`. Nothing from that branch is published yet.
 The live audit also found a broad "No tracking" claim in Footle and useful
 missing reciprocal links from the four US Front Office pages. Round 602 owns
 those copy and navigation changes, with no simulation or sports-data changes.
@@ -50,9 +54,26 @@ persist a kid without the debit, and malformed stored player fields could crash
 the pack card. All three fixes are complete: `simTycoonPacks` passes all 12 page
 tests and proves all 22 mutation controls. A separate hook review passed five
 storage-recovery probes. The full SEO build passed, including saved pages and
-the final production bundle (`index-DEcxjmNi.js`). The targeted harness batch is
-running, followed by the full suite and Vitest. Browser walks, commit and live
-verification are still pending. The source remains frozen during these checks.
+the final production bundle (`index-DEcxjmNi.js`). The local targeted batch finished
+13 of 14 green. `simTycoonPitch` reported `STACK_TRACE_ERROR` in its first page
+case under severe host memory pressure; its intended mutation controls still
+failed at their expected assertions. This remains an unresolved gate, not a
+waived failure. The full node suite and Vitest did not start locally.
+
+The exact frozen source is committed as `fb793c50` on the verification branch.
+All 1,427 primary source hashes remained unchanged, and a fresh checkout differs
+only by Git line endings. Remote run
+[34934422369](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34934422369)
+is checking it on a standard public GitHub runner. The first attempt failed
+because installing Playwright in the project changed locked dependency versions;
+the workflow now installs it separately, and the rerun's app type check passed.
+No application source was changed for that setup error.
+
+Local browser evidence: both pack doors pass reveal, single-save, geometry and
+no-completion-write checks at 320, 390, 430 and 1440 pixels (eight cases). The
+existing reduced-motion harness passes its CSS checks and all 16 route checks.
+Full remote gates, release snapshots, main integration, publish and live proof
+are still pending. The primary source remains frozen.
 
 ## LIVE as of 2026-09-15: Round 584, the tycoon league keeps playing while you are away
 
