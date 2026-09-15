@@ -14,7 +14,7 @@ jobs:
     env:
       CI: 'true'
       ENGINES: chromium
-      PRERENDER_ONLY: '/stadium-tycoon,/wonderkid-factory,/club-manager'
+      PRERENDER_ONLY: '/stadium-tycoon,/wonderkid-factory,/club-manager,/soccer-career,/conquest,/conquest-nba'
       VITEST_MAX_THREADS: '1'
       VITEST_MIN_THREADS: '1'
       VITEST_MAX_FORKS: '1'
@@ -194,6 +194,19 @@ jobs:
             grep -F "CONTROL $control: one unique executable mutation applied outside src" "$RUNNER_TEMP/round587-logs/set-piece-page-$control.log"
             grep -F "CONTROL PROVED $control:" "$RUNNER_TEMP/round587-logs/set-piece-page-$control.log"
           done
+      - name: Live sim runtime controls
+        if: ${{ !cancelled() && steps.build.outcome == 'success' }}
+        timeout-minutes: 30
+        run: |
+          for control in trigger save pause mutation lineup speed reduced terminal redraw; do
+            if LIVE_MOTION_CONTROL="$control" node scripts/simLiveSimMotion.mjs > "$RUNNER_TEMP/round587-logs/live-$control.log" 2>&1; then
+              cat "$RUNNER_TEMP/round587-logs/live-$control.log"
+              echo "Negative control did not fail: $control"
+              exit 1
+            fi
+            grep -F "Negative control changed temporary source: $control" "$RUNNER_TEMP/round587-logs/live-$control.log"
+            grep -E 'AssertionError|expected .* to' "$RUNNER_TEMP/round587-logs/live-$control.log"
+          done
       - name: Prove the moved season binding guard
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         timeout-minutes: 20
@@ -245,7 +258,7 @@ jobs:
           curl --fail --silent http://127.0.0.1:4173/robots.txt >/dev/null
           export BASE=http://127.0.0.1:4173
           status=0
-          for gate in simPrerenderBoot playIphone playLeagueTableFit playFirstTeamFit sweepWeight simDrawOrder simFaqSchema simSetPiecePresentation playTycoonSetPieceFit; do
+          for gate in simPrerenderBoot playIphone playLeagueTableFit playFirstTeamFit sweepWeight simDrawOrder simFaqSchema simSetPiecePresentation playTycoonSetPieceFit simDrillMotion simConquestMotion; do
             node "$RUNNER_TEMP/round587-browser.mjs" "scripts/$gate.mjs" 2>&1 | tee "$RUNNER_TEMP/round587-logs/$gate.log" || status=1
           done
           if FIRST_TEAM_CONTROL=nowrap node "$RUNNER_TEMP/round587-browser.mjs" scripts/playFirstTeamFit.mjs > "$RUNNER_TEMP/round587-logs/first-team-nowrap.log" 2>&1; then
@@ -255,7 +268,7 @@ jobs:
           cat "$RUNNER_TEMP/round587-logs/first-team-nowrap.log"
           grep -F 'CONTROL nowrap: actual tile-name wrapping replaced' "$RUNNER_TEMP/round587-logs/first-team-nowrap.log" || status=1
           grep -F 'from intentional nowrap control' "$RUNNER_TEMP/round587-logs/first-team-nowrap.log" || status=1
-          ONLY=/stadium-tycoon,/wonderkid-factory,/club-manager node "$RUNNER_TEMP/round587-browser.mjs" scripts/playRenderStability.mjs 2>&1 | tee "$RUNNER_TEMP/round587-logs/playRenderStability.log" || status=1
+          ONLY=/stadium-tycoon,/wonderkid-factory,/club-manager,/soccer-career,/conquest,/conquest-nba node "$RUNNER_TEMP/round587-browser.mjs" scripts/playRenderStability.mjs 2>&1 | tee "$RUNNER_TEMP/round587-logs/playRenderStability.log" || status=1
           for control in wide clock; do
             result=0
             TYCOON_SET_PIECE_FIT_CONTROL="$control" node "$RUNNER_TEMP/round587-browser.mjs" scripts/playTycoonSetPieceFit.mjs > "$RUNNER_TEMP/round587-logs/set-piece-fit-$control.log" 2>&1 || result=$?
