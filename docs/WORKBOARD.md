@@ -1,5 +1,28 @@
 # Work board
 
+**2026-09-15 12:43 EDT, Codex release performance repair.** Round 586's type,
+SEO build, 279 Vitest cases and repaired league gate pass. The added phone
+download sweep found Club Manager at 708K against 620K, Stadium Tycoon at
+312K against 290K and Wonderkid Factory at 297K against 270K. Codex owns the
+repair in `.worktrees/round-586-first-team`: presentation-only lazy imports
+in `ClubManager.tsx`, guide chunk splitting in `src/data/gameContent/` and
+the exhaustive guide-mapping list in `sweepWeight.mjs`. Budgets, gameplay,
+guide prose and Claude's engine/data scope stay intact. The source change
+requires fresh full-suite verification; old unchanged-source evidence cannot
+approve it. Rounds 603 to 605 follow this fix, with Round 587 separate.
+
+A fresh signed-in AdSense console read at 12:37 EDT still shows Getting ready
+and Review requested. No new rejection, approval or repeat submission.
+
+**2026-09-15, Codex: Round 587 is in development after 586.** Worktree
+`.worktrees/round-587-set-pieces`, branch `codex/round-587-set-pieces`.
+One playable penalty or free kick per watched stadium match, using the existing
+shot engine and the original animated scene. Scope: set-piece board and scene,
+stadium offer/reward rules, hook, page, help and focused harnesses. It ships
+separately after 586; the current review and release gates still come first.
+Rounds 603 to 605 remain separate match-action work. AdSense review was accepted
+at 04:19 EDT and remains pending, with no second submission.
+
 One page, two lanes. Read this before picking work, write here before building. This file
 holds who is doing what right now; `docs/PROJECT-STATE.md` holds what happened. The split
 protocol itself lives near the top of that file ("Two subscriptions, one repo").
