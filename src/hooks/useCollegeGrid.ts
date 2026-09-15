@@ -60,27 +60,27 @@ function onRecord(entry: CollegeGridEntry, attrs: GridAttribute[]): string {
     if (judgeLabel(entry, attr) !== 'unknown') continue;
     const l = labelOf(attr);
     if (!l) {
-      facts.push(`nothing that can check ${attr.label}`);
+      facts.push(`Nothing on record can check ${attr.label}.`);
     } else if (l.kind === 'college') {
-      facts.push(entry.colleges.length > 0 ? `schools: ${entry.colleges.join(', ')}` : 'no school');
+      facts.push(entry.colleges.length > 0 ? `Schools on record: ${entry.colleges.join(', ')}.` : 'No school on record.');
     } else if (l.kind === 'position') {
-      facts.push(entry.groups.size > 0 ? `position: ${[...entry.groups].map((g) => GROUP_WORDS.get(g) ?? g).join(', ')}` : 'no position');
+      facts.push(entry.groups.size > 0 ? `Position on record: ${[...entry.groups].map((g) => GROUP_WORDS.get(g) ?? g).join(', ')}.` : 'No position on record.');
       namesake = namesake || entry.identityOpen;
     } else if (l.kind === 'heisman') {
-      facts.push('a Heisman winner with the same name');
+      facts.push('A Heisman winner shares his name.');
     } else {
       if (entry.bestPick !== null) {
         facts.push(l.kind === 'firstRound' && entry.firstRound === null
-          ? `picked No. ${entry.bestPick}, but not which round that was`
-          : `picked No. ${entry.bestPick}`);
+          ? `Picked No. ${entry.bestPick}, round not on record.`
+          : `Picked No. ${entry.bestPick}.`);
       } else {
-        facts.push(entry.undrafted ? 'not drafted' : 'no draft pick');
+        facts.push(entry.undrafted ? 'Not drafted.' : 'No draft pick on record.');
       }
       namesake = namesake || entry.identityOpen;
     }
   }
-  if (namesake) facts.push('another player with the same name');
-  return [...new Set(facts)].join('; ');
+  if (namesake) facts.push('Another player on record shares his name.');
+  return [...new Set(facts)].join(' ');
 }
 
 export function useCollegeGrid() {
@@ -208,7 +208,7 @@ export function useCollegeGrid() {
         /* The records cannot settle this cell for him either way, so the
            guess is not spent; say what they do hold. */
         const held = onRecord(player, [rowAttr, colAttr]);
-        toast(`No guess used. The records can't settle ${player.name} for this cell.`, held ? { description: `On file: ${held}.` } : undefined);
+        toast(`No guess used. The records can't settle ${player.name} for this cell.`, held ? { description: held } : undefined);
         return;
       }
 
