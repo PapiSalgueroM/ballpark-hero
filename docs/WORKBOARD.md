@@ -177,7 +177,7 @@ numbers from 600. It builds in `.claude/worktrees/desktop-next` on branch `deskt
 out of the Round 585 tree and Cursor's formatting files, and merges onto main only after 585 is
 live. Each round below came out of a read-only sweep of player reports, traffic and the owner
 table on 2026-09-15.
-- **610, built, in gates: players who joined with Google can get back in.** Round 509 hid the
+- **610, LIVE 2026-09-15 (deployment bd4b549a, entry index-KIfwLt2Q.js): players who joined with Google can get back in.** Round 509 hid the
   Google button; 244 accounts have Google as their only identity and no password, none had
   asked for a reset link, none had signed in fresh since 2026-09-08. The sign in modal says to
   use Forgot password, the account menu sends a signed in Google-only player to the change
@@ -212,8 +212,8 @@ table on 2026-09-15.
   (after 611) and `football-grid-validate` (uncalled since Round 406) are still deployed with
   373 and 204 cache rows; the five Connect 4 validators hold about 1,250 cache rows in 30 days
   with none settled from data.
-- **616, research running: Club Manager's Premier League players at last season's club.** 34
-  of the 332 pending rows in `scripts/data/rosterConfirmation2026.json` sit at Premier League
+- **616, building: Club Manager's Premier League players at last season's club.** 18 (first
+  estimated at 34) of the 332 pending rows in `scripts/data/rosterConfirmation2026.json` sit at Premier League
   clubs; each is being two-source checked for his 2026-27 club. Files: that ledger, the roster
   bake, `simRosterAdjudication`.
 

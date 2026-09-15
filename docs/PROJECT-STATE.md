@@ -1,5 +1,39 @@
 # Project state
 
+## LIVE 2026-09-15: Round 610, players who joined with Google can get back in, main `7b268106`
+
+**douknowball.com is serving it.** Deployment `bd4b549a-1e2c-416d-b9a0-ff041e50d911` at 08:28 UTC,
+called only after `get_project` showed `latest_commit_sha` `7b268106`. The entry moved from
+`index-Cq-NK7oX.js` to `index-KIfwLt2Q.js` at 08:29:18 UTC and carries `data-set-password` and
+`data-google-paused-hint`, with the hint reading "Joined with Google? It's paused for now." Gates
+on the merged tree: tsc 0, production build 0, `simGoogleOnlyReturn` (8 rendered checks, a dash
+scan, 11 controls each turning exactly its own check red), `simGoogleIdentity`, `simLoginReturn`,
+`simNoRivalNames`, the four migration reading harnesses, and the auth vitest files 12 of 12.
+
+- **The problem, measured on the live auth tables 2026-09-15.** Round 509 hid the Google button
+  until Google Cloud Branding stops showing a personal support email. 244 accounts have Google as
+  their only identity and no password; none had ever asked for a reset link and none had signed in
+  fresh since 2026-09-08, while 63 were still riding sessions that had not ended. No auth email of
+  any kind had gone out since 2026-08-12.
+- **What shipped.** The sign in modal's Log In tab tells a Google player to type that email and tap
+  Forgot password; the wrong password and already registered messages point the same way. A signed
+  in Google-only player gets Set a password in the account menu, which opens the change password
+  page (no email needed: the 3 Google accounts that already had a password had never been sent
+  one); if the server wants a fresh sign in there, the page offers the email link. A saved password
+  sets `password_set` in user_metadata so the item goes away. All of it is gated on the Google flag
+  and goes quiet when Google returns. The sign in dialog scrolls inside itself on short phones.
+- **The adversarial review changed it:** the menu item first emailed a link, the hint promised
+  streaks that live per browser, the dialog could clip on a 320 by 568 phone, and five checks had no
+  control.
+- **Still owed by the owner, unchanged:** switch the Google Cloud Branding support email to the
+  project address and publish the brand, then the flag in `src/lib/authProviders.ts` can flip.
+  Recovery email delivery is unproven since 2026-08-12 (confirmation emails before then were clicked
+  by 127 real players within two hours); custom SMTP was already listed as pending on 2026-08-12.
+- **Also pushed with it (records only):** earlier sessions' uncommitted handoff notes under
+  `docs/history/`, the Round 529 contract, the 2026-09-15 handoff PDF, the research behind Rounds
+  611 to 613 and 616, the backlog recount, and two migrations production had applied that the repo
+  never recorded (`polls_with_character`, `gauntlet_draft_score_caps`, both identical by hash).
+
 ## LIVE 2026-09-15: Rounds 600, 601 and 602, main `d5aa1b15`
 
 **Published by the Claude desktop lane at 08:13 UTC**, deployment
@@ -1733,7 +1767,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Since the list: "u call like everything new" | DONE | Round 447 |
 | Since the list: black screen of text on login, Google spinner stuck | DONE | Round 448 |
 | Since the list: Player Bingo transfers outdated (four reports, 2026-08-30 to 2026-09-04) | DONE | Round 450: 195 more two source verified summer 2026 moves written to the table, 241 in the overlay, every pool player who moved this summer covered |
-| Since the list: the Google screen exposes the Supabase host and a personal email | CODE FIX READY, PUBLIC BUTTON GATED | Round 509 replaces the hosted redirect with Google's official popup plus Supabase ID-token exchange, so the login journey can stay on douknowball.com without a paid custom domain. The live Google client already authorizes the site origin and the real button rendered cleanly. The production flag stays false, so the button and Google script cannot appear until Google Branding uses douknowball1@gmail.com and the DoUKnowBall brand is published. |
+| Since the list: the Google screen exposes the Supabase host and a personal email | CODE FIX READY, PUBLIC BUTTON GATED | Round 610 (live 2026-09-15) gives the 244 Google-only accounts a way back in while the button is hidden: Forgot password from the sign in modal, and Set a password in the account menu for anyone still signed in. Round 509 replaces the hosted redirect with Google's official popup plus Supabase ID-token exchange, so the login journey can stay on douknowball.com without a paid custom domain. The live Google client already authorizes the site origin and the real button rendered cleanly. The production flag stays false, so the button and Google script cannot appear until Google Branding uses douknowball1@gmail.com and the DoUKnowBall brand is published. |
 | Since the list: Apple sign in | OWNER DECISION, MONEY | see Decisions owed |
 | Since the list: a player's report "Alphabet Sprint wont exept anything" (2026-09-05) | DONE | Round 464: the pool was Who Am I's top 500, so real players outside it were refused (16 percent of the season's surnames accepted); it is the whole 2026 season now, 5,494 players, 100 percent accepted, verified in a real browser |
 
