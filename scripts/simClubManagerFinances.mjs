@@ -464,7 +464,7 @@ console.log('7) The kitty is never written from a wage or a travel figure, and t
   for (const l of leaks) fail(`the kitty is written from a running cost: ${l}`);
   const screen = lf(fs.readFileSync(path.join(ROOT, 'src/components/club-manager/FinancesScreen.tsx'), 'utf8'));
   if (!/never leave the kitty/.test(screen)) fail('the finances screen no longer says wages and travel never leave the kitty');
-  const guide = lf(fs.readFileSync(path.join(ROOT, 'src/data/gameContent/soccer1.ts'), 'utf8'));
+  const guide = lf(fs.readFileSync(path.join(ROOT, 'src/data/gameContent/clubManagement.ts'), 'utf8'));
   if (!/never leave the transfer kitty/.test(guide)) fail('the guide no longer says wages and travel never leave the transfer kitty');
   const DASH = /[–—]/;
   for (const [name, src] of [['clubManagerFinances.ts', desk], ['clubManagerFacilities.ts', lf(fs.readFileSync(path.join(ROOT, 'src/lib/clubManagerFacilities.ts'), 'utf8'))], ['FinancesScreen.tsx', screen], ['FacilitiesScreen.tsx', lf(fs.readFileSync(path.join(ROOT, 'src/components/club-manager/FacilitiesScreen.tsx'), 'utf8'))]]) {

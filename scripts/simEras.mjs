@@ -671,6 +671,8 @@ console.log('9) Copy check');
     'src/lib/clubManagerEras.ts',
     'src/lib/clubManager.ts',
     'src/pages/ClubManager.tsx',
+    'src/components/club-manager/ClubManagerHelp.tsx',
+    'src/components/club-manager/ClubManagerSeasonSummary.tsx',
     'src/components/club-manager/SquadScreen.tsx',
     'src/components/club-manager/ClubDetailScreen.tsx',
     'src/components/club-manager/TransferScreen.tsx',
