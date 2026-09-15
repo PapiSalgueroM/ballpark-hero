@@ -34,9 +34,11 @@ repair from `cd4e7043` is included, so the combined suite exercises the current
 defensive formula correctly.
 
 AdSense remains Review requested following the September 15 04:19 EDT
-submission. The [bounded animation audit](adsense/animation-regression-2026-09-15.md)
+submission. A fresh signed-in console inspection at 12:37 EDT confirmed
+Getting ready and Review requested, with no new rejection or approval shown.
+The [bounded animation audit](adsense/animation-regression-2026-09-15.md)
 found no new placement or crawler-access blocker on the five checked pages.
-It does not establish approval or a fresh console decision. Do not submit a
+It does not establish approval. Do not submit a
 second review while this one is pending.
 
 ## IN VERIFICATION 2026-09-15: Round 586, academy first team
