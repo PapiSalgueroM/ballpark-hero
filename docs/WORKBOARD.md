@@ -49,6 +49,17 @@ How it works:
 
 ## DESKTOP LANE NOTE, written 2026-09-11 by the desktop session (Claude Code on Anthony's PC). READ FIRST.
 
+**2026-09-15, Codex claims Round 605: basketball and football match motion.**
+The owner requested action animations across sports. This round uses the
+existing NFL and NBA Conquest arcade play feeds, in the two ConquestBoard
+components plus original local SVG/CSS. An optional NBA action tag may be
+recorded at the existing engine branch to distinguish blocks from steals;
+it must not add a random draw, change a score, delay settlement or migrate a
+save. No season-summary replay is invented. Worktree
+`.worktrees/round-605-conquest-motion`, branch `codex/round-605-conquest-motion`.
+Rounds 586, 603 and 604 remain separate releases under verification. AdSense
+is still Review requested; guide pages and indexing controls stay protected.
+
 **2026-09-15, Codex continues: Round 586 claimed.** The owner said to keep going
 after the completed release and AdSense submission. Codex owns the first-team
 round in `.worktrees/round-586-first-team`, branch `codex/round-586-first-team`,
