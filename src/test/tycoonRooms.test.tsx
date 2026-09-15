@@ -108,6 +108,7 @@ async function openTab(room: 'stadium' | 'academy' | 'league') {
   if (!tab) throw new Error(`no ${room} tab on the page`);
   await act(async () => { fireEvent.click(tab); });
   await settle();
+  await act(async () => { await vi.dynamicImportSettled(); });
   if (room === 'academy' && !document.querySelector('[data-academy-panel]')) {
     throw new Error('the Academy tab opened but the academy panel never rendered');
   }

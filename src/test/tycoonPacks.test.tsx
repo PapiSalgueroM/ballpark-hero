@@ -52,10 +52,11 @@ function seed(gems: number, beds = 0) {
   localStorage.setItem(SAVE_KEY, serialize(a));
   localStorage.setItem(REWARDS_KEY, JSON.stringify({ ...newLedger(7), earned: gems }));
 }
-function openPacks() {
+async function openPacks() {
   const tile = [...document.querySelectorAll('button')].find(b => /Packs/.test(b.textContent ?? ''));
   if (!tile) throw new Error('no Packs tile on the academy');
-  act(() => { fireEvent.click(tile); });
+  await act(async () => { fireEvent.click(tile); });
+  await act(async () => { await vi.dynamicImportSettled(); });
 }
 const openButton = (id: string) => document.querySelector(`[data-open-pack="${id}"]`) as HTMLButtonElement;
 
@@ -77,10 +78,10 @@ afterEach(() => {
 });
 
 describe('packs on the real academy', () => {
-  it('1 every pack prints the published odds, before its button', () => {
+  it('1 every pack prints the published odds, before its button', async () => {
     seed(0);
     mountPage(<WonderkidFactory />, '/wonderkid-factory');
-    openPacks();
+    await openPacks();
     let rows = 0;
     for (const pack of PACKS) {
       const panel = document.querySelector(`[data-odds="${pack.id}"]`);
@@ -100,10 +101,10 @@ describe('packs on the real academy', () => {
     measured(`${PACKS.length} packs print ${rows} odds exactly as PACKS holds them, each above its button`);
   }, TEST_MS);
 
-  it('2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems', () => {
+  it('2 a pack costs what its button says, the first Scout Pack is free, and the button waits for a bed and the gems', async () => {
     seed(130);
     mountPage(<WonderkidFactory />, '/wonderkid-factory');
-    openPacks();
+    await openPacks();
     expect(openButton('scout').textContent, 'the first Scout Pack does not say it is free').toMatch(/free/i);
     expect(openButton('club').textContent).toBe(`Open for ${PACKS[1].price} gems`);
     expect(openButton('elite').disabled, 'the Elite Pack opens with 130 gems').toBe(true);
@@ -120,12 +121,12 @@ describe('packs on the real academy', () => {
     cleanup();
     seed(1000, 5);
     mountPage(<WonderkidFactory />, '/wonderkid-factory');
-    openPacks();
+    await openPacks();
     expect(PACKS.every(p => openButton(p.id).disabled), 'a pack opens into a full academy').toBe(true);
     measured('the Club Pack cost its printed price, the first Scout Pack cost nothing and the second its price, and a full academy opens nothing');
   }, TEST_MS);
 
-  it('3 the card shows the tier drawn, and the kid in the bed carries it', () => {
+  it('3 the card shows the tier drawn, and the kid in the bed carries it', async () => {
     const tiers: string[] = [];
     for (let run = 0; run < 12; run += 1) {
       cleanup();
@@ -134,7 +135,7 @@ describe('packs on the real academy', () => {
       seed(10000);
       localStorage.setItem(REWARDS_KEY, JSON.stringify({ ...newLedger(1000 + run * 97), earned: 10000 }));
       mountPage(<WonderkidFactory />, '/wonderkid-factory');
-      openPacks();
+      await openPacks();
       act(() => { fireEvent.click(openButton('elite')); });
       const drawn = ledger().pending;
       const card = document.querySelector('[data-pack-reveal]');
@@ -150,10 +151,10 @@ describe('packs on the real academy', () => {
     measured(`12 Elite Packs: every card showed the tier drawn and every kid carried it (${[...new Set(tiers)].join(', ')})`);
   }, TEST_MS);
 
-  it('4 a reload in the middle of a reveal shows the same kid, delivered exactly once', () => {
+  it('4 a reload in the middle of a reveal shows the same kid, delivered exactly once', async () => {
     seed(500);
     const first = mountPage(<WonderkidFactory />, '/wonderkid-factory');
-    openPacks();
+    await openPacks();
     act(() => { fireEvent.click(openButton('club')); });
     const drawn = ledger().pending;
     act(() => { window.dispatchEvent(new Event('pagehide')); });
@@ -161,7 +162,7 @@ describe('packs on the real academy', () => {
 
     mountPage(<WonderkidFactory />, '/wonderkid-factory');
     act(() => { vi.advanceTimersByTime(1000); });
-    openPacks();
+    await openPacks();
     const card = document.querySelector('[data-pack-reveal]');
     expect(card?.textContent ?? '', 'the reload did not show the same kid').toContain(drawn.kid.name);
     const beds = academy().prospects.filter((p: { name: string }) => p.name === drawn.kid.name).length;
@@ -216,12 +217,12 @@ describe('packs on the real academy', () => {
   }, TEST_MS);
 
   /* The review's cases, each a way a pack could have lost a kid or a gem. */
-  it('6 a kid still waiting for a bed cannot be waved away, and moves in when one frees', () => {
+  it('6 a kid still waiting for a bed cannot be waved away, and moves in when one frees', async () => {
     seed(0, 5);
     localStorage.setItem(REWARDS_KEY, JSON.stringify({ ...newLedger(7), earned: 100, spent: 100, opened: { scout: 0, club: 1, elite: 0 }, nextSeq: 2, pending: { seq: 1, pack: 'club', tier: 'talent', kid: { id: 1, name: 'Waiting Kid', nation: 'Spain', pos: 'FW', age: 16, ageClock: 0, rating: 52, potential: 80 } } }));
     mountPage(<WonderkidFactory />, '/wonderkid-factory');
     act(() => { vi.advanceTimersByTime(500); });
-    openPacks();
+    await openPacks();
     expect(document.querySelector('[data-pack-waiting]'), 'the card does not say he is waiting for a bed').not.toBeNull();
     expect([...document.querySelectorAll('[data-pack-reveal] button')].length, 'a waiting kid can be waved away').toBe(0);
     expect(ledger().pending?.kid.name, 'the waiting kid was dropped').toBe('Waiting Kid');
@@ -232,7 +233,7 @@ describe('packs on the real academy', () => {
     act(() => { vi.advanceTimersByTime(500); });
     const beds = academy().prospects.filter((p: { name: string }) => p.name === 'Waiting Kid').length;
     expect(beds, 'the waiting kid did not move into the freed bed').toBe(1);
-    openPacks();
+    await openPacks();
     const welcome = document.querySelector('[data-pack-reveal] button') as HTMLElement | null;
     expect(welcome, 'once in a bed he still cannot be welcomed').not.toBeNull();
     act(() => { fireEvent.click(welcome!); });
@@ -240,7 +241,7 @@ describe('packs on the real academy', () => {
     measured('a kid with no bed could not be waved away, moved in when a bed was sold free, and was then welcomed');
   }, TEST_MS);
 
-  it('7 an academy that remembers more packs than a lost ledger still gets the next kid', () => {
+  it('7 an academy that remembers more packs than a lost ledger still gets the next kid', async () => {
     const a = newFactory(EPOCH, 42);
     a.levels = { ...a.levels, dorms: 2 };
     a.packsDelivered = 4;
@@ -248,7 +249,7 @@ describe('packs on the real academy', () => {
     localStorage.setItem(SAVE_KEY, serialize(a));
     localStorage.setItem(REWARDS_KEY, JSON.stringify({ ...newLedger(9), earned: 150 }));
     mountPage(<WonderkidFactory />, '/wonderkid-factory');
-    openPacks();
+    await openPacks();
     act(() => { fireEvent.click(openButton('club')); });
     const drawn = ledger().pending;
     const after = academy();
@@ -295,14 +296,14 @@ describe('packs on the real academy', () => {
     measured(`${awayWins} away wins earned ${awayWins * GEM_PAY.awayWin} gems; the watched title match earned ${GEM_PAY.win + GEM_PAY.title}`);
   }, TEST_MS);
 
-  it('9 malformed saved card fields stay safe before and after delivery', () => {
+  it('9 malformed saved card fields stay safe before and after delivery', async () => {
     for (const nation of [{}, '__proto__', 'constructor']) {
       cleanup();
       localStorage.clear();
       seed(0);
       localStorage.setItem(REWARDS_KEY, JSON.stringify({ ...newLedger(7), earned: 100, spent: 100, opened: { scout: 0, club: 1, elite: 0 }, nextSeq: 2, pending: { seq: 1, pack: 'club', tier: 'talent', kid: { id: {}, name: 'Stored Kid', nation, pos: {}, age: {}, ageClock: {}, rating: {}, potential: {} } } }));
       mountPage(<WonderkidFactory />, '/wonderkid-factory');
-      openPacks();
+      await openPacks();
       const card = document.querySelector('[data-pack-reveal]');
       expect(card, 'malformed saved fields crashed the reveal').not.toBeNull();
       expect(card?.textContent).toContain('Stored Kid');
@@ -317,7 +318,7 @@ describe('packs on the real academy', () => {
     measured('object-valued saved card fields and inherited nation names render safely and the same repaired kid reaches a bed');
   }, TEST_MS);
 
-  it('10 a refused academy write keeps the paid draw through same-visit recovery and reload', () => {
+  it('10 a refused academy write keeps the paid draw through same-visit recovery and reload', async () => {
     for (const reload of [false, true]) {
       cleanup();
       localStorage.clear();
@@ -333,7 +334,7 @@ describe('packs on the real academy', () => {
         original.call(this, key, value);
       });
       mountPage(<WonderkidFactory />, '/wonderkid-factory');
-      openPacks();
+      await openPacks();
       act(() => { fireEvent.click(openButton('club')); });
       const drawn = ledger().pending;
       expect(refusals, 'the storage rejection did not fire').toBeGreaterThan(0);
@@ -346,7 +347,7 @@ describe('packs on the real academy', () => {
       blocked = false;
       if (reload) {
         mountPage(<WonderkidFactory />, '/wonderkid-factory');
-        openPacks();
+        await openPacks();
       }
       act(() => { vi.advanceTimersByTime(500); });
       const saved = academy();
@@ -362,10 +363,10 @@ describe('packs on the real academy', () => {
     measured('a paid pack survived refused academy writes, recovered once in the same visit and after reload, with one charge and the original kid');
   }, TEST_MS);
 
-  it('11 dismissal retains the draw when the latest academy state cannot be saved', () => {
+  it('11 dismissal retains the draw when the latest academy state cannot be saved', async () => {
     seed(100);
     mountPage(<WonderkidFactory />, '/wonderkid-factory');
-    openPacks();
+    await openPacks();
     act(() => { fireEvent.click(openButton('club')); });
     const drawn = ledger().pending;
     const original = Storage.prototype.setItem;
@@ -388,7 +389,7 @@ describe('packs on the real academy', () => {
     measured('Welcome retained the recovery draw after a refused save and dismissed it once the academy was saved');
   }, TEST_MS);
 
-  it('12 a refused ledger debit cannot deliver a kid or spend gems', () => {
+  it('12 a refused ledger debit cannot deliver a kid or spend gems', async () => {
     seed(100);
     const original = Storage.prototype.setItem;
     let refusals = 0;
@@ -400,7 +401,7 @@ describe('packs on the real academy', () => {
       original.call(this, key, value);
     });
     mountPage(<WonderkidFactory />, '/wonderkid-factory');
-    openPacks();
+    await openPacks();
     act(() => { fireEvent.click(openButton('club')); });
     expect(refusals, 'the ledger rejection did not fire').toBeGreaterThan(0);
     expect(ledger().spent, 'a refused debit spent durable gems').toBe(0);
@@ -412,7 +413,7 @@ describe('packs on the real academy', () => {
     cleanup();
     writes.mockRestore();
     mountPage(<WonderkidFactory />, '/wonderkid-factory');
-    openPacks();
+    await openPacks();
     act(() => { fireEvent.click(openButton('club')); });
     expect(ledger().spent).toBe(PACKS[1].price);
     expect(ledger().opened.club).toBe(1);
