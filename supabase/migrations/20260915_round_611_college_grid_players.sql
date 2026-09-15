@@ -6,8 +6,8 @@
 -- (id draft:YEAR-PICK) or a Heisman winner that joined neither (id heisman:YEAR).
 -- src/lib/collegeGrid.ts judges every guess against it in the browser.
 -- RLS on with a public read policy, the same shape as nfl_grid_players.
--- NOT YET APPLIED (2026-09-15). Apply this DDL through the Supabase MCP, load
--- the rows as described below, then run get_advisors.
+-- APPLIED 2026-09-15 through the Supabase MCP: the table exists with RLS on and the
+-- public read policy, loaded as described below, and get_advisors was run after it.
 create table if not exists public.college_grid_players (
   id text primary key,
   display_name text not null,
