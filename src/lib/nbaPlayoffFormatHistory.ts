@@ -47,6 +47,8 @@ export interface NbaPlayoffSource {
 }
 
 export const NBA_PLAYOFF_SOURCES: NbaPlayoffSource[] = [
+  { id: 'nba1967', publisher: 'NBA.com', title: 'Season Review: 1966-67', url: 'https://www.nba.com/news/history-season-review-1966-67' },
+  { id: 'nba2004', publisher: 'NBA.com', title: 'Season Review: 2004-05', url: 'https://www.nba.com/news/history-season-review-2004-05' },
   { id: 'wpoverview', publisher: 'Wikipedia', title: 'NBA playoffs', url: 'https://en.wikipedia.org/wiki/NBA_playoffs' },
   { id: 'wp1946', publisher: 'Wikipedia', title: '1946-47 BAA season', url: 'https://en.wikipedia.org/wiki/1946%E2%80%9347_BAA_season' },
   { id: 'wp1950', publisher: 'Wikipedia', title: '1950 NBA playoffs', url: 'https://en.wikipedia.org/wiki/1950_NBA_playoffs' },
@@ -181,11 +183,11 @@ export const NBA_PLAYOFF_PERIODS: NbaPlayoffPeriod[] = [
     to: 1969,
     title: 'Expansion brings back eight',
     fieldSize: 8,
-    qualifying: 'The top four in each division, no bye: first played fourth and second played third in the division semifinals.',
+    qualifying: 'The top four in each division, no bye: first played third and second played fourth in the division semifinals.',
     notes: [
       'Expansion in 1966-67 let the league fill an eight team bracket again. A year later the division semifinals went to best of seven, and from the 1968 playoffs every series in the tournament was best of seven, a state that lapsed in 1975 and did not come back until 2003.',
     ],
-    sources: ['wpoverview', 'wp1966', 'fansidedreform', 'fansidedseries'],
+    sources: ['wpoverview', 'wp1966', 'fansidedreform', 'fansidedseries', 'nba1967'],
   },
   {
     id: 'conferences',
@@ -195,9 +197,9 @@ export const NBA_PLAYOFF_PERIODS: NbaPlayoffPeriod[] = [
     fieldSize: 8,
     qualifying: 'Four teams from each conference, drawn from the two divisions inside it, playing conference semifinals and conference finals before the Finals.',
     notes: [
-      'The 1970-71 season was the first with an Eastern and a Western Conference, each split into two divisions, the structure the league still uses. The field stayed at eight, so the change was to how the bracket was organised rather than how many got in.',
+      'The 1970-71 season was the first with an Eastern and a Western Conference, each split into two divisions. Each conference expanded to three divisions in 2004-05. The field stayed at eight in 1970-71, so that change was to how the bracket was organised rather than how many got in.',
     ],
-    sources: ['wpoverview', 'wp1970', 'fansidedreform'],
+    sources: ['wpoverview', 'wp1970', 'fansidedreform', 'wp2004', 'nba2004'],
   },
   {
     id: 'ten',

@@ -25,7 +25,8 @@
  *
  * Run: node scripts/simNbaPlayoffFormatHistory.mjs
  */
-import { execSync } from 'node:child_process';
+import { build } from 'esbuild';
+import { renderFormatGuide, parseFormatGuide, periodNotes, tableCell, replaceGuideClaim } from './lib/renderFormatGuide.mjs';
 import os from 'node:os';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -40,7 +41,9 @@ const BUNDLE = `${TMP}/nbaPlayoff.${PID}.bundle.mjs`;
 const LIB = `${ROOT}/src/lib/nbaPlayoffFormatHistory.ts`;
 
 const CONTROL = process.env.NBA_PLAYOFF_CONTROL || '';
-const KNOWN = ['gap', 'onesrc'];
+const KNOWN = ['gap', 'onesrc', 'pairings', 'divisions'];
+// Source-only mode renders production components but does not claim the saved HTML was rebuilt.
+const SOURCE_ONLY = process.env.FORMAT_GUIDE_SOURCE_ONLY === '1';
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`NBA_PLAYOFF_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -68,7 +71,7 @@ if (CONTROL === 'gap') {
 }
 
 fs.writeFileSync(ENTRY, `export const lib = await import('${libPath.replaceAll('\\', '/')}');`);
-execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`, { stdio: 'inherit' });
+await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: BUNDLE, logLevel: 'error', alias: { '@': `${ROOT_URL}/src` } });
 const { lib } = await import(pathToFileURL(BUNDLE).href);
 const { NBA_PLAYOFF_PERIODS, NBA_PLAYOFF_SOURCES, NBA_LOTTERY, NBA_PLAYOFF_VERIFIED_ON, NBA_FIELD_NEVER_SHRINKS_FROM, seasonRange, sourceById } = lib;
 
@@ -159,8 +162,8 @@ console.log('2) every period and every lottery era rests on at least two publish
 
 /* ---------- 3. The shipped snapshot ---------- */
 section = '3';
-if (CONTROL) {
-  console.log('3) snapshot check skipped under a control');
+if (CONTROL || SOURCE_ONLY) {
+  console.log('3) snapshot check skipped: ' + (CONTROL ? 'control run' : 'SOURCE-ONLY verification, saved HTML pending build'));
 } else {
   console.log('3) the shipped snapshot carries every row, the source list and the page');
   const snap = path.join(ROOT, 'public', 'nba-playoff-format-history', 'index.html');
@@ -189,11 +192,39 @@ if (CONTROL) {
   }
 }
 
+/* Actual guide cells and answers, not matching correct notes elsewhere on the page.
+   The new controls restore the old wrong summary while leaving those notes intact. */
+section = '4';
+console.log('4) production guide rendering and saved summary claims');
+{
+  const page = path.join(ROOT, 'src/pages', 'NbaPlayoffFormatHistory.tsx');
+  const overrides = {};
+  if (CONTROL === 'pairings') overrides[LIB] = replaceGuideClaim(LIB,
+    'first played third and second played fourth in the division semifinals.',
+    'first played fourth and second played third in the division semifinals.');
+  if (CONTROL === 'divisions') overrides[LIB] = replaceGuideClaim(LIB,
+    'each split into two divisions. Each conference expanded to three divisions in 2004-05.',
+    'each split into two divisions, the structure the league still uses.');
+  const documents = [['production component', await renderFormatGuide(ROOT, 'NbaPlayoffFormatHistory.tsx', overrides)]];
+  const snapshot = path.join(ROOT, 'public', 'nba-playoff-format-history', 'index.html');
+  if (!CONTROL && !SOURCE_ONLY && fs.existsSync(snapshot)) documents.push(['saved HTML', parseFormatGuide(fs.readFileSync(snapshot, 'utf8'))]);
+  for (const [label, document] of documents) {
+    const pairings = tableCell(document, '1966-67 to 1969-70', 2);
+    if (!/first played third and second played fourth/.test(pairings)) fail(label + ': 1967 table pairings must be 1v3 and 2v4');
+    const divisions = periodNotes(document, 'conferences', '1970-71 to 1973-74: Two conferences of two divisions');
+    if (!/two divisions/.test(divisions) || !/three divisions in 2004-05/.test(divisions) || /structure the league still uses/.test(divisions)) fail(label + ': conference note must distinguish 1970 and 2004 divisions');
+    console.log('   inspected ' + label + ' at the affected table cell or answer');
+  }
+}
+
 console.log('');
 if (CONTROL) {
-  const want = CONTROL === 'gap'
-    ? { section: '1', signal: 'a hole or an overlap' }
-    : { section: '2', signal: 'rests on' };
+  const want = ({
+    gap: { section: '1', signal: 'a hole or an overlap' },
+    onesrc: { section: '2', signal: 'rests on' },
+    pairings: { section: '4', signal: '1967 table pairings' },
+    divisions: { section: '4', signal: 'conference note must distinguish' },
+  })[CONTROL];
   const hits = (sectionMessages[want.section] ?? []).filter(m => m.includes(want.signal)).length;
   if (hits > 0) {
     console.log(`simNbaPlayoffFormatHistory control: green. NBA_PLAYOFF_CONTROL=${CONTROL} was reported by section ${want.section} with "${want.signal}" (${hits} finding${hits === 1 ? '' : 's'}).`);

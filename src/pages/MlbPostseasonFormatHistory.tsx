@@ -79,7 +79,7 @@ const MlbPostseasonFormatHistory = () => {
                 {MLB_POSTSEASON_PERIODS.map(p => (
                   <tr key={p.id} className="border-t border-border/60 align-top">
                     <td className="px-3 py-1.5 text-muted-foreground whitespace-nowrap">{seasonRange(p)}</td>
-                    <td className="px-3 py-1.5 font-medium text-foreground whitespace-nowrap">{p.fieldSize} clubs</td>
+                    <td className="px-3 py-1.5 font-medium text-foreground whitespace-nowrap">{p.fieldSize} clubs {p.fieldNote && <span className="block whitespace-normal text-xs font-normal mt-1">{p.fieldNote}</span>}</td>
                     <td className="px-3 py-1.5 text-muted-foreground">{p.qualifying}</td>
                   </tr>
                 ))}

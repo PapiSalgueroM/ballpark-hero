@@ -1,6 +1,6 @@
 # Project state
 
-## PRIORITY CORRECTION 2026-09-15: published NFL format guide
+## PRIORITY CORRECTION 2026-09-15: published reference guides and save claims
 
 An independent public content audit found the guide incorrectly treats 1933
 through 1969 as one title-game format. The Chicago Bears' official history
@@ -8,9 +8,23 @@ and Pro Football Hall of Fame results confirm four NFL playoff teams and
 conference championship games in 1967 to 1969. Related early tiebreaker, 1982
 and 1990 wording is being checked against primary sources. Codex is preparing
 a factual correction on `codex/nfl-guide-format-correction` from current main.
+The independent review also found incorrect NBA opening pairings, an obsolete
+NBA division claim and missing Champions League 2020, MLB 1981 and NHL 2020-21
+exceptions in summary tables or FAQs. The lower notes already describe those
+last three exceptions; the summaries need to match. Source records accompany
+the corrections in `docs/adsense/`.
+
+The homepage's cross-device career-save promise and Soccer Career's guest
+sign-in-to-save line contradict the actual localStorage load/save path. Both
+are corrected to describe browser saves and optional account scores. The
+homepage Record Books description now includes award winners and avoids a
+stale competition count. These are three copy-only edits, with Cursor's
+formatting work kept separate.
+
 This has priority over the feature releases because accurate, useful content
-is central to the pending AdSense review. Nothing in this finding proves
-which pages Google used in its earlier rejection.
+is central to the pending AdSense review. The changes are under verification
+and are not published. Nothing in this finding proves which pages Google
+used in its earlier rejection.
 
 ## NEXT IN PREPARATION 2026-09-15: Round 588, title-earned boots
 

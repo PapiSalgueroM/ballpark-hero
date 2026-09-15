@@ -49,7 +49,8 @@ function knockoutLine(p: UclFormatPeriod): string {
   if (p.stage === 'knockout') return 'Two legs in every round, then a one match final';
   if (p.stage === 'leaguePhase') return 'Two legs from the play-offs to the semi-finals';
   if (p.koLegs === 1) return 'One off semi-finals at the group winners\' grounds';
-  return p.roundOf16 ? 'Two legs from the round of 16 to the semi-finals' : 'Two legged quarter-finals and semi-finals';
+  const usual = p.roundOf16 ? 'Two legs from the round of 16 to the semi-finals' : 'Two legged quarter-finals and semi-finals';
+  return p.knockoutException ? `${usual}. ${p.knockoutException}` : usual;
 }
 
 /* The tap target floor the phone sweep holds every control to. */
