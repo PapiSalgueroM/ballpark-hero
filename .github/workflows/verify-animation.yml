@@ -54,6 +54,20 @@ jobs:
           temp = pathlib.Path(os.environ['RUNNER_TEMP'])
           before_path = temp / 'release-inputs.json'
           built_path = temp / 'release-outputs.json'
+          logs = temp / 'animation603-logs'
+          logs.mkdir(parents=True, exist_ok=True)
+          def save_manifest_diagnostics(kind, expected, current):
+              previous = {row['path']: row for row in expected}
+              observed = {row['path']: row for row in current}
+              delta = {
+                  'added': sorted(set(observed) - set(previous)),
+                  'removed': sorted(set(previous) - set(observed)),
+                  'modified': sorted(name for name in previous.keys() & observed.keys() if previous[name] != observed[name]),
+              }
+              for label, value in [('before', expected), ('current', current), ('delta', delta)]:
+                  (logs / ('artifact-' + kind + '-' + label + '.json')).write_text(json.dumps(value, indent=2) + '\n')
+              print('Artifact ' + kind + ' delta: ' + json.dumps(delta, sort_keys=True), flush=True)
+
           def generated(name):
               return (name.startswith('public/') and name.endswith('.html')) or name in ('public/sitemap.xml', 'scripts/data/lastmod.json') or name.startswith('dist/')
           def tracked_inputs():
@@ -82,19 +96,25 @@ jobs:
               return names
           if sys.argv[1] == 'before':
               before_path.write_text(json.dumps(inputs(), indent=2) + '\n')
+              shutil.copyfile(before_path, logs / 'artifact-inputs-before.json')
               print('Recorded input hashes before build.')
           elif sys.argv[1] == 'built':
               built_path.write_text(json.dumps([record(name) for name in output_names()], indent=2) + '\n')
+              shutil.copyfile(built_path, logs / 'artifact-outputs-before.json')
               print('Recorded generated file hashes after build.')
           elif sys.argv[1] == 'package':
               before = json.loads(before_path.read_text())
-              if inputs() != before:
+              current_inputs = inputs()
+              save_manifest_diagnostics('inputs', before, current_inputs)
+              if current_inputs != before:
                   raise RuntimeError('Tracked build inputs changed during verification.')
               out = temp / 'release-build-output'
               out.mkdir(exist_ok=False)
               names = output_names()
               built = json.loads(built_path.read_text())
-              if [record(name) for name in names] != built:
+              current_outputs = [record(name) for name in names]
+              save_manifest_diagnostics('outputs', built, current_outputs)
+              if current_outputs != built:
                   raise RuntimeError('Generated files changed after build during verification.')
               outputs = []
               for name in names:
