@@ -1,5 +1,14 @@
 # Work board
 
+**2026-09-15, Codex: Round 587 is in development after 586.** Worktree
+`.worktrees/round-587-set-pieces`, branch `codex/round-587-set-pieces`.
+One playable penalty or free kick per watched stadium match, using the existing
+shot engine and the original animated scene. Scope: set-piece board and scene,
+stadium offer/reward rules, hook, page, help and focused harnesses. It ships
+separately after 586; the current review and release gates still come first.
+Rounds 603 to 605 remain separate match-action work. AdSense review was accepted
+at 04:19 EDT and remains pending, with no second submission.
+
 One page, two lanes. Read this before picking work, write here before building. This file
 holds who is doing what right now; `docs/PROJECT-STATE.md` holds what happened. The split
 protocol itself lives near the top of that file ("Two subscriptions, one repo").
