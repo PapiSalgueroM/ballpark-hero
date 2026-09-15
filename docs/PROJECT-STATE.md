@@ -1,5 +1,23 @@
 # Project state
 
+## LIVE CHECK 2026-09-15 18:47 EDT: the guide correction is published
+
+Independent public verification now passes all seven affected routes. Their
+readable content, links and structured metadata match the reviewed source;
+each returns 200, is indexable and has the expected single canonical. The
+entry is `index-jZ501OVb.js`; all six route scripts load as JavaScript, and
+the Soccer Career script contains the corrected browser-save wording.
+See [the public proof](adsense/guide-publication-proof-2026-09-15.json).
+
+The first check detected the changed entry but rejected all content hashes.
+An exact text diff showed only the host's injected `aside#lovable-badge`.
+The verifier now excludes that specific badge, with 14 controls proving
+other added content still changes the hash; all seven old-content controls
+still fail as intended. This verifies the correction, not all new Claude
+features or any Codex feature branch. Codex did not trigger this publication.
+The last directly observed AdSense status remains Review requested at
+12:37 EDT. No new submission was made.
+
 ## MAIN ADVANCED 2026-09-15 18:47 EDT: Claude's 611, 612 and 616 landed
 
 Remote main advanced from `83658d7b` to `b528bda1` while Codex prepared the
@@ -60,13 +78,10 @@ no generated-file import is needed. Newer main documentation is preserved,
 and the verification workflow stays off main. See
 [the accepted artifact record](adsense/guide-correction-verified-artifact-2026-09-15.json).
 
-The correction is not yet published: the 17:33 EDT public check still found
-the old content on all seven affected routes and entry `index-KIfwLt2Q.js`.
-Codex's Lovable tab operations
-are timing out, including a fresh tab. The publisher must first check that
-Lovable has the current origin/main commit and the reviewed correction, then
-publish and verify the actual public claims and app assets. Do not include the
-feature queue in this corrective publication. AdSense has not been resubmitted.
+The correction was independently confirmed published at 18:47 EDT, as recorded
+above. The earlier 17:33 EDT check still found old content on all seven routes
+and entry `index-KIfwLt2Q.js`. Codex's Lovable controls were timing out and
+Codex did not trigger the publication. AdSense has not been resubmitted.
 
 ## FULL VERIFICATION 2026-09-15: first team, action scenes, watched kicks and boots
 

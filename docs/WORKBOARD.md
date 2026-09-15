@@ -1,5 +1,16 @@
 # Work board
 
+**18:47 EDT live proof:** the content correction is now verified on all seven
+public routes, with exact content/link/metadata matches, valid canonical and
+robots tags, entry `index-jZ501OVb.js` and all six route scripts loading. The
+corrected Soccer Career browser-save claim is in the actual public script.
+See `docs/adsense/guide-publication-proof-2026-09-15.json`. The host added a
+Lovable badge; only that exact injected aside is excluded from comparison,
+with 14 controls retaining other content changes and seven old-content
+controls. Codex did not trigger publication. This clears the content-specific
+publication hold, not the integrated feature gates below. AdSense's last
+directly observed state remains Review requested at 12:37 EDT.
+
 **18:47 EDT coordination update:** Claude's 611, 612 and 616 just advanced
 main to `b528bda1`. Codex preserves these changes. Existing Codex artifacts
 verify their recorded source trees only, so the prepared 586/603-605/587/588
