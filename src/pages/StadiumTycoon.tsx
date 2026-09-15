@@ -43,7 +43,7 @@ import {
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
-import VictoryMoment from '@/components/game/VictoryMoment';
+import VictoryMoment from '@/components/tycoon/TycoonVictoryMoment';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import TycoonPitch from '@/components/tycoon/TycoonPitch';
 import { useTycoonRewards } from '@/hooks/useTycoonRewards';
@@ -161,7 +161,7 @@ export default function StadiumTycoon() {
         <LeagueRoom g={g} visible={room === 'league'} />
         {academyOpened && (
           <Suspense fallback={<div className="h-40" />}>
-            <AcademyPanel visible={room === 'academy'} onStatus={setAcademyStatus} onSnapshot={onAcademySnapshot} />
+            <AcademyPanel stylesReady visible={room === 'academy'} onStatus={setAcademyStatus} onSnapshot={onAcademySnapshot} />
           </Suspense>
         )}
 

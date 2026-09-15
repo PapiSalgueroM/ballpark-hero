@@ -29,7 +29,7 @@
 import { intlName, NATION_FAMILY } from '@/lib/intlNames';
 import { ensureUniqueIds, makeIdMinter } from '@/lib/entityIds';
 import { basePrice } from '@/lib/playerValue';
-import { BOOTS } from '@/lib/soccerCareerAppearance';
+import { BOOT_IDS } from '@/lib/soccerBootIds';
 export { basePrice } from '@/lib/playerValue';
 
 /* ------------------------------------------------------------------ tuning */
@@ -417,7 +417,7 @@ export function squadEdge(s: FactoryState, levels: GearLevels = {}): number {
 }
 
 function bootLevel(levels: GearLevels, id: string): number {
-  if (!BOOTS.some(b => b.id === id) || !Object.prototype.hasOwnProperty.call(levels, id)) return 0;
+  if (!BOOT_IDS.some(bootId => bootId === id) || !Object.prototype.hasOwnProperty.call(levels, id)) return 0;
   const level = levels[id];
   return Number.isInteger(level) && level! >= 1 && level! <= MAX_BOOT_LEVEL ? level! : 0;
 }

@@ -1,3 +1,6 @@
+/* Round 530: the setting the visitor already made. The glow stops
+           looping and the floaters land as plain text until they are cleared. */
+
 /**
  * Round 580: the academy, as a panel. This is Wonderkid Factory's screen moved
  * out of src/pages/WonderkidFactory.tsx verbatim, so the same academy can run on
@@ -19,7 +22,6 @@
 import { lazy, Suspense, useEffect, useRef, useState } from 'react';
 import { Star, HelpCircle, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { ConfettiBurst } from '@/components/club-manager/Celebration';
 import { HubTiles, HubPanelHeader, HubTile } from '@/components/hub/HubTiles';
 import { useWonderkidFactory } from '@/hooks/useWonderkidFactory';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -36,6 +38,11 @@ import { useTycoonRewards } from '@/hooks/useTycoonRewards';
 import { balance, priceOf, canOpen } from '@/lib/tycoonRewards';
 import { PACKS, TIERS, bedFree } from '@/lib/wonderkidFactory';
 
+let decorationReady = false;
+const CelebrationStyles = lazy(() => import('@/components/club-manager/CelebrationStyles').then(m => { decorationReady = true; return { default: m.CelebrationStyles }; }));
+
+const ConfettiBurst = lazy(() => import('@/components/club-manager/Celebration').then(m => ({ default: m.ConfettiBurst })));
+
 const AcademyFacilityPanel = lazy(() => import('@/components/tycoon/AcademyLegacyPanel').then(m => ({ default: m.AcademyFacilityPanel })));
 const AcademyLegacyPanel = lazy(() => import('@/components/tycoon/AcademyLegacyPanel'));
 const PacksPanel = lazy(() => import('@/components/tycoon/PacksPanel'));
@@ -44,7 +51,7 @@ const AcademyProspects = lazy(() => import('@/components/tycoon/AcademyProspects
 
 type Panel = 'scouting' | 'coaching' | 'dorms' | 'agents' | 'legacy' | 'packs' | 'firstTeam' | null;
 
-export default function AcademyPanel({ visible = true, onStatus, onSnapshot }: { visible?: boolean; onStatus?: (s: AcademyStatus) => void; onSnapshot?: (s: FactoryState) => void }) {
+export default function AcademyPanel({ visible = true, stylesReady = false, onStatus, onSnapshot }: { visible?: boolean; stylesReady?: boolean; onStatus?: (s: AcademyStatus) => void; onSnapshot?: (s: FactoryState) => void }) {
   const { state: s, floaters, doBuy, doSell, doShowcase, doMoveUp, doOpenPack, doDismissPack, packSaveBlocked, doPromote, doSellSenior, academySaveBlocked, doEquipBoot, doUpgradeBoot, gearSaveBlocked } = useWonderkidFactory();
   /* Round 585: the gem ledger, shared with the stadium that earns it. */
   const ledger = useTycoonRewards();
@@ -78,10 +85,10 @@ export default function AcademyPanel({ visible = true, onStatus, onSnapshot }: {
      slot for four seconds or until Continue. The engine is a mutable object
      behind the hook's ref, so the flip is read off the star count between
      renders rather than off an event. */
-  const [moved, setMoved] = useState<{ name: string; emoji: string; seq: number } | null>(null);
+  const [moved, setMoved] = useState<{ name: string; emoji: string; seq: number; animate: boolean } | null>(null);
   const prevRep = useRef(s.rep);
   useEffect(() => {
-    if (s.rep > prevRep.current) setMoved({ name: region.name, emoji: region.emoji, seq: s.rep });
+    if (s.rep > prevRep.current) setMoved({ name: region.name, emoji: region.emoji, seq: s.rep, animate: stylesReady || decorationReady });
     prevRep.current = s.rep;
   }, [s.rep, region]);
   useEffect(() => {
@@ -94,7 +101,7 @@ export default function AcademyPanel({ visible = true, onStatus, onSnapshot }: {
      leftFree is the engine's count; the name comes from the bed he was in on
      the previous render, and when that cannot be pinned to the count the
      line says a kid rather than guessing a name. */
-  const [walked, setWalked] = useState<{ text: string; seq: number } | null>(null);
+  const [walked, setWalked] = useState<{ text: string; seq: number; animate: boolean } | null>(null);
   const bedsRef = useRef(s.prospects.map(p => ({ id: p.id, name: p.name })));
   const prevLeftFree = useRef(s.leftFree);
   useEffect(() => {
@@ -106,7 +113,7 @@ export default function AcademyPanel({ visible = true, onStatus, onSnapshot }: {
     const still = new Set(s.prospects.map(p => p.id));
     const names = before.filter(k => !still.has(k.id)).map(k => k.name);
     const who = names.length === gone ? names.join(' and ') : gone === 1 ? 'a kid' : `${gone} kids`;
-    setWalked({ text: `${who} turned 24 and walked out on a free`, seq: s.leftFree });
+    setWalked({ text: `${who} turned 24 and walked out on a free`, seq: s.leftFree, animate: stylesReady || decorationReady });
   });
   useEffect(() => {
     if (!walked) return;
@@ -240,7 +247,7 @@ export default function AcademyPanel({ visible = true, onStatus, onSnapshot }: {
             now, and it does not take taps. */}
         {walked && (
           <div key={walked.seq} className="pointer-events-none absolute inset-x-3 top-3 z-10 rounded-lg bg-card">
-            <p className="cm-loss-shake rounded-lg border border-destructive/40 bg-destructive/10 px-2.5 py-1.5 text-xs font-bold text-destructive">
+            <p className={cn(walked.animate && 'cm-loss-shake', 'rounded-lg border border-destructive/40 bg-destructive/10 px-2.5 py-1.5 text-xs font-bold text-destructive')}>
               🚪 {walked.text}
             </p>
           </div>
@@ -262,16 +269,16 @@ export default function AcademyPanel({ visible = true, onStatus, onSnapshot }: {
           card (Round 530) while the new region is being announced */}
       {panel === 'firstTeam' ? null : moved ? (
         <div key={`moved|${moved.seq}`} className="relative overflow-hidden rounded-2xl border border-gold/60 bg-card p-4 text-center">
-          <ConfettiBurst seed={moved.seq} count={30} />
-          <p className="cm-slam font-display text-xl font-black text-gold" style={{ animationDelay: '0.05s' }}>
+          <Suspense fallback={null}><ConfettiBurst seed={moved.seq} count={30} /></Suspense>
+          <p className={cn(moved.animate && 'cm-slam', 'font-display text-xl font-black text-gold')} style={{ animationDelay: '0.05s' }}>
             {moved.emoji} Welcome to {moved.name}
           </p>
-          <p className="cm-rise mt-1 text-xs text-muted-foreground" style={{ animationDelay: '0.45s' }}>
+          <p className={cn(moved.animate && 'cm-rise', 'mt-1 text-xs text-muted-foreground')} style={{ animationDelay: '0.45s' }}>
             star {s.rep} is forever: +{Math.round(s.rep * REP_TRAIN_BONUS * 100)}% training, +{Math.round(s.rep * REP_FEE_BONUS * 100)}% fees, and the scouts here find ceilings up to {region.potMax}
           </p>
           <button
             onClick={() => setMoved(null)}
-            className="cm-rise mt-3 inline-flex min-h-[36px] items-center rounded-full bg-primary px-6 py-2 text-sm font-bold text-primary-foreground hover:brightness-110"
+            className={cn(moved.animate && 'cm-rise', 'mt-3 inline-flex min-h-[36px] items-center rounded-full bg-primary px-6 py-2 text-sm font-bold text-primary-foreground hover:brightness-110')}
             style={{ animationDelay: '0.7s' }}
           >
             Continue
@@ -301,6 +308,8 @@ export default function AcademyPanel({ visible = true, onStatus, onSnapshot }: {
           </Suspense>
         </div>
       )}
+
+      {(moved || walked) && <Suspense fallback={null}><CelebrationStyles /></Suspense>}
 
       {/* floaters */}
       <div aria-hidden="true" className="pointer-events-none fixed bottom-20 inset-x-0 flex flex-col items-center gap-1 z-40">
@@ -357,8 +366,7 @@ export default function AcademyPanel({ visible = true, onStatus, onSnapshot }: {
         .wf-float { animation: wfFloat 2.6s ease-out forwards; }
         @keyframes wfGlow { 0%, 100% { box-shadow: 0 0 6px rgba(234,179,8,0.5); } 50% { box-shadow: 0 0 22px rgba(234,179,8,0.9); } }
         .wf-glow { animation: wfGlow 1.6s ease-in-out infinite; }
-        /* Round 530: the setting the visitor already made. The glow stops
-           looping and the floaters land as plain text until they are cleared. */
+
         @media (prefers-reduced-motion: reduce) {
           .wf-glow { animation: none; }
           .wf-float { animation: none; opacity: 1; transform: none; }

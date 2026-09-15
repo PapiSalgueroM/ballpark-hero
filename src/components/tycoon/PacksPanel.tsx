@@ -11,6 +11,7 @@
  * including a list of words it may never use.
  */
 import { cn } from '@/lib/utils';
+import { CelebrationStyles } from '@/components/club-manager/CelebrationStyles';
 import { PACKS, TIERS, GUARANTEED_TIERS } from '@/lib/wonderkidFactory';
 import type { PackId } from '@/lib/wonderkidFactory';
 import { balance, priceOf, packsToGuarantee, canOpen, GEM_PAY } from '@/lib/tycoonRewards';
@@ -33,6 +34,7 @@ export default function PacksPanel({ ledger, bedFree, delivered, saveBlocked, on
 
   return (
     <div data-packs-panel className="space-y-3">
+      <CelebrationStyles />
       <div className="rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
         <div className="text-sm font-bold text-foreground">💎 {gems} gem{gems === 1 ? '' : 's'}</div>
         <p className="mt-1 leading-snug">

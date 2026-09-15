@@ -21,7 +21,7 @@
  */
 import { PACKS, TIERS, TIER_IDS, GUARANTEED_TIERS, cleanPackKid, MAX_BOOT_LEVEL } from '@/lib/wonderkidFactory';
 import type { PackId, Pack, TierId, Prospect } from '@/lib/wonderkidFactory';
-import { BOOTS } from '@/lib/soccerCareerAppearance';
+import { BOOT_IDS } from '@/lib/soccerBootIds';
 export { MAX_BOOT_LEVEL } from '@/lib/wonderkidFactory';
 
 export const REWARDS_KEY = 'tycoonRewardsV1';
@@ -141,11 +141,11 @@ export function cleanLedger(raw: unknown, seedIfMissing = 585): RewardsLedger {
     out.gearUnlocked = [];
     out.gearLevel = {};
     if (receipts.size > 0 && Array.isArray(r.gearUnlocked)) {
-      for (const boot of BOOTS) {
-        if (r.gearUnlocked[out.gearUnlocked.length] !== boot.id || out.gearUnlocked.length >= out.lastMatch) break;
-        out.gearUnlocked.push(boot.id);
-        const level = Object.prototype.hasOwnProperty.call(r.gearLevel ?? {}, boot.id) ? r.gearLevel?.[boot.id] : 1;
-        out.gearLevel[boot.id] = Number.isSafeInteger(level) && level! >= 1 ? Math.min(level!, MAX_BOOT_LEVEL) : 1;
+      for (const id of BOOT_IDS) {
+        if (r.gearUnlocked[out.gearUnlocked.length] !== id || out.gearUnlocked.length >= out.lastMatch) break;
+        out.gearUnlocked.push(id);
+        const level = Object.prototype.hasOwnProperty.call(r.gearLevel ?? {}, id) ? r.gearLevel?.[id] : 1;
+        out.gearLevel[id] = Number.isSafeInteger(level) && level! >= 1 ? Math.min(level!, MAX_BOOT_LEVEL) : 1;
       }
     }
     out.kitUpgrades = receipts.size > 0 ? whole(r.kitUpgrades, Math.min(out.lastMatch, 1e9)) : 0;
@@ -186,11 +186,11 @@ export function creditFullTimes(l: RewardsLedger, list: FullTime[], allowGear = 
       const division = ft.division!;
       const titles = [...(out.gearTitles ?? Array(GEAR_DIVISIONS).fill(0))];
       const unlocked = out.gearUnlocked ?? [];
-      const unlock = unlocked.length < BOOTS.length && (!titles[division] || division === GEAR_DIVISIONS - 1);
+      const unlock = unlocked.length < BOOT_IDS.length && (!titles[division] || division === GEAR_DIVISIONS - 1);
       if (!titles[division]) titles[division] = ft.totalMatches;
       out = { ...out, gearTitles: titles, gearUnlocked: unlocked, gearLevel: out.gearLevel ?? {}, kitUpgrades: out.kitUpgrades ?? 0 };
       if (unlock) {
-        const id = BOOTS[unlocked.length].id;
+        const id = BOOT_IDS[unlocked.length];
         out.gearUnlocked = [...unlocked, id];
         out.gearLevel = { ...out.gearLevel, [id]: 1 };
       } else {
@@ -204,7 +204,7 @@ export function creditFullTimes(l: RewardsLedger, list: FullTime[], allowGear = 
 /** A kit upgrade raises one owned pair. It never costs gems or changes its wearer. */
 export function upgradeBoot(l: RewardsLedger, id: string): RewardsLedger | null {
   const level = l.gearLevel?.[id];
-  if (!BOOTS.some(b => b.id === id) || !l.gearUnlocked?.includes(id)
+  if (!BOOT_IDS.some(bootId => bootId === id) || !l.gearUnlocked?.includes(id)
     || !Number.isInteger(level) || level! < 1 || level! >= MAX_BOOT_LEVEL
     || !Number.isSafeInteger(l.kitUpgrades) || l.kitUpgrades! < 1) return null;
   return { ...l, gearLevel: { ...l.gearLevel, [id]: level! + 1 }, kitUpgrades: l.kitUpgrades! - 1 };

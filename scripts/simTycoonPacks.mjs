@@ -105,7 +105,7 @@ process.on('exit', () => {
   try { fs.rmSync(tmp, { recursive: true, force: true }); } catch { /* best effort */ }
 });
 function mustReplace(text, from, to, what) {
-  if (text.split(from).length - 1 !== 1) abort(`  control: ${what} does not carry exactly one ${JSON.stringify(from.slice(0, 70))}, so this control would prove nothing`);
+  if (text.split(from).length - 1 !== 1) abort(`  FAIL: control: ${what} does not carry exactly one ${JSON.stringify(from.slice(0, 70))}, so this control would prove nothing`);
   return text.replace(from, to);
 }
 async function bundle(entry, name, aliases = {}) {
@@ -505,7 +505,7 @@ const CONTROLS = [
   { name: 'unsaveddismiss', why: 'dismissal clears the pending draw despite a refused academy save', red: [], vRed: [11], vitest: 'TYCOON_LOADS_ACADEMY_HOOK',
     lib: () => [ACADEMY_HOOK, mustReplace(read(ACADEMY_HOOK), '    try { localStorage.setItem(SAVE_KEY, serialize(s)); } catch {\n      setPackSaveBlocked(true);\n      return;\n    }', '    try { localStorage.setItem(SAVE_KEY, serialize(s)); } catch {\n      setPackSaveBlocked(true);\n    }', 'useWonderkidFactory.ts')] },
   { name: 'unsaveddebit', why: 'opening accepts a ledger write refusal and delivers a kid without a durable debit', red: [], vRed: [12], vitest: 'TYCOON_PACKS_REWARDS',
-    lib: () => [REWARDS_LIB, mustReplace(read(REWARDS_LIB), '  saveLedger(next, true);', '  saveLedger(next);', 'tycoonRewards.ts')] },
+    lib: () => [REWARDS_LIB, mustReplace(read(REWARDS_LIB), '  saveLedger(next, true);\n  return next.pending;', '  saveLedger(next);\n  return next.pending;', 'tycoonRewards.ts (commitOpenPack)')] },
 ];
 const SLOW = ['S15'];
 for (const control of CONTROLS) {
