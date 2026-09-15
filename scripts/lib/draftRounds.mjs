@@ -8,9 +8,10 @@
    round is every pick before that.
 
    THE RULE. For each draft year, firstRoundEnds is the smallest pick among
-   that year's round two rows, minus 1. A year with no round two rows (1942
-   to 1945, most of 1949 to 1969, and 1966 to 1969 in particular) gets null,
-   and a pick from a null year is never judged either way.
+   that year's round two rows, minus 1. A year with no round two rows gets
+   null (measured 2026-09-15: 1942 to 1945, 1949, 1951 to 1955 and 1957 to
+   1969; every draft from 1970 has a boundary), and a pick from a null year
+   is never judged either way.
 
    The raw round column is never used as a verdict anywhere that imports this
    module. The College Grid key (scripts/genCollegeGridData.mjs) uses it now;
