@@ -64,8 +64,9 @@ unchanged-build retry passed. No extra headroom or budget increase is claimed.
 
 These are pending full verification, not published. All existing workflow
 gates remain, with strict result parsing and eleven rebuilt routes. The old
-586/603-605/587 runs failed on issues now repaired; they are not release
-approval. The new 587 source is in `.worktrees/round-587-final`; the old
+586/603-605/587 runs are failed evidence, not release approval. Their exact
+results and remaining sampling issue are recorded below. The new 587 source
+is in `.worktrees/round-587-final`; the old
 `.worktrees/round-587-set-pieces` and its fourteen generated draft modifications
 remain untouched. Publish correction, 586, 603 to 605, 587, then 588, separately.
 No feature beyond 588 is started. Claude's reserved work and Cursor's formatting
