@@ -1,5 +1,33 @@
 # Project state
 
+## IN VERIFICATION 2026-09-15: Rounds 603 to 605, match action animations
+
+The animation release is assembled in `.worktrees/animation-release-603-605`,
+branch `codex/animation-release-603-605`. It includes Round 586 as its base and
+must be published after 586's separate release. None of these new action
+renderers is confirmed live yet.
+
+Club Manager's live feed now drives original players striking, passing and
+making goalkeeper saves. Pausing, speed changes, tactics redraws and the final
+event before half time or full time preserve the committed result and clock.
+Soccer Career's wall shots, tackles and glove drills use visible player poses
+and actual ball contact. Wall blocks stop at the wall, weak shots fall short,
+and the existing 700ms scoring deadline stays unchanged. NFL and NBA Conquest
+use their already revealed plays for catches, runs, kicks, interceptions,
+shots, blocks and steals. The NBA engine adds only an action label to an
+existing branch, with no extra random draw or scoring change.
+
+Focused runtime and geometry checks are recorded with each source commit.
+The full combined build, harness suite and generated-page verification remain
+owed until the release workflow finishes. Keep this distinct from the passing
+focused checks and preview videos.
+
+AdSense remains Review requested following the September 15 04:19 EDT
+submission. The [bounded animation audit](adsense/animation-regression-2026-09-15.md)
+found no new placement or crawler-access blocker on the five checked pages.
+It does not establish approval or a fresh console decision. Do not submit a
+second review while this one is pending.
+
 ## IN VERIFICATION 2026-09-15: Round 586, academy first team
 
 Built in `.worktrees/round-586-first-team`, branch `codex/round-586-first-team`.
