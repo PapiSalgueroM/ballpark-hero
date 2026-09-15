@@ -58,6 +58,20 @@ jobs:
           temp = pathlib.Path(os.environ['RUNNER_TEMP'])
           before_path = temp / 'release-inputs.json'
           built_path = temp / 'release-outputs.json'
+          logs = temp / 'round588-logs'
+          logs.mkdir(parents=True, exist_ok=True)
+          def save_manifest_diagnostics(kind, expected, current):
+              previous = {row['path']: row for row in expected}
+              observed = {row['path']: row for row in current}
+              delta = {
+                  'added': sorted(set(observed) - set(previous)),
+                  'removed': sorted(set(previous) - set(observed)),
+                  'modified': sorted(name for name in previous.keys() & observed.keys() if previous[name] != observed[name]),
+              }
+              for label, value in [('before', expected), ('current', current), ('delta', delta)]:
+                  (logs / ('artifact-' + kind + '-' + label + '.json')).write_text(json.dumps(value, indent=2) + '\n')
+              print('Artifact ' + kind + ' delta: ' + json.dumps(delta, sort_keys=True), flush=True)
+
           def generated(name):
               return (name.startswith('public/') and name.endswith('.html')) or name in ('public/sitemap.xml', 'scripts/data/lastmod.json') or name.startswith('dist/')
           def tracked_inputs():
@@ -86,19 +100,25 @@ jobs:
               return names
           if sys.argv[1] == 'before':
               before_path.write_text(json.dumps(inputs(), indent=2) + '\n')
+              shutil.copyfile(before_path, logs / 'artifact-inputs-before.json')
               print('Recorded input hashes before build.')
           elif sys.argv[1] == 'built':
               built_path.write_text(json.dumps([record(name) for name in output_names()], indent=2) + '\n')
+              shutil.copyfile(built_path, logs / 'artifact-outputs-before.json')
               print('Recorded generated file hashes after build.')
           elif sys.argv[1] == 'package':
               before = json.loads(before_path.read_text())
-              if inputs() != before:
+              current_inputs = inputs()
+              save_manifest_diagnostics('inputs', before, current_inputs)
+              if current_inputs != before:
                   raise RuntimeError('Tracked build inputs changed during verification.')
               out = temp / 'release-build-output'
               out.mkdir(exist_ok=False)
               names = output_names()
               built = json.loads(built_path.read_text())
-              if [record(name) for name in names] != built:
+              current_outputs = [record(name) for name in names]
+              save_manifest_diagnostics('outputs', built, current_outputs)
+              if current_outputs != built:
                   raise RuntimeError('Generated files changed after build during verification.')
               outputs = []
               for name in names:
@@ -187,8 +207,26 @@ jobs:
           )"
           test -f "$TYCOON_GEAR_CSS"
           status=0
-          for gate in simPrerenderBoot playIphone playLeagueTableFit playFirstTeamFit sweepWeight simDrawOrder simFaqSchema simSetPiecePresentation playTycoonSetPieceFit simDrillMotion simConquestMotion playTycoonGearFit; do
+          for gate in simPrerenderBoot playIphone playLeagueTableFit playFirstTeamFit sweepWeight simDrawOrder simFaqSchema simSetPiecePresentation playTycoonSetPieceFit simDrillMotion simConquestMotion playTycoonGearFit simVictoryMoment; do
             node "$RUNNER_TEMP/round588-browser.mjs" "scripts/$gate.mjs" 2>&1 | tee "$RUNNER_TEMP/round588-logs/$gate.log" || status=1
+          done
+          for control in motion frozen promotion loading late flash packstyle; do
+            case "$control" in
+              motion) assertion='Reduced motion has no running animations' ;;
+              frozen) assertion='Cup visibly lifts' ;;
+              promotion) assertion='entire promotion card fits pitch' ;;
+              loading) assertion='Pending trophy keeps committed title visible exactly once' ;;
+              late) assertion='Original parent dismissal or four-second lifetime wins over a held import' ;;
+              flash) assertion='Late CSS never hides or restarts an already visible cold notice' ;;
+              packstyle) assertion='First standalone pack owns its rise styles before reveal' ;;
+            esac
+            result=0
+            VICTORY_CONTROL="$control" node "$RUNNER_TEMP/round588-browser.mjs" scripts/simVictoryMoment.mjs > "$RUNNER_TEMP/round588-logs/victory-$control.log" 2>&1 || result=$?
+            cat "$RUNNER_TEMP/round588-logs/victory-$control.log"
+            test "$result" -eq 1 || status=1
+            grep -F "CONTROL $control:" "$RUNNER_TEMP/round588-logs/victory-$control.log" || status=1
+            grep -F 'AssertionError' "$RUNNER_TEMP/round588-logs/victory-$control.log" || status=1
+            grep -F "$assertion" "$RUNNER_TEMP/round588-logs/victory-$control.log" || status=1
           done
           if FIRST_TEAM_CONTROL=nowrap node "$RUNNER_TEMP/round588-browser.mjs" scripts/playFirstTeamFit.mjs > "$RUNNER_TEMP/round588-logs/first-team-nowrap.log" 2>&1; then
             echo 'First team negative control did not fail'
@@ -359,7 +397,7 @@ jobs:
         if: ${{ !cancelled() && steps.build.outcome == 'success' }}
         timeout-minutes: 30
         run: |
-          for control in fee edge cap duplicate repeat title summit pack upgrade locked save cache writer; do
+          for control in fee edge cap duplicate repeat title summit pack upgrade locked save cache writer catalog order; do
             result=0
             GEAR_CONTROL="$control" node scripts/simTycoonGear.mjs > "$RUNNER_TEMP/round588-logs/gear-engine-$control.log" 2>&1 || result=$?
             cat "$RUNNER_TEMP/round588-logs/gear-engine-$control.log"
