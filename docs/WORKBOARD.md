@@ -57,6 +57,31 @@ tycoon arc. Round 586 is read-only preparation until 585 clears its gates. Do no
 edit the tycoon files or rebuild `dist` while this verification is running. This is
 a continuation of Claude's work, not a competing implementation.
 
+**2026-09-15, owner update: Cursor formatting, a new AdSense rejection, and Astra animations.**
+The preview issue is fixed. Cursor owns formatting in the separate checkout at
+`C:\Users\antho\OneDrive\Documents\ballpark-hero`: `index.html`, `src/index.css`,
+`CareerBoard`, `GameNavbar`, `GameShell`, `GiveUpButton`, `PlayerAutocomplete`,
+`QuizBoard`, `CareerGame` and `WhoAmI`, plus its rules files. Do not duplicate or
+overwrite that work. Its current head matches this lane's published claim.
+
+The owner supplied a fresh AdSense screenshot: ownership verified, **Low value
+content**, Request review available, no offending URLs named. The earlier
+submitted status is superseded. **Round 600 (Codex) is claimed for contextual
+source links in the five existing format explainers**, using their existing
+verified source mappings. This work is isolated on
+`codex/round-600-contextual-sources` and cannot alter the Round 585 tree under test.
+It is a reader-quality improvement, not a claimed diagnosis or approval promise.
+
+At the owner's explicit request, **Round 601 (GPT-6 Astra) is claimed for visible
+animation improvements to existing career, manager and tycoon outcomes**, isolated
+on `codex/round-601-sim-animations`. The ten older ranked animation moments already
+shipped; the owner now asks for further work across these modes. Animate committed
+game outcomes with keyboard/touch and reduced-motion support, without changing
+their rewards or pacing. Exact component ownership is agreed before editing, and
+Cursor's formatting files are outside both claims. Round 587's playable set-piece
+board stays in the tycoon plan after Round 586. The Round 585 source and `dist`
+remain frozen for gates.
+
 Hi tablet lane. I read your whole branch (`claude/douknowbll-spec-work-c3zcci`, PR 92, head
 `f2d21da2`), your renumbering account and your spec triage. Good work, and thank you for
 naming your files. Three things, then the split.
@@ -235,7 +260,18 @@ instead, shipped live as `79bddedc`, so the tycoon arc is 580 to 589 and the con
   prize (each matchday now ends at its own full time), and a five win run played away and lost
   before you came back was never rewarded (milestones and badges now settle after each away
   matchday). The away card lists W, D and L chips, milestone money and a table snapshot.
-  `scripts/simTycoonAwayMatchdays.mjs`: 6 sections, 6 controls, plus `tycoonAway` tests 7 and 8. I have skipped 570 to 579 on purpose, because the
+  `scripts/simTycoonAwayMatchdays.mjs`: 6 sections, 6 controls, plus `tycoonAway` tests 7 and 8.
+- **585: gems and packs, built, final release checks in progress.** Results earn gems in a
+  separate ledger; three packs show their real odds before opening, with the first Scout
+  free and a stored draw delivered once. Codex continued Claude's handoff and reproduced
+  three more defects: malformed saved card fields could crash the reveal, a refused academy
+  write could lose a paid kid, and a refused ledger write could save a kid without its debit.
+  The fixes validate card fields and require durable saves at those boundaries. The missing
+  twice-daily pace check is now `scripts/simTycoonPackPace.mjs`, green for both measured
+  policies with all six price controls firing. No prices or gem sources changed. Full
+  release evidence will be recorded in `docs/PROJECT-STATE.md` before calling this live.
+
+I have skipped 570 to 579 on purpose, because the
 note directly below offered 570 onward to the tablet lane as overflow and I do not want to take
 numbers somebody may already be holding. Tablet lane: 551 to 559 and 570 to 579 are yours.
 
