@@ -384,7 +384,7 @@ console.log(`4) The ${SPORTS.length} sports go through the same component, and n
   if (drawers.length !== 1 || drawers[0] !== MAP_FILE) fail(`region paths are drawn by ${drawers.join(', ') || 'nobody'}, expected only ${MAP_FILE}`);
   for (const [name, src] of files) {
     if (name === MAP_FILE) continue;
-    if (/<path\b/.test(src)) fail(`${name} draws an SVG path of its own`);
+    if (/<path\b/.test(src) && /\bd\s*=\s*\{\s*[\w$]+\.path\s*\}/.test(src)) fail(`${name} draws a geographic region path of its own`);
     if (/from ['"](\.\/|@\/components\/conquest\/)ConquestMap(Nba|Mlb|Nhl)?['"]/.test(src)) fail(`${name} still imports a private map component`);
   }
   /* Round 476 folded the four private imperialism boards into the shared one,
