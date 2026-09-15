@@ -281,7 +281,8 @@ function sections({ W, R, V1, T, panelSource, sources, baseline }) {
   if (/setInterval|setTimeout|Confetti/.test(panelCode)) out.S10.push('the Packs panel has a timer or confetti');
   const academyCode = stripComments(sources.find(s => s.rel === 'src/components/tycoon/AcademyPanel.tsx')?.code ?? '');
   const academyPanelsCode = stripComments(sources.find(s => s.rel === 'src/components/tycoon/AcademyLegacyPanel.tsx')?.code ?? '');
-  const packCode = [panelCode, rewardsCode, academyCode, academyPanelsCode].join('\n').toLowerCase();
+  const academyProspectsCode = stripComments(sources.find(s => s.rel === 'src/components/tycoon/AcademyProspects.tsx')?.code ?? '');
+  const packCode = [panelCode, rewardsCode, academyCode, academyPanelsCode, academyProspectsCode].join('\n').toLowerCase();
   for (const word of BANNED) if (new RegExp(`\\b${word}\\b`).test(packCode)) out.S10.push(`the pack code uses the word "${word}"`);
   notes.S10 = `one writer of the ledger key across ${sources.length} source files, no .earned assignment elsewhere, no Math.random in the ledger, no timer or confetti on the panel, none of ${BANNED.join(', ')}`;
 
