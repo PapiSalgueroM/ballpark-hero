@@ -1,8 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
 import {
   money, moneyIn, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, expiringPlayers,
-  sellValue, canLeaveSquad, terminationQuote,
+  sellValue, canPayOff, terminationQuote,
 } from '@/lib/clubManager';
 import type { CareerState, CMPlayer } from '@/lib/clubManager';
 import { payoffRate, wageOwed } from '@/lib/clubManagerFreeAgents';
@@ -45,6 +45,10 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onTerminate 
      stray thumb away from a renewal button on a phone. */
   const [payoffOpen, setPayoffOpen] = useState(false);
   const [confirmId, setConfirmId] = useState<string | null>(null);
+  /* Disarm on any change to the save. The payoff list is sorted by wage, so
+     renewing somebody in the Final year list above re-sorts the rows under an
+     armed Confirm and leaves it sitting where an unarmed Pay off button was. */
+  useEffect(() => { setConfirmId(null); }, [career]);
   const bill = wageBill(career);
   const cap = career.wageCap ?? wageCapFrom(bill);
   const pct = Math.round((bill / Math.max(1, cap)) * 100);
@@ -59,7 +63,7 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onTerminate 
      a settlement that goes through. Dearest first, because the whole reason to
      do this is a wage you cannot carry. */
   const payoffCandidates = career.squad
-    .filter(p => canLeaveSquad(career, p))
+    .filter(p => canPayOff(career, p))
     .map(p => ({ p, cost: terminationQuote(career, p.id) }))
     .filter((row): row is { p: CMPlayer; cost: number } => row.cost !== null)
     .sort((a, b) => (b.p.wage ?? 0) - (a.p.wage ?? 0));

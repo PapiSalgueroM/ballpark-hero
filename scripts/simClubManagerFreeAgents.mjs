@@ -58,6 +58,10 @@
  *                                expiry path, which is the bug this section
  *                                was written for. Section 3 must find men
  *                                called "(Youth)" on a first team board.
+ *   CM_FA_CONTROL=flipmoney      puts the notional market value back onto the
+ *                                squad record a free agent signs on, which is
+ *                                what made him worth five times what he cost.
+ *                                Section 11 must find the money printer.
  *
  * MEASURED BANDS, 2026-09-16, on the filename seed and on SIM_SEED 1, 2 and 3.
  * Every threshold sits between the two bands rather than beside either.
@@ -107,7 +111,7 @@ const ENTRY = path.join(TMP, 'cmFa.entry.mjs');
 const BUNDLE = path.join(TMP, 'cmFa.bundle.mjs');
 
 const CONTROL = process.env.CM_FA_CONTROL || '';
-const KNOWN = ['nogate', 'primefree', 'nodupeguard', 'windowlock', 'noresignguard', 'nopayoffledger', 'youthonboard'];
+const KNOWN = ['nogate', 'primefree', 'nodupeguard', 'windowlock', 'noresignguard', 'nopayoffledger', 'youthonboard', 'flipmoney'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_FA_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -160,10 +164,22 @@ if (CONTROL) {
       "  if (fa.wasMine && fa.since === career.season && (fa.reason === 'terminated' || fa.reason === 'expired')) {",
       '  if (false) {',
       'clubManager.ts (the re-sign guard)');
+  } else if (CONTROL === 'flipmoney') {
+    /* Put the notional market value back on the squad record, which is what
+       made every free agent worth five times what he cost. Section 11 must
+       find the money printer. */
+    engine = swap(engine, '    value: signedValue(fa),', '    value: fa.value,',
+      'clubManager.ts (the signed value)');
   } else if (CONTROL === 'youthonboard') {
+    /* Anchored on the guard line alone rather than on the guard plus the push
+       below it. The pair broke the first time the push changed for an unrelated
+       reason (the unique id argument), and the control then failed closed and
+       proved nothing, which is the right failure but still a control out of
+       action. `if (p.isYouth) continue;` appears exactly once in the engine and
+       the swap asserts that. */
     engine = swap(engine,
-      '      if (p.isYouth) continue;\n      walkedToPool.push(freeAgentFromPlayer(p, career.clubName, season, \'expired\'));',
-      '      walkedToPool.push(freeAgentFromPlayer(p, career.clubName, season, \'expired\'));',
+      '      if (p.isYouth) continue;\n',
+      '',
       'clubManager.ts (the academy filter on the expiry path)');
   } else if (CONTROL === 'nopayoffledger') {
     engine = swap(engine,
@@ -203,7 +219,7 @@ const {
   startCareer, playNextEntry, finishSeason, startNextSeason,
   buildMarket, buyPlayer, wageBill, xiAverageRating,
   freeAgentPool, terminateContract, terminationQuote, signFreeAgent, freeAgentRefusal,
-  ensureFreeAgents, canLeaveSquad,
+  ensureFreeAgents, canPayOff, setTransferStatus, acceptBid,
 } = cm;
 const {
   FA_BOARD_FLOOR, FA_SHELF_WEEKS, PAYOFF_FLOOR, PAYOFF_CEILING,
@@ -214,7 +230,7 @@ const { projectFinances } = finMod;
 for (const [name, fn] of Object.entries({
   startCareer, playNextEntry, finishSeason, startNextSeason, buildMarket, buyPlayer,
   wageBill, xiAverageRating, freeAgentPool, terminateContract, terminationQuote,
-  signFreeAgent, freeAgentRefusal, ensureFreeAgents, canLeaveSquad,
+  signFreeAgent, freeAgentRefusal, ensureFreeAgents, canPayOff, setTransferStatus, acceptBid,
   freeAgentTerms, payoffRate, terminationCost, wageOwed, worldReleaseOdds, projectFinances,
 })) {
   if (typeof fn !== 'function') {
@@ -416,7 +432,7 @@ console.log('4) A payoff costs real money, and the books see it');
   let ledgerMisses = 0;
   for (const club of CLUBS) {
     const s = startCareer(club);
-    const victim = s.squad.filter(p => canLeaveSquad(s, p) && !p.isYouth)
+    const victim = s.squad.filter(p => canPayOff(s, p))
       .sort((a, b) => (b.wage ?? 0) - (a.wage ?? 0))[0];
     if (!victim) { fail(`${club} has nobody who can be paid off at all`); continue; }
     const quote = terminationQuote(s, victim.id);
@@ -526,7 +542,7 @@ console.log('6) You cannot re-sign a man you let go this season');
   let expiriesSeen = 0;
   for (const club of CLUBS) {
     const s = startCareer(club);
-    const victim = s.squad.filter(p => canLeaveSquad(s, p) && !p.isYouth)
+    const victim = s.squad.filter(p => canPayOff(s, p))
       .sort((a, b) => (b.wage ?? 0) - (a.wage ?? 0))[0];
     if (victim) {
       const after = terminateContract(s, victim.id);
@@ -747,6 +763,122 @@ console.log('10) Copy check');
     });
   }
   if (dashes === 0) console.log('   clean');
+}
+
+/* ================================================================== */
+console.log('11) The board cannot be farmed for cash');
+/*
+ * THE CHECK THIS HARNESS WAS MISSING, and the reason a game breaking bug got
+ * past nine green sections: section 8 measures squad RATING, and the exploit
+ * was in MONEY. Sign a free agent for 18 percent of his notional value, take
+ * delivery of a squad record carrying the full value, list him, and sellValue
+ * pays 90 percent of it. Measured on the build that shipped to the branch:
+ * Everton turned 43m into 358.81m in one season (22 signings for 55.0m, 19
+ * sales for 358.9m) and Manchester City made 241m. Every note came from
+ * players the game invented.
+ *
+ * So this buys and immediately re-lists ONLY the free agents it signed, never
+ * an existing squad member, and reads the net. A manager who churns the board
+ * must lose money on it. Measured after the fix: Everton -10.32m, City -25.60m.
+ */
+{
+  const nets = [];
+  for (const club of CLUBS) {
+    reseed(armSeed(club, 1));
+    let s = startCareer(club);
+    let spent = 0;
+    let banked = 0;
+    let signings = 0;
+    const signed = new Set();
+    for (let week = 0; week < 40 && s.week < s.calendar.length; week += 1) {
+      for (const fa of freeAgentPool(s)) {
+        if (freeAgentRefusal(s, fa.id) !== null) continue;
+        const cost = freeAgentTerms(fa).bonus;
+        const next = signFreeAgent(s, fa.id);
+        if (!next) continue;
+        const p = next.squad[next.squad.length - 1];
+        spent += cost;
+        signings += 1;
+        signed.add(p.id);
+        s = setTransferStatus(next, p.id, 'listed') ?? next;
+      }
+      /* Only the men this loop signed. Accepting every bid would bank the
+         club's real stars and measure a different thing entirely, which is
+         what the first probe did. */
+      for (const bid of s.incomingBids ?? []) {
+        if (!signed.has(bid.playerId)) continue;
+        const before = s.budget;
+        const after = acceptBid(s, bid.playerId);
+        if (after) { banked += after.budget - before; s = after; }
+      }
+      const r = playNextEntry(s, { skipHalftime: true });
+      s = r.state;
+      if (r.kind === 'seasonOver' || s.sacked) break;
+    }
+    nets.push({ club, net: banked - spent, signings });
+  }
+  const worst = Math.max(...nets.map(n => n.net));
+  console.log(`   ${nets.map(n => `${n.club} ${n.net >= 0 ? '+' : ''}${n.net.toFixed(1)}m`).join(', ')}`);
+  if (nets.some(n => n.signings < 3)) fail('too few free agents were signed to measure a flip at all');
+  /* Threshold from the measured failure, not the pass: the broken build made
+     +316m at one club. A ceiling of +5m sits far under that and comfortably
+     over the fixed band, which is negative everywhere. */
+  if (worst > 5) {
+    fail(`churning the free agent board banked ${worst.toFixed(1)}m of profit, so the board is a money printer`);
+  }
+}
+
+console.log('12) A man who walks off your books lands on the board at his real age');
+/*
+ * The rollover ages every squad member and rolls retirement over them BEFORE
+ * the expiry split, so the men who walk are already aged and already survived
+ * a retirement roll. Merging them into the board before rollFreeAgents ran
+ * meant both happened again: measured, 30 of 30 of my own walked players
+ * arrived exactly two years older than they were in the squad, and 5 of 221
+ * departures were silently retired by the second roll after the transfer feed
+ * had already announced them leaving on a free.
+ */
+{
+  let checked = 0;
+  let wrongAge = 0;
+  let vanished = 0;
+  for (const club of CLUBS) {
+    reseed(armSeed(club, 2));
+    let s = startCareer(club);
+    for (let season = 0; season < 3; season += 1) {
+      s = runSeason(s);
+      if (s.sacked) break;
+      /* Everyone whose deal is about to run out, and how old he is today. */
+      const expiring = new Map(
+        s.squad.filter(p => !p.onLoan && !p.isYouth && (p.contractYears ?? 9) <= 1)
+          .map(p => [p.name, p.age]),
+      );
+      const before = s;
+      s = nextSeason(s);
+      const board = new Map(freeAgentPool(s).map(fa => [fa.name, fa]));
+      const retired = new Set(s.retiredNames ?? []);
+      for (const [name, ageThen] of expiring) {
+        if (before.squad.some(p => p.name === name && (p.contractYears ?? 9) > 1)) continue;
+        const fa = board.get(name);
+        if (!fa) {
+          /* Gone without a trace is only legitimate when the rollover itself
+             retired him, or a rival signed him in the summer rush. */
+          if (!retired.has(name)) vanished += 1;
+          continue;
+        }
+        checked += 1;
+        /* agePlayer adds exactly one year at the rollover. Anything else means
+           he was aged twice. */
+        if (fa.age !== ageThen + 1) {
+          wrongAge += 1;
+          if (wrongAge <= 3) console.log(`   ${club}: ${name} was ${ageThen} in the squad and is ${fa.age} on the board`);
+        }
+      }
+    }
+  }
+  console.log(`   ${checked} walked players traced onto the board, ${wrongAge} at the wrong age, ${vanished} vanished`);
+  if (checked < 5) fail(`only ${checked} walked players reached the board, so this section proves nothing`);
+  if (wrongAge > 0) fail(`${wrongAge} players arrived on the board at the wrong age, so the rollover ages them twice`);
 }
 
 console.log(failures === 0 ? '\nALL FREE AGENT CHECKS PASSED' : `\n${failures} FAILURES`);

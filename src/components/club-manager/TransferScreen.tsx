@@ -692,13 +692,13 @@ export function TransferScreen({
       )}
 
       {/* Mode toggle */}
-      <div className="grid grid-cols-4 gap-1.5">
+      <div className="grid grid-cols-4 gap-1">
         <button
           onClick={() => setMode('buy')}
-          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all',
+          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1 min-w-0 whitespace-nowrap transition-all',
             mode === 'buy' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
         >
-          <ArrowDownToLine className="w-3.5 h-3.5" /> Buy
+          <ArrowDownToLine className="w-3.5 h-3.5 shrink-0" /> Buy
         </button>
         {/* Round 619: the free agent board. Deliberately beside Buy and not
             inside it: nothing here costs a fee and nothing here needs the
@@ -706,26 +706,26 @@ export function TransferScreen({
         <button
           onClick={() => setMode('free')}
           data-free-agent-tab
-          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all',
+          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1 min-w-0 whitespace-nowrap transition-all',
             mode === 'free' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
         >
-          <UserPlus className="w-3.5 h-3.5" /> Free
+          <UserPlus className="w-3.5 h-3.5 shrink-0" /> Free
           {freeAgents.length > 0 && <span className="ml-0.5 text-[9px] bg-emerald-500 text-background rounded-full px-1.5 py-0.5 font-bold">{freeAgents.length}</span>}
         </button>
         <button
           onClick={() => setMode('sell')}
-          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all',
+          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1 min-w-0 whitespace-nowrap transition-all',
             mode === 'sell' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
         >
-          <ArrowUpFromLine className="w-3.5 h-3.5" /> Sell
+          <ArrowUpFromLine className="w-3.5 h-3.5 shrink-0" /> Sell
           {bids.length > 0 && <span className="ml-0.5 text-[9px] bg-gold text-background rounded-full px-1.5 py-0.5 font-bold">{bids.length}</span>}
         </button>
         <button
           onClick={() => setMode('news')}
-          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all',
+          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1 min-w-0 whitespace-nowrap transition-all',
             mode === 'news' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
         >
-          <TrendingUp className="w-3.5 h-3.5" /> Latest
+          <TrendingUp className="w-3.5 h-3.5 shrink-0" /> Latest
         </button>
       </div>
 
@@ -913,7 +913,9 @@ export function TransferScreen({
             {(['ALL', 'GK', 'DEF', 'MID', 'ATT'] as PosFilter[]).map(f => (
               <button
                 key={f}
-                onClick={() => { setFilter(f); setPosExact('any'); }}
+                /* No setPosExact here: freeAgentsShown never reads it, so
+                   clearing it only wiped an exact position set on the Buy tab. */
+                onClick={() => setFilter(f)}
                 className={cn('px-2.5 py-1 rounded-full border text-[10px] font-bold transition-all',
                   filter === f ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-muted-foreground hover:border-primary')}
               >
@@ -929,9 +931,12 @@ export function TransferScreen({
                 : 'Nobody in that position is a free agent right now.'}
             </p>
           ) : freeAgentsShown.map(fa => {
-            const terms = freeAgentTerms(fa);
+            /* faTerms, not terms: the component already has a `terms` state for the
+               open negotiation's personal terms sheet, and shadowing it here left a
+               trap that typechecks clean because both are PersonalTerms. */
+            const faTerms = freeAgentTerms(fa);
             const refusal = freeAgentRefusal(career, fa.id);
-            const faRoomLine = wageRoomLine(wageRoom(bill, wageCeiling, terms.wage));
+            const faRoomLine = wageRoomLine(wageRoom(bill, wageCeiling, faTerms.wage));
             return (
               <div key={fa.id} className="bg-card border border-border rounded-xl p-3" data-free-agent-card>
                 <div className="flex items-center gap-2">
@@ -951,8 +956,8 @@ export function TransferScreen({
                   <span className={cn('text-sm font-bold font-display', ratingTint(fa.rating))}>{fa.rating}</span>
                 </div>
                 <div className="mt-1.5 pl-11 text-[10px] text-muted-foreground">
-                  He wants {terms.wage}k a week for {terms.years} years as a {ROLE_INFO[terms.role].label.toLowerCase()},
-                  and {money(terms.bonus)} to sign. No fee to anybody.
+                  He wants {faTerms.wage}k a week for {faTerms.years} years as a {ROLE_INFO[faTerms.role].label.toLowerCase()},
+                  and {money(faTerms.bonus)} to sign. No fee to anybody.
                   {fa.weeks > 0 && marketPull(fa.weeks) < 1 && (
                     <span className="text-emerald-400"> His asking price is already {Math.round((1 - marketPull(fa.weeks)) * 100)}% down on where he started.</span>
                   )}
@@ -963,11 +968,11 @@ export function TransferScreen({
                     onClick={() => onSignFree(fa.id)}
                     disabled={refusal !== null}
                     data-sign-free-agent
-                    title={refusal ?? `Sign him for ${money(terms.bonus)}, ${terms.wage}k a week.`}
+                    title={refusal ?? `Sign him for ${money(faTerms.bonus)}, ${faTerms.wage}k a week.`}
                     className={cn('w-full px-2 py-1.5 rounded-lg text-[10px] font-bold transition-all',
                       refusal === null ? 'bg-emerald-600 text-white hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
                   >
-                    {refusal === null ? `Sign on a free · ${money(terms.bonus)}` : refusal}
+                    {refusal === null ? `Sign on a free · ${money(faTerms.bonus)}` : refusal}
                   </button>
                 </div>
               </div>
@@ -1249,6 +1254,10 @@ export function TransferScreen({
 
 /** This season's in/out list, shown when the window is shut. */
 function ClosedWindowBusiness({ career }: { career: CareerState }) {
+  /* Round 514's rule, missed here: this component sits outside TransferScreen's
+     own `money` shadow, so it was printing pounds whatever currency the save
+     was started in. */
+  const money = moneyIn(career);
   return (
     <div className="bg-card border border-border rounded-xl p-4">
       <div className="text-xs font-bold text-foreground mb-2">This season's business</div>
@@ -1261,7 +1270,16 @@ function ClosedWindowBusiness({ career }: { career: CareerState }) {
             ? <span className="text-emerald-400">IN&nbsp;&nbsp;</span>
             : <span className="text-red-400">OUT</span>}
           <span className="text-foreground ml-2">{t.name}</span>
-          <span className="text-muted-foreground ml-1">({money(t.fee)}{t.loan ? ', loan' : ''})</span>
+          {/* Round 619: a settlement is not a fee. A payoff row carries fee 0
+              by design, so printing t.fee alone rendered a 4.7m contract
+              buyout as "OUT Dewsbury-Hall (0.0m)", which reads as giving him
+              away and leaves the money that really left the kitty off the one
+              screen a manager checks to see what he did this season. */}
+          <span className="text-muted-foreground ml-1">
+            {t.payoff
+              ? `paid off, ${money(t.payoff)}`
+              : `${money(t.fee)}${t.loan ? ', loan' : ''}`}
+          </span>
         </p>
       ))}
     </div>

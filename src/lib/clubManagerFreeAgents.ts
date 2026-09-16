@@ -271,6 +271,39 @@ export function freeAgentTerms(fa: FreeAgent): PersonalTerms {
   return { years, wage, bonus, role: freeAgentRole(fa) };
 }
 
+/**
+ * What he is worth to SELL once he has signed, as a multiple of what he cost.
+ *
+ * This is the most important number in this file and the first build did not
+ * have it at all. signFreeAgent wrote the pool record's notional `value`
+ * straight onto the squad player. That value is rating derived, so an invented
+ * 72 rated 28 year old carried 37.3m against a signing on fee of 6.7m, and
+ * sellValue is 0.9 x value, so every free agent was worth five times what he
+ * cost the moment he walked in. Measured on the shipped engine, signing every
+ * signable free agent each week and listing him: Everton turned 43m into
+ * 358.81m in one season, 22 signings for 55.0m against 19 sales for 358.9m.
+ * Manchester City made 241m the same way. A money printer, and every note it
+ * printed came from players this game made up.
+ *
+ * The fix is not a nerf, it is the honest reading of what a free transfer
+ * means. A market value is what a club would pay in a FEE, and the market has
+ * already answered that question about this man: nothing. His ABILITY is
+ * completely real, it is what you signed him for and it is what he gives you
+ * on a Saturday. What was never real is a resale price nobody was willing to
+ * pay. So he carries roughly what he cost you, the flip is worth about
+ * nothing, and the footballer is worth exactly as much as he always was.
+ *
+ * Anchored to the fee rather than to a fraction of the notional value on
+ * purpose, so it tracks marketPull: a man you waited out costs less AND
+ * resells for less, and patience cannot become its own arbitrage.
+ */
+export const FA_VALUE_OF_FEE = 1.15;
+
+/** What his squad record carries as a market value once he signs. */
+export function signedValue(fa: FreeAgent): number {
+  return Math.max(0.1, round1(freeAgentTerms(fa).bonus * FA_VALUE_OF_FEE));
+}
+
 
 /**
  * Will he come?
@@ -324,15 +357,21 @@ export function wageCeilingBlocks(bill: number, cap: number, wage: number): bool
  * FA_SLACK_WAIT, so the week he comes round is that solved for weeks.
  */
 export function refusalLine(fa: FreeAgent, xiAvg: number): string {
+  /* Written about the SITUATION and not about the man. These lines are
+     rendered under a named card, and from season two the board carries real
+     footballers by design, so "he is holding out for a bigger club" would be
+     this game inventing a real professional's motives. The gap between his
+     level and your eleven is a fact the engine computed; what he is thinking
+     is not. Same rule the Round 137 message pools are written to. */
   if (fa.rating - (xiAvg + joinSlack(fa)) <= 2) {
-    return 'He is listening, but he wants to see where else the season takes him.';
+    return 'A close call at this level. No answer yet.';
   }
   const comesRoundAt = Math.ceil(((fa.rating - xiAvg - FA_SLACK_BASE) / FA_SLACK_WAIT) * FA_SHELF_WEEKS);
   if (comesRoundAt <= FA_SHELF_WEEKS) {
     const wait = Math.max(1, comesRoundAt - fa.weeks);
-    return `He is holding out for a bigger club. Another ${wait} week${wait === 1 ? '' : 's'} without an offer and he may drop his sights.`;
+    return `Too big a step down for now. ${wait} more week${wait === 1 ? '' : 's'} unattached and this club is in range.`;
   }
-  return 'He is not dropping to this level, whatever you offer him.';
+  return 'Too far below the level he has been playing at.';
 }
 
 /* ================================================================== */
@@ -342,16 +381,43 @@ export function refusalLine(fa: FreeAgent, xiAvg: number): string {
 /** A stable id for a pool entry. The season and the reason are in it so a man
  *  released twice across a long save is two records, not one overwritten. */
 export function freeAgentId(name: string, season: number, reason: FreeAgentReason): string {
-  const slug = name.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[^a-z0-9]+/g, '-');
+  const slug = name.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '').replace(/[^a-z0-9]+/g, '-');
   return `fa-${slug}-s${season}-${reason}`;
+}
+
+/**
+ * The same id, made unique inside THIS pool.
+ *
+ * Round 567 learned this about squad ids and wrote it down: slug() is not
+ * injective, so an id built from a name is not unique either. The pool had the
+ * identical hole. Ederson (Atalanta, CM) and Ederson (Fenerbahce, GK) both
+ * slug to "ederson", and they are not a hypothetical pair, they are the exact
+ * two that src/test/clubManagerSave.test.tsx already names. Released in the
+ * same summer they shared one id, and signFreeAgent's own cleanup did the
+ * damage: it removes by id with a filter, so signing one deleted BOTH records,
+ * while the lookup always resolved to the first, so the other could never be
+ * signed at all. They also shared a React key on the board.
+ *
+ * Mirrors freeSquadId: keep the readable id when it is free, suffix when it
+ * is not.
+ */
+export function uniqueFreeAgentId(pool: readonly { id: string }[], base: string): string {
+  const taken = new Set(pool.map(fa => fa.id));
+  if (!taken.has(base)) return base;
+  for (let n = 2; n < 1000; n += 1) {
+    const candidate = `${base}-${n}`;
+    if (!taken.has(candidate)) return candidate;
+  }
+  return `${base}-${taken.size}`;
 }
 
 /** One of mine, on his way out. */
 export function freeAgentFromPlayer(
   p: CMPlayer, lastClub: string, season: number, reason: FreeAgentReason,
+  pool: readonly { id: string }[] = [],
 ): FreeAgent {
   return {
-    id: freeAgentId(p.name, season, reason),
+    id: uniqueFreeAgentId(pool, freeAgentId(p.name, season, reason)),
     name: p.name,
     position: p.position,
     age: p.age,
@@ -367,9 +433,12 @@ export function freeAgentFromPlayer(
 }
 
 /** Somebody the world let go. */
-export function freeAgentFromMarket(mp: MarketPlayer, season: number, reason: FreeAgentReason): FreeAgent {
+export function freeAgentFromMarket(
+  mp: MarketPlayer, season: number, reason: FreeAgentReason,
+  pool: readonly { id: string }[] = [],
+): FreeAgent {
   return {
-    id: freeAgentId(mp.name, season, reason),
+    id: uniqueFreeAgentId(pool, freeAgentId(mp.name, season, reason)),
     name: mp.name,
     position: mp.position,
     age: mp.age,
