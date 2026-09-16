@@ -72,7 +72,11 @@ const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim(
 
 /* The map is parsed out of the SHIPPED function, not retyped here. A copy in
    the harness would pass while the deployed file said something else. */
-const src = readFileSync(FN, 'utf8');
+/* Line endings normalised on read. Section 4 cuts the function body at the
+   first "\n}\n", and on a CRLF checkout that string is never in the raw file,
+   so the slice came back empty and all three shape checks failed on healthy
+   code: red on every Windows checkout since they were written. */
+const src = readFileSync(FN, 'utf8').replace(/\r\n/g, '\n');
 const mapBody = src.match(/const C4_CLUB_STRINGS: Record<string, string\[\]> = \{([\s\S]*?)\n\};/);
 if (!mapBody) {
   console.error('could not find C4_CLUB_STRINGS in the shipped function');

@@ -66,8 +66,11 @@ const HEAD = { apikey: KEY, Authorization: `Bearer ${KEY}` };
 
 const C4 = path.join(ROOT, 'supabase', 'functions', 'football-connect4-validate', 'index.ts');
 const GRID = path.join(ROOT, 'supabase', 'functions', 'soccer-grid-validate', 'index.ts');
-const c4src = readFileSync(C4, 'utf8');
-const gridsrc = readFileSync(GRID, 'utf8');
+/* Line endings normalised on read. Section 3 cuts the connect4 function at the
+   first "\n}\n", which a CRLF checkout never contains, so on Windows the check
+   read an empty slice and failed on healthy code. */
+const c4src = readFileSync(C4, 'utf8').replace(/\r\n/g, '\n');
+const gridsrc = readFileSync(GRID, 'utf8').replace(/\r\n/g, '\n');
 
 /* The fold is LIFTED OUT OF THE SHIPPED FUNCTION, never retyped. A copy here
    would agree with itself while the deployed file said something else, which is
