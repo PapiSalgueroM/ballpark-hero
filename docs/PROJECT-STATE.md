@@ -1,5 +1,15 @@
 # Project state
 
+## SEPARATE NFL DISPLAY FOLLOW-UP 2026-09-15 23:08 EDT
+
+On a separate branch based on `a96ed002`, NFL Career now displays recorded LB,
+CB, EDGE and K stats in season, career and retirement summaries. Missing old-save
+fields remain unrecorded; the longest made field goal uses an eligible maximum.
+Offense wording, saves, outcomes and scoring stay unchanged. Proper types, 24
+actual-season fixtures, 22 effective controls and 48 old/new season comparisons
+pass, with independent review. See the position-stat audit under docs/audits.
+This is not part of the frozen combined release and has no publication claim.
+
 ## ADSENSE CHECKLIST AND RELEASE REPAIRS 2026-09-15 22:16 EDT
 
 The new pasted checklist was checked against Google's published requirements

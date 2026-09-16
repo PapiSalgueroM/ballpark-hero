@@ -1003,6 +1003,7 @@ export function legacyOf(c: CareerState): Legacy {
     `${c.seasons.length} seasons, ${c.rings} ring${c.rings === 1 ? '' : 's'}, ${c.mvps} MVP${c.mvps === 1 ? '' : 's'}, ${c.allPros} All-Pro nod${c.allPros === 1 ? '' : 's'}`,
     c.pos === 'QB' ? `${totals.passYds.toLocaleString()} passing yards, ${totals.passTd} touchdowns`
       : c.pos === 'RB' ? `${totals.rushYds.toLocaleString()} rushing yards, ${totals.rushTd} touchdowns`
+      : nflDefenseOrKickingLine(totals, c.pos) != null ? `Recorded totals: ${nflDefenseOrKickingLine(totals, c.pos)}`
       : `${totals.rec} catches for ${totals.recYds.toLocaleString()} yards, ${totals.recTd} touchdowns`,
     `${Math.round(c.earnings)}M career earnings, drafted pick ${c.draftPick}`,
   ];
@@ -1010,13 +1011,33 @@ export function legacyOf(c: CareerState): Legacy {
 }
 
 export function careerTotals(c: CareerState) {
-  const t = { passYds: 0, passTd: 0, ints: 0, rushYds: 0, rushTd: 0, rec: 0, recYds: 0, recTd: 0 };
+  const empty = c.seasons.some(s => s.games > 0 && s.teamResult !== 'SUSPENDED') ? undefined : 0;
+  const t = { passYds: 0, passTd: 0, ints: 0, rushYds: 0, rushTd: 0, rec: 0, recYds: 0, recTd: 0,
+    tackles: empty as number | undefined, sacks: empty as number | undefined, picks: empty as number | undefined,
+    passDef: empty as number | undefined, forcedFum: empty as number | undefined,
+    fgMade: empty as number | undefined, fgAtt: empty as number | undefined, longFg: empty as number | undefined };
   for (const s of c.seasons) {
     t.passYds += s.passYds ?? 0; t.passTd += s.passTd ?? 0; t.ints += s.ints ?? 0;
     t.rushYds += s.rushYds ?? 0; t.rushTd += s.rushTd ?? 0;
     t.rec += s.rec ?? 0; t.recYds += s.recYds ?? 0; t.recTd += s.recTd ?? 0;
+    for (const field of ['tackles', 'sacks', 'picks', 'passDef', 'forcedFum', 'fgMade', 'fgAtt'] as const) {
+      if (s[field] != null) t[field] = (t[field] ?? 0) + s[field];
+    }
+    if (s.games > 0 && s.teamResult !== 'SUSPENDED' && (s.fgMade ?? 0) > 0 && s.longFg != null) {
+      t.longFg = Math.max(t.longFg ?? 0, s.longFg);
+    }
   }
+  if (t.sacks != null) t.sacks = Math.round(t.sacks * 10) / 10;
   return t;
+}
+
+/** The recorded fields for positions whose production is not receiving. */
+export function nflDefenseOrKickingLine(s: Partial<SeasonLine>, p: CareerPos): string | null {
+  if (p === 'K') return `${s.fgMade ?? 'not recorded'}/${s.fgAtt ?? 'not recorded'} FG${(s.fgMade ?? 0) > 0 && s.games !== 0 && s.teamResult !== 'SUSPENDED' ? `, long ${s.longFg ?? 'not recorded'}${s.longFg == null ? '' : ' yds'}` : ''}`;
+  if (p === 'LB') return `${s.tackles ?? 'not recorded'} tackles, ${s.sacks ?? 'not recorded'} sacks, ${s.picks ?? 'not recorded'} INT, ${s.forcedFum ?? 'not recorded'} forced fumbles`;
+  if (p === 'CB') return `${s.tackles ?? 'not recorded'} tackles, ${s.picks ?? 'not recorded'} INT, ${s.passDef ?? 'not recorded'} passes defended, ${s.forcedFum ?? 'not recorded'} forced fumbles`;
+  if (p === 'EDGE') return `${s.sacks ?? 'not recorded'} sacks, ${s.tackles ?? 'not recorded'} tackles, ${s.forcedFum ?? 'not recorded'} forced fumbles, ${s.passDef ?? 'not recorded'} passes defended`;
+  return null;
 }
 
 /* Round 422: a balance the old bug drove below zero is an ARTEFACT, not a
