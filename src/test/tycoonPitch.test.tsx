@@ -16,7 +16,7 @@
    The wrapper is scripts/simTycoonPitch.mjs; run that, not this file alone. */
 import './dailyReload/mocks';
 import { resetMocks } from './dailyReload/mocks';
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
+import { describe, it, expect, beforeAll, beforeEach, afterEach, vi } from 'vitest';
 import { act, cleanup, fireEvent } from '@testing-library/react';
 import { mountPage } from './dailyReload/harness';
 import type { TickEvent, TycoonState } from '@/lib/stadiumTycoon';
@@ -36,6 +36,7 @@ vi.mock('@/lib/stadiumTycoon', async (importOriginal) => {
 });
 
 import StadiumTycoon from '@/pages/StadiumTycoon';
+import { loadGameContent } from '@/data/gameContent/loader';
 import { TYCOON_SAVE_KEY, newTycoon, serializeTycoon, ACHIEVEMENTS } from '@/lib/stadiumTycoon';
 
 const FRAME_MS = 200;
@@ -108,6 +109,9 @@ function pitch() {
   if (!el) throw new Error('no pitch on the Stadium tab');
   return el;
 }
+
+// Resolve the real guide before the synchronous match loop can starve the module loader.
+beforeAll(async () => { expect(await loadGameContent('/stadium-tycoon')).not.toBeNull(); });
 
 beforeEach(() => {
   vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval'] });
