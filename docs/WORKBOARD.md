@@ -756,6 +756,18 @@ table on 2026-09-15.
 **619 is the last number in this lane's block, so the lane claims 620 to 627 next**, per the
 block rule agreed further down this board. A block is cheap and a collision costs a day.
 
+- **625, BUILT AND GATED, committed as `20552910` on branch `r625-fight-gym` (cut from 620):
+  Fight Gym, the second role on the fight model.** The owner liked that the boxing game he
+  pointed at lets you fight a career OR run a gym. This is the gym, on the same fighters, bouts,
+  damage and retirement as Round 620, with the money on you and the damage on somebody else.
+  Harness found three design defects (grinding lost on every axis so it was not a temptation,
+  reputation saturated, and the stewardship mechanic was not load bearing at all) and three in
+  itself (a policy that differed in three ways at once, a fleet average that could only read
+  noise, and a turnover check that tested the harness rather than the engine). Gates: tsc 0,
+  `simFightGym` five sections with all five controls proved to fire, `simFightCareer` still
+  green, plus the five registration harnesses, index at 126 of 126, and the loop walked in a
+  browser. Promoter mode remains open.
+
 - **620, BUILT AND GATED, committed as `90c501bc` on branch `r620-fight-career`: Fight Career,
   and the shared career engine under it.** Gates: tsc 0, `simFightCareer` green on five sections
   with all five controls proved to fire on their own sections, plus `simNoRivalNames`,

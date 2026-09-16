@@ -1,5 +1,40 @@
 # Project state
 
+## ROUND 625 BUILT 2026-09-16: Fight Gym, the second role on the fight model
+
+On branch `r625-fight-gym`, commit `20552910`, cut from `r620-fight-career`. Not merged.
+`/fight-gym`. New `src/lib/fightGym.ts` and `scripts/simFightGym.mjs`.
+
+**Deliberately not a second engine.** Fighters, attributes, styles, the bout, damage, ageing and
+retirement all come from `fightCareer.ts` unchanged. What differs is whose problem it is: in the
+career you carry your own damage and the tradeoff enforces itself, and in the gym the damage
+lands on somebody else while the money lands on you, so nothing enforces it but the design.
+
+**Three defects the harness found in the design.** Grinding fighters lost on every axis at once
+(39 against 89), which is a labelled wrong button rather than a temptation, so a purse now
+reflects a fighter's record as well as his current form and a faded name keeps earning.
+Reputation saturated at 86 out of 100 almost every run, so gains now run against headroom while
+losses do not. And the mechanic the mode is named for was not load bearing at all: the control
+removed every reputation cost of wrecking men and the section stayed green, proving grinding lost
+only because damaged fighters lose fights. Putting a visibly hurt man in is now charged on the
+decision rather than the result, and removing that charge collapses the gap from 29.3 to 1.5.
+
+**Three defects in the harness itself, all recorded in it.** Its grinder policy differed from
+careful in three ways at once, so it measured none of them. It measured the temptation as a fleet
+average and read noise, because at short horizons the policies have not diverged and at long ones
+the reputation bill is what the number sees; it is a paired experiment now, forking one gym at
+the moment somebody is hurt, which measures the temptation at 2.646m over 14 weeks, 10.7 percent
+of the till. And its turnover section tested the harness policy rather than the engine.
+
+**Gates.** tsc 0. `simFightGym` green on five sections with all five controls (`nocut`,
+`nopenalty`, `norep`, `noretire`, `freecost`) proved to fire on their own sections.
+`simFightCareer` still green. `simNoRivalNames`, `simScoringCoverage`, `simSiteSearch`,
+`simSearchDiscard`, `simNoInventedQuotes` green. Search index regenerated at 126 of 126. Opened a
+gym in a browser and walked the loop.
+
+**Still open from the contract.** Promoter mode, on the Stadium Tycoon shape, reading the same
+fighter and bout model.
+
 ## ROUND 620 BUILT 2026-09-16: Fight Career, and the shared career engine under it
 
 On branch `r620-fight-career`, commit `90c501bc`, 11 files and 2,039 lines, cut from
