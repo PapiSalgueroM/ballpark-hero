@@ -1,5 +1,40 @@
 # Project state
 
+## FINAL COMBINED VERIFICATION 2026-09-15 22:35 EDT
+
+[PR 96](https://github.com/PapiSalgueroM/ballpark-hero/pull/96) contains the
+combined animation, progression, watched-kick and gear release, preserving main
+`034049cb`. Source is frozen at `a96ed002809ed78d3a9bb19a9e66a77cfbb634e8`.
+Verification `3a7e54b3ad42e0a61186a1b5bcf89a3a29c25988` differs only by the
+reviewed workflow, whose LF SHA256 is
+`58852dee80cfc6b16fe98e1ee163424512eea16a177615da47c5255767dbcc88`.
+[Run 35048332634](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35048332634),
+attempt 1, is running. Proper app types pass and the SEO build is underway.
+Source blob and file-mode parity passes. No artifact is accepted yet.
+
+The run retains all old gates, timeouts and budgets, the 74 existing controls,
+two College Grid parser controls, 12 navbar controls and 13 rarity controls.
+It also discovers the new eight-case test-runner failure check. About, Privacy
+and Terms are added to the existing 12-route snapshot regeneration list.
+Please keep new application/data work on separate branches until this combined
+artifact is accepted, so the tested source can be published without a rollback.
+
+The local cleanup's three affected non-Pitch files now pass all 15 tests with
+exit 0, no unhandled errors and no new blocked network attempts. The long local
+Pitch attempt was cancelled under host memory pressure and is not called a
+pass. A stack sample confirmed active rendering, not an import wait. The full
+cloud run owns fresh Pitch proof. A separate two-line useMemo change reuses
+deterministic related-game recommendations until the route changes; measured
+function cost is about 0.68ms per call on this host, not an FPS result.
+
+The new AdSense checklist audit found all 18 public responses successful, and
+readable policy/game text already present in initial HTML. The pasted numerical
+approval thresholds are unsupported. Narrow funding/hosting copy corrections
+are included in PR 96; disclosures, contact email and consent behavior remain.
+The last observed AdSense status is still Review requested. No fresh request,
+DNS change, paid upgrade or production write was made by these test repairs.
+The alternate animation preview remains public while GoDaddy access is pending.
+
 ## ADSENSE CHECKLIST AND RELEASE REPAIRS 2026-09-15 22:16 EDT
 
 The new pasted checklist was checked against Google's published requirements
