@@ -15,6 +15,7 @@ import {
   changeLive, startSecondHalf, markLiveMinute,
   setDuty, dutyOptions, dutyLineOf, pitchLineOf, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
   DEFAULT_ERA_ID,
+  releasePlayer, signFreeAgent,
 } from '@/lib/clubManager';
 import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation, FormationSlot } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
@@ -599,6 +600,18 @@ export function useClubManager() {
     setCareer(prev => (prev ? renewContract(prev, playerId) ?? prev : prev));
   }, []);
 
+  /* Round 619: end a deal early. The settlement is written on the save and
+     keeps counting against the wage cap, so this is not a delete button. */
+  const terminate = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? releasePlayer(prev, playerId) ?? prev : prev));
+  }, []);
+
+  /* Round 619: sign a man with no club. The only signing that works with the
+     transfer window shut. */
+  const signFree = useCallback((name: string) => {
+    setCareer(prev => (prev ? signFreeAgent(prev, name) ?? prev : prev));
+  }, []);
+
   /* Round 193: the clause renewal, cheaper wage for an exit door. */
   const renewWithClause = useCallback((playerId: string) => {
     setCareer(prev => (prev ? renewContractWithClause(prev, playerId) ?? prev : prev));
@@ -736,7 +749,7 @@ export function useClubManager() {
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint,
     setCurrency, setNationJobs, setStrictness,
     acceptIncomingBid, rejectIncomingBid,
-    setStatus, loanOut, renew, renewWithClause, setRole,
+    setStatus, loanOut, renew, renewWithClause, terminate, signFree, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
     subAtHalftime, shapeAtHalftime, secondHalf, startSecondHalfLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,

@@ -1,5 +1,5 @@
 import { cn } from '@/lib/utils';
-import { money, moneyIn, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, expiringPlayers, sellValue } from '@/lib/clubManager';
+import { money, moneyIn, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, expiringPlayers, sellValue, severanceFor, severanceBill, freeAgentInterest } from '@/lib/clubManager';
 import type { CareerState, CMPlayer } from '@/lib/clubManager';
 import { ratingTint } from '@/components/club-manager/SquadScreen';
 
@@ -7,6 +7,10 @@ interface ContractsCardProps {
   career: CareerState;
   onRenew: (playerId: string) => void;
   onRenewWithClause: (playerId: string) => void;
+  /** Round 619: end a deal early. The cost is shown before it is agreed. */
+  onRelease?: (playerId: string) => void;
+  /** Round 619: sign a man with no club. Works with the window shut. */
+  onSignFreeAgent?: (name: string) => void;
 }
 
 /**
@@ -28,7 +32,7 @@ interface ContractsCardProps {
  * way to delete it. The clause section below the expiring list keeps every
  * door you have signed in plain sight.
  */
-export function ContractsCard({ career, onRenew, onRenewWithClause }: ContractsCardProps) {
+export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, onSignFreeAgent }: ContractsCardProps) {
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(career);
@@ -153,6 +157,91 @@ export function ContractsCard({ career, onRenew, onRenewWithClause }: ContractsC
             );
           })}
         </>
+      )}
+
+      {/* Round 619: what you still owe men you let go. It sits with the wage
+          bill because it IS the wage bill: the cap, the weekly charge and the
+          season projection all read the same number, and a manager who has
+          released three players has to see why the wage line has not fallen. */}
+      {severanceBill(career) > 0 && (
+        <div className="mt-3 pt-2 border-t border-border/40">
+          <div className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">
+            Still paying {severanceBill(career)}k a week
+          </div>
+          {(career.severance ?? []).map(r => (
+            <div key={r.name} className="flex justify-between text-[10px] text-muted-foreground py-0.5">
+              <span className="truncate">{r.name}</span>
+              <span className="shrink-0 tabular-nums">{r.weekly}k for {r.weeksLeft} more week{r.weeksLeft === 1 ? '' : 's'}</span>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Round 619: ending a deal early. The settlement is quoted before you
+          agree to it, because the whole design rests on that cost being visible
+          rather than discovered afterwards. */}
+      {onRelease && (
+        <div className="mt-3 pt-2 border-t border-border/40">
+          <div className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">Let somebody go</div>
+          <div className="text-[9px] text-muted-foreground mb-1.5">
+            You keep paying half his wage until his deal would have run out, capped at two seasons, and it counts
+            against the cap the whole time.
+          </div>
+          <div className="max-h-40 overflow-y-auto">
+            {career.squad.filter(p => !p.onLoan && !p.isYouth && p.age >= 20).map(p => {
+              const sev = severanceFor(career, p);
+              return (
+                <div key={p.id} className="flex items-center gap-2 py-1 border-b border-border/30 last:border-0">
+                  <div className="flex-1 min-w-0">
+                    <div className="text-xs text-foreground truncate">{p.name}</div>
+                    <div className="text-[9px] text-muted-foreground">
+                      {p.rating} rated, {p.wage ?? 0}k a week, {p.contractYears ?? 0} year{(p.contractYears ?? 0) === 1 ? '' : 's'} left
+                    </div>
+                  </div>
+                  <button
+                    onClick={() => onRelease(p.id)}
+                    title={`Settle at ${sev.weekly}k a week for ${sev.weeksLeft} weeks. The dressing room will notice.`}
+                    className="shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold bg-secondary text-muted-foreground hover:bg-destructive hover:text-destructive-foreground transition-all"
+                  >
+                    Release, {sev.weekly}k x {sev.weeksLeft}
+                  </button>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Round 619: men with no club. Signable with the window shut, which is
+          the one thing in this game that is. */}
+      {onSignFreeAgent && (career.freeAgents ?? []).length > 0 && (
+        <div className="mt-3 pt-2 border-t border-border/40">
+          <div className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">
+            Free agents{career.transferWindow === null ? ', and the window being shut does not stop these' : ''}
+          </div>
+          {(career.freeAgents ?? []).map(f => {
+            const keen = freeAgentInterest(career, f);
+            return (
+              <div key={f.name} className="flex items-center gap-2 py-1 border-b border-border/30 last:border-0">
+                <div className="flex-1 min-w-0">
+                  <div className="text-xs text-foreground truncate">{f.name}</div>
+                  <div className="text-[9px] text-muted-foreground">
+                    {f.position}, {f.rating} rated, {f.age}, {f.reason === 'released' ? 'let go' : 'deal ran out'}
+                  </div>
+                </div>
+                <button
+                  onClick={() => onSignFreeAgent(f.name)}
+                  disabled={!keen}
+                  title={keen ? 'He will sign for nothing but his wage' : 'He thinks he can do better than you'}
+                  className={cn('shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all',
+                    keen ? 'bg-primary text-primary-foreground hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
+                >
+                  {keen ? 'Sign' : 'Not interested'}
+                </button>
+              </div>
+            );
+          })}
+        </div>
       )}
     </div>
   );
