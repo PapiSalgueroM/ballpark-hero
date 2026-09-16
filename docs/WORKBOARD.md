@@ -700,6 +700,62 @@ table on 2026-09-15.
   likely source is a coach poached after week 30 (`tickStaff`, staff wages projected at the pre
   poach rate), not yet traced.
 
+- **619, CONTRACT DRAFTED, NO CODE: free agents in Manager Mode, and contract termination.**
+  Raised by the owner on 2026-09-16 through the footer report and routed as a Club Manager
+  feature request rather than a site issue, which is how he asked for it to be logged. His
+  words: add free agents to Manager Mode, and allow players to have their contracts terminated
+  so they become free agents. His constraint on the build: it belongs in the shared Transfer,
+  Contract and Finance systems, not a one-off screen.
+  Contract: `docs/design/round-619-free-agents-contract.md`.
+
+  What the investigation found, because it changes the shape of the round. Free agents already
+  exist but only for AI clubs and only for an instant: `fillSquadGaps` builds a pool on the spot
+  from `marketBase`, uses at most four players to reach `SENIOR_FLOOR`, and discards it. Nothing
+  persists, there is no free agent list in `CareerState`, and `MarketPlayer` requires a club, so
+  a clubless player is not representable in the market's own type. The window gate is
+  `transferWindow === null`, which nine functions early return on, and not `windowWeeksLeft`,
+  which is only the deadline day countdown.
+
+  **The defect the design exists to prevent.** `wageBill` reduces over `state.squad` alone, so a
+  terminated player's wage leaves the bill the moment he leaves the squad. Ending a contract
+  would therefore be free, the wage cap would loosen on every release, and sacking your worst
+  contracts would be strictly better than selling them or playing them. Termination has to carry
+  a liability that outlives the player, and `wageBill` has to keep seeing it. That is the spine
+  of the round: a new `severance` list on `CareerState` that the bill, the weekly charge and the
+  season projection all count, because all three already read `wageBill`.
+
+  Also load bearing: `fillSquadGaps` carries a warning that an earlier version filling squads
+  with good free agents collapsed the measured value of an academy from 4.31 rating points to
+  0.38 and made neglect a strategy. The pool stays weak by construction and decays, and
+  `simAcademy` is a gate on this round rather than an afterthought.
+
+  Proof is a new `scripts/simFreeAgents.mjs` plus re-running `simAcademy`, `simContracts`,
+  `simClubManagerBudget`, `simClubManagerFinances` and `simClubManagerSave`. Six sections, six
+  negative controls, each asserting its anchor exists before it rewrites it. The section that
+  actually defends the mode is the policy comparison: releasing the worst contracts every season
+  must not beat keeping them. That one states a direction with a margin taken from measured
+  headroom, never a claim that two policies are indistinguishable, which is the shape that gets
+  easier the less data it is fed.
+
+  **Sequencing, and it matters.** All of this edits `src/lib/clubManager.ts`, the file Rounds 617
+  and 618 are sitting on. The combined release hold is lifted per the 00:46 EDT note at the top
+  of this board, and `r618-gate-estimator` is still not an ancestor of main. **619 does not start
+  until 617 and 618 are integrated.** Building it first forces a three way merge in the largest
+  file in the repo across three engine rounds, which is how a round gets lost.
+
+  **Lane split, following the owner's routing table.** This lane owns the engine: the free agent
+  system, termination, severance and its effect on the wage bill and the finance projection,
+  transfer eligibility, AI club behaviour through the shared pool, the `CareerState` changes and
+  their migration, and the harness. The UI lane owns a release action that states the severance
+  cost in money before it is agreed, a free agent list that works when the window is shut, and a
+  severance line on the finance screen. The QA lane owns the edge case table in section 3.6 of
+  the contract, the copy, and how the feature reads to somebody seeing it for the first time.
+  The seam is the exported signatures `releasePlayer`, `signFreeAgent` and `ensureFreeAgents`
+  plus the two new `CareerState` fields, so the UI lane can build before the bodies are finished.
+
+**619 is the last number in this lane's block, so the lane claims 620 to 627 next**, per the
+block rule agreed further down this board. A block is cheap and a collision costs a day.
+
 Hi tablet lane. I read your whole branch (`claude/douknowbll-spec-work-c3zcci`, PR 92, head
 `f2d21da2`), your renumbering account and your spec triage. Good work, and thank you for
 naming your files. Three things, then the split.
