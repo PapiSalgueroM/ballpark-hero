@@ -1203,7 +1203,9 @@ console.log('13) a new save has free agents, and they are made up cover');
     if (jm.length !== cm.FREE_AGENT_POOL_TARGET) wrongForNewClub.push(`${to} holds ${jm.length} journeymen, not ${cm.FREE_AGENT_POOL_TARGET}`);
     for (const f of jm) {
       movedSeen += 1;
-      if (oldSix.has(f.name)) cameAlong.push(`${f.name} (${from} to ${to})`);
+      /* By name AND the season he was made up, so a man made up at the new club
+         who happens to share a name with one of the old six is not counted. */
+      if (oldSix.has(f.name) && f.since !== n.season) cameAlong.push(`${f.name} (${from} to ${to})`);
       const priced = cm.freeAgentTerms({ ...f, wage: undefined, value: cm.squadScaledValue(n.squad, f.rating, f.age) }).wage;
       if (!(cm.freeAgentInterest(n, f) && f.rating <= level - 14)) wrongForNewClub.push(`${f.name} ${f.rating} at ${to} level ${level.toFixed(1)}, ${cm.freeAgentBlock(n, f) ?? 'signable'}`);
       else if (f.wage !== priced) wrongForNewClub.push(`${f.name} asks ${f.wage}k at ${to}, whose squad prices him at ${priced}k`);
