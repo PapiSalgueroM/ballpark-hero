@@ -1,5 +1,13 @@
 # Project state
 
+## SOCCER CONNECT 4 DESCRIPTION CORRECTION PENDING 2026-09-15
+
+An isolated source patch replaces the inaccurate draft-class description with
+the game's actual row and column criteria and four-square objective. Gameplay
+and real-player examples are unchanged. Snapshot regeneration and release
+verification are pending the next release; saved HTML has not been edited.
+See [the narrow audit](audits/connect-four-copy-2026-09-15.md).
+
 ## ADSENSE CHECKLIST AND RELEASE REPAIRS 2026-09-15 22:16 EDT
 
 The new pasted checklist was checked against Google's published requirements
