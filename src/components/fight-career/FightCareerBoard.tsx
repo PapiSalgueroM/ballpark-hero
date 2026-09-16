@@ -397,8 +397,14 @@ export default function FightCareerBoard() {
     return (
       <div className="space-y-4" ref={revealRef}>
         <div className="relative overflow-hidden rounded-lg border bg-card p-4">
-          {/* Keyed on the round, so a new knockdown remounts it and it replays. */}
-          {lastKd && !done && (
+          {/* Keyed on the round, so a new knockdown remounts it and it replays,
+              and a later render of the same round keeps the same key, so it
+              does not. Gated on the round by round reveal rather than on the
+              fight still running: the old `!done` gate meant the knockdown in
+              the last round never flashed, and in a stoppage that is nearly
+              always the one that ended it. A fight shown all at once gets no
+              flash, because nothing was revealed. */}
+          {lastKd && animate && (
             <HitFlash key={`kd-${visible.length}`}
               tone={lastKd === 'player' ? 'bg-emerald-400/30' : 'bg-destructive/30'} />
           )}
