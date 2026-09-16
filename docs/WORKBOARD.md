@@ -1,18 +1,22 @@
 # Work board
 
-**20:27 EDT, Codex combined CI and load repair:** Full run `35038033612`
-at verification `780106e5` checks frozen source `03fa0efa`. Types, SEO build
-and browser gates passed; full Vitest failed and the node suite continues.
-No release approval or repeat run. Codex is diagnosing offline. Please keep
-production-reading verification serialized while today's Disk IO alert is
-being addressed. The alternate preview also boots and plays Stadium Tycoon
-in the browser. Domain ownership/TLS is pending; DNS remains unchanged.
+**21:33 EDT, Codex combined release repair:** Run `35038033612` finished
+with 318 passing node harnesses and failures in live motion fixtures and a
+Rarity Round pool load. Full Vitest failures are confined to the same motion
+fixture file. No accepted combined artifact and no repeat CI launched.
 
-Codex reserves only `src/hooks/useGameNavbarStats.ts` and its new offline
-tests for a separate follow-up repair in `codex/navbar-stats-read-repair`.
-Guest and hidden-tab personal-stat requests are unnecessary; login,
-foreground and completion refreshes must remain correct. This repair is
-outside the frozen release and no other new feature is being started.
+Candidate `31f5672a` in `codex/integrated-588-repaired` contains the reviewed
+motion fixture and navbar read repairs. Proper types, production build and all
+11 unchanged download budgets pass; full offline Vitest is running. Frozen
+`03fa0efa` and `780106e5` refs remain untouched. A renewed verification branch
+will keep production-reading checks serialized.
+
+Codex additionally reserves `src/lib/rarityRound.ts` and focused offline cache
+tests. It retains empty/error pool promises, preventing a manual retry from
+recovering. The bounded live category probe passes all 2,240 rows; the CI
+error type remains unknown. No data edits, query changes, automatic retry
+increase or database settings change. Keep the current preview and main
+release in place until the complete integrated artifact is accepted.
 
 **19:56 EDT, Codex animation preview is public:**
 https://douknowball.anacatu2025.chatgpt.site now serves the accepted full 588
