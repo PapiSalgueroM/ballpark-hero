@@ -57,6 +57,25 @@ const RIVAL_NAMES = [
   'efootball',
   'ea ?sports',
   'ea ?fc\\b',
+
+  /* Round 620: the independent studio whose sports sims the owner pointed at
+     when he asked for a fight career game, plus its titles. The genre is fair
+     game and the names are not, and the repo is public, so a comment naming
+     them would be exactly as readable as a button naming them.
+
+     ON THE SHAPE OF THE BOXING ONE, because it needs to be deliberate. The
+     ordinary English word for a professional boxer is a legitimate thing to
+     write in a boxing game's copy, and banning it outright would fail the build
+     on honest prose. So the plural and the numbered title are banned, which is
+     what the product is actually called, and the plain English singular is
+     left alone. This is the same distinction the FIFA entries below draw
+     between the governing body and the video game. */
+  'koality',
+  'prizefighters\\b',
+  'prizefighter ?[0-9]',
+  'hoop ?land',
+  'hoop league tactics',
+  'ice league hockey',
   // Round 135: two shapes the list missed for eight rounds, both of them sitting
   // in Club Manager comments the whole time. "EA's own forum" never contained
   // "ea sports" or "ea fc", and "FC 26" on its own has no "ea" in front of it to
