@@ -6,16 +6,42 @@
 the mechanism rather than about the four harnesses that had it, because a check written for a
 known offender cannot find the next offender.
 
-**The rule.** A harness that reads a file under `src/` and searches it with a multi line string
-literal must normalise line endings when it reads. Any of the four idioms already in use counts.
-On this checkout src is CRLF and an anchor written inside a harness is LF, so a single line
-anchor matches and a multi line one cannot, ever. 28 harnesses are in scope and all of them
-comply. Control `ANCHOR_CONTROL=strip` removes the normalisation from a copy of
-`simFightCareer.mjs` and the check goes from green to exactly one failure naming it.
+**The rule.** For every multi line anchor a harness carries into a file under `src/`, every read
+in that harness that can reach that file, and whose text can reach the anchor, must normalise
+line endings. On this checkout src is CRLF and an anchor written inside a harness is LF, so a
+single line anchor matches and a multi line one cannot, ever.
 
-**Fixed this round:** `simTransferPathRepeat` (its only control aborted with "no duplicate guard
-to remove", so section 1 had never been verified here) and `simPollCharacter` (both of its copy
-helpers). `simFightCareer` and `simFightGym` were fixed in Round 628.
+**As first shipped it was much weaker than this section said, and review caught it (findings 37
+to 43).** It exempted a harness if the normaliser text appeared anywhere in it, comments
+included, so `simSiteSearch` (guide read normalised, the read its `catalogdump` control searches
+left raw) read as compliant while that control had never run here. It only saw reads with a src
+path typed into the call, so a `readSrc(p)` helper was invisible. It judged "anchor" against this
+checkout's raw bytes, so an LF clone found nothing, and its vacuity floor counted normalisers
+rather than anchors, so it still said ok. Its strip control passed on any failure at all and left
+a copy of `scripts/` in the temp folder every run. And the `simPollCharacter` fix went through a
+Bash heredoc and put real line breaks inside two string literals: the harness stopped parsing,
+all five controls with it, and the suite would have gone red on every ship.
+
+**What it is now.** A tokeniser, so prose is never code. Anchors come from quoted strings,
+template literals, `+` chains, array joins and regexes, decided against normalised source so an
+LF clone finds what CRLF finds. Read paths resolve through consts, helpers, loops, properties and
+local functions. Any normaliser idiom counts, judged by running the call on a CRLF sample. It also
+runs `node --check` over every sim, play and sweep harness, so a syntax error is named as one. The
+header lists exactly which shapes are still out of reach. Measured: 72 harnesses carry a multi
+line anchor into src and 68 normalised reads guard one. Six controls (`strip`, `oneread`,
+`helper`, `comment`, `lf`, `parse`), each passing only when exactly its planted harness is named,
+each removing its temp copy.
+
+**The real number was not four.** Widening the fence found five more controls that could never
+run on this checkout, all now normalised on read and each shown aborting before the fix and
+firing after: `simCfbDynasty` replay, `simErrorBoundary` unwrapped and nocatch, `simFetchRetry`
+noretry, `simFootleAtomicPool` partial, `simFootleDaily` freeze. With `simSiteSearch` catalogdump
+that is ten harnesses. `simTransferPathRepeat` and `simPollCharacter` were fixed in this round
+(the second one properly only after review), `simFightCareer` and `simFightGym` in Round 628.
+Running every control of those harnesses turned up one more dead control for a different reason:
+`simCfbDynasty` drain had crashed in esbuild since Round 568, because the engine copy it writes to
+the temp folder carries a relative `./entityIds` import. The copy's relative imports now point
+back at `src/lib`, and drain turns sections 2 and 3 red.
 
 **Two wrong drafts of the fence, both worth knowing about.** The first matched every multi line
 literal and reported 47 harnesses, nearly all false, because a harness's own console output is
@@ -30,7 +56,9 @@ it does not also appear in that file's raw bytes it cannot match as written.
 **And a caution for anyone auditing this from a worktree.** A worktree has no `node_modules`, so
 any harness that spawns `ROOT/node_modules/vitest` or similar by absolute path cannot run there
 and reports zero failures for a reason that has nothing to do with its controls. That nearly got
-recorded here as two more findings.
+recorded here as two more findings. The review gates for this round ran those harnesses as
+scratch copies with only ROOT and the esbuild and vitest paths swapped, vitest on a config that
+extends the worktree's own, and a resolve hook for bare imports.
 
 
 ## ROUND 628 2026-09-16: the fight screen, and a harness that agreed with itself

@@ -95,7 +95,8 @@
  *   - a read whose path cannot be resolved and that reaches X without the
  *     harness ever naming X (walking src/ and choosing files by content)
  *   - text that leaves a block by a route the escape test does not know,
- *     such as a closure stored outside the block
+ *     such as a closure stored outside the block, and text split into lines
+ *     on the spot and later joined back together
  *   - a path the resolver gets wrong: it treats every call it does not know
  *     as passing its arguments through, so path.basename keeps directories
  *   - normalisation in any shape not listed above. That one errs toward a
