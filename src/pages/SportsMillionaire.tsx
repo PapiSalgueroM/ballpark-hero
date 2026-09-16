@@ -9,6 +9,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import GameEditorialGuide from '@/components/seo/GameEditorialGuide';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
 import { markRestoredFinish } from '@/lib/restoredFinish';
@@ -560,8 +561,10 @@ const SportsMillionaire = () => {
           <ReportQuestion gameType="sports-millionaire" />
         </div>
 
+        <GameEditorialGuide path="/sports-millionaire" />
         <GameSeoContent
           pageHasOwnH1
+          omitLongGuide
           title="Sports Millionaire: The Money Ladder Trivia Game"
           description="Climb a money ladder where every right answer raises the stakes. Fifteen questions built from real market values, nationalities, positions, and Ballon d'Or history. Use your lifelines wisely."
           howToPlay={[

@@ -17,8 +17,12 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import GameEditorialGuide from '@/components/seo/GameEditorialGuide';
 import { supabase } from '@/integrations/supabase/client';
 import { computeChemistry, formatChemistry } from '@/lib/chemistry';
+import { computeNeighborChemistry, xiOverall } from '@/lib/xiPitchChemistry';
+import { DraftTurnBanner } from '@/components/lineup/DraftTurnBanner';
+import { DraftSquadCompare } from '@/components/lineup/DraftSquadCompare';
 import { StatTile } from '@/components/game/StatTile';
 import { normalizePosition, playerRating } from '@/lib/squadDeal';
 import { ordinal, simulateWorldXiSeason, type WxPlayer } from '@/lib/worldXi';
@@ -29,13 +33,21 @@ const LineupBuilder = () => {
   const {
     formation,
     phase,
+    playMode,
+    setPlayMode,
     selectedPositionIndex,
     currentTeam,
     positions,
     filledSlots,
+    filledSlotsP1,
     filledSlotsArray,
+    filledSlotsP2,
+    filledSlotsP2Array,
     filledCount,
+    filledCountP1,
+    filledCountP2,
     verdict,
+    verdictP2,
     isEvaluating,
     isValidating,
     validationError,
@@ -46,9 +58,18 @@ const LineupBuilder = () => {
     submitPlayer,
     evaluateTeam,
     resetGame,
+    skipTurn,
     finishSpin,
     rerollTeam,
     teamAssignments,
+    isDraft,
+    activeSeat,
+    pickIndex,
+    secondsLeft,
+    timerPaused,
+    setSearchFocused,
+    setSearchHasText,
+    assignmentIndex,
   } = useLineupBuilder();
 
   const [playerInput, setPlayerInput] = useState('');
@@ -62,10 +83,12 @@ const LineupBuilder = () => {
     }
   }, []);
 
-  const excludedPlayers = useMemo(
-    () => new Set(filledSlotsArray.map((slot) => normalizeName(slot.playerName))),
-    [filledSlotsArray]
-  );
+  const excludedPlayers = useMemo(() => {
+    const names = isDraft
+      ? [...filledSlotsArray, ...filledSlotsP2Array]
+      : filledSlotsArray;
+    return new Set(names.map((slot) => normalizeName(slot.playerName)));
+  }, [filledSlotsArray, filledSlotsP2Array, isDraft]);
 
   /* Round 484: the men this country has actually named in a squad, lifted to
      the top of the nation slot's suggestions.
@@ -146,6 +169,7 @@ const LineupBuilder = () => {
       year: typeof entity.meta.year === 'number' ? entity.meta.year : undefined,
     });
     setPlayerInput('');
+    setSearchHasText(false);
   };
 
   const chemistry = useMemo(
@@ -158,6 +182,23 @@ const LineupBuilder = () => {
         })),
       ),
     [filledSlotsArray]
+  );
+
+  const draftChemP1 = useMemo(
+    () => computeNeighborChemistry(positions, filledSlotsP1),
+    [positions, filledSlotsP1],
+  );
+  const draftChemP2 = useMemo(
+    () => computeNeighborChemistry(positions, filledSlotsP2),
+    [positions, filledSlotsP2],
+  );
+  const overallP1 = useMemo(
+    () => xiOverall(filledSlotsArray, isDraft ? draftChemP1.totalBonus : chemistry.totalBonus),
+    [filledSlotsArray, isDraft, draftChemP1.totalBonus, chemistry.totalBonus],
+  );
+  const overallP2 = useMemo(
+    () => xiOverall(filledSlotsP2Array, draftChemP2.totalBonus),
+    [filledSlotsP2Array, draftChemP2.totalBonus],
   );
 
   /* Round 442, his "the simulation wasnt that good like other games and the
@@ -242,7 +283,7 @@ const LineupBuilder = () => {
           <div className="flex justify-center">
             <button
               onClick={() => setShowRules(true)}
-              className="mt-1 inline-flex items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
+              className="mt-1 inline-flex min-h-[44px] items-center gap-1.5 rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-primary"
               aria-label="How to play"
             >
               <HelpCircle className="w-4 h-4" /> How to play
@@ -253,13 +294,41 @@ const LineupBuilder = () => {
         {/* Formation Selection */}
         {phase === 'formation' && (
           <div className="max-w-lg mx-auto">
+            <div className="mb-5 flex w-full max-w-full rounded-2xl border border-border bg-secondary/40 p-1">
+              <button
+                type="button"
+                onClick={() => setPlayMode('solo')}
+                className={cn(
+                  'min-h-[44px] flex-1 rounded-xl px-3 text-sm font-semibold transition-colors',
+                  playMode === 'solo' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground',
+                )}
+              >
+                Solo
+              </button>
+              <button
+                type="button"
+                onClick={() => setPlayMode('pass-and-play')}
+                className={cn(
+                  'min-h-[44px] flex-1 rounded-xl px-3 text-sm font-semibold transition-colors',
+                  playMode === 'pass-and-play' ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground',
+                )}
+              >
+                Pass & Play
+              </button>
+            </div>
+            <p className="mb-4 text-center text-sm text-muted-foreground">
+              {playMode === 'solo'
+                ? 'Build one XI. Same game as always.'
+                : 'Two players, one phone. Snake draft: P1, P2, P2, P1 until both XIs are full.'}
+            </p>
             <h2 className="text-center text-lg font-semibold text-foreground mb-4">Choose Your Formation</h2>
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
               {formationOptions.map((f) => (
                 <button
                   key={f}
+                  type="button"
                   onClick={() => selectFormation(f)}
-                  className="rounded-xl border border-border bg-card hover:bg-primary hover:text-primary-foreground transition-all p-6 text-center group"
+                  className="rounded-xl border border-border bg-card hover:bg-primary hover:text-primary-foreground transition-all min-h-[44px] p-6 text-center group"
                 >
                   <span className="text-2xl font-bold font-display group-hover:scale-110 transition-transform inline-block">
                     {f}
@@ -275,9 +344,50 @@ const LineupBuilder = () => {
 
         {/* Building Phase */}
         {phase === 'building' && (
-          <div className="max-w-3xl mx-auto space-y-6">
+          <div className="max-w-3xl mx-auto w-full space-y-6">
+            {isDraft && (
+              <>
+                <DraftTurnBanner
+                  seat={activeSeat}
+                  pickIndex={pickIndex}
+                  secondsLeft={secondsLeft}
+                  paused={timerPaused}
+                />
+                <div className="flex justify-center">
+                  <button
+                    type="button"
+                    onClick={skipTurn}
+                    disabled={isValidating || isSpinning}
+                    className="inline-flex min-h-[44px] min-w-[44px] items-center justify-center rounded-full border border-border bg-secondary px-4 text-sm font-semibold text-secondary-foreground"
+                  >
+                    Skip this pick
+                  </button>
+                </div>
+                <DraftSquadCompare
+                  p1={{
+                    label: 'Player 1',
+                    filled: filledCountP1,
+                    chemistry: draftChemP1,
+                    overall: overallP1,
+                    positions,
+                    filledMap: filledSlotsP1,
+                    active: activeSeat === 1,
+                  }}
+                  p2={{
+                    label: 'Player 2',
+                    filled: filledCountP2,
+                    chemistry: draftChemP2,
+                    overall: overallP2,
+                    positions,
+                    filledMap: filledSlotsP2,
+                    active: activeSeat === 2,
+                  }}
+                />
+              </>
+            )}
+
             {/* Progress */}
-            <div className="flex items-center justify-center gap-1.5">
+            <div className="flex items-center justify-center gap-1.5 flex-wrap">
               {positions.map((_, i) => (
                 <div
                   key={i}
@@ -287,23 +397,26 @@ const LineupBuilder = () => {
                   )}
                 />
               ))}
-              <span className="ml-2 text-xs text-muted-foreground font-semibold">{filledCount}/11</span>
+              <span className="ml-2 text-xs text-muted-foreground font-semibold">
+                {isDraft ? `P${activeSeat} ${filledCount}/11` : `${filledCount}/11`}
+              </span>
             </div>
 
             {/* Spinner + Input on top */}
-            <div className="max-w-lg mx-auto space-y-4">
+            <div className="max-w-lg mx-auto space-y-4 w-full max-w-full">
               {/* Slot machine spinner + reroll */}
               <div className="relative">
                 <TeamSpinner
                   teams={teamAssignments}
-                  targetIndex={filledCount}
+                  targetIndex={assignmentIndex}
                   isSpinning={isSpinning}
                   onFinish={finishSpin}
                 />
                 {!isSpinning && currentTeam && (
                   <button
+                    type="button"
                     onClick={rerollTeam}
-                    className="absolute top-2 right-2 flex items-center justify-center w-10 h-10 rounded-lg bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all"
+                    className="absolute top-2 right-2 flex items-center justify-center min-h-[44px] min-w-[44px] rounded-lg bg-secondary hover:bg-secondary/80 text-muted-foreground hover:text-foreground transition-all"
                     title="Reroll: get a different team"
                   >
                     <Shuffle className="w-4 h-4" />
@@ -328,15 +441,25 @@ const LineupBuilder = () => {
                   </p>
 
                   <div className="flex items-start gap-2">
-                    <div className="flex-1">
+                    <div
+                      className="flex-1"
+                      onFocusCapture={() => setSearchFocused(true)}
+                      onBlurCapture={(e) => {
+                        const next = e.relatedTarget as Node | null;
+                        if (!e.currentTarget.contains(next)) setSearchFocused(false);
+                      }}
+                    >
                       <PlayerAutocomplete
                         value={playerInput}
-                        onChange={setPlayerInput}
+                        onChange={(v) => {
+                          setPlayerInput(v);
+                          setSearchHasText(v.trim().length > 0);
+                        }}
                         onSelect={handleSelectPlayer}
                         searchOptions={{ source: teamScopedSource ?? SOCCER_MARKET_VALUE_SOURCE, exclude: excludedPlayers, boostNames: cappedNames }}
                         placeholder={currentTeam ? `Search a ${currentTeam.name} player...` : 'Enter player name...'}
                         disabled={isValidating}
-                        autoFocus
+                        autoFocus={!isDraft}
                         validateOnly
                       />
                     </div>
@@ -380,47 +503,77 @@ const LineupBuilder = () => {
 
         {/* Review Phase */}
         {phase === 'reviewing' && (
-          <div className="max-w-xl mx-auto space-y-6">
-            <div className="bg-card border border-border rounded-2xl p-6 shadow-lg">
-              <h2 className="text-center text-xl font-bold text-foreground font-display mb-1">
-                Your {formation} Starting XI
-              </h2>
-              <p className="text-center text-sm text-muted-foreground mb-4">Review your team before submitting</p>
-              <div className="space-y-2">
-                {filledSlotsArray.map((slot, i) => (
-                  <div key={i} className="flex items-center gap-3 bg-secondary/30 rounded-lg px-4 py-2.5">
-                    <span className="text-xs font-bold text-primary w-10 shrink-0">{slot.label}</span>
-                    <span className="font-semibold text-foreground flex-1 min-w-0 truncate">{slot.playerName}</span>
-                    <span className="text-xs text-muted-foreground shrink-0 max-w-[35%] truncate">
-                      {slot.isNation ? <FlagImg name={slot.assignedTeam} size={16} showLabel /> : <>🏟️ {slot.assignedTeam}</>}
+          <div className="max-w-xl mx-auto w-full max-w-full space-y-6">
+            {isDraft ? (
+              <>
+                <DraftSquadCompare
+                  p1={{
+                    label: 'Player 1',
+                    filled: filledCountP1,
+                    chemistry: draftChemP1,
+                    overall: overallP1,
+                    positions,
+                    filledMap: filledSlotsP1,
+                    active: false,
+                  }}
+                  p2={{
+                    label: 'Player 2',
+                    filled: filledCountP2,
+                    chemistry: draftChemP2,
+                    overall: overallP2,
+                    positions,
+                    filledMap: filledSlotsP2,
+                    active: false,
+                  }}
+                />
+                <p className="text-center text-sm text-muted-foreground">
+                  Submit both XIs. Skipped turns stay empty. Nobody gets a made-up player.
+                </p>
+              </>
+            ) : (
+              <div className="bg-card border border-border rounded-2xl p-6 shadow-lg">
+                <h2 className="text-center text-xl font-bold text-foreground font-display mb-1">
+                  Your {formation} Starting XI
+                </h2>
+                <p className="text-center text-sm text-muted-foreground mb-4">Review your team before submitting</p>
+                <div className="space-y-2">
+                  {filledSlotsArray.map((slot, i) => (
+                    <div key={i} className="flex items-center gap-3 bg-secondary/30 rounded-lg px-4 py-2.5">
+                      <span className="text-xs font-bold text-primary w-10 shrink-0">{slot.label}</span>
+                      <span className="font-semibold text-foreground flex-1 min-w-0 truncate">{slot.playerName}</span>
+                      <span className="text-xs text-muted-foreground shrink-0 max-w-[35%] truncate">
+                        {slot.isNation ? <FlagImg name={slot.assignedTeam} size={16} showLabel /> : <>🏟️ {slot.assignedTeam}</>}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+                {chemistry.totalBonus > 0 && (
+                  <div className="mt-4 text-center">
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
+                      {formatChemistry(chemistry)}
                     </span>
                   </div>
-                ))}
+                )}
               </div>
-              {chemistry.totalBonus > 0 && (
-                <div className="mt-4 text-center">
-                  <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
-                    {formatChemistry(chemistry)}
-                  </span>
-                </div>
-              )}
-            </div>
+            )}
 
             <div className="flex flex-wrap items-center justify-center gap-3">
               <button
+                type="button"
                 onClick={resetGame}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
+                className="inline-flex min-h-[44px] items-center gap-2 px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-semibold hover:bg-secondary/80 transition-all"
               >
                 <RotateCcw className="w-4 h-4" />
                 Start Over
               </button>
               <button
+                type="button"
                 onClick={evaluateTeam}
                 disabled={isEvaluating}
-                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
+                className="inline-flex min-h-[44px] items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-full font-semibold hover:opacity-90 transition-all"
               >
                 {isEvaluating ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                {isEvaluating ? 'Evaluating...' : 'Submit Team'}
+                {isEvaluating ? 'Evaluating...' : isDraft ? 'Rate both XIs' : 'Submit Team'}
               </button>
             </div>
           </div>
@@ -431,9 +584,19 @@ const LineupBuilder = () => {
           <div className="max-w-xl mx-auto">
             <ResultScreen
               outcomeEmoji={<Trophy className="w-12 h-12 text-primary mx-auto" />}
-              headline={verdict.rating}
-              statLine={<span className="font-semibold">{verdict.headline}</span>}
-              funFact={<span className="whitespace-pre-line">{verdict.analysis}</span>}
+              headline={isDraft && verdictP2 ? `P1 ${verdict.rating}` : verdict.rating}
+              statLine={
+                <span className="font-semibold">
+                  {isDraft && verdictP2 ? `P2 ${verdictP2.rating}` : verdict.headline}
+                </span>
+              }
+              funFact={
+                <span className="whitespace-pre-line">
+                  {isDraft && verdictP2
+                    ? `P1: ${verdict.headline}\n${verdict.analysis}\n\nP2: ${verdictP2.headline}\n${verdictP2.analysis}`
+                    : verdict.analysis}
+                </span>
+              }
               emojiGrid={
                 seasonReport
                   ? `Build Your XI: ${formation} rated ${verdict.rating}\nSeason sim: ${seasonReport.squadRating}/100, finished ${ordinal(seasonReport.tablePosition)}`
@@ -447,7 +610,9 @@ const LineupBuilder = () => {
               onPlayAgain={resetGame}
             >
               <div className="bg-secondary/30 rounded-2xl p-4 mb-2 text-left">
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Your {formation} XI</p>
+                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">
+                  {isDraft ? `Player 1 ${formation} XI` : `Your ${formation} XI`}
+                </p>
                 <div className="space-y-1.5">
                   {ratedXi.map(({ slot, rating }, i) => (
                     <div key={i} className="flex items-center gap-2 bg-card/60 rounded-lg px-3 py-2 text-sm">
@@ -474,14 +639,45 @@ const LineupBuilder = () => {
                     </div>
                   ))}
                 </div>
-                {chemistry.totalBonus > 0 && (
+                {(!isDraft && chemistry.totalBonus > 0) && (
                   <div className="mt-3 text-center">
                     <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
                       {formatChemistry(chemistry)}
                     </span>
                   </div>
                 )}
+                {isDraft && (
+                  <div className="mt-3 text-center">
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
+                      {formatChemistry(draftChemP1)} · {overallP1.label}
+                    </span>
+                  </div>
+                )}
               </div>
+
+              {isDraft && (
+                <div className="bg-secondary/30 rounded-2xl p-4 mb-2 text-left">
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-2">Player 2 {formation} XI</p>
+                  <div className="space-y-1.5">
+                    {filledSlotsP2Array.map((slot, i) => (
+                      <div key={i} className="flex items-center gap-2 bg-card/60 rounded-lg px-3 py-2 text-sm">
+                        <span className="text-xs font-bold text-primary w-8 shrink-0">{slot.label}</span>
+                        <span className="flex-1 min-w-0">
+                          <span className="font-semibold text-foreground block truncate">{slot.playerName}</span>
+                        </span>
+                        <span className="text-xs text-muted-foreground shrink-0 max-w-[32%] truncate">
+                          {slot.isNation ? <FlagImg name={slot.assignedTeam} size={16} showLabel /> : <>🏟️ {slot.assignedTeam}</>}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="mt-3 text-center">
+                    <span className="inline-flex items-center px-3 py-1.5 rounded-full bg-surface-2 text-gold text-sm font-semibold">
+                      {formatChemistry(draftChemP2)} · {overallP2.label}
+                    </span>
+                  </div>
+                </div>
+              )}
 
               {seasonReport && (
                 <div className="rounded-2xl border border-primary/30 bg-surface-1 p-4 mb-2 text-left">
@@ -535,12 +731,14 @@ const LineupBuilder = () => {
 
         <GameSeoContent
           pageHasOwnH1
+          omitLongGuide
           title="Build Your XI | DoUKnowBall"
           description="Build your ultimate starting eleven from players who match specific criteria. Test your football knowledge across positions, teams and eras."
           howToPlay={[
-            "Choose a formation for your starting eleven",
+            "Choose Solo or Pass & Play, then pick a formation",
             "Spin to get a random team assignment for each position",
             "Name a player from that team who fits the position",
+            "Pass & Play snakes P1, P2, P2, P1. A timed-out pick is skipped, never auto-filled",
             "Submit your full XI for an AI-powered evaluation and rating",
           ]}
           examples={[
@@ -564,6 +762,7 @@ const LineupBuilder = () => {
 
         <LineupHowToPlay open={showRules} onOpenChange={setShowRules} />
       </GameShell>
+      <GameEditorialGuide path="/build-your-xi" />
     </>
   );
 };

@@ -28,6 +28,12 @@ interface GameSeoContentProps {
    * and its components, so neither state can drift.
    */
   pageHasOwnH1?: boolean;
+  /**
+   * When a page mounts GameEditorialGuide as the canonical long copy,
+   * skip intro/howToPlay/rules/example/tips so crawlers do not see two
+   * guides repeating the same paragraphs. FAQ, related games and JSON-LD stay.
+   */
+  omitLongGuide?: boolean;
 }
 
 // Round 48 (AdSense content build): this block grew from title + description only
@@ -42,7 +48,7 @@ interface GameSeoContentProps {
 // made that true: the array used to carry a generic placeholder set while the
 // guide file was loading, and that set fed the JSON-LD without ever appearing
 // on screen. See the long note on `faqs` below.
-const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeoContentProps) => {
+const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1, omitLongGuide }: GameSeoContentProps) => {
   const location = useLocation();
   const path = location.pathname;
 
@@ -153,55 +159,59 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
 
       {content && (
         <article className="mt-10 text-left text-sm text-muted-foreground leading-relaxed space-y-8">
-          <div className="space-y-3">
-            {content.intro.map((p, i) => (
-              <p key={i}>{p}</p>
-            ))}
-          </div>
+          {!omitLongGuide && (
+            <>
+              <div className="space-y-3">
+                {content.intro.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
 
-          <div>
-            <h2 className="text-base font-semibold text-foreground mb-3">
-              How to play {gameLabel}
-            </h2>
-            <ol className="list-decimal pl-5 space-y-2">
-              {content.howToPlay.map((step, i) => (
-                <li key={i}>{step}</li>
-              ))}
-            </ol>
-          </div>
+              <div>
+                <h2 className="text-base font-semibold text-foreground mb-3">
+                  How to play {gameLabel}
+                </h2>
+                <ol className="list-decimal pl-5 space-y-2">
+                  {content.howToPlay.map((step, i) => (
+                    <li key={i}>{step}</li>
+                  ))}
+                </ol>
+              </div>
 
-          <div>
-            <h2 className="text-base font-semibold text-foreground mb-3">
-              Rules to know
-            </h2>
-            <ul className="list-disc pl-5 space-y-2">
-              {content.rules.map((rule, i) => (
-                <li key={i}>{rule}</li>
-              ))}
-            </ul>
-          </div>
+              <div>
+                <h2 className="text-base font-semibold text-foreground mb-3">
+                  Rules to know
+                </h2>
+                <ul className="list-disc pl-5 space-y-2">
+                  {content.rules.map((rule, i) => (
+                    <li key={i}>{rule}</li>
+                  ))}
+                </ul>
+              </div>
 
-          <div>
-            <h2 className="text-base font-semibold text-foreground mb-3">
-              Example walkthrough
-            </h2>
-            <div className="space-y-3">
-              {content.example.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
-          </div>
+              <div>
+                <h2 className="text-base font-semibold text-foreground mb-3">
+                  Example walkthrough
+                </h2>
+                <div className="space-y-3">
+                  {content.example.map((p, i) => (
+                    <p key={i}>{p}</p>
+                  ))}
+                </div>
+              </div>
 
-          <div>
-            <h2 className="text-base font-semibold text-foreground mb-3">
-              Strategy tips
-            </h2>
-            <ul className="list-disc pl-5 space-y-2">
-              {content.tips.map((tip, i) => (
-                <li key={i}>{tip}</li>
-              ))}
-            </ul>
-          </div>
+              <div>
+                <h2 className="text-base font-semibold text-foreground mb-3">
+                  Strategy tips
+                </h2>
+                <ul className="list-disc pl-5 space-y-2">
+                  {content.tips.map((tip, i) => (
+                    <li key={i}>{tip}</li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          )}
 
           <div>
             <h2 className="text-base font-semibold text-foreground mb-3">
@@ -219,7 +229,7 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
         </article>
       )}
 
-      {!content && howToPlay && howToPlay.length > 0 && (
+      {!omitLongGuide && !content && howToPlay && howToPlay.length > 0 && (
         <div className="mt-8 text-left text-sm text-muted-foreground leading-relaxed">
           <h2 className="text-base font-semibold text-foreground mb-3">How to play</h2>
           <ol className="list-decimal pl-5 space-y-2">

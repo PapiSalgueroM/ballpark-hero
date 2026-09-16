@@ -25,6 +25,7 @@ export interface MysteryBoxState {
   loading: boolean;
   formation: typeof FORMATIONS[number];
   packIndex: number;               // 0-based; packIndex === TOTAL_PACKS => done
+  upcoming: PackPlayer | null;     // next pack, known before the wheel spins
   current: PackPlayer | null;      // the just-opened player awaiting a decision
   revealed: boolean;
   squad: (PackPlayer | undefined)[];
@@ -129,7 +130,8 @@ export function useMysteryBox(): MysteryBoxState {
 
   const packIndex = decisions.length;
   const finished = packs.length > 0 && packIndex >= packs.length;
-  const current = !finished && revealed ? (packs[packIndex] ?? null) : null;
+  const upcoming = !finished ? (packs[packIndex] ?? null) : null;
+  const current = revealed ? upcoming : null;
 
   const squad = useMemo(() => {
     const s: (PackPlayer | undefined)[] = Array(formation.slots.length).fill(undefined);
@@ -199,7 +201,7 @@ export function useMysteryBox(): MysteryBoxState {
   }, [finished, packs, rating, filled, bestPull, today]);
 
   return {
-    loading, formation, packIndex, current, revealed, squad, compatibleSlots,
+    loading, formation, packIndex, upcoming, current, revealed, squad, compatibleSlots,
     discards, finished, rating, filled, bestPull, openPack, place, discard, shareText,
   };
 }

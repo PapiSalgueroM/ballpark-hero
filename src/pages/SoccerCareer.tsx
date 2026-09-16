@@ -4,6 +4,7 @@ import { useGameCompletion } from "@/hooks/useGameCompletion";
 import { recordCompletion, recordActivity, recordStreakDay } from "@/lib/completions";
 import PageSeo from "@/components/seo/PageSeo";
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import GameEditorialGuide from '@/components/seo/GameEditorialGuide';
 import { GameNavbar } from "@/components/game/GameNavbar";
 import { GameHelp } from "@/components/game/GameHelp";
 import VictoryMoment from '@/components/game/VictoryMoment';
@@ -1203,8 +1204,10 @@ export default function SoccerCareer() {
             )}
           </>
         )}
+        <GameEditorialGuide path="/soccer-career" />
         <GameSeoContent
           pageHasOwnH1
+          omitLongGuide
           title="Soccer Career Simulator | DoUKnowBall"
           description="Live out your soccer dream in a season by season career simulator. Create a player, join a youth academy, develop skills, sign contracts, win trophies, and compete for the Ballon d'Or."
           howToPlay={[

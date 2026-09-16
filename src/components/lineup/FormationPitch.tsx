@@ -6,6 +6,8 @@ interface FormationPitchProps {
   filledSlots: Map<number, FilledSlot>;
   selectedIndex: number | null;
   onSelectPosition: (index: number) => void;
+  readOnly?: boolean;
+  compact?: boolean;
 }
 
 // Maps each position index to a grid location based on formation rows
@@ -47,11 +49,21 @@ function getPositionCoords(positions: PositionSlot[]): { x: number; y: number }[
   return coords;
 }
 
-const FormationPitch = ({ positions, filledSlots, selectedIndex, onSelectPosition }: FormationPitchProps) => {
+const FormationPitch = ({
+  positions,
+  filledSlots,
+  selectedIndex,
+  onSelectPosition,
+  readOnly = false,
+  compact = false,
+}: FormationPitchProps) => {
   const coords = getPositionCoords(positions);
 
   return (
-    <div className="relative w-full max-w-lg mx-auto aspect-[3/4.5] bg-correct/10 rounded-2xl border border-correct/20 overflow-hidden">
+    <div className={cn(
+      'relative w-full mx-auto bg-correct/10 rounded-2xl border border-correct/20 overflow-hidden',
+      compact ? 'max-w-full aspect-[3/3.2]' : 'max-w-lg aspect-[3/4.5]',
+    )}>
       {/* Pitch markings */}
       <div className="absolute inset-0">
         {/* Center line */}
@@ -73,11 +85,13 @@ const FormationPitch = ({ positions, filledSlots, selectedIndex, onSelectPositio
         return (
           <button
             key={i}
-            onClick={() => !filled && onSelectPosition(i)}
-            disabled={!!filled}
+            type="button"
+            onClick={() => !readOnly && !filled && onSelectPosition(i)}
+            disabled={readOnly || !!filled}
             className={cn(
               'absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-200',
-              'flex flex-col items-center justify-center rounded-lg text-center min-w-[4rem] px-2 py-1.5',
+              'flex flex-col items-center justify-center rounded-lg text-center min-h-[44px] min-w-[44px] px-2 py-1.5',
+              compact ? 'px-1' : 'min-w-[4rem]',
               filled
                 ? 'bg-correct text-correct-foreground shadow-md cursor-default'
                 : isSelected

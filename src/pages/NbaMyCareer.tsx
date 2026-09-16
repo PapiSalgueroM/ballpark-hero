@@ -4,6 +4,7 @@ import NbaMyCareerBoard from '@/components/nba-my-career/NbaMyCareerBoard';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import GameEditorialGuide from '@/components/seo/GameEditorialGuide';
 
 const NbaMyCareer = () => {
   return (
@@ -24,8 +25,10 @@ const NbaMyCareer = () => {
             </p>
           </div>
           <NbaMyCareerBoard />
+          <GameEditorialGuide path="/nba-my-career" />
           <GameSeoContent
           pageHasOwnH1
+            omitLongGuide
             title="NBA My Career: the Player Life Sim"
             description="Build a fictional prospect and live a full NBA career inside the real league. Your position and archetype drive realistic per-game lines, and every summer brings one big decision: hometown discount or the max somewhere new, surgery or load management, the podcast or the gym. Chase rings, MVPs, Finals MVPs and All-NBA nods, fight Father Time, and retire to a verdict that runs from ten-day contracts to the GOAT debate."
             howToPlay={[

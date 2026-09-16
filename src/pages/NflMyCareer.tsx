@@ -4,6 +4,7 @@ import NflMyCareerBoard from '@/components/nfl-my-career/NflMyCareerBoard';
 import { GameNav } from '@/components/game/GameNav';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import GameEditorialGuide from '@/components/seo/GameEditorialGuide';
 
 const NflMyCareer = () => {
   return (
@@ -24,8 +25,10 @@ const NflMyCareer = () => {
             </p>
           </div>
           <NflMyCareerBoard />
+          <GameEditorialGuide path="/nfl-my-career" />
           <GameSeoContent
           pageHasOwnH1
+            omitLongGuide
             title="NFL My Career: the Player Life Sim"
             description="Build a fictional prospect and live a full NFL career inside the real league. Your position and archetype drive realistic season stat lines, your choices drive everything else: training focus, holdouts, trade requests, surgeries, hometown discounts or max-money moves. Chase rings, MVPs and All-Pro nods, fight the aging curve, and retire to a legacy verdict that tells you if Canton calls."
             howToPlay={[

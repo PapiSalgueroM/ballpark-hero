@@ -264,17 +264,19 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "When the eleventh name lands, an AI referee grades the lineup and writes a short scouting report, then a season report plays a full year out with your XI: league finish, points, trophies and a top scorer. No two teams ever come out alike.",
     ],
     howToPlay: [
-      "Choose one of 6 formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1, 3-4-3, or 5-3-2.",
+      "Choose Solo or Pass & Play, then one of 6 formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1, 3-4-3, or 5-3-2.",
       "Tap a position. The spinner shows which club or national team that slot is locked to.",
       "Type a player from that team who fits. The game verifies the answer before it counts.",
       "Hate an assignment? Reroll it for a different team.",
+      "Pass & Play snakes P1, P2, P2, P1 on one phone. A timed-out pick is skipped, never auto-filled with a made-up name.",
       "Fill all 11 slots, review your chemistry links, then submit for the AI rating.",
     ],
     rules: [
       "Wrong answers are rejected with a reason but cost nothing. Retry until a valid name lands.",
       "A slot takes a player who plays there or right beside it: full backs and wing backs cover each other, wingers count on both flanks, CM covers CDM and CAM, strikers cover each other. A keeper only ever goes in goal.",
-      "No duplicate players across your XI.",
-      "Chemistry: each pair sharing a club is worth 3 points, a league 2, a nationality 1, capped at 9 per player.",
+      "No duplicate players across your XI. In Pass & Play a name can only be drafted once between both XIs.",
+      "Solo chemistry: each pair sharing a club is worth 3 points, a league 2, a nationality 1, capped at 9 per player.",
+      "Pass & Play chemistry is neighbor-only: same club +3, same league or nationality +1 for adjacent pitch slots.",
       "If the AI judge is unreachable, a built in offline judge grades you instead, so a run never dead ends.",
     ],
     example: [

@@ -47,6 +47,9 @@ export interface TeamAssignment {
 
 export type GamePhase = 'formation' | 'building' | 'reviewing' | 'result';
 
+/** Solo is the default. Pass and play is two people on one phone, snake draft. */
+export type LineupPlayMode = 'solo' | 'pass-and-play';
+
 export interface AIVerdict {
   rating: string;
   headline: string;

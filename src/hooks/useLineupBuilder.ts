@@ -1,8 +1,16 @@
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { localEvaluateSoccerXI } from '@/lib/localLineupEval';
 import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS } from '@/data/lineupTeams';
-import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment } from '@/types/lineupBuilder';
+import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment, LineupPlayMode } from '@/types/lineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
+import {
+  DRAFT_TURN_SECONDS,
+  SNAKE_TOTAL_PICKS,
+  advanceDraftPick,
+  shouldPauseDraftTimer,
+  snakeSeat,
+  type DraftSeat,
+} from '@/lib/xiSnakeDraft';
 import { checkLineupPick } from '@/lib/positionFit';
 import type { Position } from '@/types/game';
 import { normalizePosition } from '@/lib/squadDeal';
@@ -59,10 +67,14 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 export function useLineupBuilder() {
   const [formation, setFormation] = useState<Formation | null>(null);
   const [phase, setPhase] = useState<GamePhase>('formation');
+  const [playMode, setPlayMode] = useState<LineupPlayMode>('solo');
   const [selectedPositionIndex, setSelectedPositionIndex] = useState<number | null>(null);
   const [filledSlots, setFilledSlots] = useState<Map<number, FilledSlot>>(new Map());
+  const [filledSlotsP2, setFilledSlotsP2] = useState<Map<number, FilledSlot>>(new Map());
+  const [pickIndex, setPickIndex] = useState(0);
   const [teamAssignments, setTeamAssignments] = useState<TeamAssignment[]>([]);
   const [verdict, setVerdict] = useState<AIVerdict | null>(null);
+  const [verdictP2, setVerdictP2] = useState<AIVerdict | null>(null);
   const [isEvaluating, setIsEvaluating] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -70,27 +82,37 @@ export function useLineupBuilder() {
   const [checkingDown, setCheckingDown] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
   const [spinTeamIndex, setSpinTeamIndex] = useState(0);
+  const [secondsLeft, setSecondsLeft] = useState(DRAFT_TURN_SECONDS);
+  const [searchFocused, setSearchFocused] = useState(false);
+  const [searchHasText, setSearchHasText] = useState(false);
 
+  const isDraft = playMode === 'pass-and-play';
   const positions = useMemo(() => (formation ? FORMATIONS[formation] : []), [formation]);
-
-  const filledCount = filledSlots.size;
-  const currentTeam = useMemo(() => teamAssignments[filledCount] ?? null, [teamAssignments, filledCount]);
+  const activeSeat: DraftSeat = isDraft ? snakeSeat(Math.min(pickIndex, SNAKE_TOTAL_PICKS - 1)) : 1;
+  const activeFilled = isDraft && activeSeat === 2 ? filledSlotsP2 : filledSlots;
+  const assignmentIndex = isDraft ? pickIndex : filledSlots.size;
+  const filledCount = activeFilled.size;
+  const currentTeam = useMemo(() => teamAssignments[assignmentIndex] ?? null, [teamAssignments, assignmentIndex]);
 
   const selectFormation = useCallback((f: Formation) => {
     setFormation(f);
-    setTeamAssignments(getRandomTeamAssignments(11));
+    setTeamAssignments(getRandomTeamAssignments(isDraft ? SNAKE_TOTAL_PICKS : 11));
     setPhase('building');
     setSelectedPositionIndex(null);
     setFilledSlots(new Map());
+    setFilledSlotsP2(new Map());
+    setPickIndex(0);
     setVerdict(null);
+    setVerdictP2(null);
     setValidationError(null);
-  }, []);
+    setSecondsLeft(DRAFT_TURN_SECONDS);
+  }, [isDraft]);
 
   const selectPosition = useCallback((index: number) => {
-    if (filledSlots.has(index)) return;
+    if (activeFilled.has(index)) return;
     setSelectedPositionIndex(index);
     setValidationError(null);
-  }, [filledSlots]);
+  }, [activeFilled]);
 
   const startSpin = useCallback(() => {
     setIsSpinning(true);
@@ -103,7 +125,7 @@ export function useLineupBuilder() {
 
   const rerollTeam = useCallback(() => {
     setTeamAssignments((prev) => {
-      const usedNames = new Set(prev.filter((_, i) => i !== filledCount).map((t) => t.name));
+      const usedNames = new Set(prev.filter((_, i) => i !== assignmentIndex).map((t) => t.name));
       const all = [
         ...ALL_CLUBS.map((name) => ({ name, isNation: false })),
         ...ALL_NATIONS.map((name) => ({ name, isNation: true })),
@@ -112,13 +134,13 @@ export function useLineupBuilder() {
       const pick = available[Math.floor(Math.random() * available.length)];
       if (!pick) return prev;
       const next = [...prev];
-      next[filledCount] = pick;
+      next[assignmentIndex] = pick;
       return next;
     });
     setSelectedPositionIndex(null);
     setValidationError(null);
     startSpin();
-  }, [filledCount, startSpin]);
+  }, [assignmentIndex, startSpin]);
 
   const submitPlayer = useCallback(
     async (inputName: string, pickMeta?: PickMeta) => {
@@ -128,11 +150,16 @@ export function useLineupBuilder() {
       if (!position) return;
 
       const trimmedName = playerName.trim().toLowerCase();
-      const isDuplicate = Array.from(filledSlots.values()).some(
+      const taken = isDraft
+        ? [...filledSlots.values(), ...filledSlotsP2.values()]
+        : [...filledSlots.values()];
+      const isDuplicate = taken.some(
         (slot) => slot.playerName.toLowerCase() === trimmedName
       );
       if (isDuplicate) {
-        setValidationError(`${playerName.trim()} is already in your lineup!`);
+        setValidationError(isDraft
+          ? `${playerName.trim()} is already drafted!`
+          : `${playerName.trim()} is already in your lineup!`);
         return;
       }
 
@@ -254,22 +281,41 @@ export function useLineupBuilder() {
         ...(pickMeta ? { pick: pickMeta } : {}),
       };
 
-      setFilledSlots((prev) => {
-        const next = new Map(prev);
-        next.set(selectedPositionIndex, slot);
-        return next;
-      });
+      if (isDraft && activeSeat === 2) {
+        setFilledSlotsP2((prev) => {
+          const next = new Map(prev);
+          next.set(selectedPositionIndex, slot);
+          return next;
+        });
+      } else {
+        setFilledSlots((prev) => {
+          const next = new Map(prev);
+          next.set(selectedPositionIndex, slot);
+          return next;
+        });
+      }
 
       setSelectedPositionIndex(null);
       setIsValidating(false);
+      setSearchHasText(false);
 
-      if (filledCount + 1 >= 11) {
+      if (isDraft) {
+        const next = advanceDraftPick(pickIndex);
+        setPickIndex(next.pickIndex);
+        setSecondsLeft(DRAFT_TURN_SECONDS);
+        if (next.complete) {
+          setPhase('reviewing');
+          setIsSpinning(false);
+        } else {
+          startSpin();
+        }
+      } else if (filledCount + 1 >= 11) {
         setPhase('reviewing');
       } else {
         startSpin();
       }
     },
-    [selectedPositionIndex, currentTeam, positions, filledCount, startSpin]
+    [selectedPositionIndex, currentTeam, positions, filledCount, startSpin, isDraft, filledSlots, filledSlotsP2, activeSeat, pickIndex]
   );
 
   const filledSlotsArray = useMemo(() => {
@@ -278,9 +324,60 @@ export function useLineupBuilder() {
       .map(([, slot]) => slot);
   }, [filledSlots]);
 
-  const evaluateTeam = useCallback(async () => {
-    if (filledSlotsArray.length !== 11) return;
-    setIsEvaluating(true);
+  const filledSlotsP2Array = useMemo(() => {
+    return Array.from(filledSlotsP2.entries())
+      .sort(([a], [b]) => a - b)
+      .map(([, slot]) => slot);
+  }, [filledSlotsP2]);
+
+  const skipTurn = useCallback(() => {
+    if (!isDraft || phase !== 'building' || isValidating) return;
+    setSelectedPositionIndex(null);
+    setValidationError(null);
+    setSearchHasText(false);
+    const next = advanceDraftPick(pickIndex);
+    setPickIndex(next.pickIndex);
+    setSecondsLeft(DRAFT_TURN_SECONDS);
+    if (next.complete) {
+      setPhase('reviewing');
+      setIsSpinning(false);
+    } else {
+      startSpin();
+    }
+  }, [isDraft, phase, pickIndex, startSpin, isValidating]);
+
+  const skipTurnRef = useRef(skipTurn);
+  skipTurnRef.current = skipTurn;
+
+  useEffect(() => {
+    if (!isDraft || phase !== 'building') return;
+    const paused = shouldPauseDraftTimer({
+      searchFocused,
+      searchHasText,
+      isValidating,
+      isSpinning,
+    });
+    if (paused) return;
+    const id = window.setInterval(() => {
+      setSecondsLeft((s) => {
+        if (s <= 1) {
+          window.setTimeout(() => skipTurnRef.current(), 0);
+          return DRAFT_TURN_SECONDS;
+        }
+        return s - 1;
+      });
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [isDraft, phase, searchFocused, searchHasText, isValidating, isSpinning]);
+
+  const judgeXi = useCallback(async (players: FilledSlot[]): Promise<AIVerdict> => {
+    if (players.length !== 11) {
+      return {
+        rating: `${players.length}/11 filled`,
+        headline: 'Some picks were skipped',
+        analysis: 'When the timer hits zero that turn is skipped. Empty slots stay empty. No player names were invented to fill them.',
+      };
+    }
     try {
       const resp = await fetch(
         `${"https://flawuiqbvjobmkfkauhw.supabase.co"}/functions/v1/evaluate-lineup`,
@@ -290,61 +387,85 @@ export function useLineupBuilder() {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZsYXd1aXFidmpvYm1rZmthdWh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU4NTUwNzYsImV4cCI6MjA5MTQzMTA3Nn0.L8xWIXikPIaXC0XOL-FLOuPQb6idws2NdliARxBgk_Y"}`,
           },
-          body: JSON.stringify({ formation, players: filledSlotsArray }),
+          body: JSON.stringify({ formation, players }),
         }
       );
       const data = await resp.json();
-      
+
       if (!resp.ok) {
-        // AI referee down/out of quota -> offline judge, never a dead-end
-        const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
-        setVerdict(local);
-        setPhase('result');
-        return;
+        return await localEvaluateSoccerXI(players.map((s) => s.playerName));
       }
-      
+
       if (!data.rating || !data.analysis) {
-        setVerdict({
+        return {
           rating: data.rating || 'Mid-Table 😐',
           headline: data.headline || 'Squad evaluated',
           analysis: data.analysis || 'Your squad has been evaluated.',
-        });
-      } else {
-        setVerdict(data);
+        };
       }
-      setPhase('result');
+      return data as AIVerdict;
     } catch (err) {
       console.error('Evaluation error:', err);
       try {
-        const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
-        setVerdict(local);
+        return await localEvaluateSoccerXI(players.map((s) => s.playerName));
       } catch {
-        setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: 'Network error. Please check your connection and try again.' });
+        return { rating: 'Error', headline: 'Could not evaluate', analysis: 'Network error. Please check your connection and try again.' };
       }
+    }
+  }, [formation]);
+
+  const evaluateTeam = useCallback(async () => {
+    if (!isDraft && filledSlotsArray.length !== 11) return;
+    setIsEvaluating(true);
+    try {
+      if (isDraft) {
+        const [a, b] = await Promise.all([judgeXi(filledSlotsArray), judgeXi(filledSlotsP2Array)]);
+        setVerdict(a);
+        setVerdictP2(b);
+        setPhase('result');
+        return;
+      }
+      const one = await judgeXi(filledSlotsArray);
+      setVerdict(one);
       setPhase('result');
     } finally {
       setIsEvaluating(false);
     }
-  }, [filledSlotsArray, formation]);
+  }, [isDraft, filledSlotsArray, filledSlotsP2Array, judgeXi]);
 
   const resetGame = useCallback(() => {
     setFormation(null);
     setPhase('formation');
     setSelectedPositionIndex(null);
     setFilledSlots(new Map());
+    setFilledSlotsP2(new Map());
+    setPickIndex(0);
     setTeamAssignments([]);
     setVerdict(null);
+    setVerdictP2(null);
     setValidationError(null);
     setIsSpinning(false);
+    setSecondsLeft(DRAFT_TURN_SECONDS);
+    setSearchFocused(false);
+    setSearchHasText(false);
   }, []);
 
   useGameCompletion('build-your-xi', phase === 'result', verdict ? 500 : 0);
 
   return {
-    formation, phase, selectedPositionIndex, currentTeam, positions,
-    filledSlots, filledSlotsArray, filledCount, verdict, isEvaluating,
+    formation, phase, playMode, setPlayMode, selectedPositionIndex, currentTeam, positions,
+    filledSlots: activeFilled, filledSlotsP1: filledSlots, filledSlotsArray, filledSlotsP2, filledSlotsP2Array,
+    filledCount, filledCountP1: filledSlots.size, filledCountP2: filledSlotsP2.size,
+    verdict, verdictP2, isEvaluating,
     isValidating, validationError, checkingDown, isSpinning, spinTeamIndex, setSpinTeamIndex,
-    selectFormation, selectPosition, submitPlayer, evaluateTeam, resetGame,
+    selectFormation, selectPosition, submitPlayer, evaluateTeam, resetGame, skipTurn,
     startSpin, finishSpin, rerollTeam, teamAssignments,
+    isDraft, activeSeat, pickIndex, secondsLeft, timerPaused: shouldPauseDraftTimer({
+      searchFocused,
+      searchHasText,
+      isValidating,
+      isSpinning,
+    }),
+    setSearchFocused, setSearchHasText, assignmentIndex,
   };
 }

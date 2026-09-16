@@ -14,6 +14,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import GameEditorialGuide from '@/components/seo/GameEditorialGuide';
 
 const difficultyColors: Record<ConnectionDifficulty, string> = {
   easy: 'bg-correct',
@@ -275,8 +276,10 @@ const Connections = () => {
           <span className="inline-flex items-center gap-1.5"><span className="w-3 h-3 rounded bg-purple-500" /> Insane</span>
         </div>
 
+        <GameEditorialGuide path="/connections" />
         <GameSeoContent
           pageHasOwnH1
+          omitLongGuide
           title="Sports Connections Game | DoUKnowBall"
           description="Find the four groups of connected sports players. Each group shares something in common: a team, award, position or era."
           howToPlay={[

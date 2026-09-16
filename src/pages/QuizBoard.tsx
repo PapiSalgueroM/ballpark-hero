@@ -1,5 +1,6 @@
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import GameEditorialGuide from '@/components/seo/GameEditorialGuide';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
 import { QuizBoard } from '@/components/quiz-board/QuizBoard';
@@ -15,7 +16,9 @@ export default function QuizBoardPage() {
       <GameNavbar />
       <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
       <QuizBoard />
+      <GameEditorialGuide path="/quiz-board" />
       <GameSeoContent
+        omitLongGuide
         title="Sports Quiz Board | DoUKnowBall"
         description="A daily quiz-show board across five sports categories, Ballon d'Or, Premier League, NBA Finals, Super Bowl and more. Clues are worth $200 to $1000 depending on how far back they go. Get it right and bank the money, get it wrong and lose it."
         howToPlay={[

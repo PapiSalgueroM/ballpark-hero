@@ -64,6 +64,18 @@ export function LineupHowToPlay({ open, onOpenChange }: LineupHowToPlayProps) {
           </section>
 
           <section>
+            <h3 className="font-bold text-foreground mb-2">👥 Pass & Play</h3>
+            <ul className="space-y-1.5 text-muted-foreground">
+              <li>• Solo is the default. Switch to Pass & Play on the formation screen</li>
+              <li>• Two people, one phone. Snake order is <span className="text-foreground font-semibold">P1, P2, P2, P1</span>, then it repeats</li>
+              <li>• 22 picks, 11 each. A taken name cannot be drafted again</li>
+              <li>• Each turn has a 30 second timer. Searching pauses it so the keyboard does not steal the pick</li>
+              <li>• If the timer hits zero, that pick is skipped. The slot stays empty. No player name is invented</li>
+              <li>• Live chemistry (same club +3, same league or nationality +1 for pitch neighbors) and overall sit side by side</li>
+            </ul>
+          </section>
+
+          <section>
             <h3 className="font-bold text-foreground mb-2">🏆 Rating & Sharing</h3>
             <ul className="space-y-1.5 text-muted-foreground">
               <li>• Submit your finished team for an <span className="text-primary font-semibold">AI rating</span></li>
