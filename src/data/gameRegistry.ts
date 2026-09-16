@@ -280,6 +280,7 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Combat Sports',
     emoji: '🥊',
     games: [
+      { path: '/fight-career', label: 'Fight Career', emoji: '👊', description: 'Turn pro, pick your fights and climb to a world title. The damage never heals.', addedOn: '2026-09-16' },
       { path: '/ufc', label: 'UFC Guesser', emoji: '🥊', description: 'Guess the UFC fighter', addedOn: '2026-02-10' },
       { path: '/ufc-chain', label: 'Combat Chain', emoji: '🔗', description: 'Build a chain of fighters who beat each other', addedOn: '2026-03-09' },
     ],

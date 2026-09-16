@@ -53,6 +53,7 @@ const AdminLogin = lazy(() => import("./pages/AdminLogin"));
 const AdminReports = lazy(() => import("./pages/AdminReports"));
 const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const UfcChain = lazy(() => import("./pages/UfcChain"));
+const FightCareer = lazy(() => import("./pages/FightCareer"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Leaderboard = lazy(() => import("./pages/Leaderboard"));
 const GuessTheYear = lazy(() => import("./pages/GuessTheYear"));
@@ -350,6 +351,7 @@ const AppContent = () => {
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route path="/admin/reports" element={<AdminReports />} />
         <Route path="/ufc-chain" element={<UfcChain />} />
+        <Route path="/fight-career" element={<FightCareer />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="/reset-password" element={<ResetPassword />} />

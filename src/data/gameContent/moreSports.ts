@@ -524,6 +524,52 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
     ],
   },
 
+  '/fight-career': {
+    intro: [
+      "Fight Career is a free boxing career sim. You turn professional as a nobody, take one fight at a time, and try to be world champion before your body decides otherwise. Every fighter in it is invented, including the ones you beat, so nothing here is a real person's record being rewritten.",
+      "The decision that runs the whole game is which fight you take. Three come in every time: a tune up that is safe and pays almost nothing, an even fight, and a step up that pays well, ranks you fast and can take years off the end of you. Damage never heals. It comes off your chin first, and it decides when you are finished.",
+      "Then there is the night itself. Four styles beat each other in a circle, so there is always an answer to the man in front of you, and he adjusts to whatever you keep doing. Give him the same look three times and he will punish it.",
+    ],
+    howToPlay: [
+      "Make your fighter: a name, one of 8 weight classes from flyweight to heavyweight, and one of 4 styles.",
+      "Read the three offers. Each one names the opponent, his style, the purse and how far a win moves you up the rankings.",
+      "Spend 6 weeks of camp across conditioning, power, defence and speed before every fight.",
+      "Pick three looks for the night. They cycle through the rounds, so three different ones is a plan and one repeated is a gift.",
+      "Watch it round by round, or turn that off and take the decision straight away.",
+      "Keep going until the damage, the years or a run of defeats ends it, then read the verdict on your career.",
+    ],
+    rules: [
+      "Pressure beats an out-boxer, boxing beats a swarmer, countering beats a slugger, and brawling beats a counter-puncher. It closes into a circle, so no look is simply the best one.",
+      "Your opponent does not stand still. A fighter with real ring IQ will switch into whatever punishes the look you used last round, so repeating yourself is the worst thing you can do.",
+      "Damage is permanent and cumulative. It never heals, it takes your chin down fastest, and at 82 you are done whatever your age says.",
+      "You are also finished at 41, or at 35 if you are already carrying 58 damage, or after three straight defeats once you have dropped out of the top 12.",
+      "Camp growth runs against a hidden ceiling. Every fighter has one, camp moves you toward it and never past it, and the closer you get the less each camp is worth.",
+      "Beating a man well below your level does not move you once you are inside the top 10. Padding a record stalls on purpose.",
+      "Reach number one and every offer on the table is for a world title, whichever road got you there.",
+      "A world champion is drawn from the top of the sport in absolute terms, not from a notch above you, so the belt does not get easier because you did.",
+      "There is no betting anywhere in this game. Purses and offers are contracts, not wagers.",
+    ],
+    example: [
+      "You start as a 21 year old welterweight out-boxer, unranked, and take the tune up. The purse is small and the win moves you one place, but you come out of it almost unmarked.",
+      "Three even fights later you are ranked 11 and you have learned the circle: the swarmer in front of you gets boxed, and when he starts switching you give him something else instead of the same jab for ten rounds.",
+      "At number one you get three title offers. You take the middle one, put the champion down in the eighth, and win a decision you will feel for the rest of your life. Damage 44, and it is not coming back off.",
+      "Four defences later you are 31 with 71 damage, the chin is gone and a challenger you would have beaten at 26 stops you in five. You retire with a title, four defences and a verdict that says Modern Great.",
+    ],
+    tips: [
+      "Take the safe fights early. You are trying to reach a title shot with a chin, not to prove something at 22.",
+      "Never give the same look twice in a row against anyone who can think. Three different looks beat one good one.",
+      "Watch the damage bar more than the record. A 20-0 fighter carrying 70 damage is closer to the end than a 16-4 who stayed sharp.",
+      "Spread your camp when you need to last, and pile it into one area when you need an edge in a fight you should lose.",
+      "Who you beat is worth far more than how many you beat. A long unbeaten run against nobody scores worse than a hard career against contenders.",
+    ],
+    faqs: [
+      { q: "Are the fighters real?", a: "No. Every fighter in the game is generated, including your opponents and the champions. No real boxer is simulated, ranked, aged or beaten anywhere in it." },
+      { q: "Can I heal the damage?", a: "No, and that is the point of the game. Damage is permanent, it takes your chin first, and it is the price of every hard fight you took to get where you are." },
+      { q: "Why will he not fight me for the title?", a: "Beating opponents well below your level stops moving you once you are in the top 10. You need real wins to reach number one, and once you are there every offer is for the belt." },
+      { q: "Is there a daily?", a: "Yes. Fight Night is one three round bout per day, the same fighter and the same opponent for everybody, scored out of 100 on whether you won, how many rounds you took, whether you finished him, how little you took back and how well you read his style." },
+      { q: "Does the game have betting?", a: "No. There is no wagering of any kind in it. The purse is what you are paid to fight." },
+    ],
+  },
   '/ufc': {
     intro: [
       "You get eight guesses to name a mystery UFC fighter, and every guess talks back. Each attempt lights up a row of stats showing exactly how close you landed.",
