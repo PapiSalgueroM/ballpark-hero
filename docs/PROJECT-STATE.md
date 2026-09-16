@@ -48,6 +48,128 @@ trusted. And the theory that 617's alternating venues remove long away runs, lea
 press to multiply, is wrong: confidence lost per season is 73.88 on main against 72.44 on the
 branch.
 
+## ROUND 627 BUILT 2026-09-16: Fight Promoter, completing the three roles
+
+On branch `r627-fight-promoter`, commit `8a71c2e5`, cut from `r625-fight-gym`. Not merged.
+`/fight-promoter`. New `src/lib/fightPromoter.ts` and `scripts/simFightPromoter.mjs`.
+
+Same fighters, bouts, damage and ageing as Round 620, a third chair. The claim the mode rests
+on is that the two ways to fill a building pull against each other, and it is measured at the
+moment the player faces it: feeding a name takes 13.1 percent more at the door tonight and costs
+6.0 reputation across a career.
+
+**Six design defects the harness found.** Quality rewarded punches, knockdowns and stoppages,
+which a beating delivers, so mismatches scored as great fights. Closeness came off the point
+spread, far too weak when a card moves ten to nine and a shutout over eight rounds is eight
+points apart; it is rounds won now. Purses cost more than a small hall could take, so seven in
+ten promotions went under whatever they did. Then the opposite, with the gate growing on two
+terms while costs did not, banking 328m over forty shows; fighters now take the greater of
+guarantee or 58 percent of the door. A loss barely dented a fighter's draw, so there was no
+reason to protect anybody. And the pool logic was backwards: departures were the only way new
+fighters arrived and departures fall as reputation rises, so a big name kept his ordinary roster.
+
+**Three defects in the harness itself, all recorded in it.** Its mismatch policy sorted by draw
+then re-sorted by gap, discarding the first sort, so it modelled any lopsided pairing rather
+than feeding a name. Its pricing test measured money compounded over 24 shows, where a richer
+promoter books a bigger room, so it reported the dearest ticket as simply correct. And it tested
+the temptation as a compounded mean, which is a knife edge; it is a single decision now.
+
+**Gates.** tsc 0, five sections with all five controls (`freerent`, `noquality`, `noprice`,
+`norep`, `nodamage`) proved to fire on their own sections, `simFightCareer` and `simFightGym`
+still green, the five registration harnesses green, index at 127 of 127, venue ladder verified
+in a browser.
+
+## ROUND 625 BUILT 2026-09-16: Fight Gym, the second role on the fight model
+
+On branch `r625-fight-gym`, commit `20552910`, cut from `r620-fight-career`. Not merged.
+`/fight-gym`. New `src/lib/fightGym.ts` and `scripts/simFightGym.mjs`.
+
+**Deliberately not a second engine.** Fighters, attributes, styles, the bout, damage, ageing and
+retirement all come from `fightCareer.ts` unchanged. What differs is whose problem it is: in the
+career you carry your own damage and the tradeoff enforces itself, and in the gym the damage
+lands on somebody else while the money lands on you, so nothing enforces it but the design.
+
+**Three defects the harness found in the design.** Grinding fighters lost on every axis at once
+(39 against 89), which is a labelled wrong button rather than a temptation, so a purse now
+reflects a fighter's record as well as his current form and a faded name keeps earning.
+Reputation saturated at 86 out of 100 almost every run, so gains now run against headroom while
+losses do not. And the mechanic the mode is named for was not load bearing at all: the control
+removed every reputation cost of wrecking men and the section stayed green, proving grinding lost
+only because damaged fighters lose fights. Putting a visibly hurt man in is now charged on the
+decision rather than the result, and removing that charge collapses the gap from 29.3 to 1.5.
+
+**Three defects in the harness itself, all recorded in it.** Its grinder policy differed from
+careful in three ways at once, so it measured none of them. It measured the temptation as a fleet
+average and read noise, because at short horizons the policies have not diverged and at long ones
+the reputation bill is what the number sees; it is a paired experiment now, forking one gym at
+the moment somebody is hurt, which measures the temptation at 2.646m over 14 weeks, 10.7 percent
+of the till. And its turnover section tested the harness policy rather than the engine.
+
+**Gates.** tsc 0. `simFightGym` green on five sections with all five controls (`nocut`,
+`nopenalty`, `norep`, `noretire`, `freecost`) proved to fire on their own sections.
+`simFightCareer` still green. `simNoRivalNames`, `simScoringCoverage`, `simSiteSearch`,
+`simSearchDiscard`, `simNoInventedQuotes` green. Search index regenerated at 126 of 126. Opened a
+gym in a browser and walked the loop.
+
+**Still open from the contract.** Promoter mode, on the Stadium Tycoon shape, reading the same
+fighter and bout model.
+
+## ROUND 620 BUILT 2026-09-16: Fight Career, and the shared career engine under it
+
+On branch `r620-fight-career`, commit `90c501bc`, 11 files and 2,039 lines, cut from
+`r619-free-agents` which is cut from main `f083e0b2`. Not merged. Contract:
+`docs/design/round-620-fight-career-contract.md`.
+
+**Why this game.** The owner asked on 2026-09-16 for games in the style of a well known
+independent studio's sports sims, taking what is good about them and then going further. Combat
+sports was the largest hole in the catalogue: 136 games, 20 of them deep simulations across
+soccer, the NFL, the NBA, MLB, the NHL and college, and nothing for fighting but two guessing
+games. The studio and its titles are named nowhere in the code and are now in `RIVAL_NAMES`.
+
+**What it is.** `/fight-career`. Turn professional, take one of three offers, spend six camp
+weeks, pick three looks for the night, carry the damage forever. Four styles beat each other in
+a circle and the opponent switches into whatever punishes your last look, so the plan cycles
+three tactics rather than holding one.
+
+**The engine.** New `src/lib/careerEngine.ts`, with `src/lib/fightCareer.ts` as the first
+consumer. The four my career engines (`nflMyCareer` 1042 lines, `mlbMyCareer` 995,
+`nhlMyCareer` 937, `nbaMyCareer` 899) share 24 exported symbol names once the sport prefix is
+stripped, which is about two thirds of 3,900 lines being one idea written four times. **The four
+live games are deliberately NOT migrated in this round**, because moving four working games for
+no immediate player benefit risks all four at once and the gates cannot tell a silent behaviour
+change from a correct one. Migration is Rounds 621 to 624, one sport per round, each proving
+byte identical career outcomes on a fixed seed before and after.
+
+**Six defects the harness found, all of them in the first draft of the engine.** Damage accrued
+about eight times too fast, so every career of every policy retired pinned at the ceiling inside
+nine fights and the choice between roads became decoration. A title shot was pinned to the
+riskiest offer slot, so a patient player reached number one and was never offered the fight: 260
+careers, zero titles. Opponent style was fixed for a whole bout, so one tactic answered every
+round forever, 98.5 percent of careers won a title and the optimal play was to stop thinking.
+Camp gains were flat and uncapped, which is the named regression from Rounds 96 and 116, growth
+that ignores potential headroom; fighters now have a ceiling. Champions were drawn relative to
+the challenger, so the belt tracked the player's own level. Legacy counted volume, so a long
+quiet career of beating nobodies scored 94 out of 100. And quality wins were counted by a purse
+threshold the purse formula can never reach for a non champion, so that counter was silently
+always zero.
+
+**The harness was wrong twice itself and both are recorded in it.** It bucketed careers by total
+damage, which correlates with career length, so the most damaged fighters appeared to retire
+oldest. And it modelled a player who repeats one tactic, which is exactly what the adaptive
+opponent punishes, so it reported the daily as a wall.
+
+**Gates.** tsc 0. `scripts/simFightCareer.mjs` green on five sections with all five controls
+(`nodecay`, `noretire`, `godmode`, `driftdaily`, `nostyle`) proved to fire on their own sections.
+`simNoRivalNames`, `simScoringCoverage`, `simSiteSearch`, `simSearchDiscard` and
+`simNoInventedQuotes` green. Search keyword index regenerated at 125 of 125 games. Played end to
+end in a browser on the dev server: a ten round split decision, a knockdown each way, rank moved
+from unranked to 17, and the damage bar visibly took a point off chin and speed.
+
+**Not done in this round, on purpose.** Gym mode (sign and develop fighters, on the Club Manager
+shape) and promoter mode (build cards, on the Stadium Tycoon shape) are later rounds reading the
+same fighter and bout model, which is the reason the engine came first.
+
+
 ## RELEASE MERGED 2026-09-16 00:46 EDT
 
 PR 96 merged as `25a0448e87d68de8f70752c28bbb5fbdc93a2162`. The accepted

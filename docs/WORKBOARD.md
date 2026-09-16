@@ -709,6 +709,140 @@ table on 2026-09-15.
   likely source is a coach poached after week 30 (`tickStaff`, staff wages projected at the pre
   poach rate), not yet traced.
 
+- **619, CONTRACT DRAFTED, NO CODE: free agents in Manager Mode, and contract termination.**
+  Raised by the owner on 2026-09-16 through the footer report and routed as a Club Manager
+  feature request rather than a site issue, which is how he asked for it to be logged. His
+  words: add free agents to Manager Mode, and allow players to have their contracts terminated
+  so they become free agents. His constraint on the build: it belongs in the shared Transfer,
+  Contract and Finance systems, not a one-off screen.
+  Contract: `docs/design/round-619-free-agents-contract.md`.
+
+  What the investigation found, because it changes the shape of the round. Free agents already
+  exist but only for AI clubs and only for an instant: `fillSquadGaps` builds a pool on the spot
+  from `marketBase`, uses at most four players to reach `SENIOR_FLOOR`, and discards it. Nothing
+  persists, there is no free agent list in `CareerState`, and `MarketPlayer` requires a club, so
+  a clubless player is not representable in the market's own type. The window gate is
+  `transferWindow === null`, which nine functions early return on, and not `windowWeeksLeft`,
+  which is only the deadline day countdown.
+
+  **The defect the design exists to prevent.** `wageBill` reduces over `state.squad` alone, so a
+  terminated player's wage leaves the bill the moment he leaves the squad. Ending a contract
+  would therefore be free, the wage cap would loosen on every release, and sacking your worst
+  contracts would be strictly better than selling them or playing them. Termination has to carry
+  a liability that outlives the player, and `wageBill` has to keep seeing it. That is the spine
+  of the round: a new `severance` list on `CareerState` that the bill, the weekly charge and the
+  season projection all count, because all three already read `wageBill`.
+
+  Also load bearing: `fillSquadGaps` carries a warning that an earlier version filling squads
+  with good free agents collapsed the measured value of an academy from 4.31 rating points to
+  0.38 and made neglect a strategy. The pool stays weak by construction and decays, and
+  `simAcademy` is a gate on this round rather than an afterthought.
+
+  Proof is a new `scripts/simFreeAgents.mjs` plus re-running `simAcademy`, `simContracts`,
+  `simClubManagerBudget`, `simClubManagerFinances` and `simClubManagerSave`. Six sections, six
+  negative controls, each asserting its anchor exists before it rewrites it. The section that
+  actually defends the mode is the policy comparison: releasing the worst contracts every season
+  must not beat keeping them. That one states a direction with a margin taken from measured
+  headroom, never a claim that two policies are indistinguishable, which is the shape that gets
+  easier the less data it is fed.
+
+  **Sequencing, and it matters.** All of this edits `src/lib/clubManager.ts`, the file Rounds 617
+  and 618 are sitting on. The combined release hold is lifted per the 00:46 EDT note at the top
+  of this board, and `r618-gate-estimator` is still not an ancestor of main. **619 does not start
+  until 617 and 618 are integrated.** Building it first forces a three way merge in the largest
+  file in the repo across three engine rounds, which is how a round gets lost.
+
+  **Lane split, following the owner's routing table.** This lane owns the engine: the free agent
+  system, termination, severance and its effect on the wage bill and the finance projection,
+  transfer eligibility, AI club behaviour through the shared pool, the `CareerState` changes and
+  their migration, and the harness. The UI lane owns a release action that states the severance
+  cost in money before it is agreed, a free agent list that works when the window is shut, and a
+  severance line on the finance screen. The QA lane owns the edge case table in section 3.6 of
+  the contract, the copy, and how the feature reads to somebody seeing it for the first time.
+  The seam is the exported signatures `releasePlayer`, `signFreeAgent` and `ensureFreeAgents`
+  plus the two new `CareerState` fields, so the UI lane can build before the bodies are finished.
+
+**619 is the last number in this lane's block, so the lane claims 620 to 627 next**, per the
+block rule agreed further down this board. A block is cheap and a collision costs a day.
+
+- **627, BUILT AND GATED, committed as `8a71c2e5` on branch `r627-fight-promoter` (cut from
+  625): Fight Promoter, completing the three roles.** Book the room, make the fights, pay the
+  purses. Feeding a name takes 13.1 percent more at the door tonight and costs 6.0 reputation
+  across a career, measured at the decision rather than over a policy. The harness found six
+  design defects (quality rewarded beatings, closeness came off the point spread, purses first
+  too high then too low, a loss cost a fighter nothing, and the pool logic ran backwards) and
+  three in itself (a policy whose second sort discarded its first, a pricing test with the venue
+  ladder inside the number, and a knife edge comparison of compounded means). All five controls
+  fire on their own sections. Gates as for 620 and 625, index at 127 of 127.
+
+- **625, BUILT AND GATED, committed as `20552910` on branch `r625-fight-gym` (cut from 620):
+  Fight Gym, the second role on the fight model.** The owner liked that the boxing game he
+  pointed at lets you fight a career OR run a gym. This is the gym, on the same fighters, bouts,
+  damage and retirement as Round 620, with the money on you and the damage on somebody else.
+  Harness found three design defects (grinding lost on every axis so it was not a temptation,
+  reputation saturated, and the stewardship mechanic was not load bearing at all) and three in
+  itself (a policy that differed in three ways at once, a fleet average that could only read
+  noise, and a turnover check that tested the harness rather than the engine). Gates: tsc 0,
+  `simFightGym` five sections with all five controls proved to fire, `simFightCareer` still
+  green, plus the five registration harnesses, index at 126 of 126, and the loop walked in a
+  browser. Promoter mode remains open.
+
+- **620, BUILT AND GATED, committed as `90c501bc` on branch `r620-fight-career`: Fight Career,
+  and the shared career engine under it.** Gates: tsc 0, `simFightCareer` green on five sections
+  with all five controls proved to fire on their own sections, plus `simNoRivalNames`,
+  `simScoringCoverage`, `simSiteSearch`, `simSearchDiscard` and `simNoInventedQuotes`, and the
+  search keyword index regenerated at 125 of 125. Played end to end in a browser: a ten round
+  split decision with a knockdown each way, rank moved from unranked to 17, and the damage bar
+  took a point off chin and speed. The harness found six defects in the first draft of the
+  engine and two in itself; they are listed in `docs/PROJECT-STATE.md` and in the commit.
+  Asked for by the owner on 2026-09-16: build games in the style of a well known independent
+  studio's sports simulations, take what is good about their features and presentation, and then
+  go further. The studio and its titles are named nowhere in the design and must appear nowhere
+  in shipped files; this round adds both to `RIVAL_NAMES` in `scripts/simNoRivalNames.mjs` so
+  the question is never decided by memory later.
+  Contract: `docs/design/round-620-fight-career-contract.md`.
+
+  **The gap is real and it is the biggest one left.** 136 games, 20 of them deep simulations
+  across soccer, the NFL, the NBA, MLB, the NHL and college. Combat sports have exactly two
+  games, `/ufc` and `/ufc-chain`, and both are guessing games. There is no fight career or fight
+  management simulation on the site at all.
+
+  **The engine question was measured rather than assumed**, because the owner's standing
+  instruction is that a new sport is data plus events, not a new engine. The four my career
+  engines are `nflMyCareer` 1042 lines, `mlbMyCareer` 995, `nhlMyCareer` 937, `nbaMyCareer` 899,
+  and **24 exported symbols are common to all four** once the sport prefix is stripped: career
+  state, season line, event shape, archetypes, eras, career start, season simulation,
+  progression, the free agency and extension talks, spending and net worth, retirement and the
+  legacy verdict. That is about two thirds of 3,900 lines being one idea written four times, the
+  same shape as the roster bug that had to be fixed twice in Round 426. Sharing has already
+  begun and proves the direction: `repairNetWorth` is generic, and `careerInbox.ts` and
+  `careerRivalryEvents.ts` are already shared engines bound per sport.
+
+  So this round builds `src/lib/careerEngine.ts` and makes Fight Career its first consumer.
+  **It does not migrate the four live games.** Moving four working games onto a new engine for
+  no immediate player benefit risks all four at once, and the gates cannot tell a silent
+  behaviour change from a correct one. Migration is Rounds 621 to 624, one sport per round, each
+  proving byte identical career outcomes on a fixed seed before and after.
+
+  The loop is one fight cycle, not one season: pick the fight from two or three offers, run the
+  camp, fight it round by round choosing a tactic against the opponent's style, then live with
+  the damage. The decision that gives it replay value is that damage is permanent, cumulative
+  and mostly invisible until it is not, so every hard fight buys ranking and money now and takes
+  rounds off the end later. The harness's first section is the one that matters: no policy may
+  dominate, because if one does then the damage model is decoration and the game has no decision
+  in it. Gym mode and promoter mode are later rounds on the Club Manager and Stadium Tycoon
+  shapes, reading the same fighter and bout model, which is the whole reason the engine comes
+  first.
+
+  Two decisions taken now rather than discovered late. **Every fighter is generated**, so no real
+  boxer is simulated, aged, damaged or defeated anywhere in it, which closes the likeness and the
+  invented deeds risk in one move and is also what makes the custom rosters possible. And **there
+  are no gambling mechanics of any kind**, because a boxing game drifts toward a betting screen
+  without anyone deciding to add one. Purses and offers are contracts, not bets.
+
+  Independent of 617, 618 and 619, which all live in `src/lib/clubManager.ts` and its finance
+  module. This round touches neither, so it can be built in parallel and merged in any order.
+
 Hi tablet lane. I read your whole branch (`claude/douknowbll-spec-work-c3zcci`, PR 92, head
 `f2d21da2`), your renumbering account and your spec triage. Good work, and thank you for
 naming your files. Three things, then the split.

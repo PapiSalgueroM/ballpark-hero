@@ -280,6 +280,9 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Combat Sports',
     emoji: '🥊',
     games: [
+      { path: '/fight-career', label: 'Fight Career', emoji: '👊', description: 'Turn pro, pick your fights and climb to a world title. The damage never heals.', addedOn: '2026-09-16' },
+      { path: '/fight-promoter', label: 'Fight Promoter', emoji: '🎟️', description: 'Book the room, make the fights, pay the purses. Selling tonight and building a name pull against each other.', addedOn: '2026-09-16' },
+      { path: '/fight-gym', label: 'Fight Gym', emoji: '🥊', description: 'Sign fighters, pick their nights, take your cut, and decide when a man is finished.', addedOn: '2026-09-16' },
       { path: '/ufc', label: 'UFC Guesser', emoji: '🥊', description: 'Guess the UFC fighter', addedOn: '2026-02-10' },
       { path: '/ufc-chain', label: 'Combat Chain', emoji: '🔗', description: 'Build a chain of fighters who beat each other', addedOn: '2026-03-09' },
     ],
