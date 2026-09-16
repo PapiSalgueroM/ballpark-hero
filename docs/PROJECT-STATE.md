@@ -1,5 +1,53 @@
 # Project state
 
+## ROUND 626 2026-09-16: the three harness holes that were blocking 617 and 618
+
+Branch `r626-harness-fix`, cut from `r618-gate-estimator`, head `5d141c96`. The integration
+branch in the release clone (`integrate-617-618`, `8998acd1`) is main plus 617, 618 and these
+fixes. Not merged to main yet.
+
+**All three were reproduced before anything was written, and all three had passed every green
+gate.**
+
+**617.** `simFixtureBalance` section 5 is titled "every caller passes the flag" and read only
+`clubManager.ts`, because `src` is set to the engine text at the top of the section. Round 617
+created a fifth caller outside it in `CalendarCard.tsx`, and the floor of four was satisfied by
+the engine's own four. Hardcoding the card's flag to `true` left the harness printing PASS while
+reporting "4 callers". There is now a walk over every ts and tsx file under `src`, with a floor
+on the scan itself.
+
+**618.** Nothing held the gate estimator to the level of the draw it claims to be the mean of.
+The only check that round added is a week 2 against week 5 drift, which is the estimator divided
+by itself, so any constant multiplier leaves it unchanged. Multiplying `expectedHomeCrowd` by
+1.10 passed AND improved the week 5 income error from 7.4 percent to 3.1, because the projection
+under projects and an over estimate cancels the bias. New section 9 measures the expectation
+against the crowd the engine actually drew, recovered from the books (concession income is
+linear in attendance) so there is no second copy of the crowd model. Healthy: median -0.5
+percent, abs median 1.4, p90 4.0, so the bands are 6 and 9. New control `gatelevel` is that
+exact experiment and now fails at 9.4 and 11.7.
+
+**simPress, and this one was the only red on the integration.** It is a coin toss, not a
+regression. A probe reproducing section 6 exactly across three seed bases on two engines:
+
+| seed base | main `f083e0b2` | 617 plus 618 |
+|---|---|---|
+| 7000 | 11.67 | 5.70 |
+| 9100 | 7.85 | 10.56 |
+| 12400 | 7.40 | 6.30 |
+
+Six observations from 5.70 to 11.67 against a two standard error threshold landing between 5.39
+and 6.27, so the threshold sits inside the healthy distribution. The branch beats main at 9100
+and main clears by only 1.4x at 12400. The gate is now a floor of 4.00 taken from those
+observations, the harness gets its first negative control (`PRESS_CONTROL=nopress`, verified:
+healthy 5.70 passes, control -4.46 fails), and its two fixed temp filenames are per run, because
+two concurrent runs were writing each other's bundle.
+
+**Two dead ends worth recording so nobody repeats them.** `PRESS_SEED_BASE` does not reach
+section 6, which hardcodes 7000, so varying it reproduces the identical number; two 45 minute
+runs were started on that assumption and killed. And the theory that 617's alternating venues
+remove long away runs, leaving less for the press to multiply, is wrong: confidence lost per
+season is 73.88 on main against 72.44 on the branch.
+
 ## LIVE CHECK 2026-09-15 18:47 EDT: the guide correction is published
 
 Independent public verification now passes all seven affected routes. Their

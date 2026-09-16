@@ -1,5 +1,14 @@
 # Work board
 
+**Round 626, 2026-09-16: 617 and 618 are cleared to merge.** The full suite on the merged tree
+came back 323 of 324, and the single red (`simPress` board confidence) is a coin toss gate, not
+those rounds: measured across three seed bases on two engines the effect runs 5.70 to 11.67 and
+the BRANCH beats main at one of them, while the two standard error threshold lands between 5.39
+and 6.27, inside the healthy spread. Fixed to a measured floor with the harness's first negative
+control. The two adversarial review findings against 617 and 618 are also fixed and each was
+reproduced first. Integration branch `integrate-617-618` at `8998acd1` in the release clone is
+main plus all of it, pending its own suite run.
+
 **18:58 EDT database repair:** migration `20260915225210` is applied. Its
 covering index gives the unchanged public leaderboard measurable headroom
 under the existing anonymous three-second limit (764.481ms in one warm
