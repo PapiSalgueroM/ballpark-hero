@@ -26,6 +26,7 @@
  *   FA_CONTROL=nomigrate  an old save is not repaired         -> section 6
  *   FA_CONTROL=tickwild   a week can be counted more than once -> section 7
  *   FA_CONTROL=keenall    every free agent will sign for anyone  -> section 9
+ *   FA_CONTROL=resignnow  a man let go can come straight back    -> section 9
  */
 
 import './lib/seedRandom.mjs';
@@ -109,6 +110,10 @@ if (CONTROL === 'nosev') {
   rewrite('keenall',
     '  return fa.rating <= mine - 6;',
     '  return true;');
+} else if (CONTROL === 'resignnow') {
+  rewrite('resignnow',
+    '  if (fa.fromMyClub && fa.since === career.season) return null;',
+    '  if (false) return null;');
 } else if (CONTROL) {
   console.log(`   FAIL unknown control ${CONTROL}`);
   process.exit(1);
@@ -485,14 +490,44 @@ console.log('9) letting deals expire does not beat renewing them');
   } else {
     ok(`no club's best player would sign for nothing, at any of the ${CLUBS.length} clubs`);
   }
-  /* And a man whose deal ran out this summer cannot be taken straight back. */
-  const anyone = seniors[0];
-  if (anyone) {
-    const pool = [{ name: anyone.name, position: anyone.position, age: anyone.age, rating: Math.min(anyone.rating, Math.round(mine) - 5), since: st.season, reason: 'expired', fromMyClub: true }];
-    const attempt = cm.signFreeAgent({ ...st, squad: st.squad.filter(x => x.id !== anyone.id), freeAgents: pool, transferWindow: null }, anyone.name);
-    if (attempt) fail('a man whose deal ran out this summer can be re-signed immediately, so letting him go costs nothing');
-    else ok('a man who left this summer cannot be taken back until the next one');
-  }
+  /* And a man you let go this season cannot be taken straight back.
+
+     Its own career, because the two blocks above build theirs inside a loop
+     and none of their names reach this far. The first draft read `seniors`
+     from one of them, threw a ReferenceError, and took section 10 down with it
+     on the full suite, after the controls had been proven on the draft before.
+
+     The refusal also has to come from the same season guard and not from
+     something else. The first draft offered a man rated one point above the
+     interest bar, so interest refused him whatever the guard did and the check
+     could not fail. So the same man is offered twice: as let go LAST season,
+     which must be accepted (proving interest, the cap and the squad size all
+     allow him), and as let go THIS season, which must be refused.
+
+     His value goes with him, exactly as releasePlayer writes it. Without it
+     wageFor falls back to a rating formula about ten times his real wage (a 72
+     rated backup on 8k asked 82k), the cap refused both offers, and the
+     twin failed on healthy code. The cap is lifted for the same reason: this
+     check is about the guard, and section 1 already owns the cap. */
+  seeded(6400, () => {
+    const st = cm.startCareer(CLUBS[0]);
+    cm.ensureFreeAgents(st);
+    const mine = st.clubStrengths?.[st.clubName] ?? 66;
+    const weakest = st.squad.filter(p => !p.isYouth && p.age >= 20).sort((a2, b2) => a2.rating - b2.rating)[0];
+    if (!weakest) { fail('no senior at the club to test the re-sign guard with'); return; }
+    const rating = Math.min(weakest.rating, Math.floor(mine) - 8);
+    const without = { ...st, squad: st.squad.filter(x => x.id !== weakest.id), transferWindow: null, wageCap: Number.MAX_SAFE_INTEGER };
+    const offered = (since) => ({ ...without, freeAgents: [{ name: weakest.name, position: weakest.position, age: weakest.age, rating, value: weakest.value, generated: weakest.generated, since, reason: 'released', fromMyClub: true }] });
+    if (!cm.signFreeAgent(offered(st.season - 1), weakest.name)) {
+      fail('the same man let go LAST season is refused too, so a refusal this season cannot be pinned on the re-sign guard');
+      return;
+    }
+    if (cm.signFreeAgent(offered(st.season), weakest.name)) {
+      fail('a man let go this season can be re-signed at once, so letting him go costs nothing');
+    } else {
+      ok('a man let go this season cannot be taken back, and the same man let go last season can');
+    }
+  });
 }
 
 console.log('10) the release wiring goes to the right function');
