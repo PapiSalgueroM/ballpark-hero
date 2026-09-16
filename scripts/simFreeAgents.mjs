@@ -24,11 +24,14 @@
  * House rules as everywhere: never assert on a maximum, never assert non
  * significance, bands from measured headroom, and a control per check that
  * provably fires. Every control asserts its anchor appears EXACTLY once in the
- * line ending normalised source before it rewrites it.
+ * line ending normalised source before it rewrites it. Each turns exactly the
+ * checks listed red and nothing else; the three that reach several sections
+ * break something those sections all genuinely depend on (no settlement at
+ * all, a bill blind to settlements, interest switched off).
  *
  * CONTROLS (FA_CONTROL=name):
- *   nosev          a release writes no settlement                    -> section 1
- *   billblind      the wage bill ignores settlements                 -> section 1
+ *   nosev          a release writes no settlement                    -> sections 1, 2, 7 and 8
+ *   billblind      the wage bill ignores settlements                 -> sections 1, 2 and 14
  *   shortsev       settlements capped at 0.3 seasons, not 2          -> section 2
  *   openall        startNegotiation stops checking the window        -> section 3
  *   offeropen      makeOffer stops checking the window               -> section 3
@@ -204,8 +207,8 @@ if (CONTROL === 'nosev') {
     "  if (false) return 'justLeft';");
 } else if (CONTROL === 'resignreleased') {
   rewrite('resignreleased', 'engine',
-    "  return fa.fromMyClub === true && fa.reason === 'released';",
-    '  return false;');
+    "  if (releasedByYou(fa)) return 'releasedByYou';",
+    "  if (false) return 'releasedByYou';");
 } else if (CONTROL === 'livefree') {
   rewrite('livefree', 'engine',
     "  if (career.live) return 'midMatch';",
@@ -606,7 +609,7 @@ console.log('5) no duplicates, and nobody who retired');
       const again = cm.releasePlayer(stale, `${p.id}-again`);
       const records = (again?.freeAgents ?? []).filter(f => f.name === p.name);
       if (!again) fail('the release over a stale record was refused, so the record rule was never reached');
-      else if (!records.some(f => cm.releasedByYou(f) && f.since === again.season)) {
+      else if (!records.some(f => f.reason === 'released' && f.fromMyClub === true && f.since === again.season)) {
         fail(`a fresh release left the old record in charge (${records.map(f => `${f.reason} since ${f.since}`).join(', ') || 'none'}), so he can be signed straight back`);
       } else {
         ok('a fresh release replaces a stale record for the same man');
@@ -673,6 +676,10 @@ console.log('7) one week billed is one week counted off the settlement');
           const leftBefore = left(s2);
           const r = cm.playNextEntry(s2, { skipHalftime: true });
           if (r.kind === 'seasonOver' || r.state.season !== s2.season) break;
+          /* The call that clears the row is left out: it can charge weeks after
+             the row has gone (a window week and a bye in the same call), and
+             those are not weeks the settlement was running. */
+          if (left(r.state) === 0) break;
           charges += (r.state.books?.season?.weeks ?? 0) - weeksBefore;
           counted += leftBefore - left(r.state);
           s2 = r.state;
@@ -682,7 +689,7 @@ console.log('7) one week billed is one week counted off the settlement');
       });
       const rate = counted / Math.max(1, charges);
       console.log(`   ${calls} calls charged ${charges} weeks and counted ${counted} off a quote of ${quoted}: ${rate.toFixed(2)} counted per week charged`);
-      if (charges < 12) {
+      if (charges < 8) {
         fail(`only ${charges} weeks were charged, too few to measure the rate`);
       } else if (rate > 1.05) {
         fail(`the settlement counts down ${rate.toFixed(2)} times per week charged, so it ends sooner than the ${quoted} weeks quoted and the cost is never paid`);
@@ -952,7 +959,9 @@ console.log('12) nobody is in the squad and the pool at once');
   const probes = [];
   for (const pos of ['GK', 'CB', 'CM', 'ST']) {
     probes.push({ name: `Released ${pos} Probe`, position: pos, age: 27, rating: r - 1, value: 0.5, since: fst.season, reason: 'released', fromMyClub: true });
-    probes.push({ name: `Expired ${pos} Probe`, position: pos, age: 27, rating: r, value: 0.5, since: fst.season - 1, reason: 'expired', fromMyClub: true });
+    /* Since this season, so a man the fill signs would survive the decay and
+       still be listed if nothing took him out. */
+    probes.push({ name: `Expired ${pos} Probe`, position: pos, age: 27, rating: r, value: 0.5, since: fst.season, reason: 'expired', fromMyClub: true });
   }
   /* Five seniors kept: players turning 20 count as seniors too, and keeping
      eight left the fill only one gap to fill. */
