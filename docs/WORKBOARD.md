@@ -567,13 +567,20 @@ table on 2026-09-15.
   way: a 300 second vitest timeout after measuring 202 of 202 goals replayed, printed by the harness
   as STACK_TRACE_ERROR, so a timing budget on this machine today rather than a replay defect. It
   passed for Round 585 this morning. Not this lane's file; recorded, not touched.
-- **618, IN PROGRESS on branch `r618-gate-estimator` (cut from 617), also held off main by the same
-  freeze: the finance projection's gate estimator.** Built and reviewed: the projected gate is the
+- **618, BUILT AND GATED, committed and pushed as `f0a300bc` on branch `r618-gate-estimator`
+  (cut from 617), held off main by the same freeze: the finance projection's gate estimator.** Built and reviewed: the projected gate is the
   crowd the engine expects times the price a head times the finance tree's edge, never the average
   of the gates banked. The review found two real defects in the first draft, both fixed on the
   branch: the expectation clipped the band's midpoint where the engine clips every draw (up to 5.8
   percent high on a tier 2 gate, measured against the draw itself), and the food row carried a tree
   edge the ledger never banks. The crowd bands are now one shared export rather than a copy.
+  Gates: tsc 0, build 0, the harness green on the default seed and on five seeds (32 to 35 seasons
+  each), and all four controls firing on their own sections, including a new one that puts the
+  banked average back. That control is what proves the round rather than the bands: it leaves the
+  week 5 income error inside the income band while moving the projected gate 9.6 percent between
+  weeks two and five against a band of 1 percent, so the bands alone would have passed the old
+  estimator. Both review defects were verified against the engine's own draw over 400,000 samples
+  per cell before they were fixed.
   Contract: `docs/design/round-618-gate-estimator-contract.md`. `projectFinances` switches from the
   stature prior (exactly the attendance draw's mean for a passive manager) to the sample mean after
   three home gates, which is noisier than the prior it replaces (tier 4 draw spread 23 percent), so
