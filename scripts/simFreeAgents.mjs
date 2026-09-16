@@ -34,7 +34,8 @@
  * checks listed red and nothing else; the ones that reach several checks
  * break something those checks all genuinely depend on (no settlement at all,
  * a bill blind to settlements, interest switched off, the released list
- * ignored, no signing on fee taken).
+ * ignored, no signing on fee taken, no journeymen anybody can sign, a fill
+ * that forgets every man you released).
  *
  * CONTROLS (FA_CONTROL=name):
  *   nosev          a release writes no settlement                    -> sections 1, 2, 7 and 8
@@ -66,8 +67,8 @@
  *   inventedletgo  the fallback list alone forgets who you released  -> section 12, the fallback check
  *   fillwage       the summer fill ignores a journeyman's asking wage -> section 12
  *   faid           signFreeAgent builds ids that can repeat          -> section 12
- *   nojourneymen   the pool is never topped up                       -> section 13
- *   goodjourneymen journeymen rated above the club's level           -> section 13
+ *   nojourneymen   the pool is never topped up                       -> sections 13 and 16
+ *   goodjourneymen journeymen rated above the club's level           -> sections 13 and 16
  *   unflagged      journeymen not flagged as made up                 -> section 13
  *   realname       a journeyman wears a real player's name           -> section 13
  *   novalue        journeymen priced with no value, so wages go wild -> section 13
@@ -322,8 +323,8 @@ if (CONTROL === 'nosev') {
     '              const block = null as FreeAgentBlock | null;');
 } else if (CONTROL === 'termsdrift') {
   rewrite('termsdrift', 'engine',
-    '  const { wage, years } = freeAgentTerms(fa);',
-    '  const { wage, years } = { wage: freeAgentTerms(fa).wage + 1, years: freeAgentTerms(fa).years };');
+    '  const { wage, years, fee } = freeAgentTerms(fa);',
+    '  const { wage, years, fee } = { ...freeAgentTerms(fa), wage: freeAgentTerms(fa).wage + 1 };');
 } else if (CONTROL === 'onetap') {
   rewrite('onetap', 'card',
     '                      onClick={() => setConfirmId(confirming ? null : p.id)}',
@@ -1282,12 +1283,18 @@ console.log('16) signing a journeyman to sell him on does not pay');
      THE MEASURE IS PER SALE: what the bid paid minus what signing that man
      cost the kitty, averaged at each club. A club total mixes in how many bids
      happened to arrive, which is noise about the market rather than about the
-     rule; the margin on a sale is the rule. */
+     rule; the margin on a sale is the rule.
+
+     Plus Inter Miami, the smallest wages in the game: a journeyman there asks
+     1k or 2k, so the plain fee formula would ask 0.1m and the minimum fee is
+     the only thing between him and a profit. Without it the minimum shows up
+     only as a few hundredths at Ajax, which is not a margin to trust. */
+  const flipClubs = [...CLUBS, 'Inter Miami'];
   const rows = [];
   let sales = 0;
-  for (let i = 0; i < CLUBS.length; i += 1) {
+  for (let i = 0; i < flipClubs.length; i += 1) {
     seeded(7600 + i, () => {
-      let st = cm.startCareer(CLUBS[i]);
+      let st = cm.startCareer(flipClubs[i]);
       const paid = new Map();
       for (const f of (st.freeAgents ?? []).filter(x => x.reason === 'unattached')) {
         const next = cm.signFreeAgent(st, f.name);
@@ -1313,12 +1320,12 @@ console.log('16) signing a journeyman to sell him on does not pay');
       }
       sales += margins.length;
       const feesPaid = [...paid.values()].reduce((a, b) => a + b, 0);
-      rows.push({ club: CLUBS[i], sold: margins.length, margin: mean(margins) });
-      console.log(`   ${CLUBS[i]}: signed ${paid.size} for ${feesPaid.toFixed(1)}m in fees, sold ${margins.length}, ${margins.length ? `${mean(margins).toFixed(2)}m a sale against what he cost` : 'no sale'}`);
+      rows.push({ club: flipClubs[i], sold: margins.length, margin: mean(margins) });
+      console.log(`   ${flipClubs[i]}: signed ${paid.size} for ${feesPaid.toFixed(1)}m in fees, sold ${margins.length}, ${margins.length ? `${mean(margins).toFixed(2)}m a sale against what he cost` : 'no sale'}`);
     });
   }
   const winners = rows.filter(r => r.sold > 0 && !(r.margin < 0));
-  if (sales < 8) fail(`only ${sales} journeymen sold across ${CLUBS.length} clubs, too few to say what a sale earns`);
+  if (sales < 8) fail(`only ${sales} journeymen sold across ${flipClubs.length} clubs, too few to say what a sale earns`);
   else if (winners.length) fail(`selling a journeyman on beats what he cost to sign at ${winners.map(r => `${r.club} (${r.margin.toFixed(2)}m a sale)`).join(', ')}`);
   else ok(`over ${sales} sales at ${rows.filter(r => r.sold > 0).length} clubs, every club loses money on each journeyman it signs to sell`);
 }
@@ -1370,7 +1377,7 @@ console.log('17) a man you release never signs for you again, by any door');
       const record = { name, position: pick.p.position, age: pick.p.age, rating: Math.floor(level) - 10, value: 0.2, wage: 5, since: later.season - 1, reason: 'unattached' };
       const pooled = { ...later, wageCap: Number.MAX_SAFE_INTEGER, freeAgents: [record], releasedNames: [name] };
       if (!cm.signFreeAgent(clone({ ...pooled, releasedNames: [] }), name)) fail(`${name} cannot be signed as a free agent even with the list taken away, so this cannot see the list`);
-      else if (cm.signFreeAgent(clone(pooled), name)) fail(`${name} signs as a free agent after you released him, because the rule reads only the pool record`);
+      else if (cm.signFreeAgent(clone(pooled), name)) fail(`${name} signs as a free agent after you released him, because the signing rule does not read the list of men you released`);
       else ok(`${name} cannot be signed off the free agent list whatever his record says`);
     }
   }

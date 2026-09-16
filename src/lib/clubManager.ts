@@ -4989,8 +4989,10 @@ export function freeAgentInterest(career: CareerState, fa: FreeAgent): boolean {
  * journeyman being signed to be sold on. At the smallest clubs his wage is 1k
  * or 2k, so the plain formula asked 0.1m, while a club bids at least 0.3m for
  * anybody listed (and a contested or improved bid for a man at the value floor
- * reaches 0.5m). Measured on the build without it, Inter Miami banked 1.2m to
- * 1.9m a summer off six journeymen with an 11m budget.
+ * reaches 0.5m). The second build charged no fee at all and already valued
+ * Inter Miami's journeymen at about the floor, and six of them banked 1.2m to
+ * 1.9m a summer on an 11m budget. The plain formula with no minimum still
+ * leaves a profit on every sale there (simFreeAgents section 16, feefloor).
  */
 export const FREE_AGENT_MIN_FEE = 0.5;
 
