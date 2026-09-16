@@ -1,0 +1,96 @@
+{
+  "base": "31f5672ab5c77da955d0ab6ebab9d06cf5a209f7",
+  "recordedUtc": "2026-09-16T01:54:48.348611+00:00",
+  "healthyCases": 6,
+  "mockedCategoryRequests": 12,
+  "productionRequests": 0,
+  "controls": [
+    {
+      "control": "pending",
+      "exitCode": 1,
+      "proved": true,
+      "seconds": 5.1498086
+    },
+    {
+      "control": "success",
+      "exitCode": 1,
+      "proved": true,
+      "seconds": 5.8019927
+    },
+    {
+      "control": "empty",
+      "exitCode": 1,
+      "proved": true,
+      "seconds": 5.3173412
+    },
+    {
+      "control": "rejected",
+      "exitCode": 1,
+      "proved": true,
+      "seconds": 4.2398033
+    },
+    {
+      "control": "propagate",
+      "exitCode": 1,
+      "proved": true,
+      "seconds": 4.1285618
+    },
+    {
+      "control": "automatic",
+      "exitCode": 1,
+      "proved": true,
+      "seconds": 2.1437423
+    },
+    {
+      "control": "isolation",
+      "exitCode": 1,
+      "proved": true,
+      "seconds": 3.0334242
+    },
+    {
+      "control": "rejectisolation",
+      "exitCode": 1,
+      "proved": true,
+      "seconds": 4.2237569
+    },
+    {
+      "control": "diagnostic",
+      "exitCode": 1,
+      "proved": true,
+      "seconds": 3.6605133
+    },
+    {
+      "control": "body",
+      "exitCode": 1,
+      "proved": true,
+      "seconds": 3.6995293
+    },
+    {
+      "control": "transport",
+      "exitCode": 1,
+      "proved": true,
+      "seconds": 2.9761759
+    },
+    {
+      "control": "scope",
+      "exitCode": 1,
+      "proved": true,
+      "seconds": 4.9322933
+    },
+    {
+      "control": "bound",
+      "exitCode": 1,
+      "proved": true,
+      "seconds": 2.8296387
+    }
+  ],
+  "typeExitCode": 0,
+  "sourceFiles": {
+    "src/lib/rarityRound.ts": "9062208da80acd68b8738ddfc52c6d19d6e04650f82763e5e74e4f923bd8bf7d",
+    "scripts/simRarityAgreement.mjs": "6470d1e387b61bb4baea6050a3aa21bc30c1eafcd1561401bdb518ccb9d6439d",
+    "scripts/simRarityPoolRecovery.mjs": "b671602e3667ca854f9be54fbf409842854a7a12cbfb3307fdc7f7855e4874b9"
+  },
+  "committed": false,
+  "pushed": false,
+  "buildRun": false
+}

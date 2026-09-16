@@ -1,5 +1,39 @@
 # Project state
 
+## ADSENSE CHECKLIST AND RELEASE REPAIRS 2026-09-15 22:16 EDT
+
+The new pasted checklist was checked against Google's published requirements
+and the actual main domain. All 18 public responses passed, covering nine
+addresses with ordinary and Mediapartners-Google request headers. What’s New
+returned 200, and About, Contact, Privacy, Terms and Soccer Career already
+contain readable initial HTML. Google publishes none of the pasted word,
+indexed-page or daily-impression quotas. See
+[the audit](adsense/checklist-review-2026-09-15.md).
+
+Four source files now describe advertising as potential support and name both
+hosting providers accurately. The real email address, Google cookie disclosures,
+opt-out links and consent behavior stay intact. This copy is in the release
+candidate, not yet published. September 2 records establish the Google CMP
+message configuration then; later browser timeouts do not establish fresh CMP
+or AdSense status. No new review or indexing request was submitted.
+
+Rarity Round's empty/error cache repair has independent source and receipt
+review. Six offline cases, 13 effective controls and proper app types pass.
+Pending and successful pools remain cached; an explicit retry can reload a
+failed category. No query, ranking, scoring or automatic retry count changed.
+The repair also adds bounded diagnostics to the live-data harness. See
+[the repair](audits/rarity-pool-recovery-2026-09-15.md).
+
+The full local 31f5672a test run passed all 321 assertions across 39 files but
+exited 1 with 13 unhandled errors and two blocked completion-write attempts.
+It is not a green run. Isolated test repairs mock completion writes, settle
+College Grid flash timers before teardown and resolve the real Stadium Tycoon
+guide before the synchronous match loop. The pitch wrapper now rejects a
+failed test process or unhandled errors. Focused verification is pending.
+The combined source includes main 034049cb; a fresh full CI and accepted
+artifact are still required. The public alternate preview, main domain and
+pending GoDaddy sign-in are unchanged.
+
 ## COMBINED RELEASE REPAIR 2026-09-15 21:33 EDT
 
 Run [35038033612](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35038033612)

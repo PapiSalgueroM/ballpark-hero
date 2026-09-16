@@ -1,5 +1,21 @@
 # Work board
 
+**22:16 EDT, Codex AdSense audit and final test repairs:** The supplied audit's
+403 claim did not reproduce. Nine main-domain addresses returned 200 under both
+ordinary and Mediapartners-Google headers, with readable policy/game HTML.
+Codex owns the narrow About, Privacy, Terms and home-template funding/hosting
+wording correction, now in the combined candidate. No new contact address,
+CMP claim, consent behavior or review request. See the September 15 checklist
+review under `docs/adsense/`.
+
+Rarity recovery passes six offline cases, 13 effective controls and app types,
+with independent source and receipt review. Local full Vitest's 321 assertions
+passed but its exit was 1 due to unhandled errors and blocked completion calls.
+Codex owns the focused test cleanup and fail-closed pitch-runner repair. Do not
+read the assertion count as release approval. A fresh serialized full CI will
+check the integrated final source, preserving main 034049cb and Claude's work.
+The accepted 588 alternate preview remains available; DNS access is pending.
+
 **21:33 EDT, Codex combined release repair:** Run `35038033612` finished
 with 318 passing node harnesses and failures in live motion fixtures and a
 Rarity Round pool load. Full Vitest failures are confined to the same motion
