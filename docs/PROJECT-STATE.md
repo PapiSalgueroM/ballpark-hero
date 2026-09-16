@@ -1,5 +1,76 @@
 # Project state
 
+## OWNER REPORT LOGGED, AND BUILT 2026-09-16: Club Manager free agents
+
+**Filed as a Club Manager feature request, not a site issue.** Source: the
+footer report form. The useful half of the report, in the reporter's terms:
+*"Add free agents to Manager Mode, and allow players to have their contracts
+terminated so they become free agents."* The same report praised the recent
+**second legs live start points**, which is the first unprompted positive
+signal on that change and is worth remembering when the two legged knockout
+comes up again.
+
+The request is routed into the shared Transfer, Contract and Finance systems
+rather than added as a screen, which is what the master spec's Club Manager 2.0
+section asks for. Status: **BUILT**, on branch
+`claude/free-agents-contract-termination-5oeyzz`.
+
+**What shipped.**
+
+- `src/lib/clubManagerFreeAgents.ts`, new: the `FreeAgent` record, the payoff
+  curve, the world release table, the demand decay and the world gate. Pure,
+  same split as `clubManagerDeals.ts`.
+- `CareerState.freeAgents?`, optional so `SAVE_VERSION` does not move and no
+  live career on any device is discarded. `ensureFreeAgents` at the three usual
+  call sites, idempotent.
+- `terminateContract` and `signFreeAgent` in `clubManager.ts`, beside the
+  signings they mirror. Weekly and summer passes for the board.
+- Free tab on the transfer screen, a payoff desk on the contracts card with a
+  two tap confirm, help copy, SEO copy, regenerated search index.
+- `scripts/simClubManagerFreeAgents.mjs`, ten sections, six negative controls.
+
+**Three decisions that are worth not relitigating.**
+
+1. **The window does not apply to a free agent.** He has no club, so there is
+   no registration being traded between clubs and nothing for a window to
+   regulate. `signFreeAgent` is the only signing path in the engine without the
+   `transferWindow === null` guard, and that is deliberate: it is what makes
+   the board worth opening in February.
+2. **The world only releases real players once the world has moved on**
+   (`WORLD_POOL_FROM_YEAR`). In season one the save still is the real season,
+   so calling a real professional unemployed would read as a claim about the
+   man rather than about the simulation. Season one's board is made up players,
+   marked MADE UP like everywhere else, so the feature is still live on day one.
+3. **You cannot re-sign a man this club let go this season**, whether you paid
+   him off or let his deal run out. Both are free money loops and the second one
+   measured strictly cheaper than the contracts desk before the guard went in.
+
+**Balance took three goes and the harness is why.** A free transfer saves the
+whole fee, so the board must not also be better football. Build one put a 24
+year old rated 88 on Everton's board. Build two still finished a free agent only
+manager on an eleven rated 80.0 against a buyer's 76.0, because filling a squad
+to thirty for 35m buys depth and the fit adjusted rating reads depth. What fixed
+it, all three true to football: a player in his prime is never released for
+nothing; a free agent's wage carries a premium, because the money that would
+have gone to a selling club goes to him and his agent instead; and the board
+refuse a wage that takes the bill far past their ceiling. Measured now over 111
+shopping rounds the best affordable signing beats the best available free agent
+by 16.7 rating points, and the board never once won.
+
+**Verified.** `tsc` zero. `npm run build` clean. 321 component tests across 39
+files. The new harness green on the filename seed and on SIM_SEED 1, 2 and 3,
+with all six controls confirmed to fail the section each targets. Club Manager
+regression sims re-run.
+
+**Open, and small.** The remaining Transfer/Contract spec items this does not
+touch are the wider negotiation table items (add-ons and buy-back clauses on the
+free agent table, which a free agent does not have) and any front office reuse:
+the four GM sims already have their own release-and-sign pool, and Club Manager
+is soccer native (wages, fees, windows, no cap), so this shares the concept and
+the UI shape rather than the module. That judgement is recorded here so it is
+not re-argued.
+
+
 ## RELEASE MERGED 2026-09-16 00:46 EDT
 
 PR 96 merged as `25a0448e87d68de8f70752c28bbb5fbdc93a2162`. The accepted
