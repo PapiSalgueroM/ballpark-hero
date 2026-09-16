@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { CalendarDays } from 'lucide-react';
-import { careerLeagueOf } from '@/lib/clubManager';
+import { careerLeagueOf, roundPairs } from '@/lib/clubManager';
 import type { CareerState, CalendarEntry } from '@/lib/clubManager';
 
 /** Round 73: the season at a glance. Recent results plus what's coming. */
@@ -107,22 +107,15 @@ export function CalendarCard({ career, onQuickSim }: { career: CareerState; onQu
 
 /** My league opponent for a given round, home/away tagged. */
 function leagueOpponentFor(career: CareerState, round: number): string {
-  // The engine's pairing function is private; recompute the same circle
-  // method here for display only.
-  const clubs = career.leagueClubs;
-  const list = clubs.length % 2 === 0 ? clubs : [...clubs, '__BYE__'];
-  const n = list.length;
-  const r = round % (n - 1);
-  const rest = list.slice(1);
-  const rot = [...rest.slice(r), ...rest.slice(0, r)];
-  const arr = [list[0], ...rot];
-  for (let i = 0; i < n / 2; i++) {
-    let h = arr[i];
-    let a = arr[n - 1 - i];
-    if ((r + i) % 2 === 1) [h, a] = [a, h];
-    if (round >= n - 1) [h, a] = [a, h];
-    if (h === career.clubName) return a === '__BYE__' ? 'Bye week' : `${a} (H)`;
-    if (a === career.clubName) return h === '__BYE__' ? 'Bye week' : `${h} (A)`;
+  /* Round 617: this used to carry its own copy of the circle method, written
+     when the engine's pairing function was private, and the copy kept the old
+     venue rule. The engine exports roundPairs now and the save says which
+     rule it plays, so there is one list and this card cannot disagree with
+     it. The bye ghost never comes out in a pair, so a round without my club
+     is a bye week. */
+  for (const [h, a] of roundPairs(career.leagueClubs, round, !!career.balancedFixtures)) {
+    if (h === career.clubName) return `${a} (H)`;
+    if (a === career.clubName) return `${h} (A)`;
   }
   return 'Bye week';
 }
