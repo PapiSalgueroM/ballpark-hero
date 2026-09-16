@@ -1,5 +1,12 @@
 # Work board
 
+**Codex follow-up, separate from the frozen release:** NFL Career's season stat
+formatter falls through to receiving fields for kickers and defenders, printing
+undefined values despite committed position-specific stats. Codex reserves the
+narrow formatter correction and its focused regression proof on a separate
+branch. No new match or possession events are being invented. This work will
+not enter the current frozen source or running verification.
+
 **22:35 EDT, Codex final combined CI is running:** Draft PR 96 freezes source
 `a96ed002`; verification `3a7e54b3` adds only the reviewed workflow. One run,
 `35048332634` attempt 1, checks the whole combined release with unchanged old
