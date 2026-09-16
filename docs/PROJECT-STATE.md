@@ -1,5 +1,110 @@
 # Project state
 
+## ROUND 628 BUILT 2026-09-16: the Club Manager season score reads the manager, not the club
+
+On branch `claude/free-agents-contract-termination-5oeyzz`, commit `4df6892`, riding beside
+Round 619 on PR 103 because that is the branch this lane was given. `docs/PROJECT-STATE.md`
+listed "A correct points system per game" as PART with **Club Manager points design open**, and
+this is that row.
+
+The rule was `Math.min(130, myRow.pts + seasonTrophies.length * 10)`. **Three defects, all
+measured before a line was written.**
+
+**One, it read the club.** One season at twelve clubs with management held identical (nobody
+touched anything, every entry auto played), so every point of spread was stature: scores ran 24
+to 90 and the club's preview XI rating correlated with the season score at **0.851**. Bayern
+finished 8th of 18 on grade F having hit 0 of 7 board objectives and scored 55, while Sevilla
+finished 13th on grade C having hit 3 of 8 and scored 46. The F beat the C. Real Madrid hit one
+objective in eight, graded C, and posted the highest score in the set at 90, above a Newcastle
+side that won its league on grade A for 78.
+
+**Two, the scale did not fit the leagues.** Maximum league points by league size: 54 in the 10
+club SuperSport HNL, 102 in the 18 club leagues, 114 in the big three, **138** in the 24 club
+EFL Championship, against one flat cap of 130. A perfect Croatian season topped out near 84
+with a cup treble and could never reach the ceiling; the Championship passed 130 on league
+points alone so its trophies were worth nothing.
+
+**Three, relegation paid.** Left in place for eight seasons with nobody managing, Sunderland
+scored 43 finishing 18th in the Premier League, went down, won the Championship and scored
+**124**. Everton reproduced it independently. Winning the second division beat winning the
+first by 46 points, straight out of 46 games against 38.
+
+**What it is now.** A ledger in the new `src/lib/clubManagerScore.ts`, every term a SHARE of
+what was available so league size cancels: league form 48 (your points over the points your own
+fixture list offered), the title 28, a cup run up to 24, a European run up to 24, each board
+objective 6 up to 30. **48 + 28 + 24 + 30 is exactly 130**, which is the ceiling with no
+European run in it, so the five leagues with no Champions League route (the Championship,
+Saudi, both MLS conferences, 2. Bundesliga) can still reach the top of the scale. A European
+league gets Europe's 24 as slack instead.
+
+**The weights are grid searched, not chosen.** 77 seeded seasons at 34 clubs across every
+league size, every season scored under both rules, against three targets at once.
+
+| | OLD | NEW |
+|---|---|---|
+| median score | 63 | 62 |
+| correlation with the board's verdict grade | 0.312 | 0.481 |
+| correlation with the club's preview XI | 0.776 | 0.311 |
+| mean score, grade A | 65.8 | 82.2 |
+| mean score, grade B | 67.2 | 69.2 |
+| mean score, grade C | 58.4 | 48.8 |
+| mean score, grade D | 28.8 | 34.8 |
+
+The old rule could not order A above B. Keeping the median matters because
+`public.global_leaderboard()` pays `100.0 * day_best / max_score` and the denominator lives in
+the database, so a rule that scored lower would quietly cut every Club Manager player's earning
+rate. Emitting 0..100 instead of 0..130 would have cut it by 23 percent forever.
+
+**The monotone law.** The leaderboard ranks on the day's MAX reading and `recordActivity` pings
+after every match, so a score that can FALL pays a player for their luckiest afternoon rather
+than their season. A points per game rate reads 3.00 after one opening win and can only decline,
+which is why a rate, a position snapshot, an expectation overshoot and a verdict grade are all
+structurally wrong here however well they read. Every term is a non decreasing function of a
+quantity that only rises and every denominator is a season constant.
+
+**Expectation was deliberately NOT used**, despite being the obvious answer and the angle that
+scored second in the design panel. Two reasons found by reading the engine: a custom club's
+expectation is re-measured from YOUR OWN squad on every load (`clubManager.ts:16101`), so
+weakening your squad lowers the bar you are judged against, and a real club's expectation is
+frozen at the year zero bake while actual strength projects forward, so a long save drifts into
+free overachievement. The board objectives term carries the expectation-aware part instead,
+because the board already sizes its own demands to the club.
+
+**Takeovers.** Walking into a job part way through no longer pays you for the manager before
+you. The handover is stamped and frozen at `startMidSeason` (points, games, cup and European
+rank, objectives ticked, and whether the league was already won). For a takeover save written
+before this round the estimate is gated on **season 1**, because `career.midSeasonStart` has
+exactly two writes in the whole repo and the engine never clears it: without the gate every
+later season subtracts a manager who does not exist and the 48 point form term reads zero for
+two thirds of the year. All three design judges found that independently and it is invisible at
+the ends, so it would have shipped.
+
+**How it was designed.** A 21 agent workflow: five read-only agents mapped the engine, four
+independent designs were written from deliberately different angles (expectation relative,
+achievement ledger, the board's own objectives, difficulty weighted), and three judges scored
+each one through a distinct lens (a 15 year old on a phone, a leaderboard farmer, the engineer
+who has to fence it). The Achievement Ledger won 8/8/8 unanimously, none disqualified. Its two
+flaws, both named by the judges and both fixed before shipping: the legacy gate above, and a
+legacy estimate that was a live RATE and therefore climbed as you lost (13 straight defeats read
+24 of 40 form points and rising). It is a fixed neutral 1.35 points a game now, a constant, which
+cannot move with your results.
+
+**Gates.** tsc 0, `npm run build` clean, 321 component tests across 39 files.
+`scripts/simClubManagerScore.mjs`: 9 sections, 6 negative controls, **all six proved to fail the
+section each targets**. Regression green: `simClubManager`, `simContracts`, `simBoardAsks`,
+`simAcademy`, `simClubManagerFinances`, `simClubManagerFreeAgents`, `simClubManagerSave`,
+`simSessionMarks`, `simActivityNotCompletion`, `simSiteSearch`, `simNoRivalNames`.
+
+**Two harness mistakes made and fixed in the building, both worth recording.** The first draft
+bundled its rewritten modules from the system temp directory, where `@/lib/...` does not
+resolve, and the entry imported both modules by ABSOLUTE PATH while the aliases only rewrite the
+`@/lib/` specifier: **five of the six controls reported green while changing nothing**. The
+second draft gated stature and board agreement on a 38 season sample where the two arms overlap
+(healthy 0.016 to 0.375, old rule 0.331 to 0.653), which is a coin toss dressed as a rule; the
+sample is 34 clubs and 4 seasons now and the arms separate cleanly (stature healthy 0.185 to
+0.452 against old 0.689 to 0.818, board agreement healthy 0.440 to 0.586 against old 0.086 to
+0.110), with both gates set midway through the measured gap.
+
 ## COLLEGE GRID RESOLVED 2026-09-16: it works, and the purge must NOT run
 
 The open question from the 610 to 619 handoff is answered, and the answer changes the pending
@@ -2846,7 +2951,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Flags, never abbreviations, everywhere | DONE | Round 444 for Career Ladder and Missing XI; Round 453 swept the rest: every printed nationality renders through FlagImg with its name beside the flag (17 bare sites plus 2 country lines to 0), simNationalityFlags fences it, and the two long lists (Soccer Career's picker, Club Manager's market filter) sit under their confederation |
 | Polls more engaging | DONE | Round 521, his own words: "your polls are extremely dull u should add more character". Round 509's fixed two-string rewrite is gone; the component renders the database question as written, with two to four choices. The 46 still-to-come canned rows and the fallback pool both got a real question per matchup. His 2026-08-16 rule on the choices (three words, never a sentence) stays in force. |
 | Profile page accurate for every game | PART | the page enumerates games from the registry (no hand list, so a new game appears on its own); per game credit is fenced by simScoringCoverage (125 of 125 live routes wired) and best scores by simLeaderboardCaps; streak and badge correctness per game is not measured yet |
-| A correct points system per game | PART | Rounds 434 to 439 fixed six broken economies and the caps table; Club Manager points design open |
+| A correct points system per game | PART | Rounds 434 to 439 fixed six broken economies and the caps table; **Club Manager points design DONE in Round 628** (the old rule correlated 0.851 with the club's XI rating and paid 124 for winning the second division against 78 for winning the first; it is a ledger of shares now, fenced by simClubManagerScore with 6 controls). Other games' point designs not yet audited one by one |
 | Indexing | STOPPED | his 2026-09-04 instruction: "dont worry about bing or yandex anymore" |
 | More games you actually move in | DONE, ongoing | Round 433 Free Kick, Round 445 Buzzer Beater, Round 468 the three Soccer Career drills, one shared engine |
 | More animation across every sim | DONE for the inventory, Rounds 529 and 530 (row corrected 2026-09-14, it had been left reading OPEN) | Every one of the ten moments ranked in `docs/audits/animation-inventory-2026-09-11.md` is in the code, checked by grep rather than trusted from the design contract: `us-career/DraftDayCard.tsx` exists; `CountUp` has zero importers in `src`, so Round 147's rule holds; both dynasty recaps, the Imperialism champion card, the Club Manager XP screen, the Idle Arena trophy card, Rebuild's final grade, the Ballon d'Or countdown and the coach career panel all carry `cm-slam`, `cm-tick-in` or `ConfettiBurst`; Stadium Tycoon and Wonderkid Factory now carry the `prefers-reduced-motion` rule the inventory flagged missing. New moments beyond that inventory are fair game, but nothing on it is still owed |
