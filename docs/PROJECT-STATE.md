@@ -1,5 +1,19 @@
 # Project state
 
+## COOKIE CHOICE STORAGE RECOVERY DRAFT 2026-09-15
+
+An isolated follow-up from `a96ed002` handles blocked cookie-choice storage
+without crashing the banner or treating a failed Accept write as saved.
+Essential only can dismiss for the current page; a page-lifetime guard keeps
+stale stored consent from restarting optional loads after a storage failure.
+Existing vendor scripts are not retroactively unloaded. On September 16, all
+six focused component cases passed and nine controls proved their exact
+intended failures, with no unhandled errors or new network attempts. Proper
+app types and the sequential plain production build then passed on unchanged
+source. SEO regeneration, browser download budgets and release verification
+are not claimed. This remains a separate follow-up to the published a96
+combined release. See [the audit](audits/cookie-storage-recovery-2026-09-15.md).
+
 ## ADSENSE CHECKLIST AND RELEASE REPAIRS 2026-09-15 22:16 EDT
 
 The new pasted checklist was checked against Google's published requirements

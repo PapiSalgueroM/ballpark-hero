@@ -14,6 +14,13 @@ export const ADSENSE_CLIENT = 'ca-pub-2929318086316376';
 export const GA_MEASUREMENT_ID = 'G-KZQK2G68YC';
 export const CONSENT_CHANGED_EVENT = 'dukb-consent-changed';
 
+// A storage failure must not revive an old Accept value during this page visit.
+let consentStorageBlocked = false;
+export const isConsentStorageBlocked = () => consentStorageBlocked;
+export function setConsentStorageBlocked(blocked: boolean): void {
+  consentStorageBlocked = blocked;
+}
+
 declare global {
   interface Window {
     dataLayer?: unknown[];
@@ -22,6 +29,7 @@ declare global {
 }
 
 export function loadAdSense(): boolean {
+  if (isConsentStorageBlocked()) return false;
   try {
     if (document.querySelector('meta[name="robots"][content*="noindex"]')) return false;
     if (!document.querySelector('[data-dukb-manual-ad] ins.adsbygoogle[data-ad-slot]')) return false;
@@ -44,6 +52,7 @@ export function loadAdSense(): boolean {
 }
 
 export function loadAnalytics(): void {
+  if (isConsentStorageBlocked()) return;
   try {
     if (document.querySelector('script[src*="googletagmanager.com/gtag/js"]')) return;
     window.dataLayer = window.dataLayer || [];

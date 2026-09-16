@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { CONSENT_CHANGED_EVENT, loadAdSense } from '@/lib/consentedScripts';
+import { CONSENT_CHANGED_EVENT, isConsentStorageBlocked, loadAdSense } from '@/lib/consentedScripts';
 
 declare global {
   interface Window {
@@ -77,6 +77,7 @@ const HEAD_SETTLE_FRAMES = 2;
 type AdState = 'unknown' | 'filled' | 'empty';
 
 function readStoredConsent(): string | null {
+  if (isConsentStorageBlocked()) return null;
   try {
     return localStorage.getItem('cookie-consent');
   } catch {
@@ -95,7 +96,7 @@ const AdBanner = ({ slot, format = 'auto', layout, layoutKey, className = '' }: 
     // tab or right after the user responds to the cookie banner.
     setConsent(readStoredConsent());
     const onStorage = (e: StorageEvent) => {
-      if (e.key === 'cookie-consent') setConsent(e.newValue);
+      if (e.key === 'cookie-consent') setConsent(isConsentStorageBlocked() ? null : e.newValue);
     };
     const onConsentChanged = () => setConsent(readStoredConsent());
     window.addEventListener('storage', onStorage);

@@ -1,15 +1,23 @@
 import { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { Link } from 'react-router-dom';
-import { CONSENT_CHANGED_EVENT, loadConsentedScripts } from '@/lib/consentedScripts';
+import { CONSENT_CHANGED_EVENT, isConsentStorageBlocked, loadConsentedScripts, setConsentStorageBlocked } from '@/lib/consentedScripts';
 
 export function CookieConsent() {
   const [visible, setVisible] = useState(false);
+  const [storageError, setStorageError] = useState('');
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const consent = localStorage.getItem('cookie-consent');
-    if (!consent) setVisible(true);
+    try {
+      const consent = localStorage.getItem('cookie-consent');
+      if (!consent) setVisible(true);
+    } catch {
+      setConsentStorageBlocked(true);
+      window.dispatchEvent(new Event(CONSENT_CHANGED_EVENT));
+      setStorageError('Your browser is blocking saved choices. Essential only still works for this page.');
+      setVisible(true);
+    }
   }, []);
 
   /* A withdrawal in another tab reloads this one so vendor code that already
@@ -19,6 +27,7 @@ export function CookieConsent() {
     const onStorage = (event: StorageEvent) => {
       if (event.key !== 'cookie-consent') return;
       if (event.newValue === 'accepted') {
+        if (isConsentStorageBlocked()) return;
         setVisible(false);
         loadConsentedScripts();
         return;
@@ -62,13 +71,24 @@ export function CookieConsent() {
   }, [visible]);
 
   const saveChoice = (choice: 'accepted' | 'essential') => {
-    localStorage.setItem('cookie-consent', choice);
+    try {
+      localStorage.setItem('cookie-consent', choice);
+    } catch {
+      setConsentStorageBlocked(true);
+      window.dispatchEvent(new Event(CONSENT_CHANGED_EVENT));
+      setStorageError('Your browser blocked saving this choice. Try again or choose Essential only.');
+      if (choice === 'essential') setVisible(false);
+      return false;
+    }
+    setConsentStorageBlocked(false);
     window.dispatchEvent(new Event(CONSENT_CHANGED_EVENT));
+    setStorageError('');
     setVisible(false);
+    return true;
   };
 
   const accept = () => {
-    saveChoice('accepted');
+    if (!saveChoice('accepted')) return;
     // Start analytics in this session. The ad loader also runs, but it stays
     // off until AdBanner renders a deliberate slot after this state change.
     loadConsentedScripts();
@@ -125,6 +145,7 @@ export function CookieConsent() {
         <p className="flex-1 text-center sm:text-left">
           Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same.{' '}
           <Link to="/privacy" className="underline hover:text-foreground font-medium">Learn more</Link>
+          {storageError && <span role="alert" className="block mt-1">{storageError}</span>}
         </p>
         <div className="flex items-center gap-2 whitespace-nowrap">
           <button
