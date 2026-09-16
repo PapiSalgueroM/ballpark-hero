@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Trophy, Star, Medal, Flame, ArrowLeft, UserPlus } from 'lucide-react';
 import { useGameNavbarStats } from '@/hooks/useGameNavbarStats';
 import { useDailyLegend } from '@/hooks/useDailyLegend';
-import { DailyLegendOverlay } from '@/components/game/DailyLegendOverlay';
 import { useAuth } from '@/contexts/AuthContext';
 import { AuthModal } from '@/components/auth/AuthModal';
+
+const DailyLegendOverlay = lazy(() => import('./DailyLegendOverlay').then(module => ({ default: module.DailyLegendOverlay })));
 
 /**
  * Game-page top bar. This renders on all 118 routes, so a change here is a
@@ -215,7 +216,9 @@ export function GameNavbar() {
       </nav>
 
       {showCelebration && (
-        <DailyLegendOverlay streakDays={streakDays} onDismiss={dismissCelebration} />
+        <Suspense fallback={null}>
+          <DailyLegendOverlay streakDays={streakDays} onDismiss={dismissCelebration} />
+        </Suspense>
       )}
 
       <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} defaultTab="signup" />
