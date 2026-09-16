@@ -22,6 +22,8 @@
    The wrapper is scripts/simTycoonLoads.mjs; run that, not this file alone. */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { act, render, cleanup } from '@testing-library/react';
+
+vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn() }));
 import { useWonderkidFactory } from '@/hooks/useWonderkidFactory';
 import { SAVE_KEY, applyAway, deserialize } from '@/lib/wonderkidFactory';
 import type { FactoryState } from '@/lib/wonderkidFactory';

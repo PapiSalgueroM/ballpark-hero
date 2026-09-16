@@ -1,5 +1,31 @@
 # Project state
 
+## COMBINED RELEASE PUBLISHED 2026-09-16 00:41 EDT
+
+Source `a96ed002` is accepted from verification `3a7e54b3`,
+[CI 35048332634](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35048332634),
+attempt 1. Proper types, SEO build, browser checks, 323 node harnesses,
+321 component tests and all 101 explicit controls passed. Exact intake checked
+1,980 inputs and 717 generated outputs. All 11 strict raw loading budgets pass.
+The 170 approved repository outputs are imported, and source/blob/mode parity
+passes with main `50d5903f` merged. Main advanced only through documentation.
+
+The exact accepted build is published as Sites version 3 at
+https://douknowball.anacatu2025.chatgpt.site without rebuilding it. All 546 public
+files passed: 377 exact asset hashes and 169 HTML hashes after removing only the
+known hosting challenge script. Four corruption controls also passed.
+Main-domain DNS remains unchanged pending GoDaddy sign-in. AdSense's last observed status is
+Getting ready / Review requested, with ads.txt Authorized; approval is still
+Google's decision. No new review request, indexing request or paid upgrade.
+See [the release evidence](audits/integrated-release-2026-09-16.md).
+
+Claude's 617 and 618 remain separately gated and held off main until this
+combined release lands. Codex follow-ups also remain separate: draft PRs 98/99,
+the NFL kicker illustration and a storage-blocked consent fix. The consent
+patch passes six component cases and nine controls; its type/build checks are
+pending. The kicker's new trophy-panel split is in final verification after
+the first raw size check found a 280-byte excess. These are not in this artifact.
+
 ## COMBINED CHECKS AND ACCOUNT STATUS 2026-09-15 23:22 EDT
 
 Frozen source `a96ed002`, verification `3a7e54b3` and CI `35048332634` remain
@@ -21,6 +47,25 @@ fixes. The stats patch passes proper types, 24 real seasons, 22 controls and 48
 old/new state and random-call comparisons. The copy snapshot needs normal
 regeneration. A kicker season illustration is in progress on a separate branch.
 These follow-ups have no full-release or publication claim.
+
+## ACCOUNT CHECK 2026-09-15 22:58 EDT
+
+The AdSense page currently shows Getting ready / Review requested and ads.txt
+Authorized. No new approval or rejection is shown. Its European regulations
+message for douknowball.com is Published, with English plus 31 languages. This
+confirms account configuration, not regional delivery. No settings changed.
+
+Search Console's Page indexing report still has a September 3 data date: 58
+indexed and 91 excluded (3 redirects, 17 crawled, 71 discovered). Most crawled
+examples were last visited in March to May. Do not treat these records as a
+fresh review of the current site. No indexing request or validation restart.
+See [the account receipt](adsense/account-observation-2026-09-15.json).
+
+The combined CI's type, SEO build, browser and full Vitest gates pass; the full
+node harness suite is running. Remaining controls and artifact intake are pending.
+The frozen source and verification commits remain unchanged. GoDaddy remains
+signed out, and the main domain has not moved. The NFL position-stat display
+correction is separate from the frozen release and preserves simulation balance.
 
 ## FINAL COMBINED VERIFICATION 2026-09-15 22:35 EDT
 
@@ -56,6 +101,40 @@ are included in PR 96; disclosures, contact email and consent behavior remain.
 The last observed AdSense status is still Review requested. No fresh request,
 DNS change, paid upgrade or production write was made by these test repairs.
 The alternate animation preview remains public while GoDaddy access is pending.
+
+## ADSENSE CHECKLIST AND RELEASE REPAIRS 2026-09-15 22:16 EDT
+
+The new pasted checklist was checked against Google's published requirements
+and the actual main domain. All 18 public responses passed, covering nine
+addresses with ordinary and Mediapartners-Google request headers. What’s New
+returned 200, and About, Contact, Privacy, Terms and Soccer Career already
+contain readable initial HTML. Google publishes none of the pasted word,
+indexed-page or daily-impression quotas. See
+[the audit](adsense/checklist-review-2026-09-15.md).
+
+Four source files now describe advertising as potential support and name both
+hosting providers accurately. The real email address, Google cookie disclosures,
+opt-out links and consent behavior stay intact. This copy is in the release
+candidate, not yet published. September 2 records establish the Google CMP
+message configuration then; later browser timeouts do not establish fresh CMP
+or AdSense status. No new review or indexing request was submitted.
+
+Rarity Round's empty/error cache repair has independent source and receipt
+review. Six offline cases, 13 effective controls and proper app types pass.
+Pending and successful pools remain cached; an explicit retry can reload a
+failed category. No query, ranking, scoring or automatic retry count changed.
+The repair also adds bounded diagnostics to the live-data harness. See
+[the repair](audits/rarity-pool-recovery-2026-09-15.md).
+
+The full local 31f5672a test run passed all 321 assertions across 39 files but
+exited 1 with 13 unhandled errors and two blocked completion-write attempts.
+It is not a green run. Isolated test repairs mock completion writes, settle
+College Grid flash timers before teardown and resolve the real Stadium Tycoon
+guide before the synchronous match loop. The pitch wrapper now rejects a
+failed test process or unhandled errors. Focused verification is pending.
+The combined source includes main 034049cb; a fresh full CI and accepted
+artifact are still required. The public alternate preview, main domain and
+pending GoDaddy sign-in are unchanged.
 
 ## COMBINED RELEASE REPAIR 2026-09-15 21:33 EDT
 
@@ -116,6 +195,24 @@ redundant local union run completed the healthy six cases correctly, then
 was canceled during controls; it is not claimed as a full pass and produced
 no source change. Full combined CI retains the existing checks and timeouts.
 
+## LOCAL HARNESS REPAIR 2026-09-15: reduce repeated database reads
+
+Today's Supabase Disk I/O warning prompted a bounded read-only statistics and
+log audit. It found substantial repeated Node-style market-value and stint
+reads, without proving their share of the daily burst budget. No current
+budget percentage or host swap measurement was available. See the
+[audit and limitations](audits/supabase-disk-io-2026-09-15.md).
+
+An isolated harness-only patch changes the two complete stint readers to
+existing-primary-key pagination and memoizes only identical successful rarity
+prominence responses within one invocation. All direct searches, outcome
+assertions and the independent accent/order harness remain intact. Local
+fake-fetch checks pass four sections and 11 effective controls. Live database
+runs, a production performance claim and publication are still pending review;
+this does not change site code or database settings. The static model saves
+1,155 prominence requests in rarity section 1 while keeping all 1,188 direct
+queries. Changed traversal order can change eligible live sample identities.
+
 ## HOSTING AND DATABASE 2026-09-15 19:47 EDT
 
 Anthony confirms today's Supabase Disk IO warning and requests another host.
@@ -147,6 +244,17 @@ The alternate preview must not replace the main domain until the integrated
 build preserves Claude's live 611, 612 and 616 features. All animation sources
 remain intact. The recent main tycoon-pitch warning is being checked against
 the integrated source with production requests blocked.
+
+## CURRENT UNION SOURCE INTEGRATION 2026-09-15
+
+This worktree starts from frozen Round 588 source `8a4e00a5` and integrates
+current main `97d68894`, retaining its College Grid saved page and all engine
+changes. The surgical Club Manager lazy-panel repair is applied separately.
+One fresh union verification is planned after the read-load repair; no new
+build, CI, publication or combined artifact approval is claimed here.
+Earlier 586, animation, 587 and 588 approvals below apply only to their exact
+recorded sources. They do not approve this combined tree. Database browser
+access remains blocked while the owner's I/O alert is investigated.
 
 ## LIVE CHECK 2026-09-15 18:47 EDT: the guide correction is published
 
@@ -451,6 +559,225 @@ migration); those later heads are not deployed.
   after the deploy (381 rows, last write 2026-09-15 18:33 UTC, read at 22:52 UTC after the entry
   moved); purge only after 24 hours with 0 new rows, exactly as contract section 5 says; retiring
   the function is Round 615.
+
+## Earlier Round 586 verification history
+
+The following run notes are retained as history, not current approval.
+
+- Round 586 source `24e17ff6`, verification `6c0165d7`,
+  [run 34999864639](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999864639).
+- Combined Rounds 603 to 605 source `4a99788f`, verification `4ebbb1df`,
+  [run 34999930238](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34999930238).
+- Round 587 source `9a2f6da1`, verification `418bdf77`,
+  [run 35001991548](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35001991548).
+  This final source includes 603 to 605 and measured guide claims. The earlier
+  run `35000569315` was cancelled and is superseded.
+
+All three runs have passed app types and rebuilt snapshots and are in the
+full node suite. Full suites, browser download
+budgets, effective failure controls and artifact checks remain required.
+Round 586 also needs slow-chunk navigation checked against its final artifact.
+Publish 586 separately first, then the action scenes, then 587. Verification
+workflows stay off main. Claude's `release-611-612-616` is not part of these
+release sources. AdSense remains pending as confirmed at 12:37 EDT below.
+
+## IN DEVELOPMENT 2026-09-15: Round 588, title-earned boots
+
+Worktree `.worktrees/round-588-title-boots`, branch
+`codex/round-588-title-boots`, follows the combined Round 587 source. This
+round publishes separately after 586, 603 to 605 and 587. It is not live.
+
+League titles earn the existing fictional boot pairs on a fixed schedule.
+The first observed title in each division unlocks the next pair; Summit
+titles continue the collection. Other titles earn kit upgrades. The Boot
+room opens from First team, with six pairs per page, one wearer per pair,
+free reassignment and upgrades capped at level three. Equipment adds match
+rating for defense, with the existing rating floor and cap, and never changes
+a transfer fee. Past titles are not reconstructed for old saves.
+
+Equipment saves before appearing on screen. Failed writes leave the previous
+equipment intact and show an explanation. The completed stadium title saves
+before its reward; the existing two-save failure limit can lose a title's
+equipment reward when only the ledger write fails. The page says so instead
+of displaying an unsaved reward.
+
+Independent focused checks pass ten engine sections, 11,444,400 exact fee
+comparisons, 13 effective engine controls, six actual hook/page cases and
+seven effective page controls. The actual component preview passes at 320,
+390 and 1440 pixels with 44-pixel targets, no overflow, real equip/upgrade
+actions and the rating 60/99 and level-three boundaries. Six deliberate UI
+mutations fail their intended checks. This preview uses source-generated
+CSS. The current app type gate passes; the final built CSS, a fresh full build
+and all release gates remain owed. Section 20 of the tycoon merge design records the schedule,
+storage tradeoff and measured edge limits.
+
+The older first-team save test now waits for the lazy Reputation panel before
+finding its Move up button. Its seven healthy cases and all six intended
+failure controls pass on this tree. The final source also passes the app type
+gate. Fresh release CI will follow integration of the urgent reference-guide
+corrections, so this branch cannot restore the known published content errors.
+
+AdSense review remains pending. The public HTTP audit at 13:22 to 13:23 EDT
+passed all 148 sitemap URLs with zero findings; that result establishes
+document checks, not indexing or approval. No additional review request.
+
+## IN DEVELOPMENT 2026-09-15: Round 587, playable watched-match kicks
+
+Worktree `.worktrees/round-587-set-pieces`, branch `codex/round-587-set-pieces`.
+This follows Round 586's separate publication. It is not published or fully
+verified yet. Rounds 603 to 605 publish separately first and are included in
+this final source tree so the last verification checks the actual combined app.
+
+A watched stadium match offers a penalty or free kick for 12 seconds. Players
+aim, set power and curve, and take one shot using the existing Free Kick
+engine. The kick window shows the live minute and score while the match keeps
+running. An original animated scene shows the committed result, including
+keeper contact, wall blocks, post hits and misses. Reduced motion and a direct
+result button remain available.
+
+Opening and scoring save before changing the live state. Closing or reloading
+cannot reopen an attempt. A failed goal save permits retrying that same shot,
+and stale matches cannot receive the goal. A score pays the existing goal
+bonus, with no direct gems or daily-game writes. Pure-engine balance, ignored
+offer parity and effective controls are recorded in section 19 of
+`docs/design/round-580-tycoon-merge.md`. All six real-page cases and eleven
+effective page controls pass, alongside the three Board cases. Scene checks
+cover 36 rendered cases and eight effective controls for boot, glove, wall,
+net, anatomy and reduced-motion behavior. A final independent hook/page/Board
+review found no additional score or deadline callback. The app type gate and
+scoped SEO production build pass. All six actual built-page cases pass at
+320, 390 and 1440 pixels with normal and reduced motion: 42 reachable targets
+of at least 44 pixels, a visible advancing clock, one durable goal per case,
+no overflow or runtime error, and exact restoration of nonzero scroll positions
+(409, 373 and 417 pixels). Deliberately widening the served dialog or hiding
+its clock fails the intended checks. Full release gates and publication are
+still owed.
+
+The offered kick setup now loads inside the lazy Board module. This removes
+the eager Free Kick and arcade dependencies from the page's initial import
+graph (1,398 gzipped bytes in the prior build). The setup stays memoized so
+clock updates cannot restart the replay. All nine focused Board/page tests
+pass; a twelfth page control removes that memo and detects a replay that keeps
+restarting. The daily-record write control remains effective. Final rebuilt
+download size and actual-page fit will be checked again in release CI.
+
+The final content audit found the new guide and modal quantities were missing
+from the existing measured-claims table. `simTycoonHelp` now checks real penalty
+and free-kick windows, reload consumption, a single normal bonus, duplicate
+rejection and full-time boundaries. Its scoped run passes all 76 claims and
+13 effective controls. The default real-page tests remain part of full CI.
+
+AdSense remains Review requested after the September 15 04:19 EDT submission,
+confirmed again in the fully loaded console at 12:37 EDT.
+No second request is made, no indexable route is retired, and no ad slot is
+added by this round. Approval remains pending with Google.
+
+## IN VERIFICATION 2026-09-15: Rounds 603 to 605, match action animations
+
+The animation release is assembled in `.worktrees/animation-release-603-605`,
+branch `codex/animation-release-603-605`. It includes Round 586 as its base and
+must be published after 586's separate release. None of these new action
+renderers is confirmed live yet.
+
+Club Manager's live feed now drives original players striking, passing and
+making goalkeeper saves. Pausing, speed changes, tactics redraws and the final
+event before half time or full time preserve the committed result and clock.
+Soccer Career's wall shots, tackles and glove drills use visible player poses
+and actual ball contact. Wall blocks stop at the wall, weak shots fall short,
+and the existing 700ms scoring deadline stays unchanged. NFL and NBA Conquest
+use their already revealed plays for catches, runs, kicks, interceptions,
+shots, blocks and steals. The NBA engine adds only an action label to an
+existing branch, with no extra random draw or scoring change.
+
+Frozen source commits are `26094c9f` (603), `547aee9a` (604) and `be49e8ad`
+(605). The live sim has 17 passing runtime cases and nine effective controls.
+The drills retain their actual saved outcomes across motion preferences and
+the 700ms settlement boundary, with six shot outcomes checked in full motion,
+reduced motion and a preference change during flight. Conquest retains all
+256 frozen battle outcomes and random-draw counts. Geometry checks cover
+3,333 arm poses and 808 post-contact carry samples; 13 effective controls catch
+scoring, randomness, contact, motion, Skip and phone layout regressions.
+Root review fixed balls trailing behind their carriers after catches or steals.
+
+The full combined build, harness suite and generated-page verification remain
+owed until the release workflow finishes. Keep this distinct from the passing
+focused checks and preview videos. The older league guard's neutral-arm anchor
+repair from `cd4e7043` is included, so the combined suite exercises the current
+defensive formula correctly.
+
+AdSense remains Review requested following the September 15 04:19 EDT
+submission. A fresh signed-in console inspection at 12:37 EDT confirmed
+Getting ready and Review requested, with no new rejection or approval shown.
+The [bounded animation audit](adsense/animation-regression-2026-09-15.md)
+found no new placement or crawler-access blocker on the five checked pages.
+It does not establish approval. Do not submit a
+second review while this one is pending.
+
+## IN VERIFICATION 2026-09-15: Round 586, academy first team
+
+Built in `.worktrees/round-586-first-team`, branch `codex/round-586-first-team`.
+Not published. AdSense remains Review requested following the September 15
+04:19 EDT submission. No new review was requested by this round.
+
+Players aged 18 to 23 can enter five first-team places. Their ratings reduce
+opponent scoring chances in watched and away stadium matches. Senior training,
+birthday decline, selling and retirement create the hold-versus-sell decision.
+Promotion, senior sale and move-up save before showing the change; first-team
+players survive both reset actions. Returning graduates keep aging without an
+Academy tab visit. Review caught and fixed cold-load away results using ratings
+from before offline training, and removed an inaccurate guide claim about the
+best single sale surviving move-up.
+
+Measured balance and contract corrections are in section 18 of
+`docs/design/round-580-tycoon-merge.md`: 334,620 exact youth quotes, independent
+policy holdouts, the measured 45M final-region goal and its effect on repeated
+stars. This changes the sixth and later reputation resets; the first five goals
+stay unchanged. Local type check and production build pass, as do all seven
+real-page cases, six effective save/clock controls, the value-curve controls and
+the help checks. Production CSS and the actual built page fit 320 and 390 pixel
+phones, with a real saved first-team sale and no horizontal overflow.
+
+The full release workflow is
+[34983397450](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/34983397450),
+testing source `be0c2378` with verification-only workflow commit `9bd3c802`.
+Its app type check, SEO build, all 279 Vitest tests and browser steps pass.
+The full node run passed 312 of 313 harnesses. The sole failure was the older
+league strength control looking for a return expression that Round 586 moved
+into a local `base` variable. The control's exact anchor was repaired in
+`cd4e7043` and passed locally and in run `34994125996`. The application formula
+and test thresholds are unchanged. Publication remains owed.
+The workflow's locally owed reduced-motion gate has now passed all 16 routes.
+Its deliberate removed-guard control detected six isolated CSS failures and
+three route failures. The local wrapper changed only hardcoded paths in a
+temporary copy and retained every assertion; external writes were intercepted.
+Rounds 603 and 604 are independent action-animation
+worktrees for Club Manager live matches and Soccer Career drills; they do not
+share this round's save changes or release.
+
+## RELEASE CHECK UPDATE 2026-09-15 12:43 EDT
+
+The new Round 586 release sweep found three initial JavaScript downloads above
+their existing phone budgets: Club Manager 708K/620K, Stadium Tycoon 312K/290K
+and Wonderkid Factory 297K/270K. Codex is repairing eager presentation and guide
+imports before publication, preserving the budgets and content. The type gate,
+SEO build, 279 Vitest tests, repaired league harness and other browser checks
+passed. A fresh full suite will cover the changed loading code. No Round 586,
+587 or 603 to 605 action source is confirmed published yet.
+
+AdSense was checked directly at 12:37 EDT. The fully loaded site detail panel
+still shows Getting ready and Review requested. The review submitted at 04:19
+EDT is pending, with no new rejection or approval shown and no new submission.
+
+The performance source is now committed as `f66bab76`. Closed management
+screens and academy panels load when opened; the three management guides each
+have their own small download, with every original guide entry unchanged.
+Local loading boundaries keep the existing headings, navigation and scroll
+refs mounted. Twelve existing guards follow the moved copy or source anchors.
+The last local measurement before the final two panel extractions was
+621K/620K, 288K/290K and 271K/270K in the order above. These are not final
+passing measurements. Fresh full type, SEO build, node, Vitest, browser,
+download and moved-binding control checks run remotely before artifact
+acceptance or publication. Earlier unchanged-source reuse is no longer valid.
 
 ## LIVE 2026-09-15: Round 610, players who joined with Google can get back in, main `7b268106`
 
@@ -2133,7 +2460,7 @@ an area moves; the round numbers stay for traceability.
 | Grid category (Milestone 0) | 86% | Round 406: the NFL grid runs on the shared engine over a 1970 to 2025 answer key, no AI in the loop; the archive with answer keys (design phase 4) is next. |
 | Indexing and SEO | 48% | Round 496, against Search Console ground truth read 2026-09-06: sitemap clean (140 of 140, Success), 58 indexed against 91 not. The home page was linking to /jeopardy, a redirect to /quiz-board, so the most crawled document on the domain spent an outbound vote on a URL that only bounces; that is the Page with redirect bucket and it is fixed and fenced. Measured in the same pass and worth not re-chasing: the link graph is healthy (zero orphans, every page 2 or more inbound, deepest page 3 clicks from home), so the 71 discovered-not-crawled pages are a crawl budget and quality question, not a structure one. |
 | Profiles and leaderboard | 45% | Rounds 392 and 399 stopped the earlier per-match and per-visit leaks. Round 509 also stops restored retired NFL, NBA, MLB and NHL My Career saves from paying their legacy score on every visit, but that code is pending PR and deploy. The measured leak is 61,964 points across 30 accounts; no retroactive subtraction was performed. The broader history repair remains an owner decision. |
-| AdSense recovery | REJECTED, recovery active | New Low value content rejection confirmed by Anthony's screenshot on 2026-09-15. Ownership is verified; no offending URLs are named. Existing prerendering and five sourced format explainers are live. Round 600 adds contextual source links using their existing mappings. Fresh Search Console indexing evidence is still needed before the next review decision. Prior technical checks remain evidence of implementation, not proof of Google approval. |
+| AdSense recovery | REVIEW REQUESTED, Google decision pending | AdSense accepted a fresh request on September 15 at 04:19 EDT after the published guide, navigation and animation improvements were verified. The console shows Getting ready and Review requested. All five guide live tests passed and their indexing requests were accepted; indexing is not confirmed. Do not resubmit while the review is pending. See `docs/adsense/console-check-2026-09-15.md` and `docs/seo/gsc-indexing-2026-09-15.md`. |
 | In game reporting UX | 78% | Round 447: game pages now use the shared report flow in GameShell on the latest touched games, with board context passed for game-specific issues and a standard placement pattern before SEO footer blocks. |
 | Club Manager | 49% | Round 505: the tactics tab reads the way the match does (a man read in his slot at 0, 2, 6 or 14 rating points on him alone, the bench under the pitch ordered same position first, seventeen shapes that carry the eleven across, the armband and four takers that reach the stream, a duty on every slot capped at 0.12, a second position learned over counted weeks and real players starting with none), fenced by simTacticsEngine with seven controls and the Round 114 pitch guard brought back from a false green. Before it, Round 504: the live match is football, each half committed as a stream the viewer walks and the report is counted off, both elevens named and numbered, the ball at a carrier's feet, corners and throw ins and fouls, live stats, a sub or shape change at any minute with the rest of the half redrawn, and the other dugout's own subs; fenced by simLiveMatch (nine sections, five controls). Before it, Rounds 465 to 467: two meters on every tab (the board meter is the sacking number itself, the fans move with results at r = 0.93 against points per game), goals for and against on every table, a calendar you tap to sim to any day on the one loop the four fast forwards use, four facilities with start levels derived from the club's tier and money and effects that are real and bounded, ticket and concession pricing with fan and board reactions, generated sponsors, and a projected finances screen whose lines sum. Before them, Round 462: the era Champions League plays its round of 16, the group tables stay up through the knockouts, and level points split the way each league says (Spain and Italy head to head) on a per pair ledger with a save migration. Before it: quick sim stops at a sacking and the title band is a measured gap plus a stature list (399); the bake owns every league it ships (394). |
 | Soccer Career | 16% | Round 468 added three position specific training drills you actually play. Round 509's branch connects the wall visually without changing its legal gap, replays the real daily wall draws across 90 dates and 900 rounds with zero unwinnable walls, and adds controls for the two previously unfenced sections. That code is pending PR and deploy. Round 469 lifted the money app, social feed, rival and badge shapes into shared modules so the US careers can reach the same loop. Per season ping is activity, not completion (392). |
@@ -5299,7 +5626,7 @@ per-game SEO copy, about 52 harnesses in `scripts/`, 53 files in `docs/`.
 | GitHub | `PapiSalgueroM/ballpark-hero`, public, branch `main` |
 | Supabase | `flawuiqbvjobmkfkauhw`, **Pro $25/mo**, spend cap ON |
 | Lovable | `c29d224f-a662-4a15-b809-d86fa3b3f0ad`, **free plan, 0 credits**, never use its AI agent |
-| AdSense | `pub-2929318086316376`. One responsive Display unit exists: `DoUKnowBall Game Banner`, slot `7540487748`. Auto Ads and Auto optimize are verified OFF. Round 400 is live and the review was submitted. The 2026-09-07 site-side re-audit passed 17 checks and all 14 controls, with 140 of 140 live sitemap routes clean. The last private-console evidence remains Getting ready and Review requested with no Policy Center issue. Google still decides and approval is not guaranteed. Detailed evidence lives in `docs/adsense/reapply-readiness.md`. |
+| AdSense | `pub-2929318086316376`. One responsive Display unit exists: `DoUKnowBall Game Banner`, slot `7540487748`. Auto Ads and Auto optimize were verified OFF. A fresh review was accepted September 15 at 04:19 EDT after Rounds 600 to 602 were published and checked. The direct console result is Getting ready and Review requested. The earlier rejection was Low value content; approval is pending. Current evidence lives in `docs/adsense/console-check-2026-09-15.md` and `docs/adsense/reapply-readiness.md`. |
 | ads.txt line | `google.com, pub-2929318086316376, DIRECT, f08c47fec0942fa0` |
 | Google consoles | `anacatu2025@gmail.com`, inspected, configured and submitted on 2026-09-02. Current evidence is recorded once in `docs/adsense/reapply-readiness.md`. |
 | Search Console | The sitemap was accepted and read on 2026-09-02 with status Success and 137 discovered pages. All ten priority URLs were added to the crawl queue. Indexing, inspection, Manual Actions and Security Issues evidence is recorded in `docs/adsense/reapply-readiness.md`. |
@@ -9659,3 +9986,81 @@ about corny answers unchanged, because that one was about the CHOICES, not the q
   game_completions plus a backfill, which is a database migration this session cannot run
   without the Supabase approval Anthony has not tapped yet. It is the next database change
   whenever access returns.
+
+
+## Historical source integration notes, preserved for provenance
+
+## CURRENT ROUND 588 LOADING REPAIR 2026-09-15
+
+The final local repair separates the unchanged 18-item boot catalog from its
+ordered IDs and loads celebration artwork when needed. Cold academy notices
+keep their text visible for their original lifetime; late styles cannot hide
+or restart them. The standalone pack panel owns its reveal styles. Pending
+trophy artwork keeps the committed result and Continue action visible.
+
+All 11 existing download budgets pass locally with their original limits.
+Wonderkid Factory is only 31 bytes below its rounding boundary, so this is
+not spare capacity. Type checking, production build, gear and creation checks,
+reveal checks, normal and reduced motion, phone layouts, 15 gear controls and
+seven celebration failure controls pass. The pack and room mutation fixtures
+were repaired without changing production saving behavior; their 22 and 11
+controls pass. Evidence is frozen in the local file
+`dukb-588-final-local-evidence.json` (SHA-256
+`0a019271c79eca701e206c909a76a58ba270a5cefc14825eab53cc42d126e0fb`).
+
+The previous full run `35015717663` passed 311 Vitest cases and 316 of 318
+node harnesses, but failed the two repaired fixtures and the original download
+limits. It is not release approval. A fresh full run and accepted artifact are
+required for this repaired source. Nothing in this section is published.
+
+## CURRENT ROUND 588 SOURCE INTEGRATION 2026-09-15
+
+The boots worktree combines its committed source `c03d2ff0` with clean Round
+587 source `5f3a9a12`, including animation `a7453087`, Round 586 `3530aacc` and
+final factual correction `a35693a5`. Title-earned equipment, the existing
+first-team behavior and all action scenes remain in this source. No app
+conflict required a manual change, and no verification workflow was imported.
+
+The correction takes publication priority, then 586, 603 to 605, 587 and 588.
+Each still needs its own final passing release gates and publication proof.
+The older dirty 587 worktree is separate and untouched. The sections below
+retain the individual feature histories, not approval for this combined tree.
+
+## CURRENT ROUND 587 SOURCE INTEGRATION 2026-09-15
+
+The clean release worktree is `.worktrees/round-587-final`, branch
+`codex/round-587-final`, created from committed watched-kick source `c5d97526`.
+It now includes animation release `a7453087`, Round 586 `3530aacc` and final
+factual correction `a35693a5`. The old `.worktrees/round-587-set-pieces` remains
+untouched with its 14 draft generated-file edits; those edits are not part of
+this source. The existing set-piece implementation and map-guard fix are kept.
+
+Correction publication has priority, followed by 586, 603 to 605, 587 and 588.
+This source integration is not approval or publication. It imports no
+verification workflow, and fresh integrated release gates remain required.
+The sections below preserve each feature's earlier development history.
+
+## CURRENT ANIMATION INTEGRATION 2026-09-15
+
+The animation release combines its checked map-guard source `08216535` with
+Round 586 `3530aacc`, including final factual correction `a35693a5`. The live
+sim, drill and conquest action histories below are preserved. The guide
+correction takes publication priority, then 586, 603 to 605, 587 and 588.
+This merge adds no workflow and does not reuse a failed run as approval.
+Final integrated download, type/build and full verification remain required.
+
+## CURRENT INTEGRATION 2026-09-15: corrections merged into the Round 586 source
+
+This local tree combines Round 586 source `25533a22` with factual correction
+`a35693a5`, including the five corrected guide snapshots and honest career-save
+copy. The academy prospect-card split, exact player callbacks and lazy-panel
+test waits remain intact. No verification workflow was imported.
+
+The factual correction still takes publication priority. None of this merge
+is a publication or proof of final download weight. The release coordinator
+owns correction readability checks and the next integrated weight/build gates.
+Fresh full verification must use this merged source; previous artifacts cannot
+approve the new tree. The completed combined 587 run `35001991548` failed the
+old broad SVG map guard, lazy-panel test waits and Wonderkid's 271K/270K budget.
+Its expected negative controls passed. The records below retain earlier
+verification context and do not supersede this current integration note.

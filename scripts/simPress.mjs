@@ -722,6 +722,8 @@ console.log('10) Copy check');
     'src/components/club-manager/HalftimeScreen.tsx',
     'src/hooks/useClubManager.ts',
     'src/pages/ClubManager.tsx',
+    'src/components/club-manager/ClubManagerHelp.tsx',
+    'src/components/club-manager/ClubManagerSeasonSummary.tsx', 'src/components/club-manager/ClubManagerCareerPanel.tsx', 'src/components/club-manager/ClubManagerBoardPanel.tsx', 'src/components/club-manager/ClubManagerTreatmentPanel.tsx',
     'scripts/simPress.mjs',
   ];
   let dashes = 0;

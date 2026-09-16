@@ -12,10 +12,10 @@ import {
   FactoryState, FacilityId, SAVE_KEY,
   newFactory, deserialize, serialize, applyOffline, advanceClock,
   buyFacility, sellProspect, startShowcase, moveUp,
-  bedFree, deliverPack, makeProspectInBand,
+  bedFree, deliverPack, makeProspectInBand, promote, sellSenior, equipBoot,
 } from '@/lib/wonderkidFactory';
 import type { PackId } from '@/lib/wonderkidFactory';
-import { commitOpenPack, clearPendingPack, loadLedger } from '@/lib/tycoonRewards';
+import { commitOpenPack, clearPendingPack, loadLedger, commitUpgradeBoot } from '@/lib/tycoonRewards';
 import { recordCompletion } from '@/lib/completions';
 
 export interface Floater {
@@ -29,7 +29,7 @@ export function useWonderkidFactory() {
   if (stateRef.current === null) {
     const now = Date.now();
     let loaded: FactoryState | null = null;
-    try { loaded = deserialize(localStorage.getItem(SAVE_KEY), now); } catch { loaded = null; }
+    try { loaded = deserialize(localStorage.getItem(SAVE_KEY), now, loadLedger().gearLevel); } catch { loaded = null; }
     const s = loaded ?? newFactory(now);
     const applied = applyOffline(s, now);
     if (applied > 60) s.scoutProgress = Math.max(s.scoutProgress, 0);
@@ -38,6 +38,20 @@ export function useWonderkidFactory() {
   const [, setVersion] = useState(0);
   const bump = useCallback(() => setVersion(v => v + 1), []);
   const [packSaveBlocked, setPackSaveBlocked] = useState(false);
+  const [academySaveBlocked, setAcademySaveBlocked] = useState(false);
+  const [gearSaveBlocked, setGearSaveBlocked] = useState(false);
+
+  /* Moving a player only reaches the screen after the whole academy is saved. */
+  const commitAcademy = useCallback((next: FactoryState): boolean => {
+    try { localStorage.setItem(SAVE_KEY, serialize(next)); } catch {
+      setAcademySaveBlocked(true);
+      return false;
+    }
+    Object.assign(stateRef.current!, next);
+    setAcademySaveBlocked(false);
+    bump();
+    return true;
+  }, [bump]);
 
   /** Round 585: a pack opened and not yet in a bed (a reload between the draw
    *  and the delivery, or a bed that filled) moves in as soon as a bed is free. */
@@ -138,14 +152,46 @@ export function useWonderkidFactory() {
   }, [bump, markSessionPlay, pushFloater]);
 
   const doMoveUp = useCallback(() => {
-    markSessionPlay();
-    const s = stateRef.current!;
-    if (moveUp(s)) {
-      try { localStorage.setItem(SAVE_KEY, serialize(s)); } catch { /* ignore */ }
+    const next = copyAcademy(stateRef.current!);
+    if (moveUp(next) && commitAcademy(next)) {
+      markSessionPlay();
       pushFloater('⭐ the academy moves up in the world', 'win');
-      bump();
     }
-  }, [bump, markSessionPlay, pushFloater]);
+  }, [commitAcademy, markSessionPlay, pushFloater]);
+
+  const doPromote = useCallback((id: number) => {
+    const next = copyAcademy(stateRef.current!);
+    const kid = next.prospects.find(p => p.id === id);
+    if (kid && promote(next, id) && commitAcademy(next)) {
+      markSessionPlay();
+      pushFloater(`⚽ ${kid.name} joined the first team`, 'win');
+    }
+  }, [commitAcademy, markSessionPlay, pushFloater]);
+
+  const doSellSenior = useCallback((id: string) => {
+    const next = copyAcademy(stateRef.current!);
+    const player = next.firstTeam?.find(p => p.id === id);
+    const price = sellSenior(next, id);
+    if (player && price !== null && commitAcademy(next)) {
+      markSessionPlay();
+      pushFloater(`💷 ${player.name} sold for ${price.toLocaleString()}`, 'sale');
+    }
+  }, [commitAcademy, markSessionPlay, pushFloater]);
+
+  const doEquipBoot = useCallback((seniorId: string, bootId: string | null) => {
+    const next = copyAcademy(stateRef.current!);
+    if (!equipBoot(next, seniorId, bootId, loadLedger().gearLevel ?? {})) return;
+    setGearSaveBlocked(!commitAcademy(next));
+  }, [commitAcademy]);
+
+  const doUpgradeBoot = useCallback((bootId: string) => {
+    try {
+      if (commitUpgradeBoot(bootId)) {
+        setGearSaveBlocked(false);
+        bump();
+      }
+    } catch { setGearSaveBlocked(true); }
+  }, [bump]);
 
   /* Round 585: open a pack. The ledger stores the draw first, then the kid moves
      into a free bed and the academy is saved, all before anything is shown. */
@@ -189,5 +235,19 @@ export function useWonderkidFactory() {
     doOpenPack,
     doDismissPack,
     packSaveBlocked,
+    doPromote,
+    doSellSenior,
+    academySaveBlocked,
+    doEquipBoot,
+    doUpgradeBoot,
+    gearSaveBlocked,
+  };
+}
+
+function copyAcademy(s: FactoryState): FactoryState {
+  return {
+    ...s,
+    prospects: s.prospects.map(p => ({ ...p })),
+    ...(s.firstTeam ? { firstTeam: s.firstTeam.map(p => ({ ...p })) } : {}),
   };
 }

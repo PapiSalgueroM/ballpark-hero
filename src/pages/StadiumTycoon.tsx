@@ -20,10 +20,11 @@
  * never stops while you are at the ground. scripts/simTycoonRooms.mjs holds
  * both to it, and its controls rewrite the exact lines marked below.
  */
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { focusDialogOnMount, escapeCloses } from '@/lib/dialogA11y';
 import { cn } from '@/lib/utils';
 import { HelpCircle, Star, X } from 'lucide-react';
+import { Dialog, DialogContent, DialogDescription, DialogTitle } from '@/components/ui/dialog';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
@@ -38,19 +39,22 @@ import {
   STAFF, staffLevelOf, staffCostOf, canHire, totalStaffLevels,
   ACHIEVEMENTS, ACH_BONUS, achMult, goldenActive, GOLDEN_INFO,
   LEGACY_PERKS, perkLevelOf, perkCostOf, canBuyPerk, legacyPointsOf,
-  totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC,
+  totalPerkLevels, pointsForSale, HYPE_MULT, AWAY_MATCHDAY_SEC, SET_PIECE_WINDOW_SEC,
 } from '@/lib/stadiumTycoon';
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import { ConfettiBurst, CelebrationStyles } from '@/components/club-manager/Celebration';
-import VictoryMoment from '@/components/game/VictoryMoment';
+import VictoryMoment from '@/components/tycoon/TycoonVictoryMoment';
 import { LeagueTableCard } from '@/components/club-manager/LeagueTableCard';
 import TycoonPitch from '@/components/tycoon/TycoonPitch';
 import { useTycoonRewards } from '@/hooks/useTycoonRewards';
-import { balance, GEM_PAY } from '@/lib/tycoonRewards';
+import { balance, GEM_PAY, loadLedger } from '@/lib/tycoonRewards';
 import type { TapFx } from '@/components/tycoon/TycoonPitch';
 import type { AcademyStatus, Room } from '@/lib/tycoonRooms';
+import { deserialize as deserializeAcademy, applyOffline as applyAcademyOffline, SAVE_KEY as ACADEMY_SAVE_KEY, squadEdge } from '@/lib/wonderkidFactory';
+import type { FactoryState } from '@/lib/wonderkidFactory';
 
 const AcademyPanel = lazy(() => import('@/components/tycoon/AcademyPanel'));
+const SetPieceBoard = lazy(() => import('@/components/tycoon/SetPieceBoard').then(module => ({ default: module.WatchedSetPieceBoard })));
 
 /* ---------- tiny animation helpers ---------- */
 
@@ -79,9 +83,22 @@ const CONFETTI_COLORS = ['#22c55e', '#eab308', '#3b82f6', '#ef4444', '#a855f7', 
 type OfficePanel = 'upgrades' | 'payroll' | 'ach' | 'legacy' | 'stats';
 
 export default function StadiumTycoon() {
-  const g = useStadiumTycoon();
+  const [savedAcademy] = useState(() => {
+    try {
+      const now = Date.now();
+      const snapshot = deserializeAcademy(localStorage.getItem(ACADEMY_SAVE_KEY), now, loadLedger().gearLevel);
+      if (snapshot) applyAcademyOffline(snapshot, now);
+      return snapshot;
+    }
+    catch { return null; }
+  });
+  const academyRef = useRef(savedAcademy);
+  const getEdge = useCallback(() => academyRef.current ? squadEdge(academyRef.current, loadLedger().gearLevel) : 0, []);
+  const onAcademySnapshot = useCallback((snapshot: FactoryState) => { academyRef.current = snapshot; }, []);
+  const g = useStadiumTycoon(getEdge);
   const [room, setRoom] = useState<Room>('stadium');
-  const [academyOpened, setAcademyOpened] = useState(false);
+  /* A returning first team keeps its clock even before the Academy tab opens. */
+  const [academyOpened, setAcademyOpened] = useState(() => Boolean(savedAcademy?.firstTeam?.length));
   const [academyStatus, setAcademyStatus] = useState<AcademyStatus | null>(null);
   const [stadiumNeedsYou, setStadiumNeedsYou] = useState(false);
 
@@ -139,11 +156,12 @@ export default function StadiumTycoon() {
           ))}
         </div>
 
+        {g.gearSaveBlocked && <p role="alert" data-no-prerender className="mb-3 rounded-xl border border-destructive/40 bg-destructive/10 p-3 text-xs">Title equipment could not be saved, so no new equipment was added. Your existing pairs are safe. Allow device storage before earning another title.</p>}
         <StadiumRoom g={g} visible={room === 'stadium'} onNeedsYou={setStadiumNeedsYou} />
         <LeagueRoom g={g} visible={room === 'league'} />
         {academyOpened && (
           <Suspense fallback={<div className="h-40" />}>
-            <AcademyPanel visible={room === 'academy'} onStatus={setAcademyStatus} />
+            <AcademyPanel stylesReady visible={room === 'academy'} onStatus={setAcademyStatus} onSnapshot={onAcademySnapshot} />
           </Suspense>
         )}
 
@@ -296,6 +314,7 @@ function LeagueRoom({ g, visible }: { g: ReturnType<typeof useStadiumTycoon>; vi
    timers until you are looking again. Its hooks keep running either way. */
 function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadiumTycoon>; visible: boolean; onNeedsYou: (v: boolean) => void }) {
   const s = g.state;
+  const kickClosed = !g.activeSetPiece || s.rep !== g.activeSetPiece.rep || (s.totalMatches ?? 0) !== g.activeSetPiece.match || s.minute >= 90;
   /* Round 585: the gems this club's results have earned. */
   const gems = balance(useTycoonRewards());
   const [showHelp, setShowHelp] = useState(false);
@@ -549,6 +568,12 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
                 🪙
               </button>
             )}
+            {g.setPiece && <button type="button" data-set-piece-offer
+              className="absolute right-3 top-3 z-20 min-h-11 rounded-xl border border-amber-200/60 bg-amber-300 px-3 py-2 text-xs font-bold text-slate-950"
+              onClick={event => { event.stopPropagation(); g.doBeginSetPiece(g.setPiece!); }}>
+              ⚽ {g.setPiece.kind === 'penalty' ? 'Penalty' : 'Free kick'} · {Math.ceil(g.setPiece.remainingSec)}s
+            </button>}
+            {g.setPieceError && <p role="alert" className="pointer-events-none absolute inset-x-3 top-16 z-20 rounded-xl bg-card p-2 text-xs text-foreground">{g.setPieceError}</p>}
             {/* Round 530 review: the badge line lies over the pitch for its
                 few seconds, the same reason the promotion card below does. In
                 the flow above the drawer buttons it pushed them, an open
@@ -801,6 +826,20 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           lifetime {fmtMoney(s.lifetime)} · {s.totalWins} wins · {s.totalGoals} goals · {s.totalTaps} taps · match #{s.matchNo + 1} · milestones {(s.claimed ?? []).length}/{MILESTONES.length} · badges {achCount}/{ACHIEVEMENTS.length}
         </div>
 
+      <Dialog open={Boolean(g.activeSetPiece)} onOpenChange={open => { if (!open) g.closeSetPiece(); }}>
+        <DialogContent className="max-h-[90dvh] w-[calc(100%-1rem)] max-w-lg overflow-y-auto rounded-2xl p-4">
+          <DialogTitle className="sr-only">Watched match kick</DialogTitle>
+          <DialogDescription data-set-piece-match className="text-xs tabular-nums text-muted-foreground">
+            {kickClosed ? 'Kick closed' : `Match ${s.minute}' · ${s.goalsFor} - ${s.goalsAgainst}`}
+          </DialogDescription>
+          {g.activeSetPiece && <Suspense fallback={<p className="text-sm">Getting the kick ready...</p>}>
+            <SetPieceBoard key={`${g.activeSetPiece.rep}:${g.activeSetPiece.match}`} kickIndex={g.activeSetPiece.kickIndex} seed={g.activeSetPiece.seed}
+              expired={kickClosed}
+              onResult={scored => g.doSetPieceResult(g.activeSetPiece!, scored)} onBack={g.closeSetPiece} />
+          </Suspense>}
+        </DialogContent>
+      </Dialog>
+
       {/* Away earnings modal */}
       {g.awayPay !== null && (
         <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={g.dismissAway}>
@@ -858,6 +897,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
               <p>Your ground plays in a league, {h.divisions} divisions from the {h.firstDivision} to {h.lastDivision}. Each division is a small league of named rivals: {leagueShape(0).clubs} clubs playing each other once in the bottom {SINGLE_LEG_BELOW} divisions, then {leagueShape(3).clubs} and {leagueShape(6).clubs} clubs home and away. Only the champion goes up, and nobody ever goes down. Every division multiplies all income, up to x{h.topMult} at the top, going up pays a promotion bonus on the spot, and a title at {h.lastDivision} pays it again. Higher divisions send tougher opponents. The League tab shows the table.</p>
               <p>The payroll hires {h.staff} staff, from a {h.firstStaff} to a {h.lastStaff}. Every staff level adds steady income of its own before the multipliers touch it, so a deep payroll compounds hard.</p>
               <p>While you play, a golden whistle drifts onto the pitch every couple of minutes. You get about {h.catchSec} seconds to catch it, for one of {h.prizes} prizes: {GOLDEN_INFO.frenzy.label} ({GOLDEN_INFO.frenzy.blurb} for {GOLDEN_INFO.frenzy.duration} seconds), {GOLDEN_INFO.tapRush.label} ({GOLDEN_INFO.tapRush.blurb} for {GOLDEN_INFO.tapRush.duration} seconds), {GOLDEN_INFO.windfall.label} ({h.windfallMin} minutes of income, instantly), {GOLDEN_INFO.fanWave.label} ({GOLDEN_INFO.fanWave.blurb}) or {GOLDEN_INFO.freeLevel.label} ({GOLDEN_INFO.freeLevel.blurb}).</p>
+              <p>A penalty or free-kick offer appears once per watched match. You have {SET_PIECE_WINDOW_SEC} seconds to open it. Pick your aim, power and curve for one shot while the match clock keeps running. Opening uses that match's attempt, including if you leave or reload. A goal before full time adds one goal and the usual goal bonus; a miss costs nothing. Away matches have no kick offers, and kicks have no daily score or direct gem reward.</p>
               <p>Milestones pay once each for the club's firsts, like {h.milestoneExamples}. {h.milestones} in all, and they stay earned even after you sell up.</p>
               <p>Badges are the long game: {h.badges} of them, from {h.firstBadge} to {h.lastBadge}, and each one earned is +{h.badgePct}% income forever. Check them on the Badges tile, and your career numbers on Records.</p>
               <p>When lifetime earnings hit the bar, sell up: fans, ground, staff and division reset, but you keep a permanent Reputation star worth +{h.starPct}% income each, every badge, and your club records. The ladder is faster every run.</p>

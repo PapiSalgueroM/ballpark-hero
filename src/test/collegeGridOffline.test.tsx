@@ -34,8 +34,8 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { describe, it, expect, beforeAll, vi } from 'vitest';
-import { renderHook, act, waitFor } from '@testing-library/react';
+import { describe, it, expect, beforeAll, afterAll, afterEach, vi } from 'vitest';
+import { renderHook, act, waitFor, cleanup } from '@testing-library/react';
 import type { GridPuzzle } from '@/types/footballGrid';
 
 const state = vi.hoisted(() => ({
@@ -131,11 +131,14 @@ beforeAll(async () => {
   entries = real.indexCollegeEntries(state.rows);
   bySchool = new Map();
   for (const e of entries) for (const c of e.colleges) bySchool.set(c, [...(bySchool.get(c) ?? []), e]);
-  globalThis.fetch = (() => {
+  vi.stubGlobal('fetch', () => {
     state.networkThrows += 1;
     throw new Error('network stubbed to throw: fetch');
-  }) as typeof fetch;
+  });
 }, 120_000);
+
+afterEach(() => { cleanup(); vi.useRealTimers(); });
+afterAll(() => { vi.unstubAllGlobals(); });
 
 const cellAttrs = (board: GridPuzzle, i: number) => [board.rows[Math.floor(i / 3)], board.cols[i % 3]] as const;
 
@@ -187,6 +190,8 @@ async function play(board: GridPuzzle, moves: { cell: number; name: string }[]) 
   await waitFor(() => expect(result.current.isLoading).toBe(false), { timeout: 60_000 });
   if (result.current.dataError) throw new Error('the key did not load through the stub');
   if (result.current.puzzle.id !== board.id) throw new Error(`the hook served ${result.current.puzzle.id}, not ${board.id}`);
+  // Keep the real key load asynchronous, then own the wrong-answer flash timers.
+  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
   let counted = 0;
   for (const m of moves) {
     if (result.current.gameStatus !== 'playing') break;
@@ -203,7 +208,11 @@ async function play(board: GridPuzzle, moves: { cell: number; name: string }[]) 
     names: result.current.cells.map((c) => c.playerName),
     recorded: vi.mocked(recordCompletion).mock.calls.map((c) => [c[0], c[1]]),
   };
+  // Run the hook's flash callbacks while jsdom and its mounted React tree still exist.
+  await act(async () => { await vi.runOnlyPendingTimersAsync(); });
+  expect(vi.getTimerCount(), 'Every flash timer must settle before the board unmounts').toBe(0);
   unmount();
+  vi.useRealTimers();
   return out;
 }
 

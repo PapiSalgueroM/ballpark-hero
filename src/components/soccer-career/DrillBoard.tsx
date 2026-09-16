@@ -6,6 +6,7 @@ import { useArcadeFlight } from '@/hooks/useArcadeFlight';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { getTodayET } from '@/lib/dateUtils';
 import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+import { DrillFigure, DrillKeeper } from '@/components/soccer-career/DrillPlayers';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 import {
   DRILL_META, drillForPosition, drillSeed, lehmer, ROUNDS_PER_RUN,
@@ -99,24 +100,27 @@ function maxRun(kind: DrillKind, setups: AnySetup[]): number {
   return maxGloveScore(setups as GloveSetup[]);
 }
 
-/* A player, drawn as shapes: the same figure Free Kick's wall and keeper use. */
-function Figure({ x, y, tint, tilt = 0, scale = 1 }: { x: number; y: number; tint: 'wall' | 'keeper' | 'attacker' | 'you'; tilt?: number; scale?: number }) {
-  const head = tint === 'wall' ? 'hsl(210 60% 62%)' : tint === 'keeper' ? 'hsl(45 90% 62%)' : tint === 'attacker' ? 'hsl(0 65% 62%)' : 'hsl(150 55% 58%)';
-  const body = tint === 'wall' ? 'hsl(210 60% 52%)' : tint === 'keeper' ? 'hsl(45 85% 52%)' : tint === 'attacker' ? 'hsl(0 65% 50%)' : 'hsl(150 55% 46%)';
-  const legs = tint === 'wall' ? 'hsl(210 40% 40%)' : tint === 'keeper' ? 'hsl(45 60% 40%)' : tint === 'attacker' ? 'hsl(0 45% 38%)' : 'hsl(150 40% 34%)';
-  /* Wall figures stand 0.22 goal units apart. Their shoulder span reaches
-     exactly halfway to the next man, with a small overlap for antialiasing,
-     so each side reads as one wall while the moving gap stays visible. */
-  const wallShoulderHalfWidth = (WALL_MAN_HALF_STEP * ((GOAL_R - GOAL_L) / 2)) / scale + 0.4;
-  return (
-    <g transform={`translate(${x} ${y}) rotate(${tilt}) scale(${scale})`}>
-      <circle cy={-19} r={4.4} fill={head} />
-      {tint === 'wall' && <rect x={-wallShoulderHalfWidth} y={-12.5} width={wallShoulderHalfWidth * 2} height={5} rx={2.5} fill={body} />}
-      <rect x={-5} y={-15} width={10} height={16} rx={3} fill={body} />
-      <rect x={-4.5} y={0} width={3.4} height={9} rx={1.5} fill={legs} />
-      <rect x={1.1} y={0} width={3.4} height={9} rx={1.5} fill={legs} />
-    </g>
-  );
+/** Project the engine's goal coordinates through the foreground wall. */
+function wallShotBall(result: WallShotResult, progress: number): { x: number; y: number } {
+  const p = Math.max(0, Math.min(1, progress));
+  const wallAt = 0.45;
+  const atWall = result.path[Math.round(result.path.length * wallAt)];
+  const wallY = (height: number) => GOAL_BOT + 3 - Math.max(0, Math.min(1, height)) * 2;
+  const contact = { x: toViewX(atWall.x), y: wallY(atWall.y) };
+  const short = !result.hitWall && !result.hitPost && !result.onTarget && Math.abs(result.x) < 1 && result.y > 0 && result.y < 1;
+  const depth = result.hitWall ? Math.min(p, wallAt) : short ? Math.min(p, .74) : p;
+  const sample = result.path[Math.min(result.path.length - 1, Math.round(depth * (result.path.length - 1)))];
+  if (p <= wallAt) {
+    const approach = p / wallAt;
+    return { x: VIEW_W / 2 + (toViewX(sample.x) - VIEW_W / 2) * approach, y: VIEW_H - 12 + (wallY(sample.y) - (VIEW_H - 12)) * approach };
+  }
+  const afterWall = (p - wallAt) / (1 - wallAt);
+  if (result.hitWall) {
+    const rebound = afterWall * (2 - afterWall);
+    return { x: contact.x + (VIEW_W / 2 - contact.x) * rebound * .07, y: contact.y + rebound * 17 };
+  }
+  if (short) return { x: toViewX(sample.x), y: contact.y + (GOAL_BOT + 10 - contact.y) * afterWall };
+  return { x: toViewX(sample.x), y: contact.y + (toViewY(sample.y) - contact.y) * afterWall };
 }
 
 export default function DrillBoard({ career, canBank, onBank, onBack }: {
@@ -143,6 +147,14 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
   const [result, setResult] = useState<AnyResult | null>(null);
   const [input, setInput] = useState<AnyInput | null>(null);
   const { progress: flight, launch, reset: resetFlight } = useArcadeFlight(FLIGHT_MS);
+  const [reducedMotion, setReducedMotion] = useState(prefersReducedMotion);
+  useEffect(() => {
+    const query = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+    if (!query) return;
+    const change = () => setReducedMotion(query.matches);
+    query.addEventListener('change', change);
+    return () => query.removeEventListener('change', change);
+  }, []);
   const rngRef = useRef<() => number>(lehmer(1));
   const savedRef = useRef(false);
 
@@ -377,11 +389,12 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
   /* What moment the board is drawing. Live it is the clock; while the resolve
      plays it runs from the press to the outcome, so the wall the ball reaches
      is the wall the rules scored. */
+  const drawFlight = reducedMotion && result ? 1 : flight;
   let tDraw = phase === 'playing' ? now : 0;
   if ((phase === 'flying' || phase === 'roundEnd') && input && setup) {
-    if (kind === 'wallshot') { const w = input as WallShotInput; tDraw = w.press + flight * (wallTravel(w.power) / 0.45); }
-    else if (kind === 'tackle') { const tk = input as TackleInput; tDraw = tk.press + flight * 0.45; }
-    else { const g = input as GloveInput; const arrival = gloveDeadline(setup as GloveSetup); const from = Math.min(g.release, arrival); tDraw = from + flight * (arrival - from); }
+    if (kind === 'wallshot') { const w = input as WallShotInput; tDraw = w.press + drawFlight * (wallTravel(w.power) / 0.45); }
+    else if (kind === 'tackle') { const tk = input as TackleInput; tDraw = tk.press + drawFlight * 0.45; }
+    else { const g = input as GloveInput; const arrival = gloveDeadline(setup as GloveSetup); const from = Math.min(g.release, arrival); tDraw = from + drawFlight * (arrival - from); }
   }
 
   const headroom = drillHeadroom(career);
@@ -398,7 +411,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
           <div className="text-4xl">{meta.emoji}</div>
           <p className="mt-1 text-lg font-black">{meta.name}</p>
           <p className="mx-auto mt-2 max-w-sm text-[12px] text-muted-foreground">
-            {kind === 'wallshot' && 'Five in the wall and a gap that opens and closes. Drag the goal to aim across and up, set your power, and let go as the gap opens. Pace gets there sooner and sprays wider. Ten shots.'}
+            {kind === 'wallshot' && 'A wall with a gap that opens and closes. Drag the goal to aim across and up, set your power, and let go as the gap opens. Pace gets there sooner and sprays wider. Ten shots.'}
             {kind === 'tackle' && 'He runs across you and every touch pushes the ball off his feet for a moment. Tap the ball, not the man, while it is loose. Tap him, or go through the ball while it sits at his feet, and it is a foul. Ten runs.'}
             {kind === 'gloves' && 'Hold and drag to set your dive: the direction is where you drag, the reach is how far. Let go to dive. A full stretch takes longer to get there than a hop, so the corner has to be left for early. Ten shots.'}
           </p>
@@ -436,6 +449,10 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
       {setup && <p className="text-center text-[11px] text-muted-foreground">{setup.label}</p>}
 
       <svg
+        data-drill-board={kind}
+        data-drill-phase={phase}
+        data-drill-motion={reducedMotion ? 'reduced' : 'full'}
+        data-drill-time={tDraw}
         ref={boardRef}
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         className={cn('w-full touch-none select-none rounded-2xl border border-border', kind === 'tackle' ? 'bg-[hsl(140_35%_20%)]' : 'bg-[hsl(140_35%_18%)]')}
@@ -473,26 +490,31 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
           const r = result as WallShotResult | null;
           const gap = wallGapAt(w, tDraw);
           const men: number[] = [];
-          for (let k = 0; k < 6; k += 1) {
+          for (let k = 0; k < 14; k += 1) {
             const left = w.gapCentre - gap - WALL_MAN_HALF_STEP - WALL_MAN_STEP * k;
             const right = w.gapCentre + gap + WALL_MAN_HALF_STEP + WALL_MAN_STEP * k;
-            if (left > -0.98) men.push(left);
-            if (right < 0.98) men.push(right);
+            if (left > -1.5) men.push(left);
+            if (right < 1.5) men.push(right);
           }
           const restX = toViewX(w.keeperLean * 0.18);
           const kx = r ? toViewX(r.keeperX) : restX;
           const ky = r ? toViewY(r.keeperY) : GOAL_BOT - 20;
-          const dive = r && phase !== 'playing' ? flight : 0;
-          const ball = r && phase !== 'playing' ? r.path[Math.min(r.path.length - 1, Math.round(flight * (r.path.length - 1)))] : null;
+          const dive = r && phase !== 'playing' ? drawFlight : 0;
+          const ball = r && phase !== 'playing' ? wallShotBall(r, drawFlight) : null;
+          const glove = { x: restX + (kx - restX) * dive, y: GOAL_BOT - 20 + (ky - (GOAL_BOT - 20)) * dive };
+          const catchProgress = r?.saved ? Math.max(0, (drawFlight - 0.8) / 0.2) : 0;
+          const jump = r && !reducedMotion ? Math.sin(Math.PI * Math.min(1, drawFlight / 0.65)) * 5 : 0;
+          const swing = r ? Math.sin(drawFlight * Math.PI) : 0;
           return (
             <>
-              <g transform={`translate(${restX + (kx - restX) * dive} ${(GOAL_BOT - 20) + (ky - (GOAL_BOT - 20)) * dive}) rotate(${r ? (r.keeperX < 0 ? -1 : 1) * dive * 55 : 0})`}>
-                <circle cy={-16} r={4.8} fill="hsl(45 90% 62%)" />
-                <rect x={-6} y={-12} width={12} height={17} rx={4} fill="hsl(45 85% 52%)" />
-                <rect x={-13} y={-10} width={8} height={4} rx={2} fill="hsl(45 85% 62%)" />
-                <rect x={5} y={-10} width={8} height={4} rx={2} fill="hsl(45 85% 62%)" />
-              </g>
-              {men.map((m, i) => <Figure key={i} x={toViewX(m)} y={GOAL_BOT + 14} tint="wall" scale={1.35} />)}
+              <DrillKeeper
+                origin={{ x: restX, y: GOAL_BOT - 20 }} glove={glove}
+                catching={!!r?.saved && drawFlight >= 0.8}
+                contact={r?.saved ? { x: glove.x + (toViewX(r.x) - glove.x) * catchProgress, y: glove.y + (toViewY(r.y) - glove.y) * catchProgress } : undefined}
+              />
+              {men.map((m, i) => <DrillFigure key={i} x={toViewX(m)} y={GOAL_BOT + 26 - jump} tint="wall" scale={1.15} wallHalfWidth={(WALL_MAN_HALF_STEP * ((GOAL_R - GOAL_L) / 2)) / 1.15 + 0.4} />)}
+              <DrillFigure x={164} y={201} tint="you" scale={1.1} lean={r ? 7 + swing * 6 : -5} strike={r ? 0.5 + swing * 0.5 : 0}
+                reach={r ? { x: 14 + swing * 6, y: -3 - swing * 14 } : undefined} />
               {phase === 'playing' && (
                 <>
                   <path d={`M ${VIEW_W / 2} ${VIEW_H - 12} L ${toViewX(aimX)} ${toViewY(aimY)}`} fill="none" stroke="hsl(var(--primary))" strokeWidth={1.4} strokeDasharray="4 4" opacity={0.75} />
@@ -500,7 +522,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
                   <circle cx={toViewX(aimX)} cy={toViewY(aimY)} r={1.6} fill="hsl(var(--primary))" />
                 </>
               )}
-              <circle cx={ball ? toViewX(ball.x) : VIEW_W / 2} cy={ball ? toViewY(ball.y) : VIEW_H - 12} r={ball ? 4 + flight * 1.6 : 4.5} fill="white" stroke="hsl(0 0% 55%)" strokeWidth={0.7} />
+              <circle data-drill-ball cx={ball ? ball.x : VIEW_W / 2} cy={ball ? ball.y : VIEW_H - 12} r={ball ? 4 + drawFlight * 1.6 : 4.5} fill="white" stroke="hsl(0 0% 55%)" strokeWidth={0.7} />
             </>
           );
         })()}
@@ -512,8 +534,13 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
           const inp = input as TackleInput | null;
           const live = phase === 'playing' || phase === 'flying' || phase === 'roundEnd';
           const feet = tackleFeetAt(tk, live ? tDraw : 0);
-          const ball = tackleBallAt(tk, live ? tDraw : 0);
+          const ball = tackleBallAt(tk, r?.won && inp ? inp.press : live ? tDraw : 0);
           const pressed = inp && inp.x >= 0 ? { x: inp.x * VIEW_W, y: inp.y * VIEW_H } : null;
+          const stride = live && !reducedMotion ? Math.sin(tDraw * 15) * 0.85 : 0;
+          const recovery = Math.max(0, (drawFlight - 0.72) / 0.28);
+          const body = pressed ? { x: pressed.x + tk.dir * 26, y: Math.min(VIEW_H + 22, pressed.y + 28) + (1 - drawFlight) * 45 - recovery * 6 } : null;
+          const contact = pressed ? { x: r?.won ? ball.x * VIEW_W : pressed.x, y: r?.won ? ball.y * VIEW_H : pressed.y } : null;
+          const reach = body && contact ? { x: ((contact.x - body.x) / 1.25) * drawFlight, y: ((contact.y - body.y) / 1.25) * drawFlight } : undefined;
           return (
             <>
               <line x1={0} y1={VIEW_H * 0.5} x2={VIEW_W} y2={VIEW_H * 0.5} stroke="hsl(0 0% 85%)" strokeWidth={0.6} opacity={0.35} />
@@ -524,15 +551,14 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
                   so it sat at the drawn feet, and a player tapping the ball he
                   could see was 0.043 off in y, the whole reach at the top of
                   the ladder. Measured in the browser pass on 2026-09-05. */}
-              <Figure x={feet.x * VIEW_W} y={feet.y * VIEW_H - 11} tint="attacker" tilt={tk.dir * 8} scale={1.3} />
-              <circle cx={ball.x * VIEW_W} cy={ball.y * VIEW_H} r={4.5} fill="white" stroke="hsl(0 0% 55%)" strokeWidth={0.7} />
+              <DrillFigure x={feet.x * VIEW_W} y={feet.y * VIEW_H} tint="attacker" lean={tk.dir * 8} stride={stride} scale={1.3} />
+              <circle data-drill-ball cx={ball.x * VIEW_W} cy={ball.y * VIEW_H} r={4.5} fill="white" stroke="hsl(0 0% 55%)" strokeWidth={0.7} />
               {phase === 'playing' && (
                 <circle cx={cursor.x * VIEW_W} cy={cursor.y * VIEW_H} r={9} fill="none" stroke="hsl(var(--primary))" strokeWidth={1.4} strokeDasharray="3 3" opacity={0.8} />
               )}
-              {pressed && (
+              {pressed && body && (
                 <>
-                  <line x1={pressed.x} y1={VIEW_H + 10} x2={pressed.x} y2={pressed.y + (VIEW_H + 10 - pressed.y) * (1 - flight)} stroke="hsl(150 55% 58%)" strokeWidth={2} strokeDasharray="5 3" opacity={0.7} />
-                  <Figure x={pressed.x} y={pressed.y + (VIEW_H + 10 - pressed.y) * (1 - flight)} tint="you" tilt={-tk.dir * 70 * flight} scale={1.3} />
+                  <DrillFigure x={body.x} y={body.y} tint="you" lean={-tk.dir * (24 * drawFlight - recovery * 14)} reach={reach} scale={1.25} />
                   <circle cx={pressed.x} cy={pressed.y} r={10} fill="none" stroke={r?.won ? 'hsl(150 70% 60%)' : r?.foul ? 'hsl(0 80% 60%)' : 'hsl(45 90% 62%)'} strokeWidth={2} />
                 </>
               )}
@@ -561,17 +587,14 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
           const gy = mY(glove.y);
           const vecX = mX(GLOVE_ORIGIN.x + drag.dx);
           const vecY = mY(GLOVE_ORIGIN.y + drag.dy);
+          const strikeProgress = Math.max(0, Math.min(1, (t - g.shotAt) / g.flight));
+          const catchProgress = r?.saved ? Math.max(0, (p - 0.8) / 0.2) : 0;
           return (
             <>
-              {/* you, in goal: body at the chest, gloves where the dive has them */}
-              <g transform={`translate(${mX(GLOVE_ORIGIN.x)} ${mY(GLOVE_ORIGIN.y) + 14})`}>
-                <circle cy={-22} r={5.2} fill="hsl(45 90% 62%)" />
-                <rect x={-6.5} y={-17} width={13} height={20} rx={4} fill="hsl(45 85% 52%)" />
-                <rect x={-5} y={3} width={4} height={11} rx={1.5} fill="hsl(45 60% 40%)" />
-                <rect x={1} y={3} width={4} height={11} rx={1.5} fill="hsl(45 60% 40%)" />
-              </g>
-              <line x1={mX(GLOVE_ORIGIN.x)} y1={mY(GLOVE_ORIGIN.y)} x2={gx} y2={gy} stroke="hsl(45 85% 62%)" strokeWidth={4} strokeLinecap="round" opacity={0.9} />
-              <circle cx={gx} cy={gy} r={r ? r.radius * VX_PER_M : 6} fill="hsl(45 90% 70%)" stroke="hsl(45 60% 35%)" strokeWidth={1} opacity={r ? 0.75 : 0.95} />
+              <circle data-drill-glove cx={gx} cy={gy} r={r ? r.radius * VX_PER_M : 6} fill="hsl(45 90% 70%)" fillOpacity={0.12} stroke="hsl(45 60% 55%)" strokeWidth={1} opacity={r ? 0.75 : 0.95} />
+              <DrillKeeper origin={{ x: mX(GLOVE_ORIGIN.x), y: mY(GLOVE_ORIGIN.y) }} glove={{ x: gx, y: gy }}
+                catching={!!r?.saved && p >= 0.8}
+                contact={r?.saved ? { x: gx + (tx - gx) * catchProgress, y: gy + (ty - gy) * catchProgress } : undefined} />
               {phase === 'playing' && (drag.dx !== 0 || drag.dy !== 0) && (
                 <>
                   <line x1={mX(GLOVE_ORIGIN.x)} y1={mY(GLOVE_ORIGIN.y)} x2={vecX} y2={vecY} stroke="hsl(var(--primary))" strokeWidth={1.6} strokeDasharray="4 4" />
@@ -579,11 +602,12 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
                 </>
               )}
               {/* the striker, who shows you the side before he hits it */}
-              <Figure x={strikerX + (tell ? side * 6 : 0)} y={strikerY} tint="attacker" tilt={tell ? side * 16 : 0} scale={1.5} />
+              <DrillFigure x={strikerX - 13 + (tell ? side * 6 : 0)} y={strikerY + 5} tint="attacker" lean={tell ? side * 16 : 0} scale={1.35}
+                strike={p >= 0 ? (reducedMotion ? 0.5 : 0.5 + Math.sin(strikeProgress * Math.PI) * 0.5) : 0} />
               {(phase === 'roundEnd' || phase === 'done') && r && !r.saved && (
                 <circle cx={tx} cy={ty} r={5} fill="none" stroke="hsl(0 80% 60%)" strokeWidth={1.5} />
               )}
-              <circle cx={ballX} cy={ballY} r={p < 0 ? 3.2 : 3.2 + p * 2.6} fill="white" stroke="hsl(0 0% 55%)" strokeWidth={0.7} />
+              <circle data-drill-ball cx={ballX} cy={ballY} r={p < 0 ? 3.2 : 3.2 + p * 2.6} fill="white" stroke="hsl(0 0% 55%)" strokeWidth={0.7} />
             </>
           );
         })()}

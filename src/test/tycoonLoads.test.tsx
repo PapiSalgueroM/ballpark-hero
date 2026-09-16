@@ -21,6 +21,8 @@
    The wrapper is scripts/simTycoonLoads.mjs; run that, not this file alone. */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 import { act, render, cleanup } from '@testing-library/react';
+
+vi.mock('@/lib/completions', () => ({ recordCompletion: vi.fn() }));
 import { useStadiumTycoon } from '@/hooks/useStadiumTycoon';
 import {
   TRACKS, TYCOON_SAVE_KEY, goalChancePerMin, prestigeThreshold, canPrestige,

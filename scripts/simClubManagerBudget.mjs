@@ -33,7 +33,7 @@
      2) the bound the rules screen promises. The four-times clone must not
         open four times higher: the carry stops at one more allocation, so
         the ceiling is exactly double what an empty balance opens on. The
-        copy in src/pages/ClubManager.tsx is read and has to say so.
+        copy in src/components/club-manager/ClubManagerHelp.tsx is read and has to say so.
      3) a hoarder and a spender across consecutive summers of real careers,
         which is the outcome a player actually feels.
      4) the ceiling is no longer a mirror: how often next summer's cap comes
@@ -251,7 +251,7 @@ if (!(richMult >= 1.95 && richMax <= 2.05)) {
 
 console.log('2) The rules screen states the bound the engine enforces');
 {
-  const page = fs.readFileSync(path.join(ROOT, 'src', 'pages', 'ClubManager.tsx'), 'utf8');
+  const page = fs.readFileSync(path.join(ROOT, 'src', 'components', 'club-manager', 'ClubManagerHelp.tsx'), 'utf8');
   // Read the copy the player is shown, not the comments around it.
   const copy = page.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^\s*\/\/.*$/gm, ' ');
   const claims = [

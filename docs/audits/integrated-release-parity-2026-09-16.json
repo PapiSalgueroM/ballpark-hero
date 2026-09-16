@@ -1,0 +1,19 @@
+{
+  "candidate": "d418f247cf73ae2a65517a433b5942ce19cbc4aa",
+  "verifiedSource": "a96ed002809ed78d3a9bb19a9e66a77cfbb634e8",
+  "verificationCommit": "3a7e54b3ad42e0a61186a1b5bcf89a3a29c25988",
+  "run": "https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35048332634",
+  "runAttempt": "1",
+  "mainAtBuild": "034049cbad5e63457db34f9736bd1a3cecb37b94",
+  "main": "50d5903fca0d6f7cccb768aa2042d43f9c390b97",
+  "sourceParity": true,
+  "sourceVerifyBlobsAndModesEqualOutsideWorkflow": true,
+  "mainAdvanceDocsOnly": true,
+  "mainMerged": true,
+  "sourceAuditOnly": false,
+  "importedRepositoryOutputs": 170,
+  "navbarReceiptsChecked": 12,
+  "rarityReceiptsChecked": 13,
+  "workflowAbsent": true,
+  "scope": "Read-only parity and navbar/rarity receipts. Does not replace complete CI success, other gate/control logs, artifact ZIP/digest/input/file-set validation, or publication proof."
+}

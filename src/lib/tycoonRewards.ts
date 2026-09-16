@@ -19,8 +19,10 @@
  * Pure functions take a ledger and return a new one; the few functions that
  * touch storage say so in their names (load, record, commit, clear).
  */
-import { PACKS, TIERS, TIER_IDS, GUARANTEED_TIERS, cleanPackKid } from '@/lib/wonderkidFactory';
+import { PACKS, TIERS, TIER_IDS, GUARANTEED_TIERS, cleanPackKid, MAX_BOOT_LEVEL } from '@/lib/wonderkidFactory';
 import type { PackId, Pack, TierId, Prospect } from '@/lib/wonderkidFactory';
+import { BOOT_IDS } from '@/lib/soccerBootIds';
+export { MAX_BOOT_LEVEL } from '@/lib/wonderkidFactory';
 
 export const REWARDS_KEY = 'tycoonRewardsV1';
 
@@ -49,7 +51,15 @@ export interface RewardsLedger {
   nextSeq: number;
   /** a pack drawn and not yet dismissed */
   pending: PendingPack | null;
+  /** Round 588: prospective title rewards, absent in untouched older ledgers. */
+  gearUnlocked?: string[];
+  gearLevel?: Record<string, number>;
+  kitUpgrades?: number;
+  /** First credited title match in each division, zero until one is observed. */
+  gearTitles?: number[];
 }
+
+export const GEAR_DIVISIONS = 10;
 
 const PACK_IDS: PackId[] = PACKS.map(p => p.id);
 const zeroes = (): Record<PackId, number> => ({ scout: 0, club: 0, elite: 0 });
@@ -120,6 +130,26 @@ export function cleanLedger(raw: unknown, seedIfMissing = 585): RewardsLedger {
     const kid = cleanPackKid(p.kid, p.tier);
     if (kid) out.pending = { seq: p.seq, pack: p.pack, tier: p.tier, kid };
   }
+  if (r.gearUnlocked !== undefined || r.gearLevel !== undefined || r.kitUpgrades !== undefined || r.gearTitles !== undefined) {
+    const receipts = new Set<number>();
+    out.gearTitles = Array.from({ length: GEAR_DIVISIONS }, (_, division) => {
+      const match = Array.isArray(r.gearTitles) ? r.gearTitles[division] : 0;
+      if (!Number.isSafeInteger(match) || match <= 0 || match > out.lastMatch || receipts.has(match)) return 0;
+      receipts.add(match);
+      return match;
+    });
+    out.gearUnlocked = [];
+    out.gearLevel = {};
+    if (receipts.size > 0 && Array.isArray(r.gearUnlocked)) {
+      for (const id of BOOT_IDS) {
+        if (r.gearUnlocked[out.gearUnlocked.length] !== id || out.gearUnlocked.length >= out.lastMatch) break;
+        out.gearUnlocked.push(id);
+        const level = Object.prototype.hasOwnProperty.call(r.gearLevel ?? {}, id) ? r.gearLevel?.[id] : 1;
+        out.gearLevel[id] = Number.isSafeInteger(level) && level! >= 1 ? Math.min(level!, MAX_BOOT_LEVEL) : 1;
+      }
+    }
+    out.kitUpgrades = receipts.size > 0 ? whole(r.kitUpgrades, Math.min(out.lastMatch, 1e9)) : 0;
+  }
   return out;
 }
 
@@ -133,6 +163,8 @@ export interface FullTime {
   away: boolean;
   /** your final league place, when this full time ended a season */
   position?: number;
+  /** The division that just finished, before a title promotes the club. */
+  division?: number;
 }
 
 /** The gems one full time pays. Away matchdays never end a season. */
@@ -145,13 +177,37 @@ export function gemsFor(ft: FullTime): number {
 
 /** Credit full times in order. One already credited (its match count at or under
  *  the last one) pays nothing. */
-export function creditFullTimes(l: RewardsLedger, list: FullTime[]): RewardsLedger {
+export function creditFullTimes(l: RewardsLedger, list: FullTime[], allowGear = true): RewardsLedger {
   let out = l;
   for (const ft of list) {
     if (!Number.isSafeInteger(ft.totalMatches) || ft.totalMatches <= out.lastMatch) continue;
     out = { ...out, earned: Math.min(1e9, out.earned + gemsFor(ft)), lastMatch: ft.totalMatches };
+    if (allowGear && !ft.away && ft.position === 1 && Number.isInteger(ft.division) && ft.division! >= 0 && ft.division! < GEAR_DIVISIONS) {
+      const division = ft.division!;
+      const titles = [...(out.gearTitles ?? Array(GEAR_DIVISIONS).fill(0))];
+      const unlocked = out.gearUnlocked ?? [];
+      const unlock = unlocked.length < BOOT_IDS.length && (!titles[division] || division === GEAR_DIVISIONS - 1);
+      if (!titles[division]) titles[division] = ft.totalMatches;
+      out = { ...out, gearTitles: titles, gearUnlocked: unlocked, gearLevel: out.gearLevel ?? {}, kitUpgrades: out.kitUpgrades ?? 0 };
+      if (unlock) {
+        const id = BOOT_IDS[unlocked.length];
+        out.gearUnlocked = [...unlocked, id];
+        out.gearLevel = { ...out.gearLevel, [id]: 1 };
+      } else {
+        out.kitUpgrades = Math.min(1e9, out.kitUpgrades! + 1);
+      }
+    }
   }
   return out;
+}
+
+/** A kit upgrade raises one owned pair. It never costs gems or changes its wearer. */
+export function upgradeBoot(l: RewardsLedger, id: string): RewardsLedger | null {
+  const level = l.gearLevel?.[id];
+  if (!BOOT_IDS.some(bootId => bootId === id) || !l.gearUnlocked?.includes(id)
+    || !Number.isInteger(level) || level! < 1 || level! >= MAX_BOOT_LEVEL
+    || !Number.isSafeInteger(l.kitUpgrades) || l.kitUpgrades! < 1) return null;
+  return { ...l, gearLevel: { ...l.gearLevel, [id]: level! + 1 }, kitUpgrades: l.kitUpgrades! - 1 };
 }
 
 /* ------------------------------------------------------------------ packs */
@@ -229,7 +285,23 @@ let memoryOnly = false;
 /** The ledger as stored. The same object comes back until storage changes, so a
  *  React store can subscribe to it. */
 export function loadLedger(): RewardsLedger {
-  if (memoryOnly && cached) return cached.ledger;
+  if (memoryOnly && cached) {
+    try {
+      const raw = localStorage.getItem(REWARDS_KEY);
+      let parsed: unknown = null;
+      try { parsed = raw ? JSON.parse(raw) : null; } catch { parsed = null; }
+      const stored = cleanLedger(parsed);
+      const gearKeys = ['gearUnlocked', 'gearLevel', 'kitUpgrades', 'gearTitles'] as const;
+      if (gearKeys.some(key => JSON.stringify(cached!.ledger[key]) !== JSON.stringify(stored[key]))) {
+        // Keep visit-only gems, but a deleted ledger cannot leave equipment behind.
+        const ledger = { ...cached.ledger };
+        for (const key of gearKeys) delete ledger[key];
+        Object.assign(ledger, Object.fromEntries(gearKeys.filter(key => stored[key] !== undefined).map(key => [key, stored[key]])));
+        cached = { ...cached, ledger };
+      }
+    } catch { /* a blocked read keeps only the previously saved gear */ }
+    return cached.ledger;
+  }
   let raw: string | null = null;
   try { raw = localStorage.getItem(REWARDS_KEY); } catch { raw = null; }
   if (cached && cached.raw === raw) return cached.ledger;
@@ -266,11 +338,28 @@ export function subscribeLedger(fn: () => void): () => void {
 }
 
 /** Credit full times to the stored ledger. Returns the gems they paid. */
-export function recordFullTimes(list: FullTime[]): number {
+export function recordFullTimes(list: FullTime[], allowGear = true, onGearSaveFailure?: () => void): number {
   const before = ledgerToWrite();
-  const after = creditFullTimes(before, list);
-  if (after !== before) saveLedger(after);
+  let after = creditFullTimes(before, list, allowGear);
+  if (after !== before) {
+    if (after.gearTitles !== before.gearTitles) {
+      try { saveLedger(after, true); } catch {
+        // Gems keep their visit-only fallback; unsaved gear never reaches the UI.
+        after = creditFullTimes(before, list, false);
+        saveLedger(after);
+        onGearSaveFailure?.();
+      }
+    } else saveLedger(after);
+  }
   return after.earned - before.earned;
+}
+
+/** Store the upgraded pair before subscribers or its wearer see the new level. */
+export function commitUpgradeBoot(id: string): boolean {
+  const next = upgradeBoot(loadLedger(), id);
+  if (!next) return false;
+  saveLedger(next, true);
+  return true;
 }
 
 /** Open a pack against the stored ledger and store the draw before anything is

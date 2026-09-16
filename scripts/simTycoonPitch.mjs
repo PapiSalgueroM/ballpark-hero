@@ -66,7 +66,18 @@ function mustReplace(text, from, to, what) {
   return text.replace(from, to);
 }
 
-function runSuite(env) {
+function runnerFailure(result, report, text, negative) {
+  if (result.error) return `runner error: ${result.error.message}`;
+  if (result.signal) return `runner signal: ${result.signal}`;
+  if (Number(report.numUnhandledErrors ?? 0) > 0 || (report.unhandledErrors ?? []).length > 0
+    || /Vitest caught [1-9]\d* unhandled errors?|Unhandled (?:Errors?|Rejection)|Uncaught Exception/.test(text))
+    return 'Vitest reported unhandled errors';
+  const expectedExit = negative && report.numFailedTests > 0 ? 1 : 0;
+  if (result.status !== expectedExit) return `runner exit ${result.status}, expected ${expectedExit}`;
+  return null;
+}
+
+function runSuite(env, negative = false) {
   const out = path.join(tmp, `report-${Math.random().toString(36).slice(2)}.json`);
   const r = spawnSync(
     process.execPath,
@@ -77,6 +88,7 @@ function runSuite(env) {
   if (!fs.existsSync(out)) { console.error(text.slice(-3000)); return null; }
   const report = JSON.parse(fs.readFileSync(out, 'utf8'));
   const rows = [];
+  rows.runnerError = runnerFailure(r, report, text, negative);
   rows.notes = [...text.matchAll(/PITCH\| (.+)/g)].map(m => m[1].trim());
   rows.loadError = /Failed to load|Cannot find module|Failed to resolve import|SyntaxError|Transform failed/.test(text) ? text.slice(-1500) : null;
   for (const file of report.testResults || []) {
@@ -162,6 +174,7 @@ console.log('');
 console.log('A) the shipped code');
 const live = runSuite({});
 if (!live) abort('  FAIL: the suite produced no report at all');
+if (live.runnerError) abort('  FAIL: ' + live.runnerError);
 for (const row of live) {
   console.log(`   ${row.status === 'passed' ? 'pass' : 'FAIL'}  ${row.title}`);
   if (row.status !== 'passed') fail(`${row.title}: ${detail(row.messages)}`);
@@ -179,9 +192,10 @@ for (const control of CONTROLS) {
   fs.mkdirSync(dir, { recursive: true });
   const file = path.join(dir, control.file);
   fs.writeFileSync(file, control.build());
-  const rows = runSuite({ [control.env]: file.replaceAll('\\', '/') });
+  const rows = runSuite({ [control.env]: file.replaceAll('\\', '/') }, true);
   fs.rmSync(dir, { recursive: true, force: true });
   if (!rows) { fail(`control ${control.name}: no report`); continue; }
+  if (rows.runnerError) { fail(`control ${control.name}: ${rows.runnerError}`); continue; }
   if (rows.loadError) { fail(`control ${control.name}: the broken copy did not load, so every red is a crash:\n${rows.loadError}`); continue; }
   if (rows.length < TEST_COUNT) { fail(`control ${control.name}: only ${rows.length} tests ran`); continue; }
   for (const row of rows) {

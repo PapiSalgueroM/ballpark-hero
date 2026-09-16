@@ -730,6 +730,8 @@ console.log('13) Copy rules on everything this round wrote');
   const FILES = [
     'src/lib/soccerCareerAttributes.ts',
     'src/lib/soccerCareerAppearance.ts',
+    'src/lib/soccerBoots.ts',
+    'src/lib/soccerBootIds.ts',
     'src/components/soccer-career/AppearanceBuilder.tsx',
     'src/components/soccer-career/PlayerAvatar.tsx',
     'src/pages/SoccerCareer.tsx',

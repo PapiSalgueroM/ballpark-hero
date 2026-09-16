@@ -1099,6 +1099,8 @@ rows above:
 - `VALUE_CONTROL=noprime`: 2 and the earn half of 3 red.
 - `VALUE_CONTROL=flatedge`: the win half of 3, and 5, red.
 
+Round 586 implementation evidence and contract corrections are in section 18.
+
 ### Round 587: Set pieces (rides alone)
 
 **Files:** `src/components/tycoon/SetPieceBoard.tsx`, `stadiumTycoon.ts` (`setPieceOffer`, `awardSetPieceGoal`, `setPieceUsedMatch` in `prestige`), the hook, the page, help.
@@ -1284,3 +1286,159 @@ Only two items genuinely need Anthony, because both touch the money side of the 
 2. **Ad slots on the tycoon page.**
    - The page has no ad slot today.
    - **Default:** add none in this arc. If one is ever added, it sits below the guide, never beside the tab strip, the pitch or the pack panel, and never offers gems for viewing.
+
+## 18. Round 586 implementation evidence, 2026-09-15
+
+Source and focused tests are complete; release gates and publication are separate.
+The original contract above stays as the proposal. These measured corrections
+describe the implementation and supersede its unsupported numerical assumptions.
+
+- The old 52,920 quote sample cannot be reproduced because its sampling definition
+  was never stored. The harness instead checks 334,620 explicitly enumerated youth
+  quotes against a frozen pre-round fee function, with the original multiplication
+  order. It also checks 18,920 senior age comparisons.
+- Twelve frozen stadium histories cover watched and away play with zero edge.
+  All 195 one-point rating steps from 60 through 99 use the real tick consumer;
+  the away consumer is tested too. No empty-roster result changes.
+- The policy comparison fixes ten mid-division seasons, fixtures, upgrades, random
+  streams and a greedy refill rule. It uses a mature pack cohort and local scout
+  replacements, not an unrestricted optimal-play claim. In 32 independent holdout
+  seeds, holding to 33 gains 3.1875 wins per ten seasons. Selling at 28 yields mean
+  transfer cash of 25,346.47 versus 22,479.63 for holding. The initial-cohort cash
+  advantage is 2,016.06, above the 1,010.34375 floor set from half the separate
+  calibration effect. The win floor is 1.828125. Both floors pass the holdout.
+- Removing the prime curve leaves some cash advantage from rating decline and
+  replacement timing. It does not reverse the direction as the proposal assumed.
+  The no-prime control instead fails the measured cash-effect floor and prime
+  checks; the flat-edge control fails the wins floor and direct edge checks.
+- The first five region goals stay unchanged. The old 400M World Stage goal misses
+  the 100-hour sixth-star target. Twelve seeds had earned only 48.71M to 49.36M
+  there at 100 watched hours. The goal is now 45M. All twelve reach star six in
+  96.756 to 97.239 watched hours, median 96.982, with real packs in the loop.
+  Because the final region repeats, this also lowers the goal for stars 7 to 60.
+  One representative seed reaches all 60 at 705.153 watched hours and 1,754 packs.
+  This is a deterministic simulation estimate, not a promise to every player.
+- The first-team panel shows five selectable places and one detailed player card.
+  Promotion, senior sale and academy move-up write the full save successfully
+  before changing the visible roster. Failed writes leave the action available
+  for retry. The existing save version and keys stay unchanged. First-team fields
+  remain absent from untouched older saves; move-up and Sell up keep graduates.
+- A returning first team mounts the Academy clock even if its tab never opens.
+  Before that lazy panel loads, a separate read-only snapshot applies the same
+  offline training as the actual hook. Review found that deserialize alone could
+  commit away draws using an old rating while a warm Academy produced wins.
+  The real-page test now measures that cold-load result and verifies training
+  is saved once. Seven page cases have six effective mutation controls.
+- The guide says career totals survive move-up. It no longer says the best single
+  sale survives, because that run-level record resets in the existing engine.
+
+Evidence: `scripts/simAllPlayersValue.mjs`, its frozen fixture and baseline JSON,
+`src/test/firstTeam.test.tsx`, `scripts/simFirstTeamPage.mjs` and the extended
+`scripts/simTycoonHelp.mjs`. The release entry in PROJECT-STATE records final
+build, full-suite, browser and publication evidence when those gates finish.
+
+## 19. Round 587 implementation evidence, 2026-09-15
+
+This round is in development and follows Round 586's separate release. The
+figures here describe the checked pure engine; rendered-page and release gates
+are recorded separately when complete.
+
+- A watched match offers one kick for 12 real seconds. The deterministic minute
+  is between 20 and 80. Every third career match offers a penalty; other matches
+  choose one of the existing Free Kick setups at indices 2 through 6. This uses
+  the existing shot engine, with no new random draw in the stadium minute loop.
+- Opening saves the attempt before the board appears. Closing or reloading
+  consumes that attempt. A goal can be accepted later than the opening window,
+  provided the same match and reputation are still active and full time has not
+  arrived. The clock keeps running during aiming and replay.
+- A scored shot adds one goal and the existing normal goal bonus. It has no
+  direct gems, daily score, arcade record or separate completion write. The
+  normal full-time result may improve because the match score improved.
+- The engine rejected 40,000 duplicate awards across 10,000 measured matches.
+  Twelve frozen pre-round watched and away histories remain byte identical
+  when the offer is ignored. Away matches never receive an offer.
+- The balance check measures a perfect-kicker ceiling at fixed division 3,
+  squad 40 and match strength 70, with identical minute-roll streams in the
+  paired arms. It is not a prediction of ordinary players' scoring rates.
+  Calibration batches of 2,000 matches gained 12.25 and 11.00 percentage points
+  of wins. An independent 2,000-match holdout gained 10.65 points (967 baseline
+  wins versus 1,180 with every offered kick scored). Its acceptance band was
+  fixed from calibration at 5.8125 to 17.4375 points, before the holdout.
+- The no-gain control produced 967 versus 967 wins and failed that measured
+  band. Ten other effective controls cover duplicate goals, reopened attempts,
+  away offers, the window, bonus size, lost latches, malformed loads, ignored
+  offers, added randomness and daily-score writes. The daily-score control
+  fails both the actual module graph and a runtime write spy.
+- Optional attempt and goal latches stay absent from untouched saves. Malformed
+  or future latches consume the current attempt rather than reopening it.
+  Both reset paths preserve the latches, and reputation is part of the active
+  board's identity, so a board cannot score after selling up.
+
+Pure-engine evidence: `scripts/simTycoonSetPiece.mjs`. Real Board and page
+coverage: `src/test/tycoonSetPieceBoard.test.tsx`,
+`src/test/tycoonSetPiecePage.test.tsx` and `scripts/simTycoonSetPiecePage.mjs`.
+Presentation evidence: `scripts/simSetPiecePresentation.mjs`. Six real-page
+cases, eleven effective page controls, three Board cases, 36 rendered scene
+cases and eight effective scene controls pass. A final independent combined
+review found no scoring callback in replay, Skip or Back. The app type gate
+and scoped SEO production build pass. `scripts/playTycoonSetPieceFit.mjs`
+passes six actual built-page cases at 320, 390 and 1440 pixels with both motion
+preferences. It verifies 42 reachable controls, an advancing visible clock,
+six real legal goals saved once and reloaded, and exact nonzero scroll restore.
+Both served-chunk layout and clock controls fail their intended checks. Full
+release verification and publication remain separate gates.
+
+## 20. Round 588 implementation decisions and verification
+
+This round follows 587 as a separate release. It uses the existing fictional
+`BOOTS` catalog and reward ledger, with no new currency or random gear draw.
+
+- Each boot line is a pair with at most one senior wearer. Equipping it on a
+  different graduate removes it from the previous wearer in the same academy
+  save. Selling or retiring the wearer frees the pair; its level remains in the
+  reward ledger. This makes allocating equipment a decision instead of giving
+  every graduate the same best pair.
+- Awards are prospective. The first observed title in a division unlocks the
+  next catalog entry. Every Summit title keeps unlocking entries while any
+  remain. A new career therefore earns its tenth pair at its first Summit
+  title. A returning Summit career starts on its next title and can continue
+  collecting without reconstructing historical results. Other titles grant a
+  kit upgrade; after the catalog is complete, every title grants an upgrade.
+- One kit upgrade raises one owned pair by one level, up to three. Neither
+  equipping nor upgrading spends gems. Gear never enters a transfer fee.
+- The optional gear fields stay absent from untouched old ledgers. Title
+  receipts use the completed match count and division; replayed results cannot
+  award again. A title's stadium state is saved before its equipment reward.
+  Failed equipment writes do not add usable equipment to the memory-only gem
+  fallback. A successful stadium save followed by a failed ledger save can
+  lose that title reward, matching the existing cross-key failure limit. The
+  page explains that storage must work before earning another title.
+- The earlier wording that every level changes the edge needs a bound. A level
+  adds 0.002 only above the rating floor and below the effective-rating cap.
+  Neutral steps at those boundaries are correct. Five legal wearers capped at
+  rating 99 reach an edge of 0.39, so the existing defensive bound of 0.40 is
+  not reachable by a legal team.
+
+The independent pure-engine check currently passes 11,444,400 exact fee
+comparisons, 8,262 uncapped level steps, 6,372 neutral steps and 324 fractional
+transitions. Three separating-roll cases exercise both watched and away match
+outcomes. Thirteen effective controls cover fees, neutralized edge, the rating
+cap, duplicate equipment, repeated awards, non-title grants, Summit progression,
+pack grants, upgrades, locked pairs, failed writes, stale memory-only gear and
+unauthorized gear writers. Six actual hook/page cases and seven effective page
+controls verify title write order, failed stadium and ledger saves, atomic
+reassignment, upgrades and gear use in watched and away matches. These are
+scoped results, not completed release verification.
+
+The actual First team and Boot room component preview passes at 320, 390 and
+1440 pixels with source-generated preview CSS. It checks all 18 pairs, six
+tiles per page, player changes, atomic movement, saved upgrades, unchanged
+fees, blocked saves and Back. Clean panel heights are 949, 932 and 722 pixels,
+with every reachable button and rules summary at least 44 pixels high and
+no horizontal overflow. Boundary fixtures compare displayed ratings and
+controls against the real edge: 59 plus level one is 60 with no benefit,
+59 plus level two is 61 with edge 0.002, and 98 plus level three caps at 99
+with edge 0.078. A successful level-three upgrade consumes one kit and
+disables further upgrades. Six effective UI controls cover width, movement,
+double upgrades, the floor, cap and maximum. Production CSS and full page
+release checks remain required before publication.

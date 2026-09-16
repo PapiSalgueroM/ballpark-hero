@@ -198,7 +198,16 @@ const poolCache = new Map<string, Promise<PoolEntry[]>>();
 function cachedPool(id: string, fetcher: () => Promise<PoolEntry[]>): () => Promise<PoolEntry[]> {
   return () => {
     if (!poolCache.has(id)) {
-      poolCache.set(id, fetcher());
+      poolCache.set(id, fetcher().then(
+        pool => {
+          if (pool.length === 0) poolCache.delete(id);
+          return pool;
+        },
+        error => {
+          poolCache.delete(id);
+          throw error;
+        },
+      ));
     }
     return poolCache.get(id)!;
   };

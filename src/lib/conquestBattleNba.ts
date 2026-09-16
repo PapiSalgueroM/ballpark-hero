@@ -20,6 +20,8 @@ import { compositeAttackerWinProb, HOME_FIELD_BUMP } from '@/lib/conquestBattle'
    file has zero import coupling to the NFL module beyond the two pure
    exports above) ── */
 
+export type BasketballAction = 'three' | 'drive' | 'and_one' | 'block' | 'strip' | 'free_throw' | 'steal';
+
 export interface PlayEvent {
   description: string;
   attScore: number;
@@ -27,6 +29,7 @@ export interface PlayEvent {
   yards: number;
   type: 'pass' | 'rush' | 'sack' | 'interception' | 'fumble' | 'field_goal' | 'punt';
   team: 'att' | 'def';
+  action?: BasketballAction;
 }
 
 export interface TeamStatLine {
@@ -108,6 +111,7 @@ interface PlayResult {
   type: PlayEvent['type'];
   yards: number;
   points: number;
+  action: BasketballAction;
   isTd?: boolean;
   offPlayerName?: string;
   defPlayerName?: string;
@@ -145,19 +149,19 @@ function generatePlay(
       if (made) {
         return {
           description: `${shooter.name} drills a three! 🎯`,
-          type: 'pass', yards: 3, points: 3, isTd: true,
+          type: 'pass', yards: 3, points: 3, isTd: true, action: 'three',
           offPlayerName: shooter.name, defPlayerName: defPlayer.name,
         };
       }
       return {
         description: `${shooter.name}'s three rims out, ${defPlayer.name} grabs the board`,
-        type: 'pass', yards: 0, points: 0,
+        type: 'pass', yards: 0, points: 0, action: 'three',
         offPlayerName: shooter.name, defPlayerName: defPlayer.name,
       };
     }
     return {
       description: `${defPlayer.name} contests hard, ${shooter.name} bricks the three`,
-      type: 'sack', yards: 0, points: 0,
+      type: 'sack', yards: 0, points: 0, action: 'three',
       offPlayerName: shooter.name, defPlayerName: defPlayer.name,
     };
   }
@@ -174,20 +178,20 @@ function generatePlay(
         description: andOne
           ? `${driver.name} finishes through contact for the and-one! 💥`
           : `${driver.name} drives and finishes at the rim`,
-        type: 'rush', yards: 2, points: andOne ? 3 : 2, isTd: andOne,
+        type: 'rush', yards: 2, points: andOne ? 3 : 2, isTd: andOne, action: andOne ? 'and_one' : 'drive',
         offPlayerName: driver.name, defPlayerName: defPlayer.name,
       };
     }
     if (Math.random() < 0.3) {
       return {
         description: `${defPlayer.name} strips ${driver.name}! Turnover!`,
-        type: 'fumble', yards: 0, points: 0,
+        type: 'fumble', yards: 0, points: 0, action: 'strip',
         offPlayerName: driver.name, defPlayerName: defPlayer.name,
       };
     }
     return {
       description: `${defPlayer.name} blocks ${driver.name} at the rim!`,
-      type: 'interception', yards: 0, points: 0,
+      type: 'interception', yards: 0, points: 0, action: 'block',
       offPlayerName: driver.name, defPlayerName: defPlayer.name,
     };
   }
@@ -200,7 +204,7 @@ function generatePlay(
       description: made
         ? `${shooter.name} steps to the line and knocks down both free throws`
         : `${shooter.name} misses at the charity stripe`,
-      type: 'field_goal', yards: 0, points: made ? 2 : 0,
+      type: 'field_goal', yards: 0, points: made ? 2 : 0, action: 'free_throw',
       offPlayerName: shooter.name,
     };
   }
@@ -208,7 +212,7 @@ function generatePlay(
   // Turnover on the possession (~10%)
   return {
     description: `${defPlayer.name} picks off the pass! Fast break the other way!`,
-    type: 'interception', yards: 0, points: 0,
+    type: 'interception', yards: 0, points: 0, action: 'steal',
     defPlayerName: defPlayer.name,
   };
 }
@@ -371,6 +375,7 @@ export function simulateDetailedBattleNba(
       yards: play.yards,
       type: play.type,
       team: side,
+      action: play.action,
     });
   }
 

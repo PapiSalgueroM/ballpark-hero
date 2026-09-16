@@ -1,0 +1,30 @@
+{
+  "base": "31f5672ab5c77da955d0ab6ebab9d06cf5a209f7",
+  "cleanupCommit": "1ede998243dcf097d00a793f748a6d747b7831ef",
+  "runtime": {
+    "files": 3,
+    "passed": 15,
+    "failed": 0,
+    "exit": 0,
+    "unhandled": 0,
+    "newBlockedRequests": 0,
+    "guardBytesBefore": 130,
+    "guardBytesAfter": 130
+  },
+  "pitch": "canceled incomplete, requires fresh CI",
+  "durableRunnerControls": 8,
+  "sha256": {
+    "remaining-three.log": "4928b1dfb3ab7a86a4a64373d2c6a938ed89b5fc78522e39512db97d67b88a17",
+    "remaining-three.json": "a19956db78ddb8546fa95d8228d291d7bda2debf58658cf0e70a4a04c02979bf",
+    "durable-runner-controls.log": "d8900407e198bf07e0732353ddb50423379045724b9681263b899a27a195d004",
+    "owned-worker-stack.json": "90a87d640d25772087beae949a83d01d28250251a7a1ea907c0f691934dbb895",
+    "flash-control.log": "1b3f9d4d4d6efeb9b0bd13dbf092305f817526886e539b230c9e0f9fc22c94fc"
+  },
+  "pendingFlashControl": {
+    "exit": 1,
+    "mutationMarker": true,
+    "expectedAssertion": "Every flash timer must settle before the board unmounts",
+    "pendingTimers": 30,
+    "unhandled": 0
+  }
+}

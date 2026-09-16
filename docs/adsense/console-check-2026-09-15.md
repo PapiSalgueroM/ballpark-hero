@@ -4,7 +4,16 @@ Read directly from the signed-in AdSense console for publisher
 `pub-2929318086316376`. The initial inspection was read-only. A new review was
 submitted later, after the release and public-site checks below.
 
-## Current status: review requested at 4:19 AM EDT
+## Current status: pending review confirmed again at 12:37 PM EDT
+
+A fresh read-only inspection of the signed-in site detail page on September
+15 at 12:37 PM EDT showed **Getting ready**, **Verify site ownership** with a
+green check, and **Review requested** with a green check. The fully loaded
+panel said the site was being prepared to show ads. No new rejection or
+approval was shown. No button was selected and no new review was submitted.
+This confirms that the morning request is still pending.
+
+## Review submission at 4:19 AM EDT
 
 The last successful direct account check at 12:37 PM EDT still showed
 Getting ready and Review requested. Later browser-control timeouts provide

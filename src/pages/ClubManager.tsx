@@ -1,9 +1,9 @@
 import { Link } from 'react-router-dom';
-import { useMemo, useState } from 'react';
+import { lazy, Suspense, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
-import { Play, ChevronRight, ChevronLeft, Trophy, Briefcase, ShieldAlert, ClipboardList } from 'lucide-react';
+import { Play, ChevronRight, ChevronLeft, Trophy, Briefcase } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useClubManager } from '@/hooks/useClubManager';
 import type { HubTab } from '@/hooks/useClubManager';
@@ -20,62 +20,67 @@ import {
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
 import { fanMeter } from '@/lib/clubManagerMeters';
-import { STAFF_MATCHES_PER_SEASON, STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
-import { askExplainer, isBoardAsk } from '@/lib/clubManagerBoardAsks';
-import { FacilitiesScreen } from '@/components/club-manager/FacilitiesScreen';
-import { StaffScreen } from '@/components/club-manager/StaffScreen';
-import { FinancesScreen } from '@/components/club-manager/FinancesScreen';
-import type { NationDef, ObjectiveStatus, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
-import { MANAGER_BACKGROUNDS, CLUB_IDENTITIES } from '@/lib/clubManager';
-import { ManagerForm } from '@/components/club-manager/ManagerForm';
+import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
+import type { NationDef, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
 import { eraRealShareLabel, eraHonestyLine } from '@/lib/clubManagerEras';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
-import { ResultScreen } from '@/components/game/ResultScreen';
 import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { ConfettiBurst, revealDelay } from '@/components/club-manager/Celebration';
-import { CustomClubForm, CrestBadge } from '@/components/club-manager/CustomClubForm';
-import { WorldTablesCard } from '@/components/club-manager/WorldTablesCard';
-import { MetersStrip } from '@/components/club-manager/MetersStrip';
-import { UclBracketCard } from '@/components/club-manager/UclBracketCard';
-import { UclGroupsCard } from '@/components/club-manager/UclGroupsCard';
-import { CupBracketCard } from '@/components/club-manager/CupBracketCard';
-import { StatsScreen } from '@/components/club-manager/StatsScreen';
-import { CalendarScreen } from '@/components/club-manager/CalendarScreen';
-import { InboxCard } from '@/components/club-manager/InboxCard';
-import { ClubDetailScreen } from '@/components/club-manager/ClubDetailScreen';
-import { SquadScreen } from '@/components/club-manager/SquadScreen';
-import { ContractsCard } from '@/components/club-manager/ContractsCard';
-import { TacticsScreen } from '@/components/club-manager/TacticsScreen';
-import { TransferScreen } from '@/components/club-manager/TransferScreen';
-import { HalftimeScreen } from '@/components/club-manager/HalftimeScreen';
-import { MatchReportCard } from '@/components/club-manager/MatchReportCard';
-import { AcademyScreen } from '@/components/club-manager/AcademyScreen';
-import { TrainingScreen } from '@/components/club-manager/TrainingScreen';
-import { RolesScreen } from '@/components/club-manager/RolesScreen';
-import { XpScreen } from '@/components/club-manager/XpScreen';
-import { StartOptionsScreen } from '@/components/club-manager/StartOptionsScreen';
 import { CURRENCIES, STRICTNESS_INFO, startOptionsOf } from '@/lib/clubManagerStart';
 import { levelFor, pointsFree, xpOf, MAX_LEVEL } from '@/lib/clubManagerXp';
-import { PressScreen } from '@/components/club-manager/PressScreen';
-import { MatchCentre } from '@/components/club-manager/MatchCentre';
-import { LiveSimScreen } from '@/components/club-manager/LiveSimScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+
+const ClubManagerTreatmentPanel = lazy(() => import('@/components/club-manager/ClubManagerTreatmentPanel'));
+const ClubManagerBoardPanel = lazy(() => import('@/components/club-manager/ClubManagerBoardPanel'));
+const ClubManagerCareerPanel = lazy(() => import('@/components/club-manager/ClubManagerCareerPanel'));
+const ConfettiBurst = lazy(() => import('@/components/club-manager/Celebration').then(m => ({ default: m.ConfettiBurst })));
+const ClubManagerHelp = lazy(() => import('@/components/club-manager/ClubManagerHelp'));
+const ClubManagerSeasonSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary'));
+const SackedCareerSummary = lazy(() => import('@/components/club-manager/ClubManagerSeasonSummary').then(m => ({ default: m.SackedCareerSummary })));
+const CustomClubForm = lazy(() => import('@/components/club-manager/CustomClubForm').then(m => ({ default: m.CustomClubForm })));
+const CrestBadge = lazy(() => import('@/components/club-manager/CustomClubForm').then(m => ({ default: m.CrestBadge })));
+const FacilitiesScreen = lazy(() => import('@/components/club-manager/FacilitiesScreen').then(m => ({ default: m.FacilitiesScreen })));
+const StaffScreen = lazy(() => import('@/components/club-manager/StaffScreen').then(m => ({ default: m.StaffScreen })));
+const FinancesScreen = lazy(() => import('@/components/club-manager/FinancesScreen').then(m => ({ default: m.FinancesScreen })));
+const ManagerForm = lazy(() => import('@/components/club-manager/ManagerForm').then(m => ({ default: m.ManagerForm })));
+const WorldTablesCard = lazy(() => import('@/components/club-manager/WorldTablesCard').then(m => ({ default: m.WorldTablesCard })));
+const MetersStrip = lazy(() => import('@/components/club-manager/MetersStrip').then(m => ({ default: m.MetersStrip })));
+const UclBracketCard = lazy(() => import('@/components/club-manager/UclBracketCard').then(m => ({ default: m.UclBracketCard })));
+const UclGroupsCard = lazy(() => import('@/components/club-manager/UclGroupsCard').then(m => ({ default: m.UclGroupsCard })));
+const CupBracketCard = lazy(() => import('@/components/club-manager/CupBracketCard').then(m => ({ default: m.CupBracketCard })));
+const StatsScreen = lazy(() => import('@/components/club-manager/StatsScreen').then(m => ({ default: m.StatsScreen })));
+const CalendarScreen = lazy(() => import('@/components/club-manager/CalendarScreen').then(m => ({ default: m.CalendarScreen })));
+const InboxCard = lazy(() => import('@/components/club-manager/InboxCard').then(m => ({ default: m.InboxCard })));
+const ClubDetailScreen = lazy(() => import('@/components/club-manager/ClubDetailScreen').then(m => ({ default: m.ClubDetailScreen })));
+const SquadScreen = lazy(() => import('@/components/club-manager/SquadScreen').then(m => ({ default: m.SquadScreen })));
+const ContractsCard = lazy(() => import('@/components/club-manager/ContractsCard').then(m => ({ default: m.ContractsCard })));
+const TacticsScreen = lazy(() => import('@/components/club-manager/TacticsScreen').then(m => ({ default: m.TacticsScreen })));
+const TransferScreen = lazy(() => import('@/components/club-manager/TransferScreen').then(m => ({ default: m.TransferScreen })));
+const HalftimeScreen = lazy(() => import('@/components/club-manager/HalftimeScreen').then(m => ({ default: m.HalftimeScreen })));
+const MatchReportCard = lazy(() => import('@/components/club-manager/MatchReportCard').then(m => ({ default: m.MatchReportCard })));
+const AcademyScreen = lazy(() => import('@/components/club-manager/AcademyScreen').then(m => ({ default: m.AcademyScreen })));
+const TrainingScreen = lazy(() => import('@/components/club-manager/TrainingScreen').then(m => ({ default: m.TrainingScreen })));
+const RolesScreen = lazy(() => import('@/components/club-manager/RolesScreen').then(m => ({ default: m.RolesScreen })));
+const XpScreen = lazy(() => import('@/components/club-manager/XpScreen').then(m => ({ default: m.XpScreen })));
+const StartOptionsScreen = lazy(() => import('@/components/club-manager/StartOptionsScreen').then(m => ({ default: m.StartOptionsScreen })));
+const PressScreen = lazy(() => import('@/components/club-manager/PressScreen').then(m => ({ default: m.PressScreen })));
+const MatchCentre = lazy(() => import('@/components/club-manager/MatchCentre').then(m => ({ default: m.MatchCentre })));
+const LiveSimScreen = lazy(() => import('@/components/club-manager/LiveSimScreen').then(m => ({ default: m.LiveSimScreen })));
+
+function ScreenLoading({ children, compact = false }: { children: ReactNode; compact?: boolean }) {
+  return (
+    <Suspense fallback={compact ? <span role="status" className="text-xs text-muted-foreground">Loading...</span> : <div role="status" className="min-h-48 py-12 text-center text-sm text-muted-foreground">Loading screen...</div>}>
+      {children}
+    </Suspense>
+  );
+}
 
 const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
   W: 'bg-emerald-500', D: 'bg-yellow-500', L: 'bg-red-500',
-};
-
-// Round 70: board objective status chips.
-const OBJ_CHIP: Record<ObjectiveStatus, { label: string; cls: string }> = {
-  done: { label: 'Done', cls: 'bg-emerald-500/15 text-emerald-400 border-emerald-500/40' },
-  onTrack: { label: 'On track', cls: 'bg-secondary text-muted-foreground border-border' },
-  behind: { label: 'Behind', cls: 'bg-yellow-500/10 text-yellow-400 border-yellow-500/40' },
-  failed: { label: 'Failed', cls: 'bg-red-500/10 text-red-400 border-red-500/40' },
 };
 
 /** Round 74: one hub box (the tile rule). Tap it, it becomes its own screen. */
@@ -190,33 +195,7 @@ const ClubManager = () => {
       >
         <div className="relative">
           <HowToPlayPopover title="How to Play Club Manager" triggerSide="right">
-            <div className="space-y-3 text-left">
-              <p>🌍 <span className="font-semibold text-foreground">Pick any club in 20 real leagues.</span> The big five (2026-27 lineups with promotions and relegations applied), the EFL Championship and the 2. Bundesliga, the Primeira Liga, the Scottish Premiership, the Süper Lig, the Belgian Pro League, the Austrian Bundesliga, the Super League Greece, the Danish Superliga, the Swiss Super League, Croatia's SuperSport HNL, the Saudi Pro League, both MLS conferences and the Eredivisie: 330 clubs and over 3,600 real players, each squad at its real market values as of August 2026, after the summer window. Giants get huge budgets and zero patience; underdogs get small budgets and a low bar.</p>
-              <p>📅 <span className="font-semibold text-foreground">Pick when you start.</span> 2026-27 is the real thing: real clubs, real players, real market values, with the summer window applied. Or go back: 2015-16 is the season Leicester won at 5000 to 1, with Vardy, Mahrez and Kante at their real pre-title values, MSN at Barcelona, De Bruyne newly at City and, since the Serie A joined the era, Juventus chasing a fifth straight Scudetto with Dybala newly arrived from Palermo; 2010-11 is prime Messi, Mourinho's Madrid and Rooney's United; 2005-06 is Ronaldinho's Ballon d'Or Barcelona with a 17 year old Messi on the bench, Mourinho's back to back Chelsea, Henry's Arsenal and Gerrard's Istanbul champions, back when the second European prize was still called the UEFA Cup, and the boards say so. Each past season is the real top flight football of its year: 2015-16 runs the Premier League, La Liga and Serie A, all 60 clubs, while 2010-11 and 2005-06 run the Premier League and La Liga, 40 each, hundreds of real players at their real ages and values from that year, with the famous summer moves applied. Each era's giants rate like the legends they are, above anyone in the current generation, with the whole era scaled around them. Every era is a sealed world, so no 2026 player can leak into your past market, and there is no Conference League back there because it did not exist yet. We only offer a past we hold real data for, and we never invent one: 2005-06 is the floor of the records, so there is no 2000 era. As your save runs deep, players age, retire and get replaced; anyone the game makes up is marked MADE UP wherever he appears, so you always know who is real.</p>
-              <p>✨ <span className="font-semibold text-foreground">Or create your own club.</span> Any league, either era: name it, build the crest (shape, pattern, your colors, your initials), name your stadium, and choose your backing. Your club takes the league place of the division's weakest side and starts with 24 generated players, all marked as made up. Every real player stays real, and the market is where you sign them. The board reads your squad, not your wallet: big money in a smaller league gets told to win it, the same money in the Premier League gets told to survive first.</p>
-              <p>👟 <span className="font-semibold text-foreground">Players age and they stop playing.</span> A thirty year old slips a point a season, a thirty five year old slips three or four, and how fast depends on where he plays: keepers last for years, wingers and full backs go first. Somewhere around thirty four to thirty seven most of them retire for good. Sign the young ones early, get your kids in, or your best XI will quietly rot underneath you.</p>
-              <p>📋 <span className="font-semibold text-foreground">The board names the actual prize</span>: win the league, qualify for the Champions League or Europa League, reach the top half, or stay up, plus a cup target, a rival to finish above, and squad mandates. Hit them and your stock rises; miss them and the confidence meter drains.</p>
-              <p>🛒 <span className="font-semibold text-foreground">And two of them are things you go and buy.</span> On top of the season demands, every board makes two specific asks a year, drawn from five shapes and worked out from your club and your era rather than written down: get one more player from your own country into the squad, keep one more aged 30 or over, sign somebody in the thinnest line of your squad, sign somebody 21 or under at a rating the market says you can reach, or spend a set fee or more on one signing. Every threshold is read off the market you actually have and the money you actually hold, so a big club today gets told to spend nine figures and a modest one in 2005 gets told to spend a few million, and the two asks together never cost more than the pot. That rating floor on the young one is where this game keeps headroom: a signing of 21 or under can still add up to ten rating points, and about one in twelve is carrying a lot more than that. The board screen shows the two under In the market, with the line that says how each one is graded.</p>
-              <p>📩 <span className="font-semibold text-foreground">The inbox is not just your players any more.</span> The board chase an ask you have not met, and you can take their money (a quarter of the kitty, and a point off their patience), give them your word (marked on the board screen, and worth three points of next season's opening confidence either way) or tell them no, which drops the ask and costs three points now. An agent writes about a client of his in your squad with a year left, priced at the contracts desk's own terms, and signing him takes his sale value back off the floor that a last year on a deal puts it on. Your assistant argues about the training plan, but only when the plan really is wrong for the squad in front of him. The supporters trust write about the ticket price when it is on premium. A reporter wants a line on whether the squad is good enough, and backing them lifts every player's morale and the press mood. Every one of those moves a number with a screen behind it, so what you decided in October is still readable in April.</p>
-              <p>🗓️ <span className="font-semibold text-foreground">Play a full season in your club's REAL league</span>, at its real length, against its real clubs, plus the domestic cup and the Champions League if you qualify, while every other league in the world plays out alongside yours. In Europe you can watch all eight groups, and a projected knockout bracket tracks the leaders until the real draw locks in after matchday 6.</p>
-              <p>📆 <span className="font-semibold text-foreground">The calendar is the season laid out month by month, and you can tap any day and sim to it.</span> Match days name the opponent, home or away, with the competition, and wear a result once played. The summer window is open from kickoff and the January window opens in January, on the first Saturday of the new year in most leagues and a little later in one long enough to reach January on its own; each one closes at the final whistle of its deadline day, marked with a padlock, after four of your matches in the summer and three in January. Tap a day, read what it holds, and hit Sim to play everything up to it in one go: a match day plays that match, a quiet day plays everything before it and stops. The four fast forwards (next match, about a month, to the window, rest of season) are the same tap on a chosen day. Every run stops early for the things that need you: a window opening, the season review, the sack, or a club's approach landing.</p>
-              <p>🧠 <span className="font-semibold text-foreground">Set tactics before each match:</span> formation, mentality and your starting XI. Form, morale, fatigue, injuries and home advantage all matter. Seventeen shapes now, grouped by the back line (three, four or five), and switching one carries every man across by his slot before the auto pick fills whatever is left. Anyone can play anywhere, ten defenders if you like, but the match reads each man in his slot: a position he holds costs nothing, a neighbouring one (a winger on the other flank, a full back at wing back, a number ten dropped into the holding spot) takes 2 rating points off him, the wrong line takes 6, and a keeper outfield or an outfielder in goal takes 14, so the average in the header is the fit adjusted one and every token wears its ring, amber for a neighbouring spot and red for the rest. The bench sits under the pitch, same position first for whichever spot you tapped, the men who cannot play greyed with the reason, and a tap on a bench man then a spot puts him there (or a spot then a bench man, or drag). Every slot carries a duty (sweeper keeper or shot stopper, stopper or cover, attacking or holding full back, anchor or deep playmaker, box to box or playmaker, creator or shadow striker, winger or inside forward, poacher, target man or false nine): a small nudge to how you attack and defend, the whole eleven's worth capped well under one mentality step, plus a say in who gets on the end of things, so a poacher takes more of your goals and a target man lays more on. The set piece card names the captain, the corner takers left and right, the free kick taker and the penalty taker, with an auto pick if you would rather not, and the match reads them: a corner goes to that flag's man while he is on the pitch, about 8 of your goals in a hundred come from the spot and 4 from a direct free kick, both credited to the taker, a save can be a saved penalty, the penalty taker's rating shifts a shootout a touch, and the eleven lose one morale point less to a defeat with the captain out there. Sell or loan a man out and every job naming him is cleared, so nothing travels.</p>
-              <p>🏋️ <span className="font-semibold text-foreground">Training is two switches and a second position.</span> How hard you work them and who the week is built around are set on the Training tile, and the same tile retrains an outfielder into a second position: about 6 weeks for a position next to one he holds, 10 for another on the same line, 16 across lines, half as long again past thirty, shorter with a better training ground and never under 4. One man learns one position at a time, keeps two at most (the oldest makes way for a third), and keepers stay keepers, nobody else goes in goal. When it lands the position is his: no fit penalty in that slot, the auto pick and the bench read it as his own, and it shows as a small chip beside his position. A real footballer starts with the one position the data gives him, so every second position in your squad was earned in this save.</p>
-              <p>📊 <span className="font-semibold text-foreground">One match, two ways through it.</span> Play Live puts both elevens on the pitch as dots with names and numbers, at 0.5x to 4x speed. The numbers are the classic 1 to 11 by position, the keeper wearing 1, and 12 up for the bench: no roster the game holds carries real shirt numbers, so it does not invent any. The ball sits at a player's feet and passes between them, and the chances, saves, corners, throw ins and fouls land at their real minutes, with goals, cards and subs on both sides, and your injuries. Under the pitch the live stats count up as it goes: possession, shots and shots on target, expected goals, corners and fouls for both clubs, and at the whistle they are exactly the report's numbers, because the report is counted off the same list. You can pause at any minute, tap one of your players and bring somebody on or change the shape (three changes a match, and the other dugout makes its own), and the rest of the half is redrawn off the change. The break is still the dressing room, where the subs, the shape and the team talk are yours. Quick Sim plays the same match without you and goes straight to the report. It really is the same match: both ways kick off through the same engine, so the only thing the live one adds is your say while it is on. The report gives you the scoreline with the stoppage time both halves ran to, scorers, cards and subs on both sides, your injuries, possession as the two shares of the ball, shots, expected goals, a momentum graph drawn from who had the chances in each ten minutes, and every player's rating on both sides. The Match Centre shows both clubs' form, your past meetings and the engine's own win odds before you commit.</p>
-              <p>📈 <span className="font-semibold text-foreground">The stats centre keeps the season's numbers.</span> The club's record split by league, cup and Europe, the top scorer, the assist king, the best average rating and the most carded man, plus every player's full line (apps, goals, assists, cards, average rating), sortable by any column and filterable by competition. Above it all run the award races: the league's golden boot board, a player of the season watch scored by one formula for everyone, and the Ballon d'Or conversation, all settled with the season and named in your season review.</p>
-              <p>🤝 <span className="font-semibold text-foreground">Tell every player what he is</span>: star man, key first teamer, rotation option, backup or one for the future. Each rung is a promise about minutes, and the dressing room keeps score over your last ten matches. Keep your word and they play for you. Break it and they sulk, drag the room down and hand in transfer requests. You can buy your way out of a promise, but it costs six weeks of his wages a rung.</p>
-              <p>🎙️ <span className="font-semibold text-foreground">Front up to the press, and talk to your players.</span> The reporters only turn up when something has happened: a losing run, a man you have stopped picking, a club circling one of your stars, a derby, or the bookmakers making you favourite for the sack. Every answer spends one thing to buy another, so backing your players costs you with the board and calling them out costs you the dressing room, and talking big before a derby puts your words on the other lot's wall. Before every match and again at half time you pick a tone: calm them, fire them up, demand more, or the hairdryer. Read the afternoon right and they play above themselves. Read it wrong and you lose them, and the wrong one hurts more than the right one helps.</p>
-              <p>💰 <span className="font-semibold text-foreground">Buy and sell in the summer and January windows.</span> Over 3,600 real players are on the market at their real values, each one wearing his real nationality's flag, and the deep filters go all the way down: position group or exact position, age, price, selling league, nationality (132 real nations, drawn from your world's own market) and four sorts. Stay under budget and keep at least 14 players.</p>
-              <p>📝 <span className="font-semibold text-foreground">Every player is on a real deal.</span> Wages sit on a curve, and the board sets a weekly ceiling taken off the squad they handed you on day one. It moves with the club's season after that, up a bit when you beat what they asked for and further for a trophy, back down after a bad one, and it never moves with your own wage bill, so signing big does not talk them into paying for it. Contracts tick down: a man you never sit down with walks for free in the summer, with his sale value already collapsed. The contracts desk on the Squad tab re-signs anyone in his final year, two ways: the full-wage deal, or 12 percent cheaper with a release clause written in at 1.5 times his value that day. The clause is a real exit door. Any club can pay it, it cannot be rejected or blocked, an unanswered one executes itself on deadline day, and the only way to delete it is a full price renewal later. Grow a star past his own clause and the phone will ring.</p>
-              <p>🤝 <span className="font-semibold text-foreground">Sponsors pay the other half of the bills.</span> The Finances desk puts four shirt sponsor offers on the table whenever the club has no deal. Three are honest brands in three shapes: the most guaranteed money, less money with a real bonus for winning the league, or the smallest cheque locked in for four seasons with a little for a top half finish, each marked local or global. The fourth is a bad brand (a bookmaker, a lender, that sort) paying 1.35 times the safe cheque: the fans lose 6 mood the day you sign and 8 off their target every week it runs, and the board like the money by a point. Every offer takes a push: ask for more and the brand comes up six percent, ask once too often and it walks for the season. The money lands in the same kitty as everything else, once a season, and the bonus lands at the season end that earns it. Leave the club and the deal stays behind, because it was the club's and not yours.</p>
-              <p>🎟️ <span className="font-semibold text-foreground">The club earns while you manage, and the fans have a say.</span> Every home crowd pays the transfer kitty: attendance times the money a head, which is your ticket price plus food and drink at your prices. Fair tickets and cheap food lift the fans' mood, premium anything costs it, and the mood moves your home crowd, 0.9 times when they are furious and 1.1 when they are singing; the board go the other way, a point of confidence for premium tickets and a point off for fair ones. The Finances desk also projects the season's books to the last day: tickets, food, the sponsor and deals in, player wages, staff wages, travel, deals and the builders out. Wages and travel are running costs the board covers, so they never leave the kitty; the wage ceiling on the contracts desk is how the board keeps them honest. It is all one kitty otherwise: gates in, transfers, scouts, the academy and the facilities out. Whatever you did not spend rolls into the summer on top of the board's new cheque, up to one more season's worth. Leave the club and the balance stays behind, the same as the sponsor deal and the facilities, because it was always the club's money.</p>
-              <p>🏗️ <span className="font-semibold text-foreground">Four facilities, level 1 to 10.</span> Stadium, training ground, medical and dressing room, on the Facilities desk. A club opens where its stature puts it: the giants on 8 to 10, most clubs on 1 or 2. Every level is a lift on the game you already play and level 1 does nothing at all: the training ground speeds growth for anyone with room under his ceiling (nobody grows past it), medical writes injuries for fewer weeks (never under one), the dressing room brings unhappy players back toward content between games, and the stadium lifts the food and drink money a head, with the first three levels you buy also growing the crowd. Upgrades come out of the transfer kitty and get dearer every level, so a small club cannot build a level 10 anything in a season.</p>
-              <p>🧑‍🏫 <span className="font-semibold text-foreground">Four people on the staff, and rivals want them.</span> An attack coach, a defence coach, a goalkeeping coach and a lead scout, all made up, each with a level 1 to 10 and a ceiling he can still reach. A club opens where its stature puts it, the same as the facilities. Each one is a lift and level 1 does nothing at all, so an empty chair costs you nothing you already had: the attack coach speeds up the forwards and the number ten, the defence coach the back line and the holding midfielder, the keepers get their own man, and the middle of the park splits the two coaches between them. Nobody grows past his ceiling whoever is coaching him. The lead scout is the one who reads the trip reports, so the boys your scouts come home with have a little more in them. Their wages are a running cost the board covers; hiring costs a fee and paying somebody off costs severance, and both come out of the kitty and show up on the Finances desk. You can also promote from your own academy staff for nothing: he starts lower than anyone on the shortlist and has the furthest to grow, and how good he is comes off your academy's coaching level. Rival clubs come in for the good ones on their own schedule, and you get {STAFF_MATCHES_PER_SEASON} matches a season: match the money and he stays on a quarter more wages, or let him go and the job opens. Ignore an approach for two weeks and he leaves anyway. The staff belong to the club, so a new job starts on the new club's people.</p>
-              <p>🌐 <span className="font-semibold text-foreground">Win enough and your country calls.</span> A national federation can offer you the international job alongside your club. Club football does not change at all: the country plays between seasons, in the real tournaments, with the real qualifying groups and the slot counts each confederation actually gets. A good manager makes his country more likely to win one, but the players still decide most of it. Win a tournament and it goes in the same cabinet as a league title. Miss one your country should have reached and the federation moves on.</p>
-              <p>🧳 <span className="font-semibold text-foreground">And if they do sack you, that is not the end.</span> You go out of work with your record intact and clubs start calling: real clubs from the real pyramid, with the job they are actually offering written out. Trophies and title finishes open doors, relegations shut them. Every week you wait for a better job cools the market a little, and somebody always takes a chance on you in the end. Take one and you start next season there.</p>
-              <p>📉 <span className="font-semibold text-foreground">Two meters sit under the club name on every tab: the board and the fans.</span> Tap either one to swap its words for the number out of 100. The board meter is the sack race itself, nothing prettier: it opens at 60 in your first season and anywhere from 35 to 82 after that depending on how the last one went, a win adds about 4, a defeat takes about 4.5 (more at a giant, more again when the papers have turned on you), the table against what the club expects moves it a little every league week, a cup exit or a promise to the press you broke costs extra, and at zero you are sacked. Safe is 60 and above. Under pressure is 10 to 59. Under 10 it reads One bad week from the sack, and it means it: a single week has been measured taking more than 10 off, because a defeat, the table, a cup exit and a promise to the press broken can all land in the same seven days. Between matches nothing can sack you: a press answer, a handshake with another club or a switch on the Finances desk can drain the board to its last point, and the next result decides. The fan meter is read off what fans actually feel: this season's results weighted towards the recent ones (the biggest term, worth 34 points either way), your league position against the club's own expectation (2.5 a place, capped at 15), the ticket policy on the Finances desk (fair prices +4, premium -5), what a pie costs in the ground (cheap +3, premium -4), a shirt sponsor they are ashamed of (-6) and every trophy lifted this season (+8 each, up to 16), all on top of a base of 55. Singing is 65 and above, Grumbling is 40 to 64, Turning is under 40, and Hopeful is what they are before a ball is kicked. Overachieve and bigger clubs come calling, from any league in the game, and some of them call MID-SEASON: an approach lands in the Manager panel, and committing to it is a summer pre-agreement your current board will hear about on the radio. They can even walk away again if your season collapses after the handshake.</p>
-              <p>🏆 <span className="font-semibold text-foreground">Season score</span> = league points + 10 per trophy (max 130). Careers span multiple seasons; your save is kept on this device.</p>
-            </div>
+            <ScreenLoading><ClubManagerHelp /></ScreenLoading>
           </HowToPlayPopover>
           {inner}
         </div>
@@ -580,18 +559,18 @@ const ClubManager = () => {
 
         {/* -------- Step 4 (optional): found your own club (Round 154) -------- */}
         {pickStep === 'custom' && pickNation && league && (
-          <CustomClubForm
+          <ScreenLoading><CustomClubForm
             leagueName={league.name}
             leagueId={league.id}
             eraId={historicPick ? pickEra : undefined}
             onBack={() => setPickStep('team')}
             onCreate={spec => { setPendingCustomSpec(spec); setPickStep('manager'); }}
-          />
+          /></ScreenLoading>
         )}
 
         {/* -------- Step 5 (Round 303): who is in the dugout -------- */}
         {pickStep === 'manager' && (
-          <ManagerForm
+          <ScreenLoading><ManagerForm
             clubName={pendingCustomSpec?.name || g.pendingClub || 'Back'}
             defaultNation={pickNation?.name ?? 'England'}
             onBack={() => {
@@ -602,7 +581,7 @@ const ClubManager = () => {
               setPickStep(target);
             }}
             onConfirm={confirmAndReset}
-          />
+          /></ScreenLoading>
         )}
       </div>
     );
@@ -625,7 +604,7 @@ const ClubManager = () => {
         <header className="text-center mb-3">
           <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">MATCH LIVE</h1>
         </header>
-        <LiveSimScreen
+        <ScreenLoading><LiveSimScreen
           career={g.career}
           live={g.career.live ?? null}
           report={g.phase === 'matchResult' ? g.report : null}
@@ -638,7 +617,7 @@ const ClubManager = () => {
           onChange={g.changeAt}
           onMark={g.markMinute}
           onExit={() => setWatchMode(false)}
-        />
+        /></ScreenLoading>
       </div>
     );
   }
@@ -650,13 +629,13 @@ const ClubManager = () => {
         <header className="text-center mb-4">
           <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">HALF TIME</h1>
         </header>
-        <HalftimeScreen
+        <ScreenLoading><HalftimeScreen
           career={g.career}
           onSub={g.subAtHalftime}
           onShape={g.shapeAtHalftime}
           onTalk={g.halftimeTalk}
           onSecondHalf={g.secondHalf}
-        />
+        /></ScreenLoading>
       </div>
     );
   }
@@ -667,7 +646,7 @@ const ClubManager = () => {
         <header className="text-center mb-4">
           <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">FULL TIME</h1>
         </header>
-        <MatchReportCard report={g.report} clubName={g.career.clubName} onContinue={g.continueFromReport} />
+        <ScreenLoading><MatchReportCard report={g.report} clubName={g.career.clubName} onContinue={g.continueFromReport} /></ScreenLoading>
       </div>
     );
   }
@@ -685,151 +664,15 @@ const ClubManager = () => {
        this one call site, which is the argument for the scope check in
        scripts/simEarlyReturnScope.mjs rather than another careful read. */
     const c = g.career;
-    const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
-    /* Round 530: the season's facts tick in one at a time, in the order they
-       are listed, on the shared Round 186 pace. A running counter rather than
-       a map index because the lines are conditional: the tenth thing to land
-       is the tenth thing that exists, not the tenth thing that could have.
-       The counter restarts on every render because the block is rebuilt on
-       every render; the wrapper is keyed on the season so a new season
-       remounts the rows and they tick again. Only the arrival moves: every
-       number is the true final from frame one (Round 147). */
-    let tick = 0;
-    const tickIn = () => ({ animationDelay: revealDelay(tick++) });
     // Round 66: same treatment as full time. Only one phase screen renders at a
     // time, so the shared ref is safe here too.
     return shell(
       <div ref={revealRef} className="text-center relative">
         {/* Round 147: a season that ends with silverware rains on the summary. */}
-        {sm.trophies.length > 0 && <ConfettiBurst seed={sm.season * 13 + sm.trophies.length} count={40} />}
+        {sm.trophies.length > 0 && <Suspense fallback={null}><ConfettiBurst seed={sm.season * 13 + sm.trophies.length} count={40} /></Suspense>}
         <h1 className="text-3xl md:text-5xl font-bold text-primary font-display mb-1">SEASON {sm.season} COMPLETE</h1>
         <p className="text-muted-foreground text-sm mb-5">{sm.club} · finished <span className="text-foreground font-bold">#{sm.position}</span> with {sm.points} pts</p>
-        <ResultScreen
-          won={sm.verdictGrade === 'A' || sm.verdictGrade === 'B' ? true : sm.verdictGrade === 'C' ? undefined : false}
-          outcomeEmoji={sm.trophies.length > 0 ? '🏆' : sm.position <= 4 ? '🥈' : sm.verdictGrade === 'F' ? '😬' : '⚽'}
-          headline={`Board verdict: ${sm.verdictGrade}`}
-          statLine={`${sm.wins}W ${sm.draws}D ${sm.losses}L · GF ${sm.gf} GA ${sm.ga}`}
-          funFact={sm.verdict}
-          statRow={[
-            { label: 'Finish', value: `#${sm.position}` },
-            { label: 'Points', value: sm.points },
-            { label: 'Season Score', value: sm.seasonScore },
-          ]}
-          emojiGrid={`🏟️ S${sm.season} · #${sm.position} · ${sm.points}pts · ${trophyLine}`}
-          share={{
-            score: `#${sm.position} (${sm.points} pts, ${sm.trophies.length} trophies)`,
-            gameName: 'Club Manager',
-            gamePath: '/club-manager',
-          }}
-          onPlayAgain={() => g.nextSeason()}
-          playAgainLabel={`Continue to Season ${sm.season + 1}`}
-          playNext={
-            <div className="space-y-3">
-              {sm.offers.length > 0 && (
-                <div className="text-left bg-surface-2 border border-border/60 rounded-xl p-3">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-2">📞 Job offers on the table</div>
-                  {/* Round 530: each offer rises in on its own beat, keyed on
-                      the season so next year's offers rise again. The button
-                      works from frame one; only its opacity is on the way in. */}
-                  {sm.offers.map((o, i) => (
-                    <button
-                      key={`${sm.season}:${o.club}`}
-                      onClick={() => g.nextSeason(o.club)}
-                      className="cm-rise w-full mb-2 last:mb-0 rounded-lg border border-primary/40 bg-primary/5 p-2.5 text-left hover:bg-primary/15 transition-colors"
-                      style={{ animationDelay: revealDelay(i) }}
-                    >
-                      <div className="text-sm font-bold text-primary">{o.club} want you as manager</div>
-                      <div className="text-[10px] text-muted-foreground">{o.blurb}</div>
-                    </button>
-                  ))}
-                  <p className="text-[9px] text-muted-foreground">Accepting an offer moves you there for Season {sm.season + 1}.</p>
-                </div>
-              )}
-              <button onClick={g.startNew} className="text-xs text-muted-foreground hover:text-primary transition-colors">
-                Retire and start a new career
-              </button>
-            </div>
-          }
-        >
-          {/* Round 530: every line below ticks in on its own beat, keyed on
-              the season. ResultScreen mounts CelebrationStyles, so the
-              classes are live here. A trophy line glows once it has landed:
-              the glow sits on an inner span because cm-tick-in and
-              cm-gold-glow both set the animation shorthand and would cancel
-              each other on one element, which would leave the trophy line at
-              opacity 0 for good. */}
-          <div key={sm.season} data-season-lines className="text-left space-y-1.5 mb-2">
-            <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-              <Trophy className="w-3.5 h-3.5 text-primary mt-0.5 shrink-0" />
-              Champions: <span className="font-bold">{sm.champion}</span>
-            </p>
-            {sm.trophies.map(t => {
-              /* The glow starts 0.35s after this line's own beat, once the
-                 tick-in has finished. */
-              const glowAt = revealDelay(tick, 0.95);
-              return (
-                <p key={t} className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                  <Trophy className="w-3.5 h-3.5 text-gold mt-0.5 shrink-0" />
-                  <span>
-                    You won the{' '}
-                    <span className="cm-gold-glow font-bold rounded px-1 text-gold" style={{ animationDelay: glowAt }}>{t}</span>!
-                  </span>
-                </p>
-              );
-            })}
-            {sm.topScorer && (
-              <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                <span className="shrink-0">⚽</span>Top scorer: {sm.topScorer.name} ({sm.topScorer.goals} goals)
-              </p>
-            )}
-            {sm.topAssister && (
-              <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                <span className="shrink-0">🎯</span>Most assists: {sm.topAssister.name} ({sm.topAssister.assists})
-              </p>
-            )}
-            {/* Round 165: the season's individual honours. */}
-            {sm.goldenBoot && (
-              <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                <span className="shrink-0">👟</span>Golden boot: <span className="font-bold">{sm.goldenBoot.name}</span> ({sm.goldenBoot.club}, {sm.goldenBoot.goals} goals)
-              </p>
-            )}
-            {sm.playerOfSeason && (
-              <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                <span className="shrink-0">🎖️</span>Player of the season: <span className="font-bold">{sm.playerOfSeason.name}</span> ({sm.playerOfSeason.club})
-              </p>
-            )}
-            {sm.ballonDor && (
-              <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                <span className="shrink-0">🌍</span>Ballon d'Or: <span className="font-bold">{sm.ballonDor.name}</span> ({sm.ballonDor.club})
-              </p>
-            )}
-            {sm.qualifiedUcl && (
-              <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
-                <span className="shrink-0">⭐</span>Qualified for next season's Champions League
-              </p>
-            )}
-            {sm.objectives && sm.objectives.length > 0 && (
-              <div className="pt-1">
-                <div className="cm-tick-in text-[10px] text-muted-foreground uppercase tracking-wider mb-1" style={tickIn()}>Board objectives</div>
-                {sm.objectives.map((o, i) => (
-                  <p key={i} className={cn('cm-tick-in text-xs', o.hit ? 'text-emerald-400' : 'text-red-400')} style={tickIn()}>
-                    {o.hit ? '✓' : '✗'} <span className="text-foreground">{o.label}</span>
-                  </p>
-                ))}
-              </div>
-            )}
-            {sm.signings.length > 0 && (
-              <div className="pt-1">
-                <div className="cm-tick-in text-[10px] text-muted-foreground uppercase tracking-wider mb-1" style={tickIn()}>Transfer business</div>
-                {sm.signings.slice(0, 8).map((t, i) => (
-                  <p key={i} className="cm-tick-in text-xs text-muted-foreground" style={tickIn()}>
-                    {t.dir === 'in' ? '🟢 IN' : '🔴 OUT'} {t.name} ({money(t.fee, c)})
-                  </p>
-                ))}
-              </div>
-            )}
-          </div>
-        </ResultScreen>
+        <ScreenLoading><ClubManagerSeasonSummary sm={sm} c={c} g={g} /></ScreenLoading>
       </div>
     );
   }
@@ -843,93 +686,7 @@ const ClubManager = () => {
             does. ResultScreen below mounts CelebrationStyles, and the rules
             are document wide once mounted, so the class is live up here. */}
         <h1 className="cm-loss-shake text-3xl md:text-5xl font-bold text-destructive font-display mb-5">SACKED!</h1>
-        <ResultScreen
-          won={false}
-          outcomeEmoji="🚪"
-          headline="You've been sacked"
-          statLine={`The ${c.clubName} board ran out of patience in Season ${c.season}.`}
-          statRow={[
-            { label: 'Seasons', value: c.season },
-            { label: 'Win %', value: `${c.careerStats.played ? Math.round((c.careerStats.wins / c.careerStats.played) * 100) : 0}%` },
-            { label: 'Trophies', value: c.trophies.length },
-          ]}
-          emojiGrid={`🚪 Sacked in S${c.season} · ${c.careerStats.wins}W ${c.careerStats.draws}D ${c.careerStats.losses}L · 🏆×${c.trophies.length}`}
-          share={{
-            score: `Sacked after ${c.season} season${c.season > 1 ? 's' : ''} (${c.trophies.length} trophies)`,
-            gameName: 'Club Manager',
-            gamePath: '/club-manager',
-          }}
-          onPlayAgain={g.startNew}
-          playAgainLabel="Start New Career"
-        >
-          {/* Round 201: the wilderness. A sacking used to end the save here,
-              which is the one moment in a manager's life that should not end
-              anything. Your record follows you and decides who calls. */}
-          <div data-wilderness className="cm-rise text-left rounded-xl border border-border bg-card p-3 mb-3" style={{ animationDelay: '0.35s' }}>
-            <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">🧳 Out of work</div>
-            <p className="text-xs text-foreground">
-              {(c.wilderness?.weeksOut ?? 0) === 0
-                ? 'You are between jobs. Clubs will call, but the longer you sit out the quieter the phone gets.'
-                : `${c.wilderness?.weeksOut} week${c.wilderness?.weeksOut === 1 ? '' : 's'} without a club. ${(c.wilderness?.offers.length ?? 0) > 0 ? 'The phone has rung.' : 'Nobody has called yet.'}`}
-            </p>
-            <div className="mt-2 space-y-1.5">
-              {/* Round 530: the offers rise in one after another. Round 530
-                  review: keyed on the CLUB, not on the week. Keyed on the week,
-                  every "wait a week" remounted the lot and re-ran the rise on
-                  offers that had been on the table for weeks (wildernessWeek
-                  carries them forward and adds at most one new call, and only
-                  in about half of the weeks), so a phone that had not rung read
-                  as though it had. On the club, a new call rises and the rest
-                  hold their final frame. Clubs cannot repeat: wildernessWeek
-                  adds every offered club to seen and excludes seen. */}
-              {(c.wilderness?.offers ?? []).map((o, i) => (
-                <div
-                  key={o.club}
-                  data-wilderness-offer={o.club}
-                  className="cm-rise rounded-lg border border-border bg-background/40 p-2"
-                  style={{ animationDelay: revealDelay(i) }}
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="text-[11px] font-bold text-foreground truncate">{o.club}</span>
-                    <span className="text-[9px] text-muted-foreground shrink-0">{o.league}</span>
-                  </div>
-                  <p className="text-[9px] text-muted-foreground mt-0.5 leading-snug">{o.reason}</p>
-                  <p className="text-[9px] text-foreground mt-0.5 leading-snug"><span className="text-muted-foreground">The brief:</span> {o.brief}</p>
-                  <button
-                    onClick={() => g.takeJob(o.club)}
-                    className="mt-1.5 w-full py-1.5 rounded-lg text-[11px] font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
-                  >
-                    Take the {o.club} job
-                  </button>
-                </div>
-              ))}
-            </div>
-            <button
-              onClick={g.waitAWeek}
-              data-wait-week
-              className="mt-2 w-full py-2 rounded-lg text-xs font-bold bg-secondary text-foreground hover:opacity-90 transition-opacity"
-            >
-              ⏭️ Wait a week for the phone to ring
-            </button>
-            <p className="text-[9px] text-muted-foreground mt-1.5">
-              Trophies and promotions open doors; relegations shut them. Waiting costs you standing, so the job you hold out for may not be there when you finally say yes. Somebody always needs a manager in the end.
-            </p>
-          </div>
-          <div className="text-left space-y-1.5 mb-2">
-            <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Career record</div>
-            {c.history.length === 0 && <p className="text-xs text-muted-foreground">Sacked before finishing a single season. Brutal.</p>}
-            {c.history.map(h => (
-              <p key={h.season} className="text-xs text-foreground">
-                S{h.season} · {h.club} · #{h.position} ({h.points} pts){h.trophies.length ? ` · 🏆 ${h.trophies.join(', ')}` : ''}
-              </p>
-            ))}
-            {c.trophies.length > 0 && (
-              <p className="text-xs text-foreground pt-1">
-                Cabinet: {c.trophies.map(t => `${t.emoji} ${t.name} (S${t.season})`).join(' · ')}
-              </p>
-            )}
-          </div>
-        </ResultScreen>
+        <ScreenLoading><SackedCareerSummary c={c} g={g} /></ScreenLoading>
       </div>
     );
   }
@@ -960,7 +717,7 @@ const ClubManager = () => {
   if (clubView) {
     return shell(
       <div ref={panelRef}>
-        <ClubDetailScreen clubName={clubView} career={c} onBack={() => setClubView(null)} />
+        <ScreenLoading><ClubDetailScreen clubName={clubView} career={c} onBack={() => setClubView(null)} /></ScreenLoading>
       </div>
     );
   }
@@ -973,7 +730,7 @@ const ClubManager = () => {
           {/* Round 154: a club you founded wears its crest where every other
               club wears its color dot. */}
           {c.customClub && c.customClub.name === c.clubName
-            ? <CrestBadge crest={c.customClub.crest} size={22} />
+            ? <ScreenLoading compact><CrestBadge crest={c.customClub.crest} size={22} /></ScreenLoading>
             : <span className="w-3 h-3 rounded-full" style={{ backgroundColor: club.color }} />}
           <h1 className="text-2xl md:text-3xl font-bold text-primary font-display">{c.clubName}</h1>
           {/* Round 132: the save now knows what year it is, so it says so, next
@@ -1013,7 +770,7 @@ const ClubManager = () => {
         </div>
         {/* Round 465: the board and the fans, on every tab, words by default
             and the number on tap. */}
-        <MetersStrip career={c} />
+        <ScreenLoading compact><MetersStrip career={c} /></ScreenLoading>
       </header>
 
       <Tabs value={g.activeTab} onValueChange={(v) => g.setActiveTab(v as HubTab)}>
@@ -1032,7 +789,7 @@ const ClubManager = () => {
               and both ways to play. */}
           {hubPanel === 'matchCentre' && g.facts ? (
             <div ref={panelRef}>
-              <MatchCentre
+              <ScreenLoading><MatchCentre
                 career={c}
                 facts={g.facts}
                 clubColor={club.color}
@@ -1043,7 +800,7 @@ const ClubManager = () => {
                 onQuickSim={() => { setHubPanel(null); setWatchMode(false); g.quickPlay(); }}
                 onLive={() => { setHubPanel(null); setWatchMode(true); g.play(); }}
                 onBack={() => setHubPanel(null)}
-              />
+              /></ScreenLoading>
             </div>
           ) : (
           <>
@@ -1345,50 +1102,10 @@ const ClubManager = () => {
               </button>
 
               {hubPanel === 'board' && objStatuses.length > 0 && (
-                <div className="bg-card border border-border rounded-xl p-3">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                    <ClipboardList className="w-3 h-3" /> Board expectations · {TIER_INFO[club.tier].blurb}
-                  </div>
-                  <div className="space-y-1.5">
-                    {objStatuses.filter(s => !isBoardAsk(s.objective.id)).map(({ objective, status }) => (
-                      <div key={objective.id} className="flex items-center justify-between gap-2">
-                        <span className="text-xs text-foreground min-w-0 truncate">{objective.label}</span>
-                        <span className={cn('shrink-0 text-[9px] font-bold border rounded-full px-2 py-0.5', OBJ_CHIP[status].cls)}>
-                          {OBJ_CHIP[status].label}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                  {/* Round 474: the two asks you go out and DO, kept apart from
-                      the demands the season hands you, with the line that says
-                      how each one is judged so nobody has to guess. */}
-                  {objStatuses.some(s => isBoardAsk(s.objective.id)) && (
-                    <div className="mt-3 pt-2.5 border-t border-border">
-                      <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">
-                        🛒 In the market
-                      </div>
-                      <div className="space-y-2">
-                        {objStatuses.filter(s => isBoardAsk(s.objective.id)).map(({ objective, status }) => (
-                          <div key={objective.id}>
-                            <div className="flex items-center justify-between gap-2">
-                              <span className="text-xs text-foreground min-w-0">{objective.label}</span>
-                              <span className={cn('shrink-0 text-[9px] font-bold border rounded-full px-2 py-0.5', OBJ_CHIP[status].cls)}>
-                                {OBJ_CHIP[status].label}
-                              </span>
-                            </div>
-                            <p className="text-[9px] text-muted-foreground mt-0.5 leading-relaxed">
-                              {objective.promised ? 'You gave them your word on this one. ' : ''}
-                              {askExplainer(objective)}
-                            </p>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                </div>
+                <ScreenLoading><ClubManagerBoardPanel club={club} objStatuses={objStatuses} /></ScreenLoading>
               )}
 
-              {hubPanel === 'inbox' && <InboxCard career={c} onAnswer={g.answer} />}
+              {hubPanel === 'inbox' && <ScreenLoading><InboxCard career={c} onAnswer={g.answer} /></ScreenLoading>}
               {hubPanel === 'inbox' && (c.inbox ?? []).length === 0 && (
                 <p className="text-xs text-muted-foreground text-center py-6">Nobody has texted you yet. Play some matches, the drama finds you.</p>
               )}
@@ -1398,44 +1115,32 @@ const ClubManager = () => {
                   any day can be tapped and simmed to, through the same loop
                   the fast forwards use. */}
               {hubPanel === 'calendar' && (
-                <CalendarScreen career={c} onSimTo={g.simToWeek} onSetTraining={g.setTraining} />
+                <ScreenLoading><CalendarScreen career={c} onSimTo={g.simToWeek} onSetTraining={g.setTraining} /></ScreenLoading>
               )}
 
               {hubPanel === 'academy' && (
-                <AcademyScreen
+                <ScreenLoading><AcademyScreen
                   career={c}
                   onUpgrade={g.upgradeFacility}
                   onHire={g.sendScout}
                   onRecall={g.callScoutHome}
                   onPromote={g.promote}
                   onRelease={g.release}
-                />
+                /></ScreenLoading>
               )}
 
               {hubPanel === 'training' && (
-                <TrainingScreen career={c} onSetPlan={g.setTraining} onRetrain={g.retrain} onStopRetrain={g.stopRetrain} />
+                <ScreenLoading><TrainingScreen career={c} onSetPlan={g.setTraining} onRetrain={g.retrain} onStopRetrain={g.stopRetrain} /></ScreenLoading>
               )}
 
-              {hubPanel === 'roles' && <RolesScreen career={c} onSetRole={g.setRole} />}
+              {hubPanel === 'roles' && <ScreenLoading><RolesScreen career={c} onSetRole={g.setRole} /></ScreenLoading>}
 
               {hubPanel === 'press' && (
-                <PressScreen career={c} onAnswer={g.sayIt} onDuck={g.sendAssistant} />
+                <ScreenLoading><PressScreen career={c} onAnswer={g.sayIt} onDuck={g.sendAssistant} /></ScreenLoading>
               )}
 
               {hubPanel === 'treatment' && (
-                <div className="bg-card border border-border rounded-xl p-3">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5 flex items-center gap-1">
-                    <ShieldAlert className="w-3 h-3" /> Treatment room
-                  </div>
-                  {unavailable.length === 0 && <p className="text-xs text-muted-foreground">Everyone is fit and available. Enjoy it while it lasts.</p>}
-                  <div className="flex flex-wrap gap-1.5">
-                    {unavailable.map(p => (
-                      <span key={p.id} className="text-[10px] bg-secondary rounded-full px-2 py-1 text-foreground">
-                        {p.injuryWeeks > 0 ? `🩹 ${p.name} (${p.injuryWeeks}w)` : `🟥 ${p.name} (${p.suspendedMatches})`}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                <ScreenLoading><ClubManagerTreatmentPanel unavailable={unavailable} /></ScreenLoading>
               )}
 
               {hubPanel === 'cups' && (
@@ -1457,13 +1162,13 @@ const ClubManager = () => {
                     )}
                   </div>
                   {/* Round 102 built this bracket; Round 312 finally mounts it. */}
-                  <CupBracketCard career={c} onClubClick={setClubView} />
+                  <ScreenLoading><CupBracketCard career={c} onClubClick={setClubView} /></ScreenLoading>
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider px-1 pt-1">
                     ⭐ Champions League
                   </div>
                   {/* Round 163: every group in the draw, not just mine, plus
                       the projected bracket that locks in after matchday 6. */}
-                  <UclGroupsCard career={c} onClubClick={setClubView} />
+                  <ScreenLoading><UclGroupsCard career={c} onClubClick={setClubView} /></ScreenLoading>
                   {c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won' && (
                     <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
                       ⭐ Alive in the Champions League. Next knockout round: <span className="font-bold">{c.uclKoRound === 'F' ? 'Final' : c.uclKoRound === 'SF' ? 'Semi-final' : c.uclKoRound === 'QF' ? 'Quarter-final' : 'Round of 16'}</span>
@@ -1473,7 +1178,7 @@ const ClubManager = () => {
                     <div className="bg-card border border-gold/40 rounded-xl p-3 text-xs text-gold font-bold">⭐ CHAMPIONS OF EUROPE.</div>
                   )}
                   {/* Round 95: the knockout stage as a real bracket. */}
-                  <UclBracketCard career={c} onClubClick={setClubView} />
+                  <ScreenLoading><UclBracketCard career={c} onClubClick={setClubView} /></ScreenLoading>
                   {!uclAlive && c.uclKoRound !== 'won' && c.uclGroup === null && (
                     <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">No European football this season{careerLeagueOf(c).euro ? '. Reach the Champions League places to change that' : ' in this league'}.</div>
                   )}
@@ -1484,43 +1189,43 @@ const ClubManager = () => {
                   Round 467: the projection, food prices, the push and the bad
                   brand, all in FinancesScreen. */}
               {hubPanel === 'finance' && (
-                <FinancesScreen
+                <ScreenLoading><FinancesScreen
                   career={c}
                   onTickets={g.setTickets}
                   onConcessions={g.setConcessions}
                   onSponsor={g.takeSponsor}
                   onPush={g.pushSponsorOffer}
-                />
+                /></ScreenLoading>
               )}
 
               {/* Round 467: the facilities desk. The ground card that lived on
                   the finance desk is the stadium level here now. */}
-              {hubPanel === 'facilities' && <FacilitiesScreen career={c} onUpgrade={g.buyFacility} />}
+              {hubPanel === 'facilities' && <ScreenLoading><FacilitiesScreen career={c} onUpgrade={g.buyFacility} /></ScreenLoading>}
 
               {/* Round 471: the staff desk. Four generated men, the rival on
                   the phone, and the promotion out of the academy. */}
               {hubPanel === 'staff' && (
-                <StaffScreen
+                <ScreenLoading><StaffScreen
                   career={c}
                   onHire={g.appointStaff}
                   onSack={g.payOffStaff}
                   onMatch={g.matchStaff}
                   onLetGo={g.letStaffGo}
-                />
+                /></ScreenLoading>
               )}
-              {hubPanel === 'stats' && <StatsScreen career={c} />}
+              {hubPanel === 'stats' && <ScreenLoading><StatsScreen career={c} /></ScreenLoading>}
 
               {/* Round 513: the manager's own trees, spec section 28. */}
-              {hubPanel === 'xp' && <XpScreen career={c} onSpendPoint={g.spendPoint} />}
+              {hubPanel === 'xp' && <ScreenLoading><XpScreen career={c} onSpendPoint={g.spendPoint} /></ScreenLoading>}
 
               {/* Round 514: his three start options. */}
               {hubPanel === 'options' && (
-                <StartOptionsScreen
+                <ScreenLoading><StartOptionsScreen
                   career={c}
                   onCurrency={g.setCurrency}
                   onNationJobs={g.setNationJobs}
                   onStrictness={g.setStrictness}
-                />
+                /></ScreenLoading>
               )}
 
               {hubPanel === 'trophies' && (
@@ -1538,121 +1243,7 @@ const ClubManager = () => {
               )}
 
               {hubPanel === 'manager' && (
-                <>
-                {/* Round 202: the international job. Club football is
-                    unchanged; the country only plays in the summer. */}
-                {c.nationJob ? (
-                  <div data-nation-job className="bg-card border border-primary/40 rounded-xl p-3 mb-2">
-                    <div className="text-[10px] text-primary uppercase tracking-wider mb-1.5 font-bold">🌐 {c.nationJob.nation} manager</div>
-                    <p className="text-xs text-foreground">
-                      In charge since season {c.nationJob.since}. {c.nationJob.played === 0
-                        ? 'Your first tournament summer is still to come.'
-                        : `${c.nationJob.played} tournament${c.nationJob.played === 1 ? '' : 's'} taken charge of, ${c.nationJob.won} won.`}
-                    </p>
-                    {c.nationJob.lastResult && (
-                      <p className="text-[11px] text-muted-foreground mt-1">
-                        Last summer ({c.nationJob.lastYear}): {c.nationJob.lastResult}.
-                      </p>
-                    )}
-                    <p className="text-[10px] text-muted-foreground mt-1">
-                      Tournaments run between club seasons. Miss one your country should have reached and the federation will not wait around.
-                    </p>
-                    <button
-                      onClick={g.resignNation}
-                      className="mt-2 w-full py-2 rounded-lg bg-secondary text-foreground text-xs font-bold hover:opacity-90 transition-opacity"
-                    >
-                      Step down from the national team
-                    </button>
-                  </div>
-                ) : nationOffer ? (
-                  <div data-nation-offer className="bg-card border border-primary/50 rounded-xl p-3 mb-2">
-                    <div className="text-[10px] text-primary uppercase tracking-wider mb-1.5 font-bold">🌐 Your country is calling</div>
-                    <p className="text-sm text-foreground font-bold mb-0.5">{nationOffer.nation} want you.</p>
-                    <p className="text-[11px] text-muted-foreground mb-2">{nationOffer.blurb}</p>
-                    <button
-                      onClick={g.acceptNation}
-                      className="w-full py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
-                    >
-                      🌐 Take the {nationOffer.nation} job as well
-                    </button>
-                  </div>
-                ) : null}
-                {/* Round 168: mid-season approaches land here, his CM-10. */}
-                {c.approach && (
-                  <div className="bg-card border border-primary/50 rounded-xl p-3 mb-2">
-                    <div className="text-[10px] text-primary uppercase tracking-wider mb-1.5 font-bold">📞 An approach has come in</div>
-                    <p className="text-sm text-foreground font-bold mb-0.5">{c.approach.club} want you as their manager.</p>
-                    <p className="text-[11px] text-muted-foreground mb-2">{c.approach.blurb}</p>
-                    <p className="text-[10px] text-muted-foreground mb-2">Commit and it becomes a summer pre-agreement: the move happens when the season ends, the news breaks today, and your current board will not love it. Ignore it and they move on in a few weeks.</p>
-                    <div className="flex gap-2">
-                      <button
-                        onClick={() => g.answerApproach(true)}
-                        className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
-                      >
-                        🤝 Shake hands for the summer
-                      </button>
-                      <button
-                        onClick={() => g.answerApproach(false)}
-                        className="flex-1 py-2 rounded-lg border border-border bg-card text-xs font-bold text-foreground hover:border-primary transition-colors"
-                      >
-                        Turn them down
-                      </button>
-                    </div>
-                  </div>
-                )}
-                {c.pendingMove && (
-                  <div className="bg-card border border-gold/40 rounded-xl p-3 mb-2 text-xs text-foreground">
-                    🤝 <span className="font-bold">Pre-agreement signed:</span> you take over at <span className="font-bold">{c.pendingMove.club}</span> when the season ends. Finish the job here first.
-                  </div>
-                )}
-                <div className="bg-card border border-border rounded-xl p-3">
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1.5">💼 Manager career</div>
-                  {/* Round 303: the created manager's card line. Absent spec, the
-                      panel reads exactly as it always has. */}
-                  {c.manager && (
-                    <div className="flex items-center gap-2 mb-2 rounded-lg border border-border bg-background/60 px-2.5 py-1.5">
-                      <FlagImg name={c.manager.nationality} size={14} />
-                      <span className="text-xs font-bold text-foreground truncate">{c.manager.name}</span>
-                      <span className="text-[9px] text-muted-foreground truncate">
-                        {MANAGER_BACKGROUNDS[c.manager.background]?.emoji} {MANAGER_BACKGROUNDS[c.manager.background]?.label}
-                        {' · '}{CLUB_IDENTITIES[c.manager.style]?.emoji} {CLUB_IDENTITIES[c.manager.style]?.label}
-                      </span>
-                    </div>
-                  )}
-                  <div className="grid grid-cols-3 gap-2 text-center mb-2">
-                    <div>
-                      <div className="text-sm font-bold font-display text-foreground">{c.careerStats.wins}W {c.careerStats.draws}D {c.careerStats.losses}L</div>
-                      <div className="text-[9px] text-muted-foreground">Record</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold font-display text-foreground">{c.careerStats.played > 0 ? Math.round((c.careerStats.wins / c.careerStats.played) * 100) : 0}%</div>
-                      <div className="text-[9px] text-muted-foreground">Win rate</div>
-                    </div>
-                    <div>
-                      <div className="text-sm font-bold font-display text-foreground">{c.trophies.length}</div>
-                      <div className="text-[9px] text-muted-foreground">Trophies</div>
-                    </div>
-                  </div>
-                  <div className="space-y-0.5 text-[10px] text-muted-foreground">
-                    {c.careerStats.biggestWin && (
-                      <p>🎉 Biggest win: <span className="text-foreground font-semibold">{c.careerStats.biggestWin.score}</span> vs {c.careerStats.biggestWin.opp}</p>
-                    )}
-                    {c.careerStats.biggestDefeat && (
-                      <p>💀 Worst defeat: <span className="text-foreground font-semibold">{c.careerStats.biggestDefeat.score}</span> vs {c.careerStats.biggestDefeat.opp}</p>
-                    )}
-                    {c.careerStats.mostExpensiveBuy && (
-                      <p>💸 Priciest buy: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveBuy.name}</span> ({money(c.careerStats.mostExpensiveBuy.fee, c)})</p>
-                    )}
-                    {c.careerStats.mostExpensiveSale && (
-                      <p>🤑 Best sale: <span className="text-foreground font-semibold">{c.careerStats.mostExpensiveSale.name}</span> ({money(c.careerStats.mostExpensiveSale.fee, c)})</p>
-                    )}
-                    {(c.careerStats.clubsManaged?.length ?? 0) > 1 && (
-                      <p>🧳 Clubs managed: <span className="text-foreground">{c.careerStats.clubsManaged!.join(', ')}</span></p>
-                    )}
-                    {c.careerStats.played === 0 && <p>Take charge of your first match and the numbers start here.</p>}
-                  </div>
-                </div>
-                </>
+                <ScreenLoading><ClubManagerCareerPanel c={c} g={g} nationOffer={nationOffer} /></ScreenLoading>
               )}
             </div>
           )}
@@ -1663,18 +1254,18 @@ const ClubManager = () => {
         {/* -------- Squad -------- */}
         <TabsContent value="squad">
           <div className="space-y-3">
-            <SquadScreen squad={c.squad} xiIds={c.xiIds} eraId={c.eraId} captainId={c.setPieces?.captain ?? null} />
+            <ScreenLoading><SquadScreen squad={c.squad} xiIds={c.xiIds} eraId={c.eraId} captainId={c.setPieces?.captain ?? null} /></ScreenLoading>
             {/* Round 193: the contracts desk, built in Round 105 and never
                mounted until now, so renewals were unreachable for 88 rounds.
                Plain renewal or the cheaper clause deal, and every clause you
                have granted stays in view with its bargain warning. */}
-            <ContractsCard career={c} onRenew={g.renew} onRenewWithClause={g.renewWithClause} />
+            <ScreenLoading><ContractsCard career={c} onRenew={g.renew} onRenewWithClause={g.renewWithClause} /></ScreenLoading>
           </div>
         </TabsContent>
 
         {/* -------- Tactics -------- */}
         <TabsContent value="tactics">
-          <TacticsScreen
+          <ScreenLoading><TacticsScreen
             career={c}
             onFormation={g.setFormationIndex}
             onMentality={g.setMentality}
@@ -1684,18 +1275,18 @@ const ClubManager = () => {
             onDuty={g.setSlotDuty}
             onSetPiece={g.assignSetPiece}
             onAutoSetPieces={g.autoPickSetPieces}
-          />
+          /></ScreenLoading>
         </TabsContent>
 
         {/* -------- Table -------- */}
         <TabsContent value="table">
           {/* Round 95: every league in the world, not just mine. */}
-          <WorldTablesCard career={c} myRows={g.tableRows} onClubClick={setClubView} />
+          <ScreenLoading><WorldTablesCard career={c} myRows={g.tableRows} onClubClick={setClubView} /></ScreenLoading>
         </TabsContent>
 
         {/* -------- Transfers -------- */}
         <TabsContent value="transfers">
-          <TransferScreen
+          <ScreenLoading><TransferScreen
             career={c}
             market={g.market}
             onNegotiate={g.negotiate}
@@ -1712,7 +1303,7 @@ const ClubManager = () => {
             onBuyLoanee={g.buyLoanee}
             onEndLoanEarly={g.endLoanEarly}
             onRecallLoanee={g.recallLoanee}
-          />
+          /></ScreenLoading>
         </TabsContent>
       </Tabs>
     </div>

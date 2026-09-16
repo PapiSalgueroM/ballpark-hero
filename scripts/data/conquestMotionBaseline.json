@@ -1,0 +1,2690 @@
+{
+  "from": "d726bce5b546c868beaec6a77c325ce1a3427d73",
+  "sourceHash": "b77c49dd3f3756f5ce4c7aa1bcf91592c660e67dcaa92b8413a6bea285a01aa2",
+  "rows": [
+    {
+      "sport": "nfl",
+      "seed": 0,
+      "hash": "daffb3622406ef391bac61f8a73bee36d3793c36dab9c0362f58ea40ec583193",
+      "draws": 63
+    },
+    {
+      "sport": "nfl",
+      "seed": 1,
+      "hash": "a33075bb07ee2c2a42783577bf7393a145e12a1b8fec674a426ac096874eef86",
+      "draws": 69
+    },
+    {
+      "sport": "nfl",
+      "seed": 2,
+      "hash": "63e514ffa364b11db85a1b3bef4cf8a93213eafc5a0f8f6a3867914aed69f368",
+      "draws": 74
+    },
+    {
+      "sport": "nfl",
+      "seed": 3,
+      "hash": "81308756ca4865e0afff2c2cbb32eb4764917a3691b64fc9af70659d75f9ebb3",
+      "draws": 76
+    },
+    {
+      "sport": "nfl",
+      "seed": 4,
+      "hash": "67dbb8783463cfd7c942a2c02b4a326671612a51747e184bcdc8af223714a7fb",
+      "draws": 73
+    },
+    {
+      "sport": "nfl",
+      "seed": 5,
+      "hash": "60924f54d9b8792182dfd5c16d1db8674d3ddba1e70a63341c92d245ec25bab5",
+      "draws": 78
+    },
+    {
+      "sport": "nfl",
+      "seed": 6,
+      "hash": "5d5a5b0a450db1102bcac454e0527f670c8c21961bd98eb61f731daa26f193e4",
+      "draws": 63
+    },
+    {
+      "sport": "nfl",
+      "seed": 7,
+      "hash": "59b30ede1cc28bf0c6ab65542c10a7b91df6dc874ddb8085e2934b48b24fda48",
+      "draws": 64
+    },
+    {
+      "sport": "nfl",
+      "seed": 8,
+      "hash": "811d9f5a61c784708e35ad4ef0a882ada24f2dc841104a520e8bf3d4c9fdc660",
+      "draws": 66
+    },
+    {
+      "sport": "nfl",
+      "seed": 9,
+      "hash": "fcf8eb60eead19fe028b304be06c5082bba4cca8047c08b842fda6431effc9ca",
+      "draws": 62
+    },
+    {
+      "sport": "nfl",
+      "seed": 10,
+      "hash": "5afb2681fed6fe32e10bddcac4b2e72b49b3d2c41a4d93c59905f1c05f4d6cad",
+      "draws": 69
+    },
+    {
+      "sport": "nfl",
+      "seed": 11,
+      "hash": "baa38175e4bcfd72541fd878d4ecb8a2e59eeb7bd2484778a424588141714dc8",
+      "draws": 69
+    },
+    {
+      "sport": "nfl",
+      "seed": 12,
+      "hash": "39b09ad750a899bcfd5f67dcf63bfb154194658f0646e5fffdb7321e4ff6d2ba",
+      "draws": 62
+    },
+    {
+      "sport": "nfl",
+      "seed": 13,
+      "hash": "b1598fd5c3dfb9bdc2b6d2415a60cdc6c1779d9666d4e7e9ba8df5c73325f907",
+      "draws": 73
+    },
+    {
+      "sport": "nfl",
+      "seed": 14,
+      "hash": "0e49bbb8e5e17b6f708d0e2e48b263b289ba97d014e2f8f19590892034f5cdf4",
+      "draws": 69
+    },
+    {
+      "sport": "nfl",
+      "seed": 15,
+      "hash": "51234dcd292c06b3ce918e11456e8bf3524a4e8a16a980a5603f312c4ff9e38d",
+      "draws": 62
+    },
+    {
+      "sport": "nfl",
+      "seed": 16,
+      "hash": "b7302af9aab0b446579334cb127ba1a05676fba77d3783eef9bff756afd258df",
+      "draws": 72
+    },
+    {
+      "sport": "nfl",
+      "seed": 17,
+      "hash": "520e52e549f64ca427e4c142ec89fba999d4e760f33eb0997a477471e217d626",
+      "draws": 78
+    },
+    {
+      "sport": "nfl",
+      "seed": 18,
+      "hash": "73b95bea4114cc072f257ba795689a9e9422d196495ab3dd80f75c5af93a05d6",
+      "draws": 72
+    },
+    {
+      "sport": "nfl",
+      "seed": 19,
+      "hash": "86765644254ccd8e34f0a1a7fe1f98efd3ff0c0f7bed158cc4bbef3176a92cf3",
+      "draws": 63
+    },
+    {
+      "sport": "nfl",
+      "seed": 20,
+      "hash": "4ff14fdcc60ab2e1ff9436931556a571716e4c9f3a7c801c22364c61b61f0191",
+      "draws": 71
+    },
+    {
+      "sport": "nfl",
+      "seed": 21,
+      "hash": "b5851265b291226d213b55023a663349c8af655fd98644a46ca720c1b8f5a9fa",
+      "draws": 70
+    },
+    {
+      "sport": "nfl",
+      "seed": 22,
+      "hash": "589b615933d81a55a52cdc0f1f5d2f92b049be6cbe6afc09533f985c342cf661",
+      "draws": 72
+    },
+    {
+      "sport": "nfl",
+      "seed": 23,
+      "hash": "38a25cdc6d5f028f693ba3236ec9387d7e5ed984824891e524b08d5b50420880",
+      "draws": 62
+    },
+    {
+      "sport": "nfl",
+      "seed": 24,
+      "hash": "507de502641b9e814b5eef903bbe9bbb9b6c3e89ff913e153c4f97381ce3f75e",
+      "draws": 64
+    },
+    {
+      "sport": "nfl",
+      "seed": 25,
+      "hash": "ae262bf0199743d7d7e0d2a887f774a279b4b6fb0636072f95ae27dbda7a805d",
+      "draws": 66
+    },
+    {
+      "sport": "nfl",
+      "seed": 26,
+      "hash": "fea0669286d2564e505ba60339919a8a432fc286abbf9a5eccce95f0b601528e",
+      "draws": 70
+    },
+    {
+      "sport": "nfl",
+      "seed": 27,
+      "hash": "2fa6c858a8c4340a7fc959c2b897aa6b422bf1169f308a50c28daa5407fe7360",
+      "draws": 70
+    },
+    {
+      "sport": "nfl",
+      "seed": 28,
+      "hash": "a3721f0f809cd82ddb8dcfbc2bdf88bfa008433542810ef970f2f30e7721ea67",
+      "draws": 70
+    },
+    {
+      "sport": "nfl",
+      "seed": 29,
+      "hash": "65e928c7b65c699bb132809d2ca23297908b050c7437a3c590d846cac7edbea5",
+      "draws": 68
+    },
+    {
+      "sport": "nfl",
+      "seed": 30,
+      "hash": "02f4d847f166e4f7e49cff06c035f28adae5ff8e9a1f793ce64012e4738d52ba",
+      "draws": 81
+    },
+    {
+      "sport": "nfl",
+      "seed": 31,
+      "hash": "ce9c0903b364709753ec97ed20a1ed50a4cea0fca7d0900917f31317bdf04bf4",
+      "draws": 77
+    },
+    {
+      "sport": "nfl",
+      "seed": 32,
+      "hash": "c607bd5935781a270f83fdf4573b9925bce9e961822c3d2843387d4e230ea7fa",
+      "draws": 66
+    },
+    {
+      "sport": "nfl",
+      "seed": 33,
+      "hash": "7be72216db11030fe2c6e1748e592d312028b71bcc1d57176f40f425bb1439fe",
+      "draws": 73
+    },
+    {
+      "sport": "nfl",
+      "seed": 34,
+      "hash": "e64144663e071249a6e3fdf6038ad964b78ae453dd19ec0db3ed2678139adfe6",
+      "draws": 72
+    },
+    {
+      "sport": "nfl",
+      "seed": 35,
+      "hash": "282a349e4d33819b384b8c45a33eb4fe6811f35f3b6e220c8c6ad4b86b7d84a4",
+      "draws": 66
+    },
+    {
+      "sport": "nfl",
+      "seed": 36,
+      "hash": "555a0b776d16034f735454da5a856eb8b2e41599c2ab637b638c3841c667a870",
+      "draws": 77
+    },
+    {
+      "sport": "nfl",
+      "seed": 37,
+      "hash": "fcd3b06e6210a3aa2ed31f183fe74b1da8001224180a77141719e55c973695aa",
+      "draws": 68
+    },
+    {
+      "sport": "nfl",
+      "seed": 38,
+      "hash": "bf597299b919dcd129e5ea7e6c475de812c1028923866f9a3a6a157d02a6bb51",
+      "draws": 71
+    },
+    {
+      "sport": "nfl",
+      "seed": 39,
+      "hash": "c5d981df7fd9bd31eb8bc0e127c33831848e9f26e0bb64a8bcdde0398e1efef8",
+      "draws": 62
+    },
+    {
+      "sport": "nfl",
+      "seed": 40,
+      "hash": "c6034e3d02ce931955b05c71703ac244b878e4bb700a57462858c81c696f12e5",
+      "draws": 69
+    },
+    {
+      "sport": "nfl",
+      "seed": 41,
+      "hash": "b4189033f82b5a313025f3477d9e81d239b9dc2b56df62cf191e123cf62ef038",
+      "draws": 79
+    },
+    {
+      "sport": "nfl",
+      "seed": 42,
+      "hash": "fa3349e8613a45424b66d3d1e6f8976c664d6ec87ad5edf0dcd55741519cb9cc",
+      "draws": 70
+    },
+    {
+      "sport": "nfl",
+      "seed": 43,
+      "hash": "233c741458483b42d3f0eda73633cc78a1e12b9a7a0ae59c1f3acc162e76fc83",
+      "draws": 76
+    },
+    {
+      "sport": "nfl",
+      "seed": 44,
+      "hash": "223a8fb2e07b7b59251b9ed4836b22c3e920fc3b6739095fbe4077acde3a6a79",
+      "draws": 75
+    },
+    {
+      "sport": "nfl",
+      "seed": 45,
+      "hash": "ec1cacc3889fb4a57eecc387dfa872af6148b2e2f6ef5ac803b49d1bc93eafa7",
+      "draws": 65
+    },
+    {
+      "sport": "nfl",
+      "seed": 46,
+      "hash": "c079c1e1ec9210d1d184c399e3d70a5667ea847df24945ee27e5954dbae46872",
+      "draws": 65
+    },
+    {
+      "sport": "nfl",
+      "seed": 47,
+      "hash": "52e1bee8a5777194b598bdb8af5233c18a1a7ec9b159e76fbb0554260cbb05c0",
+      "draws": 70
+    },
+    {
+      "sport": "nfl",
+      "seed": 48,
+      "hash": "cd1cc7afcb413867468c8b0ff51b6916593934d8c61ef927e211288744e3b6f1",
+      "draws": 76
+    },
+    {
+      "sport": "nfl",
+      "seed": 49,
+      "hash": "2b992c44ac0a1904a264f3177fafe69c8e21a1d5a80d9918af2def20c1a12aac",
+      "draws": 74
+    },
+    {
+      "sport": "nfl",
+      "seed": 50,
+      "hash": "3ae79bf8681e3e05f16a780d0bb67e5687fc4aada3a46a8bb8c713fbb5d97e3e",
+      "draws": 63
+    },
+    {
+      "sport": "nfl",
+      "seed": 51,
+      "hash": "fdce0530b93feff6216c2023947ee4ff7eed272aa6f69b84352466562f590c29",
+      "draws": 68
+    },
+    {
+      "sport": "nfl",
+      "seed": 52,
+      "hash": "1cf6474aa4731c7ebe64e3678934d13f21db1422da0e27dd0f095e5de3e9984b",
+      "draws": 70
+    },
+    {
+      "sport": "nfl",
+      "seed": 53,
+      "hash": "283fcb8ccd1084ef740a7be48bb2b0f374db5bc99f9e72b661e7bede5b56854c",
+      "draws": 64
+    },
+    {
+      "sport": "nfl",
+      "seed": 54,
+      "hash": "58f36edc134a025cf452bb7d47332d8459683753ebf14f682609f0e544bcdf77",
+      "draws": 65
+    },
+    {
+      "sport": "nfl",
+      "seed": 55,
+      "hash": "7bb14d6e513bde574800224343026beb0b96826529f26922d124cda5d3667552",
+      "draws": 69
+    },
+    {
+      "sport": "nfl",
+      "seed": 56,
+      "hash": "a52445d8923a14eba15e80c4e11ae35973db4c7c870e4a1b34f99b7784eecc7f",
+      "draws": 62
+    },
+    {
+      "sport": "nfl",
+      "seed": 57,
+      "hash": "f6d55b989ddb9086e2f8a7a409ca41562d13b52fdb818e8406579aec88fb4edd",
+      "draws": 75
+    },
+    {
+      "sport": "nfl",
+      "seed": 58,
+      "hash": "2cf38ceb93eb0eebf56987754880e19468972d9055325ee2f5cc33126b07c2e1",
+      "draws": 72
+    },
+    {
+      "sport": "nfl",
+      "seed": 59,
+      "hash": "cd054afad7ad563cb43e630e20635c32dbdde29cc36416043247e35e18cf7d01",
+      "draws": 68
+    },
+    {
+      "sport": "nfl",
+      "seed": 60,
+      "hash": "5803b685e4514cf1d2c536c99f2d48bf75f0c95e37f17624bdf7a5b4cd4b5e12",
+      "draws": 64
+    },
+    {
+      "sport": "nfl",
+      "seed": 61,
+      "hash": "4f305738e99493db025a82c5ba62ddc47d9f8d890cda8ecd77ff94d99dfbc4a7",
+      "draws": 70
+    },
+    {
+      "sport": "nfl",
+      "seed": 62,
+      "hash": "7b1b0bd551e070384bbd2abc2987f9fef89933e5bfbf30bf4ca7b158514d3a62",
+      "draws": 74
+    },
+    {
+      "sport": "nfl",
+      "seed": 63,
+      "hash": "b9cd099cbfce074ccd4f2fc8648edb13a2276fd9812e5af4afeaebb7abd5f460",
+      "draws": 64
+    },
+    {
+      "sport": "nfl",
+      "seed": 64,
+      "hash": "dc8dadda41d0ce8beb1a9f69f87c9886cc790284075ebf85ba08dde58edb3880",
+      "draws": 75
+    },
+    {
+      "sport": "nfl",
+      "seed": 65,
+      "hash": "fe692a1a96fc029b934bd1058613566938a2116be51c7cb7f4f77dd7585a691b",
+      "draws": 65
+    },
+    {
+      "sport": "nfl",
+      "seed": 66,
+      "hash": "34df30ac79405c8a7212015d3864ca979d527cc8c05d4ad83b3eb734d0990ff3",
+      "draws": 59
+    },
+    {
+      "sport": "nfl",
+      "seed": 67,
+      "hash": "b4359518c0299b4fdbd3e47f197dc96a21ab550213506671186e60333146aad0",
+      "draws": 76
+    },
+    {
+      "sport": "nfl",
+      "seed": 68,
+      "hash": "ad8f42a33b64bb33d7bcafe3dc770aaa1006b1fdcbfb6ff5d66a846bdd614f40",
+      "draws": 69
+    },
+    {
+      "sport": "nfl",
+      "seed": 69,
+      "hash": "123b645976f1129893a273d51185b8d4d8beb9a7cad0fb87240464c68d80c9ce",
+      "draws": 76
+    },
+    {
+      "sport": "nfl",
+      "seed": 70,
+      "hash": "11670cdc1b8345d66b1e5c48ea66a3599dcd654c7b214ad3fbe6d47508fc1d72",
+      "draws": 75
+    },
+    {
+      "sport": "nfl",
+      "seed": 71,
+      "hash": "6c304050be968ea54433bbe71052c95e0affb309c718e08d79eca752a1b37319",
+      "draws": 74
+    },
+    {
+      "sport": "nfl",
+      "seed": 72,
+      "hash": "5052290b7467454fd72f1776bca803b7d9db806df9cc82fc447bae2c61b4aee3",
+      "draws": 62
+    },
+    {
+      "sport": "nfl",
+      "seed": 73,
+      "hash": "beba93108bb7bb6daa1fc89625fa8e274df3f2d18098145be0395348dca99b5c",
+      "draws": 78
+    },
+    {
+      "sport": "nfl",
+      "seed": 74,
+      "hash": "8a844bcfc055390b44261968d00e7da84c2c8ff775b15e3c851f119fd8538531",
+      "draws": 60
+    },
+    {
+      "sport": "nfl",
+      "seed": 75,
+      "hash": "750e07b6fbc224b7d62ad8bb89442a88347d20dcd5f42d6bc27b07fbc927f4c6",
+      "draws": 65
+    },
+    {
+      "sport": "nfl",
+      "seed": 76,
+      "hash": "6763f7fab63913147f3faa5bc17483696ea3e6195568d52ae1a2bc3663ece016",
+      "draws": 72
+    },
+    {
+      "sport": "nfl",
+      "seed": 77,
+      "hash": "506bddd393ebbdd1ce0837d14cde503234c9945f4c2179f93e05f80bb91dcc8b",
+      "draws": 72
+    },
+    {
+      "sport": "nfl",
+      "seed": 78,
+      "hash": "cc9968fa8332d048995aba7732a01e8f734563048e88ccbfb6357a61105e96c6",
+      "draws": 71
+    },
+    {
+      "sport": "nfl",
+      "seed": 79,
+      "hash": "5a771f627e0f61eb46b3b2b1c00526d658679ecc6ce6472f31d3939c9f7b9bb1",
+      "draws": 63
+    },
+    {
+      "sport": "nfl",
+      "seed": 80,
+      "hash": "28135e3a96338c149ce2a1a2c176fb38c0ebacea748be28bcffd8547aadc3214",
+      "draws": 76
+    },
+    {
+      "sport": "nfl",
+      "seed": 81,
+      "hash": "e9e04dbf271aaa8d0accc87808cb5258cad1a652d607faa813ce84cf6fe4e830",
+      "draws": 74
+    },
+    {
+      "sport": "nfl",
+      "seed": 82,
+      "hash": "66a6584fd250f446a3f6c4284fa2857bca7a5cd4ab7d89cc71decb795dff5f8c",
+      "draws": 77
+    },
+    {
+      "sport": "nfl",
+      "seed": 83,
+      "hash": "e82cc0c28021aa4fbd9cb1e0d14f6be4608f31a1f9513b06ce65a73aa7ad6925",
+      "draws": 74
+    },
+    {
+      "sport": "nfl",
+      "seed": 84,
+      "hash": "2fcb911bfaf851f0097e83ca1b90dd89ebf0512e0d0c998e1069c6c6042491f9",
+      "draws": 68
+    },
+    {
+      "sport": "nfl",
+      "seed": 85,
+      "hash": "c2d890f8c5ad923d28fb9ffa3e4653fd193ac39b31342cc91f7964f8038cddd2",
+      "draws": 74
+    },
+    {
+      "sport": "nfl",
+      "seed": 86,
+      "hash": "4f5130448702bee0198f10198d5b9b219e2f7007fea09d5a0314860926c2b7d7",
+      "draws": 63
+    },
+    {
+      "sport": "nfl",
+      "seed": 87,
+      "hash": "78d6a41e1b5910d0071afa1faf303b58859f7c799b96656d433e59d62b18964b",
+      "draws": 66
+    },
+    {
+      "sport": "nfl",
+      "seed": 88,
+      "hash": "55a6d49b8acd7a8167c93c31a90b07c728e85c9e26ab1c649c29fa6000e8acdf",
+      "draws": 75
+    },
+    {
+      "sport": "nfl",
+      "seed": 89,
+      "hash": "702eafecc455316e9a989dd77784d1eb28e67e9d2b1f3f9ba93ead7525f5632e",
+      "draws": 75
+    },
+    {
+      "sport": "nfl",
+      "seed": 90,
+      "hash": "671d126c5144b6d227fe637610326f97e94ae4489f702ff5c9c1f88cfd3e05f5",
+      "draws": 60
+    },
+    {
+      "sport": "nfl",
+      "seed": 91,
+      "hash": "f639ca7b973a329c6966f1e90bd734209a0cf56a1d65e59a36877bdec9ad5076",
+      "draws": 67
+    },
+    {
+      "sport": "nfl",
+      "seed": 92,
+      "hash": "4c2904f5bd801f19613d1012fdc74d994b313bea96086695631ececa276bc9ed",
+      "draws": 68
+    },
+    {
+      "sport": "nfl",
+      "seed": 93,
+      "hash": "361501fb08b3a05ec13a0dcd08de634e9ed136891863cf26685800c2b3ad6c3e",
+      "draws": 61
+    },
+    {
+      "sport": "nfl",
+      "seed": 94,
+      "hash": "ad03f530a81ed7de6974e00da6ea20aff351140e4b6703cc5b0e3f855a870231",
+      "draws": 66
+    },
+    {
+      "sport": "nfl",
+      "seed": 95,
+      "hash": "431c9d1692150f40a22b0db8394bae5e919d43645d324666955a635a792359fe",
+      "draws": 70
+    },
+    {
+      "sport": "nfl",
+      "seed": 96,
+      "hash": "81bc48c340cee6c82a1b50027a7b4eaa09e640f0f7ab9947b398a369a82ca7bf",
+      "draws": 64
+    },
+    {
+      "sport": "nfl",
+      "seed": 97,
+      "hash": "dc2be9738e1b78f4645bfc9ce5029a5815902f6aec0c643db2cbb0da28753d94",
+      "draws": 70
+    },
+    {
+      "sport": "nfl",
+      "seed": 98,
+      "hash": "ea09a334c2f4e38e88d86e138e92ec6c66c5a3b68c6b8e5698e4ff822c44457d",
+      "draws": 70
+    },
+    {
+      "sport": "nfl",
+      "seed": 99,
+      "hash": "4609f7008d92f2a4a6534ab1f4e96e256e9394982c8a23f1a289ba719dd430cc",
+      "draws": 63
+    },
+    {
+      "sport": "nfl",
+      "seed": 100,
+      "hash": "c2ab6e717018ba4fdff3a11c1bdd8b6eef6e77c3f15b4e4b655891bcb0021578",
+      "draws": 66
+    },
+    {
+      "sport": "nfl",
+      "seed": 101,
+      "hash": "7edd54e0a8dd5e252f7c83b04808c8fdb74a30b6e783539b49bfc116cb6fb59f",
+      "draws": 64
+    },
+    {
+      "sport": "nfl",
+      "seed": 102,
+      "hash": "3456d8e1cc4791d1b88647cc3a1ccaaefbb4bda3d53d8dbfff99062eb5cea868",
+      "draws": 77
+    },
+    {
+      "sport": "nfl",
+      "seed": 103,
+      "hash": "22a92cc0f73db3cfa4bea22755bdd35677df3f16561585c5cc426913568e92c7",
+      "draws": 63
+    },
+    {
+      "sport": "nfl",
+      "seed": 104,
+      "hash": "de2191e3c1f70919e50c137f66cd81523243c184f041001cd5681aaa62f1df40",
+      "draws": 75
+    },
+    {
+      "sport": "nfl",
+      "seed": 105,
+      "hash": "34fb492327d58ac17d987d02538615e7142b31432da619e2eeca844a3330435a",
+      "draws": 62
+    },
+    {
+      "sport": "nfl",
+      "seed": 106,
+      "hash": "f51d1032225f173e7602e77a4cb72df2b05b025430b836d4a70377db6e96c41b",
+      "draws": 69
+    },
+    {
+      "sport": "nfl",
+      "seed": 107,
+      "hash": "e010319ae5fe287bc665547085f67782eb044993e0108a6f08df272d8d09d191",
+      "draws": 76
+    },
+    {
+      "sport": "nfl",
+      "seed": 108,
+      "hash": "afa149d5a3e5887ec520503d77bccb1a945d4d9a7deeea3d4e2b2e63459a397a",
+      "draws": 70
+    },
+    {
+      "sport": "nfl",
+      "seed": 109,
+      "hash": "514bcb9879c739628f70af910e4dfeaaccba8749b48f5bf7052858b1d644421a",
+      "draws": 73
+    },
+    {
+      "sport": "nfl",
+      "seed": 110,
+      "hash": "9475364018a2522c2d729e1d9513481ecadbcdc03055af0c4528d80ec05ddf0e",
+      "draws": 66
+    },
+    {
+      "sport": "nfl",
+      "seed": 111,
+      "hash": "3d3699f454f747c4e814df64b61b9a844df1bc0e4b8369003dd0a561d3d7618b",
+      "draws": 71
+    },
+    {
+      "sport": "nfl",
+      "seed": 112,
+      "hash": "be727e0b200a6fdbabcd33d156d7cdd7cec64db2fb1342546f7f503bc66d54ae",
+      "draws": 69
+    },
+    {
+      "sport": "nfl",
+      "seed": 113,
+      "hash": "6f4f51a992faec9abc83e310a160de070a63275297cc54113e80fce3ec6fd6a5",
+      "draws": 74
+    },
+    {
+      "sport": "nfl",
+      "seed": 114,
+      "hash": "c0bf7e8ec945922ac809ccfe5c8c0bdd15b29f2cd414a7e4c8b623a5a27f78ad",
+      "draws": 72
+    },
+    {
+      "sport": "nfl",
+      "seed": 115,
+      "hash": "67b176a07dfdf8158fbeed57dc03cb296e6b1db7e2907f848ea8575962a72ae5",
+      "draws": 61
+    },
+    {
+      "sport": "nfl",
+      "seed": 116,
+      "hash": "c9e2a5a5c0bef8c2cb6c14f9df85b9ee5f432742105f5dbe550ceaa938815f03",
+      "draws": 76
+    },
+    {
+      "sport": "nfl",
+      "seed": 117,
+      "hash": "14c7f5edcab873f83197d6ae644644667462f15f821799a97100e70f926baf7b",
+      "draws": 61
+    },
+    {
+      "sport": "nfl",
+      "seed": 118,
+      "hash": "7ae301562c2afc171c727c76a66affc04f66ba08481a54656ffa212cad6dc79d",
+      "draws": 69
+    },
+    {
+      "sport": "nfl",
+      "seed": 119,
+      "hash": "d4e73db78cb99a0bc04d5e4b12e4c6ed1b15467658f8b6e787387a78bbd3f946",
+      "draws": 74
+    },
+    {
+      "sport": "nfl",
+      "seed": 120,
+      "hash": "cfaed5829c6826f06e537c6693cdad086d2351bf11f1560826e2343ac5e43997",
+      "draws": 78
+    },
+    {
+      "sport": "nfl",
+      "seed": 121,
+      "hash": "de3f938d4b09e7fc2067a88c09a2bfea53ab5242b795db987c251f06297dbfe8",
+      "draws": 64
+    },
+    {
+      "sport": "nfl",
+      "seed": 122,
+      "hash": "51cf35358cf814c55f923f69f46176cf4d0595fe3e8b00db99af91035e7a09e7",
+      "draws": 74
+    },
+    {
+      "sport": "nfl",
+      "seed": 123,
+      "hash": "bc73ea6d632ae185a6d5fe934ff166476fe0deacaba20d4bfca779ce59b1d4e7",
+      "draws": 79
+    },
+    {
+      "sport": "nfl",
+      "seed": 124,
+      "hash": "8272a20eb53833e4c377294efb174cf33072737d2526176b0f6c69e8c129c6ce",
+      "draws": 77
+    },
+    {
+      "sport": "nfl",
+      "seed": 125,
+      "hash": "148ef684cd95a33876860445f8def672feb898b8a7faf1a93b5726b5d971acd3",
+      "draws": 72
+    },
+    {
+      "sport": "nfl",
+      "seed": 126,
+      "hash": "d221cb2bbeb2d674698c21df4aa8691ae2a80d5edd13f5a62d7792edeed2ccbf",
+      "draws": 70
+    },
+    {
+      "sport": "nfl",
+      "seed": 127,
+      "hash": "f80b5ecfe417d9e023b887bd2f2231cbf0e496592bf8f25de10cc4613b71fd4f",
+      "draws": 68
+    },
+    {
+      "sport": "nba",
+      "seed": 0,
+      "hash": "1e8402178f1977085cbea7cb73ce07fa4ea2d71c9739f8095878fdf727157015",
+      "draws": 61,
+      "actions": [
+        "three",
+        "and_one",
+        "block",
+        "three",
+        "and_one",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 1,
+      "hash": "66a563734a061f2db6e3ae1487e9dbec181fe0c52cceafbbf7f010744e49bda7",
+      "draws": 59,
+      "actions": [
+        "steal",
+        "drive",
+        "three",
+        "drive",
+        "drive",
+        "free_throw",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 2,
+      "hash": "292950a9f878cd9402a4e3ad09d403f2ffc72aa55b34223f15778ab5b69059fe",
+      "draws": 71,
+      "actions": [
+        "block",
+        "three",
+        "three",
+        "three",
+        "drive",
+        "drive",
+        "steal",
+        "strip"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 3,
+      "hash": "bc74f27510a361ca81818679e4ffe6206ba3b655107a7eca06783ab89069291b",
+      "draws": 69,
+      "actions": [
+        "three",
+        "drive",
+        "free_throw",
+        "strip",
+        "steal",
+        "drive",
+        "block",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 4,
+      "hash": "fb261097b89ece2d26d31019bd3c39fae262c32e0318edd5069a836017c461a2",
+      "draws": 70,
+      "actions": [
+        "three",
+        "drive",
+        "block",
+        "strip",
+        "three",
+        "three",
+        "strip",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 5,
+      "hash": "7fd41915bc47224238f6622ac690952911cb9570dd4be62e67c5f1e1da0b3deb",
+      "draws": 68,
+      "actions": [
+        "block",
+        "three",
+        "strip",
+        "three",
+        "three",
+        "free_throw",
+        "block",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 6,
+      "hash": "e7e545e638a9ccdd9eba823c0c1e6d6a85e90059cad65b3dc252c542cb8a3bcf",
+      "draws": 60,
+      "actions": [
+        "three",
+        "three",
+        "free_throw",
+        "steal",
+        "steal",
+        "block",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 7,
+      "hash": "e5ececea01e0970d7d69c47c12782edfe9451f1090c21c9cf9c59bd8f04e1f68",
+      "draws": 60,
+      "actions": [
+        "drive",
+        "drive",
+        "strip",
+        "free_throw",
+        "drive",
+        "block"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 8,
+      "hash": "1346b41ec0f19da0fcfb8312d0589077564f45a31e06761e1709fe01281c4569",
+      "draws": 57,
+      "actions": [
+        "drive",
+        "three",
+        "steal",
+        "three",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 9,
+      "hash": "60d39e5f942cf1d3c8376f1599bcaa55c13a62d488d1564feb4912e1d96d325c",
+      "draws": 53,
+      "actions": [
+        "free_throw",
+        "three",
+        "steal",
+        "block",
+        "free_throw",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 10,
+      "hash": "a3cd157fccff8bc494c053135dfb2c6853f63b735d3db9be144acf528a430287",
+      "draws": 63,
+      "actions": [
+        "free_throw",
+        "three",
+        "strip",
+        "three",
+        "three",
+        "three",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 11,
+      "hash": "c721dcb7fbe562d18dc23ed8c80cdafefb7bf62fe9e7c8fe148670be4b19d1cf",
+      "draws": 64,
+      "actions": [
+        "strip",
+        "block",
+        "three",
+        "three",
+        "free_throw",
+        "three",
+        "block"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 12,
+      "hash": "614f24f09a61ca93436d0a6a1ec08b120877b6d3b62f07592347669609d2f6e3",
+      "draws": 56,
+      "actions": [
+        "steal",
+        "block",
+        "three",
+        "free_throw",
+        "drive",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 13,
+      "hash": "255c78458918685cb81403870c289daf04a0d09c3d4934950105851a249c5f86",
+      "draws": 66,
+      "actions": [
+        "three",
+        "free_throw",
+        "block",
+        "and_one",
+        "three",
+        "drive",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 14,
+      "hash": "f66bf4b989d9ab72b7b603d98c20598dc23ef61c625002c5ee910c257aee3cc1",
+      "draws": 66,
+      "actions": [
+        "drive",
+        "free_throw",
+        "three",
+        "three",
+        "three",
+        "drive",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 15,
+      "hash": "4ac5e9c23edeecd2c01fa6d717cbdfe1365f904df442b96956d85bef4d7283cd",
+      "draws": 60,
+      "actions": [
+        "block",
+        "and_one",
+        "three",
+        "and_one",
+        "free_throw",
+        "block"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 16,
+      "hash": "5cdc9179a398a849ae58a1a682b5549951b28f0544cda5814cd2de4be765a5fc",
+      "draws": 61,
+      "actions": [
+        "drive",
+        "steal",
+        "three",
+        "drive",
+        "free_throw",
+        "three",
+        "block"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 17,
+      "hash": "fc0df44b4c0090464479c5daeb448c94d10a9c84050f741c3faf2517d32e2ed7",
+      "draws": 67,
+      "actions": [
+        "three",
+        "three",
+        "three",
+        "block",
+        "three",
+        "drive",
+        "steal",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 18,
+      "hash": "6a306032a7fec521e5b60d141fcbdff00cd1fa14561f18612652475889a7ef28",
+      "draws": 64,
+      "actions": [
+        "three",
+        "three",
+        "block",
+        "three",
+        "three",
+        "drive",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 19,
+      "hash": "0aa3f4f8e592acab417649490b5e1d764f7615b32e6161ac9450b0dc16e830d2",
+      "draws": 60,
+      "actions": [
+        "free_throw",
+        "drive",
+        "drive",
+        "drive",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 20,
+      "hash": "12405aa7dd8f9d016aa0cedda62bfe63a34259c2a2d96120f9c9fdea629d17f2",
+      "draws": 67,
+      "actions": [
+        "three",
+        "steal",
+        "three",
+        "three",
+        "steal",
+        "three",
+        "three",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 21,
+      "hash": "fc285f0ac39fd152eaa541d678afee973ff95635344fbc495611a51b2b3dc6e3",
+      "draws": 63,
+      "actions": [
+        "block",
+        "free_throw",
+        "three",
+        "block",
+        "free_throw",
+        "three",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 22,
+      "hash": "019ba6eb6f9d04418a32f13cf42b901bb51998435b5dde944220c45d48ed83c0",
+      "draws": 65,
+      "actions": [
+        "three",
+        "drive",
+        "three",
+        "free_throw",
+        "three",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 23,
+      "hash": "e03e7566decab89c66cd8f4bd811ebd730c0a298e6d710d6a07482a34ea9daed",
+      "draws": 58,
+      "actions": [
+        "three",
+        "three",
+        "drive",
+        "three",
+        "block",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 24,
+      "hash": "744233e72ca0a66122a2a6e526913bae69bf0887f2e2799d2c6bb3b521ecb7fa",
+      "draws": 57,
+      "actions": [
+        "three",
+        "free_throw",
+        "block",
+        "free_throw",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 25,
+      "hash": "e069c4ce86bd1530767603bc47458f3d48e35dcc9dafcc397550aaf0ed27a67c",
+      "draws": 64,
+      "actions": [
+        "drive",
+        "three",
+        "three",
+        "steal",
+        "three",
+        "block",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 26,
+      "hash": "501fd4ae25a0926330ca24dc124b6cef595fad23b81f5ec37d7c5551d538c05e",
+      "draws": 65,
+      "actions": [
+        "three",
+        "free_throw",
+        "free_throw",
+        "strip",
+        "block",
+        "three",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 27,
+      "hash": "1c2a1252e3e185835742243bef0a5cfc1ebe1bd9b0abc1772f55f70f1c2e0e28",
+      "draws": 65,
+      "actions": [
+        "three",
+        "block",
+        "three",
+        "drive",
+        "three",
+        "steal",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 28,
+      "hash": "5911c34a425695ab840a98826353dd653f756eaab0776c17fcd73da30f852c7e",
+      "draws": 60,
+      "actions": [
+        "drive",
+        "block",
+        "steal",
+        "three",
+        "free_throw",
+        "drive",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 29,
+      "hash": "8aa4d633efd3f5c2f6c742f6af0669aa5d7d7c4941b5cf172db0b9514f1de3f6",
+      "draws": 60,
+      "actions": [
+        "three",
+        "three",
+        "drive",
+        "three",
+        "drive",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 30,
+      "hash": "beb0030f3c5526bc88ecdc6b5e23213660d418d0dfb4552684200082a29d7212",
+      "draws": 68,
+      "actions": [
+        "three",
+        "drive",
+        "free_throw",
+        "three",
+        "drive",
+        "steal",
+        "three",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 31,
+      "hash": "1786a7eb0f461e0919297fc639c2b9a18c924ec6cac32b73c520035b53034480",
+      "draws": 68,
+      "actions": [
+        "three",
+        "block",
+        "three",
+        "free_throw",
+        "drive",
+        "three",
+        "free_throw",
+        "strip"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 32,
+      "hash": "a59e0eb2464203e2df7487df65755469f3fa7b9efe52b8b650913455d346e246",
+      "draws": 64,
+      "actions": [
+        "free_throw",
+        "free_throw",
+        "drive",
+        "strip",
+        "three",
+        "three",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 33,
+      "hash": "f3556cab397c23eaca3add7a857fd3bf30cc21c2482930773781a3905a162e33",
+      "draws": 63,
+      "actions": [
+        "three",
+        "free_throw",
+        "free_throw",
+        "three",
+        "block",
+        "block",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 34,
+      "hash": "efb7cd132dae3fab281b43e3c55b69592fa2bc03fd8fa0ae28a965d3d664a096",
+      "draws": 64,
+      "actions": [
+        "block",
+        "three",
+        "drive",
+        "three",
+        "block",
+        "steal",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 35,
+      "hash": "90b771986faa0de5f4cb806cf32891ddba77e63e134f47be893d9e6402358234",
+      "draws": 59,
+      "actions": [
+        "free_throw",
+        "free_throw",
+        "three",
+        "drive",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 36,
+      "hash": "675a69cb7950e2441333d6b9952f33bf30776a87c9ebcc0bee7f3a747afa6490",
+      "draws": 62,
+      "actions": [
+        "three",
+        "free_throw",
+        "steal",
+        "steal",
+        "steal",
+        "three",
+        "drive",
+        "strip"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 37,
+      "hash": "9b50d42b39eb99267d77fd73d8d117969ff0654b040205c570b0ebf1c500c72d",
+      "draws": 65,
+      "actions": [
+        "strip",
+        "strip",
+        "free_throw",
+        "three",
+        "three",
+        "drive",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 38,
+      "hash": "a610e5b8146aa23baf2c3bb88de9a20292879ab80ac74eef979744d502094603",
+      "draws": 65,
+      "actions": [
+        "free_throw",
+        "steal",
+        "three",
+        "block",
+        "drive",
+        "free_throw",
+        "free_throw",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 39,
+      "hash": "96e45ba7e1e8df97ddf83b1220bb4d9a010d50a42710a242f3dcdab570aaee20",
+      "draws": 49,
+      "actions": [
+        "three",
+        "steal",
+        "free_throw",
+        "and_one",
+        "steal",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 40,
+      "hash": "149a144b5f3930272ab3f709cf86d3232853c6002e899a46cfba78ac3489cd9f",
+      "draws": 63,
+      "actions": [
+        "block",
+        "free_throw",
+        "three",
+        "block",
+        "block",
+        "steal",
+        "strip"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 41,
+      "hash": "aa93ac9be460d1e871a13c4cde36c466533eaf00f3a0e05f19ac9893c2a365d3",
+      "draws": 70,
+      "actions": [
+        "drive",
+        "drive",
+        "three",
+        "three",
+        "three",
+        "block",
+        "drive",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 42,
+      "hash": "0e2b0f997371ac518aab2137562f1dc7daae97ebb0f068d42e05a84a32f78016",
+      "draws": 66,
+      "actions": [
+        "drive",
+        "block",
+        "strip",
+        "three",
+        "free_throw",
+        "drive",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 43,
+      "hash": "b0cabd4c133c997449873afdbff4bbeec41194452214dec842fed9358f31518f",
+      "draws": 62,
+      "actions": [
+        "three",
+        "free_throw",
+        "three",
+        "steal",
+        "steal",
+        "block",
+        "drive",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 44,
+      "hash": "9998403be533062e430deea73cf52e25bfd758e99f9f081f186a83c9e3d95a99",
+      "draws": 69,
+      "actions": [
+        "free_throw",
+        "and_one",
+        "free_throw",
+        "drive",
+        "steal",
+        "drive",
+        "block",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 45,
+      "hash": "afb9a9859916abeb97abd2529c2aeb256a2f6d82a2e6b4a0a51bf25e392dbd27",
+      "draws": 57,
+      "actions": [
+        "and_one",
+        "free_throw",
+        "block",
+        "block",
+        "free_throw",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 46,
+      "hash": "d65df7be3faa521594e9b6ed26b8e1b1b50e6a0b557527f15e9c5c7f0b8b60a5",
+      "draws": 52,
+      "actions": [
+        "free_throw",
+        "free_throw",
+        "steal",
+        "free_throw",
+        "steal",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 47,
+      "hash": "e2f2457c7ff3d014a7aedc87503abd387b6696c1bf38742e83124f198a323d8b",
+      "draws": 66,
+      "actions": [
+        "block",
+        "drive",
+        "drive",
+        "three",
+        "block",
+        "drive",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 48,
+      "hash": "55ff6a9b2a00afec07dd07d5a8be2406229b1323b32e791ee8fa125f274a4587",
+      "draws": 70,
+      "actions": [
+        "three",
+        "free_throw",
+        "drive",
+        "three",
+        "three",
+        "drive",
+        "strip",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 49,
+      "hash": "dcdfdd66b2c4303e0300f7b3d47e1d93c2c189a83150fb245ea3fc61c7bc7356",
+      "draws": 65,
+      "actions": [
+        "three",
+        "three",
+        "drive",
+        "drive",
+        "drive",
+        "free_throw",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 50,
+      "hash": "2568c67b4fa8b258c86617df59b9e0d05c6ffa104359fcc793bf1ec3b98ae50a",
+      "draws": 57,
+      "actions": [
+        "three",
+        "free_throw",
+        "steal",
+        "block",
+        "steal",
+        "drive",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 51,
+      "hash": "6e05d9e3d40edfa3fcfa3c378e78df66b9079b7618ba2b508d63955647a4253e",
+      "draws": 56,
+      "actions": [
+        "three",
+        "steal",
+        "drive",
+        "three",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 52,
+      "hash": "f9e2b85e5798867539a8e12a970ca3b635514f7f2acc330f005e876365a853eb",
+      "draws": 56,
+      "actions": [
+        "free_throw",
+        "free_throw",
+        "three",
+        "three",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 53,
+      "hash": "634e5d16ce536e53eb50837f4f8d109bf00bbe0a8bffe52b58169a5791a95c34",
+      "draws": 49,
+      "actions": [
+        "steal",
+        "three",
+        "steal",
+        "steal",
+        "free_throw",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 54,
+      "hash": "6a1a50d714403b97a6d347ef198ea8376b76265e432ae9a1a65d9598fcdee9ea",
+      "draws": 56,
+      "actions": [
+        "block",
+        "block",
+        "steal",
+        "drive",
+        "free_throw",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 55,
+      "hash": "2132d298c189ba5dd029e3a1f518c6d1eb8e352299efc297dc63aae0e8e2a803",
+      "draws": 67,
+      "actions": [
+        "drive",
+        "three",
+        "drive",
+        "free_throw",
+        "three",
+        "drive",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 56,
+      "hash": "a96dbf103281b5137e05b54940ec6348505be0588b18dce135f9f04f9e88a518",
+      "draws": 58,
+      "actions": [
+        "three",
+        "free_throw",
+        "three",
+        "three",
+        "block",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 57,
+      "hash": "b887009d0c3c45cf3fb6aef8a07ce537046c52e8ba6eb3aa68addac85d15d531",
+      "draws": 68,
+      "actions": [
+        "strip",
+        "block",
+        "free_throw",
+        "steal",
+        "three",
+        "three",
+        "three",
+        "block"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 58,
+      "hash": "d2d16b4388694e007c03be59bcbc64099f107bba9009580ad69308c1955d531b",
+      "draws": 59,
+      "actions": [
+        "three",
+        "strip",
+        "three",
+        "steal",
+        "steal",
+        "drive",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 59,
+      "hash": "53cf974335a8314e5a07bd86795dd98ccbe54b6589e364637478505220107f7a",
+      "draws": 59,
+      "actions": [
+        "three",
+        "steal",
+        "block",
+        "drive",
+        "three",
+        "steal",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 60,
+      "hash": "7f0b57453a3d2ba3f3ac5938aa850f06bfa0a5585510004b7af7f07ec65e92a8",
+      "draws": 59,
+      "actions": [
+        "block",
+        "free_throw",
+        "free_throw",
+        "block",
+        "drive",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 61,
+      "hash": "92a240e8f56fe5a3a8c609585dfce22effaefc64bdd06956120cf79922956167",
+      "draws": 64,
+      "actions": [
+        "drive",
+        "block",
+        "drive",
+        "and_one",
+        "free_throw",
+        "three",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 62,
+      "hash": "3fa1ee33d7ef49ac0d50a138c1fb3a6d2fda34d107d27c429e053cea854ae88d",
+      "draws": 70,
+      "actions": [
+        "drive",
+        "three",
+        "block",
+        "steal",
+        "strip",
+        "strip",
+        "strip",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 63,
+      "hash": "fcefee4f7a2e1eed64e7327a7bc11205f4b60419c0944c185afef00faf58e31f",
+      "draws": 54,
+      "actions": [
+        "three",
+        "and_one",
+        "block",
+        "steal",
+        "three",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 64,
+      "hash": "7c288ac6a28d86186d075c7abd545288fb8006423b18ce048d53798dd5e3937b",
+      "draws": 69,
+      "actions": [
+        "three",
+        "free_throw",
+        "strip",
+        "block",
+        "three",
+        "drive",
+        "three",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 65,
+      "hash": "35a1e73090bba3d54186346588c34aeff61754bc26ff67ab24a92466ede88e7b",
+      "draws": 55,
+      "actions": [
+        "drive",
+        "three",
+        "steal",
+        "free_throw",
+        "block",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 66,
+      "hash": "b5ff6695048a76250bc032e65fb31949c8d77d02aa8c367165479ac669e86d2a",
+      "draws": 59,
+      "actions": [
+        "strip",
+        "three",
+        "free_throw",
+        "three",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 67,
+      "hash": "cf6a10b30e5bf12b846026bb8b9ec2eee54aa5a5510fd0ef156d128ed9070973",
+      "draws": 67,
+      "actions": [
+        "block",
+        "three",
+        "drive",
+        "block",
+        "free_throw",
+        "free_throw",
+        "steal",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 68,
+      "hash": "bf5f7856a6ec7793018d41c99ac7cf149b0d745f2688b912b08fcb223009b53a",
+      "draws": 58,
+      "actions": [
+        "steal",
+        "block",
+        "strip",
+        "three",
+        "block",
+        "steal",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 69,
+      "hash": "329847c40d19be79cf3e9c1f5cbe2b2e82986d9b5ffff74fd12422532d85febe",
+      "draws": 67,
+      "actions": [
+        "free_throw",
+        "free_throw",
+        "three",
+        "free_throw",
+        "drive",
+        "three",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 70,
+      "hash": "3d47b7383d5b118cc60f3ba1f94cda47559001fb4a014a3a7557d4f3223b4357",
+      "draws": 69,
+      "actions": [
+        "strip",
+        "steal",
+        "three",
+        "three",
+        "three",
+        "three",
+        "strip",
+        "block"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 71,
+      "hash": "f6a0b11a61b89233d6dca984d9a2e8f7e4e57e1582c7ca4a9b126d527629e7e4",
+      "draws": 71,
+      "actions": [
+        "drive",
+        "block",
+        "drive",
+        "three",
+        "three",
+        "three",
+        "drive",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 72,
+      "hash": "27d8386f130eeba1c2585d1bad8a449325f9d03a634bc1d1527d845e0f8f1ac7",
+      "draws": 60,
+      "actions": [
+        "three",
+        "three",
+        "block",
+        "strip",
+        "free_throw",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 73,
+      "hash": "1d317bc369f00a18e812e73ca6e74083da2cf5fd190fe77ec65f62a021c14e47",
+      "draws": 70,
+      "actions": [
+        "three",
+        "three",
+        "and_one",
+        "block",
+        "steal",
+        "block",
+        "drive",
+        "strip"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 74,
+      "hash": "6905d4f3a2d02e0fa28659d38b14765baa64b874dc78fbcfdc91791ec81f3e74",
+      "draws": 60,
+      "actions": [
+        "drive",
+        "free_throw",
+        "drive",
+        "and_one",
+        "drive",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 75,
+      "hash": "c7f9d282cb7217a938810ea369756420b4524f482c4a61965ff004115bcecd4b",
+      "draws": 55,
+      "actions": [
+        "three",
+        "three",
+        "steal",
+        "block",
+        "three",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 76,
+      "hash": "0d3558a3abb5ef0682cf81fc8263cacd45cbecae2a0a959f2fc9b041bcbac0dd",
+      "draws": 64,
+      "actions": [
+        "three",
+        "block",
+        "free_throw",
+        "three",
+        "block",
+        "block",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 77,
+      "hash": "ebde28f9e177e530993ca372ad92ddd5d651b5ce7db5185e6d4c498f4558cc7e",
+      "draws": 64,
+      "actions": [
+        "block",
+        "three",
+        "and_one",
+        "steal",
+        "three",
+        "block",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 78,
+      "hash": "868dacc1a1ced576b9aca6f6b89dd722baa16fbd1f0e9f4aa9eb96eacf5700ed",
+      "draws": 65,
+      "actions": [
+        "strip",
+        "free_throw",
+        "strip",
+        "strip",
+        "drive",
+        "three",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 79,
+      "hash": "6fe15d03c9cc3548d5a88724ae58915289fc39c6007c7b0737f0f00013508628",
+      "draws": 60,
+      "actions": [
+        "and_one",
+        "three",
+        "drive",
+        "free_throw",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 80,
+      "hash": "a09871cff41d952ab6456192068360ced2114034874c878e0c9dfbf8facc0089",
+      "draws": 68,
+      "actions": [
+        "three",
+        "three",
+        "three",
+        "drive",
+        "block",
+        "three",
+        "three",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 81,
+      "hash": "fff95625ee2c2dfaf794b747fb4f655f29be365976a5b0d7b521b47442b8b1e2",
+      "draws": 71,
+      "actions": [
+        "drive",
+        "three",
+        "and_one",
+        "three",
+        "drive",
+        "three",
+        "strip",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 82,
+      "hash": "02ad1583df1f896e75742f72a1d5f0a20240350089f4b98c390c0a34180b4fb3",
+      "draws": 73,
+      "actions": [
+        "drive",
+        "block",
+        "strip",
+        "drive",
+        "drive",
+        "drive",
+        "strip",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 83,
+      "hash": "f4d2551bc29bad15bca8d6222db800a9ce617c49a9cf1ad29ecb9361761e8824",
+      "draws": 65,
+      "actions": [
+        "drive",
+        "steal",
+        "drive",
+        "drive",
+        "three",
+        "steal",
+        "three",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 84,
+      "hash": "207b5487a4739e4f65097f899a3d499c26fb68a3cfaf9fdd2b2fc874e3ee4a33",
+      "draws": 64,
+      "actions": [
+        "drive",
+        "block",
+        "three",
+        "drive",
+        "free_throw",
+        "free_throw",
+        "block"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 85,
+      "hash": "4cfc2bd31dff72185be61b48437d0a7eff240baee053b4651f565fd52212f980",
+      "draws": 63,
+      "actions": [
+        "three",
+        "free_throw",
+        "drive",
+        "drive",
+        "steal",
+        "three",
+        "block"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 86,
+      "hash": "80873fb49b01141f2256d677b950800fa006b73135d821c91dba0d0c02319483",
+      "draws": 60,
+      "actions": [
+        "free_throw",
+        "drive",
+        "block",
+        "three",
+        "strip",
+        "block"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 87,
+      "hash": "f191c0b5bd60548caf6658eecec1099bbbda3285362670ff21f80eb820eceff0",
+      "draws": 61,
+      "actions": [
+        "block",
+        "three",
+        "drive",
+        "drive",
+        "drive",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 88,
+      "hash": "47ebef5445c2ba464804c78a4ba573bf924b103826b8fd332bb1d07a21d1998c",
+      "draws": 67,
+      "actions": [
+        "drive",
+        "three",
+        "free_throw",
+        "three",
+        "free_throw",
+        "free_throw",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 89,
+      "hash": "f0b807d09dcad75be4773d74e5f20939eee5c35a68f3b09bca002e0332840971",
+      "draws": 66,
+      "actions": [
+        "free_throw",
+        "free_throw",
+        "free_throw",
+        "three",
+        "steal",
+        "three",
+        "three",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 90,
+      "hash": "d607eacc8f3081d0aed5ff0d6d5d337a38e540d2df4fbf423cf144ffb4bd61a8",
+      "draws": 54,
+      "actions": [
+        "block",
+        "three",
+        "steal",
+        "steal",
+        "three",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 91,
+      "hash": "a78eeab1b3309649630c4225faba227ae3078b2409e6d8eed5f9b14e715de8d7",
+      "draws": 63,
+      "actions": [
+        "block",
+        "three",
+        "free_throw",
+        "drive",
+        "three",
+        "block",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 92,
+      "hash": "9b0c15101607939cd202b86a7e10f46138e8776d4540b411ccd92fec0b096285",
+      "draws": 64,
+      "actions": [
+        "block",
+        "block",
+        "and_one",
+        "free_throw",
+        "drive",
+        "steal",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 93,
+      "hash": "375c33ab978658d058bd3f5eef2abe819cb4d1d24c5dd747a43bfbaa9a82dac0",
+      "draws": 57,
+      "actions": [
+        "free_throw",
+        "free_throw",
+        "three",
+        "drive",
+        "free_throw",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 94,
+      "hash": "ef45af457b739d8c70459dca64493d991300dd15bbb8b953a0ce909bd684be0a",
+      "draws": 56,
+      "actions": [
+        "block",
+        "drive",
+        "three",
+        "steal",
+        "free_throw",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 95,
+      "hash": "249109cae677a5dfd91869a534dbae967a5ceffdd43891fcbc3e3fc96303929d",
+      "draws": 63,
+      "actions": [
+        "steal",
+        "free_throw",
+        "three",
+        "block",
+        "drive",
+        "three",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 96,
+      "hash": "f7d1d27cb851bced63a6ab99dbb923def0849106b90ddaf4239ec1dc6106de01",
+      "draws": 57,
+      "actions": [
+        "free_throw",
+        "three",
+        "strip",
+        "three",
+        "free_throw",
+        "strip"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 97,
+      "hash": "06f57b1baa021fbd93851bed1cbe0677fa4020acc4fec415a7abc595ae1c3e1a",
+      "draws": 62,
+      "actions": [
+        "drive",
+        "three",
+        "steal",
+        "block",
+        "three",
+        "drive",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 98,
+      "hash": "9f98c0ba5780e888e7e0c5ae590eb46438fc15a29b1a8248e674e566715ff851",
+      "draws": 61,
+      "actions": [
+        "three",
+        "strip",
+        "block",
+        "and_one",
+        "block",
+        "three",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 99,
+      "hash": "8be7476e11b02df730d0fb2c1c692d896aa0e2efd9f32a7172265c9aaed03774",
+      "draws": 58,
+      "actions": [
+        "strip",
+        "drive",
+        "three",
+        "drive",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 100,
+      "hash": "5e2ecb96411259da57c6e8aca363541fccb3bc96c76858f0251d5fd0ac8e93d7",
+      "draws": 55,
+      "actions": [
+        "free_throw",
+        "three",
+        "three",
+        "three",
+        "three",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 101,
+      "hash": "237b9845f744ba0d4ba353f98d3bdc447269caaa01f64a802056efac44996843",
+      "draws": 56,
+      "actions": [
+        "block",
+        "three",
+        "drive",
+        "free_throw",
+        "drive",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 102,
+      "hash": "1ea71d7727bd0bfe58fe56cc1c35f3e7a3f0ba0fab894d50bef893daa3db6372",
+      "draws": 68,
+      "actions": [
+        "steal",
+        "drive",
+        "free_throw",
+        "drive",
+        "strip",
+        "drive",
+        "three",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 103,
+      "hash": "5d4e34c44573ace80ccc8a29cf118ba4cbd2d4a272d2bbe8961c3afecd57c902",
+      "draws": 58,
+      "actions": [
+        "free_throw",
+        "and_one",
+        "drive",
+        "free_throw",
+        "three",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 104,
+      "hash": "cd34040f40f4b7079519fba3bab1eb8ed9eb0fcd5ccd1174690b0f5b84e35170",
+      "draws": 66,
+      "actions": [
+        "three",
+        "three",
+        "drive",
+        "strip",
+        "steal",
+        "steal",
+        "free_throw",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 105,
+      "hash": "fefe684b69890c91057c92507670658f3983fd160ff17d6fa12a4e8efd8532e0",
+      "draws": 56,
+      "actions": [
+        "free_throw",
+        "block",
+        "free_throw",
+        "steal",
+        "three",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 106,
+      "hash": "22864528505b8f38418d3ba19e73a659d3003e4a4733638cff04fa61fc938b4a",
+      "draws": 57,
+      "actions": [
+        "free_throw",
+        "three",
+        "block",
+        "strip",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 107,
+      "hash": "3d62d07adb539f14dcab3c1469589a507291f4eabb55dca59917251f77d7cc23",
+      "draws": 70,
+      "actions": [
+        "drive",
+        "three",
+        "three",
+        "drive",
+        "three",
+        "free_throw",
+        "free_throw",
+        "block"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 108,
+      "hash": "63189a26450d1c499c16417fa2cb0ce3470681e8e4b096a6c3062f6546ca680b",
+      "draws": 63,
+      "actions": [
+        "free_throw",
+        "three",
+        "three",
+        "three",
+        "three",
+        "strip",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 109,
+      "hash": "7957a0da727fb4e3952b0e2ce672cade563ad2e33289906f331e12ead37043e9",
+      "draws": 70,
+      "actions": [
+        "three",
+        "and_one",
+        "three",
+        "block",
+        "three",
+        "free_throw",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 110,
+      "hash": "3d970566bf9d8e2bd8be79ce8c6eff2a0b593c2fd478e28971e315383f55b57c",
+      "draws": 55,
+      "actions": [
+        "free_throw",
+        "free_throw",
+        "free_throw",
+        "three",
+        "strip",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 111,
+      "hash": "3b1d11d7a65eb1f25602c7d0cbc81e73006b02e3c203691cd118cdc4a2f3a02a",
+      "draws": 74,
+      "actions": [
+        "block",
+        "drive",
+        "drive",
+        "three",
+        "strip",
+        "drive",
+        "block",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 112,
+      "hash": "f26e307c2e0bfbfd898c3aa4a1622fdb5b32e1f2a4761c8d76f335089592b6d2",
+      "draws": 63,
+      "actions": [
+        "three",
+        "drive",
+        "three",
+        "three",
+        "three",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 113,
+      "hash": "677aed504244a7e0fa7527eb27f03d3b2f7ab249a75392c5eec13131b468dc12",
+      "draws": 65,
+      "actions": [
+        "three",
+        "free_throw",
+        "drive",
+        "free_throw",
+        "drive",
+        "steal",
+        "steal",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 114,
+      "hash": "7a05b7db546af9ff18199d8b146d449a3ea4da2a25e552fe93f9a1df27e86654",
+      "draws": 63,
+      "actions": [
+        "free_throw",
+        "drive",
+        "three",
+        "three",
+        "block",
+        "three",
+        "free_throw"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 115,
+      "hash": "85558ee3fe2ca427de8708845f8fca4dadec6799877f87556b4218a7652d584d",
+      "draws": 59,
+      "actions": [
+        "three",
+        "free_throw",
+        "block",
+        "block",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 116,
+      "hash": "7dca2c276a38313e20ea8100367c4b6e1c3d8ece9e10adbf8e8f5d81e7513b6d",
+      "draws": 68,
+      "actions": [
+        "drive",
+        "drive",
+        "three",
+        "free_throw",
+        "three",
+        "three",
+        "free_throw",
+        "steal"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 117,
+      "hash": "08fbd37e5c76b223dcf44b4b42a108d618e3bd09dd8a047673cebf1d7b767286",
+      "draws": 61,
+      "actions": [
+        "three",
+        "block",
+        "three",
+        "strip",
+        "drive",
+        "strip"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 118,
+      "hash": "7c59e06606a90208ff066121f914ab97917356ec153956fcf991524f31f1077f",
+      "draws": 59,
+      "actions": [
+        "free_throw",
+        "three",
+        "three",
+        "three",
+        "block",
+        "block"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 119,
+      "hash": "6dd670b01b739a74871c9d0bfe28e55750f5474cd3f081a78d68b124d582273c",
+      "draws": 70,
+      "actions": [
+        "steal",
+        "drive",
+        "block",
+        "three",
+        "strip",
+        "block",
+        "block",
+        "block"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 120,
+      "hash": "f4f60f9e313bfc93168a4abb20366f3d1432ab6f65476b4bc77d6274eff1f6d7",
+      "draws": 69,
+      "actions": [
+        "three",
+        "steal",
+        "drive",
+        "three",
+        "three",
+        "block",
+        "free_throw",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 121,
+      "hash": "178425e8ed535695455e1941ca4eaef469e4a1786c205d3b61928505e516a2c1",
+      "draws": 53,
+      "actions": [
+        "three",
+        "three",
+        "steal",
+        "steal",
+        "three",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 122,
+      "hash": "82058332157a6b08a11740654fd46ca3bf6ba1b5f837d0c810cd7a29015de91c",
+      "draws": 67,
+      "actions": [
+        "drive",
+        "three",
+        "drive",
+        "steal",
+        "three",
+        "drive",
+        "steal",
+        "strip"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 123,
+      "hash": "bf1d81d02c7629960723b3aa5847d3404a6c09e860ca257ced8eed801a5ae13b",
+      "draws": 67,
+      "actions": [
+        "three",
+        "free_throw",
+        "three",
+        "and_one",
+        "free_throw",
+        "steal",
+        "drive",
+        "drive"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 124,
+      "hash": "c9c2d3fb7776689e06fd518cd72dd28a2d5609c7dfaa265eb0351c111f7a6035",
+      "draws": 68,
+      "actions": [
+        "drive",
+        "drive",
+        "drive",
+        "steal",
+        "three",
+        "free_throw",
+        "free_throw",
+        "strip"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 125,
+      "hash": "aec2b36164f1e5c5102aca7e3752f538f48738dbb3840f69d003a9fb7f3d2261",
+      "draws": 71,
+      "actions": [
+        "three",
+        "drive",
+        "block",
+        "free_throw",
+        "three",
+        "three",
+        "three",
+        "three"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 126,
+      "hash": "6181a60d9be3af4e4e1c69635ed350a5e8da208d52de1c3afc9ffc56041ce8c7",
+      "draws": 65,
+      "actions": [
+        "three",
+        "three",
+        "block",
+        "block",
+        "three",
+        "three",
+        "strip"
+      ]
+    },
+    {
+      "sport": "nba",
+      "seed": 127,
+      "hash": "1728c3d1bd82317083314dbe58eaacf3f25cff749002dede107d618dd248e6a3",
+      "draws": 57,
+      "actions": [
+        "drive",
+        "steal",
+        "free_throw",
+        "strip",
+        "drive",
+        "block"
+      ]
+    }
+  ]
+}

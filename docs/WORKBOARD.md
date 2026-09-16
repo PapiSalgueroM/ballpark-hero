@@ -1,5 +1,18 @@
 # Work board
 
+**00:41 EDT September 16, Codex combined artifact published:** CI `35048332634`
+attempt 1 is fully green: 323 node harnesses, 321 component tests, browser
+gates and 101 explicit controls. Exact source `a96ed002` / verification
+`3a7e54b3` intake checked 1,980 inputs and 717 outputs. The 170 generated
+repository outputs match the artifact, and candidate parity passes with
+docs-only main `50d5903f` merged. All 11 strict raw loading budgets also pass.
+Published as Sites version 3 at https://douknowball.anacatu2025.chatgpt.site,
+using the exact accepted dist without a rebuild. Public checks verified 377
+asset hashes and 169 HTML pages, plus four corruption controls. Keep the application hold until PR 96 lands;
+617/618 can then be integrated from current main with their own verification.
+No DNS or AdSense review change. Follow-up PRs 98/99, kicker illustration and
+cookie storage recovery remain outside this artifact.
+
 **23:22 EDT, Codex combined verification update:** I read the 617/618 hold and
 local-runner note. Thank you for keeping both branches off main. Frozen source
 `a96ed002` and verification `3a7e54b3` remain unchanged. Remote CI `35048332634`
@@ -17,6 +30,22 @@ European message is Published. Direct Search Console inspections show Soccer
 Career and Footle indexed, despite Footle remaining in the September 3 aggregate
 exclusion report. No new review/indexing request, DNS change or paid upgrade.
 
+**22:58 EDT, fresh account checks:** AdSense still shows Getting ready / Review
+requested, with ads.txt Authorized. The Google European regulations message for
+douknowball.com is Published. Search Console's September 3 report shows 58 indexed
+and 91 excluded pages, with most crawled examples dated months ago. No review,
+indexing or validation submission, CMP change, paid upgrade or DNS change. The
+combined CI type, SEO build, browser and full Vitest gates pass; node harnesses
+are running and artifact intake is pending. GoDaddy
+sign-in remains pending. See the dated account observation under docs/adsense.
+
+**Codex follow-up, separate from the frozen release:** NFL Career's season stat
+formatter falls through to receiving fields for kickers and defenders, printing
+undefined values despite committed position-specific stats. Codex reserves the
+narrow formatter correction and its focused regression proof on a separate
+branch. No new match or possession events are being invented. This work will
+not enter the current frozen source or running verification.
+
 **22:35 EDT, Codex final combined CI is running:** Draft PR 96 freezes source
 `a96ed002`; verification `3a7e54b3` adds only the reviewed workflow. One run,
 `35048332634` attempt 1, checks the whole combined release with unchanged old
@@ -30,6 +59,22 @@ Rarity recovery and test cleanup are in the candidate. Fifteen focused cleanup
 tests pass, while the cancelled local Pitch run is explicitly not a pass.
 The main domain and pending AdSense review remain unchanged. GoDaddy sign-in
 is still needed; the alternate animation preview remains public.
+
+**22:16 EDT, Codex AdSense audit and final test repairs:** The supplied audit's
+403 claim did not reproduce. Nine main-domain addresses returned 200 under both
+ordinary and Mediapartners-Google headers, with readable policy/game HTML.
+Codex owns the narrow About, Privacy, Terms and home-template funding/hosting
+wording correction, now in the combined candidate. No new contact address,
+CMP claim, consent behavior or review request. See the September 15 checklist
+review under `docs/adsense/`.
+
+Rarity recovery passes six offline cases, 13 effective controls and app types,
+with independent source and receipt review. Local full Vitest's 321 assertions
+passed but its exit was 1 due to unhandled errors and blocked completion calls.
+Codex owns the focused test cleanup and fail-closed pitch-runner repair. Do not
+read the assertion count as release approval. A fresh serialized full CI will
+check the integrated final source, preserving main 034049cb and Claude's work.
+The accepted 588 alternate preview remains available; DNS access is pending.
 
 **21:33 EDT, Codex combined release repair:** Run `35038033612` finished
 with 318 passing node harnesses and failures in live motion fixtures and a
@@ -77,6 +122,13 @@ still pending. The `simTycoonPitch` concern from Claude's release receipts is
 being checked locally with remote requests blocked. Main `8b32a375` contains
 new publication receipts only. All live Claude features and claimed work are
 preserved; the old afternoon handoff is historical.
+
+**Current union integration:** `.worktrees/integrate-round-588-main` combines
+frozen 588 `8a4e00a5` and main `97d68894`, then the exact lazy-panel repair.
+All earlier feature proofs are historical exact-source proofs. No old
+artifact replaces main's College Grid outputs. A read-load repair and one
+fresh full union CI are still required; no new CI or production reads run
+as part of this source merge.
 
 **18:58 EDT database repair:** migration `20260915225210` is applied. Its
 covering index gives the unchanged public leaderboard measurable headroom
@@ -187,6 +239,36 @@ review. The owner will fix Lovable later; keep building within these release
 lanes. Editor-free publication through official Lovable MCP is supported but
 not connected in this session. No alternate host or DNS cutover is configured.
 
+**Historical feature integration notes (not union approval):**
+
+**2026-09-15, Round 588 source integration.** The boots branch combines
+`c03d2ff0` with clean Round 587 `5f3a9a12`, animation `a7453087`, Round 586
+`3530aacc` and final factual follow-up `a35693a5`. Equipment and gameplay code
+needed no manual merge edits. No verification workflow, test/build run or
+publication is included. Correction priority and separately verified releases
+remain the plan. The original dirty 587 worktree has not been changed.
+
+**2026-09-15, clean Round 587 release source.** Work continues for release
+in `.worktrees/round-587-final` on `codex/round-587-final`, created from
+`c5d97526` and merged with animation source `a7453087`. This carries corrected
+586 source `3530aacc` and factual follow-up `a35693a5`. The old 587 worktree and
+its 14 generated draft edits remain untouched. Existing watched-kick and map
+behavior is preserved; no workflow, test rerun or publication is claimed.
+Correction priority and fresh separate release verification still apply.
+
+**2026-09-15, animation source integration.** The 603 to 605 branch now
+combines map-guard repair `08216535` with Round 586 `3530aacc` and factual
+follow-up `a35693a5`. Existing action code is unchanged by this merge.
+Correction priority, separate feature releases and fresh full gates remain.
+No verification workflow or publication is included.
+
+**2026-09-15, factual follow-up integrated into Round 586.** The local
+first-team branch now includes correction `a35693a5`, following `eabde5cd`.
+The last MLB provenance sentence and matching saved page are included. The
+map-guard repair has passed and is committed in the animation branch; source
+integration through 588 is proceeding before fresh full verification. No
+workflow or publication is part of this merge. Correction priority is intact.
+
 **2026-09-15 15:19 EDT, Codex correction release check update.** The five
 guide corrections and three save/Record Books copy fixes are implemented at
 `a35693a5`. Phone tables now scroll within keyboard-accessible regions with
@@ -205,6 +287,15 @@ Publish order stays correction, 586, 603 to 605, 587, then 588. No later feature
 is started. AdSense's last confirmed state remains Getting ready at 12:37 EDT;
 no review was resubmitted. Lovable publication still needs a working connection
 and independent public checks after main lands.
+
+**2026-09-15, local Round 586 source integration.** Codex merged factual
+correction `253790d7` into `.worktrees/round-586-first-team` at `25533a22`.
+Both the correction and existing first-team behavior are preserved; no
+verification-branch workflow is included. Accurate guide/save copy retains
+publication priority. The release coordinator owns final correction readability
+and integrated download/build checks. Nothing from this merge is published,
+no earlier verification artifact approves it, and downstream propagation waits
+for the separate map-guard repair and coordinated release gates.
 
 **2026-09-15, Codex expands the factual correction to all five guides.**
 The independent source review found an NBA seed-pairing error and a stale
@@ -335,6 +426,15 @@ How it works:
   in docs/workflows/ and were fired afterwards. The numbers are labels, not an order.
 
 ## DESKTOP LANE NOTE, written 2026-09-11 by the desktop session (Claude Code on Anthony's PC). READ FIRST.
+
+**2026-09-15, Codex animation release being verified.** Rounds 603 to 605 are
+assembled in `.worktrees/animation-release-603-605`. The release includes 586
+as a base and must follow its separate publication. Focused animation checks
+are passing; full combined release checks and publication are still owed.
+Round 587 is also in progress in its own worktree and is not part of this
+animation release. The AdSense review remains pending; no repeat request was
+made. Preserve Claude's 610 to 619 engine/data scope and Cursor's formatting
+files when merging.
 
 **2026-09-15, Codex claims Round 605: basketball and football match motion.**
 The owner requested action animations across sports. This round uses the

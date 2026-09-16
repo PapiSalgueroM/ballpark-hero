@@ -1,3 +1,5 @@
+import { BOOTS } from '@/lib/soccerBoots';
+
 /* ─── Soccer Career: Create Your Appearance (Round 54) ───
    The look you build here follows you everywhere: the career header, the
    Ballon d'Or stage, newspaper features, and your retirement send-off.
@@ -125,30 +127,7 @@ export const ACCESSORIES: AppearanceOption[] = [
   { id: "undershirt", label: "Long Undershirt" },
 ];
 
-/* Fictional boot lines. Real brands stay out on purpose (same reason the
-   sponsor deals are Vortex and Kinetiq): zero trademark headaches. */
-export const BOOTS: (AppearanceOption & { color: string; flavor: string })[] = [
-  { id: "vortex_strike", label: "Vortex Strike", color: "#E0342C", flavor: "The volume seller. Red, loud, everywhere." },
-  { id: "vortex_ghost", label: "Vortex Ghost", color: "#EDEDED", flavor: "All white. You do NOT slide tackle in these." },
-  { id: "kinetiq_blaze", label: "Kinetiq Blaze", color: "#F28A1F", flavor: "Construction-cone orange. Defenders see you coming and it does not help them." },
-  { id: "kinetiq_void", label: "Kinetiq Void", color: "#181820", flavor: "Blackout edition for players who let the feet talk." },
-  { id: "aurora_nine", label: "Aurora Nine", color: "#37B58C", flavor: "Mint green, worn by exactly one show-off per league." },
-  { id: "aurora_royal", label: "Aurora Royal", color: "#2F4FB5", flavor: "Deep blue classics your dad approves of." },
-  { id: "pulse_gold", label: "Pulse Gold", color: "#D9A82D", flavor: "Gold boots. You had better score this week." },
-  { id: "pulse_venom", label: "Pulse Venom", color: "#7A3FB0", flavor: "Purple with attitude. The commentators will mention them." },
-  { id: "retro_classica", label: "Classica '86", color: "#2B2B25", flavor: "Old-school black leather. Purists nod in respect." },
-  { id: "bubblegum", label: "Bubblegum Pop", color: "#E86FAE", flavor: "Pink enough to trend on its own." },
-  /* Round 131: eight more lines, same rule as the first ten. Every name is
-     made up here and nobody else's. */
-  { id: "vortex_frost", label: "Vortex Frost", color: "#8FD4E8", flavor: "Ice blue. Somehow always look brand new at full time." },
-  { id: "kinetiq_flare", label: "Kinetiq Flare", color: "#F5E23C", flavor: "Highlighter yellow under floodlights. Impossible to miss." },
-  { id: "aurora_dusk", label: "Aurora Dusk", color: "#6B4E9E", flavor: "Faded purple that looks better the muddier it gets." },
-  { id: "pulse_copper", label: "Pulse Copper", color: "#B4703A", flavor: "Burnt copper, worn by people who take free kicks." },
-  { id: "terrace_navy", label: "Terrace Navy", color: "#23335C", flavor: "Quiet, dark, sensible. The boots of somebody who tackles." },
-  { id: "sunday_league", label: "Sunday League", color: "#C9CBC5", flavor: "Battered grey. You have had these since you were fourteen." },
-  { id: "carnival", label: "Carnival", color: "#2FB56A", flavor: "Green and gold split. Loud on purpose, and it works." },
-  { id: "midnight_chrome", label: "Midnight Chrome", color: "#4A4E57", flavor: "Gunmetal with a shine. Photographers love them." },
-];
+export { BOOTS } from '@/lib/soccerBoots';
 
 /* Round 99: found by playing it. Both places these appear render them as
    "you {line}", but every line was written in the third person, so the

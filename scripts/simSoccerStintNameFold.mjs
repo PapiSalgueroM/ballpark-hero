@@ -47,6 +47,7 @@
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { stintPages, stintPageUrl } from './lib/stintPages.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.STINT_FOLD_CONTROL || '';
@@ -100,15 +101,15 @@ if (!foldC4 || !foldGrid) {
 
 /* one paged scan, refusing to run rather than reporting findings on a bad read */
 const rows = [];
-for (let from = 0; from < 200000; from += 1000) {
+for await (const page of stintPages(async afterId => {
   let page = null;
   for (let attempt = 0; attempt < 4 && page === null; attempt += 1) {
     try {
-      const r = await fetch(`${URL_}/rest/v1/soccer_player_club_stints?select=player_name,name_folded&order=player_name.asc,club.asc`,
-        { headers: { ...HEAD, Range: `${from}-${from + 999}` } });
+      const r = await fetch(stintPageUrl(URL_, 'player_name,name_folded', afterId),
+        { headers: HEAD });
       if (r.ok) page = await r.json();
       else if (attempt === 3) {
-        console.error(`could not read soccer_player_club_stints at offset ${from} (HTTP ${r.status}); refusing to run rather than report findings against a bad read`);
+        console.error(`could not read soccer_player_club_stints after id ${afterId} (HTTP ${r.status}); refusing to run rather than report findings against a bad read`);
         process.exit(1);
       }
     } catch (e) {
@@ -116,8 +117,9 @@ for (let from = 0; from < 200000; from += 1000) {
     }
     if (page === null) await new Promise(r => setTimeout(r, 900 * (attempt + 1)));
   }
+  return page;
+})) {
   rows.push(...page);
-  if (page.length < 1000) break;
 }
 console.log(`   ${rows.length} stint rows read`);
 if (rows.length < 50000) {

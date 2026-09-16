@@ -171,8 +171,10 @@ console.log('6) No em or en dash in the new copy');
   const start = src.indexOf('Round 201: the wilderness');
   const chunk = src.slice(start, start + 6000);
   if (DASHES.test(chunk)) fail('dash in the wilderness engine');
-  const page = fs.readFileSync(path.join(ROOT, 'src/pages/ClubManager.tsx'), 'utf-8');
-  if (DASHES.test(page)) fail('dash in the Club Manager page');
+  for (const file of ['src/pages/ClubManager.tsx', 'src/components/club-manager/ClubManagerHelp.tsx', 'src/components/club-manager/ClubManagerSeasonSummary.tsx', 'src/components/club-manager/ClubManagerCareerPanel.tsx', 'src/components/club-manager/ClubManagerBoardPanel.tsx', 'src/components/club-manager/ClubManagerTreatmentPanel.tsx']) {
+    const page = fs.readFileSync(path.join(ROOT, file), 'utf-8');
+    if (DASHES.test(page)) fail(`dash in ${file}`);
+  }
 }
 
 console.log('');

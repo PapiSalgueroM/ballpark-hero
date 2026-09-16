@@ -236,7 +236,7 @@ const rollsANumber = code => {
 
 /* 1b. Reduced motion beside every keyframe. */
 const REDUCED_MOTION_BASELINE = ['src/pages/GuessTheCollege.tsx', 'src/pages/PlayerBingo.tsx'];
-const ROUND_530_KEYFRAME_FILES = [KIT, DRAFT_NIGHT, 'src/pages/IdleArena.tsx', 'src/pages/StadiumTycoon.tsx', 'src/components/tycoon/AcademyPanel.tsx'];
+const ROUND_530_KEYFRAME_FILES = [KIT, 'src/components/club-manager/CelebrationStyles.tsx', DRAFT_NIGHT, 'src/pages/IdleArena.tsx', 'src/pages/StadiumTycoon.tsx', 'src/components/tycoon/AcademyPanel.tsx'];
 {
   const styleBlocks = code => [...code.matchAll(/<style[^>]*>\{([\s\S]*?)\}<\/style>/g)].map(m => m[1]);
   const keyframe = /@keyframes\s+[\w-]+/;

@@ -15,8 +15,9 @@ import {
   activateBoost, hire, catchGolden, rollGoldenKind, goldenActive, ACH_BONUS,
   GOLDEN_INFO, fmtMoney, buyPerk, perkById, setClubName, GOLDEN_CATCH_SEC, GOLDEN_MEAN_GAP_SEC, HYPE_MULT,
   awaySecondsOf, playAwayMatchdays, AWAY_MATCHDAY_SEC, leaguePosition, leagueShape,
+  setPieceOffer, beginSetPiece, awardSetPieceGoal,
 } from '@/lib/stadiumTycoon';
-import type { GoldenKind, LeagueClub, AwayMatch } from '@/lib/stadiumTycoon';
+import type { GoldenKind, LeagueClub, AwayMatch, SetPieceOffer } from '@/lib/stadiumTycoon';
 
 /** Round 162: a golden whistle drifting across the pitch, waiting to be
  *  caught. Purely presentational until the tap: the engine only hears about
@@ -62,7 +63,9 @@ export interface AwayTrip {
   standing: { position: number; clubs: number; left: number } | null;
 }
 
-export function useStadiumTycoon() {
+export function useStadiumTycoon(getEdge?: () => number) {
+  const getEdgeRef = useRef(getEdge);
+  getEdgeRef.current = getEdge;
   const [state, setState] = useState<TycoonState>(() => {
     const now = Date.now();
     const loaded = deserializeTycoon(
@@ -77,6 +80,9 @@ export function useStadiumTycoon() {
   const [awayTrip, setAwayTrip] = useState<AwayTrip | null>(null);
   const [confetti, setConfetti] = useState(0);
   const [golden, setGolden] = useState<PendingGolden | null>(null);
+  const [activeSetPiece, setActiveSetPiece] = useState<SetPieceOffer | null>(null);
+  const [setPieceError, setSetPieceError] = useState<string | null>(null);
+  const [gearSaveBlocked, setGearSaveBlocked] = useState(false);
   const [promotion, setPromotion] = useState<Promotion | null>(null);
   const [badge, setBadge] = useState<BadgeEarned | null>(null);
   const [lastSeason, setLastSeason] = useState<LastSeason | null>(null);
@@ -141,7 +147,7 @@ export function useStadiumTycoon() {
     if (!(pay > 0) && matchdays === 0) return;
     setAwayPay(Math.max(0, pay));
     const paid = { ...cur, money: cur.money + Math.max(0, pay), lifetime: cur.lifetime + Math.max(0, pay), savedAt: now };
-    const away = matchdays > 0 ? playAwayMatchdays(paid, matchdays, Math.random) : null;
+    const away = matchdays > 0 ? playAwayMatchdays(paid, matchdays, Math.random, getEdgeRef.current?.() ?? 0) : null;
     const lg = away?.state.league;
     /* Round 585: an away win earns its gem, credited once per match. */
     const awayGems = away
@@ -189,7 +195,8 @@ export function useStadiumTycoon() {
         // Round 439: the loop has now paid for these seconds, so the away
         // settle must not bill for them again.
         paidUntilRef.current += use * 1000;
-        const { state: next, events } = tick(stateRef.current, use, Math.random);
+        const playedDivision = stateRef.current.league?.division;
+        const { state: next, events } = tick(stateRef.current, use, Math.random, getEdgeRef.current?.() ?? 0);
         stateRef.current = next;
         for (const e of events) reactToEvent(e);
         /* Round 585: a watched full time earns its gems, once, keyed on the
@@ -197,7 +204,16 @@ export function useStadiumTycoon() {
         const ft = events.find(e => e.kind === 'win' || e.kind === 'draw' || e.kind === 'loss');
         if (ft) {
           const season = events.find(e => (e.kind === 'title' || e.kind === 'seasonEnd') && e.position !== undefined);
-          const gems = recordFullTimes([{ totalMatches: next.totalMatches ?? 0, result: ft.kind as FullTime['result'], away: false, position: season?.position }]);
+          let allowGear = true;
+          if (season?.kind === 'title') {
+            // The completed stadium match is durable before its title can award gear.
+            try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); } catch { allowGear = false; }
+            setGearSaveBlocked(!allowGear);
+          }
+          const gems = recordFullTimes([{
+            totalMatches: next.totalMatches ?? 0, result: ft.kind as FullTime['result'], away: false,
+            position: season?.position, division: season?.kind === 'title' ? playedDivision : undefined,
+          }], allowGear, () => setGearSaveBlocked(true));
           if (gems > 0) pushFloater(`+${gems} gems`, 'money', 62, 10);
         }
         setState(next);
@@ -386,6 +402,36 @@ export function useStadiumTycoon() {
     commit(after);
   }, [commit]);
 
+  const doBeginSetPiece = useCallback((offer: SetPieceOffer) => {
+    if (!replaysOnRef.current || document.hidden) return;
+    const next = beginSetPiece(stateRef.current, offer);
+    if (next === stateRef.current) return;
+    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(next, Date.now())); }
+    catch {
+      setSetPieceError('This kick could not be saved. Try opening it again.');
+      return;
+    }
+    commit(next);
+    setSetPieceError(null);
+    setActiveSetPiece(offer);
+  }, [commit]);
+
+  const doSetPieceResult = useCallback((offer: SetPieceOffer, scored: boolean): 'accepted' | 'expired' | 'save-failed' => {
+    const before = stateRef.current;
+    if ((before.totalMatches ?? 0) !== offer.match || before.rep !== offer.rep
+      || before.minute >= 90 || before.setPieceAttemptedMatch !== offer.match) return 'expired';
+    if (!scored || before.setPieceUsedMatch === offer.match) return 'accepted';
+    const awarded = awardSetPieceGoal(before, offer);
+    if (!awarded) return 'expired';
+    try { localStorage.setItem(TYCOON_SAVE_KEY, serializeTycoon(awarded.state, Date.now())); }
+    catch { return 'save-failed'; }
+    commit(awarded.state);
+    pushFloater(`GOAL ${awarded.event.minute}' +${fmtMoney(awarded.event.amount ?? 0)}`, 'goal', 50, 24);
+    setConfetti(count => count + 1);
+    return 'accepted';
+  }, [commit, pushFloater]);
+  const closeSetPiece = useCallback(() => { setActiveSetPiece(null); setSetPieceError(null); }, []);
+
   const dismissAway = useCallback(() => { setAwayPay(null); setAwayTrip(null); }, []);
   const dismissPromotion = useCallback(() => setPromotion(null), []);
   const dismissBadge = useCallback(() => setBadge(null), []);
@@ -396,12 +442,18 @@ export function useStadiumTycoon() {
     replaysOnRef.current = on;
     setReplays(q => (q.length ? [] : q));
   }, []);
+  const pendingSetPiece = setPieceOffer(state, replaysOnRef.current && typeof document !== 'undefined' && !document.hidden);
+  useEffect(() => {
+    setSetPieceError(null);
+  }, [pendingSetPiece?.match, pendingSetPiece?.rep]);
 
   return {
-    state, floaters, awayPay, awayTrip, dismissAway, confetti,
+    state, floaters, awayPay, awayTrip, dismissAway, confetti, gearSaveBlocked,
     doBuy, doTap, doPrestige, doBoost,
     golden, doCatchGolden, doHire, doLegacyPerk,
     promotion, dismissPromotion, badge, dismissBadge, doSetClubName, lastSeason,
     replays, endReplay, watchReplays,
+    setPiece: pendingSetPiece,
+    activeSetPiece, setPieceError, doBeginSetPiece, doSetPieceResult, closeSetPiece,
   };
 }
