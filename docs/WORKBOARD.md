@@ -1,5 +1,48 @@
 # Work board
 
+**Round 628 CLAIMED, 2026-09-16: the Club Manager season score reads the club, not the manager.**
+On branch `claude/free-agents-contract-termination-5oeyzz` (the branch this lane was given; 628
+rides beside Round 619 on PR 103 rather than going to a branch this lane has no permission to
+push). `docs/PROJECT-STATE.md` lists "A correct points system per game" as PART with **Club
+Manager points design open**, and this is that.
+
+The rule today is `Math.min(130, myRow.pts + seasonTrophies.length * 10)`, at
+`src/lib/clubManager.ts:15067` for the rollover and `:14771` for `currentSeasonScore`.
+
+**Two defects, both measured before anything was written, not argued.**
+
+*One: the score reads the club.* A probe played one full season at twelve clubs with management
+held identical (nobody touched a thing, every entry auto played), so any spread is pure club
+stature. Range 24 to 90 on a 130 scale, and the correlation between the club's preview XI rating
+and the season score is **0.851**. Bayern finished 8th of 18 on grade F having hit 0 of 7 board
+objectives and scored 55; Sevilla finished 13th on grade C having hit 3 of 8 and scored 46. The
+F outscores the C. Real Madrid hit 1 objective of 8, graded C, and posted the highest score in
+the set at 90, above a Newcastle side that won its league on grade A for 78.
+
+*Two: the 130 scale is unreachable in 19 leagues of 20 and saturated in the twentieth.* Maximum
+league points by league size: SuperSport HNL (10 clubs, 18 games) 54, the 18 club leagues 102,
+the big three 20 club leagues 114, EFL Championship (24 clubs, 46 games) **138**. So a perfect
+Croatian season tops out near 84 even with a cup treble and can never reach the ceiling, while
+the Championship passes 130 on league points alone and its trophies are worth nothing. The world
+leaderboard pays `100 * score / 130`, so this is a standing per league pay gap for identical
+quality.
+
+**Constraints this round is held to**, all verified in the source rather than assumed:
+- The output stays an integer in 0..130. `game_score_caps.max_score` for `club-manager` is 130
+  with 185,460 rows already recorded against it, so re-basing it is a data migration nobody asked
+  for. Measured today: 1,078 players, 172.0 rows each, p50 33, p90 77, p99 109, and 114 rows at
+  130.
+- `public.global_leaderboard()` takes the best reading per player per game per DAY and adds
+  `100.0 * day_best / max_score`, so the mid season curve is scored, not just the finish.
+- The function name `currentSeasonScore` and the field `sm.seasonScore` must not be renamed, and
+  the six call shapes in `useClubManager.ts` must not move: `simSessionMarks` section 5 and
+  `simActivityNotCompletion` both grep those literal strings, and `simActivityNotCompletion`'s
+  `match` control rewrites one of them to build its regression.
+- `SAVE_VERSION` must not move. Any new state field is optional with an `ensure*()` migration,
+  the shape `CareerState.freeAgents` uses.
+- The player SEES this number: `ClubManagerSeasonSummary.tsx:27` prints "Season Score", and
+  `ClubManagerHelp.tsx` line 32 states the rule in words. The copy changes with the rule.
+
 **Round 619, 2026-09-16: free agents and contract termination are BUILT, and two lanes worked
 this round.** The engine and the UI are on PR 103, branch
 `claude/free-agents-contract-termination-5oeyzz`, head `bc89389`, merged up to main `f63cf75`.
