@@ -1,5 +1,30 @@
 # Project state
 
+## COMBINED RELEASE CHECK 2026-09-15 20:27 EDT
+
+Run [35038033612](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35038033612)
+checks source `03fa0efa96369ecf565c0c3039e629aee2a2c1cf` through verification
+`780106e50d8d272e4a98ef5230435632caa8d84d`. Types, the SEO build and portable
+browser gates passed. The full component-test step failed; the full node
+suite is still running. This run is not release approval. No duplicate CI
+or production-data test has been started. Codex is diagnosing the failure
+offline while the remaining checks collect evidence.
+
+The public alternate-host homepage and Stadium Tycoon now also boot in the
+Codex browser. The tycoon shows its rules, live clock, income and pitch.
+This is a manual smoke check of the accepted 588 preview, not the new union.
+Domain ownership/TLS validation remains pending and no DNS has changed.
+
+A separate post-release repair is reserved in `codex/navbar-stats-read-repair`:
+stop personal-stat reads for guests and hidden tabs while preserving visible
+signed-in updates. Its source audit found the navbar queries even though the
+guest interface does not display those stats. It is not in the frozen union
+or the published preview. Tests use mocked requests only.
+
+The last directly observed AdSense state remains Review requested at 12:37
+EDT. Another attempt to read the existing AdSense tab timed out; no new
+status or review submission is claimed.
+
 ## ANIMATION PREVIEW LIVE 2026-09-15 19:56 EDT
 
 The accepted frozen 588 build is public at
