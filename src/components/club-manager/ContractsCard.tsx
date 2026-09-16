@@ -220,7 +220,13 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
             Free agents{career.transferWindow === null ? ', and the window being shut does not stop these' : ''}
           </div>
           {(career.freeAgents ?? []).map(f => {
-            const keen = freeAgentInterest(career, f);
+            /* A button that looks available and silently does nothing is
+               worse than no button. The engine refuses to re-sign a man you
+               released this season (pay half, re-sign cheaper, count both is a
+               wage cap exploit), so the screen has to say so rather than let
+               the player press it and watch nothing happen. */
+            const justLetGo = f.fromMyClub === true && f.since === career.season;
+            const keen = !justLetGo && freeAgentInterest(career, f);
             return (
               <div key={f.name} className="flex items-center gap-2 py-1 border-b border-border/30 last:border-0">
                 <div className="flex-1 min-w-0">
@@ -232,11 +238,13 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
                 <button
                   onClick={() => onSignFreeAgent(f.name)}
                   disabled={!keen}
-                  title={keen ? 'He will sign for nothing but his wage' : 'He thinks he can do better than you'}
+                  title={justLetGo
+                    ? 'You let him go this season. You cannot take him back until the summer.'
+                    : keen ? 'He will sign for nothing but his wage' : 'He thinks he can do better than you'}
                   className={cn('shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all',
                     keen ? 'bg-primary text-primary-foreground hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
                 >
-                  {keen ? 'Sign' : 'Not interested'}
+                  {justLetGo ? 'You let him go' : keen ? 'Sign' : 'Not interested'}
                 </button>
               </div>
             );
