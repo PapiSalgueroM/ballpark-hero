@@ -77,6 +77,13 @@ also appears in that group and is not an ordinary content page. See the dated
 [account observation](account-observation-2026-09-15.json). No indexing request
 or validation restart was submitted.
 
+A separate URL inspection at about 23:00 EDT confirms `/soccer-career` is on
+Google. Its recorded smartphone crawl on September 13 at 19:26:41 succeeded,
+with crawl and indexing allowed and the inspected URL selected as canonical.
+HTTPS and one valid breadcrumb item are present. This is actual recorded Google
+crawl evidence for that page, not a claim that the whole site is indexed or that
+AdSense has approved it. No live test or indexing request was needed.
+
 Source review found wording that says advertising already pays for the site,
 even though the current application is pending, and hosting wording that names
 only Lovable even though an alternate ChatGPT Sites preview now exists. Correct

@@ -1,6 +1,6 @@
 {
   "method": "Read-only visible signed-in browser pages through Codex browser controls",
-  "observationWindowUtc": "2026-09-16T02:50:00Z/2026-09-16T02:58:00Z",
+  "observationWindowUtc": "2026-09-16T02:50:00Z/2026-09-16T03:00:00Z",
   "site": "douknowball.com",
   "adsense": {
     "status": "Getting ready",
@@ -45,6 +45,22 @@
     ],
     "indexingRequested": false,
     "validationRestarted": false,
+    "soccerCareerInspection": {
+      "path": "/soccer-career",
+      "status": "URL is on Google",
+      "pageIndexing": "Page is indexed",
+      "lastCrawlAsDisplayed": "Sep 13, 2026, 7:26:41 PM",
+      "crawler": "Googlebot smartphone",
+      "crawlAllowed": true,
+      "fetch": "Successful",
+      "indexingAllowed": true,
+      "declaredCanonical": "https://douknowball.com/soccer-career",
+      "selectedCanonical": "Inspected URL",
+      "https": "Page is served over HTTPS",
+      "breadcrumbs": "1 valid item detected",
+      "liveTestRun": false,
+      "indexingRequested": false
+    },
     "limitation": "Report data is dated September 3; old crawl dates do not establish evaluation of current content or an AdSense decision."
   },
   "domainAccess": {"godaddySignedIn": false, "dnsChanged": false},
