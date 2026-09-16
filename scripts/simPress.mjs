@@ -50,15 +50,42 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const PRESS_SEED_BASE = Number(process.env.PRESS_SEED_BASE || 6000);
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const ENTRY = path.join(os.tmpdir(), 'pressEntry.mjs');
-const BUNDLE = path.join(os.tmpdir(), 'press.bundle.mjs');
+/* ROUND 626: a per run temp directory. These two filenames were fixed, so two
+   runs of this harness at once (two trees, or a seed sweep) wrote each other's
+   bundle and silently measured a mixture of both. That has happened in this
+   repo before and the result of such a run is worthless rather than wrong. */
+const TMPDIR = fs.mkdtempSync(path.join(os.tmpdir(), 'press-'));
+const ENTRY = path.join(TMPDIR, 'pressEntry.mjs');
+const BUNDLE = path.join(TMPDIR, 'press.bundle.mjs');
+
+/* ROUND 626: a negative control, which this harness had none of.
+   PRESS_CONTROL=nopress stops the press scaling a falling board, which is the
+   entire mechanism section 6 measures, so section 6 must go red. It refuses to
+   run if its anchor is not there, so it can never pass by finding nothing. */
+const PRESS_CONTROL = process.env.PRESS_CONTROL || '';
+let enginePath = `${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts`;
+if (PRESS_CONTROL === 'nopress') {
+  const src = fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf8');
+  const anchor = 'if (confDelta < 0 && state.press) confDelta *= pressPatience(state.press.mood);';
+  if (!src.includes(anchor)) {
+    console.error('control nopress cannot run: clubManager.ts no longer scales a falling board by the press');
+    process.exit(1);
+  }
+  const patched = path.join(TMPDIR, 'clubManager.nopress.ts');
+  fs.writeFileSync(patched, src.replace(anchor, 'if (false && state.press) confDelta *= pressPatience(state.press.mood);'));
+  enginePath = patched.replaceAll('\\', '/');
+  console.log('NEGATIVE CONTROL ON: the press no longer scales a falling board');
+} else if (PRESS_CONTROL) {
+  console.error(`PRESS_CONTROL=${PRESS_CONTROL} is not a control this harness knows`);
+  process.exit(1);
+}
 
 fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-const mod = await import('${ROOT.replaceAll('\\', '/')}/src/lib/clubManager.ts');
+const mod = await import('${enginePath}');
 export const cm = mod;
 `);
-execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --alias:@=${JSON.stringify(`${ROOT.replaceAll('\\', '/')}/src`)} --log-level=error`, { stdio: 'inherit' });
 
 const { cm } = await import(pathToFileURL(BUNDLE).href);
 const {
@@ -606,7 +633,34 @@ console.log('6) The board read about it in the morning');
   }
   console.log(`   ${SEEDS} paired Everton seasons: papers onside ends on ${mean(loved).toFixed(1)} board confidence, papers against on ${mean(hated).toFixed(1)}`);
   console.log(`   paired difference ${mean(diffs).toFixed(2)} (2se ${se2(diffs).toFixed(2)})`);
-  if (mean(diffs) <= se2(diffs)) fail(`the press being for you or against you is worth ${mean(diffs).toFixed(2)} board confidence, which is inside the noise`);
+  /* ROUND 626: A MEASURED FLOOR, NOT A NOISE GATE, and the reason is measured.
+     This used to fail when the paired difference did not clear two standard
+     errors. The comment above records moving from 120 seeds to 240 to stop
+     exactly the flappiness that produces, and 240 is still not enough: the
+     threshold sits INSIDE the distribution of the healthy effect, which is the
+     definition this repo already writes down for a coin toss dressed as a rule.
+
+     Measured with a probe that reproduces this section exactly (same club, same
+     paired design, same 240 seasons) across three seed bases on two engines:
+
+       main f083e0b2          base 7000 11.67, base 9100 7.85, base 12400 7.40
+       Rounds 617 plus 618    base 7000  5.70, base 9100 10.56, base 12400 6.30
+
+     Six observations from 5.70 to 11.67, and a two standard error threshold
+     that lands between 5.39 and 6.27. Main clears it by only 1.4x at base
+     12400, so main fails this too on an unlucky draw. It duly went red on the
+     617 and 618 integration at base 7000 and cost a real investigation, and
+     those rounds turn out to have nothing to do with it: the effect is HIGHER
+     on the branch than on main at base 9100.
+
+     So the gate is a floor below every observation, which is the shape this
+     same file already uses for the magnitude claim in section 5 ("measured 3.34
+     to 6.24 across four seed bases, so 2.0 clears every observation by a
+     margin"). 4.0 sits 30 percent below the lowest of the six and still catches
+     the press effect halving, which is the thing worth protecting. The two
+     standard errors are still printed, because they are worth reading; they are
+     just not the rule any more. */
+  if (mean(diffs) <= 4) fail(`the press being for you or against you is worth only ${mean(diffs).toFixed(2)} board confidence, under the floor of 4.00 measured from 5.70 to 11.67 over three seed bases on two engines`);
   if (mean(diffs) > 30) fail(`the press alone swing the board by ${mean(diffs).toFixed(2)}, which is a whole season of results`);
 }
 
