@@ -54,8 +54,11 @@
  *   so the ledger reports them without inventing a second account.
  *
  *   THE PROJECTION. Actual to date plus the rest of the season at today's
- *   rates: the wage bill times the weeks left, the average home gate so far
- *   (or a stature estimate before the first) times the home games the
+ *   rates: the wage bill times the weeks left, the crowd the engine expects
+ *   at your ground at today's prices (Round 618: the same stature, ticket,
+ *   ground, mood and finance tree factors the gate draws from, never the
+ *   gates banked so far, which are a noisier estimate of the same number)
+ *   times the home games the
  *   fixture list is certain of, travel for the away trips it is certain of.
  *   Certain means league fixtures plus the one cup or European tie already
  *   drawn; later rounds depend on results nobody has yet and are left out,
@@ -64,6 +67,7 @@
  */
 import type { CareerState, Competition, SponsorOffer } from '@/lib/clubManager';
 import {
+  CROWD_BANDS, CROWD_CAP, CUSTOM_CROWD_FLOOR,
   TICKET_TIERS, clubDefFor, eraClubDefFor, fixtureFor, gatePricePerFan, isHistoricEra,
   money, signSponsorWith, sponsorOffers, wageBill,
 } from '@/lib/clubManager';
@@ -71,6 +75,10 @@ import { facilityLevel, facilitiesOf, stadiumConcessionMult } from '@/lib/clubMa
 /* Round 471: the four staff posts pay a wage every week and cost fees when
    you change them, so both belong in this ledger. */
 import { staffOf, staffPayrollWeekly } from '@/lib/clubManagerStaff';
+/* Round 618: the finance tree's edge on money a head, so the projected gate is
+   the gate's own expectation to the pound. clubManagerXp imports only a type
+   from the engine, so there is no cycle. */
+import { gateEdge } from '@/lib/clubManagerXp';
 
 export type ConcessionTier = 0 | 1 | 2;
 
@@ -398,17 +406,38 @@ export function certainFixturesLeft(state: CareerState): { home: number; away: n
   return { home, away, euroAway };
 }
 
-/** A stature estimate of one home crowd, for a projection made before the first gate. */
+/** The mean of one attendance draw: a uniform pick from [lo, hi] scaled by m,
+ *  with the ground's ceiling clipping the top of the band.
+ *
+ *  Why it is not the midpoint times m. The engine clips every DRAW at the
+ *  ceiling (matchAttendance), and the mean of a clipped draw sits below the
+ *  clipped mean, so a big club with cheap tickets and a warm crowd was
+ *  projected about two percent of a gate too high by the old line. The
+ *  arithmetic: the part of the band under the ceiling keeps its own average,
+ *  the part over it is worth the ceiling and no more. */
+function cappedDrawMean(lo: number, hi: number, m: number, cap: number): number {
+  if (hi * m <= cap) return ((lo + hi) / 2) * m;
+  if (lo * m >= cap) return cap;
+  const edgeDraw = cap / m;
+  const under = (edgeDraw - lo) / (hi - lo);
+  return under * ((lo + edgeDraw) / 2) * m + (1 - under) * cap;
+}
+
+/** The crowd the engine expects at one home game: the mean of the draw
+ *  matchAttendance makes, off the same bands (CROWD_BANDS), the same ticket,
+ *  ground and mood factors and the same ceiling, so the desk holds no second
+ *  copy of the crowd model. Round 618 reads it for every projection. */
 export function expectedHomeCrowd(state: CareerState): number {
   const custom = state.customClub && state.clubName === state.customClub.name ? state.customClub : null;
   const ticket = TICKET_TIERS[state.finance?.ticketTier ?? 1].crowdMult;
+  const fans = fanCrowdMult(state);
   if (custom && custom.capacity) {
     const cap = custom.capacity + (state.finance?.groundUpgrades ?? 0) * 6000;
-    return Math.min(cap, Math.round(cap * 0.87 * ticket * fanCrowdMult(state)));
+    return Math.round(cappedDrawMean(Math.round(cap * CUSTOM_CROWD_FLOOR), cap, ticket * fans, cap));
   }
-  const mid = [67000, 46000, 28500, 15000][careerTier(state) - 1] ?? 15000;
+  const [lo, hi] = CROWD_BANDS[careerTier(state)] ?? CROWD_BANDS[4];
   const ground = 1 + 0.12 * (state.finance?.groundUpgrades ?? 0);
-  return Math.min(78000, Math.round(mid * ticket * ground * fanCrowdMult(state)));
+  return Math.round(cappedDrawMean(lo, hi, ticket * ground * fans, CROWD_CAP));
 }
 
 export function projectFinances(state: CareerState): FinanceProjection {
@@ -418,13 +447,24 @@ export function projectFinances(state: CareerState): FinanceProjection {
   const left = certainFixturesLeft(state);
   const perFan = gatePricePerFan(state);
   const food = concessionPerFan(state);
-  const gateSoFar = s.tickets + s.concessions;
-  const perHome = s.homeGames >= 3
-    ? gateSoFar / s.homeGames
-    : (expectedHomeCrowd(state) * perFan) / 1e6;
-  const foodShare = perFan > 0 ? food / perFan : 0;
-  const ticketsLeft = round2(perHome * (1 - foodShare) * left.home);
-  const foodLeft = round2(perHome * foodShare * left.home);
+  /* Round 618: one projected gate is the engine's own expectation, the crowd
+     it draws around times the price a head times the finance tree's edge. It
+     used to switch to the average of the gates banked once three were in,
+     and that average is a noisier estimate of the same number: the spread of
+     a single tier 4 gate is 23 percent of its mean, so three to seven of them
+     put a passive club's projection 10 to 19 percent out (the Ajax trace of
+     2026-09-15), and the balanced list of Round 617 sent most clubs onto the
+     switch by week 5. The expectation also follows a ticket change, a ground
+     upgrade or a mood swing at once, where the banked average kept mixing in
+     gates taken under the old conditions. */
+  const crowd = expectedHomeCrowd(state);
+  const perHome = (crowd * perFan * gateEdge(state)) / 1e6;
+  /* Round 618: the ledger banks the food at the food rate with no tree edge
+     (noteHomeGate) and puts the whole edge into the ticket line, so the
+     projection splits a future gate the same way: food at the food rate,
+     tickets the rest. The totals never disagreed; the two rows now agree too. */
+  const foodLeft = round2(((crowd * food) / 1e6) * left.home);
+  const ticketsLeft = round2(perHome * left.home - foodLeft);
   const wagesLeft = round2((wageBill(state) / 1000) * weeksLeft);
   const staffLeft = round2((staffWagesWeekly(state) / 1000) * weeksLeft);
   const travelLeft = round2(travelCost(state, 'league') * (left.away - left.euroAway) + travelCost(state, 'uclGroup') * left.euroAway);
