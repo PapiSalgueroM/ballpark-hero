@@ -8,6 +8,8 @@ import {
   startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, recallLoanedPlayer, walkAway, respondApproach, expandGround,
   enterWilderness, wildernessWeek, acceptWildernessJob, takeNationJob, leaveNationJob, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract, renewContractWithClause,
+  /* Round 619: the free agent board and the door out of a contract. */
+  terminateContract, signFreeAgent, freeAgentPool,
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
   resumeMatch, makeHalftimeSub, setHalftimeMentality, setSquadRole,
   setTeamTalk, giveHalftimeTalk, answerPress, duckPress,
@@ -20,6 +22,7 @@ import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation, FormationSlo
 import type { Position } from '@/types/game';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
+import type { FreeAgent } from '@/lib/clubManagerFreeAgents';
 import { simToWeek as runSimToWeek, startMidSeason } from '@/lib/clubManagerCalendar';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
@@ -174,6 +177,12 @@ export function useClubManager() {
   /* ---------- derived ---------- */
   const market: MarketPlayer[] = useMemo(
     () => (career ? buildMarket(career) : []),
+    [career],
+  );
+  /* Round 619: the free agent board, derived the same way the market is, so a
+     signing that empties it redraws the screen with no extra plumbing. */
+  const freeAgents: FreeAgent[] = useMemo(
+    () => (career ? freeAgentPool(career) : []),
     [career],
   );
   const nextFx: NextFixtureInfo | null = useMemo(
@@ -604,6 +613,21 @@ export function useClubManager() {
     setCareer(prev => (prev ? renewContractWithClause(prev, playerId) ?? prev : prev));
   }, []);
 
+  /* ---------- Round 619: free agents ---------- */
+
+  /** Tear his deal up. The settlement comes out of the kitty and he walks out
+   *  a free agent that any club, including one in your league, can sign. */
+  const terminate = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? terminateContract(prev, playerId) ?? prev : prev));
+  }, []);
+
+  /** Sign somebody off the free agent board. No fee, no selling club, and
+   *  deliberately no window check: an unattached player can be registered
+   *  whenever, which is the whole reason the board is worth having. */
+  const signFree = useCallback((faId: string) => {
+    setCareer(prev => (prev ? signFreeAgent(prev, faId) ?? prev : prev));
+  }, []);
+
   /* ---------- Round 127: squad roles and playing time promises ---------- */
   const setRole = useCallback((playerId: string, role: SquadRole) => {
     setCareer(prev => (prev ? setSquadRole(prev, playerId, role) ?? prev : prev));
@@ -726,7 +750,7 @@ export function useClubManager() {
   return {
     simToWeek,
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
-    market, nextFx, tableRows, myPosition, facts,
+    market, freeAgents, nextFx, tableRows, myPosition, facts,
     resume, startNew, chooseClub, confirmClub, confirmCustomClub,
     setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
     setSlotDuty, assignSetPiece, autoPickSetPieces, retrain, stopRetrain,
@@ -736,7 +760,7 @@ export function useClubManager() {
     appointStaff, payOffStaff, matchStaff, letStaffGo, spendPoint,
     setCurrency, setNationJobs, setStrictness,
     acceptIncomingBid, rejectIncomingBid,
-    setStatus, loanOut, renew, renewWithClause, setRole,
+    setStatus, loanOut, renew, renewWithClause, terminate, signFree, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
     subAtHalftime, shapeAtHalftime, secondHalf, startSecondHalfLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,

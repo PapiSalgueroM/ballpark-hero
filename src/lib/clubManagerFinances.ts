@@ -439,6 +439,10 @@ export function projectFinances(state: CareerState): FinanceProjection {
      it has to appear here: money that goes and shows up nowhere is a lie the
      projection would tell every week. */
   const staffFees = round2(staffOf(state).seasonSpend);
+  /* Round 619: contracts torn up. Same reasoning as the staff fees line above,
+     and it gets its own row rather than being folded into Players bought
+     because it is the opposite transaction: money out for a player LEAVING. */
+  const payoffs = round2(signings.reduce((n, t) => n + (t.payoff ?? 0), 0));
 
   const income: ProjectionLine[] = [
     { id: 'tickets', label: 'Tickets', actual: round2(s.tickets), projected: round2(s.tickets + ticketsLeft), kitty: true, note: `${left.home} certain home game${left.home === 1 ? '' : 's'} left` },
@@ -453,6 +457,7 @@ export function projectFinances(state: CareerState): FinanceProjection {
     { id: 'transferOut', label: 'Players bought', actual: transferOut, projected: transferOut, kitty: true, note: 'assumes no more deals' },
     { id: 'facilities', label: 'Facilities', actual: round2(facilities), projected: round2(facilities), kitty: true },
     { id: 'staffFees', label: 'Staff fees', actual: staffFees, projected: staffFees, kitty: true, note: 'hires and pay offs' },
+    { id: 'payoffs', label: 'Contract pay offs', actual: payoffs, projected: payoffs, kitty: true, note: 'players you settled with' },
   ];
   const sum = (lines: ProjectionLine[], k: 'actual' | 'projected') => round2(lines.reduce((n, l) => n + l[k], 0));
   const incomeActual = sum(income, 'actual');
@@ -485,7 +490,14 @@ export function closeLedger(state: CareerState): ClosedLedger {
   /* Round 507: a signing on fee leaves the same kitty as the transfer fee, so
      the books count both. It is a separate field because the fee column is what the
      selling club got and the news feed prints that number. */
-  const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0));
+  /* Round 619: and the contracts torn up. Folded into this one number rather
+     than given a key of its own, because ClosedLedger's shape is validated key
+     by key by isClosed and a new key would fail isValidBooks on every save
+     already in flight, which resets the whole block to defaultBooks. The
+     season projection above gives it its own visible row; the closed record
+     only has to balance. */
+  const payoffs = round2(signings.reduce((n, t) => n + (t.payoff ?? 0), 0));
+  const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0) + payoffs);
   const facilities = round2(facilitiesOf(state).seasonSpend);
   const staffFees = round2(staffOf(state).seasonSpend);
   const income = round2(s.tickets + s.concessions + s.sponsor + transferIn);
