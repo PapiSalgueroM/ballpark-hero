@@ -1125,7 +1125,7 @@ const ClubManager = () => {
                   onHire={g.sendScout}
                   onRecall={g.callScoutHome}
                   onPromote={g.promote}
-                  onRelease={g.terminate}
+                  onRelease={g.release}
                 /></ScreenLoading>
               )}
 

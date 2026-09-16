@@ -1817,6 +1817,9 @@ export interface CareerState {
   freeAgents?: FreeAgent[];
   /** Round 619: what ending a contract early still costs after he has gone. */
   severance?: SeveranceRow[];
+  /** Round 619: the calendar week the settlements last counted down on, so a
+      week that reaches the weekly tick more than once still costs one week. */
+  severanceTickedWeek?: number;
   aiHeadlines: string[];
   /** Names no longer purchasable (bought by me or by AI clubs this season). */
   goneNames: string[];
@@ -4774,8 +4777,16 @@ function addFreeAgent(pool: FreeAgent[], fa: FreeAgent, state: CareerState, stil
 /** Is this man interested in signing for you? A strong free agent will refuse a weak club. */
 export function freeAgentInterest(career: CareerState, fa: FreeAgent): boolean {
   const mine = career.clubStrengths?.[career.clubName] ?? STRENGTH_PRIORS[career.clubName] ?? 66;
-  /* He will drop a little to keep playing, and less the better he is. */
-  return fa.rating <= mine + 4;
+  /* Round 619: BELOW the club's level, not above it.
+     The first rule was rating <= mine + 4, and mine is an XI average, so at
+     every club measured (Everton 82.2, Brentford 85.5, Arsenal 88.5, Napoli
+     82.6) one hundred percent of that club's own seniors cleared it, including
+     the best player in the squad. Since your own men are the only population
+     the pool ever holds, that made it a free rack holding your whole squad at
+     full rating rather than the weak bin the contract describes. A man good
+     enough to walk into your first team does not sign for you for nothing; he
+     goes somewhere better. */
+  return fa.rating <= mine - 6;
 }
 
 /**
@@ -4799,7 +4810,14 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
   if (fa.fromMyClub && fa.since === career.season) return null;
   if (!freeAgentInterest(career, fa)) return null;
 
-  const wage = Math.max(1, Math.round(wageFor({ rating: fa.rating, age: fa.age, value: fa.value, isYouth: false } as CMPlayer)));
+  /* He has no club and every club can talk to him, so he asks what a renewal
+     asks, not the bare market rate. Pricing him at plain wageFor made running a
+     deal down cheaper than renewing it on wages as well as on fees. The ladder
+     is renewalTerms', deliberately, so the two routes cost the same per week
+     and the only difference left is the fee, which is what a free transfer
+     genuinely is. */
+  const leverage = fa.age <= 23 ? 1.15 : fa.age <= 29 ? 1.3 : 0.95;
+  const wage = Math.max(1, Math.round(wageFor({ rating: fa.rating, age: fa.age, value: fa.value, isYouth: false } as CMPlayer) * leverage));
   const cap = career.wageCap ?? wageCapFrom(wageBill(career));
   if (wageBill(career) + wage > cap) return null;
 
@@ -11796,6 +11814,31 @@ export function liveStatsAt(
  * only way to avoid collapse.
  */
 function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
+  /* Round 619: a settlement counts down HERE, in the same function that charges
+     the wage bill, and a row at zero is gone.
+
+     The first version ticked it beside the transfer window inside playMyMatch,
+     which fires only on weeks the club actually plays, while tickBooks charges
+     the bill on EVERY calendar week: the window entry, the weeks somebody else
+     is playing, all of them. Measured on this branch at Everton, a 108 week row
+     took 40 decrements over 54 charged weeks, so a settlement quoted as 108
+     weeks was really billed for about 146 and the two season cap was nearer
+     2.7. The manager was paying about 3,504k against the 2,592k the button
+     quoted him, which makes the quote a lie rather than an estimate. Charging
+     and counting have to happen in the same place or they drift forever. */
+  if (state.severance && state.severance.length && state.severanceTickedWeek !== state.week) {
+    /* ONCE PER CALENDAR WEEK, keyed on the week itself rather than trusting the
+       call count. Measured on this branch before the guard: 38 countdowns over
+       29 weeks played, about 1.3 a week, so a settlement quoted at 108 weeks
+       was finished in 44 and the cost the button promises was never paid. The
+       weekly tick is reachable by more than one path per week, and rather than
+       chase them all the count is made idempotent, which stays correct whatever
+       the paths do next. */
+    state.severanceTickedWeek = state.week;
+    state.severance = state.severance
+      .map(r => ({ ...r, weeksLeft: r.weeksLeft - 1 }))
+      .filter(r => r.weeksLeft > 0);
+  }
   // Round 116: how hard you work them all week shows up here. Light sessions
   // send a fresher team out on Saturday, double sessions send a tired one and
   // pick up knocks on the training ground, and that is the price of the
@@ -12975,15 +13018,6 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      January), fresh bids can land in any of them, and open offers stay on
      the table instead of being wiped every Saturday. When the weeks run out
      the deadline hits: deals die, bids die, grudges are forgotten. */
-  /* Round 619: a settlement counts down with the weeks, and a row at zero is
-     gone. It ticks HERE, beside the window, because this is the engine's own
-     week boundary; putting it in the finance desk would have made the bill and
-     the cap disagree with each other for a week at a time. */
-  if (state.severance && state.severance.length) {
-    state.severance = state.severance
-      .map(r => ({ ...r, weeksLeft: r.weeksLeft - 1 }))
-      .filter(r => r.weeksLeft > 0);
-  }
   if (state.transferWindow !== null) {
     const left = (state.windowWeeksLeft ?? 1) - 1;
     state.windowWeeksLeft = Math.max(0, left);
@@ -15037,6 +15071,14 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       name: p.name, position: p.position, age: p.age, rating: p.rating,
       value: p.value, generated: p.generated, since: career.season + 1,
       reason: 'expired' as const,
+      /* Round 619: these are MY players whose deals ran out, so the same season
+         re-sign block has to apply to them too. Without this, letting every
+         contract expire and re-signing the same men out of window the following
+         week beat renewing them outright: measured at Arsenal, 936k a week and
+         no fee against 1,415k and 246.2m in signing fees, with the first eleven
+         unchanged. That turns the whole Round 105 contract system into a trap
+         for anybody who uses it. Let a man go and you lose him for a season. */
+      fromMyClub: true as const,
     })));
     squad = stillPlaying.filter(p => (p.contractYears ?? 1) > 0);
     /* Round 132: the club replaces what it lost. The old intake was a flat two
@@ -15255,8 +15297,19 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       for (const f of walkedFree619) if (!gone.has(f.name)) out = addFreeAgent(out, f, career);
       return out;
     })(),
-    /* And a settlement outlives the season it was signed in. */
-    severance: (career.severance ?? []).filter(r => r.weeksLeft > 0),
+    /* A settlement outlives the season it was signed in, but NOT the job.
+       It belongs to the club that agreed it, and the first version carried it
+       across a move unconditionally while buildSquad replaced the whole squad.
+       Because the new employer then re-anchors its ceiling on
+       wageCapFrom(wageBill(state)), and wageBill counts severance, the new club
+       inherited a permanently higher cap for a liability it never incurred.
+       Measured on this branch: release the six worst contracts at Real Madrid,
+       take the Barcelona job, and Barcelona's ceiling went from 1343 to 1694
+       with a byte identical squad, 26 percent of free headroom that never
+       washes out because nextWageCap compounds off the previous ceiling every
+       summer after. That is exactly the "sack your way to cap space" exploit
+       this round exists to prevent, arriving through the back door. */
+    severance: moving ? [] : (career.severance ?? []).filter(r => r.weeksLeft > 0),
     // Round 310: the memberships the new season plays under, exactly what
     // was registered above, so a reload registers the same world back.
     leagueOverrides: pr.overrides ?? undefined,

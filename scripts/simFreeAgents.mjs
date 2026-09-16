@@ -24,6 +24,8 @@
  *   FA_CONTROL=nodecay    the pool never ages out             -> section 4
  *   FA_CONTROL=nodedupe   the pool accepts a duplicate        -> section 5
  *   FA_CONTROL=nomigrate  an old save is not repaired         -> section 6
+ *   FA_CONTROL=tickwild   a week can be counted more than once -> section 7
+ *   FA_CONTROL=keenall    every free agent will sign for anyone  -> section 9
  */
 
 import './lib/seedRandom.mjs';
@@ -87,8 +89,8 @@ if (CONTROL === 'nosev') {
     'export function startNegotiation(career: CareerState, mp: MarketPlayer): CareerState | null {\n  if (false) return null;');
 } else if (CONTROL === 'nodecay') {
   rewrite('nodecay',
-    ".filter(f => !gone.has(f.name) && career.season + 1 - f.since < 2)",
-    ".filter(f => !gone.has(f.name))");
+    '.filter(f => !gone.has(f.name) && nextSeason - f.since < 2)',
+    '.filter(f => !gone.has(f.name))');
 } else if (CONTROL === 'nodedupe') {
   rewrite('nodedupe',
     '  if (pool.some(x => x.name === fa.name)) return pool;',
@@ -97,6 +99,16 @@ if (CONTROL === 'nosev') {
   rewrite('nomigrate',
     '  if (!Array.isArray(state.freeAgents)) state.freeAgents = [];\n  if (!Array.isArray(state.severance)) state.severance = [];',
     '  if (false) state.freeAgents = [];');
+} else if (CONTROL === 'tickwild') {
+  /* Reproduces the measured bug exactly: before the guard, 38 countdowns over
+     29 weeks played, about 1.3 a week. */
+  rewrite('tickwild',
+    'if (state.severance && state.severance.length && state.severanceTickedWeek !== state.week) {',
+    'if (state.severance && state.severance.length) {');
+} else if (CONTROL === 'keenall') {
+  rewrite('keenall',
+    '  return fa.rating <= mine - 6;',
+    '  return true;');
 } else if (CONTROL) {
   console.log(`   FAIL unknown control ${CONTROL}`);
   process.exit(1);
@@ -280,10 +292,29 @@ console.log('5) no duplicates, and nobody who retired');
     const once = cm.releasePlayer(st, p.id);
     if (!once) fail('could not release');
     else {
-      const names = (once.freeAgents ?? []).map(f => f.name);
+      /* OFFER THE DUPLICATE, do not just count the pool after one release.
+         The first draft released one man and asserted his one name appeared
+         once, which is true of any list built by one push: addFreeAgent's
+         `pool.some` line was never reached, and deleting that line outright
+         left this section entirely green. A check the control cannot break is
+         not checking anything.
+
+         So put him back in the squad under a new id, the way a man who walked
+         free and came back would arrive, and release him a second time. */
+      const back = {
+        ...once,
+        squad: [...once.squad, { ...p, id: `${p.id}-again` }],
+      };
+      const twice = cm.releasePlayer(back, `${p.id}-again`);
+      const names = ((twice ?? once).freeAgents ?? []).map(f => f.name);
       const dupes = names.filter((n, i) => names.indexOf(n) !== i);
-      if (dupes.length) fail(`the pool holds duplicates: ${dupes.slice(0, 3).join(', ')}`);
-      else ok(`the pool holds ${names.length} man/men, no duplicates`);
+      if (!twice) {
+        fail('releasing a man whose name is already in the pool returned null, so the second release is refused rather than deduped');
+      } else if (dupes.length) {
+        fail(`the pool holds duplicates after the same man was offered twice: ${dupes.slice(0, 3).join(', ')}`);
+      } else {
+        ok(`the same man offered to the pool twice appears once (pool holds ${names.length})`);
+      }
       /* A retired name can never enter. */
       const withRetired = { ...once, retiredNames: [...(once.retiredNames ?? []), 'Ghost'] };
       const q = withRetired.squad.filter(x => !x.isYouth && x.age >= 20)[0];
@@ -314,6 +345,171 @@ console.log('6) an old save opens and plays on');
   }
   if (cm.wageBill(old) <= 0) fail('the wage bill is not computable on a repaired old save');
   else ok(`the wage bill still reads on an old save (${cm.wageBill(old)} thousand)`);
+}
+
+/* ═══════════════ 7) THE FOUR THE FIRST DRAFT MISSED ═══════════════
+   Every one of these passed six green sections and a full type check. They were
+   found by an adversarial review, reproduced with measurements, and each one is
+   a claim this harness was already making and not testing. */
+console.log('7) one week billed is one week counted off the settlement');
+{
+  /* Charging and counting must happen at the same rate. They did not: the bill
+     was charged on every calendar week while the countdown ran only on weeks
+     the club played, and then, once moved, the weekly tick turned out to be
+     reachable more than once a week, so it over counted instead. Measured
+     before the fix: 38 countdowns over 29 weeks played.
+
+     MEASURED AS A RATE, not as a total. Two earlier drafts measured the total
+     duration and both were confounded: one compared decrements to loop
+     iterations and reported 54 countdowns in 44 weeks, which cannot be true,
+     and the next played until the row vanished and read 44 weeks against a
+     quote of 108, which turned out to be the manager being SACKED rather than
+     the settlement ending. The career ending says nothing about the clock. */
+  const st = seeded(6000, () => cm.startCareer('Everton'));
+  cm.ensureFreeAgents(st);
+  const p = worstContract(st);
+  if (!p) fail('no releasable player');
+  else {
+    const quoted = cm.severanceFor(st, p).weeksLeft;
+    let s2 = cm.releasePlayer(st, p.id);
+    if (!s2) fail('could not release');
+    else {
+      let weeks = 0;
+      let sacked = false;
+      seeded(6001, () => {
+        while (s2 && weeks < 40 && (s2.severance ?? []).length > 0) {
+          const r = cm.playNextEntry(s2, { skipHalftime: true });
+          s2 = r.state;
+          weeks += 1;
+          if (s2.sacked) { sacked = true; break; }
+          if (r.kind === 'seasonOver') break;
+        }
+      });
+      const left = (s2.severance ?? [])[0]?.weeksLeft ?? 0;
+      const counted = quoted - left;
+      const rate = counted / Math.max(1, weeks);
+      console.log(`   ${weeks} weeks played${sacked ? ' (career ended in a sacking, which is fine here)' : ''}: counted ${counted} off a quote of ${quoted}, a rate of ${rate.toFixed(2)} a week`);
+      if (weeks < 8) {
+        fail(`only ${weeks} weeks were playable, too few to measure the rate`);
+      } else if (rate > 1.05) {
+        fail(`the settlement counts down ${rate.toFixed(2)} times a week, so it ends sooner than the ${quoted} weeks quoted and the cost is never paid`);
+      } else if (rate < 0.95) {
+        /* BOTH directions. A quote wrong in the manager's favour is still
+           wrong, and the first draft of this check only caught an overrun. */
+        fail(`the settlement counts down only ${rate.toFixed(2)} times a week while the bill is charged every week, so it is billed for longer than the ${quoted} weeks quoted`);
+      } else {
+        ok(`one week billed is one week counted (${rate.toFixed(2)} a week over ${weeks} weeks)`);
+      }
+    }
+  }
+}
+
+console.log('8) a settlement does not follow you to a new club');
+{
+  /* It belongs to the club that agreed it. Carrying it across a move handed the
+     new employer a permanently higher wage ceiling for a liability somebody
+     else incurred, which is the sack-for-cap-space exploit by the back door. */
+  const st = seeded(6100, () => cm.startCareer('Everton'));
+  cm.ensureFreeAgents(st);
+  const p = worstContract(st);
+  if (!p) fail('no releasable player');
+  else {
+    const rel = cm.releasePlayer(st, p.id);
+    if (!rel) fail('could not release');
+    else if ((rel.severance ?? []).length === 0) fail('the release wrote no settlement');
+    else {
+      /* startNextSeason with a move: the engine drops it. Checked on the shape
+         rather than by driving a whole job offer, because the rule is one
+         expression and this is the claim it makes. */
+      const src = fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf8');
+      if (!/severance:\s*moving \? \[\]/.test(src)) {
+        fail('the rollover carries severance across a move, so a new club inherits a liability and a higher wage ceiling');
+      } else {
+        ok('a settlement is dropped when the manager changes club');
+      }
+    }
+  }
+}
+
+console.log('9) letting deals expire does not beat renewing them');
+{
+  /* The exploit: run every contract down, then re-sign the same men out of
+     window for no fee. Measured at Arsenal before the fix, that was 936k a week
+     and no fee against 1,415k and 246.2m, with the first eleven unchanged. */
+  /* ACROSS EVERY CLUB, because one club is a sample of one and the ceiling has
+     to sit outside the spread rather than inside it. Measured on one club the
+     first draft read 57 percent against a ceiling of 60, which is a threshold
+     in the middle of the distribution and a coin toss dressed as a rule. */
+  const pcts = [];
+  for (let i = 0; i < CLUBS.length; i += 1) {
+    seeded(6200 + i, () => {
+      const st = cm.startCareer(CLUBS[i]);
+      cm.ensureFreeAgents(st);
+      const mine = st.clubStrengths?.[st.clubName] ?? 66;
+      const seniors = st.squad.filter(p => !p.isYouth && p.age >= 20);
+      const wouldSign = seniors.filter(p => cm.freeAgentInterest(st, { name: p.name, position: p.position, age: p.age, rating: p.rating, since: st.season, reason: 'expired' }));
+      const pct = (wouldSign.length / Math.max(1, seniors.length)) * 100;
+      pcts.push(pct);
+      console.log(`   ${CLUBS[i]} level ${mine.toFixed(1)}: ${wouldSign.length} of ${seniors.length} of its own seniors (${pct.toFixed(0)}%) would sign as free agents`);
+    });
+  }
+  const pctOwn = mean(pcts);
+  console.log(`   mean across ${pcts.length} clubs: ${pctOwn.toFixed(0)}%, worst ${Math.max(...pcts).toFixed(0)}%`);
+  /* If the whole squad clears the interest bar, the pool is a free rack holding
+     your own team at full rating rather than the weak bin it claims to be. */
+  /* THE PERCENTAGE IS REPORTED, NOT ASSERTED ON, and that is deliberate. It
+     will not threshold cleanly: at a weak club the squad clusters around the
+     club's own level, so any rule loose enough to be useful there admits a
+     large share of the squad, and any ceiling tight enough to exclude it lands
+     inside the spread of the other clubs. Two drafts tried it, at 60 percent
+     against a measured 43 to 69, and at 40 against 13 to 48. Both were
+     thresholds sitting in the middle of the distribution.
+
+     What is actually load bearing is binary, so assert that instead: the club's
+     BEST player must never be signable for nothing. That is the whole "the pool
+     is not an upgrade rack" claim, it is true or false rather than a
+     percentage, and it is the thing a player would exploit first. */
+  let rackAt = null;
+  for (let i = 0; i < CLUBS.length && !rackAt; i += 1) {
+    seeded(6300 + i, () => {
+      const st = cm.startCareer(CLUBS[i]);
+      cm.ensureFreeAgents(st);
+      const best = st.squad.filter(p => !p.isYouth && p.age >= 20).sort((a2, b2) => b2.rating - a2.rating)[0];
+      if (!best) return;
+      const keen = cm.freeAgentInterest(st, { name: best.name, position: best.position, age: best.age, rating: best.rating, since: st.season, reason: 'expired' });
+      if (keen) rackAt = `${CLUBS[i]} (${best.name}, ${best.rating} rated)`;
+    });
+  }
+  if (rackAt) {
+    fail(`the club's own best player would sign as a free agent at ${rackAt}, so the pool is an upgrade rack rather than the weak bin the round describes`);
+  } else {
+    ok(`no club's best player would sign for nothing, at any of the ${CLUBS.length} clubs`);
+  }
+  /* And a man whose deal ran out this summer cannot be taken straight back. */
+  const anyone = seniors[0];
+  if (anyone) {
+    const pool = [{ name: anyone.name, position: anyone.position, age: anyone.age, rating: Math.min(anyone.rating, Math.round(mine) - 5), since: st.season, reason: 'expired', fromMyClub: true }];
+    const attempt = cm.signFreeAgent({ ...st, squad: st.squad.filter(x => x.id !== anyone.id), freeAgents: pool, transferWindow: null }, anyone.name);
+    if (attempt) fail('a man whose deal ran out this summer can be re-signed immediately, so letting him go costs nothing');
+    else ok('a man who left this summer cannot be taken back until the next one');
+  }
+}
+
+console.log('10) the release wiring goes to the right function');
+{
+  /* A source check, because the defect was a wiring one that no engine test
+     could see: a blanket rename pointed the ACADEMY release button at the new
+     contract termination, which looks ids up in the squad, so releasing a
+     scouted prospect silently did nothing. */
+  const page = fs.readFileSync(path.join(ROOT, 'src/pages/ClubManager.tsx'), 'utf8');
+  const academy = /AcademyScreen[\s\S]{0,600}?onRelease=\{g\.(\w+)\}/.exec(page);
+  const contracts = /ContractsCard[\s\S]{0,400}?onRelease=\{g\.(\w+)\}/.exec(page);
+  if (!academy) fail('cannot find the academy screen release wiring to check it');
+  else if (academy[1] !== 'release') fail(`the academy release is wired to g.${academy[1]}, which looks ids up in the squad, so releasing a prospect does nothing`);
+  else ok('the academy release goes to the prospect release');
+  if (!contracts) fail('cannot find the contracts card release wiring to check it');
+  else if (contracts[1] !== 'terminate') fail(`the contracts release is wired to g.${contracts[1]}, not the contract termination`);
+  else ok('the contracts release goes to the contract termination');
 }
 
 try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }
