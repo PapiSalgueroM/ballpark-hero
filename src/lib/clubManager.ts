@@ -15306,6 +15306,14 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
        still the mistake Round 105 made it, it is just a mistake a rival can
        now profit from in front of you. */
     for (const p of walked) {
+      /* Not the academy pads, the same rule terminateContract and the squad
+         trim already follow: a kid whose scholarship runs out drops out of the
+         professional game, he does not appear on a board of first team free
+         agents. This path was the one that missed it, and the symptom was
+         visible rather than subtle, because a generated youth name carries a
+         "(Youth)" suffix: measured over four clubs and five seasons, 8 of 125
+         board entries were men called "Jude Calvet (Youth)". */
+      if (p.isYouth) continue;
       walkedToPool.push(freeAgentFromPlayer(p, career.clubName, season, 'expired'));
     }
     squad = stillPlaying.filter(p => (p.contractYears ?? 1) > 0);

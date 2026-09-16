@@ -109,8 +109,18 @@ export interface FreeAgent {
 export const FA_SHELF_WEEKS = 34;
 
 /**
- * Below this the board tops itself up mid season, so there is always
- * something to look at in February. See midSeasonRelease in clubManager.ts.
+ * The size below which the board starts topping itself up mid season, so there
+ * is always something to look at in February. See midSeasonRelease.
+ *
+ * It is a TRIGGER and not a guarantee, and the name is the closest short one
+ * rather than a promise: the top-up adds at most one player a week and only on
+ * a roll, while rival clubs can take several in the same week, so the board
+ * genuinely sits under this number for a good part of a season. Measured over
+ * four clubs and five seasons it ran between 3 and 26 with a mean near 8, and
+ * spent 14 to 28 weeks a season below it. That is the intended shape: a hard
+ * floor would make the board a reliable shop, which is exactly what it must
+ * not be. What IS guaranteed is that it never empties, and simClubManagerFreeAgents
+ * section 7 is what holds that.
  */
 export const FA_BOARD_FLOOR = 8;
 

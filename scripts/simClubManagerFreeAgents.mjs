@@ -54,6 +54,10 @@
  *   CM_FA_CONTROL=nopayoffledger stops the settlement being written to
  *                                seasonSignings. Section 4 must find the
  *                                finance desk projecting money that is gone.
+ *   CM_FA_CONTROL=youthonboard   puts back the missing academy filter on the
+ *                                expiry path, which is the bug this section
+ *                                was written for. Section 3 must find men
+ *                                called "(Youth)" on a first team board.
  *
  * MEASURED BANDS, 2026-09-16, on the filename seed and on SIM_SEED 1, 2 and 3.
  * Every threshold sits between the two bands rather than beside either.
@@ -62,6 +66,7 @@
  *   real names on a day one board             0 of 4         4 of 4 (nogate)      must be 0
  *   world free agents 80+ and under 31        0              10 (primefree)       must be 0
  *   names in both the pool and the market     0              75 (nodupeguard)     must be 0
+ *   academy pads on the board                 0              8 of 125 (youthonboard) must be 0
  *   mean settle rate, wants out               0.270          n/a                  under contented
  *   mean settle rate, contented               0.670          n/a                  by 0.15 or more
  *   free agent signings in a shut window      12 of 12       0 of 12 (windowlock) must be 12
@@ -102,7 +107,7 @@ const ENTRY = path.join(TMP, 'cmFa.entry.mjs');
 const BUNDLE = path.join(TMP, 'cmFa.bundle.mjs');
 
 const CONTROL = process.env.CM_FA_CONTROL || '';
-const KNOWN = ['nogate', 'primefree', 'nodupeguard', 'windowlock', 'noresignguard', 'nopayoffledger'];
+const KNOWN = ['nogate', 'primefree', 'nodupeguard', 'windowlock', 'noresignguard', 'nopayoffledger', 'youthonboard'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_FA_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -155,6 +160,11 @@ if (CONTROL) {
       "  if (fa.wasMine && fa.since === career.season && (fa.reason === 'terminated' || fa.reason === 'expired')) {",
       '  if (false) {',
       'clubManager.ts (the re-sign guard)');
+  } else if (CONTROL === 'youthonboard') {
+    engine = swap(engine,
+      '      if (p.isYouth) continue;\n      walkedToPool.push(freeAgentFromPlayer(p, career.clubName, season, \'expired\'));',
+      '      walkedToPool.push(freeAgentFromPlayer(p, career.clubName, season, \'expired\'));',
+      'clubManager.ts (the academy filter on the expiry path)');
   } else if (CONTROL === 'nopayoffledger') {
     engine = swap(engine,
       "    seasonSignings: [...career.seasonSignings, { dir: 'out', name: p.name, fee: 0, payoff: cost }],",
@@ -357,6 +367,7 @@ console.log('3) One man, one record');
   let inSquad = 0;
   let twiceInPool = 0;
   let retiredOnBoard = 0;
+  let academyPads = 0;
   let checks = 0;
   for (const club of CLUBS) {
     let s = startCareer(club);
@@ -375,16 +386,25 @@ console.log('3) One man, one record');
         if (squad.has(fa.name)) inSquad += 1;
         if (retired.has(fa.name)) retiredOnBoard += 1;
         if (seen.has(fa.name)) twiceInPool += 1;
+        /* An academy pad is not a first team free agent, and the symptom is
+           right there in his generated name. Three paths put players on this
+           board and all three must filter him; the expiry path did not, and
+           this walk is where that showed up. Matching the suffix reads the
+           visible bug rather than a flag, which is the point: whatever the
+           mechanism is next time, a man called "(Youth)" on this board is
+           wrong. */
+        if (fa.name.includes('(Youth)')) academyPads += 1;
         seen.add(fa.name);
       }
     }
   }
-  console.log(`   ${checks} boards checked: ${bothLists} on the market too, ${inSquad} already signed, ${twiceInPool} listed twice, ${retiredOnBoard} retired`);
+  console.log(`   ${checks} boards checked: ${bothLists} on the market too, ${inSquad} already signed, ${twiceInPool} listed twice, ${retiredOnBoard} retired, ${academyPads} academy pads`);
   if (checks === 0) fail('no boards were checked, so this section proves nothing');
   if (bothLists > 0) fail(`${bothLists} free agents are ALSO for sale at the club they left, at a full fee`);
   if (inSquad > 0) fail(`${inSquad} players are on the board and in the squad at the same time`);
   if (twiceInPool > 0) fail(`${twiceInPool} duplicate records on the board`);
   if (retiredOnBoard > 0) fail(`${retiredOnBoard} retired players are still looking for a club`);
+  if (academyPads > 0) fail(`${academyPads} academy pads are on a first team free agent board, names and all`);
 }
 
 /* ================================================================== */
