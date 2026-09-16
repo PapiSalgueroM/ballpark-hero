@@ -69,7 +69,7 @@ import type { CareerState, Competition, SponsorOffer } from '@/lib/clubManager';
 import {
   CROWD_BANDS, CROWD_CAP, CUSTOM_CROWD_FLOOR,
   TICKET_TIERS, clubDefFor, eraClubDefFor, fixtureFor, gatePricePerFan, isHistoricEra,
-  money, signSponsorWith, sponsorOffers, wageBill,
+  money, severanceBill, signSponsorWith, sponsorOffers, wageBill,
 } from '@/lib/clubManager';
 import { facilityLevel, facilitiesOf, stadiumConcessionMult } from '@/lib/clubManagerFacilities';
 /* Round 471: the four staff posts pay a wage every week and cost fees when
@@ -465,7 +465,13 @@ export function projectFinances(state: CareerState): FinanceProjection {
      tickets the rest. The totals never disagreed; the two rows now agree too. */
   const foodLeft = round2(((crowd * food) / 1e6) * left.home);
   const ticketsLeft = round2(perHome * left.home - foodLeft);
-  const wagesLeft = round2((wageBill(state) / 1000) * weeksLeft);
+  /* Round 619 review: the squad's wages run every week left, but a settlement
+     runs only for the weeks it still has, and one that ends in a fortnight is
+     not a season's cost. Charging the whole bill for every week left put a
+     5 week row on the Finances desk at eleven times what it could still cost. */
+  const squadWeekly = wageBill(state) - severanceBill(state);
+  const settlementsLeft = (state.severance ?? []).reduce((n, r) => n + r.weekly * Math.min(r.weeksLeft, weeksLeft), 0);
+  const wagesLeft = round2((squadWeekly * weeksLeft + settlementsLeft) / 1000);
   const staffLeft = round2((staffWagesWeekly(state) / 1000) * weeksLeft);
   const travelLeft = round2(travelCost(state, 'league') * (left.away - left.euroAway) + travelCost(state, 'uclGroup') * left.euroAway);
   const signings = state.seasonSignings ?? [];

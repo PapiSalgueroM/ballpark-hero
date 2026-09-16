@@ -1,7 +1,36 @@
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { money, moneyIn, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, expiringPlayers, sellValue, severanceFor, severanceBill, freeAgentInterest } from '@/lib/clubManager';
-import type { CareerState, CMPlayer } from '@/lib/clubManager';
-import { ratingTint } from '@/components/club-manager/SquadScreen';
+import { money, moneyIn, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, expiringPlayers, sellValue, severanceFor, severanceBill, releaseBlock, freeAgentBlock, freeAgentTerms } from '@/lib/clubManager';
+import type { CareerState, CMPlayer, ReleaseBlock, FreeAgentBlock, FreeAgent } from '@/lib/clubManager';
+import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
+
+/* Round 619 review: what the button says when the engine would refuse, so a
+   disabled button always says why. Keyed on the engine's own reason codes, so
+   the screen cannot invent a rule the engine does not have. */
+const RELEASE_BLOCK_COPY: Record<ReleaseBlock, { face: string; title: string }> = {
+  midMatch: { face: 'Match on', title: 'Finish the match first. Nobody gets released at half time.' },
+  onLoan: { face: 'On loan', title: 'He is here on loan, so he is not yours to release.' },
+  lastKeeper: { face: 'Only keeper', title: 'He is your only keeper. Sign another one first.' },
+  squadSize: { face: 'Squad at 14', title: 'The squad is down to 14, the fewest you are allowed.' },
+  squadRules: { face: 'In a deal', title: 'He is part of a deal on the table right now.' },
+  seniorFloor: { face: 'Need 12 seniors', title: 'You need at least 12 senior players, so nobody can go until you sign someone.' },
+};
+
+const FREE_AGENT_BLOCK_COPY: Record<FreeAgentBlock, { face: string; title: string }> = {
+  notInPool: { face: 'Gone', title: 'He is not on the free agent list any more.' },
+  inSquad: { face: 'In your squad', title: 'He is already in your squad.' },
+  releasedByYou: { face: 'You let him go', title: 'You released him, and a man you release never comes back to you.' },
+  justLeft: { face: 'Just left you', title: 'His deal with you ran out this summer, so you cannot take him straight back this season.' },
+  notInterested: { face: 'Not interested', title: 'Too good to sign for your club for nothing.' },
+  squadFull: { face: 'Squad full', title: 'You already have 30 players.' },
+  overCap: { face: 'Over the cap', title: 'His wage would take you over the wage cap.' },
+};
+
+const FREE_AGENT_REASON: Record<FreeAgent['reason'], string> = {
+  released: 'you let him go',
+  expired: 'deal ran out',
+  unattached: 'no club',
+};
 
 interface ContractsCardProps {
   career: CareerState;
@@ -33,6 +62,8 @@ interface ContractsCardProps {
  * door you have signed in plain sight.
  */
 export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, onSignFreeAgent }: ContractsCardProps) {
+  /* Round 619 review: the man whose release is waiting on a second tap. */
+  const [confirmId, setConfirmId] = useState<string | null>(null);
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(career);
@@ -168,8 +199,10 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
           <div className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">
             Still paying {severanceBill(career)}k a week
           </div>
-          {(career.severance ?? []).map(r => (
-            <div key={r.name} className="flex justify-between text-[10px] text-muted-foreground py-0.5">
+          {/* Keyed by position as well as name: a man released, signed back
+              later and released again owes two settlements under one name. */}
+          {(career.severance ?? []).map((r, i) => (
+            <div key={`${r.name}-${i}`} className="flex justify-between text-[10px] text-muted-foreground py-0.5">
               <span className="truncate">{r.name}</span>
               <span className="shrink-0 tabular-nums">{r.weekly}k for {r.weeksLeft} more week{r.weeksLeft === 1 ? '' : 's'}</span>
             </div>
@@ -190,21 +223,58 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
           <div className="max-h-40 overflow-y-auto">
             {career.squad.filter(p => !p.onLoan && !p.isYouth && p.age >= 20).map(p => {
               const sev = severanceFor(career, p);
+              /* Round 619 review: the engine's own refusal, so a button is
+                 never live when pressing it would do nothing. */
+              const block = releaseBlock(career, p);
+              /* Two taps, and the second one is only offered once the whole
+                 cost is on screen. A release cannot be undone and the save is
+                 written the moment it happens. */
+              const confirming = confirmId === p.id && !block;
               return (
-                <div key={p.id} className="flex items-center gap-2 py-1 border-b border-border/30 last:border-0">
-                  <div className="flex-1 min-w-0">
-                    <div className="text-xs text-foreground truncate">{p.name}</div>
-                    <div className="text-[9px] text-muted-foreground">
-                      {p.rating} rated, {p.wage ?? 0}k a week, {p.contractYears ?? 0} year{(p.contractYears ?? 0) === 1 ? '' : 's'} left
+                <div key={p.id} className="py-1 border-b border-border/30 last:border-0">
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 min-w-0">
+                      <div className="text-xs text-foreground truncate">{p.name}</div>
+                      <div className="text-[9px] text-muted-foreground">
+                        {p.rating} rated, {p.wage ?? 0}k a week, {p.contractYears ?? 0} year{(p.contractYears ?? 0) === 1 ? '' : 's'} left
+                      </div>
                     </div>
+                    <button
+                      data-release-id={p.id}
+                      onClick={() => setConfirmId(confirming ? null : p.id)}
+                      disabled={!!block}
+                      title={block ? RELEASE_BLOCK_COPY[block].title : `Settle at ${sev.weekly}k a week for ${sev.weeksLeft} weeks`}
+                      className={cn('shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all',
+                        block ? 'bg-secondary text-muted-foreground cursor-not-allowed'
+                          : confirming ? 'bg-secondary text-foreground'
+                            : 'bg-secondary text-muted-foreground hover:bg-destructive hover:text-destructive-foreground')}
+                    >
+                      {block ? RELEASE_BLOCK_COPY[block].face : confirming ? 'Cancel' : `Release, ${sev.weekly}k x ${sev.weeksLeft}`}
+                    </button>
                   </div>
-                  <button
-                    onClick={() => onRelease(p.id)}
-                    title={`Settle at ${sev.weekly}k a week for ${sev.weeksLeft} weeks. The dressing room will notice.`}
-                    className="shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold bg-secondary text-muted-foreground hover:bg-destructive hover:text-destructive-foreground transition-all"
-                  >
-                    Release, {sev.weekly}k x {sev.weeksLeft}
-                  </button>
+                  {confirming && (
+                    <div className="mt-1.5 rounded-lg border border-destructive/50 bg-destructive/10 p-2 space-y-1.5" data-release-confirm>
+                      <p className="text-[10px] text-foreground">
+                        You pay him {sev.weekly}k a week for {sev.weeksLeft} more week{sev.weeksLeft === 1 ? '' : 's'}, {money((sev.weekly * sev.weeksLeft) / 1000)} in all,
+                        and it counts against your wage cap until it is paid. The whole dressing room takes a morale hit,
+                        and you can never sign him again.
+                      </p>
+                      <div className="flex gap-1.5">
+                        <button
+                          onClick={() => { onRelease(p.id); setConfirmId(null); }}
+                          className="flex-1 px-2 py-1.5 rounded-lg text-[10px] font-bold bg-destructive text-destructive-foreground hover:opacity-90 transition-all"
+                        >
+                          Release him
+                        </button>
+                        <button
+                          onClick={() => setConfirmId(null)}
+                          className="flex-1 px-2 py-1.5 rounded-lg text-[10px] font-bold bg-secondary text-foreground hover:opacity-90 transition-all"
+                        >
+                          Keep him
+                        </button>
+                      </div>
+                    </div>
+                  )}
                 </div>
               );
             })}
@@ -219,32 +289,39 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
           <div className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">
             Free agents{career.transferWindow === null ? ', and the window being shut does not stop these' : ''}
           </div>
-          {(career.freeAgents ?? []).map(f => {
+          {(career.freeAgents ?? []).map((f, i) => {
             /* A button that looks available and silently does nothing is
-               worse than no button. The engine refuses to re-sign a man you
-               released this season (pay half, re-sign cheaper, count both is a
-               wage cap exploit), so the screen has to say so rather than let
-               the player press it and watch nothing happen. */
-            const justLetGo = f.fromMyClub === true && f.since === career.season;
-            const keen = !justLetGo && freeAgentInterest(career, f);
+               worse than no button. Round 619 review: the first build checked
+               two of the engine's rules here and missed the cap and the squad
+               size, so a keen man could show Sign and nothing happened. The
+               card now asks the engine's own freeAgentBlock, and quotes the
+               wage and length off the same freeAgentTerms signFreeAgent
+               commits. */
+            const block = freeAgentBlock(career, f);
+            const t = freeAgentTerms(f);
             return (
               <div key={f.name} className="flex items-center gap-2 py-1 border-b border-border/30 last:border-0">
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs text-foreground truncate">{f.name}</div>
+                  <div className="flex items-center gap-1 min-w-0">
+                    <span className="text-xs text-foreground truncate">{f.name}</span>
+                    {f.generated && <MadeUpTag title="Not a real player. This game made him up to fill the free agent list." />}
+                  </div>
                   <div className="text-[9px] text-muted-foreground">
-                    {f.position}, {f.rating} rated, {f.age}, {f.reason === 'released' ? 'let go' : 'deal ran out'}
+                    {f.position}, {f.rating} rated, {f.age}, {FREE_AGENT_REASON[f.reason]}
+                  </div>
+                  <div className="text-[9px] text-muted-foreground">
+                    {t.wage}k a week for {t.years} years, no fee
                   </div>
                 </div>
                 <button
+                  data-sign-index={i}
                   onClick={() => onSignFreeAgent(f.name)}
-                  disabled={!keen}
-                  title={justLetGo
-                    ? 'You let him go this season. You cannot take him back until the summer.'
-                    : keen ? 'He will sign for nothing but his wage' : 'He thinks he can do better than you'}
+                  disabled={!!block}
+                  title={block ? FREE_AGENT_BLOCK_COPY[block].title : `${t.years} years at ${t.wage}k a week, no fee. The window being shut does not matter.`}
                   className={cn('shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all',
-                    keen ? 'bg-primary text-primary-foreground hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
+                    block ? 'bg-secondary text-muted-foreground cursor-not-allowed' : 'bg-primary text-primary-foreground hover:opacity-90')}
                 >
-                  {justLetGo ? 'You let him go' : keen ? 'Sign' : 'Not interested'}
+                  {block ? FREE_AGENT_BLOCK_COPY[block].face : `Sign · ${t.wage}k/w · ${t.years}y`}
                 </button>
               </div>
             );

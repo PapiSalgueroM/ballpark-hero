@@ -15,10 +15,10 @@ import type { CMPlayer } from '@/lib/clubManager';
  * ones. Same spirit as the "partial data" flag on the club picker: if the data
  * is thin, say it is thin, right there, rather than hoping nobody notices.
  */
-export function MadeUpTag({ className }: { className?: string }) {
+export function MadeUpTag({ className, title }: { className?: string; title?: string }) {
   return (
     <span
-      title="Not a real player. This game made him up because the real August 2026 data cannot tell us who is playing this far ahead."
+      title={title ?? 'Not a real player. This game made him up because the real August 2026 data cannot tell us who is playing this far ahead.'}
       className={cn('text-[8px] font-bold text-sky-300/90 border border-sky-400/50 rounded px-1 shrink-0', className)}
     >
       MADE UP
