@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import { TOTAL_GAMES } from '@/data/gameRegistry';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -39,7 +39,9 @@ interface GameNavbarStats {
  * - Streak: the local streak engine (the instant same-browser record).
  */
 export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
-  const { profile } = useAuth();
+  const { user, profile } = useAuth();
+  const accountId = user?.id ?? null;
+  const canReadRemote = !!accountId && profile?.user_id === accountId;
   const playerName = getCurrentPlayerName(profile);
   const [stats, setStats] = useState<GameNavbarStats>({
     gamesPlayedToday: 0,
@@ -48,63 +50,75 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
     currentStreak: 0,
     loading: true,
   });
-  const fetchingRef = useRef(false);
-
-  const fetchStats = useCallback(async () => {
-    if (fetchingRef.current) return;
-    fetchingRef.current = true;
-
-    try {
-      const todayUtc = new Date().toISOString().split('T')[0];
-
-      const [rankRes, playedRes] = await Promise.all([
-        (supabase.rpc as any)('global_rank', {
-          p_player: playerName,
-          p_period: 'today',
-          p_games: null,
-        }),
-        (supabase.from as any)('game_completions')
-          .select('game')
-          .eq('player_name', playerName)
-          .eq('completed_on', todayUtc),
-      ]);
-
-      const rankRow = Array.isArray(rankRes?.data) ? rankRes.data[0] : rankRes?.data ?? null;
-      const totalPointsToday = rankRow ? Number(rankRow.total_points) || 0 : 0;
-      const dailyRank = rankRow && Number(rankRow.rank) > 0 ? Number(rankRow.rank) : null;
-
-      const serverGames = playedRes?.data
-        ? new Set((playedRes.data as Array<{ game: string }>).map((r) => r.game)).size
-        : 0;
-      /* Round 301, audit finding 7: both sides of this max now count
-         DISTINCT games completed today (getLocalTodayCount returns the size
-         of a local slug set since Round 301), so the merge no longer mixes
-         a raw completion count against a distinct count and a replay of one
-         game cannot inflate the chip. */
-      const gamesPlayedToday = Math.max(serverGames, getLocalTodayCount());
-
-      setStats({
-        gamesPlayedToday,
-        totalPointsToday,
-        dailyRank,
-        currentStreak: getGlobalCurrentStreak(),
-        loading: false,
-      });
-    } catch (error) {
-      console.debug('[NavbarStats] fetch failed:', error);
-      // Even offline, show local truths rather than dashes.
-      setStats((prev) => ({
-        ...prev,
-        gamesPlayedToday: Math.max(prev.gamesPlayedToday, getLocalTodayCount()),
-        currentStreak: getGlobalCurrentStreak(),
-        loading: false,
-      }));
-    } finally {
-      fetchingRef.current = false;
-    }
-  }, [playerName]);
-
   useEffect(() => {
+    let active = true;
+    let fetching = false;
+    let completionTimer: ReturnType<typeof setTimeout> | undefined;
+    // A new account/handle starts with local facts, never the prior rank.
+    setStats({
+      gamesPlayedToday: getLocalTodayCount(),
+      totalPointsToday: 0,
+      dailyRank: null,
+      currentStreak: getGlobalCurrentStreak(),
+      loading: canReadRemote && document.visibilityState === 'visible',
+    });
+
+    const fetchStats = async () => {
+      if (!active || !canReadRemote || document.visibilityState !== 'visible' || fetching) return;
+      fetching = true;
+
+      try {
+        const todayUtc = new Date().toISOString().split('T')[0];
+
+        const [rankRes, playedRes] = await Promise.all([
+          (supabase.rpc as any)('global_rank', {
+            p_player: playerName,
+            p_period: 'today',
+            p_games: null,
+          }),
+          (supabase.from as any)('game_completions')
+            .select('game')
+            .eq('player_name', playerName)
+            .eq('completed_on', todayUtc),
+        ]);
+
+        if (!active) return;
+        const rankRow = Array.isArray(rankRes?.data) ? rankRes.data[0] : rankRes?.data ?? null;
+        const totalPointsToday = rankRow ? Number(rankRow.total_points) || 0 : 0;
+        const dailyRank = rankRow && Number(rankRow.rank) > 0 ? Number(rankRow.rank) : null;
+
+        const serverGames = playedRes?.data
+          ? new Set((playedRes.data as Array<{ game: string }>).map((r) => r.game)).size
+          : 0;
+        /* Round 301, audit finding 7: both sides of this max now count
+           DISTINCT games completed today (getLocalTodayCount returns the size
+           of a local slug set since Round 301), so the merge no longer mixes
+           a raw completion count against a distinct count and a replay of one
+           game cannot inflate the chip. */
+        const gamesPlayedToday = Math.max(serverGames, getLocalTodayCount());
+
+        setStats({
+          gamesPlayedToday,
+          totalPointsToday,
+          dailyRank,
+          currentStreak: getGlobalCurrentStreak(),
+          loading: false,
+        });
+      } catch (error) {
+        if (!active) return;
+        console.debug('[NavbarStats] fetch failed:', error);
+        // Even offline, show local truths rather than dashes.
+        setStats((prev) => ({
+          ...prev,
+          gamesPlayedToday: Math.max(prev.gamesPlayedToday, getLocalTodayCount()),
+          currentStreak: getGlobalCurrentStreak(),
+          loading: false,
+        }));
+      } finally {
+        fetching = false;
+      }
+    };
+
     fetchStats();
 
     // Refetch when the app comes back to the foreground (mobile) or focus.
@@ -123,7 +137,8 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
         gamesPlayedToday: Math.max(prev.gamesPlayedToday, getLocalTodayCount()),
         currentStreak: getGlobalCurrentStreak(),
       }));
-      setTimeout(fetchStats, 800);
+      clearTimeout(completionTimer);
+      completionTimer = setTimeout(fetchStats, 800);
     };
     window.addEventListener('game-completion-saved', handleGameComplete);
 
@@ -131,12 +146,14 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
     const pollInterval = setInterval(fetchStats, 60_000);
 
     return () => {
+      active = false;
+      clearTimeout(completionTimer);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleFocus);
       window.removeEventListener('game-completion-saved', handleGameComplete);
       clearInterval(pollInterval);
     };
-  }, [fetchStats]);
+  }, [accountId, canReadRemote, playerName]);
 
   return { ...stats, totalGames: TOTAL_GAMES };
 }
