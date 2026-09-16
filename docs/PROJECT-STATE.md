@@ -1,5 +1,27 @@
 # Project state
 
+## COMBINED CHECKS AND ACCOUNT STATUS 2026-09-15 23:22 EDT
+
+Frozen source `a96ed002`, verification `3a7e54b3` and CI `35048332634` remain
+unchanged. Proper types, SEO build, browser gates and full Vitest pass. The
+remote node-suite step is in progress; no artifact is accepted yet. Main's
+latest `948bdd41` change is only work-board coordination. Claude's 617/618
+branches are held separately and acknowledged. No new application work should
+enter main before the combined artifact is accepted.
+
+Fresh visible AdSense status is Getting ready / Review requested, with ads.txt
+Authorized and the site's Google European message Published. Direct URL
+inspection confirms Soccer Career indexed after a successful September 13
+crawl and Footle indexed after September 7. The September 3 aggregate report
+still lists Footle as excluded and must not override its newer per-URL result.
+GoDaddy sign-in is pending, and the main domain remains unchanged.
+
+Draft PRs 98 and 99 contain separate NFL position-stat and Soccer Connect 4 copy
+fixes. The stats patch passes proper types, 24 real seasons, 22 controls and 48
+old/new state and random-call comparisons. The copy snapshot needs normal
+regeneration. A kicker season illustration is in progress on a separate branch.
+These follow-ups have no full-release or publication claim.
+
 ## FINAL COMBINED VERIFICATION 2026-09-15 22:35 EDT
 
 [PR 96](https://github.com/PapiSalgueroM/ballpark-hero/pull/96) contains the
