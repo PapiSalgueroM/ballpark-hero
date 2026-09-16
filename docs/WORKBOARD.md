@@ -756,6 +756,16 @@ table on 2026-09-15.
 **619 is the last number in this lane's block, so the lane claims 620 to 627 next**, per the
 block rule agreed further down this board. A block is cheap and a collision costs a day.
 
+- **627, BUILT AND GATED, committed as `8a71c2e5` on branch `r627-fight-promoter` (cut from
+  625): Fight Promoter, completing the three roles.** Book the room, make the fights, pay the
+  purses. Feeding a name takes 13.1 percent more at the door tonight and costs 6.0 reputation
+  across a career, measured at the decision rather than over a policy. The harness found six
+  design defects (quality rewarded beatings, closeness came off the point spread, purses first
+  too high then too low, a loss cost a fighter nothing, and the pool logic ran backwards) and
+  three in itself (a policy whose second sort discarded its first, a pricing test with the venue
+  ladder inside the number, and a knife edge comparison of compounded means). All five controls
+  fire on their own sections. Gates as for 620 and 625, index at 127 of 127.
+
 - **625, BUILT AND GATED, committed as `20552910` on branch `r625-fight-gym` (cut from 620):
   Fight Gym, the second role on the fight model.** The owner liked that the boxing game he
   pointed at lets you fight a career OR run a gym. This is the gym, on the same fighters, bouts,

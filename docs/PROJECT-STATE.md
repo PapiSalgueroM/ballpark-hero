@@ -1,5 +1,36 @@
 # Project state
 
+## ROUND 627 BUILT 2026-09-16: Fight Promoter, completing the three roles
+
+On branch `r627-fight-promoter`, commit `8a71c2e5`, cut from `r625-fight-gym`. Not merged.
+`/fight-promoter`. New `src/lib/fightPromoter.ts` and `scripts/simFightPromoter.mjs`.
+
+Same fighters, bouts, damage and ageing as Round 620, a third chair. The claim the mode rests
+on is that the two ways to fill a building pull against each other, and it is measured at the
+moment the player faces it: feeding a name takes 13.1 percent more at the door tonight and costs
+6.0 reputation across a career.
+
+**Six design defects the harness found.** Quality rewarded punches, knockdowns and stoppages,
+which a beating delivers, so mismatches scored as great fights. Closeness came off the point
+spread, far too weak when a card moves ten to nine and a shutout over eight rounds is eight
+points apart; it is rounds won now. Purses cost more than a small hall could take, so seven in
+ten promotions went under whatever they did. Then the opposite, with the gate growing on two
+terms while costs did not, banking 328m over forty shows; fighters now take the greater of
+guarantee or 58 percent of the door. A loss barely dented a fighter's draw, so there was no
+reason to protect anybody. And the pool logic was backwards: departures were the only way new
+fighters arrived and departures fall as reputation rises, so a big name kept his ordinary roster.
+
+**Three defects in the harness itself, all recorded in it.** Its mismatch policy sorted by draw
+then re-sorted by gap, discarding the first sort, so it modelled any lopsided pairing rather
+than feeding a name. Its pricing test measured money compounded over 24 shows, where a richer
+promoter books a bigger room, so it reported the dearest ticket as simply correct. And it tested
+the temptation as a compounded mean, which is a knife edge; it is a single decision now.
+
+**Gates.** tsc 0, five sections with all five controls (`freerent`, `noquality`, `noprice`,
+`norep`, `nodamage`) proved to fire on their own sections, `simFightCareer` and `simFightGym`
+still green, the five registration harnesses green, index at 127 of 127, venue ladder verified
+in a browser.
+
 ## ROUND 625 BUILT 2026-09-16: Fight Gym, the second role on the fight model
 
 On branch `r625-fight-gym`, commit `20552910`, cut from `r620-fight-career`. Not merged.
