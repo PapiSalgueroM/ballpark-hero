@@ -14,6 +14,11 @@ The public alternate-host homepage and Stadium Tycoon now also boot in the
 Codex browser. The tycoon shows its rules, live clock, income and pitch.
 This is a manual smoke check of the accepted 588 preview, not the new union.
 Domain ownership/TLS validation remains pending and no DNS has changed.
+The GoDaddy DNS page is open but signed out; Anthony has been asked to log in.
+At 20:36 EDT, home, Soccer Career, robots.txt and ads.txt return exact expected
+content for both AdSense crawler headers and the normal Node client. A Python
+header receives Cloudflare 403. This is a workstation HTTP check, not a Google
+crawl. See [the access evidence](hosting/crawler-header-check-2026-09-15.json).
 
 A separate post-release repair is reserved in `codex/navbar-stats-read-repair`:
 stop personal-stat reads for guests and hidden tabs while preserving visible

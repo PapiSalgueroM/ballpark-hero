@@ -27,6 +27,16 @@ is public at https://douknowball.anacatu2025.chatgpt.site.
   browser programs and 74 effective controls. This is not approval of the new
   combined tree.
 
+At 20:36 EDT, a targeted public access check returned the expected content
+with HTTP 200 for home, Soccer Career, robots.txt and ads.txt under the normal
+Node client and both AdSense crawler headers. Python's default user agent
+received a Cloudflare 403 on the same four paths. This narrows the earlier
+Python failure to a header-sensitive access rule; it is not proof of a real
+Google crawl or of access from every network. No security setting changed.
+See [the 16-request evidence](crawler-header-check-2026-09-15.json).
+Google documents the two AdSense crawlers in its
+[crawler guidance](https://support.google.com/adsense/answer/99376?hl=en).
+
 **Do not move the main domain to this preview yet.** That would undo
 Claude's live 611, 612 and 616 changes. The final integrated tree contains them
 and the full animation stack. Its type check and production build pass; its
@@ -58,9 +68,11 @@ domain validation/TLS are ready, the provider's apex A targets are
 cutover. Recheck these returned targets before acting. Do not substitute a
 CNAME at the apex or change nameservers.
 
-There is no working signed-in DNS management connection in this task. Anthony
-has been asked whether he can open GoDaddy DNS. Browser controls time out,
-so no DNS record has been changed. A separate preview origin does not establish
+There is no signed-in DNS management connection in this task. The Codex
+in-app browser works again for ordinary pages. A direct visit to this
+domain's GoDaddy DNS page reached the sign-in screen, which is kept open for
+Anthony. He has been asked to sign in. No DNS record has been changed.
+A separate preview origin does not establish
 that Supabase authentication callbacks are allowlisted there. Preserving the
 production origin preserves its existing callback URLs and browser saves.
 
