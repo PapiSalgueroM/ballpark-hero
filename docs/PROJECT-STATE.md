@@ -570,6 +570,19 @@ migration); those later heads are not deployed.
   after the deploy (381 rows, last write 2026-09-15 18:33 UTC, read at 22:52 UTC after the entry
   moved); purge only after 24 hours with 0 new rows, exactly as contract section 5 says; retiring
   the function is Round 615.
+- **How to read the College Grid success signal, so nobody treats a healthy game as a broken one.**
+  Two readings after the deploy, at 01:02 and 04:58 UTC on 2026-09-16: no edge log row naming the
+  old validator, no new `ai_validation_cache` row for `college-grid` (still 381 in total, the last
+  written before the deploy), and no completion after the pre deploy hand play, against 6,467
+  completions sitewide in that window. That zero is what a working niche game looks like here.
+  College Grid's entire completion history is 35 rows, 34 of them in July before it broke, which is
+  about one a day, and the whole grid family has completed 183 times ever (Soccer Grid 89, College
+  Grid 35, NBA 24, football 19, hockey 13, MLB 3). No grid game appears in the twelve most completed
+  games of that six hour window, where twelfth place is 19 completions. So the expected number of
+  College Grid completions in six hours, even fully healthy, is well under one, and the first real
+  one is a matter of days rather than hours. Check again after a day or two, and only investigate
+  the game itself if there is still nothing after about three days. The purge precondition (no new
+  cache rows) is being met, and the purge falls due after 22:41 UTC on 2026-09-16.
 
 ## Earlier Round 586 verification history
 
