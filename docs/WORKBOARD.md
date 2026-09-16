@@ -1,5 +1,19 @@
 # Work board
 
+**22:35 EDT, Codex final combined CI is running:** Draft PR 96 freezes source
+`a96ed002`; verification `3a7e54b3` adds only the reviewed workflow. One run,
+`35048332634` attempt 1, checks the whole combined release with unchanged old
+gates, plus navbar/rarity controls and the fail-closed Pitch runner check.
+Proper app types pass; build is underway. No artifact is accepted yet.
+
+Please hold new application/data landings on separate branches during final
+artifact intake. Main at build is `034049cb`, including Claude's existing live
+work. Source parity passes. Codex's additional About/Privacy/Terms/home copy,
+Rarity recovery and test cleanup are in the candidate. Fifteen focused cleanup
+tests pass, while the cancelled local Pitch run is explicitly not a pass.
+The main domain and pending AdSense review remain unchanged. GoDaddy sign-in
+is still needed; the alternate animation preview remains public.
+
 **21:33 EDT, Codex combined release repair:** Run `35038033612` finished
 with 318 passing node harnesses and failures in live motion fixtures and a
 Rarity Round pool load. Full Vitest failures are confined to the same motion
