@@ -84,6 +84,19 @@ HTTPS and one valid breadcrumb item are present. This is actual recorded Google
 crawl evidence for that page, not a claim that the whole site is indexed or that
 AdSense has approved it. No live test or indexing request was needed.
 
+Direct inspection of `/footle` at about 23:12 EDT also says the page is indexed,
+with a successful September 7 smartphone crawl at 20:55:35 and the inspected URL
+selected as canonical. The September 3 exclusion table still lists its March
+crawl. This directly shows why the older aggregate table cannot be treated as
+the current status of every listed URL. No recrawl request was submitted.
+
+The [source classification](exclusion-source-audit-2026-09-15.md) separates
+the 17 examples into eleven current indexable pages, three retired redirects,
+two deliberate noindex routes and the XML sitemap. All eleven current pages
+have readable snapshots and expected metadata. A verified Soccer Connect 4
+description mismatch is reserved for a separate copy correction; it is not
+claimed as Google's reason for exclusion.
+
 Source review found wording that says advertising already pays for the site,
 even though the current application is pending, and hosting wording that names
 only Lovable even though an alternate ChatGPT Sites preview now exists. Correct

@@ -1,6 +1,6 @@
 {
   "method": "Read-only visible signed-in browser pages through Codex browser controls",
-  "observationWindowUtc": "2026-09-16T02:50:00Z/2026-09-16T03:00:00Z",
+  "observationWindowUtc": "2026-09-16T02:50:00Z/2026-09-16T03:12:00Z",
   "site": "douknowball.com",
   "adsense": {
     "status": "Getting ready",
@@ -45,6 +45,23 @@
     ],
     "indexingRequested": false,
     "validationRestarted": false,
+    "footleInspection": {
+      "path": "/footle",
+      "status": "URL is on Google",
+      "pageIndexing": "Page is indexed",
+      "lastCrawlAsDisplayed": "Sep 7, 2026, 8:55:35 PM",
+      "crawler": "Googlebot smartphone",
+      "crawlAllowed": true,
+      "fetch": "Successful",
+      "indexingAllowed": true,
+      "declaredCanonical": "https://douknowball.com/footle",
+      "selectedCanonical": "Inspected URL",
+      "https": "Page is served over HTTPS",
+      "breadcrumbs": "1 valid item detected",
+      "liveTestRun": false,
+      "indexingRequested": false,
+      "note": "This newer per-URL result supersedes the September 3 aggregate report's excluded example for this URL."
+    },
     "soccerCareerInspection": {
       "path": "/soccer-career",
       "status": "URL is on Google",
