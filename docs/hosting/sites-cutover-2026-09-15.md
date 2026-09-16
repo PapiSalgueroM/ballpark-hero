@@ -19,12 +19,25 @@ is public at https://douknowball.anacatu2025.chatgpt.site.
   mask snapshots or assets on this deployment.
 - Independent static review verified all 493 output files and all 148 sitemap
   documents, including canonical URLs, indexability, local assets and ads.txt.
-- The accepted 588 animation build is being prepared for the same preview.
+- The accepted 588 animation build is now live on the same preview, published
+  at 23:54:57 UTC. All 374 non-HTML responses match exactly, and all 169 HTML
+  responses match after the narrowly controlled Cloudflare script removal.
+  All return 200. See [the publication proof](animation-preview-proof-2026-09-15.json).
   That exact source passed 318 node harnesses, 311 Vitest tests, 15 explicit
   browser programs and 74 effective controls. This is not approval of the new
   combined tree.
 
-**Do not move the main domain to either historical preview.** That would undo
+At 20:36 EDT, a targeted public access check returned the expected content
+with HTTP 200 for home, Soccer Career, robots.txt and ads.txt under the normal
+Node client and both AdSense crawler headers. Python's default user agent
+received a Cloudflare 403 on the same four paths. This narrows the earlier
+Python failure to a header-sensitive access rule; it is not proof of a real
+Google crawl or of access from every network. No security setting changed.
+See [the 16-request evidence](crawler-header-check-2026-09-15.json).
+Google documents the two AdSense crawlers in its
+[crawler guidance](https://support.google.com/adsense/answer/99376?hl=en).
+
+**Do not move the main domain to this preview yet.** That would undo
 Claude's live 611, 612 and 616 changes. The final integrated tree contains them
 and the full animation stack. Its type check and production build pass; its
 fresh full verification and accepted artifact are still pending.
@@ -55,9 +68,11 @@ domain validation/TLS are ready, the provider's apex A targets are
 cutover. Recheck these returned targets before acting. Do not substitute a
 CNAME at the apex or change nameservers.
 
-There is no working signed-in DNS management connection in this task. Anthony
-has been asked whether he can open GoDaddy DNS. Browser controls time out,
-so no DNS record has been changed. A separate preview origin does not establish
+There is no signed-in DNS management connection in this task. The Codex
+in-app browser works again for ordinary pages. A direct visit to this
+domain's GoDaddy DNS page reached the sign-in screen, which is kept open for
+Anthony. He has been asked to sign in. No DNS record has been changed.
+A separate preview origin does not establish
 that Supabase authentication callbacks are allowlisted there. Preserving the
 production origin preserves its existing callback URLs and browser saves.
 

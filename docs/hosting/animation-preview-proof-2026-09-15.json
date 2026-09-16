@@ -1,0 +1,28 @@
+{
+  "siteUrl": "https://douknowball.anacatu2025.chatgpt.site",
+  "projectId": "appgprj_6aa9d4d57c5081919c1cc6702160c568",
+  "deploymentId": "appgdep_6aa9da9b77fc8191a51d070ee8da027a",
+  "versionId": "appgprj_6aa9d4d57c5081919c1cc6702160c568~appgver_538f186ac5788191b531718e32d0e2d2",
+  "deployedAt": "2026-09-15T23:54:57.678532+00:00",
+  "hostingCommit": "ba22ae4006f38be7f01b8f040fccc5defe005e7c",
+  "verifiedSource": "8a4e00a53331e2bb6a7a694dc4602e3994434c68",
+  "verificationCommit": "75d4f3c64bad61684d08cb2c5c2c1b7be6841f5d",
+  "verificationRun": "https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35026622660",
+  "nodeHarnesses": 318,
+  "vitestTests": 311,
+  "explicitBrowserPrograms": 15,
+  "negativeControls": 74,
+  "acceptedInputs": 1942,
+  "acceptedOutputs": 714,
+  "hostedFiles": 544,
+  "publicChecks": {
+    "assetsExact": 374,
+    "htmlExactAfterKnownCloudflareScriptRemoval": 169,
+    "normalizerControls": 4,
+    "allStatus200": true,
+    "checkedAt": "2026-09-15T23:56:44.059Z"
+  },
+  "mainDomainMoved": false,
+  "integratedMainApproved": false,
+  "adsenseApproved": false
+}

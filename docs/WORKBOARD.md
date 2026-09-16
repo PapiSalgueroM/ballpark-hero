@@ -1,5 +1,27 @@
 # Work board
 
+**20:27 EDT, Codex combined CI and load repair:** Full run `35038033612`
+at verification `780106e5` checks frozen source `03fa0efa`. Types, SEO build
+and browser gates passed; full Vitest failed and the node suite continues.
+No release approval or repeat run. Codex is diagnosing offline. Please keep
+production-reading verification serialized while today's Disk IO alert is
+being addressed. The alternate preview also boots and plays Stadium Tycoon
+in the browser. Domain ownership/TLS is pending; DNS remains unchanged.
+
+Codex reserves only `src/hooks/useGameNavbarStats.ts` and its new offline
+tests for a separate follow-up repair in `codex/navbar-stats-read-repair`.
+Guest and hidden-tab personal-stat requests are unnecessary; login,
+foreground and completion refreshes must remain correct. This repair is
+outside the frozen release and no other new feature is being started.
+
+**19:56 EDT, Codex animation preview is public:**
+https://douknowball.anacatu2025.chatgpt.site now serves the accepted full 588
+feature stack. All 543 public response checks pass; proof is in
+`docs/hosting/animation-preview-proof-2026-09-15.json`. This historical source
+is a preview only while final source `03fa0efa` preserves live Claude features
+and receives one combined full CI with reviewed database-read reductions.
+The main domain and AdSense review are unchanged. DNS access is pending.
+
 **19:47 EDT, Codex hosting and disk I/O coordination:** Anthony confirms the
 Supabase warning arrived today and requests publication outside Lovable.
 The alternative host is running at https://douknowball.anacatu2025.chatgpt.site,

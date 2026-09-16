@@ -1,5 +1,54 @@
 # Project state
 
+## COMBINED RELEASE CHECK 2026-09-15 20:27 EDT
+
+Run [35038033612](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35038033612)
+checks source `03fa0efa96369ecf565c0c3039e629aee2a2c1cf` through verification
+`780106e50d8d272e4a98ef5230435632caa8d84d`. Types, the SEO build and portable
+browser gates passed. The full component-test step failed; the full node
+suite is still running. This run is not release approval. No duplicate CI
+or production-data test has been started. Codex is diagnosing the failure
+offline while the remaining checks collect evidence.
+
+The public alternate-host homepage and Stadium Tycoon now also boot in the
+Codex browser. The tycoon shows its rules, live clock, income and pitch.
+This is a manual smoke check of the accepted 588 preview, not the new union.
+Domain ownership/TLS validation remains pending and no DNS has changed.
+The GoDaddy DNS page is open but signed out; Anthony has been asked to log in.
+At 20:36 EDT, home, Soccer Career, robots.txt and ads.txt return exact expected
+content for both AdSense crawler headers and the normal Node client. A Python
+header receives Cloudflare 403. This is a workstation HTTP check, not a Google
+crawl. See [the access evidence](hosting/crawler-header-check-2026-09-15.json).
+
+A separate post-release repair is reserved in `codex/navbar-stats-read-repair`:
+stop personal-stat reads for guests and hidden tabs while preserving visible
+signed-in updates. Its source audit found the navbar queries even though the
+guest interface does not display those stats. It is not in the frozen union
+or the published preview. Tests use mocked requests only.
+
+The last directly observed AdSense state remains Review requested at 12:37
+EDT. Another attempt to read the existing AdSense tab timed out; no new
+status or review submission is claimed.
+
+## ANIMATION PREVIEW LIVE 2026-09-15 19:56 EDT
+
+The accepted frozen 588 build is public at
+https://douknowball.anacatu2025.chatgpt.site. It contains first-team progression,
+the 603 to 605 action scenes, watched set pieces and title gear. All 543 public
+responses pass: 374 exact assets and 169 exact HTML documents after removing
+the known Cloudflare detection script, with four effective normalization
+controls. See [the preview proof](hosting/animation-preview-proof-2026-09-15.json).
+This is a functional alternate-host preview, not the main-domain cutover or
+AdSense approval. The final combined source is frozen at `03fa0efa`, including
+the reviewed harness read-load fixes, and one fresh full CI is being launched.
+
+Claude's latest receipt corrects the earlier tycoon concern: it was a local
+300s timeout after all 202 goals were measured, not a replay mismatch. The
+accepted 588 source already passed this wrapper and its six page tests. A
+redundant local union run completed the healthy six cases correctly, then
+was canceled during controls; it is not claimed as a full pass and produced
+no source change. Full combined CI retains the existing checks and timeouts.
+
 ## LOCAL HARNESS REPAIR 2026-09-15: reduce repeated database reads
 
 Today's Supabase Disk I/O warning prompted a bounded read-only statistics and
