@@ -11997,6 +11997,19 @@ function buildMatchDetail(args: {
  * because a stadium's size and name are checkable real-world facts and the
  * data rules ban inventing those.
  */
+/* Round 618: the bands a home crowd is drawn from, the ground's hard ceiling
+   and the share of a custom ground that always turns up. Exported because the
+   finance desk projects a future gate from exactly these numbers, and a second
+   copy of them would drift away from the draw without anything noticing. */
+export const CROWD_BANDS: Record<number, [number, number]> = {
+  1: [56000, 78000],
+  2: [36000, 56000],
+  3: [21000, 36000],
+  4: [9000, 21000],
+};
+export const CROWD_CAP = 78000;
+export const CUSTOM_CROWD_FLOOR = 0.74;
+
 function matchAttendance(state: CareerState, fx: { home: boolean | null; opponent: string }): { attendance: number; capacity: number | null; venue: 'home' | 'away' | 'neutral' } {
   const venue: 'home' | 'away' | 'neutral' = fx.home === true ? 'home' : fx.home === false ? 'away' : 'neutral';
   if (venue === 'neutral') return { attendance: ri(64000, 78000), capacity: null, venue };
@@ -12012,19 +12025,13 @@ function matchAttendance(state: CareerState, fx: { home: boolean | null; opponen
   if (custom && custom.capacity) {
     /* The chosen ground genuinely grows: 6,000 seats per expansion. */
     const cap = custom.capacity + (myGround ? (fin?.groundUpgrades ?? 0) * 6000 : 0);
-    const att = Math.min(cap, Math.round(ri(Math.round(cap * 0.74), cap) * TICKET_TIERS[fin?.ticketTier ?? 1].crowdMult * fans));
+    const att = Math.min(cap, Math.round(ri(Math.round(cap * CUSTOM_CROWD_FLOOR), cap) * TICKET_TIERS[fin?.ticketTier ?? 1].crowdMult * fans));
     return { attendance: att, capacity: cap, venue };
   }
   const eraHist = !!state.eraId && isHistoricEra(state.eraId);
   const def = eraHist ? eraClubDefFor(hostName, state.eraId) : clubDefFor(hostName);
-  const bands: Record<number, [number, number]> = {
-    1: [56000, 78000],
-    2: [36000, 56000],
-    3: [21000, 36000],
-    4: [9000, 21000],
-  };
-  const [lo, hi] = bands[def.tier] ?? bands[4];
-  const att = clamp(Math.round(ri(lo, hi) * crowdMult), Math.round(lo * 0.6), 78000);
+  const [lo, hi] = CROWD_BANDS[def.tier] ?? CROWD_BANDS[4];
+  const att = clamp(Math.round(ri(lo, hi) * crowdMult), Math.round(lo * 0.6), CROWD_CAP);
   return { attendance: att, capacity: null, venue };
 }
 
