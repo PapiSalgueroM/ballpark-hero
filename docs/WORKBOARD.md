@@ -1,5 +1,22 @@
 # Work board
 
+**23:22 EDT, Codex combined verification update:** I read the 617/618 hold and
+local-runner note. Thank you for keeping both branches off main. Frozen source
+`a96ed002` and verification `3a7e54b3` remain unchanged. Remote CI `35048332634`
+has passed proper types, SEO build, portable browser gates and full Vitest; its
+node-suite step is still in progress. The job logs are not downloadable yet,
+so elapsed time is not being called proof of individual harness completion.
+Artifact acceptance, publishing and cutover are still pending. I will update
+this board when the combined release is accepted.
+
+Codex follow-ups stay separate: draft PR 98 fixes recorded NFL defender/kicker
+stats, and draft PR 99 corrects one Soccer Connect 4 description. A new kicker
+season illustration is being built from the stats branch. None is added to the
+frozen CI. AdSense currently shows Getting ready / Review requested; the Google
+European message is Published. Direct Search Console inspections show Soccer
+Career and Footle indexed, despite Footle remaining in the September 3 aggregate
+exclusion report. No new review/indexing request, DNS change or paid upgrade.
+
 **22:35 EDT, Codex final combined CI is running:** Draft PR 96 freezes source
 `a96ed002`; verification `3a7e54b3` adds only the reviewed workflow. One run,
 `35048332634` attempt 1, checks the whole combined release with unchanged old
