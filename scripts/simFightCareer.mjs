@@ -24,6 +24,8 @@
  *   FIGHT_CONTROL=godmode     the player is unbeatable         -> section 3
  *   FIGHT_CONTROL=driftdaily  the daily stops targeting        -> section 4
  *   FIGHT_CONTROL=nostyle     the tactic matrix goes flat      -> section 5
+ *   FIGHT_CONTROL=flatbar     the condition bars never drain   -> section 6
+ *   FIGHT_CONTROL=nostop      a stopped man keeps a full bar   -> section 6
  */
 
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
@@ -68,8 +70,18 @@ const ENGINE = path.join(TMP, 'careerEngine.ts');
 const ENTRY = path.join(TMP, 'entry.ts');
 const BUNDLE = path.join(TMP, 'bundle.mjs');
 
-let src = fs.readFileSync(path.join(ROOT, 'src/lib/fightCareer.ts'), 'utf8');
-let engineSrc = fs.readFileSync(path.join(ROOT, 'src/lib/careerEngine.ts'), 'utf8');
+/* NORMALISE THE LINE ENDINGS BEFORE ANY CONTROL LOOKS AT THIS TEXT.
+   Round 628, found by adding a control whose anchor spanned two lines and
+   watching it refuse to run. Anthony's checkout stores these files CRLF, all
+   926 lines of fightCareer.ts, and an anchor written in this file is LF. A
+   single line anchor therefore matches and a MULTI LINE one cannot, ever.
+   Two of the five controls shipped in Round 620 are multi line: `noretire`
+   and `driftdaily` had never once fired on a CRLF checkout, so sections 2 and
+   4 were green because their control changed nothing, which is the exact
+   reading of green the repo's own rule warns about. It survived because it is
+   invisible on an LF checkout, where both controls work perfectly. */
+let src = fs.readFileSync(path.join(ROOT, 'src/lib/fightCareer.ts'), 'utf8').replaceAll('\r\n', '\n');
+let engineSrc = fs.readFileSync(path.join(ROOT, 'src/lib/careerEngine.ts'), 'utf8').replaceAll('\r\n', '\n');
 
 /* Each control asserts its anchor BEFORE it edits. A control that rewrites a
    string the file does not contain changes nothing, the harness stays green,
@@ -119,6 +131,17 @@ if (CONTROL === 'nodecay') {
   rewrite('nostyle',
     "  brawl: { outboxer: -1, swarmer: 0, slugger: 0, counter: 1 },",
     "  brawl: { outboxer: 0, swarmer: 0, slugger: 0, counter: 0 },");
+} else if (CONTROL === 'flatbar') {
+  rewrite('flatbar',
+    'export const DRAIN_PER_PUNCH = 0.8;',
+    'export const DRAIN_PER_PUNCH = 0;');
+  rewrite('flatbar',
+    'export const DRAIN_PER_KNOCKDOWN = 10;',
+    'export const DRAIN_PER_KNOCKDOWN = 0;');
+} else if (CONTROL === 'nostop') {
+  rewrite('nostop',
+    "      player: stoppage && last && loser === 'player' ? 0 : Math.round(player),\n      opp: stoppage && last && loser === 'opp' ? 0 : Math.round(opp),",
+    '      player: Math.round(player),\n      opp: Math.round(opp),');
 } else if (CONTROL) {
   console.log(`   FAIL unknown control ${CONTROL}`);
   process.exit(1);
@@ -472,6 +495,126 @@ console.log('5) reading the opponent style beats guessing');
   /* Margin from measured headroom on healthy code. */
   if (!(rp > bp + 6)) fail(`reading the style is worth only ${(rp - bp).toFixed(1)} points, so the tactic choice is close to meaningless (margin 6)`);
   else ok(`reading the style is worth ${(rp - bp).toFixed(1)} points (margin 6)`);
+}
+
+/* ═════ 6) the fight screen's bars are about the fight, Round 628 ═════ */
+console.log('6) the condition bars tell the truth about the fight');
+{
+  const ends = { win: [], lose: [] };
+  let bouts = 0, decisions = 0, agrees = 0;
+  let stoppedZero = 0, stoppedTotal = 0, standingZero = 0, rose = 0;
+  let landed = 0, landedN = 0;
+
+  /* THESE BOUTS COME OUT OF REAL CAREERS, not out of makeFighter directly, and
+     that is the whole reason this section is trustworthy. The first draft built
+     two fighters at tiers 2 to 4 and fought them, which gave 2.9 punches landed
+     a round. Real career rounds land 7.4. The constants were then calibrated
+     against the harness's own sample rather than against the game, this section
+     passed at 89.5 percent, and the actual screen showed both men pinned on the
+     floor after a points decision. A harness that invents its own population
+     will agree with whatever it invented. */
+  const weights = ['fly', 'light', 'welter', 'middle', 'heavy'];
+  const bag = [];
+  for (let s = 0; s < 260 && bag.length < 4000; s += 1) {
+    const rng = rngFrom(4000 + s);
+    const w = weights[Math.floor(rng() * weights.length)];
+    let st = fc.newFightCareer(`P${s}`, w, STYLES[Math.floor(rng() * 4)], `seed-${s}`);
+    let fights = 0;
+    while (!st.retired && fights < 60 && bag.length < 4000) {
+      const offer = st.offers[Math.floor(rng() * st.offers.length)];
+      if (!offer) break;
+      st = fc.runCamp(st, { conditioning: 2, power: 2, defence: 1, speed: 1 });
+      const tactics = Array.from({ length: offer.rounds }, () => TACTICS[Math.floor(rng() * 4)]);
+      const r = fc.takeFight(st, offer.id, tactics);
+      if (!r) break;
+      bag.push(r.result);
+      st = r.state;
+      fights += 1;
+    }
+  }
+
+  for (const res of bag) {
+    const track = fc.conditionTrack(res);
+    if (!track.length) continue;
+    bouts += 1;
+    res.rounds.forEach(x => { landed += x.playerLanded + x.oppLanded; landedN += 2; });
+    const end = track[track.length - 1];
+
+    /* A bar that can go back up is not a condition bar, it is a chart of
+       something else. Checked on every step of every bout, not at the ends:
+       a 0 against max assertion has passed a broken middle in this repo
+       before. */
+    for (let i = 1; i < track.length; i += 1) {
+      if (track[i].player > track[i - 1].player || track[i].opp > track[i - 1].opp) rose += 1;
+    }
+
+    if (res.method === 'KO' || res.method === 'TKO') {
+      stoppedTotal += 1;
+      const l = res.winner === 'player' ? end.opp : end.player;
+      const w = res.winner === 'player' ? end.player : end.opp;
+      if (l === 0) stoppedZero += 1;
+      if (w === 0) standingZero += 1;
+    } else {
+      if (end.player === 0 || end.opp === 0) standingZero += 1;
+      if (res.winner !== 'draw') {
+        decisions += 1;
+        const w = res.winner === 'player' ? end.player : end.opp;
+        const l = res.winner === 'player' ? end.opp : end.player;
+        ends.win.push(w); ends.lose.push(l);
+        if (w > l) agrees += 1;
+      }
+    }
+  }
+
+  const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
+  const pct = (100 * agrees) / decisions;
+  const perRound = landed / landedN;
+  console.log(`   ${bouts} bouts from real careers, ${perRound.toFixed(1)} punches landed per man per round`);
+  console.log(`   winner ends ${mean(ends.win).toFixed(1)} on average, loser ${mean(ends.lose).toFixed(1)}`);
+
+  /* THE GUARD AGAINST THE MISTAKE ITSELF, not just against its symptom. If
+     these bouts ever stop looking like the game's bouts, the calibration above
+     is void whatever the other numbers say. Measured at 7.4 landed per man per
+     round on real careers, against 2.9 for the synthetic sample that produced
+     the wrong constant, so a band of 5 to 10 separates the two decisively and
+     is nowhere near either edge of the healthy figure. */
+  if (perRound < 5 || perRound > 10) {
+    fail(`these bouts land ${perRound.toFixed(1)} punches a round, outside the 5 to 10 the real game produces, so the bars below are calibrated against a population no player meets`);
+  } else {
+    ok(`the sample is the game's own: ${perRound.toFixed(1)} punches landed per man per round (band 5 to 10)`);
+  }
+
+  /* THE TWO HARD CLAIMS FIRST, both binary. The bar is allowed to be
+     approximate about how worn a man looks. It is not allowed to be wrong
+     about whether he is still in the fight. */
+  if (stoppedZero !== stoppedTotal) {
+    fail(`${stoppedTotal - stoppedZero} of ${stoppedTotal} stopped men do not end on an empty bar, so a stoppage looks like any other round`);
+  } else {
+    ok(`every one of the ${stoppedTotal} stopped men ends on an empty bar`);
+  }
+  if (standingZero > 0) {
+    fail(`${standingZero} men still on their feet read empty, so the bar calls a decision a knockout`);
+  } else {
+    ok('nobody still standing ever reads empty');
+  }
+  if (rose > 0) {
+    fail(`condition went back UP ${rose} times, so the bar is not a condition bar`);
+  } else {
+    ok('condition never rises, across every round of every bout');
+  }
+
+  /* MEASURED FLOOR, not a chosen one. On healthy code this runs at 89.5% over
+     2,887 decisions, whose standard error is about 0.6 of a point, so a floor
+     of 80 sits roughly sixteen standard errors below the measurement rather
+     than inside its spread. It is deliberately NOT 100: a man can win on
+     points while taking more punishment than he handed out, and a bar that
+     always matched the card would be drawing the card and not the fight. */
+  console.log(`   the bar agrees with the official cards in ${pct.toFixed(1)}% of ${decisions} decisions`);
+  if (!(pct > 80)) {
+    fail(`the bar agrees with the cards in only ${pct.toFixed(1)}% of decisions, so it is not showing who took the beating (floor 80)`);
+  } else {
+    ok(`the bar agrees with the cards in ${pct.toFixed(1)}% of decisions (floor 80)`);
+  }
 }
 
 try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }

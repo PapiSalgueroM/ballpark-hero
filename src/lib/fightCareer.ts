@@ -264,6 +264,81 @@ export interface BoutResult {
   roundsWon: number;
 }
 
+/* ───────────────── what the fight screen shows, Round 628 ─────────────────
+   The bout already produced everything a viewer needs: punches landed both
+   ways, knockdowns, a scored card. It was rendered as a list of sentences, so
+   a twelve round war and a shutout read almost the same. These two bars are
+   the fix, and they live HERE rather than in the component for one reason:
+   a number computed inside a React render cannot be measured by a harness,
+   and an unmeasured bar is decoration that is free to lie. */
+
+/** How much condition one landed punch costs the man who took it. */
+export const DRAIN_PER_PUNCH = 0.8;
+/** What going down costs on top of the punches, which is most of a round. */
+export const DRAIN_PER_KNOCKDOWN = 10;
+/** A man still on his feet never reads empty, however wide the fight got. */
+export const STANDING_FLOOR = 8;
+
+export interface ConditionPoint { round: number; player: number; opp: number }
+
+/**
+ * Condition after each round, 100 down to 0, for both men.
+ *
+ * THE RATE IS MEASURED, NOT CHOSEN, AND IT MUST BE MEASURED ON BOUTS THE GAME
+ * ACTUALLY PRODUCES. Over 7,233 bouts played through real careers, real offers
+ * and real camps: a man lands 7.4 punches a round on average, a decision
+ * winner absorbs 51 across the fight at the median and a decision loser
+ * absorbs 82, with the loser's p90 at 108.
+ *
+ * THE MISTAKE THAT COST THIS TWICE, written down because the harness did not
+ * catch it and the browser did. The first calibration sampled fighters built
+ * straight from makeFighter at tiers 2 to 4, which gave 2.9 landed a round and
+ * a rate of 1.6. Section 6 passed at 89.5 percent agreement because it drew
+ * its bouts the same wrong way, so the check and the constant agreed with each
+ * other and neither agreed with the game. Opening the page showed both men on
+ * 10 and 8 after a ten round decision, every bar pinned, because real rounds
+ * land two and a half times as many punches as the sample did. A harness that
+ * samples a population the player never meets will confirm anything.
+ *
+ * The rate is set from the loser's p90 so the floor stays rare: 85 points of
+ * drain over 108 punches is 0.787, rounded to 0.8. That puts the median
+ * decision winner near 59 and the median loser near 34, a gap you can see
+ * across a room, and only the worst tail pins.
+ *
+ * The bar is not meant to agree with the cards every time. A man can win on
+ * points while taking more punishment than he handed out, and a bar that
+ * always matched the card would be drawing the card rather than the fight.
+ *
+ * The one hard claim, which `simFightCareer` section 6 asserts: a man who was
+ * stopped ends at exactly 0 and a man still standing never does. The bar is
+ * allowed to be approximate about how worn somebody looks. It is not allowed
+ * to be wrong about whether he is still in the fight.
+ */
+export function conditionTrack(res: BoutResult): ConditionPoint[] {
+  const stoppage = res.method === 'KO' || res.method === 'TKO';
+  const loser = res.winner === 'player' ? 'opp' : res.winner === 'opp' ? 'player' : null;
+  let player = 100;
+  let opp = 100;
+  const out: ConditionPoint[] = [];
+  res.rounds.forEach((r, i) => {
+    /* knockdown: 'player' means the PLAYER scored it, so the OPPONENT went
+       down. That reading is the engine's, see simBout where pDrops sets
+       knockdown to 'player' and increments oppHurt. Getting it backwards
+       would drain the wrong bar on the most visible moment in the fight. */
+    player -= r.oppLanded * DRAIN_PER_PUNCH + (r.knockdown === 'opp' ? DRAIN_PER_KNOCKDOWN : 0);
+    opp -= r.playerLanded * DRAIN_PER_PUNCH + (r.knockdown === 'player' ? DRAIN_PER_KNOCKDOWN : 0);
+    player = Math.max(STANDING_FLOOR, player);
+    opp = Math.max(STANDING_FLOOR, opp);
+    const last = i === res.rounds.length - 1;
+    out.push({
+      round: r.round,
+      player: stoppage && last && loser === 'player' ? 0 : Math.round(player),
+      opp: stoppage && last && loser === 'opp' ? 0 : Math.round(opp),
+    });
+  });
+  return out;
+}
+
 function habitTactic(style: FightStyle, rng: () => number): Tactic {
   const list = STYLE_HABIT[style];
   return list[Math.floor(rng() * list.length)];

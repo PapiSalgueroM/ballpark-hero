@@ -129,6 +129,15 @@ export default {
           "0%, 100%": { filter: "drop-shadow(0 0 4px rgba(251,191,36,0.5))" },
           "50%": { filter: "drop-shadow(0 0 16px rgba(251,191,36,0.95))" },
         },
+        // Round 628: the fight screen
+        "hit-flash": {
+          "0%": { opacity: "0.9" },
+          "100%": { opacity: "0" },
+        },
+        "round-in": {
+          "0%": { transform: "translateY(8px)", opacity: "0" },
+          "100%": { transform: "translateY(0)", opacity: "1" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -139,6 +148,8 @@ export default {
         "float-up": "float-up 1.6s ease-out forwards",
         "count-pop": "count-pop 0.4s ease-out",
         "trophy-glow": "trophy-glow 2s ease-in-out infinite",
+        "hit-flash": "hit-flash 0.42s ease-out forwards",
+        "round-in": "round-in 0.28s ease-out",
       },
     },
   },

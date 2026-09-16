@@ -1,5 +1,71 @@
 # Project state
 
+## ROUND 629 2026-09-16: a harness may not carry an anchor that can never match
+
+`scripts/simHarnessAnchors.mjs` is the permanent fence for the Round 628 finding, written about
+the mechanism rather than about the four harnesses that had it, because a check written for a
+known offender cannot find the next offender.
+
+**The rule.** A harness that reads a file under `src/` and searches it with a multi line string
+literal must normalise line endings when it reads. Any of the four idioms already in use counts.
+On this checkout src is CRLF and an anchor written inside a harness is LF, so a single line
+anchor matches and a multi line one cannot, ever. 28 harnesses are in scope and all of them
+comply. Control `ANCHOR_CONTROL=strip` removes the normalisation from a copy of
+`simFightCareer.mjs` and the check goes from green to exactly one failure naming it.
+
+**Fixed this round:** `simTransferPathRepeat` (its only control aborted with "no duplicate guard
+to remove", so section 1 had never been verified here) and `simPollCharacter` (both of its copy
+helpers). `simFightCareer` and `simFightGym` were fixed in Round 628.
+
+**Two wrong drafts of the fence, both worth knowing about.** The first matched every multi line
+literal and reported 47 harnesses, nearly all false, because a harness's own console output is
+full of multi line strings that are printed and never matched. That version was also
+undemonstrable: a check sitting at 47 failures cannot be proved by a negative control, since the
+control can only add a forty eighth. The second looked only at literals inline in a `.includes(`
+call and found zero, because the usual shape names the anchor first and hands it to a helper.
+What works is to let the source decide: a literal that appears in a real source file once line
+endings are normalised IS an anchor into that file, whatever plumbing carries it there, and if
+it does not also appear in that file's raw bytes it cannot match as written.
+
+**And a caution for anyone auditing this from a worktree.** A worktree has no `node_modules`, so
+any harness that spawns `ROOT/node_modules/vitest` or similar by absolute path cannot run there
+and reports zero failures for a reason that has nothing to do with its controls. That nearly got
+recorded here as two more findings.
+
+
+## ROUND 628 2026-09-16: the fight screen, and a harness that agreed with itself
+
+Fight Career draws the bout now: two draining condition bars, per round punch bars, a flash on a
+knockdown, a card that pops when it changes, confetti on a win with gold for a stoppage. The bars
+come from `conditionTrack` in `src/lib/fightCareer.ts` rather than from the render, because a
+number computed inside a React render cannot be measured by a harness.
+
+**The lesson worth keeping is not the animation, it is how the calibration was wrong twice and
+every gate stayed green.** The drain rate was measured on fighters built straight from
+`makeFighter` at tiers 2 to 4, which land 2.9 punches a round. Bouts the game actually produces
+land 7.4. `simFightCareer` section 6 drew its sample the same wrong way, so the check and the
+constant confirmed each other and neither described the game. tsc was zero, the harness passed at
+89.5 percent, and opening the page showed both fighters pinned on the floor after a points
+decision. **A harness that invents its own population will confirm whatever it invented.** Section
+6 now plays real careers through real offers and real camps, and its FIRST assertion is that the
+sample looks like the game (5 to 10 punches landed per man per round, measured at 7.5) before it
+asserts anything about the bars. Re-measured over 7,233 real bouts the rate is 0.8, the median
+decision winner ends 59 and the median loser 34.
+
+**Two negative controls had never fired, since Round 620.** Running each control one at a time,
+rather than trusting that they existed, found that `simFightCareer` reads its source without
+normalising line endings. Anthony's checkout is CRLF for all 926 lines of `fightCareer.ts`, an
+anchor written inside a harness is LF, so a **multi line anchor can never match**. `noretire` and
+`driftdaily` are both multi line, so sections 2 and 4 were green because their control changed
+nothing. `simFightGym`'s `noretire` had the same defect. Both harnesses normalise on read now and
+every control fires. **This is invisible on an LF checkout, where all of them work**, so it is
+worth checking on any harness that rewrites source: `simClubManagerEraUcl`,
+`simClubManagerMeters` and `simFightPromoter` were all checked and every one of their controls
+applies.
+
+Verified in the browser at both widths: bars end 55 and 34 on a split decision won 96 to 94, 28
+confetti pieces, 10 animated round cards, no horizontal overflow at 375px.
+
 ## COLLEGE GRID RESOLVED 2026-09-16: it works, and the purge must NOT run
 
 The open question from the 610 to 619 handoff is answered, and the answer changes the pending

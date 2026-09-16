@@ -58,7 +58,12 @@ let env = {};
 let exitCode = 0;
 try {
   if (CONTROL === 'old') {
-    const source = fs.readFileSync(path.join(ROOT, 'src', 'hooks', 'useTransferPath.ts'), 'utf8');
+    /* Normalised on read. This checkout stores src CRLF and the anchor below is
+       written LF across four lines, so without this the control aborts with
+       "no duplicate guard to remove" on Anthony's machine and section 1 has
+       never been verified here. Round 629, same cause as the two dead fight
+       career controls. */
+    const source = fs.readFileSync(path.join(ROOT, 'src', 'hooks', 'useTransferPath.ts'), 'utf8').replaceAll('\r\n', '\n');
     const guard = "\n    if (chain.some(player => player.toLowerCase() === name.toLowerCase())) {\n      return { ok: false, club: null, reason: 'duplicate' };\n    }\n";
     const regressed = source.replace(guard, '\n');
     if (regressed === source) {

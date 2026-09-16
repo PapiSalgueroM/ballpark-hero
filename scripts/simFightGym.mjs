@@ -60,9 +60,14 @@ const deAlias = (s) => s
   .replaceAll('@/lib/careerEngine', './careerEngine')
   .replaceAll('@/lib/fightCareer', './fightCareer');
 
-let engineSrc = deAlias(fs.readFileSync(path.join(ROOT, 'src/lib/careerEngine.ts'), 'utf8'));
-let careerSrc = deAlias(fs.readFileSync(path.join(ROOT, 'src/lib/fightCareer.ts'), 'utf8'));
-let gymSrc = deAlias(fs.readFileSync(path.join(ROOT, 'src/lib/fightGym.ts'), 'utf8'));
+/* Line endings normalised before any control reads this text. See the same
+   block in simFightCareer.mjs: Anthony's checkout is CRLF, an anchor written
+   here is LF, so a multi line anchor can never match and its control silently
+   changes nothing. `noretire` below is four lines long and had never fired. */
+const readSrc = p => deAlias(fs.readFileSync(path.join(ROOT, p), 'utf8').replaceAll('\r\n', '\n'));
+let engineSrc = readSrc('src/lib/careerEngine.ts');
+let careerSrc = readSrc('src/lib/fightCareer.ts');
+let gymSrc = readSrc('src/lib/fightGym.ts');
 
 /* Each control asserts its anchor exists BEFORE it edits. A control that
    rewrites a string the file does not contain changes nothing, the harness
