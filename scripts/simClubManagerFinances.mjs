@@ -176,6 +176,19 @@ const REWRITES = {
     broken: '  const gateSoFar = s.tickets + s.concessions;\n  const perHome = s.homeGames >= 3\n    ? gateSoFar / s.homeGames\n    : (crowd * perFan) / 1e6;',
     note: 'NEGATIVE CONTROL ON: the projected gate is the average of the gates banked once three are in',
   },
+  /* ROUND 626. This is the control section 9 exists for, and it is the exact
+     experiment that proved Round 618's headline claim was unverified: multiply
+     the expected crowd by 1.10 and every check in this file passed, with the
+     drift unchanged (it is a ratio of the estimator against itself) and the
+     week 5 income error IMPROVING from 7.4 percent to 3.1, because the
+     projection under projects and an over estimated gate cancels the bias.
+     Section 9 measures the level against the crowd the engine actually drew,
+     so it cannot be fooled that way. */
+  gatelevel: {
+    fixed: '  return Math.round(cappedDrawMean(lo, hi, ticket * ground * fans, CROWD_CAP));',
+    broken: '  return Math.round(cappedDrawMean(lo, hi, ticket * ground * fans, CROWD_CAP) * 1.1);',
+    note: 'NEGATIVE CONTROL ON: the expected home crowd is inflated by ten percent',
+  },
 };
 if (CONTROL && !(CONTROL in REWRITES)) {
   console.error(`CM_FINANCES_CONTROL=${CONTROL} is not a control this harness knows`);
@@ -617,6 +630,65 @@ console.log('7) The kitty is never written from a wage or a travel figure, and t
     if (DASH.test(src)) fail(`a dash in ${name}`);
   }
   console.log(`   0 kitty writes from a running cost across the desk and the engine; the screen and the guide both say so; no dashes in the four new files`);
+}
+
+/* ROUND 626: THE GATE ESTIMATOR IS HELD TO THE LEVEL OF THE ENGINE'S OWN DRAW.
+   Round 618's whole claim is that the projected gate is the crowd the engine
+   expects. Nothing checked that. The only thing it added was the week 2 against
+   week 5 drift, which is the estimator divided by itself, so multiplying
+   expectedHomeCrowd by any constant leaves it exactly unchanged: it tests
+   stability and never level. The income band cannot catch it either, because
+   the projection systematically under projects, so an over estimated gate
+   cancels the bias rather than exposing it.
+
+   Proved before this section was written: multiplying the return of
+   expectedHomeCrowd by 1.10 left the harness printing PASS, with drift
+   unchanged and the week 5 income error IMPROVING from 7.4 percent to 3.1. The
+   harness's own numbers got better as the estimator got worse, which is the
+   worst possible failure mode: the next person to re-measure the bands would
+   read a broken estimator as an improvement and tighten around it. It also
+   meant cappedDrawMean, the clipped mean arithmetic that is the part of Round
+   618 which actually changes the number, had no check and no control anywhere.
+
+   HOW THE ACTUAL CROWD IS RECOVERED without a second copy of the crowd model.
+   matchAttendance is not exported, but concession income is linear in
+   attendance (noteHomeGate books attendance times concessionPerFan over 1e6,
+   and the min against the gate never binds because a ticket costs more than a
+   pie), so the season's mean attendance comes straight back out of the books
+   the engine wrote. The expectation is averaged over the same season, because
+   fan mood moves the crowd during it and comparing a season average against a
+   single opening week reading would measure the mood drift rather than the
+   estimator. */
+console.log('9) the projected gate is the level of the crowd the engine actually draws');
+{
+  const CLUBS_L = ['Real Madrid', 'Manchester City', 'Arsenal', 'Brentford', 'Napoli', 'Ajax'];
+  const errs = [];
+  let skipped = 0;
+  for (let i = 0; i < CLUBS_L.length; i += 1) {
+    for (let seed = 0; seed < 5; seed += 1) {
+      withStream(5000 + i * 31 + seed * 7, () => {
+        const exps = [];
+        const end = playSeason(startCareer(CLUBS_L[i]), s => { exps.push(fin.expectedHomeCrowd(s)); });
+        if (!complete(end) || !exps.length) { skipped += 1; return; }
+        const b = booksOf(end).season;
+        if (!(b.homeGames > 0) || !(b.concessions > 0)) { skipped += 1; return; }
+        const perFan = fin.concessionPerFan(end);
+        if (!(perFan > 0)) { skipped += 1; return; }
+        const actualMean = (b.concessions * 1e6) / (b.homeGames * perFan);
+        const expectedMean = mean(exps);
+        errs.push((expectedMean - actualMean) / actualMean);
+      });
+    }
+  }
+  const abs = errs.map(Math.abs);
+  console.log(`   ${errs.length} seasons, ${skipped} skipped: expectation against the crowd actually drawn, median ${(median(errs) * 100).toFixed(1)}%, abs median ${(median(abs) * 100).toFixed(1)}%, p90 ${(pct(abs, 0.9) * 100).toFixed(1)}%`);
+  if (errs.length < 20) fail(`only ${errs.length} seasons produced a comparable gate level`);
+  /* Bands from measured headroom on this branch, not from a number that felt
+     right. A season is about nineteen home games, so the sample mean carries
+     real spread of its own and the band has to sit above that without leaving
+     room for the 10 percent error the control plants. */
+  if (!(median(abs) <= 0.06)) fail(`the projected gate is ${(median(abs) * 100).toFixed(1)}% off the crowd the engine actually draws at the median, over the 6% band, so it is not the engine's expectation`);
+  if (!(pct(abs, 0.9) <= 0.09)) fail(`the projected gate is ${(pct(abs, 0.9) * 100).toFixed(1)}% off the drawn crowd at the p90, over the 9% band`);
 }
 
 console.log('');

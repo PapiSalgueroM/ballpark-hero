@@ -566,6 +566,78 @@ run('5', 'Words match code: the balanced branch swaps on the round alone, the le
   }
   if (calls.length < 4) fail(`${calls.length} roundPairs caller(s) found, the contract names four`);
 
+  /* ROUND 626: EVERY CALLER ANYWHERE IN src, NOT JUST THE ONES IN THE ENGINE.
+     Everything above this reads only clubManager.ts, because `src` is set to the
+     engine text at the top of this section. Round 617 created a FIFTH caller
+     outside it, in src/components/club-manager/CalendarCard.tsx, replacing that
+     card's own private copy of the circle method. Nothing here could see it, and
+     the floor of four was satisfied by the engine's four on its own.
+
+     Reproduced on this branch before the fix was written: hardcoding the card's
+     third argument to true left this harness printing PASS and reporting
+     "4 callers", under a heading that reads "every caller passes the flag".
+     The other cross file check in this section cannot cover it either, because
+     a card calling roundPairs with the wrong flag carries no copy of the venue
+     swap to find.
+
+     What it would cost. A save from before Round 617 has no balancedFixtures
+     field, so a card with the flag hardcoded would list the balanced opponent
+     and venue while the engine plays the legacy one, and the next up card would
+     name a different opponent, at a different ground, from the match the player
+     actually gets. That is exactly the disagreement Round 617 exists to end. */
+  const argsOfCallsIn = (text) => {
+    const out = [];
+    const re = /\broundPairs\(/g;
+    let mm;
+    while ((mm = re.exec(text))) {
+      const open = mm.index + mm[0].length - 1;
+      let depth = 0, j = open;
+      for (; j < text.length; j++) {
+        if (text[j] === '(') depth += 1;
+        else if (text[j] === ')') { depth -= 1; if (depth === 0) break; }
+      }
+      const args = [];
+      let d = 0, cur = '';
+      for (const ch of text.slice(open + 1, j)) {
+        if (ch === '(' || ch === '[' || ch === '{') d += 1;
+        if (ch === ')' || ch === ']' || ch === '}') d -= 1;
+        if (ch === ',' && d === 0) { args.push(cur.trim()); cur = ''; } else cur += ch;
+      }
+      if (cur.trim()) args.push(cur.trim());
+      out.push({ line: text.slice(0, mm.index).split('\n').length, args });
+    }
+    return out;
+  };
+
+  const outsideCalls = [];
+  const walkCallers = dir => {
+    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
+      const p = path.join(dir, e.name);
+      if (e.isDirectory()) { walkCallers(p); continue; }
+      if (!/\.(ts|tsx)$/.test(e.name)) continue;
+      if (path.resolve(p) === path.resolve(ENGINE_PATH)) continue;
+      const text = blankComments(fs.readFileSync(p, 'utf8'));
+      for (const c of argsOfCallsIn(text)) {
+        outsideCalls.push({ file: path.relative(ROOT, p).split(path.sep).join('/'), line: c.line, args: c.args });
+      }
+    }
+  };
+  walkCallers(path.join(ROOT, 'src'));
+
+  for (const c of outsideCalls) {
+    if (c.args.length !== 3) {
+      fail(`the roundPairs call in ${c.file} line ${c.line} passes ${c.args.length} argument(s), not three: (${c.args.join(', ')})`);
+    } else if (!/\bbalancedFixtures\b/.test(c.args[2])) {
+      fail(`the roundPairs call in ${c.file} line ${c.line} passes "${c.args[2]}" as the balanced flag instead of reading the save's balancedFixtures, so that screen can disagree with the engine about who plays where`);
+    }
+  }
+  /* A floor on the SCAN itself, so a walk that silently finds nothing fails
+     here rather than reporting every caller as correct. Round 617 created one
+     caller outside the engine and it is still there. */
+  if (outsideCalls.length < 1) {
+    fail(`the cross file caller scan found no roundPairs callers outside the engine, and Round 617 created one in CalendarCard.tsx, so the scan itself is broken`);
+  }
+
   if (!/^\s*balancedFixtures\?:\s*true;/m.test(blank)) fail('CareerState does not declare balancedFixtures?: true');
   for (const name of ['startCareer', 'startNextSeason']) {
     const rg = functionRegion(blank, name);
