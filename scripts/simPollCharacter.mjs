@@ -55,8 +55,14 @@ function runVitest(env = {}, tests = TESTS) {
 /* A control that rewrites a string the file does not contain changes nothing
    and the harness stays green for the wrong reason, so every swap asserts its
    target is present exactly once (or, for the sweep, many times). */
+/* Round 629: normalised on read, in both helpers below. This checkout stores
+   src CRLF while a needle written here is LF, so a needle spanning more than
+   one line matches zero times and the guard aborts the control instead of
+   running it. Same cause as the two dead fight career controls. */
 function changedCopy(relativePath, needle, replacement, tempDir) {
-  const source = fs.readFileSync(path.join(ROOT, relativePath), 'utf8');
+  const source = fs.readFileSync(path.join(ROOT, relativePath), 'utf8').replaceAll('
+', '
+');
   const matches = source.split(needle).length - 1;
   if (matches !== 1) abort(`control cannot run: expected one target in ${relativePath}, found ${matches}`);
   const changed = source.replace(needle, replacement);
@@ -67,7 +73,9 @@ function changedCopy(relativePath, needle, replacement, tempDir) {
 }
 
 function sweptCopy(relativePath, pattern, replacement, atLeast, tempDir) {
-  const source = fs.readFileSync(path.join(ROOT, relativePath), 'utf8');
+  const source = fs.readFileSync(path.join(ROOT, relativePath), 'utf8').replaceAll('
+', '
+');
   const matches = (source.match(pattern) ?? []).length;
   if (matches < atLeast) abort(`control cannot run: expected at least ${atLeast} targets in ${relativePath}, found ${matches}`);
   const changed = source.replace(pattern, replacement);
