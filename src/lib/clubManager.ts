@@ -1876,6 +1876,12 @@ export interface CareerState {
    *  Round 612 has none and keeps the group it was drawn, a custom club's
    *  season one has none because it has qualified for nothing. */
   uclField?: string[];
+  /** Round 617: the league fixture list alternates home and away (the circle
+   *  method's standard venue rule, see roundPairs). Set on every new career
+   *  and on every season rollover. Absent on a save from before the round,
+   *  which keeps the old list for the season it is in so nothing flips mid
+   *  season. */
+  balancedFixtures?: true;
   /** Round 165: the league's golden boot race, AI entries only. */
   scorerRace?: RaceScorer[];
   /** Round 168: the live mid-season approach, if a club is courting me. */
@@ -8035,9 +8041,10 @@ const BYE = '__BYE__';
  * second with venues swapped. Round 72: odd-sized leagues (each MLS
  * conference has 15 clubs) get a ghost BYE entrant, so every round one club
  * rests and everyone ends on 2*(n-1) games across 2*n rounds.
- * Pure function of (clubs, round).
+ * Pure function of (clubs, round, balanced). Exported since Round 617 so the
+ * fence can hold it to the rule directly.
  */
-function roundPairs(clubs: string[], round: number): [string, string][] {
+export function roundPairs(clubs: string[], round: number, balanced: boolean): [string, string][] {
   const list = clubs.length % 2 === 0 ? clubs : [...clubs, BYE];
   const n = list.length;
   const r = round % (n - 1);
@@ -8048,7 +8055,18 @@ function roundPairs(clubs: string[], round: number): [string, string][] {
   for (let i = 0; i < n / 2; i++) {
     let h = arr[i];
     let a = arr[n - 1 - i];
-    if ((r + i) % 2 === 1) [h, a] = [a, h];
+    /* Round 617: a balanced list swaps venue on the round's parity alone, the
+       standard circle method (leagueCore's roundRobinCalendar does the same),
+       so every club alternates home and away, with a double where it changes
+       row or wraps (a few a season, never three in a row). The old rule
+       swapped on (r + i), and for every rotating club that
+       sum keeps its parity from round to round, so the club sat at one venue
+       for a whole half: up to nineteen league games in a row. A save from
+       before this round has no balancedFixtures field and keeps the old list
+       for the season it is in, because fixtureFor recomputes venues from here
+       on every read and a mid season switch would flip the rest of its season;
+       startNextSeason sets the field, so every save converges at its rollover. */
+    if ((balanced ? r : r + i) % 2 === 1) [h, a] = [a, h];
     if (round >= n - 1) [h, a] = [a, h];
     if (h === BYE || a === BYE) continue;
     pairs.push([h, a]);
@@ -8281,7 +8299,7 @@ function syncWorld(state: CareerState, myPlayed: number): void {
     let guard = 0;
     while (w.round < target && guard < 200) {
       guard += 1;
-      for (const [h, a] of roundPairs(lg.clubs, w.round)) {
+      for (const [h, a] of roundPairs(lg.clubs, w.round, !!state.balancedFixtures)) {
         const [hg, ag] = simAiMatch(state, h, a);
         applyResult(w.table, h, a, hg, ag);
         notePair(state, lg.id, h, a, hg, ag);
@@ -11677,7 +11695,7 @@ export interface MyFixture {
 export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture | null {
   if (!entryInvolvesMe(state, entry)) return null;
   if (entry.type === 'league') {
-    const pairs = roundPairs(state.leagueClubs, entry.round);
+    const pairs = roundPairs(state.leagueClubs, entry.round, !!state.balancedFixtures);
     const mine = pairs.find(([h, a]) => h === state.clubName || a === state.clubName);
     if (!mine) return null;
     const home = mine[0] === state.clubName;
@@ -12190,7 +12208,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   let confDelta = won ? 4 : drawn ? 0.5 : -4.5;
 
   if (fx.competition === 'league') {
-    const pairs = roundPairs(state.leagueClubs, entry.round);
+    const pairs = roundPairs(state.leagueClubs, entry.round, !!state.balancedFixtures);
     // Round 165: the race board exists before this round's goals land on it.
     ensureScorerRace(state);
     // Round 462: every result of the round goes into the pair ledger too.
@@ -13457,6 +13475,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     formationIndex: 0,
     mentality: 'balanced',
     leagueClubs,
+    balancedFixtures: true,
     table: leagueClubs.map(emptyRow),
     form: [],
     calendar: buildCalendar(league.clubs.length, eraUclHasR16(era.id), uclLegsFor(era.id, 'QF') === 2),
@@ -13616,7 +13635,7 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
       // Round 72: on my bye week (odd-sized leagues) the rest of the round
       // still gets played, or the table comes up short for everyone else.
       if (entry.type === 'league') {
-        const pairs = roundPairs(state.leagueClubs, entry.round);
+        const pairs = roundPairs(state.leagueClubs, entry.round, !!state.balancedFixtures);
         ensureScorerRace(state);
         const myLeagueId = careerLeagueOf(state).id;
         for (const [h, a] of pairs) {
@@ -14951,6 +14970,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     squad,
     xiIds: [],
     leagueClubs,
+    balancedFixtures: true,
     table: leagueClubs.map(emptyRow),
     form: [],
     calendar: buildCalendar(league.clubs.length, eraUclHasR16(eraId), uclLegsFor(eraId, 'QF') === 2),
@@ -15267,6 +15287,11 @@ export function loadCareer(): CareerState | null {
     const raw = localStorage.getItem(SAVE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw) as CareerState;
+    /* Round 617: the fixture rule flag is exactly true or absent. A hand
+       edited or damaged value would otherwise read as balanced through the
+       callers' !! and flip a season's venues, so it is dropped, which keeps
+       the old list, the safe side for a save already in play. */
+    if (parsed && parsed.balancedFixtures !== undefined && parsed.balancedFixtures !== true) delete parsed.balancedFixtures;
     if (
       !parsed ||
       parsed.saveVersion !== SAVE_VERSION ||

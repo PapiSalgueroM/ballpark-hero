@@ -64,9 +64,9 @@
    counts before they are drawn); spend abs median 0.2 / 0.1 to 0.2 / 0.0
    and p90 1.1 to 1.5 / 0.3 to 0.7 / 0.3 to 0.4 percent. The desk itself is
    untouched by Round 612: its diff against main for
-   src/lib/clubManagerFinances.ts is empty. The bands: income median
-   14 / 14 / 6 and p90 25 / 26 / 13 percent, spend median 0.5 at every week
-   and p90 2.5 / 2 / 1 percent. Each is roughly twice the eight seed mean of
+   src/lib/clubManagerFinances.ts is empty. Before Round 617 the bands were
+   income median 14 / 14 / 6 and p90 25 / 26 / 13 percent, spend median 0.5 at
+   every week and p90 2.5 / 2 / 1 percent. Each was roughly twice the eight seed mean of
    its statistic and 1.6 to 1.8 times the worst seed, except the spend p90
    bands at weeks 15 and 30, kept from 2026-09-05 at 2 and 1 (2.9 and 2.5
    times the worst run on file). What the wider income bands give up: an
@@ -97,15 +97,27 @@
    Brentford and Newcastle out) and who the opponents are, not how often a
    run goes deep: over the seeds traced on both trees the knockout runs per
    season are the same and the release tree has slightly fewer home knockout
-   ties per run. And roundPairs in the engine hands every club but one a
-   same venue run of up to nineteen league rounds (the club at shuffled slot
-   k plays k rounds at one venue and the rest at the other, mirrored after
-   the turn), so a club whose home run comes late projects a whole season
-   from a few early gates through the desk's three gate switch
+   ties per run. And roundPairs in the engine, before Round 617, handed every
+   club but one a same venue run of up to nineteen league rounds (the club at
+   shuffled slot k played k rounds at one venue and the rest at the other,
+   mirrored after the turn), so a club whose home run came late projected a
+   whole season from a few early gates through the desk's three gate switch
    (projectFinances, perHome): Ajax, tier 4 in the data (an attendance draw
    with a 23 percent spread), had banked seven gates by week 30 that ran 0.8
-   sd high and projected 10 percent over. The schedule is Round 617's fix
-   and the estimator Round 618's; re-measure here after each lands.
+   sd high and projected 10 percent over. The schedule was Round 617's fix
+   (re-measured below) and the estimator is Round 618's.
+
+   Re-measured after Round 617 (the balanced fixture list), 2026-09-15, same
+   sample, SIM_SEED 0 to 4: income abs median 6.3 to 10.4 / 7.0 to 10.4 /
+   2.2 to 3.2 percent and p90 13.3 to 18.3 / 12.0 to 14.1 / 4.7 to 5.9 percent
+   at weeks 5 / 15 / 30; spend unchanged. Week 30 tightened as expected, the
+   late season estimate now averages a balanced sample. Week 5 loosened: with
+   home and away alternating, most clubs have banked three gates by week 5 and
+   the desk switches from the stature prior to the three gate mean, the
+   noisier of the two (Round 618's fix). The bands follow the recipe above on
+   this measurement: income median 17 / 17 / 6 and p90 31 / 26 / 11 percent,
+   each 1.6 to 2.2 times the worst seed and about twice the mean, spend
+   unchanged. Re-measure after 618.
 
    Run: node scripts/simClubManagerFinances.mjs
 */
@@ -323,10 +335,10 @@ console.log('3) The projection at week N against the closed ledger, over clubs a
   console.log(`   ${runs} seasons reached the last day, ${sackedRuns} ended in a sacking and are left out`);
   if (runs < 24) fail(`only ${runs} seasons projected`);
   /* Bands: [abs median, p90] of the relative error, roughly twice the mean
-     and 1.6 to 1.8 times the worst of SIM_SEED 0 to 7 measured 2026-09-15
-     (see the header) rather than beside them; the spend p90 at weeks 15 and
-     30 kept from 2026-09-05. */
-  const BAND = { income: { 5: [0.14, 0.25], 15: [0.14, 0.26], 30: [0.06, 0.13] }, spend: { 5: [0.005, 0.025], 15: [0.005, 0.02], 30: [0.005, 0.01] } };
+     and 1.6 to 2.2 times the worst of SIM_SEED 0 to 4 measured 2026-09-15
+     after Round 617 (see the header) rather than beside them; the spend p90
+     at weeks 15 and 30 kept from 2026-09-05. */
+  const BAND = { income: { 5: [0.17, 0.31], 15: [0.17, 0.26], 30: [0.06, 0.11] }, spend: { 5: [0.005, 0.025], 15: [0.005, 0.02], 30: [0.005, 0.01] } };
   for (const w of AT) {
     for (const side of ['income', 'spend']) {
       const abs = err[side][w].map(Math.abs);
