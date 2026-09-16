@@ -3,7 +3,7 @@ import { Crown, Dumbbell, RotateCcw, Sparkles } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
 import { NFL_ERAS,
   ARCHETYPES, NFL_TEAM_NAMES, startCareer, simSeason, progress, drawEvent,
-  shouldRetire, legacyOf, careerTotals, rollTeamQuality, teamLabelOf, marketSalary,
+  shouldRetire, legacyOf, careerTotals, nflDefenseOrKickingLine, rollTeamQuality, teamLabelOf, marketSalary,
   NFL_SPEND_ITEMS, buyNflItem, type NflSpendCategory,
   buildNflFaWindow, nflFaPushArgs, buildNflExtension, nflExtPushArgs,
   nflAssignRole, nflCampBattle,
@@ -461,7 +461,7 @@ export default function NflMyCareerBoard() {
     s.teamResult === 'SUSPENDED' ? 'Suspended, no season played'
       : p === 'QB' ? `${s.passYds} yds, ${s.passTd} TD, ${s.ints} INT`
       : p === 'RB' ? `${s.rushYds} rush yds, ${s.rushTd} TD, ${s.rec} rec`
-      : `${s.rec} rec, ${s.recYds} yds, ${s.recTd} TD`;
+      : nflDefenseOrKickingLine(s, p) ?? `${s.rec} rec, ${s.recYds} yds, ${s.recTd} TD`;
 
   /* ------------------------------ create ------------------------------ */
   if (phase === 'create' || !career) {
@@ -927,7 +927,7 @@ export default function NflMyCareerBoard() {
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">
             Career so far: {career.rings} rings · {career.mvps} MVPs · {career.allPros} All-Pros ·{' '}
-            {career.pos === 'QB' ? `${totals.passYds.toLocaleString()} pass yds` : career.pos === 'RB' ? `${totals.rushYds.toLocaleString()} rush yds` : `${totals.recYds.toLocaleString()} rec yds`}
+            {nflDefenseOrKickingLine(totals, career.pos) != null ? `Recorded totals: ${nflDefenseOrKickingLine(totals, career.pos)}` : career.pos === 'QB' ? `${totals.passYds.toLocaleString()} pass yds` : career.pos === 'RB' ? `${totals.rushYds.toLocaleString()} rush yds` : `${totals.recYds.toLocaleString()} rec yds`}
           </p>
           {career.seasons.length >= 6 && (
             <button onClick={retireNow} className="mt-2 text-[11px] text-muted-foreground hover:text-destructive">Hang them up now</button>
