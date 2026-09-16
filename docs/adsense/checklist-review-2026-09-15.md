@@ -5,8 +5,9 @@
 The pasted external audit is not reliable evidence of the current site state.
 Several of its proposed requirements are unsupported, and the reported broken
 route did not reproduce. Approval remains Google's decision. The last directly
-observed account status is Getting ready / Review requested at 12:37 EDT on
-September 15; a later browser inspection timed out and does not update that fact.
+observed account status is Getting ready / Review requested at about 22:50 EDT
+on September 15, with ads.txt Authorized. The table's own last-updated field is
+September 15 at 04:19 EDT. This is a pending review, not an approval or new rejection.
 Do not submit another review while this request is pending.
 
 ## Public response check
@@ -55,17 +56,26 @@ shells. No route or rendering rewrite is justified by this check.
   add a contact form that has no working delivery path.
 - A custom cookie banner alone is not proof of a Google-certified CMP.
   [Google's CMP guidance](https://support.google.com/adsense/answer/13554020?hl=en)
-  explains its EEA, UK and Switzerland requirements. The September 2 account
-  inspection recorded an active Google European regulations message specifically
-  for `douknowball.com`; see `reapply-readiness.md`. That dated observation
-  establishes configuration then, not present regional message delivery. No
-  fresh CMP result or setting change is claimed here.
+  explains its EEA, UK and Switzerland requirements. A fresh account inspection
+  at about 22:55 EDT on September 15 shows the European regulations message for
+  `douknowball.com` Published, with English plus 31 languages and a February 11
+  last-modified date. This establishes account configuration, not delivery to
+  every regional visitor. No CMP setting was changed.
 - Keep the existing protection around game controls, deliberate ad slots and
   consent choices. Do not enable Auto Ads or change privacy behavior merely to
   satisfy an unsupported checklist. The integrated release runs the existing
   ad-route, privacy, brand, raw-HTML and navigation checks.
 
 ## Concrete corrections and remaining work
+
+The Page indexing report opened at about 22:56 EDT on September 15 still carries
+a September 3 data date. It shows 58 indexed pages and 91 not indexed: 3 redirects,
+17 crawled but not indexed, and 71 discovered but not indexed. Many examples in
+the crawled group have March to May crawl dates. These old crawl records cannot
+establish that Google has evaluated the current page content. The sitemap itself
+also appears in that group and is not an ordinary content page. See the dated
+[account observation](account-observation-2026-09-15.json). No indexing request
+or validation restart was submitted.
 
 Source review found wording that says advertising already pays for the site,
 even though the current application is pending, and hosting wording that names

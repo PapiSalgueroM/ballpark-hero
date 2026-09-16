@@ -1,0 +1,52 @@
+{
+  "method": "Read-only visible signed-in browser pages through Codex browser controls",
+  "observationWindowUtc": "2026-09-16T02:50:00Z/2026-09-16T02:58:00Z",
+  "site": "douknowball.com",
+  "adsense": {
+    "status": "Getting ready",
+    "review": "Review requested",
+    "adsTxt": "Authorized",
+    "tableLastUpdated": "2026-09-15 04:19 EDT",
+    "newReviewSubmitted": false
+  },
+  "consentMessage": {
+    "name": "European regulations message - douknowball.com",
+    "status": "Published",
+    "languages": "English (en), +31 more",
+    "lastModified": "2026-02-11",
+    "settingsChanged": false,
+    "limitation": "Account configuration observed; regional visitor delivery not tested."
+  },
+  "searchConsole": {
+    "report": "Page indexing",
+    "selection": "All known pages",
+    "dataLastUpdated": "2026-09-03",
+    "indexed": 58,
+    "notIndexed": 91,
+    "reasons": {"pageWithRedirect": 3, "crawledCurrentlyNotIndexed": 17, "discoveredCurrentlyNotIndexed": 71},
+    "crawledExamples": [
+      {"path": "/sitemap.xml", "lastCrawled": "2026-08-28"},
+      {"path": "/football-draft", "lastCrawled": "2026-05-03"},
+      {"path": "/football-connect-4", "lastCrawled": "2026-05-01"},
+      {"path": "/guess-cbb-team", "lastCrawled": "2026-04-10"},
+      {"path": "/guess-nascar-driver", "lastCrawled": "2026-04-10"},
+      {"path": "/guess-nfl-team", "lastCrawled": "2026-04-10"},
+      {"path": "/guess-soccer-club", "lastCrawled": "2026-04-10"},
+      {"path": "/guess-tennis-player", "lastCrawled": "2026-04-10"},
+      {"path": "/guess-the-college", "lastCrawled": "2026-04-10"},
+      {"path": "/terms", "lastCrawled": "2026-04-09"},
+      {"path": "/f1-driver", "lastCrawled": "2026-04-05"},
+      {"path": "/footle", "lastCrawled": "2026-03-23"},
+      {"path": "/football-timeline", "lastCrawled": "2026-03-18"},
+      {"path": "/baseball-career", "lastCrawled": "2026-03-18"},
+      {"path": "/baseball-connections", "lastCrawled": "2026-03-18"},
+      {"path": "/connections", "lastCrawled": "2026-03-18"},
+      {"path": "/world-cup", "lastCrawled": "2026-03-09"}
+    ],
+    "indexingRequested": false,
+    "validationRestarted": false,
+    "limitation": "Report data is dated September 3; old crawl dates do not establish evaluation of current content or an AdSense decision."
+  },
+  "domainAccess": {"godaddySignedIn": false, "dnsChanged": false},
+  "paidUpgrade": false
+}

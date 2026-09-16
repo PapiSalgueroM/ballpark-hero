@@ -1,5 +1,24 @@
 # Project state
 
+## ACCOUNT CHECK 2026-09-15 22:58 EDT
+
+The AdSense page currently shows Getting ready / Review requested and ads.txt
+Authorized. No new approval or rejection is shown. Its European regulations
+message for douknowball.com is Published, with English plus 31 languages. This
+confirms account configuration, not regional delivery. No settings changed.
+
+Search Console's Page indexing report still has a September 3 data date: 58
+indexed and 91 excluded (3 redirects, 17 crawled, 71 discovered). Most crawled
+examples were last visited in March to May. Do not treat these records as a
+fresh review of the current site. No indexing request or validation restart.
+See [the account receipt](adsense/account-observation-2026-09-15.json).
+
+The combined CI's type, SEO build, browser and full Vitest gates pass; the full
+node harness suite is running. Remaining controls and artifact intake are pending.
+The frozen source and verification commits remain unchanged. GoDaddy remains
+signed out, and the main domain has not moved. The NFL position-stat display
+correction is separate from the frozen release and preserves simulation balance.
+
 ## FINAL COMBINED VERIFICATION 2026-09-15 22:35 EDT
 
 [PR 96](https://github.com/PapiSalgueroM/ballpark-hero/pull/96) contains the

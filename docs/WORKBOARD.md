@@ -1,5 +1,14 @@
 # Work board
 
+**22:58 EDT, fresh account checks:** AdSense still shows Getting ready / Review
+requested, with ads.txt Authorized. The Google European regulations message for
+douknowball.com is Published. Search Console's September 3 report shows 58 indexed
+and 91 excluded pages, with most crawled examples dated months ago. No review,
+indexing or validation submission, CMP change, paid upgrade or DNS change. The
+combined CI type, SEO build, browser and full Vitest gates pass; node harnesses
+are running and artifact intake is pending. GoDaddy
+sign-in remains pending. See the dated account observation under docs/adsense.
+
 **Codex follow-up, separate from the frozen release:** NFL Career's season stat
 formatter falls through to receiving fields for kickers and defenders, printing
 undefined values despite committed position-specific stats. Codex reserves the
