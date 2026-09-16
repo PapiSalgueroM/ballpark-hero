@@ -19,6 +19,14 @@ objectives and scored 55; Sevilla finished 13th on grade C having hit 3 of 8 and
 F outscores the C. Real Madrid hit 1 objective of 8, graded C, and posted the highest score in
 the set at 90, above a Newcastle side that won its league on grade A for 78.
 
+*Three, and it is the sharpest: relegation is a promotion in points.* The same probe left the
+manager in place for eight seasons and never took a job offer. Sunderland finished 18th in the
+Premier League for a score of 43, went down, won the 24 club Championship and scored **124**.
+Everton did the same thing independently, 40 and 44 in the top flight, then 92 in the second.
+Against that, the Newcastle side that actually won the Premier League scored 78. **Winning the
+second division outscores winning the first by 46 points**, and it falls straight out of the
+arithmetic (46 games at 3 points against 38), so it is structural rather than a seed artifact.
+
 *Two: the 130 scale is unreachable in 19 leagues of 20 and saturated in the twentieth.* Maximum
 league points by league size: SuperSport HNL (10 clubs, 18 games) 54, the 18 club leagues 102,
 the big three 20 club leagues 114, EFL Championship (24 clubs, 46 games) **138**. So a perfect
