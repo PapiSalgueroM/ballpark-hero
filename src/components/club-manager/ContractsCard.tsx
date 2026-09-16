@@ -289,43 +289,47 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
           <div className="text-[10px] uppercase tracking-wide text-muted-foreground mb-1">
             Free agents{career.transferWindow === null ? ', and the window being shut does not stop these' : ''}
           </div>
-          {(career.freeAgents ?? []).map((f, i) => {
-            /* A button that looks available and silently does nothing is
-               worse than no button. Round 619 review: the first build checked
-               two of the engine's rules here and missed the cap and the squad
-               size, so a keen man could show Sign and nothing happened. The
-               card now asks the engine's own freeAgentBlock, and quotes the
-               wage and length off the same freeAgentTerms signFreeAgent
-               commits. */
-            const block = freeAgentBlock(career, f);
-            const t = freeAgentTerms(f);
-            return (
-              <div key={f.name} className="flex items-center gap-2 py-1 border-b border-border/30 last:border-0">
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-1 min-w-0">
-                    <span className="text-xs text-foreground truncate">{f.name}</span>
-                    {f.generated && <MadeUpTag title="Not a real player. This game made him up to fill the free agent list." />}
+          {/* Scrolls inside the card, like the lists above it: after a few
+              summers of deals running out the pool can hold twenty men. */}
+          <div className="max-h-64 overflow-y-auto">
+            {(career.freeAgents ?? []).map((f, i) => {
+              /* A button that looks available and silently does nothing is
+                 worse than no button. Round 619 review: the first build checked
+                 two of the engine's rules here and missed the cap and the squad
+                 size, so a keen man could show Sign and nothing happened. The
+                 card now asks the engine's own freeAgentBlock, and quotes the
+                 wage and length off the same freeAgentTerms signFreeAgent
+                 commits. */
+              const block = freeAgentBlock(career, f);
+              const t = freeAgentTerms(f);
+              return (
+                <div key={f.name} className="flex items-center gap-2 py-1 border-b border-border/30 last:border-0">
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-1 min-w-0">
+                      <span className="min-w-0 text-xs text-foreground truncate">{f.name}</span>
+                      {f.generated && <MadeUpTag title="Not a real player. This game made him up to fill the free agent list." />}
+                    </div>
+                    <div className="text-[9px] text-muted-foreground">
+                      {f.position}, {f.rating} rated, {f.age}, {FREE_AGENT_REASON[f.reason]}
+                    </div>
+                    <div className="text-[9px] text-muted-foreground">
+                      {t.wage}k a week for {t.years} years, no fee
+                    </div>
                   </div>
-                  <div className="text-[9px] text-muted-foreground">
-                    {f.position}, {f.rating} rated, {f.age}, {FREE_AGENT_REASON[f.reason]}
-                  </div>
-                  <div className="text-[9px] text-muted-foreground">
-                    {t.wage}k a week for {t.years} years, no fee
-                  </div>
+                  <button
+                    data-sign-index={i}
+                    onClick={() => onSignFreeAgent(f.name)}
+                    disabled={!!block}
+                    title={block ? FREE_AGENT_BLOCK_COPY[block].title : `${t.years} years at ${t.wage}k a week, no fee. The window being shut does not matter.`}
+                    className={cn('shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all',
+                      block ? 'bg-secondary text-muted-foreground cursor-not-allowed' : 'bg-primary text-primary-foreground hover:opacity-90')}
+                  >
+                    {block ? FREE_AGENT_BLOCK_COPY[block].face : `Sign · ${t.wage}k/w · ${t.years}y`}
+                  </button>
                 </div>
-                <button
-                  data-sign-index={i}
-                  onClick={() => onSignFreeAgent(f.name)}
-                  disabled={!!block}
-                  title={block ? FREE_AGENT_BLOCK_COPY[block].title : `${t.years} years at ${t.wage}k a week, no fee. The window being shut does not matter.`}
-                  className={cn('shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all',
-                    block ? 'bg-secondary text-muted-foreground cursor-not-allowed' : 'bg-primary text-primary-foreground hover:opacity-90')}
-                >
-                  {block ? FREE_AGENT_BLOCK_COPY[block].face : `Sign · ${t.wage}k/w · ${t.years}y`}
-                </button>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       )}
     </div>

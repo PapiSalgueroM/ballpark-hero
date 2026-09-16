@@ -263,8 +263,8 @@ if (CONTROL === 'nosev') {
     '              const block = null as ReleaseBlock | null;');
 } else if (CONTROL === 'cardsign') {
   rewrite('cardsign', 'card',
-    '            const block = freeAgentBlock(career, f);',
-    '            const block = null as FreeAgentBlock | null;');
+    '              const block = freeAgentBlock(career, f);',
+    '              const block = null as FreeAgentBlock | null;');
 } else if (CONTROL === 'termsdrift') {
   rewrite('termsdrift', 'engine',
     '  const { wage, years } = freeAgentTerms(fa);',
