@@ -1,5 +1,53 @@
 # Project state
 
+## ROUND 626 LIVE ON MAIN 2026-09-16: three harness holes, and 617 and 618 integrated
+
+Main `8998acd1` carries Rounds 617, 618 and the Round 626 harness fixes. Full gate on the
+integration before it landed: tsc 0, build 0, **all 324 harnesses green**.
+
+All three holes were reproduced before anything was written, and all three had passed every
+existing green gate.
+
+**617.** `simFixtureBalance` section 5 is titled "every caller passes the flag" and read only
+`clubManager.ts`, because `src` is set to the engine text at the top of the section. Round 617
+created a fifth caller outside it in `CalendarCard.tsx`, and the floor of four was satisfied by
+the engine's own four. Hardcoding the card's flag to `true` left the harness printing PASS while
+reporting "4 callers". It now walks every ts and tsx file under `src`, with a floor on the scan
+itself so a walk that finds nothing fails rather than passing everything.
+
+**618.** Nothing held the gate estimator to the level of the draw it claims to be the mean of.
+The only check that round added is a week 2 against week 5 drift, which is the estimator divided
+by itself, so any constant multiplier leaves it unchanged. Multiplying `expectedHomeCrowd` by
+1.10 passed AND improved the week 5 income error from 7.4 percent to 3.1, because the projection
+under projects and an over estimate cancels the bias: the harness's numbers got better as the
+estimator got worse. New section 9 measures the expectation against the crowd the engine actually
+drew, recovered from the books because concession income is linear in attendance, so there is no
+second copy of the crowd model. Healthy: median -0.5 percent, abs median 1.4, p90 4.0, bands 6
+and 9. New control `gatelevel` is that exact experiment and fails at 9.4 and 11.7.
+
+**simPress, which was the only red on the integration and is a coin toss, not a regression.**
+A probe reproducing section 6 exactly across three seed bases on two engines:
+
+| seed base | main `f083e0b2` | 617 plus 618 |
+|---|---|---|
+| 7000 | 11.67 | 5.70 |
+| 9100 | 7.85 | 10.56 |
+| 12400 | 7.40 | 6.30 |
+
+Six observations from 5.70 to 11.67 against a two standard error threshold landing between 5.39
+and 6.27, so the threshold sat inside the healthy distribution. The branch beats main at 9100 and
+main clears by only 1.4x at 12400. The gate is now a floor of 4.00 taken from those observations,
+the harness has its first negative control (`PRESS_CONTROL=nopress`; healthy 5.70 passes, control
+-4.46 fails), and its two fixed temp filenames are per run because concurrent runs were writing
+each other's bundle.
+
+**Two dead ends, recorded so nobody repeats them.** `PRESS_SEED_BASE` does not reach section 6,
+which hardcodes 7000, so varying it reproduces the identical number; two 45 minute runs were
+started on that assumption and killed once the code was read instead of the variable's name
+trusted. And the theory that 617's alternating venues remove long away runs, leaving less for the
+press to multiply, is wrong: confidence lost per season is 73.88 on main against 72.44 on the
+branch.
+
 ## REVIEW ROUND 2026-09-16: the free agent board was a money printer
 
 An adversarial review of the Round 619 diff, four lenses over correctness,
