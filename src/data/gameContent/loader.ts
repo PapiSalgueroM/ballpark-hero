@@ -92,6 +92,7 @@ export const PATH_BUNDLE: Record<string, ContentBundle> = {
   /* moreSports */
   '/afl-higher-lower': 'moreSports',
   '/fight-career': 'moreSports',
+  '/fight-gym': 'moreSports',
   '/f1-constructor': 'moreSports',
   '/f1-driver': 'moreSports',
   '/f1-higher-lower': 'moreSports',

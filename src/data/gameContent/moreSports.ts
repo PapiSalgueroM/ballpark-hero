@@ -524,6 +524,53 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
     ],
   },
 
+  '/fight-gym': {
+    intro: [
+      "Fight Gym is a free boxing management sim. You open a room with two young fighters nobody else wanted and enough money for a few weeks, and you decide what happens to everyone who walks through the door after that.",
+      "It runs on the same fighters and the same fights as Fight Career, with one difference that changes everything: the damage lands on somebody else and the money lands on you. A hurt fighter still sells tickets. Nothing stops you putting him in again except what it does to him, and to your name.",
+      "Every fighter in it is invented, including the champions and the kids the scout brings you.",
+    ],
+    howToPlay: [
+      "Name the gym. You start with 0.6m, two fighters and a name worth 8 out of 100.",
+      "Each week you can sign somebody, put a fighter through a training block for 0.035m, or find one of them a fight.",
+      "A fight comes with three offers. Pick the night, then pick three looks the same way you would in a career.",
+      "You take between 20 and 35 percent of every purse. The better your name, the bigger the cut.",
+      "The bills arrive every week: 0.012m plus 0.009m for each fighter on the books.",
+      "Let a fighter go when you think he has had enough, or keep cashing him.",
+      "Run out of money and the doors close for good.",
+    ],
+    rules: [
+      "Your name is the whole economy. It sets your cut of a purse and it sets the quality of the fighters who walk in, which runs from about 38 at the bottom to about 72 at the top.",
+      "Reputation is hard to build and easy to lose. Gains shrink as you climb, losses do not.",
+      "Putting a fighter in carrying 55 damage costs you reputation, and 70 costs you more, whatever the result. That is charged on the decision, not the outcome.",
+      "Letting a wrecked man go costs you too. There is no clean exit from a fighter you ruined.",
+      "Damage never heals, and it takes a fighter's chin down fastest.",
+      "A fighter is finished at 39, or at 34 if he is already carrying 58 damage, or at 82 damage whatever his age.",
+      "A fighter's purse reflects his record as well as his current form, so a faded name keeps earning long after he should have stopped. That is the trap the whole game is built around.",
+      "You can carry at most six fighters.",
+      "There is no betting anywhere in this game. Purses are contracts.",
+    ],
+    example: [
+      "Week one you have two teenagers and 0.6m. You sign a third for 0.09m because the scout likes him, then start finding six rounders for all three.",
+      "By week 40 your name is up near 40, the cut is better and real prospects are walking in. One of your out-boxers is ranked 6 and the purses have stopped being small.",
+      "Week 70 and your best fighter is carrying 58 damage. He is also the biggest name you have, and the offer on the table is the best money the gym has ever seen. You take it, the crowd sees a hurt man get stopped, and your name drops further than the purse was worth.",
+      "You close at week 160 with two world titles, eleven fighters through the door, three of whom got out clean and two who did not. The verdict says Respected, and you know exactly which night cost you Great.",
+    ],
+    tips: [
+      "Sign early. An empty gym has no way to earn and the bills do not wait.",
+      "Watch the damage number harder than the record. It is the only thing you cannot undo.",
+      "A training block is cheap next to a signing fee. Build the man you have before replacing him.",
+      "The temptation is real and it is measurable: keeping a hurt fighter genuinely pays better in the short run. It just costs you more than it pays.",
+      "Let a man go at around 50 damage rather than 70. The reputation hit for releasing a wrecked fighter is far worse than the purses you gave up.",
+    ],
+    faqs: [
+      { q: "Is this the same game as Fight Career?", a: "Same fighters, same fights, opposite chair. In the career the damage is yours. Here it belongs to somebody who works for you, and you are the one deciding whether he goes out again." },
+      { q: "Why did my name drop when I did not lose?", a: "Putting a visibly hurt fighter in costs reputation whatever happens. It is charged on the decision, because that is the part you control." },
+      { q: "Can I keep a fighter forever?", a: "No. Everyone finishes, at 39, or at 34 carrying heavy damage, or at 82 damage whenever that arrives." },
+      { q: "Are the fighters real?", a: "No. Every fighter, prospect and champion is generated. No real boxer is signed, trained, damaged or retired anywhere in this game." },
+      { q: "Does the game have betting?", a: "No. There is no wagering of any kind. Your income is a cut of the purse." },
+    ],
+  },
   '/fight-career': {
     intro: [
       "Fight Career is a free boxing career sim. You turn professional as a nobody, take one fight at a time, and try to be world champion before your body decides otherwise. Every fighter in it is invented, including the ones you beat, so nothing here is a real person's record being rewritten.",
