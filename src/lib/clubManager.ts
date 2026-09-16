@@ -71,7 +71,8 @@ import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
 import {
   FA_BOARD_FLOOR, FA_SHELF_WEEKS, WORLD_POOL_FROM_YEAR, aiInterest, capPool, dedupePool,
   freeAgentFromMarket, freeAgentFromPlayer, freeAgentTerms, sortPool,
-  terminationCost, terminationMoraleHit, wageCeilingBlocks, willJoin, worldReleases,
+  refusalLine, terminationCost, terminationMoraleHit, wageCeilingBlocks, willJoin,
+  worldReleases,
 } from '@/lib/clubManagerFreeAgents';
 import type { FreeAgent } from '@/lib/clubManagerFreeAgents';
 /* Round 513: manager XP and the seven trees, in their own file for the same
@@ -6494,6 +6495,17 @@ export function freeAgentRefusal(career: CareerState, faId: string): string | nu
    *
    * He is available to everybody else immediately, which is the cost of
    * letting him go: watch a rival take him.
+   *
+   * `released` is deliberately NOT in this list, and it is not an oversight.
+   * The other two are decisions the manager made: he paid the man off, or he
+   * never sat him down. The summer squad trim is the CLUB acting because the
+   * squad went over the limit, it picks who goes on its own rules (finished
+   * players, never an academy graduate), and the manager may well have wanted
+   * to keep him. "You let him go" is not true of that one, so the door stays
+   * open. There is nothing to farm through it either: the trim only fires
+   * above the squad limit and only ever takes players with no growth left, so
+   * re-signing one costs a signing on fee for a man you were over the limit
+   * with in the first place.
    */
   if (fa.wasMine && fa.since === career.season && (fa.reason === 'terminated' || fa.reason === 'expired')) {
     return fa.reason === 'terminated'
@@ -6511,7 +6523,10 @@ export function freeAgentRefusal(career: CareerState, faId: string): string | nu
   if (wageCeilingBlocks(bill, career.wageCap ?? wageCapFrom(bill), terms.wage)) {
     return `The board will not sanction ${terms.wage}k a week on top of the bill.`;
   }
-  if (!willJoin(fa, xiAverageRating(career))) return 'He will not drop to this level yet.';
+  /* The refusal says WHY and, when waiting would work, how long: the board is
+     a waiting game and a greyed button with no reason does not teach that. */
+  const xiAvg = xiAverageRating(career);
+  if (!willJoin(fa, xiAvg)) return refusalLine(fa, xiAvg);
   return null;
 }
 

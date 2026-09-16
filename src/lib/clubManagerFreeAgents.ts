@@ -261,11 +261,6 @@ export function freeAgentTerms(fa: FreeAgent): PersonalTerms {
   return { years, wage, bonus, role: freeAgentRole(fa) };
 }
 
-/** What signing him costs the transfer kitty today, in millions. There is no
- *  fee to anybody else: that IS the feature. */
-export function freeAgentFee(fa: FreeAgent): number {
-  return freeAgentTerms(fa).bonus;
-}
 
 /**
  * Will he come?
@@ -309,16 +304,25 @@ export function wageCeilingBlocks(bill: number, cap: number, wage: number): bool
   return bill + wage > cap * FA_CAP_HEADROOM;
 }
 
-/** One line for the card when he will not come, so the refusal explains
- *  itself rather than greying a button out. */
+/**
+ * One line for the card when he will not come, so a refusal explains itself
+ * rather than greying a button out with no reason.
+ *
+ * Derived from willJoin's own inequality rather than written beside it, so the
+ * number of weeks it quotes cannot drift from the week he actually signs.
+ * willJoin is rating <= xiAvg + FA_SLACK_BASE + (weeks / FA_SHELF_WEEKS) *
+ * FA_SLACK_WAIT, so the week he comes round is that solved for weeks.
+ */
 export function refusalLine(fa: FreeAgent, xiAvg: number): string {
-  const gap = Math.round(fa.rating - (xiAvg + joinSlack(fa)));
-  const weeksLeft = Math.max(1, Math.ceil(((fa.rating - xiAvg - FA_SLACK_BASE) / FA_SLACK_WAIT) * FA_SHELF_WEEKS) - fa.weeks);
-  if (gap <= 2) return 'He is listening, but he wants to see where else the season takes him.';
-  if (weeksLeft <= FA_SHELF_WEEKS) {
-    return `He is holding out for a bigger club. Wait him out and he may drop his sights.`;
+  if (fa.rating - (xiAvg + joinSlack(fa)) <= 2) {
+    return 'He is listening, but he wants to see where else the season takes him.';
   }
-  return 'He is not dropping this far, whatever you offer him.';
+  const comesRoundAt = Math.ceil(((fa.rating - xiAvg - FA_SLACK_BASE) / FA_SLACK_WAIT) * FA_SHELF_WEEKS);
+  if (comesRoundAt <= FA_SHELF_WEEKS) {
+    const wait = Math.max(1, comesRoundAt - fa.weeks);
+    return `He is holding out for a bigger club. Another ${wait} week${wait === 1 ? '' : 's'} without an offer and he may drop his sights.`;
+  }
+  return 'He is not dropping to this level, whatever you offer him.';
 }
 
 /* ================================================================== */
