@@ -45,9 +45,10 @@ function mount(career: CareerState) {
 function findTerminalFixtures() {
   if (terminalFixtures.size === 4) return;
   const base = fixtures.get('goal')!.career;
+  // Spread the LCG seeds across its range instead of sampling correlated consecutive seeds.
   // Redraw actual halves with the engine. No event minute, scorer or outcome is invented.
   for (let attempt = 0; attempt < 300 && terminalFixtures.size < 4; attempt++) {
-    vi.mocked(Math.random).mockImplementation(seeded(6034500 + attempt));
+    vi.mocked(Math.random).mockImplementation(seeded(6034500 + attempt * 104729));
     const first = changeLive(base, 0, { kind: 'shape', mentality: 'balanced' })!;
     const second = startSecondHalf(first)!;
     for (const [cap, career] of [[45, first], [90, second]] as const) {
@@ -71,7 +72,52 @@ function expectWhistle(mounted: ReturnType<typeof mount>, cap: number, called: b
   expect(mounted.callbacks.onStartSecondHalf).not.toHaveBeenCalled();
 }
 
+function expectAllocatedIds<T extends { id: string }>(original: T[], expected: T[], actual: T[], kind: 'msg' | 'pq') {
+  const originalIds = new Set(original.map(item => item.id));
+  expect(actual).toHaveLength(expected.length);
+  expect(new Set(actual.map(item => item.id)).size).toBe(actual.length);
+  expect(new Set(expected.map(item => item.id)).size).toBe(expected.length);
+  for (let index = 0; index < expected.length; index++) {
+    const wanted = expected[index], received = actual[index];
+    const fresh = !originalIds.has(wanted.id);
+    expect(!originalIds.has(received.id)).toBe(fresh);
+    if (fresh) {
+      const pattern = new RegExp(`^${kind}-(\\d+)-(\\d+)-([1-9]\\d*)$`);
+      const expectedId = wanted.id.match(pattern), actualId = received.id.match(pattern);
+      expect(expectedId).not.toBeNull(); expect(actualId).not.toBeNull();
+      expect(actualId!.slice(1, 3)).toEqual(expectedId!.slice(1, 3));
+      expect({ ...received, id: wanted.id }).toEqual(wanted);
+      received.id = wanted.id;
+    } else expect(received).toEqual(wanted);
+  }
+}
+
 describe('Live simcast motion', () => {
+  it('settlement ID comparison rejects changed payloads, retained IDs and allocator prefixes', () => {
+    for (const kind of ['msg', 'pq'] as const) {
+      const retained = { id: `${kind}-1-0-1`, text: 'Retained payload' };
+      const fresh = { id: `${kind}-1-1-2`, text: 'Fresh payload' };
+      const expected = [retained, fresh];
+      const actual = [structuredClone(retained), { ...fresh, id: `${kind}-1-1-3` }];
+      expectAllocatedIds([retained], expected, structuredClone(actual), kind);
+      const controls = [
+        [{ ...actual[0], id: `${kind}-1-0-4` }, actual[1]],
+        [actual[0], { ...actual[1], id: 'malformed' }],
+        [actual[0], { ...actual[1], id: `${kind}-2-1-3` }],
+        [actual[0], { ...actual[1], id: `${kind}-1-2-3` }],
+        [actual[0], { ...actual[1], text: 'Changed payload' }],
+        [actual[1], actual[0]],
+        [actual[0]],
+        [actual[0], actual[0]],
+      ];
+      for (const broken of controls) {
+        expect(broken).not.toEqual(actual);
+        expect(() => expectAllocatedIds([retained], expected, structuredClone(broken), kind)).toThrow();
+      }
+    }
+  });
+
+
   it('the committed action puts goals in the correct net and saves at the keeper', () => {
     const before = JSON.stringify(scene);
     const random = vi.spyOn(Math, 'random').mockImplementation(() => { throw Error('Motion must not draw outcomes'); });
@@ -141,8 +187,11 @@ describe('Live simcast motion', () => {
     expect(mounted.callbacks.onSub).not.toHaveBeenCalled();
     vi.mocked(Math.random).mockImplementation(seeded(6038));
     const after = resumeMatch(structuredClone(career));
-    // The press allocator has a module counter. Its unrelated fresh ID differs between calls.
-    if (after.state.press?.pending && baseline.state.press?.pending) after.state.press.pending.id = baseline.state.press.pending.id;
+    // Module counters allocate fresh inbox and press IDs independently of the seeded match RNG.
+    // Compare every payload first and only align IDs that did not exist in the input career.
+    expectAllocatedIds(career.inbox ?? [], baseline.state.inbox ?? [], after.state.inbox ?? [], 'msg');
+    const pending = (state: CareerState) => state.press?.pending ? [state.press.pending] : [];
+    expectAllocatedIds(pending(career), pending(baseline.state), pending(after.state), 'pq');
     expect(after).toEqual(baseline);
   });
 
