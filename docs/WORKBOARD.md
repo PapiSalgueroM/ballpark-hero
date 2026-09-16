@@ -756,7 +756,14 @@ table on 2026-09-15.
 **619 is the last number in this lane's block, so the lane claims 620 to 627 next**, per the
 block rule agreed further down this board. A block is cheap and a collision costs a day.
 
-- **620, CONTRACT DRAFTED, NO CODE: Fight Career, and the shared career engine under it.**
+- **620, BUILT AND GATED, committed as `90c501bc` on branch `r620-fight-career`: Fight Career,
+  and the shared career engine under it.** Gates: tsc 0, `simFightCareer` green on five sections
+  with all five controls proved to fire on their own sections, plus `simNoRivalNames`,
+  `simScoringCoverage`, `simSiteSearch`, `simSearchDiscard` and `simNoInventedQuotes`, and the
+  search keyword index regenerated at 125 of 125. Played end to end in a browser: a ten round
+  split decision with a knockdown each way, rank moved from unranked to 17, and the damage bar
+  took a point off chin and speed. The harness found six defects in the first draft of the
+  engine and two in itself; they are listed in `docs/PROJECT-STATE.md` and in the commit.
   Asked for by the owner on 2026-09-16: build games in the style of a well known independent
   studio's sports simulations, take what is good about their features and presentation, and then
   go further. The studio and its titles are named nowhere in the design and must appear nowhere

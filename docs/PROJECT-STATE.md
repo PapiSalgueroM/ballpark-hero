@@ -1,5 +1,60 @@
 # Project state
 
+## ROUND 620 BUILT 2026-09-16: Fight Career, and the shared career engine under it
+
+On branch `r620-fight-career`, commit `90c501bc`, 11 files and 2,039 lines, cut from
+`r619-free-agents` which is cut from main `f083e0b2`. Not merged. Contract:
+`docs/design/round-620-fight-career-contract.md`.
+
+**Why this game.** The owner asked on 2026-09-16 for games in the style of a well known
+independent studio's sports sims, taking what is good about them and then going further. Combat
+sports was the largest hole in the catalogue: 136 games, 20 of them deep simulations across
+soccer, the NFL, the NBA, MLB, the NHL and college, and nothing for fighting but two guessing
+games. The studio and its titles are named nowhere in the code and are now in `RIVAL_NAMES`.
+
+**What it is.** `/fight-career`. Turn professional, take one of three offers, spend six camp
+weeks, pick three looks for the night, carry the damage forever. Four styles beat each other in
+a circle and the opponent switches into whatever punishes your last look, so the plan cycles
+three tactics rather than holding one.
+
+**The engine.** New `src/lib/careerEngine.ts`, with `src/lib/fightCareer.ts` as the first
+consumer. The four my career engines (`nflMyCareer` 1042 lines, `mlbMyCareer` 995,
+`nhlMyCareer` 937, `nbaMyCareer` 899) share 24 exported symbol names once the sport prefix is
+stripped, which is about two thirds of 3,900 lines being one idea written four times. **The four
+live games are deliberately NOT migrated in this round**, because moving four working games for
+no immediate player benefit risks all four at once and the gates cannot tell a silent behaviour
+change from a correct one. Migration is Rounds 621 to 624, one sport per round, each proving
+byte identical career outcomes on a fixed seed before and after.
+
+**Six defects the harness found, all of them in the first draft of the engine.** Damage accrued
+about eight times too fast, so every career of every policy retired pinned at the ceiling inside
+nine fights and the choice between roads became decoration. A title shot was pinned to the
+riskiest offer slot, so a patient player reached number one and was never offered the fight: 260
+careers, zero titles. Opponent style was fixed for a whole bout, so one tactic answered every
+round forever, 98.5 percent of careers won a title and the optimal play was to stop thinking.
+Camp gains were flat and uncapped, which is the named regression from Rounds 96 and 116, growth
+that ignores potential headroom; fighters now have a ceiling. Champions were drawn relative to
+the challenger, so the belt tracked the player's own level. Legacy counted volume, so a long
+quiet career of beating nobodies scored 94 out of 100. And quality wins were counted by a purse
+threshold the purse formula can never reach for a non champion, so that counter was silently
+always zero.
+
+**The harness was wrong twice itself and both are recorded in it.** It bucketed careers by total
+damage, which correlates with career length, so the most damaged fighters appeared to retire
+oldest. And it modelled a player who repeats one tactic, which is exactly what the adaptive
+opponent punishes, so it reported the daily as a wall.
+
+**Gates.** tsc 0. `scripts/simFightCareer.mjs` green on five sections with all five controls
+(`nodecay`, `noretire`, `godmode`, `driftdaily`, `nostyle`) proved to fire on their own sections.
+`simNoRivalNames`, `simScoringCoverage`, `simSiteSearch`, `simSearchDiscard` and
+`simNoInventedQuotes` green. Search keyword index regenerated at 125 of 125 games. Played end to
+end in a browser on the dev server: a ten round split decision, a knockdown each way, rank moved
+from unranked to 17, and the damage bar visibly took a point off chin and speed.
+
+**Not done in this round, on purpose.** Gym mode (sign and develop fighters, on the Club Manager
+shape) and promoter mode (build cards, on the Stadium Tycoon shape) are later rounds reading the
+same fighter and bout model, which is the reason the engine came first.
+
 ## RELEASE MERGED 2026-09-16 00:46 EDT
 
 PR 96 merged as `25a0448e87d68de8f70752c28bbb5fbdc93a2162`. The accepted
