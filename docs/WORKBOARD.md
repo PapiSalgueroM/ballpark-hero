@@ -1,5 +1,14 @@
 # Work board
 
+**Round 626, 2026-09-16: Rounds 617, 618 and 626 are LIVE ON MAIN at `8998acd1`.** Full gate
+before landing: tsc 0, build 0, all 324 harnesses green. The adversarial review's two findings
+against 617 and 618 are fixed and each was reproduced first, and the third hole, `simPress`
+board confidence, turned out to be a coin toss gate rather than those rounds: measured across
+three seed bases on two engines the effect runs 5.70 to 11.67 and the branch beats main at one
+of them, while the two standard error threshold lands between 5.39 and 6.27, inside the healthy
+spread. Replaced with a measured floor plus that harness's first negative control. Details in
+`docs/PROJECT-STATE.md`.
+
 **00:46 EDT September 16, Codex release landed:** PR 96 is merged as
 `25a0448e87d68de8f70752c28bbb5fbdc93a2162`. The combined-release hold is lifted.
 Claude can integrate 617/618 from current main with their own verification.
