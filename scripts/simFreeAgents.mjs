@@ -21,13 +21,20 @@
  * bill a settlement only for the weeks it has left, and the contracts card has
  * to agree with the engine on every button it shows.
  *
+ * Sections 16 and 17 came out of the review of the second build: the made up
+ * journeymen were valued like squad players and signed for nothing, so signing
+ * all six and selling them banked real money every summer; and a man you
+ * released came back through the market the season after, while the copy said
+ * he never would.
+ *
  * House rules as everywhere: never assert on a maximum, never assert non
  * significance, bands from measured headroom, and a control per check that
  * provably fires. Every control asserts its anchor appears EXACTLY once in the
  * line ending normalised source before it rewrites it. Each turns exactly the
- * checks listed red and nothing else; the three that reach several sections
- * break something those sections all genuinely depend on (no settlement at
- * all, a bill blind to settlements, interest switched off).
+ * checks listed red and nothing else; the ones that reach several checks
+ * break something those checks all genuinely depend on (no settlement at all,
+ * a bill blind to settlements, interest switched off, the released list
+ * ignored, no signing on fee taken).
  *
  * CONTROLS (FA_CONTROL=name):
  *   nosev          a release writes no settlement                    -> sections 1, 2, 7 and 8
@@ -48,24 +55,34 @@
  *   tickwild       a week is counted off twice                       -> section 7
  *   countfirst     the countdown runs before the week is charged     -> section 7
  *   resignnow      a man whose deal ran out comes straight back      -> section 9
- *   resignreleased a man you released comes back a season later      -> section 9
+ *   resignreleased the signing rule forgets everyone you released    -> sections 9 and 17
  *   livefree       a release works with a match paused               -> section 11
  *   gkfree         a release skips the shared squad rules            -> section 11
  *   refsleft       a release leaves his XI slot, jobs and bids       -> section 11
  *   buykeeps       a man bought off the market stays in the pool     -> section 12
  *   fillkeeps      a man the summer fill signed stays in the pool    -> section 12
- *   fillreleased   the summer fill signs a man you released          -> section 12
+ *   fillreleased   the summer fill signs a man you released, from
+ *                  the pool and from the made up fallback list       -> section 12, both of those checks
+ *   inventedletgo  the fallback list alone forgets who you released  -> section 12, the fallback check
+ *   fillwage       the summer fill ignores a journeyman's asking wage -> section 12
  *   faid           signFreeAgent builds ids that can repeat          -> section 12
  *   nojourneymen   the pool is never topped up                       -> section 13
  *   goodjourneymen journeymen rated above the club's level           -> section 13
  *   unflagged      journeymen not flagged as made up                 -> section 13
  *   realname       a journeyman wears a real player's name           -> section 13
- *   novalue        journeymen carry no value, so wages come out wild -> section 13
+ *   novalue        journeymen priced with no value, so wages go wild -> section 13
  *   projall        the projection bills a settlement all season      -> section 14
  *   cardrelease    the card ignores the engine's release refusal     -> section 15
  *   cardsign       the card ignores the engine's signing refusal     -> section 15
  *   termsdrift     a signing commits a wage the card did not quote   -> section 15
  *   onetap         Release fires on the first tap                    -> section 15
+ *   nofee          a signing takes no signing on fee from the kitty  -> sections 15 and 16
+ *   jmworth        journeymen valued like squad players again        -> section 16
+ *   feefloor       the signing on fee can drop to 0.1m               -> section 16
+ *   marketreleased the market lists a man you released               -> section 17
+ *   buyreleased    a deal signs a man you released                   -> section 17
+ *   noreleasedlist a release is not written to the permanent list    -> section 17
+ *   blocklist      the signing rule reads only the pool record       -> section 17
  */
 
 import './lib/seedRandom.mjs';
@@ -207,8 +224,12 @@ if (CONTROL === 'nosev') {
     "  if (false) return 'justLeft';");
 } else if (CONTROL === 'resignreleased') {
   rewrite('resignreleased', 'engine',
-    "  if (releasedByYou(fa)) return 'releasedByYou';",
+    "  if (releasedByYou(fa) || releasedByYouNames(career).has(fa.name)) return 'releasedByYou';",
     "  if (false) return 'releasedByYou';");
+} else if (CONTROL === 'blocklist') {
+  rewrite('blocklist', 'engine',
+    "  if (releasedByYou(fa) || releasedByYouNames(career).has(fa.name)) return 'releasedByYou';",
+    "  if (releasedByYou(fa)) return 'releasedByYou';");
 } else if (CONTROL === 'livefree') {
   rewrite('livefree', 'engine',
     "  if (career.live) return 'midMatch';",
@@ -231,8 +252,18 @@ if (CONTROL === 'nosev') {
     '      return out;');
 } else if (CONTROL === 'fillreleased') {
   rewrite('fillreleased', 'engine',
-    '  const letGo = new Set(realPool.filter(releasedByYou).map(f => f.name));',
+    '  const letGo = new Set(released);',
     '  const letGo = new Set<string>();');
+} else if (CONTROL === 'inventedletgo') {
+  /* The verifier's control on the second build: the fallback list's half of
+     the rule, which no check could see. */
+  rewrite('inventedletgo', 'engine',
+    '    .filter(p => !letGo.has(p.name) && !taken.has(p.name) && !retired.has(p.name) && band(p.rating)',
+    '    .filter(p => !taken.has(p.name) && !retired.has(p.name) && band(p.rating)');
+} else if (CONTROL === 'fillwage') {
+  rewrite('fillwage', 'engine',
+    '    player.wage = askingWage.get(mp.name) ?? wageFor(player);',
+    '    player.wage = wageFor(player);');
 } else if (CONTROL === 'faid') {
   rewrite('faid', 'engine',
     '    id: freeSquadId(career.squad, `fa-${slug(fa.name)}-s${career.season}`),',
@@ -251,8 +282,32 @@ if (CONTROL === 'nosev') {
     '      since: state.season,');
 } else if (CONTROL === 'novalue') {
   rewrite('novalue', 'engine',
-    '      value: squadScaledValue(state.squad, rating, age),',
-    '      value: undefined,');
+    "      wage: freeAgentTerms({ name, position, age, rating, value: worth, since: state.season, reason: 'unattached' }).wage,",
+    "      wage: freeAgentTerms({ name, position, age, rating, value: undefined, since: state.season, reason: 'unattached' }).wage,");
+} else if (CONTROL === 'jmworth') {
+  rewrite('jmworth', 'engine',
+    '      value: JOURNEYMAN_VALUE,\n',
+    '      value: worth,\n');
+} else if (CONTROL === 'feefloor') {
+  rewrite('feefloor', 'engine',
+    '  const fee = Math.max(FREE_AGENT_MIN_FEE, Math.round(wage * years * 0.045 * 10) / 10);',
+    '  const fee = Math.max(0.1, Math.round(wage * years * 0.045 * 10) / 10);');
+} else if (CONTROL === 'nofee') {
+  rewrite('nofee', 'engine',
+    '    budget: Math.round((career.budget - fee) * 10) / 10,\n    squad: [...career.squad, player],\n    freeAgents: pool.filter(x => x.name !== fa.name),',
+    '    squad: [...career.squad, player],\n    freeAgents: pool.filter(x => x.name !== fa.name),');
+} else if (CONTROL === 'marketreleased') {
+  rewrite('marketreleased', 'engine',
+    ' && !retired.has(p.name) && !released.has(p.name));',
+    ' && !retired.has(p.name));');
+} else if (CONTROL === 'buyreleased') {
+  rewrite('buyreleased', 'engine',
+    '  if (releasedByYouNames(career).has(mp.name)) return null;\n',
+    '');
+} else if (CONTROL === 'noreleasedlist') {
+  rewrite('noreleasedlist', 'engine',
+    '    releasedNames: (career.releasedNames ?? []).includes(p.name)\n      ? career.releasedNames\n      : [...(career.releasedNames ?? []), p.name],\n',
+    '');
 } else if (CONTROL === 'projall') {
   rewrite('projall', 'fin',
     '  const wagesLeft = round2((squadWeekly * weeksLeft + settlementsLeft) / 1000);',
@@ -950,18 +1005,23 @@ console.log('12) nobody is in the squad and the pool at once');
 
   /* The summer emergency fill. It signs out of the pool first, and nothing
      took the men it signed back out; and it must never sign a man you
-     released, which is taking him back by another door. One released and one
-     expired probe per position group, the released one a point lower so the
-     fill, which reaches for the weakest first, would pick him if it could. */
+     released, which is taking him back by another door. One released, one
+     journeyman and one expired probe per position group, the released one the
+     weakest so the fill, which reaches for the weakest first, would pick him
+     if it could, and the journeyman next so it is the man the fill does pick. */
   const fst = seeded(6900, () => cm.startCareer('Everton'));
   const baseline = cm.projectedXIAvg(fst.clubName, cm.yearsOn(fst) + 1, fst.eraId) ?? 66;
   const r = Math.round(baseline) - 20;
   const probes = [];
   for (const pos of ['GK', 'CB', 'CM', 'ST']) {
-    probes.push({ name: `Released ${pos} Probe`, position: pos, age: 27, rating: r - 1, value: 0.5, since: fst.season, reason: 'released', fromMyClub: true });
+    probes.push({ name: `Released ${pos} Probe`, position: pos, age: 27, rating: r - 2, value: 0.5, since: fst.season, reason: 'released', fromMyClub: true });
     /* Since this season, so a man the fill signs would survive the decay and
        still be listed if nothing took him out. */
     probes.push({ name: `Expired ${pos} Probe`, position: pos, age: 27, rating: r, value: 0.5, since: fst.season, reason: 'expired', fromMyClub: true });
+    /* A made up journeyman the way topUpFreeAgents writes one: worth the floor,
+       asking a wage off his squad. A wage his value alone could never price
+       (17k against the 1k the floor prices), so a fill that ignores it shows. */
+    probes.push({ name: `Journeyman ${pos} Probe`, position: pos, age: 27, rating: r - 1, value: 0.2, wage: 17, generated: true, since: fst.season, reason: 'unattached' });
   }
   /* Five seniors kept: players turning 20 count as seniors too, and keeping
      eight left the fill only one gap to fill. */
@@ -981,6 +1041,36 @@ console.log('12) nobody is in the squad and the pool at once');
   }
   if (inBoth.length) fail(`after the summer ${inBoth.length} men are in the squad and the pool at once: ${inBoth.slice(0, 3).map(p => p.name).join(', ')}`);
   else ok('after the summer nobody in the squad is still listed as a free agent');
+  /* The journeymen the fill signs are paid what they ask. */
+  const jmSigned = n.squad.filter(p => p.name.startsWith('Journeyman '));
+  if (!jmSigned.length) fail('the summer fill signed no journeyman probe, so the asking wage cannot be checked');
+  else if (jmSigned.some(p => p.wage !== 17)) fail(`the summer fill pays a journeyman off his value, not what he asks: ${jmSigned.map(p => `${p.name} on ${p.wage}k`).join(', ')}`);
+  else ok(`the summer fill paid ${jmSigned.length} ${jmSigned.length === 1 ? 'journeyman the wage he' : 'journeymen the wages they'} asked`);
+
+  /* THE FALLBACK LIST TOO. With the pool empty the fill reaches for real men
+     off the projected market, and a real man you released is still on it
+     under his old club. The second build filtered that list and nothing could
+     see it: deleting the filter left this harness green. So mark the first
+     three men the fill would reach for in every position group as released,
+     and give it nothing else. */
+  const next = { ...fst, season: fst.season + 1, squad: [], goneNames: [], retiredNames: [], releasedNames: [], freeAgents: [] };
+  const band = (x) => x <= baseline - 14 && x >= baseline - 26;
+  /* Everybody still under contract is in the squad the fill reads, so it
+     skips them; a man whose deal runs out this summer is not, so he stays in. */
+  const stays = new Set(thin.squad.filter(p => (p.contractYears ?? 1) > 1).map(p => p.name));
+  const fallback = cm.buildMarket(next)
+    .filter(m => band(m.rating) && !stays.has(m.name) && !(fst.retiredNames ?? []).includes(m.name))
+    .sort((a, b) => a.rating - b.rating);
+  const marked = [];
+  for (const g of ['GK', 'DEF', 'MID', 'ATT']) marked.push(...fallback.filter(m => cm.groupOf(m.position) === g).slice(0, 3).map(m => m.name));
+  const bare = { ...thin, freeAgents: [], releasedNames: marked };
+  const nb = seeded(6902, () => cm.startNextSeason(bare));
+  const fromList = nb.squad.filter(p => fallback.some(m => m.name === p.name) && !stays.has(p.name));
+  const tookMarked = fromList.filter(p => marked.includes(p.name));
+  if (marked.length < 8) fail(`only ${marked.length} men in the fill's band to mark, too few to cover every position`);
+  else if (!fromList.length) fail('with the pool empty the summer fill signed nobody off the fallback list, so this cannot see the list');
+  else if (tookMarked.length) fail(`the summer fill's fallback list signed a man you released: ${tookMarked.map(p => p.name).join(', ')}`);
+  else ok(`with the pool empty the fill signed ${fromList.length} off the fallback list and none of the ${marked.length} you released`);
 
   /* Ids. Round 567's rule: slug() is not injective, so two free agents whose
      names slug the same shared one id, and releasing either took both off. */
@@ -1012,6 +1102,8 @@ console.log('13) a new save has free agents, and they are made up cover');
   const notCover = [];
   const wageRatios = [];
   const curveRatios = [];
+  const offSquad = [];
+  let freshSeen = 0;
   const clash = [];
   let seen = 0;
   const inspect = (st, when) => {
@@ -1026,7 +1118,16 @@ console.log('13) a new save has free agents, and they are made up cover');
       if (REAL_NAMES.has(f.name)) realHits.push(`${f.name} (${when})`);
       if (squadNames.has(f.name)) clash.push(`${f.name} (${when})`);
       if (!(cm.freeAgentInterest(st, f) && f.rating <= level - 14)) notCover.push(`${f.name} ${f.rating} at level ${level.toFixed(1)} (${when})`);
-      curveRatios.push(cm.freeAgentTerms(f).wage / cm.freeAgentTerms({ ...f, value: undefined }).wage);
+      curveRatios.push(cm.freeAgentTerms(f).wage / cm.freeAgentTerms({ ...f, value: undefined, wage: undefined }).wage);
+      /* A man made up this summer asks what his squad's own values price for a
+         man of his rating and age. The value on his record is the floor (see
+         section 16), so the wage has to come from somewhere else, and this is
+         where it has to come from. Last summer's men have aged a year since. */
+      if (f.since === st.season) {
+        freshSeen += 1;
+        const priced = cm.freeAgentTerms({ ...f, wage: undefined, value: cm.squadScaledValue(st.squad, f.rating, f.age) }).wage;
+        if (f.wage !== priced) offSquad.push(`${f.name} asks ${f.wage}k, his squad prices ${priced}k (${when})`);
+      }
     }
     if (jm.length && seniorWage > 0) wageRatios.push(mean(jm.map(f => cm.freeAgentTerms(f).wage)) / seniorWage);
   };
@@ -1066,6 +1167,9 @@ console.log('13) a new save has free agents, and they are made up cover');
   console.log(`   a journeyman asks ${(cr * 100).toFixed(0)}% of the raw curve wage, and ${(wr * 100).toFixed(0)}% of his squad's median senior wage`);
   if (!(cr < 0.6)) fail(`a journeyman asks ${(cr * 100).toFixed(0)}% of the raw curve wage, so his wage ignores what his squad is really worth (ceiling 60%)`);
   else ok(`a journeyman is priced off his squad's values, ${(cr * 100).toFixed(0)}% of the raw curve wage (ceiling 60%)`);
+  if (freshSeen < 10) fail(`only ${freshSeen} journeymen made up this summer were seen, too few to check their wages`);
+  else if (offSquad.length) fail(`${offSquad.length} journeymen do not ask what their squad prices: ${offSquad.slice(0, 2).join(' | ')}`);
+  else ok(`all ${freshSeen} journeymen made up this summer ask exactly the wage their squad prices`);
 }
 
 console.log('14) the projection bills a settlement only for the weeks it has left');
@@ -1107,7 +1211,11 @@ console.log('15) the contracts card agrees with the engine on every button');
       { name: letGo.name, position: letGo.position, age: letGo.age, rating: 55, value: 0.5, since: everton.season, reason: 'unattached' },
     ],
   };
-  const states = [['a new save', everton], ['at the senior floor', floor], ['at half time', halftime], ['at the wage cap', overCap], ['with 30 players', full], ['with every re-sign rule in the pool', rules]];
+  /* Enough to sign the cheapest free agent on the list and not the dearest, so
+     one save shows the fee refusing some Sign buttons and allowing others. */
+  const fees = (everton.freeAgents ?? []).map(f => cm.freeAgentTerms(f).fee).sort((a, b) => a - b);
+  const skint = { ...everton, budget: fees.length ? fees[0] : 0 };
+  const states = [['a new save', everton], ['at the senior floor', floor], ['at half time', halftime], ['at the wage cap', overCap], ['with 30 players', full], ['with every re-sign rule in the pool', rules], ['with almost nothing in the kitty', skint]];
   let compared = 0;
   let enabled = 0;
   let disabled = 0;
@@ -1133,9 +1241,13 @@ console.log('15) the contracts card agrees with the engine on every button');
       if ((after !== null) === isDisabled) wrong.push(`Sign ${f.name} ${label}: card ${isDisabled ? 'off' : 'on'}, engine ${after ? 'allows' : 'refuses'}`);
       if (!isDisabled) {
         const t = cm.freeAgentTerms(f);
-        if (!m[4].includes(`${t.wage}k/w`) || !m[4].includes(`${t.years}y`)) badFaces.push(`${f.name}: "${m[4]}" for ${t.wage}k and ${t.years} years`);
+        const feeText = cm.money(t.fee, st);
+        if (!m[4].includes(`${t.wage}k/w`) || !m[4].includes(`${t.years}y`) || !m[4].includes(feeText)) badFaces.push(`${f.name}: "${m[4]}" for ${t.wage}k, ${t.years} years and ${feeText}`);
         const man = after?.squad.find(p => p.name === f.name);
         if (man && (man.wage !== t.wage || man.contractYears !== t.years)) drift.push(`${f.name}: quoted ${t.wage}k for ${t.years}, signed on ${man.wage}k for ${man.contractYears}`);
+        /* And the fee quoted is the fee that leaves the kitty. */
+        const charged = after ? Math.round((st.budget - after.budget) * 10) / 10 : null;
+        if (after && charged !== Math.round(t.fee * 10) / 10) drift.push(`${f.name}: quoted a ${t.fee}m signing on fee, the kitty lost ${charged}m`);
       }
     }
   }
@@ -1145,7 +1257,7 @@ console.log('15) the contracts card agrees with the engine on every button');
   else ok('every Release and Sign button is live exactly when the engine would go through with it');
   if (badFaces.length) fail(`a Sign button does not quote the terms: ${badFaces.slice(0, 2).join(' | ')}`);
   else if (drift.length) fail(`a signing commits different terms from the ones the button quoted: ${drift.slice(0, 2).join(' | ')}`);
-  else ok('every live Sign button quotes the wage and length the signing then commits');
+  else ok('every live Sign button quotes the wage, length and signing on fee the signing then commits');
   /* Two taps. SSR cannot press a button, so this reads the card's code with
      comments stripped: onRelease is called in exactly one place, and that
      place is inside the confirmation that states the cost. */
@@ -1156,6 +1268,111 @@ console.log('15) the contracts card agrees with the engine on every button');
     fail(`Release is not behind a confirmation: onRelease is called in ${calls} places and ${confirmAt < 0 ? 'there is no confirmation block' : 'not only inside it'}`);
   } else {
     ok('a release only fires from the confirmation that states the cost');
+  }
+}
+
+console.log('16) signing a journeyman to sell him on does not pay');
+{
+  /* The second build valued the made up journeymen like squad players and
+     signed them for nothing, so the review's policy (sign every one, transfer
+     list him, take every bid while the window is open) banked 21.5m at
+     Manchester City and 2.0m at Ajax in one summer, and the list tops back up
+     every summer. Played here the same way, with the engine's own bids.
+
+     THE MEASURE IS PER SALE: what the bid paid minus what signing that man
+     cost the kitty, averaged at each club. A club total mixes in how many bids
+     happened to arrive, which is noise about the market rather than about the
+     rule; the margin on a sale is the rule. */
+  const rows = [];
+  let sales = 0;
+  for (let i = 0; i < CLUBS.length; i += 1) {
+    seeded(7600 + i, () => {
+      let st = cm.startCareer(CLUBS[i]);
+      const paid = new Map();
+      for (const f of (st.freeAgents ?? []).filter(x => x.reason === 'unattached')) {
+        const next = cm.signFreeAgent(st, f.name);
+        if (!next) continue;
+        paid.set(f.name, Math.round((st.budget - next.budget) * 10) / 10);
+        st = next;
+      }
+      const ids = st.squad.filter(p => paid.has(p.name)).map(p => p.id);
+      for (const id of ids) st = cm.setTransferStatus(st, id, 'listed');
+      const margins = [];
+      let calls = 0;
+      while (st.transferWindow && calls < 12 && !st.sacked) {
+        for (const b of [...(st.incomingBids ?? [])]) {
+          if (b.loan || !ids.includes(b.playerId)) continue;
+          const man = st.squad.find(p => p.id === b.playerId);
+          const next = man ? cm.acceptBid(st, b.playerId) : null;
+          if (!next) continue;
+          margins.push(b.offer - paid.get(man.name));
+          st = next;
+        }
+        st = cm.playNextEntry(st, { skipHalftime: true }).state;
+        calls += 1;
+      }
+      sales += margins.length;
+      const feesPaid = [...paid.values()].reduce((a, b) => a + b, 0);
+      rows.push({ club: CLUBS[i], sold: margins.length, margin: mean(margins) });
+      console.log(`   ${CLUBS[i]}: signed ${paid.size} for ${feesPaid.toFixed(1)}m in fees, sold ${margins.length}, ${margins.length ? `${mean(margins).toFixed(2)}m a sale against what he cost` : 'no sale'}`);
+    });
+  }
+  const winners = rows.filter(r => r.sold > 0 && !(r.margin < 0));
+  if (sales < 8) fail(`only ${sales} journeymen sold across ${CLUBS.length} clubs, too few to say what a sale earns`);
+  else if (winners.length) fail(`selling a journeyman on beats what he cost to sign at ${winners.map(r => `${r.club} (${r.margin.toFixed(2)}m a sale)`).join(', ')}`);
+  else ok(`over ${sales} sales at ${rows.filter(r => r.sold > 0).length} clubs, every club loses money on each journeyman it signs to sell`);
+}
+
+console.log('17) a man you release never signs for you again, by any door');
+{
+  /* The second build blocked him only on the free agent list, and only while
+     his pool record lasted. The summer empties goneNames, the record ages out
+     after two, and the projected world still has a real man at his old club,
+     so from the next season the market listed him and a deal signed him back
+     (Mark Travers at Everton for 7.7m, in the review). Each door is tried on
+     the save as it looks once the record and goneNames are gone, and each must
+     open when the permanent list is taken away, or its refusal proves nothing. */
+  const st = seeded(7700, () => cm.startCareer('Everton'));
+  cm.ensureFreeAgents(st);
+  const shelf = cm.buildMarket({ ...st, squad: [] });
+  const pick = st.squad
+    .filter(p => !p.isYouth && !p.generated && cm.releaseBlock(st, p) === null)
+    .map(p => ({ p, mp: shelf.find(m => m.name === p.name) }))
+    .filter(x => x.mp && x.mp.price <= st.budget)
+    .sort((a, b) => a.mp.price - b.mp.price)[0];
+  if (!pick) fail('nobody releasable at Everton is also on the market at a price the club can pay');
+  else {
+    const name = pick.p.name;
+    const rel = cm.releasePlayer(st, pick.p.id);
+    if (!rel) fail(`the release of ${name} was refused`);
+    else {
+      const later = {
+        ...rel,
+        transferWindow: 'summer',
+        windowWeeksLeft: 4,
+        goneNames: [],
+        freeAgents: (rel.freeAgents ?? []).filter(f => f.name !== name),
+      };
+      const forgotten = { ...later, releasedNames: [] };
+      /* The market. */
+      const listed = cm.buildMarket(forgotten).find(m => m.name === name);
+      if (!listed) fail(`${name} is not on the market even with the list taken away, so this cannot see the market rule`);
+      else if (cm.buildMarket(later).some(m => m.name === name)) fail(`the market lists ${name} for sale after you released him`);
+      else ok(`${name} is off the market once released, and would be back on it without the list`);
+      /* A deal, whatever screen it started on. */
+      const mp = listed ?? pick.mp;
+      if (!cm.buyPlayer(clone(forgotten), mp)) fail(`buying ${name} is refused even with the list taken away, so this cannot see the deal rule`);
+      else if (cm.buyPlayer(clone(later), mp)) fail(`a deal signs ${name} back after you released him`);
+      else ok(`a deal cannot sign ${name} back, and the same deal goes through without the list`);
+      /* The free agent list, reading the permanent list and not only a
+         record that says released: here the record says nothing of the sort. */
+      const level = st.clubStrengths[st.clubName];
+      const record = { name, position: pick.p.position, age: pick.p.age, rating: Math.floor(level) - 10, value: 0.2, wage: 5, since: later.season - 1, reason: 'unattached' };
+      const pooled = { ...later, wageCap: Number.MAX_SAFE_INTEGER, freeAgents: [record], releasedNames: [name] };
+      if (!cm.signFreeAgent(clone({ ...pooled, releasedNames: [] }), name)) fail(`${name} cannot be signed as a free agent even with the list taken away, so this cannot see the list`);
+      else if (cm.signFreeAgent(clone(pooled), name)) fail(`${name} signs as a free agent after you released him, because the rule reads only the pool record`);
+      else ok(`${name} cannot be signed off the free agent list whatever his record says`);
+    }
   }
 }
 

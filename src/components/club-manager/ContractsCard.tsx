@@ -19,11 +19,12 @@ const RELEASE_BLOCK_COPY: Record<ReleaseBlock, { face: string; title: string }> 
 const FREE_AGENT_BLOCK_COPY: Record<FreeAgentBlock, { face: string; title: string }> = {
   notInPool: { face: 'Gone', title: 'He is not on the free agent list any more.' },
   inSquad: { face: 'In your squad', title: 'He is already in your squad.' },
-  releasedByYou: { face: 'You let him go', title: 'You released him, and a man you release never comes back to you.' },
+  releasedByYou: { face: 'You let him go', title: 'You released him, so he will not sign for you again.' },
   justLeft: { face: 'Just left you', title: 'His deal with you ran out this summer, so you cannot take him straight back this season.' },
-  notInterested: { face: 'Not interested', title: 'Too good to sign for your club for nothing.' },
+  notInterested: { face: 'Not interested', title: 'Too good to sign for your club as a free agent.' },
   squadFull: { face: 'Squad full', title: 'You already have 30 players.' },
   overCap: { face: 'Over the cap', title: 'His wage would take you over the wage cap.' },
+  cantAfford: { face: 'Too dear', title: 'You cannot cover his signing on fee.' },
 };
 
 const FREE_AGENT_REASON: Record<FreeAgent['reason'], string> = {
@@ -298,8 +299,8 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
                  two of the engine's rules here and missed the cap and the squad
                  size, so a keen man could show Sign and nothing happened. The
                  card now asks the engine's own freeAgentBlock, and quotes the
-                 wage and length off the same freeAgentTerms signFreeAgent
-                 commits. */
+                 wage, length and signing on fee off the same freeAgentTerms
+                 signFreeAgent commits. */
               const block = freeAgentBlock(career, f);
               const t = freeAgentTerms(f);
               return (
@@ -313,18 +314,18 @@ export function ContractsCard({ career, onRenew, onRenewWithClause, onRelease, o
                       {f.position}, {f.rating} rated, {f.age}, {FREE_AGENT_REASON[f.reason]}
                     </div>
                     <div className="text-[9px] text-muted-foreground">
-                      {t.wage}k a week for {t.years} years, no fee
+                      {t.wage}k a week for {t.years} years, {money(t.fee)} to sign, no transfer fee
                     </div>
                   </div>
                   <button
                     data-sign-index={i}
                     onClick={() => onSignFreeAgent(f.name)}
                     disabled={!!block}
-                    title={block ? FREE_AGENT_BLOCK_COPY[block].title : `${t.years} years at ${t.wage}k a week, no fee. The window being shut does not matter.`}
+                    title={block ? FREE_AGENT_BLOCK_COPY[block].title : `${t.years} years at ${t.wage}k a week and ${money(t.fee)} to sign. No transfer fee, and the window being shut does not matter.`}
                     className={cn('shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold transition-all',
                       block ? 'bg-secondary text-muted-foreground cursor-not-allowed' : 'bg-primary text-primary-foreground hover:opacity-90')}
                   >
-                    {block ? FREE_AGENT_BLOCK_COPY[block].face : `Sign · ${t.wage}k/w · ${t.years}y`}
+                    {block ? FREE_AGENT_BLOCK_COPY[block].face : `Sign · ${t.wage}k/w · ${t.years}y · ${money(t.fee)}`}
                   </button>
                 </div>
               );
