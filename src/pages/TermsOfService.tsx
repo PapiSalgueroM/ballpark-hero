@@ -18,7 +18,7 @@ const TermsOfService = () => {
       </button>
       <h1 className="text-3xl font-bold mb-8">Terms of Service</h1>
 
-      <p className="text-sm text-muted-foreground mb-6">Last updated: September 7, 2026</p>
+      <p className="text-sm text-muted-foreground mb-6">Last updated: September 15, 2026</p>
 
       <section className="space-y-6 text-sm leading-relaxed text-muted-foreground">
         <div>
@@ -46,7 +46,7 @@ const TermsOfService = () => {
 
         <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">5. Advertising</h2>
-          <p>The Site is supported by advertising served through Google AdSense in non-personalized mode. Ads load only if you choose Accept on our cookie banner; choose Essential only and no advertising code is loaded at all. See our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> for the full advertising disclosure.</p>
+          <p>Advertising can help cover hosting costs and keep the Site free. The Site is set up to request Google AdSense ads in non-personalized mode. Google's advertising script loads only if you choose Accept on our cookie banner; choose Essential only and no advertising code is loaded at all. See our <Link to="/privacy" className="underline hover:text-foreground transition-colors">Privacy Policy</Link> for the full advertising disclosure.</p>
         </div>
 
         <div>
