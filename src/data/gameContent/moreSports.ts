@@ -524,6 +524,53 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
     ],
   },
 
+  '/fight-promoter': {
+    intro: [
+      "Fight Promoter is a free boxing matchmaking sim. You book the room, decide who fights whom, set the ticket price and pay the purses. Everything else in the building is somebody else's problem.",
+      "There are two ways to fill a room and they pull against each other. Put a known fighter in with somebody who cannot live with him and the house is full on the name, the fight is over early and nobody remembers it. Make the fight people actually want and it costs you both purses, and half the time your biggest draw walks out beaten and worth far less next time.",
+      "So the money says feed him and your name says make the fight. Measured in the game's own engine, a mismatch takes about 13 percent more at the door tonight and costs you six points of reputation across a career. Every fighter in it is invented.",
+    ],
+    howToPlay: [
+      "Name the promotion. You start with 0.12m, a name worth 5 out of 100 and ten fighters who will take your calls.",
+      "Pick a room. Six of them, from a 1,200 seat leisure centre up to a 78,000 seat national stadium, and each one wants a bigger name before it will have you.",
+      "Set the ticket price. Too high and you have paid for an empty room, too low and you have given the night away.",
+      "Build the card: pick a fighter, then pick who goes in with him. Both have to make the same weight.",
+      "Read the appeal number before you commit. Names sell tickets and a fight nobody can call sells tickets, and they are rarely the same match.",
+      "Put the show on, then read the room. A one sided beating earns you nothing at all.",
+    ],
+    rules: [
+      "Fighters take the greater of their guarantee or 58 percent of the door, so a big night is never a windfall and a room that does not fill still owes the guarantee.",
+      "The room costs its hire fee whether anybody turns up or not.",
+      "Your name is what opens bigger buildings: 12 for the town hall, 26 for the ballroom, 45 for the arena, 68 for the dome and 86 for the stadium.",
+      "Your name grows on the quality of the fights and nothing else. A full house watching a mismatch is worth almost nothing.",
+      "Quality is judged mostly on how close the fight was, counted in rounds won. A knockout in a one sided fight does not rescue it.",
+      "A loss costs a fighter far more drawing power than a win builds. That is why protecting a record is tempting.",
+      "Fighters leave a promotion nobody rates, and they take the top of your card with them. A promotion people want to be on replaces its weakest name with somebody better.",
+      "Nobody fights forever. They leave at 82 damage or at 39, and nobody carrying 80 damage gets matched at all.",
+      "Go below zero after a show and you are out of the business.",
+      "There is no betting anywhere in this game.",
+    ],
+    example: [
+      "Show one is a leisure centre. You put your best man in with a journeyman, the room is two thirds full on his name, and you clear a few thousand. Your name moves almost nothing.",
+      "Four shows later you are still in the leisure centre, because feeding him has not earned you a booking anywhere bigger. So you make the fight: your draw against the best man at his weight.",
+      "He loses a close one. His drawing power halves overnight and the next card is worth less. But the fight was the best thing anyone in that room had seen, your name jumps, and the town hall takes your call.",
+      "Twenty shows on you are in the arena with fighters who would not have returned your calls at the start, and you are making the same decision again with more money on it.",
+    ],
+    tips: [
+      "Early on you have to feed somebody, because you cannot afford a real fight and a bad night closes you.",
+      "The ticket price has a best answer and it is not the highest one. Watch the projected house move as you drag it.",
+      "Two men at the same weight with ratings within about ten points is the fight worth making.",
+      "Your draw is an asset with a record attached. Spend it deliberately, not by accident.",
+      "A damaged veteran still sells. That is exactly why he is still on your books.",
+    ],
+    faqs: [
+      { q: "Why did a sold out show still lose money?", a: "The guarantees and the room. Fighters take the greater of their guarantee or 58 percent of the door, so a small house against big guarantees loses whatever the room looked like." },
+      { q: "Why is my name not growing?", a: "Your name grows on the quality of the fights, judged mostly on how close they were. If you are feeding your draw soft opponents, you are selling tickets and building nothing." },
+      { q: "Where did my best fighter go?", a: "He left for somebody bigger. Fighters walk out on a promotion nobody rates, and the better he is, the more likely he is the one who goes." },
+      { q: "Are the fighters real?", a: "No. Every fighter is generated. No real boxer is matched, paid, beaten or promoted anywhere in this game, and no real venue is named." },
+      { q: "Is this the same as Fight Career and Fight Gym?", a: "Same fighters and the same bouts, a third chair. In the career you take the damage, in the gym you answer for it, and here you sell tickets on it." },
+    ],
+  },
   '/fight-gym': {
     intro: [
       "Fight Gym is a free boxing management sim. You open a room with two young fighters nobody else wanted and enough money for a few weeks, and you decide what happens to everyone who walks through the door after that.",

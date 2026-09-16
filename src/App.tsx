@@ -55,6 +55,7 @@ const ResetPassword = lazy(() => import("./pages/ResetPassword"));
 const UfcChain = lazy(() => import("./pages/UfcChain"));
 const FightCareer = lazy(() => import("./pages/FightCareer"));
 const FightGym = lazy(() => import("./pages/FightGym"));
+const FightPromoter = lazy(() => import("./pages/FightPromoter"));
 const Profile = lazy(() => import("./pages/Profile"));
 const Leaderboard = lazy(() => import("./pages/Leaderboard"));
 const GuessTheYear = lazy(() => import("./pages/GuessTheYear"));
@@ -354,6 +355,7 @@ const AppContent = () => {
         <Route path="/ufc-chain" element={<UfcChain />} />
         <Route path="/fight-career" element={<FightCareer />} />
         <Route path="/fight-gym" element={<FightGym />} />
+        <Route path="/fight-promoter" element={<FightPromoter />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/profile/:username" element={<Profile />} />
         <Route path="/reset-password" element={<ResetPassword />} />
