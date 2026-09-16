@@ -1,5 +1,26 @@
 # Project state
 
+## COLLEGE GRID RESOLVED 2026-09-16: it works, and the purge must NOT run
+
+The open question from the 610 to 619 handoff is answered, and the answer changes the pending
+action.
+
+**Do not purge the `ai_validation_cache` rows for `college-grid`.** The precondition recorded in
+the handoff was 24 hours with zero new rows. Measured 2026-09-16 at about 16:45 UTC: the table
+holds **382** rows for that game, up from the 381 recorded, and the newest was written
+**2026-09-16 11:23:45 UTC**, roughly five hours earlier. The clock has reset, so the purge is not
+due and running it now would delete a live cache.
+
+**And the game is working, which is what the handoff could not tell.** The new row is
+`ray lewis|miami (fl)|top 10 pick`, verdict `valid: false`, with `unverified` absent. Three things
+follow. The validator ran rather than timing out. It reached a definite verdict rather than the
+fail closed `unverified` retry, so no player lost a guess to a quota or a parse error. And the
+verdict is factually right: Ray Lewis went 26th overall in the 1996 draft out of Miami, so he was
+not a top ten pick (Pro Football Reference and the Pro Football Hall of Fame both give 26).
+
+So the "zero completions in six hours" reading in the handoff was what it said it probably was, a
+niche game with a low completion rate, not a broken one. Nobody needs to investigate College Grid.
+
 ## ROUND 626 LIVE ON MAIN 2026-09-16: three harness holes, and 617 and 618 integrated
 
 Main `8998acd1` carries Rounds 617, 618 and the Round 626 harness fixes. Full gate on the
