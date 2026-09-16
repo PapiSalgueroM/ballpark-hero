@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { ALL_GAMES } from '@/data/gameRegistry';
@@ -126,7 +126,7 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
      deterministic graph instead: a ring through my category, a link into the
      next category (so the whole site is one crawlable component, proven by
      simRelatedGames with a real BFS), and two hash-spread variety picks. */
-  const related = relatedGamesFor(path);
+  const related = useMemo(() => relatedGamesFor(path), [path]);
 
   return (
     <section
