@@ -1,5 +1,42 @@
 # Work board
 
+**Round 619, 2026-09-16: free agents and contract termination are BUILT, and two lanes worked
+this round.** The engine and the UI are on PR 103, branch
+`claude/free-agents-contract-termination-5oeyzz`, head `bc89389`, merged up to main `f63cf75`.
+`docs/design/round-619-free-agents-contract.md` landed on main from the other lane marked
+CONTRACT DRAFTED, NO CODE WRITTEN, so there is no duplicate code, but **do not implement 619
+from that contract: it is already built.** Read this entry first.
+
+**Where the two agree**, having been reached independently, which is the useful signal: a
+separate `FreeAgent` record rather than widening `MarketPlayer`; no window gate on either
+signing a free agent or ending a contract, with the nine existing guards untouched; a re-sign
+lock for the season a man was let go; the pool must never become a quality upgrade rack; and
+`simAcademy` is a gate on the round rather than an afterthought. It passes.
+
+**Where they differ, and it is one decision, owner's call.** The contract wants termination to
+cost a PERSISTING severance (`SeveranceRow[]`, `wageBill` becomes squad plus severance), so the
+wage cap keeps counting a man after he has gone. The built version charges a ONE OFF settlement
+out of the transfer kitty at 25 to 85 percent of the wages still owed, reading how much he wants
+to leave, and his wage leaves the bill that week. Both stop termination being free, and the
+built one is measured doing so. The contract's model additionally stops the wage cap loosening
+the moment you release somebody, which the built one does allow: transfer money converts into
+wage room. That is the whole of the difference and it is worth a decision rather than a quiet
+default.
+
+**Two smaller gaps against the contract, neither shipped:** `fillSquadGaps` still builds its own
+pool instead of reading the shared one (the contract calls one pool one set of rules an owner
+requirement), and an unsigned free agent does not lose rating over a season, he just ages off
+the board after 34 weeks.
+
+**What the built round carries:** `src/lib/clubManagerFreeAgents.ts`, the state field and its
+`ensureFreeAgents` migration with `SAVE_VERSION` untouched, `terminateContract`, `signFreeAgent`,
+`canPayOff`, `committedWageBill`, payoffs on the finance projection and in the closed ledger, a
+Free tab and a payoff desk, help and SEO copy, and
+`scripts/simClubManagerFreeAgents.mjs` at 13 sections with 9 negative controls all confirmed to
+fail the section each targets. An adversarial review raised 31 findings, 25 refuted, 6 confirmed
+and all 6 fixed; the worst was a money printer that nine green sections missed because they all
+measured rating and none measured money.
+
 **Round 626, 2026-09-16: Rounds 617, 618 and 626 are LIVE ON MAIN at `8998acd1`.** Full gate
 before landing: tsc 0, build 0, all 324 harnesses green. The adversarial review's two findings
 against 617 and 618 are fixed and each was reproduced first, and the third hole, `simPress`
