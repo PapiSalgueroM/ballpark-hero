@@ -68,6 +68,11 @@ const GENERATORS = [
   /* Round 473: the columnist who follows a career. Broadsheet bylines rather
      than footballer names, on purpose, and checked here like everything else. */
   { file: 'src/lib/careerCritic.ts', first: 'CRITIC_FIRST', last: 'CRITIC_LAST', what: 'career critics' },
+  /* Round 620: every fighter in Fight Career, Fight Gym and Fight Promoter is
+     generated from these two banks, including the champions, so the cross
+     product is checked here like every other bank. The three games share one
+     roster model, so registering the source file covers all of them. */
+  { file: 'src/lib/fightCareer.ts', first: 'FIRST', last: 'LAST', what: 'boxers' },
 ];
 
 const bankOf = (src, name) => {
