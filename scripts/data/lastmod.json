@@ -1,12 +1,12 @@
 {
   "__version": 3,
   "/": {
-    "hash": "d9cbb67b3f522482",
-    "date": "2026-09-15"
+    "hash": "d279e20d5acb3de0",
+    "date": "2026-09-16"
   },
   "/about": {
-    "hash": "26b6575a336ad5ee",
-    "date": "2026-09-01"
+    "hash": "e9b17eb973aac3d9",
+    "date": "2026-09-16"
   },
   "/accessibility": {
     "hash": "be624390c0098085",
@@ -453,8 +453,8 @@
     "date": "2026-09-05"
   },
   "/privacy": {
-    "hash": "06f7d95a75df5356",
-    "date": "2026-09-11"
+    "hash": "f2c8213cdf602fa9",
+    "date": "2026-09-16"
   },
   "/pro-basketball": {
     "hash": "c1d239757fa9b51f",
@@ -533,8 +533,8 @@
     "date": "2026-09-05"
   },
   "/stadium-tycoon": {
-    "hash": "711022bc0b454ca1",
-    "date": "2026-09-15"
+    "hash": "7a61e44d5bf8c530",
+    "date": "2026-09-16"
   },
   "/stat-detective": {
     "hash": "c4a41377555608e0",
@@ -553,8 +553,8 @@
     "date": "2026-09-05"
   },
   "/terms": {
-    "hash": "fc4bf2d05dfe6f8a",
-    "date": "2026-09-07"
+    "hash": "d602c5e0b75cef5a",
+    "date": "2026-09-16"
   },
   "/transfer-path": {
     "hash": "2ff2ed0d2d66fb49",
@@ -581,8 +581,8 @@
     "date": "2026-09-02"
   },
   "/wonderkid-factory": {
-    "hash": "2a8d5b6c6203b635",
-    "date": "2026-09-15"
+    "hash": "73d203622d8c7f4c",
+    "date": "2026-09-16"
   },
   "/world-cup-bracket": {
     "hash": "ff74eb7f3ef852e3",

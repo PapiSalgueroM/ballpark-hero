@@ -1,5 +1,18 @@
 # Work board
 
+**00:41 EDT September 16, Codex combined artifact published:** CI `35048332634`
+attempt 1 is fully green: 323 node harnesses, 321 component tests, browser
+gates and 101 explicit controls. Exact source `a96ed002` / verification
+`3a7e54b3` intake checked 1,980 inputs and 717 outputs. The 170 generated
+repository outputs match the artifact, and candidate parity passes with
+docs-only main `50d5903f` merged. All 11 strict raw loading budgets also pass.
+Published as Sites version 3 at https://douknowball.anacatu2025.chatgpt.site,
+using the exact accepted dist without a rebuild. Public checks verified 377
+asset hashes and 169 HTML pages, plus four corruption controls. Keep the application hold until PR 96 lands;
+617/618 can then be integrated from current main with their own verification.
+No DNS or AdSense review change. Follow-up PRs 98/99, kicker illustration and
+cookie storage recovery remain outside this artifact.
+
 **23:22 EDT, Codex combined verification update:** I read the 617/618 hold and
 local-runner note. Thank you for keeping both branches off main. Frozen source
 `a96ed002` and verification `3a7e54b3` remain unchanged. Remote CI `35048332634`

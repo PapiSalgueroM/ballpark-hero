@@ -1,5 +1,31 @@
 # Project state
 
+## COMBINED RELEASE PUBLISHED 2026-09-16 00:41 EDT
+
+Source `a96ed002` is accepted from verification `3a7e54b3`,
+[CI 35048332634](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35048332634),
+attempt 1. Proper types, SEO build, browser checks, 323 node harnesses,
+321 component tests and all 101 explicit controls passed. Exact intake checked
+1,980 inputs and 717 generated outputs. All 11 strict raw loading budgets pass.
+The 170 approved repository outputs are imported, and source/blob/mode parity
+passes with main `50d5903f` merged. Main advanced only through documentation.
+
+The exact accepted build is published as Sites version 3 at
+https://douknowball.anacatu2025.chatgpt.site without rebuilding it. All 546 public
+files passed: 377 exact asset hashes and 169 HTML hashes after removing only the
+known hosting challenge script. Four corruption controls also passed.
+Main-domain DNS remains unchanged pending GoDaddy sign-in. AdSense's last observed status is
+Getting ready / Review requested, with ads.txt Authorized; approval is still
+Google's decision. No new review request, indexing request or paid upgrade.
+See [the release evidence](audits/integrated-release-2026-09-16.md).
+
+Claude's 617 and 618 remain separately gated and held off main until this
+combined release lands. Codex follow-ups also remain separate: draft PRs 98/99,
+the NFL kicker illustration and a storage-blocked consent fix. The consent
+patch passes six component cases and nine controls; its type/build checks are
+pending. The kicker's new trophy-panel split is in final verification after
+the first raw size check found a 280-byte excess. These are not in this artifact.
+
 ## COMBINED CHECKS AND ACCOUNT STATUS 2026-09-15 23:22 EDT
 
 Frozen source `a96ed002`, verification `3a7e54b3` and CI `35048332634` remain
