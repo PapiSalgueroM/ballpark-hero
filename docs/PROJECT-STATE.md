@@ -1,34 +1,44 @@
 # Project state
 
-## COMBINED RELEASE CHECK 2026-09-15 20:27 EDT
+## COMBINED RELEASE REPAIR 2026-09-15 21:33 EDT
 
 Run [35038033612](https://github.com/PapiSalgueroM/ballpark-hero/actions/runs/35038033612)
-checks source `03fa0efa96369ecf565c0c3039e629aee2a2c1cf` through verification
-`780106e50d8d272e4a98ef5230435632caa8d84d`. Types, the SEO build and portable
-browser gates passed. The full component-test step failed; the full node
-suite is still running. This run is not release approval. No duplicate CI
-or production-data test has been started. Codex is diagnosing the failure
-offline while the remaining checks collect evidence.
+finished without approval. It checked source `03fa0efa` through verification
+`780106e5`. Types, SEO build, browser gates and explicit control steps passed.
+The node table contains 318 PASS and two FAIL rows: `simLiveSimMotion` and
+`simRarityAgreement`. Full Vitest has 302 passing and 11 failing tests, all
+failures in `liveSimMotion.test.tsx`. No built artifact was packaged.
 
-The public alternate-host homepage and Stadium Tycoon now also boot in the
-Codex browser. The tycoon shows its rules, live clock, income and pitch.
-This is a manual smoke check of the accepted 588 preview, not the new union.
-Domain ownership/TLS validation remains pending and no DNS has changed.
-The GoDaddy DNS page is open but signed out; Anthony has been asked to log in.
-At 20:36 EDT, home, Soccer Career, robots.txt and ads.txt return exact expected
-content for both AdSense crawler headers and the normal Node client. A Python
-header receives Cloudflare 403. This is a workstation HTTP check, not a Google
-crawl. See [the access evidence](hosting/crawler-header-check-2026-09-15.json).
+The test-only motion repair `47d2ecd3` preserves all four terminal outcomes
+and the existing 300-draw bound. Eighteen focused tests, nine motion controls
+and 16 ID-comparison controls pass. Navbar repair `14778302` suppresses guest
+and hidden-tab reads while preserving foreground, login and completion
+refreshes. Seven mocked cases, 12 controls and its app type gate pass. See
+[the navbar evidence](audits/navbar-stats-reads-2026-09-15.md).
 
-A separate post-release repair is reserved in `codex/navbar-stats-read-repair`:
-stop personal-stat reads for guests and hidden tabs while preserving visible
-signed-in updates. Its source audit found the navbar queries even though the
-guest interface does not display those stats. It is not in the frozen union
-or the published preview. Tests use mocked requests only.
+The combined candidate is `31f5672a` in `codex/integrated-588-repaired`.
+It also loads the existing Daily Legend overlay only when earned. This was
+needed after the navbar repair crossed two unchanged download limits. The
+new production build and all 11 offline route budgets pass, including Club
+Manager at 634,716 gzip bytes and Wonderkid Factory at 276,366 bytes. Its app
+type gate passes; full offline Vitest is running. These results are not full
+release approval. Frozen source and verification branches remain untouched.
 
-The last directly observed AdSense state remains Review requested at 12:37
-EDT. Another attempt to read the existing AdSense tab timed out; no new
-status or review submission is claimed.
+The rarity failure says only that the attacking-midfielder pool was empty.
+A bounded anonymous probe at 01:25:43 UTC returned all 2,240 usable rows over
+three HTTP 200 pages. It does not establish the historical failure cause.
+The new harness memo cannot intercept this endpoint. Source review did find
+that Rarity Round keeps failed/empty pool promises for the session, preventing
+its Try again button from recovering. Codex reserves a separate minimal cache
+recovery repair with offline tests. No added automatic retries or scoring
+changes are planned. See [the probe](audits/rarity-category-probe-2026-09-15.json).
+
+The accepted 588 alternate preview remains public. Main-domain cutover waits
+for the accepted combined release and the pending GoDaddy sign-in. DNS has
+not changed. The last directly observed AdSense state remains Review requested
+at 12:37 EDT. Search Console's existing tab still displayed no recorded NBA
+guide crawl, but its refresh timed out, so this is not a new indexing result.
+No further review or indexing request was submitted.
 
 ## ANIMATION PREVIEW LIVE 2026-09-15 19:56 EDT
 
