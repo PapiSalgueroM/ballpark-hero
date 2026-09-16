@@ -58,6 +58,9 @@
  *                                expiry path, which is the bug this section
  *                                was written for. Section 3 must find men
  *                                called "(Youth)" on a first team board.
+ *   CM_FA_CONTROL=nodecay        stops an unsigned man losing anything for a
+ *                                summer on the board. Section 15 must find
+ *                                them coming through unchanged.
  *   CM_FA_CONTROL=loanhole       puts the weekly bill back in the free agent
  *                                wage gate, so a loaned out earner stops
  *                                counting. Section 13 must find the ceiling
@@ -79,6 +82,19 @@
  *   walked players at the wrong age            0 of 30        30 of 30 (pre-fix)   must be 0
  *   announced on a free AND retired            0              7 of 411 (pre-fix)   must be 0
  *   clubs renting ceiling with a loan out      0 of 3         3 of 3 (loanhole)    must be 0
+ *   unsigned men who got worse over a summer   23 of 23       0 (nodecay)          must be all
+ *
+ * NOT COVERED HERE, on purpose. Round 619 also made fillSquadGaps read the real
+ * free agent board before falling back to its own marketBase filter. Three
+ * attempts to fence that here all measured zero movement, and the reason is
+ * worth writing down rather than repeating: fillSquadGaps only fires when the
+ * senior count drops under SENIOR_FLOOR, which a normal six season run never
+ * does, so a control aimed at it cannot reach it. Its two real guards are the
+ * unchanged band and the ASCENDING sort that takes the worst candidates first,
+ * and the gate on all of it is simAcademy, which drives the engaged against
+ * neglectful comparison over many seasons and measures the academy gap
+ * directly. That is the harness that caught this class of bug before and it is
+ * run on this round.
  *   mean settle rate, wants out               0.270          n/a                  under contented
  *   mean settle rate, contented               0.670          n/a                  by 0.15 or more
  *   free agent signings in a shut window      12 of 12       0 of 12 (windowlock) must be 12
@@ -119,7 +135,7 @@ const ENTRY = path.join(TMP, 'cmFa.entry.mjs');
 const BUNDLE = path.join(TMP, 'cmFa.bundle.mjs');
 
 const CONTROL = process.env.CM_FA_CONTROL || '';
-const KNOWN = ['nogate', 'primefree', 'nodupeguard', 'windowlock', 'noresignguard', 'nopayoffledger', 'youthonboard', 'flipmoney', 'loanhole'];
+const KNOWN = ['nogate', 'primefree', 'nodupeguard', 'windowlock', 'noresignguard', 'nopayoffledger', 'youthonboard', 'flipmoney', 'loanhole', 'nodecay'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_FA_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -172,6 +188,12 @@ if (CONTROL) {
       "  if (fa.wasMine && fa.since === career.season && (fa.reason === 'terminated' || fa.reason === 'expired')) {",
       '  if (false) {',
       'clubManager.ts (the re-sign guard)');
+  } else if (CONTROL === 'nodecay') {
+    /* Stop an unsigned man losing anything for a summer on the board.
+       Section 15 must find them all coming through unchanged. */
+    engine = swap(engine, '    const rating = Math.max(40, fa.rating - FA_IDLE_DECAY);',
+      '    const rating = fa.rating;',
+      'clubManager.ts (the idle decay)');
   } else if (CONTROL === 'loanhole') {
     /* Put the weekly bill back in the gate, so a loaned out earner stops
        counting and the ceiling can be rented. Section 13 must find it. */
@@ -971,6 +993,45 @@ console.log('13) The wage ceiling cannot be rented with a loan');
   console.log(`   ${tested} clubs had a wage-blocked free agent, ${rented} let a loan out buy the headroom`);
   if (tested === 0) fail('no club had a free agent refused on wages, so this section proves nothing');
   if (rented > 0) fail(`${rented} clubs rented ceiling headroom by loaning players out`);
+}
+
+/* ================================================================== */
+console.log('14) A man nobody signs gets worse');
+/*
+ * The other half of stopping the board silting up. The shelf drops him
+ * eventually, but a decent player sitting on it for a season should not be the
+ * same player next August.
+ */
+{
+  let traced = 0;
+  let decayed = 0;
+  let wrongWay = 0;
+  for (const club of CLUBS) {
+    reseed(armSeed(club, 5));
+    let s = startCareer(club);
+    for (let season = 0; season < 4; season += 1) {
+      s = runSeason(s);
+      if (s.sacked) break;
+      /* Captured at the END of the season, immediately before the rollover.
+         The first draft sampled in August and traced nobody, because a man on
+         the board then has a whole season of weekly ticks behind him by the
+         summer and the shelf has already dropped him. The men who actually
+         survive a rollover are the ones who arrived late. */
+      const before = new Map(freeAgentPool(s).map(fa => [fa.name, fa.rating]));
+      s = nextSeason(s);
+      for (const fa of freeAgentPool(s)) {
+        const was = before.get(fa.name);
+        if (was === undefined) continue;
+        traced += 1;
+        if (fa.rating < was) decayed += 1;
+        else if (fa.rating > was) wrongWay += 1;
+      }
+    }
+  }
+  console.log(`   ${traced} men traced across a summer on the board: ${decayed} got worse, ${wrongWay} got better`);
+  if (traced < 5) fail(`only ${traced} men stayed on the board across a summer, so this section proves nothing`);
+  if (wrongWay > 0) fail(`${wrongWay} unsigned free agents improved while nobody was training them`);
+  if (decayed < traced) fail(`${traced - decayed} unsigned free agents came through a whole summer unchanged`);
 }
 
 console.log(failures === 0 ? '\nALL FREE AGENT CHECKS PASSED' : `\n${failures} FAILURES`);

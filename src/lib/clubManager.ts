@@ -69,7 +69,8 @@ import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
 /* Round 619: the free agent pool and the payoff maths, in their own file for
    the same reason the deals and the staff are in theirs. */
 import {
-  FA_BOARD_FLOOR, FA_SHELF_WEEKS, WORLD_POOL_FROM_YEAR, aiInterest, capPool, dedupePool,
+  FA_BOARD_FLOOR, FA_IDLE_DECAY, FA_SHELF_WEEKS, WORLD_POOL_FROM_YEAR, aiInterest, capPool,
+  dedupePool,
   uniqueFreeAgentId,
   freeAgentFromMarket, freeAgentFromPlayer, freeAgentTerms, sortPool,
   refusalLine, signedValue, terminationCost, terminationMoraleHit, wageCeilingBlocks,
@@ -6715,6 +6716,7 @@ function rollFreeAgents(
    */
   const carried: FreeAgent[] = [];
   const retiredNames = new Set(state.retiredNames ?? []);
+  const mine = new Set(state.squad.map(p => p.name));
   for (const fa of state.freeAgents ?? []) {
     if (retiredNames.has(fa.name)) continue;
     const age = fa.age + 1;
@@ -6724,13 +6726,23 @@ function rollFreeAgents(
       state.retiredNames = [...(state.retiredNames ?? []), fa.name];
       continue;
     }
+    /* Signed by somebody in the meantime, including by this club's own
+       emergency fill above, so he is not on the board any more. Checked here
+       rather than plumbed back out of fillSquadGaps: the squad is the truth
+       and this cannot drift from it. */
+    if (mine.has(fa.name)) continue;
     /* A summer of nobody calling. Past the shelf he is out of the game, and
        the projection is free to list him at a club again next time it is
        asked, which is the honest answer for a man this save stopped
        simulating. */
     const weeks = fa.weeks + 6;
     if (weeks > FA_SHELF_WEEKS) continue;
-    carried.push({ ...fa, age, weeks });
+    /* And a year without a club costs him. Training alone is not training
+       with a team, so an unsigned man slides, which is both true and the
+       thing that stops the board silting up with players who were good when
+       they arrived. He is dropped entirely at the shelf either way. */
+    const rating = Math.max(40, fa.rating - FA_IDLE_DECAY);
+    carried.push({ ...fa, age, weeks, rating });
   }
   /* Arrivals join at their true age and at zero weeks unattached: today is the
      day they became free. They DO face the summer rush below, because a rival
@@ -15178,7 +15190,7 @@ const SENIOR_FLOOR = 12;
  */
 function fillSquadGaps(
   clubName: string, season: number, squad: CMPlayer[], yearsOnNow: number,
-  retiredNames: string[], eraId: string = 'now',
+  retiredNames: string[], eraId: string = 'now', board: readonly FreeAgent[] = [],
 ): { squad: CMPlayer[]; signed: string[] } {
   const seniors = squad.filter(p => !p.isYouth && p.age >= 20).length;
   if (seniors >= SENIOR_FLOOR) return { squad, signed: [] };
@@ -15186,12 +15198,35 @@ function fillSquadGaps(
     ?? STRENGTH_PRIORS[clubName] ?? 66;
   const taken = new Set(squad.map(p => p.name));
   const retired = new Set(retiredNames);
-  // Well below what this club would normally field: these are the players
-  // nobody else wanted in August, and they should feel like it.
-  const pool = marketBase(yearsOnNow, eraId)
-    .filter(p => !taken.has(p.name) && !retired.has(p.name)
-      && p.rating <= baseline - 14 && p.rating >= baseline - 26)
-    .sort((a, b) => a.rating - b.rating);
+  /*
+   * Round 619: the real free agent board comes FIRST, then the old made up
+   * one. One pool and one set of rules is what the owner asked for, and until
+   * this round the sporting director was conjuring his own list out of other
+   * clubs' rosters while an actual board of unattached players sat unread.
+   *
+   * THE BAND IS UNCHANGED AND THAT IS THE WHOLE POINT. The comment above
+   * SENIOR_FLOOR is the scar: an earlier version filled squads to eighteen
+   * with the best free agents it could find and simAcademy measured the value
+   * of running an academy collapsing from 4.31 rating points to 0.38, which
+   * turned neglect into a strategy. So the board is read through the SAME
+   * "well below what this club would field" filter as the made up list. A
+   * manager who lets his squad rot still gets journeymen, he just gets real
+   * ones now. simAcademy is the gate on this and it is re-run.
+   */
+  const fromBoard: MarketPlayer[] = board
+    .filter(fa => !taken.has(fa.name) && !retired.has(fa.name)
+      && fa.rating <= baseline - 14 && fa.rating >= baseline - 26)
+    .map(fa => ({
+      name: fa.name, club: fa.lastClub, position: fa.position, age: fa.age,
+      rating: fa.rating, price: 0, value: fa.value, generated: fa.generated,
+    }));
+  const onBoard = new Set(fromBoard.map(p => p.name));
+  const pool = [
+    ...fromBoard,
+    ...marketBase(yearsOnNow, eraId)
+      .filter(p => !taken.has(p.name) && !retired.has(p.name) && !onBoard.has(p.name)
+        && p.rating <= baseline - 14 && p.rating >= baseline - 26),
+  ].sort((a, b) => a.rating - b.rating);
   if (!pool.length) return { squad, signed: [] };
   const want = clamp(SENIOR_FLOOR - seniors, 0, 4);
   const out = [...squad];
@@ -15467,6 +15502,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       clubName, season, squad, nextYearsOn,
       [...(career.retiredNames ?? []), ...retiredNow.map(r => r.name)],
       eraId,
+      career.freeAgents ?? [],
     );
     squad = emergency.squad;
     freeAgentsIn.push(...emergency.signed);

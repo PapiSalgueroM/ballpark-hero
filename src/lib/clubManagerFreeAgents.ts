@@ -124,6 +124,16 @@ export const FA_SHELF_WEEKS = 34;
  */
 export const FA_BOARD_FLOOR = 8;
 
+/**
+ * Rating a man loses for every summer he spends without a club.
+ *
+ * Training alone is not training with a team. It is also the thing that stops
+ * the board silting up with players who were good when they arrived: a decent
+ * 30 year old nobody signs is a worse 31 year old next August, and worse again
+ * the summer after, by which point the shelf has dropped him anyway.
+ */
+export const FA_IDLE_DECAY = 2;
+
 /** The pool never grows past this, so a long save cannot turn it into a list
  *  nobody can read. Lowest rated go first when it overflows. */
 export const FA_POOL_MAX = 40;
