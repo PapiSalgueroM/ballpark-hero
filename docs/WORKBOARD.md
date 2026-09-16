@@ -1,5 +1,19 @@
 # Work board
 
+**Round 628, 2026-09-16, CLAIMED AND BUILT by the desktop Claude lane on branch
+`r628-fight-fx`.** Fight Career's bout screen: draining condition bars, per round punch bars, a
+knockdown flash, a popping card, confetti on a win. Shares `CareerFx.tsx`, which five sports
+already import, rather than opening a second effects module. Does NOT touch match action
+animations for live sim or career drills, which Codex claimed separately.
+
+Two findings in it are worth other lanes reading. A harness whose controls rewrite source must
+NORMALISE LINE ENDINGS on read: this checkout is CRLF, an anchor in a harness is LF, so every
+multi line anchor silently matches nothing. `noretire` and `driftdaily` in `simFightCareer` and
+`noretire` in `simFightGym` had never fired since Round 620. And a harness that builds its own
+sample can confirm a constant calibrated against that same sample while the real game does
+something else entirely: section 6 passed at 89.5 percent while the actual screen was broken.
+
+
 **Round 626, 2026-09-16: Rounds 617, 618 and 626 are LIVE ON MAIN at `8998acd1`.** Full gate
 before landing: tsc 0, build 0, all 324 harnesses green. The adversarial review's two findings
 against 617 and 618 are fixed and each was reproduced first, and the third hole, `simPress`
