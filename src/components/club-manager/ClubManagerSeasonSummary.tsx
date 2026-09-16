@@ -6,12 +6,26 @@ import { money } from '@/lib/clubManager';
 import type { CareerState, SeasonSummary } from '@/lib/clubManager';
 import type { useClubManager } from '@/hooks/useClubManager';
 
+/* Round 628: the five terms, in the order they are worth. Kept beside the
+   screen that prints them rather than in the engine, because the wording is
+   copy and the numbers are not. */
+const SCORE_TERMS = [
+  { key: 'form', label: 'League form' },
+  { key: 'title', label: 'Title' },
+  { key: 'cup', label: 'Cup run' },
+  { key: 'euro', label: 'Europe' },
+  { key: 'objectives', label: 'Board' },
+] as const;
+
 export default function ClubManagerSeasonSummary({ sm, c, g }: {
   sm: SeasonSummary;
   c: CareerState;
   g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'>;
 }) {
   const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
+  /* Optional: a summary stored before Round 628 carries no breakdown, and the
+     block below simply does not render for it. */
+  const parts = sm.seasonScoreParts;
   let tick = 0;
   const tickIn = () => ({ animationDelay: revealDelay(tick++) });
   return (
@@ -118,6 +132,22 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
               <p className="cm-tick-in text-sm text-foreground flex items-start gap-2" style={tickIn()}>
                 <span className="shrink-0">⭐</span>Qualified for next season's Champions League
               </p>
+            )}
+            {/* Round 628: the season score shows its working. It used to be
+                league points plus 10 a trophy, which meant the tile next to
+                Finish and Points was really reading which club you picked, so
+                there was nothing to explain. Now it is five things you did,
+                and a number a player cannot explain is a number they cannot
+                aim at. Only the terms that scored anything are listed. */}
+            {parts && (
+              <div className="pt-1">
+                <div className="cm-tick-in text-[10px] text-muted-foreground uppercase tracking-wider mb-1" style={tickIn()}>
+                  Season score {sm.seasonScore} of 130
+                </div>
+                <p className="cm-tick-in text-xs text-muted-foreground" style={tickIn()}>
+                  {SCORE_TERMS.filter(t => parts[t.key] > 0).map(t => `${t.label} ${parts[t.key]}`).join(' · ') || 'Nothing on the board yet'}
+                </p>
+              </div>
             )}
             {sm.objectives && sm.objectives.length > 0 && (
               <div className="pt-1">
