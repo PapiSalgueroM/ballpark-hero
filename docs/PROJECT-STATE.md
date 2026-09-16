@@ -1,5 +1,47 @@
 # Project state
 
+## REVIEW ROUND 2026-09-16: the free agent board was a money printer
+
+An adversarial review of the Round 619 diff, four lenses over correctness,
+save safety, exploits and the UI, found nine real defects on a branch whose
+twelve harness sections were all green. Every one is fixed and pushed
+(`e4a1ab6` on PR 103). **The lesson worth keeping is the shape of the miss, not
+the bug.**
+
+**Nine green sections measured RATING and none measured MONEY.** `signFreeAgent`
+charged the signing on fee, 18 percent of notional value, and then wrote the
+FULL notional value onto the squad record. `sellValue` is 90 percent of value,
+so a free agent was worth five times what he cost the moment he signed. Sign
+every signable free agent each week and list him: **Everton turned 43m into
+358.81m in one season**, 22 signings for 55.0m against 19 sales for 358.9m, and
+Manchester City made 241m. Every note came from players the game invented.
+Section 11 is the check that was missing, and it buys and re-lists only the
+free agents it signed so an existing star's sale cannot flatter the number.
+
+The fix is the honest reading of a free transfer rather than a nerf: a market
+value is what a club would pay in a FEE and the market already said nothing
+about this man, while his ABILITY is real and is what you signed him for.
+
+**The other eight, each measured before it was fixed:**
+
+| Defect | Measured |
+|---|---|
+| Aged and retired twice at the rollover | 30 of 30 walked players two years too old; 5 of 221 departures silently retired after the feed announced them |
+| Pool ids not unique (Round 567's lesson, missed for the pool) | Ederson and Ederson share one id, signing one deletes both |
+| Payoff desk offered academy pads and the engine dropped them | button, title and news all claimed a free agent the engine never made |
+| `netSpend` blind to a payoff (Round 507's mistake, repeated) | four payoffs took 43m to 30.5m and it still graded done |
+| Season business printed a settlement as a fee | a 4.7m payoff rendered `OUT (0.0m)` |
+| Help copy overclaimed the season one board | true of the world's half only |
+| `ensureFreeAgents` not failing closed on records | one bad entry takes down buildMarket, not a screen |
+| Day one transfer feed, `goneNames` aliasing, four UI issues | see the commit |
+
+**And a control that had stopped controlling.** `youthonboard`'s anchor broke on
+an unrelated edit, so it failed closed and proved nothing. That IS the right
+failure, and it is still a control out of action: anchors want to be one line,
+not a pair that an adjacent change can move.
+
+Eight controls now, all confirmed to fail the section each targets.
+
 ## OWNER REPORT LOGGED, AND BUILT 2026-09-16: Club Manager free agents
 
 **Filed as a Club Manager feature request, not a site issue.** Source: the
