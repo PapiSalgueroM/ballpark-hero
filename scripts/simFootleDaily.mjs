@@ -61,7 +61,8 @@ console.log('1) The real hook, rendered: the daily target is drawn from the fetc
   let env = {};
   let copy = null;
   if (CONTROL === 'freeze') {
-    const src = fs.readFileSync(path.join(ROOT, 'src/hooks/useGame.ts'), 'utf8');
+    /* normalised on read: the pattern below spans lines, which a CRLF checkout never matches */
+    const src = fs.readFileSync(path.join(ROOT, 'src/hooks/useGame.ts'), 'utf8').replaceAll('\r\n', '\n');
     let regressed = src.replace(/\n\s*supabasePuzzle: todaysTarget,\n\s*getPuzzleId: \(p\) => p\.name,/, '');
     regressed = regressed.replace(/puzzles: players,/, 'puzzles: dailyPool,');
     if (regressed === src || /supabasePuzzle: todaysTarget/.test(regressed) || !/puzzles: dailyPool,/.test(regressed)) {

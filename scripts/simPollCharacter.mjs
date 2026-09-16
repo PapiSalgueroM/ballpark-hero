@@ -60,9 +60,7 @@ function runVitest(env = {}, tests = TESTS) {
    one line matches zero times and the guard aborts the control instead of
    running it. Same cause as the two dead fight career controls. */
 function changedCopy(relativePath, needle, replacement, tempDir) {
-  const source = fs.readFileSync(path.join(ROOT, relativePath), 'utf8').replaceAll('
-', '
-');
+  const source = fs.readFileSync(path.join(ROOT, relativePath), 'utf8').replaceAll('\r\n', '\n');
   const matches = source.split(needle).length - 1;
   if (matches !== 1) abort(`control cannot run: expected one target in ${relativePath}, found ${matches}`);
   const changed = source.replace(needle, replacement);
@@ -73,9 +71,7 @@ function changedCopy(relativePath, needle, replacement, tempDir) {
 }
 
 function sweptCopy(relativePath, pattern, replacement, atLeast, tempDir) {
-  const source = fs.readFileSync(path.join(ROOT, relativePath), 'utf8').replaceAll('
-', '
-');
+  const source = fs.readFileSync(path.join(ROOT, relativePath), 'utf8').replaceAll('\r\n', '\n');
   const matches = (source.match(pattern) ?? []).length;
   if (matches < atLeast) abort(`control cannot run: expected at least ${atLeast} targets in ${relativePath}, found ${matches}`);
   const changed = source.replace(pattern, replacement);

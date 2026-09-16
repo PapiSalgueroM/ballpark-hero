@@ -74,9 +74,11 @@ if (!fs.existsSync(BOUNDARY_SRC_PATH)) {
   console.error('there is no RouteErrorBoundary.tsx at all');
   process.exit(1);
 }
-const boundarySrc = fs.readFileSync(BOUNDARY_SRC_PATH, 'utf8');
+/* Both normalised on read. The two controls match patterns that end a line
+   with \n, and on a CRLF checkout they found nothing and refused to run. */
+const boundarySrc = fs.readFileSync(BOUNDARY_SRC_PATH, 'utf8').replaceAll('\r\n', '\n');
 
-let appSrc = fs.readFileSync(path.join(ROOT, 'src/App.tsx'), 'utf8');
+let appSrc = fs.readFileSync(path.join(ROOT, 'src/App.tsx'), 'utf8').replaceAll('\r\n', '\n');
 if (CONTROL === 'unwrapped') {
   const open = /\s*<RouteErrorBoundary resetKey=\{pathname\}>\n/;
   const close = /\s*<\/RouteErrorBoundary>\n/;
