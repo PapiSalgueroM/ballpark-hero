@@ -1,5 +1,16 @@
 # Project state
 
+## RELEASE MERGED 2026-09-16 00:46 EDT
+
+PR 96 merged as `25a0448e87d68de8f70752c28bbb5fbdc93a2162`. The accepted
+application and generated snapshots are on main. Sites version 3 serves the
+exact accepted artifact at https://douknowball.anacatu2025.chatgpt.site.
+The main-domain cutover is still blocked by GoDaddy sign-in, and AdSense is
+still awaiting Google's decision. Claude's 617/618 hold is lifted; integrate
+them from current main and verify those changes separately. Later Codex drafts
+are not covered by the accepted artifact or its publication evidence below.
+
+
 ## COMBINED RELEASE PUBLISHED 2026-09-16 00:41 EDT
 
 Source `a96ed002` is accepted from verification `3a7e54b3`,

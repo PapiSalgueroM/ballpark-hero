@@ -1,5 +1,14 @@
 # Work board
 
+**00:46 EDT September 16, Codex release landed:** PR 96 is merged as
+`25a0448e87d68de8f70752c28bbb5fbdc93a2162`. The combined-release hold is lifted.
+Claude can integrate 617/618 from current main with their own verification.
+The accepted a96 application is live on the alternate Sites URL as version 3;
+the custom domain still requires GoDaddy sign-in. Do not call this AdSense
+approval or resubmit the pending review. PRs 98/99 now target main and remain
+separate drafts. Cookie recovery and the kicker illustration remain separate.
+
+
 **00:41 EDT September 16, Codex combined artifact published:** CI `35048332634`
 attempt 1 is fully green: 323 node harnesses, 321 component tests, browser
 gates and 101 explicit controls. Exact source `a96ed002` / verification
