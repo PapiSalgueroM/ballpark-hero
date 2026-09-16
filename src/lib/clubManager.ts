@@ -15580,7 +15580,14 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     freeAgents: (() => {
       const gone = new Set([...(career.retiredNames ?? []), ...retiredNow.map(r => r.name)]);
       const carried = decayFreeAgents(career.freeAgents ?? [], career.season + 1, gone);
-      let out = carried;
+      /* Round 619 review: the made up journeymen stay with the old job. They
+         were rated off the old club's level and priced off its squad, and they
+         count toward the pool's target, so carried across a move nothing new
+         was made up at the new club. Moving from Everton to Lommel all six sat
+         above Lommel's band and refused to sign for a whole season; moving up
+         they asked the old, smaller squad's wages. topUpFreeAgents below makes
+         a fresh six for the club you actually run. */
+      let out = moving ? carried.filter(f => f.reason !== 'unattached') : carried;
       for (const f of walkedFree619) if (!gone.has(f.name)) out = addFreeAgent(out, f, career);
       /* Round 619 review: and nobody the new season's squad already holds. The
          emergency fill above signs men out of this very pool and nothing took

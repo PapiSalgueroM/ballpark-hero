@@ -27,6 +27,10 @@
  * released came back through the market the season after, while the copy said
  * he never would.
  *
+ * Section 13's job move checks came out of the review of the third build: the
+ * old club's journeymen followed the manager to a new job, so at a smaller
+ * club every one of them refused to sign for a whole season.
+ *
  * House rules as everywhere: never assert on a maximum, never assert non
  * significance, bands from measured headroom, and a control per check that
  * provably fires. Every control asserts its anchor appears EXACTLY once in the
@@ -68,6 +72,7 @@
  *   fillwage       the summer fill ignores a journeyman's asking wage -> section 12
  *   faid           signFreeAgent builds ids that can repeat          -> section 12
  *   nojourneymen   the pool is never topped up                       -> sections 13 and 16
+ *   movekeeps      the old club's journeymen follow a job move       -> section 13, both move checks
  *   goodjourneymen journeymen rated above the club's level           -> sections 13 and 16
  *   unflagged      journeymen not flagged as made up                 -> section 13
  *   realname       a journeyman wears a real player's name           -> section 13
@@ -273,6 +278,10 @@ if (CONTROL === 'nosev') {
   rewrite('nojourneymen', 'engine',
     '  if (have >= FREE_AGENT_POOL_TARGET) return;',
     '  return;');
+} else if (CONTROL === 'movekeeps') {
+  rewrite('movekeeps', 'engine',
+    "      let out = moving ? carried.filter(f => f.reason !== 'unattached') : carried;",
+    '      let out = carried;');
 } else if (CONTROL === 'goodjourneymen') {
   rewrite('goodjourneymen', 'engine',
     '    const rating = clamp(Math.round(level) - cInt(`${seed}|r`, 20, 26), 40, 99);',
@@ -1171,6 +1180,43 @@ console.log('13) a new save has free agents, and they are made up cover');
   if (freshSeen < 10) fail(`only ${freshSeen} journeymen made up this summer were seen, too few to check their wages`);
   else if (offSquad.length) fail(`${offSquad.length} journeymen do not ask what their squad prices: ${offSquad.slice(0, 2).join(' | ')}`);
   else ok(`all ${freshSeen} journeymen made up this summer ask exactly the wage their squad prices`);
+
+  /* A JOB MOVE. Everything above rolls over at the same club, so nothing saw
+     the second repair's gap: the pool carried the old club's six across a move
+     and they filled the target, so nothing was made up at the new club. Moving
+     down (Everton to Lommel, Arsenal to St Johnstone) all six sat above the new
+     club's band and refused to sign for a whole season; moving up (Lommel to
+     Arsenal) they asked the old squad's wages. A sacked manager taking a
+     smaller job is a core path, so it gets its own rollovers. */
+  const MOVES = [['Everton', 'Lommel'], ['Arsenal', 'St Johnstone'], ['Lommel', 'Arsenal']];
+  const cameAlong = [];
+  const wrongForNewClub = [];
+  let movedSeen = 0;
+  for (let i = 0; i < MOVES.length; i += 1) {
+    const [from, to] = MOVES[i];
+    const st = seeded(7200 + i, () => cm.startCareer(from));
+    const oldSix = new Set((st.freeAgents ?? []).filter(f => f.reason === 'unattached').map(f => f.name));
+    const n = seeded(7225 + i, () => cm.startNextSeason(st, to));
+    if (n.clubName !== to || oldSix.size === 0) { fail(`the move from ${from} to ${to} did not happen with journeymen to carry (now at ${n.clubName}, ${oldSix.size} before)`); continue; }
+    const level = n.clubStrengths[n.clubName];
+    const jm = (n.freeAgents ?? []).filter(f => f.reason === 'unattached');
+    if (jm.length !== cm.FREE_AGENT_POOL_TARGET) wrongForNewClub.push(`${to} holds ${jm.length} journeymen, not ${cm.FREE_AGENT_POOL_TARGET}`);
+    for (const f of jm) {
+      movedSeen += 1;
+      if (oldSix.has(f.name)) cameAlong.push(`${f.name} (${from} to ${to})`);
+      const priced = cm.freeAgentTerms({ ...f, wage: undefined, value: cm.squadScaledValue(n.squad, f.rating, f.age) }).wage;
+      if (!(cm.freeAgentInterest(n, f) && f.rating <= level - 14)) wrongForNewClub.push(`${f.name} ${f.rating} at ${to} level ${level.toFixed(1)}, ${cm.freeAgentBlock(n, f) ?? 'signable'}`);
+      else if (f.wage !== priced) wrongForNewClub.push(`${f.name} asks ${f.wage}k at ${to}, whose squad prices him at ${priced}k`);
+    }
+    const tally = {};
+    for (const f of jm) { const b = cm.freeAgentBlock(n, f) ?? 'signable'; tally[b] = (tally[b] ?? 0) + 1; }
+    console.log(`   ${from} to ${to} (level ${level.toFixed(1)}): ${jm.length} journeymen rated ${jm.map(f => f.rating).join(', ')}, ${JSON.stringify(tally)}`);
+  }
+  if (movedSeen === 0) fail('no journeymen were seen after a job move, so the move checks measured nothing');
+  else if (cameAlong.length) fail(`${cameAlong.length} of the old club's journeymen came along on a job move: ${cameAlong.slice(0, 3).join(', ')}`);
+  else ok(`none of the old club's journeymen follow the manager to a new job (${MOVES.length} moves, ${movedSeen} journeymen at the new clubs)`);
+  if (movedSeen && wrongForNewClub.length) fail(`${wrongForNewClub.length} journeymen after a job move are not willing cover priced off the new squad: ${wrongForNewClub.slice(0, 3).join(' | ')}`);
+  else if (movedSeen) ok('after a job move every journeyman is willing cover at the new club and asks what its squad prices');
 }
 
 console.log('14) the projection bills a settlement only for the weeks it has left');
