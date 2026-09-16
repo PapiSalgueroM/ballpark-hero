@@ -58,6 +58,10 @@
  *                                expiry path, which is the bug this section
  *                                was written for. Section 3 must find men
  *                                called "(Youth)" on a first team board.
+ *   CM_FA_CONTROL=loanhole       puts the weekly bill back in the free agent
+ *                                wage gate, so a loaned out earner stops
+ *                                counting. Section 13 must find the ceiling
+ *                                rentable with a loan.
  *   CM_FA_CONTROL=flipmoney      puts the notional market value back onto the
  *                                squad record a free agent signs on, which is
  *                                what made him worth five times what he cost.
@@ -71,6 +75,10 @@
  *   world free agents 80+ and under 31        0              10 (primefree)       must be 0
  *   names in both the pool and the market     0              75 (nodupeguard)     must be 0
  *   academy pads on the board                 0              8 of 125 (youthonboard) must be 0
+ *   free agent churn, best club                -2.3m          +63.9m (flipmoney)   ceiling +5m
+ *   walked players at the wrong age            0 of 30        30 of 30 (pre-fix)   must be 0
+ *   announced on a free AND retired            0              7 of 411 (pre-fix)   must be 0
+ *   clubs renting ceiling with a loan out      0 of 3         3 of 3 (loanhole)    must be 0
  *   mean settle rate, wants out               0.270          n/a                  under contented
  *   mean settle rate, contented               0.670          n/a                  by 0.15 or more
  *   free agent signings in a shut window      12 of 12       0 of 12 (windowlock) must be 12
@@ -111,7 +119,7 @@ const ENTRY = path.join(TMP, 'cmFa.entry.mjs');
 const BUNDLE = path.join(TMP, 'cmFa.bundle.mjs');
 
 const CONTROL = process.env.CM_FA_CONTROL || '';
-const KNOWN = ['nogate', 'primefree', 'nodupeguard', 'windowlock', 'noresignguard', 'nopayoffledger', 'youthonboard', 'flipmoney'];
+const KNOWN = ['nogate', 'primefree', 'nodupeguard', 'windowlock', 'noresignguard', 'nopayoffledger', 'youthonboard', 'flipmoney', 'loanhole'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_FA_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -164,6 +172,12 @@ if (CONTROL) {
       "  if (fa.wasMine && fa.since === career.season && (fa.reason === 'terminated' || fa.reason === 'expired')) {",
       '  if (false) {',
       'clubManager.ts (the re-sign guard)');
+  } else if (CONTROL === 'loanhole') {
+    /* Put the weekly bill back in the gate, so a loaned out earner stops
+       counting and the ceiling can be rented. Section 13 must find it. */
+    engine = swap(engine, '  if (wageCeilingBlocks(committedWageBill(career), career.wageCap ?? wageCapFrom(bill), terms.wage)) {',
+      '  if (wageCeilingBlocks(bill, career.wageCap ?? wageCapFrom(bill), terms.wage)) {',
+      'clubManager.ts (the free agent wage gate)');
   } else if (CONTROL === 'flipmoney') {
     /* Put the notional market value back on the squad record, which is what
        made every free agent worth five times what he cost. Section 11 must
@@ -219,7 +233,7 @@ const {
   startCareer, playNextEntry, finishSeason, startNextSeason,
   buildMarket, buyPlayer, wageBill, xiAverageRating,
   freeAgentPool, terminateContract, terminationQuote, signFreeAgent, freeAgentRefusal,
-  ensureFreeAgents, canPayOff, setTransferStatus, acceptBid,
+  ensureFreeAgents, canPayOff, setTransferStatus, acceptBid, loanOutPlayer, committedWageBill,
 } = cm;
 const {
   FA_BOARD_FLOOR, FA_SHELF_WEEKS, PAYOFF_FLOOR, PAYOFF_CEILING,
@@ -231,6 +245,7 @@ for (const [name, fn] of Object.entries({
   startCareer, playNextEntry, finishSeason, startNextSeason, buildMarket, buyPlayer,
   wageBill, xiAverageRating, freeAgentPool, terminateContract, terminationQuote,
   signFreeAgent, freeAgentRefusal, ensureFreeAgents, canPayOff, setTransferStatus, acceptBid,
+  loanOutPlayer, committedWageBill,
   freeAgentTerms, payoffRate, terminationCost, wageOwed, worldReleaseOdds, projectFinances,
 })) {
   if (typeof fn !== 'function') {
@@ -842,6 +857,7 @@ console.log('12) A man who walks off your books lands on the board at his real a
   let checked = 0;
   let wrongAge = 0;
   let vanished = 0;
+  let ghosts = 0;
   for (const club of CLUBS) {
     reseed(armSeed(club, 2));
     let s = startCareer(club);
@@ -862,8 +878,13 @@ console.log('12) A man who walks off your books lands on the board at his real a
         const fa = board.get(name);
         if (!fa) {
           /* Gone without a trace is only legitimate when the rollover itself
-             retired him, or a rival signed him in the summer rush. */
-          if (!retired.has(name)) vanished += 1;
+             retired him, or a rival signed him in the summer rush. A man the
+             feed announced leaving on a free who is ALSO in retiredNames is
+             neither, he is the double roll. */
+          const announced = (s.transferLog ?? []).some(
+            t => t.name === name && t.to === 'a free transfer' && t.season === s.season);
+          if (retired.has(name) && announced) ghosts += 1;
+          else if (!retired.has(name)) vanished += 1;
           continue;
         }
         checked += 1;
@@ -876,9 +897,80 @@ console.log('12) A man who walks off your books lands on the board at his real a
       }
     }
   }
-  console.log(`   ${checked} walked players traced onto the board, ${wrongAge} at the wrong age, ${vanished} vanished`);
+  console.log(`   ${checked} walked players traced onto the board, ${wrongAge} at the wrong age, ${vanished} vanished, ${ghosts} announced on a free AND retired`);
   if (checked < 5) fail(`only ${checked} walked players reached the board, so this section proves nothing`);
   if (wrongAge > 0) fail(`${wrongAge} players arrived on the board at the wrong age, so the rollover ages them twice`);
+  /* The other half of the same ordering bug. The rollover rolls retirement
+     over the squad, and the board pass used to roll it AGAIN at age plus two
+     with a 1.35x multiplier, so a man the transfer feed had just announced
+     leaving on a free was simultaneously in retiredNames and on no board at
+     all. Measured on the broken build: 7 of 411 departures over 18 rollovers.
+     The feed line and retiredNames contradicting each other is the visible
+     symptom, so that is what this reads. */
+  if (ghosts > 0) fail(`${ghosts} players were announced leaving on a free and retired in the same summer`);
+}
+
+/* ================================================================== */
+console.log('13) The wage ceiling cannot be rented with a loan');
+/*
+ * The free agent gate is the only place in this engine that refuses a signing
+ * on wages, so it is the only place a manager can be tempted to game the bill
+ * it reads. wageBill sums the squad, and loanOutPlayer takes a man off the
+ * squad and parks him in loanedOut with his wage, so loaning out two earners
+ * used to free real headroom: measured at Sevilla, the board refused a 24k a
+ * week free agent, loaning out two 19k earners flipped the refusal to null,
+ * and recalling both left the bill at 304 against a ceiling of 280 that was
+ * never asked again.
+ *
+ * Selling to make room is a real decision because he is gone. A loan is a
+ * round trip that costs a little morale and comes back cash positive, so the
+ * gate reads what you are COMMITTED to instead.
+ */
+{
+  let rented = 0;
+  let tested = 0;
+  for (const club of CLUBS) {
+    reseed(armSeed(club, 3));
+    let s = startCareer(club);
+    /* A day one squad sits well under the ceiling (the cap opens at 1.15x the
+       bill and the gate allows 1.25x the cap), so nothing is refused on wages
+       yet. Sign into the headroom first, which is the state a manager reaches
+       by playing, and only then is there a ceiling to try to rent. */
+    let blocked = null;
+    for (let round = 0; round < 25 && !blocked; round += 1) {
+      let signedOne = false;
+      for (const fa of freeAgentPool(s)) {
+        const why = freeAgentRefusal(s, fa.id);
+        if (typeof why === 'string' && why.includes('sanction')) { blocked = fa; break; }
+        if (why !== null) continue;
+        const next = signFreeAgent(s, fa.id);
+        if (next) { s = next; signedOne = true; }
+      }
+      if (blocked) break;
+      if (!signedOne && s.week < s.calendar.length) {
+        const r = playNextEntry(s, { skipHalftime: true });
+        s = r.state;
+        if (r.kind === 'seasonOver' || s.sacked) break;
+      } else if (!signedOne) break;
+    }
+    if (!blocked) continue;
+    tested += 1;
+    /* Now loan out the biggest earners the squad can spare and ask again. */
+    let loaned = 0;
+    for (const p of [...s.squad].sort((a, b) => (b.wage ?? 0) - (a.wage ?? 0))) {
+      if (loaned >= 4) break;
+      const next = loanOutPlayer(s, p.id);
+      if (next) { s = next; loaned += 1; }
+    }
+    if (!loaned) continue;
+    if (freeAgentRefusal(s, blocked.id) === null) {
+      rented += 1;
+      console.log(`   ${club}: ${loaned} loans out flipped a refused signing to allowed`);
+    }
+  }
+  console.log(`   ${tested} clubs had a wage-blocked free agent, ${rented} let a loan out buy the headroom`);
+  if (tested === 0) fail('no club had a free agent refused on wages, so this section proves nothing');
+  if (rented > 0) fail(`${rented} clubs rented ceiling headroom by loaning players out`);
 }
 
 console.log(failures === 0 ? '\nALL FREE AGENT CHECKS PASSED' : `\n${failures} FAILURES`);

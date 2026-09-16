@@ -4650,6 +4650,29 @@ export function wageBill(career: CareerState): number {
 }
 
 /**
+ * Round 619: the wage you are COMMITTED to, which is the bill plus everybody
+ * out on loan.
+ *
+ * wageBill is what you are paying this week and that is the right number for
+ * the contracts desk and the board's weekly drip, because a man out on loan is
+ * somebody else's payroll for the season. It is the wrong number for deciding
+ * whether you can take on a NEW multi year contract, because he is coming back
+ * and his wage comes back with him.
+ *
+ * Without this, the free agent ceiling was reversibly evadable and the loan
+ * desk was the lever. Reproduced at Sevilla: the board refuses a 24k a week
+ * free agent, loaning out two 19k earners flips that refusal to null, the
+ * signing goes through, and recalling both in the same window leaves the bill
+ * at 304 against a ceiling of 280 that is never asked again. Selling somebody
+ * to make room is a real decision because he is gone; a loan is a round trip
+ * that costs a little morale and comes back cash positive.
+ */
+export function committedWageBill(career: CareerState): number {
+  return wageBill(career)
+    + (career.loanedOut ?? []).reduce((s, l) => s + (l.player.wage ?? wageFor(l.player)), 0);
+}
+
+/**
  * What the board will tolerate. Derived from the squad you were HANDED, plus
  * about fifteen percent of headroom, rather than from the transfer budget.
  * That was the first version and it was wrong at every club: a transfer
@@ -6549,8 +6572,11 @@ export function freeAgentRefusal(career: CareerState, faId: string): string | nu
   /* The board have a view on the wage, because on a free transfer the wage is
      the entire deal. See FA_CAP_HEADROOM: this is what stops a manager
      assembling a second squad out of money nobody sanctioned. */
+  /* The cap's own fallback is derived from the bill you are paying, the way
+     every other reader of wageCap derives it. The GATE reads the committed
+     figure, so a loan out cannot rent you headroom you have to give back. */
   const bill = wageBill(career);
-  if (wageCeilingBlocks(bill, career.wageCap ?? wageCapFrom(bill), terms.wage)) {
+  if (wageCeilingBlocks(committedWageBill(career), career.wageCap ?? wageCapFrom(bill), terms.wage)) {
     return `The board will not sanction ${terms.wage}k a week on top of the bill.`;
   }
   /* The refusal says WHY and, when waiting would work, how long: the board is

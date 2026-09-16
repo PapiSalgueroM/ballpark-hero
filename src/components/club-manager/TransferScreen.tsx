@@ -7,7 +7,7 @@ import { FlagImg } from '@/components/FlagImg';
 import { groupByConfederation } from '@/lib/confederationGroups';
 import { Input } from '@/components/ui/input';
 import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp, UserPlus } from 'lucide-react';
-import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, leagueOf, freeAgentRefusal } from '@/lib/clubManager';
+import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, leagueOf, freeAgentRefusal, committedWageBill } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, MarketPlayer, TransferStatus, DealExtras } from '@/lib/clubManager';
 /* Round 506: the deal desk. The screen reads the SAME verdict and the SAME
    meter the engine judges with, so what the bar says while you are typing and
@@ -936,7 +936,10 @@ export function TransferScreen({
                trap that typechecks clean because both are PersonalTerms. */
             const faTerms = freeAgentTerms(fa);
             const refusal = freeAgentRefusal(career, fa.id);
-            const faRoomLine = wageRoomLine(wageRoom(bill, wageCeiling, faTerms.wage));
+            /* The committed bill, matching the engine's own gate: a man out on
+               loan is coming back and his wage with him, so the warning and the
+               refusal read the same number. */
+            const faRoomLine = wageRoomLine(wageRoom(committedWageBill(career), wageCeiling, faTerms.wage));
             return (
               <div key={fa.id} className="bg-card border border-border rounded-xl p-3" data-free-agent-card>
                 <div className="flex items-center gap-2">
