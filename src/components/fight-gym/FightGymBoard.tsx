@@ -4,7 +4,8 @@ import ShareButtons from '@/components/game/ShareButtons';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { cn } from '@/lib/utils';
-import { STYLES, TACTICS, weightById, ratingOf, effectiveAttrs, type Tactic, type BoutResult } from '@/lib/fightCareer';
+import { Confetti, ConditionBar } from '@/components/soccer-career/CareerFx';
+import { STYLES, TACTICS, weightById, ratingOf, effectiveAttrs, conditionTrack, type Tactic, type BoutResult } from '@/lib/fightCareer';
 import {
   newGym, signProspect, trainFighter, offersForFighter, takeGymFight,
   releaseFighter, advanceWeek, gymVerdict, guessWeight, weeklyCost, cutRate, TRAIN_COST,
@@ -189,9 +190,18 @@ export default function FightGymBoard() {
     }
     if (!result) return null;
     const won = result.winner === 'player';
+    /* Round 630: the same bars Fight Career uses, from the same function in the
+       lib. The gym watches this from the other side of the ropes, so the bar
+       that matters here is your own fighter's: the whole game is that his
+       damage is permanent and your cut is not. */
+    const track = conditionTrack(result);
+    const end = track.length ? track[track.length - 1] : { round: 0, player: 100, opp: 100 };
+    const busiest = Math.max(1, ...result.rounds.map(r => Math.max(r.playerLanded, r.oppLanded)));
     return (
       <div className="space-y-4" ref={revealRef}>
-        <div className={cn('rounded-lg border p-4 text-center', won ? 'border-emerald-500/60 bg-emerald-500/10' : 'bg-card')}>
+        <div className={cn('relative overflow-hidden rounded-lg border p-4 text-center', won ? 'border-emerald-500/60 bg-emerald-500/10' : 'bg-card')}>
+          {won && <Confetti pieces={result.method === 'KO' || result.method === 'TKO' ? 46 : 28}
+            gold={result.method === 'KO' || result.method === 'TKO'} />}
           <p className="text-xs uppercase tracking-wide text-muted-foreground">
             {result.method === 'D' ? 'Drawn' : won ? `${f.name} wins` : `${f.name} loses`}
           </p>
@@ -204,6 +214,10 @@ export default function FightGymBoard() {
           <p className="mt-1 flex items-center justify-center gap-1 text-xs text-muted-foreground">
             <HeartPulse className="h-3 w-3" />He took {result.damageTaken.toFixed(1)} damage, and he keeps it.
           </p>
+          <div className="mt-3 flex items-start gap-3 text-left">
+            <ConditionBar value={end.player} label={f.name} />
+            <ConditionBar value={end.opp} label={offer.opponent.name} align="right" />
+          </div>
         </div>
         <div className="space-y-1.5">
           {result.rounds.map(r => (
@@ -213,6 +227,19 @@ export default function FightGymBoard() {
               <div className="flex justify-between font-semibold">
                 <span>Round {r.round}</span><span className="tabular-nums">{r.playerScore} - {r.oppScore}</span>
               </div>
+              <div className="mt-1 space-y-1" aria-hidden="true">
+                <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+                  <div className="h-full rounded-full bg-emerald-500 transition-[width] duration-500 ease-out"
+                    style={{ width: `${(r.playerLanded / busiest) * 100}%` }} />
+                </div>
+                <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+                  <div className="h-full rounded-full bg-muted-foreground/60 transition-[width] duration-500 ease-out"
+                    style={{ width: `${(r.oppLanded / busiest) * 100}%` }} />
+                </div>
+              </div>
+              <p className="mt-1 text-muted-foreground">
+                He landed {r.playerLanded}, and took {r.oppLanded}.
+              </p>
               {r.note && (
                 <p className={cn(r.switched ? 'text-amber-500' : 'text-muted-foreground')}>
                   {r.switched && <Flame className="mr-1 inline h-3 w-3" />}{r.note}
