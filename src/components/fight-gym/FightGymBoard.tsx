@@ -4,7 +4,8 @@ import ShareButtons from '@/components/game/ShareButtons';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { cn } from '@/lib/utils';
-import { STYLES, TACTICS, weightById, ratingOf, effectiveAttrs, type Tactic, type BoutResult } from '@/lib/fightCareer';
+import { Confetti, ConditionBar } from '@/components/soccer-career/CareerFx';
+import { STYLES, TACTICS, weightById, ratingOf, effectiveAttrs, conditionTrack, type Tactic, type BoutResult } from '@/lib/fightCareer';
 import {
   newGym, signProspect, trainFighter, offersForFighter, takeGymFight,
   releaseFighter, advanceWeek, gymVerdict, guessWeight, weeklyCost, cutRate, TRAIN_COST,
@@ -189,9 +190,21 @@ export default function FightGymBoard() {
     }
     if (!result) return null;
     const won = result.winner === 'player';
+    /* Round 630: the same bars Fight Career uses, from the same function in the
+       lib. They show what THIS fight took out of both men and nothing else:
+       conditionTrack starts everybody at 100 and never reads f.damage. The
+       permanent damage, which is what actually ends a career in this game, is
+       the hub's Damage bar and the line above the bars, so the screen says
+       which is which rather than letting a green bar under a nearly finished
+       fighter's name read as a clean bill of health. */
+    const track = conditionTrack(result);
+    const end = track.length ? track[track.length - 1] : { round: 0, player: 100, opp: 100 };
+    const busiest = Math.max(1, ...result.rounds.map(r => Math.max(r.playerLanded, r.oppLanded)));
     return (
       <div className="space-y-4" ref={revealRef}>
-        <div className={cn('rounded-lg border p-4 text-center', won ? 'border-emerald-500/60 bg-emerald-500/10' : 'bg-card')}>
+        <div className={cn('relative overflow-hidden rounded-lg border p-4 text-center', won ? 'border-emerald-500/60 bg-emerald-500/10' : 'bg-card')}>
+          {won && <Confetti pieces={result.method === 'KO' || result.method === 'TKO' ? 46 : 28}
+            gold={result.method === 'KO' || result.method === 'TKO'} />}
           <p className="text-xs uppercase tracking-wide text-muted-foreground">
             {result.method === 'D' ? 'Drawn' : won ? `${f.name} wins` : `${f.name} loses`}
           </p>
@@ -202,8 +215,13 @@ export default function FightGymBoard() {
             Cards {result.playerCard} to {result.oppCard} · purse {offer.purse.toFixed(3)}m, your cut {(offer.purse * cutRate(g)).toFixed(3)}m
           </p>
           <p className="mt-1 flex items-center justify-center gap-1 text-xs text-muted-foreground">
-            <HeartPulse className="h-3 w-3" />He took {result.damageTaken.toFixed(1)} damage, and he keeps it.
+            <HeartPulse className="h-3 w-3" />He took {result.damageTaken.toFixed(1)} damage tonight and he keeps it, so he is carrying {Math.round(f.damage)} now.
           </p>
+          <p className="mt-3 text-[11px] uppercase tracking-wide text-muted-foreground">What each man had left when it ended</p>
+          <div className="mt-1 flex items-start gap-3 text-left">
+            <ConditionBar value={end.player} label={f.name} />
+            <ConditionBar value={end.opp} label={offer.opponent.name} align="right" />
+          </div>
         </div>
         <div className="space-y-1.5">
           {result.rounds.map(r => (
@@ -213,6 +231,19 @@ export default function FightGymBoard() {
               <div className="flex justify-between font-semibold">
                 <span>Round {r.round}</span><span className="tabular-nums">{r.playerScore} - {r.oppScore}</span>
               </div>
+              <div className="mt-1 space-y-1" aria-hidden="true">
+                <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+                  <div className="h-full rounded-full bg-emerald-500 transition-[width] duration-500 ease-out"
+                    style={{ width: `${(r.playerLanded / busiest) * 100}%` }} />
+                </div>
+                <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+                  <div className="h-full rounded-full bg-muted-foreground/60 transition-[width] duration-500 ease-out"
+                    style={{ width: `${(r.oppLanded / busiest) * 100}%` }} />
+                </div>
+              </div>
+              <p className="mt-1 text-muted-foreground">
+                He landed {r.playerLanded}, and took {r.oppLanded}.
+              </p>
               {r.note && (
                 <p className={cn(r.switched ? 'text-amber-500' : 'text-muted-foreground')}>
                   {r.switched && <Flame className="mr-1 inline h-3 w-3" />}{r.note}

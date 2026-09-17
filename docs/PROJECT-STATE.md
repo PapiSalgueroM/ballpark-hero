@@ -1,155 +1,240 @@
 # Project state
 
-## ROUND 628 BUILT 2026-09-16: the Club Manager season score reads the manager, not the club
+## ROUNDS 619 AND 628 TO 630 ON MAIN 2026-09-17: landed after a review that found 28 real defects past green gates
 
-On branch `claude/free-agents-contract-termination-5oeyzz`, commit `4df6892`, riding beside
-Round 619 on PR 103 because that is the branch this lane was given. `docs/PROJECT-STATE.md`
-listed "A correct points system per game" as PART with **Club Manager points design open**, and
-this is that row.
+Landed together as `release-619-630`, built in a fresh CRLF clone (`C:\Users\antho\dukb-gate`)
+from origin/main `b51500fb`. The 2026-09-16 handoff said all four rounds were built and verified,
+and that 619 was gated apart from its suite. **Neither was true, and every gate was green.**
 
-The rule was `Math.min(130, myRow.pts + seasonTrophies.length * 10)`. **Three defects, all
-measured before a line was written.**
+**What the full suite found first.** The 619 solo suite on `cd7f0477` came back 327 of 328:
+`simFreeAgents` itself threw a ReferenceError after section 9, so section 10 had never run. The
+commit before claimed fifteen assertions green, because every standalone run was filtered for
+"ok" and "FAIL" lines and a stack trace contains neither. **A control run only counts if it
+reaches the harness's closing summary line.** Once the scope was fixed, section 9's re-sign check
+still passed for the wrong reason: it offered a man one point over the interest bar, and without
+his value `wageFor` priced him at ten times his real wage, so interest and the cap refused him
+whatever the guard did.
 
-**One, it read the club.** One season at twelve clubs with management held identical (nobody
-touched anything, every entry auto played), so every point of spread was stature: scores ran 24
-to 90 and the club's preview XI rating correlated with the season score at **0.851**. Bayern
-finished 8th of 18 on grade F having hit 0 of 7 board objectives and scored 55, while Sevilla
-finished 13th on grade C having hit 3 of 8 and scored 46. The F beat the C. Real Madrid hit one
-objective in eight, graded C, and posted the highest score in the set at 90, above a Newcastle
-side that won its league on grade A for 78.
+**What the adversarial review found.** Five lenses over the combined tree, and every finding
+handed to an independent skeptic who had to reproduce it: 45 findings, 28 CONFIRMED by
+reproduction, 17 lower severity returned unverified (nearly all real, and fixed). The ones that
+mattered:
 
-**Two, the scale did not fit the leagues.** Maximum league points by league size: 54 in the 10
-club SuperSport HNL, 102 in the 18 club leagues, 114 in the big three, **138** in the 24 club
-EFL Championship, against one flat cap of 130. A perfect Croatian season topped out near 84
-with a cup treble and could never reach the ceiling; the Championship passed 130 on league
-points alone so its trophies were worth nothing.
+- **619, money.** A settlement was billed about 30 percent longer than the button quoted (73
+  weeks charged against a 54 week quote at Everton). The `severanceTickedWeek` guard, added to fix
+  an "overcount" that was really the harness dividing by `playNextEntry` calls instead of weeks
+  charged, skipped a real countdown whenever a bye came before a match. The harness and the bug
+  agreed with each other, the same trap as Round 628.
+- **619, exploits.** Releasing an expiring player the week before his deal ran out dodged both
+  the renewal fee and the "lose him for a season" block. A man could sit in the squad and the free
+  agent pool at once. You could release your last keeper, and release mid match and play the
+  second half a man down. Signing a free agent built ids that collided, so releasing one man
+  removed two.
+- **619, screen.** Release fired on one tap with no confirm. Buttons at the squad floor stayed
+  live and did nothing. Sign never showed the wage or length it committed to, and was enabled when
+  the cap or squad size would refuse it. And a new save had no free agents at all, because the
+  pool only ever held your own ex-players.
+- **619, harness.** Five sections could not fail: section 2 repeated section 1's arithmetic,
+  two of section 3's three window probes refused for reasons that had nothing to do with the
+  window, section 5's retired check rode a release the senior floor refused, section 4 never
+  checked that the rollover called the decay, and section 6's `bill <= 0` passed a NaN.
+- **629.** `simPollCharacter.mjs` did not parse. Its "fix" went through a Bash heredoc and put
+  real line breaks inside two string literals, so all five controls were dead and the suite would
+  have been red on every ship. The fence itself was blind to comments, helpers and LF clones.
+- **628 and 630.** The knockdown that ends a stoppage never flashed, the new animations ignored
+  reduced motion, Fight Promoter said "sold out" and fired gold confetti with seats still empty,
+  and `simFightCareer` section 6 could not see pinned bars, the exact defect that started 628.
 
-**Three, relegation paid.** Left in place for eight seasons with nobody managing, Sunderland
-scored 43 finishing 18th in the Premier League, went down, won the Championship and scored
-**124**. Everton reproduced it independently. Winning the second division beat winning the
-first by 46 points, straight out of 46 games against 38.
+**How it was fixed.** Three builders in separate worktrees, one per file group, each checked by
+an independent verifier that reran the gates and every control one at a time, with repair passes
+until it passed. The 619 group took three verifier passes, and each pass found something new
+that the previous fix had created:
 
-**What it is now.** A ledger in the new `src/lib/clubManagerScore.ts`, every term a SHARE of
-what was available so league size cancels: league form 48 (your points over the points your own
-fixture list offered), the title 28, a cup run up to 24, a European run up to 24, each board
-objective 6 up to 30. **48 + 28 + 24 + 30 is exactly 130**, which is the ceiling with no
-European run in it, so the five leagues with no Champions League route (the Championship,
-Saudi, both MLS conferences, 2. Bundesliga) can still reach the top of the scale. A European
-league gets Europe's 24 as slack instead.
+- Journeymen given a squad like value could be signed for free and sold on for real fees. They
+  now carry the floor value, their wage is priced off the squad and stored, and **every free agent
+  pays a signing on fee** (the engine's usual wage x years x 0.045, minimum 0.5m, recorded as a
+  bonus, never as a transfer fee). Free agents now mean no transfer fee, not no money.
+- "A released man never signs for you again" was true of the free agent list and false of the
+  market, which listed him again the next season. `releasedNames` is now persistent, and one set
+  is read by the list, the market, deals and the summer fill.
+- After a job move the old club's six journeymen followed the manager and refused a weaker club
+  for a whole season. They now stay behind and the new club gets its own six.
+- `loadCareer` never filled the pool, so every save written before this round opened with an
+  empty list until a week was played.
 
-**The weights are grid searched, not chosen.** 77 seeded seasons at 34 clubs across every
-league size, every season scored under both rules, against three targets at once.
+**What 619 is now.** `releaseBlock` and `freeAgentBlock` are the single gates, and the card
+renders their reasons, so the screen cannot offer a button the engine refuses (section 15 renders
+the card across saves and compares every button with the engine: 137 buttons, 0 disagreements).
+The settlement is half the wage until the deal would have ended, capped at two seasons, counted in
+`wageBill`, and one week charged is one week counted off (54 of 54, 108 of 108). The pool holds
+your released and expired men plus six generated journeymen a season (`makeGeneratedName`, never
+a real name, tagged made up, 20 to 26 below the club's level), decays a point a summer and clears
+after two. `simFreeAgents` has 17 sections and 47 controls, each run alone and each turning exactly
+its intended check red, and `simAcademy` stays green.
 
-| | OLD | NEW |
-|---|---|---|
-| median score | 63 | 62 |
-| correlation with the board's verdict grade | 0.312 | 0.481 |
-| correlation with the club's preview XI | 0.776 | 0.311 |
-| mean score, grade A | 65.8 | 82.2 |
-| mean score, grade B | 67.2 | 69.2 |
-| mean score, grade C | 58.4 | 48.8 |
-| mean score, grade D | 28.8 | 34.8 |
+**629 after review.** See its own section below, corrected in place.
 
-The old rule could not order A above B. Keeping the median matters because
-`public.global_leaderboard()` pays `100.0 * day_best / max_score` and the denominator lives in
-the database, so a rule that scored lower would quietly cut every Club Manager player's earning
-rate. Emitting 0..100 instead of 0..130 would have cut it by 23 percent forever.
+**Two more harnesses were red on every Windows checkout, and neither was these rounds.**
+`simConnect4ClubRecords` section 4 and `simSoccerStintNameFold` section 3 cut an edge function
+body at the first newline, brace, newline, which a CRLF file never contains. Green on the LF
+release clone, red on a CRLF clone of the same tree. Both normalise on read now. The 629 fence
+only looks at reads into `src/`, which is why it missed them: `supabase/functions` is out of its
+reach and says so.
 
-**The monotone law.** The leaderboard ranks on the day's MAX reading and `recordActivity` pings
-after every match, so a score that can FALL pays a player for their luckiest afternoon rather
-than their season. A points per game rate reads 3.00 after one opening win and can only decline,
-which is why a rate, a position snapshot, an expectation overshoot and a verdict grade are all
-structurally wrong here however well they read. Every term is a non decreasing function of a
-quantity that only rises and every denominator is a season constant.
+**And one harness had spent its own subjects.** `simConnect4ClubRecords` asks the deployed
+connect4 function about players the stint table proves, and the records pass caches every
+attribute it proves, so each run uses about three subjects for good. It only walked the first 250
+of 950 candidates, and on 2026-09-17 all 250 were cached: red on this release and identically red
+on the tree before it, with nothing in either touching the function. The walk now covers the whole
+list (cache hits spend no AI), which leaves roughly 700 subjects of runway, and its `denyonmiss`
+control, which had been going red for the spent pool, now goes red for its own reason again.
 
-**Expectation was deliberately NOT used**, despite being the obvious answer and the angle that
-scored second in the design panel. Two reasons found by reading the engine: a custom club's
-expectation is re-measured from YOUR OWN squad on every load (`clubManager.ts:16101`), so
-weakening your squad lowers the bar you are judged against, and a real club's expectation is
-frozen at the year zero bake while actual strength projects forward, so a long save drifts into
-free overachievement. The board objectives term carries the expectation-aware part instead,
-because the board already sizes its own demands to the club.
+**Corrections to earlier records, so nobody trusts them:**
+- `cd7f0477`'s message says fifteen assertions were green. The harness was crashing after section 9.
+- The first Round 629 section said `simPollCharacter` was fixed and 28 harnesses were in scope and
+  compliant. It did not parse, and the widened fence found ten harnesses with controls that could
+  never run here.
+- `docs/HANDOFF-2026-09-16.md` section 4 said everything else for 619 was done. See above.
 
-**Takeovers.** Walking into a job part way through no longer pays you for the manager before
-you. The handover is stamped and frozen at `startMidSeason` (points, games, cup and European
-rank, objectives ticked, and whether the league was already won). For a takeover save written
-before this round the estimate is gated on **season 1**, because `career.midSeasonStart` has
-exactly two writes in the whole repo and the engine never clears it: without the gate every
-later season subtracts a manager who does not exist and the 48 point form term reads zero for
-two thirds of the year. All three design judges found that independently and it is invisible at
-the ends, so it would have shipped.
+**Two browser harnesses could not reach what they check, both pre-existing.**
+`playReleaseClause` had timed out since Round 303 (2026-08-27) put the "who is in the dugout" step
+between taking a job and the hub, so the one browser walk of the contracts desk had not run for
+three weeks; it skips the step now and walks 619's rebuilt desk green. `playReducedMotion` read
+its source from a hardcoded `C:/Users/antho/ballpark-hero` path, so a clone tested that folder's
+(older) source against its own build; it reads relative to itself now, and its `noguard` control
+still fires.
 
-**How it was designed.** A 21 agent workflow: five read-only agents mapped the engine, four
-independent designs were written from deliberately different angles (expectation relative,
-achievement ledger, the board's own objectives, difficulty weighted), and three judges scored
-each one through a distinct lens (a 15 year old on a phone, a leaderboard farmer, the engineer
-who has to fence it). The Achievement Ledger won 8/8/8 unanimously, none disqualified. Its two
-flaws, both named by the judges and both fixed before shipping: the legacy gate above, and a
-legacy estimate that was a live RATE and therefore climbed as you lost (13 straight defeats read
-24 of 40 form points and rising). It is a fixed neutral 1.35 points a game now, a constant, which
-cannot move with your results.
+**Gate on the landed tree.** tsc 0. `build:seo` exit 0, and only `/whats-new` changed (it had
+been missing 628's entry). The full node suite on the frozen tree `0d6db0bd`, in a CRLF clone:
+328 of 329, the one red being the spent connect4 pool, fixed and green alone with all three
+controls. Fourteen browser harnesses chosen for what these rounds touch: ten green
+(`playRenderStability`, `playSnapshotDrift`, `playSoftFourOhFour`, `simPrerenderBoot`,
+`simRevealScroll`, `simVictoryMoment`, `playFirstTeamFit`, `playIphone`, `playSeasonReveal`,
+`playHowTo`), `playReleaseClause` and `playReducedMotion` green after the repairs above, and two
+pre-existing reds on things nothing here touches: `playClubManager`'s 0 signings (identical on
+main) and `sweepPhone` (below). The new contracts card was also walked by hand at desktop and
+375px: the two step release quotes the right total (24k x 108 weeks, £2.6m), the wage line moves
+446k to 422k, every Release button disables at the senior floor with the reason on it, the
+released man shows as "You let him go", journeymen carry the MADE UP tag with wage, length and
+fee on the button, and nothing overflows at 375px.
 
-**Gates.** tsc 0, `npm run build` clean, 321 component tests across 39 files.
-`scripts/simClubManagerScore.mjs`: 9 sections, 6 negative controls, **all six proved to fail the
-section each targets**. Regression green: `simClubManager`, `simContracts`, `simBoardAsks`,
-`simAcademy`, `simClubManagerFinances`, `simClubManagerFreeAgents`, `simClubManagerSave`,
-`simSessionMarks`, `simActivityNotCompletion`, `simSiteSearch`, `simNoRivalNames`.
+### Follow ups this work surfaced, none started
 
-**REVIEW ROUND: 42 findings across seven lenses, 11 refuted, and the worst one repeats Round
-619's lesson exactly.** Seven hunters, each blind to the others, then an independent skeptic per
-finding told to refute it.
+- **NFL Front Office cuts are free.** `releasePlayer` in `src/lib/frontOffice.ts` frees the whole
+  salary at once and the man can be signed straight back on a one year deal: the exact exploit 619
+  exists to prevent, in a sibling sim. Reuse 619's settlement shape (dead cap counted in
+  `capUsed`, no same league year re-sign). MLB, NBA and NHL have no manual release.
+- **Club Manager youth padding kids sell for millions with no signing cost.** Listed padding kids
+  carry no value, so `sellValue` prices them off the raw curve: one Everton kid sold for 6.6m and
+  one Inter Miami kid for 12.1m in a probe. A bigger free money path than the journeymen were.
+- **`playClubManager` is red on main and on 619 alike** (45 windows, 0 signings on `f63cf758`,
+  43 and 0 on 619). `signSomebody()` never finds an enabled Release clause button. Pre-existing,
+  not root caused. It is a browser harness, so the default suite skips it.
+- **Fight Career bars pin more for good players.** A player who reads every fight pins 30.0 to
+  33.3 percent of decision losers at the shipped drain rate of 0.8, against 9.8 to 13.5 percent for
+  random tactics, which is what `simFightCareer` section 6 samples. `conditionTrack`'s comment
+  ("the floor stays rare") is only true of random play. Re-tune or correct the comment.
+- **Reduced motion.** Width transitions on the condition and house bars are not covered, and
+  nothing stops the next new `animate-*` class shipping without a reduced motion rule.
+- **`sweepPhone` is red on two routes this release does not touch:** `/world-cup-bracket` has a
+  20px "Show the real bracket" control and `/stadium-tycoon` a 1px "Tap the stadium for $3", both
+  under the 30px floor.
+- The 629 fence does not cover harness reads into `supabase/functions`, `scripts/lib` helpers or
+  `git show`. Its header lists what is out of reach.
 
-**The monotone law was FALSE and the section written to guard it was blind to that.**
-`objectiveStatuses` recomputes the youth objective from the CURRENT squad, and four of the five
-board asks read the squad the same way, so a tick could come back off. Selling a man, loaning
-him out or paying him off took 6 points off a live score through three buttons the game really
-has: measured Ajax 43 to 37, Le Havre 17 to 11, and a season forked at week 20 finishing 58 if
-you kept the player and 48 if you paid him off. Section 2 reported "0 of them lower" because it
-played every career hands off and never changed a squad. **Nine sections, one kind of
-measurement, and the thing they all missed sat one click from two live buttons**, which is the
-same shape as Round 619's money printer that nine rating-measuring sections missed.
-The board term lands only at the final whistle now, where the board itself settles the card, and
-section 2 buys, sells and pays players off with a floor on the number of removals so it cannot
-go back to passing by never doing the thing that broke it.
+## ROUND 629 2026-09-16: a harness may not carry an anchor that can never match
 
-**A pre-628 takeover save was paid for the previous manager's honours.** `handoverOf` zeroed
-`cupRank`, `euroRank` and `objectivesDone`, which is not neutral: it credited the new manager
-with the cup run, the European run and the board ticks his predecessor banked, about 15 of 130
-on average and 40 at worst. Those three scale by the share of the season actually managed now.
+`scripts/simHarnessAnchors.mjs` is the permanent fence for the Round 628 finding, written about
+the mechanism rather than about the four harnesses that had it, because a check written for a
+known offender cannot find the next offender.
 
-**A club in the calibration sample did not exist.** "Midtjylland" is in no playable league, and
-an unknown name does not throw: `clubDefFor` returns a flat fallback and **`leagueOf` falls back
-to the PREMIER LEAGUE**, so it silently became an invented Premier League club in the very run
-that set the weights. Fixed to `FC Midtjylland`, weights reconfirmed on the rerun (median 63
-against the old rule's 63, stature 0.314, board 0.577), and the harness refuses to start if any
-club it names is not playable.
+**The rule.** For every multi line anchor a harness carries into a file under `src/`, every read
+in that harness that can reach that file, and whose text can reach the anchor, must normalise
+line endings. On this checkout src is CRLF and an anchor written inside a harness is LF, so a
+single line anchor matches and a multi line one cannot, ever.
 
-Also fixed: the season end screen printed five raw terms beside a clamped total, so they could
-add up to more than the number above them; the help copy opened with 130 while its own five
-maxima added to 154, and claimed Europe was "counted by how far you went" when `UCL_STAGE_RANK`
-collapses the round of 16 and the quarter final onto the same rank; a handover read out of
-localStorage could claim more games than the table had records of and buy the whole form term;
-section 9 compared 0 to 0 on a career that had played nothing; section 1's sample guard was
-arithmetically incapable of failing; the `dist` shadow leaked on an abnormal exit; and four
-comments still quoted the pre-tuning weights.
+**As first shipped it was much weaker than this section said, and review caught it (findings 37
+to 43).** It exempted a harness if the normaliser text appeared anywhere in it, comments
+included, so `simSiteSearch` (guide read normalised, the read its `catalogdump` control searches
+left raw) read as compliant while that control had never run here. It only saw reads with a src
+path typed into the call, so a `readSrc(p)` helper was invisible. It judged "anchor" against this
+checkout's raw bytes, so an LF clone found nothing, and its vacuity floor counted normalisers
+rather than anchors, so it still said ok. Its strip control passed on any failure at all and left
+a copy of `scripts/` in the temp folder every run. And the `simPollCharacter` fix went through a
+Bash heredoc and put real line breaks inside two string literals: the harness stopped parsing,
+all five controls with it, and the suite would have gone red on every ship.
 
-Both correlation gates were re-measured after the design change and re-set midway through the
-new gaps. The old board floor of 0.28 was cleared by the OLD RULE at 0.253 on one seed, which is
-0.027 of room and not a threshold. Now 0.47 and 0.45, each about 0.21 clear of both arms.
+**What it is now.** A tokeniser, so prose is never code. Anchors come from quoted strings,
+template literals, `+` chains, array joins and regexes, decided against normalised source so an
+LF clone finds what CRLF finds. Read paths resolve through consts, helpers, loops, properties and
+local functions. Any normaliser idiom counts, judged by running the call on a CRLF sample. It also
+runs `node --check` over every sim, play and sweep harness, so a syntax error is named as one. The
+header lists exactly which shapes are still out of reach. Measured: 72 harnesses carry a multi
+line anchor into src and 68 normalised reads guard one. Six controls (`strip`, `oneread`,
+`helper`, `comment`, `lf`, `parse`), each passing only when exactly its planted harness is named,
+each removing its temp copy.
 
-Final: **10 sections, 9 negative controls, all nine proved to fail the section each targets.**
-`liveobjectives` reproduces the un-tick on demand and fires at "Stuttgart week 21 after paying a
-man off: 21 to 15".
+**The real number was not four.** Widening the fence found five more controls that could never
+run on this checkout, all now normalised on read and each shown aborting before the fix and
+firing after: `simCfbDynasty` replay, `simErrorBoundary` unwrapped and nocatch, `simFetchRetry`
+noretry, `simFootleAtomicPool` partial, `simFootleDaily` freeze. With `simSiteSearch` catalogdump
+that is ten harnesses. `simTransferPathRepeat` and `simPollCharacter` were fixed in this round
+(the second one properly only after review), `simFightCareer` and `simFightGym` in Round 628.
+Running every control of those harnesses turned up one more dead control for a different reason:
+`simCfbDynasty` drain had crashed in esbuild since Round 568, because the engine copy it writes to
+the temp folder carries a relative `./entityIds` import. The copy's relative imports now point
+back at `src/lib`, and drain turns sections 2 and 3 red.
 
-**Two harness mistakes made and fixed in the building, both worth recording.** The first draft
-bundled its rewritten modules from the system temp directory, where `@/lib/...` does not
-resolve, and the entry imported both modules by ABSOLUTE PATH while the aliases only rewrite the
-`@/lib/` specifier: **five of the six controls reported green while changing nothing**. The
-second draft gated stature and board agreement on a 38 season sample where the two arms overlap
-(healthy 0.016 to 0.375, old rule 0.331 to 0.653), which is a coin toss dressed as a rule; the
-sample is 34 clubs and 4 seasons now and the arms separate cleanly (stature healthy 0.185 to
-0.452 against old 0.689 to 0.818, board agreement healthy 0.440 to 0.586 against old 0.086 to
-0.110), with both gates set midway through the measured gap.
+**Two wrong drafts of the fence, both worth knowing about.** The first matched every multi line
+literal and reported 47 harnesses, nearly all false, because a harness's own console output is
+full of multi line strings that are printed and never matched. That version was also
+undemonstrable: a check sitting at 47 failures cannot be proved by a negative control, since the
+control can only add a forty eighth. The second looked only at literals inline in a `.includes(`
+call and found zero, because the usual shape names the anchor first and hands it to a helper.
+What works is to let the source decide: a literal that appears in a real source file once line
+endings are normalised IS an anchor into that file, whatever plumbing carries it there, and if
+it does not also appear in that file's raw bytes it cannot match as written.
+
+**And a caution for anyone auditing this from a worktree.** A worktree has no `node_modules`, so
+any harness that spawns `ROOT/node_modules/vitest` or similar by absolute path cannot run there
+and reports zero failures for a reason that has nothing to do with its controls. That nearly got
+recorded here as two more findings. The review gates for this round ran those harnesses as
+scratch copies with only ROOT and the esbuild and vitest paths swapped, vitest on a config that
+extends the worktree's own, and a resolve hook for bare imports.
+
+
+## ROUND 628 2026-09-16: the fight screen, and a harness that agreed with itself
+
+Fight Career draws the bout now: two draining condition bars, per round punch bars, a flash on a
+knockdown, a card that pops when it changes, confetti on a win with gold for a stoppage. The bars
+come from `conditionTrack` in `src/lib/fightCareer.ts` rather than from the render, because a
+number computed inside a React render cannot be measured by a harness.
+
+**The lesson worth keeping is not the animation, it is how the calibration was wrong twice and
+every gate stayed green.** The drain rate was measured on fighters built straight from
+`makeFighter` at tiers 2 to 4, which land 2.9 punches a round. Bouts the game actually produces
+land 7.4. `simFightCareer` section 6 drew its sample the same wrong way, so the check and the
+constant confirmed each other and neither described the game. tsc was zero, the harness passed at
+89.5 percent, and opening the page showed both fighters pinned on the floor after a points
+decision. **A harness that invents its own population will confirm whatever it invented.** Section
+6 now plays real careers through real offers and real camps, and its FIRST assertion is that the
+sample looks like the game (5 to 10 punches landed per man per round, measured at 7.5) before it
+asserts anything about the bars. Re-measured over 7,233 real bouts the rate is 0.8, the median
+decision winner ends 59 and the median loser 34.
+
+**Two negative controls had never fired, since Round 620.** Running each control one at a time,
+rather than trusting that they existed, found that `simFightCareer` reads its source without
+normalising line endings. Anthony's checkout is CRLF for all 926 lines of `fightCareer.ts`, an
+anchor written inside a harness is LF, so a **multi line anchor can never match**. `noretire` and
+`driftdaily` are both multi line, so sections 2 and 4 were green because their control changed
+nothing. `simFightGym`'s `noretire` had the same defect. Both harnesses normalise on read now and
+every control fires. **This is invisible on an LF checkout, where all of them work**, so it is
+worth checking on any harness that rewrites source: `simClubManagerEraUcl`,
+`simClubManagerMeters` and `simFightPromoter` were all checked and every one of their controls
+applies.
+
+Verified in the browser at both widths: bars end 55 and 34 on a split decision won 96 to 94, 28
+confetti pieces, 10 animated round cards, no horizontal overflow at 375px.
 
 ## COLLEGE GRID RESOLVED 2026-09-16: it works, and the purge must NOT run
 
@@ -340,118 +425,6 @@ from unranked to 17, and the damage bar visibly took a point off chin and speed.
 **Not done in this round, on purpose.** Gym mode (sign and develop fighters, on the Club Manager
 shape) and promoter mode (build cards, on the Stadium Tycoon shape) are later rounds reading the
 same fighter and bout model, which is the reason the engine came first.
-
-## REVIEW ROUND 2026-09-16: the free agent board was a money printer
-
-An adversarial review of the Round 619 diff, four lenses over correctness,
-save safety, exploits and the UI, found nine real defects on a branch whose
-twelve harness sections were all green. Every one is fixed and pushed
-(`e4a1ab6` on PR 103). **The lesson worth keeping is the shape of the miss, not
-the bug.**
-
-**Nine green sections measured RATING and none measured MONEY.** `signFreeAgent`
-charged the signing on fee, 18 percent of notional value, and then wrote the
-FULL notional value onto the squad record. `sellValue` is 90 percent of value,
-so a free agent was worth five times what he cost the moment he signed. Sign
-every signable free agent each week and list him: **Everton turned 43m into
-358.81m in one season**, 22 signings for 55.0m against 19 sales for 358.9m, and
-Manchester City made 241m. Every note came from players the game invented.
-Section 11 is the check that was missing, and it buys and re-lists only the
-free agents it signed so an existing star's sale cannot flatter the number.
-
-The fix is the honest reading of a free transfer rather than a nerf: a market
-value is what a club would pay in a FEE and the market already said nothing
-about this man, while his ABILITY is real and is what you signed him for.
-
-**The other eight, each measured before it was fixed:**
-
-| Defect | Measured |
-|---|---|
-| Aged and retired twice at the rollover | 30 of 30 walked players two years too old; 5 of 221 departures silently retired after the feed announced them |
-| Pool ids not unique (Round 567's lesson, missed for the pool) | Ederson and Ederson share one id, signing one deletes both |
-| Payoff desk offered academy pads and the engine dropped them | button, title and news all claimed a free agent the engine never made |
-| `netSpend` blind to a payoff (Round 507's mistake, repeated) | four payoffs took 43m to 30.5m and it still graded done |
-| Season business printed a settlement as a fee | a 4.7m payoff rendered `OUT (0.0m)` |
-| Help copy overclaimed the season one board | true of the world's half only |
-| `ensureFreeAgents` not failing closed on records | one bad entry takes down buildMarket, not a screen |
-| Day one transfer feed, `goneNames` aliasing, four UI issues | see the commit |
-
-**And a control that had stopped controlling.** `youthonboard`'s anchor broke on
-an unrelated edit, so it failed closed and proved nothing. That IS the right
-failure, and it is still a control out of action: anchors want to be one line,
-not a pair that an adjacent change can move.
-
-Eight controls now, all confirmed to fail the section each targets.
-
-## OWNER REPORT LOGGED, AND BUILT 2026-09-16: Club Manager free agents
-
-**Filed as a Club Manager feature request, not a site issue.** Source: the
-footer report form. The useful half of the report, in the reporter's terms:
-*"Add free agents to Manager Mode, and allow players to have their contracts
-terminated so they become free agents."* The same report praised the recent
-**second legs live start points**, which is the first unprompted positive
-signal on that change and is worth remembering when the two legged knockout
-comes up again.
-
-The request is routed into the shared Transfer, Contract and Finance systems
-rather than added as a screen, which is what the master spec's Club Manager 2.0
-section asks for. Status: **BUILT**, on branch
-`claude/free-agents-contract-termination-5oeyzz`.
-
-**What shipped.**
-
-- `src/lib/clubManagerFreeAgents.ts`, new: the `FreeAgent` record, the payoff
-  curve, the world release table, the demand decay and the world gate. Pure,
-  same split as `clubManagerDeals.ts`.
-- `CareerState.freeAgents?`, optional so `SAVE_VERSION` does not move and no
-  live career on any device is discarded. `ensureFreeAgents` at the three usual
-  call sites, idempotent.
-- `terminateContract` and `signFreeAgent` in `clubManager.ts`, beside the
-  signings they mirror. Weekly and summer passes for the board.
-- Free tab on the transfer screen, a payoff desk on the contracts card with a
-  two tap confirm, help copy, SEO copy, regenerated search index.
-- `scripts/simClubManagerFreeAgents.mjs`, ten sections, six negative controls.
-
-**Three decisions that are worth not relitigating.**
-
-1. **The window does not apply to a free agent.** He has no club, so there is
-   no registration being traded between clubs and nothing for a window to
-   regulate. `signFreeAgent` is the only signing path in the engine without the
-   `transferWindow === null` guard, and that is deliberate: it is what makes
-   the board worth opening in February.
-2. **The world only releases real players once the world has moved on**
-   (`WORLD_POOL_FROM_YEAR`). In season one the save still is the real season,
-   so calling a real professional unemployed would read as a claim about the
-   man rather than about the simulation. Season one's board is made up players,
-   marked MADE UP like everywhere else, so the feature is still live on day one.
-3. **You cannot re-sign a man this club let go this season**, whether you paid
-   him off or let his deal run out. Both are free money loops and the second one
-   measured strictly cheaper than the contracts desk before the guard went in.
-
-**Balance took three goes and the harness is why.** A free transfer saves the
-whole fee, so the board must not also be better football. Build one put a 24
-year old rated 88 on Everton's board. Build two still finished a free agent only
-manager on an eleven rated 80.0 against a buyer's 76.0, because filling a squad
-to thirty for 35m buys depth and the fit adjusted rating reads depth. What fixed
-it, all three true to football: a player in his prime is never released for
-nothing; a free agent's wage carries a premium, because the money that would
-have gone to a selling club goes to him and his agent instead; and the board
-refuse a wage that takes the bill far past their ceiling. Measured now over 111
-shopping rounds the best affordable signing beats the best available free agent
-by 16.7 rating points, and the board never once won.
-
-**Verified.** `tsc` zero. `npm run build` clean. 321 component tests across 39
-files. The new harness green on the filename seed and on SIM_SEED 1, 2 and 3,
-with all six controls confirmed to fail the section each targets. Club Manager
-regression sims re-run.
-
-**Open, and small.** The remaining Transfer/Contract spec items this does not
-touch are the wider negotiation table items (add-ons and buy-back clauses on the
-free agent table, which a free agent does not have) and any front office reuse:
-the four GM sims already have their own release-and-sign pool, and Club Manager
-is soccer native (wages, fees, windows, no cap), so this shares the concept and
-the UI shape rather than the module. That judgement is recorded here so it is
-not re-argued.
 
 
 ## RELEASE MERGED 2026-09-16 00:46 EDT
@@ -2997,7 +2970,7 @@ nobody has built it yet. Numbers are his P1 numbering in `docs/TWEAKS-2026-08-28
 | Flags, never abbreviations, everywhere | DONE | Round 444 for Career Ladder and Missing XI; Round 453 swept the rest: every printed nationality renders through FlagImg with its name beside the flag (17 bare sites plus 2 country lines to 0), simNationalityFlags fences it, and the two long lists (Soccer Career's picker, Club Manager's market filter) sit under their confederation |
 | Polls more engaging | DONE | Round 521, his own words: "your polls are extremely dull u should add more character". Round 509's fixed two-string rewrite is gone; the component renders the database question as written, with two to four choices. The 46 still-to-come canned rows and the fallback pool both got a real question per matchup. His 2026-08-16 rule on the choices (three words, never a sentence) stays in force. |
 | Profile page accurate for every game | PART | the page enumerates games from the registry (no hand list, so a new game appears on its own); per game credit is fenced by simScoringCoverage (125 of 125 live routes wired) and best scores by simLeaderboardCaps; streak and badge correctness per game is not measured yet |
-| A correct points system per game | PART | Rounds 434 to 439 fixed six broken economies and the caps table; **Club Manager points design DONE in Round 628** (the old rule correlated 0.851 with the club's XI rating and paid 124 for winning the second division against 78 for winning the first; it is a ledger of shares now, fenced by simClubManagerScore with 6 controls). Other games' point designs not yet audited one by one |
+| A correct points system per game | PART | Rounds 434 to 439 fixed six broken economies and the caps table; Club Manager points design open |
 | Indexing | STOPPED | his 2026-09-04 instruction: "dont worry about bing or yandex anymore" |
 | More games you actually move in | DONE, ongoing | Round 433 Free Kick, Round 445 Buzzer Beater, Round 468 the three Soccer Career drills, one shared engine |
 | More animation across every sim | DONE for the inventory, Rounds 529 and 530 (row corrected 2026-09-14, it had been left reading OPEN) | Every one of the ten moments ranked in `docs/audits/animation-inventory-2026-09-11.md` is in the code, checked by grep rather than trusted from the design contract: `us-career/DraftDayCard.tsx` exists; `CountUp` has zero importers in `src`, so Round 147's rule holds; both dynasty recaps, the Imperialism champion card, the Club Manager XP screen, the Idle Arena trophy card, Rebuild's final grade, the Ballon d'Or countdown and the coach career panel all carry `cm-slam`, `cm-tick-in` or `ConfettiBurst`; Stadium Tycoon and Wonderkid Factory now carry the `prefers-reduced-motion` rule the inventory flagged missing. New moments beyond that inventory are fair game, but nothing on it is still owed |

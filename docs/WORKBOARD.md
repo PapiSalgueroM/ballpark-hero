@@ -1,103 +1,38 @@
 # Work board
 
-**Round 628 BUILT, 2026-09-16, reviewed and pushed 2026-09-17: the Club Manager season score now
-reads the manager, not the club.** Head `dee0e5e`. Full detail in `docs/HANDOFF-2026-09-17.md` and
-`docs/PROJECT-STATE.md`. It is a ledger of shares now (form 48, title 28, cup 24, Europe 24, board
-6 each to 30; the four non-European terms sum to exactly 130 so the five leagues with no
-Champions League route can still top the scale), weights grid searched over 77 seeded seasons at
-34 clubs, fenced by `scripts/simClubManagerScore.mjs` at 10 sections with 9 controls all proved to
-fire. An adversarial review raised 42 findings across seven lenses, 11 refuted; the worst was that
-the monotone law the design rests on was FALSE (paying a man off un-ticked a board objective and
-took 6 points off a live score) and the section written to guard it was blind because it played
-every career hands off. The original claim and its measurements follow.
+**Rounds 619, 628, 629 and 630, 2026-09-16: ON MAIN, desktop Claude lane.** Landed as one
+release from a fresh CRLF clone, after an adversarial review that found 28 defects confirmed by
+reproduction behind green gates: a settlement billed about 30 percent longer than quoted, a
+release timed before expiry that dodged the renewal fee, the last keeper releasable, one tap
+irreversible releases, `simPollCharacter` not parsing at all, and a fight screen that called a
+room sold out with seats empty. All fixed, each fix checked by an independent verifier. Free
+agents now carry a signing on fee (no transfer fee is not no money). Gate: tsc 0, `build:seo` 0,
+full node suite 328 of 329 on the frozen tree with the one red (a spent live test pool) fixed and
+green alone, and 12 of 14 targeted browser harnesses green, the other two pre-existing on things
+this release does not touch.
+Full account and the follow ups in `docs/PROJECT-STATE.md`.
 
-**Round 628 CLAIMED, 2026-09-16: the Club Manager season score reads the club, not the manager.**
-On branch `claude/free-agents-contract-termination-5oeyzz` (the branch this lane was given; 628
-rides beside Round 619 on PR 103 rather than going to a branch this lane has no permission to
-push). `docs/PROJECT-STATE.md` lists "A correct points system per game" as PART with **Club
-Manager points design open**, and this is that.
+**Queued by this lane, numbers reserved, none started:** 631, NFL Front Office cuts free the
+whole salary with no dead money and the man can be re-signed at once (the 619 exploit in a
+sibling sim). 632, Club Manager youth padding kids sell for millions with no value and no signing
+cost. Also open and unnumbered: `playClubManager` red on main (pre-existing, the Release clause
+button is never enabled for it), Fight Career bars pinning a third of decision losers for a player
+who reads every fight, and reduced motion gaps for width transitions and future `animate-*`
+classes.
 
-The rule today is `Math.min(130, myRow.pts + seasonTrophies.length * 10)`, at
-`src/lib/clubManager.ts:15067` for the rollover and `:14771` for `currentSeasonScore`.
+**Round 628, 2026-09-16, CLAIMED AND BUILT by the desktop Claude lane on branch
+`r628-fight-fx`.** Fight Career's bout screen: draining condition bars, per round punch bars, a
+knockdown flash, a popping card, confetti on a win. Shares `CareerFx.tsx`, which five sports
+already import, rather than opening a second effects module. Does NOT touch match action
+animations for live sim or career drills, which Codex claimed separately.
 
-**Two defects, both measured before anything was written, not argued.**
+Two findings in it are worth other lanes reading. A harness whose controls rewrite source must
+NORMALISE LINE ENDINGS on read: this checkout is CRLF, an anchor in a harness is LF, so every
+multi line anchor silently matches nothing. `noretire` and `driftdaily` in `simFightCareer` and
+`noretire` in `simFightGym` had never fired since Round 620. And a harness that builds its own
+sample can confirm a constant calibrated against that same sample while the real game does
+something else entirely: section 6 passed at 89.5 percent while the actual screen was broken.
 
-*One: the score reads the club.* A probe played one full season at twelve clubs with management
-held identical (nobody touched a thing, every entry auto played), so any spread is pure club
-stature. Range 24 to 90 on a 130 scale, and the correlation between the club's preview XI rating
-and the season score is **0.851**. Bayern finished 8th of 18 on grade F having hit 0 of 7 board
-objectives and scored 55; Sevilla finished 13th on grade C having hit 3 of 8 and scored 46. The
-F outscores the C. Real Madrid hit 1 objective of 8, graded C, and posted the highest score in
-the set at 90, above a Newcastle side that won its league on grade A for 78.
-
-*Three, and it is the sharpest: relegation is a promotion in points.* The same probe left the
-manager in place for eight seasons and never took a job offer. Sunderland finished 18th in the
-Premier League for a score of 43, went down, won the 24 club Championship and scored **124**.
-Everton did the same thing independently, 40 and 44 in the top flight, then 92 in the second.
-Against that, the Newcastle side that actually won the Premier League scored 78. **Winning the
-second division outscores winning the first by 46 points**, and it falls straight out of the
-arithmetic (46 games at 3 points against 38), so it is structural rather than a seed artifact.
-
-*Two: the 130 scale is unreachable in 19 leagues of 20 and saturated in the twentieth.* Maximum
-league points by league size: SuperSport HNL (10 clubs, 18 games) 54, the 18 club leagues 102,
-the big three 20 club leagues 114, EFL Championship (24 clubs, 46 games) **138**. So a perfect
-Croatian season tops out near 84 even with a cup treble and can never reach the ceiling, while
-the Championship passes 130 on league points alone and its trophies are worth nothing. The world
-leaderboard pays `100 * score / 130`, so this is a standing per league pay gap for identical
-quality.
-
-**Constraints this round is held to**, all verified in the source rather than assumed:
-- The output stays an integer in 0..130. `game_score_caps.max_score` for `club-manager` is 130
-  with 185,460 rows already recorded against it, so re-basing it is a data migration nobody asked
-  for. Measured today: 1,078 players, 172.0 rows each, p50 33, p90 77, p99 109, and 114 rows at
-  130.
-- `public.global_leaderboard()` takes the best reading per player per game per DAY and adds
-  `100.0 * day_best / max_score`, so the mid season curve is scored, not just the finish.
-- The function name `currentSeasonScore` and the field `sm.seasonScore` must not be renamed, and
-  the six call shapes in `useClubManager.ts` must not move: `simSessionMarks` section 5 and
-  `simActivityNotCompletion` both grep those literal strings, and `simActivityNotCompletion`'s
-  `match` control rewrites one of them to build its regression.
-- `SAVE_VERSION` must not move. Any new state field is optional with an `ensure*()` migration,
-  the shape `CareerState.freeAgents` uses.
-- The player SEES this number: `ClubManagerSeasonSummary.tsx:27` prints "Season Score", and
-  `ClubManagerHelp.tsx` line 32 states the rule in words. The copy changes with the rule.
-
-**Round 619, 2026-09-16: free agents and contract termination are BUILT, and two lanes worked
-this round.** The engine and the UI are on PR 103, branch
-`claude/free-agents-contract-termination-5oeyzz`, head `bc89389`, merged up to main `f63cf75`.
-`docs/design/round-619-free-agents-contract.md` landed on main from the other lane marked
-CONTRACT DRAFTED, NO CODE WRITTEN, so there is no duplicate code, but **do not implement 619
-from that contract: it is already built.** Read this entry first.
-
-**Where the two agree**, having been reached independently, which is the useful signal: a
-separate `FreeAgent` record rather than widening `MarketPlayer`; no window gate on either
-signing a free agent or ending a contract, with the nine existing guards untouched; a re-sign
-lock for the season a man was let go; the pool must never become a quality upgrade rack; and
-`simAcademy` is a gate on the round rather than an afterthought. It passes.
-
-**Where they differ, and it is one decision, owner's call.** The contract wants termination to
-cost a PERSISTING severance (`SeveranceRow[]`, `wageBill` becomes squad plus severance), so the
-wage cap keeps counting a man after he has gone. The built version charges a ONE OFF settlement
-out of the transfer kitty at 25 to 85 percent of the wages still owed, reading how much he wants
-to leave, and his wage leaves the bill that week. Both stop termination being free, and the
-built one is measured doing so. The contract's model additionally stops the wage cap loosening
-the moment you release somebody, which the built one does allow: transfer money converts into
-wage room. That is the whole of the difference and it is worth a decision rather than a quiet
-default.
-
-**Two smaller gaps against the contract, neither shipped:** `fillSquadGaps` still builds its own
-pool instead of reading the shared one (the contract calls one pool one set of rules an owner
-requirement), and an unsigned free agent does not lose rating over a season, he just ages off
-the board after 34 weeks.
-
-**What the built round carries:** `src/lib/clubManagerFreeAgents.ts`, the state field and its
-`ensureFreeAgents` migration with `SAVE_VERSION` untouched, `terminateContract`, `signFreeAgent`,
-`canPayOff`, `committedWageBill`, payoffs on the finance projection and in the closed ledger, a
-Free tab and a payoff desk, help and SEO copy, and
-`scripts/simClubManagerFreeAgents.mjs` at 13 sections with 9 negative controls all confirmed to
-fail the section each targets. An adversarial review raised 31 findings, 25 refuted, 6 confirmed
-and all 6 fixed; the worst was a money printer that nine green sections missed because they all
-measured rating and none measured money.
 
 **Round 626, 2026-09-16: Rounds 617, 618 and 626 are LIVE ON MAIN at `8998acd1`.** Full gate
 before landing: tsc 0, build 0, all 324 harnesses green. The adversarial review's two findings
@@ -808,7 +743,11 @@ table on 2026-09-15.
   likely source is a coach poached after week 30 (`tickStaff`, staff wages projected at the pre
   poach rate), not yet traced.
 
-- **619, CONTRACT DRAFTED, NO CODE: free agents in Manager Mode, and contract termination.**
+- **619, ON MAIN 2026-09-17 with Rounds 628 to 630, after an adversarial review (entry at the top
+  of this board, account in `docs/PROJECT-STATE.md`). Originally: CONTRACT DRAFTED, NO CODE: free
+  agents in Manager Mode, and contract termination.** The contract text below is kept as written;
+  two things changed in the build: the pool also carries six generated journeymen a season, and
+  every free agent pays a signing on fee.
   Raised by the owner on 2026-09-16 through the footer report and routed as a Club Manager
   feature request rather than a site issue, which is how he asked for it to be logged. His
   words: add free agents to Manager Mode, and allow players to have their contracts terminated

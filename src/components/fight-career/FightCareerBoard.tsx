@@ -4,9 +4,11 @@ import ShareButtons from '@/components/game/ShareButtons';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { cn } from '@/lib/utils';
+import { Confetti, ConditionBar, HitFlash } from '@/components/soccer-career/CareerFx';
 import {
   WEIGHT_CLASSES, STYLES, TACTICS, weightById,
   newFightCareer, runCamp, takeFight, legacyOf, ratingOf, effectiveAttrs,
+  conditionTrack,
   type FightCareerState, type Offer, type BoutResult, type CampPlan,
   type Tactic, type FightStyle, type WeightId,
 } from '@/lib/fightCareer';
@@ -381,32 +383,77 @@ export default function FightCareerBoard() {
     const visible = result.rounds.slice(0, shown);
     const done = shown >= result.rounds.length;
     const won = result.winner === 'player';
+    /* Round 628: the bars are computed in the lib, not here, so the harness can
+       measure them. See conditionTrack in src/lib/fightCareer.ts. */
+    const track = conditionTrack(result);
+    const at = shown > 0 ? track[Math.min(shown, track.length) - 1] : { round: 0, player: 100, opp: 100 };
+    const myCard = visible.reduce((a, r) => a + r.playerScore, 0);
+    const hisCard = visible.reduce((a, r) => a + r.oppScore, 0);
+    /* The most punches either man landed in one round, so the per round bars
+       are drawn against the fight's own scale rather than an invented ceiling.
+       Guarded at 1 because a round where nobody lands anything is legal. */
+    const busiest = Math.max(1, ...result.rounds.map(r => Math.max(r.playerLanded, r.oppLanded)));
+    const lastKd = visible.length ? visible[visible.length - 1].knockdown : null;
     return (
       <div className="space-y-4" ref={revealRef}>
-        <div className="rounded-lg border bg-card p-4">
+        <div className="relative overflow-hidden rounded-lg border bg-card p-4">
+          {/* Keyed on the round, so a new knockdown remounts it and it replays,
+              and a later render of the same round keeps the same key, so it
+              does not. Gated on the round by round reveal rather than on the
+              fight still running: the old `!done` gate meant the knockdown in
+              the last round never flashed, and in a stoppage that is nearly
+              always the one that ended it. A fight shown all at once gets no
+              flash, because nothing was revealed. */}
+          {lastKd && animate && (
+            <HitFlash key={`kd-${visible.length}`}
+              tone={lastKd === 'player' ? 'bg-emerald-400/30' : 'bg-destructive/30'} />
+          )}
           <div className="flex items-center justify-between text-sm font-semibold">
             <span className="truncate">{f.name}</span>
             <span className="shrink-0 px-2 text-xs text-muted-foreground">vs</span>
             <span className="truncate text-right">{offer.opponent.name}</span>
           </div>
-          <div className="mt-1 flex items-center justify-between text-xs tabular-nums text-muted-foreground">
-            <span>{visible.reduce((a, r) => a + r.playerScore, 0)}</span>
+
+          <div className="mt-2 flex items-start gap-3">
+            <ConditionBar value={at.player} label="You" />
+            <ConditionBar value={at.opp} label="Him" align="right" />
+          </div>
+
+          <div className="mt-2 flex items-center justify-between text-xs tabular-nums text-muted-foreground">
+            {/* count-pop keyed on the score itself: it replays only when the
+                number actually changes, not on every reveal tick. */}
+            <span key={`p${myCard}`} className="animate-count-pop font-semibold text-foreground">{myCard}</span>
             <span>after {visible.length} of {result.rounds.length}</span>
-            <span>{visible.reduce((a, r) => a + r.oppScore, 0)}</span>
+            <span key={`o${hisCard}`} className="animate-count-pop font-semibold text-foreground">{hisCard}</span>
           </div>
         </div>
 
         <div className="space-y-2">
           {visible.map(r => (
             <div key={r.round}
-              className={cn('rounded-md border p-2.5 text-xs',
+              className={cn('relative animate-round-in overflow-hidden rounded-md border p-2.5 text-xs',
                 r.knockdown === 'player' ? 'border-emerald-500/60 bg-emerald-500/10'
                   : r.knockdown === 'opp' ? 'border-destructive/60 bg-destructive/10' : 'bg-card')}>
               <div className="flex items-center justify-between font-semibold">
                 <span>Round {r.round}</span>
                 <span className="tabular-nums">{r.playerScore} - {r.oppScore}</span>
               </div>
-              <p className="text-muted-foreground">
+
+              {/* Punches landed, drawn against the busiest round of the night.
+                  The sentence underneath still says the numbers, because a bar
+                  on its own is a shape and the player wants the count. */}
+              <div className="mt-1.5 space-y-1" aria-hidden="true">
+                <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+                  <div className="h-full rounded-full bg-emerald-500 transition-[width] duration-500 ease-out"
+                    style={{ width: `${(r.playerLanded / busiest) * 100}%` }} />
+                </div>
+                <div className="h-1.5 overflow-hidden rounded-full bg-muted">
+                  <div className="h-full rounded-full bg-muted-foreground/60 transition-[width] duration-500 ease-out"
+                    style={{ width: `${(r.oppLanded / busiest) * 100}%` }} />
+                </div>
+              </div>
+
+              <p className="mt-1.5 text-muted-foreground">
                 You {TACTICS.find(t => t.id === r.tactic)?.label.toLowerCase()}, landing {r.playerLanded}. He landed {r.oppLanded}.
               </p>
               {r.note && (
@@ -430,8 +477,13 @@ export default function FightCareerBoard() {
 
         {done && (
           <>
-            <div className={cn('rounded-lg border p-4 text-center',
+            <div className={cn('relative overflow-hidden rounded-lg border p-4 text-center',
               won ? 'border-emerald-500/60 bg-emerald-500/10' : 'bg-card')}>
+              {/* A win is the moment worth celebrating, and a stoppage is the
+                  biggest one, so it gets the gold. A loss gets nothing: the
+                  screen going quiet is the point. */}
+              {won && <Confetti pieces={result.method === 'KO' || result.method === 'TKO' ? 46 : 28}
+                gold={result.method === 'KO' || result.method === 'TKO'} />}
               <p className="text-xs uppercase tracking-wide text-muted-foreground">
                 {result.method === 'D' ? 'Drawn' : won ? 'You win' : 'You lose'}
               </p>

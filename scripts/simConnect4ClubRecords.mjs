@@ -72,7 +72,11 @@ const norm = s => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').trim(
 
 /* The map is parsed out of the SHIPPED function, not retyped here. A copy in
    the harness would pass while the deployed file said something else. */
-const src = readFileSync(FN, 'utf8');
+/* Line endings normalised on read. Section 4 cuts the function body at the
+   first "\n}\n", and on a CRLF checkout that string is never in the raw file,
+   so the slice came back empty and all three shape checks failed on healthy
+   code: red on every Windows checkout since they were written. */
+const src = readFileSync(FN, 'utf8').replace(/\r\n/g, '\n');
 const mapBody = src.match(/const C4_CLUB_STRINGS: Record<string, string\[\]> = \{([\s\S]*?)\n\};/);
 if (!mapBody) {
   console.error('could not find C4_CLUB_STRINGS in the shipped function');
@@ -281,7 +285,12 @@ console.log('5) the DEPLOYED function answers club squares from records, and a m
      cache hits cheaply (they are a cacheOnly call and spend no AI). The pool is
      the whole candidate list rather than a fixed 40, which is why the count is
      printed: when it starts creeping toward the cap, the pool is running low. */
-  const SCAN_CAP = Math.min(candidates.length, 250);
+  /* 2026-09-17: the first 250 candidates were spent. The release suite for
+     Rounds 619 and 628 to 630 found every one of them cached, on this tree and
+     on the tree before it, with about 700 unused subjects further down the
+     list. Cache hits spend no AI, so the walk now covers the whole list, and
+     the pool only runs out when every candidate has been used once. */
+  const SCAN_CAP = candidates.length;
   const WANT_RECORDS = 3;
   let fromRecords = 0, fromCache = 0, missed = 0, tried = 0;
   let subject = null;

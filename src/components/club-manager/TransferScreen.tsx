@@ -6,8 +6,8 @@ import { nationalityOf } from '@/data/playerNationalities';
 import { FlagImg } from '@/components/FlagImg';
 import { groupByConfederation } from '@/lib/confederationGroups';
 import { Input } from '@/components/ui/input';
-import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp, UserPlus } from 'lucide-react';
-import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, leagueOf, freeAgentRefusal, committedWageBill } from '@/lib/clubManager';
+import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp } from 'lucide-react';
+import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, leagueOf } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, MarketPlayer, TransferStatus, DealExtras } from '@/lib/clubManager';
 /* Round 506: the deal desk. The screen reads the SAME verdict and the SAME
    meter the engine judges with, so what the bar says while you are typing and
@@ -17,10 +17,6 @@ import {
   termsVerdict, valuationLine, wageRoom, wageRoomLine,
 } from '@/lib/clubManagerDeals';
 import type { PersonalTerms } from '@/lib/clubManagerDeals';
-/* Round 619: the free agent board reads the engine's own terms and its own
-   refusal, so what the card says and what the button does cannot disagree. */
-import { FA_SHELF_WEEKS, freeAgentTerms, marketPull } from '@/lib/clubManagerFreeAgents';
-import type { FreeAgent } from '@/lib/clubManagerFreeAgents';
 import { ROLE_INFO, ROLE_LADDER, wageBill, wageCapFrom } from '@/lib/clubManager';
 import type { SquadRole } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
@@ -58,9 +54,6 @@ type SortKey = 'rating' | 'value' | 'young' | 'cheap';
 interface TransferScreenProps {
   career: CareerState;
   market: MarketPlayer[];
-  /* Round 619: players with no club, signable for no fee and with the window shut. */
-  freeAgents: FreeAgent[];
-  onSignFree: (faId: string) => void;
   /* Round 71: the market grew a brain. */
   onNegotiate: (mp: MarketPlayer) => void;
   onOffer: (amount: number, extras?: DealExtras) => void;
@@ -80,15 +73,6 @@ interface TransferScreenProps {
   /* Round 508: bring one of MY loans back early. */
   onRecallLoanee: (playerId: string) => void;
 }
-
-/** Round 619: how a man came to be on the free agent board, in the words a
- *  manager would use. The reason is the story on his card: a deal that ran out
- *  reads very differently from a club that paid him off. */
-const REASON_LINE: Record<FreeAgent['reason'], string> = {
-  expired: 'deal ran out at',
-  terminated: 'paid off by',
-  released: 'released by',
-};
 
 /** Round 94: the three things you can tell the world about a player. */
 const STATUS_META: Record<TransferStatus, { short: string; tint: string; blurb: string }> = {
@@ -111,7 +95,7 @@ const STATUS_META: Record<TransferStatus, { short: string; tint: string; blurb: 
 
 /** Buy/sell/news hub, shown inside the transfers tab. */
 export function TransferScreen({
-  career, market, freeAgents, onSignFree,
+  career, market,
   onNegotiate, onOffer, onWalk, onDismissNegotiation, onClause, onLoan,
   onAcceptBid, onRejectBid, onSetStatus, onLoanOut,
   onProposeTerms, onBuyLoanee, onEndLoanEarly, onRecallLoanee,
@@ -121,7 +105,7 @@ export function TransferScreen({
   const money = moneyIn(career);
   const [filter, setFilter] = useState<PosFilter>('ALL');
   const [query, setQuery] = useState('');
-  const [mode, setMode] = useState<'buy' | 'free' | 'sell' | 'news'>('buy');
+  const [mode, setMode] = useState<'buy' | 'sell' | 'news'>('buy');
   const [newsSort, setNewsSort] = useState<'recent' | 'fee'>('recent');
   /* Round 161: the deep filters. */
   const [posExact, setPosExact] = useState<'any' | Position>('any');
@@ -281,15 +265,7 @@ export function TransferScreen({
      and every wage read as over the ceiling. Every other reader in the repo
      falls back to wageCapFrom(bill), and so does this one now. */
   const bill = Math.round(wageBill(career));
-  /* Round 619: the same ceiling the line below falls back to, named once so
-     the free agent board can warn about a breach too. */
-  const wageCeiling = career.wageCap ?? wageCapFrom(bill);
-  const room = terms ? wageRoom(bill, wageCeiling, terms.wage) : null;
-  /* Round 619: the board, filtered by the same position chips the buy list
-     uses. No price or age bands: this list is short by design (it is capped at
-     FA_POOL_MAX) and another six dropdowns over twelve names is noise. */
-  const freeAgentsShown = freeAgents.filter(fa =>
-    filter === 'ALL' || POS_GROUPS[filter].includes(fa.position));
+  const room = terms ? wageRoom(bill, career.wageCap ?? wageCapFrom(bill), terms.wage) : null;
   const roomLine = room ? wageRoomLine(room) : '';
 
   const offerBtn = (label: string, amount: number, tone: 'safe' | 'risky' | 'close' = 'safe') => (
@@ -331,7 +307,7 @@ export function TransferScreen({
           <div className="text-[10px] text-muted-foreground">
             {windowOpen
               ? `${(career.windowWeeksLeft ?? 1) <= 1 ? 'DEADLINE: shuts after your next match' : `${career.windowWeeksLeft} match weeks until the deadline`} · offers can arrive any week · loans used ${loansUsed}/2`
-              : 'Reopens in January / next summer'}
+              : 'Reopens in January / next summer · free agents still sign from the contracts desk on the Squad tab'}
           </div>
         </div>
         <div className="text-right">
@@ -692,40 +668,28 @@ export function TransferScreen({
       )}
 
       {/* Mode toggle */}
-      <div className="grid grid-cols-4 gap-1">
+      <div className="grid grid-cols-3 gap-1.5">
         <button
           onClick={() => setMode('buy')}
-          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1 min-w-0 whitespace-nowrap transition-all',
+          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all',
             mode === 'buy' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
         >
-          <ArrowDownToLine className="w-3.5 h-3.5 shrink-0" /> Buy
-        </button>
-        {/* Round 619: the free agent board. Deliberately beside Buy and not
-            inside it: nothing here costs a fee and nothing here needs the
-            window, so it is a different market and not a filter on this one. */}
-        <button
-          onClick={() => setMode('free')}
-          data-free-agent-tab
-          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1 min-w-0 whitespace-nowrap transition-all',
-            mode === 'free' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
-        >
-          <UserPlus className="w-3.5 h-3.5 shrink-0" /> Free
-          {freeAgents.length > 0 && <span className="ml-0.5 text-[9px] bg-emerald-500 text-background rounded-full px-1.5 py-0.5 font-bold">{freeAgents.length}</span>}
+          <ArrowDownToLine className="w-3.5 h-3.5" /> Buy
         </button>
         <button
           onClick={() => setMode('sell')}
-          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1 min-w-0 whitespace-nowrap transition-all',
+          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all',
             mode === 'sell' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
         >
-          <ArrowUpFromLine className="w-3.5 h-3.5 shrink-0" /> Sell
+          <ArrowUpFromLine className="w-3.5 h-3.5" /> Sell
           {bids.length > 0 && <span className="ml-0.5 text-[9px] bg-gold text-background rounded-full px-1.5 py-0.5 font-bold">{bids.length}</span>}
         </button>
         <button
           onClick={() => setMode('news')}
-          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1 min-w-0 whitespace-nowrap transition-all',
+          className={cn('rounded-lg border py-2 text-xs font-bold inline-flex items-center justify-center gap-1.5 transition-all',
             mode === 'news' ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-foreground hover:border-primary')}
         >
-          <TrendingUp className="w-3.5 h-3.5 shrink-0" /> Latest
+          <TrendingUp className="w-3.5 h-3.5" /> Latest
         </button>
       </div>
 
@@ -892,103 +856,6 @@ export function TransferScreen({
         <ClosedWindowBusiness career={career} />
       ))}
 
-      {/* Round 619: the free agent board. */}
-      {mode === 'free' && (
-        <div className="space-y-2">
-          <div className="bg-card border border-border rounded-xl p-3 space-y-1">
-            <div className="text-[10px] text-emerald-400 uppercase tracking-wider font-bold">🤝 Free agents</div>
-            <p className="text-[10px] text-muted-foreground">
-              Nobody on this board has a club, so there is nobody to agree a fee with and{' '}
-              <span className="text-foreground font-semibold">the transfer window does not apply</span>.
-              You can sign any of them in February. All it costs is his signing on fee and his wages.
-            </p>
-            <p className="text-[10px] text-muted-foreground">
-              They are mostly older players and squad bodies, because that is who comes free. Rival clubs
-              are looking at the same board every week, and the good ones go first. Wait one out and his
-              demands drop, if somebody else has not taken him.
-            </p>
-          </div>
-
-          <div className="flex gap-1.5 flex-wrap items-center">
-            {(['ALL', 'GK', 'DEF', 'MID', 'ATT'] as PosFilter[]).map(f => (
-              <button
-                key={f}
-                /* No setPosExact here: freeAgentsShown never reads it, so
-                   clearing it only wiped an exact position set on the Buy tab. */
-                onClick={() => setFilter(f)}
-                className={cn('px-2.5 py-1 rounded-full border text-[10px] font-bold transition-all',
-                  filter === f ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border text-muted-foreground hover:border-primary')}
-              >
-                {f}
-              </button>
-            ))}
-          </div>
-
-          {freeAgentsShown.length === 0 ? (
-            <p className="text-[10px] text-muted-foreground bg-card border border-border rounded-xl p-3">
-              {freeAgents.length === 0
-                ? 'Nobody is out of contract right now. The board fills up in the summer, when deals run out across the world, and tops itself up as the season goes on.'
-                : 'Nobody in that position is a free agent right now.'}
-            </p>
-          ) : freeAgentsShown.map(fa => {
-            /* faTerms, not terms: the component already has a `terms` state for the
-               open negotiation's personal terms sheet, and shadowing it here left a
-               trap that typechecks clean because both are PersonalTerms. */
-            const faTerms = freeAgentTerms(fa);
-            const refusal = freeAgentRefusal(career, fa.id);
-            /* The committed bill, matching the engine's own gate: a man out on
-               loan is coming back and his wage with him, so the warning and the
-               refusal read the same number. */
-            const faRoomLine = wageRoomLine(wageRoom(committedWageBill(career), wageCeiling, faTerms.wage));
-            return (
-              <div key={fa.id} className="bg-card border border-border rounded-xl p-3" data-free-agent-card>
-                <div className="flex items-center gap-2">
-                  <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{fa.position}</span>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      {(() => { const nat = nationalityOf(career.eraId, fa.name); return nat ? <FlagImg name={nat} size={13} /> : null; })()}
-                      <span className="text-xs text-foreground truncate">{fa.name}</span>
-                      {fa.generated && <MadeUpTag />}
-                      {fa.wasMine && <span className="text-[8px] font-bold text-gold border border-gold/60 rounded px-1 shrink-0">WAS YOURS</span>}
-                    </div>
-                    <div className="text-[9px] text-muted-foreground">
-                      {fa.age}y · {REASON_LINE[fa.reason]} {fa.lastClub}
-                      {fa.weeks > 0 ? ` · ${fa.weeks} week${fa.weeks === 1 ? '' : 's'} without a club` : ' · just became available'}
-                    </div>
-                  </div>
-                  <span className={cn('text-sm font-bold font-display', ratingTint(fa.rating))}>{fa.rating}</span>
-                </div>
-                <div className="mt-1.5 pl-11 text-[10px] text-muted-foreground">
-                  He wants {faTerms.wage}k a week for {faTerms.years} years as a {ROLE_INFO[faTerms.role].label.toLowerCase()},
-                  and {money(faTerms.bonus)} to sign. No fee to anybody.
-                  {fa.weeks > 0 && marketPull(fa.weeks) < 1 && (
-                    <span className="text-emerald-400"> His asking price is already {Math.round((1 - marketPull(fa.weeks)) * 100)}% down on where he started.</span>
-                  )}
-                </div>
-                {faRoomLine && <p className="mt-1 pl-11 text-[10px] text-yellow-400">{faRoomLine}</p>}
-                <div className="mt-1.5 pl-11">
-                  <button
-                    onClick={() => onSignFree(fa.id)}
-                    disabled={refusal !== null}
-                    data-sign-free-agent
-                    title={refusal ?? `Sign him for ${money(faTerms.bonus)}, ${faTerms.wage}k a week.`}
-                    className={cn('w-full px-2 py-1.5 rounded-lg text-[10px] font-bold transition-all',
-                      refusal === null ? 'bg-emerald-600 text-white hover:opacity-90' : 'bg-secondary text-muted-foreground cursor-not-allowed')}
-                  >
-                    {refusal === null ? `Sign on a free · ${money(faTerms.bonus)}` : refusal}
-                  </button>
-                </div>
-              </div>
-            );
-          })}
-          {freeAgents.length > 0 && (
-            <p className="text-[9px] text-muted-foreground">
-              A man nobody signs inside {FA_SHELF_WEEKS} weeks drops off the board for good.
-            </p>
-          )}
-        </div>
-      )}
-
       {mode === 'sell' && (
         <div className="space-y-2">
           {/* Round 71: incoming bids for my players */}
@@ -1104,7 +971,7 @@ export function TransferScreen({
               <p className="text-[9px] text-muted-foreground px-1 pb-1.5 border-b border-border/40">
                 {windowOpen
                   ? 'Nobody sells a player over the counter. Transfer list him and clubs will come to you with offers, sometimes two of them fighting over the same man, and the bids land in Incoming above.'
-                  : 'The window is shut, so nobody moves today. You can still tell the club who is available, who is off limits and who you want out on loan, and it will be waiting when it reopens.'}
+                  : 'The window is shut, so no transfers today. Free agents are the exception: sign them from the contracts desk on the Squad tab. You can still tell the club who is available, who is off limits and who you want out on loan, and it will be waiting when it reopens.'}
               </p>
               {sellable.map(p => {
                 const st = p.transferStatus;
@@ -1257,10 +1124,6 @@ export function TransferScreen({
 
 /** This season's in/out list, shown when the window is shut. */
 function ClosedWindowBusiness({ career }: { career: CareerState }) {
-  /* Round 514's rule, missed here: this component sits outside TransferScreen's
-     own `money` shadow, so it was printing pounds whatever currency the save
-     was started in. */
-  const money = moneyIn(career);
   return (
     <div className="bg-card border border-border rounded-xl p-4">
       <div className="text-xs font-bold text-foreground mb-2">This season's business</div>
@@ -1273,16 +1136,7 @@ function ClosedWindowBusiness({ career }: { career: CareerState }) {
             ? <span className="text-emerald-400">IN&nbsp;&nbsp;</span>
             : <span className="text-red-400">OUT</span>}
           <span className="text-foreground ml-2">{t.name}</span>
-          {/* Round 619: a settlement is not a fee. A payoff row carries fee 0
-              by design, so printing t.fee alone rendered a 4.7m contract
-              buyout as "OUT Dewsbury-Hall (0.0m)", which reads as giving him
-              away and leaves the money that really left the kitty off the one
-              screen a manager checks to see what he did this season. */}
-          <span className="text-muted-foreground ml-1">
-            {t.payoff
-              ? `paid off, ${money(t.payoff)}`
-              : `${money(t.fee)}${t.loan ? ', loan' : ''}`}
-          </span>
+          <span className="text-muted-foreground ml-1">({money(t.fee)}{t.loan ? ', loan' : ''})</span>
         </p>
       ))}
     </div>

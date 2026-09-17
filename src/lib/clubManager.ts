@@ -12,9 +12,9 @@ import { realJobOffers, allOfferClubs, invalidateOfferClubCache } from '@/lib/ma
    Career has used since Round 124, rather than a second thinner one. */
 import { runManagerSummer, NATION_CONFED } from '@/lib/soccerInternational';
 import type { JobOffer as MarketJobOffer, ManagerProfile, ClubTier } from '@/lib/managerOffers';
-/* Round 628: the season score lives in its own pure module so a harness can
-   drive it with synthetic inputs and no engine bundle. Type-only plus plain
-   functions, no cycle: clubManagerScore imports nothing from here. */
+/* Round 633: the season score lives in its own pure module so a harness can
+   drive it with synthetic inputs and no engine bundle. clubManagerScore
+   imports nothing from here, so there is no cycle. */
 import {
   seasonLedger, seasonLedgerScore, type SeasonHandover, type SeasonLedger, type SeasonLedgerInput,
 } from '@/lib/clubManagerScore';
@@ -72,17 +72,6 @@ import {
   loanOutTermsFor, offerVerdict, patienceCost, termsNote, termsVerdict,
 } from '@/lib/clubManagerDeals';
 import type { LoanTerms, PersonalTerms } from '@/lib/clubManagerDeals';
-/* Round 619: the free agent pool and the payoff maths, in their own file for
-   the same reason the deals and the staff are in theirs. */
-import {
-  FA_BOARD_FLOOR, FA_IDLE_DECAY, FA_SHELF_WEEKS, WORLD_POOL_FROM_YEAR, aiInterest, capPool,
-  dedupePool,
-  uniqueFreeAgentId,
-  freeAgentFromMarket, freeAgentFromPlayer, freeAgentTerms, sortPool,
-  refusalLine, signedValue, terminationCost, terminationMoraleHit, wageCeilingBlocks,
-  willJoin, worldReleases,
-} from '@/lib/clubManagerFreeAgents';
-import type { FreeAgent } from '@/lib/clubManagerFreeAgents';
 /* Round 513: manager XP and the seven trees, in their own file for the same
    reason the deals and the staff are in theirs. */
 import { addXp, askEdge, dutyEdge, ensureXp, gateEdge, levelFor, pressCushion, promiseCushion, seasonXp, xpOf, youthIntakeEdge, youthReportEdge } from '@/lib/clubManagerXp';
@@ -858,15 +847,6 @@ export interface TransferRecord {
    * record written before Round 507 and on every deal without one.
    */
   bonus?: number;
-  /**
-   * Round 619: the settlement paid to end a contract early, in millions, on
-   * the `out` record of a player who was paid off. Optional and absent
-   * everywhere else, exactly the shape Round 507 gave `bonus` and for the same
-   * reason: it leaves the same kitty, so the books have to count it, but it is
-   * NOT a transfer fee and nothing may report it as one. A payoff row carries
-   * `fee: 0`, which is the truth (nobody paid you anything for him).
-   */
-  payoff?: number;
 }
 
 /* ---------- Round 71: the transfer market grows a brain ---------- */
@@ -1800,10 +1780,10 @@ export interface SeasonSummary {
   qualifiedUcl: boolean;
   signings: TransferRecord[];
   offers: JobOffer[];
-  /** Round 628: the ledger in clubManagerScore.ts, 0..130. Was league points
+  /** Round 633: the ledger in clubManagerScore.ts, 0..130. Was league points
    *  plus 10 a trophy, which read the club rather than the manager. */
   seasonScore: number;
-  /** Round 628: the five terms behind it, so the summary can show its working
+  /** Round 633: the five terms behind it, so the summary can show its working
    *  instead of printing a number nobody can explain. Optional because a
    *  summary stored in an older save has none. */
   seasonScoreParts?: SeasonLedger;
@@ -1844,6 +1824,14 @@ export interface CareerState {
    *  through early season fixtures, so listing a man and waiting for offers
    *  is now an actual strategy instead of a single-screen gamble. */
   windowWeeksLeft?: number;
+  /** Round 619: men with no club, carried across weeks and seasons. */
+  freeAgents?: FreeAgent[];
+  /** Round 619: what ending a contract early still costs after he has gone. */
+  severance?: SeveranceRow[];
+  /** Round 619 review: every man this manager has released. None of them
+   *  signs for him again by any route, so it outlives the pool record, which
+   *  ages out after two summers. See releasedByYouNames. */
+  releasedNames?: string[];
   aiHeadlines: string[];
   /** Names no longer purchasable (bought by me or by AI clubs this season). */
   goneNames: string[];
@@ -1898,7 +1886,7 @@ export interface CareerState {
    *  the run-in played by the manager before you. The board screen says so, and
    *  it is what stops a simulated run-in ever being presented as real history. */
   midSeasonStart?: 'autumn' | 'newYear' | 'runIn';
-  /** Round 628: what the manager before you had already banked when a takeover
+  /** Round 633: what the manager before you had already banked when a takeover
    *  career began, frozen at the handover so the season score can subtract it
    *  without the number moving with your own results. Absent on a career
    *  started from week 0 and on every save written before the round, and
@@ -2067,15 +2055,6 @@ export interface CareerState {
    *  the slot's own line does not offer, so a shape change cannot leave a
    *  poacher's duty on a centre back. Absent on an older save. */
   xiDuties?: (Duty | null)[];
-  /**
-   * Round 619: players with no club at all, signable for no fee and, because
-   * there is no selling club to deal with, signable with the window shut.
-   * Absent on every save written before this round, which ensureFreeAgents
-   * reads as an empty board and fills at the next rollover, so an old save
-   * loses nothing and gains the pool the first summer it plays.
-   * See clubManagerFreeAgents.
-   */
-  freeAgents?: FreeAgent[];
 }
 
 /* ---------- Round 505: the armband and the set piece takers ---------- */
@@ -4668,32 +4647,465 @@ export function wageFor(p: CMPlayer): number {
   return Math.max(1, Math.round(base * youth));
 }
 
-/** The whole weekly wage bill, in thousands. */
-export function wageBill(career: CareerState): number {
-  return career.squad.reduce((s, p) => s + (p.wage ?? wageFor(p)), 0);
+/* ─────────────────── Round 619: free agents and termination ───────────────────
+   Contract: docs/design/round-619-free-agents-contract.md, from the owner's
+   footer report asking for free agents in Manager Mode and for players to have
+   their contracts terminated.
+
+   THE DEFECT THIS EXISTS TO PREVENT, which is why severance is here rather
+   than anywhere else. wageBill reduced over state.squad alone, so a terminated
+   player's wage left the bill in the same tick he left the squad. Ending a
+   contract would have cost nothing, the wage cap would have loosened on every
+   release, and sacking your three worst contracts would have beaten selling
+   them or playing them. That is not a feature, it is a delete button that pays
+   you, and it would have quietly destroyed the cap that Round 105 built. So a
+   release writes a liability that outlives the player, and the bill still sees
+   it: the cap, the weekly charge and the season projection all read wageBill,
+   so one change makes all three honest at once. */
+
+export interface FreeAgent {
+  name: string;
+  position: Position;
+  age: number;
+  rating: number;
+  /** What a club would pay for him. A made up journeyman sits on the floor. */
+  value?: number;
+  /** Round 619 review: what he asks a week, in thousands, when that is not
+      simply the wage his value prices. Set on a made up journeyman, whose wage
+      comes off his squad's own values while his value is the floor (see
+      topUpFreeAgents). Absent on a real man. */
+  wage?: number;
+  generated?: boolean;
+  /** Season he became available, so the pool can age and clear. */
+  since: number;
+  /** 'unattached' is a made up journeyman the pool is topped up with (see
+      topUpFreeAgents), so a new save has somebody in it. Never a real player:
+      taking a real footballer off his real club would be inventing a transfer. */
+  reason: 'released' | 'expired' | 'unattached';
+  /** Set only when I was the one who let him go. */
+  fromMyClub?: true;
+}
+
+export interface SeveranceRow {
+  name: string;
+  /** Thousands per week, the same unit as CMPlayer.wage. */
+  weekly: number;
+  /** Calendar weeks still owed. Counts down with the wage charge. */
+  weeksLeft: number;
 }
 
 /**
- * Round 619: the wage you are COMMITTED to, which is the bill plus everybody
- * out on loan.
+ * Round 619: defaults both lists, so every save written before this loads.
  *
- * wageBill is what you are paying this week and that is the right number for
- * the contracts desk and the board's weekly drip, because a man out on loan is
- * somebody else's payroll for the season. It is the wrong number for deciding
- * whether you can take on a NEW multi year contract, because he is coming back
- * and his wage comes back with him.
- *
- * Without this, the free agent ceiling was reversibly evadable and the loan
- * desk was the lever. Reproduced at Sevilla: the board refuses a 24k a week
- * free agent, loaning out two 19k earners flips that refusal to null, the
- * signing goes through, and recalling both in the same window leaves the bill
- * at 304 against a ceiling of 280 that is never asked again. Selling somebody
- * to make room is a real decision because he is gone; a loan is a round trip
- * that costs a little morale and comes back cash positive.
+ * A save with no pool at all (a new career, or one written before free agents
+ * existed) is topped up with journeymen on the spot, so the list is not empty
+ * until the first summer. A save that already has a pool is left alone here:
+ * the rollover tops it up once a season, and an empty pool mid season just
+ * means every journeyman was signed.
  */
-export function committedWageBill(career: CareerState): number {
-  return wageBill(career)
-    + (career.loanedOut ?? []).reduce((s, l) => s + (l.player.wage ?? wageFor(l.player)), 0);
+export function ensureFreeAgents(state: CareerState): void {
+  const fresh = !Array.isArray(state.freeAgents);
+  if (fresh) state.freeAgents = [];
+  if (!Array.isArray(state.severance)) state.severance = [];
+  if (fresh) topUpFreeAgents(state);
+}
+
+/** Round 619 review: how many unattached journeymen the pool is kept at. */
+export const FREE_AGENT_POOL_TARGET = 6;
+
+/**
+ * Round 619 review: what a made up journeyman fetches, which is next to
+ * nothing: every club in the game could have had him for free all summer and
+ * none did. It is the same floor agePlayer lets a value fall to.
+ *
+ * The second build valued him off his squad instead, the way a squad player of
+ * his rating is valued, and that was a money machine: sign all six for no fee,
+ * transfer list them, and the bids were real. Measured on that build over the
+ * first summer window, Manchester City banked 21.5m and Arsenal 24.6m, every
+ * season, because the summer tops the list back up. His WAGE still comes off
+ * the squad (FreeAgent.wage), because wages are the thing that has to look like
+ * a real squad player's.
+ */
+export const JOURNEYMAN_VALUE = 0.2;
+
+/** The club level a free agent measures you by, shared by interest and the top up. */
+function freeAgentClubLevel(career: CareerState): number {
+  return career.clubStrengths?.[career.clubName] ?? STRENGTH_PRIORS[career.clubName] ?? 66;
+}
+
+/**
+ * What a player of this rating and age is worth at this club, the way the
+ * projected world values the men it makes up: the raw curve times the median
+ * ratio of real value to raw curve across the squad (valueScaleFor in
+ * clubManagerEras does the same thing off a baked roster). Without a value
+ * wageFor falls back to the raw curve, which for a squad level player is about
+ * ten times his real wage, and the cap refuses him for no honest reason.
+ */
+export function squadScaledValue(squad: CMPlayer[], rating: number, age: number): number {
+  /* Above the floor only: a journeyman you signed is worth the floor whatever
+     he is rated, so counting him would drag every later journeyman's wage down. */
+  const ratios = squad
+    .filter(p => !p.isYouth && !p.onLoan && (p.value ?? 0) > JOURNEYMAN_VALUE)
+    .map(p => (p.value as number) / baseValue(p.rating, p.age))
+    .sort((a, b) => a - b);
+  const scale = ratios[Math.floor(ratios.length / 2)] || 1;
+  return Math.max(0.2, Math.round(baseValue(rating, age) * scale * 10) / 10);
+}
+
+/** The position groups the journeymen cycle through, so the list is not six strikers. */
+const JOURNEYMAN_GROUPS: PosGroup[] = ['GK', 'DEF', 'MID', 'ATT', 'DEF', 'MID'];
+
+/**
+ * Round 619 review: the pool is topped up with made up journeymen.
+ *
+ * The first build only ever filled the pool with your own ex-players, so a new
+ * save had no free agents at all and the first one you could sign turned up a
+ * season after you let somebody go. The fix is NOT to move real footballers
+ * off their real clubs into the pool, because that is inventing a transfer.
+ * These men are generated, flagged generated, and named off makeGeneratedName,
+ * which never returns a real player's name.
+ *
+ * They are cover and nothing more. Rated 20 to 26 below the club's level, so
+ * every one of them passes freeAgentInterest and none of them is a first team
+ * upgrade, which is the fillSquadGaps warning this round lives under: squads
+ * topped up with good free agents wiped out the value of running an academy.
+ * The emergency fill's own band is 14 to 26 below, so these sit in the bottom
+ * of it and are no better than the men it already reached for.
+ *
+ * They are also worth nothing to sell (JOURNEYMAN_VALUE), while they ask the
+ * wage a man of their rating and age earns at this club, priced off the squad's
+ * own values. The two used to be one number and that made them a free asset.
+ *
+ * Deterministic (hashed seeds, no Math.random), so a seeded stream is not
+ * moved by the top up, and no name repeats anyone in the squad, the pool, the
+ * academy, out on loan, retired, gone this season, released by you, or on the
+ * market.
+ */
+export function topUpFreeAgents(state: CareerState): void {
+  const pool = Array.isArray(state.freeAgents) ? state.freeAgents : [];
+  let have = pool.filter(f => f.reason === 'unattached').length;
+  if (have >= FREE_AGENT_POOL_TARGET) return;
+  const level = freeAgentClubLevel(state);
+  const used = new Set<string>([
+    ...state.squad.map(p => p.name),
+    ...pool.map(f => f.name),
+    ...(state.retiredNames ?? []),
+    ...(state.goneNames ?? []),
+    ...(state.releasedNames ?? []),
+    ...(state.academy?.prospects ?? []).map(pr => pr.name),
+    ...(state.loanedOut ?? []).map(l => l.player.name),
+    ...marketBase(yearsOn(state), state.eraId).map(m => m.name),
+  ]);
+  const out = [...pool];
+  for (let k = 0; have < FREE_AGENT_POOL_TARGET && k < FREE_AGENT_POOL_TARGET * 3; k++) {
+    const seed = `free-agent|${state.clubName}|${state.season}|${k}`;
+    let name = makeGeneratedName(seed);
+    for (let j = 1; used.has(name) && j < 25; j++) name = makeGeneratedName(`${seed}|${j}`);
+    if (used.has(name)) continue;
+    used.add(name);
+    const group = JOURNEYMAN_GROUPS[have % JOURNEYMAN_GROUPS.length];
+    const choices: Position[] = group === 'GK' ? ['GK'] : group === 'DEF' ? POS_DEF : group === 'MID' ? POS_MID : POS_ATT;
+    const position = choices[cInt(`${seed}|p`, 0, choices.length - 1)];
+    const age = cInt(`${seed}|a`, 24, 33);
+    const rating = clamp(Math.round(level) - cInt(`${seed}|r`, 20, 26), 40, 99);
+    const worth = squadScaledValue(state.squad, rating, age);
+    out.push({
+      name, position, age, rating,
+      value: JOURNEYMAN_VALUE,
+      wage: freeAgentTerms({ name, position, age, rating, value: worth, since: state.season, reason: 'unattached' }).wage,
+      generated: true,
+      since: state.season,
+      reason: 'unattached',
+    });
+    have += 1;
+  }
+  state.freeAgents = out;
+}
+
+/**
+ * Round 619: how the pool ages over a summer.
+ *
+ * Exported because the rollover is the only caller and an inline expression
+ * there is untestable: the harness could not reach it without playing a whole
+ * season, so the decay claim went unchecked on the first draft and printed a
+ * note instead of a verdict. A rule nothing can test is a rule nobody is
+ * keeping.
+ *
+ * Anyone who retired leaves whatever else is true of him, everyone left ages a
+ * year and loses a rating point, and a man unsigned for two seasons is gone, so
+ * a save cannot slowly accumulate a bench of good free agents.
+ */
+export function decayFreeAgents(pool: FreeAgent[], nextSeason: number, gone: Set<string>): FreeAgent[] {
+  return pool
+    .filter(f => !gone.has(f.name) && nextSeason - f.since < 2)
+    .map(f => ({ ...f, age: f.age + 1, rating: Math.max(40, f.rating - 1) }));
+}
+
+/** What the settlements still cost a week, in thousands. */
+export function severanceBill(career: CareerState): number {
+  return (career.severance ?? []).reduce((s, r) => s + r.weekly, 0);
+}
+
+/**
+ * The whole weekly wage bill, in thousands.
+ *
+ * Round 619: the squad PLUS what you still owe men you let go. See the block
+ * above for why that is not optional.
+ */
+export function wageBill(career: CareerState): number {
+  return career.squad.reduce((s, p) => s + (p.wage ?? wageFor(p)), 0) + severanceBill(career);
+}
+
+/** A settlement is a negotiated discount on the remainder, not a gift. */
+export const SEVERANCE_RATE = 0.5;
+/** And never more than two seasons of it, so a four year deal is not fatal. */
+export const SEVERANCE_CAP_SEASONS = 2;
+
+/** What letting this man go would cost, so a screen can say so before you do it. */
+export function severanceFor(state: CareerState, p: CMPlayer): { weekly: number; weeksLeft: number } {
+  const wage = p.wage ?? wageFor(p);
+  const seasonWeeks = Math.max(1, state.calendar.length);
+  const leftThisSeason = Math.max(0, seasonWeeks - state.week);
+  const yearsBeyond = Math.max(0, (p.contractYears ?? 1) - 1);
+  const owed = Math.min(leftThisSeason + yearsBeyond * seasonWeeks, SEVERANCE_CAP_SEASONS * seasonWeeks);
+  return { weekly: Math.max(1, Math.ceil(wage * SEVERANCE_RATE)), weeksLeft: Math.max(1, Math.round(owed)) };
+}
+
+/** Why a release would be refused. The card shows the same reason the engine uses. */
+export type ReleaseBlock = 'midMatch' | 'onLoan' | 'lastKeeper' | 'squadSize' | 'squadRules' | 'seniorFloor';
+
+/**
+ * Round 619 review: the one place that decides whether a man can be released,
+ * so the button and the engine can never disagree. Null means he can go.
+ *
+ * The first build checked only a loan and the senior floor, and skipped the
+ * shared exit rule every other way out of the squad passes (selling, a bid, a
+ * loan): not the last keeper, not a squad of 14 or fewer, not a man promised
+ * in an open deal. So a club could release both keepers and play on with an
+ * outfielder in goal. It also worked with a match paused at half time, and the
+ * second half then kicked off a man short because the lineup still named him.
+ */
+export function releaseBlock(career: CareerState, p: CMPlayer): ReleaseBlock | null {
+  if (career.live) return 'midMatch';
+  if (!canLeaveSquad(career, p)) {
+    /* canLeaveSquad is the gate. These lines only name which of its rules
+       said no, for the screen, and anything they do not recognise is the
+       open deal lock. */
+    if (p.onLoan) return 'onLoan';
+    if (p.position === 'GK' && career.squad.filter(x => x.position === 'GK').length <= 1) return 'lastKeeper';
+    if (career.squad.length <= 14) return 'squadSize';
+    return 'squadRules';
+  }
+  const seniorsAfter = career.squad.filter(x => x.id !== p.id && !x.isYouth && x.age >= 20).length;
+  if (seniorsAfter < SENIOR_FLOOR) return 'seniorFloor';
+  return null;
+}
+
+/**
+ * End a contract early. NOT gated on the transfer window, because ending your
+ * own contract is not a transfer.
+ *
+ * Refuses whatever releaseBlock refuses: mid match, a loan in (he goes back
+ * through breakLoan), the shared squad rules, or a release that would drop the
+ * senior count below the floor. You cannot sack your way to an illegal squad.
+ */
+export function releasePlayer(career: CareerState, playerId: string): CareerState | null {
+  ensureFreeAgents(career);
+  const p = career.squad.find(x => x.id === playerId);
+  if (!p || releaseBlock(career, p)) return null;
+
+  const sev = severanceFor(career, p);
+  /* The dressing room reads it, and how hard depends on how well regarded he
+     was. This is what stops a mass clear out being free once the money is. */
+  const sting = clamp(1 + (p.rating - 60) / 8, 1, 6);
+  const remaining = career.squad.filter(x => x.id !== playerId);
+  const next: CareerState = {
+    ...career,
+    squad: remaining.map(x => ({ ...x, morale: clamp(x.morale - sting, 5, 99) })),
+    /* He leaves the way every other exit leaves (acceptBid, loanOutPlayer):
+       out of the XI, off every set piece job, and every bid for him is gone.
+       The first build left his bids behind, so a met release clause for a man
+       no longer at the club collapsed on deadline day with a headline saying
+       the squad could not spare him. */
+    xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
+    setPieces: setPiecesWithout(career.setPieces, playerId),
+    incomingBids: (career.incomingBids ?? []).filter(b => b.playerId !== playerId),
+    severance: [...(career.severance ?? []), { name: p.name, weekly: sev.weekly, weeksLeft: sev.weeksLeft }],
+    freeAgents: addFreeAgent(career.freeAgents ?? [], {
+      name: p.name, position: p.position, age: p.age, rating: p.rating,
+      value: p.value, generated: p.generated, since: career.season,
+      reason: 'released', fromMyClub: true,
+    }, career, remaining.map(x => x.name)),
+    /* He cannot be sold back to you this season. */
+    goneNames: career.goneNames.includes(p.name) ? career.goneNames : [...career.goneNames, p.name],
+    /* And he never signs for you again, by any door. goneNames empties every
+       summer and the pool record ages out after two, so the second build's
+       block lasted only as long as the record: from the next season the market
+       listed a real man you had released at his old price and bought him
+       straight back. */
+    releasedNames: (career.releasedNames ?? []).includes(p.name)
+      ? career.releasedNames
+      : [...(career.releasedNames ?? []), p.name],
+  };
+  return next;
+}
+
+/**
+ * Add to the pool, keyed by name, refusing anyone who is already somewhere he
+ * cannot also be. The contract lists duplicate records as an edge case and this
+ * is the one place that can create one.
+ */
+function addFreeAgent(pool: FreeAgent[], fa: FreeAgent, state: CareerState, stillHere: string[] = []): FreeAgent[] {
+  if ((state.retiredNames ?? []).includes(fa.name)) return pool;
+  /* The squad to check against is the one AFTER he leaves, passed in, not the
+     one on the state. Reading state.squad here matched the man against himself
+     on every release, so the pool could never be populated at all: the first
+     run of the harness reported it holding zero men after a release that had
+     plainly happened. */
+  if (stillHere.includes(fa.name)) return pool;
+  /* One record per name, and the NEW one wins. The first build kept whichever
+     record was there first, so a man already in the pool under an old record
+     kept it through a fresh release: no fromMyClub, an old season, and he could
+     be signed straight back while his new settlement ran. */
+  return [...pool.filter(x => x.name !== fa.name), fa];
+}
+
+/** Is this man interested in signing for you? A strong free agent will refuse a weak club. */
+export function freeAgentInterest(career: CareerState, fa: FreeAgent): boolean {
+  const mine = freeAgentClubLevel(career);
+  /* Round 619: BELOW the club's level, not above it.
+     The first rule was rating <= mine + 4, and mine is an XI average, so at
+     every club measured (Everton 82.2, Brentford 85.5, Arsenal 88.5, Napoli
+     82.6) one hundred percent of that club's own seniors cleared it, including
+     the best player in the squad. Since your own men are the only population
+     the pool ever holds, that made it a free rack holding your whole squad at
+     full rating rather than the weak bin the contract describes. A man good
+     enough to walk into your first team does not sign for you for nothing; he
+     goes somewhere better. */
+  return fa.rating <= mine - 6;
+}
+
+/**
+ * Round 619 review: the wage and the length a free agent signs for, the ONE
+ * place both come from, so the button can quote exactly what signFreeAgent
+ * commits. The first build worked them out inside signFreeAgent and the screen
+ * showed neither, so a manager found the wage in the jump of his wage bill.
+ *
+ * He has no club and every club can talk to him, so he asks what a renewal
+ * asks, not the bare market rate. Pricing him at plain wageFor made running a
+ * deal down cheaper than renewing it on wages as well as on fees. The ladder
+ * is renewalTerms', deliberately, so the two routes cost the same per week.
+ *
+ * And the signing on fee too, Round 619 review. A free transfer means no fee to
+ * a club, not no money at all: every other signing in this game pays the player
+ * one (askingTerms, renewalTerms, the same wage x years x 0.045), so a free
+ * agent does as well. With no fee a man whose deal you let run out came back a
+ * season later for nothing where renewing him would have cost the fee.
+ *
+ * The fee never drops below FREE_AGENT_MIN_FEE, which is what stops a
+ * journeyman being signed to be sold on. At the smallest clubs his wage is 1k
+ * or 2k, so the plain formula asked 0.1m, while a club bids at least 0.3m for
+ * anybody listed (and a contested or improved bid for a man at the value floor
+ * reaches 0.5m). The second build charged no fee at all and already valued
+ * Inter Miami's journeymen at about the floor, and six of them banked 1.2m to
+ * 1.9m a summer on an 11m budget. The plain formula with no minimum still
+ * leaves a profit on every sale there (simFreeAgents section 16, feefloor).
+ */
+export const FREE_AGENT_MIN_FEE = 0.5;
+
+export function freeAgentTerms(fa: FreeAgent): { wage: number; years: number; fee: number } {
+  const leverage = fa.age <= 23 ? 1.15 : fa.age <= 29 ? 1.3 : 0.95;
+  const wage = fa.wage ?? Math.max(1, Math.round(wageFor({ rating: fa.rating, age: fa.age, value: fa.value, isYouth: false } as CMPlayer) * leverage));
+  const years = fa.age >= 31 ? 2 : 3;
+  const fee = Math.max(FREE_AGENT_MIN_FEE, Math.round(wage * years * 0.045 * 10) / 10);
+  return { wage, years, fee };
+}
+
+/**
+ * Every name this manager may never sign again because he released him: the
+ * permanent list, plus any released record still in the pool (a save from
+ * before the list existed has only the record). The free agent block, the
+ * market, a completed signing and the summer fill all read this one set.
+ */
+export function releasedByYouNames(career: CareerState): Set<string> {
+  return new Set([
+    ...(career.releasedNames ?? []),
+    ...(career.freeAgents ?? []).filter(releasedByYou).map(f => f.name),
+  ]);
+}
+
+/**
+ * A man YOU released. He never comes back to you, in any season.
+ *
+ * The first build blocked him only for the season he was released in, while a
+ * man whose deal ran out was blocked for the season after. So releasing an
+ * expiring player before the last match beat both rules: a week of half wage,
+ * then sign him back in August with no renewal fee. Measured at Manchester
+ * City: 12.8m of renewal fees dodged for 37k of settlements.
+ */
+export function releasedByYou(fa: FreeAgent): boolean {
+  return fa.fromMyClub === true && fa.reason === 'released';
+}
+
+/** Why a free agent signing would be refused. The card shows the same reason the engine uses. */
+export type FreeAgentBlock = 'notInPool' | 'inSquad' | 'releasedByYou' | 'justLeft' | 'notInterested' | 'squadFull' | 'overCap' | 'cantAfford';
+
+/** Round 619 review: the one place that decides whether a free agent signs. Null means he does. */
+export function freeAgentBlock(career: CareerState, fa: FreeAgent): FreeAgentBlock | null {
+  if (!(career.freeAgents ?? []).some(x => x.name === fa.name)) return 'notInPool';
+  if (career.squad.some(p => p.name === fa.name)) return 'inSquad';
+  if (releasedByYou(fa) || releasedByYouNames(career).has(fa.name)) return 'releasedByYou';
+  /* A man whose deal ran out at your club enters the pool the season after,
+     and you cannot take him straight back that season: pay nothing, re-sign
+     with no fee, is renewing him for free. */
+  if (fa.fromMyClub && fa.since === career.season) return 'justLeft';
+  if (!freeAgentInterest(career, fa)) return 'notInterested';
+  if (career.squad.length >= 30) return 'squadFull';
+  const cap = career.wageCap ?? wageCapFrom(wageBill(career));
+  if (wageBill(career) + freeAgentTerms(fa).wage > cap) return 'overCap';
+  if (freeAgentTerms(fa).fee > career.budget) return 'cantAfford';
+  return null;
+}
+
+/**
+ * Sign a man with no club. THE ONE WINDOW BYPASS IN THIS ROUND, and the point
+ * of it: a free agent is signable out of window in real football. It is a new
+ * function rather than a weakening of the nine existing window guards, so
+ * nothing else becomes possible out of window by accident.
+ *
+ * Everything that is not the window still applies, all of it in
+ * freeAgentBlock: the pool actually containing him, the re-sign rules, his
+ * own interest, the squad size, the wage cap and the signing on fee.
+ */
+export function signFreeAgent(career: CareerState, name: string): CareerState | null {
+  ensureFreeAgents(career);
+  const pool = career.freeAgents ?? [];
+  const fa = pool.find(x => x.name === name);
+  if (!fa || freeAgentBlock(career, fa)) return null;
+  const { wage, years, fee } = freeAgentTerms(fa);
+
+  const player: CMPlayer = {
+    /* Round 567's rule: unique inside THIS squad. slug() is not injective, so
+       two free agents whose names slug the same would otherwise share an id,
+       and releasing either one took both off the books. */
+    id: freeSquadId(career.squad, `fa-${slug(fa.name)}-s${career.season}`),
+    name: fa.name, position: fa.position, rating: fa.rating, age: fa.age,
+    fitness: 100, morale: 70, injuryWeeks: 0, suspendedMatches: 0,
+    isYouth: false, seasonGoals: 0, seasonAssists: 0,
+    value: fa.value, generated: fa.generated,
+    contractYears: years,
+    wage,
+  };
+  return {
+    ...career,
+    budget: Math.round((career.budget - fee) * 10) / 10,
+    squad: [...career.squad, player],
+    freeAgents: pool.filter(x => x.name !== fa.name),
+    /* No transfer fee, and the signing on fee goes in bonus, the Round 507
+       field for exactly this: the books count it, the news never calls it a
+       transfer fee. */
+    seasonSignings: [...career.seasonSignings, { dir: 'in', name: fa.name, fee: 0, bonus: fee }],
+  };
 }
 
 /**
@@ -6180,16 +6592,12 @@ export function buildMarket(career: CareerState): MarketPlayer[] {
   const squadNames = new Set(career.squad.map(p => p.name));
   const gone = new Set(career.goneNames);
   const retired = new Set(career.retiredNames ?? []);
-  /* Round 619: and minus anybody currently unattached. A free agent is nobody's
-     player, so the projection must stop listing him at the club he has left.
-     goneNames covers this within a season, but goneNames is cleared at every
-     rollover while the pool is carried, so without this line a man still on the
-     board in season two is ALSO on the market at his old club for a full fee:
-     one player, two records, two prices. That is the duplicate this filter
-     exists to make impossible rather than to clean up afterwards. */
-  const free = freeAgentNames(career);
+  /* Round 619 review: and nobody you released. The projected world still has a
+     real man at his old club, so from the season after a release the market
+     listed him there at his old price and he could be bought straight back. */
+  const released = releasedByYouNames(career);
   return marketBase(yearsOn(career), career.eraId)
-    .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name) && !free.has(p.name));
+    .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name) && !released.has(p.name));
 }
 
 /** Round 71: append a line to the Latest Transfers feed (capped at 80). */
@@ -6231,6 +6639,9 @@ function completeSigning(
   if (fee > career.budget) return null;
   if (career.squad.length >= 30) return null;
   if (career.squad.some(p => p.name === mp.name)) return null;
+  /* Round 619 review: a man you released does not come back through a deal
+     either, whatever screen the deal started on. */
+  if (releasedByYouNames(career).has(mp.name)) return null;
   const player: CMPlayer = {
     /* Round 567: unique inside THIS squad, see freeSquadId. Two real players
        whose names slug to one string are both signable and stay two men. */
@@ -6271,6 +6682,10 @@ function completeSigning(
     budget: Math.round((career.budget - fee) * 10) / 10,
     squad: [...career.squad, player],
     goneNames: [...career.goneNames, mp.name],
+    /* Round 619 review: a man who joins the squad leaves the free agent pool,
+       however he got here. Only signFreeAgent used to take anyone out, so a
+       man bought off the market sat in the squad and the pool at once. */
+    freeAgents: (career.freeAgents ?? []).filter(f => f.name !== mp.name),
     seasonSignings: [...career.seasonSignings, { dir: 'in', name: mp.name, fee, loan: loan || undefined }],
     careerStats: { ...career.careerStats },
     transferLog: [...(career.transferLog ?? [])],
@@ -6403,551 +6818,6 @@ export function breakLoan(career: CareerState, playerId: string): CareerState | 
   };
   pushNews(state, { name: p.name, from: state.clubName, to: home, fee: 0, loan: true });
   return state;
-}
-
-/* ================================================================== */
-/* Round 619: free agents, and the door out of a contract              */
-/* ================================================================== */
-/*
- * The maths is in clubManagerFreeAgents.ts and the reasoning with it. What
- * lives here is the state, because every one of these mirrors a transition
- * that already existed: signing one is completeSigning without a seller,
- * paying one off is acceptBid without a buyer, and the weekly pass is
- * generateHeadlines' trick (a name leaves the board, a club gets the credit,
- * the feed says so) applied to the pool instead of to the market.
- */
-
-/** Old saves have no pool. Absent reads as empty, filled at the next summer. */
-function isFreeAgentRecord(v: unknown): v is FreeAgent {
-  if (!v || typeof v !== 'object' || Array.isArray(v)) return false;
-  const o = v as Record<string, unknown>;
-  return typeof o.id === 'string' && typeof o.name === 'string' && typeof o.position === 'string'
-    && typeof o.lastClub === 'string' && typeof o.reason === 'string'
-    && [o.age, o.rating, o.since, o.weeks].every(n => typeof n === 'number' && Number.isFinite(n));
-}
-
-/**
- * Old saves have no pool. Absent reads as empty, filled at the next summer.
- *
- * Fails closed on the contents and not just the container, the way
- * isValidBooks and isLedger do on the finance block. The pool is read by
- * buildMarket through freeAgentNames, which maps fa.name, so one malformed
- * entry is not a wrong number on a screen, it is the transfer screen's own
- * data source throwing. A bad record is dropped rather than carried.
- */
-export function ensureFreeAgents(state: CareerState): FreeAgent[] {
-  const held: unknown = state.freeAgents;
-  if (!Array.isArray(held)) state.freeAgents = [];
-  else if (!held.every(isFreeAgentRecord)) state.freeAgents = held.filter(isFreeAgentRecord);
-  return state.freeAgents as FreeAgent[];
-}
-
-/**
- * The board as a manager sees it.
- *
- * Anyone already in the squad is filtered out rather than trusted to be
- * absent: the pool survives the rollover, a signing writes to two places, and
- * a list that can show a man you already own is the kind of thing that only
- * shows up in a save six seasons deep.
- */
-export function freeAgentPool(career: CareerState): FreeAgent[] {
-  const mine = new Set(career.squad.map(p => p.name));
-  const retired = new Set(career.retiredNames ?? []);
-  return sortPool((career.freeAgents ?? []).filter(fa => !mine.has(fa.name) && !retired.has(fa.name)));
-}
-
-/** Every name currently unattached, for the guards that must agree with the
- *  pool: buildMarket above all, since a free agent is nobody's player and must
- *  not also be for sale at the club he has left. */
-export function freeAgentNames(career: CareerState): Set<string> {
-  return new Set((career.freeAgents ?? []).map(fa => fa.name));
-}
-
-/**
- * Round 619: what paying him off costs, or null when he is not somebody this
- * club can pay off at all.
- *
- * ELIGIBILITY only, deliberately not affordability. canPayOff is the shared
- * rule and both this and terminateContract run it, so a name the screen offers
- * is a name the engine accepts, which is Round 506's rule for the deal desk.
- * The budget check lives in terminateContract alone and on purpose: the card
- * has to PRINT the price on a settlement you cannot afford, so it can grey the
- * button and say why. A quote that went null when the money was short would
- * leave the screen with nothing to show.
- */
-export function canPayOff(career: CareerState, p: CMPlayer): boolean {
-  /* An academy pad is not a first team contract. terminateContract already
-     refused to put him on the board (a kid drops out of the game rather than
-     joining a free agent list), but the payoff DESK was reading canLeaveSquad,
-     which knows nothing about youth, so it offered him, took the settlement,
-     and printed "he is a free agent" over an engine that had quietly dropped
-     him. Three claims and none of them true. The academy's own door is
-     releaseProspect; this one is for professionals. */
-  if (p.isYouth) return false;
-  return canLeaveSquad(career, p);
-}
-
-export function terminationQuote(career: CareerState, playerId: string): number | null {
-  const p = career.squad.find(x => x.id === playerId);
-  if (!p) return null;
-  if (!canPayOff(career, p)) return null;
-  return terminationCost(p);
-}
-
-/**
- * End his contract. He walks out of the building a free agent, and the cheque
- * that bought the rest of his deal back comes out of the transfer kitty.
- *
- * The kitty is the right pot and it is the club's own precedent: paying a
- * coach off has come out of it since the staff shipped ("hiring costs a fee
- * and paying somebody off costs severance, and both come out of the kitty").
- * Wages themselves are a running cost the board covers, so the weekly saving
- * shows up on the contracts desk's ceiling rather than as money in.
- */
-export function terminateContract(career: CareerState, playerId: string): CareerState | null {
-  const p = career.squad.find(x => x.id === playerId);
-  if (!p) return null;
-  if (!canPayOff(career, p)) return null;
-  const cost = terminationCost(p);
-  if (cost > career.budget) return null;
-  const others = career.squad.filter(x => x.id !== playerId);
-  const avg = others.length
-    ? others.reduce((s, x) => s + x.rating, 0) / others.length
-    : p.rating;
-  const hit = terminationMoraleHit(p, avg);
-  /* canPayOff has already refused an academy pad, so everybody who reaches
-     here joins the board. */
-  const fa = freeAgentFromPlayer(p, career.clubName, career.season, 'terminated', career.freeAgents ?? []);
-  const state: CareerState = {
-    ...career,
-    budget: Math.round((career.budget - cost) * 10) / 10,
-    squad: others.map(x => ({ ...x, morale: clamp(x.morale - hit, 5, 99) })),
-    xiIds: career.xiIds.map(id => (id === playerId ? null : id)),
-    /* Round 505's rule: the armband and the set pieces never travel. */
-    setPieces: setPiecesWithout(career.setPieces, playerId),
-    /* He is not his old club's player any more, so the market must stop
-       offering him, and any bid on the table dies with the contract. */
-    goneNames: [...career.goneNames, p.name],
-    incomingBids: (career.incomingBids ?? []).filter(b => b.playerId !== playerId),
-    /* The settlement leaves the kitty, so the finance desk has to see it.
-       Round 471's rule, written about staff severance and true of this too:
-       money that goes and shows up nowhere is a lie the projection tells every
-       week. fee is 0 because nobody paid you for him. */
-    seasonSignings: [...career.seasonSignings, { dir: 'out', name: p.name, fee: 0, payoff: cost }],
-    freeAgents: capPool(dedupePool([...(career.freeAgents ?? []), fa])),
-    transferLog: [...(career.transferLog ?? [])],
-  };
-  pushNews(state, { name: p.name, from: career.clubName, to: 'a free agent', fee: 0 });
-  state.aiHeadlines = [
-    `\u{1F4C4} ${career.clubName} have torn up ${p.name}'s contract. The settlement cost them ${money(cost, career)} and he is a free agent.`,
-    ...state.aiHeadlines,
-  ].slice(0, 8);
-  return state;
-}
-
-/**
- * Round 619: why he will not sign, or null when he will.
- *
- * Same contract as terminationQuote: one function, read by the screen and by
- * the signing, so a button that is lit is a deal that goes through.
- */
-export function freeAgentRefusal(career: CareerState, faId: string): string | null {
-  const fa = (career.freeAgents ?? []).find(x => x.id === faId);
-  if (!fa) return 'He is no longer available.';
-  if (career.squad.some(p => p.name === fa.name)) return 'He is already yours.';
-  if (career.squad.length >= SQUAD_LIMIT) return `You are at the ${SQUAD_LIMIT} player limit.`;
-  /*
-   * ONE RULE, TWO LOOPS: you cannot re-sign a man this club let go this
-   * season. Nothing in the laws of the game stops either of them, but both are
-   * free money and both would undo a constraint that already works.
-   *
-   *   terminated  pay him off, sign him straight back on a cheaper deal,
-   *               repeat. A contract would mean nothing.
-   *   expired     never renew anybody, let the lot walk in May, re-sign them
-   *               all on frees in June. Measured on the first build: Everton's
-   *               keeper walked for nothing and came back for a 4.5m signing on
-   *               fee against a 7.2m renewal, so running every deal down was
-   *               strictly cheaper than the contracts desk. That is Round 105's
-   *               whole constraint inverted.
-   *
-   * He is available to everybody else immediately, which is the cost of
-   * letting him go: watch a rival take him.
-   *
-   * `released` is deliberately NOT in this list, and it is not an oversight.
-   * The other two are decisions the manager made: he paid the man off, or he
-   * never sat him down. The summer squad trim is the CLUB acting because the
-   * squad went over the limit, it picks who goes on its own rules (finished
-   * players, never an academy graduate), and the manager may well have wanted
-   * to keep him. "You let him go" is not true of that one, so the door stays
-   * open. There is nothing to farm through it either: the trim only fires
-   * above the squad limit and only ever takes players with no growth left, so
-   * re-signing one costs a signing on fee for a man you were over the limit
-   * with in the first place.
-   */
-  if (fa.wasMine && fa.since === career.season && (fa.reason === 'terminated' || fa.reason === 'expired')) {
-    return fa.reason === 'terminated'
-      ? 'You paid him off this season. He cannot re-sign here until the summer.'
-      : 'You let his deal run out. He is not coming back this summer.';
-  }
-  const terms = freeAgentTerms(fa);
-  if (terms.bonus > career.budget) {
-    return `The signing on fee is ${money(terms.bonus, career)} and you cannot cover it.`;
-  }
-  /* The board have a view on the wage, because on a free transfer the wage is
-     the entire deal. See FA_CAP_HEADROOM: this is what stops a manager
-     assembling a second squad out of money nobody sanctioned. */
-  /* The cap's own fallback is derived from the bill you are paying, the way
-     every other reader of wageCap derives it. The GATE reads the committed
-     figure, so a loan out cannot rent you headroom you have to give back. */
-  const bill = wageBill(career);
-  if (wageCeilingBlocks(committedWageBill(career), career.wageCap ?? wageCapFrom(bill), terms.wage)) {
-    return `The board will not sanction ${terms.wage}k a week on top of the bill.`;
-  }
-  /* The refusal says WHY and, when waiting would work, how long: the board is
-     a waiting game and a greyed button with no reason does not teach that. */
-  const xiAvg = xiAverageRating(career);
-  if (!willJoin(fa, xiAvg)) return refusalLine(fa, xiAvg);
-  return null;
-}
-
-/**
- * Sign him. No fee, no selling club, and no window.
- *
- * THE WINDOW IS DELIBERATELY NOT CHECKED HERE, and it is the only signing
- * path in this engine that does not check it. Every other one opens with
- * `if (career.transferWindow === null) return null` because there is a club on
- * the other side of the table and clubs may only trade registrations inside a
- * window. An unattached player has no club, nobody is trading anything, and he
- * may be registered whenever. That is the real regulation, and it is what
- * makes this pool worth having in February.
- */
-export function signFreeAgent(career: CareerState, faId: string): CareerState | null {
-  if (freeAgentRefusal(career, faId) !== null) return null;
-  const fa = (career.freeAgents ?? []).find(x => x.id === faId);
-  if (!fa) return null;
-  const terms = freeAgentTerms(fa);
-  const player: CMPlayer = {
-    /* Round 567's rule: unique inside THIS squad. */
-    id: freeSquadId(career.squad, `fa-${slug(fa.name)}-s${career.season}`),
-    name: fa.name,
-    position: fa.position,
-    rating: fa.rating,
-    age: fa.age,
-    fitness: 85,
-    morale: 76,
-    injuryWeeks: 0,
-    suspendedMatches: 0,
-    isYouth: false,
-    seasonGoals: 0,
-    seasonAssists: 0,
-    /* NOT fa.value. See signedValue: the notional value is what he would have
-       cost in a fee, and the market has already said that number is not real
-       for this man. Carrying it made every free agent worth five times what he
-       cost the moment he signed, which turned the board into a money printer.
-       His rating is untouched, so the footballer you signed is the footballer
-       you get. */
-    value: signedValue(fa),
-    generated: fa.generated,
-    contractYears: terms.years,
-    wage: terms.wage,
-    role: terms.role,
-    signedTerms: { years: terms.years, wage: terms.wage, role: terms.role, season: career.season },
-  };
-  const state: CareerState = {
-    ...career,
-    budget: Math.round((career.budget - terms.bonus) * 10) / 10,
-    squad: [...career.squad, player],
-    /* Always a NEW array, even when the name is already in it, which is the
-       normal case rather than the rare one: the rollover pushes every pool name
-       into goneNames. Returning the input's array would hand the reducer a
-       state sharing it with the previous one, and three functions here push to
-       goneNames in place. */
-    goneNames: career.goneNames.includes(fa.name) ? [...career.goneNames] : [...career.goneNames, fa.name],
-    /* Round 507's rule: the money paid to the PLAYER is a bonus and never the
-       transfer fee. A free transfer is a free transfer on every screen that
-       reads this record, and the kitty still knows what it cost. */
-    seasonSignings: [...career.seasonSignings, { dir: 'in', name: fa.name, fee: 0, bonus: terms.bonus }],
-    freeAgents: (career.freeAgents ?? []).filter(x => x.id !== faId),
-    transferLog: [...(career.transferLog ?? [])],
-  };
-  pushNews(state, { name: fa.name, from: 'a free transfer', to: state.clubName, fee: 0 });
-  return state;
-}
-
-/* ---------- filling the board ---------- */
-
-/**
- * The world's own summer releases.
- *
- * Deterministic per name and season (worldReleases), so the same summer seeds
- * the same board however many times it is recomputed, and gated on
- * WORLD_POOL_FROM_YEAR so season one never says a real professional is out of
- * work. A made up player is exempt from the gate: there is nobody to be wrong
- * about, and it means a season one save still has a board to read.
- *
- * Every name seeded here also goes into goneNames, because he has left the
- * club the projection still lists him at, and the two lists must agree or the
- * same man is on the market twice at two different prices.
- */
-function seedWorldFreeAgents(state: CareerState, nextYearsOn: number): FreeAgent[] {
-  const mine = new Set(state.squad.map(p => p.name));
-  const retired = new Set(state.retiredNames ?? []);
-  const held = new Set((state.freeAgents ?? []).map(fa => fa.name));
-  const realAllowed = nextYearsOn >= WORLD_POOL_FROM_YEAR;
-  const out: FreeAgent[] = [];
-  for (const mp of marketBase(nextYearsOn, state.eraId)) {
-    if (mine.has(mp.name) || retired.has(mp.name) || held.has(mp.name)) continue;
-    if (!realAllowed && !mp.generated) continue;
-    if (!worldReleases(mp, state.season)) continue;
-    out.push(freeAgentFromMarket(mp, state.season, mp.age >= 32 ? 'expired' : 'released', [...(state.freeAgents ?? []), ...out]));
-  }
-  return out;
-}
-
-/**
- * The summer pass over the pool: everybody ages, the finished ones stop
- * playing, the long term unattached drop off the board, and the world's new
- * releases arrive. Called from the rollover with the NEW season already on
- * the state, so `since` and the retirement odds read the season being entered.
- */
-function rollFreeAgents(
-  state: CareerState, nextYearsOn: number, arrivals: FreeAgent[] = [], rush = true,
-): void {
-  /*
-   * `arrivals` is THIS summer's departures from your own squad, and they are
-   * deliberately kept out of the ageing pass below. The rollover has already
-   * done both things to them: agePlayer put the summer's year on every squad
-   * member before the expiry split, and the retirement roll ran over the same
-   * list. Merging them into state.freeAgents before this function ran, which
-   * is what the first build did, meant the pass treated them as men who had
-   * been on the board since last summer and did it all again.
-   *
-   * Two measured consequences, both real. Every player who walked out of your
-   * own club arrived on the board TWO years older than he is anywhere else in
-   * the save (Branthwaite 23 in the squad, 25 on the board; Pickford 31 to 33),
-   * which then fed his asking terms and his retirement odds. And the second
-   * retirement roll, taken at his real age plus two and multiplied by 1.35,
-   * quietly deleted men the transfer feed had just announced as leaving on a
-   * free: 5 of 221 departures across 18 rollovers were in retiredNames with no
-   * entry on the board and no line saying they had retired.
-   */
-  const carried: FreeAgent[] = [];
-  const retiredNames = new Set(state.retiredNames ?? []);
-  const mine = new Set(state.squad.map(p => p.name));
-  for (const fa of state.freeAgents ?? []) {
-    if (retiredNames.has(fa.name)) continue;
-    const age = fa.age + 1;
-    /* A man with no club is likelier to call it a day than one with a
-       contract, so the ordinary odds get a nudge rather than a new table. */
-    if (Math.random() < Math.min(1, retireChance(age, fa.rating, fa.position) * 1.35)) {
-      state.retiredNames = [...(state.retiredNames ?? []), fa.name];
-      continue;
-    }
-    /* Signed by somebody in the meantime, including by this club's own
-       emergency fill above, so he is not on the board any more. Checked here
-       rather than plumbed back out of fillSquadGaps: the squad is the truth
-       and this cannot drift from it. */
-    if (mine.has(fa.name)) continue;
-    /* A summer of nobody calling. Past the shelf he is out of the game, and
-       the projection is free to list him at a club again next time it is
-       asked, which is the honest answer for a man this save stopped
-       simulating. */
-    const weeks = fa.weeks + 6;
-    if (weeks > FA_SHELF_WEEKS) continue;
-    /* And a year without a club costs him. Training alone is not training
-       with a team, so an unsigned man slides, which is both true and the
-       thing that stops the board silting up with players who were good when
-       they arrived. He is dropped entirely at the shelf either way. */
-    const rating = Math.max(40, fa.rating - FA_IDLE_DECAY);
-    carried.push({ ...fa, age, weeks, rating });
-  }
-  /* Arrivals join at their true age and at zero weeks unattached: today is the
-     day they became free. They DO face the summer rush below, because a rival
-     taking the man whose deal you let run down is the whole consequence of
-     letting it run down. */
-  const withArrivals = [...carried, ...arrivals];
-  const seeded = seedWorldFreeAgents({ ...state, freeAgents: withArrivals }, nextYearsOn);
-  const all = capPool(dedupePool([...withArrivals, ...seeded]));
-  /*
-   * The summer rush. Contracts end in June and the good ones are signed within
-   * days, so the board a manager opens in July is what is LEFT, not everybody
-   * who came free. Without this the rollover handed him the full list with
-   * nobody else in the race, because the weekly pass does not run until the
-   * first match week: one clear look at every free agent in the world, every
-   * summer, uncontested.
-   *
-   * Three weeks of ordinary interest, applied once. It lands hardest on the
-   * best names, which is the point of it. Recorded in the transfers feed and
-   * deliberately NOT in aiHeadlines, because generateHeadlines rebuilds that
-   * list from scratch further down the rollover and would eat them (the Round
-   * 161 rule, learned by simDealDepth).
-   */
-  const pool: FreeAgent[] = [];
-  for (const fa of all) {
-    const suitor = rush && Math.random() < aiInterest(fa, fa.weeks) * 3 ? freeAgentSuitor(state, fa) : null;
-    if (suitor) {
-      if (!state.goneNames.includes(fa.name)) state.goneNames.push(fa.name);
-      pushNews(state, { name: fa.name, from: 'a free transfer', to: suitor, fee: 0 });
-      continue;
-    }
-    pool.push(fa);
-  }
-  /* And a made up body or two if the world was quiet, so a board is never
-     empty on day one. This is the only thing standing between season one and
-     a feature with nothing in it, because the world gate correctly refuses to
-     call a real 2026-27 professional unemployed. */
-  const taken = new Set<string>([...state.squad.map(p => p.name), ...pool.map(fa => fa.name)]);
-  while (pool.length < FA_BOARD_FLOOR) {
-    pool.push(makeJourneymanFreeAgent(state, taken));
-  }
-  state.freeAgents = sortPool(pool);
-  const gone = new Set(state.goneNames);
-  for (const fa of pool) if (!gone.has(fa.name)) state.goneNames.push(fa.name);
-}
-
-/**
- * Round 619: a made up free agent, for the weeks when the real world has not
- * released anybody.
- *
- * Every one of these is flagged `generated`, which means MADE UP appears
- * beside his name on every screen that shows one, the Round 132 rule. That is
- * what lets the board exist in season one at all: the world gate above keeps
- * real professionals out of a season that is still the real season, and there
- * is nobody to be wrong about here.
- *
- * Deliberately BELOW the level you would buy at. The free transfer already
- * saves you the entire fee, so if the board also offered upgrades there would
- * be no reason to use the transfer market, and Round 132's warning about
- * fillSquadGaps applies exactly: a pool good enough to build a squad from
- * turns neglect into a strategy. These are squad bodies and emergency cover,
- * which is what a real free agent list mostly is.
- */
-function makeJourneymanFreeAgent(
-  state: CareerState, taken: Set<string>, pool: readonly { id: string }[] = [],
-): FreeAgent {
-  const taken2 = pool;
-  /* The best eleven on the books, NOT xiAverageRating. This runs at the
-     rollover and inside startCareer, and at both of those moments xiIds is
-     still empty (the auto pick happens further down), so the XI reading is
-     zero and every journeyman came out rated 48. Reading the squad directly is
-     correct at any point in the week. */
-  const best = [...state.squad].sort((a, b) => b.rating - a.rating).slice(0, 11);
-  const baseline = clamp(
-    Math.round(best.length ? best.reduce((s, p) => s + p.rating, 0) / best.length : 66),
-    50, 90,
-  );
-  /* Nine to eighteen points below your best eleven, and never above 76. Two
-     goes to get here. The first band (four to twelve below, capped at 82) put
-     78 rated 33 year olds on Everton's board for a signing on fee. The second
-     (six to fourteen below) still left a free agent only manager finishing
-     three seasons on an eleven rated 80.0 against a buyer's 76.0, because
-     filling the squad to thirty for 35m buys real depth and depth is what the
-     fit adjusted rating reads. These are cover, and they should feel like
-     cover. The genuine bargain comes from the world pool, where it is rare,
-     real, and carries a real decline. */
-  const rating = clamp(ri(baseline - 18, baseline - 9), 48, 76);
-  const age = ri(28, 35);
-  const position = pick([...POS_DEF, ...POS_MID, ...POS_ATT, 'GK' as Position]);
-  const name = uniqueYouthName(taken);
-  return {
-    id: uniqueFreeAgentId(taken2, `fa-made-${slug(name)}-s${state.season}-w${state.week}`),
-    name,
-    position,
-    age,
-    rating,
-    /* Discounted against the curve, because he is on this board precisely
-       because nobody met his price. It reads through to his wage and his
-       signing on fee, which is the honest shape: a free agent is cheap in
-       wages too, and that is most of why a club takes a punt on one. */
-    value: Math.round(baseValue(rating, age) * 0.7 * 10) / 10,
-    /* He was somewhere, and the board should say where rather than leaving a
-       blank. A club in your own league is the honest answer for a squad player
-       nobody signed, and he is marked MADE UP either way. */
-    lastClub: 'a club in the lower leagues',
-    reason: 'released',
-    since: state.season,
-    weeks: 0,
-    generated: true,
-  };
-}
-
-/**
- * Round 619: the mid season trickle that keeps the board from emptying.
- *
- * REAL players only ever join the board at the summer rollover, where a
- * contract expiring is the thing that actually happens in football and where
- * the world gate has already decided the save is allowed to simulate it. A
- * release in February is a sharper claim about a specific recent event, so
- * the trickle is always somebody this game made up. The board therefore always
- * has something on it in a closed window, which is the whole point of the
- * feature, and it never says anything new about a real person mid season.
- */
-/**
- * Which club took him. The big spenders for somebody worth having, anybody in
- * your own league for a squad body, so the feed never reads like Hull City
- * signing a superstar (the Round 99 lesson, which is why generateHeadlines
- * checks affordability at all).
- */
-function freeAgentSuitor(state: CareerState, fa: FreeAgent): string | null {
-  const big = buyerPool(state);
-  const local = careerLeagueOf(state).clubs.filter(c => c !== state.clubName);
-  const from = fa.rating >= 76 ? big : local;
-  if (from.length) return pick(from);
-  return big.length ? pick(big) : (local.length ? pick(local) : null);
-}
-
-function midSeasonRelease(state: CareerState, pool: FreeAgent[]): FreeAgent {
-  const taken = new Set<string>([
-    ...state.squad.map(p => p.name),
-    ...pool.map(fa => fa.name),
-  ]);
-  return makeJourneymanFreeAgent(state, taken);
-}
-
-/**
- * The weekly pass. Time passes for everyone on the board, and rival clubs take
- * the good ones, which is the whole reason the board is worth checking rather
- * than saving for later: a useful free agent is a decision this week.
- *
- * Modelled exactly the way generateHeadlines models an AI transfer, because
- * AI clubs in this game have no squads to put him in: the name leaves the
- * board, a club that could plausibly want him gets the credit, and the feed
- * says so. Nothing else in the world moves, which is correct, since nothing
- * else in the world moves when generateHeadlines sells somebody either.
- */
-function runFreeAgentWeek(state: CareerState): void {
-  const pool = state.freeAgents ?? [];
-  const kept: FreeAgent[] = [];
-  const taken: { name: string; club: string }[] = [];
-  for (const fa of pool) {
-    const weeks = fa.weeks + 1;
-    if (weeks > FA_SHELF_WEEKS) continue;
-    if (Math.random() < aiInterest(fa, weeks)) {
-      const club = freeAgentSuitor(state, fa);
-      if (club) { taken.push({ name: fa.name, club }); continue; }
-    }
-    kept.push({ ...fa, weeks });
-  }
-  /* The board tops itself up when it runs thin, so February always has
-     something on it. One at a time, and only below the floor, so it can never
-     become a second transfer market. */
-  if (kept.length < FA_BOARD_FLOOR && Math.random() < 0.35) {
-    kept.push(midSeasonRelease(state, kept));
-  }
-  state.freeAgents = kept;
-  for (const t of taken) {
-    if (!state.goneNames.includes(t.name)) state.goneNames.push(t.name);
-    pushNews(state, { name: t.name, from: 'a free transfer', to: t.club, fee: 0 });
-  }
-  if (taken.length) {
-    const lead = taken[0];
-    state.aiHeadlines = [
-      taken.length === 1
-        ? `\u{1F91D} ${lead.club} have signed ${lead.name} on a free transfer.`
-        : `\u{1F91D} ${taken.length} free agents found clubs this week, ${lead.name} to ${lead.club} among them.`,
-      ...state.aiHeadlines,
-    ].slice(0, 8);
-  }
 }
 
 /* ================================================================== */
@@ -10692,14 +10562,9 @@ export function objectiveStatuses(career: CareerState): { objective: BoardObject
          spend too. It was missed when the field was added and the finance desk
          was taught about it: askingTerms sizes it at wage times years times
          0.045, roughly 15m on a 60m target, so a board objective could be
-         reported as met while the kitty said otherwise.
-         Round 619 repeated the mistake with `payoff` and this is the fix: a
-         contract settlement is on an `out` row carrying fee 0, so it read as a
-         free departure and scored +0 while the kitty was millions lighter.
-         Measured: four payoffs took Everton from 43m to 30.5m, the finance desk
-         showed the 12.5m, and netSpend still graded `done`. */
+         reported as met while the kitty said otherwise. */
       const net = (career.seasonSignings ?? []).reduce(
-        (s, x) => s + (x.dir === 'out' ? x.fee - (x.payoff ?? 0) : -(x.fee + (x.bonus ?? 0))), 0);
+        (s, x) => s + (x.dir === 'out' ? x.fee : -(x.fee + (x.bonus ?? 0))), 0);
       if (seasonDone) {
         status = net >= 0 ? 'done' : 'failed';
       } else {
@@ -12230,6 +12095,21 @@ export function liveStatsAt(
  * only way to avoid collapse.
  */
 function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
+  /* Round 619: a settlement counts down HERE, in the same function that charges
+     the wage bill, and a row at zero is gone.
+
+     The first version ticked it beside the transfer window inside playMyMatch,
+     which fires only on weeks the club actually plays, while tickBooks charges
+     the bill on EVERY calendar week: the window entry, the weeks somebody else
+     is playing, all of them. Measured on this branch at Everton, a 108 week row
+     took 40 decrements over 54 charged weeks, so a settlement quoted as 108
+     weeks was really billed for about 146 and the two season cap was nearer
+     2.7. The manager was paying about 3,504k against the 2,592k the button
+     quoted him, which makes the quote a lie rather than an estimate. Charging
+     and counting have to happen in the same place or they drift forever.
+
+     The countdown itself sits at the bottom of this function, straight after
+     tickBooks, so a row is charged for a week and then counts that week off. */
   // Round 116: how hard you work them all week shows up here. Light sessions
   // send a fresher team out on Saturday, double sessions send a tired one and
   // pick up knocks on the training ground, and that is the price of the
@@ -12268,6 +12148,26 @@ function tickWeek(state: CareerState, playedIds: Set<string> | null): void {
   // Round 467: the dressing room's recovery and the week's books.
   tickFacilities(state);
   tickBooks(state);
+  /* Round 619: EVERY call that charges a week counts one week off, with no
+     guard. A second draft keyed the countdown on state.week to stop a "week
+     counted twice", and that double count was never real: it came from
+     dividing countdowns by playNextEntry calls, and one call can run several
+     calendar entries. The guard then did real harm, because the bye and window
+     paths tick after moving the week on while playMyMatch ticks before, so a
+     bye followed by a match ticked twice under one key. The bill was charged
+     both times and the settlement counted down once. Measured at Everton: 73
+     weeks charged against a 54 week quote, and 146 against 108 at Brentford.
+     With no guard both read exactly 54 and 108. Every calendar entry reaches
+     tickWeek once, so the charge count is the right clock.
+
+     AFTER tickBooks, so a row with one week left is charged that week and then
+     cleared. Counting first cleared it before the charge and billed a 54 week
+     quote for 53. */
+  if (state.severance && state.severance.length) {
+    state.severance = state.severance
+      .map(r => ({ ...r, weeksLeft: r.weeksLeft - 1 }))
+      .filter(r => r.weeksLeft > 0);
+  }
   /* Round 471: an approach on the staff desk runs down, or a rival comes in
      for one of yours. Hashed, so it adds no draw to the week's stream. */
   tickStaff(state);
@@ -13447,11 +13347,6 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       generateIncomingBids(state, true);
     }
   }
-  /* Round 619: the free agent board moves every week, window or no window.
-     Deliberately OUTSIDE the `if (state.transferWindow !== null)` block above:
-     an unattached player can sign for anybody at any time, so his board cannot
-     freeze in February while yours is the one screen still open. */
-  runFreeAgentWeek(state);
   // Round 141: the news feed reads the week's table and says something true.
   generateWeeklyNews(state);
   // Round 135: and the room fills up again, once there is something to ask.
@@ -14180,21 +14075,11 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
     }
   }
   ensureContracts(state);
+  ensureFreeAgents(state);
   ensureAcademy(state);
   ensureRoles(state);
   ensurePress(state);
   ensureManagers(state);
-  /* Round 619: day one free agent board. yearsOn is 0 in season one, so the
-     gate in seedWorldFreeAgents lets only made up players through and no real
-     professional is ever described as out of work in a world that is still the
-     real one. From the first summer the board fills properly. */
-  ensureFreeAgents(state);
-  /* No summer rush on day one. The rush is a rollover thing: contracts end in
-     June and the good ones go within days. Running it inside startCareer gave a
-     brand new save 3 to 6 "X joined Y on a free transfer" lines in the Latest
-     Transfers feed before a ball had been kicked, and took the same names out
-     of a season one market that has not had a season yet. */
-  rollFreeAgents(state, yearsOn(state), [], false);
   state.wageCap = wageCapFrom(wageBill(state));
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id, custom ? leagueClubs : undefined);
   /* Round 474: and the two specific asks, read off the squad you have just
@@ -14226,12 +14111,11 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   if (!state.world) syncWorld(state, myRoundsPlayed(state, state.week));
   // Round 105: and a save made before contracts existed gets given some.
   ensureContracts(state);
+  ensureFreeAgents(state);
   // Round 116: same story for the academy, the training plan and potentials.
   ensureAcademy(state);
   // Round 127: and everybody gets told where he stands.
   ensureRoles(state);
-  // Round 619: and a save from before the free agent board has an empty one.
-  ensureFreeAgents(state);
   // Round 567: and nobody shares an id with anybody, so every lookup by id
   // below this line answers with the player it was asked about.
   ensureSquadIds(state);
@@ -14784,13 +14668,14 @@ export function matchFacts(career: CareerState): MatchFacts | null {
   return null;
 }
 
-/* Round 628: the league title trophy's name, which both the rollover that
-   pushes it and the season score that reads it now share, rather than two
-   string literals that can drift apart. */
+/** min(130, current league points + 10 per trophy won this season). */
+/* Round 633: the league title trophy's name, shared by the rollover that
+   pushes it and the season score that reads it, rather than two literals that
+   can drift apart. */
 const LEAGUE_TITLE_NAME = 'League Title';
 
 /**
- * Round 628: a record shape guard for the stamped handover, on the
+ * Round 633: a record shape guard for the stamped handover, on the
  * ensureFreeAgents pattern. Fails closed on the CONTENTS and not just the
  * container, because a malformed record here is not a wrong number on a
  * screen, it is a subtraction against every score the save ever reports.
@@ -14805,8 +14690,8 @@ function isHandoverRecord(v: unknown): v is SeasonHandover {
 
 /**
  * The handover this save is entitled to subtract. A malformed record is
- * dropped to null, which falls through to the legacy estimate below and, for
- * a career that never was a takeover, to nothing at all.
+ * dropped to null, which falls through to the legacy estimate and, for a
+ * career that never was a takeover, to nothing at all.
  */
 export function ensureHandover(state: CareerState): SeasonHandover | null {
   const held: unknown = state.handover;
@@ -14816,18 +14701,18 @@ export function ensureHandover(state: CareerState): SeasonHandover | null {
 }
 
 /**
- * Round 628: everything the season score reads, gathered in one place so the
+ * Round 633: everything the season score reads, gathered in one place so the
  * mid season reading and the rollover reading cannot drift apart.
  *
  * On `legacyStart`. A takeover save written before this round carries
  * `midSeasonStart` and no stamped handover, so the previous manager has to be
  * estimated. That estimate is gated on season 1 on purpose: the engine NEVER
  * clears `midSeasonStart` (it has exactly two writes in the repo, the
- * declaration and startMidSeason), and ClubManager.tsx:745 already guards its
- * own takeover banner with `c.season === 1` for the same reason. Without the
- * gate, every season from the second onward of a takeover career would
- * subtract a manager who does not exist, and the form term would read zero for
- * roughly two thirds of every one of them.
+ * declaration and startMidSeason), and ClubManager.tsx already guards its own
+ * takeover banner with `c.season === 1` for the same reason. Without the gate,
+ * every season from the second onward of a takeover career would subtract a
+ * manager who does not exist, and the form term would read zero for roughly
+ * two thirds of every one of them.
  */
 export function seasonLedgerInputOf(career: CareerState): SeasonLedgerInput {
   const row = career.table.find(r => r.club === career.clubName);
@@ -14836,9 +14721,9 @@ export function seasonLedgerInputOf(career: CareerState): SeasonLedgerInput {
     inTable: !!row,
     leaguePts: row ? row.pts : 0,
     leaguePlayed: row ? row.w + row.d + row.l : 0,
-    /* The engine's own fixture count, at clubManager.ts objectiveStatuses.
-       Never career.calendar.length, which carries cup weeks, European group
-       weeks, the transfer window and the MLS bye. */
+    /* The engine's own fixture count, the objectiveStatuses expression. Never
+       career.calendar.length, which carries cup weeks, European group weeks,
+       the transfer window and the MLS bye. */
     leagueRounds: career.leagueClubs.length > 1 ? 2 * (career.leagueClubs.length - 1) : 38,
     wonLeague: career.trophies.some(t => t.season === career.season && t.name === LEAGUE_TITLE_NAME),
     cupRank: cupProgressRank(career).rank,
@@ -14860,14 +14745,14 @@ export function seasonScoreParts(career: CareerState): SeasonLedger {
 }
 
 /**
- * The season score, 0..130. Round 628 replaced `min(130, league points + 10 a
+ * The season score, 0..130. Round 633 replaced `min(130, league points + 10 a
  * trophy)` with the ledger in clubManagerScore.ts; see that file's header for
  * the three measured defects that rule had.
  *
- * The NAME and the call shape both stay: scripts/simSessionMarks.mjs section 5
- * and the negative control in scripts/simActivityNotCompletion.mjs both string
- * match `currentSeasonScore(` in useClubManager.ts, and the control ABORTS
- * rather than silently passing if the literal stops existing.
+ * The NAME and the call shape both stay: simSessionMarks section 5 and the
+ * negative control in simActivityNotCompletion both string match
+ * `currentSeasonScore(` in useClubManager.ts, and the control ABORTS rather
+ * than silently passing if the literal stops existing.
  */
 export function currentSeasonScore(career: CareerState): number {
   return seasonLedgerScore(seasonLedgerInputOf(career));
@@ -15162,7 +15047,7 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     qualifiedUcl: position <= uclPlacesIn(careerLeagueOf(state)),
     signings: state.seasonSignings,
     offers,
-    /* Round 628: one function, two call sites, so the number the player
+    /* Round 633: one function, two call sites, so the number the player
        watches climb all season is the same number the summary prints. This
        sits AFTER the League Title push above, so the title term sees it. */
     seasonScore: currentSeasonScore(state),
@@ -15292,7 +15177,8 @@ const SENIOR_FLOOR = 12;
  */
 function fillSquadGaps(
   clubName: string, season: number, squad: CMPlayer[], yearsOnNow: number,
-  retiredNames: string[], eraId: string = 'now', board: readonly FreeAgent[] = [],
+  retiredNames: string[], eraId: string = 'now', realPool: FreeAgent[] = [],
+  released: string[] = [],
 ): { squad: CMPlayer[]; signed: string[] } {
   const seniors = squad.filter(p => !p.isYouth && p.age >= 20).length;
   if (seniors >= SENIOR_FLOOR) return { squad, signed: [] };
@@ -15300,35 +15186,37 @@ function fillSquadGaps(
     ?? STRENGTH_PRIORS[clubName] ?? 66;
   const taken = new Set(squad.map(p => p.name));
   const retired = new Set(retiredNames);
-  /*
-   * Round 619: the real free agent board comes FIRST, then the old made up
-   * one. One pool and one set of rules is what the owner asked for, and until
-   * this round the sporting director was conjuring his own list out of other
-   * clubs' rosters while an actual board of unattached players sat unread.
-   *
-   * THE BAND IS UNCHANGED AND THAT IS THE WHOLE POINT. The comment above
-   * SENIOR_FLOOR is the scar: an earlier version filled squads to eighteen
-   * with the best free agents it could find and simAcademy measured the value
-   * of running an academy collapsing from 4.31 rating points to 0.38, which
-   * turned neglect into a strategy. So the board is read through the SAME
-   * "well below what this club would field" filter as the made up list. A
-   * manager who lets his squad rot still gets journeymen, he just gets real
-   * ones now. simAcademy is the gate on this and it is re-run.
-   */
-  const fromBoard: MarketPlayer[] = board
-    .filter(fa => !taken.has(fa.name) && !retired.has(fa.name)
-      && fa.rating <= baseline - 14 && fa.rating >= baseline - 26)
-    .map(fa => ({
-      name: fa.name, club: fa.lastClub, position: fa.position, age: fa.age,
-      rating: fa.rating, price: 0, value: fa.value, generated: fa.generated,
-    }));
-  const onBoard = new Set(fromBoard.map(p => p.name));
-  const pool = [
-    ...fromBoard,
-    ...marketBase(yearsOnNow, eraId)
-      .filter(p => !taken.has(p.name) && !retired.has(p.name) && !onBoard.has(p.name)
-        && p.rating <= baseline - 14 && p.rating >= baseline - 26),
-  ].sort((a, b) => a.rating - b.rating);
+  // Well below what this club would normally field: these are the players
+  // nobody else wanted in August, and they should feel like it.
+  /* Round 619: ONE POOL. Men who were actually released or ran their deals out
+     are real free agents and get taken first; the invented band below is the
+     fallback for when the real pool cannot cover a gap.
+
+     The rating band is unchanged and applies to BOTH, which is the important
+     part. The header above this function records what happened the last time
+     squads were filled with good free agents: the measured value of running an
+     academy collapsed from 4.31 rating points to 0.38 and neglect became a
+     strategy. Releasing your best player does not put him on a rival's team
+     sheet the following week. */
+  const band = (r: number) => r <= baseline - 14 && r >= baseline - 26;
+  /* Round 619 review: and never a man you released, from either list. The rule
+     is that you cannot take him back, and the club signing him on your behalf
+     is taking him back. A real player you released is still on the projected
+     market under his old club, so leaving him out of the pool alone would have
+     let the fallback list hand him straight back. The names come from
+     releasedByYouNames, so the block outlives his pool record. */
+  const letGo = new Set(released);
+  const fromReal = realPool
+    .filter(f => !letGo.has(f.name) && !taken.has(f.name) && !retired.has(f.name) && band(f.rating))
+    .map(f => ({ name: f.name, club: '', position: f.position, age: f.age, rating: f.rating, price: 0, value: f.value, generated: f.generated }));
+  /* A made up journeyman is worth the floor and asks a wage off his squad, so
+     the club pays him what he asks rather than what his value would price. */
+  const askingWage = new Map(realPool.filter(f => f.wage !== undefined).map(f => [f.name, f.wage as number]));
+  const invented = marketBase(yearsOnNow, eraId)
+    .filter(p => !letGo.has(p.name) && !taken.has(p.name) && !retired.has(p.name) && band(p.rating)
+      && !fromReal.some(f => f.name === p.name))
+    .sort((a, b) => a.rating - b.rating);
+  const pool = [...fromReal.sort((a, b) => a.rating - b.rating), ...invented];
   if (!pool.length) return { squad, signed: [] };
   const want = clamp(SENIOR_FLOOR - seniors, 0, 4);
   const out = [...squad];
@@ -15346,7 +15234,8 @@ function fillSquadGaps(
     if (!mp) break;
     signed.push(mp.name);
     const player: CMPlayer = {
-      id: `fa-${slug(mp.name)}-s${season}`,
+      /* Round 567's rule, which this signing skipped: unique inside the squad. */
+      id: freeSquadId(out, `fa-${slug(mp.name)}-s${season}`),
       name: mp.name,
       position: mp.position,
       rating: mp.rating,
@@ -15363,7 +15252,7 @@ function fillSquadGaps(
       contractYears: mp.age >= 31 ? 2 : 3,
       wage: 0,
     };
-    player.wage = wageFor(player);
+    player.wage = askingWage.get(mp.name) ?? wageFor(player);
     out.push(player);
   }
   return { squad: out, signed };
@@ -15528,11 +15417,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   const freeAgentNews: string[] = [];
   const releasedNews: string[] = [];
   const freeAgentsIn: string[] = [];
-  /* Round 619: everybody who leaves this squad without being sold goes onto
-     the free agent board rather than out of the game. Collected here and
-     written onto the new state below, the same shape the loan returns use. */
-  const walkedToPool: FreeAgent[] = [];
   const retiredNow: { name: string; age: number; rating: number }[] = [];
+  /* Round 619: men whose deals ran out this summer, collected here and
+     written into the new season's free agent pool below. */
+  const walkedFree619: FreeAgent[] = [];
   // Round 71: loan players go back to their parent clubs at season's end.
   const afterLoans = career.squad.filter(p => !p.onLoan);
   // Round 94: and MY loanees come home, with a season of football in them.
@@ -15565,25 +15453,22 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     }
     const walked = stillPlaying.filter(p => (p.contractYears ?? 1) <= 0);
     for (const p of walked) freeAgentNews.push(p.name);
-    /* Round 619: and now they go somewhere. Until this round "left for
-       nothing" meant left the game: out of the squad, and out of the market
-       too, because buildMarket reads the projected club rosters and a man who
-       walked out on you is not in anybody's roster. The one thing the phrase
-       promised, that somebody could sign him, had never been true. He goes on
-       the board at his real age and rating, so letting a deal run down is
-       still the mistake Round 105 made it, it is just a mistake a rival can
-       now profit from in front of you. */
-    for (const p of walked) {
-      /* Not the academy pads, the same rule terminateContract and the squad
-         trim already follow: a kid whose scholarship runs out drops out of the
-         professional game, he does not appear on a board of first team free
-         agents. This path was the one that missed it, and the symptom was
-         visible rather than subtle, because a generated youth name carries a
-         "(Youth)" suffix: measured over four clubs and five seasons, 8 of 125
-         board entries were men called "Jude Calvet (Youth)". */
-      if (p.isYouth) continue;
-      walkedToPool.push(freeAgentFromPlayer(p, career.clubName, season, 'expired', [...(career.freeAgents ?? []), ...walkedToPool]));
-    }
+    /* Round 619: a deal that ran out does not delete the man. He walks for
+       nothing, which is what Round 105 always said, and now there is somewhere
+       for him to walk TO. No severance, because nothing was broken early. */
+    walkedFree619.push(...walked.map(p => ({
+      name: p.name, position: p.position, age: p.age, rating: p.rating,
+      value: p.value, generated: p.generated, since: career.season + 1,
+      reason: 'expired' as const,
+      /* Round 619: these are MY players whose deals ran out, so the same season
+         re-sign block has to apply to them too. Without this, letting every
+         contract expire and re-signing the same men out of window the following
+         week beat renewing them outright: measured at Arsenal, 936k a week and
+         no fee against 1,415k and 246.2m in signing fees, with the first eleven
+         unchanged. That turns the whole Round 105 contract system into a trap
+         for anybody who uses it. Let a man go and you lose him for a season. */
+      fromMyClub: true as const,
+    })));
     squad = stillPlaying.filter(p => (p.contractYears ?? 1) > 0);
     /* Round 132: the club replaces what it lost. The old intake was a flat two
        or three kids a summer whatever happened, so a squad that lost six
@@ -15605,6 +15490,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       [...(career.retiredNames ?? []), ...retiredNow.map(r => r.name)],
       eraId,
       career.freeAgents ?? [],
+      [...releasedByYouNames(career)],
     );
     squad = emergency.squad;
     freeAgentsIn.push(...emergency.signed);
@@ -15631,15 +15517,6 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       spare.sort((a, b) => (a.isYouth ? 0 : 1) - (b.isYouth ? 0 : 1) || a.rating - b.rating);
       const cut = new Set(spare.slice(0, squad.length - SQUAD_LIMIT).map(p => p.id));
       for (const p of squad) if (cut.has(p.id)) releasedNews.push(p.name);
-      /* Round 619: released is not deleted either. A fringe player the club
-         trimmed is exactly the kind of body that turns up on a free agent
-         board, and a manager who needs one in February should be able to find
-         the man he let go in August. */
-      for (const p of squad) {
-        if (cut.has(p.id) && !p.isYouth) {
-          walkedToPool.push(freeAgentFromPlayer(p, clubName, season, 'released', [...(career.freeAgents ?? []), ...walkedToPool]));
-        }
-      }
       squad = squad.filter(p => !cut.has(p.id));
     }
   }
@@ -15799,16 +15676,49 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     // told, and the list has to survive the rollover it was written in.
     retiredNames: [...(career.retiredNames ?? []), ...retiredNow.map(r => r.name)],
     retiredLastSummer: retiredNow,
-    /* Round 619: last summer's board carries over. THIS summer's departures are
-       deliberately NOT merged here: they go to rollFreeAgents as arrivals, so
-       the ageing and retirement pass cannot run over them a second time. */
-    freeAgents: [...(career.freeAgents ?? [])],
-    /* Round 628: the handover is a PER SEASON block and the deep copy above
-       would otherwise carry it forward, subtracting the same previous manager
-       from every season for the life of the save. `midSeasonStart` is
-       deliberately left alone: the takeover really did happen, ClubManager.tsx
-       reads it for its banner, and seasonLedgerInputOf gates the legacy
-       estimate on season 1 rather than on the field's absence. */
+    /* Round 619: the pool carries across the summer. Men whose deals ran out
+       join it, anyone who retired leaves it whatever else is true of him, and
+       it decays so a slowly accumulating pile of good players cannot build up:
+       unsigned after a season he loses a rating point, after two he is gone. */
+    freeAgents: (() => {
+      const gone = new Set([...(career.retiredNames ?? []), ...retiredNow.map(r => r.name)]);
+      const carried = decayFreeAgents(career.freeAgents ?? [], career.season + 1, gone);
+      /* Round 619 review: the made up journeymen stay with the old job. They
+         were rated off the old club's level and priced off its squad, and they
+         count toward the pool's target, so carried across a move nothing new
+         was made up at the new club. Moving from Everton to Lommel all six sat
+         above Lommel's band and refused to sign for a whole season; moving up
+         they asked the old, smaller squad's wages. topUpFreeAgents below makes
+         a fresh six for the club you actually run. */
+      let out = moving ? carried.filter(f => f.reason !== 'unattached') : carried;
+      for (const f of walkedFree619) if (!gone.has(f.name)) out = addFreeAgent(out, f, career);
+      /* Round 619 review: and nobody the new season's squad already holds. The
+         emergency fill above signs men out of this very pool and nothing took
+         them out of it, so each one sat in the squad and the pool at once with
+         a Sign button that did nothing. Checked against the final squad rather
+         than the fill's own list, so any other way in is covered too. */
+      const inSquad = new Set(squad.map(p => p.name));
+      return out.filter(f => !inSquad.has(f.name));
+    })(),
+    /* A settlement outlives the season it was signed in, but NOT the job.
+       It belongs to the club that agreed it, and the first version carried it
+       across a move unconditionally while buildSquad replaced the whole squad.
+       Because the new employer then re-anchors its ceiling on
+       wageCapFrom(wageBill(state)), and wageBill counts severance, the new club
+       inherited a permanently higher cap for a liability it never incurred.
+       Measured on this branch: release the six worst contracts at Real Madrid,
+       take the Barcelona job, and Barcelona's ceiling went from 1343 to 1694
+       with a byte identical squad, 26 percent of free headroom that never
+       washes out because nextWageCap compounds off the previous ceiling every
+       summer after. That is exactly the "sack your way to cap space" exploit
+       this round exists to prevent, arriving through the back door. */
+    severance: moving ? [] : (career.severance ?? []).filter(r => r.weeksLeft > 0),
+    /* Round 633: the handover is a PER SEASON block and the deep copy would
+       otherwise carry it forward, subtracting the same previous manager from
+       every season for the life of the save. `midSeasonStart` is deliberately
+       left alone: the takeover really did happen, ClubManager.tsx reads it for
+       its banner, and seasonLedgerInputOf gates the legacy estimate on season
+       1 rather than on the field's absence. */
     handover: null,
     // Round 310: the memberships the new season plays under, exactly what
     // was registered above, so a reload registers the same world back.
@@ -15838,6 +15748,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   // Round 105: everyone still here needs a wage on file, the new club sets a
   // new cap, and the players you let walk lead the summer's news.
   ensureContracts(state);
+  ensureFreeAgents(state);
   ensureAcademy(state);
   /* Round 127: a manager who walks into a new club walks into a dressing room
      that has never been told anything, so it gets the honest default ladder
@@ -15871,6 +15782,10 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   state.teamTalk = null;
   // Round 116: intake day. What comes up is whatever your academy earned.
   const intakeNews = runYouthIntake(state);
+  /* Round 619 review: the summer's journeymen, after the intake so no kid on
+     the books shares a name with one, and after the decay above cleared last
+     season's unsigned ones. */
+  topUpFreeAgents(state);
   /* Round 436: a new club sets its ceiling off the squad it hands you, which
      is the Round 105 anchor doing its job. Staying carries last season's
      ceiling and moves it on the CLUB's season, never on your own wage bill.
@@ -15878,10 +15793,6 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
   state.wageCap = moving
     ? wageCapFrom(wageBill(state))
     : nextWageCap(career.wageCap ?? wageCapFrom(wageBill(career)), club.expectation, prevPos, seasonTrophyCount);
-  /* Round 619: the free agent board rolls here, AFTER retiredNames is final
-     (so a man who retired this summer cannot also be looking for a club) and
-     after the squad is settled (so nobody on the board is already yours). */
-  rollFreeAgents(state, nextYearsOn, walkedToPool);
   for (const name of freeAgentNews) {
     pushNews(state, { name, from: career.clubName, to: 'a free transfer', fee: 0 });
   }
@@ -16120,10 +16031,6 @@ export function loadCareer(): CareerState | null {
        real half played save built on the committed pre Round 127 engine into a
        browser, which is the only way anybody would ever have seen it. */
     ensureRoles(parsed);
-    /* Round 619: and the free agent board, for the same reason: the transfer
-       screen reads it before a ball is kicked. Absent means empty, which is
-       every save written before this round, and the first rollover fills it. */
-    ensureFreeAgents(parsed);
     /* Round 567: FIRST, because every repair below and every screen above reads
        the squad by id, and a career carrying two men under one id has been
        answering those lookups with the wrong player. Registered in BOTH
@@ -16168,6 +16075,10 @@ export function loadCareer(): CareerState | null {
     /* Round 505: and the armband and the takers, for the same reason: the
        tactics screen reads them before a ball is kicked. */
     ensureSetPieces(parsed);
+    /* Round 619: and the free agent list, for the same reason: the contracts
+       card reads it before a ball is kicked, so a save from before free agents
+       existed would otherwise show an empty list until the first week. */
+    ensureFreeAgents(parsed);
     /* Round 507: a negotiation frozen mid haggle by a build that charged
        patience only for an insult, resumed by a build that charges for every
        answer. Its opener was 2 or 3 where the new one is 4 or 5, so two

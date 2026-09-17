@@ -239,6 +239,28 @@ export function expectedAttendance(st: PromoterState, plan: ShowPlan): number {
   return clampi(venue.capacity * clamp(pull * priceFactor, 0, 1), 0, venue.capacity);
 }
 
+export interface HouseFill {
+  /** Whole percent of the seats taken. Rounded down, so it never reads fuller than the room was. */
+  percent: number;
+  /** Every seat taken. A room with one empty seat is not sold out. */
+  soldOut: boolean;
+}
+
+/**
+ * How full the room was, for the result screen.
+ *
+ * Round 630 worked this out inside the render as a rounded percentage and
+ * called anything from 99 up a sell out, so 15,853 in a room of 16,000 read
+ * "99% of 16,000, sold out" with 147 seats empty and got the gold confetti.
+ * It lives here so `simFightPromoter` can hold the screen to the seats: sold
+ * out means attendance reached capacity, and 100 is only ever shown then.
+ */
+export function houseFill(attendance: number, capacity: number): HouseFill {
+  const soldOut = attendance >= capacity;
+  const percent = soldOut ? 100 : clamp(Math.floor((attendance / capacity) * 100), 0, 99);
+  return { percent, soldOut };
+}
+
 /** How good the fight actually was, judged after the fact. */
 export function qualityOf(res: BoutResult, rounds: number): number {
   /* Round 627: COMPETITIVENESS CARRIES THIS, and the drama only counts inside a

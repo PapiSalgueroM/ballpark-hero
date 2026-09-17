@@ -4,10 +4,11 @@ import ShareButtons from '@/components/game/ShareButtons';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { cn } from '@/lib/utils';
+import { Confetti } from '@/components/soccer-career/CareerFx';
 import { STYLES, weightById, ratingOf, type Fighter } from '@/lib/fightCareer';
 import {
   newPromoter, runShow, promoterVerdict, appealOf, purseFor, legalMatch,
-  drawOf, weightOf, expectedAttendance, VENUES, venueById,
+  drawOf, weightOf, expectedAttendance, houseFill, VENUES, venueById,
   type PromoterState, type ShowResult, type Booking,
 } from '@/lib/fightPromoter';
 
@@ -126,13 +127,35 @@ export default function FightPromoterBoard() {
   }
 
   if (phase === 'result' && result) {
+    /* From the lib, not worked out here, so the harness can check that "sold
+       out" only ever appears with every seat taken. */
+    const { percent: full, soldOut } = houseFill(result.attendance, result.venue.capacity);
     return (
       <div className="space-y-4" ref={revealRef}>
         {Header}
-        <div className={cn('rounded-lg border p-4 text-center',
+        <div className={cn('relative overflow-hidden rounded-lg border p-4 text-center',
           result.profit >= 0 ? 'border-emerald-500/60 bg-emerald-500/10' : 'border-destructive/60 bg-destructive/10')}>
+          {/* Round 630: a sell out is the promoter's knockout, so it gets the
+              gold. A show that merely made money gets the smaller burst, and a
+              loss gets nothing. */}
+          {result.profit >= 0 && (
+            <Confetti pieces={soldOut ? 46 : 26} gold={soldOut} />
+          )}
           <p className="text-xs uppercase tracking-wide text-muted-foreground">{result.venue.name}</p>
-          <p className="text-2xl font-bold">{result.attendance.toLocaleString()} in</p>
+          <p key={result.attendance} className="animate-count-pop text-2xl font-bold">{result.attendance.toLocaleString()} in</p>
+          {/* The house filling is this game's condition bar: the number alone
+              does not tell you whether 3,100 was a triumph or an empty room,
+              and the capacity is what decides that. */}
+          <div className="mx-auto mt-2 max-w-xs">
+            <div className="h-2.5 overflow-hidden rounded-full bg-muted">
+              <div className={cn('h-full rounded-full transition-[width] duration-700 ease-out',
+                full >= 90 ? 'bg-amber-500' : full >= 55 ? 'bg-emerald-500' : 'bg-muted-foreground/60')}
+                style={{ width: `${full}%` }} />
+            </div>
+            <p className="mt-1 text-[11px] text-muted-foreground">
+              {full}% of {result.venue.capacity.toLocaleString()}{soldOut ? ', sold out' : ''}
+            </p>
+          </div>
           <p className="text-sm text-muted-foreground">
             gate {result.gate.toFixed(3)}m, purses {result.purses.toFixed(3)}m, room {result.rent.toFixed(3)}m
           </p>

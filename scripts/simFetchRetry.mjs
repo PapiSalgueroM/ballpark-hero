@@ -58,7 +58,8 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 const SRC = path.join(ROOT, 'src', 'lib', 'fetchAllRows.ts');
-let source = fs.readFileSync(SRC, 'utf8');
+/* normalised on read: the noretry pattern ends lines with \n, which a CRLF checkout never matches */
+let source = fs.readFileSync(SRC, 'utf8').replaceAll('\r\n', '\n');
 
 /* The control removes the mechanism, not the checking code, so what it proves
    is that the checks would notice its absence. */
@@ -183,7 +184,7 @@ console.log('6) every caller reads the error');
      whoAmI documents why. This section is here so the tenth has to. */
   const callers = fs.readdirSync(path.join(ROOT, 'src', 'lib'))
     .filter(f => f.endsWith('.ts') && f !== 'fetchAllRows.ts')
-    .map(f => ({ name: f, src: fs.readFileSync(path.join(ROOT, 'src', 'lib', f), 'utf8') }))
+    .map(f => ({ name: f, src: fs.readFileSync(path.join(ROOT, 'src', 'lib', f), 'utf8').replaceAll('\r\n', '\n') }))
     .filter(f => /\bfetchAllRows\b/.test(f.src));
 
   /* Read the code, not the prose about the code: whoAmI's comment explains the

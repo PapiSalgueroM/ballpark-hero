@@ -69,7 +69,7 @@ import type { CareerState, Competition, SponsorOffer } from '@/lib/clubManager';
 import {
   CROWD_BANDS, CROWD_CAP, CUSTOM_CROWD_FLOOR,
   TICKET_TIERS, clubDefFor, eraClubDefFor, fixtureFor, gatePricePerFan, isHistoricEra,
-  money, signSponsorWith, sponsorOffers, wageBill,
+  money, severanceBill, signSponsorWith, sponsorOffers, wageBill,
 } from '@/lib/clubManager';
 import { facilityLevel, facilitiesOf, stadiumConcessionMult } from '@/lib/clubManagerFacilities';
 /* Round 471: the four staff posts pay a wage every week and cost fees when
@@ -465,7 +465,13 @@ export function projectFinances(state: CareerState): FinanceProjection {
      tickets the rest. The totals never disagreed; the two rows now agree too. */
   const foodLeft = round2(((crowd * food) / 1e6) * left.home);
   const ticketsLeft = round2(perHome * left.home - foodLeft);
-  const wagesLeft = round2((wageBill(state) / 1000) * weeksLeft);
+  /* Round 619 review: the squad's wages run every week left, but a settlement
+     runs only for the weeks it still has, and one that ends in a fortnight is
+     not a season's cost. Charging the whole bill for every week left put a
+     5 week row on the Finances desk at eleven times what it could still cost. */
+  const squadWeekly = wageBill(state) - severanceBill(state);
+  const settlementsLeft = (state.severance ?? []).reduce((n, r) => n + r.weekly * Math.min(r.weeksLeft, weeksLeft), 0);
+  const wagesLeft = round2((squadWeekly * weeksLeft + settlementsLeft) / 1000);
   const staffLeft = round2((staffWagesWeekly(state) / 1000) * weeksLeft);
   const travelLeft = round2(travelCost(state, 'league') * (left.away - left.euroAway) + travelCost(state, 'uclGroup') * left.euroAway);
   const signings = state.seasonSignings ?? [];
@@ -479,10 +485,6 @@ export function projectFinances(state: CareerState): FinanceProjection {
      it has to appear here: money that goes and shows up nowhere is a lie the
      projection would tell every week. */
   const staffFees = round2(staffOf(state).seasonSpend);
-  /* Round 619: contracts torn up. Same reasoning as the staff fees line above,
-     and it gets its own row rather than being folded into Players bought
-     because it is the opposite transaction: money out for a player LEAVING. */
-  const payoffs = round2(signings.reduce((n, t) => n + (t.payoff ?? 0), 0));
 
   const income: ProjectionLine[] = [
     { id: 'tickets', label: 'Tickets', actual: round2(s.tickets), projected: round2(s.tickets + ticketsLeft), kitty: true, note: `${left.home} certain home game${left.home === 1 ? '' : 's'} left` },
@@ -497,7 +499,6 @@ export function projectFinances(state: CareerState): FinanceProjection {
     { id: 'transferOut', label: 'Players bought', actual: transferOut, projected: transferOut, kitty: true, note: 'assumes no more deals' },
     { id: 'facilities', label: 'Facilities', actual: round2(facilities), projected: round2(facilities), kitty: true },
     { id: 'staffFees', label: 'Staff fees', actual: staffFees, projected: staffFees, kitty: true, note: 'hires and pay offs' },
-    { id: 'payoffs', label: 'Contract pay offs', actual: payoffs, projected: payoffs, kitty: true, note: 'players you settled with' },
   ];
   const sum = (lines: ProjectionLine[], k: 'actual' | 'projected') => round2(lines.reduce((n, l) => n + l[k], 0));
   const incomeActual = sum(income, 'actual');
@@ -530,14 +531,7 @@ export function closeLedger(state: CareerState): ClosedLedger {
   /* Round 507: a signing on fee leaves the same kitty as the transfer fee, so
      the books count both. It is a separate field because the fee column is what the
      selling club got and the news feed prints that number. */
-  /* Round 619: and the contracts torn up. Folded into this one number rather
-     than given a key of its own, because ClosedLedger's shape is validated key
-     by key by isClosed and a new key would fail isValidBooks on every save
-     already in flight, which resets the whole block to defaultBooks. The
-     season projection above gives it its own visible row; the closed record
-     only has to balance. */
-  const payoffs = round2(signings.reduce((n, t) => n + (t.payoff ?? 0), 0));
-  const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0) + payoffs);
+  const transferOut = round2(signings.filter(t => t.dir === 'in').reduce((n, t) => n + t.fee + (t.bonus ?? 0), 0));
   const facilities = round2(facilitiesOf(state).seasonSpend);
   const staffFees = round2(staffOf(state).seasonSpend);
   const income = round2(s.tickets + s.concessions + s.sponsor + transferIn);

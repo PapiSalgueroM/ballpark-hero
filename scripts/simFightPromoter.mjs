@@ -21,6 +21,9 @@
  *   PROMO_CONTROL=noprice     the ticket price stops mattering  -> section 3
  *   PROMO_CONTROL=norep       your name stops buying fighters   -> section 4
  *   PROMO_CONTROL=nodamage    fighters never wear out           -> section 5
+ *   PROMO_CONTROL=nearlyfull  99 percent counts as sold out     -> section 6
+ *   PROMO_CONTROL=roundedpct  the percentage rounds up          -> section 6
+ *   PROMO_CONTROL=halfhouse   no room ever gets near full       -> section 6
  */
 
 import './lib/seedRandom.mjs';
@@ -88,6 +91,16 @@ if (CONTROL === 'freerent') {
 } else if (CONTROL === 'nodamage') {
   rewrite('nodamage', 'a.damage = Math.round((a.damage + res.damageTaken) * 10) / 10;', 'a.damage = 0;');
   rewrite('nodamage', 'c.damage = Math.round((c.damage + res.damageDealt) * 10) / 10;', 'c.damage = 0;');
+} else if (CONTROL === 'nearlyfull') {
+  /* The Round 630 render rule, put back into the lib. */
+  rewrite('nearlyfull', 'const soldOut = attendance >= capacity;',
+    'const soldOut = Math.round((attendance / capacity) * 100) >= 99;');
+} else if (CONTROL === 'roundedpct') {
+  rewrite('roundedpct', 'const percent = soldOut ? 100 : clamp(Math.floor((attendance / capacity) * 100), 0, 99);',
+    'const percent = soldOut ? 100 : clamp(Math.round((attendance / capacity) * 100), 0, 100);');
+} else if (CONTROL === 'halfhouse') {
+  rewrite('halfhouse', 'const pull = clamp((cardAppeal / 46) * (0.6 + st.reputation / 110), 0, 1.25);',
+    'const pull = clamp((cardAppeal / 46) * (0.6 + st.reputation / 110), 0, 0.5);');
 } else if (CONTROL) {
   console.log(`   FAIL unknown control ${CONTROL}`);
   process.exit(1);
@@ -372,6 +385,62 @@ console.log('5) the men on your shows are not props');
      drives it to exactly zero. */
   if (!(hurt >= 0.5)) fail(`nobody on the shows ever gets hurt (${hurt.toFixed(2)} of 10), so the fighters are props (floor 0.5)`);
   else ok(`${hurt.toFixed(2)} of 10 in the pool carry real damage (floor 0.5)`);
+}
+
+/* ═══════════════ 6) the house bar tells the truth about the seats ═══════════════ */
+console.log('6) "sold out" means every seat, and the percentage never reads fuller than the room');
+{
+  /* Round 630 worked the house out inside the render, rounded it, and called
+     99 a sell out, so a room with 147 empty seats got the label and the gold
+     confetti. Both claims are binary and checked on every show: the label
+     against the seats, and the percentage against the true share.
+
+     The sample runs three ticket prices so it reaches the rooms that matter.
+     A sample that never gets near a full house cannot see this defect at all,
+     so it has to prove it got there before its zeros mean anything. */
+  let shows = 0, soldOut = 0, nearly = 0, labelLies = 0, missedSellOut = 0, overstated = 0;
+  let example = '';
+  for (const picker of ['balanced', 'mismatch']) {
+    for (const mult of [0.3, 0.6, 1]) {
+      for (let seed = 0; seed < 60; seed += 1) {
+        let st = pr.newPromoter(`H${seed}`, `house-${picker}-${mult}-${seed}`);
+        for (let i = 0; i < 40 && !st.closed; i += 1) {
+          const plan = planFor(st, picker, mult);
+          if (!plan) break;
+          const r = pr.runShow(st, plan);
+          if (!r) break;
+          st = r.state;
+          shows += 1;
+          const { attendance, venue } = r.result;
+          const cap = venue.capacity;
+          const fill = pr.houseFill(attendance, cap);
+          if (attendance >= cap) soldOut += 1;
+          else if (attendance * 1000 >= cap * 985) nearly += 1;
+          if (fill.soldOut && attendance < cap) {
+            labelLies += 1;
+            if (!example) example = `${venue.name}: ${attendance.toLocaleString()} of ${cap.toLocaleString()} reads sold out with ${(cap - attendance).toLocaleString()} empty`;
+          }
+          if (!fill.soldOut && attendance >= cap) missedSellOut += 1;
+          if (fill.percent * cap > attendance * 100) overstated += 1;
+        }
+      }
+    }
+  }
+  console.log(`   ${shows} shows: ${soldOut} sold out, ${nearly} at 98.5% or more with seats still empty`);
+  /* Measured on healthy code: 1,795 full rooms and 88 nearly full ones over
+     13,730 shows, so a floor of 20 on each sits well under both. The
+     halfhouse control caps the crowd and drives both to zero. */
+  if (soldOut < 20 || nearly < 20) {
+    fail(`the sample reached only ${soldOut} full rooms and ${nearly} nearly full ones (floor 20 each), so the zeros below cannot see a false sell out`);
+  } else {
+    ok(`the sample reaches the rooms that matter: ${soldOut} full, ${nearly} nearly full (floor 20 each)`);
+  }
+  if (labelLies > 0) fail(`${labelLies} shows say sold out with seats still empty, for example ${example}`);
+  else ok('no show says sold out with an empty seat');
+  if (missedSellOut > 0) fail(`${missedSellOut} full rooms do not say sold out`);
+  else ok('every full room says sold out');
+  if (overstated > 0) fail(`${overstated} shows read a fuller percentage than the room was`);
+  else ok('the percentage never reads fuller than the room was');
 }
 
 try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }
