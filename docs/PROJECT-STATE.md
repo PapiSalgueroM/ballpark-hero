@@ -1,5 +1,62 @@
 # Project state
 
+## HANDOFF 2026-09-17: main `b51500fb` re-gated, nothing in flight, and two cloud traps
+
+`docs/HANDOFF-2026-09-17.md` replaces the 2026-09-15 pair and `CLAUDE.md`'s doc map points at it.
+
+**Gates, measured on this head in a fresh cloud container rather than carried over.** tsc 0.
+Of 327 node harnesses, 284 were runnable here and **263 are green**. The other 21 split as 12 that
+reached no database and self skipped, 6 that failed on the database, 2 that want a build first
+(`simInternalLinks` and `simPrerender` both print "NO dist/sitemap.xml. BUILD FIRST"), and 1 on a
+shallow clone. **None of the 21 is a code defect.**
+
+**Trap one: this cloud environment's network policy blocks Supabase.**
+`flawuiqbvjobmkfkauhw.supabase.co:443` is refused by the egress proxy, which answers 403 to
+CONNECT, while GitHub answers 200 through the same proxy. About 61 harnesses need that host: 43
+name it in their own source and 18 more reach it through a shared helper in `scripts/lib/`, so a
+grep over the harness files undercounts. The well written ones say so and skip. **The rest hang,
+and a hung harness looks exactly like a slow one because `runAllSims.mjs` has no per harness
+timeout.** `simFootleKitNumbers` sat for 32 minutes on 3 seconds of CPU and the first suite
+attempt took 37 minutes to reach the letter P. The tell is CPU time against elapsed:
+`ps -o etime=,time=,pcpu= -p <pid>`. 100 percent is working, 0.2 percent is blocked.
+So a cloud session can gate tsc, the build and 263 harnesses, and **owes the database group a run
+somewhere the host is reachable**. Do not call a cloud run "all green".
+
+**Trap two: a fresh cloud clone is shallow, and it shows up as a data error.** `simNewBadge`
+reported `124 typed date(s) disagree with git`, which reads like 124 wrong dates in the registry
+and is nothing of the kind: `.git/shallow` was present, the clone held 196 commits and its
+earliest was dated the day the container was made, so every page looked newer than its typed
+date. `git fetch --unshallow` takes it to 3,228 commits from 2025-01-01 and the harness is fine.
+**Run it at the start of a cloud session, before trusting anything that reads history.** The
+giveaway is a failure message where "anything git traces the page to" equals the container's
+own birthday.
+
+**Nothing is waiting to be merged.** Checked branch by branch with `git merge-base --is-ancestor`
+against `origin/main`, then re-run after unshallowing and identical both times, which was worth
+doing because a truncated history is exactly what makes an ancestry test lie. Merged: `r611`,
+`r617`, `r618`, `r619` (its contract commit), `r620`, `r625`, `r627`. Landed by another route
+despite failing the ancestry test: `r612` and `r616` (through `release-611-612-616`, and both
+their design files are on main) and `r626` (its tip holds one docs commit whose content is on main
+as `ac7fc82`, on an old base, so its diff against main looks enormous and means nothing).
+**Ancestry is not a reliable "did this ship" test in this repo; check the content.** Genuinely
+unlanded, one commit each and both drafts with no verified code: `r613-soccer-grid` at `6ffbc8fd`
+and `r614-nfl-grid-key` at `fb24ceae`.
+
+**Round 619 is unblocked and is the next round.** Its contract's section 5 refuses to start until
+617 and 618 are integrated, because everything in it edits `src/lib/clubManager.ts` and a three
+way merge in the largest file in the repo across three engine rounds is how a round gets lost.
+Both landed on 2026-09-16, so that condition is met.
+
+**Round 614's plan changed and the 2026-09-15 handoff is wrong about it.** The investigation on
+`r614-nfl-grid-key` found the pre 1970 Super Bowl gap should be **closed** rather than made
+unknown, because the unknown rule leaves six careers still answering wrongly while turning about a
+thousand honest "no" verdicts into free retries. Two attackers then found real problems in that
+contract, recorded verbatim in `docs/design/round-614-attack-notes.md` rather than folded in, so
+it is a draft and not buildable. Resolve the disagreement before writing code.
+
+Take **Round 628** next. 621 to 624 stay reserved for the career engine migration. The
+"NEXT FREE NUMBER: 551" line in `docs/WORKBOARD.md` is stale by about eighty rounds.
+
 ## COLLEGE GRID RESOLVED 2026-09-16: it works, and the purge must NOT run
 
 The open question from the 610 to 619 handoff is answered, and the answer changes the pending
