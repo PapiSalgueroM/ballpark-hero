@@ -95,6 +95,52 @@ section each targets**. Regression green: `simClubManager`, `simContracts`, `sim
 `simAcademy`, `simClubManagerFinances`, `simClubManagerFreeAgents`, `simClubManagerSave`,
 `simSessionMarks`, `simActivityNotCompletion`, `simSiteSearch`, `simNoRivalNames`.
 
+**REVIEW ROUND: 42 findings across seven lenses, 11 refuted, and the worst one repeats Round
+619's lesson exactly.** Seven hunters, each blind to the others, then an independent skeptic per
+finding told to refute it.
+
+**The monotone law was FALSE and the section written to guard it was blind to that.**
+`objectiveStatuses` recomputes the youth objective from the CURRENT squad, and four of the five
+board asks read the squad the same way, so a tick could come back off. Selling a man, loaning
+him out or paying him off took 6 points off a live score through three buttons the game really
+has: measured Ajax 43 to 37, Le Havre 17 to 11, and a season forked at week 20 finishing 58 if
+you kept the player and 48 if you paid him off. Section 2 reported "0 of them lower" because it
+played every career hands off and never changed a squad. **Nine sections, one kind of
+measurement, and the thing they all missed sat one click from two live buttons**, which is the
+same shape as Round 619's money printer that nine rating-measuring sections missed.
+The board term lands only at the final whistle now, where the board itself settles the card, and
+section 2 buys, sells and pays players off with a floor on the number of removals so it cannot
+go back to passing by never doing the thing that broke it.
+
+**A pre-628 takeover save was paid for the previous manager's honours.** `handoverOf` zeroed
+`cupRank`, `euroRank` and `objectivesDone`, which is not neutral: it credited the new manager
+with the cup run, the European run and the board ticks his predecessor banked, about 15 of 130
+on average and 40 at worst. Those three scale by the share of the season actually managed now.
+
+**A club in the calibration sample did not exist.** "Midtjylland" is in no playable league, and
+an unknown name does not throw: `clubDefFor` returns a flat fallback and **`leagueOf` falls back
+to the PREMIER LEAGUE**, so it silently became an invented Premier League club in the very run
+that set the weights. Fixed to `FC Midtjylland`, weights reconfirmed on the rerun (median 63
+against the old rule's 63, stature 0.314, board 0.577), and the harness refuses to start if any
+club it names is not playable.
+
+Also fixed: the season end screen printed five raw terms beside a clamped total, so they could
+add up to more than the number above them; the help copy opened with 130 while its own five
+maxima added to 154, and claimed Europe was "counted by how far you went" when `UCL_STAGE_RANK`
+collapses the round of 16 and the quarter final onto the same rank; a handover read out of
+localStorage could claim more games than the table had records of and buy the whole form term;
+section 9 compared 0 to 0 on a career that had played nothing; section 1's sample guard was
+arithmetically incapable of failing; the `dist` shadow leaked on an abnormal exit; and four
+comments still quoted the pre-tuning weights.
+
+Both correlation gates were re-measured after the design change and re-set midway through the
+new gaps. The old board floor of 0.28 was cleared by the OLD RULE at 0.253 on one seed, which is
+0.027 of room and not a threshold. Now 0.47 and 0.45, each about 0.21 clear of both arms.
+
+Final: **10 sections, 9 negative controls, all nine proved to fail the section each targets.**
+`liveobjectives` reproduces the un-tick on demand and fires at "Stuttgart week 21 after paying a
+man off: 21 to 15".
+
 **Two harness mistakes made and fixed in the building, both worth recording.** The first draft
 bundled its rewritten modules from the system temp directory, where `@/lib/...` does not
 resolve, and the entry imported both modules by ABSOLUTE PATH while the aliases only rewrite the
