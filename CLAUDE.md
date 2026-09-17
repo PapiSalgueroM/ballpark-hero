@@ -41,6 +41,15 @@ the browsers themselves are preinstalled at `/opt/pw-browsers`, so this is just 
 and `pip3 install fonttools pillow` (simBrand runs the logo generator and fails closed
 without them).
 
+**It also needs `git fetch --unshallow`, learned on 2026-09-17, and it is worth doing first.**
+The container's clone is shallow. Measured that day: `.git/shallow` present, 196 commits, earliest
+dated the day the container was made, against 3,228 from 2025-01-01 afterwards. Nothing announces
+this as a clone problem. What it looks like instead is a data error: `simNewBadge` reported
+"124 typed date(s) disagree with git", because it dates each page from history and history started
+three days ago, so every page looked newer than its typed date. The giveaway is a message where
+"anything git traces the page to" is the container's own birthday. Any harness or script that
+reads git history is wrong until you fix it.
+
 Then read `docs/PROJECT-STATE.md` and reconcile against reality:
 
 1. `git log --oneline -5` gives you the true head. **Trust this over the head recorded in
@@ -627,6 +636,19 @@ These are not preferences, they are the exposure.
   claude.ai/code path this trap does not exist, the clone sits at `origin` and checkout behaves
   like ordinary git, but the habit of copying a file before experimenting on it is still a good
   one.
+- **A cloud session cannot reach Supabase, and about 61 harnesses need it. Learned 2026-09-17.**
+  The egress proxy answers 403 to CONNECT for `flawuiqbvjobmkfkauhw.supabase.co:443` while GitHub
+  answers 200 through the same proxy, so it is a per host network policy, not an outage. 43
+  harnesses name the host in their own source and about 18 more reach it through a shared helper
+  in `scripts/lib/`, so a grep undercounts. The well written ones skip and say so.
+  **The rest hang, and `runAllSims.mjs` has no per harness timeout**, so a blocked harness is
+  indistinguishable from a slow one by the clock. `simFootleKitNumbers` sat for 32 minutes on 3
+  seconds of CPU. The tell is CPU time against elapsed time
+  (`ps -o etime=,time=,pcpu= -p <pid>`): near 100 percent is working, 0.2 percent is blocked.
+  `simOpposition`, `simPress` and `simRoles` genuinely take 20 to 30 minutes each, so runtime
+  alone proves nothing either way. A cloud session can gate tsc, the build and roughly 263
+  harnesses, and **owes the database group a run where the host is reachable**. Never report a
+  cloud suite run as "all green" without naming what did not run.
 - **Bash reads can be stale or truncated** in the sandbox for files edited by the Write and Edit
   tools in the same session. A file once ended mid-word under `tail` while the Read tool showed
   it complete. **Verify file content with the Read and Grep tools, never with bash `cat`,
@@ -678,8 +700,9 @@ current:**
 
 | File | Status |
 |---|---|
-| `docs/HANDOFF-2026-09-15.md` | **LIVE UNTIL THE NEXT HANDOFF.** Where the desktop lane left the build early on 2026-09-15: Rounds 580 to 584 of the Stadium Tycoon merge live, Round 585 (gems and packs) built, reviewed and uncommitted in the working tree with the exact steps to land it, what comes next (586 to 589), the open follow-ups, and every trap hit with its fix. Read it right after this file. |
-| `docs/HANDOFF-2026-09-15-AFTERNOON.md` | **LIVE FOR THE CLAUDE 610 TO 619 LANE, sections 4 to 9.** Its release in flight (611, 612 and 616) went live the same evening: the "Round 612 blocker" in section 3.6 turned out to be a coin toss gate, and the whole story is the top LIVE section of `docs/PROJECT-STATE.md`. Still current: the College Grid purge after 24 hours (section 4), Round 613's contract and branch (section 5), the queue and loose ends (section 6), the lane setup (section 7), the traps (section 8, plus the harness temp file race recorded in `docs/PROJECT-STATE.md`), and the owner decisions (section 9). |
+| `docs/HANDOFF-2026-09-17.md` | **LIVE UNTIL THE NEXT HANDOFF.** Where the build stands on 2026-09-17, measured on main `b51500fb` on a fresh install rather than carried over: the gates, what is genuinely unlanded (two contract drafts and nothing else), the queue in order starting with Round 619, the three places the 2026-09-15 pair are now wrong, the cloud session setup, the traps and the owner decisions. Read it right after this file. |
+| `docs/HANDOFF-2026-09-15.md` | HISTORICAL. The early 2026-09-15 desktop handoff, superseded by the one above. |
+| `docs/HANDOFF-2026-09-15-AFTERNOON.md` | HISTORICAL, superseded by the 2026-09-17 handoff. Still the fullest account of how Rounds 611, 612 and 616 were built and gated, and its section 5 is the background for Round 613. Do not act on its College Grid purge instruction (section 4) or its 617/618 hold: both were overtaken on 2026-09-16. |
 | `docs/HANDOFF-2026-09-10.md` | HISTORICAL. The 2026-09-10 handoff, superseded by the one above. |
 | `docs/HANDOFF-2026-09-05.md` | HISTORICAL. The 2026-09-05 handoff, superseded by the one above. |
 | `docs/SHIP-PIPELINE.md` | **LIVE.** The deploy runbook. Read before packaging. |

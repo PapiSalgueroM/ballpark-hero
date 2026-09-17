@@ -69,7 +69,7 @@ import type { CareerState, Competition, SponsorOffer } from '@/lib/clubManager';
 import {
   CROWD_BANDS, CROWD_CAP, CUSTOM_CROWD_FLOOR,
   TICKET_TIERS, clubDefFor, eraClubDefFor, fixtureFor, gatePricePerFan, isHistoricEra,
-  money, signSponsorWith, sponsorOffers, wageBill,
+  money, severanceBill, signSponsorWith, sponsorOffers, wageBill,
 } from '@/lib/clubManager';
 import { facilityLevel, facilitiesOf, stadiumConcessionMult } from '@/lib/clubManagerFacilities';
 /* Round 471: the four staff posts pay a wage every week and cost fees when
@@ -103,6 +103,19 @@ export interface SeasonLedger {
   playerWages: number;
   staffWages: number;
   travel: number;
+  /**
+   * Round 619: wages still being paid to men who have left, kept apart from
+   * the squad's wages so the screen can say why the wage line did not fall
+   * when a contract was settled.
+   *
+   * OPTIONAL, and deliberately NOT in LEDGER_KEYS. isLedger requires every key
+   * in that list to be a finite number, so adding it there would fail the shape
+   * check on every save written before this round, and ensureBooks fails closed
+   * by resetting to defaultBooks: a season of real financial history would be
+   * wiped by a cosmetic split. Absent reads as zero, which is exactly right,
+   * because before this round nobody was owed anything.
+   */
+  severance?: number;
 }
 
 /** A closed season: the ledger plus the lines the engine already keeps elsewhere. */
@@ -144,7 +157,7 @@ function careerTier(state: Pick<CareerState, 'clubName' | 'eraId'>): 1 | 2 | 3 |
 }
 
 export function emptyLedger(): SeasonLedger {
-  return { weeks: 0, homeGames: 0, awayTrips: 0, tickets: 0, concessions: 0, sponsor: 0, playerWages: 0, staffWages: 0, travel: 0 };
+  return { weeks: 0, homeGames: 0, awayTrips: 0, tickets: 0, concessions: 0, sponsor: 0, playerWages: 0, staffWages: 0, travel: 0, severance: 0 };
 }
 
 const LEDGER_KEYS: (keyof SeasonLedger)[] = ['weeks', 'homeGames', 'awayTrips', 'tickets', 'concessions', 'sponsor', 'playerWages', 'staffWages', 'travel'];
@@ -327,7 +340,14 @@ export function tickBooks(state: CareerState): void {
   const books = ensureBooks(state);
   const s = books.season;
   s.weeks += 1;
-  s.playerWages = round3(s.playerWages + wageBill(state) / 1000);
+  /* Round 619: wageBill is the squad PLUS what is owed on settled contracts,
+     so the two are booked apart here. They still sum to the same money, and the
+     week's charge is unchanged; what changes is that the finance screen can
+     name the second half instead of leaving a manager wondering why paying off
+     three players did not move the wage line. */
+  const owed = severanceBill(state) / 1000;
+  s.playerWages = round3(s.playerWages + wageBill(state) / 1000 - owed);
+  s.severance = round3((s.severance ?? 0) + owed);
   s.staffWages = round3(s.staffWages + staffWagesWeekly(state) / 1000);
   const target = gateMoodTarget(state);
   books.fanMood = clamp(round1(books.fanMood + (target - books.fanMood) * 0.15), 0, 100);
@@ -465,7 +485,16 @@ export function projectFinances(state: CareerState): FinanceProjection {
      tickets the rest. The totals never disagreed; the two rows now agree too. */
   const foodLeft = round2(((crowd * food) / 1e6) * left.home);
   const ticketsLeft = round2(perHome * left.home - foodLeft);
-  const wagesLeft = round2((wageBill(state) / 1000) * weeksLeft);
+  /* Round 619: the squad's wages run for every week left; the settlements run
+     only until their own ledgers empty, which is usually sooner. Projecting
+     severance at the current weekly rate for the rest of the season would
+     overstate it by however many weeks the last row has already been paid off,
+     so it is summed row by row against the weeks actually left. */
+  const owedWeekly = severanceBill(state) / 1000;
+  const severanceLeft = round2(
+    (state.severance ?? []).reduce((n2, r) => n2 + (r.weekly / 1000) * Math.min(Math.max(0, r.weeksLeft), weeksLeft), 0),
+  );
+  const wagesLeft = round2(((wageBill(state) - severanceBill(state)) / 1000) * weeksLeft);
   const staffLeft = round2((staffWagesWeekly(state) / 1000) * weeksLeft);
   const travelLeft = round2(travelCost(state, 'league') * (left.away - left.euroAway) + travelCost(state, 'uclGroup') * left.euroAway);
   const signings = state.seasonSignings ?? [];
@@ -487,7 +516,22 @@ export function projectFinances(state: CareerState): FinanceProjection {
     { id: 'transferIn', label: 'Players sold', actual: transferIn, projected: transferIn, kitty: true, note: 'assumes no more deals' },
   ];
   const spend: ProjectionLine[] = [
-    { id: 'playerWages', label: 'Player wages', actual: round2(s.playerWages), projected: round2(s.playerWages + wagesLeft), kitty: false, note: `${money(wageBill(state) / 1000)} a week` },
+    { id: 'playerWages', label: 'Player wages', actual: round2(s.playerWages), projected: round2(s.playerWages + wagesLeft), kitty: false, note: `${money((wageBill(state) - severanceBill(state)) / 1000)} a week` },
+    /* Round 619: only when there is something to show. A line reading zero on
+       every save that has never settled a contract is noise on a screen that
+       is already dense. */
+    ...((s.severance ?? 0) > 0 || owedWeekly > 0
+      ? [{
+        id: 'severance',
+        label: 'Settled contracts',
+        actual: round2(s.severance ?? 0),
+        projected: round2((s.severance ?? 0) + severanceLeft),
+        kitty: false,
+        note: owedWeekly > 0
+          ? `${money(owedWeekly)} a week, ${(state.severance ?? []).length} player${(state.severance ?? []).length === 1 ? '' : 's'}`
+          : 'all paid off',
+      } as ProjectionLine]
+      : []),
     { id: 'staffWages', label: 'Staff wages', actual: round2(s.staffWages), projected: round2(s.staffWages + staffLeft), kitty: false, note: `${money(staffWagesWeekly(state) / 1000)} a week` },
     { id: 'travel', label: 'Travel', actual: round2(s.travel), projected: round2(s.travel + travelLeft), kitty: false, note: `${left.away} certain away trip${left.away === 1 ? '' : 's'} left` },
     { id: 'transferOut', label: 'Players bought', actual: transferOut, projected: transferOut, kitty: true, note: 'assumes no more deals' },
@@ -529,7 +573,7 @@ export function closeLedger(state: CareerState): ClosedLedger {
   const facilities = round2(facilitiesOf(state).seasonSpend);
   const staffFees = round2(staffOf(state).seasonSpend);
   const income = round2(s.tickets + s.concessions + s.sponsor + transferIn);
-  const spend = round2(s.playerWages + s.staffWages + s.travel + transferOut + facilities + staffFees);
+  const spend = round2(s.playerWages + (s.severance ?? 0) + s.staffWages + s.travel + transferOut + facilities + staffFees);
   return { ...s, transferIn, transferOut, facilities, staffFees, income, spend, result: round2(income - spend) };
 }
 

@@ -1,5 +1,209 @@
 # Project state
 
+## ROUND 621 BUILT 2026-09-17: the career engine migration, and the measurement that shrank it
+
+On branch `claude/handoff-docs-2026-bxwi9m`. All four my career games adopt `careerEngine.ts`,
+proved byte identical, in one round rather than the four Round 620 planned.
+
+**The scope changed because the premise was measured and was wrong.** Round 620 recorded that the
+four games "share 24 exported symbol names once the sport prefix is stripped, which is about two
+thirds of 3,900 lines being one idea written four times", and scoped Rounds 621 to 624 as four
+large migrations on that basis. The first half is right: 25 names are common to all four. The
+second half is not.
+
+Measured over the eleven common functions whose bodies can be compared, with comments,
+whitespace and the sport prefix normalised away:
+
+| | count | which |
+|---|---|---|
+| Identical in all four | 2 | `repairNetWorth`, `eraById` |
+| Identical in three | 1 | `rollTeamQuality`, where the NFL differs by five numbers |
+| Genuinely different per sport | 8 | `shouldRetire`, `careerTotals`, `marketSalary`, `legacyOf`, `progress`, `assignRole`, `campBattle`, `teamLabelOf` |
+
+**Shared names are not shared code**, and `legacyOf` is the clearest case: the NFL scores an
+unbounded total with Canton at 520 while the shared `legacyTier` is a 0 to 100 ladder, so
+"sharing" it would change every verdict in the game rather than lift anything. The reason so
+little is left is a good one: the heavy machinery these four have in common was already shared,
+rounds ago, through `careerVariance`, `careerAwards`, `careerRival`, `usCareerFreeAgency`,
+`usCareerExtension`, `usCareerPress`, `careerMoney`, `careerInbox` and `careerRivalryEvents`.
+What is left per sport is the sport.
+
+**So there were three things to lift, not two thirds of 3,900 lines.** `TAKE_HOME` (0.45, a
+private const in all four at the same value), `repairNetWorth` (four byte identical copies) and
+`eraById` (four identical one line lookups over four different lists) moved to `careerEngine.ts`,
+and `rollTeamQuality` moved with its five numbers injected as a `TeamQualityBand`, which is the
+owner's 2026-09-04 instruction exactly: the data differs per sport and the function is shared.
+Every consumer still imports `repairNetWorth` from its own sport's file, which now re-exports it,
+so no screen changed.
+
+**The gate is the one Round 620 asked for and it is not a recorded number.**
+`scripts/simCareerEngineParity.mjs` pulls the pre migration source straight out of git with
+`git show HEAD:src/lib/<sport>MyCareer.ts`, rewrites its sibling imports to the `@/lib` alias so a
+temp copy resolves, and bundles it beside the migrated source. Both sides then run the identical
+seeded career and the whole state is diffed. **120 careers and 2,235 seasons across four sports,
+byte identical**, plus 4,036 direct comparisons of the three lifted functions. It refuses to run
+if the baseline already imports `careerEngine` (so it cannot compare the new file with itself) or
+if the current file does not (so it cannot pass before the work is done). Control
+`ENGINE_PARITY_CONTROL=drift` moves one number in the migrated NFL band and is proved to diverge
+sections 1 and 2.
+
+**Two output bugs in that harness, found and fixed before it was trusted.** Section 2 printed
+"byte identical" unconditionally, so the control run reported the careers as identical on the
+same screen as the failures saying they were not. And section 3 gated its own green line on the
+GLOBAL failure count, so it went silent whenever an earlier section had failed, which is exactly
+when somebody needs to know whether the files are in order. Both are the same mistake in
+different clothes: a harness that reports on something other than what it measured.
+
+**A note on its runtime, because 0.33 seconds looks like a harness that did not run.** It did.
+esbuild bundles the whole graph in 34ms measured, the career loop is cheap arithmetic, section 2
+fails if fewer than 400 seasons were simulated, and the control proves the two sides are distinct
+modules rather than one module compared with itself.
+
+### What this means for Rounds 622 to 624
+
+**They are done, and they should be struck from the queue rather than built.** All four sports
+migrated here because the change was three functions wide and provably identical; splitting that
+across four rounds would have been four rounds of churn on four working games for no player
+benefit, which is the exact thing Round 620 deferred them to avoid. There is no further shared
+implementation to lift out of these four files: what remains is genuinely per sport, and a future
+round that "shares" `legacyOf` or `careerTotals` would be changing behaviour, not removing
+duplication. **Take 628 next**, and do not re-derive the two thirds figure from the Round 620
+header, which now carries a pointer to this measurement.
+
+## ROUND 619 BUILT 2026-09-17: free agents, and what it costs to end a contract early
+
+On branch `claude/handoff-docs-2026-bxwi9m`. Contract:
+`docs/design/round-619-free-agents-contract.md`, which was written on 2026-09-16 and is followed
+here including its lane split, except that the UI half was built too rather than left for a lane
+that does not exist in this session. The owner asked for both halves through the footer report:
+free agents in Manager Mode, and the ability to terminate a contract so a player becomes one.
+
+**The defect the whole round exists to prevent.** `wageBill` was a reduce over the squad, so a
+released player's wage left the bill in the same tick he left the squad. Termination would have
+cost nothing, bought wage cap room instantly, and been strictly better than selling him, loaning
+him out or playing him. `wageBill` is now the squad plus what is still owed on settled contracts,
+and that one change makes the cap, the weekly charge in `tickBooks` and the season projection
+honest at once, because all three already read it.
+
+**What shipped.** `releasePlayer`, `signFreeAgent`, `ensureFreeAgents`, `severanceFor`,
+`freeAgentAsk`, `freeAgentInterest`, `tickSeverance` and `severanceBill` on `clubManager.ts`, two
+optional `CareerState` fields (`freeAgents`, `severance`), expiries routed into the pool at the
+rollover, a pool that ages and drains to other clubs, `fillSquadGaps` reading the save's own pool
+instead of conjuring its own, a settlements line on the finance projection, a settle action with
+its price shown before it is agreed on the contracts desk, a free agent list on the transfer
+screen that works when the window is shut, and the help copy for both.
+
+**Gates.** tsc 0. `simFreeAgents` green on six sections with all seven controls proved to fire on
+their own sections (`nosev`, `billblind`, `openall`, `goodpool`, `staleforever`, `nodedupe`,
+`nomigrate`). `simAcademy`, `simContracts`, `simClubManagerBudget`, `simClubManagerFinances` and
+`simClubManagerSave`, the five harnesses whose subject this round moves, all still green.
+Headline numbers: the wage bill falls by 47 percent of a released wage rather than 100, and
+across 19 releases over eight seasons at six clubs settlements clawed back 84 percent of the
+wages the manager thought he had stopped paying.
+
+### Four things measurement changed, all of them worth keeping
+
+**Section 2's first version measured the wrong policy and would have passed for it.** It picked
+"the worst contract" by wage divided by rating, which scores a 140k striker rated 88 worse than a
+31k defender rated 70, so the policy it actually modelled was "release Haaland and Mbappe every
+August". It reported that releasing BEAT keeping, which was a true fact about a policy nobody
+would run. The metric is now overpayment against what the player is worth, lowest rated breaking
+the tie, which is the contract a manager trying to save money would really bin.
+
+**The football outcome is inside the noise, and the harness says so rather than hiding it.**
+Measured across four seed bases on healthy code the mean gap ran +1.94, +2.15, -3.88 and +0.3
+league points per season, so it crosses zero: at six clubs and eight seasons, binning dead weight
+is not reliably worse ON THE PITCH, because the men it bins were not playing. A positive football
+margin there would have been a coin toss dressed as a rule, the Round 284 mistake, and asserting
+the two policies are the SAME is the forbidden shape. So section 2 asserts the money, which is
+the mechanism and is deterministic, and reports the football without asserting it. A first
+attempt to blame the spread on sacked managers ending runs early was checked and was wrong:
+nobody was sacked and every run was 48 seasons.
+
+**`releasePlayer` shifted the whole formation, and only reading the diff caught it.** `xiIds` is
+POSITIONAL: index i is formation slot i and `null` is an empty slot. The first draft filtered the
+released man out, which shortens the array and moves every player behind him into somebody else's
+position. tsc cannot see it and no season level check would have either, because the team still
+plays. It nulls the slot now, the shape `acceptBid`, `loanOutPlayer` and `exerciseLoanOption` all
+use, and section 1 now asserts slot count and slot identity across a release.
+
+**Two controls were green for the wrong reason before they were fixed.** The `nodedupe` control
+pointed at `addFreeAgent`, whose guard only runs on a manual release, so it sat green through
+eight simulated seasons and proved nothing; section 5's control is now `staleforever`, which
+removes the two season drop that runs every summer. And section 3 called `acceptBid` with no bid
+on the table, so it returned null at `if (!bid)` and never reached the window guard: it
+"refused" even with the guard deleted. It plants a real bid now and first proves the same call
+succeeds with the window OPEN, so a refusal means the window and nothing else.
+
+**Two judgement calls not in the contract, both recorded in the code.** Severance has a floor of
+four weeks, because the contract's formula owes nothing at all to a manager who waits until the
+final week of a season, which would make the last calendar entry of every year free clear-out
+day. And academy players whose deals expire do NOT enter the pool: before this round they simply
+left, and putting them on a public list where rival clubs take them first would be a new leak out
+of the youth setup in the one area the contract says not to touch. Anybody who does pass through
+the pool carries his `potential` and `academyGrad` back out, so a re-signing cannot launder away
+his ceiling (the Rounds 96 and 116 regression) or his academy badge.
+
+**Still open from the contract.** The QA lane's hand walk of the section 3.6 edge table, and a
+pass on how the feature reads to somebody who has never seen it.
+
+## HANDOFF 2026-09-17: main `b51500fb` re-gated, nothing in flight, and two cloud traps
+
+`docs/HANDOFF-2026-09-17.md` replaces the 2026-09-15 pair and `CLAUDE.md`'s doc map points at it.
+
+**Gates, measured on this head in a fresh cloud container rather than carried over.** tsc 0.
+Of 327 node harnesses, 284 were runnable here and **263 are green**. The other 21 split as 12 that
+reached no database and self skipped, 6 that failed on the database, 2 that want a build first
+(`simInternalLinks` and `simPrerender` both print "NO dist/sitemap.xml. BUILD FIRST"), and 1 on a
+shallow clone. **None of the 21 is a code defect.**
+
+**Trap one: this cloud environment's network policy blocks Supabase.**
+`flawuiqbvjobmkfkauhw.supabase.co:443` is refused by the egress proxy, which answers 403 to
+CONNECT, while GitHub answers 200 through the same proxy. About 61 harnesses need that host: 43
+name it in their own source and 18 more reach it through a shared helper in `scripts/lib/`, so a
+grep over the harness files undercounts. The well written ones say so and skip. **The rest hang,
+and a hung harness looks exactly like a slow one because `runAllSims.mjs` has no per harness
+timeout.** `simFootleKitNumbers` sat for 32 minutes on 3 seconds of CPU and the first suite
+attempt took 37 minutes to reach the letter P. The tell is CPU time against elapsed:
+`ps -o etime=,time=,pcpu= -p <pid>`. 100 percent is working, 0.2 percent is blocked.
+So a cloud session can gate tsc, the build and 263 harnesses, and **owes the database group a run
+somewhere the host is reachable**. Do not call a cloud run "all green".
+
+**Trap two: a fresh cloud clone is shallow, and it shows up as a data error.** `simNewBadge`
+reported `124 typed date(s) disagree with git`, which reads like 124 wrong dates in the registry
+and is nothing of the kind: `.git/shallow` was present, the clone held 196 commits and its
+earliest was dated the day the container was made, so every page looked newer than its typed
+date. `git fetch --unshallow` takes it to 3,228 commits from 2025-01-01 and the harness is fine.
+**Run it at the start of a cloud session, before trusting anything that reads history.** The
+giveaway is a failure message where "anything git traces the page to" equals the container's
+own birthday.
+
+**Nothing is waiting to be merged.** Checked branch by branch with `git merge-base --is-ancestor`
+against `origin/main`, then re-run after unshallowing and identical both times, which was worth
+doing because a truncated history is exactly what makes an ancestry test lie. Merged: `r611`,
+`r617`, `r618`, `r619` (its contract commit), `r620`, `r625`, `r627`. Landed by another route
+despite failing the ancestry test: `r612` and `r616` (through `release-611-612-616`, and both
+their design files are on main) and `r626` (its tip holds one docs commit whose content is on main
+as `ac7fc82`, on an old base, so its diff against main looks enormous and means nothing).
+**Ancestry is not a reliable "did this ship" test in this repo; check the content.** Genuinely
+unlanded, one commit each and both drafts with no verified code: `r613-soccer-grid` at `6ffbc8fd`
+and `r614-nfl-grid-key` at `fb24ceae`.
+
+**Round 619 is unblocked and is the next round.** Its contract's section 5 refuses to start until
+617 and 618 are integrated, because everything in it edits `src/lib/clubManager.ts` and a three
+way merge in the largest file in the repo across three engine rounds is how a round gets lost.
+Both landed on 2026-09-16, so that condition is met.
+
+**Round 614's plan changed and the 2026-09-15 handoff is wrong about it.** The investigation on
+`r614-nfl-grid-key` found the pre 1970 Super Bowl gap should be **closed** rather than made
+unknown, because the unknown rule leaves six careers still answering wrongly while turning about a
+thousand honest "no" verdicts into free retries. Two attackers then found real problems in that
+contract, recorded verbatim in `docs/design/round-614-attack-notes.md` rather than folded in, so
+it is a draft and not buildable. Resolve the disagreement before writing code.
+
+Take **Round 628** next. 621 to 624 stay reserved for the career engine migration. The
+"NEXT FREE NUMBER: 551" line in `docs/WORKBOARD.md` is stale by about eighty rounds.
+
 ## COLLEGE GRID RESOLVED 2026-09-16: it works, and the purge must NOT run
 
 The open question from the 610 to 619 handoff is answered, and the answer changes the pending

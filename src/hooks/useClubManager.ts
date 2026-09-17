@@ -8,6 +8,7 @@ import {
   startNegotiation, makeOffer, offerTerms, exerciseLoanOption, breakLoan, recallLoanedPlayer, walkAway, respondApproach, expandGround,
   enterWilderness, wildernessWeek, acceptWildernessJob, takeNationJob, leaveNationJob, payClause, loanIn, acceptBid, rejectBid,
   answerMessage, setTransferStatus, loanOutPlayer, renewContract, renewContractWithClause,
+  releasePlayer, signFreeAgent,
   upgradeAcademy, hireScout, recallScout, promoteProspect, releaseProspect, setTrainingPlan,
   resumeMatch, makeHalftimeSub, setHalftimeMentality, setSquadRole,
   setTeamTalk, giveHalftimeTalk, answerPress, duckPress,
@@ -630,6 +631,20 @@ export function useClubManager() {
     setCareer(prev => (prev ? releaseProspect(prev, prospectId) : prev));
   }, []);
 
+  /* Round 619: settle a senior player's contract. Named settleContract rather
+     than release because `release` on this hook has meant "let an academy
+     prospect go" since Round 116, and two different things under one name on
+     one object is how a screen ends up calling the wrong one. */
+  const settleContract = useCallback((playerId: string) => {
+    setCareer(prev => (prev ? releasePlayer(prev, playerId) ?? prev : prev));
+  }, []);
+
+  /* Round 619: and sign a man with no club, which works when the window is
+     shut. That is the one door in the round that opens out of window. */
+  const signFree = useCallback((name: string, terms: { years: number; wage: number }) => {
+    setCareer(prev => (prev ? signFreeAgent(prev, name, terms) ?? prev : prev));
+  }, []);
+
   const setTraining = useCallback((plan: TrainingPlan) => {
     setCareer(prev => (prev ? setTrainingPlan(prev, plan) : prev));
   }, []);
@@ -738,6 +753,7 @@ export function useClubManager() {
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
+    settleContract, signFree,
     subAtHalftime, shapeAtHalftime, secondHalf, startSecondHalfLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,
     answer,

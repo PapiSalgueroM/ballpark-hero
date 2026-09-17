@@ -12,6 +12,14 @@
  * as the Round 426 roster bug that had to be fixed twice because two games
  * were two copies of one idea.
  *
+ * ROUND 621 MEASURED THAT LAST SENTENCE AND IT IS WRONG. The 25 shared names
+ * are real; the shared code is not. Two of the eleven comparable common
+ * functions are identical in all four and one in three, and the other eight
+ * are genuinely different per sport. Read the Round 621 header further down
+ * before planning any more of this work: the paragraph above is what was
+ * believed when this file was created, kept because Rounds 622 to 624 were
+ * scoped on it and somebody should be able to see why.
+ *
  * Sharing had already started before this round and is what proves the
  * direction rather than my opinion of it: `repairNetWorth` is generic,
  * `careerVariance.ts`, `careerRival.ts`, `careerInbox.ts` and
@@ -109,4 +117,97 @@ export function legacyTier(score: number): { tier: string; hof: boolean } {
   if (score >= 46) return { tier: 'Solid Pro', hof: false };
   if (score >= 28) return { tier: 'Journeyman', hof: false };
   return { tier: 'Footnote', hof: false };
+}
+
+/* ══════════════════════════════════════════════════════════════════════════ */
+/* Round 621: the first of the four my career games adopts this file, and the  */
+/* measurement that had to happen first.                                       */
+/*                                                                             */
+/* Round 620 recorded that the four games "share 24 exported symbol names once */
+/* the sport prefix is stripped, which is about two thirds of 3,900 lines      */
+/* being one idea written four times". The first half is right: 25 names are   */
+/* common to all four. The second half is not, and it matters, because Rounds  */
+/* 622 to 624 were scoped on it.                                               */
+/*                                                                             */
+/* MEASURED over the eleven common functions whose bodies can be compared,     */
+/* with comments, whitespace and the sport prefix normalised away:             */
+/*                                                                             */
+/*   identical in all four   2   repairNetWorth, eraById                       */
+/*   identical in three      1   rollTeamQuality (NFL differs by five numbers) */
+/*   genuinely different     8   shouldRetire, careerTotals, marketSalary,     */
+/*                               legacyOf, progress, assignRole, campBattle,   */
+/*                               teamLabelOf                                   */
+/*                                                                             */
+/* Shared NAMES are not shared CODE. legacyOf is the clearest case: the NFL    */
+/* scores an unbounded total with Canton at 520 and the shared legacyTier above */
+/* is a 0 to 100 ladder, so "sharing" it would change every verdict in the      */
+/* game rather than lift anything. The heavy machinery these four have in       */
+/* common was already shared years of rounds ago, through careerVariance,       */
+/* careerAwards, careerRival, usCareerFreeAgency, usCareerExtension,            */
+/* usCareerPress, careerMoney, careerInbox and careerRivalryEvents. What is     */
+/* left per sport is the sport.                                                */
+/*                                                                             */
+/* So this is what there actually was to lift, and it is one small round        */
+/* rather than four large ones. See docs/PROJECT-STATE.md for what that means   */
+/* for 622 to 624.                                                             */
+/* ══════════════════════════════════════════════════════════════════════════ */
+
+/**
+ * What a professional keeps out of a contract after tax and the agent, in all
+ * four leagues. It was a private `const TAKE_HOME = 0.45` in each of the four
+ * files, at the same value, feeding the same two lines of net worth arithmetic.
+ */
+export const TAKE_HOME = 0.45;
+
+/**
+ * Rebuild a net worth that a save is missing or that went negative.
+ *
+ * This was four byte identical copies. `careerEngine`'s own header already
+ * called it generic in Round 620; this round actually moves it.
+ */
+export function repairNetWorth<T extends { netWorth?: number; earnings: number; purchased?: string[] }>(
+  c: T,
+  costOf: (id: string) => number,
+): T {
+  if ((c.netWorth ?? 0) >= 0) return c;
+  const spent = (c.purchased ?? []).reduce((sum, id) => sum + costOf(id), 0);
+  const rebuilt = Math.max(0, Math.round((c.earnings * TAKE_HOME - spent) * 10) / 10);
+  return { ...c, netWorth: rebuilt };
+}
+
+/** The five numbers that make one league's roster churn differ from another's. */
+export interface TeamQualityBand {
+  /** The floor of the opening draw. */
+  base: number;
+  /** How wide the opening draw is above that floor. */
+  span: number;
+  /** How far a roster can swing in either direction between seasons. */
+  drift: number;
+  min: number;
+  max: number;
+}
+
+/**
+ * How good the team around you is this season.
+ *
+ * The NBA, MLB and NHL copies were byte identical and the NFL's differed only
+ * in these five numbers, which is the shape the owner asked for on 2026-09-04:
+ * the DATA differs per sport and the function is shared. The arithmetic is
+ * unchanged from the copies it replaces, `rng()` is drawn exactly once on each
+ * path and in the same order, so a fixed seed produces the identical sequence
+ * it did before. `simCareerEngineParity` proves that against the pre migration
+ * source rather than against a recorded number.
+ */
+export function rollTeamQuality(prev: number | null, rng: () => number, band: TeamQualityBand): number {
+  if (prev == null) return band.base + Math.floor(rng() * band.span);
+  return Math.max(band.min, Math.min(band.max, Math.round(prev + (rng() * (band.drift * 2) - band.drift))));
+}
+
+/**
+ * The era a save is playing in, or the default when it names one that has been
+ * retired or was never there. Four identical one line lookups over four
+ * different lists, so the list is the parameter.
+ */
+export function eraById<T extends { id: string }>(list: T[], id?: string): T {
+  return list.find(e => e.id === id) ?? list[0];
 }

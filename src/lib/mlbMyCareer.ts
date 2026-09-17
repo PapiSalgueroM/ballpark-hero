@@ -42,11 +42,27 @@ import { mlbRivalryTick } from './mlbCareerRivalryEvents';
    agent and living. It was already the number this file used to turn career
    earnings into net worth; it is named here so the yearly banking and the
    repair below cannot drift apart from it. */
-const TAKE_HOME = 0.45;
+/* Round 621: TAKE_HOME, repairNetWorth, the team quality roll and the era
+   lookup now live in careerEngine.ts. They were four identical copies each
+   (the roll differed only in five numbers), which is what the measurement in
+   that file's Round 621 header found was genuinely shared and what is not. */
 
 
 // Round 58: a real diamond instead of four sample positions. Relievers,
 // catchers and corner bats all live different careers now.
+/* Round 621: the three things the four my career engines genuinely had in
+   common, measured rather than assumed. See careerEngine.ts. */
+import {
+  TAKE_HOME,
+  rollTeamQuality as rollTeamQualityShared,
+  eraById as eraByIdShared,
+} from './careerEngine';
+import type { TeamQualityBand } from './careerEngine';
+
+/** How this league's rosters churn. The only thing that differed between the
+    four copies of the roll below. */
+const MLB_TEAM_QUALITY: TeamQualityBand = { base: 70, span: 20, drift: 6, min: 64, max: 95 };
+
 export type MlbCareerPos = 'SP' | 'RP' | 'C' | '1B' | '2B' | '3B' | 'SS' | 'LF' | 'CF' | 'RF' | 'DH';
 
 /** Pitchers get an innings line, everyone else gets a batting line. */
@@ -286,7 +302,7 @@ export const MLB_ERAS: MlbEraDef[] = [
 ];
 
 export function mlbEraById(id?: string): MlbEraDef {
-  return MLB_ERAS.find(e => e.id === id) ?? MLB_ERAS[0];
+  return eraByIdShared(MLB_ERAS, id);
 }
 
 /** The team pool for an era. The modern era reads the live MLB_TEAMS list
@@ -351,8 +367,7 @@ export function startMlbCareer(
 }
 
 export function mlbRollTeamQuality(prev: number | null, rng: () => number): number {
-  if (prev == null) return 70 + Math.floor(rng() * 20);
-  return Math.max(64, Math.min(95, Math.round(prev + (rng() * 12 - 6))));
+  return rollTeamQualityShared(prev, rng, MLB_TEAM_QUALITY);
 }
 
 /* ─── Round 183: the lineup card ───
@@ -984,12 +999,4 @@ export function buyMlbItem(c: MlbCareerState, itemId: string): { state: MlbCaree
    upkeep is deliberately NOT re-deducted, because it was charged against a
    balance that had no income in it, so charging it again would keep part of the
    bug. Runs on load, once, and does nothing to a healthy save. */
-export function repairNetWorth<T extends { netWorth?: number; earnings: number; purchased?: string[] }>(
-  c: T,
-  costOf: (id: string) => number,
-): T {
-  if ((c.netWorth ?? 0) >= 0) return c;
-  const spent = (c.purchased ?? []).reduce((sum, id) => sum + costOf(id), 0);
-  const rebuilt = Math.max(0, Math.round((c.earnings * TAKE_HOME - spent) * 10) / 10);
-  return { ...c, netWorth: rebuilt };
-}
+export { repairNetWorth } from './careerEngine';

@@ -1,5 +1,6 @@
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { money, moneyIn, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, expiringPlayers, sellValue } from '@/lib/clubManager';
+import { money, moneyIn, wageBill, wageCapFrom, renewalTerms, renewalTermsWithClause, expiringPlayers, sellValue, severanceFor, severanceBill, SENIOR_FLOOR } from '@/lib/clubManager';
 import type { CareerState, CMPlayer } from '@/lib/clubManager';
 import { ratingTint } from '@/components/club-manager/SquadScreen';
 
@@ -7,6 +8,8 @@ interface ContractsCardProps {
   career: CareerState;
   onRenew: (playerId: string) => void;
   onRenewWithClause: (playerId: string) => void;
+  /** Round 619: settle a contract early. He leaves, and you keep paying. */
+  onSettle: (playerId: string) => void;
 }
 
 /**
@@ -28,7 +31,13 @@ interface ContractsCardProps {
  * way to delete it. The clause section below the expiring list keeps every
  * door you have signed in plain sight.
  */
-export function ContractsCard({ career, onRenew, onRenewWithClause }: ContractsCardProps) {
+export function ContractsCard({ career, onRenew, onRenewWithClause, onSettle }: ContractsCardProps) {
+  /* Round 619: the confirm step. The whole design rests on the manager seeing
+     what a settlement costs BEFORE he agrees to it, so the first click quotes
+     the money and only the second one ends the deal. A cost discovered
+     afterwards is a trap; a cost on the confirmation is a decision. */
+  const [confirming, setConfirming] = useState<string | null>(null);
+  const [settleOpen, setSettleOpen] = useState(false);
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
   const money = moneyIn(career);
@@ -37,6 +46,15 @@ export function ContractsCard({ career, onRenew, onRenewWithClause }: ContractsC
   const pct = Math.round((bill / Math.max(1, cap)) * 100);
   const over = bill > cap;
   const expiring = expiringPlayers(career);
+  /* Round 619: who can actually be settled. A loan signing is not yours to
+     release, and the engine refuses a release that would drop the senior count
+     below a legal squad, so the list matches what releasePlayer will accept
+     rather than offering buttons that do nothing. */
+  const seniors = career.squad.filter(p => !p.isYouth && p.age >= 20).length;
+  const settleable = career.squad
+    .filter(p => !p.onLoan && !(!p.isYouth && p.age >= 20 && seniors - 1 < SENIOR_FLOOR))
+    .sort((a, b) => (b.wage ?? 0) - (a.wage ?? 0));
+  const owed = severanceBill(career);
   const claused = career.squad
     .filter(p => !p.onLoan && (p.releaseClause ?? 0) > 0)
     .sort((a, b) => (sellValue(b) / (b.releaseClause as number)) - (sellValue(a) / (a.releaseClause as number)));
@@ -120,6 +138,90 @@ export function ContractsCard({ career, onRenew, onRenewWithClause }: ContractsC
           </p>
         </>
       )}
+
+      {/* Round 619: settling a contract. Deliberately BELOW the renewals and
+          behind a disclosure, because it is the destructive option on this
+          desk and it should take a deliberate act to reach rather than sitting
+          under the thumb next to Renew. */}
+      <div className="pt-1">
+        <button
+          onClick={() => { setSettleOpen(o => !o); setConfirming(null); }}
+          className="w-full flex items-center justify-between text-[10px] uppercase tracking-wider font-bold text-muted-foreground hover:text-foreground transition-colors py-1"
+        >
+          <span>📄 Settle a contract ({settleable.length})</span>
+          <span>{settleOpen ? '▾' : '▸'}</span>
+        </button>
+        {owed > 0 && (
+          <p className="text-[9px] text-red-400">
+            Still paying {owed}k a week to {career.severance?.length ?? 0} player{(career.severance?.length ?? 0) === 1 ? '' : 's'} who have already left.
+          </p>
+        )}
+        {settleOpen && (
+          <div className="mt-1 space-y-1">
+            <p className="text-[9px] text-muted-foreground">
+              Ending a deal early does not end the wages. You pay half of what was left, week after week,
+              and it stays on the wage bill until it runs out. The dressing room notices too.
+            </p>
+            {settleable.length === 0 ? (
+              <p className="text-[10px] text-muted-foreground">
+                Nobody can be settled right now. You cannot cut below a legal squad.
+              </p>
+            ) : (
+              <div className="max-h-64 overflow-y-auto">
+                {settleable.map(p => {
+                  const q = severanceFor(career, p);
+                  const isConfirming = confirming === p.id;
+                  return (
+                    <div key={p.id} className="py-1.5 border-b border-border/30 last:border-0">
+                      <div className="flex items-center gap-2">
+                        <span className="w-9 shrink-0 text-[10px] font-bold text-muted-foreground bg-secondary rounded px-1 py-0.5 text-center">{p.position}</span>
+                        <div className="flex-1 min-w-0">
+                          <div className="text-xs text-foreground truncate">{p.name}</div>
+                          <div className="text-[9px] text-muted-foreground">
+                            {p.age}y · on {p.wage ?? 0}k a week · {p.contractYears ?? 1} year{(p.contractYears ?? 1) === 1 ? '' : 's'} left
+                          </div>
+                        </div>
+                        <span className={cn('text-sm font-bold font-display', ratingTint(p.rating))}>{p.rating}</span>
+                      </div>
+                      <div className="mt-1 pl-11">
+                        {isConfirming ? (
+                          <div className="space-y-1">
+                            <p className="text-[9px] text-red-400 font-bold">
+                              {q.weekly}k a week for {q.weeksLeft} more weeks, {money(q.total / 1000)} in all. It stays on the wage bill.
+                            </p>
+                            <div className="flex gap-1.5">
+                              <button
+                                onClick={() => { onSettle(p.id); setConfirming(null); }}
+                                className="flex-1 px-2 py-1.5 rounded-lg text-[10px] font-bold bg-red-500 text-white hover:opacity-90 transition-all"
+                              >
+                                Settle and let him go
+                              </button>
+                              <button
+                                onClick={() => setConfirming(null)}
+                                className="px-2.5 py-1.5 rounded-lg text-[10px] font-bold bg-secondary text-muted-foreground hover:text-foreground transition-all"
+                              >
+                                Keep him
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <button
+                            onClick={() => setConfirming(p.id)}
+                            title={`Settling costs ${q.weekly}k a week for ${q.weeksLeft} weeks, ${money(q.total / 1000)} in all`}
+                            className="w-full px-2 py-1.5 rounded-lg text-[10px] font-bold border border-border bg-secondary text-foreground hover:border-red-400 transition-all"
+                          >
+                            Settle · {money(q.total / 1000)} over {q.weeksLeft} weeks
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+      </div>
 
       {claused.length > 0 && (
         <>
