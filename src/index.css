@@ -294,7 +294,10 @@
      that moves. The 2026-08-27 audit counted 87 animate-pulse and 71
      animate-spin uses, both infinite loops, none covered; the audit's
      minimal fix is this list. Spinners freeze into static icons, which is
-     fine: every loading state also carries aria-busy or a text line. */
+     fine: every loading state also carries aria-busy or a text line.
+     The last three are the fight screens (Rounds 628 and 630): the round
+     cards sliding in, the score popping, and the knockdown flash, which ends
+     transparent so a collapsed run of it leaves nothing on screen. */
   .animate-tile-flip,
   .animate-pop-correct,
   .animate-shake-wrong,
@@ -312,7 +315,10 @@
   .animate-shine-sweep,
   .animate-float-up,
   .animate-confetti-fall,
-  .animate-avatar-bob {
+  .animate-avatar-bob,
+  .animate-round-in,
+  .animate-count-pop,
+  .animate-hit-flash {
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
   }

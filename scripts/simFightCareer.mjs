@@ -26,6 +26,11 @@
  *   FIGHT_CONTROL=nostyle     the tactic matrix goes flat      -> section 5
  *   FIGHT_CONTROL=flatbar     the condition bars never drain   -> section 6
  *   FIGHT_CONTROL=nostop      a stopped man keeps a full bar   -> section 6
+ *   FIGHT_CONTROL=synthetic   the sample is invented fighters  -> section 6
+ *   FIGHT_CONTROL=nofloor     a standing man can read empty    -> section 6
+ *   FIGHT_CONTROL=recover     the bars climb back up           -> section 6
+ *   FIGHT_CONTROL=heavybar    a punch drains 50 percent more   -> section 6
+ *   FIGHT_CONTROL=pinboth     worn men both drop to the floor  -> section 6
  */
 
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
@@ -142,6 +147,31 @@ if (CONTROL === 'nodecay') {
   rewrite('nostop',
     "      player: stoppage && last && loser === 'player' ? 0 : Math.round(player),\n      opp: stoppage && last && loser === 'opp' ? 0 : Math.round(opp),",
     '      player: Math.round(player),\n      opp: Math.round(opp),');
+} else if (CONTROL === 'synthetic') {
+  /* Harness side, nothing in the source changes: section 6 draws the first
+     draft's population instead of real careers. See that section. */
+  console.log('   [control synthetic applied: section 6 samples invented fighters]');
+} else if (CONTROL === 'nofloor') {
+  rewrite('nofloor',
+    'export const STANDING_FLOOR = 8;',
+    'export const STANDING_FLOOR = 0;');
+} else if (CONTROL === 'recover') {
+  rewrite('recover',
+    '    player = Math.max(STANDING_FLOOR, player);',
+    '    player = Math.max(STANDING_FLOOR, player) + (i % 2 ? 3 : 0);');
+} else if (CONTROL === 'heavybar') {
+  /* The pinned bar defect at half as much drain again. The agreement check
+     alone stays green on this, which is why the pinned checks exist. */
+  rewrite('heavybar',
+    'export const DRAIN_PER_PUNCH = 0.8;',
+    'export const DRAIN_PER_PUNCH = 1.2;');
+} else if (CONTROL === 'pinboth') {
+  /* The exact screen Round 628 was written to fix, both men on the floor after
+     a points decision, without moving the drain rate: any decision that ends
+     with both men under 30 drops both to the floor. */
+  rewrite('pinboth',
+    "      player: stoppage && last && loser === 'player' ? 0 : Math.round(player),\n      opp: stoppage && last && loser === 'opp' ? 0 : Math.round(opp),",
+    "      player: stoppage && last && loser === 'player' ? 0 : !stoppage && last && player < 30 && opp < 30 ? STANDING_FLOOR : Math.round(player),\n      opp: stoppage && last && loser === 'opp' ? 0 : !stoppage && last && player < 30 && opp < 30 ? STANDING_FLOOR : Math.round(opp),");
 } else if (CONTROL) {
   console.log(`   FAIL unknown control ${CONTROL}`);
   process.exit(1);
@@ -503,6 +533,7 @@ console.log('6) the condition bars tell the truth about the fight');
   const ends = { win: [], lose: [] };
   let bouts = 0, decisions = 0, agrees = 0;
   let stoppedZero = 0, stoppedTotal = 0, standingZero = 0, rose = 0;
+  let losersPinned = 0, bothPinned = 0;
   let landed = 0, landedN = 0;
 
   /* THESE BOUTS COME OUT OF REAL CAREERS, not out of makeFighter directly, and
@@ -515,7 +546,19 @@ console.log('6) the condition bars tell the truth about the fight');
      will agree with whatever it invented. */
   const weights = ['fly', 'light', 'welter', 'middle', 'heavy'];
   const bag = [];
-  for (let s = 0; s < 260 && bag.length < 4000; s += 1) {
+  if (CONTROL === 'synthetic') {
+    /* The first draft's population, put back so the band below is proved to
+       catch it: two fighters straight out of makeFighter at tiers 2 to 4. */
+    for (let s = 0; s < 4000; s += 1) {
+      const rng = rngFrom(4000 + s);
+      const w = weights[Math.floor(rng() * weights.length)];
+      const tier = 2 + Math.floor(rng() * 3);
+      const n = [4, 6, 8, 10, 12][Math.floor(rng() * 5)];
+      const tactics = Array.from({ length: n }, () => TACTICS[Math.floor(rng() * 4)]);
+      bag.push(fc.simBout({ player: fc.makeFighter(rng, tier, w), opponent: fc.makeFighter(rng, tier, w), rounds: n, weight: w, tactics, campQuality: 0.5 }, rng));
+    }
+  }
+  for (let s = 0; CONTROL !== 'synthetic' && s < 260 && bag.length < 4000; s += 1) {
     const rng = rngFrom(4000 + s);
     const w = weights[Math.floor(rng() * weights.length)];
     let st = fc.newFightCareer(`P${s}`, w, STYLES[Math.floor(rng() * 4)], `seed-${s}`);
@@ -562,6 +605,8 @@ console.log('6) the condition bars tell the truth about the fight');
         const l = res.winner === 'player' ? end.opp : end.player;
         ends.win.push(w); ends.lose.push(l);
         if (w > l) agrees += 1;
+        if (l <= fc.STANDING_FLOOR) losersPinned += 1;
+        if (w <= fc.STANDING_FLOOR && l <= fc.STANDING_FLOOR) bothPinned += 1;
       }
     }
   }
@@ -574,10 +619,12 @@ console.log('6) the condition bars tell the truth about the fight');
 
   /* THE GUARD AGAINST THE MISTAKE ITSELF, not just against its symptom. If
      these bouts ever stop looking like the game's bouts, the calibration above
-     is void whatever the other numbers say. Measured at 7.4 landed per man per
-     round on real careers, against 2.9 for the synthetic sample that produced
-     the wrong constant, so a band of 5 to 10 separates the two decisively and
-     is nowhere near either edge of the healthy figure. */
+     is void whatever the other numbers say. Measured at 7.5 landed per man per
+     round on this sample (7.4 over the 7,233 career bouts the rate was set
+     from), against 2.9 for the synthetic sample that produced the wrong
+     constant, so a band of 5 to 10 separates the two decisively and is nowhere
+     near either edge of the healthy figure. The synthetic control puts that
+     population back and reads 3.2. */
   if (perRound < 5 || perRound > 10) {
     fail(`these bouts land ${perRound.toFixed(1)} punches a round, outside the 5 to 10 the real game produces, so the bars below are calibrated against a population no player meets`);
   } else {
@@ -603,17 +650,60 @@ console.log('6) the condition bars tell the truth about the fight');
     ok('condition never rises, across every round of every bout');
   }
 
-  /* MEASURED FLOOR, not a chosen one. On healthy code this runs at 89.5% over
-     2,887 decisions, whose standard error is about 0.6 of a point, so a floor
-     of 80 sits roughly sixteen standard errors below the measurement rather
-     than inside its spread. It is deliberately NOT 100: a man can win on
-     points while taking more punishment than he handed out, and a bar that
-     always matched the card would be drawing the card and not the fight. */
+  /* MEASURED FLOOR, not a chosen one. On healthy code this real career sample
+     runs at 93.9% over 2,724 decisions, and at 93.0 to 94.0 over eight seed
+     bases of the same sample. The standard error is about half a point, so a
+     floor of 80 sits far below the measurement rather than inside its spread.
+     (The 89.5% over 2,887 that used to be quoted here came from the invented
+     makeFighter population this section threw out.) It is deliberately NOT
+     100: a man can win on points while taking more punishment than he handed
+     out, and a bar that always matched the card would be drawing the card and
+     not the fight. */
   console.log(`   the bar agrees with the official cards in ${pct.toFixed(1)}% of ${decisions} decisions`);
   if (!(pct > 80)) {
     fail(`the bar agrees with the cards in only ${pct.toFixed(1)}% of decisions, so it is not showing who took the beating (floor 80)`);
   } else {
     ok(`the bar agrees with the cards in ${pct.toFixed(1)}% of decisions (floor 80)`);
+  }
+
+  /* PINNED BARS, the defect Round 628 was written to fix, and the agreement
+     check above cannot see it: a loser pinned on the floor still sits below
+     the winner, so that check only drops once winners pin too. At a drain of
+     1.2 a punch (heavybar) 71% of decision losers end on the floor and 10% of
+     decisions leave both men there, and agreement still reads 85.9%.
+
+     Measured over eight seed bases of this sample at the shipped 0.8: 9.8 to
+     13.5% of decision losers end on the floor, and both men end there in 0 or
+     1 of about 2,700 decisions, at most 0.04%. For scale, 0.9 a punch reads 19
+     to 26% and 0 to 0.2%, 1.0 reads 34 to 41% and 0.5 to 1.2%, 1.2 reads 67 to
+     71% and 8 to 10%.
+
+     The losers share also moves when the CAREERS change, not only the bars:
+     with damage switched off (the nodecay control) it reads 21.3% and with
+     retirement switched off (noretire) 18.4%, because longer careers make
+     more one sided decisions. A ceiling of 20 would call those pinned bars.
+     So the ceilings are 25% of losers, eleven and a half points above the
+     worst healthy seed and clear of both of those, which still catches a
+     drain a quarter heavier; and 1% of decisions with both men pinned, twenty
+     five times the worst healthy seed, which none of those moved at all.
+
+     These are claims about THIS sample, which picks tactics at random. A
+     player who reads every fight (smartLine) wins more one sided decisions and
+     pins 30 to 33% of his losers at the shipped rate, with both men pinned in
+     at most 0.16% of decisions, so do not read the 25% as true of every
+     player. Both are shares of the whole sample, never a max. */
+  const loserPinPct = (100 * losersPinned) / decisions;
+  const bothPinPct = (100 * bothPinned) / decisions;
+  console.log(`   decision losers left on the floor: ${losersPinned} (${loserPinPct.toFixed(1)}%), both men on it: ${bothPinned} (${bothPinPct.toFixed(2)}%)`);
+  if (!(loserPinPct < 25)) {
+    fail(`${loserPinPct.toFixed(1)}% of decision losers end pinned on the floor, so the bar reads the same for a close loss and a beating (ceiling 25%)`);
+  } else {
+    ok(`${loserPinPct.toFixed(1)}% of decision losers end on the floor (ceiling 25%)`);
+  }
+  if (!(bothPinPct < 1)) {
+    fail(`${bothPinned} decisions (${bothPinPct.toFixed(2)}%) leave both men pinned on the floor, the screen Round 628 was written to fix (ceiling 1%)`);
+  } else {
+    ok(`both men end on the floor in ${bothPinPct.toFixed(2)}% of decisions (ceiling 1%)`);
   }
 }
 

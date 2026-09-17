@@ -8,7 +8,7 @@ import { Confetti } from '@/components/soccer-career/CareerFx';
 import { STYLES, weightById, ratingOf, type Fighter } from '@/lib/fightCareer';
 import {
   newPromoter, runShow, promoterVerdict, appealOf, purseFor, legalMatch,
-  drawOf, weightOf, expectedAttendance, VENUES, venueById,
+  drawOf, weightOf, expectedAttendance, houseFill, VENUES, venueById,
   type PromoterState, type ShowResult, type Booking,
 } from '@/lib/fightPromoter';
 
@@ -127,8 +127,9 @@ export default function FightPromoterBoard() {
   }
 
   if (phase === 'result' && result) {
-    const full = Math.max(0, Math.min(100, Math.round((result.attendance / result.venue.capacity) * 100)));
-    const soldOut = full >= 99;
+    /* From the lib, not worked out here, so the harness can check that "sold
+       out" only ever appears with every seat taken. */
+    const { percent: full, soldOut } = houseFill(result.attendance, result.venue.capacity);
     return (
       <div className="space-y-4" ref={revealRef}>
         {Header}

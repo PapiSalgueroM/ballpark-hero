@@ -111,11 +111,18 @@ export const ConditionBar = ({
  * keyed by the caller (a round number), so remounting is what replays it.
  * Reduced motion gets nothing at all rather than a flash held still, which
  * would be a permanent coloured box over the screen.
+ *
+ * It starts OFF and only switches on in the effect, the same way Confetti
+ * does. The first version started on and switched itself off for reduced
+ * motion inside the effect, but the reveal tick is a timeout, so the browser
+ * could paint the flash for a frame before that effect ran: exactly the
+ * flash reduced motion is promised it never gets.
  */
 export const HitFlash = ({ tone = "bg-emerald-400/30" }: { tone?: string }) => {
-  const [on, setOn] = useState(true);
+  const [on, setOn] = useState(false);
   useEffect(() => {
-    if (prefersReducedMotion()) { setOn(false); return; }
+    if (prefersReducedMotion()) return;
+    setOn(true);
     const t = window.setTimeout(() => setOn(false), 420);
     return () => window.clearTimeout(t);
   }, []);
