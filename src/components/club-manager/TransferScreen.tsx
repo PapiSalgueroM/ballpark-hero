@@ -307,7 +307,7 @@ export function TransferScreen({
           <div className="text-[10px] text-muted-foreground">
             {windowOpen
               ? `${(career.windowWeeksLeft ?? 1) <= 1 ? 'DEADLINE: shuts after your next match' : `${career.windowWeeksLeft} match weeks until the deadline`} · offers can arrive any week · loans used ${loansUsed}/2`
-              : 'Reopens in January / next summer'}
+              : 'Reopens in January / next summer · free agents still sign from the contracts desk on the Squad tab'}
           </div>
         </div>
         <div className="text-right">
@@ -971,7 +971,7 @@ export function TransferScreen({
               <p className="text-[9px] text-muted-foreground px-1 pb-1.5 border-b border-border/40">
                 {windowOpen
                   ? 'Nobody sells a player over the counter. Transfer list him and clubs will come to you with offers, sometimes two of them fighting over the same man, and the bids land in Incoming above.'
-                  : 'The window is shut, so nobody moves today. You can still tell the club who is available, who is off limits and who you want out on loan, and it will be waiting when it reopens.'}
+                  : 'The window is shut, so no transfers today. Free agents are the exception: sign them from the contracts desk on the Squad tab. You can still tell the club who is available, who is off limits and who you want out on loan, and it will be waiting when it reopens.'}
               </p>
               {sellable.map(p => {
                 const st = p.transferStatus;
