@@ -53,7 +53,8 @@ function passed(out, label) {
 }
 
 if (CONTROL === 'partial') {
-  const source = fs.readFileSync(path.join(ROOT, 'src', 'lib', 'fetchFootlePlayerPool.ts'), 'utf8');
+  /* normalised on read: the guard below spans four lines, which a CRLF checkout never matches */
+  const source = fs.readFileSync(path.join(ROOT, 'src', 'lib', 'fetchFootlePlayerPool.ts'), 'utf8').replaceAll('\r\n', '\n');
   const early = `    if (!obscureRows) {\n      console.warn('[fetchFootlePlayerPool] Obscure batch failed, using fallback');\n      return [];\n    }\n`;
   if (!source.includes(early)) {
     console.error('control cannot run: atomic obscure-failure guard is missing or changed shape');

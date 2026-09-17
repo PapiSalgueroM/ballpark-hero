@@ -34,6 +34,7 @@
  *   SIM_SEARCH_CONTROL=flat     every result scores the same constant
  *   SIM_SEARCH_CONTROL=nofuzzy  the typo fallback never fires
  *   SIM_SEARCH_CONTROL=jitter   the score picks up a random fraction
+ *   SIM_SEARCH_CONTROL=catalogdump  an unreadable query returns the whole catalog
  *
  * Run: node scripts/simSiteSearch.mjs
  */
@@ -82,7 +83,10 @@ const CONTROLS = {
   },
 };
 
-let source = fs.readFileSync(SRC, 'utf8');
+/* Round 629 review: normalised on read. src is CRLF on Anthony's checkout and
+   the catalogdump anchor spans three lines, so read raw it matched nothing and
+   that control aborted instead of running. */
+let source = fs.readFileSync(SRC, 'utf8').replace(/\r\n/g, '\n');
 if (CONTROL) {
   const c = CONTROLS[CONTROL];
   if (!c) { console.error(`unknown SIM_SEARCH_CONTROL=${CONTROL}, expected one of ${Object.keys(CONTROLS).join(', ')}`); process.exit(1); }

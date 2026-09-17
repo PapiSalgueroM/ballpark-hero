@@ -66,7 +66,12 @@ if (CONTROL === 'drain') {
     const src = fs.readFileSync(path.join(ROOT, 'src', 'lib', `${name}.ts`), 'utf8');
     if (!src.includes(fixed)) { console.error(`control cannot run: ${name}.ts is not in the shape this control rewrites`); process.exit(1); }
     const copy = `${TMP}/${name}.control.ts`;
-    fs.writeFileSync(copy, src.replace(fixed, broken));
+    /* Round 568 gave both engines a relative import (./entityIds), which does
+       not resolve from a copy in the temp folder, so this control died in
+       esbuild instead of running. Point relative imports back at src/lib. */
+    const regressed = src.replace(fixed, broken).replace(/from '\.\/([^']+)'/g, (_, rel) => `from '${ROOT_URL}/src/lib/${rel}'`);
+    if (/from '\.\.?\//.test(regressed)) { console.error(`control cannot run: ${name}.ts has a relative import this control cannot point back at src`); process.exit(1); }
+    fs.writeFileSync(copy, regressed);
     if (target === 'cfb') cfbSrc = copy; else cbbSrc = copy;
   }
   console.log('NEGATIVE CONTROL ON: both engines refill by roster size again');
@@ -178,7 +183,8 @@ console.log('4) the board: a reload on the recap draws the recap again and never
   let env = {};
   let copy = null;
   if (CONTROL === 'replay') {
-    const src = fs.readFileSync(path.join(ROOT, 'src/components/cfb-dynasty/CfbDynastyBoard.tsx'), 'utf8');
+    /* normalised on read: both patterns below end a line with \n, which a CRLF checkout never matches */
+    const src = fs.readFileSync(path.join(ROOT, 'src/components/cfb-dynasty/CfbDynastyBoard.tsx'), 'utf8').replaceAll('\r\n', '\n');
     let regressed = src.replace(/if \(state\.natties\.some\(n => n\.season === state\.season\)\) return;\n/, '');
     regressed = regressed.replace(/if \(s\.phase === 'recap'\) \{\n\s*if \(s\.postseason\) \{ setPostseason\(s\.postseason\); setPhase\('recap'\); \}\n\s*else openRecruiting\(s\.st\);\n\s*\} else \{\n\s*setPhase\(s\.phase\);\n\s*\}/, "setPhase(s.phase === 'recap' ? 'season' : s.phase);");
     if (regressed === src || /natties\.some\(n => n\.season === state\.season\)/.test(regressed) || !/setPhase\(s\.phase === 'recap' \? 'season' : s\.phase\);/.test(regressed)) {
