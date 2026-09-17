@@ -50,6 +50,13 @@ const browser = await chromium.launch();
   const essential = page.locator('button:has-text("Essential only")');
   if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
   await page.locator('text=Take the job').click();
+  await page.waitForTimeout(1200);
+  /* Round 303 put a "who is in the dugout" step between the job and the hub.
+     This walk never learned it, so from 2026-08-27 it timed out waiting for a
+     Squad tab that was still one screen away, and the contracts desk it exists
+     to walk went unchecked for three weeks. */
+  const skipManager = page.locator('button:has-text("Skip: just manage")');
+  if (await skipManager.count()) { await skipManager.first().click(); }
   await page.waitForTimeout(2000);
   say(/Newcastle/i.test(await page.locator('body').textContent() ?? ''), 'the Newcastle job is on');
 

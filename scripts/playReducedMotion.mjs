@@ -30,14 +30,19 @@
  *
  * Run: node scripts/playReducedMotion.mjs
  */
-import pw from 'file:///C:/Users/antho/ballpark-hero/scripts/lib/playwrightLoader.mjs';
+import pw from './lib/playwrightLoader.mjs';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { spawn } from 'node:child_process';
 const { chromium } = pw;
 
-const kitPath = 'C:/Users/antho/ballpark-hero/src/components/club-manager/Celebration.tsx';
+/* Relative to this file, not a hardcoded checkout. It used to read
+   C:/Users/antho/ballpark-hero, so any other clone tested that folder's
+   source (which could be weeks behind) against its own build, and on any
+   other machine it could not start at all. */
+const KIT_ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const kitPath = path.join(KIT_ROOT, 'src', 'components', 'club-manager', 'Celebration.tsx');
 const src = [kitPath, path.join(path.dirname(kitPath), 'CelebrationStyles.tsx')].map(file => fs.readFileSync(file, 'utf8')).join('\n');
 const blocks = [...src.matchAll(/<style>\{`([\s\S]*?)`\}<\/style>/g)].map(m => m[1]);
 if (blocks.length !== 2) { console.error(`expected 2 style blocks, found ${blocks.length}`); process.exit(1); }
