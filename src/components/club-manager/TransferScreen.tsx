@@ -21,6 +21,7 @@ import { ROLE_INFO, ROLE_LADDER, wageBill, wageCapFrom } from '@/lib/clubManager
 import type { SquadRole } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
+import { FreeAgentsCard } from '@/components/club-manager/FreeAgentsCard';
 
 type PosFilter = 'ALL' | 'GK' | 'DEF' | 'MID' | 'ATT';
 
@@ -72,6 +73,8 @@ interface TransferScreenProps {
   onEndLoanEarly: (playerId: string) => void;
   /* Round 508: bring one of MY loans back early. */
   onRecallLoanee: (playerId: string) => void;
+  /** Round 619: sign a man with no club. Works with the window shut. */
+  onSignFree: (name: string, terms: { years: number; wage: number }) => void;
 }
 
 /** Round 94: the three things you can tell the world about a player. */
@@ -98,7 +101,7 @@ export function TransferScreen({
   career, market,
   onNegotiate, onOffer, onWalk, onDismissNegotiation, onClause, onLoan,
   onAcceptBid, onRejectBid, onSetStatus, onLoanOut,
-  onProposeTerms, onBuyLoanee, onEndLoanEarly, onRecallLoanee,
+  onProposeTerms, onBuyLoanee, onEndLoanEarly, onRecallLoanee, onSignFree,
 }: TransferScreenProps) {
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
@@ -315,6 +318,11 @@ export function TransferScreen({
           <div className="text-lg font-bold font-display text-gold">{money(career.budget)}</div>
         </div>
       </div>
+
+      {/* Round 619: free agents, deliberately ABOVE the market. The point of
+          the feature is that it still works on a week when everything below it
+          is greyed out, so it must not be buried under the closed window. */}
+      <FreeAgentsCard career={career} onSign={onSignFree} />
 
       {/* Round 71: live negotiation table */}
       {neg && (

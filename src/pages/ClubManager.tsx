@@ -1259,7 +1259,7 @@ const ClubManager = () => {
                mounted until now, so renewals were unreachable for 88 rounds.
                Plain renewal or the cheaper clause deal, and every clause you
                have granted stays in view with its bargain warning. */}
-            <ScreenLoading><ContractsCard career={c} onRenew={g.renew} onRenewWithClause={g.renewWithClause} /></ScreenLoading>
+            <ScreenLoading><ContractsCard career={c} onRenew={g.renew} onRenewWithClause={g.renewWithClause} onSettle={g.settleContract} /></ScreenLoading>
           </div>
         </TabsContent>
 
@@ -1303,6 +1303,7 @@ const ClubManager = () => {
             onBuyLoanee={g.buyLoanee}
             onEndLoanEarly={g.endLoanEarly}
             onRecallLoanee={g.recallLoanee}
+            onSignFree={g.signFree}
           /></ScreenLoading>
         </TabsContent>
       </Tabs>

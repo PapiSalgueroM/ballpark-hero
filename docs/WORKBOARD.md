@@ -1,5 +1,21 @@
 # Work board
 
+**Round 619, 2026-09-17: free agents and contract termination are BUILT, on branch
+`claude/handoff-docs-2026-bxwi9m`.** Engine and UI both, against
+`docs/design/round-619-free-agents-contract.md`. The blocker in that contract's section 5 (617
+and 618 on main) cleared on 2026-09-16, which is what unblocked it. tsc 0, `simFreeAgents` green
+on six sections with all seven controls proved to fire, and the five existing harnesses whose
+subject this round moves (`simAcademy`, `simContracts`, `simClubManagerBudget`,
+`simClubManagerFinances`, `simClubManagerSave`) all still green. Ending a contract now costs half
+the wage for what was left of the deal, that money stays on the wage bill where the cap and the
+board read it, and free agents are the one thing signable with the window shut. Details, and the
+four things measurement changed about the round, in `docs/PROJECT-STATE.md`.
+
+**NEXT FREE ROUND NUMBER: 628.** 621 to 624 stay reserved for the career engine migration (one
+sport per round onto `src/lib/careerEngine.ts`, each proving byte identical outcomes on a fixed
+seed). 627 was the highest used before this round. The "NEXT FREE NUMBER: 551" line further down
+this file is stale by about eighty rounds and should be read as history.
+
 **Round 626, 2026-09-16: Rounds 617, 618 and 626 are LIVE ON MAIN at `8998acd1`.** Full gate
 before landing: tsc 0, build 0, all 324 harnesses green. The adversarial review's two findings
 against 617 and 618 are fixed and each was reproduced first, and the third hole, `simPress`

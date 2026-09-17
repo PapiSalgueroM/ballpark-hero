@@ -1,5 +1,82 @@
 # Project state
 
+## ROUND 619 BUILT 2026-09-17: free agents, and what it costs to end a contract early
+
+On branch `claude/handoff-docs-2026-bxwi9m`. Contract:
+`docs/design/round-619-free-agents-contract.md`, which was written on 2026-09-16 and is followed
+here including its lane split, except that the UI half was built too rather than left for a lane
+that does not exist in this session. The owner asked for both halves through the footer report:
+free agents in Manager Mode, and the ability to terminate a contract so a player becomes one.
+
+**The defect the whole round exists to prevent.** `wageBill` was a reduce over the squad, so a
+released player's wage left the bill in the same tick he left the squad. Termination would have
+cost nothing, bought wage cap room instantly, and been strictly better than selling him, loaning
+him out or playing him. `wageBill` is now the squad plus what is still owed on settled contracts,
+and that one change makes the cap, the weekly charge in `tickBooks` and the season projection
+honest at once, because all three already read it.
+
+**What shipped.** `releasePlayer`, `signFreeAgent`, `ensureFreeAgents`, `severanceFor`,
+`freeAgentAsk`, `freeAgentInterest`, `tickSeverance` and `severanceBill` on `clubManager.ts`, two
+optional `CareerState` fields (`freeAgents`, `severance`), expiries routed into the pool at the
+rollover, a pool that ages and drains to other clubs, `fillSquadGaps` reading the save's own pool
+instead of conjuring its own, a settlements line on the finance projection, a settle action with
+its price shown before it is agreed on the contracts desk, a free agent list on the transfer
+screen that works when the window is shut, and the help copy for both.
+
+**Gates.** tsc 0. `simFreeAgents` green on six sections with all seven controls proved to fire on
+their own sections (`nosev`, `billblind`, `openall`, `goodpool`, `staleforever`, `nodedupe`,
+`nomigrate`). `simAcademy`, `simContracts`, `simClubManagerBudget`, `simClubManagerFinances` and
+`simClubManagerSave`, the five harnesses whose subject this round moves, all still green.
+Headline numbers: the wage bill falls by 47 percent of a released wage rather than 100, and
+across 19 releases over eight seasons at six clubs settlements clawed back 84 percent of the
+wages the manager thought he had stopped paying.
+
+### Four things measurement changed, all of them worth keeping
+
+**Section 2's first version measured the wrong policy and would have passed for it.** It picked
+"the worst contract" by wage divided by rating, which scores a 140k striker rated 88 worse than a
+31k defender rated 70, so the policy it actually modelled was "release Haaland and Mbappe every
+August". It reported that releasing BEAT keeping, which was a true fact about a policy nobody
+would run. The metric is now overpayment against what the player is worth, lowest rated breaking
+the tie, which is the contract a manager trying to save money would really bin.
+
+**The football outcome is inside the noise, and the harness says so rather than hiding it.**
+Measured across four seed bases on healthy code the mean gap ran +1.94, +2.15, -3.88 and +0.3
+league points per season, so it crosses zero: at six clubs and eight seasons, binning dead weight
+is not reliably worse ON THE PITCH, because the men it bins were not playing. A positive football
+margin there would have been a coin toss dressed as a rule, the Round 284 mistake, and asserting
+the two policies are the SAME is the forbidden shape. So section 2 asserts the money, which is
+the mechanism and is deterministic, and reports the football without asserting it. A first
+attempt to blame the spread on sacked managers ending runs early was checked and was wrong:
+nobody was sacked and every run was 48 seasons.
+
+**`releasePlayer` shifted the whole formation, and only reading the diff caught it.** `xiIds` is
+POSITIONAL: index i is formation slot i and `null` is an empty slot. The first draft filtered the
+released man out, which shortens the array and moves every player behind him into somebody else's
+position. tsc cannot see it and no season level check would have either, because the team still
+plays. It nulls the slot now, the shape `acceptBid`, `loanOutPlayer` and `exerciseLoanOption` all
+use, and section 1 now asserts slot count and slot identity across a release.
+
+**Two controls were green for the wrong reason before they were fixed.** The `nodedupe` control
+pointed at `addFreeAgent`, whose guard only runs on a manual release, so it sat green through
+eight simulated seasons and proved nothing; section 5's control is now `staleforever`, which
+removes the two season drop that runs every summer. And section 3 called `acceptBid` with no bid
+on the table, so it returned null at `if (!bid)` and never reached the window guard: it
+"refused" even with the guard deleted. It plants a real bid now and first proves the same call
+succeeds with the window OPEN, so a refusal means the window and nothing else.
+
+**Two judgement calls not in the contract, both recorded in the code.** Severance has a floor of
+four weeks, because the contract's formula owes nothing at all to a manager who waits until the
+final week of a season, which would make the last calendar entry of every year free clear-out
+day. And academy players whose deals expire do NOT enter the pool: before this round they simply
+left, and putting them on a public list where rival clubs take them first would be a new leak out
+of the youth setup in the one area the contract says not to touch. Anybody who does pass through
+the pool carries his `potential` and `academyGrad` back out, so a re-signing cannot launder away
+his ceiling (the Rounds 96 and 116 regression) or his academy badge.
+
+**Still open from the contract.** The QA lane's hand walk of the section 3.6 edge table, and a
+pass on how the feature reads to somebody who has never seen it.
+
 ## HANDOFF 2026-09-17: main `b51500fb` re-gated, nothing in flight, and two cloud traps
 
 `docs/HANDOFF-2026-09-17.md` replaces the 2026-09-15 pair and `CLAUDE.md`'s doc map points at it.
