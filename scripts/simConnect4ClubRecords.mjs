@@ -285,7 +285,12 @@ console.log('5) the DEPLOYED function answers club squares from records, and a m
      cache hits cheaply (they are a cacheOnly call and spend no AI). The pool is
      the whole candidate list rather than a fixed 40, which is why the count is
      printed: when it starts creeping toward the cap, the pool is running low. */
-  const SCAN_CAP = Math.min(candidates.length, 250);
+  /* 2026-09-17: the first 250 candidates were spent. The release suite for
+     Rounds 619 and 628 to 630 found every one of them cached, on this tree and
+     on the tree before it, with about 700 unused subjects further down the
+     list. Cache hits spend no AI, so the walk now covers the whole list, and
+     the pool only runs out when every candidate has been used once. */
+  const SCAN_CAP = candidates.length;
   const WANT_RECORDS = 3;
   let fromRecords = 0, fromCache = 0, missed = 0, tried = 0;
   let subject = null;
