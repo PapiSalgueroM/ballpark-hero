@@ -1,5 +1,25 @@
 # Work board
 
+**Rounds 619, 628, 629 and 630, 2026-09-16: ON MAIN, desktop Claude lane.** Landed as one
+release from a fresh CRLF clone, after an adversarial review that found 28 defects confirmed by
+reproduction behind green gates: a settlement billed about 30 percent longer than quoted, a
+release timed before expiry that dodged the renewal fee, the last keeper releasable, one tap
+irreversible releases, `simPollCharacter` not parsing at all, and a fight screen that called a
+room sold out with seats empty. All fixed, each fix checked by an independent verifier. Free
+agents now carry a signing on fee (no transfer fee is not no money). Gate: tsc 0, `build:seo` 0,
+full node suite 328 of 329 on the frozen tree with the one red (a spent live test pool) fixed and
+green alone, and 12 of 14 targeted browser harnesses green, the other two pre-existing on things
+this release does not touch.
+Full account and the follow ups in `docs/PROJECT-STATE.md`.
+
+**Queued by this lane, numbers reserved, none started:** 631, NFL Front Office cuts free the
+whole salary with no dead money and the man can be re-signed at once (the 619 exploit in a
+sibling sim). 632, Club Manager youth padding kids sell for millions with no value and no signing
+cost. Also open and unnumbered: `playClubManager` red on main (pre-existing, the Release clause
+button is never enabled for it), Fight Career bars pinning a third of decision losers for a player
+who reads every fight, and reduced motion gaps for width transitions and future `animate-*`
+classes.
+
 **Round 628, 2026-09-16, CLAIMED AND BUILT by the desktop Claude lane on branch
 `r628-fight-fx`.** Fight Career's bout screen: draining condition bars, per round punch bars, a
 knockdown flash, a popping card, confetti on a win. Shares `CareerFx.tsx`, which five sports
@@ -723,7 +743,11 @@ table on 2026-09-15.
   likely source is a coach poached after week 30 (`tickStaff`, staff wages projected at the pre
   poach rate), not yet traced.
 
-- **619, CONTRACT DRAFTED, NO CODE: free agents in Manager Mode, and contract termination.**
+- **619, ON MAIN 2026-09-17 with Rounds 628 to 630, after an adversarial review (entry at the top
+  of this board, account in `docs/PROJECT-STATE.md`). Originally: CONTRACT DRAFTED, NO CODE: free
+  agents in Manager Mode, and contract termination.** The contract text below is kept as written;
+  two things changed in the build: the pool also carries six generated journeymen a season, and
+  every free agent pays a signing on fee.
   Raised by the owner on 2026-09-16 through the footer report and routed as a Club Manager
   feature request rather than a site issue, which is how he asked for it to be logged. His
   words: add free agents to Manager Mode, and allow players to have their contracts terminated

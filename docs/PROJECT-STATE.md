@@ -1,5 +1,147 @@
 # Project state
 
+## ROUNDS 619 AND 628 TO 630 ON MAIN 2026-09-17: landed after a review that found 28 real defects past green gates
+
+Landed together as `release-619-630`, built in a fresh CRLF clone (`C:\Users\antho\dukb-gate`)
+from origin/main `b51500fb`. The 2026-09-16 handoff said all four rounds were built and verified,
+and that 619 was gated apart from its suite. **Neither was true, and every gate was green.**
+
+**What the full suite found first.** The 619 solo suite on `cd7f0477` came back 327 of 328:
+`simFreeAgents` itself threw a ReferenceError after section 9, so section 10 had never run. The
+commit before claimed fifteen assertions green, because every standalone run was filtered for
+"ok" and "FAIL" lines and a stack trace contains neither. **A control run only counts if it
+reaches the harness's closing summary line.** Once the scope was fixed, section 9's re-sign check
+still passed for the wrong reason: it offered a man one point over the interest bar, and without
+his value `wageFor` priced him at ten times his real wage, so interest and the cap refused him
+whatever the guard did.
+
+**What the adversarial review found.** Five lenses over the combined tree, and every finding
+handed to an independent skeptic who had to reproduce it: 45 findings, 28 CONFIRMED by
+reproduction, 17 lower severity returned unverified (nearly all real, and fixed). The ones that
+mattered:
+
+- **619, money.** A settlement was billed about 30 percent longer than the button quoted (73
+  weeks charged against a 54 week quote at Everton). The `severanceTickedWeek` guard, added to fix
+  an "overcount" that was really the harness dividing by `playNextEntry` calls instead of weeks
+  charged, skipped a real countdown whenever a bye came before a match. The harness and the bug
+  agreed with each other, the same trap as Round 628.
+- **619, exploits.** Releasing an expiring player the week before his deal ran out dodged both
+  the renewal fee and the "lose him for a season" block. A man could sit in the squad and the free
+  agent pool at once. You could release your last keeper, and release mid match and play the
+  second half a man down. Signing a free agent built ids that collided, so releasing one man
+  removed two.
+- **619, screen.** Release fired on one tap with no confirm. Buttons at the squad floor stayed
+  live and did nothing. Sign never showed the wage or length it committed to, and was enabled when
+  the cap or squad size would refuse it. And a new save had no free agents at all, because the
+  pool only ever held your own ex-players.
+- **619, harness.** Five sections could not fail: section 2 repeated section 1's arithmetic,
+  two of section 3's three window probes refused for reasons that had nothing to do with the
+  window, section 5's retired check rode a release the senior floor refused, section 4 never
+  checked that the rollover called the decay, and section 6's `bill <= 0` passed a NaN.
+- **629.** `simPollCharacter.mjs` did not parse. Its "fix" went through a Bash heredoc and put
+  real line breaks inside two string literals, so all five controls were dead and the suite would
+  have been red on every ship. The fence itself was blind to comments, helpers and LF clones.
+- **628 and 630.** The knockdown that ends a stoppage never flashed, the new animations ignored
+  reduced motion, Fight Promoter said "sold out" and fired gold confetti with seats still empty,
+  and `simFightCareer` section 6 could not see pinned bars, the exact defect that started 628.
+
+**How it was fixed.** Three builders in separate worktrees, one per file group, each checked by
+an independent verifier that reran the gates and every control one at a time, with repair passes
+until it passed. The 619 group took three verifier passes, and each pass found something new
+that the previous fix had created:
+
+- Journeymen given a squad like value could be signed for free and sold on for real fees. They
+  now carry the floor value, their wage is priced off the squad and stored, and **every free agent
+  pays a signing on fee** (the engine's usual wage x years x 0.045, minimum 0.5m, recorded as a
+  bonus, never as a transfer fee). Free agents now mean no transfer fee, not no money.
+- "A released man never signs for you again" was true of the free agent list and false of the
+  market, which listed him again the next season. `releasedNames` is now persistent, and one set
+  is read by the list, the market, deals and the summer fill.
+- After a job move the old club's six journeymen followed the manager and refused a weaker club
+  for a whole season. They now stay behind and the new club gets its own six.
+- `loadCareer` never filled the pool, so every save written before this round opened with an
+  empty list until a week was played.
+
+**What 619 is now.** `releaseBlock` and `freeAgentBlock` are the single gates, and the card
+renders their reasons, so the screen cannot offer a button the engine refuses (section 15 renders
+the card across saves and compares every button with the engine: 137 buttons, 0 disagreements).
+The settlement is half the wage until the deal would have ended, capped at two seasons, counted in
+`wageBill`, and one week charged is one week counted off (54 of 54, 108 of 108). The pool holds
+your released and expired men plus six generated journeymen a season (`makeGeneratedName`, never
+a real name, tagged made up, 20 to 26 below the club's level), decays a point a summer and clears
+after two. `simFreeAgents` has 17 sections and 47 controls, each run alone and each turning exactly
+its intended check red, and `simAcademy` stays green.
+
+**629 after review.** See its own section below, corrected in place.
+
+**Two more harnesses were red on every Windows checkout, and neither was these rounds.**
+`simConnect4ClubRecords` section 4 and `simSoccerStintNameFold` section 3 cut an edge function
+body at the first newline, brace, newline, which a CRLF file never contains. Green on the LF
+release clone, red on a CRLF clone of the same tree. Both normalise on read now. The 629 fence
+only looks at reads into `src/`, which is why it missed them: `supabase/functions` is out of its
+reach and says so.
+
+**And one harness had spent its own subjects.** `simConnect4ClubRecords` asks the deployed
+connect4 function about players the stint table proves, and the records pass caches every
+attribute it proves, so each run uses about three subjects for good. It only walked the first 250
+of 950 candidates, and on 2026-09-17 all 250 were cached: red on this release and identically red
+on the tree before it, with nothing in either touching the function. The walk now covers the whole
+list (cache hits spend no AI), which leaves roughly 700 subjects of runway, and its `denyonmiss`
+control, which had been going red for the spent pool, now goes red for its own reason again.
+
+**Corrections to earlier records, so nobody trusts them:**
+- `cd7f0477`'s message says fifteen assertions were green. The harness was crashing after section 9.
+- The first Round 629 section said `simPollCharacter` was fixed and 28 harnesses were in scope and
+  compliant. It did not parse, and the widened fence found ten harnesses with controls that could
+  never run here.
+- `docs/HANDOFF-2026-09-16.md` section 4 said everything else for 619 was done. See above.
+
+**Two browser harnesses could not reach what they check, both pre-existing.**
+`playReleaseClause` had timed out since Round 303 (2026-08-27) put the "who is in the dugout" step
+between taking a job and the hub, so the one browser walk of the contracts desk had not run for
+three weeks; it skips the step now and walks 619's rebuilt desk green. `playReducedMotion` read
+its source from a hardcoded `C:/Users/antho/ballpark-hero` path, so a clone tested that folder's
+(older) source against its own build; it reads relative to itself now, and its `noguard` control
+still fires.
+
+**Gate on the landed tree.** tsc 0. `build:seo` exit 0, and only `/whats-new` changed (it had
+been missing 628's entry). The full node suite on the frozen tree `0d6db0bd`, in a CRLF clone:
+328 of 329, the one red being the spent connect4 pool, fixed and green alone with all three
+controls. Fourteen browser harnesses chosen for what these rounds touch: ten green
+(`playRenderStability`, `playSnapshotDrift`, `playSoftFourOhFour`, `simPrerenderBoot`,
+`simRevealScroll`, `simVictoryMoment`, `playFirstTeamFit`, `playIphone`, `playSeasonReveal`,
+`playHowTo`), `playReleaseClause` and `playReducedMotion` green after the repairs above, and two
+pre-existing reds on things nothing here touches: `playClubManager`'s 0 signings (identical on
+main) and `sweepPhone` (below). The new contracts card was also walked by hand at desktop and
+375px: the two step release quotes the right total (24k x 108 weeks, £2.6m), the wage line moves
+446k to 422k, every Release button disables at the senior floor with the reason on it, the
+released man shows as "You let him go", journeymen carry the MADE UP tag with wage, length and
+fee on the button, and nothing overflows at 375px.
+
+### Follow ups this work surfaced, none started
+
+- **NFL Front Office cuts are free.** `releasePlayer` in `src/lib/frontOffice.ts` frees the whole
+  salary at once and the man can be signed straight back on a one year deal: the exact exploit 619
+  exists to prevent, in a sibling sim. Reuse 619's settlement shape (dead cap counted in
+  `capUsed`, no same league year re-sign). MLB, NBA and NHL have no manual release.
+- **Club Manager youth padding kids sell for millions with no signing cost.** Listed padding kids
+  carry no value, so `sellValue` prices them off the raw curve: one Everton kid sold for 6.6m and
+  one Inter Miami kid for 12.1m in a probe. A bigger free money path than the journeymen were.
+- **`playClubManager` is red on main and on 619 alike** (45 windows, 0 signings on `f63cf758`,
+  43 and 0 on 619). `signSomebody()` never finds an enabled Release clause button. Pre-existing,
+  not root caused. It is a browser harness, so the default suite skips it.
+- **Fight Career bars pin more for good players.** A player who reads every fight pins 30.0 to
+  33.3 percent of decision losers at the shipped drain rate of 0.8, against 9.8 to 13.5 percent for
+  random tactics, which is what `simFightCareer` section 6 samples. `conditionTrack`'s comment
+  ("the floor stays rare") is only true of random play. Re-tune or correct the comment.
+- **Reduced motion.** Width transitions on the condition and house bars are not covered, and
+  nothing stops the next new `animate-*` class shipping without a reduced motion rule.
+- **`sweepPhone` is red on two routes this release does not touch:** `/world-cup-bracket` has a
+  20px "Show the real bracket" control and `/stadium-tycoon` a 1px "Tap the stadium for $3", both
+  under the 30px floor.
+- The 629 fence does not cover harness reads into `supabase/functions`, `scripts/lib` helpers or
+  `git show`. Its header lists what is out of reach.
+
 ## ROUND 629 2026-09-16: a harness may not carry an anchor that can never match
 
 `scripts/simHarnessAnchors.mjs` is the permanent fence for the Round 628 finding, written about
