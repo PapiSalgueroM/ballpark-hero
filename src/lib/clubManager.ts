@@ -15965,6 +15965,10 @@ export function loadCareer(): CareerState | null {
     /* Round 505: and the armband and the takers, for the same reason: the
        tactics screen reads them before a ball is kicked. */
     ensureSetPieces(parsed);
+    /* Round 619: and the free agent list, for the same reason: the contracts
+       card reads it before a ball is kicked, so a save from before free agents
+       existed would otherwise show an empty list until the first week. */
+    ensureFreeAgents(parsed);
     /* Round 507: a negotiation frozen mid haggle by a build that charged
        patience only for an insult, resumed by a build that charges for every
        answer. Its opener was 2 or 3 where the new one is 4 or 5, so two

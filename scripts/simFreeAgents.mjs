@@ -56,6 +56,7 @@
  *   stalekeep      an old pool record survives a fresh release       -> section 5
  *   nomigrate      an old save's settlement list is not repaired     -> section 6
  *   nanbill        the bill of an unrepaired save is not a number    -> section 6
+ *   noloadpool     loading a save does not fill the free agent list  -> section 6
  *   weekkey        the week keyed countdown guard is back            -> section 7
  *   tickwild       a week is counted off twice                       -> section 7
  *   countfirst     the countdown runs before the week is charged     -> section 7
@@ -209,6 +210,10 @@ if (CONTROL === 'nosev') {
   rewrite('nanbill', 'engine',
     'return (career.severance ?? []).reduce((s, r) => s + r.weekly, 0);',
     'return career.severance ? career.severance.reduce((s, r) => s + r.weekly, 0) : NaN;');
+} else if (CONTROL === 'noloadpool') {
+  rewrite('noloadpool', 'engine',
+    '    ensureFreeAgents(parsed);\n',
+    '');
 } else if (CONTROL === 'weekkey') {
   /* The second draft's guard, exactly: count down only when the week has
      moved on since the last countdown. It is the real drift the review found. */
@@ -709,6 +714,21 @@ console.log('6) an old save opens and plays on');
   } else {
     ok('an old save plays a week and comes out with both lists');
   }
+  /* And the moment it is OPENED, not only once a week is played. The card
+     shows its free agent list straight after loading, and every save that
+     predates this round is an old one, so the journeymen have to be there
+     before a ball is kicked. */
+  const saved = clone(st);
+  delete saved.freeAgents;
+  delete saved.severance;
+  const realGet = globalThis.localStorage.getItem;
+  globalThis.localStorage.getItem = (k) => (k === 'dukb-club-manager-save' ? JSON.stringify(saved) : null);
+  let loaded = null;
+  try { loaded = cm.loadCareer(); } finally { globalThis.localStorage.getItem = realGet; }
+  const onOpen = (loaded?.freeAgents ?? []).filter(f => f.reason === 'unattached').length;
+  if (!loaded) fail('an old save did not load at all, so the free agent check on opening never ran');
+  else if (onOpen < cm.FREE_AGENT_POOL_TARGET) fail(`an old save opens with ${onOpen} journeymen before a ball is kicked, so the card shows an empty list until the first week`);
+  else ok(`an old save opens with ${onOpen} journeymen before a ball is kicked`);
 }
 
 /* ═══════════════ 7) THE CLOCK ═══════════════ */

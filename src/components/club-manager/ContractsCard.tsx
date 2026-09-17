@@ -11,7 +11,7 @@ const RELEASE_BLOCK_COPY: Record<ReleaseBlock, { face: string; title: string }> 
   midMatch: { face: 'Match on', title: 'Finish the match first. Nobody gets released at half time.' },
   onLoan: { face: 'On loan', title: 'He is here on loan, so he is not yours to release.' },
   lastKeeper: { face: 'Only keeper', title: 'He is your only keeper. Sign another one first.' },
-  squadSize: { face: 'Squad at 14', title: 'The squad is down to 14, the fewest you are allowed.' },
+  squadSize: { face: 'Squad too small', title: 'The squad is down to 14 or fewer, and nobody else can leave until you add players.' },
   squadRules: { face: 'In a deal', title: 'He is part of a deal on the table right now.' },
   seniorFloor: { face: 'Need 12 seniors', title: 'You need at least 12 senior players, so nobody can go until you sign someone.' },
 };
