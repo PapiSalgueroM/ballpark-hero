@@ -11,10 +11,18 @@ the wage for what was left of the deal, that money stays on the wage bill where 
 board read it, and free agents are the one thing signable with the window shut. Details, and the
 four things measurement changed about the round, in `docs/PROJECT-STATE.md`.
 
-**NEXT FREE ROUND NUMBER: 628.** 621 to 624 stay reserved for the career engine migration (one
-sport per round onto `src/lib/careerEngine.ts`, each proving byte identical outcomes on a fixed
-seed). 627 was the highest used before this round. The "NEXT FREE NUMBER: 551" line further down
-this file is stale by about eighty rounds and should be read as history.
+**Round 621, 2026-09-17: the career engine migration is DONE, and 622 to 624 are struck.** All
+four my career games adopt `careerEngine.ts` and are proved byte identical: 120 careers and 2,235
+seasons diffed against the pre migration source pulled straight out of git, not against a recorded
+number. It took one round instead of four because the premise was measured first and was wrong:
+the four games share 25 exported NAMES but only three implementations, the rest having been
+shared rounds ago through `careerVariance`, `careerAwards`, `usCareerFreeAgency` and the other six
+modules. What is left per sport is the sport. Do not build 622 to 624; the reasoning and the
+measurement are in `docs/PROJECT-STATE.md`.
+
+**NEXT FREE ROUND NUMBER: 628.** 621 is used, 622 to 624 are struck as above, and 627 was the
+highest used before yesterday. The "NEXT FREE NUMBER: 551" line further down this file is stale by
+about eighty rounds and should be read as history.
 
 **Round 626, 2026-09-16: Rounds 617, 618 and 626 are LIVE ON MAIN at `8998acd1`.** Full gate
 before landing: tsc 0, build 0, all 324 harnesses green. The adversarial review's two findings

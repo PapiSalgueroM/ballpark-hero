@@ -1,5 +1,75 @@
 # Project state
 
+## ROUND 621 BUILT 2026-09-17: the career engine migration, and the measurement that shrank it
+
+On branch `claude/handoff-docs-2026-bxwi9m`. All four my career games adopt `careerEngine.ts`,
+proved byte identical, in one round rather than the four Round 620 planned.
+
+**The scope changed because the premise was measured and was wrong.** Round 620 recorded that the
+four games "share 24 exported symbol names once the sport prefix is stripped, which is about two
+thirds of 3,900 lines being one idea written four times", and scoped Rounds 621 to 624 as four
+large migrations on that basis. The first half is right: 25 names are common to all four. The
+second half is not.
+
+Measured over the eleven common functions whose bodies can be compared, with comments,
+whitespace and the sport prefix normalised away:
+
+| | count | which |
+|---|---|---|
+| Identical in all four | 2 | `repairNetWorth`, `eraById` |
+| Identical in three | 1 | `rollTeamQuality`, where the NFL differs by five numbers |
+| Genuinely different per sport | 8 | `shouldRetire`, `careerTotals`, `marketSalary`, `legacyOf`, `progress`, `assignRole`, `campBattle`, `teamLabelOf` |
+
+**Shared names are not shared code**, and `legacyOf` is the clearest case: the NFL scores an
+unbounded total with Canton at 520 while the shared `legacyTier` is a 0 to 100 ladder, so
+"sharing" it would change every verdict in the game rather than lift anything. The reason so
+little is left is a good one: the heavy machinery these four have in common was already shared,
+rounds ago, through `careerVariance`, `careerAwards`, `careerRival`, `usCareerFreeAgency`,
+`usCareerExtension`, `usCareerPress`, `careerMoney`, `careerInbox` and `careerRivalryEvents`.
+What is left per sport is the sport.
+
+**So there were three things to lift, not two thirds of 3,900 lines.** `TAKE_HOME` (0.45, a
+private const in all four at the same value), `repairNetWorth` (four byte identical copies) and
+`eraById` (four identical one line lookups over four different lists) moved to `careerEngine.ts`,
+and `rollTeamQuality` moved with its five numbers injected as a `TeamQualityBand`, which is the
+owner's 2026-09-04 instruction exactly: the data differs per sport and the function is shared.
+Every consumer still imports `repairNetWorth` from its own sport's file, which now re-exports it,
+so no screen changed.
+
+**The gate is the one Round 620 asked for and it is not a recorded number.**
+`scripts/simCareerEngineParity.mjs` pulls the pre migration source straight out of git with
+`git show HEAD:src/lib/<sport>MyCareer.ts`, rewrites its sibling imports to the `@/lib` alias so a
+temp copy resolves, and bundles it beside the migrated source. Both sides then run the identical
+seeded career and the whole state is diffed. **120 careers and 2,235 seasons across four sports,
+byte identical**, plus 4,036 direct comparisons of the three lifted functions. It refuses to run
+if the baseline already imports `careerEngine` (so it cannot compare the new file with itself) or
+if the current file does not (so it cannot pass before the work is done). Control
+`ENGINE_PARITY_CONTROL=drift` moves one number in the migrated NFL band and is proved to diverge
+sections 1 and 2.
+
+**Two output bugs in that harness, found and fixed before it was trusted.** Section 2 printed
+"byte identical" unconditionally, so the control run reported the careers as identical on the
+same screen as the failures saying they were not. And section 3 gated its own green line on the
+GLOBAL failure count, so it went silent whenever an earlier section had failed, which is exactly
+when somebody needs to know whether the files are in order. Both are the same mistake in
+different clothes: a harness that reports on something other than what it measured.
+
+**A note on its runtime, because 0.33 seconds looks like a harness that did not run.** It did.
+esbuild bundles the whole graph in 34ms measured, the career loop is cheap arithmetic, section 2
+fails if fewer than 400 seasons were simulated, and the control proves the two sides are distinct
+modules rather than one module compared with itself.
+
+### What this means for Rounds 622 to 624
+
+**They are done, and they should be struck from the queue rather than built.** All four sports
+migrated here because the change was three functions wide and provably identical; splitting that
+across four rounds would have been four rounds of churn on four working games for no player
+benefit, which is the exact thing Round 620 deferred them to avoid. There is no further shared
+implementation to lift out of these four files: what remains is genuinely per sport, and a future
+round that "shares" `legacyOf` or `careerTotals` would be changing behaviour, not removing
+duplication. **Take 628 next**, and do not re-derive the two thirds figure from the Round 620
+header, which now carries a pointer to this measurement.
+
 ## ROUND 619 BUILT 2026-09-17: free agents, and what it costs to end a contract early
 
 On branch `claude/handoff-docs-2026-bxwi9m`. Contract:

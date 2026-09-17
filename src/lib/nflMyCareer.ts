@@ -43,6 +43,19 @@ import { receiveNflInboxTexts } from './nflCareerInbox';
 import type { RivalryEvent } from './careerRivalryEvents';
 import { nflRivalryTick } from './nflCareerRivalryEvents';
 
+/* Round 621: the three things the four my career engines genuinely had in
+   common, measured rather than assumed. See careerEngine.ts. */
+import {
+  TAKE_HOME,
+  rollTeamQuality as rollTeamQualityShared,
+  eraById as eraByIdShared,
+} from './careerEngine';
+import type { TeamQualityBand } from './careerEngine';
+
+/** How this league's rosters churn. The only thing that differed between the
+    four copies of the roll below. */
+const NFL_TEAM_QUALITY: TeamQualityBand = { base: 68, span: 22, drift: 7, min: 62, max: 94 };
+
 export type CareerPos = 'QB' | 'RB' | 'WR' | 'TE' | 'LB' | 'CB' | 'EDGE' | 'K';
 
 /** Positions that put up receiving lines. */
@@ -124,7 +137,7 @@ export const NFL_ERAS: NflEraDef[] = [
 ];
 
 export function nflEraById(id?: string): NflEraDef {
-  return NFL_ERAS.find(e => e.id === id) ?? NFL_ERAS[0];
+  return eraByIdShared(NFL_ERAS, id);
 }
 
 export interface Archetype {
@@ -345,8 +358,7 @@ export function teamLabelOf(abbr: string, eraId?: string): string {
 
 /** Team quality random-walks per season so franchises rise and fall. */
 export function rollTeamQuality(prev: number | null, rng: () => number): number {
-  if (prev == null) return 68 + Math.floor(rng() * 22);
-  return Math.max(62, Math.min(94, Math.round(prev + (rng() * 14 - 7))));
+  return rollTeamQualityShared(prev, rng, NFL_TEAM_QUALITY);
 }
 
 /* ─── Round 182: the depth chart ───
@@ -704,7 +716,10 @@ export function progress(c: CareerState, rng: () => number): string[] {
    tax, agent and living. It was already the number this file used to turn
    career earnings into net worth; it is named here so the yearly banking and
    the repair below cannot drift apart from it. */
-const TAKE_HOME = 0.45;
+/* Round 621: TAKE_HOME, repairNetWorth, the team quality roll and the era
+   lookup now live in careerEngine.ts. They were four identical copies each
+   (the roll differed only in five numbers), which is what the measurement in
+   that file's Round 621 header found was genuinely shared and what is not. */
 
 /* ─── Round 56: the money ─── */
 export type NflSpendCategory = 'home' | 'ride' | 'invest' | 'body' | 'flex' | 'family' | 'shady';
@@ -1031,12 +1046,4 @@ export function careerTotals(c: CareerState) {
    upkeep is deliberately NOT re-deducted, because it was charged against a
    balance that had no income in it, so charging it again would keep part of the
    bug. Runs on load, once, and does nothing to a healthy save. */
-export function repairNetWorth<T extends { netWorth?: number; earnings: number; purchased?: string[] }>(
-  c: T,
-  costOf: (id: string) => number,
-): T {
-  if ((c.netWorth ?? 0) >= 0) return c;
-  const spent = (c.purchased ?? []).reduce((sum, id) => sum + costOf(id), 0);
-  const rebuilt = Math.max(0, Math.round((c.earnings * TAKE_HOME - spent) * 10) / 10);
-  return { ...c, netWorth: rebuilt };
-}
+export { repairNetWorth } from './careerEngine';
