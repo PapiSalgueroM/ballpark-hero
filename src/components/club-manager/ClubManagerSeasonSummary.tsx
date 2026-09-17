@@ -6,7 +6,7 @@ import { money } from '@/lib/clubManager';
 import type { CareerState, SeasonSummary } from '@/lib/clubManager';
 import type { useClubManager } from '@/hooks/useClubManager';
 
-/* Round 628: the five terms, in the order they are worth. Kept beside the
+/* Round 633: the five terms, in the order they are worth. Kept beside the
    screen that prints them rather than in the engine, because the wording is
    copy and the numbers are not. */
 const SCORE_TERMS = [
@@ -23,7 +23,7 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
   g: Pick<ReturnType<typeof useClubManager>, 'nextSeason' | 'startNew'>;
 }) {
   const trophyLine = sm.trophies.length ? sm.trophies.map(() => '🏆').join('') : '-';
-  /* Optional: a summary stored before Round 628 carries no breakdown, and the
+  /* Optional: a summary stored before Round 633 carries no breakdown, and the
      block below simply does not render for it. */
   const parts = sm.seasonScoreParts;
   const partsTotal = parts ? parts.form + parts.title + parts.cup + parts.euro + parts.objectives : 0;
@@ -134,7 +134,7 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
                 <span className="shrink-0">⭐</span>Qualified for next season's Champions League
               </p>
             )}
-            {/* Round 628: the season score shows its working. It used to be
+            {/* Round 633: the season score shows its working. It used to be
                 league points plus 10 a trophy, which meant the tile next to
                 Finish and Points was really reading which club you picked, so
                 there was nothing to explain. Now it is five things you did,

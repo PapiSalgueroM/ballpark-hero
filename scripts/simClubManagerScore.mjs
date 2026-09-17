@@ -1,5 +1,5 @@
 /**
- * Round 628: the Club Manager season score reads the MANAGER, not the club.
+ * Round 633: the Club Manager season score reads the MANAGER, not the club.
  *
  * WHY THIS HARNESS EXISTS. Before this round the only assertion anywhere on
  * the season score was `simClubManager.mjs:214`, `if (!isNum(summary.seasonScore))`.
@@ -64,7 +64,7 @@
  *                                 off an under 21 un-ticks the youth objective
  *                                 and takes 6 points off a live score.
  *                                 Section 2 must go red.
- *   CM_SCORE_CONTROL=legacyfreecup pays a pre Round 628 takeover save in full
+ *   CM_SCORE_CONTROL=legacyfreecup pays a pre Round 633 takeover save in full
  *                                 for the previous manager's cup run,
  *                                 European run and board card. Section 5.
  *   CM_SCORE_CONTROL=copydrift    moves a weight without touching the help
@@ -150,7 +150,7 @@ if (CONTROL === 'rawpoints') {
   score = swap(score, "  const objectives = !i.seasonDone ? 0",
     '  const objectives = false ? 0', 'clubManagerScore.ts');
 } else if (CONTROL === 'legacyfreecup') {
-  /* Puts back the version that paid a pre Round 628 takeover save in full for
+  /* Puts back the version that paid a pre Round 633 takeover save in full for
      the previous manager's cup run, European run and board card. Section 5
      must go red. */
   score = swap(score, '  const est = !!(h && h.estimated);',
@@ -221,7 +221,7 @@ const S = mod.scoreMod;
 const {
   startCareer, playNextEntry, finishSeason, startNextSeason,
   clubDefFor, clubPreviewRating, currentSeasonScore, REAL_LEAGUES,
-  terminateContract, canPayOff, acceptBid, playableClubs,
+  releasePlayer, releaseBlock, acceptBid, playableClubs,
 } = cm;
 
 /* Every playable league size in the game, read from the engine rather than
@@ -321,8 +321,8 @@ console.log('2) The score never falls, even when you sell, loan out or pay someb
      score by 6 each. objectiveStatuses recomputes the youth objective from the
      CURRENT squad, and four of the five board asks read the squad the same
      way, so removing a qualifying player un-ticked a box that had already been
-     paid for. It exercises all three removal paths now: the contracts desk pay
-     off, accepting a bid, and loaning a man out. A monotonicity check that
+     paid for. It exercises all three removal paths now: the contracts desk release,
+     accepting a bid, and loaning a man out. A monotonicity check that
      never changes the squad is not a monotonicity check. */
   const CLUBS = ['Newcastle', 'Sevilla', 'Stuttgart', 'Celtic', 'Le Havre', 'Napoli',
     'Rijeka', 'Twente', 'Wolves', 'Al-Hilal', 'Galatasaray', 'Lecce'];
@@ -367,11 +367,14 @@ console.log('2) The score never falls, even when you sell, loan out or pay someb
         /* Prefer an under 21 with appearances: that is the player the youth
            objective counts, so it is the removal most likely to un-tick a box
            that has already been paid for. */
-        const kids = s.squad.filter(p => p.age <= 21 && (p.apps ?? 0) > 0 && canPayOff(s, p));
-        const target = kids[0] ?? s.squad.filter(p => canPayOff(s, p))[0];
+        /* main's Round 619 names these releaseBlock and releasePlayer, and
+           releaseBlock returns null when the release is allowed. */
+        const free = p => !releaseBlock(s, p);
+        const kids = s.squad.filter(p => p.age <= 21 && (p.apps ?? 0) > 0 && free(p));
+        const target = kids[0] ?? s.squad.filter(free)[0];
         if (target) {
-          const after = terminateContract(s, target.id);
-          if (after) { s = after; removals += 1; check('after paying a man off'); }
+          const after = releasePlayer(s, target.id);
+          if (after) { s = after; removals += 1; check('after releasing a man'); }
         }
       }
       if (s.sacked) break;

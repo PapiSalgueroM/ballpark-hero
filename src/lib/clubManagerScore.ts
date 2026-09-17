@@ -1,5 +1,5 @@
 /**
- * Round 628: the Club Manager season score, rebuilt so it reads the manager
+ * Round 633: the Club Manager season score, rebuilt so it reads the manager
  * rather than the club.
  *
  * WHAT WAS WRONG. The rule was `Math.min(130, myRow.pts + trophies * 10)`, and
@@ -133,7 +133,7 @@ export const CUP_POINTS: readonly number[] = [0, 5, 11, 17, 24];
 export const EURO_POINTS: readonly number[] = [0, 7, 13, 18, 24];
 
 /**
- * A pre Round 628 takeover save carries no stamped handover, so the previous
+ * A pre Round 633 takeover save carries no stamped handover, so the previous
  * manager's points have to be estimated. It is estimated at a FIXED neutral
  * rate rather than at the player's own scoring rate, and that choice is the
  * whole point: a rate estimate rises as you lose (subtract `pts * played /
@@ -252,7 +252,7 @@ export function handoverOf(i: SeasonLedgerInput): SeasonHandover | null {
   return {
     pts: Math.round(LEGACY_PPG * played),
     played,
-    /* These three are NOT knowable from a pre Round 628 save, and zeroing them
+    /* These three are NOT knowable from a pre Round 633 save, and zeroing them
        is not neutral: it credits the new manager with the cup run, the
        European run and the board ticks the previous manager banked, which
        measured at about 15 points of 130 on average and 40 at worst. They are

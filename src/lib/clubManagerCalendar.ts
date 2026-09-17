@@ -706,7 +706,7 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
     /* The inbox is the old manager's post. */
     inbox: career.inbox,
     midSeasonStart: entry,
-    /* Round 628: what he had already banked, frozen here so the season score
+    /* Round 633: what he had already banked, frozen here so the season score
        can subtract it. It is stamped rather than estimated later because an
        estimate computed from the player's own running totals rises as he
        LOSES, which pays a manager for defeats. These five numbers are read
@@ -718,7 +718,7 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
 }
 
 /**
- * Round 628: the previous manager's season, as the score reads it.
+ * Round 633: the previous manager's season, as the score reads it.
  * `objectiveStatuses` grades against the board's targets, so an objective he
  * had already banked does not pay you a second time.
  */
