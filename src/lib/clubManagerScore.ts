@@ -43,8 +43,24 @@
  * screen: a points per game reading is at its maximum of 3.00 after one
  * opening win and can only decline. Every term below is a non decreasing
  * function of a quantity that only ever rises, and every denominator is a
- * season constant. `simClubManagerScore` samples the score after every match
- * of many seeded seasons and fails if it ever drops.
+ * season constant.
+ *
+ * ONE TERM COULD NOT BE MADE MONOTONE, so it is graded once instead. The
+ * board objectives are recomputed live from the CURRENT squad, so a tick can
+ * come back OFF: `youth` counts under 21s with appearances who are still in
+ * your squad, and four of the five board asks read the squad the same way.
+ * Selling, loaning out or paying off one of those players took 6 points off a
+ * live score through three buttons the game really has (measured: Ajax 43 to
+ * 37, Le Havre 17 to 11, and a season forked at week 20 finishing 58 if you
+ * kept the player and 48 if you paid him off). So the board term lands ONLY at
+ * the final whistle, where the board itself settles the card, and there is no
+ * sequence of readings for it to fall through.
+ *
+ * `simClubManagerScore` section 2 samples the score after every match of many
+ * seeded seasons and fails if it ever drops. Its first version played every
+ * career hands off and never bought, sold, loaned or paid off anybody, so it
+ * reported zero drops while all three of those buttons dropped the score. It
+ * exercises them now.
  *
  * THE SCALE STAYS 0..130 ON PURPOSE. `game_score_caps.max_score` for
  * `club-manager` is 130 with 185,460 rows already recorded against it, and the
@@ -68,14 +84,22 @@ export const LEDGER_CAP = 130;
  * the correlation with the club's preview XI rating. This set won on all
  * three. Measured against the old rule on the same 77 seasons:
  *
- *                            OLD     NEW
- *   median score              63      62
- *   correlation with grade  0.312   0.481
- *   correlation with club XI 0.776   0.311
- *   mean score, grade A       65.8    82.2
- *   mean score, grade B       67.2    69.2
- *   mean score, grade C       58.4    48.8
- *   mean score, grade D       28.8    34.8
+ *                              OLD     NEW
+ *   median score                63      63
+ *   correlation with grade    0.312   0.482
+ *   correlation with club XI   0.776   0.314
+ *   correlation with the board 0.132   0.577
+ *   mean score, grade A         65.8    82.1
+ *   mean score, grade B         67.2    69.4
+ *   mean score, grade C         58.4    48.8
+ *   mean score, grade D         28.8    34.5
+ *
+ * One club in the first calibration run, "Midtjylland", is not in any playable
+ * league. An unknown name does not throw: clubDefFor returns a flat fallback
+ * and leagueOf falls back to the PREMIER LEAGUE, so it silently became an
+ * invented Premier League club. The table above is the rerun with the real
+ * name, and simClubManagerScore now refuses to start if any club it names is
+ * not in a playable league.
  *
  * The old rule could not even order A above B (65.8 against 67.2). This one
  * separates all four bands in the right order.
@@ -113,8 +137,8 @@ export const EURO_POINTS: readonly number[] = [0, 7, 13, 18, 24];
  * manager's points have to be estimated. It is estimated at a FIXED neutral
  * rate rather than at the player's own scoring rate, and that choice is the
  * whole point: a rate estimate rises as you lose (subtract `pts * played /
- * leaguePlayed` and thirteen straight defeats read 24 of 40 form points, and
- * climbing), which pays a player for losing. A constant cannot do that.
+ * leaguePlayed` and thirteen straight defeats read a rising share of the form
+ * term), which pays a player for losing. A constant cannot do that.
  * 1.35 is roughly the points per game a league hands out on average, since
  * three points are shared between a winner and a loser and about a quarter of
  * matches are drawn.
@@ -141,6 +165,11 @@ export interface SeasonHandover {
   objectivesDone: number;
   /** The league was already won when you arrived. */
   wonLeague: boolean;
+  /**
+   * True when this is the legacy ESTIMATE rather than a record stamped at the
+   * handover, so the honours terms know they cannot be trusted to subtract.
+   */
+  estimated?: boolean;
 }
 
 export interface SeasonLedgerInput {
@@ -160,6 +189,8 @@ export interface SeasonLedgerInput {
   euroRank: number;
   /** objectiveStatuses(career) entries reading 'done'. */
   objectivesDone: number;
+  /** career.week >= career.calendar.length. The board card settles here. */
+  seasonDone: boolean;
   /** The stamped handover, or null on a career started from week 0. */
   handover: SeasonHandover | null;
   /**
@@ -197,9 +228,16 @@ const NOTHING: SeasonLedger = { form: 0, title: 0, cup: 0, euro: 0, objectives: 
  */
 export function handoverOf(i: SeasonLedgerInput): SeasonHandover | null {
   if (i.handover) {
+    /* The two clamps are a consistency check, not decoration. `played` and
+       `pts` come out of localStorage, which the player can edit, and a
+       handover claiming to have played MORE games than the table has records
+       of would shrink `mine` towards 1 and hand out the whole form term for a
+       single win. Neither can exceed what the table itself says happened. */
+    const playedCeiling = Math.max(0, int(i.leaguePlayed, 0, 500));
+    const ptsCeiling = Math.max(0, int(i.leaguePts, 0, 500));
     return {
-      pts: Math.max(0, int(i.handover.pts, 0, Number.MAX_SAFE_INTEGER)),
-      played: Math.max(0, int(i.handover.played, 0, Number.MAX_SAFE_INTEGER)),
+      pts: Math.min(ptsCeiling, Math.max(0, int(i.handover.pts, 0, Number.MAX_SAFE_INTEGER))),
+      played: Math.min(playedCeiling, Math.max(0, int(i.handover.played, 0, Number.MAX_SAFE_INTEGER))),
       cupRank: rank04(i.handover.cupRank),
       euroRank: rank04(i.handover.euroRank),
       objectivesDone: Math.max(0, int(i.handover.objectivesDone, 0, 99)),
@@ -214,10 +252,18 @@ export function handoverOf(i: SeasonLedgerInput): SeasonHandover | null {
   return {
     pts: Math.round(LEGACY_PPG * played),
     played,
+    /* These three are NOT knowable from a pre Round 628 save, and zeroing them
+       is not neutral: it credits the new manager with the cup run, the
+       European run and the board ticks the previous manager banked, which
+       measured at about 15 points of 130 on average and 40 at worst. They are
+       left at zero here and the honours terms below scale by the share of the
+       season actually managed instead, which is the honest reading of "we do
+       not know what he did, so you are paid for your part of it". */
     cupRank: 0,
     euroRank: 0,
     objectivesDone: 0,
     wonLeague: false,
+    estimated: true,
   };
 }
 
@@ -241,14 +287,14 @@ export function seasonLedger(i: SeasonLedgerInput): SeasonLedger {
   const mine = Math.max(1, rounds - inherited);
   const share = mine / rounds;
 
-  /* LEAGUE FORM, 0..40. Points you banked over the points your own remaining
-     fixtures offered. The denominator is a season constant and the numerator
-     only rises, so this term can never fall. */
+  /* LEAGUE FORM, 0..W_FORM. Points you banked over the points your own
+     remaining fixtures offered. The denominator is a season constant and the
+     numerator only rises, so this term can never fall. */
   const rawPts = Math.max(0, int(i.leaguePts, 0, 500));
   const myPts = Math.max(0, rawPts - (h ? Math.max(0, h.pts) : 0));
   const form = int(W_FORM * Math.min(1, myPts / (3 * mine)), 0, W_FORM);
 
-  /* THE TITLE, 0..26, scaled by the share of the season you managed. Taking
+  /* THE TITLE, 0..W_TITLE, scaled by the share of the season you managed. Taking
      over a side already top with six games left and lifting the trophy is
      real, and it is not the same as winning it over thirty eight. A club that
      had already mathematically won it when you walked in pays nothing. */
@@ -256,18 +302,40 @@ export function seasonLedger(i: SeasonLedgerInput): SeasonLedger {
     ? int(W_TITLE * share, 0, W_TITLE)
     : 0;
 
-  /* THE KNOCKOUTS, 0..24 each. Only the rounds you took the club through
-     count, so inheriting a semi finalist pays for the final and not the
-     three rounds before it. */
-  const cup = Math.max(0, CUP_POINTS[rank04(i.cupRank)] - (h ? CUP_POINTS[rank04(h.cupRank)] : 0));
-  const euro = Math.max(0, EURO_POINTS[rank04(i.euroRank)] - (h ? EURO_POINTS[rank04(h.euroRank)] : 0));
+  /* THE KNOCKOUTS, up to CUP_POINTS[4] and EURO_POINTS[4]. Only the rounds
+     you took the club through count, so inheriting a semi finalist pays for
+     the final and not the three rounds before it.
+     On a LEGACY takeover the previous manager's rank is unknown rather than
+     zero, so the run is paid at the share of the season actually managed
+     instead of being subtracted. */
+  const est = !!(h && h.estimated);
+  const rawCup = Math.max(0, CUP_POINTS[rank04(i.cupRank)] - (h && !est ? CUP_POINTS[rank04(h.cupRank)] : 0));
+  const rawEuro = Math.max(0, EURO_POINTS[rank04(i.euroRank)] - (h && !est ? EURO_POINTS[rank04(h.euroRank)] : 0));
+  const cup = est ? int(rawCup * share, 0, CUP_POINTS[4]) : rawCup;
+  const euro = est ? int(rawEuro * share, 0, EURO_POINTS[4]) : rawEuro;
 
-  /* THE BOARD, 4 each and 20 at most. This is the term that knows which club
-     you are at, and it is the right one to: the board asks a giant for the
-     title and a minnow to stay up, so ticking the box means the same amount
-     of management either way. */
-  const done = Math.max(0, int(i.objectivesDone, 0, 99) - (h ? h.objectivesDone : 0));
-  const objectives = Math.min(W_OBJ_CAP, done * W_OBJ_EACH);
+  /* THE BOARD, W_OBJ_EACH each and W_OBJ_CAP at most, and ONLY AT THE FINAL
+     WHISTLE. This is the term that knows which club you are at, and it is the
+     right one to: the board asks a giant for the title and a minnow to stay
+     up, so ticking the box means the same amount of management either way.
+
+     THE WHISTLE GATE IS WHAT KEEPS THE SCORE MONOTONE, and the first version
+     of this round shipped without it and was wrong. `objectiveStatuses`
+     recomputes `youth` from the CURRENT squad on every call
+     (clubManager.ts, `career.squad.filter(p => p.age <= 21 && p.apps > 0)`),
+     and four of the five board asks read the squad the same way. So a tick
+     could flip back OFF: paying a man off, selling him, or loaning him out
+     took 6 points off a live score, through three buttons the game actually
+     has. Measured on the real engine: Ajax 43 to 37, Le Havre 17 to 11, and a
+     season forked at week 20 finished 58 if you kept him and 48 if you paid
+     him off. Grading the card once, where the board itself settles it, means
+     there is no sequence of readings to fall through, and it makes the score
+     agree with the tick list printed beside it on the same screen. */
+  const doneNow = Math.max(0, int(i.objectivesDone, 0, 99) - (h && !est ? h.objectivesDone : 0));
+  const rawObjectives = Math.min(W_OBJ_CAP, doneNow * W_OBJ_EACH);
+  const objectives = !i.seasonDone ? 0
+    : est ? int(rawObjectives * share, 0, W_OBJ_CAP)
+      : rawObjectives;
 
   const total = int(form + title + cup + euro + objectives, 0, LEDGER_CAP);
   return { form, title, cup, euro, objectives, total };
@@ -279,14 +347,18 @@ export function seasonLedgerScore(i: SeasonLedgerInput): number {
 }
 
 /**
- * The most anyone could score, used by the help copy and by the harness so the
- * ceiling is derived in one place rather than written down twice.
+ * What the five terms add up to BEFORE the cap. It is 154, deliberately more
+ * than 130: a season has to be outstanding rather than literally perfect to
+ * reach the top of the scale. Exported so the help copy and the harness read
+ * one number instead of writing it down twice.
  */
+export function ledgerRawCeiling(): number {
+  return W_FORM + W_TITLE + CUP_POINTS[4] + EURO_POINTS[4] + W_OBJ_CAP;
+}
+
+/** The most anyone can actually score. */
 export function ledgerCeiling(): number {
-  return Math.min(
-    LEDGER_CAP,
-    W_FORM + W_TITLE + CUP_POINTS[4] + EURO_POINTS[4] + W_OBJ_CAP,
-  );
+  return Math.min(LEDGER_CAP, ledgerRawCeiling());
 }
 
 /**

@@ -14826,8 +14826,8 @@ export function ensureHandover(state: CareerState): SeasonHandover | null {
  * declaration and startMidSeason), and ClubManager.tsx:745 already guards its
  * own takeover banner with `c.season === 1` for the same reason. Without the
  * gate, every season from the second onward of a takeover career would
- * subtract a manager who does not exist, and the 40 point form term would read
- * zero for roughly two thirds of every one of them.
+ * subtract a manager who does not exist, and the form term would read zero for
+ * roughly two thirds of every one of them.
  */
 export function seasonLedgerInputOf(career: CareerState): SeasonLedgerInput {
   const row = career.table.find(r => r.club === career.clubName);
@@ -14844,6 +14844,11 @@ export function seasonLedgerInputOf(career: CareerState): SeasonLedgerInput {
     cupRank: cupProgressRank(career).rank,
     euroRank: uclProgressRank(career).rank,
     objectivesDone: objectiveStatuses(career).filter(o => o.status === 'done').length,
+    /* The board card settles at the final whistle, exactly where
+       objectiveStatuses itself settles the league, defence and youth shapes.
+       The score reads it there and nowhere else, because a live reading can
+       come back off when the squad changes. */
+    seasonDone: career.week >= career.calendar.length,
     handover: stamped,
     legacyStart: !stamped && career.season === 1 ? (career.midSeasonStart ?? null) : null,
   };

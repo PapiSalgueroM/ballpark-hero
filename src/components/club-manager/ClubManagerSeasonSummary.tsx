@@ -26,6 +26,7 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
   /* Optional: a summary stored before Round 628 carries no breakdown, and the
      block below simply does not render for it. */
   const parts = sm.seasonScoreParts;
+  const partsTotal = parts ? parts.form + parts.title + parts.cup + parts.euro + parts.objectives : 0;
   let tick = 0;
   const tickIn = () => ({ animationDelay: revealDelay(tick++) });
   return (
@@ -145,7 +146,12 @@ export default function ClubManagerSeasonSummary({ sm, c, g }: {
                   Season score {sm.seasonScore} of 130
                 </div>
                 <p className="cm-tick-in text-xs text-muted-foreground" style={tickIn()}>
-                  {SCORE_TERMS.filter(t => parts[t.key] > 0).map(t => `${t.label} ${parts[t.key]}`).join(' · ') || 'Nothing on the board yet'}
+                  {SCORE_TERMS.filter(t => parts[t.key] > 0).map(t => `${t.label} ${parts[t.key]}`).join(' · ') || 'Nothing scored this season'}
+                  {/* The five terms are worth 154 between them and the scale
+                      stops at 130, so an outstanding season earns more than it
+                      can be paid. Saying so beats printing a list that visibly
+                      adds up to more than the number printed above it. */}
+                  {partsTotal > sm.seasonScore && ` · ${partsTotal} earned, capped at 130`}
                 </p>
               </div>
             )}

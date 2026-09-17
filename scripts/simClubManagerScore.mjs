@@ -21,13 +21,14 @@
  * scored under both rules. These are where the thresholds below come from:
  *
  *                             OLD     NEW
- *   median score               63      62
- *   correlation with grade   0.312   0.481
- *   correlation with club XI  0.776   0.311
- *   mean, grade A             65.8    82.2
- *   mean, grade B             67.2    69.2
+ *   median score               63      63
+ *   correlation with grade   0.312   0.482
+ *   correlation with club XI  0.776   0.314
+ *   correlation with the board 0.132  0.577
+ *   mean, grade A             65.8    82.1
+ *   mean, grade B             67.2    69.4
  *   mean, grade C             58.4    48.8
- *   mean, grade D             28.8    34.8
+ *   mean, grade D             28.8    34.5
  *
  * The old rule could not order A above B. Thresholds are set from that spread
  * with headroom, never from a number that felt right.
@@ -57,6 +58,18 @@
  *   CM_SCORE_CONTROL=europriced   prices Europe into the ceiling, so the five
  *                                 leagues with no European route can never
  *                                 reach 130. Section 7.
+ *   CM_SCORE_CONTROL=liveobjectives grades the board card LIVE instead of at
+ *                                 the final whistle, which is the bug the
+ *                                 adversarial review found: selling or paying
+ *                                 off an under 21 un-ticks the youth objective
+ *                                 and takes 6 points off a live score.
+ *                                 Section 2 must go red.
+ *   CM_SCORE_CONTROL=legacyfreecup pays a pre Round 628 takeover save in full
+ *                                 for the previous manager's cup run,
+ *                                 European run and board card. Section 5.
+ *   CM_SCORE_CONTROL=copydrift    moves a weight without touching the help
+ *                                 copy, which is how the screen starts lying
+ *                                 to the player. Section 10 must go red.
  *
  * Run: node scripts/simClubManagerScore.mjs
  */
@@ -73,7 +86,7 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const isNum = v => typeof v === 'number' && Number.isFinite(v);
 
-const KNOWN = ['rawpoints', 'ratescore', 'oldrule', 'nohandover', 'nolegacygate', 'europriced'];
+const KNOWN = ['rawpoints', 'ratescore', 'oldrule', 'nohandover', 'nolegacygate', 'europriced', 'liveobjectives', 'legacyfreecup', 'copydrift'];
 const CONTROL = process.env.CM_SCORE_CONTROL || '';
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`CM_SCORE_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
@@ -129,6 +142,23 @@ if (CONTROL === 'rawpoints') {
      every later season subtract a manager who does not exist. */
   engine = swap(engine, '    legacyStart: !stamped && career.season === 1 ? (career.midSeasonStart ?? null) : null,',
     '    legacyStart: !stamped ? (career.midSeasonStart ?? null) : null,', 'clubManager.ts');
+} else if (CONTROL === 'liveobjectives') {
+  /* Puts back the version that graded the board card LIVE instead of at the
+     final whistle. That is the bug the adversarial review found: selling,
+     loaning out or paying off an under 21 un-ticks the youth objective and
+     takes 6 points off a live score. Section 2 must go red. */
+  score = swap(score, "  const objectives = !i.seasonDone ? 0",
+    '  const objectives = false ? 0', 'clubManagerScore.ts');
+} else if (CONTROL === 'legacyfreecup') {
+  /* Puts back the version that paid a pre Round 628 takeover save in full for
+     the previous manager's cup run, European run and board card. Section 5
+     must go red. */
+  score = swap(score, '  const est = !!(h && h.estimated);',
+    '  const est = false;', 'clubManagerScore.ts');
+} else if (CONTROL === 'copydrift') {
+  /* Moves a weight without touching the help copy, which is exactly how the
+     screen ends up lying to the player. Section 10 must go red. */
+  score = swap(score, 'export const W_FORM = 48;', 'export const W_FORM = 44;', 'clubManagerScore.ts');
 } else if (CONTROL === 'europriced') {
   score = swap(score, '  return Math.min(LEDGER_CAP, W_FORM + W_TITLE + CUP_POINTS[4] + W_OBJ_CAP);',
     '  return Math.min(LEDGER_CAP, W_FORM + W_TITLE + CUP_POINTS[4] + W_OBJ_CAP) - 24;', 'clubManagerScore.ts');
@@ -178,17 +208,41 @@ execSync(
   { stdio: 'inherit' },
 );
 
+/* Registered as a process hook, not a bare statement at the end: a section
+   that throws or a control that exits early would otherwise leave the
+   rewritten engine sitting in dist/ for the next run to trip over. */
+process.on('exit', () => {
+  try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }
+});
+
 const mod = await import(pathToFileURL(BUNDLE).href);
 const cm = mod.engine;
 const S = mod.scoreMod;
 const {
   startCareer, playNextEntry, finishSeason, startNextSeason,
   clubDefFor, clubPreviewRating, currentSeasonScore, REAL_LEAGUES,
+  terminateContract, canPayOff, acceptBid, playableClubs,
 } = cm;
 
 /* Every playable league size in the game, read from the engine rather than
    written down, so a new league joins this harness on its own. */
 const LEAGUE_SIZES = [...new Set(REAL_LEAGUES.map(l => l.clubs.length))].sort((a, b) => a - b);
+
+/* EVERY CLUB THIS HARNESS NAMES MUST BE REAL, and this is not pedantry. A name
+   clubDefMap does not know does NOT throw: clubDefFor returns a flat fallback
+   (tier 4, expectation 10) and leagueOf falls back to the PREMIER LEAGUE, so a
+   typo silently becomes an invented Premier League club and quietly poisons
+   the two correlation gates below. simClubManagerFreeAgents learned this the
+   same way. */
+function assertRealClubs(names, where) {
+  const known = new Set(REAL_LEAGUES.flatMap(l => playableClubs(l.id).map(c => c.name)));
+  const missing = names.filter(n => !known.has(n));
+  if (missing.length) {
+    console.error(`${where} names ${missing.length} club(s) that are not in any playable league: ${missing.join(', ')}`);
+    console.error('  An unknown name does not throw, it becomes a fallback Premier League club, so the sample would be quietly wrong.');
+    process.exit(1);
+  }
+}
 
 /** Play one season with nobody managing. Returns null if the manager is sacked. */
 function playSeason(state) {
@@ -227,7 +281,7 @@ console.log('1) The same season scores the same in a 10 club league and a 24 clu
         leaguePlayed: rounds,
         leagueRounds: rounds,
         wonLeague: p.won, cupRank: p.cup, euroRank: p.euro, objectivesDone: p.obj,
-        handover: null, legacyStart: null,
+        seasonDone: true, handover: null, legacyStart: null,
       });
       seen.push({ size, total });
       checked += 1;
@@ -242,7 +296,12 @@ console.log('1) The same season scores the same in a 10 club league and a 24 clu
       fail(`the same season scores ${Math.min(...vals)} to ${Math.max(...vals)} across league sizes ${LEAGUE_SIZES.join(', ')}, a spread of ${spread}. League size is leaking into the score.`);
     }
   }
-  if (checked < LEAGUE_SIZES.length * profiles.length) fail('not every league size was scored, so this section proves nothing');
+  /* The old guard here compared a counter incremented unconditionally inside
+     the loops against the product of their lengths, so it could not fail. What
+     actually needs asserting is that the engine handed us a real spread of
+     league sizes to vary. */
+  if (LEAGUE_SIZES.length < 5) fail(`only ${LEAGUE_SIZES.length} distinct league sizes were found (${LEAGUE_SIZES.join(', ')}), so varying league size proves nothing`);
+  if (checked !== LEAGUE_SIZES.length * profiles.length) fail(`scored ${checked} combinations against ${LEAGUE_SIZES.length * profiles.length} expected`);
 }
 
 function seasonScoreFor(input) {
@@ -250,26 +309,30 @@ function seasonScoreFor(input) {
 }
 
 /* ---------- 2. The monotone law ---------- */
-console.log('2) The score never falls, because the leaderboard takes the day best');
+console.log('2) The score never falls, even when you sell, loan out or pay somebody off');
 {
   /* global_leaderboard ranks on max(least(score, max_score)) per player per
      game per DAY and recordActivity pings after every match, so a score that
      can fall pays a player for their luckiest afternoon rather than for the
-     season. This walks real seasons and samples after every entry. */
-  /* Twelve clubs across the league sizes, not six. A separate probe over 18
-     careers and up to four seasons each sampled 2,063 readings and found ZERO
-     drops in the score and zero in objectivesDone, which is the one input
-     that could in principle un-tick mid season (sell the blooded under 21 who
-     satisfied the youth objective). Twelve is the runtime this harness can
-     carry while keeping that measurement meaningful. */
+     season.
+
+     THE FIRST VERSION OF THIS SECTION PLAYED EVERY CAREER HANDS OFF, and that
+     is how it reported "0 of them lower" while three live buttons dropped the
+     score by 6 each. objectiveStatuses recomputes the youth objective from the
+     CURRENT squad, and four of the five board asks read the squad the same
+     way, so removing a qualifying player un-ticked a box that had already been
+     paid for. It exercises all three removal paths now: the contracts desk pay
+     off, accepting a bid, and loaning a man out. A monotonicity check that
+     never changes the squad is not a monotonicity check. */
   const CLUBS = ['Newcastle', 'Sevilla', 'Stuttgart', 'Celtic', 'Le Havre', 'Napoli',
     'Rijeka', 'Twente', 'Wolves', 'Al-Hilal', 'Galatasaray', 'Lecce'];
-  let drops = 0, samples = 0, careers = 0, worst = null;
+  assertRealClubs(CLUBS, "section 2's sample");
+  let drops = 0, samples = 0, careers = 0, removals = 0, worst = null;
   for (const club of CLUBS) {
     let s;
     try { s = startCareer(club); } catch { continue; }
     let prev = currentSeasonScore(s);
-    let guard = 0, alive = true;
+    let guard = 0;
     careers += 1;
     for (;;) {
       guard += 1;
@@ -277,21 +340,51 @@ console.log('2) The score never falls, because the leaderboard takes the day bes
       const res = playNextEntry(s, { skipHalftime: true });
       s = res.state;
       if (res.kind === 'seasonOver') break;
-      const now = currentSeasonScore(s);
-      samples += 1;
-      if (now < prev) {
-        drops += 1;
-        if (!worst || prev - now > worst.by) worst = { club, week: s.week, from: prev, to: now, by: prev - now };
+
+      const check = label => {
+        const now = currentSeasonScore(s);
+        samples += 1;
+        if (now < prev) {
+          drops += 1;
+          if (!worst || prev - now > worst.by) worst = { club, week: s.week, from: prev, to: now, by: prev - now, label };
+        }
+        prev = now;
+      };
+      check('after a match');
+
+      /* Every few weeks, take somebody out of the squad through whichever
+         route is open, and read the score again straight afterwards. These are
+         the exact calls the three buttons make (useClubManager's terminate,
+         acceptBid and loanOut). */
+      if (s.week % 5 === 0) {
+        const bid = (s.incomingBids ?? [])[0];
+        if (bid) {
+          const after = acceptBid(s, bid.playerId);
+          if (after) { s = after; removals += 1; check('after accepting a bid'); }
+        }
       }
-      prev = now;
-      if (s.sacked) { alive = false; break; }
+      if (s.week % 7 === 0) {
+        /* Prefer an under 21 with appearances: that is the player the youth
+           objective counts, so it is the removal most likely to un-tick a box
+           that has already been paid for. */
+        const kids = s.squad.filter(p => p.age <= 21 && (p.apps ?? 0) > 0 && canPayOff(s, p));
+        const target = kids[0] ?? s.squad.filter(p => canPayOff(s, p))[0];
+        if (target) {
+          const after = terminateContract(s, target.id);
+          if (after) { s = after; removals += 1; check('after paying a man off'); }
+        }
+      }
+      if (s.sacked) break;
     }
-    void alive;
   }
-  console.log(`   ${careers} careers, ${samples} readings sampled after a match, ${drops} of them lower than the reading before`);
+  console.log(`   ${careers} careers, ${samples} readings, ${removals} players taken out of a squad mid season, ${drops} readings lower than the one before`);
   if (samples < 450) fail(`only ${samples} readings were sampled, so this section proves nothing`);
+  /* The removals floor is the whole point: without it this section passes by
+     never doing the thing that used to break it. Measured healthy: 60 to 120
+     removals across the twelve careers. */
+  if (removals < 25) fail(`only ${removals} players were removed from a squad, so this section is back to the hands-off version that missed the bug`);
   if (drops > 0) {
-    fail(`the score fell ${drops} times, worst ${worst.club} week ${worst.week}: ${worst.from} to ${worst.to}. The day best is a MAX, so a score that can fall is farmable.`);
+    fail(`the score fell ${drops} times, worst ${worst.club} week ${worst.week} ${worst.label}: ${worst.from} to ${worst.to}. The day best is a MAX, so a score that can fall is farmable.`);
   }
 }
 
@@ -313,8 +406,9 @@ const SAMPLE = (() => {
     'Napoli', 'Aston Villa', 'Newcastle', 'Sevilla', 'Stuttgart', 'Ajax', 'Benfica', 'Celtic',
     'Le Havre', 'Hull City', 'Bologna', 'Galatasaray', 'Al-Hilal', 'Dinamo Zagreb',
     'Rangers', 'Feyenoord', 'Porto', 'Lazio', 'Wolves', 'Brentford', 'Augsburg', 'Nice',
-    'Lecce', 'Getafe', 'Twente', 'Rijeka', 'Sturm Graz', 'Midtjylland',
+    'Lecce', 'Getafe', 'Twente', 'Rijeka', 'Sturm Graz', 'FC Midtjylland',
   ];
+  assertRealClubs(CLUBS, 'the sections 3 and 4 sample');
   const rows = [];
   for (const club of CLUBS) {
     let s0;
@@ -347,14 +441,15 @@ console.log('3) Management held identical, the club varied: how much does statur
   else {
     const r = correlation(SAMPLE.map(x => x.xi), SAMPLE.map(x => x.score));
     console.log(`   ${SAMPLE.length} seasons, correlation between the club's preview XI rating and its season score: ${r.toFixed(3)}`);
-    /* MEASURED, both arms, on this exact sample across three extra seeds:
-         new rule  0.185  0.366  0.452
-         old rule  0.689  0.753  0.818
-       The bands do not touch. The gate is 0.58, roughly midway through the
-       gap, so the healthy arm has about 0.13 of headroom and the control
-       about 0.11. It is set from that measured spread and not from a number
-       that felt right. */
-    if (r > 0.58) fail(`stature still explains the score: correlation ${r.toFixed(3)} against a ceiling of 0.58 (measured: new rule 0.185 to 0.452, old rule 0.689 to 0.818)`);
+    /* MEASURED, both arms, on this exact sample across three seeds, AFTER the
+       whistle gate on the board term:
+         new rule  0.030  0.231  0.260
+         old rule  0.679  0.745  0.780
+       The bands do not touch. The gate is 0.47, midway through the gap, so
+       each arm has about 0.21 of headroom. Re-measured rather than inherited:
+       an earlier draft used 0.58, which left the CONTROL only 0.10 of room,
+       and a threshold is only as good as the arm it is closest to. */
+    if (r > 0.47) fail(`stature still explains the score: correlation ${r.toFixed(3)} against a ceiling of 0.47 (measured: new rule 0.030 to 0.260, old rule 0.679 to 0.780)`);
   }
 }
 
@@ -375,14 +470,16 @@ console.log('4) The score follows what the board actually asked for');
       .filter(x => x.v.length >= 3)
       .map(x => `${x.g} n=${x.v.length} mean ${mean(x.v).toFixed(1)}`);
     console.log('   by the board verdict grade: ' + line.join('   '));
-    /* MEASURED, both arms, across three extra seeds:
-         new rule  0.440  0.483  0.586
-         old rule  0.086  0.104  0.110
+    /* MEASURED, both arms, across three seeds, after the whistle gate:
+         new rule  0.669  0.674  0.746
+         old rule  0.095  0.216  0.253
        A far wider gap than the stature one, which is why this is the gate and
        the verdict grade is only printed: the strongest signal available, not
-       the most descriptive one. Floor 0.28, about 0.16 clear of the healthy
-       arm and 0.17 clear of the control. */
-    if (r < 0.28) fail(`the score barely follows the board: correlation ${r.toFixed(3)} against a floor of 0.28 (measured: new rule 0.440 to 0.586, old rule 0.086 to 0.110)`);
+       the most descriptive one. Floor 0.45, midway, about 0.22 clear of the
+       healthy arm and 0.20 clear of the control. An earlier draft used 0.28,
+       which the old rule cleared at 0.253 on one seed: 0.027 of room is not a
+       threshold, it is a coin toss waiting to happen. */
+    if (r < 0.45) fail(`the score barely follows the board: correlation ${r.toFixed(3)} against a floor of 0.45 (measured: new rule 0.669 to 0.746, old rule 0.095 to 0.253)`);
   }
 }
 
@@ -396,7 +493,7 @@ console.log('5) Walking into a job part way through pays for your share and not 
   const full = {
     inTable: true, leaguePts: 90, leaguePlayed: rounds, leagueRounds: rounds,
     wonLeague: true, cupRank: 4, euroRank: 2, objectivesDone: 5,
-    handover: null, legacyStart: null,
+    seasonDone: true, handover: null, legacyStart: null,
   };
   const scratch = seasonScoreFor(full);
   /* He played 27 of the 38 and banked 70 of the 90, was already in the cup
@@ -409,14 +506,42 @@ console.log('5) Walking into a job part way through pays for your share and not 
   if (!(inherited < scratch)) {
     fail(`a takeover scored ${inherited} against ${scratch} for the same table, so the previous manager's season is being paid to you`);
   }
-  /* And the title a man had ALREADY won when you arrived pays nothing. */
+  /* The title a man had ALREADY won when you arrived pays nothing.
+     BE HONEST ABOUT WHAT THIS PROVES. handover.wonLeague can only be true if a
+     League Title trophy is already stamped when startMidSeason runs, and it
+     never is in shipped code, so the guard it polices is unreachable today.
+     It is kept as a property of the pure module (a save editor, or a future
+     takeover that starts from a finished season, would reach it) and is tested
+     here as such, not claimed as a live path. */
   const gifted = seasonScoreFor({
     ...full,
     handover: { pts: 80, played: 34, cupRank: 4, euroRank: 2, objectivesDone: 5, wonLeague: true },
   });
-  console.log(`   a league already won when you walked in: ${gifted}`);
+  console.log(`   a league already won when you walked in: ${gifted} (module level property, not reachable in shipped play)`);
   if (gifted >= inherited) fail(`inheriting a won league scored ${gifted}, at or above ${inherited} for inheriting a leader, so the title is being gifted`);
   if (gifted < 0 || gifted > 130) fail(`out of range: ${gifted}`);
+
+  /* THE LEGACY TAKEOVER, which IS reachable: a save written before this round
+     carries midSeasonStart and no stamped handover, so the previous manager's
+     cup run, European run and board ticks are unknown. Zeroing them paid the
+     new manager for all three. They are scaled by the share of the season he
+     actually managed instead, so a run-in takeover cannot bank a cup somebody
+     else won four rounds of. */
+  const rounds38 = 38;
+  const legacyRunIn = seasonScoreFor({
+    inTable: true, leaguePts: 90, leaguePlayed: rounds38, leagueRounds: rounds38,
+    wonLeague: false, cupRank: 4, euroRank: 4, objectivesDone: 5, seasonDone: true,
+    handover: null, legacyStart: 'runIn',
+  });
+  const legacyScratch = seasonScoreFor({
+    inTable: true, leaguePts: 90, leaguePlayed: rounds38, leagueRounds: rounds38,
+    wonLeague: false, cupRank: 4, euroRank: 4, objectivesDone: 5, seasonDone: true,
+    handover: null, legacyStart: null,
+  });
+  console.log(`   an old takeover save, same honours: from week 0 ${legacyScratch}, taking over for the run-in ${legacyRunIn}`);
+  if (!(legacyRunIn < legacyScratch)) {
+    fail(`a legacy run-in takeover scored ${legacyRunIn} against ${legacyScratch} from week 0 with the same cup, Europe and board card, so it is being paid for honours it cannot be shown to have won`);
+  }
 }
 
 /* ---------- 6. The legacy estimate stays in its own season ---------- */
@@ -490,7 +615,7 @@ console.log('7) The ceiling is reachable without a Champions League run');
   const best = seasonScoreFor({
     inTable: true, leaguePts: 3 * rounds, leaguePlayed: rounds, leagueRounds: rounds,
     wonLeague: true, cupRank: 4, euroRank: 0, objectivesDone: 5,
-    handover: null, legacyStart: null,
+    seasonDone: true, handover: null, legacyStart: null,
   });
   console.log(`   a perfect Championship season with no Europe scores ${best}`);
   if (best !== cap) fail(`a perfect season in a league with no European route scored ${best}, not ${cap}`);
@@ -501,13 +626,13 @@ console.log('8) 0 to 130 at both ends, and a malformed save cannot escape it');
 {
   const cap = S.LEDGER_CAP;
   const cases = [
-    ['nothing at all', { inTable: true, leaguePts: 0, leaguePlayed: 0, leagueRounds: 38, wonLeague: false, cupRank: 0, euroRank: 0, objectivesDone: 0, handover: null, legacyStart: null }],
-    ['not in the table', { inTable: false, leaguePts: 99, leaguePlayed: 38, leagueRounds: 38, wonLeague: true, cupRank: 4, euroRank: 4, objectivesDone: 9, handover: null, legacyStart: null }],
-    ['everything won', { inTable: true, leaguePts: 114, leaguePlayed: 38, leagueRounds: 38, wonLeague: true, cupRank: 4, euroRank: 4, objectivesDone: 9, handover: null, legacyStart: null }],
-    ['NaN points', { inTable: true, leaguePts: NaN, leaguePlayed: NaN, leagueRounds: NaN, wonLeague: false, cupRank: NaN, euroRank: NaN, objectivesDone: NaN, handover: null, legacyStart: null }],
-    ['negative everything', { inTable: true, leaguePts: -50, leaguePlayed: -9, leagueRounds: -3, wonLeague: false, cupRank: -2, euroRank: -7, objectivesDone: -4, handover: null, legacyStart: null }],
-    ['absurd ranks', { inTable: true, leaguePts: 1e9, leaguePlayed: 1e9, leagueRounds: 38, wonLeague: true, cupRank: 99, euroRank: 99, objectivesDone: 1e6, handover: null, legacyStart: null }],
-    ['garbage handover', { inTable: true, leaguePts: 60, leaguePlayed: 30, leagueRounds: 38, wonLeague: false, cupRank: 1, euroRank: 0, objectivesDone: 2, handover: { pts: NaN, played: -5, cupRank: 99, euroRank: NaN, objectivesDone: -1, wonLeague: false }, legacyStart: null }],
+    ['nothing at all', { inTable: true, leaguePts: 0, leaguePlayed: 0, leagueRounds: 38, wonLeague: false, cupRank: 0, euroRank: 0, objectivesDone: 0, seasonDone: true, handover: null, legacyStart: null }],
+    ['not in the table', { inTable: false, leaguePts: 99, leaguePlayed: 38, leagueRounds: 38, wonLeague: true, cupRank: 4, euroRank: 4, objectivesDone: 9, seasonDone: true, handover: null, legacyStart: null }],
+    ['everything won', { inTable: true, leaguePts: 114, leaguePlayed: 38, leagueRounds: 38, wonLeague: true, cupRank: 4, euroRank: 4, objectivesDone: 9, seasonDone: true, handover: null, legacyStart: null }],
+    ['NaN points', { inTable: true, leaguePts: NaN, leaguePlayed: NaN, leagueRounds: NaN, wonLeague: false, cupRank: NaN, euroRank: NaN, objectivesDone: NaN, seasonDone: true, handover: null, legacyStart: null }],
+    ['negative everything', { inTable: true, leaguePts: -50, leaguePlayed: -9, leagueRounds: -3, wonLeague: false, cupRank: -2, euroRank: -7, objectivesDone: -4, seasonDone: true, handover: null, legacyStart: null }],
+    ['absurd ranks', { inTable: true, leaguePts: 1e9, leaguePlayed: 1e9, leagueRounds: 38, wonLeague: true, cupRank: 99, euroRank: 99, objectivesDone: 1e6, seasonDone: true, handover: null, legacyStart: null }],
+    ['garbage handover', { inTable: true, leaguePts: 60, leaguePlayed: 30, leagueRounds: 38, wonLeague: false, cupRank: 1, euroRank: 0, objectivesDone: 2, seasonDone: true, handover: { pts: NaN, played: -5, cupRank: 99, euroRank: NaN, objectivesDone: -1, wonLeague: false }, legacyStart: null }],
   ];
   let bad = 0;
   for (const [name, input] of cases) {
@@ -537,9 +662,16 @@ console.log('9) SAVE_VERSION did not move and the new field is optional');
   let s;
   try { s = startCareer('Celtic'); } catch { s = null; }
   if (s) {
-    const absent = currentSeasonScore({ ...s, handover: undefined });
-    const nulled = currentSeasonScore({ ...s, handover: null });
-    console.log(`   handover absent ${absent}, handover null ${nulled}`);
+    /* ON A CAREER THAT HAS ACTUALLY PLAYED. A raw startCareer has no points,
+       no games and no honours, so absent and null both read 0 and the check
+       passes for ANY implementation, including one that ignores the field
+       entirely. Putting points on the board is what makes the two readings
+       capable of disagreeing. */
+    const played = { ...s, table: bumpMyRow(s, 52, 20) };
+    const absent = currentSeasonScore({ ...played, handover: undefined });
+    const nulled = currentSeasonScore({ ...played, handover: null });
+    console.log(`   52 points from 20 games: handover absent ${absent}, handover null ${nulled}`);
+    if (absent === 0) fail('the save shape check ran on a career with nothing on the board, so it cannot discriminate any implementation');
     if (absent !== nulled) fail(`an absent handover scores ${absent} and a null one ${nulled}; an older save must read the same as a new one`);
   } else fail('could not start a career for the save shape check');
   /* And the call shapes three other harnesses string match must still exist. */
@@ -551,6 +683,35 @@ console.log('9) SAVE_VERSION did not move and the new field is optional');
   if (ends < 3) fail(`only ${ends} recordCompletion(sm.seasonScore) calls left; simSessionMarks section 5 expects 3`);
 }
 
+/* ---------- 10. The help screen and the constants agree ---------- */
+console.log('10) The How To Play numbers are the numbers the code uses');
+{
+  /* Nothing tied these together before, so the weights could be retuned and
+     the screen would go on quoting the old ones at the player. The check reads
+     the CODE's numbers from the module and the COPY's numbers from the JSX,
+     rather than reading either twice. */
+  const help = fs.readFileSync(path.join(ROOT, 'src', 'components', 'club-manager', 'ClubManagerHelp.tsx'), 'utf8');
+  const para = (help.match(/Season score, out of [\s\S]*?<\/p>/) ?? [''])[0];
+  if (!para) fail('the season score paragraph is gone from ClubManagerHelp.tsx, so the copy cannot be checked against the code');
+  else {
+    const must = [
+      ['the scale', String(S.LEDGER_CAP)],
+      ['league form', String(S.W_FORM)],
+      ['the title', String(S.W_TITLE)],
+      ['a cup win', String(S.CUP_POINTS[4])],
+      ['a European win', String(S.EURO_POINTS[4])],
+      ['each objective', String(S.W_OBJ_EACH)],
+      ['the board cap', String(S.W_OBJ_CAP)],
+      ['the five terms before the cap', String(S.ledgerRawCeiling())],
+    ];
+    const missing = must.filter(([, n]) => !new RegExp(`\\b${n}\\b`).test(para));
+    console.log(`   checked ${must.length} numbers against the copy, ${missing.length} missing`);
+    for (const [what, n] of missing) {
+      fail(`the help copy does not state ${what} (${n}), so the screen and the code can disagree without anything going red`);
+    }
+  }
+}
+
 function correlation(a, b) {
   const mean = x => x.reduce((s, n) => s + n, 0) / x.length;
   const ma = mean(a), mb = mean(b);
@@ -559,8 +720,6 @@ function correlation(a, b) {
   const sb = Math.sqrt(mean(b.map(v => (v - mb) ** 2)));
   return sa === 0 || sb === 0 ? 0 : cov / (sa * sb);
 }
-
-try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }
 
 if (failures) {
   console.error(`\n${failures} SEASON SCORE CHECK${failures === 1 ? '' : 'S'} FAILED`);
