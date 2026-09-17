@@ -1,5 +1,16 @@
 # Work board
 
+**Round 628 BUILT, 2026-09-16, reviewed and pushed 2026-09-17: the Club Manager season score now
+reads the manager, not the club.** Head `dee0e5e`. Full detail in `docs/HANDOFF-2026-09-17.md` and
+`docs/PROJECT-STATE.md`. It is a ledger of shares now (form 48, title 28, cup 24, Europe 24, board
+6 each to 30; the four non-European terms sum to exactly 130 so the five leagues with no
+Champions League route can still top the scale), weights grid searched over 77 seeded seasons at
+34 clubs, fenced by `scripts/simClubManagerScore.mjs` at 10 sections with 9 controls all proved to
+fire. An adversarial review raised 42 findings across seven lenses, 11 refuted; the worst was that
+the monotone law the design rests on was FALSE (paying a man off un-ticked a board objective and
+took 6 points off a live score) and the section written to guard it was blind because it played
+every career hands off. The original claim and its measurements follow.
+
 **Round 628 CLAIMED, 2026-09-16: the Club Manager season score reads the club, not the manager.**
 On branch `claude/free-agents-contract-termination-5oeyzz` (the branch this lane was given; 628
 rides beside Round 619 on PR 103 rather than going to a branch this lane has no permission to
