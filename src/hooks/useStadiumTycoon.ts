@@ -7,6 +7,7 @@
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { recordCompletion } from '@/lib/completions';
+import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import { recordFullTimes } from '@/lib/tycoonRewards';
 import type { FullTime } from '@/lib/tycoonRewards';
 import {
@@ -106,6 +107,10 @@ export function useStadiumTycoon(getEdge?: () => number) {
   const goldenRef = useRef(golden);
   goldenRef.current = golden;
 
+  /* Round 657: the floater's clean up timer is owned by the page and dies
+     with it (see useOwnedTimeouts). */
+  const later = useOwnedTimeouts();
+
   const pushFloater = useCallback((text: string, kind: Floater['kind'], x?: number, y?: number) => {
     const f: Floater = {
       id: floaterSeq++,
@@ -116,8 +121,8 @@ export function useStadiumTycoon(getEdge?: () => number) {
     };
     setFloaters(cur => [...cur.slice(-14), f]);
     // Floaters clean themselves up after the animation finishes.
-    setTimeout(() => setFloaters(cur => cur.filter(g => g.id !== f.id)), 1900);
-  }, []);
+    later(() => setFloaters(cur => cur.filter(g => g.id !== f.id)), 1900);
+  }, [later]);
 
   /* Round 439: away earnings settle from the wall clock the ground has not
      already been paid for, so a fresh load and a tab that was only
