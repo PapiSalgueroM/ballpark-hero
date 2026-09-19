@@ -5794,9 +5794,11 @@ besides money. Everything else, decide yourself.** When one is resolved, delete 
    should know. The wider question behind it, whether unlimited modes anywhere should count
    toward points and the leaderboard, is his call and is unresolved across about ten games.
 
-2. **Competitor names in the public repo.** `docs/research/R1_soccer_sites.md` and
-   `docs/research/R3_creator_formats.md` name competitors by name in a public repo. Delete or
-   gitignore. Do not silently delete his research, ask him.
+2. **Competitor names in the public repo. RESOLVED 2026-09-19.** Anthony's direction that day
+   was to do everything that does not cost money, so `docs/research/R1_soccer_sites.md`,
+   `R2_us_sports_sites.md` and `R3_creator_formats.md` were untracked and gitignored. The files
+   stay on his disk; they are no longer in the tree (they remain in git history, which nobody is
+   rewriting).
 3. **Apple sign-in.** Parked on the $99/yr Apple developer account. Money.
 5. **The inflated points, the history.** Two leaks, both stopped forward, neither
    repaired backward. Round 392 stopped the per match one: every Club Manager match used

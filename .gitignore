@@ -76,3 +76,8 @@ src/lib/__control_*.ts
 /.agents/
 /.codex/
 /.claude/launch.json
+
+# Owner research that names other sites by name; kept on disk, never in the public repo (2026-09-19)
+docs/research/R1_soccer_sites.md
+docs/research/R2_us_sports_sites.md
+docs/research/R3_creator_formats.md
