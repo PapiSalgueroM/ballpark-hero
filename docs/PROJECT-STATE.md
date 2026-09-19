@@ -1,5 +1,59 @@
 # Project state
 
+## RELEASE C 2026-09-19 evening: Rounds 632, 640, 642, 636 and 650
+
+Built and gated by the desktop Claude lane in the CRLF gate clone on branch `release-c`, on top of
+main `9442fb9e`. Pushed to main as a fast forward; the publish record follows.
+
+- **632, youth padding kids are priced like real teenagers.** A Club Manager squad padded out with
+  generated kids gave each one a first team price, so the padding itself was a way to print money. A
+  pad now stores `youthPadValue` at creation, the market's own price for a teenager of his rating
+  (0.3m to 1.3m), with his wage pinned first so no bill moves. Older saves give the same value to
+  valueless pads on load, in the squad, out on loan and on the free agent list. Academy graduates and
+  scouted boys are untouched. Fence: `simYouthPadding`, four sections and three controls.
+- **640, created clubs are priced like real squads.** `buildCustomSquad` stored the raw curve as each
+  made up founder's value, so a mid tier squad rated 67.5 was worth 826.6m and sold for hundreds of
+  millions in the first window against budgets of 15, 40 or 90 million. A founder now carries the real
+  median money for his rating in his era. The first draft also capped the quality slider by budget,
+  which reversed Round 160's deliberate free slider, so it was rebuilt: the slider stays 55 to 88 on
+  every tier, and a squad founded above what its money buys sells on at the money's squad prices
+  through a sale ratio fixed at the founding, still rising as the players improve. The club's wage
+  cap carries those founders' wage room and sheds it as they leave. Old created saves are repriced
+  once on load, and every figure priced off an old sale price (open bids, release clauses, a loan's
+  buy option, an agreed part exchange) moves by new over old. The review found those old save holes
+  and a pad wage change; all were fixed before this release. Fence: `simCustomClubValues`.
+- **642, every game page has a keyword search title and description.** 127 titles and descriptions
+  live in `src/data/seoMeta.ts`, loaded in their own chunk so the entry bundle stays at main's size.
+  PageSeo reads the cache through `useSyncExternalStore` and holds a game's structured data until its
+  entry is known, which ended a duplicate Game JSON-LD on a cold load. Fence: `simSeoTitles`, with
+  controls for the entry chunk, the early structured data and a doubled block.
+- **636, Fight Career's condition bars ease toward the floor instead of clipping at it.** A good
+  player's losing options pinned at the floor and read as empty; the bars now bend toward it from 40
+  (`conditionShown`). Fences: `simFightCareer` and `simFightGym` section 6, control `strongpin`.
+
+- **650, the home page's headings carry search words, and two fixes in the same file.** Lovable's
+  numbers for 2026-09-05 to 09-19 show Bing sending 3,882 search visits against Google's 1,705, and
+  Bing leans on the raw HTML, so the template's static block now has keyword h2s and its five
+  questions are h3s phrased the way people ask them; the rendered home page names every game in an
+  h3 under its category (no visual change, the reset gives a heading the span's size). A search
+  audit then found two real defects in that file. The dead address script painted "404: there is no
+  page at this address" over every shared `/profile/<name>` link, because no username can have a
+  saved page; it now keeps the noindex, drops the home canonical and paints nothing there
+  (`playSoftFourOhFour` section 5; served from the build before, the 404 text and title checks go
+  red and nothing else does). And the static block called NFL Front Office "the soccer version" and
+  never linked four of the ten most viewed pages (College Grid, Player Bingo, Wonderkid Factory,
+  Build Your XI); both fixed. The format history heading commit on the same branch waits for the
+  next release, because it changes five saved pages.
+
+**Gates on this tree:** tsc 0. `build:seo` exit 0: 157 routes prerendered, 128 pages re-dated (every
+game page's head carries its new title and description), 23 held; 650's copy re-dated the home page
+alone afterwards (`simSitemap` caught the stale hash). Full node suite on the frozen built tree:
+335 of 336, the one red `simTycoonPitch` on "Vitest reported unhandled errors", which is the
+Stadium Tycoon timer firing after `tycoonHelp.test.tsx` tears down (seen on main by both of today's
+builders); release C touches no Tycoon code, and the harness is green alone on the same tree with
+all 8 controls firing. On the final commit, the 21 harnesses that read the template, the saved
+pages or the sitemap are green. Browser harnesses on the built final commit, served like the host: playSoftFourOhFour (with the new profile section), playHomeFold, playHowTo (127 of 127), sweepPhone, playSnapshotDrift, playRenderStability (151 routes, 5 renders each, 53 minutes under load), playClubManagerSaveLeave and playReducedMotion all green.
+
 ## LIVE 2026-09-19 afternoon: Round 638 part two (all 126 guides in keyword sections) and Round 641, main `02dd813e`
 
 Built and gated by the desktop Claude lane in the CRLF gate clone on branch `release-guides`, on top

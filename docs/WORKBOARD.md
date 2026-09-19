@@ -1,5 +1,41 @@
 # Work board
 
+**2026-09-19 evening, desktop Claude lane: Rounds 649 and 650 claimed, for search traffic.**
+Lovable's numbers for 2026-09-05 to 09-19: about 1,000 visitors a day, and Bing sends 3,882 of
+the search visits against Google's 1,705, so the raw HTML a crawler reads without running the app
+matters more than the rendered page for the bigger engine.
+- **649, one page per competition in The Record Books** (`/records/<slug>`, twelve of them, one
+  shared component), each with a keyword h1, decade h3s and a most titles table computed from
+  `recordBooks.json`; `/records` becomes the index. Building on `r649-record-pages`.
+- **650, the home page's headings carry search words.** The template's static block gets keyword
+  h2s and its questions become h3s; the rendered home page names each game in an h3. Built on
+  `r650-home-headings`, folded into release C with two fixes a search audit found in the same
+  file: shared `/profile/<name>` links opened on the template's 404 text (no username can have a
+  saved page), and the static block called NFL Front Office "the soccer version" and never linked
+  four of the ten most viewed pages. The format history headings commit waits for release D.
+
+**Rounds 651 to 656 claimed from that audit** (five lenses, 53 findings, every one confirmed by a
+skeptic re-reading the files; the full list is in the lane's notes):
+- **651, honest game page headings.** The guide heading prints the old title with " | DoUKnowBall"
+  on 73 game pages (the only h1 on 7); four pages lead with a description of the wrong game (the
+  soccer Higher or Lower says "football, NBA and UFC"); 20 h1s name no sport and copy a sibling
+  ("HIGHER OR LOWER" ten times); six registry labels carry no sport; "Fantasy DraftShowdown";
+  16 saved pages open on a frozen "Loading..." line; Budget Builder's guide missed Round 638.
+- **652, tables reach a crawler as tables.** The prerenderer turns every td into a p, so the
+  Record Books, the grid archives and the format histories read as streams of one word lines.
+- **653, the grid answer archives.** Stopped at 2026-08-30 while saying "the last 14"; the college
+  basketball archive publishes a placeholder name and duplicate players; headings never say
+  "answers". Regenerate as a named release step, dedupe, and fix the copy and headings.
+- **654, links between the big pages.** Soccer Career and Club Manager never link each other (the
+  two biggest search entries); the NBA and College hubs print 33 game paths as plain text; hub
+  h1s and the footer say "Football" for the NFL to a UK and Australian audience; breadcrumbs skip
+  the hub; the format histories get three or four links in.
+- **655, Club Manager's leagues and clubs as readable lists** in its guide, from the same data the
+  picker uses, with the CM_PARTIAL marks. Today 330 club names exist only as buttons.
+- **656, new pages from verified data already in the repo**, starting with the 2026 World Cup
+  results and the Finals MVP lists, each checked with dukb-data-guardian before a line is written.
+The next free number for anyone else is 657.
+
 **2026-09-19 evening, desktop Claude lane: the points audit, and Rounds 643 to 648 claimed.** Every
 game's recorded score was audited against its leaderboard cap (the owner's "a correct points system
 per game", PART). Eleven defect classes, the full table kept in the lane's notes and summarised in
@@ -16,8 +52,13 @@ per game", PART). Eleven defect classes, the full table kept in the lane's notes
 - **645, unranked runs and free points.** Non daily runs (free play, unlimited, new season) record
   under the daily key, so the day best becomes the best of N: a `ranked` flag on the recorder, the
   way Face Off already does it. And the per game scores that pay the cap or a big floor for no skill
-  (Build Your XI and Starting 5 pay 100 for finishing, NFL Career Path pays full for giving up, Ball IQ
-  pays 34 for zero correct, and more).
+  (Build Your XI and Starting 5 pay 100 for finishing, Ball IQ pays 34 for zero correct, and more;
+  NFL Career Path's full score for giving up moved into Round 643, whose review found it on the
+  line 643 rewrote). Plus what 643's review confirmed and left for this round: the dailies that
+  never lock and can be replayed and re-scored (Perfect Lineup classic, Pack Battle, Rarity Round,
+  Football Timeline, the NASCAR, Tennis and UFC chains), and the run based dailies that save only at
+  the end, so quitting mid run and reloading replays the day with the answers known (Buzzer Beater
+  and Free Kick among them).
 - **646, caps at each game's real ceiling.** Most caps were frozen as the highest score ever seen, so
   the same achievement pays 2.8 to 11.9 points across the four front offices; one migration sets every
   cap to the engine's real ceiling, fenced so a cap row must equal an exported ceiling.
