@@ -4,8 +4,9 @@ import { Helmet } from 'react-helmet-async';
 import { ALL_GAMES } from '@/data/gameRegistry';
 /* Round 210: the guide arrives one sport at a time instead of every word
    of prose on the site arriving on every page. See gameContent/loader.ts. */
-import { loadGameContent } from '@/data/gameContent/loader';
-import type { GameContent } from '@/data/gameContent/types';
+import { loadGameContent, peekGameContent } from '@/data/gameContent/loader';
+import type { GameContent, GuideSection, GuideStorySection } from '@/data/gameContent/types';
+import { flatGuide, guideH2Titles } from '@/data/gameContent/guideShape';
 // Round 181: the deterministic related-games graph (S-6 internal links).
 import { relatedGamesFor } from '@/lib/relatedGames';
 
@@ -42,6 +43,58 @@ interface GameSeoContentProps {
 // made that true: the array used to carry a generic placeholder set while the
 // guide file was loading, and that set fed the JSON-LD without ever appearing
 // on screen. See the long note on `faqs` below.
+/* Round 638: a guide part written as sections renders each one as an h3 over
+   its list, with any h4 groups under it, so the page reads h2, h3, h4 with no
+   level skipped (simGuideHeadings section 2). An ordered part (how to play)
+   keeps one running count across every list, so step seven is still step seven
+   whichever heading it sits under. */
+const GuideSections = ({ sections, ordered = false }: { sections: GuideSection[]; ordered?: boolean }) => {
+  let counted = 0;
+  const list = (items: string[]) => {
+    const start = counted + 1;
+    counted += items.length;
+    return ordered ? (
+      <ol start={start} className="list-decimal pl-5 space-y-2">
+        {items.map((item, i) => <li key={i}>{item}</li>)}
+      </ol>
+    ) : (
+      <ul className="list-disc pl-5 space-y-2">
+        {items.map((item, i) => <li key={i}>{item}</li>)}
+      </ul>
+    );
+  };
+  return (
+    <div className="space-y-5">
+      {sections.map((section, i) => (
+        <div key={i}>
+          <h3 className="text-sm font-semibold text-foreground mb-2">{section.heading}</h3>
+          {list(section.items)}
+          {section.subsections?.map((sub, j) => (
+            <div key={j} className="mt-3 pl-3">
+              <h4 className="text-xs font-semibold uppercase tracking-wide text-foreground/80 mb-1.5">{sub.heading}</h4>
+              {list(sub.items)}
+            </div>
+          ))}
+        </div>
+      ))}
+    </div>
+  );
+};
+
+/* The worked example as h3 beats, each over its own paragraphs. */
+const GuideStory = ({ sections }: { sections: GuideStorySection[] }) => (
+  <div className="space-y-5">
+    {sections.map((section, i) => (
+      <div key={i}>
+        <h3 className="text-sm font-semibold text-foreground mb-2">{section.heading}</h3>
+        <div className="space-y-3">
+          {section.paragraphs.map((p, j) => <p key={j}>{p}</p>)}
+        </div>
+      </div>
+    ))}
+  </div>
+);
+
 const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeoContentProps) => {
   const location = useLocation();
   const path = location.pathname;
@@ -61,15 +114,23 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
      doing, it was a 3.5 second settle racing a lazy chunk on a busy machine,
      and the single sample prerender had been exposed to the same race all
      along with nothing to notice it. */
-  const [content, setContent] = useState<GameContent | null | undefined>(undefined);
+  /* Round 638: a guide whose sport file is already held (a second game of the
+     same sport, or a harness that fetched it first) draws on the first render.
+     A first visit still starts at undefined, exactly as before. */
+  const [content, setContent] = useState<GameContent | null | undefined>(() => peekGameContent(path));
   useEffect(() => {
     let live = true;
-    setContent(undefined);
+    setContent(peekGameContent(path));
     loadGameContent(path).then(c => { if (live) setContent(c); });
     return () => { live = false; };
   }, [path]);
 
   const gameLabel = game?.label || title;
+  /* Round 638: a converted guide keeps its sentences only in its sections, so
+     the flat lists come through the accessor, and the h2 titles come from the
+     guide's own keyword bearing headings when it sets them. */
+  const guide = content ? flatGuide(content) : null;
+  const titles = content ? guideH2Titles(content, gameLabel) : null;
 
   /* ROUND 373: THERE IS NO FALLBACK FAQ ANY MORE, AND ITS REMOVAL FIXES TWO
      THINGS AT ONCE.
@@ -161,51 +222,67 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
 
           <div>
             <h2 className="text-base font-semibold text-foreground mb-3">
-              How to play {gameLabel}
+              {titles.howToPlay}
             </h2>
-            <ol className="list-decimal pl-5 space-y-2">
-              {content.howToPlay.map((step, i) => (
-                <li key={i}>{step}</li>
-              ))}
-            </ol>
+            {content.howToPlaySections ? (
+              <GuideSections sections={content.howToPlaySections} ordered />
+            ) : (
+              <ol className="list-decimal pl-5 space-y-2">
+                {guide.howToPlay.map((step, i) => (
+                  <li key={i}>{step}</li>
+                ))}
+              </ol>
+            )}
           </div>
 
           <div>
             <h2 className="text-base font-semibold text-foreground mb-3">
-              Rules to know
+              {titles.rules}
             </h2>
-            <ul className="list-disc pl-5 space-y-2">
-              {content.rules.map((rule, i) => (
-                <li key={i}>{rule}</li>
-              ))}
-            </ul>
+            {content.ruleSections ? (
+              <GuideSections sections={content.ruleSections} />
+            ) : (
+              <ul className="list-disc pl-5 space-y-2">
+                {guide.rules.map((rule, i) => (
+                  <li key={i}>{rule}</li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <div>
             <h2 className="text-base font-semibold text-foreground mb-3">
-              Example walkthrough
+              {titles.example}
             </h2>
-            <div className="space-y-3">
-              {content.example.map((p, i) => (
-                <p key={i}>{p}</p>
-              ))}
-            </div>
+            {content.exampleSections ? (
+              <GuideStory sections={content.exampleSections} />
+            ) : (
+              <div className="space-y-3">
+                {guide.example.map((p, i) => (
+                  <p key={i}>{p}</p>
+                ))}
+              </div>
+            )}
           </div>
 
           <div>
             <h2 className="text-base font-semibold text-foreground mb-3">
-              Strategy tips
+              {titles.tips}
             </h2>
-            <ul className="list-disc pl-5 space-y-2">
-              {content.tips.map((tip, i) => (
-                <li key={i}>{tip}</li>
-              ))}
-            </ul>
+            {content.tipSections ? (
+              <GuideSections sections={content.tipSections} />
+            ) : (
+              <ul className="list-disc pl-5 space-y-2">
+                {guide.tips.map((tip, i) => (
+                  <li key={i}>{tip}</li>
+                ))}
+              </ul>
+            )}
           </div>
 
           <div>
             <h2 className="text-base font-semibold text-foreground mb-3">
-              {gameLabel} FAQ
+              {titles.faq}
             </h2>
             <div className="space-y-4">
               {faqs.map((faq, i) => (

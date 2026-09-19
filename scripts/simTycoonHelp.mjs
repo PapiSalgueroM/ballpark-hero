@@ -849,6 +849,13 @@ console.log(`   ${CLAIMS.length} claims hold (${tracked} in the stadium guide, $
 if (tracked < 30) fail(`only ${tracked} stadium claims, so the table is not covering the guide`);
 
 const clone = v => JSON.parse(JSON.stringify(v));
+/* Round 638: the stadium guide keeps its steps in h3 sections (and h4 groups),
+   so a control finds the list a step lives in wherever it sits. */
+function stepAt(entry, prefix) {
+  const lists = entry.howToPlay ? [entry.howToPlay] : (entry.howToPlaySections ?? []).flatMap(s => [s.items, ...(s.subsections ?? []).map(x => x.items)]);
+  for (const list of lists) { const i = list.findIndex(x => x.startsWith(prefix)); if (i >= 0) return [list, i]; }
+  return [null, -1];
+}
 const HYPE_JSX = 'Press it and your income pays double for {h.hypeSec} seconds';
 const HYPE_FACT = '    hypeSec: BOOST_DURATION_SEC,\n';
 function changedKickEngine(T, name, replacement, probe) {
@@ -861,8 +868,7 @@ const CLAIM_CONTROLS = [
     name: 'kickcopy', why: 'the new kick instructions promise twenty seconds instead of twelve',
     red: ['G1', 'G3'], green: ['G2', 'M1', 'M2', 'L1'],
     guides: g => {
-      const steps = g['/stadium-tycoon'].howToPlay;
-      const i = steps.findIndex(text => text.startsWith('Open a penalty or free-kick offer'));
+      const [steps, i] = stepAt(g['/stadium-tycoon'], 'Open a penalty or free-kick offer');
       if (i < 0) abort('  control kickcopy: the new kick step is missing');
       steps[i] = mustReplace(steps[i], 'twelve seconds', 'twenty seconds', 'kick guide step');
     },
@@ -919,7 +925,7 @@ const CLAIM_CONTROLS = [
     name: 'typed',
     why: 'the guide gains a sentence with a typed number in it',
     red: ['G3'], green: ['G1', 'G2', 'M1', 'M2', 'L1'],
-    guides: g => { const i = g['/stadium-tycoon'].howToPlay.findIndex(x => x.startsWith('Tap the stadium for instant cash.')); if (i < 0) abort('  control typed: the tap line is gone'); g['/stadium-tycoon'].howToPlay[i] = g['/stadium-tycoon'].howToPlay[i].replace('Tap the stadium for instant cash.', 'Tap the stadium for instant cash, about 3 dollars a tap at the start.'); },
+    guides: g => { const [steps, i] = stepAt(g['/stadium-tycoon'], 'Tap the stadium for instant cash.'); if (i < 0) abort('  control typed: the tap line is gone'); steps[i] = steps[i].replace('Tap the stadium for instant cash.', 'Tap the stadium for instant cash, about 3 dollars a tap at the start.'); },
   },
   {
     name: 'stale',

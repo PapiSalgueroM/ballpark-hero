@@ -3,6 +3,7 @@ import { useLocation } from 'react-router-dom';
 import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import { loadGameContent } from '@/data/gameContent/loader';
 import type { GameContent } from '@/data/gameContent/types';
+import { flatGuide } from '@/data/gameContent/guideShape';
 
 /**
  * Round 321, the how-to-play audit. The house rule since the early rounds:
@@ -39,33 +40,36 @@ export function GameHelp({ side = 'left', inline = false, className }: GameHelpP
     return () => { cancelled = true; };
   }, [pathname]);
 
-  if (!content || content.howToPlay.length === 0) return null;
+  /* Round 638: a converted guide keeps its sentences in sections, so read the
+     flat lists through the accessor. */
+  const guide = content ? flatGuide(content) : null;
+  if (!guide || guide.howToPlay.length === 0) return null;
 
   return (
     <HowToPlayPopover title="How to play" triggerSide={side} floatingTrigger={!inline} className={className}>
       <div>
         <h3 className="font-bold text-foreground mb-2">The steps</h3>
         <ol className="list-decimal list-inside space-y-1.5 text-muted-foreground">
-          {content.howToPlay.map((step, i) => (
+          {guide.howToPlay.map((step, i) => (
             <li key={i}>{step}</li>
           ))}
         </ol>
       </div>
-      {content.rules.length > 0 && (
+      {guide.rules.length > 0 && (
         <div>
           <h3 className="font-bold text-foreground mb-2">The rules</h3>
           <ul className="list-disc list-inside space-y-1.5 text-muted-foreground">
-            {content.rules.map((rule, i) => (
+            {guide.rules.map((rule, i) => (
               <li key={i}>{rule}</li>
             ))}
           </ul>
         </div>
       )}
-      {content.example.length > 0 && (
+      {guide.example.length > 0 && (
         <div>
           <h3 className="font-bold text-foreground mb-2">A worked example</h3>
           <div className="space-y-2 text-muted-foreground">
-            {content.example.map((para, i) => (
+            {guide.example.map((para, i) => (
               <p key={i}>{para}</p>
             ))}
           </div>

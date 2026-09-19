@@ -89,13 +89,14 @@ const BUNDLE = path.join(os.tmpdir(), 'dukbSearchKeywords.bundle.mjs');
 const posix = ROOT.replaceAll('\\', '/');
 fs.writeFileSync(ENTRY, `
 export { GAME_CONTENT } from '${posix}/src/data/gameContent/index.ts';
+export { flatGuide } from '${posix}/src/data/gameContent/guideShape.ts';
 export { CATEGORIES } from '${posix}/src/data/gameRegistry.ts';
 `);
 execSync(
   `"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`,
   { stdio: 'inherit' },
 );
-const { GAME_CONTENT, CATEGORIES } = await import(pathToFileURL(BUNDLE).href);
+const { GAME_CONTENT, CATEGORIES, flatGuide } = await import(pathToFileURL(BUNDLE).href);
 
 const games = CATEGORIES.flatMap(c => c.games.map(g => ({ ...g, category: c.title })));
 
@@ -104,7 +105,10 @@ const docs = new Map();
 for (const g of games) {
   const c = GAME_CONTENT[g.path];
   if (!c) continue;
-  const text = [...(c.intro || []), ...(c.howToPlay || []), ...(c.rules || [])].join(' ');
+  /* Round 638: a converted guide holds its steps and rules only in its h3
+     sections, so the sentences come through the same accessor the page uses. */
+  const flat = flatGuide(c);
+  const text = [...(c.intro || []), ...flat.howToPlay, ...flat.rules].join(' ');
   const tf = new Map();
   for (const t of tokens(text)) {
     if (t.length < MIN_LEN || STOP.has(t) || BLOCKED.has(t) || /^\d+$/.test(t)) continue;
