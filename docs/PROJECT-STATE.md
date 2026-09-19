@@ -1,9 +1,9 @@
 # Project state
 
-## RELEASE C 2026-09-19 evening: Rounds 632, 640, 642, 636 and 650
+## LIVE 2026-09-19 evening: Rounds 632, 640, 642, 636 and 650 (release C), main `8a3bb5ba`
 
 Built and gated by the desktop Claude lane in the CRLF gate clone on branch `release-c`, on top of
-main `9442fb9e`. Pushed to main as a fast forward; the publish record follows.
+main `9442fb9e`. Pushed to main as a fast forward from `9442fb9e`. **douknowball.com is serving it:** deployment `9c44e64f-492f-4c1b-ab6c-4899f85d4088`, called at 20:21 UTC only after `get_project` showed `latest_commit_sha` `8a3bb5ba`; the entry moved from `index-UjziBKQk.js` to `index-CvyQdw4v.js` by 20:22:11 UTC. Proof on the live site: the home page raw HTML carries "NFL Front Office</a>, the pro football one", the h3 "Are these sports games free to play?", the College Grid link and the `/profile/<name>` exemption in the fallback script; saved titles read "Missing XI: Guess the Missing Soccer Player | DoUKnowBall" and "NFL Front Office: Football GM Simulator | DoUKnowBall"; `/club-manager` carries 640's "sell on at that money" sentence; `/whats-new/` carries the created clubs and youth padding entry. `auditLive` 151 of 151 clean; IndexNow accepted all 151 sitemap URLs.
 
 - **632, youth padding kids are priced like real teenagers.** A Club Manager squad padded out with
   generated kids gave each one a first team price, so the padding itself was a way to print money. A
