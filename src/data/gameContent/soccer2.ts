@@ -192,7 +192,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         ],
       },
       {
-        heading: "How the knockout plays out",
+        heading: "Why every replay stays deterministic",
         items: [
           "The knockout is deterministic in your XI: goals come from the rating gap, level games go to extra time and then penalties, and replaying the same squad replays the same cup.",
         ],
@@ -327,7 +327,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
     ],
     tipSections: [
       {
-        heading: "Opening with a player you know cold",
+        heading: "Starting on someone you know cold",
         items: [
           "Open with someone you know cold so the arrows mean something.",
         ],
