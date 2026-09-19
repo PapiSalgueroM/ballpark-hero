@@ -8,11 +8,11 @@ export const BASEBALL_CONTENT: GameContentMap = {
       "Eleven picks later you own a lineup stitched from every era, and the sim makes you sweat all 162 games. Going 158-4 hurts more than going 120-42. That is the point.",
     ],
     headings: {
-      howToPlay: "How to play 162-0 Perfect Season, a free MLB draft simulation",
-      rules: "162-0 Perfect Season rules: rerolls, modes and lineup slots",
-      example: "162-0 Perfect Season walkthrough: an all era dream lineup",
-      tips: "162-0 Perfect Season tips for rerolls, the DH slot and Hard mode",
-      faq: "162-0 Perfect Season FAQ: perfect runs and daily mode",
+      howToPlay: "How to play 162-0 MLB Perfect Season, a free baseball draft simulation",
+      rules: "162-0 MLB Perfect Season rules: rerolls, modes and lineup slots",
+      example: "162-0 MLB Perfect Season walkthrough: an all era dream lineup",
+      tips: "162-0 MLB Perfect Season tips for rerolls, the DH slot and Hard mode",
+      faq: "162-0 MLB Perfect Season FAQ: perfect runs and daily mode",
     },
     howToPlaySections: [
       {
@@ -122,11 +122,11 @@ export const BASEBALL_CONTENT: GameContentMap = {
       "The ladder runs from draft info through teams, stats and awards. Diehards nail it in two clues. The rest of us wait for the trophy case.",
     ],
     headings: {
-      howToPlay: "How to play Career Path, a free MLB guess the player game",
-      rules: "Career Path rules for clues, points and hard mode",
-      example: "Career Path walkthrough: naming Mike Trout from the draft clue",
-      tips: "Career Path tips for draft year, teams and free guesses",
-      faq: "Career Path FAQ: clue order, hard mode and daily play",
+      howToPlay: "How to play MLB Career Path, a free guess the baseball player game",
+      rules: "MLB Career Path rules for clues, points and hard mode",
+      example: "MLB Career Path walkthrough: naming Mike Trout from the draft clue",
+      tips: "MLB Career Path tips for draft year, teams and free guesses",
+      faq: "MLB Career Path FAQ: clue order, hard mode and daily play",
     },
     howToPlaySections: [
       {
@@ -1293,11 +1293,11 @@ export const BASEBALL_CONTENT: GameContentMap = {
       "The twist is size. Groups run five deep instead of four, which means more cover for the traps and a better feeling when one locks in.",
     ],
     headings: {
-      howToPlay: "How to play Connections, a free daily baseball grouping puzzle",
-      rules: "Connections rules for groups, lives and the daily puzzle",
-      example: "Connections walkthrough: a Yankees overlap and a purple finish",
-      tips: "Connections tips for reading themes and the leftovers",
-      faq: "Connections FAQ: group size, colors and running out of lives",
+      howToPlay: "How to play MLB Connections, a free daily baseball grouping puzzle",
+      rules: "MLB Connections rules for groups, lives and the daily puzzle",
+      example: "MLB Connections walkthrough: a Yankees overlap and a purple finish",
+      tips: "MLB Connections tips for reading themes and the leftovers",
+      faq: "MLB Connections FAQ: group size, colors and running out of lives",
     },
     howToPlaySections: [
       {

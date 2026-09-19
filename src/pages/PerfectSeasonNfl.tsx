@@ -397,7 +397,8 @@ const PerfectSeasonNfl = () => {
       <div className="max-w-4xl mx-auto px-4 py-6 md:py-10">
         <header className="text-center mb-6">
           <h1 className="text-4xl md:text-6xl font-bold tracking-[0.08em] text-primary font-display mb-1">
-            17-0
+            17-0{' '}
+            <span className="block mt-1 text-sm md:text-base font-semibold tracking-[0.2em] uppercase text-muted-foreground">NFL Perfect Season</span>
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
             Spin the wheel of NFL history, draft one player per stop, and chase the perfect season.
@@ -829,7 +830,7 @@ const PerfectSeasonNfl = () => {
 
         <GameSeoContent
           pageHasOwnH1
-          title="17-0: The Perfect Season Challenge (NFL)"
+          title="17-0 NFL Perfect Season Challenge"
           description="Draft an offense across the modern NFL. The wheel decides which team-season you draft from, one player per spin, no repeats. Then the sim decides your fate over 17 games."
           howToPlay={[
             'Spin the wheel. It lands on a real NFL team and season from 1999 to today.',

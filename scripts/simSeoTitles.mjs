@@ -48,12 +48,16 @@
  * NEGATIVE CONTROLS (SEO_TITLES_CONTROL). Each refuses to run if its anchor is
  * missing, edits only an in memory copy, and must turn exactly its own section
  * red with the finding it names:
- *   dupetitle   /hockey-career takes /baseball-career's title           section 1
+ *   dupetitle   /nba-higher-lower is planted as /nba-career's twin      section 1
  *   longdesc    /footle's description grows past 158 characters         section 1
  *   noregistry  PageSeo ignores seoMeta and uses the page prop          section 2
  *   earlyld     a game page emits its Game JSON-LD before the chunk     section 2
  *   staleshot   a saved /club-manager head keeps its old title          section 3
  *   twold       a saved /club-manager head carries two Game blocks      section 3
+ *   brandheading   a saved /club-manager guide heading reads its old     section 5
+ *                  branded prop
+ *   sportlessh1    the saved /nba-higher-lower h1 loses its league       section 5
+ *   sportlesslabel /nba-connections' label loses its league              section 5
  *   inentry     a side build where PageSeo imports seoMeta statically,  section 4
  *               putting the map back on the entry chunk's import path
  *               (vite build into a temp dir through a transform plugin,
@@ -110,6 +114,9 @@ const CONTROLS = {
   staleshot: { section: 3, finding: 'saved title' },
   twold: { section: 3, finding: 'Game JSON-LD block(s)' },
   inentry: { section: 4, finding: 'entry chunk' },
+  brandheading: { section: 5, finding: 'carries the brand' },
+  sportlessh1: { section: 5, finding: 'the h1 names no sport' },
+  sportlesslabel: { section: 5, finding: 'family label' },
 };
 const CONTROL = process.env.SEO_TITLES_CONTROL || '';
 if (CONTROL && !CONTROLS[CONTROL]) {
@@ -231,9 +238,9 @@ function headOf(html) {
   };
 }
 
-const findings = { 1: [], 2: [], 3: [], 4: [] };
-const notes = { 1: '', 2: '', 3: '', 4: '' };
-const skipped = { 3: [], 4: [] };
+const findings = { 1: [], 2: [], 3: [], 4: [], 5: [] };
+const notes = { 1: '', 2: '', 3: '', 4: '', 5: '' };
+const skipped = { 3: [], 4: [], 5: [] };
 
 /* ---------- 1. the words ---------- */
 /* An in memory copy, so a control that edits it can never reach PageSeo. */
@@ -241,12 +248,21 @@ const entries = CATEGORIES.flatMap(c => c.games.map(g => ({
   path: g.path, label: g.label, category: c.title,
   title: SEO_META[g.path]?.title, description: SEO_META[g.path]?.description,
 })));
+/* Round 651 re-anchored this. The two Career Path games were its pair because
+   they shared a label, so a copied title still carried the right label once
+   and the ONLY thing wrong was the duplicate. Round 651 put the sport in every
+   label that had a twin, so no genuine pair is left, and the control now
+   PLANTS the twin: /nba-higher-lower takes /nba-career's label and title in
+   memory, the exact shape the Career Path games had before. Both are
+   basketball games, so the copied title still names the right sport and the
+   label once, and the duplicate is the only thing wrong with it. */
 if (CONTROL === 'dupetitle') {
-  const from = entries.find(e => e.path === '/baseball-career');
-  const to = entries.find(e => e.path === '/hockey-career');
-  if (!from?.title || !to?.title || from.label !== to.label) abort('control dupetitle: /baseball-career and /hockey-career no longer share a label with titles to copy');
+  const from = entries.find(e => e.path === '/nba-career');
+  const to = entries.find(e => e.path === '/nba-higher-lower');
+  if (!from?.title || !to?.title || from.category !== to.category) abort('control dupetitle: /nba-career and /nba-higher-lower are not two titled games in one category');
+  to.label = from.label;
   to.title = from.title;
-  console.log(`CONTROL dupetitle: /hockey-career now reads "${to.title}"; section 1 must go red`);
+  console.log(`CONTROL dupetitle: /nba-higher-lower is planted as a twin of /nba-career, label "${to.label}" and title "${to.title}"; section 1 must go red`);
 }
 if (CONTROL === 'longdesc') {
   const e = entries.find(x => x.path === '/footle');
@@ -500,6 +516,75 @@ if (CONTROL === 'inentry') {
   }
 }
 
+/* ---------- 5. the saved headings (Round 651) ---------- */
+/* The round that put these titles on the page, checked where a crawler reads
+   them. Before it, the guide block printed its old title prop as the heading,
+   so 73 saved game pages carried "Soccer Career Simulator | DoUKnowBall" as an
+   h2 (the only h1 on seven of them), and twenty family h1s ("HIGHER OR LOWER"
+   on ten pages) named no sport. On every saved game page:
+     (a) an h1 or h2 is the game's seoMeta title, the guide heading;
+     (b) no h1 to h4 carries " | DoUKnowBall";
+     (c) in the families that share a name across sports (Higher or Lower,
+         Connections, Career Path, Connect 4, Gauntlet Draft, Perfect
+         Season), the h1 names a sport word of the game's category;
+   and in the registry, (d) every family label names its sport too.
+   Controls, each editing only an in memory copy:
+     brandheading    the saved /club-manager guide heading goes back to its
+                     branded prop, so (a) and (b) must both fire
+     sportlessh1     the saved /nba-higher-lower h1 loses its league, (c)
+     sportlesslabel  /nba-connections' label loses its league, (d) */
+const FAMILY = /Higher or Lower|Connections|Career Path|Connect 4|Gauntlet Draft|Perfect Season/;
+{
+  const f = findings[5];
+  const headingsOf = html => [...html.matchAll(/<h([1-6])\b[^>]*>([\s\S]*?)<\/h\1>/gi)]
+    .map(m => ({ level: Number(m[1]), text: decode(m[2].replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim() }));
+  const games = CATEGORIES.flatMap(c => c.games.map(g => ({ path: g.path, label: g.label, category: c.title })))
+    .filter((g, i, a) => a.findIndex(x => x.path === g.path) === i);
+  if (CONTROL === 'sportlesslabel') {
+    const g = games.find(x => x.path === '/nba-connections');
+    if (!g || !namesSport(g.label, g.category)) abort('control sportlesslabel: /nba-connections has no sport bearing label to strip');
+    g.label = g.label.replace(/\bNBA\s*/, '');
+    if (namesSport(g.label, g.category)) abort('control sportlesslabel: the stripped label still names its sport');
+    console.log(`CONTROL sportlesslabel: /nba-connections is labelled "${g.label}" in memory; section 5 must go red`);
+  }
+  let pages = 0, family = 0;
+  for (const g of games) {
+    if (FAMILY.test(g.label)) {
+      if (!namesSport(g.label, g.category)) f.push(`${g.path}: the family label "${g.label}" names no ${g.category} word, so it reads the same as its sibling in another sport`);
+    }
+    const meta = SEO_META[g.path];
+    const file = path.join(ROOT, 'public', g.path.slice(1), 'index.html');
+    if (!meta || !fs.existsSync(file)) { skipped[5].push(`${g.path}: no saved page or no seoMeta entry`); continue; }
+    let doc = fs.readFileSync(file, 'utf8');
+    const end = doc.indexOf('</head>');
+    doc = (end >= 0 ? doc.slice(end) : doc).replace(/<!--[\s\S]*?-->/g, ' ').replace(/<script[\s\S]*?<\/script>/gi, ' ');
+    if (CONTROL === 'brandheading' && g.path === '/club-manager') {
+      const re = new RegExp(`(<h[12]>)${escRe(meta.title)}(</h[12]>)`);
+      const edited = doc.replace(re, `$1Club Manager: Football Management Sim${BRAND}$2`);
+      if (edited === doc) abort('control brandheading: the saved /club-manager page has no guide heading to put back');
+      doc = edited;
+      console.log('CONTROL brandheading: the saved /club-manager guide heading reads its old branded prop again; section 5 must go red');
+    }
+    if (CONTROL === 'sportlessh1' && g.path === '/nba-higher-lower') {
+      const edited = doc.replace(/<h1>([^<]*?)\bNBA\s+/, '<h1>$1');
+      if (edited === doc) abort('control sportlessh1: the saved /nba-higher-lower h1 carries no NBA to strip');
+      doc = edited;
+      console.log('CONTROL sportlessh1: the saved /nba-higher-lower h1 loses its league; section 5 must go red');
+    }
+    pages += 1;
+    const hs = headingsOf(doc);
+    if (!hs.some(h => h.level <= 2 && h.text === meta.title)) f.push(`${g.path}: no saved h1 or h2 is the seoMeta title "${meta.title}", so the guide heading is not the game's search title`);
+    for (const h of hs) if (h.level <= 4 && h.text.includes(BRAND)) f.push(`${g.path}: the saved h${h.level} "${h.text.slice(0, 60)}" carries the brand`);
+    if (FAMILY.test(g.label)) {
+      family += 1;
+      const h1s = hs.filter(h => h.level === 1);
+      if (!h1s.length) f.push(`${g.path}: the saved page has no h1`);
+      for (const h of h1s) if (!namesSport(h.text, g.category)) f.push(`${g.path}: the saved h1 "${h.text}" names no ${g.category} word, the h1 names no sport`);
+    }
+  }
+  notes[5] = `${pages} saved game pages read: guide heading is the seoMeta title and no heading carries the brand; ${family} family h1s and every family label name their sport`;
+}
+
 fs.rmSync(TMP, { recursive: true, force: true });
 
 /* ---------- the report ---------- */
@@ -508,9 +593,10 @@ const TITLES = {
   2: 'the render: props before the chunk, seoMeta everywhere after it',
   3: 'the saved pages carry the seoMeta head once prerendered, all or none',
   4: 'the entry chunk carries none of the SEO text; one lazy chunk carries it',
+  5: 'the saved headings: guide heading is the search title, no brand, family h1s and labels name their sport',
 };
 console.log('');
-for (const n of [1, 2, 3, 4]) {
+for (const n of [1, 2, 3, 4, 5]) {
   console.log(`${n}) ${TITLES[n]}`);
   for (const m of findings[n].slice(0, 12)) console.error(`  FAIL: ${m}`);
   if (findings[n].length > 12) console.error(`  ... and ${findings[n].length - 12} more`);
@@ -519,7 +605,7 @@ for (const n of [1, 2, 3, 4]) {
   for (const line of s.slice(0, 8)) console.log(`   SKIP (loud): ${line}`);
   if (s.length > 8) console.log(`   SKIP (loud): ... and ${s.length - 8} more`);
 }
-const red = [1, 2, 3, 4].filter(n => findings[n].length);
+const red = [1, 2, 3, 4, 5].filter(n => findings[n].length);
 const total = red.reduce((t, n) => t + findings[n].length, 0);
 console.log('');
 if (CONTROL) {
@@ -536,5 +622,5 @@ if (red.length) {
   console.error(`simSeoTitles: RED, ${total} failure${total === 1 ? '' : 's'} in section${red.length === 1 ? '' : 's'} ${red.join(', ')}`);
   process.exit(1);
 }
-const waits = [skipped[3].length ? `${skipped[3].length} saved pages still wait for build:seo` : 'every saved page matches', skipped[4].length ? 'the entry chunk check waits for a build' : 'the entry chunk is clean'];
+const waits = [skipped[3].length ? `${skipped[3].length} saved pages still wait for build:seo` : 'every saved page matches', skipped[4].length ? 'the entry chunk check waits for a build' : 'the entry chunk is clean', skipped[5].length ? `${skipped[5].length} saved pages had no headings to read` : 'every saved guide heading is its search title'];
 console.log(`simSeoTitles: green. ${rendered.size} games carry a keyword title and description, PageSeo renders them lazily, ${waits.join(', and ')}.`);

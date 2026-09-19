@@ -8,11 +8,11 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "The fun is the mash-up: a 2007 Randy Moss catching passes from a 2013 Peyton Manning, rated on what each actually did that exact year.",
     ],
     headings: {
-      howToPlay: "How to play 17-0 Perfect Season, a free online NFL draft simulation game",
-      rules: "17-0 Perfect Season rules: eras, ratings and the playoff push",
-      example: "17-0 Perfect Season walkthrough: a cross era draft and a 15 win season",
-      tips: "17-0 Perfect Season tips for building a stacked NFL roster",
-      faq: "17-0 Perfect Season FAQ: daily mode, eras and the playoffs",
+      howToPlay: "How to play 17-0 NFL Perfect Season, a free online football draft simulator",
+      rules: "17-0 NFL Perfect Season rules: eras, ratings and the playoff push",
+      example: "17-0 NFL Perfect Season walkthrough: a cross era draft and a 15 win season",
+      tips: "17-0 NFL Perfect Season tips for building a stacked roster",
+      faq: "17-0 NFL Perfect Season FAQ: daily mode, eras and the playoffs",
     },
     howToPlaySections: [
       {

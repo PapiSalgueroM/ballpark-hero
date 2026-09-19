@@ -133,9 +133,10 @@ const wordsOf = s => normalizeQuery(s).split(/[^a-z0-9]+/).filter(Boolean);
 /* ── 1: every game is findable by its own name, and comes back first ────── */
 console.log('1) every game is findable by typing its own name');
 {
-  /* Three games share a label with another game ("Connections", "Career Path",
-     "82-0 Perfect Season"), so first place is shared: a game with a twin has
-     to be inside the first N, where N is how many games wear that name. */
+  /* A game can share a label with another ("Connections", "Career Path" and
+     "82-0 Perfect Season" each had twins until Round 651 put the sport in
+     them), so first place is shared: a game with a twin has to be inside the
+     first N, where N is how many games wear that name. */
   const shareCount = new Map();
   for (const g of GAMES) {
     const k = normalizeQuery(g.label);

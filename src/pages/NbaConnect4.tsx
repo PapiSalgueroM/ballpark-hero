@@ -282,7 +282,7 @@ const NbaConnect4 = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Pro Basketball Connect 4 | DoUKnowBall"
-          description="Connect four basketball players in a row by finding what links them together: teams, awards, colleges or stats."
+          description="Red and Blue take turns on one board. Drop into a column, then name an NBA player who fits both that column and the row your piece lands in, like the Lakers and an MVP award. First to four in a row wins, and nobody can be used twice."
           howToPlay={[
             "Pick a column to drop your piece into the lowest empty row",
             "Name an NBA player who matches both the column and row criteria",

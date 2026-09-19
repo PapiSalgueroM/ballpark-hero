@@ -257,7 +257,7 @@ const ClueAuction = () => {
         {phase === 'boot' && (
           <div className="flex flex-col items-center gap-3 py-16">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            <p className="text-xs text-muted-foreground">Setting up the auction room...</p>
+            <p data-no-prerender className="text-xs text-muted-foreground">Setting up the auction room...</p>
           </div>
         )}
 

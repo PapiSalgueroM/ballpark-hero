@@ -57,7 +57,7 @@ export function CbbProgramBoard() {
           </div>
 
           {programsStatus === 'loading' && (
-            <p className="text-sm text-slate-400">Loading programs...</p>
+            <p data-no-prerender className="text-sm text-slate-400">Loading programs...</p>
           )}
           {programsStatus === 'error' && (
             <div className="space-y-2">

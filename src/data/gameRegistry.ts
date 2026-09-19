@@ -99,12 +99,12 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/sign-the-player', label: 'Sign the Player', emoji: '🔨', description: 'A blind auction: outbid two AI moguls, £1B each, then sim the showdown', addedOn: '2026-07-03' },
       { path: '/footle', label: 'Footle', emoji: '🎯', description: 'Guess the soccer player from stats', addedOn: '2025-01-01' },
       { path: '/career', label: 'Career Quiz', emoji: '📜', description: 'Guess from career history', addedOn: '2026-02-09' },
-      { path: '/higher-lower', label: 'Higher or Lower', emoji: '📊', description: 'Compare all-time career stats', addedOn: '2026-02-09' },
-      { path: '/connections', label: 'Connections', emoji: '🔗', description: 'Find groups of 4 connected players', addedOn: '2026-02-09' },
+      { path: '/higher-lower', label: 'Soccer Higher or Lower', emoji: '📊', description: 'Compare all-time career stats', addedOn: '2026-02-09' },
+      { path: '/connections', label: 'Soccer Connections', emoji: '🔗', description: 'Find groups of 4 connected players', addedOn: '2026-02-09' },
       { path: '/build-your-xi', label: 'Build Your XI', emoji: '⚽', description: 'Create a lineup, get AI rated', addedOn: '2026-02-09' },
       // deleted 2026-08-05 per owner review: "Delete perfect lineup."
       // { path: '/perfect-lineup', label: 'Perfect Lineup', emoji: '⚽', description: 'Build an XI under random league & country constraints, then simulate', daily: true, isNew: true },
-      { path: '/football-connect-4', label: 'Connect 4', emoji: '🔴', description: 'Soccer trivia meets Connect 4', addedOn: '2026-02-10' },
+      { path: '/football-connect-4', label: 'Soccer Connect 4', emoji: '🔴', description: 'Soccer trivia meets Connect 4', addedOn: '2026-02-10' },
       // Revived 2026-07-22. Was deleted 2026-07-08 as "buggy (hint x3 -> blank
       // screen) and too few possible puzzles for a rare event". The bug is
       // root-caused and fixed (useWorldCup.ts: the Answer clue was reachable
@@ -119,7 +119,7 @@ export const CATEGORIES: GameCategory[] = [
       // { path: '/guess-soccer-club', label: 'Guess The Club', emoji: '🏟️', description: 'Identify the mystery football club', daily: true, isNew: true },
       { path: '/free-kick', label: 'Free Kick', emoji: '🥅', description: 'Aim it, bend it, beat the wall and the keeper', daily: true, addedOn: '2026-09-04' },
       { path: '/soccer-grid', label: 'Soccer Grid', emoji: '⚽', description: '3×3 grid puzzle with rarity scores', daily: true, addedOn: '2026-03-08' },
-      { path: '/world-cup-bracket', label: '2026 Bracket', emoji: '🌍', description: 'Build the 2026 bracket and score it against how the World Cup really went', addedOn: '2026-03-28' },
+      { path: '/world-cup-bracket', label: 'World Cup 2026 Bracket', emoji: '🌍', description: 'Build the 2026 bracket and score it against how the World Cup really went', addedOn: '2026-03-28' },
       { path: '/soccer-career', label: 'Soccer Career', emoji: '⚽', description: 'Create your look, sign for your boyhood club, get rich, get shady, retire a legend.', addedOn: '2026-03-28', featured: true },
       { path: '/fantasy-draft', label: 'Fantasy Draft', emoji: '🧑‍💼', description: 'Draft your ultimate XI against an AI opponent', addedOn: '2026-03-09' },
       // deleted 2026-07-08 per owner review: too easy/boring. Route kept for direct links; uncomment to revive.
@@ -130,7 +130,7 @@ export const CATEGORIES: GameCategory[] = [
       // moved from the retired Game Shows tab 2026-07-08 (owner: game-show games belong in their sport)
       { path: '/squad-deal', label: 'Squad Deal', emoji: '🏟️', description: 'Build an XI out of mystery boxes', addedOn: '2026-06-23' },
       { path: '/search-and-discard', label: 'Search and Discard', emoji: '🔎', description: 'The squad duel: keep one, bin two, settle it in a season', addedOn: '2026-08-29' },
-      { path: '/gauntlet-draft', label: 'Gauntlet Draft', emoji: '⚔️', description: 'Pick your XI five cards at a time, then survive a five round cup', daily: true, addedOn: '2026-08-29' },
+      { path: '/gauntlet-draft', label: 'Gauntlet Draft: Soccer', emoji: '⚔️', description: 'Pick your XI five cards at a time, then survive a five round cup', daily: true, addedOn: '2026-08-29' },
       { path: '/player-stock-market', label: 'Player Stock Market', emoji: '📈', description: 'Open a past season, buy an XI on stats alone, then roll the years forward', daily: true, addedOn: '2026-07-22' },
       // deleted 2026-08-05 per owner review: he asked for the standalone box
       // game to go and for Squad Deal to stay.
@@ -143,7 +143,7 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Pro Football',
     emoji: '🏈',
     games: [
-      { path: '/perfect-season-nfl', label: '17-0 Perfect Season', emoji: '🏆', description: 'Draft an offense across eras, run the table', addedOn: '2026-07-01' },
+      { path: '/perfect-season-nfl', label: '17-0 NFL Perfect Season', emoji: '🏆', description: 'Draft an offense across eras, run the table', addedOn: '2026-07-01' },
       { path: '/front-office', label: 'NFL Front Office', emoji: '🏢', description: 'Full GM sim with real rosters: cap, trades, drafts, dynasties', addedOn: '2026-08-11', featured: true },
       { path: '/nfl-my-career', label: 'NFL My Career', emoji: '🌟', description: 'Draft night to Canton. 8 positions, 100+ crossroads, and a very tempting envelope', addedOn: '2026-08-11', featured: true },
       { path: '/football-grid', label: 'NFL Grid', emoji: '🏈', description: '3×3 grid puzzle with rarity scores', daily: true, addedOn: '2026-03-08' },
@@ -182,7 +182,7 @@ export const CATEGORIES: GameCategory[] = [
     emoji: '🏀',
     games: [
       { path: '/buzzer-beater', label: 'Buzzer Beater', emoji: '🏀', description: 'Pick the arc, beat the hand, drop ten jump shots', daily: true, addedOn: '2026-09-04' },
-      { path: '/perfect-season-nba', label: '82-0 Perfect Season', emoji: '🏆', description: 'Spin team seasons, draft a six man rotation', addedOn: '2026-07-01' },
+      { path: '/perfect-season-nba', label: '82-0 NBA Perfect Season', emoji: '🏆', description: 'Spin team seasons, draft a six man rotation', addedOn: '2026-07-01' },
       { path: '/stat-detective', label: 'Stat Detective', emoji: '🔎', description: 'Name the player behind the mystery stat line', addedOn: '2026-07-02' },
       { path: '/nba-stat-line', label: 'NBA Stat Line', emoji: '📊', description: 'Blend five real seasons into a target per 36 line', daily: true, addedOn: '2026-08-29' },
       { path: '/nba-starting-5', label: 'NBA Starting 5', emoji: '🏀', description: 'Build a lineup with stat challenges', addedOn: '2026-02-09' },
@@ -204,8 +204,8 @@ export const CATEGORIES: GameCategory[] = [
     title: 'Baseball',
     emoji: '⚾',
     games: [
-      { path: '/perfect-season-mlb', label: '162-0 Perfect Season', emoji: '🏆', description: 'Spin, draft across eras, chase perfection', addedOn: '2026-07-01' },
-      { path: '/baseball-career', label: 'Career Path', emoji: '⚾', description: 'Guess the baseball player', daily: true, addedOn: '2026-03-08' },
+      { path: '/perfect-season-mlb', label: '162-0 MLB Perfect Season', emoji: '🏆', description: 'Spin, draft across eras, chase perfection', addedOn: '2026-07-01' },
+      { path: '/baseball-career', label: 'MLB Career Path', emoji: '⚾', description: 'Guess the baseball player', daily: true, addedOn: '2026-03-08' },
       { path: '/mlb-higher-lower', label: 'MLB Higher or Lower', emoji: '📊', description: 'Which legend hit more career home runs?', daily: true, addedOn: '2026-03-08' },
       { path: '/mlb-grid', label: 'MLB Franchise Grid', emoji: '🔲', description: 'Fill the 3×3 with legends who match both teams', daily: true, addedOn: '2026-07-03' },
       { path: '/mlb-connect-4', label: 'MLB Connect 4', emoji: '⚾', description: 'Baseball trivia meets Connect 4', addedOn: '2026-02-10' },
@@ -214,18 +214,18 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/mlb-my-career', label: 'MLB My Career', emoji: '🌟', description: 'Draft day to Cooperstown. 11 positions, 100+ crossroads, and a camera in center field', addedOn: '2026-08-11', featured: true },
       { path: '/mlb-front-office', label: 'MLB Front Office', emoji: '🏢', description: 'Full GM sim with real 2026 rosters: the tax line, trades, October, dynasties', addedOn: '2026-08-11', featured: true },
       { path: '/missing-nine', label: 'Missing Nine', emoji: '🕵️', description: 'Name the missing starter from a famous World Series batting order', daily: true, addedOn: '2026-07-22' },
-      { path: '/baseball-connections', label: 'Connections', emoji: '⚾', description: 'Group baseball players', daily: true, addedOn: '2026-03-08' },
+      { path: '/baseball-connections', label: 'MLB Connections', emoji: '⚾', description: 'Group baseball players', daily: true, addedOn: '2026-03-08' },
     ],
   },
   {
     title: 'Hockey',
     emoji: '🏒',
     games: [
-      { path: '/perfect-season-nhl', label: '82-0 Perfect Season', emoji: '🏆', description: 'Spin franchises and eras, chase 82-0', addedOn: '2026-07-01' },
+      { path: '/perfect-season-nhl', label: '82-0 NHL Perfect Season', emoji: '🏆', description: 'Spin franchises and eras, chase 82-0', addedOn: '2026-07-01' },
       { path: '/puck-detective', label: 'Puck Detective', emoji: '🏒', description: 'Guess the mystery NHL player with attribute clues', daily: true, addedOn: '2026-07-03' },
       { path: '/hockey-grid', label: 'NHL Franchise Grid', emoji: '🥅', description: '3x3 grid with NHL franchises and career milestones', daily: true, addedOn: '2026-07-03' },
-      { path: '/hockey-career', label: 'Career Path', emoji: '🏒', description: 'Guess the hockey player', daily: true, addedOn: '2026-03-08' },
-      { path: '/hockey-higher-lower', label: 'Higher / Lower', emoji: '🏒', description: 'Compare career points', daily: true, addedOn: '2026-03-08' },
+      { path: '/hockey-career', label: 'NHL Career Path', emoji: '🏒', description: 'Guess the hockey player', daily: true, addedOn: '2026-03-08' },
+      { path: '/hockey-higher-lower', label: 'NHL Higher or Lower', emoji: '🏒', description: 'Compare career points', daily: true, addedOn: '2026-03-08' },
       { path: '/nhl-connections', label: 'NHL Connections', emoji: '🧩', description: 'Group 20 players into four hidden connections', daily: true, addedOn: '2026-03-08' },
       { path: '/conquest-nhl', label: 'NHL Conquest', emoji: '🗺️', description: 'Imperialism on ice: winners annex whole empires, five invaders start landless', daily: true, addedOn: '2026-08-11' },
       { path: '/nhl-my-career', label: 'NHL My Career', emoji: '🌟', description: 'Draft day to the rafters. 5 positions, 100+ crossroads, and an envelope on the bench', addedOn: '2026-08-11', featured: true },

@@ -32,7 +32,7 @@ const GolfHigherLower = () => {
       />
       <GameShell
         width="narrow"
-        title="⛳ HIGHER OR LOWER"
+        title="⛳ GOLF HIGHER OR LOWER"
         subtitle="Which golfer won more major championships?"
         headerExtra={
           <>

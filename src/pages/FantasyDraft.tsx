@@ -294,7 +294,7 @@ const FantasyDraft = () => {
                   <Shield className="w-8 h-8 sm:w-10 sm:h-10 opacity-60" />
                 </div>
                 <h1 className="text-4xl sm:text-6xl font-extrabold tracking-tight text-foreground leading-tight">
-                  Fantasy Draft<span className="block text-primary">Showdown</span>
+                  Fantasy Draft{' '}<span className="block text-primary">Showdown</span>
                 </h1>
                 <p className="text-base sm:text-xl text-muted-foreground max-w-md mx-auto leading-relaxed">
                   The goal: outdraft the AI. Your XI and its XI play the same simulated season, and the final table decides who drafted better.

@@ -69,7 +69,7 @@ export function TennisPlayerBoard() {
           </div>
 
           {status === 'loading' && (
-            <p className="text-sm text-green-400">Loading players...</p>
+            <p data-no-prerender className="text-sm text-green-400">Loading players...</p>
           )}
           {status === 'error' && (
             <button onClick={reloadPlayers} className="inline-flex items-center px-3 py-2 text-sm text-red-400 underline">

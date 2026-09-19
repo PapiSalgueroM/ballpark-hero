@@ -394,7 +394,8 @@ const PerfectSeasonNba = () => {
       <div className="max-w-4xl mx-auto px-4 py-6 md:py-10">
         <header className="text-center mb-6">
           <h1 className="text-4xl md:text-6xl font-bold tracking-[0.08em] text-primary font-display mb-1">
-            82-0
+            82-0{' '}
+            <span className="block mt-1 text-sm md:text-base font-semibold tracking-[0.2em] uppercase text-muted-foreground">NBA Perfect Season</span>
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
             Spin the wheel of NBA history, draft one player per stop, and chase the perfect season.
@@ -826,7 +827,7 @@ const PerfectSeasonNba = () => {
 
         <GameSeoContent
           pageHasOwnH1
-          title="82-0: The Perfect Season Challenge"
+          title="82-0 NBA Perfect Season Challenge"
           description="Draft across every era of NBA history. The wheel decides which team and season you draft from, one player per spin, no repeats. Then the sim decides your fate over 82 games."
           howToPlay={[
             'Spin the wheel. It lands on a real NBA team and season, from the 1950s to today.',

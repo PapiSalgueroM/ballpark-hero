@@ -56,7 +56,7 @@ const HockeyCareer = () => {
       />
       <GameShell help="none"
         width="narrow"
-        title="🏒 CAREER PATH"
+        title="🏒 NHL CAREER PATH"
         subtitle="Guess the mystery hockey player from progressive clues"
         headerExtra={
           <>

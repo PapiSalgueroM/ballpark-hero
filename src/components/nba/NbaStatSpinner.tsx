@@ -48,7 +48,7 @@ const NbaStatSpinner = ({ challenge, isSpinning, onFinish }: NbaStatSpinnerProps
 
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-card p-6 shadow-lg text-center">
-      <p className="text-xs text-muted-foreground uppercase tracking-wider mb-2">
+      <p data-no-prerender={settled ? undefined : true} className="text-xs text-muted-foreground uppercase tracking-wider mb-2">
         {settled ? 'Your Challenge' : 'Spinning your challenge...'}
       </p>
 

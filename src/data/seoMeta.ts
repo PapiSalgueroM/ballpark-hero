@@ -66,8 +66,8 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Pick a formation, spin in 11 random countries and name a real footballer from each nation who fits the slot. Optional timer. Free soccer trivia game.',
   },
   '/player-bingo': {
-    title: 'Player Bingo: Football Trivia Bingo Game',
-    description: 'Real footballers appear one at a time, name only. Tap the square each one fits and complete a line on the 5x5 board before three strikes. Free soccer bingo.',
+    title: 'Player Bingo: Soccer Player Trivia Bingo',
+    description: 'Real footballers appear one at a time, name only. Tap the square each one fits and complete a line on the 5x5 board before three strikes. Free football bingo.',
   },
   '/sports-bingo': {
     title: 'Sports Bingo: Soccer Pack Opening Bingo Game',
@@ -102,11 +102,11 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: "A footballer's whole career sits there season by season with the boxes covered. Reveal as few clubs and stats as you can and name him. Free soccer quiz.",
   },
   '/higher-lower': {
-    title: 'Higher or Lower: Soccer Career Stats Game',
+    title: 'Soccer Higher or Lower: Career Stats Game',
     description: "Your player's stats are face up and the challenger's are hidden. Pick appearances, goals or caps where yours wins and keep the streak going. Free soccer game.",
   },
   '/connections': {
-    title: 'Connections: Soccer Player Grouping Puzzle',
+    title: 'Soccer Connections: Football Player Puzzle',
     description: 'Sixteen soccer players, four hidden groups of four. Sort every name into its secret category before your lives run out. A free football trivia puzzle.',
   },
   '/build-your-xi': {
@@ -114,7 +114,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'A slot machine gives each position a random club or country. Name a player who fits each slot, then an AI grades your XI and a season plays out. Free soccer.',
   },
   '/football-connect-4': {
-    title: 'Connect 4: Soccer Trivia Grid Game',
+    title: 'Soccer Connect 4: Football Trivia Grid Game',
     description: 'Classic four in a row where every disc costs a soccer answer. Name a player who fits the column and the row to claim the cell. Free two player trivia game.',
   },
   '/free-kick': {
@@ -126,7 +126,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Fill the daily 3x3 board with players who match both the row and the column. Rarity scores reward picks nobody else made. Free soccer trivia grid game.',
   },
   '/world-cup-bracket': {
-    title: '2026 Bracket: World Cup Soccer Predictor',
+    title: 'World Cup 2026 Bracket: Soccer Predictor Game',
     description: 'Build your 2026 World Cup bracket, every group and knockout round plus the awards, then score it against how the tournament really went. Free soccer game.',
   },
   '/soccer-career': {
@@ -158,7 +158,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Buy an XI in a real past season from anonymous stat cards, then roll the years forward and watch the real market values move. Free soccer stats game.',
   },
   '/perfect-season-nfl': {
-    title: '17-0 Perfect Season: NFL Football Draft Sim',
+    title: '17-0 NFL Perfect Season: Football Draft Sim',
     description: 'Spin real pro football team seasons from 1999 to 2024, draft a cross era offense and simulate a 17 game season. Can you go unbeaten? Free NFL game.',
   },
   '/front-office': {
@@ -234,7 +234,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Set the arc, fade off the closeout and time the strength bar over ten jump shots, backing up each time. Daily and unlimited. A free basketball shooting game.',
   },
   '/perfect-season-nba': {
-    title: '82-0 Perfect Season: NBA Basketball Draft Sim',
+    title: '82-0 NBA Perfect Season: Basketball Draft Sim',
     description: 'Every spin lands on a real NBA team season. Draft a cross era starting five plus a sixth man, then simulate 82 games. Can you go unbeaten? Free basketball.',
   },
   '/stat-detective': {
@@ -298,11 +298,11 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Draft an NBA starting five one slot at a time from five real players, then survive a five round knockout cup. Free daily basketball draft game.',
   },
   '/perfect-season-mlb': {
-    title: '162-0 Perfect Season: MLB Baseball Draft Sim',
+    title: '162-0 MLB Perfect Season: Baseball Draft Sim',
     description: 'Spin across a century of baseball, draft a cross era lineup from real team seasons and simulate all 162 games. Can you go unbeaten? Free MLB game.',
   },
   '/baseball-career': {
-    title: 'Career Path: Guess the MLB Baseball Player',
+    title: 'MLB Career Path: Guess the Baseball Player',
     description: 'One mystery baseball player, six clues from position and draft to teams, stats and awards. The sooner you guess, the more you score. Free daily MLB trivia.',
   },
   '/mlb-higher-lower': {
@@ -338,11 +338,11 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'A real World Series starting nine in batting order with one name blanked out. Can you remember who actually started? Free daily baseball quiz.',
   },
   '/baseball-connections': {
-    title: 'Connections: MLB Baseball Grouping Puzzle',
+    title: 'MLB Connections: Baseball Grouping Puzzle',
     description: 'Twenty baseball players hide four groups of five tied by a franchise, an award or a country. Find every group before you run out. Free daily MLB puzzle.',
   },
   '/perfect-season-nhl': {
-    title: '82-0 Perfect Season: NHL Hockey Draft Sim',
+    title: '82-0 NHL Perfect Season: Hockey Draft Sim',
     description: 'Every spin lands on a real NHL franchise and decade. Fill six slots from a century of hockey, then the sim plays 82 games. Can you go unbeaten? Free.',
   },
   '/puck-detective': {
@@ -354,11 +354,11 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Every row and column is an NHL franchise or a career milestone, and each cell wants a player who fits both. Daily 3x3 board plus unlimited. Free hockey.',
   },
   '/hockey-career': {
-    title: 'Career Path: Guess the NHL Hockey Player',
+    title: 'NHL Career Path: Guess the Hockey Player',
     description: 'One mystery hockey player and a stack of clues on country, draft, teams, stats and awards. Swing early for the full score. Free daily NHL trivia game.',
   },
   '/hockey-higher-lower': {
-    title: 'Higher / Lower: NHL Hockey Career Points Quiz',
+    title: 'NHL Higher or Lower: Hockey Career Points Quiz',
     description: 'Two hockey players side by side: who finished with more career points? Ten quick rounds and a streak bonus that snowballs. Free daily NHL trivia game.',
   },
   '/nhl-connections': {
@@ -514,7 +514,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'One category, a board of names. Click everyone who belongs and dodge the plausible fakes planted among them. Two lives a board. Free daily sports trivia.',
   },
   '/sports-millionaire': {
-    title: 'Sports Millionaire: Money Ladder Trivia Quiz',
+    title: 'Sports Millionaire: Soccer Money Ladder Quiz',
     description: 'Fifteen questions built from real football data, three lifelines and a pretend million at the top of the money ladder. One wrong step drops you. Free.',
   },
   '/quiz-board': {

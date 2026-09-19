@@ -32,7 +32,7 @@ const NflHigherLower = () => {
       />
       <GameShell
         width="narrow"
-        title="🏈 HIGHER OR LOWER"
+        title="🏈 NFL HIGHER OR LOWER"
         subtitle="A new stat every round. Who has the bigger career number?"
         headerExtra={
           <>

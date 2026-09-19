@@ -9,6 +9,7 @@ import type { GameContent, GuideSection, GuideStorySection } from '@/data/gameCo
 import { flatGuide, guideH2Titles } from '@/data/gameContent/guideShape';
 // Round 181: the deterministic related-games graph (S-6 internal links).
 import { relatedGamesFor } from '@/lib/relatedGames';
+import { stripBrand, useSeoMetaTitle } from '@/components/seo/PageSeo';
 
 interface GameSeoContentProps {
   title: string;
@@ -100,6 +101,9 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
   const path = location.pathname;
 
   const game = ALL_GAMES.find(g => g.path === path);
+  /* Round 651: the heading is the game's search title, never the old page
+     title with the brand on the end. See useSeoMetaTitle in PageSeo. */
+  const heading = useSeoMetaTitle(path) ?? stripBrand(title);
   /* Fetched, not bundled. The block below renders its fallback copy while
      the sport file is in flight, so the page is never empty and a crawler
      that waits for the network (all of them do, this whole site is client
@@ -200,11 +204,11 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
             on screen; only the level a crawler reads changes. */}
         {pageHasOwnH1 ? (
           <h2 className="text-lg font-semibold text-muted-foreground font-display mb-2">
-            {title}
+            {heading}
           </h2>
         ) : (
           <h1 className="text-lg font-semibold text-muted-foreground font-display mb-2">
-            {title}
+            {heading}
           </h1>
         )}
         <p className="text-sm text-muted-foreground leading-relaxed">

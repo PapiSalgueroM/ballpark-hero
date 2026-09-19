@@ -82,7 +82,7 @@ const NbaLineup = () => {
       />
       <GameShell
         width="wide"
-        title="BUILD YOUR STARTING 5"
+        title="BUILD YOUR NBA STARTING 5"
         subtitle="Spin a stat challenge, get random NBA teams, build the ultimate lineup"
         headerExtra={
           <button

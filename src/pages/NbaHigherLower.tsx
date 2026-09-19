@@ -32,7 +32,7 @@ const NbaHigherLower = () => {
       />
       <GameShell
         width="narrow"
-        title="🏀 HIGHER OR LOWER"
+        title="🏀 NBA HIGHER OR LOWER"
         subtitle="Which player scored more career points?"
         headerExtra={
           <>

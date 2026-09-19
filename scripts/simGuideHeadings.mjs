@@ -62,7 +62,7 @@ const FIXTURE = path.join(ROOT, 'scripts/data/guideHeadingsFrozen.json');
 const SEO = path.join(ROOT, 'src/components/seo/GameSeoContent.tsx');
 
 /* Raise this in the round that converts another guide. */
-const CONVERTED_FLOOR = 126;
+const CONVERTED_FLOOR = 127;
 
 const CONTROLS = { skiplevel: 2, nokeyword: 1, lostline: 1, unconvert: 3, snapdrift: 4 };
 const CONTROL = process.env.GUIDE_HEADINGS_CONTROL || '';
@@ -271,7 +271,7 @@ const notes = { 1: '', 2: '', 3: '', 4: '' };
         else owner.set(tri, h.text);
       }
     }
-    /* The game's own name is exempt: "82-0 Perfect Season" carries a hyphen in
+    /* The game's own name is exempt: "82-0 NBA Perfect Season" carries a hyphen in
        the registry, every h2 must carry that name, and the rule is about a
        heading reaching for a dash, not about a scoreline in a proper name.
        Everything else in the heading is still checked. */

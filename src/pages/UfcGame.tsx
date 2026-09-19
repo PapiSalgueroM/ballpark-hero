@@ -88,7 +88,7 @@ const UfcGame = () => {
       >
         {isLoading ? (
           <div className="mb-8 flex justify-center">
-            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
+            <p data-no-prerender className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
           </div>
         ) : gameStatus === 'playing' ? (
           <div className="mb-8 space-y-3">
@@ -159,7 +159,7 @@ const UfcGame = () => {
 
         <GameSeoContent
           pageHasOwnH1
-          title="Combat Sports Trivia Game | DoUKnowBall"
+          title="UFC Guesser: Guess the MMA Fighter | DoUKnowBall"
           description="Test your UFC and MMA knowledge with daily trivia puzzles covering fighters, records, weight classes and championship history."
           howToPlay={[
             "A mystery UFC fighter is selected. Guess who it is in 8 tries",

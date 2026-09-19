@@ -8,11 +8,11 @@ export const HOCKEY_CONTENT: GameContentMap = {
       "Fill six slots from a century of hockey, then the sim plays the 82 game season. Anything short of 82-0 stings.",
     ],
     headings: {
-      howToPlay: "How to play 82-0 Perfect Season, a free NHL wheel and draft game",
-      rules: "82-0 Perfect Season rules: the wheel, the slots and the 82 games",
-      example: "82-0 Perfect Season walkthrough: a spin, a reroll and a near miss",
-      tips: "82-0 Perfect Season tips for building a run that stays perfect",
-      faq: "82-0 Perfect Season FAQ: rerolls, Hard mode and the Daily",
+      howToPlay: "How to play 82-0 NHL Perfect Season, a free hockey wheel and draft game",
+      rules: "82-0 NHL Perfect Season rules: the wheel, the slots and the 82 games",
+      example: "82-0 NHL Perfect Season walkthrough: a spin, a reroll and a near miss",
+      tips: "82-0 NHL Perfect Season tips for building a run that stays perfect",
+      faq: "82-0 NHL Perfect Season FAQ: rerolls, Hard mode and the Daily",
     },
     howToPlaySections: [
       {
@@ -359,11 +359,11 @@ export const HOCKEY_CONTENT: GameContentMap = {
       "Career Path opens with just the position. From there you choose: swing early for the full 1000 points, or buy clues about country, draft, teams, stats and awards until the answer is staring at you.",
     ],
     headings: {
-      howToPlay: "How to play Career Path, a free NHL mystery player guessing game",
-      rules: "Career Path rules: scoring, clues and the daily hockey player",
-      example: "Career Path walkthrough: two clues to Connor McDavid",
-      tips: "Career Path tips for scoring big on the mystery hockey player",
-      faq: "Career Path FAQ: guesses, names and Hard mode",
+      howToPlay: "How to play NHL Career Path, a free mystery hockey player guessing game",
+      rules: "NHL Career Path rules: scoring, clues and the daily hockey player",
+      example: "NHL Career Path walkthrough: two clues to Connor McDavid",
+      tips: "NHL Career Path tips for scoring big on the mystery hockey player",
+      faq: "NHL Career Path FAQ: guesses, names and Hard mode",
     },
     howToPlaySections: [
       {
@@ -478,11 +478,11 @@ export const HOCKEY_CONTENT: GameContentMap = {
       "Ten quick rounds, a streak bonus that snowballs, and a daily set of matchups the whole site sweats together. It sounds easy until a pure sniper meets a quiet playmaker.",
     ],
     headings: {
-      howToPlay: "How to play Higher / Lower, a free NHL trivia comparison game",
-      rules: "Higher / Lower rules: scoring, streaks and the daily matchups",
-      example: "Higher / Lower walkthrough: Jagr's points against Hull's goals",
-      tips: "Higher / Lower tips for reading NHL career point totals",
-      faq: "Higher / Lower FAQ: scoring, ties and Hard mode",
+      howToPlay: "How to play NHL Higher or Lower, a free hockey trivia comparison game",
+      rules: "NHL Higher or Lower rules: scoring, streaks and the daily matchups",
+      example: "NHL Higher or Lower walkthrough: Jagr's points against Hull's goals",
+      tips: "NHL Higher or Lower tips for reading career point totals",
+      faq: "NHL Higher or Lower FAQ: scoring, ties and Hard mode",
     },
     howToPlaySections: [
       {

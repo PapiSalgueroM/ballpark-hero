@@ -51,7 +51,7 @@ const HigherLowerGame = () => {
       />
       <GameShell
         width="wide"
-        title="HIGHER OR LOWER"
+        title="SOCCER HIGHER OR LOWER"
         subtitle="Pick a stat where the left player is higher. Build your streak!"
         headerExtra={
           <>
@@ -141,8 +141,8 @@ const HigherLowerGame = () => {
 
         <GameSeoContent
           pageHasOwnH1
-          title="Higher or Lower Sports Game | DoUKnowBall"
-          description="Guess whether the next player's stat is higher or lower. Tests your knowledge of player stats across football, NBA and UFC."
+          title="Soccer Higher or Lower | DoUKnowBall"
+          description="Two soccer players face off. Yours shows his career appearances, goals and international caps while the challenger's stay hidden, so pick the stat where yours is higher. One wrong pick ends the streak."
           howToPlay={[
             "Two players are shown side by side with their stats",
             "Pick a stat where the left player has a higher value",

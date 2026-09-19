@@ -318,7 +318,7 @@ const FaceOff = () => {
         )}
 
         <p className="text-center text-xs text-muted-foreground mt-6">
-          Want the same stats without the clock? <Link to="/higher-lower" className="text-primary hover:underline">Higher or Lower</Link> has every pool on its own.
+          Want the same stats without the clock? Every sport here has its own Higher or Lower, like <Link to="/higher-lower" className="text-primary hover:underline">Soccer Higher or Lower</Link> and <Link to="/nba-higher-lower" className="text-primary hover:underline">NBA Higher or Lower</Link>.
         </p>
 
         <GameSeoContent

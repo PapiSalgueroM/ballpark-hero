@@ -36,7 +36,7 @@ const HockeyHigherLower = () => {
       />
       <GameShell
         width="narrow"
-        title="🏒 HIGHER OR LOWER"
+        title="🏒 NHL HIGHER OR LOWER"
         subtitle="Which player has more career points?"
         headerExtra={
           <>

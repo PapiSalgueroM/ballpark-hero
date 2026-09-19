@@ -133,7 +133,28 @@ const subscribeSeoMeta = (notify: () => void) => {
 };
 const readSeoMeta = () => seoMeta;
 
-const PageSeo = ({ title: pageTitle, description: pageDescription, path, ogImage, noindex }: PageSeoProps) => {
+/* Round 651: the guide block's heading reads the same store.
+ *
+ * GameSeoContent printed its title prop as the page heading, so 73 saved game
+ * pages carried "Soccer Career Simulator | DoUKnowBall" as an h2, and on seven
+ * of them that branded string was the only h1. The heading is now the game's
+ * search title without the brand, from the same cached chunk PageSeo loads,
+ * and a page with no entry gets its own prop with the brand taken off. Both
+ * components re-render off one notify, so the head and the heading swap in the
+ * same commit and the prerenderer, which waits for the head to settle, never
+ * saves one without the other. */
+export const stripBrand = (title: string): string =>
+  title.endsWith(BRAND_SUFFIX) ? title.slice(0, -BRAND_SUFFIX.length) : title;
+export const useSeoMetaTitle = (path: string): string | undefined => {
+  const meta = useSyncExternalStore(subscribeSeoMeta, readSeoMeta, readSeoMeta);
+  const isGame = ALL_GAMES.some(g => g.path === path);
+  useEffect(() => {
+    if (!seoMeta && isGame) void loadSeoMeta();
+  }, [path, isGame]);
+  return meta?.[path]?.title;
+};
+
+const PageSeo =({ title: pageTitle, description: pageDescription, path, ogImage, noindex }: PageSeoProps) => {
   const meta = useSyncExternalStore(subscribeSeoMeta, readSeoMeta, readSeoMeta);
   /* Only a game page has an entry, so the home page, the hubs and the legal
      pages never fetch the chunk. The registry is already in the entry chunk

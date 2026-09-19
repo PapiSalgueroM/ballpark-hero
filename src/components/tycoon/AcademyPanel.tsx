@@ -228,7 +228,7 @@ export default function AcademyPanel({ visible = true, stylesReady = false, onSt
 
       <div ref={firstTeamRef}>
       {panel === 'firstTeam' ? (
-        <Suspense fallback={<p className="min-h-48 p-3 text-sm text-muted-foreground">Opening the first team...</p>}>
+        <Suspense fallback={<p data-no-prerender className="min-h-48 p-3 text-sm text-muted-foreground">Opening the first team...</p>}>
           <FirstTeamPanel state={s} ledger={ledger} onSell={doSellSenior} onEquip={doEquipBoot} onUpgrade={doUpgradeBoot} gearSaveBlocked={gearSaveBlocked} onBack={() => setPanel(null)} />
         </Suspense>
       ) : (
@@ -289,21 +289,21 @@ export default function AcademyPanel({ visible = true, stylesReady = false, onSt
       ) : panel === 'packs' ? (
         <div className="space-y-2">
           <HubPanelHeader title="Packs" onBack={() => setPanel(null)} />
-          <Suspense fallback={<p role="status" className="min-h-48 p-3 text-sm text-muted-foreground">Opening packs...</p>}>
+          <Suspense fallback={<p data-no-prerender role="status" className="min-h-48 p-3 text-sm text-muted-foreground">Opening packs...</p>}>
             <PacksPanel ledger={ledger} bedFree={bedFree(s)} delivered={ledger.pending !== null && (s.packsDelivered ?? 0) >= ledger.pending.seq} saveBlocked={packSaveBlocked} onOpen={doOpenPack} onDismiss={doDismissPack} />
           </Suspense>
         </div>
       ) : panel === 'legacy' ? (
         <div className="space-y-2">
           <HubPanelHeader title="Reputation" onBack={() => setPanel(null)} />
-          <Suspense fallback={<p role="status" className="min-h-48 p-3 text-sm text-muted-foreground">Opening reputation...</p>}>
+          <Suspense fallback={<p data-no-prerender role="status" className="min-h-48 p-3 text-sm text-muted-foreground">Opening reputation...</p>}>
             <AcademyLegacyPanel s={s} region={region} goal={goal} goalPct={goalPct} doMoveUp={doMoveUp} />
           </Suspense>
         </div>
       ) : (
         <div className="space-y-2">
           <HubPanelHeader title={FACILITIES.find(f => f.id === panel)!.label} onBack={() => setPanel(null)} />
-          <Suspense fallback={<p role="status" className="min-h-48 p-3 text-sm text-muted-foreground">Opening facility...</p>}>
+          <Suspense fallback={<p data-no-prerender role="status" className="min-h-48 p-3 text-sm text-muted-foreground">Opening facility...</p>}>
             <AcademyFacilityPanel s={s} panel={panel} cap={cap} doBuy={doBuy} />
           </Suspense>
         </div>

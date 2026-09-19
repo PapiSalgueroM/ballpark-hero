@@ -138,11 +138,11 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "The run is decided entirely by the squad you drafted: the same XI always runs the same gauntlet, so every pick is the game.",
     ],
     headings: {
-      howToPlay: "How to play Gauntlet Draft, a free online soccer card draft game",
-      rules: "Gauntlet Draft rules: cards, the knockout and opposition ratings",
-      example: "Gauntlet Draft walkthrough: a striker pick and a four round run",
-      tips: "Gauntlet Draft tips for drafting a squad that lifts the trophy",
-      faq: "Gauntlet Draft FAQ: the daily draft, real players and replays",
+      howToPlay: "How to play Gauntlet Draft: Soccer, a free online card draft game",
+      rules: "Gauntlet Draft: Soccer rules for cards, the knockout and opposition ratings",
+      example: "Gauntlet Draft: Soccer walkthrough of a striker pick and a four round run",
+      tips: "Gauntlet Draft: Soccer tips for drafting a squad that lifts the trophy",
+      faq: "Gauntlet Draft: Soccer FAQ on the daily draft, real players and replays",
     },
     howToPlaySections: [
       {
@@ -496,11 +496,11 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Three career totals are in play: appearances, goals and international caps. Choose the one stat where your player beats the mystery opponent. One bad read ends the run.",
     ],
     headings: {
-      howToPlay: "How to play Higher or Lower, a free soccer stats comparison game",
-      rules: "Higher or Lower rules: ties, career totals and one wrong pick",
-      example: "Higher or Lower walkthrough: Maldini's appearances start a streak",
-      tips: "Higher or Lower tips for picking the safest career stat",
-      faq: "Higher or Lower FAQ: ties, streaks and hidden opponents",
+      howToPlay: "How to play Soccer Higher or Lower, a free career stats comparison game",
+      rules: "Soccer Higher or Lower rules: ties, career totals and one wrong pick",
+      example: "Soccer Higher or Lower walkthrough: Maldini's appearances start a streak",
+      tips: "Soccer Higher or Lower tips for picking the safest career stat",
+      faq: "Soccer Higher or Lower FAQ: ties, streaks and hidden opponents",
     },
     howToPlaySections: [
       {
@@ -625,11 +625,11 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "The connections range from friendly, like a shared club, to evil, like a common shirt number or award. Each solved group shows a difficulty color, and purple is usually the trap.",
     ],
     headings: {
-      howToPlay: "How to play Connections, a free soccer players grouping puzzle",
-      rules: "Connections rules: lives, hints and the four difficulty colors",
-      example: "Connections walkthrough: four AC Milan legends and one swap",
-      tips: "Connections tips for spotting the trap player early",
-      faq: "Connections FAQ: daily puzzles, hints and your win streak",
+      howToPlay: "How to play Soccer Connections, a free football players grouping puzzle",
+      rules: "Soccer Connections rules: lives, hints and the four difficulty colors",
+      example: "Soccer Connections walkthrough: four AC Milan legends and one swap",
+      tips: "Soccer Connections tips for spotting the trap player early",
+      faq: "Soccer Connections FAQ: daily puzzles, hints and your win streak",
     },
     howToPlaySections: [
       {
@@ -881,11 +881,11 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Each of the 7 columns and 6 rows carries an attribute. To claim a cell you name a player matching both, and gravity still applies: pieces fall to the lowest open row.",
     ],
     headings: {
-      howToPlay: "How to play Connect 4, a free soccer trivia and four in a row game",
-      rules: "Connect 4 rules: columns, rows and rejected answers",
-      example: "Connect 4 walkthrough: Ronaldinho blocks a winning line",
-      tips: "Connect 4 tips for choosing columns over trivia recall",
-      faq: "Connect 4 FAQ: turns, rejected names and network errors",
+      howToPlay: "How to play Soccer Connect 4, a free football trivia and four in a row game",
+      rules: "Soccer Connect 4 rules: columns, rows and rejected answers",
+      example: "Soccer Connect 4 walkthrough: Ronaldinho blocks a winning line",
+      tips: "Soccer Connect 4 tips for choosing columns over trivia recall",
+      faq: "Soccer Connect 4 FAQ: turns, rejected names and network errors",
     },
     howToPlaySections: [
       {
@@ -1138,11 +1138,11 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "The field is the real one, playoff winners included, and the format follows FIFA's: top two per group advance plus the 8 best third place teams into a round of 32.",
     ],
     headings: {
-      howToPlay: "How to play 2026 Bracket, a free World Cup predictor and bracket game",
-      rules: "2026 Bracket rules: groups, standings and the round of 32",
-      example: "2026 Bracket walkthrough: a Group J tiebreak and a Brazil upset",
-      tips: "2026 Bracket tips for filling a sharper World Cup bracket",
-      faq: "2026 Bracket FAQ: scoring, groups and the real World Cup result",
+      howToPlay: "How to play World Cup 2026 Bracket, a free soccer predictor and bracket game",
+      rules: "World Cup 2026 Bracket rules: groups, standings and the round of 32",
+      example: "World Cup 2026 Bracket walkthrough: a Group J tiebreak and a Brazil upset",
+      tips: "World Cup 2026 Bracket tips for filling a sharper bracket",
+      faq: "World Cup 2026 Bracket FAQ: scoring, groups and the real result",
     },
     howToPlaySections: [
       {

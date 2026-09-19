@@ -69,7 +69,7 @@ const NflConnections = () => {
       />
       <GameShell
         width="narrow"
-        title="🏈 CONNECTIONS"
+        title="🏈 NFL CONNECTIONS"
         subtitle="Find four groups of 5 NFL players that share a connection"
         headerExtra={
           <>
