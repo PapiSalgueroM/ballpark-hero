@@ -1,5 +1,37 @@
 # Project state
 
+## RELEASE 2026-09-19 afternoon: Round 638 part two (all 126 guides in keyword sections) and Round 641
+
+Built and gated by the desktop Claude lane in the CRLF gate clone on branch `release-guides`, on top
+of main `91811008`.
+
+- **638 part two, every game guide in keyword sections.** Fourteen writers (Sonnet 5, two at a time
+  after a session limit killed the first wave) converted the remaining 107 guides, one sport file slice
+  each, so all 126 now carry keyword h2s over h3 sections and h4 subsections. Every original sentence
+  kept word for word and in order, proven by `simGuideHeadings` against frozen originals of all 126
+  (converted floor 126). One writer could not convert 82-0 Perfect Season because its name carries a
+  hyphen and the fence banned hyphens in headings; the fence now exempts a game's own name. The four
+  front office guides conflicted with Round 631, which had added a rules sentence after the originals
+  were frozen: each keeps the writer's sections and gains one h3 holding 631's sentence, placed after
+  the h3 holding the sentence it followed. `simIdleArenaCap` read a fixed 6,000 character window of
+  the Idle Arena guide and the new structure pushed its tips past it; it now reads the whole entry
+  (both controls still fire).
+- **641, the home page fold harness fences where the maker note lives.** `playHomeFold` section 5
+  still asked for the owner's note as a card on the home page, which Round 382 moved to About at his
+  request; it had been red on healthy code since 2026-09-01. It now checks no note card on the home
+  page, About linked from the footer, and the note on About under its own heading. Controls
+  `notehome` and `notegone` each turn only their own check red.
+
+**Gates on this tree:** tsc 0. `build:seo` exit 0: 157 routes prerendered, 108 pages re-dated (the 107
+newly converted guides and What's New), 43 held. Full node suite on the frozen tree: 332 of 333, the
+one red `simIdleArenaCap`'s fixed window above, fixed and green alone with both controls. Browser harnesses on the built site: playSoftFourOhFour, playHowTo (127 of 127 games), sweepPhone, playSnapshotDrift and playRenderStability (151 routes, 5 renders each) green; playHomeFold green alone on a quiet machine (its first run timed out opening the home page while another agent was running probes).
+
+**Next, assembled on `release-c`:** Round 632 (youth padding priced like real teenagers), Round 640
+(created clubs priced like real squads, the backing sets the wage room, a free slider whose surplus
+sells on at the money's squad prices) with the review's fixes, and Round 642 (keyword titles and
+descriptions for all 127 game pages, loaded in their own chunk so the entry bundle stays at main's
+size).
+
 ## LIVE 2026-09-19: Rounds 631, 633, 634, 635, 639 and Round 638 part one, main `06e6c6e2`
 
 Built and gated by the desktop Claude lane in the CRLF gate clone (`C:\Users\antho\dukb-gate`) on
