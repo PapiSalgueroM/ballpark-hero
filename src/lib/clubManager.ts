@@ -3992,6 +3992,99 @@ export function ensureCustomClubValues(state: CareerState): void {
   state.customValues = CUSTOM_VALUES_VERSION;
 }
 
+/* ─────────────── Round 640: the wage cap a created club's money buys ───────────────
+   THE PROBLEM THE HONEST PRICES MADE. The cap is 1.15 times the day one bill
+   (wageCapFrom), and a founder's wage now follows his honest value, so a
+   created club's bill and cap fell to a small club's while it kept a 40m or
+   90m budget: the big tier's cap went from 2,031k a week to 298k, with 39k of
+   headroom, so three signings its budget easily covers put it about 30 percent
+   over and the board's confidence dripped every week.
+
+   THE RULE. A real club's budget and its cap both come off its squad
+   (budget = 0.16 x the roster's value, clubDefMap and eraClubDefMap; cap =
+   1.15 x the bill its values price), so the two move together. Measured over
+   the 200 real clubs whose budget sits inside the 8m to 200m clamp, all four
+   eras: cap = 37.13 x budget^0.711 (thousands a week, budget in millions),
+   with every club within 0.95 to 1.05 of the line at p10 to p90, every league's
+   median within 0.96 to 1.05 and every era's own fit within 3 percent of it at
+   15m, 40m and 90m. The league does not move it (Leeds at 39m run 506k,
+   Athletic Club at 36m 451k, Al-Hilal at 40m 489k, 2010 Liverpool at 40m
+   489k). So a created club is given the cap a real club with its budget has,
+   255k a week on 15m, 512k on 40m and 911k on 90m, never less than its own
+   bill based cap. From the founding on it moves like any club's (nextWageCap).
+
+   A save written before the round loads with at least the same cap. Its own is
+   the old inflated one and sits far above the line, so in practice nothing
+   moves; the floor is for the save whose cap has somehow fallen below it. No
+   contract changes, and it runs once, before the version mark is set, so a
+   reload never lifts a cap the career itself brought down. */
+export const REAL_CAP_PER_BUDGET_K = 37.13;
+export const REAL_CAP_PER_BUDGET_EXP = 0.711;
+
+/** Round 640: the day one wage cap (thousands a week) a real club with this budget has. */
+export function realCapForBudget(budget: number): number {
+  return Math.round(REAL_CAP_PER_BUDGET_K * Math.pow(Math.max(0, budget), REAL_CAP_PER_BUDGET_EXP));
+}
+
+/** Round 640: a created club save from before the round gets at least the cap its budget buys. */
+export function ensureCustomClubWageCap(state: CareerState): void {
+  const spec = state.customClub;
+  if (!spec || spec.name !== state.clubName || state.customValues === CUSTOM_VALUES_VERSION) return;
+  const floor = realCapForBudget((CUSTOM_TIERS[spec.budgetTier] ?? CUSTOM_TIERS.mid).budget);
+  state.wageCap = Math.max(state.wageCap ?? wageCapFrom(wageBill(state)), floor);
+}
+
+/* ─────────────── Round 640: the squad quality a created club's money buys ───────────────
+   THE PROBLEM. Round 160 split the quality slider from the budget, so any tier
+   could found a squad of 90s. Priced honestly that squad is worth 1,465.6m
+   today, and listing it in the first window banked a p90 of 732m on a 15m,
+   40m or 90m budget alike.
+
+   THE RULE. The squad is part of what the budget buys. The engine already
+   says what squad goes with a budget: a real club's budget is 0.16 of its
+   roster's value, so a club handed B holds a squad worth B / 0.16. A tier's
+   slider runs up to the highest quality whose squad (the tier's own slots at
+   that average, each man's name wobble of up to two points either way
+   averaged in) is worth no more than that: today 72 on 15m (93.75m allowed,
+   about 83m at 72, 99m at 73), 78 on 40m (250m, about 244m at 78) and 82 on
+   90m (562.5m, about 500m at 82). The eras price the top end in their own
+   money, so the same budget reaches further back then: 88 on 90m in 2005, 85
+   in 2010 and 2015, and 79 on 40m in 2005.
+   Everything under the ceiling is exactly the squad it always was, the form's
+   default (66) is inside every tier, and the budget is untouched.
+
+   What that sells for is what a real club with that budget banks. Listing the
+   whole squad in the first window and taking every bid the squad floor allows,
+   real clubs inside the budget clamp bank 2.69 times their budget at the
+   median and 3.31 at p90 (66 clubs, all four eras); a squad at the ceiling
+   banks the same kind of multiple of its tier's budget, and never more than
+   the section 2 bound in scripts/simCustomClubValues.mjs.
+
+   startCareer applies it, so a save written before the round keeps the squad
+   it was founded with (its spec is rebuilt as saved, never clamped). */
+export const CUSTOM_SQUAD_PER_BUDGET = 1 / 0.16;
+
+/** Round 640: the highest squad quality a budget tier may found in this era. */
+export function customQualityCap(tier: CustomBudgetTier, eraId?: string): number {
+  const allowed = (CUSTOM_TIERS[tier] ?? CUSTOM_TIERS.mid).budget * CUSTOM_SQUAD_PER_BUDGET;
+  /* Each man's rating is his slot's plus a name wobble of -2 to +2 (cInt in
+     buildCustomSquad), and value climbs faster than rating, so the squad is
+     priced at the average over that wobble, not at the wobble of zero, which
+     reads about 5 percent cheap. */
+  const expected = (r: number): number => {
+    let s = 0;
+    for (let w = -2; w <= 2; w++) s += customFounderValue(clamp(r + w, 48, 93), eraId);
+    return s / 5;
+  };
+  let cap = 55;
+  for (let q = 56; q <= 88; q++) {
+    const worth = CUSTOM_SLOTS.reduce((s, slot) => s + expected(q + slot.off), 0);
+    if (worth > allowed) break;
+    cap = q;
+  }
+  return cap;
+}
+
 /** Best XI average of an actual squad, same math as bakedXIAvg. */
 function squadXIAvg(squad: CMPlayer[]): number {
   const rs = squad.map(p => p.rating).sort((a, b) => b - a).slice(0, 11);
@@ -4115,6 +4208,9 @@ export function customBoardPreview(spec: Omit<CustomClubSpec, 'replacedClub'>, e
   const ranked = historic ? eraPlayableClubs(eraId!, spec.leagueId) : playableClubs(spec.leagueId);
   const replaced = ranked.length ? ranked[ranked.length - 1].name : null;
   const full: CustomClubSpec = { ...spec, replacedClub: replaced ?? '' };
+  /* Round 640: the same ceiling startCareer applies, so the preview never
+     quotes a demand for a squad the founding will not hand over. */
+  if (full.quality !== undefined) full.quality = Math.min(full.quality, customQualityCap(full.budgetTier, eraId));
   const { def, gap } = buildCustomDef(full, eraId);
   const league = customLeagueDef(full, eraId);
   if (!league) return { label: 'Finish in the top half', replaced };
@@ -14149,6 +14245,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
       crest: { ...custom.crest, initials: sanitizeCrestInitials(custom.crest.initials) },
       replacedClub: ranked.length ? ranked[ranked.length - 1].name : custom.replacedClub,
     };
+    /* Round 640: the slider runs only as high as the tier's money buys. */
+    if (spec.quality !== undefined) spec.quality = Math.min(spec.quality, customQualityCap(spec.budgetTier, era.id));
     registerCustomClub(spec, era.id);
     custom = spec;
   } else {
@@ -14276,6 +14374,8 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   ensurePress(state);
   ensureManagers(state);
   state.wageCap = wageCapFrom(wageBill(state));
+  /* Round 640: and a created club gets the cap a real club with its budget has. */
+  if (custom) state.wageCap = Math.max(state.wageCap, realCapForBudget(club.budget));
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id, custom ? leagueClubs : undefined);
   /* Round 474: and the two specific asks, read off the squad you have just
      been handed and the market this world really has. */
@@ -16225,7 +16325,9 @@ export function loadCareer(): CareerState | null {
       && parsed.customClub.name === parsed.clubName && parsed.customClub.crest) {
       /* Round 640: a save written before founders were priced like real
          players opens with them repriced. Before the registration, which reads
-         only ratings, and before any screen reads a value. */
+         only ratings, and before any screen reads a value. The cap floor
+         first, because both run once and the repricing sets the mark. */
+      ensureCustomClubWageCap(parsed);
       ensureCustomClubValues(parsed);
       registerCustomClub(parsed.customClub, parsed.eraId, squadXIAvg(parsed.squad));
     } else {
