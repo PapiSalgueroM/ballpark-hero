@@ -1,6 +1,5 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
-import { ALL_GAMES } from '@/data/gameRegistry';
 import { jsonLdFor } from '@/lib/pageSchema';
 
 interface PageSeoProps {
@@ -70,7 +69,8 @@ export const searchTitle = (full: string): string =>
     ? full.slice(0, -BRAND_SUFFIX.length)
     : full;
 
-/* Round 642: a game's search title and description come from the registry.
+/* Round 642: a game's search title and description come from
+ * src/data/seoMeta.ts, loaded on its own.
  *
  * The owner asked for "lots of key words ... because we need more traction".
  * Measured before this round: titles like "Missing XI | DoUKnowBall" and
@@ -78,25 +78,55 @@ export const searchTitle = (full: string): string =>
  * for a soccer lineup quiz had nothing to match, and 46 of the 127 game
  * descriptions ran past 158 characters, where a result starts cutting them.
  *
- * So every game in src/data/gameRegistry.ts carries a seoTitle (without the
- * brand) and a seoDescription, written once beside the game's label, and this
- * is the one place that reads them: a single lookup by the page's own path.
- * The brand suffix goes on here and the Round 277 rule above still decides
- * whether it stays in the <title>, so og:title, twitter:title and the JSON-LD
- * name get the full text exactly as they always have. A page with no registry
- * entry (the hubs, the legal pages, the retired games) keeps the props it
- * passes, unchanged. scripts/simSeoTitles.mjs renders every game page through
- * this component and holds it to the registry. */
-const seoFor = (path: string, title: string, description: string) => {
-  const game = ALL_GAMES.find(g => g.path === path);
-  return {
-    title: game?.seoTitle ? `${game.seoTitle}${BRAND_SUFFIX}` : title,
-    description: game?.seoDescription ?? description,
-  };
+ * WHY A DYNAMIC IMPORT. The first cut put the text on every GameDef, which put
+ * about 28 KB (7.5 KB gzipped) into the entry chunk every page loads and left
+ * /soccer-career 8 KB under its weight ceiling, for text a page needs exactly
+ * one line of. So it is its own chunk now. The module promise and the loaded
+ * map are cached HERE, at module level: the first PageSeo to mount starts the
+ * load and renders the page's own props meanwhile, then swaps once the chunk
+ * lands, and every page after that reads the map synchronously on its first
+ * render. Nothing is drawn in a state initialiser; the state is only a nudge
+ * to render again. A failed load leaves the page's own props in place and
+ * clears the cache so the next page tries again.
+ *
+ * The saved pages are what a crawler reads, and the prerenderer waits for the
+ * head to stop moving before it captures, so the swap lands in them. The brand
+ * suffix goes on here and the Round 277 rule above still decides whether it
+ * stays in the <title>, so og:title, twitter:title and the JSON-LD name get the
+ * full text exactly as they always have. A path with no entry (the hubs, the
+ * legal pages, the retired games) keeps the props it passes, unchanged.
+ * scripts/simSeoTitles.mjs renders every game page through this component
+ * before and after the load, and checks the text stays out of the entry chunk. */
+type SeoMetaMap = typeof import('@/data/seoMeta').SEO_META;
+let seoMeta: SeoMetaMap | null = null;
+let seoMetaLoad: Promise<SeoMetaMap | null> | null = null;
+export const loadSeoMeta = (): Promise<SeoMetaMap | null> => {
+  if (!seoMetaLoad) {
+    seoMetaLoad = import('@/data/seoMeta')
+      .then(m => (seoMeta = m.SEO_META))
+      .catch(() => {
+        seoMetaLoad = null;
+        return null;
+      });
+  }
+  return seoMetaLoad;
 };
 
 const PageSeo = ({ title: pageTitle, description: pageDescription, path, ogImage, noindex }: PageSeoProps) => {
-  const { title, description } = seoFor(path, pageTitle, pageDescription);
+  const [, setSeoMetaLoaded] = useState(false);
+  useEffect(() => {
+    if (seoMeta) return;
+    let live = true;
+    loadSeoMeta().then(m => {
+      if (live && m) setSeoMetaLoaded(true);
+    });
+    return () => {
+      live = false;
+    };
+  }, []);
+  const entry = seoMeta?.[path];
+  const title = entry ? `${entry.title}${BRAND_SUFFIX}` : pageTitle;
+  const description = entry ? entry.description : pageDescription;
   const canonicalUrl = `${BASE_URL}${path}`;
   const image = ogImage || DEFAULT_OG_IMAGE;
 
