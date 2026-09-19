@@ -25,7 +25,7 @@
     "date": "2026-09-19"
   },
   "/baseball": {
-    "hash": "185d37b0aff7accb",
+    "hash": "85515a276ccaf798",
     "date": "2026-09-19"
   },
   "/baseball-career": {
@@ -81,8 +81,8 @@
     "date": "2026-09-19"
   },
   "/champions-league-format-history": {
-    "hash": "3e863f66653d060a",
-    "date": "2026-09-15"
+    "hash": "f41a405fb50ca167",
+    "date": "2026-09-19"
   },
   "/club-manager": {
     "hash": "3472959b55584d3d",
@@ -93,7 +93,7 @@
     "date": "2026-09-19"
   },
   "/college": {
-    "hash": "b853298876b49ba7",
+    "hash": "7158f8bda23edbb7",
     "date": "2026-09-19"
   },
   "/college-grid": {
@@ -229,7 +229,7 @@
     "date": "2026-09-19"
   },
   "/hockey": {
-    "hash": "ef56abfa04e70a69",
+    "hash": "5c705c488d494669",
     "date": "2026-09-19"
   },
   "/hockey-career": {
@@ -313,7 +313,7 @@
     "date": "2026-09-19"
   },
   "/mlb-postseason-format-history": {
-    "hash": "6bfdfc269a42b640",
+    "hash": "f58a348b199907f4",
     "date": "2026-09-19"
   },
   "/mystery-box": {
@@ -365,7 +365,7 @@
     "date": "2026-09-19"
   },
   "/nba-playoff-format-history": {
-    "hash": "2f9ab17cf129cd32",
+    "hash": "f00dc904c0a97748",
     "date": "2026-09-19"
   },
   "/nba-starting-5": {
@@ -401,7 +401,7 @@
     "date": "2026-09-19"
   },
   "/nfl-playoff-format-history": {
-    "hash": "e2e27a28b68dae5b",
+    "hash": "dd98bcb6b9b945d6",
     "date": "2026-09-19"
   },
   "/nhl-connect-4": {
@@ -421,7 +421,7 @@
     "date": "2026-09-19"
   },
   "/nhl-playoff-format-history": {
-    "hash": "570f398b2cb1b4e7",
+    "hash": "f1accc020651c3bf",
     "date": "2026-09-19"
   },
   "/olympics": {
@@ -469,11 +469,11 @@
     "date": "2026-09-16"
   },
   "/pro-basketball": {
-    "hash": "c17f2b201437012c",
+    "hash": "f5e813074afb8177",
     "date": "2026-09-19"
   },
   "/pro-football": {
-    "hash": "38f305691ea058b6",
+    "hash": "c7d5ef55a7c5d914",
     "date": "2026-09-19"
   },
   "/puck-detective": {
@@ -497,55 +497,55 @@
     "date": "2026-09-19"
   },
   "/records": {
-    "hash": "0721f43ee6ac2fdc",
+    "hash": "fcb21c34ee34bcc0",
     "date": "2026-09-19"
   },
   "/records/afl-premiers": {
-    "hash": "68fc9aa74397ffe6",
+    "hash": "96e0668087389007",
     "date": "2026-09-19"
   },
   "/records/brownlow-medal-winners": {
-    "hash": "ce680f332cdf9cad",
+    "hash": "6914ef8109860d3a",
     "date": "2026-09-19"
   },
   "/records/college-football-national-champions": {
-    "hash": "28f129873cadbd0c",
+    "hash": "6789602ee26ca96f",
     "date": "2026-09-19"
   },
   "/records/dally-m-medal-winners": {
-    "hash": "67fcde4d776d39a1",
+    "hash": "986ed63d8eb586d3",
     "date": "2026-09-19"
   },
   "/records/english-football-champions": {
-    "hash": "6d9d9869b6f201ed",
+    "hash": "d3509b32a4394784",
     "date": "2026-09-19"
   },
   "/records/nba-champions": {
-    "hash": "8f94bf9c2b0e8195",
+    "hash": "caf592f9da12f61c",
     "date": "2026-09-19"
   },
   "/records/ncaa-basketball-champions": {
-    "hash": "377b8abd5b24c198",
+    "hash": "8d9e4b9f18b26fd2",
     "date": "2026-09-19"
   },
   "/records/nrl-premiers": {
-    "hash": "dd7d378501057fc4",
+    "hash": "460b72ebd97f6c38",
     "date": "2026-09-19"
   },
   "/records/stanley-cup-winners": {
-    "hash": "d32946c6b692694d",
+    "hash": "1e0322a36d28ae0c",
     "date": "2026-09-19"
   },
   "/records/super-bowl-winners": {
-    "hash": "35f2dcb7f0948cb2",
+    "hash": "8410aae2a703270e",
     "date": "2026-09-19"
   },
   "/records/wnba-champions": {
-    "hash": "e37bf0a3673e044b",
+    "hash": "4721395e7db8f09b",
     "date": "2026-09-19"
   },
   "/records/world-series-winners": {
-    "hash": "0bd83658a215bc68",
+    "hash": "379e4b4faab2f81d",
     "date": "2026-09-19"
   },
   "/score-predictor": {
@@ -565,7 +565,7 @@
     "date": "2026-09-19"
   },
   "/soccer": {
-    "hash": "d5c9af896a5231e7",
+    "hash": "5384222b0dbcb1b7",
     "date": "2026-09-19"
   },
   "/soccer-career": {
@@ -629,7 +629,7 @@
     "date": "2026-09-19"
   },
   "/whats-new": {
-    "hash": "3576f8b7e0ff6c52",
+    "hash": "d9b88fb850c6180a",
     "date": "2026-09-19"
   },
   "/who-am-i": {
