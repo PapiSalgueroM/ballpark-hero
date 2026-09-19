@@ -12,6 +12,13 @@ import { realJobOffers, allOfferClubs, invalidateOfferClubCache } from '@/lib/ma
    Career has used since Round 124, rather than a second thinner one. */
 import { runManagerSummer, NATION_CONFED } from '@/lib/soccerInternational';
 import type { JobOffer as MarketJobOffer, ManagerProfile, ClubTier } from '@/lib/managerOffers';
+/* Round 633: the season score lives in its own pure module so a harness can
+   drive it with synthetic inputs and no engine bundle. clubManagerScore
+   imports nothing from here, so there is no cycle. */
+import {
+  seasonLedger, seasonLedgerScore,
+  type LegacyLogEntry, type SeasonHandover, type SeasonLedger, type SeasonLedgerInput,
+} from '@/lib/clubManagerScore';
 import type { Player, Position } from '@/types/game';
 import { FORMATIONS as SHARED_FORMATIONS, SLOT_ALLOWED, playerRating } from '@/lib/squadDeal';
 import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
@@ -1782,8 +1789,13 @@ export interface SeasonSummary {
   qualifiedUcl: boolean;
   signings: TransferRecord[];
   offers: JobOffer[];
-  /** min(130, league points + 10 per trophy this season). */
+  /** Round 633: the ledger in clubManagerScore.ts, 0..130. Was league points
+   *  plus 10 a trophy, which read the club rather than the manager. */
   seasonScore: number;
+  /** Round 633: the five terms behind it, so the summary can show its working
+   *  instead of printing a number nobody can explain. Optional because a
+   *  summary stored in an older save has none. */
+  seasonScoreParts?: SeasonLedger;
   /** Round 70: how each board objective ended up. */
   objectives?: { label: string; hit: boolean }[];
   /** Round 165: the season's individual honours, from the award races. */
@@ -1883,6 +1895,12 @@ export interface CareerState {
    *  the run-in played by the manager before you. The board screen says so, and
    *  it is what stops a simulated run-in ever being presented as real history. */
   midSeasonStart?: 'autumn' | 'newYear' | 'runIn';
+  /** Round 633: what the manager before you had already banked when a takeover
+   *  career began, frozen at the handover so the season score can subtract it
+   *  without the number moving with your own results. Absent on a career
+   *  started from week 0 and on every save written before the round, and
+   *  cleared at the rollover because it is a per season block. */
+  handover?: SeasonHandover | null;
   /** Round 547: this season's Champions League field, DERIVED from last
    *  season's final tables rather than drawn from a prestige pool. Absent on
    *  a historic era and on a save from before the round, and both fall back
@@ -10202,14 +10220,14 @@ const CUP_STAGE_RANK: Record<CupRound, number> = { R16: 0, QF: 1, SF: 2, F: 3 };
 const UCL_STAGE_RANK: Record<UclKoRound, number> = { R16: 1, QF: 1, SF: 2, F: 3 };
 
 /** How far we got in the cup: 0 = still/exit at R16 ... 4 = won it. */
-function cupProgressRank(state: CareerState): { rank: number; alive: boolean } {
+export function cupProgressRank(state: CareerState): { rank: number; alive: boolean } {
   if (state.cupRound === 'won') return { rank: 4, alive: false };
   if (state.cupRound === 'out') return { rank: CUP_STAGE_RANK[state.cupExit ?? 'R16'], alive: false };
   return { rank: CUP_STAGE_RANK[state.cupRound], alive: true };
 }
 
 /** How far we got in Europe: 0 = group, 1 = knockouts ... 4 = won it. */
-function uclProgressRank(state: CareerState): { rank: number; alive: boolean } {
+export function uclProgressRank(state: CareerState): { rank: number; alive: boolean } {
   if (state.uclKoRound === 'won') return { rank: 4, alive: false };
   if (state.uclKoRound === 'out') {
     const exit = state.uclExit;
@@ -14832,12 +14850,118 @@ export function matchFacts(career: CareerState): MatchFacts | null {
   return null;
 }
 
-/** min(130, current league points + 10 per trophy won this season). */
-export function currentSeasonScore(career: CareerState): number {
+/* Round 633: the league title trophy's name, shared by the rollover that
+   pushes it and the season score that reads it, rather than two literals that
+   can drift apart. */
+const LEAGUE_TITLE_NAME = 'League Title';
+
+/**
+ * Round 633: a record shape guard for the stamped handover, on the
+ * ensureFreeAgents pattern. Fails closed on the CONTENTS and not just the
+ * container, because a malformed record here is not a wrong number on a
+ * screen, it is a subtraction against every score the save ever reports.
+ */
+function isHandoverRecord(v: unknown): v is SeasonHandover {
+  if (!v || typeof v !== 'object') return false;
+  const h = v as Record<string, unknown>;
+  const num = (x: unknown) => typeof x === 'number' && Number.isFinite(x) && x >= 0;
+  /* The board ticks are stamped as ids now. A bare count is the shape the
+     first version of this round wrote and is still accepted, read as a count. */
+  const ids = (x: unknown) => Array.isArray(x) && x.every(v => typeof v === 'string');
+  return num(h.pts) && num(h.played) && num(h.cupRank) && num(h.euroRank)
+    && (ids(h.objectivesDone) || num(h.objectivesDone)) && typeof h.wonLeague === 'boolean';
+}
+
+/**
+ * The handover this save is entitled to subtract. A malformed record is
+ * dropped to null, which falls through to the legacy estimate and, for a
+ * career that never was a takeover, to nothing at all.
+ */
+export function ensureHandover(state: CareerState): SeasonHandover | null {
+  const held: unknown = state.handover;
+  if (held === null || held === undefined) return state.handover ?? null;
+  if (!isHandoverRecord(held)) { state.handover = null; return null; }
+  return held;
+}
+
+/**
+ * Round 633: everything the season score reads, gathered in one place so the
+ * mid season reading and the rollover reading cannot drift apart.
+ *
+ * On `legacyStart`. A takeover save written before this round carries
+ * `midSeasonStart` and no stamped handover, so the previous manager has to be
+ * estimated. That estimate is gated on season 1 on purpose: the engine NEVER
+ * clears `midSeasonStart` (it has exactly two writes in the repo, the
+ * declaration and startMidSeason), and ClubManager.tsx already guards its own
+ * takeover banner with `c.season === 1` for the same reason. Without the gate,
+ * every season from the second onward of a takeover career would subtract a
+ * manager who does not exist, and the form term would read zero for roughly
+ * two thirds of every one of them.
+ */
+export function seasonLedgerInputOf(career: CareerState): SeasonLedgerInput {
   const row = career.table.find(r => r.club === career.clubName);
-  const pts = row ? row.pts : 0;
-  const seasonTrophies = career.trophies.filter(t => t.season === career.season).length;
-  return Math.min(130, pts + seasonTrophies * 10);
+  const stamped = ensureHandover(career);
+  const legacyStart = !stamped && career.season === 1 ? (career.midSeasonStart ?? null) : null;
+  return {
+    inTable: !!row,
+    leaguePts: row ? row.pts : 0,
+    leaguePlayed: row ? row.w + row.d + row.l : 0,
+    /* The engine's own fixture count, the objectiveStatuses expression. Never
+       career.calendar.length, which carries cup weeks, European group weeks,
+       the transfer window and the MLS bye. */
+    leagueRounds: career.leagueClubs.length > 1 ? 2 * (career.leagueClubs.length - 1) : 38,
+    wonLeague: career.trophies.some(t => t.season === career.season && t.name === LEAGUE_TITLE_NAME),
+    cupRank: cupProgressRank(career).rank,
+    euroRank: uclProgressRank(career).rank,
+    objectivesDone: objectiveStatuses(career).filter(o => o.status === 'done').map(o => o.objective.id),
+    /* The board card settles at the final whistle, exactly where
+       objectiveStatuses itself settles the league, defence and youth shapes.
+       The score reads it there and nowhere else, because a live reading can
+       come back off when the squad changes. */
+    seasonDone: career.week >= career.calendar.length,
+    handover: stamped,
+    legacyStart,
+    calendarLength: career.calendar.length,
+    /* The fixture log only matters on the legacy path, where it replays the
+       previous manager's league record; every other save hands over null. */
+    legacyLog: legacyStart ? legacyLogOf(career) : null,
+  };
+}
+
+/**
+ * career.resultLog as the score reads it. The typed competition has been on
+ * every entry since Round 164 and the takeover feature is Round 549, so a
+ * takeover save always carries it; an entry without it is bucketed off its
+ * label exactly the way teamCompRecord does.
+ */
+function legacyLogOf(career: CareerState): LegacyLogEntry[] {
+  const cupName = careerLeagueOf(career).cupName;
+  return (career.resultLog ?? []).map(e => ({
+    week: e.week,
+    league: e.competition
+      ? e.competition === 'league'
+      : !(e.comp.startsWith('Champions League') || e.comp.startsWith(cupName)),
+    res: e.res,
+  }));
+}
+
+/** The five terms behind the number, for the season end screen. */
+export function seasonScoreParts(career: CareerState): SeasonLedger {
+  return seasonLedger(seasonLedgerInputOf(career));
+}
+
+/**
+ * The season score, 0..130. Round 633 replaced `min(130, league points + 10 a
+ * trophy)` with the ledger in clubManagerScore.ts; see that file's header for
+ * the three measured defects that rule had.
+ *
+ * The NAME and the call shape both stay: simSessionMarks section 5 and the
+ * negative control in simActivityNotCompletion both string match
+ * `currentSeasonScore(` in useClubManager.ts, and the control ABORTS rather
+ * than silently passing if the literal stops existing.
+ */
+export function currentSeasonScore(career: CareerState): number {
+  return seasonLedgerScore(seasonLedgerInputOf(career));
 }
 
 const VERDICTS: Record<'A' | 'B' | 'C' | 'D' | 'F', string[]> = {
@@ -14963,8 +15087,8 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
   const myRow = table.find(r => r.club === state.clubName) ?? emptyRow(state.clubName);
   const position = Math.max(1, table.findIndex(r => r.club === state.clubName) + 1);
 
-  if (position === 1 && !state.trophies.some(t => t.season === state.season && t.name === 'League Title')) {
-    state.trophies.push({ name: 'League Title', emoji: '🏆', season: state.season });
+  if (position === 1 && !state.trophies.some(t => t.season === state.season && t.name === LEAGUE_TITLE_NAME)) {
+    state.trophies.push({ name: LEAGUE_TITLE_NAME, emoji: '🏆', season: state.season });
   }
   const seasonTrophies = state.trophies.filter(t => t.season === state.season).map(t => t.name);
   const overshoot = club.expectation - position;
@@ -15129,7 +15253,11 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
     qualifiedUcl: position <= uclPlacesIn(careerLeagueOf(state)),
     signings: state.seasonSignings,
     offers,
-    seasonScore: Math.min(130, myRow.pts + seasonTrophies.length * 10),
+    /* Round 633: one function, two call sites, so the number the player
+       watches climb all season is the same number the summary prints. This
+       sits AFTER the League Title push above, so the title term sees it. */
+    seasonScore: currentSeasonScore(state),
+    seasonScoreParts: seasonScoreParts(state),
     objectives: objectiveResults,
     goldenBoot,
     playerOfSeason,
@@ -15791,6 +15919,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
        summer after. That is exactly the "sack your way to cap space" exploit
        this round exists to prevent, arriving through the back door. */
     severance: moving ? [] : (career.severance ?? []).filter(r => r.weeksLeft > 0),
+    /* Round 633: the handover is a PER SEASON block and the deep copy would
+       otherwise carry it forward, subtracting the same previous manager from
+       every season for the life of the save. `midSeasonStart` is deliberately
+       left alone: the takeover really did happen, ClubManager.tsx reads it for
+       its banner, and seasonLedgerInputOf gates the legacy estimate on season
+       1 rather than on the field's absence. */
+    handover: null,
     // Round 310: the memberships the new season plays under, exactly what
     // was registered above, so a reload registers the same world back.
     leagueOverrides: pr.overrides ?? undefined,

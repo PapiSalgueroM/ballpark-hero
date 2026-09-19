@@ -29,6 +29,47 @@ The next free number for anyone else is 640.
   against the stint tables, and Alphabet Sprint's acceptance path checked in a browser.
 - 638 and 639 reserved, contents named when claimed.
 
+**Round 633 CLAIMED AND BUILT, 2026-09-17, claude.ai/code lane: the Club Manager season score
+reads the manager, not the club.** Branch `claude/free-agents-contract-termination-5oeyzz`,
+PR 103, draft, merged up to main `32012b2`. Renumbered from 628, which this lane had claimed ON A
+BRANCH while the desktop lane took it on main for the fight screens. 629 and 630 are also taken
+and 631 and 632 are reserved, so this is 633.
+
+**The lane collision, recorded so it is not repeated.** This lane also built the whole of Round
+619, free agents and contract termination, from the same footer report, in parallel with the
+desktop lane and without either seeing the other. The desktop lane's version landed on main first,
+so **this lane's Round 619 has been dropped**: the merge takes `src` and `scripts` from main
+wholesale and deletes this lane's `clubManagerFreeAgents.ts` and `simClubManagerFreeAgents.mjs`.
+A claim on a branch is not a claim. **Push the workboard entry to main before writing code, or
+read main's workboard immediately before starting and again before pushing.**
+
+Before dropping it, this lane's worst Round 619 finding was checked against main's build, because
+a bug found in one implementation has to be checked in the other. This lane's review had found a
+money printer (`signFreeAgent` writing the full notional value while charging only a fee, turning
+43m into 358.81m at Everton). Main's has the same shape. **Measured on main's engine over 30
+signings at five clubs: 0 turn an instant profit, total -10.3m**, because main's journeymen carry
+a near zero notional value. Nothing to report against main. Not measured: a high value real
+professional, who only reaches the pool after the world release gate opens.
+
+Main also settled this lane's one open question by building the PERSISTING severance model
+(`CareerState.severance`). No decision is owed.
+
+**What Round 633 is.** The rule was `Math.min(130, myRow.pts + trophies * 10)`, and it is still
+that on main, so all three defects are live there. It read the club (correlation 0.851 with the
+club's preview XI, with management held identical); the 130 scale did not fit leagues whose max
+league points run 54 to 138; and relegation paid (Sunderland 43 in the Premier League, then 124
+winning the Championship, against 78 for winning the Premier League). It is a ledger of shares
+now: form 48, title 28, cup 24, Europe 24, board 6 each to 30, with the four non-European terms
+summing to exactly 130 so the five leagues with no Champions League route can still top the scale.
+Weights grid searched over 77 seeded seasons at 34 clubs: median held at 63, agreement with the
+board's grade 0.312 to 0.482, with objectives hit 0.132 to 0.577, club stature 0.776 to 0.314.
+
+**Gate, re-run against MAIN's engine after the merge rather than assumed:** tsc 0, build clean,
+`scripts/simClubManagerScore.mjs` at 10 sections with 9 controls all proved to fire with no broken
+anchors, `simFreeAgents` and `simHarnessAnchors` green, plus the Club Manager regressions.
+Component tests 317 of 321, the four failures proven pre-existing on main by running them against
+a clean archive of `origin/main`. Full account in `docs/HANDOFF-2026-09-17.md`.
+
 **Rounds 619, 628, 629 and 630, 2026-09-16: ON MAIN, desktop Claude lane.** Landed as one
 release from a fresh CRLF clone, after an adversarial review that found 28 defects confirmed by
 reproduction behind green gates: a settlement billed about 30 percent longer than quoted, a
