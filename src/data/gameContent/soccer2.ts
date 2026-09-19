@@ -496,11 +496,11 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Three career totals are in play: appearances, goals and international caps. Choose the one stat where your player beats the mystery opponent. One bad read ends the run.",
     ],
     headings: {
-      howToPlay: "How to play Higher or Lower, a free soccer stats comparison game",
-      rules: "Higher or Lower rules: ties, career totals and one wrong pick",
-      example: "Higher or Lower walkthrough: Maldini's appearances start a streak",
-      tips: "Higher or Lower tips for picking the safest career stat",
-      faq: "Higher or Lower FAQ: ties, streaks and hidden opponents",
+      howToPlay: "How to play Soccer Higher or Lower, a free career stats comparison game",
+      rules: "Soccer Higher or Lower rules: ties, career totals and one wrong pick",
+      example: "Soccer Higher or Lower walkthrough: Maldini's appearances start a streak",
+      tips: "Soccer Higher or Lower tips for picking the safest career stat",
+      faq: "Soccer Higher or Lower FAQ: ties, streaks and hidden opponents",
     },
     howToPlaySections: [
       {
@@ -625,11 +625,11 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "The connections range from friendly, like a shared club, to evil, like a common shirt number or award. Each solved group shows a difficulty color, and purple is usually the trap.",
     ],
     headings: {
-      howToPlay: "How to play Connections, a free soccer players grouping puzzle",
-      rules: "Connections rules: lives, hints and the four difficulty colors",
-      example: "Connections walkthrough: four AC Milan legends and one swap",
-      tips: "Connections tips for spotting the trap player early",
-      faq: "Connections FAQ: daily puzzles, hints and your win streak",
+      howToPlay: "How to play Soccer Connections, a free football players grouping puzzle",
+      rules: "Soccer Connections rules: lives, hints and the four difficulty colors",
+      example: "Soccer Connections walkthrough: four AC Milan legends and one swap",
+      tips: "Soccer Connections tips for spotting the trap player early",
+      faq: "Soccer Connections FAQ: daily puzzles, hints and your win streak",
     },
     howToPlaySections: [
       {
@@ -1138,11 +1138,11 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "The field is the real one, playoff winners included, and the format follows FIFA's: top two per group advance plus the 8 best third place teams into a round of 32.",
     ],
     headings: {
-      howToPlay: "How to play 2026 Bracket, a free World Cup predictor and bracket game",
-      rules: "2026 Bracket rules: groups, standings and the round of 32",
-      example: "2026 Bracket walkthrough: a Group J tiebreak and a Brazil upset",
-      tips: "2026 Bracket tips for filling a sharper World Cup bracket",
-      faq: "2026 Bracket FAQ: scoring, groups and the real World Cup result",
+      howToPlay: "How to play World Cup 2026 Bracket, a free soccer predictor and bracket game",
+      rules: "World Cup 2026 Bracket rules: groups, standings and the round of 32",
+      example: "World Cup 2026 Bracket walkthrough: a Group J tiebreak and a Brazil upset",
+      tips: "World Cup 2026 Bracket tips for filling a sharper bracket",
+      faq: "World Cup 2026 Bracket FAQ: scoring, groups and the real result",
     },
     howToPlaySections: [
       {

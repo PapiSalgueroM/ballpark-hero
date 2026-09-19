@@ -32,7 +32,7 @@ const MlbHigherLower = () => {
       />
       <GameShell
         width="narrow"
-        title="⚾ HIGHER OR LOWER"
+        title="⚾ MLB HIGHER OR LOWER"
         subtitle="Which legend hit more career home runs?"
         headerExtra={
           <>

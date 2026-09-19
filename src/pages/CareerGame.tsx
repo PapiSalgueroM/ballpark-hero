@@ -91,7 +91,7 @@ const CareerGame = () => {
       />
       <GameShell help="none"
         width="wide"
-        title="CAREER QUIZ"
+        title="SOCCER CAREER QUIZ"
         subtitle="Uncover boxes to reveal a player's career, then guess who it is!"
         headerExtra={
           <>

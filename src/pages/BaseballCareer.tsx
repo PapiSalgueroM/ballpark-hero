@@ -71,7 +71,7 @@ const BaseballCareer = () => {
       />
       <GameShell help="none"
         width="narrow"
-        title="⚾ CAREER PATH"
+        title="⚾ MLB CAREER PATH"
         subtitle="Guess the mystery baseball player from progressive clues"
         headerExtra={
           <>

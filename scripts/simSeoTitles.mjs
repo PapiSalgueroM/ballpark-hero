@@ -48,7 +48,7 @@
  * NEGATIVE CONTROLS (SEO_TITLES_CONTROL). Each refuses to run if its anchor is
  * missing, edits only an in memory copy, and must turn exactly its own section
  * red with the finding it names:
- *   dupetitle   /hockey-career takes /baseball-career's title           section 1
+ *   dupetitle   /perfect-season-nhl takes /perfect-season-nba's title   section 1
  *   longdesc    /footle's description grows past 158 characters         section 1
  *   noregistry  PageSeo ignores seoMeta and uses the page prop          section 2
  *   earlyld     a game page emits its Game JSON-LD before the chunk     section 2
@@ -241,12 +241,19 @@ const entries = CATEGORIES.flatMap(c => c.games.map(g => ({
   path: g.path, label: g.label, category: c.title,
   title: SEO_META[g.path]?.title, description: SEO_META[g.path]?.description,
 })));
+/* Round 651 re-anchored this. The two Career Path games were its pair because
+   they shared a label, so a copied title still carried the right label once
+   and the ONLY thing wrong was the duplicate. They are "MLB Career Path" and
+   "NHL Career Path" now, and the two 82-0 Perfect Season games (NBA and NHL)
+   are the pair that still share one. The copy also names no hockey word, a
+   second finding in the same section; the control still requires the
+   duplicate finding by name. */
 if (CONTROL === 'dupetitle') {
-  const from = entries.find(e => e.path === '/baseball-career');
-  const to = entries.find(e => e.path === '/hockey-career');
-  if (!from?.title || !to?.title || from.label !== to.label) abort('control dupetitle: /baseball-career and /hockey-career no longer share a label with titles to copy');
+  const from = entries.find(e => e.path === '/perfect-season-nba');
+  const to = entries.find(e => e.path === '/perfect-season-nhl');
+  if (!from?.title || !to?.title || from.label !== to.label) abort('control dupetitle: /perfect-season-nba and /perfect-season-nhl no longer share a label with titles to copy');
   to.title = from.title;
-  console.log(`CONTROL dupetitle: /hockey-career now reads "${to.title}"; section 1 must go red`);
+  console.log(`CONTROL dupetitle: /perfect-season-nhl now reads "${to.title}"; section 1 must go red`);
 }
 if (CONTROL === 'longdesc') {
   const e = entries.find(x => x.path === '/footle');

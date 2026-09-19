@@ -33,7 +33,7 @@ const TennisHigherLower = () => {
       />
       <GameShell
         width="narrow"
-        title="🎾 HIGHER OR LOWER"
+        title="🎾 TENNIS HIGHER OR LOWER"
         subtitle="Which legend won more Grand Slam singles titles?"
         headerExtra={
           <>

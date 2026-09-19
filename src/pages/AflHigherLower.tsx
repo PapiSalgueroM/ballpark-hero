@@ -31,7 +31,7 @@ const AflHigherLower = () => {
       />
       <GameShell
         width="narrow"
-        title="🏉 HIGHER OR LOWER"
+        title="🏉 AFL HIGHER OR LOWER"
         subtitle="Which legend kicked more career goals?"
         headerExtra={
           <>

@@ -32,7 +32,7 @@ const CfbHigherLower = () => {
       />
       <GameShell
         width="narrow"
-        title="🎓 HIGHER OR LOWER"
+        title="🎓 CFB HIGHER OR LOWER"
         subtitle="Which QB threw for more career college yards?"
         headerExtra={
           <>

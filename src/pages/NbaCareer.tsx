@@ -60,7 +60,7 @@ const NbaCareer = () => {
       />
       <GameShell help="none"
         width="narrow"
-        title="🏀 CAREER PATH"
+        title="🏀 NBA CAREER PATH"
         subtitle="Guess the mystery NBA player from progressive clues"
         headerExtra={
           <>

@@ -223,7 +223,7 @@ const FootballConnect4 = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Football Connect 4 | DoUKnowBall"
-          description="Connect four football players in a row by finding the common link: teams played for, draft class, position or awards."
+          description="Blue and Red take turns on one board. Drop into a column, then name a soccer player who fits both that column and the row your piece lands in, like Barcelona and a World Cup win. First to four in a row wins."
           howToPlay={[
             "Two players take turns: Blue and Red",
             "Pick a column to drop your piece into the grid",

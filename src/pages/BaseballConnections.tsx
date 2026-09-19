@@ -64,7 +64,7 @@ const BaseballConnections = () => {
       />
       <GameShell
         width="narrow"
-        title="⚾ CONNECTIONS"
+        title="⚾ MLB CONNECTIONS"
         subtitle="Find four groups of 5 baseball players that share a connection"
         headerExtra={
           <>

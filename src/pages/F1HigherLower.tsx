@@ -31,7 +31,7 @@ const F1HigherLower = () => {
       />
       <GameShell
         width="narrow"
-        title="🏎️ HIGHER OR LOWER"
+        title="🏎️ F1 HIGHER OR LOWER"
         subtitle="Which driver won more Grands Prix?"
         headerExtra={
           <>

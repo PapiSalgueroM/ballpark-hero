@@ -66,7 +66,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Pick a formation, spin in 11 random countries and name a real footballer from each nation who fits the slot. Optional timer. Free soccer trivia game.',
   },
   '/player-bingo': {
-    title: 'Player Bingo: Football Trivia Bingo Game',
+    title: 'Player Bingo: Soccer and Football Trivia Bingo',
     description: 'Real footballers appear one at a time, name only. Tap the square each one fits and complete a line on the 5x5 board before three strikes. Free soccer bingo.',
   },
   '/sports-bingo': {
@@ -102,11 +102,11 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: "A footballer's whole career sits there season by season with the boxes covered. Reveal as few clubs and stats as you can and name him. Free soccer quiz.",
   },
   '/higher-lower': {
-    title: 'Higher or Lower: Soccer Career Stats Game',
+    title: 'Soccer Higher or Lower: Career Stats Game',
     description: "Your player's stats are face up and the challenger's are hidden. Pick appearances, goals or caps where yours wins and keep the streak going. Free soccer game.",
   },
   '/connections': {
-    title: 'Connections: Soccer Player Grouping Puzzle',
+    title: 'Soccer Connections: Football Player Puzzle',
     description: 'Sixteen soccer players, four hidden groups of four. Sort every name into its secret category before your lives run out. A free football trivia puzzle.',
   },
   '/build-your-xi': {
@@ -126,7 +126,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Fill the daily 3x3 board with players who match both the row and the column. Rarity scores reward picks nobody else made. Free soccer trivia grid game.',
   },
   '/world-cup-bracket': {
-    title: '2026 Bracket: World Cup Soccer Predictor',
+    title: 'World Cup 2026 Bracket: Soccer Predictor Game',
     description: 'Build your 2026 World Cup bracket, every group and knockout round plus the awards, then score it against how the tournament really went. Free soccer game.',
   },
   '/soccer-career': {
@@ -302,7 +302,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Spin across a century of baseball, draft a cross era lineup from real team seasons and simulate all 162 games. Can you go unbeaten? Free MLB game.',
   },
   '/baseball-career': {
-    title: 'Career Path: Guess the MLB Baseball Player',
+    title: 'MLB Career Path: Guess the Baseball Player',
     description: 'One mystery baseball player, six clues from position and draft to teams, stats and awards. The sooner you guess, the more you score. Free daily MLB trivia.',
   },
   '/mlb-higher-lower': {
@@ -338,7 +338,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'A real World Series starting nine in batting order with one name blanked out. Can you remember who actually started? Free daily baseball quiz.',
   },
   '/baseball-connections': {
-    title: 'Connections: MLB Baseball Grouping Puzzle',
+    title: 'MLB Connections: Baseball Grouping Puzzle',
     description: 'Twenty baseball players hide four groups of five tied by a franchise, an award or a country. Find every group before you run out. Free daily MLB puzzle.',
   },
   '/perfect-season-nhl': {
@@ -354,11 +354,11 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Every row and column is an NHL franchise or a career milestone, and each cell wants a player who fits both. Daily 3x3 board plus unlimited. Free hockey.',
   },
   '/hockey-career': {
-    title: 'Career Path: Guess the NHL Hockey Player',
+    title: 'NHL Career Path: Guess the Hockey Player',
     description: 'One mystery hockey player and a stack of clues on country, draft, teams, stats and awards. Swing early for the full score. Free daily NHL trivia game.',
   },
   '/hockey-higher-lower': {
-    title: 'Higher / Lower: NHL Hockey Career Points Quiz',
+    title: 'NHL Higher or Lower: Hockey Career Points Quiz',
     description: 'Two hockey players side by side: who finished with more career points? Ten quick rounds and a streak bonus that snowballs. Free daily NHL trivia game.',
   },
   '/nhl-connections': {
@@ -514,7 +514,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'One category, a board of names. Click everyone who belongs and dodge the plausible fakes planted among them. Two lives a board. Free daily sports trivia.',
   },
   '/sports-millionaire': {
-    title: 'Sports Millionaire: Money Ladder Trivia Quiz',
+    title: 'Sports Millionaire: Soccer Money Ladder Quiz',
     description: 'Fifteen questions built from real football data, three lifelines and a pretend million at the top of the money ladder. One wrong step drops you. Free.',
   },
   '/quiz-board': {

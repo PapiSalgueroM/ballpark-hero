@@ -320,7 +320,8 @@ const PerfectSeasonMlb = () => {
       <div className="max-w-4xl mx-auto px-4 py-6 md:py-10">
         <header className="text-center mb-6">
           <h1 className="text-4xl md:text-6xl font-bold tracking-[0.08em] text-primary font-display mb-1">
-            162-0
+            162-0{' '}
+            <span className="block mt-1 text-sm md:text-base font-semibold tracking-[0.2em] uppercase text-muted-foreground">MLB Perfect Season</span>
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
             Spin the wheel of baseball history, draft one player per stop, and chase the perfect season.

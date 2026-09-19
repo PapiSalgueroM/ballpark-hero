@@ -69,7 +69,7 @@ const Connections = () => {
       />
       <GameShell
         width="wide"
-        title="CONNECTIONS"
+        title="SOCCER CONNECTIONS"
         subtitle="Group 16 soccer players into 4 secret categories. Can you crack the connection?"
         headerExtra={
           <>
@@ -278,7 +278,7 @@ const Connections = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Sports Connections Game | DoUKnowBall"
-          description="Find the four groups of connected sports players. Each group shares something in common: a team, award, position or era."
+          description="Sixteen soccer players hide four groups of four, tied by a club, a country, a trophy or a record. Pick four that belong together, and every wrong guess costs one of your four lives."
           howToPlay={[
             'Select four players you think belong to the same group',
             'Hit Submit to check your guess. Correct groups are revealed',
