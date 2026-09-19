@@ -277,7 +277,7 @@ const Connections = () => {
 
         <GameSeoContent
           pageHasOwnH1
-          title="Sports Connections Game | DoUKnowBall"
+          title="Soccer Connections | DoUKnowBall"
           description="Sixteen soccer players hide four groups of four, tied by a club, a country, a trophy or a record. Pick four that belong together, and every wrong guess costs one of your four lives."
           howToPlay={[
             'Select four players you think belong to the same group',

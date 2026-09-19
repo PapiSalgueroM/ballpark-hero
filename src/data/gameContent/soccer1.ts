@@ -5,11 +5,11 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       '/budget-builder': {
     intro: [
       "Budget Builder gives you a huge pot of transfer money and one job: sign the best eleven the market allows. Prices are real market values, so every superstar you grab starves another position.",
-      "The twist is the cap: always 62 percent of what the priciest possible XI would cost in your chosen market, so you can never just buy the best name for every slot.",
+      "The twist is the budget. The Today market gives you a flat billion, well short of the priciest possible XI on the full world market, and the 2015 and 2007 markets cap you at 62 percent of their own priciest XI, so there you can never buy the best name for every slot.",
     ],
     headings: {
       howToPlay: "How to play $1B Budget Builder, a free soccer squad building game",
-      rules: "$1B Budget Builder rules: the cap, team rating and final score",
+      rules: "$1B Budget Builder rules: the budget, team rating and final score",
       example: "$1B Budget Builder walkthrough: a Today market XI built around Haaland",
       tips: "$1B Budget Builder tips for spending the cap on the right shirts",
       faq: "$1B Budget Builder FAQ: the billion and the Money XI",
@@ -50,9 +50,9 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     ],
     ruleSections: [
       {
-        heading: "How the 62 percent budget cap is worked out",
+        heading: "How your budget is set in each market",
         items: [
-          "The cap is 62 percent of the priciest possible XI for your era, formation and pool, rounded to the nearest 10 million, never below 100 million, and always shown on screen.",
+          "The Today market is a flat 1,000 million, one billion. The 2015 and 2007 markets cap you at 62 percent of the priciest possible XI for your formation, rounded to the nearest 10 million and never below 100 million. Your budget is always shown on screen.",
         ],
       },
       {
@@ -62,15 +62,15 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         ],
       },
       {
-        heading: "One daily board demand worth 100 points",
+        heading: "One daily board demand worth 10 points",
         items: [
-          "One board demand runs per day, worth 100 bonus score if the finished XI meets it. It never blocks a signing.",
+          "One board demand runs per day in each market, worth 10 bonus points if the finished XI meets it. It never blocks a signing.",
         ],
       },
       {
         heading: "Final score: rating, savings and the series",
         items: [
-          "Final score is rating times 10, plus 1 point per 20 million unspent, plus the demand bonus, plus 150 for a series win or 50 for a draw.",
+          "Final score is your team rating, plus 1 point for every full 200 million left unspent, plus 10 for meeting the board demand, plus 15 for a series win or 5 for a draw.",
         ],
       },
     ],
@@ -111,7 +111,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
     faqs: [
       {
         q: "Is the budget really a billion dollars?",
-        a: "On the modern board, yes: exactly one billion, in dollars, which is the currency the real market values are recorded in. The best possible XI costs well past it, so the squeeze is real. Historic eras recompute their cap from their own smaller market, 62 percent of the priciest possible XI, so every era forces the same choices.",
+        a: "On the Today board, yes: exactly one billion, in dollars, which is the currency the real market values are recorded in. On the full world market the priciest possible XI costs well past it, so the squeeze is real. The 2015 and 2007 boards recompute their cap from their own smaller market, 62 percent of the priciest possible XI rounded to the nearest 10 million and never below 100 million, so those eras force the same choices.",
       },
       {
         q: "What is the Money XI?",

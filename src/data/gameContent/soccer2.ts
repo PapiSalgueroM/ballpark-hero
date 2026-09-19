@@ -138,11 +138,11 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "The run is decided entirely by the squad you drafted: the same XI always runs the same gauntlet, so every pick is the game.",
     ],
     headings: {
-      howToPlay: "How to play Gauntlet Draft, a free online soccer card draft game",
-      rules: "Gauntlet Draft rules: cards, the knockout and opposition ratings",
-      example: "Gauntlet Draft walkthrough: a striker pick and a four round run",
-      tips: "Gauntlet Draft tips for drafting a squad that lifts the trophy",
-      faq: "Gauntlet Draft FAQ: the daily draft, real players and replays",
+      howToPlay: "How to play Gauntlet Draft: Soccer, a free online card draft game",
+      rules: "Gauntlet Draft: Soccer rules for cards, the knockout and opposition ratings",
+      example: "Gauntlet Draft: Soccer walkthrough of a striker pick and a four round run",
+      tips: "Gauntlet Draft: Soccer tips for drafting a squad that lifts the trophy",
+      faq: "Gauntlet Draft: Soccer FAQ on the daily draft, real players and replays",
     },
     howToPlaySections: [
       {
@@ -881,11 +881,11 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Each of the 7 columns and 6 rows carries an attribute. To claim a cell you name a player matching both, and gravity still applies: pieces fall to the lowest open row.",
     ],
     headings: {
-      howToPlay: "How to play Connect 4, a free soccer trivia and four in a row game",
-      rules: "Connect 4 rules: columns, rows and rejected answers",
-      example: "Connect 4 walkthrough: Ronaldinho blocks a winning line",
-      tips: "Connect 4 tips for choosing columns over trivia recall",
-      faq: "Connect 4 FAQ: turns, rejected names and network errors",
+      howToPlay: "How to play Soccer Connect 4, a free football trivia and four in a row game",
+      rules: "Soccer Connect 4 rules: columns, rows and rejected answers",
+      example: "Soccer Connect 4 walkthrough: Ronaldinho blocks a winning line",
+      tips: "Soccer Connect 4 tips for choosing columns over trivia recall",
+      faq: "Soccer Connect 4 FAQ: turns, rejected names and network errors",
     },
     howToPlaySections: [
       {

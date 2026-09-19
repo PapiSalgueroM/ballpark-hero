@@ -66,8 +66,8 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Pick a formation, spin in 11 random countries and name a real footballer from each nation who fits the slot. Optional timer. Free soccer trivia game.',
   },
   '/player-bingo': {
-    title: 'Player Bingo: Soccer and Football Trivia Bingo',
-    description: 'Real footballers appear one at a time, name only. Tap the square each one fits and complete a line on the 5x5 board before three strikes. Free soccer bingo.',
+    title: 'Player Bingo: Soccer Player Trivia Bingo',
+    description: 'Real footballers appear one at a time, name only. Tap the square each one fits and complete a line on the 5x5 board before three strikes. Free football bingo.',
   },
   '/sports-bingo': {
     title: 'Sports Bingo: Soccer Pack Opening Bingo Game',
@@ -114,7 +114,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'A slot machine gives each position a random club or country. Name a player who fits each slot, then an AI grades your XI and a season plays out. Free soccer.',
   },
   '/football-connect-4': {
-    title: 'Connect 4: Soccer Trivia Grid Game',
+    title: 'Soccer Connect 4: Football Trivia Grid Game',
     description: 'Classic four in a row where every disc costs a soccer answer. Name a player who fits the column and the row to claim the cell. Free two player trivia game.',
   },
   '/free-kick': {
@@ -158,7 +158,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Buy an XI in a real past season from anonymous stat cards, then roll the years forward and watch the real market values move. Free soccer stats game.',
   },
   '/perfect-season-nfl': {
-    title: '17-0 Perfect Season: NFL Football Draft Sim',
+    title: '17-0 NFL Perfect Season: Football Draft Sim',
     description: 'Spin real pro football team seasons from 1999 to 2024, draft a cross era offense and simulate a 17 game season. Can you go unbeaten? Free NFL game.',
   },
   '/front-office': {
@@ -234,7 +234,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Set the arc, fade off the closeout and time the strength bar over ten jump shots, backing up each time. Daily and unlimited. A free basketball shooting game.',
   },
   '/perfect-season-nba': {
-    title: '82-0 Perfect Season: NBA Basketball Draft Sim',
+    title: '82-0 NBA Perfect Season: Basketball Draft Sim',
     description: 'Every spin lands on a real NBA team season. Draft a cross era starting five plus a sixth man, then simulate 82 games. Can you go unbeaten? Free basketball.',
   },
   '/stat-detective': {
@@ -298,7 +298,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Draft an NBA starting five one slot at a time from five real players, then survive a five round knockout cup. Free daily basketball draft game.',
   },
   '/perfect-season-mlb': {
-    title: '162-0 Perfect Season: MLB Baseball Draft Sim',
+    title: '162-0 MLB Perfect Season: Baseball Draft Sim',
     description: 'Spin across a century of baseball, draft a cross era lineup from real team seasons and simulate all 162 games. Can you go unbeaten? Free MLB game.',
   },
   '/baseball-career': {
@@ -342,7 +342,7 @@ export const SEO_META: Record<string, SeoMeta> = {
     description: 'Twenty baseball players hide four groups of five tied by a franchise, an award or a country. Find every group before you run out. Free daily MLB puzzle.',
   },
   '/perfect-season-nhl': {
-    title: '82-0 Perfect Season: NHL Hockey Draft Sim',
+    title: '82-0 NHL Perfect Season: Hockey Draft Sim',
     description: 'Every spin lands on a real NHL franchise and decade. Fill six slots from a century of hockey, then the sim plays 82 games. Can you go unbeaten? Free.',
   },
   '/puck-detective': {

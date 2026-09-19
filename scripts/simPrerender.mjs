@@ -885,39 +885,87 @@ const failuresAfter16 = failures;
    strips, and this reads the documents rather than the source, so a
    placeholder added next month with none is caught whatever its wording after
    the first word. Comments and scripts are stripped first (section 11's
-   lesson), and only a readable block whose text STARTS with the word counts,
-   so a sentence that merely mentions loading is not a finding.
-   SIM_PRERENDER_CONTROL=loading plants one such paragraph in one document in
-   memory, and this section must report it. */
+   lesson).
+
+   THE SHAPE, NOT THE WORD. The first cut matched only a block starting
+   "Loading", and seven sitemap pages walked straight past it with the same
+   frozen state worded differently: "Setting the test...", "Stacking today's
+   boxes...", "Scouting the player pool...", "unpacking the archive...". A
+   waiting line has a shape, so that is what is matched. A readable block is a
+   placeholder when its whole text
+     (a) starts with "Loading", or with a plain wait phrase ("Please wait",
+         "One moment", "Hang tight"), or
+     (b) is short (80 characters at most), ends in an ellipsis ("..." or the
+         single character), and opens on a waiting verb from the list below
+         or on any word ending in "ing", or
+     (c) is nothing but an ellipsis.
+   Ordinary copy does not take that shape: the guide headings open on "ing"
+   words ("Reading the row and column criteria") but never trail off, and a
+   picker's empty state ("Select a player...") trails off but is not waiting
+   on anything.
+   SIM_PRERENDER_CONTROL=loading plants three placeholders of different shapes
+   and three decoys in one document in memory. This section must report every
+   placeholder and none of the decoys. */
 console.log('17) no saved page opens on a frozen loading line');
+const found17 = [];
 {
+  const PLANTED = ["Loading today's puzzle…", "Stacking today's boxes…", 'unpacking the archive...'];
+  const DECOYS = ['Reading the row and column criteria', 'Select a player...', 'Checking the map first in World Cup mode'];
+  let controlVictim = null;
   if (CONTROL === 'loading') {
-    const victim = [...docs.keys()].find(r => r !== '/');
-    const before = docs.get(victim);
-    const after = before.replace(/<\/body>/i, "<p>Loading today's puzzle…</p></body>");
+    controlVictim = [...docs.keys()].find(r => r !== '/');
+    const before = docs.get(controlVictim);
+    const plant = [
+      ...PLANTED.map(t => `<p>${t}</p>`),
+      `<h3>${DECOYS[0]}</h3>`, `<p>${DECOYS[1]}</p>`, `<li>${DECOYS[2]}</li>`,
+    ].join('');
+    const after = before.replace(/<\/body>/i, `${plant}</body>`);
     if (after === before) {
-      console.error(`control: could not plant a loading line in ${victim}, so this control would prove nothing`);
+      console.error(`control: could not plant the lines in ${controlVictim}, so this control would prove nothing`);
       process.exit(1);
     }
-    docs.set(victim, after);
-    console.log(`   control loading: ${victim} carries a planted loading paragraph in memory, section 17 must report it`);
+    docs.set(controlVictim, after);
+    console.log(`   control loading: ${controlVictim} carries ${PLANTED.length} planted placeholders and ${DECOYS.length} decoys in memory; section 17 must report exactly the placeholders`);
   }
-  /* case sensitive on purpose: the prerenderer writes lowercase tags, and a
-     capital L is how a placeholder opens where ordinary copy does not */
-  const LOADING_BLOCK = /<(p|li|h[1-6]|blockquote|td|th)\b[^>]*>\s*(Loading\b[^<]{0,60})/g;
-  let hits = 0;
+  const WAITING_VERBS = new Set([
+    'loading', 'fetching', 'getting', 'preparing', 'pulling', 'warming', 'shuffling', 'building',
+    'checking', 'connecting', 'dealing', 'spinning', 'waiting', 'setting', 'stacking', 'scouting',
+    'unpacking', 'generating', 'crunching', 'calculating', 'syncing', 'opening', 'finding',
+    'searching', 'drawing', 'counting', 'starting', 'simulating', 'rolling', 'grabbing',
+  ]);
+  const ELLIPSIS = /(?:…|\.{3})$/;
+  const decode = s => s.replace(/&hellip;/g, '…').replace(/&#x27;|&apos;|&#39;/g, "'").replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&nbsp;/g, ' ').replace(/&amp;/g, '&');
+  const isPlaceholder = text => {
+    if (/^Loading\b/.test(text) || /^(?:please wait|one moment|hang tight|just a (?:moment|sec))\b/i.test(text)) return true;
+    if (/^(?:…|\.{3,})$/.test(text)) return true;
+    if (text.length > 80 || !ELLIPSIS.test(text)) return false;
+    const first = (text.match(/^[A-Za-z']+/) ?? [''])[0].toLowerCase();
+    return WAITING_VERBS.has(first) || /[a-z]ing$/.test(first);
+  };
+  const BLOCK = /<(p|li|h[1-6]|blockquote|td|th)\b[^>]*>([\s\S]*?)<\/\1>/g;
   for (const [r, doc] of docs) {
     const html = doc
       .replace(/<!--[\s\S]*?-->/g, ' ')
       .replace(/<script[\s\S]*?<\/script>/gi, ' ')
-      .replace(/<style[\s\S]*?<\/style>/gi, ' ');
-    const found = [...html.matchAll(LOADING_BLOCK)].map(m => m[2].trim());
-    for (const line of found) {
-      hits += 1;
-      fail(`${r}: the saved page carries a loading placeholder as content ("${line}"); mark the placeholder element data-no-prerender`);
+      .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+      .replace(/<head[\s\S]*?<\/head>/i, ' ');
+    for (const m of html.matchAll(BLOCK)) {
+      const text = decode(m[2].replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
+      if (!text || !isPlaceholder(text)) continue;
+      found17.push({ r, text });
+      fail(`${r}: the saved page carries a waiting placeholder as content ("${text.slice(0, 70)}"); mark the placeholder element data-no-prerender`);
     }
   }
-  console.log(`   ${docs.size} documents read, ${hits} loading line${hits === 1 ? '' : 's'} found`);
+  if (CONTROL === 'loading') {
+    const got = found17.filter(f => f.r === controlVictim).map(f => f.text);
+    const missed = PLANTED.filter(t => !got.includes(t));
+    const decoyHit = DECOYS.filter(t => got.includes(t));
+    if (missed.length) console.error(`   control loading: missed ${missed.map(t => `"${t}"`).join(', ')}`);
+    if (decoyHit.length) console.error(`   control loading: flagged decoy ${decoyHit.map(t => `"${t}"`).join(', ')}`);
+    found17.controlExact = !missed.length && !decoyHit.length && got.length === PLANTED.length;
+  }
+  console.log(`   ${docs.size} documents read, ${found17.length} waiting line${found17.length === 1 ? '' : 's'} found`);
 }
 
 console.log('');
@@ -968,10 +1016,11 @@ if (CONTROL === 'loading') {
   /* inverted like the others: section 17 must fail under it, and only it */
   const caught = failures - failuresAfter16;
   const elsewhere = failuresAfter16;
-  if (caught > 0 && elsewhere === 0) {
-    console.log(`simPrerender control: green. The planted loading line was reported (${caught} finding), so section 17 works.`);
+  if (caught > 0 && elsewhere === 0 && found17.controlExact) {
+    console.log(`simPrerender control: green. All three planted placeholder shapes were reported and none of the three decoys (${caught} findings), so section 17 works.`);
     process.exit(0);
   }
+  if (!found17.controlExact) console.error('simPrerender control: RED. Section 17 missed a planted placeholder or flagged a decoy, so its shape rule is wrong.');
   if (caught === 0) console.error('simPrerender control: RED. A saved page opening on a loading line went unreported, so section 17 proves nothing.');
   if (elsewhere > 0) console.error(`simPrerender control: RED. ${elsewhere} failure(s) outside section 17, which the control run must not hide.`);
   process.exit(1);

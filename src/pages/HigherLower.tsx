@@ -141,7 +141,7 @@ const HigherLowerGame = () => {
 
         <GameSeoContent
           pageHasOwnH1
-          title="Higher or Lower Sports Game | DoUKnowBall"
+          title="Soccer Higher or Lower | DoUKnowBall"
           description="Two soccer players face off. Yours shows his career appearances, goals and international caps while the challenger's stay hidden, so pick the stat where yours is higher. One wrong pick ends the streak."
           howToPlay={[
             "Two players are shown side by side with their stats",

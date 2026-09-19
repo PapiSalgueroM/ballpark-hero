@@ -34,7 +34,7 @@ export function MysteryBoxBoard() {
     return (
       <div className="mx-auto max-w-2xl px-4 py-16 text-center">
         <div className="mx-auto h-6 w-40 animate-pulse rounded bg-muted" />
-        <p className="mt-4 text-sm text-muted-foreground">Stacking today's boxes…</p>
+        <p data-no-prerender className="mt-4 text-sm text-muted-foreground">Stacking today's boxes…</p>
       </div>
     );
   }

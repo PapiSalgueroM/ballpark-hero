@@ -85,7 +85,7 @@ const CareerGame = () => {
   return (
     <>
       <PageSeo
-        title="Soccer Career Path - Guess the Player from Transfers | DoUKnowBall"
+        title="Soccer Career Quiz - Guess the Player from His Career | DoUKnowBall"
         description="Identify the soccer player from their career history. Clubs revealed one by one. Free football trivia game."
         path="/career"
       />
@@ -289,7 +289,7 @@ const CareerGame = () => {
 
         <GameSeoContent
           pageHasOwnH1
-          title="Career Path Game | DoUKnowBall"
+          title="Soccer Career Quiz | DoUKnowBall"
           description="Guess the mystery sports player from their career history. Each clue reveals a team they played for. The fewer clues you need, the higher your score."
           howToPlay={[
             'Click boxes to reveal teams from the mystery player\'s career',

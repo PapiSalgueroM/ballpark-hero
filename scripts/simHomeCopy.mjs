@@ -35,7 +35,8 @@
  *      belongs to one day.
  *
  * Since Round 651 the head's meta description is held equal to the one the
- * app renders (part 4b), with the control HOME_COPY_CONTROL=descdrift.
+ * app renders (part 4b), read with comments stripped from both files, with
+ * the controls HOME_COPY_CONTROL=descdrift, commentapp and commenttpl.
  *
  * Run: node scripts/simHomeCopy.mjs
  */
@@ -60,7 +61,44 @@ const { CATEGORIES, ALL_GAMES } = registry;
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
-const html = readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+/* Round 651's controls for part 4b, parsed up front because two of them edit
+   the template and Index.tsx in memory before anything reads them. */
+const CONTROL = process.env.HOME_COPY_CONTROL || '';
+const HOME_CONTROLS = ['descdrift', 'commentapp', 'commenttpl'];
+if (CONTROL && !HOME_CONTROLS.includes(CONTROL)) {
+  console.error(`HOME_COPY_CONTROL=${CONTROL} is not a control this harness knows (${HOME_CONTROLS.join(', ')})`);
+  process.exit(1);
+}
+
+let html = readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+let indexPage = readFileSync(path.join(ROOT, 'src/pages/Index.tsx'), 'utf8');
+/* commenttpl: the template's real description says something else, and the
+   right one survives only inside an HTML comment placed first. A reader that
+   does not strip comments takes the comment's copy and stays green. */
+if (CONTROL === 'commenttpl') {
+  const m = html.match(/<meta name="description" content="([^"]+)">/);
+  if (!m) { console.error('control commenttpl: no template meta description to move into a comment'); process.exit(1); }
+  const decoy = 'A different home description the app never renders, long enough to pass every length check on its own.';
+  const edited = html.replace(m[0], `<!-- ${m[0]} --><meta name="description" content="${decoy}">`);
+  if (edited === html) { console.error('control commenttpl: the template did not change'); process.exit(1); }
+  html = edited;
+  console.log('   control commenttpl: the template description survives only in a comment; part 4b must report the pair apart');
+}
+/* commentapp: the app's description becomes an expression, and the literal
+   survives only in a comment inside the PageSeo tag. */
+if (CONTROL === 'commentapp') {
+  const m = indexPage.match(/(<PageSeo\b)([\s\S]*?)\bdescription="([^"]*)"/);
+  if (!m) { console.error('control commentapp: no plain PageSeo description in Index.tsx to move into a comment'); process.exit(1); }
+  const edited = indexPage.replace(m[0], `${m[1]} /* description="${m[3]}" */${m[2]}description={HOME_DESCRIPTION}`);
+  if (edited === indexPage) { console.error('control commentapp: Index.tsx did not change'); process.exit(1); }
+  indexPage = edited;
+  console.log('   control commentapp: the app description survives only in a comment; part 4b must report it is not a plain string');
+}
+/* A guard that reads source must read the code, not the comments: the head
+   loses its HTML comments and Index.tsx its block and line comments before
+   any title or description is matched. */
+const indexCode = indexPage.replace(/\/\*[\s\S]*?\*\//g, ' ').replace(/^\s*\/\/.*$/gm, ' ');
+
 const rootStart = html.indexOf('<div id="root">');
 const rootEnd = html.lastIndexOf('</div>');
 if (rootStart < 0 || rootEnd < rootStart) {
@@ -168,7 +206,7 @@ console.log('4) the head the crawler actually gets');
    of what a crawler with JavaScript off sees. Measured live on 2026-08-22 with
    a Googlebot user agent: ten pages, ten canonicals, and the one missing was
    the home page. */
-const head = html.slice(0, rootStart);
+const head = html.slice(0, rootStart).replace(/<!--[\s\S]*?-->/g, ' ');
 const canon = head.match(/<link[^>]+rel="canonical"[^>]+href="([^"]+)"/);
 if (!canon) fail('the template has no canonical, so a crawler with JavaScript off sees none on the home page');
 else if (canon[1] !== 'https://douknowball.com/') fail(`the home canonical points at ${canon[1]}`);
@@ -176,8 +214,7 @@ const staticTitle = (head.match(/<title>([^<]*)<\/title>/) ?? [])[1] ?? '';
 if (!staticTitle.trim()) fail('the template has no title');
 /* and the app must not rename the page the moment it boots: a crawler that
    renders would then read a different title from one that does not */
-const indexPage = readFileSync(path.join(ROOT, 'src/pages/Index.tsx'), 'utf8');
-const appTitle = (indexPage.match(/title="([^"]*)"/) ?? [])[1] ?? '';
+const appTitle = (indexCode.match(/title="([^"]*)"/) ?? [])[1] ?? '';
 if (appTitle !== staticTitle) {
   fail(`the template says ${JSON.stringify(staticTitle)} and the app sets ${JSON.stringify(appTitle)}, so the two disagree`);
 }
@@ -199,22 +236,22 @@ console.log(`   canonical ${canon ? canon[1] : 'MISSING'}, title matches the app
    labels, and a length a result does not cut.
    HOME_COPY_CONTROL=descdrift changes one word of the app's description in
    memory; this part must then report the pair apart, and nothing else may
-   fail. */
+   fail. Both sides are read with their comments stripped (see indexCode and
+   head above), because a copy of the string in a comment is exactly what a
+   fence like this one finds by accident: HOME_COPY_CONTROL=commentapp leaves
+   the app's string only in a comment, commenttpl does the same to the
+   template's, and each must turn this part red. */
 console.log('4b) the home description is one string in the template and the app');
-const CONTROL = process.env.HOME_COPY_CONTROL || '';
-if (CONTROL && CONTROL !== 'descdrift') {
-  console.error(`HOME_COPY_CONTROL=${CONTROL} is not a control this harness knows`);
-  process.exit(1);
-}
 const failuresBefore4b = failures;
 let descDriftCaught = false;
 {
   const decodeAttr = s => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
   const tpl = staticDesc ? decodeAttr(staticDesc[1]) : '';
-  const seoBlock = (indexPage.match(/<PageSeo\b([\s\S]*?)\/>/) ?? [])[1] ?? '';
+  const seoBlock = (indexCode.match(/<PageSeo\b([\s\S]*?)\/>/) ?? [])[1] ?? '';
   let app = (seoBlock.match(/\bdescription="([^"]*)"/) ?? [])[1] ?? null;
   if (app === null) {
     fail('the home PageSeo description in src/pages/Index.tsx is not a plain string, so it cannot be held equal to the template');
+    if (CONTROL === 'commentapp') descDriftCaught = true;
   } else {
     if (CONTROL === 'descdrift') {
       const drifted = app.replace('No login needed.', 'No login required.');
@@ -227,7 +264,7 @@ let descDriftCaught = false;
     }
     if (app !== tpl) {
       fail(`the template's description ${JSON.stringify(tpl)} and the app's ${JSON.stringify(app)} differ, so a crawler reads one or the other depending on JavaScript`);
-      if (CONTROL === 'descdrift') descDriftCaught = true;
+      if (CONTROL === 'descdrift' || CONTROL === 'commenttpl') descDriftCaught = true;
     }
   }
   for (const key of ['og:description', 'twitter:description']) {
@@ -267,16 +304,16 @@ for (const [re, what] of DATED) {
 console.log('   no years, months, relative dates or results');
 
 console.log('');
-if (CONTROL === 'descdrift') {
-  /* inverted: the pair must be reported apart, by part 4b, and nothing else
-     may fail, or the red could have come from anywhere */
+if (CONTROL) {
+  /* inverted: the break must be reported by part 4b, and nothing else may
+     fail, or the red could have come from anywhere */
   const elsewhere = failuresBefore4b + (failures - failuresAfter4b);
   if (descDriftCaught && elsewhere === 0) {
-    console.log('simHomeCopy control descdrift: green. The drifted description was reported by part 4b and nothing else failed.');
+    console.log(`simHomeCopy control ${CONTROL}: green. The planted break was reported by part 4b and nothing else failed.`);
     process.exit(0);
   }
-  if (!descDriftCaught) console.error('simHomeCopy control descdrift: RED. A description that differs from the template went unreported, so part 4b proves nothing.');
-  if (elsewhere > 0) console.error(`simHomeCopy control descdrift: RED. ${elsewhere} failure(s) outside part 4b, which the control run must not hide.`);
+  if (!descDriftCaught) console.error(`simHomeCopy control ${CONTROL}: RED. The planted break went unreported, so part 4b proves nothing.`);
+  if (elsewhere > 0) console.error(`simHomeCopy control ${CONTROL}: RED. ${elsewhere} failure(s) outside part 4b, which the control run must not hide.`);
   process.exit(1);
 }
 if (failures > 0) {

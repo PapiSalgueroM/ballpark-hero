@@ -8,11 +8,11 @@ export const BASEBALL_CONTENT: GameContentMap = {
       "Eleven picks later you own a lineup stitched from every era, and the sim makes you sweat all 162 games. Going 158-4 hurts more than going 120-42. That is the point.",
     ],
     headings: {
-      howToPlay: "How to play 162-0 Perfect Season, a free MLB draft simulation",
-      rules: "162-0 Perfect Season rules: rerolls, modes and lineup slots",
-      example: "162-0 Perfect Season walkthrough: an all era dream lineup",
-      tips: "162-0 Perfect Season tips for rerolls, the DH slot and Hard mode",
-      faq: "162-0 Perfect Season FAQ: perfect runs and daily mode",
+      howToPlay: "How to play 162-0 MLB Perfect Season, a free baseball draft simulation",
+      rules: "162-0 MLB Perfect Season rules: rerolls, modes and lineup slots",
+      example: "162-0 MLB Perfect Season walkthrough: an all era dream lineup",
+      tips: "162-0 MLB Perfect Season tips for rerolls, the DH slot and Hard mode",
+      faq: "162-0 MLB Perfect Season FAQ: perfect runs and daily mode",
     },
     howToPlaySections: [
       {

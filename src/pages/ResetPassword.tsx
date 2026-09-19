@@ -130,7 +130,7 @@ export default function ResetPassword() {
             {phase === 'checking' && (
               <div className="flex flex-col items-center gap-3 py-8">
                 <Loader2 className="w-8 h-8 animate-spin text-primary" />
-                <p className="text-sm text-muted-foreground">Checking your reset link...</p>
+                <p data-no-prerender className="text-sm text-muted-foreground">Checking your reset link...</p>
               </div>
             )}
 

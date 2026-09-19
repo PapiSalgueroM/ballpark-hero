@@ -134,10 +134,10 @@
         "Fill all eleven for your team rating, then play the Money XI final."
       ],
       "rules": [
-        "The cap is 62 percent of the priciest possible XI for your era, formation and pool, rounded to the nearest 10 million, never below 100 million, and always shown on screen.",
+        "The Today market is a flat 1,000 million, one billion. The 2015 and 2007 markets cap you at 62 percent of the priciest possible XI for your formation, rounded to the nearest 10 million and never below 100 million. Your budget is always shown on screen.",
         "Team rating is the average of your eleven ratings, on a ratings curve that tops out at 96.",
-        "One board demand runs per day, worth 100 bonus score if the finished XI meets it. It never blocks a signing.",
-        "Final score is rating times 10, plus 1 point per 20 million unspent, plus the demand bonus, plus 150 for a series win or 50 for a draw."
+        "One board demand runs per day in each market, worth 10 bonus points if the finished XI meets it. It never blocks a signing.",
+        "Final score is your team rating, plus 1 point for every full 200 million left unspent, plus 10 for meeting the board demand, plus 15 for a series win or 5 for a draw."
       ],
       "example": [
         "You take the Today market in a 4-3-3 and blow half the cap on the front line, Haaland through the middle. The defense budget looks grim, so you release a winger and bargain hunt for fullbacks.",

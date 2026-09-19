@@ -80,7 +80,7 @@ const HallOfChampions = () => {
           {loadState === 'loading' ? (
             <div className="py-16 flex flex-col items-center gap-3 text-muted-foreground">
               <Loader2 className="w-8 h-8 animate-spin text-primary" />
-              <p className="text-sm">unpacking the archive...</p>
+              <p data-no-prerender className="text-sm">unpacking the archive...</p>
             </div>
           ) : (
             <div className="py-12 text-muted-foreground">

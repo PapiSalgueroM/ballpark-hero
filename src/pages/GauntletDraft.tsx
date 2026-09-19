@@ -148,7 +148,7 @@ export default function GauntletDraft() {
         description="The draft mode: eleven picks of five real players each, one per position, then your XI runs a five round knockout against ever stronger opposition. One shared daily draft, an unlimited mode, and the same squad always runs the same gauntlet."
         path="/gauntlet-draft"
       />
-      <GameShell width="narrow" title="Gauntlet Draft" emoji="⚔️" subtitle="Pick your XI five cards at a time, then survive the cup.">
+      <GameShell width="narrow" title="Gauntlet Draft: Soccer" emoji="⚔️" subtitle="Pick your XI five cards at a time, then survive the cup.">
         {phase === 'boot' && (
           <div className="flex justify-center py-16"><Loader2 className="w-8 h-8 animate-spin text-primary" /></div>
         )}
@@ -268,7 +268,7 @@ export default function GauntletDraft() {
 
         <GameSeoContent
           pageHasOwnH1
-          title="Gauntlet Draft: Pick Five, Survive Five"
+          title="Gauntlet Draft: Soccer, Pick Five, Survive Five"
           description="The draft mode: a formation is drawn, each of its eleven slots deals five real players from a star to a bargain, you keep one per slot, and the finished XI runs a five round knockout against ever stronger invented opposition. One shared daily draft, unlimited redrafts, and a fully deterministic cup run so the draft is the game."
         />
         <GameNav />

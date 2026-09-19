@@ -91,13 +91,15 @@ export function BudgetBuilderBoard() {
           />
         </div>
         <p className="mt-1.5 text-[11px] text-muted-foreground">
-          Spent ${spent}M of ${budget}M ({era.label} market cap: 62% of the priciest possible XI)
+          Spent ${spent}M of ${budget}M ({era.id === 'today'
+            ? 'the Today market is a flat billion'
+            : `${era.label} market cap: 62% of the priciest possible XI, to the nearest 10M`})
         </p>
       </div>
 
       {/* Board demand (owner task 49: criteria) */}
       <div className={`mt-3 rounded-xl border p-3 ${complete ? (criterionMet ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-destructive/50 bg-destructive/5') : 'border-gold/40 bg-gold/5'}`}>
-        <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">📋 Today's board demand (+100 score)</p>
+        <p className="text-[10px] font-semibold uppercase tracking-wider text-gold">📋 Today's board demand (+10 score)</p>
         <p className={`mt-1 text-sm font-semibold ${complete ? (criterionMet ? 'text-emerald-500' : 'text-destructive') : 'text-foreground'}`}>
           {complete ? (criterionMet ? '✅ ' : '❌ ') : ''}{criterion.emoji} {criterion.label}
         </p>
@@ -273,7 +275,7 @@ export function BudgetBuilderBoard() {
               </div>
               <p className="mt-3 text-center font-display text-2xl font-black text-gold">Score: {finalScore}</p>
               <p className="text-center text-[11px] text-muted-foreground">
-                rating x10 + thrift + board demand bonus + final result
+                team rating + 1 per 200M unspent + 10 for the board demand + 15 for a series win or 5 for a draw
               </p>
             </div>
           )}

@@ -128,11 +128,11 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Six picks build a cross era starting five plus a sixth man, then the simulator plays all 82 games. The goal is right there in the name: 82-0.",
     ],
     headings: {
-      howToPlay: "How to play 82-0 Perfect Season, a free online NBA draft simulator",
-      rules: "82-0 Perfect Season rules: spins, rerolls and the simulated playoffs",
-      example: "82-0 Perfect Season walkthrough: a Lakers spin and a playoff run",
-      tips: "82-0 Perfect Season tips for drafting a title worthy roster",
-      faq: "82-0 Perfect Season FAQ: daily mode, ratings and going undefeated",
+      howToPlay: "How to play 82-0 NBA Perfect Season, a free online draft simulator",
+      rules: "82-0 NBA Perfect Season rules: spins, rerolls and the simulated playoffs",
+      example: "82-0 NBA Perfect Season walkthrough: a Lakers spin and a playoff run",
+      tips: "82-0 NBA Perfect Season tips for drafting a title worthy roster",
+      faq: "82-0 NBA Perfect Season FAQ: daily mode, ratings and going undefeated",
     },
     howToPlaySections: [
       {

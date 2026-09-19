@@ -827,7 +827,7 @@ const PerfectSeasonNba = () => {
 
         <GameSeoContent
           pageHasOwnH1
-          title="82-0: The Perfect Season Challenge"
+          title="82-0 NBA Perfect Season Challenge"
           description="Draft across every era of NBA history. The wheel decides which team and season you draft from, one player per spin, no repeats. Then the sim decides your fate over 82 games."
           howToPlay={[
             'Spin the wheel. It lands on a real NBA team and season, from the 1950s to today.',

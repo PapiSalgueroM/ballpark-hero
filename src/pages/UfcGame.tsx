@@ -159,7 +159,7 @@ const UfcGame = () => {
 
         <GameSeoContent
           pageHasOwnH1
-          title="Combat Sports Trivia Game | DoUKnowBall"
+          title="UFC Guesser: Guess the MMA Fighter | DoUKnowBall"
           description="Test your UFC and MMA knowledge with daily trivia puzzles covering fighters, records, weight classes and championship history."
           howToPlay={[
             "A mystery UFC fighter is selected. Guess who it is in 8 tries",

@@ -659,7 +659,7 @@ const PerfectSeasonNhl = () => {
 
         <GameSeoContent
           pageHasOwnH1
-          title="82-0: The Perfect Season Challenge"
+          title="82-0 NHL Perfect Season Challenge"
           description="Draft across every era of NHL history. The wheel decides which franchise and decade you draft from, one player per spin, no repeats. Then the sim decides your fate over 82 games."
           howToPlay={[
             'Spin the wheel. It lands on a real NHL franchise and one decade of its history.',

@@ -832,7 +832,7 @@ function StadiumRoom({ g, visible, onNeedsYou }: { g: ReturnType<typeof useStadi
           <DialogDescription data-set-piece-match className="text-xs tabular-nums text-muted-foreground">
             {kickClosed ? 'Kick closed' : `Match ${s.minute}' · ${s.goalsFor} - ${s.goalsAgainst}`}
           </DialogDescription>
-          {g.activeSetPiece && <Suspense fallback={<p className="text-sm">Getting the kick ready...</p>}>
+          {g.activeSetPiece && <Suspense fallback={<p data-no-prerender className="text-sm">Getting the kick ready...</p>}>
             <SetPieceBoard key={`${g.activeSetPiece.rep}:${g.activeSetPiece.match}`} kickIndex={g.activeSetPiece.kickIndex} seed={g.activeSetPiece.seed}
               expired={kickClosed}
               onResult={scored => g.doSetPieceResult(g.activeSetPiece!, scored)} onBack={g.closeSetPiece} />

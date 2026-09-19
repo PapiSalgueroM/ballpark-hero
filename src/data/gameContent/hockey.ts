@@ -8,11 +8,11 @@ export const HOCKEY_CONTENT: GameContentMap = {
       "Fill six slots from a century of hockey, then the sim plays the 82 game season. Anything short of 82-0 stings.",
     ],
     headings: {
-      howToPlay: "How to play 82-0 Perfect Season, a free NHL wheel and draft game",
-      rules: "82-0 Perfect Season rules: the wheel, the slots and the 82 games",
-      example: "82-0 Perfect Season walkthrough: a spin, a reroll and a near miss",
-      tips: "82-0 Perfect Season tips for building a run that stays perfect",
-      faq: "82-0 Perfect Season FAQ: rerolls, Hard mode and the Daily",
+      howToPlay: "How to play 82-0 NHL Perfect Season, a free hockey wheel and draft game",
+      rules: "82-0 NHL Perfect Season rules: the wheel, the slots and the 82 games",
+      example: "82-0 NHL Perfect Season walkthrough: a spin, a reroll and a near miss",
+      tips: "82-0 NHL Perfect Season tips for building a run that stays perfect",
+      faq: "82-0 NHL Perfect Season FAQ: rerolls, Hard mode and the Daily",
     },
     howToPlaySections: [
       {

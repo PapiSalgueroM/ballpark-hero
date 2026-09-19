@@ -419,7 +419,7 @@ const WhoAmI = () => {
         {phase === 'boot' && (
           <div className="flex flex-col items-center gap-3 py-16">
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            <p className="text-xs text-muted-foreground">Scouting the player pool...</p>
+            <p data-no-prerender className="text-xs text-muted-foreground">Scouting the player pool...</p>
           </div>
         )}
 
@@ -524,7 +524,7 @@ const WhoAmI = () => {
                 validateOnly
                 autoFocus
               />
-              {checking && <p className="mt-2 text-xs text-muted-foreground text-center">Checking his season...</p>}
+              {checking && <p data-no-prerender className="mt-2 text-xs text-muted-foreground text-center">Checking his season...</p>}
               {lookupFailed && (
                 <p className="mt-2 text-xs text-destructive text-center">
                   Couldn't pull up his season just then, so that one doesn't count. Pick him again.
