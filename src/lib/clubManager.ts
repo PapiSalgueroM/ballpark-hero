@@ -455,6 +455,12 @@ export interface CMPlayer {
       teenager's value since Round 632 (youthPadValue); academy graduates have
       none and are priced off the curve. */
   value?: number;
+  /** Round 640: a created club's founder only. The most he can be sold on
+      for, in £m: what the same man is worth in the squad his tier's money
+      could have bought (see customQualityCap). sellValue pays the lower of
+      this and his value; his value, rating and wage stay honest. Never copied
+      to a free agent, so it ends the day he leaves the club. */
+  founderSaleCap?: number;
   /** Round 71: loan signings go home at the end of the season. */
   onLoan?: boolean;
   /** Round 94: how this player is being handled in the market. */
@@ -3836,6 +3842,8 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
      overalls"). The board reads the squad either way, so a slider superteam
      gets told to win it all, honestly. */
   const anchor = spec.quality !== undefined ? clamp(Math.round(spec.quality), 55, 88) : t.anchor;
+  /* Round 640: the squad quality the tier's money buys, for each man's sale cap. */
+  const ceiling = customQualityCap(spec.budgetTier, eraId);
   const used = new Set<string>();
   /* Round 567: the generated names are already deduped through `used`, so this
      is the belt to that brace: two different generated names that slug to one
@@ -3845,7 +3853,11 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
     let name = makeGeneratedName(seed);
     for (let k = 1; used.has(name) && k < 25; k++) name = makeGeneratedName(`${seed}|${k}`);
     used.add(name);
-    const rating = clamp(anchor + slot.off + cInt(`${seed}|r`, -2, 2), 48, 93);
+    const wobble = cInt(`${seed}|r`, -2, 2);
+    const rating = clamp(anchor + slot.off + wobble, 48, 93);
+    /* Round 640: the same man in the squad the money could have bought: his
+       slot and his wobble at the tier's ceiling. */
+    const ceilingRating = clamp(ceiling + slot.off + wobble, 48, 93);
     // Starters arrive in their prime, rotation a little younger, depth are
     // kids. Same intake logic a real newly assembled squad would show.
     const age = slot.off >= 2 ? cInt(`${seed}|a`, 24, 30)
@@ -3865,6 +3877,7 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
       seasonGoals: 0,
       seasonAssists: 0,
       value: customFounderValue(rating, eraId),
+      founderSaleCap: customFounderValue(ceilingRating, eraId),
       generated: true,
     };
   }));
@@ -3893,9 +3906,9 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
    AZ, Southampton, Hull) bank 29m to 40m doing the same thing with the seven
    men their squads can spare. The mid tier squad is 39.4m, the big 116.7m. A slider
    88 squad is 1,436.5m today, because a team of 90s is what the market says
-   it is, which is why the slider now stops where the tier's money does
-   (customQualityCap) and a created club gets the wage cap its budget buys
-   (realCapForBudget); both are below.
+   it is, which is why a founder can only be sold on for what the tier's money
+   could have bought (founderSaleCap, customQualityCap) and a created club gets
+   the wage cap its budget buys (realCapForBudget); both are below.
 
    THE RULE. A founder is worth what the real market pays for a player of his
    rating in his era. The measured ratio of real value to the raw curve over
@@ -3965,7 +3978,8 @@ function founderOf(p: CMPlayer, founders: Map<string, CMPlayer>): CMPlayer | nul
  * it at 31) keeps the same movement on the new footing: his value times the
  * ratio of the new creation value to the old, which is what this engine would
  * have grown him to. In the squad and out on loan; a founder who was sold left
- * the world with the sale.
+ * the world with the sale. Each founder also gets the sale cap his club's tier
+ * and era would have given him at the founding (founderSaleCap).
  *
  * Nothing else moves. Not a wage (a contract signed stays signed, and the cap
  * was set off the same bill, so the two still agree), not a real player bought
@@ -3987,6 +4001,8 @@ export function ensureCustomClubValues(state: CareerState): void {
     const was = preRound640FounderValue(f.rating, f.age);
     const now = f.value as number;
     p.value = p.value === was ? now : Math.max(JOURNEYMAN_VALUE, Math.round(p.value * (now / was) * 10) / 10);
+    /* And the sale cap he was founded under, from the save's own tier and era. */
+    p.founderSaleCap = f.founderSaleCap;
   };
   for (const p of state.squad ?? []) reprice(p);
   for (const l of state.loanedOut ?? []) if (l && l.player) reprice(l.player);
@@ -4035,39 +4051,46 @@ export function ensureCustomClubWageCap(state: CareerState): void {
   state.wageCap = Math.max(state.wageCap ?? wageCapFrom(wageBill(state)), floor);
 }
 
-/* ─────────────── Round 640: the squad quality a created club's money buys ───────────────
-   THE PROBLEM. Round 160 split the quality slider from the budget, so any tier
-   could found a squad of 90s. Priced honestly that squad is worth 1,465.6m
-   today, and listing it in the first window banked a p90 of 732m on a 15m,
-   40m or 90m budget alike.
+/* ─────────────── Round 640: what a founder can be sold on for ───────────────
+   THE PROBLEM. Round 160 split the quality slider from the budget on purpose
+   ("found the club YOU want, not the one the wallet dictates"), so any tier
+   can found a squad of 90s, and it plays like one. Priced honestly that squad
+   is worth 1,465.6m today, and listing it in the first window banked a p90 of
+   732m on a 15m, 40m or 90m budget alike: the slider was a money printer.
 
-   THE RULE. The squad is part of what the budget buys. The engine already
-   says what squad goes with a budget: a real club's budget is 0.16 of its
-   roster's value, so a club handed B holds a squad worth B / 0.16. A tier's
-   slider runs up to the highest quality whose squad (the tier's own slots at
-   that average, each man's name wobble of up to two points either way
-   averaged in) is worth no more than that: today 72 on 15m (93.75m allowed,
-   about 83m at 72, 99m at 73), 78 on 40m (250m, about 244m at 78) and 82 on
-   90m (562.5m, about 500m at 82). The eras price the top end in their own
-   money, so the same budget reaches further back then: 88 on 90m in 2005, 85
-   in 2010 and 2015, and 79 on 40m in 2005.
-   Everything under the ceiling is exactly the squad it always was, the form's
-   default (66) is inside every tier, and the budget is untouched.
+   THE RULE. The slider stays free, 55 to 88 on every tier in every era, and
+   the squad plays, costs and is valued exactly as good as it is. What the
+   money did not buy is the right to cash it out. The engine already says what
+   squad goes with a budget: a real club's budget is 0.16 of its roster's
+   value, so a club handed B holds a squad worth B / 0.16. The tier's ceiling
+   is the highest quality whose squad (the tier's own slots at that average,
+   each man's name wobble of up to two points either way averaged in) is worth
+   no more than that: today 72 on 15m (93.75m allowed, about 83m at 72, 99m at
+   73), 78 on 40m (250m, about 244m at 78) and 82 on 90m (562.5m, about 500m at
+   82). The eras price the top end in their own money, so the same budget
+   reaches further back then: 88 on 90m in 2005, 85 in 2010 and 2015, and 79 on
+   40m in 2005.
+
+   Every founder carries a sale cap (founderSaleCap), set at the founding: what
+   the same man, his slot and his name wobble, is worth in the squad founded at
+   the ceiling. His value depends on his rating alone (customFounderValue), so
+   his age and position change nothing. sellValue pays the lower of his value
+   and his cap, so every bid, a met release clause, a loan fee and a swap
+   (which all price off sellValue) stop there, while his value, his rating and
+   his wage stay honest. At or under the ceiling the cap sits at or above his
+   value and changes nothing on day one. He keeps it however far he develops;
+   the day he leaves he is a normal player again, because a free agent is
+   copied field by field and never with the cap.
 
    What that sells for is what a real club with that budget banks. Listing the
    whole squad in the first window and taking every bid the squad floor allows,
    real clubs inside the budget clamp bank 2.69 times their budget at the
-   median and 3.31 at p90 (66 clubs, all four eras); founded at each tier's
-   top three settings the squad banks a p90 of 2.61 to 3.01 of its tier's
-   budget (four seeds, scripts/simCustomClubValues.mjs section 2), where a
-   free slider banked 20 times it, and the tier's own squad and the form's
-   default still bank a p90 of 0.52 to 0.59 of it.
-
-   startCareer applies it, so a save written before the round keeps the squad
-   it was founded with (its spec is rebuilt as saved, never clamped). */
+   median and 3.31 at p90 (66 clubs, all four eras); measured in section 2 of
+   scripts/simCustomClubValues.mjs over every slider setting of every tier,
+   88 on 15m included. */
 export const CUSTOM_SQUAD_PER_BUDGET = 1 / 0.16;
 
-/** Round 640: the highest squad quality a budget tier may found in this era. */
+/** Round 640: the highest squad quality a budget tier's money buys in this era, the founders' sale ceiling. */
 export function customQualityCap(tier: CustomBudgetTier, eraId?: string): number {
   const allowed = (CUSTOM_TIERS[tier] ?? CUSTOM_TIERS.mid).budget * CUSTOM_SQUAD_PER_BUDGET;
   /* Each man's rating is his slot's plus a name wobble of -2 to +2 (cInt in
@@ -4211,9 +4234,6 @@ export function customBoardPreview(spec: Omit<CustomClubSpec, 'replacedClub'>, e
   const ranked = historic ? eraPlayableClubs(eraId!, spec.leagueId) : playableClubs(spec.leagueId);
   const replaced = ranked.length ? ranked[ranked.length - 1].name : null;
   const full: CustomClubSpec = { ...spec, replacedClub: replaced ?? '' };
-  /* Round 640: the same ceiling startCareer applies, so the preview never
-     quotes a demand for a squad the founding will not hand over. */
-  if (full.quality !== undefined) full.quality = Math.min(full.quality, customQualityCap(full.budgetTier, eraId));
   const { def, gap } = buildCustomDef(full, eraId);
   const league = customLeagueDef(full, eraId);
   if (!league) return { label: 'Finish in the top half', replaced };
@@ -6817,7 +6837,10 @@ export function sellValue(p: CMPlayer): number {
   // sporting director in Europe knows you have to sell. They bid accordingly.
   const wantsOut = p.wantsOut ? 0.82 : 1;
   if (p.value !== undefined) {
-    return Math.max(0.3, Math.round(p.value * 0.9 * runDown * wantsOut * 10) / 10);
+    /* Round 640: a created club's founder sells for no more than the same man
+       in the squad its money could have bought (founderSaleCap). */
+    const worth = p.founderSaleCap !== undefined ? Math.min(p.value, p.founderSaleCap) : p.value;
+    return Math.max(0.3, Math.round(worth * 0.9 * runDown * wantsOut * 10) / 10);
   }
   const youthF = p.isYouth ? 0.4 : 1;
   return Math.max(1, Math.round(baseValue(p.rating, p.age) * 0.9 * youthF * runDown * wantsOut));
@@ -14248,8 +14271,6 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
       crest: { ...custom.crest, initials: sanitizeCrestInitials(custom.crest.initials) },
       replacedClub: ranked.length ? ranked[ranked.length - 1].name : custom.replacedClub,
     };
-    /* Round 640: the slider runs only as high as the tier's money buys. */
-    if (spec.quality !== undefined) spec.quality = Math.min(spec.quality, customQualityCap(spec.budgetTier, era.id));
     registerCustomClub(spec, era.id);
     custom = spec;
   } else {
