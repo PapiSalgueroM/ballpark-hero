@@ -643,28 +643,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "No name, no face, just a career stat line. Hall of Fame or Bust shows you the anonymized numbers of a real player and asks for a verdict: legend or letdown?",
       "After you vote, the name drops, the verdict lands, and you see how the community called it. Stats can flatter, and this game is built on that.",
     ],
-    howToPlay: [
-      "Read the anonymized career stats for the mystery player. The sport is shown, the name isn't.",
-      "If you're torn, reveal a hint. There are up to 3 per player.",
-      "Vote Hall of Fame or Bust when you've made up your mind.",
-      "The reveal shows the player, the official verdict, a fun fact and the community vote split.",
-      "Finish the daily player, then keep going in unlimited mode.",
+    headings: {
+      howToPlay: "Hall of Fame or Bust? Here's how to play this blind stats game",
+      rules: "Hall of Fame or Bust? rules for hints, scoring and verdicts",
+      example: "Hall of Fame or Bust? walkthrough: 894 goals and a hidden bust",
+      tips: "Hall of Fame or Bust? tips for reading a blind stat line",
+      faq: "Hall of Fame or Bust? FAQ: verdicts, votes and sports",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the anonymized career stats",
+        items: [
+          "Read the anonymized career stats for the mystery player. The sport is shown, the name isn't.",
+        ],
+      },
+      {
+        heading: "Revealing up to three hints",
+        items: [
+          "If you're torn, reveal a hint. There are up to 3 per player.",
+        ],
+      },
+      {
+        heading: "Voting once you've made up your mind",
+        items: [
+          "Vote Hall of Fame or Bust when you've made up your mind.",
+        ],
+      },
+      {
+        heading: "Seeing the player, verdict and vote split",
+        items: [
+          "The reveal shows the player, the official verdict, a fun fact and the community vote split.",
+        ],
+      },
+      {
+        heading: "Moving from the daily player to unlimited",
+        items: [
+          "Finish the daily player, then keep going in unlimited mode.",
+        ],
+      },
     ],
-    rules: [
-      "A correct vote scores 1,000 points minus 100 for each hint you used. A wrong vote scores 0.",
-      "You can reveal up to 3 hints per player, each costing 100 points off a win.",
-      "Verdicts are Hall of Fame, Bust, or Borderline, and on a Borderline player either vote counts as correct.",
-      "One shared mystery player per day, with unlimited mode serving more after that.",
+    ruleSections: [
+      {
+        heading: "Losing points for every hint you use",
+        items: [
+          "A correct vote scores 1,000 points minus 100 for each hint you used. A wrong vote scores 0.",
+        ],
+        subsections: [
+          {
+            heading: "Capping hints at three a player",
+            items: [
+              "You can reveal up to 3 hints per player, each costing 100 points off a win.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Three verdicts, with Borderline counting either way",
+        items: [
+          "Verdicts are Hall of Fame, Bust, or Borderline, and on a Borderline player either vote counts as correct.",
+        ],
+      },
+      {
+        heading: "One shared player a day, then unlimited",
+        items: [
+          "One shared mystery player per day, with unlimited mode serving more after that.",
+        ],
+      },
     ],
-    example: [
-      "Imagine the card reads: 894 career goals, 4 championship rings, played into his 30s. No hints needed, numbers like that belong to one hockey player ever, and Hall of Fame is a free 1,000 points.",
-      "The next card is murkier: big counting stats, zero titles, one MVP-ish season. You burn two hints, vote Bust, and you're right for 800. The community split says 61 percent agreed.",
+    exampleSections: [
+      {
+        heading: "894 goals and four rings, an easy call",
+        paragraphs: [
+          "Imagine the card reads: 894 career goals, 4 championship rings, played into his 30s. No hints needed, numbers like that belong to one hockey player ever, and Hall of Fame is a free 1,000 points.",
+        ],
+      },
+      {
+        heading: "Big stats, no titles, a correct Bust vote",
+        paragraphs: [
+          "The next card is murkier: big counting stats, zero titles, one MVP-ish season. You burn two hints, vote Bust, and you're right for 800. The community split says 61 percent agreed.",
+        ],
+      },
     ],
-    tips: [
-      "Trophies and awards separate legends from compilers faster than raw totals.",
-      "Notice what the stat line leaves out. No titles listed usually means there aren't any.",
-      "Hints cost 100 each, so guess from the numbers first and spend hints only when stuck.",
-      "Busts here mean careers that fell short of the hype, and hype is exactly what the stat line hides.",
+    tipSections: [
+      {
+        heading: "Weighing trophies over raw totals",
+        items: [
+          "Trophies and awards separate legends from compilers faster than raw totals.",
+        ],
+      },
+      {
+        heading: "Noticing what the stat line leaves out",
+        items: [
+          "Notice what the stat line leaves out. No titles listed usually means there aren't any.",
+        ],
+      },
+      {
+        heading: "Guessing from the numbers before a hint",
+        items: [
+          "Hints cost 100 each, so guess from the numbers first and spend hints only when stuck.",
+        ],
+      },
+      {
+        heading: "Remembering a Bust is about the hype",
+        items: [
+          "Busts here mean careers that fell short of the hype, and hype is exactly what the stat line hides.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -687,28 +771,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "You remember who won. But do you remember the score? Score Predictor pulls up a famous match, gives you the teams, the competition, the date and a hint, and asks for the exact final score.",
       "It's a memory test disguised as a prediction game, and the difference between glory and 50 points is usually one goal you forgot about.",
     ],
-    howToPlay: [
-      "Read the match card: both teams, the competition, the date and a hint about the drama.",
-      "Type your predicted score for each team.",
-      "Hit Lock In Prediction. One prediction per match, no edits.",
-      "The real score is revealed with a fun fact about the game.",
-      "Play the daily match, then switch to unlimited for more.",
+    headings: {
+      howToPlay: "How to play Score Predictor, a free soccer, NFL and NBA trivia game",
+      rules: "Score Predictor rules for scoring bands and accuracy",
+      example: "Score Predictor walkthrough: Brazil versus Germany, 2014",
+      tips: "Score Predictor tips for calibrating by sport",
+      faq: "Score Predictor FAQ: sports covered and scoring bands",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the match card and the hint",
+        items: [
+          "Read the match card: both teams, the competition, the date and a hint about the drama.",
+        ],
+      },
+      {
+        heading: "Typing a predicted score for each team",
+        items: [
+          "Type your predicted score for each team.",
+        ],
+      },
+      {
+        heading: "Locking in one prediction per match",
+        items: [
+          "Hit Lock In Prediction. One prediction per match, no edits.",
+        ],
+      },
+      {
+        heading: "Seeing the real score and a fun fact",
+        items: [
+          "The real score is revealed with a fun fact about the game.",
+        ],
+      },
+      {
+        heading: "Switching from the daily match to unlimited",
+        items: [
+          "Play the daily match, then switch to unlimited for more.",
+        ],
+      },
     ],
-    rules: [
-      "Exact score scores 1,000 points.",
-      "Right result with both team scores within 1 scores 700, within 2 scores 400.",
-      "Right result but way off on the numbers scores 200, and the wrong result scores 50.",
-      "One featured match per day, plus an unlimited mode with the whole archive of soccer, NFL and NBA classics.",
+    ruleSections: [
+      {
+        heading: "Scoring the most for an exact score",
+        items: [
+          "Exact score scores 1,000 points.",
+        ],
+        subsections: [
+          {
+            heading: "Staying close scores a shrinking bonus",
+            items: [
+              "Right result with both team scores within 1 scores 700, within 2 scores 400.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Paying least for a wrong result",
+        items: [
+          "Right result but way off on the numbers scores 200, and the wrong result scores 50.",
+        ],
+      },
+      {
+        heading: "One daily match plus an unlimited archive",
+        items: [
+          "One featured match per day, plus an unlimited mode with the whole archive of soccer, NFL and NBA classics.",
+        ],
+      },
     ],
-    example: [
-      "Suppose the card shows Brazil against Germany, World Cup semifinal, 2014. You remember Germany humiliated the hosts, so you lock in 1-5.",
-      "The reveal says 1-7. You called the winner and Brazil's goal exactly, but being 2 off on Germany's tally drops you out of the 700 tier and out of the 400 tier too, since both scores need to be close. Right result, 200 points, and a fun fact about the strangest half in World Cup history.",
+    exampleSections: [
+      {
+        heading: "Predicting a big Germany win",
+        paragraphs: [
+          "Suppose the card shows Brazil against Germany, World Cup semifinal, 2014. You remember Germany humiliated the hosts, so you lock in 1-5.",
+        ],
+      },
+      {
+        heading: "Landing in the smallest right result tier",
+        paragraphs: [
+          "The reveal says 1-7. You called the winner and Brazil's goal exactly, but being 2 off on Germany's tally drops you out of the 700 tier and out of the 400 tier too, since both scores need to be close. Right result, 200 points, and a fun fact about the strangest half in World Cup history.",
+        ],
+      },
     ],
-    tips: [
-      "Calibrate by sport. Soccer classics live between 0 and 4 goals, NBA finals scores sit in the 80s to 110s.",
-      "Famous upsets are usually tight. Blowouts are famous precisely because they're rare.",
-      "The hint often nods at the drama, like a comeback or a shootout, which hints at the shape of the score.",
-      "Nail the winner first. That alone is the difference between 200 and 50.",
+    tipSections: [
+      {
+        heading: "Calibrating goals and points by sport",
+        items: [
+          "Calibrate by sport. Soccer classics live between 0 and 4 goals, NBA finals scores sit in the 80s to 110s.",
+        ],
+      },
+      {
+        heading: "Expecting tight scores in famous upsets",
+        items: [
+          "Famous upsets are usually tight. Blowouts are famous precisely because they're rare.",
+        ],
+      },
+      {
+        heading: "Reading the hint for the shape of the score",
+        items: [
+          "The hint often nods at the drama, like a comeback or a shootout, which hints at the shape of the score.",
+        ],
+      },
+      {
+        heading: "Nailing the winner before the numbers",
+        items: [
+          "Nail the winner first. That alone is the difference between 200 and 50.",
+        ],
+      },
     ],
     faqs: [
       {
