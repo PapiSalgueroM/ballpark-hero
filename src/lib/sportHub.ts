@@ -43,6 +43,12 @@ export interface SportHub {
   route: string;
   emoji: string;
   h1: string;
+  /** Round 639: the word a searcher uses for this section ("NFL", "soccer"),
+   *  read into the page's section headings so each one says what the section
+   *  is about instead of "Where to start" on six pages in a row. */
+  keyword: string;
+  /** Round 639: the sport's own name for the background heading. */
+  sport: string;
   /** registry categories it gathers, in display order */
   titles: CategoryTitle[];
   seoTitle: string;
@@ -86,6 +92,8 @@ export const SPORT_HUBS: SportHub[] = [
     route: '/soccer',
     emoji: '⚽',
     h1: 'Soccer Games',
+    keyword: 'soccer',
+    sport: 'Soccer',
     titles: ['Soccer'],
     seoTitle: 'Free Soccer Games: Football Trivia, Puzzles and Career Sims | DoUKnowBall',
     seoDescription:
@@ -113,12 +121,12 @@ export const SPORT_HUBS: SportHub[] = [
       { q: 'Which of these is worth a whole evening?', a: 'Soccer Career if you want to be the player, from a boyhood club through the money and the bad decisions to retirement. Club Manager if you want the dugout instead, with negotiations, board objectives and the sack race hanging over you. Stadium Tycoon and Wonderkid Factory are the idle ones, they keep ticking while you are doing something else, so they suit a second tab better than an hour of full attention.' },
     ],
     deep: {
-      heading: '⏳ The long games',
+      heading: '⏳ Soccer career and club manager sims',
       blurb:
         'Sims you come back to. Soccer Career takes one player from a boyhood club to retirement and then into the dugout. Club Manager hands you any of hundreds of real clubs across twenty leagues, today or in a real past season, and lets the board decide how long you last.',
     },
     quick: {
-      heading: '⏱️ Five minute soccer puzzles',
+      heading: '⏱️ Five minute soccer trivia and puzzle games',
       blurb:
         'Grids, guessers, transfer trivia and squad builders. Short enough for a queue, and the daily ones give everybody the same board so you can argue about it afterwards.',
     },
@@ -135,6 +143,8 @@ export const SPORT_HUBS: SportHub[] = [
     route: '/pro-basketball',
     emoji: '🏀',
     h1: 'Basketball Games',
+    keyword: 'NBA',
+    sport: 'Basketball',
     titles: ['Pro Basketball'],
     seoTitle: 'Free Basketball Games: NBA Trivia, Grids and GM Sims | DoUKnowBall',
     seoDescription:
@@ -164,12 +174,12 @@ export const SPORT_HUBS: SportHub[] = [
       { q: 'Which of these have a daily puzzle?', a: 'Plenty of them. /nba-grid, /nba-connections, /missing-five, /nba-higher-lower and /nba-stat-line serve everyone the same board once a day, and /perfect-season-nba, /perfect-lineup-nba, /nba-career and /conquest-nba have daily modes too. They all roll over at midnight Eastern. The rest, /nba-connect-4 and /nba-chain included, you can just keep playing.' },
     ],
     deep: {
-      heading: '⏳ The long games',
+      heading: '⏳ NBA career and front office sims',
       blurb:
         'One puts you in the front office with the cap, the trades and a best of seven to win. The other starts on draft night and asks what you do with a career.',
     },
     quick: {
-      heading: '⏱️ Five minute basketball puzzles',
+      heading: '⏱️ Five minute NBA trivia and puzzle games',
       blurb:
         'Grids, chains, connections and head to head stat calls. Most reset daily, so everybody plays the same board.',
     },
@@ -186,6 +196,8 @@ export const SPORT_HUBS: SportHub[] = [
     route: '/hockey',
     emoji: '🏒',
     h1: 'Hockey Games',
+    keyword: 'NHL',
+    sport: 'Hockey',
     titles: ['Hockey'],
     seoTitle: 'Free Hockey Games: NHL Trivia, Grids and GM Sims | DoUKnowBall',
     seoDescription:
@@ -214,12 +226,12 @@ export const SPORT_HUBS: SportHub[] = [
       { q: 'What is the difference between 82-0 Perfect Season and Perfect Lineup: NHL?', a: 'Who sets your limits, and how long the sim runs. Perfect Season spins a wheel that lands on a franchise and a decade, you take one player from whatever it gives you, and then it plays all 82 games hunting a perfect record. Perfect Lineup locks three of your six slots to a team or an era up front, lets you choose freely from the all-time pool, weights the result 80 percent talent and 20 percent chemistry, and grades a single game.' },
     ],
     deep: {
-      heading: '⏳ The long games',
+      heading: '⏳ NHL career and front office sims',
       blurb:
         'One is a general manager sim with a hard cap, the loser point and a bracket at the end of it. The other is one player, from draft day to the rafters.',
     },
     quick: {
-      heading: '⏱️ Five minute hockey puzzles',
+      heading: '⏱️ Five minute NHL trivia and puzzle games',
       blurb:
         'Franchise grids, attribute clues, connections and career point comparisons. Most reset daily.',
     },
@@ -236,6 +248,8 @@ export const SPORT_HUBS: SportHub[] = [
     route: '/pro-football',
     emoji: '🏈',
     h1: 'Football Games',
+    keyword: 'NFL',
+    sport: 'Football',
     titles: ['Pro Football'],
     seoTitle: 'Free Football Games: NFL Trivia, Grids and GM Sims | DoUKnowBall',
     seoDescription:
@@ -263,12 +277,12 @@ export const SPORT_HUBS: SportHub[] = [
       { q: 'Why are there no team logos, helmets or player photos?', a: 'Because all of that is licensed and this is an independent fan project with no connection to the league. The real players, their stats and the Super Bowl starting lineups are real and checked. What is invented is invented on purpose: Front Office\'s draft prospects are generated and run against a wall of real names so they stay made up, and the player at the centre of My Career never existed either. The badges are simply not here, and nothing on the page pretends otherwise.' },
     ],
     deep: {
-      heading: '⏳ The long games',
+      heading: '⏳ NFL career and front office sims',
       blurb:
         'One is the general manager job: the cap, the trades, the draft and a dynasty if you are good enough. The other runs one player from draft night toward Canton.',
     },
     quick: {
-      heading: '⏱️ Five minute football puzzles',
+      heading: '⏱️ Five minute NFL trivia and puzzle games',
       blurb:
         'The 3x3 grid scores you on how obscure your answers are, so the safe pick is rarely the best one. Most of these reset daily.',
     },
@@ -285,6 +299,8 @@ export const SPORT_HUBS: SportHub[] = [
     route: '/baseball',
     emoji: '⚾',
     h1: 'Baseball Games',
+    keyword: 'MLB',
+    sport: 'Baseball',
     titles: ['Baseball'],
     seoTitle: 'Free Baseball Games: MLB Trivia, Grids and GM Sims | DoUKnowBall',
     seoDescription:
@@ -313,12 +329,12 @@ export const SPORT_HUBS: SportHub[] = [
       { q: 'Are the players real?', a: 'In the guessing games, yes. Real players, real career stops, nothing made up to fill a gap, and no words put in anybody\'s mouth. In MLB My Career the player is yours, created at the start, so that story belongs to you rather than to somebody who actually lived it.' },
     ],
     deep: {
-      heading: '⏳ The long games',
+      heading: '⏳ MLB career and front office sims',
       blurb:
         'One is the front office: the tax line, the trade deadline and October. The other is one player from draft day toward Cooperstown.',
     },
     quick: {
-      heading: '⏱️ Five minute baseball puzzles',
+      heading: '⏱️ Five minute MLB trivia and puzzle games',
       blurb:
         'Franchise grids, career paths, home run head to heads, connections and naming the missing bat from a famous World Series order. Most reset daily.',
     },
@@ -335,6 +351,8 @@ export const SPORT_HUBS: SportHub[] = [
     route: '/college',
     emoji: '🎓',
     h1: 'College Games Hub',
+    keyword: 'college sports',
+    sport: 'College sports',
     titles: ['College Sports'],
     seoTitle: 'College Sports Games: CFB and CBB Trivia and Sims | DoUKnowBall',
     seoDescription:
@@ -362,12 +380,12 @@ export const SPORT_HUBS: SportHub[] = [
       { q: 'Do I need an account for any of this?', a: 'No. Every game on this page plays signed out and free, including both dynasty sims. An account only exists if you want streaks and leaderboard placings to follow you around, and nothing is locked behind it.' },
     ],
     deep: {
-      heading: '🏟️ Run a program',
+      heading: '🏟️ College football and basketball dynasties',
       blurb:
         'The long ones. You take a real school and live with the consequences for as many seasons as you last. Recruits and transfers are generated rather than real teenagers, which is deliberate: no invented player on this site is allowed to carry a real person\'s name.',
     },
     quick: {
-      heading: '⏱️ Five minute college puzzles',
+      heading: '⏱️ Five minute college sports trivia and puzzles',
       blurb:
         'Grids, program guessers and stat calls. Short enough for a queue, and the daily ones give everybody the same board so you can argue about it afterwards.',
     },

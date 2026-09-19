@@ -199,6 +199,53 @@ if (thin.length > 8) fail(`${thin.length} games are all but unreachable in total
 const nums = graded.map(([, n]) => n).sort((a, b) => a - b);
 console.log(`   ${chrome.size} chrome links, ${graded.length} games graded on body links: min ${nums[0]}, median ${nums[Math.floor(nums.length / 2)]}, max ${nums[nums.length - 1]}`);
 
+/* ── 6: every game is a heading, and every section says what sport it is ──
+   Round 639. Each hub's games used to ship as a run of bare links with no
+   heading between them, and its section headings ("The long games", "Where to
+   start", "Questions people ask") were the same words on all six hubs. Now
+   each game is an h3 holding its link, and each section heading names the
+   sport. Read from the saved documents, because the prerenderer decides what
+   a crawler gets: a heading nested inside a link would have been written out
+   twice, which is why the card holds the link inside the heading instead.
+   HUBS_CONTROL=cardlink rewrites the first game's h3 on each hub back to a
+   bare link in memory, and this section must go red. */
+console.log('6) every game on a hub ships as an h3 holding its link, and every section heading names the sport');
+const CONTROL = process.env.HUBS_CONTROL || '';
+if (CONTROL && CONTROL !== 'cardlink') { console.error(`HUBS_CONTROL=${CONTROL} is not a control this harness knows (cardlink)`); process.exit(2); }
+const H3_LINK = /<h3[^>]*>\s*<a href="([^"]+)"[^>]*>([^<]*)<\/a>\s*<\/h3>/g;
+const H2_TEXT = /<h2[^>]*>([\s\S]*?)<\/h2>/g;
+const clean = s => s.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
+let controlFired = 0;
+for (const h of SPORT_HUBS) {
+  let html = byRoute.get(h.route);
+  if (!html) continue;
+  if (CONTROL === 'cardlink') {
+    const first = html.match(/<h3[^>]*>\s*(<a href="[^"]+"[^>]*>[^<]*<\/a>)\s*<\/h3>/);
+    if (first) { html = html.replace(first[0], first[1]); controlFired += 1; }
+  }
+  const want = CATEGORIES.filter(c => h.titles.includes(c.title)).flatMap(c => c.games);
+  const asHeading = new Map();
+  for (const m of html.matchAll(H3_LINK)) asHeading.set(m[1], (asHeading.get(m[1]) || 0) + 1);
+  const notHeadings = want.filter(g => (asHeading.get(g.path) || 0) !== 1);
+  for (const g of notHeadings.slice(0, 4)) fail(`${h.route}: ${g.label} ships ${asHeading.get(g.path) || 0} times as an h3 holding its link, not once`);
+  const h2s = [...html.matchAll(H2_TEXT)].map(m => clean(m[1]));
+  const expected = [
+    h.deep ? h.deep.heading : null,
+    h.quick.heading,
+    h.whyHere ? `Every ${h.keyword} game here, and how they differ` : null,
+    h.startHere?.length ? `Where to start with the ${h.keyword} games` : null,
+    h.reference ? `${h.sport}, the background` : null,
+    h.hubFaqs?.length ? `${h.sport} games: questions people ask` : null,
+  ].filter(Boolean);
+  for (const e of expected) if (!h2s.includes(clean(e))) fail(`${h.route}: no h2 reading "${e}" in the saved page`);
+  const names = [h.keyword.toLowerCase(), h.sport.split(' ')[0].toLowerCase()];
+  for (const group of [h.deep, h.quick].filter(Boolean)) {
+    if (!names.some(n => group.heading.toLowerCase().includes(n))) fail(`${h.route}: the group heading "${group.heading}" does not name the sport`);
+  }
+  console.log(`   ${h.route}: ${want.length - notHeadings.length}/${want.length} games as h3 links, ${expected.length} section headings checked`);
+}
+if (CONTROL === 'cardlink' && controlFired === 0) { console.error('control cardlink: no hub carried an h3 link to rewrite, so it would prove nothing'); process.exit(1); }
+
 console.log('');
 if (failures > 0) {
   console.error(`simHubs: ${failures} failure${failures === 1 ? '' : 's'}`);

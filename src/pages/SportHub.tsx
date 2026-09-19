@@ -19,25 +19,37 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { categoriesByTitle, type GameDef } from '@/data/gameRegistry';
 import { hubFor } from '@/lib/sportHub';
 
+/* Round 639: each game is an h3 now, so the page's outline reads NFL Front
+   Office, NFL My Career, NFL Grid under the section they sit in, rather than a
+   run of links with no headings between them. The heading HOLDS the link and
+   the link is stretched over the whole card with a pseudo element, which keeps
+   the whole card a tap target without a heading nested inside a link: the
+   prerenderer writes a link out on its own before the blocks inside it, so a
+   card that was a link around a heading would have shipped every game's name
+   twice. The link keeps a 30px floor so sweepPhone measures a real target. */
 function GameCard({ game }: { game: GameDef }) {
   return (
-    <Link
-      to={game.path}
-      className="group flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary/40 hover:bg-card/80 transition-all"
-    >
-      <span className="text-2xl shrink-0">{game.emoji}</span>
-      <span className="min-w-0">
-        <span className="flex items-center gap-2 flex-wrap">
-          <span className="font-semibold text-foreground">{game.label}</span>
+    <div className="group relative flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary/40 hover:bg-card/80 focus-within:border-primary/60 transition-all">
+      <span className="text-2xl shrink-0" aria-hidden="true">{game.emoji}</span>
+      <div className="min-w-0">
+        <div className="flex items-center gap-2 flex-wrap">
+          <h3 className="text-base font-semibold text-foreground">
+            <Link
+              to={game.path}
+              className="inline-flex min-h-[30px] items-center focus:outline-none after:absolute after:inset-0 after:rounded-xl"
+            >
+              {game.label}
+            </Link>
+          </h3>
           {game.daily && (
             <span className="text-[10px] uppercase tracking-wide font-bold text-primary border border-primary/40 rounded px-1.5 py-0.5">
               Daily
             </span>
           )}
-        </span>
-        <span className="block text-xs text-muted-foreground mt-1">{game.description}</span>
-      </span>
-    </Link>
+        </div>
+        <p className="text-xs text-muted-foreground mt-1">{game.description}</p>
+      </div>
+    </div>
   );
 }
 
@@ -99,7 +111,7 @@ const SportHub = ({ route }: { route: string }) => {
         {hub.whyHere && (
           <section className="mb-10">
             <h2 className="text-lg font-display font-bold text-foreground mb-2">
-              What is here, and how it splits up
+              Every {hub.keyword} game here, and how they differ
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed">{hub.whyHere}</p>
           </section>
@@ -107,7 +119,7 @@ const SportHub = ({ route }: { route: string }) => {
 
         {hub.startHere && hub.startHere.length > 0 && (
           <section className="mb-10">
-            <h2 className="text-lg font-display font-bold text-foreground mb-2">Where to start</h2>
+            <h2 className="text-lg font-display font-bold text-foreground mb-2">Where to start with the {hub.keyword} games</h2>
             <ul className="space-y-3">
               {hub.startHere.map(s => (
                 <li key={s.path} className="text-sm text-muted-foreground leading-relaxed">
@@ -122,7 +134,7 @@ const SportHub = ({ route }: { route: string }) => {
         {hub.reference && (
           <section className="mb-10">
             <h2 className="text-lg font-display font-bold text-foreground mb-2">
-              {hub.h1.replace(/ Games( Hub)?$/, '')}, the background
+              {hub.sport}, the background
             </h2>
             <p className="text-sm text-muted-foreground leading-relaxed">{hub.reference}</p>
             {hub.referenceLinks && hub.referenceLinks.length > 0 && (
@@ -140,7 +152,9 @@ const SportHub = ({ route }: { route: string }) => {
 
         {hub.hubFaqs && hub.hubFaqs.length > 0 && (
           <section className="mb-10">
-            <h2 className="text-lg font-display font-bold text-foreground mb-3">Questions people ask</h2>
+            <h2 className="text-lg font-display font-bold text-foreground mb-3">
+              {hub.sport} games: questions people ask
+            </h2>
             <div className="space-y-4">
               {hub.hubFaqs.map(f => (
                 <div key={f.q}>
