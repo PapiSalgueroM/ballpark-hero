@@ -1283,28 +1283,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Every fan can name the most decorated club in their league. Silverware Sort asks the harder question: can you put five of them in order? The gap between knowing the Yankees lead baseball and knowing whether the Dodgers or the Red Sox come next is where this game lives.",
       "Five teams from one competition, a shuffled pile, and a ladder with the most titles at the top. Every count is counted straight out of the same audited record books the rest of the site runs on, across the Super Bowl, the NBA, the World Series, the Stanley Cup, college football and hoops, the English title, the AFL and the NRL.",
     ],
-    howToPlay: [
-      "Read the board: one competition, five teams, one right order.",
-      "Tap teams into the ladder, most titles at the top, fewest at the bottom.",
-      "Submit. Rungs you placed right lock in green, and you get a second try at the rest.",
-      "One point per correct rung on your final answer, fifteen points across the day's three boards.",
-      "The daily boards are the same for everyone. Unlimited mode keeps dealing fresh ones.",
+    headings: {
+      howToPlay: "How to play Silverware Sort, a free daily sports ranking trivia game",
+      rules: "Silverware Sort rules for ties, tries and the reveal",
+      example: "Silverware Sort walkthrough: a World Series board and an AFL board",
+      tips: "Silverware Sort tips for ranking title counts fast",
+      faq: "Silverware Sort FAQ: era names, ties and the WNBA",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the board's one competition and five teams",
+        items: [
+          "Read the board: one competition, five teams, one right order.",
+        ],
+      },
+      {
+        heading: "Building the ladder from most titles to fewest",
+        items: [
+          "Tap teams into the ladder, most titles at the top, fewest at the bottom.",
+        ],
+      },
+      {
+        heading: "Submitting for a green lock and a second try",
+        items: [
+          "Submit. Rungs you placed right lock in green, and you get a second try at the rest.",
+        ],
+      },
+      {
+        heading: "Scoring one point per rung across three boards",
+        items: [
+          "One point per correct rung on your final answer, fifteen points across the day's three boards.",
+        ],
+      },
+      {
+        heading: "Choosing the daily boards or unlimited mode",
+        items: [
+          "The daily boards are the same for everyone. Unlimited mode keeps dealing fresh ones.",
+        ],
+      },
     ],
-    rules: [
-      "No two teams on a board are ever tied. Every board has exactly one right order, so a miss is a miss on the record, never on a coin flip.",
-      "Counts follow the name the club wore at the time, the same convention as our Record Books and Name Them All: South Melbourne's flags and Sydney's flags are separate stacks.",
-      "Two tries per board. The first submit locks your greens; the second is final.",
-      "The reveal always shows every team's real count, so you leave each board knowing the actual cabinet.",
+    ruleSections: [
+      {
+        heading: "Never facing a tied board",
+        items: [
+          "No two teams on a board are ever tied. Every board has exactly one right order, so a miss is a miss on the record, never on a coin flip.",
+        ],
+        subsections: [
+          {
+            heading: "Counting titles under the name worn at the time",
+            items: [
+              "Counts follow the name the club wore at the time, the same convention as our Record Books and Name Them All: South Melbourne's flags and Sydney's flags are separate stacks.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Two tries before a board locks in",
+        items: [
+          "Two tries per board. The first submit locks your greens; the second is final.",
+        ],
+      },
+      {
+        heading: "Revealing every team's real count",
+        items: [
+          "The reveal always shows every team's real count, so you leave each board knowing the actual cabinet.",
+        ],
+      },
     ],
-    example: [
-      'A World Series board deals the Yankees, the Cardinals, the Dodgers, the Cubs and the Marlins. The top is a gift: 27 Yankees titles, then the Cardinals on 11. The bottom half is the game: Dodgers, then Cubs, then the Marlins with 2.',
-      "An AFL board will never hand you Essendon, Carlton and Collingwood together: all three sit on 16 flags, and tied teams never share a board. Same reason a Super Bowl board never deals the Steelers next to the Patriots.",
+    exampleSections: [
+      {
+        heading: "A World Series board topped by the Yankees",
+        paragraphs: [
+          'A World Series board deals the Yankees, the Cardinals, the Dodgers, the Cubs and the Marlins. The top is a gift: 27 Yankees titles, then the Cardinals on 11. The bottom half is the game: Dodgers, then Cubs, then the Marlins with 2.',
+        ],
+      },
+      {
+        heading: "An AFL board where three clubs tie on flags",
+        paragraphs: [
+          "An AFL board will never hand you Essendon, Carlton and Collingwood together: all three sit on 16 flags, and tied teams never share a board. Same reason a Super Bowl board never deals the Steelers next to the Patriots.",
+        ],
+      },
     ],
-    tips: [
-      "Anchor the ends first. The most decorated team and the clear minnow are usually easy; the middle rungs are where points die.",
-      "Watch for era names. Eastern Suburbs and the Sydney Roosters are the same club but separate stacks here, and old-name entries usually carry the smaller count.",
-      "A first-try miss is information: your greens lock, so the second try is a smaller puzzle. Count what is left before you tap.",
-      "Reading the Record Books page once a week is basically training camp for this game.",
+    tipSections: [
+      {
+        heading: "Anchoring the top and bottom rungs first",
+        items: [
+          "Anchor the ends first. The most decorated team and the clear minnow are usually easy; the middle rungs are where points die.",
+        ],
+      },
+      {
+        heading: "Watching for era name changes",
+        items: [
+          "Watch for era names. Eastern Suburbs and the Sydney Roosters are the same club but separate stacks here, and old-name entries usually carry the smaller count.",
+        ],
+      },
+      {
+        heading: "Treating a first miss as information",
+        items: [
+          "A first-try miss is information: your greens lock, so the second try is a smaller puzzle. Count what is left before you tap.",
+        ],
+      },
+      {
+        heading: "Reading the Record Books page for practice",
+        items: [
+          "Reading the Record Books page once a week is basically training camp for this game.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -1327,31 +1411,120 @@ export const WORLD_CONTENT: GameContentMap = {
       "Most idle games have you clicking a number until it goes up. This one has you building a museum, and every single thing you hang on the wall actually happened. Acquire Super Bowl I and the plaque tells you which team won it, who they beat and by how much. Acquire the 1985 Bears and it is the 1985 Bears, because the exhibit list is read straight out of our audited record books.",
       "Visitors pay admission every second, admission money buys more history, and more history brings more visitors. Ten wings, hundreds of real champions from the nineteenth century to this year, and the hall keeps earning while your phone is in your pocket.",
     ],
-    howToPlay: [
-      "Acquire champions one at a time, oldest first in each wing. Each costs more and earns more than the last.",
-      "Every ten exhibits in a wing doubles that wing's income.",
-      "Open new wings when the money allows, from the Super Bowl through to the NRL and the AFL.",
-      "Tap the anniversary banner when it lights up: admissions triple for a few seconds.",
-      "Spend on tours, the curator's network, the gift shop and the archive vault to raise everything at once.",
-      "Rededicate once the hall is big enough to trade every exhibit for permanent renown stars.",
+    headings: {
+      howToPlay: "How to play Hall of Champions, a free idle sports trivia museum game",
+      rules: "Hall of Champions rules for plaques, away time and rededicating",
+      example: "Hall of Champions walkthrough: opening and completing the Super Bowl wing",
+      tips: "Hall of Champions tips for faster wings and better timing",
+      faq: "Hall of Champions FAQ: real championships, away earnings and rededicating",
+    },
+    howToPlaySections: [
+      {
+        heading: "Acquiring champions oldest first in each wing",
+        items: [
+          "Acquire champions one at a time, oldest first in each wing. Each costs more and earns more than the last.",
+        ],
+      },
+      {
+        heading: "Opening wings and doubling their income",
+        items: [
+          "Every ten exhibits in a wing doubles that wing's income.",
+          "Open new wings when the money allows, from the Super Bowl through to the NRL and the AFL.",
+        ],
+      },
+      {
+        heading: "Tapping the anniversary banner for triple admissions",
+        items: [
+          "Tap the anniversary banner when it lights up: admissions triple for a few seconds.",
+        ],
+      },
+      {
+        heading: "Spending on tours, the network, the shop and the vault",
+        items: [
+          "Spend on tours, the curator's network, the gift shop and the archive vault to raise everything at once.",
+        ],
+      },
+      {
+        heading: "Rededicating for permanent renown stars",
+        items: [
+          "Rededicate once the hall is big enough to trade every exhibit for permanent renown stars.",
+        ],
+      },
     ],
-    rules: [
-      "Nothing in this museum is invented. Every year, team and result comes from the same checked champion tables our quiz games and Record Books run on.",
-      "The hall earns while you are away, at half speed, capped at eight hours. The gift shop raises that rate.",
-      "Finishing a wing hangs a plaque worth a permanent income bonus, and a plaque survives every rededication.",
-      "Rededicating clears the exhibits, the funds, the wings and the upgrades. Renown stars and plaques are the only things that carry over, and they carry over forever.",
-      "The price quoted on a button is the price charged. No hidden fees, no fake discounts.",
+    ruleSections: [
+      {
+        heading: "Every exhibit coming from checked champion tables",
+        items: [
+          "Nothing in this museum is invented. Every year, team and result comes from the same checked champion tables our quiz games and Record Books run on.",
+        ],
+      },
+      {
+        heading: "Earning while you are away at half speed",
+        items: [
+          "The hall earns while you are away, at half speed, capped at eight hours. The gift shop raises that rate.",
+        ],
+      },
+      {
+        heading: "Plaques from finishing a wing",
+        items: [
+          "Finishing a wing hangs a plaque worth a permanent income bonus, and a plaque survives every rededication.",
+        ],
+        subsections: [
+          {
+            heading: "What a rededication clears and keeps",
+            items: [
+              "Rededicating clears the exhibits, the funds, the wings and the upgrades. Renown stars and plaques are the only things that carry over, and they carry over forever.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Honest prices with no hidden fees",
+        items: [
+          "The price quoted on a button is the price charged. No hidden fees, no fake discounts.",
+        ],
+      },
     ],
-    example: [
-      "Your first purchase is the oldest Super Bowl on the books, for ten coins. Ten Super Bowls later that wing pays double, and the money starts arriving fast enough to open the WNBA wing next door.",
-      "Sixty Super Bowls in, the wing is complete and its plaque is permanent: a quarter more admissions across the whole museum, forever, even after you rededicate and start the walls again.",
+    exampleSections: [
+      {
+        heading: "Opening the Super Bowl wing for ten coins",
+        paragraphs: [
+          "Your first purchase is the oldest Super Bowl on the books, for ten coins. Ten Super Bowls later that wing pays double, and the money starts arriving fast enough to open the WNBA wing next door.",
+        ],
+      },
+      {
+        heading: "A permanent plaque once that wing fills up",
+        paragraphs: [
+          "Sixty Super Bowls in, the wing is complete and its plaque is permanent: a quarter more admissions across the whole museum, forever, even after you rededicate and start the walls again.",
+        ],
+      },
     ],
-    tips: [
-      "Wide beats deep early. Opening a new wing is usually worth more than the next expensive exhibit in your best one.",
-      "Watch the milestone counter on each buy button. Being two exhibits away from doubling a wing is the best money in the game.",
-      "Save the anniversary tap for right after a big acquisition run, when your per second number is at its highest.",
-      "The gift shop only pays if you actually leave. If you play in long sittings, tours and the network are worth more.",
-      "Do not rush the first rededication. Stars are paid per twenty exhibits, so one late rededication beats two early ones.",
+    tipSections: [
+      {
+        heading: "Going wide before going deep, then watching milestones",
+        items: [
+          "Wide beats deep early. Opening a new wing is usually worth more than the next expensive exhibit in your best one.",
+          "Watch the milestone counter on each buy button. Being two exhibits away from doubling a wing is the best money in the game.",
+        ],
+      },
+      {
+        heading: "Timing the anniversary tap after a buying run",
+        items: [
+          "Save the anniversary tap for right after a big acquisition run, when your per second number is at its highest.",
+        ],
+      },
+      {
+        heading: "Choosing the gift shop for long time away",
+        items: [
+          "The gift shop only pays if you actually leave. If you play in long sittings, tours and the network are worth more.",
+        ],
+      },
+      {
+        heading: "Waiting for the first rededication",
+        items: [
+          "Do not rush the first rededication. Stars are paid per twenty exhibits, so one late rededication beats two early ones.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -1378,28 +1551,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "The board looks friendly: one category, a wall of names, most of them belong. Some of them are mines. Minefield asks you to click everyone who truly fits while dodging the plausible fakes planted among them.",
       "You know Leicester won the Premier League. You think Newcastle did too. Boom.",
     ],
-    howToPlay: [
-      "Read the category and its hint, like Premier League champions or the MLB 500 home run club.",
-      "Click every tile you believe belongs. Correct picks turn green.",
-      "Click a mine and it explodes, costing one of your 2 lives on that board.",
-      "Find all the correct tiles to clear the board and bank a bonus.",
-      "Play 3 boards per run, then see your final score and share it.",
+    headings: {
+      howToPlay: "How to play Minefield, a free daily sports trivia clicking game",
+      rules: "Minefield rules for lives, points and mine counts",
+      example: "Minefield walkthrough: a Premier League board and a wrong click",
+      tips: "Minefield tips for banking points and dodging mines",
+      faq: "Minefield FAQ: lives, mine counts and the daily board",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the category and its hint",
+        items: [
+          "Read the category and its hint, like Premier League champions or the MLB 500 home run club.",
+        ],
+      },
+      {
+        heading: "Clicking tiles that belong to the category",
+        items: [
+          "Click every tile you believe belongs. Correct picks turn green.",
+        ],
+      },
+      {
+        heading: "Losing a life on a mine",
+        items: [
+          "Click a mine and it explodes, costing one of your 2 lives on that board.",
+        ],
+      },
+      {
+        heading: "Clearing the board for a bonus",
+        items: [
+          "Find all the correct tiles to clear the board and bank a bonus.",
+        ],
+      },
+      {
+        heading: "Playing three boards and sharing your score",
+        items: [
+          "Play 3 boards per run, then see your final score and share it.",
+        ],
+      },
     ],
-    rules: [
-      "Each board has 2 lives. Two mine hits end that board, but the run continues to the next one.",
-      "Every correct tile is worth 10 points, and clearing a full board adds a 30 point bonus.",
-      "Boards hold 12 to 16 tiles, with 4 to 6 mines hidden among them.",
-      "The daily run is identical for everyone and flips at midnight Eastern Time. Unlimited deals random boards.",
+    ruleSections: [
+      {
+        heading: "Two lives per board",
+        items: [
+          "Each board has 2 lives. Two mine hits end that board, but the run continues to the next one.",
+        ],
+      },
+      {
+        heading: "Scoring correct tiles and the clear bonus",
+        items: [
+          "Every correct tile is worth 10 points, and clearing a full board adds a 30 point bonus.",
+        ],
+      },
+      {
+        heading: "How big a board can get",
+        items: [
+          "Boards hold 12 to 16 tiles, with 4 to 6 mines hidden among them.",
+        ],
+        subsections: [
+          {
+            heading: "Daily boards versus unlimited mode",
+            items: [
+              "The daily run is identical for everyone and flips at midnight Eastern Time. Unlimited deals random boards.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Imagine the category is Premier League champions. You click the bankers: Manchester United, Arsenal, Chelsea, Manchester City. Then Blackburn Rovers and Leicester City, both real champions, both green.",
-      "Feeling smart, you click Newcastle United. Boom, never won the Premier League itself. One life left, and the remaining tiles suddenly look a lot more suspicious.",
+    exampleSections: [
+      {
+        heading: "A Premier League board with the easy bankers",
+        paragraphs: [
+          "Imagine the category is Premier League champions. You click the bankers: Manchester United, Arsenal, Chelsea, Manchester City. Then Blackburn Rovers and Leicester City, both real champions, both green.",
+        ],
+      },
+      {
+        heading: "A wrong click on Newcastle United",
+        paragraphs: [
+          "Feeling smart, you click Newcastle United. Boom, never won the Premier League itself. One life left, and the remaining tiles suddenly look a lot more suspicious.",
+        ],
+      },
     ],
-    tips: [
-      "Bank the certainties first. Every green is 10 points you keep even if the board later explodes.",
-      "Read the hint line, since era limits change everything about who counts.",
-      "Mines are nearly-men: famous finalists, runners-up and almost-dynasties. If a name feels like it should have won, that feeling is the trap.",
-      "Down to one life? Slow down and count the board. The found counter tells you how many real ones remain.",
+    tipSections: [
+      {
+        heading: "Banking the certain tiles first",
+        items: [
+          "Bank the certainties first. Every green is 10 points you keep even if the board later explodes.",
+        ],
+      },
+      {
+        heading: "Reading the hint line for era limits",
+        items: [
+          "Read the hint line, since era limits change everything about who counts.",
+        ],
+      },
+      {
+        heading: "Spotting mines among the nearly men",
+        items: [
+          "Mines are nearly-men: famous finalists, runners-up and almost-dynasties. If a name feels like it should have won, that feeling is the trap.",
+        ],
+      },
+      {
+        heading: "Slowing down on your last life",
+        items: [
+          "Down to one life? Slow down and count the board. The found counter tells you how many real ones remain.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -1422,28 +1679,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Fifteen questions stand between you and a million pretend dollars. Sports Millionaire is a climb-the-ladder quiz in the classic TV style: each answer raises the stakes, and one wrong step sends you tumbling.",
       "The money is entirely pretend, no prizes and no cash, but the sweat on question 12 is real. Questions are generated from a live database of footballers.",
     ],
-    howToPlay: [
-      "Answer multiple-choice questions one at a time, four options each, easiest first.",
-      "Each correct answer climbs the money ladder toward the top.",
-      "Use your lifelines: 50:50 removes two wrong options, Ask the Crowd shows a poll, Swap Question trades in the current question.",
-      "Before locking in, you can walk away and keep everything you've banked.",
-      "Answer wrong and you drop to the last safe haven you passed.",
+    headings: {
+      howToPlay: "How to play Sports Millionaire, a free fifteen question money ladder quiz",
+      rules: "Sports Millionaire rules for the ladder, havens and lifelines",
+      example: "Sports Millionaire walkthrough: a safe haven and a big gamble",
+      tips: "Sports Millionaire tips for lifelines, havens and reading the crowd",
+      faq: "Sports Millionaire FAQ: real money, questions and lifelines",
+    },
+    howToPlaySections: [
+      {
+        heading: "Answering multiple choice questions easiest first",
+        items: [
+          "Answer multiple-choice questions one at a time, four options each, easiest first.",
+        ],
+      },
+      {
+        heading: "Climbing the money ladder with each right answer",
+        items: [
+          "Each correct answer climbs the money ladder toward the top.",
+        ],
+      },
+      {
+        heading: "Using the three lifelines",
+        items: [
+          "Use your lifelines: 50:50 removes two wrong options, Ask the Crowd shows a poll, Swap Question trades in the current question.",
+        ],
+      },
+      {
+        heading: "Walking away with what you have banked",
+        items: [
+          "Before locking in, you can walk away and keep everything you've banked.",
+        ],
+      },
+      {
+        heading: "Dropping back to your last safe haven",
+        items: [
+          "Answer wrong and you drop to the last safe haven you passed.",
+        ],
+      },
     ],
-    rules: [
-      "The ladder runs 15 questions, from $100 up to $1,000,000, all in play money.",
-      "Questions 5 and 10 are safe havens worth $1,000 and $32,000. A wrong answer drops you to the last haven you cleared, or $0 if you haven't reached one.",
-      "Each of the 3 lifelines can be used exactly once per run.",
-      "The daily ladder is the same 15 questions for everyone. Unlimited builds a fresh random ladder every run.",
+    ruleSections: [
+      {
+        heading: "How far the ladder climbs in dollars",
+        items: [
+          "The ladder runs 15 questions, from $100 up to $1,000,000, all in play money.",
+        ],
+      },
+      {
+        heading: "Where the two safe havens sit",
+        items: [
+          "Questions 5 and 10 are safe havens worth $1,000 and $32,000. A wrong answer drops you to the last haven you cleared, or $0 if you haven't reached one.",
+        ],
+        subsections: [
+          {
+            heading: "Using each lifeline once a run",
+            items: [
+              "Each of the 3 lifelines can be used exactly once per run.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Daily ladders versus unlimited ladders",
+        items: [
+          "The daily ladder is the same 15 questions for everyone. Unlimited builds a fresh random ladder every run.",
+        ],
+      },
     ],
-    example: [
-      "Picture gliding to question 9 on football basics. Question 10 for $32,000 is a shirt-number deep cut, so you burn the 50:50, guess right, and lock the haven.",
-      "At question 11 you gamble for $64,000, miss, and fall back to $32,000. That banked haven is the difference between a war story and a wipeout.",
+    exampleSections: [
+      {
+        heading: "Clearing the second safe haven with a lifeline",
+        paragraphs: [
+          "Picture gliding to question 9 on football basics. Question 10 for $32,000 is a shirt-number deep cut, so you burn the 50:50, guess right, and lock the haven.",
+        ],
+      },
+      {
+        heading: "Gambling past a safe haven and falling back",
+        paragraphs: [
+          "At question 11 you gamble for $64,000, miss, and fall back to $32,000. That banked haven is the difference between a war story and a wipeout.",
+        ],
+      },
     ],
-    tips: [
-      "Treat questions 5 and 10 like finish lines. Clear them, then gamble freely.",
-      "Save Swap Question for the late rungs, where every question is brutal.",
-      "The crowd is confident on easy questions and shaky on hard ones. Trust a landslide, doubt a coin flip.",
-      "Walking away is a real strategy. A banked $16,000 beats a proud $1,000.",
+    tipSections: [
+      {
+        heading: "Treating the safe havens as finish lines",
+        items: [
+          "Treat questions 5 and 10 like finish lines. Clear them, then gamble freely.",
+        ],
+      },
+      {
+        heading: "Saving Swap Question for the late rungs",
+        items: [
+          "Save Swap Question for the late rungs, where every question is brutal.",
+        ],
+      },
+      {
+        heading: "Reading the crowd's confidence",
+        items: [
+          "The crowd is confident on easy questions and shaky on hard ones. Trust a landslide, doubt a coin flip.",
+        ],
+      },
+      {
+        heading: "Walking away as a real strategy",
+        items: [
+          "Walking away is a real strategy. A banked $16,000 beats a proud $1,000.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -1466,28 +1807,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Five categories, five money rows, twenty-five clues, and a scoreboard that goes down as well as up. Sports Quiz Board is the game where the wrong answer doesn't just miss, it costs you the tile's full value.",
       "The dollars are pure scorekeeping, nothing real changes hands. The pain of blowing a $1,000 clue, though, is real.",
     ],
-    howToPlay: [
-      "Pick any tile on the board, in any order you like.",
-      "Read the clue and type your answer in the box.",
-      "Correct answers add the tile's value to your score. Wrong answers subtract it.",
-      "Not sure? Close the clue and come back later, deferring is free.",
-      "Answer all 25 tiles to finish the board and share your result grid.",
+    headings: {
+      howToPlay: "How to play Sports Quiz Board, a free daily sports trivia board game",
+      rules: "Sports Quiz Board rules for scoring, negatives and answer matching",
+      example: "Sports Quiz Board walkthrough: an easy clue and a costly miss",
+      tips: "Sports Quiz Board tips for sweeping rows and beating the deep cuts",
+      faq: "Sports Quiz Board FAQ: negative scores, saving and answer matching",
+    },
+    howToPlaySections: [
+      {
+        heading: "Picking any tile in any order",
+        items: [
+          "Pick any tile on the board, in any order you like.",
+        ],
+      },
+      {
+        heading: "Reading the clue and typing an answer",
+        items: [
+          "Read the clue and type your answer in the box.",
+        ],
+      },
+      {
+        heading: "Scoring right and wrong answers",
+        items: [
+          "Correct answers add the tile's value to your score. Wrong answers subtract it.",
+        ],
+      },
+      {
+        heading: "Deferring a clue for free",
+        items: [
+          "Not sure? Close the clue and come back later, deferring is free.",
+        ],
+      },
+      {
+        heading: "Finishing all the tiles and sharing your grid",
+        items: [
+          "Answer all 25 tiles to finish the board and share your result grid.",
+        ],
+      },
     ],
-    rules: [
-      "The board is 5 categories with clues at $200, $400, $600, $800 and $1,000 each, 25 tiles total.",
-      "Wrong answers subtract the full tile value, and your score can go negative.",
-      "Everyone gets the same board each day, and your progress saves so you can finish later.",
-      "Answer matching is forgiving: surnames of 4 or more letters count, and accents and punctuation are ignored.",
+    ruleSections: [
+      {
+        heading: "Five categories and their rising tile values",
+        items: [
+          "The board is 5 categories with clues at $200, $400, $600, $800 and $1,000 each, 25 tiles total.",
+        ],
+      },
+      {
+        heading: "Going negative on a wrong answer",
+        items: [
+          "Wrong answers subtract the full tile value, and your score can go negative.",
+        ],
+      },
+      {
+        heading: "The same board for everyone each day",
+        items: [
+          "Everyone gets the same board each day, and your progress saves so you can finish later.",
+        ],
+        subsections: [
+          {
+            heading: "How forgiving the answer matching is",
+            items: [
+              "Answer matching is forgiving: surnames of 4 or more letters count, and accents and punctuation are ignored.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Say you open a $200 tile in a Ballon d'Or category and it asks for a very recent winner. Easy money. Emboldened, you jump straight to the $1,000 in the same column and meet a winner from decades before you were born.",
-      "You type a surname, it's wrong, and $1,000 evaporates. The lesson sticks: the big tiles reach way back in time, and they're priced that way for a reason.",
+    exampleSections: [
+      {
+        heading: "An easy Ballon d'Or clue in the top row",
+        paragraphs: [
+          "Say you open a $200 tile in a Ballon d'Or category and it asks for a very recent winner. Easy money. Emboldened, you jump straight to the $1,000 in the same column and meet a winner from decades before you were born.",
+        ],
+      },
+      {
+        heading: "A costly miss in the deepest tile",
+        paragraphs: [
+          "You type a surname, it's wrong, and $1,000 evaporates. The lesson sticks: the big tiles reach way back in time, and they're priced that way for a reason.",
+        ],
+      },
     ],
-    tips: [
-      "Sweep the $200 and $400 rows first to build a cushion before touching the deep cuts.",
-      "There's no timer. Close a hard clue, let it stew, and circle back.",
-      "Type surnames. Full names are only needed when a surname alone is ambiguous.",
-      "Respect the $1,000 row. High value means old and obscure, and a miss stings double.",
+    tipSections: [
+      {
+        heading: "Sweeping the cheap rows for a cushion",
+        items: [
+          "Sweep the $200 and $400 rows first to build a cushion before touching the deep cuts.",
+        ],
+      },
+      {
+        heading: "Using the clock free deferral",
+        items: [
+          "There's no timer. Close a hard clue, let it stew, and circle back.",
+        ],
+      },
+      {
+        heading: "Typing surnames instead of full names",
+        items: [
+          "Type surnames. Full names are only needed when a surname alone is ambiguous.",
+        ],
+      },
+      {
+        heading: "Respecting the priciest row",
+        items: [
+          "Respect the $1,000 row. High value means old and obscure, and a miss stings double.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -1510,27 +1935,106 @@ export const WORLD_CONTENT: GameContentMap = {
       "Twelve questions, ramping from layups to half-court heaves, and at the end a number that claims to measure your sports brain. Ball Knowledge IQ is the daily settle-the-argument machine.",
       "The catch is the weighting. The hard questions at the end are worth the most, so a hot start means nothing if you faceplant on the deep cuts.",
     ],
-    howToPlay: [
-      "Answer 12 multiple-choice questions, four options each.",
-      "Each pick is graded instantly, green for right, red for wrong, then move on.",
-      "The questions escalate: recent, famous stuff early, decades-old deep cuts late.",
-      "Finish all 12 to get your IQ score and your rank.",
-      "Copy the share squares and challenge someone who claims they know ball.",
+    headings: {
+      howToPlay: "How to play Ball Knowledge IQ, a free twelve question sports quiz",
+      rules: "Ball Knowledge IQ rules for weighting, ranks and the daily set",
+      example: "Ball Knowledge IQ walkthrough: a hot start and a rough finish",
+      tips: "Ball Knowledge IQ tips for the back half and eliminating options",
+      faq: "Ball Knowledge IQ FAQ: the highest score, weighting and daily play",
+    },
+    howToPlaySections: [
+      {
+        heading: "Answering twelve multiple choice questions",
+        items: [
+          "Answer 12 multiple-choice questions, four options each.",
+        ],
+      },
+      {
+        heading: "Grading each pick instantly",
+        items: [
+          "Each pick is graded instantly, green for right, red for wrong, then move on.",
+        ],
+      },
+      {
+        heading: "Escalating from recent to decades old",
+        items: [
+          "The questions escalate: recent, famous stuff early, decades-old deep cuts late.",
+        ],
+      },
+      {
+        heading: "Finishing for an IQ score and rank",
+        items: [
+          "Finish all 12 to get your IQ score and your rank.",
+        ],
+      },
+      {
+        heading: "Sharing your squares to challenge a friend",
+        items: [
+          "Copy the share squares and challenge someone who claims they know ball.",
+        ],
+      },
     ],
-    rules: [
-      "The 12 questions follow a fixed ramp: 3 easy, 3 medium, then pairs at rising weights up to the two hardest at the end.",
-      "Your IQ runs from 55 to 160 and is weighted by question value, so the hard ones move it most.",
-      "Ranks: 145 and up is Certified ball knower, 125 is Knows ball, 105 is Solid ball knowledge, 85 is Casual, 70 is Knows of ball, and below that, Does not know ball.",
-      "Everyone gets the same 12 questions each day, and progress saves for the day.",
+    ruleSections: [
+      {
+        heading: "The fixed ramp of twelve questions",
+        items: [
+          "The 12 questions follow a fixed ramp: 3 easy, 3 medium, then pairs at rising weights up to the two hardest at the end.",
+        ],
+      },
+      {
+        heading: "Why the hardest questions move your IQ most",
+        items: [
+          "Your IQ runs from 55 to 160 and is weighted by question value, so the hard ones move it most.",
+        ],
+        subsections: [
+          {
+            heading: "The six IQ ranks from casual to certified",
+            items: [
+              "Ranks: 145 and up is Certified ball knower, 125 is Knows ball, 105 is Solid ball knowledge, 85 is Casual, 70 is Knows of ball, and below that, Does not know ball.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "The same twelve questions every day",
+        items: [
+          "Everyone gets the same 12 questions each day, and progress saves for the day.",
+        ],
+      },
     ],
-    example: [
-      "Imagine you cruise through the first nine, recent champions and famous MVPs, no sweat. Then the last two questions ask about winners from long before your time, and you miss both.",
-      "Ten of twelve sounds elite, but those were the two heaviest questions on the test. You land around 128, Knows ball. The gap to Certified lives in the deep end.",
+    exampleSections: [
+      {
+        heading: "Cruising through the first nine questions",
+        paragraphs: [
+          "Imagine you cruise through the first nine, recent champions and famous MVPs, no sweat. Then the last two questions ask about winners from long before your time, and you miss both.",
+        ],
+      },
+      {
+        heading: "Missing the two heaviest questions at the end",
+        paragraphs: [
+          "Ten of twelve sounds elite, but those were the two heaviest questions on the test. You land around 128, Knows ball. The gap to Certified lives in the deep end.",
+        ],
+      },
     ],
-    tips: [
-      "Budget your focus for the back half. The final questions swing your IQ more than the first six combined.",
-      "Wrong options come from the same category and era as the answer, so eliminate by detail, not by vibe.",
-      "A red early answer changes nothing about the questions ahead, so shake it off.",
+    tipSections: [
+      {
+        heading: "Budgeting your focus for the back half",
+        items: [
+          "Budget your focus for the back half. The final questions swing your IQ more than the first six combined.",
+        ],
+      },
+      {
+        heading: "Eliminating wrong options by detail",
+        items: [
+          "Wrong options come from the same category and era as the answer, so eliminate by detail, not by vibe.",
+        ],
+      },
+      {
+        heading: "Shaking off an early red answer",
+        items: [
+          "A red early answer changes nothing about the questions ahead, so shake it off.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -1553,28 +2057,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Can you read football in emoji? Emoji Guess serves five riddles a day, each one a player, club, manager or iconic moment told entirely in little pictures.",
       "Some solve themselves at a glance. Others sit there smugly until the hint arrives and you groan out loud. Five puzzles, three guesses each, and a colored grid to prove how you did.",
     ],
-    howToPlay: [
-      "Look at the emoji string and the category label above it.",
-      "Type your answer. Surnames are fine and spelling is forgiving on accents.",
-      "Miss once and a written hint appears under the emoji.",
-      "You get 3 guesses per puzzle before the answer is revealed.",
-      "Clear all 5 puzzles, then share your grid of green, yellow, orange and red squares.",
+    headings: {
+      howToPlay: "How to play Emoji Guess, a free daily football emoji trivia game",
+      rules: "Emoji Guess rules for scoring, hints and the daily reset",
+      example: "Emoji Guess walkthrough: a goat emoji and a cherry emoji",
+      tips: "Emoji Guess tips for reading categories and catching puns",
+      faq: "Emoji Guess FAQ: accepted answers, scoring and other sports",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the emoji string and its category",
+        items: [
+          "Look at the emoji string and the category label above it.",
+        ],
+      },
+      {
+        heading: "Typing a forgiving surname answer",
+        items: [
+          "Type your answer. Surnames are fine and spelling is forgiving on accents.",
+        ],
+      },
+      {
+        heading: "Unlocking a hint after a miss",
+        items: [
+          "Miss once and a written hint appears under the emoji.",
+        ],
+      },
+      {
+        heading: "Getting three guesses per puzzle",
+        items: [
+          "You get 3 guesses per puzzle before the answer is revealed.",
+        ],
+      },
+      {
+        heading: "Clearing five puzzles and sharing your grid",
+        items: [
+          "Clear all 5 puzzles, then share your grid of green, yellow, orange and red squares.",
+        ],
+      },
     ],
-    rules: [
-      "Each day serves 5 puzzles: 2 easy, 2 medium and 1 hard, the same set for everyone.",
-      "Scoring per puzzle: 100 points on the first guess, 60 on the second, 30 on the third, 0 for a miss. A perfect day is 500.",
-      "The hint appears after your first wrong guess, at no extra cost beyond the tier you already dropped.",
-      "The set flips at midnight Eastern Time, and your progress saves for the day.",
+    ruleSections: [
+      {
+        heading: "Five puzzles at rising difficulty",
+        items: [
+          "Each day serves 5 puzzles: 2 easy, 2 medium and 1 hard, the same set for everyone.",
+        ],
+      },
+      {
+        heading: "How the tiered scoring works",
+        items: [
+          "Scoring per puzzle: 100 points on the first guess, 60 on the second, 30 on the third, 0 for a miss. A perfect day is 500.",
+        ],
+        subsections: [
+          {
+            heading: "What the hint actually costs you",
+            items: [
+              "The hint appears after your first wrong guess, at no extra cost beyond the tier you already dropped.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "When the daily set resets",
+        items: [
+          "The set flips at midnight Eastern Time, and your progress saves for the day.",
+        ],
+      },
     ],
-    example: [
-      "Suppose puzzle one is a goat next to an Argentina flag, category Player. You type Messi, first try, 100 points. Puzzle two is a single cherry with the category Club, and you sit there blank.",
-      "One wrong guess later the hint mentions England's south coast, and it clicks: Bournemouth, the Cherries, 60 points. That's the game in miniature, instant glory or a slow, hint-assisted crawl.",
+    exampleSections: [
+      {
+        heading: "Solving a goat next to an Argentina flag",
+        paragraphs: [
+          "Suppose puzzle one is a goat next to an Argentina flag, category Player. You type Messi, first try, 100 points. Puzzle two is a single cherry with the category Club, and you sit there blank.",
+        ],
+      },
+      {
+        heading: "Cracking a single cherry after a hint",
+        paragraphs: [
+          "One wrong guess later the hint mentions England's south coast, and it clicks: Bournemouth, the Cherries, 60 points. That's the game in miniature, instant glory or a slow, hint-assisted crawl.",
+        ],
+      },
     ],
-    tips: [
-      "Read the category label first. The same emoji means different things for a club than for a moment.",
-      "Club puzzles usually run on nicknames and badges, so think about what's on the crest.",
-      "Say the emoji out loud. Half these riddles are puns that only work in your ears.",
-      "Down to your last guess, wait for nothing. A 30 beats a zero and keeps the grid respectable.",
+    tipSections: [
+      {
+        heading: "Reading the category label before the emoji",
+        items: [
+          "Read the category label first. The same emoji means different things for a club than for a moment.",
+        ],
+      },
+      {
+        heading: "Thinking about crests for club puzzles",
+        items: [
+          "Club puzzles usually run on nicknames and badges, so think about what's on the crest.",
+        ],
+      },
+      {
+        heading: "Saying the emoji out loud for puns",
+        items: [
+          "Say the emoji out loud. Half these riddles are puns that only work in your ears.",
+        ],
+      },
+      {
+        heading: "Guessing on your last try rather than waiting",
+        items: [
+          "Down to your last guess, wait for nothing. A 30 beats a zero and keeps the grid respectable.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -1597,28 +2185,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Your squad is sitting inside fifteen sealed packs. Mystery Box reveals real footballers one at a time, and you either slot them into your 4-3-3 or bin them and pray the next pack is kinder.",
       "Everyone opens the same packs each day, so luck is no excuse. The gap between your rating and your mate's is pure decision-making.",
     ],
-    howToPlay: [
-      "Open packs one at a time, 15 in total.",
-      "Each pack reveals a real player with his club, position, rating and market value, plus a tier from fringe to superstar.",
-      "Keep him by tapping a highlighted compatible slot in your 4-3-3.",
-      "Or bin him, if you can afford to.",
-      "After pack 15, your final XI rating and best pull are ready to share.",
+    headings: {
+      howToPlay: "How to play Mystery Box, a free football pack opening XI builder",
+      rules: "Mystery Box rules for bins, pack odds and empty slots",
+      example: "Mystery Box walkthrough: an early superstar and a fringe keeper",
+      tips: "Mystery Box tips for bins, scarce slots and safe picks",
+      faq: "Mystery Box FAQ: pack order, replays and a good rating",
+    },
+    howToPlaySections: [
+      {
+        heading: "Opening packs one at a time",
+        items: [
+          "Open packs one at a time, 15 in total.",
+        ],
+      },
+      {
+        heading: "Reading a pack's player and tier",
+        items: [
+          "Each pack reveals a real player with his club, position, rating and market value, plus a tier from fringe to superstar.",
+        ],
+      },
+      {
+        heading: "Keeping a player in a compatible slot",
+        items: [
+          "Keep him by tapping a highlighted compatible slot in your 4-3-3.",
+        ],
+      },
+      {
+        heading: "Binning a player if you can afford it",
+        items: [
+          "Or bin him, if you can afford to.",
+        ],
+      },
+      {
+        heading: "Sharing your final rating and best pull",
+        items: [
+          "After pack 15, your final XI rating and best pull are ready to share.",
+        ],
+      },
     ],
-    rules: [
-      "You open 15 packs to fill 11 slots, which means you can only afford 4 bins all run.",
-      "Pack odds per tier: superstar 3 percent, star 9, quality 22, squad player 41, fringe 25.",
-      "Your rating averages all 11 slots, and an empty slot counts as a 45, below even the weakest real player.",
-      "One run per day, the same sequence for everyone, saved as you go.",
+    ruleSections: [
+      {
+        heading: "How many bins you can actually afford",
+        items: [
+          "You open 15 packs to fill 11 slots, which means you can only afford 4 bins all run.",
+        ],
+      },
+      {
+        heading: "The pack odds behind each tier",
+        items: [
+          "Pack odds per tier: superstar 3 percent, star 9, quality 22, squad player 41, fringe 25.",
+        ],
+        subsections: [
+          {
+            heading: "Why an empty slot costs you so much",
+            items: [
+              "Your rating averages all 11 slots, and an empty slot counts as a 45, below even the weakest real player.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "One saved run per day",
+        items: [
+          "One run per day, the same sequence for everyone, saved as you go.",
+        ],
+      },
     ],
-    example: [
-      "Imagine pack 2 pops a superstar winger. Instant keep at right wing. Packs 3 through 7 are squad-level bodies, and you bin two chasing better, leaving 2 bins for the rest of the run.",
-      "Then pack 9 is a fringe goalkeeper. Keeping him feels bad, but there's one goalkeeper slot and no guarantee anything better is coming. You keep him and finish with a full XI in the low 70s.",
+    exampleSections: [
+      {
+        heading: "Keeping an early superstar winger",
+        paragraphs: [
+          "Imagine pack 2 pops a superstar winger. Instant keep at right wing. Packs 3 through 7 are squad-level bodies, and you bin two chasing better, leaving 2 bins for the rest of the run.",
+        ],
+      },
+      {
+        heading: "Settling for a fringe goalkeeper pick",
+        paragraphs: [
+          "Then pack 9 is a fringe goalkeeper. Keeping him feels bad, but there's one goalkeeper slot and no guarantee anything better is coming. You keep him and finish with a full XI in the low 70s.",
+        ],
+      },
     ],
-    tips: [
-      "Count your bins. Spend all 4 early and every remaining pack becomes a forced keep.",
-      "Guard the scarce spots. There's one goalkeeper slot and one striker slot, but three central midfield slots.",
-      "A fringe body still beats a hole. Empty slots score 45, lower than any real player.",
-      "Superstars are a 3 percent event. Don't bin solid players betting on one.",
+    tipSections: [
+      {
+        heading: "Counting your bins before you spend them",
+        items: [
+          "Count your bins. Spend all 4 early and every remaining pack becomes a forced keep.",
+        ],
+      },
+      {
+        heading: "Guarding the scarcest slots on the pitch",
+        items: [
+          "Guard the scarce spots. There's one goalkeeper slot and one striker slot, but three central midfield slots.",
+        ],
+      },
+      {
+        heading: "Filling a hole with a fringe body",
+        items: [
+          "A fringe body still beats a hole. Empty slots score 45, lower than any real player.",
+        ],
+      },
+      {
+        heading: "Not betting solid players on a superstar pull",
+        items: [
+          "Superstars are a 3 percent event. Don't bin solid players betting on one.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -1640,32 +2312,133 @@ export const WORLD_CONTENT: GameContentMap = {
       "This is the idle game the word usually means. Tap a ball and a number goes up. Spend the number on a squad and it goes up on its own. Spend what the squad makes on a bigger squad, and by the time you look up the number has more letters after it than you expected. There is no end and no losing, just a curve that keeps steepening.",
       "Nobody in the arena is real. The squad is eight archetypes, a Ball Boy, a Sunday Striker, a Point Guard, a Slugger, a Sniper, a Quarterback, an Ace and a Champion, so there is no stat to check and nothing to argue about. That is on purpose: our other three idle games give you a museum, a club or an academy to run, and this one is built on nothing but the number.",
     ],
-    howToPlay: [
-      "Tap the ball. Every tap scores a point, more once you own the tap upgrades.",
-      "Sign a squad. Each archetype scores every second, from 0.4 a second for a Ball Boy up to 176,000 a second for a Champion.",
-      "Switch the buy toggle to x10 or max when the points are coming faster than you can spend them.",
-      "Own five of an archetype and its own upgrade appears. Buy it and that whole line scores double.",
-      "Earn a million in one run and the trophy box lights up. Lift it, the run resets, and every trophy you hold is +5% on everything from then on.",
-      "Walk away whenever you like. The squad keeps scoring at half speed for up to eight hours, whether you closed the tab or left it sitting there, and the door tells you what it made when you come back.",
+    headings: {
+      howToPlay: "How to play Idle Arena, a free tap and build idle sports game",
+      rules: "Idle Arena rules for pricing, trophies and time away",
+      example: "Idle Arena walkthrough: building a squad and lifting a trophy",
+      tips: "Idle Arena tips for pricing, upgrades and time away",
+      faq: "Idle Arena FAQ: the endgame, time away and real players",
+    },
+    howToPlaySections: [
+      {
+        heading: "Tapping the ball to score points",
+        items: [
+          "Tap the ball. Every tap scores a point, more once you own the tap upgrades.",
+        ],
+      },
+      {
+        heading: "Signing a squad that scores every second",
+        items: [
+          "Sign a squad. Each archetype scores every second, from 0.4 a second for a Ball Boy up to 176,000 a second for a Champion.",
+        ],
+      },
+      {
+        heading: "Speeding up buys with the toggle",
+        items: [
+          "Switch the buy toggle to x10 or max when the points are coming faster than you can spend them.",
+        ],
+        subsections: [
+          {
+            heading: "Unlocking a whole line's bonus",
+            items: [
+              "Own five of an archetype and its own upgrade appears. Buy it and that whole line scores double.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Lifting the trophy for a permanent boost",
+        items: [
+          "Earn a million in one run and the trophy box lights up. Lift it, the run resets, and every trophy you hold is +5% on everything from then on.",
+        ],
+      },
+      {
+        heading: "Earning points while you are away",
+        items: [
+          "Walk away whenever you like. The squad keeps scoring at half speed for up to eight hours, whether you closed the tab or left it sitting there, and the door tells you what it made when you come back.",
+        ],
+      },
     ],
-    rules: [
-      "Your first Ball Boy is free, so something is always scoring, even for somebody who never taps at all.",
-      "Every archetype you sign costs 15% more than the last one of its kind. A Ball Boy costs 15, the tenth one costs 53, the hundredth costs about 15 million.",
-      "Trophies are paid on points earned in one run, not on points in hand. One trophy at a million, two at four million, three at nine million: the square root of the millions, rounded down.",
-      "Lifting the trophy clears the points, the squad and the upgrades. Trophies, badges and the all time total are the only things that carry over, and they carry over forever.",
-      "Ten badges, each worth a permanent +1% on everything. They are earned by tapping, by squad size, by points and by trophies, and they survive every lift.",
-      "Time away runs at half speed and stops after eight hours. That is the same eight hours whether the tab was shut or just sitting in a background window, because being there is what matters, not the tab being open.",
+    ruleSections: [
+      {
+        heading: "Your first archetype costing nothing",
+        items: [
+          "Your first Ball Boy is free, so something is always scoring, even for somebody who never taps at all.",
+        ],
+      },
+      {
+        heading: "Costs climbing with every signing",
+        items: [
+          "Every archetype you sign costs 15% more than the last one of its kind. A Ball Boy costs 15, the tenth one costs 53, the hundredth costs about 15 million.",
+        ],
+      },
+      {
+        heading: "How trophies are priced by points earned",
+        items: [
+          "Trophies are paid on points earned in one run, not on points in hand. One trophy at a million, two at four million, three at nine million: the square root of the millions, rounded down.",
+        ],
+        subsections: [
+          {
+            heading: "What survives a trophy lift",
+            items: [
+              "Lifting the trophy clears the points, the squad and the upgrades. Trophies, badges and the all time total are the only things that carry over, and they carry over forever.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Earning badges from tapping and trophies",
+        items: [
+          "Ten badges, each worth a permanent +1% on everything. They are earned by tapping, by squad size, by points and by trophies, and they survive every lift.",
+        ],
+      },
+      {
+        heading: "Away time running at a slower pace",
+        items: [
+          "Time away runs at half speed and stops after eight hours. That is the same eight hours whether the tab was shut or just sitting in a background window, because being there is what matters, not the tab being open.",
+        ],
+      },
     ],
-    example: [
-      "You tap eighteen times and sign a second Ball Boy. Two of them make 0.8 a second, which pays for a third in about twenty five seconds, and the three of them save toward a Sunday Striker at 100. Ten minutes in, the squad makes more in a second than your first minute of tapping did.",
-      "Fifteen or twenty minutes of steady buying gets a run past a million, which is the first trophy. Lift it and the arena empties, but every tap and every archetype now scores 5% more, so the second run reaches the same million faster than the first did, and the third faster still.",
+    exampleSections: [
+      {
+        heading: "Building toward your first bigger archetype",
+        paragraphs: [
+          "You tap eighteen times and sign a second Ball Boy. Two of them make 0.8 a second, which pays for a third in about twenty five seconds, and the three of them save toward a Sunday Striker at 100. Ten minutes in, the squad makes more in a second than your first minute of tapping did.",
+        ],
+      },
+      {
+        heading: "Reaching the trophy and lifting it",
+        paragraphs: [
+          "Fifteen or twenty minutes of steady buying gets a run past a million, which is the first trophy. Lift it and the arena empties, but every tap and every archetype now scores 5% more, so the second run reaches the same million faster than the first did, and the third faster still.",
+        ],
+      },
     ],
-    tips: [
-      "Read the rate against the price, not the price alone. A new archetype pays back slower than the tier below it at first, but the tier below has been getting 15% dearer with every signing, so the moment always comes when the bigger name is the better buy.",
-      "Five of anything is the magic number. That archetype's upgrade doubles the whole line, so buy to five before you spread out.",
-      "Muscle Memory turns taps into a share of the squad's rate. Once the squad is scoring thousands a second, it is the best tap upgrade on the board.",
-      "Do not lift at exactly one trophy. Four million pays two, nine million pays three, and the run you are in already has the squad built.",
-      "Leave it running before bed. Eight hours at half speed is four hours of income you did not have to be there for.",
+    tipSections: [
+      {
+        heading: "Comparing rate against price before buying",
+        items: [
+          "Read the rate against the price, not the price alone. A new archetype pays back slower than the tier below it at first, but the tier below has been getting 15% dearer with every signing, so the moment always comes when the bigger name is the better buy.",
+        ],
+      },
+      {
+        heading: "Reaching the upgrade point for a whole line",
+        items: [
+          "Five of anything is the magic number. That archetype's upgrade doubles the whole line, so buy to five before you spread out.",
+        ],
+      },
+      {
+        heading: "Turning taps into squad power",
+        items: [
+          "Muscle Memory turns taps into a share of the squad's rate. Once the squad is scoring thousands a second, it is the best tap upgrade on the board.",
+        ],
+      },
+      {
+        heading: "Timing the lift and an overnight run",
+        items: [
+          "Do not lift at exactly one trophy. Four million pays two, nine million pays three, and the run you are in already has the squad built.",
+          "Leave it running before bed. Eight hours at half speed is four hours of income you did not have to be there for.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -1691,31 +2464,125 @@ export const WORLD_CONTENT: GameContentMap = {
       "Higher or Lower with somebody in the other chair. Two athletes, one career stat, and ten seconds to tap the one with the bigger number. A rival answers every round too, at its own speed, with its own hit rate, and after ten rounds the scoreboard says who knows ball.",
       "The pairs come from every corner of the site: soccer goals, NBA points, home runs, six different NFL stats, NHL points, college passing yards, F1 wins, Grand Slams, golf majors and VFL/AFL goals, never the same sport twice in a row. Every number is a career total that is already on the site in a Higher or Lower game, so nothing was made up for the duel.",
     ],
-    howToPlay: [
-      "Pick the daily duel, which is the same ten pairs against The Pro for everyone, Unlimited, where you choose your rival, or Pass the phone, where the rival is whoever is sitting next to you.",
-      "Read the stat and the two names, then tap the athlete with the bigger number.",
-      "Watch the bar. Ten seconds a round, and a right answer scores 100 plus 10 for every whole second you had left.",
-      "The reveal shows both numbers, what the rival picked and how long it took.",
-      "After ten rounds the higher total wins. Level on points and it goes to sudden death, up to three extra rounds.",
+    headings: {
+      howToPlay: "How to play Face Off, a free head to head sports stat trivia duel",
+      rules: "Face Off rules for scoring, rivals and passing the phone",
+      example: "Face Off walkthrough: a tied round and a late buzzer win",
+      tips: "Face Off tips for speed, deep pools and picking a rival",
+      faq: "Face Off FAQ: the rivals, the daily duel and two player mode",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing the daily duel, unlimited or pass the phone",
+        items: [
+          "Pick the daily duel, which is the same ten pairs against The Pro for everyone, Unlimited, where you choose your rival, or Pass the phone, where the rival is whoever is sitting next to you.",
+        ],
+      },
+      {
+        heading: "Tapping the athlete with the bigger number",
+        items: [
+          "Read the stat and the two names, then tap the athlete with the bigger number.",
+        ],
+      },
+      {
+        heading: "Racing the ten second clock",
+        items: [
+          "Watch the bar. Ten seconds a round, and a right answer scores 100 plus 10 for every whole second you had left.",
+        ],
+      },
+      {
+        heading: "Reading the reveal after each round",
+        items: [
+          "The reveal shows both numbers, what the rival picked and how long it took.",
+        ],
+      },
+      {
+        heading: "Winning after ten rounds or sudden death",
+        items: [
+          "After ten rounds the higher total wins. Level on points and it goes to sudden death, up to three extra rounds.",
+        ],
+      },
     ],
-    rules: [
-      "Wrong scores nothing. Out of time scores nothing. There is no penalty beyond that, so a guess at the buzzer is always better than no answer.",
-      "The rival is dealt its answers with the pairs, so in the daily duel everyone faces exactly the same rival performance. Beating a friend's score is beating them on the same ten questions.",
-      "Three rivals. The Rookie takes 3 to 8 seconds and guesses the close ones. The Pro takes 2 to 6 and is sharp on the obvious pairs. The Legend answers inside 5 seconds and almost never misses a wide gap.",
-      "No pair is a tie and no pair is a gimme: the bigger number is always at least 4% more than the smaller and never more than 4 times it.",
-      "No athlete appears twice in one duel, and the daily can only be played once. Unlimited never runs out.",
-      "Pass the phone is two people on one device. Player 1 answers, the pair is hidden while the phone changes hands, Player 2 presses ready to start their own ten seconds, and both picks are revealed together. It is a game between the two of you and it is not booked to your record against the rivals.",
+    ruleSections: [
+      {
+        heading: "Why a guess always beats no answer",
+        items: [
+          "Wrong scores nothing. Out of time scores nothing. There is no penalty beyond that, so a guess at the buzzer is always better than no answer.",
+        ],
+      },
+      {
+        heading: "Facing the same rival performance as everyone",
+        items: [
+          "The rival is dealt its answers with the pairs, so in the daily duel everyone faces exactly the same rival performance. Beating a friend's score is beating them on the same ten questions.",
+        ],
+      },
+      {
+        heading: "Three rivals with three different speeds",
+        items: [
+          "Three rivals. The Rookie takes 3 to 8 seconds and guesses the close ones. The Pro takes 2 to 6 and is sharp on the obvious pairs. The Legend answers inside 5 seconds and almost never misses a wide gap.",
+        ],
+        subsections: [
+          {
+            heading: "How close a pair is allowed to be",
+            items: [
+              "No pair is a tie and no pair is a gimme: the bigger number is always at least 4% more than the smaller and never more than 4 times it.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "No repeats within one duel",
+        items: [
+          "No athlete appears twice in one duel, and the daily can only be played once. Unlimited never runs out.",
+        ],
+      },
+      {
+        heading: "Passing the phone between two players",
+        items: [
+          "Pass the phone is two people on one device. Player 1 answers, the pair is hidden while the phone changes hands, Player 2 presses ready to start their own ten seconds, and both picks are revealed together. It is a game between the two of you and it is not booked to your record against the rivals.",
+        ],
+      },
     ],
-    example: [
-      "Round one: who has more career NBA points, Kareem Abdul-Jabbar or Kobe Bryant. You tap Kareem with six seconds left, which is right, 160 points. The Pro took 3.4 seconds and got it too, 160 points. All square.",
-      "Round four is Formula 1 wins and you hesitate, then miss. The Pro misses too, so the round is 0 to 0 and the lead never changes hands. Round nine you tap Gordon Coventry at the buzzer, right with one second left, 110 points. Ten rounds later you have won by 30, because you were right as often and a shade faster.",
+    exampleSections: [
+      {
+        heading: "Matching The Pro on career points",
+        paragraphs: [
+          "Round one: who has more career NBA points, Kareem Abdul-Jabbar or Kobe Bryant. You tap Kareem with six seconds left, which is right, 160 points. The Pro took 3.4 seconds and got it too, 160 points. All square.",
+        ],
+      },
+      {
+        heading: "Missing together and closing out the lead",
+        paragraphs: [
+          "Round four is Formula 1 wins and you hesitate, then miss. The Pro misses too, so the round is 0 to 0 and the lead never changes hands. Round nine you tap Gordon Coventry at the buzzer, right with one second left, 110 points. Ten rounds later you have won by 30, because you were right as often and a shade faster.",
+        ],
+      },
     ],
-    tips: [
-      "Speed is the second stat. Two people who both know the answer are separated by the clock, and a second is ten points.",
-      "Do not freeze on the close ones. A wrong answer costs nothing more than a late one, and the rival is guessing those too.",
-      "Learn the deep ends of each pool. The wide gaps are free points; the duel is decided on the pairs where both names are legends.",
-      "Play the daily first. It is against The Pro every day, so your score means the same thing tomorrow and to everyone else.",
-      "Start Unlimited against The Rookie and move up when you are winning three in a row. The Legend is there to be beaten, not to be your first game.",
+    tipSections: [
+      {
+        heading: "Treating speed as the second stat",
+        items: [
+          "Speed is the second stat. Two people who both know the answer are separated by the clock, and a second is ten points.",
+        ],
+      },
+      {
+        heading: "Not freezing on the close calls",
+        items: [
+          "Do not freeze on the close ones. A wrong answer costs nothing more than a late one, and the rival is guessing those too.",
+        ],
+      },
+      {
+        heading: "Learning the deep ends of each pool",
+        items: [
+          "Learn the deep ends of each pool. The wide gaps are free points; the duel is decided on the pairs where both names are legends.",
+        ],
+      },
+      {
+        heading: "Trying the daily match before the Rookie",
+        items: [
+          "Play the daily first. It is against The Pro every day, so your score means the same thing tomorrow and to everyone else.",
+          "Start Unlimited against The Rookie and move up when you are winning three in a row. The Legend is there to be beaten, not to be your first game.",
+        ],
+      },
     ],
     faqs: [
       {
