@@ -68,6 +68,22 @@ const STATIC_PAGES = [
   { p: '/hockey', freq: 'weekly', pri: '0.6' },
   { p: '/whats-new', freq: 'weekly', pri: '0.5' },
   { p: '/records', freq: 'weekly', pri: '0.6' },
+  /* Round 649: one page per Record Books competition. The slugs live on
+     RECORD_SECTIONS in src/lib/records.ts, and scripts/simRecordPages.mjs fails
+     if this list, App.tsx and that one disagree. Being named here is also what
+     puts them in front of the prerenderer. */
+  { p: '/records/super-bowl-winners', freq: 'monthly', pri: '0.6' },
+  { p: '/records/nba-champions', freq: 'monthly', pri: '0.6' },
+  { p: '/records/world-series-winners', freq: 'monthly', pri: '0.6' },
+  { p: '/records/stanley-cup-winners', freq: 'monthly', pri: '0.6' },
+  { p: '/records/wnba-champions', freq: 'monthly', pri: '0.6' },
+  { p: '/records/college-football-national-champions', freq: 'monthly', pri: '0.6' },
+  { p: '/records/ncaa-basketball-champions', freq: 'monthly', pri: '0.6' },
+  { p: '/records/english-football-champions', freq: 'monthly', pri: '0.6' },
+  { p: '/records/afl-premiers', freq: 'monthly', pri: '0.6' },
+  { p: '/records/brownlow-medal-winners', freq: 'monthly', pri: '0.6' },
+  { p: '/records/dally-m-medal-winners', freq: 'monthly', pri: '0.6' },
+  { p: '/records/nrl-premiers', freq: 'monthly', pri: '0.6' },
   /* Round 520: the first reference explainer. Non game, so named here like
      /records, which is also what puts it in front of the prerenderer. */
   { p: '/champions-league-format-history', freq: 'monthly', pri: '0.6' },

@@ -20,7 +20,7 @@ const RELATED = [
   { path: '/nfl-my-career', label: 'NFL My Career', why: 'play a career through this era from a player\'s seat' },
   { path: '/missing-eleven', label: 'Missing Eleven', why: 'a real Super Bowl starting lineup, one name blanked' },
   { path: '/football-grid', label: 'NFL Grid', why: 'the daily 3x3 knowledge puzzle' },
-  { path: '/records', label: 'The Record Books', why: 'every Super Bowl champion, year by year' },
+  { path: '/records/super-bowl-winners', label: 'The Record Books', why: 'every Super Bowl champion, year by year' },
   { path: '/pro-football', label: 'All the football games', why: 'the whole section on one page' },
 ];
 

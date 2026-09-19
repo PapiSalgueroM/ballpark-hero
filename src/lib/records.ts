@@ -20,8 +20,54 @@ export interface RecordRow {
   extra: Record<string, string>;
 }
 
+/** Round 649: the words a section's own page (/records/<slug>) is built from.
+ *  Wording only. Every number on that page is counted from recordBooks.json. */
+export interface RecordWords {
+  /** the plural a searcher types, in mid sentence casing: "Super Bowl winners" */
+  many: string;
+  /** the singular: "Super Bowl winner" */
+  one: string;
+  /** the leaders heading: "Most Super Bowl titles" */
+  most: string;
+  /** what one row counts as, singular and plural */
+  unit: [string, string];
+  /** who wins it, singular and plural */
+  who: [string, string];
+  /** the search result title, under 60 characters with the brand on the end */
+  seoTitle: string;
+  /** the meta description around the span the rows cover, 120 to 160 characters once filled */
+  seoDescription: (first: number, latest: number) => string;
+}
+
+/** Round 649: the format explainers, one list shared by /records and the section pages. */
+export interface FormatPage {
+  path: string;
+  label: string;
+  /** the line that follows the link */
+  blurb: string;
+}
+
+export const FORMAT_PAGES: FormatPage[] = [
+  { path: '/champions-league-format-history', label: 'Champions League format history', blurb: 'every shape the European Cup and the Champions League have taken since 1955, season by season, each checked against two sources.' },
+  { path: '/nfl-playoff-format-history', label: 'NFL playoff format history', blurb: 'how the field, seeding and overtime rules changed.' },
+  { path: '/nba-playoff-format-history', label: 'NBA playoff format history', blurb: 'the playoff bracket, play-in and draft lottery through the years.' },
+  { path: '/mlb-postseason-format-history', label: 'MLB postseason format history', blurb: 'the changing postseason field, series lengths and years without a World Series.' },
+  { path: '/nhl-playoff-format-history', label: 'NHL playoff format history', blurb: 'the playoff bracket through the years, including seasons that broke the pattern.' },
+];
+
+/** Round 649: the sourcing paragraph, shared by /records and every section page. */
+export const RECORD_SOURCING =
+  'Each table was verified against at least two independent sources, and the checks run on every build: winner lists are audited answer by answer, split titles and vacated seasons are pinned so they can never quietly change, and a blank cell means the detail was never verified rather than papered over. Spot something that looks wrong anyway? The Report a bug button below lands straight in our inbox.';
+
 export interface RecordSection {
   key: string;
+  /** Round 649: the section's own page lives at /records/<slug>. This is the one
+   *  source; App.tsx, scripts/genSitemap.mjs and src/lib/pageSchema.ts register the
+   *  same address and scripts/simRecordPages.mjs fails if any of them disagree. */
+  slug: string;
+  words: RecordWords;
+  /** Round 649: the format explainer for this sport, when one exists */
+  format?: { path: string; heading: string };
   emoji: string;
   title: string;
   /** one short factual paragraph under the heading */
@@ -73,6 +119,14 @@ async function rows(
 export const RECORD_SECTIONS: RecordSection[] = [
   {
     key: 'sb', emoji: '🏈', title: 'Super Bowl Champions',
+    slug: 'super-bowl-winners',
+    words: {
+      many: 'Super Bowl winners', one: 'Super Bowl winner', most: 'Most Super Bowl titles',
+      unit: ['title', 'titles'], who: ['team', 'teams'],
+      seoTitle: 'Super Bowl Winners by Year: Every Champion | DoUKnowBall',
+      seoDescription: (f, l) => `Every Super Bowl winner from ${f} to ${l}, with the runner-up, final score, MVP, stadium and host city, plus the teams with the most titles.`,
+    },
+    format: { path: '/nfl-playoff-format-history', heading: 'How the NFL playoffs work' },
     blurb: 'Every Super Bowl by the year it was played, with the final score, the MVP, the stadium as it was named that day and the host city as it was that day too: Miami until the Gardens incorporated, Stanford for XIX, Las Vegas for LVIII.',
     yearLabel: 'Year',
     columns: [['runnerUp', 'Runner-up'], ['score', 'Score'], ['mvp', 'MVP'], ['venue', 'Venue'], ['city', 'City']],
@@ -97,6 +151,14 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'nba', emoji: '🏀', title: 'NBA Champions',
+    slug: 'nba-champions',
+    words: {
+      many: 'NBA champions', one: 'NBA champion', most: 'Most NBA titles',
+      unit: ['title', 'titles'], who: ['team', 'teams'],
+      seoTitle: 'NBA Champions by Year: Every Finals Winner | DoUKnowBall',
+      seoDescription: (f, l) => `Every NBA champion from ${f} to ${l}, the BAA years included, with the beaten finalist, the series score and the Finals MVP, plus the most titles.`,
+    },
+    format: { path: '/nba-playoff-format-history', heading: 'How the NBA playoffs work' },
     blurb: 'Every Finals back to the 1947 BAA with the beaten finalist, the series winner first, and every Finals MVP since the award began in 1969.',
     yearLabel: 'Year',
     columns: [['runnerUp', 'Runner-up'], ['series', 'Series'], ['mvp', 'Finals MVP']],
@@ -109,6 +171,14 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'ws', emoji: '⚾', title: 'World Series Champions',
+    slug: 'world-series-winners',
+    words: {
+      many: 'World Series winners', one: 'World Series winner', most: 'Most World Series titles',
+      unit: ['title', 'titles'], who: ['team', 'teams'],
+      seoTitle: 'World Series Winners by Year: Full List | DoUKnowBall',
+      seoDescription: (f, l) => `Every World Series winner from ${f} to ${l}, with the beaten pennant winner and the series score, plus the teams with the most championships.`,
+    },
+    format: { path: '/mlb-postseason-format-history', heading: 'How the MLB postseason works' },
     blurb: 'Every World Series since 1903 with the beaten pennant winner. There was no series in 1904 or 1994, and the early best-of-nine years read as they were played.',
     yearLabel: 'Year',
     columns: [['runnerUp', 'Runner-up'], ['series', 'Series']],
@@ -121,6 +191,14 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'cup', emoji: '🏒', title: 'Stanley Cup Champions',
+    slug: 'stanley-cup-winners',
+    words: {
+      many: 'Stanley Cup winners', one: 'Stanley Cup winner', most: 'Most Stanley Cup wins',
+      unit: ['Cup', 'Cups'], who: ['team', 'teams'],
+      seoTitle: 'Stanley Cup Winners by Year: Full List | DoUKnowBall',
+      seoDescription: (f, l) => `Every Stanley Cup winner from ${f} to ${l}, with the beaten finalist and the series score, plus the teams that have lifted the Cup the most.`,
+    },
+    format: { path: '/nhl-playoff-format-history', heading: 'How the NHL playoffs work' },
     blurb: 'Cup winners since 1915 with the beaten finalist, PCHA and WCHL challengers included. The 1919 final was abandoned for the flu pandemic and 2005 was lost to the lockout, so neither year appears.',
     yearLabel: 'Year',
     columns: [['runnerUp', 'Runner-up'], ['series', 'Series']],
@@ -133,6 +211,13 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'wnba', emoji: '🏀', title: 'WNBA Champions',
+    slug: 'wnba-champions',
+    words: {
+      many: 'WNBA champions', one: 'WNBA champion', most: 'Most WNBA titles',
+      unit: ['title', 'titles'], who: ['team', 'teams'],
+      seoTitle: 'WNBA Champions by Year: Every Finals Winner | DoUKnowBall',
+      seoDescription: (f, l) => `Every WNBA champion from ${f} to ${l}, with the beaten finalist, the series score and the Finals MVP, plus the teams with the most titles.`,
+    },
     blurb: 'Every WNBA Finals since the league began in 1997, with the beaten finalist and every Finals MVP from Cynthia Cooper on.',
     yearLabel: 'Year',
     columns: [['runnerUp', 'Runner-up'], ['series', 'Series'], ['mvp', 'Finals MVP']],
@@ -145,6 +230,13 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'cfb', emoji: '🏈', title: 'College Football National Champions',
+    slug: 'college-football-national-champions',
+    words: {
+      many: 'college football national champions', one: 'college football national champion', most: 'Most college football national titles',
+      unit: ['title', 'titles'], who: ['school', 'schools'],
+      seoTitle: 'College Football National Champions by Year | DoUKnowBall',
+      seoDescription: (f, l) => `Every college football national champion from ${f} to ${l}, split titles included, with the selector, the result and the coach, plus the most titles.`,
+    },
     blurb: 'National champions by season since 1981. Years where the polls split carry one row per selector, because both titles are real.',
     yearLabel: 'Season',
     columns: [['selector', 'Selector'], ['record', 'Result'], ['coach', 'Coach']],
@@ -157,6 +249,13 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'cbb', emoji: '🏀', title: "Men's NCAA Basketball Champions",
+    slug: 'ncaa-basketball-champions',
+    words: {
+      many: "men's NCAA basketball champions", one: "men's NCAA basketball champion", most: "Most men's NCAA basketball titles",
+      unit: ['title', 'titles'], who: ['school', 'schools'],
+      seoTitle: "Men's NCAA Basketball Champions by Year | DoUKnowBall",
+      seoDescription: (f, l) => `Every men's NCAA basketball champion from ${f} to ${l}, with the beaten finalist and the final score, plus the schools with the most titles.`,
+    },
     blurb: "Every men's national title game since 1939 with the beaten finalist and the final score. The 2020 tournament was cancelled, so no year is missing by accident.",
     yearLabel: 'Year',
     columns: [['runnerUp', 'Runner-up'], ['score', 'Score']],
@@ -169,6 +268,14 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'epl', emoji: '⚽', title: 'English Champions',
+    slug: 'english-football-champions',
+    words: {
+      many: 'English football champions', one: 'English football champion', most: 'Most English league titles',
+      unit: ['title', 'titles'], who: ['club', 'clubs'],
+      seoTitle: 'English Football Champions by Year: Full List | DoUKnowBall',
+      seoDescription: (f, l) => `Every champion of the English top flight from ${f} to ${l}, season by season, plus the clubs with the most league titles and the full list by decade.`,
+    },
+    format: { path: '/champions-league-format-history', heading: 'How the Champions League works' },
     blurb: 'Champions of the English top flight, by the year the season finished.',
     yearLabel: 'Year',
     columns: [],
@@ -181,6 +288,13 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'afl', emoji: '🏉', title: 'VFL/AFL Premiers',
+    slug: 'afl-premiers',
+    words: {
+      many: 'VFL/AFL premiers', one: 'VFL/AFL premier', most: 'Most VFL/AFL premierships',
+      unit: ['premiership', 'premierships'], who: ['club', 'clubs'],
+      seoTitle: 'AFL Premiers by Year: Every VFL and AFL Flag | DoUKnowBall',
+      seoDescription: (f, l) => `Every VFL and AFL premier from ${f} to ${l}, each club under the name it wore at the time, plus the clubs with the most premierships.`,
+    },
     blurb: 'Every premiership since 1897, each club under the name it wore at the time. Essendon, Carlton and Collingwood lead the count on 16 flags apiece.',
     yearLabel: 'Year',
     columns: [],
@@ -193,6 +307,13 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'brownlow', emoji: '🏅', title: 'Brownlow Medallists',
+    slug: 'brownlow-medal-winners',
+    words: {
+      many: 'Brownlow Medal winners', one: 'Brownlow Medal winner', most: 'Most Brownlow Medals',
+      unit: ['medal', 'medals'], who: ['player', 'players'],
+      seoTitle: 'Brownlow Medal Winners by Year: Full List | DoUKnowBall',
+      seoDescription: (f, l) => `Every Brownlow Medal winner from ${f} to ${l} with the club and the votes, tied counts included, plus the players who won it more than once.`,
+    },
     blurb: "The VFL/AFL's fairest and best, as voted by the field umpires, every year since 1924. Haydn Bunton, Dick Reynolds, Bob Skilton and Ian Stewart won three each; no medal was awarded from 1942 to 1945.",
     yearLabel: 'Year',
     championLabel: 'Medallist',
@@ -212,6 +333,13 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'dallym', emoji: '🏉', title: 'Dally M Medallists',
+    slug: 'dally-m-medal-winners',
+    words: {
+      many: 'Dally M Medal winners', one: 'Dally M Medal winner', most: 'Most Dally M Medals',
+      unit: ['medal', 'medals'], who: ['player', 'players'],
+      seoTitle: 'Dally M Medal Winners by Year: Full List | DoUKnowBall',
+      seoDescription: (f, l) => `Every Dally M Medal winner from ${f} to ${l}, shared medals included, plus the players who have won rugby league's player of the year more than once.`,
+    },
     blurb: "Rugby league's player of the year since 1979, judged match by match through the season. Johnathan Thurston won four, Andrew Johns three.",
     yearLabel: 'Year',
     championLabel: 'Medallist',
@@ -229,6 +357,13 @@ export const RECORD_SECTIONS: RecordSection[] = [
   },
   {
     key: 'nrl', emoji: '🏉', title: 'NRL/NSWRL Premiers',
+    slug: 'nrl-premiers',
+    words: {
+      many: 'NRL/NSWRL premiers', one: 'NRL/NSWRL premier', most: 'Most NRL/NSWRL premierships',
+      unit: ['premiership', 'premierships'], who: ['club', 'clubs'],
+      seoTitle: 'NRL Premiers by Year: Every Premiership | DoUKnowBall',
+      seoDescription: (f, l) => `Every NRL and NSWRL premier from ${f} to ${l}, with the competition each title was won in, plus the clubs with the most top grade premierships.`,
+    },
     blurb: 'Every top grade rugby league premiership since 1908. 1997 lists both premiers because the game split that year, Newcastle in the ARL and Brisbane in Super League.',
     yearLabel: 'Year',
     columns: [['competition', 'Competition']],

@@ -42,6 +42,21 @@ const STATIC_TYPES: Record<string, string> = {
   '/terms': 'WebPage',
   '/accessibility': 'WebPage',
   '/records': 'CollectionPage',
+  /* Round 649: one champion table per competition. A reference page, not a
+     list of other pages, so WebPage, the type that claims nothing. The slugs
+     live on RECORD_SECTIONS; scripts/simRecordPages.mjs holds this list to it. */
+  '/records/super-bowl-winners': 'WebPage',
+  '/records/nba-champions': 'WebPage',
+  '/records/world-series-winners': 'WebPage',
+  '/records/stanley-cup-winners': 'WebPage',
+  '/records/wnba-champions': 'WebPage',
+  '/records/college-football-national-champions': 'WebPage',
+  '/records/ncaa-basketball-champions': 'WebPage',
+  '/records/english-football-champions': 'WebPage',
+  '/records/afl-premiers': 'WebPage',
+  '/records/brownlow-medal-winners': 'WebPage',
+  '/records/dally-m-medal-winners': 'WebPage',
+  '/records/nrl-premiers': 'WebPage',
   /* Round 520: a reference explainer. Not a Game and not a list of other
      pages. Not an Article either: the generic emitter below carries none of
      the fields Google reads an Article by (headline, author, dates, image),

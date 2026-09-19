@@ -20,7 +20,7 @@ const RELATED = [
   { path: '/nhl-front-office', label: 'NHL Front Office', why: 'run a club through the real divisional bracket, wild cards and all' },
   { path: '/nhl-my-career', label: 'NHL My Career', why: 'chase the Cup from a player\'s seat instead of the office' },
   { path: '/hockey-grid', label: 'NHL Franchise Grid', why: 'the daily 3x3 franchise puzzle' },
-  { path: '/records#cup', label: 'The Record Books', why: 'every Stanley Cup final since 1915, with 1919 and 2005 left blank on purpose' },
+  { path: '/records/stanley-cup-winners', label: 'The Record Books', why: 'every Stanley Cup final since 1915, with 1919 and 2005 left blank on purpose' },
   { path: '/hockey', label: 'All the hockey games', why: 'the whole section on one page' },
 ];
 

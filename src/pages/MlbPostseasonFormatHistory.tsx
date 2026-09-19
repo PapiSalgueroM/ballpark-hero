@@ -20,7 +20,7 @@ const RELATED = [
   { path: '/mlb-my-career', label: 'MLB My Career', why: 'a whole career from the player\'s side of the clubhouse' },
   { path: '/missing-nine', label: 'Missing Nine', why: 'a real World Series lineup with one name blanked' },
   { path: '/mlb-grid', label: 'MLB Franchise Grid', why: 'the daily 3x3 knowledge puzzle' },
-  { path: '/records#ws', label: 'The Record Books', why: 'every World Series winner since 1903, with 1904 and 1994 left empty on purpose' },
+  { path: '/records/world-series-winners', label: 'The Record Books', why: 'every World Series winner since 1903, with 1904 and 1994 left empty on purpose' },
   { path: '/baseball', label: 'All the baseball games', why: 'the whole section on one page' },
 ];
 
