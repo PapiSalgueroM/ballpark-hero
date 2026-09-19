@@ -1137,29 +1137,103 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "The 2026 World Cup runs 48 teams, 12 groups, and 104 matches, and this predictor lets you call all of it: every group game by exact score, every knockout winner, and the awards.",
       "The field is the real one, playoff winners included, and the format follows FIFA's: top two per group advance plus the 8 best third place teams into a round of 32.",
     ],
-    howToPlay: [
-      "Type exact scores for the 6 matches in each group. Standings update live.",
-      "Watch the colors: green rows are through, yellow marks a possible best third.",
-      "Confirm your 8 third place qualifiers and generate the bracket.",
-      "Pick winners from the round of 32 through the final, third place game included.",
-      "Call the Golden Boot, Golden Glove, and Golden Ball, then share it all.",
-      "Read your score at the bottom: every qualifier, knockout team, the champion and each award checked against the real results, out of 166 points.",
+    headings: {
+      howToPlay: "How to play 2026 Bracket, a free World Cup predictor and bracket game",
+      rules: "2026 Bracket rules: groups, standings and the round of 32",
+      example: "2026 Bracket walkthrough: a Group J tiebreak and a Brazil upset",
+      tips: "2026 Bracket tips for filling a sharper World Cup bracket",
+      faq: "2026 Bracket FAQ: scoring, groups and the real World Cup result",
+    },
+    howToPlaySections: [
+      {
+        heading: "Locking in scores for every group match",
+        items: [
+          "Type exact scores for the 6 matches in each group. Standings update live.",
+          "Watch the colors: green rows are through, yellow marks a possible best third.",
+        ],
+      },
+      {
+        heading: "Confirming your eight third place teams",
+        items: [
+          "Confirm your 8 third place qualifiers and generate the bracket.",
+        ],
+      },
+      {
+        heading: "Advancing picks through the knockout bracket",
+        items: [
+          "Pick winners from the round of 32 through the final, third place game included.",
+        ],
+      },
+      {
+        heading: "Naming the awards and reading your score",
+        items: [
+          "Call the Golden Boot, Golden Glove, and Golden Ball, then share it all.",
+          "Read your score at the bottom: every qualifier, knockout team, the champion and each award checked against the real results, out of 166 points.",
+        ],
+      },
     ],
-    rules: [
-      "12 groups of 4 make 72 group matches, and score inputs go up to 9 goals a side.",
-      "Standings use the real rules: 3 points a win, 1 a draw, then goal difference, then goals scored.",
-      "32 teams advance: 12 winners, 12 runners up, and your 8 chosen thirds.",
-      "By Rank auto fill uses real FIFA rankings: the higher ranked side wins 65 percent of sims, the underdog 20, and 15 percent draw.",
+    ruleSections: [
+      {
+        heading: "How group matches and scoring work",
+        items: [
+          "12 groups of 4 make 72 group matches, and score inputs go up to 9 goals a side.",
+        ],
+      },
+      {
+        heading: "Ranking standings by points and goals",
+        items: [
+          "Standings use the real rules: 3 points a win, 1 a draw, then goal difference, then goals scored.",
+        ],
+      },
+      {
+        heading: "Which teams reach the round of 32",
+        items: [
+          "32 teams advance: 12 winners, 12 runners up, and your 8 chosen thirds.",
+        ],
+        subsections: [
+          {
+            heading: "Auto filling results with By Rank",
+            items: [
+              "By Rank auto fill uses real FIFA rankings: the higher ranked side wins 65 percent of sims, the underdog 20, and 15 percent draw.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "In Group J you hand Argentina three routine wins, then pencil an Austria and Algeria draw that leaves third place hanging on goal difference.",
-      "By the knockouts your France and Brazil picks collide in a semifinal, so somebody goes home early. You send Brazil through, save the bracket, and drop the link in the group chat.",
+    exampleSections: [
+      {
+        heading: "A tiebreak battle in Group J",
+        paragraphs: [
+          "In Group J you hand Argentina three routine wins, then pencil an Austria and Algeria draw that leaves third place hanging on goal difference.",
+        ],
+      },
+      {
+        heading: "Brazil survives a semifinal collision",
+        paragraphs: [
+          "By the knockouts your France and Brazil picks collide in a semifinal, so somebody goes home early. You send Brazil through, save the bracket, and drop the link in the group chat.",
+        ],
+      },
     ],
-    tips: [
-      "Fill groups you know by hand, and save the auto tools for matchups you have no read on.",
-      "Third place picks quietly decide brackets. A soft third in the right slot gifts your favorite an easy round of 32.",
-      "Draws are rarer than instinct says. The simulator prices them at 15 percent.",
-      "Reset one group instead of wiping everything when you change your mind.",
+    tipSections: [
+      {
+        heading: "Splitting hand picks from the auto tools",
+        items: [
+          "Fill groups you know by hand, and save the auto tools for matchups you have no read on.",
+        ],
+      },
+      {
+        heading: "Why third place slots swing brackets",
+        items: [
+          "Third place picks quietly decide brackets. A soft third in the right slot gifts your favorite an easy round of 32.",
+        ],
+      },
+      {
+        heading: "Pricing draws low and fixing one group",
+        items: [
+          "Draws are rarer than instinct says. The simulator prices them at 15 percent.",
+          "Reset one group instead of wiping everything when you change your mind.",
+        ],
+      },
     ],
     faqs: [
       {
