@@ -151,6 +151,48 @@ async function awardWinners(awardName: string): Promise<string[]> {
   return onlyNames(Promise.resolve(raw.map(stripWinCount)));
 }
 
+/**
+ * The Champions League season top scorers, and ONLY those.
+ *
+ * Round 661. ucl_top_scorers_by_season is four tables scraped into one, with a
+ * different column shift in each shape, and the old reading of the 'player'
+ * column mixed three of them together:
+ *   1. 70 good rows. season = '1955-56', player = the man, club = his club,
+ *      goals = his goals. These are the real per-season top scorers, 1955-56
+ *      to 2024-25, and they are the only rows this puzzle is about.
+ *   2. 28 rows of the ALL TIME scorers table. season = a rank ('1', '10'),
+ *      player = the man, club = his appearance count, goals = his career
+ *      goals. The old reading served these as answers, so the target count
+ *      included men who never once finished a season on top, and the four
+ *      names carrying a dagger ('Eusebio (dagger)') were unguessable because
+ *      stripWinCount does not remove it.
+ *   3. 24 more all time rows shifted one further. season = the man, player =
+ *      a number. Morata, Griezmann, Dzeko, Inzaghi and Gabriel Jesus sit here,
+ *      so their names never reached the answer list at all.
+ *   4. 22 rows of a wins by club and by nation table ('Yugoslavia', 'Milan').
+ *
+ * Reading shape 1 only fixes all of it at once: no numbers, no daggers (the
+ * good rows spell the names cleanly), and nobody is marked wrong for naming a
+ * man the list should never have expected. 70 rows, 52 distinct names.
+ *
+ * The shape test is the season string itself, not a row count or an id list,
+ * so a re-scrape that fixes the table keeps working and a new bad shape is
+ * dropped rather than served. simTriviaFacts section 5 pins this.
+ */
+const UCL_SEASON_SHAPE = /^\d{4}[-‐-―]\d{2,4}$/;
+
+async function uclSeasonTopScorers(): Promise<string[]> {
+  const { data, error } = await supabase
+    .from('ucl_top_scorers_by_season' as any)
+    .select('season, player')
+    .limit(5000);
+  if (error || !data) throw new Error('ucl_top_scorers_by_season unavailable');
+  const names = (data as any[])
+    .filter(r => UCL_SEASON_SHAPE.test(String(r?.season ?? '').trim()))
+    .map(r => String(r?.player ?? '').trim());
+  return onlyNames(Promise.resolve(names));
+}
+
 /** A static list so the page still works if the database is unreachable. */
 export const OFFLINE_PUZZLE: ListPuzzleDef = {
   id: 'offline-sb-winners',
@@ -265,28 +307,10 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
   },
   {
     id: 'ucl-topscorers',
-    title: 'Champions League Top Scorers',
-    blurb: 'Every player near the top of the Champions League all-time scoring charts.',
+    title: 'Champions League Season Top Scorers',
+    blurb: 'Every player who has finished a European Cup or Champions League season as its top scorer.',
     sport: 'Soccer', emoji: '⚽', minAnswers: 10,
-    /**
-     * LIVE BUG FIX 2026-07-15, this puzzle was serving numbers as answers.
-     *
-     * ucl_top_scorers_by_season has THREE different row shapes merged into it,
-     * with the columns shifted differently in each (144 rows total):
-     *   - 98 rows: player = the real name (correct), club = goals, goals = apps
-     *   - 24 rows: season = the real name, player = GOALS  ("48", "57", "30")
-     *   - 22 rows: a titles-by-nation table entirely ("Yugoslavia", club =
-     *     "1955-56 , 1963-64 , ...")
-     * So the old col(..., 'player') returned 98 names and 46 numbers, 31.9%
-     * of this puzzle's answers were things like "48" and "57", which no player
-     * could ever guess and which appeared in the target count.
-     *
-     * Keeping only the 98 rows where 'player' actually holds a name. The other
-     * 46 rows' names live in 'season', but recovering them means trusting a
-     * second shift on a table this scrambled, so they're dropped rather than
-     * guessed at. See task #45 for the underlying re-scrape.
-     */
-    fetch: () => onlyNames(col('ucl_top_scorers_by_season', 'player')),
+    fetch: uclSeasonTopScorers,
   },
   {
     id: 'wimbledon-champs',

@@ -51,7 +51,7 @@ export function ShirtNumberBoard() {
           </p>
           <HowToPlayPopover title="How to Play Shirt Number" floatingTrigger={false} className="p-1">
             <div className="space-y-3 text-left">
-              <p>👕 <span className="font-semibold text-foreground">Guess the shirt number</span> this player wears for the club shown.</p>
+              <p>👕 <span className="font-semibold text-foreground">Guess the shirt number</span> this player has worn at the club shown.</p>
               <p>🔢 Type any number from 1 to 99 and submit. You get a limited number of tries.</p>
               <p>⬆️⬇️ After each miss the game tells you whether the real number is higher or lower.</p>
               <p>🏆 Fewer guesses means a bigger score. Nail it first try for max points.</p>
