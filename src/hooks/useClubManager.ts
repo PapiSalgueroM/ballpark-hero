@@ -121,10 +121,19 @@ export function useClubManager() {
     }
   }, []);
 
+  /* Round 634: whether the last write was refused. saveCareer swallowed every
+     throw until this round, so a browser out of storage for this site, or one
+     blocking it, dropped the career on the floor and the player was told
+     nothing ("Manager career doesnt save if you leave the website", filed
+     2026-09-13). True from the first refused write until one succeeds, and
+     the page shows a plain banner while it is true. */
+  const [saveFailed, setSaveFailed] = useState(false);
+  const note = useCallback((ok: boolean) => setSaveFailed(!ok), []);
+
   // Persist the career on every change.
   useEffect(() => {
-    if (career) saveCareer(career);
-  }, [career]);
+    if (career) note(saveCareer(career));
+  }, [career, note]);
 
   /* ---------- Round 567: and persist it when the page goes away ---------- */
 
@@ -157,7 +166,11 @@ export function useClubManager() {
   useEffect(() => { careerRef.current = career; }, [career]);
 
   useEffect(() => {
-    const write = () => { const c = careerRef.current; if (c) saveCareer(c); };
+    /* Round 634: the same write, and it reports. A refused write at pagehide
+       cannot reach the screen (the page is going), but one at a tab switch
+       can, and the banner is there when the tab comes back. Same career,
+       same bytes, so a write that repeats the effect's own is harmless. */
+    const write = () => { const c = careerRef.current; if (c) note(saveCareer(c)); };
     const onHidden = () => { if (document.visibilityState === 'hidden') write(); };
     window.addEventListener('pagehide', write);
     document.addEventListener('visibilitychange', onHidden);
@@ -738,6 +751,7 @@ export function useClubManager() {
 
   return {
     simToWeek,
+    saveFailed,
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
     resume, startNew, chooseClub, confirmClub, confirmCustomClub,

@@ -334,6 +334,35 @@ addPath('recall from a loan out', () => {
   if (!out) return { state: null, name: him.name, why: 'the loan out was refused' };
   return { state: recallLoanedPlayer(out, him.id), name: him.name, from: out };
 });
+/* Round 634: the path the second report actually came from. Loan a man out
+   and the market listed him at MY OWN club (the market is every club's
+   projected roster, mine included, minus only the squad), so he could be
+   bought back while loanedOut still held him and the summer brought the loan
+   copy home beside the one I had paid for. The market must not offer him, a
+   stale card must be refused, and the summer must return exactly one of him. */
+addPath('loan out, then the summer (no buy back)', () => {
+  /* 25 or 26 and under 78: the borrowing club's option (Round 508) needs a
+     growth of 3 or a rating of 80 after it, neither reachable from here, and
+     retirement odds at that age are negligible, so one of him must come home. */
+  const him = base.squad.find(p => !p.isYouth && p.rating < 78 && p.age >= 25 && p.age < 27 && (p.contractYears ?? 3) >= 2) ?? base.squad[base.squad.length - 1];
+  const out = loanOutPlayer(base, him.id, 'Elsewhere', 1);
+  if (!out) return { state: null, name: him.name, why: 'the loan out was refused' };
+  const listed = buildMarket(out).find(m => m.name === him.name);
+  if (listed) return { state: null, name: him.name, why: `the market lists him at ${listed.club} while he is out on loan from me` };
+  /* The stale card: the one the market showed before he left. */
+  const stale = market.find(m => m.name === him.name) ?? { name: him.name, club: out.clubName, position: him.position, age: him.age, rating: him.rating, price: 1, value: him.value };
+  const bought = buyPlayer({ ...out, budget: 1e6 }, stale);
+  if (bought) return { state: null, name: him.name, why: 'a stale market card bought back a man who is out on loan from me' };
+  let s = out;
+  for (let i = 0; i < 130; i++) {
+    const res = playNextEntry(s, { skipHalftime: true });
+    s = res.state;
+    if (res.kind === 'seasonOver' || s.sacked) break;
+  }
+  if (s.sacked) return { state: null, name: him.name, why: 'sacked before the summer, so the return was never measured' };
+  const next = startNextSeason(finishSeason(s).state);
+  return { state: next, name: him.name };
+});
 addPath('a mid season takeover, then a signing', () => {
   let taken = startMidSeason(startCareer('Real Madrid'), 'newYear');
   /* The handover lands just before the January window rather than inside it,
@@ -450,7 +479,9 @@ const OLD_MARK = [
   '  }, []);',
   '',
 ].join('\n');
-const HANDLER_HEAD = '  useEffect(() => {\n    const write = () => { const c = careerRef.current; if (c) saveCareer(c); };';
+/* Round 634 made the write report (note(saveCareer(c))) and put a comment
+   above it, so the anchor is the start of that effect as it reads now. */
+const HANDLER_HEAD = '  useEffect(() => {\n    /* Round 634: the same write, and it reports.';
 const HANDLER_TAIL = '      write();\n    };\n  }, []);\n';
 
 let hookCopyDir = null;

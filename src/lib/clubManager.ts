@@ -3222,6 +3222,53 @@ export function ensureSquadIds(state: CareerState): void {
 }
 
 /**
+ * Round 634: one of each MAN, not just one of each id. The second live report
+ * of 2026-09-13 ("the players duplicate if you buy them") reproduced on the
+ * shipped engine through the loan desk: the market is every club's projected
+ * roster, my own club included, minus only the squad, so a man I had sent out
+ * on loan was listed at my own club and could be bought back while loanedOut
+ * still held him. The summer then brought the loan copy home beside the copy
+ * I had paid for, two of him under two different ids (p-andriy-lunin and
+ * sign-andriy-lunin-s1), which is exactly what ensureSquadIds cannot see.
+ *
+ * buildMarket and completeSigning now refuse the round trip, and this repairs
+ * a save that already carries the result: a name held twice in the squad keeps
+ * the copy the manager is using (in the XI, else the higher rated, else the
+ * first) and drops the rest, with every reference to a dropped id cleared; a
+ * name held in the squad AND in loanedOut drops the loan entry, so the coming
+ * summer cannot manufacture the pair. Registered in loadCareer and at the top
+ * of playNextEntry, the house pattern.
+ */
+export function ensureOneOfEach(state: CareerState): void {
+  if (!Array.isArray(state.squad)) return;
+  const byName = new Map<string, CMPlayer[]>();
+  for (const p of state.squad) {
+    if (!byName.has(p.name)) byName.set(p.name, []);
+    byName.get(p.name)!.push(p);
+  }
+  const inXi = new Set((state.xiIds ?? []).filter((id): id is string => !!id));
+  const dropped = new Set<string>();
+  for (const copies of byName.values()) {
+    if (copies.length < 2) continue;
+    const keep = copies.find(p => inXi.has(p.id))
+      ?? [...copies].sort((a, b) => b.rating - a.rating)[0];
+    for (const p of copies) if (p !== keep) dropped.add(p.id);
+  }
+  if (dropped.size) {
+    state.squad = state.squad.filter(p => !dropped.has(p.id));
+    state.xiIds = state.xiIds.map(id => (id && dropped.has(id) ? null : id));
+    for (const id of dropped) state.setPieces = setPiecesWithout(state.setPieces, id);
+    if (state.incomingBids) state.incomingBids = state.incomingBids.filter(b => !dropped.has(b.playerId));
+    if (state.promisedStarts) state.promisedStarts = state.promisedStarts.filter(id => !dropped.has(id));
+  }
+  if (Array.isArray(state.loanedOut) && state.loanedOut.length) {
+    const names = new Set(state.squad.map(p => p.name));
+    const kept = state.loanedOut.filter(l => !names.has(l.player.name));
+    if (kept.length !== state.loanedOut.length) state.loanedOut = kept;
+  }
+}
+
+/**
  * Money in millions: money(180) -> '£180m', money(0.6) -> '£600k'.
  *
  * Round 514: the symbol follows the start option when a career is handed in,
@@ -6579,8 +6626,13 @@ export function buildMarket(career: CareerState): MarketPlayer[] {
      real man at his old club, so from the season after a release the market
      listed him there at his old price and he could be bought straight back. */
   const released = releasedByYouNames(career);
+  /* Round 634: and nobody I have out on loan. He is off the squad list for
+     the season but he is still mine, and the projected world still has him
+     at my club, so without this he was on sale at my own club at his own
+     price and the summer return made two of him. See ensureOneOfEach. */
+  const onLoanOut = new Set((career.loanedOut ?? []).map(l => l.player.name));
   return marketBase(yearsOn(career), career.eraId)
-    .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name) && !released.has(p.name));
+    .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.has(p.name));
 }
 
 /** Round 71: append a line to the Latest Transfers feed (capped at 80). */
@@ -6625,6 +6677,10 @@ function completeSigning(
   /* Round 619 review: a man you released does not come back through a deal
      either, whatever screen the deal started on. */
   if (releasedByYouNames(career).has(mp.name)) return null;
+  /* Round 634: nor a man you have out on loan, by any door. buildMarket no
+     longer offers him, but a card drawn from an older career object can still
+     be pressed, and the summer return would make two of him. */
+  if ((career.loanedOut ?? []).some(l => l.player.name === mp.name)) return null;
   const player: CMPlayer = {
     /* Round 567: unique inside THIS squad, see freeSquadId. Two real players
        whose names slug to one string are both signable and stay two men. */
@@ -7873,6 +7929,13 @@ export function acceptBid(career: CareerState, playerId: string): CareerState | 
     setPieces: setPiecesWithout(career.setPieces, playerId),
     seasonSignings: [...career.seasonSignings, { dir: 'out', name: p.name, fee: netFee }],
     incomingBids: bids.filter(b => b.playerId !== playerId),
+    /* Round 634: he belongs to the buyer now, so he is off the market for the
+       season like every other man an AI club has bought. Without this the
+       projected world still had him at my club and he was listed there, for
+       about the fee I had just banked, the moment the sale went through. The
+       release desk and the part exchange already did this; the bid desk was
+       the one that did not. */
+    goneNames: career.goneNames.includes(p.name) ? career.goneNames : [...career.goneNames, p.name],
     careerStats: { ...career.careerStats },
     transferLog: [...(career.transferLog ?? [])],
   };
@@ -14102,6 +14165,9 @@ export function playNextEntry(career: CareerState, opts?: { skipHalftime?: boole
   // Round 567: and nobody shares an id with anybody, so every lookup by id
   // below this line answers with the player it was asked about.
   ensureSquadIds(state);
+  // Round 634: and nobody is on the books twice, nor in the squad and out
+  // on loan at once, so the summer cannot bring a second copy of him home.
+  ensureOneOfEach(state);
   // Round 132: and a save made before the world had a clock gets put on one.
   ensureClock(state);
   // Round 135: and one from before the press room existed gets one of those.
@@ -15883,11 +15949,90 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
 /* Persistence (localStorage)                                         */
 /* ================================================================== */
 
-export function saveCareer(career: CareerState): void {
+/**
+ * Round 634: what a save may carry of each rolling ledger. These are the
+ * engine's own caps (pushNews slices the transfer feed at 80, the result log
+ * is sliced at 60, the head to head at 300, the inbox and the headlines at 8)
+ * restated in one place so a save can be held to them on the way out and on
+ * the way in. Measured on the shipped engine over fifteen seasons at three
+ * clubs (scripts/simClubManagerSaveSize.mjs), a save plateaus between 162
+ * and 166 KB by season eight, so this is not about a career outgrowing the
+ * quota on its own: it is about a save from a build before the caps, or a
+ * damaged one, shrinking the first time it opens rather than being written
+ * back oversized for ever.
+ */
+export const SAVE_CAPS = { h2h: 300, transferLog: 80, resultLog: 60, inbox: 8, aiHeadlines: 8 } as const;
+
+/**
+ * Round 634: the save held to SAVE_CAPS. Newest-last lists keep their tail,
+ * newest-first lists keep their head, and a save already inside every cap
+ * comes back as the same object, so a caller can tell a no-op from a trim.
+ * Nothing a screen reads is cut: the calendar and the meters read this
+ * season's results (at most 55 entries), the pre match facts read the last
+ * six meetings with the next opponent, the transfer desk shows the last 50
+ * lines of the feed, the hub reads the inbox and the headlines whole.
+ */
+export function trimCareer(state: CareerState): CareerState {
+  if (!state || typeof state !== 'object') return state;
+  let out = state;
+  if (Array.isArray(out.h2h) && out.h2h.length > SAVE_CAPS.h2h) out = { ...out, h2h: out.h2h.slice(-SAVE_CAPS.h2h) };
+  if (Array.isArray(out.transferLog) && out.transferLog.length > SAVE_CAPS.transferLog) out = { ...out, transferLog: out.transferLog.slice(-SAVE_CAPS.transferLog) };
+  if (Array.isArray(out.resultLog) && out.resultLog.length > SAVE_CAPS.resultLog) out = { ...out, resultLog: out.resultLog.slice(-SAVE_CAPS.resultLog) };
+  if (Array.isArray(out.inbox) && out.inbox.length > SAVE_CAPS.inbox) out = { ...out, inbox: out.inbox.slice(0, SAVE_CAPS.inbox) };
+  if (Array.isArray(out.aiHeadlines) && out.aiHeadlines.length > SAVE_CAPS.aiHeadlines) out = { ...out, aiHeadlines: out.aiHeadlines.slice(0, SAVE_CAPS.aiHeadlines) };
+  return out;
+}
+
+/**
+ * Round 634: the shape a save is retried in when the browser refuses the
+ * full one. Only what no screen reads is cut: the head to head is kept to the
+ * last six meetings per opponent, which is exactly what the pre match facts
+ * show (matchFacts slices six), so the career plays and reads the same from
+ * here. It is a last resort rather than a diet: measured on the shipped
+ * engine it takes roughly 10 KB off a 165 KB save, which covers a quota
+ * missed by a hair and nothing more, and the honest report of a refused write
+ * below is what handles the rest.
+ */
+export function leanCareer(state: CareerState): CareerState {
+  const out = trimCareer(state);
+  const h2h = out.h2h ?? [];
+  if (!h2h.length) return out;
+  const seen = new Map<string, number>();
+  const keep: H2HEntry[] = [];
+  for (let i = h2h.length - 1; i >= 0; i--) {
+    const n = seen.get(h2h[i].opp) ?? 0;
+    if (n >= 6) continue;
+    seen.set(h2h[i].opp, n + 1);
+    keep.push(h2h[i]);
+  }
+  if (keep.length === h2h.length) return out;
+  keep.reverse();
+  return { ...out, h2h: keep };
+}
+
+/**
+ * Round 634: the write says whether it happened. Until this round it swallowed
+ * every throw, so a browser that refused the write (the origin's quota spent
+ * by every other save on the site, or storage blocked in a private window)
+ * left the career unsaved and the player told nothing, which is the first
+ * live report of 2026-09-13 word for word. A refused write is retried once in
+ * the lean shape, and false comes back only when that is refused as well, so
+ * the hook can put it on screen. Same career in, same bytes out, so writing
+ * twice is harmless.
+ */
+export function saveCareer(career: CareerState): boolean {
+  const full = trimCareer(career);
   try {
-    localStorage.setItem(SAVE_KEY, JSON.stringify(career));
+    localStorage.setItem(SAVE_KEY, JSON.stringify(full));
+    return true;
   } catch {
-    /* quota/private mode, the run just won't persist */
+    /* quota, or a blocked store: once more, lean */
+  }
+  try {
+    localStorage.setItem(SAVE_KEY, JSON.stringify(leanCareer(full)));
+    return true;
+  } catch {
+    return false;
   }
 }
 
@@ -15895,7 +16040,10 @@ export function loadCareer(): CareerState | null {
   try {
     const raw = localStorage.getItem(SAVE_KEY);
     if (!raw) return null;
-    const parsed = JSON.parse(raw) as CareerState;
+    /* Round 634: held to SAVE_CAPS on the way in, so a save written oversized
+       by an older build shrinks the first time it opens and is written back
+       trimmed by the next save. A no-op on anything this engine wrote. */
+    const parsed = trimCareer(JSON.parse(raw) as CareerState);
     /* Round 617: the fixture rule flag is exactly true or absent. A hand
        edited or damaged value would otherwise read as balanced through the
        callers' !! and flip a season's venues, so it is dropped, which keeps
@@ -15927,6 +16075,10 @@ export function loadCareer(): CareerState | null {
        loadCareer and playNextEntry for Round 127's reason: a screen can be
        opened before a ball is kicked. */
     ensureSquadIds(parsed);
+    /* Round 634: and one of each man, see ensureOneOfEach. Here as well as
+       in playNextEntry because a save can be opened on its summary and rolled
+       straight into the summer without a ball being kicked. */
+    ensureOneOfEach(parsed);
     /* Round 135: and the press room, for exactly the same reason. The hub tile
        and the press screen both read it before a ball is kicked. */
     ensurePress(parsed);
