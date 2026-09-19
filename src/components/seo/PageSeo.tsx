@@ -99,12 +99,13 @@ export const searchTitle = (full: string): string =>
  * scripts/simSeoTitles.mjs renders every game page through this component
  * before and after the load, and checks the text stays out of the entry chunk. */
 /* WHY useSyncExternalStore AND NOT A useState NUDGE. The first version kept a
- * flag in state and set it when the load resolved, and a prerender caught it
- * out: on a cold browser an instance rendered BEFORE the chunk resolved and ran
- * its effect AFTER, found the cache already full, skipped the nudge, and kept
- * the page's old Game JSON-LD in the head beside the new one. The cache is an
- * external store, and this hook re-reads it after subscribing, so an instance
- * that rendered with nothing always renders again with the map. */
+ * flag in state and set it from an effect when the load resolved. An instance
+ * that renders BEFORE the chunk resolves and runs its effect AFTER finds the
+ * cache full, skips the nudge and keeps the old text. The cache is an external
+ * store, and this hook re-reads it after subscribing, so an instance that
+ * rendered with nothing always renders again with the map. (The stale Game
+ * JSON-LD a prerender caught had a second cause as well, a stranded Helmet
+ * instance; see holdJsonLd in the component.) */
 type SeoMetaMap = typeof import('@/data/seoMeta').SEO_META;
 let seoMeta: SeoMetaMap | null = null;
 let seoMetaLoad: Promise<SeoMetaMap | null> | null = null;
@@ -134,12 +135,25 @@ const readSeoMeta = () => seoMeta;
 
 const PageSeo = ({ title: pageTitle, description: pageDescription, path, ogImage, noindex }: PageSeoProps) => {
   const meta = useSyncExternalStore(subscribeSeoMeta, readSeoMeta, readSeoMeta);
+  /* Only a game page has an entry, so the home page, the hubs and the legal
+     pages never fetch the chunk. The registry is already in the entry chunk
+     (pageSchema reads it), so asking costs nothing. */
+  const isGame = ALL_GAMES.some(g => g.path === path);
   useEffect(() => {
-    /* Only a game page has an entry, so the home page, the hubs and the legal
-       pages never fetch the chunk. The registry is already in the entry chunk
-       (pageSchema reads it), so asking costs nothing. */
-    if (!seoMeta && ALL_GAMES.some(g => g.path === path)) void loadSeoMeta();
-  }, [path]);
+    if (!seoMeta && isGame) void loadSeoMeta();
+  }, [path, isGame]);
+  /* A GAME PAGE HOLDS ITS STRUCTURED DATA UNTIL ITS TEXT IS KNOWN. Helmet
+     registers an instance while it RENDERS and forgets it only on unmount, so
+     a render React throws away (a lazy route suspending on a cold load) leaves
+     an instance behind for the life of the document. Titles and meta tags are
+     last one wins, and identical scripts are merged, so on the old copy that
+     was invisible. With a swap it is not: measured on fresh browsers, 19 of 24
+     renders of six routes ended with TWO Game JSON-LD objects, the page prop's
+     and the new one, because the stranded instance still held the first. So
+     the Game block waits for the map, and a stranded early render carries
+     none. If the chunk never lands the page has no Game block at all, which
+     simSchema section 2 reports rather than letting a stale one ship. */
+  const holdJsonLd = isGame && !meta;
   const entry = meta?.[path];
   const title = entry ? `${entry.title}${BRAND_SUFFIX}` : pageTitle;
   const description = entry ? entry.description : pageDescription;
@@ -238,7 +252,7 @@ const PageSeo = ({ title: pageTitle, description: pageDescription, path, ogImage
      The decision is now made in one place off the game registry plus an
      explicit table, and scripts/simSchema.mjs fails if a submitted route is in
      neither, so a new static page cannot inherit Game by accident. */
-  const jsonLd = jsonLdFor(path, title, description, canonicalUrl);
+  const jsonLd = holdJsonLd ? null : jsonLdFor(path, title, description, canonicalUrl);
 
   return (
     <Helmet>
