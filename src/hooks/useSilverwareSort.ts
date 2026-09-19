@@ -49,14 +49,34 @@ export function loadDailySave(raw: string | null): SavedDaily | null {
   }
 }
 
+const dailySeedOf = (day: string) => `silverware-sort:${day}`;
+const readDaily = (day: string) => loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${day}`));
+
 export function useSilverwareSort() {
   const today = getTodayET();
   const [loadState, setLoadState] = useState<LoadState>('loading');
   const [countsByKey, setCountsByKey] = useState<Map<string, TeamCount[]> | null>(null);
   const [mode, setMode] = useState<SortMode>('daily');
-  const [results, setResults] = useState<BoardResult[]>([]);
+  /* Round 643 review: today's daily on its own, whatever mode is on screen.
+     It moves in the same step as the save, so the recorder reads what is
+     stored: `results` below is only what the board shows, and it waits out
+     each reveal. Reading the recorder off `results` lost a finish whenever
+     the page reloaded or went to Unlimited inside the final reveal, because
+     the restore found the day already finished and marked it. Restored in
+     the initializer, keyed to its day (the Champ or Not shape). */
+  const [daily, setDaily] = useState<{ day: string; results: BoardResult[] }>(() => ({ day: today, results: readDaily(today)?.results ?? [] }));
+  const dailyResults = daily.day === today ? daily.results : [];
+  const [results, setResults] = useState<BoardResult[]>(daily.results);
   const [unlimitedRun, setUnlimitedRun] = useState(0);
   const unlimitedNonce = useRef(String(Date.now() % 1000000007));
+  /* The pending reveal, so a mode change can cancel it: left running, it
+     wrote the daily's results onto the Unlimited board. */
+  const revealTimer = useRef<number | null>(null);
+  const clearReveal = useCallback(() => {
+    if (revealTimer.current !== null) window.clearTimeout(revealTimer.current);
+    revealTimer.current = null;
+  }, []);
+  useEffect(() => clearReveal, [clearReveal]);
 
   // within-board state
   const [slots, setSlots] = useState<(number | null)[]>(Array(BOARD_SIZE).fill(null));
@@ -79,6 +99,13 @@ export function useSilverwareSort() {
         );
         if (!alive) return;
         const m = new Map(entries.map(([k, v]) => [k, v]));
+        /* Round 643: the results are restored at mount, but whether they
+           finish today's boards is known only now, so a finished daily read
+           back says so before the boards land, or the recorder sees false
+           then true and records it again. */
+        const dailyCount = buildBoards(m, dailySeedOf(today), DAILY_BOARDS).length;
+        const saved = readDaily(today);
+        if (saved && dailyCount > 0 && saved.results.length >= dailyCount) markRestoredFinish('silverware-sort');
         setCountsByKey(m);
         setLoadState('ready');
       } catch {
@@ -86,9 +113,12 @@ export function useSilverwareSort() {
       }
     })();
     return () => { alive = false; window.clearTimeout(watchdog); };
+    // The fetch runs once per mount; `today` is the mount's day, as the
+    // restore above it is.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const dailySeed = `silverware-sort:${today}`;
+  const dailySeed = dailySeedOf(today);
   const seedPrefix = mode === 'daily'
     ? dailySeed
     : `silverware-sort:unlimited:${unlimitedNonce.current}:${unlimitedRun}`;
@@ -98,28 +128,11 @@ export function useSilverwareSort() {
     return buildBoards(countsByKey, seedPrefix, DAILY_BOARDS);
   }, [countsByKey, seedPrefix]);
 
-  /* Round 643: today's boards on their own, whatever mode is on screen, so a
-     restore can tell whether the results it reads back finish them. */
+  /* Round 643: today's boards on their own, whatever mode is on screen. */
   const dailyBoardCount = useMemo(
     () => (countsByKey ? buildBoards(countsByKey, dailySeed, DAILY_BOARDS).length : 0),
     [countsByKey, dailySeed],
   );
-
-  /* Round 643: both restores (the data landing, and the Daily tab after
-     Unlimited) run after mount, so a finished daily read back says so first
-     or the completion hook records it again (the Round 399 double record). */
-  const restoreDaily = useCallback(() => {
-    const saved = loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${today}`));
-    if (saved && dailyBoardCount > 0 && saved.results.length >= dailyBoardCount) markRestoredFinish('silverware-sort');
-    return saved;
-  }, [today, dailyBoardCount]);
-
-  // restore the daily the moment data is ready
-  useEffect(() => {
-    if (loadState !== 'ready' || mode !== 'daily') return;
-    const saved = restoreDaily();
-    if (saved) setResults(saved.results);
-  }, [loadState, mode, restoreDaily]);
 
   const boardIdx = Math.min(results.length, boards.length);
   const board = boardIdx < boards.length ? boards[boardIdx] : null;
@@ -127,7 +140,11 @@ export function useSilverwareSort() {
   const score = results.reduce((a, r) => a + r.s, 0);
   const maxScore = boards.length * BOARD_SIZE;
 
-  useGameCompletion('silverware-sort', done && mode === 'daily', score, 1);
+  /* Round 643 review: the recorder reads the stored daily alone, in either
+     mode, with the daily's own score. A mode toggle never flips it, the final
+     board records at once, and a restore arrives through the mark above. */
+  const dailyDone = dailyBoardCount > 0 && dailyResults.length >= dailyBoardCount;
+  useGameCompletion('silverware-sort', dailyDone, dailyResults.reduce((a, r) => a + r.s, 0), 1);
 
   const resetBoardState = useCallback(() => {
     setSlots(Array(BOARD_SIZE).fill(null));
@@ -184,32 +201,36 @@ export function useSilverwareSort() {
       try {
         localStorage.setItem(`${STORAGE_PREFIX}daily-${today}`, JSON.stringify({ results: next }));
       } catch { /* storage full or blocked: play on */ }
+      setDaily({ day: today, results: next });
     }
-    window.setTimeout(() => {
+    clearReveal();
+    revealTimer.current = window.setTimeout(() => {
+      revealTimer.current = null;
       setResults(next);
       resetBoardState();
     }, 3400);
-  }, [board, canSubmit, slots, attempt, results, mode, today, resetBoardState]);
+  }, [board, canSubmit, slots, attempt, results, mode, today, resetBoardState, clearReveal]);
 
   const switchMode = useCallback((m: SortMode) => {
     if (m === mode) return;
+    clearReveal();
     setMode(m);
     resetBoardState();
     if (m === 'unlimited') {
       setResults([]);
       setUnlimitedRun(r => r + 1);
     } else {
-      const saved = restoreDaily();
-      setResults(saved?.results ?? []);
+      setResults(dailyResults);
     }
-  }, [mode, restoreDaily, resetBoardState]);
+  }, [mode, dailyResults, resetBoardState, clearReveal]);
 
   const playAgain = useCallback(() => {
     if (mode !== 'unlimited') return;
+    clearReveal();
     setResults([]);
     resetBoardState();
     setUnlimitedRun(r => r + 1);
-  }, [mode, resetBoardState]);
+  }, [mode, resetBoardState, clearReveal]);
 
   return {
     loadState, mode, switchMode, boards, boardIdx, board, slots, locked,

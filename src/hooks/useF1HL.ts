@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { f1HLDrivers, F1HLDriver } from '@/data/f1HLDrivers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { higherLowerScore } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
@@ -92,7 +93,14 @@ export function useF1HL() {
   const [unlimitedResults, setUnlimitedResults] = useState<RoundResult[]>([]);
   const [unlimitedRound, setUnlimitedRound] = useState(0);
 
-  const dailyCurrentRound = dailyActions.length;
+  /* Round 643 review: a daily round is saved the moment it is decided, not
+     when its reveal ends. It used to wait out the two second reveal, so a
+     reload inside that window dealt the same round again with the answer
+     already seen. While the reveal shows, the round just decided is in the
+     save but stays on screen, so everything the page reads is computed as
+     though it were still pending, exactly as before. */
+  const revealingDaily = mode === 'daily' && showingResult && currentResult !== null;
+  const dailyCurrentRound = dailyActions.length - (revealingDaily ? 1 : 0);
   const dailyResults: RoundResult[] = useMemo(
     () =>
       dailyActions.map((a, i) => ({
@@ -105,26 +113,25 @@ export function useF1HL() {
 
   const pairs = mode === 'daily' ? dailyPairs : unlimitedPairs;
   const currentRound = mode === 'daily' ? dailyCurrentRound : unlimitedRound;
-  const baseResults = mode === 'daily' ? dailyResults : unlimitedResults;
+  const baseResults = mode === 'daily' ? (revealingDaily ? dailyResults.slice(0, -1) : dailyResults) : unlimitedResults;
   const results: RoundResult[] = useMemo(
     () => (currentResult ? [...baseResults, currentResult] : baseResults),
     [baseResults, currentResult],
   );
 
   const gameStatus: F1HLStatus = mode === 'daily'
-    ? (rawDailyStatus !== 'playing' ? 'complete' : 'playing')
+    ? (rawDailyStatus !== 'playing' && !revealingDaily ? 'complete' : 'playing')
     : (unlimitedRound >= ROUNDS ? 'complete' : 'playing');
 
   const currentPair = gameStatus === 'playing' ? pairs[currentRound] ?? null : null;
 
   const correctCount = baseResults.filter((r) => r.correct).length;
-  const streakBonus = baseResults.reduce((sum, r, i) => {
-    if (!r.correct) return sum;
-    let s = 0;
-    for (let j = i; j >= 0 && baseResults[j].correct; j--) s++;
-    return sum + Math.max(0, s - 1);
-  }, 0);
-  const totalScore = correctCount * 10 + streakBonus * 5;
+  const totalScore = higherLowerScore(baseResults);
+  /* Round 643 review: the recorder reads the daily's own score, every
+     decided round in it, whatever mode is on screen. The final round is
+     saved (and the daily recorded) while its reveal still shows, when the
+     score on screen does not include it yet. */
+  const dailyScore = higherLowerScore(dailyResults);
 
   const streak = useMemo(() => {
     let s = 0;
@@ -149,10 +156,10 @@ export function useF1HL() {
       setCurrentResult({ player1: p1, player2: p2, correct });
       setShowingResult(true);
 
+      if (mode === 'daily') addDailyAction({ t: 'result', correct });
+
       setTimeout(() => {
-        if (mode === 'daily') {
-          addDailyAction({ t: 'result', correct });
-        } else {
+        if (mode !== 'daily') {
           setUnlimitedResults((prev) => [...prev, { player1: p1, player2: p2, correct }]);
           setUnlimitedRound((prev) => prev + 1);
         }
@@ -189,7 +196,7 @@ export function useF1HL() {
     });
   }, []);
 
-  useGameCompletion('f1-higher-lower', rawDailyStatus !== 'playing', totalScore);
+  useGameCompletion('f1-higher-lower', rawDailyStatus !== 'playing', dailyScore);
 
   return {
     mode, switchMode, hard, toggleHard, currentPair, currentRound, results, showingResult, streak,

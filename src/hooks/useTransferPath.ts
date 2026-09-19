@@ -372,8 +372,11 @@ export function useTransferPath(): TransferPathState {
 
   // ── useGameCompletion ──────────────────────────────────────────────────────
   // A surrendered daily still counts as "played today" (score 0, no win).
-  const isComplete = mode === 'daily' && (status === 'won' || status === 'gaveup');
-  useGameCompletion('transfer-path', isComplete, status === 'won' ? score : 0, status === 'won' ? 1 : 0);
+  /* Round 643 review: the daily status alone, with the daily's own score,
+     whatever mode is on screen (the Missing XI shape), so no mode change can
+     ever flip the recorder over a daily already recorded. */
+  const isComplete = dailyStatus === 'won' || dailyStatus === 'gaveup';
+  useGameCompletion('transfer-path', isComplete, dailyStatus === 'won' ? dailyScore : 0, dailyStatus === 'won' ? 1 : 0);
 
   // ── giveUp + reveal ────────────────────────────────────────────────────────
   const giveUp = useCallback(() => {

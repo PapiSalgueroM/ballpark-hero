@@ -352,6 +352,18 @@ export function useDailyPuzzle<T, G>(
     );
 
     if (saved) {
+      /* Round 643 review: a save is read under today's rule. The status is
+         stored beside the guesses, and a save written under an older rule
+         can say 'playing' over guesses that end the game now: Transfer Path
+         stored a give up as still playing until Round 643 made a give up a
+         loss, and its page reads the finish off the guesses, so such a save
+         came back finished with no mark and recorded again on every reload.
+         The status is decided again from the guesses, exactly as addGuess
+         decides it, before anything below reads it. */
+      if (saved.gameStatus === 'playing' && puzzle != null && Array.isArray(saved.guesses)) {
+        if (isWon(saved.guesses, puzzle)) saved.gameStatus = 'won';
+        else if (saved.guesses.length >= maxGuesses || (isLost && isLost(saved.guesses, puzzle))) saved.gameStatus = 'lost';
+      }
       guessesRef.current = saved.guesses;
       setGuesses(saved.guesses);
       /* Round 399: a finished status read back from storage is not a new

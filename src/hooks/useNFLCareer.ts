@@ -28,10 +28,19 @@ function loadDailySave(): NflDailySave | null {
   } catch { return null; }
 }
 
-function persistDaily(status: 'won' | 'lost', cluesRevealed: number, guesses: string[]) {
+function persistDaily(date: string, status: 'won' | 'lost', cluesRevealed: number, guesses: string[]) {
   try {
-    localStorage.setItem(DAILY_KEY, JSON.stringify({ date: getTodayET(), status, cluesRevealed, guesses } satisfies NflDailySave));
+    localStorage.setItem(DAILY_KEY, JSON.stringify({ date, status, cluesRevealed, guesses } satisfies NflDailySave));
   } catch { /* private mode: daily just won't lock */ }
+}
+
+/* Round 643 review: what a finished daily records. A win scores by the clues
+   it took; a loss or a give up scores 0, as every sibling Career Path does
+   (the NBA, NHL and baseball ones record 0 unless the daily was solved). It
+   used to record the clue score whatever the outcome, so giving up at the
+   first clue recorded 6, the same as the best possible solve. */
+function dailyScoreOf(status: 'won' | 'lost', cluesRevealed: number): number {
+  return status === 'won' ? Math.max(1, TOTAL_CLUES + 1 - cluesRevealed) : 0;
 }
 
 export type NflCareerMode = 'daily' | 'unlimited';
@@ -46,17 +55,24 @@ export function useNFLCareer() {
   const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>(() => loadDailySave()?.status ?? 'playing');
   const [guessHistory, setGuessHistory] = useState<string[]>(() => loadDailySave()?.guesses ?? []);
   const [hard, setHard] = useState(false);
-  /* Round 643: whether today's daily is finished, on its own, whatever mode
-     is on screen. The completion hook used to read the shared gameStatus
-     behind a mode check, so the Daily tab after Unlimited flipped it false
-     then true over a daily already recorded and paid it again. Restored in
-     the initializer, so a finished daily mounts complete and records
-     nothing. */
-  const [dailyFinished, setDailyFinished] = useState(() => loadDailySave() !== null);
+  /* Round 643: the daily's finish, on its own, whatever mode is on screen.
+     The completion hook used to read the shared gameStatus behind a mode
+     check, so the Daily tab after Unlimited flipped it false then true over a
+     daily already recorded and paid it again. Restored in the initializer, so
+     a finished daily mounts complete and records nothing. Round 643 review:
+     it carries the day it belongs to and the score it records, so a tab left
+     open past midnight records the next day's daily, and the score is the
+     daily's own, never the clue count of whatever is on screen. */
+  const [dailyFinish, setDailyFinish] = useState<{ date: string; score: number } | null>(() => {
+    const s = loadDailySave();
+    return s ? { date: s.date, score: dailyScoreOf(s.status, s.cluesRevealed) } : null;
+  });
   const finishDaily = useCallback((status: 'won' | 'lost', clues: number, guesses: string[]) => {
-    persistDaily(status, clues, guesses);
-    setDailyFinished(true);
+    const date = getTodayET();
+    persistDaily(date, status, clues, guesses);
+    setDailyFinish({ date, score: dailyScoreOf(status, clues) });
   }, []);
+  const dailyDone = dailyFinish !== null && dailyFinish.date === getTodayET();
 
   const dealRound = useCallback((player: NFLCareerPlayer) => {
     setTargetPlayer(player);
@@ -166,7 +182,7 @@ export function useNFLCareer() {
   // rules used throughout the search layer).
   const excludedNames = useMemo(() => new Set(guessHistory.map(normalizeName)), [guessHistory]);
 
-  useGameCompletion('nfl-career', dailyFinished, score);
+  useGameCompletion('nfl-career', dailyDone, dailyDone ? dailyFinish.score : 0);
 
   const toggleHard = useCallback(() => setHard(h => !h), []);
 

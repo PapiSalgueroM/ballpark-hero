@@ -22,7 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { hslToRgb, readableL } from "@/lib/readableColor";
 import { recordCompletion, getCurrentPlayerName } from "@/lib/completions";
-import { WC2026_STORAGE_KEYS, clearWc2026ChildStorage, createAutoFillController, wc2026SeedSignature } from "@/lib/wc2026Lifecycle";
+import { WC2026_STORAGE_KEYS, clearWc2026ChildStorage, createAutoFillController, crownChampion, parseCrowned, wc2026SeedSignature } from "@/lib/wc2026Lifecycle";
 
 /* ───── types ───── */
 
@@ -804,18 +804,14 @@ const WorldCupPredictor = () => {
      stored value is a JSON list now; a value written before this round is a
      single plain name and reads back as a list of one. */
   const crownedRef = useRef<string[]>((() => {
-    try {
-      const raw = localStorage.getItem(WC2026_STORAGE_KEYS.crowned) || "";
-      if (!raw) return [];
-      if (!raw.startsWith("[")) return [raw];
-      const list: unknown = JSON.parse(raw);
-      return Array.isArray(list) ? list.filter((name): name is string => typeof name === "string") : [];
-    } catch { return []; }
+    try { return parseCrowned(localStorage.getItem(WC2026_STORAGE_KEYS.crowned)); } catch { return []; }
   })());
   useEffect(() => {
-    if (!champion || viewingSharedBracket || crownedRef.current.includes(champion)) return;
-    crownedRef.current = [...crownedRef.current, champion];
-    try { localStorage.setItem(WC2026_STORAGE_KEYS.crowned, JSON.stringify(crownedRef.current)); } catch { /* storage may be unavailable */ }
+    if (viewingSharedBracket) return;
+    const next = crownChampion(crownedRef.current, champion);
+    if (!next) return;
+    crownedRef.current = next;
+    try { localStorage.setItem(WC2026_STORAGE_KEYS.crowned, JSON.stringify(next)); } catch { /* storage may be unavailable */ }
     recordCompletion("/world-cup-bracket", undefined, getCurrentPlayerName(profile));
   }, [champion, viewingSharedBracket, profile]);
 
