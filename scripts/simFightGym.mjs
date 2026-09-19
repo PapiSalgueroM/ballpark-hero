@@ -20,6 +20,7 @@
  *   GYM_CONTROL=norep        reputation stops buying prospects -> section 3
  *   GYM_CONTROL=noretire     fighters never finish             -> section 4
  *   GYM_CONTROL=freecost     the bills stop arriving           -> section 5
+ *   GYM_CONTROL=strongpin    Round 628's clamped bar is back   -> section 6
  */
 
 import './lib/seedRandom.mjs';
@@ -72,12 +73,14 @@ let gymSrc = readSrc('src/lib/fightGym.ts');
 /* Each control asserts its anchor exists BEFORE it edits. A control that
    rewrites a string the file does not contain changes nothing, the harness
    stays green, and green then means the control did not fire. */
-function rewrite(which, anchor, replacement) {
-  if (!gymSrc.includes(anchor)) {
+function rewrite(which, anchor, replacement, inCareer = false) {
+  const target = inCareer ? careerSrc : gymSrc;
+  if (!target.includes(anchor)) {
     console.log(`   FAIL control ${which} anchor is not in the source, so it would change nothing`);
     process.exit(1);
   }
-  gymSrc = gymSrc.replace(anchor, replacement);
+  if (inCareer) careerSrc = target.replace(anchor, replacement);
+  else gymSrc = target.replace(anchor, replacement);
   console.log(`   [control ${which} applied]`);
 }
 
@@ -107,6 +110,12 @@ if (CONTROL === 'nocut') {
   rewrite('freecost',
     'return Math.round((0.012 + g.roster.length * 0.009) * 1000) / 1000;',
     'return 0;');
+} else if (CONTROL === 'strongpin') {
+  /* Round 636: the bars come from fightCareer.ts, so this one edits that
+     file. Round 628's straight line clamped at the floor, put back exactly. */
+  rewrite('strongpin',
+    '  if (straight >= SOFT_FLOOR_FROM) return straight;',
+    '  return Math.max(STANDING_FLOOR, straight);', true);
 } else if (CONTROL) {
   console.log(`   FAIL unknown control ${CONTROL}`);
   process.exit(1);
@@ -445,6 +454,134 @@ console.log('5) money is a constraint, not decoration');
   console.log(`   median week a reckless gym closed: ${median(reckless.filter(r => r.closed).map(r => r.week)).toFixed(0)}`);
   if (!(rc > cc + 25)) fail(`the bills do not bite: reckless ${rc.toFixed(1)}% against careful ${cc.toFixed(1)}%, margin 25`);
   else ok(`spending without earning closes ${(rc - cc).toFixed(1)} percentage points more gyms (margin 25)`);
+}
+
+/* ═════════ 6) the result screen's bars, on the gym's own fights ═════════ */
+console.log('6) the condition bars on a gym fight tell the truth, for every kind of player');
+{
+  /* Round 636. The gym's result screen draws the same two bars as Fight
+     Career, from the same conditionTrack, and simFightCareer section 6 only
+     ever measures career bouts. The gym's men and offers are drawn another
+     way, and a harness that samples a population the player never meets will
+     confirm anything, so the gym's bouts are measured here, played by the
+     same four kinds of player (see simFightCareer section 6), each through
+     the gym plan screen's three looks:
+       random    three looks at random
+       strong    three looks, each answering what he will switch to next
+       stubborn  one answer to his style, held all night
+       weak      the tactic his style punishes, all night
+     The gym is run the careful way (let a man go at 52 damage, sign while
+     there is room and money, fight the healthiest man) and the offer is
+     picked at random, so only how the fights are fought differs.
+
+     PINNED CEILING, a share of decision losers checked for each player, never
+     a max. Over eight seed bases (2000 to 9000 step 1000, 200 gyms or 4,000
+     bouts each), with Round 636's bar and beside it Round 628's straight line
+     and clamp, which the strongpin control puts back:
+                 Round 636      Round 628
+       random    0.0 to 0.1     4.1 to 5.4
+       strong    0.0 to 0.1     9.8 to 11.1
+       stubborn  0.2 to 0.5     7.6 to 10.3
+       weak      0.0            19.4 to 21.8
+     A ceiling of 2 percent is one and a half points above the worst healthy
+     seed and two below the lowest Round 628 seed of any player. It sits
+     lower than Fight Career's 8 because the gym's fights are shorter and its
+     careers turn over, so its tail is thinner under either bar. */
+  const PIN_CEILING = 2;
+  const rngFrom = (seed) => {
+    let a = seed >>> 0;
+    return () => {
+      a |= 0; a = (a + 0x6d2b79f5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  };
+  const trapTactic = (style) => TACTICS.find(t => fc.tacticEdge(t, style) < 0) || 'box';
+  const BAR_POLICIES = {
+    random: (o, rng) => Array.from({ length: 3 }, () => TACTICS[Math.floor(rng() * 4)]),
+    strong: (o) => smartLine(o.opponent.style, 3),
+    stubborn: (o) => [bestTactic(o.opponent.style)],
+    weak: (o) => [trapTactic(o.opponent.style)],
+  };
+  const gymBouts = (policy) => {
+    const bag = [];
+    for (let s = 0; s < 200 && bag.length < 4000; s += 1) {
+      const rng = rngFrom(2000 + s);
+      let g = gym.newGym(`G${s}`, `gymbar-2000-${s}`);
+      for (let w = 0; w < 160 && !g.closed && bag.length < 4000; w += 1) {
+        for (const f of g.roster.slice()) {
+          if (f.damage >= 52) { const r = gym.releaseFighter(g, f.id); if (r) g = r; }
+        }
+        if (g.roster.length < 4) {
+          const aff = g.prospects.filter(p => p.fee <= g.money * 0.6);
+          if (aff.length) { const sx = gym.signProspect(g, aff[aff.length - 1].id); if (sx) g = sx; }
+        }
+        const able = g.roster.filter(f => f.damage < 80).sort((a, b) => a.damage - b.damage);
+        if (able.length) {
+          const offers = gym.offersForFighter(g, able[0].id);
+          if (offers.length) {
+            const o = offers[Math.floor(rng() * offers.length)];
+            const r = gym.takeGymFight(g, able[0].id, o, BAR_POLICIES[policy](o, rng));
+            if (r) { g = r.state; bag.push(r.result); }
+          }
+        }
+        g = gym.advanceWeek(g);
+      }
+    }
+    return bag;
+  };
+
+  for (const policy of Object.keys(BAR_POLICIES)) {
+    const tag = `[${policy}]`;
+    let decisions = 0, stoppedTotal = 0, stoppedZero = 0, standingZero = 0, rose = 0;
+    let losersPinned = 0, losersNear = 0, bothPinned = 0;
+    const bag = gymBouts(policy);
+    for (const res of bag) {
+      const track = fc.conditionTrack(res);
+      if (!track.length) continue;
+      const stopped = res.method === 'KO' || res.method === 'TKO';
+      for (let i = 1; i < track.length; i += 1) {
+        if (track[i].player > track[i - 1].player || track[i].opp > track[i - 1].opp) rose += 1;
+      }
+      /* The one 0 allowed anywhere on a track is the stopped man's last one. */
+      track.forEach((pt, i) => {
+        const stoppedHere = stopped && i === track.length - 1;
+        if (pt.player === 0 && !(stoppedHere && res.winner === 'opp')) standingZero += 1;
+        if (pt.opp === 0 && !(stoppedHere && res.winner === 'player')) standingZero += 1;
+      });
+      const end = track[track.length - 1];
+      if (stopped) {
+        stoppedTotal += 1;
+        if ((res.winner === 'player' ? end.opp : end.player) === 0) stoppedZero += 1;
+        continue;
+      }
+      if (res.winner === 'draw') continue;
+      decisions += 1;
+      const w = res.winner === 'player' ? end.player : end.opp;
+      const l = res.winner === 'player' ? end.opp : end.player;
+      if (l <= fc.STANDING_FLOOR) losersPinned += 1;
+      if (l <= fc.STANDING_FLOOR + 4) losersNear += 1;
+      if (w <= fc.STANDING_FLOOR && l <= fc.STANDING_FLOOR) bothPinned += 1;
+    }
+    const pinPct = (100 * losersPinned) / Math.max(1, decisions);
+    const nearPct = (100 * losersNear) / Math.max(1, decisions);
+    const bothPct = (100 * bothPinned) / Math.max(1, decisions);
+    console.log(`   ${tag} ${bag.length} gym bouts, ${decisions} decisions, ${stoppedTotal} stoppages; decision losers on the floor ${losersPinned} (${pinPct.toFixed(1)}%), within 4 of it ${losersNear} (${nearPct.toFixed(1)}%), both men on it ${bothPinned} (${bothPct.toFixed(2)}%)`);
+    if (decisions < 500 || stoppedTotal < 100) {
+      fail(`${tag} only ${decisions} decisions and ${stoppedTotal} stoppages, too few to measure a share of either`);
+    }
+    if (stoppedZero !== stoppedTotal) fail(`${tag} ${stoppedTotal - stoppedZero} of ${stoppedTotal} stopped men do not end on an empty bar`);
+    else ok(`${tag} every one of the ${stoppedTotal} stopped men ends on an empty bar`);
+    if (standingZero > 0) fail(`${tag} ${standingZero} readings of a man still on his feet show empty, so the bar calls him stopped`);
+    else ok(`${tag} nobody on his feet reads empty, on any round of any bout`);
+    if (rose > 0) fail(`${tag} condition went back UP ${rose} times, so the bar is not a condition bar`);
+    else ok(`${tag} condition never rises, across every round of every bout`);
+    if (!(pinPct < PIN_CEILING)) fail(`${tag} ${pinPct.toFixed(1)}% of decision losers end pinned on the floor, so a close loss and a beating read the same (ceiling ${PIN_CEILING}%)`);
+    else ok(`${tag} ${pinPct.toFixed(1)}% of decision losers end on the floor (ceiling ${PIN_CEILING}%)`);
+    if (!(bothPct < 1)) fail(`${tag} ${bothPinned} decisions (${bothPct.toFixed(2)}%) leave both men on the floor (ceiling 1%)`);
+    else ok(`${tag} both men end on the floor in ${bothPct.toFixed(2)}% of decisions (ceiling 1%)`);
+  }
 }
 
 try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }

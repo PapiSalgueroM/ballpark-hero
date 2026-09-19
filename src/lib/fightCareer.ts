@@ -301,10 +301,10 @@ export interface ConditionPoint { round: number; player: number; opp: number }
  * The drain rate was not the lever. The damage behind it is sound: it is the
  * punches the engine landed, and none of this feeds lasting damage, which
  * comes from simBout's damageTaken. A slower straight line would still clip,
- * just later: at 0.6 a punch a good player's losers still pin 18 to 23
+ * just later: at 0.6 a punch a good player's losers still pin 19 to 23
  * percent, and holding their p99 off the floor in a straight line takes about
- * 0.4, which lifts a random decision loser's median from 30 to 64 and erases
- * the gap the bar exists to show.
+ * 0.4, which lifts a random decision loser's median from 30 to about 64 and
+ * erases the gap the bar exists to show.
  *
  * So the bar reads exactly as Round 628 drew it down to SOFT_FLOOR_FROM, and
  * below that it keeps falling for every extra punch but ever more slowly, and
@@ -312,8 +312,19 @@ export interface ConditionPoint { round: number; player: number; opp: number }
  * they meet, so there is no visible kink. Measured on the same bouts: a
  * decision loser reads the floor in 0 to 0.1 percent of fights for the good
  * player and the weak one, 0 to 0.4 for random tactics and 0.6 to 0.9 for a
- * player who holds one answer all night, and the median random loser moves
- * from 30 to 31. Above 40 nothing a Round 628 bar showed has changed.
+ * player who holds one answer all night, and the median random loser reads 31
+ * or 32 where it read 29 or 30. Above 40 nothing a Round 628 bar showed has
+ * changed, and nothing about the fight has: the bouts, the cards and the
+ * damage are the same numbers, only the drawing of them moved.
+ *
+ * What it costs, said plainly: a good player's worst beaten men now crowd
+ * into 9 to 12 rather than sitting on 8. About a fifth of his decision losers
+ * read there (18.7 to 22.8 percent over the same eight bases), every one of
+ * them a man who took over 120 points of drain, which is about 150 punches,
+ * or fewer with a knockdown among them.
+ * That is the bar saying he barely made the bell, which is true, and each of
+ * those readings is still a visible sliver and a number above 0, which a
+ * stopped man never gets.
  */
 export function conditionShown(drain: number): number {
   const straight = 100 - drain;
