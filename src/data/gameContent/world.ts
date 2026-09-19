@@ -448,28 +448,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Every fan can name the most decorated club in their league. Silverware Sort asks the harder question: can you put five of them in order? The gap between knowing the Yankees lead baseball and knowing whether the Dodgers or the Red Sox come next is where this game lives.",
       "Five teams from one competition, a shuffled pile, and a ladder with the most titles at the top. Every count is counted straight out of the same audited record books the rest of the site runs on, across the Super Bowl, the NBA, the World Series, the Stanley Cup, college football and hoops, the English title, the AFL and the NRL.",
     ],
-    howToPlay: [
-      "Read the board: one competition, five teams, one right order.",
-      "Tap teams into the ladder, most titles at the top, fewest at the bottom.",
-      "Submit. Rungs you placed right lock in green, and you get a second try at the rest.",
-      "One point per correct rung on your final answer, fifteen points across the day's three boards.",
-      "The daily boards are the same for everyone. Unlimited mode keeps dealing fresh ones.",
+    headings: {
+      howToPlay: "How to play Silverware Sort, a free daily sports ranking trivia game",
+      rules: "Silverware Sort rules for ties, tries and the reveal",
+      example: "Silverware Sort walkthrough: a World Series board and an AFL board",
+      tips: "Silverware Sort tips for ranking title counts fast",
+      faq: "Silverware Sort FAQ: era names, ties and the WNBA",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the board's one competition and five teams",
+        items: [
+          "Read the board: one competition, five teams, one right order.",
+        ],
+      },
+      {
+        heading: "Building the ladder from most titles to fewest",
+        items: [
+          "Tap teams into the ladder, most titles at the top, fewest at the bottom.",
+        ],
+      },
+      {
+        heading: "Submitting for a green lock and a second try",
+        items: [
+          "Submit. Rungs you placed right lock in green, and you get a second try at the rest.",
+        ],
+      },
+      {
+        heading: "Scoring one point per rung across three boards",
+        items: [
+          "One point per correct rung on your final answer, fifteen points across the day's three boards.",
+        ],
+      },
+      {
+        heading: "Choosing the daily boards or unlimited mode",
+        items: [
+          "The daily boards are the same for everyone. Unlimited mode keeps dealing fresh ones.",
+        ],
+      },
     ],
-    rules: [
-      "No two teams on a board are ever tied. Every board has exactly one right order, so a miss is a miss on the record, never on a coin flip.",
-      "Counts follow the name the club wore at the time, the same convention as our Record Books and Name Them All: South Melbourne's flags and Sydney's flags are separate stacks.",
-      "Two tries per board. The first submit locks your greens; the second is final.",
-      "The reveal always shows every team's real count, so you leave each board knowing the actual cabinet.",
+    ruleSections: [
+      {
+        heading: "Never facing a tied board",
+        items: [
+          "No two teams on a board are ever tied. Every board has exactly one right order, so a miss is a miss on the record, never on a coin flip.",
+        ],
+        subsections: [
+          {
+            heading: "Counting titles under the name worn at the time",
+            items: [
+              "Counts follow the name the club wore at the time, the same convention as our Record Books and Name Them All: South Melbourne's flags and Sydney's flags are separate stacks.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Two tries before a board locks in",
+        items: [
+          "Two tries per board. The first submit locks your greens; the second is final.",
+        ],
+      },
+      {
+        heading: "Revealing every team's real count",
+        items: [
+          "The reveal always shows every team's real count, so you leave each board knowing the actual cabinet.",
+        ],
+      },
     ],
-    example: [
-      'A World Series board deals the Yankees, the Cardinals, the Dodgers, the Cubs and the Marlins. The top is a gift: 27 Yankees titles, then the Cardinals on 11. The bottom half is the game: Dodgers, then Cubs, then the Marlins with 2.',
-      "An AFL board will never hand you Essendon, Carlton and Collingwood together: all three sit on 16 flags, and tied teams never share a board. Same reason a Super Bowl board never deals the Steelers next to the Patriots.",
+    exampleSections: [
+      {
+        heading: "A World Series board topped by the Yankees",
+        paragraphs: [
+          'A World Series board deals the Yankees, the Cardinals, the Dodgers, the Cubs and the Marlins. The top is a gift: 27 Yankees titles, then the Cardinals on 11. The bottom half is the game: Dodgers, then Cubs, then the Marlins with 2.',
+        ],
+      },
+      {
+        heading: "An AFL board where three clubs tie on flags",
+        paragraphs: [
+          "An AFL board will never hand you Essendon, Carlton and Collingwood together: all three sit on 16 flags, and tied teams never share a board. Same reason a Super Bowl board never deals the Steelers next to the Patriots.",
+        ],
+      },
     ],
-    tips: [
-      "Anchor the ends first. The most decorated team and the clear minnow are usually easy; the middle rungs are where points die.",
-      "Watch for era names. Eastern Suburbs and the Sydney Roosters are the same club but separate stacks here, and old-name entries usually carry the smaller count.",
-      "A first-try miss is information: your greens lock, so the second try is a smaller puzzle. Count what is left before you tap.",
-      "Reading the Record Books page once a week is basically training camp for this game.",
+    tipSections: [
+      {
+        heading: "Anchoring the top and bottom rungs first",
+        items: [
+          "Anchor the ends first. The most decorated team and the clear minnow are usually easy; the middle rungs are where points die.",
+        ],
+      },
+      {
+        heading: "Watching for era name changes",
+        items: [
+          "Watch for era names. Eastern Suburbs and the Sydney Roosters are the same club but separate stacks here, and old-name entries usually carry the smaller count.",
+        ],
+      },
+      {
+        heading: "Treating a first miss as information",
+        items: [
+          "A first-try miss is information: your greens lock, so the second try is a smaller puzzle. Count what is left before you tap.",
+        ],
+      },
+      {
+        heading: "Reading the Record Books page for practice",
+        items: [
+          "Reading the Record Books page once a week is basically training camp for this game.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -492,31 +576,120 @@ export const WORLD_CONTENT: GameContentMap = {
       "Most idle games have you clicking a number until it goes up. This one has you building a museum, and every single thing you hang on the wall actually happened. Acquire Super Bowl I and the plaque tells you which team won it, who they beat and by how much. Acquire the 1985 Bears and it is the 1985 Bears, because the exhibit list is read straight out of our audited record books.",
       "Visitors pay admission every second, admission money buys more history, and more history brings more visitors. Ten wings, hundreds of real champions from the nineteenth century to this year, and the hall keeps earning while your phone is in your pocket.",
     ],
-    howToPlay: [
-      "Acquire champions one at a time, oldest first in each wing. Each costs more and earns more than the last.",
-      "Every ten exhibits in a wing doubles that wing's income.",
-      "Open new wings when the money allows, from the Super Bowl through to the NRL and the AFL.",
-      "Tap the anniversary banner when it lights up: admissions triple for a few seconds.",
-      "Spend on tours, the curator's network, the gift shop and the archive vault to raise everything at once.",
-      "Rededicate once the hall is big enough to trade every exhibit for permanent renown stars.",
+    headings: {
+      howToPlay: "How to play Hall of Champions, a free idle sports trivia museum game",
+      rules: "Hall of Champions rules for plaques, away time and rededicating",
+      example: "Hall of Champions walkthrough: opening and completing the Super Bowl wing",
+      tips: "Hall of Champions tips for faster wings and better timing",
+      faq: "Hall of Champions FAQ: real championships, away earnings and rededicating",
+    },
+    howToPlaySections: [
+      {
+        heading: "Acquiring champions oldest first in each wing",
+        items: [
+          "Acquire champions one at a time, oldest first in each wing. Each costs more and earns more than the last.",
+        ],
+      },
+      {
+        heading: "Opening wings and doubling their income",
+        items: [
+          "Every ten exhibits in a wing doubles that wing's income.",
+          "Open new wings when the money allows, from the Super Bowl through to the NRL and the AFL.",
+        ],
+      },
+      {
+        heading: "Tapping the anniversary banner for triple admissions",
+        items: [
+          "Tap the anniversary banner when it lights up: admissions triple for a few seconds.",
+        ],
+      },
+      {
+        heading: "Spending on tours, the network, the shop and the vault",
+        items: [
+          "Spend on tours, the curator's network, the gift shop and the archive vault to raise everything at once.",
+        ],
+      },
+      {
+        heading: "Rededicating for permanent renown stars",
+        items: [
+          "Rededicate once the hall is big enough to trade every exhibit for permanent renown stars.",
+        ],
+      },
     ],
-    rules: [
-      "Nothing in this museum is invented. Every year, team and result comes from the same checked champion tables our quiz games and Record Books run on.",
-      "The hall earns while you are away, at half speed, capped at eight hours. The gift shop raises that rate.",
-      "Finishing a wing hangs a plaque worth a permanent income bonus, and a plaque survives every rededication.",
-      "Rededicating clears the exhibits, the funds, the wings and the upgrades. Renown stars and plaques are the only things that carry over, and they carry over forever.",
-      "The price quoted on a button is the price charged. No hidden fees, no fake discounts.",
+    ruleSections: [
+      {
+        heading: "Every exhibit coming from checked champion tables",
+        items: [
+          "Nothing in this museum is invented. Every year, team and result comes from the same checked champion tables our quiz games and Record Books run on.",
+        ],
+      },
+      {
+        heading: "Earning while you are away at half speed",
+        items: [
+          "The hall earns while you are away, at half speed, capped at eight hours. The gift shop raises that rate.",
+        ],
+      },
+      {
+        heading: "Plaques from finishing a wing",
+        items: [
+          "Finishing a wing hangs a plaque worth a permanent income bonus, and a plaque survives every rededication.",
+        ],
+        subsections: [
+          {
+            heading: "What a rededication clears and keeps",
+            items: [
+              "Rededicating clears the exhibits, the funds, the wings and the upgrades. Renown stars and plaques are the only things that carry over, and they carry over forever.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Honest prices with no hidden fees",
+        items: [
+          "The price quoted on a button is the price charged. No hidden fees, no fake discounts.",
+        ],
+      },
     ],
-    example: [
-      "Your first purchase is the oldest Super Bowl on the books, for ten coins. Ten Super Bowls later that wing pays double, and the money starts arriving fast enough to open the WNBA wing next door.",
-      "Sixty Super Bowls in, the wing is complete and its plaque is permanent: a quarter more admissions across the whole museum, forever, even after you rededicate and start the walls again.",
+    exampleSections: [
+      {
+        heading: "Opening the Super Bowl wing for ten coins",
+        paragraphs: [
+          "Your first purchase is the oldest Super Bowl on the books, for ten coins. Ten Super Bowls later that wing pays double, and the money starts arriving fast enough to open the WNBA wing next door.",
+        ],
+      },
+      {
+        heading: "Completing the Super Bowl wing for a permanent plaque",
+        paragraphs: [
+          "Sixty Super Bowls in, the wing is complete and its plaque is permanent: a quarter more admissions across the whole museum, forever, even after you rededicate and start the walls again.",
+        ],
+      },
     ],
-    tips: [
-      "Wide beats deep early. Opening a new wing is usually worth more than the next expensive exhibit in your best one.",
-      "Watch the milestone counter on each buy button. Being two exhibits away from doubling a wing is the best money in the game.",
-      "Save the anniversary tap for right after a big acquisition run, when your per second number is at its highest.",
-      "The gift shop only pays if you actually leave. If you play in long sittings, tours and the network are worth more.",
-      "Do not rush the first rededication. Stars are paid per twenty exhibits, so one late rededication beats two early ones.",
+    tipSections: [
+      {
+        heading: "Going wide before going deep, then watching milestones",
+        items: [
+          "Wide beats deep early. Opening a new wing is usually worth more than the next expensive exhibit in your best one.",
+          "Watch the milestone counter on each buy button. Being two exhibits away from doubling a wing is the best money in the game.",
+        ],
+      },
+      {
+        heading: "Timing the anniversary tap after a buying run",
+        items: [
+          "Save the anniversary tap for right after a big acquisition run, when your per second number is at its highest.",
+        ],
+      },
+      {
+        heading: "Choosing the gift shop for long time away",
+        items: [
+          "The gift shop only pays if you actually leave. If you play in long sittings, tours and the network are worth more.",
+        ],
+      },
+      {
+        heading: "Waiting for the first rededication",
+        items: [
+          "Do not rush the first rededication. Stars are paid per twenty exhibits, so one late rededication beats two early ones.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -543,28 +716,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "The board looks friendly: one category, a wall of names, most of them belong. Some of them are mines. Minefield asks you to click everyone who truly fits while dodging the plausible fakes planted among them.",
       "You know Leicester won the Premier League. You think Newcastle did too. Boom.",
     ],
-    howToPlay: [
-      "Read the category and its hint, like Premier League champions or the MLB 500 home run club.",
-      "Click every tile you believe belongs. Correct picks turn green.",
-      "Click a mine and it explodes, costing one of your 2 lives on that board.",
-      "Find all the correct tiles to clear the board and bank a bonus.",
-      "Play 3 boards per run, then see your final score and share it.",
+    headings: {
+      howToPlay: "How to play Minefield, a free daily sports trivia clicking game",
+      rules: "Minefield rules for lives, points and mine counts",
+      example: "Minefield walkthrough: a Premier League board and a wrong click",
+      tips: "Minefield tips for banking points and dodging mines",
+      faq: "Minefield FAQ: lives, mine counts and the daily board",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the category and its hint",
+        items: [
+          "Read the category and its hint, like Premier League champions or the MLB 500 home run club.",
+        ],
+      },
+      {
+        heading: "Clicking tiles that belong to the category",
+        items: [
+          "Click every tile you believe belongs. Correct picks turn green.",
+        ],
+      },
+      {
+        heading: "Losing a life on a mine",
+        items: [
+          "Click a mine and it explodes, costing one of your 2 lives on that board.",
+        ],
+      },
+      {
+        heading: "Clearing the board for a bonus",
+        items: [
+          "Find all the correct tiles to clear the board and bank a bonus.",
+        ],
+      },
+      {
+        heading: "Playing three boards and sharing your score",
+        items: [
+          "Play 3 boards per run, then see your final score and share it.",
+        ],
+      },
     ],
-    rules: [
-      "Each board has 2 lives. Two mine hits end that board, but the run continues to the next one.",
-      "Every correct tile is worth 10 points, and clearing a full board adds a 30 point bonus.",
-      "Boards hold 12 to 16 tiles, with 4 to 6 mines hidden among them.",
-      "The daily run is identical for everyone and flips at midnight Eastern Time. Unlimited deals random boards.",
+    ruleSections: [
+      {
+        heading: "Two lives per board",
+        items: [
+          "Each board has 2 lives. Two mine hits end that board, but the run continues to the next one.",
+        ],
+      },
+      {
+        heading: "Scoring correct tiles and the clear bonus",
+        items: [
+          "Every correct tile is worth 10 points, and clearing a full board adds a 30 point bonus.",
+        ],
+      },
+      {
+        heading: "How big a board can get",
+        items: [
+          "Boards hold 12 to 16 tiles, with 4 to 6 mines hidden among them.",
+        ],
+        subsections: [
+          {
+            heading: "Daily boards versus unlimited mode",
+            items: [
+              "The daily run is identical for everyone and flips at midnight Eastern Time. Unlimited deals random boards.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Imagine the category is Premier League champions. You click the bankers: Manchester United, Arsenal, Chelsea, Manchester City. Then Blackburn Rovers and Leicester City, both real champions, both green.",
-      "Feeling smart, you click Newcastle United. Boom, never won the Premier League itself. One life left, and the remaining tiles suddenly look a lot more suspicious.",
+    exampleSections: [
+      {
+        heading: "A Premier League board with the easy bankers",
+        paragraphs: [
+          "Imagine the category is Premier League champions. You click the bankers: Manchester United, Arsenal, Chelsea, Manchester City. Then Blackburn Rovers and Leicester City, both real champions, both green.",
+        ],
+      },
+      {
+        heading: "A wrong click on Newcastle United",
+        paragraphs: [
+          "Feeling smart, you click Newcastle United. Boom, never won the Premier League itself. One life left, and the remaining tiles suddenly look a lot more suspicious.",
+        ],
+      },
     ],
-    tips: [
-      "Bank the certainties first. Every green is 10 points you keep even if the board later explodes.",
-      "Read the hint line, since era limits change everything about who counts.",
-      "Mines are nearly-men: famous finalists, runners-up and almost-dynasties. If a name feels like it should have won, that feeling is the trap.",
-      "Down to one life? Slow down and count the board. The found counter tells you how many real ones remain.",
+    tipSections: [
+      {
+        heading: "Banking the certain tiles first",
+        items: [
+          "Bank the certainties first. Every green is 10 points you keep even if the board later explodes.",
+        ],
+      },
+      {
+        heading: "Reading the hint line for era limits",
+        items: [
+          "Read the hint line, since era limits change everything about who counts.",
+        ],
+      },
+      {
+        heading: "Spotting mines among the nearly men",
+        items: [
+          "Mines are nearly-men: famous finalists, runners-up and almost-dynasties. If a name feels like it should have won, that feeling is the trap.",
+        ],
+      },
+      {
+        heading: "Slowing down on your last life",
+        items: [
+          "Down to one life? Slow down and count the board. The found counter tells you how many real ones remain.",
+        ],
+      },
     ],
     faqs: [
       {
