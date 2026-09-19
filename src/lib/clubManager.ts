@@ -4085,9 +4085,12 @@ export function ensureCustomClubWageCap(state: CareerState): void {
    What that sells for is what a real club with that budget banks. Listing the
    whole squad in the first window and taking every bid the squad floor allows,
    real clubs inside the budget clamp bank 2.69 times their budget at the
-   median and 3.31 at p90 (66 clubs, all four eras); measured in section 2 of
-   scripts/simCustomClubValues.mjs over every slider setting of every tier,
-   88 on 15m included. */
+   median and 3.31 at p90 (66 clubs, all four eras). Measured in section 2 of
+   scripts/simCustomClubValues.mjs over every slider setting of every tier in
+   every era (408 settings, four seeds): the same sell off banks a p90 of 2.40
+   to 2.58 of the tier's budget, 2.73 to 2.91 above the ceiling with 88 on 15m
+   included, where the same founders with no sale cap banked 14.99; the tier's
+   own squad and the form's default still bank 0.52 to 0.59. */
 export const CUSTOM_SQUAD_PER_BUDGET = 1 / 0.16;
 
 /** Round 640: the highest squad quality a budget tier's money buys in this era, the founders' sale ceiling. */
