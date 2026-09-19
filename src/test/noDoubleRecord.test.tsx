@@ -84,6 +84,7 @@ import { useBallIq } from '@/hooks/useBallIq';
 import { useMysteryBox } from '@/hooks/useMysteryBox';
 import { useNFLCareer } from '@/hooks/useNFLCareer';
 import { useTransferPath } from '@/hooks/useTransferPath';
+import { useFootballGrid } from '@/hooks/useFootballGrid';
 import { useGradeTransfer } from '@/hooks/useGradeTransfer';
 import CareerLadder from '@/pages/CareerLadder';
 import NbaGrid from '@/pages/NbaGrid';
@@ -211,6 +212,16 @@ vi.mock('@/lib/hockeyGrid', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/lib/hockeyGrid')>()),
   fetchHockeyGridData: async () => F.EMPTY_GRID(),
 }));
+/* Football Grid's answer key: one name, and no cell it fits, so any guess of
+   it is a miss. The grid's board is still built by the real engine. */
+vi.mock('@/lib/nflGrid', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/nflGrid')>()),
+  fetchNflGridData: async () => {
+    const p = { name: 'Probe Player' };
+    return { players: [p], byNormalizedName: new Map([['probe player', p]]) };
+  },
+  playerMatchesCell: () => false,
+}));
 vi.mock('@/lib/cbbGrid', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/lib/cbbGrid')>()),
   fetchCbbGridData: async () => F.CBB_GRID(),
@@ -326,17 +337,24 @@ interface Case {
 }
 
 /* -- slug: the nine Higher or Lower hooks, one engine per sport ----------- */
-function hl(id: string, storageSlug: string, useHook: () => unknown): Case {
+/* `stat` reads the number a round compares, so the row can answer the final
+   round right: then the whole score is at least 10 above the score of the
+   first nine, and a record taken before the final reveal cannot pass for one
+   taken after (with a wrong final answer the two are the same number). */
+function hl(id: string, storageSlug: string, useHook: () => unknown, stat: (p: any) => number): Case {
   return {
     id, shape: 'slug', usesMark: true, storageSlug,
     mount: () => mountHook(useHook, r => !r.isLoading),
     async finish(api) {
       await withFakeTimers(async () => {
         for (let i = 0; i < 12 && api.r.gameStatus === 'playing'; i += 1) {
-          await run(() => api.r.makeGuess('left'));
+          const last = api.r.currentRound === api.r.totalRounds - 1;
+          const [a, b] = api.r.currentPair;
+          await run(() => api.r.makeGuess(last ? (stat(a) >= stat(b) ? 'left' : 'right') : 'left'));
           await advance(2100);
         }
       });
+      expect(api.r.results[api.r.results.length - 1]?.correct, 'the final round was answered right, so the two scores differ').toBe(true);
     },
     finished: api => api.r.mode === 'daily' && api.r.gameStatus === 'complete',
     /* The final round is recorded as it is decided, before its reveal ends;
@@ -535,15 +553,15 @@ const CASES: Case[] = [
     (c, rng) => { simNhlSeason(c as never, 80, rng); nhlProgress(c as never, rng); }),
 
   /* slug: the mark goes under the recorder's slug, the save stays where it was */
-  hl('nfl-higher-lower', 'nfl-hl', useNflHL),
-  hl('nba-higher-lower', 'nba-hl', useNbaHL),
-  hl('mlb-higher-lower', 'mlb-hl', useMlbHL),
-  hl('hockey-higher-lower', 'hockey-hl', useHockeyHL),
-  hl('cfb-higher-lower', 'cfb-hl', useCfbHL),
-  hl('f1-higher-lower', 'f1-hl', useF1HL),
-  hl('tennis-higher-lower', 'tennis-hl', useTennisHL),
-  hl('golf-higher-lower', 'golf-hl', useGolfHL),
-  hl('afl-higher-lower', 'afl-hl', useAflHL),
+  hl('nfl-higher-lower', 'nfl-hl', useNflHL, p => p.value),
+  hl('nba-higher-lower', 'nba-hl', useNbaHL, p => p.careerPoints),
+  hl('mlb-higher-lower', 'mlb-hl', useMlbHL, p => p.careerHrs),
+  hl('hockey-higher-lower', 'hockey-hl', useHockeyHL, p => p.careerPoints),
+  hl('cfb-higher-lower', 'cfb-hl', useCfbHL, p => p.careerPassYds),
+  hl('f1-higher-lower', 'f1-hl', useF1HL, p => p.careerWins),
+  hl('tennis-higher-lower', 'tennis-hl', useTennisHL, p => p.slams),
+  hl('golf-higher-lower', 'golf-hl', useGolfHL, p => p.majors),
+  hl('afl-higher-lower', 'afl-hl', useAflHL, p => p.goals),
   {
     id: 'ufc', shape: 'slug', usesMark: true, storageSlug: 'ufc-game',
     mount: () => mountHook(useUfcGame, r => !r.isLoading && !!r.targetFighter),
@@ -866,8 +884,13 @@ interface Race {
   ready: (r: any) => boolean;
   total: (r: any) => number;
   shown: (r: any) => number;
+  /** Everything a pick needs before its final tap (Silverware: the chips). */
+  setup?: (api: Api) => Promise<void>;
+  /** The tap that decides the round and saves it. */
   pick: (api: Api) => Promise<void>;
   revealMs: number;
+  /** Where the daily of `day` is saved. */
+  saveKey: (day: string) => string;
 }
 const RACES: Race[] = [
   {
@@ -875,31 +898,39 @@ const RACES: Race[] = [
     ready: r => r.loadState === 'ready' && r.rounds.length > 0,
     total: r => r.rounds.length, shown: r => r.answers.length,
     pick: api => run(() => api.r.answer(api.r.current.isTrue)),
+    saveKey: day => `champ-or-not-daily-${day}`,
   },
   {
     id: 'whod-they-beat', useHook: useWhodTheyBeat, revealMs: 2200,
     ready: r => r.loadState === 'ready' && r.questions.length > 0,
     total: r => r.questions.length, shown: r => r.answers.length,
     pick: api => run(() => api.r.answer(api.r.current.correctIndex)),
+    saveKey: day => `whod-they-beat-daily-${day}`,
   },
   {
     id: 'silverware-sort', useHook: useSilverwareSort, revealMs: 3400,
     ready: r => r.loadState === 'ready' && r.boards.length > 0,
     total: r => r.boards.length, shown: r => r.results.length,
-    async pick(api) {
+    /* Slot i is right when it holds team i. */
+    async setup(api) {
       for (let t = 0; t < 5; t += 1) await run(() => api.r.place(t));
-      await run(() => api.r.submit());
     },
+    pick: api => run(() => api.r.submit()),
+    saveKey: day => `silverware-sort-daily-${day}`,
   },
 ];
+async function fullPick(race: Race, api: Api): Promise<void> {
+  if (race.setup) await race.setup(api);
+  await race.pick(api);
+}
 async function toFinalPick(race: Race): Promise<Api> {
   const api = await mountHook(race.useHook, race.ready);
   vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
   for (let i = 0; i < 20 && race.shown(api.r) < race.total(api.r) - 1; i += 1) {
-    await race.pick(api);
+    await fullPick(race, api);
     await advance(race.revealMs + 100);
   }
-  await race.pick(api);
+  await fullPick(race, api);
   expect(race.shown(api.r), 'the final result is still in its reveal').toBe(race.total(api.r) - 1);
   return api;
 }
@@ -938,10 +969,104 @@ const raceToggle = (race: Race): Check => ({
   },
 });
 
+/* 23:59 and 00:01 Eastern on the night of 2026-09-19, as UTC. */
+const BEFORE_MIDNIGHT_ET = new Date('2026-09-20T03:59:00Z');
+const AFTER_MIDNIGHT_ET = new Date('2026-09-20T04:01:00Z');
+
+/* The daily is dealt at 23:59 ET and its final pick lands at 00:01: it is
+   still the day it was dealt, so it is saved and recorded once, not lost. */
+const raceMidnight = (race: Race): Check => ({
+  title: `${race.id}: a final pick after midnight ET`, id: race.id, usesMark: false,
+  async run() {
+    vi.useFakeTimers({ toFake: ['Date'] });
+    vi.setSystemTime(BEFORE_MIDNIGHT_ET);
+    const api = await mountHook(race.useHook, race.ready);
+    try {
+      /* The mount waited on real timers; the reveals are played on fake ones
+         (fake timers are not re-read while installed, so reinstall). */
+      vi.useRealTimers();
+      vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout'] });
+      vi.setSystemTime(BEFORE_MIDNIGHT_ET);
+      for (let i = 0; i < 20 && race.shown(api.r) < race.total(api.r) - 1; i += 1) {
+        await fullPick(race, api);
+        await advance(race.revealMs + 100);
+      }
+      if (race.setup) await race.setup(api);
+      expect(getTodayET(), 'still the night the daily was dealt').toBe('2026-09-19');
+      /* The clock crosses midnight with the final tap the only thing left,
+         and nothing on the page re-renders in between, as in a real tab. */
+      vi.setSystemTime(AFTER_MIDNIGHT_ET);
+      await race.pick(api);
+      await advance(race.revealMs + 100);
+      expect(api.r.done, 'the daily finishes after midnight').toBe(true);
+      expect(paths(), 'a final pick after midnight records the daily once').toEqual([`/${race.id}`]);
+      expect(localStorage.getItem(race.saveKey('2026-09-20')), 'after midnight, nothing is saved under the next day').toBeNull();
+      expect(localStorage.getItem(race.saveKey('2026-09-19')), 'after midnight, the daily is saved under the day it was dealt').not.toBeNull();
+    } finally {
+      api.unmount();
+    }
+  },
+});
+
+/* A seeded Football Grid daily saved as 'playing' with more guesses than the
+   limit, the save a player makes with Unlimited on, read back with it off. */
+const FOOTBALL_GRID_PAST_LIMIT: Check = {
+  title: 'football-grid: a playing save past the limit, read with Unlimited off',
+  id: 'football-grid', usesMark: false,
+  async run() {
+    localStorage.setItem('football-grid-unlimited', '0');
+    const guesses = [
+      ...Array.from({ length: 7 }, (_, i) => ({ t: 'ok', cellIndex: i, playerName: `Seeded ${i}`, rarity: 40 })),
+      ...Array.from({ length: 9 }, () => ({ t: 'x' })),
+    ];
+    localStorage.setItem(dailyKey('football-grid'), JSON.stringify({ v: 1, date: today, puzzleIndex: 0, guesses, gameStatus: 'playing' }));
+    const api = await mountHook(useFootballGrid, r => !r.isLoading);
+    try {
+      await settle();
+      expect(api.r.gameStatus, 'the save is restored as playing, not turned into a loss').toBe('playing');
+      expect(paths(), 'mounting records nothing').toEqual([]);
+      await run(() => api.r.setActiveCell(8));
+      await run(() => api.r.submitGuess('Probe Player'));
+      expect(api.r.gameStatus, 'the next guess past the limit ends it').toBe('complete');
+      expect(paths(), 'and records it exactly once').toEqual(['/football-grid']);
+    } finally {
+      api.unmount();
+    }
+  },
+};
+
 const CHECKS: Check[] = [
   ...HL_HOOKS.map(hlSaved),
   ...RACES.map(raceReload),
   ...RACES.map(raceToggle),
+  ...RACES.map(raceMidnight),
+  FOOTBALL_GRID_PAST_LIMIT,
+  {
+    /* Dealt on the 19th, solved at 00:01 on the 20th: it is the 19th's daily,
+       saved and recorded as that, and the 20th's real daily is still there to
+       play the next time the Daily tab deals. */
+    title: 'nfl-career: a daily dealt before midnight and solved after it',
+    id: 'nfl-career', usesMark: false,
+    async run() {
+      vi.useFakeTimers({ toFake: ['Date'] });
+      vi.setSystemTime(BEFORE_MIDNIGHT_ET);
+      const api = await mountHook(useNFLCareer);
+      try {
+        await run(() => api.r.makeGuess('Nobody At All'));
+        vi.setSystemTime(AFTER_MIDNIGHT_ET);
+        await run(() => api.r.makeGuess(api.r.targetPlayer.name));
+        expect(api.r.gameStatus).toBe('won');
+        expect(paths(), 'solved after midnight, recorded once').toEqual(['/nfl-career']);
+        expect((JSON.parse(localStorage.getItem('nfl-career-daily') ?? '{}') as { date?: string }).date, 'saved as the day it was dealt').toBe('2026-09-19');
+        await run(() => api.r.switchMode('daily'));
+        expect(api.r.gameStatus, 'the next day deals its own fresh daily').toBe('playing');
+        await run(() => api.r.giveUp());
+        expect(paths(), 'and records it once more').toEqual(['/nfl-career', '/nfl-career']);
+      } finally {
+        api.unmount();
+      }
+    },
+  },
   {
     title: 'nfl-career: a first clue solve records its clue score',
     id: 'nfl-career', usesMark: false,
@@ -1038,7 +1163,7 @@ describe('no double record', () => {
        restore is the six after-data hooks and NFL Career Path. */
     for (const s of Object.keys(EXACT) as Shape[]) expect(count(s), `${s} rows`).toBe(EXACT[s]);
     expect(CASES.length, 'rows in all').toBe(Object.values(EXACT).reduce((a, b) => a + b, 0));
-    expect(CHECKS.length, 'checks: nine HL saves, three reloads and three toggles inside a reveal, two NFL, one bracket').toBe(18);
+    expect(CHECKS.length, 'checks: nine HL saves, three reloads, three toggles and three midnights around a reveal, one Football Grid, three NFL, one bracket').toBe(23);
   });
 
   it(CONTROL === 'nomark' ? 'nomark control: markRestoredFinish is a no-op' : 'markRestoredFinish is live', () => {
