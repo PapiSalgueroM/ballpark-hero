@@ -270,11 +270,13 @@
         <li><a href="/soccer-career">Soccer Career</a>, the biggest one here: start at 16 and play until you hang them up</li>
         <li><a href="/club-manager">Club Manager</a>, run a club through a season of real fixtures</li>
         <li><a href="/nba-my-career">NBA My Career</a> and <a href="/nfl-my-career">NFL My Career</a>, draft night to the rafters</li>
-        <li><a href="/stadium-tycoon">Stadium Tycoon</a> and <a href="/hall-of-champions">Hall of Champions</a>, the idle ones</li>
+        <li><a href="/stadium-tycoon">Stadium Tycoon</a>, <a href="/hall-of-champions">Hall of Champions</a> and <a href="/wonderkid-factory">Wonderkid Factory</a>, the idle ones, the last an academy where you grow made up kids and sell at the right moment</li>
+        <li><a href="/build-your-xi">Build Your XI</a>, pick a lineup and get it rated</li>
       </ul>
       <h2>Daily sports puzzles and grid games</h2>
       <ul>
         <li><a href="/soccer-grid">Soccer Grid</a>, a three by three of clubs and countries</li>
+        <li><a href="/college-grid">College Grid</a>, the same idea for college football</li>
         <li><a href="/transfer-path">Transfer Path</a>, get from one player to another through real moves</li>
         <li><a href="/minefield">Minefield</a>, name as many as you dare before you hit a wrong one</li>
         <li><a href="/silverware-sort">Silverware Sort</a>, stack five teams by titles won</li>
@@ -311,7 +313,7 @@
       <ul>
         <li><a href="/nba-front-office">NBA Front Office</a> and <a href="/nhl-front-office">NHL Front Office</a>, hard cap, soft cap, and the trade deadline</li>
         <li><a href="/mlb-front-office">MLB Front Office</a>, a farm system and no cap at all</li>
-        <li><a href="/front-office">Front Office</a>, the soccer version: transfer windows, wage bills and a board with a mandate</li>
+        <li><a href="/front-office">NFL Front Office</a>, the pro football one: real rosters, the cap, trades and the draft</li>
         <li><a href="/cfb-dynasty">CFB Dynasty</a> and <a href="/cbb-dynasty">CBB Dynasty</a>, recruit, redshirt, and try to keep your job</li>
       </ul>
 
@@ -323,6 +325,7 @@
         <li><a href="/who-am-i">Who Am I?</a>, clues drip out one at a time and the fewer you need the better</li>
         <li><a href="/guess-the-year">Guess The Year</a> and <a href="/teammates">Teammates</a></li>
         <li><a href="/rank-em">Rank 'Em</a>, put five in the right order with no second chances</li>
+        <li><a href="/player-bingo">Player Bingo</a>, fill a line on a five by five board before three strikes</li>
       </ul>
 
       <h2>Every sport we cover, from soccer to F1, tennis, golf and UFC</h2>
@@ -463,6 +466,14 @@
              the home page. */
           var ogUrl = document.querySelector('meta[property="og:url"]');
           if (ogUrl) ogUrl.parentNode.removeChild(ogUrl);
+
+          /* Round 650: a player profile (/profile/<name>) is a real page that
+             can never have a saved copy, because nobody can prerender a
+             username. It keeps the noindex and loses the home canonical above,
+             which is what the profile page itself asks for once it loads, but
+             it is not a dead address, so it must not be painted as one. Before
+             this line every shared profile link opened on the 404 text. */
+          if (/^\/profile\/[^/]+$/.test(path)) return;
 
           var NOT_FOUND_TITLE = 'Page Not Found | DoUKnowBall';
           var NOT_FOUND_DESC = 'There is no page at this address on DoUKnowBall. Browse the free sports games instead.';

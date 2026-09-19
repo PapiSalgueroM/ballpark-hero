@@ -175,6 +175,31 @@ console.log('4) real routes are untouched, which is the half that must not fail'
     `${ROUTES.length} real routes, ${marked} wrongly marked, ${noSnapshot} served from the fallback, ${homeCopy} serving home page copy`);
 }
 
+console.log('5) a player profile is a real page with no saved copy, and it is not painted as a 404');
+{
+  /* Round 650. /profile/<name> is routed by the app and copied to the
+     clipboard by the profile screen's share button, but no username can ever
+     be prerendered, so the server answers it with the fallback exactly as it
+     answers a dead address. Until this round the script then painted "404:
+     there is no page at this address" over it, which is what anyone opening a
+     shared profile link saw until the app loaded. It must keep the noindex and
+     lose the home canonical, because the profile page asks for both once it
+     loads, and it must show no 404. Its negative control is the build before
+     this round: served from that dist, the 404 text and the not found title
+     checks fail and the rest pass, because the old script already did the
+     noindex and the canonical. A deeper path under /profile is still a dead
+     address. */
+  const sent = await raw('/profile/round650-someone');
+  say(!sent.snapshot, 'the server answers a profile link with the fallback, which is why this case exists');
+  const prof = await read('/profile/round650-someone');
+  say(prof.robots === 'noindex, follow', `robots is ${JSON.stringify(prof.robots)}, as the profile page itself asks`);
+  say(prof.canonical === null, `the home page canonical is gone (${prof.canonical ?? 'gone'})`);
+  say(!/404|no page at this address/i.test(prof.text), `no 404 text is painted over it (${JSON.stringify(prof.text.slice(0, 60))})`);
+  say(!/not found/i.test(prof.title), `its title is not the not found title: ${JSON.stringify(prof.title)}`);
+  const deep = await read('/profile/round650-someone/extra');
+  say(/no page at this address/i.test(deep.text), 'a deeper path under /profile is still marked as a dead address');
+}
+
 await browser.close();
 
 console.log('');
