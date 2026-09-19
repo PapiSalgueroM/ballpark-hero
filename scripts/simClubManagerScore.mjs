@@ -45,7 +45,10 @@
  *                                 size neutrality, must go red.
  *   CM_SCORE_CONTROL=ratescore    form reads points per game PLAYED, the rate
  *                                 that reads 3.00 after one opening win.
- *                                 Section 2, the monotone law, must go red.
+ *                                 Section 2, the monotone law, must go red. It
+ *                                 trips 6 too: a rate on a legacy save that
+ *                                 has played fewer games than the estimate
+ *                                 subtracts reads the full 48 for 4 points.
  *   CM_SCORE_CONTROL=oldrule      puts back min(130, pts + 10 a trophy).
  *                                 Sections 3 and 4, stature and following the
  *                                 board, must both go red. It trips 6 too,
@@ -64,7 +67,9 @@
  *                                 with no European route can no longer reach
  *                                 130. Section 7, which scores that season
  *                                 through the real module rather than reading
- *                                 a helper, must go red.
+ *                                 a helper, must go red. It trips 4 too: a
+ *                                 scaled total no longer matches the breakdown
+ *                                 the season end screen prints beside it.
  *   CM_SCORE_CONTROL=liveobjectives grades the board card LIVE instead of at
  *                                 the final whistle, which is the bug the
  *                                 adversarial review found: selling or paying
@@ -84,7 +89,9 @@
  *   CM_SCORE_CONTROL=noobjsub     the stamped board ticks are no longer
  *                                 subtracted. Section 5 must go red.
  *   CM_SCORE_CONTROL=uncapped     drops the 0..130 clamp on the total.
- *                                 Section 8 must go red.
+ *                                 Section 8 must go red. It trips 4 too: a
+ *                                 season scored over 130 cannot match its
+ *                                 capped breakdown.
  *   CM_SCORE_CONTROL=requiredhandover makes the save field mandatory, so a
  *                                 save from before the round would not load.
  *                                 Section 9 must go red.
@@ -124,7 +131,7 @@ if (CONTROL && !KNOWN.includes(CONTROL)) {
 
 /* ---------- the engine, with the control applied IN MEMORY ---------- */
 /* Never on disk: a crashed run must not be able to leave a rewritten engine
-   where tsc or a build would read it. Same approach as simFreeAgents. */
+   where tsc or a build would read it. Same approach as simClubManagerDeals. */
 const SCORE_SRC = path.join(ROOT, 'src', 'lib', 'clubManagerScore.ts');
 const ENGINE_SRC = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
 const CALENDAR_SRC = path.join(ROOT, 'src', 'lib', 'clubManagerCalendar.ts');
@@ -143,6 +150,15 @@ function swap(text, old, neu, where) {
   }
   return text.split(old).join(neu);
 }
+
+/** Source with its comments taken out, for every guard below that reads a
+ *  file: prose about the code is the one place the string a guard looks for
+ *  is guaranteed to appear. Block comments (JSX's included) and line
+ *  comments go; a `//` inside a string such as a URL may go with them, which
+ *  can only make a guard stricter, never let one pass on prose. */
+const codeOf = text => text
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/(^|[^:'"`\\])\/\/.*$/gm, '$1');
 
 const TOTAL_LINE = '  const total = int(form + title + cup + euro + objectives, 0, LEDGER_CAP);';
 
@@ -309,7 +325,8 @@ const LEAGUE_SIZES = [...new Set(REAL_LEAGUES.map(l => l.clubs.length))].sort((a
    clubDefMap does not know does NOT throw: clubDefFor returns a flat fallback
    (tier 4, expectation 10) and leagueOf falls back to the PREMIER LEAGUE, so a
    typo silently becomes an invented Premier League club and quietly poisons
-   the two correlation gates below. simFreeAgents learned this the same way. */
+   the two correlation gates below. The first calibration run of this round's
+   weights learned it that way, through a club called "Midtjylland". */
 function assertRealClubs(names, where) {
   const known = new Set(REAL_LEAGUES.flatMap(l => playableClubs(l.id).map(c => c.name)));
   const missing = names.filter(n => !known.has(n));
@@ -500,12 +517,17 @@ console.log('2) The score never falls, even when you sell, loan out or pay someb
   console.log(`   ${careers} careers, ${samples} readings, ${listed} men listed, ${sales} sold through acceptBid, ${loans} loaned out, ${payoffs} paid off, ${drops} readings lower than the one before`);
   if (samples < 450) fail(`only ${samples} readings were sampled, so this section proves nothing`);
   /* The floors are the whole point: without them this section passes by never
-     doing the things that used to break it. Measured over five seeds (the
-     filename seed and SIM_SEED 1 to 4): sales 15 to 21, loans 22 to 24,
-     payoffs 60 to 70. Each floor sits at about half of the lowest reading. */
-  if (sales < 8) fail(`only ${sales} men were sold through acceptBid, so the whistle gate is not being tested against a sale`);
-  if (loans < 12) fail(`only ${loans} men were loaned out, so the whistle gate is not being tested against a loan`);
-  if (payoffs < 30) fail(`only ${payoffs} men were paid off, so the whistle gate is not being tested against a payoff`);
+     doing the things that used to break it. Measured over eight seeds (the
+     filename seed, then SIM_SEED 1 to 7), twelve careers each:
+       sales    23  23  23  27  29  24  26  28   (23 to 29)
+       loans    18  19  21  20  21  19  20  20   (18 to 21)
+       payoffs  34  35  34  37  32  33  37  34   (32 to 37)
+     Each floor sits at about half of the lowest reading, so a seed has to
+     halve an action before it goes red, and a change that stops one of the
+     three from happening at all cannot pass. */
+  if (sales < 11) fail(`only ${sales} men were sold through acceptBid, so the whistle gate is not being tested against a sale (measured 23 to 29)`);
+  if (loans < 9) fail(`only ${loans} men were loaned out, so the whistle gate is not being tested against a loan (measured 18 to 21)`);
+  if (payoffs < 16) fail(`only ${payoffs} men were paid off, so the whistle gate is not being tested against a payoff (measured 32 to 37)`);
   if (drops > 0) {
     fail(`the score fell ${drops} times, worst ${worst.club} week ${worst.week} ${worst.label}: ${worst.from} to ${worst.to}. The day best is a MAX, so a score that can fall is farmable.`);
   }
@@ -547,7 +569,10 @@ const SAMPLE = (() => {
         rows.push({
           xi,
           score: summary.seasonScore,
-          objTerm: parts && isNum(parts.objectives) ? parts.objectives : null,
+          /* The rule this round replaced, scored on the very same season,
+             so section 4 can measure against a baseline from its own run. */
+          oldRule: Math.min(130, summary.points + summary.trophies.length * 10),
+          parts: parts ?? null,
           grade: summary.verdictGrade,
           objFrac: objs.filter(o => o.hit).length / objs.length,
         });
@@ -566,15 +591,17 @@ console.log('3) Management held identical, the club varied: how much does statur
   else {
     const r = correlation(SAMPLE.map(x => x.xi), SAMPLE.map(x => x.score));
     console.log(`   ${SAMPLE.length} seasons, correlation between the club's preview XI rating and its season score: ${r.toFixed(3)}`);
-    /* MEASURED, both arms, on this exact sample across three seeds, AFTER the
-       whistle gate on the board term:
-         new rule  0.030  0.231  0.260
-         old rule  0.679  0.745  0.780
-       The bands do not touch. The gate is 0.47, midway through the gap, so
-       each arm has about 0.21 of headroom. Re-measured rather than inherited:
-       an earlier draft used 0.58, which left the CONTROL only 0.10 of room,
-       and a threshold is only as good as the arm it is closest to. */
-    if (r > 0.47) fail(`stature still explains the score: correlation ${r.toFixed(3)} against a ceiling of 0.47 (measured: new rule 0.030 to 0.260, old rule 0.679 to 0.780)`);
+    /* MEASURED, both arms, on this exact sample across eight seeds (the
+       filename seed, then SIM_SEED 1 to 7), with section 2 driving its three
+       squad actions ahead of it in the stream:
+         new rule  0.251 0.264 0.271 0.101 0.091 0.321 0.121 0.224   (0.091 to 0.321)
+         old rule  0.777 0.752 0.690 0.655 0.756 0.773 0.724 0.739   (0.655 to 0.777)
+       The bands do not touch. The gate is 0.47, 0.149 above the healthy arm's
+       highest reading and 0.185 below the control's lowest. Re-measured rather
+       than inherited: an earlier draft used 0.58, which left the CONTROL only
+       0.10 of room, and a threshold is only as good as the arm it is closest
+       to. */
+    if (r > 0.47) fail(`stature still explains the score: correlation ${r.toFixed(3)} against a ceiling of 0.47 (measured: new rule 0.091 to 0.321, old rule 0.655 to 0.777)`);
   }
 }
 
@@ -585,37 +612,62 @@ console.log('4) The score follows what the board actually asked for');
      board objectives hit. The verdict grade correlates too but far more
      weakly, so it is printed below as information and not used as the gate.
 
-     THE GATE IS MEASURED WITH THE BOARD TERM TAKEN OUT OF THE SCORE. The
-     score carries a term that is literally six points a tick, so its
-     correlation with the share of ticks is partly the term correlating with
-     itself, and the review asked whether that was all of it. It is not: the
-     other four terms (league form, the title, the cup run and the European
-     run) follow the board on their own, because a board asks for the things
-     those terms pay for. The full score's correlation is printed beside it
-     for the record. */
+     TWO GATES, because the review asked a fair question of the first one.
+     The score carries a term that is literally six points a tick, so its
+     correlation with the share of ticks is partly that term correlating with
+     itself. Was that all of it? It is not, and the second gate is what says
+     so: with the board term taken out, the other four terms (league form, the
+     title, the cup run and the European run) still follow the board, because
+     a board asks for the things those terms pay for.
+
+     The second gate is measured against a BASELINE from the same run rather
+     than against a fixed floor. The old rule, scored on the very same
+     seasons, follows the board a little too (a club that hits its board card
+     tends to bank points), and across eight seeds the two arms came within
+     0.09 of each other at their closest, so a fixed floor between them would
+     have been a coin toss. Paired on the same seasons they never came
+     within 0.16.
+
+     The score without its board term is rebuilt from the season summary's
+     own breakdown, and only when that breakdown really is the score: the five
+     terms, capped at 130, must come to the number the summary prints. The
+     season end screen lists those terms beside that number, so a breakdown
+     that disagrees with it is a defect in its own right and fails here. A
+     score that carries no breakdown of its own (the old rule, under the
+     oldrule control) has no board term to take out, so it is read whole. */
+  const partsSum = p => p.form + p.title + p.cup + p.euro + p.objectives;
+  const described = x => !!x.parts && Math.min(S.LEDGER_CAP, partsSum(x.parts)) === x.score;
+  const withoutBoard = x => (described(x) ? x.parts.form + x.parts.title + x.parts.cup + x.parts.euro : x.score);
   if (SAMPLE.length < 55) fail('sample too small to ask whether the score follows the board');
-  else if (SAMPLE.some(x => x.objTerm === null)) fail('a season summary carried no seasonScoreParts, so the board term cannot be taken out of the score');
   else {
-    const rFull = correlation(SAMPLE.map(x => x.objFrac), SAMPLE.map(x => x.score));
-    const r = correlation(SAMPLE.map(x => x.objFrac), SAMPLE.map(x => x.score - x.objTerm));
-    console.log(`   correlation between the share of board objectives hit and the season score: ${rFull.toFixed(3)} with the board term in, ${r.toFixed(3)} with it taken out`);
+    const loose = SAMPLE.filter(x => !described(x));
+    if (loose.length) fail(`${loose.length} of ${SAMPLE.length} season summaries print a breakdown that does not add up to the score beside it (first: score ${loose[0].score}, terms ${loose[0].parts ? partsSum(loose[0].parts) : 'none'})`);
+    const board = SAMPLE.map(x => x.objFrac);
+    const rFull = correlation(board, SAMPLE.map(x => x.score));
+    const rOut = correlation(board, SAMPLE.map(withoutBoard));
+    const rOld = correlation(board, SAMPLE.map(x => x.oldRule));
+    console.log(`   correlation between the share of board objectives hit and the season score: ${rFull.toFixed(3)} with the board term in, ${rOut.toFixed(3)} with it taken out; the old rule on the same seasons ${rOld.toFixed(3)}, so ${(rOut - rOld).toFixed(3)} better without the board term`);
     const mean = a => a.reduce((x, n) => x + n, 0) / a.length;
     const line = ['A', 'B', 'C', 'D', 'F']
       .map(g => ({ g, v: SAMPLE.filter(x => x.grade === g).map(x => x.score) }))
       .filter(x => x.v.length >= 3)
       .map(x => `${x.g} n=${x.v.length} mean ${mean(x.v).toFixed(1)}`);
     console.log('   by the board verdict grade: ' + line.join('   '));
-    /* MEASURED, both arms, across five seeds (the filename seed and SIM_SEED
-       1 to 4), the board term taken out of the new rule's score:
-         new rule, board term out   0.523  0.566  0.579  0.598  0.612
-         old rule                  -0.087  0.014  0.034  0.061  0.106
-       (the old rule has no board term, so under the control the subtraction
-       takes a term out of a score that never had it, which only lowers it).
-       The full new rule score measured 0.669 to 0.746 on the same seeds.
-       Floor 0.30, about 0.22 clear of the healthy arm's lowest reading and
-       0.19 clear of the control's highest. An earlier draft gated the full
-       score at 0.45, which the board term alone could have carried. */
-    if (r < 0.30) fail(`the score barely follows the board once its own board term is taken out: correlation ${r.toFixed(3)} against a floor of 0.30 (measured: new rule 0.523 to 0.612, old rule -0.087 to 0.106)`);
+    /* MEASURED across eight seeds (the filename seed, then SIM_SEED 1 to 7):
+         full score            0.706 0.687 0.705 0.762 0.753 0.797 0.706 0.696   (0.687 to 0.797)
+         board term taken out  0.502 0.491 0.514 0.594 0.602 0.661 0.529 0.503   (0.491 to 0.661)
+         old rule, same seasons 0.174 0.214 0.351 0.292 0.209 0.400 0.171 0.205  (0.171 to 0.400)
+         taken out minus old   0.328 0.277 0.163 0.302 0.393 0.261 0.358 0.298   (0.163 to 0.393)
+       Gate one, the full score: floor 0.54, midway between the old rule's
+       highest reading and the new rule's lowest, so 0.147 clear of the healthy
+       arm and 0.14 clear of the control. The first version of this gate was
+       0.45 and quoted the old rule at 0.095 to 0.253; seed 5 above puts the
+       old rule at 0.400, which would have left that control 0.05 of room.
+       Gate two, the paired margin: at least 0.08, half the lowest measured.
+       Under the oldrule control the score IS the old rule, so the margin
+       reads 0.000 to 0.005. */
+    if (rFull < 0.54) fail(`the score barely follows the board: correlation ${rFull.toFixed(3)} against a floor of 0.54 (measured: new rule 0.687 to 0.797, old rule 0.171 to 0.400)`);
+    if (rOut - rOld < 0.08) fail(`with its board term taken out the score follows the board only ${(rOut - rOld).toFixed(3)} better than the old rule does on the same seasons (${rOut.toFixed(3)} against ${rOld.toFixed(3)}), under a floor of 0.08 (measured 0.163 to 0.393), so the board term is carrying the correlation on its own`);
   }
 }
 
@@ -819,8 +871,9 @@ console.log('9) SAVE_VERSION did not move and the new field is optional');
 {
   /* Read off the engine text the bundle was built from, so the control that
      edits the shadow is seen here rather than only on disk. Without a control
-     that text IS the file on disk. */
-  const src = engine;
+     that text IS the file on disk. Comments out, so a doc comment quoting the
+     optional field cannot stand in for the field. */
+  const src = codeOf(engine);
   const m = src.match(/const SAVE_VERSION = (\d+)/);
   if (!m) fail('SAVE_VERSION is gone from clubManager.ts');
   else {
@@ -848,7 +901,7 @@ console.log('9) SAVE_VERSION did not move and the new field is optional');
     if (absent !== nulled) fail(`an absent handover scores ${absent} and a null one ${nulled}; an older save must read the same as a new one`);
   } else fail('could not start a career for the save shape check');
   /* And the call shapes three other harnesses string match must still exist. */
-  const hook = fs.readFileSync(path.join(ROOT, 'src', 'hooks', 'useClubManager.ts'), 'utf8');
+  const hook = codeOf(fs.readFileSync(path.join(ROOT, 'src', 'hooks', 'useClubManager.ts'), 'utf8'));
   const pings = [...hook.matchAll(/recordActivity\('\/club-manager', currentSeasonScore\(/g)].length;
   const ends = [...hook.matchAll(/recordCompletion\('\/club-manager', sm\.seasonScore\)/g)].length;
   console.log(`   useClubManager still has ${pings} match pings and ${ends} season end completions`);
@@ -865,7 +918,7 @@ console.log('10) The How To Play numbers are the numbers the code uses');
      rather than reading either twice. The cup and European steps are checked
      as the phrase each one sits in, so a moved step cannot pass on a number
      that happens to appear elsewhere in the paragraph. */
-  const help = fs.readFileSync(path.join(ROOT, 'src', 'components', 'club-manager', 'ClubManagerHelp.tsx'), 'utf8');
+  const help = codeOf(fs.readFileSync(path.join(ROOT, 'src', 'components', 'club-manager', 'ClubManagerHelp.tsx'), 'utf8'));
   const para = (help.match(/Season score, out of [\s\S]*?<\/p>/) ?? [''])[0];
   if (!para) fail('the season score paragraph is gone from ClubManagerHelp.tsx, so the copy cannot be checked against the code');
   else {
@@ -958,11 +1011,22 @@ console.log('12) A takeover save from before the round replays his league record
      previous manager's points from what the save still carries, and the
      fixture log carries every match with the week it was played in. The
      constant it used to fall back on is measured here too, on the same
-     sample, so the size of the repair is on the record. */
+     sample, so the size of the repair is on the record.
+
+     THE REFERENCE IS THE TABLE, not the engine's stamp. `truth` is the
+     harness's own reading of the table at the moment of takeover, and the
+     reference ledger is scored with those league numbers. The stamp's cup,
+     Europe and board fields are borrowed only for the whole score line, which
+     is printed and not asserted, so a broken stamp turns section 11 red and
+     leaves this one measuring the replay alone. */
   let atTakeover = 0, atWhistle = 0, sacked = 0;
-  const constErrTake = [], constErrWhistle = [], constAboveZero = [];
-  const scoreGapReplay = [], scoreGapConst = [];
-  const stampedInput = (inp, h) => ({ ...inp, handover: h, legacyStart: null, legacyLog: null });
+  const constFormTake = [], constTotalTake = [], replayTotalTake = [], constAboveZero = [];
+  const leagueGapReplay = [], leagueGapConst = [], totalGapReplay = [], totalGapConst = [];
+  const refInput = (inp, t, truth) => ({
+    ...inp, handover: { ...t.handover, pts: truth.pts, played: truth.played }, legacyStart: null, legacyLog: null,
+  });
+  const leagueTerms = l => l.form + l.title;
+  let truncated = 0, truncatedFellBack = 0, trimmedCup = 0, trimmedCupExact = 0;
   for (const r of TAKEOVERS) {
     const { taken: t, truth } = r;
     const label = `${r.club} ${r.entry}`;
@@ -975,11 +1039,35 @@ console.log('12) A takeover save from before the round replays his league record
     atTakeover += 1;
     if (!h || !h.fromLog) fail(`${label}: at the takeover the legacy path did not replay the log (${h ? 'fell back to the constant' : 'no handover at all'})`);
     else if (h.pts !== truth.pts || h.played !== truth.played) fail(`${label}: at the takeover the replay says ${h.pts} points from ${h.played} games, the table said ${truth.pts} from ${truth.played}`);
-    const formNow = S.seasonLedger(inp).form;
-    if (formNow !== 0) fail(`${label}: the new manager has picked no team yet and the form term already reads ${formNow}`);
-    const constForm = S.seasonLedger({ ...inp, legacyLog: null }).form;
-    constErrTake.push(constForm);
-    if (constForm > 0) constAboveZero.push(label);
+    const replayNow = S.seasonLedger(inp);
+    if (replayNow.form !== 0) fail(`${label}: the new manager has picked no team yet and the form term already reads ${replayNow.form}`);
+    const constNow = S.seasonLedger({ ...inp, legacyLog: null });
+    constFormTake.push(constNow.form);
+    constTotalTake.push(constNow.total);
+    replayTotalTake.push(replayNow.total);
+    if (constNow.form > 0) constAboveZero.push(label);
+
+    /* THE 60 ENTRY CAP. resultLog keeps only the newest 60 entries, so on a
+       long enough season the oldest go first, and the oldest are always the
+       previous manager's. Dropping his first league match must send the
+       score back to the constant rather than replay a record with a hole in
+       it. And dropping a CUP or European entry must not: the league record
+       is still whole, so the replay still holds. */
+    const log = stripped.resultLog ?? [];
+    const firstLeague = log.findIndex(e => e.competition === 'league');
+    if (firstLeague >= 0) {
+      truncated += 1;
+      const cut = S.handoverOf(seasonLedgerInputOf({ ...stripped, resultLog: log.slice(firstLeague + 1) }));
+      if (cut && cut.estimated && !cut.fromLog) truncatedFellBack += 1;
+      else fail(`${label}: with his first league match dropped from the log the score still ${cut ? 'replayed it' : 'found no handover'}, so a capped log undercounts the previous manager`);
+    }
+    const firstOther = log.findIndex(e => e.competition && e.competition !== 'league');
+    if (firstOther >= 0) {
+      trimmedCup += 1;
+      const kept = S.handoverOf(seasonLedgerInputOf({ ...stripped, resultLog: log.filter((_, k) => k !== firstOther) }));
+      if (kept && kept.fromLog && kept.pts === truth.pts && kept.played === truth.played) trimmedCupExact += 1;
+      else fail(`${label}: with a cup or European entry dropped the league record is still whole, and the score ${kept && kept.fromLog ? `replayed ${kept.pts} from ${kept.played}` : 'fell back to the constant'}`);
+    }
 
     /* At the final whistle, the season played out under the new manager. */
     const done = playSeason(stripped);
@@ -989,22 +1077,32 @@ console.log('12) A takeover save from before the round replays his league record
     atWhistle += 1;
     if (!hW || !hW.fromLog) { fail(`${label}: at the whistle the legacy path did not replay the log`); continue; }
     if (hW.pts !== truth.pts || hW.played !== truth.played) fail(`${label}: at the whistle the replay says ${hW.pts} points from ${hW.played} games, the table at the takeover said ${truth.pts} from ${truth.played}`);
-    const stampedLed = S.seasonLedger(stampedInput(inpW, t.handover));
+    const refLed = S.seasonLedger(refInput(inpW, t, truth));
     const replayLed = S.seasonLedger(inpW);
     const constLed = S.seasonLedger({ ...inpW, legacyLog: null });
-    if (replayLed.form !== stampedLed.form) fail(`${label}: the replay's form term ${replayLed.form} differs from the stamped record's ${stampedLed.form}`);
-    constErrWhistle.push(Math.abs(constLed.form - stampedLed.form));
-    scoreGapReplay.push(Math.abs(replayLed.total - stampedLed.total));
-    scoreGapConst.push(Math.abs(constLed.total - stampedLed.total));
+    if (leagueTerms(replayLed) !== leagueTerms(refLed)) fail(`${label}: the replay's league terms (form ${replayLed.form}, title ${replayLed.title}) differ from the record's (form ${refLed.form}, title ${refLed.title})`);
+    leagueGapReplay.push(Math.abs(leagueTerms(replayLed) - leagueTerms(refLed)));
+    leagueGapConst.push(Math.abs(leagueTerms(constLed) - leagueTerms(refLed)));
+    totalGapReplay.push(Math.abs(replayLed.total - refLed.total));
+    totalGapConst.push(Math.abs(constLed.total - refLed.total));
   }
+  const dist = a => `median ${median(a)}, p90 ${p90(a)}, max ${Math.max(0, ...a)}`;
   console.log(`   ${atTakeover} takeovers replayed at the handover, ${atWhistle} at the whistle (${sacked} sacked before it)`);
-  console.log(`   the constant, for the record: at the takeover it read a form term above 0 in ${constAboveZero.length} of ${atTakeover} saves (median ${median(constErrTake)}, p90 ${p90(constErrTake)}, max ${Math.max(0, ...constErrTake)} of ${S.W_FORM}); at the whistle its form term was off by median ${median(constErrWhistle)}, p90 ${p90(constErrWhistle)}, max ${Math.max(0, ...constErrWhistle)}`);
-  console.log(`   whole score against the stamped reading at the whistle (the honours terms differ by design, paid at share rather than subtracted): replay median ${median(scoreGapReplay)}, p90 ${p90(scoreGapReplay)}; constant median ${median(scoreGapConst)}, p90 ${p90(scoreGapConst)}`);
+  console.log(`   at the takeover, no team picked yet: the constant read a form term above 0 in ${constAboveZero.length} of ${atTakeover} saves (${dist(constFormTake)} of ${S.W_FORM}) and a whole score of ${dist(constTotalTake)}; the replay reads form 0 in all of them and a whole score of ${dist(replayTotalTake)}`);
+  console.log(`   at the whistle, league terms (form and title) against the record: replay ${dist(leagueGapReplay)}; constant ${dist(leagueGapConst)}`);
+  console.log(`   at the whistle, whole score against the record: replay ${dist(totalGapReplay)}; constant ${dist(totalGapConst)} (the cup, Europe and board terms are paid at share on a legacy save by design, not subtracted, so the whole score keeps that gap)`);
+  console.log(`   the 60 entry cap: ${truncatedFellBack} of ${truncated} logs missing his first league match fell back to the constant; ${trimmedCupExact} of ${trimmedCup} missing a cup or European entry still replayed exactly`);
   /* Exact equality is the right bar: the replay is a sum over a record, not
-     a statistic, and it reproduced the stamp in 54 of 54 takeovers when it
-     was written. The count floor is what stops a sample of three passing. */
-  if (atTakeover < 40) fail(`only ${atTakeover} takeovers were replayed, so this section proves little`);
-  if (atWhistle < 30) fail(`only ${atWhistle} takeovers reached the whistle, so the whistle half of this section proves little`);
+     a statistic, and it reproduced the table in all 54 takeovers at the
+     handover and in every one that reached the whistle, on each of eight
+     seeds (the filename seed, then SIM_SEED 1 to 7). The count floors are
+     what stop a sample of three passing. Measured on those seeds: 54
+     takeovers every time, 50 to 54 reaching the whistle, 54 logs to cut and
+     54 carrying a cup or European entry before the handover. */
+  if (atTakeover < 40) fail(`only ${atTakeover} takeovers were replayed, so this section proves little (measured 54)`);
+  if (atWhistle < 30) fail(`only ${atWhistle} takeovers reached the whistle, so the whistle half of this section proves little (measured 50 to 54)`);
+  if (truncated < 40) fail(`only ${truncated} logs could be cut, so the cap fallback is barely tested (measured 54)`);
+  if (trimmedCup < 27) fail(`only ${trimmedCup} logs carried a cup or European entry before the handover, so the converse of the cap check is barely tested (measured 54)`);
 }
 
 function correlation(a, b) {
