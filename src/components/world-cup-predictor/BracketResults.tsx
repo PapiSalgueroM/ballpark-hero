@@ -78,7 +78,7 @@ const BracketResults = ({ seeds, thirds, rounds, awards }: BracketResultsProps) 
       <button
         type="button"
         onClick={() => setShowReal((v) => !v)}
-        className="mt-4 inline-flex items-center gap-1 text-sm font-semibold text-[hsl(45,90%,55%)] hover:underline"
+        className="mt-4 inline-flex min-h-[44px] items-center gap-1 py-2 text-sm font-semibold text-[hsl(45,90%,55%)] hover:underline"
       >
         {showReal ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
         {showReal ? "Hide the real bracket" : "Show the real bracket"}
