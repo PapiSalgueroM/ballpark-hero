@@ -53,17 +53,12 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
   const [triedSubmit, setTriedSubmit] = useState(false);
   /* Round 160: how good the squad starts (decoupled from the money), the
      club's football identity, and the size of the ground. */
-  const [wantedQuality, setQuality] = useState(66);
+  const [quality, setQuality] = useState(66);
   const [identity, setIdentity] = useState<ClubIdentity>('balanced');
   const [capacity, setCapacity] = useState(CUSTOM_STADIUMS[1].capacity);
-  /* Round 640: the squad is part of what the money buys, so each tier's
-     slider stops where its budget does (customQualityCap). The pick is kept,
-     so going back up a tier gives it back. */
-  const caps = useMemo(
-    () => Object.fromEntries((Object.keys(CUSTOM_TIERS) as CustomBudgetTier[]).map(k => [k, customQualityCap(k, eraId)])) as Record<CustomBudgetTier, number>,
-    [eraId],
-  );
-  const quality = Math.min(wantedQuality, caps[tier]);
+  /* Round 640: the squad quality the chosen money buys. Above it the squad is
+     just as good, but its made up players only sell on at this level. */
+  const ceiling = useMemo(() => customQualityCap(tier, eraId), [tier, eraId]);
 
   // Initials follow the name until the user takes them over.
   const autoInitials = useMemo(() => {
@@ -231,7 +226,7 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
           </div>
         </div>
 
-        {/* Round 160: squad quality. Round 640: capped by the tier's money. */}
+        {/* Round 160: squad quality, decoupled from the wallet. */}
         <div className="bg-card border border-border rounded-2xl p-3">
           <div className="flex items-center justify-between mb-1">
             <div className="text-[10px] text-muted-foreground uppercase tracking-wider">How good do you start</div>
@@ -240,7 +235,7 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
           <input
             type="range"
             min={55}
-            max={caps[tier]}
+            max={88}
             step={1}
             value={quality}
             onChange={e => setQuality(Number(e.target.value))}
@@ -249,11 +244,17 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
           />
           <div className="flex justify-between text-[9px] text-muted-foreground mt-0.5">
             <span>Minnows (55s)</span>
-            <span>Up to ~{caps[tier]} on {CUSTOM_TIERS[tier].label.toLowerCase()}</span>
+            <span>Mid table</span>
+            <span>Team of 90s</span>
           </div>
           <p className="text-[9px] text-muted-foreground mt-1">
-            The squad average. Your best players land a couple of points above it. The squad is part of what your money buys, so {money(CUSTOM_TIERS[tier].budget)} gets you up to about {caps[tier]}.{Object.values(caps).some(c => c > caps[tier]) ? ' Want better? Pick bigger backing below.' : ''} The board reads the squad you build here, and the demand above moves as you drag.
+            The squad average. Your best players land a couple of points above it, so 88 hands you starters in the low 90s. The board reads the squad you build here, and the demand above moves as you drag.
           </p>
+          {quality > ceiling && (
+            <p className="text-[9px] text-gold mt-1">
+              {money(CUSTOM_TIERS[tier].budget)} buys a squad of about {ceiling}, so these made up players only sell on for what a ~{ceiling} squad would fetch.
+            </p>
+          )}
         </div>
 
         {/* Round 160: the football identity. */}
@@ -327,7 +328,6 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
                   <div className={cn('text-xs font-bold', sel ? 'text-primary' : 'text-foreground')}>{t.label}</div>
                   <div className="text-sm font-bold font-display text-gold mt-0.5">{money(t.budget)}</div>
                   <div className="text-[9px] text-muted-foreground mt-0.5">{t.blurb}</div>
-                  <div className="text-[9px] text-foreground mt-0.5">Squad up to ~{caps[k]}</div>
                 </button>
               );
             })}
