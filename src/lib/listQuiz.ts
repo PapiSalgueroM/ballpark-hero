@@ -300,9 +300,10 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
     title: 'Masters Champions',
     blurb: 'Every golfer to win the green jacket.',
     sport: 'Golf', emoji: '⛳', minAnswers: 15,
-    // onlyNames: golf_majors stores '-' for years the major wasn't played
-    // (1943-45 WWII, and The Open 2020 for COVID), 25 rows across the four
-    // tournaments. That's correct source data, but as a puzzle answer it means
+    // onlyNames: golf_majors stores a single dash character (U+2014) for
+    // years the major wasn't played (the two World Wars, The Open in 1871 and
+    // 2020), 25 rows across the four tournaments. simSportsFacts section 10
+    // fails if any read of the table skips this filter. That's correct source data, but as a puzzle answer it means
     // "name the golfer: , ". Filtered out, not treated as corruption.
     fetch: () => onlyNames(col('golf_majors', 'player_name', q => q.ilike('tournament', '%masters%'))),
   },

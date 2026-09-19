@@ -25,9 +25,15 @@
  *      argument, and this is the one the inventory named.
  *
  * Plus the smell list entries that are arithmetic rather than opinion: more
- * finishes than wins, a negative count, a pay per view rank below one, a
- * career that ends before it starts or runs past today, an age that would
- * have the fighter debuting as a child, and the same name twice in one pool.
+ * finishes than wins, a negative count, a career that ends before it starts
+ * or runs past today, a birth date that would have the fighter debuting as a
+ * child, and the same name twice in one pool.
+ *
+ * Round 660 update: the verification pass this harness was the floor under
+ * has now happened. scripts/simSportsFacts.mjs pins every row of both files
+ * to a two source record (scripts/data/sportsFactsVerified2026-09.json), so a
+ * green run there means verified. This harness keeps its own job, the
+ * arithmetic and the cross file agreement, which needs no record.
  *
  * WHAT IT DOES NOT DO. It does not assert that any number is correct. That
  * needs two published sources and belongs in the same re-verification pass
@@ -107,8 +113,10 @@ if (CONTROL === 'crossfile') {
     `{ name: 'Israel Adesanya', weightClass: 'Welterweight'`, "Adesanya's weight class in the chain file");
 }
 if (CONTROL === 'finishes') {
-  fighterSrc = rewrite(fighterSrc, `wins: 29, losses: 0, draws: 0, age: 37, koTko: 8`,
-    `wins: 29, losses: 0, draws: 0, age: 37, koTko: 80`, "Khabib's knockout count");
+  const line = fighterSrc.split('\n').find(l => l.includes("{ name: 'Khabib Nurmagomedov',"));
+  const m = line && line.match(/koTko: \d+,/);
+  if (!m) { console.error("CONTROL finishes cannot run: Khabib's row with a knockout count not found"); process.exit(2); }
+  fighterSrc = rewrite(fighterSrc, line, line.replace(m[0], 'koTko: 80,'), "Khabib's knockout count");
 }
 
 const fighters = parseRows(fighterSrc, 'export const ufcFighters');
@@ -145,9 +153,12 @@ for (const f of fighters) {
   if (f.yearsActive !== want) fail(2, `${FIGHTERS}: ${f.name} says yearsActive "${f.yearsActive}" and ${want} in the same row`);
   if (f.yearsActiveEnd < f.yearsActiveStart) fail(2, `${FIGHTERS}: ${f.name} ends in ${f.yearsActiveEnd}, before starting in ${f.yearsActiveStart}`);
   if (f.yearsActiveEnd > THIS_YEAR) fail(2, `${FIGHTERS}: ${f.name} is active until ${f.yearsActiveEnd}, which has not happened yet`);
-  // Nobody debuts in a professional promotion at fifteen.
-  const ageAtDebut = f.age - (THIS_YEAR - f.yearsActiveStart);
-  if (ageAtDebut < 16) fail(2, `${FIGHTERS}: ${f.name} is ${f.age} and started in ${f.yearsActiveStart}, which makes the debut age ${ageAtDebut}`);
+  // Nobody debuts in a professional promotion at fifteen. Round 660: the row
+  // carries a birth date now (age is computed on the day of play), so the
+  // debut age comes from it.
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(f.birthDate || '')) { fail(2, `${FIGHTERS}: ${f.name} has no YYYY-MM-DD birthDate`); continue; }
+  const ageAtDebut = f.yearsActiveStart - Number(f.birthDate.slice(0, 4));
+  if (ageAtDebut < 16) fail(2, `${FIGHTERS}: ${f.name} was born ${f.birthDate} and started in ${f.yearsActiveStart}, which makes the debut age about ${ageAtDebut}`);
 }
 if (!yearsChecked) fail(2, `${FIGHTERS}: no row carried a start year, so this section checked nothing`);
 else console.log(`  ${yearsChecked} careers start before they end, end by ${THIS_YEAR}, and imply a debut at 16 or older`);
@@ -161,10 +172,9 @@ for (const f of fighters) {
   if (f.koTko + f.submissions > f.wins) {
     fail(3, `${FIGHTERS}: ${f.name} has ${f.koTko} knockouts and ${f.submissions} submissions, which is more than his ${f.wins} wins`);
   }
-  for (const k of ['wins', 'losses', 'draws', 'koTko', 'submissions', 'age']) {
+  for (const k of ['wins', 'losses', 'draws', 'koTko', 'submissions']) {
     if (f[k] < 0) fail(3, `${FIGHTERS}: ${f.name} has a negative ${k} (${f[k]})`);
   }
-  if (f.highestP4PRank < 1) fail(3, `${FIGHTERS}: ${f.name} has a pound for pound rank of ${f.highestP4PRank}, and there is no rank below one`);
 }
 if (!countChecked) fail(3, `${FIGHTERS}: no row carried a finish count, so this section checked nothing`);
 else console.log(`  ${countChecked} fighters have no more finishes than wins and no negative counts`);

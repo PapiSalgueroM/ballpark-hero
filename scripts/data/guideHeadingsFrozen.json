@@ -3169,13 +3169,13 @@
       "howToPlay": [
         "Pick Daily for the fighter everyone is chasing today, or Unlimited for a random one each game.",
         "Search any fighter and submit them as your opening probe.",
-        "Read the row: years active, weight class, nationality, age, wins, losses, draws, knockouts, submissions and peak pound for pound rank.",
+        "Read the row: years active, weight class, nationality, age, wins, losses, draws, knockouts and submissions.",
         "Follow the arrows on numeric stats to aim your next guess higher or lower.",
         "Close the net within 8 guesses, or use Give Up to see the answer."
       ],
       "rules": [
         "8 guesses maximum, in both Daily and Unlimited.",
-        "Yellow means close: one weight class off, same continent, within 2 years on age or career length, 3 wins, 2 losses, 1 draw, 3 knockouts, 2 submissions, or 2 pound for pound spots.",
+        "Yellow means close: one weight class off, same continent, within 2 years on age or career length, 3 wins, 2 losses, 1 draw, 3 knockouts or 2 submissions.",
         "Daily progress is saved through the day and a new fighter arrives at midnight Eastern.",
         "The pool spans all nine weight divisions, strawweight to heavyweight, women's stars included."
       ],

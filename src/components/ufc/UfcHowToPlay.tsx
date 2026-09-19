@@ -37,7 +37,7 @@ export function UfcHowToPlay({ open, onOpenChange }: UfcHowToPlayProps) {
           <div className="pt-2 border-t border-border">
             <p className="font-semibold text-foreground mb-1">Columns:</p>
             <ul className="list-disc pl-4 space-y-1 text-xs">
-              <li><strong>Years Active</strong>: Number of years active, yellow if within 2</li>
+              <li><strong>Years Active</strong>: Years from first to latest UFC fight, yellow if within 2</li>
               <li><strong>Weight Class</strong>: Yellow if one class away, with ▲▼ direction</li>
               <li><strong>Nationality</strong>: Yellow if same continent</li>
               <li><strong>Age</strong>: Yellow if within 2 years</li>
@@ -46,7 +46,6 @@ export function UfcHowToPlay({ open, onOpenChange }: UfcHowToPlayProps) {
               <li><strong>Draws</strong>: Yellow if within 1</li>
               <li><strong>KO/TKO</strong>: Yellow if within 3</li>
               <li><strong>Submissions</strong>: Yellow if within 2</li>
-              <li><strong>P4P Rank</strong>: Highest all-time UFC P4P ranking, yellow if within 2</li>
             </ul>
           </div>
         </div>

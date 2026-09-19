@@ -64,7 +64,7 @@ export function useUfcGame() {
 
   const makeGuess = useCallback((fighter: UfcFighter) => {
     if (gameStatus !== 'playing' || !targetFighter) return;
-    const result = compareUfcGuess(fighter, targetFighter);
+    const result = compareUfcGuess(fighter, targetFighter, todayStr);
 
     if (mode === 'daily') {
       addDailyGuess(result);
@@ -76,7 +76,7 @@ export function useUfcGame() {
         return next;
       });
     }
-  }, [mode, gameStatus, targetFighter, addDailyGuess]);
+  }, [mode, gameStatus, targetFighter, addDailyGuess, todayStr]);
 
   const giveUp = useCallback(() => {
     if (gameStatus !== 'playing') return;

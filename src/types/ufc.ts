@@ -21,6 +21,14 @@ export const WEIGHT_CLASS_ORDER: WeightClass[] = [
   'Heavyweight',
 ];
 
+/* Round 660: age is no longer typed. A typed age is wrong for every fighter
+   whose birthday has passed since the day it was written, so the row carries
+   the verified birth date and the game computes the age on the day it is
+   played (ageOn in src/lib/ufcGameLogic.ts). The P4P column went at the same
+   time: the UFC has only published pound for pound rankings since 2013, so a
+   "highest ever" rank for Royce Gracie or Ken Shamrock was invented, and no
+   two sources record every fighter's peak. yearsActive is the span from the
+   year of the first UFC bout to the year of the latest one. */
 export interface UfcFighter {
   name: string;
   nationality: string;
@@ -32,10 +40,9 @@ export interface UfcFighter {
   wins: number;
   losses: number;
   draws: number;
-  age: number;
+  birthDate: string; // YYYY-MM-DD
   koTko: number;
   submissions: number;
-  highestP4PRank: number; // 1 = #1 ever
 }
 
 export type UfcCellStatus = 'correct' | 'close' | 'incorrect';
@@ -60,6 +67,5 @@ export interface UfcGuessResult {
     draws: UfcCellResult;
     koTko: UfcCellResult;
     submissions: UfcCellResult;
-    p4pRank: UfcCellResult;
   };
 }

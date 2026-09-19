@@ -1,11 +1,22 @@
 /**
- * Men's major champions with 2+ majors, aggregated from public.golf_majors
+ * Men's major champions with 2+ majors, first aggregated from public.golf_majors
  * (rank=1 rows, 2026-08-05). Counts are career MAJOR wins; tournaments lists
  * which of the four majors the player has won at least once. Era years are
- * first and last major win. Source of truth is the DB; regenerate with:
- *   select player_name, count(*), min(year), max(year), max(nationality),
- *          string_agg(distinct tournament, '|')
- *   from golf_majors where rank=1 or rank is null group by player_name;
+ * first and last major win.
+ *
+ * Round 660: every row was checked on 2026-09-19 against the four majors'
+ * champion lists from two independent sources each, through the 2026 season
+ * (Masters McIlroy, PGA Aaron Rai, U.S. Open Wyndham Clark, The Open Ryan Fox).
+ * The record, with URLs, is scripts/data/sportsFactsVerified2026-09.json and
+ * scripts/simSportsFacts.mjs pins every row to it. One row was wrong and the
+ * table was the cause: golf_majors splits Bobby Jones across two spellings (one
+ * carries a footnote mark), so the aggregate gave him 5 majors from 1926. He
+ * won 7 from 1923 to 1930. The table also stores a single dash for years a
+ * major was not played, and a plain group by counts that dash as a golfer, so
+ * do NOT regenerate this file from the table until both are fixed there.
+ * This is a selection, not every multiple winner: some two and three time
+ * champions from the early years (and Wyndham Clark, whose second major came
+ * in 2026) are not in it.
  */
 export interface GolfLegend {
   name: string;
@@ -40,7 +51,7 @@ export const golfLegends: GolfLegend[] = [
   { name: 'Seve Ballesteros', majors: 5, firstWin: 1979, lastWin: 1988, nationality: 'Spain', tournaments: [M, O] },
   { name: 'Peter Thomson', majors: 5, firstWin: 1954, lastWin: 1965, nationality: 'Australia', tournaments: [O] },
   { name: 'Byron Nelson', majors: 5, firstWin: 1937, lastWin: 1945, nationality: 'United States', tournaments: [M, P, U] },
-  { name: 'Bobby Jones', majors: 5, firstWin: 1926, lastWin: 1930, nationality: 'United States', tournaments: [O, U] },
+  { name: 'Bobby Jones', majors: 7, firstWin: 1923, lastWin: 1930, nationality: 'United States', tournaments: [O, U] },
   { name: 'John Henry Taylor', majors: 5, firstWin: 1894, lastWin: 1913, nationality: 'England', tournaments: [O] },
   { name: 'James Braid', majors: 5, firstWin: 1901, lastWin: 1910, nationality: 'Scotland', tournaments: [O] },
   { name: 'Scottie Scheffler', majors: 4, firstWin: 2022, lastWin: 2025, nationality: 'United States', tournaments: [M, P, O] },
