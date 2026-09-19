@@ -4,6 +4,8 @@ import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the cap comes from one sourced file, never a bare literal here. */
 import { NFL_SALARY_CAP_2026 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
+/* Round 631: dead money and the no way back rule, shared by the four GM sims. */
+import { type CutLedger, type DeadCapEntry, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal, tradeRefusal } from './frontOfficeCuts';
 
 /**
  * NFL Front Office engine (2026-08-05, the manager-for-every-sport push).
@@ -31,7 +33,12 @@ export interface GmPlayer extends FoPlayer {
   pot: number;
 }
 
-export interface GmTeamState {
+/** Round 631: what a cut still costs after the man has gone. See src/lib/frontOfficeCuts.ts. */
+export type GmDeadCap = DeadCapEntry;
+
+/* Round 631: CutLedger is the optional deadCap and releasedThisSeason pair,
+   so every league saved before this round keeps loading and reads as empty. */
+export interface GmTeamState extends CutLedger {
   abbr: string;
   players: GmPlayer[];
   defense: number;
@@ -149,8 +156,9 @@ export function salaryFor(pos: GmPlayer['pos'], ovr: number): number {
   return Math.round(Math.max(1.0, (ovr - 66) * 1.15 - 12) * 10) / 10;
 }
 
+/** The roster's salaries plus this season's dead money (Round 631). */
 export function capUsed(team: GmTeamState): number {
-  return Math.round(team.players.reduce((s, p) => s + p.salary, 0) * 10) / 10;
+  return payrollWithDeadCap(team.players, team);
 }
 
 export function capRoom(team: GmTeamState, cap: number): number {
@@ -533,18 +541,29 @@ export function runPlayoffs(
 // GM moves
 // ---------------------------------------------------------------------------
 
-/** Release: cap relief now, the player joins the FA pool. */
+/* Round 631: A CUT IS NOT FREE. Until this round a release dropped the man
+   and his whole salary in one move, and signPlayer would take him straight
+   back out of the pool on a one year deal, so a cut was full cap relief for
+   nothing and a cut plus re-sign was a free contract reset. Measured on the
+   shipped engine: Trey McBride, 23.7M with three years left, cap room 190.4
+   to 214.1 on the cut and back to 190.4 on the re-sign, his deal now one
+   year. The rule (half his salary as dead money now, a quarter next season
+   if he had years left, no way back for this team until the offseason) lives
+   in src/lib/frontOfficeCuts.ts, once, for all four GM sims. Nothing else
+   about the cut changed: he joins the pool on one year, and the floor of six
+   stays. runOffseason rolls the ledger through rollDeadCap. */
+/** Round 631: the fewest men a club may carry. The board greys Cut at it. The NFL sign path has no ceiling. */
+export const NFL_ROSTER_MIN = 6;
+
 export function releasePlayer(team: GmTeamState, freeAgents: GmPlayer[], playerId: string): boolean {
-  const idx = team.players.findIndex(p => p.id === playerId);
-  if (idx < 0 || team.players.length <= 6) return false;
-  const [p] = team.players.splice(idx, 1);
-  freeAgents.push({ ...p, years: 1 });
-  return true;
+  return cutPlayer(team, freeAgents, playerId, NFL_ROSTER_MIN);
 }
 
 export function signPlayer(team: GmTeamState, freeAgents: GmPlayer[], playerId: string, cap: number): boolean {
   const idx = freeAgents.findIndex(p => p.id === playerId);
   if (idx < 0) return false;
+  /* Round 631: the same refusal the board shows beside the greyed button. */
+  if (signRefusal(team, playerId)) return false;
   const p = freeAgents[idx];
   if (capRoom(team, cap) < p.salary) return false;
   freeAgents.splice(idx, 1);
@@ -566,6 +585,8 @@ export function proposeTrade(
   const mine = my.players.find(p => p.id === myPlayerId);
   const theirs = their.players.find(p => p.id === theirPlayerId);
   if (!mine || !theirs || my.players.length <= 6 || their.players.length <= 6) return 'invalid';
+  /* Round 631: nobody comes back the season he was cut, by trade either. */
+  if (tradeRefusal(my, theirPlayerId) || tradeRefusal(their, myPlayerId)) return 'invalid';
   // Round 82: salary matching so cap-strapped teams can still swap contracts
   const fitsMe = capRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
   const fitsThem = capRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;
@@ -596,6 +617,8 @@ export function executeTalksTrade(
   const mine = my.players.find(p => p.id === myPlayerId);
   const theirs = their.players.find(p => p.id === theirPlayerId);
   if (!mine || !theirs || my.players.length <= 6 || their.players.length <= 6) return 'invalid';
+  /* Round 631: nobody comes back the season he was cut, by trade either. */
+  if (tradeRefusal(my, theirPlayerId) || tradeRefusal(their, myPlayerId)) return 'invalid';
   if (addPick && my.picks.length === 0) return 'invalid';
   const fitsMe = capRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
   const fitsThem = capRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;
@@ -750,6 +773,7 @@ export function runOffseason(league: LeagueState, rng: () => number): OffseasonN
     t.wins = 0;
     t.losses = 0;
     t.picks = [1, 2, 3];
+    rollDeadCap(t);
     /* Round 418: team.defense NO LONGER REACHES THE SIM AT ALL. An earlier
        draft of that round kept it as defenceRating's empty roster fallback,
        and that fallback was the exploit (cutting your whole defence dropped

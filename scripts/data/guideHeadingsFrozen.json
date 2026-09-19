@@ -977,6 +977,7 @@
         "Playoffs use the real 14 team format: 7 seeds per conference, byes for the 1 seeds, four knockout rounds.",
         "Trades are judged on rating, age, and position, with quarterbacks at a premium. The AI only accepts a clear win.",
         "Grades can miss by up to 4 points either way, injuries cost players 1 to 4 weeks, and rosters cannot drop below six players.",
+        "A cut is not free. Half the man's salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
         "Trust upstairs runs 0 to 100. Beating the mandate raises it, missing it drops it, a championship fixes almost anything, and at zero you are fired and the save ends. A fresh GM always survives one bad year, never three."
       ],
       "example": [
@@ -1587,6 +1588,7 @@
         "Trades weigh rating, age and position, with premiums on aces, shortstops and catchers.",
         "You hold 2 picks a year, and scout grades carry error. True ratings show only after you pick.",
         "Injuries cost one to four rounds on the IL, and your franchise saves automatically.",
+        "A DFA is not free. Half the man's salary stays on this season's payroll as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
         "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a ring fixes almost anything, and at zero you are fired and the save ends."
       ],
       "example": [
@@ -1879,6 +1881,7 @@
         "The play-in covers seeds 7 through 10, with one last game deciding the 8 seed.",
         "Draft classes have 24 prospects, you pick twice, and scouting grades can miss the truth by a few points either way.",
         "Everyone ages each summer: young players develop toward potential, decline starts at 32, veterans retire.",
+        "Waiving a man is not free. Half his salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
         "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a banner fixes almost anything, and at zero you are fired and the save ends."
       ],
       "example": [
@@ -2280,6 +2283,7 @@
         "Rosters run between 8 and 15 players, floor and ceiling both enforced.",
         "Trades are player for player plus an optional pick, and the AI prices age, rating and position before saying yes.",
         "At the draft you make 2 picks, and scouting grades carry error; the true rating appears only after you commit.",
+        "Waiving a man is not free. Half his salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
         "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a Cup fixes almost anything, and at zero you are fired and the save ends."
       ],
       "example": [

@@ -416,6 +416,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
       "Rosters run between 8 and 15 players, floor and ceiling both enforced.",
       "Trades are player for player plus an optional pick, and the AI prices age, rating and position before saying yes.",
       "At the draft you make 2 picks, and scouting grades carry error; the true rating appears only after you commit.",
+      "Waiving a man is not free. Half his salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
       "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a Cup fixes almost anything, and at zero you are fired and the save ends.",
     ],
     example: [

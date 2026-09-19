@@ -22,9 +22,13 @@
  * their own state into FoHubFacts and this file does the rest, which is
  * why one change here lands on all four games at once.
  */
+/* Round 631: the market box asks the same questions the sign path does. */
+import { type CutLedger, rosterFullRefusal, signRefusal } from './frontOfficeCuts';
 
 /** One man, reduced to the five things a hub box can care about. */
 export interface FoHubPlayer {
+  /** Round 631: optional, and needed only for the market's cut ledger check. */
+  id?: string;
   name: string;
   pos: string;
   age: number;
@@ -87,6 +91,15 @@ export interface FoHubFacts {
   tradeLine: string | null;
   /** Silverware so far, for the trade box when nothing else is happening. */
   titles: number;
+  /**
+   * Round 631: the team's cut ledger. A man it released this season sits in
+   * the pool but its sign path refuses him, so the market box must never
+   * offer him. Without this the box said the man you had just cut "fits your
+   * room" on 32 of 32 NFL clubs.
+   */
+  ledger?: CutLedger;
+  /** Round 631: the sport's roster ceiling, when its sign path has one. */
+  rosterMax?: number;
 }
 
 /** Sorted ovr at a percentile, 0 = worst man, 1 = best man. */
@@ -142,9 +155,14 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
   /* ------------------------------------------------------------ free agency */
   {
     const room = f.capRoom;
-    const affordable = f.freeAgents.filter(p => p.salary <= Math.max(0, room));
+    /* Round 631: only men the sign path would take. A man this team cut this
+       season is refused whatever the room says, and at the roster ceiling
+       everybody is, so neither may be offered here. */
+    const market = f.freeAgents.filter(p => !(f.ledger && p.id && signRefusal(f.ledger, p.id)));
+    const full = f.rosterMax != null ? rosterFullRefusal({ players: f.roster }, f.rosterMax) : null;
+    const affordable = full ? [] : market.filter(p => p.salary <= Math.max(0, room));
     const pick = best(affordable);
-    const topAvailable = best(f.freeAgents);
+    const topAvailable = best(market);
     /* Worth a dot only if he would walk into the better two thirds of the
        squad. A 71 rated body you can afford is not news. */
     const bar = percentileOvr(f.roster, 0.67);
@@ -154,13 +172,15 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
       icon: '💼',
       title: 'Free agency',
       value: room > 0 ? `${money(room)} of room` : room === 0 ? 'No room left' : `${money(room)} over`,
-      sub: upgrade && pick
-        ? `${pick.name}, ${pick.ovr} rated, fits your room`
-        : pick
-          ? `In reach: ${pick.name} at ${pick.ovr}`
-          : topAvailable
-            ? `${topAvailable.name} wants ${money(topAvailable.salary)}, out of reach`
-            : 'The market is empty',
+      sub: full
+        ? full
+        : upgrade && pick
+          ? `${pick.name}, ${pick.ovr} rated, fits your room`
+          : pick
+            ? `In reach: ${pick.name} at ${pick.ovr}`
+            : topAvailable
+              ? `${topAvailable.name} wants ${money(topAvailable.salary)}, out of reach`
+              : 'The market is empty',
       accent: upgrade,
     });
   }

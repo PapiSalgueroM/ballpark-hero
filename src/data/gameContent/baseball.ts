@@ -319,6 +319,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       "Trades weigh rating, age and position, with premiums on aces, shortstops and catchers.",
       "You hold 2 picks a year, and scout grades carry error. True ratings show only after you pick.",
       "Injuries cost one to four rounds on the IL, and your franchise saves automatically.",
+      "A DFA is not free. Half the man's salary stays on this season's payroll as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
       "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a ring fixes almost anything, and at zero you are fired and the save ends.",
     ],
     example: [

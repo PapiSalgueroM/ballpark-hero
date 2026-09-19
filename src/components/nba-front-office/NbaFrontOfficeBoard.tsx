@@ -11,8 +11,10 @@ import {
   nbaRelease, nbaSign, nbaTrade, nbaTradeValue, EAST,
   NBA_ROUNDS,
   type NbaLeague, type NbaProspect, type SeriesResult, nbaExecuteTalksTrade,
-  ensureNbaLeagueIds,
+  ensureNbaLeagueIds, NBA_ROSTER_MIN, NBA_ROSTER_MAX,
 } from '@/lib/nbaFrontOffice';
+/* Round 631: waiving a man costs dead money and he cannot come back this season. */
+import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, rosterFullRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
 /* Round 531: the cap on screen says which day its figure was read. */
 import { capNote } from '@/lib/leagueCaps';
 import { leagueNames } from '@/lib/foNames';
@@ -49,6 +51,8 @@ type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
 type Tab = 'team' | 'market' | 'trade' | 'round' | 'standings';
 
 const SAVE_KEY = 'nba-front-office-save-v1';
+/* Round 631: what the market and the trade screen say about a man you let go this season. */
+const CUT_SAID = 'You waived him this season.';
 
 const NBA_WORDS: FoSportWords = { title: 'the Finals', playoffs: 'the playoffs', round: 'a series', games: 80 };
 
@@ -91,6 +95,9 @@ export default function NbaFrontOfficeBoard() {
   const [picksLeft, setPicksLeft] = useState(0);
   const [tradePartner, setTradePartner] = useState('');
   const [myTradePiece, setMyTradePiece] = useState('');
+  /* Round 631: the man whose Waive button has been tapped once. The second
+     tap is only offered once the dead money is on screen. Transient. */
+  const [cutArmed, setCutArmed] = useState<string | null>(null);
   /* Round 190: the live phone call. Transient like the market window:
      never persisted, a reload simply ends the call. */
   const [talks, setTalks] = useState<{ state: TalksState; partner: string; myPieceId: string; wantId: string } | null>(null);
@@ -376,6 +383,7 @@ export default function NbaFrontOfficeBoard() {
 
   const doRelease = (pid: string) => {
     if (!league) return;
+    setCutArmed(null);
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
     if (nbaRelease(lg.teams[myTeam], lg.freeAgents, pid)) { setLeague(lg); persist({}, lg, myTeam); }
   };
@@ -647,8 +655,11 @@ export default function NbaFrontOfficeBoard() {
   const confTable = nbaStandings(league, myConfName);
   const tiles = foHubTiles({
     roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
-    freeAgents: league.freeAgents.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    freeAgents: league.freeAgents.map(p => ({ id: p.id, name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
     capRoom: room,
+    /* Round 631: the box offers only men the sign path would take. */
+    ledger: my,
+    rosterMax: NBA_ROSTER_MAX,
     wins: my.wins,
     losses: my.losses,
     period: league.round,
@@ -665,7 +676,12 @@ export default function NbaFrontOfficeBoard() {
     tradeLine: seasonTradeLine,
     titles,
   });
-  const openPanel = (key: FoPanelKey) => setTab(key === 'play' ? 'round' : key);
+  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setTab(key === 'play' ? 'round' : key); };
+  /* Round 631: dead money on the payroll line, only when there is any. */
+  const dead = deadCapUsed(my);
+  /* Round 631: at the engine's floor every Waive waits, at its ceiling every Sign does, and both say why. */
+  const cutBlock = cutRefusal(my, NBA_ROSTER_MIN);
+  const fullBlock = rosterFullRefusal(my, NBA_ROSTER_MAX);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
 
   return (
@@ -708,41 +724,89 @@ export default function NbaFrontOfficeBoard() {
 
       {tab === 'team' && (
         <div className="rounded-2xl border border-border bg-card p-3">
-          <p className="mb-2 text-center text-xs text-muted-foreground">Payroll ${nbaCapUsed(my)}M of ${league.cap}M</p>
+          <p className="mb-2 text-center text-xs text-muted-foreground">
+            Payroll ${nbaCapUsed(my)}M of ${league.cap}M
+            {dead > 0 && <> · dead money <b className="text-destructive">${dead}M</b></>}
+          </p>
           <p className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}</p>
+          {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
-            {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
-              <div key={p.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
+            {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => {
+              /* Round 631: the cost is on screen before the second tap. */
+              const cost = deadMoneyFor(p);
+              const arming = cutArmed === p.id;
+              return (
+              <div key={p.id} data-roster-row={p.id} className="rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
+                <div className="flex items-center justify-between">
                 <span className="min-w-0">
                   <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>{p.name} {p.out > 0 ? `(out ${p.out}r)` : ''}</span>
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}</span>
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
                   <b className="text-primary">{p.ovr}</b>
-                  <button onClick={() => doRelease(p.id)} className="rounded-full border border-border px-2 py-0.5 text-[10px] text-muted-foreground hover:border-destructive hover:text-destructive">Waive</button>
+                  <button
+                    onClick={() => setCutArmed(arming ? null : p.id)}
+                    disabled={!!cutBlock}
+                    title={cutBlock ?? `Waive him and $${cost.now}M stays on this season's cap`}
+                    className={cn('rounded-full border border-border px-2 py-0.5 text-[10px] disabled:opacity-40',
+                      arming ? 'text-foreground' : 'text-muted-foreground hover:border-destructive hover:text-destructive')}
+                  >
+                    {arming ? 'Keep' : `Waive, $${cost.now}M dead`}
+                  </button>
                 </span>
+                </div>
+                {arming && (
+                  <div className="mt-1.5 rounded-lg border border-destructive/50 bg-destructive/10 p-2 space-y-1.5" data-cut-confirm>
+                    <p className="text-[10px] text-foreground">
+                      Waive {p.name}? ${cost.now}M of his ${p.salary}M stays on this season's cap as dead money
+                      {cost.next > 0 ? `, and $${cost.next}M lands on next season's` : ''}. He goes to the pool and you cannot sign him back until the offseason.
+                    </p>
+                    <div className="flex gap-1.5">
+                      <button
+                        onClick={() => doRelease(p.id)}
+                        className="flex-1 rounded-lg bg-destructive px-2 py-1 text-[10px] font-bold text-destructive-foreground hover:opacity-90"
+                      >
+                        Waive him
+                      </button>
+                      <button
+                        onClick={() => setCutArmed(null)}
+                        className="flex-1 rounded-lg bg-secondary px-2 py-1 text-[10px] font-bold text-foreground hover:opacity-90"
+                      >
+                        Keep him
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
 
       {tab === 'market' && (
         <div className="rounded-2xl border border-border bg-card p-3">
-          <p className="mb-2 text-center text-xs text-muted-foreground">Free agents (cap room ${room}M)</p>
+          <p className="mb-2 text-center text-xs text-muted-foreground">Free agents (cap room ${room}M). A man you waived waits until next season.</p>
+          {fullBlock && <p data-sign-block className="mb-2 text-center text-[10px] text-destructive">{fullBlock}</p>}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
-            {[...league.freeAgents].sort((a, b) => b.ovr - a.ovr).slice(0, 20).map(p => (
-              <div key={p.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
+            {[...league.freeAgents].sort((a, b) => b.ovr - a.ovr).slice(0, 20).map(p => {
+              /* Round 631: the engine's own refusal, so the button is never
+                 live when pressing it would do nothing. */
+              const refusal = signRefusal(my, p.id, CUT_SAID);
+              return (
+              <div key={p.id} data-fa-row={p.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
                 <span className="min-w-0">
                   <span className="block truncate font-bold text-foreground">{p.name}</span>
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · wants ${p.salary}M</span>
+                  {refusal && <span className="block text-[10px] text-destructive">{refusal}</span>}
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
                   <b className="text-primary">{p.ovr}</b>
-                  <button onClick={() => doSign(p.id)} disabled={p.salary > room} className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40">Sign</button>
+                  <button onClick={() => doSign(p.id)} disabled={p.salary > room || !!refusal || !!fullBlock} title={refusal ?? fullBlock ?? undefined} className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40">Sign</button>
                 </span>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
@@ -812,12 +876,19 @@ export default function NbaFrontOfficeBoard() {
                 </div>
                 <div className="space-y-1">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You get ({tradePartner})</p>
-                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
-                    <div key={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
-                      <span className="truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
-                      <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
+                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => {
+                    /* Round 631: the trade paths refuse a man you let go this season, so the screen says so. */
+                    const back = tradeRefusal(my, p.id, CUT_SAID);
+                    return (
+                    <div key={p.id} data-trade-row={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
+                      <span className="min-w-0">
+                        <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
+                        {back && <span className="block text-[9px] text-destructive">{back}</span>}
+                      </span>
+                      <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece || !!back} title={back ?? undefined} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </>
