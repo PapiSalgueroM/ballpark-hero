@@ -393,29 +393,85 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "Footy's goal kicking arguments, settled 10 rounds at a time. Two VFL/AFL greats appear side by side and you pick the one who kicked more career goals.",
       "The pool is 60 retired legends, everyone from Gordon Coventry in the 1920s to Buddy Franklin, and only retired players make the list so no total ever moves under you.",
     ],
-    howToPlay: [
-      "Choose Daily for the shared matchups or Unlimited for random pairs.",
-      "Each card shows the player's clubs and the years of their career.",
-      "Tap the player you believe kicked more career goals.",
-      "The real counts reveal, points land, and the next pair appears.",
-      "Stack correct answers for streak bonuses.",
+    headings: {
+      howToPlay: "How to play AFL Higher or Lower, a free footy goal kicking trivia game",
+      rules: "AFL Higher or Lower rules for rounds, streaks and hard mode",
+      example: "AFL Higher or Lower walkthrough: Lockett, Coventry and career totals",
+      tips: "AFL Higher or Lower tips for picking the higher goal kicker",
+      faq: "AFL Higher or Lower FAQ: goal totals and the retired player pool",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing Daily or Unlimited mode",
+        items: ["Choose Daily for the shared matchups or Unlimited for random pairs."],
+      },
+      {
+        heading: "Reading each player's card",
+        items: ["Each card shows the player's clubs and the years of their career."],
+      },
+      {
+        heading: "Picking the higher career goal kicker",
+        items: [
+          "Tap the player you believe kicked more career goals.",
+          "The real counts reveal, points land, and the next pair appears.",
+        ],
+      },
+      {
+        heading: "Stacking a streak bonus",
+        items: ["Stack correct answers for streak bonuses."],
+      },
     ],
-    rules: [
-      "10 rounds, 10 points per correct answer, plus a streak bonus growing by 5 with each straight correct after the first. A perfect game is 325.",
-      "Exact ties score as correct on either side, and this pool has real ones: Wayne Carey and Peter Hudson both finished on 727.",
-      "Hard mode lives in Unlimited only and pairs players with close goal counts.",
-      "New daily matchups arrive at midnight Eastern.",
+    ruleSections: [
+      {
+        heading: "Scoring ten rounds and a growing streak bonus",
+        items: ["10 rounds, 10 points per correct answer, plus a streak bonus growing by 5 with each straight correct after the first. A perfect game is 325."],
+      },
+      {
+        heading: "How exact ties score",
+        items: ["Exact ties score as correct on either side, and this pool has real ones: Wayne Carey and Peter Hudson both finished on 727."],
+      },
+      {
+        heading: "Hard mode in Unlimited",
+        items: ["Hard mode lives in Unlimited only and pairs players with close goal counts."],
+      },
+      {
+        heading: "New matchups at midnight",
+        items: ["New daily matchups arrive at midnight Eastern."],
+      },
     ],
-    example: [
-      "Round one gives you Tony Lockett against Matthew Lloyd, and the counts land 1,360 to 926 for Plugger, the only man in history past 1,300.",
-      "Later it's Gordon Coventry against Jack Riewoldt. Recency pulls you toward Jack, but Coventry kicked 1,299 before World War Two. That's the trap this game sets over and over.",
-      "You stop trusting recency, start trusting eras, and grind out 7 of 10.",
+    exampleSections: [
+      {
+        heading: "Tony Lockett against Matthew Lloyd",
+        paragraphs: ["Round one gives you Tony Lockett against Matthew Lloyd, and the counts land 1,360 to 926 for Plugger, the only man in history past 1,300."],
+      },
+      {
+        heading: "Gordon Coventry against Jack Riewoldt",
+        paragraphs: ["Later it's Gordon Coventry against Jack Riewoldt. Recency pulls you toward Jack, but Coventry kicked 1,299 before World War Two. That's the trap this game sets over and over."],
+      },
+      {
+        heading: "Trusting eras over recency",
+        paragraphs: ["You stop trusting recency, start trusting eras, and grind out 7 of 10."],
+      },
     ],
-    tips: [
-      "Memorize the podium: Lockett 1,360, Coventry 1,299, Dunstall 1,254.",
-      "Only five men have ever kicked 1,000: those three plus Doug Wade and Gary Ablett Sr, with Buddy Franklin's 1,066 among them.",
-      "Full forwards from the high scoring 80s stack huge numbers. A key forward from the 2010s on the same games usually sits lower.",
-      "Ties pay both ways, so identical-feeling pairs are free points, not landmines.",
+    tipSections: [
+      {
+        heading: "Memorizing the career goal podium",
+        items: ["Memorize the podium: Lockett 1,360, Coventry 1,299, Dunstall 1,254."],
+        subsections: [
+          {
+            heading: "The exclusive 1,000 goal club",
+            items: ["Only five men have ever kicked 1,000: those three plus Doug Wade and Gary Ablett Sr, with Buddy Franklin's 1,066 among them."],
+          },
+        ],
+      },
+      {
+        heading: "Weighing eras against each other",
+        items: ["Full forwards from the high scoring 80s stack huge numbers. A key forward from the 2010s on the same games usually sits lower."],
+      },
+      {
+        heading: "Trusting ties as free points",
+        items: ["Ties pay both ways, so identical-feeling pairs are free points, not landmines."],
+      },
     ],
     faqs: [
       {
@@ -433,31 +489,94 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "There's a Cup Series driver on the other side of the screen, and you get six clues to figure out who. It could be a modern playoff regular or a legend from the golden eras of stock car racing.",
       "Clues unlock in a fixed order and get more specific as they go: the years the driver was winning, how many championships they took, what they were driving in a title year, and then three actual races they won, named and dated.",
     ],
-    howToPlay: [
-      "Pick Daily Challenge to chase the same driver as everyone else, or Unlimited to keep the puzzles coming.",
-      "Read the era clue first and guess whenever conviction strikes.",
-      "Every wrong guess reveals the next clue automatically.",
-      "Hints unlock the next clue without spending a guess, though the score tier drops the same either way.",
-      "Pick a name from the suggestion list to submit your guess.",
+    headings: {
+      howToPlay: "How to play Guess The Driver, a free daily NASCAR trivia game",
+      rules: "Guess The Driver rules for clues, scoring and the pool",
+      example: "Guess The Driver walkthrough: eras, titles and Richard Petty",
+      tips: "Guess The Driver tips for narrowing down a Cup Series legend",
+      faq: "Guess The Driver FAQ: clues, the driver pool and giving up",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing Daily or Unlimited to begin",
+        items: ["Pick Daily Challenge to chase the same driver as everyone else, or Unlimited to keep the puzzles coming."],
+      },
+      {
+        heading: "Reading the opening era clue",
+        items: ["Read the era clue first and guess whenever conviction strikes."],
+      },
+      {
+        heading: "Guessing wrong reveals the next clue",
+        items: ["Every wrong guess reveals the next clue automatically."],
+      },
+      {
+        heading: "Using a hint without losing your guess",
+        items: ["Hints unlock the next clue without spending a guess, though the score tier drops the same either way."],
+      },
+      {
+        heading: "Picking a name from the suggestion list",
+        items: ["Pick a name from the suggestion list to submit your guess."],
+      },
     ],
-    rules: [
-      "6 clues per driver, scored 1000, 800, 600, 400, 200 and 100 by the clue you solve on.",
-      "A wrong guess while clue six is showing ends the round.",
-      "Give Up reveals the driver and scores 0.",
-      "Daily and Unlimited both pull from the same 59 driver pool.",
-      "Every clue is a fact from a real race result or a real championship season. Nothing about a driver is invented, and where our race records are thin the clue says \"on record\" instead of claiming a career total.",
+    ruleSections: [
+      {
+        heading: "Scoring by which clue you solve on",
+        items: ["6 clues per driver, scored 1000, 800, 600, 400, 200 and 100 by the clue you solve on."],
+      },
+      {
+        heading: "What ends a round on the last clue",
+        items: ["A wrong guess while clue six is showing ends the round."],
+      },
+      {
+        heading: "Giving up and scoring zero",
+        items: ["Give Up reveals the driver and scores 0."],
+      },
+      {
+        heading: "Daily and Unlimited sharing one pool",
+        items: ["Daily and Unlimited both pull from the same 59 driver pool."],
+      },
+      {
+        heading: "Every clue built from a real result",
+        items: ["Every clue is a fact from a real race result or a real championship season. Nothing about a driver is invented, and where our race records are thin the clue says \"on record\" instead of claiming a career total."],
+      },
     ],
-    example: [
-      "Clue one says the driver has race wins on record between 1970 and 1984, so you are in the sport's second golden era and you hold your fire.",
-      "Clue two says seven Cup Series championships. Only three drivers in history have seven, and one of them raced far later, so you are down to two.",
-      "Clue three says a title year came driving a Plymouth, which settles it: Richard Petty, guessed on clue three for 600 points. The 1973 Daytona 500 was waiting in clue four, and you didn't need it.",
+    exampleSections: [
+      {
+        heading: "Landing in the sport's second golden era",
+        paragraphs: ["Clue one says the driver has race wins on record between 1970 and 1984, so you are in the sport's second golden era and you hold your fire."],
+      },
+      {
+        heading: "Narrowing it down on championships",
+        paragraphs: ["Clue two says seven Cup Series championships. Only three drivers in history have seven, and one of them raced far later, so you are down to two."],
+      },
+      {
+        heading: "Settling it on the manufacturer",
+        paragraphs: ["Clue three says a title year came driving a Plymouth, which settles it: Richard Petty, guessed on clue three for 600 points. The 1973 Daytona 500 was waiting in clue four, and you didn't need it."],
+      },
     ],
-    tips: [
-      "Championship counts cluster at the top, so seven titles narrows it to a very short list before you have seen a single race.",
-      "The era clue splits the generations cleanly. Use it to rule out most of the field before the race names arrive.",
-      "The manufacturer in a title year dates a driver closely: Plymouth and Oldsmobile belong to one era, Toyota to another.",
-      "The named races are the giveaway. If you know who won a particular Daytona 500 or Southern 500, the round is over on that clue.",
-      "If a name is stuck on the tip of your tongue, scroll the suggestion list; seeing it usually unlocks it.",
+    tipSections: [
+      {
+        heading: "Letting championship counts narrow the field",
+        items: ["Championship counts cluster at the top, so seven titles narrows it to a very short list before you have seen a single race."],
+      },
+      {
+        heading: "Using the era clue to split generations",
+        items: ["The era clue splits the generations cleanly. Use it to rule out most of the field before the race names arrive."],
+      },
+      {
+        heading: "Reading the manufacturer for the decade",
+        items: ["The manufacturer in a title year dates a driver closely: Plymouth and Oldsmobile belong to one era, Toyota to another."],
+        subsections: [
+          {
+            heading: "Letting a named race close it out",
+            items: ["The named races are the giveaway. If you know who won a particular Daytona 500 or Southern 500, the round is over on that clue."],
+          },
+        ],
+      },
+      {
+        heading: "Letting the list jog a stuck memory",
+        items: ["If a name is stuck on the tip of your tongue, scroll the suggestion list; seeing it usually unlocks it."],
+      },
     ],
     faqs: [
       {
@@ -484,29 +603,86 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "Winning a Cup championship means somebody else didn't. NASCAR Chain runs on that: you get a driver, and you name someone who beat them to a Cup Series title. Then someone who beat that driver to one, and on and on.",
       "It's a memory test of championship seasons more than raw trivia, and one wrong link ends the whole run.",
     ],
-    howToPlay: [
-      "Choose Daily Challenge, same starting driver for everyone, or Unlimited for a random start.",
-      "Think of a champion who won the Cup while your current driver was chasing it.",
-      "Search the name; the game verifies the connection before it counts.",
-      "Each verified answer joins the chain and becomes your new current driver.",
-      "Run it as far as you can, then save your score with a nickname to hit the top 10 board.",
+    headings: {
+      howToPlay: "How to play NASCAR Chain, a free Cup Series championship game",
+      rules: "NASCAR Chain rules for links, badges and scoring",
+      example: "NASCAR Chain walkthrough: Earnhardt Jr. to a broken run",
+      tips: "NASCAR Chain tips for remembering championship seasons",
+      faq: "NASCAR Chain FAQ: verified links, badges and the leaderboard",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing Daily or Unlimited to start",
+        items: ["Choose Daily Challenge, same starting driver for everyone, or Unlimited for a random start."],
+      },
+      {
+        heading: "Thinking of a driver who beat the champion",
+        items: ["Think of a champion who won the Cup while your current driver was chasing it."],
+      },
+      {
+        heading: "Searching a name for the game to verify",
+        items: ["Search the name; the game verifies the connection before it counts."],
+        subsections: [
+          {
+            heading: "What happens once a link is verified",
+            items: ["Each verified answer joins the chain and becomes your new current driver."],
+          },
+        ],
+      },
+      {
+        heading: "Saving your score with a nickname",
+        items: ["Run it as far as you can, then save your score with a nickname to hit the top 10 board."],
+      },
     ],
-    rules: [
-      "Each verified link is worth 100 points, with your total multiplied by 1.5 at a chain of 5 and by 2 at 10.",
-      "Repeating a driver already in the chain ends the run instantly, and so does a wrong answer.",
-      "Badges: Pit Crew at 3 links, Cup Contender at 5, NASCAR Legend at 10.",
-      "Connection problems never kill a run; unverified answers just ask for a retry.",
+    ruleSections: [
+      {
+        heading: "Scoring points with chain multipliers",
+        items: ["Each verified link is worth 100 points, with your total multiplied by 1.5 at a chain of 5 and by 2 at 10."],
+      },
+      {
+        heading: "What instantly ends a run",
+        items: ["Repeating a driver already in the chain ends the run instantly, and so does a wrong answer."],
+      },
+      {
+        heading: "Earning badges along the chain",
+        items: ["Badges: Pit Crew at 3 links, Cup Contender at 5, NASCAR Legend at 10."],
+      },
+      {
+        heading: "Connection problems asking for a retry",
+        items: ["Connection problems never kill a run; unverified answers just ask for a retry."],
+      },
     ],
-    example: [
-      "Suppose you start on Dale Earnhardt Jr., a superstar who never lifted the Cup. Plenty of drivers beat him to titles, so you open with Jimmie Johnson. Verified, link one.",
-      "From Johnson you name Kyle Busch, the 2015 champion. Link two. From Busch you go Joey Logano, the 2018 title. Link three, 300 points, Pit Crew badge.",
-      "Then you blank on the older eras, gamble, and it's over at 300. Steer toward seasons you actually remember.",
+    exampleSections: [
+      {
+        heading: "Starting from Dale Earnhardt Jr.",
+        paragraphs: ["Suppose you start on Dale Earnhardt Jr., a superstar who never lifted the Cup. Plenty of drivers beat him to titles, so you open with Jimmie Johnson. Verified, link one."],
+      },
+      {
+        heading: "Chaining through Kyle Busch and Joey Logano",
+        paragraphs: ["From Johnson you name Kyle Busch, the 2015 champion. Link two. From Busch you go Joey Logano, the 2018 title. Link three, 300 points, Pit Crew badge."],
+      },
+      {
+        heading: "Blanking on an older era",
+        paragraphs: ["Then you blank on the older eras, gamble, and it's over at 300. Steer toward seasons you actually remember."],
+      },
     ],
-    tips: [
-      "Anchor on seasons. Picture the champion celebrating and who finished behind them.",
-      "The playoff era is fresh memory for most fans, so steer chains toward the 2000s and 2010s.",
-      "Every driver is single use, so don't spend an obvious champion early if a rarer name also works.",
-      "No clock runs, so place the season before you type.",
+    tipSections: [
+      {
+        heading: "Anchoring on a championship season",
+        items: ["Anchor on seasons. Picture the champion celebrating and who finished behind them."],
+      },
+      {
+        heading: "Steering into the playoff era",
+        items: ["The playoff era is fresh memory for most fans, so steer chains toward the 2000s and 2010s."],
+      },
+      {
+        heading: "Saving a rare driver for later",
+        items: ["Every driver is single use, so don't spend an obvious champion early if a rarer name also works."],
+      },
+      {
+        heading: "Placing the season before you type",
+        items: ["No clock runs, so place the season before you type."],
+      },
     ],
     faqs: [
       {
@@ -530,38 +706,116 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "There are two ways to fill a room and they pull against each other. Put a known fighter in with somebody who cannot live with him and the house is full on the name, the fight is over early and nobody remembers it. Make the fight people actually want and it costs you both purses, and half the time your biggest draw walks out beaten and worth far less next time.",
       "So the money says feed him and your name says make the fight. Measured in the game's own engine, a mismatch takes about 13 percent more at the door tonight and costs you six points of reputation across a career. Every fighter in it is invented.",
     ],
-    howToPlay: [
-      "Name the promotion. You start with 0.12m, a name worth 5 out of 100 and ten fighters who will take your calls.",
-      "Pick a room. Six of them, from a 1,200 seat leisure centre up to a 78,000 seat national stadium, and each one wants a bigger name before it will have you.",
-      "Set the ticket price. Too high and you have paid for an empty room, too low and you have given the night away.",
-      "Build the card: pick a fighter, then pick who goes in with him. Both have to make the same weight.",
-      "Read the appeal number before you commit. Names sell tickets and a fight nobody can call sells tickets, and they are rarely the same match.",
-      "Put the show on, then read the room. A one sided beating earns you nothing at all.",
+    headings: {
+      howToPlay: "How to play Fight Promoter, a free boxing matchmaking sim",
+      rules: "Fight Promoter rules for purses, names and the room",
+      example: "Fight Promoter walkthrough: from a leisure centre to the arena",
+      tips: "Fight Promoter tips for pricing tickets and protecting your draw",
+      faq: "Fight Promoter FAQ: fighters, purses and your promotion's name",
+    },
+    howToPlaySections: [
+      {
+        heading: "Naming your promotion",
+        items: ["Name the promotion. You start with 0.12m, a name worth 5 out of 100 and ten fighters who will take your calls."],
+      },
+      {
+        heading: "Picking a room for the show",
+        items: ["Pick a room. Six of them, from a 1,200 seat leisure centre up to a 78,000 seat national stadium, and each one wants a bigger name before it will have you."],
+        subsections: [
+          {
+            heading: "Setting the ticket price",
+            items: ["Set the ticket price. Too high and you have paid for an empty room, too low and you have given the night away."],
+          },
+        ],
+      },
+      {
+        heading: "Building the card at matching weights",
+        items: ["Build the card: pick a fighter, then pick who goes in with him. Both have to make the same weight."],
+      },
+      {
+        heading: "Weighing the appeal before committing",
+        items: ["Read the appeal number before you commit. Names sell tickets and a fight nobody can call sells tickets, and they are rarely the same match."],
+      },
+      {
+        heading: "Reading the room after the show",
+        items: ["Put the show on, then read the room. A one sided beating earns you nothing at all."],
+      },
     ],
-    rules: [
-      "Fighters take the greater of their guarantee or 58 percent of the door, so a big night is never a windfall and a room that does not fill still owes the guarantee.",
-      "The room costs its hire fee whether anybody turns up or not.",
-      "Your name is what opens bigger buildings: 12 for the town hall, 26 for the ballroom, 45 for the arena, 68 for the dome and 86 for the stadium.",
-      "Your name grows on the quality of the fights and nothing else. A full house watching a mismatch is worth almost nothing.",
-      "Quality is judged mostly on how close the fight was, counted in rounds won. A knockout in a one sided fight does not rescue it.",
-      "A loss costs a fighter far more drawing power than a win builds. That is why protecting a record is tempting.",
-      "Fighters leave a promotion nobody rates, and they take the top of your card with them. A promotion people want to be on replaces its weakest name with somebody better.",
-      "Nobody fights forever. They leave at 82 damage or at 39, and nobody carrying 80 damage gets matched at all.",
-      "Go below zero after a show and you are out of the business.",
-      "There is no betting anywhere in this game.",
+    ruleSections: [
+      {
+        heading: "Paying purses and covering the room",
+        items: [
+          "Fighters take the greater of their guarantee or 58 percent of the door, so a big night is never a windfall and a room that does not fill still owes the guarantee.",
+          "The room costs its hire fee whether anybody turns up or not.",
+        ],
+      },
+      {
+        heading: "Growing your name on bigger buildings",
+        items: [
+          "Your name is what opens bigger buildings: 12 for the town hall, 26 for the ballroom, 45 for the arena, 68 for the dome and 86 for the stadium.",
+          "Your name grows on the quality of the fights and nothing else. A full house watching a mismatch is worth almost nothing.",
+        ],
+        subsections: [
+          {
+            heading: "Judging quality by how close a fight was",
+            items: ["Quality is judged mostly on how close the fight was, counted in rounds won. A knockout in a one sided fight does not rescue it."],
+          },
+        ],
+      },
+      {
+        heading: "Protecting a record and losing your card",
+        items: [
+          "A loss costs a fighter far more drawing power than a win builds. That is why protecting a record is tempting.",
+          "Fighters leave a promotion nobody rates, and they take the top of your card with them. A promotion people want to be on replaces its weakest name with somebody better.",
+        ],
+      },
+      {
+        heading: "Retirement, going broke and no betting",
+        items: [
+          "Nobody fights forever. They leave at 82 damage or at 39, and nobody carrying 80 damage gets matched at all.",
+          "Go below zero after a show and you are out of the business.",
+          "There is no betting anywhere in this game.",
+        ],
+      },
     ],
-    example: [
-      "Show one is a leisure centre. You put your best man in with a journeyman, the room is two thirds full on his name, and you clear a few thousand. Your name moves almost nothing.",
-      "Four shows later you are still in the leisure centre, because feeding him has not earned you a booking anywhere bigger. So you make the fight: your draw against the best man at his weight.",
-      "He loses a close one. His drawing power halves overnight and the next card is worth less. But the fight was the best thing anyone in that room had seen, your name jumps, and the town hall takes your call.",
-      "Twenty shows on you are in the arena with fighters who would not have returned your calls at the start, and you are making the same decision again with more money on it.",
+    exampleSections: [
+      {
+        heading: "Filling a leisure centre on a name",
+        paragraphs: ["Show one is a leisure centre. You put your best man in with a journeyman, the room is two thirds full on his name, and you clear a few thousand. Your name moves almost nothing."],
+      },
+      {
+        heading: "Making the fight instead of feeding him",
+        paragraphs: ["Four shows later you are still in the leisure centre, because feeding him has not earned you a booking anywhere bigger. So you make the fight: your draw against the best man at his weight."],
+      },
+      {
+        heading: "A close loss that grows your name",
+        paragraphs: ["He loses a close one. His drawing power halves overnight and the next card is worth less. But the fight was the best thing anyone in that room had seen, your name jumps, and the town hall takes your call."],
+      },
+      {
+        heading: "Reaching the arena twenty shows on",
+        paragraphs: ["Twenty shows on you are in the arena with fighters who would not have returned your calls at the start, and you are making the same decision again with more money on it."],
+      },
     ],
-    tips: [
-      "Early on you have to feed somebody, because you cannot afford a real fight and a bad night closes you.",
-      "The ticket price has a best answer and it is not the highest one. Watch the projected house move as you drag it.",
-      "Two men at the same weight with ratings within about ten points is the fight worth making.",
-      "Your draw is an asset with a record attached. Spend it deliberately, not by accident.",
-      "A damaged veteran still sells. That is exactly why he is still on your books.",
+    tipSections: [
+      {
+        heading: "Feeding somebody in the early shows",
+        items: ["Early on you have to feed somebody, because you cannot afford a real fight and a bad night closes you."],
+      },
+      {
+        heading: "Watching the projected house move",
+        items: ["The ticket price has a best answer and it is not the highest one. Watch the projected house move as you drag it."],
+      },
+      {
+        heading: "Matching close fighters and spending your draw",
+        items: [
+          "Two men at the same weight with ratings within about ten points is the fight worth making.",
+          "Your draw is an asset with a record attached. Spend it deliberately, not by accident.",
+        ],
+      },
+      {
+        heading: "Why a damaged veteran still sells",
+        items: ["A damaged veteran still sells. That is exactly why he is still on your books."],
+      },
     ],
     faqs: [
       { q: "Why did a sold out show still lose money?", a: "The guarantees and the room. Fighters take the greater of their guarantee or 58 percent of the door, so a small house against big guarantees loses whatever the room looked like." },
@@ -577,38 +831,117 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "It runs on the same fighters and the same fights as Fight Career, with one difference that changes everything: the damage lands on somebody else and the money lands on you. A hurt fighter still sells tickets. Nothing stops you putting him in again except what it does to him, and to your name.",
       "Every fighter in it is invented, including the champions and the kids the scout brings you.",
     ],
-    howToPlay: [
-      "Name the gym. You start with 0.6m, two fighters and a name worth 8 out of 100.",
-      "Each week you can sign somebody, put a fighter through a training block for 0.035m, or find one of them a fight.",
-      "A fight comes with three offers. Pick the night, then pick three looks the same way you would in a career.",
-      "You take between 20 and 35 percent of every purse. The better your name, the bigger the cut.",
-      "The bills arrive every week: 0.012m plus 0.009m for each fighter on the books.",
-      "Let a fighter go when you think he has had enough, or keep cashing him.",
-      "Run out of money and the doors close for good.",
+    headings: {
+      howToPlay: "How to play Fight Gym, a free boxing management sim",
+      rules: "Fight Gym rules for reputation, damage and your roster",
+      example: "Fight Gym walkthrough: from two teenagers to two world titles",
+      tips: "Fight Gym tips for timing a fighter's exit",
+      faq: "Fight Gym FAQ: reputation, retirement and betting",
+    },
+    howToPlaySections: [
+      {
+        heading: "Naming your gym",
+        items: ["Name the gym. You start with 0.6m, two fighters and a name worth 8 out of 100."],
+      },
+      {
+        heading: "Signing, training or booking each week",
+        items: ["Each week you can sign somebody, put a fighter through a training block for 0.035m, or find one of them a fight."],
+      },
+      {
+        heading: "Picking three offers and three looks",
+        items: ["A fight comes with three offers. Pick the night, then pick three looks the same way you would in a career."],
+        subsections: [
+          {
+            heading: "Taking your cut of every purse",
+            items: ["You take between 20 and 35 percent of every purse. The better your name, the bigger the cut."],
+          },
+        ],
+      },
+      {
+        heading: "Paying the weekly bills",
+        items: ["The bills arrive every week: 0.012m plus 0.009m for each fighter on the books."],
+      },
+      {
+        heading: "Letting a fighter go before the money runs out",
+        items: [
+          "Let a fighter go when you think he has had enough, or keep cashing him.",
+          "Run out of money and the doors close for good.",
+        ],
+      },
     ],
-    rules: [
-      "Your name is the whole economy. It sets your cut of a purse and it sets the quality of the fighters who walk in, which runs from about 38 at the bottom to about 72 at the top.",
-      "Reputation is hard to build and easy to lose. Gains shrink as you climb, losses do not.",
-      "Putting a fighter in carrying 55 damage costs you reputation, and 70 costs you more, whatever the result. That is charged on the decision, not the outcome.",
-      "Letting a wrecked man go costs you too. There is no clean exit from a fighter you ruined.",
-      "Damage never heals, and it takes a fighter's chin down fastest.",
-      "A fighter is finished at 39, or at 34 if he is already carrying 58 damage, or at 82 damage whatever his age.",
-      "A fighter's purse reflects his record as well as his current form, so a faded name keeps earning long after he should have stopped. That is the trap the whole game is built around.",
-      "You can carry at most six fighters.",
-      "There is no betting anywhere in this game. Purses are contracts.",
+    ruleSections: [
+      {
+        heading: "Your name setting the whole economy",
+        items: ["Your name is the whole economy. It sets your cut of a purse and it sets the quality of the fighters who walk in, which runs from about 38 at the bottom to about 72 at the top."],
+      },
+      {
+        heading: "Building reputation slower than losing it",
+        items: ["Reputation is hard to build and easy to lose. Gains shrink as you climb, losses do not."],
+        subsections: [
+          {
+            heading: "Charging the decision, not the outcome",
+            items: ["Putting a fighter in carrying 55 damage costs you reputation, and 70 costs you more, whatever the result. That is charged on the decision, not the outcome."],
+          },
+        ],
+      },
+      {
+        heading: "The cost of letting a wrecked man go",
+        items: ["Letting a wrecked man go costs you too. There is no clean exit from a fighter you ruined."],
+      },
+      {
+        heading: "Damage that never heals",
+        items: [
+          "Damage never heals, and it takes a fighter's chin down fastest.",
+          "A fighter is finished at 39, or at 34 if he is already carrying 58 damage, or at 82 damage whatever his age.",
+        ],
+      },
+      {
+        heading: "A faded name, a roster cap and no betting",
+        items: [
+          "A fighter's purse reflects his record as well as his current form, so a faded name keeps earning long after he should have stopped. That is the trap the whole game is built around.",
+          "You can carry at most six fighters.",
+          "There is no betting anywhere in this game. Purses are contracts.",
+        ],
+      },
     ],
-    example: [
-      "Week one you have two teenagers and 0.6m. You sign a third for 0.09m because the scout likes him, then start finding six rounders for all three.",
-      "By week 40 your name is up near 40, the cut is better and real prospects are walking in. One of your out-boxers is ranked 6 and the purses have stopped being small.",
-      "Week 70 and your best fighter is carrying 58 damage. He is also the biggest name you have, and the offer on the table is the best money the gym has ever seen. You take it, the crowd sees a hurt man get stopped, and your name drops further than the purse was worth.",
-      "You close at week 160 with two world titles, eleven fighters through the door, three of whom got out clean and two who did not. The verdict says Respected, and you know exactly which night cost you Great.",
+    exampleSections: [
+      {
+        heading: "Week one with two teenagers",
+        paragraphs: ["Week one you have two teenagers and 0.6m. You sign a third for 0.09m because the scout likes him, then start finding six rounders for all three."],
+      },
+      {
+        heading: "Week forty and real prospects walking in",
+        paragraphs: ["By week 40 your name is up near 40, the cut is better and real prospects are walking in. One of your out-boxers is ranked 6 and the purses have stopped being small."],
+      },
+      {
+        heading: "Week seventy's costly decision",
+        paragraphs: ["Week 70 and your best fighter is carrying 58 damage. He is also the biggest name you have, and the offer on the table is the best money the gym has ever seen. You take it, the crowd sees a hurt man get stopped, and your name drops further than the purse was worth."],
+      },
+      {
+        heading: "Closing the gym at week 160",
+        paragraphs: ["You close at week 160 with two world titles, eleven fighters through the door, three of whom got out clean and two who did not. The verdict says Respected, and you know exactly which night cost you Great."],
+      },
     ],
-    tips: [
-      "Sign early. An empty gym has no way to earn and the bills do not wait.",
-      "Watch the damage number harder than the record. It is the only thing you cannot undo.",
-      "A training block is cheap next to a signing fee. Build the man you have before replacing him.",
-      "The temptation is real and it is measurable: keeping a hurt fighter genuinely pays better in the short run. It just costs you more than it pays.",
-      "Let a man go at around 50 damage rather than 70. The reputation hit for releasing a wrecked fighter is far worse than the purses you gave up.",
+    tipSections: [
+      {
+        heading: "Signing early before the bills arrive",
+        items: ["Sign early. An empty gym has no way to earn and the bills do not wait."],
+      },
+      {
+        heading: "Watching the damage number over the record",
+        items: [
+          "Watch the damage number harder than the record. It is the only thing you cannot undo.",
+          "A training block is cheap next to a signing fee. Build the man you have before replacing him.",
+        ],
+      },
+      {
+        heading: "The pay off that costs more than it earns",
+        items: ["The temptation is real and it is measurable: keeping a hurt fighter genuinely pays better in the short run. It just costs you more than it pays."],
+      },
+      {
+        heading: "Letting a man go before 70 damage",
+        items: ["Let a man go at around 50 damage rather than 70. The reputation hit for releasing a wrecked fighter is far worse than the purses you gave up."],
+      },
     ],
     faqs: [
       { q: "Is this the same game as Fight Career?", a: "Same fighters, same fights, opposite chair. In the career the damage is yours. Here it belongs to somebody who works for you, and you are the one deciding whether he goes out again." },
@@ -624,37 +957,117 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "The decision that runs the whole game is which fight you take. Three come in every time: a tune up that is safe and pays almost nothing, an even fight, and a step up that pays well, ranks you fast and can take years off the end of you. Damage never heals. It comes off your chin first, and it decides when you are finished.",
       "Then there is the night itself. Four styles beat each other in a circle, so there is always an answer to the man in front of you, and he adjusts to whatever you keep doing. Give him the same look three times and he will punish it.",
     ],
-    howToPlay: [
-      "Make your fighter: a name, one of 8 weight classes from flyweight to heavyweight, and one of 4 styles.",
-      "Read the three offers. Each one names the opponent, his style, the purse and how far a win moves you up the rankings.",
-      "Spend 6 weeks of camp across conditioning, power, defence and speed before every fight.",
-      "Pick three looks for the night. They cycle through the rounds, so three different ones is a plan and one repeated is a gift.",
-      "Watch it round by round, or turn that off and take the decision straight away.",
-      "Keep going until the damage, the years or a run of defeats ends it, then read the verdict on your career.",
+    headings: {
+      howToPlay: "How to play Fight Career, a free boxing career sim",
+      rules: "Fight Career rules for styles, damage and the ranking climb",
+      example: "Fight Career walkthrough: an unranked welterweight to Modern Great",
+      tips: "Fight Career tips for style matchups and managing damage",
+      faq: "Fight Career FAQ: damage, title shots and betting",
+    },
+    howToPlaySections: [
+      {
+        heading: "Creating your fighter's weight class and style",
+        items: ["Make your fighter: a name, one of 8 weight classes from flyweight to heavyweight, and one of 4 styles."],
+      },
+      {
+        heading: "Reading the three fight offers",
+        items: ["Read the three offers. Each one names the opponent, his style, the purse and how far a win moves you up the rankings."],
+      },
+      {
+        heading: "Spending six weeks of camp",
+        items: ["Spend 6 weeks of camp across conditioning, power, defence and speed before every fight."],
+      },
+      {
+        heading: "Picking three looks for fight night",
+        items: ["Pick three looks for the night. They cycle through the rounds, so three different ones is a plan and one repeated is a gift."],
+      },
+      {
+        heading: "Watching it live before the final verdict",
+        items: ["Watch it round by round, or turn that off and take the decision straight away."],
+        subsections: [
+          {
+            heading: "What ends a career and reads the verdict",
+            items: ["Keep going until the damage, the years or a run of defeats ends it, then read the verdict on your career."],
+          },
+        ],
+      },
     ],
-    rules: [
-      "Pressure beats an out-boxer, boxing beats a swarmer, countering beats a slugger, and brawling beats a counter-puncher. It closes into a circle, so no look is simply the best one.",
-      "Your opponent does not stand still. A fighter with real ring IQ will switch into whatever punishes the look you used last round, so repeating yourself is the worst thing you can do.",
-      "Damage is permanent and cumulative. It never heals, it takes your chin down fastest, and at 82 you are done whatever your age says.",
-      "You are also finished at 41, or at 35 if you are already carrying 58 damage, or after three straight defeats once you have dropped out of the top 12.",
-      "Camp growth runs against a hidden ceiling. Every fighter has one, camp moves you toward it and never past it, and the closer you get the less each camp is worth.",
-      "Beating a man well below your level does not move you once you are inside the top 10. Padding a record stalls on purpose.",
-      "Reach number one and every offer on the table is for a world title, whichever road got you there.",
-      "A world champion is drawn from the top of the sport in absolute terms, not from a notch above you, so the belt does not get easier because you did.",
-      "There is no betting anywhere in this game. Purses and offers are contracts, not wagers.",
+    ruleSections: [
+      {
+        heading: "The circle of styles beating each other",
+        items: ["Pressure beats an out-boxer, boxing beats a swarmer, countering beats a slugger, and brawling beats a counter-puncher. It closes into a circle, so no look is simply the best one."],
+      },
+      {
+        heading: "An opponent who adjusts to your looks",
+        items: ["Your opponent does not stand still. A fighter with real ring IQ will switch into whatever punishes the look you used last round, so repeating yourself is the worst thing you can do."],
+      },
+      {
+        heading: "Damage that never heals",
+        items: [
+          "Damage is permanent and cumulative. It never heals, it takes your chin down fastest, and at 82 you are done whatever your age says.",
+          "You are also finished at 41, or at 35 if you are already carrying 58 damage, or after three straight defeats once you have dropped out of the top 12.",
+        ],
+      },
+      {
+        heading: "Camp growth against a hidden ceiling",
+        items: ["Camp growth runs against a hidden ceiling. Every fighter has one, camp moves you toward it and never past it, and the closer you get the less each camp is worth."],
+        subsections: [
+          {
+            heading: "Why padding a record stalls out",
+            items: ["Beating a man well below your level does not move you once you are inside the top 10. Padding a record stalls on purpose."],
+          },
+        ],
+      },
+      {
+        heading: "Reaching number one for a world title",
+        items: [
+          "Reach number one and every offer on the table is for a world title, whichever road got you there.",
+          "A world champion is drawn from the top of the sport in absolute terms, not from a notch above you, so the belt does not get easier because you did.",
+          "There is no betting anywhere in this game. Purses and offers are contracts, not wagers.",
+        ],
+      },
     ],
-    example: [
-      "You start as a 21 year old welterweight out-boxer, unranked, and take the tune up. The purse is small and the win moves you one place, but you come out of it almost unmarked.",
-      "Three even fights later you are ranked 11 and you have learned the circle: the swarmer in front of you gets boxed, and when he starts switching you give him something else instead of the same jab for ten rounds.",
-      "At number one you get three title offers. You take the middle one, put the champion down in the eighth, and win a decision you will feel for the rest of your life. Damage 44, and it is not coming back off.",
-      "Four defences later you are 31 with 71 damage, the chin is gone and a challenger you would have beaten at 26 stops you in five. You retire with a title, four defences and a verdict that says Modern Great.",
+    exampleSections: [
+      {
+        heading: "Starting as an unranked welterweight",
+        paragraphs: ["You start as a 21 year old welterweight out-boxer, unranked, and take the tune up. The purse is small and the win moves you one place, but you come out of it almost unmarked."],
+      },
+      {
+        heading: "Learning the circle at number eleven",
+        paragraphs: ["Three even fights later you are ranked 11 and you have learned the circle: the swarmer in front of you gets boxed, and when he starts switching you give him something else instead of the same jab for ten rounds."],
+      },
+      {
+        heading: "Winning the title at number one",
+        paragraphs: ["At number one you get three title offers. You take the middle one, put the champion down in the eighth, and win a decision you will feel for the rest of your life. Damage 44, and it is not coming back off."],
+      },
+      {
+        heading: "Retiring a Modern Great",
+        paragraphs: ["Four defences later you are 31 with 71 damage, the chin is gone and a challenger you would have beaten at 26 stops you in five. You retire with a title, four defences and a verdict that says Modern Great."],
+      },
     ],
-    tips: [
-      "Take the safe fights early. You are trying to reach a title shot with a chin, not to prove something at 22.",
-      "Never give the same look twice in a row against anyone who can think. Three different looks beat one good one.",
-      "Watch the damage bar more than the record. A 20-0 fighter carrying 70 damage is closer to the end than a 16-4 who stayed sharp.",
-      "Spread your camp when you need to last, and pile it into one area when you need an edge in a fight you should lose.",
-      "Who you beat is worth far more than how many you beat. A long unbeaten run against nobody scores worse than a hard career against contenders.",
+    tipSections: [
+      {
+        heading: "Taking the safe fights early",
+        items: ["Take the safe fights early. You are trying to reach a title shot with a chin, not to prove something at 22."],
+      },
+      {
+        heading: "Never repeating the same look twice",
+        items: ["Never give the same look twice in a row against anyone who can think. Three different looks beat one good one."],
+        subsections: [
+          {
+            heading: "Reading the damage bar over the record",
+            items: ["Watch the damage bar more than the record. A 20-0 fighter carrying 70 damage is closer to the end than a 16-4 who stayed sharp."],
+          },
+        ],
+      },
+      {
+        heading: "Spreading or piling your camp",
+        items: ["Spread your camp when you need to last, and pile it into one area when you need an edge in a fight you should lose."],
+      },
+      {
+        heading: "Why who you beat outweighs how many",
+        items: ["Who you beat is worth far more than how many you beat. A long unbeaten run against nobody scores worse than a hard career against contenders."],
+      },
     ],
     faqs: [
       { q: "Are the fighters real?", a: "No. Every fighter in the game is generated, including your opponents and the champions. No real boxer is simulated, ranked, aged or beaten anywhere in it." },
@@ -669,28 +1082,82 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "You get eight guesses to name a mystery UFC fighter, and every guess talks back. Each attempt lights up a row of stats showing exactly how close you landed.",
       "Green means you matched the mystery fighter's stat, yellow means close, red means off target, and little arrows tell you whether the real number sits higher or lower. It's deduction, not luck.",
     ],
-    howToPlay: [
-      "Pick Daily for the fighter everyone is chasing today, or Unlimited for a random one each game.",
-      "Search any fighter and submit them as your opening probe.",
-      "Read the row: years active, weight class, nationality, age, wins, losses, draws, knockouts, submissions and peak pound for pound rank.",
-      "Follow the arrows on numeric stats to aim your next guess higher or lower.",
-      "Close the net within 8 guesses, or use Give Up to see the answer.",
+    headings: {
+      howToPlay: "How to play UFC Guesser, a free daily MMA guessing game",
+      rules: "UFC Guesser rules for guesses, colors and the fighter pool",
+      example: "UFC Guesser walkthrough: from Conor McGregor to Khabib Nurmagomedov",
+      tips: "UFC Guesser tips for narrowing down a mystery fighter",
+      faq: "UFC Guesser FAQ: stats, the pound for pound column and more",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing Daily or Unlimited mode",
+        items: ["Pick Daily for the fighter everyone is chasing today, or Unlimited for a random one each game."],
+      },
+      {
+        heading: "Submitting your opening probe",
+        items: ["Search any fighter and submit them as your opening probe."],
+      },
+      {
+        heading: "Reading every stat in the row",
+        items: ["Read the row: years active, weight class, nationality, age, wins, losses, draws, knockouts, submissions and peak pound for pound rank."],
+      },
+      {
+        heading: "Following the arrows higher or lower",
+        items: ["Follow the arrows on numeric stats to aim your next guess higher or lower."],
+      },
+      {
+        heading: "Closing the net within eight guesses",
+        items: ["Close the net within 8 guesses, or use Give Up to see the answer."],
+      },
     ],
-    rules: [
-      "8 guesses maximum, in both Daily and Unlimited.",
-      "Yellow means close: one weight class off, same continent, within 2 years on age or career length, 3 wins, 2 losses, 1 draw, 3 knockouts, 2 submissions, or 2 pound for pound spots.",
-      "Daily progress is saved through the day and a new fighter arrives at midnight Eastern.",
-      "The pool spans all nine weight divisions, strawweight to heavyweight, women's stars included.",
+    ruleSections: [
+      {
+        heading: "Eight guesses in both modes",
+        items: ["8 guesses maximum, in both Daily and Unlimited."],
+      },
+      {
+        heading: "What a yellow, close call means",
+        items: ["Yellow means close: one weight class off, same continent, within 2 years on age or career length, 3 wins, 2 losses, 1 draw, 3 knockouts, 2 submissions, or 2 pound for pound spots."],
+      },
+      {
+        heading: "Saving progress until midnight",
+        items: ["Daily progress is saved through the day and a new fighter arrives at midnight Eastern."],
+      },
+      {
+        heading: "Spanning all nine weight divisions",
+        items: ["The pool spans all nine weight divisions, strawweight to heavyweight, women's stars included."],
+      },
     ],
-    example: [
-      "Suppose the mystery fighter is Khabib Nurmagomedov and you open with Conor McGregor. Weight class comes back green at lightweight, age and career length green, nationality yellow for the right continent, and the record cells glow red with arrows demanding more wins, fewer losses and more submissions.",
-      "So you're hunting a European lightweight from McGregor's era with a spotless record and a pile of submissions.",
-      "An undefeated Russian grappler fits every cell. Khabib in two guesses.",
+    exampleSections: [
+      {
+        heading: "Opening with Conor McGregor",
+        paragraphs: ["Suppose the mystery fighter is Khabib Nurmagomedov and you open with Conor McGregor. Weight class comes back green at lightweight, age and career length green, nationality yellow for the right continent, and the record cells glow red with arrows demanding more wins, fewer losses and more submissions."],
+      },
+      {
+        heading: "Narrowing to a European lightweight",
+        paragraphs: ["So you're hunting a European lightweight from McGregor's era with a spotless record and a pile of submissions."],
+      },
+      {
+        heading: "Solving it as Khabib Nurmagomedov",
+        paragraphs: ["An undefeated Russian grappler fits every cell. Khabib in two guesses."],
+      },
     ],
-    tips: [
-      "Open with a fighter you know inside out so you can interpret every cell.",
-      "The weight class arrow is the fastest filter in the game; two guesses can pin the division.",
-      "A red loss cell pointing down toward zero screams elite champion.",
+    tipSections: [
+      {
+        heading: "Opening with a fighter you know well",
+        items: ["Open with a fighter you know inside out so you can interpret every cell."],
+        subsections: [
+          {
+            heading: "Using the weight class arrow as a filter",
+            items: ["The weight class arrow is the fastest filter in the game; two guesses can pin the division."],
+          },
+        ],
+      },
+      {
+        heading: "Reading a red loss cell pointing to zero",
+        items: ["A red loss cell pointing down toward zero screams elite champion."],
+      },
     ],
     faqs: [
       {
@@ -713,29 +1180,86 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "Fight fans keep receipts. Combat Chain is those receipts turned into a game: name a fighter who beat your current fighter, then a fighter who beat them, building the longest chain of real results you can.",
       "Wins are checked against the game's own record book, and one wrong answer ends the run. No timer, just you and the history of the sport.",
     ],
-    howToPlay: [
-      "Pick a mode: Daily (same start for everyone), Unlimited, Weight Class (one division only), or Hall of Fame (legends only).",
-      "Recall who has actually beaten your current fighter.",
-      "Submit a name. A verified defeat adds the winner to your chain and hands them the spotlight.",
-      "Repeat until you miss, reuse a fighter, or bank your score with Give Up.",
-      "Save your run with a nickname to enter the top 10 leaderboard.",
+    headings: {
+      howToPlay: "How to play Combat Chain, a free MMA fight result game",
+      rules: "Combat Chain rules for scoring, badges and Weight Class mode",
+      example: "Combat Chain walkthrough: McGregor, Poirier and an unbeaten wall",
+      tips: "Combat Chain tips for title fights and undefeated legends",
+      faq: "Combat Chain FAQ: verified wins, modes and the leaderboard",
+    },
+    howToPlaySections: [
+      {
+        heading: "Picking a mode to start the chain",
+        items: ["Pick a mode: Daily (same start for everyone), Unlimited, Weight Class (one division only), or Hall of Fame (legends only)."],
+      },
+      {
+        heading: "Recalling who beat your current fighter",
+        items: ["Recall who has actually beaten your current fighter."],
+      },
+      {
+        heading: "Submitting a name for a verified defeat",
+        items: ["Submit a name. A verified defeat adds the winner to your chain and hands them the spotlight."],
+      },
+      {
+        heading: "Repeating until you miss or bank it",
+        items: ["Repeat until you miss, reuse a fighter, or bank your score with Give Up."],
+      },
+      {
+        heading: "Saving your run for the leaderboard",
+        items: ["Save your run with a nickname to enter the top 10 leaderboard."],
+      },
     ],
-    rules: [
-      "Each correct link scores 100 points, plus a 50 point bonus when the win came in a championship fight.",
-      "The total multiplies by 1.5 at a chain of 5 and by 2 at 10.",
-      "A wrong answer ends the run and reveals a fighter who would have worked.",
-      "Weight Class mode offers 8 divisions, flyweight through heavyweight.",
-      "Badges: On A Roll at 3 links, Contender at 5, Champion at 10, GOAT at 15.",
+    ruleSections: [
+      {
+        heading: "Scoring points and a title fight bonus",
+        items: ["Each correct link scores 100 points, plus a 50 point bonus when the win came in a championship fight."],
+      },
+      {
+        heading: "Multiplying the total as the chain grows",
+        items: ["The total multiplies by 1.5 at a chain of 5 and by 2 at 10."],
+      },
+      {
+        heading: "What a wrong answer reveals",
+        items: ["A wrong answer ends the run and reveals a fighter who would have worked."],
+      },
+      {
+        heading: "Weight Class mode's eight divisions",
+        items: ["Weight Class mode offers 8 divisions, flyweight through heavyweight."],
+        subsections: [
+          {
+            heading: "Earning badges along the chain",
+            items: ["Badges: On A Roll at 3 links, Contender at 5, Champion at 10, GOAT at 15."],
+          },
+        ],
+      },
     ],
-    example: [
-      "Say you start on Conor McGregor. Dustin Poirier stopped him in 2021, so that's a clean first link: 100 points.",
-      "Who beat Poirier? Khabib Nurmagomedov submitted him in a title fight, and championship wins pay extra: 150 more for 250 total.",
-      "Now the problem: Khabib retired undefeated, so nobody in the book has beaten him. You cash out at 250. Chaining into an unbeaten legend is a beautiful dead end.",
+    exampleSections: [
+      {
+        heading: "Starting on Conor McGregor",
+        paragraphs: ["Say you start on Conor McGregor. Dustin Poirier stopped him in 2021, so that's a clean first link: 100 points."],
+      },
+      {
+        heading: "Chaining to Khabib Nurmagomedov",
+        paragraphs: ["Who beat Poirier? Khabib Nurmagomedov submitted him in a title fight, and championship wins pay extra: 150 more for 250 total."],
+      },
+      {
+        heading: "Hitting an unbeaten legend's dead end",
+        paragraphs: ["Now the problem: Khabib retired undefeated, so nobody in the book has beaten him. You cash out at 250. Chaining into an unbeaten legend is a beautiful dead end."],
+      },
     ],
-    tips: [
-      "Title fight wins pay 50 extra, so prefer the championship answer when you have options.",
-      "Watch for undefeated walls. A fighter with zero losses ends your chain on the spot.",
-      "Fighters are single use per run; don't burn a well connected name early.",
+    tipSections: [
+      {
+        heading: "Preferring the championship answer",
+        items: ["Title fight wins pay 50 extra, so prefer the championship answer when you have options."],
+      },
+      {
+        heading: "Watching for an undefeated wall",
+        items: ["Watch for undefeated walls. A fighter with zero losses ends your chain on the spot."],
+      },
+      {
+        heading: "Saving a well connected name",
+        items: ["Fighters are single use per run; don't burn a well connected name early."],
+      },
     ],
     faqs: [
       {
