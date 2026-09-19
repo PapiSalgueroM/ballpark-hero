@@ -199,7 +199,14 @@ console.log('6) the trophy example reproduces through the real formula');
     console.log('CONTROL example: the panel says "four trophies" again, the way it did before Round 438.');
   }
   const world = fs.readFileSync(path.join(ROOT, 'src', 'data', 'gameContent', 'world.ts'), 'utf8');
-  const arena = world.slice(world.indexOf("'/idle-arena'"), world.indexOf("'/idle-arena'") + 6000);
+  /* The whole Idle Arena entry, from its key to the next route key. It used
+     to be a fixed 6000 characters, and Round 638's section headings pushed
+     the tips past that window, which read as the example having gone
+     missing. */
+  const arenaAt = world.indexOf("'/idle-arena'");
+  if (arenaAt < 0) { fail('the Idle Arena guide is not in world.ts'); }
+  const nextAt = world.slice(arenaAt + 1).search(/\n\s*'\/[a-z0-9-]+': \{/);
+  const arena = world.slice(arenaAt, nextAt < 0 ? undefined : arenaAt + 1 + nextAt);
 
   /* the panel: "two trophies at {fmt(4 * TROPHY_FLOOR)}" */
   for (const m of page.matchAll(new RegExp(`\\b(${W})\\b(?:\\s+troph(?:y|ies))?\\s+at\\s*\\{fmt\\((\\d+)\\s*\\*\\s*TROPHY_FLOOR\\)\\}`, 'gi'))) {
