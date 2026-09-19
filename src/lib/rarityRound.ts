@@ -895,6 +895,20 @@ export function totalScore(rounds: RoundResult[]): number {
 }
 
 /**
+ * Round 644: the number a finished run records, in both modes the thing that
+ * mode rewards, higher is better, 100 a round at best. Crowd Says records its
+ * total as it stands. Rarity records how far each pick sat from the famous end
+ * of its pool, 100 minus the round's points, so a perfect Goalless run records
+ * 500. Before this it recorded the raw points total, and the leaderboard counts
+ * a higher number as better and a 0 as no score at all, so a perfect Rarity
+ * run earned nothing and the most famous answers earned the most.
+ */
+export function recordedRunScore(rounds: RoundResult[], mode: RarityMode): number {
+  const total = totalScore(rounds);
+  return mode === 'rarity' ? rounds.length * 100 - total : total;
+}
+
+/**
  * The one line that says what you are actually trying to do, in the mode you
  * are actually in.
  *

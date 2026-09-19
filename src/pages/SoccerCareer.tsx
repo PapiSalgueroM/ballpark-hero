@@ -36,7 +36,7 @@ import {
   dismissBallonDor, applyBdorSpeech, type BdorSpeechChoice,
   applyWorldCupSpeech, type WorldCupSpeechChoice, manualRetire, choosePostRetirement, advanceManagerSeason, acceptManagerOffer, endManagerCareer, loadManagerMarket,
   acceptRetirementSuggestion, declineRetirementSuggestion,
-  advancePunditSeason, endPunditCareer,
+  advancePunditSeason, endPunditCareer, punditLegacyPaid, playedSeniorSeason, POST_RETIREMENT_BONUS_CAP,
   advanceOwnerSeason, endOwnerCareer,
   dismissNewspaper, purchaseSpendingItem, SPENDING_ITEMS,
   applySocialMediaAction, handleCoverAthleteDecision, dismissSocialMediaPhase,
@@ -685,15 +685,19 @@ export default function SoccerCareer() {
      was. Same lift, same reason. */
   const floatingButtonLift = useFooterLift(!!career);
 
-  // Score tracking on retirement
+  /* Score tracking on retirement. Round 644: the record is the legacy score
+     the retirement screen and the share card show, out of 100. It used to be
+     its own formula, 200 a Ballon d'Or, 150 a Champions League or a World
+     Cup and 50 a league title, capped at 1000, which never looked at where a
+     career began. The build editor lets anyone type a 99 starting overall, so
+     a 99 build ran to that cap on most careers (4,060 of 7,048 rows in the 30
+     days before this round sat exactly on it) while the screen showed a
+     different number. The legacy score knows the start (The Climb, in the
+     engine's calculateLegacy): the same career record handed 99 on the
+     creation screen scores 16 to 24 points less than the same record climbed
+     from 55. scripts/simScoreShown.mjs holds both halves. */
   const isRetired = career?.retired === true && career?.phase === "retired";
-  const legacyScore = useMemo(() => {
-    if (!isRetired || !career) return 0;
-    const totals = getCareerTotals(career.seasons);
-    return Math.min(1000, Math.round(
-      (totals.ballonDors * 200) + (totals.championsLeagues * 150) + (totals.worldCups * 150) + (totals.leagueTitles * 50)
-    ));
-  }, [isRetired, career]);
+  const legacyScore = isRetired && career?.legacy ? career.legacy.score : 0;
   useGameCompletion('soccer-career', isRetired, legacyScore);
 
   // Club roster comes from the bundled FALLBACK_CLUBS list, deliberately.
@@ -3119,7 +3123,9 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
 
       {/* Pundit bonus */}
       {career.isPundit && (
-        <div className="text-center text-xs text-muted-foreground">🎙️ TV Pundit career · Legacy +5</div>
+        <div className="text-center text-xs text-muted-foreground">
+          🎙️ TV Pundit career{legacy.breakdown.some(b => b.label === "TV Pundit") ? " · Legacy +5" : ""}
+        </div>
       )}
 
       {/* Manager results */}
@@ -3880,7 +3886,14 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
               <div className="grid grid-cols-3 gap-2 text-center text-xs">
                 <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{career.punditState.predictions.filter(p => p.cameTrue).length}</div><div className="text-[9px] text-muted-foreground">Predictions ✓</div></div>
                 <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">{career.punditState.controversies}</div><div className="text-[9px] text-muted-foreground">Controversies</div></div>
-                <div className="bg-muted/20 rounded-lg p-2"><div className="font-black">+{career.punditState.legacyBonus}</div><div className="text-[9px] text-muted-foreground">Legacy Bonus</div></div>
+                {/* Round 644: what the legacy really gets, capped, and nothing
+                    for a career that never played a senior season. */}
+                <div className="bg-muted/20 rounded-lg p-2" data-testid="pundit-legacy-tile">
+                  <div className="font-black">{playedSeniorSeason(career) ? `+${punditLegacyPaid(career)}` : "0"}</div>
+                  <div className="text-[9px] text-muted-foreground">
+                    {playedSeniorSeason(career) ? `Legacy Bonus (max +${POST_RETIREMENT_BONUS_CAP})` : "No legacy bonus, no senior career"}
+                  </div>
+                </div>
               </div>
               <div className="text-xs text-center text-muted-foreground font-bold uppercase mt-2">Choose your action this season</div>
               <div className="space-y-2">

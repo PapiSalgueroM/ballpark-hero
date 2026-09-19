@@ -19,6 +19,7 @@ import {
   pickRandomCategories,
   scoreRound,
   totalScore,
+  recordedRunScore,
   buildEmojiGrid,
   roundSummaryLine,
   buildReveal,
@@ -32,6 +33,10 @@ import {
 import { displayName } from '@/lib/playerSearch';
 
 type PlayMode = 'daily' | 'unlimited';
+
+/* Round 644: the day Rarity runs started recording the obscurity total. A
+   game_score_caps row stamped before it means the switch has not landed. */
+const RARITY_SCORE_SWITCH_DAY = '2026-09-19';
 type Phase = 'boot' | 'error' | 'loading-round' | 'playing' | 'revealed' | 'done';
 
 /**
@@ -224,35 +229,57 @@ const RarityRound = () => {
   };
 
   const finalScore = useMemo(() => totalScore(results), [results]);
+  /* Round 644: what the run records, higher is better in both modes. In
+     Rarity it is the obscurity total (100 minus each round's points), shown
+     on the result screen beside the points total so the two always agree. */
+  const recordedScore = useMemo(() => recordedRunScore(results, rarityMode), [results, rarityMode]);
   const isComplete = phase === 'done';
+  /* Round 644: one ranked number per run, and only Rarity runs are ranked.
+     Both modes used to write their totals under the same key, one lower is
+     better and one higher, so the board and today's standing compared two
+     different things. Crowd Says also pays close to full marks for naming the
+     most famous answer in each category, which is not a score anyone earned.
+     So Crowd Says is the warm up: it still counts as a play (streak, played
+     today), with no score, and the result screen says so. */
+  const rankedRun = rarityMode === 'rarity';
 
   // Final standing among everyone who finished today's Rarity Round. Reads
   // game_completions for this slug + today; includes this run even if its
-  // own insert hasn't landed yet.
+  // own insert hasn't landed yet. Round 644: only Rarity runs carry a score
+  // now, so this compares like with like. Rows from before the switch hold the
+  // old totals of both modes, so only rows written since this game's score
+  // last changed are counted (game_score_caps.updated_at, which the round's
+  // migration stamps after the new client is live), and until that has
+  // happened there is no standing rather than a wrong one.
   useEffect(() => {
-    if (!isComplete) { setTodayStanding(null); return; }
+    if (!isComplete || !rankedRun) { setTodayStanding(null); return; }
     let cancelled = false;
     (async () => {
       try {
+        const { data: caps } = await (supabase.from as any)('game_score_caps')
+          .select('updated_at')
+          .eq('game', 'rarity-round')
+          .limit(1);
+        const since: string | undefined = Array.isArray(caps) ? caps[0]?.updated_at : undefined;
+        if (cancelled || !since || since < RARITY_SCORE_SWITCH_DAY) return;
         const { data } = await (supabase.from as any)('game_completions')
           .select('score')
           .eq('game', 'rarity-round')
           .eq('completed_on', new Date().toISOString().slice(0, 10))
+          .gte('created_at', since)
+          .not('score', 'is', null)
           .limit(2000);
         if (cancelled || !data) return;
         const scores: number[] = (data as { score: number }[]).map(r => Number(r.score) || 0);
         if (!scores.length) return;
-        // In Rarity mode LOWER is better; in Crowd Says HIGHER is better.
-        const better = scores.filter(s =>
-          rarityMode === 'rarity' ? s < finalScore : s > finalScore,
-        ).length;
+        const better = scores.filter(s => s > recordedScore).length;
         setTodayStanding({ rank: better + 1, total: Math.max(scores.length, better + 1) });
       } catch { /* standing is a bonus */ }
     })();
     return () => { cancelled = true; };
-  }, [isComplete, finalScore, rarityMode]);
+  }, [isComplete, rankedRun, recordedScore]);
 
-  useGameCompletion('rarity-round', isComplete, finalScore, results.length);
+  useGameCompletion('rarity-round', isComplete, rankedRun ? recordedScore : undefined, results.length);
 
   const emojiGrid = useMemo(() => buildEmojiGrid(results, rarityMode), [results, rarityMode]);
 
@@ -265,11 +292,14 @@ const RarityRound = () => {
      objectiveLine so it cannot drift from the scoring. */
   const goalLine = `Five rounds, five categories. ${modeName('rarity')} rewards the answer nobody thinks of, ${modeName('crowd')} rewards the one everybody does.`;
 
+  /* Round 644: in Rarity the headline and the share carry the obscurity total,
+     the number the run records, and the fame points sit beside it. */
+  const obscurityMax = results.length * 100;
   const resultHeadline =
     rarityMode === 'rarity'
       ? finalScore === 0
-        ? 'Goalless! A perfect run'
-        : `You scored ${finalScore}`
+        ? `Goalless! A perfect ${recordedScore} of ${obscurityMax}`
+        : `You scored ${recordedScore} of ${obscurityMax}`
       : `You scored ${finalScore}`;
 
   const resultStatLine =
@@ -591,10 +621,15 @@ const RarityRound = () => {
               outcomeEmoji={outcomeEmoji}
               headline={resultHeadline}
               statLine={resultStatLine}
-              statRow={[{ label: modeLabel, value: finalScore }]}
+              statRow={
+                rarityMode === 'rarity'
+                  ? [{ label: 'Obscurity', value: `${recordedScore}/${obscurityMax}` }, { label: 'Fame points', value: finalScore }]
+                  : [{ label: modeLabel, value: finalScore }]
+              }
+              funFact={rankedRun ? undefined : 'Crowd Says is the warm up: it counts as a play, not for leaderboard points.'}
               emojiGrid={emojiGrid}
               share={{
-                score: String(finalScore),
+                score: rarityMode === 'rarity' ? `${recordedScore}/${obscurityMax} obscurity` : String(finalScore),
                 gameName: `${modeLabel} - Rarity Round`,
                 gamePath: '/rarity-round',
               }}

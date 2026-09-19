@@ -867,6 +867,14 @@ export interface CareerState {
   matchFixBanned: number;
   divingActive: boolean;
   integrityBonus: number;
+  /** Round 644: what a TV career earned (bold predictions that came true) and
+      what a club owner earned (promotions and trophies). Their own fields now,
+      not folded into integrityBonus, so a long tail after retirement cannot
+      fill the moral dilemma band. calculateLegacy caps each one and pays
+      neither to a career that never played a senior season. Optional so older
+      saves keep loading. */
+  punditBonus?: number;
+  ownerBonus?: number;
   childEventsSeen: string[]; // track which child follow-up events have been shown
   pregnancyAnnounced: boolean;
   /** 2026-08-05 storyline arcs. Optional so pre-expansion saves keep loading. */
@@ -7049,6 +7057,24 @@ export function getCareerTotals(seasons: SeasonRecord[]) {
 }
 
 /* ─── Legacy Calculation ─── */
+/** Round 644: the most a TV career, or a club owner's run, adds to the legacy. */
+export const POST_RETIREMENT_BONUS_CAP = 6;
+
+/** Round 644: did this career play a senior season? Nothing after retirement
+    counts toward the legacy of one that did not. */
+export function playedSeniorSeason(state: CareerState): boolean {
+  return state.seasons.some(s => s.type === "playing");
+}
+
+/** Round 644: what the studio will really add to the legacy right now, the
+    number the TV screen shows: the prediction bonus up to the cap, and nothing
+    for a career with no senior season. calculateLegacy pays the same. */
+export function punditLegacyPaid(state: CareerState): number {
+  if (!playedSeniorSeason(state)) return 0;
+  const earned = state.punditState ? state.punditState.legacyBonus : (state.punditBonus ?? 0);
+  return clamp(Math.round(earned), 0, POST_RETIREMENT_BONUS_CAP);
+}
+
 function getLegacyTier(score: number): LegacyTier {
   if (score >= 90) return "GOAT";
   if (score >= 80) return "LEGEND";
@@ -7057,7 +7083,11 @@ function getLegacyTier(score: number): LegacyTier {
   return "JOURNEYMAN";
 }
 
-function calculateLegacy(state: CareerState): LegacyResult {
+/* Exported in Round 644 for scripts/simScoreShown.mjs, which scores one
+   finished career twice with only the starting overall changed. This is the
+   number the retirement screen shows and, since that round, the number the
+   leaderboard records. */
+export function calculateLegacy(state: CareerState): LegacyResult {
   const totals = getCareerTotals(state.seasons);
   const breakdown: { label: string; points: number }[] = [];
   let score = 0;
@@ -7133,10 +7163,27 @@ function calculateLegacy(state: CareerState): LegacyResult {
     score += rivalPoints;
   }
 
-  // Pundit bonus
-  if (state.isPundit) {
-    breakdown.push({ label: "TV Pundit", points: 5 });
-    score += 5;
+  /* After the boots come off. Round 644: this is the leaderboard score now,
+     and a career could be retired in its first youth year, sent to the TV
+     studio and walked through thirty bold predictions (true at 35 percent for
+     3 each, no downside, no season limit) to a score of 20 with no football
+     played. So none of it is paid to a career with no senior season, and the
+     studio and the boardroom each earn a small capped line of their own. */
+  if (careerLength > 0) {
+    if (state.isPundit) {
+      breakdown.push({ label: "TV Pundit", points: 5 });
+      score += 5;
+    }
+    const punditPoints = clamp(Math.round(state.punditBonus ?? 0), 0, POST_RETIREMENT_BONUS_CAP);
+    if (punditPoints > 0) {
+      breakdown.push({ label: "Punditry", points: punditPoints });
+      score += punditPoints;
+    }
+    const ownerPoints = clamp(Math.round(state.ownerBonus ?? 0), 0, POST_RETIREMENT_BONUS_CAP);
+    if (ownerPoints > 0) {
+      breakdown.push({ label: "Club Owner", points: ownerPoints });
+      score += ownerPoints;
+    }
   }
 
   /* Cover star bonus. Round 129 scrubbed the offer card itself of the real
@@ -7629,11 +7676,21 @@ export function advancePunditSeason(prev: CareerState, action: PunditAction): Ca
       const cameTrue = Math.random() < 0.35;
       ps.predictions.push({ season: ps.season, prediction: "Bold prediction", cameTrue });
       if (cameTrue) {
+        /* Round 644: the line says what the legacy really gains, which is
+           nothing past the cap and nothing for a career with no senior season. */
+        const counted = (b: number) => Math.min(b, POST_RETIREMENT_BONUS_CAP);
+        const before = ps.legacyBonus;
         ps.legacyBonus += 3;
+        const played = playedSeniorSeason(s);
+        const gain = played ? counted(ps.legacyBonus) - counted(before) : 0;
         s.socialMediaFollowers += 1.5;
         s.popularity = clamp(s.popularity + 8, 0, 100);
         ps.followerGains += 1.5;
-        eventText = "🎯 Your bold prediction came TRUE! Legacy +3, Followers +1.5M";
+        eventText = !played
+          ? "🎯 Your bold prediction came TRUE! Followers +1.5M. Your legacy only counts senior football, and you never played a senior season, so the studio adds nothing to it"
+          : gain > 0
+            ? `🎯 Your bold prediction came TRUE! Legacy +${gain}, Followers +1.5M`
+            : `🎯 Your bold prediction came TRUE! Followers +1.5M, though the studio has already added its most, +${POST_RETIREMENT_BONUS_CAP}, to your legacy`;
       } else {
         s.socialMediaFollowers += 0.3;
         ps.followerGains += 0.3;
@@ -7657,9 +7714,9 @@ export function advancePunditSeason(prev: CareerState, action: PunditAction): Ca
 
 export function endPunditCareer(prev: CareerState): CareerState {
   const s = { ...prev };
-  if (s.punditState) {
-    s.integrityBonus += s.punditState.legacyBonus;
-  }
+  /* Round 644: its own field, capped in calculateLegacy, rather than added to
+     integrityBonus where thirty lucky predictions filled the whole band. */
+  s.punditBonus = s.punditState ? s.punditState.legacyBonus : 0;
   s.isPundit = true;
   s.legacy = calculateLegacy(s);
   s.phase = "retired";
@@ -7715,8 +7772,8 @@ export function advanceOwnerSeason(prev: CareerState): CareerState {
 export function endOwnerCareer(prev: CareerState): CareerState {
   const s = { ...prev };
   if (s.ownerState) {
-    // Owner gets legacy bonus
-    s.integrityBonus += s.ownerState.promotions * 3 + s.ownerState.trophies * 5;
+    // Owner gets legacy bonus. Round 644: its own field, capped in calculateLegacy.
+    s.ownerBonus = s.ownerState.promotions * 3 + s.ownerState.trophies * 5;
   }
   s.legacy = calculateLegacy(s);
   s.phase = "retired";

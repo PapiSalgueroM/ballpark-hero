@@ -29,6 +29,27 @@ const toSettlePlayer = (p: DraftPlayer): Player =>
 const TEAM_SIZE = 11;
 const TOTAL_PICKS = TEAM_SIZE * 2;
 
+/* Round 644: the season score, your points as a share of the 114 a perfect
+   38 game season earns, out of 100. The completion records it, and since this
+   round the verdict card and the share line say it too, because before it the
+   card showed season points and the board counted this number, which nobody
+   was ever shown. */
+const seasonScore = (points: number) => Math.min(100, Math.round((points / 114) * 100));
+
+/* Round 644: the share says how the season really went and carries the same
+   season score. It used to claim "I outdrafted the AI" whatever the table said. */
+function fantasyShareText(verdict: SdSeason | null): string {
+  const tail = 'Can you build a better squad? douknowball.com/fantasy-draft';
+  if (!verdict) return `I drafted my XI on Fantasy Draft at DoUKnowBall. ${tail}`;
+  const line = `Season score ${seasonScore(verdict.points[0])}/100, ${verdict.points[0]} pts to the AI's ${verdict.points[1]}.`;
+  const result = verdict.winner === 0
+    ? 'I outdrafted the AI on Fantasy Draft at DoUKnowBall!'
+    : verdict.winner === -1
+      ? 'I drew level with the AI on Fantasy Draft at DoUKnowBall.'
+      : 'The AI outdrafted me on Fantasy Draft at DoUKnowBall.';
+  return `${result} ${line} ${tail}`;
+}
+
 function getPickOwner(pickIndex: number, userFirst: boolean): 'user' | 'ai' {
   const round = Math.floor(pickIndex / 2);
   const posInRound = pickIndex % 2;
@@ -95,7 +116,7 @@ const FantasyDraft = () => {
     completionRef.current = true;
     const season = settleSeason(userTeam.map(toSettlePlayer), aiTeam.map(toSettlePlayer));
     setVerdict(season);
-    const score = Math.min(100, Math.round((season.points[0] / 114) * 100));
+    const score = seasonScore(season.points[0]);
     recordCompletion('/fantasy-draft', score, getCurrentPlayerName(profile), season.winner === 0 ? 1 : 0);
   }, [draftComplete, userTeam, aiTeam, profile]);
 
@@ -382,6 +403,9 @@ const FantasyDraft = () => {
                           You {verdict.points[0]} pts ({verdict.ratings[0]} OVR) · AI {verdict.points[1]} pts ({verdict.ratings[1]} OVR)
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">{verdict.headToHead}.</p>
+                        <p className="text-sm font-bold text-primary mt-2">
+                          Season score: {seasonScore(verdict.points[0])}/100
+                        </p>
                       </div>
                     )}
 
@@ -426,8 +450,8 @@ const FantasyDraft = () => {
                       <ShareButtons
                         gameName="Fantasy Draft"
                         gamePath="/fantasy-draft"
-                        score={verdict ? `${verdict.points[0]} pts vs the AI's ${verdict.points[1]}` : 'Drafted my XI and simulated a full season'}
-                        customText="I outdrafted the AI on Fantasy Draft at DoUKnowBall! Can you build a better squad? douknowball.com/fantasy-draft"
+                        score={verdict ? `Season score ${seasonScore(verdict.points[0])}/100 (${verdict.points[0]} pts vs the AI's ${verdict.points[1]})` : 'Drafted my XI and simulated a full season'}
+                        customText={fantasyShareText(verdict)}
                       />
                     )}
                   </>

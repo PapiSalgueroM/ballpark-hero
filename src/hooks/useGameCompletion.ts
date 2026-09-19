@@ -29,7 +29,9 @@ import { consumeRestoredFinish } from '@/lib/restoredFinish';
 export function useGameCompletion(
   gameSlug: string,
   isComplete: boolean,
-  score: number,
+  /* Round 644: undefined records a play with no score, the row the recorder
+     already writes when a game has no ranked number (Crowd Says). */
+  score: number | undefined,
   correctAnswers: number = 0
 ) {
   const { user, profile, refreshProfile } = useAuth();

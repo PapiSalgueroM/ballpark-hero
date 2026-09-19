@@ -7,7 +7,7 @@ import { useQuizBoard } from '@/hooks/useQuizBoard';
 
 export function QuizBoard() {
   const {
-    loading, categories, board, openTile, score, answeredCount, totalTiles,
+    loading, categories, board, openTile, score, banked, answeredCount, totalTiles,
     finished, guess, setGuess, select, submit, closeTile, shareText,
   } = useQuizBoard();
   const [copied, setCopied] = useState(false);
@@ -151,9 +151,14 @@ export function QuizBoard() {
           <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             Board cleared
           </p>
-          <p className={`mt-2 font-display text-5xl font-black ${score < 0 ? 'text-destructive' : 'text-primary'}`}>
-            ${score}
+          <p className="mt-2 font-display text-5xl font-black text-primary">
+            ${banked}
           </p>
+          {score < 0 && (
+            <p className="mt-1 text-xs text-muted-foreground">
+              You finished on -${Math.abs(score)}. A cleared board never banks below $0.
+            </p>
+          )}
           <button
             onClick={copyShare}
             className="mt-4 inline-flex items-center gap-2 rounded-full bg-primary px-6 py-2.5 text-sm font-semibold text-primary-foreground hover:opacity-90"
