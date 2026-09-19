@@ -10,6 +10,7 @@
  * away rule against the timestamp the last session wrote.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import { recordCompletion } from '@/lib/completions';
 import {
   SAVE_KEY, TICK_MS, type ArenaState,
@@ -79,16 +80,19 @@ export function useIdleArena() {
     recordCompletion('/idle-arena');
   }, []);
 
+  /* Round 657: the floater timer is owned by the page (useOwnedTimeouts). */
+  const later = useOwnedTimeouts();
+
   const doTap = useCallback((x: number, y: number) => {
     setState(s => {
       const next = tap(s);
       const gained = next.points - s.points;
       const id = ++floaterId.current;
       setFloaters(f => [...f.slice(-11), { id, text: `+${gained < 10 ? gained.toFixed(1) : Math.floor(gained)}`, x, y }]);
-      window.setTimeout(() => setFloaters(f => f.filter(fl => fl.id !== id)), 700);
+      later(() => setFloaters(f => f.filter(fl => fl.id !== id)), 700);
       return next;
     });
-  }, []);
+  }, [later]);
 
   const doBuy = useCallback((genId: string, mode: 1 | 10 | 'max') => {
     markSessionPlay();

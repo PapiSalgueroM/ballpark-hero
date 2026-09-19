@@ -8,6 +8,7 @@
  * setStates its whole world every frame spends its battery on renders.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import {
   FactoryState, FacilityId, SAVE_KEY,
   newFactory, deserialize, serialize, applyOffline, advanceClock,
@@ -71,11 +72,13 @@ export function useWonderkidFactory() {
 
   const [floaters, setFloaters] = useState<Floater[]>([]);
   const floaterId = useRef(1);
+  /* Round 657: the floater timer is owned by the page (useOwnedTimeouts). */
+  const later = useOwnedTimeouts();
   const pushFloater = useCallback((text: string, kind: Floater['kind']) => {
     const id = floaterId.current++;
     setFloaters(f => [...f.slice(-4), { id, text, kind }]);
-    window.setTimeout(() => setFloaters(f => f.filter(x => x.id !== id)), 2600);
-  }, []);
+    later(() => setFloaters(f => f.filter(x => x.id !== id)), 2600);
+  }, [later]);
 
   /* the clock, and the save that survives a closed lid.
      Round 581: each callback pays the wall time since the last one, not a fixed

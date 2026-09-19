@@ -13,6 +13,7 @@
  * state the other idles do not need.
  */
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import {
   type HallState, type Wing, type UpgradeId,
   SAVE_KEY, freshState, loadSave, serialize, fetchCatalog,
@@ -38,11 +39,13 @@ export function useHallOfChampions() {
 
   const [floaters, setFloaters] = useState<Floater[]>([]);
   const floaterId = useRef(1);
+  /* Round 657: the floater timer is owned by the page (useOwnedTimeouts). */
+  const later = useOwnedTimeouts();
   const pushFloater = useCallback((text: string, kind: Floater['kind']) => {
     const id = floaterId.current++;
     setFloaters(f => [...f.slice(-4), { id, text, kind }]);
-    window.setTimeout(() => setFloaters(f => f.filter(x => x.id !== id)), 2600);
-  }, []);
+    later(() => setFloaters(f => f.filter(x => x.id !== id)), 2600);
+  }, [later]);
 
   /* the catalog: real champions, through the same fetchers the quiz games
      use. A dead network gets the honest error card after 15 seconds

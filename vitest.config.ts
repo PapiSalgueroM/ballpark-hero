@@ -23,6 +23,12 @@ export default defineConfig({
       ...(process.env.COMPLETION_HOOK
         ? { "@/hooks/useGameCompletion": path.resolve(process.env.COMPLETION_HOOK) }
         : {}),
+      /* Round 657 negative control. scripts/simIdleTimers.mjs writes a copy of
+         useOwnedTimeouts that never clears and points the idle floater suite
+         at it. Same ordering rule: above "@". Off in every ordinary run. */
+      ...(process.env.OWNED_TIMEOUTS_HOOK
+        ? { "@/hooks/useOwnedTimeouts": path.resolve(process.env.OWNED_TIMEOUTS_HOOK) }
+        : {}),
       ...(process.env.CONQUEST_NBA_HOOK
         ? { "@/hooks/useConquestNba": path.resolve(process.env.CONQUEST_NBA_HOOK) }
         : {}),
