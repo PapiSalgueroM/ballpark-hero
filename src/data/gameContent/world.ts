@@ -8,28 +8,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Every round is built from verified career totals in the site's database, with no ties anywhere. The order is the order.",
       "There's a daily ranking everyone shares, plus an unlimited mode.",
     ],
-    howToPlay: [
-      "Check the header for the sport and the stat, like NBA career assists or MLB career home runs.",
-      "Tap the five names in order, starting with the player you think has the most.",
-      "Changed your mind? Hit Undo last any time before your fifth pick.",
-      "Your ranking submits automatically the moment the fifth player lands.",
-      "The reveal shows the true order with each player's real career number beside it.",
+    headings: {
+      howToPlay: "How to play Rank 'Em, a free NBA, NHL and MLB stat ranking game",
+      rules: "Rank 'Em rules for scoring, the daily round and unlimited mode",
+      example: "Rank 'Em walkthrough: ranking five MLB home run kings",
+      tips: "Rank 'Em tips for ordering five career stat leaders",
+      faq: "Rank 'Em FAQ: stats, sports and scoring",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the sport and stat in the header",
+        items: [
+          "Check the header for the sport and the stat, like NBA career assists or MLB career home runs.",
+        ],
+      },
+      {
+        heading: "Tapping the five names most to fewest",
+        items: [
+          "Tap the five names in order, starting with the player you think has the most.",
+        ],
+      },
+      {
+        heading: "Undoing your last tap before the fifth pick",
+        items: [
+          "Changed your mind? Hit Undo last any time before your fifth pick.",
+        ],
+      },
+      {
+        heading: "Submitting automatically on your fifth pick",
+        items: [
+          "Your ranking submits automatically the moment the fifth player lands.",
+        ],
+      },
+      {
+        heading: "Seeing the true order and the real numbers",
+        items: [
+          "The reveal shows the true order with each player's real career number beside it.",
+        ],
+      },
     ],
-    rules: [
-      "You get exactly 1 submission per round, so the daily is one attempt per day.",
-      "Scoring is 200 points for each player in the exact right slot, 1,000 for a perfect 5 for 5.",
-      "The daily round is the same for everyone and flips at midnight Eastern Time.",
-      "Unlimited mode deals random rounds from the same NBA, NHL and MLB pool.",
+    ruleSections: [
+      {
+        heading: "One submission locks in the daily attempt",
+        items: [
+          "You get exactly 1 submission per round, so the daily is one attempt per day.",
+        ],
+      },
+      {
+        heading: "Scoring extra points for a perfect board",
+        items: [
+          "Scoring is 200 points for each player in the exact right slot, 1,000 for a perfect 5 for 5.",
+        ],
+      },
+      {
+        heading: "One daily round shared by everyone",
+        items: [
+          "The daily round is the same for everyone and flips at midnight Eastern Time.",
+        ],
+        subsections: [
+          {
+            heading: "Switching to unlimited for random rounds",
+            items: [
+              "Unlimited mode deals random rounds from the same NBA, NHL and MLB pool.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Say the stat is MLB career home runs and the names are Barry Bonds, Hank Aaron, Babe Ruth, Albert Pujols and Willie Mays. Bonds at 762 feels safe on top, and Mays slots fifth at 660.",
-      "The middle is the trap. Aaron hit 755, Ruth 714 and Pujols 703, so flipping Ruth above Aaron costs you two slots and leaves you at 3 of 5 for 600 points.",
+    exampleSections: [
+      {
+        heading: "Locking Bonds first and Mays fifth",
+        paragraphs: [
+          "Say the stat is MLB career home runs and the names are Barry Bonds, Hank Aaron, Babe Ruth, Albert Pujols and Willie Mays. Bonds at 762 feels safe on top, and Mays slots fifth at 660.",
+        ],
+      },
+      {
+        heading: "Ruth and Aaron flipped in the middle",
+        paragraphs: [
+          "The middle is the trap. Aaron hit 755, Ruth 714 and Pujols 703, so flipping Ruth above Aaron costs you two slots and leaves you at 3 of 5 for 600 points.",
+        ],
+      },
     ],
-    tips: [
-      "Lock in the two ends first. First and fifth are usually the spots you actually know.",
-      "Career totals reward longevity. A 20-year grinder often out-counts a shorter, brighter prime.",
-      "Think era. Stats like three-pointers and stolen bases skew hard toward certain decades.",
-      "Use undo freely. Nothing counts until the fifth tap.",
+    tipSections: [
+      {
+        heading: "Locking the first and fifth spots first",
+        items: [
+          "Lock in the two ends first. First and fifth are usually the spots you actually know.",
+        ],
+      },
+      {
+        heading: "Valuing a long grinding career",
+        items: [
+          "Career totals reward longevity. A 20-year grinder often out-counts a shorter, brighter prime.",
+        ],
+      },
+      {
+        heading: "Weighing era for three pointers and steals",
+        items: [
+          "Think era. Stats like three-pointers and stolen bases skew hard toward certain decades.",
+        ],
+      },
+      {
+        heading: "Using undo since nothing locks in early",
+        items: [
+          "Use undo freely. Nothing counts until the fifth tap.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -52,27 +136,106 @@ export const WORLD_CONTENT: GameContentMap = {
       "Two names, one question: did these guys ever wear the same shirt? Teammates or Not flashes a pair of athletes from the NFL, NBA or soccer and you call it, yes or no.",
       "It sounds easy until you hit the pairs whose careers brushed past each other by a season. That one year in a strange uniform is exactly what this game lives on.",
     ],
-    howToPlay: [
-      "Look at the two players and the sport badge above them.",
-      "Decide whether they were ever on the same team at any point in their careers.",
-      "Tap YES or NO to lock in your answer.",
-      "Read the fun fact that explains the real story behind the pair.",
-      "Hit Next Question and keep going until all 10 are done, then see your score.",
+    headings: {
+      howToPlay: "Teammates or Not? Here's how to play this NFL, NBA and soccer game",
+      rules: "Teammates or Not? rules for rounds, scoring and difficulty",
+      example: "Teammates or Not? walkthrough: Kobe and Shaq, Brady and Manning",
+      tips: "Teammates or Not? tips for spotting real career overlaps",
+      faq: "Teammates or Not? FAQ: sports covered and question pools",
+    },
+    howToPlaySections: [
+      {
+        heading: "Checking the two players and the sport badge",
+        items: [
+          "Look at the two players and the sport badge above them.",
+        ],
+      },
+      {
+        heading: "Deciding if they shared a team ever",
+        items: [
+          "Decide whether they were ever on the same team at any point in their careers.",
+        ],
+      },
+      {
+        heading: "Tapping yes or no to lock it in",
+        items: [
+          "Tap YES or NO to lock in your answer.",
+        ],
+      },
+      {
+        heading: "Reading the fun fact behind the pair",
+        items: [
+          "Read the fun fact that explains the real story behind the pair.",
+        ],
+        subsections: [
+          {
+            heading: "Finishing all ten questions for your score",
+            items: [
+              "Hit Next Question and keep going until all 10 are done, then see your score.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "Each round is 10 questions: 3 easy, 3 medium and 4 hard, drawn fresh from a bigger pool.",
-      "Every correct call is worth 1 point, so a perfect round is 10 out of 10.",
-      "There's no timer, and a give up button ends the round early if you want out.",
-      "Play again reshuffles a brand new set of pairs, as many rounds as you like.",
+    ruleSections: [
+      {
+        heading: "Ten questions split easy, medium and hard",
+        items: [
+          "Each round is 10 questions: 3 easy, 3 medium and 4 hard, drawn fresh from a bigger pool.",
+        ],
+      },
+      {
+        heading: "Scoring one point per correct call",
+        items: [
+          "Every correct call is worth 1 point, so a perfect round is 10 out of 10.",
+        ],
+      },
+      {
+        heading: "Playing with no clock and a give up button",
+        items: [
+          "There's no timer, and a give up button ends the round early if you want out.",
+        ],
+      },
+      {
+        heading: "Reshuffling a new set with play again",
+        items: [
+          "Play again reshuffles a brand new set of pairs, as many rounds as you like.",
+        ],
+      },
     ],
-    example: [
-      "Imagine the board serves up Kobe Bryant and Shaquille O'Neal. Easy yes, they won three straight titles together on the Lakers. Next comes Tom Brady and Peyton Manning. They defined a rivalry for years but never shared a locker room, so that's a no.",
-      "The hard ones are sneakier, the pairs where you have to remember exactly when someone left. Finish 7 of 10 and you're doing better than most.",
+    exampleSections: [
+      {
+        heading: "Kobe and Shaq, then Brady and Manning",
+        paragraphs: [
+          "Imagine the board serves up Kobe Bryant and Shaquille O'Neal. Easy yes, they won three straight titles together on the Lakers. Next comes Tom Brady and Peyton Manning. They defined a rivalry for years but never shared a locker room, so that's a no.",
+        ],
+      },
+      {
+        heading: "The sneaky pairs about exact timing",
+        paragraphs: [
+          "The hard ones are sneakier, the pairs where you have to remember exactly when someone left. Finish 7 of 10 and you're doing better than most.",
+        ],
+      },
     ],
-    tips: [
-      "Timelines beat team lists. Two legends at the same club in different decades were never teammates.",
-      "Remember the weird late-career moves. Stars finishing on random rosters create the best traps.",
-      "Don't rush the obvious no. If a pair feels impossible, ask yourself why the game picked it.",
+    tipSections: [
+      {
+        heading: "Checking timelines over team rosters",
+        items: [
+          "Timelines beat team lists. Two legends at the same club in different decades were never teammates.",
+        ],
+      },
+      {
+        heading: "Watching for weird late career moves",
+        items: [
+          "Remember the weird late-career moves. Stars finishing on random rosters create the best traps.",
+        ],
+      },
+      {
+        heading: "Questioning an obvious no before tapping",
+        items: [
+          "Don't rush the obvious no. If a pair feels impossible, ask yourself why the game picked it.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -96,28 +259,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Every clue you reveal makes the answer easier and your score smaller, so the game is a staring contest between confidence and greed.",
       "The pool covers Summer and Winter athletes, sprinters to figure skaters.",
     ],
-    howToPlay: [
-      "Start with clue one, the athlete's sport, and see if a name jumps out.",
-      "Type a guess any time. Suggestions appear once you've typed a couple of letters, and last names count.",
-      "Stuck? Hit Next Clue to reveal country, then the Games year and host city, achievement, career context, medal haul, and finally the athlete's initials.",
-      "Wrong guesses cost nothing, so fire away and guess again.",
-      "Give up if you're done, which reveals the athlete and scores zero.",
+    headings: {
+      howToPlay: "How to play The Medal Games, a free Olympics guessing game",
+      rules: "The Medal Games rules for clues, scoring and daily mode",
+      example: "The Medal Games walkthrough: swimming clues to Phelps",
+      tips: "The Medal Games tips for reading clues before you guess",
+      faq: "The Medal Games FAQ: clue order and Winter athletes",
+    },
+    howToPlaySections: [
+      {
+        heading: "Starting from the athlete's sport",
+        items: [
+          "Start with clue one, the athlete's sport, and see if a name jumps out.",
+        ],
+      },
+      {
+        heading: "Typing a guess with name suggestions",
+        items: [
+          "Type a guess any time. Suggestions appear once you've typed a couple of letters, and last names count.",
+        ],
+      },
+      {
+        heading: "Revealing country, year, host city and more",
+        items: [
+          "Stuck? Hit Next Clue to reveal country, then the Games year and host city, achievement, career context, medal haul, and finally the athlete's initials.",
+        ],
+      },
+      {
+        heading: "Guessing again for free after a miss",
+        items: [
+          "Wrong guesses cost nothing, so fire away and guess again.",
+        ],
+      },
+      {
+        heading: "Giving up to reveal the athlete",
+        items: [
+          "Give up if you're done, which reveals the athlete and scores zero.",
+        ],
+      },
     ],
-    rules: [
-      "There are 7 clue levels. Solving on clue 1 scores 1,000, then 850, 700, 550, 400, 250 and 100.",
-      "Points only drop when you reveal clues. Wrong guesses are free retries.",
-      "Giving up ends the run at 0 and shows the answer.",
-      "The daily athlete is the same for everyone, and unlimited mode deals random athletes forever.",
+    ruleSections: [
+      {
+        heading: "Seven clue levels paying less each time",
+        items: [
+          "There are 7 clue levels. Solving on clue 1 scores 1,000, then 850, 700, 550, 400, 250 and 100.",
+        ],
+      },
+      {
+        heading: "Only clues cost you points",
+        items: [
+          "Points only drop when you reveal clues. Wrong guesses are free retries.",
+        ],
+        subsections: [
+          {
+            heading: "Giving up ending the run at zero",
+            items: [
+              "Giving up ends the run at 0 and shows the answer.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "One daily athlete, unlimited after that",
+        items: [
+          "The daily athlete is the same for everyone, and unlimited mode deals random athletes forever.",
+        ],
+      },
     ],
-    example: [
-      "Suppose clue one says Swimming. That's a big pool, no pun intended, so you reveal the country: USA. Still wide. Clue three says the 2008 Games in Beijing, and now your brain is screaming one name.",
-      "You type Phelps, and last names count, so that's the win. Three clues used means 700 points.",
+    exampleSections: [
+      {
+        heading: "Swimming, USA, then Beijing 2008",
+        paragraphs: [
+          "Suppose clue one says Swimming. That's a big pool, no pun intended, so you reveal the country: USA. Still wide. Clue three says the 2008 Games in Beijing, and now your brain is screaming one name.",
+        ],
+      },
+      {
+        heading: "Typing Phelps for 700 points",
+        paragraphs: [
+          "You type Phelps, and last names count, so that's the win. Three clues used means 700 points.",
+        ],
+      },
     ],
-    tips: [
-      "Sport plus country solves half the puzzles for big names, so always take a swing before clue three.",
-      "The Games year and host city date the athlete's peak. Work out the era before guessing blind.",
-      "Because wrong guesses are free, list your suspects and try them all.",
-      "Save give up for genuine dead ends. Even clue seven pays 100.",
+    tipSections: [
+      {
+        heading: "Guessing early from sport and country",
+        items: [
+          "Sport plus country solves half the puzzles for big names, so always take a swing before clue three.",
+        ],
+      },
+      {
+        heading: "Dating the athlete's peak from the host city",
+        items: [
+          "The Games year and host city date the athlete's peak. Work out the era before guessing blind.",
+        ],
+      },
+      {
+        heading: "Trying every suspect since guesses are free",
+        items: [
+          "Because wrong guesses are free, list your suspects and try them all.",
+        ],
+      },
+      {
+        heading: "Saving give up for a true dead end",
+        items: [
+          "Save give up for genuine dead ends. Even clue seven pays 100.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -140,28 +387,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Six things happened across the sports world, all in the same year, and you have to figure out which year it was. Guess The Year opens with one clue and lets you climb from there.",
       "Each clue is a different sport, so a World Cup memory can rescue you when the hockey clue means nothing. The earlier you nail it, the bigger the score.",
     ],
-    howToPlay: [
-      "Read the first clue describing a famous sports moment.",
-      "Set your year with the arrow buttons. Single arrows move 1 year, doubles jump 10.",
-      "Hit the guess button when you're ready to commit.",
-      "A wrong guess automatically reveals the next clue, so every miss buys more information.",
-      "You can also reveal the next clue voluntarily, or give up to see the answer.",
+    headings: {
+      howToPlay: "How to play Guess The Year, a free daily sports trivia game",
+      rules: "Guess The Year rules for clues, scoring and the answer range",
+      example: "Guess The Year walkthrough: McGwire and the 1998 World Cup",
+      tips: "Guess The Year tips for narrowing the decade fast",
+      faq: "Guess The Year FAQ: clue count and answer range",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the first sports moment clue",
+        items: [
+          "Read the first clue describing a famous sports moment.",
+        ],
+      },
+      {
+        heading: "Setting the year with single and double arrows",
+        items: [
+          "Set your year with the arrow buttons. Single arrows move 1 year, doubles jump 10.",
+        ],
+      },
+      {
+        heading: "Hitting guess when you're ready",
+        items: [
+          "Hit the guess button when you're ready to commit.",
+        ],
+      },
+      {
+        heading: "Unlocking the next clue on a wrong guess",
+        items: [
+          "A wrong guess automatically reveals the next clue, so every miss buys more information.",
+        ],
+      },
+      {
+        heading: "Revealing a clue early or giving up",
+        items: [
+          "You can also reveal the next clue voluntarily, or give up to see the answer.",
+        ],
+      },
     ],
-    rules: [
-      "There are 6 clues per puzzle. Solving on clue 1 scores 1,000 points, then 800, 600, 400, 200 and 100.",
-      "Every wrong guess reveals the next clue and drops you a scoring tier.",
-      "The run ends after 6 wrong guesses, or immediately if you give up, both scoring 0.",
-      "Answers range from 1972 to 2026, and a fresh puzzle arrives every day.",
+    ruleSections: [
+      {
+        heading: "Six clues paying less with every reveal",
+        items: [
+          "There are 6 clues per puzzle. Solving on clue 1 scores 1,000 points, then 800, 600, 400, 200 and 100.",
+        ],
+      },
+      {
+        heading: "Dropping a tier on every wrong guess",
+        items: [
+          "Every wrong guess reveals the next clue and drops you a scoring tier.",
+        ],
+        subsections: [
+          {
+            heading: "Ending the run at zero after six misses",
+            items: [
+              "The run ends after 6 wrong guesses, or immediately if you give up, both scoring 0.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Answers between 1972 and 2026 daily",
+        items: [
+          "Answers range from 1972 to 2026, and a fresh puzzle arrives every day.",
+        ],
+      },
     ],
-    example: [
-      "Picture this: clue one says a first baseman shattered a 37-year-old single-season home run record. You're thinking late 90s, so you guess 1997. Wrong, and clue two reveals the host nation won the World Cup on home soil.",
-      "France at home, McGwire chasing Maris. That's 1998, and getting it on the second clue banks 800 points. Miss again and the year would still be gettable, just cheaper.",
+    exampleSections: [
+      {
+        heading: "A home run record and a home World Cup",
+        paragraphs: [
+          "Picture this: clue one says a first baseman shattered a 37-year-old single-season home run record. You're thinking late 90s, so you guess 1997. Wrong, and clue two reveals the host nation won the World Cup on home soil.",
+        ],
+      },
+      {
+        heading: "Landing on 1998 on the second clue",
+        paragraphs: [
+          "France at home, McGwire chasing Maris. That's 1998, and getting it on the second clue banks 800 points. Miss again and the year would still be gettable, just cheaper.",
+        ],
+      },
     ],
-    tips: [
-      "Triangulate across sports. One clue narrows the decade, another pins the exact year.",
-      "Use the 10-year jump buttons to get in the neighborhood before fine-tuning.",
-      "A near-miss guess isn't wasted. The clue it unlocks usually tells you which direction to move.",
-      "Anchor on world events you're sure of, like World Cups and Olympics, which only land in certain years.",
+    tipSections: [
+      {
+        heading: "Triangulating the decade across sports",
+        items: [
+          "Triangulate across sports. One clue narrows the decade, another pins the exact year.",
+        ],
+      },
+      {
+        heading: "Jumping ten years before fine tuning",
+        items: [
+          "Use the 10-year jump buttons to get in the neighborhood before fine-tuning.",
+        ],
+      },
+      {
+        heading: "Reading direction from a near miss guess",
+        items: [
+          "A near-miss guess isn't wasted. The clue it unlocks usually tells you which direction to move.",
+        ],
+      },
+      {
+        heading: "Anchoring on sure World Cup and Olympic years",
+        items: [
+          "Anchor on world events you're sure of, like World Cups and Olympics, which only land in certain years.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -184,28 +515,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Somewhere on the map is a country with a sporting story, and you're guessing it from the resume alone. Guess The Nation starts with a single vibe word and drips out clues until only one flag fits.",
       "It plays like a detective case: population, medal counts, famous moments, even flag colors. Early solves pay best.",
     ],
-    howToPlay: [
-      "Pick a mode: Daily Challenge, Unlimited, Summer or Winter focus, or filter by continent.",
-      "Choose Easy for famous sporting nations or Hard for the full pool.",
-      "Read the vibe word, then search and submit a country when you have a hunch.",
-      "Each wrong guess reveals the next clue. The hint button reveals one too, if you'd rather not burn a guess.",
-      "Keep going until you name it, run out of clues, or give up.",
+    headings: {
+      howToPlay: "How to play Guess The Nation, a free countries sports trivia game",
+      rules: "Guess The Nation rules for clues, scoring and streaks",
+      example: "Guess The Nation walkthrough: sprinting clues to Jamaica",
+      tips: "Guess The Nation tips for reading the vibe word",
+      faq: "Guess The Nation FAQ: clue order and difficulty modes",
+    },
+    howToPlaySections: [
+      {
+        heading: "Picking daily, unlimited or a continent filter",
+        items: [
+          "Pick a mode: Daily Challenge, Unlimited, Summer or Winter focus, or filter by continent.",
+        ],
+      },
+      {
+        heading: "Choosing easy nations or the full hard pool",
+        items: [
+          "Choose Easy for famous sporting nations or Hard for the full pool.",
+        ],
+      },
+      {
+        heading: "Reading the vibe word before you search",
+        items: [
+          "Read the vibe word, then search and submit a country when you have a hunch.",
+        ],
+      },
+      {
+        heading: "Revealing clues from a miss or a hint",
+        items: [
+          "Each wrong guess reveals the next clue. The hint button reveals one too, if you'd rather not burn a guess.",
+        ],
+      },
+      {
+        heading: "Playing until you name it or give up",
+        items: [
+          "Keep going until you name it, run out of clues, or give up.",
+        ],
+      },
     ],
-    rules: [
-      "There are 12 clue slots and the final one is the country's name itself, worth 0.",
-      "Scoring starts at 1,200 on clue 1, then 1,100, 1,000, 850, 700, 550, 400, 250, 150, 100, 50 and 0.",
-      "Consecutive wins build a streak with badges at 3, 5, 10 and 15 wins. A miss or a give up resets it.",
-      "Give up any time to reveal the answer and score 0.",
+    ruleSections: [
+      {
+        heading: "Twelve clue slots ending in the name",
+        items: [
+          "There are 12 clue slots and the final one is the country's name itself, worth 0.",
+        ],
+      },
+      {
+        heading: "Paying less with every clue you reveal",
+        items: [
+          "Scoring starts at 1,200 on clue 1, then 1,100, 1,000, 850, 700, 550, 400, 250, 150, 100, 50 and 0.",
+        ],
+      },
+      {
+        heading: "Building a streak with badges as you win",
+        items: [
+          "Consecutive wins build a streak with badges at 3, 5, 10 and 15 wins. A miss or a give up resets it.",
+        ],
+        subsections: [
+          {
+            heading: "Giving up to reveal the answer",
+            items: [
+              "Give up any time to reveal the answer and score 0.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Say the vibe word is Sprint. Bold guessers type Jamaica immediately for 1,200. You play it safer, revealing the region, the Caribbean, then a medal count won almost entirely on the track.",
-      "You commit to Jamaica on clue 3 for 1,000 points. The famous moment clue would have name-dropped a certain 100m world record in Beijing, but you didn't need it.",
+    exampleSections: [
+      {
+        heading: "Sprint, the Caribbean and a track heavy medal count",
+        paragraphs: [
+          "Say the vibe word is Sprint. Bold guessers type Jamaica immediately for 1,200. You play it safer, revealing the region, the Caribbean, then a medal count won almost entirely on the track.",
+        ],
+      },
+      {
+        heading: "Committing to Jamaica on the third clue",
+        paragraphs: [
+          "You commit to Jamaica on clue 3 for 1,000 points. The famous moment clue would have name-dropped a certain 100m world record in Beijing, but you didn't need it.",
+        ],
+      },
     ],
-    tips: [
-      "The vibe word is sharper than it looks. One word can eliminate four continents.",
-      "Medal totals are the biggest tell. A huge winter haul points north fast.",
-      "Population plus continent narrows brutally. Big country, small medal count is its own clue.",
-      "Weak hunch? Use the hint button instead of guessing, and save guesses for real suspects.",
+    tipSections: [
+      {
+        heading: "Eliminating continents from one sharp word",
+        items: [
+          "The vibe word is sharper than it looks. One word can eliminate four continents.",
+        ],
+      },
+      {
+        heading: "Reading a big winter haul as a tell",
+        items: [
+          "Medal totals are the biggest tell. A huge winter haul points north fast.",
+        ],
+      },
+      {
+        heading: "Narrowing by population and continent",
+        items: [
+          "Population plus continent narrows brutally. Big country, small medal count is its own clue.",
+        ],
+      },
+      {
+        heading: "Saving guesses for real suspects",
+        items: [
+          "Weak hunch? Use the hint button instead of guessing, and save guesses for real suspects.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -228,28 +643,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "No name, no face, just a career stat line. Hall of Fame or Bust shows you the anonymized numbers of a real player and asks for a verdict: legend or letdown?",
       "After you vote, the name drops, the verdict lands, and you see how the community called it. Stats can flatter, and this game is built on that.",
     ],
-    howToPlay: [
-      "Read the anonymized career stats for the mystery player. The sport is shown, the name isn't.",
-      "If you're torn, reveal a hint. There are up to 3 per player.",
-      "Vote Hall of Fame or Bust when you've made up your mind.",
-      "The reveal shows the player, the official verdict, a fun fact and the community vote split.",
-      "Finish the daily player, then keep going in unlimited mode.",
+    headings: {
+      howToPlay: "Hall of Fame or Bust? Here's how to play this blind stats game",
+      rules: "Hall of Fame or Bust? rules for hints, scoring and verdicts",
+      example: "Hall of Fame or Bust? walkthrough: 894 goals and a hidden bust",
+      tips: "Hall of Fame or Bust? tips for reading a blind stat line",
+      faq: "Hall of Fame or Bust? FAQ: verdicts, votes and sports",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the anonymized career stats",
+        items: [
+          "Read the anonymized career stats for the mystery player. The sport is shown, the name isn't.",
+        ],
+      },
+      {
+        heading: "Revealing up to three hints",
+        items: [
+          "If you're torn, reveal a hint. There are up to 3 per player.",
+        ],
+      },
+      {
+        heading: "Voting once you've made up your mind",
+        items: [
+          "Vote Hall of Fame or Bust when you've made up your mind.",
+        ],
+      },
+      {
+        heading: "Seeing the player, verdict and vote split",
+        items: [
+          "The reveal shows the player, the official verdict, a fun fact and the community vote split.",
+        ],
+      },
+      {
+        heading: "Moving from the daily player to unlimited",
+        items: [
+          "Finish the daily player, then keep going in unlimited mode.",
+        ],
+      },
     ],
-    rules: [
-      "A correct vote scores 1,000 points minus 100 for each hint you used. A wrong vote scores 0.",
-      "You can reveal up to 3 hints per player, each costing 100 points off a win.",
-      "Verdicts are Hall of Fame, Bust, or Borderline, and on a Borderline player either vote counts as correct.",
-      "One shared mystery player per day, with unlimited mode serving more after that.",
+    ruleSections: [
+      {
+        heading: "Losing points for every hint you use",
+        items: [
+          "A correct vote scores 1,000 points minus 100 for each hint you used. A wrong vote scores 0.",
+        ],
+        subsections: [
+          {
+            heading: "Capping hints at three a player",
+            items: [
+              "You can reveal up to 3 hints per player, each costing 100 points off a win.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Three verdicts, with Borderline counting either way",
+        items: [
+          "Verdicts are Hall of Fame, Bust, or Borderline, and on a Borderline player either vote counts as correct.",
+        ],
+      },
+      {
+        heading: "One shared player a day, then unlimited",
+        items: [
+          "One shared mystery player per day, with unlimited mode serving more after that.",
+        ],
+      },
     ],
-    example: [
-      "Imagine the card reads: 894 career goals, 4 championship rings, played into his 30s. No hints needed, numbers like that belong to one hockey player ever, and Hall of Fame is a free 1,000 points.",
-      "The next card is murkier: big counting stats, zero titles, one MVP-ish season. You burn two hints, vote Bust, and you're right for 800. The community split says 61 percent agreed.",
+    exampleSections: [
+      {
+        heading: "894 goals and four rings, an easy call",
+        paragraphs: [
+          "Imagine the card reads: 894 career goals, 4 championship rings, played into his 30s. No hints needed, numbers like that belong to one hockey player ever, and Hall of Fame is a free 1,000 points.",
+        ],
+      },
+      {
+        heading: "Big stats, no titles, a correct Bust vote",
+        paragraphs: [
+          "The next card is murkier: big counting stats, zero titles, one MVP-ish season. You burn two hints, vote Bust, and you're right for 800. The community split says 61 percent agreed.",
+        ],
+      },
     ],
-    tips: [
-      "Trophies and awards separate legends from compilers faster than raw totals.",
-      "Notice what the stat line leaves out. No titles listed usually means there aren't any.",
-      "Hints cost 100 each, so guess from the numbers first and spend hints only when stuck.",
-      "Busts here mean careers that fell short of the hype, and hype is exactly what the stat line hides.",
+    tipSections: [
+      {
+        heading: "Weighing trophies over raw totals",
+        items: [
+          "Trophies and awards separate legends from compilers faster than raw totals.",
+        ],
+      },
+      {
+        heading: "Noticing what the stat line leaves out",
+        items: [
+          "Notice what the stat line leaves out. No titles listed usually means there aren't any.",
+        ],
+      },
+      {
+        heading: "Guessing from the numbers before a hint",
+        items: [
+          "Hints cost 100 each, so guess from the numbers first and spend hints only when stuck.",
+        ],
+      },
+      {
+        heading: "Remembering a Bust is about the hype",
+        items: [
+          "Busts here mean careers that fell short of the hype, and hype is exactly what the stat line hides.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -272,28 +771,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "You remember who won. But do you remember the score? Score Predictor pulls up a famous match, gives you the teams, the competition, the date and a hint, and asks for the exact final score.",
       "It's a memory test disguised as a prediction game, and the difference between glory and 50 points is usually one goal you forgot about.",
     ],
-    howToPlay: [
-      "Read the match card: both teams, the competition, the date and a hint about the drama.",
-      "Type your predicted score for each team.",
-      "Hit Lock In Prediction. One prediction per match, no edits.",
-      "The real score is revealed with a fun fact about the game.",
-      "Play the daily match, then switch to unlimited for more.",
+    headings: {
+      howToPlay: "How to play Score Predictor, a free soccer, NFL and NBA trivia game",
+      rules: "Score Predictor rules for scoring bands and accuracy",
+      example: "Score Predictor walkthrough: Brazil versus Germany, 2014",
+      tips: "Score Predictor tips for calibrating by sport",
+      faq: "Score Predictor FAQ: sports covered and scoring bands",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the match card and the hint",
+        items: [
+          "Read the match card: both teams, the competition, the date and a hint about the drama.",
+        ],
+      },
+      {
+        heading: "Typing a predicted score for each team",
+        items: [
+          "Type your predicted score for each team.",
+        ],
+      },
+      {
+        heading: "Locking in one prediction per match",
+        items: [
+          "Hit Lock In Prediction. One prediction per match, no edits.",
+        ],
+      },
+      {
+        heading: "Seeing the real score and a fun fact",
+        items: [
+          "The real score is revealed with a fun fact about the game.",
+        ],
+      },
+      {
+        heading: "Switching from the daily match to unlimited",
+        items: [
+          "Play the daily match, then switch to unlimited for more.",
+        ],
+      },
     ],
-    rules: [
-      "Exact score scores 1,000 points.",
-      "Right result with both team scores within 1 scores 700, within 2 scores 400.",
-      "Right result but way off on the numbers scores 200, and the wrong result scores 50.",
-      "One featured match per day, plus an unlimited mode with the whole archive of soccer, NFL and NBA classics.",
+    ruleSections: [
+      {
+        heading: "Scoring the most for an exact score",
+        items: [
+          "Exact score scores 1,000 points.",
+        ],
+        subsections: [
+          {
+            heading: "Staying close scores a shrinking bonus",
+            items: [
+              "Right result with both team scores within 1 scores 700, within 2 scores 400.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Paying least for a wrong result",
+        items: [
+          "Right result but way off on the numbers scores 200, and the wrong result scores 50.",
+        ],
+      },
+      {
+        heading: "One daily match plus an unlimited archive",
+        items: [
+          "One featured match per day, plus an unlimited mode with the whole archive of soccer, NFL and NBA classics.",
+        ],
+      },
     ],
-    example: [
-      "Suppose the card shows Brazil against Germany, World Cup semifinal, 2014. You remember Germany humiliated the hosts, so you lock in 1-5.",
-      "The reveal says 1-7. You called the winner and Brazil's goal exactly, but being 2 off on Germany's tally drops you out of the 700 tier and out of the 400 tier too, since both scores need to be close. Right result, 200 points, and a fun fact about the strangest half in World Cup history.",
+    exampleSections: [
+      {
+        heading: "Predicting a big Germany win",
+        paragraphs: [
+          "Suppose the card shows Brazil against Germany, World Cup semifinal, 2014. You remember Germany humiliated the hosts, so you lock in 1-5.",
+        ],
+      },
+      {
+        heading: "Landing in the smallest right result tier",
+        paragraphs: [
+          "The reveal says 1-7. You called the winner and Brazil's goal exactly, but being 2 off on Germany's tally drops you out of the 700 tier and out of the 400 tier too, since both scores need to be close. Right result, 200 points, and a fun fact about the strangest half in World Cup history.",
+        ],
+      },
     ],
-    tips: [
-      "Calibrate by sport. Soccer classics live between 0 and 4 goals, NBA finals scores sit in the 80s to 110s.",
-      "Famous upsets are usually tight. Blowouts are famous precisely because they're rare.",
-      "The hint often nods at the drama, like a comeback or a shootout, which hints at the shape of the score.",
-      "Nail the winner first. That alone is the difference between 200 and 50.",
+    tipSections: [
+      {
+        heading: "Calibrating goals and points by sport",
+        items: [
+          "Calibrate by sport. Soccer classics live between 0 and 4 goals, NBA finals scores sit in the 80s to 110s.",
+        ],
+      },
+      {
+        heading: "Expecting tight scores in famous upsets",
+        items: [
+          "Famous upsets are usually tight. Blowouts are famous precisely because they're rare.",
+        ],
+      },
+      {
+        heading: "Reading the hint for the shape of the score",
+        items: [
+          "The hint often nods at the drama, like a comeback or a shootout, which hints at the shape of the score.",
+        ],
+      },
+      {
+        heading: "Nailing the winner before the numbers",
+        items: [
+          "Nail the winner first. That alone is the difference between 200 and 50.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -316,28 +899,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Pick a list, empty your brain into the box. Name Them All is the classic recall quiz: every Super Bowl MVP, every F1 world champion, every Masters winner, and you versus the blanks.",
       "There are 28 lists across a dozen sports, from Heisman winners to VFL/AFL and NRL premiers, all built from the site's records database, so the answer key is real history.",
     ],
-    howToPlay: [
-      "Choose a list from the menu, anything from Heisman winners to Stanley Cup champions.",
-      "Pick Relaxed for no clock, or the timed mode for a 3:00 sprint.",
-      "Type names into the box. Correct answers flash green and fill in on the board.",
-      "Repeats flash yellow, misses flash red, and neither costs you anything.",
-      "Give up any time to reveal what you missed, then retry or grab another list.",
+    headings: {
+      howToPlay: "How to play Name Them All, a free sports recall quiz",
+      rules: "Name Them All rules for timers, tiers and guessing",
+      example: "Name Them All walkthrough: Super Bowl MVPs on the clock",
+      tips: "Name Them All tips for beating the clock",
+      faq: "Name Them All FAQ: lists, tiers and spelling",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing a list from the menu",
+        items: [
+          "Choose a list from the menu, anything from Heisman winners to Stanley Cup champions.",
+        ],
+      },
+      {
+        heading: "Picking Relaxed or the timed sprint",
+        items: [
+          "Pick Relaxed for no clock, or the timed mode for a 3:00 sprint.",
+        ],
+      },
+      {
+        heading: "Typing names for a green flash",
+        items: [
+          "Type names into the box. Correct answers flash green and fill in on the board.",
+        ],
+      },
+      {
+        heading: "Reading yellow repeats and red misses",
+        items: [
+          "Repeats flash yellow, misses flash red, and neither costs you anything.",
+        ],
+      },
+      {
+        heading: "Giving up to reveal what's missing",
+        items: [
+          "Give up any time to reveal what you missed, then retry or grab another list.",
+        ],
+      },
     ],
-    rules: [
-      "Timed mode gives you exactly 180 seconds. Relaxed mode has no timer at all.",
-      "Guesses need at least 3 letters, and surnames or team nicknames count when they're unique to one answer.",
-      "Finishing 100 percent of a list earns Gold, 80 percent or better earns Silver, and 60 percent or better earns Bronze.",
-      "Wrong guesses are free. There's no penalty and no guess limit.",
+    ruleSections: [
+      {
+        heading: "Playing with a clock or without one",
+        items: [
+          "Timed mode gives you exactly 180 seconds. Relaxed mode has no timer at all.",
+        ],
+      },
+      {
+        heading: "Typing at least three letters or a surname",
+        items: [
+          "Guesses need at least 3 letters, and surnames or team nicknames count when they're unique to one answer.",
+        ],
+      },
+      {
+        heading: "Earning Gold, Silver and Bronze tiers",
+        items: [
+          "Finishing 100 percent of a list earns Gold, 80 percent or better earns Silver, and 60 percent or better earns Bronze.",
+        ],
+        subsections: [
+          {
+            heading: "Guessing for free with no limit",
+            items: [
+              "Wrong guesses are free. There's no penalty and no guess limit.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Say you open Super Bowl MVPs on the 3:00 clock. You hammer out the quarterbacks first, montana, brady, mahomes, all accepted as surnames, and the board starts filling green.",
-      "Around 40 seconds left you stall, dig up a defender or two, then time hits zero at 72 percent. Bronze tier, and the red misses show exactly what to remember for the Silver run.",
+    exampleSections: [
+      {
+        heading: "Naming quarterbacks first by surname",
+        paragraphs: [
+          "Say you open Super Bowl MVPs on the 3:00 clock. You hammer out the quarterbacks first, montana, brady, mahomes, all accepted as surnames, and the board starts filling green.",
+        ],
+      },
+      {
+        heading: "Stalling at seventy two percent for Bronze",
+        paragraphs: [
+          "Around 40 seconds left you stall, dig up a defender or two, then time hits zero at 72 percent. Bronze tier, and the red misses show exactly what to remember for the Silver run.",
+        ],
+      },
     ],
-    tips: [
-      "Dump the easy names first and save the digging for the back half of the clock.",
-      "Type surnames. They're faster, and the game only asks for full names when two answers share one.",
-      "Work by decade. Walking through the years surfaces names that free recall won't.",
-      "If a name flashes red, try the full version. Shared surnames need spelling out.",
+    tipSections: [
+      {
+        heading: "Dumping the easy names first",
+        items: [
+          "Dump the easy names first and save the digging for the back half of the clock.",
+        ],
+      },
+      {
+        heading: "Typing fast surnames over full names",
+        items: [
+          "Type surnames. They're faster, and the game only asks for full names when two answers share one.",
+        ],
+      },
+      {
+        heading: "Working through the list by decade",
+        items: [
+          "Work by decade. Walking through the years surfaces names that free recall won't.",
+        ],
+      },
+      {
+        heading: "Spelling out a shared surname in full",
+        items: [
+          "If a name flashes red, try the full version. Shared surnames need spelling out.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -360,29 +1027,118 @@ export const WORLD_CONTENT: GameContentMap = {
       "Champ or Not deals ten claims about champions, one at a time, and every single one sounds right. The Bulls in 1994? The Islanders in 1982? Leicester in 2016? Two of those happened. Your job is knowing which.",
       "Every claim is built from real title history across ten competitions: the Super Bowl, the NBA, the World Series, the Stanley Cup, the WNBA, college football and college hoops, the English title, the VFL/AFL flag and the NRL premiership. The fakes are the cruelest kind: a real champion of that competition, dropped into a year they did not win.",
     ],
-    howToPlay: [
-      "Read the claim: a team, a title, a year.",
-      "Tap CHAMP if it really happened, or NOT if it did not.",
-      "The reveal tells you straight away, and if the claim was fake it names the team that really won that year.",
-      "Ten claims per day, one point per correct call, and everyone in the world gets the same ten.",
-      "Unlimited mode deals fresh sets as long as you want to keep calling, and its Hard toggle makes every fake a team that really won a nearby season.",
+    headings: {
+      howToPlay: "How to play Champ or Not, a free true or false champions game",
+      rules: "Champ or Not rules for claims, years and hard mode",
+      example: "Champ or Not walkthrough: the 1994 Bulls and the 1982 Islanders",
+      tips: "Champ or Not tips for placing an era before you tap",
+      faq: "Champ or Not FAQ: leagues covered and split titles",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the team, title and year",
+        items: [
+          "Read the claim: a team, a title, a year.",
+        ],
+      },
+      {
+        heading: "Tapping CHAMP or NOT",
+        items: [
+          "Tap CHAMP if it really happened, or NOT if it did not.",
+        ],
+      },
+      {
+        heading: "Seeing the real winner on a fake claim",
+        items: [
+          "The reveal tells you straight away, and if the claim was fake it names the team that really won that year.",
+        ],
+      },
+      {
+        heading: "Ten daily claims worth one point each",
+        items: [
+          "Ten claims per day, one point per correct call, and everyone in the world gets the same ten.",
+        ],
+      },
+      {
+        heading: "Toggling Hard mode in unlimited sets",
+        items: [
+          "Unlimited mode deals fresh sets as long as you want to keep calling, and its Hard toggle makes every fake a team that really won a nearby season.",
+        ],
+      },
     ],
-    rules: [
-      "Every team named is a genuine champion of that competition at some point in history. The lie, when there is one, is only ever the year.",
-      "Hard mode (Unlimited only) tightens the fakes: the wrong team still won for real, within about three seasons of the year on the card.",
-      "Split titles count as true: if two schools share a college football crown, a claim about either one is a real claim.",
-      "The daily set is the same for everyone and locks in your result for the day once you finish.",
-      "No hints, no lifelines, no second guesses. One tap per claim.",
+    ruleSections: [
+      {
+        heading: "Every team named is a real champion",
+        items: [
+          "Every team named is a genuine champion of that competition at some point in history. The lie, when there is one, is only ever the year.",
+        ],
+      },
+      {
+        heading: "Tightening fakes to three seasons in Hard mode",
+        items: [
+          "Hard mode (Unlimited only) tightens the fakes: the wrong team still won for real, within about three seasons of the year on the card.",
+        ],
+      },
+      {
+        heading: "Counting a shared college football crown as true",
+        items: [
+          "Split titles count as true: if two schools share a college football crown, a claim about either one is a real claim.",
+        ],
+      },
+      {
+        heading: "One shared daily set that locks in",
+        items: [
+          "The daily set is the same for everyone and locks in your result for the day once you finish.",
+        ],
+        subsections: [
+          {
+            heading: "One tap per claim, no lifelines",
+            items: [
+              "No hints, no lifelines, no second guesses. One tap per claim.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "The card says: The Chicago Bulls won the 1994 NBA Finals. It smells right, the Bulls won everything in the 90s, but 1994 is the baseball year: Houston won it. You tap NOT and the reveal confirms it, one point.",
-      "Next card: The New York Islanders won the Stanley Cup in 1982. That is the middle of the four in a row, so you tap CHAMP. Another point, eight claims to go.",
+    exampleSections: [
+      {
+        heading: "The 1994 Bulls claim is actually false",
+        paragraphs: [
+          "The card says: The Chicago Bulls won the 1994 NBA Finals. It smells right, the Bulls won everything in the 90s, but 1994 is the baseball year: Houston won it. You tap NOT and the reveal confirms it, one point.",
+        ],
+      },
+      {
+        heading: "The 1982 Islanders mid dynasty claim",
+        paragraphs: [
+          "Next card: The New York Islanders won the Stanley Cup in 1982. That is the middle of the four in a row, so you tap CHAMP. Another point, eight claims to go.",
+        ],
+      },
     ],
-    tips: [
-      "Work out the era first. Most fakes die the moment you remember who owned that stretch of years.",
-      "Dynasty gaps are the trap: the Bulls did not win in 1994 or 1995, and the Lakers missed 1990 to 1999 entirely.",
-      "The reveal names the real winner on every fake, so even a wrong call teaches you the year for next time.",
-      "Champions repeat. If you know the team has a pile of titles, the question is only whether THIS year is one of them.",
+    tipSections: [
+      {
+        heading: "Placing the era before you tap",
+        items: [
+          "Work out the era first. Most fakes die the moment you remember who owned that stretch of years.",
+        ],
+      },
+      {
+        heading: "Watching for gaps inside a dynasty",
+        items: [
+          "Dynasty gaps are the trap: the Bulls did not win in 1994 or 1995, and the Lakers missed 1990 to 1999 entirely.",
+        ],
+      },
+      {
+        heading: "Learning the correct year from a miss",
+        items: [
+          "The reveal names the real winner on every fake, so even a wrong call teaches you the year for next time.",
+        ],
+      },
+      {
+        heading: "Asking if this exact year is a title year",
+        items: [
+          "Champions repeat. If you know the team has a pile of titles, the question is only whether THIS year is one of them.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -405,27 +1161,106 @@ export const WORLD_CONTENT: GameContentMap = {
       "History has a short memory and it only keeps one name per year. Who'd They Beat? is about the other name: the team that made the final, shook hands, and watched the confetti fall on somebody else.",
       "We give you the champion and the year, across five competitions: the Super Bowl, the NBA Finals, the World Series, the Stanley Cup and the WNBA Finals. You pick who they beat from four options, and every single option is a real beaten finalist from that competition's record books.",
     ],
-    howToPlay: [
-      "Read the final: a champion and a year.",
-      "Pick which of the four teams lost to them.",
-      "The reveal names the answer and the series result straight away.",
-      "Ten finals per day, two from each competition, one point per correct pick.",
-      "The daily set is the same for everyone. Unlimited mode keeps dealing.",
+    headings: {
+      howToPlay: "How to play Who'd They Beat?, a free finals trivia game",
+      rules: "Who'd They Beat? rules for options and daily scoring",
+      example: "Who'd They Beat? walkthrough: the 1994 Rockets and the 1942 Leafs",
+      tips: "Who'd They Beat? tips for placing the era and league",
+      faq: "Who'd They Beat? FAQ: leagues covered and the data",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the champion and the year",
+        items: [
+          "Read the final: a champion and a year.",
+        ],
+      },
+      {
+        heading: "Picking the loser from four options",
+        items: [
+          "Pick which of the four teams lost to them.",
+        ],
+      },
+      {
+        heading: "Seeing the answer and the series result",
+        items: [
+          "The reveal names the answer and the series result straight away.",
+        ],
+      },
+      {
+        heading: "Ten daily finals across five leagues",
+        items: [
+          "Ten finals per day, two from each competition, one point per correct pick.",
+        ],
+        subsections: [
+          {
+            heading: "Switching to unlimited after the daily set",
+            items: [
+              "The daily set is the same for everyone. Unlimited mode keeps dealing.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "Every option is a genuine finals loser from that same competition. No invented teams, ever.",
-      "The wrong options are real runners up from other years, which is what makes the near misses cruel: the 1995 Magic show up as an option for the 1994 question.",
-      "One pick per final, no second chances, and the daily locks your result once you finish.",
+    ruleSections: [
+      {
+        heading: "Every option is a real finals loser",
+        items: [
+          "Every option is a genuine finals loser from that same competition. No invented teams, ever.",
+        ],
+      },
+      {
+        heading: "Mixing in runners up from other years",
+        items: [
+          "The wrong options are real runners up from other years, which is what makes the near misses cruel: the 1995 Magic show up as an option for the 1994 question.",
+        ],
+      },
+      {
+        heading: "One pick per final, no second chances",
+        items: [
+          "One pick per final, no second chances, and the daily locks your result once you finish.",
+        ],
+      },
     ],
-    example: [
-      'The card asks: "The Houston Rockets won the 1994 NBA Finals. Who did they beat?" You remember the Knicks going to seven, pick New York, and the reveal confirms it, series 4-3.',
-      "Next card is hockey: the 1942 Maple Leafs. If you know the only final ever won from three games down, you know Detroit was on the wrong end of it.",
+    exampleSections: [
+      {
+        heading: "The 1994 Rockets against the Knicks",
+        paragraphs: [
+          'The card asks: "The Houston Rockets won the 1994 NBA Finals. Who did they beat?" You remember the Knicks going to seven, pick New York, and the reveal confirms it, series 4-3.',
+        ],
+      },
+      {
+        heading: "The 1942 Maple Leafs comeback final",
+        paragraphs: [
+          "Next card is hockey: the 1942 Maple Leafs. If you know the only final ever won from three games down, you know Detroit was on the wrong end of it.",
+        ],
+      },
     ],
-    tips: [
-      "Work out the era first, then the conference or league. Half the wrong options die on geography.",
-      "Dynasty years are the easy ones: everyone knows who kept losing to the Bulls. The 40s and 50s are where scores are made.",
-      "The reveal teaches the series result too, which quietly makes you better at Champ or Not.",
-      "The trap options are usually from a year or two away. If two answers feel right, pick the one that fits the exact year.",
+    tipSections: [
+      {
+        heading: "Placing the era before the league",
+        items: [
+          "Work out the era first, then the conference or league. Half the wrong options die on geography.",
+        ],
+      },
+      {
+        heading: "Trusting dynasty years as the easy calls",
+        items: [
+          "Dynasty years are the easy ones: everyone knows who kept losing to the Bulls. The 40s and 50s are where scores are made.",
+        ],
+      },
+      {
+        heading: "Picking up who beat whom as you go",
+        items: [
+          "The reveal teaches the series result too, which quietly makes you better at Champ or Not.",
+        ],
+      },
+      {
+        heading: "Choosing the option closest to the exact year",
+        items: [
+          "The trap options are usually from a year or two away. If two answers feel right, pick the one that fits the exact year.",
+        ],
+      },
     ],
     faqs: [
       {
