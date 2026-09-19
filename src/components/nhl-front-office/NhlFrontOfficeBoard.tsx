@@ -11,7 +11,7 @@ import {
   nhlRelease, nhlSign, nhlTrade, nhlTradeValue, nhlAiMoves, nhlPoints, EASTERN, WESTERN, NHL_FO_DIVISIONS,
   NHL_FO_ROUNDS,
   type NhlLeague, type NhlProspect, type NhlSeriesResult, nhlExecuteTalksTrade,
-  ensureNhlLeagueIds,
+  ensureNhlLeagueIds, NHL_ROSTER_MIN, NHL_ROSTER_MAX,
 } from '@/lib/nhlFrontOffice';
 /* Round 631: waiving a man costs dead money and he cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal } from '@/lib/frontOfficeCuts';
@@ -656,8 +656,11 @@ export default function NhlFrontOfficeBoard() {
   const confTable = nhlFoStandings(league, EASTERN.includes(myTeam) ? EASTERN : WESTERN);
   const tiles = foHubTiles({
     roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
-    freeAgents: league.freeAgents.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    freeAgents: league.freeAgents.map(p => ({ id: p.id, name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
     capRoom: room,
+    /* Round 631: the box offers only men the sign path would take. */
+    ledger: my,
+    rosterMax: NHL_ROSTER_MAX,
     wins: my.wins,
     losses: my.losses,
     period: league.round,

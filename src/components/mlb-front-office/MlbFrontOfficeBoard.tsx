@@ -11,7 +11,7 @@ import {
   mlbRelease, mlbSign, mlbTrade, mlbTradeValue, mlbAiMoves, AL, NL, MLB_DIVISIONS,
   MLB_ROUNDS,
   type MlbLeague, type MlbProspect, type MlbSeriesResult, mlbExecuteTalksTrade,
-  ensureMlbLeagueIds,
+  ensureMlbLeagueIds, MLB_ROSTER_MIN, MLB_ROSTER_MAX,
 } from '@/lib/mlbFrontOffice';
 /* Round 631: a DFA costs dead money and the man cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal } from '@/lib/frontOfficeCuts';
@@ -657,8 +657,11 @@ export default function MlbFrontOfficeBoard() {
   const confTable = mlbStandings(league, AL.includes(myTeam) ? AL : NL);
   const tiles = foHubTiles({
     roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
-    freeAgents: league.freeAgents.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    freeAgents: league.freeAgents.map(p => ({ id: p.id, name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
     capRoom: room,
+    /* Round 631: the box offers only men the sign path would take. */
+    ledger: my,
+    rosterMax: MLB_ROSTER_MAX,
     wins: my.wins,
     losses: my.losses,
     period: league.round,

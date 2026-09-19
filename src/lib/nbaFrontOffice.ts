@@ -5,7 +5,7 @@ import { leagueNames, uniqueName } from './foNames';
 import { NBA_SALARY_CAP_2026_27 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
-import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal } from './frontOfficeCuts';
+import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal } from './frontOfficeCuts';
 
 /**
  * NBA Front Office engine (2026-08-05). Basketball sibling of
@@ -274,13 +274,17 @@ export function runNbaPlayoffs(league: NbaLeague, rng: () => number): { series: 
    lives in src/lib/frontOfficeCuts.ts, once, for all four GM sims; measured
    before it, waiving Nikola Jokic at 61.1M freed the whole 61.1, and only
    Denver's own cap position stopped the re-sign, never a rule. */
+/** Round 631: the roster floor and ceiling. The board greys Waive and Sign at them. */
+export const NBA_ROSTER_MIN = 8;
+export const NBA_ROSTER_MAX = 15;
+
 export function nbaRelease(t: NbaGmTeam, fas: NbaGmPlayer[], id: string): boolean {
-  return cutPlayer(t, fas, id, 8);
+  return cutPlayer(t, fas, id, NBA_ROSTER_MIN);
 }
 
 export function nbaSign(t: NbaGmTeam, fas: NbaGmPlayer[], id: string, cap: number): boolean {
   const i = fas.findIndex(p => p.id === id);
-  if (i < 0 || t.players.length >= 15) return false;
+  if (i < 0 || rosterFullRefusal(t, NBA_ROSTER_MAX)) return false;
   /* Round 631: the same refusal the board shows beside the greyed button. */
   if (signRefusal(t, id)) return false;
   const p = fas[i];

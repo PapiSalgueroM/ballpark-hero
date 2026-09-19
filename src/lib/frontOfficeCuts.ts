@@ -81,6 +81,26 @@ export function payrollWithDeadCap(players: { salary: number }[], team: CutLedge
 }
 
 /**
+ * Why this team cannot cut anybody right now, or null. The floor is the
+ * sport's own (each engine exports it), so the board greys the button for
+ * exactly the reason the engine would refuse.
+ */
+export function cutRefusal(team: { players: unknown[] }, floor: number): string | null {
+  if (team.players.length <= floor) return `Your roster is at the minimum of ${floor}, so nobody else can go.`;
+  return null;
+}
+
+/**
+ * Why this team cannot sign anybody right now, or null. The ceiling is the
+ * sport's own (the NFL engine has none), and the hub and the Sign buttons
+ * read the same sentence.
+ */
+export function rosterFullRefusal(team: { players: unknown[] }, max: number): string | null {
+  if (team.players.length >= max) return `Roster full at ${max}. Cut or trade someone first.`;
+  return null;
+}
+
+/**
  * The cut. Refuses a man not on the roster and a roster at its floor, records
  * the dead money and the id, and moves him to the pool on one year. This is
  * the one place a front office engine may take a man off a roster for nothing
@@ -88,7 +108,7 @@ export function payrollWithDeadCap(players: { salary: number }[], team: CutLedge
  */
 export function cutPlayer<P extends CutPlayer>(team: CutLedger & { players: P[] }, freeAgents: P[], playerId: string, floor: number): boolean {
   const idx = team.players.findIndex(p => p.id === playerId);
-  if (idx < 0 || team.players.length <= floor) return false;
+  if (idx < 0 || cutRefusal(team, floor)) return false;
   const [p] = team.players.splice(idx, 1);
   const { now } = deadMoneyFor(p);
   team.deadCap = [...(team.deadCap ?? []), { playerId: p.id, name: p.name, amount: now, seasonsLeft: p.years > 1 ? 2 : 1 }];

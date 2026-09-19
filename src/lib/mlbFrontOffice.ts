@@ -5,7 +5,7 @@ import { leagueNames, uniqueName } from './foNames';
 import { MLB_CBT_THRESHOLD_2026 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
-import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal } from './frontOfficeCuts';
+import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal } from './frontOfficeCuts';
 
 /**
  * MLB Front Office engine (2026-08-05). Baseball sibling of the NFL and NBA
@@ -283,13 +283,17 @@ export function runMlbPlayoffs(league: MlbLeague, rng: () => number): { series: 
    src/lib/frontOfficeCuts.ts, once, for all four GM sims; measured before it,
    Corbin Carroll at 21.8M with four years left took the room from 75.3 to
    97.1 and straight back to 75.3 on a one year deal. */
+/** Round 631: the roster floor and ceiling. The board greys DFA and Sign at them. */
+export const MLB_ROSTER_MIN = 9;
+export const MLB_ROSTER_MAX = 16;
+
 export function mlbRelease(t: MlbGmTeam, fas: MlbGmPlayer[], id: string): boolean {
-  return cutPlayer(t, fas, id, 9);
+  return cutPlayer(t, fas, id, MLB_ROSTER_MIN);
 }
 
 export function mlbSign(t: MlbGmTeam, fas: MlbGmPlayer[], id: string, cap: number): boolean {
   const i = fas.findIndex(p => p.id === id);
-  if (i < 0 || t.players.length >= 16) return false;
+  if (i < 0 || rosterFullRefusal(t, MLB_ROSTER_MAX)) return false;
   /* Round 631: the same refusal the board shows beside the greyed button. */
   if (signRefusal(t, id)) return false;
   const p = fas[i];

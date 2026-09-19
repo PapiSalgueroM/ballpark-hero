@@ -11,7 +11,7 @@ import {
   nbaRelease, nbaSign, nbaTrade, nbaTradeValue, EAST,
   NBA_ROUNDS,
   type NbaLeague, type NbaProspect, type SeriesResult, nbaExecuteTalksTrade,
-  ensureNbaLeagueIds,
+  ensureNbaLeagueIds, NBA_ROSTER_MIN, NBA_ROSTER_MAX,
 } from '@/lib/nbaFrontOffice';
 /* Round 631: waiving a man costs dead money and he cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal } from '@/lib/frontOfficeCuts';
@@ -653,8 +653,11 @@ export default function NbaFrontOfficeBoard() {
   const confTable = nbaStandings(league, myConfName);
   const tiles = foHubTiles({
     roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
-    freeAgents: league.freeAgents.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    freeAgents: league.freeAgents.map(p => ({ id: p.id, name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
     capRoom: room,
+    /* Round 631: the box offers only men the sign path would take. */
+    ledger: my,
+    rosterMax: NBA_ROSTER_MAX,
     wins: my.wins,
     losses: my.losses,
     period: league.round,

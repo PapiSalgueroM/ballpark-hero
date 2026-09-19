@@ -5,7 +5,7 @@ import { leagueNames, uniqueName } from './foNames';
 import { NHL_UPPER_LIMIT_2026_27 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
-import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal } from './frontOfficeCuts';
+import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal } from './frontOfficeCuts';
 
 /**
  * NHL Front Office engine (2026-08-05). Hockey sibling of the NFL, NBA and
@@ -297,13 +297,17 @@ export function runNhlFoPlayoffs(league: NhlLeague, rng: () => number): { series
    lives in src/lib/frontOfficeCuts.ts, once, for all four GM sims; measured
    before it, Leo Carlsson at 9.6M with four years left took the space from
    19.6 to 29.2 and straight back to 19.6 on a one year deal. */
+/** Round 631: the roster floor and ceiling. The board greys Waive and Sign at them. */
+export const NHL_ROSTER_MIN = 8;
+export const NHL_ROSTER_MAX = 15;
+
 export function nhlRelease(t: NhlGmTeam, fas: NhlGmPlayer[], id: string): boolean {
-  return cutPlayer(t, fas, id, 8);
+  return cutPlayer(t, fas, id, NHL_ROSTER_MIN);
 }
 
 export function nhlSign(t: NhlGmTeam, fas: NhlGmPlayer[], id: string, cap: number): boolean {
   const i = fas.findIndex(p => p.id === id);
-  if (i < 0 || t.players.length >= 15) return false;
+  if (i < 0 || rosterFullRefusal(t, NHL_ROSTER_MAX)) return false;
   /* Round 631: the same refusal the board shows beside the greyed button. */
   if (signRefusal(t, id)) return false;
   const p = fas[i];

@@ -552,8 +552,11 @@ export function runPlayoffs(
    in src/lib/frontOfficeCuts.ts, once, for all four GM sims. Nothing else
    about the cut changed: he joins the pool on one year, and the floor of six
    stays. runOffseason rolls the ledger through rollDeadCap. */
+/** Round 631: the fewest men a club may carry. The board greys Cut at it. The NFL sign path has no ceiling. */
+export const NFL_ROSTER_MIN = 6;
+
 export function releasePlayer(team: GmTeamState, freeAgents: GmPlayer[], playerId: string): boolean {
-  return cutPlayer(team, freeAgents, playerId, 6);
+  return cutPlayer(team, freeAgents, playerId, NFL_ROSTER_MIN);
 }
 
 export function signPlayer(team: GmTeamState, freeAgents: GmPlayer[], playerId: string, cap: number): boolean {
