@@ -67,6 +67,10 @@
  *                 section4.
  *   postmdelta    the totals model drops the term for plays saved between the
  *                 morning recompute and P: section4.
+ *   nomd5guard    the migration read without part 2's record_auth_completion
+ *                 fingerprint check: section4.
+ *   livepart2     the migration read with part 2 dividing user_game_scores by a
+ *                 live predicate instead of its snapshot: section4.
  *   studiotile    SoccerCareer.tsx shows the uncapped studio bonus again:
  *                 soccer-career.
  *   strayerror    the test file throws one error outside any test while every
@@ -110,6 +114,8 @@ const CONTROLS = {
   noplaygate: 'section2post',
   norescale: 'section4',
   postmdelta: 'section4',
+  nomd5guard: 'section4',
+  livepart2: 'section4',
   strayerror: 'unhandled',
   studiotile: 'soccer-career',
 };
@@ -432,9 +438,26 @@ console.log('\n3) The caps the migration sets, against the ceilings the code rea
 
 const MIGRATION = path.join(ROOT, 'supabase', 'migrations', '20260919_round_644_scores_shown.sql');
 if (!fs.existsSync(MIGRATION)) abort('the Round 644 migration is missing');
+/* Section 4's own controls rewrite the SQL text in memory, never the file. */
+const SQL_REWRITES = {
+  nomd5guard: [
+    "  if v_md5 is null or v_md5 <> md5(pg_get_functiondef('public.record_auth_completion(text,integer,integer)'::regprocedure)) then\n    raise exception 'Round 644 part 2: record_auth_completion changed since part 1; recompute the part 2 delta for the new add rule. Nothing was changed.';\n  end if;\n",
+    '',
+  ],
+  livepart2: [
+    '  update public.user_game_scores s\n     set score = round(r.score / 10.0)::integer\n    from r644_part2_ugs r\n   where s.id = r.id;\n',
+    "  update public.user_game_scores\n     set score = round(score / 10.0)::integer\n   where game_type = 'soccer-career' and created_at >= v_p and score > 100;\n",
+  ],
+};
+let migrationText = readLF(MIGRATION);
+if (SQL_REWRITES[CONTROL]) {
+  const [from, to] = SQL_REWRITES[CONTROL];
+  migrationText = swap(migrationText, from, to, 'the Round 644 migration');
+  console.log(`   NEGATIVE CONTROL ON: the migration is read with ${CONTROL}`);
+}
 /* The code, not the comments: every line comment and block comment goes
    before matching. */
-const sql = readLF(MIGRATION)
+const sql = migrationText
   .replace(/\/\*[\s\S]*?\*\//g, ' ')
   .split('\n').map(l => l.replace(/--.*$/, '')).join('\n')
   .replace(/\s+/g, ' ');
@@ -477,7 +500,7 @@ const need = (re, what) => {
    included, so a replace all cannot leave a second copy that trips a check,
    and the check itself tests the shape of P rather than comparing to the token. */
 {
-  const raw = readLF(MIGRATION);
+  const raw = migrationText;
   const copies = raw.split('SET_P_HERE').length - 1;
   if (copies === 1) ok('the P token appears exactly once in the file');
   else noteRed('section4', `the P token appears ${copies} times in the file, expected exactly 1`);
@@ -516,21 +539,46 @@ need(/if v_off > 0 then raise exception/, 'part 1 refuses to run if any soccer a
 for (const [table, key] of [['game_completions', 'game'], ['user_game_scores', 'game_type']]) {
   need(new RegExp(`update public\\.${table} set score = round\\(score / 10\\.0\\)::integer where ${key} = 'soccer-career' and score > 0 and created_at < v_p and score % 50 = 0;`),
     `${table}: before P only the old formula's rows (multiples of 50) are divided`);
-  need(new RegExp(`update public\\.${table} set score = round\\(score / 10\\.0\\)::integer where ${key} = 'soccer-career' and created_at >= v_p and score > 100;`),
-    `${table}: after P only rows above 100 (an old tab) are divided`);
+}
+/* Part 2: the fingerprint guard before any write, and every write driven by
+   one snapshot taken at its top. */
+need(/update private\.r644_state set part1_done_at = now\(\), raw_add_md5 = md5\(pg_get_functiondef\('public\.record_auth_completion\(text,integer,integer\)'::regprocedure\)\) where id = 1;/,
+  'part 1 stores the md5 of record_auth_completion\'s definition');
+{
+  const part2 = sql.slice(sql.indexOf("'Round 644 part 2: part 1 has not run"));
+  const guard = part2.search(/if v_md5 is null or v_md5 <> md5\(pg_get_functiondef\('public\.record_auth_completion\(text,integer,integer\)'::regprocedure\)\) then raise exception 'Round 644 part 2: record_auth_completion changed since part 1; recompute the part 2 delta for the new add rule/);
+  const firstWrite = part2.search(/create temporary table|insert into |update public\./);
+  if (guard >= 0 && firstWrite > guard) ok('part 2 refuses to run, before any write, if record_auth_completion changed since part 1');
+  else noteRed('section4', 'part 2 has no fingerprint guard ahead of its first write');
+  const snaps = [
+    [/create temporary table r644_part2_ugs on commit drop as select s\.id, s\.user_id, s\.score, s\.created_at from public\.user_game_scores s where s\.game_type = 'soccer-career' and s\.created_at >= v_p and s\.score > 100;/, 'the user_game_scores snapshot: old tab rows after P above 100'],
+    [/create temporary table r644_part2_gc on commit drop as select gc\.id, gc\.score, gc\.created_at from public\.game_completions gc where gc\.game = 'soccer-career' and gc\.created_at >= v_p and gc\.score > 100;/, 'the game_completions snapshot: the same rows'],
+    [/create temporary table r644_part2_delta on commit drop as select r\.user_id, sum\(r\.score - round\(r\.score \/ 10\.0\)::integer\)::integer as delta from r644_part2_ugs r group by r\.user_id;/, 'part 2 delta: old minus new for each snapshotted old tab play'],
+    [/select 'part2:game_completions', r\.id::text, r\.score, r\.created_at from r644_part2_gc r;/, 'the game_completions backup reads the snapshot'],
+    [/select 'part2:user_game_scores', r\.id::text, r\.user_id, r\.score, r\.created_at from r644_part2_ugs r;/, 'the user_game_scores backup reads the snapshot'],
+    [/update public\.game_completions gc set score = round\(r\.score \/ 10\.0\)::integer from r644_part2_gc r where gc\.id = r\.id;/, 'game_completions is divided by snapshot id'],
+    [/update public\.user_game_scores s set score = round\(r\.score \/ 10\.0\)::integer from r644_part2_ugs r where s\.id = r\.id;/, 'user_game_scores is divided by snapshot id'],
+  ];
+  for (const [re, what] of snaps) {
+    if (re.test(part2)) ok(what);
+    else noteRed('section4', `not in part 2: ${what}`);
+  }
+  /* And nothing in part 2 divides a play by a live predicate. */
+  if (/update public\.(game_completions|user_game_scores) set score = round\(score \/ 10\.0\)/.test(part2)) noteRed('section4', 'part 2 divides a table by a live predicate, so a save committing mid run can be divided without its delta');
+  else ok('no part 2 update reads the live table instead of its snapshot');
 }
 if (/update public\.user_best_scores [^;]*round\(/.test(sql)) noteRed('section4', 'user_best_scores is divided somewhere, and a divided best can land below the real one');
 else ok('user_best_scores is never divided');
-need(/update public\.user_best_scores b set best_score = m\.best from \(select s\.user_id, max\(s\.score\) as best from public\.user_game_scores s where s\.game_type = 'soccer-career' group by s\.user_id\) m where b\.user_id = m\.user_id and b\.game_type = 'soccer-career' and b\.best_score is distinct from m\.best;/,
-  'bests are rebuilt as each player\'s max(score), touching only rows that differ');
+need(/create temporary table r644_part2_bests on commit drop as select b\.user_id, b\.best_score as before, m\.best from public\.user_best_scores b join \(select s\.user_id, max\(s\.score\) as best from public\.user_game_scores s where s\.game_type = 'soccer-career' group by s\.user_id\) m on m\.user_id = b\.user_id where b\.game_type = 'soccer-career' and b\.best_score is distinct from m\.best;/,
+  'bests are rebuilt as each player\'s max(score), from one snapshot of the rows that differ');
+need(/update public\.user_best_scores b set best_score = r\.best from r644_part2_bests r where b\.user_id = r\.user_id and b\.game_type = 'soccer-career' and b\.best_score is not distinct from r\.before;/,
+  'a best raised by a save after the snapshot is left for the next rerun');
 if (/r644_totals|set total_points = t\.pts/.test(sql)) noteRed('section4', 'a whole total is still recomputed somewhere, which cuts real raw saves since the morning');
 else ok('no total is recomputed whole');
 need(/least\(max\(s\.score\), 1000\) - least\(max\(case when s\.score > 0 and s\.score % 50 = 0 then round\(s\.score \/ 10\.0\)::integer else s\.score end\), 100\) as d from public\.user_game_scores s where s\.game_type = 'soccer-career' and s\.created_at < v_m group by s\.user_id, s\.puzzle_date/,
   'part 1 delta, days before M: the morning rule\'s soccer line at cap 1000 minus the same after the rescale at cap 100');
 need(/select s\.user_id, s\.score - round\(s\.score \/ 10\.0\)::integer as d from public\.user_game_scores s where s\.game_type = 'soccer-career' and s\.created_at >= v_m and s\.created_at < v_p and s\.score > 0 and s\.score % 50 = 0/,
   'part 1 delta, plays between M and P: old minus new for each play it divides');
-need(/select s\.user_id, sum\(s\.score - round\(s\.score \/ 10\.0\)::integer\)::integer as delta from public\.user_game_scores s where s\.game_type = 'soccer-career' and s\.created_at >= v_p and s\.score > 100 group by s\.user_id;/,
-  'part 2 delta: old minus new for each old tab play it divides');
 need(/set total_points = u\.total_points - d\.delta from r644_part1_delta d/, 'part 1 subtracts its delta');
 need(/set total_points = u\.total_points - d\.delta from r644_part2_delta d/, 'part 2 subtracts its delta');
 need(/score in \(50, 100\)\) into v_ambiguous; raise notice/, 'part 2 reports the rows since P at exactly 50 or 100 and how long ago P was');

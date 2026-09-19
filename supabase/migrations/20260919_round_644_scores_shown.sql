@@ -10,20 +10,28 @@
 -- ORDER OF OPERATIONS. PUBLISH FIRST, THEN APPLY WITH P FILLED IN.
 -- =====================================================================
 --   1. Publish the client that records the legacy score.
---   2. Note P, the moment the live bundle on douknowball.com flipped to it.
---      ERR EARLY WITH P. Landing on main rebuilds the public preview
---      (ballpark-hero.lovable.app) with the new client hours before the live
---      site moves, and it writes to this same database. A P that is too early
---      only leaves an old tab's 50 or 100 undivided (a few points on one day).
---      A P that is too late divides real new legacy scores that happen to be
---      50 or 100 by ten. If unsure, use the time the change landed on main.
+--   2. Note P, the moment the LIVE bundle flipped: deploy_project has
+--      completed and douknowball.com serves the new entry chunk. Not the time
+--      the change landed on main. Every live play between the main landing and
+--      the live publish comes from the old client, and part 2 never divides an
+--      old 50 or 100 written after P, so each of those would keep 50 or 100
+--      leaderboard points on its day where it earned 5 or 10, up to 90 points
+--      a row. The public preview (ballpark-hero.lovable.app) runs the new
+--      client from the moment the change lands on main and writes to this
+--      same database, but it is the smaller error: part 1 divides a new legacy
+--      score of exactly 50 or 100 written before P (it cannot tell those from
+--      the old formula), and its notice counts the other new scale rows before
+--      P, which it leaves alone.
 --   3. Write P into the v_p line of the first block below as an ISO timestamp
 --      with an offset, for example 2026-09-20 14:05:00+00, and apply this
 --      file. The block refuses anything that is not that shape (so 'now', a
 --      bare date and a time without an offset are all refused), a P in the
 --      future, and a P before the morning recompute M (below).
 --   4. Rerun PART 2 on its own after a few hours and again after a few days.
---      It is safe to run any number of times.
+--      It is safe to rerun while record_auth_completion is unchanged: part 1
+--      stores the md5 of that function's definition, and part 2 refuses to
+--      run, before any write, if the live definition differs, because its
+--      totals delta assumes each save added the raw score (see below).
 --
 -- NEVER RUN ANY STATEMENT OF PART 1 ON ITS OWN, outside its block. The guard
 -- inside the block (no record of part 1 having run, and the soccer-career cap
@@ -40,7 +48,8 @@
 -- preview, and are left alone). Part 2 divides rows after P above 100, which
 -- only an old tab can write. What neither part can do is tell an old tab's 50
 -- or 100 after P from a new legacy score of 50 or 100; those are left as they
--- are, and part 2 reports how many there are and how long P was ago.
+-- are, each worth up to 90 leaderboard points more than it earned on its day,
+-- and part 2 reports how many there are and how long P was ago.
 --
 -- =====================================================================
 -- WHAT WAS WRONG
@@ -130,9 +139,17 @@
 --     100; plus, for each soccer-career play between M and P that part 1
 --     divides, its score minus its rescaled score.
 --   part 2: for each old tab play after P that it divides, its score minus its
---     rescaled score. This assumes record_auth_completion still adds the raw
---     score, as it does today; if Round 648 changes what a save adds before a
---     rerun, change this line to match.
+--     rescaled score. That is right only while record_auth_completion adds the
+--     raw score, as it does today; Round 648 plans a capped add, after which an
+--     old tab's 1000 would have added 100 and this would take away 900. So it
+--     is enforced, not assumed: part 1 stores the md5 of the function's
+--     definition, and part 2 raises before any write if it has changed
+--     ("recompute the part 2 delta for the new add rule").
+--   Part 2 takes one snapshot of the rows it will divide, into temporary
+--   tables at its top, and drives the backup, the delta and both updates from
+--   that snapshot by id, so a save that commits while it runs is neither
+--   divided without its delta nor counted without being divided; the next
+--   rerun picks it up.
 -- Part 1 checks the model first and refuses to run (changing nothing) if any
 -- account with soccer-career plays no longer holds it. Accounts with no
 -- soccer-career play are not touched. Dry run, read only, 2026-09-19 evening,
@@ -161,8 +178,10 @@
 create table if not exists private.r644_state (
   id integer primary key default 1 check (id = 1),
   publish_time timestamptz not null,
-  part1_done_at timestamptz
+  part1_done_at timestamptz,
+  raw_add_md5 text
 );
+alter table private.r644_state add column if not exists raw_add_md5 text;
 revoke all on private.r644_state from public, anon, authenticated;
 
 create table if not exists private.r644_soccer_scores_bak (
@@ -328,80 +347,104 @@ begin
         note = excluded.note,
         updated_at = now();
 
-  update private.r644_state set part1_done_at = now() where id = 1;
+  /* The add rule part 2's delta depends on, fingerprinted as it stands now. */
+  update private.r644_state
+     set part1_done_at = now(),
+         raw_add_md5 = md5(pg_get_functiondef('public.record_auth_completion(text,integer,integer)'::regprocedure))
+   where id = 1;
 end $$;
 
 -- =====================================================================
 -- PART 2. RERUNNABLE. Old tabs after P, the soccer part of their totals, then
 -- the bests. Run it again on its own a few hours after the publish and a few
--- days after.
+-- days after. It refuses to run, before any write, if record_auth_completion
+-- has changed since part 1.
 -- =====================================================================
 do $$
 declare
   v_p timestamptz;
+  v_md5 text;
   v_ambiguous integer;
 begin
-  select publish_time into v_p from private.r644_state where id = 1 and part1_done_at is not null;
+  select publish_time, raw_add_md5 into v_p, v_md5 from private.r644_state where id = 1 and part1_done_at is not null;
   if v_p is null then
     raise exception 'Round 644 part 2: part 1 has not run, so there is no scale to bring anything onto.';
   end if;
+  if v_md5 is null or v_md5 <> md5(pg_get_functiondef('public.record_auth_completion(text,integer,integer)'::regprocedure)) then
+    raise exception 'Round 644 part 2: record_auth_completion changed since part 1; recompute the part 2 delta for the new add rule. Nothing was changed.';
+  end if;
+
+  /* One snapshot of everything this part will change, taken before any write.
+     The backup, the delta and the updates below all read it by id, so a save
+     committing while this runs is left whole for the next rerun. A
+     soccer-career score above 100 after P can only be an old tab. */
+  create temporary table r644_part2_ugs on commit drop as
+    select s.id, s.user_id, s.score, s.created_at
+      from public.user_game_scores s
+     where s.game_type = 'soccer-career' and s.created_at >= v_p and s.score > 100;
+  create temporary table r644_part2_gc on commit drop as
+    select gc.id, gc.score, gc.created_at
+      from public.game_completions gc
+     where gc.game = 'soccer-career' and gc.created_at >= v_p and gc.score > 100;
+  create temporary table r644_part2_delta on commit drop as
+    select r.user_id, sum(r.score - round(r.score / 10.0)::integer)::integer as delta
+      from r644_part2_ugs r
+     group by r.user_id;
 
   select (select count(*) from public.game_completions
            where game = 'soccer-career' and created_at >= v_p and score in (50, 100))
        + (select count(*) from public.user_game_scores
            where game_type = 'soccer-career' and created_at >= v_p and score in (50, 100))
     into v_ambiguous;
-  raise notice 'Round 644 part 2: P was % ago. % soccer-career rows since P sit at exactly 50 or 100; an old tab''s 50 or 100 cannot be told from a new legacy score, so they are left as they are.', now() - v_p, v_ambiguous;
-
-  /* A soccer-career score above 100 after P can only be an old tab. */
-  create temporary table r644_part2_delta on commit drop as
-    select s.user_id, sum(s.score - round(s.score / 10.0)::integer)::integer as delta
-      from public.user_game_scores s
-     where s.game_type = 'soccer-career' and s.created_at >= v_p and s.score > 100
-     group by s.user_id;
+  raise notice 'Round 644 part 2: P was % ago. % soccer-career rows since P sit at exactly 50 or 100; an old tab''s 50 or 100 cannot be told from a new legacy score, so they are left as they are, each up to 90 leaderboard points above what it earned.', now() - v_p, v_ambiguous;
 
   insert into private.r644_soccer_scores_bak (source, row_id, value, created_at)
-    select 'part2:game_completions', gc.id::text, gc.score, gc.created_at
-    from public.game_completions gc
-    where gc.game = 'soccer-career' and gc.created_at >= v_p and gc.score > 100;
+    select 'part2:game_completions', r.id::text, r.score, r.created_at
+    from r644_part2_gc r;
   insert into private.r644_soccer_scores_bak (source, row_id, user_id, value, created_at)
-    select 'part2:user_game_scores', s.id::text, s.user_id, s.score, s.created_at
-    from public.user_game_scores s
-    where s.game_type = 'soccer-career' and s.created_at >= v_p and s.score > 100;
+    select 'part2:user_game_scores', r.id::text, r.user_id, r.score, r.created_at
+    from r644_part2_ugs r;
   insert into private.r644_soccer_scores_bak (source, user_id, value)
     select 'part2:user_scores', u.user_id, u.total_points
     from public.user_scores u
     join r644_part2_delta d on d.user_id = u.user_id
     where d.delta <> 0;
 
-  update public.game_completions
-     set score = round(score / 10.0)::integer
-   where game = 'soccer-career' and created_at >= v_p and score > 100;
-  update public.user_game_scores
-     set score = round(score / 10.0)::integer
-   where game_type = 'soccer-career' and created_at >= v_p and score > 100;
+  update public.game_completions gc
+     set score = round(r.score / 10.0)::integer
+    from r644_part2_gc r
+   where gc.id = r.id;
+  update public.user_game_scores s
+     set score = round(r.score / 10.0)::integer
+    from r644_part2_ugs r
+   where s.id = r.id;
   update public.user_scores u
      set total_points = u.total_points - d.delta
     from r644_part2_delta d
    where d.user_id = u.user_id and d.delta <> 0;
-  drop table if exists r644_part2_delta;
 
-  /* Bests, rebuilt from the plays and never divided. */
+  /* Bests, rebuilt from the plays and never divided. Also one snapshot, and a
+     best that a save raised after it was taken is left for the next rerun. */
+  create temporary table r644_part2_bests on commit drop as
+    select b.user_id, b.best_score as before, m.best
+      from public.user_best_scores b
+      join (select s.user_id, max(s.score) as best
+              from public.user_game_scores s
+             where s.game_type = 'soccer-career'
+             group by s.user_id) m on m.user_id = b.user_id
+     where b.game_type = 'soccer-career' and b.best_score is distinct from m.best;
   insert into private.r644_soccer_scores_bak (source, user_id, value)
-    select 'part2:user_best_scores', b.user_id, b.best_score
-    from public.user_best_scores b
-    join (select s.user_id, max(s.score) as best
-            from public.user_game_scores s
-           where s.game_type = 'soccer-career'
-           group by s.user_id) m on m.user_id = b.user_id
-    where b.game_type = 'soccer-career' and b.best_score is distinct from m.best;
+    select 'part2:user_best_scores', r.user_id, r.before
+    from r644_part2_bests r;
   update public.user_best_scores b
-     set best_score = m.best
-    from (select s.user_id, max(s.score) as best
-            from public.user_game_scores s
-           where s.game_type = 'soccer-career'
-           group by s.user_id) m
-   where b.user_id = m.user_id
+     set best_score = r.best
+    from r644_part2_bests r
+   where b.user_id = r.user_id
      and b.game_type = 'soccer-career'
-     and b.best_score is distinct from m.best;
+     and b.best_score is not distinct from r.before;
+
+  drop table if exists r644_part2_ugs;
+  drop table if exists r644_part2_gc;
+  drop table if exists r644_part2_delta;
+  drop table if exists r644_part2_bests;
 end $$;
