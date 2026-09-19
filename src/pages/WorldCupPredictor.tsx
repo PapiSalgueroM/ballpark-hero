@@ -798,13 +798,24 @@ const WorldCupPredictor = () => {
      bracket's own included, and the two reset handlers below clear the ref
      with it, so a fresh bracket still counts even when it crowns the same
      favourite without a reload. */
-  const crownedRef = useRef<string>((() => {
-    try { return localStorage.getItem(WC2026_STORAGE_KEYS.crowned) || ""; } catch { return ""; }
+  /* Round 643: every name this bracket has crowned, not only the last. With
+     the last alone, crowning A, then B in the final, then A again recorded A
+     a second time, against the one row per crowned name rule above. The
+     stored value is a JSON list now; a value written before this round is a
+     single plain name and reads back as a list of one. */
+  const crownedRef = useRef<string[]>((() => {
+    try {
+      const raw = localStorage.getItem(WC2026_STORAGE_KEYS.crowned) || "";
+      if (!raw) return [];
+      if (!raw.startsWith("[")) return [raw];
+      const list: unknown = JSON.parse(raw);
+      return Array.isArray(list) ? list.filter((name): name is string => typeof name === "string") : [];
+    } catch { return []; }
   })());
   useEffect(() => {
-    if (!champion || viewingSharedBracket || crownedRef.current === champion) return;
-    crownedRef.current = champion;
-    try { localStorage.setItem(WC2026_STORAGE_KEYS.crowned, champion); } catch { /* storage may be unavailable */ }
+    if (!champion || viewingSharedBracket || crownedRef.current.includes(champion)) return;
+    crownedRef.current = [...crownedRef.current, champion];
+    try { localStorage.setItem(WC2026_STORAGE_KEYS.crowned, JSON.stringify(crownedRef.current)); } catch { /* storage may be unavailable */ }
     recordCompletion("/world-cup-bracket", undefined, getCurrentPlayerName(profile));
   }, [champion, viewingSharedBracket, profile]);
 
@@ -917,7 +928,7 @@ const WorldCupPredictor = () => {
   const invalidateKnockout = useCallback(() => {
     clearWc2026ChildStorage(localStorage, false);
     setChampion("");
-    crownedRef.current = "";
+    crownedRef.current = [];
     setBracketRounds([]);
     setKnockoutResetVersion((version) => version + 1);
   }, []);
@@ -1139,7 +1150,7 @@ const WorldCupPredictor = () => {
     setSelectedThirds([]);
     setPlayoffPicks({});
     setChampion("");
-    crownedRef.current = "";
+    crownedRef.current = [];
     setBracketRounds([]);
     setAwardPicks({ goldenBoot: "", goldenGlove: "", goldenBall: "" });
     setKnockoutResetVersion((version) => version + 1);

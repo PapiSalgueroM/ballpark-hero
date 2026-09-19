@@ -51,8 +51,9 @@ import './dailyReload/mocks';
 import type { ReactElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, renderHook, waitFor } from '@testing-library/react';
-import { recordCompletion, resetMocks } from './dailyReload/mocks';
+import { recordCompletion, resetMocks, setTableFixture } from './dailyReload/mocks';
 import { button, click, findButton, mountPage, typeInto } from './dailyReload/harness';
+import stockDriver from './dailyReload/player-stock-market.driver';
 import { consumeRestoredFinish, markRestoredFinish } from '@/lib/restoredFinish';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 
@@ -82,6 +83,9 @@ import { useQuizBoard } from '@/hooks/useQuizBoard';
 import { useBallIq } from '@/hooks/useBallIq';
 import { useMysteryBox } from '@/hooks/useMysteryBox';
 import { useNFLCareer } from '@/hooks/useNFLCareer';
+import { useTransferPath } from '@/hooks/useTransferPath';
+import { useGradeTransfer } from '@/hooks/useGradeTransfer';
+import CareerLadder from '@/pages/CareerLadder';
 import NbaGrid from '@/pages/NbaGrid';
 import MlbGrid from '@/pages/MlbGrid';
 import HockeyGrid from '@/pages/HockeyGrid';
@@ -145,7 +149,19 @@ const F = vi.hoisted(() => {
       })))),
     byNormalizedName: new Map(),
   });
-  return { CHAMP_ROWS, FINALS_ROWS, CLUES, PACK_POOL, PUCK_POOL, EMPTY_GRID, CBB_GRID };
+  /* Career Ladder's pool arrives when the row says so (see its mount). */
+  const LADDER = { pending: [] as ((pool: unknown) => void)[] };
+  const LADDER_POOL = Array.from({ length: 12 }, (_, i) => ({
+    id: `p${String(i).padStart(2, '0')}`, name: `Ladder Player ${i}`, nationality: 'England', position: 'Midfielder',
+    seasons: Array.from({ length: 5 }, (_, s) => ({
+      season: `201${s}/1${s + 1}`, club: `Club ${i}-${s}`, goals: 1, assists: 1, appearances: 10, marketValue: (i + 1) * 1_000_000, sortOrder: s,
+    })),
+  }));
+  const GRADE_CASES = Array.from({ length: 8 }, (_, i) => ({
+    playerName: `Graded ${i}`, nationality: 'X', position: 'CM', fromClub: `From ${i}`, toClub: `To ${i}`,
+    moveYear: 2010 + i, valueAtMove: 10, valueAfter: 20, pctChange: 100, actualGrade: 'B',
+  }));
+  return { CHAMP_ROWS, FINALS_ROWS, CLUES, PACK_POOL, PUCK_POOL, EMPTY_GRID, CBB_GRID, LADDER, LADDER_POOL, GRADE_CASES };
 });
 
 vi.mock('@/lib/champOrNot', async (importOriginal) => ({
@@ -165,6 +181,15 @@ vi.mock('@/lib/fetchPackPool', async (importOriginal) => ({
   fetchPackPool: async () => F.PACK_POOL,
 }));
 vi.mock('@/lib/fetchCareerPlayers', () => ({ fetchCareerPlayers: () => Promise.resolve([]) }));
+vi.mock('@/lib/fetchTransferPathPuzzles', () => ({ fetchTransferPathPuzzles: () => Promise.resolve([]) }));
+vi.mock('@/lib/fetchTransferGrades', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/fetchTransferGrades')>()),
+  fetchTransferGrades: async () => F.GRADE_CASES,
+}));
+vi.mock('@/lib/careerLadder', async (importOriginal) => ({
+  ...(await importOriginal<typeof import('@/lib/careerLadder')>()),
+  fetchCareerPool: () => new Promise(resolve => { F.LADDER.pending.push(resolve); }),
+}));
 vi.mock('@/lib/puckDetective', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/lib/puckDetective')>()),
   fetchPuckDetectivePool: async () => F.PUCK_POOL,
@@ -255,7 +280,9 @@ const resultCard = (c: HTMLElement) => c.querySelector('[role="status"]');
 /* The table                                                                 */
 /* ------------------------------------------------------------------------ */
 
-type Shape = 'fight' | 'career' | 'slug' | 'toggle' | 'restore';
+/* 'extra' holds the games the audit did not name, found by the Round 643
+   sweep of every recorder call site. */
+type Shape = 'fight' | 'career' | 'slug' | 'toggle' | 'restore' | 'extra';
 
 interface Case {
   /** The slug the recorder records under; also the test's name. */
@@ -660,6 +687,90 @@ const CASES: Case[] = [
       await run(() => api.r.switchMode('daily'));
     },
   },
+
+  /* extra: found by the sweep, not named by the audit */
+  {
+    /* The daily is restored and marked at mount, but the page's phase waits
+       on the pool, and the mark lasts five seconds. The pool here lands with
+       the clock six seconds on, the case of a slow connection. */
+    id: 'career-ladder', shape: 'extra', usesMark: true,
+    async mount() {
+      const api = await mountEl(<CareerLadder />, '/career-ladder', c => !!findButton(c, UNLIMITED_TOGGLE));
+      await settle();
+      vi.setSystemTime(new Date(Date.now() + 6000));
+      try {
+        const pending = F.LADDER.pending.splice(0);
+        if (!pending.length) throw new Error('the page never asked for its pool');
+        await run(() => { for (const resolve of pending) resolve(F.LADDER_POOL); });
+        await waitFor(() => {
+          if (!findButton(api.container, /^Give up$/) && !resultCard(api.container)) throw new Error('the ladder has not dealt yet');
+        }, { timeout: 3000 });
+        await settle();
+      } finally {
+        vi.useRealTimers();
+      }
+      return api;
+    },
+    async finish(api) {
+      await click(button(api.container, /^Give up$/));
+      await click(button(api.container, /^Yes, reveal it$/));
+    },
+    finished: api => !!resultCard(api.container),
+    async toggle(api) {
+      await click(button(api.container, UNLIMITED_TOGGLE));
+      await settle();
+      await click(button(api.container, DAILY_TOGGLE));
+      await settle();
+    },
+  },
+  {
+    /* A give up was stored as still playing, so its reload carried no mark. */
+    id: 'transfer-path', shape: 'extra', usesMark: true,
+    mount: () => mountHook(useTransferPath, r => !r.isLoadingPool && !r.isLoading),
+    finish: async api => { await run(() => api.r.giveUp()); },
+    finished: api => api.r.mode === 'daily' && api.r.status === 'gaveup',
+  },
+  {
+    /* The Ball IQ shape: the place is restored at mount, the cases after. */
+    id: 'grade-transfer', shape: 'extra', usesMark: true,
+    mount: () => mountHook(useGradeTransfer, r => !r.loading && r.rounds.length > 0),
+    async finish(api) {
+      for (let i = 0; i < 20 && api.r.status !== 'finished'; i += 1) {
+        if (api.r.status === 'grading') await run(() => api.r.grade('A'));
+        else await run(() => api.r.next());
+      }
+    },
+    finished: api => api.r.status === 'finished',
+  },
+  {
+    /* Restored in the initializer, so a reload is quiet; the hole was the
+       menu. Unlimited clears the result first, and when its market fails to
+       open, Back then Daily reopened the day's result after mount with no
+       mark. The finish reuses the Round 458 daily driver and its fixtures. */
+    id: 'player-stock-market', shape: 'extra', usesMark: true,
+    async mount() {
+      const m = await stockDriver.mount();
+      return { unmount: m.unmount, r: null, container: m.container };
+    },
+    async finish(api) {
+      const m = { container: api.container, unmount: api.unmount };
+      await stockDriver.enterDaily(m);
+      await stockDriver.finish(m);
+    },
+    finished: api => !!resultCard(api.container),
+    async replay(api) {
+      await click(button(api.container, /^Open another season$/));
+      setTableFixture('player_market_tracked', []); // the unlimited market cannot open
+      await click(button(api.container, /^Surprise me$/));
+      await waitFor(() => { if (!findButton(api.container, /^Back$/) || !textOf(api.container).includes("Couldn't open")) throw new Error('the unlimited market has not failed yet'); });
+      const back = Array.from(api.container.querySelectorAll('button')).filter(b => textOf(b).trim() === 'Back').pop();
+      if (!back) throw new Error('no Back on the error screen');
+      await click(back);
+      await click(button(api.container, /^Today's market is closed/));
+      await settle();
+      expect(resultCard(api.container), 'the day\'s result reopens').not.toBeNull();
+    },
+  },
 ];
 
 /* ------------------------------------------------------------------------ */
@@ -686,7 +797,7 @@ describe('no double record', () => {
     const ids = CASES.map(c => c.id);
     expect(new Set(ids).size, 'every row has its own slug').toBe(ids.length);
     const count = (s: Shape) => CASES.filter(c => c.shape === s).length;
-    console.log(`NO_DOUBLE_TABLE ${JSON.stringify({ rows: CASES.length, fight: count('fight'), career: count('career'), slug: count('slug'), toggle: count('toggle'), restore: count('restore') })}`);
+    console.log(`NO_DOUBLE_TABLE ${JSON.stringify({ rows: CASES.length, fight: count('fight'), career: count('career'), slug: count('slug'), toggle: count('toggle'), restore: count('restore'), extra: count('extra') })}`);
     expect(count('slug'), 'all twelve slug pairs').toBe(12);
     expect(count('toggle'), 'all ten toggle pages').toBeGreaterThanOrEqual(10);
     expect(count('restore'), 'all six restore hooks and NFL Career Path').toBeGreaterThanOrEqual(7);

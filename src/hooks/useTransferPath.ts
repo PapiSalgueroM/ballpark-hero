@@ -141,7 +141,11 @@ export function useTransferPath(): TransferPathState {
     getPuzzleId: (p) => p.id,
     maxGuesses: 999,
     isWon: (actions) => actions.some(a => a.t === 'won'),
-    isLost: () => false,
+    /* Round 643: a give up ends the daily in the engine's own terms too. It
+       was stored as still playing, so the reload restored it with no mark,
+       the page derived "gave up" after mount, and the completion hook
+       recorded the surrender again on every visit. */
+    isLost: (actions) => actions.some(a => a.t === 'give'),
     deserializeGuesses: (raw) => raw as TransferAction[],
   });
 
