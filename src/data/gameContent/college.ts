@@ -8,31 +8,130 @@ export const COLLEGE_CONTENT: GameContentMap = {
       "It is built on nearly 40,000 college careers across 407 programs, and every crossing on the board has at least ten real answers behind it, so no cell is a dead end. That floor is checked against the live data rather than assumed.",
       "One grid a day, the same for everyone, nine guesses. A fresh board arrives at midnight Eastern, and unlimited mode deals a new one whenever you want another.",
     ],
-    howToPlay: [
-      "Tap an empty cell. The game names both requirements, like Kentucky plus 1,500+ Career Points.",
-      "Type a player name. Suggestions appear after a couple of letters, drawn from the same career database the answers are checked against.",
-      "Correct picks lock the cell green. Wrong picks flash red and cost a guess.",
-      "Each player can only be used once on the board, so a name that fits two cells has to be spent on one.",
-      "Fill all nine cells or run out of guesses, then share your emoji grid.",
+    headings: {
+      howToPlay: "How to play College Basketball Grid, a free daily hoops puzzle",
+      rules: "College Basketball Grid rules for rows, columns and guesses",
+      example: "College Basketball Grid walkthrough: Calbert Cheaney fills Indiana",
+      tips: "College Basketball Grid tips for scanning columns and guesses",
+      faq: "College Basketball Grid FAQ: schools, achievements and daily resets",
+    },
+    howToPlaySections: [
+      {
+        heading: "Tapping a cell to see its requirements",
+        items: [
+          "Tap an empty cell. The game names both requirements, like Kentucky plus 1,500+ Career Points.",
+        ],
+      },
+      {
+        heading: "Typing a name from the suggestion list",
+        items: [
+          "Type a player name. Suggestions appear after a couple of letters, drawn from the same career database the answers are checked against.",
+        ],
+      },
+      {
+        heading: "What a correct or wrong pick does",
+        items: [
+          "Correct picks lock the cell green. Wrong picks flash red and cost a guess.",
+        ],
+      },
+      {
+        heading: "Spending each player once on the board",
+        items: [
+          "Each player can only be used once on the board, so a name that fits two cells has to be spent on one.",
+        ],
+      },
+      {
+        heading: "Filling all nine cells before guesses run out",
+        items: [
+          "Fill all nine cells or run out of guesses, then share your emoji grid.",
+        ],
+      },
     ],
-    rules: [
-      "Nine guesses to fill nine cells. A wrong guess costs a guess and leaves the cell empty.",
-      "A cell only accepts a player who satisfies its row and its column at the same time.",
-      "Rows are always schools. Columns are always achievements, never a second school.",
-      "Every name can be used once per board.",
-      "Daily is the same grid for everybody and saves your progress. Unlimited generates a new grid on demand.",
+    ruleSections: [
+      {
+        heading: "Nine guesses to fill the nine cells",
+        items: [
+          "Nine guesses to fill nine cells. A wrong guess costs a guess and leaves the cell empty.",
+        ],
+      },
+      {
+        heading: "Matching both the row and the column",
+        items: [
+          "A cell only accepts a player who satisfies its row and its column at the same time.",
+        ],
+      },
+      {
+        heading: "Rows are schools and columns are achievements",
+        items: [
+          "Rows are always schools. Columns are always achievements, never a second school.",
+        ],
+      },
+      {
+        heading: "Using each name once per board",
+        items: [
+          "Every name can be used once per board.",
+        ],
+      },
+      {
+        heading: "The shared daily grid and unlimited mode",
+        items: [
+          "Daily is the same grid for everybody and saves your progress. Unlimited generates a new grid on demand.",
+        ],
+      },
     ],
-    example: [
-      "Say the rows are Indiana, Kentucky and Kansas, and the columns are 1,500+ Career Points, 700+ Career Rebounds and Played in the 1990s. You open on Indiana plus 1,500+ Career Points and type Calbert Cheaney, who scored 2,613 for the Hoosiers between 1989 and 1993. Green.",
-      "Cheaney also grabbed 710 rebounds, so he would have fitted the middle column too, but each name is spent once, so you have to choose. That is the whole tension of the board: your best answer usually solves more than one cell.",
-      "The 1990s column is the friendliest on the grid, because it takes anyone whose career touched the decade at all. Save the tight crossings, like a rebounding total at a guard heavy program, for while you still have guesses in hand.",
+    exampleSections: [
+      {
+        heading: "Calbert Cheaney opens Indiana and 1500 points",
+        paragraphs: [
+          "Say the rows are Indiana, Kentucky and Kansas, and the columns are 1,500+ Career Points, 700+ Career Rebounds and Played in the 1990s. You open on Indiana plus 1,500+ Career Points and type Calbert Cheaney, who scored 2,613 for the Hoosiers between 1989 and 1993. Green.",
+        ],
+      },
+      {
+        heading: "Choosing between two cells Cheaney could fill",
+        paragraphs: [
+          "Cheaney also grabbed 710 rebounds, so he would have fitted the middle column too, but each name is spent once, so you have to choose. That is the whole tension of the board: your best answer usually solves more than one cell.",
+        ],
+      },
+      {
+        heading: "Saving the tightest crossings for last",
+        paragraphs: [
+          "The 1990s column is the friendliest on the grid, because it takes anyone whose career touched the decade at all. Save the tight crossings, like a rebounding total at a guard heavy program, for while you still have guesses in hand.",
+        ],
+      },
     ],
-    tips: [
-      "Start with the column that fits the most people. Games played and the era columns are far wider than the scoring and rebounding ones.",
-      "Big men solve rebound cells and guards solve assist cells. Match the archetype to the column before you reach for a famous name.",
-      "A four year player beats a one and done here. The columns are career totals, so somebody who stayed will clear them and a freshman phenomenon usually will not.",
-      "If a name fits two cells, spend it on the harder one. The easy cell will have another answer.",
-      "Nine guesses for nine cells means there is no budget for guessing. Fill what you know first.",
+    tipSections: [
+      {
+        heading: "Starting with the widest open column",
+        items: [
+          "Start with the column that fits the most people. Games played and the era columns are far wider than the scoring and rebounding ones.",
+        ],
+      },
+      {
+        heading: "Matching player archetype to the column",
+        items: [
+          "Big men solve rebound cells and guards solve assist cells. Match the archetype to the column before you reach for a famous name.",
+        ],
+        subsections: [
+          {
+            heading: "Why four year players beat one and dones",
+            items: [
+              "A four year player beats a one and done here. The columns are career totals, so somebody who stayed will clear them and a freshman phenomenon usually will not.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Spending a shared name on the harder cell",
+        items: [
+          "If a name fits two cells, spend it on the harder one. The easy cell will have another answer.",
+        ],
+      },
+      {
+        heading: "Filling in what you already know first",
+        items: [
+          "Nine guesses for nine cells means there is no budget for guessing. Fill what you know first.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -63,34 +162,140 @@ export const COLLEGE_CONTENT: GameContentMap = {
       "If you came looking for a college football grid, this is that idea built on where players went to school. Every answer is checked against our own records: NFL draft picks back to 1936, NFL careers from 1970 on, and every Heisman winner since 1935. The columns run from Quarterback and Defensive Back to Heisman Winner, First Round Pick and Top 5 Pick.",
       "One grid a day, the same for everyone, 15 guesses, and a rarity score for style points. A fresh college football grid game lands every day at midnight Eastern.",
     ],
-    howToPlay: [
-      "Tap an empty cell. The game spells out both requirements, like Alabama plus Heisman Winner.",
-      "Start typing a name and pick him from the list. The list only offers players in our records, and when two players share a name it adds his school or his years so you get the right guy.",
-      "A pick that fits locks in green with a rarity percentage. A pick the records say doesn't fit flashes red and costs a guess.",
-      "If the records can't settle it either way, nothing is charged. You see what they do have on him, and you can try someone else.",
-      "Fill all 9 cells or run out of guesses, then share your Rarity Score and emoji grid.",
-      "Come back tomorrow. A new grid arrives at midnight Eastern.",
+    headings: {
+      howToPlay: "How to play College Grid, a free daily football guessing game",
+      rules: "College Grid rules for positions, Heisman and draft picks",
+      example: "College Grid walkthrough: Derrick Henry solves Alabama",
+      tips: "College Grid tips for rarity scores and thin columns",
+      faq: "College Grid FAQ: guesses, rarity and repeat players",
+    },
+    howToPlaySections: [
+      {
+        heading: "Tapping a cell for its two requirements",
+        items: [
+          "Tap an empty cell. The game spells out both requirements, like Alabama plus Heisman Winner.",
+        ],
+      },
+      {
+        heading: "Picking a name from the record backed list",
+        items: [
+          "Start typing a name and pick him from the list. The list only offers players in our records, and when two players share a name it adds his school or his years so you get the right guy.",
+        ],
+      },
+      {
+        heading: "What a green or red pick means",
+        items: [
+          "A pick that fits locks in green with a rarity percentage. A pick the records say doesn't fit flashes red and costs a guess.",
+        ],
+      },
+      {
+        heading: "When the records cannot settle a pick",
+        items: [
+          "If the records can't settle it either way, nothing is charged. You see what they do have on him, and you can try someone else.",
+        ],
+      },
+      {
+        heading: "Filling all nine cells for a Rarity Score",
+        items: [
+          "Fill all 9 cells or run out of guesses, then share your Rarity Score and emoji grid.",
+        ],
+        subsections: [
+          {
+            heading: "A new grid every midnight Eastern",
+            items: [
+              "Come back tomorrow. A new grid arrives at midnight Eastern.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "You get 15 guesses to fill 9 cells, and correct answers use a guess too.",
-      "A cell only takes a player who matches its row and its column at the same time.",
-      "A guess costs a turn only when the records say no. If they can't tell, it's free.",
-      "Each player goes on the board once. Pick someone who's already on your grid and you just get a reminder.",
-      "Rows are schools. Columns are one of eight positions (Quarterback, Running Back, Wide Receiver, Tight End, Offensive Lineman, Defensive Lineman, Linebacker, Defensive Back), Heisman Winner, or a draft column: First Round Pick, Top 10 Pick or Top 5 Pick.",
-      "Draft columns go by overall pick number. A player drafted twice counts his best pick, and First Round Pick means that pick came inside that year's first round.",
-      "Each correct answer shows a rarity percentage, the share of players who used the same name there. Your Rarity Score averages your correct cells, and lower is better.",
+    ruleSections: [
+      {
+        heading: "Fifteen guesses to fill nine cells",
+        items: [
+          "You get 15 guesses to fill 9 cells, and correct answers use a guess too.",
+        ],
+      },
+      {
+        heading: "Matching the row and the column at once",
+        items: [
+          "A cell only takes a player who matches its row and its column at the same time.",
+        ],
+      },
+      {
+        heading: "When a guess costs you nothing",
+        items: [
+          "A guess costs a turn only when the records say no. If they can't tell, it's free.",
+        ],
+      },
+      {
+        heading: "Spending each player once per grid",
+        items: [
+          "Each player goes on the board once. Pick someone who's already on your grid and you just get a reminder.",
+        ],
+      },
+      {
+        heading: "Rows for schools and columns for positions",
+        items: [
+          "Rows are schools. Columns are one of eight positions (Quarterback, Running Back, Wide Receiver, Tight End, Offensive Lineman, Defensive Lineman, Linebacker, Defensive Back), Heisman Winner, or a draft column: First Round Pick, Top 10 Pick or Top 5 Pick.",
+          "Draft columns go by overall pick number. A player drafted twice counts his best pick, and First Round Pick means that pick came inside that year's first round.",
+        ],
+        subsections: [
+          {
+            heading: "Rarity scores from how common your pick was",
+            items: [
+              "Each correct answer shows a rarity percentage, the share of players who used the same name there. Your Rarity Score averages your correct cells, and lower is better.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Say the rows are Alabama, Ohio State and LSU, and the columns are Quarterback, Heisman Winner and First Round Pick. You open with Alabama plus Heisman Winner and type Derrick Henry, who won it in 2015. Green, with a rarity percentage next to his name.",
-      "Ohio State plus First Round Pick has plenty of answers, so you bank Chase Young. For LSU plus Quarterback you skip Joe Burrow, since everybody types him, and go with JaMarcus Russell, the first overall pick in 2007. Burrow still has a job, though: our records have him at Ohio State too, so he fills Ohio State plus Quarterback.",
-      "Alabama plus Quarterback goes to Jalen Hurts, who the records have at Alabama as well as Oklahoma. Two picks come back red along the way because the records say they don't fit, and those cost a guess each. You close the rest with names you're sure of and finish 9 for 9 with guesses to spare.",
+    exampleSections: [
+      {
+        heading: "Derrick Henry opens Alabama and Heisman Winner",
+        paragraphs: [
+          "Say the rows are Alabama, Ohio State and LSU, and the columns are Quarterback, Heisman Winner and First Round Pick. You open with Alabama plus Heisman Winner and type Derrick Henry, who won it in 2015. Green, with a rarity percentage next to his name.",
+        ],
+      },
+      {
+        heading: "Banking Chase Young and saving Joe Burrow for Ohio State",
+        paragraphs: [
+          "Ohio State plus First Round Pick has plenty of answers, so you bank Chase Young. For LSU plus Quarterback you skip Joe Burrow, since everybody types him, and go with JaMarcus Russell, the first overall pick in 2007. Burrow still has a job, though: our records have him at Ohio State too, so he fills Ohio State plus Quarterback.",
+        ],
+      },
+      {
+        heading: "Jalen Hurts closes out a nine for nine board",
+        paragraphs: [
+          "Alabama plus Quarterback goes to Jalen Hurts, who the records have at Alabama as well as Oklahoma. Two picks come back red along the way because the records say they don't fit, and those cost a guess each. You close the rest with names you're sure of and finish 9 for 9 with guesses to spare.",
+        ],
+      },
     ],
-    tips: [
-      "Fight the first instinct. The obvious name is the one everyone types, and rarity rewards the road less traveled.",
-      "Heisman Winner is the tightest column on the board. There's one winner a year, so even the big programs only have a handful.",
-      "First Round Pick is usually the roomiest draft column. Top 10 Pick and Top 5 Pick get thin fast.",
-      "Players who changed schools count for every school our records have them at, which can open up a thin cell.",
-      "Each player goes on the board once, so if a name fits two cells, spend him on the harder one.",
+    tipSections: [
+      {
+        heading: "Fighting the obvious first instinct",
+        items: [
+          "Fight the first instinct. The obvious name is the one everyone types, and rarity rewards the road less traveled.",
+        ],
+      },
+      {
+        heading: "Heisman Winner as the tightest column",
+        items: [
+          "Heisman Winner is the tightest column on the board. There's one winner a year, so even the big programs only have a handful.",
+        ],
+      },
+      {
+        heading: "Where First Round Pick beats the deeper rounds",
+        items: [
+          "First Round Pick is usually the roomiest draft column. Top 10 Pick and Top 5 Pick get thin fast.",
+        ],
+      },
+      {
+        heading: "Transfers and spending a name on the harder cell",
+        items: [
+          "Players who changed schools count for every school our records have them at, which can open up a thin cell.",
+          "Each player goes on the board once, so if a name fits two cells, spend him on the harder one.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -125,27 +330,106 @@ export const COLLEGE_CONTENT: GameContentMap = {
       "Somewhere in Division 1 there is one school the game has in mind, and your job is to name it before the clues run out. You start with a single vibe word and end, if it goes badly, at the school colors.",
       "Guess early and look like a savant, or ride to clue 11 and scrape out 100 points.",
     ],
-    howToPlay: [
-      "Read clue 1, a one word vibe for the mystery school.",
-      "Type a guess anytime. The school name, a nickname, or the mascot all count.",
-      "A wrong guess or a Skip reveals the next clue. There are 11 in all, then the answer.",
-      "Points drop as clues stack: 1200 on clue 1, 1000 on clue 2, then 100 less per clue down to 100.",
-      "Pick Daily, Unlimited with a streak counter, or Conference mode, and set Easy (Power 4) or Hard (all of Division 1).",
+    headings: {
+      howToPlay: "How to play Guess The College, a free daily college trivia game",
+      rules: "Guess The College rules: clues, points and skips",
+      example: "Guess The College walkthrough: an SEC clue leads to LSU",
+      tips: "Guess The College tips for reading clues and saving points",
+      faq: "Guess The College FAQ: modes, difficulty and daily resets",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the first vibe word clue",
+        items: [
+          "Read clue 1, a one word vibe for the mystery school.",
+        ],
+      },
+      {
+        heading: "Typing a guess at any time",
+        items: [
+          "Type a guess anytime. The school name, a nickname, or the mascot all count.",
+        ],
+      },
+      {
+        heading: "Where a miss or a skip leads next",
+        items: [
+          "A wrong guess or a Skip reveals the next clue. There are 11 in all, then the answer.",
+        ],
+        subsections: [
+          {
+            heading: "How points drop as the clues stack",
+            items: [
+              "Points drop as clues stack: 1200 on clue 1, 1000 on clue 2, then 100 less per clue down to 100.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Choosing a mode and a difficulty",
+        items: [
+          "Pick Daily, Unlimited with a streak counter, or Conference mode, and set Easy (Power 4) or Hard (all of Division 1).",
+        ],
+      },
     ],
-    rules: [
-      "The 11 clues follow a fixed order, from vibe and region through conference and sports history to the school colors.",
-      "A wrong guess costs the same as a skip, one clue. A wrong guess on clue 11 ends the run.",
-      "The daily school comes from the Power 4 pool and flips at midnight Eastern.",
-      "Unlimited streaks earn badges at 3, 5, and 10 straight.",
+    ruleSections: [
+      {
+        heading: "The fixed order of all eleven clues",
+        items: [
+          "The 11 clues follow a fixed order, from vibe and region through conference and sports history to the school colors.",
+        ],
+      },
+      {
+        heading: "A wrong guess costs the same as a skip",
+        items: [
+          "A wrong guess costs the same as a skip, one clue. A wrong guess on clue 11 ends the run.",
+        ],
+      },
+      {
+        heading: "The daily school and its midnight flip",
+        items: [
+          "The daily school comes from the Power 4 pool and flips at midnight Eastern.",
+        ],
+      },
+      {
+        heading: "Earning streak badges in unlimited mode",
+        items: [
+          "Unlimited streaks earn badges at 3, 5, and 10 straight.",
+        ],
+      },
     ],
-    example: [
-      "You skip the early clues. Clue 5 says SEC, so you swing on Georgia. Red. Clue 6 is basketball history, skip. Then clue 7 counts four poll era football titles and talks up the 2019 team and it clicks: LSU.",
-      "The card flips: 500 points for solving on clue 7, plus a fun fact about the school. Not the hero guess, but a clean save.",
+    exampleSections: [
+      {
+        heading: "Working through the SEC clue to LSU",
+        paragraphs: [
+          "You skip the early clues. Clue 5 says SEC, so you swing on Georgia. Red. Clue 6 is basketball history, skip. Then clue 7 counts four poll era football titles and talks up the 2019 team and it clicks: LSU.",
+        ],
+      },
+      {
+        heading: "Five hundred points for a clean save",
+        paragraphs: [
+          "The card flips: 500 points for solving on clue 7, plus a fun fact about the school. Not the hero guess, but a clean save.",
+        ],
+      },
     ],
-    tips: [
-      "Never skip when you have a hunch. A guess costs the same clue and might just be right.",
-      "Clue 5, the conference, is the pivot. Run the whole league in your head before the points drop again.",
-      "Still alive at clue 11? Colors settle it. Crimson and cream is not scarlet and gray.",
+    tipSections: [
+      {
+        heading: "Guessing on a hunch instead of skipping",
+        items: [
+          "Never skip when you have a hunch. A guess costs the same clue and might just be right.",
+        ],
+      },
+      {
+        heading: "The conference clue as the pivot point",
+        items: [
+          "Clue 5, the conference, is the pivot. Run the whole league in your head before the points drop again.",
+        ],
+      },
+      {
+        heading: "Letting school colors settle it at the end",
+        items: [
+          "Still alive at clue 11? Colors settle it. Crimson and cream is not scarlet and gray.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -168,27 +452,106 @@ export const COLLEGE_CONTENT: GameContentMap = {
       "One college basketball program is hiding behind six locked clues, and the points shrink with every clue you need. Solve it off the vibe word for 1000, or limp home at the mascot clue for 100.",
       "The pool spans blue bloods like Duke, Kentucky, and Kansas and mid-major regulars like Gonzaga, so do not assume a power conference. Play the shared daily or keep pulling programs in unlimited.",
     ],
-    howToPlay: [
-      "Start with clue 1, a single vibe word for the program.",
-      "Type a guess. Autocomplete pulls from the full program list, and common short names count.",
-      "Every wrong guess unlocks the next clue: region and state, conference, tournament history, championships, then the mascot.",
-      "Guess sooner for more points, from 1000 on clue 1 down to 100 on clue 6.",
-      "Pick Daily Challenge for the shared puzzle or Unlimited for a random program every time.",
+    headings: {
+      howToPlay: "How to play Guess The CBB Program, a free daily basketball trivia game",
+      rules: "Guess The CBB Program rules for clues and points",
+      example: "Guess The CBB Program walkthrough: three guesses to Kansas",
+      tips: "Guess The CBB Program tips for clues and guessing fast",
+      faq: "Guess The CBB Program FAQ: guesses, scoring and daily play",
+    },
+    howToPlaySections: [
+      {
+        heading: "Starting with a single vibe word clue",
+        items: [
+          "Start with clue 1, a single vibe word for the program.",
+        ],
+      },
+      {
+        heading: "Typing a guess with autocomplete help",
+        items: [
+          "Type a guess. Autocomplete pulls from the full program list, and common short names count.",
+        ],
+      },
+      {
+        heading: "What each wrong guess unlocks next",
+        items: [
+          "Every wrong guess unlocks the next clue: region and state, conference, tournament history, championships, then the mascot.",
+        ],
+        subsections: [
+          {
+            heading: "Why guessing sooner pays more points",
+            items: [
+              "Guess sooner for more points, from 1000 on clue 1 down to 100 on clue 6.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Choosing Daily Challenge or Unlimited",
+        items: [
+          "Pick Daily Challenge for the shared puzzle or Unlimited for a random program every time.",
+        ],
+      },
     ],
-    rules: [
-      "There are 6 clues, worth 1000, 800, 600, 400, 200, and 100 points in order.",
-      "Each wrong guess reveals the next clue, so you get at most 6 guesses. A wrong answer on clue 6 ends the game.",
-      "Give Up shows the answer and scores zero.",
-      "A new daily puzzle arrives every day, the same for everyone.",
+    ruleSections: [
+      {
+        heading: "Six clues worth six different point totals",
+        items: [
+          "There are 6 clues, worth 1000, 800, 600, 400, 200, and 100 points in order.",
+        ],
+      },
+      {
+        heading: "At most six guesses before the game ends",
+        items: [
+          "Each wrong guess reveals the next clue, so you get at most 6 guesses. A wrong answer on clue 6 ends the game.",
+        ],
+      },
+      {
+        heading: "What Give Up does to your score",
+        items: [
+          "Give Up shows the answer and scores zero.",
+        ],
+      },
+      {
+        heading: "The same daily puzzle for everyone",
+        items: [
+          "A new daily puzzle arrives every day, the same for everyone.",
+        ],
+      },
     ],
-    example: [
-      "Clue 1 hands you a vibe word that could mean anything, so you fire a guess to open the region clue. It points to the plains. Kansas State feels right. Wrong, and clue 3 says Big 12. Baylor. Wrong again, so you spend one more miss on Texas Tech.",
-      "That unlocks clue 5, championships, and it mentions four national titles. There is the fingerprint: Kansas. Correct on clue 5 banks 200 points, and the mascot clue never gets used.",
+    exampleSections: [
+      {
+        heading: "Burning three guesses on the plains",
+        paragraphs: [
+          "Clue 1 hands you a vibe word that could mean anything, so you fire a guess to open the region clue. It points to the plains. Kansas State feels right. Wrong, and clue 3 says Big 12. Baylor. Wrong again, so you spend one more miss on Texas Tech.",
+        ],
+      },
+      {
+        heading: "Four national titles point to Kansas",
+        paragraphs: [
+          "That unlocks clue 5, championships, and it mentions four national titles. There is the fingerprint: Kansas. Correct on clue 5 banks 200 points, and the mascot clue never gets used.",
+        ],
+      },
     ],
-    tips: [
-      "There is no skip button. A wrong guess is the only key to the next clue, so make every guess a real one.",
-      "Championship counts are fingerprints. Few programs share the same number of banners.",
-      "When the conference clue lands, recite that league's heavyweights before you type.",
+    tipSections: [
+      {
+        heading: "No skip button, so every guess must count",
+        items: [
+          "There is no skip button. A wrong guess is the only key to the next clue, so make every guess a real one.",
+        ],
+      },
+      {
+        heading: "Championship counts as a fingerprint clue",
+        items: [
+          "Championship counts are fingerprints. Few programs share the same number of banners.",
+        ],
+      },
+      {
+        heading: "Reciting a league's heavyweights at the conference clue",
+        items: [
+          "When the conference clue lands, recite that league's heavyweights before you type.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -211,28 +574,112 @@ export const COLLEGE_CONTENT: GameContentMap = {
       "Two quarterbacks, one question: who threw for more career passing yards in college? Not the NFL, college. That flip is the whole game, because the record books belong to four-year starters in pass-happy systems, not the legends you watched on Sundays.",
       "Tom Brady left Michigan with 4,773 yards. Case Keenum left Houston with 19,217, the record. Every pair is a little logic puzzle about eras, offenses, and who actually held the job.",
     ],
-    howToPlay: [
-      "Look at the two quarterbacks, their schools, and the years they played.",
-      "Tap the one you think threw for more career college passing yards.",
-      "Both totals flash for a couple of seconds, then the next pair loads.",
-      "Play all 10 rounds and protect your streak for bonus points.",
-      "Daily gives everyone the same 10 pairs. Unlimited deals random pairs; its Hard toggle picks close-gap pairs.",
+    headings: {
+      howToPlay: "How to play CFB Higher or Lower, a free college football trivia game",
+      rules: "CFB Higher or Lower rules for rounds, streaks and ties",
+      example: "CFB Higher or Lower walkthrough: Case Keenum tops Tom Brady",
+      tips: "CFB Higher or Lower tips for spotting the real passing leader",
+      faq: "CFB Higher or Lower FAQ: streaks, ties and daily pairs",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading each quarterback pair",
+        items: [
+          "Look at the two quarterbacks, their schools, and the years they played.",
+        ],
+      },
+      {
+        heading: "Tapping the higher passing total",
+        items: [
+          "Tap the one you think threw for more career college passing yards.",
+        ],
+      },
+      {
+        heading: "Seeing both totals before the next pair",
+        items: [
+          "Both totals flash for a couple of seconds, then the next pair loads.",
+        ],
+        subsections: [
+          {
+            heading: "Protecting a streak across ten rounds",
+            items: [
+              "Play all 10 rounds and protect your streak for bonus points.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Daily pairs versus Unlimited and Hard mode",
+        items: [
+          "Daily gives everyone the same 10 pairs. Unlimited deals random pairs; its Hard toggle picks close-gap pairs.",
+        ],
+      },
     ],
-    rules: [
-      "10 rounds, 10 points per correct answer.",
-      "Streaks pay a growing bonus: the second straight correct adds 5 extra, the third 10, the fourth 15, and so on. A miss resets the ladder.",
-      "A perfect 10 for 10 scores 325, the max.",
-      "Ties count as correct no matter which side you pick.",
-      "The daily set flips at midnight Eastern. Hard mode lives in Unlimited only.",
+    ruleSections: [
+      {
+        heading: "Ten points for every correct round",
+        items: [
+          "10 rounds, 10 points per correct answer.",
+        ],
+      },
+      {
+        heading: "How the streak bonus keeps growing",
+        items: [
+          "Streaks pay a growing bonus: the second straight correct adds 5 extra, the third 10, the fourth 15, and so on. A miss resets the ladder.",
+        ],
+      },
+      {
+        heading: "A perfect run scores the max",
+        items: [
+          "A perfect 10 for 10 scores 325, the max.",
+        ],
+      },
+      {
+        heading: "Ties always count as correct",
+        items: [
+          "Ties count as correct no matter which side you pick.",
+        ],
+      },
+      {
+        heading: "The daily set and where Hard mode lives",
+        items: [
+          "The daily set flips at midnight Eastern. Hard mode lives in Unlimited only.",
+        ],
+      },
     ],
-    example: [
-      "Round 1 pairs Tom Brady with Case Keenum and you refuse the bait: 19,217 buries 4,773. The next three land too, worth 15, 20, and 25 as the streak grows.",
-      "Round 5 is two system guys you cannot separate, and the coin flip misses. Ladder reset. You grind out four of the last five and finish 8 of 10 for 140 points.",
+    exampleSections: [
+      {
+        heading: "Refusing the Tom Brady bait for Case Keenum",
+        paragraphs: [
+          "Round 1 pairs Tom Brady with Case Keenum and you refuse the bait: 19,217 buries 4,773. The next three land too, worth 15, 20, and 25 as the streak grows.",
+        ],
+      },
+      {
+        heading: "A coin flip miss resets the ladder",
+        paragraphs: [
+          "Round 5 is two system guys you cannot separate, and the coin flip misses. Ladder reset. You grind out four of the last five and finish 8 of 10 for 140 points.",
+        ],
+      },
     ],
-    tips: [
-      "Length of career beats fame. A four-year starter in an air raid out-throws a two-year phenom nearly every time.",
-      "Check the years. Passing totals ballooned through the 2000s and 2010s, so an older great can trail a modern system guy.",
-      "NFL resumes are traps. Plenty of famous pros sat early, split snaps, or ran the ball in college.",
+    tipSections: [
+      {
+        heading: "Career length beats fame every time",
+        items: [
+          "Length of career beats fame. A four-year starter in an air raid out-throws a two-year phenom nearly every time.",
+        ],
+      },
+      {
+        heading: "Checking the years before you tap",
+        items: [
+          "Check the years. Passing totals ballooned through the 2000s and 2010s, so an older great can trail a modern system guy.",
+        ],
+      },
+      {
+        heading: "Why NFL fame is a trap here",
+        items: [
+          "NFL resumes are traps. Plenty of famous pros sat early, split snaps, or ran the ball in college.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -255,27 +702,106 @@ export const COLLEGE_CONTENT: GameContentMap = {
       "CFB Dynasty hands you a real college football program and an open-ended job: win now, recruit forever, stack championships. The 44 schools are real. The players are not: every athlete is a generated recruit with a class year, so rosters age and churn.",
       "Each season runs into conference championships and the 12-team Playoff, then an NIL and portal offseason before you run it back.",
     ],
-    howToPlay: [
-      "Pick a program. Its prestige rating drives your talent pipeline and NIL budget.",
-      "Play one week at a time: 12 games, weeks 1 to 4 out of conference, the rest in it.",
-      "Finish top two in your conference to reach its title game; win it for an automatic Playoff bid.",
-      "Survive the 12-team bracket, single elimination from the first round to the national championship.",
-      "Spend NIL points across an 18-player high school board and an 8-player portal, then start the next season.",
+    headings: {
+      howToPlay: "How to play CFB Dynasty, a free college football GM sim",
+      rules: "CFB Dynasty rules for the Playoff, NIL and recruiting",
+      example: "CFB Dynasty walkthrough: Boise State chases a title run",
+      tips: "CFB Dynasty tips for the portal and the recruiting board",
+      faq: "CFB Dynasty FAQ: saves, real players and Group of Five teams",
+    },
+    howToPlaySections: [
+      {
+        heading: "Picking a program by its prestige rating",
+        items: [
+          "Pick a program. Its prestige rating drives your talent pipeline and NIL budget.",
+        ],
+      },
+      {
+        heading: "Playing one week of the season at a time",
+        items: [
+          "Play one week at a time: 12 games, weeks 1 to 4 out of conference, the rest in it.",
+        ],
+      },
+      {
+        heading: "Reaching the conference title game",
+        items: [
+          "Finish top two in your conference to reach its title game; win it for an automatic Playoff bid.",
+        ],
+        subsections: [
+          {
+            heading: "Surviving the twelve team Playoff bracket",
+            items: [
+              "Survive the 12-team bracket, single elimination from the first round to the national championship.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Spending NIL points on recruits and the portal",
+        items: [
+          "Spend NIL points across an 18-player high school board and an 8-player portal, then start the next season.",
+        ],
+      },
     ],
-    rules: [
-      "The Playoff field is 12: the 5 conference champions plus 7 at-larges, seeded by ranking, byes for the top four.",
-      "High school grades carry scouting error of up to 4 points either way. Portal transfers show true ratings and arrive as sophomores.",
-      "NIL resets each offseason from prestige plus wins, and every signing spends against it.",
-      "Seniors graduate and juniors rated 88 or higher often declare early.",
+    ruleSections: [
+      {
+        heading: "Twelve teams make the Playoff field",
+        items: [
+          "The Playoff field is 12: the 5 conference champions plus 7 at-larges, seeded by ranking, byes for the top four.",
+        ],
+      },
+      {
+        heading: "Scouting error on high school grades",
+        items: [
+          "High school grades carry scouting error of up to 4 points either way. Portal transfers show true ratings and arrive as sophomores.",
+        ],
+      },
+      {
+        heading: "How the NIL budget resets each offseason",
+        items: [
+          "NIL resets each offseason from prestige plus wins, and every signing spends against it.",
+        ],
+      },
+      {
+        heading: "Seniors graduating and juniors declaring early",
+        items: [
+          "Seniors graduate and juniors rated 88 or higher often declare early.",
+        ],
+      },
     ],
-    example: [
-      "You take Boise State, prestige 78. One September loss, then you run the league, finish 11-1, and win the conference title game for the automatic bid.",
-      "You win a first-round game, stun a bye team in the quarterfinals, and lose the semifinal. Then your 89-rated junior quarterback declares, so you sign a portal passer rated exactly 81 and roll the dice on a 5-star scouted at 83 who might really be a 79. Or an 87.",
+    exampleSections: [
+      {
+        heading: "Boise State runs the table for an automatic bid",
+        paragraphs: [
+          "You take Boise State, prestige 78. One September loss, then you run the league, finish 11-1, and win the conference title game for the automatic bid.",
+        ],
+      },
+      {
+        heading: "A junior quarterback declares after the semifinal",
+        paragraphs: [
+          "You win a first-round game, stun a bye team in the quarterfinals, and lose the semifinal. Then your 89-rated junior quarterback declares, so you sign a portal passer rated exactly 81 and roll the dice on a 5-star scouted at 83 who might really be a 79. Or an 87.",
+        ],
+      },
     ],
-    tips: [
-      "Shop the portal for needs, the high school board for ceilings. Transfers are exactly as rated; freshmen develop longest.",
-      "Never enter a season without a real quarterback; the sim weighs your starter heavily.",
-      "Recruit to the holes. The offseason notes list who graduated and who declared.",
+    tipSections: [
+      {
+        heading: "Portal needs versus high school ceilings",
+        items: [
+          "Shop the portal for needs, the high school board for ceilings. Transfers are exactly as rated; freshmen develop longest.",
+        ],
+      },
+      {
+        heading: "Never starting a season without a real quarterback",
+        items: [
+          "Never enter a season without a real quarterback; the sim weighs your starter heavily.",
+        ],
+      },
+      {
+        heading: "Recruiting to the holes the offseason notes list",
+        items: [
+          "Recruit to the holes. The offseason notes list who graduated and who declared.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -298,27 +824,106 @@ export const COLLEGE_CONTENT: GameContentMap = {
       "CBB Dynasty is the college hoops program sim: 40 real schools, six leagues, fictional players, and a season built to set up March. You can have the best roster in the country and still lose everything in one bad night.",
       "Six leagues cover the sport, from the ACC and Big East to a Mid-Major group built for Cinderella runs. The one-and-done era means your best freshman is probably a rental.",
     ],
-    howToPlay: [
-      "Pick one of 40 programs. Prestige sets your pipeline and NIL power.",
-      "Play 10 rounds of two games each, one league matchup and one cross-country test.",
-      "Finish top four in your league for the conference tournament; win it and you dance automatically.",
-      "Survive March: 32 teams, single elimination, five rounds from the Round of 32 to the title game.",
-      "Recruit each spring from a 14-player high school board and a 7-player portal, then run it back.",
+    headings: {
+      howToPlay: "How to play CBB Dynasty, a free college basketball GM sim",
+      rules: "CBB Dynasty rules for March, seeding and early departures",
+      example: "CBB Dynasty walkthrough: a thirteen seed crashes the Final Four",
+      tips: "CBB Dynasty tips for recruiting and mid major runs",
+      faq: "CBB Dynasty FAQ: real players, Cinderella runs and March",
+    },
+    howToPlaySections: [
+      {
+        heading: "Picking one of forty real programs",
+        items: [
+          "Pick one of 40 programs. Prestige sets your pipeline and NIL power.",
+        ],
+      },
+      {
+        heading: "Playing two games in every round",
+        items: [
+          "Play 10 rounds of two games each, one league matchup and one cross-country test.",
+        ],
+      },
+      {
+        heading: "Dancing automatically as a tournament champion",
+        items: [
+          "Finish top four in your league for the conference tournament; win it and you dance automatically.",
+        ],
+        subsections: [
+          {
+            heading: "Surviving five rounds of March",
+            items: [
+              "Survive March: 32 teams, single elimination, five rounds from the Round of 32 to the title game.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Recruiting each spring from two boards",
+        items: [
+          "Recruit each spring from a 14-player high school board and a 7-player portal, then run it back.",
+        ],
+      },
     ],
-    rules: [
-      "The field is 32 teams: six tournament champions plus 26 at-larges, seeded 1 through 32 by record first, strength second.",
-      "Freshmen rated 88 or higher go one-and-done almost every time, upperclassmen rated 90 or higher often declare, and seniors graduate.",
-      "High school grades can be off by up to 4 points either way; portal players show true ratings and arrive as sophomores.",
-      "A Cinderella flag fires when a 10 seed or worse crashes the Final Four. Saves are automatic in your browser.",
+    ruleSections: [
+      {
+        heading: "Thirty two teams make the March field",
+        items: [
+          "The field is 32 teams: six tournament champions plus 26 at-larges, seeded 1 through 32 by record first, strength second.",
+        ],
+      },
+      {
+        heading: "When freshmen go one and done",
+        items: [
+          "Freshmen rated 88 or higher go one-and-done almost every time, upperclassmen rated 90 or higher often declare, and seniors graduate.",
+        ],
+      },
+      {
+        heading: "High school grades carry real scouting error",
+        items: [
+          "High school grades can be off by up to 4 points either way; portal players show true ratings and arrive as sophomores.",
+        ],
+      },
+      {
+        heading: "Cinderella runs and automatic browser saves",
+        items: [
+          "A Cinderella flag fires when a 10 seed or worse crashes the Final Four. Saves are automatic in your browser.",
+        ],
+      },
     ],
-    example: [
-      "You take VCU, prestige 79. The season is bumpy, but you sneak into the league's top four, win both tournament games, and grab the automatic bid.",
-      "March seeds you 13th. You win a nervy opener, shock a top-four seed in the Sweet 16, and crash the Final Four, earning the Cinderella tag. The semifinal ends it. Then your 90-rated sophomore declares, and NIL has to rebuild half a rotation.",
+    exampleSections: [
+      {
+        heading: "VCU sneaks into the conference tournament",
+        paragraphs: [
+          "You take VCU, prestige 79. The season is bumpy, but you sneak into the league's top four, win both tournament games, and grab the automatic bid.",
+        ],
+      },
+      {
+        heading: "A thirteen seed crashes the Final Four",
+        paragraphs: [
+          "March seeds you 13th. You win a nervy opener, shock a top-four seed in the Sweet 16, and crash the Final Four, earning the Cinderella tag. The semifinal ends it. Then your 90-rated sophomore declares, and NIL has to rebuild half a rotation.",
+        ],
+      },
     ],
-    tips: [
-      "Sign the 88-plus freshman anyway. One superstar season is how March gets survived; just plan the replacement early.",
-      "Your top five carries three quarters of team strength, so stack the starting lineup first.",
-      "Mid-major life runs through the league tournament: win it and at-large math never matters.",
+    tipSections: [
+      {
+        heading: "Signing the elite freshman anyway",
+        items: [
+          "Sign the 88-plus freshman anyway. One superstar season is how March gets survived; just plan the replacement early.",
+        ],
+      },
+      {
+        heading: "Stacking your starting five first",
+        items: [
+          "Your top five carries three quarters of team strength, so stack the starting lineup first.",
+        ],
+      },
+      {
+        heading: "Why mid majors live through the league tournament",
+        items: [
+          "Mid-major life runs through the league tournament: win it and at-large math never matters.",
+        ],
+      },
     ],
     faqs: [
       {
