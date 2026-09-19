@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { ALL_GAMES } from '@/data/gameRegistry';
 import { jsonLdFor } from '@/lib/pageSchema';
 
 interface PageSeoProps {
@@ -115,7 +116,10 @@ export const loadSeoMeta = (): Promise<SeoMetaMap | null> => {
 const PageSeo = ({ title: pageTitle, description: pageDescription, path, ogImage, noindex }: PageSeoProps) => {
   const [, setSeoMetaLoaded] = useState(false);
   useEffect(() => {
-    if (seoMeta) return;
+    /* Only a game page has an entry, so the home page, the hubs and the legal
+       pages never fetch the chunk. The registry is already in the entry chunk
+       (pageSchema reads it), so asking costs nothing. */
+    if (seoMeta || !ALL_GAMES.some(g => g.path === path)) return;
     let live = true;
     loadSeoMeta().then(m => {
       if (live && m) setSeoMetaLoaded(true);
@@ -123,7 +127,7 @@ const PageSeo = ({ title: pageTitle, description: pageDescription, path, ogImage
     return () => {
       live = false;
     };
-  }, []);
+  }, [path]);
   const entry = seoMeta?.[path];
   const title = entry ? `${entry.title}${BRAND_SUFFIX}` : pageTitle;
   const description = entry ? entry.description : pageDescription;
