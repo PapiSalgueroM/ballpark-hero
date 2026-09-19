@@ -7,28 +7,112 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "Somewhere in Formula 1 history sits a driver, and the game knows exactly who. Guess The F1 Driver hides one of 20 grand prix greats behind six clues that unlock one at a time.",
       "The first clue is a single word, a vibe. The rest get concrete: race wins, world titles, teams, nationality, and one famous career moment. Solve it on clue one for 1000 points; limp to clue six and you're playing for 100.",
     ],
-    howToPlay: [
-      "Choose Daily Challenge for the shared mystery driver, or Unlimited for random drivers on repeat.",
-      "Read the one-word vibe and see if a name jumps out.",
-      "Search and pick a driver to guess. A surname or a HAM style shorthand resolves to the right person.",
-      "Every wrong guess reveals the next clue, so a miss always buys information.",
-      "The hint button unlocks the next clue without risking a guess, though it lowers your score tier just like a miss.",
+    headings: {
+      howToPlay: "How to play Guess The F1 Driver, a free Formula 1 guessing game",
+      rules: "Guess The F1 Driver rules for clues, guesses and scoring",
+      example: "Guess The F1 Driver walkthrough: from a vibe word to Hamilton",
+      tips: "Guess The F1 Driver tips for clues, hints and guesses",
+      faq: "Guess The F1 Driver FAQ: guesses, hints and signing in",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing Daily Challenge or Unlimited mode",
+        items: [
+          "Choose Daily Challenge for the shared mystery driver, or Unlimited for random drivers on repeat.",
+        ],
+      },
+      {
+        heading: "Reading the one word vibe clue",
+        items: [
+          "Read the one-word vibe and see if a name jumps out.",
+        ],
+      },
+      {
+        heading: "Searching for a driver to guess",
+        items: [
+          "Search and pick a driver to guess. A surname or a HAM style shorthand resolves to the right person.",
+        ],
+        subsections: [
+          {
+            heading: "How each miss reveals a new clue",
+            items: [
+              "Every wrong guess reveals the next clue, so a miss always buys information.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Using the hint button to see ahead",
+        items: [
+          "The hint button unlocks the next clue without risking a guess, though it lowers your score tier just like a miss.",
+        ],
+      },
     ],
-    rules: [
-      "Six clues per driver, and the answer pool holds 20 drivers.",
-      "Scoring by clue: 1000, 800, 600, 400, 200, then 100 points.",
-      "A wrong guess while the sixth clue is showing ends the game, so six misses is the cap.",
-      "Giving up reveals the driver and scores 0. The daily driver changes every day.",
+    ruleSections: [
+      {
+        heading: "Six clues and a pool of 20 drivers",
+        items: [
+          "Six clues per driver, and the answer pool holds 20 drivers.",
+        ],
+      },
+      {
+        heading: "Scoring from 1000 points down to 100",
+        items: [
+          "Scoring by clue: 1000, 800, 600, 400, 200, then 100 points.",
+        ],
+      },
+      {
+        heading: "Why six wrong guesses ends it",
+        items: [
+          "A wrong guess while the sixth clue is showing ends the game, so six misses is the cap.",
+        ],
+      },
+      {
+        heading: "Giving up and the daily driver",
+        items: [
+          "Giving up reveals the driver and scores 0. The daily driver changes every day.",
+        ],
+      },
     ],
-    example: [
-      "Imagine the vibe word is Dominant. That fits a handful of drivers, so you take a swing at Michael Schumacher. Wrong, and the next clue slides out: 105 race wins, the all-time record.",
-      "Only one driver owns that number. You type Lewis Hamilton on clue two and bank 800 points.",
-      "Waiting for the championship clue to confirm the seven titles would have paid 600. Confidence is worth 200 points here.",
+    exampleSections: [
+      {
+        heading: "A first guess at Michael Schumacher",
+        paragraphs: [
+          "Imagine the vibe word is Dominant. That fits a handful of drivers, so you take a swing at Michael Schumacher. Wrong, and the next clue slides out: 105 race wins, the all-time record.",
+        ],
+      },
+      {
+        heading: "Landing on Lewis Hamilton for 800 points",
+        paragraphs: [
+          "Only one driver owns that number. You type Lewis Hamilton on clue two and bank 800 points.",
+        ],
+      },
+      {
+        heading: "What waiting for the title clue would pay",
+        paragraphs: [
+          "Waiting for the championship clue to confirm the seven titles would have paid 600. Confidence is worth 200 points here.",
+        ],
+      },
     ],
-    tips: [
-      "The autocomplete list only contains drivers who can actually be the answer, so browsing it is a legitimate move.",
-      "Hints never end your game, but wrong guesses can. Once all six clues are out, guess like it's match point.",
-      "Unlimited recycles the same pool, so a few practice runs teach you every possible answer.",
+    tipSections: [
+      {
+        heading: "Browsing the autocomplete for ideas",
+        items: [
+          "The autocomplete list only contains drivers who can actually be the answer, so browsing it is a legitimate move.",
+        ],
+      },
+      {
+        heading: "Why hints are safer than a miss",
+        items: [
+          "Hints never end your game, but wrong guesses can. Once all six clues are out, guess like it's match point.",
+        ],
+      },
+      {
+        heading: "Practicing the pool in Unlimited mode",
+        items: [
+          "Unlimited recycles the same pool, so a few practice runs teach you every possible answer.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -51,30 +135,124 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "Two drivers, one question: who won more Grands Prix? Simple, until the pairings leave the obvious names behind.",
       "The pool is every driver in F1 history with at least 8 career wins, 42 of them, from the 1950s through 2025. Points systems changed too much across eras to compare fairly, so the game runs on race wins, a stat that travels.",
     ],
-    howToPlay: [
-      "Pick Daily for today's shared matchups or Unlimited for endless random pairs.",
-      "Read both cards: each shows the seasons raced, title count, and teams.",
-      "Tap the driver you think won more Grands Prix.",
-      "The real totals flash up, then the next pair rolls in after a couple of seconds.",
-      "String correct answers together to grow the streak bonus.",
+    headings: {
+      howToPlay: "How to play F1 Higher or Lower, a daily Formula 1 trivia game",
+      rules: "F1 Higher or Lower rules for rounds, streaks and ties",
+      example: "F1 Higher or Lower walkthrough: Prost, Senna and Fangio's math",
+      tips: "F1 Higher or Lower tips for reading seasons and eras",
+      faq: "F1 Higher or Lower FAQ: wins, points and daily matchups",
+    },
+    howToPlaySections: [
+      {
+        heading: "Picking Daily or Unlimited matchups",
+        items: [
+          "Pick Daily for today's shared matchups or Unlimited for endless random pairs.",
+        ],
+      },
+      {
+        heading: "Reading both driver cards",
+        items: [
+          "Read both cards: each shows the seasons raced, title count, and teams.",
+        ],
+      },
+      {
+        heading: "Tapping the driver with more wins",
+        items: [
+          "Tap the driver you think won more Grands Prix.",
+        ],
+      },
+      {
+        heading: "Watching the real totals flash up",
+        items: [
+          "The real totals flash up, then the next pair rolls in after a couple of seconds.",
+        ],
+        subsections: [
+          {
+            heading: "Stringing wins together for a streak bonus",
+            items: [
+              "String correct answers together to grow the streak bonus.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "10 rounds per game, 10 points per correct answer.",
-      "Streaks pay rising bonuses: the second straight correct adds 5 points, the third adds 10, and so on. A perfect 10 for 10 run maxes out at 325.",
-      "Exact ties count as correct no matter which driver you picked.",
-      "Hard mode, Unlimited only, deliberately pairs drivers with close win totals.",
-      "The daily is the same 10 matchups for everyone and flips at midnight Eastern.",
+    ruleSections: [
+      {
+        heading: "Ten rounds worth ten points each",
+        items: [
+          "10 rounds per game, 10 points per correct answer.",
+        ],
+      },
+      {
+        heading: "How the streak bonus climbs to 325",
+        items: [
+          "Streaks pay rising bonuses: the second straight correct adds 5 points, the third adds 10, and so on. A perfect 10 for 10 run maxes out at 325.",
+        ],
+      },
+      {
+        heading: "Why an exact tie still counts",
+        items: [
+          "Exact ties count as correct no matter which driver you picked.",
+        ],
+      },
+      {
+        heading: "Hard mode's close win totals",
+        items: [
+          "Hard mode, Unlimited only, deliberately pairs drivers with close win totals.",
+        ],
+      },
+      {
+        heading: "The daily matchups and midnight reset",
+        items: [
+          "The daily is the same 10 matchups for everyone and flips at midnight Eastern.",
+        ],
+      },
     ],
-    example: [
-      "Say round one hands you Alain Prost against Ayrton Senna. Titles say 4 against 3, and the wins agree: Prost 51, Senna 41.",
-      "Round five is nastier: Juan Manuel Fangio, five-time champion, against David Coulthard, zero titles. But 1950s seasons were short. Fangio sits on 24 wins, Coulthard on 13, so the legend still cashes.",
-      "You close 8 of 10 with a six-round streak in the middle and post 155. The streak did the heavy lifting.",
+    exampleSections: [
+      {
+        heading: "Prost and Senna agree with the titles",
+        paragraphs: [
+          "Say round one hands you Alain Prost against Ayrton Senna. Titles say 4 against 3, and the wins agree: Prost 51, Senna 41.",
+        ],
+      },
+      {
+        heading: "Fangio's short seasons still cash in",
+        paragraphs: [
+          "Round five is nastier: Juan Manuel Fangio, five-time champion, against David Coulthard, zero titles. But 1950s seasons were short. Fangio sits on 24 wins, Coulthard on 13, so the legend still cashes.",
+        ],
+      },
+      {
+        heading: "Closing at 155 on a six round streak",
+        paragraphs: [
+          "You close 8 of 10 with a six-round streak in the middle and post 155. The streak did the heavy lifting.",
+        ],
+      },
     ],
-    tips: [
-      "Titles lie. Stirling Moss won 16 races and no championship, while Fangio turned 24 wins into 5 titles.",
-      "Watch the seasons on the card. Long modern careers usually mean big win counts.",
-      "When two drivers feel identical, relax: a dead heat pays either way.",
-      "Use Hard mode as a study tool. Small gaps teach you the actual numbers fast.",
+    tipSections: [
+      {
+        heading: "Why titles can lie about win totals",
+        items: [
+          "Titles lie. Stirling Moss won 16 races and no championship, while Fangio turned 24 wins into 5 titles.",
+        ],
+      },
+      {
+        heading: "Watching the seasons raced on the card",
+        items: [
+          "Watch the seasons on the card. Long modern careers usually mean big win counts.",
+        ],
+      },
+      {
+        heading: "Relaxing on an identical feeling pair",
+        items: [
+          "When two drivers feel identical, relax: a dead heat pays either way.",
+        ],
+      },
+      {
+        heading: "Using Hard mode to study the numbers",
+        items: [
+          "Use Hard mode as a study tool. Small gaps teach you the actual numbers fast.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -97,29 +275,118 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "This time the mystery isn't a driver, it's a whole team. Guess The Constructor hides one of 31 Formula 1 constructors behind six clues, from the giants of the modern grid to names that vanished decades ago.",
       "Clues arrive in a fixed order: a one-word vibe, the team's country, its era, its championship haul, its livery, and finally a famous driver. Every extra clue cuts your payout.",
     ],
-    howToPlay: [
-      "Pick Daily Challenge for the shared team of the day or Unlimited for random constructors.",
-      "Start from the vibe word and guess whenever a team feels right.",
-      "Each wrong guess unlocks the next clue in the sequence.",
-      "Take a hint to see the next clue without risking a miss; the score tier drops just the same.",
-      "Name the constructor before the six clues run out.",
+    headings: {
+      howToPlay: "How to play Guess The Constructor, a free F1 team guessing game",
+      rules: "Guess The Constructor rules for clues and scoring tiers",
+      example: "Guess The Constructor walkthrough: Iconic, Italy and Ferrari",
+      tips: "Guess The Constructor tips for reading country and livery clues",
+      faq: "Guess The Constructor FAQ: dead teams and the daily driver link",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing Daily Challenge or Unlimited teams",
+        items: [
+          "Pick Daily Challenge for the shared team of the day or Unlimited for random constructors.",
+        ],
+      },
+      {
+        heading: "Starting from the vibe word clue",
+        items: [
+          "Start from the vibe word and guess whenever a team feels right.",
+        ],
+      },
+      {
+        heading: "How each wrong guess unlocks a clue",
+        items: [
+          "Each wrong guess unlocks the next clue in the sequence.",
+        ],
+        subsections: [
+          {
+            heading: "Taking a hint without risking a miss",
+            items: [
+              "Take a hint to see the next clue without risking a miss; the score tier drops just the same.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Naming the constructor before six clues",
+        items: [
+          "Name the constructor before the six clues run out.",
+        ],
+      },
     ],
-    rules: [
-      "The pool holds 31 constructors and each puzzle has 6 clues.",
-      "Points by clue: 1000, 800, 600, 400, 200, 100.",
-      "A wrong guess with all six clues showing ends the round. Giving up scores 0.",
-      "The daily constructor is picked independently of the daily driver, so the two F1 games never mirror each other.",
+    ruleSections: [
+      {
+        heading: "A pool of 31 constructors and six clues",
+        items: [
+          "The pool holds 31 constructors and each puzzle has 6 clues.",
+        ],
+      },
+      {
+        heading: "Points from 1000 down to 100",
+        items: [
+          "Points by clue: 1000, 800, 600, 400, 200, 100.",
+        ],
+      },
+      {
+        heading: "What a final wrong guess costs you",
+        items: [
+          "A wrong guess with all six clues showing ends the round. Giving up scores 0.",
+        ],
+      },
+      {
+        heading: "The daily team and the daily driver",
+        items: [
+          "The daily constructor is picked independently of the daily driver, so the two F1 games never mirror each other.",
+        ],
+      },
     ],
-    example: [
-      "Suppose clue one reads Iconic. Half the grid thinks that's them, so you wait. Clue two says Italy, and now it's a short list.",
-      "Iconic plus Italy has one obvious owner. Ferrari on clue two banks 800 points.",
-      "Holding out for the championship clue, a count of 16 titles, would have confirmed it at 600. Some clues are worth skipping.",
+    exampleSections: [
+      {
+        heading: "Waiting out the Iconic clue",
+        paragraphs: [
+          "Suppose clue one reads Iconic. Half the grid thinks that's them, so you wait. Clue two says Italy, and now it's a short list.",
+        ],
+      },
+      {
+        heading: "Ferrari confirmed for 800 points",
+        paragraphs: [
+          "Iconic plus Italy has one obvious owner. Ferrari on clue two banks 800 points.",
+        ],
+      },
+      {
+        heading: "What the 16 title clue would confirm",
+        paragraphs: [
+          "Holding out for the championship clue, a count of 16 titles, would have confirmed it at 600. Some clues are worth skipping.",
+        ],
+      },
     ],
-    tips: [
-      "Country is the power clue, but Britain won't save you: McLaren, Williams, Lotus and more are all UK based.",
-      "Learn the championship counts of the giants. Numbers like 16 and 9 are fingerprints.",
-      "The livery clue almost always gives it away. If you have any read at all, guess before it appears.",
-      "Defunct teams are in here too, so don't anchor on the current grid.",
+    tipSections: [
+      {
+        heading: "Why Britain alone will not save you",
+        items: [
+          "Country is the power clue, but Britain won't save you: McLaren, Williams, Lotus and more are all UK based.",
+        ],
+      },
+      {
+        heading: "Learning the giants' championship counts",
+        items: [
+          "Learn the championship counts of the giants. Numbers like 16 and 9 are fingerprints.",
+        ],
+      },
+      {
+        heading: "Guessing before the livery clue lands",
+        items: [
+          "The livery clue almost always gives it away. If you have any read at all, guess before it appears.",
+        ],
+      },
+      {
+        heading: "Not anchoring on the current grid",
+        items: [
+          "Defunct teams are in here too, so don't anchor on the current grid.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -138,29 +405,118 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "Perfect Lineup: F1 hands you five empty driver seats and a catch: three of them come with a constraint. Maybe a seat only accepts Ferrari drivers, or drivers from the 1990s, or Finns.",
       "You fill the seats from a pool of 41 drivers across eras, each rated up to 99, then hit Simulate. The game grades your squad on pace and chemistry and turns it into a season result you can share.",
     ],
-    howToPlay: [
-      "Check which of the five slots carry constraints: a team, era, or country tag.",
-      "Tap a slot and search. The picker only lists eligible drivers, highest rated first.",
-      "Chase links while you pick: drivers sharing a team, country, or era boost chemistry.",
-      "Clear and swap picks freely, then hit Simulate once all five seats are filled.",
-      "Share the result, or roll new constraints with New Lineup.",
+    headings: {
+      howToPlay: "How to play Perfect Lineup: F1 and build a five driver squad",
+      rules: "Perfect Lineup: F1 rules for slots, chemistry and grades",
+      example: "Perfect Lineup: F1 walkthrough: five legends and one grade jump",
+      tips: "Perfect Lineup: F1 tips for constraints and chemistry links",
+      faq: "Perfect Lineup: F1 FAQ: squares, duplicate drivers and slots",
+    },
+    howToPlaySections: [
+      {
+        heading: "Checking which slots carry constraints",
+        items: [
+          "Check which of the five slots carry constraints: a team, era, or country tag.",
+        ],
+      },
+      {
+        heading: "Searching the eligible driver pool",
+        items: [
+          "Tap a slot and search. The picker only lists eligible drivers, highest rated first.",
+        ],
+      },
+      {
+        heading: "Chasing links while you pick",
+        items: [
+          "Chase links while you pick: drivers sharing a team, country, or era boost chemistry.",
+        ],
+      },
+      {
+        heading: "Simulating once all five seats are filled",
+        items: [
+          "Clear and swap picks freely, then hit Simulate once all five seats are filled.",
+        ],
+        subsections: [
+          {
+            heading: "Sharing the result or rolling new constraints",
+            items: [
+              "Share the result, or roll new constraints with New Lineup.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "Five slots, 3 of them constrained. Every constraint is guaranteed at least 4 eligible drivers.",
-      "Squad rating is 80 percent average driver rating plus 20 percent chemistry.",
-      "Grades: A+ at a rating of 92 or better, A at 84, B at 74, C at 62, D below.",
-      "Daily mode gives everyone the same constraints once a day; New Lineup rolls random ones anytime.",
+    ruleSections: [
+      {
+        heading: "Five slots and three constraints",
+        items: [
+          "Five slots, 3 of them constrained. Every constraint is guaranteed at least 4 eligible drivers.",
+        ],
+      },
+      {
+        heading: "How squad rating and chemistry combine",
+        items: [
+          "Squad rating is 80 percent average driver rating plus 20 percent chemistry.",
+        ],
+      },
+      {
+        heading: "The grade bands from A+ to D",
+        items: [
+          "Grades: A+ at a rating of 92 or better, A at 84, B at 74, C at 62, D below.",
+        ],
+      },
+      {
+        heading: "Daily constraints versus New Lineup",
+        items: [
+          "Daily mode gives everyone the same constraints once a day; New Lineup rolls random ones anytime.",
+        ],
+      },
     ],
-    example: [
-      "Say your constraints are Ferrari, Finland and the 1990s. You go star hunting: Michael Schumacher, Kimi Raikkonen, Ayrton Senna, then Lewis Hamilton and Max Verstappen in the free seats. Average rating: just over 97.",
-      "The sim returns a B. Five all-time greats, almost no connections: only the Schumacher and Raikkonen overlap registers, and chemistry lands at 27.",
-      "Swap Senna for Mika Hakkinen and it flips: two Finns, two Ferrari drivers, a shared era. Chemistry 40, rating 85, grade A. Lesser name, better team.",
+    exampleSections: [
+      {
+        heading: "Star hunting under Ferrari and Finland",
+        paragraphs: [
+          "Say your constraints are Ferrari, Finland and the 1990s. You go star hunting: Michael Schumacher, Kimi Raikkonen, Ayrton Senna, then Lewis Hamilton and Max Verstappen in the free seats. Average rating: just over 97.",
+        ],
+      },
+      {
+        heading: "A B grade from five great names",
+        paragraphs: [
+          "The sim returns a B. Five all-time greats, almost no connections: only the Schumacher and Raikkonen overlap registers, and chemistry lands at 27.",
+        ],
+      },
+      {
+        heading: "Swapping in Hakkinen for an A grade",
+        paragraphs: [
+          "Swap Senna for Mika Hakkinen and it flips: two Finns, two Ferrari drivers, a shared era. Chemistry 40, rating 85, grade A. Lesser name, better team.",
+        ],
+      },
     ],
-    tips: [
-      "Ratings are 80 percent of the formula, so never tank quality for one link. Find picks that do both jobs.",
-      "Fill the constrained slots first, then patch chemistry with the free seats.",
-      "Era overlaps are the cheapest links: same-decade drivers connect even when teams and countries don't.",
-      "In daily mode, Edit Lineup lets you rebuild and simulate again.",
+    tipSections: [
+      {
+        heading: "Why rating still leads the formula",
+        items: [
+          "Ratings are 80 percent of the formula, so never tank quality for one link. Find picks that do both jobs.",
+        ],
+      },
+      {
+        heading: "Filling constrained slots before free ones",
+        items: [
+          "Fill the constrained slots first, then patch chemistry with the free seats.",
+        ],
+      },
+      {
+        heading: "Why era overlaps are the cheapest links",
+        items: [
+          "Era overlaps are the cheapest links: same-decade drivers connect even when teams and countries don't.",
+        ],
+      },
+      {
+        heading: "Rebuilding a daily squad with Edit Lineup",
+        items: [
+          "In daily mode, Edit Lineup lets you rebuild and simulate again.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -179,29 +535,118 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "A mystery tennis player is hiding behind six clues, and they could come from either tour. Men's legends, women's legends, everyone is in the same deck.",
       "Clues unlock in a set order: a one-word vibe, nationality and era, tour, Grand Slam count, slam details, and a famous moment. The sooner you commit, the more you score.",
     ],
-    howToPlay: [
-      "Choose the daily puzzle, shared by everyone that day, or Unlimited for random legends.",
-      "Read the vibe word and take an early swing if you're feeling brave.",
-      "Each wrong guess reveals the next clue in the sequence.",
-      "The hint button unlocks the next clue without spending a guess; the score tier drops either way.",
-      "Type the player's name and pick from the suggestions to lock it in.",
+    headings: {
+      howToPlay: "How to play Guess The Player, a free tennis guessing game",
+      rules: "Guess The Player rules for clues, tours and scoring",
+      example: "Guess The Player walkthrough: closing in on Serena Williams",
+      tips: "Guess The Player tips for the tour clue and slam counts",
+      faq: "Guess The Player FAQ: ATP, WTA and loading the player list",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing the daily puzzle or Unlimited",
+        items: [
+          "Choose the daily puzzle, shared by everyone that day, or Unlimited for random legends.",
+        ],
+      },
+      {
+        heading: "Taking an early swing at the vibe word",
+        items: [
+          "Read the vibe word and take an early swing if you're feeling brave.",
+        ],
+      },
+      {
+        heading: "How each wrong guess reveals a clue",
+        items: [
+          "Each wrong guess reveals the next clue in the sequence.",
+        ],
+        subsections: [
+          {
+            heading: "Taking a hint without spending a guess",
+            items: [
+              "The hint button unlocks the next clue without spending a guess; the score tier drops either way.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Typing a name from the suggestions",
+        items: [
+          "Type the player's name and pick from the suggestions to lock it in.",
+        ],
+      },
     ],
-    rules: [
-      "6 clues maximum, with scoring tiers of 1000, 800, 600, 400, 200 and 100 points.",
-      "A wrong guess while the sixth clue is showing ends the game.",
-      "Giving up ends the round at 0 and reveals the player.",
-      "Common names work: the game accepts well known short versions of a name.",
+    ruleSections: [
+      {
+        heading: "Six clues and the scoring tiers",
+        items: [
+          "6 clues maximum, with scoring tiers of 1000, 800, 600, 400, 200 and 100 points.",
+        ],
+      },
+      {
+        heading: "Why the sixth clue ends the round",
+        items: [
+          "A wrong guess while the sixth clue is showing ends the game.",
+        ],
+      },
+      {
+        heading: "Giving up and revealing the player",
+        items: [
+          "Giving up ends the round at 0 and reveals the player.",
+        ],
+      },
+      {
+        heading: "Accepting common short names",
+        items: [
+          "Common names work: the game accepts well known short versions of a name.",
+        ],
+      },
     ],
-    example: [
-      "Suppose clue two describes an American who ruled across the 2000s and 2010s. Too many candidates, so you pass. Clue three says WTA, and clue four lands the hammer: 23 Grand Slam singles titles.",
-      "Only one player in history owns exactly 23. You type Serena Williams on clue four and take 400 points.",
-      "A sharper read on the era hint might have gotten you there a clue earlier for 600. That's the game inside the game.",
+    exampleSections: [
+      {
+        heading: "An American star with too many candidates",
+        paragraphs: [
+          "Suppose clue two describes an American who ruled across the 2000s and 2010s. Too many candidates, so you pass. Clue three says WTA, and clue four lands the hammer: 23 Grand Slam singles titles.",
+        ],
+      },
+      {
+        heading: "Serena Williams confirmed at 23 titles",
+        paragraphs: [
+          "Only one player in history owns exactly 23. You type Serena Williams on clue four and take 400 points.",
+        ],
+      },
+      {
+        heading: "What a sharper era read would have paid",
+        paragraphs: [
+          "A sharper read on the era hint might have gotten you there a clue earlier for 600. That's the game inside the game.",
+        ],
+      },
     ],
-    tips: [
-      "The tour clue instantly halves the field. Torn between a man and a woman? Wait for it.",
-      "Slam counts are fingerprints at the top: 24, 23, 22 and 20 each point at one or two legends.",
-      "The suggestion list doubles as a roster of possible answers. Skim it when you're lost.",
-      "Early clues reward era knowledge. Knowing who peaked when beats knowing forehands.",
+    tipSections: [
+      {
+        heading: "How the tour clue halves the field",
+        items: [
+          "The tour clue instantly halves the field. Torn between a man and a woman? Wait for it.",
+        ],
+      },
+      {
+        heading: "Slam counts as fingerprints",
+        items: [
+          "Slam counts are fingerprints at the top: 24, 23, 22 and 20 each point at one or two legends.",
+        ],
+      },
+      {
+        heading: "Skimming the suggestion list for ideas",
+        items: [
+          "The suggestion list doubles as a roster of possible answers. Skim it when you're lost.",
+        ],
+      },
+      {
+        heading: "Why era knowledge beats forehands",
+        items: [
+          "Early clues reward era knowledge. Knowing who peaked when beats knowing forehands.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -224,29 +669,118 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "Every tennis great has lost to somebody. Tennis Chain turns that into a game: start from a legend, name a player who beat them at a Grand Slam, then someone who beat that player, for as long as your memory holds.",
       "There's no timer and no guess meter. Just one rule: every answer must be a real Grand Slam defeat of your current player, and one mistake ends the run.",
     ],
-    howToPlay: [
-      "Pick Daily Challenge, where everyone starts from the same player, or Unlimited for a random starter.",
-      "Think of anyone who beat the current player at a major.",
-      "Search the name and submit. The game verifies the matchup before the link counts.",
-      "Each verified defeat adds the winner to your chain, and they become the new current player.",
-      "Keep going until you miss, repeat a player, or cash out with Give Up.",
+    headings: {
+      howToPlay: "How to play Tennis Chain, a free Grand Slam connection game",
+      rules: "Tennis Chain rules for links, points and badges",
+      example: "Tennis Chain walkthrough: from Federer to a broken link",
+      tips: "Tennis Chain tips for finals and big career hubs",
+      faq: "Tennis Chain FAQ: defeats, accounts and connection errors",
+    },
+    howToPlaySections: [
+      {
+        heading: "Picking Daily Challenge or Unlimited",
+        items: [
+          "Pick Daily Challenge, where everyone starts from the same player, or Unlimited for a random starter.",
+        ],
+      },
+      {
+        heading: "Thinking of a Grand Slam winner",
+        items: [
+          "Think of anyone who beat the current player at a major.",
+        ],
+      },
+      {
+        heading: "Searching and submitting a name",
+        items: [
+          "Search the name and submit. The game verifies the matchup before the link counts.",
+        ],
+        subsections: [
+          {
+            heading: "How a verified defeat joins the chain",
+            items: [
+              "Each verified defeat adds the winner to your chain, and they become the new current player.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Playing on until you miss or cash out",
+        items: [
+          "Keep going until you miss, repeat a player, or cash out with Give Up.",
+        ],
+      },
     ],
-    rules: [
-      "Every verified link is worth 100 points.",
-      "Your total is multiplied by 1.5 once the chain reaches 5 links and by 2 at 10.",
-      "Naming a player already used in the chain ends the run, and so does one wrong answer.",
-      "Badges land at 3 links (Club Player), 5 (Pro Circuit) and 10 (Grand Slam Champion).",
-      "If the checker hits a connection problem, nothing is lost; just retry.",
+    ruleSections: [
+      {
+        heading: "Every verified link is worth 100 points",
+        items: [
+          "Every verified link is worth 100 points.",
+        ],
+      },
+      {
+        heading: "How the multiplier grows the chain",
+        items: [
+          "Your total is multiplied by 1.5 once the chain reaches 5 links and by 2 at 10.",
+        ],
+      },
+      {
+        heading: "What ends a run instantly",
+        items: [
+          "Naming a player already used in the chain ends the run, and so does one wrong answer.",
+        ],
+      },
+      {
+        heading: "Badges at 3, 5 and 10 links",
+        items: [
+          "Badges land at 3 links (Club Player), 5 (Pro Circuit) and 10 (Grand Slam Champion).",
+        ],
+      },
+      {
+        heading: "Retrying after a connection problem",
+        items: [
+          "If the checker hits a connection problem, nothing is lost; just retry.",
+        ],
+      },
     ],
-    example: [
-      "Say you start on Roger Federer. Rafael Nadal beat him at Roland Garros more than once: link one. Nadal to Novak Djokovic is just as easy. Link two.",
-      "From Djokovic you remember Stan Wawrinka's 2015 French Open final win. Link three, 300 points, and the Club Player badge is yours.",
-      "Then you blank on who ever beat Wawrinka at a slam, toss out a name you can't back up, and the run ends at 300.",
+    exampleSections: [
+      {
+        heading: "Starting the chain at Roger Federer",
+        paragraphs: [
+          "Say you start on Roger Federer. Rafael Nadal beat him at Roland Garros more than once: link one. Nadal to Novak Djokovic is just as easy. Link two.",
+        ],
+      },
+      {
+        heading: "Wawrinka earns the Club Player badge",
+        paragraphs: [
+          "From Djokovic you remember Stan Wawrinka's 2015 French Open final win. Link three, 300 points, and the Club Player badge is yours.",
+        ],
+      },
+      {
+        heading: "Where the chain finally breaks",
+        paragraphs: [
+          "Then you blank on who ever beat Wawrinka at a slam, toss out a name you can't back up, and the run ends at 300.",
+        ],
+      },
     ],
-    tips: [
-      "Think finals first. Title matches are the defeats everyone remembers.",
-      "Don't chain into a player whose losses you can't picture. You have to escape everyone you name.",
-      "Save the big hubs, players with famous losses across eras, for when you're stuck.",
+    tipSections: [
+      {
+        heading: "Thinking of Grand Slam finals first",
+        items: [
+          "Think finals first. Title matches are the defeats everyone remembers.",
+        ],
+      },
+      {
+        heading: "Only chaining into losses you can picture",
+        items: [
+          "Don't chain into a player whose losses you can't picture. You have to escape everyone you name.",
+        ],
+      },
+      {
+        heading: "Saving your big hubs for later",
+        items: [
+          "Save the big hubs, players with famous losses across eras, for when you're stuck.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -269,29 +803,118 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "Serena or Federer: who won more Grand Slam singles titles? This game asks that kind of question 10 times, and it mixes both tours in one pool on purpose, because cross-tour matchups are where the arguments live.",
       "The pool holds 44 champions, from the pioneers of the 1920s to active stars, with title counts frozen through the 2026 Australian Open.",
     ],
-    howToPlay: [
-      "Choose Daily for the shared matchups or Unlimited for random ones.",
-      "Read both cards: each shows the years of the player's first and last major and their tour.",
-      "Tap the player you think won more Grand Slam singles titles.",
-      "Watch the real numbers reveal, then roll into the next round.",
-      "Chain correct answers to build the streak bonus.",
+    headings: {
+      howToPlay: "How to play Tennis Higher or Lower, a daily Grand Slam trivia game",
+      rules: "Tennis Higher or Lower rules for rounds, ties and streaks",
+      example: "Tennis Higher or Lower walkthrough: Serena, Federer and a tie",
+      tips: "Tennis Higher or Lower tips for tie clusters and eras",
+      faq: "Tennis Higher or Lower FAQ: cross tour picks and title counts",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing Daily or Unlimited matchups",
+        items: [
+          "Choose Daily for the shared matchups or Unlimited for random ones.",
+        ],
+      },
+      {
+        heading: "Reading each player's title years and tour",
+        items: [
+          "Read both cards: each shows the years of the player's first and last major and their tour.",
+        ],
+      },
+      {
+        heading: "Tapping the player with more Grand Slams",
+        items: [
+          "Tap the player you think won more Grand Slam singles titles.",
+        ],
+      },
+      {
+        heading: "Watching the real numbers reveal",
+        items: [
+          "Watch the real numbers reveal, then roll into the next round.",
+        ],
+        subsections: [
+          {
+            heading: "Chaining correct picks into a streak",
+            items: [
+              "Chain correct answers to build the streak bonus.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "10 rounds, 10 points per correct pick.",
-      "Streaks add 5 extra points on the second straight correct answer, 10 on the third, and so on. A flawless game is worth 325.",
-      "Ties are common with slam counts and score as correct for either pick.",
-      "Hard mode, Unlimited only, serves up deliberately close matchups.",
-      "The daily flips at midnight Eastern and your progress holds for the day.",
+    ruleSections: [
+      {
+        heading: "Ten rounds and ten points a pick",
+        items: [
+          "10 rounds, 10 points per correct pick.",
+        ],
+      },
+      {
+        heading: "How the streak bonus reaches 325",
+        items: [
+          "Streaks add 5 extra points on the second straight correct answer, 10 on the third, and so on. A flawless game is worth 325.",
+        ],
+      },
+      {
+        heading: "Why slam count ties still score",
+        items: [
+          "Ties are common with slam counts and score as correct for either pick.",
+        ],
+      },
+      {
+        heading: "Hard mode's close matchups",
+        items: [
+          "Hard mode, Unlimited only, serves up deliberately close matchups.",
+        ],
+      },
+      {
+        heading: "The daily flip at midnight Eastern",
+        items: [
+          "The daily flips at midnight Eastern and your progress holds for the day.",
+        ],
+      },
     ],
-    example: [
-      "Round one: Serena Williams against Roger Federer. Two icons, one number each, 23 against 20. Serena takes it.",
-      "Later you draw Chris Evert against Martina Navratilova and freeze. Then you remember it doesn't matter: both won 18, and a tie pays either way.",
-      "You finish 9 of 10 with one bad miss on an old-timer, a reminder that the early greats in this pool won a lot.",
+    exampleSections: [
+      {
+        heading: "Serena Williams edges Roger Federer",
+        paragraphs: [
+          "Round one: Serena Williams against Roger Federer. Two icons, one number each, 23 against 20. Serena takes it.",
+        ],
+      },
+      {
+        heading: "Evert and Navratilova end in a tie",
+        paragraphs: [
+          "Later you draw Chris Evert against Martina Navratilova and freeze. Then you remember it doesn't matter: both won 18, and a tie pays either way.",
+        ],
+      },
+      {
+        heading: "One miss on an old timer costs a perfect run",
+        paragraphs: [
+          "You finish 9 of 10 with one bad miss on an old-timer, a reminder that the early greats in this pool won a lot.",
+        ],
+      },
     ],
-    tips: [
-      "Learn the tie clusters: 24, 22, 18 and 8 all have multiple owners.",
-      "Respect the ancients. Margaret Court's 24 and Helen Wills' 19 outrank almost everyone modern.",
-      "The year range on the card is your era anchor. A long title window usually means a big count.",
+    tipSections: [
+      {
+        heading: "Learning the slam count clusters",
+        items: [
+          "Learn the tie clusters: 24, 22, 18 and 8 all have multiple owners.",
+        ],
+      },
+      {
+        heading: "Respecting the sport's early legends",
+        items: [
+          "Respect the ancients. Margaret Court's 24 and Helen Wills' 19 outrank almost everyone modern.",
+        ],
+      },
+      {
+        heading: "Reading the year range as an era anchor",
+        items: [
+          "The year range on the card is your era anchor. A long title window usually means a big count.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -310,30 +933,124 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "One major champion is hiding behind six clues, and the first is already on the table: the years they were winning majors. From there it's on you.",
       "Wrong guesses unlock the rest in a fixed order: nationality, career major count, which of the four majors they won, initials, then first name. Scoring rewards the brave: a first-clue solve pays 600, and every extra clue costs 100.",
     ],
-    howToPlay: [
-      "Pick Daily, the same golfer for everyone, or Unlimited for a fresh champion every round.",
-      "Study the opening clue: the span between their first and last major win.",
-      "Type at least two letters to see name suggestions, then tap one to guess.",
-      "Every miss unlocks the next clue in the sequence.",
-      "Solve it before your sixth wrong guess or the round ends.",
+    headings: {
+      howToPlay: "How to play Guess The Golfer, a free major champion guessing game",
+      rules: "Guess The Golfer rules for guesses, scoring and the pool",
+      example: "Guess The Golfer walkthrough: Gary Player and South Africa",
+      tips: "Guess The Golfer tips for year spans and nationality clues",
+      faq: "Guess The Golfer FAQ: women's champions and old timers",
+    },
+    howToPlaySections: [
+      {
+        heading: "Picking Daily or Unlimited champions",
+        items: [
+          "Pick Daily, the same golfer for everyone, or Unlimited for a fresh champion every round.",
+        ],
+      },
+      {
+        heading: "Studying the opening year span clue",
+        items: [
+          "Study the opening clue: the span between their first and last major win.",
+        ],
+      },
+      {
+        heading: "Typing letters to see name suggestions",
+        items: [
+          "Type at least two letters to see name suggestions, then tap one to guess.",
+        ],
+        subsections: [
+          {
+            heading: "How every miss unlocks the next clue",
+            items: [
+              "Every miss unlocks the next clue in the sequence.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Solving before the sixth wrong guess",
+        items: [
+          "Solve it before your sixth wrong guess or the round ends.",
+        ],
+      },
     ],
-    rules: [
-      "Six wrong guesses end the round.",
-      "Score starts at 600 for a first-clue solve and drops 100 per extra clue, bottoming out at 100.",
-      "Answers come from a famous 55-golfer slice: champions with 4 or more majors from any era, plus anyone who won a major in 1980 or later.",
-      "The search list is wider, covering all 61 men's champions with at least 2 career majors.",
-      "The daily golfer resets at midnight Eastern, and your progress is saved for the day.",
+    ruleSections: [
+      {
+        heading: "Six wrong guesses ends the round",
+        items: [
+          "Six wrong guesses end the round.",
+        ],
+      },
+      {
+        heading: "Scoring from 600 down to 100",
+        items: [
+          "Score starts at 600 for a first-clue solve and drops 100 per extra clue, bottoming out at 100.",
+        ],
+      },
+      {
+        heading: "The 55 golfer answer pool",
+        items: [
+          "Answers come from a famous 55-golfer slice: champions with 4 or more majors from any era, plus anyone who won a major in 1980 or later.",
+        ],
+      },
+      {
+        heading: "A wider 61 champion search list",
+        items: [
+          "The search list is wider, covering all 61 men's champions with at least 2 career majors.",
+        ],
+      },
+      {
+        heading: "The daily golfer and the midnight reset",
+        items: [
+          "The daily golfer resets at midnight Eastern, and your progress is saved for the day.",
+        ],
+      },
     ],
-    example: [
-      "Say the first clue reads: won majors between 1959 and 1978. That's a long reign, so you gamble on Arnold Palmer. Miss; his wins sit between 1958 and 1964.",
-      "Clue two says South Africa, and the long window suddenly makes sense. Gary Player, nine majors across two decades. You take 500 points on clue two.",
-      "Calling the era cold would have been a 600-point flex, but 500 with certainty beats 0 with style.",
+    exampleSections: [
+      {
+        heading: "Missing on Arnold Palmer's year span",
+        paragraphs: [
+          "Say the first clue reads: won majors between 1959 and 1978. That's a long reign, so you gamble on Arnold Palmer. Miss; his wins sit between 1958 and 1964.",
+        ],
+      },
+      {
+        heading: "Gary Player confirmed for 500 points",
+        paragraphs: [
+          "Clue two says South Africa, and the long window suddenly makes sense. Gary Player, nine majors across two decades. You take 500 points on clue two.",
+        ],
+      },
+      {
+        heading: "Trading a 600 point flex for certainty",
+        paragraphs: [
+          "Calling the era cold would have been a 600-point flex, but 500 with certainty beats 0 with style.",
+        ],
+      },
     ],
-    tips: [
-      "Memorize the marquee year spans: 1962 to 1986 is Nicklaus, 1997 to 2019 is Tiger.",
-      "Any nationality that isn't United States slices the pool down to a handful of names.",
-      "Wrong guesses are your only currency, so spend them on real hypotheses, not shrugs.",
-      "If you're still alive at the initials clue, the answer is basically gift wrapped. Never lose from there.",
+    tipSections: [
+      {
+        heading: "Memorizing the marquee year spans",
+        items: [
+          "Memorize the marquee year spans: 1962 to 1986 is Nicklaus, 1997 to 2019 is Tiger.",
+        ],
+      },
+      {
+        heading: "How nationality slices the pool",
+        items: [
+          "Any nationality that isn't United States slices the pool down to a handful of names.",
+        ],
+      },
+      {
+        heading: "Spending wrong guesses on real hypotheses",
+        items: [
+          "Wrong guesses are your only currency, so spend them on real hypotheses, not shrugs.",
+        ],
+      },
+      {
+        heading: "Why the initials clue is a gift",
+        items: [
+          "If you're still alive at the initials clue, the answer is basically gift wrapped. Never lose from there.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -352,29 +1069,118 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       "Golf's major-count arguments, settled 10 rounds at a time. Two champions appear side by side and you pick the one with more career majors.",
       "The pool runs the entire history of championship golf: 61 players, everyone with at least 2 majors, from Old Tom Morris in the 1860s to Scottie Scheffler.",
     ],
-    howToPlay: [
-      "Choose Daily for the shared matchups or Unlimited for random pairs.",
-      "Each card shows the golfer's country and the years of their first and last major win.",
-      "Tap the golfer you believe won more majors.",
-      "The real counts reveal, points land, and the next pair appears.",
-      "Stack correct answers for streak bonuses.",
+    headings: {
+      howToPlay: "How to play Golf Higher or Lower, a daily major championship trivia game",
+      rules: "Golf Higher or Lower rules for rounds, ties and streak bonuses",
+      example: "Golf Higher or Lower walkthrough: Nicklaus, Woods and Hagen",
+      tips: "Golf Higher or Lower tips for reading eras and win years",
+      faq: "Golf Higher or Lower FAQ: the four majors and Hard mode",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing Daily or Unlimited pairs",
+        items: [
+          "Choose Daily for the shared matchups or Unlimited for random pairs.",
+        ],
+      },
+      {
+        heading: "Reading each golfer's country and win years",
+        items: [
+          "Each card shows the golfer's country and the years of their first and last major win.",
+        ],
+      },
+      {
+        heading: "Tapping the golfer with more majors",
+        items: [
+          "Tap the golfer you believe won more majors.",
+        ],
+      },
+      {
+        heading: "Watching the real counts reveal",
+        items: [
+          "The real counts reveal, points land, and the next pair appears.",
+        ],
+        subsections: [
+          {
+            heading: "Stacking correct picks for streak bonuses",
+            items: [
+              "Stack correct answers for streak bonuses.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "10 rounds, 10 points per correct answer, plus a streak bonus growing by 5 with each straight correct after the first. A perfect game is 325.",
-      "Exact ties score as correct on either side.",
-      "Hard mode lives in Unlimited only and pairs golfers with close major counts.",
-      "New daily matchups arrive at midnight Eastern.",
+    ruleSections: [
+      {
+        heading: "Ten rounds and a growing streak bonus",
+        items: [
+          "10 rounds, 10 points per correct answer, plus a streak bonus growing by 5 with each straight correct after the first. A perfect game is 325.",
+        ],
+      },
+      {
+        heading: "Why exact ties always score",
+        items: [
+          "Exact ties score as correct on either side.",
+        ],
+      },
+      {
+        heading: "Hard mode's close major counts",
+        items: [
+          "Hard mode lives in Unlimited only and pairs golfers with close major counts.",
+        ],
+      },
+      {
+        heading: "New matchups at midnight Eastern",
+        items: [
+          "New daily matchups arrive at midnight Eastern.",
+        ],
+      },
     ],
-    example: [
-      "Round one gives you Jack Nicklaus against Tiger Woods, the two biggest names in the sport, and the counts land 18 to 15 for Jack.",
-      "Later it's Walter Hagen against Phil Mickelson. Recency pulls you toward Phil, but Hagen's 11 majors dwarf Phil's 6. That's the trap this game sets over and over.",
-      "You stop trusting instinct, start trusting eras, and grind out 7 of 10.",
+    exampleSections: [
+      {
+        heading: "Nicklaus edges Tiger Woods",
+        paragraphs: [
+          "Round one gives you Jack Nicklaus against Tiger Woods, the two biggest names in the sport, and the counts land 18 to 15 for Jack.",
+        ],
+      },
+      {
+        heading: "Hagen's majors dwarf Mickelson's",
+        paragraphs: [
+          "Later it's Walter Hagen against Phil Mickelson. Recency pulls you toward Phil, but Hagen's 11 majors dwarf Phil's 6. That's the trap this game sets over and over.",
+        ],
+      },
+      {
+        heading: "Trusting eras over instinct to close 7 of 10",
+        paragraphs: [
+          "You stop trusting instinct, start trusting eras, and grind out 7 of 10.",
+        ],
+      },
     ],
-    tips: [
-      "Memorize the podium: Nicklaus 18, Woods 15, Hagen 11.",
-      "Early century champions stack majors quietly. When in doubt between eras, old often beats modern.",
-      "The two-major club is crowded and coin-flip rounds happen. Use the win years on the card to spot the bigger legend.",
-      "Ties pay both ways, so identical-feeling pairs are free points, not landmines.",
+    tipSections: [
+      {
+        heading: "Memorizing the podium of major counts",
+        items: [
+          "Memorize the podium: Nicklaus 18, Woods 15, Hagen 11.",
+        ],
+      },
+      {
+        heading: "Trusting old champions over modern ones",
+        items: [
+          "Early century champions stack majors quietly. When in doubt between eras, old often beats modern.",
+        ],
+      },
+      {
+        heading: "Spotting the bigger legend in a crowded club",
+        items: [
+          "The two-major club is crowded and coin-flip rounds happen. Use the win years on the card to spot the bigger legend.",
+        ],
+      },
+      {
+        heading: "Treating ties as free points",
+        items: [
+          "Ties pay both ways, so identical-feeling pairs are free points, not landmines.",
+        ],
+      },
     ],
     faqs: [
       {
