@@ -59,6 +59,7 @@ const {
   validateCustomClubName, crestSvg, sanitizeCrestInitials, registerCustomClub,
   clubDefFor, boardWantLabel, saveCareer, loadCareer, clearCareer,
   REAL_LEAGUES, ERA_LEAGUES, playableClubs, CUSTOM_TIERS, CREST_SHAPES, CREST_PATTERNS,
+  customQualityCap,
 } = cm;
 
 let failures = 0;
@@ -339,16 +340,33 @@ console.log('7) Crest markup is deterministic, self-contained and injection-proo
 console.log('8) Round 160: quality slider, identity, stadium size');
 {
   Math.random = seeded(160160);
-  // A team of 90s: quality 88 in the Eredivisie must produce low-90s starters
-  // and a board that names the title, whatever the wallet says.
+  /* The top of the slider on the biggest money in the Eredivisie must produce
+     starters a few points above it and a board that names the title. Round
+     640 made the squad part of what the money buys, so the slider stops at
+     the tier's ceiling (customQualityCap, 82 on 90m today): asking for 88
+     gets the ceiling, and the same ask on 15m gets that tier's much lower one
+     (simCustomClubValues section 2 fences the rule itself). */
+  const ceiling = customQualityCap('big', 'now');
   const superclub = startCareer('Real Anthony', 'now', spec({
-    budgetTier: 'small', leagueId: 'eredivisie', quality: 88, identity: 'gegenpress', capacity: 62000,
+    budgetTier: 'big', leagueId: 'eredivisie', quality: 88, identity: 'gegenpress', capacity: 62000,
   }));
+  if (superclub.customClub?.quality !== ceiling) fail(`asking for 88 on 90m founded at ${superclub.customClub?.quality}, not the tier's ceiling of ${ceiling}`);
   const ratings = superclub.squad.map(p => p.rating).sort((a, b) => b - a);
-  if (ratings[0] < 89) fail(`quality 88 produced a best player of ${ratings[0]}, expected low 90s`);
-  if (ratings[0] > 93) fail(`quality 88 produced a ${ratings[0]}, above the 93 cap`);
+  if (ratings[0] < ceiling + 2) fail(`the ${ceiling} ceiling produced a best player of ${ratings[0]}, expected a few points above it`);
+  if (ratings[0] > 93) fail(`the slider produced a ${ratings[0]}, above the 93 cap`);
   const xiAvg = ratings.slice(0, 11).reduce((s, r) => s + r, 0) / 11;
-  if (xiAvg < 86) fail(`quality 88 XI averages ${xiAvg.toFixed(1)}, the slider is not reaching the squad`);
+  if (xiAvg < ceiling) fail(`the ${ceiling} ceiling's XI averages ${xiAvg.toFixed(1)}, the slider is not reaching the squad`);
+  const smallCeiling = customQualityCap('small', 'now');
+  const shoestring = startCareer('Real Anthony', 'now', spec({ budgetTier: 'small', leagueId: 'eredivisie', quality: 88 }));
+  const sBest = Math.max(...shoestring.squad.map(p => p.rating));
+  if (!(smallCeiling < ceiling) || shoestring.customClub?.quality !== smallCeiling || sBest > smallCeiling + 6) {
+    fail(`asking for 88 on 15m founded at ${shoestring.customClub?.quality} with a best man of ${sBest}, not the small tier's ceiling of ${smallCeiling}`);
+  }
+  /* Rebuild the superclub for the board line below, which reads the club
+     registered last. */
+  startCareer('Real Anthony', 'now', spec({
+    budgetTier: 'big', leagueId: 'eredivisie', quality: 88, identity: 'gegenpress', capacity: 62000,
+  }));
   const wants = boardWantLabel('Real Anthony');
   if (!/win|title|champion/i.test(wants)) fail(`a division-topping slider squad is told "${wants}", not the title`);
   /* And the demand names the RIGHT league. The old label read leagueOf, whose
@@ -373,7 +391,7 @@ console.log('8) Round 160: quality slider, identity, stadium size');
 
   // Determinism: the same spec builds the same squad, quality included.
   const again = startCareer('Real Anthony', 'now', spec({
-    budgetTier: 'small', leagueId: 'eredivisie', quality: 88, identity: 'gegenpress', capacity: 62000,
+    budgetTier: 'big', leagueId: 'eredivisie', quality: 88, identity: 'gegenpress', capacity: 62000,
   }));
   const names1 = superclub.squad.map(p => p.name).join('|');
   const names2 = again.squad.map(p => p.name).join('|');
@@ -386,7 +404,7 @@ console.log('8) Round 160: quality slider, identity, stadium size');
   const legacy = startCareer('Real Anthony', 'now', spec({ budgetTier: 'mid', leagueId: 'premier' }));
   const lr = legacy.squad.map(p => p.rating).sort((a, b) => b - a);
   if (lr[0] > 78) fail(`a legacy no-quality spec produced a ${lr[0]}, the old anchor path drifted`);
-  console.log(`   slider 88: best ${ratings[0]}, XI ${xiAvg.toFixed(1)}, told "${wants}" · slider 55 in the PL told "${wants2}" · legacy anchor intact`);
+  console.log(`   slider asked for 88 on 90m: ceiling ${ceiling}, best ${ratings[0]}, XI ${xiAvg.toFixed(1)}, told "${wants}" · on 15m: ceiling ${smallCeiling}, best ${sBest} · slider 55 in the PL told "${wants2}" · legacy anchor intact`);
 }
 
 /* ---------- 7. The dashboard can never call a custom club English ---------- */
