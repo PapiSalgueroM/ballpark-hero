@@ -30,33 +30,55 @@
  *      (same seed) that sells none. The budget difference is the money the pads
  *      printed. Clubs chosen where the most pads can actually leave (the squad
  *      floor, canLeaveSquad, stops a sale at fifteen). Pooled p90 bounded.
+ *      And from below: every day one pad against the real players of 21 and
+ *      under within two rating points of him in his era's rosters, so a pad is
+ *      priced at the market's own teenagers and not at the floor.
  *   3) an academy graduate who developed keeps his earned value: promoted off a
- *      real intake, three summers of growth, and his price is still the curve's
- *      price for his rating and age, many times what a pad of his level fetches.
+ *      real intake, three summers of growth, no stored value on any graduate,
+ *      and many times what a pad of his rating and age fetches. (The Round 640
+ *      review removed the graduate over "the curve's price for him": a
+ *      graduate carries no value, so that ratio read 1.00 by construction.)
  *   4) a save written by the engine as it stood before the round (the in memory
  *      copy with the creation value and the load repair taken out) loads with
  *      the value applied to every pad in the squad, out on loan and in the free
  *      agent list, with every wage, every real player and every graduate left
- *      exactly as saved, and then plays the rest of season one identically to
- *      the same save played by the old engine, bar the pads' value field.
+ *      exactly as saved (the graduate in the hand built save is flagged isYouth,
+ *      so only the academyGrad guard keeps him unvalued), and then plays the
+ *      rest of season one identically to the same save played by the old
+ *      engine, bar the pads' value field. The same save carries old money on
+ *      pads (bids on the table, a clause, a loan's buy option), and after the
+ *      load every figure sits on the pad's new sale price.
+ *   5) a pad earns what he earned before the round: real clubs with the most
+ *      pads play three seasons on both engines, every expiring deal renewed,
+ *      and every renewal ask and every wage bill must match the engine before
+ *      Round 632 (wageFor prices a pad off the curve, not his sale value).
  *
  * MEASURED, default seed and SIM_SEED 1, 2 and 3, each run on its own TEMP.
  *   section 1  p95 of pad offers      fixed 1.30m on all four   novalue 16.9 to 17.1m    bound 2.0m
  *              (about 9,600 offers for about 3,050 pads a run; the p50 is 0.5m, was 6.7m)
+ *              pad / market teens p50 fixed 0.87 on all four   padfloor 0.25            band 0.6 to 1.8
+ *              (1,285 to 1,344 pads a run with 5 or more real teenagers near their rating)
  *   section 2  pooled p90 gain        fixed 2.56 to 3.28m       novalue 31.4 to 38.4m    bound 5.0m
  *              (48 paired careers, 127 to 136 sales a run; the median gain is 1.5 to 1.8m)
- *   section 3  grad / curve median    fixed 1.00                flatgrads 0.04 to 0.05   floor 0.95
- *              grad / pad median      fixed 32.0 to 32.5        flatgrads 1.4 to 1.5     floor 8
+ *   section 3  grad / pad median      fixed 32.0 to 32.5        flatgrads 1.4 to 1.5     floor 8
  *              (83 to 95 graduates promoted a run, every one grew 3 or more points)
  *   section 4  pads valued on load    fixed 106 of 106          noload 0 of 106
  *              seasons played alike   fixed 8 of 8, 0 wages moved
+ *              old money figures      all moved onto the new price   padnoresale: none moved
+ *              graduate flagged isYouth stays unvalued              nogradguard: valued
+ *   section 5  renewal asks alike     fixed 388 to 392 of 388 to 392 (285 to 289 pads)   nopadwage 170 differ
+ *              wage bills alike       fixed 18 of 18                                      nopadwage 12 differ
  *
  * CONTROLS (YOUTH_PAD_CONTROL=name). Each edits an in memory copy of the engine
  * after asserting its anchor appears exactly once, and must turn exactly its
  * own sections red:
- *   novalue    makeYouth stores no value at creation          -> sections 1 and 2
- *   noload     loadCareer skips the repair                     -> section 4
- *   flatgrads  promoteProspect prices a graduate like a pad    -> section 3
+ *   novalue      makeYouth stores no value at creation          -> sections 1 and 2
+ *   noload       loadCareer skips the repair                     -> section 4
+ *   flatgrads    promoteProspect prices a graduate like a pad    -> section 3
+ *   padfloor     every pad priced at the journeyman floor        -> section 1
+ *   nogradguard  isPaddingKid without its academyGrad guard      -> section 4
+ *   padnoresale  the repair leaves bids, clauses and options      -> section 4
+ *   nopadwage    wageFor reads a pad's stored sale value         -> section 5
  *
  * Nothing here reads dist or the clock (Date.now is only in generated ids), so
  * it is safe to run between builds.
@@ -521,7 +543,11 @@ console.log('4) a save written before the round loads valued and plays the same 
     };
     const listed = kids.slice(2, 6).map(p => p.id);
     for (const id of listed) save = old.setTransferStatus(save, id, 'listed');
-    old.generateIncomingBids(save, false);
+    /* The window's opening pass, then its weekly top ups until at least two
+       listed pads hold a bid, so the save always carries old money to test. */
+    for (let k = 0; k < 10 && (k === 0 || (save.incomingBids ?? []).filter(b => listed.includes(b.playerId) && !b.loan).length < 2); k++) {
+      old.generateIncomingBids(save, k > 0);
+    }
     const clauseMan = save.squad.find(p => p.id === kids[6]?.id);
     if (clauseMan) clauseMan.releaseClause = old.renewalTermsWithClause(clauseMan).clause;
     oldMoney = {
@@ -594,8 +620,9 @@ console.log('5) a pad earns what he earned before the round: wage bills and rene
    the same seed; at every summer each squad man's renewal ask is read, every
    man with a year or less left is renewed (the same men, in the same order,
    on both), and the wage bill is read after. Pads in the free agent list
-   quote their ask too. Only clubs with the most pads, so developed pads come
-   up for renewal. */
+   quote their ask too when there are any (none walk inside three seasons at
+   these clubs, so that count is printed, not asserted). Only clubs with the
+   most pads, so developed pads come up for renewal. */
 {
   let asksCompared = 0;
   let askDiff = 0;
@@ -665,7 +692,7 @@ console.log('5) a pad earns what he earned before the round: wage bills and rene
   if (padAsks < 100 || billsCompared < 12) fail(`only ${padAsks} pad renewal asks and ${billsCompared} bills compared`);
   else if (squadDiff) fail(`${squadDiff} season squads parted between the engines, so the wages were not compared like for like`);
   else if (askDiff || poolDiff || billDiff) fail(`${askDiff} renewal asks, ${poolDiff} pad free agent asks and ${billDiff} wage bills differ from the engine before Round 632`);
-  else ok(`every renewal ask (${asksCompared}, ${padAsks} of them pads), every pad free agent ask (${poolAsks}) and every wage bill (${billsCompared}) over three seasons matches the engine before Round 632`);
+  else ok(`every renewal ask (${asksCompared}, ${padAsks} of them pads, ${developed} a season or more on) and every wage bill (${billsCompared}) over three seasons matches the engine before Round 632`);
 }
 
 fs.rmSync(TMP, { recursive: true, force: true });

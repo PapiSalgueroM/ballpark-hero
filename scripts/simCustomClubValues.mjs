@@ -16,13 +16,16 @@
  * with a historic rating taken back below the uplift first), which is the
  * median real value at that rating in every league, era and age band; his wage
  * follows through ensureContracts. A save written before the round is repriced
- * on load (ensureCustomClubValues), each founder rebuilt from the spec. Two
- * rules the honest prices made necessary: a created club's wage cap is the one
- * a real club with its budget has (realCapForBudget), never less than its own
- * bill based cap; and the quality slider stays free (Round 160: found the club
- * you want, not the one the wallet dictates), but every founder carries a sale
- * cap (founderSaleCap), what he is worth in the squad the tier's money could
- * have bought, budget / 0.16 (customQualityCap), and sellValue pays no more.
+ * on load (ensureCustomClubValues), each founder rebuilt from the spec, found
+ * wherever he is, and every bid, clause, loan option and agreed part exchange
+ * priced off his old value moved with him. The rules the honest prices made
+ * necessary: a created club's wage cap is the one a real club with its budget
+ * has (realCapForBudget), never less than its own bill based cap; the quality
+ * slider stays free (Round 160: found the club you want, not the one the
+ * wallet dictates), but a squad founded above what the money buys, budget /
+ * 0.16 (customQualityCap), carries a sale ratio on every founder
+ * (founderSaleRatio, travelling with him everywhere) and brings wage room that
+ * leaves with those founders (founderWageRoom).
  *
  * SECTIONS, on the real engine bundled with esbuild, all four eras:
  *   1) a created squad is worth what the real squads of its level in its own
@@ -30,11 +33,13 @@
  *      tiers and the quality slider at 55, 66, 77 and 88, three founding names.
  *      Value a head against the median value a head of the real players of the
  *      real squads in the same league whose mean rating is within two points
- *      (a head, so a 17 man real squad and a 24 man founding compare). Pooled
- *      p10 and p90 inside the band. Never a max. And a squad founded above its
- *      tier's ceiling keeps, man by man, the rating the slider gave him on the
- *      engine as it stood before the round, his honest value and his honest
- *      wage: the sale cap touches the sale and nothing else.
+ *      (a head, so a 17 man real squad and a 24 man founding compare), and man
+ *      by man against the real players of his era, rating and age band: p10,
+ *      median and p90 each in a band. Never a max. The historic eras' founders
+ *      over 80 against the era's real players the engine rates within a point
+ *      (the uplift taken back). And a squad founded above its tier's ceiling
+ *      keeps, man by man, the rating the slider gave him on the engine as it
+ *      stood before the round, his honest value and his honest wage.
  *   2) listing every founder in the first summer window and taking every bid the
  *      squad floor allows, against the same career (same seed) selling nobody.
  *      The budget difference is what the founders were worth to sell, taken as
@@ -44,16 +49,12 @@
  *      budget, 1 x 15m on the smallest tier, because the squad a tier builds by
  *      itself must never sell for more than the tier's own cheque.
  *      (b) every slider setting on every tier in every era, 55 to 88 (408
- *      settings), 88 on the smallest budget included. A squad at the ceiling is
- *      the squad a real club with that budget holds, and above it the founders
- *      sell for no more than they would at the ceiling, so it may sell for what
- *      a real club with that budget sells for: the same sell off on 66 real
- *      clubs inside the budget clamp banks p50 2.69 and p90 3.31 of their own
- *      budget (3.85 in the 60m to 120m band), and the bound, 4 x the tier's
- *      budget, sits on the top of that. Pooled over every setting and,
- *      separately, over the settings above the ceiling. sellValue never prices
- *      a capped founder above his cap, and above the ceiling the squad's sale
- *      ceiling (each man at the lower of value and cap) is held to budget / 0.16.
+ *      settings), 88 on the smallest budget included, bounded at 1.2 x the p90
+ *      of the same sell off on real clubs inside the budget clamp, measured in
+ *      the section (every third such club, 64 to 68 a run). sellValue pays a
+ *      founder with a ratio his value times it; above the ceiling the squad's
+ *      sale ceiling is held to budget / 0.16 and each founder's sale basis to
+ *      the same man founded at the ceiling, from both sides.
  *   3) real players are priced exactly as before: a real club career plays its
  *      first window and weeks identically on the engine as it stood before the
  *      round and survives a save and load unchanged; the market a created club
@@ -62,84 +63,89 @@
  *      players loads with every real player's value and wage exactly as saved.
  *   4) a created club save written by the engine as it stood before the round
  *      (two weeks in, one founder out on loan) loads with every founder carrying
- *      exactly today's creation value and sale cap and nothing else moved, a load is done
- *      once (a second load moves nothing), and the rest of season one plays
- *      exactly as the old engine plays the same save with the old values, bar
- *      the founders' value and what is read straight off it (the bids for them,
- *      the two amounts in an agent's renewal quote). The one place a value steers
- *      the random stream, the value sorted pick of who gets an unsolicited bid,
- *      is sorted by rating in both copies for that comparison (see liveBlind),
- *      and the literal comparison is printed beside it. A save a whole season
- *      on moves every founder by the ratio of the new creation value to the old,
- *      then plays on the same way.
- *   5) a created club can spend its budget the way a real club with that budget
- *      can: each tier founded in four leagues today and two in each past era,
- *      two names, opens on the larger of its bill based cap and realCapForBudget,
- *      then makes three signings through buyPlayer, each the best rated real
- *      player the money left can pay for with the signings still to come. Its
- *      bill over its cap afterwards, p90, must sit no higher than that of real
- *      clubs with a budget within 0.7 to 1.4 times its own doing the same thing,
- *      plus a band. And an old created save whose cap is under the line loads
- *      at the line with every contract as signed, while an old save's higher cap
- *      and a new save's own lowered cap load untouched (the floor runs once).
+ *      exactly today's creation value and sale ratio and nothing else moved, a
+ *      load is done once (a second load moves nothing), and the rest of season
+ *      one plays exactly as the old engine plays the same save with the old
+ *      values, bar the founders' value and what is read straight off it (the
+ *      bids for them, the two amounts in an agent's renewal quote, a loan's buy
+ *      option). The one place a value steers the random stream, the value
+ *      sorted pick of who gets an unsolicited bid, is sorted by rating in both
+ *      copies for that comparison (see liveBlind), and the literal comparison is
+ *      printed beside it. A save a whole season on moves every founder by the
+ *      ratio of the new creation value to the old, then plays on the same way.
+ *      And saves holding the old money (bids on the table, a clause, a loan's
+ *      buy option) plus a founder in the free agent list and one signed back
+ *      under a free agent id load with every figure on the new price and both
+ *      founders repriced.
+ *   5) the cap: realCapForBudget against the real clubs it was fitted to
+ *      (median and tails); a created club, each tier in four leagues today and
+ *      two in each past era, opens on the larger of its bill based cap and the
+ *      line plus its founders' room, makes three signings through buyPlayer,
+ *      and at the median sits no further over its cap than real clubs of that
+ *      budget doing the same; founded at 88 above the ceiling, the cap covers
+ *      the bill a summer on with the founders there and falls back to the line
+ *      a summer after they have all gone; and the old save floor.
  *
  * MEASURED, default seed and SIM_SEED 1, 2 and 3, each run on its own TEMP;
  * the control figures are the default seed with the control applied.
- *   section 1  a head, pooled p10       fixed 0.76 to 0.81    rawcurve 10.11    floor 0.5
- *              a head, pooled p90       fixed 1.39 to 1.45    rawcurve 28.04    ceiling 2.0
- *              (about 260 of 567 created squads a run have a real squad within two
- *              points in their league; the small tier and slider 55 squads have none
- *              anywhere, so they are priced by the same line but banded only man by man)
- *              man by man, p10          fixed 0.87 to 0.90    rawcurve 7.77     floor 0.75
- *                                                             capall 0.34
- *              man by man, p90          fixed 1.02 to 1.03    rawcurve 24.17    ceiling 1.3
- *              (5,192 to 6,032 founders a run with 8 or more real players of their
- *              era, rating and age band)
- *              capped founders moved    fixed 0 of 744        capall 744 of 744 must be 0
- *              in rating, value, wage                         rawcurve 744 of 744
- *              (31 foundings above a tier's ceiling a run, every era and tier)
- *   section 2a p90 gain / tier budget   fixed 0.52 to 0.59    rawcurve 2.83     bound 1.0
- *              (104 paired careers and about 1,040 sales a run; p90 gain small 6.3 to
- *              7.0m, mid 19.3 to 21.8m, big 51.6 to 64.5m, slider 66 on 40m 12.5 to
- *              14.8m, against 183m, 378m, 719m and 296m on the old curve with no
- *              sale cap; rawcurve reads lower now because the cap holds it)
- *   section 2b every setting, p90       fixed 2.40 to 2.58    nosalecap 7.92    bound 4.0
- *              gain / tier budget
- *              above the ceiling, p90   fixed 2.73 to 2.91    nosalecap 14.99   bound 4.0
- *              88 on 15m, each seed     fixed 1.22 to 3.12    nosalecap 12.69 to 48.10
+ *   section 1  a head p10 / p50 / p90   fixed 0.76-0.81 / 0.93-1.00 / 1.39-1.45   bands 0.6 / 0.8-1.15 / 1.65
+ *                                       overprice 1.01 / 1.25 / 1.78, rawcurve 10.11 / 17.62 / 28.04
+ *              man by man              fixed 0.87-0.90 / 0.96 / 1.02-1.03        bands 0.8 / 0.88-1.08 / 1.15
+ *                                       overprice 1.14 / 1.18 / 1.28, capall p10 0.34, rawcurve 7.77 / 12.98 / 24.17
+ *              (5,192 to 6,032 founders a run with 8 or more real players of their era, rating and age band;
+ *              about 260 of 567 created squads a run have a real squad within two points in their league)
+ *              past eras over 80, p50  fixed 1.00 to 1.02    noerabake 1.62    band 0.7 to 1.4
+ *              (538 to 556 founders a run)
+ *              above ceiling founders  fixed 0 of 744        capall 744 of 744 must be 0
+ *              moved in rating, value, wage
+ *   section 2a p90 gain / tier budget   fixed 0.52 to 0.59    rawcurve 10.85    bound 1.0
+ *   section 2b real baseline p90        3.06 to 3.50 (bound 3.67 to 4.20 = 1.2 x)
+ *              every setting, p90       fixed 2.40 to 2.58    nosalecap 7.92, rawcurve 19.36
+ *              above the ceiling, p90   fixed 2.72 to 2.91    nosalecap 14.99
+ *              88 on 15m, each seed     fixed 1.22 to 3.10
  *              sale ceiling /           fixed 0.97 to 0.98                      ceiling 1.15
  *              (budget / 0.16), p90
- *              capped founders priced   fixed 0 of 2,760      nosalecap 2,534   must be 0
- *              above the cap
- *              (408 settings, 115 of them above their tier's ceiling, and 4,080
- *              sales a run; the ceilings are 72, 78 and 82 today, 72, 78 and 85
- *              in 2015 and 2010, 72, 79 and 88 in 2005)
- *   section 5  bill / cap after          fixed 0.37 to 0.44    tightcap 1.31      real p90 1.01
- *              spending, p90 by tier                          to 1.49            to 1.02, band 0.1
- *              (tightcap also opens 60 of 60 foundings off the line and loads the
- *              lowered old save at 100k instead of 910k)
- *              (60 foundings, the budget spent p10 0.99; real clubs of a similar
- *              budget land right on their cap after the same spending, and a
- *              created club, whose founders cost what their level costs, keeps
- *              more than half its cap free)
+ *              sale basis / same man    fixed 1.00 at p10 and p90   stingycap 0.50   band 0.95 to 1.05
+ *              at the ceiling                                       rawcurve 0.03 to 0.11
+ *              founders priced above    fixed 0 of 2,760      nosalecap 2,534   must be 0
+ *              value x ratio
+ *              (408 settings, 115 above their tier's ceiling, about 4,080 sales a run; the ceilings
+ *              are 72, 78 and 82 today, 72, 78 and 85 in 2015 and 2010, 72, 79 and 88 in 2005)
  *   section 3  30 real club careers and 30 of their saves identical, 16 created club
  *              markets and 48 real signings identical, 48 of 48 real players in old
  *              created club saves unmoved on load (realtoo: 48 of 48 moved)
  *   section 4  460 of 460 founders and 20 of 20 loans repriced on load, 0 wages moved,
  *              20 of 20 seasons alike, a season on 68 to 80 founders all moved by the
- *              ratio and 4 of 4 alike (noload: 0 of 460 repriced). With the old values
- *              kept and the value sorted targeting live, 20 of 20 alike on seeds 0 to
- *              2 and 19 of 20 on seed 3.
+ *              ratio and 4 of 4 alike; 35 old money figures all moved, 16 of 16 lost
+ *              founders repriced (noload: 0 of 460; noresale: 35 of 35 kept the old money)
+ *   section 5  real cap / line          p10 0.94-0.95, p50 1.00, p90 1.05-1.06    halfcap 1.89 / 2.01 / 2.10
+ *              created bill / cap after spending, median by tier 0.36 to 0.43 against real 1.00 to 1.01
+ *                                       tightcap fails all three tiers
+ *              founded at 88, a summer on: cap / bill 1.19 to 1.27 with the founders kept;
+ *              cap / line 0.97 with them gone (stickycap 2.34, halfcap 1.82; bound 1.2)
  *
  * CONTROLS (CUSTOM_VALUE_CONTROL=name). Each edits an in memory copy of the
- * engine after asserting its anchor appears exactly once, and must turn exactly
- * its own sections red:
+ * engine after asserting its anchor appears exactly once:
  *   rawcurve   buildCustomSquad stores the old full curve again      -> sections 1 and 2
  *   noload     loadCareer skips the repricing                         -> section 4
  *   realtoo    the repricing treats a real player as a founder too    -> section 3
- *   nosalecap  sellValue ignores the founder's sale cap               -> section 2
- *   capall     the sale cap lowers the founder's value too            -> section 1
+ *   nosalecap  sellValue ignores the founder's sale ratio             -> section 2
+ *   capall     the ceiling lowers the founder's value too             -> sections 1 and 2 (the
+ *              value falls to the ceiling's, so no ratio is left for section 2 to read)
  *   tightcap   the bill based cap only, at the founding and on load   -> section 5
+ *   halfcap    the cap line at half what real clubs run               -> section 5
+ *   stingycap  a sale ratio half what the money bought                -> section 2
+ *   overprice  founders priced 25 percent over the market             -> section 1
+ *   noerabake  a historic founder priced by his uplifted rating       -> section 1
+ *   stickycap  the summer moves the whole cap, founders' room and all -> section 5
+ *   noresale   the repricing leaves bids, clauses and options behind  -> section 4
+ *
+ * What the checks that set the engine against itself can and cannot catch,
+ * said where they are: the creation value against customFounderValue, the
+ * day one cap against max(bill cap, line plus room), sellValue against value
+ * times ratio, and the load against today's creation value each catch a path
+ * that skips the rule, never a wrong rule; the rule itself is held to real
+ * players, real squads, real clubs' caps and real clubs' sell offs.
  *
  * Nothing here reads dist or the clock (Date.now is only in generated ids), so
  * it is safe to run between builds.
@@ -205,7 +211,8 @@ function rewrite(src, anchor, replacement, why) {
 
 let live = PRISTINE;
 if (CONTROL === 'rawcurve') live = rewrite(live, VALUE_LINE, OLD_VALUE_LINE, 'control rawcurve');
-if (CONTROL === 'noload') live = rewrite(live, LOAD_LINE, NO_LOAD, 'control noload');
+/* The repricing skipped, the cap floor that rides with it left running. */
+if (CONTROL === 'noload') live = rewrite(live, LOAD_LINE, '      const repriced = parsed.customValues !== CUSTOM_VALUES_VERSION;\n', 'control noload');
 if (CONTROL === 'realtoo') {
   live = rewrite(live, REAL_LINE,
     '  if (!p.generated && !p.isYouth) return p;\n  if (p.isYouth || p.academyGrad) return null;\n', 'control realtoo');
