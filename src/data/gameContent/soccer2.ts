@@ -137,27 +137,106 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Then the cup begins. Your finished XI runs five knockout rounds against ever stronger opposition, rated 70 up to 89, with extra time and penalties when the ninety minutes are level.",
       "The run is decided entirely by the squad you drafted: the same XI always runs the same gauntlet, so every pick is the game.",
     ],
-    howToPlay: [
-      "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
-      "For each slot, read the five cards, star to bargain, and tap the one you keep. Position families apply, so a winger card can cover either flank.",
-      "After pick eleven the knockout starts on its own: five rounds, one match each, revealed one at a time.",
-      "Survive a round for 16 points; lift the trophy for exactly 100.",
+    headings: {
+      howToPlay: "How to play Gauntlet Draft, a free online soccer card draft game",
+      rules: "Gauntlet Draft rules: cards, the knockout and opposition ratings",
+      example: "Gauntlet Draft walkthrough: a striker pick and a four round run",
+      tips: "Gauntlet Draft tips for drafting a squad that lifts the trophy",
+      faq: "Gauntlet Draft FAQ: the daily draft, real players and replays",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing daily or unlimited mode",
+        items: [
+          "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
+        ],
+      },
+      {
+        heading: "Drafting one card per slot",
+        items: [
+          "For each slot, read the five cards, star to bargain, and tap the one you keep. Position families apply, so a winger card can cover either flank.",
+        ],
+      },
+      {
+        heading: "How the knockout starts on its own",
+        items: [
+          "After pick eleven the knockout starts on its own: five rounds, one match each, revealed one at a time.",
+        ],
+      },
+      {
+        heading: "Scoring survival points and the trophy",
+        items: [
+          "Survive a round for 16 points; lift the trophy for exactly 100.",
+        ],
+      },
     ],
-    rules: [
-      "Every card is a real player from the same verified market data the rest of the site uses; every opponent club is invented on purpose.",
-      "The five cards per slot are spread across the value bands, so a star and a bargain are always both on the table.",
-      "No player is dealt twice in one draft.",
-      "The knockout is deterministic in your XI: goals come from the rating gap, level games go to extra time and then penalties, and replaying the same squad replays the same cup.",
-      "Opposition ratings climb 70, 76, 81, 85, 89. A bargain draft usually falls in the first two rounds, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy about one run in eight.",
+    ruleSections: [
+      {
+        heading: "Real players against invented opponents",
+        items: [
+          "Every card is a real player from the same verified market data the rest of the site uses; every opponent club is invented on purpose.",
+        ],
+      },
+      {
+        heading: "Card spread and no repeat picks",
+        items: [
+          "The five cards per slot are spread across the value bands, so a star and a bargain are always both on the table.",
+        ],
+        subsections: [
+          {
+            heading: "Never dealt the same player twice",
+            items: [
+              "No player is dealt twice in one draft.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "How the knockout plays out",
+        items: [
+          "The knockout is deterministic in your XI: goals come from the rating gap, level games go to extra time and then penalties, and replaying the same squad replays the same cup.",
+        ],
+      },
+      {
+        heading: "Climbing opposition ratings by round",
+        items: [
+          "Opposition ratings climb 70, 76, 81, 85, 89. A bargain draft usually falls in the first two rounds, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy about one run in eight.",
+        ],
+      },
     ],
-    example: [
-      "The draw hands you a 4-3-3 and the striker slot deals a 91 rated superstar next to an 84, a 79, a 74 and a 68. You pay nothing for any of them, so the 91 is the pick unless you are chasing a story.",
-      "Your finished XI rates 84. The Qualifier ends 3-0, the Last Sixteen 2-1, the Quarter Final needs penalties, and the Semi Final ends the run 1-2. Four rounds survived, 64 points, and the draft you would redo is the 74 you took at left back.",
+    exampleSections: [
+      {
+        heading: "A striker slot with five cards to choose",
+        paragraphs: [
+          "The draw hands you a 4-3-3 and the striker slot deals a 91 rated superstar next to an 84, a 79, a 74 and a 68. You pay nothing for any of them, so the 91 is the pick unless you are chasing a story.",
+        ],
+      },
+      {
+        heading: "Four rounds survived and one regret",
+        paragraphs: [
+          "Your finished XI rates 84. The Qualifier ends 3-0, the Last Sixteen 2-1, the Quarter Final needs penalties, and the Semi Final ends the run 1-2. Four rounds survived, 64 points, and the draft you would redo is the 74 you took at left back.",
+        ],
+      },
     ],
-    tips: [
-      "The keeper card matters as much as the striker card: one weak slot drags the whole rating.",
-      "The bargain cards exist for flavor runs, not for winning. If the score is the goal, draft the biggest number that fits.",
-      "Champions need a squad in the high eighties. Check your running rating under the cards as you go.",
+    tipSections: [
+      {
+        heading: "Why the keeper slot matters as much",
+        items: [
+          "The keeper card matters as much as the striker card: one weak slot drags the whole rating.",
+        ],
+      },
+      {
+        heading: "Bargain cards versus chasing the score",
+        items: [
+          "The bargain cards exist for flavor runs, not for winning. If the score is the goal, draft the biggest number that fits.",
+        ],
+      },
+      {
+        heading: "Watching your running rating climb",
+        items: [
+          "Champions need a squad in the high eighties. Check your running rating under the cards as you go.",
+        ],
+      },
     ],
     faqs: [
       { q: "Is the daily draft the same for everyone?", a: "Yes. One shared set of five card choices per Eastern Time date, so daily scores compare fairly." },
@@ -170,28 +249,107 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Footle gives you 8 guesses to name a mystery soccer player. Each guess is a real player, and colored tiles compare it to the answer across eight attributes, from club to kit number.",
       "You get eight goes at one mystery player and every guess comes back colour coded: arrows say whether the answer is older, scores more, or wears a higher number. Everyone gets the same new player every day.",
     ],
-    howToPlay: [
-      "Type a player's name and pick him from the suggestions.",
-      "Read the tiles: green is an exact match, yellow is close, white is a miss.",
-      "Follow the arrows: up means the answer's value is higher than your guess.",
-      "Narrow by continent, league, and position group before sweating exact numbers.",
-      "Get the name within 8 guesses and share your emoji grid.",
+    headings: {
+      howToPlay: "How to play Footle, a free daily soccer guessing game",
+      rules: "Footle rules: guesses, yellow tiles and the difficulty tiers",
+      example: "Footle walkthrough: from Bellingham to a Barcelona academy graduate",
+      tips: "Footle tips for narrowing down the mystery player fast",
+      faq: "Footle FAQ: daily resets, difficulty tiers and unlimited mode",
+    },
+    howToPlaySections: [
+      {
+        heading: "Typing a name from the suggestions",
+        items: [
+          "Type a player's name and pick him from the suggestions.",
+        ],
+      },
+      {
+        heading: "Reading the color coded tiles",
+        items: [
+          "Read the tiles: green is an exact match, yellow is close, white is a miss.",
+        ],
+      },
+      {
+        heading: "Following the up or down arrows",
+        items: [
+          "Follow the arrows: up means the answer's value is higher than your guess.",
+        ],
+      },
+      {
+        heading: "Narrowing by continent, league and position",
+        items: [
+          "Narrow by continent, league, and position group before sweating exact numbers.",
+        ],
+        subsections: [
+          {
+            heading: "Solving within your eight guesses",
+            items: [
+              "Get the name within 8 guesses and share your emoji grid.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "You get 8 guesses in both daily and unlimited mode.",
-      "Yellow means close: same continent, same league, within 3 goals, assists, or kit number, within 2 years of age, within 5 million dollars of value, or the same position group.",
-      "The daily tier is shared: about 40 percent of days are Easy, 55 Hard, 5 Insane.",
-      "In unlimited mode you choose Easy, Hard, or Insane, and the answer always comes from that tier.",
+    ruleSections: [
+      {
+        heading: "Eight guesses in every mode",
+        items: [
+          "You get 8 guesses in both daily and unlimited mode.",
+        ],
+      },
+      {
+        heading: "What counts as a close yellow tile",
+        items: [
+          "Yellow means close: same continent, same league, within 3 goals, assists, or kit number, within 2 years of age, within 5 million dollars of value, or the same position group.",
+        ],
+      },
+      {
+        heading: "Daily difficulty split and unlimited choice",
+        items: [
+          "The daily tier is shared: about 40 percent of days are Easy, 55 Hard, 5 Insane.",
+          "In unlimited mode you choose Easy, Hard, or Insane, and the answer always comes from that tier.",
+        ],
+      },
     ],
-    example: [
-      "Open with Jude Bellingham. Club comes back yellow, so the answer is La Liga but not Real Madrid. Position is green, a midfielder, and the age tile points down.",
-      "Young La Liga midfielders scream Barcelona. Pedri turns club green, kit number and goals steer the last step, and Gavi lights the board on guess three.",
+    exampleSections: [
+      {
+        heading: "Opening with a famous midfielder",
+        paragraphs: [
+          "Open with Jude Bellingham. Club comes back yellow, so the answer is La Liga but not Real Madrid. Position is green, a midfielder, and the age tile points down.",
+        ],
+      },
+      {
+        heading: "Zeroing in on a young La Liga midfielder",
+        paragraphs: [
+          "Young La Liga midfielders scream Barcelona. Pedri turns club green, kit number and goals steer the last step, and Gavi lights the board on guess three.",
+        ],
+      },
     ],
-    tips: [
-      "Open with someone you know cold so the arrows mean something.",
-      "Category tiles carve the pool faster than stats: continent, then league, then position group.",
-      "Kit number is sneaky useful. A yellow pins the shirt to within 3.",
-      "In unlimited Insane, still probe with famous names. Guessing stays open to the full pool.",
+    tipSections: [
+      {
+        heading: "Opening with a player you know cold",
+        items: [
+          "Open with someone you know cold so the arrows mean something.",
+        ],
+      },
+      {
+        heading: "Category tiles before chasing the stats",
+        items: [
+          "Category tiles carve the pool faster than stats: continent, then league, then position group.",
+        ],
+      },
+      {
+        heading: "Why the kit number tile is sneaky useful",
+        items: [
+          "Kit number is sneaky useful. A yellow pins the shirt to within 3.",
+        ],
+      },
+      {
+        heading: "Probing with famous names on Insane",
+        items: [
+          "In unlimited Insane, still probe with famous names. Guessing stays open to the full pool.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -214,28 +372,107 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "A player's whole career sits in front of you, season by season, with almost everything covered up. Work out who it is while revealing as few boxes as you can.",
       "Only the season years start visible. Club, appearances, goals, assists, and market value hide behind tappable boxes. It is a memory test for anyone who has watched a decade of transfer windows.",
     ],
-    howToPlay: [
-      "Tap any hidden box to reveal that cell of the career table.",
-      "Press Give Hint to open 4 random boxes at once, as often as you like.",
-      "Guess by typing a name in the search bar, any time, even with zero boxes open.",
-      "Wrong guesses burn one of your 8 chances. Revealing boxes never does.",
-      "Solve it and the game logs both your guess count and your box count.",
+    headings: {
+      howToPlay: "How to play Career Quiz, a free soccer career reveal puzzle",
+      rules: "Career Quiz rules: guesses, hints and the hidden columns",
+      example: "Career Quiz walkthrough: from a Juventus box to naming Zlatan",
+      tips: "Career Quiz tips for reading a career table fast",
+      faq: "Career Quiz FAQ: daily puzzles, hints and unlimited tiers",
+    },
+    howToPlaySections: [
+      {
+        heading: "Tapping boxes to reveal the table",
+        items: [
+          "Tap any hidden box to reveal that cell of the career table.",
+        ],
+      },
+      {
+        heading: "Using Give Hint for four boxes at once",
+        items: [
+          "Press Give Hint to open 4 random boxes at once, as often as you like.",
+        ],
+      },
+      {
+        heading: "Typing a guess at any time",
+        items: [
+          "Guess by typing a name in the search bar, any time, even with zero boxes open.",
+        ],
+        subsections: [
+          {
+            heading: "Why revealing boxes is always free",
+            items: [
+              "Wrong guesses burn one of your 8 chances. Revealing boxes never does.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "What the game logs when you solve it",
+        items: [
+          "Solve it and the game logs both your guess count and your box count.",
+        ],
+      },
     ],
-    rules: [
-      "You get 8 guesses, and 8 wrong guesses ends the run.",
-      "Each hint opens exactly 4 random boxes.",
-      "Five columns hide per season: club, appearances, goals, assists, and market value.",
-      "The daily is shared by everyone. Unlimited mode adds Easy, Normal, and Hard tiers, splitting the pool by peak market value.",
+    ruleSections: [
+      {
+        heading: "Eight guesses before the run ends",
+        items: [
+          "You get 8 guesses, and 8 wrong guesses ends the run.",
+        ],
+      },
+      {
+        heading: "Hints and the five hidden columns",
+        items: [
+          "Each hint opens exactly 4 random boxes.",
+          "Five columns hide per season: club, appearances, goals, assists, and market value.",
+        ],
+      },
+      {
+        heading: "Daily puzzle versus unlimited difficulty tiers",
+        items: [
+          "The daily is shared by everyone. Unlimited mode adds Easy, Normal, and Hard tiers, splitting the pool by peak market value.",
+        ],
+      },
     ],
-    example: [
-      "You open one club box mid career and get Juventus. Big list, so you open the market value cell on that row: star money, a player in his prime. One more club box near the top shows Ajax.",
-      "Ajax to Juventus with superstar value narrows it fast. You type Zlatan Ibrahimovic and win in 1 guess with 3 boxes revealed, the kind of line worth sharing.",
+    exampleSections: [
+      {
+        heading: "A Juventus club box mid career",
+        paragraphs: [
+          "You open one club box mid career and get Juventus. Big list, so you open the market value cell on that row: star money, a player in his prime. One more club box near the top shows Ajax.",
+        ],
+      },
+      {
+        heading: "Naming Zlatan in one guess",
+        paragraphs: [
+          "Ajax to Juventus with superstar value narrows it fast. You type Zlatan Ibrahimovic and win in 1 guess with 3 boxes revealed, the kind of line worth sharing.",
+        ],
+      },
     ],
-    tips: [
-      "Club boxes are the biggest tell. A distinctive transfer route can solve it in two reveals.",
-      "Market value peaks mark the prime years and split superstars from journeymen.",
-      "Goals in the twenties every season screams striker. Big appearances with few goals hints at defenders and keepers.",
-      "No clock is running, so sit with the pattern before you spend a guess.",
+    tipSections: [
+      {
+        heading: "Why club boxes are the biggest tell",
+        items: [
+          "Club boxes are the biggest tell. A distinctive transfer route can solve it in two reveals.",
+        ],
+      },
+      {
+        heading: "Market value peaks and prime years",
+        items: [
+          "Market value peaks mark the prime years and split superstars from journeymen.",
+        ],
+      },
+      {
+        heading: "Reading goals and appearances by position",
+        items: [
+          "Goals in the twenties every season screams striker. Big appearances with few goals hints at defenders and keepers.",
+        ],
+      },
+      {
+        heading: "Taking your time with no clock running",
+        items: [
+          "No clock is running, so sit with the pattern before you spend a guess.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -258,29 +495,113 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Most higher or lower games hide a number and make you call it. This one flips the table: your player's stats are face up, the challenger's are hidden, and you pick the battleground.",
       "Three career totals are in play: appearances, goals and international caps. Choose the one stat where your player beats the mystery opponent. One bad read ends the run.",
     ],
-    howToPlay: [
-      "Study your player's three revealed career stats.",
-      "Tap the one stat where you think your player is at least as high as the hidden opponent.",
-      "The reveal shows both cards for a few seconds either way.",
-      "Correct picks grow your streak, and the opponent becomes your next player.",
-      "A wrong pick ends the game. Share the streak and go again.",
+    headings: {
+      howToPlay: "How to play Higher or Lower, a free soccer stats comparison game",
+      rules: "Higher or Lower rules: ties, career totals and one wrong pick",
+      example: "Higher or Lower walkthrough: Maldini's appearances start a streak",
+      tips: "Higher or Lower tips for picking the safest career stat",
+      faq: "Higher or Lower FAQ: ties, streaks and hidden opponents",
+    },
+    howToPlaySections: [
+      {
+        heading: "Studying your player's three stats",
+        items: [
+          "Study your player's three revealed career stats.",
+        ],
+      },
+      {
+        heading: "Picking the stat that beats the opponent",
+        items: [
+          "Tap the one stat where you think your player is at least as high as the hidden opponent.",
+        ],
+      },
+      {
+        heading: "Watching the reveal either way",
+        items: [
+          "The reveal shows both cards for a few seconds either way.",
+        ],
+        subsections: [
+          {
+            heading: "How a correct pick grows your streak",
+            items: [
+              "Correct picks grow your streak, and the opponent becomes your next player.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "What happens after a wrong pick",
+        items: [
+          "A wrong pick ends the game. Share the streak and go again.",
+        ],
+      },
     ],
-    rules: [
-      "All three stats are career totals.",
-      "Ties count for you: a pick is correct when your number is higher than or equal to the opponent's.",
-      "One wrong pick ends the run. There are no lives and no timer.",
-      "Every matchup is winnable by design, with at least one stat where your player is not behind.",
-      "International caps are senior full internationals, and a card says on the reveal when its number comes from one publisher rather than two.",
+    ruleSections: [
+      {
+        heading: "Three career totals decide every matchup",
+        items: [
+          "All three stats are career totals.",
+        ],
+      },
+      {
+        heading: "Why a tie still counts as a win",
+        items: [
+          "Ties count for you: a pick is correct when your number is higher than or equal to the opponent's.",
+        ],
+      },
+      {
+        heading: "No lives, no timer, one wrong pick",
+        items: [
+          "One wrong pick ends the run. There are no lives and no timer.",
+        ],
+      },
+      {
+        heading: "Every matchup is winnable by design",
+        items: [
+          "Every matchup is winnable by design, with at least one stat where your player is not behind.",
+          "International caps are senior full internationals, and a card says on the reveal when its number comes from one publisher rather than two.",
+        ],
+      },
     ],
-    example: [
-      "Your card is Paolo Maldini. Goals is a trap for a defender who played 25 years at the back, so you tap appearances, and 902 games holds up against almost anybody.",
-      "The reveal shows a striker with a monster goal column and a short career. Streak to 7, and now you play as that striker, hunting his one strong column.",
+    exampleSections: [
+      {
+        heading: "Picking appearances for a defender",
+        paragraphs: [
+          "Your card is Paolo Maldini. Goals is a trap for a defender who played 25 years at the back, so you tap appearances, and 902 games holds up against almost anybody.",
+        ],
+      },
+      {
+        heading: "The streak climbs against a striker",
+        paragraphs: [
+          "The reveal shows a striker with a monster goal column and a short career. Streak to 7, and now you play as that striker, hunting his one strong column.",
+        ],
+      },
     ],
-    tips: [
-      "Appearances reward longevity, so keepers and one club legends quietly dominate that column.",
-      "Remember who might be hiding: the pool mixes recent names with retired icons carrying finished, giant totals.",
-      "Ties go to you, so a merely solid stat can still be the safest pick.",
-      "Your best streak of the session stays on screen. Chase it while the pool is fresh in your head.",
+    tipSections: [
+      {
+        heading: "Why appearances reward long careers",
+        items: [
+          "Appearances reward longevity, so keepers and one club legends quietly dominate that column.",
+        ],
+      },
+      {
+        heading: "Remembering who might be hiding",
+        items: [
+          "Remember who might be hiding: the pool mixes recent names with retired icons carrying finished, giant totals.",
+        ],
+      },
+      {
+        heading: "Why a merely solid stat can be safest",
+        items: [
+          "Ties go to you, so a merely solid stat can still be the safest pick.",
+        ],
+      },
+      {
+        heading: "Chasing your best streak of the session",
+        items: [
+          "Your best streak of the session stays on screen. Chase it while the pool is fresh in your head.",
+        ],
+      },
     ],
     faqs: [
       {
