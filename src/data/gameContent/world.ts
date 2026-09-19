@@ -1161,27 +1161,106 @@ export const WORLD_CONTENT: GameContentMap = {
       "History has a short memory and it only keeps one name per year. Who'd They Beat? is about the other name: the team that made the final, shook hands, and watched the confetti fall on somebody else.",
       "We give you the champion and the year, across five competitions: the Super Bowl, the NBA Finals, the World Series, the Stanley Cup and the WNBA Finals. You pick who they beat from four options, and every single option is a real beaten finalist from that competition's record books.",
     ],
-    howToPlay: [
-      "Read the final: a champion and a year.",
-      "Pick which of the four teams lost to them.",
-      "The reveal names the answer and the series result straight away.",
-      "Ten finals per day, two from each competition, one point per correct pick.",
-      "The daily set is the same for everyone. Unlimited mode keeps dealing.",
+    headings: {
+      howToPlay: "How to play Who'd They Beat?, a free finals trivia game",
+      rules: "Who'd They Beat? rules for options and daily scoring",
+      example: "Who'd They Beat? walkthrough: the 1994 Rockets and the 1942 Leafs",
+      tips: "Who'd They Beat? tips for placing the era and league",
+      faq: "Who'd They Beat? FAQ: leagues covered and the data",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the champion and the year",
+        items: [
+          "Read the final: a champion and a year.",
+        ],
+      },
+      {
+        heading: "Picking the loser from four options",
+        items: [
+          "Pick which of the four teams lost to them.",
+        ],
+      },
+      {
+        heading: "Seeing the answer and the series result",
+        items: [
+          "The reveal names the answer and the series result straight away.",
+        ],
+      },
+      {
+        heading: "Ten daily finals across five leagues",
+        items: [
+          "Ten finals per day, two from each competition, one point per correct pick.",
+        ],
+        subsections: [
+          {
+            heading: "Switching to unlimited after the daily set",
+            items: [
+              "The daily set is the same for everyone. Unlimited mode keeps dealing.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "Every option is a genuine finals loser from that same competition. No invented teams, ever.",
-      "The wrong options are real runners up from other years, which is what makes the near misses cruel: the 1995 Magic show up as an option for the 1994 question.",
-      "One pick per final, no second chances, and the daily locks your result once you finish.",
+    ruleSections: [
+      {
+        heading: "Every option is a real finals loser",
+        items: [
+          "Every option is a genuine finals loser from that same competition. No invented teams, ever.",
+        ],
+      },
+      {
+        heading: "Mixing in runners up from other years",
+        items: [
+          "The wrong options are real runners up from other years, which is what makes the near misses cruel: the 1995 Magic show up as an option for the 1994 question.",
+        ],
+      },
+      {
+        heading: "One pick per final, no second chances",
+        items: [
+          "One pick per final, no second chances, and the daily locks your result once you finish.",
+        ],
+      },
     ],
-    example: [
-      'The card asks: "The Houston Rockets won the 1994 NBA Finals. Who did they beat?" You remember the Knicks going to seven, pick New York, and the reveal confirms it, series 4-3.',
-      "Next card is hockey: the 1942 Maple Leafs. If you know the only final ever won from three games down, you know Detroit was on the wrong end of it.",
+    exampleSections: [
+      {
+        heading: "The 1994 Rockets against the Knicks",
+        paragraphs: [
+          'The card asks: "The Houston Rockets won the 1994 NBA Finals. Who did they beat?" You remember the Knicks going to seven, pick New York, and the reveal confirms it, series 4-3.',
+        ],
+      },
+      {
+        heading: "The 1942 Maple Leafs comeback final",
+        paragraphs: [
+          "Next card is hockey: the 1942 Maple Leafs. If you know the only final ever won from three games down, you know Detroit was on the wrong end of it.",
+        ],
+      },
     ],
-    tips: [
-      "Work out the era first, then the conference or league. Half the wrong options die on geography.",
-      "Dynasty years are the easy ones: everyone knows who kept losing to the Bulls. The 40s and 50s are where scores are made.",
-      "The reveal teaches the series result too, which quietly makes you better at Champ or Not.",
-      "The trap options are usually from a year or two away. If two answers feel right, pick the one that fits the exact year.",
+    tipSections: [
+      {
+        heading: "Placing the era before the league",
+        items: [
+          "Work out the era first, then the conference or league. Half the wrong options die on geography.",
+        ],
+      },
+      {
+        heading: "Trusting dynasty years as the easy calls",
+        items: [
+          "Dynasty years are the easy ones: everyone knows who kept losing to the Bulls. The 40s and 50s are where scores are made.",
+        ],
+      },
+      {
+        heading: "Picking up who beat whom as you go",
+        items: [
+          "The reveal teaches the series result too, which quietly makes you better at Champ or Not.",
+        ],
+      },
+      {
+        heading: "Choosing the option closest to the exact year",
+        items: [
+          "The trap options are usually from a year or two away. If two answers feel right, pick the one that fits the exact year.",
+        ],
+      },
     ],
     faqs: [
       {
