@@ -323,6 +323,9 @@ const click = async (root: HTMLElement, text: string) => {
   await act(async () => { fireEvent.click(b); });
   await tick(40);
 };
+/* What the TV studio tile said just before the last show, and what the legacy
+   card then paid for it. */
+const studio: { tile: string | null; label: string | null; paid: number } = { tile: null, label: null, paid: NaN };
 const roads = {
   retire: async (root: HTMLElement) => { await click(root, 'Retire and Enjoy Life'); },
   manager: async (root: HTMLElement) => {
@@ -332,8 +335,14 @@ const roads = {
   },
   pundit: async (root: HTMLElement) => {
     await click(root, 'Become a TV Pundit');
-    for (let i = 0; i < 6; i++) await click(root, 'Make a Bold Prediction');
+    for (let i = 0; i < 12; i++) await click(root, 'Make a Bold Prediction');
+    const tile = root.querySelector('[data-testid="pundit-legacy-tile"]');
+    studio.tile = tile?.firstElementChild?.textContent ?? null;
+    studio.label = tile?.lastElementChild?.textContent ?? null;
     await click(root, 'Retire from Punditry');
+    /* The line the legacy card pays for the studio, or 0 when it pays none. */
+    const line = Array.from(root.querySelectorAll('span')).find(s => (s.textContent ?? '').trim() === 'Punditry');
+    studio.paid = line ? firstNumber(line.nextElementSibling?.textContent) : 0;
   },
   owner: async (root: HTMLElement) => {
     await click(root, 'Buy a Football Club');
@@ -363,11 +372,37 @@ describe('soccer-career', () => {
     it(`soccer-career: ending ${road === 'owner' ? 'an' : 'a'} ${road} career records the legacy score the final screen shows`, async () => {
       const career = playToCeremony(645, 70);
       if (road === 'owner') career.netWorth = 500;
-      const r = await finishThroughPage(career, roads[road]);
-      console.log(`SHOWN soccer-career after the ${road} road: recorded ${JSON.stringify(r.rec)} shown "${r.shownText}" (ceremony legacy ${career.legacy!.score})`);
+      const realRandom = Math.random;
+      Math.random = seeded(700);
+      let r: Awaited<ReturnType<typeof finishThroughPage>>;
+      try { r = await finishThroughPage(career, roads[road]); } finally { Math.random = realRandom; }
+      console.log(`SHOWN soccer-career after the ${road} road: recorded ${JSON.stringify(r.rec)} shown "${r.shownText}" (ceremony legacy ${career.legacy!.score})${road === 'pundit' ? `; studio tile "${studio.tile}" (${studio.label}), legacy card Punditry ${studio.paid}` : ''}`);
       expect(r.rec).toEqual([r.shown]);
+      if (road === 'pundit') {
+        /* The studio tile promises what the record pays: the same number. */
+        expect(firstNumber(studio.tile)).toBe(studio.paid);
+        expect(studio.paid).toBeLessThanOrEqual(E.POST_RETIREMENT_BONUS_CAP);
+      }
     }, 60000);
   }
+
+  it('soccer-career: a career retired in its first youth year gets nothing from the studio, and the tile says so', async () => {
+    const st = (o: number) => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
+    const kid = E.manualRetire(E.initCareer('Test Kid', 'England', 'ST', '2020s', st(55), 55, 2020, E.FALLBACK_CLUBS, null, 80));
+    const realRandom = Math.random;
+    Math.random = seeded(646);
+    try {
+      const r = await finishThroughPage(kid, roads.pundit);
+      console.log(`SHOWN soccer-career youth retirement then the studio: recorded ${JSON.stringify(r.rec)} shown "${r.shownText}"; studio tile "${studio.tile}" (${studio.label}), legacy card Punditry ${studio.paid}`);
+      expect(r.rec).toEqual([r.shown]);
+      expect(r.rec).toEqual([0]);
+      expect(firstNumber(studio.tile)).toBe(0);
+      expect(studio.paid).toBe(0);
+      expect(studio.label).toContain('no senior career');
+    } finally {
+      Math.random = realRandom;
+    }
+  }, 60000);
 });
 
 /* ---------------- Footle ---------------- */

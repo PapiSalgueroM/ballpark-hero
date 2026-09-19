@@ -65,6 +65,10 @@
  *                 season: section2post.
  *   norescale     the migration modelled with the cap moved and no rescale:
  *                 section4.
+ *   postmdelta    the totals model drops the term for plays saved between the
+ *                 morning recompute and P: section4.
+ *   studiotile    SoccerCareer.tsx shows the uncapped studio bonus again:
+ *                 soccer-career.
  *   strayerror    the test file throws one error outside any test while every
  *                 case passes: the unhandled error verdict.
  * A control refuses to run if the text it rewrites is not in the file, and every
@@ -105,7 +109,9 @@ const CONTROLS = {
   nopunditcap: 'section2post',
   noplaygate: 'section2post',
   norescale: 'section4',
+  postmdelta: 'section4',
   strayerror: 'unhandled',
+  studiotile: 'soccer-career',
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
   console.error(`SCORE_SHOWN_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(CONTROLS).join(', ')})`);
@@ -123,7 +129,7 @@ if (CONTROL && !CONTROLS[CONTROL]) {
 const START_GAP_BOUND = -12;
 const PENALTY_BOUND = -13;
 const CAREERS = Number(process.env.SCORE_SHOWN_CAREERS || 40);
-const EXPECTED_CASES = 15;
+const EXPECTED_CASES = 16;
 
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'scoreShown-')).replaceAll('\\', '/');
 const readLF = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
@@ -163,6 +169,13 @@ const PAGE_COPY = {
       '  const legacyScore = isRetired && career?.legacy ? career.legacy.score : 0;\n',
       '  const legacyScore = isRetired && career ? Math.min(1000, Math.round((getCareerTotals(career.seasons).ballonDors * 200) + (getCareerTotals(career.seasons).championsLeagues * 150) + (getCareerTotals(career.seasons).worldCups * 150) + (getCareerTotals(career.seasons).leagueTitles * 50))) : 0;\n',
       'SoccerCareer.tsx (the recorded legacy score)'),
+  },
+  studiotile: {
+    file: 'src/pages/SoccerCareer.tsx', envKey: 'SCORE_SHOWN_SOCCER_PAGE',
+    rewrite: s => swap(s,
+      '{playedSeniorSeason(career) ? `+${punditLegacyPaid(career)}` : "0"}',
+      '+{career.punditState.legacyBonus}',
+      'SoccerCareer.tsx (the TV studio tile)'),
   },
   footlestats: {
     file: 'src/pages/Footle.tsx', envKey: 'SCORE_SHOWN_FOOTLE_PAGE',
@@ -454,31 +467,55 @@ for (const [game, ceiling, how] of ceilings) {
 }
 
 /* ======================= Section 4: the migration ======================= */
-console.log('\n4) The migration: its shape read off the SQL, then the rescale modelled on live and synthetic rows');
+console.log('\n4) The migration: its shape read off the SQL, then the rescale and the totals modelled on live and synthetic rows');
 
 const need = (re, what) => {
   if (re.test(sql)) ok(what);
   else noteRed('section4', `not in the SQL: ${what}`);
 };
-need(/v_p text := 'SET_P_HERE'; .* if v_p = 'SET_P_HERE' then raise exception/, 'P is one placeholder, and the file refuses to run while it is still there');
-need(/if v_ts < '2026-09-19 00:00:00\+00' or v_ts > now\(\) then raise exception/, 'a P in the future or before 2026-09-19 is refused');
-need(/if v_done is not null then raise notice .* return; end if; if v_cap is distinct from 1000 then raise exception/, 'part 1 runs once: skipped once done, refused if the cap moved without it');
-/* The backup comes first inside part 1: the first backup insert sits before the
-   first rescale. */
+/* The placeholder: exactly one copy of the token in the whole file, comments
+   included, so a replace all cannot leave a second copy that trips a check,
+   and the check itself tests the shape of P rather than comparing to the token. */
+{
+  const raw = readLF(MIGRATION);
+  const copies = raw.split('SET_P_HERE').length - 1;
+  if (copies === 1) ok('the P token appears exactly once in the file');
+  else noteRed('section4', `the P token appears ${copies} times in the file, expected exactly 1`);
+}
+need(/v_p text := 'SET_P_HERE';/, 'P is one literal on the v_p line');
+need(/if v_p !~ '\^\\d\{4\}-\\d\{2\}-\\d\{2\}\[ T\]\\d\{2\}:\\d\{2\}\(:\\d\{2\}\(\\\.\\d\+\)\?\)\?\(Z\|\[\+-\]\\d\{2\}\(:\?\\d\{2\}\)\?\)\$' then raise exception/,
+  'P must be an ISO timestamp with an offset, so the placeholder, now, a bare date and a missing offset are all refused');
+need(/if v_ts <= v_m or v_ts > now\(\) then raise exception/, 'a P in the future or before the morning recompute is refused');
+need(/v_m constant timestamptz := '2026-09-19 06:20:00\+00';/, 'M, the morning recompute, is the measured 2026-09-19 06:20 UTC');
+need(/if v_done is not null then raise notice .* return; end if; select max_score into v_cap from public\.game_score_caps where game = 'soccer-career'; if v_cap is distinct from 1000 then raise exception/,
+  'part 1 runs once: skipped once done, refused if the cap moved without it');
+need(/score % 50 <> 0\) into v_odd; if v_odd > 0 then raise notice/, 'part 1 counts rows before P that break the multiple of 50 invariant, and says so');
+need(/if v_off > 0 then raise exception/, 'part 1 refuses to run if any soccer account no longer holds the morning rule plus raw saves');
 {
   const part1 = sql.slice(sql.indexOf('select publish_time, part1_done_at'), sql.indexOf('update private.r644_state set part1_done_at = now()'));
   const firstBackup = part1.indexOf('insert into private.r644_soccer_scores_bak');
   const firstUpdate = part1.indexOf('update public.');
   if (firstBackup >= 0 && firstUpdate > firstBackup) ok('part 1 backs every table up before it changes one');
   else noteRed('section4', 'part 1 changes a table before (or without) backing it up');
-  for (const t of ['game_completions', 'user_game_scores', 'user_best_scores', 'user_scores']) {
+  for (const t of ['game_completions', 'user_game_scores', 'user_scores', 'game_score_caps']) {
     if (part1.includes(`'part1:${t}'`)) ok(`part 1 backs up ${t}`);
     else noteRed('section4', `part 1 does not back up ${t}`);
   }
+  if (/select 'part1:game_score_caps', c\.game, c\.max_score, c\.note, c\.updated_at from public\.game_score_caps c where c\.game in \('soccer-career', 'player-bingo', 'rarity-round'\);/.test(part1)) ok('the three caps are backed up whole: game, max_score, note, updated_at');
+  else noteRed('section4', 'the caps backup does not hold game, max_score, note and updated_at for all three');
+  if (part1.indexOf("'part1:game_score_caps'") < part1.indexOf('insert into public.game_score_caps')) ok('the caps are backed up before the upsert');
+  else noteRed('section4', 'the caps upsert runs before their backup');
+  for (const [table, key] of [['game_completions', 'gc.game'], ['user_game_scores', 's.game_type']]) {
+    const tag = `'part1:${table}'`;
+    const at = part1.indexOf(tag);
+    const stmt = at >= 0 ? part1.slice(at, part1.indexOf(';', at)) : '';
+    if (stmt.includes("= 'soccer-career'") && stmt.includes('< v_p') && /score % 50 = 0/.test(stmt) && stmt.includes(key)) ok(`${table}: the backup takes the same rows part 1 divides`);
+    else noteRed('section4', `${table}: the part 1 backup does not match the rows it divides`);
+  }
 }
 for (const [table, key] of [['game_completions', 'game'], ['user_game_scores', 'game_type']]) {
-  need(new RegExp(`update public\\.${table} set score = round\\(score / 10\\.0\\)::integer where ${key} = 'soccer-career' and score > 0 and created_at < v_p;`),
-    `${table}: every row before P is divided by ten, with no value filter`);
+  need(new RegExp(`update public\\.${table} set score = round\\(score / 10\\.0\\)::integer where ${key} = 'soccer-career' and score > 0 and created_at < v_p and score % 50 = 0;`),
+    `${table}: before P only the old formula's rows (multiples of 50) are divided`);
   need(new RegExp(`update public\\.${table} set score = round\\(score / 10\\.0\\)::integer where ${key} = 'soccer-career' and created_at >= v_p and score > 100;`),
     `${table}: after P only rows above 100 (an old tab) are divided`);
 }
@@ -486,24 +523,36 @@ if (/update public\.user_best_scores [^;]*round\(/.test(sql)) noteRed('section4'
 else ok('user_best_scores is never divided');
 need(/update public\.user_best_scores b set best_score = m\.best from \(select s\.user_id, max\(s\.score\) as best from public\.user_game_scores s where s\.game_type = 'soccer-career' group by s\.user_id\) m where b\.user_id = m\.user_id and b\.game_type = 'soccer-career' and b\.best_score is distinct from m\.best;/,
   'bests are rebuilt as each player\'s max(score), touching only rows that differ');
-need(/least\(max\(s\.score\), d\.max_score\) as best from public\.user_game_scores s join public\.game_denominators d on d\.game = s\.game_type where s\.user_id = u\.user_id group by s\.game_type, s\.puzzle_date, d\.max_score/,
-  'total_points is recomputed to the 2026-09-19 rule: per game per day, the day\'s best, capped by game_denominators');
-need(/update public\.user_scores u set total_points = t\.pts from r644_totals t where t\.user_id = u\.user_id and u\.total_points is distinct from t\.pts;/, 'the recompute touches only totals that differ');
+if (/r644_totals|set total_points = t\.pts/.test(sql)) noteRed('section4', 'a whole total is still recomputed somewhere, which cuts real raw saves since the morning');
+else ok('no total is recomputed whole');
+need(/least\(max\(s\.score\), 1000\) - least\(max\(case when s\.score > 0 and s\.score % 50 = 0 then round\(s\.score \/ 10\.0\)::integer else s\.score end\), 100\) as d from public\.user_game_scores s where s\.game_type = 'soccer-career' and s\.created_at < v_m group by s\.user_id, s\.puzzle_date/,
+  'part 1 delta, days before M: the morning rule\'s soccer line at cap 1000 minus the same after the rescale at cap 100');
+need(/select s\.user_id, s\.score - round\(s\.score \/ 10\.0\)::integer as d from public\.user_game_scores s where s\.game_type = 'soccer-career' and s\.created_at >= v_m and s\.created_at < v_p and s\.score > 0 and s\.score % 50 = 0/,
+  'part 1 delta, plays between M and P: old minus new for each play it divides');
+need(/select s\.user_id, sum\(s\.score - round\(s\.score \/ 10\.0\)::integer\)::integer as delta from public\.user_game_scores s where s\.game_type = 'soccer-career' and s\.created_at >= v_p and s\.score > 100 group by s\.user_id;/,
+  'part 2 delta: old minus new for each old tab play it divides');
+need(/set total_points = u\.total_points - d\.delta from r644_part1_delta d/, 'part 1 subtracts its delta');
+need(/set total_points = u\.total_points - d\.delta from r644_part2_delta d/, 'part 2 subtracts its delta');
+need(/score in \(50, 100\)\) into v_ambiguous; raise notice/, 'part 2 reports the rows since P at exactly 50 or 100 and how long ago P was');
 {
   const part2 = sql.slice(sql.indexOf("'Round 644 part 2:"));
   const b = part2.indexOf("'part2:user_scores'"); const u = part2.indexOf('update public.user_scores');
-  if (b >= 0 && u > b) ok('part 2 backs a total up before recomputing it');
-  else noteRed('section4', 'part 2 recomputes totals without backing them up first');
+  if (b >= 0 && u > b) ok('part 2 backs a total up before adjusting it');
+  else noteRed('section4', 'part 2 adjusts totals without backing them up first');
+  const bb = part2.indexOf("'part2:user_best_scores'"); const ub = part2.indexOf('update public.user_best_scores');
+  if (bb >= 0 && ub > bb) ok('part 2 backs a best up before rebuilding it');
+  else noteRed('section4', 'part 2 rebuilds bests without backing them up first');
 }
 
 /* The model. Postgres round() on a positive numeric rounds half away from zero,
    which for positives is Math.round. A row is [score, beforeP]. */
 const rescale = s => (CONTROL === 'norescale' ? s : Math.round(s / 10));
 if (CONTROL === 'norescale') console.log('   NEGATIVE CONTROL ON: the model moves the cap to 100 and leaves every row as it was');
+const oldShape = s => s > 0 && s % 50 === 0;
 function applyMigration(rows, state) {
   let next = rows;
   if (!state.part1Done && state.cap === 1000) {
-    next = next.map(([s, pre]) => [pre && s > 0 ? rescale(s) : s, pre]);
+    next = next.map(([s, pre]) => [pre && oldShape(s) ? rescale(s) : s, pre]);
     state = { cap: 100, part1Done: true };
   }
   next = next.map(([s, pre]) => [!pre && s > 100 ? rescale(s) : s, pre]);
@@ -529,7 +578,7 @@ for (const [table, hist] of Object.entries(LIVE)) {
   const line = `${table}: ${rows.toLocaleString('en-US')} live rows, ${before.toFixed(1)} row points before, ${then.toFixed(1)} after, worst row ${worst.toFixed(3)}`;
   if (worst === 0) ok(line); else noteRed('section4', line);
 }
-console.log('   live leaderboard, read only 2026-09-19 (the query is in the migration): 9,341 soccer-career player days before P = now(), 825,490 points before and after, 0 days changed');
+console.log('   live, read only 2026-09-19 evening (queries in the migration and the report): 9,350 soccer-career player days before P = now(), 826,185 points before and after, 0 days changed; totals: 118 accounts without soccer move by 0, 427 of 427 soccer accounts land exactly on the rescaled rule');
 
 /* Synthetic, the transform on its own, every integer from 0 to 3000. */
 let synthWorst = 0; let synthWorstAt = 0; let monotone = true; let tens = true;
@@ -542,23 +591,92 @@ for (let s = 0; s <= 3000; s++) {
 if (synthWorst <= 0.5 && tens && monotone) ok(`the transform on every integer 0 to 3000: worst ${synthWorst.toFixed(3)} points (at ${synthWorstAt}), exact on every multiple of 10, order kept`);
 else noteRed('section4', `the transform: worst ${synthWorst.toFixed(3)} points at ${synthWorstAt}, exact on multiples of 10 ${tens}, order kept ${monotone}`);
 
-/* Applying the file twice divides nothing twice; after P a new score is left
-   alone at any value (50 and 100 included) and an old tab above 100 is caught;
-   and a best rebuilt from the plays is right where a divided best is not. */
-const first = applyMigration([[1000, true], [850, true], [50, true], [0, true], [84, false], [50, false], [800, false]], { cap: 1000, part1Done: false });
+/* Applying the file twice divides nothing twice; before P a new score that is
+   not a multiple of 50 is left alone; after P a new score is left alone at any
+   value (50 and 100 included) and an old tab above 100 is caught. */
+const first = applyMigration([[1000, true], [850, true], [50, true], [0, true], [84, true], [84, false], [50, false], [800, false]], { cap: 1000, part1Done: false });
 const second = applyMigration(first.rows, first.state);
-const want = [100, 85, 5, 0, 84, 50, 80];
+const want = [100, 85, 5, 0, 84, 84, 50, 80];
 const flat = r => r.rows.map(x => x[0]);
 if (JSON.stringify(flat(first)) === JSON.stringify(want) && JSON.stringify(flat(second)) === JSON.stringify(want)) ok(`first apply ${JSON.stringify(flat(first))}, a second apply changes nothing`);
 else noteRed('section4', `apply once ${JSON.stringify(flat(first))}, twice ${JSON.stringify(flat(second))}, wanted ${JSON.stringify(want)} both times`);
 {
-  /* A player's real best after P is 84; an old tab then saves 800, which
-     record_auth_completion takes as the new best. */
   const plays = applyMigration([[84, false], [800, false]], { cap: 100, part1Done: true }).rows.map(x => x[0]);
   const rebuilt = Math.max(...plays);
   const divided = rescale(800);
   if (rebuilt === 84 && divided < 84) ok(`a best rebuilt from the plays keeps the real 84, where dividing the stored 800 would give ${divided}`);
   else noteRed('section4', `bests: rebuilt ${rebuilt}, divided ${divided}`);
+}
+
+/* The totals, on seeded synthetic accounts. The stored total is the morning
+   rule over plays before M plus every play since M added raw. After the
+   migration it must equal the same model over the rescaled plays under the new
+   soccer cap, and the only change allowed is the delta the SQL subtracts.
+   Accounts with no soccer play must not move. */
+{
+  const CAPS_OLD = { 'soccer-career': 1000, 'club-manager': 130, footle: 700 };
+  const CAPS_NEW = { ...CAPS_OLD, 'soccer-career': 100 };
+  const model = (plays, caps) => {
+    const days = new Map();
+    let raw = 0;
+    for (const p of plays) {
+      if (p.afterM) { raw += p.score; continue; }
+      const k = `${p.game}|${p.day}`;
+      days.set(k, Math.max(days.get(k) ?? -Infinity, p.score));
+    }
+    let rule = 0;
+    for (const [k, best] of days) rule += Math.min(best, caps[k.split('|')[0]]);
+    return rule + raw;
+  };
+  const newScore = p => (p.game === 'soccer-career' && p.phase !== 'afterP' && oldShape(p.score) ? rescale(p.score)
+    : p.game === 'soccer-career' && p.phase === 'afterP' && p.score > 100 ? rescale(p.score) : p.score);
+  const sqlDelta = plays => {
+    const soccer = plays.filter(p => p.game === 'soccer-career');
+    const days = new Map();
+    for (const p of soccer.filter(x => !x.afterM)) {
+      const d = days.get(p.day) ?? { old: -Infinity, now: -Infinity };
+      d.old = Math.max(d.old, p.score);
+      d.now = Math.max(d.now, oldShape(p.score) ? rescale(p.score) : p.score);
+      days.set(p.day, d);
+    }
+    let delta = 0;
+    for (const d of days.values()) delta += Math.min(d.old, 1000) - Math.min(d.now, 100);
+    if (CONTROL !== 'postmdelta') {
+      for (const p of soccer.filter(x => x.phase === 'betweenMP' && oldShape(x.score))) delta += p.score - rescale(p.score);
+    }
+    for (const p of soccer.filter(x => x.phase === 'afterP' && x.score > 100)) delta += p.score - rescale(p.score);
+    return delta;
+  };
+  if (CONTROL === 'postmdelta') console.log('   NEGATIVE CONTROL ON: the totals model drops the plays saved between M and P');
+  let rnd = 0x644;
+  const next = () => { rnd = (Math.imul(rnd, 1103515245) + 12345) >>> 0; return rnd / 4294967296; };
+  let accounts = 0; let wrong = 0; let nonSoccerMoved = 0; let crossing = 0;
+  for (let a = 0; a < 400; a++) {
+    const hasSoccer = a % 5 !== 0;
+    const plays = [];
+    const n = 1 + Math.floor(next() * 14);
+    for (let i = 0; i < n; i++) {
+      const game = hasSoccer && next() < 0.6 ? 'soccer-career' : (next() < 0.5 ? 'club-manager' : 'footle');
+      const phase = next() < 0.5 ? 'beforeM' : next() < 0.6 ? 'betweenMP' : 'afterP';
+      const day = Math.floor(next() * 4);
+      let score;
+      if (game === 'soccer-career') {
+        score = phase === 'afterP' ? (next() < 0.25 ? 50 * Math.floor(next() * 21) : Math.floor(next() * 101))
+          : phase === 'betweenMP' && next() < 0.2 ? 1 + Math.floor(next() * 99) /* a preview row, new scale */
+          : 50 * Math.floor(next() * 21);
+      } else score = Math.floor(next() * (game === 'footle' ? 701 : 131));
+      plays.push({ game, phase, day, score, afterM: phase !== 'beforeM' });
+    }
+    if (plays.some(p => p.phase === 'beforeM') && plays.some(p => p.phase !== 'beforeM' && p.game === 'soccer-career')) crossing++;
+    const stored = model(plays, CAPS_OLD);
+    const target = model(plays.map(p => ({ ...p, score: newScore(p) })), CAPS_NEW);
+    const moved = stored - sqlDelta(plays);
+    accounts++;
+    if (moved !== target) wrong++;
+    if (!hasSoccer && moved !== stored) nonSoccerMoved++;
+  }
+  const line = `totals on ${accounts} seeded accounts (${crossing} with soccer plays on both sides of M): ${wrong} land off the rescaled rule after the delta, ${nonSoccerMoved} without soccer plays moved`;
+  if (wrong === 0 && nonSoccerMoved === 0) ok(line); else noteRed('section4', line);
 }
 
 /* ======================= Verdict ======================= */

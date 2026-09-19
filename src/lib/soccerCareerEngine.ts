@@ -7060,6 +7060,21 @@ export function getCareerTotals(seasons: SeasonRecord[]) {
 /** Round 644: the most a TV career, or a club owner's run, adds to the legacy. */
 export const POST_RETIREMENT_BONUS_CAP = 6;
 
+/** Round 644: did this career play a senior season? Nothing after retirement
+    counts toward the legacy of one that did not. */
+export function playedSeniorSeason(state: CareerState): boolean {
+  return state.seasons.some(s => s.type === "playing");
+}
+
+/** Round 644: what the studio will really add to the legacy right now, the
+    number the TV screen shows: the prediction bonus up to the cap, and nothing
+    for a career with no senior season. calculateLegacy pays the same. */
+export function punditLegacyPaid(state: CareerState): number {
+  if (!playedSeniorSeason(state)) return 0;
+  const earned = state.punditState ? state.punditState.legacyBonus : (state.punditBonus ?? 0);
+  return clamp(Math.round(earned), 0, POST_RETIREMENT_BONUS_CAP);
+}
+
 function getLegacyTier(score: number): LegacyTier {
   if (score >= 90) return "GOAT";
   if (score >= 80) return "LEGEND";
@@ -7666,14 +7681,16 @@ export function advancePunditSeason(prev: CareerState, action: PunditAction): Ca
         const counted = (b: number) => Math.min(b, POST_RETIREMENT_BONUS_CAP);
         const before = ps.legacyBonus;
         ps.legacyBonus += 3;
-        const played = s.seasons.some(x => x.type === "playing");
+        const played = playedSeniorSeason(s);
         const gain = played ? counted(ps.legacyBonus) - counted(before) : 0;
         s.socialMediaFollowers += 1.5;
         s.popularity = clamp(s.popularity + 8, 0, 100);
         ps.followerGains += 1.5;
-        eventText = gain > 0
-          ? `🎯 Your bold prediction came TRUE! Legacy +${gain}, Followers +1.5M`
-          : "🎯 Your bold prediction came TRUE! Followers +1.5M, though the studio has already added all it can to your legacy";
+        eventText = !played
+          ? "🎯 Your bold prediction came TRUE! Followers +1.5M. Your legacy only counts senior football, and you never played a senior season, so the studio adds nothing to it"
+          : gain > 0
+            ? `🎯 Your bold prediction came TRUE! Legacy +${gain}, Followers +1.5M`
+            : `🎯 Your bold prediction came TRUE! Followers +1.5M, though the studio has already added its most, +${POST_RETIREMENT_BONUS_CAP}, to your legacy`;
       } else {
         s.socialMediaFollowers += 0.3;
         ps.followerGains += 0.3;
