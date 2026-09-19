@@ -136,27 +136,106 @@ export const WORLD_CONTENT: GameContentMap = {
       "Two names, one question: did these guys ever wear the same shirt? Teammates or Not flashes a pair of athletes from the NFL, NBA or soccer and you call it, yes or no.",
       "It sounds easy until you hit the pairs whose careers brushed past each other by a season. That one year in a strange uniform is exactly what this game lives on.",
     ],
-    howToPlay: [
-      "Look at the two players and the sport badge above them.",
-      "Decide whether they were ever on the same team at any point in their careers.",
-      "Tap YES or NO to lock in your answer.",
-      "Read the fun fact that explains the real story behind the pair.",
-      "Hit Next Question and keep going until all 10 are done, then see your score.",
+    headings: {
+      howToPlay: "Teammates or Not? Here's how to play this NFL, NBA and soccer game",
+      rules: "Teammates or Not? rules for rounds, scoring and difficulty",
+      example: "Teammates or Not? walkthrough: Kobe and Shaq, Brady and Manning",
+      tips: "Teammates or Not? tips for spotting real career overlaps",
+      faq: "Teammates or Not? FAQ: sports covered and question pools",
+    },
+    howToPlaySections: [
+      {
+        heading: "Checking the two players and the sport badge",
+        items: [
+          "Look at the two players and the sport badge above them.",
+        ],
+      },
+      {
+        heading: "Deciding if they shared a team ever",
+        items: [
+          "Decide whether they were ever on the same team at any point in their careers.",
+        ],
+      },
+      {
+        heading: "Tapping yes or no to lock it in",
+        items: [
+          "Tap YES or NO to lock in your answer.",
+        ],
+      },
+      {
+        heading: "Reading the fun fact behind the pair",
+        items: [
+          "Read the fun fact that explains the real story behind the pair.",
+        ],
+        subsections: [
+          {
+            heading: "Finishing all ten questions for your score",
+            items: [
+              "Hit Next Question and keep going until all 10 are done, then see your score.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "Each round is 10 questions: 3 easy, 3 medium and 4 hard, drawn fresh from a bigger pool.",
-      "Every correct call is worth 1 point, so a perfect round is 10 out of 10.",
-      "There's no timer, and a give up button ends the round early if you want out.",
-      "Play again reshuffles a brand new set of pairs, as many rounds as you like.",
+    ruleSections: [
+      {
+        heading: "Ten questions split easy, medium and hard",
+        items: [
+          "Each round is 10 questions: 3 easy, 3 medium and 4 hard, drawn fresh from a bigger pool.",
+        ],
+      },
+      {
+        heading: "Scoring one point per correct call",
+        items: [
+          "Every correct call is worth 1 point, so a perfect round is 10 out of 10.",
+        ],
+      },
+      {
+        heading: "Playing with no clock and a give up button",
+        items: [
+          "There's no timer, and a give up button ends the round early if you want out.",
+        ],
+      },
+      {
+        heading: "Reshuffling a new set with play again",
+        items: [
+          "Play again reshuffles a brand new set of pairs, as many rounds as you like.",
+        ],
+      },
     ],
-    example: [
-      "Imagine the board serves up Kobe Bryant and Shaquille O'Neal. Easy yes, they won three straight titles together on the Lakers. Next comes Tom Brady and Peyton Manning. They defined a rivalry for years but never shared a locker room, so that's a no.",
-      "The hard ones are sneakier, the pairs where you have to remember exactly when someone left. Finish 7 of 10 and you're doing better than most.",
+    exampleSections: [
+      {
+        heading: "Kobe and Shaq, then Brady and Manning",
+        paragraphs: [
+          "Imagine the board serves up Kobe Bryant and Shaquille O'Neal. Easy yes, they won three straight titles together on the Lakers. Next comes Tom Brady and Peyton Manning. They defined a rivalry for years but never shared a locker room, so that's a no.",
+        ],
+      },
+      {
+        heading: "The sneaky pairs about exact timing",
+        paragraphs: [
+          "The hard ones are sneakier, the pairs where you have to remember exactly when someone left. Finish 7 of 10 and you're doing better than most.",
+        ],
+      },
     ],
-    tips: [
-      "Timelines beat team lists. Two legends at the same club in different decades were never teammates.",
-      "Remember the weird late-career moves. Stars finishing on random rosters create the best traps.",
-      "Don't rush the obvious no. If a pair feels impossible, ask yourself why the game picked it.",
+    tipSections: [
+      {
+        heading: "Checking timelines over team rosters",
+        items: [
+          "Timelines beat team lists. Two legends at the same club in different decades were never teammates.",
+        ],
+      },
+      {
+        heading: "Watching for weird late career moves",
+        items: [
+          "Remember the weird late-career moves. Stars finishing on random rosters create the best traps.",
+        ],
+      },
+      {
+        heading: "Questioning an obvious no before tapping",
+        items: [
+          "Don't rush the obvious no. If a pair feels impossible, ask yourself why the game picked it.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -180,28 +259,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Every clue you reveal makes the answer easier and your score smaller, so the game is a staring contest between confidence and greed.",
       "The pool covers Summer and Winter athletes, sprinters to figure skaters.",
     ],
-    howToPlay: [
-      "Start with clue one, the athlete's sport, and see if a name jumps out.",
-      "Type a guess any time. Suggestions appear once you've typed a couple of letters, and last names count.",
-      "Stuck? Hit Next Clue to reveal country, then the Games year and host city, achievement, career context, medal haul, and finally the athlete's initials.",
-      "Wrong guesses cost nothing, so fire away and guess again.",
-      "Give up if you're done, which reveals the athlete and scores zero.",
+    headings: {
+      howToPlay: "How to play The Medal Games, a free Olympics guessing game",
+      rules: "The Medal Games rules for clues, scoring and daily mode",
+      example: "The Medal Games walkthrough: swimming clues to Phelps",
+      tips: "The Medal Games tips for reading clues before you guess",
+      faq: "The Medal Games FAQ: clue order and Winter athletes",
+    },
+    howToPlaySections: [
+      {
+        heading: "Starting from the athlete's sport",
+        items: [
+          "Start with clue one, the athlete's sport, and see if a name jumps out.",
+        ],
+      },
+      {
+        heading: "Typing a guess with name suggestions",
+        items: [
+          "Type a guess any time. Suggestions appear once you've typed a couple of letters, and last names count.",
+        ],
+      },
+      {
+        heading: "Revealing country, year, host city and more",
+        items: [
+          "Stuck? Hit Next Clue to reveal country, then the Games year and host city, achievement, career context, medal haul, and finally the athlete's initials.",
+        ],
+      },
+      {
+        heading: "Guessing again for free after a miss",
+        items: [
+          "Wrong guesses cost nothing, so fire away and guess again.",
+        ],
+      },
+      {
+        heading: "Giving up to reveal the athlete",
+        items: [
+          "Give up if you're done, which reveals the athlete and scores zero.",
+        ],
+      },
     ],
-    rules: [
-      "There are 7 clue levels. Solving on clue 1 scores 1,000, then 850, 700, 550, 400, 250 and 100.",
-      "Points only drop when you reveal clues. Wrong guesses are free retries.",
-      "Giving up ends the run at 0 and shows the answer.",
-      "The daily athlete is the same for everyone, and unlimited mode deals random athletes forever.",
+    ruleSections: [
+      {
+        heading: "Seven clue levels paying less each time",
+        items: [
+          "There are 7 clue levels. Solving on clue 1 scores 1,000, then 850, 700, 550, 400, 250 and 100.",
+        ],
+      },
+      {
+        heading: "Only clues cost you points",
+        items: [
+          "Points only drop when you reveal clues. Wrong guesses are free retries.",
+        ],
+        subsections: [
+          {
+            heading: "Giving up ending the run at zero",
+            items: [
+              "Giving up ends the run at 0 and shows the answer.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "One daily athlete, unlimited after that",
+        items: [
+          "The daily athlete is the same for everyone, and unlimited mode deals random athletes forever.",
+        ],
+      },
     ],
-    example: [
-      "Suppose clue one says Swimming. That's a big pool, no pun intended, so you reveal the country: USA. Still wide. Clue three says the 2008 Games in Beijing, and now your brain is screaming one name.",
-      "You type Phelps, and last names count, so that's the win. Three clues used means 700 points.",
+    exampleSections: [
+      {
+        heading: "Swimming, USA, then Beijing 2008",
+        paragraphs: [
+          "Suppose clue one says Swimming. That's a big pool, no pun intended, so you reveal the country: USA. Still wide. Clue three says the 2008 Games in Beijing, and now your brain is screaming one name.",
+        ],
+      },
+      {
+        heading: "Typing Phelps for 700 points",
+        paragraphs: [
+          "You type Phelps, and last names count, so that's the win. Three clues used means 700 points.",
+        ],
+      },
     ],
-    tips: [
-      "Sport plus country solves half the puzzles for big names, so always take a swing before clue three.",
-      "The Games year and host city date the athlete's peak. Work out the era before guessing blind.",
-      "Because wrong guesses are free, list your suspects and try them all.",
-      "Save give up for genuine dead ends. Even clue seven pays 100.",
+    tipSections: [
+      {
+        heading: "Guessing early from sport and country",
+        items: [
+          "Sport plus country solves half the puzzles for big names, so always take a swing before clue three.",
+        ],
+      },
+      {
+        heading: "Dating the athlete's peak from the host city",
+        items: [
+          "The Games year and host city date the athlete's peak. Work out the era before guessing blind.",
+        ],
+      },
+      {
+        heading: "Trying every suspect since guesses are free",
+        items: [
+          "Because wrong guesses are free, list your suspects and try them all.",
+        ],
+      },
+      {
+        heading: "Saving give up for a true dead end",
+        items: [
+          "Save give up for genuine dead ends. Even clue seven pays 100.",
+        ],
+      },
     ],
     faqs: [
       {
