@@ -1137,29 +1137,103 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "The 2026 World Cup runs 48 teams, 12 groups, and 104 matches, and this predictor lets you call all of it: every group game by exact score, every knockout winner, and the awards.",
       "The field is the real one, playoff winners included, and the format follows FIFA's: top two per group advance plus the 8 best third place teams into a round of 32.",
     ],
-    howToPlay: [
-      "Type exact scores for the 6 matches in each group. Standings update live.",
-      "Watch the colors: green rows are through, yellow marks a possible best third.",
-      "Confirm your 8 third place qualifiers and generate the bracket.",
-      "Pick winners from the round of 32 through the final, third place game included.",
-      "Call the Golden Boot, Golden Glove, and Golden Ball, then share it all.",
-      "Read your score at the bottom: every qualifier, knockout team, the champion and each award checked against the real results, out of 166 points.",
+    headings: {
+      howToPlay: "How to play 2026 Bracket, a free World Cup predictor and bracket game",
+      rules: "2026 Bracket rules: groups, standings and the round of 32",
+      example: "2026 Bracket walkthrough: a Group J tiebreak and a Brazil upset",
+      tips: "2026 Bracket tips for filling a sharper World Cup bracket",
+      faq: "2026 Bracket FAQ: scoring, groups and the real World Cup result",
+    },
+    howToPlaySections: [
+      {
+        heading: "Locking in scores for every group match",
+        items: [
+          "Type exact scores for the 6 matches in each group. Standings update live.",
+          "Watch the colors: green rows are through, yellow marks a possible best third.",
+        ],
+      },
+      {
+        heading: "Confirming your eight third place teams",
+        items: [
+          "Confirm your 8 third place qualifiers and generate the bracket.",
+        ],
+      },
+      {
+        heading: "Advancing picks through the knockout bracket",
+        items: [
+          "Pick winners from the round of 32 through the final, third place game included.",
+        ],
+      },
+      {
+        heading: "Naming the awards and reading your score",
+        items: [
+          "Call the Golden Boot, Golden Glove, and Golden Ball, then share it all.",
+          "Read your score at the bottom: every qualifier, knockout team, the champion and each award checked against the real results, out of 166 points.",
+        ],
+      },
     ],
-    rules: [
-      "12 groups of 4 make 72 group matches, and score inputs go up to 9 goals a side.",
-      "Standings use the real rules: 3 points a win, 1 a draw, then goal difference, then goals scored.",
-      "32 teams advance: 12 winners, 12 runners up, and your 8 chosen thirds.",
-      "By Rank auto fill uses real FIFA rankings: the higher ranked side wins 65 percent of sims, the underdog 20, and 15 percent draw.",
+    ruleSections: [
+      {
+        heading: "How group matches and scoring work",
+        items: [
+          "12 groups of 4 make 72 group matches, and score inputs go up to 9 goals a side.",
+        ],
+      },
+      {
+        heading: "Ranking standings by points and goals",
+        items: [
+          "Standings use the real rules: 3 points a win, 1 a draw, then goal difference, then goals scored.",
+        ],
+      },
+      {
+        heading: "Which teams reach the round of 32",
+        items: [
+          "32 teams advance: 12 winners, 12 runners up, and your 8 chosen thirds.",
+        ],
+        subsections: [
+          {
+            heading: "Auto filling results with By Rank",
+            items: [
+              "By Rank auto fill uses real FIFA rankings: the higher ranked side wins 65 percent of sims, the underdog 20, and 15 percent draw.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "In Group J you hand Argentina three routine wins, then pencil an Austria and Algeria draw that leaves third place hanging on goal difference.",
-      "By the knockouts your France and Brazil picks collide in a semifinal, so somebody goes home early. You send Brazil through, save the bracket, and drop the link in the group chat.",
+    exampleSections: [
+      {
+        heading: "A tiebreak battle in Group J",
+        paragraphs: [
+          "In Group J you hand Argentina three routine wins, then pencil an Austria and Algeria draw that leaves third place hanging on goal difference.",
+        ],
+      },
+      {
+        heading: "Brazil survives a semifinal collision",
+        paragraphs: [
+          "By the knockouts your France and Brazil picks collide in a semifinal, so somebody goes home early. You send Brazil through, save the bracket, and drop the link in the group chat.",
+        ],
+      },
     ],
-    tips: [
-      "Fill groups you know by hand, and save the auto tools for matchups you have no read on.",
-      "Third place picks quietly decide brackets. A soft third in the right slot gifts your favorite an easy round of 32.",
-      "Draws are rarer than instinct says. The simulator prices them at 15 percent.",
-      "Reset one group instead of wiping everything when you change your mind.",
+    tipSections: [
+      {
+        heading: "Splitting hand picks from the auto tools",
+        items: [
+          "Fill groups you know by hand, and save the auto tools for matchups you have no read on.",
+        ],
+      },
+      {
+        heading: "Why third place slots swing brackets",
+        items: [
+          "Third place picks quietly decide brackets. A soft third in the right slot gifts your favorite an easy round of 32.",
+        ],
+      },
+      {
+        heading: "Pricing draws low and fixing one group",
+        items: [
+          "Draws are rarer than instinct says. The simulator prices them at 15 percent.",
+          "Reset one group instead of wiping everything when you change your mind.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -1182,31 +1256,122 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "The imperialism map format comes to football. Ninety six clubs from the Premier League, La Liga, Serie A, the Bundesliga and Ligue 1 sit on one map of Europe, every region starts in the hands of the nearest club of its own country, and when two clubs meet the winner takes everything the loser owns.",
       "Nothing here is typed. Club strength is real squad market value, so Real Madrid open as the giants and a promoted side like Le Mans opens as the long shot, which is exactly the club you want to be riding when the upset lands.",
     ],
-    howToPlay: [
-      "Pick your club from all 96, grouped by league. The tile shows the squad value its strength comes from.",
-      "Each matchday pairs the whole continent into 48 games. Before it plays, call your club's game. The card shows each side's win odds.",
-      "Play the matchday. Winners annex everything the losers held, and the map redraws in one swing.",
-      "Survive 10 matchdays. The top 8 empires by region make the playoffs, record breaking ties.",
-      "Win the Quarter-finals, the Semi-finals and the Imperial Final to rule the map.",
+    headings: {
+      howToPlay: "How to play Soccer Conquest, a free online soccer strategy map game",
+      rules: "Soccer Conquest rules: regions, scoring and the Daily Challenge",
+      example: "Soccer Conquest walkthrough: Brentford topples Bayern Munich",
+      tips: "Soccer Conquest tips for reading the odds and surviving wipeouts",
+      faq: "Soccer Conquest FAQ: strength ratings, playoffs and daily runs",
+    },
+    howToPlaySections: [
+      {
+        heading: "Picking your club from all 96",
+        items: [
+          "Pick your club from all 96, grouped by league. The tile shows the squad value its strength comes from.",
+        ],
+      },
+      {
+        heading: "Calling each matchday's 48 games",
+        items: [
+          "Each matchday pairs the whole continent into 48 games. Before it plays, call your club's game. The card shows each side's win odds.",
+        ],
+      },
+      {
+        heading: "Playing the matchday and redrawing the map",
+        items: [
+          "Play the matchday. Winners annex everything the losers held, and the map redraws in one swing.",
+        ],
+      },
+      {
+        heading: "Surviving ten matchdays into the playoffs",
+        items: [
+          "Survive 10 matchdays. The top 8 empires by region make the playoffs, record breaking ties.",
+        ],
+        subsections: [
+          {
+            heading: "Winning the knockout to rule the map",
+            items: [
+              "Win the Quarter-finals, the Semi-finals and the Imperial Final to rule the map.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "10 regular matchdays, then an 8 club knockout bracket.",
-      "154 regions: 96 club home areas plus the countryside between them, which opens in the hands of the nearest club of the same country.",
-      "Scoring: 25 points per correct call, 3 per region held at the end, 200 for the crown, 50 for making the playoffs.",
-      "Wiped out clubs keep playing, and one win takes back a whole empire.",
-      "Level games go to penalties, so there are no draws, ever.",
-      "Strength is the 2026 squad market value on record, mapped onto the same 55 to 95 band the other conquest maps use. The value is the sum of the players the table holds for that club, so every tile says how many that is, and a club with only a handful on record is rated on those few and says partial data.",
-      "The Daily Challenge deals every player the same date seeded season: same opening map, same fixtures, same results. One scored run per day with streaks. Free Play is unlimited and fully random.",
+    ruleSections: [
+      {
+        heading: "The matchday format and knockout bracket",
+        items: [
+          "10 regular matchdays, then an 8 club knockout bracket.",
+        ],
+      },
+      {
+        heading: "How the 154 regions are laid out",
+        items: [
+          "154 regions: 96 club home areas plus the countryside between them, which opens in the hands of the nearest club of the same country.",
+        ],
+      },
+      {
+        heading: "Scoring calls, regions and the crown",
+        items: [
+          "Scoring: 25 points per correct call, 3 per region held at the end, 200 for the crown, 50 for making the playoffs.",
+        ],
+      },
+      {
+        heading: "Wiped out clubs and level game penalties",
+        items: [
+          "Wiped out clubs keep playing, and one win takes back a whole empire.",
+          "Level games go to penalties, so there are no draws, ever.",
+        ],
+      },
+      {
+        heading: "Squad value strength and the Daily Challenge",
+        items: [
+          "Strength is the 2026 squad market value on record, mapped onto the same 55 to 95 band the other conquest maps use. The value is the sum of the players the table holds for that club, so every tile says how many that is, and a club with only a handful on record is rated on those few and says partial data.",
+        ],
+        subsections: [
+          {
+            heading: "Daily Challenge versus Free Play",
+            items: [
+              "The Daily Challenge deals every player the same date seeded season: same opening map, same fixtures, same results. One scored run per day with streaks. Free Play is unlimited and fully random.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "You ride Brentford. Matchday 1 pairs you with Bayern Munich, the odds sit under fifty, you call the upset anyway and it lands on penalties: Bavaria is yours.",
-      "By matchday 6 you hold a strip from west London to the Alps, then lose the lot to Lecce in ninety minutes. Matchday 8 you take an empire back off Genoa, sneak in as the eighth seed, and the bracket gets interesting.",
+    exampleSections: [
+      {
+        heading: "Brentford calls an upset over Bayern Munich",
+        paragraphs: [
+          "You ride Brentford. Matchday 1 pairs you with Bayern Munich, the odds sit under fifty, you call the upset anyway and it lands on penalties: Bavaria is yours.",
+        ],
+      },
+      {
+        heading: "Falling to Lecce and clawing back from Genoa",
+        paragraphs: [
+          "By matchday 6 you hold a strip from west London to the Alps, then lose the lot to Lecce in ninety minutes. Matchday 8 you take an empire back off Genoa, sneak in as the eighth seed, and the bracket gets interesting.",
+        ],
+      },
     ],
-    tips: [
-      "Call games with the odds, not your heart. The percentages come from real squad values.",
-      "Landless is one good night from owning a coastline. Do not panic when you get wiped.",
-      "Check the standings late. Seeding goes by regions, so the last matchdays are about protecting your count.",
-      "A big empire gets overextended and a landless club fights harder, so a giant on a losing run is beatable.",
+    tipSections: [
+      {
+        heading: "Trusting the odds over your heart",
+        items: [
+          "Call games with the odds, not your heart. The percentages come from real squad values.",
+        ],
+      },
+      {
+        heading: "Bouncing back after getting wiped out",
+        items: [
+          "Landless is one good night from owning a coastline. Do not panic when you get wiped.",
+        ],
+      },
+      {
+        heading: "Watching seeding and beatable giants late",
+        items: [
+          "Check the standings late. Seeding goes by regions, so the last matchdays are about protecting your count.",
+          "A big empire gets overextended and a landless club fights harder, so a giant on a losing run is beatable.",
+        ],
+      },
     ],
     faqs: [
       { q: "How does the Daily Challenge work?", a: "Everyone gets the same season today: identical opening map, identical fixtures, identical results. Your score comes from which club you back and how well you call its games. One scored run per day, streaks build if you show up daily, and a fresh map drops at midnight Eastern. Free Play stays unlimited." },
@@ -1225,46 +1390,164 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "You build your player's actual face before kickoff: skin tone, hairstyle and colour, facial hair, a boot line, an accessory, and a signature celebration that gets described every time you score. That look follows you onto the Ballon d'Or stage and into your retirement send off.",
       "There is a dirty side too. Bent officials, betting syndicates, kickbacks, offshore accounts and laundering fronts all sit there waiting, each one heating up a hidden investigation meter. Take enough envelopes and the dawn raid comes, then the trial, then a season inside and a comeback from nothing.",
     ],
-    howToPlay: [
-      "Create your player: name, one of 50 nationalities, one of 10 positions, and a starting era from the 1990s to the 2020s.",
-      "Build your look in the appearance editor: 12 skin tones, 23 hairstyles, 16 hair colours, 14 beard styles, 16 accessories, 18 boot lines, and 19 signature celebrations, or hit Surprise me.",
-      "Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are free and there is no limit on them.",
-      "Open Customize your build to set your starting overall anywhere from 40 to 99, move points between the six attribute families, shape the specifics under each family, and set your height and weight.",
-      "Begin in an academy matched to your nationality and talent. Pro contract offers arrive from age 17.",
-      "Advance season by season through simulated stats, newspaper headlines, random events, and decisions.",
-      "Open the training ground (the dumbbell button, bottom right) once a season. Your position picks a drill you actually play: keepers hold and drag a glove save dive, centre backs, full backs and defensive midfielders time a tackle on a moving ball, and everyone else times a wall shot through a gap that opens and closes. Today's ten rounds are the same for everyone at your position and count once; practice is unlimited and banks nothing.",
-      "Work the transfer windows: stay, extend, request a move, or weigh rival offers and dream club pay cuts.",
-      "Spend the money in 8 shop aisles: property, vehicles, investments, lifestyle, performance, flex, family, and a shady aisle that only appears once you have something to hide.",
-      "Retire, on your terms or your body's, collect the legacy verdict, then carry on as a manager, pundit, or owner if you want.",
+    headings: {
+      howToPlay: "How to play Soccer Career, a free football career simulation game",
+      rules: "Soccer Career rules: growth, legacy and the corruption meter",
+      example: "Soccer Career walkthrough: a striker's rise to a Ballon d'Or revenge arc",
+      tips: "Soccer Career tips for growing stats and building your legacy",
+      faq: "Soccer Career FAQ: saves, the Ballon d'Or and corruption mode",
+    },
+    howToPlaySections: [
+      {
+        heading: "Creating your player and building your look",
+        items: [
+          "Create your player: name, one of 50 nationalities, one of 10 positions, and a starting era from the 1990s to the 2020s.",
+          "Build your look in the appearance editor: 12 skin tones, 23 hairstyles, 16 hair colours, 14 beard styles, 16 accessories, 18 boot lines, and 19 signature celebrations, or hit Surprise me.",
+        ],
+      },
+      {
+        heading: "Rolling potential and customizing your build",
+        items: [
+          "Roll your starting potential, somewhere in the mid 50s to high 60s, and reroll as many times as you like. Rerolls are free and there is no limit on them.",
+          "Open Customize your build to set your starting overall anywhere from 40 to 99, move points between the six attribute families, shape the specifics under each family, and set your height and weight.",
+        ],
+      },
+      {
+        heading: "Starting in the academy and turning pro",
+        items: [
+          "Begin in an academy matched to your nationality and talent. Pro contract offers arrive from age 17.",
+        ],
+      },
+      {
+        heading: "Advancing seasons through the training ground",
+        items: [
+          "Advance season by season through simulated stats, newspaper headlines, random events, and decisions.",
+          "Open the training ground (the dumbbell button, bottom right) once a season. Your position picks a drill you actually play: keepers hold and drag a glove save dive, centre backs, full backs and defensive midfielders time a tackle on a moving ball, and everyone else times a wall shot through a gap that opens and closes. Today's ten rounds are the same for everyone at your position and count once; practice is unlimited and banks nothing.",
+        ],
+      },
+      {
+        heading: "Working transfer windows and the shop aisles",
+        items: [
+          "Work the transfer windows: stay, extend, request a move, or weigh rival offers and dream club pay cuts.",
+          "Spend the money in 8 shop aisles: property, vehicles, investments, lifestyle, performance, flex, family, and a shady aisle that only appears once you have something to hide.",
+        ],
+        subsections: [
+          {
+            heading: "Retiring into management, punditry or ownership",
+            items: [
+              "Retire, on your terms or your body's, collect the legacy verdict, then carry on as a manager, pundit, or owner if you want.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "Stats grow slowly and honestly: 1 to 3 points a year through the academy and your prime, less once you pass 86, and barely at all above 90. Reaching world class is a decade of work, not three good seasons.",
-      "Growth fades once your hidden prime type (early, normal, late, or extended) ends, with decline turning brutal from 38.",
-      "The club that raised you always offers you a first team deal when you turn pro, so you can spend a whole career at your boyhood club, and it can call you home again from 27.",
-      "Retirement is suggested from age 30 once you drop 10 off your peak or hit 75 overall, forced below 50 overall at 33 or older, and automatic at 45.",
-      "The World Cup comes every 4 years. Top nations qualify about 90 percent of the time, while a small nation mostly needs a world class you.",
-      "Legacy runs 0 to 100: 90 is GOAT, 80 LEGEND, 70 GREAT, 60 SOLID PRO, and less is JOURNEYMAN. The verdict also knows the overall you started at, so climbing from 54 to 91 scores better than being handed 91 on the creation screen.",
-      "There is no cap on your starting overall, but a high start eats the room you had to grow into, and if you are already world class as a teenager you pick up far more injuries before you turn 24.",
-      "Your ceiling is not welded shut. Two seasons in a row that are both elite and decorated, while you are already pressed against it, buy one point back at a time. 99 is the hard wall and nothing gets past it.",
-      "A position drill is ten rounds and its session score is wins times ten. 50 pays +1 to the drill's attribute with next season's growth (shooting for the wall shot, defending for the tackle, reflexes for the glove save) and 80 pays +2, capped at the room between your overall and your ceiling, so a drill never lifts you past it. It shares the one training session a season with the cone slalom, sprint burst, passing gates and penalty sessions.",
-      "Height and weight are real numbers, not decoration: a tall heavy player wins more in the air and is stronger, and is slower off the mark and less agile for it.",
-      "Morale runs 0 to 100 and moves with events and choices, while scandals feed an integrity ledger worth minus 30 to plus 20 legacy points at the end.",
-      "A statistically dominant season cannot be snubbed at the Ballon d'Or. Outscore the whole shortlist while winning a major and the trophy is yours, and any 45 goal or 55 goal involvement season finishes on the podium at worst.",
-      "Corruption heat runs 0 to 100 and cools 8 a year when you stay clean. Past 70 the financial crimes unit can raid you, and past 90 comes a conviction, seized money, and a season in prison that wrecks your stats.",
-      "Unexplained money keeps generating heat every season until you wash it through a shady business or declare it and eat the tax.",
+    ruleSections: [
+      {
+        heading: "How stats grow through your prime",
+        items: [
+          "Stats grow slowly and honestly: 1 to 3 points a year through the academy and your prime, less once you pass 86, and barely at all above 90. Reaching world class is a decade of work, not three good seasons.",
+          "Growth fades once your hidden prime type (early, normal, late, or extended) ends, with decline turning brutal from 38.",
+        ],
+      },
+      {
+        heading: "Your boyhood club and retirement age",
+        items: [
+          "The club that raised you always offers you a first team deal when you turn pro, so you can spend a whole career at your boyhood club, and it can call you home again from 27.",
+          "Retirement is suggested from age 30 once you drop 10 off your peak or hit 75 overall, forced below 50 overall at 33 or older, and automatic at 45.",
+        ],
+      },
+      {
+        heading: "The World Cup cycle and your legacy score",
+        items: [
+          "The World Cup comes every 4 years. Top nations qualify about 90 percent of the time, while a small nation mostly needs a world class you.",
+          "Legacy runs 0 to 100: 90 is GOAT, 80 LEGEND, 70 GREAT, 60 SOLID PRO, and less is JOURNEYMAN. The verdict also knows the overall you started at, so climbing from 54 to 91 scores better than being handed 91 on the creation screen.",
+        ],
+      },
+      {
+        heading: "Starting overall and your growth ceiling",
+        items: [
+          "There is no cap on your starting overall, but a high start eats the room you had to grow into, and if you are already world class as a teenager you pick up far more injuries before you turn 24.",
+          "Your ceiling is not welded shut. Two seasons in a row that are both elite and decorated, while you are already pressed against it, buy one point back at a time. 99 is the hard wall and nothing gets past it.",
+        ],
+        subsections: [
+          {
+            heading: "How a position drill trains your attributes",
+            items: [
+              "A position drill is ten rounds and its session score is wins times ten. 50 pays +1 to the drill's attribute with next season's growth (shooting for the wall shot, defending for the tackle, reflexes for the glove save) and 80 pays +2, capped at the room between your overall and your ceiling, so a drill never lifts you past it. It shares the one training session a season with the cone slalom, sprint burst, passing gates and penalty sessions.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Physical stats, morale and integrity",
+        items: [
+          "Height and weight are real numbers, not decoration: a tall heavy player wins more in the air and is stronger, and is slower off the mark and less agile for it.",
+          "Morale runs 0 to 100 and moves with events and choices, while scandals feed an integrity ledger worth minus 30 to plus 20 legacy points at the end.",
+        ],
+        subsections: [
+          {
+            heading: "A pay cut, an injury and a rival's Ballon d'Or",
+            items: [
+              "A statistically dominant season cannot be snubbed at the Ballon d'Or. Outscore the whole shortlist while winning a major and the trophy is yours, and any 45 goal or 55 goal involvement season finishes on the podium at worst.",
+            ],
+          },
+          {
+            heading: "Corruption heat and dirty money",
+            items: [
+              "Corruption heat runs 0 to 100 and cools 8 a year when you stay clean. Past 70 the financial crimes unit can raid you, and past 90 comes a conviction, seized money, and a season in prison that wrecks your stats.",
+              "Unexplained money keeps generating heat every season until you wash it through a shady business or declare it and eat the tax.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Take a Nigerian striker rolled at 63, a Gifted start. Two academy years push him past 70, and at 18 a bidding war breaks out. He takes minutes over money, bags 20 league goals, and the papers crown him the next superstar.",
-      "At 22 a dream club calls with a pay cut, and he signs anyway. A league title lands in year two, then a torn hamstring eats half a season, and a moral dilemma offers a shady shortcut back to fitness. He refuses, banking integrity, while the rival the game spawned at his debut, a preening Brazilian winger, lifts the Ballon d'Or. The snub becomes fuel.",
-      "The revenge arc peaks at 26: a Champions League, a World Cup semifinal carrying Nigeria, then the Ballon d'Or, where he thanks the rival from the stage. An extended prime runs to 36, the fortune buys his boyhood club, and he retires at 38 with a legacy of 84, LEGEND tier, one Champions League short of GOAT talk.",
+    exampleSections: [
+      {
+        heading: "A Nigerian striker breaks out as a teenager",
+        paragraphs: [
+          "Take a Nigerian striker rolled at 63, a Gifted start. Two academy years push him past 70, and at 18 a bidding war breaks out. He takes minutes over money, bags 20 league goals, and the papers crown him the next superstar.",
+        ],
+      },
+      {
+        heading: "A dream transfer and a torn hamstring",
+        paragraphs: [
+          "At 22 a dream club calls with a pay cut, and he signs anyway. A league title lands in year two, then a torn hamstring eats half a season, and a moral dilemma offers a shady shortcut back to fitness. He refuses, banking integrity, while the rival the game spawned at his debut, a preening Brazilian winger, lifts the Ballon d'Or. The snub becomes fuel.",
+        ],
+      },
+      {
+        heading: "A revenge arc ends in LEGEND tier retirement",
+        paragraphs: [
+          "The revenge arc peaks at 26: a Champions League, a World Cup semifinal carrying Nigeria, then the Ballon d'Or, where he thanks the rival from the stage. An extended prime runs to 36, the fortune buys his boyhood club, and he retires at 38 with a legacy of 84, LEGEND tier, one Champions League short of GOAT talk.",
+        ],
+      },
     ],
-    tips: [
-      "Reroll your potential to 62 or better. The gap between a Promising start and a Gifted one echoes for a decade.",
-      "The training ground is the dumbbell button, one session a season. The older sessions (cone slalom, sprint burst, passing gates, penalties or shot stopping) pay +1 at 50 and +2 at 80; the position drill pays the same but stops at your ceiling. Beyond that, growth follows your age curve, and you steer it through event choices, lifestyle purchases, and the social media detox, worth plus 2 to every stat next season.",
-      "Money matters: a personal trainer adds a stat point per season, and the recovery clinic halves injury layoffs.",
-      "The doping storyline boosts every stat but risks a 20 percent failed test each season it runs, and failing means a 1 season ban and a wrecked reputation.",
-      "Your personality and your agent shape the whole run. The Showman grows followers 60 percent faster, The Professor earns brand trust, and super agent Zara Blackwood opens dream club doors for a 10 percent cut.",
-      "Loyalty pays: a decade at one club is worth about as much legacy as two and a half league titles.",
+    tipSections: [
+      {
+        heading: "Rerolling your potential before you start",
+        items: [
+          "Reroll your potential to 62 or better. The gap between a Promising start and a Gifted one echoes for a decade.",
+        ],
+      },
+      {
+        heading: "Training sessions and steering growth events",
+        items: [
+          "The training ground is the dumbbell button, one session a season. The older sessions (cone slalom, sprint burst, passing gates, penalties or shot stopping) pay +1 at 50 and +2 at 80; the position drill pays the same but stops at your ceiling. Beyond that, growth follows your age curve, and you steer it through event choices, lifestyle purchases, and the social media detox, worth plus 2 to every stat next season.",
+        ],
+      },
+      {
+        heading: "Paying for a trainer and the recovery clinic",
+        items: [
+          "Money matters: a personal trainer adds a stat point per season, and the recovery clinic halves injury layoffs.",
+        ],
+      },
+      {
+        heading: "Weighing the doping risk, your agent and loyalty",
+        items: [
+          "The doping storyline boosts every stat but risks a 20 percent failed test each season it runs, and failing means a 1 season ban and a wrecked reputation.",
+          "Your personality and your agent shape the whole run. The Showman grows followers 60 percent faster, The Professor earns brand trust, and super agent Zara Blackwood opens dream club doors for a 10 percent cut.",
+          "Loyalty pays: a decade at one club is worth about as much legacy as two and a half league titles.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -1303,28 +1586,102 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "You and an AI rival take turns raiding one player pool until you have each drafted a full XI. Then a season is simulated, both squads get dissected, and the community votes on who built better.",
       "The wrinkle is the daily criteria: one squad building rule per day, and it is enforced, not decorative. Picks that break it are blocked for you and the AI alike.",
     ],
-    howToPlay: [
-      "Read today's criteria first. It shapes the whole draft.",
-      "Draft snake style: 22 alternating picks, with a coin flip deciding who starts.",
-      "Cover every position, goalkeeper included.",
-      "At 11 apiece, hit Simulate Season for the story of each team's year.",
-      "Read the strengths and weaknesses report, then vote for the winner.",
+    headings: {
+      howToPlay: "How to play Fantasy Draft, a free online soccer draft game",
+      rules: "Fantasy Draft rules: the shared pool, daily criteria and voting",
+      example: "Fantasy Draft walkthrough: an Under 25s rule and a keeper steal",
+      tips: "Fantasy Draft tips for outdrafting the AI rival",
+      faq: "Fantasy Draft FAQ: criteria, voting and legal picks",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading today's squad building criteria",
+        items: [
+          "Read today's criteria first. It shapes the whole draft.",
+        ],
+      },
+      {
+        heading: "Drafting snake style against the AI",
+        items: [
+          "Draft snake style: 22 alternating picks, with a coin flip deciding who starts.",
+        ],
+      },
+      {
+        heading: "Covering every position on the pitch",
+        items: [
+          "Cover every position, goalkeeper included.",
+        ],
+      },
+      {
+        heading: "Simulating the season and voting on the winner",
+        items: [
+          "At 11 apiece, hit Simulate Season for the story of each team's year.",
+          "Read the strengths and weaknesses report, then vote for the winner.",
+        ],
+      },
     ],
-    rules: [
-      "Both sides draft 11 players from one shared pool, so a taken player is gone for both.",
-      "Rules come with exact numbers: Under 25s, a 1 billion pound squad cap, One Nation (max 3 per country), Bargain Hunt (60 million or less each), Wonderkids (outfielders 21 or under), or Galacticos (outfielders 80 million plus).",
-      "Illegal picks are blocked with the reason shown, relaxing only when no legal option remains.",
-      "Voting requires signing in, so nobody stuffs the ballot.",
+    ruleSections: [
+      {
+        heading: "One shared pool for both drafters",
+        items: [
+          "Both sides draft 11 players from one shared pool, so a taken player is gone for both.",
+        ],
+      },
+      {
+        heading: "The daily criteria's exact numbers",
+        items: [
+          "Rules come with exact numbers: Under 25s, a 1 billion pound squad cap, One Nation (max 3 per country), Bargain Hunt (60 million or less each), Wonderkids (outfielders 21 or under), or Galacticos (outfielders 80 million plus).",
+        ],
+      },
+      {
+        heading: "Blocked picks are relaxed automatically",
+        items: [
+          "Illegal picks are blocked with the reason shown, relaxing only when no legal option remains.",
+        ],
+        subsections: [
+          {
+            heading: "Signing in before you vote",
+            items: [
+              "Voting requires signing in, so nobody stuffs the ballot.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "The rule is Under 25s, so your 27 year old superstar opener dies on contact: blocked. Round one becomes a wonderkid land grab, and the AI, which leans expensive, snaps up the priciest young forward on the board.",
-      "You counter with a young keeper, because the AI leaves goalkeepers late. By pick 22 both rosters are packed with kids, and the vote breaks your way.",
+    exampleSections: [
+      {
+        heading: "An Under 25s rule blocks your opening pick",
+        paragraphs: [
+          "The rule is Under 25s, so your 27 year old superstar opener dies on contact: blocked. Round one becomes a wonderkid land grab, and the AI, which leans expensive, snaps up the priciest young forward on the board.",
+        ],
+      },
+      {
+        heading: "Grabbing a keeper late while the AI stalls",
+        paragraphs: [
+          "You counter with a young keeper, because the AI leaves goalkeepers late. By pick 22 both rosters are packed with kids, and the vote breaks your way.",
+        ],
+      },
     ],
-    tips: [
-      "Draft against the AI's taste: it chases market value, so grab the cheap positional glue it ignores.",
-      "Under a budget cap, one megastar eats a third of your money. Spread it.",
-      "Scarcity beats stardom mid draft. Two keepers left is a pick, not a luxury.",
-      "The AI picks in about 2 seconds, so keep a shortlist ready for every position.",
+    tipSections: [
+      {
+        heading: "Drafting against what the AI values",
+        items: [
+          "Draft against the AI's taste: it chases market value, so grab the cheap positional glue it ignores.",
+        ],
+      },
+      {
+        heading: "Spreading money under a budget cap",
+        items: [
+          "Under a budget cap, one megastar eats a third of your money. Spread it.",
+        ],
+      },
+      {
+        heading: "Scarcity, speed and keeping a shortlist ready",
+        items: [
+          "Scarcity beats stardom mid draft. Two keepers left is a pick, not a luxury.",
+          "The AI picks in about 2 seconds, so keep a shortlist ready for every position.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -1347,31 +1704,122 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Two players sit at opposite ends of a chain, and you link them through shared dressing rooms. It is six degrees of separation for football.",
       "The catch: teammates means actual teammates. Two stars who wore the same shirt years apart do not count. Every link needs the same club in the same season.",
     ],
-    howToPlay: [
-      "Check the start player, the target, and the optimal step count on the card.",
-      "Type a player who was a club teammate of the start player. Real links join the chain with the shared club labeled.",
-      "Keep connecting to the most recent name in your chain.",
-      "Reach the target to win. If a new player also links to the target, the chain closes automatically.",
-      "Stuck? Take the hint, or give up to see a full working path.",
-      "Want it harder? Pick a special rule above the card: Active players only, or Europe only. The optimal on the card changes with the rule.",
+    headings: {
+      howToPlay: "How to play Transfer Path, a free daily soccer chain puzzle",
+      rules: "Transfer Path rules: valid links, scoring and special rules",
+      example: "Transfer Path walkthrough: Gerrard to Messi through Luis Suarez",
+      tips: "Transfer Path tips for chaining teammates fast",
+      faq: "Transfer Path FAQ: rejected links, hints and scoring",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the start, target and optimal steps",
+        items: [
+          "Check the start player, the target, and the optimal step count on the card.",
+        ],
+      },
+      {
+        heading: "Typing teammates to build the chain",
+        items: [
+          "Type a player who was a club teammate of the start player. Real links join the chain with the shared club labeled.",
+        ],
+      },
+      {
+        heading: "Connecting to your chain's most recent name",
+        items: [
+          "Keep connecting to the most recent name in your chain.",
+        ],
+      },
+      {
+        heading: "Reaching the target and closing the chain",
+        items: [
+          "Reach the target to win. If a new player also links to the target, the chain closes automatically.",
+        ],
+      },
+      {
+        heading: "Taking a hint or giving up",
+        items: [
+          "Stuck? Take the hint, or give up to see a full working path.",
+        ],
+        subsections: [
+          {
+            heading: "Picking a special rule for a harder chain",
+            items: [
+              "Want it harder? Pick a special rule above the card: Active players only, or Europe only. The optimal on the card changes with the rule.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "A valid link is the same club in the same season, not the same club ever.",
-      "Scoring starts at 1000 for the optimal path and drops 100 per extra step, with a floor of 0.",
-      "Invalid names cost nothing. No attempt limit, no timer.",
-      "One shared daily puzzle, plus unlimited practice puzzles.",
-      "Active players only: every name in the chain, the start and the target included, is in our verified 2026 active-player records. Europe only: every club a link goes through is a European club. Each rule has its own optimal, worked out on the players that rule leaves in play.",
-      "A special rule reaches the daily only when today's pair has a route under it; otherwise the daily plays the everyday rule and the rule waits for you in unlimited. The daily score still counts steps against the everyday optimal, so a rule is a harder road to the same finish line. Unlimited scores against the rule's own optimal.",
+    ruleSections: [
+      {
+        heading: "What counts as a valid club link",
+        items: [
+          "A valid link is the same club in the same season, not the same club ever.",
+        ],
+      },
+      {
+        heading: "Scoring from 1000 down to a floor of zero",
+        items: [
+          "Scoring starts at 1000 for the optimal path and drops 100 per extra step, with a floor of 0.",
+        ],
+      },
+      {
+        heading: "Free retries and the daily versus unlimited puzzle",
+        items: [
+          "Invalid names cost nothing. No attempt limit, no timer.",
+          "One shared daily puzzle, plus unlimited practice puzzles.",
+        ],
+      },
+      {
+        heading: "How the special rules change your optimal",
+        items: [
+          "Active players only: every name in the chain, the start and the target included, is in our verified 2026 active-player records. Europe only: every club a link goes through is a European club. Each rule has its own optimal, worked out on the players that rule leaves in play.",
+        ],
+        subsections: [
+          {
+            heading: "When the harder rule reaches the daily puzzle",
+            items: [
+              "A special rule reaches the daily only when today's pair has a route under it; otherwise the daily plays the everyday rule and the rule waits for you in unlimited. The daily score still counts steps against the everyday optimal, so a rule is a harder road to the same finish line. Unlimited scores against the rule's own optimal.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Say it is Steven Gerrard to Lionel Messi, optimal in 2 steps. Gerrard played with Luis Suarez at Liverpool, and Suarez spent years beside Messi at Barcelona, so you type Suarez and the chain autocompletes for the full 1000.",
-      "Wander through four or five names instead and you still win, just at 800 or 700. The share line shows your steps against the optimal.",
+    exampleSections: [
+      {
+        heading: "Gerrard to Messi through Luis Suarez",
+        paragraphs: [
+          "Say it is Steven Gerrard to Lionel Messi, optimal in 2 steps. Gerrard played with Luis Suarez at Liverpool, and Suarez spent years beside Messi at Barcelona, so you type Suarez and the chain autocompletes for the full 1000.",
+        ],
+      },
+      {
+        heading: "A longer chain still wins at a lower score",
+        paragraphs: [
+          "Wander through four or five names instead and you still win, just at 800 or 700. The share line shows your steps against the optimal.",
+        ],
+      },
     ],
-    tips: [
-      "Think in well traveled hubs: serial movers like Zlatan Ibrahimovic connect whole leagues by themselves.",
-      "Work backwards from the target too. Meeting in the middle beats a blind march.",
-      "Match eras before clubs. A clever link fails if the careers never overlapped there.",
-      "Wrong attempts are free, so test hunches instead of agonizing.",
+    tipSections: [
+      {
+        heading: "Thinking in well traveled player hubs",
+        items: [
+          "Think in well traveled hubs: serial movers like Zlatan Ibrahimovic connect whole leagues by themselves.",
+        ],
+      },
+      {
+        heading: "Working backwards to meet in the middle",
+        items: [
+          "Work backwards from the target too. Meeting in the middle beats a blind march.",
+        ],
+      },
+      {
+        heading: "Matching eras and testing free hunches",
+        items: [
+          "Match eras before clubs. A clever link fails if the careers never overlapped there.",
+          "Wrong attempts are free, so test hunches instead of agonizing.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -1398,28 +1846,102 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Squad Deal crosses building an XI with a blind box gamble. Every position is a wall of mystery boxes, you claim one blind, and a banker keeps ringing with tempting named alternatives.",
       "You never quite know what you are holding until it is too late, which is the point. The finished squad gets simulated, graded, and logged on a leaderboard saved to your device.",
     ],
-    howToPlay: [
-      "Set up: Current Stars or All-Time Legends, an optional theme like Premier League only, one of 9 formations, and whether meme players can lurk in the boxes.",
-      "Tap a position, face up to 10 hidden players, and keep one box sight unseen.",
-      "Open the rest in short rounds. Between rounds the banker offers a named player: accept to fill the slot or keep opening.",
-      "Refuse everything and you finish the slot from the last unopened boxes.",
-      "After the XI, play the 5 extras, then simulate for your grade.",
+    headings: {
+      howToPlay: "How to play Squad Deal, a free online soccer box opening game",
+      rules: "Squad Deal rules: box odds, chemistry and the letter grades",
+      example: "Squad Deal walkthrough: a Traffic Cone and a Premier League B",
+      tips: "Squad Deal tips for reading the banker's offers",
+      faq: "Squad Deal FAQ: grading, extras and your leaderboard",
+    },
+    howToPlaySections: [
+      {
+        heading: "Setting up your theme, formation and modes",
+        items: [
+          "Set up: Current Stars or All-Time Legends, an optional theme like Premier League only, one of 9 formations, and whether meme players can lurk in the boxes.",
+        ],
+      },
+      {
+        heading: "Picking a hidden box for each position",
+        items: [
+          "Tap a position, face up to 10 hidden players, and keep one box sight unseen.",
+        ],
+      },
+      {
+        heading: "Opening rounds and the banker's offers",
+        items: [
+          "Open the rest in short rounds. Between rounds the banker offers a named player: accept to fill the slot or keep opening.",
+        ],
+      },
+      {
+        heading: "Finishing slots and simulating for a grade",
+        items: [
+          "Refuse everything and you finish the slot from the last unopened boxes.",
+          "After the XI, play the 5 extras, then simulate for your grade.",
+        ],
+      },
     ],
-    rules: [
-      "Boxes are seeded stars to scrubs: on a full board of 10, a couple come from the top of the pool and a couple from the bottom.",
-      "Offers strengthen in later rounds, roughly 1 in 4 is a sweetener near the best player left, and the banker never repeats an offer.",
-      "Final rating: players 82 percent, chemistry 18 percent, plus extras. Chemistry counts shared clubs and nationalities.",
-      "Grades: 84 and up is A+, 76 is A, 66 is B, 55 is C, below that D.",
+    ruleSections: [
+      {
+        heading: "How boxes are seeded top to bottom",
+        items: [
+          "Boxes are seeded stars to scrubs: on a full board of 10, a couple come from the top of the pool and a couple from the bottom.",
+        ],
+      },
+      {
+        heading: "How the banker sweetens later rounds",
+        items: [
+          "Offers strengthen in later rounds, roughly 1 in 4 is a sweetener near the best player left, and the banker never repeats an offer.",
+        ],
+      },
+      {
+        heading: "Final rating and the letter grades",
+        items: [
+          "Final rating: players 82 percent, chemistry 18 percent, plus extras. Chemistry counts shared clubs and nationalities.",
+        ],
+        subsections: [
+          {
+            heading: "The grade cutoffs from A+ to D",
+            items: [
+              "Grades: 84 and up is A+, 76 is A, 66 is B, 55 is C, below that D.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "At striker you keep box 4. Two scrubs and a star flip out, the banker offers a solid mid 80s name, and you decline. Next round burns another elite option, and his follow up is weaker, because the field left in play got worse.",
-      "You ride it to the end and out comes The Traffic Cone. Your all Premier League chemistry still drags the sim to a B, logged with formation and date.",
+    exampleSections: [
+      {
+        heading: "Declining the banker's mid 80s offer at striker",
+        paragraphs: [
+          "At striker you keep box 4. Two scrubs and a star flip out, the banker offers a solid mid 80s name, and you decline. Next round burns another elite option, and his follow up is weaker, because the field left in play got worse.",
+        ],
+      },
+      {
+        heading: "The Traffic Cone lands but chemistry saves the grade",
+        paragraphs: [
+          "You ride it to the end and out comes The Traffic Cone. Your all Premier League chemistry still drags the sim to a B, logged with formation and date.",
+        ],
+      },
     ],
-    tips: [
-      "Judge the banker against what is left, not what is gone. His offer tracks the unopened average.",
-      "Take early offers at thin positions like goalkeeper. Deep positions can afford greed.",
-      "In Legends mode every box holds an all time great, so gambling to the last box is far safer.",
-      "Meme mode is chaos on purpose: a few joke players are secretly elite, most are Sunday league.",
+    tipSections: [
+      {
+        heading: "Judging the banker against what remains",
+        items: [
+          "Judge the banker against what is left, not what is gone. His offer tracks the unopened average.",
+        ],
+      },
+      {
+        heading: "Taking early offers at thin positions",
+        items: [
+          "Take early offers at thin positions like goalkeeper. Deep positions can afford greed.",
+        ],
+      },
+      {
+        heading: "Legends mode safety and Meme mode chaos",
+        items: [
+          "In Legends mode every box holds an all time great, so gambling to the last box is far safer.",
+          "Meme mode is chaos on purpose: a few joke players are secretly elite, most are Sunday league.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -1443,31 +1965,120 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Every card is anonymous while you shop. You see the position, the age, and that season's matches, goals, assists and cards, plus the price, which is the player's real market value that year. Never a name, a country or a club, because knowing who a player is would be the whole answer.",
       "When the XI is full the years roll forward one at a time to the latest season, every holding moves as it really moved, and only then do the cards turn over. Every number on every screen is real market history.",
     ],
-    howToPlay: [
-      "Pick the daily market (the same season and the same cards for everyone today) or unlimited, where you choose the season the market opens in, 2015 to 2022, or let it roll one.",
-      "Fill the XI position by position. Each slot deals four anonymous cards from the opening season, from an expensive bet to a cheap punt. Read the age, the matches and the output, then buy exactly one at its real price.",
-      "The wallet always reserves enough for the remaining slots' punts, so a run can never strand you.",
-      "After the eleventh buy, step through the seasons one at a time. Each step shows what every holding is worth that year against what it was, and says plainly when a player has no row for a year rather than making one up.",
-      "At the end the reveal names all eleven, prices the portfolio at the latest season's real values, and scores the run.",
+    headings: {
+      howToPlay: "How to play Player Stock Market, a free soccer investing game",
+      rules: "Player Stock Market rules: the wallet, scoring and missing rows",
+      example: "Player Stock Market walkthrough: a cheap card outgrows a star",
+      tips: "Player Stock Market tips for reading age over the name",
+      faq: "Player Stock Market FAQ: real prices, seasons and going broke",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing the daily market or an unlimited season",
+        items: [
+          "Pick the daily market (the same season and the same cards for everyone today) or unlimited, where you choose the season the market opens in, 2015 to 2022, or let it roll one.",
+        ],
+      },
+      {
+        heading: "Buying anonymous cards to fill your XI",
+        items: [
+          "Fill the XI position by position. Each slot deals four anonymous cards from the opening season, from an expensive bet to a cheap punt. Read the age, the matches and the output, then buy exactly one at its real price.",
+        ],
+      },
+      {
+        heading: "How the wallet reserves money for later slots",
+        items: [
+          "The wallet always reserves enough for the remaining slots' punts, so a run can never strand you.",
+        ],
+      },
+      {
+        heading: "Stepping through the seasons after your buys",
+        items: [
+          "After the eleventh buy, step through the seasons one at a time. Each step shows what every holding is worth that year against what it was, and says plainly when a player has no row for a year rather than making one up.",
+        ],
+        subsections: [
+          {
+            heading: "Reaching the reveal and your final score",
+            items: [
+              "At the end the reveal names all eleven, prices the portfolio at the latest season's real values, and scores the run.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "The wallet is 200M for the whole XI, and prices are real market values from the opening season.",
-      "Cards come only from careers the data tracks through to the latest season, stated here on purpose: you are choosing among players whose story the table can finish, and a value can still crater.",
-      "A slot's four cards always span the market: one from the top of that season's range, two from the middle, and a punt the wallet can always cover. They are dealt in a shuffled order, so the price band cannot be read off where a card sits.",
-      "Scoring is the return on the whole 200M. What your eleven are worth at the end is placed between the worst and the best eleven that the same 200M could really have bought from the same cards, so 100 means you played the wallet perfectly and 0 means you could not have done worse with it.",
-      "Money you never spend buys nothing. Sitting on the wallet is not a safe play, it is a low score, because the cash you kept could have been eleven careers instead.",
-      "A season with no row for a player is shown as exactly that. Nothing is ever filled in between two real values.",
+    ruleSections: [
+      {
+        heading: "The 200M wallet and real market prices",
+        items: [
+          "The wallet is 200M for the whole XI, and prices are real market values from the opening season.",
+        ],
+      },
+      {
+        heading: "Why every card's career reaches the latest season",
+        items: [
+          "Cards come only from careers the data tracks through to the latest season, stated here on purpose: you are choosing among players whose story the table can finish, and a value can still crater.",
+        ],
+      },
+      {
+        heading: "How each slot's four cards span the market",
+        items: [
+          "A slot's four cards always span the market: one from the top of that season's range, two from the middle, and a punt the wallet can always cover. They are dealt in a shuffled order, so the price band cannot be read off where a card sits.",
+        ],
+      },
+      {
+        heading: "Scoring your return between the worst and best XI",
+        items: [
+          "Scoring is the return on the whole 200M. What your eleven are worth at the end is placed between the worst and the best eleven that the same 200M could really have bought from the same cards, so 100 means you played the wallet perfectly and 0 means you could not have done worse with it.",
+        ],
+      },
+      {
+        heading: "Empty wallets and missing season rows",
+        items: [
+          "Money you never spend buys nothing. Sitting on the wallet is not a safe play, it is a low score, because the cash you kept could have been eleven careers instead.",
+          "A season with no row for a player is shown as exactly that. Nothing is ever filled in between two real values.",
+        ],
+      },
     ],
-    example: [
-      "The market opens in 2018, the striker slot. One card reads age 21, 34 matches, 14 goals, 6 assists, 24M. Another reads age 29, 41 matches, 22 goals, 5 assists, 60M. The kid costs less than half; you take the age and the rate.",
-      "You step through 2019, 2020 and on, watching the 24M card climb past the 60M one, and the reveal says the kid became a superstar worth several times what you paid. The portfolio closes well over 200M and the score lands in the eighties.",
+    exampleSections: [
+      {
+        heading: "Choosing a 21 year old over a 29 year old striker",
+        paragraphs: [
+          "The market opens in 2018, the striker slot. One card reads age 21, 34 matches, 14 goals, 6 assists, 24M. Another reads age 29, 41 matches, 22 goals, 5 assists, 60M. The kid costs less than half; you take the age and the rate.",
+        ],
+      },
+      {
+        heading: "The cheap card climbs past the expensive one",
+        paragraphs: [
+          "You step through 2019, 2020 and on, watching the 24M card climb past the 60M one, and the reveal says the kid became a superstar worth several times what you paid. The portfolio closes well over 200M and the score lands in the eighties.",
+        ],
+      },
     ],
-    tips: [
-      "Age is the loudest number on the card. A 21 year old with real minutes is the market telling you where it is going; a 31 year old at 60M is a value with mostly one direction left.",
-      "Read the rate, not the raw count. Ten goals in 20 matches beats fourteen in 40.",
-      "Spend the wallet, but spend it on purpose. A 60M splash is ten cheap seats later, and eleven punts is a portfolio that barely moves. The reserve rule keeps you solvent either way.",
-      "Keepers and defenders show few goals, so age and matches are their story.",
-      "Yes, a fan might guess who the 130M card is. The game is won on the cheap seats, where age and the rate are the only edge you have.",
+    tipSections: [
+      {
+        heading: "Reading age as the loudest number",
+        items: [
+          "Age is the loudest number on the card. A 21 year old with real minutes is the market telling you where it is going; a 31 year old at 60M is a value with mostly one direction left.",
+        ],
+      },
+      {
+        heading: "Judging the rate, not the raw count",
+        items: [
+          "Read the rate, not the raw count. Ten goals in 20 matches beats fourteen in 40.",
+        ],
+      },
+      {
+        heading: "Spending the wallet on purpose",
+        items: [
+          "Spend the wallet, but spend it on purpose. A 60M splash is ten cheap seats later, and eleven punts is a portfolio that barely moves. The reserve rule keeps you solvent either way.",
+        ],
+      },
+      {
+        heading: "Keepers, defenders and guessing a name",
+        items: [
+          "Keepers and defenders show few goals, so age and matches are their story.",
+          "Yes, a fan might guess who the 130M card is. The game is won on the cheap seats, where age and the rate are the only edge you have.",
+        ],
+      },
     ],
     faqs: [
       { q: "Are the numbers real?", a: "Yes, every price, stat and season value is a real row from the market value history the rest of the site runs on. Nothing is authored, and a season with no row says so." },
@@ -1482,27 +2093,106 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "That discard is the heart of it. A striker you bin can never reach the other squad, so every search is two decisions at once: who makes your XI, and who you refuse to let make theirs.",
       "When both XIs are full, the arguing stops and a simulated 38 game season settles it, derbies included. Play the CPU or pass one screen between two people.",
     ],
-    howToPlay: [
-      "Pick your opponent: the CPU, or a second person on the same screen.",
-      "On your turn, three real players appear. At least one always fits an open slot in your 4-3-3.",
-      "Tap the one you keep, then tap the slot he plays. The other two are binned for good, for both squads.",
-      "Eleven keeps each, alternating turns. Then both XIs play the same simulated season and the table decides.",
+    headings: {
+      howToPlay: "How to play Search and Discard, a free soccer squad building duel",
+      rules: "Search and Discard rules: positions, discards and season scoring",
+      example: "Search and Discard walkthrough: a scarce keeper wins the duel",
+      tips: "Search and Discard tips for guarding scarce positions",
+      faq: "Search and Discard FAQ: multiplayer, ratings and repeat picks",
+    },
+    howToPlaySections: [
+      {
+        heading: "Picking the CPU or a second player",
+        items: [
+          "Pick your opponent: the CPU, or a second person on the same screen.",
+        ],
+      },
+      {
+        heading: "Seeing three real players on your turn",
+        items: [
+          "On your turn, three real players appear. At least one always fits an open slot in your 4-3-3.",
+        ],
+      },
+      {
+        heading: "Keeping one player and binning the rest",
+        items: [
+          "Tap the one you keep, then tap the slot he plays. The other two are binned for good, for both squads.",
+        ],
+      },
+      {
+        heading: "Alternating turns until the season decides",
+        items: [
+          "Eleven keeps each, alternating turns. Then both XIs play the same simulated season and the table decides.",
+        ],
+      },
     ],
-    rules: [
-      "Both managers build the identical 4-3-3 from one shared pool, real players and real market values throughout.",
-      "Position rules use the sitewide families: wingers cover both flanks, central mids cover the holding and attacking slots, a keeper is only ever a keeper.",
-      "A discarded player is out of the entire game. He cannot be searched again by either side.",
-      "The settle is deterministic: the same two finished XIs always produce the same season, so the draft is the game.",
-      "Season scoring: 36 league games against a spread of opposition plus two head to head derbies, 3 points a win, 1 a draw. Your season score is your points as a share of the 114 available.",
+    ruleSections: [
+      {
+        heading: "Building an identical formation from one pool",
+        items: [
+          "Both managers build the identical 4-3-3 from one shared pool, real players and real market values throughout.",
+        ],
+      },
+      {
+        heading: "Which nearby positions each slot accepts",
+        items: [
+          "Position rules use the sitewide families: wingers cover both flanks, central mids cover the holding and attacking slots, a keeper is only ever a keeper.",
+        ],
+      },
+      {
+        heading: "Discarding a player out of the entire game",
+        items: [
+          "A discarded player is out of the entire game. He cannot be searched again by either side.",
+        ],
+      },
+      {
+        heading: "A deterministic settle decides the season",
+        items: [
+          "The settle is deterministic: the same two finished XIs always produce the same season, so the draft is the game.",
+        ],
+        subsections: [
+          {
+            heading: "How your season score is worked out",
+            items: [
+              "Season scoring: 36 league games against a spread of opposition plus two head to head derbies, 3 points a win, 1 a draw. Your season score is your points as a share of the 114 available.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Your search deals an 89 rated winger, an 84 keeper and a 76 full back, with your goalkeeper slot still open. Keeping the winger is tempting, but keepers are scarce in a shrinking pool, so you take the 84 and bin the other two, and the 89 winger is gone from the duel entirely.",
-      "Ten turns later both squads stand at 11. Yours rates 82, theirs 80, the derbies split, and your side edges the season by four points.",
+    exampleSections: [
+      {
+        heading: "Taking the scarce keeper over the tempting winger",
+        paragraphs: [
+          "Your search deals an 89 rated winger, an 84 keeper and a 76 full back, with your goalkeeper slot still open. Keeping the winger is tempting, but keepers are scarce in a shrinking pool, so you take the 84 and bin the other two, and the 89 winger is gone from the duel entirely.",
+        ],
+      },
+      {
+        heading: "A four point season win between two full squads",
+        paragraphs: [
+          "Ten turns later both squads stand at 11. Yours rates 82, theirs 80, the derbies split, and your side edges the season by four points.",
+        ],
+      },
     ],
-    tips: [
-      "Guard the scarce slots. Keepers and centre backs dry up fastest in a shared pool; a late empty GK slot is a disaster.",
-      "Bin with intent. When your slots are nearly full, the keep matters less than which star you deny the other side.",
-      "Ratings follow real market value with an age correction, so a famous veteran is often worth more than his price tag suggests.",
+    tipSections: [
+      {
+        heading: "Guarding the scarcest positions early",
+        items: [
+          "Guard the scarce slots. Keepers and centre backs dry up fastest in a shared pool; a late empty GK slot is a disaster.",
+        ],
+      },
+      {
+        heading: "Binning with intent late in the draft",
+        items: [
+          "Bin with intent. When your slots are nearly full, the keep matters less than which star you deny the other side.",
+        ],
+      },
+      {
+        heading: "Why real market value drives the ratings",
+        items: [
+          "Ratings follow real market value with an age correction, so a famous veteran is often worth more than his price tag suggests.",
+        ],
+      },
     ],
     faqs: [
       { q: 'Can both squads end up with the same player?', a: 'No. A kept player is off the pool, and a discarded player is out of the whole game, so the two XIs never overlap.' },
@@ -1515,26 +2205,100 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Every other game here asks you a question. This one asks you to hit it. Ten free kicks, a wall that grows, and a keeper who leans one way before you strike.",
       "Aim across the goal, bend it with the inside or the outside, and stop the power bar where you dare. Smash it and it sprays. Roll it and he reaches it. The corners are the only safe place and they are the hardest to find.",
     ],
-    howToPlay: [
-      "Aim with the arrow keys, or drag the pitch with a finger or the mouse.",
-      "Q and E bend the flight. The slower you hit it, the more it bends.",
-      "Hold space, or hold the strike button, to charge. The power bar sweeps up and down and you get the number you let go on.",
-      "Ten kicks a run, each one further out than the last, with more defenders in the wall and a better keeper.",
+    headings: {
+      howToPlay: "How to play Free Kick, a free online soccer shooting game",
+      rules: "Free Kick rules: power, accuracy and how goals are scored",
+      example: "Free Kick walkthrough: bending a shot past a four man wall",
+      tips: "Free Kick tips for reading the keeper and the power bar",
+      faq: "Free Kick FAQ: the daily run, aiming and missed corners",
+    },
+    howToPlaySections: [
+      {
+        heading: "Aiming with the keys or by dragging",
+        items: [
+          "Aim with the arrow keys, or drag the pitch with a finger or the mouse.",
+        ],
+      },
+      {
+        heading: "Bending the flight with Q and E",
+        items: [
+          "Q and E bend the flight. The slower you hit it, the more it bends.",
+        ],
+      },
+      {
+        heading: "Charging and releasing the power bar",
+        items: [
+          "Hold space, or hold the strike button, to charge. The power bar sweeps up and down and you get the number you let go on.",
+        ],
+      },
+      {
+        heading: "Ten kicks that get harder as you go",
+        items: [
+          "Ten kicks a run, each one further out than the last, with more defenders in the wall and a better keeper.",
+        ],
+      },
     ],
-    rules: [
-      "Power beats the keeper but costs accuracy, and the cost grows faster than the power does, so a full blooded strike misses far more than it scores.",
-      "The wall only blocks what stays low. Lift it and the wall is irrelevant, but the keeper is not.",
-      "Goals pay by distance, by the size of the wall you beat and by how close to the corner you finished. A tap into the middle pays least.",
-      "The daily deals the same ten kicks to everyone and keeps your score for the day. Unlimited deals fresh ones for ever.",
+    ruleSections: [
+      {
+        heading: "Trading power against accuracy",
+        items: [
+          "Power beats the keeper but costs accuracy, and the cost grows faster than the power does, so a full blooded strike misses far more than it scores.",
+        ],
+      },
+      {
+        heading: "Lifting the ball past the wall",
+        items: [
+          "The wall only blocks what stays low. Lift it and the wall is irrelevant, but the keeper is not.",
+        ],
+      },
+      {
+        heading: "How goals are scored by distance and corner",
+        items: [
+          "Goals pay by distance, by the size of the wall you beat and by how close to the corner you finished. A tap into the middle pays least.",
+        ],
+        subsections: [
+          {
+            heading: "Daily kicks versus unlimited practice",
+            items: [
+              "The daily deals the same ten kicks to everyone and keeps your score for the day. Unlimited deals fresh ones for ever.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Kick one is a penalty with nobody in the wall. The temptation is to smash it; the points are in rolling it into a corner where the keeper is not.",
-      "Kick seven is twenty metres out with four in the wall and the keeper leaning right. Lift it over the wall, bend it back toward the left post, and take about two thirds power so the bend still has time to work.",
+    exampleSections: [
+      {
+        heading: "An open penalty rewards a corner, not power",
+        paragraphs: [
+          "Kick one is a penalty with nobody in the wall. The temptation is to smash it; the points are in rolling it into a corner where the keeper is not.",
+        ],
+      },
+      {
+        heading: "Lifting and bending past a four man wall",
+        paragraphs: [
+          "Kick seven is twenty metres out with four in the wall and the keeper leaning right. Lift it over the wall, bend it back toward the left post, and take about two thirds power so the bend still has time to work.",
+        ],
+      },
     ],
-    tips: [
-      "Watch the keeper before you strike. He is already leaning, and the far side is the side he left you.",
-      "Two thirds power is usually the best trade: enough to reach from distance, slow enough to bend and straight enough to land where you aimed.",
-      "Height beats the wall, width beats the keeper. From distance with a big wall you need both, which is why those kicks pay the most.",
+    tipSections: [
+      {
+        heading: "Reading which way the keeper leans",
+        items: [
+          "Watch the keeper before you strike. He is already leaning, and the far side is the side he left you.",
+        ],
+      },
+      {
+        heading: "Why two thirds power is the best trade",
+        items: [
+          "Two thirds power is usually the best trade: enough to reach from distance, slow enough to bend and straight enough to land where you aimed.",
+        ],
+      },
+      {
+        heading: "Beating a big wall with height and width",
+        items: [
+          "Height beats the wall, width beats the keeper. From distance with a big wall you need both, which is why those kicks pay the most.",
+        ],
+      },
     ],
     faqs: [
       { q: 'Is the daily the same for everyone?', a: 'Yes. The ten kicks come from the date, so every player gets the same run, and your score is kept for the day.' },
