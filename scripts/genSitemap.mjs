@@ -68,22 +68,11 @@ const STATIC_PAGES = [
   { p: '/hockey', freq: 'weekly', pri: '0.6' },
   { p: '/whats-new', freq: 'weekly', pri: '0.5' },
   { p: '/records', freq: 'weekly', pri: '0.6' },
-  /* Round 649: one page per Record Books competition. The slugs live on
-     RECORD_SECTIONS in src/lib/records.ts, and scripts/simRecordPages.mjs fails
-     if this list, App.tsx and that one disagree. Being named here is also what
-     puts them in front of the prerenderer. */
-  { p: '/records/super-bowl-winners', freq: 'monthly', pri: '0.6' },
-  { p: '/records/nba-champions', freq: 'monthly', pri: '0.6' },
-  { p: '/records/world-series-winners', freq: 'monthly', pri: '0.6' },
-  { p: '/records/stanley-cup-winners', freq: 'monthly', pri: '0.6' },
-  { p: '/records/wnba-champions', freq: 'monthly', pri: '0.6' },
-  { p: '/records/college-football-national-champions', freq: 'monthly', pri: '0.6' },
-  { p: '/records/ncaa-basketball-champions', freq: 'monthly', pri: '0.6' },
-  { p: '/records/english-football-champions', freq: 'monthly', pri: '0.6' },
-  { p: '/records/afl-premiers', freq: 'monthly', pri: '0.6' },
-  { p: '/records/brownlow-medal-winners', freq: 'monthly', pri: '0.6' },
-  { p: '/records/dally-m-medal-winners', freq: 'monthly', pri: '0.6' },
-  { p: '/records/nrl-premiers', freq: 'monthly', pri: '0.6' },
+  /* Round 649: the twelve /records/<slug> pages are NOT typed here. They are
+     read from RECORD_SECTIONS in src/lib/records.ts (the one place a slug
+     lives) in the bundle step below and spliced in right after /records, so
+     the sitemap and the prerenderer can never miss a section or keep a dead
+     one. */
   /* Round 520: the first reference explainer. Non game, so named here like
      /records, which is also what puts it in front of the prerenderer. */
   { p: '/champions-league-format-history', freq: 'monthly', pri: '0.6' },
@@ -122,17 +111,41 @@ const redirects = new Set(retired.map(r => r.from));
    Windows. */
 const ENTRY = path.join(os.tmpdir(), 'sitemapEntry.mjs');
 const BUNDLE = path.join(os.tmpdir(), 'sitemap.bundle.mjs');
+/* Round 649: records.ts imports the Supabase client, which reads localStorage
+   when it is created, so the entry stubs it the way simRecords does. Only the
+   slugs are read; no fetcher is ever called. */
 fs.writeFileSync(ENTRY, `
+globalThis.localStorage = globalThis.localStorage ?? { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const reg = await import('${ROOT.replaceAll('\\', '/')}/src/data/gameRegistry.ts');
+const rec = await import('${ROOT.replaceAll('\\', '/')}/src/lib/records.ts');
 export const paths = (reg.ALL_GAMES ?? reg.CATEGORIES.flatMap(c => c.games)).map(g => g.path);
+export const recordSlugs = rec.RECORD_SECTIONS.map(s => s.slug);
 `);
 execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
-const { paths: gamePaths } = await import(pathToFileURL(BUNDLE).href);
+const { paths: gamePaths, recordSlugs } = await import(pathToFileURL(BUNDLE).href);
+
+/* Round 649: the record pages, spliced in after /records. Fail closed: an
+   empty or malformed slug list stops the build rather than submitting a page
+   that is not there. */
+{
+  const at = STATIC_PAGES.findIndex(s => s.p === '/records');
+  const good = Array.isArray(recordSlugs) && recordSlugs.length > 0
+    && recordSlugs.every(x => /^[a-z0-9]+(-[a-z0-9]+)*$/.test(x || ''))
+    && new Set(recordSlugs).size === recordSlugs.length;
+  if (at < 0 || !good) {
+    console.error(`FATAL: could not read a clean slug list from RECORD_SECTIONS (${JSON.stringify(recordSlugs)})`);
+    process.exit(1);
+  }
+  STATIC_PAGES.splice(at + 1, 0, ...recordSlugs.map(slug => ({ p: `/records/${slug}`, freq: 'monthly', pri: '0.6' })));
+}
 
 let bad = 0;
 for (const p of gamePaths) {
   if (redirects.has(p)) { bad += 1; console.error(`FATAL: registry game ${p} is a redirect route`); }
   if (!liveRoutes.has(p)) { bad += 1; console.error(`FATAL: registry game ${p} has no route in App.tsx`); }
+}
+for (const slug of recordSlugs) {
+  if (!liveRoutes.has(`/records/${slug}`)) { bad += 1; console.error(`FATAL: record section /records/${slug} has no route in App.tsx`); }
 }
 if (bad) process.exit(1);
 

@@ -20,7 +20,7 @@ const RELATED = [
   { path: '/nba-my-career', label: 'NBA My Career', why: 'draft night to the rafters from a player\'s seat' },
   { path: '/conquest-nba', label: 'NBA Conquest', why: 'the map game, a franchise a day' },
   { path: '/nba-grid', label: 'NBA Franchise Grid', why: 'the daily 3x3 knowledge puzzle' },
-  { path: '/records/nba-champions', label: 'The Record Books', why: 'every NBA champion since 1947, year by year' },
+  { path: '/records/nba-champions', label: 'NBA champions since 1947, year by year', why: 'from the Record Books, with the beaten finalist and the Finals MVP' },
   { path: '/pro-basketball', label: 'All the basketball games', why: 'the whole section on one page' },
 ];
 

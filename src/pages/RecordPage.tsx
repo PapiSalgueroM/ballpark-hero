@@ -5,7 +5,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import RecordTable from '@/components/records/RecordTable';
 import NotFound from '@/pages/NotFound';
 import { FORMAT_PAGES, RECORD_SECTIONS, RECORD_SOURCING, type RecordRow } from '@/lib/records';
-import { capFirst, decadesOf, joinNames, leadersOf, spanOf, yearRanges } from '@/lib/recordPages';
+import { capFirst, decadesOf, firstYearOf, joinNames, leadersOf, sinceLabel, spanOf, yearRanges } from '@/lib/recordPages';
 import recordBooks from '@/data/recordBooks.json';
 
 /**
@@ -19,13 +19,23 @@ import recordBooks from '@/data/recordBooks.json';
  * the h1, the year by year list under an h2 with one h3 per decade, and the
  * most titles table under its own h2.
  *
- * EVERY NUMBER AND NAME HERE IS COUNTED FROM THE ROWS at render, in
- * src/lib/recordPages.ts. The only typed words are the section's own labels in
- * src/lib/records.ts. The committed JSON is read directly rather than fetched,
- * for the reason Round 372 wrote down on /records: a crawler has to receive the
- * champions, and the prerenderer leaves every database request hanging on
- * purpose. Nothing reads the clock, so the saved page stays true until the rows
- * change.
+ * WHAT IS TYPED AND WHAT IS COUNTED. Typed, in src/lib/records.ts: the section's
+ * labels (the words a searcher uses, the column names) and its blurb and note,
+ * which are prose about the history. The blurbs and notes carry no counts, and a
+ * "since" year in them must be the first year the rows hold; simRecordPages
+ * check 10 fails on either. Counted here at render, in src/lib/recordPages.ts:
+ * every number, every leader and every year in a heading or fact.
+ *
+ * THE SPAN RULE (Round 649 review). Some tables start after the competition did
+ * (the Stanley Cup rows begin in 1915, college football's in 1981), so nothing
+ * on the page may read as all time: the h2s say "since 1915", the facts say
+ * "earliest season listed" and "names appear on the list". The rule is the same
+ * for all twelve, so no list of short tables exists to fall behind.
+ *
+ * The committed JSON is read directly rather than fetched, for the reason Round
+ * 372 wrote down on /records: a crawler has to receive the champions, and the
+ * prerenderer leaves every database request hanging on purpose. Nothing reads
+ * the clock, so the saved page stays true until the rows change.
  *
  * scripts/simRecordPages.mjs checks the saved pages against the JSON.
  */
@@ -33,18 +43,18 @@ import recordBooks from '@/data/recordBooks.json';
 const LINK = 'inline-flex items-center min-h-[32px] text-primary hover:underline';
 const SITE = 'https://douknowball.com';
 
+const rowsOf = (key: string): RecordRow[] =>
+  (recordBooks.sections as Record<string, RecordRow[] | undefined>)[key] ?? [];
+
 const RecordPage = ({ slug }: { slug: string }) => {
   const def = RECORD_SECTIONS.find(s => s.slug === slug);
-  const rows: RecordRow[] = def
-    ? ((recordBooks.sections as Record<string, RecordRow[] | undefined>)[def.key] ?? [])
-    : [];
+  const rows = def ? rowsOf(def.key) : [];
   const span = spanOf(rows);
   if (!def || !span) return <NotFound />;
 
   const w = def.words;
   const path = `/records/${def.slug}`;
   const h1 = `${capFirst(w.many)} by year`;
-  const label = (def.championLabel ?? 'Champion').toLowerCase();
   const unitFor = (n: number) => (n === 1 ? w.unit[0] : w.unit[1]);
   const isPeople = w.who[0] === 'player';
 
@@ -60,7 +70,7 @@ const RecordPage = ({ slug }: { slug: string }) => {
 
   return (
     <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
-      <PageSeo title={w.seoTitle} description={w.seoDescription(span.first, span.latest)} path={path} />
+      <PageSeo title={w.seoTitle(span.first)} description={w.seoDescription(span.first, span.latest)} path={path} />
       {/* The breadcrumb follows the game pages' pattern in GameSeoContent: its own
           Helmet, mounted once with its final content, so it only ever adds. */}
       <Helmet>
@@ -90,13 +100,13 @@ const RecordPage = ({ slug }: { slug: string }) => {
           {span.seasons} seasons listed, {span.first} to {span.latest}.
           {rows.length !== span.seasons && ` That is ${rows.length} ${w.unit[1]} in all, because some seasons have more than one.`}
         </li>
-        <li>First {label}: {joinNames(span.firstNames)} ({span.first}).</li>
-        <li>Latest {label}: {joinNames(span.latestNames)} ({span.latest}).</li>
-        <li>{span.distinct} different {w.who[1]} have won it.</li>
+        <li>Earliest season listed: {joinNames(span.firstNames)} ({span.first}).</li>
+        <li>Latest season listed: {joinNames(span.latestNames)} ({span.latest}).</li>
+        <li>{span.distinct} different {w.who[0]} names appear on the list, {span.first} to {span.latest}.</li>
       </ul>
 
       <section className="space-y-6" aria-labelledby="record-every">
-        <h2 id="record-every" className="text-xl font-semibold text-foreground">Every {w.one}, year by year</h2>
+        <h2 id="record-every" className="text-xl font-semibold text-foreground">Every {w.one} since {span.first}, year by year</h2>
         {decades.map(d => (
           <div key={d.start}>
             <h3 className="text-base font-semibold text-foreground mb-2">{capFirst(w.many)} in the {d.start}s</h3>
@@ -106,7 +116,15 @@ const RecordPage = ({ slug }: { slug: string }) => {
       </section>
 
       <section className="mt-10 space-y-3" aria-labelledby="record-most">
-        <h2 id="record-most" className="text-xl font-semibold text-foreground">{w.most}</h2>
+        <h2 id="record-most" className="text-xl font-semibold text-foreground">{w.most} since {span.first}</h2>
+        {/* The counting rule sits above the table at full size (Round 649 review):
+            the counts are per name exactly as written, and a reader has to know
+            that before reading them, not after. */}
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          How we counted: each line in the year by year tables counts for the {w.who[0]} name exactly as it is written there, so {isPeople ? 'a player written two ways' : `a ${w.who[0]} written two ways, or one that moved or was renamed,`} counts separately under each name.
+          {splitYears.length > 0 && ` ${joinNames(splitYears)} ${splitYears.length === 1 ? 'has' : 'have'} more than one line, and every ${w.who[0]} named in ${oneOrMany(splitYears.length)} gets one.`}
+          {gapYears.length > 0 && ` Nothing is listed for ${yearRanges(gapYears)}, so nobody gets one for ${oneOrMany(gapYears.length)}.`}
+        </p>
         <p className="text-sm text-muted-foreground leading-relaxed">
           Out in front: {joinNames(topNames)}, {top} {unitFor(top)}{topNames.length > 1 ? ' each' : ''}.
         </p>
@@ -115,7 +133,7 @@ const RecordPage = ({ slug }: { slug: string }) => {
             <thead>
               <tr className="bg-secondary/50 text-left">
                 <th className="px-3 py-2 font-semibold text-foreground">{capFirst(w.who[0])}</th>
-                <th className="px-3 py-2 font-semibold text-foreground">{capFirst(w.unit[1])}</th>
+                <th className="px-3 py-2 font-semibold text-foreground">{capFirst(w.unit[1])} under this name</th>
                 <th className="px-3 py-2 font-semibold text-foreground">Years</th>
               </tr>
             </thead>
@@ -132,15 +150,9 @@ const RecordPage = ({ slug }: { slug: string }) => {
         </div>
         {once > 0 && (
           <p className="text-sm text-muted-foreground leading-relaxed">
-            {once} more {once === 1 ? `${w.who[0]} has` : `${w.who[1]} have`} won it once.
+            {once} more {w.who[0]} {once === 1 ? 'name appears' : 'names appear'} once.
           </p>
         )}
-        <p className="text-xs text-muted-foreground leading-relaxed">
-          How we counted: each line in the year by year tables is one {w.unit[0]} for the {w.who[0]} named on it
-          {isPeople ? '.' : `, under the name it had that season, so a ${w.who[0]} that moved or was renamed counts separately under each name.`}
-          {splitYears.length > 0 && ` ${joinNames(splitYears)} ${splitYears.length === 1 ? 'has' : 'have'} more than one line, and every ${w.who[0]} named in ${oneOrMany(splitYears.length)} gets one.`}
-          {gapYears.length > 0 && ` Nothing is listed for ${yearRanges(gapYears)}, so nobody gets one for ${oneOrMany(gapYears.length)}.`}
-        </p>
       </section>
 
       <section className="mt-10 space-y-2" aria-labelledby="record-play">
@@ -171,9 +183,9 @@ const RecordPage = ({ slug }: { slug: string }) => {
         <h2 id="record-more" className="text-lg font-semibold text-foreground">More record books</h2>
         <ul className="text-sm space-y-1">
           {others.map(s => (
-            <li key={s.key}><Link to={`/records/${s.slug}`} className={LINK}>{capFirst(s.words.many)} by year</Link></li>
+            <li key={s.key}><Link to={`/records/${s.slug}`} className={LINK}>{sinceLabel(s, firstYearOf(rowsOf(s.key)))}</Link></li>
           ))}
-          <li><Link to="/records" className={`${LINK} font-semibold`}>All the Record Books on one page</Link></li>
+          <li><Link to="/records" className={`${LINK} font-semibold`}>The Record Books, with the latest seasons of every competition</Link></li>
         </ul>
       </nav>
     </div>

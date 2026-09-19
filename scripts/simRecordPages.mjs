@@ -1,6 +1,6 @@
 /**
  * Round 649 harness: the per competition Record Books pages say what the data
- * says, and reach a crawler saying it.
+ * says, claim nothing the rows do not cover, and reach a crawler saying it.
  *
  * WHAT CHANGED. /records used to be one address holding twelve full champion
  * tables. Round 649 gave each competition its own page at /records/<slug>
@@ -8,40 +8,54 @@
  * headings, a year by year list split into decades, and a most titles table
  * COUNTED from the rows at render. /records became the index.
  *
+ * THE REVIEW THAT SHAPED IT. The first version stated facts as all time on
+ * tables that start late ("First champion: Clemson", "Most college football
+ * titles" on rows that begin in 1981), hid the counting rule under the table,
+ * and let typed leader counts sit in the blurbs unchecked. Every one of those is
+ * a check below now, and the span rule is enforced by construction: a heading,
+ * fact, title or link that could read as all time must name the first year the
+ * rows hold. Nothing here knows which tables are short.
+ *
  * WHAT THIS HOLDS, and it reads the DATA and the SAVED FILES, never the page's
  * own helpers, so the page cannot mark its own homework:
- *   1. Registration. Every section in RECORD_SECTIONS has a slug, and that slug
- *      has a route in App.tsx, a row in genSitemap.mjs, an entry in
- *      public/sitemap.xml, a line in pageSchema.ts's type table, and a saved
- *      page in public/records/<slug>/index.html. Nothing under /records/ is
- *      registered that is not a section.
+ *   1. Registration. Every section has a slug, and that slug has a route in
+ *      App.tsx, an entry in public/sitemap.xml (genSitemap.mjs derives them from
+ *      RECORD_SECTIONS), a line in pageSchema.ts's type table and a saved page.
+ *      Nothing under /records/ is registered that is not a section. Source is
+ *      read with its comments stripped, so a commented out line does not count.
  *   2. Every row. Each decade block of each saved page holds exactly the rows
  *      recordBooks.json has for that decade, cell for cell, in order, and
- *      nothing else. So a missing row, an invented row and a row filed under
- *      the wrong decade all fail.
- *   3. The most titles table. Recounted here from the JSON: one per row for the
- *      name on it, every name with two or more listed, ties never split, counts
- *      and years exact, and the "won it once" line agreeing with the rest.
- *   4. The derived facts. Seasons listed, first and latest, how many different
- *      winners, who is out in front, and the split and empty years named in the
- *      counting note, all recomputed from the JSON.
- *   5. Structure. Exactly one h1 and it is the search phrase, the h2s the page
- *      promises, and one h3 per decade the data actually has, no more, no fewer.
- *   6. The head. A title under 60 characters ending in the brand, a description
- *      of 120 to 160 characters naming the span the rows cover, the page's own
- *      canonical, and a three step BreadcrumbList that ends at that canonical.
+ *      nothing else, under an h2 that names the first year.
+ *   3. The most titles table. Recounted here from the JSON, per name exactly as
+ *      written: every name with two or more listed, ties never split, counts and
+ *      years exact, the "names appear once" line agreeing with the rest.
+ *   4. The derived facts, span bound: seasons listed, earliest and latest season
+ *      listed, how many different names appear, the exact set of leaders and
+ *      their count, and the counting note, which must sit ABOVE the leaders and
+ *      name the split and empty years the rows actually have.
+ *   5. Structure. One h1 that is the search phrase, the h2s the page promises
+ *      (the year by year and most titles ones naming the first year), and one h3
+ *      per decade the data has, no more, no fewer.
+ *   6. The head. A title under 60 characters ending in the brand and naming the
+ *      first year, a description of 120 to 160 characters naming the span, the
+ *      page's own canonical, and a three step BreadcrumbList ending there.
  *   7. Links. /records links all twelve pages, and each page links the other
- *      eleven and /records.
+ *      eleven and /records from its own body (the sitewide footer does not
+ *      count).
  *   8. The index is an index. /records shows each section's newest ten seasons
- *      (a split season kept whole) and not the eleventh, so the full tables
- *      live in one place only.
+ *      and not the eleventh, links each page with the span bound wording, and
+ *      its leader line names exactly the leaders the rows give.
  *   9. Source links. No link in src still points at an old /records#key anchor,
- *      and every /records/<slug> written in src names a real section.
+ *      every /records/<slug> written in src names a real section, and every
+ *      literal link to a record page carries the span bound wording.
+ *  10. The blurbs and notes. No sentence puts a count next to a name from that
+ *      section's rows (who won how many is computed, never typed), and every
+ *      "since YYYY" in them is the first year the rows hold.
  *
  * NEGATIVE CONTROLS. RECORD_PAGES_CONTROL=<name> breaks one input, in memory,
  * for the one check it targets, and the run is green only if THAT check went
  * red and every other check stayed green. Each control refuses to run if the
- * thing it removes is not there, because a control that changes nothing proves
+ * thing it changes is not there, because a control that changes nothing proves
  * nothing. RECORD_PAGES_CONTROL=all runs every control in turn and fails if
  * any of them did not behave.
  *
@@ -60,15 +74,16 @@ const SITE = 'https://douknowball.com';
 
 /* control name -> the check it must turn red, and nothing else */
 const CONTROLS = {
-  noslug: 1, noroute: 1, nositemap: 1, nopage: 1,
+  noslug: 1, noroute: 1, commented: 1, notype: 1, nositemap: 1, nopage: 1,
   droprow: 2,
   miscount: 3,
-  wrongfact: 4,
+  wrongfact: 4, wrongleader: 4,
   twoh1: 5, nodecade: 5,
   longtitle: 6, shortdesc: 6,
-  nolink: 7,
-  fulltable: 8,
-  hashlink: 9,
+  nolink: 7, nobacklink: 7,
+  fulltable: 8, indexleader: 8,
+  hashlink: 9, genericlabel: 9,
+  blurbcount: 10, blurbsince: 10,
 };
 const CONTROL = process.env.RECORD_PAGES_CONTROL || '';
 
@@ -79,7 +94,7 @@ if (CONTROL === 'all') {
     const last = (r.stdout || '').trim().split('\n').pop() || (r.stderr || '').trim().split('\n').pop() || '';
     const ok = r.status === 0;
     if (!ok) bad += 1;
-    console.log(`  ${ok ? 'ok  ' : 'BAD '} ${name.padEnd(10)} ${last}`);
+    console.log(`  ${ok ? 'ok  ' : 'BAD '} ${name.padEnd(12)} ${last}`);
   }
   console.log('');
   if (bad) { console.error(`simRecordPages controls: ${bad} of ${Object.keys(CONTROLS).length} did not behave.`); process.exit(1); }
@@ -131,6 +146,14 @@ const unesc = t => String(t)
 const cap = s => s.charAt(0).toUpperCase() + s.slice(1);
 const join = xs => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')} and ${xs[xs.length - 1]}`);
 const pageFile = route => path.join(ROOT, 'public', route.replace(/^\//, ''), 'index.html');
+/** the span bound link wording, written out here from the rule, not imported */
+const sinceText = (def, firstYear) => `${cap(def.words.many)} since ${firstYear}, year by year`;
+/** source code with its comments removed: block, JSX and line comments (a "//"
+    right after a colon or a quote is a URL or a string, not a comment) */
+const stripComments = src => src
+  .replace(/\{\/\*[\s\S]*?\*\/\}/g, '')
+  .replace(/\/\*[\s\S]*?\*\//g, '')
+  .replace(/(^|[^:'"`\\])\/\/.*$/gm, '$1');
 
 /** The readable body of a saved page, one block per line, site chrome removed. */
 function bodyLines(html) {
@@ -144,6 +167,7 @@ function bodyLines(html) {
 }
 const textOf = line => unesc(line.replace(/<[^>]+>/g, '')).trim();
 const tagOf = line => (line.match(/^<([a-z0-9]+)/) || [])[1];
+const hrefsIn = lines => new Set(lines.flatMap(l => [...l.matchAll(/href="([^"]+)"/g)].map(m => m[1])));
 
 /** Everything between the h2 whose text is `heading` and the next h2. */
 function sectionAfter(lines, heading) {
@@ -155,11 +179,12 @@ function sectionAfter(lines, heading) {
 }
 
 const rowsOf = def => book.sections[def.key] || [];
+const firstOf = def => Math.min(...rowsOf(def).map(r => r.year));
 const cellsOf = (def, r) => [String(r.year), r.champion, ...def.columns.map(([k]) => r.extra[k]).filter(v => v != null && String(v).trim() !== '')]
   .map(c => `<p>${esc(c)}</p>`);
 const headerOf = def => [def.yearLabel, def.championLabel ?? 'Champion', ...def.columns.map(([, l]) => l)].map(c => `<p>${esc(c)}</p>`);
 
-/** The recount: one per row for the name on it. */
+/** The recount: one per row for the name exactly as the row writes it. */
 function recount(rows) {
   const by = new Map();
   for (const r of rows) {
@@ -167,6 +192,11 @@ function recount(rows) {
     by.get(r.champion).push(r.year);
   }
   return by;
+}
+function topOf(rows) {
+  const counts = [...recount(rows).entries()].map(([name, ys]) => [name, ys.length]);
+  const top = Math.max(...counts.map(([, n]) => n));
+  return { top, names: counts.filter(([, n]) => n === top).map(([n]) => n) };
 }
 function spanFacts(rows) {
   const years = [...new Set(rows.map(r => r.year))].sort((a, b) => a - b);
@@ -194,6 +224,23 @@ function yearsIn(phrase) {
   }
   return out;
 }
+/* No champion name contains ", " or " and ", so a joined list splits back into
+   names cleanly. Checked, not assumed: if a name ever does, the leader checks
+   compare the whole joined string instead. */
+const SPLITTABLE = RECORD_SECTIONS.every(d => rowsOf(d).every(r => !/, | and /.test(r.champion)));
+const splitNames = s => s.split(/, | and /);
+/** does "names, N unit( each)" name exactly these leaders with this count */
+function leaderLineOk(namesPart, n, wantNames, wantTop) {
+  if (n !== wantTop) return `gives ${n}, the rows give ${wantTop}`;
+  if (SPLITTABLE) {
+    const got = splitNames(namesPart).sort();
+    const want = [...wantNames].sort();
+    if (JSON.stringify(got) !== JSON.stringify(want)) return `names ${JSON.stringify(got)}, the rows give exactly ${JSON.stringify(want)}`;
+  } else if (namesPart !== join([...wantNames].sort((a, b) => a.localeCompare(b)))) {
+    return `names ${JSON.stringify(namesPart)}, the rows give ${JSON.stringify(wantNames)}`;
+  }
+  return '';
+}
 
 /* ---- the saved pages, read once; controls edit these copies only ---- */
 const saved = new Map();
@@ -215,13 +262,12 @@ const mutateSaved = (slug, from, to, why) => {
 
 /* ======================================================================= */
 current = 1;
-console.log(`1) every section has a slug, a route, a sitemap row, a type and a saved page`);
+console.log('1) every section has a slug, a route, a sitemap entry, a type and a saved page');
 {
   let sections = RECORD_SECTIONS.map(s => ({ key: s.key, slug: s.slug }));
   let app = read('src/App.tsx');
   let sitemap = read('public/sitemap.xml');
-  const gen = read('scripts/genSitemap.mjs');
-  const schema = read('src/lib/pageSchema.ts');
+  let schema = read('src/lib/pageSchema.ts');
   const pageExists = slug => fs.existsSync(pageFile(`/records/${slug}`)) && /id="dukb-snapshot"/.test(readFile(pageFile(`/records/${slug}`)));
   let exists = pageExists;
 
@@ -229,10 +275,21 @@ console.log(`1) every section has a slug, a route, a sitemap row, a type and a s
     if (!sections[0].slug) refuse('the first section has no slug to blank');
     sections = sections.map((s, i) => (i === 0 ? { ...s, slug: '' } : s));
   }
+  const routeLine = new RegExp(`[^\\n]*<Route\\s+path="/records/${firstSlug}"[^\\n]*`);
   if (CONTROL === 'noroute') {
-    const line = new RegExp(`<Route\\s+path="/records/${firstSlug}"[^\\n]*\\n`);
-    if (!line.test(app)) refuse(`App.tsx has no route line for /records/${firstSlug}`);
-    app = app.replace(line, '');
+    if (!routeLine.test(app)) refuse(`App.tsx has no route line for /records/${firstSlug}`);
+    app = app.replace(routeLine, '');
+  }
+  if (CONTROL === 'commented') {
+    /* the line stays in the file, commented out: a reader of the raw text would
+       still find it, so this proves the comments really are stripped */
+    if (!routeLine.test(app)) refuse(`App.tsx has no route line for /records/${firstSlug}`);
+    app = app.replace(routeLine, l => `{/* ${l.trim()} */}`);
+  }
+  if (CONTROL === 'notype') {
+    const typeLine = new RegExp(`[^\\n]*'/records/${firstSlug}':\\s*'[A-Za-z]+',[^\\n]*`);
+    if (!typeLine.test(schema)) refuse(`pageSchema.ts has no type line for /records/${firstSlug}`);
+    schema = schema.replace(typeLine, '');
   }
   if (CONTROL === 'nositemap') {
     const loc = `<loc>${SITE}/records/${firstSlug}</loc>`;
@@ -243,6 +300,8 @@ console.log(`1) every section has a slug, a route, a sitemap row, a type and a s
     if (!pageExists(firstSlug)) refuse(`there is no saved page for ${firstSlug} to hide`);
     exists = slug => slug !== firstSlug && pageExists(slug);
   }
+  app = stripComments(app);
+  schema = stripComments(schema);
 
   const slugs = sections.map(s => s.slug);
   for (const s of sections) {
@@ -258,21 +317,19 @@ console.log(`1) every section has a slug, a route, a sitemap row, a type and a s
   const anyRecordRoute = [...app.matchAll(/<Route\s+path="\/records\/([^"]+)"/g)].map(m => m[1]);
   for (const r of anyRecordRoute) if (!routes.has(r)) fail(`App.tsx routes /records/${r} to something other than RecordPage`);
   const locs = new Set([...sitemap.matchAll(/<loc>https:\/\/douknowball\.com\/records\/([^<]+)<\/loc>/g)].map(m => m[1]));
-  const genRows = new Set([...gen.matchAll(/p:\s*'\/records\/([^']+)'/g)].map(m => m[1]));
   const typed = new Set([...schema.matchAll(/'\/records\/([a-z0-9-]+)':\s*'([A-Za-z]+)'/g)].map(m => m[1]));
 
   for (const slug of want) {
     if (!routes.has(slug)) fail(`/records/${slug} has no route in App.tsx`);
     else if (routes.get(slug) !== slug) fail(`/records/${slug} is routed to RecordPage slug="${routes.get(slug)}", so it draws the wrong competition`);
-    if (!genRows.has(slug)) fail(`/records/${slug} is not in genSitemap.mjs, so the next build drops it from the sitemap and the prerenderer`);
     if (!locs.has(slug)) fail(`/records/${slug} is not in public/sitemap.xml`);
     if (!typed.has(slug)) fail(`/records/${slug} is not in the type table in src/lib/pageSchema.ts`);
     if (!exists(slug)) fail(`/records/${slug} has no saved page with a snapshot block, so a crawler gets the fallback`);
   }
-  for (const [name, set] of [['App.tsx', new Set(routes.keys())], ['genSitemap.mjs', genRows], ['public/sitemap.xml', locs], ['pageSchema.ts', typed]]) {
+  for (const [name, set] of [['App.tsx', new Set(routes.keys())], ['public/sitemap.xml', locs], ['pageSchema.ts', typed]]) {
     for (const slug of set) if (!want.has(slug)) fail(`${name} registers /records/${slug}, which is no section's slug`);
   }
-  console.log(`   ${want.size} slugs; ${routes.size} routes, ${genRows.size} generator rows, ${locs.size} sitemap entries, ${typed.size} typed, ${[...want].filter(s => exists(s)).length} saved pages`);
+  console.log(`   ${want.size} slugs; ${routes.size} routes, ${locs.size} sitemap entries, ${typed.size} typed, ${[...want].filter(s => exists(s)).length} saved pages (comments stripped before reading)`);
 }
 
 /* ======================================================================= */
@@ -286,14 +343,13 @@ console.log('2) every row in recordBooks.json is in its saved page, under its ow
     const rows = rowsOf(def);
     if (!rows.length) { fail(`${def.key}: recordBooks.json has no rows`); continue; }
     if (CONTROL === 'droprow' && def === first) {
-      const cell = `<p>${esc(rows[rows.length - 1].champion)}</p>\n`;
-      const lastYear = `<p>${rows[rows.length - 1].year}</p>\n${cell}`;
-      html = mutateSaved(def.slug, lastYear, `<p>${rows[rows.length - 1].year}</p>\n`, 'droprow');
+      const last = rows[rows.length - 1];
+      html = mutateSaved(def.slug, `<p>${last.year}</p>\n<p>${esc(last.champion)}</p>\n`, `<p>${last.year}</p>\n`, 'droprow');
     }
     const lines = bodyLines(html);
-    const every = sectionAfter(lines, `Every ${def.words.one}, year by year`);
-    if (!every) { fail(`${def.key}: no "Every ${def.words.one}, year by year" section in the saved page`); continue; }
-    /* the blocks, keyed by their h3 */
+    const heading = `Every ${def.words.one} since ${firstOf(def)}, year by year`;
+    const every = sectionAfter(lines, heading);
+    if (!every) { fail(`${def.key}: no "${heading}" section in the saved page`); continue; }
     const blocks = new Map();
     let key = null;
     for (const l of every) {
@@ -327,7 +383,7 @@ console.log('2) every row in recordBooks.json is in its saved page, under its ow
 
 /* ======================================================================= */
 current = 3;
-console.log('3) the most titles table matches a recount of the JSON');
+console.log('3) the most titles table matches a recount of the JSON, per name as written');
 {
   let tables = 0;
   for (const def of RECORD_SECTIONS) {
@@ -339,13 +395,14 @@ console.log('3) the most titles table matches a recount of the JSON');
     const listed = multi.length ? multi : all;
     const once = multi.length ? all.length - multi.length : 0;
     if (CONTROL === 'miscount' && def === first) {
-      const top = listed.sort((a, b) => b.count - a.count)[0];
-      html = mutateSaved(def.slug, `<p>${esc(top.name)}</p>\n<p>${top.count}</p>`, `<p>${esc(top.name)}</p>\n<p>${top.count + 1}</p>`, 'miscount');
+      const topRow = [...listed].sort((a, b) => b.count - a.count)[0];
+      html = mutateSaved(def.slug, `<p>${esc(topRow.name)}</p>\n<p>${topRow.count}</p>`, `<p>${esc(topRow.name)}</p>\n<p>${topRow.count + 1}</p>`, 'miscount');
     }
-    const sec = sectionAfter(bodyLines(html), def.words.most);
-    if (!sec) { fail(`${def.key}: no "${def.words.most}" section`); continue; }
+    const heading = `${def.words.most} since ${firstOf(def)}`;
+    const sec = sectionAfter(bodyLines(html), heading);
+    if (!sec) { fail(`${def.key}: no "${heading}" section`); continue; }
     const ps = sec.filter(l => tagOf(l) === 'p');
-    const head = [cap(def.words.who[0]), cap(def.words.unit[1]), 'Years'].map(c => `<p>${esc(c)}</p>`);
+    const head = [cap(def.words.who[0]), `${cap(def.words.unit[1])} under this name`, 'Years'].map(c => `<p>${esc(c)}</p>`);
     const h = ps.findIndex((l, i) => l === head[0] && ps[i + 1] === head[1] && ps[i + 2] === head[2]);
     if (h < 0) { fail(`${def.key}: the most titles table has no ${head.map(textOf).join(' / ')} header`); continue; }
     const got = new Map();
@@ -365,9 +422,9 @@ console.log('3) the most titles table matches a recount of the JSON');
       if (g.yrs !== x.years.join(', ')) fail(`${def.key}: ${x.name} shows years ${g.yrs}, the rows give ${x.years.join(', ')}`);
     }
     for (const name of got.keys()) if (!listed.some(x => x.name === name)) fail(`${def.key}: ${name} is in the table and should not be`);
-    const onceLine = ps.map(textOf).find(t => /won it once\.$/.test(t));
+    const onceLine = ps.map(textOf).find(t => /(?:name appears|names appear) once\.$/.test(t));
     const onceGot = onceLine ? Number((onceLine.match(/^(\d+) more /) || [])[1]) : 0;
-    if (onceGot !== once) fail(`${def.key}: the page says ${onceGot} won it once, the rows give ${once}`);
+    if (onceGot !== once) fail(`${def.key}: the page says ${onceGot} names appear once, the rows give ${once}`);
     tables += 1;
   }
   console.log(`   ${tables} of ${RECORD_SECTIONS.length} tables match the recount`);
@@ -375,7 +432,7 @@ console.log('3) the most titles table matches a recount of the JSON');
 
 /* ======================================================================= */
 current = 4;
-console.log('4) the derived facts are the ones the rows give');
+console.log('4) the derived facts are span bound and the ones the rows give');
 {
   let ok = 0;
   for (const def of RECORD_SECTIONS) {
@@ -383,38 +440,53 @@ console.log('4) the derived facts are the ones the rows give');
     if (!html) { fail(`${def.key}: no saved page to read`); continue; }
     const rows = rowsOf(def);
     const f = spanFacts(rows);
+    const { top, names: topNames } = topOf(rows);
     if (CONTROL === 'wrongfact' && def === first) {
       html = mutateSaved(def.slug, `<li>${f.years.length} seasons listed`, `<li>${f.years.length + 1} seasons listed`, 'wrongfact');
     }
-    const texts = bodyLines(html).map(textOf);
+    if (CONTROL === 'wrongleader' && def === first) {
+      /* one wrong name added to the leaders while the real ones stay: the loose
+         "every real leader is named" test this replaced would have passed it */
+      const intruder = [...recount(rows).keys()].find(n => !topNames.includes(n));
+      html = mutateSaved(def.slug, '<p>Out in front: ', `<p>Out in front: ${esc(intruder)}, `, 'wrongleader');
+    }
+    const lines = bodyLines(html);
+    const texts = lines.map(textOf);
     const before = failedChecks.get(4) || 0;
-    const label = (def.championLabel ?? 'Champion').toLowerCase();
     const want = [
       `${f.years.length} seasons listed, ${f.first} to ${f.latest}.` + (rows.length !== f.years.length ? ` That is ${rows.length} ${def.words.unit[1]} in all, because some seasons have more than one.` : ''),
-      `First ${label}: ${join(f.firstNames)} (${f.first}).`,
-      `Latest ${label}: ${join(f.latestNames)} (${f.latest}).`,
-      `${new Set(rows.map(r => r.champion)).size} different ${def.words.who[1]} have won it.`,
+      `Earliest season listed: ${join(f.firstNames)} (${f.first}).`,
+      `Latest season listed: ${join(f.latestNames)} (${f.latest}).`,
+      `${new Set(rows.map(r => r.champion)).size} different ${def.words.who[0]} names appear on the list, ${f.first} to ${f.latest}.`,
     ];
     for (const w of want) if (!texts.includes(w)) fail(`${def.key}: the page does not say ${JSON.stringify(w)}`);
-    const counts = [...recount(rows).entries()].map(([name, ys]) => [name, ys.length]);
-    const top = Math.max(...counts.map(([, n]) => n));
-    const topNames = counts.filter(([, n]) => n === top).map(([n]) => n);
-    const front = texts.find(t => t.startsWith('Out in front: '));
-    if (!front) fail(`${def.key}: no "Out in front" line`);
+    const most = sectionAfter(lines, `${def.words.most} since ${f.first}`) || [];
+    const mostTexts = most.map(textOf);
+    const frontAt = mostTexts.findIndex(t => t.startsWith('Out in front: '));
+    const noteAt = mostTexts.findIndex(t => t.startsWith('How we counted: '));
+    if (frontAt < 0) fail(`${def.key}: no "Out in front" line under the most titles heading`);
     else {
+      const front = mostTexts[frontAt];
+      const m = front.match(/^Out in front: (.+), (\d+) (\S+)( each)?\.$/);
       const unit = top === 1 ? def.words.unit[0] : def.words.unit[1];
-      if (!front.endsWith(`, ${top} ${unit}${topNames.length > 1 ? ' each' : ''}.`)) fail(`${def.key}: "${front}" does not give the top count ${top}`);
-      for (const n of topNames) if (!front.includes(n)) fail(`${def.key}: "${front}" leaves out ${n}, who is level on ${top}`);
+      if (!m) fail(`${def.key}: cannot read "${front}"`);
+      else {
+        const why = leaderLineOk(m[1], Number(m[2]), topNames, top);
+        if (why) fail(`${def.key}: "${front}" ${why}`);
+        if (m[3] !== unit || Boolean(m[4]) !== (topNames.length > 1)) fail(`${def.key}: "${front}" words the count wrongly`);
+      }
     }
-    const note = texts.find(t => t.startsWith('How we counted:')) || '';
-    if (!note) fail(`${def.key}: no counting note`);
+    if (noteAt < 0) fail(`${def.key}: no counting note under the most titles heading`);
+    else if (frontAt >= 0 && noteAt > frontAt) fail(`${def.key}: the counting note comes after the leaders, so a reader meets the counts before the rule`);
+    const note = noteAt >= 0 ? mostTexts[noteAt] : '';
+    if (note && !/counts for the \S+ name exactly as it is written there/.test(note)) fail(`${def.key}: the counting note does not say names count exactly as written`);
     const splitPart = (note.match(/\. ([^.]*?) (?:has|have) more than one line/) || [])[1] || '';
     const gapPart = (note.match(/Nothing is listed for ([^.]*?), so nobody/) || [])[1] || '';
     if (JSON.stringify(yearsIn(splitPart)) !== JSON.stringify(f.splits)) fail(`${def.key}: the note names split years ${JSON.stringify(yearsIn(splitPart))}, the rows have ${JSON.stringify(f.splits)}`);
     if (JSON.stringify(yearsIn(gapPart)) !== JSON.stringify(f.gaps)) fail(`${def.key}: the note names empty years ${JSON.stringify(yearsIn(gapPart))}, the rows leave ${JSON.stringify(f.gaps)}`);
     if ((failedChecks.get(4) || 0) === before) ok += 1;
   }
-  console.log(`   ${ok} of ${RECORD_SECTIONS.length} pages state their facts as the rows give them`);
+  console.log(`   ${ok} of ${RECORD_SECTIONS.length} pages state their facts as the rows give them, rule above the leaders`);
 }
 
 /* ======================================================================= */
@@ -427,6 +499,7 @@ console.log('5) one h1, the promised h2s, one h3 per decade in the data');
     if (!html) { fail(`${def.key}: no saved page to read`); continue; }
     const h1 = `${cap(def.words.many)} by year`;
     const rows = rowsOf(def);
+    const f1 = firstOf(def);
     const decades = [...new Set(rows.map(r => Math.floor(r.year / 10) * 10))].sort((a, b) => b - a);
     if (CONTROL === 'twoh1' && def === first) html = mutateSaved(def.slug, `<h1>${esc(h1)}</h1>`, `<h1>${esc(h1)}</h1>\n<h1>A second headline</h1>`, 'twoh1');
     if (CONTROL === 'nodecade' && def === first) html = mutateSaved(def.slug, `<h3>${esc(cap(def.words.many))} in the ${decades[0]}s</h3>`, '', 'nodecade');
@@ -436,7 +509,7 @@ console.log('5) one h1, the promised h2s, one h3 per decade in the data');
     if (h1s.length !== 1) fail(`${def.key}: ${h1s.length} h1s on the page`);
     else if (h1s[0] !== h1) fail(`${def.key}: the h1 is ${JSON.stringify(h1s[0])}, the search phrase is ${JSON.stringify(h1)}`);
     const h2s = lines.filter(l => tagOf(l) === 'h2').map(textOf);
-    const wantH2 = [`Every ${def.words.one}, year by year`, def.words.most, 'Play with this history', ...(def.format ? [def.format.heading] : []), 'Where this comes from', 'More record books'];
+    const wantH2 = [`Every ${def.words.one} since ${f1}, year by year`, `${def.words.most} since ${f1}`, 'Play with this history', ...(def.format ? [def.format.heading] : []), 'Where this comes from', 'More record books'];
     for (const w of wantH2) if (!h2s.includes(w)) fail(`${def.key}: no h2 ${JSON.stringify(w)}`);
     const h3s = lines.filter(l => tagOf(l) === 'h3').map(textOf);
     const wantH3 = decades.map(d => `${cap(def.words.many)} in the ${d}s`);
@@ -459,6 +532,7 @@ console.log('6) the head: title, description, canonical and breadcrumb');
     let html = saved.get(def.slug);
     if (!html) { fail(`${def.key}: no saved page to read`); continue; }
     const route = `/records/${def.slug}`;
+    const f = spanFacts(rowsOf(def));
     const before = failedChecks.get(6) || 0;
     const titleRaw = (html.match(/<title[^>]*>([^<]*)<\/title>/) || [])[1];
     const descRaw = (html.match(/<meta name="description" content="([^"]*)"/) || [])[1];
@@ -470,9 +544,9 @@ console.log('6) the head: title, description, canonical and breadcrumb');
     else {
       if (title.length >= 60) fail(`${def.key}: the title is ${title.length} characters, over the 60 a result shows: ${title}`);
       if (!title.endsWith(' | DoUKnowBall')) fail(`${def.key}: the title does not end in the brand: ${title}`);
-      if (title !== def.words.seoTitle) fail(`${def.key}: the saved title ${JSON.stringify(title)} is not the section's own ${JSON.stringify(def.words.seoTitle)}`);
+      if (!title.includes(String(f.first))) fail(`${def.key}: the title does not name ${f.first}, where the rows start, so it reads as all time: ${title}`);
+      if (title !== def.words.seoTitle(f.first)) fail(`${def.key}: the saved title ${JSON.stringify(title)} is not the section's own ${JSON.stringify(def.words.seoTitle(f.first))}`);
     }
-    const f = spanFacts(rowsOf(def));
     if (desc.length < 120 || desc.length > 160) fail(`${def.key}: the description is ${desc.length} characters, outside 120 to 160`);
     if (!desc.includes(String(f.first)) || !desc.includes(String(f.latest))) fail(`${def.key}: the description does not name the span the rows cover, ${f.first} to ${f.latest}`);
     const canon = [...html.matchAll(/<link rel="canonical" href="([^"]+)"/g)].map(m => m[1]);
@@ -498,7 +572,7 @@ console.log('6) the head: title, description, canonical and breadcrumb');
 
 /* ======================================================================= */
 current = 7;
-console.log('7) /records links all twelve pages, and each page links the others');
+console.log('7) /records links all twelve pages, and each page links the others and /records from its own body');
 {
   let idx = indexHtml;
   if (!idx) fail('no saved /records page to read');
@@ -507,7 +581,7 @@ console.log('7) /records links all twelve pages, and each page links the others'
     if (!idx.includes(a)) refuse(`the saved /records page has no ${a}`);
     idx = idx.split(a).join('href="/records"');
   }
-  const idxHrefs = new Set([...idx.matchAll(/href="([^"]+)"/g)].map(m => m[1]));
+  const idxHrefs = hrefsIn(bodyLines(idx));
   let linked = 0;
   for (const def of RECORD_SECTIONS) {
     if (idxHrefs.has(`/records/${def.slug}`)) linked += 1;
@@ -515,32 +589,54 @@ console.log('7) /records links all twelve pages, and each page links the others'
   }
   let pagesOk = 0;
   for (const def of RECORD_SECTIONS) {
-    const html = saved.get(def.slug);
+    let html = saved.get(def.slug);
     if (!html) { fail(`${def.key}: no saved page to read`); continue; }
-    const hrefs = new Set([...html.slice(html.indexOf('<div id="dukb-snapshot">')).matchAll(/href="([^"]+)"/g)].map(m => m[1]));
+    if (CONTROL === 'nobacklink' && def === first) {
+      /* every link back to /records in the page's own body goes; the footer's
+         stays, which is exactly the link that used to satisfy this check */
+      const cut = html.indexOf('<div data-site-chrome>');
+      const body = cut < 0 ? html : html.slice(0, cut);
+      if (!body.includes('href="/records"')) refuse(`the body of ${def.slug} has no link back to /records`);
+      if (cut < 0 || !html.slice(cut).includes('href="/records"')) refuse(`the footer of ${def.slug} has no /records link, so this control cannot show it is ignored`);
+      html = body.split('href="/records"').join('href="/records-removed"') + html.slice(cut);
+    }
+    const hrefs = hrefsIn(bodyLines(html));
     const missing = RECORD_SECTIONS.filter(o => o !== def && !hrefs.has(`/records/${o.slug}`)).map(o => o.slug);
     if (missing.length) fail(`${def.key}: does not link ${missing.length} of the other pages (${missing[0]})`);
-    if (!hrefs.has('/records')) fail(`${def.key}: does not link back to /records`);
+    if (!hrefs.has('/records')) fail(`${def.key}: the page body does not link back to /records (the footer does not count)`);
     if (!missing.length && hrefs.has('/records')) pagesOk += 1;
   }
-  console.log(`   /records links ${linked} of ${RECORD_SECTIONS.length}; ${pagesOk} pages link all the others and /records`);
+  console.log(`   /records links ${linked} of ${RECORD_SECTIONS.length}; ${pagesOk} pages link all the others and /records from their own body`);
 }
 
 /* ======================================================================= */
 current = 8;
-console.log('8) /records shows the newest ten seasons of each section, and not the eleventh');
+console.log('8) /records shows the newest ten seasons of each section, links each page by its span, and names the right leaders');
 {
   let idx = indexHtml;
   let ok = 0;
   for (const def of RECORD_SECTIONS) {
     const rows = rowsOf(def);
+    const f1 = firstOf(def);
     const years = [...new Set(rows.map(r => r.year))].sort((a, b) => b - a);
     const shown = new Set(years.slice(0, 10));
     const eleventh = rows.filter(r => r.year === years[10]);
+    const { top, names: topNames } = topOf(rows);
+    const leadPrefix = `Most ${def.words.unit[1]} under one name since ${f1}: `;
     if (CONTROL === 'fulltable' && def === first) {
       const anchor = cellsOf(def, rows.filter(r => shown.has(r.year)).slice(-1)[0]).join('\n');
       if (!idx.includes(anchor)) refuse('the last shown row of the first section is not in the saved /records page');
       idx = idx.replace(anchor, `${anchor}\n${eleventh.flatMap(r => cellsOf(def, r)).join('\n')}`);
+    }
+    if (CONTROL === 'indexleader' && def === first) {
+      const from = `<p>${esc(leadPrefix)}`;
+      if (!idx.includes(from)) refuse('the first section has no leader line on the saved /records page');
+      const at = idx.indexOf(from);
+      const end = idx.indexOf('</p>', at);
+      const line = idx.slice(at, end);
+      const bumped = line.replace(/, (\d+)( each)?\.$/, (m0, n, e) => `, ${Number(n) + 1}${e || ''}.`);
+      if (bumped === line) refuse('the first leader line has no count to change');
+      idx = idx.slice(0, at) + bumped + idx.slice(end);
     }
     const before = failedChecks.get(8) || 0;
     for (const r of rows.filter(x => shown.has(x.year))) {
@@ -549,14 +645,28 @@ console.log('8) /records shows the newest ten seasons of each section, and not t
     for (const r of eleventh) {
       if (idx.includes(cellsOf(def, r).join('\n'))) fail(`/records ${def.key}: ${r.year} ${r.champion} is shown, the eleventh season, so the index is carrying the full table again`);
     }
+    const block = sectionAfter(bodyLines(idx), `${def.emoji} ${def.title}`) || [];
+    const linkLine = block.find(l => l.includes(`href="/records/${def.slug}"`));
+    if (!linkLine) fail(`/records ${def.key}: no link to its page inside its own section`);
+    else if (textOf(linkLine) !== sinceText(def, f1)) fail(`/records ${def.key}: the link reads ${JSON.stringify(textOf(linkLine))}, the span bound wording is ${JSON.stringify(sinceText(def, f1))}`);
+    const lead = block.map(textOf).find(t => t.startsWith(leadPrefix));
+    if (!lead) fail(`/records ${def.key}: no "${leadPrefix}" line`);
+    else {
+      const m = lead.slice(leadPrefix.length).match(/^(.+), (\d+)( each)?\.$/);
+      if (!m) fail(`/records ${def.key}: cannot read "${lead}"`);
+      else {
+        const why = leaderLineOk(m[1], Number(m[2]), topNames, top);
+        if (why) fail(`/records ${def.key}: "${lead}" ${why}`);
+      }
+    }
     if ((failedChecks.get(8) || 0) === before) ok += 1;
   }
-  console.log(`   ${ok} of ${RECORD_SECTIONS.length} sections show exactly their newest ten seasons`);
+  console.log(`   ${ok} of ${RECORD_SECTIONS.length} sections show exactly their newest ten seasons, a span bound link and the right leaders`);
 }
 
 /* ======================================================================= */
 current = 9;
-console.log('9) no link in src points at an old /records#key anchor or an unknown record page');
+console.log('9) links in src: no old /records#key anchor, no unknown page, and every labelled record link worded by its span');
 {
   const files = [];
   const walk = d => {
@@ -567,31 +677,77 @@ console.log('9) no link in src points at an old /records#key anchor or an unknow
     }
   };
   walk(path.join(ROOT, 'src'));
-  /* code, not the prose about it: block comments, JSX comments and whole line
-     comments go before matching, so a note explaining the old anchors cannot
-     trip the check and a comment cannot satisfy it */
-  const code = src => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-  const slugs = new Set(RECORD_SECTIONS.map(s => s.slug));
-  const target = path.join(ROOT, 'src/lib/sportHub.ts');
-  let hashes = 0, unknown = 0, links = 0;
+  const bySlug = new Map(RECORD_SECTIONS.map(s => [s.slug, s]));
+  const hashTarget = path.join(ROOT, 'src/lib/sportHub.ts');
+  const labelTarget = path.join(ROOT, 'src/pages/NflPlayoffFormatHistory.tsx');
+  let hashes = 0, unknown = 0, links = 0, labelled = 0, wrongLabels = 0;
   for (const f of files) {
     let src = readFile(f);
-    if (CONTROL === 'hashlink' && f === target) {
+    if (CONTROL === 'hashlink' && f === hashTarget) {
       const from = "'/records/nba-champions'";
       if (!src.includes(from)) refuse(`src/lib/sportHub.ts has no ${from} to turn back into an anchor`);
       src = src.replace(from, "'/records#nba'");
     }
-    const c = code(src);
+    if (CONTROL === 'genericlabel' && f === labelTarget) {
+      const re = /(path:\s*'\/records\/super-bowl-winners'\s*,\s*label:\s*)'[^']*'/;
+      if (!re.test(src)) refuse('NflPlayoffFormatHistory.tsx has no labelled Super Bowl record link');
+      src = src.replace(re, "$1'The Record Books'");
+    }
+    /* code, not the prose about it */
+    const c = stripComments(src);
     for (const m of c.matchAll(/\/records#([a-z]+)/g)) {
       hashes += 1;
       fail(`${path.relative(ROOT, f)} still links /records#${m[1]}, which now lands on the index instead of the ${m[1]} page`);
     }
     for (const m of c.matchAll(/['"`]\/records\/([a-z0-9-]+)['"`]/g)) {
       links += 1;
-      if (!slugs.has(m[1])) { unknown += 1; fail(`${path.relative(ROOT, f)} links /records/${m[1]}, which is no section's page`); }
+      if (!bySlug.has(m[1])) { unknown += 1; fail(`${path.relative(ROOT, f)} links /records/${m[1]}, which is no section's page`); }
+    }
+    for (const m of c.matchAll(/path:\s*'\/records\/([a-z0-9-]+)'\s*,\s*label:\s*(['"])((?:(?!\2).)*)\2/g)) {
+      labelled += 1;
+      const def = bySlug.get(m[1]);
+      if (!def) continue;
+      const want = sinceText(def, firstOf(def));
+      if (m[3] !== want) { wrongLabels += 1; fail(`${path.relative(ROOT, f)} labels /records/${m[1]} ${JSON.stringify(m[3])}, the span bound wording is ${JSON.stringify(want)}`); }
     }
   }
-  console.log(`   ${files.length} source files, ${links} literal record page links, ${hashes} old anchors, ${unknown} unknown pages`);
+  console.log(`   ${files.length} source files, ${links} literal record page links (${labelled} labelled, ${wrongLabels} worded wrong), ${hashes} old anchors, ${unknown} unknown pages`);
+}
+
+/* ======================================================================= */
+current = 10;
+console.log('10) blurbs and notes carry no counts next to a name, and every "since" year is where the rows start');
+{
+  const COUNT_WORD = /\b(one|two|three|four|five|six|seven|eight|nine|ten|eleven|twelve|thirteen|fourteen|fifteen|sixteen|seventeen|eighteen|nineteen|twenty|thirty|forty|fifty|once|twice|thrice|dozen)\b|\b\d{1,3}\b/i;
+  let sentencesRead = 0, sinceChecked = 0;
+  for (const src of RECORD_SECTIONS) {
+    const def = { ...src };
+    const rows = rowsOf(def);
+    if (CONTROL === 'blurbcount' && def.key === 'brownlow') {
+      if (!rows.some(r => r.champion === 'Haydn Bunton')) refuse('Haydn Bunton is not in the Brownlow rows, so the injected claim would name nobody');
+      def.blurb = `${def.blurb} Haydn Bunton won three.`;
+    }
+    if (CONTROL === 'blurbsince' && def.key === 'brownlow') {
+      if (!/since 1924\b/.test(def.blurb)) refuse('the Brownlow blurb has no "since 1924" to move');
+      def.blurb = def.blurb.replace('since 1924', 'since 1925');
+    }
+    const f1 = firstOf(def);
+    const names = new Set(rows.map(r => r.champion));
+    if (def.words.who[0] === 'player') for (const r of rows) names.add(r.champion.split(' ').pop());
+    const text = [def.blurb, def.note || ''].join(' ');
+    for (const sentence of text.split(/(?<=[.;!?])\s+/).filter(Boolean)) {
+      sentencesRead += 1;
+      const count = sentence.match(COUNT_WORD);
+      if (!count) continue;
+      const named = [...names].find(n => new RegExp(`\\b${n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`).test(sentence));
+      if (named) fail(`${def.key}: "${sentence}" puts the count "${count[0]}" next to ${named}; who won how many is computed on the page, never typed`);
+    }
+    for (const m of text.matchAll(/\bsince (\d{4})\b/g)) {
+      sinceChecked += 1;
+      if (Number(m[1]) !== f1) fail(`${def.key}: the blurb says since ${m[1]}, and the rows start in ${f1}`);
+    }
+  }
+  console.log(`   ${sentencesRead} sentences read, ${sinceChecked} "since" years checked against the rows`);
 }
 
 /* ======================================================================= */
@@ -611,4 +767,4 @@ if (red.length) {
   console.error(`simRecordPages: ${n} failure${n === 1 ? '' : 's'} in check${red.length === 1 ? '' : 's'} ${red.join(', ')}.`);
   process.exit(1);
 }
-console.log(`simRecordPages: green. ${RECORD_SECTIONS.length} record pages, registered everywhere, carrying every row and a recount that agrees.`);
+console.log(`simRecordPages: green. ${RECORD_SECTIONS.length} record pages, registered everywhere, span bound, carrying every row and a recount that agrees.`);

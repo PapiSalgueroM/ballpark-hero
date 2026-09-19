@@ -61,7 +61,7 @@ const RELATED = [
   { path: '/soccer-career', label: 'Soccer Career', why: 'play the nights rather than pick the team' },
   { path: '/whod-they-beat', label: "Who'd They Beat", why: 'the beaten finalists, year by year' },
   { path: '/champ-or-not', label: 'Champ or Not', why: 'did that club ever win it' },
-  { path: '/records', label: 'The Record Books', why: 'every champion in every sport we cover' },
+  { path: '/records', label: 'The Record Books', why: 'champions by year for every competition we keep records for' },
   { path: '/soccer', label: 'All the soccer games', why: 'the whole section on one page' },
 ];
 

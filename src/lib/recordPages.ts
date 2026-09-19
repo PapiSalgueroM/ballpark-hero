@@ -1,4 +1,4 @@
-import type { RecordRow } from '@/lib/records';
+import type { RecordRow, RecordSection } from '@/lib/records';
 
 /**
  * Round 649: everything the per competition record pages say that is a number
@@ -7,16 +7,25 @@ import type { RecordRow } from '@/lib/records';
  *
  * THE COUNTING RULE, and it follows the rows as they are rather than as anyone
  * might want them to be:
- *   - every row is one title (or medal) for the name on that row;
+ *   - every row is one title (or medal) for the name exactly as that row writes
+ *     it, character for character;
  *   - a year with two rows (a split college football title, a shared Dally M,
  *     a tied Brownlow count, rugby league's split 1997) gives one to each name;
  *   - a year with no row (a season never played, a title stripped and left
  *     vacant) gives one to nobody;
- *   - a club that moved or was renamed is counted under each name it won under,
- *     because the rows name clubs as they were at the time and nothing here
- *     keeps a list of which names belong together.
- * The pages print this rule in words, built from the same rows, so a reader can
- * see exactly how a count came out.
+ *   - so a club written two ways, or one that moved or was renamed, counts
+ *     separately under each name. Nothing here keeps a list of which names
+ *     belong together, and the rows do not always use the name of the day
+ *     either, so the pages never say they do.
+ * The pages print this rule in words above the leaders table, built from the
+ * same rows, so a reader can see exactly how a count came out.
+ *
+ * THE SPAN RULE (Round 649 review). Several tables start after the competition
+ * did: the Stanley Cup rows begin in 1915, college football's in 1981. So every
+ * heading, fact and link that could read as all time names the span instead:
+ * "since 1915", "earliest season listed". That is true for a table that starts at
+ * the competition's first season too, so one rule serves all twelve and nothing
+ * keeps a list of which tables are short.
  *
  * scripts/simRecordPages.mjs recounts all of it independently from the JSON and
  * compares against the saved pages, so this file is not allowed to mark its own
@@ -133,6 +142,17 @@ export function yearRanges(years: number[]): string {
 }
 
 export const capFirst = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+
+/** The first year a section's rows hold, which every span bound phrase is built on. */
+export const firstYearOf = (rows: RecordRow[]): number =>
+  rows.reduce((min, r) => Math.min(min, r.year), Number.POSITIVE_INFINITY);
+
+/** The one wording for a link to a section's page, used by /records, by the other
+ *  section pages, and copied literally into the hubs and format explainers, where
+ *  simRecordPages check 9 holds the copy to this rule: "Stanley Cup winners since
+ *  1915, year by year". */
+export const sinceLabel = (def: RecordSection, first: number): string =>
+  `${capFirst(def.words.many)} since ${first}, year by year`;
 
 /** The newest `seasons` years of rows (the rows arrive newest first), keeping a
  *  year with two rows whole, so a shared title is never shown half shared. */

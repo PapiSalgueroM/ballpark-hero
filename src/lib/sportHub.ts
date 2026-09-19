@@ -111,7 +111,7 @@ export const SPORT_HUBS: SportHub[] = [
     reference:
       'Almost everything in this section runs on the transfer market, so it is worth knowing how that actually works. European clubs register new signings during two windows, a long one across the summer and a short one in January, and the main exception is a player already out of contract, who can generally be signed and registered outside them. That exception traces back to the Bosman ruling in 1995, which established freedom of movement for out-of-contract players inside the EU, and the principle that an expired contract means a move without a fee was carried into the transfer regulations that followed. It is why a club would rather sell someone with a year left than lose him for nothing. The fee is also only half the cost: it goes to the selling club as a one-time cost rather than a recurring one, often spread across instalments over several years, while wages are paid every week for the length of the deal and often add up to more. And the published numbers are estimates. Fees frequently go undisclosed and add-ons sit inside the headline figure. Neymar\'s 222 million euro move from Barcelona to Paris Saint-Germain in 2017 is the one everybody quotes, and as of August 2026 nobody had gone past it.',
     referenceLinks: [
-      { path: '/records/english-football-champions', label: 'English champions, year by year', why: 'every English league title winner in the table, year by year, checked against the record' },
+      { path: '/records/english-football-champions', label: 'English football champions since 1889, year by year', why: 'every English league title winner in the table, year by year, checked against the record' },
       { path: '/champions-league-format-history', label: 'Champions League format history', why: 'every shape the competition has taken since 1955, with the sources for each, and what each Club Manager era actually plays' },
     ],
     hubFaqs: [
@@ -162,9 +162,9 @@ export const SPORT_HUBS: SportHub[] = [
     reference:
       'Basketball\'s record book has hard start dates, and a lot of the sport\'s arguments trace back to them. The NBA adopted the 24 second shot clock for the 1954-55 season, which is the line between the modern game and the stalling contests before it. Steals, blocks and the split between offensive and defensive rebounds only became official statistics in 1973-74, and individual turnovers waited until 1977-78, which is why Bill Russell and Wilt Chamberlain carry no official career block totals despite both being remembered as dominant shot blockers. The three point line came in for 1979-80, originally as a one year trial. And the 82 game season only started in 1967-68, the year expansion took the league to twelve teams. So compare eras all you like, but for some whole careers the numbers people want were simply never written down.',
     referenceLinks: [
-      { path: '/records/nba-champions', label: 'NBA champions, year by year', why: 'every Finals since 1947 with the beaten side and the series score, and the Finals MVP from 1969 when the award began, checked against the record' },
+      { path: '/records/nba-champions', label: 'NBA champions since 1947, year by year', why: 'every Finals since 1947 with the beaten side and the series score, and the Finals MVP from 1969 when the award began, checked against the record' },
       { path: '/nba-playoff-format-history', label: 'NBA playoff format history', why: 'how the bracket grew from six BAA teams to sixteen plus a play-in, and the draft lottery from the coin flip to the 3-2-1 lottery, each change twice sourced' },
-      { path: '/records/wnba-champions', label: 'WNBA champions, year by year', why: 'every Finals with the runner-up, the series and the Finals MVP' },
+      { path: '/records/wnba-champions', label: 'WNBA champions since 1997, year by year', why: 'every Finals with the runner-up, the series and the Finals MVP' },
       { path: '/nba-grid/archive', label: 'NBA Grid archive', why: 'every past board with its full answer key, so a franchise crossed with a franchise reads as a list of the men who wore both' },
     ],
     hubFaqs: [
@@ -215,7 +215,7 @@ export const SPORT_HUBS: SportHub[] = [
     reference:
       'Two things about the NHL trip up people arriving from other sports. First, not every game hands out the same number of points. A win is worth two whether it comes in regulation, overtime or a shootout, and the team that loses in overtime or a shootout still keeps one, so a game settled inside sixty minutes is worth two points in total and one that goes past it is worth three. That is why the table is read in points rather than in wins and losses, and why losing late still feels like collecting something. Second, the playoffs drop the shootout entirely. Postseason overtime is 5-on-5 sudden death in full twenty minute periods, repeated until somebody scores, and sixteen teams play four best-of-seven rounds, sixteen wins in all, for the Stanley Cup, which is not remade each year for the new champion the way other North American trophies are but handed on with the winners\' names engraved on its bands.',
     referenceLinks: [
-      { path: '/records/stanley-cup-winners', label: 'Stanley Cup champions, year by year', why: 'every final since 1915 with the beaten side and the series, with the two seasons nobody won left honestly empty' },
+      { path: '/records/stanley-cup-winners', label: 'Stanley Cup winners since 1915, year by year', why: 'every final since 1915 with the beaten side and the series, with the two seasons nobody won left honestly empty' },
       { path: '/hockey-grid/archive', label: 'NHL Grid archive', why: 'the past boards and their answer keys, which double as a record of who skated for two clubs' },
       { path: '/nhl-playoff-format-history', label: 'NHL playoff format history', why: 'from the NHL champion meeting the West for the Cup to top three plus wild cards, every bracket since 1917-18 checked against the league\'s own account and Wikipedia, with the three places they disagree printed rather than picked' },
     ],
@@ -267,7 +267,7 @@ export const SPORT_HUBS: SportHub[] = [
     reference:
       'Pro football\'s structure points at parity. Thirty two teams sit in two conferences, the AFC and the NFC, split into four divisions of four, and every club works under the same hard salary cap. The regular season grew from 16 games to 17 in 2021 and is still the shortest of the major American leagues, which is why one loss matters here in a way it cannot across 82 or 162. The postseason is the only one of those leagues that is single elimination the whole way through: 14 teams since the 2020 season, seven per conference, and only the top seed in each gets the opening weekend off. Which is why 1972 still carries the weight it does. Don Shula\'s Dolphins went unbeaten and won Super Bowl VII, and running the table is the thing pro football measures itself against every autumn a team starts hot.',
     referenceLinks: [
-      { path: '/records/super-bowl-winners', label: 'Super Bowl champions, year by year', why: 'every Super Bowl with the runner-up, the score, the MVP and the venue, checked against the record' },
+      { path: '/records/super-bowl-winners', label: 'Super Bowl winners since 1967, year by year', why: 'every Super Bowl with the runner-up, the score, the MVP and the venue, checked against the record' },
       { path: '/nfl-playoff-format-history', label: 'NFL playoff format history', why: "every field size change since 1933, two source verified, and the overtime rule's own history" },
     ],
     hubFaqs: [
@@ -318,7 +318,7 @@ export const SPORT_HUBS: SportHub[] = [
     reference:
       'Baseball still has no game clock. A pitch clock arrived in 2023 and pulled that season\'s average nine inning game down to roughly two hours 40 minutes, but nothing counts down to zero, so a team in front has no clock to run out. The infield is fixed by rule, 90 feet between bases and the pitching rubber 60 feet 6 inches from home, a distance the National League set in 1893 and nobody has moved since. Past the infield the rule book only sets a floor: any field built after June 1, 1958 has to reach at least 325 feet down each foul line and 400 feet to center, with older parks exempt and waivers handed out since. No exact shape is prescribed, which is why the left field wall at Fenway Park, the Green Monster, stands about 37 feet tall barely 310 feet down the line. The season runs 162 games, the length the American League adopted in 1961 and the National League in 1962.',
     referenceLinks: [
-      { path: '/records/world-series-winners', label: 'World Series champions, year by year', why: 'every series since 1903 with the beaten pennant winner and the series score, the two unplayed years missing on purpose' },
+      { path: '/records/world-series-winners', label: 'World Series winners since 1903, year by year', why: 'every series since 1903 with the beaten pennant winner and the series score, the two unplayed years missing on purpose' },
       { path: '/mlb-postseason-format-history', label: 'MLB postseason format history', why: 'how October grew from one series to a twelve club bracket, each round added since 1903 and how long it has been, checked against two publishers' },
       { path: '/mlb-grid/archive', label: 'MLB Grid archive', why: 'past boards with the answers filled in, a quiet reference for which players suited up for two clubs' },
     ],
@@ -369,8 +369,8 @@ export const SPORT_HUBS: SportHub[] = [
     reference:
       'Almost everything that makes college sports confusing right now arrived in the last few years. The NCAA transfer portal opened on October 15, 2018, and the NCAA\'s interim name, image and likeness policy took effect on July 1, 2021. A judge gave final approval to the House v. NCAA settlement on June 6, 2025, and schools could begin paying athletes directly from July 1, 2025. The map moved too: in 2024 the Pac-12 lost ten members to the Big Ten, Big 12 and ACC, leaving Oregon State and Washington State, and the league then rebuilt around them, relaunching on July 1, 2026 with nine full members including Boise State, San Diego State and Gonzaga. Football\'s playoff went from four teams to twelve for the 2024 season, with first round games hosted by the higher seed rather than at a neutral bowl site. Basketball\'s bracket held at 68 teams from 2011 through 2026, and then the NCAA approved a jump to 76 for the 2027 tournament, with a 12 game Opening Round cutting the field back to the usual 64. If a program you remember looks nothing like the one playing now, that is most of the reason why.',
     referenceLinks: [
-      { path: '/records/college-football-national-champions', label: 'College football national champions', why: 'every season with the selector, the result and the coach, split titles kept split' },
-      { path: '/records/ncaa-basketball-champions', label: "Men's NCAA basketball champions", why: 'every title game since 1939 with the beaten finalist and the score' },
+      { path: '/records/college-football-national-champions', label: 'College football national champions since 1981, year by year', why: 'the selector, the result and the coach for each season listed, split titles kept split' },
+      { path: '/records/ncaa-basketball-champions', label: "Men's NCAA basketball champions since 1939, year by year", why: 'every title game since 1939 with the beaten finalist and the score' },
       { path: '/cbb-grid/archive', label: 'College Basketball Grid archive', why: 'past boards with every answer, a reference for which players passed through which programs' },
     ],
     hubFaqs: [
