@@ -1,5 +1,27 @@
 # Work board
 
+**2026-09-19 night, desktop Claude lane: the owner's two calls, and Rounds 657 to 661 claimed.**
+He said plainly: "in the last month I see like no difference on the site from the beginning to
+now", and asked whether the player data is verified. Both were fair. Of about 1,470 commits since
+2026-08-19, roughly 610 are tests, checks, audits and crawler plumbing, and the visible work went
+deep inside games while the home page, header and tiles did not move. So two things changed.
+- **Most of each session now goes to work a visitor sees in the first ten seconds**, and every
+  release sends him before and after screenshots. Rounds 658 and 659 are the first of it: the home
+  page redesign (a drawn stage for the four flagships with a Continue CTA, a daily puzzles rail led
+  by a Today's puzzle card, Just shipped from the registry's addedOn dates, polls moved lower, and
+  a sport colour plus a drawn sport badge on every card), designed by a panel of three designers
+  and two judges and built on `r658-home-front`. First phone tile at y 249 against the 430 ceiling,
+  entry chunk smaller than main's.
+- **The data map is in the repo** (`docs/DATA-VERIFICATION-MAP-2026-09-19.md`): 118 datasets, 40 of
+  them carrying known wrong entries, 61 partial, 9 unverified, about 124 rounds to verify all of
+  them. Data rounds now run beside the visible work, worst first.
+Claimed: **657** (the four idle games' floater timers die with the page, which is what made every
+full Vitest run exit 1 and turned simTycoonPitch red), **658 and 659** (the home page redesign),
+**660** (the UFC, F1, Olympics and golf files: UFC Chain accepted fights that never happened),
+**661** (the trivia banks: Guess The Year's wrong clues, Hall of Fame or Bust's false stat lines,
+Score Predictor's swapped home and away, the stale shirt numbers, and the List Quiz table whose
+shifted rows mark correct answers wrong). The next free number for anyone else is 662.
+
 **2026-09-19 evening, desktop Claude lane: Rounds 649 and 650 claimed, for search traffic.**
 Lovable's numbers for 2026-09-05 to 09-19: about 1,000 visitors a day, and Bing sends 3,882 of
 the search visits against Google's 1,705, so the raw HTML a crawler reads without running the app
