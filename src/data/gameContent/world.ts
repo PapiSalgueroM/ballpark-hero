@@ -387,28 +387,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Six things happened across the sports world, all in the same year, and you have to figure out which year it was. Guess The Year opens with one clue and lets you climb from there.",
       "Each clue is a different sport, so a World Cup memory can rescue you when the hockey clue means nothing. The earlier you nail it, the bigger the score.",
     ],
-    howToPlay: [
-      "Read the first clue describing a famous sports moment.",
-      "Set your year with the arrow buttons. Single arrows move 1 year, doubles jump 10.",
-      "Hit the guess button when you're ready to commit.",
-      "A wrong guess automatically reveals the next clue, so every miss buys more information.",
-      "You can also reveal the next clue voluntarily, or give up to see the answer.",
+    headings: {
+      howToPlay: "How to play Guess The Year, a free daily sports trivia game",
+      rules: "Guess The Year rules for clues, scoring and the answer range",
+      example: "Guess The Year walkthrough: McGwire and the 1998 World Cup",
+      tips: "Guess The Year tips for narrowing the decade fast",
+      faq: "Guess The Year FAQ: clue count and answer range",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the first sports moment clue",
+        items: [
+          "Read the first clue describing a famous sports moment.",
+        ],
+      },
+      {
+        heading: "Setting the year with single and double arrows",
+        items: [
+          "Set your year with the arrow buttons. Single arrows move 1 year, doubles jump 10.",
+        ],
+      },
+      {
+        heading: "Hitting guess when you're ready",
+        items: [
+          "Hit the guess button when you're ready to commit.",
+        ],
+      },
+      {
+        heading: "Unlocking the next clue on a wrong guess",
+        items: [
+          "A wrong guess automatically reveals the next clue, so every miss buys more information.",
+        ],
+      },
+      {
+        heading: "Revealing a clue early or giving up",
+        items: [
+          "You can also reveal the next clue voluntarily, or give up to see the answer.",
+        ],
+      },
     ],
-    rules: [
-      "There are 6 clues per puzzle. Solving on clue 1 scores 1,000 points, then 800, 600, 400, 200 and 100.",
-      "Every wrong guess reveals the next clue and drops you a scoring tier.",
-      "The run ends after 6 wrong guesses, or immediately if you give up, both scoring 0.",
-      "Answers range from 1972 to 2026, and a fresh puzzle arrives every day.",
+    ruleSections: [
+      {
+        heading: "Six clues paying less with every reveal",
+        items: [
+          "There are 6 clues per puzzle. Solving on clue 1 scores 1,000 points, then 800, 600, 400, 200 and 100.",
+        ],
+      },
+      {
+        heading: "Dropping a tier on every wrong guess",
+        items: [
+          "Every wrong guess reveals the next clue and drops you a scoring tier.",
+        ],
+        subsections: [
+          {
+            heading: "Ending the run at zero after six misses",
+            items: [
+              "The run ends after 6 wrong guesses, or immediately if you give up, both scoring 0.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Answers between 1972 and 2026 daily",
+        items: [
+          "Answers range from 1972 to 2026, and a fresh puzzle arrives every day.",
+        ],
+      },
     ],
-    example: [
-      "Picture this: clue one says a first baseman shattered a 37-year-old single-season home run record. You're thinking late 90s, so you guess 1997. Wrong, and clue two reveals the host nation won the World Cup on home soil.",
-      "France at home, McGwire chasing Maris. That's 1998, and getting it on the second clue banks 800 points. Miss again and the year would still be gettable, just cheaper.",
+    exampleSections: [
+      {
+        heading: "A home run record and a home World Cup",
+        paragraphs: [
+          "Picture this: clue one says a first baseman shattered a 37-year-old single-season home run record. You're thinking late 90s, so you guess 1997. Wrong, and clue two reveals the host nation won the World Cup on home soil.",
+        ],
+      },
+      {
+        heading: "Landing on 1998 on the second clue",
+        paragraphs: [
+          "France at home, McGwire chasing Maris. That's 1998, and getting it on the second clue banks 800 points. Miss again and the year would still be gettable, just cheaper.",
+        ],
+      },
     ],
-    tips: [
-      "Triangulate across sports. One clue narrows the decade, another pins the exact year.",
-      "Use the 10-year jump buttons to get in the neighborhood before fine-tuning.",
-      "A near-miss guess isn't wasted. The clue it unlocks usually tells you which direction to move.",
-      "Anchor on world events you're sure of, like World Cups and Olympics, which only land in certain years.",
+    tipSections: [
+      {
+        heading: "Triangulating the decade across sports",
+        items: [
+          "Triangulate across sports. One clue narrows the decade, another pins the exact year.",
+        ],
+      },
+      {
+        heading: "Jumping ten years before fine tuning",
+        items: [
+          "Use the 10-year jump buttons to get in the neighborhood before fine-tuning.",
+        ],
+      },
+      {
+        heading: "Reading direction from a near miss guess",
+        items: [
+          "A near-miss guess isn't wasted. The clue it unlocks usually tells you which direction to move.",
+        ],
+      },
+      {
+        heading: "Anchoring on sure World Cup and Olympic years",
+        items: [
+          "Anchor on world events you're sure of, like World Cups and Olympics, which only land in certain years.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -431,28 +515,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Somewhere on the map is a country with a sporting story, and you're guessing it from the resume alone. Guess The Nation starts with a single vibe word and drips out clues until only one flag fits.",
       "It plays like a detective case: population, medal counts, famous moments, even flag colors. Early solves pay best.",
     ],
-    howToPlay: [
-      "Pick a mode: Daily Challenge, Unlimited, Summer or Winter focus, or filter by continent.",
-      "Choose Easy for famous sporting nations or Hard for the full pool.",
-      "Read the vibe word, then search and submit a country when you have a hunch.",
-      "Each wrong guess reveals the next clue. The hint button reveals one too, if you'd rather not burn a guess.",
-      "Keep going until you name it, run out of clues, or give up.",
+    headings: {
+      howToPlay: "How to play Guess The Nation, a free countries sports trivia game",
+      rules: "Guess The Nation rules for clues, scoring and streaks",
+      example: "Guess The Nation walkthrough: sprinting clues to Jamaica",
+      tips: "Guess The Nation tips for reading the vibe word",
+      faq: "Guess The Nation FAQ: clue order and difficulty modes",
+    },
+    howToPlaySections: [
+      {
+        heading: "Picking daily, unlimited or a continent filter",
+        items: [
+          "Pick a mode: Daily Challenge, Unlimited, Summer or Winter focus, or filter by continent.",
+        ],
+      },
+      {
+        heading: "Choosing easy nations or the full hard pool",
+        items: [
+          "Choose Easy for famous sporting nations or Hard for the full pool.",
+        ],
+      },
+      {
+        heading: "Reading the vibe word before you search",
+        items: [
+          "Read the vibe word, then search and submit a country when you have a hunch.",
+        ],
+      },
+      {
+        heading: "Revealing clues from a miss or a hint",
+        items: [
+          "Each wrong guess reveals the next clue. The hint button reveals one too, if you'd rather not burn a guess.",
+        ],
+      },
+      {
+        heading: "Playing until you name it or give up",
+        items: [
+          "Keep going until you name it, run out of clues, or give up.",
+        ],
+      },
     ],
-    rules: [
-      "There are 12 clue slots and the final one is the country's name itself, worth 0.",
-      "Scoring starts at 1,200 on clue 1, then 1,100, 1,000, 850, 700, 550, 400, 250, 150, 100, 50 and 0.",
-      "Consecutive wins build a streak with badges at 3, 5, 10 and 15 wins. A miss or a give up resets it.",
-      "Give up any time to reveal the answer and score 0.",
+    ruleSections: [
+      {
+        heading: "Twelve clue slots ending in the name",
+        items: [
+          "There are 12 clue slots and the final one is the country's name itself, worth 0.",
+        ],
+      },
+      {
+        heading: "Paying less with every clue you reveal",
+        items: [
+          "Scoring starts at 1,200 on clue 1, then 1,100, 1,000, 850, 700, 550, 400, 250, 150, 100, 50 and 0.",
+        ],
+      },
+      {
+        heading: "Building a streak with badges as you win",
+        items: [
+          "Consecutive wins build a streak with badges at 3, 5, 10 and 15 wins. A miss or a give up resets it.",
+        ],
+        subsections: [
+          {
+            heading: "Giving up to reveal the answer",
+            items: [
+              "Give up any time to reveal the answer and score 0.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Say the vibe word is Sprint. Bold guessers type Jamaica immediately for 1,200. You play it safer, revealing the region, the Caribbean, then a medal count won almost entirely on the track.",
-      "You commit to Jamaica on clue 3 for 1,000 points. The famous moment clue would have name-dropped a certain 100m world record in Beijing, but you didn't need it.",
+    exampleSections: [
+      {
+        heading: "Sprint, the Caribbean and a track heavy medal count",
+        paragraphs: [
+          "Say the vibe word is Sprint. Bold guessers type Jamaica immediately for 1,200. You play it safer, revealing the region, the Caribbean, then a medal count won almost entirely on the track.",
+        ],
+      },
+      {
+        heading: "Committing to Jamaica on the third clue",
+        paragraphs: [
+          "You commit to Jamaica on clue 3 for 1,000 points. The famous moment clue would have name-dropped a certain 100m world record in Beijing, but you didn't need it.",
+        ],
+      },
     ],
-    tips: [
-      "The vibe word is sharper than it looks. One word can eliminate four continents.",
-      "Medal totals are the biggest tell. A huge winter haul points north fast.",
-      "Population plus continent narrows brutally. Big country, small medal count is its own clue.",
-      "Weak hunch? Use the hint button instead of guessing, and save guesses for real suspects.",
+    tipSections: [
+      {
+        heading: "Eliminating continents from one sharp word",
+        items: [
+          "The vibe word is sharper than it looks. One word can eliminate four continents.",
+        ],
+      },
+      {
+        heading: "Reading a big winter haul as a tell",
+        items: [
+          "Medal totals are the biggest tell. A huge winter haul points north fast.",
+        ],
+      },
+      {
+        heading: "Narrowing by population and continent",
+        items: [
+          "Population plus continent narrows brutally. Big country, small medal count is its own clue.",
+        ],
+      },
+      {
+        heading: "Saving guesses for real suspects",
+        items: [
+          "Weak hunch? Use the hint button instead of guessing, and save guesses for real suspects.",
+        ],
+      },
     ],
     faqs: [
       {
