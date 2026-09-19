@@ -1319,6 +1319,8 @@ const ClubManager = () => {
             onBuyLoanee={g.buyLoanee}
             onEndLoanEarly={g.endLoanEarly}
             onRecallLoanee={g.recallLoanee}
+            deskNote={g.deskNote}
+            onClearNote={g.clearDeskNote}
           /></ScreenLoading>
         </TabsContent>
       </Tabs>

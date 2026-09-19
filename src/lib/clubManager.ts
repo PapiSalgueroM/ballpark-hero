@@ -474,6 +474,14 @@ export interface CMPlayer {
   loanOptionFee?: number;
   /** Round 506: end the loan early for this, in millions. */
   loanBreakFee?: number;
+  /** Round 634 review: the season I last sent him out on loan. One loan out a
+      season: loanOutPlayer banks a fee and recallLoanedPlayer charges back
+      about half of it, so with no limit the pair was a money pump inside one
+      window (25 cycles of one star took a budget from 135 to 215). It travels
+      with him out and back, so a recall cannot reset it, and it is inert the
+      moment the season number moves on. Absent on every older save, which
+      reads as never loaned out. */
+  loanOutSeason?: number;
   /** Round 193: a release clause YOU granted at a renewal, in millions. It
       bought a cheaper wage, and the price is that any club can meet it:
       a met clause cannot be rejected, and blocking him cannot kill it.
@@ -3232,23 +3240,26 @@ export function ensureSquadIds(state: CareerState): void {
  * sign-andriy-lunin-s1), which is exactly what ensureSquadIds cannot see.
  *
  * buildMarket and completeSigning now refuse the round trip, and this repairs
- * a save that already carries the result: a name held twice in the squad keeps
- * the copy the manager is using (in the XI, else the higher rated, else the
- * first) and drops the rest, with every reference to a dropped id cleared; a
- * name held in the squad AND in loanedOut drops the loan entry, so the coming
- * summer cannot manufacture the pair. Registered in loadCareer and at the top
- * of playNextEntry, the house pattern.
+ * a save that already carries the result: one man held twice in the squad
+ * keeps the copy the manager is using (in the XI, else the higher rated, else
+ * the first) and drops the rest, with every reference to a dropped id cleared;
+ * one man held in the squad AND in loanedOut drops the loan entry, so the
+ * coming summer cannot manufacture the pair. Registered in loadCareer and at
+ * the top of playNextEntry, the house pattern.
+ *
+ * "One man" is sameManKey, never the bare name: see there.
  */
 export function ensureOneOfEach(state: CareerState): void {
   if (!Array.isArray(state.squad)) return;
-  const byName = new Map<string, CMPlayer[]>();
+  const byMan = new Map<string, CMPlayer[]>();
   for (const p of state.squad) {
-    if (!byName.has(p.name)) byName.set(p.name, []);
-    byName.get(p.name)!.push(p);
+    const k = sameManKey(p);
+    if (!byMan.has(k)) byMan.set(k, []);
+    byMan.get(k)!.push(p);
   }
   const inXi = new Set((state.xiIds ?? []).filter((id): id is string => !!id));
   const dropped = new Set<string>();
-  for (const copies of byName.values()) {
+  for (const copies of byMan.values()) {
     if (copies.length < 2) continue;
     const keep = copies.find(p => inXi.has(p.id))
       ?? [...copies].sort((a, b) => b.rating - a.rating)[0];
@@ -3262,10 +3273,33 @@ export function ensureOneOfEach(state: CareerState): void {
     if (state.promisedStarts) state.promisedStarts = state.promisedStarts.filter(id => !dropped.has(id));
   }
   if (Array.isArray(state.loanedOut) && state.loanedOut.length) {
-    const names = new Set(state.squad.map(p => p.name));
-    const kept = state.loanedOut.filter(l => !names.has(l.player.name));
+    const here = new Set(state.squad.map(sameManKey));
+    const kept = state.loanedOut.filter(l => !here.has(sameManKey(l.player)));
     if (kept.length !== state.loanedOut.length) state.loanedOut = kept;
   }
+}
+
+/**
+ * Round 634 review: who counts as the same MAN. The bare name does not, and
+ * the first version of ensureOneOfEach used it and deleted real players: the
+ * engine's own projected world gives one club two DIFFERENT generated men
+ * under one name (Athletic Club three years on carries Nando Hedlund the ST,
+ * 23, and Nando Hedlund the GK, 18; 2015-16 Chelsea ten years on carries two
+ * Asier Abaras, a RW of 28 and a CAM of 19), and Round 567 had deliberately
+ * given each pair two ids. Keyed on the name, the repair dropped one of them
+ * on the next load, and dropped a loaned one's loan record with the fee kept.
+ *
+ * MEASURED across all four eras and world years 0 to 15: 50 same name pairs
+ * in 50 club year rosters (28 now, 9 in 2015-16, 4 in 2010-11, 9 in 2005-06),
+ * and 0 of them share name, position AND age (1 shares name and position at a
+ * different age). The duplicate this round repairs is one real man twice,
+ * which always agrees on all three: a bought back copy is priced off the same
+ * projected row his loan copy was, and at the summer both are aged together.
+ * Position is stable for the purpose because retraining adds a secondary
+ * position and never rewrites this one. So the key is all three.
+ */
+export function sameManKey(p: { name: string; position: Position; age: number }): string {
+  return `${p.name}|${p.position}|${p.age}`;
 }
 
 /**
@@ -6630,9 +6664,11 @@ export function buildMarket(career: CareerState): MarketPlayer[] {
      the season but he is still mine, and the projected world still has him
      at my club, so without this he was on sale at my own club at his own
      price and the summer return made two of him. See ensureOneOfEach. */
-  const onLoanOut = new Set((career.loanedOut ?? []).map(l => l.player.name));
+  /* Keyed on sameManKey, so a different man who happens to share his name is
+     still on the market. */
+  const onLoanOut = new Set((career.loanedOut ?? []).map(l => sameManKey(l.player)));
   return marketBase(yearsOn(career), career.eraId)
-    .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.has(p.name));
+    .filter(p => !squadNames.has(p.name) && !gone.has(p.name) && !retired.has(p.name) && !released.has(p.name) && !onLoanOut.has(sameManKey(p)));
 }
 
 /** Round 71: append a line to the Latest Transfers feed (capped at 80). */
@@ -6662,6 +6698,64 @@ function trackDealExtremes(state: CareerState, dir: 'in' | 'out', name: string, 
  * which ensureRoles fills in later. Only a deal that came through the personal
  * terms table carries what he was actually promised.
  */
+/**
+ * Round 634 review: why a signing at this fee would be refused, in words, or
+ * null when it would go through. completeSigning refuses on exactly this and
+ * nothing else, so the line a screen shows under a dead button is the engine's
+ * own reason rather than a guess made beside it.
+ */
+export function signingRefusal(career: CareerState, mp: MarketPlayer, fee: number): string | null {
+  if (career.transferWindow === null) return 'The transfer window is shut.';
+  if (fee > career.budget) return `That costs ${money(fee, career)} and you have ${money(career.budget, career)}.`;
+  if (career.squad.length >= 30) return 'Your squad is full at 30. Somebody has to leave first.';
+  if (career.squad.some(p => p.name === mp.name)) return `${mp.name} is already in your squad.`;
+  /* Round 619 review: a man you released does not come back through a deal
+     either, whatever screen the deal started on. */
+  if (releasedByYouNames(career).has(mp.name)) return `You released ${mp.name}. He will not sign for you again.`;
+  /* Round 634: nor a man you have out on loan, by any door. buildMarket no
+     longer offers him, but a card drawn from an older career object can still
+     be pressed, and the summer return would make two of him. */
+  const away = (career.loanedOut ?? []).find(l => sameManKey(l.player) === sameManKey(mp));
+  if (away) return `${mp.name} is already yours, out on loan at ${away.club}. Bring him back from the loan desk instead.`;
+  return null;
+}
+
+/** Round 634 review: the four ways a market card can be pressed. */
+export type MarketDoor = 'buy' | 'clause' | 'loan' | 'talk';
+
+/**
+ * Round 634 review: why pressing this door on this card would do nothing, or
+ * null when it would go through. Mirrors buyPlayer, payClause, loanIn and
+ * startNegotiation check for check (startNegotiation calls it directly), and
+ * scripts/simClubManagerSaveSize.mjs holds the four to agreement, so a press
+ * that is refused always has a reason on screen instead of a dead button.
+ */
+export function doorRefusal(career: CareerState, mp: MarketPlayer, door: MarketDoor): string | null {
+  if (door === 'buy') return signingRefusal(career, mp, mp.price);
+  if (door === 'clause') {
+    const clause = releaseClauseOf(mp, career.season);
+    if (clause === null) return `${mp.name} has no release clause.`;
+    return signingRefusal(career, mp, clause);
+  }
+  if (door === 'loan') {
+    if (!loanEligible(career, mp)) return `${mp.club} will not loan ${mp.name} out to you.`;
+    if (activeLoans(career) >= 2) return 'You already have two players in on loan, the most you can hold.';
+    return signingRefusal(career, mp, loanFeeOf(mp));
+  }
+  if (career.transferWindow === null) return 'The transfer window is shut.';
+  if (career.negotiation && career.negotiation.status === 'open') return 'You are already in talks for somebody. Finish that deal or walk away first.';
+  if (career.squad.length >= 30) return 'Your squad is full at 30. Somebody has to leave first.';
+  if (career.squad.some(p => p.name === mp.name)) return `${mp.name} is already in your squad.`;
+  if ((career.coldNames ?? []).includes(mp.name)) return `${mp.club} walked away from you this window. They will not talk about ${mp.name} again until it shuts.`;
+  /* Round 634 review: refused at the door, with the real reason. Before this
+     a man you released, or a man of yours out on loan, opened a fee table
+     that only failed at the terms stage with a generic line. */
+  if (releasedByYouNames(career).has(mp.name)) return `You released ${mp.name}. He will not sign for you again.`;
+  const away = (career.loanedOut ?? []).find(l => sameManKey(l.player) === sameManKey(mp));
+  if (away) return `${mp.name} is already yours, out on loan at ${away.club}. Bring him back from the loan desk instead.`;
+  return null;
+}
+
 function completeSigning(
   career: CareerState,
   mp: MarketPlayer,
@@ -6670,17 +6764,7 @@ function completeSigning(
   terms?: PersonalTerms,
   loanTerms?: LoanTerms,
 ): CareerState | null {
-  if (career.transferWindow === null) return null;
-  if (fee > career.budget) return null;
-  if (career.squad.length >= 30) return null;
-  if (career.squad.some(p => p.name === mp.name)) return null;
-  /* Round 619 review: a man you released does not come back through a deal
-     either, whatever screen the deal started on. */
-  if (releasedByYouNames(career).has(mp.name)) return null;
-  /* Round 634: nor a man you have out on loan, by any door. buildMarket no
-     longer offers him, but a card drawn from an older career object can still
-     be pressed, and the summer return would make two of him. */
-  if ((career.loanedOut ?? []).some(l => l.player.name === mp.name)) return null;
+  if (signingRefusal(career, mp, fee) !== null) return null;
   const player: CMPlayer = {
     /* Round 567: unique inside THIS squad, see freeSquadId. Two real players
        whose names slug to one string are both signable and stay two men. */
@@ -7485,11 +7569,11 @@ const SELLER_COUNTER = [
 
 /** Open a negotiation for a market player. One live deal at a time. */
 export function startNegotiation(career: CareerState, mp: MarketPlayer): CareerState | null {
-  if (career.transferWindow === null) return null;
-  if (career.negotiation && career.negotiation.status === 'open') return null;
-  if (career.squad.length >= 30) return null;
-  if (career.squad.some(p => p.name === mp.name)) return null;
-  if ((career.coldNames ?? []).includes(mp.name)) return null;
+  /* Round 634 review: the same checks as before (window, an open deal, a full
+     squad, him already here, a club gone cold) plus a man you released or have
+     out on loan, all in doorRefusal so the screen can say which. No draw
+     happens before this line, so a seeded run is unchanged. */
+  if (doorRefusal(career, mp, 'talk') !== null) return null;
   /* Round 513: the Negotiation tree talks the seller's premium down, floored
      at the 1.02 of value the shipped engine already guaranteed, so the ask
      never drops below what the man is worth. One draw from Math.random either
@@ -8096,6 +8180,26 @@ function squadCanSpare(career: CareerState, p: CMPlayer): boolean {
  * game time behind him, which for a young player is worth far more than the
  * fee (see returnLoanedPlayers).
  */
+/**
+ * Round 634 review: why this man cannot go out on loan right now, in words, or
+ * null when he can. loanOutPlayer refuses on exactly these, so the loan desk
+ * shows the engine's own reason on the button instead of a dead press.
+ */
+export function loanOutRefusal(career: CareerState, playerId: string): string | null {
+  const p = career.squad.find(x => x.id === playerId);
+  if (!p) return 'He is not in your squad any more.';
+  if (career.transferWindow === null) return 'Loans out need an open transfer window.';
+  if (p.loanOutSeason === career.season) return `${p.name} has already been out on loan once this season. One loan out a season.`;
+  if (career.squad.length <= 14) return 'Your squad is at the minimum of 14. Nobody else can leave.';
+  if (p.onLoan) return `${p.name} is on loan to you, so he is not yours to send anywhere.`;
+  if (!canLeaveSquad(career, p)) {
+    return p.position === 'GK' && career.squad.filter(x => x.position === 'GK').length <= 1
+      ? `${p.name} is your only keeper.`
+      : `${p.name} is promised in the deal on the table, so he stays until it is settled.`;
+  }
+  return null;
+}
+
 export function loanOutPlayer(
   career: CareerState,
   playerId: string,
@@ -8105,6 +8209,13 @@ export function loanOutPlayer(
   if (career.transferWindow === null) return null;
   const p = career.squad.find(x => x.id === playerId);
   if (!p || !canLeaveSquad(career, p)) return null;
+  /* Round 634 review: one loan out a season. The fee banked here and the
+     recall charged back at recallLoanedPlayer made a pump with no limit, 25
+     cycles in one summer took Liverpool from 135 to 215 on Florian Wirtz. A
+     recall is still a real choice (the man in front of him gets hurt in
+     November); what it cannot be is the start of a second paid trip. Checked
+     before the pick below, so the refused path draws nothing. */
+  if (p.loanOutSeason === career.season) return null;
   const pool = buyerPool(career);
   const club = toClub && toClub !== career.clubName ? toClub : pick(pool);
   /* Round 508: honour the number that was actually agreed. acceptBid used to
@@ -8132,7 +8243,7 @@ export function loanOutPlayer(
     loanedOut: [
       ...(career.loanedOut ?? []),
       {
-        player: { ...p, transferStatus: undefined, retraining: undefined },
+        player: { ...p, transferStatus: undefined, retraining: undefined, loanOutSeason: career.season },
         club,
         fee,
         season: career.season,
@@ -8173,6 +8284,10 @@ function returnLoanedPlayers(career: CareerState): {
       morale: 76,
       transferStatus: undefined,
       onLoan: undefined,
+      /* Round 634 review: the summer ends the one-loan-a-season stamp for a
+         man coming home. One recalled mid season keeps his, and it is inert
+         from here because it names a season that is over. */
+      loanOutSeason: undefined,
     };
     /* Round 508: they only take the option up if the season was worth taking it
        up for. A boy who grew is one they want to keep; one who did not simply
