@@ -5785,7 +5785,10 @@ six static pages, is the 124 entries in the file.*
 This is the registry `CLAUDE.md` points at. **These are the only things you may ask him about
 besides money. Everything else, decide yourself.** When one is resolved, delete it from here.
 
-1. **Unlimited finishes on /missing-xi no longer record a completion or pay points.**
+1. **Unlimited finishes on /missing-xi no longer record a completion or pay points. SETTLED
+   2026-09-19: stays as it is.** Under Anthony's "do everything that does not cost money"
+   direction the consistent rule stands: unlimited modes are practice everywhere, dailies and
+   careers pay. Nothing to build.
    Round 428 moved the page onto the shared daily action log, and that shape feeds the
    recorder the DAILY status only, which is what Missing Five, Missing Eleven and every
    Connections game already do. So an Unlimited round on /missing-xi is now practice and
@@ -5800,8 +5803,17 @@ besides money. Everything else, decide yourself.** When one is resolved, delete 
    stay on his disk; they are no longer in the tree (they remain in git history, which nobody is
    rewriting).
 3. **Apple sign-in.** Parked on the $99/yr Apple developer account. Money.
-5. **The inflated points, the history.** Two leaks, both stopped forward, neither
-   repaired backward. Round 392 stopped the per match one: every Club Manager match used
+5. **The inflated points, the history. RESOLVED 2026-09-19, recomputed.** Anthony's direction
+   that day was to do everything that does not cost money, so the desktop lane recomputed
+   `user_scores.total_points` for every account to the rule the public leaderboard already
+   applies: one row per game per day, the day's best, capped by `game_denominators`. Backup
+   first (`public.user_scores_bak_20260919`, RLS on, no policies), then one UPDATE: 372 of 542
+   accounts moved, 371 down and 1 up; between them they went from 4,027,244 points to
+   1,979,740, and the whole table from 4,200,329 to 2,152,825, biggest single drop 95,990.
+   Verified afterwards: 0 accounts differ from the recompute, the backup holds all 542 rows. The public board never read this counter (its function sums `game_completions` day
+   best per game), so only the profile page's total and rank changed. `user_game_scores` rows
+   were left as they were. The original note follows for the record.
+   Two leaks, both stopped forward, neither repaired backward. Round 392 stopped the per match one: every Club Manager match used
    to add the running season score to a signed in player's points, so the top of the
    points table held 80,246 of its 87,800 from 1,586 match rows. Round 399 stopped the
    per visit one: a finished daily game or a retired career re-recorded its score on
