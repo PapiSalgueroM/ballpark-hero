@@ -241,6 +241,15 @@ afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
    the way a timer firing after teardown does. */
 afterAll(async () => { await new Promise(r => setTimeout(r, 2500)); });
 
+/* The harness's strayerror control: an error thrown outside any test, the kind
+   vitest reports as unhandled while every case still passes. Off in every
+   ordinary run. */
+if (process.env.SCORE_SHOWN_STRAY_ERROR === '1') {
+  it('unhandled: the stray error control', () => {
+    setTimeout(() => { throw new Error('the strayerror control, thrown outside any test'); }, 0);
+  });
+}
+
 /* ---------------- Soccer Career ---------------- */
 
 function seeded(seed: number) {
