@@ -59,6 +59,18 @@
                    only nfl-career, on its replay step
      olddaily      useDailyPuzzle trusts a stored 'playing' again; only
                    transfer-path, reading its pre Round 643 save
+     maxguess      the restore re-decides through maxGuesses again; only the
+                   Football Grid check (a save made with Unlimited on)
+     unpinned      the three reveal games read the day on every render again;
+                   only their three after midnight checks
+     lateday       the three reveal games move their daily state when the
+                   reveal ends again; only their six inside the reveal checks
+     nflstamp      NFL Career Path stamps its finish with the clock again;
+                   only its dealt before midnight check
+     nflgiveup     NFL Career Path records the clue score on a give up again;
+                   only the nfl-career row, on its score
+     hlscore       NFL Higher or Lower records the score on screen again;
+                   only the nfl-higher-lower row, on its score
    The source ones rewrite one file in memory and run section 2 on it:
      scanslug      useNflHL's slug pair back to its mismatch; exactly that
                    file flagged for its slug
@@ -85,64 +97,113 @@ const ONLY = process.env.NO_DOUBLE_ONLY || '';
 
 /* What the table must hold, as the test file's own exact counts say. */
 const EXPECTED_ROWS = 41;
-const EXPECTED_CHECKS = 18;
+const EXPECTED_CHECKS = 23;
 
+/* Each vitest control is one or more edits, each to a copy of one module. */
+const REVEAL_HOOKS = [
+  ['src/hooks/useChampOrNot.ts', 'Answers'],
+  ['src/hooks/useWhodTheyBeat.ts', 'Answers'],
+  ['src/hooks/useSilverwareSort.ts', 'Results'],
+];
 const VITEST_CONTROLS = {
   nomark: {
-    module: '@/lib/restoredFinish',
-    file: 'src/lib/restoredFinish.ts',
-    from: '  marks.set(gameSlug, Date.now());',
-    to: '  void gameSlug; /* NO_DOUBLE_CONTROL=nomark: the mark is dropped */',
+    edits: [{ file: 'src/lib/restoredFinish.ts', from: '  marks.set(gameSlug, Date.now());', to: '  void gameSlug; /* NO_DOUBLE_CONTROL=nomark: the mark is dropped */' }],
     why: 'markRestoredFinish is a no-op, so every restore that relies on it records again',
     red: row => row.usesMark,
     point: /records nothing|recorded once/,
   },
   slugdrift: {
-    module: '@/hooks/useNflHL',
-    file: 'src/hooks/useNflHL.ts',
-    from: "    gameSlug: 'nfl-higher-lower',\n    storageSlug: 'nfl-hl',",
-    to: "    gameSlug: 'nfl-hl',",
+    edits: [{ file: 'src/hooks/useNflHL.ts', from: "    gameSlug: 'nfl-higher-lower',\n    storageSlug: 'nfl-hl',", to: "    gameSlug: 'nfl-hl'," }],
     why: "NFL Higher or Lower marks its restore under 'nfl-hl' again while the recorder asks under 'nfl-higher-lower'",
     red: row => row.title === 'nfl-higher-lower',
     point: /records nothing/,
   },
   togglerearm: {
-    module: '@/pages/RankEm',
-    file: 'src/pages/RankEm.tsx',
-    from: "useGameCompletion('rank-em', rawDailyStatus !== 'playing', score);",
-    to: "useGameCompletion('rank-em', mode === 'daily' && rawDailyStatus !== 'playing', score);",
+    edits: [{ file: 'src/pages/RankEm.tsx', from: "useGameCompletion('rank-em', rawDailyStatus !== 'playing', score);", to: "useGameCompletion('rank-em', mode === 'daily' && rawDailyStatus !== 'playing', score);" }],
     why: "Rank 'Em gates the recorder on the mode again, so Unlimited and back re-arms it",
     red: row => row.title === 'rank-em',
     point: /records nothing/,
   },
   coachflip: {
-    module: '@/components/nfl-my-career/NflMyCareerBoard',
-    file: 'src/components/nfl-my-career/NflMyCareerBoard.tsx',
-    from: "  const done = phase === 'retired' || phase === 'coach';",
-    to: "  const done = phase === 'retired';",
-    why: "the NFL My Career counts only the retired screen as done again, so every coaching round trip re-arms the recorder",
+    edits: [{ file: 'src/components/nfl-my-career/NflMyCareerBoard.tsx', from: "  const done = phase === 'retired' || phase === 'coach';", to: "  const done = phase === 'retired';" }],
+    why: 'the NFL My Career counts only the retired screen as done again, so every coaching round trip re-arms the recorder',
     red: row => row.title === 'nfl-my-career',
     point: /coaching round trip 1 records nothing/,
   },
   playunlimited: {
-    module: '@/hooks/useNFLCareer',
-    file: 'src/hooks/useNFLCareer.ts',
-    from: "  const nextUnlimited = useCallback(() => {\n    setMode('unlimited');\n",
-    to: "  const nextUnlimited = useCallback(() => {\n",
+    edits: [{ file: 'src/hooks/useNFLCareer.ts', from: "  const nextUnlimited = useCallback(() => {\n    setMode('unlimited');\n", to: '  const nextUnlimited = useCallback(() => {\n' }],
     why: "NFL Career Path's Play Unlimited deals a random player inside the daily again, and solving him overwrites today's save",
     red: row => row.title === 'nfl-career',
     point: /Play Unlimited leaves the daily/,
   },
   olddaily: {
-    module: '@/hooks/useDailyPuzzle',
-    file: 'src/hooks/useDailyPuzzle.ts',
-    from: "      if (saved.gameStatus === 'playing' && puzzle != null && Array.isArray(saved.guesses)) {\n        if (isWon(saved.guesses, puzzle)) saved.gameStatus = 'won';\n        else if (saved.guesses.length >= maxGuesses || (isLost && isLost(saved.guesses, puzzle))) saved.gameStatus = 'lost';\n      }\n",
-    to: '',
+    edits: [{
+      file: 'src/hooks/useDailyPuzzle.ts',
+      from: "      if (saved.gameStatus === 'playing' && puzzle != null && Array.isArray(saved.guesses)) {\n        if (isWon(saved.guesses, puzzle)) saved.gameStatus = 'won';\n        else if (isLost && isLost(saved.guesses, puzzle)) saved.gameStatus = 'lost';\n      }\n",
+      to: '',
+    }],
     why: "useDailyPuzzle trusts a stored 'playing' again, so a Transfer Path give up saved before Round 643 comes back unmarked",
     red: row => row.title === 'transfer-path',
     point: /reload 1 records nothing/,
   },
+  maxguess: {
+    edits: [{
+      file: 'src/hooks/useDailyPuzzle.ts',
+      from: "        else if (isLost && isLost(saved.guesses, puzzle)) saved.gameStatus = 'lost';",
+      to: "        else if (saved.guesses.length >= maxGuesses || (isLost && isLost(saved.guesses, puzzle))) saved.gameStatus = 'lost';",
+    }],
+    why: "the restore re-decides through maxGuesses again, so a Football Grid save made with Unlimited on comes back a loss with Unlimited off",
+    red: row => row.title === 'football-grid: a playing save past the limit, read with Unlimited off',
+    point: /restored as playing/,
+  },
+  unpinned: {
+    edits: REVEAL_HOOKS.map(([file]) => ({ file, from: '  const today = useRef(getTodayET()).current;', to: '  const today = getTodayET();' })),
+    why: 'Champ or Not, Who\'d They Beat and Silverware Sort read the day on every render again, so a final pick after midnight ET is lost',
+    red: row => row.title.endsWith(': a final pick after midnight ET'),
+    point: /after midnight/,
+  },
+  lateday: {
+    edits: REVEAL_HOOKS.map(([file, item]) => ({
+      file,
+      from: `      setDaily${item}(next);\n    }\n    clearReveal();\n    revealTimer.current = window.setTimeout(() => {\n      revealTimer.current = null;\n`,
+      to: `    }\n    clearReveal();\n    revealTimer.current = window.setTimeout(() => {\n      revealTimer.current = null;\n      if (mode === 'daily') setDaily${item}(next);\n`,
+    })),
+    why: "the three reveal games move their daily state when the reveal ends again, not with the save, so a reload or a mode change inside the final reveal loses the record",
+    red: row => / inside the final reveal$/.test(row.title),
+    point: /recorded once|back on the daily/,
+  },
+  nflstamp: {
+    edits: [{
+      file: 'src/hooks/useNFLCareer.ts',
+      from: '    persistDaily(dealtDay, status, clues, guesses);\n    setDailyFinish({ date: dealtDay, score: dailyScoreOf(status, clues) });\n',
+      to: '    persistDaily(getTodayET(), status, clues, guesses);\n    setDailyFinish({ date: getTodayET(), score: dailyScoreOf(status, clues) });\n',
+    }],
+    why: 'NFL Career Path stamps its finish with the clock again, so a daily dealt before midnight and solved after it lands on the next day',
+    red: row => row.title === 'nfl-career: a daily dealt before midnight and solved after it',
+    point: /dealt|midnight|next day/,
+  },
+  nflgiveup: {
+    edits: [{
+      file: 'src/hooks/useNFLCareer.ts',
+      from: "  return status === 'won' ? Math.max(1, TOTAL_CLUES + 1 - cluesRevealed) : 0;",
+      to: '  return Math.max(1, TOTAL_CLUES + 1 - cluesRevealed);',
+    }],
+    why: 'NFL Career Path records the clue score whatever the outcome again, so a give up at the first clue records 6',
+    red: row => row.title === 'nfl-career',
+    point: /the score the finish earned/,
+  },
+  hlscore: {
+    edits: [{
+      file: 'src/hooks/useNflHL.ts',
+      from: "  useGameCompletion('nfl-higher-lower', rawDailyStatus !== 'playing', dailyScore);",
+      to: "  useGameCompletion('nfl-higher-lower', rawDailyStatus !== 'playing', totalScore);",
+    }],
+    why: 'NFL Higher or Lower records the score on screen again, which waits for the final reveal, so the record is one round short',
+    red: row => row.title === 'nfl-higher-lower',
+    point: /whole finished score/,
+  },
 };
+const moduleOf = file => '@/' + file.replace(/^src\//, '').replace(/\.(ts|tsx)$/, '');
 const SCAN_CONTROLS = {
   scanslug: {
     file: 'src/hooks/useNflHL.ts',
@@ -491,19 +552,28 @@ try {
     }
     const ctl = VITEST_CONTROLS[name];
     console.log(`\nNEGATIVE CONTROL ${name}: ${ctl.why}`);
-    const src = readLF(ctl.file);
-    if (count(src, ctl.from) !== 1) abort(`control ${name} cannot run: ${ctl.file} does not carry exactly one ${JSON.stringify(ctl.from)}`);
-    if (count(stripComments(src), ctl.from) !== 1) abort(`control ${name} cannot run: the anchor in ${ctl.file} is not code`);
-    const copy = src.replace(ctl.from, ctl.to);
-    if (copy === src) abort(`control ${name} cannot run: the rewrite changed nothing`);
-    if (/from '\.\.?\//.test(copy)) abort(`control ${name} cannot run: ${ctl.file} has a relative import, which a copy elsewhere cannot resolve`);
-    const dir = path.join(controlDir, name);
-    fs.mkdirSync(dir, { recursive: true });
-    const file = path.join(dir, path.basename(ctl.file));
-    fs.writeFileSync(file, copy);
-    console.log(`   ${ctl.file} copied to ${path.relative(ROOT, file).replaceAll('\\', '/')} with its anchor rewritten, src untouched`);
+    const swap = {};
+    const byFile = new Map();
+    for (const e of ctl.edits) byFile.set(e.file, [...(byFile.get(e.file) ?? []), e]);
+    for (const [rel, edits] of byFile) {
+      const src = readLF(rel);
+      let copy = src;
+      for (const e of edits) {
+        if (count(copy, e.from) !== 1) abort(`control ${name} cannot run: ${rel} does not carry exactly one ${JSON.stringify(e.from)}`);
+        if (count(stripComments(copy), e.from) !== 1) abort(`control ${name} cannot run: the anchor in ${rel} is not code`);
+        copy = copy.replace(e.from, e.to);
+      }
+      if (copy === src) abort(`control ${name} cannot run: the rewrite of ${rel} changed nothing`);
+      if (/from '\.\.?\//.test(copy)) abort(`control ${name} cannot run: ${rel} has a relative import, which a copy elsewhere cannot resolve`);
+      const dir = path.join(controlDir, name);
+      fs.mkdirSync(dir, { recursive: true });
+      const file = path.join(dir, path.basename(rel));
+      fs.writeFileSync(file, copy);
+      swap[moduleOf(rel)] = file.replaceAll('\\', '/');
+      console.log(`   ${rel} copied to ${path.relative(ROOT, file).replaceAll('\\', '/')} with ${edits.length} anchor(s) rewritten, src untouched`);
+    }
 
-    const run = runSuite({ NO_DOUBLE_CONTROL: name, NO_DOUBLE_SWAP: JSON.stringify({ [ctl.module]: file.replaceAll('\\', '/') }) });
+    const run = runSuite({ NO_DOUBLE_CONTROL: name, NO_DOUBLE_SWAP: JSON.stringify(swap) });
     if (!checkTable(run)) continue;
     if (run.loadError && !run.tests.size) { fail(`control ${name}: the copy did not load, so every red is a crash:\n${run.loadError}`); continue; }
     if (name === 'nomark' && run.tests.get('nomark control: markRestoredFinish is a no-op')?.status !== 'passed') {
