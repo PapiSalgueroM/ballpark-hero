@@ -278,8 +278,49 @@ export const DRAIN_PER_PUNCH = 0.8;
 export const DRAIN_PER_KNOCKDOWN = 10;
 /** A man still on his feet never reads empty, however wide the fight got. */
 export const STANDING_FLOOR = 8;
+/** Below this the bar stops draining in a straight line and eases toward the floor. */
+export const SOFT_FLOOR_FROM = 40;
 
 export interface ConditionPoint { round: number; player: number; opp: number }
+
+/**
+ * Round 636: what a man's bar reads after he has soaked up `drain` points of
+ * punishment, for a man still on his feet.
+ *
+ * WHY THIS IS A CURVE AND NOT A CLAMP. Round 628 drained the bar in a straight
+ * line and clamped it at the floor. That clamp was the defect. A straight
+ * line runs out at 92 points of drain, 115 punches, and the men a good player
+ * beats on points soak up far more than that: over eight seed bases of real
+ * careers played with three looks that each answer what the opponent will
+ * switch to (the game's own hint), the decision loser's drain sits at 77 to 80
+ * at the median, 144 to 148 at p90 and 172 to 179 at p99. So 29 to 34 percent
+ * of those losers read the floor, the same as a man who barely got through
+ * and within a sliver of a man who was stopped. Random tactics, which is all
+ * Round 628 measured, pinned 11 to 13 percent.
+ *
+ * The drain rate was not the lever. The damage behind it is sound: it is the
+ * punches the engine landed, and none of this feeds lasting damage, which
+ * comes from simBout's damageTaken. A slower straight line would still clip,
+ * just later: at 0.6 a punch a good player's losers still pin 18 to 23
+ * percent, and holding their p99 off the floor in a straight line takes about
+ * 0.4, which lifts a random decision loser's median from 30 to 64 and erases
+ * the gap the bar exists to show.
+ *
+ * So the bar reads exactly as Round 628 drew it down to SOFT_FLOOR_FROM, and
+ * below that it keeps falling for every extra punch but ever more slowly, and
+ * it never reaches the floor. The tail has the same slope as the line where
+ * they meet, so there is no visible kink. Measured on the same bouts: a
+ * decision loser reads the floor in 0 to 0.1 percent of fights for the good
+ * player and the weak one, 0 to 0.4 for random tactics and 0.6 to 0.9 for a
+ * player who holds one answer all night, and the median random loser moves
+ * from 30 to 31. Above 40 nothing a Round 628 bar showed has changed.
+ */
+export function conditionShown(drain: number): number {
+  const straight = 100 - drain;
+  if (straight >= SOFT_FLOOR_FROM) return straight;
+  const span = SOFT_FLOOR_FROM - STANDING_FLOOR;
+  return STANDING_FLOOR + span * Math.exp((straight - SOFT_FLOOR_FROM) / span);
+}
 
 /**
  * Condition after each round, 100 down to 0, for both men.
@@ -300,10 +341,14 @@ export interface ConditionPoint { round: number; player: number; opp: number }
  * land two and a half times as many punches as the sample did. A harness that
  * samples a population the player never meets will confirm anything.
  *
- * The rate is set from the loser's p90 so the floor stays rare: 85 points of
- * drain over 108 punches is 0.787, rounded to 0.8. That puts the median
- * decision winner near 59 and the median loser near 34, a gap you can see
- * across a room, and only the worst tail pins.
+ * The rate is set from the loser's p90: 85 points of drain over 108 punches is
+ * 0.787, rounded to 0.8. That puts the median decision winner near 59 and the
+ * median loser near 34, a gap you can see across a room.
+ *
+ * Round 628 said that also kept the floor rare. It did, for random tactics,
+ * which is all it sampled, and for nobody who plays well: a player who reads
+ * every fight left 29 to 34 percent of his decision losers on the floor. The
+ * floor is kept rare by conditionShown now, not by the rate. See it above.
  *
  * The bar is not meant to agree with the cards every time. A man can win on
  * points while taking more punishment than he handed out, and a bar that
@@ -317,18 +362,20 @@ export interface ConditionPoint { round: number; player: number; opp: number }
 export function conditionTrack(res: BoutResult): ConditionPoint[] {
   const stoppage = res.method === 'KO' || res.method === 'TKO';
   const loser = res.winner === 'player' ? 'opp' : res.winner === 'opp' ? 'player' : null;
-  let player = 100;
-  let opp = 100;
+  let playerDrain = 0;
+  let oppDrain = 0;
   const out: ConditionPoint[] = [];
   res.rounds.forEach((r, i) => {
     /* knockdown: 'player' means the PLAYER scored it, so the OPPONENT went
        down. That reading is the engine's, see simBout where pDrops sets
        knockdown to 'player' and increments oppHurt. Getting it backwards
        would drain the wrong bar on the most visible moment in the fight. */
-    player -= r.oppLanded * DRAIN_PER_PUNCH + (r.knockdown === 'opp' ? DRAIN_PER_KNOCKDOWN : 0);
-    opp -= r.playerLanded * DRAIN_PER_PUNCH + (r.knockdown === 'player' ? DRAIN_PER_KNOCKDOWN : 0);
-    player = Math.max(STANDING_FLOOR, player);
-    opp = Math.max(STANDING_FLOOR, opp);
+    playerDrain += r.oppLanded * DRAIN_PER_PUNCH + (r.knockdown === 'opp' ? DRAIN_PER_KNOCKDOWN : 0);
+    oppDrain += r.playerLanded * DRAIN_PER_PUNCH + (r.knockdown === 'player' ? DRAIN_PER_KNOCKDOWN : 0);
+    /* Drain only ever grows and conditionShown only ever falls as it grows,
+       so a bar can never climb back up between rounds. */
+    const player = conditionShown(playerDrain);
+    const opp = conditionShown(oppDrain);
     const last = i === res.rounds.length - 1;
     out.push({
       round: r.round,
