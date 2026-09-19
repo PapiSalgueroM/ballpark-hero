@@ -4,8 +4,30 @@
 `73e62cdc`, entry `index-d4nq1olf.js`. That is every round on main since 616: Codex's 586 to 588
 and 603 to 605, and Claude's 617, 618, 619, 626, 628, 629 and 630. Proof and timings in
 `docs/PROJECT-STATE.md`. Round 633 (the season score, PR 103) is in gates and review on this lane
-and lands next if it holds. This lane still holds 631 and 632 and continues from there; the next
-free number for anyone else is 634.
+and lands next if it holds. This lane still holds 631 and 632 and continues from there.
+
+**2026-09-19, desktop Claude lane: block 634 to 639 claimed**, from the open footer reports
+(`question_reports`, none resolved since 2026-09-05) and the follow ups the 619 release left.
+The next free number for anyone else is 640.
+- **634: Club Manager saves that survive leaving the site, and no duplicate signings.** Two
+  reports on 2026-09-13: "Manager career doesnt save if you leave the website" and "the players
+  duplicate if you buy them and it doesnt save". `saveCareer` swallows a quota error silently, so
+  a career that outgrows localStorage stops persisting with no word to the player; measure the
+  save size over long careers, trim what grows without bound, and say so on screen when a write
+  fails. The buy path is checked for a second tap landing twice.
+- **635: phone tap targets and the sweep's blind spot.** `sweepPhone` is red on two routes: the
+  World Cup Bracket "Show the real bracket" toggle is 20px tall (fix the control), and Stadium
+  Tycoon's "Tap the stadium" is a screen reader only button measured at 1px (the sweep learns to
+  skip visually hidden controls, with a negative control). Plus the reduced motion gaps 619 to 630
+  left: width transitions on the condition and house bars, and a source guard that every
+  `animate-*` class shipped has a reduced motion rule.
+- **636: Fight Career bars pin a third of decision losers for a player who reads every fight**
+  (30 to 33 percent at drain 0.8 against 10 to 13 for random tactics). Re-tune with the harness
+  sampling both policies, or correct the comment if the pin is the design.
+- **637: the reported Transfer Path chains and Alphabet Sprint's "wont exept anything".** Two
+  chains reported as bugs (`tpa-662`, `tpa-199` with Lukaku after Diego Costa refused) checked
+  against the stint tables, and Alphabet Sprint's acceptance path checked in a browser.
+- 638 and 639 reserved, contents named when claimed.
 
 **Rounds 619, 628, 629 and 630, 2026-09-16: ON MAIN, desktop Claude lane.** Landed as one
 release from a fresh CRLF clone, after an adversarial review that found 28 defects confirmed by
