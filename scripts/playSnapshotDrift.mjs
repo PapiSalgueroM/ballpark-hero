@@ -76,6 +76,9 @@ const ROUTES = [
   '/soccer-grid',
   '/soccer',
   '/records',
+  /* Round 649: the per competition record page shape, which counts its facts
+     at render and must say the same thing on every date */
+  '/records/super-bowl-winners',
   '/leaderboard',
   '/whats-new',
   '/about',

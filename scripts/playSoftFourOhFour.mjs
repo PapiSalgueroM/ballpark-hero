@@ -160,7 +160,9 @@ console.log('4) real routes are untouched, which is the half that must not fail'
   /* A marker that fires on a good page takes that page out of the index, which
      is worse than the bug being fixed here. A spread, including the two pages
      whose documents are stubs rather than full snapshots. */
-  const ROUTES = ['/soccer-career', '/soccer-grid', '/records', '/about', '/leaderboard', '/soccer', '/privacy'];
+  /* Round 649: one nested /records/<slug> page joined the spread, a real page two
+     segments deep, so the marker is proved quiet on that shape too. */
+  const ROUTES = ['/soccer-career', '/soccer-grid', '/records', '/records/super-bowl-winners', '/about', '/leaderboard', '/soccer', '/privacy'];
   let marked = 0, noSnapshot = 0, homeCopy = 0;
   for (const r of ROUTES) {
     /* The snapshot check reads the SERVER's answer, because the block lives
