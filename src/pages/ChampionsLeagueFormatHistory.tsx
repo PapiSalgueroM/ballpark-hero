@@ -120,7 +120,7 @@ const ChampionsLeagueFormatHistory = () => {
         </header>
 
         <section className="mb-10">
-          <h2 className="text-lg font-display font-bold text-foreground mb-3">The timeline at a glance</h2>
+          <h2 className="text-lg font-display font-bold text-foreground mb-3">Champions League format timeline at a glance</h2>
           <p className="sm:hidden mb-2 text-xs text-muted-foreground">Swipe sideways to see every column.</p>
           <div tabIndex={0} role="region" aria-label="Champions League format timeline" className="overflow-x-auto rounded-xl border border-border focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary">
             <table className="w-full min-w-[700px] text-sm">
@@ -147,7 +147,7 @@ const ChampionsLeagueFormatHistory = () => {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-lg font-display font-bold text-foreground mb-3">Season by season</h2>
+          <h2 className="text-lg font-display font-bold text-foreground mb-3">Champions League format, season by season</h2>
           <div className="space-y-4">
             {UCL_FORMAT_PERIODS.map(p => (
               <article key={p.id} id={p.id} className="rounded-xl border border-border bg-card p-4">
@@ -193,7 +193,7 @@ const ChampionsLeagueFormatHistory = () => {
         </section>
 
         <section className="mb-10">
-          <h2 className="text-lg font-display font-bold text-foreground mb-3">Questions people ask</h2>
+          <h2 className="text-lg font-display font-bold text-foreground mb-3">Champions League format: questions people ask</h2>
           <div className="space-y-4">
             {FAQS.map(f => (
               <div key={f.q}>
