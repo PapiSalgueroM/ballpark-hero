@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, useRef, type ReactNode } from 'react';
+import { useState, useEffect, useMemo, useRef, lazy, Suspense, type ReactNode } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Link } from 'react-router-dom';
 import { Trophy, Flame, Sparkles, Users, Search, X, Globe } from 'lucide-react';
@@ -7,7 +7,7 @@ import PageSeo from '@/components/seo/PageSeo';
 
 import { StreakReminder } from '@/components/game/StreakReminder';
 import { useMostPlayed } from '@/hooks/useMostPlayed';
-import { PollOfTheDay } from '@/components/home/PollOfTheDay';
+import { PollsPlaceholder } from '@/components/home/PollsPlaceholder';
 import { FeaturedStage } from '@/components/home/FeaturedStage';
 import { DailyRail } from '@/components/home/DailyRail';
 import { JustShipped } from '@/components/home/JustShipped';
@@ -18,7 +18,14 @@ import { AuthModal } from '@/components/auth/AuthModal';
 import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, GAME_COUNT_LABEL, TOTAL_GAMES, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
 import { CATEGORY_SPORT, sportOf } from '@/data/homeFront';
 import { isNewGame } from '@/lib/newBadge';
-import { searchSite } from '@/lib/siteSearch';
+/* Round 659: the search engine loads the first time somebody reaches for
+   the box (focus, a tap or a key), not with the page. Index ships in the
+   entry chunk every route downloads, and the engine plus its keyword index
+   is about five kilobytes gzipped that most visits never use; that is what
+   paid for the new front without growing any page's download. */
+type SearchEngine = typeof import('@/lib/siteSearch');
+let enginePromise: Promise<SearchEngine> | null = null;
+const loadSearchEngine = () => (enginePromise ??= import('@/lib/siteSearch'));
 import { getTodayET } from '@/lib/dateUtils';
 import { SPORT_HUBS } from '@/lib/sportHub';
 
@@ -93,9 +100,14 @@ export default function Index() {
 
   // The engine builds its index once on first call and caches it, so this is
   // scoring only, re-run when the query text changes and not before.
+  const [engine, setEngine] = useState<SearchEngine | null>(null);
+  const warmSearch = () => {
+    if (engine) return;
+    loadSearchEngine().then(setEngine).catch(() => { enginePromise = null; });
+  };
   const filteredGames = useMemo(
-    () => (isSearching ? searchSite(searchQuery).map(r => r.game) : []),
-    [isSearching, searchQuery]
+    () => (isSearching && engine ? engine.searchSite(searchQuery).map(r => r.game) : []),
+    [isSearching, searchQuery, engine]
   );
 
   useEffect(() => {
@@ -273,7 +285,9 @@ export default function Index() {
               <input
                 type="text"
                 value={searchQuery}
-                onChange={e => setSearchQuery(e.target.value)}
+                onChange={e => { warmSearch(); setSearchQuery(e.target.value); }}
+                onFocus={warmSearch}
+                onPointerEnter={warmSearch}
                 aria-label="Search games"
                 placeholder='Search games... e.g. soccer, grid, NBA'
                 className="h-11 w-full pl-10 pr-10 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all"
@@ -293,7 +307,12 @@ export default function Index() {
           {/* Search results replace everything under the title row, so they
               arrive right under the box with nothing to scroll past. */}
           {isSearching ? (
-            filteredGames.length > 0 ? (
+            /* the few milliseconds before the engine lands on a first
+               keystroke: hold the space, and never say "no games found"
+               for a search that has not run yet */
+            !engine ? (
+              <div aria-busy="true" className="min-h-[120px]" />
+            ) : filteredGames.length > 0 ? (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                 {filteredGames.map(game => (
                   <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} />
@@ -364,7 +383,11 @@ export default function Index() {
               {/* Most played stays, per the same 2026-08-26 document, and
                   still counts real people with its curated fallback. Round
                   659 sets Just shipped beside it on a wide screen. */}
-              <div className="grid gap-10 lg:grid-cols-2 lg:gap-8">
+              {/* grid-cols-1 is minmax(0, 1fr), not auto: with an auto track a
+                  long real Most Played description (the truncate is nowrap)
+                  widened the column to its full text and the whole phone
+                  page with it, measured at 915px with live data */}
+              <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-8">
                 <MostPlayedToday />
                 <JustShipped>
                   {games => (
@@ -382,7 +405,7 @@ export default function Index() {
               {/* Round 659: the polls sit under the games now. They invite a
                   click, the tiles get played, and the first screen belongs to
                   the tiles. PollOfTheDay holds its own height while it loads. */}
-              <PollOfTheDay />
+              <PollsWhenNear />
               {/* ROUND 382: the maker's note is gone from here, on the owner's
                   instruction: "it shouldnt pop up there I would rather you put it
                   in one the small like tabs on the bottom like near the privacy
@@ -471,6 +494,39 @@ export default function Index() {
   );
 }
 
+/* Round 659: the polls sit below the games now, so their code (the poll
+   card, the flags, the fixture pool) loads when the section comes within
+   600px of the screen rather than with the page. Until then, and while it
+   loads, the placeholder holds the section's exact box, and because the
+   swap happens well below what anyone is reading, nothing they see moves. */
+const LazyPolls = lazy(() => import('@/components/home/PollOfTheDay').then(m => ({ default: m.PollOfTheDay })));
+
+function PollsWhenNear() {
+  const ref = useRef<HTMLDivElement>(null);
+  const [near, setNear] = useState(false);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (typeof IntersectionObserver === 'undefined') { setNear(true); return; }
+    const io = new IntersectionObserver(entries => {
+      if (entries.some(e => e.isIntersecting)) { setNear(true); io.disconnect(); }
+    }, { rootMargin: '600px 0px' });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <div ref={ref}>
+      {near ? (
+        <Suspense fallback={<PollsPlaceholder />}>
+          <LazyPolls />
+        </Suspense>
+      ) : (
+        <PollsPlaceholder />
+      )}
+    </div>
+  );
+}
+
 /** One signed-in stat in the title row. The unit words drop on a phone so
     three chips fit beside the h1 without making the row any taller. */
 function StatChip({ icon, label, value, unit }: { icon: ReactNode; label: string; value: string; unit?: string }) {
@@ -523,7 +579,7 @@ function MostPlayedToday() {
   return (
     <section>
       {heading}
-      <ol className="grid gap-2">
+      <ol className="grid grid-cols-1 gap-2">
         {entries.map(({ game, isFallback }, rank) => {
           const sport = sportOf(game.path);
           return (

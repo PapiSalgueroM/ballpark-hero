@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { POLLS, type PollFixture } from '@/data/pollFixtures';
 import { getPollDayET, dateSeed } from '@/lib/dateUtils';
 import { FlagImg, FlagFromEmoji, TextWithFlags } from '@/components/FlagImg';
+import { PollsHeading, PollsPlaceholder } from './PollsPlaceholder';
 
 /**
  * Home: Poll of the Day 3.0.
@@ -152,29 +153,15 @@ export function PollOfTheDay() {
      skeleton cards hold the exact room the real ones take (the same card
      box, the same two rows of buttons), so a late answer from the database
      can never push down a page somebody is already reading. */
+  if (polls === null) return <PollsPlaceholder />;
+
   return (
-    <section aria-labelledby="home-polls" aria-busy={polls === null}>
-      <h2 id="home-polls" className="mb-3 flex items-center gap-2.5 text-lg font-display font-bold text-foreground">
-        <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold/15 text-base ring-1 ring-inset ring-gold/30">🗳️</span>
-        Polls of the day
-      </h2>
+    <section aria-labelledby="home-polls">
+      <PollsHeading />
       <div className="grid gap-3 md:grid-cols-2">
-        {polls === null
-          ? [0, 1].map(i => <PollSkeleton key={i} />)
-          : polls.map((poll) => <PollCard key={poll.key} poll={poll} />)}
+        {polls.map((poll) => <PollCard key={poll.key} poll={poll} />)}
       </div>
     </section>
-  );
-}
-
-function PollSkeleton() {
-  return (
-    <div aria-hidden="true" data-poll-skeleton="" className="rounded-xl border border-border bg-surface-1 p-4">
-      <div className="mb-3 h-5 w-3/4 rounded bg-muted/60" />
-      <div className="grid grid-cols-2 gap-2">
-        {[0, 1, 2, 3].map(i => <div key={i} className="h-[42px] rounded-lg bg-surface-2" />)}
-      </div>
-    </div>
   );
 }
 
