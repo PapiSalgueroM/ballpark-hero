@@ -63,6 +63,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       "Playoffs use the real 14 team format: 7 seeds per conference, byes for the 1 seeds, four knockout rounds.",
       "Trades are judged on rating, age, and position, with quarterbacks at a premium. The AI only accepts a clear win.",
       "Grades can miss by up to 4 points either way, injuries cost players 1 to 4 weeks, and rosters cannot drop below six players.",
+      "A cut is not free. Half the man's salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
       "Trust upstairs runs 0 to 100. Beating the mandate raises it, missing it drops it, a championship fixes almost anything, and at zero you are fired and the save ends. A fresh GM always survives one bad year, never three.",
     ],
     example: [
