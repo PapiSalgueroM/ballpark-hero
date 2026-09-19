@@ -321,10 +321,9 @@ export interface ConditionPoint { round: number; player: number; opp: number }
  * into 9 to 12 rather than sitting on 8. About a fifth of his decision losers
  * read there (18.7 to 22.8 percent over the same eight bases), every one of
  * them a man who took over 120 points of drain, which is about 150 punches,
- * or fewer with a knockdown among them.
- * That is the bar saying he barely made the bell, which is true, and each of
- * those readings is still a visible sliver and a number above 0, which a
- * stopped man never gets.
+ * or fewer with a knockdown among them. That is the bar saying he barely made
+ * the bell, which is true, and each of those readings is still a visible
+ * sliver and a number above 0, which a stopped man never gets.
  */
 export function conditionShown(drain: number): number {
   const straight = 100 - drain;
