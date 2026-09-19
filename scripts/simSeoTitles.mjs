@@ -131,7 +131,8 @@ const MODULES = path.dirname(path.dirname(REACT));
 /* ---- PageSeo, seoMeta, the registry and a renderer, bundled once ---- */
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), `seoTitles-${process.pid}-`));
 const pageSeoSrc = lf(fs.readFileSync(SEO, 'utf8'));
-const LAZY_ANCHOR = "import('@/data/seoMeta')";
+/* The load itself, not the type beside it that names the same module. */
+const LAZY_ANCHOR = "seoMetaLoad = import('@/data/seoMeta')";
 const LOOKUP_ANCHOR = 'const entry = seoMeta?.[path];';
 let seoPath = SEO;
 if (CONTROL === 'noregistry') {
@@ -397,31 +398,36 @@ if (CONTROL && CONTROL !== 'staleshot') {
 /* ---------- 4. the entry chunk ---------- */
 let distDir = path.join(ROOT, 'dist');
 if (CONTROL === 'inentry') {
-  if (!pageSeoSrc.includes(LAZY_ANCHOR)) abort('control inentry: PageSeo has no dynamic import of seoMeta to make static');
+  if (count(pageSeoSrc, LAZY_ANCHOR) !== 1) abort(`control inentry: PageSeo carries "${LAZY_ANCHOR}" ${count(pageSeoSrc, LAZY_ANCHOR)} times, not once, so there is no one load to make static`);
   const vitePath = findUp('vite/dist/node/index.js');
   if (!vitePath) abort('control inentry: vite not found in any node_modules above the repo');
   const { build } = await import(pathToFileURL(vitePath).href);
   distDir = path.join(TMP, 'dist-inentry');
   let fired = false;
   console.log('CONTROL inentry: a side build where PageSeo imports seoMeta statically, so the map rides the entry chunk again; section 4 must go red');
-  await build({
-    root: ROOT,
-    configFile: path.join(ROOT, 'vite.config.ts'),
-    mode: 'production',
-    logLevel: 'error',
-    build: { outDir: distDir, emptyOutDir: true },
-    plugins: [{
-      name: 'seo-titles-control-inentry',
-      enforce: 'pre',
-      transform(code, id) {
-        if (!id.replaceAll('\\', '/').endsWith('src/components/seo/PageSeo.tsx')) return null;
-        const src = lf(code);
-        if (!src.includes(LAZY_ANCHOR)) return null;
-        fired = true;
-        return `import * as seoMetaStatic from '@/data/seoMeta';\n${src.replace(LAZY_ANCHOR, 'Promise.resolve(seoMetaStatic)')}`;
-      },
-    }],
-  });
+  try {
+    await build({
+      root: ROOT,
+      configFile: path.join(ROOT, 'vite.config.ts'),
+      mode: 'production',
+      logLevel: 'error',
+      build: { outDir: distDir, emptyOutDir: true },
+      plugins: [{
+        name: 'seo-titles-control-inentry',
+        enforce: 'pre',
+        transform(code, id) {
+          if (!id.replaceAll('\\', '/').endsWith('src/components/seo/PageSeo.tsx')) return null;
+          const src = lf(code);
+          if (count(src, LAZY_ANCHOR) !== 1) return null;
+          fired = true;
+          return `import * as seoMetaStatic from '@/data/seoMeta';\n${src.replace(LAZY_ANCHOR, 'seoMetaLoad = Promise.resolve(seoMetaStatic)')}`;
+        },
+      }],
+    });
+  } catch (e) {
+    /* A crash must never read as a caught break: that is exit 2, not 1. */
+    abort(`control inentry: the side build failed: ${String(e?.message ?? e).split('\n')[0]}`);
+  }
   if (!fired) abort('control inentry: the transform never saw PageSeo, so the side build proves nothing');
 }
 {
