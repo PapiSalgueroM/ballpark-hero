@@ -5,7 +5,7 @@ import { leagueNames, uniqueName } from './foNames';
 import { NHL_UPPER_LIMIT_2026_27 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
-import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal } from './frontOfficeCuts';
+import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal, tradeRefusal } from './frontOfficeCuts';
 
 /**
  * NHL Front Office engine (2026-08-05). Hockey sibling of the NFL, NBA and
@@ -329,6 +329,8 @@ export function nhlTrade(
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
   if (!mine || !theirs || my.players.length <= 8 || their.players.length <= 8) return 'invalid';
+  /* Round 631: nobody comes back the season he was cut, by trade either. */
+  if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   // Round 82: salary matching so cap-strapped teams can still swap contracts
   const fitsMe = nhlCapRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
   const fitsThem = nhlCapRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;
@@ -353,6 +355,8 @@ export function nhlExecuteTalksTrade(
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
   if (!mine || !theirs || my.players.length <= 8 || their.players.length <= 8) return 'invalid';
+  /* Round 631: nobody comes back the season he was cut, by trade either. */
+  if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   if (addPick && !my.picks.length) return 'invalid';
   const fitsMe = nhlCapRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
   const fitsThem = nhlCapRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;

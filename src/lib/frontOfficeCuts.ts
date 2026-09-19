@@ -128,6 +128,19 @@ export function signRefusal(team: CutLedger, playerId: string, said = 'You cut h
   return null;
 }
 
+/**
+ * Why this team cannot take this man in by trade, or null. Without it a man
+ * could come back the season he was cut: an AI club signs him from the pool
+ * and a trade returns him the same week. Every trade path refuses on it, and
+ * the trade screen shows it beside the greyed Open talks button. It carries
+ * its own check rather than calling signRefusal, so the two rules can be
+ * fenced apart.
+ */
+export function tradeRefusal(team: CutLedger, incomingId: string, said = 'You cut him this season.'): string | null {
+  if ((team.releasedThisSeason ?? []).includes(incomingId)) return `${said} He can come back after the offseason.`;
+  return null;
+}
+
 /** One offseason's worth of the ledger, for one team. */
 export function rollDeadCap(team: CutLedger): void {
   team.deadCap = (team.deadCap ?? [])

@@ -5,7 +5,7 @@ import { leagueNames, uniqueName } from './foNames';
 import { MLB_CBT_THRESHOLD_2026 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
-import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal } from './frontOfficeCuts';
+import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal, tradeRefusal } from './frontOfficeCuts';
 
 /**
  * MLB Front Office engine (2026-08-05). Baseball sibling of the NFL and NBA
@@ -315,6 +315,8 @@ export function mlbTrade(
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
   if (!mine || !theirs || my.players.length <= 9 || their.players.length <= 9) return 'invalid';
+  /* Round 631: nobody comes back the season he was cut, by trade either. */
+  if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   // Round 82: salary matching so payroll-heavy teams can still swap contracts
   const fitsMe = mlbCapRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
   const fitsThem = mlbCapRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;
@@ -339,6 +341,8 @@ export function mlbExecuteTalksTrade(
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
   if (!mine || !theirs || my.players.length <= 9 || their.players.length <= 9) return 'invalid';
+  /* Round 631: nobody comes back the season he was cut, by trade either. */
+  if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   if (addPick && !my.picks.length) return 'invalid';
   const fitsMe = mlbCapRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
   const fitsThem = mlbCapRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;

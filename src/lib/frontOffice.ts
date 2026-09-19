@@ -5,7 +5,7 @@ import { leagueNames, uniqueName } from './foNames';
 import { NFL_SALARY_CAP_2026 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
-import { type CutLedger, type DeadCapEntry, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal } from './frontOfficeCuts';
+import { type CutLedger, type DeadCapEntry, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal, tradeRefusal } from './frontOfficeCuts';
 
 /**
  * NFL Front Office engine (2026-08-05, the manager-for-every-sport push).
@@ -585,6 +585,8 @@ export function proposeTrade(
   const mine = my.players.find(p => p.id === myPlayerId);
   const theirs = their.players.find(p => p.id === theirPlayerId);
   if (!mine || !theirs || my.players.length <= 6 || their.players.length <= 6) return 'invalid';
+  /* Round 631: nobody comes back the season he was cut, by trade either. */
+  if (tradeRefusal(my, theirPlayerId) || tradeRefusal(their, myPlayerId)) return 'invalid';
   // Round 82: salary matching so cap-strapped teams can still swap contracts
   const fitsMe = capRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
   const fitsThem = capRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;
@@ -615,6 +617,8 @@ export function executeTalksTrade(
   const mine = my.players.find(p => p.id === myPlayerId);
   const theirs = their.players.find(p => p.id === theirPlayerId);
   if (!mine || !theirs || my.players.length <= 6 || their.players.length <= 6) return 'invalid';
+  /* Round 631: nobody comes back the season he was cut, by trade either. */
+  if (tradeRefusal(my, theirPlayerId) || tradeRefusal(their, myPlayerId)) return 'invalid';
   if (addPick && my.picks.length === 0) return 'invalid';
   const fitsMe = capRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
   const fitsThem = capRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;

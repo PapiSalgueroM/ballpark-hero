@@ -16,7 +16,7 @@ import {
   ensureFoLeagueIds, NFL_ROSTER_MIN,
 } from '@/lib/frontOffice';
 /* Round 631: a cut costs dead money and the man cannot come back this season. */
-import { deadMoneyFor, deadCapUsed, signRefusal } from '@/lib/frontOfficeCuts';
+import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
 /* Round 531: the cap on screen says which day its figure was read. */
 import { capNote } from '@/lib/leagueCaps';
 import { leagueNames } from '@/lib/foNames';
@@ -805,6 +805,8 @@ export default function FrontOfficeBoard() {
   const openPanel = (key: FoPanelKey) => { setCutArmed(null); setTab(key === 'play' ? 'week' : key); };
   /* Round 631: dead money on the cap line, only when there is any. */
   const dead = deadCapUsed(my);
+  /* Round 631: at the roster floor the engine refuses every cut, so every Cut says why and waits. */
+  const cutBlock = cutRefusal(my, NFL_ROSTER_MIN);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'week' : x.key) === tab)?.title ?? '';
 
   return (
@@ -858,6 +860,7 @@ export default function FrontOfficeBoard() {
             {dead > 0 && <> · dead money <b className="text-destructive">${dead}M</b></>}
           </p>
           <p className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}</p>
+          {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => {
               /* Round 631: the cost is on screen before the second tap. */
@@ -876,8 +879,9 @@ export default function FrontOfficeBoard() {
                   <b className="text-primary">{p.ovr}</b>
                   <button
                     onClick={() => setCutArmed(arming ? null : p.id)}
-                    title={`Cut him and $${cost.now}M stays on this season's cap`}
-                    className={cn('rounded-full border border-border px-2 py-0.5 text-[10px]',
+                    disabled={!!cutBlock}
+                    title={cutBlock ?? `Cut him and $${cost.now}M stays on this season's cap`}
+                    className={cn('rounded-full border border-border px-2 py-0.5 text-[10px] disabled:opacity-40',
                       arming ? 'text-foreground' : 'text-muted-foreground hover:border-destructive hover:text-destructive')}
                   >
                     {arming ? 'Keep' : `Cut, $${cost.now}M dead`}
@@ -1025,12 +1029,19 @@ export default function FrontOfficeBoard() {
                 </div>
                 <div className="space-y-1">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You get ({tradePartner})</p>
-                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).map(p => (
-                    <div key={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
-                      <span className="truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
-                      <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
+                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).map(p => {
+                    /* Round 631: the trade paths refuse a man you cut this season, so the screen says so. */
+                    const back = tradeRefusal(my, p.id);
+                    return (
+                    <div key={p.id} data-trade-row={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
+                      <span className="min-w-0">
+                        <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
+                        {back && <span className="block text-[9px] text-destructive">{back}</span>}
+                      </span>
+                      <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece || !!back} title={back ?? undefined} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </>

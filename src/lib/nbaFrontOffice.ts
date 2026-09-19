@@ -5,7 +5,7 @@ import { leagueNames, uniqueName } from './foNames';
 import { NBA_SALARY_CAP_2026_27 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
-import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal } from './frontOfficeCuts';
+import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal, tradeRefusal } from './frontOfficeCuts';
 
 /**
  * NBA Front Office engine (2026-08-05). Basketball sibling of
@@ -305,6 +305,8 @@ export function nbaTrade(
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
   if (!mine || !theirs || my.players.length <= 8 || their.players.length <= 8) return 'invalid';
+  /* Round 631: nobody comes back the season he was cut, by trade either. */
+  if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   // Round 82: NBA style salary matching. Over-cap teams can still trade when
   // the money roughly lines up (the old room-only check made every trade
   // between capped-out rosters invalid, which killed the whole trade screen).
@@ -331,6 +333,8 @@ export function nbaExecuteTalksTrade(
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
   if (!mine || !theirs || my.players.length <= 8 || their.players.length <= 8) return 'invalid';
+  /* Round 631: nobody comes back the season he was cut, by trade either. */
+  if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   if (addPick && !my.picks.length) return 'invalid';
   const fitsMe = nbaCapRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
   const fitsThem = nbaCapRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;

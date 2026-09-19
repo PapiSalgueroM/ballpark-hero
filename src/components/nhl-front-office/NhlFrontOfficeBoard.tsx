@@ -14,7 +14,7 @@ import {
   ensureNhlLeagueIds, NHL_ROSTER_MIN, NHL_ROSTER_MAX,
 } from '@/lib/nhlFrontOffice';
 /* Round 631: waiving a man costs dead money and he cannot come back this season. */
-import { deadMoneyFor, deadCapUsed, signRefusal } from '@/lib/frontOfficeCuts';
+import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, rosterFullRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
 /* Round 531: the cap on screen says which day its figure was read. */
 import { capNote } from '@/lib/leagueCaps';
 import { leagueNames } from '@/lib/foNames';
@@ -51,6 +51,8 @@ type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
 type Tab = 'team' | 'market' | 'trade' | 'round' | 'standings';
 
 const SAVE_KEY = 'nhl-front-office-save-v1';
+/* Round 631: what the market and the trade screen say about a man you let go this season. */
+const CUT_SAID = 'You waived him this season.';
 
 const NHL_WORDS: FoSportWords = { title: 'the Stanley Cup', playoffs: 'the playoffs', round: 'a series', games: 80 };
 
@@ -680,6 +682,9 @@ export default function NhlFrontOfficeBoard() {
   const openPanel = (key: FoPanelKey) => { setCutArmed(null); setTab(key === 'play' ? 'round' : key); };
   /* Round 631: dead money on the cap line, only when there is any. */
   const dead = deadCapUsed(my);
+  /* Round 631: at the engine's floor every Waive waits, at its ceiling every Sign does, and both say why. */
+  const cutBlock = cutRefusal(my, NHL_ROSTER_MIN);
+  const fullBlock = rosterFullRefusal(my, NHL_ROSTER_MAX);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
 
   return (
@@ -728,6 +733,7 @@ export default function NhlFrontOfficeBoard() {
             {dead > 0 && <> · dead money <b className="text-destructive">${dead}M</b></>}
           </p>
           <p className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}</p>
+          {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => {
               /* Round 631: the cost is on screen before the second tap. */
@@ -744,8 +750,9 @@ export default function NhlFrontOfficeBoard() {
                   <b className="text-primary">{p.ovr}</b>
                   <button
                     onClick={() => setCutArmed(arming ? null : p.id)}
-                    title={`Waive him and $${cost.now}M stays on this season's cap`}
-                    className={cn('rounded-full border border-border px-2 py-0.5 text-[10px]',
+                    disabled={!!cutBlock}
+                    title={cutBlock ?? `Waive him and $${cost.now}M stays on this season's cap`}
+                    className={cn('rounded-full border border-border px-2 py-0.5 text-[10px] disabled:opacity-40',
                       arming ? 'text-foreground' : 'text-muted-foreground hover:border-destructive hover:text-destructive')}
                   >
                     {arming ? 'Keep' : `Waive, $${cost.now}M dead`}
@@ -784,11 +791,12 @@ export default function NhlFrontOfficeBoard() {
       {tab === 'market' && (
         <div className="rounded-2xl border border-border bg-card p-3">
           <p className="mb-2 text-center text-xs text-muted-foreground">Free agents (cap space ${room}M). A man you waived waits until next season.</p>
+          {fullBlock && <p data-sign-block className="mb-2 text-center text-[10px] text-destructive">{fullBlock}</p>}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...league.freeAgents].sort((a, b) => b.ovr - a.ovr).slice(0, 20).map(p => {
               /* Round 631: the engine's own refusal, so the button is never
                  live when pressing it would do nothing. */
-              const refusal = signRefusal(my, p.id, 'You waived him this season.');
+              const refusal = signRefusal(my, p.id, CUT_SAID);
               return (
               <div key={p.id} data-fa-row={p.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
                 <span className="min-w-0">
@@ -798,7 +806,7 @@ export default function NhlFrontOfficeBoard() {
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
                   <b className="text-primary">{p.ovr}</b>
-                  <button onClick={() => doSign(p.id)} disabled={p.salary > room || !!refusal} title={refusal ?? undefined} className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40">Sign</button>
+                  <button onClick={() => doSign(p.id)} disabled={p.salary > room || !!refusal || !!fullBlock} title={refusal ?? fullBlock ?? undefined} className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40">Sign</button>
                 </span>
               </div>
               );
@@ -872,12 +880,19 @@ export default function NhlFrontOfficeBoard() {
                 </div>
                 <div className="space-y-1">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You get ({tradePartner})</p>
-                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
-                    <div key={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
-                      <span className="truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
-                      <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
+                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => {
+                    /* Round 631: the trade paths refuse a man you let go this season, so the screen says so. */
+                    const back = tradeRefusal(my, p.id, CUT_SAID);
+                    return (
+                    <div key={p.id} data-trade-row={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
+                      <span className="min-w-0">
+                        <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
+                        {back && <span className="block text-[9px] text-destructive">{back}</span>}
+                      </span>
+                      <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece || !!back} title={back ?? undefined} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
                     </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             </>
