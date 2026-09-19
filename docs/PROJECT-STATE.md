@@ -1,5 +1,33 @@
 # Project state
 
+## LIVE 2026-09-19: everything on main since Round 616, main `32012b2c`
+
+**douknowball.com is serving it.** Deployment `73e62cdc-c880-44bf-a499-7cb645f9f761`, called by the
+Claude desktop lane at about 05:53 UTC only after `get_project` showed `latest_commit_sha`
+`32012b2c`. The entry moved from `index-jZ501OVb.js` (deployment `b034db02`, the 611, 612 and 616
+publish of 2026-09-15) to `index-d4nq1olf.js`, serving by 05:55:47 UTC. Nothing had been published
+to the main domain for four days while main took on two lanes' releases; the owner's instruction on
+2026-09-19 was to push things live.
+
+**What this publish carries, everything that landed on main between `b528bda1` and `32012b2c`:**
+Codex's combined release (Rounds 586, 587, 588, 603, 604 and 605, PR 96, until now only on the
+alternate host), and the desktop Claude lane's Rounds 617, 618, 626, 619, 628, 629 and 630. The
+tree was gated before landing (see the 2026-09-17 section below); the three commits after that gate
+(`a8820b71`, `90c5c6f7`, `32012b2c`) touch only `scripts/` and `docs/`, confirmed with
+`git diff --stat 0d6db0bd 32012b2c -- src public index.html package.json supabase/functions`
+coming back empty, and tsc was 0 on `32012b2c` in the CRLF gate clone before the call.
+
+**Proof read from the live site after the entry moved:** the entry bundle references
+`FightCareer-KQwigK79.js`, `FightGym-D1AHkjUZ.js` and `FightPromoter-DuMxt0-R.js` (620, 625, 627);
+`ContractsCard-CSsFGsky.js` carries "You let him go" (619's released man label) and
+`clubManager-BJZ6TQzH.js` carries the `severance` save key; `/whats-new/` carries the Fight
+Career, Fight Gym, Fight Promoter and free agent entries; `/fight-career/` serves its own title.
+IndexNow accepted all 151 sitemap URLs (HTTP 200) with the key file verified live.
+
+**Not in it:** Round 633, the Club Manager season score rebuild from the claude.ai/code lane (draft
+PR 103, `b826caec`, 23 commits ahead of main). It is being gated and adversarially reviewed by the
+desktop lane and lands separately if it holds.
+
 ## ROUNDS 619 AND 628 TO 630 ON MAIN 2026-09-17: landed after a review that found 28 real defects past green gates
 
 Landed together as `release-619-630`, built in a fresh CRLF clone (`C:\Users\antho\dukb-gate`)

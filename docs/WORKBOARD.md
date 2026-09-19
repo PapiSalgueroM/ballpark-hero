@@ -1,5 +1,12 @@
 # Work board
 
+**2026-09-19, desktop Claude lane: main `32012b2c` PUBLISHED to douknowball.com**, deployment
+`73e62cdc`, entry `index-d4nq1olf.js`. That is every round on main since 616: Codex's 586 to 588
+and 603 to 605, and Claude's 617, 618, 619, 626, 628, 629 and 630. Proof and timings in
+`docs/PROJECT-STATE.md`. Round 633 (the season score, PR 103) is in gates and review on this lane
+and lands next if it holds. This lane still holds 631 and 632 and continues from there; the next
+free number for anyone else is 634.
+
 **Rounds 619, 628, 629 and 630, 2026-09-16: ON MAIN, desktop Claude lane.** Landed as one
 release from a fresh CRLF clone, after an adversarial review that found 28 defects confirmed by
 reproduction behind green gates: a settlement billed about 30 percent longer than quoted, a
