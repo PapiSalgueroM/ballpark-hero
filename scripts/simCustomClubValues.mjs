@@ -156,7 +156,8 @@ import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CUSTOM_VALUE_CONTROL || '';
-const KNOWN = ['rawcurve', 'noload', 'realtoo', 'nosalecap', 'capall', 'tightcap'];
+const KNOWN = ['rawcurve', 'noload', 'realtoo', 'nosalecap', 'capall', 'tightcap',
+  'halfcap', 'stingycap', 'overprice', 'noerabake', 'stickycap', 'noresale'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.log(`   FAIL unknown control ${CONTROL} (known: ${KNOWN.join(', ')})`);
   process.exit(1);
@@ -174,13 +175,21 @@ const PRISTINE = fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf
 
 const VALUE_LINE = '      value: customFounderValue(rating, eraId),\n';
 const OLD_VALUE_LINE = '      value: preRound640FounderValue(rating, age),\n';
-const LOAD_LINE = '      ensureCustomClubValues(parsed);\n';
+const LOAD_LINE = '      const repriced = ensureCustomClubValues(parsed);\n';
+const NO_LOAD = '      const repriced = false;\n';
 const MARK_LINE = '    state.customValues = CUSTOM_VALUES_VERSION;\n';
 const REAL_LINE = '  if (!p.generated || p.isYouth || p.academyGrad) return null;\n';
-const SALE_CAP_LINE = '    const worth = p.founderSaleCap !== undefined ? Math.min(p.value, p.founderSaleCap) : p.value;\n';
-const FOUNDER_CAP_LINE = '      founderSaleCap: customFounderValue(ceilingRating, eraId),\n';
-const CAP_FLOOR_LINE = '  if (custom) state.wageCap = Math.max(state.wageCap, realCapForBudget(club.budget));\n';
-const CAP_LOAD_LINE = '      ensureCustomClubWageCap(parsed);\n';
+const SALE_CAP_LINE = '    const worth = p.founderSaleRatio !== undefined ? p.value * p.founderSaleRatio : p.value;\n';
+const FOUNDER_CAP_LINE = '    if (aboveCeiling && saleRatio < 1) founder.founderSaleRatio = saleRatio;\n';
+const CAP_FLOOR_LINE = '  if (custom) state.wageCap = Math.max(state.wageCap, realCapForBudget(club.budget) + (state.founderWageRoom ?? 0));\n';
+const ROOM_AT_FOUNDING = '  if (custom) state.founderWageRoom = foundersWageRoom(state) || undefined;\n';
+const ROOM_AT_SUMMER = '  state.founderWageRoom = roomNow || undefined;\n';
+const CAP_LOAD_LINE = '      if (repriced) ensureCustomClubWageCap(parsed);\n';
+const PRICE_LINE = '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(eraBakeRating(eraId, rating)) * 10) / 10);\n';
+const LINE_K = 'export const REAL_CAP_PER_BUDGET_K = 37.13;\n';
+const ROLLOVER_CAP = '    : nextWageCap(Math.max(60, (career.wageCap ?? wageCapFrom(wageBill(career))) - (career.founderWageRoom ?? 0)), club.expectation, prevPos, seasonTrophyCount) + roomNow;\n';
+const OLD_ROLLOVER_CAP = '    : nextWageCap(career.wageCap ?? wageCapFrom(wageBill(career)), club.expectation, prevPos, seasonTrophyCount);\n';
+const FOUNDER_RESCALE = '    rescaleSaleFigures(state, p.id, oldSell, sellValue(p), loan);\n  };\n  for (const p of state.squad ?? []) reprice(p);\n';
 
 /* Every rewrite asserts its anchor exactly once, or the run stops: a control
    that matches nothing leaves the harness green for the wrong reason. */
@@ -196,7 +205,7 @@ function rewrite(src, anchor, replacement, why) {
 
 let live = PRISTINE;
 if (CONTROL === 'rawcurve') live = rewrite(live, VALUE_LINE, OLD_VALUE_LINE, 'control rawcurve');
-if (CONTROL === 'noload') live = rewrite(live, LOAD_LINE, '', 'control noload');
+if (CONTROL === 'noload') live = rewrite(live, LOAD_LINE, NO_LOAD, 'control noload');
 if (CONTROL === 'realtoo') {
   live = rewrite(live, REAL_LINE,
     '  if (!p.generated && !p.isYouth) return p;\n  if (p.isYouth || p.academyGrad) return null;\n', 'control realtoo');
@@ -211,14 +220,35 @@ if (CONTROL === 'capall') {
 if (CONTROL === 'tightcap') {
   live = rewrite(rewrite(live, CAP_FLOOR_LINE, '', 'control tightcap, founding'), CAP_LOAD_LINE, '', 'control tightcap, load');
 }
+/* The budget's cap line at half what real clubs run. */
+if (CONTROL === 'halfcap') live = rewrite(live, LINE_K, 'export const REAL_CAP_PER_BUDGET_K = 18.565;\n', 'control halfcap');
+/* A sale ratio half what the money bought, below the squad the tier buys. */
+if (CONTROL === 'stingycap') {
+  live = rewrite(live, FOUNDER_CAP_LINE, '    if (aboveCeiling && saleRatio < 1) founder.founderSaleRatio = saleRatio * 0.5;\n', 'control stingycap');
+}
+/* Founders priced 25 percent over the market. */
+if (CONTROL === 'overprice') {
+  live = rewrite(live, PRICE_LINE, '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(eraBakeRating(eraId, rating)) * 1.25 * 10) / 10);\n', 'control overprice');
+}
+/* A historic founder priced by his engine rating, the era's uplift not taken back. */
+if (CONTROL === 'noerabake') {
+  live = rewrite(live, PRICE_LINE, '  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(rating) * 10) / 10);\n', 'control noerabake');
+}
+/* The summer moves the whole cap on, founders' room and all, as before the review. */
+if (CONTROL === 'stickycap') live = rewrite(live, ROLLOVER_CAP, OLD_ROLLOVER_CAP, 'control stickycap');
+/* The repricing moves the founders but leaves bids, clauses and loan options on the old money. */
+if (CONTROL === 'noresale') live = rewrite(live, FOUNDER_RESCALE, '  };\n  for (const p of state.squad ?? []) reprice(p);\n', 'control noresale');
 if (CONTROL) console.log(`   [control ${CONTROL} applied to an in memory copy of the engine]`);
 /* The engine as it stood before Round 640: the full curve at creation, no
    repricing on load, no version mark on a new created club, no founder sale
-   cap, and the bill based cap only. The slider was free then and is free now. */
+   ratio, the bill based cap only and the summer cap as it was. The slider
+   was free then and is free now. */
 let pre = PRISTINE;
 for (const [anchor, to, why] of [
-  [VALUE_LINE, OLD_VALUE_LINE, 'creation value'], [LOAD_LINE, '', 'load repricing'], [MARK_LINE, '', 'version mark'],
-  [FOUNDER_CAP_LINE, '', 'founder sale cap'], [CAP_FLOOR_LINE, '', 'cap floor'], [CAP_LOAD_LINE, '', 'cap floor on load'],
+  [VALUE_LINE, OLD_VALUE_LINE, 'creation value'], [LOAD_LINE, NO_LOAD, 'load repricing'], [MARK_LINE, '', 'version mark'],
+  [FOUNDER_CAP_LINE, '', 'founder sale ratio'], [CAP_FLOOR_LINE, '', 'cap floor'], [CAP_LOAD_LINE, '', 'cap floor on load'],
+  [ROLLOVER_CAP, OLD_ROLLOVER_CAP, 'summer cap'], [ROOM_AT_FOUNDING, '', 'founders room at the founding'],
+  [ROOM_AT_SUMMER, '', 'founders room at the summer'],
 ]) pre = rewrite(pre, anchor, to, `pre round engine, ${why}`);
 /* Section 4's second pair of copies. generateIncomingBids picks who gets an
    unsolicited bid from the eight most VALUABLE men rated 74 or more, and a man
@@ -346,33 +376,49 @@ console.log(`simCustomClubValues: seed base ${SEED_BASE}${CONTROL ? `, control $
 /* ================================================================== */
 section = 1;
 console.log('1) a created squad is worth what the real squads of its level in its league are worth');
-/* Measured over four seeds (see the header): a head, p10 0.76 to 0.81 and p90
-   1.39 to 1.45, so the band leaves 0.26 below the worst p10 and 0.55 above the
-   worst p90; man by man, p10 0.87 to 0.90 and p90 1.02 to 1.03, so 0.12 below
-   and 0.27 above. The full curve sits at 8 and more on both. */
-const BAND_LO = 0.5;
-const BAND_HI = 2.0;
-const MAN_LO = 0.75;
-const MAN_HI = 1.3;
+/* Measured over four seeds (see the header). A head: p10 0.75 to 0.81, p50
+   0.92 to 1.00, p90 1.39 to 1.45. Man by man: p10 0.87 to 0.90, p50 0.95 to
+   0.96, p90 1.00 to 1.03. The bands leave that headroom and no more than it
+   needs: founders priced 25 percent over the market (control overprice) move
+   the man by man median to about 1.19 and the p90s to about 1.29 and 1.8, all
+   outside, and the full curve sits at 8 and more. */
+const BAND_P10 = 0.6;
+const BAND_P50 = [0.8, 1.15];
+const BAND_P90 = 1.65;
+const MAN_P10 = 0.8;
+const MAN_P50 = [0.88, 1.08];
+const MAN_P90 = 1.15;
+/* The top of the historic eras: measured in the header; noerabake (a founder
+   priced by his uplifted engine rating in the era's money) reads 2 and more. */
+const TOP_P50 = [0.7, 1.4];
+/* Every real club's day one budget and cap, for section 5's line check. */
+const realCaps = [];
 {
   const realOf = new Map();
   /* And every real player's value by era, rating and age band, for the man by
-     man comparison (the raw curve's own age bands). */
+     man comparison (the raw curve's own age bands), and by era and rating for
+     the top end of the historic eras. */
   const ageBand = (a) => (a <= 21 ? 0 : a <= 24 ? 1 : a <= 28 ? 2 : a <= 31 ? 3 : a <= 34 ? 4 : 5);
   const realByRating = new Map();
+  const realByEraRating = new Map();
   for (const era of ERAS) for (const lg of leaguesOf(era)) {
     realOf.set(`${era}|${lg.id}`, clubsOf(era, lg.id).map((club) => {
       const st = seeded(`s1real|${era}|${club}`, () => cm.startCareer(club, era));
+      realCaps.push({ era, club, budget: st.budget, cap: st.wageCap });
       const real = st.squad.filter(p => !p.isYouth && !p.generated);
       for (const p of real) {
         const k = `${era}|${p.rating}|${ageBand(p.age)}`;
         if (!realByRating.has(k)) realByRating.set(k, []);
         realByRating.get(k).push(p.value);
+        const e = `${era}|${p.rating}`;
+        if (!realByEraRating.has(e)) realByEraRating.set(e, []);
+        realByEraRating.get(e).push(p.value);
       }
       return { club, mean: meanR(real), head: perHead(real) };
     }));
   }
   const manByMan = [];
+  const topEnd = [];
   const ratios = [];
   const byCfg = {};
   let squads = 0;
@@ -391,6 +437,12 @@ const MAN_HI = 1.3;
             if (p.value !== cm.customFounderValue(p.rating, era)) wrongValue += 1;
             const same = realByRating.get(`${era}|${p.rating}|${ageBand(p.age)}`) ?? [];
             if (same.length >= 8) manByMan.push(p.value / median(same));
+            /* Historic founders above the uplift pivot, against the era's real
+               players the engine rates within a point of him. */
+            if (era !== 'now' && p.rating > 80) {
+              const near = [-1, 0, 1].flatMap(d => realByEraRating.get(`${era}|${p.rating + d}`) ?? []);
+              if (near.length >= 3) topEnd.push(p.value / median(near));
+            }
           }
           const m = meanR(f);
           const near = realOf.get(`${era}|${lg.id}`).filter(r => Math.abs(r.mean - m) <= 2);
@@ -402,31 +454,40 @@ const MAN_HI = 1.3;
       }
     }
   }
+  const inBand = (x, [lo, hi]) => x >= lo && x <= hi;
   console.log(`   ${squads} created squads (${founderCount} founders), ${ratios.length} with a real squad of the same league within two rating points`);
   console.log(`   value a head over the real squads': ${Object.entries(byCfg).map(([k, v]) => `${k} p50 ${f2(median(v))} (${v.length})`).join(', ')}`);
   console.log(`   no real squad that close in the league: ${Object.entries(noMatch).map(([k, v]) => `${k} ${v}`).join(', ') || 'none'}`);
   console.log(`   pooled p10 ${f2(pct(ratios, 0.1))}, p50 ${f2(median(ratios))}, p90 ${f2(pct(ratios, 0.9))}`);
   if (ratios.length < 150) fail(`only ${ratios.length} created squads had a real squad to compare with, too few to read a p10 and a p90`);
-  else if (!(pct(ratios, 0.1) >= BAND_LO && pct(ratios, 0.9) <= BAND_HI)) {
-    fail(`a created squad's value a head runs p10 ${f2(pct(ratios, 0.1))} to p90 ${f2(pct(ratios, 0.9))} of the real squads of its level, outside ${BAND_LO} to ${BAND_HI}`);
-  } else ok(`a created squad's value a head runs p10 ${f2(pct(ratios, 0.1))} to p90 ${f2(pct(ratios, 0.9))} of the real squads of its level in its league, inside ${BAND_LO} to ${BAND_HI}`);
+  else if (!(pct(ratios, 0.1) >= BAND_P10 && inBand(median(ratios), BAND_P50) && pct(ratios, 0.9) <= BAND_P90)) {
+    fail(`a created squad's value a head runs p10 ${f2(pct(ratios, 0.1))}, p50 ${f2(median(ratios))}, p90 ${f2(pct(ratios, 0.9))} of the real squads of its level, outside p10 ${BAND_P10}, p50 ${BAND_P50.join(' to ')}, p90 ${BAND_P90}`);
+  } else ok(`a created squad's value a head runs p10 ${f2(pct(ratios, 0.1))}, p50 ${f2(median(ratios))}, p90 ${f2(pct(ratios, 0.9))} of the real squads of its level in its league (bands p10 ${BAND_P10}, p50 ${BAND_P50.join(' to ')}, p90 ${BAND_P90})`);
   console.log(`   man by man, ${manByMan.length} founders against the median real player of the same era, rating and age band (8 or more of them): p10 ${f2(pct(manByMan, 0.1))}, p50 ${f2(median(manByMan))}, p90 ${f2(pct(manByMan, 0.9))}`);
   if (manByMan.length < 3000) fail(`only ${manByMan.length} founders had 8 real players of their era, rating and age band to compare with`);
-  else if (!(pct(manByMan, 0.1) >= MAN_LO && pct(manByMan, 0.9) <= MAN_HI)) {
-    fail(`a founder is worth p10 ${f2(pct(manByMan, 0.1))} to p90 ${f2(pct(manByMan, 0.9))} of the real players of his era, rating and age band, outside ${MAN_LO} to ${MAN_HI}`);
-  } else ok(`a founder is worth p10 ${f2(pct(manByMan, 0.1))} to p90 ${f2(pct(manByMan, 0.9))} of the real players of his era, rating and age band, inside ${MAN_LO} to ${MAN_HI}`);
+  else if (!(pct(manByMan, 0.1) >= MAN_P10 && inBand(median(manByMan), MAN_P50) && pct(manByMan, 0.9) <= MAN_P90)) {
+    fail(`a founder is worth p10 ${f2(pct(manByMan, 0.1))}, p50 ${f2(median(manByMan))}, p90 ${f2(pct(manByMan, 0.9))} of the real players of his era, rating and age band, outside p10 ${MAN_P10}, p50 ${MAN_P50.join(' to ')}, p90 ${MAN_P90}`);
+  } else ok(`a founder is worth p10 ${f2(pct(manByMan, 0.1))}, p50 ${f2(median(manByMan))}, p90 ${f2(pct(manByMan, 0.9))} of the real players of his era, rating and age band (bands p10 ${MAN_P10}, p50 ${MAN_P50.join(' to ')}, p90 ${MAN_P90})`);
+  console.log(`   the top of the past eras, ${topEnd.length} founders rated over 80 against the era's real players the engine rates within a point of him (3 or more): p10 ${f2(pct(topEnd, 0.1))}, p50 ${f2(median(topEnd))}, p90 ${f2(pct(topEnd, 0.9))}`);
+  if (topEnd.length < 200) fail(`only ${topEnd.length} historic founders over 80 had real players of their engine rating to compare with`);
+  else if (!inBand(median(topEnd), TOP_P50)) fail(`a historic founder over 80 is worth ${f2(median(topEnd))} of the era's real players of his engine rating at the median, outside ${TOP_P50.join(' to ')}: the era's uplift is not being taken back before he is priced`);
+  else ok(`a historic founder over 80 is worth ${f2(median(topEnd))} of the era's real players of his engine rating at the median, inside ${TOP_P50.join(' to ')}, so the uplift is taken back before he is priced (eraBakeRating)`);
   if (founderCount < 5000) fail(`only ${founderCount} founders measured`);
   else if (wrongValue) fail(`${wrongValue} of ${founderCount} founders were not created carrying customFounderValue for their rating and era`);
-  else ok(`all ${founderCount} founders were created carrying customFounderValue for their rating and era`);
+  else ok(`all ${founderCount} founders were created carrying customFounderValue for their rating and era (the engine against its own function: this catches a creation path that skips the rule, not a wrong rule; the three checks above test the rule against real players)`);
 
   /* A squad founded above what its money buys is exactly as good, as valuable
-     and as dear as it would have been: the sale cap touches the sale and
+     and as dear as it would have been: the sale ratio touches the sale and
      nothing else. Every tier in every era, just above its ceiling, a few
-     points above, and at 88; each founder against the same founding on the
-     engine as it stood before the round (the rating the slider gave him then),
-     against customFounderValue for that rating (his honest value), and against
-     wageFor on that honest value (his honest wage). Counted only where the cap
-     binds, so the check cannot pass on men it never capped. */
+     points above, and at 88. The men it binds are found without reading the
+     ratio (whose honest value is above the same man's in the founding at the
+     ceiling), so a rule that also cut the value cannot hide by dropping the
+     ratio. Each against the same founding on the engine as it stood before the
+     round (the rating the slider gave him then), against customFounderValue
+     for that rating (his honest value) and against wageFor on that value (his
+     honest wage). The last two are the engine against its own functions: they
+     catch the cap reaching the value or the wage (control capall), not a
+     wrong price, which the checks above own. */
   let capped = 0;
   let movedByCap = 0;
   let foundings = 0;
@@ -440,12 +501,14 @@ const MAN_HI = 1.3;
         const spec = specOf(name, { budgetTier: tier, quality: q }, lg);
         const st = seeded(`s1cap|${era}|${tier}|${q}`, () => cm.startCareer(name, era, spec));
         const was = seeded(`s1cap|${era}|${tier}|${q}`, () => old.startCareer(name, era, spec));
+        const atCeiling = new Map(cm.buildCustomSquad({ ...spec, quality: ceiling }, era).map(p => [p.id, p]));
         const before = new Map(was.squad.map(p => [p.id, p]));
         foundings += 1;
         for (const p of founders(st)) {
-          if (!(p.founderSaleCap < p.value) && !(p.founderSaleCap < cm.customFounderValue(p.rating, era))) continue;
-          capped += 1;
           const honest = cm.customFounderValue(p.rating, era);
+          const c = atCeiling.get(p.id);
+          if (!c || !(c.value < honest)) continue;
+          capped += 1;
           const b = before.get(p.id);
           const wage = cm.wageFor({ ...p, value: honest });
           if (!b || b.rating !== p.rating || p.value !== honest || p.wage !== wage) {
@@ -456,10 +519,10 @@ const MAN_HI = 1.3;
       }
     }
   }
-  console.log(`   ${foundings} foundings above their tier's ceiling, ${capped} founders whose sale cap binds; ${movedByCap} of them moved in rating, value or wage${firstMoved.length ? `, first: ${firstMoved[0]}` : ''}`);
-  if (capped < 300) fail(`only ${capped} founders had a binding sale cap, too few to say the cap leaves them alone`);
-  else if (movedByCap) fail(`${movedByCap} of ${capped} capped founders lost rating, value or wage to the cap; it may only touch what they sell for`);
-  else ok(`all ${capped} capped founders keep the rating the slider gave them, their honest value and their honest wage`);
+  console.log(`   ${foundings} foundings above their tier's ceiling, ${capped} founders worth more than the same man at the ceiling; ${movedByCap} of them moved in rating, value or wage${firstMoved.length ? `, first: ${firstMoved[0]}` : ''}`);
+  if (capped < 300) fail(`only ${capped} founders above their tier's ceiling, too few to say the ratio leaves them alone`);
+  else if (movedByCap) fail(`${movedByCap} of ${capped} founders above the ceiling lost rating, value or wage to the sale ratio; it may only touch what they sell for`);
+  else ok(`all ${capped} founders above the ceiling keep the rating the slider gave them, their honest value and their honest wage`);
 }
 
 /* ================================================================== */
@@ -469,17 +532,21 @@ console.log('2) selling the founders never pays more than their tier\'s money al
    the tier's budget over four seeds, 0.41 of headroom. */
 const GAIN_BOUND = 1.0;
 /* Every slider setting on every tier: a squad at the tier's ceiling is what a
-   real club with that budget holds, and above the ceiling its founders sell
-   for what they would at the ceiling, so it may sell for what a real club with
-   that budget sells for. The same sell off on 66 real clubs inside the budget
-   clamp (all four eras) banks p50 2.69 and p90 3.31 of their own budget, 3.85
-   in the 60m to 120m band; the bound sits on the top of those. The squad's
-   sale ceiling (every founder at the lower of his value and his cap) is held
-   to budget / 0.16, the rule, with the name wobble's headroom. Measured over
-   four seeds: p90 2.73 to 2.91 above the ceiling (1.09 of headroom) against
-   14.99 with no sale cap, and a sale ceiling of 0.97 to 0.98. */
-const SLIDER_BOUND = 4.0;
+   real club with that budget holds, and above the ceiling its founders sell at
+   the ceiling squad's prices, so it may sell for what a real club with that
+   budget sells for. That figure is measured here, on real clubs inside the
+   budget clamp doing the same sell off (REAL_SELL_OFF), and the bound is its
+   p90 times SLIDER_HEADROOM: the created settings measure 0.8 to 0.9 of the
+   real p90 over four seeds, and the real p90 itself moves about 10 percent
+   seed to seed. The squad's sale ceiling (every founder at his value times his
+   ratio) is held to budget / 0.16, the rule, with the name wobble's headroom,
+   and each above ceiling founder's sale basis to the same man's value in the
+   squad founded at the ceiling (a separate founding, not the ratio read back),
+   from both sides: a ratio below that (control stingycap) withholds money the
+   tier's own money bought. */
+const SLIDER_HEADROOM = 1.2;
 const WORTH_BOUND = 1.15;
+const BASIS_BAND = [0.95, 1.05];
 {
   const LEAGUES = {
     now: ['premier', 'championship', 'laliga', 'eredivisie', 'scottish', 'mlsEast'],
@@ -487,23 +554,27 @@ const WORTH_BOUND = 1.15;
     era2010: ['premier2010', 'laliga2010'],
     era2005: ['premier2005', 'laliga2005'],
   };
-  /* List every founder at the founding, take every bid the squad floor allows
-     through the summer window, against the same career (same seed) selling
-     nobody. The budget difference is what the founders sold for. */
-  const sellOff = (key, era, spec) => {
+  /* List every founder (or, at a real club, every man) at the founding, take
+     every bid the squad floor allows through the summer window, against the
+     same career (same seed) selling nobody. The budget difference is what the
+     squad sold for. */
+  const sellOffOf = (key, make, who) => {
     const arm = (sell) => seeded(key, () => {
-      let st = cm.startCareer(spec.name, era, spec);
-      /* What the squad could be cashed out for at most: every founder at the
-         lower of his value and his sale cap. */
-      const worth = founders(st).reduce((s, p) => s + Math.min(p.value, p.founderSaleCap ?? Infinity), 0);
+      let st = make();
+      const listed = who(st);
+      /* What the squad could be cashed out for at most: every founder at his
+         value times his sale ratio. */
+      const worth = listed.reduce((s, p) => s + (p.value ?? 0) * (p.founderSaleRatio ?? 1), 0);
       const quality = st.customClub?.quality;
-      /* And whether sellValue honours the cap, man by man, on day one, for
-         every founder whose honest price is above his cap. */
-      const binds = (p) => p.founderSaleCap !== undefined && p.founderSaleCap < cm.customFounderValue(p.rating, era);
-      const over = founders(st).filter(p => binds(p)
-        && cm.sellValue(p) > Math.max(0.3, Math.round(p.founderSaleCap * 0.9 * 10) / 10)).length;
-      const bound = founders(st).filter(binds).length;
-      const ids = new Set(founders(st).map(p => p.id));
+      /* And whether sellValue pays the ratio, man by man, on day one. The
+         engine against its own rule: this catches a sale path that ignores
+         the ratio (control nosalecap), not a wrong ratio, which the basis
+         check and the sell off below own. */
+      const binds = (p) => p.founderSaleRatio !== undefined && p.founderSaleRatio < 1;
+      const over = listed.filter(p => binds(p)
+        && cm.sellValue(p) > Math.max(0.3, Math.round(p.value * p.founderSaleRatio * 0.9 * 10) / 10)).length;
+      const bound = listed.filter(binds).length;
+      const ids = new Set(listed.map(p => p.id));
       if (sell) for (const id of ids) st = cm.setTransferStatus(st, id, 'listed');
       let n = 0;
       let guard = 0;
@@ -522,6 +593,25 @@ const WORTH_BOUND = 1.15;
     const b = arm(false);
     return { gain: a.budget - b.budget, n: a.n, worth: a.worth, quality: a.quality, over: a.over, bound: a.bound };
   };
+  const sellOff = (key, era, spec) => sellOffOf(key, () => cm.startCareer(spec.name, era, spec), founders);
+
+  /* The real baseline: every third real club of every era whose budget sits
+     inside the 8m to 200m clamp (outside it the budget is not 0.16 of the
+     squad), the whole squad listed. */
+  const realShare = [];
+  let realSold = 0;
+  for (const era of ERAS) {
+    const pool = realCaps.filter(r => r.era === era && r.budget > 8 && r.budget < 200);
+    pool.filter((_, i) => i % 3 === SEED_BASE % 3).forEach((r) => {
+      const res = sellOffOf(`s2real|${era}|${r.club}`, () => cm.startCareer(r.club, era), st => st.squad);
+      realShare.push(res.gain / r.budget);
+      realSold += res.n;
+    });
+  }
+  const REAL_SELL_OFF = pct(realShare, 0.9);
+  const SLIDER_BOUND = Math.round(REAL_SELL_OFF * SLIDER_HEADROOM * 100) / 100;
+  console.log(`   real baseline: ${realShare.length} real clubs inside the budget clamp, ${realSold} sold; gain / own budget p50 ${f2(median(realShare))}, p90 ${f2(REAL_SELL_OFF)}; bound ${SLIDER_HEADROOM} x that = ${f2(SLIDER_BOUND)}`);
+  if (realShare.length < 40) fail(`only ${realShare.length} real clubs in the baseline`);
 
   /* (a) the tiers' own squads and the form's default setting. */
   const S2 = CONFIGS.filter(c => ['small', 'mid', 'big', 'q66'].includes(c.tag));
@@ -553,10 +643,12 @@ const WORTH_BOUND = 1.15;
 
   /* (b) every slider setting on every tier, in every era, 55 to 88, 88 on the
      smallest budget included. The league turns over with the setting and the
-     name with the seed. */
+     name with the seed. Above the ceiling, each founder's sale basis against
+     the same man in a founding at the ceiling. */
   const all = [];
   const above = [];
   const worthShare = [];
+  const basis = [];
   const byTier = {};
   let settings = 0;
   let aboveSettings = 0;
@@ -572,13 +664,21 @@ const WORTH_BOUND = 1.15;
         const i = q - 55;
         const name = NAMES[(i + SEED_BASE) % NAMES.length];
         const lg = lgs[(i * 7 + SEED_BASE) % lgs.length];
-        const r = sellOff(`s2b|${era}|${tier}|${q}|${name}`, era, specOf(name, { budgetTier: tier, quality: q }, lg));
+        const spec = specOf(name, { budgetTier: tier, quality: q }, lg);
+        const r = sellOff(`s2b|${era}|${tier}|${q}|${name}`, era, spec);
         const s = r.gain / TIERS[tier];
         all.push(s);
         if (q > ceiling) {
           above.push(s);
           aboveSettings += 1;
           worthShare.push(r.worth / (TIERS[tier] / 0.16));
+          const st = seeded(`s2basis|${era}|${tier}|${q}`, () => cm.startCareer(name, era, spec));
+          const atCeiling = new Map(cm.buildCustomSquad({ ...spec, quality: ceiling }, era).map(p => [p.id, p]));
+          for (const p of founders(st)) {
+            const c = atCeiling.get(p.id);
+            if (!c || !(c.value < p.value)) continue;
+            basis.push((p.value * (p.founderSaleRatio ?? 1)) / c.value);
+          }
         }
         if (tier === 'small' && q === 88) small88.push(s);
         (byTier[`${era} ${tier}`] ??= { ceiling, gains: [] }).gains.push(s);
@@ -593,16 +693,20 @@ const WORTH_BOUND = 1.15;
     console.log(`   ${k.padEnd(13)} ceiling ${v.ceiling}: gain / budget p50 ${f2(median(v.gains))}, p90 ${f2(pct(v.gains, 0.9))}`);
   }
   console.log(`   ${settings} settings (${aboveSettings} above their tier's ceiling), ${sold2} founders sold; gain / tier budget over all p50 ${f2(median(all))}, p90 ${f2(pct(all, 0.9))}; above the ceiling p50 ${f2(median(above))}, p90 ${f2(pct(above, 0.9))}; 88 on 15m ${small88.map(f2).join(', ')}`);
-  console.log(`   above the ceiling, the squad's sale ceiling / (tier budget / 0.16): p50 ${f2(median(worthShare))}, p90 ${f2(pct(worthShare, 0.9))} (${worthShare.length}); ${boundMen} founders with a binding cap, ${overMen} priced above it by sellValue`);
+  console.log(`   above the ceiling, the squad's sale ceiling / (tier budget / 0.16): p50 ${f2(median(worthShare))}, p90 ${f2(pct(worthShare, 0.9))} (${worthShare.length}); ${boundMen} founders with a ratio, ${overMen} priced above it by sellValue`);
+  console.log(`   above the ceiling, a founder's sale basis over the same man founded at the ceiling (${basis.length} men): p10 ${f2(pct(basis, 0.1))}, p50 ${f2(median(basis))}, p90 ${f2(pct(basis, 0.9))}`);
   if (settings < 400 || aboveSettings < 100) fail(`only ${settings} slider settings covered, ${aboveSettings} of them above a ceiling`);
   else if (!(pct(all, 0.9) <= SLIDER_BOUND && pct(above, 0.9) <= SLIDER_BOUND)) {
-    fail(`selling the founders pays p90 ${f2(pct(all, 0.9))} of the tier's budget over every setting and ${f2(pct(above, 0.9))} above the ceiling, above ${SLIDER_BOUND}, what a real club with that budget banks`);
-  } else ok(`over all ${settings} settings, selling the founders pays p90 ${f2(pct(all, 0.9))} of the tier's budget, and ${f2(pct(above, 0.9))} above the tier's ceiling, 88 on 15m included, inside the ${SLIDER_BOUND} a real club with that budget banks`);
-  if (boundMen < 1000) fail(`only ${boundMen} founders had a binding sale cap`);
-  else if (overMen) fail(`sellValue prices ${overMen} of ${boundMen} capped founders above their sale cap`);
-  else ok(`sellValue prices all ${boundMen} capped founders at or under their sale cap`);
+    fail(`selling the founders pays p90 ${f2(pct(all, 0.9))} of the tier's budget over every setting and ${f2(pct(above, 0.9))} above the ceiling, above ${f2(SLIDER_BOUND)} (${SLIDER_HEADROOM} x the ${f2(REAL_SELL_OFF)} real clubs bank)`);
+  } else ok(`over all ${settings} settings, selling the founders pays p90 ${f2(pct(all, 0.9))} of the tier's budget, and ${f2(pct(above, 0.9))} above the tier's ceiling, 88 on 15m included, inside ${f2(SLIDER_BOUND)} (${SLIDER_HEADROOM} x the ${f2(REAL_SELL_OFF)} real clubs with a budget bank, measured above)`);
+  if (boundMen < 1000) fail(`only ${boundMen} founders had a sale ratio`);
+  else if (overMen) fail(`sellValue prices ${overMen} of ${boundMen} founders above their value times their sale ratio`);
+  else ok(`sellValue prices all ${boundMen} founders with a ratio at or under their value times that ratio`);
   if (!(pct(worthShare, 0.9) <= WORTH_BOUND)) fail(`above the ceiling a founding squad can be sold for p90 ${f2(pct(worthShare, 0.9))} of what a real club with its budget holds, above ${WORTH_BOUND}`);
   else ok(`above the ceiling a founding squad can be sold for at most p90 ${f2(pct(worthShare, 0.9))} of what a real club with its budget holds (budget / 0.16), inside ${WORTH_BOUND}`);
+  if (basis.length < 1000) fail(`only ${basis.length} founders above a ceiling had a sale basis to read`);
+  else if (!(pct(basis, 0.1) >= BASIS_BAND[0] && pct(basis, 0.9) <= BASIS_BAND[1])) fail(`a founder above the ceiling sells on a basis of p10 ${f2(pct(basis, 0.1))} to p90 ${f2(pct(basis, 0.9))} of the same man founded at the ceiling, outside ${BASIS_BAND.join(' to ')}: the ratio withholds more (or less) than the slider handed out`);
+  else ok(`a founder above the ceiling sells on a basis of p10 ${f2(pct(basis, 0.1))} to p90 ${f2(pct(basis, 0.9))} of the same man founded at the ceiling, inside ${BASIS_BAND.join(' to ')}: the ratio withholds the slider's gift and nothing the money bought`);
 }
 
 /* ================================================================== */
@@ -723,15 +827,19 @@ console.log('4) a created club save written before the round loads repriced and 
      for one of them (renewalTerms prices the wage off the larger of his wage
      and what his value earns, and a season on his value has grown past his
      wage on the old footing). The quote's player, week, words and options
-     must still match; only its two amounts are masked. And the sale cap the
-     load gives each founder, which the old engine never wrote. */
+     must still match; only its two amounts are masked. And the sale ratio the
+     load gives each founder, which the old engine never wrote, and a loan's
+     buy option, which the load moves with his price (checked below). */
   const stripFounderValue = (st) => {
     const s = clone(st);
     const ids = new Set();
-    for (const p of s.squad ?? []) if (p.generated && !p.isYouth) { delete p.value; delete p.founderSaleCap; ids.add(p.id); }
-    for (const l of s.loanedOut ?? []) if (l.player?.generated) { delete l.player.value; delete l.player.founderSaleCap; }
+    for (const p of s.squad ?? []) if (p.generated && !p.isYouth) { delete p.value; delete p.founderSaleRatio; ids.add(p.id); }
+    for (const l of s.loanedOut ?? []) if (l.player?.generated) { delete l.player.value; delete l.player.founderSaleRatio; delete l.optionFee; }
+    /* A founder waiting in the free agent list is repriced too (checked below). */
+    for (const f of s.freeAgents ?? []) if (f.generated) { delete f.value; delete f.founderSaleRatio; }
     delete s.incomingBids;
     delete s.customValues;
+    delete s.founderWageRoom;
     const mask = (t) => (typeof t === 'string' ? t.replace(/£[0-9.,]+[mk]?/g, '£?').replace(/\d+k a week/g, '?k a week') : t);
     for (const m of s.inbox ?? []) {
       if (m.kind !== 'agent' || !ids.has(m.playerId)) continue;
@@ -774,14 +882,14 @@ console.log('4) a created club save written before the round loads repriced and 
       for (const p of founders(loaded)) {
         foundersOnLoad += 1;
         const t = today.get(p.id);
-        if (t && p.value === t.value && p.founderSaleCap === t.founderSaleCap) foundersRight += 1;
+        if (t && p.value === t.value && p.founderSaleRatio === t.founderSaleRatio) foundersRight += 1;
         if (p.wage !== was.get(p.id)?.wage) wagesMoved += 1;
       }
       for (const l of loaded.loanedOut ?? []) {
         if (!l.player?.generated) continue;
         loans += 1;
         const t = today.get(l.player.id);
-        if (t && l.player.value === t.value && l.player.founderSaleCap === t.founderSaleCap) loanRight += 1;
+        if (t && l.player.value === t.value && l.player.founderSaleRatio === t.founderSaleRatio) loanRight += 1;
       }
       /* Nothing but the founders' value (and the version mark) may differ. */
       if (canon(stripFounderValue(loaded)) !== canon(stripFounderValue(loadedOld))) {
@@ -881,17 +989,126 @@ console.log('4) a created club save written before the round loads repriced and 
   if (movedFounders < 60) fail(`only ${movedFounders} founders in the saves a season on`);
   else if (movedRight !== movedFounders || laterDiff) fail(`a season on, ${movedFounders - movedRight} of ${movedFounders} founders did not move by the ratio of the new creation value to the old, and ${laterDiff} of ${laterPlayed} saves played on differently`);
   else ok(`a season on, all ${movedFounders} founders moved by the ratio of the new creation value to the old, and all ${laterPlayed} saves played the next weeks exactly as the old engine did`);
+
+  /* Round 640 review: the old money a created club save can hold, and the
+     founders the first repair could not find. Written by the old engine: four
+     founders listed with the window's bids on the table, a starter renewed
+     with a clause, a young founder out on loan with his buy option, a founder
+     whose deal ran out waiting in the free agent list, and a founder the old
+     engine signed back out of that list under a free agent id. After the load
+     each figure must sit on the man's new sale price (a bid at most 1.35 x
+     1.15 of it, a clause 1.5 x, an option 1.15 x, above the engine's floors),
+     and both lost founders must carry today's creation value and ratio. On the
+     middle tier's own squad and on a slider 88 squad over it, in every era. */
+  let figures = 0;
+  const figureProblems = [];
+  let lost = 0;
+  let lostRight = 0;
+  const lostProblems = [];
+  const oldFigures = [];
+  for (const era of ERAS) {
+    for (const cfg of CONFIGS.filter(c => ['mid', 'q88'].includes(c.tag))) {
+      const lg = leaguesOf(era)[0].id;
+      const name = NAMES[0];
+      const spec = specOf(name, cfg, lg);
+      const save = seeded(`s4money|${era}|${cfg.tag}`, () => {
+        let st = old.startCareer(name, era, spec);
+        const fs0 = founders(st).sort((x, y) => y.rating - x.rating || x.id.localeCompare(y.id));
+        const listed = fs0.slice(11, 15).map(p => p.id);
+        for (const id of listed) st = old.setTransferStatus(st, id, 'listed');
+        old.generateIncomingBids(st, false);
+        const starter = st.squad.find(p => p.id === fs0[0].id);
+        starter.releaseClause = old.renewalTermsWithClause(starter).clause;
+        const young = fs0.filter(p => p.age <= 21 && !listed.includes(p.id)).sort((x, y) => x.id.localeCompare(y.id))[0];
+        const lent = old.loanOutPlayer(st, young.id);
+        if (lent) st = lent;
+        const rest = fs0.filter(p => p.id !== young.id && p.id !== fs0[0].id && !listed.includes(p.id));
+        const walker = rest[rest.length - 1];
+        st.squad = st.squad.filter(p => p.id !== walker.id);
+        st.xiIds = st.xiIds.map(id => (id === walker.id ? null : id));
+        st.freeAgents = [...(st.freeAgents ?? []), {
+          name: walker.name, position: walker.position, age: walker.age, rating: walker.rating,
+          value: walker.value, generated: true, since: 1, reason: 'expired', fromMyClub: true,
+        }];
+        const back = rest[rest.length - 2];
+        const i = st.squad.findIndex(p => p.id === back.id);
+        const faId = `fa-${back.id.slice(2)}-s1`;
+        st.xiIds = st.xiIds.map(id => (id === back.id ? faId : id));
+        st.squad[i] = { ...st.squad[i], id: faId };
+        return { st, listed, starter: starter.id, loaned: young.id, walker: walker.name, faId };
+      });
+      oldFigures.push(`${era} ${cfg.tag}: bids ${(save.st.incomingBids ?? []).filter(b => save.listed.includes(b.playerId) && !b.loan).map(b => b.offer).join('/')}m, clause ${save.st.squad.find(p => p.id === save.starter)?.releaseClause}m, option ${save.st.loanedOut?.[0]?.optionFee}m`);
+      store.clear();
+      old.saveCareer(save.st);
+      const loaded = cm.loadCareer();
+      if (!loaded) { fail(`the old money save for ${era} ${cfg.tag} did not load`); continue; }
+      const byName = new Map(cm.buildCustomSquad(spec, era).map(p => [p.name, p]));
+      for (const b of (loaded.incomingBids ?? []).filter(x => save.listed.includes(x.playerId) && !x.loan)) {
+        const p = loaded.squad.find(x => x.id === b.playerId);
+        if (!p) continue;
+        figures += 1;
+        if (b.offer > Math.max(0.3, 1.6 * cm.sellValue(p))) figureProblems.push(`${era} ${cfg.tag}: a bid of ${b.offer}m on a founder selling for ${cm.sellValue(p)}m`);
+      }
+      const starter = loaded.squad.find(p => p.id === save.starter);
+      if (starter) {
+        figures += 1;
+        if (starter.releaseClause > Math.max(0.5, 1.6 * cm.sellValue(starter))) figureProblems.push(`${era} ${cfg.tag}: a clause of ${starter.releaseClause}m on a founder selling for ${cm.sellValue(starter)}m`);
+      }
+      const loan = (loaded.loanedOut ?? []).find(l => l.player.id === save.loaned);
+      if (loan) {
+        figures += 1;
+        if (loan.optionFee > Math.max(0.5, 1.2 * cm.sellValue(loan.player))) figureProblems.push(`${era} ${cfg.tag}: a loan buy option of ${loan.optionFee}m on a founder selling for ${cm.sellValue(loan.player)}m`);
+      }
+      const inPool = (loaded.freeAgents ?? []).find(f => f.name === save.walker);
+      const t1 = byName.get(save.walker);
+      lost += 1;
+      if (inPool && t1 && inPool.value === t1.value && inPool.founderSaleRatio === t1.founderSaleRatio) lostRight += 1;
+      else lostProblems.push(`${era} ${cfg.tag}: the founder in the free agent list loaded at ${inPool?.value}m ratio ${inPool?.founderSaleRatio}, today's ${t1?.value}m ratio ${t1?.founderSaleRatio}`);
+      const signedBack = loaded.squad.find(p => p.id === save.faId);
+      const t2 = signedBack ? byName.get(signedBack.name) : undefined;
+      lost += 1;
+      if (signedBack && t2 && signedBack.value === t2.value && signedBack.founderSaleRatio === t2.founderSaleRatio) lostRight += 1;
+      else lostProblems.push(`${era} ${cfg.tag}: the founder signed back under ${save.faId} loaded at ${signedBack?.value}m ratio ${signedBack?.founderSaleRatio}, today's ${t2?.value}m ratio ${t2?.founderSaleRatio}`);
+    }
+  }
+  console.log(`   old money in the saves: ${oldFigures.join('; ')}`);
+  console.log(`   after the load: ${figures} figures checked, ${figureProblems.length} still on the old money; ${lostRight} of ${lost} founders in the free agent list or signed back under a free agent id repriced${figureProblems.length ? `; first: ${figureProblems[0]}` : ''}${lostProblems.length ? `; ${lostProblems[0]}` : ''}`);
+  if (figures < 30) fail(`only ${figures} old money figures made it into the saves, so the repair was not tested`);
+  else if (figureProblems.length) fail(`${figureProblems.length} of ${figures} bids, clauses and loan options kept the old money after the load`);
+  else ok(`all ${figures} bids, clauses and loan options the old engine priced off a founder's old value load moved onto his new sale price`);
+  if (lost < 16 || lostRight !== lost) fail(`${lost - lostRight} of ${lost} founders in the free agent list or signed back under a free agent id loaded without today's value and ratio`);
+  else ok(`all ${lost} founders waiting in the free agent list or signed back under a free agent id load with today's value and sale ratio`);
 }
 
 /* ================================================================== */
 section = 5;
 console.log('5) a created club can spend its budget the way a real club with that budget can');
-/* The created club's bill over its cap after spending may run to the real
-   clubs' p90 plus the band. Measured over four seeds: created p90 0.37 to
-   0.44, real p90 1.01 to 1.02, tightcap 1.31 to 1.49, so 0.1 over the real
-   p90 sits 0.19 under the tightest control reading and 0.67 over the rule. */
+/* The line itself against the real clubs it was fitted to, measured here:
+   day one cap over realCapForBudget(budget) for every real club inside the
+   budget clamp, all four eras (measured median 1.00, p10 0.95, p90 1.05 when
+   fitted). A line at half (control halfcap) reads 2. */
+const LINE_P50 = [0.93, 1.07];
+const LINE_TAILS = [0.85, 1.15];
+/* The created club's bill over its cap after spending, at the median, may run
+   to the real clubs' median plus the band (a median of 20 foundings a tier
+   against a median of 12 to 24 real clubs, rather than a p90 of that few,
+   which is a max in disguise). Measured over four seeds: created medians
+   0.36 to 0.43, real 1.00 to 1.01, tightcap 1.28 to 1.44. */
 const CAP_BAND = 0.1;
+/* After a summer with the founders above the money gone, the cap over the
+   line: nextWageCap moves a cap by 0.94 to 1.16 a season, so 1.2 is the most
+   the line alone can have grown to. With stickycap (the whole cap moved on,
+   founders' room and all) it reads several times the line. */
+const DRIFT_BOUND = 1.2;
 {
+  const inBand = (x, [lo, hi]) => x >= lo && x <= hi;
+  const lineRatios = realCaps.filter(r => r.budget > 8 && r.budget < 200).map(r => r.cap / cm.realCapForBudget(r.budget));
+  console.log(`   the line against ${lineRatios.length} real clubs inside the budget clamp: day one cap / realCapForBudget p10 ${f2(pct(lineRatios, 0.1))}, p50 ${f2(median(lineRatios))}, p90 ${f2(pct(lineRatios, 0.9))}`);
+  if (lineRatios.length < 150) fail(`only ${lineRatios.length} real clubs to hold the line against`);
+  else if (!(inBand(median(lineRatios), LINE_P50) && pct(lineRatios, 0.1) >= LINE_TAILS[0] && pct(lineRatios, 0.9) <= LINE_TAILS[1])) {
+    fail(`real clubs run p10 ${f2(pct(lineRatios, 0.1))}, p50 ${f2(median(lineRatios))}, p90 ${f2(pct(lineRatios, 0.9))} of realCapForBudget, outside p50 ${LINE_P50.join(' to ')} and tails ${LINE_TAILS.join(' to ')}: the line is not the cap a real club with that budget has`);
+  } else ok(`real clubs run p10 ${f2(pct(lineRatios, 0.1))}, p50 ${f2(median(lineRatios))}, p90 ${f2(pct(lineRatios, 0.9))} of realCapForBudget: the line is the cap a real club with that budget has`);
+
   /* Three signings through the real buy path, each the best rated real player
      the budget still left can pay for with two, one or no more signings to
      come after it (price at most what is left over the signings left), ties to
@@ -913,7 +1130,7 @@ const CAP_BAND = 0.1;
     return { st, spent: (start - st.budget) / start, bought, over: cm.wageBill(st) / st.wageCap };
   };
   /* Real clubs of a similar budget in the same era (the cap follows the budget
-     the same way in every league, see realCapForBudget). */
+     the same way in every league, as the check above shows). */
   const realPool = {};
   for (const era of ERAS) {
     realPool[era] = [];
@@ -936,7 +1153,9 @@ const CAP_BAND = 0.1;
           const r = seeded(`s5|${era}|${lg}|${tier}|${name}`, () => {
             const st = cm.startCareer(name, era, specOf(name, { budgetTier: tier }, lg));
             dayOne += 1;
-            const want = Math.max(Math.max(60, Math.round(cm.wageBill(st) * 1.15)), cm.realCapForBudget(B));
+            /* The engine against its own rule: catches a founding that skips
+               the line, not a wrong line, which the check above owns. */
+            const want = Math.max(Math.max(60, Math.round(cm.wageBill(st) * 1.15)), cm.realCapForBudget(B) + cm.foundersWageRoom(st));
             if (st.wageCap !== want) dayOneShort += 1;
             return spend(st);
           });
@@ -952,15 +1171,47 @@ const CAP_BAND = 0.1;
     }
   }
   for (const tier of Object.keys(TIERS)) {
-    console.log(`   ${tier.padEnd(5)} ${TIERS[tier]}m: created bill / cap after spending p50 ${f2(median(created[tier]))}, p90 ${f2(pct(created[tier], 0.9))} (${created[tier].length}); real clubs of a similar budget p50 ${f2(median(real[tier] ?? []))}, p90 ${f2(pct(real[tier] ?? [], 0.9))} (${(real[tier] ?? []).length})`);
+    console.log(`   ${tier.padEnd(5)} ${TIERS[tier]}m: created bill / cap after spending p50 ${f2(median(created[tier]))} (${created[tier].length}); real clubs of a similar budget p50 ${f2(median(real[tier] ?? []))} (${(real[tier] ?? []).length})`);
   }
-  console.log(`   ${dayOne} created clubs founded, ${dayOneShort} not on max(bill based cap, realCapForBudget); budget spent p50 ${f2(median(spent))}, p10 ${f2(pct(spent, 0.1))}`);
-  if (dayOne < 60 || dayOneShort) fail(`${dayOneShort} of ${dayOne} created clubs did not open on the larger of their bill based cap and the cap a real club with their budget has`);
-  else ok(`all ${dayOne} created clubs opened on the larger of their bill based cap and the cap a real club with their budget has`);
+  console.log(`   ${dayOne} created clubs founded, ${dayOneShort} not on max(bill based cap, realCapForBudget + foundersWageRoom); budget spent p50 ${f2(median(spent))}, p10 ${f2(pct(spent, 0.1))}`);
+  if (dayOne < 60 || dayOneShort) fail(`${dayOneShort} of ${dayOne} created clubs did not open on the larger of their bill based cap and the cap a real club with their budget has plus their founders' room`);
+  else ok(`all ${dayOne} created clubs opened on the larger of their bill based cap and the cap a real club with their budget has plus their founders' room`);
   if (!(pct(spent, 0.1) >= 0.7)) fail(`the spending only used p10 ${f2(pct(spent, 0.1))} of the budget, so the cap was never really tested`);
-  const bad = Object.keys(TIERS).filter(t => !((real[t] ?? []).length >= 6 && pct(created[t], 0.9) <= pct(real[t], 0.9) + CAP_BAND));
-  if (bad.length) fail(`after spending its budget a created club runs further over its cap than real clubs of its budget on the ${bad.join(', ')} tier${bad.length === 1 ? '' : 's'} (p90 against the real p90 plus ${CAP_BAND})`);
-  else ok(`on every tier a created club that spends its budget sits no further over its cap than real clubs of that budget do (p90 against their p90 plus ${CAP_BAND})`);
+  const bad = Object.keys(TIERS).filter(t => !((real[t] ?? []).length >= 6 && median(created[t]) <= median(real[t]) + CAP_BAND));
+  if (bad.length) fail(`after spending its budget a created club runs further over its cap than real clubs of its budget on the ${bad.join(', ')} tier${bad.length === 1 ? '' : 's'} (median against the real median plus ${CAP_BAND})`);
+  else ok(`on every tier a created club that spends its budget sits no further over its cap than real clubs of that budget do (median against their median plus ${CAP_BAND})`);
+
+  /* A squad founded above what its money buys: its founders' wage room is on
+     the cap while they are there, and comes off as they go. Every tier in
+     every era whose ceiling is under 88, founded at 88. Kept: a summer on,
+     the cap still covers the bill. Gone: every founder with a sale ratio off
+     the books before the summer (sold, released, walked), and a summer on the
+     cap is back near the budget's line. */
+  const keepRoom = [];
+  const gone = [];
+  for (const era of ERAS) {
+    for (const tier of Object.keys(TIERS)) {
+      if (cm.customQualityCap(tier, era) >= 88) continue;
+      const lg = leaguesOf(era)[0].id;
+      const name = NAMES[2];
+      const spec = specOf(name, { budgetTier: tier, quality: 88 }, lg);
+      const st = seeded(`s5drift|${era}|${tier}`, () => cm.startCareer(name, era, spec));
+      const kept = seeded(`s5driftk|${era}|${tier}`, () => cm.startNextSeason(clone(st)));
+      keepRoom.push(kept.wageCap / cm.wageBill(kept));
+      const without = clone(st);
+      const leaving = new Set(without.squad.filter(p => p.founderSaleRatio !== undefined).map(p => p.id));
+      without.squad = without.squad.filter(p => !leaving.has(p.id));
+      without.xiIds = without.xiIds.map(id => (leaving.has(id) ? null : id));
+      const after = seeded(`s5driftg|${era}|${tier}`, () => cm.startNextSeason(without));
+      gone.push({ tag: `${era} ${tier}`, founding: st.wageCap, after: after.wageCap, line: cm.realCapForBudget(TIERS[tier]), room: cm.foundersWageRoom(after) });
+    }
+  }
+  const driftRatios = gone.map(g => g.after / g.line);
+  console.log(`   founded at 88 above the ceiling (${gone.length} tier and era pairs): kept a summer on, cap / bill p50 ${f2(median(keepRoom))}; with every founder carrying a ratio gone, the cap went ${gone.slice(0, 3).map(g => `${g.founding}k to ${g.after}k (line ${g.line}k)`).join(', ')}; after / line p50 ${f2(median(driftRatios))}, p90 ${f2(pct(driftRatios, 0.9))}`);
+  if (gone.length < 8) fail(`only ${gone.length} tier and era pairs founded above the ceiling`);
+  else if (!(median(keepRoom) >= 1.0)) fail(`a summer on with the founders still there, the cap covers only ${f2(median(keepRoom))} of the bill at the median`);
+  else if (!(median(driftRatios) <= DRIFT_BOUND)) fail(`with the founders gone the cap sits at ${f2(median(driftRatios))} of the budget's line at the median a summer on, above ${DRIFT_BOUND}: their wage room did not leave with them`);
+  else ok(`a squad above the money keeps room for its bill while it is there (cap ${f2(median(keepRoom))} of the bill a summer on) and, with its founders gone, falls back to ${f2(median(driftRatios))} of the budget's line a summer on (bound ${DRIFT_BOUND})`);
 
   /* A created club save from before the round with its cap somehow under the
      line loads with the line, contracts untouched; one with the old inflated

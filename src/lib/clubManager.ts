@@ -2001,6 +2001,14 @@ export interface CareerState {
    *  startCareer on every created club, and by loadCareer after it reprices a
    *  created club save written before the round. Absent everywhere else. */
   customValues?: number;
+  /** Round 640 review: the part of wageCap that is the wage room of a created
+   *  club's founders above its money (foundersWageRoom), as it was put on at
+   *  the founding or the last summer. The summer takes exactly this off before
+   *  it moves the cap on and puts the room of the founders still there back,
+   *  so a founder who leaves mid season takes his room with him. Absent when
+   *  there is none, which is every club but a created one founded above its
+   *  money. */
+  founderWageRoom?: number;
   /** Round 303: who you are in the dugout. Absent on every save made before
    *  the feature and whenever the picker step is skipped, and every reader
    *  treats absence as the second person career this always was. */
@@ -4109,11 +4117,16 @@ export function ensureCustomClubValues(state: CareerState): boolean {
    the budget's own line has grown to. A club founded at or under the line
    carries no ratio and no room, so its cap moves exactly as before.
 
-   A save written before the round loads with at least the line plus that
-   room. Its own is the old inflated one and sits far above it, so in practice
-   nothing moves; the floor is for the save whose cap has somehow fallen below
-   it. No contract changes, and it runs only when the repricing does (once),
-   so a reload never lifts a cap the career itself brought down. */
+   A save written before the round loads with at least the line. Its own cap
+   is the old inflated one, 1.15 times a bill priced off the raw curve, so it
+   already covers every wage it signed and sits far above the line; in
+   practice nothing moves, and the floor is for the save whose cap has somehow
+   fallen below it. Its founders' room is not added on top, because their
+   wages are old contracts the old cap was built from, and adding it would lift
+   the cap of every old save above the ceiling for nothing. From its first
+   summer the room comes off and goes back on like any created club's. No
+   contract changes, and it runs only when the repricing does (once), so a
+   reload never lifts a cap the career itself brought down. */
 export const REAL_CAP_PER_BUDGET_K = 37.13;
 export const REAL_CAP_PER_BUDGET_EXP = 0.711;
 
@@ -4139,12 +4152,15 @@ export function foundersWageRoom(state: Pick<CareerState, 'squad' | 'loanedOut'>
 }
 
 /** Round 640: a created club save from before the round gets at least the
-    cap its budget buys, plus its founders' room. Runs with the repricing. */
+    cap its budget buys. Runs with the repricing. */
 export function ensureCustomClubWageCap(state: CareerState): void {
   const spec = state.customClub;
   if (!spec || spec.name !== state.clubName) return;
-  const floor = realCapForBudget((CUSTOM_TIERS[spec.budgetTier] ?? CUSTOM_TIERS.mid).budget) + foundersWageRoom(state);
+  const floor = realCapForBudget((CUSTOM_TIERS[spec.budgetTier] ?? CUSTOM_TIERS.mid).budget);
   state.wageCap = Math.max(state.wageCap ?? wageCapFrom(wageBill(state)), floor);
+  /* The part of that cap the founders above the money account for, so the
+     next summer can take it off as they go. */
+  state.founderWageRoom = foundersWageRoom(state) || undefined;
 }
 
 /* ─────────────── Round 640: what a founder can be sold on for ───────────────
@@ -14523,8 +14539,10 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   ensureManagers(state);
   state.wageCap = wageCapFrom(wageBill(state));
   /* Round 640: and a created club gets the cap a real club with its budget
-     has, plus the room its founders above that money bring. */
-  if (custom) state.wageCap = Math.max(state.wageCap, realCapForBudget(club.budget) + foundersWageRoom(state));
+     has, plus the room its founders above that money bring, recorded so the
+     summer knows how much of the cap is theirs. */
+  if (custom) state.founderWageRoom = foundersWageRoom(state) || undefined;
+  if (custom) state.wageCap = Math.max(state.wageCap, realCapForBudget(club.budget) + (state.founderWageRoom ?? 0));
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id, custom ? leagueClubs : undefined);
   /* Round 474: and the two specific asks, read off the squad you have just
      been handed and the market this world really has. */
@@ -16148,12 +16166,15 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      ceiling and moves it on the CLUB's season, never on your own wage bill.
      See nextWageCap for what the old self-anchored line measured out at. */
   /* Round 640 review: the room a created club's founders above its money
-     brought comes off before the season moves the cap, and the room of those
-     still on the books goes back on after, so the cap falls back toward the
-     budget's line as they leave. Zero at every other club. */
+     brought (founderWageRoom, exactly what was put on) comes off before the
+     season moves the cap, and the room of those still on the books goes back
+     on after, so the cap falls back toward the budget's line as they leave,
+     whenever in the season they went. Zero at every other club. */
+  const roomNow = moving ? 0 : foundersWageRoom(state);
   state.wageCap = moving
     ? wageCapFrom(wageBill(state))
-    : nextWageCap(Math.max(60, (career.wageCap ?? wageCapFrom(wageBill(career))) - foundersWageRoom(career)), club.expectation, prevPos, seasonTrophyCount) + foundersWageRoom(state);
+    : nextWageCap(Math.max(60, (career.wageCap ?? wageCapFrom(wageBill(career))) - (career.founderWageRoom ?? 0)), club.expectation, prevPos, seasonTrophyCount) + roomNow;
+  state.founderWageRoom = roomNow || undefined;
   for (const name of freeAgentNews) {
     pushNews(state, { name, from: career.clubName, to: 'a free transfer', fee: 0 });
   }

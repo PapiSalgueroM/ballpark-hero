@@ -73,7 +73,7 @@ import { build } from 'esbuild';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.YOUTH_PAD_CONTROL || '';
-const KNOWN = ['novalue', 'noload', 'flatgrads'];
+const KNOWN = ['novalue', 'noload', 'flatgrads', 'padfloor', 'nogradguard', 'padnoresale', 'nopadwage'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.log(`   FAIL unknown control ${CONTROL} (known: ${KNOWN.join(', ')})`);
   process.exit(1);
@@ -81,7 +81,9 @@ if (CONTROL && !KNOWN.includes(CONTROL)) {
 
 let checks = 0;
 let failures = 0;
-const fail = (m) => { checks += 1; failures += 1; console.log(`   FAIL ${m}`); };
+let section = 0;
+const failedSections = new Set();
+const fail = (m) => { checks += 1; failures += 1; failedSections.add(section); console.log(`   FAIL ${m}`); };
 const ok = (m) => { checks += 1; console.log(`   ok   ${m}`); };
 
 /* ---------- the engine, pristine and rewritten ---------- */
@@ -90,6 +92,10 @@ const PRISTINE = fs.readFileSync(path.join(ROOT, 'src/lib/clubManager.ts'), 'utf
 const VALUE_LINE = '  kid.value = youthPadValue(kid.rating, kid.age);\n';
 const LOAD_LINE = '    ensureYouthPadValues(parsed);\n';
 const GRAD_LINE = '    academyGrad: true,\n    potential: pr.potential,';
+const PAD_VALUE_FN = '  return Math.max(JOURNEYMAN_VALUE, Math.round(baseValue(rating, age) * YOUTH_PAD_SCALE * 10) / 10);\n';
+const GRAD_GUARD = "  return !p.academyGrad && (p.isYouth === true || (p.name ?? '').endsWith(YOUTH_PAD_SUFFIX));\n";
+const PAD_RESCALE = '    rescaleSaleFigures(state, p.id, oldSell, sellValue(p), loan);\n  };\n  for (const p of state.squad ?? []) price(p);\n';
+const PAD_WAGE = '  const v = p.value !== undefined && !isPaddingKid(p) ? p.value : Math.max(0.5, baseValue(p.rating, p.age));\n';
 
 /* Every rewrite asserts its anchor exactly once, or the run stops: a control
    that matches nothing leaves the harness green for the wrong reason. */
@@ -110,6 +116,18 @@ if (CONTROL === 'flatgrads') {
   live = rewrite(live, GRAD_LINE,
     '    academyGrad: true,\n    value: youthPadValue(pr.rating, pr.age),\n    potential: pr.potential,', 'control flatgrads');
 }
+/* Every pad at the journeyman floor, not at the market's price for a teenager. */
+if (CONTROL === 'padfloor') live = rewrite(live, PAD_VALUE_FN, '  return JOURNEYMAN_VALUE;\n', 'control padfloor');
+/* isPaddingKid without its academy graduate guard. */
+if (CONTROL === 'nogradguard') {
+  live = rewrite(live, GRAD_GUARD, "  return (p.isYouth === true || (p.name ?? '').endsWith(YOUTH_PAD_SUFFIX));\n", 'control nogradguard');
+}
+/* The pad repair values the pad but leaves bids, clauses and loan options on the old money. */
+if (CONTROL === 'padnoresale') {
+  live = rewrite(live, PAD_RESCALE, '  };\n  for (const p of state.squad ?? []) price(p);\n', 'control padnoresale');
+}
+/* wageFor reads a pad's stored sale value again, as it did between Round 632 and its review. */
+if (CONTROL === 'nopadwage') live = rewrite(live, PAD_WAGE, '  const v = p.value ?? Math.max(0.5, baseValue(p.rating, p.age));\n', 'control nopadwage');
 if (CONTROL) console.log(`   [control ${CONTROL} applied to an in memory copy of the engine]`);
 /* The engine as it stood before Round 632, for the save section 4 loads. */
 const pre = rewrite(rewrite(PRISTINE, VALUE_LINE, '', 'pre round engine, creation value'), LOAD_LINE, '', 'pre round engine, load repair');
@@ -192,9 +210,18 @@ function runWindowOrSeason(engine, st, untilWindowShut) {
 console.log(`simYouthPadding: seed base ${SEED_BASE}${CONTROL ? `, control ${CONTROL}` : ''}`);
 
 /* ================================================================== */
+section = 1;
 console.log('1) no youth pad sells for more than the rule allows in his first season');
 const PAD_BID_BOUND = 2.0;
+/* The floor under the rule, from the market itself: a pad is priced at what
+   the real players of 21 and under of his rating (within two points) are
+   valued at in the same era's rosters, the market the rule was written off.
+   Measured over four seeds in the header; padfloor prices every pad at the
+   journeyman floor instead. */
+const PAD_MARKET_LO = 0.6;
+const PAD_MARKET_HI = 1.8;
 const dayOneByEra = {};
+const padsSeen = [];
 {
   const offers = [];
   const curve = [];
@@ -231,6 +258,7 @@ const dayOneByEra = {};
       for (const p of kidsHere) {
         curve.push(curvePrice(p));
         if (p.value !== cm.youthPadValue(p.rating, p.age)) wrongValue += 1;
+        padsSeen.push({ era, rating: p.rating, value: p.value });
       }
       sampleBids(st, kidsHere.map(p => p.id), `s1|${era}|${club}`);
     }
@@ -260,10 +288,35 @@ const dayOneByEra = {};
   else ok(`the p95 offer for a pad is ${m1(pct(offers, 0.95))}, inside the ${m1(PAD_BID_BOUND)} bound (measured 1.30m on four seeds, 16.9m to 17.1m with no stored value)`);
   if (kids < 1000) fail(`only ${kids} pads measured`);
   else if (wrongValue > 0) fail(`${wrongValue} of ${kids} pads were not created carrying youthPadValue for their rating and age`);
-  else ok(`all ${kids} pads were created carrying youthPadValue for their rating and age`);
+  else ok(`all ${kids} pads were created carrying youthPadValue for their rating and age (the engine against its own function: this catches a creation path that skips the rule, not a wrong rule; the check below tests the rule against the market)`);
+
+  /* And the price is the market's, not the floor: every day one pad against
+     the median value of the real players aged 21 or under within two rating
+     points of him in the same era (5 or more of them), so the ratio is 1 when
+     a pad costs what a real teenager of his level costs. */
+  const teens = {};
+  for (const era of ERAS) {
+    teens[era] = [];
+    for (const club of clubsOf(era)) {
+      for (const b of cm.projectedRoster(club, 0, era)) if (!b.g && b.a <= 21) teens[era].push(b);
+    }
+  }
+  const toMarket = [];
+  let atFloor = 0;
+  for (const p of padsSeen) {
+    const near = teens[p.era].filter(b => Math.abs(b.r - p.rating) <= 2).map(b => b.v);
+    if (near.length < 5) continue;
+    toMarket.push(p.value / median(near));
+    if (p.value <= cm.JOURNEYMAN_VALUE) atFloor += 1;
+  }
+  console.log(`   ${toMarket.length} of ${padsSeen.length} day one pads have 5 or more real players of 21 and under within two rating points in their era; pad value over their median p10 ${pct(toMarket, 0.1).toFixed(2)}, p50 ${median(toMarket).toFixed(2)}, p90 ${pct(toMarket, 0.9).toFixed(2)}; ${atFloor} of them at the journeyman floor`);
+  if (toMarket.length < 500) fail(`only ${toMarket.length} pads could be set against the market's own teenagers`);
+  else if (!(median(toMarket) >= PAD_MARKET_LO && median(toMarket) <= PAD_MARKET_HI)) fail(`a pad is priced at ${median(toMarket).toFixed(2)} of the market's own teenagers of his level at the median, outside ${PAD_MARKET_LO} to ${PAD_MARKET_HI}`);
+  else ok(`a pad is priced at ${median(toMarket).toFixed(2)} of the market's own teenagers of his level at the median, inside ${PAD_MARKET_LO} to ${PAD_MARKET_HI} (not the floor)`);
 }
 
 /* ================================================================== */
+section = 2;
 console.log('2) selling every pad in the first window prints no real money');
 /* Measured pooled p90 2.56m to 3.28m on four seeds, 31.4m to 38.4m with no
    stored value; 5.0m leaves 1.7m of headroom over the worst seed. */
@@ -315,6 +368,7 @@ const GAIN_BOUND = 5.0;
 }
 
 /* ================================================================== */
+section = 3;
 console.log('3) an academy graduate who developed keeps the value he earned');
 {
   const toCurve = [];
@@ -347,20 +401,26 @@ console.log('3) an academy graduate who developed keeps the value he earned');
       }
     }
   }
+  /* Round 640 review: the graduate's price over "the curve's price for him"
+     is gone. A graduate carries no value, so sellValue IS the curve's price,
+     and the ratio read 1.00 by construction: it could only ever fail if a
+     graduate were given a stored value, which the first check below already
+     asks directly. What stays measures something: whether a graduate carries
+     a stored value at all, and what he fetches against a pad of the same
+     rating and age (the pad's price being the market's, section 1). */
   console.log(`   ${promoted} graduates promoted, ${toCurve.length} of them grew 3 or more points over three summers`);
-  console.log(`   developed graduate's price / the curve's price for him: median ${median(toCurve).toFixed(2)}; / a pad of his rating and age: median ${median(toPad).toFixed(1)}`);
-  if (toCurve.length < 20) fail(`only ${toCurve.length} developed graduates, too few to read a median`);
+  console.log(`   developed graduate's price / a pad of his rating and age: median ${median(toPad).toFixed(1)}`);
+  if (toPad.length < 20) fail(`only ${toPad.length} developed graduates, too few to read a median`);
   else {
     if (valuedAtPromotion > 0) fail(`${valuedAtPromotion} of ${promoted} graduates came up carrying a stored value, so the curve no longer prices them`);
     else ok(`none of the ${promoted} graduates carries a stored value, so the curve prices what he becomes`);
-    if (!(median(toCurve) >= 0.95)) fail(`a developed graduate sells for ${median(toCurve).toFixed(2)} of the curve's price for him at the median, not the 0.95 he earned (measured 1.00 on four seeds, 0.04 to 0.05 flattened)`);
-    else ok(`a developed graduate sells for ${median(toCurve).toFixed(2)} of the curve's price for his rating and age at the median (floor 0.95)`);
     if (!(median(toPad) >= 8)) fail(`a developed graduate fetches only ${median(toPad).toFixed(1)} times a pad of his level at the median, under 8 (measured 32.0 to 32.5 on four seeds, 1.4 to 1.5 flattened)`);
     else ok(`a developed graduate fetches ${median(toPad).toFixed(1)} times a pad of his rating and age at the median (floor 8)`);
   }
 }
 
 /* ================================================================== */
+section = 4;
 console.log('4) a save written before the round loads valued and plays the same season');
 {
   const KEY_OF = () => [...store.keys()].find(k => k.startsWith('dukb-club-manager')) ?? 'dukb-club-manager-save';
@@ -437,6 +497,7 @@ console.log('4) a save written before the round loads valued and plays the same 
      out on loan, waiting in the free agent list, re-signed after his deal ran
      out (no longer flagged a pad, still wearing the suffix), beside a graduate
      who must stay unvalued. */
+  let oldMoney = null;
   const shapes = seeded('s4shapes', () => {
     const most = [...dayOneByEra.now].sort((a, b) => b.n - a.n || a.club.localeCompare(b.club))[0].club;
     const st = old.startCareer(most, 'now');
@@ -444,13 +505,29 @@ console.log('4) a save written before the round loads valued and plays the same 
     const onLoan = kids[0];
     const resigned = { ...kids[1], id: 'resigned-pad', isYouth: false };
     delete resigned.value;
-    const grad = { ...st.squad.find(p => !p.isYouth), id: 'grad-x', name: 'Grad Example', academyGrad: true };
+    /* A graduate the pad test would take for a pad but for the academyGrad
+       guard: flagged isYouth, as a boy on the books is. Without the guard in
+       isPaddingKid the load values him like a pad (control nogradguard). */
+    const grad = { ...st.squad.find(p => !p.isYouth), id: 'grad-x', name: 'Grad Example', academyGrad: true, isYouth: true };
     delete grad.value;
-    const save = {
+    /* Round 640 review: the old money a save can hold on a pad. A listed pad
+       with bids on the table, a pad renewed with a clause, and the loan out
+       carrying its buy option, all priced by the old engine off the curve. */
+    let save = {
       ...st,
       squad: [...st.squad.filter(p => p.id !== onLoan.id && p.id !== kids[1].id), resigned, grad],
-      loanedOut: [{ player: onLoan, club: 'Elsewhere', fee: 0.1, season: 1 }],
+      loanedOut: [{ player: onLoan, club: 'Elsewhere', fee: 0.1, season: 1, optionFee: Math.max(0.5, Math.round(old.sellValue(onLoan) * 1.15 * 10) / 10), recallFee: 0.1 }],
       freeAgents: [...(st.freeAgents ?? []), { name: 'Walked Example (Youth)', position: 'CM', age: 20, rating: 63, since: 1, reason: 'expired', fromMyClub: true }],
+    };
+    const listed = kids.slice(2, 6).map(p => p.id);
+    for (const id of listed) save = old.setTransferStatus(save, id, 'listed');
+    old.generateIncomingBids(save, false);
+    const clauseMan = save.squad.find(p => p.id === kids[6]?.id);
+    if (clauseMan) clauseMan.releaseClause = old.renewalTermsWithClause(clauseMan).clause;
+    oldMoney = {
+      bids: (save.incomingBids ?? []).filter(b => listed.includes(b.playerId) && !b.loan).map(b => ({ id: b.playerId, offer: b.offer })),
+      clause: clauseMan ? { id: clauseMan.id, was: clauseMan.releaseClause } : null,
+      option: save.loanedOut[0].optionFee,
     };
     store.clear();
     old.saveCareer(save);
@@ -464,14 +541,40 @@ console.log('4) a save written before the round loads valued and plays the same 
   if (!loanP || loanP.value !== cm.youthPadValue(loanP.rating, loanP.age)) shapeProblems.push('the pad out on loan');
   if (!poolP || poolP.value !== cm.youthPadValue(poolP.rating, poolP.age)) shapeProblems.push('the pad in the free agent list');
   if (!resP || resP.value !== cm.youthPadValue(resP.rating, resP.age)) shapeProblems.push('the re-signed pad');
-  if (!gradP || gradP.value !== undefined) shapeProblems.push('the graduate (he must stay unvalued)');
+  if (!gradP || gradP.value !== undefined) shapeProblems.push('the graduate flagged isYouth (he must stay unvalued)');
+  /* The old money, after the load: each figure against the pad's new sale
+     price. A bid is at most 1.35 x 1.15 of it, a clause 1.5 x, an option
+     1.15 x, with the engine's own floors (0.3, 0.5, 0.5) for the cheapest. */
+  const moneyProblems = [];
+  let moneyChecked = 0;
+  for (const b of oldMoney?.bids ?? []) {
+    const p = shapes?.squad?.find(x => x.id === b.id);
+    const now = shapes?.incomingBids?.find(x => x.playerId === b.id && !x.loan);
+    if (!p || !now) continue;
+    moneyChecked += 1;
+    if (now.offer > Math.max(0.3, 1.6 * cm.sellValue(p))) moneyProblems.push(`a bid of ${now.offer}m (was ${b.offer}m) on a pad selling for ${cm.sellValue(p)}m`);
+  }
+  if (oldMoney?.clause) {
+    const p = shapes?.squad?.find(x => x.id === oldMoney.clause.id);
+    moneyChecked += 1;
+    if (!p || p.releaseClause > Math.max(0.5, 1.6 * cm.sellValue(p))) moneyProblems.push(`a clause of ${p?.releaseClause}m (was ${oldMoney.clause.was}m) on a pad selling for ${p ? cm.sellValue(p) : '?'}m`);
+  }
+  if (loanP) {
+    moneyChecked += 1;
+    const opt = shapes.loanedOut[0].optionFee;
+    if (opt > Math.max(0.5, 1.2 * cm.sellValue(loanP))) moneyProblems.push(`a loan buy option of ${opt}m (was ${oldMoney?.option}m) on a pad selling for ${cm.sellValue(loanP)}m`);
+  }
 
   console.log(`   ${savesChecked} old saves, ${padsOnLoad} pads in them; ${padsValued} valued on load, ${wageMoved} wages moved, ${othersMoved} other changes; ${playedCompared - playedDiff} of ${playedCompared} seasons played identically`);
   if (padsOnLoad < 20) fail(`only ${padsOnLoad} pads in the old saves`);
   else if (padsValued !== padsOnLoad) fail(`${padsOnLoad - padsValued} of ${padsOnLoad} pads in an old save loaded without youthPadValue`);
   else ok(`every one of ${padsOnLoad} pads in ${savesChecked} old saves loaded carrying youthPadValue`);
   if (shapeProblems.length) fail(`an old save loaded wrong for ${shapeProblems.join(', ')}`);
-  else ok('an old save also values the pad out on loan, the pad in the free agent list and a re-signed pad, and leaves a graduate unvalued');
+  else ok('an old save also values the pad out on loan, the pad in the free agent list and a re-signed pad, and leaves a graduate unvalued even when he is flagged isYouth');
+  console.log(`   old money on pads in the save: ${oldMoney?.bids?.length ?? 0} bids (${(oldMoney?.bids ?? []).map(b => b.offer).join(', ')}m), a clause of ${oldMoney?.clause?.was}m, a loan option of ${oldMoney?.option}m; ${moneyChecked} figures checked after the load`);
+  if (moneyChecked < 4 || !oldMoney?.clause) fail(`only ${moneyChecked} old money figures made it into the save, so the repair was not tested`);
+  else if (moneyProblems.length) fail(`an old save kept old money on its pads: ${moneyProblems.join('; ')}`);
+  else ok(`every bid, the clause and the loan option the old engine priced off a pad's curve price load moved onto his new sale price`);
   if (wageMoved || othersMoved) fail(`the repair changed ${wageMoved} wages and ${othersMoved} other things it should not touch`);
   else ok('the repair moved no wage and nothing but the pads\' value');
   if (weeksPlayed < playedCompared * 30) fail(`only ${weeksPlayed} calendar weeks played across ${playedCompared} saves, so the comparison did not cover a season`);
@@ -479,6 +582,92 @@ console.log('4) a save written before the round loads valued and plays the same 
   else ok(`all ${playedCompared} repaired saves played the rest of season one (${weeksPlayed} calendar weeks in all) exactly as the old engine played them, bar the pads' value`);
 }
 
+/* ================================================================== */
+section = 5;
+console.log('5) a pad earns what he earned before the round: wage bills and renewal asks over three seasons');
+/* Round 640 review: wageFor read a pad's new stored value, so a pad who
+   developed renewed for almost nothing. It prices a pad off the curve again,
+   and this holds real clubs to the engine as it stood before Round 632 (the
+   in memory copy without the creation value and the load repair; for a real
+   club nothing else in this branch differs, simCustomClubValues section 3
+   proves that side). Each club plays three whole seasons on both engines from
+   the same seed; at every summer each squad man's renewal ask is read, every
+   man with a year or less left is renewed (the same men, in the same order,
+   on both), and the wage bill is read after. Pads in the free agent list
+   quote their ask too. Only clubs with the most pads, so developed pads come
+   up for renewal. */
+{
+  let asksCompared = 0;
+  let askDiff = 0;
+  let padAsks = 0;
+  let billsCompared = 0;
+  let billDiff = 0;
+  let poolAsks = 0;
+  let poolDiff = 0;
+  let careers = 0;
+  let squadDiff = 0;
+  let developed = 0;
+  const firstDiffs = [];
+  const clubs5 = [];
+  for (const era of ERAS) {
+    const rows = [...dayOneByEra[era]].sort((a, b) => b.n - a.n || a.club.localeCompare(b.club));
+    for (const r of rows.slice(0, era === 'now' ? 3 : 1)) clubs5.push({ era, club: r.club });
+  }
+  for (const { era, club } of clubs5) {
+    const run = (engine) => seeded(`s5|${era}|${club}`, () => {
+      let st = engine.startCareer(club, era);
+      const out = [];
+      for (let season = 0; season < 3; season++) {
+        st = runWindowOrSeason(engine, st, false);
+        const asks = st.squad.map(p => ({ id: p.name, pad: p.isYouth || p.name.endsWith(' (Youth)'), ...engine.renewalTerms(p), rating: p.rating }));
+        const pool = (st.freeAgents ?? []).filter(f => f.name.endsWith(' (Youth)')).map(f => ({ name: f.name, wage: engine.freeAgentTerms(f).wage }));
+        for (const p of [...st.squad]) {
+          if ((p.contractYears ?? 9) > 1 || p.onLoan) continue;
+          const next = engine.renewContract(st, p.id);
+          if (next) st = next;
+        }
+        out.push({ asks, pool, bill: engine.wageBill(st), names: st.squad.map(p => `${p.name}:${p.rating}`).join('|') });
+        st = engine.startNextSeason(st);
+      }
+      return out;
+    });
+    const a = run(cm);
+    const b = run(old);
+    careers += 1;
+    for (let s = 0; s < a.length; s++) {
+      if (a[s].names !== b[s].names) { squadDiff += 1; continue; }
+      const bAsk = new Map(b[s].asks.map(x => [x.id, x]));
+      for (const x of a[s].asks) {
+        const y = bAsk.get(x.id);
+        if (!y) continue;
+        asksCompared += 1;
+        if (x.pad) padAsks += 1;
+        if (x.pad && s > 0) developed += 1;
+        if (x.wage !== y.wage || x.fee !== y.fee || x.years !== y.years) {
+          askDiff += 1;
+          if (firstDiffs.length < 2) firstDiffs.push(`${club} (${era}) season ${s + 1}, ${x.id}: ask ${x.wage}k against ${y.wage}k`);
+        }
+      }
+      const bPool = new Map(b[s].pool.map(x => [x.name, x.wage]));
+      for (const x of a[s].pool) {
+        if (!bPool.has(x.name)) continue;
+        poolAsks += 1;
+        if (bPool.get(x.name) !== x.wage) poolDiff += 1;
+      }
+      billsCompared += 1;
+      if (a[s].bill !== b[s].bill) {
+        billDiff += 1;
+        if (firstDiffs.length < 3) firstDiffs.push(`${club} (${era}) season ${s + 1}: bill ${a[s].bill}k against ${b[s].bill}k`);
+      }
+    }
+  }
+  console.log(`   ${careers} clubs, three seasons each: ${asksCompared} renewal asks compared (${padAsks} of them pads, ${developed} a season or more on), ${askDiff} differ; ${poolAsks} pad free agent asks, ${poolDiff} differ; ${billsCompared} wage bills, ${billDiff} differ; ${squadDiff} season squads parted${firstDiffs.length ? `; first: ${firstDiffs.join('; ')}` : ''}`);
+  if (padAsks < 100 || billsCompared < 12) fail(`only ${padAsks} pad renewal asks and ${billsCompared} bills compared`);
+  else if (squadDiff) fail(`${squadDiff} season squads parted between the engines, so the wages were not compared like for like`);
+  else if (askDiff || poolDiff || billDiff) fail(`${askDiff} renewal asks, ${poolDiff} pad free agent asks and ${billDiff} wage bills differ from the engine before Round 632`);
+  else ok(`every renewal ask (${asksCompared}, ${padAsks} of them pads), every pad free agent ask (${poolAsks}) and every wage bill (${billsCompared}) over three seasons matches the engine before Round 632`);
+}
+
 fs.rmSync(TMP, { recursive: true, force: true });
-console.log(`simYouthPadding: ${checks} checks, ${failures} failure${failures === 1 ? '' : 's'}${CONTROL ? ` (control ${CONTROL})` : ''}`);
+console.log(`simYouthPadding: ${checks} checks, ${failures} failure${failures === 1 ? '' : 's'}${failedSections.size ? ` (sections ${[...failedSections].sort().join(', ')})` : ''}${CONTROL ? ` (control ${CONTROL})` : ''}`);
 process.exit(failures ? 1 : 0);
