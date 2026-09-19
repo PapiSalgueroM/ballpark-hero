@@ -155,6 +155,7 @@ const GolfHigherLower = lazy(() => import("./pages/GolfHigherLower"));
 const AflHigherLower = lazy(() => import("./pages/AflHigherLower"));
 const ChampOrNot = lazy(() => import("./pages/ChampOrNot"));
 const Records = lazy(() => import("./pages/Records"));
+const RecordPage = lazy(() => import("./pages/RecordPage"));
 const ChampionsLeagueFormatHistory = lazy(() => import("./pages/ChampionsLeagueFormatHistory"));
 const NflPlayoffFormatHistory = lazy(() => import("./pages/NflPlayoffFormatHistory"));
 const NbaPlayoffFormatHistory = lazy(() => import("./pages/NbaPlayoffFormatHistory"));
@@ -493,6 +494,21 @@ const AppContent = () => {
         <Route path="/afl-higher-lower" element={<AflHigherLower />} />
         <Route path="/champ-or-not" element={<ChampOrNot />} />
         <Route path="/records" element={<Records />} />
+        {/* Round 649: one page per Record Books competition, all drawn by RecordPage. The slugs
+            live on RECORD_SECTIONS in src/lib/records.ts; scripts/simRecordPages.mjs fails if this
+            list and that one disagree. */}
+        <Route path="/records/super-bowl-winners" element={<RecordPage slug="super-bowl-winners" />} />
+        <Route path="/records/nba-champions" element={<RecordPage slug="nba-champions" />} />
+        <Route path="/records/world-series-winners" element={<RecordPage slug="world-series-winners" />} />
+        <Route path="/records/stanley-cup-winners" element={<RecordPage slug="stanley-cup-winners" />} />
+        <Route path="/records/wnba-champions" element={<RecordPage slug="wnba-champions" />} />
+        <Route path="/records/college-football-national-champions" element={<RecordPage slug="college-football-national-champions" />} />
+        <Route path="/records/ncaa-basketball-champions" element={<RecordPage slug="ncaa-basketball-champions" />} />
+        <Route path="/records/english-football-champions" element={<RecordPage slug="english-football-champions" />} />
+        <Route path="/records/afl-premiers" element={<RecordPage slug="afl-premiers" />} />
+        <Route path="/records/brownlow-medal-winners" element={<RecordPage slug="brownlow-medal-winners" />} />
+        <Route path="/records/dally-m-medal-winners" element={<RecordPage slug="dally-m-medal-winners" />} />
+        <Route path="/records/nrl-premiers" element={<RecordPage slug="nrl-premiers" />} />
         <Route path="/champions-league-format-history" element={<ChampionsLeagueFormatHistory />} />
         <Route path="/nfl-playoff-format-history" element={<NflPlayoffFormatHistory />} />
         <Route path="/nba-playoff-format-history" element={<NbaPlayoffFormatHistory />} />

@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Super Bowl Winners by Year Since 1967 | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"The Record Books","item":"https://douknowball.com/records"},{"@type":"ListItem","position":3,"name":"Super Bowl winners by year","item":"https://douknowball.com/records/super-bowl-winners"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"WebPage","name":"Super Bowl Winners by Year Since 1967 | DoUKnowBall","description":"Every Super Bowl winner from 1967 to 2026, with the runner-up, final score, MVP, stadium and host city, plus the most titles over those years.","url":"https://douknowball.com/records/super-bowl-winners","isPartOf":{"@id":"https://douknowball.com/#website"},"publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/records/super-bowl-winners" data-rh="true"><meta name="description" content="Every Super Bowl winner from 1967 to 2026, with the runner-up, final score, MVP, stadium and host city, plus the most titles over those years." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/records/super-bowl-winners" data-rh="true"><meta property="og:title" content="Super Bowl Winners by Year Since 1967 | DoUKnowBall" data-rh="true"><meta property="og:description" content="Every Super Bowl winner from 1967 to 2026, with the runner-up, final score, MVP, stadium and host city, plus the most titles over those years." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Super Bowl Winners by Year Since 1967 | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Every Super Bowl winner from 1967 to 2026, with the runner-up, final score, MVP, stadium and host city, plus the most titles over those years." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<a href="/records">Back to the Record Books</a>
+<h1>Super Bowl winners by year</h1>
+<p>Every Super Bowl by the year it was played, with the final score, the MVP, the stadium as it was named that day and the host city as it was that day too: Miami until the Gardens incorporated, Stanford for XIX, Las Vegas for LVIII.</p>
+<li>60 years listed, 1967 to 2026.</li>
+<li>Earliest year listed: Green Bay Packers (1967).</li>
+<li>Latest year listed: Seattle Seahawks (2026).</li>
+<li>23 different team names appear on the list, 1967 to 2026.</li>
+<h2>Every Super Bowl winner since 1967, year by year</h2>
+<h3>Super Bowl winners in the 2020s</h3>
+<p>Year</p>
+<p>Champion</p>
+<p>Runner-up</p>
+<p>Score</p>
+<p>MVP</p>
+<p>Venue</p>
+<p>City</p>
+<p>2026</p>
+<p>Seattle Seahawks</p>
+<p>New England Patriots</p>
+<p>29-13</p>
+<p>Kenneth Walker III</p>
+<p>Levi's Stadium</p>
+<p>Santa Clara, CA</p>
+<p>2025</p>
+<p>Philadelphia Eagles</p>
+<p>Kansas City Chiefs</p>
+<p>40-22</p>
+<p>Jalen Hurts</p>
+<p>Caesars Superdome</p>
+<p>New Orleans, LA</p>
+<p>2024</p>
+<p>Kansas City Chiefs</p>
+<p>San Francisco 49ers</p>
+<p>25-22</p>
+<p>Patrick Mahomes</p>
+<p>Allegiant Stadium</p>
+<p>Las Vegas, NV</p>
+<p>2023</p>
+<p>Kansas City Chiefs</p>
+<p>Philadelphia Eagles</p>
+<p>38-35</p>
+<p>Patrick Mahomes</p>
+<p>State Farm Stadium</p>
+<p>Glendale, AZ</p>
+<p>2022</p>
+<p>Los Angeles Rams</p>
+<p>Cincinnati Bengals</p>
+<p>23-20</p>
+<p>Cooper Kupp</p>
+<p>SoFi Stadium</p>
+<p>Inglewood, CA</p>
+<p>2021</p>
+<p>Tampa Bay Buccaneers</p>
+<p>Kansas City Chiefs</p>
+<p>31-9</p>
+<p>Tom Brady</p>
+<p>Raymond James Stadium</p>
+<p>Tampa, FL</p>
+<p>2020</p>
+<p>Kansas City Chiefs</p>
+<p>San Francisco 49ers</p>
+<p>31-20</p>
+<p>Patrick Mahomes</p>
+<p>Hard Rock Stadium</p>
+<p>Miami Gardens, FL</p>
+<h3>Super Bowl winners in the 2010s</h3>
+<p>Year</p>
+<p>Champion</p>
+<p>Runner-up</p>
+<p>Score</p>
+<p>MVP</p>
+<p>Venue</p>
+<p>City</p>
+<p>2019</p>
+<p>New England Patriots</p>
+<p>Los Angeles Rams</p>
+<p>13-3</p>
+<p>Julian Edelman</p>
+<p>Mercedes-Benz Stadium</p>
+<p>Atlanta, GA</p>
+<p>2018</p>
+<p>Philadelphia Eagles</p>
+<p>New England Patriots</p>
+<p>41-33</p>
+<p>Nick Foles</p>
+<p>U.S. Bank Stadium</p>
+<p>Minneapolis, MN</p>
+<p>2017</p>
+<p>New England Patriots</p>
+<p>Atlanta Falcons</p>
+<p>34-28</p>
+<p>Tom Brady</p>
+<p>NRG Stadium</p>
+<p>Houston, TX</p>
+<p>2016</p>
+<p>Denver Broncos</p>
+<p>Carolina Panthers</p>
+<p>24-10</p>
+<p>Von Miller</p>
+<p>Levi's Stadium</p>
+<p>Santa Clara, CA</p>
+<p>2015</p>
+<p>New England Patriots</p>
+<p>Seattle Seahawks</p>
+<p>28-24</p>
+<p>Tom Brady</p>
+<p>University of Phoenix Stadium</p>
+<p>Glendale, AZ</p>
+<p>2014</p>
+<p>Seattle Seahawks</p>
+<p>Denver Broncos</p>
+<p>43-8</p>
+<p>Malcolm Smith</p>
+<p>MetLife Stadium</p>
+<p>East Rutherford, NJ</p>
+<p>2013</p>
+<p>Baltimore Ravens</p>
+<p>San Francisco 49ers</p>
+<p>34-31</p>
+<p>Joe Flacco</p>
+<p>Mercedes-Benz Superdome</p>
+<p>New Orleans, LA</p>
+<p>2012</p>
+<p>New York Giants</p>
+<p>New England Patriots</p>
+<p>21-17</p>
+<p>Eli Manning</p>
+<p>Lucas Oil Stadium</p>
+<p>Indianapolis, IN</p>
+<p>2011</p>
+<p>Green Bay Packers</p>
+<p>Pittsburgh Steelers</p>
+<p>31-25</p>
+<p>Aaron Rodgers</p>
+<p>Cowboys Stadium</p>
+<p>Arlington, TX</p>
+<p>2010</p>
+<p>New Orleans Saints</p>
+<p>Indianapolis Colts</p>
+<p>31-17</p>
+<p>Drew Brees</p>
+<p>Sun Life Stadium</p>
+<p>Miami Gardens, FL</p>
+<h3>Super Bowl winners in the 2000s</h3>
+<p>Year</p>
+<p>Champion</p>
+<p>Runner-up</p>
+<p>Score</p>
+<p>MVP</p>
+<p>Venue</p>
+<p>City</p>
+<p>2009</p>
+<p>Pittsburgh Steelers</p>
+<p>Arizona Cardinals</p>
+<p>27-23</p>
+<p>Santonio Holmes</p>
+<p>Raymond James Stadium</p>
+<p>Tampa, FL</p>
+<p>2008</p>
+<p>New York Giants</p>
+<p>New England Patriots</p>
+<p>17-14</p>
+<p>Eli Manning</p>
+<p>University of Phoenix Stadium</p>
+<p>Glendale, AZ</p>
+<p>2007</p>
+<p>Indianapolis Colts</p>
+<p>Chicago Bears</p>
+<p>29-17</p>
+<p>Peyton Manning</p>
+<p>Dolphin Stadium</p>
+<p>Miami Gardens, FL</p>
+<p>2006</p>
+<p>Pittsburgh Steelers</p>
+<p>Seattle Seahawks</p>
+<p>21-10</p>
+<p>Hines Ward</p>
+<p>Ford Field</p>
+<p>Detroit, MI</p>
+<p>2005</p>
+<p>New England Patriots</p>
+<p>Philadelphia Eagles</p>
+<p>24-21</p>
+<p>Deion Branch</p>
+<p>Alltel Stadium</p>
+<p>Jacksonville, FL</p>
+<p>2004</p>
+<p>New England Patriots</p>
+<p>Carolina Panthers</p>
+<p>32-29</p>
+<p>Tom Brady</p>
+<p>Reliant Stadium</p>
+<p>Houston, TX</p>
+<p>2003</p>
+<p>Tampa Bay Buccaneers</p>
+<p>Oakland Raiders</p>
+<p>48-21</p>
+<p>Dexter Jackson</p>
+<p>Qualcomm Stadium</p>
+<p>San Diego, CA</p>
+<p>2002</p>
+<p>New England Patriots</p>
+<p>St. Louis Rams</p>
+<p>20-17</p>
+<p>Tom Brady</p>
+<p>Louisiana Superdome</p>
+<p>New Orleans, LA</p>
+<p>2001</p>
+<p>Baltimore Ravens</p>
+<p>New York Giants</p>
+<p>34-7</p>
+<p>Ray Lewis</p>
+<p>Raymond James Stadium</p>
+<p>Tampa, FL</p>
+<p>2000</p>
+<p>St. Louis Rams</p>
+<p>Tennessee Titans</p>
+<p>23-16</p>
+<p>Kurt Warner</p>
+<p>Georgia Dome</p>
+<p>Atlanta, GA</p>
+<h3>Super Bowl winners in the 1990s</h3>
+<p>Year</p>
+<p>Champion</p>
+<p>Runner-up</p>
+<p>Score</p>
+<p>MVP</p>
+<p>Venue</p>
+<p>City</p>
+<p>1999</p>
+<p>Denver Broncos</p>
+<p>Atlanta Falcons</p>
+<p>34-19</p>
+<p>John Elway</p>
+<p>Pro Player Stadium</p>
+<p>Miami, FL</p>
+<p>1998</p>
+<p>Denver Broncos</p>
+<p>Green Bay Packers</p>
+<p>31-24</p>
+<p>Terrell Davis</p>
+<p>Qualcomm Stadium</p>
+<p>San Diego, CA</p>
+<p>1997</p>
+<p>Green Bay Packers</p>
+<p>New England Patriots</p>
+<p>35-21</p>
+<p>Desmond Howard</p>
+<p>Louisiana Superdome</p>
+<p>New Orleans, LA</p>
+<p>1996</p>
+<p>Dallas Cowboys</p>
+<p>Pittsburgh Steelers</p>
+<p>27-17</p>
+<p>Larry Brown</p>
+<p>Sun Devil Stadium</p>
+<p>Tempe, AZ</p>
+<p>1995</p>
+<p>San Francisco 49ers</p>
+<p>San Diego Chargers</p>
+<p>49-26</p>
+<p>Steve Young</p>
+<p>Joe Robbie Stadium</p>
+<p>Miami, FL</p>
+<p>1994</p>
+<p>Dallas Cowboys</p>
+<p>Buffalo Bills</p>
+<p>30-13</p>
+<p>Emmitt Smith</p>
+<p>Georgia Dome</p>
+<p>Atlanta, GA</p>
+<p>1993</p>
+<p>Dallas Cowboys</p>
+<p>Buffalo Bills</p>
+<p>52-17</p>
+<p>Troy Aikman</p>
+<p>Rose Bowl</p>
+<p>Pasadena, CA</p>
+<p>1992</p>
+<p>Washington Redskins</p>
+<p>Buffalo Bills</p>
+<p>37-24</p>
+<p>Mark Rypien</p>
+<p>Metrodome</p>
+<p>Minneapolis, MN</p>
+<p>1991</p>
+<p>New York Giants</p>
+<p>Buffalo Bills</p>
+<p>20-19</p>
+<p>Ottis Anderson</p>
+<p>Tampa Stadium</p>
+<p>Tampa, FL</p>
+<p>1990</p>
+<p>San Francisco 49ers</p>
+<p>Denver Broncos</p>
+<p>55-10</p>
+<p>Joe Montana</p>
+<p>Louisiana Superdome</p>
+<p>New Orleans, LA</p>
+<h3>Super Bowl winners in the 1980s</h3>
+<p>Year</p>
+<p>Champion</p>
+<p>Runner-up</p>
+<p>Score</p>
+<p>MVP</p>
+<p>Venue</p>
+<p>City</p>
+<p>1989</p>
+<p>San Francisco 49ers</p>
+<p>Cincinnati Bengals</p>
+<p>20-16</p>
+<p>Jerry Rice</p>
+<p>Joe Robbie Stadium</p>
+<p>Miami, FL</p>
+<p>1988</p>
+<p>Washington Redskins</p>
+<p>Denver Broncos</p>
+<p>42-10</p>
+<p>Doug Williams</p>
+<p>San Diego-Jack Murphy Stadium</p>
+<p>San Diego, CA</p>
+<p>1987</p>
+<p>New York Giants</p>
+<p>Denver Broncos</p>
+<p>39-20</p>
+<p>Phil Simms</p>
+<p>Rose Bowl</p>
+<p>Pasadena, CA</p>
+<p>1986</p>
+<p>Chicago Bears</p>
+<p>New England Patriots</p>
+<p>46-10</p>
+<p>Richard Dent</p>
+<p>Louisiana Superdome</p>
+<p>New Orleans, LA</p>
+<p>1985</p>
+<p>San Francisco 49ers</p>
+<p>Miami Dolphins</p>
+<p>38-16</p>
+<p>Joe Montana</p>
+<p>Stanford Stadium</p>
+<p>Stanford, CA</p>
+<p>1984</p>
+<p>Los Angeles Raiders</p>
+<p>Washington Redskins</p>
+<p>38-9</p>
+<p>Marcus Allen</p>
+<p>Tampa Stadium</p>
+<p>Tampa, FL</p>
+<p>1983</p>
+<p>Washington Redskins</p>
+<p>Miami Dolphins</p>
+<p>27-17</p>
+<p>John Riggins</p>
+<p>Rose Bowl</p>
+<p>Pasadena, CA</p>
+<p>1982</p>
+<p>San Francisco 49ers</p>
+<p>Cincinnati Bengals</p>
+<p>26-21</p>
+<p>Joe Montana</p>
+<p>Pontiac Silverdome</p>
+<p>Pontiac, MI</p>
+<p>1981</p>
+<p>Oakland Raiders</p>
+<p>Philadelphia Eagles</p>
+<p>27-10</p>
+<p>Jim Plunkett</p>
+<p>Louisiana Superdome</p>
+<p>New Orleans, LA</p>
+<p>1980</p>
+<p>Pittsburgh Steelers</p>
+<p>Los Angeles Rams</p>
+<p>31-19</p>
+<p>Terry Bradshaw</p>
+<p>Rose Bowl</p>
+<p>Pasadena, CA</p>
+<h3>Super Bowl winners in the 1970s</h3>
+<p>Year</p>
+<p>Champion</p>
+<p>Runner-up</p>
+<p>Score</p>
+<p>MVP</p>
+<p>Venue</p>
+<p>City</p>
+<p>1979</p>
+<p>Pittsburgh Steelers</p>
+<p>Dallas Cowboys</p>
+<p>35-31</p>
+<p>Terry Bradshaw</p>
+<p>Miami Orange Bowl</p>
+<p>Miami, FL</p>
+<p>1978</p>
+<p>Dallas Cowboys</p>
+<p>Denver Broncos</p>
+<p>27-10</p>
+<p>Harvey Martin &amp; Randy White</p>
+<p>Louisiana Superdome</p>
+<p>New Orleans, LA</p>
+<p>1977</p>
+<p>Oakland Raiders</p>
+<p>Minnesota Vikings</p>
+<p>32-14</p>
+<p>Fred Biletnikoff</p>
+<p>Rose Bowl</p>
+<p>Pasadena, CA</p>
+<p>1976</p>
+<p>Pittsburgh Steelers</p>
+<p>Dallas Cowboys</p>
+<p>21-17</p>
+<p>Lynn Swann</p>
+<p>Miami Orange Bowl</p>
+<p>Miami, FL</p>
+<p>1975</p>
+<p>Pittsburgh Steelers</p>
+<p>Minnesota Vikings</p>
+<p>16-6</p>
+<p>Franco Harris</p>
+<p>Tulane Stadium</p>
+<p>New Orleans, LA</p>
+<p>1974</p>
+<p>Miami Dolphins</p>
+<p>Minnesota Vikings</p>
+<p>24-7</p>
+<p>Larry Csonka</p>
+<p>Rice Stadium</p>
+<p>Houston, TX</p>
+<p>1973</p>
+<p>Miami Dolphins</p>
+<p>Washington Redskins</p>
+<p>14-7</p>
+<p>Jake Scott</p>
+<p>Los Angeles Memorial Coliseum</p>
+<p>Los Angeles, CA</p>
+<p>1972</p>
+<p>Dallas Cowboys</p>
+<p>Miami Dolphins</p>
+<p>24-3</p>
+<p>Roger Staubach</p>
+<p>Tulane Stadium</p>
+<p>New Orleans, LA</p>
+<p>1971</p>
+<p>Baltimore Colts</p>
+<p>Dallas Cowboys</p>
+<p>16-13</p>
+<p>Chuck Howley</p>
+<p>Miami Orange Bowl</p>
+<p>Miami, FL</p>
+<p>1970</p>
+<p>Kansas City Chiefs</p>
+<p>Minnesota Vikings</p>
+<p>23-7</p>
+<p>Len Dawson</p>
+<p>Tulane Stadium</p>
+<p>New Orleans, LA</p>
+<h3>Super Bowl winners from 1967 to 1969</h3>
+<p>Year</p>
+<p>Champion</p>
+<p>Runner-up</p>
+<p>Score</p>
+<p>MVP</p>
+<p>Venue</p>
+<p>City</p>
+<p>1969</p>
+<p>New York Jets</p>
+<p>Baltimore Colts</p>
+<p>16-7</p>
+<p>Joe Namath</p>
+<p>Miami Orange Bowl</p>
+<p>Miami, FL</p>
+<p>1968</p>
+<p>Green Bay Packers</p>
+<p>Oakland Raiders</p>
+<p>33-14</p>
+<p>Bart Starr</p>
+<p>Miami Orange Bowl</p>
+<p>Miami, FL</p>
+<p>1967</p>
+<p>Green Bay Packers</p>
+<p>Kansas City Chiefs</p>
+<p>35-10</p>
+<p>Bart Starr</p>
+<p>Los Angeles Memorial Coliseum</p>
+<p>Los Angeles, CA</p>
+<h2>Most Super Bowl titles since 1967</h2>
+<p>How we counted: each line in the year by year tables counts for the team name exactly as the table writes it, so a team the table writes two ways counts separately under each. The table does not always use the name of the day, so a renamed team may sit under one name or several.</p>
+<p>Out in front: New England Patriots and Pittsburgh Steelers, 6 titles each.</p>
+<p>Team</p>
+<p>Titles under this name</p>
+<p>Years</p>
+<p>New England Patriots</p>
+<p>6</p>
+<p>2002, 2004, 2005, 2015, 2017, 2019</p>
+<p>Pittsburgh Steelers</p>
+<p>6</p>
+<p>1975, 1976, 1979, 1980, 2006, 2009</p>
+<p>Dallas Cowboys</p>
+<p>5</p>
+<p>1972, 1978, 1993, 1994, 1996</p>
+<p>San Francisco 49ers</p>
+<p>5</p>
+<p>1982, 1985, 1989, 1990, 1995</p>
+<p>Green Bay Packers</p>
+<p>4</p>
+<p>1967, 1968, 1997, 2011</p>
+<p>Kansas City Chiefs</p>
+<p>4</p>
+<p>1970, 2020, 2023, 2024</p>
+<p>New York Giants</p>
+<p>4</p>
+<p>1987, 1991, 2008, 2012</p>
+<p>Denver Broncos</p>
+<p>3</p>
+<p>1998, 1999, 2016</p>
+<p>Washington Redskins</p>
+<p>3</p>
+<p>1983, 1988, 1992</p>
+<p>Baltimore Ravens</p>
+<p>2</p>
+<p>2001, 2013</p>
+<p>Miami Dolphins</p>
+<p>2</p>
+<p>1973, 1974</p>
+<p>Oakland Raiders</p>
+<p>2</p>
+<p>1977, 1981</p>
+<p>Philadelphia Eagles</p>
+<p>2</p>
+<p>2018, 2025</p>
+<p>Seattle Seahawks</p>
+<p>2</p>
+<p>2014, 2026</p>
+<p>Tampa Bay Buccaneers</p>
+<p>2</p>
+<p>2003, 2021</p>
+<p>8 more team names appear once.</p>
+<h2>Play with this history</h2>
+<li><a href="/champ-or-not">Champ or Not</a></li>
+<li><a href="/whod-they-beat">Who'd They Beat?</a></li>
+<li><a href="/list-quiz">Name Them All</a></li>
+<h2>How the NFL playoffs work</h2>
+<p><a href="/nfl-playoff-format-history">NFL playoff format history</a>: how the field, seeding and overtime rules changed.</p>
+<h2>Where this comes from</h2>
+<p>Each table was verified against at least two independent sources, and the checks run on every build: winner lists are audited answer by answer, split titles and vacated seasons are pinned so they can never quietly change, and a blank cell means the detail was never verified rather than papered over. Spot something that looks wrong anyway? The Report a bug button below lands straight in our inbox.</p>
+<h2>More record books</h2>
+<li><a href="/records/nba-champions">NBA champions since 1947, year by year</a></li>
+<li><a href="/records/world-series-winners">World Series winners since 1903, year by year</a></li>
+<li><a href="/records/stanley-cup-winners">Stanley Cup winners since 1915, year by year</a></li>
+<li><a href="/records/wnba-champions">WNBA champions since 1997, year by year</a></li>
+<li><a href="/records/college-football-national-champions">College football national champions since 1981, year by year</a></li>
+<li><a href="/records/ncaa-basketball-champions">Men's NCAA basketball champions since 1939, year by year</a></li>
+<li><a href="/records/english-football-champions">English football champions since 1889, year by year</a></li>
+<li><a href="/records/afl-premiers">VFL/AFL premiers since 1897, year by year</a></li>
+<li><a href="/records/brownlow-medal-winners">Brownlow Medal winners since 1924, year by year</a></li>
+<li><a href="/records/dally-m-medal-winners">Dally M Medal winners since 1979, year by year</a></li>
+<li><a href="/records/nrl-premiers">NRL/NSWRL premiers since 1908, year by year</a></li>
+<li><a href="/records">The Record Books, with the latest seasons of every competition</a></li>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

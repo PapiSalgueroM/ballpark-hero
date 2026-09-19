@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>WNBA Champions by Year Since 1997 | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"The Record Books","item":"https://douknowball.com/records"},{"@type":"ListItem","position":3,"name":"WNBA champions by year","item":"https://douknowball.com/records/wnba-champions"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"WebPage","name":"WNBA Champions by Year Since 1997 | DoUKnowBall","description":"Every WNBA champion from 1997 to 2025, with the beaten finalist, the series score and the Finals MVP, plus the most titles in that span.","url":"https://douknowball.com/records/wnba-champions","isPartOf":{"@id":"https://douknowball.com/#website"},"publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/records/wnba-champions" data-rh="true"><meta name="description" content="Every WNBA champion from 1997 to 2025, with the beaten finalist, the series score and the Finals MVP, plus the most titles in that span." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/records/wnba-champions" data-rh="true"><meta property="og:title" content="WNBA Champions by Year Since 1997 | DoUKnowBall" data-rh="true"><meta property="og:description" content="Every WNBA champion from 1997 to 2025, with the beaten finalist, the series score and the Finals MVP, plus the most titles in that span." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="WNBA Champions by Year Since 1997 | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Every WNBA champion from 1997 to 2025, with the beaten finalist, the series score and the Finals MVP, plus the most titles in that span." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<a href="/records">Back to the Record Books</a>
+<h1>WNBA champions by year</h1>
+<p>Every WNBA Finals since the league began in 1997, with the beaten finalist and every Finals MVP from Cynthia Cooper on.</p>
+<li>29 years listed, 1997 to 2025.</li>
+<li>Earliest year listed: Houston Comets (1997).</li>
+<li>Latest year listed: Las Vegas Aces (2025).</li>
+<li>12 different team names appear on the list, 1997 to 2025.</li>
+<h2>Every WNBA champion since 1997, year by year</h2>
+<h3>WNBA champions in the 2020s</h3>
+<p>Year</p>
+<p>Champion</p>
+<p>Runner-up</p>
+<p>Series</p>
+<p>Finals MVP</p>
+<p>2025</p>
+<p>Las Vegas Aces</p>
+<p>Phoenix Mercury</p>
+<p>4-0</p>
+<p>A'ja Wilson</p>
+<p>2024</p>
+<p>New York Liberty</p>
+<p>Minnesota Lynx</p>
+<p>3-2</p>
+<p>Jonquel Jones</p>
+<p>2023</p>
+<p>Las Vegas Aces</p>
+<p>New York Liberty</p>
+<p>3-1</p>
+<p>A'ja Wilson</p>
+<p>2022</p>
+<p>Las Vegas Aces</p>
+<p>Connecticut Sun</p>
+<p>3-1</p>
+<p>Chelsea Gray</p>
+<p>2021</p>
+<p>Chicago Sky</p>
+<p>Phoenix Mercury</p>
+<p>3-1</p>
+<p>Kahleah Copper</p>
+<p>2020</p>
+<p>Seattle Storm</p>
+<p>Las Vegas Aces</p>
+<p>3-0</p>
+<p>Breanna Stewart</p>
+<h3>WNBA champions in the 2010s</h3>
+<p>Year</p>
+<p>Champion</p>
+<p>Runner-up</p>
+<p>Series</p>
+<p>Finals MVP</p>
+<p>2019</p>
+<p>Washington Mystics</p>
+<p>Connecticut Sun</p>
+<p>3-2</p>
+<p>Emma Meesseman</p>
+<p>2018</p>
+<p>Seattle Storm</p>
+<p>Washington Mystics</p>
+<p>3-0</p>
+<p>Breanna Stewart</p>
+<p>2017</p>
+<p>Minnesota Lynx</p>
+<p>Los Angeles Sparks</p>
+<p>3-2</p>
+<p>Sylvia Fowles</p>
+<p>2016</p>
+<p>Los Angeles Sparks</p>
+<p>Minnesota Lynx</p>
+<p>3-2</p>
+<p>Candace Parker</p>
+<p>2015</p>
+<p>Minnesota Lynx</p>
+<p>Indiana Fever</p>
+<p>3-2</p>
+<p>Sylvia Fowles</p>
+<p>2014</p>
+<p>Phoenix Mercury</p>
+<p>Chicago Sky</p>
+<p>3-0</p>
+<p>Diana Taurasi</p>
+<p>2013</p>
+<p>Minnesota Lynx</p>
+<p>Atlanta Dream</p>
+<p>3-0</p>
+<p>Maya Moore</p>
+<p>2012</p>
+<p>Indiana Fever</p>
+<p>Minnesota Lynx</p>
+<p>3-1</p>
+<p>Tamika Catchings</p>
+<p>2011</p>
+<p>Minnesota Lynx</p>
+<p>Atlanta Dream</p>
+<p>3-0</p>
+<p>Seimone Augustus</p>
+<p>2010</p>
+<p>Seattle Storm</p>
+<p>Atlanta Dream</p>
+<p>3-0</p>
+<p>Lauren Jackson</p>
+<h3>WNBA champions in the 2000s</h3>
+<p>Year</p>
+<p>Champion</p>
+<p>Runner-up</p>
+<p>Series</p>
+<p>Finals MVP</p>
+<p>2009</p>
+<p>Phoenix Mercury</p>
+<p>Indiana Fever</p>
+<p>3-2</p>
+<p>Diana Taurasi</p>
+<p>2008</p>
+<p>Detroit Shock</p>
+<p>San Antonio Silver Stars</p>
+<p>3-0</p>
+<p>Katie Smith</p>
+<p>2007</p>
+<p>Phoenix Mercury</p>
+<p>Detroit Shock</p>
+<p>3-2</p>
+<p>Cappie Pondexter</p>
+<p>2006</p>
+<p>Detroit Shock</p>
+<p>Sacramento Monarchs</p>
+<p>3-2</p>
+<p>Deanna Nolan</p>
+<p>2005</p>
+<p>Sacramento Monarchs</p>
+<p>Connecticut Sun</p>
+<p>3-1</p>
+<p>Yolanda Griffith</p>
+<p>2004</p>
+<p>Seattle Storm</p>
+<p>Connecticut Sun</p>
+<p>2-1</p>
+<p>Betty Lennox</p>
+<p>2003</p>
+<p>Detroit Shock</p>
+<p>Los Angeles Sparks</p>
+<p>2-1</p>
+<p>Ruth Riley</p>
+<p>2002</p>
+<p>Los Angeles Sparks</p>
+<p>New York Liberty</p>
+<p>2-0</p>
+<p>Lisa Leslie</p>
+<p>2001</p>
+<p>Los Angeles Sparks</p>
+<p>Charlotte Sting</p>
+<p>2-0</p>
+<p>Lisa Leslie</p>
+<p>2000</p>
+<p>Houston Comets</p>
+<p>New York Liberty</p>
+<p>2-0</p>
+<p>Cynthia Cooper</p>
+<h3>WNBA champions from 1997 to 1999</h3>
+<p>Year</p>
+<p>Champion</p>
+<p>Runner-up</p>
+<p>Series</p>
+<p>Finals MVP</p>
+<p>1999</p>
+<p>Houston Comets</p>
+<p>New York Liberty</p>
+<p>2-1</p>
+<p>Cynthia Cooper</p>
+<p>1998</p>
+<p>Houston Comets</p>
+<p>Phoenix Mercury</p>
+<p>2-1</p>
+<p>Cynthia Cooper</p>
+<p>1997</p>
+<p>Houston Comets</p>
+<p>New York Liberty</p>
+<p>1-0</p>
+<p>Cynthia Cooper</p>
+<h2>Most WNBA titles since 1997</h2>
+<p>How we counted: each line in the year by year tables counts for the team name exactly as the table writes it, so a team the table writes two ways counts separately under each. The table does not always use the name of the day, so a renamed team may sit under one name or several.</p>
+<p>Out in front: Houston Comets, Minnesota Lynx and Seattle Storm, 4 titles each.</p>
+<p>Team</p>
+<p>Titles under this name</p>
+<p>Years</p>
+<p>Houston Comets</p>
+<p>4</p>
+<p>1997, 1998, 1999, 2000</p>
+<p>Minnesota Lynx</p>
+<p>4</p>
+<p>2011, 2013, 2015, 2017</p>
+<p>Seattle Storm</p>
+<p>4</p>
+<p>2004, 2010, 2018, 2020</p>
+<p>Detroit Shock</p>
+<p>3</p>
+<p>2003, 2006, 2008</p>
+<p>Las Vegas Aces</p>
+<p>3</p>
+<p>2022, 2023, 2025</p>
+<p>Los Angeles Sparks</p>
+<p>3</p>
+<p>2001, 2002, 2016</p>
+<p>Phoenix Mercury</p>
+<p>3</p>
+<p>2007, 2009, 2014</p>
+<p>5 more team names appear once.</p>
+<h2>Play with this history</h2>
+<li><a href="/champ-or-not">Champ or Not</a></li>
+<li><a href="/whod-they-beat">Who'd They Beat?</a></li>
+<li><a href="/list-quiz">Name Them All</a></li>
+<h2>Where this comes from</h2>
+<p>Each table was verified against at least two independent sources, and the checks run on every build: winner lists are audited answer by answer, split titles and vacated seasons are pinned so they can never quietly change, and a blank cell means the detail was never verified rather than papered over. Spot something that looks wrong anyway? The Report a bug button below lands straight in our inbox.</p>
+<h2>More record books</h2>
+<li><a href="/records/super-bowl-winners">Super Bowl winners since 1967, year by year</a></li>
+<li><a href="/records/nba-champions">NBA champions since 1947, year by year</a></li>
+<li><a href="/records/world-series-winners">World Series winners since 1903, year by year</a></li>
+<li><a href="/records/stanley-cup-winners">Stanley Cup winners since 1915, year by year</a></li>
+<li><a href="/records/college-football-national-champions">College football national champions since 1981, year by year</a></li>
+<li><a href="/records/ncaa-basketball-champions">Men's NCAA basketball champions since 1939, year by year</a></li>
+<li><a href="/records/english-football-champions">English football champions since 1889, year by year</a></li>
+<li><a href="/records/afl-premiers">VFL/AFL premiers since 1897, year by year</a></li>
+<li><a href="/records/brownlow-medal-winners">Brownlow Medal winners since 1924, year by year</a></li>
+<li><a href="/records/dally-m-medal-winners">Dally M Medal winners since 1979, year by year</a></li>
+<li><a href="/records/nrl-premiers">NRL/NSWRL premiers since 1908, year by year</a></li>
+<li><a href="/records">The Record Books, with the latest seasons of every competition</a></li>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">Basketball</a>
+<a href="/hockey">Hockey</a>
+<a href="/pro-football">Football</a>
+<a href="/baseball">Baseball</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>

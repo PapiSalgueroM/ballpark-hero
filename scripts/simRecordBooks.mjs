@@ -118,9 +118,9 @@ console.log('3) the snapshot a crawler receives contains real champion names');
     const wanted = [];
     for (const def of RECORD_SECTIONS) {
       const rows = book.sections[def.key] || [];
-      /* The page renders the newest 12 of each section before the show all
-         toggle, and the prerenderer captures only what is visible, so check
-         inside that window rather than against every row. */
+      /* The page renders the newest ten seasons of each section (Round 649
+         moved the full tables to /records/<slug>, which simRecordPages
+         checks), so check inside that window rather than against every row. */
       for (const r of rows.slice(0, 6)) wanted.push({ section: def.key, champion: String(r.champion) });
     }
 
