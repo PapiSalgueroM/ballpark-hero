@@ -60,7 +60,9 @@
  * seeded seasons and fails if it ever drops. Its first version played every
  * career hands off and never bought, sold, loaned or paid off anybody, so it
  * reported zero drops while all three of those buttons dropped the score. It
- * exercises them now.
+ * exercises them now, and it asserts a floor on each of the three separately,
+ * because its second version listed men and accepted whatever bid the stream
+ * happened to send and measured one sale and no loans across twelve careers.
  *
  * THE SCALE STAYS 0..130 ON PURPOSE. `game_score_caps.max_score` for
  * `club-manager` is 130 with 185,460 rows already recorded against it, and the
@@ -134,14 +136,37 @@ export const EURO_POINTS: readonly number[] = [0, 7, 13, 18, 24];
 
 /**
  * A pre Round 633 takeover save carries no stamped handover, so the previous
- * manager's points have to be estimated. It is estimated at a FIXED neutral
- * rate rather than at the player's own scoring rate, and that choice is the
- * whole point: a rate estimate rises as you lose (subtract `pts * played /
- * leaguePlayed` and thirteen straight defeats read a rising share of the form
- * term), which pays a player for losing. A constant cannot do that.
- * 1.35 is roughly the points per game a league hands out on average, since
- * three points are shared between a winner and a loser and about a quarter of
- * matches are drawn.
+ * manager's points have to be recovered some other way. There are two ways,
+ * and only one of them is a record.
+ *
+ * FIRST, THE RECORD. The save carries `career.resultLog`, one entry per match
+ * this season with the calendar week it was played in, and the takeover week
+ * is a pure function of the calendar length and the entry point (the same
+ * formula startMidSeason has used since Round 549, below in
+ * `legacyTakeoverWeek`). So the previous manager's league points and games
+ * are simply the league entries logged before that week, a win worth 3 and a
+ * draw 1. That is a REPLAY of what happened, frozen the moment it happened:
+ * nothing the new manager does can change an entry logged before he arrived,
+ * so the number cannot move with his own results any more than a stamped
+ * record could. Measured on 54 takeovers at 18 clubs it reproduced the
+ * stamped record exactly, at the takeover and at the final whistle.
+ *
+ * SECOND, THE CONSTANT, kept as the fallback. The log is capped at 60 entries
+ * (`state.resultLog = log.slice(-60)` in clubManager.ts), and a save from
+ * before the log existed carries none, so when the log does not hold every
+ * league match the table says was played, the replay would undercount the
+ * previous manager and pay the new one for games he never picked a team for.
+ * The fallback is then a FIXED neutral rate rather than the player's own
+ * scoring rate, and that choice is the whole point: a rate estimate rises as
+ * you lose (subtract `pts * played / leaguePlayed` and thirteen straight
+ * defeats read a rising share of the form term), which pays a player for
+ * losing. A constant cannot do that, and neither can the replay, which is a
+ * sum over entries the player can no longer touch. 1.35 is roughly the points
+ * per game a league hands out on average, since three points are shared
+ * between a winner and a loser and about a quarter of matches are drawn.
+ * Measured on the same 54 takeovers, the constant was wrong by a median of 5
+ * points of score and up to 23 at the whistle, and at the moment of takeover
+ * it read above zero in 45 of the 54 saves, up to 53 for no games managed.
  */
 export const LEGACY_PPG = 1.35;
 
@@ -153,6 +178,30 @@ export const LEGACY_HANDOVER_FRACTION: Record<string, number> = {
 };
 
 /**
+ * The calendar week a takeover career began at, for a legacy save. This is
+ * startMidSeason's own target formula (clubManagerCalendar.ts, Round 549) and
+ * it must stay identical to it: simClubManagerScore takes over through
+ * startMidSeason itself and checks the replay against the stamped record, so
+ * a drift here goes red there. Null when the calendar or the entry is not
+ * something the formula can be applied to.
+ */
+export function legacyTakeoverWeek(calendarLength: number, start: string): number | null {
+  const f = LEGACY_HANDOVER_FRACTION[start];
+  const total = int(calendarLength, 0, 500);
+  if (!Number.isFinite(f) || total <= 0) return null;
+  return Math.max(1, Math.min(total - 3, Math.round(total * f)));
+}
+
+/** One line of the season's fixture log, as the score reads it. */
+export interface LegacyLogEntry {
+  /** The calendar week the match was played in, career.calendar's index. */
+  week: number;
+  /** A league match. Cup and European entries carry no league points. */
+  league: boolean;
+  res: 'W' | 'D' | 'L';
+}
+
+/**
  * What the manager before you had already banked when you walked in. Stamped
  * into the save at the handover so it is frozen, never recomputed, and
  * therefore cannot move with your own results.
@@ -162,7 +211,16 @@ export interface SeasonHandover {
   played: number;
   cupRank: number;
   euroRank: number;
-  objectivesDone: number;
+  /**
+   * The ids of the board objectives already ticked at the handover. At the
+   * whistle only those still ticked are subtracted, because a tick can come
+   * back off (the youth objective is recomputed from the current squad, and
+   * four of the five board asks read the squad the same way): a manager who
+   * inherits a tick and loses it has not been paid for it, so it must not be
+   * docked from him either. A NUMBER here is the shape the first version of
+   * this round stamped, a bare count, and it is still read as a count.
+   */
+  objectivesDone: string[] | number;
   /** The league was already won when you arrived. */
   wonLeague: boolean;
   /**
@@ -170,6 +228,9 @@ export interface SeasonHandover {
    * handover, so the honours terms know they cannot be trusted to subtract.
    */
   estimated?: boolean;
+  /** On a legacy estimate: the points came from the fixture log replay
+   *  rather than from the constant. Never stored, read by the harness. */
+  fromLog?: boolean;
 }
 
 export interface SeasonLedgerInput {
@@ -187,8 +248,8 @@ export interface SeasonLedgerInput {
   cupRank: number;
   /** uclProgressRank(career).rank, 0..4. */
   euroRank: number;
-  /** objectiveStatuses(career) entries reading 'done'. */
-  objectivesDone: number;
+  /** The ids of the objectiveStatuses(career) entries reading 'done'. */
+  objectivesDone: string[];
   /** career.week >= career.calendar.length. The board card settles here. */
   seasonDone: boolean;
   /** The stamped handover, or null on a career started from week 0. */
@@ -201,6 +262,15 @@ export interface SeasonLedgerInput {
    * own season would subtract a manager who does not exist.
    */
   legacyStart: 'autumn' | 'newYear' | 'runIn' | null;
+  /** career.calendar.length, which fixes the takeover week of a legacy save. */
+  calendarLength: number;
+  /**
+   * career.resultLog on the legacy path, so the previous manager's league
+   * record can be replayed rather than estimated. Null when there is no
+   * legacy takeover to repair, and the replay falls back to the constant when
+   * the log does not hold every league match the table says was played.
+   */
+  legacyLog: LegacyLogEntry[] | null;
 }
 
 export interface SeasonLedger {
@@ -222,25 +292,57 @@ const rank04 = (r: number): number => int(r, 0, 4);
 /** The empty ledger, so every early return agrees on its shape. */
 const NOTHING: SeasonLedger = { form: 0, title: 0, cup: 0, euro: 0, objectives: 0, total: 0 };
 
+/** The stamped ids, cleaned: strings only, and never more than the board could hold. */
+const idList = (v: unknown): string[] =>
+  (Array.isArray(v) ? v.filter((x): x is string => typeof x === 'string') : []).slice(0, 99);
+
+/**
+ * The previous manager's league record, replayed from the fixture log. Null
+ * when the log cannot be trusted to hold it: no log at all, or a log whose
+ * league entries do not number the games the table says were played, which
+ * is what the 60 entry cap looks like once it has dropped the oldest
+ * matches. The dropped matches are always the earliest, so they are always
+ * the previous manager's, and a partial replay would undercount him.
+ */
+function legacyFromLog(i: SeasonLedgerInput): { pts: number; played: number } | null {
+  if (!i.legacyStart || !Array.isArray(i.legacyLog)) return null;
+  const week = legacyTakeoverWeek(i.calendarLength, i.legacyStart);
+  if (week === null) return null;
+  const league = i.legacyLog.filter(e => !!e && e.league === true && Number.isFinite(e.week));
+  if (league.length !== Math.max(0, int(i.leaguePlayed, 0, 500))) return null;
+  let pts = 0;
+  let played = 0;
+  for (const e of league) {
+    if (e.week >= week) continue;
+    played += 1;
+    pts += e.res === 'W' ? 3 : e.res === 'D' ? 1 : 0;
+  }
+  return { pts, played };
+}
+
 /**
  * The handover to subtract. A stamped record wins. Otherwise a legacy takeover
- * is estimated at the neutral rate above, and everything else is null.
+ * is replayed from the fixture log, or estimated at the neutral rate above
+ * when the log cannot carry it, and everything else is null.
  */
 export function handoverOf(i: SeasonLedgerInput): SeasonHandover | null {
+  const playedCeiling = Math.max(0, int(i.leaguePlayed, 0, 500));
+  const ptsCeiling = Math.max(0, int(i.leaguePts, 0, 500));
   if (i.handover) {
     /* The two clamps are a consistency check, not decoration. `played` and
        `pts` come out of localStorage, which the player can edit, and a
        handover claiming to have played MORE games than the table has records
        of would shrink `mine` towards 1 and hand out the whole form term for a
        single win. Neither can exceed what the table itself says happened. */
-    const playedCeiling = Math.max(0, int(i.leaguePlayed, 0, 500));
-    const ptsCeiling = Math.max(0, int(i.leaguePts, 0, 500));
+    const stampedObjectives = i.handover.objectivesDone;
     return {
       pts: Math.min(ptsCeiling, Math.max(0, int(i.handover.pts, 0, Number.MAX_SAFE_INTEGER))),
       played: Math.min(playedCeiling, Math.max(0, int(i.handover.played, 0, Number.MAX_SAFE_INTEGER))),
       cupRank: rank04(i.handover.cupRank),
       euroRank: rank04(i.handover.euroRank),
-      objectivesDone: Math.max(0, int(i.handover.objectivesDone, 0, 99)),
+      objectivesDone: typeof stampedObjectives === 'number'
+        ? Math.max(0, int(stampedObjectives, 0, 99))
+        : idList(stampedObjectives),
       wonLeague: !!i.handover.wonLeague,
     };
   }
@@ -248,23 +350,53 @@ export function handoverOf(i: SeasonLedgerInput): SeasonHandover | null {
   const rounds = Math.max(1, int(i.leagueRounds, 1, 200));
   const f = LEGACY_HANDOVER_FRACTION[i.legacyStart];
   if (!Number.isFinite(f)) return null;
-  const played = Math.min(rounds - 1, Math.max(0, Math.round(rounds * f)));
+  const rebuilt = legacyFromLog(i);
+  const played = rebuilt
+    ? Math.min(rounds - 1, Math.min(playedCeiling, rebuilt.played))
+    : Math.min(rounds - 1, Math.max(0, Math.round(rounds * f)));
+  const pts = rebuilt
+    ? Math.min(ptsCeiling, rebuilt.pts)
+    : Math.round(LEGACY_PPG * played);
   return {
-    pts: Math.round(LEGACY_PPG * played),
+    pts,
     played,
     /* These three are NOT knowable from a pre Round 633 save, and zeroing them
        is not neutral: it credits the new manager with the cup run, the
        European run and the board ticks the previous manager banked, which
        measured at about 15 points of 130 on average and 40 at worst. They are
-       left at zero here and the honours terms below scale by the share of the
+       left empty here and the honours terms below scale by the share of the
        season actually managed instead, which is the honest reading of "we do
-       not know what he did, so you are paid for your part of it". */
+       not know what he did, so you are paid for your part of it". The log
+       could in principle replay the cup and European rounds too, but it says
+       nothing about the board card, and paying two honours in full while the
+       third is scaled would be a third shape for the same save. */
     cupRank: 0,
     euroRank: 0,
-    objectivesDone: 0,
+    objectivesDone: [],
     wonLeague: false,
     estimated: true,
+    fromLog: !!rebuilt,
   };
+}
+
+/**
+ * How many of the stamped ticks are still ticked now. A count (the first
+ * version's shape) is subtracted as a count. A list of ids is matched one for
+ * one against the ids done now, so a board that happens to carry two
+ * objectives with the same id is still counted right, and a stamped tick that
+ * has since come off subtracts nothing.
+ */
+function stampedStillDone(stamped: string[] | number, doneNow: string[]): number {
+  if (typeof stamped === 'number') return stamped;
+  const left = [...doneNow];
+  let n = 0;
+  for (const id of stamped) {
+    const k = left.indexOf(id);
+    if (k < 0) continue;
+    left.splice(k, 1);
+    n += 1;
+  }
+  return n;
 }
 
 /**
@@ -330,8 +462,13 @@ export function seasonLedger(i: SeasonLedgerInput): SeasonLedger {
      season forked at week 20 finished 58 if you kept him and 48 if you paid
      him off. Grading the card once, where the board itself settles it, means
      there is no sequence of readings to fall through, and it makes the score
-     agree with the tick list printed beside it on the same screen. */
-  const doneNow = Math.max(0, int(i.objectivesDone, 0, 99) - (h && !est ? h.objectivesDone : 0));
+     agree with the tick list printed beside it on the same screen.
+
+     The same flip is why the handover subtracts stamped IDS and not a count:
+     a tick the previous manager banked and the new one lost is not on the
+     card at the whistle, so a count would dock him one of his own. */
+  const doneIds = idList(i.objectivesDone);
+  const doneNow = Math.max(0, doneIds.length - (h && !est ? stampedStillDone(h.objectivesDone, doneIds) : 0));
   const rawObjectives = Math.min(W_OBJ_CAP, doneNow * W_OBJ_EACH);
   const objectives = !i.seasonDone ? 0
     : est ? int(rawObjectives * share, 0, W_OBJ_CAP)
@@ -365,7 +502,9 @@ export function ledgerCeiling(): number {
  * The ceiling a league with no European route can reach, which must still be
  * the full 130 or the five non-European leagues are structurally underpaid.
  * Derived rather than written down, so a weight change cannot break it
- * silently: simClubManagerScore asserts it equals LEDGER_CAP.
+ * silently: simClubManagerScore asserts it equals LEDGER_CAP, and asserts
+ * that a perfect season with no Europe, scored through seasonLedger itself,
+ * lands on the same number.
  */
 export function ceilingWithoutEurope(): number {
   return Math.min(LEDGER_CAP, W_FORM + W_TITLE + CUP_POINTS[4] + W_OBJ_CAP);

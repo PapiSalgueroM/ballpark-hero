@@ -720,7 +720,12 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
 /**
  * Round 633: the previous manager's season, as the score reads it.
  * `objectiveStatuses` grades against the board's targets, so an objective he
- * had already banked does not pay you a second time.
+ * had already banked does not pay you a second time. The ticks are stamped
+ * by ID rather than counted: a tick can come back off later (the youth
+ * objective is recomputed from the current squad, and four of the five board
+ * asks read the squad the same way), and the score subtracts only the stamped
+ * ticks still on the card at the whistle, so a tick you inherited and then
+ * lost is neither paid to you nor docked from you.
  */
 function handoverFrom(s: CareerState) {
   const row = s.table.find(r => r.club === s.clubName);
@@ -729,7 +734,7 @@ function handoverFrom(s: CareerState) {
     played: row ? row.w + row.d + row.l : 0,
     cupRank: cupProgressRank(s).rank,
     euroRank: uclProgressRank(s).rank,
-    objectivesDone: objectiveStatuses(s).filter(o => o.status === 'done').length,
+    objectivesDone: objectiveStatuses(s).filter(o => o.status === 'done').map(o => o.objective.id),
     wonLeague: s.trophies.some(t => t.season === s.season && t.name === 'League Title'),
   };
 }

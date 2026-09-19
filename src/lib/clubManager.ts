@@ -16,7 +16,8 @@ import type { JobOffer as MarketJobOffer, ManagerProfile, ClubTier } from '@/lib
    drive it with synthetic inputs and no engine bundle. clubManagerScore
    imports nothing from here, so there is no cycle. */
 import {
-  seasonLedger, seasonLedgerScore, type SeasonHandover, type SeasonLedger, type SeasonLedgerInput,
+  seasonLedger, seasonLedgerScore,
+  type LegacyLogEntry, type SeasonHandover, type SeasonLedger, type SeasonLedgerInput,
 } from '@/lib/clubManagerScore';
 import type { Player, Position } from '@/types/game';
 import { FORMATIONS as SHARED_FORMATIONS, SLOT_ALLOWED, playerRating } from '@/lib/squadDeal';
@@ -14668,7 +14669,6 @@ export function matchFacts(career: CareerState): MatchFacts | null {
   return null;
 }
 
-/** min(130, current league points + 10 per trophy won this season). */
 /* Round 633: the league title trophy's name, shared by the rollover that
    pushes it and the season score that reads it, rather than two literals that
    can drift apart. */
@@ -14684,8 +14684,11 @@ function isHandoverRecord(v: unknown): v is SeasonHandover {
   if (!v || typeof v !== 'object') return false;
   const h = v as Record<string, unknown>;
   const num = (x: unknown) => typeof x === 'number' && Number.isFinite(x) && x >= 0;
+  /* The board ticks are stamped as ids now. A bare count is the shape the
+     first version of this round wrote and is still accepted, read as a count. */
+  const ids = (x: unknown) => Array.isArray(x) && x.every(v => typeof v === 'string');
   return num(h.pts) && num(h.played) && num(h.cupRank) && num(h.euroRank)
-    && num(h.objectivesDone) && typeof h.wonLeague === 'boolean';
+    && (ids(h.objectivesDone) || num(h.objectivesDone)) && typeof h.wonLeague === 'boolean';
 }
 
 /**
@@ -14717,6 +14720,7 @@ export function ensureHandover(state: CareerState): SeasonHandover | null {
 export function seasonLedgerInputOf(career: CareerState): SeasonLedgerInput {
   const row = career.table.find(r => r.club === career.clubName);
   const stamped = ensureHandover(career);
+  const legacyStart = !stamped && career.season === 1 ? (career.midSeasonStart ?? null) : null;
   return {
     inTable: !!row,
     leaguePts: row ? row.pts : 0,
@@ -14728,15 +14732,36 @@ export function seasonLedgerInputOf(career: CareerState): SeasonLedgerInput {
     wonLeague: career.trophies.some(t => t.season === career.season && t.name === LEAGUE_TITLE_NAME),
     cupRank: cupProgressRank(career).rank,
     euroRank: uclProgressRank(career).rank,
-    objectivesDone: objectiveStatuses(career).filter(o => o.status === 'done').length,
+    objectivesDone: objectiveStatuses(career).filter(o => o.status === 'done').map(o => o.objective.id),
     /* The board card settles at the final whistle, exactly where
        objectiveStatuses itself settles the league, defence and youth shapes.
        The score reads it there and nowhere else, because a live reading can
        come back off when the squad changes. */
     seasonDone: career.week >= career.calendar.length,
     handover: stamped,
-    legacyStart: !stamped && career.season === 1 ? (career.midSeasonStart ?? null) : null,
+    legacyStart,
+    calendarLength: career.calendar.length,
+    /* The fixture log only matters on the legacy path, where it replays the
+       previous manager's league record; every other save hands over null. */
+    legacyLog: legacyStart ? legacyLogOf(career) : null,
   };
+}
+
+/**
+ * career.resultLog as the score reads it. The typed competition has been on
+ * every entry since Round 164 and the takeover feature is Round 549, so a
+ * takeover save always carries it; an entry without it is bucketed off its
+ * label exactly the way teamCompRecord does.
+ */
+function legacyLogOf(career: CareerState): LegacyLogEntry[] {
+  const cupName = careerLeagueOf(career).cupName;
+  return (career.resultLog ?? []).map(e => ({
+    week: e.week,
+    league: e.competition
+      ? e.competition === 'league'
+      : !(e.comp.startsWith('Champions League') || e.comp.startsWith(cupName)),
+    res: e.res,
+  }));
 }
 
 /** The five terms behind the number, for the season end screen. */
