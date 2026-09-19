@@ -899,28 +899,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Pick a list, empty your brain into the box. Name Them All is the classic recall quiz: every Super Bowl MVP, every F1 world champion, every Masters winner, and you versus the blanks.",
       "There are 28 lists across a dozen sports, from Heisman winners to VFL/AFL and NRL premiers, all built from the site's records database, so the answer key is real history.",
     ],
-    howToPlay: [
-      "Choose a list from the menu, anything from Heisman winners to Stanley Cup champions.",
-      "Pick Relaxed for no clock, or the timed mode for a 3:00 sprint.",
-      "Type names into the box. Correct answers flash green and fill in on the board.",
-      "Repeats flash yellow, misses flash red, and neither costs you anything.",
-      "Give up any time to reveal what you missed, then retry or grab another list.",
+    headings: {
+      howToPlay: "How to play Name Them All, a free sports recall quiz",
+      rules: "Name Them All rules for timers, tiers and guessing",
+      example: "Name Them All walkthrough: Super Bowl MVPs on the clock",
+      tips: "Name Them All tips for beating the clock",
+      faq: "Name Them All FAQ: lists, tiers and spelling",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing a list from the menu",
+        items: [
+          "Choose a list from the menu, anything from Heisman winners to Stanley Cup champions.",
+        ],
+      },
+      {
+        heading: "Picking Relaxed or the timed sprint",
+        items: [
+          "Pick Relaxed for no clock, or the timed mode for a 3:00 sprint.",
+        ],
+      },
+      {
+        heading: "Typing names for a green flash",
+        items: [
+          "Type names into the box. Correct answers flash green and fill in on the board.",
+        ],
+      },
+      {
+        heading: "Reading yellow repeats and red misses",
+        items: [
+          "Repeats flash yellow, misses flash red, and neither costs you anything.",
+        ],
+      },
+      {
+        heading: "Giving up to reveal what's missing",
+        items: [
+          "Give up any time to reveal what you missed, then retry or grab another list.",
+        ],
+      },
     ],
-    rules: [
-      "Timed mode gives you exactly 180 seconds. Relaxed mode has no timer at all.",
-      "Guesses need at least 3 letters, and surnames or team nicknames count when they're unique to one answer.",
-      "Finishing 100 percent of a list earns Gold, 80 percent or better earns Silver, and 60 percent or better earns Bronze.",
-      "Wrong guesses are free. There's no penalty and no guess limit.",
+    ruleSections: [
+      {
+        heading: "Playing with a clock or without one",
+        items: [
+          "Timed mode gives you exactly 180 seconds. Relaxed mode has no timer at all.",
+        ],
+      },
+      {
+        heading: "Typing at least three letters or a surname",
+        items: [
+          "Guesses need at least 3 letters, and surnames or team nicknames count when they're unique to one answer.",
+        ],
+      },
+      {
+        heading: "Earning Gold, Silver and Bronze tiers",
+        items: [
+          "Finishing 100 percent of a list earns Gold, 80 percent or better earns Silver, and 60 percent or better earns Bronze.",
+        ],
+        subsections: [
+          {
+            heading: "Guessing for free with no limit",
+            items: [
+              "Wrong guesses are free. There's no penalty and no guess limit.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Say you open Super Bowl MVPs on the 3:00 clock. You hammer out the quarterbacks first, montana, brady, mahomes, all accepted as surnames, and the board starts filling green.",
-      "Around 40 seconds left you stall, dig up a defender or two, then time hits zero at 72 percent. Bronze tier, and the red misses show exactly what to remember for the Silver run.",
+    exampleSections: [
+      {
+        heading: "Naming quarterbacks first by surname",
+        paragraphs: [
+          "Say you open Super Bowl MVPs on the 3:00 clock. You hammer out the quarterbacks first, montana, brady, mahomes, all accepted as surnames, and the board starts filling green.",
+        ],
+      },
+      {
+        heading: "Stalling at seventy two percent for Bronze",
+        paragraphs: [
+          "Around 40 seconds left you stall, dig up a defender or two, then time hits zero at 72 percent. Bronze tier, and the red misses show exactly what to remember for the Silver run.",
+        ],
+      },
     ],
-    tips: [
-      "Dump the easy names first and save the digging for the back half of the clock.",
-      "Type surnames. They're faster, and the game only asks for full names when two answers share one.",
-      "Work by decade. Walking through the years surfaces names that free recall won't.",
-      "If a name flashes red, try the full version. Shared surnames need spelling out.",
+    tipSections: [
+      {
+        heading: "Dumping the easy names first",
+        items: [
+          "Dump the easy names first and save the digging for the back half of the clock.",
+        ],
+      },
+      {
+        heading: "Typing fast surnames over full names",
+        items: [
+          "Type surnames. They're faster, and the game only asks for full names when two answers share one.",
+        ],
+      },
+      {
+        heading: "Working through the list by decade",
+        items: [
+          "Work by decade. Walking through the years surfaces names that free recall won't.",
+        ],
+      },
+      {
+        heading: "Spelling out a shared surname in full",
+        items: [
+          "If a name flashes red, try the full version. Shared surnames need spelling out.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -943,29 +1027,118 @@ export const WORLD_CONTENT: GameContentMap = {
       "Champ or Not deals ten claims about champions, one at a time, and every single one sounds right. The Bulls in 1994? The Islanders in 1982? Leicester in 2016? Two of those happened. Your job is knowing which.",
       "Every claim is built from real title history across ten competitions: the Super Bowl, the NBA, the World Series, the Stanley Cup, the WNBA, college football and college hoops, the English title, the VFL/AFL flag and the NRL premiership. The fakes are the cruelest kind: a real champion of that competition, dropped into a year they did not win.",
     ],
-    howToPlay: [
-      "Read the claim: a team, a title, a year.",
-      "Tap CHAMP if it really happened, or NOT if it did not.",
-      "The reveal tells you straight away, and if the claim was fake it names the team that really won that year.",
-      "Ten claims per day, one point per correct call, and everyone in the world gets the same ten.",
-      "Unlimited mode deals fresh sets as long as you want to keep calling, and its Hard toggle makes every fake a team that really won a nearby season.",
+    headings: {
+      howToPlay: "How to play Champ or Not, a free true or false champions game",
+      rules: "Champ or Not rules for claims, years and hard mode",
+      example: "Champ or Not walkthrough: the 1994 Bulls and the 1982 Islanders",
+      tips: "Champ or Not tips for placing an era before you tap",
+      faq: "Champ or Not FAQ: leagues covered and split titles",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the team, title and year",
+        items: [
+          "Read the claim: a team, a title, a year.",
+        ],
+      },
+      {
+        heading: "Tapping CHAMP or NOT",
+        items: [
+          "Tap CHAMP if it really happened, or NOT if it did not.",
+        ],
+      },
+      {
+        heading: "Seeing the real winner on a fake claim",
+        items: [
+          "The reveal tells you straight away, and if the claim was fake it names the team that really won that year.",
+        ],
+      },
+      {
+        heading: "Ten daily claims worth one point each",
+        items: [
+          "Ten claims per day, one point per correct call, and everyone in the world gets the same ten.",
+        ],
+      },
+      {
+        heading: "Toggling Hard mode in unlimited sets",
+        items: [
+          "Unlimited mode deals fresh sets as long as you want to keep calling, and its Hard toggle makes every fake a team that really won a nearby season.",
+        ],
+      },
     ],
-    rules: [
-      "Every team named is a genuine champion of that competition at some point in history. The lie, when there is one, is only ever the year.",
-      "Hard mode (Unlimited only) tightens the fakes: the wrong team still won for real, within about three seasons of the year on the card.",
-      "Split titles count as true: if two schools share a college football crown, a claim about either one is a real claim.",
-      "The daily set is the same for everyone and locks in your result for the day once you finish.",
-      "No hints, no lifelines, no second guesses. One tap per claim.",
+    ruleSections: [
+      {
+        heading: "Every team named is a real champion",
+        items: [
+          "Every team named is a genuine champion of that competition at some point in history. The lie, when there is one, is only ever the year.",
+        ],
+      },
+      {
+        heading: "Tightening fakes to three seasons in Hard mode",
+        items: [
+          "Hard mode (Unlimited only) tightens the fakes: the wrong team still won for real, within about three seasons of the year on the card.",
+        ],
+      },
+      {
+        heading: "Counting a shared college football crown as true",
+        items: [
+          "Split titles count as true: if two schools share a college football crown, a claim about either one is a real claim.",
+        ],
+      },
+      {
+        heading: "One shared daily set that locks in",
+        items: [
+          "The daily set is the same for everyone and locks in your result for the day once you finish.",
+        ],
+        subsections: [
+          {
+            heading: "One tap per claim, no lifelines",
+            items: [
+              "No hints, no lifelines, no second guesses. One tap per claim.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "The card says: The Chicago Bulls won the 1994 NBA Finals. It smells right, the Bulls won everything in the 90s, but 1994 is the baseball year: Houston won it. You tap NOT and the reveal confirms it, one point.",
-      "Next card: The New York Islanders won the Stanley Cup in 1982. That is the middle of the four in a row, so you tap CHAMP. Another point, eight claims to go.",
+    exampleSections: [
+      {
+        heading: "The 1994 Bulls claim is actually false",
+        paragraphs: [
+          "The card says: The Chicago Bulls won the 1994 NBA Finals. It smells right, the Bulls won everything in the 90s, but 1994 is the baseball year: Houston won it. You tap NOT and the reveal confirms it, one point.",
+        ],
+      },
+      {
+        heading: "The 1982 Islanders mid dynasty claim",
+        paragraphs: [
+          "Next card: The New York Islanders won the Stanley Cup in 1982. That is the middle of the four in a row, so you tap CHAMP. Another point, eight claims to go.",
+        ],
+      },
     ],
-    tips: [
-      "Work out the era first. Most fakes die the moment you remember who owned that stretch of years.",
-      "Dynasty gaps are the trap: the Bulls did not win in 1994 or 1995, and the Lakers missed 1990 to 1999 entirely.",
-      "The reveal names the real winner on every fake, so even a wrong call teaches you the year for next time.",
-      "Champions repeat. If you know the team has a pile of titles, the question is only whether THIS year is one of them.",
+    tipSections: [
+      {
+        heading: "Placing the era before you tap",
+        items: [
+          "Work out the era first. Most fakes die the moment you remember who owned that stretch of years.",
+        ],
+      },
+      {
+        heading: "Watching for gaps inside a dynasty",
+        items: [
+          "Dynasty gaps are the trap: the Bulls did not win in 1994 or 1995, and the Lakers missed 1990 to 1999 entirely.",
+        ],
+      },
+      {
+        heading: "Learning the correct year from a miss",
+        items: [
+          "The reveal names the real winner on every fake, so even a wrong call teaches you the year for next time.",
+        ],
+      },
+      {
+        heading: "Asking if this exact year is a title year",
+        items: [
+          "Champions repeat. If you know the team has a pile of titles, the question is only whether THIS year is one of them.",
+        ],
+      },
     ],
     faqs: [
       {
