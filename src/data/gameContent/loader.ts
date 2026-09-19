@@ -185,6 +185,20 @@ const LOADERS: Record<ContentBundle, () => Promise<Record<string, GameContentMap
    should not fetch the same prose twice. */
 const cache = new Map<ContentBundle, GameContentMap>();
 
+/**
+ * Round 638: the guide for one route if its sport file has already landed,
+ * without waiting. undefined means "not fetched yet" (or no guide at all),
+ * the same as the block's loading state, so a first visit renders exactly as
+ * before. It lets the block draw a guide it already holds on its first render,
+ * which is also what lets simGuideHeadings render every guide through
+ * react-dom/server, where effects never run.
+ */
+export function peekGameContent(path: string): GameContent | null | undefined {
+  const bundle = PATH_BUNDLE[path];
+  const map = bundle ? cache.get(bundle) : undefined;
+  return map ? (map[path] ?? null) : undefined;
+}
+
 /** The guide for one route, or null when that route has no guide. */
 export async function loadGameContent(path: string): Promise<GameContent | null> {
   const bundle = PATH_BUNDLE[path];
