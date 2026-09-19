@@ -64,8 +64,11 @@ export function DailyRail({ today }: { today?: string }) {
         </div>
       </div>
 
-      <div ref={railRef} className="-mx-4 snap-x overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-2 [scrollbar-width:thin]">
-        <ul className="grid w-max auto-cols-max grid-flow-col grid-rows-2 gap-2.5">
+      {/* On a phone the rail runs to the screen edge, the way a thumb
+          expects; on a wider screen it stays inside the page's column and
+          fades out at the right so the cut reads as "more this way". */}
+      <div ref={railRef} className="-mx-4 snap-x overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-2 [scrollbar-width:thin] sm:mx-0 sm:scroll-px-0 sm:px-0 sm:[mask-image:linear-gradient(to_right,#000_calc(100%-56px),transparent)]">
+        <ul className="grid w-max auto-cols-max grid-flow-col grid-rows-2 gap-2.5 sm:pr-14">
           {spotlight && (
             <li className="row-span-2 snap-start">
               <Spotlight game={spotlight} />
@@ -125,16 +128,21 @@ function DailyChip({ game }: { game: GameDef }) {
       to={game.path}
       style={sportStyle(sport)}
       data-daily-chip={game.path}
-      className="group flex h-[62px] w-[180px] items-center gap-2.5 rounded-xl border border-border/80 bg-surface-1 px-3 transition-[border-color,background-color] duration-200 hover:border-tile/60 hover:bg-surface-2"
+      className="group flex h-[80px] w-[184px] items-center gap-3 rounded-xl border border-border/80 bg-surface-1 px-3 transition-[border-color,background-color] duration-200 hover:border-tile/60 hover:bg-surface-2"
     >
-      <span aria-hidden="true" className="relative grid h-9 w-9 shrink-0 place-items-center rounded-lg bg-tile/15 text-lg ring-1 ring-inset ring-tile/25">
+      <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-tile/15 text-xl ring-1 ring-inset ring-tile/25">
         {game.emoji}
-        <span className="absolute -bottom-1 -right-1 grid h-4 w-4 place-items-center rounded-full bg-surface-1 text-tile ring-1 ring-tile/50">
-          <SportGlyph sport={sport} className="h-3 w-3" />
-        </span>
       </span>
-      <span className="line-clamp-2 min-w-0 text-[13px] font-semibold leading-4 text-foreground group-hover:text-primary">
-        {game.label}
+      <span className="min-w-0">
+        <span className="line-clamp-2 text-[13px] font-semibold leading-4 text-foreground group-hover:text-primary">
+          {game.label}
+        </span>
+        {/* the sport in words and as its drawn glyph, so the chip's colour
+            is never the only thing saying which sport it is */}
+        <span className="mt-1 flex items-center gap-1 text-[11px] font-medium text-muted-foreground">
+          <SportGlyph sport={sport} className="h-3 w-3 text-tile" />
+          {SPORT_NAME[sport]}
+        </span>
       </span>
     </Link>
   );
