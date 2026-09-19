@@ -21,16 +21,36 @@
  *   6. REDUCED MOTION GETS EVERYTHING AT ONCE: no cycling, every box open.
  *
  * NEGATIVE CONTROL: TICKER_CONTROL=dim fades the card text to half alpha in
- * the browser; section 3 must go red.
+ * the browser; section 3 must go red. TICKER_CONTROL=noresume (Round 635)
+ * never presses resume after pause; section 8's resume check must go red.
  *
  * Run: node scripts/lib/hostLikeServer.mjs dist 4173 &
  *      node scripts/playLiveTicker.mjs
  */
 import pw from './lib/playwrightLoader.mjs';
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+/* Round 635: the resume check measures the crawl against the speed the ticker
+   actually ships. It asked for a 50px step per 450ms sample, written when the
+   crawl was 110 px/s (Round 336, 49.5px a sample, a coin toss even then), and
+   Round 414 slowed the crawl to 75 px/s at the owner's request, so the check
+   had been red on healthy code ever since: measured on main on 2026-09-19 at
+   a steady 27 to 28px a sample, parked at 0. The speed is read from the code,
+   never a comment, and the bar is a quarter of the nominal step, which sits
+   an order of magnitude above a parked wire (under 2px) and well under the
+   measured headless step. */
+const TICKER_SRC = fs.readFileSync(path.join(path.dirname(fileURLToPath(import.meta.url)), '..', 'src', 'components', 'layout', 'TopTicker.tsx'), 'utf8')
+  .replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
+const speedMatch = TICKER_SRC.match(/const SPEED = (\d+(?:\.\d+)?);/);
+if (!speedMatch) { console.error('playLiveTicker: could not read the crawl speed from TopTicker.tsx, so the resume check has no bar'); process.exit(1); }
+const CRAWL_PX_PER_S = Number(speedMatch[1]);
+const RESUME_MIN_STEP = 0.25 * CRAWL_PX_PER_S * 0.45;
 
 const BASE = process.env.SWEEP_BASE || 'http://127.0.0.1:4173';
 const CONTROL = process.env.TICKER_CONTROL || '';
-if (CONTROL && CONTROL !== 'dim') { console.error(`TICKER_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
+if (CONTROL && CONTROL !== 'dim' && CONTROL !== 'noresume') { console.error(`TICKER_CONTROL=${CONTROL} is not a control this harness knows`); process.exit(1); }
 let failures = 0;
 const say = (ok, what) => { console.log(`  ${ok ? 'PASS ' : 'FAIL '} ${what}`); if (!ok) failures += 1; };
 
@@ -250,7 +270,9 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
       return { s0, s1: vp.scrollLeft };
     }, BAR);
     say(Math.abs(pausedRead.s1 - pausedRead.s0) < 2, `pause parks the wire (${pausedRead.s0.toFixed(0)} to ${pausedRead.s1.toFixed(0)}px over 2.5s)`);
-    await pauseBtn.click();
+    /* TICKER_CONTROL=noresume leaves the wire paused, which is exactly the
+       broken button this section exists for; the resume check must go red. */
+    if (CONTROL !== 'noresume') await pauseBtn.click();
     /* move the pointer OFF the strip, as a person does, then measure */
     await p4.mouse.move(700, 500);
     /* Round 336 doubled the crawl, so a start-to-end read can straddle the
@@ -267,7 +289,7 @@ console.log('7) a full slate GLIDES: the wire moves, every card passes, then han
       return { seen: seen.map(x => Math.round(x)), biggestStep, focusInStrip: document.querySelector(sel).contains(document.activeElement) };
     }, BAR);
     say(!resumed.focusInStrip, 'the resume click left no sticky focus inside the strip');
-    say(resumed.biggestStep > 50, `resume actually resumes (path ${resumed.seen.join(' > ')}, biggest step ${resumed.biggestStep.toFixed(0)}px)`);
+    say(resumed.biggestStep > RESUME_MIN_STEP, `resume actually resumes (path ${resumed.seen.join(' > ')}, biggest step ${resumed.biggestStep.toFixed(0)}px against a bar of ${RESUME_MIN_STEP.toFixed(1)}px at the shipped ${CRAWL_PX_PER_S} px/s)`);
   }
   await c4.close();
 
