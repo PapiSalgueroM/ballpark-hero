@@ -562,9 +562,13 @@ function GameCard({ game, bestScore, revealIndex }: { game: GameDef; bestScore?:
       <span className="text-2xl shrink-0 mt-0.5">{game.emoji}</span>
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="font-display font-bold text-foreground group-hover:text-primary transition-colors">
+          {/* Round 650: the game's name is an h3 under its category's h2, so
+              the rendered home page reads as a real outline of the site.
+              The reset gives a heading the inherited size and weight, so the
+              tile looks exactly as it did with a span. */}
+          <h3 className="font-display font-bold text-foreground group-hover:text-primary transition-colors">
             {game.label}
-          </span>
+          </h3>
           {game.daily && (
             <span className="inline-flex items-center text-[10px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-primary/15 text-primary">
               Daily
