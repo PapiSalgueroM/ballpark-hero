@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { ChevronLeft, Sparkles } from 'lucide-react';
 import {
   CREST_SHAPES, CREST_PATTERNS, CUSTOM_TIERS, CLUB_IDENTITIES, CUSTOM_STADIUMS, crestSvg,
-  validateCustomClubName, sanitizeCrestInitials, customBoardPreview, money,
+  validateCustomClubName, sanitizeCrestInitials, customBoardPreview, customQualityCap, money,
 } from '@/lib/clubManager';
 import type { CrestSpec, CustomClubSpec, CustomBudgetTier, ClubIdentity } from '@/lib/clubManager';
 
@@ -56,6 +56,10 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
   const [quality, setQuality] = useState(66);
   const [identity, setIdentity] = useState<ClubIdentity>('balanced');
   const [capacity, setCapacity] = useState(CUSTOM_STADIUMS[1].capacity);
+  /* Round 640: the squad quality the chosen money buys. Above it the squad is
+     just as good, but its made up players sell on at this level's prices (a
+     sale ratio fixed at the founding, so later growth still counts in step). */
+  const ceiling = useMemo(() => customQualityCap(tier, eraId), [tier, eraId]);
 
   // Initials follow the name until the user takes them over.
   const autoInitials = useMemo(() => {
@@ -247,6 +251,11 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
           <p className="text-[9px] text-muted-foreground mt-1">
             The squad average. Your best players land a couple of points above it, so 88 hands you starters in the low 90s. The board reads the squad you build here, and the demand above moves as you drag.
           </p>
+          {quality > ceiling && (
+            <p className="text-[9px] text-gold mt-1">
+              {money(CUSTOM_TIERS[tier].budget)} buys a squad of about {ceiling}. Everything above that is on the house, so these made up players sell on at ~{ceiling} squad prices, and still go up in step as they improve.
+            </p>
+          )}
         </div>
 
         {/* Round 160: the football identity. */}

@@ -5,7 +5,7 @@ import {
   money, moneyIn, sortedLeagueTable, isPartialClub, TIER_INFO,
   projectedRoster, projectedXIAvg, yearsOn, worldSeasonLabel,
   boardWantLabel, careerLeagueOf, eraClubDefFor,
-  managerOf,
+  managerOf, sellValue,
 } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 import { ratingTint, MadeUpTag } from '@/components/club-manager/SquadScreen';
@@ -38,9 +38,18 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
   /* Round 154: a club you founded has no projected world entry, its squad IS
      the save's squad, so the viewer reads that directly. */
   const isMyCustom = !!career.customClub && clubName === career.customClub.name;
-  const roster = isMyCustom
-    ? career.squad.map(p => ({ n: p.name, p: p.position, a: p.age, v: p.value ?? 0, r: p.rating, g: p.generated }))
+  /* Round 640: a founder of a club founded above what its money buys sells
+     at a fixed share of his value, so the viewer shows what a sale would pay
+     (sellValue, the figure the transfer and contracts screens quote) beside
+     what he is worth, for him and for the squad. */
+  const roster: { n: string; p: string; a: number; v: number; r: number; g?: boolean; s?: number }[] = isMyCustom
+    ? career.squad.map(p => ({
+      n: p.name, p: p.position, a: p.age, v: p.value ?? 0, r: p.rating, g: p.generated,
+      s: p.founderSaleRatio !== undefined ? sellValue(p) : undefined,
+    }))
     : projectedRoster(clubName, onYears, career.eraId);
+  const saleRatioMen = isMyCustom && career.squad.some(p => p.founderSaleRatio !== undefined);
+  const salePays = saleRatioMen ? career.squad.reduce((s, p) => s + sellValue(p), 0) : 0;
   const xiAvg = isMyCustom
     ? (roster.length ? Math.round([...roster].sort((a, b) => b.r - a.r).slice(0, 11).reduce((s, p) => s + p.r, 0) / Math.min(11, roster.length)) : null)
     : projectedXIAvg(clubName, onYears, career.eraId);
@@ -105,6 +114,9 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
           <div>
             <div className="text-lg font-bold font-display text-gold">{money(Math.round(squadValue))}</div>
             <div className="text-[9px] text-muted-foreground">Squad value</div>
+            {saleRatioMen && (
+              <div className="text-[9px] text-muted-foreground">a sale pays {money(Math.round(salePays))}</div>
+            )}
           </div>
           <div>
             <div className="text-lg font-bold font-display text-foreground">{row && inMyLeague ? `#${rowIdx + 1}` : '-'}</div>
@@ -146,7 +158,10 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
               </div>
               <div className="text-[9px] text-muted-foreground">{p.a}y</div>
             </div>
-            <span className="text-[10px] font-bold text-gold shrink-0">{money(p.v)}</span>
+            <span className="shrink-0 text-right leading-tight">
+              <span className="block text-[10px] font-bold text-gold">{money(p.v)}</span>
+              {p.s !== undefined && <span className="block text-[9px] text-muted-foreground">sells {money(p.s)}</span>}
+            </span>
             <span className={cn('text-sm font-bold font-display w-7 text-right', ratingTint(p.r))}>{p.r}</span>
           </div>
         ))}
@@ -160,6 +175,7 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
           <p className="text-[9px] text-yellow-500/80 pt-2">
             The club you founded. Its original squad was generated for it and is marked as made up;
             every real player in it arrived through the transfer market.
+            {saleRatioMen && ' You started with a better squad than your money buys, so the made up players marked "sells" go for less than they are worth: what a sale pays, the same figure the transfer screen quotes.'}
           </p>
         )}
         {!isMyCustom && onYears > 0 && roster.length > 0 && (

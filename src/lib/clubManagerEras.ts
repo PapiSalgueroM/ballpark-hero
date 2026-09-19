@@ -520,6 +520,34 @@ export function eraUpliftRating(eraId: string | undefined, r: number): number {
   return Math.min(99, Math.round(r + (r - u.pivot) * u.gain));
 }
 
+/**
+ * Round 640: the uplift run backwards. An engine rating above an era's pivot
+ * goes back to the bake rating its money came from, unrounded so a price read
+ * off it moves smoothly with the rating. The identity at or below the pivot
+ * and in the current era, which has no uplift.
+ */
+export function eraBakeRating(eraId: string | undefined, r: number): number {
+  const u = eraId ? ERA_RATING_UPLIFT[eraId] : undefined;
+  if (!u || r <= u.pivot) return r;
+  return u.pivot + (r - u.pivot) / (1 + u.gain);
+}
+
+/**
+ * Round 640: the money the bakes put on a bake rating, in pounds millions,
+ * unrounded. Every roster bake turns a real market value into a rating with
+ * one line, r = round(-13.106 + 12.851 x log10(usd)), and stores the value as
+ * usd x 0.75 / 1e6 (ratingOf and gbpM in scripts/bakeClubManagerRosters.mjs
+ * and in the 2005, 2010 and 2015 bakes). This is that line run backwards, so
+ * it is what a real player of the rating carries in the data: measured over
+ * the 6,305 real players of the four bakes, the median real value at each
+ * rating from 64 to 94 is 0.93 to 1.11 of it, inside the rounding of the
+ * rating itself (0.914 to 1.094), with the same figure in every era, every
+ * league and every age band.
+ */
+export function bakedValueForRating(bakeRating: number): number {
+  return (Math.pow(10, (bakeRating + 13.106) / 12.851) * 0.75) / 1e6;
+}
+
 /** The UNtransformed roster source: tiers, budgets and expectations read
  *  this so an era's club stature stays exactly as it calibrated. */
 export function eraRostersRaw(eraId: string | undefined): Record<string, BakedPlayer[]> {
