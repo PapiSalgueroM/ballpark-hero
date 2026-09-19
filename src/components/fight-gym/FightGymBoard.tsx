@@ -3,6 +3,7 @@ import { Swords, Dumbbell, UserPlus, ChevronLeft, Trophy, RotateCcw, HeartPulse,
 import ShareButtons from '@/components/game/ShareButtons';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 import { cn } from '@/lib/utils';
 import { Confetti, ConditionBar } from '@/components/soccer-career/CareerFx';
 import { STYLES, TACTICS, weightById, ratingOf, effectiveAttrs, conditionTrack, type Tactic, type BoutResult } from '@/lib/fightCareer';
@@ -51,6 +52,10 @@ export default function FightGymBoard() {
       if (!raw) return;
       const s = JSON.parse(raw) as { g: GymState };
       if (!s?.g?.name) return;
+      /* Round 643: a closed gym read back from storage is not a new close.
+         This restore runs after mount, so without the mark every reload
+         paid the verdict again. */
+      if (s.g.closed) markRestoredFinish('fight-gym');
       setG(s.g);
       setPhase(s.g.closed ? 'closed' : 'hub');
     } catch { /* a fresh gym is the right fallback */ }

@@ -141,7 +141,11 @@ export function useTransferPath(): TransferPathState {
     getPuzzleId: (p) => p.id,
     maxGuesses: 999,
     isWon: (actions) => actions.some(a => a.t === 'won'),
-    isLost: () => false,
+    /* Round 643: a give up ends the daily in the engine's own terms too. It
+       was stored as still playing, so the reload restored it with no mark,
+       the page derived "gave up" after mount, and the completion hook
+       recorded the surrender again on every visit. */
+    isLost: (actions) => actions.some(a => a.t === 'give'),
     deserializeGuesses: (raw) => raw as TransferAction[],
   });
 
@@ -368,8 +372,11 @@ export function useTransferPath(): TransferPathState {
 
   // ── useGameCompletion ──────────────────────────────────────────────────────
   // A surrendered daily still counts as "played today" (score 0, no win).
-  const isComplete = mode === 'daily' && (status === 'won' || status === 'gaveup');
-  useGameCompletion('transfer-path', isComplete, status === 'won' ? score : 0, status === 'won' ? 1 : 0);
+  /* Round 643 review: the daily status alone, with the daily's own score,
+     whatever mode is on screen (the Missing XI shape), so no mode change can
+     ever flip the recorder over a daily already recorded. */
+  const isComplete = dailyStatus === 'won' || dailyStatus === 'gaveup';
+  useGameCompletion('transfer-path', isComplete, dailyStatus === 'won' ? dailyScore : 0, dailyStatus === 'won' ? 1 : 0);
 
   // ── giveUp + reveal ────────────────────────────────────────────────────────
   const giveUp = useCallback(() => {

@@ -5,6 +5,7 @@ import {
   type ChampRow, type ChampRound,
 } from '@/lib/champOrNot';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 export type ChampMode = 'daily' | 'unlimited';
 export type LoadState = 'loading' | 'ready' | 'error';
@@ -30,17 +31,41 @@ export function loadDailySave(raw: string | null): SavedDaily | null {
   }
 }
 
+const dailySeedOf = (day: string) => `champ-or-not:${day}`;
+const readDaily = (day: string) => loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${day}`));
+
 export function useChampOrNot() {
-  const today = getTodayET();
+  /* Round 643 review: the day is read ONCE, at mount, as useDailyPuzzle
+     reads it, so the seed, the save key, the restore mark, the daily state
+     and the recorder all name the day the daily was dealt. Read on every
+     render, a final pick landing after midnight ET saved under one day and
+     was checked against the next, and the daily was never recorded. */
+  const today = useRef(getTodayET()).current;
   const [loadState, setLoadState] = useState<LoadState>('loading');
   const [rowsByKey, setRowsByKey] = useState<Map<string, ChampRow[]> | null>(null);
   const [mode, setMode] = useState<ChampMode>('daily');
-  const [answers, setAnswers] = useState<boolean[]>([]);
+  /* Round 643 review: today's daily on its own, whatever mode is on screen.
+     It moves in the same step as the save, so the recorder reads what is
+     stored: `answers` below is only what the board shows, and it waits out
+     each reveal. Reading the recorder off `answers` lost a finish whenever
+     the page reloaded or went to Unlimited inside the final reveal, because
+     the restore found the day already finished and marked it. Restored in
+     the initializer. */
+  const [dailyAnswers, setDailyAnswers] = useState<boolean[]>(() => readDaily(today)?.answers ?? []);
+  const [answers, setAnswers] = useState<boolean[]>(dailyAnswers);
   const [lastPick, setLastPick] = useState<boolean | null>(null);
   const [showingResult, setShowingResult] = useState(false);
   const [unlimitedRun, setUnlimitedRun] = useState(0);
   const [hard, setHard] = useState(false);
   const unlimitedNonce = useRef(String(Date.now() % 1000000007));
+  /* The pending reveal, so a mode change can cancel it: left running, it
+     wrote the daily's answers onto the Unlimited board. */
+  const revealTimer = useRef<number | null>(null);
+  const clearReveal = useCallback(() => {
+    if (revealTimer.current !== null) window.clearTimeout(revealTimer.current);
+    revealTimer.current = null;
+  }, []);
+  useEffect(() => clearReveal, [clearReveal]);
 
   useEffect(() => {
     let alive = true;
@@ -62,6 +87,13 @@ export function useChampOrNot() {
           setLoadState('error');
           return;
         }
+        /* Round 643: the answers are restored at mount, but whether they
+           finish today's board is known only now, so a finished daily read
+           back says so before the board lands, or the recorder sees false
+           then true and records it again. */
+        const dailyCount = buildRounds(m, dailySeedOf(today), DAILY_ROUNDS, false).length;
+        const saved = readDaily(today);
+        if (saved && dailyCount > 0 && saved.answers.length >= dailyCount) markRestoredFinish('champ-or-not');
         setRowsByKey(m);
         setLoadState('ready');
       } catch {
@@ -69,20 +101,17 @@ export function useChampOrNot() {
       }
     })();
     return () => { alive = false; window.clearTimeout(watchdog); };
+    // The fetch runs once per mount; `today` is the mount's day, as the
+    // restore above it is.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // restore the daily the moment data is ready
-  useEffect(() => {
-    if (loadState !== 'ready' || mode !== 'daily') return;
-    const saved = loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${today}`));
-    if (saved) setAnswers(saved.answers);
-  }, [loadState, mode, today]);
 
   // hard is an unlimited-only spice, same convention as the higher-lower
   // games: the shared daily stays one board for everyone
   const hardActive = hard && mode === 'unlimited';
+  const dailySeed = dailySeedOf(today);
   const seedPrefix = mode === 'daily'
-    ? `champ-or-not:${today}`
+    ? dailySeed
     : `champ-or-not:unlimited:${unlimitedNonce.current}:${unlimitedRun}${hardActive ? ':hard' : ''}`;
 
   const rounds: ChampRound[] = useMemo(() => {
@@ -90,12 +119,22 @@ export function useChampOrNot() {
     return buildRounds(rowsByKey, seedPrefix, DAILY_ROUNDS, hardActive);
   }, [rowsByKey, seedPrefix, hardActive]);
 
+  /* Round 643: today's board on its own, whatever mode is on screen. */
+  const dailyRoundCount = useMemo(
+    () => (rowsByKey ? buildRounds(rowsByKey, dailySeed, DAILY_ROUNDS, false).length : 0),
+    [rowsByKey, dailySeed],
+  );
+
   const roundIdx = Math.min(answers.length, rounds.length);
   const current = roundIdx < rounds.length ? rounds[roundIdx] : null;
   const done = rounds.length > 0 && answers.length >= rounds.length;
   const score = answers.filter(Boolean).length;
 
-  useGameCompletion('champ-or-not', done && mode === 'daily', score, 1);
+  /* Round 643 review: the recorder reads the stored daily alone, in either
+     mode, with the daily's own score. A mode toggle never flips it, the final
+     pick records at once, and a restore arrives through the mark above. */
+  const dailyDone = dailyRoundCount > 0 && dailyAnswers.length >= dailyRoundCount;
+  useGameCompletion('champ-or-not', dailyDone, dailyAnswers.filter(Boolean).length, 1);
 
   const answer = useCallback((saysTrue: boolean) => {
     if (!current || showingResult) return;
@@ -107,16 +146,20 @@ export function useChampOrNot() {
       try {
         localStorage.setItem(`${STORAGE_PREFIX}daily-${today}`, JSON.stringify({ answers: next }));
       } catch { /* storage full or blocked: play on */ }
+      setDailyAnswers(next);
     }
-    window.setTimeout(() => {
+    clearReveal();
+    revealTimer.current = window.setTimeout(() => {
+      revealTimer.current = null;
       setAnswers(next);
       setShowingResult(false);
       setLastPick(null);
     }, 2200);
-  }, [current, showingResult, answers, mode, today]);
+  }, [current, showingResult, answers, mode, today, clearReveal]);
 
   const switchMode = useCallback((m: ChampMode) => {
     if (m === mode) return;
+    clearReveal();
     setMode(m);
     setShowingResult(false);
     setLastPick(null);
@@ -124,29 +167,30 @@ export function useChampOrNot() {
       setAnswers([]);
       setUnlimitedRun(r => r + 1);
     } else {
-      const saved = loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${today}`));
-      setAnswers(saved?.answers ?? []);
+      setAnswers(dailyAnswers);
     }
-  }, [mode, today]);
+  }, [mode, dailyAnswers, clearReveal]);
 
   const playAgain = useCallback(() => {
     if (mode !== 'unlimited') return;
+    clearReveal();
     setAnswers([]);
     setShowingResult(false);
     setLastPick(null);
     setUnlimitedRun(r => r + 1);
-  }, [mode]);
+  }, [mode, clearReveal]);
 
   const toggleHard = useCallback(() => {
     setHard(h => !h);
     // a new difficulty means a fresh unlimited set, mid-run included
     if (mode === 'unlimited') {
+      clearReveal();
       setAnswers([]);
       setShowingResult(false);
       setLastPick(null);
       setUnlimitedRun(r => r + 1);
     }
-  }, [mode]);
+  }, [mode, clearReveal]);
 
   return {
     loadState, mode, switchMode, rounds, roundIdx, current, showingResult,

@@ -195,7 +195,13 @@ const MlbGrid = () => {
     setQuery('');
   }, [activeCell, puzzle, gridData, gameOver, mode, guessedNames]);
 
-  useGameCompletion('mlb-grid', mode === 'daily' && gameOver, filledCount * 100);
+  /* Round 643: the daily board alone, in either mode (the MissingXi shape).
+     Gated on the mode, a trip to Unlimited and back went false then true
+     over a daily already recorded and paid it again. The daily board is
+     restored in a state initializer, so a finished one mounts complete and
+     records nothing. The same line in all four grid pages. */
+  const dailyFilled = Object.keys(dailyCells).length;
+  useGameCompletion('mlb-grid', dailyFilled >= 9 || dailyWrongCount >= GUESS_LIMIT, dailyFilled * 100);
 
   const cellStatuses: CellStatus[] = useMemo(
     () => Array.from({ length: 9 }, (_, i) => (cells[i] ? 'correct' : 'empty')),

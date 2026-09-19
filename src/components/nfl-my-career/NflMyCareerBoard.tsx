@@ -144,7 +144,11 @@ export default function NflMyCareerBoard() {
      nothing when the top of the panel is already readable. */
   const panelRef = useRevealScroll<HTMLDivElement>(`${panel}:${newsTab}`);
 
-  const done = phase === 'retired';
+  /* Round 643: the coaching career comes after retirement, so it is still a
+     finished playing career. With done on the retired screen alone, every
+     Resume coaching then Back went false then true and paid the whole legacy
+     again. The same shape in all four My Career boards. */
+  const done = phase === 'retired' || phase === 'coach';
   useGameCompletion('nfl-my-career', done, career ? legacyOf(career).score : 0);
 
   useEffect(() => {
@@ -169,7 +173,7 @@ export default function NflMyCareerBoard() {
       coachRef.current = co;
       setCoach(co);
       const restoredPhase: Phase = !s.c.retired ? 'season' : s.phase === 'coach' && co ? 'coach' : 'retired';
-      if (restoredPhase === 'retired') markRestoredFinish('nfl-my-career');
+      if (restoredPhase !== 'season') markRestoredFinish('nfl-my-career');
       setPhase(restoredPhase);
     } catch { /* fresh */ }
   }, []);

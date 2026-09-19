@@ -9,6 +9,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 import { getTodayET } from '@/lib/dateUtils';
 import {
   Campaign, Holding, START_YEARS, STOCK_BUDGET, StockCard, StockFinish, YearStep,
@@ -51,8 +52,13 @@ export default function PlayerStockMarket() {
 
   const start = useCallback(async (m: Mode, chosenYear?: number) => {
     if (m === 'daily' && dailyResult) {
-      /* Today's market is closed: the result reopens, the cards do not. */
+      /* Today's market is closed: the result reopens, the cards do not.
+         Round 643: when an Unlimited start has cleared the result first (an
+         error, then Back, then Daily), this reopening is a restored finish
+         arriving after mount, so it says so first or the completion hook
+         records the day again. */
       setMode('daily');
+      if (finish === null) markRestoredFinish(SLUG);
       setFinish(dailyResult);
       setPhase('done');
       return;
@@ -69,7 +75,7 @@ export default function PlayerStockMarket() {
     setSlotIndex(0);
     setPicks([]);
     setPhase('buying');
-  }, [dailyResult, todayStr]);
+  }, [dailyResult, todayStr, finish]);
 
   const remaining = STOCK_BUDGET - picks.reduce((s, c) => s + c.price, 0);
   const current = campaign && phase === 'buying' ? campaign.slots[slotIndex] : null;

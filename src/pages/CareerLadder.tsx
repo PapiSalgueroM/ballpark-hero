@@ -87,6 +87,7 @@ const CareerLadder = () => {
   const {
     guesses: dailyActions,
     addGuess: addDailyAction,
+    gameStatus: rawDailyStatus,
     isLoading: isDailyLoading,
   } = useDailyPuzzle<CareerPlayer, LadderAction>({
     gameSlug: 'career-ladder',
@@ -315,8 +316,14 @@ const CareerLadder = () => {
       : `🪜 stumped with ${activeWrongGuesses.length} wrong ${activeWrongGuesses.length === 1 ? 'guess' : 'guesses'} and ${cluesUsed} ${cluesUsed === 1 ? 'stop' : 'stops'} showing`;
 
   // ---- Completion tracking (daily only, mirrors Footle/Career Quiz) -------
-  const dailyCompletionScore = dailyPhase === 'won' ? dailyFinalScore : 0;
-  useGameCompletion('career-ladder', dailyPhase !== 'playing' && dailyPhase !== 'boot', dailyCompletionScore);
+  /* Round 643: the daily status alone, not the phase. The phase waits on the
+     pool, but useDailyPuzzle restores a finished daily and marks it at mount,
+     and the mark lasts five seconds: on a pool slower than that the phase
+     went boot then finished after the mark had expired, and the restore was
+     recorded as a new finish. The status arrives with the mark, in the same
+     commit, whatever the network does. */
+  const dailyCompletionScore = dailyWonAction ? dailyFinalScore : 0;
+  useGameCompletion('career-ladder', rawDailyStatus !== 'playing', dailyCompletionScore);
 
   // phase tracks the single shared pool fetch (boot()), so an error there
   // means neither mode has data. Surface it regardless of which mode the

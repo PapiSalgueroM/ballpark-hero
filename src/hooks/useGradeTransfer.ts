@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 import { getTodayET, shuffledRange } from '@/lib/dateUtils';
 import { fetchTransferGrades, GRADES, type Grade, type TransferCase } from '@/lib/fetchTransferGrades';
 
@@ -78,11 +79,19 @@ export function useGradeTransfer(): GradeTransferState {
     let cancelled = false;
     fetchTransferGrades().then(p => {
       if (cancelled) return;
+      /* Round 643: the saved place is restored in a state initializer, but
+         `finished` needs today's cases, and they arrive here, after mount. A
+         saved place already past the last case is a restored finish and says
+         so first, or the completion hook sees false then true and records it
+         again on every visit (the Ball IQ shape). */
+      const count = pickDaily(p, today).length;
+      const restoredIndex = loadSaved(today)?.index;
+      if (count > 0 && typeof restoredIndex === 'number' && restoredIndex >= count) markRestoredFinish('grade-transfer');
       setPool(p);
       setLoading(false);
     });
     return () => { cancelled = true; };
-  }, []);
+  }, [today]);
 
   const cases = useMemo(() => pickDaily(pool, today), [pool, today]);
 

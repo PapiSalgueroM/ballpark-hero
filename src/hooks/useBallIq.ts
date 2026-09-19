@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET, dailyDraw, shuffledRange } from '@/lib/dateUtils';
 import { fetchQuizBoardClues, type Clue, type ClueValue } from '@/lib/fetchQuizBoard';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 export interface Question {
   clue: Clue;
@@ -104,6 +105,30 @@ function save(today: string, chosen: (string | null)[], index: number) {
   } catch { /* storage unavailable */ }
 }
 
+/* Today's twelve, before the player's picks go on them. Round 643: this was
+   the body of the questions memo; it is a function now so the restore can
+   count today's questions from a pool before it is set, and the memo calls
+   the same code, so the two cannot drift. */
+function dailyQuestions(pool: Clue[], today: string): Question[] {
+  if (pool.length === 0) return [];
+  const out: Question[] = [];
+  const usedIds = new Set<string>();
+
+  RAMP.forEach((value, qi) => {
+    const tier = pool.filter(c => c.value === value && !usedIds.has(c.clueId));
+    const source = tier.length > 0 ? tier : pool.filter(c => !usedIds.has(c.clueId));
+    if (source.length === 0) return;
+    const label = `ball-iq:${today}:q${qi}`;
+    const correct = source[dailyDraw(source.length, label)];
+    usedIds.add(correct.clueId);
+    const q = buildQuestion(correct, pool, label);
+    // Only keep questions we could give real alternatives to.
+    if (q.options.length >= 2) out.push(q);
+  });
+
+  return out;
+}
+
 export function useBallIq(): BallIqState {
   const today = useMemo(() => getTodayET(), []);
   const [pool, setPool] = useState<Clue[]>([]);
@@ -117,31 +142,24 @@ export function useBallIq(): BallIqState {
     let cancelled = false;
     fetchQuizBoardClues().then(c => {
       if (cancelled) return;
+      /* Round 643: the saved place is restored in a state initializer, but
+         `finished` needs the questions, and they arrive here, after mount. A
+         saved place already past the last question is a restored finish and
+         says so first, or the completion hook sees false then true and
+         records it again on every reload. */
+      const count = dailyQuestions(c, today).length;
+      const restoredIndex = loadSaved(today)?.index;
+      if (count > 0 && typeof restoredIndex === 'number' && restoredIndex >= count) markRestoredFinish('ball-iq');
       setPool(c);
       setLoading(false);
     });
     return () => { cancelled = true; };
-  }, []);
+  }, [today]);
 
-  const questions = useMemo(() => {
-    if (pool.length === 0) return [];
-    const out: Question[] = [];
-    const usedIds = new Set<string>();
-
-    RAMP.forEach((value, qi) => {
-      const tier = pool.filter(c => c.value === value && !usedIds.has(c.clueId));
-      const source = tier.length > 0 ? tier : pool.filter(c => !usedIds.has(c.clueId));
-      if (source.length === 0) return;
-      const label = `ball-iq:${today}:q${qi}`;
-      const correct = source[dailyDraw(source.length, label)];
-      usedIds.add(correct.clueId);
-      const q = buildQuestion(correct, pool, label);
-      // Only keep questions we could give real alternatives to.
-      if (q.options.length >= 2) out.push(q);
-    });
-
-    return out.map((q, i) => ({ ...q, chosen: chosen[i] ?? null }));
-  }, [pool, today, chosen]);
+  const questions = useMemo(
+    () => dailyQuestions(pool, today).map((q, i) => ({ ...q, chosen: chosen[i] ?? null })),
+    [pool, today, chosen],
+  );
 
   const finished = questions.length > 0 && index >= questions.length;
   const current = finished ? null : (questions[index] ?? null);

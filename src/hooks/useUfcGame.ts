@@ -39,7 +39,8 @@ export function useUfcGame() {
     puzzleIndex: dailyPuzzleIndex,
     reset: resetDailyHook,
   } = useDailyPuzzle<UfcFighter, UfcGuessResult>({
-    gameSlug: 'ufc-game',
+    gameSlug: 'ufc',
+    storageSlug: 'ufc-game',
     puzzles: uniqueUfcFighters,
     maxGuesses: MAX_GUESSES,
     isWon: (g) => g.length > 0 && g[g.length - 1].isCorrect,

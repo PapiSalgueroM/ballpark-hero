@@ -22,7 +22,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import { hslToRgb, readableL } from "@/lib/readableColor";
 import { recordCompletion, getCurrentPlayerName } from "@/lib/completions";
-import { WC2026_STORAGE_KEYS, clearWc2026ChildStorage, createAutoFillController, wc2026SeedSignature } from "@/lib/wc2026Lifecycle";
+import { WC2026_STORAGE_KEYS, clearWc2026ChildStorage, createAutoFillController, crownChampion, parseCrowned, wc2026SeedSignature } from "@/lib/wc2026Lifecycle";
 
 /* ───── types ───── */
 
@@ -798,13 +798,20 @@ const WorldCupPredictor = () => {
      bracket's own included, and the two reset handlers below clear the ref
      with it, so a fresh bracket still counts even when it crowns the same
      favourite without a reload. */
-  const crownedRef = useRef<string>((() => {
-    try { return localStorage.getItem(WC2026_STORAGE_KEYS.crowned) || ""; } catch { return ""; }
+  /* Round 643: every name this bracket has crowned, not only the last. With
+     the last alone, crowning A, then B in the final, then A again recorded A
+     a second time, against the one row per crowned name rule above. The
+     stored value is a JSON list now; a value written before this round is a
+     single plain name and reads back as a list of one. */
+  const crownedRef = useRef<string[]>((() => {
+    try { return parseCrowned(localStorage.getItem(WC2026_STORAGE_KEYS.crowned)); } catch { return []; }
   })());
   useEffect(() => {
-    if (!champion || viewingSharedBracket || crownedRef.current === champion) return;
-    crownedRef.current = champion;
-    try { localStorage.setItem(WC2026_STORAGE_KEYS.crowned, champion); } catch { /* storage may be unavailable */ }
+    if (viewingSharedBracket) return;
+    const next = crownChampion(crownedRef.current, champion);
+    if (!next) return;
+    crownedRef.current = next;
+    try { localStorage.setItem(WC2026_STORAGE_KEYS.crowned, JSON.stringify(next)); } catch { /* storage may be unavailable */ }
     recordCompletion("/world-cup-bracket", undefined, getCurrentPlayerName(profile));
   }, [champion, viewingSharedBracket, profile]);
 
@@ -917,7 +924,7 @@ const WorldCupPredictor = () => {
   const invalidateKnockout = useCallback(() => {
     clearWc2026ChildStorage(localStorage, false);
     setChampion("");
-    crownedRef.current = "";
+    crownedRef.current = [];
     setBracketRounds([]);
     setKnockoutResetVersion((version) => version + 1);
   }, []);
@@ -1139,7 +1146,7 @@ const WorldCupPredictor = () => {
     setSelectedThirds([]);
     setPlayoffPicks({});
     setChampion("");
-    crownedRef.current = "";
+    crownedRef.current = [];
     setBracketRounds([]);
     setAwardPicks({ goldenBoot: "", goldenGlove: "", goldenBall: "" });
     setKnockoutResetVersion((version) => version + 1);

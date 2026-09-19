@@ -74,6 +74,13 @@ export default defineConfig({
       ...(process.env.TYCOON_PACKS_PANEL
         ? { "@/components/tycoon/PacksPanel": path.resolve(process.env.TYCOON_PACKS_PANEL) }
         : {}),
+      /* Round 643 negative controls: scripts/simNoDoubleRecord.mjs writes a
+         broken copy of one module (the restore mark, one daily hook, one
+         toggle page) and names it here as {"@/module": "/abs/copy"}. Same
+         ordering rule: above "@". */
+      ...(process.env.NO_DOUBLE_SWAP
+        ? (JSON.parse(process.env.NO_DOUBLE_SWAP) as Record<string, string>)
+        : {}),
       "@": path.resolve(__dirname, "./src"),
     },
   },

@@ -14,6 +14,34 @@ export interface Wc2026Storage {
   removeItem(key: string): void;
 }
 
+/**
+ * Round 643: the names a bracket has already crowned, read from the stored
+ * value. A value written before Round 643 is one plain name (the last
+ * champion only) and reads back as a list of one; anything unreadable reads
+ * as none, so a wiped or tampered key can never block a first crowning.
+ */
+export function parseCrowned(raw: string | null): string[] {
+  if (!raw) return [];
+  if (!raw.startsWith('[')) return [raw];
+  try {
+    const list: unknown = JSON.parse(raw);
+    return Array.isArray(list) ? list.filter((name): name is string => typeof name === 'string' && name !== '') : [];
+  } catch {
+    return [];
+  }
+}
+
+/**
+ * Round 643: crowning `champion`. Returns the list to store when this is a
+ * name the bracket has not crowned before, which is the one moment a
+ * completion is recorded, and null when it has. Keeping only the last name,
+ * as before, recorded A again after A, then B, then A.
+ */
+export function crownChampion(crowned: readonly string[], champion: string): string[] | null {
+  if (!champion || crowned.includes(champion)) return null;
+  return [...crowned, champion];
+}
+
 /** Removes saved child state without touching unrelated browser storage. */
 export function clearWc2026ChildStorage(storage: Wc2026Storage, includeAwards: boolean): void {
   storage.removeItem(WC2026_STORAGE_KEYS.knockout);
