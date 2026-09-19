@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useSyncExternalStore } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { ALL_GAMES } from '@/data/gameRegistry';
 import { jsonLdFor } from '@/lib/pageSchema';
@@ -86,9 +86,9 @@ export const searchTitle = (full: string): string =>
  * map are cached HERE, at module level: the first PageSeo to mount starts the
  * load and renders the page's own props meanwhile, then swaps once the chunk
  * lands, and every page after that reads the map synchronously on its first
- * render. Nothing is drawn in a state initialiser; the state is only a nudge
- * to render again. A failed load leaves the page's own props in place and
- * clears the cache so the next page tries again.
+ * render. There is no state initialiser at all; the component reads the cache
+ * through useSyncExternalStore (below). A failed load leaves the page's own
+ * props in place and clears the cache so the next page tries again.
  *
  * The saved pages are what a crawler reads, and the prerenderer waits for the
  * head to stop moving before it captures, so the swap lands in them. The brand
@@ -98,13 +98,25 @@ export const searchTitle = (full: string): string =>
  * legal pages, the retired games) keeps the props it passes, unchanged.
  * scripts/simSeoTitles.mjs renders every game page through this component
  * before and after the load, and checks the text stays out of the entry chunk. */
+/* WHY useSyncExternalStore AND NOT A useState NUDGE. The first version kept a
+ * flag in state and set it when the load resolved, and a prerender caught it
+ * out: on a cold browser an instance rendered BEFORE the chunk resolved and ran
+ * its effect AFTER, found the cache already full, skipped the nudge, and kept
+ * the page's old Game JSON-LD in the head beside the new one. The cache is an
+ * external store, and this hook re-reads it after subscribing, so an instance
+ * that rendered with nothing always renders again with the map. */
 type SeoMetaMap = typeof import('@/data/seoMeta').SEO_META;
 let seoMeta: SeoMetaMap | null = null;
 let seoMetaLoad: Promise<SeoMetaMap | null> | null = null;
+const seoMetaListeners = new Set<() => void>();
 export const loadSeoMeta = (): Promise<SeoMetaMap | null> => {
   if (!seoMetaLoad) {
     seoMetaLoad = import('@/data/seoMeta')
-      .then(m => (seoMeta = m.SEO_META))
+      .then(m => {
+        seoMeta = m.SEO_META;
+        for (const notify of seoMetaListeners) notify();
+        return seoMeta;
+      })
       .catch(() => {
         seoMetaLoad = null;
         return null;
@@ -112,23 +124,23 @@ export const loadSeoMeta = (): Promise<SeoMetaMap | null> => {
   }
   return seoMetaLoad;
 };
+const subscribeSeoMeta = (notify: () => void) => {
+  seoMetaListeners.add(notify);
+  return () => {
+    seoMetaListeners.delete(notify);
+  };
+};
+const readSeoMeta = () => seoMeta;
 
 const PageSeo = ({ title: pageTitle, description: pageDescription, path, ogImage, noindex }: PageSeoProps) => {
-  const [, setSeoMetaLoaded] = useState(false);
+  const meta = useSyncExternalStore(subscribeSeoMeta, readSeoMeta, readSeoMeta);
   useEffect(() => {
     /* Only a game page has an entry, so the home page, the hubs and the legal
        pages never fetch the chunk. The registry is already in the entry chunk
        (pageSchema reads it), so asking costs nothing. */
-    if (seoMeta || !ALL_GAMES.some(g => g.path === path)) return;
-    let live = true;
-    loadSeoMeta().then(m => {
-      if (live && m) setSeoMetaLoaded(true);
-    });
-    return () => {
-      live = false;
-    };
+    if (!seoMeta && ALL_GAMES.some(g => g.path === path)) void loadSeoMeta();
   }, [path]);
-  const entry = seoMeta?.[path];
+  const entry = meta?.[path];
   const title = entry ? `${entry.title}${BRAND_SUFFIX}` : pageTitle;
   const description = entry ? entry.description : pageDescription;
   const canonicalUrl = `${BASE_URL}${path}`;

@@ -133,7 +133,7 @@ const TMP = fs.mkdtempSync(path.join(os.tmpdir(), `seoTitles-${process.pid}-`));
 const pageSeoSrc = lf(fs.readFileSync(SEO, 'utf8'));
 /* The load itself, not the type beside it that names the same module. */
 const LAZY_ANCHOR = "seoMetaLoad = import('@/data/seoMeta')";
-const LOOKUP_ANCHOR = 'const entry = seoMeta?.[path];';
+const LOOKUP_ANCHOR = 'const entry = meta?.[path];';
 let seoPath = SEO;
 if (CONTROL === 'noregistry') {
   if (!pageSeoSrc.includes(LOOKUP_ANCHOR)) abort('control noregistry: the seoMeta lookup in PageSeo is not in the shape it rewrites');
