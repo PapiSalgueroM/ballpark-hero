@@ -558,6 +558,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "The play-in covers seeds 7 through 10, with one last game deciding the 8 seed.",
       "Draft classes have 24 prospects, you pick twice, and scouting grades can miss the truth by a few points either way.",
       "Everyone ages each summer: young players develop toward potential, decline starts at 32, veterans retire.",
+      "Waiving a man is not free. Half his salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
       "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a banner fixes almost anything, and at zero you are fired and the save ends.",
     ],
     example: [

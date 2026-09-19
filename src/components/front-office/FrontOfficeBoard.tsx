@@ -10,13 +10,13 @@ import {
   generateDraftClass, draftOrder, prospectToPlayer, teamStrength, capUsed, capRoom,
   releasePlayer, signPlayer, proposeTrade, tradeValue, aiWeeklyMoves, divisionOf,
   defenceRating,
-  /* Round 631: a cut costs dead money and the man cannot come back this season. */
-  deadMoneyFor, deadCapUsed, signRefusal,
   conferenceOf, conferenceSeeds, executeTalksTrade,
   REGULAR_WEEKS,
   type LeagueState, type GmGame, type Prospect, type PlayoffRound,
   ensureFoLeagueIds,
 } from '@/lib/frontOffice';
+/* Round 631: a cut costs dead money and the man cannot come back this season. */
+import { deadMoneyFor, deadCapUsed, signRefusal } from '@/lib/frontOfficeCuts';
 /* Round 531: the cap on screen says which day its figure was read. */
 import { capNote } from '@/lib/leagueCaps';
 import { leagueNames } from '@/lib/foNames';

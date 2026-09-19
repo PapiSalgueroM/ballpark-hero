@@ -4,6 +4,8 @@ import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the cap comes from one sourced file, never a bare literal here. */
 import { NFL_SALARY_CAP_2026 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
+/* Round 631: dead money and the no way back rule, shared by the four GM sims. */
+import { type CutLedger, type DeadCapEntry, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal } from './frontOfficeCuts';
 
 /**
  * NFL Front Office engine (2026-08-05, the manager-for-every-sport push).
@@ -31,17 +33,12 @@ export interface GmPlayer extends FoPlayer {
   pot: number;
 }
 
-/** Round 631: what a cut still costs after the man has gone. See releasePlayer. */
-export interface GmDeadCap {
-  playerId: string;
-  name: string;
-  /** What this season's cap carries for him, in $M. */
-  amount: number;
-  /** Seasons this entry still runs, counting this one. */
-  seasonsLeft: number;
-}
+/** Round 631: what a cut still costs after the man has gone. See src/lib/frontOfficeCuts.ts. */
+export type GmDeadCap = DeadCapEntry;
 
-export interface GmTeamState {
+/* Round 631: CutLedger is the optional deadCap and releasedThisSeason pair,
+   so every league saved before this round keeps loading and reads as empty. */
+export interface GmTeamState extends CutLedger {
   abbr: string;
   players: GmPlayer[];
   defense: number;
@@ -49,11 +46,6 @@ export interface GmTeamState {
   losses: number;
   /** Draft capital markers, one entry per round held this year. */
   picks: number[];
-  /* Round 631: dead money from cuts, and the men cut this season. Both are
-     optional so every league saved before this round keeps loading; absent
-     reads as empty everywhere. */
-  deadCap?: GmDeadCap[];
-  releasedThisSeason?: string[];
 }
 
 export interface GmGame {
@@ -164,23 +156,9 @@ export function salaryFor(pos: GmPlayer['pos'], ovr: number): number {
   return Math.round(Math.max(1.0, (ovr - 66) * 1.15 - 12) * 10) / 10;
 }
 
-const round1 = (n: number): number => Math.round(n * 10) / 10;
-
-/** Round 631: what this season's cap still carries for men who were cut. */
-export function deadCapUsed(team: GmTeamState): number {
-  return round1((team.deadCap ?? []).reduce((s, d) => s + d.amount, 0));
-}
-
-/** Round 631: what cutting this man would cost, so a screen can say so before it happens. */
-export function deadMoneyFor(p: Pick<GmPlayer, 'salary' | 'years'>): { now: number; next: number } {
-  const now = round1(p.salary * 0.5);
-  const next = p.years > 1 ? round1(now / 2) : 0;
-  return { now, next };
-}
-
-/** The roster's salaries plus this season's dead money. */
+/** The roster's salaries plus this season's dead money (Round 631). */
 export function capUsed(team: GmTeamState): number {
-  return round1(team.players.reduce((s, p) => s + p.salary, 0) + deadCapUsed(team));
+  return payrollWithDeadCap(team.players, team);
 }
 
 export function capRoom(team: GmTeamState, cap: number): number {
@@ -569,55 +547,19 @@ export function runPlayoffs(
    nothing and a cut plus re-sign was a free contract reset. Measured on the
    shipped engine: Trey McBride, 23.7M with three years left, cap room 190.4
    to 214.1 on the cut and back to 190.4 on the re-sign, his deal now one
-   year. Round 619 closed the same hole in Club Manager with a settlement
-   that lives on the save and a rule that a released man never signs back.
-   This is that shape in this sim's terms:
-     1. Dead money. This season's cap carries half his salary, rounded to
-        0.1. If his deal had more than one year left, next season's carries
-        a quarter (half of the recorded half, so the ledger holds one number
-        per man). capUsed adds it, so cap room rises by less than his salary
-        and never by all of it.
-     2. No way back this season. His id goes on releasedThisSeason and
-        signPlayer refuses him for this team until the offseason clears the
-        list. Every other team can sign him as before.
-     3. runOffseason rolls it through rollDeadCap: seasonsLeft drops one, an
-        entry at zero is gone, a survivor halves, and releasedThisSeason
-        empties, for every team.
-   Both fields are optional on the save, so a league written before this
-   round keeps loading and reads as having neither. Nothing else about the
-   cut changed: he joins the pool on one year, and the floor of six stays. */
+   year. The rule (half his salary as dead money now, a quarter next season
+   if he had years left, no way back for this team until the offseason) lives
+   in src/lib/frontOfficeCuts.ts, once, for all four GM sims. Nothing else
+   about the cut changed: he joins the pool on one year, and the floor of six
+   stays. runOffseason rolls the ledger through rollDeadCap. */
 export function releasePlayer(team: GmTeamState, freeAgents: GmPlayer[], playerId: string): boolean {
-  const idx = team.players.findIndex(p => p.id === playerId);
-  if (idx < 0 || team.players.length <= 6) return false;
-  const [p] = team.players.splice(idx, 1);
-  const { now } = deadMoneyFor(p);
-  team.deadCap = [...(team.deadCap ?? []), { playerId: p.id, name: p.name, amount: now, seasonsLeft: p.years > 1 ? 2 : 1 }];
-  team.releasedThisSeason = [...(team.releasedThisSeason ?? []), p.id];
-  freeAgents.push({ ...p, years: 1 });
-  return true;
-}
-
-/** Round 631: one offseason's worth of the ledger above, for one team. */
-export function rollDeadCap(team: GmTeamState): void {
-  team.deadCap = (team.deadCap ?? [])
-    .map(d => ({ ...d, amount: round1(d.amount / 2), seasonsLeft: d.seasonsLeft - 1 }))
-    .filter(d => d.seasonsLeft > 0);
-  team.releasedThisSeason = [];
-}
-
-/**
- * Round 631: why this team cannot sign this free agent, or null when it can.
- * The board reads it so the button and the engine never disagree. Cap room is
- * not in here: the board already greys a man the room cannot cover.
- */
-export function signRefusal(team: GmTeamState, playerId: string): string | null {
-  if ((team.releasedThisSeason ?? []).includes(playerId)) return 'You cut him this season. He can come back after the offseason.';
-  return null;
+  return cutPlayer(team, freeAgents, playerId, 6);
 }
 
 export function signPlayer(team: GmTeamState, freeAgents: GmPlayer[], playerId: string, cap: number): boolean {
   const idx = freeAgents.findIndex(p => p.id === playerId);
   if (idx < 0) return false;
+  /* Round 631: the same refusal the board shows beside the greyed button. */
   if (signRefusal(team, playerId)) return false;
   const p = freeAgents[idx];
   if (capRoom(team, cap) < p.salary) return false;

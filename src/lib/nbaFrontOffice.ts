@@ -4,6 +4,8 @@ import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the cap comes from one sourced file, never a bare literal here. */
 import { NBA_SALARY_CAP_2026_27 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
+/* Round 631: dead money and the no way back rule, shared by the four GM sims. */
+import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal } from './frontOfficeCuts';
 
 /**
  * NBA Front Office engine (2026-08-05). Basketball sibling of
@@ -36,7 +38,9 @@ export interface NbaGmPlayer {
   pot: number;
 }
 
-export interface NbaGmTeam {
+/* Round 631: CutLedger is the optional deadCap and releasedThisSeason pair,
+   so every league saved before this round keeps loading and reads as empty. */
+export interface NbaGmTeam extends CutLedger {
   abbr: string;
   players: NbaGmPlayer[];
   wins: number;
@@ -152,8 +156,9 @@ function initialFaPool(rng: () => number, taken: Set<string>): NbaGmPlayer[] {
   return out;
 }
 
+/** The roster's salaries plus this season's dead money (Round 631). */
 export function nbaCapUsed(t: NbaGmTeam): number {
-  return Math.round(t.players.reduce((s, p) => s + p.salary, 0) * 10) / 10;
+  return payrollWithDeadCap(t.players, t);
 }
 export function nbaCapRoom(t: NbaGmTeam, cap: number): number {
   return Math.round((cap - nbaCapUsed(t)) * 10) / 10;
@@ -263,17 +268,21 @@ export function runNbaPlayoffs(league: NbaLeague, rng: () => number): { series: 
 }
 
 // GM moves (same rules as the NFL engine, basketball economics)
+/* Round 631: waiving a man is not free. Half his salary stays on this
+   season's cap as dead money, a quarter on next season's if he had years
+   left, and this team cannot sign him back until the offseason. The rule
+   lives in src/lib/frontOfficeCuts.ts, once, for all four GM sims; measured
+   before it, waiving Nikola Jokic at 61.1M freed the whole 61.1, and only
+   Denver's own cap position stopped the re-sign, never a rule. */
 export function nbaRelease(t: NbaGmTeam, fas: NbaGmPlayer[], id: string): boolean {
-  const i = t.players.findIndex(p => p.id === id);
-  if (i < 0 || t.players.length <= 8) return false;
-  const [p] = t.players.splice(i, 1);
-  fas.push({ ...p, years: 1 });
-  return true;
+  return cutPlayer(t, fas, id, 8);
 }
 
 export function nbaSign(t: NbaGmTeam, fas: NbaGmPlayer[], id: string, cap: number): boolean {
   const i = fas.findIndex(p => p.id === id);
   if (i < 0 || t.players.length >= 15) return false;
+  /* Round 631: the same refusal the board shows beside the greyed button. */
+  if (signRefusal(t, id)) return false;
   const p = fas[i];
   if (nbaCapRoom(t, cap) < p.salary) return false;
   fas.splice(i, 1);
@@ -379,6 +388,7 @@ export function nbaOffseason(league: NbaLeague, rng: () => number): string[] {
     }
     t.players = keep;
     t.wins = 0; t.losses = 0; t.picks = [1, 2];
+    rollDeadCap(t);
     while (t.players.length < 9) {
       const ovr = 70 + Math.floor(rng() * 7);
       t.players.push({

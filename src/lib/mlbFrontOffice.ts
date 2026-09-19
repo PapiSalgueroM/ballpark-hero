@@ -4,6 +4,8 @@ import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the tax line comes from one sourced file, never a bare literal here. */
 import { MLB_CBT_THRESHOLD_2026 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
+/* Round 631: dead money and the no way back rule, shared by the four GM sims. */
+import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal } from './frontOfficeCuts';
 
 /**
  * MLB Front Office engine (2026-08-05). Baseball sibling of the NFL and NBA
@@ -56,7 +58,9 @@ export interface MlbGmPlayer {
   pot: number;
 }
 
-export interface MlbGmTeam {
+/* Round 631: CutLedger is the optional deadCap and releasedThisSeason pair,
+   so every league saved before this round keeps loading and reads as empty. */
+export interface MlbGmTeam extends CutLedger {
   abbr: string;
   players: MlbGmPlayer[];
   wins: number;
@@ -161,8 +165,9 @@ function initialFaPool(rng: () => number, taken: Set<string>): MlbGmPlayer[] {
   return out;
 }
 
+/** Payroll against the tax line, plus this season's dead money (Round 631). */
 export function mlbCapUsed(t: MlbGmTeam): number {
-  return Math.round(t.players.reduce((s, p) => s + p.salary, 0) * 10) / 10;
+  return payrollWithDeadCap(t.players, t);
 }
 export function mlbCapRoom(t: MlbGmTeam, cap: number): number {
   return Math.round((cap - mlbCapUsed(t)) * 10) / 10;
@@ -272,17 +277,21 @@ export function runMlbPlayoffs(league: MlbLeague, rng: () => number): { series: 
 }
 
 // ---- GM moves ----
+/* Round 631: a DFA is not free. Half his salary stays on this season's
+   payroll as dead money, a quarter on next season's if he had years left, and
+   this club cannot sign him back until the offseason. The rule lives in
+   src/lib/frontOfficeCuts.ts, once, for all four GM sims; measured before it,
+   Corbin Carroll at 21.8M with four years left took the room from 75.3 to
+   97.1 and straight back to 75.3 on a one year deal. */
 export function mlbRelease(t: MlbGmTeam, fas: MlbGmPlayer[], id: string): boolean {
-  const i = t.players.findIndex(p => p.id === id);
-  if (i < 0 || t.players.length <= 9) return false;
-  const [p] = t.players.splice(i, 1);
-  fas.push({ ...p, years: 1 });
-  return true;
+  return cutPlayer(t, fas, id, 9);
 }
 
 export function mlbSign(t: MlbGmTeam, fas: MlbGmPlayer[], id: string, cap: number): boolean {
   const i = fas.findIndex(p => p.id === id);
   if (i < 0 || t.players.length >= 16) return false;
+  /* Round 631: the same refusal the board shows beside the greyed button. */
+  if (signRefusal(t, id)) return false;
   const p = fas[i];
   if (mlbCapRoom(t, cap) < p.salary) return false;
   fas.splice(i, 1);
@@ -387,6 +396,7 @@ export function mlbOffseason(league: MlbLeague, rng: () => number): string[] {
     }
     t.players = keep;
     t.wins = 0; t.losses = 0; t.picks = [1, 2];
+    rollDeadCap(t);
     replenishMlbRoster(t, rng, taken);
   }
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);

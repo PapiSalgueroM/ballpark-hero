@@ -4,6 +4,8 @@ import { leagueNames, uniqueName } from './foNames';
 /* Round 531: the cap comes from one sourced file, never a bare literal here. */
 import { NHL_UPPER_LIMIT_2026_27 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
+/* Round 631: dead money and the no way back rule, shared by the four GM sims. */
+import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, signRefusal } from './frontOfficeCuts';
 
 /**
  * NHL Front Office engine (2026-08-05). Hockey sibling of the NFL, NBA and
@@ -53,7 +55,9 @@ export interface NhlGmPlayer {
   pot: number;
 }
 
-export interface NhlGmTeam {
+/* Round 631: CutLedger is the optional deadCap and releasedThisSeason pair,
+   so every league saved before this round keeps loading and reads as empty. */
+export interface NhlGmTeam extends CutLedger {
   abbr: string;
   players: NhlGmPlayer[];
   wins: number;
@@ -161,8 +165,9 @@ function initialFaPool(rng: () => number, taken: Set<string>): NhlGmPlayer[] {
   return out;
 }
 
+/** The roster's cap hits plus this season's dead money (Round 631). */
 export function nhlCapUsed(t: NhlGmTeam): number {
-  return Math.round(t.players.reduce((s, p) => s + p.salary, 0) * 10) / 10;
+  return payrollWithDeadCap(t.players, t);
 }
 export function nhlCapRoom(t: NhlGmTeam, cap: number): number {
   return Math.round((cap - nhlCapUsed(t)) * 10) / 10;
@@ -286,17 +291,21 @@ export function runNhlFoPlayoffs(league: NhlLeague, rng: () => number): { series
 }
 
 // ---- GM moves ----
+/* Round 631: waiving a man is not free. Half his cap hit stays on this
+   season's cap as dead money, a quarter on next season's if he had years
+   left, and this club cannot sign him back until the offseason. The rule
+   lives in src/lib/frontOfficeCuts.ts, once, for all four GM sims; measured
+   before it, Leo Carlsson at 9.6M with four years left took the space from
+   19.6 to 29.2 and straight back to 19.6 on a one year deal. */
 export function nhlRelease(t: NhlGmTeam, fas: NhlGmPlayer[], id: string): boolean {
-  const i = t.players.findIndex(p => p.id === id);
-  if (i < 0 || t.players.length <= 8) return false;
-  const [p] = t.players.splice(i, 1);
-  fas.push({ ...p, years: 1 });
-  return true;
+  return cutPlayer(t, fas, id, 8);
 }
 
 export function nhlSign(t: NhlGmTeam, fas: NhlGmPlayer[], id: string, cap: number): boolean {
   const i = fas.findIndex(p => p.id === id);
   if (i < 0 || t.players.length >= 15) return false;
+  /* Round 631: the same refusal the board shows beside the greyed button. */
+  if (signRefusal(t, id)) return false;
   const p = fas[i];
   if (nhlCapRoom(t, cap) < p.salary) return false;
   fas.splice(i, 1);
@@ -401,6 +410,7 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
     }
     t.players = keep;
     t.wins = 0; t.losses = 0; t.otLosses = 0; t.picks = [1, 2];
+    rollDeadCap(t);
     replenishNhlRoster(t, rng, taken);
   }
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);

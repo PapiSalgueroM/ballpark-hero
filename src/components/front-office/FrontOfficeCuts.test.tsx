@@ -12,7 +12,8 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup, within } from '@testing-library/react';
-import { initLeague, deadMoneyFor } from '@/lib/frontOffice';
+import { initLeague } from '@/lib/frontOffice';
+import { deadMoneyFor } from '@/lib/frontOfficeCuts';
 
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
