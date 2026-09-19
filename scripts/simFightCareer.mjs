@@ -31,6 +31,7 @@
  *   FIGHT_CONTROL=recover     the bars climb back up           -> section 6
  *   FIGHT_CONTROL=heavybar    a punch drains 50 percent more   -> section 6
  *   FIGHT_CONTROL=pinboth     worn men both drop to the floor  -> section 6
+ *   FIGHT_CONTROL=strongpin   Round 628's clamped bar is back  -> section 6
  */
 
 /* Round 299: seeded stream, see scripts/lib/seedRandom.mjs. First import on purpose. */
@@ -152,13 +153,24 @@ if (CONTROL === 'nodecay') {
      draft's population instead of real careers. See that section. */
   console.log('   [control synthetic applied: section 6 samples invented fighters]');
 } else if (CONTROL === 'nofloor') {
+  /* Round 636: the floor is now held by conditionShown's curve, which never
+     reaches STANDING_FLOOR at all, so zeroing that constant alone would still
+     keep almost every standing man off 0 and prove nothing. Remove the floor
+     the way an edit would: drain in a straight line all the way to empty. */
   rewrite('nofloor',
-    'export const STANDING_FLOOR = 8;',
-    'export const STANDING_FLOOR = 0;');
+    '  if (straight >= SOFT_FLOOR_FROM) return straight;',
+    '  return Math.max(0, straight);');
 } else if (CONTROL === 'recover') {
   rewrite('recover',
-    '    player = Math.max(STANDING_FLOOR, player);',
-    '    player = Math.max(STANDING_FLOOR, player) + (i % 2 ? 3 : 0);');
+    '    const player = conditionShown(playerDrain);',
+    '    const player = conditionShown(playerDrain) + (i % 2 ? 3 : 0);');
+} else if (CONTROL === 'strongpin') {
+  /* Round 636: Round 628's bar put back exactly, a straight line clamped at
+     the floor. Random tactics pin about 12 percent of decision losers under
+     it and a player who reads every fight about 31. */
+  rewrite('strongpin',
+    '  if (straight >= SOFT_FLOOR_FROM) return straight;',
+    '  return Math.max(STANDING_FLOOR, straight);');
 } else if (CONTROL === 'heavybar') {
   /* The pinned bar defect at half as much drain again. The agreement check
      alone stays green on this, which is why the pinned checks exist. */
@@ -527,15 +539,9 @@ console.log('5) reading the opponent style beats guessing');
   else ok(`reading the style is worth ${(rp - bp).toFixed(1)} points (margin 6)`);
 }
 
-/* ═════ 6) the fight screen's bars are about the fight, Round 628 ═════ */
-console.log('6) the condition bars tell the truth about the fight');
+/* ═════ 6) the fight screen's bars are about the fight, Rounds 628 and 636 ═════ */
+console.log('6) the condition bars tell the truth about the fight, for every kind of player');
 {
-  const ends = { win: [], lose: [] };
-  let bouts = 0, decisions = 0, agrees = 0;
-  let stoppedZero = 0, stoppedTotal = 0, standingZero = 0, rose = 0;
-  let losersPinned = 0, bothPinned = 0;
-  let landed = 0, landedN = 0;
-
   /* THESE BOUTS COME OUT OF REAL CAREERS, not out of makeFighter directly, and
      that is the whole reason this section is trustworthy. The first draft built
      two fighters at tiers 2 to 4 and fought them, which gave 2.9 punches landed
@@ -544,11 +550,83 @@ console.log('6) the condition bars tell the truth about the fight');
      passed at 89.5 percent, and the actual screen showed both men pinned on the
      floor after a points decision. A harness that invents its own population
      will agree with whatever it invented. */
+
+  /* ROUND 636: FOUR PLAYERS, NOT ONE. Round 628 sampled random tactics and
+     nothing else, set its pinned ceiling from that sample, and wrote in the
+     lib that the floor stays rare. It was rare for a player who picks at
+     random and for nobody who plays well: a player who reads every fight wins
+     far more one sided decisions, his losers soak up far more punches, and
+     roughly a third of them read the floor at the final bell. A check that
+     only ever meets one kind of player cannot see what the others see, so
+     every claim below is made for each of these separately:
+       random    picks each round's tactic at random, Round 628's sample and
+                 drawn exactly as it drew it, so its numbers carry over
+       strong    three looks, each answering the style the opponent will
+                 switch to after the last one, which is what the plan screen's
+                 own hint asks for and all the screen lets a player enter
+       stubborn  reads the style and holds that one answer all night, the
+                 thing that same hint warns against
+       weak      plays straight into the style, the tactic it punishes
+     Offers are picked at random for all four off the same career seeds, so
+     what separates them is how they fight. */
   const weights = ['fly', 'light', 'welter', 'middle', 'heavy'];
-  const bag = [];
-  if (CONTROL === 'synthetic') {
-    /* The first draft's population, put back so the band below is proved to
-       catch it: two fighters straight out of makeFighter at tiers 2 to 4. */
+  const trapTactic = (style) => TACTICS.find(t => fc.tacticEdge(t, style) < 0) || 'box';
+  const BAR_POLICIES = {
+    random: (offer, rng) => Array.from({ length: offer.rounds }, () => TACTICS[Math.floor(rng() * 4)]),
+    strong: (offer) => smartLine(offer.opponent.style, 3),
+    stubborn: (offer) => [bestTactic(offer.opponent.style)],
+    weak: (offer) => [trapTactic(offer.opponent.style)],
+  };
+
+  /* PINNED CEILING, checked for each player, a share of decision losers and
+     never a max. Measured over eight seed bases (4000 to 11000 step 1000,
+     260 careers or 4,000 bouts each) with the bar Round 636 ships, and beside
+     it the same bouts under Round 628's straight line and clamp, which is
+     what the strongpin control puts back:
+                 Round 636      Round 628
+       random    0.0 to 0.4     11.3 to 13.3
+       strong    0.0 to 0.1     29.1 to 33.5
+       stubborn  0.6 to 0.9     21.1 to 24.7
+       weak      0.0 to 0.1     30.2 to 33.8
+     The share also moves when the CAREERS change and the bar does not. The
+     nodecay and noretire controls lengthen careers, which makes more one
+     sided decisions, and over the same eight bases they read:
+       nodecay   random 1.0 to 1.9, strong 1.0 to 1.6, stubborn 3.9 to 5.9, weak 0.0
+       noretire  random 1.4 to 2.0, strong 1.1 to 1.9, stubborn 4.0 to 6.3, weak 0.0 to 0.7
+     A ceiling of 8 percent is seven points above the worst healthy seed of
+     any player, clear of every seed of both career controls so neither turns
+     this section red for a reason that is not about the bar, and three below
+     the lowest Round 628 seed of any player. It still catches a drain half as
+     heavy again (heavybar), which reads 15.8 to 19.6 for the strong player
+     and 10.2 to 13.9 for the stubborn one. */
+  const PIN_CEILING = 8;
+
+  function careerBouts(policy) {
+    const bag = [];
+    for (let s = 0; s < 260 && bag.length < 4000; s += 1) {
+      const rng = rngFrom(4000 + s);
+      const w = weights[Math.floor(rng() * weights.length)];
+      let st = fc.newFightCareer(`P${s}`, w, STYLES[Math.floor(rng() * 4)], `seed-${s}`);
+      let fights = 0;
+      while (!st.retired && fights < 60 && bag.length < 4000) {
+        const offer = st.offers[Math.floor(rng() * st.offers.length)];
+        if (!offer) break;
+        st = fc.runCamp(st, { conditioning: 2, power: 2, defence: 1, speed: 1 });
+        const r = fc.takeFight(st, offer.id, BAR_POLICIES[policy](offer, rng));
+        if (!r) break;
+        bag.push(r.result);
+        st = r.state;
+        fights += 1;
+      }
+    }
+    return bag;
+  }
+
+  /* The first draft's population, put back by the synthetic control so the
+     band below is proved to catch it: two fighters straight out of
+     makeFighter at tiers 2 to 4. It replaces the random player's sample. */
+  function syntheticBouts() {
+    const bag = [];
     for (let s = 0; s < 4000; s += 1) {
       const rng = rngFrom(4000 + s);
       const w = weights[Math.floor(rng() * weights.length)];
@@ -557,153 +635,151 @@ console.log('6) the condition bars tell the truth about the fight');
       const tactics = Array.from({ length: n }, () => TACTICS[Math.floor(rng() * 4)]);
       bag.push(fc.simBout({ player: fc.makeFighter(rng, tier, w), opponent: fc.makeFighter(rng, tier, w), rounds: n, weight: w, tactics, campQuality: 0.5 }, rng));
     }
-  }
-  for (let s = 0; CONTROL !== 'synthetic' && s < 260 && bag.length < 4000; s += 1) {
-    const rng = rngFrom(4000 + s);
-    const w = weights[Math.floor(rng() * weights.length)];
-    let st = fc.newFightCareer(`P${s}`, w, STYLES[Math.floor(rng() * 4)], `seed-${s}`);
-    let fights = 0;
-    while (!st.retired && fights < 60 && bag.length < 4000) {
-      const offer = st.offers[Math.floor(rng() * st.offers.length)];
-      if (!offer) break;
-      st = fc.runCamp(st, { conditioning: 2, power: 2, defence: 1, speed: 1 });
-      const tactics = Array.from({ length: offer.rounds }, () => TACTICS[Math.floor(rng() * 4)]);
-      const r = fc.takeFight(st, offer.id, tactics);
-      if (!r) break;
-      bag.push(r.result);
-      st = r.state;
-      fights += 1;
-    }
+    return bag;
   }
 
-  for (const res of bag) {
-    const track = fc.conditionTrack(res);
-    if (!track.length) continue;
-    bouts += 1;
-    res.rounds.forEach(x => { landed += x.playerLanded + x.oppLanded; landedN += 2; });
-    const end = track[track.length - 1];
+  function measure(bag) {
+    const m = {
+      bouts: 0, decisions: 0, agrees: 0, stoppedZero: 0, stoppedTotal: 0,
+      standingZero: 0, rose: 0, losersPinned: 0, losersNear: 0, bothPinned: 0,
+      landed: 0, landedN: 0, playerWins: 0, win: [], lose: [],
+    };
+    for (const res of bag) {
+      const track = fc.conditionTrack(res);
+      if (!track.length) continue;
+      m.bouts += 1;
+      if (res.winner === 'player') m.playerWins += 1;
+      res.rounds.forEach(x => { m.landed += x.playerLanded + x.oppLanded; m.landedN += 2; });
+      const end = track[track.length - 1];
+      const stopped = res.method === 'KO' || res.method === 'TKO';
 
-    /* A bar that can go back up is not a condition bar, it is a chart of
-       something else. Checked on every step of every bout, not at the ends:
-       a 0 against max assertion has passed a broken middle in this repo
-       before. */
-    for (let i = 1; i < track.length; i += 1) {
-      if (track[i].player > track[i - 1].player || track[i].opp > track[i - 1].opp) rose += 1;
-    }
-
-    if (res.method === 'KO' || res.method === 'TKO') {
-      stoppedTotal += 1;
-      const l = res.winner === 'player' ? end.opp : end.player;
-      const w = res.winner === 'player' ? end.player : end.opp;
-      if (l === 0) stoppedZero += 1;
-      if (w === 0) standingZero += 1;
-    } else {
-      if (end.player === 0 || end.opp === 0) standingZero += 1;
-      if (res.winner !== 'draw') {
-        decisions += 1;
-        const w = res.winner === 'player' ? end.player : end.opp;
-        const l = res.winner === 'player' ? end.opp : end.player;
-        ends.win.push(w); ends.lose.push(l);
-        if (w > l) agrees += 1;
-        if (l <= fc.STANDING_FLOOR) losersPinned += 1;
-        if (w <= fc.STANDING_FLOOR && l <= fc.STANDING_FLOOR) bothPinned += 1;
+      /* A bar that can go back up is not a condition bar, it is a chart of
+         something else. Checked on every step of every bout, not at the ends:
+         a 0 against max assertion has passed a broken middle in this repo
+         before. */
+      for (let i = 1; i < track.length; i += 1) {
+        if (track[i].player > track[i - 1].player || track[i].opp > track[i - 1].opp) m.rose += 1;
       }
+
+      /* Nobody on his feet reads empty, on ANY round and not only the last:
+         the one 0 allowed anywhere on a track is the stopped man's final
+         reading. A man is on his feet through every round before that. */
+      track.forEach((pt, i) => {
+        const stoppedHere = stopped && i === track.length - 1;
+        if (pt.player === 0 && !(stoppedHere && res.winner === 'opp')) m.standingZero += 1;
+        if (pt.opp === 0 && !(stoppedHere && res.winner === 'player')) m.standingZero += 1;
+      });
+
+      if (stopped) {
+        m.stoppedTotal += 1;
+        if ((res.winner === 'player' ? end.opp : end.player) === 0) m.stoppedZero += 1;
+        continue;
+      }
+      if (res.winner === 'draw') continue;
+      m.decisions += 1;
+      const w = res.winner === 'player' ? end.player : end.opp;
+      const l = res.winner === 'player' ? end.opp : end.player;
+      m.win.push(w); m.lose.push(l);
+      if (w > l) m.agrees += 1;
+      if (l <= fc.STANDING_FLOOR) m.losersPinned += 1;
+      if (l <= fc.STANDING_FLOOR + 4) m.losersNear += 1;
+      if (w <= fc.STANDING_FLOOR && l <= fc.STANDING_FLOOR) m.bothPinned += 1;
     }
+    return m;
   }
 
-  const mean = a => a.reduce((x, y) => x + y, 0) / a.length;
-  const pct = (100 * agrees) / decisions;
-  const perRound = landed / landedN;
-  console.log(`   ${bouts} bouts from real careers, ${perRound.toFixed(1)} punches landed per man per round`);
-  console.log(`   winner ends ${mean(ends.win).toFixed(1)} on average, loser ${mean(ends.lose).toFixed(1)}`);
+  const avg = a => a.reduce((x, y) => x + y, 0) / Math.max(1, a.length);
+  const at = (a, p) => { const s = a.slice().sort((x, y) => x - y); return s[Math.min(s.length - 1, Math.floor(s.length * p))]; };
 
-  /* THE GUARD AGAINST THE MISTAKE ITSELF, not just against its symptom. If
-     these bouts ever stop looking like the game's bouts, the calibration above
-     is void whatever the other numbers say. Measured at 7.5 landed per man per
-     round on this sample (7.4 over the 7,233 career bouts the rate was set
-     from), against 2.9 for the synthetic sample that produced the wrong
-     constant, so a band of 5 to 10 separates the two decisively and is nowhere
-     near either edge of the healthy figure. The synthetic control puts that
-     population back and reads 3.2. */
-  if (perRound < 5 || perRound > 10) {
-    fail(`these bouts land ${perRound.toFixed(1)} punches a round, outside the 5 to 10 the real game produces, so the bars below are calibrated against a population no player meets`);
-  } else {
-    ok(`the sample is the game's own: ${perRound.toFixed(1)} punches landed per man per round (band 5 to 10)`);
-  }
+  for (const policy of Object.keys(BAR_POLICIES)) {
+    const synthetic = CONTROL === 'synthetic' && policy === 'random';
+    const m = measure(synthetic ? syntheticBouts() : careerBouts(policy));
+    const tag = `[${policy}]`;
+    const pct = (100 * m.agrees) / Math.max(1, m.decisions);
+    const perRound = m.landed / Math.max(1, m.landedN);
+    const loserPinPct = (100 * m.losersPinned) / Math.max(1, m.decisions);
+    const loserNearPct = (100 * m.losersNear) / Math.max(1, m.decisions);
+    const bothPinPct = (100 * m.bothPinned) / Math.max(1, m.decisions);
+    console.log(`   ${tag} ${m.bouts} bouts from ${synthetic ? 'INVENTED fighters' : 'real careers'}, the player won ${((100 * m.playerWins) / Math.max(1, m.bouts)).toFixed(1)}%, ${perRound.toFixed(1)} punches landed per man per round`);
+    console.log(`   ${tag} ${m.decisions} decisions: winner ends ${avg(m.win).toFixed(1)} on average, loser ${avg(m.lose).toFixed(1)}; loser p10 ${at(m.lose, 0.1)}, p25 ${at(m.lose, 0.25)}, p50 ${at(m.lose, 0.5)}, p75 ${at(m.lose, 0.75)}, p90 ${at(m.lose, 0.9)}`);
+    console.log(`   ${tag} decision losers on the floor ${m.losersPinned} (${loserPinPct.toFixed(1)}%), within 4 of it ${m.losersNear} (${loserNearPct.toFixed(1)}%), both men on it ${m.bothPinned} (${bothPinPct.toFixed(2)}%)`);
 
-  /* THE TWO HARD CLAIMS FIRST, both binary. The bar is allowed to be
-     approximate about how worn a man looks. It is not allowed to be wrong
-     about whether he is still in the fight. */
-  if (stoppedZero !== stoppedTotal) {
-    fail(`${stoppedTotal - stoppedZero} of ${stoppedTotal} stopped men do not end on an empty bar, so a stoppage looks like any other round`);
-  } else {
-    ok(`every one of the ${stoppedTotal} stopped men ends on an empty bar`);
-  }
-  if (standingZero > 0) {
-    fail(`${standingZero} men still on their feet read empty, so the bar calls a decision a knockout`);
-  } else {
-    ok('nobody still standing ever reads empty');
-  }
-  if (rose > 0) {
-    fail(`condition went back UP ${rose} times, so the bar is not a condition bar`);
-  } else {
-    ok('condition never rises, across every round of every bout');
-  }
+    if (m.decisions < 500 || m.stoppedTotal < 100) {
+      fail(`${tag} only ${m.decisions} decisions and ${m.stoppedTotal} stoppages, too few to measure a share of either`);
+    }
 
-  /* MEASURED FLOOR, not a chosen one. On healthy code this real career sample
-     runs at 93.9% over 2,724 decisions, and at 93.0 to 94.0 over eight seed
-     bases of the same sample. The standard error is about half a point, so a
-     floor of 80 sits far below the measurement rather than inside its spread.
-     (The 89.5% over 2,887 that used to be quoted here came from the invented
-     makeFighter population this section threw out.) It is deliberately NOT
-     100: a man can win on points while taking more punishment than he handed
-     out, and a bar that always matched the card would be drawing the card and
-     not the fight. */
-  console.log(`   the bar agrees with the official cards in ${pct.toFixed(1)}% of ${decisions} decisions`);
-  if (!(pct > 80)) {
-    fail(`the bar agrees with the cards in only ${pct.toFixed(1)}% of decisions, so it is not showing who took the beating (floor 80)`);
-  } else {
-    ok(`the bar agrees with the cards in ${pct.toFixed(1)}% of decisions (floor 80)`);
-  }
+    /* THE GUARD AGAINST THE MISTAKE ITSELF, not just against its symptom. If
+       these bouts ever stop looking like the game's bouts, the calibration is
+       void whatever the other numbers say. Measured at 7.5 landed per man per
+       round on the random sample (7.4 over the 7,233 career bouts the rate was
+       set from), against 2.9 for the synthetic sample that produced the wrong
+       constant, so a band of 5 to 10 separates the two decisively and is
+       nowhere near either edge of the healthy figure. The other three players
+       land 8.3 (strong), 8.0 (stubborn) and 7.4 (weak) on this sample, inside
+       the band for the same reason. The synthetic control puts the invented
+       population back into the random player's sample and reads 3.2. */
+    if (perRound < 5 || perRound > 10) {
+      fail(`${tag} these bouts land ${perRound.toFixed(1)} punches a round, outside the 5 to 10 the real game produces, so the bars below are calibrated against a population no player meets`);
+    } else {
+      ok(`${tag} the sample is the game's own: ${perRound.toFixed(1)} punches landed per man per round (band 5 to 10)`);
+    }
 
-  /* PINNED BARS, the defect Round 628 was written to fix, and the agreement
-     check above cannot see it: a loser pinned on the floor still sits below
-     the winner, so that check only drops once winners pin too. At a drain of
-     1.2 a punch (heavybar) 71% of decision losers end on the floor and 10% of
-     decisions leave both men there, and agreement still reads 85.9%.
+    /* THE TWO HARD CLAIMS FIRST, both binary. The bar is allowed to be
+       approximate about how worn a man looks. It is not allowed to be wrong
+       about whether he is still in the fight. */
+    if (m.stoppedZero !== m.stoppedTotal) {
+      fail(`${tag} ${m.stoppedTotal - m.stoppedZero} of ${m.stoppedTotal} stopped men do not end on an empty bar, so a stoppage looks like any other round`);
+    } else {
+      ok(`${tag} every one of the ${m.stoppedTotal} stopped men ends on an empty bar`);
+    }
+    if (m.standingZero > 0) {
+      fail(`${tag} ${m.standingZero} readings of a man still on his feet show empty, so the bar calls him stopped`);
+    } else {
+      ok(`${tag} nobody on his feet reads empty, on any round of any bout`);
+    }
+    if (m.rose > 0) {
+      fail(`${tag} condition went back UP ${m.rose} times, so the bar is not a condition bar`);
+    } else {
+      ok(`${tag} condition never rises, across every round of every bout`);
+    }
 
-     Measured over eight seed bases of this sample at the shipped 0.8: 9.8 to
-     13.5% of decision losers end on the floor, and both men end there in 0 or
-     1 of about 2,700 decisions, at most 0.04%. For scale, 0.9 a punch reads 19
-     to 26% and 0 to 0.2%, 1.0 reads 34 to 41% and 0.5 to 1.2%, 1.2 reads 67 to
-     71% and 8 to 10%.
+    /* MEASURED FLOOR, not a chosen one. On healthy code the random sample
+       runs at 93.9% over 2,724 decisions, and at 92.6 to 94.2 over eight seed
+       bases; over the same bases the strong player runs 95.3 to 97.1, the
+       stubborn one 93.2 to 94.2 and the weak one 95.4 to 96.9. The standard
+       error is about half a point, so a floor of 80 sits far below every
+       measurement rather than inside its spread. (The 89.5% over 2,887 that
+       used to be quoted here came from the invented makeFighter population
+       this section threw out.) It is deliberately NOT 100: a man can win on
+       points while taking more punishment than he handed out, and a bar that
+       always matched the card would be drawing the card and not the fight. */
+    if (!(pct > 80)) {
+      fail(`${tag} the bar agrees with the cards in only ${pct.toFixed(1)}% of ${m.decisions} decisions, so it is not showing who took the beating (floor 80)`);
+    } else {
+      ok(`${tag} the bar agrees with the cards in ${pct.toFixed(1)}% of ${m.decisions} decisions (floor 80)`);
+    }
 
-     The losers share also moves when the CAREERS change, not only the bars:
-     with damage switched off (the nodecay control) it reads 21.3% and with
-     retirement switched off (noretire) 18.4%, because longer careers make
-     more one sided decisions. A ceiling of 20 would call those pinned bars.
-     So the ceilings are 25% of losers, eleven and a half points above the
-     worst healthy seed and clear of both of those, which still catches a
-     drain a quarter heavier; and 1% of decisions with both men pinned, twenty
-     five times the worst healthy seed, which none of those moved at all.
-
-     These are claims about THIS sample, which picks tactics at random. A
-     player who reads every fight (smartLine) wins more one sided decisions and
-     pins 30 to 33% of his losers at the shipped rate, with both men pinned in
-     at most 0.16% of decisions, so do not read the 25% as true of every
-     player. Both are shares of the whole sample, never a max. */
-  const loserPinPct = (100 * losersPinned) / decisions;
-  const bothPinPct = (100 * bothPinned) / decisions;
-  console.log(`   decision losers left on the floor: ${losersPinned} (${loserPinPct.toFixed(1)}%), both men on it: ${bothPinned} (${bothPinPct.toFixed(2)}%)`);
-  if (!(loserPinPct < 25)) {
-    fail(`${loserPinPct.toFixed(1)}% of decision losers end pinned on the floor, so the bar reads the same for a close loss and a beating (ceiling 25%)`);
-  } else {
-    ok(`${loserPinPct.toFixed(1)}% of decision losers end on the floor (ceiling 25%)`);
-  }
-  if (!(bothPinPct < 1)) {
-    fail(`${bothPinned} decisions (${bothPinPct.toFixed(2)}%) leave both men pinned on the floor, the screen Round 628 was written to fix (ceiling 1%)`);
-  } else {
-    ok(`both men end on the floor in ${bothPinPct.toFixed(2)}% of decisions (ceiling 1%)`);
+    /* PINNED BARS, the defect Round 628 was written to fix and Round 636
+       found still there, at 21 to 34 percent of decision losers, for every
+       player who does not pick his tactics at random. The agreement
+       check above cannot see it: a loser pinned on the floor still sits below
+       the winner, so that check only drops once winners pin too. Ceilings
+       and their measurements are at PIN_CEILING above. */
+    if (!(loserPinPct < PIN_CEILING)) {
+      fail(`${tag} ${loserPinPct.toFixed(1)}% of decision losers end pinned on the floor, so the bar reads the same for a close loss and a beating (ceiling ${PIN_CEILING}%)`);
+    } else {
+      ok(`${tag} ${loserPinPct.toFixed(1)}% of decision losers end on the floor (ceiling ${PIN_CEILING}%)`);
+    }
+    /* Both men on the floor after a points decision, the exact screen Round
+       628 was written to fix. Under Round 628's bar this read at most 0.04%
+       for random tactics and 0.29% for the strong player over eight seed
+       bases; under Round 636's it cannot happen short of about 190 points of
+       drain on the WINNER. A ceiling of 1% of decisions is far above both. */
+    if (!(bothPinPct < 1)) {
+      fail(`${tag} ${m.bothPinned} decisions (${bothPinPct.toFixed(2)}%) leave both men pinned on the floor, the screen Round 628 was written to fix (ceiling 1%)`);
+    } else {
+      ok(`${tag} both men end on the floor in ${bothPinPct.toFixed(2)}% of decisions (ceiling 1%)`);
+    }
   }
 }
 
