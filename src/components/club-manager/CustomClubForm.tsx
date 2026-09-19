@@ -57,7 +57,8 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
   const [identity, setIdentity] = useState<ClubIdentity>('balanced');
   const [capacity, setCapacity] = useState(CUSTOM_STADIUMS[1].capacity);
   /* Round 640: the squad quality the chosen money buys. Above it the squad is
-     just as good, but its made up players only sell on at this level. */
+     just as good, but its made up players sell on at this level's prices (a
+     sale ratio fixed at the founding, so later growth still counts in step). */
   const ceiling = useMemo(() => customQualityCap(tier, eraId), [tier, eraId]);
 
   // Initials follow the name until the user takes them over.
@@ -252,7 +253,7 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
           </p>
           {quality > ceiling && (
             <p className="text-[9px] text-gold mt-1">
-              {money(CUSTOM_TIERS[tier].budget)} buys a squad of about {ceiling}, so these made up players only sell on for what a ~{ceiling} squad would fetch.
+              {money(CUSTOM_TIERS[tier].budget)} buys a squad of about {ceiling}. Everything above that is on the house, so these made up players sell on at ~{ceiling} squad prices, and still go up in step as they improve.
             </p>
           )}
         </div>
