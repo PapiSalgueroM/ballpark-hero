@@ -129,7 +129,11 @@ function StageCard({ card, variant, className }: { card: Card; variant: Variant;
           <h3 className="font-display text-2xl font-bold leading-[1.05] tracking-tight text-foreground md:text-[38px]">
             {game.label}
           </h3>
-          <p className="line-clamp-3 text-[13px] leading-snug text-muted-foreground md:text-[15px]">{game.description}</p>
+          {/* The whole sentence, never cut mid word: the column is sized so the
+              registry's description fits in three lines on a phone and two
+              or three on a desktop. The clamp is only a backstop for a much
+              longer description one day. */}
+          <p className="line-clamp-4 text-[13px] leading-snug text-muted-foreground md:text-[15px]">{game.description}</p>
           <span className="mt-1 inline-flex h-11 w-fit items-center gap-2 rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-transform duration-200 group-hover:translate-x-0.5">
             {cta}
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
@@ -166,7 +170,7 @@ function Kicker({ sport, text, small }: { sport: ReturnType<typeof sportOf>; tex
   return (
     <span
       className={cn(
-        'inline-flex w-fit items-center gap-1.5 rounded-full bg-background/75 font-bold uppercase text-foreground ring-1 ring-inset ring-tile/40',
+        'inline-flex w-fit items-center gap-1.5 whitespace-nowrap rounded-full bg-background/75 font-bold uppercase text-foreground ring-1 ring-inset ring-tile/40',
         small ? 'px-2 py-0.5 text-[10px] tracking-[0.12em]' : 'px-2.5 py-1 text-[11px] tracking-[0.14em]',
       )}
     >
