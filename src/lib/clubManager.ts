@@ -4775,9 +4775,9 @@ export function squadScaledValue(squad: CMPlayer[], rating: number, age: number)
    What this deliberately does NOT touch. An academy graduate or a scouted boy
    (promoteProspect) keeps no stored value and is priced off the curve, as
    simAcademy has always required, because he is the product the club paid for
-   with its academy and its scouts. His wage is unchanged too: a pad's wage is
-   fixed off the curve before the value is stored, exactly the number
-   ensureContracts always gave him. */
+   with its academy and its scouts. Nor a pad's wage: makeYouth fixes it off
+   the curve before the value is stored, exactly the number ensureContracts
+   always gave him, so no wage bill and no cap moves. */
 export const YOUTH_PAD_SCALE = 0.03;
 
 /** Round 632: a youth pad's value, a real teenager's price for his rating and age. */
