@@ -16,7 +16,11 @@
  * with a historic rating taken back below the uplift first), which is the
  * median real value at that rating in every league, era and age band; his wage
  * follows through ensureContracts. A save written before the round is repriced
- * on load (ensureCustomClubValues), each founder rebuilt from the spec.
+ * on load (ensureCustomClubValues), each founder rebuilt from the spec. Two
+ * rules the honest prices made necessary: a created club's wage cap is the one
+ * a real club with its budget has (realCapForBudget), never less than its own
+ * bill based cap, and the quality slider stops at the squad a real club with
+ * that budget holds, budget / 0.16 (customQualityCap), applied at the founding.
  *
  * SECTIONS, on the real engine bundled with esbuild, all four eras:
  *   1) a created squad is worth what the real squads of its level in its own
@@ -29,11 +33,20 @@
  *   2) listing every founder in the first summer window and taking every bid the
  *      squad floor allows, against the same career (same seed) selling nobody.
  *      The budget difference is what the founders were worth to sell, taken as
- *      a multiple of the budget the tier handed over. The bound is 1, the whole
- *      of that budget, and for the smallest tier that is 1 x 15m: selling the
- *      squad a tier builds must never pay more than the tier's own cheque, or
- *      picking the tier would mean nothing. The tiers' own squads (anchors 62, 68
- *      and 74) and the form's defaults (slider 66 on the middle budget).
+ *      a multiple of the budget the tier handed over.
+ *      (a) the tiers' own squads (anchors 62, 68 and 74) and the form's default
+ *      (slider 66 on the middle budget): the bound is 1, the whole of that
+ *      budget, 1 x 15m on the smallest tier, because the squad a tier builds by
+ *      itself must never sell for more than the tier's own cheque.
+ *      (b) every slider setting each tier allows in every era, 55 up to the
+ *      tier's ceiling (292 settings), plus a founding that asks for 88 on every
+ *      tier. A squad at the ceiling is the squad a real club with that budget
+ *      holds, so it may sell for what a real club with that budget sells for:
+ *      the same sell off on 66 real clubs inside the budget clamp banks p50 2.69
+ *      and p90 3.31 of their own budget (3.85 in the 60m to 120m band), and the
+ *      bound, 4 x the tier's budget, sits on the top of that. Pooled over every
+ *      setting and, separately, over each tier's top three and the asks for 88.
+ *      And the squad at the top settings is held to budget / 0.16.
  *   3) real players are priced exactly as before: a real club career plays its
  *      first window and weeks identically on the engine as it stood before the
  *      round and survives a save and load unchanged; the market a created club
@@ -52,22 +65,49 @@
  *      and the literal comparison is printed beside it. A save a whole season
  *      on moves every founder by the ratio of the new creation value to the old,
  *      then plays on the same way.
+ *   5) a created club can spend its budget the way a real club with that budget
+ *      can: each tier founded in four leagues today and two in each past era,
+ *      two names, opens on the larger of its bill based cap and realCapForBudget,
+ *      then makes three signings through buyPlayer, each the best rated real
+ *      player the money left can pay for with the signings still to come. Its
+ *      bill over its cap afterwards, p90, must sit no higher than that of real
+ *      clubs with a budget within 0.7 to 1.4 times its own doing the same thing,
+ *      plus a band. And an old created save whose cap is under the line loads
+ *      at the line with every contract as signed, while an old save's higher cap
+ *      and a new save's own lowered cap load untouched (the floor runs once).
  *
  * MEASURED, default seed and SIM_SEED 1, 2 and 3, each run on its own TEMP;
- * the rawcurve figures are the default seed with the old creation value.
- *   section 1  a head, pooled p10       fixed 0.76 to 0.81    rawcurve 10.11    floor 0.5
+ * the control figures are the default seed with the control applied.
+ *   section 1  a head, pooled p10       fixed 0.75 to 0.79    rawcurve 10.11    floor 0.5
  *              a head, pooled p90       fixed 1.39 to 1.45    rawcurve 28.04    ceiling 2.0
- *              (259 to 263 of 567 created squads a run have a real squad within two
+ *              (about 260 of 567 created squads a run have a real squad within two
  *              points in their league; the small tier and slider 55 squads have none
  *              anywhere, so they are priced by the same line but banded only man by man)
  *              man by man, p10          fixed 0.87 to 0.90    rawcurve 7.77     floor 0.75
- *              man by man, p90          fixed 1.02 to 1.03    rawcurve 24.17    ceiling 1.3
- *              (5,192 to 6,032 founders a run with 8 or more real players of their
+ *              man by man, p90          fixed 1.00 to 1.03    rawcurve 24.17    ceiling 1.3
+ *              (5,647 to 6,507 founders a run with 8 or more real players of their
  *              era, rating and age band)
- *   section 2  p90 gain / tier budget   fixed 0.52 to 0.59    rawcurve 10.85    bound 1.0
+ *   section 2a p90 gain / tier budget   fixed 0.52 to 0.59    rawcurve 10.85    bound 1.0
  *              (104 paired careers and about 1,040 sales a run; p90 gain small 6.3 to
  *              7.0m, mid 19.3 to 21.8m, big 51.6 to 64.5m, slider 66 on 40m 12.5 to
  *              14.8m, against 183m, 378m, 719m and 296m on the old curve)
+ *   section 2b every allowed setting,   fixed 1.86 to 2.01    freeslider 8.51    bound 4.0
+ *              p90 gain / tier budget                         rawcurve 24.41
+ *              top three and asks for   fixed 2.61 to 3.01    freeslider 20.21   bound 4.0
+ *              88, p90 gain / budget                          rawcurve 38.70
+ *              top squad worth /        fixed 0.96 to 0.98    freeslider 8.66    ceiling 1.15
+ *              (budget / 0.16), p90                           rawcurve 14.11
+ *              (292 settings, 13 asks for 88 and about 3,050 sales a run; the
+ *              ceilings are 72, 78 and 82 today, 72, 78 and 85 in 2015 and 2010,
+ *              72, 79 and 88 in 2005)
+ *   section 5  bill / cap after          fixed 0.37 to 0.44    tightcap 1.31      real p90 1.01
+ *              spending, p90 by tier                          to 1.49            to 1.02, band 0.1
+ *              (tightcap also opens 60 of 60 foundings off the line and loads the
+ *              lowered old save at 100k instead of 910k)
+ *              (60 foundings, the budget spent p10 0.99; real clubs of a similar
+ *              budget land right on their cap after the same spending, and a
+ *              created club, whose founders cost what their level costs, keeps
+ *              more than half its cap free)
  *   section 3  30 real club careers and 30 of their saves identical, 16 created club
  *              markets and 48 real signings identical, 48 of 48 real players in old
  *              created club saves unmoved on load (realtoo: 48 of 48 moved)
@@ -83,6 +123,8 @@
  *   rawcurve   buildCustomSquad stores the old full curve again      -> sections 1 and 2
  *   noload     loadCareer skips the repricing                         -> section 4
  *   realtoo    the repricing treats a real player as a founder too    -> section 3
+ *   freeslider the slider's ceiling never stops climbing (88 anywhere) -> section 2
+ *   tightcap   the bill based cap only, at the founding and on load   -> section 5
  *
  * Nothing here reads dist or the clock (Date.now is only in generated ids), so
  * it is safe to run between builds.
@@ -361,7 +403,7 @@ const MAN_HI = 1.3;
 
 /* ================================================================== */
 section = 2;
-console.log('2) selling the founders never pays more than the budget the tier bought them with');
+console.log('2) selling the founders never pays more than their tier\'s money allows');
 /* The tiers' own squads and the form's default: measured p90 0.52 to 0.59 of
    the tier's budget over four seeds, 0.41 of headroom. */
 const GAIN_BOUND = 1.0;
@@ -369,9 +411,10 @@ const GAIN_BOUND = 1.0;
    club with that budget holds, so it may sell for what a real club with that
    budget sells for. The same sell off on 66 real clubs inside the budget clamp
    (all four eras) banks p50 2.69 and p90 3.31 of their own budget, 3.85 in the
-   60m to 120m band; the bound sits on the top of those. The squad itself is
-   held to budget / 0.16 (the rule), with the name wobble's headroom. Both
-   measured over four seeds in the header. */
+   60m to 120m band; the bound sits on the top of those, and the measured p90
+   at each tier's top three settings, 2.61 to 3.01 over four seeds, leaves
+   0.99 of headroom. The squad itself is held to budget / 0.16 (the rule) with
+   the name wobble's headroom: measured p90 0.96 to 0.98 at the top settings. */
 const SLIDER_BOUND = 4.0;
 const WORTH_BOUND = 1.15;
 {
@@ -761,8 +804,10 @@ console.log('4) a created club save written before the round loads repriced and 
 /* ================================================================== */
 section = 5;
 console.log('5) a created club can spend its budget the way a real club with that budget can');
-/* Measured over four seeds in the header. The created club's bill over its
-   cap after spending may run to the real clubs' p90 plus the band. */
+/* The created club's bill over its cap after spending may run to the real
+   clubs' p90 plus the band. Measured over four seeds: created p90 0.37 to
+   0.44, real p90 1.01 to 1.02, tightcap 1.31 to 1.49, so 0.1 over the real
+   p90 sits 0.19 under the tightest control reading and 0.67 over the rule. */
 const CAP_BAND = 0.1;
 {
   /* Three signings through the real buy path, each the best rated real player

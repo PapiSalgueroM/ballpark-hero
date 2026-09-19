@@ -3893,8 +3893,9 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
    AZ, Southampton, Hull) bank 29m to 40m doing the same thing with the seven
    men their squads can spare. The mid tier squad is 39.4m, the big 116.7m. A slider
    88 squad is 1,436.5m today, because a team of 90s is what the market says
-   it is; the slider is not tied to the budget (Round 160), so that squad can
-   still outsell every tier, as a real squad of 90s would.
+   it is, which is why the slider now stops where the tier's money does
+   (customQualityCap) and a created club gets the wage cap its budget buys
+   (realCapForBudget); both are below.
 
    THE RULE. A founder is worth what the real market pays for a player of his
    rating in his era. The measured ratio of real value to the raw curve over
@@ -4056,9 +4057,11 @@ export function ensureCustomClubWageCap(state: CareerState): void {
    What that sells for is what a real club with that budget banks. Listing the
    whole squad in the first window and taking every bid the squad floor allows,
    real clubs inside the budget clamp bank 2.69 times their budget at the
-   median and 3.31 at p90 (66 clubs, all four eras); a squad at the ceiling
-   banks the same kind of multiple of its tier's budget, and never more than
-   the section 2 bound in scripts/simCustomClubValues.mjs.
+   median and 3.31 at p90 (66 clubs, all four eras); founded at each tier's
+   top three settings the squad banks a p90 of 2.61 to 3.01 of its tier's
+   budget (four seeds, scripts/simCustomClubValues.mjs section 2), where a
+   free slider banked 20 times it, and the tier's own squad and the form's
+   default still bank a p90 of 0.52 to 0.59 of it.
 
    startCareer applies it, so a save written before the round keeps the squad
    it was founded with (its spec is rebuilt as saved, never clamped). */
