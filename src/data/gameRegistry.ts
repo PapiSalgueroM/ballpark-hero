@@ -161,7 +161,7 @@ export const CATEGORIES: GameCategory[] = [
         seoDescription: 'Sixteen soccer players, four hidden groups of four. Sort every name into its secret category before your lives run out. A free football trivia puzzle.' },
       { path: '/build-your-xi', label: 'Build Your XI', emoji: '⚽', description: 'Create a lineup, get AI rated', addedOn: '2026-02-09',
         seoTitle: 'Build Your XI: Soccer Lineup Builder Game',
-        seoDescription: 'A slot machine hands every position a random club or country. Name a player who fits each slot, then an AI grades the lineup and plays a season. Free soccer.' },
+        seoDescription: 'A slot machine gives each position a random club or country. Name a player who fits each slot, then an AI grades your XI and a season plays out. Free soccer.' },
       // deleted 2026-08-05 per owner review: "Delete perfect lineup."
       // { path: '/perfect-lineup', label: 'Perfect Lineup', emoji: '⚽', description: 'Build an XI under random league & country constraints, then simulate', daily: true, isNew: true },
       { path: '/football-connect-4', label: 'Connect 4', emoji: '🔴', description: 'Soccer trivia meets Connect 4', addedOn: '2026-02-10',
