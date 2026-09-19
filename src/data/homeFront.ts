@@ -114,6 +114,27 @@ export function dailyGames(): GameDef[] {
 }
 
 /**
+ * The same games dealt round the sports one at a time (a soccer daily, then
+ * an NFL one, a college one and so on, then round again), so the first
+ * screen of the rail shows the spread of the site instead of eleven soccer
+ * games in a row. Nothing is added or dropped, only the order changes.
+ */
+export function dealtBySport(games: GameDef[]): GameDef[] {
+  const piles = new Map<SportKey, GameDef[]>();
+  for (const g of games) {
+    const s = sportOf(g.path);
+    if (!piles.has(s)) piles.set(s, []);
+    (piles.get(s) as GameDef[]).push(g);
+  }
+  const out: GameDef[] = [];
+  const decks = [...piles.values()];
+  for (let round = 0; out.length < games.length; round += 1) {
+    for (const deck of decks) if (round < deck.length) out.push(deck[round]);
+  }
+  return out;
+}
+
+/**
  * Today's puzzle: one daily game picked by the date, the same for everyone,
  * a different one every day. dailyIndex walks the whole pool once per cycle
  * in an order nobody can work out from yesterday, and never repeats the same

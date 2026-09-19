@@ -2,7 +2,7 @@ import { useMemo, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { CalendarDays, ChevronLeft, ChevronRight, Play } from 'lucide-react';
 import { getTodayET } from '@/lib/dateUtils';
-import { dailyGames, todaysPuzzle, sportOf, SPORT_NAME } from '@/data/homeFront';
+import { dailyGames, dealtBySport, todaysPuzzle, sportOf, SPORT_NAME } from '@/data/homeFront';
 import type { GameDef } from '@/data/gameRegistry';
 import { SportGlyph, sportStyle } from './SportGlyph';
 
@@ -26,7 +26,7 @@ export function DailyRail({ today }: { today?: string }) {
   const { spotlight, rest, total } = useMemo(() => {
     const all = dailyGames();
     const pick = todaysPuzzle(day);
-    return { spotlight: pick, rest: all.filter(g => g !== pick), total: all.length };
+    return { spotlight: pick, rest: dealtBySport(all.filter(g => g !== pick)), total: all.length };
   }, [day]);
   const railRef = useRef<HTMLDivElement>(null);
 
