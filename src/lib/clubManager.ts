@@ -455,12 +455,14 @@ export interface CMPlayer {
       teenager's value since Round 632 (youthPadValue); academy graduates have
       none and are priced off the curve. */
   value?: number;
-  /** Round 640: a created club's founder only. The most he can be sold on
-      for, in £m: what the same man is worth in the squad his tier's money
-      could have bought (see customQualityCap). sellValue pays the lower of
-      this and his value; his value, rating and wage stay honest. Never copied
-      to a free agent, so it ends the day he leaves the club. */
-  founderSaleCap?: number;
+  /** Round 640: a founder of a club founded above what its money buys, only.
+      His value in the squad the tier's money could have bought (see
+      customQualityCap) over his founding value, fixed at the founding and
+      below 1. sellValue pays his value times this, so what the slider handed
+      out for free is never cashed out, while anything he grows afterwards
+      still raises his price in step. His value, rating and wage stay honest.
+      It goes wherever he goes: the free agent list, a re-signing, a loan. */
+  founderSaleRatio?: number;
   /** Round 71: loan signings go home at the end of the season. */
   onLoan?: boolean;
   /** Round 94: how this player is being handled in the market. */
@@ -3842,8 +3844,10 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
      overalls"). The board reads the squad either way, so a slider superteam
      gets told to win it all, honestly. */
   const anchor = spec.quality !== undefined ? clamp(Math.round(spec.quality), 55, 88) : t.anchor;
-  /* Round 640: the squad quality the tier's money buys, for each man's sale cap. */
+  /* Round 640: the squad quality the tier's money buys. A squad founded above
+     it carries a sale ratio on every man; at or under it, none at all. */
   const ceiling = customQualityCap(spec.budgetTier, eraId);
+  const aboveCeiling = anchor > ceiling;
   const used = new Set<string>();
   /* Round 567: the generated names are already deduped through `used`, so this
      is the belt to that brace: two different generated names that slug to one
@@ -3863,7 +3867,7 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
     const age = slot.off >= 2 ? cInt(`${seed}|a`, 24, 30)
       : slot.off >= -3 ? cInt(`${seed}|a`, 21, 28)
       : cInt(`${seed}|a`, 18, 21);
-    return {
+    const founder: CMPlayer = {
       id: `p-${slug(name)}`,
       name,
       position: slot.pos,
@@ -3877,10 +3881,18 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
       seasonGoals: 0,
       seasonAssists: 0,
       value: customFounderValue(rating, eraId),
-      founderSaleCap: customFounderValue(ceilingRating, eraId),
       generated: true,
     };
+    const saleRatio = customFounderSaleRatio(founder.value as number, customFounderValue(ceilingRating, eraId));
+    if (aboveCeiling && saleRatio < 1) founder.founderSaleRatio = saleRatio;
+    return founder;
   }));
+}
+
+/** Round 640: a founder's sale ratio, his value in the squad the money could
+    have bought over his founding value, to four places. */
+function customFounderSaleRatio(value: number, boughtValue: number): number {
+  return value > 0 ? Math.round((boughtValue / value) * 10000) / 10000 : 1;
 }
 
 /* ─────────────────── Round 640: what a made up founder is worth ───────────────────
@@ -3907,7 +3919,7 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
    men their squads can spare. The mid tier squad is 39.4m, the big 116.7m. A slider
    88 squad is 1,436.5m today, because a team of 90s is what the market says
    it is, which is why a founder can only be sold on for what the tier's money
-   could have bought (founderSaleCap, customQualityCap) and a created club gets
+   could have bought (founderSaleRatio, customQualityCap) and a created club gets
    the wage cap its budget buys (realCapForBudget); both are below.
 
    THE RULE. A founder is worth what the real market pays for a player of his
@@ -3959,12 +3971,47 @@ function preRound640FounderValue(rating: number, age: number): number {
 }
 
 /** Round 640: the day one founder this man is, rebuilt from the club's spec,
-    or null. Only a man the create flow made (generated, and the same id and
-    name as a founder), never a youth pad, a graduate or anybody bought. */
-function founderOf(p: CMPlayer, founders: Map<string, CMPlayer>): CMPlayer | null {
+    or null. Only a man the create flow made: generated, and the same id and
+    name as a founder, or (a founder the old engine re-signed out of the free
+    agent list, who carries a free agent id) a founder's name on an fa- id.
+    Never a youth pad, a graduate or anybody bought. */
+function founderOf(p: CMPlayer, byId: Map<string, CMPlayer>, byName: Map<string, CMPlayer>): CMPlayer | null {
   if (!p.generated || p.isYouth || p.academyGrad) return null;
-  const f = founders.get(p.id);
-  return f && f.name === p.name ? f : null;
+  const f = byId.get(p.id);
+  if (f && f.name === p.name) return f;
+  const g = byName.get(p.name);
+  return g && p.id.startsWith('fa-') ? g : null;
+}
+
+/**
+ * Round 640 review: every figure a save wrote off a man's old sale price,
+ * moved onto his new one by the ratio of the two. A bid on the table (its
+ * multiple of his price is kept, a met clause bid follows the clause), a
+ * release clause set at a renewal, the buy option on a loan out, and the price
+ * an agreed part exchange counted him at (the cash rises by what his lower
+ * price no longer covers, so the seller still gets the package he agreed).
+ * What it leaves alone on purpose: a loan's recall fee, which is half the loan
+ * fee already banked, a charge TO the club rather than money it can take, so
+ * cutting it would hand back the old money it was set off.
+ */
+function rescaleSaleFigures(state: CareerState, playerId: string, oldSell: number, newSell: number, loan?: LoanOut): void {
+  if (!(oldSell > 0) || !(newSell > 0) || oldSell === newSell) return;
+  const k = newSell / oldSell;
+  const scaled = (x: number, floor: number): number => Math.max(floor, Math.round(x * k * 10) / 10);
+  const p = state.squad.find(x => x.id === playerId) ?? (loan?.player.id === playerId ? loan.player : undefined);
+  if (p && p.releaseClause !== undefined && p.releaseClause > 0) p.releaseClause = scaled(p.releaseClause, 0.5);
+  if (Array.isArray(state.incomingBids)) {
+    state.incomingBids = state.incomingBids.map((b) => {
+      if (b.playerId !== playerId) return b;
+      const offer = b.clauseMet && p?.releaseClause ? p.releaseClause : scaled(b.offer, b.loan ? 0.2 : 0.3);
+      return { ...b, offer };
+    });
+  }
+  if (loan && loan.player.id === playerId && loan.optionFee !== undefined) loan.optionFee = scaled(loan.optionFee, 0.5);
+  const neg = state.negotiation;
+  if (neg && neg.agreedExtras?.swapId === playerId && typeof neg.agreedFee === 'number') {
+    neg.agreedFee = Math.round((neg.agreedFee + 0.85 * (oldSell - newSell)) * 10) / 10;
+  }
 }
 
 /**
@@ -3977,36 +4024,54 @@ function founderOf(p: CMPlayer, founders: Map<string, CMPlayer>): CMPlayer | nul
  * value has moved since (agePlayer grows it 20 percent a rating point and cuts
  * it at 31) keeps the same movement on the new footing: his value times the
  * ratio of the new creation value to the old, which is what this engine would
- * have grown him to. In the squad and out on loan; a founder who was sold left
- * the world with the sale. Each founder also gets the sale cap his club's tier
- * and era would have given him at the founding (founderSaleCap).
+ * have grown him to. Wherever a founder is: the squad, out on loan, re-signed
+ * out of the free agent list under a free agent id, and waiting in that list;
+ * a founder who was sold left the world with the sale. Each founder also gets
+ * the sale ratio his club's tier and era give him (founderSaleRatio), and
+ * every figure the save priced off his old sale price is moved with it
+ * (rescaleSaleFigures): the review of the round found open bids, clauses and
+ * loan options still paying 18 to 34 times the new price.
  *
  * Nothing else moves. Not a wage (a contract signed stays signed, and the cap
  * was set off the same bill, so the two still agree), not a real player bought
  * since, not a youth pad or a graduate, and no random draw. The version mark
  * makes it run once: a repriced founder's value no longer says which footing
- * it is on.
+ * it is on. Returns whether it ran, so the wage cap floor runs with it.
  *
  * Called from loadCareer only, for Round 632's reason: every career in play
  * came from startCareer, which prices founders this way and sets the mark, or
  * through loadCareer.
  */
-export function ensureCustomClubValues(state: CareerState): void {
+export function ensureCustomClubValues(state: CareerState): boolean {
   const spec = state.customClub;
-  if (!spec || spec.name !== state.clubName || state.customValues === CUSTOM_VALUES_VERSION) return;
-  const founders = new Map(buildCustomSquad(spec, state.eraId).map(f => [f.id, f]));
-  const reprice = (p: CMPlayer): void => {
-    const f = founderOf(p, founders);
-    if (!f || p.value === undefined) return;
+  if (!spec || spec.name !== state.clubName || state.customValues === CUSTOM_VALUES_VERSION) return false;
+  const built = buildCustomSquad(spec, state.eraId);
+  const byId = new Map(built.map(f => [f.id, f]));
+  const byName = new Map(built.map(f => [f.name, f]));
+  const moved = (v: number, f: CMPlayer): number => {
     const was = preRound640FounderValue(f.rating, f.age);
     const now = f.value as number;
-    p.value = p.value === was ? now : Math.max(JOURNEYMAN_VALUE, Math.round(p.value * (now / was) * 10) / 10);
-    /* And the sale cap he was founded under, from the save's own tier and era. */
-    p.founderSaleCap = f.founderSaleCap;
+    return v === was ? now : Math.max(JOURNEYMAN_VALUE, Math.round(v * (now / was) * 10) / 10);
+  };
+  const reprice = (p: CMPlayer, loan?: LoanOut): void => {
+    const f = founderOf(p, byId, byName);
+    if (!f || p.value === undefined) return;
+    const oldSell = sellValue(p);
+    p.value = moved(p.value, f);
+    if (f.founderSaleRatio !== undefined) p.founderSaleRatio = f.founderSaleRatio;
+    else delete p.founderSaleRatio;
+    rescaleSaleFigures(state, p.id, oldSell, sellValue(p), loan);
   };
   for (const p of state.squad ?? []) reprice(p);
-  for (const l of state.loanedOut ?? []) if (l && l.player) reprice(l.player);
+  for (const l of state.loanedOut ?? []) if (l && l.player) reprice(l.player, l);
+  for (const fa of state.freeAgents ?? []) {
+    const f = fa.generated ? byName.get(fa.name) : undefined;
+    if (!f || fa.value === undefined) continue;
+    fa.value = moved(fa.value, f);
+    if (f.founderSaleRatio !== undefined) fa.founderSaleRatio = f.founderSaleRatio;
+  }
   state.customValues = CUSTOM_VALUES_VERSION;
+  return true;
 }
 
 /* ─────────────── Round 640: the wage cap a created club's money buys ───────────────
@@ -4030,11 +4095,25 @@ export function ensureCustomClubValues(state: CareerState): void {
    255k a week on 15m, 512k on 40m and 911k on 90m, never less than its own
    bill based cap. From the founding on it moves like any club's (nextWageCap).
 
-   A save written before the round loads with at least the same cap. Its own is
-   the old inflated one and sits far above the line, so in practice nothing
-   moves; the floor is for the save whose cap has somehow fallen below it. No
-   contract changes, and it runs once, before the version mark is set, so a
-   reload never lifts a cap the career itself brought down. */
+   A SQUAD FOUNDED ABOVE WHAT THE MONEY BUYS. Its founders earn what they are
+   worth, so its bill runs several times the budget's line (a slider 88 squad on
+   15m bills about 1,590k a week against a 255k line), and the club needs room
+   for it or the board drips from the first week. That room belongs to those
+   men and goes with them: foundersWageRoom is 1.15 times what the founders who
+   carry a sale ratio earn above what the same men would earn at the value the
+   money bought, the part of the bill the slider handed out. The cap is the
+   line plus that room at the founding (never less than the bill based cap),
+   and every summer the room comes off, the rest moves on the club's season
+   like any cap, and the room of the founders still on the books goes back on.
+   Sell them, release them or let them walk and the cap falls back toward what
+   the budget's own line has grown to. A club founded at or under the line
+   carries no ratio and no room, so its cap moves exactly as before.
+
+   A save written before the round loads with at least the line plus that
+   room. Its own is the old inflated one and sits far above it, so in practice
+   nothing moves; the floor is for the save whose cap has somehow fallen below
+   it. No contract changes, and it runs only when the repricing does (once),
+   so a reload never lifts a cap the career itself brought down. */
 export const REAL_CAP_PER_BUDGET_K = 37.13;
 export const REAL_CAP_PER_BUDGET_EXP = 0.711;
 
@@ -4043,11 +4122,28 @@ export function realCapForBudget(budget: number): number {
   return Math.round(REAL_CAP_PER_BUDGET_K * Math.pow(Math.max(0, budget), REAL_CAP_PER_BUDGET_EXP));
 }
 
-/** Round 640: a created club save from before the round gets at least the cap its budget buys. */
+/** Round 640 review: the wage room (thousands a week) the founders above the
+    money bring: 1.15 x what they earn over what the same men would earn at the
+    value the money bought. Squad and out on loan, because a loan comes home.
+    Zero for every club without a sale ratio on anybody. */
+export function foundersWageRoom(state: Pick<CareerState, 'squad' | 'loanedOut'>): number {
+  let extra = 0;
+  const add = (p: CMPlayer): void => {
+    if (p.founderSaleRatio === undefined || p.value === undefined) return;
+    const bought = wageFor({ ...p, value: p.value * p.founderSaleRatio });
+    extra += Math.max(0, (p.wage ?? wageFor(p)) - bought);
+  };
+  for (const p of state.squad ?? []) add(p);
+  for (const l of state.loanedOut ?? []) if (l && l.player) add(l.player);
+  return Math.round(extra * 1.15);
+}
+
+/** Round 640: a created club save from before the round gets at least the
+    cap its budget buys, plus its founders' room. Runs with the repricing. */
 export function ensureCustomClubWageCap(state: CareerState): void {
   const spec = state.customClub;
-  if (!spec || spec.name !== state.clubName || state.customValues === CUSTOM_VALUES_VERSION) return;
-  const floor = realCapForBudget((CUSTOM_TIERS[spec.budgetTier] ?? CUSTOM_TIERS.mid).budget);
+  if (!spec || spec.name !== state.clubName) return;
+  const floor = realCapForBudget((CUSTOM_TIERS[spec.budgetTier] ?? CUSTOM_TIERS.mid).budget) + foundersWageRoom(state);
   state.wageCap = Math.max(state.wageCap ?? wageCapFrom(wageBill(state)), floor);
 }
 
@@ -4071,26 +4167,31 @@ export function ensureCustomClubWageCap(state: CareerState): void {
    reaches further back then: 88 on 90m in 2005, 85 in 2010 and 2015, and 79 on
    40m in 2005.
 
-   Every founder carries a sale cap (founderSaleCap), set at the founding: what
-   the same man, his slot and his name wobble, is worth in the squad founded at
-   the ceiling. His value depends on his rating alone (customFounderValue), so
-   his age and position change nothing. sellValue pays the lower of his value
-   and his cap, so every bid, a met release clause, a loan fee and a swap
-   (which all price off sellValue) stop there, while his value, his rating and
-   his wage stay honest. At or under the ceiling the cap sits at or above his
-   value and changes nothing on day one. He keeps it however far he develops;
-   the day he leaves he is a normal player again, because a free agent is
-   copied field by field and never with the cap.
+   A squad founded at or under the ceiling carries nothing: every founder sells
+   at his value, now and however far he develops. A squad founded above it
+   carries a sale ratio on every founder (founderSaleRatio), fixed at the
+   founding: what the same man, his slot and his name wobble, is worth in the
+   squad founded at the ceiling, over what he is worth in the squad founded.
+   His value depends on his rating alone (customFounderValue), so his age and
+   position change nothing. sellValue pays his value times the ratio, so every
+   bid, a met release clause, a loan fee, a loan's buy option and a swap (which
+   all price off sellValue) carry it, while his value, his rating and his wage
+   stay honest. It is a ratio rather than a fixed sum, because a fixed sum
+   (the first build of this rule) made a founder who develops sell below his
+   worth: with the ratio, only the free surplus the slider handed out is
+   withheld, and whatever he grows afterwards raises his price in step. It
+   goes wherever he goes: the free agent list when his deal runs out or you
+   release him, a re-signing out of that list by you or the summer fill, a
+   loan and back. The first build let it drop at the free agent list, so
+   letting a deal run out and signing him back a season later stripped it.
 
    What that sells for is what a real club with that budget banks. Listing the
    whole squad in the first window and taking every bid the squad floor allows,
-   real clubs inside the budget clamp bank 2.69 times their budget at the
-   median and 3.31 at p90 (66 clubs, all four eras). Measured in section 2 of
-   scripts/simCustomClubValues.mjs over every slider setting of every tier in
-   every era (408 settings, four seeds): the same sell off banks a p90 of 2.40
-   to 2.58 of the tier's budget, 2.73 to 2.91 above the ceiling with 88 on 15m
-   included, where the same founders with no sale cap banked 14.99; the tier's
-   own squad and the form's default still bank 0.52 to 0.59. */
+   real clubs inside the budget clamp bank about 2.7 times their budget at the
+   median and 3.3 at p90 (measured inside scripts/simCustomClubValues.mjs
+   section 2, which bounds every slider setting of every tier in every era by
+   that real figure; the tier's own squad and the form's default still bank a
+   p90 of 0.52 to 0.59 of it). */
 export const CUSTOM_SQUAD_PER_BUDGET = 1 / 0.16;
 
 /** Round 640: the highest squad quality a budget tier's money buys in this era, the founders' sale ceiling. */
@@ -4887,7 +4988,12 @@ function askingPrice(value: number, age: number): number {
  * from a club.
  */
 export function wageFor(p: CMPlayer): number {
-  const v = p.value ?? Math.max(0.5, baseValue(p.rating, p.age));
+  /* Round 640 review: a youth pad's wage is priced off the curve, exactly as
+     it was before Round 632 gave him a stored value. That value is what he
+     sells for, not what he earns, and reading it here made a pad who develops
+     renew for almost nothing. simYouthPadding section 5 holds real clubs' wage
+     bills and renewal asks to the engine before Round 632 over three seasons. */
+  const v = p.value !== undefined && !isPaddingKid(p) ? p.value : Math.max(0.5, baseValue(p.rating, p.age));
   const base = Math.pow(v, 0.72) * 3.6;
   const youth = p.isYouth ? 0.25 : 1;
   return Math.max(1, Math.round(base * youth));
@@ -4922,6 +5028,8 @@ export interface FreeAgent {
       topUpFreeAgents). Absent on a real man. */
   wage?: number;
   generated?: boolean;
+  /** Round 640 review: a founder's sale ratio travels with him (CMPlayer.founderSaleRatio). */
+  founderSaleRatio?: number;
   /** Season he became available, so the pool can age and clear. */
   since: number;
   /** 'unattached' is a made up journeyman the pool is topped up with (see
@@ -5039,7 +5147,7 @@ export function youthPadValue(rating: number, age: number): number {
 /** Round 632: a man makeYouth made, still flagged as a pad or re-signed after
     his deal ran out (the suffix stays with him). Never an academy graduate. */
 function isPaddingKid(p: CMPlayer): boolean {
-  return !p.academyGrad && (p.isYouth === true || p.name.endsWith(YOUTH_PAD_SUFFIX));
+  return !p.academyGrad && (p.isYouth === true || (p.name ?? '').endsWith(YOUTH_PAD_SUFFIX));
 }
 
 /**
@@ -5049,18 +5157,25 @@ function isPaddingKid(p: CMPlayer): boolean {
  * the free agent list (a pad whose deal ran out walks there, and re-signing
  * him put him back on the curve with no youth discount at all). The wage is
  * pinned first on a pad that somehow has none, so the repair moves no bill.
+ * Round 640 review: and every figure the save priced off his old sale price
+ * (a bid on the table, a clause, a loan's buy option, an agreed part exchange)
+ * moves with it, see rescaleSaleFigures. The review found pad bids of 35.2m
+ * standing against pads now selling for 2.8m. It runs exactly once per pad,
+ * because a pad that has a value is never priced again.
  *
  * Called from loadCareer only. Every career in play either came from
  * startCareer, whose pads are created valued, or through loadCareer.
  */
 export function ensureYouthPadValues(state: CareerState): void {
-  const price = (p: CMPlayer) => {
+  const price = (p: CMPlayer, loan?: LoanOut) => {
     if (p.value !== undefined || !isPaddingKid(p)) return;
     if (p.wage === undefined) p.wage = wageFor(p);
+    const oldSell = sellValue(p);
     p.value = youthPadValue(p.rating, p.age);
+    rescaleSaleFigures(state, p.id, oldSell, sellValue(p), loan);
   };
   for (const p of state.squad ?? []) price(p);
-  for (const l of state.loanedOut ?? []) if (l && l.player) price(l.player);
+  for (const l of state.loanedOut ?? []) if (l && l.player) price(l.player, l);
   for (const f of state.freeAgents ?? []) {
     if (f.value === undefined && f.name.endsWith(YOUTH_PAD_SUFFIX)) f.value = youthPadValue(f.rating, f.age);
   }
@@ -5248,6 +5363,8 @@ export function releasePlayer(career: CareerState, playerId: string): CareerStat
     freeAgents: addFreeAgent(career.freeAgents ?? [], {
       name: p.name, position: p.position, age: p.age, rating: p.rating,
       value: p.value, generated: p.generated, since: career.season,
+      /* Round 640 review: a founder's sale ratio goes with him. */
+      founderSaleRatio: p.founderSaleRatio,
       reason: 'released', fromMyClub: true,
     }, career, remaining.map(x => x.name)),
     /* He cannot be sold back to you this season. */
@@ -5329,7 +5446,9 @@ export const FREE_AGENT_MIN_FEE = 0.5;
 
 export function freeAgentTerms(fa: FreeAgent): { wage: number; years: number; fee: number } {
   const leverage = fa.age <= 23 ? 1.15 : fa.age <= 29 ? 1.3 : 0.95;
-  const wage = fa.wage ?? Math.max(1, Math.round(wageFor({ rating: fa.rating, age: fa.age, value: fa.value, isYouth: false } as CMPlayer) * leverage));
+  /* Round 640 review: with his name, so a youth pad in the pool asks the wage
+     he asked before Round 632 (wageFor prices a pad off the curve). */
+  const wage = fa.wage ?? Math.max(1, Math.round(wageFor({ name: fa.name, rating: fa.rating, age: fa.age, value: fa.value, isYouth: false } as CMPlayer) * leverage));
   const years = fa.age >= 31 ? 2 : 3;
   const fee = Math.max(FREE_AGENT_MIN_FEE, Math.round(wage * years * 0.045 * 10) / 10);
   return { wage, years, fee };
@@ -5410,6 +5529,8 @@ export function signFreeAgent(career: CareerState, name: string): CareerState | 
     contractYears: years,
     wage,
   };
+  /* Round 640 review: a founder signed back still sells at his ratio. */
+  if (fa.founderSaleRatio !== undefined) player.founderSaleRatio = fa.founderSaleRatio;
   return {
     ...career,
     budget: Math.round((career.budget - fee) * 10) / 10,
@@ -6840,9 +6961,9 @@ export function sellValue(p: CMPlayer): number {
   // sporting director in Europe knows you have to sell. They bid accordingly.
   const wantsOut = p.wantsOut ? 0.82 : 1;
   if (p.value !== undefined) {
-    /* Round 640: a created club's founder sells for no more than the same man
-       in the squad its money could have bought (founderSaleCap). */
-    const worth = p.founderSaleCap !== undefined ? Math.min(p.value, p.founderSaleCap) : p.value;
+    /* Round 640: a founder of a club founded above what its money buys sells
+       at his value times his sale ratio (founderSaleRatio). */
+    const worth = p.founderSaleRatio !== undefined ? p.value * p.founderSaleRatio : p.value;
     return Math.max(0.3, Math.round(worth * 0.9 * runDown * wantsOut * 10) / 10);
   }
   const youthF = p.isYouth ? 0.4 : 1;
@@ -14401,8 +14522,9 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   ensurePress(state);
   ensureManagers(state);
   state.wageCap = wageCapFrom(wageBill(state));
-  /* Round 640: and a created club gets the cap a real club with its budget has. */
-  if (custom) state.wageCap = Math.max(state.wageCap, realCapForBudget(club.budget));
+  /* Round 640: and a created club gets the cap a real club with its budget
+     has, plus the room its founders above that money bring. */
+  if (custom) state.wageCap = Math.max(state.wageCap, realCapForBudget(club.budget) + foundersWageRoom(state));
   state.boardObjectives = buildBoardObjectives(club.name, state.uclGroup !== null, league.clubs.length, era.id, custom ? leagueClubs : undefined);
   /* Round 474: and the two specific asks, read off the squad you have just
      been handed and the market this world really has. */
@@ -15444,7 +15566,7 @@ function fillSquadGaps(
   const letGo = new Set(released);
   const fromReal = realPool
     .filter(f => !letGo.has(f.name) && !taken.has(f.name) && !retired.has(f.name) && band(f.rating))
-    .map(f => ({ name: f.name, club: '', position: f.position, age: f.age, rating: f.rating, price: 0, value: f.value, generated: f.generated }));
+    .map(f => ({ name: f.name, club: '', position: f.position, age: f.age, rating: f.rating, price: 0, value: f.value, generated: f.generated, founderSaleRatio: f.founderSaleRatio }));
   /* A made up journeyman is worth the floor and asks a wage off his squad, so
      the club pays him what he asks rather than what his value would price. */
   const askingWage = new Map(realPool.filter(f => f.wage !== undefined).map(f => [f.name, f.wage as number]));
@@ -15489,6 +15611,9 @@ function fillSquadGaps(
       wage: 0,
     };
     player.wage = askingWage.get(mp.name) ?? wageFor(player);
+    /* Round 640 review: a founder the fill signs back keeps his sale ratio. */
+    const ratio = (mp as { founderSaleRatio?: number }).founderSaleRatio;
+    if (ratio !== undefined) player.founderSaleRatio = ratio;
     out.push(player);
   }
   return { squad: out, signed };
@@ -15695,6 +15820,9 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
     walkedFree619.push(...walked.map(p => ({
       name: p.name, position: p.position, age: p.age, rating: p.rating,
       value: p.value, generated: p.generated, since: career.season + 1,
+      /* Round 640 review: a founder's sale ratio walks with him, or letting a
+         deal run out and signing him back would strip it for nothing. */
+      founderSaleRatio: p.founderSaleRatio,
       reason: 'expired' as const,
       /* Round 619: these are MY players whose deals ran out, so the same season
          re-sign block has to apply to them too. Without this, letting every
@@ -16019,9 +16147,13 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
      is the Round 105 anchor doing its job. Staying carries last season's
      ceiling and moves it on the CLUB's season, never on your own wage bill.
      See nextWageCap for what the old self-anchored line measured out at. */
+  /* Round 640 review: the room a created club's founders above its money
+     brought comes off before the season moves the cap, and the room of those
+     still on the books goes back on after, so the cap falls back toward the
+     budget's line as they leave. Zero at every other club. */
   state.wageCap = moving
     ? wageCapFrom(wageBill(state))
-    : nextWageCap(career.wageCap ?? wageCapFrom(wageBill(career)), club.expectation, prevPos, seasonTrophyCount);
+    : nextWageCap(Math.max(60, (career.wageCap ?? wageCapFrom(wageBill(career))) - foundersWageRoom(career)), club.expectation, prevPos, seasonTrophyCount) + foundersWageRoom(state);
   for (const name of freeAgentNews) {
     pushNews(state, { name, from: career.clubName, to: 'a free transfer', fee: 0 });
   }
@@ -16353,9 +16485,10 @@ export function loadCareer(): CareerState | null {
       /* Round 640: a save written before founders were priced like real
          players opens with them repriced. Before the registration, which reads
          only ratings, and before any screen reads a value. The cap floor
-         first, because both run once and the repricing sets the mark. */
-      ensureCustomClubWageCap(parsed);
-      ensureCustomClubValues(parsed);
+         runs only when the repricing did, and after it, because it counts
+         the sale ratios the repricing hands out. */
+      const repriced = ensureCustomClubValues(parsed);
+      if (repriced) ensureCustomClubWageCap(parsed);
       registerCustomClub(parsed.customClub, parsed.eraId, squadXIAvg(parsed.squad));
     } else {
       if (parsed.customClub) delete parsed.customClub;
