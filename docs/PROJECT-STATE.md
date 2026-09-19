@@ -28,6 +28,66 @@ IndexNow accepted all 151 sitemap URLs (HTTP 200) with the key file verified liv
 PR 103, `b826caec`, 23 commits ahead of main). It is being gated and adversarially reviewed by the
 desktop lane and lands separately if it holds.
 
+## ROUND 633 BUILT 2026-09-17: the Club Manager season score reads the manager, not the club
+
+Branch `claude/free-agents-contract-termination-5oeyzz`, PR 103, draft, merged up to main
+`32012b2`. Not on main. Renumbered from 628 after a lane collision, recorded at the top of
+`docs/WORKBOARD.md` and in full in `docs/HANDOFF-2026-09-17.md`: this lane also built the whole of
+Round 619 in parallel with the desktop lane and has dropped it, because **a workboard claim made
+on a branch is invisible to main.**
+
+**This work is NOT duplicated.** Main still carries `Math.min(130, myRow.pts + trophies * 10)` at
+both call sites, so all three defects below are live on main right now.
+
+**One, it read the club.** One season at twelve clubs with management held IDENTICAL, so every
+point of spread is stature: scores 24 to 90, correlation with the club's preview XI rating
+**0.851**. Bayern finished 8th of 18 on grade F having hit 0 of 7 board objectives and scored 55;
+Sevilla finished 13th on grade C having hit 3 of 8 and scored 46. The F beat the C.
+
+**Two, the scale did not fit the leagues.** Max league points runs 54 in the 10 club SuperSport
+HNL to **138** in the 24 club Championship, against one flat cap of 130.
+
+**Three, relegation paid.** Sunderland scored 43 finishing 18th in the Premier League, went down,
+won the Championship and scored **124**, against 78 for the side that won the Premier League.
+
+**What it is now.** A ledger in the new `src/lib/clubManagerScore.ts`, pure and importing nothing
+from `clubManager.ts`. Every term a SHARE of what was available, so league size cancels: form 48,
+title 28 (scaled by the share of the season you managed), cup up to 24, Europe up to 24, board
+objectives 6 each to 30. **48 + 28 + 24 + 30 is exactly 130**, the ceiling with no European run,
+so the five leagues with no Champions League route can still reach the top of the scale.
+
+**Weights grid searched over 77 seeded seasons at 34 clubs**, every season scored under both
+rules: median held at 63, agreement with the board's verdict grade 0.312 to 0.482, with board
+objectives hit 0.132 to 0.577, club stature 0.776 to 0.314. The old rule could not order grade A
+above grade B. Holding the median matters because `global_leaderboard()` pays
+`100.0 * day_best / max_score` and the denominator lives in the database, so a rule that simply
+scored lower would cut every Club Manager player's earning rate; emitting 0..100 would have cut
+it 23 percent forever.
+
+**The monotone law, and the review that proved it false.** The leaderboard ranks on the day's MAX
+reading and `recordActivity` pings after every match, so a score that can FALL pays for the
+luckiest afternoon. An adversarial review across seven lenses raised 42 findings, 11 refuted, and
+the worst repeated Round 619's lesson exactly: `objectiveStatuses` recomputes the youth objective
+from the CURRENT squad, so releasing, selling or loaning a qualifying under 21 took 6 points off a
+live score (Ajax 43 to 37; a season forked at week 20 finishing 58 if you kept him and 48 if you
+let him go), **and the section written to guard monotonicity reported zero drops because it played
+every career hands off and never changed a squad.** The board term settles at the final whistle
+now, and that section releases, sells and loans players with a floor on the number of removals.
+
+**Gate, re-run against MAIN's engine after the merge rather than assumed**, because main's Round
+619 rewrote a great deal of `clubManager.ts` underneath it: tsc 0, `npm run build` clean,
+`scripts/simClubManagerScore.mjs` at **10 sections with 9 negative controls, all nine proved to
+fail the section each targets with no broken anchors**, main's own `simFreeAgents` and
+`simHarnessAnchors` green, plus `simClubManager`, `simClubManagerSave`, `simSessionMarks`,
+`simBoardAsks`, `simAcademy`, `simContracts`, `simClubManagerFinances`. Component tests 317 of
+321; the four failures are `dailyReload.test.tsx` f1-constructor and were **proven pre-existing on
+main** by running them against a clean archive of `origin/main`, not assumed.
+
+Save safety: `CareerState.handover` is optional with an `ensureHandover` repair that fails closed
+on the record contents, so `SAVE_VERSION` stays 3. `currentSeasonScore` and `sm.seasonScore` keep
+their names because `simSessionMarks` section 5 and `simActivityNotCompletion`'s control both
+string match those literals.
+
 ## ROUNDS 619 AND 628 TO 630 ON MAIN 2026-09-17: landed after a review that found 28 real defects past green gates
 
 Landed together as `release-619-630`, built in a fresh CRLF clone (`C:\Users\antho\dukb-gate`)

@@ -27,6 +27,7 @@
  */
 import {
   playNextEntry, fixtureFor, entryInvolvesMe, careerLeagueOf, CUP_LABELS, UCL_LABELS,
+  cupProgressRank, uclProgressRank, objectiveStatuses,
 } from '@/lib/clubManager';
 import type { CareerState, CalendarEntry, Competition, FormResult, MatchWeekReport } from '@/lib/clubManager';
 import { CM_BASE_YEAR } from '@/lib/clubManagerEras';
@@ -705,5 +706,30 @@ export function startMidSeason(career: CareerState, entry: MidSeasonEntry): Care
     /* The inbox is the old manager's post. */
     inbox: career.inbox,
     midSeasonStart: entry,
+    /* Round 633: what he had already banked, frozen here so the season score
+       can subtract it. It is stamped rather than estimated later because an
+       estimate computed from the player's own running totals rises as he
+       LOSES, which pays a manager for defeats. These five numbers are read
+       from the state he is handing over and never move again.
+       Every call below is inside this function, never at module scope, so the
+       clubManager cycle this file already lives with stays evaluation safe. */
+    handover: handoverFrom(s),
+  };
+}
+
+/**
+ * Round 633: the previous manager's season, as the score reads it.
+ * `objectiveStatuses` grades against the board's targets, so an objective he
+ * had already banked does not pay you a second time.
+ */
+function handoverFrom(s: CareerState) {
+  const row = s.table.find(r => r.club === s.clubName);
+  return {
+    pts: row ? row.pts : 0,
+    played: row ? row.w + row.d + row.l : 0,
+    cupRank: cupProgressRank(s).rank,
+    euroRank: uclProgressRank(s).rank,
+    objectivesDone: objectiveStatuses(s).filter(o => o.status === 'done').length,
+    wonLeague: s.trophies.some(t => t.season === s.season && t.name === 'League Title'),
   };
 }
