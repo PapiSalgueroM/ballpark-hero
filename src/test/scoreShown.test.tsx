@@ -4,11 +4,12 @@
  * The points audit of 2026-09-19 found screens showing one number while the
  * recorder wrote another. Soccer Career showed a legacy score out of 100 and
  * recorded a trophy formula out of 1000 that a 99 starting overall could run to
- * the cap. Footle's score panel was handed 1000 down 125 a guess while the
- * record held 700 down 100. Fantasy Draft showed season points and recorded a
- * share of 114 nobody saw. Quiz Board showed and shared a negative bank while
- * recording 0. Player Bingo showed points and recorded nothing, and Rarity mode
- * recorded a perfect run as 0.
+ * the cap. Footle's score panel was handed 1000 down 125 a guess, on rows from
+ * 0 to 1000, while the record held 700 down 100. Fantasy Draft showed season
+ * points and recorded a share of 114 nobody saw, and its share claimed a win on
+ * every result. Quiz Board showed and shared a negative bank while recording 0.
+ * Player Bingo showed points and recorded nothing, and Rarity mode recorded a
+ * perfect run as 0.
  *
  * Every page here is the REAL page with the REAL recording path
  * (useGameCompletion or ResultScreen's recordCompletionOnMount). Only the
@@ -18,16 +19,18 @@
  * page hands it, so what it shows is what the page passed.
  *
  * scripts/simScoreShown.mjs runs this file and carries the negative controls:
- * it points SCORE_SHOWN_SOCCER_PAGE, SCORE_SHOWN_FOOTLE_PAGE or
- * SCORE_SHOWN_BINGO_PAGE at a copy of that page with the old line put back.
+ * each points one SCORE_SHOWN_*_PAGE variable at a copy of that page (or, for
+ * the Quiz Board, of its board component) with the old line put back.
  */
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+import { describe, it, expect, vi, beforeEach, afterEach, afterAll } from 'vitest';
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
 const H = vi.hoisted(() => ({
   tables: {} as Record<string, unknown[]>,
+  functions: {} as Record<string, unknown>,
+  clipboard: '' as string,
 }));
 
 vi.mock('@/lib/completions', async (importOriginal) => ({
@@ -60,7 +63,7 @@ vi.mock('@/integrations/supabase/client', () => {
   const supabase = {
     from: (table: string) => chain(table),
     rpc: () => chain('rpc'),
-    functions: { invoke: () => Promise.resolve({ data: null, error: null }) },
+    functions: { invoke: (name: string) => Promise.resolve({ data: H.functions[name] ?? null, error: null }) },
     auth: {
       getSession: () => Promise.resolve({ data: { session: null } }),
       getUser: () => Promise.resolve({ data: { user: null } }),
@@ -75,13 +78,13 @@ vi.mock('@/integrations/supabase/client', () => {
 /* The share row, the score panel and the search boxes, each drawn as the
    props the page passed and nothing else. */
 vi.mock('@/components/game/ShareButtons', () => ({
-  default: ({ score, gameName }: { score: string; gameName: string }) => (
-    <div data-testid="share" data-game={gameName} data-score={score} />
+  default: ({ score, gameName, customText }: { score: string; gameName: string; customText?: string }) => (
+    <div data-testid="share" data-game={gameName} data-score={score} data-custom={customText ?? ''} />
   ),
 }));
 vi.mock('@/components/game/PostGameStats', () => ({
-  default: ({ gameSlug, userScore }: { gameSlug: string; userScore: number }) => (
-    <div data-testid="post-game-stats" data-slug={gameSlug} data-user-score={String(userScore)} />
+  default: ({ gameSlug, userScore, buckets }: { gameSlug: string; userScore: number; buckets?: unknown }) => (
+    <div data-testid="post-game-stats" data-slug={gameSlug} data-user-score={String(userScore)} data-buckets={buckets ? JSON.stringify(buckets) : ''} />
   ),
 }));
 vi.mock('@/components/game/PlayerSearch', () => ({
@@ -168,21 +171,20 @@ import { recordCompletion } from '@/lib/completions';
 import { getTodayET, getDailyTier, dailyIndex } from '@/lib/dateUtils';
 import { players as footlePlayers } from '@/data/players';
 import { nflCareerPlayers } from '@/data/nflCareerPlayers';
+import { footleScore } from '@/hooks/useGame';
 import * as E from '@/lib/soccerCareerEngine';
 import type { CareerState } from '@/lib/soccerCareerEngine';
-import PlayerBingoReal from '@/pages/PlayerBingo';
-import RarityRound from '@/pages/RarityRound';
-import FantasyDraft from '@/pages/FantasyDraft';
-import QuizBoardPage from '@/pages/QuizBoard';
-import NFLCareer from '@/pages/NFLCareer';
 
 /* The negative controls swap in a copy of one page. Off in every ordinary run. */
-const soccerPath = process.env.SCORE_SHOWN_SOCCER_PAGE;
-const footlePath = process.env.SCORE_SHOWN_FOOTLE_PAGE;
-const bingoPath = process.env.SCORE_SHOWN_BINGO_PAGE;
-const { default: SoccerCareer } = soccerPath ? await import(/* @vite-ignore */ soccerPath) : await import('@/pages/SoccerCareer');
-const { default: Footle } = footlePath ? await import(/* @vite-ignore */ footlePath) : await import('@/pages/Footle');
-const PlayerBingo = bingoPath ? (await import(/* @vite-ignore */ bingoPath)).default : PlayerBingoReal;
+const pick = async (envPath: string | undefined, load: () => Promise<Record<string, any>>) => // eslint-disable-line @typescript-eslint/no-explicit-any
+  envPath ? import(/* @vite-ignore */ envPath) : load();
+const { default: SoccerCareer } = await pick(process.env.SCORE_SHOWN_SOCCER_PAGE, () => import('@/pages/SoccerCareer'));
+const { default: Footle } = await pick(process.env.SCORE_SHOWN_FOOTLE_PAGE, () => import('@/pages/Footle'));
+const { default: PlayerBingo } = await pick(process.env.SCORE_SHOWN_BINGO_PAGE, () => import('@/pages/PlayerBingo'));
+const { default: RarityRound } = await pick(process.env.SCORE_SHOWN_RARITY_PAGE, () => import('@/pages/RarityRound'));
+const { default: FantasyDraft } = await pick(process.env.SCORE_SHOWN_FANTASY_PAGE, () => import('@/pages/FantasyDraft'));
+const { QuizBoard } = await pick(process.env.SCORE_SHOWN_QUIZ_BOARD, () => import('@/components/quiz-board/QuizBoard'));
+const { default: NFLCareer } = await pick(process.env.SCORE_SHOWN_NFL_PAGE, () => import('@/pages/NFLCareer'));
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const recorded = (path: string) =>
@@ -191,8 +193,11 @@ const tick = (ms = 30) => act(async () => { await new Promise(r => setTimeout(r,
 const mount = (el: JSX.Element) => render(<HelmetProvider><MemoryRouter>{el}</MemoryRouter></HelmetProvider>);
 const buttonWith = (root: HTMLElement, text: string) =>
   Array.from(root.querySelectorAll('button')).find(b => (b.textContent ?? '').includes(text)) as HTMLButtonElement | undefined;
-const share = (root: HTMLElement, game: string) =>
-  root.querySelector(`[data-testid="share"][data-game="${game}"]`)?.getAttribute('data-score') ?? null;
+const buttonExactly = (root: HTMLElement, texts: string[]) =>
+  Array.from(root.querySelectorAll('button')).find(b => texts.includes((b.textContent ?? '').trim())) as HTMLButtonElement | undefined;
+const shareEl = (root: HTMLElement, game: string) =>
+  root.querySelector(`[data-testid="share"][data-game="${game}"]`);
+const share = (root: HTMLElement, game: string) => shareEl(root, game)?.getAttribute('data-score') ?? null;
 const firstNumber = (s: string | null | undefined) => {
   const m = (s ?? '').match(/-?\d+/);
   return m ? Number(m[0]) : NaN;
@@ -201,6 +206,7 @@ const statValue = (root: HTMLElement, label: string) => {
   const el = Array.from(root.querySelectorAll('span')).find(s => (s.textContent ?? '').trim() === label);
   return el?.nextElementSibling?.textContent ?? null;
 };
+const headline = (root: HTMLElement) => root.querySelector('[role="status"] h2')?.textContent ?? null;
 async function waitFor(check: () => boolean, what: string, ms = 8000) {
   const end = Date.now() + ms;
   while (!check()) {
@@ -212,6 +218,8 @@ async function waitFor(check: () => boolean, what: string, ms = 8000) {
 beforeEach(() => {
   localStorage.clear();
   H.tables = {};
+  H.functions = {};
+  H.clipboard = '';
   vi.mocked(recordCompletion).mockClear();
   vi.stubGlobal('requestAnimationFrame', () => 1);
   vi.stubGlobal('cancelAnimationFrame', () => undefined);
@@ -221,9 +229,17 @@ beforeEach(() => {
   if (!('ResizeObserver' in window)) {
     vi.stubGlobal('ResizeObserver', class { observe() {} unobserve() {} disconnect() {} });
   }
+  Object.defineProperty(navigator, 'clipboard', {
+    configurable: true,
+    value: { writeText: (t: string) => { H.clipboard = t; return Promise.resolve(); } },
+  });
   window.scrollTo = (() => undefined) as typeof window.scrollTo;
 });
 afterEach(() => { cleanup(); vi.unstubAllGlobals(); vi.restoreAllMocks(); });
+/* Let any timer a page left behind (a toast, a shake, a line flash) fire while
+   the environment still exists, so this file can never leave an error behind
+   the way a timer firing after teardown does. */
+afterAll(async () => { await new Promise(r => setTimeout(r, 2500)); });
 
 /* ---------------- Soccer Career ---------------- */
 
@@ -237,14 +253,14 @@ function seeded(seed: number) {
   };
 }
 
-/** One seeded career from a 99 start, played to the retirement ceremony. */
-function playTo99Ceremony(seed: number): CareerState {
+/** One seeded career, played to the retirement ceremony. */
+function playToCeremony(seed: number, start: number): CareerState {
   const realRandom = Math.random;
   Math.random = seeded(seed);
   try {
     const clubs = E.FALLBACK_CLUBS;
     const st = (o: number) => ({ pace: o, shooting: o, passing: o, dribbling: o, defending: o, physical: o, reflexes: o });
-    let s = E.initCareer('Test Striker', 'Brazil', 'ST', '2020s', st(99), 99, 2020, clubs, null, 99);
+    let s = E.initCareer('Test Striker', 'Brazil', 'ST', '2020s', st(start), start, 2020, clubs, null, Math.max(start, 80));
     for (let guard = 0; s.phase !== 'retirement_ceremony' && guard < 500; guard++) {
       switch (s.phase) {
         case 'youth': s = E.advanceYouthYear(s, clubs); break;
@@ -278,15 +294,13 @@ function playTo99Ceremony(seed: number): CareerState {
   }
 }
 
-/** Mount the page on a saved ceremony, retire, and read back what it records and shows. */
-async function retireThroughPage(career: CareerState) {
+/** Mount the page on a saved ceremony, take one road out of it, and read back what it records and shows. */
+async function finishThroughPage(career: CareerState, road: (root: HTMLElement) => Promise<void>) {
   vi.mocked(recordCompletion).mockClear();
   localStorage.setItem('soccerCareerSave', JSON.stringify(career));
   const v = mount(<SoccerCareer />);
   await tick(100);
-  const retire = buttonWith(v.container, 'Retire and Enjoy Life');
-  if (!retire) throw new Error('no Retire and Enjoy Life button on the ceremony');
-  await act(async () => { fireEvent.click(retire); });
+  await road(v.container);
   await waitFor(() => recorded('/soccer-career').length > 0 && share(v.container, 'Soccer Career') !== null, 'the soccer-career record and legacy card');
   const shownText = share(v.container, 'Soccer Career');
   const shown = Number((shownText ?? '').match(/(\d+)\/100/)?.[1]);
@@ -294,15 +308,39 @@ async function retireThroughPage(career: CareerState) {
   v.unmount();
   return { rec, shown, shownText };
 }
+const click = async (root: HTMLElement, text: string) => {
+  const b = buttonWith(root, text);
+  if (!b) throw new Error(`no "${text}" button`);
+  await act(async () => { fireEvent.click(b); });
+  await tick(40);
+};
+const roads = {
+  retire: async (root: HTMLElement) => { await click(root, 'Retire and Enjoy Life'); },
+  manager: async (root: HTMLElement) => {
+    await click(root, 'Become a Manager');
+    await waitFor(() => !!buttonExactly(root, ['Retire', 'Walk Away']), 'the manager season');
+    await act(async () => { fireEvent.click(buttonExactly(root, ['Retire', 'Walk Away'])!); });
+  },
+  pundit: async (root: HTMLElement) => {
+    await click(root, 'Become a TV Pundit');
+    for (let i = 0; i < 6; i++) await click(root, 'Make a Bold Prediction');
+    await click(root, 'Retire from Punditry');
+  },
+  owner: async (root: HTMLElement) => {
+    await click(root, 'Buy a Football Club');
+    for (let i = 0; i < 4; i++) await click(root, 'Next Owner Season');
+    await click(root, 'Sell Club');
+  },
+};
 
 describe('soccer-career', () => {
   it('soccer-career: records the legacy score the retirement screen shows, and a 99 start records less than the same record climbed from 55', async () => {
-    const at99 = playTo99Ceremony(644);
+    const at99 = playToCeremony(644, 99);
     const at55: CareerState = { ...at99, startingOverall: 55 };
     at55.legacy = E.calculateLegacy(at55);
 
-    const a = await retireThroughPage(at99);
-    const b = await retireThroughPage(at55);
+    const a = await finishThroughPage(at99, roads.retire);
+    const b = await finishThroughPage(at55, roads.retire);
     const t = E.getCareerTotals(at99.seasons);
     console.log(`SHOWN soccer-career start 99: recorded ${JSON.stringify(a.rec)} shown "${a.shownText}" (peak ${at99.peakOverall}, ${t.ballonDors} Ballon d'Or, ${t.championsLeagues} UCL, ${t.worldCups} WC, ${t.leagueTitles} leagues)`);
     console.log(`SHOWN soccer-career same record from 55: recorded ${JSON.stringify(b.rec)} shown "${b.shownText}"`);
@@ -311,6 +349,16 @@ describe('soccer-career', () => {
     expect(b.rec).toEqual([b.shown]);
     expect(a.rec[0]).toBeLessThan(b.rec[0] as number);
   }, 60000);
+
+  for (const road of ['manager', 'pundit', 'owner'] as const) {
+    it(`soccer-career: ending ${road === 'owner' ? 'an' : 'a'} ${road} career records the legacy score the final screen shows`, async () => {
+      const career = playToCeremony(645, 70);
+      if (road === 'owner') career.netWorth = 500;
+      const r = await finishThroughPage(career, roads[road]);
+      console.log(`SHOWN soccer-career after the ${road} road: recorded ${JSON.stringify(r.rec)} shown "${r.shownText}" (ceremony legacy ${career.legacy!.score})`);
+      expect(r.rec).toEqual([r.shown]);
+    }, 60000);
+  }
 });
 
 /* ---------------- Footle ---------------- */
@@ -325,7 +373,7 @@ function footleTarget() {
 
 describe('footle', () => {
   for (const guessCount of [1, 3]) {
-    it(`footle: a daily won in ${guessCount} records the score its stats panel places you with`, async () => {
+    it(`footle: a daily won in ${guessCount} records the score its stats panel places you with, on rows of the recorded scale`, async () => {
       const target = footleTarget();
       const wrong = footlePlayers.filter(p => p.name !== target.name).slice(0, guessCount - 1);
       const v = mount(<Footle />);
@@ -336,9 +384,19 @@ describe('footle', () => {
         await tick();
       }
       await waitFor(() => recorded('/footle').length > 0 && !!v.container.querySelector('[data-testid="post-game-stats"]'), 'the Footle record and stats panel');
-      const shown = Number(v.container.querySelector('[data-testid="post-game-stats"]')?.getAttribute('data-user-score'));
-      console.log(`SHOWN footle won in ${guessCount}: recorded ${JSON.stringify(recorded('/footle'))} stats panel ${shown}`);
+      const panel = v.container.querySelector('[data-testid="post-game-stats"]')!;
+      const shown = Number(panel.getAttribute('data-user-score'));
+      const bucketsJson = panel.getAttribute('data-buckets');
+      const buckets: { min: number; max: number; label: string }[] = bucketsJson ? JSON.parse(bucketsJson) : [];
+      const top = Math.max(...buckets.map(b => b.max));
+      const holding = buckets.filter(b => shown >= b.min && shown <= b.max).map(b => b.label);
+      console.log(`SHOWN footle won in ${guessCount}: recorded ${JSON.stringify(recorded('/footle'))} stats panel ${shown}, rows ${buckets.map(b => b.label).join(' ') || 'the default 0 to 1000'}, landing in ${holding.join(',') || 'none'}`);
       expect(recorded('/footle')).toEqual([shown]);
+      /* The rows run on the recorded scale: the top one ends at the best score
+         the game can record, and the score lands in exactly one of them. */
+      expect(buckets.length).toBeGreaterThan(0);
+      expect(top).toBe(footleScore(true, 1));
+      expect(holding.length).toBe(1);
     }, 30000);
   }
 });
@@ -404,28 +462,42 @@ async function playRarityRun(root: HTMLElement, ranks: number[]) {
     await tick();
   }
 }
+/* Every place the Rarity result screen states the score: the headline, the
+   Obscurity stat and the share. Each must be the recorded number. */
+function rarityShown(root: HTMLElement) {
+  return {
+    headline: headline(root),
+    stat: statValue(root, 'Obscurity'),
+    share: share(root, 'Rarity Round - Rarity Round'),
+  };
+}
 
 describe('rarity-round', () => {
-  it('rarity-round: Rarity mode records its obscurity total, shown on the result screen, and a perfect run records 500', async () => {
+  it('rarity-round: a perfect Rarity run records 500, and the headline, the stat and the share all say it', async () => {
     const v = mount(<RarityRound />);
     await playRarityRun(v.container, [10, 10, 10, 10, 10]);
     await tick(60);
-    const perfect = statValue(v.container, 'Obscurity');
-    const perfectRec = recorded('/rarity-round');
-    console.log(`SHOWN rarity-round Rarity perfect run: recorded ${JSON.stringify(perfectRec)} Obscurity "${perfect}" points total "${statValue(v.container, 'Rarity Round')}"`);
-    expect(perfectRec).toEqual([firstNumber(perfect)]);
-    expect(perfectRec[0]).toBe(500);
+    const s = rarityShown(v.container);
+    const rec = recorded('/rarity-round');
+    console.log(`SHOWN rarity-round Rarity perfect run: recorded ${JSON.stringify(rec)} headline "${s.headline}" Obscurity "${s.stat}" share "${s.share}" fame points "${statValue(v.container, 'Fame points')}"`);
+    expect(rec).toEqual([500]);
+    expect(firstNumber(s.headline?.replace(/^\D+/, ''))).toBe(500);
+    expect(firstNumber(s.stat)).toBe(500);
+    expect(firstNumber(s.share)).toBe(500);
   }, 30000);
 
-  it('rarity-round: a mixed Rarity run records what it shows, and Crowd Says records its total', async () => {
+  it('rarity-round: a mixed Rarity run records what every line shows, and Crowd Says records a play with no score and says so', async () => {
     const v = mount(<RarityRound />);
     await playRarityRun(v.container, [10, 7, 1, 10, 4]);
     await tick(60);
-    const mixed = statValue(v.container, 'Obscurity');
-    const mixedRec = recorded('/rarity-round');
-    console.log(`SHOWN rarity-round Rarity mixed run: recorded ${JSON.stringify(mixedRec)} Obscurity "${mixed}" points total "${statValue(v.container, 'Rarity Round')}"`);
-    expect(mixedRec).toEqual([firstNumber(mixed)]);
-    expect(mixedRec[0]).toBeGreaterThan(0);
+    const s = rarityShown(v.container);
+    const rec = recorded('/rarity-round');
+    console.log(`SHOWN rarity-round Rarity mixed run: recorded ${JSON.stringify(rec)} headline "${s.headline}" Obscurity "${s.stat}" share "${s.share}" fame points "${statValue(v.container, 'Fame points')}"`);
+    expect(rec.length).toBe(1);
+    expect(rec[0]).toBeGreaterThan(0);
+    expect(firstNumber(s.headline?.replace(/^\D+/, ''))).toBe(rec[0]);
+    expect(firstNumber(s.stat)).toBe(rec[0]);
+    expect(firstNumber(s.share)).toBe(rec[0]);
 
     vi.mocked(recordCompletion).mockClear();
     const crowd = buttonWith(v.container, 'Crowd Says');
@@ -433,42 +505,55 @@ describe('rarity-round', () => {
     await act(async () => { fireEvent.click(crowd); });
     await playRarityRun(v.container, [1, 1, 2, 1, 1]);
     await tick(60);
-    const crowdShown = statValue(v.container, 'Crowd Says');
-    console.log(`SHOWN rarity-round Crowd Says run: recorded ${JSON.stringify(recorded('/rarity-round'))} shown "${crowdShown}"`);
-    expect(recorded('/rarity-round')).toEqual([firstNumber(crowdShown)]);
+    const crowdRec = vi.mocked(recordCompletion).mock.calls.filter(c => c[0] === '/rarity-round');
+    const note = (v.container.textContent ?? '').includes('counts as a play, not for leaderboard points');
+    console.log(`SHOWN rarity-round Crowd Says run: ${crowdRec.length} record(s), score ${JSON.stringify(crowdRec.map(c => c[1] ?? null))}, shown "${statValue(v.container, 'Crowd Says')}", note on screen ${note}`);
+    expect(crowdRec.length).toBe(1);
+    expect(crowdRec[0][1]).toBeUndefined();
+    expect(note).toBe(true);
   }, 30000);
 });
 
 /* ---------------- Fantasy Draft ---------------- */
 
 describe('fantasy-draft', () => {
-  it('fantasy-draft: the verdict card shows the season score the draft records', async () => {
+  it('fantasy-draft: the verdict card and the share carry the season score the draft records, and the share tells the result as it was', async () => {
     const positions = ['GK', 'GK', 'GK', 'CB', 'CB', 'CB', 'CB', 'LB', 'RB', 'CM', 'CM', 'CM', 'CDM', 'CAM', 'LW', 'RW', 'ST', 'ST', 'ST', 'CM', 'CB', 'ST', 'LW', 'RW', 'CM', 'CB', 'GK', 'ST', 'CAM', 'CDM'];
     H.tables.fantasy_draft_players = positions.map((pos, i) => ({
       id: `fd${i}`, name: `Draft Player ${i}`, position: pos, nationality: 'Nowhere',
       market_value_millions: 10 + ((i * 37) % 90), dominant_foot: 'Right', age: 22 + (i % 12),
     }));
+    H.functions['simulate-season'] = { teamAStory: 'Your side ground it out.', teamBStory: 'The AI side ran hot and cold.' };
     /* The AI waits two seconds a pick. Same order of events, shorter waits. */
     const realTimeout = window.setTimeout.bind(window);
     vi.spyOn(window, 'setTimeout').mockImplementation(((fn: TimerHandler, ms?: number, ...args: unknown[]) =>
       realTimeout(fn as any, Math.min(ms ?? 0, 5), ...args)) as any);
     const v = mount(<FantasyDraft />);
     await tick(50);
-    const start = buttonWith(v.container, 'Start Draft');
-    if (!start) throw new Error('no Start Draft button');
-    await act(async () => { fireEvent.click(start); });
+    await click(v.container, 'Start Draft');
     await waitFor(() => v.container.querySelectorAll('[data-testid="fd-pick"]').length > 0, 'the draft pool');
     for (let guard = 0; guard < 400 && !(v.container.textContent ?? '').includes('Season score'); guard++) {
-      const pick = Array.from(v.container.querySelectorAll('[data-testid="fd-pick"]')).find(b => !(b as HTMLButtonElement).disabled) as HTMLButtonElement | undefined;
-      if (pick) await act(async () => { fireEvent.click(pick); });
+      const p = Array.from(v.container.querySelectorAll('[data-testid="fd-pick"]')).find(b => !(b as HTMLButtonElement).disabled) as HTMLButtonElement | undefined;
+      if (p) await act(async () => { fireEvent.click(p); });
       await tick(15);
     }
     const text = v.container.textContent ?? '';
     const shown = Number(text.match(/Season score: (\d+)\/100/)?.[1]);
     const points = Number(text.match(/You (\d+) pts/)?.[1]);
-    console.log(`SHOWN fantasy-draft: recorded ${JSON.stringify(recorded('/fantasy-draft'))} verdict "Season score: ${shown}/100" from ${points} season points`);
-    expect(recorded('/fantasy-draft')).toEqual([shown]);
+    const verdictLine = text.includes('Your draft wins the season') ? 'win' : text.includes('Dead level') ? 'draw' : 'loss';
+    await click(v.container, "Tell the season's story");
+    await waitFor(() => !!shareEl(v.container, 'Fantasy Draft'), 'the Fantasy Draft share');
+    const el = shareEl(v.container, 'Fantasy Draft')!;
+    const custom = el.getAttribute('data-custom') ?? '';
+    const scoreLine = el.getAttribute('data-score') ?? '';
+    const told = custom.includes('I outdrafted the AI') ? 'win' : custom.includes('drew level') ? 'draw' : custom.includes('The AI outdrafted me') ? 'loss' : 'none';
+    const rec = recorded('/fantasy-draft');
+    console.log(`SHOWN fantasy-draft: recorded ${JSON.stringify(rec)} verdict "Season score: ${shown}/100" from ${points} season points (${verdictLine}); share "${scoreLine}", text "${custom}"`);
+    expect(rec).toEqual([shown]);
     expect(shown).toBe(Math.min(100, Math.round((points / 114) * 100)));
+    expect(scoreLine).toContain(`Season score ${shown}/100`);
+    expect(custom).toContain(`Season score ${shown}/100`);
+    expect(told).toBe(verdictLine);
   }, 60000);
 });
 
@@ -488,28 +573,37 @@ const bankedOnCard = (root: HTMLElement) => {
   const label = Array.from(root.querySelectorAll('p')).find(p => (p.textContent ?? '').trim() === 'Board cleared');
   return label?.nextElementSibling?.textContent ?? null;
 };
+async function sharedBank(root: HTMLElement) {
+  await click(root, 'Share score');
+  const m = H.clipboard.match(/\n\$(-?\d+)\n/);
+  return m ? Number(m[1]) : NaN;
+}
 
 describe('quiz-board', () => {
-  it('quiz-board: a board cleared below zero shows and records the same bank, $0', async () => {
-    const v = mount(<QuizBoardPage />);
+  it('quiz-board: a board cleared below zero shows, shares and records the same bank, $0', async () => {
+    const v = mount(<QuizBoard />);
     await waitFor(() => boardReady(v.container), 'the quiz board');
     for (const val of [200, 400, 600, 800, 1000]) await answerTile(v.container, val, 'nobody at all');
     await tick(60);
     const shown = bankedOnCard(v.container);
-    console.log(`SHOWN quiz-board all wrong: recorded ${JSON.stringify(recorded('/jeopardy'))} final card "${shown}"`);
+    const shared = await sharedBank(v.container);
+    console.log(`SHOWN quiz-board all wrong: recorded ${JSON.stringify(recorded('/jeopardy'))} final card "${shown}" shared $${shared}`);
     expect(recorded('/jeopardy')).toEqual([firstNumber(shown)]);
+    expect(shared).toBe(firstNumber(shown));
     expect(firstNumber(shown)).toBe(0);
   }, 30000);
 
-  it('quiz-board: a winning board shows and records the same bank', async () => {
-    const v = mount(<QuizBoardPage />);
+  it('quiz-board: a winning board shows, shares and records the same bank', async () => {
+    const v = mount(<QuizBoard />);
     await waitFor(() => boardReady(v.container), 'the quiz board');
     await answerTile(v.container, 200, 'nobody at all');
     for (const val of [400, 600, 800, 1000]) await answerTile(v.container, val, `Answer ${val}`);
     await tick(60);
     const shown = bankedOnCard(v.container);
-    console.log(`SHOWN quiz-board four right: recorded ${JSON.stringify(recorded('/jeopardy'))} final card "${shown}"`);
+    const shared = await sharedBank(v.container);
+    console.log(`SHOWN quiz-board four right: recorded ${JSON.stringify(recorded('/jeopardy'))} final card "${shown}" shared $${shared}`);
     expect(recorded('/jeopardy')).toEqual([firstNumber(shown)]);
+    expect(shared).toBe(firstNumber(shown));
     expect(firstNumber(shown)).toBe(2600);
   }, 30000);
 });

@@ -36,6 +36,20 @@ const TOTAL_PICKS = TEAM_SIZE * 2;
    was ever shown. */
 const seasonScore = (points: number) => Math.min(100, Math.round((points / 114) * 100));
 
+/* Round 644: the share says how the season really went and carries the same
+   season score. It used to claim "I outdrafted the AI" whatever the table said. */
+function fantasyShareText(verdict: SdSeason | null): string {
+  const tail = 'Can you build a better squad? douknowball.com/fantasy-draft';
+  if (!verdict) return `I drafted my XI on Fantasy Draft at DoUKnowBall. ${tail}`;
+  const line = `Season score ${seasonScore(verdict.points[0])}/100, ${verdict.points[0]} pts to the AI's ${verdict.points[1]}.`;
+  const result = verdict.winner === 0
+    ? 'I outdrafted the AI on Fantasy Draft at DoUKnowBall!'
+    : verdict.winner === -1
+      ? 'I drew level with the AI on Fantasy Draft at DoUKnowBall.'
+      : 'The AI outdrafted me on Fantasy Draft at DoUKnowBall.';
+  return `${result} ${line} ${tail}`;
+}
+
 function getPickOwner(pickIndex: number, userFirst: boolean): 'user' | 'ai' {
   const round = Math.floor(pickIndex / 2);
   const posInRound = pickIndex % 2;
@@ -437,7 +451,7 @@ const FantasyDraft = () => {
                         gameName="Fantasy Draft"
                         gamePath="/fantasy-draft"
                         score={verdict ? `Season score ${seasonScore(verdict.points[0])}/100 (${verdict.points[0]} pts vs the AI's ${verdict.points[1]})` : 'Drafted my XI and simulated a full season'}
-                        customText="I outdrafted the AI on Fantasy Draft at DoUKnowBall! Can you build a better squad? douknowball.com/fantasy-draft"
+                        customText={fantasyShareText(verdict)}
                       />
                     )}
                   </>

@@ -3123,7 +3123,9 @@ function LegacyCard({ career, totals, onShare }: { career: CareerState; totals: 
 
       {/* Pundit bonus */}
       {career.isPundit && (
-        <div className="text-center text-xs text-muted-foreground">🎙️ TV Pundit career · Legacy +5</div>
+        <div className="text-center text-xs text-muted-foreground">
+          🎙️ TV Pundit career{legacy.breakdown.some(b => b.label === "TV Pundit") ? " · Legacy +5" : ""}
+        </div>
       )}
 
       {/* Manager results */}

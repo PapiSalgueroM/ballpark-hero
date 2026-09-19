@@ -19,6 +19,16 @@ export function footleScore(won: boolean, guessCount: number): number {
   return won ? Math.max(100, (MAX_GUESSES - guessCount) * 100) : 0;
 }
 
+/** Round 644: the score panel's rows on the scale footleScore records, 700
+    for a first guess down to 100, and 0 for a miss. */
+export const FOOTLE_SCORE_BUCKETS = [
+  { label: '700', min: 700, max: 700 },
+  { label: '500-600', min: 500, max: 699 },
+  { label: '300-400', min: 300, max: 499 },
+  { label: '100-200', min: 100, max: 299 },
+  { label: '0', min: 0, max: 99 },
+];
+
 export type FootleMode = 'daily' | 'unlimited';
 
 // ---------------------------------------------------------------------------

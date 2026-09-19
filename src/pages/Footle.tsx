@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useGame, footleScore } from '@/hooks/useGame';
+import { useGame, footleScore, FOOTLE_SCORE_BUCKETS } from '@/hooks/useGame';
 import type { GuessResult } from '@/types/game';
 import { PlayerSearch } from '@/components/game/PlayerSearch';
 import { GameBoard } from '@/components/game/GameBoard';
@@ -336,6 +336,7 @@ const Index = () => {
               <PostGameStats
                 gameSlug="footle"
                 userScore={footleScore(gameStatus === 'won', guesses.length)}
+                buckets={FOOTLE_SCORE_BUCKETS}
                 isVisible={true}
               />
             </ResultScreen>
