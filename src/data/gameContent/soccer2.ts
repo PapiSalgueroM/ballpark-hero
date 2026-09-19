@@ -7,29 +7,113 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Three bidders, one billion pounds each: you, The Sheikh, and Moneyball Mike. Twenty two players go under the hammer across two passes, eleven journeymen wait to fill the gaps, and a simulated mini league decides who spent it best.",
       "The auction runs the way a real room does: lots come up in a random position order at real list price, a contested lot turns into a live bidding war, an unwanted one decays until somebody snaps the bargain, and the most valuable player in the room headlines the final lot.",
     ],
-    howToPlay: [
-      "Pick a theme: Current Stars, All-Time Legends, or World Cup 2026.",
-      "Pass one is a lot per position from the middle band in a random order; pass two is the elite band, with the single most valuable player held back to headline the close. Until a position has come up, the room shows the running order, never the names.",
-      "Bid in steps of 5, 10, or 25 million, or pass. If you are the only one who wants him, you get him at the list price.",
-      "When the last hammer falls, every open chair on every squad is filled from the journeyman list at a fee, so nobody plays the showdown a man short.",
-      "Once all three squads hit 11, the showdown simulates the league and crowns a champion.",
+    headings: {
+      howToPlay: "How to play Sign the Player, a free online soccer auction game",
+      rules: "Sign the Player rules: bidding, passes and the journeyman fill",
+      example: "Sign the Player walkthrough: a striker war and a title race",
+      tips: "Sign the Player tips for beating The Sheikh and Moneyball Mike",
+      faq: "Sign the Player FAQ: bidding, passing and the showdown score",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing your auction theme",
+        items: [
+          "Pick a theme: Current Stars, All-Time Legends, or World Cup 2026.",
+        ],
+      },
+      {
+        heading: "How the two bidding passes run",
+        items: [
+          "Pass one is a lot per position from the middle band in a random order; pass two is the elite band, with the single most valuable player held back to headline the close. Until a position has come up, the room shows the running order, never the names.",
+        ],
+      },
+      {
+        heading: "Bidding steps and winning a lot",
+        items: [
+          "Bid in steps of 5, 10, or 25 million, or pass. If you are the only one who wants him, you get him at the list price.",
+        ],
+      },
+      {
+        heading: "Filling the last empty chairs",
+        items: [
+          "When the last hammer falls, every open chair on every squad is filled from the journeyman list at a fee, so nobody plays the showdown a man short.",
+        ],
+      },
+      {
+        heading: "Simulating the showdown season",
+        items: [
+          "Once all three squads hit 11, the showdown simulates the league and crowns a champion.",
+        ],
+      },
     ],
-    rules: [
-      "Every bidder starts with 1 billion pounds. Twenty two auction lots cover the 11 positions twice, middle band then elite, and eleven journeymen fill whatever stays open at the end.",
-      "Two bidders or more on the same lot and it is a war, so it always finishes above list. Exactly one bidder and he takes him for the list price, not a penny over.",
-      "If nobody bids at list price, the price falls step by step; anyone can snap it mid fall, and a lot that reaches thirty percent of list is withdrawn unsold.",
-      "An end of auction fill costs just under half the player's list price, minimum 5 million.",
-      "The showdown is a double round robin, 4 matches per club, ranked by points then goal difference.",
-      "Score is a place bonus (300, 150, or 50) plus 3 per point of squad rating plus 1 per 10 million left in the bank.",
+    ruleSections: [
+      {
+        heading: "The auction pool and starting funds",
+        items: [
+          "Every bidder starts with 1 billion pounds. Twenty two auction lots cover the 11 positions twice, middle band then elite, and eleven journeymen fill whatever stays open at the end.",
+        ],
+      },
+      {
+        heading: "How a war or a lone bid sets the price",
+        items: [
+          "Two bidders or more on the same lot and it is a war, so it always finishes above list. Exactly one bidder and he takes him for the list price, not a penny over.",
+        ],
+        subsections: [
+          {
+            heading: "When nobody bids at list price",
+            items: [
+              "If nobody bids at list price, the price falls step by step; anyone can snap it mid fall, and a lot that reaches thirty percent of list is withdrawn unsold.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Filling empty chairs after the auction",
+        items: [
+          "An end of auction fill costs just under half the player's list price, minimum 5 million.",
+        ],
+      },
+      {
+        heading: "The showdown format and your final score",
+        items: [
+          "The showdown is a double round robin, 4 matches per club, ranked by points then goal difference.",
+          "Score is a place bonus (300, 150, or 50) plus 3 per point of squad rating plus 1 per 10 million left in the bank.",
+        ],
+      },
     ],
-    example: [
-      "A striker lot opens mid running order at his real list price. The Sheikh wants him, so you nudge the price once and let go; he wins the war at 240 million, and when the elite striker headlines the close he is too broke to fight you.",
-      "The leftover striker goes to Mike, fee and all. The sim hands you the title on goal difference, and the unspent money pads your score.",
+    exampleSections: [
+      {
+        heading: "A striker war during the first pass",
+        paragraphs: [
+          "A striker lot opens mid running order at his real list price. The Sheikh wants him, so you nudge the price once and let go; he wins the war at 240 million, and when the elite striker headlines the close he is too broke to fight you.",
+        ],
+      },
+      {
+        heading: "The showdown decides the title",
+        paragraphs: [
+          "The leftover striker goes to Mike, fee and all. The sim hands you the title on goal difference, and the unspent money pads your score.",
+        ],
+      },
     ],
-    tips: [
-      "The Sheikh overpays, so tax him on lots you do not want, then step away.",
-      "Moneyball Mike passes on superstars and hunts value, so fight him for the mid priced lots.",
-      "Passing everything still costs you: the end of auction fill charges a fee for every open chair, and journeymen do not win showdowns.",
+    tipSections: [
+      {
+        heading: "Taxing The Sheikh's overpays",
+        items: [
+          "The Sheikh overpays, so tax him on lots you do not want, then step away.",
+        ],
+      },
+      {
+        heading: "Fighting Moneyball Mike for value",
+        items: [
+          "Moneyball Mike passes on superstars and hunts value, so fight him for the mid priced lots.",
+        ],
+      },
+      {
+        heading: "Why passing everything still costs you",
+        items: [
+          "Passing everything still costs you: the end of auction fill charges a fee for every open chair, and journeymen do not win showdowns.",
+        ],
+      },
     ],
     faqs: [
       {
