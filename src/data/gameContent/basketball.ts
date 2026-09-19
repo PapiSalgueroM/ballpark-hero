@@ -1542,7 +1542,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "Chasing a double link for double chemistry",
+        heading: "Chasing two links for double chemistry",
         items: [
           "Chase double links. A pick sharing both team and era with a teammate feeds chemistry twice.",
         ],
@@ -1956,7 +1956,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "Managing money in the Bank",
+        heading: "Managing your money between seasons",
         items: [
           "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school on the team plane is one sitting a season on odds that are printed before you sit in.",
         ],
