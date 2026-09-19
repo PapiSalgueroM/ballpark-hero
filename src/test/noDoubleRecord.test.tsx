@@ -106,6 +106,8 @@ import { NHL_ARCHETYPES, nhlProgress, simNhlSeason, startNhlCareer } from '@/lib
 import { VALUES } from '@/lib/fetchQuizBoard';
 import { getDailyRankRound } from '@/lib/orderTheList';
 import { guessableGolfers } from '@/data/golfLegends';
+import { pickDailyMystery } from '@/lib/puckDetective';
+import { crownChampion, parseCrowned } from '@/lib/wc2026Lifecycle';
 
 /* ------------------------------------------------------------------------ */
 /* The data loaders. Real modules, only the network call replaced.          */
@@ -161,7 +163,10 @@ const F = vi.hoisted(() => {
     playerName: `Graded ${i}`, nationality: 'X', position: 'CM', fromClub: `From ${i}`, toClub: `To ${i}`,
     moveYear: 2010 + i, valueAtMove: 10, valueAfter: 20, pctChange: 100, actualGrade: 'B',
   }));
-  return { CHAMP_ROWS, FINALS_ROWS, CLUES, PACK_POOL, PUCK_POOL, EMPTY_GRID, CBB_GRID, LADDER, LADDER_POOL, GRADE_CASES };
+  /* The name the search box stand in hands the page; '' for a name nobody
+     matches (the grids' wrong guess). A row sets it in its seed. */
+  const STUB = { pick: '' };
+  return { CHAMP_ROWS, FINALS_ROWS, CLUES, PACK_POOL, PUCK_POOL, EMPTY_GRID, CBB_GRID, LADDER, LADDER_POOL, GRADE_CASES, STUB };
 });
 
 vi.mock('@/lib/champOrNot', async (importOriginal) => ({
@@ -210,13 +215,15 @@ vi.mock('@/lib/cbbGrid', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/lib/cbbGrid')>()),
   fetchCbbGridData: async () => F.CBB_GRID(),
 }));
-/* The grids' search box is a network autocomplete, and it is not what is
-   under test. The stand in hands the page one name nobody in the (empty)
-   grid data matches, which the page scores as a wrong guess. */
+/* The search box is a network autocomplete, and it is not what is under
+   test. The stand in hands the page one name: by default one nobody in the
+   (empty) grid data matches, which a grid scores as a wrong guess, or the
+   name a row put in F.STUB.pick. */
 vi.mock('@/components/game/PlayerAutocomplete', () => ({
-  PlayerAutocomplete: ({ onSelect }: { onSelect: (e: { name: string; rawName: string }) => void }) => (
-    <button type="button" onClick={() => onSelect({ name: 'Nobody Real', rawName: 'Nobody Real' })}>stub guess</button>
-  ),
+  PlayerAutocomplete: ({ onSelect }: { onSelect: (e: { name: string; rawName: string }) => void }) => {
+    const name = F.STUB.pick || 'Nobody Real';
+    return <button type="button" onClick={() => onSelect({ name, rawName: name })}>stub guess</button>;
+  },
 }));
 
 /* ------------------------------------------------------------------------ */
@@ -285,9 +292,18 @@ const resultCard = (c: HTMLElement) => c.querySelector('[role="status"]');
 type Shape = 'fight' | 'career' | 'slug' | 'toggle' | 'restore' | 'extra';
 
 interface Case {
-  /** The slug the recorder records under; also the test's name. */
+  /** The slug the recorder records under; also the test's name unless
+      `name` gives one (a game finished two ways has two rows). */
   id: string;
+  name?: string;
   shape: Shape;
+  /** The score the one record must carry, when the row pins it. */
+  score?: number;
+  /** Or the score read off the finished game (HL: the full daily's). */
+  recordedScore?(api: Api): number;
+  /** Run after the first visit unmounts, before the reloads: rewrite the save
+      into the shape an older build left it in. */
+  ageSave?(): void;
   /** The reload relies on markRestoredFinish (the nomark control's verdict). */
   usesMark: boolean;
   /** Slug rows: the storage name every existing save of this daily sits under. */
@@ -323,6 +339,9 @@ function hl(id: string, storageSlug: string, useHook: () => unknown): Case {
       });
     },
     finished: api => api.r.mode === 'daily' && api.r.gameStatus === 'complete',
+    /* The final round is recorded as it is decided, before its reveal ends;
+       the record must still carry all ten rounds, the score shown after. */
+    recordedScore: api => api.r.totalScore,
     async toggle(api) {
       await run(() => api.r.switchMode('unlimited'));
       await run(() => api.r.switchMode('daily'));
@@ -577,11 +596,23 @@ const CASES: Case[] = [
       await click(button(api.container, new RegExp(`^${item.name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`)));
     }
   }, { usesMark: true }),
-  /* Give up here is its own flag, restored in a state initializer. */
-  page('puck-detective', () => <PuckDetective />, async api => {
-    await click(button(api.container, /^Give up$/));
-    await click(button(api.container, /^Yes, reveal it$/));
-  }, { usesMark: false, ready: c => !!findButton(c, /^Give up$/) }),
+  /* Puck Detective ends two ways. A give up is its own flag, restored in a
+     state initializer, so its reload needs no mark; a solve is the guess log,
+     restored by useDailyPuzzle after mount, so its reload does. */
+  {
+    ...page('puck-detective', () => <PuckDetective />, async api => {
+      await click(button(api.container, /^Give up$/));
+      await click(button(api.container, /^Yes, reveal it$/));
+    }, { usesMark: false, ready: c => !!findButton(c, /^Give up$/) }),
+    name: 'puck-detective (give up)',
+  },
+  {
+    ...page('puck-detective', () => <PuckDetective />, async api => {
+      await click(button(api.container, /^stub guess$/));
+    }, { usesMark: true, ready: c => !!findButton(c, /^stub guess$/) }),
+    name: 'puck-detective (solve)',
+    seed() { F.STUB.pick = pickDailyMystery(F.PUCK_POOL as never).name; },
+  },
   page('guess-the-golfer', () => <GuessTheGolfer />, async api => {
     const answer = guessableGolfers[dailyIndex(today, guessableGolfers.length)].name;
     const input = api.container.querySelector('input[aria-label="Guess the golfer"]');
@@ -670,6 +701,9 @@ const CASES: Case[] = [
   },
   {
     id: 'nfl-career', shape: 'restore', usesMark: false,
+    /* A give up at the first clue is a loss: it records 0, not the 6 a first
+       clue solve earns. */
+    score: 0,
     mount: () => mountHook(useNFLCareer),
     finish: async api => { await run(() => api.r.giveUp()); },
     finished: api => api.r.mode === 'daily' && api.r.gameStatus !== 'playing',
@@ -724,11 +758,20 @@ const CASES: Case[] = [
     },
   },
   {
-    /* A give up was stored as still playing, so its reload carried no mark. */
+    /* A give up was stored as still playing, so its reload carried no mark.
+       The reloads here read the save the way a build before Round 643 left
+       it, gameStatus 'playing' beside the give up, so the save a player
+       already has is covered too, not only the one this round writes. */
     id: 'transfer-path', shape: 'extra', usesMark: true,
     mount: () => mountHook(useTransferPath, r => !r.isLoadingPool && !r.isLoading),
     finish: async api => { await run(() => api.r.giveUp()); },
     finished: api => api.r.mode === 'daily' && api.r.status === 'gaveup',
+    ageSave() {
+      const key = dailyKey('transfer-path');
+      const saved = JSON.parse(localStorage.getItem(key) ?? 'null') as { gameStatus?: string; guesses?: { t: string }[] } | null;
+      if (!saved || !saved.guesses?.some(a => a.t === 'give')) throw new Error(`no give up saved under ${key}`);
+      localStorage.setItem(key, JSON.stringify({ ...saved, gameStatus: 'playing' }));
+    },
   },
   {
     /* The Ball IQ shape: the place is restored at mount, the cases after. */
@@ -774,12 +817,201 @@ const CASES: Case[] = [
 ];
 
 /* ------------------------------------------------------------------------ */
+/* The checks: steps a table row cannot take                                 */
+/* ------------------------------------------------------------------------ */
+
+interface Check {
+  /** The test's title. */
+  title: string;
+  /** The slug the check is about. */
+  id: string;
+  /** Whether it relies on markRestoredFinish (the nomark control's verdict). */
+  usesMark: boolean;
+  run(): Promise<void>;
+}
+
+/* The nine Higher or Lower dailies save a round the moment it is decided. A
+   reload inside the two second reveal used to deal the same round again with
+   the answer already seen. */
+const HL_HOOKS: [string, () => unknown][] = [
+  ['nfl-higher-lower', useNflHL], ['nba-higher-lower', useNbaHL], ['mlb-higher-lower', useMlbHL],
+  ['hockey-higher-lower', useHockeyHL], ['cfb-higher-lower', useCfbHL], ['f1-higher-lower', useF1HL],
+  ['tennis-higher-lower', useTennisHL], ['golf-higher-lower', useGolfHL], ['afl-higher-lower', useAflHL],
+];
+const hlSaved = ([id, useHook]: [string, () => unknown]): Check => ({
+  title: `${id}: a round decided is saved before its reveal ends`, id, usesMark: false,
+  async run() {
+    const first = await mountHook(useHook, r => !r.isLoading);
+    await run(() => first.r.makeGuess('left'));
+    expect(first.r.showingResult, 'the reveal is still showing').toBe(true);
+    first.unmount();
+    const again = await mountHook(useHook, r => !r.isLoading);
+    try {
+      expect(again.r.currentRound, 'the reload deals the next round, not the one already answered').toBe(1);
+      expect(again.r.results.length, 'the decided round is in the save').toBe(1);
+    } finally {
+      again.unmount();
+    }
+  },
+});
+
+/* Champ or Not, Who'd They Beat and Silverware Sort show each result for a
+   couple of seconds before the board moves on. The daily is saved at the
+   final pick, so it is recorded then; a reload or a trip to Unlimited inside
+   the final reveal must neither lose that record nor add a second one, and
+   the late reveal must not land the daily's answers on the Unlimited board. */
+interface Race {
+  id: string;
+  useHook: () => unknown;
+  ready: (r: any) => boolean;
+  total: (r: any) => number;
+  shown: (r: any) => number;
+  pick: (api: Api) => Promise<void>;
+  revealMs: number;
+}
+const RACES: Race[] = [
+  {
+    id: 'champ-or-not', useHook: useChampOrNot, revealMs: 2200,
+    ready: r => r.loadState === 'ready' && r.rounds.length > 0,
+    total: r => r.rounds.length, shown: r => r.answers.length,
+    pick: api => run(() => api.r.answer(api.r.current.isTrue)),
+  },
+  {
+    id: 'whod-they-beat', useHook: useWhodTheyBeat, revealMs: 2200,
+    ready: r => r.loadState === 'ready' && r.questions.length > 0,
+    total: r => r.questions.length, shown: r => r.answers.length,
+    pick: api => run(() => api.r.answer(api.r.current.correctIndex)),
+  },
+  {
+    id: 'silverware-sort', useHook: useSilverwareSort, revealMs: 3400,
+    ready: r => r.loadState === 'ready' && r.boards.length > 0,
+    total: r => r.boards.length, shown: r => r.results.length,
+    async pick(api) {
+      for (let t = 0; t < 5; t += 1) await run(() => api.r.place(t));
+      await run(() => api.r.submit());
+    },
+  },
+];
+async function toFinalPick(race: Race): Promise<Api> {
+  const api = await mountHook(race.useHook, race.ready);
+  vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+  for (let i = 0; i < 20 && race.shown(api.r) < race.total(api.r) - 1; i += 1) {
+    await race.pick(api);
+    await advance(race.revealMs + 100);
+  }
+  await race.pick(api);
+  expect(race.shown(api.r), 'the final result is still in its reveal').toBe(race.total(api.r) - 1);
+  return api;
+}
+const raceReload = (race: Race): Check => ({
+  title: `${race.id}: a reload inside the final reveal`, id: race.id, usesMark: true,
+  async run() {
+    const first = await toFinalPick(race);
+    first.unmount();
+    vi.useRealTimers();
+    const again = await mountHook(race.useHook, race.ready);
+    await settle();
+    try {
+      expect(again.r.done, 'the reload comes back finished').toBe(true);
+      expect(paths(), 'recorded once, not lost and not twice').toEqual([`/${race.id}`]);
+    } finally {
+      again.unmount();
+    }
+  },
+});
+const raceToggle = (race: Race): Check => ({
+  title: `${race.id}: Unlimited and back inside the final reveal`, id: race.id, usesMark: false,
+  async run() {
+    const api = await toFinalPick(race);
+    try {
+      await run(() => api.r.switchMode('unlimited'));
+      await advance(race.revealMs + 500);
+      expect(race.shown(api.r), 'the late reveal does not land the daily on the Unlimited board').toBe(0);
+      await run(() => api.r.switchMode('daily'));
+      vi.useRealTimers();
+      await settle();
+      expect(api.r.done, 'back on the daily, it is finished').toBe(true);
+      expect(paths(), 'recorded once, not lost and not twice').toEqual([`/${race.id}`]);
+    } finally {
+      api.unmount();
+    }
+  },
+});
+
+const CHECKS: Check[] = [
+  ...HL_HOOKS.map(hlSaved),
+  ...RACES.map(raceReload),
+  ...RACES.map(raceToggle),
+  {
+    title: 'nfl-career: a first clue solve records its clue score',
+    id: 'nfl-career', usesMark: false,
+    async run() {
+      const api = await mountHook(useNFLCareer);
+      try {
+        await run(() => api.r.makeGuess(api.r.targetPlayer.name));
+        expect(api.r.gameStatus).toBe('won');
+        expect(recordCompletion.mock.calls.map(c => [String(c[0]), c[1]]), 'one record, worth the six a first clue solve earns').toEqual([['/nfl-career', 6]]);
+      } finally {
+        api.unmount();
+      }
+    },
+  },
+  {
+    /* A tab left open past midnight: yesterday's finish must not stand in for
+       today's, or today's daily is never recorded. */
+    title: 'nfl-career: the next day in the same tab records once more',
+    id: 'nfl-career', usesMark: false,
+    async run() {
+      vi.useFakeTimers({ toFake: ['Date'] });
+      vi.setSystemTime(new Date('2026-09-19T16:00:00Z'));
+      const api = await mountHook(useNFLCareer);
+      try {
+        await run(() => api.r.giveUp());
+        expect(paths(), 'day one records once').toEqual(['/nfl-career']);
+        vi.setSystemTime(new Date('2026-09-20T16:00:00Z'));
+        await run(() => api.r.switchMode('daily'));
+        expect(api.r.gameStatus, 'the new day deals a fresh daily').toBe('playing');
+        expect(paths(), 'the new day alone records nothing').toEqual(['/nfl-career']);
+        await run(() => api.r.giveUp());
+        expect(paths(), 'day two records once').toEqual(['/nfl-career', '/nfl-career']);
+      } finally {
+        api.unmount();
+      }
+    },
+  },
+  {
+    /* The bracket records once per crowned name. A full row would need the
+       group and knockout fixtures, so the rule is held on the two helpers the
+       page's effect is made of. */
+    title: 'world-cup-bracket: one record per crowned name',
+    id: 'world-cup-bracket', usesMark: false,
+    async run() {
+      let crowned = parseCrowned(null);
+      const recorded: string[] = [];
+      for (const champion of ['Spain', 'France', 'Spain', '', 'France', 'Brazil']) {
+        const next = crownChampion(crowned, champion);
+        if (next) { crowned = next; recorded.push(champion); }
+      }
+      expect(recorded, 'A, then B, then A again records A once').toEqual(['Spain', 'France', 'Brazil']);
+      expect(crownChampion(parseCrowned(JSON.stringify(crowned)), 'Spain'), 'a reload remembers every name').toBeNull();
+      expect(parseCrowned('Spain'), 'a value stored before Round 643 is one name').toEqual(['Spain']);
+      expect(parseCrowned('[not json'), 'an unreadable value is no names').toEqual([]);
+      expect(parseCrowned(JSON.stringify(['A', 7, '', 'B'])), 'only names survive').toEqual(['A', 'B']);
+    },
+  },
+];
+
+/* ------------------------------------------------------------------------ */
 /* The runner                                                                */
 /* ------------------------------------------------------------------------ */
+
+const titleOf = (c: Case) => c.name ?? c.id;
+const EXACT: Record<Shape, number> = { fight: 3, career: 4, slug: 12, toggle: 11, restore: 7, extra: 4 };
 
 beforeEach(() => {
   resetMocks();
   localStorage.clear();
+  F.STUB.pick = '';
   vi.stubGlobal('requestAnimationFrame', () => 1);
   vi.stubGlobal('cancelAnimationFrame', () => undefined);
 });
@@ -792,15 +1024,21 @@ afterEach(() => {
 describe('no double record', () => {
   it('discovers the table', () => {
     for (const c of CASES) {
-      console.log('NO_DOUBLE_CASE ' + JSON.stringify({ id: c.id, shape: c.shape, usesMark: c.usesMark, toggle: !!c.toggle, coach: !!c.coach }));
+      console.log('NO_DOUBLE_CASE ' + JSON.stringify({ title: titleOf(c), id: c.id, shape: c.shape, usesMark: c.usesMark, toggle: !!c.toggle, coach: !!c.coach }));
     }
-    const ids = CASES.map(c => c.id);
-    expect(new Set(ids).size, 'every row has its own slug').toBe(ids.length);
+    for (const k of CHECKS) {
+      console.log('NO_DOUBLE_CASE ' + JSON.stringify({ title: k.title, id: k.id, shape: 'check', usesMark: k.usesMark, toggle: false, coach: false }));
+    }
+    const titles = [...CASES.map(titleOf), ...CHECKS.map(k => k.title)];
+    expect(new Set(titles).size, 'every row and check has its own title').toBe(titles.length);
     const count = (s: Shape) => CASES.filter(c => c.shape === s).length;
-    console.log(`NO_DOUBLE_TABLE ${JSON.stringify({ rows: CASES.length, fight: count('fight'), career: count('career'), slug: count('slug'), toggle: count('toggle'), restore: count('restore'), extra: count('extra') })}`);
-    expect(count('slug'), 'all twelve slug pairs').toBe(12);
-    expect(count('toggle'), 'all ten toggle pages').toBeGreaterThanOrEqual(10);
-    expect(count('restore'), 'all six restore hooks and NFL Career Path').toBeGreaterThanOrEqual(7);
+    console.log(`NO_DOUBLE_TABLE ${JSON.stringify({ rows: CASES.length, fight: count('fight'), career: count('career'), slug: count('slug'), toggle: count('toggle'), restore: count('restore'), extra: count('extra'), checks: CHECKS.length })}`);
+    /* Exact, so a row that goes missing is red here and not a quieter table.
+       toggle is the ten pages, Puck Detective twice (give up and solve);
+       restore is the six after-data hooks and NFL Career Path. */
+    for (const s of Object.keys(EXACT) as Shape[]) expect(count(s), `${s} rows`).toBe(EXACT[s]);
+    expect(CASES.length, 'rows in all').toBe(Object.values(EXACT).reduce((a, b) => a + b, 0));
+    expect(CHECKS.length, 'checks: nine HL saves, three reloads and three toggles inside a reveal, two NFL, one bracket').toBe(18);
   });
 
   it(CONTROL === 'nomark' ? 'nomark control: markRestoredFinish is a no-op' : 'markRestoredFinish is live', () => {
@@ -810,7 +1048,7 @@ describe('no double record', () => {
   });
 
   for (const c of CASES.filter(x => !ONLY || x.id === ONLY)) {
-    it(c.id, async () => {
+    it(titleOf(c), async () => {
       const once = [`/${c.id}`];
       c.seed?.();
       let api = await c.mount();
@@ -821,6 +1059,8 @@ describe('no double record', () => {
         await settle();
         expect(c.finished(api), 'the finish reached the finished state').toBe(true);
         expect(paths(), 'the finish records exactly once').toEqual(once);
+        if (c.score !== undefined) expect(recordCompletion.mock.calls[0][1], 'the record carries the score the finish earned').toBe(c.score);
+        if (c.recordedScore) expect(recordCompletion.mock.calls[0][1], 'the record carries the whole finished score').toBe(c.recordedScore(api));
 
         if (c.storageSlug) {
           const raw = localStorage.getItem(dailyKey(c.storageSlug));
@@ -850,6 +1090,7 @@ describe('no double record', () => {
       } finally {
         api.unmount();
       }
+      c.ageSave?.();
 
       for (let reload = 1; reload <= 2; reload += 1) {
         api = await c.mount();
@@ -869,5 +1110,9 @@ describe('no double record', () => {
       }
       expect(paths(), 'recorded once across the finish, the toggles, the coaching and two reloads').toEqual(once);
     }, 30000);
+  }
+
+  for (const k of CHECKS.filter(x => !ONLY || x.id === ONLY)) {
+    it(k.title, () => k.run(), 30000);
   }
 });
