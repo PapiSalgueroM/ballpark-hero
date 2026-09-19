@@ -1,9 +1,21 @@
 # Project state
 
-## RELEASE 2026-09-19: Rounds 631, 633, 634, 635, 639 and Round 638 part one
+## LIVE 2026-09-19: Rounds 631, 633, 634, 635, 639 and Round 638 part one, main `06e6c6e2`
 
 Built and gated by the desktop Claude lane in the CRLF gate clone (`C:\Users\antho\dukb-gate`) on
-branch `release-633-639`. Publish record: see the LIVE line added when it went out.
+branch `release-633-639`, pushed to main as a fast forward from `d7556a17`.
+
+**douknowball.com is serving it.** Deployment `e05774ad-f132-41eb-a30f-c748aa7adab7`, called at
+13:05 UTC only after `get_project` showed `latest_commit_sha` `06e6c6e2`. The entry moved from
+`index-d4nq1olf.js` to `index-Bv4ryYiK.js`, serving by 13:07:01 UTC. Proof read from the live site:
+`clubManager-OzUuBKiB.js` carries 633's stamped `objectivesDone` and 634's `loanOutSeason`;
+`FoHubTiles-C4AVtnxL.js` carries 631's "can come back after the offseason" refusal; the saved
+`/club-manager` page serves 23 h3 and 8 h4 under "How to play Club Manager, a free online football
+management game"; `/pro-football` serves "NFL career and front office sims" with 11 games as h3
+links; `/front-office` carries 631's "A cut is not free" rule; `/whats-new/` carries every entry.
+`auditLive` 151 of 151 clean. IndexNow accepted all 151 sitemap URLs. The two Club Manager footer
+reports (saves and duplicates) are marked resolved; two reports remain open, Player Bingo's summer
+transfers and a player named Lucas Herrington who is in no table.
 
 - **631, a cut costs something in all four front offices.** Cutting (NFL), waiving (NBA, NHL) or
   designating (MLB) a man freed his whole salary and let the same team sign him straight back on a
