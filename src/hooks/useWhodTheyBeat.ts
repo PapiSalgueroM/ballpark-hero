@@ -35,7 +35,12 @@ const dailySeedOf = (day: string) => `whod-they-beat:${day}`;
 const readDaily = (day: string) => loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${day}`));
 
 export function useWhodTheyBeat() {
-  const today = getTodayET();
+  /* Round 643 review: the day is read ONCE, at mount, as useDailyPuzzle
+     reads it, so the seed, the save key, the restore mark, the daily state
+     and the recorder all name the day the daily was dealt. Read on every
+     render, a final pick landing after midnight ET saved under one day and
+     was checked against the next, and the daily was never recorded. */
+  const today = useRef(getTodayET()).current;
   const [loadState, setLoadState] = useState<LoadState>('loading');
   const [rowsByKey, setRowsByKey] = useState<Map<string, FinalsRow[]> | null>(null);
   const [mode, setMode] = useState<BeatMode>('daily');
@@ -45,10 +50,9 @@ export function useWhodTheyBeat() {
      each reveal. Reading the recorder off `answers` lost a finish whenever
      the page reloaded or went to Unlimited inside the final reveal, because
      the restore found the day already finished and marked it. Restored in
-     the initializer, keyed to its day (the Champ or Not shape). */
-  const [daily, setDaily] = useState<{ day: string; answers: boolean[] }>(() => ({ day: today, answers: readDaily(today)?.answers ?? [] }));
-  const dailyAnswers = daily.day === today ? daily.answers : [];
-  const [answers, setAnswers] = useState<boolean[]>(daily.answers);
+     the initializer. */
+  const [dailyAnswers, setDailyAnswers] = useState<boolean[]>(() => readDaily(today)?.answers ?? []);
+  const [answers, setAnswers] = useState<boolean[]>(dailyAnswers);
   const [pickedIndex, setPickedIndex] = useState<number | null>(null);
   const [showingResult, setShowingResult] = useState(false);
   const [unlimitedRun, setUnlimitedRun] = useState(0);
@@ -135,7 +139,7 @@ export function useWhodTheyBeat() {
       try {
         localStorage.setItem(`${STORAGE_PREFIX}daily-${today}`, JSON.stringify({ answers: next }));
       } catch { /* storage blocked: play on */ }
-      setDaily({ day: today, answers: next });
+      setDailyAnswers(next);
     }
     clearReveal();
     revealTimer.current = window.setTimeout(() => {

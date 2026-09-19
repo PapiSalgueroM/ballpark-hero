@@ -53,7 +53,12 @@ const dailySeedOf = (day: string) => `silverware-sort:${day}`;
 const readDaily = (day: string) => loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${day}`));
 
 export function useSilverwareSort() {
-  const today = getTodayET();
+  /* Round 643 review: the day is read ONCE, at mount, as useDailyPuzzle
+     reads it, so the seed, the save key, the restore mark, the daily state
+     and the recorder all name the day the daily was dealt. Read on every
+     render, a final pick landing after midnight ET saved under one day and
+     was checked against the next, and the daily was never recorded. */
+  const today = useRef(getTodayET()).current;
   const [loadState, setLoadState] = useState<LoadState>('loading');
   const [countsByKey, setCountsByKey] = useState<Map<string, TeamCount[]> | null>(null);
   const [mode, setMode] = useState<SortMode>('daily');
@@ -63,10 +68,9 @@ export function useSilverwareSort() {
      each reveal. Reading the recorder off `results` lost a finish whenever
      the page reloaded or went to Unlimited inside the final reveal, because
      the restore found the day already finished and marked it. Restored in
-     the initializer, keyed to its day (the Champ or Not shape). */
-  const [daily, setDaily] = useState<{ day: string; results: BoardResult[] }>(() => ({ day: today, results: readDaily(today)?.results ?? [] }));
-  const dailyResults = daily.day === today ? daily.results : [];
-  const [results, setResults] = useState<BoardResult[]>(daily.results);
+     the initializer. */
+  const [dailyResults, setDailyResults] = useState<BoardResult[]>(() => readDaily(today)?.results ?? []);
+  const [results, setResults] = useState<BoardResult[]>(dailyResults);
   const [unlimitedRun, setUnlimitedRun] = useState(0);
   const unlimitedNonce = useRef(String(Date.now() % 1000000007));
   /* The pending reveal, so a mode change can cancel it: left running, it
@@ -201,7 +205,7 @@ export function useSilverwareSort() {
       try {
         localStorage.setItem(`${STORAGE_PREFIX}daily-${today}`, JSON.stringify({ results: next }));
       } catch { /* storage full or blocked: play on */ }
-      setDaily({ day: today, results: next });
+      setDailyResults(next);
     }
     clearReveal();
     revealTimer.current = window.setTimeout(() => {

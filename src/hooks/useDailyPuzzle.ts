@@ -358,11 +358,15 @@ export function useDailyPuzzle<T, G>(
          stored a give up as still playing until Round 643 made a give up a
          loss, and its page reads the finish off the guesses, so such a save
          came back finished with no mark and recorded again on every reload.
-         The status is decided again from the guesses, exactly as addGuess
-         decides it, before anything below reads it. */
+         The status is decided again from the guesses, through the game's own
+         isWon and isLost, before anything below reads it. Deliberately not
+         through maxGuesses: a game may change that at runtime (Football
+         Grid's Unlimited toggle lifts it to Infinity), so a save made with it
+         lifted would come back as a loss the player never had, and no
+         record. */
       if (saved.gameStatus === 'playing' && puzzle != null && Array.isArray(saved.guesses)) {
         if (isWon(saved.guesses, puzzle)) saved.gameStatus = 'won';
-        else if (saved.guesses.length >= maxGuesses || (isLost && isLost(saved.guesses, puzzle))) saved.gameStatus = 'lost';
+        else if (isLost && isLost(saved.guesses, puzzle)) saved.gameStatus = 'lost';
       }
       guessesRef.current = saved.guesses;
       setGuesses(saved.guesses);
