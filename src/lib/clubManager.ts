@@ -37,7 +37,7 @@ import {
   projectedRoster, projectedWorld, projectedXIAvg, projectedWorldFor,
   ageDriftBand, declineScale, retireChance,
   isHistoricEra, eraRosters, eraRostersRaw, eraUpliftRating, HISTORIC_PARTIAL,
-  makeGeneratedName,
+  makeGeneratedName, eraBakeRating, bakedValueForRating,
 } from '@/lib/clubManagerEras';
 import type { ProjectedPlayer, CMEra } from '@/lib/clubManagerEras';
 /* Round 467: the facilities and the books. Both modules import from this
@@ -1988,6 +1988,11 @@ export interface CareerState {
    * Absent on every save that picked a real club, and nothing changes there.
    */
   customClub?: CustomClubSpec;
+  /** Round 640: CUSTOM_VALUES_VERSION once the founders of a created club are
+   *  priced like real players of their rating (see customFounderValue). Set by
+   *  startCareer on every created club, and by loadCareer after it reprices a
+   *  created club save written before the round. Absent everywhere else. */
+  customValues?: number;
   /** Round 303: who you are in the dugout. Absent on every save made before
    *  the feature and whenever the picker step is skipped, and every reader
    *  treats absence as the second person career this always was. */
@@ -3819,8 +3824,10 @@ const CUSTOM_SLOTS: { pos: Position; off: number }[] = [
  * tagged as generated, no real footballer anywhere near it. Deterministic
  * from the spec, so the same club name at the same tier is always handed the
  * same players, which is what lets the save be rebuilt from its spec.
+ * Round 640: the era prices them (customFounderValue); it moves no rating,
+ * age, name or position, so the squad is the same squad in every era.
  */
-export function buildCustomSquad(spec: CustomClubSpec): CMPlayer[] {
+export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer[] {
   const t = CUSTOM_TIERS[spec.budgetTier] ?? CUSTOM_TIERS.mid;
   /* Round 160: the quality slider outranks the wallet's default anchor.
      Clamped to the slider's own range so a doctored save cannot smuggle in
@@ -3857,10 +3864,121 @@ export function buildCustomSquad(spec: CustomClubSpec): CMPlayer[] {
       isYouth: false,
       seasonGoals: 0,
       seasonAssists: 0,
-      value: Math.max(0.3, Math.round(baseValue(rating, age) * 10) / 10),
+      value: customFounderValue(rating, eraId),
       generated: true,
     };
   }));
+}
+
+/* ─────────────────── Round 640: what a made up founder is worth ───────────────────
+   THE DEFECT. buildCustomSquad stored the whole raw curve, baseValue, as each
+   founder's value, and the raw curve is built to round trip an old rating
+   scale, not to price anybody. Measured on the engine before this round, in
+   every league a club can be founded in and all four eras: a mid tier founding
+   (24 men, mean rating 67.5) was worth 826.6m, where the real squads of the
+   same league within two points of that mean are worth a median 19 times less
+   a head (p10 15.3, p90 26.0, over 17 leagues today); the small tier squad
+   (mean 61.5) was 420.4m, the big (73.5) 1,602.6m and a slider 88 squad
+   7,353.9m. Listing the founders in the first summer window and taking every
+   bid the squad floor allows banked a median 143m (small), 261m (mid) and 585m
+   (big) over the same career selling nobody, against budgets of 15m, 40m and
+   90m, where the real club nearest the squad's level in the same league banked
+   a median 1.4m, 2.1m and 39.2m doing the same thing.
+
+   THE RULE. A founder is worth what the real market pays for a player of his
+   rating in his era. The measured ratio of real value to the raw curve over
+   the 3,658 real players of today's bake, median by rating band and age band:
+
+              60-64  65-69  70-74  75-79  80-84  85-89
+     <=21     0.028  0.034  0.043  0.069  0.098  0.116
+     22-24    0.032  0.038  0.049  0.074  0.107  0.144
+     25-28    0.037  0.044  0.056  0.090  0.118  0.165
+     29-31    0.052  0.063  0.080  0.118  0.166
+     32-34    0.080  0.110  0.151  0.206  0.264
+
+   The 2015, 2010 and 2005 bakes give the same figure in most cells and never
+   one more than 0.02 away up to 84, which is the mix of ratings inside a band
+   rather than the era: rating by rating the eras and the leagues agree (see
+   bakedValueForRating). Down a column the ratio moves as exactly one over the raw curve's own
+   age factor (1.3, 1.15, 1, 0.7, 0.4), so at a given rating a real player's
+   value does not depend on his age at all. That is how the data was made:
+   every bake derives the rating FROM the money (bakedValueForRating), so the
+   market's price for a rating is that line run backwards, and it lands within
+   the rounding of the rating on the median real value at every rating from 64
+   to 94 in every era. The table is that line divided by the raw curve, so the
+   founder is priced off the line directly: one rule for every league, every
+   age and every era. The eras differ only above 80, where the engine stretches
+   historic ratings (eraUpliftRating), so a founder rated 90 in 2005 is priced
+   like the 2005 players the engine rates 90, whose money was 2005 money
+   (eraBakeRating takes the rating back first). The floor is the journeyman
+   value, the same one a youth pad and agePlayer keep to.
+
+   Wages follow. buildCustomSquad sets no wage, so ensureContracts prices each
+   founder's off this value (wageFor reads it) exactly as it prices a real
+   player of that value, and the bill, and the cap startCareer derives from it,
+   are a real club's of that level instead of about seven times one. No random
+   draw moves: buildCustomSquad draws none, and nothing startCareer draws is
+   drawn a different number of times for a different value.
+
+   A save written before this round is repriced on load, ensureCustomClubValues. */
+export const CUSTOM_VALUES_VERSION = 1;
+
+/** Round 640: a made up founder's value, the real market's price for his rating in this era. */
+export function customFounderValue(rating: number, eraId?: string): number {
+  return Math.max(JOURNEYMAN_VALUE, Math.round(bakedValueForRating(eraBakeRating(eraId, rating)) * 10) / 10);
+}
+
+/** Round 640: the value buildCustomSquad stored before this round, the raw curve. */
+function preRound640FounderValue(rating: number, age: number): number {
+  return Math.max(0.3, Math.round(baseValue(rating, age) * 10) / 10);
+}
+
+/** Round 640: the day one founder this man is, rebuilt from the club's spec,
+    or null. Only a man the create flow made (generated, and the same id and
+    name as a founder), never a youth pad, a graduate or anybody bought. */
+function founderOf(p: CMPlayer, founders: Map<string, CMPlayer>): CMPlayer | null {
+  if (!p.generated || p.isYouth || p.academyGrad) return null;
+  const f = founders.get(p.id);
+  return f && f.name === p.name ? f : null;
+}
+
+/**
+ * Round 640: a created club save written before this round carries its
+ * founders at the raw curve, and it is repriced the moment it opens.
+ *
+ * The founders are rebuilt from the save's own spec (buildCustomSquad is a pure
+ * function of it), so each man's day one rating and age are known exactly. One
+ * who still carries his creation value gets today's creation value. One whose
+ * value has moved since (agePlayer grows it 20 percent a rating point and cuts
+ * it at 31) keeps the same movement on the new footing: his value times the
+ * ratio of the new creation value to the old, which is what this engine would
+ * have grown him to. In the squad and out on loan; a founder who was sold left
+ * the world with the sale.
+ *
+ * Nothing else moves. Not a wage (a contract signed stays signed, and the cap
+ * was set off the same bill, so the two still agree), not a real player bought
+ * since, not a youth pad or a graduate, and no random draw. The version mark
+ * makes it run once: a repriced founder's value no longer says which footing
+ * it is on.
+ *
+ * Called from loadCareer only, for Round 632's reason: every career in play
+ * came from startCareer, which prices founders this way and sets the mark, or
+ * through loadCareer.
+ */
+export function ensureCustomClubValues(state: CareerState): void {
+  const spec = state.customClub;
+  if (!spec || spec.name !== state.clubName || state.customValues === CUSTOM_VALUES_VERSION) return;
+  const founders = new Map(buildCustomSquad(spec, state.eraId).map(f => [f.id, f]));
+  const reprice = (p: CMPlayer): void => {
+    const f = founderOf(p, founders);
+    if (!f || p.value === undefined) return;
+    const was = preRound640FounderValue(f.rating, f.age);
+    const now = f.value as number;
+    p.value = p.value === was ? now : Math.max(JOURNEYMAN_VALUE, Math.round(p.value * (now / was) * 10) / 10);
+  };
+  for (const p of state.squad ?? []) reprice(p);
+  for (const l of state.loanedOut ?? []) if (l && l.player) reprice(l.player);
+  state.customValues = CUSTOM_VALUES_VERSION;
 }
 
 /** Best XI average of an actual squad, same math as bakedXIAvg. */
@@ -3889,7 +4007,7 @@ function customLeagueDef(spec: Pick<CustomClubSpec, 'leagueId'>, eraId?: string)
  */
 function buildCustomDef(spec: CustomClubSpec, eraId?: string, xiOverride?: number): { def: ClubDef; xi: number; gap: number } {
   const t = CUSTOM_TIERS[spec.budgetTier] ?? CUSTOM_TIERS.mid;
-  const xi = xiOverride ?? squadXIAvg(buildCustomSquad(spec));
+  const xi = xiOverride ?? squadXIAvg(buildCustomSquad(spec, eraId));
   const league = customLeagueDef(spec, eraId);
   const chainEra = eraId && isHistoricEra(eraId) ? eraId : undefined;
   const xiOf = xiChainFor(chainEra);
@@ -14033,7 +14151,7 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   const club = custom ? clubDefFor(custom.name)
     : historic ? eraClubDefFor(clubName, era.id) : clubDefFor(clubName);
   const startYearsOn = historic ? 0 : Math.max(0, era.startYear - CM_BASE_YEAR);
-  const squad = custom ? buildCustomSquad(custom) : buildSquad(club.name, startYearsOn, era.id);
+  const squad = custom ? buildCustomSquad(custom, era.id) : buildSquad(club.name, startYearsOn, era.id);
   // Owner task 61: the league is the club's REAL league with its real clubs.
   const league = (custom && customLeagueDef(custom, era.id))
     || (historic && eraLeagueOf(club.name, era.id))
@@ -14114,6 +14232,9 @@ export function startCareer(clubName: string, eraId: string = DEFAULT_ERA_ID, cu
   };
   if (custom) {
     state.customClub = custom;
+    /* Round 640: its founders were priced by the market rule above, so a load
+       must never reprice them. */
+    state.customValues = CUSTOM_VALUES_VERSION;
     /* The generated squad's own measured strength, because the name-keyed
        chain in genClubStrengths cannot know a club that is in no bake. */
     state.clubStrengths[custom.name] = clamp(Math.round(squadXIAvg(squad)) + ri(-2, 2), 52, 95);
@@ -16091,6 +16212,10 @@ export function loadCareer(): CareerState | null {
        from an earlier custom career can never color a real club's screens. */
     if (parsed.customClub && typeof parsed.customClub.name === 'string'
       && parsed.customClub.name === parsed.clubName && parsed.customClub.crest) {
+      /* Round 640: a save written before founders were priced like real
+         players opens with them repriced. Before the registration, which reads
+         only ratings, and before any screen reads a value. */
+      ensureCustomClubValues(parsed);
       registerCustomClub(parsed.customClub, parsed.eraId, squadXIAvg(parsed.squad));
     } else {
       if (parsed.customClub) delete parsed.customClub;
