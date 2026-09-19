@@ -25,7 +25,7 @@
     "date": "2026-09-19"
   },
   "/baseball": {
-    "hash": "cd59a5fd209926c4",
+    "hash": "185d37b0aff7accb",
     "date": "2026-09-19"
   },
   "/baseball-career": {
@@ -93,7 +93,7 @@
     "date": "2026-09-19"
   },
   "/college": {
-    "hash": "a4c1edc88070a6df",
+    "hash": "b853298876b49ba7",
     "date": "2026-09-19"
   },
   "/college-grid": {
@@ -229,7 +229,7 @@
     "date": "2026-09-19"
   },
   "/hockey": {
-    "hash": "3c47a98ce90d6d69",
+    "hash": "ef56abfa04e70a69",
     "date": "2026-09-19"
   },
   "/hockey-career": {
@@ -313,8 +313,8 @@
     "date": "2026-09-19"
   },
   "/mlb-postseason-format-history": {
-    "hash": "1e36c8a4c9734687",
-    "date": "2026-09-15"
+    "hash": "6bfdfc269a42b640",
+    "date": "2026-09-19"
   },
   "/mystery-box": {
     "hash": "cb41e17097262b2e",
@@ -365,8 +365,8 @@
     "date": "2026-09-19"
   },
   "/nba-playoff-format-history": {
-    "hash": "3c1fe6ed9f05cfdf",
-    "date": "2026-09-15"
+    "hash": "2f9ab17cf129cd32",
+    "date": "2026-09-19"
   },
   "/nba-starting-5": {
     "hash": "c9d8ad2ddbccad8b",
@@ -401,8 +401,8 @@
     "date": "2026-09-19"
   },
   "/nfl-playoff-format-history": {
-    "hash": "abeecdb2cbbe134c",
-    "date": "2026-09-15"
+    "hash": "e2e27a28b68dae5b",
+    "date": "2026-09-19"
   },
   "/nhl-connect-4": {
     "hash": "3b565965b3c071dd",
@@ -421,8 +421,8 @@
     "date": "2026-09-19"
   },
   "/nhl-playoff-format-history": {
-    "hash": "d04478ff3a91e074",
-    "date": "2026-09-15"
+    "hash": "570f398b2cb1b4e7",
+    "date": "2026-09-19"
   },
   "/olympics": {
     "hash": "058cf123c06058c3",
@@ -469,11 +469,11 @@
     "date": "2026-09-16"
   },
   "/pro-basketball": {
-    "hash": "2b550fcbf685d3dd",
+    "hash": "c17f2b201437012c",
     "date": "2026-09-19"
   },
   "/pro-football": {
-    "hash": "6e2bb831bf809aeb",
+    "hash": "38f305691ea058b6",
     "date": "2026-09-19"
   },
   "/puck-detective": {
@@ -497,8 +497,56 @@
     "date": "2026-09-19"
   },
   "/records": {
-    "hash": "0f667dc096644f8c",
-    "date": "2026-09-15"
+    "hash": "0721f43ee6ac2fdc",
+    "date": "2026-09-19"
+  },
+  "/records/afl-premiers": {
+    "hash": "68fc9aa74397ffe6",
+    "date": "2026-09-19"
+  },
+  "/records/brownlow-medal-winners": {
+    "hash": "ce680f332cdf9cad",
+    "date": "2026-09-19"
+  },
+  "/records/college-football-national-champions": {
+    "hash": "28f129873cadbd0c",
+    "date": "2026-09-19"
+  },
+  "/records/dally-m-medal-winners": {
+    "hash": "67fcde4d776d39a1",
+    "date": "2026-09-19"
+  },
+  "/records/english-football-champions": {
+    "hash": "6d9d9869b6f201ed",
+    "date": "2026-09-19"
+  },
+  "/records/nba-champions": {
+    "hash": "8f94bf9c2b0e8195",
+    "date": "2026-09-19"
+  },
+  "/records/ncaa-basketball-champions": {
+    "hash": "377b8abd5b24c198",
+    "date": "2026-09-19"
+  },
+  "/records/nrl-premiers": {
+    "hash": "dd7d378501057fc4",
+    "date": "2026-09-19"
+  },
+  "/records/stanley-cup-winners": {
+    "hash": "d32946c6b692694d",
+    "date": "2026-09-19"
+  },
+  "/records/super-bowl-winners": {
+    "hash": "35f2dcb7f0948cb2",
+    "date": "2026-09-19"
+  },
+  "/records/wnba-champions": {
+    "hash": "e37bf0a3673e044b",
+    "date": "2026-09-19"
+  },
+  "/records/world-series-winners": {
+    "hash": "0bd83658a215bc68",
+    "date": "2026-09-19"
   },
   "/score-predictor": {
     "hash": "5a209b1f7038e1c6",
@@ -517,7 +565,7 @@
     "date": "2026-09-19"
   },
   "/soccer": {
-    "hash": "c01a440653214c3e",
+    "hash": "d5c9af896a5231e7",
     "date": "2026-09-19"
   },
   "/soccer-career": {
@@ -581,7 +629,7 @@
     "date": "2026-09-19"
   },
   "/whats-new": {
-    "hash": "f27bd4fcf5f54a4b",
+    "hash": "3576f8b7e0ff6c52",
     "date": "2026-09-19"
   },
   "/who-am-i": {
