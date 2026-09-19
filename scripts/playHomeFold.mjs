@@ -55,6 +55,11 @@ const say = (ok, what) => {
   if (!ok) failures += 1;
 };
 
+const FOLD_CONTROL = process.env.HOMEFOLD_CONTROL || '';
+if (FOLD_CONTROL && FOLD_CONTROL !== 'notehome' && FOLD_CONTROL !== 'notegone') {
+  console.error(`HOMEFOLD_CONTROL=${FOLD_CONTROL} is not a control this harness knows (notehome, notegone)`);
+  process.exit(2);
+}
 const NON_GAME = /^\/(login|signup|auth|privacy|terms|about|contact|leaderboard|records|whats-new|profile|reset-password|soccer|pro-football|pro-basketball|baseball|hockey|college)(\/|$)/;
 
 const browser = await chromium.launch();
@@ -228,45 +233,70 @@ console.log('4) a returning player gets NO checklist, and the record never moves
   say(!!fresh.first && !!again.first && Math.abs(again.first.top - fresh.first.top) <= 2, 'a fresh profile still gets its first tile in the same place');
 }
 
-console.log('5) the maker note offers after the games, and dismissing it sticks');
+console.log('5) the maker note lives on the About page, not on the home page');
 {
-  /* Round 346, the owner's welcome idea built as a card instead of the popup
-     he first pictured, precisely so this file's own covenant holds: the note
-     must sit BELOW the first game tile, must never read as an account ask,
-     and once dismissed must stay gone in that browser. */
+  /* Round 346 put the owner's welcome note on the home page as a card below
+     the games, and this section fenced that. Round 382 moved it at his
+     request ("it shouldnt pop up there I would rather you put it in one the
+     small like tabs on the bottom like near the privacy policy"): the card
+     left the home page, the note lives on /about under its own heading, and
+     About is a link in the small footer row. This section still asked for
+     the card on the home page, so it had been red on healthy code since
+     2026-09-01 (Round 641 found it red identically on main). It now fences
+     what he asked for. HOMEFOLD_CONTROL=notehome plants a note card on the
+     home page and notegone strips the heading from /about; each must turn its
+     own check red. */
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
   const page = await ctx.newPage();
   await page.route('**://*.supabase.co/**', r => r.abort());
   await page.addInitScript(() => { try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* fine */ } });
-  await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
-  await page.waitForFunction(() => !!document.querySelector('[data-maker-note]'), { timeout: 20000 }).catch(() => {});
-  const read = await page.evaluate((nonGameSrc) => {
-    const NON_GAME = new RegExp(nonGameSrc);
-    const note = document.querySelector('[data-maker-note]');
-    const firstTile = [...document.querySelectorAll('a[href^="/"]')]
-      .filter(a => !a.closest('section[aria-label="Live scores ticker"]'))
-      .map(a => ({ p: a.getAttribute('href') || '', top: a.getBoundingClientRect().top + window.scrollY }))
-      .filter(x => x.p && x.p !== '/' && !NON_GAME.test(x.p))
-      .sort((a, b) => a.top - b.top)[0] ?? null;
-    return {
-      present: !!note,
-      noteTop: note ? note.getBoundingClientRect().top + window.scrollY : null,
-      firstTop: firstTile ? firstTile.top : null,
-      asksForAccount: note ? /sign up|log in|create.*account/i.test(note.textContent || '') : false,
-    };
-  }, NON_GAME.source);
-  say(read.present, 'the maker note renders for a fresh visitor');
-  if (read.present) {
-    say(read.noteTop > read.firstTop, `it sits below the first game tile (note y=${Math.round(read.noteTop)}, tile y=${Math.round(read.firstTop)})`);
-    say(!read.asksForAccount, 'it asks for nothing, no account language inside');
-    await page.getByRole('button', { name: /dismiss the note from the maker/i }).click({ timeout: 5000 }).catch(() => {});
-    await page.waitForTimeout(400);
-    await page.reload({ waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => (document.body?.innerText ?? '').length > 200, { timeout: 20000 }).catch(() => {});
-    await page.waitForTimeout(1500);
-    const gone = await page.evaluate(() => !document.querySelector('[data-maker-note]'));
-    say(gone, 'dismissed once, gone after reload');
+  if (FOLD_CONTROL === 'notehome') {
+    await page.addInitScript(() => {
+      document.addEventListener('DOMContentLoaded', () => {
+        const card = document.createElement('div');
+        card.setAttribute('data-maker-note', '');
+        card.textContent = 'A note from the maker';
+        document.body.appendChild(card);
+      });
+    });
   }
+  /* The About page is drawn again by the app after the saved page loads, so
+     the heading lives in a script as well as in the document; both get the
+     rewrite, and the control refuses below if neither carried it. */
+  let noteRewrites = 0;
+  if (FOLD_CONTROL === 'notegone') {
+    await page.route('**/*', async r => {
+      const type = r.request().resourceType();
+      if (type !== 'document' && type !== 'script') return r.continue();
+      const res = await r.fetch();
+      const body = await res.text();
+      const swapped = body.split('A note from the maker').join('Something else');
+      if (swapped !== body) noteRewrites += 1;
+      await r.fulfill({ response: res, body: swapped });
+    });
+  }
+  await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await page.waitForFunction(() => (document.body?.innerText ?? '').length > 200, { timeout: 20000 }).catch(() => {});
+  await page.waitForTimeout(1200);
+  const home = await page.evaluate(() => ({
+    card: !!document.querySelector('[data-maker-note]'),
+    footerAbout: [...document.querySelectorAll('footer a[href]')].some(a => /^\/about\/?$/.test(a.getAttribute('href') || '')),
+  }));
+  say(!home.card, 'no maker note card on the home page');
+  say(home.footerAbout, 'the footer links to About, where the note lives');
+  await page.goto(`${BASE}/about`, { waitUntil: 'domcontentloaded', timeout: 30000 });
+  await page.waitForFunction(() => (document.body?.innerText ?? '').length > 200, { timeout: 20000 }).catch(() => {});
+  await page.waitForTimeout(800);
+  const about = await page.evaluate(() => {
+    const h = [...document.querySelectorAll('h2')].find(x => /a note from the maker/i.test(x.textContent || ''));
+    return { heading: !!h, asksForAccount: h ? /sign up|log in|create.*account/i.test((h.nextElementSibling?.textContent) || '') : false };
+  });
+  if (FOLD_CONTROL === 'notegone' && noteRewrites === 0) {
+    console.error('control notegone: no served document or script carried the note heading to strip, so it proves nothing');
+    process.exit(1);
+  }
+  say(about.heading, 'the About page carries the note under "A note from the maker"');
+  say(!about.asksForAccount, 'the note asks for nothing, no account language inside');
   await ctx.close();
 }
 
