@@ -563,7 +563,9 @@ for (const s of SPORTS) {
   agree('capUsed agrees on every team', lg => abbrs.map(a => E.capUsed(lg.teams[a])));
   agree('signRefusal agrees for every free agent on every team', lg => abbrs.map(a => lg.freeAgents.map(p => cuts.signRefusal(lg.teams[a], p.id))));
   agree('tradeRefusal agrees for every rostered man on every team', lg => abbrs.map(a => abbrs.flatMap(b => lg.teams[b].players.map(p => cuts.tradeRefusal(lg.teams[a], p.id)))));
-  const buyer = abbrs.filter(a => fresh.teams[a].players.length < s.ceiling).sort((x, y) => E.capRoom(fresh.teams[y], BIG) - E.capRoom(fresh.teams[x], BIG))[0];
+  /* the fixture is picked off the empty twin: reading the stripped league here
+     would put the check under test inside the fixture, outside any agree() */
+  const buyer = abbrs.filter(a => empty.teams[a].players.length < s.ceiling).sort((x, y) => E.capRoom(empty.teams[y], BIG) - E.capRoom(empty.teams[x], BIG))[0];
   const cheapest = fresh.freeAgents.slice().sort((x, y) => x.salary - y.salary)[0];
   ok(5, s.key, 'a buyer with a roster spot and a free agent to buy exist (fixture)', !!buyer && !!cheapest);
   if (buyer && cheapest) {
