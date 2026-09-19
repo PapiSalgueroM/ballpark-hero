@@ -7057,7 +7057,11 @@ function getLegacyTier(score: number): LegacyTier {
   return "JOURNEYMAN";
 }
 
-function calculateLegacy(state: CareerState): LegacyResult {
+/* Exported in Round 644 for scripts/simScoreShown.mjs, which scores one
+   finished career twice with only the starting overall changed. This is the
+   number the retirement screen shows and, since that round, the number the
+   leaderboard records. */
+export function calculateLegacy(state: CareerState): LegacyResult {
   const totals = getCareerTotals(state.seasons);
   const breakdown: { label: string; points: number }[] = [];
   let score = 0;

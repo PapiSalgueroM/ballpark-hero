@@ -19,6 +19,7 @@ import {
   pickRandomCategories,
   scoreRound,
   totalScore,
+  recordedRunScore,
   buildEmojiGrid,
   roundSummaryLine,
   buildReveal,
@@ -224,11 +225,16 @@ const RarityRound = () => {
   };
 
   const finalScore = useMemo(() => totalScore(results), [results]);
+  /* Round 644: what the run records, higher is better in both modes. In
+     Rarity it is the obscurity total (100 minus each round's points), shown
+     on the result screen beside the points total so the two always agree. */
+  const recordedScore = useMemo(() => recordedRunScore(results, rarityMode), [results, rarityMode]);
   const isComplete = phase === 'done';
 
   // Final standing among everyone who finished today's Rarity Round. Reads
   // game_completions for this slug + today; includes this run even if its
-  // own insert hasn't landed yet.
+  // own insert hasn't landed yet. Round 644: those rows hold recorded scores,
+  // which run higher is better in both modes, so this compares like with like.
   useEffect(() => {
     if (!isComplete) { setTodayStanding(null); return; }
     let cancelled = false;
@@ -242,17 +248,14 @@ const RarityRound = () => {
         if (cancelled || !data) return;
         const scores: number[] = (data as { score: number }[]).map(r => Number(r.score) || 0);
         if (!scores.length) return;
-        // In Rarity mode LOWER is better; in Crowd Says HIGHER is better.
-        const better = scores.filter(s =>
-          rarityMode === 'rarity' ? s < finalScore : s > finalScore,
-        ).length;
+        const better = scores.filter(s => s > recordedScore).length;
         setTodayStanding({ rank: better + 1, total: Math.max(scores.length, better + 1) });
       } catch { /* standing is a bonus */ }
     })();
     return () => { cancelled = true; };
-  }, [isComplete, finalScore, rarityMode]);
+  }, [isComplete, recordedScore]);
 
-  useGameCompletion('rarity-round', isComplete, finalScore, results.length);
+  useGameCompletion('rarity-round', isComplete, recordedScore, results.length);
 
   const emojiGrid = useMemo(() => buildEmojiGrid(results, rarityMode), [results, rarityMode]);
 
@@ -591,7 +594,11 @@ const RarityRound = () => {
               outcomeEmoji={outcomeEmoji}
               headline={resultHeadline}
               statLine={resultStatLine}
-              statRow={[{ label: modeLabel, value: finalScore }]}
+              statRow={
+                rarityMode === 'rarity'
+                  ? [{ label: modeLabel, value: finalScore }, { label: 'Obscurity', value: `${recordedScore}/${results.length * 100}` }]
+                  : [{ label: modeLabel, value: finalScore }]
+              }
               emojiGrid={emojiGrid}
               share={{
                 score: String(finalScore),

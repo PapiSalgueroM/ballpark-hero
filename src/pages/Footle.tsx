@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useGame } from '@/hooks/useGame';
+import { useGame, footleScore } from '@/hooks/useGame';
 import type { GuessResult } from '@/types/game';
 import { PlayerSearch } from '@/components/game/PlayerSearch';
 import { GameBoard } from '@/components/game/GameBoard';
@@ -335,7 +335,7 @@ const Index = () => {
             >
               <PostGameStats
                 gameSlug="footle"
-                userScore={gameStatus === 'won' ? Math.max(0, 1000 - (guesses.length - 1) * 125) : 0}
+                userScore={footleScore(gameStatus === 'won', guesses.length)}
                 isVisible={true}
               />
             </ResultScreen>

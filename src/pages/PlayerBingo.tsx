@@ -400,9 +400,14 @@ const PlayerBingo = () => {
               })}
             </div>
 
+            {/* Round 644: both screens record the score they show. Before it
+                neither passed one, so 1,966 finishes stored no score and a
+                blackout earned nothing on the board. The most a board pays is
+                1,700: all twelve lines at 100 plus the 500 blackout bonus. */}
             {phase === 'won' && (
               <ResultScreen
                 recordCompletionOnMount
+                completionScore={score}
                 won
                 outcomeEmoji={blackout ? '🏆' : linesCompleted >= 3 ? '🎉' : linesCompleted >= 2 ? '🔥' : '🐐'}
                 headline={blackout ? 'BLACKOUT!' : 'BINGO!'}
@@ -436,12 +441,13 @@ const PlayerBingo = () => {
             {phase === 'lost' && (
               <ResultScreen
                 recordCompletionOnMount
+                completionScore={score}
                 won={false}
                 outcomeEmoji={tilesFilled >= 8 ? '😩' : tilesFilled >= 4 ? '😅' : '🫠'}
                 headline={lostHeadline}
                 statLine={
                   <>
-                    {tilesFilled}/{BOARD_SIZE} tiles filled, {linesCompleted}/12 lines completed.
+                    {tilesFilled}/{BOARD_SIZE} tiles filled, {linesCompleted}/12 lines completed, {score} pts.
                   </>
                 }
                 funFact={`${lostCopy} You saw ${seenCount} players.`}

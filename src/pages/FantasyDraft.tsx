@@ -29,6 +29,13 @@ const toSettlePlayer = (p: DraftPlayer): Player =>
 const TEAM_SIZE = 11;
 const TOTAL_PICKS = TEAM_SIZE * 2;
 
+/* Round 644: the season score, your points as a share of the 114 a perfect
+   38 game season earns, out of 100. The completion records it, and since this
+   round the verdict card and the share line say it too, because before it the
+   card showed season points and the board counted this number, which nobody
+   was ever shown. */
+const seasonScore = (points: number) => Math.min(100, Math.round((points / 114) * 100));
+
 function getPickOwner(pickIndex: number, userFirst: boolean): 'user' | 'ai' {
   const round = Math.floor(pickIndex / 2);
   const posInRound = pickIndex % 2;
@@ -95,7 +102,7 @@ const FantasyDraft = () => {
     completionRef.current = true;
     const season = settleSeason(userTeam.map(toSettlePlayer), aiTeam.map(toSettlePlayer));
     setVerdict(season);
-    const score = Math.min(100, Math.round((season.points[0] / 114) * 100));
+    const score = seasonScore(season.points[0]);
     recordCompletion('/fantasy-draft', score, getCurrentPlayerName(profile), season.winner === 0 ? 1 : 0);
   }, [draftComplete, userTeam, aiTeam, profile]);
 
@@ -382,6 +389,9 @@ const FantasyDraft = () => {
                           You {verdict.points[0]} pts ({verdict.ratings[0]} OVR) · AI {verdict.points[1]} pts ({verdict.ratings[1]} OVR)
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">{verdict.headToHead}.</p>
+                        <p className="text-sm font-bold text-primary mt-2">
+                          Season score: {seasonScore(verdict.points[0])}/100
+                        </p>
                       </div>
                     )}
 
@@ -426,7 +436,7 @@ const FantasyDraft = () => {
                       <ShareButtons
                         gameName="Fantasy Draft"
                         gamePath="/fantasy-draft"
-                        score={verdict ? `${verdict.points[0]} pts vs the AI's ${verdict.points[1]}` : 'Drafted my XI and simulated a full season'}
+                        score={verdict ? `Season score ${seasonScore(verdict.points[0])}/100 (${verdict.points[0]} pts vs the AI's ${verdict.points[1]})` : 'Drafted my XI and simulated a full season'}
                         customText="I outdrafted the AI on Fantasy Draft at DoUKnowBall! Can you build a better squad? douknowball.com/fantasy-draft"
                       />
                     )}

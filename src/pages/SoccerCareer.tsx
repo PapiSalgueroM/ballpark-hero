@@ -685,15 +685,19 @@ export default function SoccerCareer() {
      was. Same lift, same reason. */
   const floatingButtonLift = useFooterLift(!!career);
 
-  // Score tracking on retirement
+  /* Score tracking on retirement. Round 644: the record is the legacy score
+     the retirement screen and the share card show, out of 100. It used to be
+     its own formula, 200 a Ballon d'Or, 150 a Champions League or a World
+     Cup and 50 a league title, capped at 1000, which never looked at where a
+     career began. The build editor lets anyone type a 99 starting overall, so
+     a 99 build ran to that cap on most careers (4,060 of 7,048 rows in the 30
+     days before this round sat exactly on it) while the screen showed a
+     different number. The legacy score knows the start (The Climb, in the
+     engine's calculateLegacy): the same career record handed 99 on the
+     creation screen scores 16 to 24 points less than the same record climbed
+     from 55. scripts/simScoreShown.mjs holds both halves. */
   const isRetired = career?.retired === true && career?.phase === "retired";
-  const legacyScore = useMemo(() => {
-    if (!isRetired || !career) return 0;
-    const totals = getCareerTotals(career.seasons);
-    return Math.min(1000, Math.round(
-      (totals.ballonDors * 200) + (totals.championsLeagues * 150) + (totals.worldCups * 150) + (totals.leagueTitles * 50)
-    ));
-  }, [isRetired, career]);
+  const legacyScore = isRetired && career?.legacy ? career.legacy.score : 0;
   useGameCompletion('soccer-career', isRetired, legacyScore);
 
   // Club roster comes from the bundled FALLBACK_CLUBS list, deliberately.

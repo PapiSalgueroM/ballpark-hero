@@ -10,6 +10,15 @@ import { fetchFootlePlayerPool } from '@/lib/fetchFootlePlayerPool';
 
 const MAX_GUESSES = 8;
 
+/* Round 644: the one Footle score. The daily record and the page's score
+   distribution panel both read it, because the panel used to be handed its
+   own formula (1000 down 125 a guess) while the record held this one (700
+   down 100 a guess), so it placed you with a number nobody else's row was
+   ever measured in. */
+export function footleScore(won: boolean, guessCount: number): number {
+  return won ? Math.max(100, (MAX_GUESSES - guessCount) * 100) : 0;
+}
+
 export type FootleMode = 'daily' | 'unlimited';
 
 // ---------------------------------------------------------------------------
@@ -221,9 +230,7 @@ export function useGame() {
   // ---- COMPLETION ----------------------------------------------------------
 
   // Score for Supabase (daily mode only)
-  const dailyScore = effectiveDailyStatus === 'won'
-    ? Math.max(100, (MAX_GUESSES - dailyGuesses.length) * 100)
-    : 0;
+  const dailyScore = footleScore(effectiveDailyStatus === 'won', dailyGuesses.length);
 
   // useGameCompletion is always called with daily state regardless of current
   // mode. This prevents its internal savedRef from resetting if the user

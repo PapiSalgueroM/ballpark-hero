@@ -15,6 +15,8 @@ export interface QuizBoardState {
   board: Record<string, Record<ClueValue, Tile | undefined>>;
   openTile: Tile | null;
   score: number;
+  /** What a cleared board banks and records: the score, floored at 0. */
+  banked: number;
   answeredCount: number;
   totalTiles: number;
   finished: boolean;
@@ -164,7 +166,13 @@ export function useQuizBoard(): QuizBoardState {
     [allTiles, openId],
   );
 
-  useGameCompletion('jeopardy', finished, Math.max(0, score), allTiles.filter(t => t.correct).length);
+  /* Round 644: a cleared board banks at no less than $0, and the banked
+     number is the one recorded, shown on the final card and shared. The
+     running score can still dip below zero while you play, that is the risk
+     in the big tiles, but the finish used to show and share a negative while
+     the record said 0. */
+  const banked = Math.max(0, score);
+  useGameCompletion('jeopardy', finished, banked, allTiles.filter(t => t.correct).length);
 
   const select = useCallback((category: string, value: ClueValue) => {
     const t = board[category]?.[value];
@@ -198,11 +206,11 @@ export function useQuizBoard(): QuizBoardState {
         return t.correct ? '🟩' : '🟥';
       }).join(''),
     ).join('\n');
-    return `Sports Quiz Board, ${today}\n${grid}\n$${score}\ndouknowball.com/quiz-board`;
-  }, [finished, categories, board, score, today]);
+    return `Sports Quiz Board, ${today}\n${grid}\n$${banked}\ndouknowball.com/quiz-board`;
+  }, [finished, categories, board, banked, today]);
 
   return {
-    loading, categories, board, openTile, score, answeredCount, totalTiles,
+    loading, categories, board, openTile, score, banked, answeredCount, totalTiles,
     finished, guess, setGuess, select, submit, closeTile, shareText,
   };
 }
