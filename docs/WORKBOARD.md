@@ -1,5 +1,33 @@
 # Work board
 
+**2026-09-19 evening, desktop Claude lane: the points audit, and Rounds 643 to 648 claimed.** Every
+game's recorded score was audited against its leaderboard cap (the owner's "a correct points system
+per game", PART). Eleven defect classes, the full table kept in the lane's notes and summarised in
+`docs/PROJECT-STATE.md` when the rounds land. Claimed, in landing order:
+- **643, the same finish paid twice.** Fight Career, Gym and Promoter re-record a finished save on
+  every reload; the four My Careers re-record on a coaching round trip; 12 daily hooks mark a restored
+  finish under the wrong slug; 10 pages re-arm the recorder on a mode toggle; 6 hooks restore a finish
+  after data loads with no mark; NFL Career Path's unlimited stays in daily mode.
+- **644, Soccer Career records the start aware legacy score out of 100** (it records a formula the
+  player can inflate by typing a 99 starting overall, 4,060 of 7,048 rows in 30 days at the cap, while
+  the screen shows a different number), with history rescaled so past days keep their points; plus the
+  other screens that show a different number from the one recorded, Player Bingo's real wins stored as
+  NULL, and Rarity mode storing a perfect run as 0.
+- **645, unranked runs and free points.** Non daily runs (free play, unlimited, new season) record
+  under the daily key, so the day best becomes the best of N: a `ranked` flag on the recorder, the
+  way Face Off already does it. And the per game scores that pay the cap or a big floor for no skill
+  (Build Your XI and Starting 5 pay 100 for finishing, NFL Career Path pays full for giving up, Ball IQ
+  pays 34 for zero correct, and more).
+- **646, caps at each game's real ceiling.** Most caps were frozen as the highest score ever seen, so
+  the same achievement pays 2.8 to 11.9 points across the four front offices; one migration sets every
+  cap to the engine's real ceiling, fenced so a cap row must equal an exported ceiling.
+- **647, front offices and dynasties score each season,** not only title seasons and not the whole
+  history again on every title, and not on which team was picked (a per season ledger on the Club
+  Manager model).
+- **648, the profile's all time total clamps each record at the game's cap** (it adds raw scores, so
+  one Pack Battle pack adds about 8.8 million).
+The next free number for anyone else is 650.
+
 **2026-09-19 afternoon, desktop Claude lane: Rounds 631, 633, 634, 635, 639 and 638 part one ON
 MAIN.** Full node suite 333 of 333 on the frozen built tree, the browser harnesses for what the
 release touches green (the home page maker note red is pre-existing on main). Account in
