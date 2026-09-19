@@ -322,6 +322,26 @@
     animation-duration: 0.001ms !important;
     animation-iteration-count: 1 !important;
   }
+
+  /* Round 635: and everything else. The list above names animations, and a
+     list only ever covers what somebody already found. The fight screens'
+     condition and house bars grow with a width transition, which no animation
+     rule touches, and the next new animate class would have shipped unguarded
+     the same way. This shortens every transition and every animation on the
+     site to one instant frame for a visitor who asked for less motion. It is
+     0.001ms rather than none, so transitionend and animationend still fire and
+     anything waiting on them carries on, and the delays go to zero so nothing
+     sits invisible waiting for a stagger. playReducedMotion measures it on
+     real pages (REDUCED_MOTION_CONTROL=noblanket). */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    animation-delay: 0s !important;
+    transition-duration: 0.001ms !important;
+    transition-delay: 0s !important;
+  }
 }
 
 

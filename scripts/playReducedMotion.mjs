@@ -52,8 +52,18 @@ if (!/prefers-reduced-motion/.test(css)) {
   process.exit(1);
 }
 
+/* Round 635 adds a third stage and a second control. The site now carries one
+   blanket rule under reduce (src/index.css) that shortens every transition and
+   animation, because the named list before it missed width transitions on the
+   fight bars and could not know about the next new class. The route walk
+   measures every element's COMPUTED durations under reduce, so it checks the
+   behaviour rather than the rule's text, and it proves the measurement can see
+   a duration at all by finding some on the same routes with no preference set.
+   REDUCED_MOTION_CONTROL=noblanket rewrites the blanket rule's transition
+   duration out of the served stylesheets and documents, and that stage must
+   then go red; it refuses if it rewrote nothing. */
 const CONTROL = process.env.REDUCED_MOTION_CONTROL || '';
-if (CONTROL && CONTROL !== 'noguard') {
+if (CONTROL && CONTROL !== 'noguard' && CONTROL !== 'noblanket') {
   console.error(`REDUCED_MOTION_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -130,7 +140,15 @@ const ROUTES = [
   '/nfl-my-career', '/nba-my-career', '/mlb-my-career', '/nhl-my-career',
   '/club-manager', '/soccer-career', '/rebuild',
   '/idle-arena', '/stadium-tycoon', '/wonderkid-factory',
+  '/fight-career', '/fight-gym', '/fight-promoter',
 ];
+/* Round 635: the longest transition or animation an element may carry under
+   reduce. The blanket rule sets 0.001ms; normal site values are 150ms and up,
+   so 10ms separates the two by four orders of magnitude on one side and more
+   than an order on the other. */
+const SLOW_MS = 10;
+let slowRoutes = 0;
+let rewrittenCss = 0;
 const REVEAL_CLASSES = ['cm-rise', 'cm-slam', 'cm-tick-in', 'cm-gold-glow', 'cm-win-pulse', 'cm-loss-shake', 'fo-draft-row', 'fo-draft-head', 'fo-draft-continue'];
 let badRoutes = 0;
 let routesWithOurCss = 0;
@@ -160,6 +178,43 @@ if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
       await route.fulfill({ response: res, body: swapped });
     });
   }
+  if (CONTROL === 'noblanket') {
+    /* The stylesheet ships as an asset and is also inlined into every saved
+       page, so both kinds of response are rewritten. Only the blanket rule
+       sets a transition duration under reduce, so this token is its alone. */
+    await ctx.route('**/*', async route => {
+      const type = route.request().resourceType();
+      if (type !== 'document' && type !== 'stylesheet') return route.continue();
+      const res = await route.fetch();
+      const body = await res.text();
+      /* Deleted, not replaced: an empty declaration is valid CSS, and a
+         replacement value such as inherit would spread durations to children
+         and measure something the site never shipped. */
+      const swapped = body.replace(/transition-duration:\s*0?\.001ms\s*!important/g, '');
+      if (swapped !== body) rewrittenCss += 1;
+      await route.fulfill({ response: res, body: swapped });
+    });
+  }
+  /* Round 635: every element's longest transition or animation, in ms, and
+     how many exceed slowMs. Third party toasts are skipped for the reason the
+     keyframe check above gives. */
+  const measure = slowMs => {
+    const ms = v => Math.max(0, ...String(v).split(',').map(x => { x = x.trim(); return x.endsWith('ms') ? parseFloat(x) : parseFloat(x) * 1000; }).filter(n => Number.isFinite(n)));
+    let slow = 0, measured = 0;
+    const sample = [];
+    for (const el of document.querySelectorAll('body *')) {
+      if (el.closest('[data-sonner-toaster]')) continue;
+      const s = getComputedStyle(el);
+      const t = ms(s.transitionDuration);
+      const a = s.animationName !== 'none' ? ms(s.animationDuration) : 0;
+      measured += 1;
+      if (t > slowMs || a > slowMs) {
+        slow += 1;
+        if (sample.length < 3) sample.push(el.tagName.toLowerCase() + '.' + String(el.className).split(' ').filter(Boolean).slice(0, 2).join('.') + ' t=' + t + ' a=' + a);
+      }
+    }
+    return { slow, measured, sample };
+  };
   console.log(`\nRound 530 routes under prefers-reduced-motion: reduce, ${ROUTES.length} routes served from dist`);
   for (const route of ROUTES) {
     const p = await ctx.newPage();
@@ -195,8 +250,10 @@ if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
       }
       return { text: (document.body.innerText || '').length, blocks: withKeyframes.length, ourBlocks: ours.length, skipped, unguarded, reveal, animating, invisible };
     }, REVEAL_CLASSES);
+    const dur = await p.evaluate(measure, SLOW_MS);
     await p.close();
-    console.log(`   ${route.padEnd(19)} text=${got.text} keyframeBlocks=${got.blocks} ours=${got.ourBlocks} thirdParty=${got.skipped} unguarded=${got.unguarded} reveal=${got.reveal} animating=${got.animating} invisible=${got.invisible}`);
+    console.log(`   ${route.padEnd(19)} text=${got.text} keyframeBlocks=${got.blocks} ours=${got.ourBlocks} thirdParty=${got.skipped} unguarded=${got.unguarded} reveal=${got.reveal} animating=${got.animating} invisible=${got.invisible} slowMotion=${dur.slow}/${dur.measured}`);
+    if (dur.slow > 0) { console.error(`  FAIL: ${route}: ${dur.slow} element(s) still move for more than ${SLOW_MS}ms under reduce (${dur.sample.join(', ')})`); slowRoutes += 1; }
     if (got.text < 200) { console.error(`  FAIL: ${route} rendered almost nothing (${got.text} chars of text), so nothing here was checked`); badRoutes += 1; continue; }
     /* Our keyframe CSS rides in with a reveal, so a first screen that has not
        reached one legitimately carries none of it: measured here, 13 of the 16
@@ -220,7 +277,35 @@ if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {
     console.log(`   our own keyframe CSS was present and guarded on ${routesWithOurCss} of ${ROUTES.length} routes; the rest had not reached a reveal yet`);
   }
   await ctx.close();
+  /* Round 635: the measurement has to be able to see a duration at all, or a
+     count of zero slow elements under reduce proves nothing. The same routes
+     with no preference set must carry real transitions (buttons, tiles and
+     bars all do). */
+  const normal = await browser.newContext({ reducedMotion: 'no-preference', viewport: { width: 390, height: 844 } });
+  await normal.addInitScript(() => {
+    try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* ignored */ }
+  });
+  let movingForEveryone = 0;
+  for (const route of ['/front-office', '/fight-career', '/stadium-tycoon']) {
+    const p = await normal.newPage();
+    await p.goto(base + route, { waitUntil: 'networkidle' });
+    await p.waitForTimeout(400);
+    const dur = await p.evaluate(measure, SLOW_MS);
+    await p.close();
+    console.log(`   no preference ${route.padEnd(16)} elements that move for more than ${SLOW_MS}ms: ${dur.slow} of ${dur.measured}`);
+    movingForEveryone += dur.slow;
+  }
+  await normal.close();
+  if (movingForEveryone === 0) {
+    console.error('  FAIL: with no preference set nothing on these routes has a transition, so the reduce count of zero measured nothing');
+    slowRoutes += 1;
+  }
   server.kill();
+  if (CONTROL === 'noblanket' && rewrittenCss === 0) {
+    console.error('control noblanket: no served stylesheet or document carried the blanket rule to rewrite, so this control would prove nothing');
+    await browser.close();
+    process.exit(1);
+  }
   if (CONTROL === 'noguard' && rewritten === 0) {
     console.error('control noguard: no served bundle carried a reduced motion rule to rewrite, so the route stage of this control would prove nothing');
     await browser.close();
@@ -237,8 +322,16 @@ if (CONTROL === 'noguard') {
   console.error(`playReducedMotion control: RED. The guards were removed and ${bad === 0 ? 'the synthetic page' : 'the routes'} stayed green, so that stage proves nothing.`);
   process.exit(1);
 }
-if (bad + badRoutes > 0) {
-  console.error(`playReducedMotion: ${bad + badRoutes} problem(s)`);
+if (CONTROL === 'noblanket') {
+  if (slowRoutes > 0 && bad + badRoutes === 0) {
+    console.log(`playReducedMotion control: green. With the blanket rule's transition duration rewritten out of ${rewrittenCss} served file(s), the duration stage went red on ${slowRoutes} route(s) and nothing else moved.`);
+    process.exit(0);
+  }
+  console.error(`playReducedMotion control: RED. The blanket rule was rewritten and the duration stage reported ${slowRoutes} route(s) while the other stages reported ${bad + badRoutes}, so it is not the stage that caught it.`);
+  process.exit(1);
+}
+if (bad + badRoutes + slowRoutes > 0) {
+  console.error(`playReducedMotion: ${bad + badRoutes + slowRoutes} problem(s)`);
   process.exit(1);
 }
 console.log('playReducedMotion: green. Motion stops for a visitor who asked for less, content stays visible, every Round 530 route lands its reveals on the final frame, and everyone else keeps the celebration.');
