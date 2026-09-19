@@ -92,5 +92,5 @@ export const HOME_STAGE: StageEntry[] = [
   { path: '/soccer-career', kicker: 'Career sim', cta: 'Start your career', continueCta: 'Continue your career', saveKey: 'soccerCareerSave', art: 'pitch' },
   { path: '/club-manager', kicker: 'Management sim', cta: 'Take the job', continueCta: 'Back to the dugout', saveKey: 'dukb-club-manager-save', art: 'tactics' },
   { path: '/stadium-tycoon', kicker: 'Idle empire', cta: 'Build it', art: 'stand' },
-  { path: '/nba-my-career', kicker: 'Basketball career', cta: 'Get drafted', art: 'court' },
+  { path: '/nba-my-career', kicker: 'Hoops career', cta: 'Get drafted', art: 'court' },
 ];

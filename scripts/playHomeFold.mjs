@@ -56,8 +56,8 @@ const say = (ok, what) => {
 };
 
 const FOLD_CONTROL = process.env.HOMEFOLD_CONTROL || '';
-if (FOLD_CONTROL && FOLD_CONTROL !== 'notehome' && FOLD_CONTROL !== 'notegone') {
-  console.error(`HOMEFOLD_CONTROL=${FOLD_CONTROL} is not a control this harness knows (notehome, notegone)`);
+if (FOLD_CONTROL && !['notehome', 'notegone', 'h1text'].includes(FOLD_CONTROL)) {
+  console.error(`HOMEFOLD_CONTROL=${FOLD_CONTROL} is not a control this harness knows (notehome, notegone, h1text)`);
   process.exit(2);
 }
 const NON_GAME = /^\/(login|signup|auth|privacy|terms|about|contact|leaderboard|records|whats-new|profile|reset-password|soccer|pro-football|pro-basketball|baseball|hockey|college)(\/|$)/;
@@ -71,6 +71,17 @@ async function look(width, height) {
      same way every other harness in this repo does it. The tiles this measures
      render from the registry, not from the database. */
   await page.route('**://*.supabase.co/**', r => r.abort());
+  /* HOMEFOLD_CONTROL=h1text: the moment the app draws its h1, a word is
+     added to it, so section 1's exact h1 check must go red. */
+  if (FOLD_CONTROL === 'h1text') {
+    await page.addInitScript(() => {
+      const mo = new MutationObserver(() => {
+        const h = document.querySelector('#dukb-main h1');
+        if (h && !h.dataset.controlled) { h.dataset.controlled = '1'; h.append(' Home'); mo.disconnect(); }
+      });
+      mo.observe(document, { childList: true, subtree: true });
+    });
+  }
   await page.goto(`${BASE}/`, { waitUntil: 'domcontentloaded', timeout: 30000 });
   await page.waitForFunction(() => (document.body?.innerText ?? '').trim().length > 200, { timeout: 20000 }).catch(() => {});
   await page.waitForTimeout(2000);
@@ -142,7 +153,9 @@ async function look(width, height) {
         return spans.length > 1 ? spans[spans.length - 1] : null;
       })
       .filter(t => t && t.length > 6);
-    return { first, prompts, subtitles, viewport: vh, tickerPresent };
+    /* Round 658: the h1, read as the page renders it. */
+    const h1s = [...document.querySelectorAll('h1')].map(h => (h.innerText || h.textContent || '').trim());
+    return { first, prompts, subtitles, viewport: vh, tickerPresent, h1s };
   }, { nonGameSrc: NON_GAME.source, vh: height });
   await ctx.close();
   return out;
@@ -163,6 +176,11 @@ console.log('1) a phone sees something to play, high enough to see it');
   }
   say(r.prompts.length <= MAX_PROMPTS,
     `${r.prompts.length} place(s) above it ask for an account (max ${MAX_PROMPTS}) | ${r.prompts.join(' | ') || 'none'}`);
+  /* Round 658: the redesign moved the h1 into a compact title row, and the
+     owner's headline is the name, nothing else ("hero headline is too long",
+     2026-08-28). Exactly one h1, and its text is exactly the name. */
+  say(r.h1s.length === 1 && r.h1s[0] === 'DoUKnowBall',
+    `the page has one h1 and it reads exactly "DoUKnowBall" (${JSON.stringify(r.h1s)})`);
 }
 
 console.log('2) desktop, same rule');

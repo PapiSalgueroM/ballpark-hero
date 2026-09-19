@@ -96,9 +96,9 @@ function StageCard({ card, variant, className }: { card: Card; variant: Variant;
         aria-hidden="true"
         className={cn(
           'absolute transition-transform duration-500 group-hover:scale-[1.03]',
-          variant === 'lead' && 'inset-y-0 right-0 left-[36%] md:left-[30%]',
+          variant === 'lead' && 'inset-y-0 right-0 left-[36%] md:left-[34%]',
           variant === 'wide' && 'inset-x-0 top-0 h-[74px] md:left-auto md:h-full md:w-[50%]',
-          variant === 'small' && 'inset-x-0 top-0 h-[74px] md:bottom-0 md:left-auto md:top-auto md:h-[72%] md:w-[62%]',
+          variant === 'small' && 'inset-x-0 top-0 h-[74px] md:bottom-0 md:left-auto md:top-auto md:h-[64%] md:w-[52%]',
         )}
       >
         <Suspense fallback={null}>
@@ -112,7 +112,7 @@ function StageCard({ card, variant, className }: { card: Card; variant: Variant;
         className={cn(
           'absolute inset-0',
           lead
-            ? 'bg-gradient-to-r from-surface-1 from-40% via-surface-1/75 via-55% to-transparent to-80% md:from-30% md:via-45% md:to-70%'
+            ? 'bg-gradient-to-r from-surface-1 from-40% via-surface-1/75 via-55% to-transparent to-80% md:from-40% md:via-55% md:to-80%'
             : 'hidden md:block md:bg-gradient-to-r md:from-surface-1 md:from-30% md:via-surface-1/70 md:via-50% md:to-transparent md:to-85%',
         )}
       />
@@ -124,9 +124,9 @@ function StageCard({ card, variant, className }: { card: Card; variant: Variant;
       )}
 
       {lead ? (
-        <div className="relative z-10 flex h-full max-w-[64%] flex-col justify-center gap-2 p-4 md:max-w-[46%] md:gap-3 md:p-7">
+        <div className="relative z-10 flex h-full max-w-[64%] flex-col justify-center gap-2 p-4 md:max-w-[56%] md:gap-3 md:p-7">
           <Kicker sport={sport} text={entry.kicker} />
-          <h3 className="font-display text-2xl font-bold leading-[1.05] tracking-tight text-foreground md:text-[40px]">
+          <h3 className="font-display text-2xl font-bold leading-[1.05] tracking-tight text-foreground md:text-[38px]">
             {game.label}
           </h3>
           <p className="line-clamp-3 text-[13px] leading-snug text-muted-foreground md:text-[15px]">{game.description}</p>
@@ -140,14 +140,14 @@ function StageCard({ card, variant, className }: { card: Card; variant: Variant;
         <div
           className={cn(
             'relative z-10 flex h-full flex-col justify-end p-2.5 md:justify-between md:p-4',
-            variant === 'wide' ? 'md:max-w-[58%]' : 'md:max-w-[72%]',
+            variant === 'wide' ? 'md:max-w-[58%]' : 'md:max-w-[66%]',
           )}
         >
           <div className="md:space-y-1.5">
             <div className="hidden md:block">
               <Kicker sport={sport} text={entry.kicker} small />
             </div>
-            <h3 className="font-display text-[13px] font-bold leading-tight text-foreground md:text-xl">{game.label}</h3>
+            <h3 className="font-display text-[13px] font-bold leading-tight text-foreground md:text-lg">{game.label}</h3>
             {variant === 'wide' && (
               <p className="hidden text-xs leading-snug text-muted-foreground md:line-clamp-2">{game.description}</p>
             )}
