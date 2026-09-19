@@ -62,7 +62,7 @@ const FIXTURE = path.join(ROOT, 'scripts/data/guideHeadingsFrozen.json');
 const SEO = path.join(ROOT, 'src/components/seo/GameSeoContent.tsx');
 
 /* Raise this in the round that converts another guide. */
-const CONVERTED_FLOOR = 2;
+const CONVERTED_FLOOR = 19;
 
 const CONTROLS = { skiplevel: 2, nokeyword: 1, lostline: 1, unconvert: 3, snapdrift: 4 };
 const CONTROL = process.env.GUIDE_HEADINGS_CONTROL || '';
@@ -271,8 +271,13 @@ const notes = { 1: '', 2: '', 3: '', 4: '' };
         else owner.set(tri, h.text);
       }
     }
+    /* The game's own name is exempt: "82-0 Perfect Season" carries a hyphen in
+       the registry, every h2 must carry that name, and the rule is about a
+       heading reaching for a dash, not about a scoreline in a proper name.
+       Everything else in the heading is still checked. */
     for (const t of [...H2_KEYS.map(k => titles[k]), ...outline.map(h => h.text)]) {
-      if (/[-\u2010-\u2015\u2212]/.test(t)) f.push(`${route}: the heading "${t}" carries a dash or hyphen`);
+      const rest = label ? t.split(label).join(' ') : t;
+      if (/[-\u2010-\u2015\u2212]/.test(rest)) f.push(`${route}: the heading "${t}" carries a dash or hyphen`);
     }
     for (const s of strings(c)) if (DASH.test(s)) f.push(`${route}: a dash in "${s.slice(0, 70)}..."`);
     if (!fixture.routes[route]) f.push(`${route}: converted with no frozen original in scripts/data/guideHeadingsFrozen.json, so nothing proves no sentence was cut; freeze before converting`);
