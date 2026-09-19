@@ -8,28 +8,112 @@ export const WORLD_CONTENT: GameContentMap = {
       "Every round is built from verified career totals in the site's database, with no ties anywhere. The order is the order.",
       "There's a daily ranking everyone shares, plus an unlimited mode.",
     ],
-    howToPlay: [
-      "Check the header for the sport and the stat, like NBA career assists or MLB career home runs.",
-      "Tap the five names in order, starting with the player you think has the most.",
-      "Changed your mind? Hit Undo last any time before your fifth pick.",
-      "Your ranking submits automatically the moment the fifth player lands.",
-      "The reveal shows the true order with each player's real career number beside it.",
+    headings: {
+      howToPlay: "How to play Rank 'Em, a free NBA, NHL and MLB stat ranking game",
+      rules: "Rank 'Em rules for scoring, the daily round and unlimited mode",
+      example: "Rank 'Em walkthrough: ranking five MLB home run kings",
+      tips: "Rank 'Em tips for ordering five career stat leaders",
+      faq: "Rank 'Em FAQ: stats, sports and scoring",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the sport and stat in the header",
+        items: [
+          "Check the header for the sport and the stat, like NBA career assists or MLB career home runs.",
+        ],
+      },
+      {
+        heading: "Tapping the five names most to fewest",
+        items: [
+          "Tap the five names in order, starting with the player you think has the most.",
+        ],
+      },
+      {
+        heading: "Undoing your last tap before the fifth pick",
+        items: [
+          "Changed your mind? Hit Undo last any time before your fifth pick.",
+        ],
+      },
+      {
+        heading: "Submitting automatically on your fifth pick",
+        items: [
+          "Your ranking submits automatically the moment the fifth player lands.",
+        ],
+      },
+      {
+        heading: "Seeing the true order and the real numbers",
+        items: [
+          "The reveal shows the true order with each player's real career number beside it.",
+        ],
+      },
     ],
-    rules: [
-      "You get exactly 1 submission per round, so the daily is one attempt per day.",
-      "Scoring is 200 points for each player in the exact right slot, 1,000 for a perfect 5 for 5.",
-      "The daily round is the same for everyone and flips at midnight Eastern Time.",
-      "Unlimited mode deals random rounds from the same NBA, NHL and MLB pool.",
+    ruleSections: [
+      {
+        heading: "One submission locks in the daily attempt",
+        items: [
+          "You get exactly 1 submission per round, so the daily is one attempt per day.",
+        ],
+      },
+      {
+        heading: "Scoring extra points for a perfect board",
+        items: [
+          "Scoring is 200 points for each player in the exact right slot, 1,000 for a perfect 5 for 5.",
+        ],
+      },
+      {
+        heading: "One daily round shared by everyone",
+        items: [
+          "The daily round is the same for everyone and flips at midnight Eastern Time.",
+        ],
+        subsections: [
+          {
+            heading: "Switching to unlimited for random rounds",
+            items: [
+              "Unlimited mode deals random rounds from the same NBA, NHL and MLB pool.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Say the stat is MLB career home runs and the names are Barry Bonds, Hank Aaron, Babe Ruth, Albert Pujols and Willie Mays. Bonds at 762 feels safe on top, and Mays slots fifth at 660.",
-      "The middle is the trap. Aaron hit 755, Ruth 714 and Pujols 703, so flipping Ruth above Aaron costs you two slots and leaves you at 3 of 5 for 600 points.",
+    exampleSections: [
+      {
+        heading: "Locking Bonds first and Mays fifth",
+        paragraphs: [
+          "Say the stat is MLB career home runs and the names are Barry Bonds, Hank Aaron, Babe Ruth, Albert Pujols and Willie Mays. Bonds at 762 feels safe on top, and Mays slots fifth at 660.",
+        ],
+      },
+      {
+        heading: "Ruth and Aaron flipped in the middle",
+        paragraphs: [
+          "The middle is the trap. Aaron hit 755, Ruth 714 and Pujols 703, so flipping Ruth above Aaron costs you two slots and leaves you at 3 of 5 for 600 points.",
+        ],
+      },
     ],
-    tips: [
-      "Lock in the two ends first. First and fifth are usually the spots you actually know.",
-      "Career totals reward longevity. A 20-year grinder often out-counts a shorter, brighter prime.",
-      "Think era. Stats like three-pointers and stolen bases skew hard toward certain decades.",
-      "Use undo freely. Nothing counts until the fifth tap.",
+    tipSections: [
+      {
+        heading: "Locking the first and fifth spots first",
+        items: [
+          "Lock in the two ends first. First and fifth are usually the spots you actually know.",
+        ],
+      },
+      {
+        heading: "Valuing a long grinding career",
+        items: [
+          "Career totals reward longevity. A 20-year grinder often out-counts a shorter, brighter prime.",
+        ],
+      },
+      {
+        heading: "Weighing era for three pointers and steals",
+        items: [
+          "Think era. Stats like three-pointers and stolen bases skew hard toward certain decades.",
+        ],
+      },
+      {
+        heading: "Using undo since nothing locks in early",
+        items: [
+          "Use undo freely. Nothing counts until the fifth tap.",
+        ],
+      },
     ],
     faqs: [
       {
