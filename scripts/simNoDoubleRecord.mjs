@@ -62,7 +62,11 @@
      maxguess      the restore re-decides through maxGuesses again; only the
                    Football Grid check (a save made with Unlimited on)
      unpinned      the three reveal games read the day on every render again;
-                   only their three after midnight checks
+                   only their three "renders after midnight" checks (the
+                   daily lands under the next day)
+     daykeyed      the previous push's shape, that and the daily state keyed
+                   to the render's day; all six after midnight checks, the
+                   "final pick after midnight" three on the lost record
      lateday       the three reveal games move their daily state when the
                    reveal ends again; only their six inside the reveal checks
      nflstamp      NFL Career Path stamps its finish with the clock again;
@@ -97,7 +101,7 @@ const ONLY = process.env.NO_DOUBLE_ONLY || '';
 
 /* What the table must hold, as the test file's own exact counts say. */
 const EXPECTED_ROWS = 41;
-const EXPECTED_CHECKS = 23;
+const EXPECTED_CHECKS = 26;
 
 /* Each vitest control is one or more edits, each to a copy of one module. */
 const REVEAL_HOOKS = [
@@ -158,8 +162,27 @@ const VITEST_CONTROLS = {
   },
   unpinned: {
     edits: REVEAL_HOOKS.map(([file]) => ({ file, from: '  const today = useRef(getTodayET()).current;', to: '  const today = getTodayET();' })),
-    why: 'Champ or Not, Who\'d They Beat and Silverware Sort read the day on every render again, so a final pick after midnight ET is lost',
-    red: row => row.title.endsWith(': a final pick after midnight ET'),
+    why: "Champ or Not, Who'd They Beat and Silverware Sort read the day on every render again, so a board that renders after midnight saves its daily under the next day",
+    red: row => row.title.endsWith(': the board renders after midnight ET before the final pick'),
+    point: /next day/,
+  },
+  daykeyed: {
+    /* The previous push's shape: the day read on every render AND the daily
+       state keyed to it, which lost the final pick after midnight. */
+    edits: REVEAL_HOOKS.flatMap(([file, item]) => {
+      const lower = item.toLowerCase();
+      const type = item === 'Answers' ? 'boolean[]' : 'BoardResult[]';
+      return [
+        { file, from: '  const today = useRef(getTodayET()).current;', to: '  const today = getTodayET();' },
+        {
+          file,
+          from: `  const [daily${item}, setDaily${item}] = useState<${type}>(() => readDaily(today)?.${lower} ?? []);`,
+          to: `  const [dailyKeyed, setDailyKeyed] = useState<{ day: string; ${lower}: ${type} }>(() => ({ day: today, ${lower}: readDaily(today)?.${lower} ?? [] }));\n  const daily${item} = dailyKeyed.day === today ? dailyKeyed.${lower} : [];\n  const setDaily${item} = (next: ${type}) => setDailyKeyed({ day: today, ${lower}: next });`,
+        },
+      ];
+    }),
+    why: "the three reveal games go back to the previous push's shape, the day read on every render with the daily state keyed to it, so a final pick after midnight ET is never recorded",
+    red: row => / after midnight ET/.test(row.title),
     point: /after midnight/,
   },
   lateday: {

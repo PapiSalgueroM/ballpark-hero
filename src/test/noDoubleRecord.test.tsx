@@ -973,10 +973,19 @@ const raceToggle = (race: Race): Check => ({
 const BEFORE_MIDNIGHT_ET = new Date('2026-09-20T03:59:00Z');
 const AFTER_MIDNIGHT_ET = new Date('2026-09-20T04:01:00Z');
 
-/* The daily is dealt at 23:59 ET and its final pick lands at 00:01: it is
-   still the day it was dealt, so it is saved and recorded once, not lost. */
-const raceMidnight = (race: Race): Check => ({
-  title: `${race.id}: a final pick after midnight ET`, id: race.id, usesMark: false,
+/* Two ways a daily meets midnight. 'tap': the clock crosses with only the
+   final tap left and nothing re-renders in between (the review's case, where
+   a day read on every render lost the record). 'render': the clock crosses
+   during the previous reveal, so the board renders once after midnight before
+   the final tap (where a day read on every render saves the daily under the
+   next day). Either way it is still the daily of the day it was dealt: saved
+   under that day, recorded once. */
+type Midnight = 'tap' | 'render';
+const raceMidnight = (race: Race, when: Midnight): Check => ({
+  title: when === 'tap'
+    ? `${race.id}: a final pick after midnight ET`
+    : `${race.id}: the board renders after midnight ET before the final pick`,
+  id: race.id, usesMark: false,
   async run() {
     vi.useFakeTimers({ toFake: ['Date'] });
     vi.setSystemTime(BEFORE_MIDNIGHT_ET);
@@ -987,16 +996,22 @@ const raceMidnight = (race: Race): Check => ({
       vi.useRealTimers();
       vi.useFakeTimers({ toFake: ['Date', 'setTimeout', 'clearTimeout'] });
       vi.setSystemTime(BEFORE_MIDNIGHT_ET);
-      for (let i = 0; i < 20 && race.shown(api.r) < race.total(api.r) - 1; i += 1) {
+      const leave = when === 'tap' ? 1 : 2;
+      for (let i = 0; i < 20 && race.shown(api.r) < race.total(api.r) - leave; i += 1) {
         await fullPick(race, api);
         await advance(race.revealMs + 100);
       }
-      if (race.setup) await race.setup(api);
       expect(getTodayET(), 'still the night the daily was dealt').toBe('2026-09-19');
-      /* The clock crosses midnight with the final tap the only thing left,
-         and nothing on the page re-renders in between, as in a real tab. */
-      vi.setSystemTime(AFTER_MIDNIGHT_ET);
-      await race.pick(api);
+      if (when === 'render') {
+        await fullPick(race, api);
+        vi.setSystemTime(AFTER_MIDNIGHT_ET);
+        await advance(race.revealMs + 100);
+        await fullPick(race, api);
+      } else {
+        if (race.setup) await race.setup(api);
+        vi.setSystemTime(AFTER_MIDNIGHT_ET);
+        await race.pick(api);
+      }
       await advance(race.revealMs + 100);
       expect(api.r.done, 'the daily finishes after midnight').toBe(true);
       expect(paths(), 'a final pick after midnight records the daily once').toEqual([`/${race.id}`]);
@@ -1039,7 +1054,8 @@ const CHECKS: Check[] = [
   ...HL_HOOKS.map(hlSaved),
   ...RACES.map(raceReload),
   ...RACES.map(raceToggle),
-  ...RACES.map(raceMidnight),
+  ...RACES.map(race => raceMidnight(race, 'tap')),
+  ...RACES.map(race => raceMidnight(race, 'render')),
   FOOTBALL_GRID_PAST_LIMIT,
   {
     /* Dealt on the 19th, solved at 00:01 on the 20th: it is the 19th's daily,
@@ -1163,7 +1179,7 @@ describe('no double record', () => {
        restore is the six after-data hooks and NFL Career Path. */
     for (const s of Object.keys(EXACT) as Shape[]) expect(count(s), `${s} rows`).toBe(EXACT[s]);
     expect(CASES.length, 'rows in all').toBe(Object.values(EXACT).reduce((a, b) => a + b, 0));
-    expect(CHECKS.length, 'checks: nine HL saves, three reloads, three toggles and three midnights around a reveal, one Football Grid, three NFL, one bracket').toBe(23);
+    expect(CHECKS.length, 'checks: nine HL saves, three reloads, three toggles and six midnights around a reveal, one Football Grid, three NFL, one bracket').toBe(26);
   });
 
   it(CONTROL === 'nomark' ? 'nomark control: markRestoredFinish is a no-op' : 'markRestoredFinish is live', () => {
