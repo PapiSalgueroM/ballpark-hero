@@ -127,27 +127,106 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "The wheel owns your draft board. Every spin stops on a real NBA team season, 1950s to today, and you take exactly one player from that roster.",
       "Six picks build a cross era starting five plus a sixth man, then the simulator plays all 82 games. The goal is right there in the name: 82-0.",
     ],
-    howToPlay: [
-      "Choose a mode. Classic shows player ratings, Hard hides them until the sim ends, and Daily gives everyone the same wheel with one attempt per day.",
-      "Spin, then draft one player from the team season you land on. Ratings run 40 to 99 and come from the player's actual stats that year.",
-      "Repeat until all six slots are filled: PG, SG, SF, PF, C and a sixth man who can be anyone.",
-      "Watch the season play out, or skip straight to the final record.",
+    headings: {
+      howToPlay: "How to play 82-0 Perfect Season, a free online NBA draft simulator",
+      rules: "82-0 Perfect Season rules: spins, rerolls and the simulated playoffs",
+      example: "82-0 Perfect Season walkthrough: a Lakers spin and a playoff run",
+      tips: "82-0 Perfect Season tips for drafting a title worthy roster",
+      faq: "82-0 Perfect Season FAQ: daily mode, ratings and going undefeated",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing Classic, Hard or Daily mode",
+        items: [
+          "Choose a mode. Classic shows player ratings, Hard hides them until the sim ends, and Daily gives everyone the same wheel with one attempt per day.",
+        ],
+      },
+      {
+        heading: "Drafting one player per spin",
+        items: [
+          "Spin, then draft one player from the team season you land on. Ratings run 40 to 99 and come from the player's actual stats that year.",
+        ],
+      },
+      {
+        heading: "Filling six roster slots",
+        items: [
+          "Repeat until all six slots are filled: PG, SG, SF, PF, C and a sixth man who can be anyone.",
+        ],
+      },
+      {
+        heading: "Playing out the season or skipping ahead",
+        items: [
+          "Watch the season play out, or skip straight to the final record.",
+        ],
+      },
     ],
-    rules: [
-      "One player per spin, 2 rerolls per run, and no player can be drafted twice.",
-      "The sim plays a full 82 game season based on your team overall.",
-      "Win 55 games or more to reach the simulated playoffs.",
-      "Daily mode locks after one attempt and resets every day at midnight Eastern.",
-      "Decade Mode limits every spin to one era. Daily always uses the full wheel.",
+    ruleSections: [
+      {
+        heading: "Spin limits and no repeat picks",
+        items: [
+          "One player per spin, 2 rerolls per run, and no player can be drafted twice.",
+        ],
+      },
+      {
+        heading: "How the season plays out",
+        items: [
+          "The sim plays a full 82 game season based on your team overall.",
+        ],
+        subsections: [
+          {
+            heading: "Reaching the simulated playoffs",
+            items: [
+              "Win 55 games or more to reach the simulated playoffs.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Daily mode's single attempt",
+        items: [
+          "Daily mode locks after one attempt and resets every day at midnight Eastern.",
+        ],
+      },
+      {
+        heading: "Decade Mode versus the full wheel",
+        items: [
+          "Decade Mode limits every spin to one era. Daily always uses the full wheel.",
+        ],
+      },
     ],
-    example: [
-      "Your first spin lands on the 1986-87 Lakers, so you take the best guard available. Four spins later your overall sits at 88.",
-      "The sim opens 21-0, then drops three random games. You finish 76-6, sweep the First Round, and fall in the Conference Finals. Close only makes it worse.",
+    exampleSections: [
+      {
+        heading: "A first spin on a classic Lakers season",
+        paragraphs: [
+          "Your first spin lands on the 1986-87 Lakers, so you take the best guard available. Four spins later your overall sits at 88.",
+        ],
+      },
+      {
+        heading: "A hot start that stalls in the Conference Finals",
+        paragraphs: [
+          "The sim opens 21-0, then drops three random games. You finish 76-6, sweep the First Round, and fall in the Conference Finals. Close only makes it worse.",
+        ],
+      },
     ],
-    tips: [
-      "The sixth man slot counts slightly less toward your overall, so park your weakest pick there.",
-      "Ratings reflect single seasons, not careers. One giant year can outrate a legend's farewell season.",
-      "An 85 overall team averages around 58 wins. A real shot at perfection starts in the mid 90s.",
+    tipSections: [
+      {
+        heading: "Sixth man rating carries less weight",
+        items: [
+          "The sixth man slot counts slightly less toward your overall, so park your weakest pick there.",
+        ],
+      },
+      {
+        heading: "Ratings reward one big season, not a career",
+        items: [
+          "Ratings reflect single seasons, not careers. One giant year can outrate a legend's farewell season.",
+        ],
+      },
+      {
+        heading: "What an 85 overall team usually wins",
+        items: [
+          "An 85 overall team averages around 58 wins. A real shot at perfection starts in the mid 90s.",
+        ],
+      },
     ],
     faqs: [
       { q: "Is 82-0 actually possible?", a: "Yes, but barely. Even a 99 overall lineup averages about 80 wins, so you need a monster draft and a lucky sim on the same run." },
@@ -1008,31 +1087,125 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "If you came from the word puzzle world, one warning: this NBA connections game runs bigger than the format you know. Groups are five deep instead of four, so there are twenty names to sort and a fifth guy to find for every theme. The easy four come quick. The fifth is where doubt moves in.",
       "Equal parts trivia and logic, and that mix is what makes a basketball connections puzzle sticky. Knowing a player is step one. Knowing which part of his career the board cares about is the game.",
     ],
-    howToPlay: [
-      "Read all 20 names before you touch anything. First instincts are good, first submissions are not.",
-      "Tap 5 players you believe share a connection. Tap again to deselect.",
-      "Hit Submit. A correct five locks in, shows its theme, and leaves the board.",
-      "A wrong five shakes the board and costs one of your 4 lives.",
-      "Group colors run yellow, green, blue, purple, from easiest to hardest.",
-      "Clear all four groups to win. Run out of lives and the remaining answers are revealed.",
+    headings: {
+      howToPlay: "How to play NBA Connections, a free online basketball trivia puzzle",
+      rules: "NBA Connections rules: groups, lives and the daily puzzle",
+      example: "NBA Connections walkthrough: a Miami Heat group and its imposter",
+      tips: "NBA Connections tips for finding the fifth player every time",
+      faq: "NBA Connections FAQ: daily puzzles, lives and player groups",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the board before you touch anything",
+        items: [
+          "Read all 20 names before you touch anything. First instincts are good, first submissions are not.",
+        ],
+      },
+      {
+        heading: "Selecting five players you believe connect",
+        items: [
+          "Tap 5 players you believe share a connection. Tap again to deselect.",
+        ],
+        subsections: [
+          {
+            heading: "What happens when a group locks in",
+            items: [
+              "Hit Submit. A correct five locks in, shows its theme, and leaves the board.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "What a wrong guess costs you",
+        items: [
+          "A wrong five shakes the board and costs one of your 4 lives.",
+        ],
+      },
+      {
+        heading: "Group colors from easiest to hardest",
+        items: [
+          "Group colors run yellow, green, blue, purple, from easiest to hardest.",
+        ],
+      },
+      {
+        heading: "Clearing all four groups to win",
+        items: [
+          "Clear all four groups to win. Run out of lives and the remaining answers are revealed.",
+        ],
+      },
     ],
-    rules: [
-      "Every puzzle is exactly 4 groups of 5 players, 20 names total.",
-      "You have 4 lives, and every wrong submission costs one.",
-      "Each player belongs to exactly one group in the puzzle. No name ever fits two answers.",
-      "The daily puzzle is identical for everyone, progress saves, and a fresh one lands every day at midnight Eastern. Unlimited deals random boards from the pool.",
+    ruleSections: [
+      {
+        heading: "Board size: four groups of five",
+        items: [
+          "Every puzzle is exactly 4 groups of 5 players, 20 names total.",
+        ],
+      },
+      {
+        heading: "Four lives and the cost of a miss",
+        items: [
+          "You have 4 lives, and every wrong submission costs one.",
+        ],
+      },
+      {
+        heading: "One group per player, never two",
+        items: [
+          "Each player belongs to exactly one group in the puzzle. No name ever fits two answers.",
+        ],
+      },
+      {
+        heading: "Daily puzzle versus unlimited boards",
+        items: [
+          "The daily puzzle is identical for everyone, progress saves, and a fresh one lands every day at midnight Eastern. Unlimited deals random boards from the pool.",
+        ],
+      },
     ],
-    example: [
-      "Say the board includes Dwyane Wade, Alonzo Mourning, Udonis Haslem, Chris Bosh and Tim Hardaway. Heat, obviously. Except Hardaway was a point guard with big assist numbers, and you suspect an assists group too. That collision is the whole puzzle.",
-      "So you count. Hardaway sits comfortably short of 10,000 career assists, while John Stockton, Jason Kidd and Steve Nash all cleared it. Hardaway goes back in the Heat pile, and both groups lock in clean.",
-      "The last trap is the scorers. Karl Malone, Kobe Bryant, Dirk Nowitzki and Carmelo Anthony scream career points, and your eye wants Allen Iverson as the fifth. Except Iverson was a number one overall pick, and Yao Ming and Zion Williamson are sitting there looking suspiciously like a draft group. Save Iverson for them, and the real fifth scorer appears by elimination. Lesson learned: verify the fifth name, always.",
+    exampleSections: [
+      {
+        heading: "A Miami Heat group hides an imposter",
+        paragraphs: [
+          "Say the board includes Dwyane Wade, Alonzo Mourning, Udonis Haslem, Chris Bosh and Tim Hardaway. Heat, obviously. Except Hardaway was a point guard with big assist numbers, and you suspect an assists group too. That collision is the whole puzzle.",
+        ],
+      },
+      {
+        heading: "Counting career assists to settle it",
+        paragraphs: [
+          "So you count. Hardaway sits comfortably short of 10,000 career assists, while John Stockton, Jason Kidd and Steve Nash all cleared it. Hardaway goes back in the Heat pile, and both groups lock in clean.",
+        ],
+      },
+      {
+        heading: "Career scorers untangled from a draft group",
+        paragraphs: [
+          "The last trap is the scorers. Karl Malone, Kobe Bryant, Dirk Nowitzki and Carmelo Anthony scream career points, and your eye wants Allen Iverson as the fifth. Except Iverson was a number one overall pick, and Yao Ming and Zion Williamson are sitting there looking suspiciously like a draft group. Save Iverson for them, and the real fifth scorer appears by elimination. Lesson learned: verify the fifth name, always.",
+        ],
+      },
     ],
-    tips: [
-      "Find the fifth before you submit. Anyone can spot four Lakers. The theme is only proven when a fifth fits.",
-      "If one player fits two of your working themes, one theme is wrong. Treat the overlap as a compass.",
-      "Star scorers hide in draft and country groups. Check where a player was born and picked before filing him under points.",
-      "Start with the group you would bet a life on, whatever its color. Five names off the board makes everything else easier to see.",
-      "Down to two groups and unsure? Submit your stronger read. If it hits, the last group solves itself.",
+    tipSections: [
+      {
+        heading: "Proving the fifth name before you submit",
+        items: [
+          "Find the fifth before you submit. Anyone can spot four Lakers. The theme is only proven when a fifth fits.",
+        ],
+      },
+      {
+        heading: "Reading an overlap as a warning sign",
+        items: [
+          "If one player fits two of your working themes, one theme is wrong. Treat the overlap as a compass.",
+        ],
+      },
+      {
+        heading: "Where star scorers like to hide",
+        items: [
+          "Star scorers hide in draft and country groups. Check where a player was born and picked before filing him under points.",
+        ],
+      },
+      {
+        heading: "Choosing which group to submit first",
+        items: [
+          "Start with the group you would bet a life on, whatever its color. Five names off the board makes everything else easier to see.",
+          "Down to two groups and unsure? Submit your stronger read. If it hits, the last group solves itself.",
+        ],
+      },
     ],
     faqs: [
       { q: "How is this different from other connections games?", a: "Three ways: it is all basketball, groups are five players instead of four, and you get 4 lives. Bigger groups make themes easier to spot but harder to complete." },
@@ -1048,28 +1221,112 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "A mystery NBA player is hiding behind a stack of clues, and the first one is nearly useless on purpose. You start with just a position and 1,000 points on the table.",
       "Every clue you flip makes the answer easier and the payout smaller. The whole game is one question: how early do you dare to guess?",
     ],
-    howToPlay: [
-      "Start with the position clue and a pot of 1,000 points.",
-      "Guess whenever you like. Wrong guesses are free, so swing away.",
-      "Stuck? Reveal the next clue: country, then draft info, then teams, then career stats, then awards.",
-      "Each reveal costs 150 points, down to a floor of 100.",
-      "Name the player to bank whatever is left, or give up to see the answer.",
+    headings: {
+      howToPlay: "How to play NBA Career Path, a free NBA guessing game",
+      rules: "NBA Career Path rules: the score ladder and free guesses",
+      example: "NBA Career Path walkthrough: guessing Hakeem Olajuwon",
+      tips: "NBA Career Path tips for cracking the clues fast",
+      faq: "NBA Career Path FAQ: scoring, hard mode and last names",
+    },
+    howToPlaySections: [
+      {
+        heading: "Starting with the position clue",
+        items: [
+          "Start with the position clue and a pot of 1,000 points.",
+        ],
+      },
+      {
+        heading: "Guessing for free at any time",
+        items: [
+          "Guess whenever you like. Wrong guesses are free, so swing away.",
+        ],
+      },
+      {
+        heading: "Revealing clues one at a time",
+        items: [
+          "Stuck? Reveal the next clue: country, then draft info, then teams, then career stats, then awards.",
+        ],
+      },
+      {
+        heading: "What each reveal costs you",
+        items: [
+          "Each reveal costs 150 points, down to a floor of 100.",
+        ],
+      },
+      {
+        heading: "Banking points or giving up",
+        items: [
+          "Name the player to bank whatever is left, or give up to see the answer.",
+        ],
+      },
     ],
-    rules: [
-      "The score ladder runs 1000, 850, 700, 550, 400, 250, 100 depending on clues used.",
-      "Wrong guesses cost nothing. Only revealed clues eat your score.",
-      "A last name alone counts as a correct guess.",
-      "Daily mode gives everyone the same player each day, and hard mode hides the two easiest clues.",
+    ruleSections: [
+      {
+        heading: "The score ladder from 1000 down to 100",
+        items: [
+          "The score ladder runs 1000, 850, 700, 550, 400, 250, 100 depending on clues used.",
+        ],
+      },
+      {
+        heading: "Free guesses, costly reveals",
+        items: [
+          "Wrong guesses cost nothing. Only revealed clues eat your score.",
+        ],
+      },
+      {
+        heading: "A last name counts as correct",
+        items: [
+          "A last name alone counts as a correct guess.",
+        ],
+      },
+      {
+        heading: "Daily mode and hard mode's hidden clues",
+        items: [
+          "Daily mode gives everyone the same player each day, and hard mode hides the two easiest clues.",
+        ],
+      },
     ],
-    example: [
-      "The position says center. That could be anyone, so you flip country: Nigeria. Interesting. One more flip, draft info: first overall pick, 1984.",
-      "Now it is obvious. Hakeem Olajuwon, guessed with two clues used, banks 700 points. Greedy players flip nothing and gamble at 1,000. Cowards flip five and keep 250. Pick your identity.",
+    exampleSections: [
+      {
+        heading: "A center from Nigeria narrows the field",
+        paragraphs: [
+          "The position says center. That could be anyone, so you flip country: Nigeria. Interesting. One more flip, draft info: first overall pick, 1984.",
+        ],
+      },
+      {
+        heading: "Two clues in, the answer is obvious",
+        paragraphs: [
+          "Now it is obvious. Hakeem Olajuwon, guessed with two clues used, banks 700 points. Greedy players flip nothing and gamble at 1,000. Cowards flip five and keep 250. Pick your identity.",
+        ],
+      },
     ],
-    tips: [
-      "Guess early and often, since misses are free. Even a wild swing at 1,000 costs nothing.",
-      "The draft clue is usually the code breaker. Year plus pick number narrows history fast.",
-      "Teams reveal one franchise at a time, so a one team legend gets exposed instantly.",
-      "In unlimited mode, practice reading stat lines. Career numbers have a shape, and shapes have names.",
+    tipSections: [
+      {
+        heading: "Guessing early costs you nothing",
+        items: [
+          "Guess early and often, since misses are free. Even a wild swing at 1,000 costs nothing.",
+        ],
+      },
+      {
+        heading: "Why the draft clue breaks the case",
+        items: [
+          "The draft clue is usually the code breaker. Year plus pick number narrows history fast.",
+        ],
+        subsections: [
+          {
+            heading: "Spotting a one team legend instantly",
+            items: [
+              "Teams reveal one franchise at a time, so a one team legend gets exposed instantly.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Practicing stat lines in unlimited mode",
+        items: [
+          "In unlimited mode, practice reading stat lines. Career numbers have a shape, and shapes have names.",
+        ],
+      },
     ],
     faqs: [
       { q: "Do wrong guesses lower my score?", a: "No. You can guess as many times as you want at no cost. The only thing that drains the pot is revealing clues, at 150 points each." },
@@ -1083,27 +1340,106 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "You remember the game. The shot, the score, the confetti. This one bets you do not remember who actually started.",
       "Missing Five shows a real starting five from a famous NBA Finals night with one name blanked. Every lineup is verified against the official box score, and the blanks are chosen to hurt.",
     ],
-    howToPlay: [
-      "Read the game context: the matchup, the date, the final score, the venue.",
-      "Look at the court. Four starters are named, one is a glowing blank with only the position showing.",
-      "Type the missing starter. You have 3 guesses.",
-      "Each miss unlocks a hint, starting with the player's nationality, then the first letter of the surname.",
+    headings: {
+      howToPlay: "How to play Missing Five, a free NBA Finals lineup game",
+      rules: "Missing Five rules: guesses, hints and hard mode",
+      example: "Missing Five walkthrough: the 2016 Finals Game 7 blank",
+      tips: "Missing Five tips for naming the missing starter fast",
+      faq: "Missing Five FAQ: real lineups, hints and surname guesses",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the game context first",
+        items: [
+          "Read the game context: the matchup, the date, the final score, the venue.",
+        ],
+      },
+      {
+        heading: "Spotting the blank starter on the court",
+        items: [
+          "Look at the court. Four starters are named, one is a glowing blank with only the position showing.",
+        ],
+      },
+      {
+        heading: "Typing your guess within three tries",
+        items: [
+          "Type the missing starter. You have 3 guesses.",
+        ],
+      },
+      {
+        heading: "What each miss unlocks",
+        items: [
+          "Each miss unlocks a hint, starting with the player's nationality, then the first letter of the surname.",
+        ],
+      },
     ],
-    rules: [
-      "3 guesses per lineup: 100 points on the first, 70 on the second, 40 on the third.",
-      "The surname alone counts, as long as it is at least four letters.",
-      "Hard mode strips the hints, the name suggestions, and even the position labels.",
-      "The daily lineup is the same for everyone and changes every day at midnight Eastern. Unlimited mode keeps dealing new ones.",
+    ruleSections: [
+      {
+        heading: "Scoring across three guesses",
+        items: [
+          "3 guesses per lineup: 100 points on the first, 70 on the second, 40 on the third.",
+        ],
+      },
+      {
+        heading: "When a surname alone is enough",
+        items: [
+          "The surname alone counts, as long as it is at least four letters.",
+        ],
+      },
+      {
+        heading: "What hard mode strips away",
+        items: [
+          "Hard mode strips the hints, the name suggestions, and even the position labels.",
+        ],
+      },
+      {
+        heading: "Daily lineups versus unlimited mode",
+        items: [
+          "The daily lineup is the same for everyone and changes every day at midnight Eastern. Unlimited mode keeps dealing new ones.",
+        ],
+      },
     ],
-    example: [
-      "The card reads 2016 NBA Finals, Game 7, Warriors starting five, and the blank is at center. You type Andrew Bogut with full confidence. Wrong. Bogut was hurt and never played that night.",
-      "The hint says Nigeria, and somewhere in your brain a backup big raises his hand. Second guess lands. 70 points and a story.",
+    exampleSections: [
+      {
+        heading: "A confident guess that was hurt that night",
+        paragraphs: [
+          "The card reads 2016 NBA Finals, Game 7, Warriors starting five, and the blank is at center. You type Andrew Bogut with full confidence. Wrong. Bogut was hurt and never played that night.",
+        ],
+      },
+      {
+        heading: "The nationality hint that unlocks the answer",
+        paragraphs: [
+          "The hint says Nigeria, and somewhere in your brain a backup big raises his hand. Second guess lands. 70 points and a story.",
+        ],
+      },
     ],
-    tips: [
-      "Think about injuries and matchups before you type the famous name. Finals coaches loved a surprise starter.",
-      "The score line and date matter. They pin the exact night, not just the series.",
-      "Role players who started title games are the answer more often than superstars. The stars are usually already on the card.",
-      "If the nationality hint surprises you, lean into it. It usually eliminates your whole shortlist at once.",
+    tipSections: [
+      {
+        heading: "Weighing injuries before the famous name",
+        items: [
+          "Think about injuries and matchups before you type the famous name. Finals coaches loved a surprise starter.",
+        ],
+      },
+      {
+        heading: "Why the score line pins the exact night",
+        items: [
+          "The score line and date matter. They pin the exact night, not just the series.",
+        ],
+      },
+      {
+        heading: "Role players start title games more than you think",
+        items: [
+          "Role players who started title games are the answer more often than superstars. The stars are usually already on the card.",
+        ],
+        subsections: [
+          {
+            heading: "Leaning into a surprising nationality hint",
+            items: [
+              "If the nationality hint surprises you, lean into it. It usually eliminates your whole shortlist at once.",
+            ],
+          },
+        ],
+      },
     ],
     faqs: [
       { q: "Are these lineups real?", a: "Yes, every five was checked against the official box score for that exact game. When the answer feels wrong, that is the point: the real starter is often not the guy history remembers." },
@@ -1117,27 +1453,106 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Five slots, and the game has opinions. Three of them come stamped with a constraint, a franchise or a decade, and only players matching the tag can go there.",
       "The pool is a curated set of greats and current stars, so every pick is good. The puzzle is squeezing the best combination through the constraints while keeping the roster connected.",
     ],
-    howToPlay: [
-      "Check the five slots: PG, SG, SF, PF and C. Three carry a constraint like Lakers or 1990s.",
-      "Tap a slot and pick from the eligible players. Constrained slots only list players who fit the tag.",
-      "Fill all five, watching for chemistry links between picks.",
-      "Hit Simulate for a scoreline, a grade and a chemistry rating.",
+    headings: {
+      howToPlay: "How to play Perfect Lineup: NBA, a free starting five builder",
+      rules: "Perfect Lineup: NBA rules: constraints, chemistry and grades",
+      example: "Perfect Lineup: NBA walkthrough: a Lakers double link",
+      tips: "Perfect Lineup: NBA tips for building real chemistry",
+      faq: "Perfect Lineup: NBA FAQ: the player pool, daily sets and grading",
+    },
+    howToPlaySections: [
+      {
+        heading: "Checking the five slots and their constraints",
+        items: [
+          "Check the five slots: PG, SG, SF, PF and C. Three carry a constraint like Lakers or 1990s.",
+        ],
+      },
+      {
+        heading: "Picking eligible players for each slot",
+        items: [
+          "Tap a slot and pick from the eligible players. Constrained slots only list players who fit the tag.",
+        ],
+      },
+      {
+        heading: "Filling all five and watching chemistry",
+        items: [
+          "Fill all five, watching for chemistry links between picks.",
+        ],
+      },
+      {
+        heading: "Simulating for a scoreline and a grade",
+        items: [
+          "Hit Simulate for a scoreline, a grade and a chemistry rating.",
+        ],
+      },
     ],
-    rules: [
-      "Exactly 3 of the 5 slots carry a team or era constraint, and every constraint leaves at least 4 eligible players.",
-      "Positions flex one step: the PG slot also takes shooting guards, the C slot also takes power forwards.",
-      "Your final rating is 80 percent player quality and 20 percent chemistry.",
-      "Chemistry comes from sharing a franchise or an era with at least one other pick.",
-      "Grades run from A+ at a 92 rating down to D. The daily constraint set is the same for everyone and changes every day.",
+    ruleSections: [
+      {
+        heading: "Three constrained slots, four eligible players",
+        items: [
+          "Exactly 3 of the 5 slots carry a team or era constraint, and every constraint leaves at least 4 eligible players.",
+        ],
+      },
+      {
+        heading: "How positions flex one step",
+        items: [
+          "Positions flex one step: the PG slot also takes shooting guards, the C slot also takes power forwards.",
+        ],
+      },
+      {
+        heading: "The rating split between quality and chemistry",
+        items: [
+          "Your final rating is 80 percent player quality and 20 percent chemistry.",
+        ],
+        subsections: [
+          {
+            heading: "Where chemistry links come from",
+            items: [
+              "Chemistry comes from sharing a franchise or an era with at least one other pick.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Grades from A+ down to D",
+        items: [
+          "Grades run from A+ at a 92 rating down to D. The daily constraint set is the same for everyone and changes every day.",
+        ],
+      },
     ],
-    example: [
-      "Say the center slot demands Lakers and the point guard slot demands 1980s. Kareem Abdul-Jabbar takes center, and Magic Johnson at point becomes a double link: same team, same decade.",
-      "Two modern wings and a 90s power forward round it out. Chemistry lifts a decent roster to an A and a green and yellow emoji row.",
+    exampleSections: [
+      {
+        heading: "Kareem and Magic lock a double link",
+        paragraphs: [
+          "Say the center slot demands Lakers and the point guard slot demands 1980s. Kareem Abdul-Jabbar takes center, and Magic Johnson at point becomes a double link: same team, same decade.",
+        ],
+      },
+      {
+        heading: "Two modern wings round out the five",
+        paragraphs: [
+          "Two modern wings and a 90s power forward round it out. Chemistry lifts a decent roster to an A and a green and yellow emoji row.",
+        ],
+      },
     ],
-    tips: [
-      "Build around the constraints first. The two free slots fix whatever the tags forced on you.",
-      "Chase double links. A pick sharing both team and era with a teammate feeds chemistry twice.",
-      "Do not draft five strangers. A weaker player who connects often beats a loner star.",
+    tipSections: [
+      {
+        heading: "Building around the constraints first",
+        items: [
+          "Build around the constraints first. The two free slots fix whatever the tags forced on you.",
+        ],
+      },
+      {
+        heading: "Chasing a double link for double chemistry",
+        items: [
+          "Chase double links. A pick sharing both team and era with a teammate feeds chemistry twice.",
+        ],
+      },
+      {
+        heading: "Why a connected roster beats five strangers",
+        items: [
+          "Do not draft five strangers. A weaker player who connects often beats a loner star.",
+        ],
+      },
     ],
     faqs: [
       { q: "Who is in the player pool?", a: "About 66 curated stars across every era, from Magic and Kareem to current MVPs. Not the full history books, which keeps every slot a real decision." },
@@ -1152,27 +1567,106 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Then the cup begins. Your finished five runs five knockout rounds against ever stronger invented opposition, rated 85 up to 101, and overtime when the game is level.",
       "The run is decided entirely by the five you drafted: the same lineup always runs the same gauntlet, so every pick is the game.",
     ],
-    howToPlay: [
-      "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
-      "For each slot, PG through C, read the five cards, star to bargain, and tap the one you keep. Positions flex the same way Perfect Lineup's do: an SG slot also takes a PG or an SF.",
-      "After pick five the knockout starts on its own: five rounds, one match each, revealed one at a time.",
-      "Survive a round for 16 points; lift the trophy for exactly 100.",
+    headings: {
+      howToPlay: "How to play Gauntlet Draft: NBA, a free online card draft game",
+      rules: "Gauntlet Draft: NBA rules: cards, the knockout and ratings",
+      example: "Gauntlet Draft: NBA walkthrough: a center pick and a title run",
+      tips: "Gauntlet Draft: NBA tips for drafting a title worthy five",
+      faq: "Gauntlet Draft: NBA FAQ: the daily draft and real players",
+    },
+    howToPlaySections: [
+      {
+        heading: "Picking daily or unlimited mode",
+        items: [
+          "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
+        ],
+      },
+      {
+        heading: "Drafting one card per slot",
+        items: [
+          "For each slot, PG through C, read the five cards, star to bargain, and tap the one you keep. Positions flex the same way Perfect Lineup's do: an SG slot also takes a PG or an SF.",
+        ],
+      },
+      {
+        heading: "How the knockout begins after pick five",
+        items: [
+          "After pick five the knockout starts on its own: five rounds, one match each, revealed one at a time.",
+        ],
+      },
+      {
+        heading: "Scoring survival points and the trophy",
+        items: [
+          "Survive a round for 16 points; lift the trophy for exactly 100.",
+        ],
+      },
     ],
-    rules: [
-      "Every card is a real player from the same curated pool Perfect Lineup: NBA plays, roughly 66 names across every era; every opponent club is invented on purpose.",
-      "The five cards per slot are spread across the pool's rating range, so a top-tier card and a bargain are always both on the table.",
-      "No player is dealt twice in one draft.",
-      "The knockout is deterministic in your five: scoring comes from the rating gap, level games go to overtime, and replaying the same lineup replays the same cup.",
-      "Opposition ratings climb 85, 89, 93, 97, 101. A bargain five usually falls in the first two rounds, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy about one run in ten.",
+    ruleSections: [
+      {
+        heading: "Real players against invented opponents",
+        items: [
+          "Every card is a real player from the same curated pool Perfect Lineup: NBA plays, roughly 66 names across every era; every opponent club is invented on purpose.",
+        ],
+      },
+      {
+        heading: "How the five cards spread across ratings",
+        items: [
+          "The five cards per slot are spread across the pool's rating range, so a top-tier card and a bargain are always both on the table.",
+        ],
+        subsections: [
+          {
+            heading: "Never dealt the same player twice",
+            items: [
+              "No player is dealt twice in one draft.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Why every replay stays deterministic",
+        items: [
+          "The knockout is deterministic in your five: scoring comes from the rating gap, level games go to overtime, and replaying the same lineup replays the same cup.",
+        ],
+      },
+      {
+        heading: "Opposition ratings climbing round by round",
+        items: [
+          "Opposition ratings climb 85, 89, 93, 97, 101. A bargain five usually falls in the first two rounds, an elite one reaches the final as a slight underdog, and even a perfect draft lifts the trophy about one run in ten.",
+        ],
+      },
     ],
-    example: [
-      "The center slot deals a 98 rated all timer next to a 91, an 88, a 86 and an 84. There is no cost to any of them, so the 98 is the pick unless you are chasing a specific team or era on the card.",
-      "Your finished five rates 96. The Qualifier wins big, the Last Sixteen is close, the Quarter Final needs extra time, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 88 you took at power forward.",
+    exampleSections: [
+      {
+        heading: "A center slot with five cards to choose",
+        paragraphs: [
+          "The center slot deals a 98 rated all timer next to a 91, an 88, a 86 and an 84. There is no cost to any of them, so the 98 is the pick unless you are chasing a specific team or era on the card.",
+        ],
+      },
+      {
+        heading: "Two rounds survived and one regret at power forward",
+        paragraphs: [
+          "Your finished five rates 96. The Qualifier wins big, the Last Sixteen is close, the Quarter Final needs extra time, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 88 you took at power forward.",
+        ],
+      },
     ],
-    tips: [
-      "The center card matters as much as the point guard card: one weak slot drags the whole rating.",
-      "The bargain cards exist for flavor runs, not for winning. If the score is the goal, draft the biggest number that fits.",
-      "Champions need a five in the high nineties. Check your running rating under the cards as you go.",
+    tipSections: [
+      {
+        heading: "Why the center card matters as much as guard",
+        items: [
+          "The center card matters as much as the point guard card: one weak slot drags the whole rating.",
+        ],
+      },
+      {
+        heading: "Bargain cards versus chasing the score",
+        items: [
+          "The bargain cards exist for flavor runs, not for winning. If the score is the goal, draft the biggest number that fits.",
+        ],
+      },
+      {
+        heading: "Watching your running rating climb",
+        items: [
+          "Champions need a five in the high nineties. Check your running rating under the cards as you go.",
+        ],
+      },
     ],
     faqs: [
       { q: "Is the daily draft the same for everyone?", a: "Yes. One shared set of five card choices per Eastern Time date, so daily scores compare fairly." },
@@ -1186,29 +1680,113 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Pick a team, inherit the land around its arena, and try to own the entire country. This is the NBA imperialism map format: every game swallows empires whole.",
       "A loss does not cost a border town. It costs everything, every territory, straight into the winner's hands. Fourteen rounds later the map is a few giant blobs with grudges.",
     ],
-    howToPlay: [
-      "Pick your team in Imperialism mode. Every territory on the map starts owned by its nearest NBA arena.",
-      "Each round, all 30 teams play. Before it runs, you call the winner of the featured game, your team's whenever they play.",
-      "Watch the results redraw the map as losers hand over entire empires.",
-      "Survive 14 rounds. The top 8 empires by territory make the playoffs.",
-      "Win the Quarterfinals, Semifinals and Imperial Finals to rule America.",
+    headings: {
+      howToPlay: "How to play NBA Conquest, a free NBA territory takeover game",
+      rules: "NBA Conquest rules: annexing empires and scoring predictions",
+      example: "NBA Conquest walkthrough: Denver's empire rises and falls",
+      tips: "NBA Conquest tips for calling games and reading the map",
+      faq: "NBA Conquest FAQ: the Daily Challenge and losing everything",
+    },
+    howToPlaySections: [
+      {
+        heading: "Picking your team in Imperialism mode",
+        items: [
+          "Pick your team in Imperialism mode. Every territory on the map starts owned by its nearest NBA arena.",
+        ],
+      },
+      {
+        heading: "Calling the winner of the featured game",
+        items: [
+          "Each round, all 30 teams play. Before it runs, you call the winner of the featured game, your team's whenever they play.",
+        ],
+      },
+      {
+        heading: "Watching the map redraw after each round",
+        items: [
+          "Watch the results redraw the map as losers hand over entire empires.",
+        ],
+      },
+      {
+        heading: "Surviving 14 rounds to reach the playoffs",
+        items: [
+          "Survive 14 rounds. The top 8 empires by territory make the playoffs.",
+        ],
+      },
+      {
+        heading: "Winning three rounds to rule America",
+        items: [
+          "Win the Quarterfinals, Semifinals and Imperial Finals to rule America.",
+        ],
+      },
     ],
-    rules: [
-      "Winners annex everything the loser owned, every single round.",
-      "Wiped off the map does not mean out: one win takes your conqueror's whole empire back.",
-      "Correct predictions pay 25 points each. Final score adds 3 per territory held, 50 for making the playoffs, 200 if your team takes the title.",
-      "Playoff seeding is territories first, season record as the tiebreaker.",
-      "Arcade mode is the original formula: battles, stealing a player from every beaten team, and power-ups.",
-      "The Daily Challenge deals every player the same date-seeded season: same starting map, same fixtures, same results. One scored run per day with streaks. Free Play is unlimited and fully random.",
+    ruleSections: [
+      {
+        heading: "How annexation works each round",
+        items: [
+          "Winners annex everything the loser owned, every single round.",
+          "Wiped off the map does not mean out: one win takes your conqueror's whole empire back.",
+        ],
+      },
+      {
+        heading: "Scoring predictions and territory",
+        items: [
+          "Correct predictions pay 25 points each. Final score adds 3 per territory held, 50 for making the playoffs, 200 if your team takes the title.",
+        ],
+      },
+      {
+        heading: "How playoff seeding is decided",
+        items: [
+          "Playoff seeding is territories first, season record as the tiebreaker.",
+        ],
+      },
+      {
+        heading: "What Arcade mode adds",
+        items: [
+          "Arcade mode is the original formula: battles, stealing a player from every beaten team, and power-ups.",
+        ],
+      },
+      {
+        heading: "How the Daily Challenge is seeded",
+        items: [
+          "The Daily Challenge deals every player the same date-seeded season: same starting map, same fixtures, same results. One scored run per day with streaks. Free Play is unlimited and fully random.",
+        ],
+      },
     ],
-    example: [
-      "You take Denver. Two early wins triple your land, then the Mavericks flatten you in round six and the whole empire changes color.",
-      "Round eight, Denver beats Dallas in overtime and takes back everything they own, half of Texas included. You sneak in as the 7 seed and fall in the Imperial Finals to a Celtics empire covering the East Coast. Run it back!",
+    exampleSections: [
+      {
+        heading: "Denver's empire falls in round six",
+        paragraphs: [
+          "You take Denver. Two early wins triple your land, then the Mavericks flatten you in round six and the whole empire changes color.",
+        ],
+      },
+      {
+        heading: "A revenge win sets up an Imperial Finals run",
+        paragraphs: [
+          "Round eight, Denver beats Dallas in overtime and takes back everything they own, half of Texas included. You sneak in as the 7 seed and fall in the Imperial Finals to a Celtics empire covering the East Coast. Run it back!",
+        ],
+      },
     ],
-    tips: [
-      "Predictions are steady income. Territories can vanish in one night, but called games are banked forever.",
-      "Check the win percentage on each matchup before calling it. Upsets happen, but math is math.",
-      "Peek at the standings. Playoff seeding sneaks up fast, and territories decide it.",
+    tipSections: [
+      {
+        heading: "Predictions as steady income",
+        items: [
+          "Predictions are steady income. Territories can vanish in one night, but called games are banked forever.",
+        ],
+      },
+      {
+        heading: "Reading the win percentage before you call it",
+        items: [
+          "Check the win percentage on each matchup before calling it. Upsets happen, but math is math.",
+        ],
+        subsections: [
+          {
+            heading: "Why playoff seeding sneaks up fast",
+            items: [
+              "Peek at the standings. Playoff seeding sneaks up fast, and territories decide it.",
+            ],
+          },
+        ],
+      },
     ],
     faqs: [
       {
@@ -1226,30 +1804,119 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Running an NBA franchise looks easy from the couch. This sim hands you a real rotation, a cap sheet and 29 rivals so you can find out.",
       "Waive the deadweight, sign the bargains, swing trades the computer actually weighs, and steer the season toward the bracket and maybe a banner. Dynasties are the real scoreboard.",
     ],
-    howToPlay: [
-      "Pick any of the 30 franchises and inherit its real rotation, rated player by player.",
-      "Read the ownership mandate: a loaded roster is told to win the Finals, a mid one to make the playoffs, a thin one to hit an honest win number. It resets every offseason.",
-      "Work the roster. Waive contracts, sign free agents with your cap room, and propose trades.",
-      "Sim the season in 20 short stretches, watching the conference standings tighten and the mandate's live pace read.",
-      "Finish top 6 for a direct playoff seed, or 7th through 10th for the play-in.",
-      "Win four best of 7 rounds, then draft and rebuild for the repeat, as long as ownership keeps you.",
+    headings: {
+      howToPlay: "How to play NBA Front Office, a free NBA GM simulator",
+      rules: "NBA Front Office rules: the cap, trades and the play in",
+      example: "NBA Front Office walkthrough: a rebuild that reaches game 7",
+      tips: "NBA Front Office tips for building a lasting contender",
+      faq: "NBA Front Office FAQ: rosters, trades and getting fired",
+    },
+    howToPlaySections: [
+      {
+        heading: "Inheriting a real 30 team rotation",
+        items: [
+          "Pick any of the 30 franchises and inherit its real rotation, rated player by player.",
+        ],
+      },
+      {
+        heading: "Reading the ownership mandate",
+        items: [
+          "Read the ownership mandate: a loaded roster is told to win the Finals, a mid one to make the playoffs, a thin one to hit an honest win number. It resets every offseason.",
+        ],
+      },
+      {
+        heading: "Working the roster with waivers and trades",
+        items: [
+          "Work the roster. Waive contracts, sign free agents with your cap room, and propose trades.",
+        ],
+      },
+      {
+        heading: "Simming the season in 20 stretches",
+        items: [
+          "Sim the season in 20 short stretches, watching the conference standings tighten and the mandate's live pace read.",
+        ],
+      },
+      {
+        heading: "Making the playoffs, then chasing a repeat",
+        items: [
+          "Finish top 6 for a direct playoff seed, or 7th through 10th for the play-in.",
+          "Win four best of 7 rounds, then draft and rebuild for the repeat, as long as ownership keeps you.",
+        ],
+      },
     ],
-    rules: [
-      "The cap starts at 155 million and rises 7 percent every season. Rosters hold 8 to 15 players.",
-      "Trades are a negotiation now: open talks and the other GM answers with a handshake, a pick demand, a lesser man, or the dial tone. You can stand firm exactly once per call, and it genuinely gambles: they blink and the price drops, or they dig in and it rises.",
-      "The play-in covers seeds 7 through 10, with one last game deciding the 8 seed.",
-      "Draft classes have 24 prospects, you pick twice, and scouting grades can miss the truth by a few points either way.",
-      "Everyone ages each summer: young players develop toward potential, decline starts at 32, veterans retire.",
-      "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a banner fixes almost anything, and at zero you are fired and the save ends.",
+    ruleSections: [
+      {
+        heading: "Cap room and roster size limits",
+        items: [
+          "The cap starts at 155 million and rises 7 percent every season. Rosters hold 8 to 15 players.",
+        ],
+      },
+      {
+        heading: "How trade negotiations play out",
+        items: [
+          "Trades are a negotiation now: open talks and the other GM answers with a handshake, a pick demand, a lesser man, or the dial tone. You can stand firm exactly once per call, and it genuinely gambles: they blink and the price drops, or they dig in and it rises.",
+        ],
+      },
+      {
+        heading: "Reaching the play in for seeds seven to ten",
+        items: [
+          "The play-in covers seeds 7 through 10, with one last game deciding the 8 seed.",
+        ],
+      },
+      {
+        heading: "Draft classes and scouting uncertainty",
+        items: [
+          "Draft classes have 24 prospects, you pick twice, and scouting grades can miss the truth by a few points either way.",
+        ],
+      },
+      {
+        heading: "How aging and decline work each summer",
+        items: [
+          "Everyone ages each summer: young players develop toward potential, decline starts at 32, veterans retire.",
+        ],
+        subsections: [
+          {
+            heading: "What moves the trust meter",
+            items: [
+              "Trust upstairs runs 0 to 100: beat the mandate and it climbs, miss it and it falls, a banner fixes almost anything, and at zero you are fired and the save ends.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "You take a bubble team and ship an aging star for a 24 year old, pick attached. The season starts ugly.",
-      "Then the kid pops. You sneak in at the 9 seed, win two play-in games, upset the 1 seed in seven, and lose the conference finals. The rookie scouted at 91 comes in at 87. Run it back.",
+    exampleSections: [
+      {
+        heading: "Trading an aging star for a young pick",
+        paragraphs: [
+          "You take a bubble team and ship an aging star for a 24 year old, pick attached. The season starts ugly.",
+        ],
+      },
+      {
+        heading: "A 9 seed run that ends in the conference finals",
+        paragraphs: [
+          "Then the kid pops. You sneak in at the 9 seed, win two play-in games, upset the 1 seed in seven, and lose the conference finals. The rookie scouted at 91 comes in at 87. Run it back.",
+        ],
+      },
     ],
-    tips: [
-      "Age is currency. The trade engine pays a premium for anyone 24 and under, so shop aging names early.",
-      "Your best five carry most of the load, but bench quality is real when injuries hit.",
-      "A champion is never finished. Contracts expire, and some role players walk every summer.",
+    tipSections: [
+      {
+        heading: "Why age is the real trade currency",
+        items: [
+          "Age is currency. The trade engine pays a premium for anyone 24 and under, so shop aging names early.",
+        ],
+      },
+      {
+        heading: "Bench quality matters when injuries hit",
+        items: [
+          "Your best five carry most of the load, but bench quality is real when injuries hit.",
+        ],
+      },
+      {
+        heading: "A champion roster is never truly finished",
+        items: [
+          "A champion is never finished. Contracts expire, and some role players walk every summer.",
+        ],
+      },
     ],
     faqs: [
       { q: "Are the rosters real?", a: "The players are real, about ten curated per franchise. Contracts, salaries and ages in the sim are explicitly fictional." },
@@ -1265,40 +1932,169 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Each season prints a stat line shaped by your rating, archetype, health and team quality. Each summer drops one decision on your desk, drawn from over a hundred of them: contracts, surgeries, trade demands, tunnel fits, a rookie who idolises you, a mural in your neighborhood.",
       "You build your player's actual face before the draft, and there is a dirty side waiting whenever you want it. Taking the under on your own rebound totals, faking load management for a bettor, tanking in March, an agent advance you were never supposed to mention. Every dirty choice raises a hidden league integrity meter, and at the top of it is an indefinite suspension and a comeback on the minimum.",
     ],
-    howToPlay: [
-      "Create your player: name, one of 5 positions (PG, SG, SF, PF, C), and one of 15 archetypes, from Point God to Movement Sniper to Paint Beast.",
-      "Pick your league: today's NBA, or the 2003-04 throwback with the SuperSonics in Seattle, the Nets in New Jersey, the Hornets in New Orleans and no Charlotte yet.",
-      "Build your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.",
-      "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school on the team plane is one sitting a season on odds that are printed before you sit in.",
-      "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
-      "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
-      "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
-      "Get drafted by a real NBA team. Stronger prospects go higher and earn more.",
-      "Check the rotation. Top five picks open in the starting five; everyone else fights for the spot in camp every fall, and second-unit seasons come in bench minutes until you crack the five.",
-      "Sim each season for a full line: games, points, rebounds, assists, awards, team result.",
-      "Handle the offseason event, one big decision per summer.",
-      "When the contract runs out, work a real free agency window: competing offers from named franchises with their own money, length and roster quality, and one push for more on any of them.",
-      "Retire when the body or the fire quits, and face the legacy verdict.",
+    headings: {
+      howToPlay: "How to play NBA My Career, a free NBA basketball career sim",
+      rules: "NBA My Career rules: ratings, the rotation and the bank",
+      example: "NBA My Career walkthrough: rookie drama to a title run",
+      tips: "NBA My Career tips for building a lasting legacy",
+      faq: "NBA My Career FAQ: real teams, free agency and badges",
+    },
+    howToPlaySections: [
+      {
+        heading: "Creating your player and picking a league",
+        items: [
+          "Create your player: name, one of 5 positions (PG, SG, SF, PF, C), and one of 15 archetypes, from Point God to Movement Sniper to Paint Beast.",
+          "Pick your league: today's NBA, or the 2003-04 throwback with the SuperSonics in Seattle, the Nets in New Jersey, the Hornets in New Orleans and no Charlotte yet.",
+        ],
+        subsections: [
+          {
+            heading: "Building your player's look",
+            items: [
+              "Build your look: skin tone, hair, beard, accessories and a signature celebration, or hit Surprise me.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Managing money in the Bank",
+        items: [
+          "Open the Bank between seasons. Savings pays 2.5% a season and never loses, five things you can put money into each have a price that moves every season whether you look or not (a fund, flats back home, two shares and a coin that halves as often as it doubles), the statement keeps your last 12 moves, and the card school on the team plane is one sitting a season on odds that are printed before you sit in.",
+        ],
+        subsections: [
+          {
+            heading: "Spending across seven aisles",
+            items: [
+              "Spend the money in 7 aisles: home, rides, investments, body, flex, family, and a shady aisle that only appears once you have something to hide.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Following your career in the News box",
+        items: [
+          "Read the News box. The paper writes up every season in your own position's stat, the SocialGram shows followers read off your fanbase with three fan comments under the latest post, and the rival's card keeps the head to head against the player drafted the same year as you.",
+        ],
+        subsections: [
+          {
+            heading: "Collecting badges in the Trophy Case",
+            items: [
+              "Collect badges in the Trophy Case: 21 of them, from a first ring and Rookie of the Year to 30,000 career points, a triple double season and $100M to your name, each lit the moment the facts of your career say so.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Getting drafted and cracking the rotation",
+        items: [
+          "Get drafted by a real NBA team. Stronger prospects go higher and earn more.",
+          "Check the rotation. Top five picks open in the starting five; everyone else fights for the spot in camp every fall, and second-unit seasons come in bench minutes until you crack the five.",
+        ],
+      },
+      {
+        heading: "Playing seasons and handling the offseason",
+        items: [
+          "Sim each season for a full line: games, points, rebounds, assists, awards, team result.",
+          "Handle the offseason event, one big decision per summer.",
+        ],
+        subsections: [
+          {
+            heading: "Working a real free agency window",
+            items: [
+              "When the contract runs out, work a real free agency window: competing offers from named franchises with their own money, length and roster quality, and one push for more on any of them.",
+            ],
+          },
+          {
+            heading: "Retiring and facing the legacy verdict",
+            items: [
+              "Retire when the body or the fire quits, and face the legacy verdict.",
+            ],
+          },
+        ],
+      },
     ],
-    rules: [
-      "Archetypes shape the stat engine: Point Gods pile up assists, Paint Beasts eat rebounds, Bucket Getters score but break down more.",
-      "All-NBA needs 62 games played, and MVP talk starts at a 92 rating.",
-      "Growth runs to age 25, decline starts at 32, and health erodes late unless you invest in it.",
-      "The rotation is real: the man ahead of you is as good as your roster is, camps have memory both ways, bench seasons run at about 60 percent of a starter's numbers, and Sixth Man of the Year goes to actual second-unit seasons now. Joining a loaded contender can cost a mid player his spot in the five.",
-      "The press reads your actual season: a banner puts you on the podium, a collapse puts you in the scrum, a second-unit year brings the role question. Three answers every time, safe, honest or fiery, and the fiery one gambles your fanbase for real.",
-      "Careers end at 41, after 21 seasons, or when the rating craters. You can also walk anytime.",
-      "The 2003-04 throwback is a sealed 29 team world, verified against the real season: every draft, trade and signing stays inside it, and contracts pay 2003 money, about a third of today's.",
-      "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the guys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
-      "The fans nag you for the thing your position is judged on and never the other way round: a point guard hears more assists, a center hears own the glass, and nobody hears about a three, a block or a steal, because the season line does not count one.",
+    ruleSections: [
+      {
+        heading: "How archetypes and ratings work together",
+        items: [
+          "Archetypes shape the stat engine: Point Gods pile up assists, Paint Beasts eat rebounds, Bucket Getters score but break down more.",
+          "All-NBA needs 62 games played, and MVP talk starts at a 92 rating.",
+        ],
+        subsections: [
+          {
+            heading: "How growth and decline unfold",
+            items: [
+              "Growth runs to age 25, decline starts at 32, and health erodes late unless you invest in it.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "How real the rotation actually is",
+        items: [
+          "The rotation is real: the man ahead of you is as good as your roster is, camps have memory both ways, bench seasons run at about 60 percent of a starter's numbers, and Sixth Man of the Year goes to actual second-unit seasons now. Joining a loaded contender can cost a mid player his spot in the five.",
+        ],
+      },
+      {
+        heading: "How the press reads your season",
+        items: [
+          "The press reads your actual season: a banner puts you on the podium, a collapse puts you in the scrum, a second-unit year brings the role question. Three answers every time, safe, honest or fiery, and the fiery one gambles your fanbase for real.",
+        ],
+        subsections: [
+          {
+            heading: "When a career finally ends",
+            items: [
+              "Careers end at 41, after 21 seasons, or when the rating craters. You can also walk anytime.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Playing inside the 2003 throwback world",
+        items: [
+          "The 2003-04 throwback is a sealed 29 team world, verified against the real season: every draft, trade and signing stays inside it, and contracts pay 2003 money, about a third of today's.",
+        ],
+      },
+      {
+        heading: "Money rules in the Bank and what fans nag about",
+        items: [
+          "Money has rules of its own. There is a 1% fee on both sides of every trade and a $100k floor in the account that cannot be invested away; a season that leaves you under the floor is covered out of savings first, then by a forced sale of holdings at whatever the price is that day. Cards win 42% of hands and a win pays 1.15x the stake, the most you can stake is $50k or 4% of your cash, and once you are $500k down for your career the guys stop dealing you in for good. Keep sitting in while you are losing and somebody at home notices, which costs morale and fanbase.",
+          "The fans nag you for the thing your position is judged on and never the other way round: a point guard hears more assists, a center hears own the glass, and nobody hears about a three, a block or a steal, because the season line does not count one.",
+        ],
+      },
     ],
-    example: [
-      "You roll a Two-Way Menace guard, go 11th, and win Rookie of the Year on a bad team. Year three, morale craters and you demand a trade. Villain arc unlocked.",
-      "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does.",
+    exampleSections: [
+      {
+        heading: "A Rookie of the Year season turns sour",
+        paragraphs: [
+          "You roll a Two-Way Menace guard, go 11th, and win Rookie of the Year on a bad team. Year three, morale craters and you demand a trade. Villain arc unlocked.",
+        ],
+      },
+      {
+        heading: "A title, a Finals MVP and a Hall of Fame verdict",
+        paragraphs: [
+          "The new team contends. You take the discount at 28, win it all at 30, and grab Finals MVP. Decline arrives at 33, surgery buys two more years, and the verdict reads first ballot Hall of Famer. The GOAT tier stays out of reach. It usually does.",
+        ],
+      },
     ],
-    tips: [
-      "Pick the archetype for the career you want to live. Durability differences are real.",
-      "Do not sit on low health. Injuries shred seasons, and awards need games played.",
-      "Team quality moves your stats and playoff odds. Free agency is a basketball decision, not just money: the contender offers less than the rebuild, and the roster number on the card is what your next seasons actually run on.",
+    tipSections: [
+      {
+        heading: "Choosing an archetype built to last",
+        items: [
+          "Pick the archetype for the career you want to live. Durability differences are real.",
+        ],
+      },
+      {
+        heading: "Why low health is worth fixing fast",
+        items: [
+          "Do not sit on low health. Injuries shred seasons, and awards need games played.",
+        ],
+      },
+      {
+        heading: "Free agency as a basketball decision, not just money",
+        items: [
+          "Team quality moves your stats and playoff odds. Free agency is a basketball decision, not just money: the contender offers less than the rebuild, and the roster number on the card is what your next seasons actually run on.",
+        ],
+      },
     ],
     faqs: [
       { q: "Can I play as a real NBA star?", a: "No, your player is fictional by design. The teams around you are real, 30 of them today and 29 in the throwback, but the career is yours to invent." },
