@@ -451,7 +451,9 @@ export interface CMPlayer {
   isYouth: boolean;
   seasonGoals: number;
   seasonAssists: number;
-  /** Real market value in £m (Round 70, baked data). Youth pads have none. */
+  /** Real market value in £m (Round 70, baked data). Youth pads carry a
+      teenager's value since Round 632 (youthPadValue); academy graduates have
+      none and are priced off the curve. */
   value?: number;
   /** Round 71: loan signings go home at the end of the season. */
   onLoan?: boolean;
@@ -3375,12 +3377,15 @@ function uniqueYouthName(taken: Set<string>, suffix = ''): string {
   return out;
 }
 
+/** Round 632: the tag every youth pad's name carries, and only theirs. */
+const YOUTH_PAD_SUFFIX = ' (Youth)';
+
 // Round 70: youth pads sit at 55-68 so they slot below a club's real players
 // on the new value curve instead of outranking half the squad.
 function makeYouth(position: Position, minRating = 55, maxRating = 68, taken: Set<string> = new Set()): CMPlayer {
   youthSeq += 1;
-  const name = uniqueYouthName(taken, ' (Youth)');
-  return {
+  const name = uniqueYouthName(taken, YOUTH_PAD_SUFFIX);
+  const kid: CMPlayer = {
     id: `youth-${Date.now().toString(36)}-${youthSeq}-${ri(100, 999)}`,
     name,
     position,
@@ -3394,6 +3399,13 @@ function makeYouth(position: Position, minRating = 55, maxRating = 68, taken: Se
     seasonGoals: 0,
     seasonAssists: 0,
   };
+  /* Round 632: he is worth what a real teenager of his level is worth, see
+     youthPadValue. The wage is fixed FIRST, off the same formula ensureContracts
+     always used on him, so storing the value moves no wage bill, no cap and no
+     seeded stream: nothing here draws a random number. */
+  kid.wage = wageFor(kid);
+  kid.value = youthPadValue(kid.rating, kid.age);
+  return kid;
 }
 
 function toCMPlayer(p: Player): CMPlayer {
@@ -4733,6 +4745,74 @@ export function squadScaledValue(squad: CMPlayer[], rating: number, age: number)
     .sort((a, b) => a - b);
   const scale = ratios[Math.floor(ratios.length / 2)] || 1;
   return Math.max(0.2, Math.round(baseValue(rating, age) * scale * 10) / 10);
+}
+
+/* ─────────────────── Round 632: what a youth pad is worth ───────────────────
+   THE DEFECT. makeYouth's kids (the thin club padding on day one, the padding
+   and the summer intake at every rollover, and the padding a job move builds)
+   carried no value, so sellValue priced them off the raw curve times 0.36, and
+   the raw curve is built to round trip ratings, not money: across the whole
+   market a real player's value is 0.06 to 0.07 of it at the median. Measured
+   on the engine before this round, every playable club in all four eras:
+   290 of 330 clubs are padded on day one today (8.3 kids a club), 39 of 60 in
+   2015, 23 of 40 in 2010 and 26 of 40 in 2005; the kids are rated 55 to 68
+   (median 62), aged 17 to 19, and sold for a median 7m and up to 16m, with
+   bids up to 21m. A padded club held a median 66m of them today (Lommel
+   141.7m), and listing them in the first window banked about 11m a club in
+   every era, for players the club paid nothing for. The summer intake uses
+   this same function and priced the same way every August.
+
+   THE RULE. A pad is worth what the market pays for a real teenager of his
+   level. The market's own teenagers rated 55 to 68 are valued 0.8m to 1.5m,
+   which is 0.028 to 0.034 of the raw curve (median 0.031), and the figure is
+   the same in all four eras, so one scale serves them all. That puts a pad at
+   0.3m to 1.3m, never below the journeyman floor. It is a real value rather
+   than the floor on purpose: agePlayer grows a stored value 20 percent a
+   rating point, so a pad who develops is sold like a real young player of
+   his new level (a 60 who reaches 76 is about 9m), while the floor would have
+   left him under 4m.
+
+   What this deliberately does NOT touch. An academy graduate or a scouted boy
+   (promoteProspect) keeps no stored value and is priced off the curve, as
+   simAcademy has always required, because he is the product the club paid for
+   with its academy and its scouts. His wage is unchanged too: a pad's wage is
+   fixed off the curve before the value is stored, exactly the number
+   ensureContracts always gave him. */
+export const YOUTH_PAD_SCALE = 0.03;
+
+/** Round 632: a youth pad's value, a real teenager's price for his rating and age. */
+export function youthPadValue(rating: number, age: number): number {
+  return Math.max(JOURNEYMAN_VALUE, Math.round(baseValue(rating, age) * YOUTH_PAD_SCALE * 10) / 10);
+}
+
+/** Round 632: a man makeYouth made, still flagged as a pad or re-signed after
+    his deal ran out (the suffix stays with him). Never an academy graduate. */
+function isPaddingKid(p: CMPlayer): boolean {
+  return !p.academyGrad && (p.isYouth === true || p.name.endsWith(YOUTH_PAD_SUFFIX));
+}
+
+/**
+ * Round 632: a save written before this round has pads with no value, and on
+ * load they are given the value they would have been created with, off their
+ * rating and age today. Everywhere a pad can be: the squad, out on loan, and
+ * the free agent list (a pad whose deal ran out walks there, and re-signing
+ * him put him back on the curve with no youth discount at all). The wage is
+ * pinned first on a pad that somehow has none, so the repair moves no bill.
+ *
+ * Called from loadCareer only. Every career in play either came from
+ * startCareer, whose pads are created valued, or through loadCareer.
+ */
+export function ensureYouthPadValues(state: CareerState): void {
+  const price = (p: CMPlayer) => {
+    if (p.value !== undefined || !isPaddingKid(p)) return;
+    if (p.wage === undefined) p.wage = wageFor(p);
+    p.value = youthPadValue(p.rating, p.age);
+  };
+  for (const p of state.squad ?? []) price(p);
+  for (const l of state.loanedOut ?? []) if (l && l.player) price(l.player);
+  for (const f of state.freeAgents ?? []) {
+    if (f.value === undefined && f.name.endsWith(YOUTH_PAD_SUFFIX)) f.value = youthPadValue(f.rating, f.age);
+  }
 }
 
 /** The position groups the journeymen cycle through, so the list is not six strikers. */
@@ -15969,6 +16049,9 @@ export function loadCareer(): CareerState | null {
        card reads it before a ball is kicked, so a save from before free agents
        existed would otherwise show an empty list until the first week. */
     ensureFreeAgents(parsed);
+    /* Round 632: after the free agent list exists, so a pad whose deal ran out
+       and who is waiting in it is valued too. */
+    ensureYouthPadValues(parsed);
     /* Round 507: a negotiation frozen mid haggle by a build that charged
        patience only for an insult, resumed by a build that charges for every
        answer. Its opener was 2 or 3 where the new one is 4 or 5, so two
