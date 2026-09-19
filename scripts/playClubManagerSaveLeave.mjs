@@ -11,8 +11,15 @@
  * The leave write is proved rather than assumed: right before leaving, the
  * save is deleted from storage. The hook's ordinary write runs from an effect
  * keyed on the career object, and nothing changes the career between the
- * delete and the navigation, so if the save is back on the next page the
- * pagehide listener wrote it and nothing else could have.
+ * delete and the navigation. That alone leaves TWO listeners that could put it
+ * back, because leaving a page fires pagehide AND turns the tab hidden, and
+ * the hook writes on both (the Round 634 review caught that the first version
+ * of this file could not tell them apart). So before leaving, the page's
+ * document.visibilityState is pinned to "visible", which makes the hidden-tab
+ * listener a no-op: if the save is back on the next page, pagehide wrote it.
+ * The hidden-tab write is then proved on its own, without leaving: the save is
+ * deleted again, visibilityState pinned to "hidden" and a visibilitychange
+ * dispatched, with no pagehide anywhere.
  *
  * Then the other half of the round: with the store stubbed to throw (what a
  * full or blocked browser does), a pagehide must put the plain banner on
@@ -156,6 +163,37 @@ try {
     if (dupes.length) fail(`the saved squad holds a name twice: ${dupes.join(', ')}`);
   }
 
+  /* ---------- 2b. the loan desk: one loan out a season, said on the button ---------- */
+  console.log('2b) The loan desk: send a man out, recall him, and his button says he has had his loan this season');
+  await tapText(/^\s*Sell/, 'the sell side of the market');
+  await page.waitForTimeout(500);
+  const budgetBefore = (await saved())?.budget;
+  const openOut = page.locator('button:visible[data-cm-loan-out="open"]').first();
+  if (await openOut.count().catch(() => 0) === 0) fail('no loan out button was open on the sell side');
+  else {
+    await openOut.click({ timeout: 4000 }).catch(() => {});
+    await page.waitForTimeout(500);
+    const lent = (await saved())?.loanedOut?.slice(-1)[0];
+    if (!lent) fail('the loan out press sent nobody');
+    else {
+      const recall = page.locator('button:visible').filter({ hasText: /^Recall/ }).first();
+      await recall.click({ timeout: 4000 }).catch(() => {});
+      await page.waitForTimeout(500);
+      const back = await saved();
+      const home = (back?.squad ?? []).some(p => p.name === lent.player.name);
+      const used = page.locator('button:visible[data-cm-loan-out="used"]');
+      const usedCount = await used.count().catch(() => 0);
+      const usedText = usedCount ? ((await used.first().innerText().catch(() => '')) || '').trim() : '';
+      const usedOff = usedCount ? await used.first().isDisabled().catch(() => false) : false;
+      const net = back && budgetBefore !== undefined ? Math.round((back.budget - budgetBefore) * 10) / 10 : null;
+      if (!home) fail(`${lent.player.name} did not come back on the recall`);
+      else if (!usedCount) fail(`after the recall no loan out button says ${lent.player.name} has had his loan this season`);
+      else if (!/once this season/i.test(usedText) || !usedOff) fail(`the used loan button reads "${usedText}" and disabled ${usedOff}`);
+      else ok(`${lent.player.name} out and back, net ${net}m; his button now reads "${usedText}" and is disabled`);
+    }
+  }
+  await tapText(/^\s*Buy/, 'back to the buy side');
+
   /* ---------- 3. play two weeks ---------- */
   console.log('3) Playing two weeks with the quick sim');
   /* The overview tab is labelled Home, and the two ways through a match sit
@@ -191,9 +229,22 @@ try {
   if (await bannerCount()) fail('the save banner is on screen on a working store after playing');
 
   /* ---------- 4. leave, with the disk emptied first ---------- */
-  console.log('4) Leaving the page by navigating away, with the save deleted first so only the pagehide write can restore it');
+  console.log('4) Leaving the page by navigating away, with the save deleted and the tab pinned visible, so only the pagehide write can restore it');
   await page.evaluate(k => localStorage.removeItem(k), KEY);
   if (await saved()) { fail('the save did not delete, so the leave write cannot be told from the ordinary one'); }
+  /* The hidden-tab listener reads document.visibilityState, so pinning it to
+     "visible" takes that listener out of the leave entirely. */
+  const pinned = await page.evaluate(() => {
+    Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'visible' });
+    return document.visibilityState;
+  });
+  if (pinned !== 'visible') fail(`the tab could not be pinned visible (reads ${pinned}), so the leave write cannot be told from the hidden-tab one`);
+  /* And prove the pin works rather than assume it: a visibilitychange under
+     it must write nothing. */
+  await page.evaluate(() => document.dispatchEvent(new Event('visibilitychange')));
+  await page.waitForTimeout(200);
+  if (await saved()) fail('a visibilitychange under the visible pin still wrote the save, so the pin does not isolate pagehide');
+  else ok('under the visible pin a visibilitychange writes nothing, so what follows is pagehide alone');
   await page.goto(BASE + '/', { waitUntil: 'domcontentloaded', timeout: 20000 });
   await page.waitForTimeout(500);
   const afterLeave = await saved();
@@ -227,6 +278,21 @@ try {
     else ok(`resumed at week ${resumed.week} with ${signing ?? 'the squad'} on the books`);
   }
   if (await bannerCount()) fail('the save banner is on screen after a clean resume');
+
+  /* ---------- 5b. the hidden-tab write on its own ---------- */
+  console.log('5b) The tab going hidden writes the save on its own, with no pagehide and no navigation');
+  await page.evaluate(k => localStorage.removeItem(k), KEY);
+  if (await saved()) fail('the save did not delete before the hidden-tab check');
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'hidden' });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+  await page.waitForTimeout(300);
+  const afterHidden = await saved();
+  await page.evaluate(() => { delete document.visibilityState; });
+  if (!afterHidden) fail('the tab went hidden and nothing was written');
+  else if (afterHidden.week !== weeksPlayed) fail(`the hidden-tab write holds week ${afterHidden.week}, not ${weeksPlayed}`);
+  else ok(`the hidden-tab write alone restored the save at week ${afterHidden.week}`);
 
   /* ---------- 6. the banner when the store refuses ---------- */
   console.log('6) The banner: on when the store throws at a pagehide, gone after a reload with the store working');

@@ -131,6 +131,33 @@ describe('Club Manager: a refused write is said out loud', () => {
     r.unmount();
   }, 120000);
 
+  it('a refused press on the transfer desk says why, and one that goes through clears it', async () => {
+    /* Round 634 review: a refused door used to be a dead button. */
+    const r = await booted();
+    const card = api.market.find((m: any) => m.price <= api.career.budget / 4);
+    act(() => api.buy(card));
+    expect(api.deskNote).toBeNull();
+    /* The same card again: he is in the squad now, the press the screen could
+       still hold from a render ago. */
+    act(() => api.buy(card));
+    console.log(`  second press on ${card.name}: "${api.deskNote}"`);
+    expect(api.deskNote).toMatch(/already in your squad/);
+    const other = api.market.find((m: any) => m.price <= api.career.budget / 4);
+    act(() => api.buy(other));
+    expect(api.deskNote).toBeNull();
+    /* The loan desk: out, back, and out again is refused with the rule. */
+    const man = api.career.squad.find((p: any) => !p.isYouth && p.position !== 'GK' && !p.onLoan);
+    act(() => api.loanOut(man.id));
+    expect(api.career.loanedOut.some((l: any) => l.player.id === man.id)).toBe(true);
+    act(() => api.recallLoanee(man.id));
+    const back = api.career.squad.find((p: any) => p.name === man.name);
+    act(() => api.loanOut(back.id));
+    console.log(`  loan out again after the recall: "${api.deskNote}"`);
+    expect(api.deskNote).toMatch(/once this season/);
+    expect(api.career.loanedOut.some((l: any) => l.player.name === man.name)).toBe(false);
+    r.unmount();
+  }, 120000);
+
   it('a pagehide under a throwing store reports too, and never throws out of the listener', async () => {
     const r = await booted();
     Storage.prototype.setItem = function () { throw new Error('QuotaExceededError (stubbed)'); };
