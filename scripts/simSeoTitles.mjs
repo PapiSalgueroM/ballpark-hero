@@ -23,14 +23,17 @@
  *      outside the label itself.
  *   2. THE RENDER. PageSeo rendered through react-dom/server inside a
  *      MemoryRouter and a HelmetProvider. Before the module loads, a game page
- *      renders its own props (so the text really is lazy). After
+ *      renders its own props (so the text really is lazy) and no Game
+ *      JSON-LD (a render React discards strands its Helmet instance, and a
+ *      stranded one must not carry a stale Game block). After
  *      loadSeoMeta() resolves, every game route renders, with a page prop
  *      that is deliberately different, a <title>, meta description, og:title,
  *      og:description, twitter:title, twitter:description and JSON-LD name and
  *      description equal to seoMeta after PageSeo's brand rule, each exactly
  *      once. A route with no entry keeps the props it passed.
  *   3. THE SAVED PAGES. Where public/<route>/index.html carries the seoMeta
- *      description, its head must carry all six tags exactly as rendered. A
+ *      description, its head must carry all six tags exactly as rendered and
+ *      exactly one Game JSON-LD block, named with the new title. A
  *      snapshot that carries none of it predates this round and is skipped,
  *      loudly: npm run build:seo refreshes it. BUT once any saved page carries
  *      the new text, every one must: a mix is red, because a page whose lazy
@@ -48,7 +51,9 @@
  *   dupetitle   /hockey-career takes /baseball-career's title           section 1
  *   longdesc    /footle's description grows past 158 characters         section 1
  *   noregistry  PageSeo ignores seoMeta and uses the page prop          section 2
+ *   earlyld     a game page emits its Game JSON-LD before the chunk     section 2
  *   staleshot   a saved /club-manager head keeps its old title          section 3
+ *   twold       a saved /club-manager head carries two Game blocks      section 3
  *   inentry     a side build where PageSeo imports seoMeta statically,  section 4
  *               putting the map back on the entry chunk's import path
  *               (vite build into a temp dir through a transform plugin,
@@ -101,7 +106,9 @@ const CONTROLS = {
   dupetitle: { section: 1, finding: 'shares its title' },
   longdesc: { section: 1, finding: 'characters, outside' },
   noregistry: { section: 2, finding: 'rendered <title>' },
+  earlyld: { section: 2, finding: 'before the seoMeta chunk was loaded, a stranded' },
   staleshot: { section: 3, finding: 'saved title' },
+  twold: { section: 3, finding: 'Game JSON-LD block(s)' },
   inentry: { section: 4, finding: 'entry chunk' },
 };
 const CONTROL = process.env.SEO_TITLES_CONTROL || '';
@@ -135,11 +142,18 @@ const pageSeoSrc = lf(fs.readFileSync(SEO, 'utf8'));
 const LAZY_ANCHOR = "seoMetaLoad = import('@/data/seoMeta')";
 const LOOKUP_ANCHOR = 'const entry = meta?.[path];';
 let seoPath = SEO;
+const HOLD_ANCHOR = 'const holdJsonLd = isGame && !meta;';
 if (CONTROL === 'noregistry') {
   if (!pageSeoSrc.includes(LOOKUP_ANCHOR)) abort('control noregistry: the seoMeta lookup in PageSeo is not in the shape it rewrites');
   seoPath = path.join(TMP, 'PageSeo.noregistry.tsx');
   fs.writeFileSync(seoPath, pageSeoSrc.replace(LOOKUP_ANCHOR, 'const entry = (null as SeoMetaMap | null)?.[path];'));
   console.log('CONTROL noregistry: PageSeo never reads seoMeta, so every page falls back to its own prop; section 2 must go red');
+}
+if (CONTROL === 'earlyld') {
+  if (!pageSeoSrc.includes(HOLD_ANCHOR)) abort('control earlyld: the JSON-LD hold in PageSeo is not in the shape it rewrites');
+  seoPath = path.join(TMP, 'PageSeo.earlyld.tsx');
+  fs.writeFileSync(seoPath, pageSeoSrc.replace(HOLD_ANCHOR, 'const holdJsonLd = isGame && false;'));
+  console.log('CONTROL earlyld: a game page emits its Game JSON-LD before the seoMeta chunk lands; section 2 must go red');
 }
 const ENTRY = path.join(TMP, 'entry.mjs');
 const BUNDLE = path.join(TMP, 'bundle.cjs');
@@ -303,6 +317,10 @@ const rendered = new Map();
   if (first.title[0] !== propsFor('/footle').title) {
     f.push(`/footle rendered "${first.title[0]}" before the seoMeta chunk was loaded, so the text is not lazy`);
   }
+  /* And it holds its Game block: Helmet strands an instance from a discarded
+     render, and a stranded one carrying the prop's JSON-LD left two Game
+     blocks in the head on 19 of 24 fresh browser renders. */
+  if (first.ld.length) f.push(`/footle rendered ${first.ld.length} Game JSON-LD block(s) before the seoMeta chunk was loaded, a stranded early render would keep it beside the real one`);
   /* 2b. Load it the way the page does, then every later render reads the
      cache synchronously. */
   const loaded = await loadSeoMeta();
@@ -340,7 +358,7 @@ const rendered = new Map();
 }
 
 /* ---------- 3. the saved pages ---------- */
-if (CONTROL && CONTROL !== 'staleshot') {
+if (CONTROL && CONTROL !== 'staleshot' && CONTROL !== 'twold') {
   notes[3] = `not run under control ${CONTROL}: it reads the real saved pages`;
 } else {
   const f = findings[3];
@@ -358,6 +376,15 @@ if (CONTROL && CONTROL !== 'staleshot') {
         + `<meta property="og:title" content="${full}"><meta property="og:description" content="${meta.description}">`
         + `<meta name="twitter:title" content="${full}"><meta name="twitter:description" content="${meta.description}"></head>`;
       console.log('CONTROL staleshot: a saved /club-manager head carries the new description under its old title; section 3 must go red');
+    } else if (CONTROL === 'twold' && g.path === '/club-manager') {
+      /* Every tag right, plus the stranded instance's block beside the real one. */
+      const ld = name => `<script type="application/ld+json" data-rh="true">${JSON.stringify({ '@context': 'https://schema.org', '@type': 'Game', name, description: meta.description })}</script>`;
+      html = `<head><title>${expectedTitle(full)}</title>`
+        + `<meta name="description" content="${meta.description}">`
+        + `<meta property="og:title" content="${full}"><meta property="og:description" content="${meta.description}">`
+        + `<meta name="twitter:title" content="${full}"><meta name="twitter:description" content="${meta.description}">`
+        + `${ld(`Club Manager: Football Management Sim${BRAND}`)}${ld(full)}</head>`;
+      console.log('CONTROL twold: a saved /club-manager head is right in every tag but carries a stale Game JSON-LD beside the real one; section 3 must go red');
     } else if (fs.existsSync(file)) {
       const doc = fs.readFileSync(file, 'utf8');
       const end = doc.indexOf('</head>');
@@ -383,6 +410,10 @@ if (CONTROL && CONTROL !== 'staleshot') {
       const want = r[key][0];
       const got = saved[key];
       if (got.length !== 1 || got[0] !== want) f.push(`${g.path}: saved ${key} "${(got[0] ?? 'missing').slice(0, 60)}" is not the rendered "${want.slice(0, 60)}"${got.length > 1 ? ` (${got.length} tags)` : ''}`);
+    }
+    const names = saved.ld.map(o => o.name);
+    if (saved.ld.length !== 1 || names[0] !== full || saved.ld[0].description !== meta.description) {
+      f.push(`${g.path}: saved head carries ${saved.ld.length} Game JSON-LD block(s) (${names.map(n => `"${String(n).slice(0, 40)}"`).join(', ')}), expected exactly one named "${full.slice(0, 40)}"`);
     }
   }
   /* A MIX IS RED. Before build:seo every saved page predates this round and
