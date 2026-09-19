@@ -153,7 +153,8 @@ const decode = s => s
 const count = (s, sub) => s.split(sub).length - 1;
 const escRe = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const namesSport = (s, cat) => SPORT_WORDS[cat].some(w => new RegExp(`\\b${escRe(w).replace(/ /g, '\\s')}\\b`, 'i').test(s));
-const DASH = /[‐-―−]/;
+/* Built from code points so this file carries no dash character of its own. */
+const DASH = new RegExp(`[${String.fromCharCode(0x2010)}-${String.fromCharCode(0x2015)}${String.fromCharCode(0x2212)}]`);
 /* The brand rule, restated here rather than imported, so a change to it in
    PageSeo shows up as a disagreement instead of being agreed with. */
 const expectedTitle = full => (full.length > TITLE_LIMIT && full.endsWith(BRAND) ? full.slice(0, -BRAND.length) : full);
