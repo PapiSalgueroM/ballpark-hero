@@ -89,7 +89,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
           {
             heading: "Starting from 24 generated players",
             items: [
-              "A club you create starts with 24 generated players, honestly marked as made up. Every real player stays real, and the transfer market is where you sign them. Budgets run 15, 40 or 90 million pounds. Every real player carries his real nationality, filterable by nation with real flags, resolved per era so a 2010 name never wears a 2026 flag.",
+              "A club you create starts with 24 generated players, honestly marked as made up. Every real player stays real, and the transfer market is where you sign them. Budgets run 15, 40 or 90 million pounds, and your backing sets your wage room. Start with a better squad than the money buys and it plays that well, but your made up players sell on at that money's squad prices, still rising as they improve. Every real player carries his real nationality, filterable by nation with real flags, resolved per era so a 2010 name never wears a 2026 flag.",
             ],
           },
         ],
