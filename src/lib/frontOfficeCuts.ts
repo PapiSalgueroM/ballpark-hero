@@ -100,11 +100,11 @@ export function cutPlayer<P extends CutPlayer>(team: CutLedger & { players: P[] 
 /**
  * Why this team cannot sign this free agent, or null when it can. The boards
  * read it so the button and the engine never disagree, and pass their own
- * word for the cut (waived, designated for assignment). Cap room is not in
- * here: every board already greys a man the room cannot cover.
+ * sentence for what happened ("You waived him this season."). Cap room is
+ * not in here: every board already greys a man the room cannot cover.
  */
-export function signRefusal(team: CutLedger, playerId: string, pastVerb = 'cut'): string | null {
-  if ((team.releasedThisSeason ?? []).includes(playerId)) return `You ${pastVerb} him this season. He can come back after the offseason.`;
+export function signRefusal(team: CutLedger, playerId: string, said = 'You cut him this season.'): string | null {
+  if ((team.releasedThisSeason ?? []).includes(playerId)) return `${said} He can come back after the offseason.`;
   return null;
 }
 

@@ -13,6 +13,8 @@ import {
   type MlbLeague, type MlbProspect, type MlbSeriesResult, mlbExecuteTalksTrade,
   ensureMlbLeagueIds,
 } from '@/lib/mlbFrontOffice';
+/* Round 631: a DFA costs dead money and the man cannot come back this season. */
+import { deadMoneyFor, deadCapUsed, signRefusal } from '@/lib/frontOfficeCuts';
 /* Round 531: the tax line on screen says which day its figure was read. */
 import { capNote } from '@/lib/leagueCaps';
 import { leagueNames } from '@/lib/foNames';
@@ -95,6 +97,9 @@ export default function MlbFrontOfficeBoard() {
   const [shopOffers, setShopOffers] = useState<FinderOffer[]>([]);
   const [shopTried, setShopTried] = useState(false);
   const [myTradePiece, setMyTradePiece] = useState('');
+  /* Round 631: the man whose DFA button has been tapped once. The second tap
+     is only offered once the dead money is on screen. Transient. */
+  const [cutArmed, setCutArmed] = useState<string | null>(null);
   /* Round 190: the live phone call. Transient like the market window:
      never persisted, a reload simply ends the call. */
   const [talks, setTalks] = useState<{ state: TalksState; partner: string; myPieceId: string; wantId: string } | null>(null);
@@ -377,6 +382,7 @@ export default function MlbFrontOfficeBoard() {
 
   const doRelease = (pid: string) => {
     if (!league) return;
+    setCutArmed(null);
     const lg: MlbLeague = JSON.parse(JSON.stringify(league));
     if (mlbRelease(lg.teams[myTeam], lg.freeAgents, pid)) { setLeague(lg); persist({}, lg, myTeam); }
   };
@@ -669,7 +675,9 @@ export default function MlbFrontOfficeBoard() {
     tradeLine: seasonTradeLine,
     titles,
   });
-  const openPanel = (key: FoPanelKey) => setTab(key === 'play' ? 'round' : key);
+  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setTab(key === 'play' ? 'round' : key); };
+  /* Round 631: dead money on the payroll line, only when there is any. */
+  const dead = deadCapUsed(my);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
 
   return (
@@ -713,41 +721,86 @@ export default function MlbFrontOfficeBoard() {
 
       {tab === 'team' && (
         <div className="rounded-2xl border border-border bg-card p-3">
-          <p className="mb-2 text-center text-xs text-muted-foreground">Payroll ${mlbCapUsed(my)}M against the ${league.cap}M tax line</p>
+          <p className="mb-2 text-center text-xs text-muted-foreground">
+            Payroll ${mlbCapUsed(my)}M against the ${league.cap}M tax line
+            {dead > 0 && <> · dead money <b className="text-destructive">${dead}M</b></>}
+          </p>
           <p className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}</p>
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
-            {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
-              <div key={p.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
+            {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => {
+              /* Round 631: the cost is on screen before the second tap. */
+              const cost = deadMoneyFor(p);
+              const arming = cutArmed === p.id;
+              return (
+              <div key={p.id} data-roster-row={p.id} className="rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
+                <div className="flex items-center justify-between">
                 <span className="min-w-0">
                   <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>{p.name} {p.out > 0 ? `(IL ${p.out}r)` : ''}</span>
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}</span>
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
                   <b className="text-primary">{p.ovr}</b>
-                  <button onClick={() => doRelease(p.id)} className="rounded-full border border-border px-2 py-0.5 text-[10px] text-muted-foreground hover:border-destructive hover:text-destructive">DFA</button>
+                  <button
+                    onClick={() => setCutArmed(arming ? null : p.id)}
+                    title={`Designate him for assignment and $${cost.now}M stays on this season's payroll`}
+                    className={cn('rounded-full border border-border px-2 py-0.5 text-[10px]',
+                      arming ? 'text-foreground' : 'text-muted-foreground hover:border-destructive hover:text-destructive')}
+                  >
+                    {arming ? 'Keep' : `DFA, $${cost.now}M dead`}
+                  </button>
                 </span>
+                </div>
+                {arming && (
+                  <div className="mt-1.5 rounded-lg border border-destructive/50 bg-destructive/10 p-2 space-y-1.5" data-cut-confirm>
+                    <p className="text-[10px] text-foreground">
+                      DFA {p.name}? ${cost.now}M of his ${p.salary}M stays on this season's payroll as dead money
+                      {cost.next > 0 ? `, and $${cost.next}M lands on next season's` : ''}. He goes to the pool and you cannot sign him back until the offseason.
+                    </p>
+                    <div className="flex gap-1.5">
+                      <button
+                        onClick={() => doRelease(p.id)}
+                        className="flex-1 rounded-lg bg-destructive px-2 py-1 text-[10px] font-bold text-destructive-foreground hover:opacity-90"
+                      >
+                        DFA him
+                      </button>
+                      <button
+                        onClick={() => setCutArmed(null)}
+                        className="flex-1 rounded-lg bg-secondary px-2 py-1 text-[10px] font-bold text-foreground hover:opacity-90"
+                      >
+                        Keep him
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
 
       {tab === 'market' && (
         <div className="rounded-2xl border border-border bg-card p-3">
-          <p className="mb-2 text-center text-xs text-muted-foreground">Free agents (tax room ${room}M)</p>
+          <p className="mb-2 text-center text-xs text-muted-foreground">Free agents (tax room ${room}M). A man you designated for assignment waits until next season.</p>
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
-            {[...league.freeAgents].sort((a, b) => b.ovr - a.ovr).slice(0, 20).map(p => (
-              <div key={p.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
+            {[...league.freeAgents].sort((a, b) => b.ovr - a.ovr).slice(0, 20).map(p => {
+              /* Round 631: the engine's own refusal, so the button is never
+                 live when pressing it would do nothing. */
+              const refusal = signRefusal(my, p.id, 'You designated him for assignment this season.');
+              return (
+              <div key={p.id} data-fa-row={p.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
                 <span className="min-w-0">
                   <span className="block truncate font-bold text-foreground">{p.name}</span>
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · wants ${p.salary}M</span>
+                  {refusal && <span className="block text-[10px] text-destructive">{refusal}</span>}
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
                   <b className="text-primary">{p.ovr}</b>
-                  <button onClick={() => doSign(p.id)} disabled={p.salary > room} className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40">Sign</button>
+                  <button onClick={() => doSign(p.id)} disabled={p.salary > room || !!refusal} title={refusal ?? undefined} className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40">Sign</button>
                 </span>
               </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       )}
