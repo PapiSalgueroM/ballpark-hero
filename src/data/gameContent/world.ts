@@ -885,7 +885,7 @@ export const WORLD_CONTENT: GameContentMap = {
     ],
     ruleSections: [
       {
-        heading: "How long the money ladder runs",
+        heading: "How far the ladder climbs in dollars",
         items: [
           "The ladder runs 15 questions, from $100 up to $1,000,000, all in play money.",
         ],
@@ -1425,7 +1425,7 @@ export const WORLD_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "Filling the goalkeeper slot with a fringe body",
+        heading: "Settling for a fringe goalkeeper pick",
         paragraphs: [
           "Then pack 9 is a fringe goalkeeper. Keeping him feels bad, but there's one goalkeeper slot and no guarantee anything better is coming. You keep him and finish with a full XI in the low 70s.",
         ],
@@ -1742,7 +1742,7 @@ export const WORLD_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "Starting with the daily duel and the Rookie",
+        heading: "Trying the daily match before the Rookie",
         items: [
           "Play the daily first. It is against The Pro every day, so your score means the same thing tomorrow and to everyone else.",
           "Start Unlimited against The Rookie and move up when you are winning three in a row. The Legend is there to be beaten, not to be your first game.",
