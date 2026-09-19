@@ -3882,8 +3882,19 @@ export function buildCustomSquad(spec: CustomClubSpec, eraId?: string): CMPlayer
    7,353.9m. Listing the founders in the first summer window and taking every
    bid the squad floor allows banked a median 143m (small), 261m (mid) and 585m
    (big) over the same career selling nobody, against budgets of 15m, 40m and
-   90m, where the real club nearest the squad's level in the same league banked
-   a median 1.4m, 2.1m and 39.2m doing the same thing.
+   90m.
+
+   Priced by the rule below (scripts/simCustomClubValues.mjs, four seeds): a
+   founding's value a head is 0.76 to 1.45 (pooled p10 to p90) of the real
+   squads of its level in its league, a founder 0.87 to 1.03 of the real
+   players of his era, rating and age band, and the same sell off banks a p90
+   of 0.52 to 0.59 of the budget the tier handed over (small 7m, mid 22m, big
+   65m at the worst seed); the real clubs nearest the big tier's level (Celtic,
+   AZ, Southampton, Hull) bank 29m to 40m doing the same thing with the seven
+   men their squads can spare. The mid tier squad is 39.4m, the big 116.7m. A slider
+   88 squad is 1,436.5m today, because a team of 90s is what the market says
+   it is; the slider is not tied to the budget (Round 160), so that squad can
+   still outsell every tier, as a real squad of 90s would.
 
    THE RULE. A founder is worth what the real market pays for a player of his
    rating in his era. The measured ratio of real value to the raw curve over
