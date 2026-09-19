@@ -1,9 +1,15 @@
 # Project state
 
-## RELEASE 2026-09-19 afternoon: Round 638 part two (all 126 guides in keyword sections) and Round 641
+## LIVE 2026-09-19 afternoon: Round 638 part two (all 126 guides in keyword sections) and Round 641, main `02dd813e`
 
 Built and gated by the desktop Claude lane in the CRLF gate clone on branch `release-guides`, on top
-of main `91811008`.
+of main `91811008`, pushed as a fast forward. **douknowball.com is serving it:** deployment
+`99faefae-f863-4803-be85-f51bce6f1f3a`, called at 16:21 UTC only after `get_project` showed
+`latest_commit_sha` `02dd813e`; the entry moved from `index-Bv4ryYiK.js` to `index-UjziBKQk.js` by
+16:22:32 UTC. Proof on the live saved pages: `/nfl-my-career` 8 h2, 25 h3, 9 h4 under "How to play
+NFL My Career, a free online NFL career simulation game"; `/olympics`, `/f1-driver`, `/who-am-i` and
+`/wonderkid-factory` carry their new keyword h2s with 15 to 23 h3s each; `/whats-new/` carries the
+entry. `auditLive` 151 of 151 clean; IndexNow accepted all 151 sitemap URLs.
 
 - **638 part two, every game guide in keyword sections.** Fourteen writers (Sonnet 5, two at a time
   after a session limit killed the first wave) converted the remaining 107 guides, one sport file slice
