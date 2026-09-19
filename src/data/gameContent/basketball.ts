@@ -7,29 +7,113 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Most of this site asks you a question. This one asks you to make the shot. Ten jump shots, you back up on every single one, and there is a hand coming at you on nine of them.",
       "The whole game is the arc. A basket is a hole you drop the ball into from above, so how steeply the ball arrives decides how much room it has. Come in flat and there is almost nothing to go through. Come in steep and there is room, but you have to throw it harder to get there, and a hard release goes where it wants rather than where you pointed it.",
     ],
-    howToPlay: [
-      "Set the arc with the up and down arrows, or by dragging up and down on the court. The readout shows the angle you are shooting at.",
-      "Fade off the closeout with left and right. The ring in the corner shows where you are pointing across the hoop.",
-      "Hold space, or hold the shoot button, to load the strength bar, and let go. The bar sweeps up and down and you get the number you release on.",
-      "Ten shots a run, from the free throw line out past the arc, with a higher hand in your face every time.",
+    headings: {
+      howToPlay: "How to play Buzzer Beater, a free NBA jump shot arcade game",
+      rules: "Buzzer Beater rules for the arc, the bar and the hand",
+      example: "Buzzer Beater walkthrough: a free throw and a contested shot",
+      tips: "Buzzer Beater tips for arc, fade and release strength",
+      faq: "Buzzer Beater FAQ: daily shots, controls and the physics",
+    },
+    howToPlaySections: [
+      {
+        heading: "Dialing in the shot arc",
+        items: [
+          "Set the arc with the up and down arrows, or by dragging up and down on the court. The readout shows the angle you are shooting at.",
+        ],
+      },
+      {
+        heading: "Fading off the defender's hand",
+        items: [
+          "Fade off the closeout with left and right. The ring in the corner shows where you are pointing across the hoop.",
+        ],
+      },
+      {
+        heading: "Charging the release before you let go",
+        items: [
+          "Hold space, or hold the shoot button, to load the strength bar, and let go. The bar sweeps up and down and you get the number you release on.",
+        ],
+      },
+      {
+        heading: "Ten shots with the hand climbing higher",
+        items: [
+          "Ten shots a run, from the free throw line out past the arc, with a higher hand in your face every time.",
+        ],
+      },
     ],
-    rules: [
-      "The ring is 18 inches across on the inside and the ball is a little under 9 and a half, which is the real difference and the reason arc matters. Seen along your shot the ring keeps its width but loses its depth, so the room you have to be short or long shrinks as the shot flattens and runs out entirely near 32 degrees.",
-      "The strength bar is absolute, not a percentage of what this shot needs. The right place to stop it is different from the free throw line than it is from the arc, so there is no single spot that works all night.",
-      "A hard release sprays. It costs you accuracy side to side and a little pace either way, and the cost grows faster than the strength does, so the top of the bar is where the misses live.",
-      "The hand only blocks what stays low. Go over it, or fade off it, and either way you have given something up to do it.",
-      "Baskets pay by distance, by the hand you shot over and by how cleanly the ball went through. A free throw pays least.",
-      "The daily deals the same ten shots to everyone and keeps your score for the day. Unlimited deals fresh ones for ever.",
+    ruleSections: [
+      {
+        heading: "The ring, the ball and the shrinking window",
+        items: [
+          "The ring is 18 inches across on the inside and the ball is a little under 9 and a half, which is the real difference and the reason arc matters. Seen along your shot the ring keeps its width but loses its depth, so the room you have to be short or long shrinks as the shot flattens and runs out entirely near 32 degrees.",
+        ],
+      },
+      {
+        heading: "The strength bar has no single sweet spot",
+        items: [
+          "The strength bar is absolute, not a percentage of what this shot needs. The right place to stop it is different from the free throw line than it is from the arc, so there is no single spot that works all night.",
+        ],
+        subsections: [
+          {
+            heading: "Why a hard release sprays the shot",
+            items: [
+              "A hard release sprays. It costs you accuracy side to side and a little pace either way, and the cost grows faster than the strength does, so the top of the bar is where the misses live.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Going over the hand or fading around it",
+        items: [
+          "The hand only blocks what stays low. Go over it, or fade off it, and either way you have given something up to do it.",
+        ],
+      },
+      {
+        heading: "How each basket gets scored",
+        items: [
+          "Baskets pay by distance, by the hand you shot over and by how cleanly the ball went through. A free throw pays least.",
+        ],
+      },
+      {
+        heading: "Daily shots versus unlimited practice",
+        items: [
+          "The daily deals the same ten shots to everyone and keeps your score for the day. Unlimited deals fresh ones for ever.",
+        ],
+      },
     ],
-    example: [
-      "Shot one is a free throw with nobody near you. It only needs a gentle release, so a big arc costs you nothing: put it up around 60 degrees, stop the bar low, and the ball comes down almost on top of the ring with plenty of room.",
-      "Shot ten is 8.6 metres out with a hand reaching over three metres, closing to within a metre of you. That same 60 degree arc now has to be thrown hard enough to spray, so flatten it a little, clear the hand by the smallest margin you dare, and accept that this one is close to a coin flip. It is also worth about three times what the free throw paid.",
+    exampleSections: [
+      {
+        heading: "A free throw with nobody in your face",
+        paragraphs: [
+          "Shot one is a free throw with nobody near you. It only needs a gentle release, so a big arc costs you nothing: put it up around 60 degrees, stop the bar low, and the ball comes down almost on top of the ring with plenty of room.",
+        ],
+      },
+      {
+        heading: "A far shot with a hand closing in",
+        paragraphs: [
+          "Shot ten is 8.6 metres out with a hand reaching over three metres, closing to within a metre of you. That same 60 degree arc now has to be thrown hard enough to spray, so flatten it a little, clear the hand by the smallest margin you dare, and accept that this one is close to a coin flip. It is also worth about three times what the free throw paid.",
+        ],
+      },
     ],
-    tips: [
-      "High from close, flatter as you back up. It is the opposite of what feels right, and it is the single biggest thing to learn here.",
-      "Read the dashed line before you load the bar. It shows the shape this release would take with nothing going wrong, so if it is already passing under the ring, fix the arc rather than hoping.",
-      "The angle readout after every shot is the honest feedback. Anything under about 40 degrees was never going in, however well you aimed it.",
-      "Fading is expensive. Only fade when the hand is genuinely too high to go over, because every centimetre of fade is a centimetre off the middle of the ring.",
+    tipSections: [
+      {
+        heading: "Go high from close, flatten out further back",
+        items: [
+          "High from close, flatter as you back up. It is the opposite of what feels right, and it is the single biggest thing to learn here.",
+        ],
+      },
+      {
+        heading: "Trust the dashed line and the angle readout",
+        items: [
+          "Read the dashed line before you load the bar. It shows the shape this release would take with nothing going wrong, so if it is already passing under the ring, fix the arc rather than hoping.",
+          "The angle readout after every shot is the honest feedback. Anything under about 40 degrees was never going in, however well you aimed it.",
+        ],
+      },
+      {
+        heading: "Fading only when you truly have to",
+        items: [
+          "Fading is expensive. Only fade when the hand is genuinely too high to go over, because every centimetre of fade is a centimetre off the middle of the ring.",
+        ],
+      },
     ],
     faqs: [
       { q: 'Is the daily the same for everyone?', a: 'Yes. The ten shots come from the date, so every player gets the same run, and your score is kept for the day.' },
@@ -77,27 +161,106 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Somewhere in the NBA record books there is a season with the name scrubbed off. You get the decade, the position and the per 36 minute stat line. That is the whole case file.",
       "Name the player within 8 guesses. Clues drip out as you miss, and the pool runs from all time greats to guys only real heads remember.",
     ],
-    howToPlay: [
-      "Pick a difficulty. Stars is famous seasons rated 85 or higher, Deep Cuts covers starters and cult heroes rated 60 to 84.",
-      "Read the case file: era, position, minutes played, and points, rebounds and assists per 36 minutes.",
-      "Type 2 or more letters and pick a player from the suggestions.",
-      "Each miss unlocks a new clue, starting with the player's career span.",
-      "Name the player within 8 guesses to close the case.",
+    headings: {
+      howToPlay: "How to play Stat Detective, an NBA player guessing game",
+      rules: "Stat Detective rules for clues, guesses and the case file",
+      example: "Stat Detective walkthrough: cracking a case with two clues",
+      tips: "Stat Detective tips for reading stat lines like a detective",
+      faq: "Stat Detective FAQ: difficulty, clues and how cases repeat",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing Stars or Deep Cuts difficulty",
+        items: [
+          "Pick a difficulty. Stars is famous seasons rated 85 or higher, Deep Cuts covers starters and cult heroes rated 60 to 84.",
+        ],
+      },
+      {
+        heading: "Reading the case file's stat line",
+        items: [
+          "Read the case file: era, position, minutes played, and points, rebounds and assists per 36 minutes.",
+        ],
+      },
+      {
+        heading: "Typing a name and picking a suspect",
+        items: [
+          "Type 2 or more letters and pick a player from the suggestions.",
+        ],
+        subsections: [
+          {
+            heading: "How each miss unlocks a new clue",
+            items: [
+              "Each miss unlocks a new clue, starting with the player's career span.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Closing the case within eight guesses",
+        items: [
+          "Name the player within 8 guesses to close the case.",
+        ],
+      },
     ],
-    rules: [
-      "You get 8 guesses per case.",
-      "Wrong guesses show whether your guess ever played for the mystery player's franchise.",
-      "Clues unlock after every miss: career span, surname initial, franchise count, team, first initial, then the exact season after miss 6.",
-      "Steals and blocks only appear on cases from 1973-74 onward, because the league did not track them before that.",
+    ruleSections: [
+      {
+        heading: "Eight guesses to crack the case",
+        items: [
+          "You get 8 guesses per case.",
+        ],
+      },
+      {
+        heading: "What a wrong guess still tells you",
+        items: [
+          "Wrong guesses show whether your guess ever played for the mystery player's franchise.",
+        ],
+      },
+      {
+        heading: "The clue order from miss to miss",
+        items: [
+          "Clues unlock after every miss: career span, surname initial, franchise count, team, first initial, then the exact season after miss 6.",
+        ],
+      },
+      {
+        heading: "When steals and blocks start showing up",
+        items: [
+          "Steals and blocks only appear on cases from 1973-74 onward, because the league did not track them before that.",
+        ],
+      },
     ],
-    example: [
-      "The file says 1980s, point guard, 11 assists per 36. Your first guess misses, but the chip says shared franchise, so those two wore the same uniform at some point.",
-      "Then the career span clue narrows the field to one generation of playmakers. With the franchise hint on top, guess three closes the case.",
+    exampleSections: [
+      {
+        heading: "A first guess and the shared franchise chip",
+        paragraphs: [
+          "The file says 1980s, point guard, 11 assists per 36. Your first guess misses, but the chip says shared franchise, so those two wore the same uniform at some point.",
+        ],
+      },
+      {
+        heading: "Narrowing it down with the career span clue",
+        paragraphs: [
+          "Then the career span clue narrows the field to one generation of playmakers. With the franchise hint on top, guess three closes the case.",
+        ],
+      },
     ],
-    tips: [
-      "Do the era math first. A career span ending in 1991 rules out half your instincts.",
-      "The franchise chip is quiet gold. Relocations count as the same franchise, so a Sonics guess can match a Thunder mystery.",
-      "Big rebound numbers from the 1960s are inflated by pace. Do not assume only legends grabbed 15 boards.",
+    tipSections: [
+      {
+        heading: "Doing the era math before you guess",
+        items: [
+          "Do the era math first. A career span ending in 1991 rules out half your instincts.",
+        ],
+      },
+      {
+        heading: "Trusting the franchise chip across relocations",
+        items: [
+          "The franchise chip is quiet gold. Relocations count as the same franchise, so a Sonics guess can match a Thunder mystery.",
+        ],
+      },
+      {
+        heading: "Watching for pace inflated rebound numbers",
+        items: [
+          "Big rebound numbers from the 1960s are inflated by pace. Do not assume only legends grabbed 15 boards.",
+        ],
+      },
     ],
     faqs: [
       { q: "Why per 36 minutes instead of per game?", a: "The underlying season data stores totals and minutes, so per 36 rates are the honest version. They also make eras comparable, since a bench player's rate line reads the same as a starter's." },
@@ -111,29 +274,118 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Someone in NBA history put up this exact line. Your job is to rebuild it from parts: a target of points, rebounds and assists per 36 minutes, a shooting split, and in the modern eras steals and blocks too.",
       "You get five real player seasons, any five you can dig out of the record books. Their combined line is minutes weighted, so a 3,000 minute monster season pulls your blend way harder than a 600 minute cameo.",
     ],
-    howToPlay: [
-      "Pick a mode. Daily gives everyone the same target with one scored run per day, Unlimited deals a fresh target every time.",
-      "Read the target line. Every number is per 36 minutes, and the shooting split might be FG%, FT% or 3P% depending on the target.",
-      "Search any NBA player and pick one of their real seasons. Each pick shows its own per 36 line so you can see what it adds.",
-      "Watch your combined line update as you go. It is the minutes weighted blend of your five picks.",
-      "Fill all five slots, then submit for a similarity score out of 100.",
+    headings: {
+      howToPlay: "How to play NBA Stat Line, a daily basketball stat blending game",
+      rules: "NBA Stat Line rules for seasons, minutes and the shooting split",
+      example: "NBA Stat Line walkthrough: blending a high usage wing's target",
+      tips: "NBA Stat Line tips for leverage, archetypes and shooting splits",
+      faq: "NBA Stat Line FAQ: modes, minutes and eligible seasons",
+    },
+    howToPlaySections: [
+      {
+        heading: "Daily target or Unlimited practice",
+        items: [
+          "Pick a mode. Daily gives everyone the same target with one scored run per day, Unlimited deals a fresh target every time.",
+        ],
+      },
+      {
+        heading: "Reading FG%, FT% or 3P% in the target",
+        items: [
+          "Read the target line. Every number is per 36 minutes, and the shooting split might be FG%, FT% or 3P% depending on the target.",
+        ],
+      },
+      {
+        heading: "Searching real players and picking a season",
+        items: [
+          "Search any NBA player and pick one of their real seasons. Each pick shows its own per 36 line so you can see what it adds.",
+        ],
+      },
+      {
+        heading: "Watching your combined line update live",
+        items: [
+          "Watch your combined line update as you go. It is the minutes weighted blend of your five picks.",
+        ],
+      },
+      {
+        heading: "Submitting all five slots for a score",
+        items: [
+          "Fill all five slots, then submit for a similarity score out of 100.",
+        ],
+      },
     ],
-    rules: [
-      "Exactly five seasons per run, no season picked twice.",
-      "Only seasons with 500 or more minutes qualify, and combined traded rows do not appear, every pick is a real single team season.",
-      "When the target includes steals or blocks, only seasons from 1973-74 on can be picked, because the league did not track those stats before then. A 3P% target limits picks to 1979-80 on for the same reason.",
-      "The combined shooting split is recalculated from total makes and attempts across your five picks, never by averaging the five percentages.",
-      "Each stat scores by how close you land, and the final score is the average across all target stats. 90 or better counts as nailing the line.",
+    ruleSections: [
+      {
+        heading: "Five seasons, none repeated",
+        items: [
+          "Exactly five seasons per run, no season picked twice.",
+        ],
+      },
+      {
+        heading: "What counts as a qualifying season",
+        items: [
+          "Only seasons with 500 or more minutes qualify, and combined traded rows do not appear, every pick is a real single team season.",
+        ],
+      },
+      {
+        heading: "Older eras and stats the league never tracked",
+        items: [
+          "When the target includes steals or blocks, only seasons from 1973-74 on can be picked, because the league did not track those stats before then. A 3P% target limits picks to 1979-80 on for the same reason.",
+        ],
+      },
+      {
+        heading: "How the shooting split and final score are built",
+        items: [
+          "The combined shooting split is recalculated from total makes and attempts across your five picks, never by averaging the five percentages.",
+        ],
+        subsections: [
+          {
+            heading: "What ninety or better means",
+            items: [
+              "Each stat scores by how close you land, and the final score is the average across all target stats. 90 or better counts as nailing the line.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "The target reads 24.1 points, 6.0 rebounds, 4.5 assists, 1.3 steals, 0.4 blocks and 48.2 FG% per 36. That smells like a high usage wing, so you grab two scoring guards from the 1990s.",
-      "Your blend sits at 27 points and only 4 rebounds, too hot and too thin on the glass. You round it out with a glue forward and two mid usage seasons, submit at 24.8 and 5.7, and land a 91.",
+    exampleSections: [
+      {
+        heading: "Chasing a high usage wing's target line",
+        paragraphs: [
+          "The target reads 24.1 points, 6.0 rebounds, 4.5 assists, 1.3 steals, 0.4 blocks and 48.2 FG% per 36. That smells like a high usage wing, so you grab two scoring guards from the 1990s.",
+        ],
+      },
+      {
+        heading: "Rounding out the blend to land a 91",
+        paragraphs: [
+          "Your blend sits at 27 points and only 4 rebounds, too hot and too thin on the glass. You round it out with a glue forward and two mid usage seasons, submit at 24.8 and 5.7, and land a 91.",
+        ],
+      },
     ],
-    tips: [
-      "Minutes are leverage. If your line is close, add low minute seasons so the blend barely moves; if it is way off, a heavy minute season drags it fastest.",
-      "Do not chase one stat at a time. Every pick moves all six numbers, so think in archetypes: scorers, rebounders, connectors.",
-      "Old big man seasons are rebound rocket fuel, 1960s pace inflated boards for everyone. One pick from that era can fix a rebound deficit on its own.",
-      "The shooting split blends by attempts, not evenly. A high volume shooter moves your percentage much more than a low volume one at the same clip.",
+    tipSections: [
+      {
+        heading: "Using minutes as leverage on the blend",
+        items: [
+          "Minutes are leverage. If your line is close, add low minute seasons so the blend barely moves; if it is way off, a heavy minute season drags it fastest.",
+        ],
+      },
+      {
+        heading: "Thinking in scorer, rebounder and connector archetypes",
+        items: [
+          "Do not chase one stat at a time. Every pick moves all six numbers, so think in archetypes: scorers, rebounders, connectors.",
+        ],
+      },
+      {
+        heading: "Old big man seasons as rebound rocket fuel",
+        items: [
+          "Old big man seasons are rebound rocket fuel, 1960s pace inflated boards for everyone. One pick from that era can fix a rebound deficit on its own.",
+        ],
+      },
+      {
+        heading: "Why attempts drive your final percentage",
+        items: [
+          "The shooting split blends by attempts, not evenly. A high volume shooter moves your percentage much more than a low volume one at the same clip.",
+        ],
+      },
     ],
     faqs: [
       { q: "Why per 36 minutes instead of per game?", a: "Per game averages need games played, and the historical season data here stores totals and minutes without game counts. Per 36 rates are exact from what the record does carry, and they make a 1965 season and a 2025 season readable on the same scale." },
@@ -148,28 +400,112 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "One spin sets the mission: build a starting five with the highest career scoring, or the lowest, or whatever the stat wheel demands.",
       "The catch: each of your five picks must come from a random NBA franchise, so your plan is only as good as your memory of who played where.",
     ],
-    howToPlay: [
-      "Spin the stat challenge. It might be highest career PPG, lowest career fouls, most championships, tallest lineup, anything from a pool of 13 stats.",
-      "Pick one of the five positions: PG, SG, SF, PF or C.",
-      "A random NBA team appears. Name a player who suited up for that franchise, picking from the suggestions as you type.",
-      "Repeat until all five slots are filled, watching your running stat total.",
-      "Submit the lineup for a verdict: a rating, a headline and a short breakdown.",
+    headings: {
+      howToPlay: "How to play NBA Starting 5, a franchise lineup guessing game",
+      rules: "NBA Starting 5 rules for slots, teams and rerolls",
+      example: "NBA Starting 5 walkthrough: an easy pick and two rude ones",
+      tips: "NBA Starting 5 tips for journeymen and reading the challenge",
+      faq: "NBA Starting 5 FAQ: player pool, positions and verdicts",
+    },
+    howToPlaySections: [
+      {
+        heading: "Spinning the stat challenge",
+        items: [
+          "Spin the stat challenge. It might be highest career PPG, lowest career fouls, most championships, tallest lineup, anything from a pool of 13 stats.",
+        ],
+      },
+      {
+        heading: "Choosing a position to fill",
+        items: [
+          "Pick one of the five positions: PG, SG, SF, PF or C.",
+        ],
+      },
+      {
+        heading: "Naming a player from the random team",
+        items: [
+          "A random NBA team appears. Name a player who suited up for that franchise, picking from the suggestions as you type.",
+        ],
+      },
+      {
+        heading: "Filling all five slots and tracking your total",
+        items: [
+          "Repeat until all five slots are filled, watching your running stat total.",
+        ],
+      },
+      {
+        heading: "Submitting the lineup for a verdict",
+        items: [
+          "Submit the lineup for a verdict: a rating, a headline and a short breakdown.",
+        ],
+      },
     ],
-    rules: [
-      "Five slots, one random team per pick, drawn from all 30 NBA franchises.",
-      "Only players who really played for the shown team will appear in the suggestions.",
-      "Guards fill PG or SG, forwards fill SF or PF, centers fill C.",
-      "No player can appear twice in one lineup.",
-      "Hit reroll to swap the current team, as often as you like.",
+    ruleSections: [
+      {
+        heading: "Five slots drawn from thirty franchises",
+        items: [
+          "Five slots, one random team per pick, drawn from all 30 NBA franchises.",
+        ],
+      },
+      {
+        heading: "Suggestions only show real former players",
+        items: [
+          "Only players who really played for the shown team will appear in the suggestions.",
+        ],
+        subsections: [
+          {
+            heading: "How guards, forwards and centers slot in",
+            items: [
+              "Guards fill PG or SG, forwards fill SF or PF, centers fill C.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "No repeating a player in one lineup",
+        items: [
+          "No player can appear twice in one lineup.",
+        ],
+      },
+      {
+        heading: "Rerolling a team as often as you like",
+        items: [
+          "Hit reroll to swap the current team, as often as you like.",
+        ],
+      },
     ],
-    example: [
-      "The wheel says highest career PPG. Your first slot is SG from the Bulls, and you do not overthink Michael Jordan.",
-      "Then it gets rude: PF from the Grizzlies, C from the Hornets. You dig up the best scorers you can remember, submit a total in the high 90s, and the verdict roasts your weakest link.",
+    exampleSections: [
+      {
+        heading: "An easy call at shooting guard",
+        paragraphs: [
+          "The wheel says highest career PPG. Your first slot is SG from the Bulls, and you do not overthink Michael Jordan.",
+        ],
+      },
+      {
+        heading: "Two tougher franchises and a rough verdict",
+        paragraphs: [
+          "Then it gets rude: PF from the Grizzlies, C from the Hornets. You dig up the best scorers you can remember, submit a total in the high 90s, and the verdict roasts your weakest link.",
+        ],
+      },
     ],
-    tips: [
-      "Read the direction twice. On a lowest challenge, the stars you love are suddenly poison.",
-      "Journeymen are cheat codes. A player with five career stops gives you outs on five different team spins.",
-      "Reroll early, not late. A bad team fit hurts more when only one slot is left.",
+    tipSections: [
+      {
+        heading: "Reading the challenge direction twice",
+        items: [
+          "Read the direction twice. On a lowest challenge, the stars you love are suddenly poison.",
+        ],
+      },
+      {
+        heading: "Journeymen as a five team cheat code",
+        items: [
+          "Journeymen are cheat codes. A player with five career stops gives you outs on five different team spins.",
+        ],
+      },
+      {
+        heading: "Rerolling early instead of late",
+        items: [
+          "Reroll early, not late. A bad team fit hurts more when only one slot is left.",
+        ],
+      },
     ],
     faqs: [
       { q: "Do the players have to be current?", a: "No. The pool spans thousands of players across NBA history, as long as they played for the shown franchise." },
@@ -183,28 +519,112 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Connect 4 with receipts. The board is the classic 7 wide by 6 tall grid, but you cannot just drop a piece. You have to earn the cell with an NBA answer.",
       "Every column and row carries a label, things like Lakers, MVP Winner or 20+ PPG Career. To claim a cell, you need one player who matches both.",
     ],
-    howToPlay: [
-      "Grab a friend. It is a two player game, red against blue, on one screen.",
-      "On your turn, pick a column. Your piece will fall to the lowest empty row.",
-      "That landing spot commits you to two labels: the column's and the row's.",
-      "Name an NBA player who fits both. A fact check reviews the claim before the piece is placed.",
-      "First to four in a row wins: across, down or diagonal.",
+    headings: {
+      howToPlay: "How to play NBA Connect 4, a two player basketball trivia game",
+      rules: "NBA Connect 4 rules for the grid, names and rejected answers",
+      example: "NBA Connect 4 walkthrough: a Warriors clear and a Lakers block",
+      tips: "NBA Connect 4 tips for reading rows and burning answers early",
+      faq: "NBA Connect 4 FAQ: solo play, wrong calls and board variety",
+    },
+    howToPlaySections: [
+      {
+        heading: "Grabbing a friend for two player play",
+        items: [
+          "Grab a friend. It is a two player game, red against blue, on one screen.",
+        ],
+      },
+      {
+        heading: "Picking a column and watching the piece fall",
+        items: [
+          "On your turn, pick a column. Your piece will fall to the lowest empty row.",
+        ],
+        subsections: [
+          {
+            heading: "Committing to the column's and row's labels",
+            items: [
+              "That landing spot commits you to two labels: the column's and the row's.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Naming a player and passing the fact check",
+        items: [
+          "Name an NBA player who fits both. A fact check reviews the claim before the piece is placed.",
+        ],
+      },
+      {
+        heading: "Winning with four in a row",
+        items: [
+          "First to four in a row wins: across, down or diagonal.",
+        ],
+      },
     ],
-    rules: [
-      "The grid is 7 columns by 6 rows, each with its own trivia label.",
-      "Each player name can only be used once per game, by either side.",
-      "A rejected answer does not place a piece and does not end your turn. Try someone else or hit skip.",
-      "Fill all 42 cells with no winner and it is a draw.",
+    ruleSections: [
+      {
+        heading: "A seven by six grid of trivia labels",
+        items: [
+          "The grid is 7 columns by 6 rows, each with its own trivia label.",
+        ],
+      },
+      {
+        heading: "Each player name usable once by either side",
+        items: [
+          "Each player name can only be used once per game, by either side.",
+        ],
+      },
+      {
+        heading: "What a rejected answer costs you",
+        items: [
+          "A rejected answer does not place a piece and does not end your turn. Try someone else or hit skip.",
+        ],
+      },
+      {
+        heading: "Filling all forty two cells with no winner",
+        items: [
+          "Fill all 42 cells with no winner and it is a draw.",
+        ],
+      },
     ],
-    example: [
-      "You drop into the Warriors column and the landing row says Champion. Andre Iguodala fits both, the check clears it, and your red piece locks in.",
-      "Later, blue needs the Lakers column to block you, but the waiting row says DPOY Winner and they blank. They skip, you finish the diagonal.",
+    exampleSections: [
+      {
+        heading: "Clearing the Warriors and Champion crossing",
+        paragraphs: [
+          "You drop into the Warriors column and the landing row says Champion. Andre Iguodala fits both, the check clears it, and your red piece locks in.",
+        ],
+      },
+      {
+        heading: "Blue blanks on Lakers and DPOY Winner",
+        paragraphs: [
+          "Later, blue needs the Lakers column to block you, but the waiting row says DPOY Winner and they blank. They skip, you finish the diagonal.",
+        ],
+      },
     ],
-    tips: [
-      "Think one row ahead. The label your piece lands on changes as the column fills.",
-      "Burn common answers early. If both of you are saving the same superstar, whoever needs him second is stuck.",
-      "Play the board, not just the trivia. A boring cell that blocks four in a row beats a clever one that does not.",
-      "The skip button is a real move. Losing a turn beats feeding a wrong guess streak.",
+    tipSections: [
+      {
+        heading: "Thinking one row ahead as columns fill",
+        items: [
+          "Think one row ahead. The label your piece lands on changes as the column fills.",
+        ],
+      },
+      {
+        heading: "Burning common answers before your rival does",
+        items: [
+          "Burn common answers early. If both of you are saving the same superstar, whoever needs him second is stuck.",
+        ],
+      },
+      {
+        heading: "Playing the board and not just the trivia",
+        items: [
+          "Play the board, not just the trivia. A boring cell that blocks four in a row beats a clever one that does not.",
+        ],
+      },
+      {
+        heading: "Treating skip as a real move",
+        items: [
+          "The skip button is a real move. Losing a turn beats feeding a wrong guess streak.",
+        ],
+      },
     ],
     faqs: [
       { q: "Can I play alone?", a: "There is no bot, so solo play means running both sides. It works fine as trivia practice." },
@@ -218,28 +638,112 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Every NBA career is a web of teammates, and this game makes you walk it. Start from one star, then name a teammate of his, then a teammate of that guy, on and on.",
       "One wrong link ends the run. The deeper you go, the more names you burn, and the more you find yourself trading superstars for that one backup center who played everywhere.",
     ],
-    howToPlay: [
-      "The game hands you a starting player, someone famous like LeBron James or Kevin Garnett.",
-      "Name any player who was an NBA teammate of the current player.",
-      "The link gets verified, and the shared team shows up on the chain.",
-      "Keep adding links. Each new player must connect to the one right before them.",
-      "Play Endless to chase a record, or Round mode for a fixed 10 pick challenge against par.",
+    headings: {
+      howToPlay: "How to play NBA Chain, a free teammate connection game",
+      rules: "NBA Chain rules for links, mistakes and the two modes",
+      example: "NBA Chain walkthrough: from Dirk Nowitzki to a broken link",
+      tips: "NBA Chain tips for journeymen and playing it safe",
+      faq: "NBA Chain FAQ: teammates, verification and saved streaks",
+    },
+    howToPlaySections: [
+      {
+        heading: "Starting from a famous first player",
+        items: [
+          "The game hands you a starting player, someone famous like LeBron James or Kevin Garnett.",
+        ],
+      },
+      {
+        heading: "Naming a teammate of the current player",
+        items: [
+          "Name any player who was an NBA teammate of the current player.",
+        ],
+        subsections: [
+          {
+            heading: "How the link gets verified and shown",
+            items: [
+              "The link gets verified, and the shared team shows up on the chain.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Connecting each new link to the last",
+        items: [
+          "Keep adding links. Each new player must connect to the one right before them.",
+        ],
+      },
+      {
+        heading: "Choosing Endless or Round mode",
+        items: [
+          "Play Endless to chase a record, or Round mode for a fixed 10 pick challenge against par.",
+        ],
+      },
     ],
-    rules: [
-      "A wrong link ends the game instantly. So does repeating any player already in the chain.",
-      "Endless mode: build until you break, and your best streak saves on your device.",
-      "Round mode: exactly 10 picks, with par set at 7.",
-      "You can end a run voluntarily and bank the score.",
+    ruleSections: [
+      {
+        heading: "What instantly ends a run",
+        items: [
+          "A wrong link ends the game instantly. So does repeating any player already in the chain.",
+        ],
+      },
+      {
+        heading: "Endless mode and its saved streak",
+        items: [
+          "Endless mode: build until you break, and your best streak saves on your device.",
+        ],
+      },
+      {
+        heading: "Round mode's ten picks and par of seven",
+        items: [
+          "Round mode: exactly 10 picks, with par set at 7.",
+        ],
+      },
+      {
+        heading: "Banking a score before you risk it",
+        items: [
+          "You can end a run voluntarily and bank the score.",
+        ],
+      },
     ],
-    example: [
-      "Start: Dirk Nowitzki. You go Jason Kidd from the title Mavs, then from Kidd's Nets years you pull Vince Carter, and from Carter's Raptors days you grab Tracy McGrady.",
-      "Eight links deep, you gamble on a teammate you half remember. No shared team. Chain of 8.",
+    exampleSections: [
+      {
+        heading: "Starting from Dirk Nowitzki and the title Mavs",
+        paragraphs: [
+          "Start: Dirk Nowitzki. You go Jason Kidd from the title Mavs, then from Kidd's Nets years you pull Vince Carter, and from Carter's Raptors days you grab Tracy McGrady.",
+        ],
+      },
+      {
+        heading: "Gambling on a half remembered teammate",
+        paragraphs: [
+          "Eight links deep, you gamble on a teammate you half remember. No shared team. Chain of 8.",
+        ],
+      },
     ],
-    tips: [
-      "Route through journeymen. A guy with six career stops opens six directions.",
-      "Long careers are bridges between eras. Veterans who played 18 plus seasons connect generations.",
-      "Do not chain into a dead end. A one team legend late in the run leaves you only his teammates.",
-      "In Round mode you just need 10 clean links, so take the safest connection every time.",
+    tipSections: [
+      {
+        heading: "Routing through six stop journeymen",
+        items: [
+          "Route through journeymen. A guy with six career stops opens six directions.",
+        ],
+      },
+      {
+        heading: "Long careers as bridges between eras",
+        items: [
+          "Long careers are bridges between eras. Veterans who played 18 plus seasons connect generations.",
+        ],
+      },
+      {
+        heading: "Avoiding a one team dead end",
+        items: [
+          "Do not chain into a dead end. A one team legend late in the run leaves you only his teammates.",
+        ],
+      },
+      {
+        heading: "Playing it safe in Round mode",
+        items: [
+          "In Round mode you just need 10 clean links, so take the safest connection every time.",
+        ],
+      },
     ],
     faqs: [
       { q: "What counts as teammates?", a: "The two players must have shared an NBA team, and the check tells you which one. Overlapping on the roster is the standard, so pick pairs you are sure actually crossed paths." },
@@ -253,29 +757,118 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Two legends, one question: who scored more career points? That is the entire game, and it is much harder than it sounds.",
       "The pool is the top 80 scorers in NBA history, so there are no easy outs. Everyone on screen scored a mountain of points. You are just deciding whose mountain is taller.",
     ],
-    howToPlay: [
-      "Look at the two player cards: name, position, franchises and final season.",
-      "Tap the player you think finished with more career points.",
-      "The totals flip over, your answer gets marked, and the next pair loads.",
-      "Survive all 10 rounds and post your score.",
-      "Play the Daily, then switch to Unlimited if you want more.",
+    headings: {
+      howToPlay: "How to play NBA Higher or Lower, a daily scoring trivia game",
+      rules: "NBA Higher or Lower rules for rounds, streaks and ties",
+      example: "NBA Higher or Lower walkthrough: Kobe, Jordan and era math",
+      tips: "NBA Higher or Lower tips for longevity and guarding streaks",
+      faq: "NBA Higher or Lower FAQ: scoring totals and the player pool",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the two player cards",
+        items: [
+          "Look at the two player cards: name, position, franchises and final season.",
+        ],
+      },
+      {
+        heading: "Tapping the player with more career points",
+        items: [
+          "Tap the player you think finished with more career points.",
+        ],
+      },
+      {
+        heading: "Watching the totals flip and the next pair load",
+        items: [
+          "The totals flip over, your answer gets marked, and the next pair loads.",
+        ],
+      },
+      {
+        heading: "Surviving all ten rounds",
+        items: [
+          "Survive all 10 rounds and post your score.",
+        ],
+      },
+      {
+        heading: "Playing Daily then switching to Unlimited",
+        items: [
+          "Play the Daily, then switch to Unlimited if you want more.",
+        ],
+      },
     ],
-    rules: [
-      "Each game is 10 rounds, and every correct answer is worth 10 points.",
-      "Consecutive correct answers earn a growing streak bonus. A perfect 10 for 10 run scores 325.",
-      "Exact ties count as correct no matter which side you pick.",
-      "Daily mode serves everyone the same pairs, once per day, with a fresh set every day at midnight Eastern.",
-      "Hard mode pairs players with close totals, and it only applies in Unlimited.",
+    ruleSections: [
+      {
+        heading: "Ten rounds worth ten points each",
+        items: [
+          "Each game is 10 rounds, and every correct answer is worth 10 points.",
+        ],
+      },
+      {
+        heading: "How the streak bonus grows",
+        items: [
+          "Consecutive correct answers earn a growing streak bonus. A perfect 10 for 10 run scores 325.",
+        ],
+        subsections: [
+          {
+            heading: "Why exact ties always count",
+            items: [
+              "Exact ties count as correct no matter which side you pick.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Daily mode's shared pairs at midnight",
+        items: [
+          "Daily mode serves everyone the same pairs, once per day, with a fresh set every day at midnight Eastern.",
+        ],
+      },
+      {
+        heading: "Hard mode in Unlimited only",
+        items: [
+          "Hard mode pairs players with close totals, and it only applies in Unlimited.",
+        ],
+      },
     ],
-    example: [
-      "Round one gives you Kobe Bryant against Michael Jordan. Feels like a coin flip, but Kobe played 20 seasons and finished ahead, 33,643 to 32,292.",
-      "Then comes a 1960s name against a 2010s star, and era math takes over. An eight answer streak builds, round nine snaps it, and you close at 230.",
+    exampleSections: [
+      {
+        heading: "Kobe Bryant against Michael Jordan",
+        paragraphs: [
+          "Round one gives you Kobe Bryant against Michael Jordan. Feels like a coin flip, but Kobe played 20 seasons and finished ahead, 33,643 to 32,292.",
+        ],
+      },
+      {
+        heading: "Era math and a streak that snaps",
+        paragraphs: [
+          "Then comes a 1960s name against a 2010s star, and era math takes over. An eight answer streak builds, round nine snaps it, and you close at 230.",
+        ],
+      },
     ],
-    tips: [
-      "Longevity beats peak. A 19 year career of good scoring usually outpoints a short brilliant one.",
-      "Check the final season on the card. It quietly tells you how long the career ran.",
-      "Multiple franchises often means a long career, which means more total points.",
-      "Guard your streak late. Rounds eight through ten carry the biggest bonuses.",
+    tipSections: [
+      {
+        heading: "Longevity usually beats a short peak",
+        items: [
+          "Longevity beats peak. A 19 year career of good scoring usually outpoints a short brilliant one.",
+        ],
+      },
+      {
+        heading: "Reading the final season for career length",
+        items: [
+          "Check the final season on the card. It quietly tells you how long the career ran.",
+        ],
+      },
+      {
+        heading: "Multiple franchises as a longevity clue",
+        items: [
+          "Multiple franchises often means a long career, which means more total points.",
+        ],
+      },
+      {
+        heading: "Guarding your streak in the final rounds",
+        items: [
+          "Guard your streak late. Rounds eight through ten carry the biggest bonuses.",
+        ],
+      },
     ],
     faqs: [
       { q: "Is it always career points?", a: "Yes, this one is pure career regular season scoring totals. No averages, no playoff points, just the full body of work." },
@@ -289,29 +882,118 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       "Nine cells, nine guesses, zero mercy. This is the NBA team grid formula: every cell sits at the crossroads of a row and a column, and you need one player whose career satisfies both.",
       "Sometimes that means two franchises, sometimes a franchise plus a milestone like 10,000 points. The obvious names run out fast.",
     ],
-    howToPlay: [
-      "Read the three row labels and three column labels. They are NBA franchises or career milestones.",
-      "Tap any empty cell and type a player name.",
-      "Pick from the suggestions. If the career matches both labels, the cell turns green.",
-      "A wrong answer costs one of your 9 guesses and leaves the cell empty.",
-      "Fill all nine cells before the guesses run out.",
+    headings: {
+      howToPlay: "How to play NBA Franchise Grid, a daily basketball guessing game",
+      rules: "NBA Franchise Grid rules for guesses, franchises and milestones",
+      example: "NBA Franchise Grid walkthrough: Shaquille O'Neal and Scottie Pippen",
+      tips: "NBA Franchise Grid tips for scanning and milestone journeymen",
+      faq: "NBA Franchise Grid FAQ: answers, difficulty and daily resets",
+    },
+    howToPlaySections: [
+      {
+        heading: "Reading the row and column labels",
+        items: [
+          "Read the three row labels and three column labels. They are NBA franchises or career milestones.",
+        ],
+      },
+      {
+        heading: "Tapping a cell and typing a name",
+        items: [
+          "Tap any empty cell and type a player name.",
+        ],
+      },
+      {
+        heading: "Picking a suggestion that matches both labels",
+        items: [
+          "Pick from the suggestions. If the career matches both labels, the cell turns green.",
+        ],
+      },
+      {
+        heading: "What a wrong answer costs you",
+        items: [
+          "A wrong answer costs one of your 9 guesses and leaves the cell empty.",
+        ],
+      },
+      {
+        heading: "Filling all nine cells before guesses run out",
+        items: [
+          "Fill all nine cells before the guesses run out.",
+        ],
+      },
     ],
-    rules: [
-      "You get 9 total guesses for 9 cells, so a perfect game has zero misses.",
-      "Each player can only be used once per grid.",
-      "Categories come from a pool of 16 franchises plus three milestones: 10,000+ career points, 5,000+ career rebounds and 900+ games played.",
-      "The daily grid is the same for everyone and your progress saves. A new one drops every day at midnight Eastern.",
-      "Unlimited mode adds difficulty tiers: easy uses two milestone lines, normal uses one, hard is all franchises.",
+    ruleSections: [
+      {
+        heading: "Nine guesses for nine cells",
+        items: [
+          "You get 9 total guesses for 9 cells, so a perfect game has zero misses.",
+        ],
+      },
+      {
+        heading: "Each player usable once per grid",
+        items: [
+          "Each player can only be used once per grid.",
+        ],
+      },
+      {
+        heading: "The pool of franchises and milestones",
+        items: [
+          "Categories come from a pool of 16 franchises plus three milestones: 10,000+ career points, 5,000+ career rebounds and 900+ games played.",
+        ],
+      },
+      {
+        heading: "The daily grid and its saved progress",
+        items: [
+          "The daily grid is the same for everyone and your progress saves. A new one drops every day at midnight Eastern.",
+        ],
+        subsections: [
+          {
+            heading: "Unlimited mode's difficulty tiers",
+            items: [
+              "Unlimited mode adds difficulty tiers: easy uses two milestone lines, normal uses one, hard is all franchises.",
+            ],
+          },
+        ],
+      },
     ],
-    example: [
-      "Top left wants Lakers plus Celtics. You take a second, then remember Shaquille O'Neal finished up in Boston. Green.",
-      "Next, Bulls plus 10,000+ career points. Jordan is the reflex, but you save him in case a tougher Bulls cell shows up, and spend Scottie Pippen instead. That little hesitation is the whole game.",
+    exampleSections: [
+      {
+        heading: "Lakers and Celtics resolved by Shaquille O'Neal",
+        paragraphs: [
+          "Top left wants Lakers plus Celtics. You take a second, then remember Shaquille O'Neal finished up in Boston. Green.",
+        ],
+      },
+      {
+        heading: "Saving Jordan and spending Scottie Pippen instead",
+        paragraphs: [
+          "Next, Bulls plus 10,000+ career points. Jordan is the reflex, but you save him in case a tougher Bulls cell shows up, and spend Scottie Pippen instead. That little hesitation is the whole game.",
+        ],
+      },
     ],
-    tips: [
-      "Scan the full grid before guessing. The hardest intersection should get your rarest player.",
-      "Journeymen with 900+ games are the milestone cheat code, and they are rarely anyone's first thought.",
-      "Answers check against career data instantly, so this is a memory game, not a debate.",
-      "Short careers ruin milestone cells. A five year star probably misses the games played bar.",
+    tipSections: [
+      {
+        heading: "Scanning the grid before your first guess",
+        items: [
+          "Scan the full grid before guessing. The hardest intersection should get your rarest player.",
+        ],
+      },
+      {
+        heading: "Journeymen as the milestone cheat code",
+        items: [
+          "Journeymen with 900+ games are the milestone cheat code, and they are rarely anyone's first thought.",
+        ],
+      },
+      {
+        heading: "Trusting the instant career data check",
+        items: [
+          "Answers check against career data instantly, so this is a memory game, not a debate.",
+        ],
+      },
+      {
+        heading: "Why short careers struggle with milestones",
+        items: [
+          "Short careers ruin milestone cells. A five year star probably misses the games played bar.",
+        ],
+      },
     ],
     faqs: [
       { q: "Does every cell have an answer?", a: "Yes. Every pairing in the pool has at least 25 qualifying players, so a blank cell is a you problem, not a board problem." },
