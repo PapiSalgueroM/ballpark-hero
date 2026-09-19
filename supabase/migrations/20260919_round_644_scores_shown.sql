@@ -79,8 +79,12 @@
 -- disagree with the rows it sums (19,857 points short, see
 -- 20260914120000_record_auth_completion.sql), how historical points are
 -- treated is an open owner decision, and Round 648 is claimed to rebuild the
--- profile total with each record clamped at its game's cap. That round reads
--- user_game_scores, which is why those rows must be on the new scale first.
+-- profile total with each record clamped at its game's cap. If it builds from
+-- user_game_scores, an old 800 left unrescaled would clamp to a full 100 under
+-- the new cap, which is one more reason those rows move to the new scale here.
+-- The browser's own lifetime points (src/lib/streaks.ts, backed up to
+-- profiles.streak_state) also summed raw scores; it lives in each browser and
+-- is not rewritten.
 --
 -- ORDER OF OPERATIONS, because the client and the database do not switch at
 -- the same instant. Old scale rows are always multiples of 50 from 0 to 1000,
