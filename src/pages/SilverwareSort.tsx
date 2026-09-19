@@ -74,7 +74,7 @@ const SilverwareSort = () => {
               <li>Two tries per board. Rungs you get right on the first try lock in green for the second.</li>
               <li>One point per correct rung, three boards a day, same boards for everyone.</li>
               <li>No two teams on a board are ever tied, so there is always exactly one right order.</li>
-              <li>Counts follow our Record Books: a title belongs to the name the club wore at the time, so South Melbourne and Sydney count separately.</li>
+              <li>Counts follow the names as our Record Books write them, so South Melbourne and Sydney count separately.</li>
             </ul>
             <p className="font-semibold text-foreground">Worked example:</p>
             <p>Handed the Yankees, the Cardinals, the Dodgers, the Cubs and the Marlins on a World Series board, the stack is Yankees 27 up top, then the Cardinals 11, the Dodgers, the Cubs, and the Marlins at the bottom with 2. The reveal always shows every count.</p>
@@ -204,7 +204,7 @@ const SilverwareSort = () => {
         )}
 
         <p className="text-center text-xs text-muted-foreground mt-6">
-          Arguing with a count? <Link to="/records" className="text-primary hover:underline">The Record Books</Link> list every title year by year.
+          Arguing with a count? <Link to="/records" className="text-primary hover:underline">The Record Books</Link> list the titles year by year.
         </p>
 
         <GameSeoContent
@@ -221,7 +221,7 @@ const SilverwareSort = () => {
           examples={[
             'A World Series board: Yankees over Cardinals over Dodgers is the easy top half, the bottom two are where runs die',
             'An AFL board will never deal Essendon, Carlton and Collingwood together: all three sit on 16 flags, and tied teams never share a board',
-            'Counts follow the name the club wore at the time, same as our Record Books: South Melbourne and Sydney count separately',
+            'Counts follow the names as our Record Books write them: South Melbourne and Sydney count separately',
           ]}
         />
 

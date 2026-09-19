@@ -57,7 +57,7 @@ const Records = () => {
   return (
     <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
       <PageSeo
-        title="The Record Books: Champions by Year in Every Sport | DoUKnowBall"
+        title={`The Record Books: Champions by Year in ${RECORD_SECTIONS.length} Competitions | DoUKnowBall`}
         description="Champions by year for the Super Bowl, NBA, World Series, Stanley Cup, WNBA, college football and basketball, English soccer, the AFL and the NRL, all in one place."
         path="/records"
       />

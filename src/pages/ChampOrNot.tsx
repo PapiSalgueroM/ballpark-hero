@@ -180,7 +180,7 @@ const ChampOrNot = () => {
         )}
 
         <p className="text-center text-xs text-muted-foreground mt-6">
-          Want the source material? <Link to="/records" className="text-primary hover:underline">Browse the full Record Books</Link>, every champion year by year.
+          Want the source material? <Link to="/records" className="text-primary hover:underline">Browse the Record Books</Link>, champions by year for every competition we keep.
         </p>
 
         <GameSeoContent

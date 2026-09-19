@@ -1330,9 +1330,9 @@ export const WORLD_CONTENT: GameContentMap = {
         ],
         subsections: [
           {
-            heading: "Counting titles under the name worn at the time",
+            heading: "Counting titles under the names our Record Books use",
             items: [
-              "Counts follow the name the club wore at the time, the same convention as our Record Books and Name Them All: South Melbourne's flags and Sydney's flags are separate stacks.",
+              "Counts follow the names as our Record Books and Name Them All write them: South Melbourne's flags and Sydney's flags are separate stacks.",
             ],
           },
         ],

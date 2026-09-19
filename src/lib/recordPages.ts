@@ -23,7 +23,7 @@ import type { RecordRow, RecordSection } from '@/lib/records';
  * THE SPAN RULE (Round 649 review). Several tables start after the competition
  * did: the Stanley Cup rows begin in 1915, college football's in 1981. So every
  * heading, fact and link that could read as all time names the span instead:
- * "since 1915", "earliest season listed". That is true for a table that starts at
+ * "since 1915", "earliest year listed". That is true for a table that starts at
  * the competition's first season too, so one rule serves all twelve and nothing
  * keeps a list of which tables are short.
  *
@@ -142,6 +142,21 @@ export function yearRanges(years: number[]): string {
 }
 
 export const capFirst = (s: string): string => s.charAt(0).toUpperCase() + s.slice(1);
+
+/** What a row's year IS, from the section's own column label: "year" on a Year
+ *  table (the Super Bowl is keyed by the year the game was played, not the
+ *  season it closed), "season" only where the column says Season. */
+export const yearNounOf = (def: RecordSection): string => def.yearLabel.toLowerCase();
+
+/** A decade's heading. A first decade the rows only partly cover says so
+ *  ("Stanley Cup winners from 1915 to 1919", "English football champions in
+ *  1889") instead of naming a whole decade the table does not hold. */
+export function decadeHeading(def: RecordSection, start: number, first: number, latest: number): string {
+  const many = capFirst(def.words.many);
+  if (first <= start) return `${many} in the ${start}s`;
+  const end = Math.min(start + 9, latest);
+  return first === end ? `${many} in ${first}` : `${many} from ${first} to ${end}`;
+}
 
 /** The first year a section's rows hold, which every span bound phrase is built on. */
 export const firstYearOf = (rows: RecordRow[]): number =>

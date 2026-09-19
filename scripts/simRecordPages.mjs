@@ -29,13 +29,17 @@
  *   3. The most titles table. Recounted here from the JSON, per name exactly as
  *      written: every name with two or more listed, ties never split, counts and
  *      years exact, the "names appear once" line agreeing with the rest.
- *   4. The derived facts, span bound: seasons listed, earliest and latest season
- *      listed, how many different names appear, the exact set of leaders and
- *      their count, and the counting note, which must sit ABOVE the leaders and
- *      name the split and empty years the rows actually have.
+ *   4. The derived facts, span bound: years listed, earliest and latest year
+ *      listed (each worded with the table's own column, so "season" only where
+ *      the column is Season: the Super Bowl rows are years of play), how many
+ *      different names appear, the exact set of leaders and their count, and the
+ *      counting note, which must sit ABOVE the leaders, say names count exactly
+ *      as the table writes them, claim no split of renamed clubs, and name the
+ *      split and empty years the rows actually have.
  *   5. Structure. One h1 that is the search phrase, the h2s the page promises
  *      (the year by year and most titles ones naming the first year), and one h3
- *      per decade the data has, no more, no fewer.
+ *      per decade the data has, no more, no fewer, a first decade the rows only
+ *      partly cover headed by the years it holds ("from 1915 to 1919").
  *   6. The head. A title under 60 characters ending in the brand and naming the
  *      first year, a description of 120 to 160 characters naming the span, the
  *      page's own canonical, and a three step BreadcrumbList ending there.
@@ -47,10 +51,12 @@
  *      its leader line names exactly the leaders the rows give.
  *   9. Source links. No link in src still points at an old /records#key anchor,
  *      every /records/<slug> written in src names a real section, and every
- *      literal link to a record page carries the span bound wording.
- *  10. The blurbs and notes. No sentence puts a count next to a name from that
- *      section's rows (who won how many is computed, never typed), and every
- *      "since YYYY" in them is the first year the rows hold.
+ *      literal link to a record page, in an object or inline in JSX, carries the
+ *      span bound wording.
+ *  10. The blurbs and notes. No sentence puts a count next to a name, or any
+ *      word of a name, from that section's rows (who won how many is computed,
+ *      never typed), and every "since YYYY" in them is the first year the rows
+ *      hold.
  *
  * NEGATIVE CONTROLS. RECORD_PAGES_CONTROL=<name> breaks one input, in memory,
  * for the one check it targets, and the run is green only if THAT check went
@@ -77,13 +83,13 @@ const CONTROLS = {
   noslug: 1, noroute: 1, commented: 1, notype: 1, nositemap: 1, nopage: 1,
   droprow: 2,
   miscount: 3,
-  wrongfact: 4, wrongleader: 4,
+  wrongfact: 4, wrongleader: 4, seasonword: 4,
   twoh1: 5, nodecade: 5,
   longtitle: 6, shortdesc: 6,
   nolink: 7, nobacklink: 7,
   fulltable: 8, indexleader: 8,
-  hashlink: 9, genericlabel: 9,
-  blurbcount: 10, blurbsince: 10,
+  hashlink: 9, genericlabel: 9, jsxlabel: 9,
+  blurbcount: 10, blurbsince: 10, shortcount: 10,
 };
 const CONTROL = process.env.RECORD_PAGES_CONTROL || '';
 
@@ -148,6 +154,16 @@ const join = xs => (xs.length <= 1 ? xs.join('') : `${xs.slice(0, -1).join(', ')
 const pageFile = route => path.join(ROOT, 'public', route.replace(/^\//, ''), 'index.html');
 /** the span bound link wording, written out here from the rule, not imported */
 const sinceText = (def, firstYear) => `${cap(def.words.many)} since ${firstYear}, year by year`;
+/** what a row's year is called: the table's own first column, lowercased */
+const nounOf = def => def.yearLabel.toLowerCase();
+/** a decade's heading, from the rule: a first decade the rows only partly
+    cover names the years it holds instead of the whole decade */
+function decadeText(def, start, firstYear, latestYear) {
+  const many = cap(def.words.many);
+  if (firstYear <= start) return `${many} in the ${start}s`;
+  const end = Math.min(start + 9, latestYear);
+  return firstYear === end ? `${many} in ${firstYear}` : `${many} from ${firstYear} to ${end}`;
+}
 /** source code with its comments removed: block, JSX and line comments (a "//"
     right after a colon or a quote is a URL or a string, not a comment) */
 const stripComments = src => src
@@ -362,8 +378,9 @@ console.log('2) every row in recordBooks.json is in its saved page, under its ow
       if (!byDecade.has(d)) byDecade.set(d, []);
       byDecade.get(d).push(r);
     }
+    const fy = firstOf(def), ly = Math.max(...rows.map(r => r.year));
     for (const [d, list] of byDecade) {
-      const h3 = `${cap(def.words.many)} in the ${d}s`;
+      const h3 = decadeText(def, d, fy, ly);
       const got = blocks.get(h3);
       if (!got) { fail(`${def.key}: no block for the ${d}s, so ${list.length} rows are missing`); continue; }
       const expected = [...headerOf(def), ...list.flatMap(r => cellsOf(def, r))];
@@ -441,8 +458,15 @@ console.log('4) the derived facts are span bound and the ones the rows give');
     const rows = rowsOf(def);
     const f = spanFacts(rows);
     const { top, names: topNames } = topOf(rows);
+    const noun = nounOf(def);
     if (CONTROL === 'wrongfact' && def === first) {
-      html = mutateSaved(def.slug, `<li>${f.years.length} seasons listed`, `<li>${f.years.length + 1} seasons listed`, 'wrongfact');
+      html = mutateSaved(def.slug, `<li>${f.years.length} ${noun}s listed`, `<li>${f.years.length + 1} ${noun}s listed`, 'wrongfact');
+    }
+    if (CONTROL === 'seasonword' && def === first) {
+      /* the first review's wording, back on the Super Bowl page, whose rows are
+         keyed by the year the game was played */
+      if (noun !== 'year') refuse(`the first section's column is ${def.yearLabel}, so "season" would be right there`);
+      html = mutateSaved(def.slug, '<li>Earliest year listed: ', '<li>Earliest season listed: ', 'seasonword');
     }
     if (CONTROL === 'wrongleader' && def === first) {
       /* one wrong name added to the leaders while the real ones stay: the loose
@@ -454,9 +478,9 @@ console.log('4) the derived facts are span bound and the ones the rows give');
     const texts = lines.map(textOf);
     const before = failedChecks.get(4) || 0;
     const want = [
-      `${f.years.length} seasons listed, ${f.first} to ${f.latest}.` + (rows.length !== f.years.length ? ` That is ${rows.length} ${def.words.unit[1]} in all, because some seasons have more than one.` : ''),
-      `Earliest season listed: ${join(f.firstNames)} (${f.first}).`,
-      `Latest season listed: ${join(f.latestNames)} (${f.latest}).`,
+      `${f.years.length} ${noun}s listed, ${f.first} to ${f.latest}.` + (rows.length !== f.years.length ? ` That is ${rows.length} ${def.words.unit[1]} in all, because some ${noun}s have more than one.` : ''),
+      `Earliest ${noun} listed: ${join(f.firstNames)} (${f.first}).`,
+      `Latest ${noun} listed: ${join(f.latestNames)} (${f.latest}).`,
       `${new Set(rows.map(r => r.champion)).size} different ${def.words.who[0]} names appear on the list, ${f.first} to ${f.latest}.`,
     ];
     for (const w of want) if (!texts.includes(w)) fail(`${def.key}: the page does not say ${JSON.stringify(w)}`);
@@ -479,9 +503,17 @@ console.log('4) the derived facts are span bound and the ones the rows give');
     if (noteAt < 0) fail(`${def.key}: no counting note under the most titles heading`);
     else if (frontAt >= 0 && noteAt > frontAt) fail(`${def.key}: the counting note comes after the leaders, so a reader meets the counts before the rule`);
     const note = noteAt >= 0 ? mostTexts[noteAt] : '';
-    if (note && !/counts for the \S+ name exactly as it is written there/.test(note)) fail(`${def.key}: the counting note does not say names count exactly as written`);
+    if (note && !/counts for the \S+ name exactly as the table writes it/.test(note)) fail(`${def.key}: the counting note does not say names count exactly as the table writes them`);
+    /* the note may not claim the table splits renamed clubs: the rows do not
+       always use the name of the day, so that claim was false */
+    if (/moved or was renamed, counts separately|name it (?:wore|had) (?:at the time|that season)/.test(note)) fail(`${def.key}: the counting note claims renamed clubs are split, which the rows do not always do`);
+    if (/\b(?:seasons?|years?)\b/.test(note)) {
+      const wrongNoun = noun === 'year' ? /\bseasons?\b/ : /\byears?\b(?! by year)/;
+      if (wrongNoun.test(note.replace(/year by year/g, ''))) fail(`${def.key}: the counting note calls a ${noun} by the other word`);
+    }
     const splitPart = (note.match(/\. ([^.]*?) (?:has|have) more than one line/) || [])[1] || '';
-    const gapPart = (note.match(/Nothing is listed for ([^.]*?), so nobody/) || [])[1] || '';
+    const gapPart = (note.match(/Nothing is listed for ([^.]*?), so no /) || [])[1] || '';
+    if (splitPart && !new RegExp(`gets one ${def.words.unit[0]}\\.`).test(note)) fail(`${def.key}: the split sentence does not say what each name gets`);
     if (JSON.stringify(yearsIn(splitPart)) !== JSON.stringify(f.splits)) fail(`${def.key}: the note names split years ${JSON.stringify(yearsIn(splitPart))}, the rows have ${JSON.stringify(f.splits)}`);
     if (JSON.stringify(yearsIn(gapPart)) !== JSON.stringify(f.gaps)) fail(`${def.key}: the note names empty years ${JSON.stringify(yearsIn(gapPart))}, the rows leave ${JSON.stringify(f.gaps)}`);
     if ((failedChecks.get(4) || 0) === before) ok += 1;
@@ -502,7 +534,8 @@ console.log('5) one h1, the promised h2s, one h3 per decade in the data');
     const f1 = firstOf(def);
     const decades = [...new Set(rows.map(r => Math.floor(r.year / 10) * 10))].sort((a, b) => b - a);
     if (CONTROL === 'twoh1' && def === first) html = mutateSaved(def.slug, `<h1>${esc(h1)}</h1>`, `<h1>${esc(h1)}</h1>\n<h1>A second headline</h1>`, 'twoh1');
-    if (CONTROL === 'nodecade' && def === first) html = mutateSaved(def.slug, `<h3>${esc(cap(def.words.many))} in the ${decades[0]}s</h3>`, '', 'nodecade');
+    const ly = Math.max(...rows.map(r => r.year));
+    if (CONTROL === 'nodecade' && def === first) html = mutateSaved(def.slug, `<h3>${esc(decadeText(def, decades[0], f1, ly))}</h3>`, '', 'nodecade');
     const lines = bodyLines(html);
     const before = failedChecks.get(5) || 0;
     const h1s = lines.filter(l => tagOf(l) === 'h1').map(textOf);
@@ -512,7 +545,7 @@ console.log('5) one h1, the promised h2s, one h3 per decade in the data');
     const wantH2 = [`Every ${def.words.one} since ${f1}, year by year`, `${def.words.most} since ${f1}`, 'Play with this history', ...(def.format ? [def.format.heading] : []), 'Where this comes from', 'More record books'];
     for (const w of wantH2) if (!h2s.includes(w)) fail(`${def.key}: no h2 ${JSON.stringify(w)}`);
     const h3s = lines.filter(l => tagOf(l) === 'h3').map(textOf);
-    const wantH3 = decades.map(d => `${cap(def.words.many)} in the ${d}s`);
+    const wantH3 = decades.map(d => decadeText(def, d, f1, ly));
     if (JSON.stringify(h3s) !== JSON.stringify(wantH3)) {
       const missing = wantH3.filter(x => !h3s.includes(x));
       const extra = h3s.filter(x => !wantH3.includes(x));
@@ -680,7 +713,8 @@ console.log('9) links in src: no old /records#key anchor, no unknown page, and e
   const bySlug = new Map(RECORD_SECTIONS.map(s => [s.slug, s]));
   const hashTarget = path.join(ROOT, 'src/lib/sportHub.ts');
   const labelTarget = path.join(ROOT, 'src/pages/NflPlayoffFormatHistory.tsx');
-  let hashes = 0, unknown = 0, links = 0, labelled = 0, wrongLabels = 0;
+  const jsxTarget = path.join(ROOT, 'src/pages/ChampOrNot.tsx');
+  let hashes = 0, unknown = 0, links = 0, labelled = 0, wrongLabels = 0, jsxLinks = 0;
   for (const f of files) {
     let src = readFile(f);
     if (CONTROL === 'hashlink' && f === hashTarget) {
@@ -692,6 +726,13 @@ console.log('9) links in src: no old /records#key anchor, no unknown page, and e
       const re = /(path:\s*'\/records\/super-bowl-winners'\s*,\s*label:\s*)'[^']*'/;
       if (!re.test(src)) refuse('NflPlayoffFormatHistory.tsx has no labelled Super Bowl record link');
       src = src.replace(re, "$1'The Record Books'");
+    }
+    if (CONTROL === 'jsxlabel' && f === jsxTarget) {
+      /* a JSX link with its words written inline, which the object literal rule
+         alone could never see */
+      const from = '<Link to="/records" className="text-primary hover:underline">Browse the Record Books</Link>';
+      if (!src.includes(from)) refuse(`ChampOrNot.tsx has no ${from} to point at a record page`);
+      src = src.replace(from, '<Link to="/records/super-bowl-winners" className="text-primary hover:underline">the full Super Bowl list</Link>');
     }
     /* code, not the prose about it */
     const c = stripComments(src);
@@ -710,8 +751,19 @@ console.log('9) links in src: no old /records#key anchor, no unknown page, and e
       const want = sinceText(def, firstOf(def));
       if (m[3] !== want) { wrongLabels += 1; fail(`${path.relative(ROOT, f)} labels /records/${m[1]} ${JSON.stringify(m[3])}, the span bound wording is ${JSON.stringify(want)}`); }
     }
+    /* JSX links whose words are written inline: <Link to="/records/x">words</Link>
+       and plain anchors. Words built from an expression are skipped here; the
+       saved page checks above read what they render. */
+    for (const m of c.matchAll(/<(Link|a)\b[^>]*?\b(?:to|href)="\/records\/([a-z0-9-]+)"[^>]*>([^<{}]*)<\/\1>/g)) {
+      jsxLinks += 1;
+      const def = bySlug.get(m[2]);
+      if (!def) continue;
+      const words = m[3].replace(/\s+/g, ' ').trim();
+      const want = sinceText(def, firstOf(def));
+      if (words !== want) { wrongLabels += 1; fail(`${path.relative(ROOT, f)} links /records/${m[2]} as ${JSON.stringify(words)}, the span bound wording is ${JSON.stringify(want)}`); }
+    }
   }
-  console.log(`   ${files.length} source files, ${links} literal record page links (${labelled} labelled, ${wrongLabels} worded wrong), ${hashes} old anchors, ${unknown} unknown pages`);
+  console.log(`   ${files.length} source files, ${links} literal record page links (${labelled} labelled in objects, ${jsxLinks} with inline JSX words, ${wrongLabels} worded wrong), ${hashes} old anchors, ${unknown} unknown pages`);
 }
 
 /* ======================================================================= */
@@ -731,9 +783,25 @@ console.log('10) blurbs and notes carry no counts next to a name, and every "sin
       if (!/since 1924\b/.test(def.blurb)) refuse('the Brownlow blurb has no "since 1924" to move');
       def.blurb = def.blurb.replace('since 1924', 'since 1925');
     }
+    if (CONTROL === 'shortcount' && def.key === 'nrl') {
+      /* a short name the table only uses inside a longer one: matching full
+         names alone would let this through */
+      if (rows.some(r => r.champion === 'Rabbitohs')) refuse('Rabbitohs is a full champion name, so this would not test the short form');
+      if (!rows.some(r => r.champion.split(' ').includes('Rabbitohs'))) refuse('no NRL champion name uses the word Rabbitohs');
+      def.blurb = `${def.blurb} The Rabbitohs lead on 21.`;
+    }
     const f1 = firstOf(def);
+    /* every word the table uses in a name, not only whole names, so "Carlton 16"
+       or "the Rabbitohs lead on 21" is caught as surely as a full name. Capitalised
+       words of three letters or more, matched case sensitively, which keeps
+       ordinary words like "the" and "St" out. */
     const names = new Set(rows.map(r => r.champion));
-    if (def.words.who[0] === 'player') for (const r of rows) names.add(r.champion.split(' ').pop());
+    for (const r of rows) {
+      for (const tok of r.champion.split(/\s+/)) {
+        const t = tok.replace(/[^A-Za-z'.-]/g, '').replace(/\.$/, '');
+        if (t.length >= 3 && /^[A-Z]/.test(t)) names.add(t);
+      }
+    }
     const text = [def.blurb, def.note || ''].join(' ');
     for (const sentence of text.split(/(?<=[.;!?])\s+/).filter(Boolean)) {
       sentencesRead += 1;

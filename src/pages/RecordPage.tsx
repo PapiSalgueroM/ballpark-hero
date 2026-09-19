@@ -5,7 +5,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import RecordTable from '@/components/records/RecordTable';
 import NotFound from '@/pages/NotFound';
 import { FORMAT_PAGES, RECORD_SECTIONS, RECORD_SOURCING, type RecordRow } from '@/lib/records';
-import { capFirst, decadesOf, firstYearOf, joinNames, leadersOf, sinceLabel, spanOf, yearRanges } from '@/lib/recordPages';
+import { capFirst, decadeHeading, decadesOf, firstYearOf, joinNames, leadersOf, sinceLabel, spanOf, yearNounOf, yearRanges } from '@/lib/recordPages';
 import recordBooks from '@/data/recordBooks.json';
 
 /**
@@ -29,8 +29,12 @@ import recordBooks from '@/data/recordBooks.json';
  * THE SPAN RULE (Round 649 review). Some tables start after the competition did
  * (the Stanley Cup rows begin in 1915, college football's in 1981), so nothing
  * on the page may read as all time: the h2s say "since 1915", the facts say
- * "earliest season listed" and "names appear on the list". The rule is the same
- * for all twelve, so no list of short tables exists to fall behind.
+ * "earliest year listed" and "names appear on the list", and a first decade the
+ * rows only partly cover is headed "from 1915 to 1919". The rule is the same for
+ * all twelve, so no list of short tables exists to fall behind. The word for a
+ * row's year comes from the table's own column: "year" everywhere except college
+ * football's Season column, because the Super Bowl rows are keyed by the year
+ * the game was played, not the season it finished.
  *
  * The committed JSON is read directly rather than fetched, for the reason Round
  * 372 wrote down on /records: a crawler has to receive the champions, and the
@@ -66,7 +70,11 @@ const RecordPage = ({ slug }: { slug: string }) => {
   const others = RECORD_SECTIONS.filter(s => s.key !== def.key);
 
   const { splitYears, gapYears } = span;
-  const oneOrMany = (n: number) => (n === 1 ? 'that season' : 'those seasons');
+  /* "year" or "season", from the table's own first column (Round 649 second
+     review): the Super Bowl rows are keyed by the year the game was played,
+     so calling 1967 a season would name the wrong one. */
+  const noun = yearNounOf(def);
+  const oneOrMany = (n: number) => (n === 1 ? `that ${noun}` : `those ${noun}s`);
 
   return (
     <div id="dukb-main" tabIndex={-1} className="min-h-screen bg-background text-foreground px-4 py-12 max-w-3xl mx-auto">
@@ -97,11 +105,11 @@ const RecordPage = ({ slug }: { slug: string }) => {
       {def.note && <p className="text-xs text-muted-foreground mb-3 leading-relaxed">{def.note}</p>}
       <ul className="text-sm text-muted-foreground mb-8 list-disc pl-5 space-y-1 leading-relaxed">
         <li>
-          {span.seasons} seasons listed, {span.first} to {span.latest}.
-          {rows.length !== span.seasons && ` That is ${rows.length} ${w.unit[1]} in all, because some seasons have more than one.`}
+          {span.seasons} {noun}s listed, {span.first} to {span.latest}.
+          {rows.length !== span.seasons && ` That is ${rows.length} ${w.unit[1]} in all, because some ${noun}s have more than one.`}
         </li>
-        <li>Earliest season listed: {joinNames(span.firstNames)} ({span.first}).</li>
-        <li>Latest season listed: {joinNames(span.latestNames)} ({span.latest}).</li>
+        <li>Earliest {noun} listed: {joinNames(span.firstNames)} ({span.first}).</li>
+        <li>Latest {noun} listed: {joinNames(span.latestNames)} ({span.latest}).</li>
         <li>{span.distinct} different {w.who[0]} names appear on the list, {span.first} to {span.latest}.</li>
       </ul>
 
@@ -109,7 +117,7 @@ const RecordPage = ({ slug }: { slug: string }) => {
         <h2 id="record-every" className="text-xl font-semibold text-foreground">Every {w.one} since {span.first}, year by year</h2>
         {decades.map(d => (
           <div key={d.start}>
-            <h3 className="text-base font-semibold text-foreground mb-2">{capFirst(w.many)} in the {d.start}s</h3>
+            <h3 className="text-base font-semibold text-foreground mb-2">{decadeHeading(def, d.start, span.first, span.latest)}</h3>
             <RecordTable def={def} rows={d.rows} />
           </div>
         ))}
@@ -118,12 +126,16 @@ const RecordPage = ({ slug }: { slug: string }) => {
       <section className="mt-10 space-y-3" aria-labelledby="record-most">
         <h2 id="record-most" className="text-xl font-semibold text-foreground">{w.most} since {span.first}</h2>
         {/* The counting rule sits above the table at full size (Round 649 review):
-            the counts are per name exactly as written, and a reader has to know
-            that before reading them, not after. */}
+            the counts are per name exactly as the table writes it, and a reader
+            has to know that before reading them, not after. It claims no more than
+            the code does: the rows do not always use the name of the day (the
+            1995 Sydney Bulldogs sit under Canterbury-Bankstown Bulldogs, for one),
+            so it never says a renamed club is split. */}
         <p className="text-sm text-muted-foreground leading-relaxed">
-          How we counted: each line in the year by year tables counts for the {w.who[0]} name exactly as it is written there, so {isPeople ? 'a player written two ways' : `a ${w.who[0]} written two ways, or one that moved or was renamed,`} counts separately under each name.
-          {splitYears.length > 0 && ` ${joinNames(splitYears)} ${splitYears.length === 1 ? 'has' : 'have'} more than one line, and every ${w.who[0]} named in ${oneOrMany(splitYears.length)} gets one.`}
-          {gapYears.length > 0 && ` Nothing is listed for ${yearRanges(gapYears)}, so nobody gets one for ${oneOrMany(gapYears.length)}.`}
+          How we counted: each line in the year by year tables counts for the {w.who[0]} name exactly as the table writes it, so a {w.who[0]} the table writes two ways counts separately under each.
+          {!isPeople && ` The table does not always use the name of the day, so a renamed ${w.who[0]} may sit under one name or several.`}
+          {splitYears.length > 0 && ` ${joinNames(splitYears)} ${splitYears.length === 1 ? 'has' : 'have'} more than one line, and every ${w.who[0]} named in ${oneOrMany(splitYears.length)} gets one ${w.unit[0]}.`}
+          {gapYears.length > 0 && ` Nothing is listed for ${yearRanges(gapYears)}, so no ${w.unit[0]} is counted for ${oneOrMany(gapYears.length)}.`}
         </p>
         <p className="text-sm text-muted-foreground leading-relaxed">
           Out in front: {joinNames(topNames)}, {top} {unitFor(top)}{topNames.length > 1 ? ' each' : ''}.

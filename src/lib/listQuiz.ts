@@ -337,7 +337,7 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
   {
     id: 'afl-premiers',
     title: 'VFL/AFL Premiers',
-    blurb: 'Every club to win the flag, under the name it wore at the time.',
+    blurb: 'Every club to win the flag, under the names our Record Books use.',
     sport: 'AFL', emoji: '🏉', minAnswers: 12,
     // afl_premiers: built Round 234. 129 rows, one premier per season
     // 1897-2025 with no gaps, two-source verified 2026-08-20 against
@@ -354,7 +354,7 @@ export const LIST_PUZZLES: ListPuzzleDef[] = [
   {
     id: 'nrl-premiers',
     title: 'NRL/NSWRL Premiers',
-    blurb: "Every club to win Australian rugby league's top grade, under the name it wore at the time.",
+    blurb: "Every club to win Australian rugby league's top grade, under the names our Record Books use.",
     sport: 'NRL', emoji: '🏉', minAnswers: 12,
     // nrl_premiers: built Round 236. 117 rows, 1908-2025, two-source
     // verified 2026-08-20 (Wikipedia's premiers roll against Topend
