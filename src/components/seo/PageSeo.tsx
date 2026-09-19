@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { Helmet } from 'react-helmet-async';
+import { ALL_GAMES } from '@/data/gameRegistry';
 import { jsonLdFor } from '@/lib/pageSchema';
 
 interface PageSeoProps {
@@ -69,7 +70,33 @@ export const searchTitle = (full: string): string =>
     ? full.slice(0, -BRAND_SUFFIX.length)
     : full;
 
-const PageSeo = ({ title, description, path, ogImage, noindex }: PageSeoProps) => {
+/* Round 642: a game's search title and description come from the registry.
+ *
+ * The owner asked for "lots of key words ... because we need more traction".
+ * Measured before this round: titles like "Missing XI | DoUKnowBall" and
+ * "Rarity Round | DoUKnowBall" named no sport and no kind of game, so a search
+ * for a soccer lineup quiz had nothing to match, and 46 of the 127 game
+ * descriptions ran past 158 characters, where a result starts cutting them.
+ *
+ * So every game in src/data/gameRegistry.ts carries a seoTitle (without the
+ * brand) and a seoDescription, written once beside the game's label, and this
+ * is the one place that reads them: a single lookup by the page's own path.
+ * The brand suffix goes on here and the Round 277 rule above still decides
+ * whether it stays in the <title>, so og:title, twitter:title and the JSON-LD
+ * name get the full text exactly as they always have. A page with no registry
+ * entry (the hubs, the legal pages, the retired games) keeps the props it
+ * passes, unchanged. scripts/simSeoTitles.mjs renders every game page through
+ * this component and holds it to the registry. */
+const seoFor = (path: string, title: string, description: string) => {
+  const game = ALL_GAMES.find(g => g.path === path);
+  return {
+    title: game?.seoTitle ? `${game.seoTitle}${BRAND_SUFFIX}` : title,
+    description: game?.seoDescription ?? description,
+  };
+};
+
+const PageSeo = ({ title: pageTitle, description: pageDescription, path, ogImage, noindex }: PageSeoProps) => {
+  const { title, description } = seoFor(path, pageTitle, pageDescription);
   const canonicalUrl = `${BASE_URL}${path}`;
   const image = ogImage || DEFAULT_OG_IMAGE;
 
