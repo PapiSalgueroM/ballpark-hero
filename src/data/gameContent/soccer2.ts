@@ -624,28 +624,107 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Sixteen players, four secret groups, and a board built to trick you. Sort all 16 names into their hidden categories of four before your lives run out.",
       "The connections range from friendly, like a shared club, to evil, like a common shirt number or award. Each solved group shows a difficulty color, and purple is usually the trap.",
     ],
-    howToPlay: [
-      "Tap four players you think belong together and hit Submit.",
-      "Correct sets lock in with their category name and color.",
-      "Wrong sets cost one of your 4 lives. If 3 of the 4 were right, the game says you were one away.",
-      "Spend a hint to reveal the category name of the easiest unsolved group.",
-      "Find all four groups before the lives run out.",
+    headings: {
+      howToPlay: "How to play Connections, a free soccer players grouping puzzle",
+      rules: "Connections rules: lives, hints and the four difficulty colors",
+      example: "Connections walkthrough: four AC Milan legends and one swap",
+      tips: "Connections tips for spotting the trap player early",
+      faq: "Connections FAQ: daily puzzles, hints and your win streak",
+    },
+    howToPlaySections: [
+      {
+        heading: "Tapping four players and submitting",
+        items: [
+          "Tap four players you think belong together and hit Submit.",
+        ],
+      },
+      {
+        heading: "Locking in a correct category",
+        items: [
+          "Correct sets lock in with their category name and color.",
+        ],
+      },
+      {
+        heading: "What a wrong guess costs you",
+        items: [
+          "Wrong sets cost one of your 4 lives. If 3 of the 4 were right, the game says you were one away.",
+        ],
+        subsections: [
+          {
+            heading: "Spending a hint on the easiest group",
+            items: [
+              "Spend a hint to reveal the category name of the easiest unsolved group.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Finding all four groups to win",
+        items: [
+          "Find all four groups before the lives run out.",
+        ],
+      },
     ],
-    rules: [
-      "Always 16 players forming exactly 4 groups of 4.",
-      "You have 4 lives, and every wrong submission costs one.",
-      "Up to 4 hints, and they reveal category names only, never players.",
-      "Colors mark difficulty: green easy, yellow medium, blue hard, purple insane.",
+    ruleSections: [
+      {
+        heading: "Sixteen players in four hidden groups",
+        items: [
+          "Always 16 players forming exactly 4 groups of 4.",
+        ],
+      },
+      {
+        heading: "Four lives and what a miss costs",
+        items: [
+          "You have 4 lives, and every wrong submission costs one.",
+        ],
+      },
+      {
+        heading: "Hints reveal names, and the difficulty colors",
+        items: [
+          "Up to 4 hints, and they reveal category names only, never players.",
+          "Colors mark difficulty: green easy, yellow medium, blue hard, purple insane.",
+        ],
+      },
     ],
-    example: [
-      "You spot Kaka, Maldini, Van Basten, and Gullit and submit them as AC Milan players. Locked, green. Then four Ballon d'Or winners come back one away: someone belongs to a sneakier group.",
-      "Swap one name for Modric and it locks. The last eight should sort themselves, but you triple check anyway, because winning with all 4 lives intact is the real flex.",
+    exampleSections: [
+      {
+        heading: "Locking in four AC Milan legends",
+        paragraphs: [
+          "You spot Kaka, Maldini, Van Basten, and Gullit and submit them as AC Milan players. Locked, green. Then four Ballon d'Or winners come back one away: someone belongs to a sneakier group.",
+        ],
+      },
+      {
+        heading: "Swapping one name to finish clean",
+        paragraphs: [
+          "Swap one name for Modric and it locks. The last eight should sort themselves, but you triple check anyway, because winning with all 4 lives intact is the real flex.",
+        ],
+      },
     ],
-    tips: [
-      "Never submit your first idea. Hunt the trap player who fits two categories.",
-      "Lock your surest group first. Every solve shrinks the board.",
-      "One away means change exactly one player, not two.",
-      "Save hints for the last two groups, where the categories get strange.",
+    tipSections: [
+      {
+        heading: "Never submitting your first idea",
+        items: [
+          "Never submit your first idea. Hunt the trap player who fits two categories.",
+        ],
+      },
+      {
+        heading: "Locking your surest group first",
+        items: [
+          "Lock your surest group first. Every solve shrinks the board.",
+        ],
+      },
+      {
+        heading: "What one away really means",
+        items: [
+          "One away means change exactly one player, not two.",
+        ],
+      },
+      {
+        heading: "Saving hints for the trickiest groups",
+        items: [
+          "Save hints for the last two groups, where the categories get strange.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -668,29 +747,113 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Build Your XI hands you a formation, then a slot machine assigns a random club or country to every position. Your job is naming a player from that exact team who fits each slot.",
       "When the eleventh name lands, an AI referee grades the lineup and writes a short scouting report, then a season report plays a full year out with your XI: league finish, points, trophies and a top scorer. No two teams ever come out alike.",
     ],
-    howToPlay: [
-      "Choose one of 6 formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1, 3-4-3, or 5-3-2.",
-      "Tap a position. The spinner shows which club or national team that slot is locked to.",
-      "Type a player from that team who fits. The game verifies the answer before it counts.",
-      "Hate an assignment? Reroll it for a different team.",
-      "Fill all 11 slots, review your chemistry links, then submit for the AI rating.",
+    headings: {
+      howToPlay: "How to play Build Your XI, a free soccer lineup builder game",
+      rules: "Build Your XI rules: positions, duplicates and chemistry points",
+      example: "Build Your XI walkthrough: a Liverpool heavy lineup gets rated",
+      tips: "Build Your XI tips for a lineup that scores well with the AI",
+      faq: "Build Your XI FAQ: rerolls, positions and the rating verdict",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing one of six formations",
+        items: [
+          "Choose one of 6 formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1, 3-4-3, or 5-3-2.",
+        ],
+      },
+      {
+        heading: "Spinning a club or country per slot",
+        items: [
+          "Tap a position. The spinner shows which club or national team that slot is locked to.",
+        ],
+      },
+      {
+        heading: "Typing a player who fits the slot",
+        items: [
+          "Type a player from that team who fits. The game verifies the answer before it counts.",
+        ],
+        subsections: [
+          {
+            heading: "Rerolling an assignment you hate",
+            items: [
+              "Hate an assignment? Reroll it for a different team.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Submitting your finished XI for a rating",
+        items: [
+          "Fill all 11 slots, review your chemistry links, then submit for the AI rating.",
+        ],
+      },
     ],
-    rules: [
-      "Wrong answers are rejected with a reason but cost nothing. Retry until a valid name lands.",
-      "A slot takes a player who plays there or right beside it: full backs and wing backs cover each other, wingers count on both flanks, CM covers CDM and CAM, strikers cover each other. A keeper only ever goes in goal.",
-      "No duplicate players across your XI.",
-      "Chemistry: each pair sharing a club is worth 3 points, a league 2, a nationality 1, capped at 9 per player.",
-      "If the AI judge is unreachable, a built in offline judge grades you instead, so a run never dead ends.",
+    ruleSections: [
+      {
+        heading: "Wrong answers cost nothing to retry",
+        items: [
+          "Wrong answers are rejected with a reason but cost nothing. Retry until a valid name lands.",
+        ],
+      },
+      {
+        heading: "Which nearby positions a slot accepts",
+        items: [
+          "A slot takes a player who plays there or right beside it: full backs and wing backs cover each other, wingers count on both flanks, CM covers CDM and CAM, strikers cover each other. A keeper only ever goes in goal.",
+        ],
+      },
+      {
+        heading: "No duplicate players in your lineup",
+        items: [
+          "No duplicate players across your XI.",
+        ],
+      },
+      {
+        heading: "Scoring chemistry and the offline backup judge",
+        items: [
+          "Chemistry: each pair sharing a club is worth 3 points, a league 2, a nationality 1, capped at 9 per player.",
+          "If the AI judge is unreachable, a built in offline judge grades you instead, so a run never dead ends.",
+        ],
+      },
     ],
-    example: [
-      "You take 4-3-3. Liverpool lands on the goalkeeper slot, so Alisson goes in. Arsenal on the right wing is Saka. Then the striker slot spins a national team, and you weigh Harry Kane against saving England for a harder slot.",
-      "The finished XI leans Premier League, chemistry pays you for it, and the verdict praises the spine while roasting your left back. You run it back in a 3-5-2.",
+    exampleSections: [
+      {
+        heading: "Alisson and Saka fill a Liverpool heavy XI",
+        paragraphs: [
+          "You take 4-3-3. Liverpool lands on the goalkeeper slot, so Alisson goes in. Arsenal on the right wing is Saka. Then the striker slot spins a national team, and you weigh Harry Kane against saving England for a harder slot.",
+        ],
+      },
+      {
+        heading: "A verdict that praises the spine",
+        paragraphs: [
+          "The finished XI leans Premier League, chemistry pays you for it, and the verdict praises the spine while roasting your left back. You run it back in a 3-5-2.",
+        ],
+      },
     ],
-    tips: [
-      "Reroll thin assignments before typing, knowing the spin can land somewhere worse.",
-      "Small club on the wheel? Goalkeepers are easy to name, elite wingers are not.",
-      "Stacking one league quietly adds chemistry points to the final screen.",
-      "If a right sounding name is rejected, let the search autocomplete the spelling for you.",
+    tipSections: [
+      {
+        heading: "Rerolling thin assignments before typing",
+        items: [
+          "Reroll thin assignments before typing, knowing the spin can land somewhere worse.",
+        ],
+      },
+      {
+        heading: "Naming goalkeepers from small clubs",
+        items: [
+          "Small club on the wheel? Goalkeepers are easy to name, elite wingers are not.",
+        ],
+      },
+      {
+        heading: "Stacking one league for chemistry points",
+        items: [
+          "Stacking one league quietly adds chemistry points to the final screen.",
+        ],
+      },
+      {
+        heading: "Letting autocomplete fix a rejected spelling",
+        items: [
+          "If a right sounding name is rejected, let the search autocomplete the spelling for you.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -717,28 +880,107 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "This is the Connect 4 you grew up with, except every square is earned with a soccer answer. Blue against Red on one board, four in a row wins.",
       "Each of the 7 columns and 6 rows carries an attribute. To claim a cell you name a player matching both, and gravity still applies: pieces fall to the lowest open row.",
     ],
-    howToPlay: [
-      "Grab an opponent. Blue and Red alternate turns on the same device, Blue first.",
-      "Pick a column and the game highlights where your piece would drop.",
-      "Name a player fitting both the column attribute and the row attribute.",
-      "A valid answer claims the cell. A rejection lets you try another name or cancel.",
-      "Connect 4 of your color in any direction to win.",
+    headings: {
+      howToPlay: "How to play Connect 4, a free soccer trivia and four in a row game",
+      rules: "Connect 4 rules: columns, rows and rejected answers",
+      example: "Connect 4 walkthrough: Ronaldinho blocks a winning line",
+      tips: "Connect 4 tips for choosing columns over trivia recall",
+      faq: "Connect 4 FAQ: turns, rejected names and network errors",
+    },
+    howToPlaySections: [
+      {
+        heading: "Alternating turns as Blue or Red",
+        items: [
+          "Grab an opponent. Blue and Red alternate turns on the same device, Blue first.",
+        ],
+      },
+      {
+        heading: "Picking a column to drop your piece",
+        items: [
+          "Pick a column and the game highlights where your piece would drop.",
+        ],
+      },
+      {
+        heading: "Naming a player who fits both clues",
+        items: [
+          "Name a player fitting both the column attribute and the row attribute.",
+        ],
+        subsections: [
+          {
+            heading: "What a valid or rejected answer does",
+            items: [
+              "A valid answer claims the cell. A rejection lets you try another name or cancel.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Winning with four in a row",
+        items: [
+          "Connect 4 of your color in any direction to win.",
+        ],
+      },
     ],
-    rules: [
-      "The board is 7 columns by 6 rows.",
-      "Each player name works once per game, for either side.",
-      "You can skip a turn, and a full board with no winner is a draw.",
-      "Answers are AI verified. Rejections do not pass your turn, and network errors never count against you.",
+    ruleSections: [
+      {
+        heading: "A board of seven columns and six rows",
+        items: [
+          "The board is 7 columns by 6 rows.",
+        ],
+      },
+      {
+        heading: "Each name only works once per game",
+        items: [
+          "Each player name works once per game, for either side.",
+        ],
+      },
+      {
+        heading: "Skipping turns, draws and rejected answers",
+        items: [
+          "You can skip a turn, and a full board with no winner is a draw.",
+          "Answers are AI verified. Rejections do not pass your turn, and network errors never count against you.",
+        ],
+      },
     ],
-    example: [
-      "The column says Played for Barcelona, the row says World Cup Winner, and the drop spot blocks Red's line. Ronaldinho verifies, and the threat dies.",
-      "Red answers Brazilian plus Champions League Winner with Roberto Carlos to keep a diagonal alive. Every answer is also a tactical move, and knowing the name is only half the battle.",
+    exampleSections: [
+      {
+        heading: "Blocking a line with Ronaldinho",
+        paragraphs: [
+          "The column says Played for Barcelona, the row says World Cup Winner, and the drop spot blocks Red's line. Ronaldinho verifies, and the threat dies.",
+        ],
+      },
+      {
+        heading: "Roberto Carlos keeps a diagonal alive",
+        paragraphs: [
+          "Red answers Brazilian plus Champions League Winner with Roberto Carlos to keep a diagonal alive. Every answer is also a tactical move, and knowing the name is only half the battle.",
+        ],
+      },
     ],
-    tips: [
-      "Play the board first, trivia second. A brilliant answer in a useless column is wasted.",
-      "Center columns touch the most lines of four, so spend your deepest knowledge there.",
-      "Track burned names. Spending a do everything legend early starves your endgame.",
-      "Skipping beats dropping a piece that sets up your opponent.",
+    tipSections: [
+      {
+        heading: "Playing the board before the trivia",
+        items: [
+          "Play the board first, trivia second. A brilliant answer in a useless column is wasted.",
+        ],
+      },
+      {
+        heading: "Why center columns matter most",
+        items: [
+          "Center columns touch the most lines of four, so spend your deepest knowledge there.",
+        ],
+      },
+      {
+        heading: "Tracking which names are already burned",
+        items: [
+          "Track burned names. Spending a do everything legend early starves your endgame.",
+        ],
+      },
+      {
+        heading: "When skipping beats a bad drop",
+        items: [
+          "Skipping beats dropping a piece that sets up your opponent.",
+        ],
+      },
     ],
     faqs: [
       {
@@ -761,29 +1003,113 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "Soccer Grid is the team grid idea rebuilt for football: a daily 3x3 board where every cell needs a player who satisfies its row and its column at once.",
       "Filling it is half the game. Every correct answer shows how many others picked the same name, and the flex is a low rarity score from picks nobody thought of.",
     ],
-    howToPlay: [
-      "Pick a difficulty tier and optional timer; your first guess locks both for the day.",
-      "Tap a cell to see its two requirements, like a club crossed with a nationality.",
-      "Search a player and submit. Correct answers turn green with a rarity percentage.",
-      "Budget carefully: 15 guesses for 9 cells, and every submission spends one.",
-      "Finish, or run out of guesses or clock, then share the emoji board.",
+    headings: {
+      howToPlay: "How to play Soccer Grid, a free daily soccer grid puzzle",
+      rules: "Soccer Grid rules: guesses, timers and the rarity score",
+      example: "Soccer Grid walkthrough: Benzema, then a nine for nine finish",
+      tips: "Soccer Grid tips for keeping your rarity score low",
+      faq: "Soccer Grid FAQ: daily resets, rare picks and Overtime",
+    },
+    howToPlaySections: [
+      {
+        heading: "Locking your tier and timer on guess one",
+        items: [
+          "Pick a difficulty tier and optional timer; your first guess locks both for the day.",
+        ],
+      },
+      {
+        heading: "Reading a cell's two requirements",
+        items: [
+          "Tap a cell to see its two requirements, like a club crossed with a nationality.",
+        ],
+      },
+      {
+        heading: "Submitting a player for a rarity score",
+        items: [
+          "Search a player and submit. Correct answers turn green with a rarity percentage.",
+        ],
+        subsections: [
+          {
+            heading: "Budgeting fifteen guesses across nine cells",
+            items: [
+              "Budget carefully: 15 guesses for 9 cells, and every submission spends one.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Finishing and sharing the emoji board",
+        items: [
+          "Finish, or run out of guesses or clock, then share the emoji board.",
+        ],
+      },
     ],
-    rules: [
-      "15 guesses total, and correct answers consume guesses too, leaving room for 6 misses.",
-      "Timers: Unlimited, 90, 60, or 40 seconds, starting on your first guess.",
-      "Easy grids lean on clubs, leagues, and positions. Hard brings awards plus Champions League and World Cup winners.",
-      "Rarity score is the average pick percentage across your correct cells. Lower is better.",
-      "If the checker cannot verify an answer, you retry free with no guess burned.",
+    ruleSections: [
+      {
+        heading: "Fifteen guesses and six allowed misses",
+        items: [
+          "15 guesses total, and correct answers consume guesses too, leaving room for 6 misses.",
+        ],
+      },
+      {
+        heading: "Choosing a timer from unlimited to forty seconds",
+        items: [
+          "Timers: Unlimited, 90, 60, or 40 seconds, starting on your first guess.",
+        ],
+      },
+      {
+        heading: "What easy and hard grids ask for",
+        items: [
+          "Easy grids lean on clubs, leagues, and positions. Hard brings awards plus Champions League and World Cup winners.",
+        ],
+      },
+      {
+        heading: "How rarity score is worked out",
+        items: [
+          "Rarity score is the average pick percentage across your correct cells. Lower is better.",
+          "If the checker cannot verify an answer, you retry free with no guess burned.",
+        ],
+      },
     ],
-    example: [
-      "Real Madrid crossed with France makes Karim Benzema the obvious green, at 44 percent. For Barcelona and Brazil you skip Neymar and submit Rivaldo: 6 percent, beautiful.",
-      "The last corner wants a Champions League winner who played in Serie A. One miss, then Kaka clicks in: 9 for 9, rarity 19 percent.",
+    exampleSections: [
+      {
+        heading: "Benzema solves Real Madrid and France",
+        paragraphs: [
+          "Real Madrid crossed with France makes Karim Benzema the obvious green, at 44 percent. For Barcelona and Brazil you skip Neymar and submit Rivaldo: 6 percent, beautiful.",
+        ],
+      },
+      {
+        heading: "Kaka finishes a nine for nine grid",
+        paragraphs: [
+          "The last corner wants a Champions League winner who played in Serie A. One miss, then Kaka clicks in: 9 for 9, rarity 19 percent.",
+        ],
+      },
     ],
-    tips: [
-      "Spend rare picks on the easy cells. Rarity is won where everyone answers.",
-      "Journeymen who hopped leagues and countries cover the weird crossings.",
-      "On a timer, plan all nine cells before your first submission starts the clock.",
-      "Overtime lets you keep filling leftover cells with no effect on your recorded score.",
+    tipSections: [
+      {
+        heading: "Saving rare picks for the easy cells",
+        items: [
+          "Spend rare picks on the easy cells. Rarity is won where everyone answers.",
+        ],
+      },
+      {
+        heading: "Journeymen cover the weird crossings",
+        items: [
+          "Journeymen who hopped leagues and countries cover the weird crossings.",
+        ],
+      },
+      {
+        heading: "Planning all nine cells before a timer starts",
+        items: [
+          "On a timer, plan all nine cells before your first submission starts the clock.",
+        ],
+      },
+      {
+        heading: "What Overtime does to your score",
+        items: [
+          "Overtime lets you keep filling leftover cells with no effect on your recorded score.",
+        ],
+      },
     ],
     faqs: [
       {
