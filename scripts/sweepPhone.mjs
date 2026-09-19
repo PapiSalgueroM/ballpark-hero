@@ -31,7 +31,19 @@
  * allowed to scroll sideways INSIDE themselves, so overflow is measured on
  * the document, not on every element.
  *
- * Run: npm run build && npx serve -s dist -l 4173, then
+ * Round 635 adds a fourth exclusion, and it is a shape rather than a
+ * place: a control that is VISUALLY HIDDEN is not a tap target, because no
+ * finger can land on it. The case that found it is Stadium Tycoon's "Tap the
+ * stadium" button, a keyboard and screen reader twin of the pitch that sits
+ * off screen as a 1 by 1 pixel box with its overflow hidden and only grows to
+ * full size when it takes focus. The sweep had been failing /stadium-tycoon
+ * on it at "1px" since Round 583. The rule matches the shape a visually
+ * hidden element must have to be invisible (at most 1 by 1 with overflow
+ * hidden, or a clip of nothing), never a class name, so a real control that
+ * is merely small still fails. SWEEP_PHONE_CONTROL=counthidden turns the
+ * exclusion off, and ROUTE=/stadium-tycoon must then go red on the 1px twin.
+ *
+ * Run: npm run build, serve dist with scripts/lib/hostLikeServer.mjs, then
  *      ENGINES=chromium node scripts/sweepPhone.mjs
  * A single route can be checked with ROUTE=/club-manager.
  */
@@ -43,6 +55,13 @@ import pw from './lib/playwrightLoader.mjs';
 const { chromium, devices } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
+
+const CONTROL = process.env.SWEEP_PHONE_CONTROL ?? '';
+if (CONTROL && CONTROL !== 'counthidden') {
+  console.error(`SWEEP_PHONE_CONTROL=${CONTROL} is not a control this sweep knows (counthidden)`);
+  process.exit(2);
+}
+if (CONTROL) console.log(`CONTROL ${CONTROL} is on: visually hidden controls are measured like visible ones, so the sweep is SUPPOSED to fail.`);
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -130,10 +149,19 @@ for (const route of ROUTES) {
   try {
     await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded', timeout: 20000 });
     await page.waitForTimeout(500);
-    metrics = await page.evaluate(() => {
+    metrics = await page.evaluate((countHidden) => {
       const doc = document.documentElement;
       const main = document.querySelector('main') ?? document.body;
       const skip = el => el.closest('.dukb-ticker-track') || el.closest('footer') || el.closest('nav');
+      /* Round 635: invisible to every finger, so not a tap target. The shape,
+         not a class name: at most 1 by 1 with overflow hidden, or clipped to
+         nothing. See the header. */
+      const visuallyHidden = (el, r) => {
+        if (countHidden) return false;
+        const cs = getComputedStyle(el);
+        if (r.width <= 1 && r.height <= 1 && cs.overflow === 'hidden') return true;
+        return cs.clip === 'rect(0px, 0px, 0px, 0px)' || cs.clipPath === 'inset(50%)';
+      };
 
       /* 1. sideways scroll on the document itself */
       const overflow = doc.scrollWidth - doc.clientWidth;
@@ -172,6 +200,7 @@ for (const route of ROUTES) {
         if (skip(el)) continue;
         const r = el.getBoundingClientRect();
         if (r.width === 0 || r.height === 0) continue;
+        if (visuallyHidden(el, r)) continue;
         const label = (el.textContent ?? '').trim().slice(0, 22);
         if (r.height < 30 && label.length > 2 && !isProseLink(el)) small.push(`${label} (${Math.round(r.height)}px)`);
         boxes.push({ label, x: r.x, y: r.y, w: r.width, h: r.height });
@@ -201,7 +230,7 @@ for (const route of ROUTES) {
         }
       }
       return { overflow, culprit, small, tiny, hits, controls: boxes.length };
-    });
+    }, CONTROL === 'counthidden');
   } catch (e) {
     fail(`${route}: would not load (${String(e).split('\n')[0].slice(0, 90)})`);
     continue;
