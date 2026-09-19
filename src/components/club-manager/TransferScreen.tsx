@@ -7,7 +7,7 @@ import { FlagImg } from '@/components/FlagImg';
 import { groupByConfederation } from '@/lib/confederationGroups';
 import { Input } from '@/components/ui/input';
 import { Newspaper, ArrowDownToLine, ArrowUpFromLine, Handshake, Zap, TrendingUp } from 'lucide-react';
-import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, leagueOf } from '@/lib/clubManager';
+import { money, moneyIn, sellValue, releaseClauseOf, loanEligible, loanFeeOf, activeLoans, loanOutFee, canLeaveSquad, dealPackageValue, leagueOf, loanOutRefusal } from '@/lib/clubManager';
 import type { CareerState, CMPlayer, MarketPlayer, TransferStatus, DealExtras } from '@/lib/clubManager';
 /* Round 506: the deal desk. The screen reads the SAME verdict and the SAME
    meter the engine judges with, so what the bar says while you are typing and
@@ -72,6 +72,9 @@ interface TransferScreenProps {
   onEndLoanEarly: (playerId: string) => void;
   /* Round 508: bring one of MY loans back early. */
   onRecallLoanee: (playerId: string) => void;
+  /* Round 634 review: why the last press did nothing, and a way to clear it. */
+  deskNote?: string | null;
+  onClearNote?: () => void;
 }
 
 /** Round 94: the three things you can tell the world about a player. */
@@ -99,6 +102,7 @@ export function TransferScreen({
   onNegotiate, onOffer, onWalk, onDismissNegotiation, onClause, onLoan,
   onAcceptBid, onRejectBid, onSetStatus, onLoanOut,
   onProposeTerms, onBuyLoanee, onEndLoanEarly, onRecallLoanee,
+  deskNote, onClearNote,
 }: TransferScreenProps) {
   /* Round 514: the money symbol follows the start option. Shadowing the
      import here is one line instead of a career argument on every call. */
@@ -293,6 +297,16 @@ export function TransferScreen({
 
   return (
     <div className="space-y-4">
+      {/* Round 634 review: why the last press did nothing, in the engine's own
+          words. A refused door used to be a dead button. */}
+      {deskNote && (
+        <div role="status" data-testid="cm-desk-note" className="rounded-xl border border-yellow-500/50 bg-yellow-500/10 px-3 py-2 text-xs text-foreground flex items-start justify-between gap-2">
+          <span>{deskNote}</span>
+          {onClearNote && (
+            <button onClick={onClearNote} className="shrink-0 text-muted-foreground hover:text-foreground font-bold" aria-label="Dismiss">x</button>
+          )}
+        </div>
+      )}
       {/* Window status + budget */}
       <div className={cn(
         'rounded-xl border p-3 flex items-center justify-between',
@@ -975,8 +989,7 @@ export function TransferScreen({
               </p>
               {sellable.map(p => {
                 const st = p.transferStatus;
-                const free = canSell(p);
-                const pill = (key: TransferStatus, label: string) => (
+                const pill =(key: TransferStatus, label: string) => (
                   <button
                     key={key}
                     onClick={() => onSetStatus(p.id, st === key ? null : key)}
@@ -1058,16 +1071,26 @@ export function TransferScreen({
                       {pill('listed', 'Transfer list')}
                       {pill('loanListed', 'Loan list')}
                       {pill('blocked', 'Not for sale')}
-                      <button
-                        onClick={() => onLoanOut(p.id)}
-                        disabled={!free}
-                        title={free ? 'Send him out on loan for the rest of the season' : 'Squad rules block this right now'}
-                        className={cn('px-2 py-1 rounded-md text-[9px] font-bold border transition-all',
-                          free ? 'bg-card border-sky-500/50 text-sky-400 hover:border-sky-400'
-                            : 'bg-secondary border-border text-muted-foreground cursor-not-allowed')}
-                      >
-                        Loan out now +{money(loanOutFee(p))}
-                      </button>
+                      {/* Round 634 review: the engine's own reason on the
+                          button, and the one-a-season rule on its face, since
+                          a tooltip never shows on a phone. */}
+                      {(() => {
+                        const outWhy = loanOutRefusal(career, p.id);
+                        const usedUp = p.loanOutSeason === career.season;
+                        return (
+                          <button
+                            onClick={() => onLoanOut(p.id)}
+                            disabled={!!outWhy}
+                            title={outWhy ?? 'Send him out on loan for the rest of the season'}
+                            data-cm-loan-out={usedUp ? 'used' : outWhy ? 'blocked' : 'open'}
+                            className={cn('px-2 py-1 rounded-md text-[9px] font-bold border transition-all',
+                              !outWhy ? 'bg-card border-sky-500/50 text-sky-400 hover:border-sky-400'
+                                : 'bg-secondary border-border text-muted-foreground cursor-not-allowed')}
+                          >
+                            {usedUp ? 'Loaned out once this season' : <>Loan out now +{money(loanOutFee(p))}</>}
+                          </button>
+                        );
+                      })()}
                         </>
                       )}
                     </div>

@@ -197,6 +197,20 @@ const ClubManager = () => {
           <HowToPlayPopover title="How to Play Club Manager" triggerSide="right">
             <ScreenLoading><ClubManagerHelp /></ScreenLoading>
           </HowToPlayPopover>
+          {/* Round 634: the save was refused and the player is told, in plain
+              words, once per phase screen and only while it stays refused.
+              Before this a full or blocked browser store dropped the career
+              silently, which is the first live report of 2026-09-13. */}
+          {g.saveFailed && (
+            <div role="alert" data-testid="cm-save-failed" className="mb-4 rounded-xl border border-destructive/60 bg-destructive/10 px-4 py-3 text-sm text-foreground">
+              <div className="font-bold">Your career is not being saved right now.</div>
+              <div className="mt-1 text-muted-foreground">
+                This browser has no storage left for douknowball.com, or is blocking it (private browsing does that).
+                Whatever you do here will be gone when you leave the page. To fix it, free up space in your browser's
+                site settings or open the game in a normal window, then play a week and this notice will go away.
+              </div>
+            </div>
+          )}
           {inner}
         </div>
         <AdBanner slot="7540487748" format="horizontal" className="mt-8" />
@@ -1305,6 +1319,8 @@ const ClubManager = () => {
             onBuyLoanee={g.buyLoanee}
             onEndLoanEarly={g.endLoanEarly}
             onRecallLoanee={g.recallLoanee}
+            deskNote={g.deskNote}
+            onClearNote={g.clearDeskNote}
           /></ScreenLoading>
         </TabsContent>
       </Tabs>

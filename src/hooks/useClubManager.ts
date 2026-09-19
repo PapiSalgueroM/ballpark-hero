@@ -16,7 +16,9 @@ import {
   setDuty, dutyOptions, dutyLineOf, pitchLineOf, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
   DEFAULT_ERA_ID,
   releasePlayer, signFreeAgent,
+  doorRefusal, loanOutRefusal,
 } from '@/lib/clubManager';
+import type { MarketDoor } from '@/lib/clubManager';
 import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation, FormationSlot } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
@@ -121,10 +123,23 @@ export function useClubManager() {
     }
   }, []);
 
+  /* Round 634: whether the last write was refused. saveCareer swallowed every
+     throw until this round, so a browser out of storage for this site, or one
+     blocking it, dropped the career on the floor and the player was told
+     nothing ("Manager career doesnt save if you leave the website", filed
+     2026-09-13). True from the first refused write until one succeeds, and
+     the page shows a plain banner while it is true. */
+  const [saveFailed, setSaveFailed] = useState(false);
+  const note = useCallback((ok: boolean) => setSaveFailed(!ok), []);
+  /* Round 634 review: why the last press on the transfer desk did nothing, in
+     the engine's own words (doorRefusal, loanOutRefusal), or null when it went
+     through. A refused press used to be a dead button. */
+  const [deskNote, setDeskNote] = useState<string | null>(null);
+
   // Persist the career on every change.
   useEffect(() => {
-    if (career) saveCareer(career);
-  }, [career]);
+    if (career) note(saveCareer(career));
+  }, [career, note]);
 
   /* ---------- Round 567: and persist it when the page goes away ---------- */
 
@@ -157,7 +172,11 @@ export function useClubManager() {
   useEffect(() => { careerRef.current = career; }, [career]);
 
   useEffect(() => {
-    const write = () => { const c = careerRef.current; if (c) saveCareer(c); };
+    /* Round 634: the same write, and it reports. A refused write at pagehide
+       cannot reach the screen (the page is going), but one at a tab switch
+       can, and the banner is there when the tab comes back. Same career,
+       same bytes, so a write that repeats the effect's own is harmless. */
+    const write = () => { const c = careerRef.current; if (c) note(saveCareer(c)); };
     const onHidden = () => { if (document.visibilityState === 'hidden') write(); };
     window.addEventListener('pagehide', write);
     document.addEventListener('visibilitychange', onHidden);
@@ -438,13 +457,21 @@ export function useClubManager() {
   }, [career]);
 
   /* ---------- transfers ---------- */
+  /* Round 634 review: read off the career the player is looking at (the last
+     commit), which is the one his press was made against. */
+  const explain = useCallback((mp: MarketPlayer, door: MarketDoor) => {
+    const now = careerRef.current;
+    setDeskNote(now ? doorRefusal(now, mp, door) : null);
+  }, []);
+
   const buy = useCallback((mp: MarketPlayer) => {
+    explain(mp, 'buy');
     setCareer(prev => {
       if (!prev) return prev;
       const next = buyPlayer(prev, mp);
       return next ?? prev;
     });
-  }, []);
+  }, [explain]);
 
   /* Round 141: the instant sell action is gone. Selling is: transfer list
      him (setTransferStatus), let bids arrive, accept one (acceptBid below).
@@ -452,8 +479,9 @@ export function useClubManager() {
 
   /* ---------- Round 71: negotiations, clauses, loans, incoming bids ---------- */
   const negotiate = useCallback((mp: MarketPlayer) => {
+    explain(mp, 'talk');
     setCareer(prev => (prev ? startNegotiation(prev, mp) ?? prev : prev));
-  }, []);
+  }, [explain]);
 
   /* Round 161: an offer can be a package: cash plus add-ons plus a sell-on
      plus a part-exchange player. Extras default to nothing, which is the
@@ -571,14 +599,21 @@ export function useClubManager() {
   }, []);
 
   const clause = useCallback((mp: MarketPlayer) => {
+    explain(mp, 'clause');
     setCareer(prev => (prev ? payClause(prev, mp) ?? prev : prev));
-  }, []);
+  }, [explain]);
 
   const loan = useCallback((mp: MarketPlayer) => {
+    explain(mp, 'loan');
     setCareer(prev => (prev ? loanIn(prev, mp) ?? prev : prev));
-  }, []);
+  }, [explain]);
 
   const acceptIncomingBid = useCallback((playerId: string) => {
+    /* Round 634 review: a loan approach goes through loanOutPlayer, so it is
+       refused on the same one-a-season rule and says so. */
+    const now = careerRef.current;
+    const bid = now?.incomingBids?.find(b => b.playerId === playerId);
+    setDeskNote(now && bid?.loan ? loanOutRefusal(now, playerId) : null);
     setCareer(prev => (prev ? acceptBid(prev, playerId) ?? prev : prev));
   }, []);
 
@@ -592,6 +627,8 @@ export function useClubManager() {
   }, []);
 
   const loanOut = useCallback((playerId: string) => {
+    const now = careerRef.current;
+    setDeskNote(now ? loanOutRefusal(now, playerId) : null);
     setCareer(prev => (prev ? loanOutPlayer(prev, playerId) ?? prev : prev));
   }, []);
 
@@ -738,6 +775,7 @@ export function useClubManager() {
 
   return {
     simToWeek,
+    saveFailed, deskNote, clearDeskNote: () => setDeskNote(null),
     phase, career, report, summary, activeTab, setActiveTab, pendingClub,
     market, nextFx, tableRows, myPosition, facts,
     resume, startNew, chooseClub, confirmClub, confirmCustomClub,
