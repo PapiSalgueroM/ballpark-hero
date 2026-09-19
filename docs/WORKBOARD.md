@@ -1,5 +1,16 @@
 # Work board
 
+**2026-09-19 afternoon, desktop Claude lane: Rounds 631, 633, 634, 635, 639 and 638 part one ON
+MAIN.** Full node suite 333 of 333 on the frozen built tree, the browser harnesses for what the
+release touches green (the home page maker note red is pre-existing on main). Account in
+`docs/PROJECT-STATE.md`. Round 637 is DONE (every reported Transfer Path chain, Alphabet Sprint and
+17-0 report checked and closed; none was a live bug). Round 636 (Fight Career bar pinning) is still
+open. **Built and waiting for the next release, on `release-b` in the gate clone:** all 126 guides
+in keyword sections (638 part two), Round 632 (youth padding kids priced like real teenagers) and
+Round 640 (created club squads priced like real squads, the budget sets the wage room, the quality
+slider stays free and founders above what the money buys sell on at the money's level). **This lane
+claims 641 to 649** for what comes next; the next free number for anyone else is 650.
+
 **2026-09-19, desktop Claude lane: main `32012b2c` PUBLISHED to douknowball.com**, deployment
 `73e62cdc`, entry `index-d4nq1olf.js`. That is every round on main since 616: Codex's 586 to 588
 and 603 to 605, and Claude's 617, 618, 619, 626, 628, 629 and 630. Proof and timings in

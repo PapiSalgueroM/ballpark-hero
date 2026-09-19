@@ -25,8 +25,8 @@
     "date": "2026-08-25"
   },
   "/baseball": {
-    "hash": "e92da0b96b76698c",
-    "date": "2026-09-12"
+    "hash": "cd59a5fd209926c4",
+    "date": "2026-09-19"
   },
   "/baseball-career": {
     "hash": "68d206bdcb581ff5",
@@ -41,16 +41,16 @@
     "date": "2026-09-05"
   },
   "/build-your-xi": {
-    "hash": "2f630c3fe3857405",
-    "date": "2026-09-05"
+    "hash": "b6e6a97d30471735",
+    "date": "2026-09-19"
   },
   "/buzzer-beater": {
-    "hash": "3e4cce6a85e6deda",
-    "date": "2026-09-05"
+    "hash": "0f2ec0f8de5b4bf8",
+    "date": "2026-09-19"
   },
   "/career": {
-    "hash": "3cb3b3f74b7bd08c",
-    "date": "2026-08-25"
+    "hash": "17e2aa5bba3a0370",
+    "date": "2026-09-19"
   },
   "/career-ladder": {
     "hash": "6c5dec55d924ee3c",
@@ -85,24 +85,24 @@
     "date": "2026-09-15"
   },
   "/club-manager": {
-    "hash": "7ae12ff39121029d",
-    "date": "2026-09-10"
+    "hash": "3472959b55584d3d",
+    "date": "2026-09-19"
   },
   "/clue-auction": {
     "hash": "17d25413c6a75e74",
     "date": "2026-09-05"
   },
   "/college": {
-    "hash": "148204f3654be605",
-    "date": "2026-09-11"
+    "hash": "a4c1edc88070a6df",
+    "date": "2026-09-19"
   },
   "/college-grid": {
     "hash": "d00b5adab33638f1",
     "date": "2026-09-15"
   },
   "/connections": {
-    "hash": "8c2bf0265e2f04fd",
-    "date": "2026-09-04"
+    "hash": "b774e221480c0ed4",
+    "date": "2026-09-19"
   },
   "/conquest": {
     "hash": "61cdab0250583ab7",
@@ -165,28 +165,28 @@
     "date": "2026-09-16"
   },
   "/football-connect-4": {
-    "hash": "1a0763b3b69b4732",
-    "date": "2026-09-05"
+    "hash": "1085665e9134b52f",
+    "date": "2026-09-19"
   },
   "/football-grid": {
     "hash": "22af3b5a7fc95f4e",
     "date": "2026-09-02"
   },
   "/footle": {
-    "hash": "beb5b2ab12d814d6",
-    "date": "2026-09-15"
+    "hash": "1e3ea4182bb166ec",
+    "date": "2026-09-19"
   },
   "/free-kick": {
     "hash": "e890e3158e3bbd38",
     "date": "2026-09-04"
   },
   "/front-office": {
-    "hash": "f4e9f92b8e92c120",
-    "date": "2026-09-15"
+    "hash": "fd1020d611f13be8",
+    "date": "2026-09-19"
   },
   "/gauntlet-draft": {
-    "hash": "4028240e25b274e6",
-    "date": "2026-09-05"
+    "hash": "4b1ea7193f7180b3",
+    "date": "2026-09-19"
   },
   "/golf-higher-lower": {
     "hash": "ed9da4580dd92ddb",
@@ -225,12 +225,12 @@
     "date": "2026-08-25"
   },
   "/higher-lower": {
-    "hash": "fc9393b4b81e3917",
-    "date": "2026-09-16"
+    "hash": "96a1530cca10255a",
+    "date": "2026-09-19"
   },
   "/hockey": {
-    "hash": "926d365410bad509",
-    "date": "2026-09-12"
+    "hash": "3c47a98ce90d6d69",
+    "date": "2026-09-19"
   },
   "/hockey-career": {
     "hash": "5427ba68ddb85460",
@@ -289,8 +289,8 @@
     "date": "2026-09-12"
   },
   "/mlb-front-office": {
-    "hash": "7c6d845f22bf809f",
-    "date": "2026-09-15"
+    "hash": "2aaff16e7f16e3d5",
+    "date": "2026-09-19"
   },
   "/mlb-gauntlet-draft": {
     "hash": "51e48bfcc78515ce",
@@ -329,36 +329,36 @@
     "date": "2026-08-25"
   },
   "/nba-chain": {
-    "hash": "ebcae1449180947a",
-    "date": "2026-09-02"
+    "hash": "8b8f140c01e644cd",
+    "date": "2026-09-19"
   },
   "/nba-connect-4": {
-    "hash": "04cd3f7824d28baf",
-    "date": "2026-09-03"
+    "hash": "fb1a737d428979b6",
+    "date": "2026-09-19"
   },
   "/nba-connections": {
     "hash": "1f8536d90211291a",
     "date": "2026-09-07"
   },
   "/nba-front-office": {
-    "hash": "bcc3561fb3cb1219",
-    "date": "2026-09-15"
+    "hash": "d86b17d8c7ef78d2",
+    "date": "2026-09-19"
   },
   "/nba-gauntlet-draft": {
     "hash": "265d5c52cbcddfad",
     "date": "2026-09-12"
   },
   "/nba-grid": {
-    "hash": "a1ded92bc1153386",
-    "date": "2026-08-30"
+    "hash": "3d7deff10d7d6689",
+    "date": "2026-09-19"
   },
   "/nba-grid/archive": {
     "hash": "80e43e65bd3e573d",
     "date": "2026-09-05"
   },
   "/nba-higher-lower": {
-    "hash": "631aee302cbeab9d",
-    "date": "2026-08-25"
+    "hash": "0f7231f42c9980b4",
+    "date": "2026-09-19"
   },
   "/nba-my-career": {
     "hash": "01b3795ffbca6c70",
@@ -369,12 +369,12 @@
     "date": "2026-09-15"
   },
   "/nba-starting-5": {
-    "hash": "2b384f95c747731e",
-    "date": "2026-08-27"
+    "hash": "c9d8ad2ddbccad8b",
+    "date": "2026-09-19"
   },
   "/nba-stat-line": {
-    "hash": "4f010cd71c4e1e82",
-    "date": "2026-09-04"
+    "hash": "4e55500f026d4ff1",
+    "date": "2026-09-19"
   },
   "/nfl-career": {
     "hash": "22bc35a92b7f5acd",
@@ -413,8 +413,8 @@
     "date": "2026-09-11"
   },
   "/nhl-front-office": {
-    "hash": "0875af4ce6f1fb7f",
-    "date": "2026-09-15"
+    "hash": "07e8abff12d0f180",
+    "date": "2026-09-19"
   },
   "/nhl-my-career": {
     "hash": "e3f310cea04577d4",
@@ -469,12 +469,12 @@
     "date": "2026-09-16"
   },
   "/pro-basketball": {
-    "hash": "c1d239757fa9b51f",
-    "date": "2026-09-12"
+    "hash": "2b550fcbf685d3dd",
+    "date": "2026-09-19"
   },
   "/pro-football": {
-    "hash": "11feb9a6dda95088",
-    "date": "2026-09-11"
+    "hash": "6e2bb831bf809aeb",
+    "date": "2026-09-19"
   },
   "/puck-detective": {
     "hash": "3f820f4d4781acaa",
@@ -509,16 +509,16 @@
     "date": "2026-09-05"
   },
   "/sign-the-player": {
-    "hash": "1a12e01f6b99651f",
-    "date": "2026-09-05"
+    "hash": "8ce1dac34b089abe",
+    "date": "2026-09-19"
   },
   "/silverware-sort": {
     "hash": "08c8664163cf2ba4",
     "date": "2026-09-05"
   },
   "/soccer": {
-    "hash": "ba2885785af74088",
-    "date": "2026-09-11"
+    "hash": "c01a440653214c3e",
+    "date": "2026-09-19"
   },
   "/soccer-career": {
     "hash": "a3093b54096436eb",
@@ -529,8 +529,8 @@
     "date": "2026-09-16"
   },
   "/soccer-grid": {
-    "hash": "0a981bb30ac03886",
-    "date": "2026-09-02"
+    "hash": "885b7c7937a5314e",
+    "date": "2026-09-19"
   },
   "/sports-bingo": {
     "hash": "666aaa3c63b62669",
@@ -545,12 +545,12 @@
     "date": "2026-09-16"
   },
   "/stadium-tycoon": {
-    "hash": "7a61e44d5bf8c530",
-    "date": "2026-09-16"
+    "hash": "0753a63b0d3c83d5",
+    "date": "2026-09-19"
   },
   "/stat-detective": {
-    "hash": "c4a41377555608e0",
-    "date": "2026-08-30"
+    "hash": "f6bd4019673e6aa0",
+    "date": "2026-09-19"
   },
   "/teammates": {
     "hash": "2a0b8f735a0e3f32",
@@ -581,8 +581,8 @@
     "date": "2026-09-16"
   },
   "/whats-new": {
-    "hash": "80294310cc3fcd3a",
-    "date": "2026-09-17"
+    "hash": "7e99f109fe7dae90",
+    "date": "2026-09-19"
   },
   "/who-am-i": {
     "hash": "c8d9b0e1afb1c729",

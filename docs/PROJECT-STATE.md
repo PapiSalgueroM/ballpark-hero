@@ -1,5 +1,73 @@
 # Project state
 
+## RELEASE 2026-09-19: Rounds 631, 633, 634, 635, 639 and Round 638 part one
+
+Built and gated by the desktop Claude lane in the CRLF gate clone (`C:\Users\antho\dukb-gate`) on
+branch `release-633-639`. Publish record: see the LIVE line added when it went out.
+
+- **631, a cut costs something in all four front offices.** Cutting (NFL), waiving (NBA, NHL) or
+  designating (MLB) a man freed his whole salary and let the same team sign him straight back on a
+  one year deal: measured on the shipped engines, Trey McBride's cut freed 23.7M of NFL room and the
+  re-sign reset his deal from three years to one. One helper, `src/lib/frontOfficeCuts.ts`, now holds
+  the rule for all four engines: half his salary stays on this season's number as dead money, a
+  quarter on next season's if he had years left, and he cannot come back to that team until the
+  offseason, by signing or by trade. The boards quote the dead money in a two step confirm, show it
+  on the cap line, and grey Sign, Cut and trade talks with the reason at the roster floor, the roster
+  ceiling and for a man cut this season. A lean review (two lenses, two skeptics) confirmed the hub's
+  Free agency tile recommending the man you had just cut on all four sims, a fence that could not
+  catch a fifth engine, and silent buttons at the floor and ceiling; all fixed. `simFrontOfficeCuts`
+  (1,183 checks over four sims, nine sections, eleven controls each red on its own sections).
+- **633, the Club Manager season score reads the manager, not the club** (the claude.ai/code lane's
+  PR 103, landed here). Five terms that are yours: league form over the fixtures you managed, the
+  title scaled by your share of the season, the cup and European rounds you took the club through,
+  and the board's asks graded once at the final whistle, capped at 130. A five lens review with three
+  skeptics each confirmed five defects, all fixed: a pre 633 takeover save is scored from its own
+  fixture log (form term above zero at the moment of takeover in 0 of 54 saves, was 40 of 54 and up
+  to 53 points), stamped board ticks are subtracted by id, and the harness drives sales, loans and
+  payoffs in every career and checks each stamped subtraction alone. 17 controls.
+- **634, Club Manager saves say whether they wrote, and the duplicate is gone.** Two footer reports
+  on 2026-09-13. `saveCareer` swallowed every storage error; it returns whether it wrote, retries in a
+  lean shape, and the page shows a banner while it fails. The save plateaus at 162 to 166 KB, so Club
+  Manager alone cannot fill a quota; the cause is a browser refusing the write. The duplicate
+  reproduced through the loan desk (a man out on loan was listed at your own club, bought back, and
+  came home twice); the market hides him, a stale card is refused with its reason, a save carrying
+  the pair is repaired on load (keyed on name, position and age: the projection gives 50 club rosters
+  two different generated men with one name, and a name only key deleted one, the review's blocker),
+  and a man can be loaned out once a season, closing a loan and recall loop worth 80m a window.
+  `simClubManagerSaveSize` (8 sections, 8 controls), a browser proof that the pagehide write alone
+  restores the career.
+- **635, phone tap targets and reduced motion.** The World Cup Bracket toggle was 20px tall; the
+  phone sweep now skips a visually hidden control by shape (Stadium Tycoon's 1px screen reader twin,
+  control `counthidden`) and all 161 routes pass. One reduced motion rule now covers every transition
+  and animation (the fight bars' width transitions were missing), measured on 19 routes by computed
+  duration (control `noblanket`). `playLiveTicker`'s resume check had been red on healthy code since
+  Round 414 slowed the crawl to 75 px/s; its bar is read from the shipped speed (control `noresume`).
+- **638 part one, keyword headings in the game guides.** The guide block renders h3 sections and h4
+  subsections under keyword h2s that carry the game's name, and one accessor (`flatGuide`) derives
+  the flat lists everything else reads. 19 guides in this release (Club Manager, Stadium Tycoon, nine
+  soccer and eight NBA games); saved Club Manager page 1 h1, 7 h2, 23 h3, 8 h4 (was 10 h3, 0 h4). Every
+  original sentence kept word for word, proven by `simGuideHeadings` against frozen originals of all
+  126 guides. All 126 are converted on `r638-guide-headings` and ship next.
+- **639, sport hub headings.** Each hub's section headings name the sport ("NFL career and front
+  office sims", "Where to start with the NFL games"), and every game on a hub is an h3 holding its
+  link, stretched over the card. `simHubs` section 6 reads the saved hubs (control `cardlink`).
+
+**Gates on this tree:** tsc 0. `build:seo` exit 0: 157 routes prerendered, 30 pages really changed
+(the 19 guides, the six hubs, the four front office guides and What's New), the sitemap ledger
+re-dated exactly those 30 and held 121. The full node suite on the frozen tree: **all 333 harnesses
+green** in 76 minutes (10:46 to 12:02 UTC). Browser harnesses on the built site: playSoftFourOhFour, playReducedMotion, playClubManagerSaveLeave, playLiveTicker, sweepPhone (161 routes), playSnapshotDrift and playRenderStability (151 routes, 5 renders each) green; playHowTo red once on /budget-builder in the full walk, then green alone twice and green over all 127 games on a quiet machine, so a timing flake; playHomeFold section 5 (the maker note renders for a fresh visitor) red, and identically red on main d7556a17, so pre-existing and not this release.
+
+**Settled the same day under the owner's "do everything that does not cost money":** the competitor
+research docs left the public tree, the inflated profile points were recomputed, and every open footer report
+but two was checked against the live site or the data and closed (the two Club Manager save reports
+close when this is live).
+
+**Next, already built:** all 126 guides converted (638 part two), Round 632 (youth padding kids sold
+for up to 16m and now fetch 0.3m to 1.3m, graduates untouched), and Round 640 (created club squads
+priced like real squads of their level, 827m down to 39m for a mid tier squad), which is being fixed
+for the wage cap and quality slider problems its own builder found. Open: Player Bingo summer 2026
+transfers need a documented dataset; Lucas Herrington is in no table.
+
 ## LIVE 2026-09-19: everything on main since Round 616, main `32012b2c`
 
 **douknowball.com is serving it.** Deployment `73e62cdc-c880-44bf-a499-7cb645f9f761`, called by the
