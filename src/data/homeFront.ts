@@ -1,4 +1,5 @@
-import { CATEGORIES, type CategoryTitle } from './gameRegistry';
+import { ALL_GAMES, CATEGORIES, type CategoryTitle, type GameDef } from './gameRegistry';
+import { dailyIndex } from '@/lib/dateUtils';
 
 /**
  * Round 658: the home front.
@@ -94,3 +95,64 @@ export const HOME_STAGE: StageEntry[] = [
   { path: '/stadium-tycoon', kicker: 'Idle empire', cta: 'Build it', art: 'stand' },
   { path: '/nba-my-career', kicker: 'Hoops career', cta: 'Get drafted', art: 'court' },
 ];
+
+/* ── Round 659 ─────────────────────────────────────────────────────────── */
+
+/**
+ * Every daily game, straight off the registry's daily flag, in registry
+ * order. The dailies rail shows exactly these and nothing typed by hand.
+ *
+ * A PLAIN RAIL, NOT A CHECKLIST. Round 293 put a personal dailies checklist
+ * on the home page and Round 297 removed it on the owner's direct word ("The
+ * your dailies I would say get rid of it"). So the rail carries no ticks, no
+ * day counts and no "N of M done": it renders the same for everybody, and
+ * scripts/simHomeFront.mjs renders it with and without a planted streak
+ * record and fails if the two differ.
+ */
+export function dailyGames(): GameDef[] {
+  return ALL_GAMES.filter(g => g.daily);
+}
+
+/**
+ * Today's puzzle: one daily game picked by the date, the same for everyone,
+ * a different one every day. dailyIndex walks the whole pool once per cycle
+ * in an order nobody can work out from yesterday, and never repeats the same
+ * board two days running, so every daily gets its day on the front.
+ */
+export function todaysPuzzle(dateStr: string): GameDef | null {
+  const all = dailyGames();
+  if (all.length === 0) return null;
+  return all[dailyIndex(dateStr, all.length)] ?? null;
+}
+
+/**
+ * The newest games by the day they shipped (the registry's addedOn, which
+ * simNewBadge holds against git), newest first, registry order on a tie. No
+ * date is typed here: the box moves on its own when the next game ships.
+ */
+export function justShipped(n: number): GameDef[] {
+  return ALL_GAMES
+    .map((g, i) => ({ g, i }))
+    .filter(x => !!x.g.addedOn)
+    .sort((a, b) => (b.g.addedOn as string).localeCompare(a.g.addedOn as string) || a.i - b.i)
+    .slice(0, n)
+    .map(x => x.g);
+}
+
+/** The short name a chip prints beside its glyph, so a sport is named in
+    words wherever sports mix. */
+export const SPORT_NAME: Record<SportKey, string> = {
+  soccer: 'Soccer',
+  football: 'NFL',
+  college: 'College',
+  basketball: 'NBA',
+  baseball: 'MLB',
+  hockey: 'NHL',
+  f1: 'F1',
+  tennis: 'Tennis',
+  golf: 'Golf',
+  aussie: 'AFL',
+  nascar: 'NASCAR',
+  combat: 'Combat',
+  world: 'All sports',
+};

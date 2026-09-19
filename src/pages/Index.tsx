@@ -9,6 +9,8 @@ import { StreakReminder } from '@/components/game/StreakReminder';
 import { useMostPlayed } from '@/hooks/useMostPlayed';
 import { PollOfTheDay } from '@/components/home/PollOfTheDay';
 import { FeaturedStage } from '@/components/home/FeaturedStage';
+import { DailyRail } from '@/components/home/DailyRail';
+import { JustShipped } from '@/components/home/JustShipped';
 import { SportGlyph, sportStyle } from '@/components/home/SportGlyph';
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
@@ -321,6 +323,19 @@ export default function Index() {
                     to play: a 390 by 844 phone sees it at about y=250, where
                     the Round 283 fence allows 430. */}
                 <FeaturedStage />
+              </div>
+
+              {/* ─── DAILY PUZZLES ───
+                  Round 659: every daily on the site in one rail, led by
+                  Today's puzzle, which the date picks for everyone. A plain
+                  rail, never a checklist: Round 293 put a personal dailies
+                  checklist here and Round 297 removed it on the owner's
+                  direct instruction in the 2026-08-26 tweaks document ("The
+                  your dailies I would say get rid of it"). Nothing on the
+                  rail reads a visitor's record, and simHomeFront renders it
+                  with and without one to prove it. */}
+              <div className="space-y-4">
+                <DailyRail />
 
                 {/* A line, not a gate. Everything on this site plays signed
                     out, so the account is an upsell and belongs where an
@@ -346,11 +361,27 @@ export default function Index() {
                 <StreakReminder />
               </div>
 
-              <MostPlayedToday />
-              {/* Round 293 put a personal dailies checklist here. Round 297 removed
-                  it on the owner's direct instruction in the 2026-08-26 tweaks
-                  document ("The your dailies I would say get rid of it"). Most
-                  played stays, per the same document. */}
+              {/* Most played stays, per the same 2026-08-26 document, and
+                  still counts real people with its curated fallback. Round
+                  659 sets Just shipped beside it on a wide screen. */}
+              <div className="grid gap-10 lg:grid-cols-2 lg:gap-8">
+                <MostPlayedToday />
+                <JustShipped>
+                  {games => (
+                    <RevealSection>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        {games.map((game, i) => (
+                          <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} />
+                        ))}
+                      </div>
+                    </RevealSection>
+                  )}
+                </JustShipped>
+              </div>
+
+              {/* Round 659: the polls sit under the games now. They invite a
+                  click, the tiles get played, and the first screen belongs to
+                  the tiles. PollOfTheDay holds its own height while it loads. */}
               <PollOfTheDay />
               {/* ROUND 382: the maker's note is gone from here, on the owner's
                   instruction: "it shouldnt pop up there I would rather you put it
@@ -463,13 +494,24 @@ function StatChip({ icon, label, value, unit }: { icon: ReactNode; label: string
 function MostPlayedToday() {
   const { entries, loading } = useMostPlayed();
 
+  /* Round 659: an h2 now, still the section's first heading, which is how
+     playHomeFold section 3 finds it. */
+  const heading = (
+    <h2 className="mb-3 flex items-center gap-2.5 text-lg font-display font-bold text-foreground">
+      <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-warn/15 text-warn ring-1 ring-inset ring-warn/30">
+        <Flame className="h-4 w-4" />
+      </span>
+      Most played today
+    </h2>
+  );
+
   if (loading && entries.length === 0) {
     return (
       <section>
-        <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">🔥 Most Played Today</p>
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+        {heading}
+        <div className="grid gap-2">
           {[1, 2, 3].map(i => (
-            <div key={i} className="h-14 rounded-lg bg-muted/30 animate-pulse" />
+            <div key={i} className="h-[68px] rounded-xl bg-muted/30 animate-pulse" />
           ))}
         </div>
       </section>
@@ -480,31 +522,44 @@ function MostPlayedToday() {
 
   return (
     <section>
-      <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">🔥 Most Played Today</p>
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-        {entries.map(({ game, isFallback }) => (
-          <Link
-            key={game.path}
-            to={game.path}
-            className="min-w-0 flex items-center gap-2 rounded-lg border border-border bg-card/80 px-3 py-2.5 hover:border-primary/40 transition-colors"
-          >
-            <span className="text-lg shrink-0">{game.emoji}</span>
-            <div className="min-w-0">
-              <span className="text-xs font-bold text-foreground block truncate">{game.label}</span>
-              {/* ROUND 283: all three of these tiles read "Popular pick", the
-                  same two words under three different games, because the
-                  fallback label is a constant. Every game in the registry
-                  carries its own one line description and that is what a
-                  person needs in order to choose between three tiles. The
-                  "Trending today" case keeps its label, because there the
-                  label IS the information: it says the ranking is real. */}
-              <span className="text-[10px] text-muted-foreground block truncate">
-                {isFallback ? game.description : 'Trending today'}
-              </span>
-            </div>
-          </Link>
-        ))}
-      </div>
+      {heading}
+      <ol className="grid gap-2">
+        {entries.map(({ game, isFallback }, rank) => {
+          const sport = sportOf(game.path);
+          return (
+            <li key={game.path}>
+              <Link
+                to={game.path}
+                style={sportStyle(sport)}
+                className="group flex h-[68px] min-w-0 items-center gap-3 rounded-xl border border-border/80 bg-surface-1 px-3 transition-colors hover:border-tile/50 hover:bg-surface-2"
+              >
+                {/* the rank, in the game's own sport ink */}
+                <span aria-hidden="true" className="w-6 shrink-0 text-center font-display text-2xl font-bold tabular-nums text-tile">{rank + 1}</span>
+                <span aria-hidden="true" className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-tile/15 text-xl ring-1 ring-inset ring-tile/25">{game.emoji}</span>
+                <div className="min-w-0 flex-1">
+                  <span className="flex items-center gap-2">
+                    <span className="truncate text-sm font-bold text-foreground group-hover:text-primary">{game.label}</span>
+                    {!isFallback && (
+                      <span className="shrink-0 rounded bg-warn/15 px-1.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-warn">Trending</span>
+                    )}
+                  </span>
+                  {/* ROUND 283: all three of these tiles read "Popular pick",
+                      the same two words under three different games, because
+                      the fallback label was a constant. Every game in the
+                      registry carries its own one line description and that is
+                      what a person needs in order to choose between three
+                      tiles. Round 659 does the same for the real ranking,
+                      which used to print "Trending today" under all three:
+                      that fact is a small tag beside the name now, and the
+                      last line is always the game's own description, which
+                      playHomeFold section 3 reads as each tile's LAST span. */}
+                  <span className="block truncate text-xs text-muted-foreground">{game.description}</span>
+                </div>
+              </Link>
+            </li>
+          );
+        })}
+      </ol>
     </section>
   );
 }
