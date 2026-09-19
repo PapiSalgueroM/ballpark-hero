@@ -23,7 +23,7 @@ export function ShirtNumberBoard() {
   if (isLoadingPool || isLoading || !puzzle) {
     return (
       <GameShell width="narrow" title="SHIRT NUMBER">
-        <p className="text-muted-foreground text-sm text-center animate-pulse">Loading today's puzzle…</p>
+        <p data-no-prerender className="text-muted-foreground text-sm text-center animate-pulse">Loading today's puzzle…</p>
       </GameShell>
     );
   }

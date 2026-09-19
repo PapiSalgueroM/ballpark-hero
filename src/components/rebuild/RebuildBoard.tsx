@@ -90,7 +90,7 @@ export function RebuildBoard() {
     return (
       <div className="mx-auto max-w-2xl px-4 py-16 text-center">
         <div className="mx-auto h-6 w-40 animate-pulse rounded bg-muted" />
-        <p className="mt-4 text-sm text-muted-foreground">Loading clubs…</p>
+        <p data-no-prerender className="mt-4 text-sm text-muted-foreground">Loading clubs…</p>
       </div>
     );
   }
@@ -234,7 +234,7 @@ export function RebuildBoard() {
       return (
         <div className="mx-auto max-w-2xl px-4 py-16 text-center">
           <div className="mx-auto h-6 w-40 animate-pulse rounded bg-muted" />
-          <p className="mt-4 text-sm text-muted-foreground">Loading {seat.club?.club ?? 'the'}'s squad…</p>
+          <p data-no-prerender className="mt-4 text-sm text-muted-foreground">Loading {seat.club?.club ?? 'the'}'s squad…</p>
         </div>
       );
     }

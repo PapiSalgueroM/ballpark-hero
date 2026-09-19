@@ -205,10 +205,15 @@ export default function Index() {
           for. simHomeCopy fails if the two drift apart again. The comment
           sits OUT here rather than inside the props: a comment between the
           attributes compiles fine but breaks simIndexing's parse of the
-          PageSeo block, which is how this was caught. */}
+          PageSeo block, which is how this was caught.
+          Round 651: the description is the template's too, word for word,
+          and a plain string rather than a count computed at runtime, so the
+          two cannot drift the day a game ships. It names the Soccer Career sim
+          and Club Manager, which carry most of the site's traffic, and the
+          count is a floor simHomeCopy checks against the registry. */}
       <PageSeo
         title="DoUKnowBall: Free Sports Trivia Games and Daily Quizzes"
-        description={`${GAME_COUNT_LABEL} free sports trivia games, daily sports quizzes and career sims covering NFL, NBA, MLB, NHL, Soccer, College Sports, UFC, F1, Tennis, NASCAR and more. No login required.`}
+        description="120+ free sports games, from a Soccer Career sim and Club Manager to daily trivia and quizzes for the NFL, NBA, MLB, NHL, F1, UFC and more. No login needed."
         path="/"
       />
       <HomeTileStyles />

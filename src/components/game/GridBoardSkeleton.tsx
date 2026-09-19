@@ -61,7 +61,7 @@ export function GridBoardSkeleton({ variant, withSettings = false }: { variant: 
             </div>
           </div>
         )}
-        <p className="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm">
+        <p data-no-prerender className="absolute inset-0 flex items-center justify-center text-muted-foreground text-sm">
           Loading today's puzzle…
         </p>
       </div>

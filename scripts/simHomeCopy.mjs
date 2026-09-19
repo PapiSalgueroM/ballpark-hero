@@ -34,6 +34,9 @@
  *   5. IT NAMES NOTHING IT SHOULD NOT. No dates, no results, no figure that
  *      belongs to one day.
  *
+ * Since Round 651 the head's meta description is held equal to the one the
+ * app renders (part 4b), with the control HOME_COPY_CONTROL=descdrift.
+ *
  * Run: node scripts/simHomeCopy.mjs
  */
 import { build } from 'esbuild';
@@ -182,6 +185,74 @@ const staticDesc = head.match(/<meta name="description" content="([^"]+)"/);
 if (!staticDesc || staticDesc[1].length < 60) fail('the template has no usable meta description');
 console.log(`   canonical ${canon ? canon[1] : 'MISSING'}, title matches the app, description ${staticDesc ? staticDesc[1].length : 0} chars`);
 
+/* ── Round 651: the description is one string in both places ──────────── */
+/* The title was fenced in Round 265 and the description never was, so the
+   template said "Free sports trivia games and daily sports quizzes: NFL, NBA,
+   ..." while the app said "120+ free sports trivia games, daily sports quizzes
+   and career sims ...", and a crawler got one or the other depending on
+   whether it ran JavaScript. Neither named the Soccer Career sim or Club
+   Manager, the two games that carry most of the traffic. Now the app passes a
+   plain string (not a count computed at runtime, which would drift from the
+   template the day the 130th game ships), and this holds the pair together:
+   equal to each other, the template's social tags equal too, the count a
+   floor that is true and still close, both games named by their registry
+   labels, and a length a result does not cut.
+   HOME_COPY_CONTROL=descdrift changes one word of the app's description in
+   memory; this part must then report the pair apart, and nothing else may
+   fail. */
+console.log('4b) the home description is one string in the template and the app');
+const CONTROL = process.env.HOME_COPY_CONTROL || '';
+if (CONTROL && CONTROL !== 'descdrift') {
+  console.error(`HOME_COPY_CONTROL=${CONTROL} is not a control this harness knows`);
+  process.exit(1);
+}
+const failuresBefore4b = failures;
+let descDriftCaught = false;
+{
+  const decodeAttr = s => s.replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  const tpl = staticDesc ? decodeAttr(staticDesc[1]) : '';
+  const seoBlock = (indexPage.match(/<PageSeo\b([\s\S]*?)\/>/) ?? [])[1] ?? '';
+  let app = (seoBlock.match(/\bdescription="([^"]*)"/) ?? [])[1] ?? null;
+  if (app === null) {
+    fail('the home PageSeo description in src/pages/Index.tsx is not a plain string, so it cannot be held equal to the template');
+  } else {
+    if (CONTROL === 'descdrift') {
+      const drifted = app.replace('No login needed.', 'No login required.');
+      if (drifted === app) {
+        console.error('control descdrift: the app description has no "No login needed." to change, so this control would prove nothing');
+        process.exit(1);
+      }
+      app = drifted;
+      console.log('   control descdrift: one word of the app description changed in memory; the pair must be reported apart');
+    }
+    if (app !== tpl) {
+      fail(`the template's description ${JSON.stringify(tpl)} and the app's ${JSON.stringify(app)} differ, so a crawler reads one or the other depending on JavaScript`);
+      if (CONTROL === 'descdrift') descDriftCaught = true;
+    }
+  }
+  for (const key of ['og:description', 'twitter:description']) {
+    const m = head.match(new RegExp(`<meta (?:name|property)="${key}" content="([^"]+)"`));
+    if (!m) fail(`the template has no ${key}`);
+    else if (decodeAttr(m[1]) !== tpl) fail(`the template's ${key} is not its meta description, so a share card before JavaScript says something else`);
+  }
+  const floor = tpl.match(/^(\d+)\+ free sports games\b/);
+  if (!floor) {
+    fail('the home description does not open with an "N+ free sports games" floor');
+  } else {
+    const n = Number(floor[1]);
+    if (n > totalGames) fail(`the home description claims ${n}+ games and there are ${totalGames}`);
+    else if (totalGames - n > Math.max(15, totalGames * 0.2)) fail(`"${n}+" in the home description is ${totalGames - n} behind the real ${totalGames}, so the floor has stopped being useful`);
+  }
+  const labels = new Set(ALL_GAMES.map(g => g.label));
+  for (const name of ['Soccer Career', 'Club Manager']) {
+    if (!labels.has(name)) fail(`"${name}" is no longer a registry label, so the home description names a game the site does not list`);
+    if (!tpl.includes(name)) fail(`the home description does not name ${name}`);
+  }
+  if (tpl.length < 120 || tpl.length > 158) fail(`the home description is ${tpl.length} characters, outside 120 to 158`);
+  console.log(`   template and app ${app === tpl ? 'match' : 'DIFFER'}, ${tpl.length} characters, social tags match, floor ${floor ? floor[1] + '+' : 'missing'} against ${totalGames} games`);
+}
+const failuresAfter4b = failures;
+
 console.log('5) nothing in it belongs to one day');
 const DATED = [
   [/\b(19|20)\d\d\b/, 'a year'],
@@ -196,6 +267,18 @@ for (const [re, what] of DATED) {
 console.log('   no years, months, relative dates or results');
 
 console.log('');
+if (CONTROL === 'descdrift') {
+  /* inverted: the pair must be reported apart, by part 4b, and nothing else
+     may fail, or the red could have come from anywhere */
+  const elsewhere = failuresBefore4b + (failures - failuresAfter4b);
+  if (descDriftCaught && elsewhere === 0) {
+    console.log('simHomeCopy control descdrift: green. The drifted description was reported by part 4b and nothing else failed.');
+    process.exit(0);
+  }
+  if (!descDriftCaught) console.error('simHomeCopy control descdrift: RED. A description that differs from the template went unreported, so part 4b proves nothing.');
+  if (elsewhere > 0) console.error(`simHomeCopy control descdrift: RED. ${elsewhere} failure(s) outside part 4b, which the control run must not hide.`);
+  process.exit(1);
+}
 if (failures > 0) {
   console.error(`simHomeCopy: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);

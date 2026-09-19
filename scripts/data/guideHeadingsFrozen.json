@@ -125,6 +125,30 @@
         "Selecting and deselecting is free. Shuffle names between candidate groups until only one arrangement makes sense."
       ]
     },
+    "/budget-builder": {
+      "howToPlay": [
+        "Pick a market: Today's 2026 values, or the 2015 or 2007 market where the money and names change completely.",
+        "Choose one of 9 formations. In the Today market you can also narrow the pool, say Premier League only.",
+        "Tap a slot to shop that position. Only players you can currently afford are listed.",
+        "Sign someone and their value leaves your budget. Release anyone for a full refund.",
+        "Fill all eleven for your team rating, then play the Money XI final."
+      ],
+      "rules": [
+        "The cap is 62 percent of the priciest possible XI for your era, formation and pool, rounded to the nearest 10 million, never below 100 million, and always shown on screen.",
+        "Team rating is the average of your eleven ratings, on a ratings curve that tops out at 96.",
+        "One board demand runs per day, worth 100 bonus score if the finished XI meets it. It never blocks a signing.",
+        "Final score is rating times 10, plus 1 point per 20 million unspent, plus the demand bonus, plus 150 for a series win or 50 for a draw."
+      ],
+      "example": [
+        "You take the Today market in a 4-3-3 and blow half the cap on the front line, Haaland through the middle. The defense budget looks grim, so you release a winger and bargain hunt for fullbacks.",
+        "The XI rates 82, the daily demand wanted two players under 15 million, and your fullbacks tick it. You edge the Money XI 2 legs to 1 for the full haul."
+      ],
+      "tips": [
+        "Strikers and wingers eat budgets. Cheap quality lives at fullback and in goal.",
+        "Veterans are bargains: a 33 year old star costs a fraction of his prime price and still rates well.",
+        "Check the board demand before spending. Demands like six nationalities are easier to build toward than to retrofit."
+      ]
+    },
     "/build-your-xi": {
       "howToPlay": [
         "Choose one of 6 formations: 4-3-3, 4-4-2, 3-5-2, 4-2-3-1, 3-4-3, or 5-3-2.",

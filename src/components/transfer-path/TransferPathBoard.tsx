@@ -84,7 +84,7 @@ export function TransferPathBoard() {
   if (isLoadingPool || isLoading) {
     return (
       <GameShell width="narrow" title="TRANSFER PATH">
-        <p className="text-muted-foreground text-sm text-center">Loading Transfer Path…</p>
+        <p data-no-prerender className="text-muted-foreground text-sm text-center">Loading Transfer Path…</p>
       </GameShell>
     );
   }

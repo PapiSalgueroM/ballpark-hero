@@ -31,7 +31,7 @@ export function GradeTransferBoard() {
     return (
       <div className="mx-auto max-w-xl px-4 py-16 text-center">
         <div className="mx-auto h-6 w-40 animate-pulse rounded bg-muted" />
-        <p className="mt-4 text-sm text-muted-foreground">Loading today's transfers…</p>
+        <p data-no-prerender className="mt-4 text-sm text-muted-foreground">Loading today's transfers…</p>
       </div>
     );
   }

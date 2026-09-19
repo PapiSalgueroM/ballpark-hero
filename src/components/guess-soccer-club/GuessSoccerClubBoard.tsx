@@ -40,7 +40,7 @@ export function GuessSoccerClubBoard() {
     if (isLoadingPool) {
       return (
         <div className="min-h-screen bg-background flex items-center justify-center">
-          <p className="text-muted-foreground">Loading…</p>
+          <p data-no-prerender className="text-muted-foreground">Loading…</p>
         </div>
       );
     }

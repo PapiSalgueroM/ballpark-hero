@@ -100,7 +100,7 @@ const FootballConnect4 = () => {
 
         {isLoading ? (
           <div className="flex justify-center py-10">
-            <p className="text-muted-foreground text-sm animate-pulse">Loading today's board…</p>
+            <p data-no-prerender className="text-muted-foreground text-sm animate-pulse">Loading today's board…</p>
           </div>
         ) : (
           <>

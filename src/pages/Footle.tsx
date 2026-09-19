@@ -246,7 +246,7 @@ const Index = () => {
         {/* Search */}
         {(isLoadingPool || isLoading) ? (
           <div className="mb-8 flex justify-center">
-            <p className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
+            <p data-no-prerender className="text-muted-foreground text-sm animate-pulse">Loading today's puzzle…</p>
           </div>
         ) : gameStatus === 'playing' ? (
           <div className="mb-8 space-y-3">

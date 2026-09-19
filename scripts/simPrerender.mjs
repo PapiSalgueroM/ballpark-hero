@@ -82,7 +82,7 @@ const CONTROL = process.env.SIM_PRERENDER_CONTROL || '';
    catches that, and red if section 15 stayed clean or if anything outside
    section 15 failed. A control whose red could come from anywhere says
    nothing about the check it is meant to prove. */
-if (CONTROL && CONTROL !== 'noindex' && CONTROL !== 'truncwrite' && CONTROL !== 'rawrandom') {
+if (CONTROL && CONTROL !== 'noindex' && CONTROL !== 'truncwrite' && CONTROL !== 'rawrandom' && CONTROL !== 'loading') {
   console.error(`SIM_PRERENDER_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -872,6 +872,53 @@ console.log('16) no random pick seeds React state directly');
   }
   console.log(`   ${scanned} source files scanned, ${offenders.length} raw random initialiser(s), ${RAW_RANDOM_BASELINE.size} file(s) on the frozen baseline, ${fresh.length} new`);
 }
+const failuresAfter16 = failures;
+
+/* ROUND 651: NO SAVED PAGE OPENS ON A FROZEN LOADING LINE.
+   The prerenderer leaves every database request hanging on purpose (a
+   fulfilled one bakes today's data into a file that outlives today), so a page
+   that waits on one shows its loading state while it is photographed. Sixteen
+   saved pages carried that state as a paragraph right under their h1: "Loading
+   today's puzzle..." on eleven of them, "Loading the market..." on Budget
+   Builder, and so on. A crawler reads that as a page that never finished.
+   Every placeholder now carries data-no-prerender, which the prerenderer
+   strips, and this reads the documents rather than the source, so a
+   placeholder added next month with none is caught whatever its wording after
+   the first word. Comments and scripts are stripped first (section 11's
+   lesson), and only a readable block whose text STARTS with the word counts,
+   so a sentence that merely mentions loading is not a finding.
+   SIM_PRERENDER_CONTROL=loading plants one such paragraph in one document in
+   memory, and this section must report it. */
+console.log('17) no saved page opens on a frozen loading line');
+{
+  if (CONTROL === 'loading') {
+    const victim = [...docs.keys()].find(r => r !== '/');
+    const before = docs.get(victim);
+    const after = before.replace(/<\/body>/i, "<p>Loading today's puzzle…</p></body>");
+    if (after === before) {
+      console.error(`control: could not plant a loading line in ${victim}, so this control would prove nothing`);
+      process.exit(1);
+    }
+    docs.set(victim, after);
+    console.log(`   control loading: ${victim} carries a planted loading paragraph in memory, section 17 must report it`);
+  }
+  /* case sensitive on purpose: the prerenderer writes lowercase tags, and a
+     capital L is how a placeholder opens where ordinary copy does not */
+  const LOADING_BLOCK = /<(p|li|h[1-6]|blockquote|td|th)\b[^>]*>\s*(Loading\b[^<]{0,60})/g;
+  let hits = 0;
+  for (const [r, doc] of docs) {
+    const html = doc
+      .replace(/<!--[\s\S]*?-->/g, ' ')
+      .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+      .replace(/<style[\s\S]*?<\/style>/gi, ' ');
+    const found = [...html.matchAll(LOADING_BLOCK)].map(m => m[2].trim());
+    for (const line of found) {
+      hits += 1;
+      fail(`${r}: the saved page carries a loading placeholder as content ("${line}"); mark the placeholder element data-no-prerender`);
+    }
+  }
+  console.log(`   ${docs.size} documents read, ${hits} loading line${hits === 1 ? '' : 's'} found`);
+}
 
 console.log('');
 if (CONTROL === 'truncwrite') {
@@ -907,14 +954,26 @@ if (CONTROL === 'noindex') {
 if (CONTROL === 'rawrandom') {
   /* inverted like the other two: section 16 is supposed to fail under it, and
      the failure must come from section 16 and nowhere else */
-  const caught = failures - failuresAfter15;
-  const elsewhere = failuresAfter15;
+  const caught = failuresAfter16 - failuresAfter15;
+  const elsewhere = failuresAfter15 + (failures - failuresAfter16);
   if (caught > 0 && elsewhere === 0) {
     console.log(`simPrerender control: green. The injected raw draw was reported (${caught} finding), so section 16 works.`);
     process.exit(0);
   }
   if (caught === 0) console.error('simPrerender control: RED. A raw random useState initialiser went unreported, so section 16 proves nothing.');
   if (elsewhere > 0) console.error(`simPrerender control: RED. ${elsewhere} failure(s) outside section 16, which the control run must not hide.`);
+  process.exit(1);
+}
+if (CONTROL === 'loading') {
+  /* inverted like the others: section 17 must fail under it, and only it */
+  const caught = failures - failuresAfter16;
+  const elsewhere = failuresAfter16;
+  if (caught > 0 && elsewhere === 0) {
+    console.log(`simPrerender control: green. The planted loading line was reported (${caught} finding), so section 17 works.`);
+    process.exit(0);
+  }
+  if (caught === 0) console.error('simPrerender control: RED. A saved page opening on a loading line went unreported, so section 17 proves nothing.');
+  if (elsewhere > 0) console.error(`simPrerender control: RED. ${elsewhere} failure(s) outside section 17, which the control run must not hide.`);
   process.exit(1);
 }
 if (failures > 0) {
