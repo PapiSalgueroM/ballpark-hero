@@ -72,7 +72,8 @@ export function useAflHL() {
     isLoading,
     todayStr,
   } = useDailyPuzzle<{ id: string }, HLAction>({
-    gameSlug: 'afl-hl',
+    gameSlug: 'afl-higher-lower',
+    storageSlug: 'afl-hl',
     puzzles: SENTINEL_PUZZLES,
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,

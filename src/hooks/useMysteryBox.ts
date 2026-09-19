@@ -3,6 +3,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET, dailyDraw } from '@/lib/dateUtils';
 import { FORMATIONS, playerRating, type FormationSlot } from '@/lib/squadDeal';
 import { fetchPackPool, type PackPlayer, type PackTier } from '@/lib/fetchPackPool';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 export const TOTAL_PACKS = 15;
 const EMPTY_SLOT_RATING = 45;
@@ -73,6 +74,39 @@ function save(today: string, s: Saved) {
   } catch { /* storage unavailable */ }
 }
 
+/**
+ * The full deterministic pack sequence. Derived, never stored: pack i's
+ * player depends only on (seed, i) and which names were already drawn, so
+ * replaying the same decisions always reproduces the same run.
+ *
+ * Round 643: this was the body of the packs memo (with the tier buckets it
+ * read); it is a function now so the restore can count today's packs from a
+ * pool before it is set, and the memo calls the same code.
+ */
+function dailyPacks(pool: PackPlayer[], today: string): PackPlayer[] {
+  if (pool.length === 0) return [];
+  const byTier: Record<PackTier, PackPlayer[]> = { fringe: [], squad: [], quality: [], star: [], superstar: [] };
+  for (const p of pool) byTier[p.tier].push(p);
+  const out: PackPlayer[] = [];
+  const used = new Set<string>();
+  for (let i = 0; i < TOTAL_PACKS; i++) {
+    const tier = tierFor(today, i);
+    // walk down tiers if a bucket is exhausted (superstar bucket is ~130)
+    const order: PackTier[] = ['superstar', 'star', 'quality', 'squad', 'fringe'];
+    let bucket = byTier[tier].filter(p => !used.has(p.name));
+    let oi = order.indexOf(tier);
+    while (bucket.length === 0 && oi < order.length - 1) {
+      oi += 1;
+      bucket = byTier[order[oi]].filter(p => !used.has(p.name));
+    }
+    if (bucket.length === 0) break;
+    const pick = bucket[dailyDraw(bucket.length, `mystery-box:${today}:pick:${i}`)];
+    used.add(pick.name);
+    out.push(pick);
+  }
+  return out;
+}
+
 export function useMysteryBox(): MysteryBoxState {
   const today = useMemo(() => getTodayET(), []);
   const formation = FORMATIONS[0]; // 4-3-3, fixed so everyone's run is comparable
@@ -88,44 +122,21 @@ export function useMysteryBox(): MysteryBoxState {
     let cancelled = false;
     fetchPackPool().then(p => {
       if (cancelled) return;
+      /* Round 643: the saved decisions are restored in a state initializer,
+         but `finished` needs the packs, and they arrive here, after mount. A
+         run the saved decisions already finish is a restored finish and says
+         so first, or the completion hook sees false then true and records it
+         again on every reload. */
+      const count = dailyPacks(p, today).length;
+      const decided = loadSaved(today)?.decisions;
+      if (count > 0 && Array.isArray(decided) && decided.length >= count) markRestoredFinish('mystery-box');
       setPool(p);
       setLoading(false);
     });
     return () => { cancelled = true; };
-  }, []);
+  }, [today]);
 
-  const byTier = useMemo(() => {
-    const b: Record<PackTier, PackPlayer[]> = { fringe: [], squad: [], quality: [], star: [], superstar: [] };
-    for (const p of pool) b[p.tier].push(p);
-    return b;
-  }, [pool]);
-
-  /**
-   * The full deterministic pack sequence. Derived, never stored: pack i's
-   * player depends only on (seed, i) and which names were already drawn, so
-   * replaying the same decisions always reproduces the same run.
-   */
-  const packs = useMemo(() => {
-    if (pool.length === 0) return [];
-    const out: PackPlayer[] = [];
-    const used = new Set<string>();
-    for (let i = 0; i < TOTAL_PACKS; i++) {
-      const tier = tierFor(today, i);
-      // walk down tiers if a bucket is exhausted (superstar bucket is ~130)
-      const order: PackTier[] = ['superstar', 'star', 'quality', 'squad', 'fringe'];
-      let bucket = byTier[tier].filter(p => !used.has(p.name));
-      let oi = order.indexOf(tier);
-      while (bucket.length === 0 && oi < order.length - 1) {
-        oi += 1;
-        bucket = byTier[order[oi]].filter(p => !used.has(p.name));
-      }
-      if (bucket.length === 0) break;
-      const pick = bucket[dailyDraw(bucket.length, `mystery-box:${today}:pick:${i}`)];
-      used.add(pick.name);
-      out.push(pick);
-    }
-    return out;
-  }, [pool, byTier, today]);
+  const packs = useMemo(() => dailyPacks(pool, today), [pool, today]);
 
   const packIndex = decisions.length;
   const finished = packs.length > 0 && packIndex >= packs.length;

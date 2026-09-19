@@ -73,7 +73,8 @@ export function useF1HL() {
     isLoading,
     todayStr,
   } = useDailyPuzzle<{ id: string }, HLAction>({
-    gameSlug: 'f1-hl',
+    gameSlug: 'f1-higher-lower',
+    storageSlug: 'f1-hl',
     puzzles: SENTINEL_PUZZLES,
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,

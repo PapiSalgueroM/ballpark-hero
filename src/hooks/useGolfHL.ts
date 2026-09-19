@@ -71,7 +71,8 @@ export function useGolfHL() {
     isLoading,
     todayStr,
   } = useDailyPuzzle<{ id: string }, HLAction>({
-    gameSlug: 'golf-hl',
+    gameSlug: 'golf-higher-lower',
+    storageSlug: 'golf-hl',
     puzzles: SENTINEL_PUZZLES,
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,

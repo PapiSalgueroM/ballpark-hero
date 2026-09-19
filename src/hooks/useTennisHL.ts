@@ -74,7 +74,8 @@ export function useTennisHL() {
     isLoading,
     todayStr,
   } = useDailyPuzzle<{ id: string }, HLAction>({
-    gameSlug: 'tennis-hl',
+    gameSlug: 'tennis-higher-lower',
+    storageSlug: 'tennis-hl',
     puzzles: SENTINEL_PUZZLES,
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,

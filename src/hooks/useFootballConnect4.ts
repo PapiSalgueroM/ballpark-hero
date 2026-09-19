@@ -139,7 +139,8 @@ export function useFootballConnect4() {
     gameStatus: rawDailyStatus,
     isLoading,
   } = useDailyPuzzle<FootballConnect4Board, C4Action>({
-    gameSlug: 'football-connect4',
+    gameSlug: 'football-connect-4',
+    storageSlug: 'football-connect4',
     puzzles: FOOTBALL_CONNECT4_BOARDS,
     maxGuesses: 999,
     isWon: (actions) => replayC4Board(actions).phase === 'won',

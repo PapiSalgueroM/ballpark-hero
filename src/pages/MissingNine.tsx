@@ -99,7 +99,11 @@ const MissingNine = () => {
 
   const switchMode = useCallback((m: Mode) => { setMode(m); setInput(''); }, []);
 
-  useGameCompletion('missing-nine', mode === 'daily' && rawDailyStatus !== 'playing', score);
+  /* Round 643: the daily status alone, in either mode (the MissingXi shape).
+     Gated on the mode, a trip to Unlimited and back went false then true
+     over a daily already recorded and paid it again; a restored finish still
+     arrives through useDailyPuzzle's markRestoredFinish handshake. */
+  useGameCompletion('missing-nine', rawDailyStatus !== 'playing', score);
 
   const suggestions = useMemo(() => {
     if (hard) return [];

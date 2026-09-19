@@ -74,7 +74,8 @@ export function useCfbHL() {
     isLoading,
     todayStr,
   } = useDailyPuzzle<{ id: string }, HLAction>({
-    gameSlug: 'cfb-hl',
+    gameSlug: 'cfb-higher-lower',
+    storageSlug: 'cfb-hl',
     puzzles: SENTINEL_PUZZLES,
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,

@@ -87,7 +87,8 @@ export function useHockeyHL() {
     isLoading,
     todayStr,
   } = useDailyPuzzle<{ id: string }, HLAction>({
-    gameSlug: 'hockey-hl',
+    gameSlug: 'hockey-higher-lower',
+    storageSlug: 'hockey-hl',
     puzzles: SENTINEL_PUZZLES,
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,

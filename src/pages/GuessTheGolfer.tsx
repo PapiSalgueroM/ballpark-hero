@@ -96,7 +96,11 @@ const GuessTheGolfer = () => {
   const cluesShown = Math.min(1 + wrongGuesses.length, MAX_GUESSES);
   const score = phase === 'won' ? Math.max(CLUE_COST, BASE_SCORE - (cluesShown - 1) * CLUE_COST) : 0;
 
-  useGameCompletion('guess-the-golfer', mode === 'daily' && dailyPhase !== 'playing', dailyPhase === 'won' ? score : 0, dailyPhase === 'won' ? 1 : 0);
+  /* Round 643: the daily phase alone, in either mode (the MissingXi shape).
+     Gated on the mode, a trip to Unlimited and back went false then true
+     over a daily already recorded and paid it again; a restored finish still
+     arrives through useDailyPuzzle's markRestoredFinish handshake. */
+  useGameCompletion('guess-the-golfer', dailyPhase !== 'playing', dailyPhase === 'won' ? score : 0, dailyPhase === 'won' ? 1 : 0);
 
   // ---- Input + suggestions --------------------------------------------------
   const [input, setInput] = useState('');

@@ -278,7 +278,13 @@ const PuckDetective = () => {
     lastResolvedRef.current = 'playing';
   }, [unlimitedMystery]);
 
-  useGameCompletion('puck-detective', mode === 'daily' && (dailyGaveUp || rawDailyStatus !== 'playing'), won ? (GUESS_LIMIT - guesses.length + 1) * 10 : 0);
+  /* Round 643: the daily status alone, in either mode (the MissingXi shape).
+     Gated on the mode, a trip to Unlimited and back went false then true
+     over a daily already recorded and paid it again. The give up flag is
+     restored in a state initializer and a finished guess log through
+     useDailyPuzzle's markRestoredFinish handshake, so a reload records
+     nothing. */
+  useGameCompletion('puck-detective', dailyGaveUp || rawDailyStatus !== 'playing', won ? (GUESS_LIMIT - guesses.length + 1) * 10 : 0);
 
   const isLoading = phase === 'boot' || (mode === 'daily' && dailyLoading);
   const emojiGrid = mystery ? buildShareGrid(guesses) : '';

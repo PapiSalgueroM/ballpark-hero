@@ -108,7 +108,8 @@ export function useCareerGame() {
     gameStatus: rawDailyStatus,
     isLoading,
   } = useDailyPuzzle<CareerPlayer, CareerAction>({
-    gameSlug: 'career-path',
+    gameSlug: 'career',
+    storageSlug: 'career-path',
     puzzles: fallbackPlayers,
     supabasePuzzle: todaysPlayer,
     getPuzzleId: (p) => p.name,

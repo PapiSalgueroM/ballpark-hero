@@ -3,6 +3,7 @@ import { Ticket, Building2, Trophy, RotateCcw, Plus, X, Flame } from 'lucide-rea
 import ShareButtons from '@/components/game/ShareButtons';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 import { cn } from '@/lib/utils';
 import { Confetti } from '@/components/soccer-career/CareerFx';
 import { STYLES, weightById, ratingOf, type Fighter } from '@/lib/fightCareer';
@@ -36,6 +37,10 @@ export default function FightPromoterBoard() {
       if (!raw) return;
       const s = JSON.parse(raw) as { st: PromoterState };
       if (!s?.st?.name) return;
+      /* Round 643: a closed promotion read back from storage is not a new
+         close. This restore runs after mount, so without the mark every
+         reload paid the verdict again. */
+      if (s.st.closed) markRestoredFinish('fight-promoter');
       setSt(s.st);
       setPhase(s.st.closed ? 'closed' : 'hub');
     } catch { /* a fresh promotion is the right fallback */ }

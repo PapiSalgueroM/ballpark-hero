@@ -5,6 +5,7 @@ import {
   type ChampRow, type ChampRound,
 } from '@/lib/champOrNot';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 export type ChampMode = 'daily' | 'unlimited';
 export type LoadState = 'loading' | 'ready' | 'error';
@@ -71,24 +72,41 @@ export function useChampOrNot() {
     return () => { alive = false; window.clearTimeout(watchdog); };
   }, []);
 
-  // restore the daily the moment data is ready
-  useEffect(() => {
-    if (loadState !== 'ready' || mode !== 'daily') return;
-    const saved = loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${today}`));
-    if (saved) setAnswers(saved.answers);
-  }, [loadState, mode, today]);
-
   // hard is an unlimited-only spice, same convention as the higher-lower
   // games: the shared daily stays one board for everyone
   const hardActive = hard && mode === 'unlimited';
+  const dailySeed = `champ-or-not:${today}`;
   const seedPrefix = mode === 'daily'
-    ? `champ-or-not:${today}`
+    ? dailySeed
     : `champ-or-not:unlimited:${unlimitedNonce.current}:${unlimitedRun}${hardActive ? ':hard' : ''}`;
 
   const rounds: ChampRound[] = useMemo(() => {
     if (!rowsByKey) return [];
     return buildRounds(rowsByKey, seedPrefix, DAILY_ROUNDS, hardActive);
   }, [rowsByKey, seedPrefix, hardActive]);
+
+  /* Round 643: today's board on its own, whatever mode is on screen, so a
+     restore can tell whether the answers it reads back finish it. */
+  const dailyRoundCount = useMemo(
+    () => (rowsByKey ? buildRounds(rowsByKey, dailySeed, DAILY_ROUNDS, false).length : 0),
+    [rowsByKey, dailySeed],
+  );
+
+  /* Round 643: both restores (the data landing, and the Daily tab after
+     Unlimited) run after mount, so a finished daily read back says so first
+     or the completion hook records it again (the Round 399 double record). */
+  const restoreDaily = useCallback(() => {
+    const saved = loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${today}`));
+    if (saved && dailyRoundCount > 0 && saved.answers.length >= dailyRoundCount) markRestoredFinish('champ-or-not');
+    return saved;
+  }, [today, dailyRoundCount]);
+
+  // restore the daily the moment data is ready
+  useEffect(() => {
+    if (loadState !== 'ready' || mode !== 'daily') return;
+    const saved = restoreDaily();
+    if (saved) setAnswers(saved.answers);
+  }, [loadState, mode, restoreDaily]);
 
   const roundIdx = Math.min(answers.length, rounds.length);
   const current = roundIdx < rounds.length ? rounds[roundIdx] : null;
@@ -124,10 +142,10 @@ export function useChampOrNot() {
       setAnswers([]);
       setUnlimitedRun(r => r + 1);
     } else {
-      const saved = loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${today}`));
+      const saved = restoreDaily();
       setAnswers(saved?.answers ?? []);
     }
-  }, [mode, today]);
+  }, [mode, restoreDaily]);
 
   const playAgain = useCallback(() => {
     if (mode !== 'unlimited') return;

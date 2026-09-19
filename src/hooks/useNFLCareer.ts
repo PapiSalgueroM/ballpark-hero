@@ -46,6 +46,17 @@ export function useNFLCareer() {
   const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>(() => loadDailySave()?.status ?? 'playing');
   const [guessHistory, setGuessHistory] = useState<string[]>(() => loadDailySave()?.guesses ?? []);
   const [hard, setHard] = useState(false);
+  /* Round 643: whether today's daily is finished, on its own, whatever mode
+     is on screen. The completion hook used to read the shared gameStatus
+     behind a mode check, so the Daily tab after Unlimited flipped it false
+     then true over a daily already recorded and paid it again. Restored in
+     the initializer, so a finished daily mounts complete and records
+     nothing. */
+  const [dailyFinished, setDailyFinished] = useState(() => loadDailySave() !== null);
+  const finishDaily = useCallback((status: 'won' | 'lost', clues: number, guesses: string[]) => {
+    persistDaily(status, clues, guesses);
+    setDailyFinished(true);
+  }, []);
 
   const dealRound = useCallback((player: NFLCareerPlayer) => {
     setTargetPlayer(player);
@@ -72,7 +83,12 @@ export function useNFLCareer() {
     }
   }, [dealRound, randomPlayer]);
 
+  /* Round 643: from the daily this is the result screen's "Play Unlimited",
+     and it used to deal a random player while staying in daily mode, so
+     solving him recorded under the daily again and overwrote today's save
+     with his result. It really leaves the daily now. */
   const nextUnlimited = useCallback(() => {
+    setMode('unlimited');
     dealRound(randomPlayer(targetPlayer.name));
   }, [dealRound, randomPlayer, targetPlayer]);
 
@@ -101,7 +117,7 @@ export function useNFLCareer() {
 
     if (trimmed.toLowerCase() === targetPlayer.name.toLowerCase()) {
       setGameStatus('won');
-      if (mode === 'daily') persistDaily('won', cluesRevealed, [...guessHistory, trimmed]);
+      if (mode === 'daily') finishDaily('won', cluesRevealed, [...guessHistory, trimmed]);
       toast.success(`🎉 Correct! You scored ${Math.max(1, TOTAL_CLUES + 1 - cluesRevealed)} points!`);
       return;
     }
@@ -110,18 +126,18 @@ export function useNFLCareer() {
 
     if (cluesRevealed >= TOTAL_CLUES) {
       setGameStatus('lost');
-      if (mode === 'daily') persistDaily('lost', cluesRevealed, [...guessHistory, trimmed]);
+      if (mode === 'daily') finishDaily('lost', cluesRevealed, [...guessHistory, trimmed]);
       toast.error(`The player was ${targetPlayer.name}`);
     } else {
       setCluesRevealed(prev => prev + 1);
     }
-  }, [gameStatus, targetPlayer, cluesRevealed, mode, guessHistory]);
+  }, [gameStatus, targetPlayer, cluesRevealed, mode, guessHistory, finishDaily]);
 
   const giveUp = useCallback(() => {
     if (gameStatus !== 'playing') return;
     setGameStatus('lost');
-    if (mode === 'daily') persistDaily('lost', cluesRevealed, guessHistory);
-  }, [gameStatus, mode, cluesRevealed, guessHistory]);
+    if (mode === 'daily') finishDaily('lost', cluesRevealed, guessHistory);
+  }, [gameStatus, mode, cluesRevealed, guessHistory, finishDaily]);
 
   const resetGame = useCallback(() => {
     // In unlimited: deal the next random player in place. From the daily:
@@ -150,7 +166,7 @@ export function useNFLCareer() {
   // rules used throughout the search layer).
   const excludedNames = useMemo(() => new Set(guessHistory.map(normalizeName)), [guessHistory]);
 
-  useGameCompletion('nfl-career', mode === 'daily' && gameStatus !== 'playing', score);
+  useGameCompletion('nfl-career', dailyFinished, score);
 
   const toggleHard = useCallback(() => setHard(h => !h), []);
 

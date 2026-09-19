@@ -74,7 +74,8 @@ export function useNbaHL() {
     isLoading,
     todayStr,
   } = useDailyPuzzle<{ id: string }, HLAction>({
-    gameSlug: 'nba-hl',
+    gameSlug: 'nba-higher-lower',
+    storageSlug: 'nba-hl',
     puzzles: SENTINEL_PUZZLES,
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,

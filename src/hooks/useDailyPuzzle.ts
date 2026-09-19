@@ -37,11 +37,28 @@ interface PersistedDailyState<G> {
 export interface DailyPuzzleOptions<T, G> {
   /**
    * Unique slug for this game.
-   * Used as the localStorage key prefix: `{gameSlug}-daily-{date}`.
-   * Must match the slug used in useGameCompletion and daily_completions.
+   * Used as the localStorage key prefix: `{gameSlug}-daily-{date}`, unless
+   * storageSlug below overrides the prefix.
+   * Must match the slug used in useGameCompletion and daily_completions:
+   * the restore marks its finish under this name.
    * e.g. 'footle', 'soccer-connections', 'nfl-career'
    */
   gameSlug: string;
+
+  /**
+   * Round 643: the prefix of the storage key, when it has to differ from
+   * gameSlug. Default: gameSlug.
+   *
+   * Twelve hooks keyed their saves under an older name than the one they
+   * record under (nfl-hl against nfl-higher-lower, ufc-game against ufc,
+   * football-connect4 against football-connect-4, career-path against career).
+   * They passed the storage name as gameSlug, so the restore marked a slug
+   * the completion hook never asks about, and every reload of a finished
+   * daily was recorded again. gameSlug is now the recorder's slug everywhere,
+   * which is what the mark needs, and this keeps the key the saves already
+   * sit under, so nothing a player has stored stops loading.
+   */
+  storageSlug?: string;
 
   /**
    * The full static puzzle pool.
@@ -259,6 +276,7 @@ export function useDailyPuzzle<T, G>(
 ): DailyPuzzleReturn<T, G> {
   const {
     gameSlug,
+    storageSlug = gameSlug,
     puzzles,
     supabasePuzzle = null,
     getPuzzleId,
@@ -273,7 +291,7 @@ export function useDailyPuzzle<T, G>(
   // finishes after midnight plays the puzzle they started, not the new day's.
   // See "Known Behavior" in docs/useDailyPuzzle-design.md.
   const todayStr = useRef(getTodayET()).current;
-  const storageKey = `${gameSlug}-daily-${todayStr}`;
+  const storageKey = `${storageSlug}-daily-${todayStr}`;
 
   // Puzzle selection. Re-evaluates when supabasePuzzle transitions null → value.
   // For date-seeded games (supabasePuzzle always null) this is stable.
@@ -323,7 +341,7 @@ export function useDailyPuzzle<T, G>(
     loadedForIndex.current = puzzleIndex;
 
     // Remove yesterday's (and older) entries for this game slug
-    cleanupOldEntries(gameSlug, storageKey);
+    cleanupOldEntries(storageSlug, storageKey);
 
     // Restore saved progress if the stored entry is valid for today's puzzle
     const saved = readPersistedState(

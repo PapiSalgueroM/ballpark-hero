@@ -5,6 +5,7 @@ import {
   type FinalsRow, type BeatQuestion,
 } from '@/lib/whodTheyBeat';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 export type BeatMode = 'daily' | 'unlimited';
 export type LoadState = 'loading' | 'ready' | 'error';
@@ -67,20 +68,37 @@ export function useWhodTheyBeat() {
     return () => { alive = false; window.clearTimeout(watchdog); };
   }, []);
 
-  useEffect(() => {
-    if (loadState !== 'ready' || mode !== 'daily') return;
-    const saved = loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${today}`));
-    if (saved) setAnswers(saved.answers);
-  }, [loadState, mode, today]);
-
+  const dailySeed = `whod-they-beat:${today}`;
   const seedPrefix = mode === 'daily'
-    ? `whod-they-beat:${today}`
+    ? dailySeed
     : `whod-they-beat:unlimited:${unlimitedNonce.current}:${unlimitedRun}`;
 
   const questions: BeatQuestion[] = useMemo(() => {
     if (!rowsByKey) return [];
     return buildQuestions(rowsByKey, seedPrefix);
   }, [rowsByKey, seedPrefix]);
+
+  /* Round 643: today's board on its own, whatever mode is on screen, so a
+     restore can tell whether the answers it reads back finish it. */
+  const dailyQuestionCount = useMemo(
+    () => (rowsByKey ? buildQuestions(rowsByKey, dailySeed).length : 0),
+    [rowsByKey, dailySeed],
+  );
+
+  /* Round 643: both restores (the data landing, and the Daily tab after
+     Unlimited) run after mount, so a finished daily read back says so first
+     or the completion hook records it again (the Round 399 double record). */
+  const restoreDaily = useCallback(() => {
+    const saved = loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${today}`));
+    if (saved && dailyQuestionCount > 0 && saved.answers.length >= dailyQuestionCount) markRestoredFinish('whod-they-beat');
+    return saved;
+  }, [today, dailyQuestionCount]);
+
+  useEffect(() => {
+    if (loadState !== 'ready' || mode !== 'daily') return;
+    const saved = restoreDaily();
+    if (saved) setAnswers(saved.answers);
+  }, [loadState, mode, restoreDaily]);
 
   const qIdx = Math.min(answers.length, questions.length);
   const current = qIdx < questions.length ? questions[qIdx] : null;
@@ -116,10 +134,10 @@ export function useWhodTheyBeat() {
       setAnswers([]);
       setUnlimitedRun(r => r + 1);
     } else {
-      const saved = loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${today}`));
+      const saved = restoreDaily();
       setAnswers(saved?.answers ?? []);
     }
-  }, [mode, today]);
+  }, [mode, restoreDaily]);
 
   const playAgain = useCallback(() => {
     if (mode !== 'unlimited') return;

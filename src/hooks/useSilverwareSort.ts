@@ -6,6 +6,7 @@ import {
   type TeamCount, type SortBoard,
 } from '@/lib/silverwareSort';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 export type SortMode = 'daily' | 'unlimited';
 export type LoadState = 'loading' | 'ready' | 'error';
@@ -87,21 +88,38 @@ export function useSilverwareSort() {
     return () => { alive = false; window.clearTimeout(watchdog); };
   }, []);
 
-  // restore the daily the moment data is ready
-  useEffect(() => {
-    if (loadState !== 'ready' || mode !== 'daily') return;
-    const saved = loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${today}`));
-    if (saved) setResults(saved.results);
-  }, [loadState, mode, today]);
-
+  const dailySeed = `silverware-sort:${today}`;
   const seedPrefix = mode === 'daily'
-    ? `silverware-sort:${today}`
+    ? dailySeed
     : `silverware-sort:unlimited:${unlimitedNonce.current}:${unlimitedRun}`;
 
   const boards: SortBoard[] = useMemo(() => {
     if (!countsByKey) return [];
     return buildBoards(countsByKey, seedPrefix, DAILY_BOARDS);
   }, [countsByKey, seedPrefix]);
+
+  /* Round 643: today's boards on their own, whatever mode is on screen, so a
+     restore can tell whether the results it reads back finish them. */
+  const dailyBoardCount = useMemo(
+    () => (countsByKey ? buildBoards(countsByKey, dailySeed, DAILY_BOARDS).length : 0),
+    [countsByKey, dailySeed],
+  );
+
+  /* Round 643: both restores (the data landing, and the Daily tab after
+     Unlimited) run after mount, so a finished daily read back says so first
+     or the completion hook records it again (the Round 399 double record). */
+  const restoreDaily = useCallback(() => {
+    const saved = loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${today}`));
+    if (saved && dailyBoardCount > 0 && saved.results.length >= dailyBoardCount) markRestoredFinish('silverware-sort');
+    return saved;
+  }, [today, dailyBoardCount]);
+
+  // restore the daily the moment data is ready
+  useEffect(() => {
+    if (loadState !== 'ready' || mode !== 'daily') return;
+    const saved = restoreDaily();
+    if (saved) setResults(saved.results);
+  }, [loadState, mode, restoreDaily]);
 
   const boardIdx = Math.min(results.length, boards.length);
   const board = boardIdx < boards.length ? boards[boardIdx] : null;
@@ -181,10 +199,10 @@ export function useSilverwareSort() {
       setResults([]);
       setUnlimitedRun(r => r + 1);
     } else {
-      const saved = loadDailySave(localStorage.getItem(`${STORAGE_PREFIX}daily-${today}`));
+      const saved = restoreDaily();
       setResults(saved?.results ?? []);
     }
-  }, [mode, today, resetBoardState]);
+  }, [mode, restoreDaily, resetBoardState]);
 
   const playAgain = useCallback(() => {
     if (mode !== 'unlimited') return;

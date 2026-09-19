@@ -73,7 +73,8 @@ export function useMlbHL() {
     isLoading,
     todayStr,
   } = useDailyPuzzle<{ id: string }, HLAction>({
-    gameSlug: 'mlb-hl',
+    gameSlug: 'mlb-higher-lower',
+    storageSlug: 'mlb-hl',
     puzzles: SENTINEL_PUZZLES,
     maxGuesses: ROUNDS,
     isWon: (g) => g.length >= ROUNDS,

@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET, dateSeed, dailyDraw } from '@/lib/dateUtils';
 import { fetchQuizBoardClues, VALUES, type Clue, type ClueValue } from '@/lib/fetchQuizBoard';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 export interface Tile {
   clue: Clue;
@@ -78,6 +79,55 @@ function save(today: string, results: Record<string, boolean>, score: number) {
   } catch { /* storage unavailable */ }
 }
 
+/**
+ * Only categories that actually have a clue at EVERY value tier can form a
+ * column, otherwise the board would have holes. Audit found 5 such
+ * categories; Premier League (no 800/1000) and Ballon d'Or Féminin (200 only)
+ * legitimately can't fill a column and are excluded here rather than faked.
+ *
+ * Round 643: this and pickClue were the bodies of the board memos. They are
+ * functions now so the restore can build today's board from a pool before it
+ * is set, and the memos call the same code, so the two cannot drift.
+ */
+function pickCategories(clues: Clue[], today: string): string[] {
+  if (clues.length === 0) return [];
+  const byCat = new Map<string, Set<number>>();
+  for (const c of clues) {
+    if (!byCat.has(c.category)) byCat.set(c.category, new Set());
+    byCat.get(c.category)!.add(c.value);
+  }
+  const full = [...byCat.entries()]
+    .filter(([, vals]) => VALUES.every(v => vals.has(v)))
+    .map(([cat]) => cat)
+    .sort();
+  if (full.length <= BOARD_CATEGORIES) return full;
+  // rotate the selection daily
+  const seed = dateSeed(today);
+  const picked: string[] = [];
+  const pool = [...full];
+  for (let i = 0; i < BOARD_CATEGORIES && pool.length > 0; i++) {
+    const idx = Math.abs((seed * (i + 11) * 1103515245 + 12345) >>> 0) % pool.length;
+    picked.push(pool.splice(idx, 1)[0]);
+  }
+  return picked.sort();
+}
+
+/* Round 229: was pickDeterministic(options, rawSeed + offsets), which walks
+   +1 per day through the alternatives, so tomorrow's tile was always simply
+   the next clue. A labelled dailyDraw keeps it deterministic per day and
+   unguessable across days, same as every other daily pick since Round 224. */
+function pickClue(clues: Clue[], category: string, value: ClueValue, today: string): Clue | undefined {
+  const options = clues.filter(c => c.category === category && c.value === value);
+  if (options.length === 0) return undefined;
+  return options[dailyDraw(options.length, `quiz-board:${today}:${category}:${value}`)];
+}
+
+/** Round 643: every clue on today's board, the tiles `finished` counts. */
+function boardClueIds(clues: Clue[], today: string): string[] {
+  return pickCategories(clues, today).flatMap(cat =>
+    VALUES.map(v => pickClue(clues, cat, v, today)).filter((c): c is Clue => !!c).map(c => c.clueId));
+}
+
 export function useQuizBoard(): QuizBoardState {
   const today = useMemo(() => getTodayET(), []);
   const saved = useMemo(() => loadSaved(today), [today]);
@@ -93,54 +143,29 @@ export function useQuizBoard(): QuizBoardState {
     let cancelled = false;
     fetchQuizBoardClues().then(c => {
       if (cancelled) return;
+      /* Round 643: the saved results are restored in a state initializer,
+         but `finished` needs the board, and the board arrives here, after
+         mount. A board the saved results already finish is a restored
+         finish and says so first, or the completion hook sees false then
+         true and records it again on every reload. */
+      const done = saved?.results && typeof saved.results === 'object' ? saved.results : null;
+      const ids = boardClueIds(c, today);
+      if (done && ids.length > 0 && ids.every(id => id in done)) markRestoredFinish('jeopardy');
       setClues(c);
       setLoading(false);
     });
     return () => { cancelled = true; };
-  }, []);
+  }, [today, saved]);
 
-  /**
-   * Only categories that actually have a clue at EVERY value tier can form a
-   * column, otherwise the board would have holes. Audit found 5 such
-   * categories; Premier League (no 800/1000) and Ballon d'Or Féminin (200 only)
-   * legitimately can't fill a column and are excluded here rather than faked.
-   */
-  const categories = useMemo(() => {
-    if (clues.length === 0) return [];
-    const byCat = new Map<string, Set<number>>();
-    for (const c of clues) {
-      if (!byCat.has(c.category)) byCat.set(c.category, new Set());
-      byCat.get(c.category)!.add(c.value);
-    }
-    const full = [...byCat.entries()]
-      .filter(([, vals]) => VALUES.every(v => vals.has(v)))
-      .map(([cat]) => cat)
-      .sort();
-    if (full.length <= BOARD_CATEGORIES) return full;
-    // rotate the selection daily
-    const seed = dateSeed(today);
-    const picked: string[] = [];
-    const pool = [...full];
-    for (let i = 0; i < BOARD_CATEGORIES && pool.length > 0; i++) {
-      const idx = Math.abs((seed * (i + 11) * 1103515245 + 12345) >>> 0) % pool.length;
-      picked.push(pool.splice(idx, 1)[0]);
-    }
-    return picked.sort();
-  }, [clues, today]);
+  const categories = useMemo(() => pickCategories(clues, today), [clues, today]);
 
   const board = useMemo(() => {
     const out: Record<string, Record<ClueValue, Tile | undefined>> = {};
     for (const cat of categories) {
       out[cat] = {} as Record<ClueValue, Tile | undefined>;
       VALUES.forEach(v => {
-        const options = clues.filter(c => c.category === cat && c.value === v);
-        if (options.length === 0) { out[cat][v] = undefined; return; }
-        /* Round 229: was pickDeterministic(options, rawSeed + offsets),
-           which walks +1 per day through the alternatives, so tomorrow's
-           tile was always simply the next clue. A labelled dailyDraw keeps
-           it deterministic per day and unguessable across days, same as
-           every other daily pick since Round 224. */
-        const chosen = options[dailyDraw(options.length, `quiz-board:${today}:${cat}:${v}`)];
+        const chosen = pickClue(clues, cat, v, today);
+        if (!chosen) { out[cat][v] = undefined; return; }
         out[cat][v] = {
           clue: chosen,
           answered: chosen.clueId in results,

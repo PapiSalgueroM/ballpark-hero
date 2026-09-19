@@ -3,6 +3,7 @@ import { Swords, Dumbbell, Trophy, RotateCcw, ChevronLeft, Flame, HeartPulse } f
 import ShareButtons from '@/components/game/ShareButtons';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 import { cn } from '@/lib/utils';
 import { Confetti, ConditionBar, HitFlash } from '@/components/soccer-career/CareerFx';
 import {
@@ -62,6 +63,11 @@ export default function FightCareerBoard() {
       if (!raw) return;
       const s = JSON.parse(raw) as SaveShape;
       if (!s?.st?.fighter?.name) return;
+      /* Round 643: a retired career read back from storage is not a new
+         retirement. This restore runs after mount, so without the mark the
+         completion hook sees false then true and pays the legacy again on
+         every reload. */
+      if (s.st.retired) markRestoredFinish('fight-career');
       setSt(s.st);
       /* Never restore straight into a half played bout: the result is not on
          the save, so the fight would have no rounds to show. */
