@@ -96,6 +96,49 @@
        background, promoted from a hardcoded arbitrary value so light mode
        can answer it (light mode text on the fixed dark bar measured 1.16). */
     --ticker: 225 25% 4%;
+
+    /* Round 658: the home front. One ink per sport, read through --tile
+       (tailwind's tile colour) on the game cards, the section headers and
+       the Main Event band. Inks only: they draw glyphs, rules and rings,
+       never body text, and every one clears 3 to 1 on --surface-1 in both
+       themes (scripts/simHomeFront.mjs measures it). Each sport also has a
+       drawn glyph, so colour is never the only thing telling two apart. */
+    --sport-soccer: 145 55% 52%;
+    --sport-football: 214 80% 66%;
+    --sport-college: 256 75% 72%;
+    --sport-basketball: 24 90% 58%;
+    --sport-baseball: 354 80% 66%;
+    --sport-hockey: 190 75% 55%;
+    --sport-f1: 322 75% 66%;
+    --sport-tennis: 68 75% 55%;
+    --sport-golf: 168 55% 50%;
+    --sport-aussie: 36 85% 58%;
+    --sport-nascar: 220 12% 72%;
+    --sport-combat: 290 55% 70%;
+    --sport-world: 43 85% 55%;
+
+    /* Round 658: the drawings on the Main Event band. A floodlit night here,
+       a day game in the light theme, so the art never turns into a black
+       slab on a white page. */
+    --stage-sky: 226 50% 7%;
+    --stage-sky-2: 222 45% 16%;
+    --stage-stand: 225 30% 11%;
+    --stage-crowd: 225 20% 32%;
+    --stage-steel: 225 15% 30%;
+    --stage-light: 48 100% 88%;
+    --stage-grass-a: 146 46% 23%;
+    --stage-grass-b: 146 42% 19%;
+    --stage-line: 0 0% 100%;
+    --stage-ball: 0 0% 97%;
+    --stage-board: 28 28% 24%;
+    --stage-seat: 152 50% 38%;
+    --stage-concrete: 225 12% 34%;
+    --stage-concrete-2: 225 14% 25%;
+    --stage-coin: 43 90% 55%;
+    --stage-coin-edge: 38 80% 36%;
+    --stage-wood: 30 42% 30%;
+    --stage-wood-2: 28 40% 23%;
+    --stage-rim: 18 90% 55%;
   }
 
   /* Round 347: light mode. The .light class on <html> is the only switch;
@@ -174,6 +217,35 @@
     --success-glow: 142 71% 35% / 0.25;
     --warn: 25 90% 42%;
     --warn-foreground: 0 0% 100%;
+
+    --sport-soccer: 145 60% 28%;
+    --sport-football: 214 70% 40%;
+    --sport-college: 256 55% 48%;
+    --sport-basketball: 24 85% 38%;
+    --sport-baseball: 354 70% 42%;
+    --sport-hockey: 190 80% 28%;
+    --sport-f1: 322 65% 40%;
+    --sport-tennis: 68 80% 26%;
+    --sport-golf: 168 70% 25%;
+    --sport-aussie: 36 90% 32%;
+    --sport-nascar: 220 15% 35%;
+    --sport-combat: 290 45% 42%;
+    --sport-world: 43 90% 30%;
+
+    --stage-sky: 205 70% 70%;
+    --stage-sky-2: 200 65% 88%;
+    --stage-stand: 215 20% 72%;
+    --stage-crowd: 215 16% 50%;
+    --stage-steel: 215 12% 46%;
+    --stage-light: 48 100% 97%;
+    --stage-grass-a: 128 42% 42%;
+    --stage-grass-b: 128 42% 36%;
+    --stage-board: 30 35% 52%;
+    --stage-seat: 152 50% 40%;
+    --stage-concrete: 220 10% 70%;
+    --stage-concrete-2: 220 10% 58%;
+    --stage-wood: 34 58% 68%;
+    --stage-wood-2: 32 45% 58%;
   }
 }
 
@@ -341,6 +413,31 @@
     animation-delay: 0s !important;
     transition-duration: 0.001ms !important;
     transition-delay: 0s !important;
+  }
+}
+
+/* Round 658: the Main Event band's one entrance. The drawing fades in, the
+   floodlights come up in a short stagger and the ball drops onto the spot.
+   Decoration only (every svg is aria-hidden) and it runs once: no loop, no
+   timer. Each keyframe ends on the element's own resting state, and under
+   reduced motion the animation is removed outright, so nothing can be left
+   at the transparent first frame. playReducedMotion walks / for these. */
+@keyframes hf-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes hf-drop-in {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: none; }
+}
+.hf-art { animation: hf-fade-in 0.45s ease-out both; }
+.hf-cone { animation: hf-fade-in 0.7s ease-out both; }
+.hf-ball { animation: hf-drop-in 0.45s cubic-bezier(0.3, 1.4, 0.5, 1) 0.3s both; }
+@media (prefers-reduced-motion: reduce) {
+  .hf-art,
+  .hf-cone,
+  .hf-ball {
+    animation: none;
   }
 }
 

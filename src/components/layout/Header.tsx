@@ -58,7 +58,11 @@ export function Header() {
             could not fit and Sign Up hung 9px off the right edge, taking seven
             game pages and the homepage with it. Tightening the padding and the
             gap only below sm buys back 12px and nothing above 640 moves. */}
-        <div className="container flex h-14 max-w-4xl items-center justify-between px-3 sm:px-4">
+        {/* Round 658: the home page runs wider (max-w-6xl) for the Main
+            Event band and the four column game grid, so the bar follows it
+            there and only there, keeping the logo over the page's own left
+            edge. Every other Header route keeps the narrower column. */}
+        <div className={`container flex h-14 ${isHome ? 'max-w-6xl' : 'max-w-4xl'} items-center justify-between px-3 sm:px-4`}>
           {/* Logo */}
           {/* Round 286: the mark, drawn inline from the same geometry as the
               favicon and the social image, then the wordmark in the display

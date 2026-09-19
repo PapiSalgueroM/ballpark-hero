@@ -8,10 +8,13 @@ import PageSeo from '@/components/seo/PageSeo';
 import { StreakReminder } from '@/components/game/StreakReminder';
 import { useMostPlayed } from '@/hooks/useMostPlayed';
 import { PollOfTheDay } from '@/components/home/PollOfTheDay';
+import { FeaturedStage } from '@/components/home/FeaturedStage';
+import { SportGlyph, sportStyle } from '@/components/home/SportGlyph';
 import { useStreaks } from '@/hooks/useStreaks';
 import { AuthModal } from '@/components/auth/AuthModal';
 
 import { ALL_GAMES, CATEGORIES, VISIBLE_CATEGORIES, FEATURED_GAMES, GAME_COUNT_LABEL, TOTAL_GAMES, type GameDef, type CategoryTitle } from '@/data/gameRegistry';
+import { CATEGORY_SPORT, sportOf } from '@/data/homeFront';
 import { isNewGame } from '@/lib/newBadge';
 import { searchSite } from '@/lib/siteSearch';
 import { getTodayET } from '@/lib/dateUtils';
@@ -35,7 +38,9 @@ import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
  * this repo keeps one engine per idea.
  *
  * The home box still shows what it always showed: a flat ranked list of tiles.
- * Only the ranking moved.
+ * Only the ranking moved. Round 658 moved the box itself up into the title
+ * row, so a visitor who knows what they want no longer scrolls past the polls
+ * to find it, and the results now land directly under it.
  */
 
 /** Shown in the "no results" state so a dead-end search still has a next step. */
@@ -214,145 +219,80 @@ export default function Index() {
       <HomeTileStyles />
       {/* Round 215: the skip link in App.tsx points here. */}
       <div id="dukb-main" className="min-h-screen bg-background text-foreground">
-        
-        
-        {/* ─── HERO ─── */}
-        <section className="relative overflow-hidden border-b border-border">
-          <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-[hsl(43,85%,55%)]/5" />
-          {/* ROUND 283: THIS HERO WAS THE REASON NOTHING PLAYABLE WAS ON SCREEN.
+        <div className="max-w-6xl mx-auto px-4 pb-12">
 
-              Measured on the built site before this change: on a 390 by 844
-              phone the first game tile sat at y=478, 57 percent of the way down
-              the only screen most visitors ever see, and three account prompts
-              sat above it (Log In, Sign Up, and a Make a free account button),
-              with a fourth in the banner above them. On a site whose entire
-              pitch is "no sign-up, no downloads", the first screen was a
-              sign-up form with the games below the fold.
+          {/* ─── TITLE ROW ───
+              ROUND 283 took the hero down to what was carrying weight, and
+              Round 658 takes the rest of the way: the owner's h1 and his
+              tagline, compact and left aligned, with the search box beside
+              them instead of three screens down. Nothing here asks for
+              anything; the account line sits under the games now.
 
-              Three things went, and none of them were carrying weight. The
-              wordmark at 5xl/7xl repeated, five times larger, the identical
-              green wordmark already sitting in the nav twelve pixels above it.
-              "The Ultimate Sports Trivia Hub" said nothing a person could act
-              on and was the one line on the page that read as a template. And
-              the guest CTA asked for the account before offering the thing the
-              account is for.
+              The Round 283 note still holds for the tagline: it carries NO
+              number of its own. GAME_COUNT_LABEL is derived from the registry
+              and the template's counts are checked against the registry by
+              simHomeCopy, so a typed figure here would be a second copy with
+              no guard behind it.
 
-              What replaced them says what the site is in words somebody
-              searching for it would use, and carries NO number, deliberately:
-              the template's counts are checked against the registry by
-              simHomeCopy, and a figure here would be a second copy with no
-              guard behind it. The signed-in stats bar below is untouched, it
-              was always the good half of this block. */}
-          <div className="relative max-w-3xl mx-auto px-4 py-6 md:py-10 text-center">
-            <h1 className="text-3xl md:text-5xl font-display font-bold tracking-tight text-primary mb-2">
-              DoUKnowBall
-            </h1>
-            {/* Owner 2026-08-28: "hero headline is too long", replaced with his
-                shape. The Round 297 honesty rule survives the cut: the account
-                claim stays phrased as what is true, every game plays without
-                one. The legal disclaimer lives in the footer, never here. */}
-            <p className="text-base md:text-lg text-muted-foreground max-w-lg mx-auto mb-4">
-              {`${GAME_COUNT_LABEL} free games across every sport. All playable without an account.`}
-            </p>
-
-            {/* Stats bar: PERSONAL stats, signed-in only (owner 2026-08-05).
-                Streak = consecutive days, played = today's count, plus world
-                rank. Guests see a sign-up nudge because none of it saves
-                without an account. Site-wide traffic numbers still must
-                never render publicly (owner 2026-07-10). */}
-            {user ? (
-              <div className="flex flex-wrap items-center justify-center gap-4 md:gap-6 text-sm">
-                <div className="flex items-center gap-1.5 text-muted-foreground">
-                  <Flame className="w-4 h-4 text-orange-500" />
-                  <span>
-                    {globalCurrentStreak > 0 ? (
-                      <><strong className="text-foreground">{globalCurrentStreak}</strong> {globalCurrentStreak === 1 ? 'day' : 'days'} in a row</>
-                    ) : (
-                      'Play anything to start your streak'
+              The signed-in chips live in the h1's own row, whose height is
+              fixed, so auth resolving (or a streak arriving) moves nothing on
+              the page. playHomeFold section 4 plants a record and holds it. */}
+          <div className="pt-4 pb-3 md:flex md:items-end md:justify-between md:gap-8 md:pt-7 md:pb-6">
+            <div className="min-w-0">
+              <div className="flex h-8 items-center gap-3 md:h-11">
+                <h1 className="font-display text-2xl font-bold leading-none tracking-tight text-primary md:text-[40px]">
+                  DoUKnowBall
+                </h1>
+                {/* Stats: PERSONAL stats, signed-in only (owner 2026-08-05).
+                    Streak = consecutive days, played = today's count, plus
+                    world rank. Site-wide traffic numbers still must never
+                    render publicly (owner 2026-07-10). */}
+                {user && (
+                  <div className="ml-auto flex min-w-0 items-center gap-1.5 md:ml-2">
+                    <StatChip icon={<Flame className="h-3.5 w-3.5 text-warn" />} label="Days in a row" value={String(globalCurrentStreak)} unit={globalCurrentStreak === 1 ? 'day' : 'days'} />
+                    <StatChip icon={<Trophy className="h-3.5 w-3.5 text-gold" />} label="Played today" value={String(gamesToday)} unit="today" />
+                    {worldRank !== null && (
+                      <StatChip icon={<Globe className="h-3.5 w-3.5 text-primary" />} label="World rank" value={`#${worldRank.toLocaleString()}`} />
                     )}
-                  </span>
-                </div>
-                <div className="flex items-center gap-1.5 text-muted-foreground">
-                  <Trophy className="w-4 h-4 text-[hsl(43,85%,55%)]" />
-                  <span>Played today: <strong className="text-foreground">{gamesToday}</strong></span>
-                </div>
-                {worldRank !== null && (
-                  <div className="flex items-center gap-1.5 text-muted-foreground">
-                    <Globe className="w-4 h-4 text-primary" />
-                    <span>World rank <strong className="text-foreground">#{worldRank.toLocaleString()}</strong></span>
                   </div>
                 )}
               </div>
-            ) : (
-              /* A line, not a gate. Everything on this site plays signed out,
-                 so the account is an upsell and belongs where an upsell goes:
-                 after somebody has played something. The nav still carries Sign
-                 Up for anyone who came here to make one. */
-              <p className="text-xs text-muted-foreground">
-                Everything below plays without an account.{' '}
-                {/* Round 285: py-2 with a matching negative margin. sweepPhone
-                    measured this control at 16px tall on a phone, which is
-                    half the tap target floor, because Round 283 turned the
-                    signup gate into a sentence and left the button inside it
-                    at text height. The padding grows the hit area to 32px;
-                    the negative margin keeps the sentence's line spacing
-                    exactly where it was. */}
-                <button
-                  onClick={() => setAuthOpen(true)}
-                  className="text-primary font-medium underline underline-offset-2 hover:opacity-80 py-2 -my-2"
-                >
-                  Make a free one
-                </button>{' '}
-                and your streak, points and world rank start counting.
+              {/* Owner 2026-08-28: "hero headline is too long", replaced with
+                  his shape. The Round 297 honesty rule survives the cut: the
+                  account claim stays phrased as what is true, every game plays
+                  without one. The legal disclaimer lives in the footer. */}
+              <p className="mt-1 text-[13px] leading-5 text-muted-foreground md:mt-1.5 md:text-base md:leading-6">
+                {`${GAME_COUNT_LABEL} free games across every sport. All playable without an account.`}
               </p>
-            )}
-            <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} defaultTab="signup" />
-          </div>
-        </section>
+            </div>
 
-        {/* ─── GAME CATEGORIES ─── */}
-        <div className="max-w-4xl mx-auto px-4 py-8 space-y-10">
-          <MostPlayedToday />
-          {/* Round 293 put a personal dailies checklist here. Round 297 removed
-              it on the owner's direct instruction in the 2026-08-26 tweaks
-              document ("The your dailies I would say get rid of it"). Most
-              played stays, per the same document. */}
-          <PollOfTheDay />
-          <StreakReminder />
-          {/* ROUND 382: the maker's note is gone from here, on the owner's
-              instruction: "it shouldnt pop up there I would rather you put it
-              in one the small like tabs on the bottom like near the privacy
-              policy". It now lives on /about, which is the first link in that
-              small footer row, and it no longer carries his name. Round 346
-              put it here and that was his idea at the time; changing his mind
-              about his own voice on his own site is his call. */}
-
-          {/* Search bar */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={e => setSearchQuery(e.target.value)}
-              aria-label="Search games"
-              placeholder='Search games... e.g. soccer, grid, NBA'
-              className="w-full pl-10 pr-10 py-3 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all"
-            />
-            {isSearching && (
-              <button
-                onClick={() => setSearchQuery('')}
-                className="absolute right-3 top-1/2 -translate-y-1/2 p-0.5 text-muted-foreground hover:text-foreground transition-colors"
-                aria-label="Clear search"
-              >
-                <X className="w-4 h-4" />
-              </button>
-            )}
+            <div className="relative mt-3 md:mt-0 md:w-[340px] md:shrink-0">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={e => setSearchQuery(e.target.value)}
+                aria-label="Search games"
+                placeholder='Search games... e.g. soccer, grid, NBA'
+                className="h-11 w-full pl-10 pr-10 rounded-xl border border-border bg-card text-foreground text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary/40 focus:border-primary/40 transition-all"
+              />
+              {isSearching && (
+                <button
+                  onClick={() => setSearchQuery('')}
+                  className="absolute right-1.5 top-1/2 -translate-y-1/2 grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Clear search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
           </div>
 
-          {/* Search results or categorized layout */}
+          {/* Search results replace everything under the title row, so they
+              arrive right under the box with nothing to scroll past. */}
           {isSearching ? (
             filteredGames.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                 {filteredGames.map(game => (
                   <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} />
                 ))}
@@ -373,22 +313,68 @@ export default function Index() {
               </div>
             )
           ) : (
-            <>
+            <div className="space-y-10">
+              <div className="space-y-4">
+                {/* ─── MAIN EVENT ───
+                    Round 658: the four flagships on the first screen, Soccer
+                    Career on the big stage. It is the first thing on the page
+                    to play: a 390 by 844 phone sees it at about y=250, where
+                    the Round 283 fence allows 430. */}
+                <FeaturedStage />
+
+                {/* A line, not a gate. Everything on this site plays signed
+                    out, so the account is an upsell and belongs where an
+                    upsell goes: after the games, not in front of them. The nav
+                    still carries Sign Up for anyone who came here to make one. */}
+                {!user && (
+                  <p className="text-xs text-muted-foreground">
+                    Every game here plays without an account.{' '}
+                    {/* Round 285: py-2 with a matching negative margin.
+                        sweepPhone measured this control at 16px tall on a
+                        phone, which is half the tap target floor. The padding
+                        grows the hit area to 32px; the negative margin keeps
+                        the sentence's line spacing exactly where it was. */}
+                    <button
+                      onClick={() => setAuthOpen(true)}
+                      className="text-primary font-medium underline underline-offset-2 hover:opacity-80 py-2 -my-2"
+                    >
+                      Make a free one
+                    </button>{' '}
+                    and your streak, points and world rank start counting.
+                  </p>
+                )}
+                <StreakReminder />
+              </div>
+
+              <MostPlayedToday />
+              {/* Round 293 put a personal dailies checklist here. Round 297 removed
+                  it on the owner's direct instruction in the 2026-08-26 tweaks
+                  document ("The your dailies I would say get rid of it"). Most
+                  played stays, per the same document. */}
+              <PollOfTheDay />
+              {/* ROUND 382: the maker's note is gone from here, on the owner's
+                  instruction: "it shouldnt pop up there I would rather you put it
+                  in one the small like tabs on the bottom like near the privacy
+                  policy". It now lives on /about, which is the first link in that
+                  small footer row, and it no longer carries his name. Round 346
+                  put it here and that was his idea at the time; changing his mind
+                  about his own voice on his own site is his call. */}
+
               {/* Dynasty & Career Sims showcase (2026-08-05): the deep games, front and center */}
               <section>
-                <h2 className="flex items-center gap-2 text-lg font-display font-bold text-foreground mb-1">
-                  <span className="text-xl">👑</span>
+                <h2 className="flex items-center gap-2.5 text-lg font-display font-bold text-foreground mb-1">
+                  <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-gold/15 text-base ring-1 ring-inset ring-gold/30">👑</span>
                   Dynasty & Career Sims
                   <span className="text-xs font-normal text-muted-foreground ml-1">
                     ({FEATURED_GAMES.length} worlds)
                   </span>
                 </h2>
-                <p className="text-xs text-muted-foreground mb-4">
+                <p className="text-xs text-muted-foreground mb-4 md:pl-[42px]">
                   Not quizzes. Whole universes: run a franchise, live a career, build a dynasty. Every one saves your progress.
                 </p>
                 {/* Round 188: the tile curtain, once per section on scroll. */}
                 <RevealSection>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                     {FEATURED_GAMES.map((game, i) => (
                       <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} />
                     ))}
@@ -397,9 +383,14 @@ export default function Index() {
               </section>
 
               {VISIBLE_CATEGORIES.map(cat => (
-                <section key={cat.title}>
-                  <h2 className="flex items-center gap-2 text-lg font-display font-bold text-foreground mb-4">
-                    <span className="text-xl">{cat.emoji}</span>
+                <section key={cat.title} data-sport={CATEGORY_SPORT[cat.title]}>
+                  {/* Round 658: the sport's drawn glyph in its own ink leads
+                      every section, so the colour on the cards below always
+                      has a shape and a name beside it. */}
+                  <h2 className="flex items-center gap-2.5 text-lg font-display font-bold text-foreground mb-4" style={sportStyle(CATEGORY_SPORT[cat.title])}>
+                    <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-tile/15 text-tile ring-1 ring-inset ring-tile/30">
+                      <SportGlyph sport={CATEGORY_SPORT[cat.title]} className="h-[18px] w-[18px]" />
+                    </span>
                     {cat.title}
                     <span className="text-xs font-normal text-muted-foreground ml-1">
                       ({cat.games.length} {cat.games.length === 1 ? 'game' : 'games'})
@@ -424,7 +415,7 @@ export default function Index() {
                     )}
                   </h2>
                   <RevealSection>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
                       {cat.games.map((game, i) => (
                         <GameCard key={game.path} game={game} bestScore={bestScores[game.path.slice(1)]} revealIndex={i} />
                       ))}
@@ -432,7 +423,7 @@ export default function Index() {
                   </RevealSection>
                 </section>
               ))}
-            </>
+            </div>
           )}
 
           {/* Golf went live 2026-08-05 (Guess The Golfer + Golf Higher or
@@ -442,9 +433,23 @@ export default function Index() {
           {/* Round 91: the owner asked for the rounds-played social proof
               block to go. Removed. */}
 
+          <AuthModal isOpen={authOpen} onClose={() => setAuthOpen(false)} defaultTab="signup" />
         </div>
       </div>
     </>
+  );
+}
+
+/** One signed-in stat in the title row. The unit words drop on a phone so
+    three chips fit beside the h1 without making the row any taller. */
+function StatChip({ icon, label, value, unit }: { icon: ReactNode; label: string; value: string; unit?: string }) {
+  return (
+    <span className="inline-flex h-7 shrink-0 items-center gap-1 rounded-full border border-border bg-surface-1 px-2 text-xs text-muted-foreground">
+      {icon}
+      <span className="sr-only">{label}: </span>
+      <strong className="text-foreground">{value}</strong>
+      {unit && <span className="hidden sm:inline">{unit}</span>}
+    </span>
   );
 }
 
@@ -546,22 +551,38 @@ function RevealSection({ children }: { children: ReactNode }) {
 /** Stagger inside a section, capped so deep grids settle fast. */
 const tileDelay = (i: number) => `${(i % 9) * 0.06}s`;
 
-/* ─── GAME CARD ─── */
+/* ─── GAME CARD ───
+   Round 658: every card wears its sport. A 3px rule and a tinted icon tile
+   in the sport's ink, and the sport's drawn glyph as a badge on the icon so
+   the colour is never the only signal (search results and the sims row mix
+   sports on one grid). The game's own emoji stays in the tile: it is the one
+   thing on the card that tells two games of the same sport apart at a
+   glance. The description is clamped to two lines so a grid of cards lines
+   up in rows. */
 function GameCard({ game, bestScore, revealIndex }: { game: GameDef; bestScore?: number; revealIndex?: number }) {
   /* Round 447: the NEW badge is derived from the day the game shipped, not
      read from a flag ("u call like everything new": 111 of 131 tiles wore
      it). The day is pinned once at mount, the same rule every daily game
      follows, so the tiles cannot disagree with each other across midnight. */
   const todayStr = useRef(getTodayET()).current;
+  const sport = sportOf(game.path);
   return (
     <Link
       to={game.path}
-      className="home-tile group flex items-start gap-3 rounded-xl border border-border bg-surface-1 p-4 hover:border-primary/40 hover:bg-surface-2 hover:-translate-y-0.5 transition-all duration-200"
-      style={revealIndex != null ? { animationDelay: tileDelay(revealIndex) } : undefined}
+      data-sport={sport}
+      className="home-tile group relative flex items-start gap-3 overflow-hidden rounded-xl border border-border/80 bg-surface-1 p-4 pt-[18px] hover:border-tile/50 hover:bg-surface-2 hover:-translate-y-0.5 transition-all duration-200"
+      style={{ ...sportStyle(sport), ...(revealIndex != null ? { animationDelay: tileDelay(revealIndex) } : {}) }}
     >
-      <span className="text-2xl shrink-0 mt-0.5">{game.emoji}</span>
-      <div className="min-w-0 flex-1">
-        <div className="flex items-center gap-2 flex-wrap">
+      <span aria-hidden="true" className="absolute inset-x-0 top-0 h-[3px] bg-tile" />
+      <SportGlyph sport={sport} className="pointer-events-none absolute -bottom-4 -right-4 h-20 w-20 text-tile opacity-[0.07] transition-opacity duration-200 group-hover:opacity-[0.13]" />
+      <span aria-hidden="true" className="relative mt-0.5 grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-tile/15 text-2xl ring-1 ring-inset ring-tile/25">
+        {game.emoji}
+        <span className="absolute -bottom-1.5 -right-1.5 grid h-5 w-5 place-items-center rounded-full bg-surface-1 text-tile ring-1 ring-tile/50">
+          <SportGlyph sport={sport} className="h-3.5 w-3.5" />
+        </span>
+      </span>
+      <div className="relative min-w-0 flex-1">
+        <div className="flex items-center gap-x-2 gap-y-1 flex-wrap">
           {/* Round 650: the game's name is an h3 under its category's h2, so
               the rendered home page reads as a real outline of the site.
               The reset gives a heading the inherited size and weight, so the
@@ -581,7 +602,7 @@ function GameCard({ game, bestScore, revealIndex }: { game: GameDef; bestScore?:
             </span>
           )}
         </div>
-        <p className="text-xs text-muted-foreground mt-0.5 leading-snug">{game.description}</p>
+        <p className="text-xs text-muted-foreground mt-1 leading-snug line-clamp-2">{game.description}</p>
         {bestScore != null && bestScore > 0 && (
           <span className="text-[10px] text-gold/70 mt-0.5 block">PB: {bestScore}</span>
         )}
