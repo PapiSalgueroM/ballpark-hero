@@ -252,7 +252,7 @@ export function CustomClubForm({ leagueName, leagueId, eraId, onBack, onCreate }
             <span>Up to ~{caps[tier]} on {CUSTOM_TIERS[tier].label.toLowerCase()}</span>
           </div>
           <p className="text-[9px] text-muted-foreground mt-1">
-            The squad average. Your best players land a couple of points above it. The squad is part of what your money buys, so {money(CUSTOM_TIERS[tier].budget)} gets you up to about {caps[tier]}. Want better? Pick bigger backing below. The board reads the squad you build here, and the demand above moves as you drag.
+            The squad average. Your best players land a couple of points above it. The squad is part of what your money buys, so {money(CUSTOM_TIERS[tier].budget)} gets you up to about {caps[tier]}.{Object.values(caps).some(c => c > caps[tier]) ? ' Want better? Pick bigger backing below.' : ''} The board reads the squad you build here, and the demand above moves as you drag.
           </p>
         </div>
 
