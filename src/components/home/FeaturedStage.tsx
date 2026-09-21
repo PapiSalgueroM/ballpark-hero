@@ -52,7 +52,12 @@ export function FeaturedStage() {
   if (cards.length === 0) return null;
   const [lead, ...rest] = cards;
   return (
-    <section aria-label="Main event" data-home-stage="" className="grid gap-3 md:h-[320px] md:grid-cols-12">
+    /* min-h, never h. At 768 and 800 a fixed 320 made the band 320 tall while
+       its cards, sized by their own content, ran to 627 and painted straight
+       over the next section's heading. The cards still stretch to one row
+       because a grid item fills its track. */
+    <section aria-labelledby="home-stage-title" data-home-stage="" className="grid gap-3 md:min-h-[320px] md:grid-cols-12">
+      <h2 id="home-stage-title" className="sr-only">Main event</h2>
       <StageCard card={lead} variant="lead" className="md:col-span-7" />
       <div className="grid grid-cols-3 gap-3 md:col-span-5 md:grid-cols-2 md:grid-rows-2">
         {rest.map((card, i) => (
@@ -134,7 +139,9 @@ function StageCard({ card, variant, className }: { card: Card; variant: Variant;
               or three on a desktop. The clamp is only a backstop for a much
               longer description one day. */}
           <p className="line-clamp-4 text-[13px] leading-snug text-muted-foreground md:text-[15px]">{game.description}</p>
-          <span className="mt-1 inline-flex h-11 w-fit items-center gap-2 rounded-full bg-primary px-5 text-sm font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-transform duration-200 group-hover:translate-x-0.5">
+          {/* whitespace-nowrap and tighter padding at the smallest width: at
+              320 the label wrapped to two lines inside the pill */}
+          <span className="mt-1 inline-flex h-11 w-fit items-center gap-2 whitespace-nowrap rounded-full bg-primary px-4 text-[13px] font-bold text-primary-foreground shadow-lg shadow-primary/20 transition-transform duration-200 group-hover:translate-x-0.5 md:px-5 md:text-sm">
             {cta}
             <ArrowRight className="h-4 w-4" aria-hidden="true" />
           </span>
@@ -153,7 +160,7 @@ function StageCard({ card, variant, className }: { card: Card; variant: Variant;
             </div>
             <h3 className="font-display text-[13px] font-bold leading-tight text-foreground md:text-lg">{game.label}</h3>
             {variant === 'wide' && (
-              <p className="hidden text-xs leading-snug text-muted-foreground md:line-clamp-2">{game.description}</p>
+              <p className="hidden text-xs leading-snug text-muted-foreground md:line-clamp-2">{leadIn(game.description)}</p>
             )}
           </div>
           <span className="hidden items-center gap-1 text-sm font-semibold text-primary md:inline-flex">
@@ -164,6 +171,17 @@ function StageCard({ card, variant, className }: { card: Card; variant: Variant;
       )}
     </Link>
   );
+}
+
+/** The opening clause of a registry description, for the wide card only. That
+    card is half the lead's width and clamps at two lines, and Club Manager's
+    description runs to 134 characters, so the clamp cut it mid word and it read
+    like the text had failed to load. Everything from the first colon or
+    sentence end is dropped. A description with neither comes back whole, and
+    the lead card still shows the full sentence because it has the room. */
+function leadIn(description: string): string {
+  const cut = description.search(/[:.!?](\s|$)/);
+  return cut === -1 ? description : description.slice(0, cut);
 }
 
 function Kicker({ sport, text, small }: { sport: ReturnType<typeof sportOf>; text: string; small?: boolean }) {
