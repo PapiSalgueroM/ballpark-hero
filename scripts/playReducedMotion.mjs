@@ -135,6 +135,8 @@ for (const pref of ['no-preference', 'reduce']) {
    elements still animating; the control refuses if no bundle was rewritten. */
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROUTES = [
+  /* Round 658: the home page, for the Main Event band's entrance. */
+  '/',
   '/cfb-dynasty', '/cbb-dynasty',
   '/front-office', '/nba-front-office', '/mlb-front-office', '/nhl-front-office',
   '/nfl-my-career', '/nba-my-career', '/mlb-my-career', '/nhl-my-career',
@@ -149,7 +151,7 @@ const ROUTES = [
 const SLOW_MS = 10;
 let slowRoutes = 0;
 let rewrittenCss = 0;
-const REVEAL_CLASSES = ['cm-rise', 'cm-slam', 'cm-tick-in', 'cm-gold-glow', 'cm-win-pulse', 'cm-loss-shake', 'fo-draft-row', 'fo-draft-head', 'fo-draft-continue'];
+const REVEAL_CLASSES = ['cm-rise', 'cm-slam', 'cm-tick-in', 'cm-gold-glow', 'cm-win-pulse', 'cm-loss-shake', 'fo-draft-row', 'fo-draft-head', 'fo-draft-continue', 'hf-art', 'hf-cone', 'hf-ball'];
 let badRoutes = 0;
 let routesWithOurCss = 0;
 if (!fs.existsSync(path.join(ROOT, 'dist', 'index.html'))) {

@@ -4,6 +4,7 @@ import { cn } from '@/lib/utils';
 import { POLLS, type PollFixture } from '@/data/pollFixtures';
 import { getPollDayET, dateSeed } from '@/lib/dateUtils';
 import { FlagImg, FlagFromEmoji, TextWithFlags } from '@/components/FlagImg';
+import { PollsHeading, PollsPlaceholder } from './PollsPlaceholder';
 
 /**
  * Home: Poll of the Day 3.0.
@@ -146,17 +147,19 @@ export function PollOfTheDay() {
     };
   }, [pollDay]);
 
-  if (!polls || polls.length === 0) return null;
+  if (polls && polls.length === 0) return null;
+
+  /* Round 659: the polls sit below the games now, and while they load two
+     skeleton cards hold the exact room the real ones take (the same card
+     box, the same two rows of buttons), so a late answer from the database
+     can never push down a page somebody is already reading. */
+  if (polls === null) return <PollsPlaceholder />;
 
   return (
-    <section>
-      <p className="text-[10px] font-semibold uppercase tracking-[0.15em] text-muted-foreground mb-2">
-        🗳️ Polls of the Day
-      </p>
-      <div className="space-y-3">
-        {polls.map((poll) => (
-          <PollCard key={poll.key} poll={poll} />
-        ))}
+    <section aria-labelledby="home-polls">
+      <PollsHeading />
+      <div className="grid gap-3 md:grid-cols-2">
+        {polls.map((poll) => <PollCard key={poll.key} poll={poll} />)}
       </div>
     </section>
   );

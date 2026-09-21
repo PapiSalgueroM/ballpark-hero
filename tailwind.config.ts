@@ -72,6 +72,9 @@ export default {
           DEFAULT: "hsl(var(--warn))",
           foreground: "hsl(var(--warn-foreground))",
         },
+        // Round 658: a sport's ink, set per element by sportStyle() in
+        // src/components/home/SportGlyph.tsx (--tile: var(--sport-<key>)).
+        tile: "hsl(var(--tile) / <alpha-value>)",
         surface: {
           1: "hsl(var(--surface-1))",
           2: "hsl(var(--surface-2))",
