@@ -5,7 +5,7 @@ import { UfcFighter, FightResult, WeightClass } from '@/types/ufcChain';
    Miocic, Cain Velasquez and Henry Cejudo were flagged as Hall of Famers and
    are not; a fight wing induction (Jon Jones, Israel Adesanya) honours the
    fight, not the fighter, so it does not count here either.
-   Junior dos Santos and Yoel Romero left the chain because the sources do not agree on their record.
+    left the chain because the sources do not agree on their record.
 
    weightClass here is NOT the same field as weightClass in
    src/data/ufcFighters.ts, and the two are allowed to differ for one reason.
@@ -15,160 +15,70 @@ import { UfcFighter, FightResult, WeightClass } from '@/types/ufcChain';
    scripts/simUfcFacts.mjs compares the two files, and
    scripts/simSportsFacts.mjs compares both with the record. */
 export const UFC_FIGHTERS: UfcFighter[] = [
-
   { name: 'Jon Jones', weightClass: 'Heavyweight', record: '28-1-0', wins: 28, losses: 1, draws: 0, isHallOfFamer: false },
-
   { name: 'Stipe Miocic', weightClass: 'Heavyweight', record: '20-5-0', wins: 20, losses: 5, draws: 0, isHallOfFamer: false },
-
   { name: 'Francis Ngannou', weightClass: 'Heavyweight', record: '19-3-0', wins: 19, losses: 3, draws: 0, isHallOfFamer: false },
-
   { name: 'Daniel Cormier', weightClass: 'Heavyweight', record: '22-3-0', wins: 22, losses: 3, draws: 0, isHallOfFamer: true },
-
   { name: 'Cain Velasquez', weightClass: 'Heavyweight', record: '14-3-0', wins: 14, losses: 3, draws: 0, isHallOfFamer: false },
-
   { name: 'Tom Aspinall', weightClass: 'Heavyweight', record: '15-3-0', wins: 15, losses: 3, draws: 0, isHallOfFamer: false },
-
   { name: 'Ciryl Gane', weightClass: 'Heavyweight', record: '14-2-0', wins: 14, losses: 2, draws: 0, isHallOfFamer: false },
-
-
   { name: 'Alex Pereira', weightClass: 'Light Heavyweight', record: '13-4-0', wins: 13, losses: 4, draws: 0, isHallOfFamer: false },
-
   { name: 'Jamahal Hill', weightClass: 'Light Heavyweight', record: '12-4-0', wins: 12, losses: 4, draws: 0, isHallOfFamer: false },
-
   { name: 'Glover Teixeira', weightClass: 'Light Heavyweight', record: '33-9-0', wins: 33, losses: 9, draws: 0, isHallOfFamer: false },
-
   { name: 'Jan Blachowicz', weightClass: 'Light Heavyweight', record: '29-12-2', wins: 29, losses: 12, draws: 2, isHallOfFamer: false },
-
   { name: 'Jiří Procházka', weightClass: 'Light Heavyweight', record: '32-6-1', wins: 32, losses: 6, draws: 1, isHallOfFamer: false },
-
   { name: 'Chuck Liddell', weightClass: 'Light Heavyweight', record: '21-9-0', wins: 21, losses: 9, draws: 0, isHallOfFamer: true },
-
   { name: 'Randy Couture', weightClass: 'Light Heavyweight', record: '19-11-0', wins: 19, losses: 11, draws: 0, isHallOfFamer: true },
-
-
   { name: 'Israel Adesanya', weightClass: 'Middleweight', record: '24-6-0', wins: 24, losses: 6, draws: 0, isHallOfFamer: false },
-
   { name: 'Dricus du Plessis', weightClass: 'Middleweight', record: '24-3-0', wins: 24, losses: 3, draws: 0, isHallOfFamer: false },
-
   { name: 'Sean Strickland', weightClass: 'Middleweight', record: '31-7-0', wins: 31, losses: 7, draws: 0, isHallOfFamer: false },
-
   { name: 'Robert Whittaker', weightClass: 'Middleweight', record: '28-9-0', wins: 28, losses: 9, draws: 0, isHallOfFamer: false },
-
   { name: 'Paulo Costa', weightClass: 'Middleweight', record: '16-4-0', wins: 16, losses: 4, draws: 0, isHallOfFamer: false },
-
   { name: 'Anderson Silva', weightClass: 'Middleweight', record: '34-11-0', wins: 34, losses: 11, draws: 0, isHallOfFamer: true },
-
   { name: 'Michael Bisping', weightClass: 'Middleweight', record: '30-9-0', wins: 30, losses: 9, draws: 0, isHallOfFamer: true },
-
-
   { name: 'Leon Edwards', weightClass: 'Welterweight', record: '22-6-0', wins: 22, losses: 6, draws: 0, isHallOfFamer: false },
-
   { name: 'Belal Muhammad', weightClass: 'Welterweight', record: '24-6-0', wins: 24, losses: 6, draws: 0, isHallOfFamer: false },
-
   { name: 'Shavkat Rakhmonov', weightClass: 'Welterweight', record: '19-0-0', wins: 19, losses: 0, draws: 0, isHallOfFamer: false },
-
   { name: 'Kamaru Usman', weightClass: 'Welterweight', record: '21-5-0', wins: 21, losses: 5, draws: 0, isHallOfFamer: false },
-
   { name: 'Colby Covington', weightClass: 'Welterweight', record: '17-5-0', wins: 17, losses: 5, draws: 0, isHallOfFamer: false },
-
   { name: 'Jorge Masvidal', weightClass: 'Welterweight', record: '35-17-0', wins: 35, losses: 17, draws: 0, isHallOfFamer: false },
-
   { name: 'Tyron Woodley', weightClass: 'Welterweight', record: '19-7-1', wins: 19, losses: 7, draws: 1, isHallOfFamer: false },
-
   { name: 'Robbie Lawler', weightClass: 'Welterweight', record: '30-16-0', wins: 30, losses: 16, draws: 0, isHallOfFamer: true },
-
   { name: 'Georges St-Pierre', weightClass: 'Welterweight', record: '26-2-0', wins: 26, losses: 2, draws: 0, isHallOfFamer: true },
-
   { name: 'Matt Hughes', weightClass: 'Welterweight', record: '45-9-0', wins: 45, losses: 9, draws: 0, isHallOfFamer: true },
-
-
   { name: 'Islam Makhachev', weightClass: 'Lightweight', record: '29-1-0', wins: 29, losses: 1, draws: 0, isHallOfFamer: false },
-
   { name: 'Arman Tsarukyan', weightClass: 'Lightweight', record: '23-3-0', wins: 23, losses: 3, draws: 0, isHallOfFamer: false },
-
   { name: 'Charles Oliveira', weightClass: 'Lightweight', record: '37-11-0', wins: 37, losses: 11, draws: 0, isHallOfFamer: false },
-
   { name: 'Justin Gaethje', weightClass: 'Lightweight', record: '28-5-0', wins: 28, losses: 5, draws: 0, isHallOfFamer: false },
-
   { name: 'Dustin Poirier', weightClass: 'Lightweight', record: '30-10-0', wins: 30, losses: 10, draws: 0, isHallOfFamer: false },
-
   { name: 'Conor McGregor', weightClass: 'Lightweight', record: '22-7-0', wins: 22, losses: 7, draws: 0, isHallOfFamer: false },
-
   { name: 'Khabib Nurmagomedov', weightClass: 'Lightweight', record: '29-0-0', wins: 29, losses: 0, draws: 0, isHallOfFamer: true },
-
   { name: 'Tony Ferguson', weightClass: 'Lightweight', record: '26-11-0', wins: 26, losses: 11, draws: 0, isHallOfFamer: false },
-
   { name: 'BJ Penn', weightClass: 'Lightweight', record: '16-14-2', wins: 16, losses: 14, draws: 2, isHallOfFamer: true },
-
-
   { name: 'Ilia Topuria', weightClass: 'Featherweight', record: '17-1-0', wins: 17, losses: 1, draws: 0, isHallOfFamer: false },
-
   { name: 'Alexander Volkanovski', weightClass: 'Featherweight', record: '28-4-0', wins: 28, losses: 4, draws: 0, isHallOfFamer: false },
-
   { name: 'Max Holloway', weightClass: 'Featherweight', record: '28-9-0', wins: 28, losses: 9, draws: 0, isHallOfFamer: false },
-
   { name: 'Diego Lopes', weightClass: 'Featherweight', record: '28-8-0', wins: 28, losses: 8, draws: 0, isHallOfFamer: false },
-
   { name: 'Movsar Evloev', weightClass: 'Featherweight', record: '20-0-0', wins: 20, losses: 0, draws: 0, isHallOfFamer: false },
-
   { name: 'Brian Ortega', weightClass: 'Featherweight', record: '16-5-0', wins: 16, losses: 5, draws: 0, isHallOfFamer: false },
-
   { name: 'Jose Aldo', weightClass: 'Featherweight', record: '32-10-0', wins: 32, losses: 10, draws: 0, isHallOfFamer: true },
-
   { name: 'Frankie Edgar', weightClass: 'Featherweight', record: '23-11-1', wins: 23, losses: 11, draws: 1, isHallOfFamer: true },
-
-
   { name: 'Merab Dvalishvili', weightClass: 'Bantamweight', record: '21-5-0', wins: 21, losses: 5, draws: 0, isHallOfFamer: false },
-
   { name: 'Sean O\'Malley', weightClass: 'Bantamweight', record: '20-3-0', wins: 20, losses: 3, draws: 0, isHallOfFamer: false },
-
   { name: 'Aljamain Sterling', weightClass: 'Bantamweight', record: '26-5-0', wins: 26, losses: 5, draws: 0, isHallOfFamer: false },
-
   { name: 'Petr Yan', weightClass: 'Bantamweight', record: '20-5-0', wins: 20, losses: 5, draws: 0, isHallOfFamer: false },
-
   { name: 'Cory Sandhagen', weightClass: 'Bantamweight', record: '18-7-0', wins: 18, losses: 7, draws: 0, isHallOfFamer: false },
-
   { name: 'TJ Dillashaw', weightClass: 'Bantamweight', record: '18-5-0', wins: 18, losses: 5, draws: 0, isHallOfFamer: false },
-
   { name: 'Dominick Cruz', weightClass: 'Bantamweight', record: '24-4-0', wins: 24, losses: 4, draws: 0, isHallOfFamer: true },
-
   { name: 'Urijah Faber', weightClass: 'Bantamweight', record: '35-11-0', wins: 35, losses: 11, draws: 0, isHallOfFamer: true },
-
-
   { name: 'Alexandre Pantoja', weightClass: 'Flyweight', record: '30-6-0', wins: 30, losses: 6, draws: 0, isHallOfFamer: false },
-
   { name: 'Brandon Moreno', weightClass: 'Flyweight', record: '24-10-2', wins: 24, losses: 10, draws: 2, isHallOfFamer: false },
-
   { name: 'Deiveson Figueiredo', weightClass: 'Flyweight', record: '25-7-1', wins: 25, losses: 7, draws: 1, isHallOfFamer: false },
-
   { name: 'Kai Kara-France', weightClass: 'Flyweight', record: '25-12-0', wins: 25, losses: 12, draws: 0, isHallOfFamer: false },
-
   { name: 'Demetrious Johnson', weightClass: 'Flyweight', record: '25-4-1', wins: 25, losses: 4, draws: 1, isHallOfFamer: true },
-
   { name: 'Henry Cejudo', weightClass: 'Flyweight', record: '16-6-0', wins: 16, losses: 6, draws: 0, isHallOfFamer: false },
-
 ];
 
-/* Round 660: every link here is a real fight with the right winner, event and
-   year, checked on 2026-09-19 against ufc.com and an independent record
-   (Sherdog, ESPN and others; URLs in scripts/data/sportsFactsVerified2026-09.json).
-   scripts/simSportsFacts.mjs fails on any link the record does not hold. Four
-   links were removed: Aspinall over Jones at UFC 313 (they never fought),
-   Aspinall over Gane (UFC 321 was a no contest), Figueiredo over Moreno at
-   UFC 256 (a majority draw) and a Silva over Bisping row (Bisping won, and
-   that result is listed). Five reversed or misdated links now say what
-   happened, and the rest had their method, round, time or title corrected.
-   A draw or a no contest is not a win and never goes in this list. */
-/* Round 660: every link here is a real fight with the right winner, event and
-   year, checked on 2026-09-19 against ufc.com and an independent record
-   (Sherdog, ESPN and others; URLs in scripts/data/sportsFactsVerified2026-09.json).
-   scripts/simSportsFacts.mjs fails on any link the record does not hold. Four
-   links were removed: Aspinall over Jones at UFC 313 (they never fought),
-   Aspinall over Gane (UFC 321 was a no contest), Figueiredo over Moreno at
-   UFC 256 (a majority draw) and a Silva over Bisping row (Bisping won, and
-   that result is listed). Five reversed or misdated links now say what
-   happened, and the rest had their method, round, time or title corrected.
-   A draw or a no contest is not a win and never goes in this list. */
 /* Round 660: every link here is a real fight with the right winner, event and
    year, checked on 2026-09-19 against ufc.com and an independent record
    (Sherdog, ESPN and others; URLs in scripts/data/sportsFactsVerified2026-09.json).
@@ -184,7 +94,9 @@ export const FIGHT_RESULTS: FightResult[] = [
   { winner: 'Jon Jones', loser: 'Stipe Miocic', event: 'UFC 309', year: 2024, method: 'KO/TKO', round: 3, time: '4:29', wasChampionshipFight: true },
   { winner: 'Stipe Miocic', loser: 'Francis Ngannou', event: 'UFC 220', year: 2018, method: 'Decision (unanimous)', round: 5, time: '5:00', wasChampionshipFight: true },
   { winner: 'Stipe Miocic', loser: 'Daniel Cormier', event: 'UFC 241', year: 2019, method: 'KO/TKO', round: 4, time: '4:09', wasChampionshipFight: true },
+  { winner: 'Stipe Miocic', loser: 'Junior dos Santos', event: 'UFC 211', year: 2017, method: 'KO/TKO', round: 1, time: '2:22', wasChampionshipFight: true },
   { winner: 'Francis Ngannou', loser: 'Stipe Miocic', event: 'UFC 260', year: 2021, method: 'KO/TKO', round: 2, time: '0:52', wasChampionshipFight: true },
+  { winner: 'Francis Ngannou', loser: 'Junior dos Santos', event: 'UFC on ESPN 3', year: 2019, method: 'KO/TKO', round: 1, time: '1:11', wasChampionshipFight: false },
   { winner: 'Francis Ngannou', loser: 'Cain Velasquez', event: 'UFC on ESPN 1', year: 2019, method: 'KO/TKO', round: 1, time: '0:26', wasChampionshipFight: false },
   { winner: 'Francis Ngannou', loser: 'Ciryl Gane', event: 'UFC 270', year: 2022, method: 'Decision (unanimous)', round: 5, time: '5:00', wasChampionshipFight: true },
   { winner: 'Daniel Cormier', loser: 'Stipe Miocic', event: 'UFC 226', year: 2018, method: 'KO/TKO', round: 1, time: '4:33', wasChampionshipFight: true },
@@ -201,6 +113,7 @@ export const FIGHT_RESULTS: FightResult[] = [
   { winner: 'Sean Strickland', loser: 'Israel Adesanya', event: 'UFC 293', year: 2023, method: 'Decision (unanimous)', round: 5, time: '5:00', wasChampionshipFight: true },
   { winner: 'Israel Adesanya', loser: 'Robert Whittaker', event: 'UFC 243', year: 2019, method: 'KO/TKO', round: 2, time: '3:33', wasChampionshipFight: true },
   { winner: 'Israel Adesanya', loser: 'Paulo Costa', event: 'UFC 253', year: 2020, method: 'KO/TKO', round: 2, time: '3:59', wasChampionshipFight: true },
+  { winner: 'Robert Whittaker', loser: 'Yoel Romero', event: 'UFC 213', year: 2017, method: 'Decision (unanimous)', round: 5, time: '5:00', wasChampionshipFight: true },
   { winner: 'Michael Bisping', loser: 'Anderson Silva', event: 'UFC Fight Night 84', year: 2016, method: 'Decision (unanimous)', round: 5, time: '5:00', wasChampionshipFight: false },
   { winner: 'Leon Edwards', loser: 'Kamaru Usman', event: 'UFC 278', year: 2022, method: 'KO/TKO', round: 5, time: '4:04', wasChampionshipFight: true },
   { winner: 'Leon Edwards', loser: 'Colby Covington', event: 'UFC 296', year: 2023, method: 'Decision (unanimous)', round: 5, time: '5:00', wasChampionshipFight: true },
