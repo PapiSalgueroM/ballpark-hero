@@ -5,11 +5,11 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
   {
     year: 1998,
     clues: [
-      "A Canadian NHL team won the Stanley Cup for the last time in history",
+      "The Detroit Red Wings won a second straight Stanley Cup",
       "A first baseman shattered a 37-year-old single season home run record",
       "The host nation won the FIFA World Cup on home soil for the first time since 1978",
-      "A legendary point guard won his 6th NBA Finals MVP",
-      "A Tennessee quarterback won the Heisman Trophy",
+      "A legendary shooting guard won his sixth NBA Finals MVP",
+      "A Texas running back won the Heisman Trophy",
       "France defeated Brazil 3-0 in the World Cup Final"
     ]
   },
