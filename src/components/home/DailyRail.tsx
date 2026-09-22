@@ -68,7 +68,17 @@ export function DailyRail({ today }: { today?: string }) {
           expects; on a wider screen it stays inside the page's column and
           fades out at the right so the cut reads as "more this way". */}
       <div ref={railRef} className="-mx-4 snap-x overflow-x-auto overscroll-x-contain scroll-px-4 px-4 pb-2 [scrollbar-width:thin] sm:mx-0 sm:scroll-px-0 sm:px-0 sm:[mask-image:linear-gradient(to_right,#000_calc(100%-56px),transparent)]">
-        <ul className="grid w-max auto-cols-max grid-flow-col grid-rows-2 gap-2.5 sm:pr-14">
+        {/* The whole rail is dated, not just the spotlight. `rest` drops the
+            game the date picked, so the set of chips is different every day:
+            today the rail has no CBB Program chip because it is the
+            spotlight, in five days it has one and no Emoji Guess chip.
+            Marking only the spotlight left that difference unmarked, and
+            playSnapshotDrift caught it on "/" as one block that changes with
+            the clock. The home page is not prerendered, so nothing was being
+            frozen into a saved file, but the block IS volatile and saying so
+            is the honest declaration rather than an exception. The visitor
+            keeps the whole rail; only a photograph of the page loses it. */}
+        <ul data-no-prerender="" className="grid w-max auto-cols-max grid-flow-col grid-rows-2 gap-2.5 sm:pr-14">
           {spotlight && (
             <li className="row-span-2 snap-start">
               <Spotlight game={spotlight} />
