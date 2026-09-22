@@ -1,5 +1,60 @@
 # Project state
 
+## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
+
+Assembled and gated by the desktop Claude lane in the CRLF gate clone on `release-d`, pushed to
+main as a fast forward of 59 commits from `5c082e71`. **douknowball.com is serving it:**
+deployment `c902a3af-6f98-4219-b2e6-3cac2bef5a78`, called only after `get_project` showed
+`latest_commit_sha` `3bddc098`; the entry moved from `index-CvyQdw4v.js` to `index-DLcJd_J8.js`.
+Proof on the live site: the rendered home page carries the Main Event stage (Soccer Career on the
+big card with Club Manager, Stadium Tycoon and NBA My Career beside it, each with its drawn art)
+and the Daily puzzles rail led by Today's puzzle, on a phone and on a desktop.
+
+- **658 and 659, the home page redesign.** The answer to the owner's "in the last month I see like
+  no difference on the site". A drawn stage for the four flagships with a Continue CTA where this
+  browser already holds a save, every daily on the site in one rail led by Today's puzzle, Just
+  shipped from the registry's addedOn dates, polls moved below the games, a sport colour and a
+  drawn sport badge on every card, and the search box moved up. Fence `simHomeFront`.
+- **643**, the same finish is never recorded twice. **644**, every game records the score its
+  result screen shows. **649**, twelve Record Books pages, one per competition. **651**, game page
+  headings name the game and its sport. **657**, the idle games' floater timers die with the page.
+
+**Two defects caught during assembly that would otherwise have shipped.**
+- *The What's New page was already corrupt on `release-d` before this session touched it.* Round
+  651's entry names the game "$1B Budget Builder", and somewhere along the way a tool read the
+  `$1` as a regex backreference and ate it: the sentence was cut in half, Round 649's entry was
+  spliced into the wound, and the champion list entry appeared twice. Rebuilt from each round's
+  own branch. It had never reached the live site, only the release branch.
+- *The dailies rail changed with the date and only its spotlight was marked.* `playSnapshotDrift`
+  went red on `/` with one block that read "Guess The CBB Program" today and "Emoji Guess" five
+  days on. The spotlight card carried `data-no-prerender` but the rail builds its chips as every
+  daily EXCEPT the one the date picked, so the chip set itself moved. The rail's `ul` is marked
+  now. Nothing was being frozen into a saved file (the home page is not prerendered and its
+  shipped HTML carries none of this), but the block is genuinely volatile, so it says so.
+
+**Gates.** tsc 0. `build:seo` exit 0: 169 routes prerendered, 0 failed, 0 pages re-dated on the
+final build. Full node suite **341 of 341 green** on `39a9521b`. After the rail fix, the complete
+snapshot reader list from CLAUDE.md re-run on `3bddc098`: **20 of 20 green** (simPrerender,
+simSitemap, simIndexNow, simSeoTitles, simHomeFront, simRecordPages, simGuideHeadings, simHomeCopy
+and the rest). Browser: `playSnapshotDrift`, `playHomeFold`, `playSoftFourOhFour` green on the
+fixed build, `sweepPhone` green on `39a9521b`.
+
+**Three gate reds this release that were environment, not code**, recorded so the next session
+does not chase them: the suite run in a worktree with no `node_modules` failed 41 harnesses that
+build an absolute path to a binary; the gate clone root's `dist/` was two days stale after a
+checkout (it is gitignored) so `simPrerender` reported `/whats-new` had lost two real entries that
+were in `public/` all along; and the browser harnesses exited 1 with zero FAIL lines because
+nothing was serving `dist` on 4173. Full note in the memory file on gate reds.
+
+**A note on the suite run.** The final full-suite attempt was left running for 22.4 hours and was
+starved rather than working: `simOpposition` had 1,384 CPU seconds against the 2,176 it needs, and
+`simPress` the same. Other work on this machine (an esbuild-bundling fence and a research
+workflow) took the cores. It was killed, the tree checked for a source file left swapped by a
+harness mid-run (clean), and the delta since the green 341 run, one JSX attribute plus rebuilt
+snapshots, gated against the full snapshot reader list instead. **Do not run anything else while
+the suite runs.**
+
+
 ## LIVE 2026-09-19 evening: Rounds 632, 640, 642, 636 and 650 (release C), main `8a3bb5ba`
 
 Built and gated by the desktop Claude lane in the CRLF gate clone on branch `release-c`, on top of

@@ -1,5 +1,48 @@
 # Work board
 
+**2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
+`3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof
+in `docs/PROJECT-STATE.md`.
+
+**Round 662 CLAIMED AND BUILT, branch `r662-nhl-hl-points`, pushed, not yet on main.** NHL Higher
+or Lower was marking correct answers wrong. 26 of its 43 skaters carried the wrong career points
+(David Pastrnak 620 against a real 932, Anze Kopitar 1,040 against 1,314), and because the game
+only asks which of two players has more, the damage is ordering: **52 of the 903 possible matchups
+were inverted, about one question in seventeen**. Now 0 of 903. Values come from
+`public.nhl_player_stats` read 2026-09-21, recorded in
+`scripts/data/nhlHigherLowerVerified2026-09.json`. Every player carries `lastSeason` now, the
+field `nbaHLPlayers.ts` always had and this file never did, which is how it went stale unnoticed.
+Fence `scripts/simHockeyHigherLower.mjs`, six sections, five controls. Two things deliberately not
+taken from the table and fenced so nobody tidies them: Gordie Howe (the table truncates pre
+1967-68 and gives him 349 against a real 1,850, so the FILE is right) and the two goalies (the
+table holds no goalie, so they keep their shipped values, are recorded unverified, and the card
+says "season not confirmed").
+
+**Round 663 is the obvious next one and the audit is already done.** The same fault is in the NBA
+sibling: `nbaHLPlayers.ts` is a consistent snapshot of 2024-25 while the table is through 2025-26,
+so **33 of 2,278 matchups (1.45%) are inverted today**, every one involving an active player.
+Kevin Durant is 1,993 points light, James Harden 1,632, DeMar DeRozan 1,419. Patrick Ewing is also
+off by 3 and carries `lastSeason: '2010-11'` when he retired in 2001-02. 12 of the 80 are not in
+`nba_player_stats` at all (Wilt, Oscar Robertson, West, Baylor, Havlicek and the other pre 1965-66
+careers) and must be held from the file exactly as Howe is. **Do not copy the hockey fence: lift
+it into one shared higher/lower fence and inject the sport**, per the owner's 2026-09-04
+instruction. There are seven files of this shape: cfb, hockey, mlb, nba, nfl (plus categories) and
+tennis. The next free number for anyone else is 664.
+
+**Rounds 660 and 661 are BUILT BUT NOT FINISHED and must not be released as they stand.** Both are
+pushed on `r660-sports-facts` and `r661-trivia-facts`. 660 carries a good fence
+(`simSportsFacts`, ten sections) whose record is only part written, so it is **red at 408
+failures**: 269 Olympic fields carry one source where two are required, and the F1 driver,
+constructor and Perfect Lineup records are empty. 661 has real corrections (Jordan was shown with
+Kobe's points, Ortiz with Jeter's hits) but **its fence does not exist**: the file's header claimed
+`simTriviaFacts.mjs` and a verification record held it, and neither file is anywhere in the repo.
+Both misleading comments have been corrected to say what is actually true. An F1 verification
+workflow ran on 660 and only one slice of four came back before the API failed; its findings are
+UNREFUTED and parked in the lane notes (Russell's clue calls Antonelli a rookie when 2026 is his
+second season and he leads Russell on points; Sainz's Renault years are off by one at both ends;
+Alonso is called 44 when he turned 45 in July).
+
+
 **2026-09-19 night, desktop Claude lane: the owner's two calls, and Rounds 657 to 661 claimed.**
 He said plainly: "in the last month I see like no difference on the site from the beginning to
 now", and asked whether the player data is verified. Both were fair. Of about 1,470 commits since
