@@ -115,8 +115,21 @@ const HockeyHigherLower = () => {
                   <span className="text-xs text-muted-foreground">{player.teams}</span>
 
                   {showingResult ? (
-                    <span className="text-2xl font-bold text-[hsl(var(--hk-silver))] animate-cell-reveal">
-                      {player.careerPoints} pts
+                    <span className="flex flex-col items-center animate-cell-reveal">
+                      <span className="text-2xl font-bold text-[hsl(var(--hk-silver))]">
+                        {player.careerPoints} pts
+                      </span>
+                      {/* Round 662: say what the total runs through. A career
+                          total with no season on it is a fact with an expiry
+                          date, and these had gone stale by up to 312 points
+                          before anybody noticed. The two goalies say so
+                          plainly rather than borrowing a season they were
+                          never checked against. */}
+                      <span className="text-[10px] text-muted-foreground">
+                        {player.lastSeason === 'unverified'
+                          ? 'season not confirmed'
+                          : `through ${player.lastSeason}`}
+                      </span>
                     </span>
                   ) : (
                     <span className="flex items-center gap-1 text-sm font-semibold text-[hsl(var(--hk-silver))]">

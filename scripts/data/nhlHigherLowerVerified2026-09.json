@@ -1,0 +1,187 @@
+{
+ "about": "NHL Higher or Lower career points, Round 662. Values for skaters come from public.nhl_player_stats (goals plus assists) read on 2026-09-21, through the year_to recorded per player. scripts/simHockeyHigherLower.mjs holds the shipped file to this record.",
+ "read": "2026-09-21",
+ "source": "public.nhl_player_stats",
+ "note": "The table truncates careers that began before 1967-68. Gordie Howe is the proven case: it reports 349 points against a real 1,850, so his row is held from the file, not the table, and is listed under heldFromFile. No goalie exists in this table, so the two goalies are listed under unverified and their shipped values were not touched.",
+ "players": {
+  "Sidney Crosby": {
+   "points": 1761,
+   "lastSeason": "2025-26"
+  },
+  "Alexander Ovechkin": {
+   "points": 1684,
+   "lastSeason": "2025-26"
+  },
+  "Evgeni Malkin": {
+   "points": 1407,
+   "lastSeason": "2025-26"
+  },
+  "Patrick Kane": {
+   "points": 1399,
+   "lastSeason": "2025-26"
+  },
+  "Anze Kopitar": {
+   "points": 1314,
+   "lastSeason": "2025-26"
+  },
+  "Steven Stamkos": {
+   "points": 1251,
+   "lastSeason": "2025-26"
+  },
+  "Connor McDavid": {
+   "points": 1215,
+   "lastSeason": "2025-26"
+  },
+  "Claude Giroux": {
+   "points": 1162,
+   "lastSeason": "2025-26"
+  },
+  "Nathan MacKinnon": {
+   "points": 1141,
+   "lastSeason": "2025-26"
+  },
+  "Nikita Kucherov": {
+   "points": 1122,
+   "lastSeason": "2025-26"
+  },
+  "Leon Draisaitl": {
+   "points": 1053,
+   "lastSeason": "2025-26"
+  },
+  "Patrice Bergeron": {
+   "points": 1040,
+   "lastSeason": "2022-23"
+  },
+  "Phil Kessel": {
+   "points": 992,
+   "lastSeason": "2022-23"
+  },
+  "Artemi Panarin": {
+   "points": 952,
+   "lastSeason": "2025-26"
+  },
+  "Erik Karlsson": {
+   "points": 936,
+   "lastSeason": "2025-26"
+  },
+  "Jonathan Toews": {
+   "points": 911,
+   "lastSeason": "2025-26"
+  },
+  "Victor Hedman": {
+   "points": 811,
+   "lastSeason": "2025-26"
+  },
+  "Mikko Rantanen": {
+   "points": 781,
+   "lastSeason": "2025-26"
+  },
+  "Auston Matthews": {
+   "points": 780,
+   "lastSeason": "2025-26"
+  },
+  "Jack Eichel": {
+   "points": 691,
+   "lastSeason": "2025-26"
+  },
+  "Matthew Tkachuk": {
+   "points": 668,
+   "lastSeason": "2025-26"
+  },
+  "Duncan Keith": {
+   "points": 646,
+   "lastSeason": "2021-22"
+  },
+  "Cale Makar": {
+   "points": 503,
+   "lastSeason": "2025-26"
+  },
+  "Jason Robertson": {
+   "points": 486,
+   "lastSeason": "2025-26"
+  },
+  "Kirill Kaprizov": {
+   "points": 475,
+   "lastSeason": "2025-26"
+  },
+  "Brady Tkachuk": {
+   "points": 463,
+   "lastSeason": "2025-26"
+  },
+  "David Pastrnak": {
+   "points": 932,
+   "lastSeason": "2025-26"
+  },
+  "Wayne Gretzky": {
+   "points": 2857,
+   "lastSeason": "1998-99"
+  },
+  "Jaromir Jagr": {
+   "points": 1921,
+   "lastSeason": "2017-18"
+  },
+  "Mark Messier": {
+   "points": 1887,
+   "lastSeason": "2003-04"
+  },
+  "Ron Francis": {
+   "points": 1798,
+   "lastSeason": "2003-04"
+  },
+  "Steve Yzerman": {
+   "points": 1755,
+   "lastSeason": "2005-06"
+  },
+  "Mario Lemieux": {
+   "points": 1723,
+   "lastSeason": "2005-06"
+  },
+  "Joe Sakic": {
+   "points": 1641,
+   "lastSeason": "2008-09"
+  },
+  "Ray Bourque": {
+   "points": 1579,
+   "lastSeason": "2000-01"
+  },
+  "Joe Thornton": {
+   "points": 1539,
+   "lastSeason": "2021-22"
+  },
+  "Paul Coffey": {
+   "points": 1531,
+   "lastSeason": "2000-01"
+  },
+  "Teemu Selanne": {
+   "points": 1457,
+   "lastSeason": "2013-14"
+  },
+  "Mats Sundin": {
+   "points": 1349,
+   "lastSeason": "2008-09"
+  },
+  "Nicklas Lidstrom": {
+   "points": 1142,
+   "lastSeason": "2011-12"
+  },
+  "Peter Forsberg": {
+   "points": 885,
+   "lastSeason": "2010-11"
+  },
+  "Pavel Bure": {
+   "points": 779,
+   "lastSeason": "2002-03"
+  }
+ },
+ "heldFromFile": {
+  "Gordie Howe": {
+   "points": 1850,
+   "lastSeason": "1979-80",
+   "why": "nhl_player_stats truncates his pre-1967-68 seasons and reports 349"
+  }
+ },
+ "unverified": [
+  "Henrik Lundqvist",
+  "Igor Shesterkin"
+ ]
+}
