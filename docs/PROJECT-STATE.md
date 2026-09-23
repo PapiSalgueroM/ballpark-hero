@@ -36,8 +36,14 @@ and the Daily puzzles rail led by Today's puzzle, on a phone and on a desktop.
 final build. Full node suite **341 of 341 green** on `39a9521b`. After the rail fix, the complete
 snapshot reader list from CLAUDE.md re-run on `3bddc098`: **20 of 20 green** (simPrerender,
 simSitemap, simIndexNow, simSeoTitles, simHomeFront, simRecordPages, simGuideHeadings, simHomeCopy
-and the rest). Browser: `playSnapshotDrift`, `playHomeFold`, `playSoftFourOhFour` green on the
-fixed build, `sweepPhone` green on `39a9521b`.
+and the rest). Browser, ALL FIVE green on the deployed commit `3bddc098`: `playSnapshotDrift`,
+`playHomeFold`, `playSoftFourOhFour`, `sweepPhone`, and `playRenderStability` (163 routes rendered
+5 times each, 0 unstable, 0 unreachable). The first account of this release understated that as
+three harnesses on the fixed build and `sweepPhone` on the older tree; the browser group actually
+ran to completion afterwards, because killing the stuck node suite let the same script carry on
+into its browser section. `playRenderStability` matters most of the five here: the home page
+redesign is new rendering code, and that harness is the one that separates a render race from a
+date dependency.
 
 **Three gate reds this release that were environment, not code**, recorded so the next session
 does not chase them: the suite run in a worktree with no `node_modules` failed 41 harnesses that
