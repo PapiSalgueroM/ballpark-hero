@@ -1,13 +1,32 @@
 import { YearPuzzle } from '@/types/guessTheYear';
 import { getTodayET } from '@/lib/dateUtils';
 
+/**
+ * Guess the Year, the clue sets.
+ *
+ * Round 661 (2026-09-28). A check of all 300 clues found 38 that pointed at
+ * the wrong year, fitted two puzzle years, or stated something false, and many
+ * more that no page opened could stand behind: Brady's Tampa Bay title sat in 2020
+ * when the game was in February 2021, the Chiefs were credited with a three-peat
+ * they lost to the Eagles, Seattle's February 2026 Super Bowl sat in 2025, and
+ * three Heisman clues were a year early. Every clue now matches its entry in
+ * scripts/data/triviaFactsVerified2026-09.json word for word, each entry carries
+ * two sources on two hosts, and scripts/simTriviaFacts.mjs fails if the two
+ * disagree or a year loses its sixth clue.
+ *
+ * The convention is the calendar year the event happened in, so a Super Bowl or
+ * a bowl game played in January belongs to the new year, not the season before.
+ *
+ * The array length and order are load bearing: the daily puzzle is picked by
+ * day count modulo the length, so edit clues in place and keep six per year.
+ */
 export const guessTheYearPuzzles: YearPuzzle[] = [
   {
     year: 1998,
     clues: [
       "The Detroit Red Wings won a second straight Stanley Cup",
-      "A first baseman shattered a 37-year-old single season home run record",
-      "The host nation won the FIFA World Cup on home soil for the first time since 1978",
+      "A slugger shattered a 37-year-old single season home run record",
+      "The host nation won its first ever FIFA World Cup",
       "A legendary shooting guard won his sixth NBA Finals MVP",
       "A Texas running back won the Heisman Trophy",
       "France defeated Brazil 3-0 in the World Cup Final"
@@ -27,11 +46,11 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
   {
     year: 2016,
     clues: [
-      "A UFC champion lost his title via submission at UFC 196",
+      "A UFC champion lost her title via submission at UFC 196",
       "A team came back from 3-1 in the NBA Finals for the first time ever",
       "Portugal won their first major international soccer trophy",
       "The Cubs won the World Series for the first time in 108 years",
-      "Clemson defeated Alabama in the College Football Playoff National Championship",
+      "The Denver Broncos beat Carolina in Super Bowl 50",
       "Leicester City won the Premier League at 5000-1 odds"
     ]
   },
@@ -41,19 +60,19 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
       "A swimmer won 8 gold medals at a single Olympic Games",
       "The Detroit Lions became the first NFL team to go 0-16",
       "Spain won their first European Championship since 1964",
-      "The Celtics won their first NBA title in 22 years with a new Big 3",
-      "Tim Tebow won the Heisman Trophy at Florida",
-      "Michael Phelps became the most decorated Olympian ever in Beijing"
+      "The Celtics beat the Lakers for their first NBA title in 22 years",
+      "Sam Bradford won the Heisman at Oklahoma",
+      "Michael Phelps set the record for most Olympic gold medals in a single Games in Beijing"
     ]
   },
   {
     year: 1994,
     clues: [
       "Baseball players went on strike, canceling the World Series",
-      "A Brazilian legend won his 3rd World Cup, tying the all-time record",
+      "Brazil won a record fourth World Cup",
       "The Rangers ended a 54-year Stanley Cup drought",
       "A former Heisman winner was famously chased in a white Ford Bronco",
-      "Nebraska won their first national championship under Tom Osborne",
+      "The Dallas Cowboys beat the Buffalo Bills in a second straight Super Bowl",
       "Brazil won the World Cup in a penalty shootout against Italy at the Rose Bowl"
     ]
   },
@@ -61,11 +80,11 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
     year: 2020,
     clues: [
       "The NBA finished their season inside a 'bubble' in Orlando",
-      "A legendary quarterback won the Super Bowl with his new team at age 43",
+      "The Dodgers beat the Tampa Bay Rays in the World Series",
       "The UEFA Euros were postponed for an entire year",
       "The Lakers won their first championship in 10 years",
-      "Joe Burrow won the Heisman at LSU with a record-setting season",
-      "Tom Brady led the Buccaneers to a Super Bowl win over the Chiefs"
+      "DeVonta Smith won the Heisman at Alabama",
+      "Patrick Mahomes won Super Bowl MVP at 24 as the Chiefs beat the 49ers"
     ]
   },
   {
@@ -73,9 +92,9 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
     clues: [
       "A 'Hand of God' goal became one of the most controversial in soccer history",
       "The Mets came back from a 2-run deficit in the 10th inning of Game 6",
-      "A football program received the 'death penalty' from the NCAA",
+      "Vinny Testaverde won the Heisman at Miami",
       "Mike Tyson became the youngest heavyweight champion at age 20",
-      "Bo Jackson won the Heisman Trophy at Auburn",
+      "Greg LeMond won the Tour de France",
       "Argentina won the World Cup led by Maradona's brilliance in Mexico"
     ]
   },
@@ -83,17 +102,17 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
     year: 2012,
     clues: [
       "A sprinter became the first man to retain both the 100m and 200m Olympic titles",
-      "The Heat won their first championship with their new Big 3",
+      "LeBron James won his first NBA title with the Miami Heat",
       "The Giants beat the Patriots in the Super Bowl for the second time in 4 years",
-      "The Kings ended a 16-year Stanley Cup drought with a miraculous playoff run",
+      "The Kings won their first Stanley Cup as the eighth seed in the West",
       "Johnny Manziel became the first freshman to win the Heisman",
-      "Usain Bolt cemented his legacy as the fastest man ever at the London Olympics"
+      "Michael Phelps became the most decorated Olympian ever in London"
     ]
   },
   {
     year: 2000,
     clues: [
-      "A running back rushed for over 2,000 yards and won MVP in a single season",
+      "A running back scored 26 touchdowns and won NFL MVP",
       "The Yankees won their third consecutive World Series title",
       "France won the European Championship as reigning World Cup holders",
       "Venus Williams won both Wimbledon and the US Open",
@@ -104,12 +123,12 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
   {
     year: 1985,
     clues: [
-      "A dominant NFL defense recorded a famous music video",
-      "A tennis prodigy won Wimbledon at age 17, becoming the youngest ever",
+      "An NFL team recorded a famous music video weeks before winning the Super Bowl",
+      "A 17-year-old tennis prodigy won the Wimbledon men's title",
       "The Royals came back from 3-1 to beat the Cardinals in the World Series",
       "Edmonton won their second consecutive Stanley Cup with Gretzky",
       "Bo Jackson rushed for 1,786 yards in his Heisman campaign at Auburn",
-      "The Bears went 15-1 and dominated Super Bowl XX"
+      "The Chicago Bears went 15-1 behind their '46' defense"
     ]
   },
   {
@@ -128,9 +147,9 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
     clues: [
       "A gymnast landed a vault on an injured ankle to clinch team gold",
       "The Cowboys won their third Super Bowl in four years",
-      "A boxer bit his opponent's ear in a heavyweight title fight rematch",
+      "Evander Holyfield stopped Mike Tyson to win the WBA heavyweight title",
       "The Yankees won their first World Series since 1978",
-      "Danny Wuerffel won the Heisman at Florida under Steve Spurrier",
+      "Danny Wuerffel won the Heisman at Florida",
       "Muhammad Ali lit the Olympic cauldron in Atlanta"
     ]
   },
@@ -138,9 +157,9 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
     year: 2014,
     clues: [
       "A host nation lost 7-1 in a World Cup semifinal on home soil",
-      "The Spurs won the NBA Finals in dominant fashion against the Heat",
+      "The Spurs beat the Heat 4-1 in an NBA Finals rematch",
       "Derek Jeter retired after 20 seasons with the Yankees",
-      "Ohio State won the first College Football Playoff Championship",
+      "The Seattle Seahawks crushed the Denver Broncos 43-8 in the Super Bowl",
       "Marcus Mariota won the Heisman at Oregon",
       "Germany crushed Brazil 7-1 in Belo Horizonte"
     ]
@@ -149,9 +168,9 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
     year: 1992,
     clues: [
       "A 'Dream Team' dominated Olympic basketball like never before",
-      "A boxing champion was convicted and stripped of his titles",
+      "Evander Holyfield lost the undisputed heavyweight title to Riddick Bowe",
       "The Blue Jays became the first team outside the US to win the World Series",
-      "Mario Lemieux led the Penguins to back-to-back Stanley Cups",
+      "The Pittsburgh Penguins won back-to-back Stanley Cups for the first time",
       "Gino Torretta won the Heisman at Miami",
       "Michael Jordan won his second straight NBA Finals MVP"
     ]
@@ -164,7 +183,7 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
       "The Warriors won their fourth NBA title in eight years",
       "Georgia won the College Football Playoff, their first title since 1980",
       "Caleb Williams won the Heisman at USC",
-      "Messi finally won the World Cup, defeating France in the greatest final ever"
+      "Messi finally won the World Cup, beating France on penalties in the final"
     ]
   },
   {
@@ -181,18 +200,18 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
   {
     year: 1990,
     clues: [
-      "Germany won the World Cup in Italy, their third overall",
-      "The Reds swept the heavily favored A's in the World Series",
+      "West Germany won the World Cup final in Rome with a late penalty",
+      "The Cincinnati Reds swept the Oakland A's in the World Series",
       "UNLV dominated the NCAA Tournament, winning by 30 in the final",
       "Ty Detmer won the Heisman at BYU",
-      "Joe Montana won his fourth Super Bowl",
-      "The Giants defeated the Bills on a missed field goal in Super Bowl XXV"
+      "Joe Montana won Super Bowl MVP in a 55-10 rout",
+      "Buster Douglas knocked out Mike Tyson in Tokyo"
     ]
   },
   {
     year: 2018,
     clues: [
-      "A 20-year-old became the second teenager to score in a World Cup Final",
+      "A 19-year-old became the second teenager to score in a World Cup Final",
       "The Eagles won their first Super Bowl with a backup quarterback",
       "The Capitals won their first Stanley Cup in franchise history",
       "Kyler Murray won the Heisman at Oklahoma",
@@ -214,7 +233,7 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
   {
     year: 1984,
     clues: [
-      "A running back rushed for 2,105 yards in just 9 NFL games",
+      "A running back set the single-season record with 2,105 rushing yards",
       "The Soviet Union boycotted the Summer Olympics in Los Angeles",
       "The Cubs made the playoffs for the first time since 1945",
       "Doug Flutie threw the famous 'Hail Flutie' pass for Boston College",
@@ -227,7 +246,7 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
     year: 2024,
     clues: [
       "A French swimmer won 4 individual gold medals at his home Olympics in Paris",
-      "The Chiefs became the first team to win three straight Super Bowls (LVIII)",
+      "The Chiefs beat the 49ers in overtime to win back-to-back Super Bowls (LVIII)",
       "Caitlin Clark shattered NCAA scoring records and was drafted #1 in the WNBA",
       "Real Madrid signed Kylian Mbappé on a free transfer from PSG",
       "The Dodgers won the World Series with Shohei Ohtani in his first NL season",
@@ -238,9 +257,9 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
     year: 2025,
     clues: [
       "Alexander Ovechkin broke Wayne Gretzky's all-time NHL goal record",
-      "The Kansas City Chiefs won an unprecedented third consecutive Super Bowl (LIX)",
+      "The Florida Panthers won a second straight Stanley Cup",
       "A generational NBA trade sent Luka Dončić to the Los Angeles Lakers",
-      "The Seattle Seahawks won Super Bowl LX, their second franchise title",
+      "The Dodgers won back-to-back World Series",
       "The Oklahoma City Thunder won their first NBA Championship",
       "The Philadelphia Eagles won the Super Bowl, beating the Kansas City Chiefs"
     ]
@@ -270,10 +289,10 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
   {
     year: 1976,
     clues: [
-      "The Boston Celtics won the NBA title in a triple-overtime Finals game",
+      "The Boston Celtics won the NBA title in a Finals that featured a triple-overtime game",
       "The Pittsburgh Steelers won a second straight Super Bowl",
       "Bruce Jenner won the Olympic decathlon",
-      "The Cincinnati Reds 'Big Red Machine' swept the Yankees in the World Series",
+      "The Cincinnati Reds swept the Yankees for a second straight World Series",
       "The Summer Olympics were held in Montreal",
       "Nadia Comaneci scored the first perfect 10 in Olympic gymnastics"
     ]
@@ -284,7 +303,7 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
       "The Seattle SuperSonics won their only NBA championship",
       "The Pittsburgh Steelers won their third Super Bowl",
       "The Montreal Canadiens won a fourth straight Stanley Cup",
-      "The Pittsburgh Pirates won the World Series to the song 'We Are Family'",
+      "The Pittsburgh Pirates came back from 3-1 down to win the World Series",
       "Bjorn Borg won another Wimbledon title",
       "Magic Johnson's Michigan State beat Larry Bird's Indiana State for the NCAA title"
     ]
@@ -292,7 +311,7 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
   {
     year: 1980,
     clues: [
-      "Boxer Roberto Duran said 'No Mas' against Sugar Ray Leonard",
+      "Boxer Roberto Duran quit on Sugar Ray Leonard in the 'No Mas' fight",
       "Bjorn Borg won his fifth straight Wimbledon title",
       "The Philadelphia Phillies won their first-ever World Series",
       "Eric Heiden won five individual speed skating golds at the Winter Olympics",
@@ -314,11 +333,11 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
   {
     year: 1982,
     clues: [
-      "Wayne Gretzky set a then-record for goals in an NHL season",
+      "Wayne Gretzky scored a record 92 goals in an NHL season",
       "The New York Islanders won a third straight Stanley Cup",
       "The St. Louis Cardinals won the World Series",
       "The Los Angeles Lakers won the NBA title behind Magic Johnson",
-      "The San Francisco 49ers won their first Super Bowl after 'The Catch'",
+      "The San Francisco 49ers won their first Super Bowl",
       "Italy won the FIFA World Cup in Spain as Paolo Rossi starred"
     ]
   },
@@ -328,7 +347,7 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
       "Australia II ended the New York Yacht Club's 132-year hold on the America's Cup",
       "Carl Lewis starred at the first World Athletics Championships in Helsinki",
       "The Baltimore Orioles won the World Series",
-      "The Washington Redskins won their first Super Bowl under Joe Gibbs",
+      "The Washington Redskins won their first Super Bowl",
       "NC State pulled a stunning upset to win the NCAA basketball title",
       "The Philadelphia 76ers swept to the NBA title behind Moses Malone"
     ]
@@ -336,12 +355,12 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
   {
     year: 1987,
     clues: [
-      "A figure skater's rivalry headlined the year in winter sports",
+      "Sugar Ray Leonard beat Marvin Hagler in a split decision",
       "The Edmonton Oilers won another Stanley Cup with Wayne Gretzky",
       "Mike Tyson unified the heavyweight titles",
       "The New York Giants won their first Super Bowl behind Phil Simms",
-      "The Los Angeles Lakers' 'Showtime' beat the Celtics for the NBA title",
-      "The Minnesota Twins won the World Series in the Metrodome"
+      "Magic Johnson won Finals MVP as the Lakers beat the Celtics",
+      "The Minnesota Twins beat the St. Louis Cardinals in seven games"
     ]
   },
   {
@@ -352,7 +371,7 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
       "Mike Tyson knocked out Michael Spinks in 91 seconds",
       "Kirk Gibson hit a famous pinch-hit walk-off homer in the World Series opener",
       "Ben Johnson was stripped of his Olympic 100m gold for doping in Seoul",
-      "The Los Angeles Dodgers upset the heavily favored Oakland Athletics in the World Series"
+      "The Los Angeles Dodgers beat the Oakland A's in five games"
     ]
   },
   {
@@ -361,7 +380,7 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
       "Michael Jordan hit 'The Shot' over Craig Ehlo in the playoffs",
       "Pete Rose was banned from baseball for gambling",
       "The Detroit Pistons swept the Lakers for their first NBA title",
-      "The San Francisco 49ers won the Super Bowl on a late Joe Montana drive",
+      "The San Francisco 49ers beat the Bengals 20-16 in the Super Bowl",
       "An earthquake interrupted the World Series in the Bay Area",
       "The Oakland Athletics swept the San Francisco Giants in the World Series"
     ]
@@ -369,10 +388,10 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
   {
     year: 1991,
     clues: [
-      "Carl Lewis ran a world-record-tying 100m at the World Championships in Tokyo",
+      "Carl Lewis set a 100m world record of 9.86 at the World Championships in Tokyo",
       "Magic Johnson announced he was HIV-positive and retired",
       "Duke ended UNLV's unbeaten run and won its first NCAA basketball title",
-      "The New York Giants beat the Bills as Scott Norwood missed 'wide right'",
+      "The New York Giants beat the Buffalo Bills by one point in the Super Bowl",
       "Michael Jordan won his first NBA title and Finals MVP",
       "The Minnesota Twins beat the Atlanta Braves in a classic seven-game World Series"
     ]
@@ -384,7 +403,7 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
       "Don Shula became the winningest coach in NFL history",
       "The Montreal Canadiens won the Stanley Cup",
       "The Dallas Cowboys won the Super Bowl over the Buffalo Bills",
-      "Michael Jordan completed a 'three-peat' then retired to play baseball",
+      "Michael Jordan completed his first 'three-peat' with the Bulls",
       "The Toronto Blue Jays won the World Series on Joe Carter's walk-off home run"
     ]
   },
@@ -393,19 +412,19 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
     clues: [
       "Major League Baseball returned after a strike wiped out the previous World Series",
       "The Houston Rockets repeated as NBA champions, sweeping the Magic",
-      "The San Francisco 49ers won the Super Bowl as Steve Young threw six touchdowns",
+      "The San Francisco 49ers became the first team to win five Super Bowls",
       "Cal Ripken Jr. broke Lou Gehrig's consecutive games streak",
       "Jonah Lomu starred as rugby's World Cup was hosted by South Africa",
-      "The Atlanta Braves won their only World Series in Atlanta"
+      "The Braves won their first World Series since moving to Atlanta"
     ]
   },
   {
     year: 1997,
     clues: [
-      "Martina Hingis became the youngest Grand Slam winner of the modern era",
+      "Martina Hingis became the youngest Grand Slam singles champion of the Open Era",
       "Mike Tyson was disqualified for biting Evander Holyfield's ear",
       "Michael Jordan's 'Flu Game' helped the Bulls in the Finals",
-      "The Green Bay Packers won the Super Bowl behind Brett Favre",
+      "The Green Bay Packers won their first NFL title in 29 years",
       "The Florida Marlins won the World Series in just their fifth season",
       "Tiger Woods won his first Masters by a record 12 strokes"
     ]
@@ -414,7 +433,7 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
     year: 1999,
     clues: [
       "Wayne Gretzky played his final NHL game and retired",
-      "The San Antonio Spurs won their first NBA title in a lockout-shortened season",
+      "The San Antonio Spurs beat the Knicks for their first NBA title",
       "The Denver Broncos won a second straight Super Bowl in John Elway's final season",
       "Manchester United completed a treble with a stoppage-time comeback against Bayern Munich",
       "The New York Yankees swept the Braves to win another World Series",
@@ -424,9 +443,9 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
   {
     year: 2001,
     clues: [
-      "A diving backhand flip by Derek Jeter helped the Yankees in the playoffs",
+      "A running backhand flip by Derek Jeter helped the Yankees in the playoffs",
       "Michael Schumacher won another Formula 1 world championship with Ferrari",
-      "The Baltimore Ravens won the Super Bowl with a dominant defense",
+      "The Baltimore Ravens routed the New York Giants 34-7 in the Super Bowl",
       "Tiger Woods held all four major golf titles at once (the 'Tiger Slam')",
       "Barry Bonds hit a single-season record 73 home runs",
       "The Arizona Diamondbacks beat the Yankees in a seven-game World Series"
@@ -437,17 +456,17 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
     clues: [
       "LeBron James was drafted first overall by the Cleveland Cavaliers",
       "The New Jersey Devils won the Stanley Cup",
-      "Serena Williams held all four Grand Slam titles (the 'Serena Slam')",
+      "Serena Williams first held all four Grand Slam titles at once (the 'Serena Slam')",
       "The Tampa Bay Buccaneers won their first Super Bowl",
       "The San Antonio Spurs won their second NBA title behind Tim Duncan",
-      "The Florida Marlins upset the Yankees to win the World Series"
+      "The Florida Marlins beat the Yankees in six games"
     ]
   },
   {
     year: 2005,
     clues: [
       "Danica Patrick led laps as a rookie at the Indianapolis 500",
-      "Lance Armstrong won a seventh straight Tour de France before retiring",
+      "Roger Federer won a third straight Wimbledon title",
       "The San Antonio Spurs won another NBA title over the Pistons",
       "The New England Patriots won their third Super Bowl in four years",
       "The Chicago White Sox won their first World Series since 1917",
@@ -470,21 +489,21 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
     clues: [
       "Barcelona won an unprecedented sextuple under Pep Guardiola",
       "Roger Federer surpassed Pete Sampras with his 15th Grand Slam title",
-      "The Los Angeles Lakers won the NBA title in Kobe Bryant's first championship without Shaq",
+      "Kobe Bryant won his first Finals MVP as the Lakers beat Orlando",
       "The Pittsburgh Steelers won a record sixth Super Bowl on a late catch",
       "Usain Bolt set still-standing world records in the 100m and 200m in Berlin",
-      "The New York Yankees won the World Series in their new stadium"
+      "The New York Yankees beat the Phillies in the World Series"
     ]
   },
   {
     year: 2011,
     clues: [
       "The Boston Bruins won the Stanley Cup",
-      "Novak Djokovic had a dominant season winning three Grand Slams",
+      "Novak Djokovic went 70-6 and won three Grand Slams in a dominant season",
       "The Green Bay Packers won the Super Bowl behind Aaron Rodgers",
       "Japan won the Women's World Cup months after a devastating earthquake",
       "Dirk Nowitzki led the Dallas Mavericks past the Miami Heat for the NBA title",
-      "The St. Louis Cardinals rallied from the brink to win a dramatic seven-game World Series"
+      "The St. Louis Cardinals beat the Texas Rangers in a seven-game World Series"
     ]
   },
   {
@@ -492,9 +511,9 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
     clues: [
       "Bayern Munich won the Champions League in an all-German final",
       "Andy Murray became the first British man in 77 years to win Wimbledon",
-      "The Chicago Blackhawks won the Stanley Cup with two late goals",
+      "The Chicago Blackhawks won their second Stanley Cup in four years",
       "The Baltimore Ravens won the Super Bowl in a game interrupted by a power outage",
-      "The Boston Red Sox won the World Series months after the marathon bombing",
+      "The Boston Red Sox beat the Cardinals in six games",
       "The Miami Heat won a second straight title behind LeBron James and Ray Allen's clutch shot"
     ]
   },
@@ -502,7 +521,7 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
     year: 2015,
     clues: [
       "American Pharoah won horse racing's first Triple Crown in 37 years",
-      "Serena Williams won three majors but fell short of a calendar Grand Slam",
+      "Serena Williams won the first three majors but fell short of a calendar Grand Slam",
       "The Golden State Warriors won their first NBA title in 40 years",
       "The Kansas City Royals won the World Series",
       "The New England Patriots won the Super Bowl on a last-minute goal-line interception",
@@ -515,7 +534,7 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
       "Lewis Hamilton won another Formula 1 world championship",
       "Floyd Mayweather beat Conor McGregor in a crossover boxing match",
       "The Golden State Warriors won the title after adding Kevin Durant",
-      "The Houston Astros won their first World Series, months after Hurricane Harvey",
+      "The Houston Astros won their first World Series",
       "Roger Federer and Rafael Nadal staged comeback Grand Slam seasons",
       "The New England Patriots came back from a 28-3 deficit to win the Super Bowl in overtime"
     ]
@@ -545,14 +564,14 @@ export const guessTheYearPuzzles: YearPuzzle[] = [
   {
     year: 2023,
     clues: [
-      "Novak Djokovic won three more majors to extend his record",
+      "Novak Djokovic won three majors to take the men's record to 24",
       "The Vegas Golden Knights won the Stanley Cup",
       "The Denver Nuggets won their first NBA title behind Nikola Jokic",
       "The Texas Rangers won their first World Series",
       "Manchester City completed the treble by winning the Champions League",
       "The Kansas City Chiefs won the Super Bowl as Patrick Mahomes won another MVP"
     ]
-  },
+  }
 ];
 
 export function getDailyGuessTheYearPuzzle(): YearPuzzle {
