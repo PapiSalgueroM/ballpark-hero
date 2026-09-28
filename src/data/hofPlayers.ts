@@ -11,8 +11,8 @@ export interface HofPlayer {
 /**
  * Hall of Fame or Bust, the stat lines.
  *
- * Round 661 (2026-09-28). Twenty of these twenty six entries carried at least
- * one false number, several of them somebody else's totals: Jordan was shown
+ * Round 661 (2026-09-28). At least eighteen of these twenty five entries
+ * carried a false line, several of them somebody else's totals: Jordan was shown
  * with Kobe's 33,643 points, Ortiz with Jeter's 3,465 hits and Sammy Sosa's
  * 609 home runs, Howe with no Stanley Cups and Yakupov with half his goals.
  *
