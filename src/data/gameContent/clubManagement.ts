@@ -104,6 +104,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
         heading: "League tables, the match engine and contracts",
         items: [
           "Every league table shows goals for and against as a pair, 25-23, beside the goal difference those two make.",
+          "A Champions League knockout that is level when the 90 minutes run out, the final on the night or a second leg on aggregate, plays thirty minutes of extra time before it goes to penalties, and the report and the bracket mark it AET. In the seasons before 2021-22 the away goals rule carried on through extra time, so the game plays it that way in those eras. The domestic cup still goes straight to penalties, because the real cups do not all play extra time and the game does not guess which ones do.",
           "Playing a match live and quick simming it are the same simulation: both kick off through one engine and the only thing the live one adds is your say at the interval. The full time report reads like a scoreboard: both clubs named on every line, the stoppage time each half ran to (worked out from the goals, cards and injuries in that half), possession as two shares of a hundred, and a momentum graph drawn from who had the chances in each ten minutes rather than from the match's average.",
         ],
         subsections: [

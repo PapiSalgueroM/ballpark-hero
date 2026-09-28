@@ -419,7 +419,8 @@ for (const s of screens) {
   const d = s.report.detail;
   if (!d) continue;
   const ctx = `${s.clubName} v ${s.report.home === s.clubName ? s.report.away : s.report.home}`;
-  if (d.momentum.length !== 9) { fail(`${ctx}: ${d.momentum.length} momentum buckets`); continue; }
+  /* Round 670: twelve buckets when the match went to extra time. */
+  if (d.momentum.length !== (d.et ? 12 : 9)) { fail(`${ctx}: ${d.momentum.length} momentum buckets`); continue; }
   for (const v of d.momentum) if (!isNum(v) || v < -1 || v > 1) fail(`${ctx}: momentum bucket ${v}`);
   swings.push(signChanges(d.momentum));
   if (d.momentum.some(v => v > 0) && d.momentum.some(v => v < 0)) bothSides += 1;

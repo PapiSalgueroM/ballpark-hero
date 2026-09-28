@@ -418,10 +418,13 @@ const finished = [];
     const h1 = d.play.filter(e => e.minute <= 45);
     const h2 = d.play.filter(e => e.minute > 45);
     h2Counts.push(h2.length);
-    for (const e of d.play) if (!inRange(e.minute, 1, 90)) fail(`${ctx}: a ${e.kind} at minute ${e.minute}`);
+    /* Round 670: a match that went to extra time ends at its end, not at 90. */
+    const end = d.et ? d.et.to : 90;
+    const buckets = d.et ? 12 : 9;
+    for (const e of d.play) if (!inRange(e.minute, 1, end)) fail(`${ctx}: a ${e.kind} at minute ${e.minute}`);
     if (!h1.length || !h2.length) fail(`${ctx}: play covers ${h1.length} first half and ${h2.length} second half events`);
     if (!Array.isArray(d.possHalves) || d.possHalves.length !== 2) { fail(`${ctx}: possHalves is ${J(d.possHalves)}`); continue; }
-    const counted = liveStatsAt({ h1Play: h1, h2Play: h2, possH1: d.possHalves[0], possH2: d.possHalves[1] }, 90);
+    const counted = liveStatsAt({ h1Play: h1, h2Play: h2, possH1: d.possHalves[0], possH2: d.possHalves[1], et: d.et }, end);
     for (const k of Object.keys(counted)) {
       if (d.stats[k] !== counted[k]) fail(`${ctx}: stats.${k} is ${d.stats[k]}, liveStatsAt over the play gives ${counted[k]}`);
     }
@@ -440,15 +443,15 @@ const finished = [];
     if (d.play.filter(e => e.goal && e.side === 'me').length !== myG) fail(`${ctx}: ${d.play.filter(e => e.goal && e.side === 'me').length} goal shots for ${myG} goals`);
     if (d.play.filter(e => e.goal && e.side === 'opp').length !== oppG) fail(`${ctx}: ${d.play.filter(e => e.goal && e.side === 'opp').length} goal shots for ${oppG} of theirs`);
     /* Momentum against the shots by minute. */
-    if (!Array.isArray(d.momentum) || d.momentum.length !== 9) { fail(`${ctx}: ${d.momentum?.length} momentum buckets`); continue; }
-    const myShots = new Array(9).fill(0);
-    const oppShots = new Array(9).fill(0);
+    if (!Array.isArray(d.momentum) || d.momentum.length !== buckets) { fail(`${ctx}: ${d.momentum?.length} momentum buckets`); continue; }
+    const myShots = new Array(buckets).fill(0);
+    const oppShots = new Array(buckets).fill(0);
     for (const e of d.play) {
       if (e.kind !== 'shot') continue;
-      const b = Math.min(8, Math.max(0, Math.floor((e.minute - 1) / 10)));
+      const b = Math.min(buckets - 1, Math.max(0, Math.floor((e.minute - 1) / 10)));
       (e.side === 'me' ? myShots : oppShots)[b] += 1;
     }
-    for (let b = 0; b < 9; b++) {
+    for (let b = 0; b < buckets; b++) {
       const lo = b * 10;
       const hi = lo + 10;
       const had = myShots[b] + oppShots[b];
