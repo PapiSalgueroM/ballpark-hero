@@ -27,7 +27,10 @@ import { cfbStrength, CFB_SCHOOL_MAP, CFB_WIN_SCALE, CFB_ROUNDS, CONF_GAMES_STAR
 import { cbbStrength, CBB_SCHOOL_MAP, CBB_WIN_SCALE, CBB_ROUNDS, DANCE_SIZE, type CbbState } from '@/lib/cbbDynasty';
 
 export interface SeasonShape<L> {
-  format: SeasonFormat;
+  /* Each shape's format is a getter, read when a board projects rather than
+     when this module loads, because the house rule is that nothing imported
+     is evaluated at module scope (that is how an import cycle got in once). */
+  readonly format: SeasonFormat;
   /** Rounds in the bracket, the final included. */
   rounds: number;
   /** The round a postseason game or series belongs to, 0 for one outside
@@ -47,12 +50,14 @@ export interface SeasonShape<L> {
 const drawnSpread = (games: number) => Math.sqrt(0.75 * games);
 
 export const NFL_SEASON: SeasonShape<LeagueState> = {
-  format: {
-    winScale: NFL_WIN_SCALE, games: REGULAR_WEEKS, gamesSpread: 0, groupGames: 0,
-    /* 7 seeds a conference, the four division winners first, the 1 seed's
-       bye, reseeded for the divisional round, one game a round. */
-    bracket: 'group', field: 7, reseed: true, autoBids: false, divisions: 'winners',
-    winsToAdvance: [1, 1, 1, 1],
+  get format(): SeasonFormat {
+    return {
+      winScale: NFL_WIN_SCALE, games: REGULAR_WEEKS, gamesSpread: 0, groupGames: 0,
+      /* 7 seeds a conference, the four division winners first, the 1 seed's
+         bye, reseeded for the divisional round, one game a round. */
+      bracket: 'group', field: 7, reseed: true, autoBids: false, divisions: 'winners',
+      winsToAdvance: [1, 1, 1, 1],
+    };
   },
   rounds: 4,
   roundOf: name => (/Super Bowl/.test(name) ? 4 : /Championship/.test(name) ? 3 : /Divisional/.test(name) ? 2 : /Wild Card/.test(name) ? 1 : 0),
@@ -65,12 +70,14 @@ export function nflPlayoffGames(rounds: readonly PlayoffRound[]): { name: string
 }
 
 export const NBA_SEASON: SeasonShape<NbaLeague> = {
-  format: {
-    winScale: NBA_WIN_SCALE, games: NBA_ROUNDS * GAMES_PER_ROUND, gamesSpread: drawnSpread(NBA_ROUNDS * GAMES_PER_ROUND), groupGames: 0,
-    /* 8 a conference on the bracket sheet (the play-in decides 7 and 8 and
-       is not a round), best of seven throughout. */
-    bracket: 'group', field: 8, reseed: false, autoBids: false, divisions: 'none',
-    winsToAdvance: [4, 4, 4, 4],
+  get format(): SeasonFormat {
+    return {
+      winScale: NBA_WIN_SCALE, games: NBA_ROUNDS * GAMES_PER_ROUND, gamesSpread: drawnSpread(NBA_ROUNDS * GAMES_PER_ROUND), groupGames: 0,
+      /* 8 a conference on the bracket sheet (the play-in decides 7 and 8 and
+         is not a round), best of seven throughout. */
+      bracket: 'group', field: 8, reseed: false, autoBids: false, divisions: 'none',
+      winsToAdvance: [4, 4, 4, 4],
+    };
   },
   rounds: 4,
   roundOf: name => (/Play-In/.test(name) ? 0 : name === 'NBA Finals' ? 4 : / Finals$/.test(name) ? 3 : / Semis$/.test(name) ? 2 : / R1$/.test(name) ? 1 : 0),
@@ -78,12 +85,14 @@ export const NBA_SEASON: SeasonShape<NbaLeague> = {
 };
 
 export const MLB_SEASON: SeasonShape<MlbLeague> = {
-  format: {
-    winScale: MLB_WIN_SCALE, games: MLB_ROUNDS * MLB_GAMES_PER_ROUND, gamesSpread: drawnSpread(MLB_ROUNDS * MLB_GAMES_PER_ROUND), groupGames: 0,
-    /* 6 a league, the three division winners first, byes for the top two,
-       then best of three, five, seven and seven. */
-    bracket: 'group', field: 6, reseed: false, autoBids: false, divisions: 'winners',
-    winsToAdvance: [2, 3, 4, 4],
+  get format(): SeasonFormat {
+    return {
+      winScale: MLB_WIN_SCALE, games: MLB_ROUNDS * MLB_GAMES_PER_ROUND, gamesSpread: drawnSpread(MLB_ROUNDS * MLB_GAMES_PER_ROUND), groupGames: 0,
+      /* 6 a league, the three division winners first, byes for the top two,
+         then best of three, five, seven and seven. */
+      bracket: 'group', field: 6, reseed: false, autoBids: false, divisions: 'winners',
+      winsToAdvance: [2, 3, 4, 4],
+    };
   },
   rounds: 4,
   roundOf: name => (name === 'World Series' ? 4 : /CS$/.test(name) ? 3 : /DS$/.test(name) ? 2 : /Wild Card/.test(name) ? 1 : 0),
@@ -94,12 +103,14 @@ export const MLB_SEASON: SeasonShape<MlbLeague> = {
 };
 
 export const NHL_SEASON: SeasonShape<NhlLeague> = {
-  format: {
-    winScale: NHL_WIN_SCALE, games: NHL_FO_ROUNDS * NHL_GAMES_PER_ROUND, gamesSpread: drawnSpread(NHL_FO_ROUNDS * NHL_GAMES_PER_ROUND), groupGames: 0,
-    /* Each division's top three and the conference's two wild cards,
-       drawn inside the divisions, best of seven throughout. */
-    bracket: 'group', field: 8, reseed: false, autoBids: false, divisions: 'sheet',
-    winsToAdvance: [4, 4, 4, 4],
+  get format(): SeasonFormat {
+    return {
+      winScale: NHL_WIN_SCALE, games: NHL_FO_ROUNDS * NHL_GAMES_PER_ROUND, gamesSpread: drawnSpread(NHL_FO_ROUNDS * NHL_GAMES_PER_ROUND), groupGames: 0,
+      /* Each division's top three and the conference's two wild cards,
+         drawn inside the divisions, best of seven throughout. */
+      bracket: 'group', field: 8, reseed: false, autoBids: false, divisions: 'sheet',
+      winsToAdvance: [4, 4, 4, 4],
+    };
   },
   rounds: 4,
   roundOf: name => (name === 'Stanley Cup Final' ? 4 : /^(Eastern|Western) Final$/.test(name) ? 3 : / Final$/.test(name) ? 2 : / Semi$/.test(name) ? 1 : 0),
@@ -110,12 +121,14 @@ export const NHL_SEASON: SeasonShape<NhlLeague> = {
 };
 
 export const CFB_SEASON: SeasonShape<CfbState> = {
-  format: {
-    winScale: CFB_WIN_SCALE, games: CFB_ROUNDS, gamesSpread: 0, groupGames: CFB_ROUNDS - CONF_GAMES_START + 1,
-    /* The twelve team Playoff: the conference champions in, seven at large,
-       straight seeding, byes for 1 to 4, the bracket sheet after that. */
-    bracket: 'league', field: 12, reseed: false, autoBids: true, divisions: 'none',
-    winsToAdvance: [1, 1, 1, 1],
+  get format(): SeasonFormat {
+    return {
+      winScale: CFB_WIN_SCALE, games: CFB_ROUNDS, gamesSpread: 0, groupGames: CFB_ROUNDS - CONF_GAMES_START + 1,
+      /* The twelve team Playoff: the conference champions in, seven at large,
+         straight seeding, byes for 1 to 4, the bracket sheet after that. */
+      bracket: 'league', field: 12, reseed: false, autoBids: true, divisions: 'none',
+      winsToAdvance: [1, 1, 1, 1],
+    };
   },
   rounds: 4,
   roundOf: name => (name === 'National Championship' ? 4 : name === 'CFP Semifinal' ? 3 : name === 'CFP Quarterfinal' ? 2 : name === 'CFP First Round' ? 1 : 0),
@@ -125,13 +138,15 @@ export const CFB_SEASON: SeasonShape<CfbState> = {
 const CBB_ROUND_NAMES = ['Round of 32', 'Sweet 16', 'Elite Eight', 'Final Four', 'National Championship'];
 
 export const CBB_SEASON: SeasonShape<CbbState> = {
-  format: {
-    /* Two games a round, one in the conference and one outside it. */
-    winScale: CBB_WIN_SCALE, games: CBB_ROUNDS * 2, gamesSpread: 0, groupGames: CBB_ROUNDS,
-    /* The 32 team Dance: the conference tournament winners in, the rest at
-       large, reseeded every round, one game a round. */
-    bracket: 'league', field: DANCE_SIZE, reseed: true, autoBids: true, divisions: 'none',
-    winsToAdvance: [1, 1, 1, 1, 1],
+  get format(): SeasonFormat {
+    return {
+      /* Two games a round, one in the conference and one outside it. */
+      winScale: CBB_WIN_SCALE, games: CBB_ROUNDS * 2, gamesSpread: 0, groupGames: CBB_ROUNDS,
+      /* The 32 team Dance: the conference tournament winners in, the rest at
+         large, reseeded every round, one game a round. */
+      bracket: 'league', field: DANCE_SIZE, reseed: true, autoBids: true, divisions: 'none',
+      winsToAdvance: [1, 1, 1, 1, 1],
+    };
   },
   rounds: 5,
   roundOf: name => CBB_ROUND_NAMES.indexOf(name) + 1,
