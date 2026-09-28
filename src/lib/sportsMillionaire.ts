@@ -229,6 +229,95 @@ export function saveDailyRecord(dateStr: string, record: MillionaireDailyRecord)
 }
 
 /**
+ * Round 645 part three fix: the daily ladder part climbed, on the same key.
+ * The page saved only once the run had ended, so a refresh on question six
+ * dealt the same seeded ladder from question one with every answer already
+ * seen and all three lifelines fresh. The climb is now filed the moment an
+ * answer is locked in (before its reveal) and the moment a lifeline is used:
+ * the question on screen, the lifelines spent, a swapped question, the 50:50
+ * and crowd readings for the question on screen, and an outcome decided but
+ * not yet shown. `at` is always one past the last right answer, so the money
+ * is derived from it, never stored. It carries no `finalAmount`, so
+ * loadDailyRecord refuses it, and this refuses anything carrying one, so the
+ * two readers never accept the same record. A record whose outcome is set is
+ * a run whose end was never shown: the page shows it on the way back, and
+ * that is the finish recorded.
+ */
+export interface MillionaireProgress {
+  /** The question on screen, 0 based; every one before it was answered right. */
+  at: number;
+  lifelines: LifelineState;
+  /** Swap Question's replacement, and the question index it replaced. */
+  swap: { at: number; question: TriviaQuestion } | null;
+  /** The 50:50's two remaining options, for the question on screen. */
+  visible: number[] | null;
+  /** The crowd's poll, for the question on screen. */
+  crowd: number[] | null;
+  /** Decided at `at` and not yet shown: a wrong answer, or the million. */
+  outcome: 'wrong' | 'million' | null;
+}
+
+function isQuestion(v: unknown): v is TriviaQuestion {
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return false;
+  const q = v as Record<string, unknown>;
+  return typeof q.question === 'string' && q.question.trim() !== ''
+    && Array.isArray(q.options) && q.options.length >= 2 && q.options.every(o => typeof o === 'string')
+    && Number.isInteger(q.correctIndex) && (q.correctIndex as number) >= 0 && (q.correctIndex as number) < q.options.length
+    && typeof q.difficulty === 'number' && Number.isFinite(q.difficulty);
+}
+
+function validateProgress(fields: Record<string, unknown>, ladder: TriviaQuestion[]): MillionaireProgress | null {
+  if (fields.finalAmount !== undefined) return null;
+  const { at, lifelines, swap, visible, crowd, outcome } = fields;
+  if (!Number.isInteger(at) || (at as number) < 0 || (at as number) >= Math.min(LADDER_SIZE, ladder.length)) return null;
+  const now = at as number;
+  if (outcome !== null && outcome !== 'wrong' && outcome !== 'million') return null;
+  if (outcome === 'million' && now !== LADDER_SIZE - 1) return null;
+  if (!lifelines || typeof lifelines !== 'object' || Array.isArray(lifelines)) return null;
+  const used = (lifelines as { used?: unknown }).used as Record<string, unknown> | undefined;
+  if (!used || typeof used !== 'object') return null;
+  const ids: LifelineId[] = ['fifty-fifty', 'ask-crowd', 'swap-question'];
+  if (!ids.every(id => typeof used[id] === 'boolean')) return null;
+  const state: LifelineState = { used: { 'fifty-fifty': used['fifty-fifty'] as boolean, 'ask-crowd': used['ask-crowd'] as boolean, 'swap-question': used['swap-question'] as boolean } };
+  let swapped: MillionaireProgress['swap'] = null;
+  if (swap !== null) {
+    const s = swap as Record<string, unknown>;
+    if (!state.used['swap-question'] || !s || typeof s !== 'object' || !Number.isInteger(s.at) || (s.at as number) < 0 || (s.at as number) > now || !isQuestion(s.question)) return null;
+    swapped = { at: s.at as number, question: s.question };
+  } else if (state.used['swap-question']) return null;
+  const onScreen = swapped && swapped.at === now ? swapped.question : ladder[now];
+  let kept: number[] | null = null;
+  if (visible !== null) {
+    if (!state.used['fifty-fifty'] || !Array.isArray(visible) || visible.length !== 2 || new Set(visible).size !== 2) return null;
+    if (!visible.every(i => Number.isInteger(i) && i >= 0 && i < onScreen.options.length) || !visible.includes(onScreen.correctIndex)) return null;
+    kept = visible as number[];
+  }
+  let poll: number[] | null = null;
+  if (crowd !== null) {
+    if (!state.used['ask-crowd'] || !Array.isArray(crowd) || crowd.length !== onScreen.options.length) return null;
+    if (!crowd.every(p => Number.isInteger(p) && p >= 0 && p <= 100) || crowd.reduce((a: number, b) => a + (b as number), 0) !== 100) return null;
+    poll = crowd as number[];
+  }
+  return { at: now, lifelines: state, swap: swapped, visible: kept, crowd: poll, outcome: outcome as MillionaireProgress['outcome'] };
+}
+
+/** `ladder` is today's ladder as dealt, before any swap. */
+export function loadDailyProgress(dateStr: string, ladder: TriviaQuestion[]): MillionaireProgress | null {
+  return readDailyRecord(DAILY_SLUG, dateStr, fields => validateProgress(fields, ladder));
+}
+
+export function saveDailyProgress(dateStr: string, progress: MillionaireProgress): void {
+  writeDailyRecord(DAILY_SLUG, dateStr, {
+    at: progress.at,
+    lifelines: progress.lifelines,
+    swap: progress.swap,
+    visible: progress.visible,
+    crowd: progress.crowd,
+    outcome: progress.outcome,
+  });
+}
+
+/**
  * Swap Question lifeline: replaces the current question with a freshly
  * generated one at the SAME difficulty, drawn from the same pool. Uses
  * generateQuestion() directly (not generateRandomLadder, which always ramps

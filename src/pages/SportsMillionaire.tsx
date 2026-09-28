@@ -28,8 +28,11 @@ import {
   buildMillionaireEmojiGrid,
   loadDailyRecord,
   saveDailyRecord,
+  loadDailyProgress,
+  saveDailyProgress,
   type LifelineState,
   type MillionaireDailyRecord,
+  type MillionaireProgress,
 } from '@/lib/sportsMillionaire';
 
 type PlayMode = 'daily' | 'unlimited';
@@ -69,6 +72,9 @@ const SportsMillionaire = () => {
   const [wasCorrect, setWasCorrect] = useState<boolean | null>(null);
   const [finalAmount, setFinalAmount] = useState<number | null>(null);
   const [walkedAway, setWalkedAway] = useState(false);
+  /* Round 645 part three fix: Swap Question's replacement and where it went,
+     so the daily's climb can be filed with it and dealt back with it. */
+  const [swapped, setSwapped] = useState<MillionaireProgress['swap']>(null);
   const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   /* Round 428: the day is captured once per mount, the shared daily hook's
      rule, so a run that crosses midnight is filed under the day whose
@@ -99,6 +105,33 @@ const SportsMillionaire = () => {
     setPhase('done');
   }, []);
 
+  /* Round 645 part three fix: a daily climbed part way comes back on the
+     question it was left on, with the lifelines it had spent (and a swapped
+     question, a 50:50 or a crowd poll on screen) as they were. An outcome
+     decided and never shown ends the run here, and that finish is the one
+     recorded: it is new, so nothing is marked. */
+  const resumeDaily = useCallback((dealt: TriviaQuestion[], part: MillionaireProgress) => {
+    setPlayMode('daily');
+    setLadder(part.swap ? dealt.map((q, i) => (i === part.swap!.at ? part.swap!.question : q)) : dealt);
+    setSwapped(part.swap);
+    setCurrentIndex(part.at);
+    setLastCorrectIndex(part.outcome === 'million' ? part.at : part.at - 1);
+    setLifelines(part.lifelines);
+    setVisibleOptions(part.visible ? new Set(part.visible) : null);
+    setCrowdPoll(part.crowd);
+    setSelectedIndex(null);
+    setWasCorrect(null);
+    setWalkedAway(false);
+    dailySaved.current = false;
+    if (part.outcome) {
+      setFinalAmount(part.outcome === 'million' ? MONEY_LADDER[MONEY_LADDER.length - 1] : safeHavenAmount(part.at - 1));
+      setPhase('done');
+      return;
+    }
+    setFinalAmount(null);
+    setPhase('playing');
+  }, []);
+
   const startRun = useCallback((mode: PlayMode, sourcePool: TriviaPool | null) => {
     /* Round 428 part two: an answer's reveal timer belongs to the run that
        armed it, so starting a run cancels it. Without this, answering in
@@ -122,8 +155,14 @@ const SportsMillionaire = () => {
         restoreDaily(done);
         return;
       }
+      const part = loadDailyProgress(todayStr, freshLadder);
+      if (part) {
+        resumeDaily(freshLadder, part);
+        return;
+      }
     }
     dailySaved.current = false;
+    setSwapped(null);
     setCurrentIndex(0);
     setLastCorrectIndex(-1);
     setLifelines(freshLifelines());
@@ -134,7 +173,7 @@ const SportsMillionaire = () => {
     setFinalAmount(null);
     setWalkedAway(false);
     setPhase('playing');
-  }, [restoreDaily, todayStr]);
+  }, [restoreDaily, resumeDaily, todayStr]);
 
   // Boot: load the shared trivia pool once, then start daily mode. The two
   // deps are a stable callback and a per mount constant, so this still runs
@@ -155,6 +194,11 @@ const SportsMillionaire = () => {
           restoreDaily(done);
           return;
         }
+        const part = loadDailyProgress(todayStr, dailyLadder);
+        if (part) {
+          resumeDaily(dailyLadder, part);
+          return;
+        }
         setCurrentIndex(0);
         setLastCorrectIndex(-1);
         setLifelines(freshLifelines());
@@ -167,7 +211,7 @@ const SportsMillionaire = () => {
       cancelled = true;
       if (revealTimer.current) clearTimeout(revealTimer.current);
     };
-  }, [restoreDaily, todayStr]);
+  }, [restoreDaily, resumeDaily, todayStr]);
 
   const switchPlayMode = (mode: PlayMode) => {
     if (mode === playMode || !pool) return;
@@ -178,9 +222,23 @@ const SportsMillionaire = () => {
   const isSafeHaven = SAFE_HAVEN_INDICES.includes(currentIndex);
   const guaranteedAmount = safeHavenAmount(lastCorrectIndex);
 
+  /* Round 645 part three fix: the daily's climb as it stands, filed on every
+     step that decides something, before any reveal. */
+  const fileClimb = (p: MillionaireProgress) => {
+    if (playMode === 'daily') saveDailyProgress(todayStr, p);
+  };
+  const shownVisible = () => (visibleOptions ? [...visibleOptions] : null);
+
   const selectOption = (optionIndex: number) => {
     if (phase !== 'playing' || !question) return;
     if (visibleOptions && !visibleOptions.has(optionIndex)) return;
+    /* The answer is decided the moment it is locked in: a right one moves the
+       climb on a question, a wrong one (or the last right one) ends it. On
+       the record before the suspense, so a refresh cannot take it back. */
+    const right = optionIndex === question.correctIndex;
+    fileClimb(right && currentIndex + 1 < LADDER_SIZE
+      ? { at: currentIndex + 1, lifelines, swap: swapped, visible: null, crowd: null, outcome: null }
+      : { at: currentIndex, lifelines, swap: swapped, visible: shownVisible(), crowd: crowdPoll, outcome: right ? 'million' : 'wrong' });
     setSelectedIndex(optionIndex);
     setPhase('locked');
     revealTimer.current = setTimeout(() => {
@@ -222,29 +280,42 @@ const SportsMillionaire = () => {
     return lastCorrectIndex >= 0 ? MONEY_LADDER[lastCorrectIndex] : 0;
   }
 
+  /* Round 645 part three fix: a lifeline is spent the moment it is used, and
+     what it showed is filed with it, so a refresh neither hands it back nor
+     draws it again. */
   const useFiftyFifty = () => {
     if (phase !== 'playing' || lifelines.used['fifty-fifty'] || !question) return;
-    setVisibleOptions(applyFiftyFifty(question));
-    setLifelines((l) => ({ used: { ...l.used, 'fifty-fifty': true } }));
+    const kept = applyFiftyFifty(question);
+    const spent: LifelineState = { used: { ...lifelines.used, 'fifty-fifty': true } };
+    fileClimb({ at: currentIndex, lifelines: spent, swap: swapped, visible: [...kept], crowd: crowdPoll, outcome: null });
+    setVisibleOptions(kept);
+    setLifelines(spent);
   };
 
   const useAskCrowd = () => {
     if (phase !== 'playing' || lifelines.used['ask-crowd'] || !question) return;
-    setCrowdPoll(generateCrowdPoll(question));
-    setLifelines((l) => ({ used: { ...l.used, 'ask-crowd': true } }));
+    const poll = generateCrowdPoll(question);
+    const spent: LifelineState = { used: { ...lifelines.used, 'ask-crowd': true } };
+    fileClimb({ at: currentIndex, lifelines: spent, swap: swapped, visible: shownVisible(), crowd: poll, outcome: null });
+    setCrowdPoll(poll);
+    setLifelines(spent);
   };
 
   const useSwapQuestion = () => {
     if (phase !== 'playing' || lifelines.used['swap-question'] || !question || !pool) return;
-    const swapped = swapQuestion(pool, question);
+    const replacement = swapQuestion(pool, question);
+    const spent: LifelineState = { used: { ...lifelines.used, 'swap-question': true } };
+    const swap = { at: currentIndex, question: replacement };
+    fileClimb({ at: currentIndex, lifelines: spent, swap, visible: null, crowd: null, outcome: null });
+    setSwapped(swap);
     setLadder((prev) => {
       const next = [...prev];
-      next[currentIndex] = swapped;
+      next[currentIndex] = replacement;
       return next;
     });
     setVisibleOptions(null);
     setCrowdPoll(null);
-    setLifelines((l) => ({ used: { ...l.used, 'swap-question': true } }));
+    setLifelines(spent);
   };
 
   const isComplete = phase === 'done';
