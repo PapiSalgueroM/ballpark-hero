@@ -15,6 +15,10 @@
  * The finished daily offers Play Unlimited (not a replay) and the two mode
  * toggles; replay() takes every one of them and plays any live daily board
  * it finds to the end.
+ *
+ * Round 645 part three: the row also resumes (assertion 6). Every call is
+ * filed before its card turns over, so one correct call, a reload and the
+ * Daily board must come back on card 3 with the same card banked.
  */
 import './mocks';
 import { waitFor } from '@testing-library/react';
@@ -65,11 +69,21 @@ async function call(m: MountedPage, correctly: boolean): Promise<void> {
   });
 }
 
+/* One correct call, then a wrong one. A pack resumed after its first call
+   (Round 645 part three, assertion 6) only has the wrong one left to make, so
+   the split run ends exactly where the unbroken one did. */
 async function finish(m: MountedPage): Promise<void> {
-  await call(m, true);
+  if (cardLine(m) === 2) await call(m, true);
   if (status(m) === 'finished') return;
   await call(m, false);
   await waitFor(() => { if (!resultCard(m.container)) throw new Error('the pack has not busted'); });
+}
+
+/* The line over the live pack: the card being called on and the bank. */
+function progress(m: MountedPage): string {
+  const span = Array.from(m.container.querySelectorAll('span')).find(s => /^Card \d+ of \d+$/.test((s.textContent ?? '').trim()));
+  if (!span?.parentElement) throw new Error('no live pack');
+  return (span.parentElement.textContent ?? '').replace(/\s+/g, ' ').trim();
 }
 
 export default defineDriver<Api>({
@@ -93,6 +107,11 @@ export default defineDriver<Api>({
 
   finish,
   status,
+
+  /* Round 645 part three: one correct call, then a reload has to come back
+     on card 3 with the same card banked. */
+  playSome: m => call(m, true),
+  progress,
 
   fingerprint(m) {
     const card = resultCard(m.container);

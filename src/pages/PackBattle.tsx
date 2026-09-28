@@ -1,5 +1,5 @@
 import { FlagImg } from '@/components/FlagImg';
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Loader2, TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -11,6 +11,8 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 import {
   fetchPackPool,
@@ -26,12 +28,41 @@ import {
 
 type Phase = 'boot' | 'error' | 'playing' | 'reveal' | 'done';
 
+const SLUG = 'pack-battle';
+
+/* Round 645 part three: today's pack as far as it was played. The daily
+   never locked: a refresh dealt the same five cards again with every value
+   already seen, and every replay recorded another completion and paid the
+   bank again. Every call is filed the moment it is made, before the card
+   turns over, so a refresh during the reveal cannot hand the call back;
+   `done` is set once the result card has been shown (and the run
+   recorded). The record must name exactly today's five cards in today's
+   order and hold calls a real run could make (a miss only ever last), or
+   the page deals a fresh daily. */
+interface PackDaily { calls: boolean[]; done: boolean }
+
+function readPackDaily(today: string, pack: PackCard[]): PackDaily | null {
+  return readDailyRecord<PackDaily>(SLUG, today, f => {
+    const { cards, calls, done } = f;
+    if (!Array.isArray(cards) || cards.length !== pack.length || cards.some((n, i) => n !== pack[i].name)) return null;
+    if (!Array.isArray(calls) || calls.length > pack.length - 1 || !calls.every(c => typeof c === 'boolean')) return null;
+    if (calls.slice(0, -1).some(c => c === false)) return null;
+    if (typeof done !== 'boolean') return null;
+    const over = calls[calls.length - 1] === false || calls.length === pack.length - 1;
+    if (done && !over) return null;
+    return { calls: calls as boolean[], done };
+  });
+}
+
 /**
  * Pack Battle: daily football-trumps pack opener (R6 build plan Part 1 item
  * 9, MASTER_PLAN Wave 15d). See src/lib/packBattle.ts for the full mechanic
  * writeup and the data source docs.
  */
 const PackBattle = () => {
+  /* Round 428's rule: the day is pinned at mount, and the pack, the record
+     and the caption all read this one value. */
+  const todayStr = useRef(getTodayET()).current;
   const [playMode, setPlayMode] = useState<PlayMode>('daily');
 
   const [phase, setPhase] = useState<Phase>('boot');
@@ -49,19 +80,34 @@ const PackBattle = () => {
 
   const startRun = useCallback((nextPlayMode: PlayMode, sourcePool: PackCard[]) => {
     setPlayMode(nextPlayMode);
-    const pack = buildPackForMode(nextPlayMode, sourcePool);
+    const pack = buildPackForMode(nextPlayMode, sourcePool, todayStr);
     if (!pack || pack.length < 2) {
       setPhase('error');
       return;
     }
+    /* Round 645 part three: today's pack is dealt once. Every correct call
+       banked the next card, so the banked card is the one after the last
+       correct call, and a miss can only be the last call. */
+    const saved = nextPlayMode === 'daily' ? readPackDaily(todayStr, pack) : null;
+    const savedCalls = saved?.calls ?? [];
+    const banked = savedCalls.filter(c => c).length;
+    const bust = savedCalls[savedCalls.length - 1] === false;
     setCards(pack);
-    setCardIndex(0);
-    setCalls([]);
-    setBankedValue(pack[0].value);
+    setCardIndex(banked);
+    setCalls(savedCalls);
+    setBankedValue(pack[banked].value);
     setLastCorrect(null);
-    setBusted(false);
-    setPhase('playing');
-  }, []);
+    setBusted(bust);
+    if (saved?.done) {
+      /* shown and recorded before the refresh: not a new finish */
+      markRestoredFinish(SLUG);
+      setPhase('done');
+      return;
+    }
+    /* A pack whose last call was made but whose result card never showed
+       finishes now, and that is the finish recorded. */
+    setPhase(bust || savedCalls.length >= pack.length - 1 ? 'done' : 'playing');
+  }, [todayStr]);
 
   // Boot: fetch the pool once, then start the daily run.
   useEffect(() => {
@@ -96,6 +142,10 @@ const PackBattle = () => {
   const call = (calledHigher: boolean) => {
     if (phase !== 'playing' || !bankedCard || !nextCard) return;
     const correct = resolveCall(bankedCard.value, nextCard.value, calledHigher);
+    /* Round 645 part three: on the record before the card turns over */
+    if (playMode === 'daily') {
+      writeDailyRecord(SLUG, todayStr, { cards: cards.map(c => c.name), calls: [...calls, correct], done: false });
+    }
     setLastCorrect(correct);
     setCalls(c => [...c, correct]);
     setPhase('reveal');
@@ -134,6 +184,13 @@ const PackBattle = () => {
 
   // Score = total banked value (USD), correctAnswers = number of correct calls.
   useGameCompletion('pack-battle', isComplete, bankedValue, correctCalls);
+
+  /* Round 645 part three: the daily's result card is on screen and the run
+     recorded, so a refresh brings this card back and records nothing. */
+  useEffect(() => {
+    if (phase !== 'done' || playMode !== 'daily') return;
+    writeDailyRecord(SLUG, todayStr, { cards: cards.map(c => c.name), calls, done: true });
+  }, [phase, playMode, cards, calls, todayStr]);
 
   const { grade, headline } = useMemo(() => gradePack(result), [result]);
   const emojiGrid = useMemo(() => buildPackEmojiGrid(result), [result]);
@@ -225,7 +282,7 @@ const PackBattle = () => {
             </div>
 
             {playMode === 'daily' && (
-              <p className="text-xs text-muted-foreground mt-3">Today's pack, {getTodayET()}. Same 5 cards for everyone.</p>
+              <p className="text-xs text-muted-foreground mt-3">Today's pack, {todayStr}. Same 5 cards for everyone.</p>
             )}
           </>
         }
