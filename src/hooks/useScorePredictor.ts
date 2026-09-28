@@ -35,7 +35,9 @@ function getDailyPuzzle(): ScorePredictorPuzzle {
   return scorePredictorPuzzles[idx];
 }
 
-function calcScore(
+/** Exported for simFreePoints (Round 645): a wrong winner still pays 50, the
+ *  5 percent participation floor the rule allows and no more. */
+export function calcScore(
   guessH: number, guessA: number,
   actualH: number, actualA: number,
 ): number {
