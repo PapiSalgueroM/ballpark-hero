@@ -43,6 +43,12 @@
  *                 A `days` driver plays each day's perfect run on real dealt
  *                 boards, where a day's best varies (the arcade ladders,
  *                 Minefield): none may record past the cap.
+ *                 Every driver also says how the fence knows the recorder uses
+ *                 what it plays. `scorer` names a function the recorder's score
+ *                 argument calls, read through the local constants that
+ *                 argument names. `scoredIn` is for a score made away from the
+ *                 recorder line (a state update, an engine): [file, the
+ *                 function that makes the score, the names it must use].
  *   UNPLAYED      the reason no offline run can be played: the ceiling is a
  *                 clamp or a bound over a pool the database deals, a whole
  *                 simulated career, or a count the recorder reads straight off
@@ -263,11 +269,12 @@ const arcadeDays = file => mods => {
   return sampleDays(400).map(d => run(`${d}, every shot perfect`, A.maxRunScore(A.buildRun(A.daySeed(d)))));
 };
 
-const HL_RUN = { files: [HL_FILE], runs: hlRuns };
-const CLUE_RUN = { files: [CLUE_FILE], runs: clueRuns };
-const CONNECTIONS_RUN = { files: [CONNECTIONS_FILE], runs: connectionsRuns };
-const GRID_RUN = { files: [GRID_FILE], runs: gridRuns };
-const CONNECT4_RUN = { files: [CONNECT4_FILE], runs: connect4Runs };
+const HL_RUN = { files: [HL_FILE], runs: hlRuns, scorer: 'higherLowerScore' };
+const CLUE_RUN = { files: [CLUE_FILE], runs: clueRuns, scorer: 'careerClueScore' };
+const CONNECTIONS_RUN = { files: [CONNECTIONS_FILE], runs: connectionsRuns, scorer: 'connectionsScore' };
+const GRID_RUN = { files: [GRID_FILE], runs: gridRuns, scorer: 'gridScore' };
+const CONNECT4_RUN = { files: [CONNECT4_FILE], runs: connect4Runs, scorer: 'connect4Score' };
+const GAUNTLET_MADE = [GAUNTLET_FILE, 'runGauntlet', ['gauntletScore']];
 
 /**
  * Every scored game whose recorder calls a scoring function the fence can
@@ -285,19 +292,22 @@ export const PERFECT_RUNS = {
   'mlb-grid': GRID_RUN, 'hockey-grid': GRID_RUN, 'cbb-grid': GRID_RUN,
   'football-connect-4': CONNECT4_RUN, 'mlb-connect-4': CONNECT4_RUN, 'nba-connect-4': CONNECT4_RUN,
   'nfl-connect-4': CONNECT4_RUN, 'nhl-connect-4': CONNECT4_RUN,
-  'footle': { files: ['src/hooks/useGame.ts'], runs: guessRuns('src/hooks/useGame.ts', 'footleScore', 12) },
-  'career': { files: ['src/hooks/useCareerGame.ts'], runs: guessRuns('src/hooks/useCareerGame.ts', 'careerDailyScore', 12) },
-  'ufc': { files: ['src/hooks/useUfcGame.ts'], runs: guessRuns('src/hooks/useUfcGame.ts', 'ufcDailyScore', 12) },
+  'footle': { files: ['src/hooks/useGame.ts'], runs: guessRuns('src/hooks/useGame.ts', 'footleScore', 12), scorer: 'footleScore' },
+  'career': { files: ['src/hooks/useCareerGame.ts'], runs: guessRuns('src/hooks/useCareerGame.ts', 'careerDailyScore', 12), scorer: 'careerDailyScore' },
+  'ufc': { files: ['src/hooks/useUfcGame.ts'], runs: guessRuns('src/hooks/useUfcGame.ts', 'ufcDailyScore', 12), scorer: 'ufcDailyScore' },
   'guess-transfer-value': {
     files: ['src/hooks/useGuessTransferValue.ts'],
     runs: guessRuns('src/hooks/useGuessTransferValue.ts', 'transferValueDailyScore', m => m['src/hooks/useGuessTransferValue.ts'].MAX_GUESSES),
+    scorer: 'transferValueDailyScore',
   },
   'puck-detective': {
     files: ['src/pages/PuckDetective.tsx', 'src/lib/puckDetective.ts'],
     runs: guessRuns('src/pages/PuckDetective.tsx', 'puckDetectiveScore', m => m['src/lib/puckDetective.ts'].GUESS_LIMIT),
+    scorer: 'puckDetectiveScore',
   },
   'nfl-career': {
     files: ['src/hooks/useNFLCareer.ts'],
+    scoredIn: ['src/hooks/useNFLCareer.ts', 'useNFLCareer', ['dailyScoreOf']],
     runs: mods => {
       const { dailyScoreOf } = mods['src/hooks/useNFLCareer.ts'];
       return range(1, 12).flatMap(c => [
@@ -308,6 +318,7 @@ export const PERFECT_RUNS = {
   },
   'football-draft': {
     files: ['src/hooks/useFootballDraft.ts', 'src/data/draftGuesserPlayers.ts'],
+    scorer: 'footballDraftDailyScore',
     runs: mods => {
       const { calcPoints, footballDraftDailyScore } = mods['src/hooks/useFootballDraft.ts'];
       const { draftGuesserPuzzles } = mods['src/data/draftGuesserPlayers.ts'];
@@ -323,6 +334,7 @@ export const PERFECT_RUNS = {
   },
   'face-off': {
     files: ['src/lib/faceOff.ts'],
+    scoredIn: ['src/hooks/useFaceOff.ts', 'useFaceOff', ['resolveRound', 'totals']],
     runs: mods => {
       const F = mods['src/lib/faceOff.ts'];
       const cats = F.buildCategories();
@@ -340,6 +352,7 @@ export const PERFECT_RUNS = {
   },
   'sports-bingo': {
     files: ['src/lib/sportsBingo.ts'],
+    scorer: 'scoreGame',
     runs: mods => {
       const { scoreGame, CARD_SIZE } = mods['src/lib/sportsBingo.ts'];
       let s = 646;
@@ -355,6 +368,7 @@ export const PERFECT_RUNS = {
   },
   'career-ladder': {
     files: ['src/lib/careerLadder.ts'],
+    scoredIn: ['src/pages/CareerLadder.tsx', 'CareerLadder', ['careerScore']],
     runs: mods => {
       const { careerScore } = mods['src/lib/careerLadder.ts'];
       return range(2, 10).flatMap(total => range(1, total).flatMap(shown => range(0, 8).map(wrong =>
@@ -363,6 +377,7 @@ export const PERFECT_RUNS = {
   },
   'guess-soccer-club-questions': {
     files: ['src/lib/clubQuestionTree.ts'],
+    scoredIn: ['src/hooks/useGuessSoccerClub.ts', 'useGuessSoccerClub', ['scoreQuestionTreeRound']],
     runs: mods => {
       const { scoreQuestionTreeRound, CLUB_QUESTIONS } = mods['src/lib/clubQuestionTree.ts'];
       const ids = CLUB_QUESTIONS.map(q => q.id);
@@ -376,6 +391,7 @@ export const PERFECT_RUNS = {
   },
   'score-predictor': {
     files: ['src/hooks/useScorePredictor.ts'],
+    scoredIn: ['src/hooks/useScorePredictor.ts', 'useScorePredictor', ['calcScore']],
     runs: mods => {
       const { calcScore } = mods['src/hooks/useScorePredictor.ts'];
       return [[2, 1], [0, 0], [1, 3], [4, 4]].flatMap(([h, a]) => range(0, 6).flatMap(gh => range(0, 6).map(ga =>
@@ -384,6 +400,7 @@ export const PERFECT_RUNS = {
   },
   'nba-stat-line': {
     files: ['src/lib/nbaStatLine.ts'],
+    scoredIn: ['src/hooks/useNbaStatLine.ts', 'useNbaStatLine', ['scoreCombined']],
     runs: mods => {
       const { scoreCombined } = mods['src/lib/nbaStatLine.ts'];
       const targets = [
@@ -396,15 +413,16 @@ export const PERFECT_RUNS = {
         run(`target ${i}, every stat off by ${d}`, scoreCombined(t, line(t, d)).total, d === 0)));
     },
   },
-  'gauntlet-draft': { files: [GAUNTLET_FILE, 'src/lib/gauntletDraft.ts'], runs: gauntletRuns(m => m['src/lib/gauntletDraft.ts'].GAUNTLET_ROUNDS.length) },
-  'nba-gauntlet-draft': { files: [GAUNTLET_FILE, 'src/lib/gauntletDraftNba.ts'], runs: gauntletRuns(m => m['src/lib/gauntletDraftNba.ts'].NBA_GAUNTLET_CONFIG.rounds.length) },
-  'nfl-gauntlet-draft': { files: [GAUNTLET_FILE, 'src/lib/gauntletDraftNfl.ts'], runs: gauntletRuns(m => m['src/lib/gauntletDraftNfl.ts'].NFL_GAUNTLET_CONFIG.rounds.length) },
-  'mlb-gauntlet-draft': { files: [GAUNTLET_FILE, 'src/lib/gauntletDraftMlb.ts'], runs: gauntletRuns(m => m['src/lib/gauntletDraftMlb.ts'].MLB_GAUNTLET_CONFIG.rounds.length) },
-  'free-kick': { files: ['src/lib/freeKick.ts'], days: true, runs: arcadeDays('src/lib/freeKick.ts') },
-  'buzzer-beater': { files: ['src/lib/buzzerBeater.ts'], days: true, runs: arcadeDays('src/lib/buzzerBeater.ts') },
+  'gauntlet-draft': { files: [GAUNTLET_FILE, 'src/lib/gauntletDraft.ts'], runs: gauntletRuns(m => m['src/lib/gauntletDraft.ts'].GAUNTLET_ROUNDS.length), scoredIn: GAUNTLET_MADE },
+  'nba-gauntlet-draft': { files: [GAUNTLET_FILE, 'src/lib/gauntletDraftNba.ts'], runs: gauntletRuns(m => m['src/lib/gauntletDraftNba.ts'].NBA_GAUNTLET_CONFIG.rounds.length), scoredIn: GAUNTLET_MADE },
+  'nfl-gauntlet-draft': { files: [GAUNTLET_FILE, 'src/lib/gauntletDraftNfl.ts'], runs: gauntletRuns(m => m['src/lib/gauntletDraftNfl.ts'].NFL_GAUNTLET_CONFIG.rounds.length), scoredIn: GAUNTLET_MADE },
+  'mlb-gauntlet-draft': { files: [GAUNTLET_FILE, 'src/lib/gauntletDraftMlb.ts'], runs: gauntletRuns(m => m['src/lib/gauntletDraftMlb.ts'].MLB_GAUNTLET_CONFIG.rounds.length), scoredIn: GAUNTLET_MADE },
+  'free-kick': { files: ['src/lib/freeKick.ts'], days: true, runs: arcadeDays('src/lib/freeKick.ts'), scoredIn: ['src/lib/freeKick.ts', 'takeShot', ['kickPoints']] },
+  'buzzer-beater': { files: ['src/lib/buzzerBeater.ts'], days: true, runs: arcadeDays('src/lib/buzzerBeater.ts'), scoredIn: ['src/lib/buzzerBeater.ts', 'takeShot', ['shotPoints']] },
   'minefield': {
     files: ['src/lib/minefield.ts'],
     days: true,
+    scoredIn: ['src/pages/Minefield.tsx', 'Minefield', ['POINTS_PER_FIND', 'CLEAR_BONUS']],
     runs: mods => {
       const M = mods['src/lib/minefield.ts'];
       return sampleDays(400).map(d => run(`${d}, every board swept`, M.maxRunScore(M.buildRun(M.daySeed(new Date(`${d}T17:00:00Z`))))));

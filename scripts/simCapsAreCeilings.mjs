@@ -50,6 +50,13 @@
  *      run on the real deal, which varies: none may record past the cap. Every
  *      other scored game is listed with the reason no run is played. Then what
  *      a perfect run paid before and pays after, for every cap that moves.
+ *      First it checks, in the code, that the recorder uses what is played:
+ *      the useGameCompletion call's score argument (read through the local
+ *      constants it names) calls the driver's `scorer`, or, for a score made
+ *      away from that line, the function the driver names in `scoredIn` uses
+ *      the names it lists. A formula written into the recorder line instead
+ *      of the scoring function would otherwise leave the run played here
+ *      green while the game recorded something else.
  *   6) The live table, read only, against the snapshot. Every row is the value
  *      read (the migration is not applied yet) or the value after (it is), and
  *      all the rows this round moves sit on the SAME side (the migration is one
@@ -83,6 +90,10 @@
  *   perfect    useGame.ts is bundled with footleScore paying a second guess
  *              win 800, while footleCeiling (a first guess) stays 700:
  *              5:footle.
+ *   recorder   useCareerGame.ts is read with its recorder's score written
+ *              inline instead of through careerDailyScore: 5:career.
+ *   scoredin   freeKick.ts is read with takeShot scoring a goal inline
+ *              instead of through kickPoints: 5:free-kick.
  *   live       one moved row of the live read is flipped to the other side in
  *              memory, a half applied table: 6 on that game. Needs the
  *              database, and refuses without it.
@@ -102,7 +113,7 @@ import {
 } from './lib/scoreCeilingTable.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTROLS = ['classify', 'resolve', 'season', 'ranked', 'ceiling', 'snapshot', 'migration', 'guard', 'perfect', 'live'];
+const CONTROLS = ['classify', 'resolve', 'season', 'ranked', 'ceiling', 'snapshot', 'migration', 'guard', 'perfect', 'recorder', 'scoredin', 'live'];
 const CONTROL = process.env.CEILINGS_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`CEILINGS_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
@@ -456,6 +467,99 @@ console.log('5) a perfect run through the scoring code the recorder calls, again
 const pays = (score, cap) => (cap ? (100 * Math.min(score, cap)) / cap : NaN);
 const PERFECT = new Map();
 {
+  /* The recorder uses what is played. Code only, comments stripped, and the
+     two controls rewrite one line of one file in memory. */
+  const REWRITES = {
+    recorder: ['src/hooks/useCareerGame.ts',
+      "  const completionScore = careerDailyScore(dailyGameStatus === 'won', dailyGuessesUsed);",
+      "  const completionScore = dailyGameStatus === 'won' ? Math.max(100, (MAX_GUESSES - dailyGuessesUsed) * 100) : 0;"],
+    scoredin: ['src/lib/freeKick.ts',
+      '    points = kickPoints(setup, corner);',
+      '    points = Math.round(100 + corner * 120);'],
+  };
+  const codeOf = new Map();
+  for (const f of srcFiles) {
+    const rel = path.relative(ROOT, f).replace(/\\/g, '/');
+    let text = fs.readFileSync(f, 'utf8').replace(/\r\n/g, '\n');
+    const rw = REWRITES[CONTROL];
+    if (rw && rw[0] === rel) {
+      needOnce(text, rw[1], rel, stripTs);
+      text = text.split(rw[1]).join(rw[2]);
+      console.log(`   NEGATIVE CONTROL ON: ${rel} is read with "${rw[2].trim()}", section 5 must go red on ${CONTROL === 'recorder' ? 'career' : 'free-kick'} alone`);
+    }
+    codeOf.set(rel, stripTs(text));
+  }
+  const esc = s => s.replace(/[$]/g, '\\$');
+  /* Every useGameCompletion call that records `game`, by its literal key or a
+     constant of the same file that holds it. */
+  const recordersOf = game => {
+    const out = [];
+    for (const [file, code] of codeOf) {
+      if (!code.includes('useGameCompletion(')) continue;
+      const heads = [`'${game}'`, `"${game}"`,
+        ...[...code.matchAll(new RegExp(`\\bconst\\s+([A-Za-z_$][\\w$]*)\\s*=\\s*['"]${game}['"]`, 'g'))].map(m => m[1])];
+      for (const m of code.matchAll(/\buseGameCompletion\(/g)) {
+        const c = callArgs(code, m.index + 'useGameCompletion'.length);
+        if (c && heads.includes(c.args[0])) out.push({ file, code, score: c.args[2] ?? '' });
+      }
+    }
+    return out;
+  };
+  /* An expression and the initialisers of the local names it reads, three
+     levels deep. */
+  const expand = (code, expr) => {
+    let text = expr;
+    const seen = new Set();
+    for (let depth = 0; depth < 3; depth += 1) {
+      let grew = false;
+      for (const id of new Set(text.match(/[A-Za-z_$][\w$]*/g) || [])) {
+        if (seen.has(id)) continue;
+        seen.add(id);
+        const m = code.match(new RegExp(`\\b(?:const|let)\\s+${esc(id)}\\s*=\\s*([^;]*);`));
+        if (m) { text += ` ${m[1]}`; grew = true; }
+      }
+      if (!grew) break;
+    }
+    return text;
+  };
+  /* The body of a function or an arrow constant, by brace matching after its
+     parameter list. */
+  const bodyOf = (code, name) => {
+    const at = code.search(new RegExp(`(?:\\bfunction\\s+${esc(name)}\\b|\\bconst\\s+${esc(name)}\\s*=)`));
+    if (at < 0) return null;
+    const params = callArgs(code, code.indexOf('(', at));
+    if (!params) return null;
+    const start = code.indexOf('{', params.end);
+    let depth = 0;
+    for (let i = start; i >= 0 && i < code.length; i += 1) {
+      if (code[i] === '{') depth += 1;
+      else if (code[i] === '}') { depth -= 1; if (depth === 0) return code.slice(start, i + 1); }
+    }
+    return null;
+  };
+  let linked = 0;
+  for (const [game, driver] of Object.entries(PERFECT_RUNS)) {
+    if (driver.scorer && driver.scoredIn) { fail(5, game, 'names both a scorer and a scoredIn; one says how the recorder uses what is played'); continue; }
+    if (driver.scorer) {
+      const recs = recordersOf(game);
+      if (!recs.length) { fail(5, game, `no useGameCompletion call records it by its key, so nothing shows the recorder calls ${driver.scorer}`); continue; }
+      const calls = new RegExp(`\\b${esc(driver.scorer)}\\s*\\(`);
+      const off = recs.find(r => !calls.test(expand(r.code, r.score)));
+      if (off) fail(5, game, `${off.file} records ${off.score || 'no score'}, which does not call ${driver.scorer}, the function the fence plays, so the run played here is not what the game records`);
+      else linked += 1;
+    } else if (driver.scoredIn) {
+      const [file, fn, names] = driver.scoredIn;
+      const body = codeOf.has(file) ? bodyOf(codeOf.get(file), fn) : null;
+      if (!body) { fail(5, game, `${file} has no ${fn} to read, so nothing shows where its score is made`); continue; }
+      const missing = names.filter(n => !new RegExp(`\\b${esc(n)}\\b`).test(body));
+      if (missing.length) fail(5, game, `${fn} in ${file} no longer uses ${missing.join(' and ')}, so the score it makes is not the one the fence plays`);
+      else linked += 1;
+    } else {
+      fail(5, game, 'has a perfect run driver that does not say how the recorder uses what it plays (scorer or scoredIn)');
+    }
+  }
+  console.log(`   ${linked} of ${Object.keys(PERFECT_RUNS).length} played games: the recorder uses the function played (the score argument calls it, or the function that makes the score uses it)`);
+
   for (const g of Object.keys(PERFECT_RUNS)) if (!CEILINGS[g]) fail(5, g, 'has a perfect run driver but is not a scored game with a ceiling');
   for (const g of Object.keys(UNPLAYED)) if (!CEILINGS[g]) fail(5, g, 'is listed as unplayed but is not a scored game with a ceiling');
   let measured = 0; let days = 0; const unplayed = [];
@@ -643,6 +747,8 @@ if (CONTROL) {
     migration: ['4:footle'],
     guard: ['4:guard-647-old-scale'],
     perfect: ['5:footle'],
+    recorder: ['5:career'],
+    scoredin: ['5:free-kick'],
     live: [`6:${firstMoved}`],
   }[CONTROL];
   const got = [...new Set(findings.map(f => `${f.section}:${f.game}`))].sort();

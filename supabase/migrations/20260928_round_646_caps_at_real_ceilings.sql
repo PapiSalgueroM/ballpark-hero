@@ -224,13 +224,17 @@
 -- office title recorded at 305 counted 305 and counts 100, and a raised cap
 -- (Golf Higher or Lower, 155 to 325) lets past plays count up to it. And in
 -- the browser, src/lib/scoreCaps.ts (on r648-profile-clamp) keeps its read of
--- game_score_caps in localStorage for six hours (FRESH_MS): for up to six
--- hours after this applies, a browser holding a fresh copy credits new plays
--- in its own tally against the OLD caps (budget-builder at 1120,
--- sign-the-player at 56,000,000, the front offices at 885 to 3810), and a play
--- in a game whose NULL cap this file sets is credited with no ceiling at all.
--- The stored total the server keeps is not affected by that cache, and the
--- tally catches up on the first read after the six hours.
+-- game_score_caps in localStorage for six hours (FRESH_MS), and a play only
+-- asks for a new read once that copy is older than that: for up to six hours
+-- after this applies, a browser holding a fresh copy credits new plays in its
+-- own tally (src/lib/streaks.ts) against the OLD caps (budget-builder at
+-- 1120, sign-the-player at 56,000,000, the front offices at 885 to 3810), and
+-- a play in a game whose NULL cap this file sets is credited with no ceiling
+-- at all. That tally is a running sum: a play credited in those hours keeps
+-- that credit for good, and only plays after the next read count at the new
+-- caps. The server's save reads the table itself, so a play saved after this
+-- applies counts at the new cap at once; what past days add to a stored
+-- total moves only when 648's part 2 is rerun, as above.
 --
 -- =====================================================================
 -- BACKUP AND UNDO
