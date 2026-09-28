@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
-import { getTodayET } from '@/lib/dateUtils';
+import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 import hofPlayers, { type HofPlayer } from '@/data/hofPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { supabase } from '@/integrations/supabase/client';
@@ -40,25 +40,36 @@ const STORAGE_PREFIX = 'hof-or-bust-';
 const BASE_SCORE = 1000;
 const HINT_COST = 100;
 
-function getDailyPlayer(): HofPlayer {
-  return dailyHofPlayer(getDateSeed());
-}
+/**
+ * Round 645: the players the daily deals, every one with a verdict. A
+ * borderline player has no right call, so either vote was scored correct and
+ * paid the full 1000: on the six borderline days of every twenty six, any
+ * click took the cap. Unlimited still deals everyone.
+ */
+const VERDICT_PLAYERS = hofPlayers.filter(p => p.verdict !== 'borderline');
 
 /**
- * Round 645: the daily player for a seed. A borderline player has no right
- * call, so either vote was scored correct and paid the full 1000: on the six
- * borderline days of every twenty six, any click took the cap. The daily now
- * steps forward to the next player with a verdict, so every other day keeps
- * exactly the player it always dealt. Unlimited still deals everyone, and
- * records nothing.
+ * Round 645: the daily player for an ET date. The first cut stepped a
+ * borderline day forward to the next player in the list, and consecutive
+ * dates hash to consecutive seeds, so the step landed on the next day's own
+ * player: 79 dailies of 2026 dealt yesterday's player again, today's answer
+ * handed to anyone who played yesterday. The daily walks the verdict players
+ * with the shared dailyIndex now (src/lib/dateUtils.ts), which shows each of
+ * them once per cycle and never the same one two days running, cycle
+ * boundaries included. simFreePoints walks a year of dates through this.
  */
-export function dailyHofPlayer(seed: number): HofPlayer {
-  const n = hofPlayers.length;
-  for (let k = 0; k < n; k += 1) {
-    const p = hofPlayers[(seed + k) % n];
-    if (p.verdict !== 'borderline') return p;
-  }
-  return hofPlayers[seed % n];
+export function dailyHofPlayer(date: string): HofPlayer {
+  return VERDICT_PLAYERS[dailyIndex(date, VERDICT_PLAYERS.length)];
+}
+
+/** The player a saved daily vote was cast on. A save names its player since
+ *  Round 645; one without a name was cast before the daily draw changed, on
+ *  the player the old draw dealt that date, so it is restored against that
+ *  player and never against a new one it was not cast on. */
+function savedDailyPlayer(saved: DailySave | null, date: string): HofPlayer | null {
+  if (!saved) return null;
+  if (saved.playerId) return hofPlayers.find(p => p.id === saved.playerId) ?? null;
+  return hofPlayers[dateSeedOf(date) % hofPlayers.length];
 }
 
 /** Round 645: one vote's score, the rule the board has always used: the right
@@ -69,25 +80,36 @@ export function hofVoteScore(player: HofPlayer, v: 'hof' | 'bust', hintsRevealed
   return correctVote ? Math.max(0, BASE_SCORE - hintsRevealed * HINT_COST) : 0;
 }
 
-function loadDailyState() {
+interface DailySave {
+  userVote: 'hof' | 'bust';
+  hintsRevealed: number;
+  score: number;
+  /** Round 645: the player the vote was cast on. */
+  playerId?: string;
+}
+
+function loadDailyState(): DailySave | null {
   const today = getTodayET();
   const key = `${STORAGE_PREFIX}daily-${today}`;
   try {
     const raw = localStorage.getItem(key);
-    if (raw) return JSON.parse(raw) as { userVote: 'hof' | 'bust'; hintsRevealed: number; score: number };
+    if (raw) return JSON.parse(raw) as DailySave;
   } catch { /* ignore */ }
   return null;
 }
 
-function saveDailyState(userVote: string, hintsRevealed: number, score: number) {
+function saveDailyState(userVote: string, hintsRevealed: number, score: number, playerId: string) {
   const today = getTodayET();
   const key = `${STORAGE_PREFIX}daily-${today}`;
-  localStorage.setItem(key, JSON.stringify({ userVote, hintsRevealed, score }));
+  localStorage.setItem(key, JSON.stringify({ userVote, hintsRevealed, score, playerId }));
 }
 
 export function useHofOrBust(): HofState {
-  const dailyPlayer = useMemo(() => getDailyPlayer(), []);
   const saved = useMemo(() => loadDailyState(), []);
+  const dailyPlayer = useMemo(() => {
+    const today = getTodayET();
+    return savedDailyPlayer(saved, today) ?? dailyHofPlayer(today);
+  }, [saved]);
 
   const [mode, setMode] = useState<HofMode>('daily');
   const [unlimitedIndex, setUnlimitedIndex] = useState(0);
@@ -96,10 +118,12 @@ export function useHofOrBust(): HofState {
   const [score, setScore] = useState(saved?.score ?? 0);
   const [communityVotes, setCommunityVotes] = useState<{ hof: number; bust: number } | null>(null);
 
+  /* Round 645: unlimited walks everyone but today's daily player, so its
+     first card is never the answer to the daily it follows. */
   const unlimitedPlayer = useMemo(() => {
-    const seed = getDateSeed() + unlimitedIndex + 1;
-    return hofPlayers[seed % hofPlayers.length];
-  }, [unlimitedIndex]);
+    const others = hofPlayers.filter(p => p.id !== dailyPlayer.id);
+    return others[(getDateSeed() + unlimitedIndex) % others.length];
+  }, [unlimitedIndex, dailyPlayer]);
 
   const player = mode === 'daily' ? dailyPlayer : unlimitedPlayer;
   const status: 'voting' | 'revealed' = userVote ? 'revealed' : 'voting';
@@ -134,7 +158,7 @@ export function useHofOrBust(): HofState {
     const s = hofVoteScore(player, v, hintsRevealed);
     setScore(s);
 
-    if (mode === 'daily') saveDailyState(v, hintsRevealed, s);
+    if (mode === 'daily') saveDailyState(v, hintsRevealed, s, player.id);
 
     // Store community vote
     supabase.from('hof_votes').insert({ player_id: player.id, vote: v }).then();
