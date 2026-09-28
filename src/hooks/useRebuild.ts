@@ -93,6 +93,10 @@ export interface RebuildState {
   /** Round 645: the points this seat's window scores; the first human seat's
    *  are the ones recorded. */
   points: number;
+  /** Round 645: whether this seat's points are the ones the site records (a
+   *  one seat table, or the first human seat at a fuller one). The hand over
+   *  card says so when they are not, rather than show points nothing keeps. */
+  pointsRecorded: boolean;
   shareText: string;
   /** What the XI would read right now with this manager in charge. */
   managerReading: (m: ManagerOption) => number;
@@ -458,7 +462,9 @@ export function useRebuild(): RebuildState {
 
   /* The finish the site records: the run at a one seat table, the first
      human's run at a fuller one, and only once the season has been played. */
-  const firstHumanRun = tbl.seats.find(s => s.kind === 'human')?.run ?? null;
+  const firstHuman = tbl.seats.find(s => s.kind === 'human') ?? null;
+  const firstHumanRun = firstHuman?.run ?? null;
+  const pointsRecorded = solo || (firstHuman !== null && firstHuman.index === tbl.turn);
   const scored = solo ? run : firstHumanRun;
   const scoredRating = scored ? loop.ratingOf(scored) : 0;
   /* Round 477: one definition of finished, in src/lib/rebuildSave.ts, because
@@ -497,7 +503,7 @@ export function useRebuild(): RebuildState {
     phase, loading, clubs, club: seat?.club ?? null, preset, setPreset, chooseClub, reset,
     run,
     seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason: tbl.season,
-    startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, points, shareText,
+    startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, points, pointsRecorded, shareText,
     managerReading, offerPrice, canRedeal,
     pickFinance, toManager, hireManager, keepManager: KEEP_MANAGER, setFormation,
     spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun,

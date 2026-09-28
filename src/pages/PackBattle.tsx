@@ -256,7 +256,9 @@ const PackBattle = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 items-stretch mb-5">
-              {card(bankedCard, true, 'Banked')}
+              {/* Round 645: nothing is banked until a call lands (packScore), so
+                  the free opening card is not labelled banked either. */}
+              {card(bankedCard, true, calls.some(c => c === true) ? 'Banked' : 'Opening card (not banked)')}
               <div className="self-center text-muted-foreground font-bold text-sm shrink-0">VS</div>
               {card(
                 nextCard,

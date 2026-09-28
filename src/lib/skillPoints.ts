@@ -33,15 +33,17 @@
  *   zero     what the worst choices earn on the same board
  *   perfect  what a perfect run earns, and records unchanged
  *
- * A board where the worst choices do as well as the perfect ones leaves no
- * room for skill, so nothing below perfect is earned on it. A score at or
- * past `perfect` keeps its own value: `perfect` is sometimes a greedy best
- * rather than a proven maximum, and a player who beats it keeps what he beat
- * it by.
+ * A score at or past `perfect` that is also past `zero` keeps its own value:
+ * `perfect` is sometimes a greedy best rather than a proven maximum, and a
+ * player who beats it keeps what he beat it by. A board where the worst
+ * choices do as well as the perfect ones leaves no room for skill, so on it
+ * nothing up to what zero skill earns is paid: skillPoints(81, 80, 80) is 81,
+ * a run that beat both ends of the board, while a Rebuild club that walks in
+ * at the 99 ceiling records 0 for holding it (zero and perfect are both 990).
  */
 export function skillPoints(score: number, zero: number, perfect: number): number {
   if (!Number.isFinite(score) || !Number.isFinite(zero) || !Number.isFinite(perfect)) return 0;
+  if (score >= perfect && score > zero) return Math.round(score);
   if (!(perfect > zero)) return 0;
-  if (score >= perfect) return Math.round(score);
   return Math.max(0, Math.round((perfect * (score - zero)) / (perfect - zero)));
 }
