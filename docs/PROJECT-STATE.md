@@ -1,5 +1,59 @@
 # Project state
 
+## LIVE 2026-09-28: Release E (662 to 667), main `cf18c92a`
+
+Assembled and gated by the desktop Claude lane in the CRLF gate clone (`release-e`, then
+`release-e2` in a worktree of it for the final fixes), pushed to main as a fast forward from
+`22bc0f7e`. **douknowball.com is serving it:** deployment `3c8e3e1f-0a61-449a-8b21-de3c6fa35a20`,
+called only after `get_project` showed `latest_commit_sha` `cf18c92a`. The live entry moved from
+`index-DLcJd_J8.js` to `index-BdV50HkD.js` (Lovable's own build; the local build of the same commit
+names it `index-R4SzqZCL.js`, so a hash is not proof here). Proof by content: the live entry bundle
+carries `dukb-reloaded-stale-chunk` and the `vite:preloadError` listener, and `/perfect-season-nba`
+serves the new 82-0 line with the old one gone. Before and after screenshots of the NHL card and
+the guide line were sent to the owner.
+
+- **662 to 666, the Higher or Lower family tells the truth.** NHL (26 values, 52 of 903 matchups
+  had been inverted, now 0), NBA (11 values), and the MLB, NFL and tennis records, all held to
+  their source tables by one shared fence (`scripts/lib/higherLowerFence.mjs`, driven by
+  `simHigherLowerFacts`). Every card says what season its total is through. College football is
+  documented open (its table is missing 33 quarterbacks).
+- **667, the player reports of 2026-09-21 to 27.** Defenders keep clean sheets in Soccer Career; a
+  tab left open across a deploy reloads once on a stale chunk instead of painting "This page
+  broke" (the likely cause of both crash reports), and stands down under the prerenderer; an event
+  card survives a reload (JSON had been dropping its choice functions); Diogo Jota is never dealt
+  as a current player (`src/data/notCurrentPlayers.ts`, one list for every pool); Alisson's
+  Internacional 2015 and 2016 are in the career data (migration applied, the fallback file
+  re-baked from the table byte for byte); the 82-0 guide line states the measured odds.
+- **Six player reports marked resolved** in `question_reports`: the two Soccer Career crashes, the
+  Club Manager tactic crash, the 82-0 report, Alisson, and clean sheets. Who Am I (2026-09-26) and
+  World XI (2026-09-21) stay open until Rounds 668 and 669 ship; the four idea reports stay open.
+
+**Gates.** tsc 0. `build:seo` exit 0 twice (169 routes, 0 failed; the final build re-dated one
+page, Perfect Season NBA, whose text changed). Full node suite on `1ace60f7`: **340 of 345**. The
+five reds were all real and all fixed before the push: simCareerCleanSheets did not parse (a
+backslash lost on the way into the file, which also reddened simHarnessAnchors), the career
+fallback header still counted 3,608 rows, the search index predated the 82-0 edit, and
+simNoZeroFacts' own sweep did not apply the not current list (it does now, with a control,
+`deadlisted`, that puts Jota back and must go red). On the final tree: the five, the Round 667
+fences and every snapshot reader in CLAUDE.md, **25 of 25 green**.
+
+**Browser group: 46 of 65 green, and the 19 reds are main's, not this release's.** Measured, not
+assumed: `origin/main` was built in its own worktree and the same 19 harnesses run on both builds
+one after the other. 18 fail identically on both; `playGmPress` passes on both (it was a timeout
+under load in the full run); `playSeasonReveal` fails on both, at a different step each run (a
+timeout, three runs on each build). The 19 are debt nobody had recorded, because Release D ran only
+five browser harnesses:
+`playCareerHub` (the NFL and NBA hub shows six boxes, the harness expects five),
+`playCareerPress`, `playClubManager`, `playDealDesk` (a signing never lands in the squad),
+`playEra2005` and `playEra2015` (named real players missing from era squads), `playFlagshipLazy`
+and `playTycoonGearFit` (the harness needs a Linux temp path or an env var), `playFootballConnect4Failures`
+(two headings match), `playLightMode` and `sweepContrast` (contrast floors: the Trending chip at
+4.17, Club Manager's REAL DATA at 4.45, unlabelled text inputs on the three fight games),
+`playNationalities`, `playSeasonReveal`, `playStartingXi`, `playWc2026Reset`, `playWilderness`
+(timeouts or a save shape the harness doctors), `simMobileChrome` (the signed in bar), and
+`sweepWeight` (five routes 5K to 15K over their JavaScript budgets). **Round 672 should clear
+these**, each fixed or its harness corrected, with the reason written down.
+
 ## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
 
 Assembled and gated by the desktop Claude lane in the CRLF gate clone on `release-d`, pushed to
