@@ -4,6 +4,7 @@ import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { F1DriverSearch } from './F1DriverSearch';
 import { F1DriverHowToPlay } from './F1DriverHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES } from '@/types/f1Driver';
 
@@ -210,6 +211,8 @@ export function F1DriverBoard() {
                 <p className="text-zinc-400">Better luck next time!</p>
               </>
             )}
+
+            <UnrankedNote ranked={gameState.mode === 'daily'} />
 
             <ShareButtons score={shareScore} gameName="Guess The F1 Driver" gamePath="/f1-driver" />
 

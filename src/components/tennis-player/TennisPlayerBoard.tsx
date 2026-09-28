@@ -4,6 +4,7 @@ import { useTennisPlayer } from '@/hooks/useTennisPlayer';
 import { TennisPlayerSearch } from './TennisPlayerSearch';
 import { TennisPlayerHowToPlay } from './TennisPlayerHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES } from '@/types/tennisPlayer';
 
@@ -213,6 +214,8 @@ export function TennisPlayerBoard() {
                 <p className="text-green-400">Better luck next time!</p>
               </>
             )}
+
+            <UnrankedNote ranked={gameState.mode === 'daily'} />
 
             <ShareButtons score={shareScore} gameName="Guess The Tennis Player" gamePath="/guess-tennis-player" />
 

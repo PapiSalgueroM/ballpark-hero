@@ -222,6 +222,7 @@ export default function NbaStatLine() {
 
         {isDone && result && target && (
           <ResultScreen
+            ranked={g.mode === 'daily'}
             won={hit}
             outcomeEmoji={hit ? '🎯' : score >= 70 ? '📊' : '🧱'}
             headline={

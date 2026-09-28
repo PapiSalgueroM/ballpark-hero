@@ -619,6 +619,7 @@ const RarityRound = () => {
         {phase === 'done' && (
           <div className="mt-4">
             <ResultScreen
+              ranked={playMode === 'daily'}
               outcomeEmoji={outcomeEmoji}
               headline={resultHeadline}
               statLine={resultStatLine}

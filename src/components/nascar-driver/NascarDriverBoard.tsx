@@ -4,6 +4,7 @@ import { useNascarDriver } from '@/hooks/useNascarDriver';
 import { NascarDriverSearch } from './NascarDriverSearch';
 import { NascarDriverHowToPlay } from './NascarDriverHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES } from '@/types/nascarDriver';
 
@@ -215,6 +216,8 @@ export function NascarDriverBoard() {
                 <p className="text-neutral-400">Better luck next time!</p>
               </>
             )}
+
+            <UnrankedNote ranked={gameState.mode === 'daily'} />
 
             <ShareButtons score={shareScore} gameName="Guess The NASCAR Driver" gamePath="/guess-nascar-driver" />
 

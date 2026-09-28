@@ -135,6 +135,7 @@ export function ScorePredictorBoard() {
         {/* Result */}
         {isRevealed && (
           <ResultScreen
+            ranked={mode === 'daily'}
             won={guessHome === puzzle.homeScore && guessAway === puzzle.awayScore}
             outcomeEmoji="⚽"
             headline="Result Revealed"

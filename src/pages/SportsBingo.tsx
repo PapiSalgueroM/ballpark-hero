@@ -315,6 +315,7 @@ export default function SportsBingo() {
 
         {isDone && (
           <ResultScreen
+            ranked={mode === 'daily'}
             won={won}
             outcomeEmoji={won ? '🎉' : '🫠'}
             headline={

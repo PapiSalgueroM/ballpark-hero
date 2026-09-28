@@ -3,6 +3,7 @@ import { RotateCcw, X, Sparkles } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { usePerfectLineupGeneric } from '@/hooks/usePerfectLineupGeneric';
 import { LineupConfig, describeConstraint, slotGradesToEmoji } from '@/lib/perfectLineupEngine';
 import { computeChemistry, formatChemistry, ChemistryPlayer } from '@/lib/chemistry';
@@ -182,6 +183,7 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
               </span>
             )}
           </div>
+          <UnrankedNote ranked={game.mode === 'daily'} />
 
           {chemistry.totalBonus > 0 && (
             <div className="flex justify-center">

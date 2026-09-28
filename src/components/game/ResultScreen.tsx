@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 /* Round 149: the celebration kit was born in Club Manager (Round 147) and
  * graduated site-wide the next day: every one of the ~56 games ending on
@@ -65,6 +66,11 @@ interface ResultScreenProps {
   /** Numeric score for the ranked views; omit when the game has no honest
    *  single number (the row still counts for streaks and played-today). */
   completionScore?: number;
+  /** Round 645: the ranked flag the game's recorder got for this finish.
+   *  false (a free run: Unlimited, free play, a new season, versus) puts the
+   *  shared free play line under the score, because that run pays no points
+   *  and is not on today's leaderboard. Omit for a game with one mode. */
+  ranked?: boolean;
   /** Optional secondary slot rendered under the play-again button, e.g. a
    *  "come back tomorrow" note or a play-next link. */
   playNext?: ReactNode;
@@ -91,6 +97,7 @@ export function ResultScreen({
   className,
   recordCompletionOnMount = false,
   completionScore,
+  ranked,
 }: ResultScreenProps) {
   /* One row per mount: play-again unmounts and remounts this screen, which
      is a genuine second play. The ref guards re-renders, not replays. */
@@ -148,6 +155,9 @@ export function ResultScreen({
           ))}
         </div>
       )}
+
+      {/* Round 645: a free run says so, under its score. */}
+      <UnrankedNote ranked={ranked !== false} className="mt-2" />
 
       {/* 5. Emoji-grid block, ALWAYS rendered, styled not raw <pre>.
           Round 306: hidden from screen readers, which would otherwise read

@@ -58,6 +58,7 @@ const UnbeatenTab = ({ game }: { game: ReturnType<typeof usePerfectLineup> }) =>
     return (
       <div className="max-w-2xl mx-auto px-4 pb-16">
         <ResultScreen
+          ranked={false}
           won={invincible ? true : undefined}
           outcomeEmoji={invincible ? '🏆' : run.wins >= 25 ? '😤' : run.wins >= 12 ? '🔥' : '📉'}
           headline={invincible ? 'INVINCIBLES!' : `Run ended at match ${run.endedAtMatch}`}

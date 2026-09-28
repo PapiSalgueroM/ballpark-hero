@@ -5,6 +5,7 @@ import { TennisChainSearch } from './TennisChainSearch';
 import { TennisChainTimeline } from './TennisChainTimeline';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { getTennisChainMultiplier } from '@/types/tennisChain';
 import { supabase } from '@/integrations/supabase/client';
 import { GameNav } from '@/components/game/GameNav';
@@ -183,6 +184,7 @@ export function TennisChainBoard() {
               )}
 
               <div className="text-xl text-emerald-400 font-bold mb-2">Final Score: {gameState.score}</div>
+              <UnrankedNote ranked={gameState.mode === 'daily'} className="mb-2" />
               {multiplier > 1 && (
                 <div className="text-sm text-purple-400 mb-4">Includes x{multiplier} chain bonus!</div>
               )}

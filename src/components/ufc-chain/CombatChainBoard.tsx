@@ -6,6 +6,7 @@ import { ChainTimeline } from './ChainTimeline';
 import { ModeSelector } from './ModeSelector';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { getChainLengthMultiplier } from '@/types/ufcChain';
 import { supabase } from '@/integrations/supabase/client';
 import { GameNav } from '@/components/game/GameNav';
@@ -210,6 +211,7 @@ export function CombatChainBoard() {
               <div className="text-xl text-red-400 font-bold mb-2">
                 Final Score: {gameState.score}
               </div>
+              <UnrankedNote ranked={gameState.mode === 'daily'} className="mb-2" />
               
               {multiplier > 1 && (
                 <div className="text-sm text-green-400 mb-4">

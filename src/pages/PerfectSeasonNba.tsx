@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Loader2, FastForward, Dices, Trophy, Lock, EyeOff, CalendarClock } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
@@ -718,6 +719,7 @@ const PerfectSeasonNba = () => {
                     ? 'A juggernaut, but not perfect.'
                     : 'The wheel giveth, the wheel taketh.'}
                 </h2>
+                <UnrankedNote ranked={mode === 'daily'} className="mb-2" />
                 <p className="text-sm text-muted-foreground mb-3">
                   {mode === 'daily' && `Daily · ${todayStr} · `}
                   Team overall {sim.overall} · drafted in {spins} spin{spins === 1 ? '' : 's'}

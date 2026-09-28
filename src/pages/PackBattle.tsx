@@ -295,6 +295,7 @@ const PackBattle = () => {
         {phase === 'done' && (
           <div className="mt-4">
             <ResultScreen
+              ranked={playMode === 'daily'}
               won={result.cleared}
               outcomeEmoji={outcomeEmoji}
               headline={headline}

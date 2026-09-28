@@ -244,6 +244,7 @@ export default function GauntletDraft() {
 
         {isDone && run && (
           <ResultScreen
+            ranked={mode === 'daily'}
             won={run.champion}
             outcomeEmoji={run.champion ? '🏆' : run.roundsCleared >= 3 ? '🥈' : '🫠'}
             headline={run.champion ? 'Champions! The gauntlet is run!' : `Out at ${run.matches[run.matches.length - 1]?.round.name ?? 'the start'}`}

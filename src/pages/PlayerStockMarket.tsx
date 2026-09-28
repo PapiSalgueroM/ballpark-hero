@@ -274,6 +274,7 @@ export default function PlayerStockMarket() {
 
         {phase === 'done' && finish && (
           <ResultScreen
+            ranked={mode === 'daily'}
             won={finish.growth >= 1}
             outcomeEmoji={finish.growth >= 1.5 ? '🚀' : finish.growth >= 1 ? '📈' : '📉'}
             headline={finish.growth >= 1.5 ? 'The market loved you!' : finish.growth >= 1 ? 'In the green' : 'The market bit back'}

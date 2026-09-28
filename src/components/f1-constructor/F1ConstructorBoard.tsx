@@ -4,6 +4,7 @@ import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { F1ConstructorSearch } from './F1ConstructorSearch';
 import { F1ConstructorHowToPlay } from './F1ConstructorHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES } from '@/types/f1Constructor';
 
@@ -195,6 +196,8 @@ export function F1ConstructorBoard() {
                 <p className="text-zinc-400">Better luck next time!</p>
               </>
             )}
+
+            <UnrankedNote ranked={gameState.mode === 'daily'} />
 
             <ShareButtons score={shareScore} gameName="Guess The F1 Constructor" gamePath="/f1-constructor" />
 

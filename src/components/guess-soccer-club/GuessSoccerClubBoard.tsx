@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { ClubSearch } from './ClubSearch';
 import { QuestionTreeBoard } from './QuestionTreeBoard';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { GameNav } from '@/components/game/GameNav';
 import { POINTS_BY_CLUE, CLUE_LABELS } from '@/types/guessSoccerClub';
 import { Trophy, HelpCircle } from 'lucide-react';
@@ -366,6 +367,7 @@ export function GuessSoccerClubBoard() {
                   points!
                 </p>
               )}
+              <UnrankedNote ranked={gameState.mode === 'daily'} className="mt-1" />
               <p className="text-sm text-muted-foreground italic mt-3">
                 {gameState.puzzle.funFact}
               </p>

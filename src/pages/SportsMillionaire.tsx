@@ -521,6 +521,7 @@ const SportsMillionaire = () => {
         {phase === 'done' && (
           <div className="mt-4 flex justify-center">
             <ResultScreen
+              ranked={playMode === 'daily'}
               won={walkedAway ? undefined : wonTheGame}
               outcomeEmoji={wonTheGame ? '🏆' : walkedAway ? '🚪' : (finalAmount ?? 0) >= 32_000 ? '🎉' : (finalAmount ?? 0) > 0 ? '😬' : '💥'}
               headline={
