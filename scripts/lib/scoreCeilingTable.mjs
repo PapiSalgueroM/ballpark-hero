@@ -432,27 +432,33 @@ export const PERFECT_RUNS = {
 
 /**
  * Round 647's six season games, played through scoreSeason when
- * src/lib/seasonLedger.ts is on the tree. 647 scores a season against its
- * own projection, PAR plus how far it beat it, clamped at the ceiling: so
- * every record from none won to all won in each sport's season length, at
- * every round reached, against projections from a no hoper to a favourite
- * expected to win it all. The perfect runs are the unbeaten title seasons
- * projected at or under par, the seasons 647 says reach the ceiling (a
- * favourite's perfect season need not, because it was expected).
+ * src/lib/seasonLedger.ts is on the tree. The 647 fix scores a season by
+ * the share of its projection's seasons past the bar that it beat: so every
+ * record from none won to all won in each sport's season length, at every
+ * round reached, against projections the ledger builds (expectationFromRuns)
+ * from projected seasons spread from a no hoper's to a favourite's. The
+ * perfect runs are the unbeaten title seasons against a projection that
+ * never went perfect itself, the seasons the fix pays the ceiling (one that
+ * did is tied by a perfect season: see THE LIMIT IT CANNOT HELP there).
  */
 export function seasonRuns(mods) {
-  const { scoreSeason, W_FORM, W_TITLE, PAR } = mods[SEASON_LEDGER[0]];
+  const { scoreSeason, expectationFromRuns, PROJECTION_RUNS } = mods[SEASON_LEDGER[0]];
   const out = [];
   const projections = [];
-  for (const share of [0, 0.25, 0.5, 0.75, 1]) for (const ladder of [0, 10, 26, 50]) projections.push({ share, ladder });
+  for (const [lo, hi] of [[0, 20], [10, 45], [30, 70], [50, 90], [70, 99], [80, 100]]) {
+    const runs = range(0, PROJECTION_RUNS - 1).map(i => {
+      const value = Math.round((lo + (hi - lo) * i / (PROJECTION_RUNS - 1)) * 1e4) / 1e4;
+      return { share: value / 100, stage: 0, value };
+    });
+    projections.push({ lo, hi, exp: expectationFromRuns(runs, 1) });
+  }
   for (const [games, rounds] of [[12, 4], [17, 4], [30, 6], [82, 4], [162, 4]]) {
     for (const wins of [0, Math.floor(games / 2), games - 1, games]) {
       for (const stage of range(0, rounds + 1)) {
-        for (const exp of projections) {
+        for (const { lo, hi, exp } of projections) {
           const r = { season: 1, team: 'Any', wins, games, rounds, stage };
-          const atOrUnderPar = W_FORM * exp.share + Math.min(exp.ladder, W_TITLE) <= PAR;
-          out.push(run(`${wins} of ${games} won, round ${stage} of ${rounds}, projected ${exp.share} and ${exp.ladder}`,
-            scoreSeason(r, exp), wins === games && stage === rounds + 1 && atOrUnderPar));
+          out.push(run(`${wins} of ${games} won, round ${stage} of ${rounds}, projected ${lo} to ${hi}`,
+            scoreSeason(r, exp), wins === games && stage === rounds + 1 && Math.max(...exp.top) < 100));
         }
       }
     }
