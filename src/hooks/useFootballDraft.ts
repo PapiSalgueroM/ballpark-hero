@@ -30,6 +30,18 @@ function calcPoints(actual: number | null, guessed: number | null, cluesUsed: nu
   return 0;
 }
 
+/**
+ * Round 646: the most a Football Draft daily can record. Every player's round
+ * called exactly before any clue pays MAX_PER_PLAYER (30), a daily is one
+ * puzzle's players, and the record is the sum times 10: 30 x the biggest
+ * puzzle's player count x 10. Every puzzle has 5 players today, so 1500.
+ * game_score_caps holds it for football-draft (scripts/simCapsAreCeilings.mjs).
+ */
+export function footballDraftCeiling(): number {
+  const most = Math.max(...draftGuesserPuzzles.map(p => p.players.length));
+  return most * calcPoints(1, 1, 0) * 10;
+}
+
 type Puzzle = (typeof draftGuesserPuzzles)[number];
 
 export function useFootballDraft() {

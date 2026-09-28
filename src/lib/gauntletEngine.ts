@@ -288,8 +288,28 @@ export function runGauntlet<P>(config: GauntletConfig<P>, squad: (P | null)[]): 
     cleared += 1;
   }
   const champion = cleared === config.rounds.length;
-  const score = Math.min(100, cleared * 16 + (champion ? 20 : 0));
+  const score = gauntletScore(cleared, champion);
   return { rating, matches, roundsCleared: cleared, champion, score };
+}
+
+/** Round 646: the scoring rule above, named, so the ceiling reads the same rule. */
+export const GAUNTLET_ROUND_POINTS = 16;
+export const GAUNTLET_TROPHY_POINTS = 20;
+export const GAUNTLET_SCORE_MAX = 100;
+
+function gauntletScore(cleared: number, champion: boolean): number {
+  return Math.min(GAUNTLET_SCORE_MAX, cleared * GAUNTLET_ROUND_POINTS + (champion ? GAUNTLET_TROPHY_POINTS : 0));
+}
+
+/**
+ * Round 646: the most a gauntlet run can record, a champion: every round of
+ * the ladder cleared at 16 plus 20 for the trophy, clamped at 100. Five rounds
+ * make exactly 100 in all four sports. game_score_caps holds it for
+ * gauntlet-draft and the NBA, NFL and MLB gauntlets
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export function gauntletCeiling<P>(config: GauntletConfig<P>): number {
+  return gauntletScore(config.rounds.length, true);
 }
 
 /**
@@ -361,7 +381,7 @@ function validateDailyRun<P>(config: GauntletConfig<P>, fields: Record<string, u
   const cleared = matches.filter(m => m.won).length;
   const consistent = roundsCleared === cleared
     && champion === (cleared === config.rounds.length)
-    && score === Math.min(100, cleared * 16 + (champion ? 20 : 0));
+    && score === gauntletScore(cleared, champion as boolean);
   if (!consistent) return null;
   return { rating: rating as number, matches, roundsCleared: cleared, champion: champion as boolean, score: score as number };
 }

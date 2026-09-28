@@ -93,6 +93,10 @@ export function simulateUnbeatenRun(rating: number, seed: number): UnbeatenRunRe
   return { matches, played, wins, draws, points, invincible, endedAtMatch };
 }
 
+/** Round 646: the most a Go Unbeaten run can bank, every one of the
+    SEASON_MATCHES won at 3: 114. */
+export const UNBEATEN_MAX_POINTS = SEASON_MATCHES * 3;
+
 /** Plain-language final verdict line for the result screen. */
 export function unbeatenVerdict(result: UnbeatenRunResult): string {
   if (result.invincible) return 'Invincibles! A full 38 match season with no losses.';

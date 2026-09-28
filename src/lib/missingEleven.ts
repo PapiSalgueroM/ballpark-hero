@@ -724,3 +724,7 @@ export function elevenHintForLevel(level: ElevenHintLevel, candidate: ElevenBlan
 }
 
 export const ELEVEN_SCORES = [100, 70, 40] as const;
+/** Round 646: the most a Missing Eleven daily can record, a win with no miss,
+    the top of ELEVEN_SCORES. game_score_caps holds it for missing-eleven
+    (scripts/simCapsAreCeilings.mjs). */
+export const MISSING_ELEVEN_CEILING = Math.max(...ELEVEN_SCORES);

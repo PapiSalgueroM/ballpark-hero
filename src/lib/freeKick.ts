@@ -29,7 +29,7 @@
  */
 import {
   buildLadder, clamp, daySeed, lehmer, sprayFor as arcadeSpray,
-  ROUNDS_PER_RUN, type SprayConfig,
+  ROUNDS_PER_RUN, LEHMER_MAX, type SprayConfig,
 } from './arcade';
 
 export { daySeed, lehmer, ROUNDS_PER_RUN };
@@ -78,21 +78,39 @@ export interface Aim {
   curve: number;
 }
 
+/** One kick of the ladder: t runs 0 to 1 up the run, i is its index. */
+function kickAt(t: number, rng: () => number, i: number): KickSetup {
+  const distance = Math.round((11 + t * 14) * 10) / 10;
+  const wallSize = i === 0 ? 0 : Math.min(5, 1 + Math.floor(t * 5 + rng() * 0.9));
+  const keeperSkill = clamp(0.28 + t * 0.42 + (rng() - 0.5) * 0.12, 0.2, 0.82);
+  const keeperLean = Math.round((rng() * 2 - 1) * 100) / 100;
+  return {
+    distance,
+    wallSize,
+    keeperSkill,
+    keeperLean,
+    label: i === 0 ? 'Penalty spot, no wall' : `${distance} m, ${wallSize} in the wall`,
+  };
+}
+
 /** The ten kicks of a run: further out, more men in the wall, better keepers. */
 export function buildRun(seed: number): KickSetup[] {
-  return buildLadder(seed, ROUNDS_PER_RUN, (t, rng, i) => {
-    const distance = Math.round((11 + t * 14) * 10) / 10;
-    const wallSize = i === 0 ? 0 : Math.min(5, 1 + Math.floor(t * 5 + rng() * 0.9));
-    const keeperSkill = clamp(0.28 + t * 0.42 + (rng() - 0.5) * 0.12, 0.2, 0.82);
-    const keeperLean = Math.round((rng() * 2 - 1) * 100) / 100;
-    return {
-      distance,
-      wallSize,
-      keeperSkill,
-      keeperLean,
-      label: i === 0 ? 'Penalty spot, no wall' : `${distance} m, ${wallSize} in the wall`,
-    };
-  });
+  return buildLadder(seed, ROUNDS_PER_RUN, kickAt);
+}
+
+/**
+ * Round 646: the most any day's run can pay, from the rules rather than from
+ * the dates tried so far. maxRunScore already scores every kick into the top
+ * corner, so the only thing a day changes is the wall and the keeper, and a
+ * bigger wall and a better keeper both pay more. The ladder's generator never
+ * returns more than LEHMER_MAX, so drawing everything at LEHMER_MAX gives every
+ * kick its biggest wall and best keeper: 3490. The cap it replaces, 3424, was
+ * the best of 60 dates, and 800 dates already reach 3445, so honest perfect
+ * runs were being clipped. game_score_caps holds it for free-kick
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export function freeKickCeiling(): number {
+  return maxRunScore(buildLadder(1, ROUNDS_PER_RUN, (t, _rng, i) => kickAt(t, () => LEHMER_MAX, i)));
 }
 
 /**

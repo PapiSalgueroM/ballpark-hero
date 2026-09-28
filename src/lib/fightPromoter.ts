@@ -427,6 +427,13 @@ function refreshPool(st: PromoterState): Fighter[] {
 
 export interface PromoterVerdict { score: number; tier: string; bullets: string[] }
 
+/**
+ * Round 646: the top of the promoter's verdict, the clamp in promoterVerdict
+ * reads it, and so the most a Fight Promoter can record. game_score_caps holds
+ * it for fight-promoter (scripts/simCapsAreCeilings.mjs).
+ */
+export const FIGHT_PROMOTER_CEILING = 100;
+
 export function promoterVerdict(st: PromoterState): PromoterVerdict {
   const shows = st.history.length;
   const profitable = st.history.filter(h => h.profit > 0).length;
@@ -435,7 +442,7 @@ export function promoterVerdict(st: PromoterState): PromoterVerdict {
     st.reputation * 0.62 +
     Math.min(24, st.money * 5) +
     Math.min(14, profitable * 0.9),
-    0, 100,
+    0, FIGHT_PROMOTER_CEILING,
   );
   const tier = score >= 86 ? 'The Big Time'
     : score >= 68 ? 'A Real Promoter'

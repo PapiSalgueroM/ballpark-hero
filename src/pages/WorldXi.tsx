@@ -43,6 +43,15 @@ type Phase = 'boot' | 'error' | 'setup' | 'playing' | 'won' | 'lost';
 const SPIN_MS = 1500;
 const SPIN_MS_TIMED = 1000;
 
+/**
+ * Round 646: the most a World XI run can record, its filled slots, so every
+ * slot of the biggest formation: 11. game_score_caps holds it for world-xi
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export function worldXiCeiling(): number {
+  return Math.max(...FORMATIONS.map(f => f.slots.length));
+}
+
 const WorldXi = () => {
   const [phase, setPhase] = useState<Phase>('boot');
   const [data, setData] = useState<WorldXiData | null>(null);

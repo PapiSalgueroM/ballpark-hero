@@ -8,6 +8,16 @@ export const MAX_GUESSES = 6;
 /** Win threshold: guess within this fractional distance of true value. */
 export const WIN_THRESHOLD = 0.05;
 
+/**
+ * Round 646: the most a Guess the Transfer Value daily can record. A win pays
+ * 150 for every guess left counting the winning one, so a first guess win is
+ * (6 - 1 + 1) x 150 = 900 (dailyScore below). The route redirects home since
+ * it retired, but the hook can still send the key, so its cap row stays true.
+ * game_score_caps holds it for guess-transfer-value
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export const GUESS_TRANSFER_VALUE_CEILING = MAX_GUESSES * 150;
+
 export interface ValueGuess {
   value: number;            // user's guess in USD
   direction: 'higher' | 'lower' | 'exact'; // true value is X relative to guess

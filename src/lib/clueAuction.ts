@@ -26,6 +26,14 @@ import { flagFor } from '@/lib/dealPlayers';
 export const START_BANK = 100;
 export const WRONG_GUESS_COST = 10;
 
+/**
+ * Round 646: the most a Clue Auction round can record. A win records the bank
+ * left, the bank starts at START_BANK and every clue and every wrong guess
+ * only takes from it, so the best is a win before buying anything: 100.
+ * game_score_caps holds it for clue-auction (scripts/simCapsAreCeilings.mjs).
+ */
+export const CLUE_AUCTION_CEILING = START_BANK;
+
 export type ClueId =
   | 'nationality'
   | 'position'

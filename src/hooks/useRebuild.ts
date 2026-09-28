@@ -20,6 +20,15 @@ import {
 import { markRestoredFinish } from '@/lib/restoredFinish';
 
 /**
+ * Round 646: the most a Rebuild run can record, the scored seat's rating
+ * times 10, and loop.ratingOf clamps the rating at REBUILD_RATING_MAX (99):
+ * 990. game_score_caps holds it for rebuild (scripts/simCapsAreCeilings.mjs).
+ */
+export function rebuildCeiling(): number {
+  return loop.REBUILD_RATING_MAX * 10;
+}
+
+/**
  * Round 456: the hook is a thin wrapper now. Every rule lives in
  * src/lib/rebuildLoop.ts as a pure function over a RunState; this file owns
  * the network (clubs, squads, the market), the two timers (the wheel's spin

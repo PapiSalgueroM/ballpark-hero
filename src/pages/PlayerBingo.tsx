@@ -23,8 +23,23 @@ import {
   fetchBingoData,
   generateBoard,
   layoutGrid,
+  winningLines,
 } from '@/lib/playerBingo';
 import { FirstLineBanner, LineFlash } from '@/components/player-bingo/LineBanner';
+
+/** Round 646: the run's points, named so the ceiling reads the same rule. */
+const POINTS_PER_LINE = 100;
+const BLACKOUT_BONUS = 500;
+
+/**
+ * Round 646: the most a Player Bingo run can record, a blackout: every one of
+ * the 12 lines (winningLines) at 100 plus the 500 blackout bonus, 1700.
+ * game_score_caps holds it for player-bingo, set by the Round 644 migration
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export function playerBingoCeiling(): number {
+  return winningLines().length * POINTS_PER_LINE + BLACKOUT_BONUS;
+}
 
 /** Why the run ended, for result-screen copy. */
 type EndReason = 'deck' | 'strikes' | 'banked' | 'blackout' | null;
@@ -136,7 +151,7 @@ const PlayerBingo = () => {
   // a +500 bonus on top.
   const maxStrikes = START_LIVES + (extended ? 1 : 0);
   const blackout = tilesFilled >= BOARD_SIZE;
-  const score = linesCompleted * 100 + (blackout ? 500 : 0);
+  const score = linesCompleted * POINTS_PER_LINE + (blackout ? BLACKOUT_BONUS : 0);
 
   /** Move to the next reveal, or end the run if the deck is spent. */
   const advanceOrEnd = (linesNow: number) => {

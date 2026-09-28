@@ -4,6 +4,15 @@ import { TeammatesPair } from '@/types/teammates';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const ROUNDS = 10;
+/** Round 646: the record pays this much for every right call. */
+const POINTS_PER_CALL = 100;
+
+/**
+ * Round 646: the most a Teammates or Not game can record: every one of the
+ * ROUNDS called right at 100, 1000. game_score_caps holds it for teammates
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export const TEAMMATES_CEILING = ROUNDS * POINTS_PER_CALL;
 
 function buildRound(): TeammatesPair[] {
   const easy = teammatesPairs.filter(p => p.difficulty === 1).sort(() => Math.random() - 0.5);
@@ -61,7 +70,7 @@ export function useTeammates() {
     return `Teammates or Not? ${emoji} ${score}/${ROUNDS}\n\nhttps://douknowball.com/teammates`;
   }, [gameOver, score]);
 
-  useGameCompletion('teammates', gameOver, score * 100);
+  useGameCompletion('teammates', gameOver, score * POINTS_PER_CALL);
 
   return {
     currentPair,

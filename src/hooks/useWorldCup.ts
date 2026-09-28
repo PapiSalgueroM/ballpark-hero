@@ -25,6 +25,13 @@ import { getTodayET } from '@/lib/dateUtils';
 const MAX_CLUES = 7;
 const POINTS_BY_CLUE: Record<number, number> = { 1: 1000, 2: 800, 3: 600, 4: 400, 5: 300, 6: 200, 7: 100 };
 
+/**
+ * Round 646: the most a World Cup daily can record, a win with one clue
+ * showing, the top of POINTS_BY_CLUE: 1000. game_score_caps holds it for
+ * world-cup (scripts/simCapsAreCeilings.mjs).
+ */
+export const WORLD_CUP_CEILING = Math.max(...Object.values(POINTS_BY_CLUE));
+
 // Seeded PRNG, deterministic per seed+index
 function seededRandom(seed: number, index: number): number {
   let s = (seed ^ (index * 2654435761)) >>> 0;

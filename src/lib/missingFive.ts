@@ -503,3 +503,7 @@ export function fiveHintForLevel(level: FiveHintLevel, candidate: FiveBlankCandi
 }
 
 export const FIVE_SCORES = [100, 70, 40] as const;
+/** Round 646: the most a Missing Five daily can record, a win with no miss,
+    the top of FIVE_SCORES. game_score_caps holds it for missing-five
+    (scripts/simCapsAreCeilings.mjs). */
+export const MISSING_FIVE_CEILING = Math.max(...FIVE_SCORES);

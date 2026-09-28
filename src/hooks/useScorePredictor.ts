@@ -35,11 +35,18 @@ function getDailyPuzzle(): ScorePredictorPuzzle {
   return scorePredictorPuzzles[idx];
 }
 
+/**
+ * Round 646: the most a Score Predictor daily can record, the exact score,
+ * the top of calcScore's ladder (1000, then 700, 400, 200, 50).
+ * game_score_caps holds it for score-predictor (scripts/simCapsAreCeilings.mjs).
+ */
+export const SCORE_PREDICTOR_CEILING = 1000;
+
 function calcScore(
   guessH: number, guessA: number,
   actualH: number, actualA: number,
 ): number {
-  if (guessH === actualH && guessA === actualA) return 1000;
+  if (guessH === actualH && guessA === actualA) return SCORE_PREDICTOR_CEILING;
 
   const guessWinner = guessH > guessA ? 'home' : guessH < guessA ? 'away' : 'draw';
   const actualWinner = actualH > actualA ? 'home' : actualH < actualA ? 'away' : 'draw';

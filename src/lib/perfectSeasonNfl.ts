@@ -15,6 +15,10 @@ export const NFL_SLOTS: SeasonSlot[] = [
 ];
 
 export const NFL_GAMES = 17;
+/** Round 646: the most a Perfect Season NFL run can record, its wins, every
+    one of NFL_GAMES won: 17. game_score_caps holds it for perfect-season-nfl
+    (scripts/simCapsAreCeilings.mjs). */
+export const PERFECT_SEASON_NFL_CEILING = NFL_GAMES;
 
 export interface NflDecadeDef {
   id: string;

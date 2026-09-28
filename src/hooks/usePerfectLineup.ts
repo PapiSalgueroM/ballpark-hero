@@ -7,13 +7,26 @@ import {
   eligiblePlayers,
   simulate,
   FORMATION_SIZE,
+  LINEUP_RATING_MAX,
 } from '@/data/perfectLineup';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
   UnbeatenRunResult,
   simulateUnbeatenRun,
+  UNBEATEN_MAX_POINTS,
 } from '@/lib/unbeatenMode';
 import { randomSeed } from '@/lib/perfectSeason';
+
+/**
+ * Round 646: the most a Perfect Lineup day can record. Two views record under
+ * the one key on two scales: the classic rating tops out at LINEUP_RATING_MAX
+ * (100) and a Go Unbeaten season at UNBEATEN_MAX_POINTS (38 wins, 114), so the
+ * ceiling is the larger, 114, and a perfect classic lineup records 100 of it.
+ * game_score_caps holds it for perfect-lineup (scripts/simCapsAreCeilings.mjs).
+ */
+export function perfectLineupCeiling(): number {
+  return Math.max(LINEUP_RATING_MAX, UNBEATEN_MAX_POINTS);
+}
 
 export type Phase = 'picking' | 'result';
 export type Mode = 'daily' | 'unlimited';

@@ -265,6 +265,14 @@ export function buildRound(def: CompetitionDef, rows: ChampRow[], label: string,
 export const DAILY_ROUNDS = 10;
 
 /**
+ * Round 646: the most a Champ or Not daily can record. The recorder counts
+ * the right answers, one a round, and a daily is at most DAILY_ROUNDS rounds:
+ * 10. game_score_caps holds it for champ-or-not
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export const CHAMP_OR_NOT_CEILING = DAILY_ROUNDS;
+
+/**
  * The day's competition order: every competition exactly once, shuffled,
  * then extra draws (no back-to-back repeats) up to DAILY_ROUNDS.
  */

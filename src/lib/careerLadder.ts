@@ -30,6 +30,14 @@ export const WRONG_GUESS_PENALTY = 100;
 export const SCORE_FLOOR = 100;
 
 /**
+ * Round 646: the most a Career Ladder daily can record. careerScore starts at
+ * BASE_SCORE and only takes away (reveals past the first stint, wrong
+ * guesses), so the best is a first stint, no miss win: 1000. game_score_caps
+ * holds it for career-ladder (scripts/simCapsAreCeilings.mjs).
+ */
+export const CAREER_LADDER_CEILING = BASE_SCORE;
+
+/**
  * Daily-mode action log, persisted to localStorage via useDailyPuzzle.
  * Mirrors the CareerAction pattern in useCareerGame.ts (the sibling
  * "Career Path" game): a flat list of actions replayed to derive state,

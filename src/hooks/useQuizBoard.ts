@@ -30,6 +30,16 @@ export interface QuizBoardState {
 }
 
 const BOARD_CATEGORIES = 5;
+
+/**
+ * Round 646: the most a Quiz Board day can bank: every tile of every column
+ * answered right, BOARD_CATEGORIES x (200 + 400 + 600 + 800 + 1000) = 15000.
+ * game_score_caps holds it for this game's completion key
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export function quizBoardCeiling(): number {
+  return BOARD_CATEGORIES * VALUES.reduce((s, v) => s + v, 0);
+}
 /* The game is called Sports Quiz Board everywhere a player can see it, and
    since Round 305 it lives at /quiz-board (the old address redirects). This
    storage key and the completion key below keep their old spelling on

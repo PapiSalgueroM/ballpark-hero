@@ -5,7 +5,7 @@ import {
   GauntletConfig, FormationSlotLike, PICK_SIZE as ENGINE_PICK_SIZE, gRng,
   buildDraft as engineBuildDraft, dailySeedFor, squadRatingOf as engineSquadRatingOf,
   runGauntlet as engineRunGauntlet, loadDailyRun as engineLoadDailyRun,
-  saveDailyRun as engineSaveDailyRun, GauntletRun,
+  saveDailyRun as engineSaveDailyRun, GauntletRun, gauntletCeiling,
 } from '@/lib/gauntletEngine';
 export type { GauntletRun } from '@/lib/gauntletEngine';
 
@@ -127,6 +127,16 @@ function soccerConfig(pool: Player[]): GauntletConfig<Player> {
     scoreline: g => g,
     tiebreakBump: 1,
   };
+}
+
+/**
+ * Round 646: the most a soccer Gauntlet Draft run can record, the engine's
+ * gauntletCeiling over this ladder (the pool plays no part in it): five
+ * rounds at 16 and 20 for the trophy, 100. game_score_caps holds it for
+ * gauntlet-draft (scripts/simCapsAreCeilings.mjs).
+ */
+export function gauntletDraftCeiling(): number {
+  return gauntletCeiling(soccerConfig([]));
 }
 
 /**

@@ -36,6 +36,10 @@ export interface GuessNflTeamState {
 }
 
 export const POINTS_BY_CLUE = [1200, 1100, 1000, 900, 800, 700, 600, 500, 400, 300, 200, 0];
+/** Round 646: the most a game on this clue ladder can record, a right guess on
+    the first clue, the top of POINTS_BY_CLUE. game_score_caps holds it for
+    this game (scripts/simCapsAreCeilings.mjs). */
+export const SCORE_CEILING = Math.max(...POINTS_BY_CLUE);
 
 export const CLUE_LABELS = [
   'Franchise Fact',

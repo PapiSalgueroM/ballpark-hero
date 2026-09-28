@@ -29,6 +29,13 @@ export interface ShirtNumberState {
 const MAX_ATTEMPTS = 3;
 const SCORES = [1000, 600, 200];
 
+/**
+ * Round 646: the most a Shirt Number daily can record, a first attempt win,
+ * the top of SCORES: 1000. game_score_caps holds it for shirt-number
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export const SHIRT_NUMBER_CEILING = Math.max(...SCORES);
+
 export function useShirtNumber(): ShirtNumberState {
   // ---- PUZZLE POOL ----------------------------------------------------------
   // Starts as the hardcoded fallback. Replaced by Supabase data once the async

@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { Player } from '@/types/game';
 import {
-  FORMATIONS, playerRating, fetchSquadPool, filterByTopic,
+  FORMATIONS, playerRating, fetchSquadPool, filterByTopic, PLAYER_RATING_MAX,
   type Formation, type FormationSlot, type Topic,
 } from '@/lib/squadDeal';
 import { simulateSeries, type SeriesResult } from '@/lib/dartDraft';
@@ -119,6 +119,29 @@ export function moneyXiFor(pool: Player[], formation: Formation): (Player | null
   });
 }
 
+/** Round 646: the Today board's budget, in millions. */
+const TODAY_BUDGET = 1000;
+/** Round 646: the finished XI's bonuses, named so the ceiling below reads them. */
+const UNSPENT_PER_POINT = 200;
+const CRITERION_BONUS = 10;
+const SERIES_WIN_BONUS = 15;
+const SERIES_DRAW_BONUS = 5;
+
+/**
+ * Round 646: the most a Budget Builder run can record. The team rating is an
+ * average of playerRating, so at most PLAYER_RATING_MAX (96); unspent money
+ * pays a point per 200, and the most any board hands you is the Today board's
+ * 1000 (the historic boards are 62 percent of their own era's priciest XI,
+ * which the Round 315 note below measured well under a billion), so at most 5;
+ * the day's criterion pays 10 and a won final 15. 96 + 5 + 10 + 15 = 126. It
+ * is a bound rather than a run anyone plays: a 96 rated XI costs far more than
+ * it leaves unspent. game_score_caps holds it for budget-builder
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export function budgetBuilderCeiling(): number {
+  return PLAYER_RATING_MAX + Math.floor(TODAY_BUDGET / UNSPENT_PER_POINT) + CRITERION_BONUS + SERIES_WIN_BONUS;
+}
+
 /** One formula, used by the hook and by the harness that proves every daily
     demand can be met inside it.
     Round 315, the owner's review: "y tf do u call it the 1 billion dollar
@@ -128,7 +151,7 @@ export function moneyXiFor(pool: Player[], formation: Formation): (Player | null
     well past it. The historic eras keep the 62% self calibration, because
     their money is small enough that a flat billion would buy every board. */
 export function budgetFor(moneyXi: (Player | null)[], eraId?: string): number {
-  if (eraId === 'today') return 1000;
+  if (eraId === 'today') return TODAY_BUDGET;
   const naive = moneyXi.reduce((s, p) => s + (p?.marketValue ?? 0), 0);
   return Math.max(100, Math.round((naive * 0.62) / 10) * 10);
 }
@@ -238,9 +261,9 @@ export function useBudgetBuilder(): BudgetBuilderState {
        ingredients, one tenth the scale: a great day lands a bit over 100,
        like everywhere else. Old personal bests from the inflated scale will
        stand until genuinely beaten, which is the honest reading of a best. */
-    let s = teamRating + Math.floor(Math.max(0, remaining) / 200);
-    if (criterionMet) s += 10;
-    if (series) s += series.outcome === 'win' ? 15 : series.outcome === 'draw' ? 5 : 0;
+    let s = teamRating + Math.floor(Math.max(0, remaining) / UNSPENT_PER_POINT);
+    if (criterionMet) s += CRITERION_BONUS;
+    if (series) s += series.outcome === 'win' ? SERIES_WIN_BONUS : series.outcome === 'draw' ? SERIES_DRAW_BONUS : 0;
     return s;
   }, [complete, teamRating, remaining, criterionMet, series]);
 

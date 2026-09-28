@@ -404,6 +404,13 @@ export function advanceWeek(g: GymState): GymState {
 export interface GymVerdict { score: number; tier: string; bullets: string[] }
 
 /**
+ * Round 646: the top of the gym's verdict, the clamp in gymVerdict reads it,
+ * and so the most a Fight Gym can record. game_score_caps holds it for
+ * fight-gym (scripts/simCapsAreCeilings.mjs).
+ */
+export const FIGHT_GYM_CEILING = 100;
+
+/**
  * What the gym is remembered for. Titles and reputation carry it, and men sent
  * out wrecked take from it, which is the whole moral argument of the mode
  * expressed as a number.
@@ -417,7 +424,7 @@ export function gymVerdict(g: GymState): GymVerdict {
     g.history.filter(h => h.result === 'W').length * 0.7 +
     clean * 2 -
     wrecked * 5,
-    0, 100,
+    0, FIGHT_GYM_CEILING,
   );
   const tier = score >= 88 ? 'A Great Gym'
     : score >= 70 ? 'Respected'

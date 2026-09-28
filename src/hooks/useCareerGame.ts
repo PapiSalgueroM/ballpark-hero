@@ -21,6 +21,14 @@ export type CareerAction =
 const MAX_GUESSES = 8;
 const COLS = ['club', 'appearances', 'goals', 'assists', 'marketValue'] as const;
 
+/**
+ * Round 646: the most a Career daily can record. A win pays 100 for every
+ * guess left of MAX_GUESSES, and the winning guess counts as used, so the best
+ * is a first guess win: (8 - 1) x 100 = 700 (completionScore below).
+ * game_score_caps holds it for career (scripts/simCapsAreCeilings.mjs).
+ */
+export const CAREER_CEILING = (MAX_GUESSES - 1) * 100;
+
 export type CareerGameMode = 'daily' | 'unlimited';
 
 // #78: prominence tiers for unlimited/practice play. Daily mode always draws

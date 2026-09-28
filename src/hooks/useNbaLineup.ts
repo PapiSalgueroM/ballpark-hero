@@ -81,6 +81,12 @@ export function isPositionEligibleForSlot(dbPosition: string | null | undefined,
   });
 }
 
+/**
+ * Round 646: what a finished NBA Starting 5 records, and so its ceiling: any
+ * result with a verdict pays this flat amount, anything else 0. game_score_caps
+ * holds it for nba-starting-5 (scripts/simCapsAreCeilings.mjs).
+ */
+export const NBA_STARTING_5_CEILING = 500;
 
 export function useNbaLineup() {
   const [phase, setPhase] = useState<NbaGamePhase>('challenge');
@@ -353,7 +359,7 @@ export function useNbaLineup() {
     }, 100);
   }, []);
 
-  useGameCompletion('nba-starting-5', phase === 'result', verdict ? 500 : 0);
+  useGameCompletion('nba-starting-5', phase === 'result', verdict ? NBA_STARTING_5_CEILING : 0);
 
   return {
     phase, challenge, selectedPosition, currentTeam, filledSlots, filledSlotsArray,

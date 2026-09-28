@@ -31,6 +31,14 @@ type Phase = 'boot' | 'error' | 'setup' | 'drafting' | 'settled';
 type Mode = 'cpu' | 'pass';
 const SLUG = 'search-and-discard';
 
+/**
+ * Round 646: the most a Search and Discard season can record, the season
+ * score's own clamp: a perfect 38 game season is 114 of 114, 100.
+ * game_score_caps holds it for search-and-discard
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export const SEARCH_AND_DISCARD_CEILING = 100;
+
 export default function SearchAndDiscard() {
   const [phase, setPhase] = useState<Phase>('boot');
   const [pool, setPool] = useState<Player[]>([]);
@@ -100,7 +108,7 @@ export default function SearchAndDiscard() {
 
   const isDone = phase === 'settled';
   const myPoints = season?.points[0] ?? 0;
-  const finalScore = Math.min(100, Math.round((myPoints / 114) * 100));
+  const finalScore = Math.min(SEARCH_AND_DISCARD_CEILING, Math.round((myPoints / 114) * 100));
   const won = season?.winner === 0;
   useGameCompletion(SLUG, isDone, finalScore, won ? 1 : 0);
 

@@ -29,6 +29,14 @@ export const MONEY_LADDER = [
   64_000, 125_000, 250_000, 500_000, 1_000_000,
 ];
 
+/**
+ * Round 646: the most a Sports Millionaire daily can record, the dollar amount
+ * reached, so the top rung of MONEY_LADDER: 1,000,000 for all fifteen right.
+ * game_score_caps holds it for sports-millionaire
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export const SPORTS_MILLIONAIRE_CEILING = Math.max(...MONEY_LADDER);
+
 /** Safe havens at Q5 and Q10 (1-indexed question numbers), i.e. array
  *  indices 4 and 9. A wrong answer drops the player back to the last safe
  *  haven cleared, or to $0 if none was reached. */

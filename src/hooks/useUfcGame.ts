@@ -10,6 +10,14 @@ import { getTodayET } from '@/lib/dateUtils';
 
 const MAX_GUESSES = 8;
 
+/**
+ * Round 646: the most a UFC daily can record. A win pays 100 for every guess
+ * left of MAX_GUESSES, counting the winning guess as used, so a first guess
+ * win is (8 - 1) x 100 = 700 (dailyScore below). game_score_caps holds it for
+ * ufc (scripts/simCapsAreCeilings.mjs).
+ */
+export const UFC_CEILING = (MAX_GUESSES - 1) * 100;
+
 export type UfcGameMode = 'daily' | 'unlimited';
 
 function selectRandomFighter(): UfcFighter {

@@ -29,6 +29,14 @@ export const BOARD_SIZE = 5;
 export const DAILY_BOARDS = 3;
 export const ATTEMPTS = 2;
 
+/**
+ * Round 646: the most a Silverware Sort daily can record. A board's result
+ * counts its green slots, at most BOARD_SIZE, and a daily is DAILY_BOARDS
+ * boards: 3 x 5 = 15. game_score_caps holds it for silverware-sort
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export const SILVERWARE_SORT_CEILING = DAILY_BOARDS * BOARD_SIZE;
+
 /** how each competition's title is spoken of on the card and reveal */
 export const SORT_LABELS: Record<string, { title: string; noun: string }> = {
   sb: { title: 'Super Bowl wins', noun: 'Super Bowls' },

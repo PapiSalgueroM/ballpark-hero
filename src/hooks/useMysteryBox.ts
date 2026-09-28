@@ -1,13 +1,25 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET, dailyDraw } from '@/lib/dateUtils';
-import { FORMATIONS, playerRating, type FormationSlot } from '@/lib/squadDeal';
+import { FORMATIONS, playerRating, PLAYER_RATING_MAX, type FormationSlot } from '@/lib/squadDeal';
 import { fetchPackPool, type PackPlayer, type PackTier } from '@/lib/fetchPackPool';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 
 export const TOTAL_PACKS = 15;
 const EMPTY_SLOT_RATING = 45;
 const STORAGE_PREFIX = 'mystery-box-';
+/** Round 646: the recorder stores the XI rating times this. */
+const RATING_RECORD_SCALE = 10;
+
+/**
+ * Round 646: the most a Mystery Box day can record. The XI rating is the
+ * average of playerRating over eleven slots (an empty slot counts 45), so at
+ * most PLAYER_RATING_MAX (96), recorded times 10: 960. game_score_caps holds
+ * it for mystery-box (scripts/simCapsAreCeilings.mjs).
+ */
+export function mysteryBoxCeiling(): number {
+  return Math.max(PLAYER_RATING_MAX, EMPTY_SLOT_RATING) * RATING_RECORD_SCALE;
+}
 
 /**
  * Pack odds. Tuned so a finished XI averages in the 60s-70s and a superstar
@@ -172,7 +184,7 @@ export function useMysteryBox(): MysteryBoxState {
     return kept.reduce((best, p) => (playerRating(p) > playerRating(best) ? p : best));
   }, [squad]);
 
-  useGameCompletion('mystery-box', finished, rating * 10, filled);
+  useGameCompletion('mystery-box', finished, rating * RATING_RECORD_SCALE, filled);
 
   const persist = useCallback((d: Array<{ slot: number | null }>, r: boolean) => {
     save(today, { decisions: d, revealedCurrent: r });

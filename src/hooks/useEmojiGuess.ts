@@ -28,6 +28,13 @@ export interface EmojiGuessState {
 const ROUNDS = 5;
 const MAX_GUESSES = 3;
 const POINTS = [100, 60, 30];
+
+/**
+ * Round 646: the most an Emoji Guess day can record. Five rounds, each solved
+ * on the first guess for the top of POINTS: 5 x 100 = 500. game_score_caps
+ * holds it for emoji-guess (scripts/simCapsAreCeilings.mjs).
+ */
+export const EMOJI_GUESS_CEILING = ROUNDS * Math.max(...POINTS);
 const STORAGE_PREFIX = 'emoji-guess-';
 
 /** Same normalization approach as the other guess games: accents/case/punct-insensitive. */

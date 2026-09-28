@@ -36,6 +36,10 @@ export interface GuessTheNationState {
 export const MAX_CLUES = 12;
 
 export const POINTS_BY_CLUE = [1200, 1100, 1000, 850, 700, 550, 400, 250, 150, 100, 50, 0];
+/** Round 646: the most a game on this clue ladder can record, a right guess on
+    the first clue, the top of POINTS_BY_CLUE. game_score_caps holds it for
+    this game (scripts/simCapsAreCeilings.mjs). */
+export const SCORE_CEILING = Math.max(...POINTS_BY_CLUE);
 
 export const CLUE_LABELS = [
   'Vibe',

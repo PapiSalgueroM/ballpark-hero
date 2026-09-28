@@ -909,6 +909,16 @@ export function recordedRunScore(rounds: RoundResult[], mode: RarityMode): numbe
 }
 
 /**
+ * Round 646: the most a Rarity Round run can record. Only Rarity runs are
+ * ranked (Crowd Says records a play with no score), and one records 100 less
+ * the round's points for each of at most ROUNDS_PER_RUN rounds, so a run of
+ * zero point picks records 5 x 100 = 500. game_score_caps holds it for
+ * rarity-round, set by the Round 644 migration
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export const RARITY_ROUND_CEILING = ROUNDS_PER_RUN * 100;
+
+/**
  * The one line that says what you are actually trying to do, in the mode you
  * are actually in.
  *

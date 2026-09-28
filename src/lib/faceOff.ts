@@ -257,6 +257,23 @@ export function pointsFor(correct: boolean, secondsUsed: number): number {
   return BASE_POINTS + PER_SECOND * Math.floor(left);
 }
 
+/**
+ * Round 646: the most a Face Off daily can record, your points total. A round
+ * pays you at most pointsFor(true, 0), 100 + 10 x 10 = 200, and a flawless
+ * match wins outright in ROUNDS: 2000. More rounds only come from a tie
+ * (needsExtra, up to MAX_EXTRA more), and a tie means your total equals a
+ * rival's, who answers no faster than his `fastest`, so at most
+ * pointsFor(true, 1.5) = 180 a round. The longest match is level through 12
+ * rounds at 180 and then yours at 200: 12 x 180 + 200 = 2360, above the
+ * outright 2000, so 2360. game_score_caps holds it for face-off
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export function faceOffCeiling(): number {
+  const yours = pointsFor(true, 0);
+  const rivals = Math.min(yours, Math.max(...RIVALS.map(r => pointsFor(true, r.fastest))));
+  return Math.max(ROUNDS * yours, (ROUNDS + MAX_EXTRA - 1) * rivals + yours);
+}
+
 export interface RoundResult {
   pick: 'a' | 'b' | null;
   youCorrect: boolean;

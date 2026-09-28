@@ -171,6 +171,14 @@ export function buildQuestion(def: FinalsCompDef, rows: FinalsRow[], label: stri
 
 export const BEAT_ROUNDS = 10;
 
+/**
+ * Round 646: the most a Who'd They Beat daily can record. The recorder counts
+ * the right answers, one a question, and buildQuestions keeps at most
+ * BEAT_ROUNDS: 10. game_score_caps holds it for whod-they-beat
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export const WHOD_THEY_BEAT_CEILING = BEAT_ROUNDS;
+
 /** Each competition exactly twice, shuffled, no back-to-back repeats. */
 export function buildBeatSlots(keys: string[], seedPrefix: string): string[] {
   const a = shuffledRange(keys.length, `${seedPrefix}:passA`).map(i => keys[i]);

@@ -16,6 +16,10 @@ export const MLB_SLOTS: SeasonSlot[] = [
 ];
 
 export const MLB_GAMES = 162;
+/** Round 646: the most a Perfect Season MLB run can record, its wins, every
+    one of MLB_GAMES won: 162. game_score_caps holds it for perfect-season-mlb
+    (scripts/simCapsAreCeilings.mjs). */
+export const PERFECT_SEASON_MLB_CEILING = MLB_GAMES;
 
 export interface TeamSeasonIndexEntry {
   yearid: number;

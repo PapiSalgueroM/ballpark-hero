@@ -84,10 +84,14 @@ async function fetchCurrentPool(theme: AuctionTheme): Promise<Player[]> {
   } catch { return []; }
 }
 
+/** Round 646: the top of an auction player's rating, the legends clamp below
+    (playerRating's own top, 96, sits under it). */
+const AUCTION_RATING_MAX = 99;
+
 function ratingOf(p: Player, theme: AuctionTheme): number {
   if (theme === 'legends') {
     const r = 85 + ((Math.max(140, Math.min(230, p.marketValue)) - 140) * 14) / 90;
-    return Math.round(Math.max(85, Math.min(99, r)));
+    return Math.round(Math.max(85, Math.min(AUCTION_RATING_MAX, r)));
   }
   return playerRating(p);
 }
@@ -463,6 +467,21 @@ export function simulateShowdown(bidders: Bidder[]): ShowdownResult {
     }
   }
   return { table: rows, lines, champion: rows[0].bidderId, topScorer: top };
+}
+
+/**
+ * Round 646: the most a Sign the Player auction can record, auctionScore's
+ * three terms at their tops: first place pays 300, the squad rating is an
+ * average of player ratings so at most AUCTION_RATING_MAX (99) times 3, and
+ * money left pays a point per 10 of a budget that starts at START_BUDGET and
+ * only ever shrinks, at most 100. 300 + 297 + 100 = 697. It is a bound rather
+ * than a run anyone plays: a 99 rated squad costs the budget it would keep.
+ * The cap it replaces was 56 million, a value frozen from the old scale, so a
+ * real auction paid a thousandth of a point. game_score_caps holds it for
+ * sign-the-player (scripts/simCapsAreCeilings.mjs).
+ */
+export function signThePlayerCeiling(): number {
+  return 300 + AUCTION_RATING_MAX * 3 + Math.round(START_BUDGET / 10);
 }
 
 /** Final score for the leaderboard: table position + squad quality + thrift. */

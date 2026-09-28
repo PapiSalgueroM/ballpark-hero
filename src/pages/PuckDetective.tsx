@@ -37,6 +37,16 @@ import {
   teamLabel,
 } from '@/lib/puckDetective';
 
+/**
+ * Round 646: the most a Puck Detective daily can record. A win pays 10 for
+ * every guess left counting the winning one, (GUESS_LIMIT - guesses + 1) x 10,
+ * so a first guess win is 8 x 10 = 80. game_score_caps holds it for
+ * puck-detective (scripts/simCapsAreCeilings.mjs).
+ */
+export function puckDetectiveCeiling(): number {
+  return GUESS_LIMIT * 10;
+}
+
 type Phase = 'boot' | 'error' | 'playing' | 'done';
 type Mode = 'daily' | 'unlimited';
 

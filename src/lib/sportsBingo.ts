@@ -242,6 +242,16 @@ export function scoreGame(marked: boolean[]): number {
   return squares * 3 + lines * 2 + blackout;
 }
 
+/**
+ * Round 646: the most a Sports Bingo game can record, a blackout scored
+ * through scoreGame: 24 squares x 3, 12 lines x 2 and the 4 point blackout
+ * bonus, 100. game_score_caps holds it for sports-bingo
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export function sportsBingoCeiling(): number {
+  return scoreGame(Array.from({ length: CARD_SIZE }, () => true));
+}
+
 export type CpuLevel = 'casual' | 'sharp' | 'ruthless';
 /* Tuned twice against the harness's 120 game measurement, because the
    first two tunings both flattened near the 24 square ceiling: claimable

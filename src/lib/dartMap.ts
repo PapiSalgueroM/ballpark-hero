@@ -298,12 +298,15 @@ export function resolveMapThrow(x: number, y: number, zones: Zone[]): MapHit {
   return { kind: 'ocean' };
 }
 
+/** Round 646: the most one dart can pay, a tiny nation. A gold zone pays 40. */
+export const ACCURACY_POINTS_MAX = 55;
+
 /** Smaller targets pay more. Range roughly 12 (Russia) to 55 (tiny nations). */
 export function accuracyPoints(hit: MapHit): number {
   if (hit.kind === 'zone') return hit.zone.bad ? 0 : 40;
   if (hit.kind === 'ocean') return 0;
   const b = boundsOf(hit.country);
-  return Math.max(12, Math.min(55, Math.round(9000 / Math.sqrt(b.area + 60))));
+  return Math.max(12, Math.min(ACCURACY_POINTS_MAX, Math.round(9000 / Math.sqrt(b.area + 60))));
 }
 
 /* ---------------- Draft choices ---------------- */

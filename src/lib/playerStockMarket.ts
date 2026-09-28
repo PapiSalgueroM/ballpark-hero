@@ -519,6 +519,16 @@ export function worstAffordableXI(campaign: Campaign): StockCard[] {
   return reachable(campaign, -1).reduce((worst, p) => (p.value < worst.value ? p : worst)).picks;
 }
 
+/**
+ * Round 646: the top of the campaign score, the most a Player Stock Market day
+ * can record: the best affordable eleven, or any eleven on a board where best
+ * and worst are worth the same. scoreCampaign clamps to 100 (its line is
+ * left as it was, because simStockCampaign and simStockScoring rewrite that
+ * exact line for their controls). game_score_caps holds it for
+ * player-stock-market (scripts/simCapsAreCeilings.mjs).
+ */
+export const STOCK_MARKET_CEILING = 100;
+
 export function scoreCampaign(campaign: Campaign, picks: StockCard[]): CampaignResult {
   const spend = picks.reduce((s, c) => s + c.price, 0);
   const finalValue = picks.reduce((s, c) => s + c.final, 0);

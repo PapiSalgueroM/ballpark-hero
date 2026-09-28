@@ -14,6 +14,19 @@ function shuffle<T>(arr: T[]): T[] {
 
 export type TimelineStatus = 'playing' | 'submitted';
 
+/** Round 646: the record pays this much for every player in his right slot. */
+const POINTS_PER_SLOT = 100;
+
+/**
+ * Round 646: the most a Football Timeline day can record: every player of the
+ * day's puzzle in his right slot, times 100. Every puzzle has 5 players today,
+ * so 500. game_score_caps holds it for football-timeline
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export function footballTimelineCeiling(): number {
+  return Math.max(...timelinePuzzles.map(p => p.players.length)) * POINTS_PER_SLOT;
+}
+
 export function useFootballTimeline() {
   const puzzle = useMemo(() => {
     /* ROUND 366: three faults in two lines. The date was UTC, so the day rolled
@@ -64,7 +77,7 @@ export function useFootballTimeline() {
 
   const saveOrder = useCallback(() => {}, []);
 
-  useGameCompletion('football-timeline', status === 'submitted', score * 100);
+  useGameCompletion('football-timeline', status === 'submitted', score * POINTS_PER_SLOT);
 
   return { puzzle, order, setOrder, movePlayer, status, submit, score, correctOrder, saveOrder };
 }

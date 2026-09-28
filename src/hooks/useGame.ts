@@ -19,6 +19,13 @@ export function footleScore(won: boolean, guessCount: number): number {
   return won ? Math.max(100, (MAX_GUESSES - guessCount) * 100) : 0;
 }
 
+/**
+ * Round 646: the most a Footle daily can record, a first guess win scored
+ * through footleScore: (8 - 1) x 100 = 700. game_score_caps holds it for
+ * footle (scripts/simCapsAreCeilings.mjs).
+ */
+export const FOOTLE_CEILING = footleScore(true, 1);
+
 /** Round 644: the score panel's rows on the scale footleScore records, 700
     for a first guess down to 100, and 0 for a miss. */
 export const FOOTLE_SCORE_BUCKETS = [

@@ -49,7 +49,7 @@
  */
 import {
   buildLadder, clamp, daySeed, lehmer, sprayFor as arcadeSpray,
-  ROUNDS_PER_RUN, type SprayConfig,
+  ROUNDS_PER_RUN, LEHMER_MAX, type SprayConfig,
 } from './arcade';
 
 export { daySeed, lehmer, ROUNDS_PER_RUN };
@@ -142,22 +142,38 @@ export interface HoopResult {
   verdict: string;
 }
 
+/** One shot of the ladder: t runs 0 to 1 up the run, i is its index. */
+function hoopAt(t: number, rng: () => number, i: number): HoopSetup {
+  const distance = Math.round((FREE_THROW + t * 4.41) * 10) / 10;
+  const contestReach = i === 0 ? 0 : Math.round(clamp(2.44 + t * 0.66 + (rng() - 0.5) * 0.16, 2.34, 3.12) * 100) / 100;
+  const contestDist = i === 0 ? 0 : Math.round((1.1 - t * 0.44) * 100) / 100;
+  const contestSide = i === 0 ? 0 : (rng() > 0.5 ? 1 : -1);
+  const hand = contestReach >= 2.88 ? 'a big hand up' : contestReach >= 2.66 ? 'a hand up' : 'a late closeout';
+  return {
+    distance,
+    contestReach,
+    contestDist,
+    contestSide,
+    label: i === 0 ? 'Free throw line, nobody there' : `${distance} m, ${hand} on your ${contestSide < 0 ? 'left' : 'right'}`,
+  };
+}
+
 /** The ten shots of a run: further out, a higher hand, and it arrives sooner. */
 export function buildRun(seed: number): HoopSetup[] {
-  return buildLadder(seed, ROUNDS_PER_RUN, (t, rng, i) => {
-    const distance = Math.round((FREE_THROW + t * 4.41) * 10) / 10;
-    const contestReach = i === 0 ? 0 : Math.round(clamp(2.44 + t * 0.66 + (rng() - 0.5) * 0.16, 2.34, 3.12) * 100) / 100;
-    const contestDist = i === 0 ? 0 : Math.round((1.1 - t * 0.44) * 100) / 100;
-    const contestSide = i === 0 ? 0 : (rng() > 0.5 ? 1 : -1);
-    const hand = contestReach >= 2.88 ? 'a big hand up' : contestReach >= 2.66 ? 'a hand up' : 'a late closeout';
-    return {
-      distance,
-      contestReach,
-      contestDist,
-      contestSide,
-      label: i === 0 ? 'Free throw line, nobody there' : `${distance} m, ${hand} on your ${contestSide < 0 ? 'left' : 'right'}`,
-    };
-  });
+  return buildLadder(seed, ROUNDS_PER_RUN, hoopAt);
+}
+
+/**
+ * Round 646: the most any day's run can pay, from the rules rather than from
+ * the dates tried so far. maxRunScore already scores every shot made pure, so
+ * the only thing a day changes is how high each hand reaches, and a higher
+ * hand pays more. The ladder's generator never returns more than
+ * LEHMER_MAX, so drawing every hand at LEHMER_MAX gives each shot its highest
+ * reach and the run its highest pay: 3045, against 3012 over 800 real dates.
+ * game_score_caps holds it for buzzer-beater (scripts/simCapsAreCeilings.mjs).
+ */
+export function buzzerBeaterCeiling(): number {
+  return maxRunScore(buildLadder(1, ROUNDS_PER_RUN, (t, _rng, i) => hoopAt(t, () => LEHMER_MAX, i)));
 }
 
 /**

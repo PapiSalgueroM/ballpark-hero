@@ -10,6 +10,13 @@ const SCORE_MAP: Record<number, number> = {
   1: 1200, 2: 1000, 3: 900, 4: 800, 5: 700, 6: 600, 7: 500, 8: 400, 9: 300, 10: 200, 11: 100,
 };
 
+/**
+ * Round 646: the most a Guess the College daily can record, a win on the
+ * first clue, the top of SCORE_MAP: 1200. game_score_caps holds it for
+ * guess-the-college (scripts/simCapsAreCeilings.mjs).
+ */
+export const GUESS_THE_COLLEGE_CEILING = Math.max(...Object.values(SCORE_MAP));
+
 /** The clue we could not stand behind says so, rather than showing a number two
  *  publishers would not agree on. See COLLEGE_THIN in src/data/colleges.ts. */
 const WITHHELD = 'Not shown for this school: we could not confirm it with two sources';
