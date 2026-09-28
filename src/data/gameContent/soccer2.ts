@@ -77,7 +77,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "The showdown format and your final score",
         items: [
           "The showdown is a double round robin, 4 matches per club, ranked by points then goal difference.",
-          "Score is a place bonus (300, 150, or 50) plus 3 per point of squad rating plus 1 per 10 million left in the bank.",
+          "Score is a place bonus (300 for the title, 150 for second, nothing for third) plus 3 per point of squad rating plus 1 per 10 million left in the bank, and all of it counts in proportion to how far your XI rates above a squad of the room's journeymen: bid on nobody and you score 0, land the best player in every slot and you keep the lot.",
         ],
       },
     ],
@@ -166,7 +166,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Scoring survival points and the trophy",
         items: [
-          "You score for every round you survive past where an XI of the weakest card in each pick would go out; lift the trophy for 100.",
+          "Each round you survive is worth 16 and lifting the trophy makes it 100. Your run records how far that goes past an XI of the weakest card in each pick on the same draw: matching that XI records 0, and the trophy always records 100.",
         ],
       },
     ],
@@ -214,7 +214,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       {
         heading: "Four rounds survived and one regret",
         paragraphs: [
-          "Your finished XI rates 84. The Qualifier ends 3-0, the Last Sixteen 2-1, the Quarter Final needs penalties, and the Semi Final ends the run 1-2. Four rounds survived, 64 points, and the draft you would redo is the 74 you took at left back.",
+          "Your finished XI rates 84. The Qualifier ends 3-0, the Last Sixteen 2-1, the Quarter Final needs penalties, and the Semi Final ends the run 1-2. Three rounds survived is 48. On the same draw an XI of the weakest card in each pick wins the Qualifier and goes out in the Last Sixteen, 16, so your run records 38, and the draft you would redo is the 74 you took at left back.",
         ],
       },
     ],
@@ -811,7 +811,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
         heading: "Scoring chemistry and the offline backup judge",
         items: [
           "Chemistry: each pair sharing a club is worth 3 points, a league 2, a nationality 1, capped at 9 per player.",
-          "If the AI judge is unreachable, a built in offline judge grades you instead, so a run never dead ends.",
+          "If the AI judge is unreachable, a built in offline judge grades you instead off current market values, so a run never dead ends. It can only price players in today's value table, so any other pick counts at its floor.",
         ],
       },
     ],
@@ -870,7 +870,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       },
       {
         q: "What does the rating look like?",
-        a: "A rating headline, a short written analysis of your picks, and your chemistry line. Under it comes a season report: a squad rating out of 100, where you finish in a 20 team league, points, trophies and a top scorer, plus how your defence, midfield and attack compare. Every player is judged at his peak, so retired greats are not marked down for being retired.",
+        a: "A rating headline, a short written analysis of your picks, and your chemistry line. Under it comes a season report: a squad rating out of 100, where you finish in a 20 team league, points, trophies and a top scorer, plus how your defence, midfield and attack compare. The AI referee judges every player at his peak, so retired greats are not marked down for being retired; when the offline backup judge stands in, it can only price players in today's value table.",
       },
     ],
   },
@@ -2154,7 +2154,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
           {
             heading: "How your season score is worked out",
             items: [
-              "Season scoring: 36 league games against a spread of opposition plus two head to head derbies, 3 points a win, 1 a draw. Your season score is your points as a share of the 114 available.",
+              "Season scoring: 36 league games against a spread of opposition plus two head to head derbies, 3 points a win, 1 a draw. Your season score is your points as a share of the 114 available, counted above the season you would have had keeping the worst player every turn on the same deal: that season scores 0, and a perfect 114 point season still scores 100.",
             ],
           },
         ],

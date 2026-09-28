@@ -700,7 +700,7 @@ export const WORLD_CONTENT: GameContentMap = {
       {
         heading: "Three verdicts, with Borderline counting either way",
         items: [
-          "Verdicts are Hall of Fame, Bust, or Borderline, and on a Borderline player either vote counts as correct.",
+          "Verdicts are Hall of Fame, Bust, or Borderline. The daily only deals players with a verdict; a Borderline player turns up in Unlimited, where either vote counts as correct.",
         ],
       },
       {

@@ -1272,7 +1272,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Scoring survival points and the trophy",
         items: [
-          "You score for every round you survive past where a team of the weakest card in each pick would go out; lift the trophy for 100.",
+          "Each round you survive is worth 16 and lifting the trophy makes it 100. Your run records how far that goes past a team of the weakest card in each pick on the same draw: matching that team records 0, and the trophy always records 100.",
         ],
       },
     ],
@@ -1326,7 +1326,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Two rounds survived and one regret",
         paragraphs: [
-          "Your finished offense rates 94. The Qualifier wins big, the Last Sixteen is tight, the Quarter Final needs overtime, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 76 you took at the third receiver spot.",
+          "Your finished offense rates 94. The Qualifier wins big, the Last Sixteen is tight, the Quarter Final needs overtime, and the Semi Final ends the run. Three rounds survived is 48. On the same draw a team of the weakest card in each pick goes out in the Qualifier, so all 48 count, and the card you would redo is the 76 you took at the third receiver spot.",
         ],
       },
     ],
