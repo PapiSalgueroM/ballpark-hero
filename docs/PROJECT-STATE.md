@@ -29,6 +29,14 @@ unchanged.
 - **Fence** `scripts/simExtraTime.mjs`, seven sections, six controls (noet, nodeflate, etleague,
   noaiet, nolabel, livedraw), each firing on exactly its own section (noet tolerates section 7,
   which it empties). About 100 seconds.
+- **Gates run.** tsc 0. `simExtraTime` green and all six controls firing. The four Club Manager
+  vitest files green. All 80 existing harnesses that read a changed file were run on the frozen
+  tree: 79 green, `simVictoryMoment` not runnable because it reads a built `dist` and no build was
+  allowed this round. `simLiveMatch`'s five controls and `simLiveSimMotion`'s nine still fire.
+  In a worktree, `simClubManagerSave`, `simActivityNotCompletion`, `simLiveSimMotion` and
+  `simClubManagerEraUcl` need `react`, `react-router-dom` and `vitest` under the worktree's own
+  `node_modules` (they hardcode `ROOT/node_modules`); thin re-exporting files did it, never a
+  junction. No build, no `runAllSims`, no browser harness (a release suite was running).
 - **Sibling checked, defect found, not fixed here.** Soccer Career's Round 546 extra time
   (`simulateUCL` in `soccerCareerEngine.ts`) says away goals counted in extra time in the old
   seasons, but decides extra time on its goals alone, so a 1-1 extra time in an away goals season
