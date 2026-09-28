@@ -1,5 +1,16 @@
 # Work board
 
+**Round 646 BUILT, branch `r646-caps-real-ceiling`, not on main, migration NOT applied.** Every
+scored game's engine exports the most it can record, computed from its rules (113 games, plus the
+six season games reading Round 647's `seasonCeiling()`). `supabase/migrations/20260928_round_646_caps_at_real_ceilings.sql`
+sets 116 caps (56 move) and backs the table up first; **apply it only after Round 647 is
+published**, because it sets the four front offices and the two dynasties to 100. Fence
+`scripts/simCapsAreCeilings.mjs` holds the engines, the committed table snapshot
+(`scripts/data/gameScoreCaps.mjs`) and the migration to one another, three controls. A perfect
+season paid 7.5, 11.3, 2.6 and 4.7 (NFL, MLB, NBA, NHL front offices) and pays 100 in all four
+after. Thirteen games have no rules ceiling (the streaks, the chains, the four My Careers, Alphabet
+Sprint, List Quiz, Pack Battle) and keep their caps; each needs a scoring scale first.
+
 **2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof
 in `docs/PROJECT-STATE.md`.
