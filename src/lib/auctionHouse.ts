@@ -465,10 +465,45 @@ export function simulateShowdown(bidders: Bidder[]): ShowdownResult {
   return { table: rows, lines, champion: rows[0].bidderId, topScorer: top };
 }
 
-/** Final score for the leaderboard: table position + squad quality + thrift. */
-export function auctionScore(result: ShowdownResult, you: Bidder): number {
+/**
+ * Round 645: the squad ratings the room offered at its two ends, the weakest
+ * player in every slot (the squad a bidder who never raised a paddle is
+ * filled with at the end) and the best. `room` is every player the auction
+ * dealt, lots and journeymen together.
+ */
+export function auctionBounds(room: AuctionPlayer[]): { zero: number; perfect: number } {
+  const lows: number[] = [];
+  const highs: number[] = [];
+  for (const slot of AUCTION_SLOTS) {
+    const ratings = room.filter(p => p.slotKey === slot.key).map(p => p.rating);
+    if (ratings.length === 0) continue;
+    lows.push(Math.min(...ratings));
+    highs.push(Math.max(...ratings));
+  }
+  const avg = (xs: number[]) => (xs.length ? Math.round(xs.reduce((s, x) => s + x, 0) / xs.length) : 0);
+  return { zero: avg(lows), perfect: avg(highs) };
+}
+
+/**
+ * Final score for the leaderboard: table position + squad quality + thrift.
+ *
+ * Round 645: a bidder who never raised a paddle scored most of a winner's
+ * total. Last place still paid 50, three times the squad rating paid for the
+ * journeymen every open chair is filled with (rated in the 70s on the current
+ * pool), and the money never spent paid a tenth of itself, the most of anyone:
+ * about 340 of the 600 or so a winning auction scores. Now last place pays
+ * nothing, and the squad and the money left count in proportion to how far
+ * the squad rates above the all journeyman squad the room would have filled
+ * you with (auctionBounds): nothing for that squad, all of it for the best
+ * squad the room offered, so a perfect auction scores exactly what it did.
+ */
+export function auctionScore(result: ShowdownResult, you: Bidder, bounds: { zero: number; perfect: number }): number {
   const place = result.table.findIndex(r => r.bidderId === 'you');
-  const placeBonus = place === 0 ? 300 : place === 1 ? 150 : 50;
+  const placeBonus = place === 0 ? 300 : place === 1 ? 150 : 0;
   const yourRow = result.table[place];
-  return placeBonus + squadRatingOf(you) * 3 + Math.round(yourRow.moneyLeft / 10);
+  const rating = squadRatingOf(you);
+  const share = bounds.perfect > bounds.zero
+    ? Math.max(0, Math.min(1, (rating - bounds.zero) / (bounds.perfect - bounds.zero)))
+    : 0;
+  return placeBonus + Math.round(share * (rating * 3 + Math.round(yourRow.moneyLeft / 10)));
 }
