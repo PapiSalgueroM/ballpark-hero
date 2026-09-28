@@ -80,7 +80,7 @@ async function enterDaily(m: MountedPage): Promise<void> {
   if (resultCard(m)) return;
   await click(button(m.container, /^Daily market|^Today's market is closed/));
   await waitFor(() => {
-    if (!resultCard(m) && cards(m).length === 0) throw new Error('the daily market has not dealt');
+    if (!resultCard(m) && cards(m).length === 0 && !stepButton(m)) throw new Error('the daily market has not dealt');
   });
 }
 
@@ -126,6 +126,24 @@ export default defineDriver<MountedPage>({
   finish,
   status,
   fingerprint,
+
+  /* Round 645 part three fix: five buys, then a reload and Daily market have
+     to come back on buy six with the same five bought and the same wallet.
+     finish() buys the first affordable card from wherever the market is, so
+     the split run buys exactly the unbroken run's XI. */
+  async playSome(m) {
+    for (let buy = 0; buy < 5; buy += 1) {
+      await click(cards(m)[0]);
+      await waitFor(() => { if (cards(m).length === 0) throw new Error('waiting for the next slot'); });
+    }
+  },
+  progress(m) {
+    const header = Array.from(m.container.querySelectorAll('span')).find(s => /^Buy \d+ of \d+/.test((s.textContent ?? '').trim()));
+    if (!header?.parentElement) throw new Error('no live market');
+    const xi = Array.from(m.container.querySelectorAll('p')).find(p => /^Your XI so far$/.test((p.textContent ?? '').trim()));
+    const slots = xi?.parentElement ? Array.from(xi.parentElement.querySelectorAll('span')).map(s => (s.textContent ?? '').trim()).join(' | ') : '';
+    return [Array.from(header.parentElement.querySelectorAll('span')).map(s => (s.textContent ?? '').trim()).join(' | '), slots].join('\n');
+  },
 
   /* The result's own button leads to the mode menu, where the daily is
      closed and reopens the result. A live board at any point is played to

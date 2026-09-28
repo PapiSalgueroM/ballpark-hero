@@ -574,6 +574,40 @@ export function saveDailyResult(date: string, finish: StockFinish): void {
   writeDailyRecord(STOCK_SLUG, date, { ...finish });
 }
 
+/* Round 645 part three fix: the daily market part bought, on the same key.
+   The page saved only when the last season was stepped through, so a refresh
+   mid reveal dealt the same market again with every holding's future known,
+   and a refresh mid buy dealt it again with the cards already weighed. Every
+   buy is now filed the moment it is made: the card ids bought so far, slot by
+   slot, and nothing else. On the way back the market is dealt again from the
+   day's seed, and each id must be one of its own slot's candidates and
+   affordable at that point of the wallet (canAfford, the rule the buy screen
+   applies), so a record can hold no XI the market would not have sold. It
+   carries no startYear, so loadDailyResult refuses it, and this refuses
+   anything carrying one, so the two readers never accept the same record. */
+export function loadDailyProgress(date: string, campaign: Campaign): StockCard[] | null {
+  return readDailyRecord(STOCK_SLUG, date, f => {
+    if (f.startYear !== undefined || !Array.isArray(f.bought)) return null;
+    const ids = f.bought;
+    if (ids.length < 1 || ids.length > campaign.slots.length) return null;
+    const picks: StockCard[] = [];
+    let remaining = STOCK_BUDGET;
+    for (let i = 0; i < ids.length; i += 1) {
+      const id = ids[i];
+      if (typeof id !== 'string') return null;
+      const card = campaign.slots[i].candidates.find(c => c.id === id);
+      if (!card || !canAfford(campaign, i, card, remaining)) return null;
+      picks.push(card);
+      remaining -= card.price;
+    }
+    return picks;
+  });
+}
+
+export function saveDailyProgress(date: string, picks: StockCard[]): void {
+  writeDailyRecord(STOCK_SLUG, date, { bought: picks.map(c => c.id) });
+}
+
 /* ---------------- formatting ---------------- */
 
 export function formatMoney(v: number): string {
