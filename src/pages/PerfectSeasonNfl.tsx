@@ -515,7 +515,7 @@ const PerfectSeasonNfl = () => {
               )}
               <pre className="text-sm tracking-wide whitespace-pre-wrap mb-3">{lockedEmojiGrid}</pre>
               <ShareButtons
-                score={`${lockedAttempt.sim.wins}-${lockedAttempt.sim.losses}`}
+                score={lockedAttempt.points !== undefined ? `${lockedAttempt.sim.wins}-${lockedAttempt.sim.losses}, ${lockedAttempt.points} points` : `${lockedAttempt.sim.wins}-${lockedAttempt.sim.losses}`}
                 gameName="17-0 Perfect Season (Daily)"
                 gamePath="/perfect-season-nfl"
                 emojiGrid={lockedEmojiGrid}
@@ -758,7 +758,7 @@ const PerfectSeasonNfl = () => {
                 )}
                 <pre className="text-sm tracking-wide whitespace-pre-wrap mb-2">{emojiGrid}</pre>
                 <ShareButtons
-                  score={`${sim.wins}-${sim.losses}`}
+                  score={`${sim.wins}-${sim.losses}, ${points} points`}
                   gameName={mode === 'daily' ? '17-0 Perfect Season (Daily)' : '17-0 Perfect Season'}
                   gamePath="/perfect-season-nfl"
                   emojiGrid={emojiGrid}
