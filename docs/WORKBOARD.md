@@ -1,5 +1,21 @@
 # Work board
 
+**Round 645 part two (free points) CLAIMED AND BUILT, branch `r645b-free-points-w2`, pushed, not
+yet on main.** Every game that records a score was measured, zero skill run (nothing correct, worst
+choice every time) against perfect run: nineteen games across fourteen engines paid a zero skill
+run more than 15 percent of perfect, and every one of them is fixed so it pays at most 5 (almost all
+now pay exactly 0), with every perfect run recording what it always did. Fixed: Build Your XI and NBA Starting 5 (the verdict is
+the score; an offline Starting 5 verdict pays 0 because that judge cannot read the challenge),
+Ball IQ, HOF or Bust (no borderline daily), Pack Battle (the free opening card banks nothing),
+Mystery Box, the four Perfect Lineups, the four Gauntlets (one engine), Search and Discard and
+Fantasy Draft (one settle engine), Squad Deal, Budget Builder, Sign the Player, Rebuild, the four
+Perfect Seasons, and Fight Gym's sign and release churn. Each scores above what the worst choices
+earn on the same board (`src/lib/skillPoints.ts`), and each result screen shows the number it
+records. Fence `scripts/simFreePoints.mjs`: one row per game (132), coverage both ways, judge
+labels on ladders, six controls each turning exactly their own rows red. Not in scope and left
+alone: Round 646's caps, Round 647's front office and dynasty ledgers, and a My Career played out
+hands off still earning its longevity terms.
+
 **2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof
 in `docs/PROJECT-STATE.md`.

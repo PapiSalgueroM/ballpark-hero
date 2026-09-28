@@ -252,7 +252,7 @@ const PackBattle = () => {
           <>
             <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground font-semibold uppercase tracking-wider mb-4">
               <span>Card {cardIndex + 2} of {cards.length}</span>
-              <span className="text-primary">&middot; Banked {fmtCompactUsd(bankedValue)}</span>
+              <span className="text-primary">&middot; Banked {fmtCompactUsd(packScore({ calls, bankedValue }))}</span>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 items-stretch mb-5">

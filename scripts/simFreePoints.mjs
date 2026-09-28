@@ -4,8 +4,9 @@
  * WHAT THE POINTS AUDIT FOUND (2026-09-19, read only, and measured again for
  * this round on 2026-09-28): a game's recorded score is its leaderboard pay,
  * 100 x score / cap per day, and a run with no skill in it (nothing correct,
- * the worst choice every time) was paid most of a perfect run in fifteen game
- * shapes. Build Your XI and NBA Starting 5 recorded 500 of 500 for any finished
+ * the worst choice every time) was paid more than 15 percent of a perfect run
+ * in nineteen games across fourteen engines, most of it in many of them.
+ * Build Your XI and NBA Starting 5 recorded 500 of 500 for any finished
  * lineup. Ball IQ recorded 550 of 1600 for twelve wrong answers. HOF or Bust
  * scored either vote on a borderline player as right, the full 1000 on six days
  * in twenty six. Pack Battle banked the free opening card on a first call bust.
