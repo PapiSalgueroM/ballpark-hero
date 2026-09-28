@@ -35,11 +35,13 @@ vi.mock('@/contexts/AuthContext', () => ({
 }));
 vi.mock('sonner', () => ({ toast: { success: () => undefined } }));
 /* The three real hooks import the client for their validators and vote
-   tables; none of that is under test, so every chain resolves to nothing. */
+   tables; none of that is under test, so every chain resolves to nothing.
+   HOF or Bust fires its vote insert with a bare .then(), no callback, so
+   the thenable hands back a real promise whether or not one is passed. */
 vi.mock('@/integrations/supabase/client', () => {
   const chain = (): unknown => new Proxy(() => undefined, {
     get: (_t, key) => {
-      if (key === 'then') return (resolve: (v: unknown) => void) => resolve({ data: [], error: null });
+      if (key === 'then') return (resolve?: (v: unknown) => unknown) => Promise.resolve({ data: [], error: null }).then(resolve);
       return () => chain();
     },
     apply: () => chain(),
