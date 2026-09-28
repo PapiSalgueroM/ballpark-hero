@@ -361,17 +361,18 @@ console.log('7) a perfect run is worth what the leaderboard cap says it is');
     day.setUTCDate(day.getUTCDate() + 1);
   }
   console.log(`   over 800 consecutive real dates a flawless run pays ${lo} to ${hi}`);
-  /* The cap committed in supabase/migrations is the top of that range. If the
-     scoring changes and the ceiling moves past it, honest scores start getting
-     clipped in silence, so the number is held here against the migration that
-     carries it. */
-  const capSql = fs.readdirSync(path.join(ROOT, 'supabase/migrations'))
-    .filter(f => /caps_allowlist_buzzer_beater/.test(f))
-    .map(f => fs.readFileSync(path.join(ROOT, 'supabase/migrations', f), 'utf8'))
-    .join('\n');
-  const capped = Number((capSql.match(/'buzzer-beater',\s*(\d+)/) || [])[1]);
+  /* The cap is the top of that range. If the scoring changes and the ceiling
+     moves past it, honest scores start getting clipped in silence, so the
+     number is held here against the cap the table carries.
+     Round 646: that number is read from the committed snapshot of the table,
+     scripts/data/gameScoreCaps.mjs, which simCapsAreCeilings holds to the
+     engine's buzzerBeaterCeiling() (the ladder drawn at the generator's
+     largest value, 3045). The 20260904 migration's 3012 was the best of 800
+     dates and is superseded by the Round 646 migration. */
+  const { CAPS } = await import(pathToFileURL(path.join(ROOT, 'scripts', 'data', 'gameScoreCaps.mjs')).href);
+  const capped = Number((CAPS.find(r => r[0] === 'buzzer-beater') || [])[1]);
   console.log(`   the committed leaderboard cap is ${capped || 'MISSING'}`);
-  if (!capped) fail('the committed migration does not name a cap for buzzer-beater');
+  if (!capped) fail('the committed snapshot of game_score_caps does not name a cap for buzzer-beater');
   else if (capped < hi) fail(`the cap is ${capped} but a flawless run can pay ${hi}, so the best runs would be clipped`);
   else if (capped > hi * 1.15) fail(`the cap is ${capped} against a real ceiling of ${hi}, which is high enough that nobody can rank near it`);
   if (hi < 1200) fail(`a flawless run is only worth ${hi}, which is too thin to rank against the rest of the board`);

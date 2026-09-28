@@ -46,6 +46,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { sourceCompletionKeys } from './lib/completionKeys.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CAPS_CONTROL || '';
@@ -105,47 +106,11 @@ async function rest(pathAndQuery) {
    their points silently counted for nothing. Section 4 is what caught it, by
    reading the completions table rather than the source, which is exactly why a
    check should never draw both its sides from the same place. */
-const LITERAL = /useGameCompletion\(\s*['"]([a-z0-9-]+)['"]|recordCompletion\(\s*['"]\/([a-z0-9-]+)['"]/g;
-const VIA_IDENT = /useGameCompletion\(\s*([A-Za-z_$][\w$]*)\s*[,)]/g;
-const CONSTANT = /(?:const|let)\s+([A-Za-z_$][\w$]*)\s*(?::\s*[^=]+)?=\s*['"]([a-z0-9-]+)['"]/g;
-const GAME_ID = /gameId:\s*['"]([a-z0-9-]+)['"]/g;
-/* ROUND 429 WIDENED THIS AGAIN, after the same gap cost points a THIRD time.
-   ResultScreen records on mount for any page that passes recordCompletionOnMount,
-   under the key it derives from share.gamePath, so those pages call neither
-   useGameCompletion nor recordCompletion and every pattern above walks past
-   them. higher-lower-transfers (Round 421 addendum), then list-quiz and
-   player-bingo (this round) were all found by section 4 or by hand, never by
-   this section. A page that opts into the mount record is now read for its
-   gamePath. */
-const ON_MOUNT = /recordCompletionOnMount/;
-const GAME_PATH = /gamePath:\s*['"]\/([a-z0-9-]+)['"]/g;
-
-function sourceKeys() {
-  const found = new Set();
-  const walk = dir => {
-    for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
-      const p = path.join(dir, e.name);
-      if (e.isDirectory()) walk(p);
-      else if (/\.tsx?$/.test(e.name)) {
-        const src = fs.readFileSync(p, 'utf8');
-        for (const m of src.matchAll(LITERAL)) found.add(m[1] || m[2]);
-        for (const m of src.matchAll(GAME_ID)) found.add(m[1]);
-        if (ON_MOUNT.test(src)) for (const m of src.matchAll(GAME_PATH)) found.add(m[1]);
-        /* Resolve an identifier argument against the string constants declared
-           in the same file. Deliberately file local: following an import would
-           mean building a module graph, and every case in this repo is local. */
-        const consts = new Map();
-        for (const m of src.matchAll(CONSTANT)) consts.set(m[1], m[2]);
-        for (const m of src.matchAll(VIA_IDENT)) {
-          const v = consts.get(m[1]);
-          if (v) found.add(v);
-        }
-      }
-    }
-  };
-  walk(path.join(ROOT, 'src'));
-  return found;
-}
+/* Round 646: the scan itself lives in scripts/lib/completionKeys.mjs now,
+   unchanged, so this harness and simCapsAreCeilings read one answer to
+   which keys the source can send. Its header carries the Round 361 and
+   Round 429 widenings. */
+const sourceKeys = () => sourceCompletionKeys(ROOT);
 
 const keys = sourceKeys();
 if (keys.size < 100) {
