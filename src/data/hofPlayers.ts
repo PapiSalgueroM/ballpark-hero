@@ -11,26 +11,27 @@ export interface HofPlayer {
 /**
  * Hall of Fame or Bust, the stat lines.
  *
- * ROUND 661, 2026-09-19, NOT FINISHED. Twenty of these twenty six entries
- * carried at least one false number. Several were somebody else's totals
- * outright: Jordan was shown with Kobe's 33,643 points, Ortiz with Jeter's
- * 3,465 hits and with Sammy Sosa's 609 home runs. The numbers below were
- * rewritten to fix that.
+ * Round 661 (2026-09-28). Twenty of these twenty six entries carried at least
+ * one false number, several of them somebody else's totals: Jordan was shown
+ * with Kobe's 33,643 points, Ortiz with Jeter's 3,465 hits and Sammy Sosa's
+ * 609 home runs, Howe with no Stanley Cups and Yakupov with half his goals.
  *
- * THERE IS NO FENCE BEHIND THIS FILE YET. An earlier draft of this comment
- * said the pairs were recorded in scripts/data/triviaFactsVerified2026-09.json
- * and that scripts/simTriviaFacts.mjs held the file to them. Neither file
- * exists. Both are owed, on the shape of scripts/simSportsFacts.mjs, and until
- * they do nothing stops the next edit here putting a wrong number back. Treat
- * the numbers below as corrected but unpinned.
+ * Every line below, stats, hints and fun fact, is pinned word for word to
+ * scripts/data/triviaFactsVerified2026-09.json, where each one carries two
+ * sources on two hosts (an official one where the sport has one, or the
+ * reason it could not), and scripts/simTriviaFacts.mjs fails if the two ever
+ * disagree. Change a line here and the fence goes red until the record holds
+ * the new text and its sources.
  *
- * Two rules that came out of the round and should survive it:
+ * Two rules that came out of the round:
  *   1. A player who is still playing gets a floor ('43,000+ career points'),
  *      never an exact total. An exact total for an active man is a fact with
  *      an expiry date, and this file has no build step to refresh it.
- *   2. Anything that could not be two-sourced was cut rather than guessed.
- *      That is why some lines are shorter than they were. The one entry left
- *      untouched for want of sources is nhl-3, flagged in the round report.
+ *   2. A line that could not be two-sourced was rewritten to one that could,
+ *      never shipped on one source.
+ *
+ * The verdict is the game's own career judgment label, not a claim about
+ * induction (Bonds is borderline while not inducted, Yao is inducted).
  *
  * The array length is load bearing: useHofOrBust picks with
  * getDateSeed() % hofPlayers.length, so adding or removing an entry moves
@@ -41,16 +42,16 @@ const hofPlayers: HofPlayer[] = [
   {
     id: 'soc-1',
     sport: 'soccer',
-    anonymizedStats: ['672 goals for one club', '4 Champions League trophies', '8 Ballon d\'Or awards', '1 World Cup'],
-    hints: ['Left-footed forward', 'Played in Spain for over a decade', 'Argentinian'],
+    anonymizedStats: ['672 goals for one club', '10 La Liga titles', '8 Ballon d\'Or awards', '1 World Cup'],
+    hints: ['Won four Champions League titles with one club', 'Played in Spain for over a decade', 'Argentinian'],
     answer: 'Lionel Messi',
     verdict: 'hof',
-    funFact: 'The most decorated player in football history with 45+ senior trophies.',
+    funFact: 'Became the most decorated player in football history in 2023.',
   },
   {
     id: 'soc-2',
     sport: 'soccer',
-    anonymizedStats: ['228 goals for one English club, a club record', '5 league titles in three countries', '1 Champions League', 'World Cup winner in 1998'],
+    anonymizedStats: ['228 goals for one English club, a club record', '5 league titles in three countries', '4 Premier League Golden Boots', 'World Cup winner in 1998'],
     hints: ['Known for incredible speed', 'French international', 'Won trophies in France, Spain and England'],
     answer: 'Thierry Henry',
     verdict: 'hof',
@@ -59,26 +60,26 @@ const hofPlayers: HofPlayer[] = [
   {
     id: 'soc-3',
     sport: 'soccer',
-    anonymizedStats: ['18 goals in 722 games for one club', '9 La Liga titles', '3 Champions League trophies', '15 seasons at the same club'],
-    hints: ['Defensive midfielder', 'Spanish international', 'Spent 15 years at one club in Spain before a move to MLS'],
+    anonymizedStats: ['722 games for one club', '9 La Liga titles', '3 Champions League trophies', 'World Cup and Euro winner'],
+    hints: ['Defensive midfielder', 'Spanish international', 'Moved to MLS in 2023 after his whole career at one Spanish club'],
     answer: 'Sergio Busquets',
     verdict: 'borderline',
-    funFact: 'The invisible metronome, you don\'t notice him until he\'s gone.',
+    funFact: 'Third on his club\'s all-time appearance list, behind Xavi and Messi.',
   },
   {
     id: 'soc-4',
     sport: 'soccer',
-    anonymizedStats: ['158 goals for one English club', '150 Premier League goals', '1 Premier League title', '0 Champions League trophies'],
+    anonymizedStats: ['158 goals for one English club', '150 Premier League goals', '1 Premier League title', '1 Ballon d\'Or'],
     hints: ['English striker', 'Known for pace and finishing', 'Played in England and Spain'],
     answer: 'Michael Owen',
     verdict: 'bust',
-    funFact: 'Won the Ballon d\'Or at 22 but injuries derailed his career trajectory.',
+    funFact: 'Won the Ballon d\'Or in 2001, but hamstring injuries dogged the rest of his career.',
   },
   {
     id: 'soc-5',
     sport: 'soccer',
     anonymizedStats: ['900+ career goals', '5 Champions League trophies', '5 Ballon d\'Or awards', 'League titles in more than one country'],
-    hints: ['Portuguese forward', 'Played top-flight football in four countries after leaving Portugal', 'Iconic header and free-kick taker'],
+    hints: ['Portuguese forward', 'Played top-flight football in four countries after leaving Portugal', 'The first man to score at six World Cups'],
     answer: 'Cristiano Ronaldo',
     verdict: 'hof',
     funFact: 'All-time top scorer in men\'s international football history.',
@@ -92,7 +93,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Quarterback drafted in the 6th round', 'Played until age 45', 'New England and Tampa Bay'],
     answer: 'Tom Brady',
     verdict: 'hof',
-    funFact: 'The 199th overall pick became the greatest winner in NFL history.',
+    funFact: 'The 199th overall pick went on to win seven Super Bowls.',
   },
   {
     id: 'nfl-2',
@@ -107,7 +108,7 @@ const hofPlayers: HofPlayer[] = [
     id: 'nfl-3',
     sport: 'nfl',
     anonymizedStats: ['4,083 career passing yards', '18 touchdowns', '23 interceptions', '3 NFL seasons'],
-    hints: ['First overall draft pick', 'Played his college ball in the SEC', 'Career cut short by poor play and injuries'],
+    hints: ['First overall draft pick', 'Played his college ball in the SEC', 'Released by his only NFL team after three seasons'],
     answer: 'JaMarcus Russell',
     verdict: 'bust',
     funFact: 'Considered one of the biggest draft busts in NFL history, out of the league by age 25.',
@@ -116,7 +117,7 @@ const hofPlayers: HofPlayer[] = [
     id: 'nfl-4',
     sport: 'nfl',
     anonymizedStats: ['71,940 career passing yards', '539 touchdowns', '2 Super Bowl wins', '5 MVP awards'],
-    hints: ['Son of an NFL quarterback', 'Played for 2 teams in his career', 'Known for audibles at the line'],
+    hints: ['Son of an NFL quarterback', 'Played for 2 teams in his career', 'Drafted first overall in 1998'],
     answer: 'Peyton Manning',
     verdict: 'hof',
     funFact: 'Retired with the most passing touchdowns in NFL history at the time.',
@@ -125,10 +126,10 @@ const hofPlayers: HofPlayer[] = [
     id: 'nfl-5',
     sport: 'nfl',
     anonymizedStats: ['22,895 career receiving yards', '197 receiving touchdowns', '13x Pro Bowl', 'Played 20 NFL seasons'],
-    hints: ['Wide receiver known for celebrations', 'Spent prime years in San Francisco', 'Set the all-time TD record'],
+    hints: ['Wide receiver known for his work ethic', 'Spent prime years in San Francisco', 'Set the all-time TD record'],
     answer: 'Jerry Rice',
     verdict: 'hof',
-    funFact: 'His records are considered virtually unbreakable in modern football.',
+    funFact: 'Still holds the NFL career records for receiving yards and total touchdowns.',
   },
 
   // ── NBA ──
@@ -144,7 +145,7 @@ const hofPlayers: HofPlayer[] = [
   {
     id: 'nba-2',
     sport: 'nba',
-    anonymizedStats: ['22,000+ career points', '6,000+ career assists', '9 All-Star selections', '0 NBA championships'],
+    anonymizedStats: ['22,000+ career points', '6,000+ career assists', '9+ All-Star selections', '1 Rookie of the Year award'],
     hints: ['Point guard from the 2010s', 'Known for deep three-pointers', 'Played in the Pacific Northwest'],
     answer: 'Damian Lillard',
     verdict: 'borderline',
@@ -154,10 +155,10 @@ const hofPlayers: HofPlayer[] = [
     id: 'nba-3',
     sport: 'nba',
     anonymizedStats: ['9,247 career points', '4,494 rebounds', '8 seasons played', '#1 overall pick'],
-    hints: ['Center from China', 'Massive marketing draw', 'Injuries ended career early'],
+    hints: ['Center from China', 'Played his whole NBA career in Houston', 'Injuries ended career early'],
     answer: 'Yao Ming',
-    verdict: 'borderline',
-    funFact: 'Inducted into the Hall of Fame largely for his cultural impact on basketball globally.',
+    verdict: 'hof',
+    funFact: 'Inducted into the Hall of Fame in 2016 after just eight NBA seasons.',
   },
   {
     id: 'nba-4',
@@ -233,22 +234,22 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Center from Canada', 'Known as "The Great One"', 'Played in the 1980s-90s'],
     answer: 'Wayne Gretzky',
     verdict: 'hof',
-    funFact: 'Holds or shares 61 NHL records, and his number 99 is retired league-wide.',
+    funFact: 'Scored 92 goals in 1981-82, still the NHL single-season record.',
   },
   {
     id: 'nhl-2',
     sport: 'hockey',
     anonymizedStats: ['766 career goals', '1,155 career assists', '1,921 career points', '1,733 games played'],
-    hints: ['Right wing with a famous mullet', 'Czech-born player', 'Played mostly in Pittsburgh'],
+    hints: ['Right wing known for playmaking', 'Czech-born player', 'Spent his longest NHL stint in Pittsburgh'],
     answer: 'Jaromir Jagr',
     verdict: 'hof',
-    funFact: 'Played professionally until age 49 across multiple leagues worldwide.',
+    funFact: 'Played professionally at age 53, for his hometown club in Kladno.',
   },
   {
     id: 'nhl-3',
     sport: 'hockey',
-    anonymizedStats: ['44 career goals', '65 career points', '#1 overall pick', '3 NHL seasons'],
-    hints: ['Russian forward drafted in 2012', 'Played for a struggling expansion-era team', 'Returned to the KHL'],
+    anonymizedStats: ['62 career goals', '136 career points', '#1 overall pick', '6 NHL seasons'],
+    hints: ['Russian forward drafted in 2012', 'Spent four seasons in Edmonton before moving on', 'Returned to the KHL'],
     answer: 'Nail Yakupov',
     verdict: 'bust',
     funFact: 'The top pick ahead of a stacked 2012 draft class, never found his NHL footing.',
@@ -269,7 +270,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Center from Canada', 'Wore #87', 'Drafted first overall in 2005'],
     answer: 'Sidney Crosby',
     verdict: 'hof',
-    funFact: 'Won back-to-back Stanley Cups and is considered the best player of his generation.',
+    funFact: 'Won back-to-back Stanley Cups in 2016 and 2017, and the Conn Smythe both times.',
   },
 ];
 
