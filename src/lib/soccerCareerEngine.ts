@@ -292,6 +292,11 @@ export interface UCLKnockoutMatch {
    *  'extraTime' and 'penalties', and with 'awayGoals' when an away goal in
    *  extra time settled it. Absent on every result from before. */
   afterExtraTime?: boolean;
+  /** Round 670 polish: the goals of extra time alone, already counted in
+   *  goalsFor and goalsAgainst, set with afterExtraTime. Taken away they give
+   *  the score at 90, which is what decided whether extra time was due. */
+  etFor?: number;
+  etAgainst?: number;
   pensFor?: number;
   pensAgainst?: number;
 }
@@ -6023,6 +6028,8 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
       decider.goalsFor += etFor;
       decider.goalsAgainst += etAgainst;
       decider.afterExtraTime = true;
+      decider.etFor = etFor;
+      decider.etAgainst = etAgainst;
       aggFor += etFor;
       aggAgainst += etAgainst;
       decider.aggFor = aggFor;
