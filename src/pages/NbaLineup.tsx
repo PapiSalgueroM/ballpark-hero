@@ -16,7 +16,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
-import { startingFivePoints } from '@/lib/lineupVerdictPoints';
+import { FIVE_REFEREE_BASELINE, startingFivePoints } from '@/lib/lineupVerdictPoints';
 
 const NbaLineup = () => {
   const {
@@ -354,7 +354,9 @@ const NbaLineup = () => {
               <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{verdict.analysis}</p>
               <p className="mt-4 text-sm text-muted-foreground">
                 <span data-testid="starting-five-points" className="font-display text-2xl font-black text-gold">{startingFivePoints(verdict)}</span> points
-                {verdict.judge === 'offline' && <span className="block mt-1 text-xs">The offline judge can't read the challenge, so this five scores no points. Play again once the referee is back.</span>}
+                {verdict.judge === 'offline'
+                  ? <span className="block mt-1 text-xs">The AI referee couldn't judge this five, and the offline judge can't read the challenge, so it scores no points.</span>
+                  : <span className="block mt-1 text-xs">Points start above {FIVE_REFEREE_BASELINE}.</span>}
               </p>
             </div>
 
