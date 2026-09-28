@@ -18,6 +18,7 @@ import {
   pickSecret,
   shortPosition,
   suggestPlayers,
+  listedAgeLabel,
 } from '@/lib/whoAmI';
 import {
   CLUE_BY_ID,
@@ -66,7 +67,8 @@ const ClueAuction = () => {
   const startGame = useCallback((d: WhoAmIData, excludeName?: string) => {
     const s = pickSecret(d.pool, excludeName);
     setSecret(s);
-    setReveals(buildClueReveals(s, d.clubHistory.get(s.name), buildClubDisplayMap(d.pool)));
+    /* Round 668: the shared pool keys club history by person, not by name. */
+    setReveals(buildClueReveals(s, d.clubHistory.get(s.personKey), buildClubDisplayMap(d.pool)));
     setBank(START_BANK);
     setPurchased([]);
     setWrongGuesses([]);
@@ -224,8 +226,8 @@ const ClueAuction = () => {
           <div className="font-bold text-foreground text-sm">{shortPosition(secret.position)}</div>
         </div>
         <div className="bg-card border border-border rounded-lg p-2">
-          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Age</div>
-          <div className="font-bold text-foreground text-sm">{secret.age}</div>
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Listed age</div>
+          <div className="font-bold text-foreground text-sm">{listedAgeLabel(secret)}</div>
         </div>
         <div className="bg-card border border-border rounded-lg p-2">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Value</div>

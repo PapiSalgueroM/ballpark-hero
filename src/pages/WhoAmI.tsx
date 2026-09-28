@@ -13,7 +13,7 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import { RulesGate } from '@/components/game/RulesGate';
 import { GiveUpButton } from '@/components/game/GiveUpButton';
 import PlayerAutocomplete from '@/components/game/PlayerAutocomplete';
-import { SOCCER_MARKET_VALUE_SOURCE, normalizeName, type PlayerEntity } from '@/lib/playerSearch';
+import { SOCCER_MARKET_VALUE_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { fmtCompactUsd } from '@/lib/dealPlayers';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
 import {
@@ -28,6 +28,8 @@ import {
   saveWhoAmIDifficulty,
   scoreGuess,
   whoAmIPlayerFromEntity,
+  whoAmIPersonKey,
+  listedAgeLabel,
   shortPosition,
   positionGroup,
 } from '@/lib/whoAmI';
@@ -89,8 +91,12 @@ const WhoAmI = () => {
     boot();
   }, [boot]);
 
-  const guessedNames = useMemo(
-    () => new Set(guesses.map(g => normalizeName(g.player.name))),
+  /* Round 668: who has been guessed, by person rather than by folded name, so
+     guessing the Fenerbahce keeper Ederson no longer hides the Atalanta
+     midfielder Éderson from the list (or refuses him). The search takes these
+     keys as `exclude` and drops just that man. */
+  const guessedPeople = useMemo(
+    () => new Set(guesses.map(g => g.player.personKey)),
     [guesses],
   );
 
@@ -128,7 +134,7 @@ const WhoAmI = () => {
   const [lookupFailed, setLookupFailed] = useState(false);
   const submitGuess = async (entity: PlayerEntity) => {
     if (phase !== 'playing' || !data || !secret || checkingRef.current) return;
-    if (guessedNames.has(normalizeName(entity.name))) return;
+    if (guessedPeople.has(entity.personKey ?? whoAmIPersonKey(entity.rawName || entity.name))) return;
     checkingRef.current = true;
     setChecking(true);
     setLookupFailed(false);
@@ -196,7 +202,7 @@ const WhoAmI = () => {
     const valueNear = Math.abs(b.valueLogDiff) <= 0.2; // within roughly 1.6x
     return (
       <div
-        key={p.name}
+        key={p.personKey}
         className={cn('bg-card border rounded-xl p-3', highlight ? 'border-primary/60' : 'border-border')}
       >
         <div className="flex items-center gap-2 mb-1.5">
@@ -262,7 +268,9 @@ const WhoAmI = () => {
               <>No current age<X className="w-3 h-3" /></>
             ) : (
               <>
-                Age {p.age}
+                {/* Round 668: the age the player list has, and which list when
+                    it is not the newest one. Never worked out to today. */}
+                Age {listedAgeLabel(p)}
                 {b.ageDiff === 0 ? (
                   <Check className="w-3 h-3" />
                 ) : b.ageDiff > 0 ? (
@@ -275,7 +283,7 @@ const WhoAmI = () => {
             p.age === 0
               ? 'No current season listing for this player, so age cannot be compared'
               : b.ageDiff === 0
-              ? 'Same age as the secret player'
+              ? 'Same listed age as the secret player'
               : b.ageDiff > 0
               ? 'The secret player is older'
               : 'The secret player is younger',
@@ -321,8 +329,8 @@ const WhoAmI = () => {
           <div className="font-bold text-foreground text-sm">{shortPosition(secret.position)}</div>
         </div>
         <div className="bg-card border border-border rounded-lg p-2">
-          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Age</div>
-          <div className="font-bold text-foreground text-sm">{secret.age}</div>
+          <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Listed age</div>
+          <div className="font-bold text-foreground text-sm">{listedAgeLabel(secret)}</div>
         </div>
         <div className="bg-card border border-border rounded-lg p-2">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Value</div>
@@ -387,6 +395,7 @@ const WhoAmI = () => {
                 <li>🟨 <span className="text-foreground">Yellow chip:</span> close, but not an exact match (same position group, or a club they used to share)</li>
                 <li>⬜ <span className="text-foreground">Gray chip:</span> no match on that clue</li>
                 <li>🔼🔽 <span className="text-foreground">Arrows</span> on age and value show whether the secret player is older/younger or worth more/less than your guess</li>
+                <li>🎂 <span className="text-foreground">Ages</span> are the ones on our player list, not worked out to today, so anyone who's had a birthday since is a bit older than it says. A player only on last year's list shows which list.</li>
               </ul>
             </section>
 
@@ -518,7 +527,7 @@ const WhoAmI = () => {
                   source: SOCCER_MARKET_VALUE_SOURCE,
                   minChars: 2,
                   limit: 8,
-                  exclude: guessedNames,
+                  exclude: guessedPeople,
                 }}
                 placeholder="Type any player's name (2+ letters)"
                 validateOnly
@@ -530,6 +539,9 @@ const WhoAmI = () => {
                   Couldn't pull up his season just then, so that one doesn't count. Pick him again.
                 </p>
               )}
+              <p className="mt-2 text-[11px] text-muted-foreground text-center">
+                Ages are as our player list has them, so a birthday since makes him a bit older.
+              </p>
             </div>
 
             <div className="flex justify-center mb-4">

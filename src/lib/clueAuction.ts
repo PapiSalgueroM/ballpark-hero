@@ -1,4 +1,4 @@
-import { WhoAmIPlayer, clubKey, shortPosition } from '@/lib/whoAmI';
+import { WhoAmIPlayer, ageOnNewestList, clubKey, shortPosition } from '@/lib/whoAmI';
 import { flagFor } from '@/lib/dealPlayers';
 
 /**
@@ -152,7 +152,8 @@ export function buildClueReveals(
   return {
     nationality: nationality ? `${flagFor(nationality)} ${nationality}` : null,
     position: position ? `${position} (${shortPosition(position)})` : null,
-    ageBracket: ageBracket(secret.age),
+    // Round 668: on the newest list, the same basis Who Am I's arrows use.
+    ageBracket: ageBracket(ageOnNewestList(secret)),
     valueBand: valueBand(secret.value),
     clubInitial: currentKey ? `Starts with "${clubName.charAt(0).toUpperCase()}"` : null,
     club: currentKey ? clubName : null,

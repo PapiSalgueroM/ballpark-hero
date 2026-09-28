@@ -1,7 +1,12 @@
 import { supabase } from '@/integrations/supabase/client';
 import { flagFor } from '@/lib/dealPlayers';
-import { clubKey, normalizeName, positionGroup, primaryNationality } from '@/lib/whoAmI';
+import { clubKey, isSameMan, normalizeName, positionGroup, primaryNationality } from '@/lib/whoAmI';
 import type { PositionGroup } from '@/lib/whoAmI';
+
+/* Round 668: isSameMan moved to whoAmI.ts so Who Am I's club history shares
+   the one rule; it is re-exported here for the harnesses that import it from
+   this file (scripts/simPlayerBingoPool.mjs). */
+export { isSameMan };
 
 /**
  * Player Bingo (5x5 board, real bingo rules: complete ANY line to win)
@@ -198,24 +203,6 @@ interface PoolRow {
   market_value_usd: number | null;
   age: number | null;
   year: number | null;
-}
-
-/**
- * ROUND 385: person_key is NULL on every row of player_market_values, so one
- * name is one career and "Rodri" is at least three men (a Barcelona
- * midfielder aged 21 in 2006, a Huesca player aged 32 in 2009, and the
- * Manchester City one), and "Lucas Hernández" is a Frenchman and a Uruguayan.
- * A history row is the pool player's only if its age walks with its year:
- * the pool row says 29 in 2026, so a 2006 row should say about 9, and 21 is
- * somebody else. Rows with no age cannot be checked and are kept.
- */
-export function isSameMan(
-  ref: { age: number; year: number },
-  row: { age: number | null; year: number | null },
-): boolean {
-  if (!(ref.age > 0) || !(ref.year > 0)) return true;
-  if (row.age == null || row.year == null || !(row.age > 0) || !(row.year > 0)) return true;
-  return Math.abs((ref.age - row.age) - (ref.year - row.year)) <= 1;
 }
 
 /**

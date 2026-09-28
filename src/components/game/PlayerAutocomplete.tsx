@@ -380,7 +380,10 @@ export function PlayerAutocomplete({
 
           {suggestions.map((entity, i) => {
             const { before, match, after } = highlightParts(entity.name, value);
-            const subtitle = metaSubtitle(entity);
+            /* Round 668: when two rows share a name (Éderson the Atalanta
+               midfielder, Ederson the Fenerbahce keeper) the line under each
+               says which man it is, from his latest row. */
+            const subtitle = entity.disambiguator ?? metaSubtitle(entity);
             return (
               <button
                 key={entity.key}
