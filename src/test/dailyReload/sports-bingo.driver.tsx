@@ -47,18 +47,38 @@ async function enterDaily(m: MountedPage): Promise<void> {
   await click(button(m.container, /^Daily card/));
 }
 
-async function finish(m: MountedPage): Promise<void> {
+/* The pack on screen, 0 based, from its "Pack N of 10" line. */
+function openPack(m: MountedPage): number {
+  const span = Array.from(m.container.querySelectorAll('span')).find(s => /Pack \d+ of \d+/.test(s.textContent ?? ''));
+  if (!span) throw new Error('no open pack');
+  return Number((span.textContent ?? '').match(/Pack (\d+) of/)![1]) - 1;
+}
+
+/* Play packs from wherever the card is up to (not including) pack `stop`:
+   every square the open pack can claim is tapped, then the pack is closed.
+   Round 645 part three fix: a card resumed part way (assertion 6) picks up on
+   the pack that was open, and the squares the honest path marked on the
+   packs before it are worked out again, so the split run taps exactly what
+   the unbroken run tapped. */
+async function playPacks(m: MountedPage, stop: number): Promise<void> {
   const game = buildGame(players, dailySeed(getTodayET()));
   const marked: boolean[] = new Array(CARD_SIZE).fill(false);
-  for (let i = 0; i < PACK_COUNT; i++) {
+  const from = openPack(m);
+  for (let i = 0; i < from; i++) for (const sq of claimableSquares(game, game.packs[i], marked)) marked[sq] = true;
+  for (let i = from; i < stop; i++) {
     for (const sq of claimableSquares(game, game.packs[i], marked)) {
-      await click(squareButtons(m)[sq]);
+      const square = squareButtons(m)[sq];
+      if (!square.disabled) await click(square);
       marked[sq] = true;
     }
     const next = advanceButton(m);
     if (!next) throw new Error(`no pack button on pack ${i + 1}`);
     await click(next);
   }
+}
+
+async function finish(m: MountedPage): Promise<void> {
+  await playPacks(m, PACK_COUNT);
 }
 
 export default defineDriver<MountedPage>({
@@ -78,6 +98,18 @@ export default defineDriver<MountedPage>({
   enterDaily,
   finish,
   status,
+
+  /* Round 645 part three fix: four packs played, then a reload and Daily card
+     have to come back on pack five with the same squares marked. The seconds
+     left are kept too, but a tick can land between the read and the refresh,
+     so they are not part of the comparison. */
+  playSome: m => playPacks(m, 4),
+  progress(m) {
+    if (status(m) !== 'playing') throw new Error('no open pack');
+    const you = Array.from(m.container.querySelectorAll('span')).find(s => /^You \d+/.test((s.textContent ?? '').trim()));
+    const marked = squareButtons(m).map((b, i) => (b.disabled ? i : -1)).filter(i => i >= 0).join(',');
+    return [`Pack ${openPack(m) + 1}`, (you?.textContent ?? '').trim(), marked].join('\n');
+  },
 
   /* The headline, the squares and lines sentence, the score chip and the
      card grid: every number and every square the player saw. */

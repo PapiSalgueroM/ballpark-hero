@@ -8,9 +8,9 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useArcadeFlight } from '@/hooks/useArcadeFlight';
 import { getTodayET } from '@/lib/dateUtils';
 import { markRestoredFinish } from '@/lib/restoredFinish';
-import { readArcadeRun, writeArcadeRun } from '@/lib/arcadeRecord';
+import { countedLehmer, readArcadeProgress, readArcadeRun, writeArcadeProgress, writeArcadeRun, type CountedRng } from '@/lib/arcadeRecord';
 import {
-  buildRun, daySeed, lehmer, maxRunScore, takeShot, wallSpan,
+  buildRun, daySeed, maxRunScore, takeShot, wallSpan,
   ROUNDS_PER_RUN, type KickSetup, type ShotResult,
 } from '@/lib/freeKick';
 
@@ -37,12 +37,19 @@ const GOAL_BOT = 150;
 const toViewX = (x: number) => GOAL_L + ((x + 1) / 2) * (GOAL_R - GOAL_L);
 const toViewY = (y: number) => GOAL_BOT - y * (GOAL_BOT - GOAL_TOP);
 
+/* Round 645 part three fix: the most today's first `rounds` shots can pay,
+   the bound a stored score is read back against (src/lib/arcadeRecord.ts). */
+const dayCeiling = (today: string, rounds: number) => maxRunScore(buildRun(daySeed(today)).slice(0, rounds));
+
 export default function FreeKickBoard() {
   /* Round 428's rule: the day is pinned at mount and every read, write and
      deal uses it, so a run that crosses midnight ET stays on the day it
      started instead of being filed under tomorrow. */
   const todayStr = useRef(getTodayET()).current;
-  const [restored] = useState(() => readArcadeRun(SLUG, todayStr, COUNT_FIELD, ROUNDS_PER_RUN));
+  const [restored] = useState(() => readArcadeRun(SLUG, todayStr, COUNT_FIELD, ROUNDS_PER_RUN, dayCeiling(todayStr, ROUNDS_PER_RUN)));
+  /* Round 645 part three: today's run part played, so the intro can say where
+     Today's ten picks up. start() reads it again when it deals. */
+  const [partPlayed] = useState(() => (restored ? null : readArcadeProgress(SLUG, todayStr, COUNT_FIELD, ROUNDS_PER_RUN, n => dayCeiling(todayStr, n))));
 
   const [mode, setMode] = useState<Mode>('daily');
   const [phase, setPhase] = useState<Phase>(restored ? 'done' : 'intro');
@@ -60,7 +67,7 @@ export default function FreeKickBoard() {
   const [power, setPower] = useState(0.6);
   const [charging, setCharging] = useState(false);
 
-  const rngRef = useRef<() => number>(lehmer(1));
+  const rngRef = useRef<CountedRng>(countedLehmer(1));
   const savedRef = useRef(restored !== null);
 
   const setup = kicks[kickIdx] ?? null;
@@ -93,24 +100,41 @@ export default function FreeKickBoard() {
       setPhase('done');
       return;
     }
+    /* Round 645 part three: a daily part played today carries on from the kick
+       it was left on, with the kicks already taken behind it and the spray
+       stream picked up where it stopped, so the remaining kicks are the ones a
+       player who never left would face. All ten taken means the final card
+       was never shown: it is shown now, and that is the finish recorded. */
+    const part = m === 'daily' ? readArcadeProgress(SLUG, todayStr, COUNT_FIELD, ROUNDS_PER_RUN, n => dayCeiling(todayStr, n)) : null;
     const seed = m === 'daily' ? daySeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
-    rngRef.current = lehmer(seed ^ 0x5eed1234);
+    rngRef.current = countedLehmer(seed ^ 0x5eed1234, part?.draws ?? 0);
     resetFlight();
     setMode(m);
     setKicks(buildRun(seed));
-    setKickIdx(0);
-    setScore(0);
-    setGoals(0);
+    setKickIdx(part ? Math.min(part.rounds, ROUNDS_PER_RUN - 1) : 0);
+    setScore(part?.score ?? 0);
+    setGoals(part?.count ?? 0);
     setResult(null);
     setAimX(0); setAimY(0.5); setCurve(0); setPower(0.6);
     savedRef.current = false;
-    setPhase('aiming');
+    setPhase(part && part.rounds >= ROUNDS_PER_RUN ? 'done' : 'aiming');
   }, [restored, todayStr, resetFlight]);
 
   const strike = useCallback(() => {
     if (phase !== 'aiming' || !setup) return;
     setCharging(false);
     const r = takeShot({ x: aimX, y: aimY, power, curve }, setup, rngRef.current);
+    /* Round 645 part three: the kick is on the record the moment it is struck,
+       before the ball is in the air, so a refresh mid flight cannot hand it
+       back to be taken again with the keeper's dive already seen. */
+    if (mode === 'daily') {
+      writeArcadeProgress(SLUG, todayStr, COUNT_FIELD, {
+        score: score + r.points,
+        count: goals + (r.scored ? 1 : 0),
+        rounds: kickIdx + 1,
+        draws: rngRef.current.draws,
+      });
+    }
     setResult(r);
     setPhase('flying');
     /* The flight is drawn from the path the rules already computed, so what
@@ -122,7 +146,7 @@ export default function FreeKickBoard() {
       if (r.scored) setGoals(g => g + 1);
       setPhase('kickEnd');
     });
-  }, [phase, setup, aimX, aimY, power, curve, launch]);
+  }, [phase, setup, aimX, aimY, power, curve, launch, mode, score, goals, kickIdx, todayStr]);
 
   const nextKick = useCallback(() => {
     resetFlight();
@@ -193,6 +217,13 @@ export default function FreeKickBoard() {
         <p className="mt-2 text-xs text-muted-foreground">
           The wall gets bigger, the keepers get better and you get further out. Ten kicks, one run.
         </p>
+        {partPlayed && (
+          <p className="mt-2 text-xs font-semibold text-primary">
+            {partPlayed.rounds >= ROUNDS_PER_RUN
+              ? "All ten of today's kicks are taken. Tap Today's ten to see how the run went."
+              : `You've taken ${partPlayed.rounds} of today's ten. Those count, so you pick up at kick ${partPlayed.rounds + 1}.`}
+          </p>
+        )}
         <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Button onClick={() => start('daily')} className="gap-2">
             <CalendarDays className="h-4 w-4" /> Today's ten

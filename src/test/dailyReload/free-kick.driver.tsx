@@ -16,7 +16,7 @@
 import './mocks';
 import { act, fireEvent, waitFor } from '@testing-library/react';
 import { defineDriver } from './driver';
-import { freezeArcadeGlobals } from './arcadeGlobals';
+import { freezeArcadeGlobals, withFullMotion } from './arcadeGlobals';
 import { button, click, findButton, mountPage, type MountedPage } from './harness';
 import { ROUNDS_PER_RUN } from '@/lib/freeKick';
 import FreeKick from '@/pages/FreeKick';
@@ -38,9 +38,12 @@ function status(m: MountedPage): 'playing' | 'finished' {
   throw new Error('free kick shows neither a pitch nor a finished run (intro?)');
 }
 
-async function finish(m: MountedPage): Promise<void> {
-  for (let i = 0; i < ROUNDS_PER_RUN; i += 1) {
-    const strike = button(m.container, /^Hold to strike$/);
+/* Settle up to `count` kicks, stopping early when the run is over: a resumed
+   run (Round 645 part three) has fewer than ten left. */
+async function takeKicks(m: MountedPage, count: number): Promise<void> {
+  for (let i = 0; i < count; i += 1) {
+    const strike = findButton(m.container, /^Hold to strike$/);
+    if (!strike) { if (doneCard(m)) return; throw new Error('no strike button and no finished run'); }
     /* Loading and striking are separate events on the same button, so this is
        a hold rather than a click. Both go in one act so no timer can run
        between them. */
@@ -51,6 +54,18 @@ async function finish(m: MountedPage): Promise<void> {
     const next = await waitFor(() => button(m.container, /^Next kick$|^See the run$/));
     await click(next);
   }
+}
+
+const finish = (m: MountedPage) => takeKicks(m, ROUNDS_PER_RUN);
+
+/* The three pills over the pitch: the kick the board is on, the goals and
+   the points. Byte identical across a reload of a part played run. */
+function progress(m: MountedPage): string {
+  const lines = Array.from(m.container.querySelectorAll('span'))
+    .map(s => (s.textContent ?? '').replace(/\s+/g, ' ').trim())
+    .filter(t => /^(Kick \d+\/\d+|Scored \d+|Points -?\d+)$/.test(t));
+  if (lines.length !== 3) throw new Error(`free kick shows ${lines.length} of the three progress pills (no live pitch?)`);
+  return lines.join('\n');
 }
 
 async function enterDaily(m: MountedPage): Promise<void> {
@@ -77,6 +92,25 @@ export default defineDriver<Api>({
   enterDaily,
   finish,
   status,
+
+  /* Round 645 part three: three of the ten, then a reload has to come back
+     on kick four with the same goals and points. */
+  playSome: m => takeKicks(m, 3),
+  progress,
+
+  /* Assertion 7: one kick struck with the ball left in the air, then the
+     refresh. The kick is decided at the strike, so it has to stay taken. */
+  oneStep: m => takeKicks(m, 1),
+  async interruptStep(m) {
+    const strike = button(m.container, /^Hold to strike$/);
+    await withFullMotion(async () => {
+      await act(async () => {
+        fireEvent.mouseDown(strike);
+        fireEvent.mouseUp(strike);
+      });
+    });
+    if (findButton(m.container, /^Next kick$|^See the run$/)) throw new Error('the kick landed before the refresh, so the flight was never interrupted');
+  },
 
   /* Every number on the final card. The one line left out is the "come back
      tomorrow" note, which appears only on a restored daily and stands where

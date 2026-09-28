@@ -218,6 +218,81 @@ migration in this round.
   backfill here. HOF or Bust's walk repeats a player two days apart 4 times a year at `dailyIndex`
   cycle boundaries, like every game on that walk.
 
+## 2026-09-28: Round 645 part three, the dailies lock, fixed after review (branch `r645c-dailies-lock`, NOT on main)
+
+Part of the six round points economy (645a, 645b, 645c, 646, 647, 648) that ships together. The
+build pass locked the dailies that never locked and made the run based ones file every step; the
+adversarial review then found three majors and five minors behind its green fence. This pass fixed
+all of them on the same branch except Perfect Season, one sibling of the third major, left below
+with its reason.
+
+**What changed for players.**
+- NASCAR and Tennis Chain: Give Up is shut while a guess is out being verified, and a verdict that
+  comes back after its chain is gone is dropped (before, giving up in that window recorded 0 while
+  the card, and every reload of it, read 100). The used check runs on the name the validator settled
+  on, so a chain never holds one name twice. All three chains remember that today's nickname row
+  was saved, so a reloaded finished daily does not offer the form again.
+- Pack Battle: the reveal timer dies with its run, so a mode toggle during the reveal can no longer
+  bust or advance the freshly dealt daily (it used to record a zero call daily and reopen the day).
+  The page files nothing its own reader would refuse, and reopening a finished daily over a result
+  card no longer leaves a restore mark that swallows the next real finish (Rarity Round too).
+- Hand edited saves: an arcade (Free Kick, Buzzer Beater) progress or finished record scoring past
+  the ceiling of the shots it covers is refused, and Rarity Round scores a saved answer from its
+  category's pool (an answer the pool does not hold refuses the record).
+- The run based dailies that saved only at the end now file every step and resume where they were
+  left: **Minefield** (every click, replayed through the rules), **Player Stock Market** (every buy;
+  all eleven bought rolls the years again over the same XI), **Sports Millionaire** (every locked in
+  answer before its suspense, every lifeline and what it showed), **Gauntlet Draft** (every pick,
+  soccer page and the shared NBA, NFL and MLB board), and **Sports Bingo** (found by grep, not the
+  review: the open pack, its seconds and the marks).
+- The tackle drill keeps its foul count across a refresh. Back to modes on both Gauntlet boards now
+  lets the run go, which closed a second stale mark the new resume assertion found.
+- Found by this pass on the same toggle, not by the review: a daily's last step filed and left in
+  its reveal for Unlimited, Unlimited played to its result, then Daily, landed the daily's finish on
+  a page already on a result card. Done to done is no transition, so the daily was never recorded
+  and was then filed as finished. Pack Battle and Rarity Round lost it on this branch; Sports
+  Millionaire loses it once 645a moves the mode out of its done flag (measured with 645a's recorder
+  swapped in). All three now put the board on boot for one tick, on the run's own timer, so the
+  finish arrives as a transition.
+
+**Left, with the reason.** Perfect Season (MLB, NBA, NFL, NHL) still saves only when the season
+lands. Its draft is network fetched squads, so an honest resume has to file every spin's team
+season and pick plus the daily picker's draw count, and re-fetch and re-verify each squad on the
+way back (or a hand edited record names a 99 rated XI); written into four hand copied pages (682 to
+854 lines, no shared engine) that is the Round 426 mistake, and it lands in the hunks 645a rewrites
+in all four. It wants the engine lifted first (one hook, four configs), then the save written once.
+Perfect Lineup classic is still unreachable (redirects home since Round 34).
+
+**Fences.** `simDailyReload`: 30 rows now (tackle and glove save drills added), 15 resume a part
+played run (assertion 6), 8 keep a step refreshed in flight (assertion 7); two new swap controls,
+`lockin` (Sports Millionaire's answer filed only when its reveal lands, (7) red on that row alone)
+and `drillland` (the drills' round filed only when it lands, (7) red on the three drill rows alone).
+New `simDailyLockEdges` (`src/test/dailyLockEdges.test.tsx`): 26 tests in 17 sections, one per door
+(14 the review found, 3 this pass found), and 18 negative controls, each a copy of one module with
+one fix taken out, swapped in through the new `DAILY_LOCK_SWAP` alias in `vitest.config.ts`; each
+refuses to run unless its anchor occurs exactly once in the code, proves the copy loaded, and must
+turn exactly its own section red. Millionaire's section asserts the cause as well as the outcome,
+because on this branch its recorder flag still carries the mode and the outcome holds either way.
+Measured on the tree this entry was committed with (code head `45b53a3f`), each run with its own
+TEMP: `simDailyLockEdges` 26 of 26, all 18 controls as designed, exit 0; `simDailyReload` 175 of
+175 across 30 rows, all 10 controls fired, exit 0; tsc exit 0. With 645a's recorder, completions
+lib and the three pages' recorder lines swapped in, the Pack Battle, Rarity and Millionaire
+sections are 10 of 10 green, and with the three new guards also taken out exactly the three
+new-finish sections go red.
+`simNoDoubleRecord` had been red since the build pass and nobody had run it: the search box mock
+the build added to `src/test/dailyReload/mocks.ts` replaced `noDoubleRecord.test.tsx`'s own, so
+the four grids and Puck Detective lost the button they are played through. The shared mock now
+takes a test file's stand in (`setAutocompleteFallback`); green, and its `nomark` control fired.
+
+**Unapplied.** No migration in this round. Not on main: it merges with the rest of the economy.
+645a edits the same `useGameCompletion` lines in PackBattle, RarityRound, the chain hooks,
+Minefield and the Gauntlet and Millionaire pages; this pass left those lines alone so the merge
+stays mechanical, and the edge suite counts 645a's unranked play where the lib has it. 645a's
+recorder also spends a restore mark when its effect reruns on a finish already handled; that and
+this branch's committed phase checks agree (measured, above). Not run here, and why: `simPrerender`
+reads the built `dist` and `simDrillMotion` is a browser harness, and this lane may not build or
+drive a browser while the release suite runs; the release gate runs both.
+
 ## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
 
 Assembled and gated by the desktop Claude lane in the CRLF gate clone on `release-d`, pushed to

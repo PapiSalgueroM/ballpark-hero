@@ -7,7 +7,7 @@ import { getTodayET } from '@/lib/dateUtils';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 import {
   buildDraft, dailySeedFor, displayScore, matchLine, GauntletConfig, GauntletDraftResult,
-  GauntletRun, loadDailyRun, runGauntlet, saveDailyRun, squadRatingOf, gauntletPoints,
+  GauntletRun, loadDailyDraft, loadDailyRun, runGauntlet, saveDailyDraft, saveDailyRun, squadRatingOf, gauntletPoints,
 } from '@/lib/gauntletEngine';
 
 /**
@@ -77,10 +77,13 @@ export default function GauntletBoard<P>({ config, children }: Props<P>) {
     }
     const seed = m === 'daily' ? dailySeedFor(config, todayStr) : Math.floor(Math.random() * 2147483645) + 1;
     const d = buildDraft(config, seed);
+    /* Round 645 part three fix: a daily draft part made today comes back on
+       the pick it was left on, with the picks already kept in place. */
+    const kept = m === 'daily' ? loadDailyDraft(config, todayStr, d) ?? [] : [];
     setMode(m);
     setDraft(d);
-    setPickIndex(0);
-    setSquad(new Array<P | null>(d.formation.slots.length).fill(null));
+    setPickIndex(kept.length);
+    setSquad(Array.from({ length: d.formation.slots.length }, (_, i) => kept[i] ?? null));
     setRun(null);
     setShownMatches(0);
     setPhase('drafting');
@@ -99,6 +102,9 @@ export default function GauntletBoard<P>({ config, children }: Props<P>) {
       setPhase('running');
       return;
     }
+    /* Round 645 part three fix: kept is kept the moment it is picked, so a
+       refresh cannot deal this pick again with the deals after it seen. */
+    if (mode === 'daily') saveDailyDraft(config, todayStr, next.slice(0, pickIndex + 1) as P[]);
     setPickIndex(i => i + 1);
   };
 
@@ -226,7 +232,8 @@ export default function GauntletBoard<P>({ config, children }: Props<P>) {
           statRow={[{ label: 'Points', value: points }]}
           emojiGrid={[`${config.emoji} ${config.gameName}: ${points} pts`, ...run.matches.map(m => `${m.won ? '🟩' : '🟥'} ${matchLine(config, m)}`)].join('\n')}
           share={{ score: String(points), gameName: config.gameName, gamePath: config.gamePath }}
-          onPlayAgain={() => setPhase('setup')}
+          /* Round 645 part three fix: back to the modes lets the run go, so Daily gauntlet from there is a transition the recorder sees and the restore's mark is consumed, never left to swallow the next real finish. */
+          onPlayAgain={() => { setRun(null); setPhase('setup'); }}
           playAgainLabel={mode === 'daily' ? 'Back to modes' : 'New draft'}
           playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new draft.</p> : undefined}
         >

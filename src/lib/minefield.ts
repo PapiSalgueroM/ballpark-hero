@@ -587,3 +587,82 @@ export function loadDailyResult(today: string): MinefieldDailyResult | null {
 export function saveDailyResult(today: string, result: MinefieldDailyResult): void {
   writeDailyRecord(SLUG, today, { score: result.score, roundsWon: result.roundsWon });
 }
+
+/* ------- the daily part played, kept across a refresh (Round 645) ------- */
+/* Round 645 part three fix. The run saved only after the last board, so a
+ * refresh on board two dealt board one again with its mines already named
+ * (a hit prints the mine's name, and a lost board reveals every tile). Every
+ * click is now filed the moment it is made, on the same key: the tiles picked
+ * on each board so far, in order, and nothing else. The score, the boards
+ * cleared, the lives and the board the run is on are REPLAYED from those
+ * picks by the rules clickTile plays by (replayBoards), so a tampered record
+ * can claim nothing the boards would not have paid. It never carries a
+ * `score`, so loadDailyResult refuses it, and loadDailyProgress refuses
+ * anything without `boards`, so the two readers never accept the same
+ * record. A progress record whose last board has ended with the final score
+ * never shown finishes on the way back, and that is the finish recorded. */
+export interface MinefieldProgress {
+  /** Tile indices picked on each board so far, in pick order. */
+  boards: number[][];
+}
+
+export interface MinefieldReplay {
+  score: number;
+  roundsWon: number;
+  /** The board the run is on (the last one with a pick). */
+  roundIdx: number;
+  picked: number[];
+  lives: number;
+  lastMine: string | null;
+  /** Whether that board is over: out of lives or every real name found. */
+  roundOver: boolean;
+  roundWon: boolean;
+  /** Every board's picks, as filed. */
+  boards: number[][];
+}
+
+/** Plays the picks back through the rules; null when they are not a run the
+ *  boards could have produced (a pick after a board ended, a board left
+ *  unfinished before the next one, a tile that does not exist or twice). */
+export function replayBoards(rounds: MinefieldRound[], boards: number[][]): MinefieldReplay | null {
+  if (boards.length === 0 || boards.length > rounds.length) return null;
+  let score = 0;
+  let roundsWon = 0;
+  let last: MinefieldReplay | null = null;
+  for (let b = 0; b < boards.length; b += 1) {
+    const tiles = rounds[b].tiles;
+    const picks = boards[b];
+    let lives = LIVES_PER_ROUND;
+    let lastMine: string | null = null;
+    let over = false;
+    let won = false;
+    const seen = new Set<number>();
+    for (const i of picks) {
+      if (over || !Number.isInteger(i) || i < 0 || i >= tiles.length || seen.has(i)) return null;
+      seen.add(i);
+      if (tiles[i].isMine) {
+        lastMine = tiles[i].name;
+        lives -= 1;
+        if (lives <= 0) over = true;
+      } else {
+        score += POINTS_PER_FIND;
+        if (tiles.every((t, j) => t.isMine || seen.has(j))) { over = true; won = true; score += CLEAR_BONUS; roundsWon += 1; }
+      }
+    }
+    if (b < boards.length - 1 && !over) return null;
+    last = { score, roundsWon, roundIdx: b, picked: [...picks], lives, lastMine, roundOver: over, roundWon: won, boards: boards.map(x => [...x]) };
+  }
+  return last;
+}
+
+export function loadDailyProgress(today: string, rounds: MinefieldRound[]): MinefieldReplay | null {
+  return readDailyRecord<MinefieldReplay>(SLUG, today, f => {
+    if (f.score !== undefined || !Array.isArray(f.boards)) return null;
+    if (!f.boards.every(b => Array.isArray(b) && b.every(i => typeof i === 'number'))) return null;
+    return replayBoards(rounds, f.boards as number[][]);
+  });
+}
+
+export function saveDailyProgress(today: string, progress: MinefieldProgress): void {
+  writeDailyRecord(SLUG, today, { boards: progress.boards });
+}

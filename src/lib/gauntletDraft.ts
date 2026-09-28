@@ -5,8 +5,9 @@ import {
   GauntletConfig, FormationSlotLike, PICK_SIZE as ENGINE_PICK_SIZE, gRng,
   buildDraft as engineBuildDraft, dailySeedFor, squadRatingOf as engineSquadRatingOf,
   runGauntlet as engineRunGauntlet, loadDailyRun as engineLoadDailyRun,
-  saveDailyRun as engineSaveDailyRun, GauntletRun, gauntletCeiling, GauntletDraftResult,
+  saveDailyRun as engineSaveDailyRun, GauntletRun, gauntletCeiling, type GauntletDraftResult,
   gauntletPoints as engineGauntletPoints,
+  loadDailyDraft as engineLoadDailyDraft, saveDailyDraft as engineSaveDailyDraft,
 } from '@/lib/gauntletEngine';
 export type { GauntletRun } from '@/lib/gauntletEngine';
 
@@ -195,4 +196,14 @@ export function loadDailyRun(date: string): GauntletRun | null {
 
 export function saveDailyRun(date: string, run: GauntletRun): void {
   engineSaveDailyRun(soccerConfig([]), date, run);
+}
+
+/** Round 645 part three fix: the daily draft part made, the engine's record
+ *  (loadDailyDraft in src/lib/gauntletEngine.ts) under the soccer slug. */
+export function loadDailyDraft(date: string, draft: GauntletDraft): Player[] | null {
+  return engineLoadDailyDraft(soccerConfig([]), date, draft as unknown as GauntletDraftResult<Player>);
+}
+
+export function saveDailyDraft(date: string, kept: Player[]): void {
+  engineSaveDailyDraft(soccerConfig([]), date, kept);
 }

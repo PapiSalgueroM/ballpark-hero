@@ -97,6 +97,21 @@ export default defineDriver<MountedPage>({
   status,
   fingerprint,
 
+  /* Round 645 part three fix: four picks kept, then a reload and Daily
+     gauntlet have to come back on pick five with the same four in the XI.
+     finish() keeps the first card of every deal from wherever the draft is,
+     so the split run drafts exactly the unbroken run's XI. */
+  async playSome(m) {
+    for (let pick = 0; pick < 4; pick++) await click(cards(m)[0]);
+  },
+  progress(m) {
+    const line = Array.from(m.container.querySelectorAll('p')).find(p => /^Pick \d+ of \d+/.test((p.textContent ?? '').trim()));
+    if (!line) throw new Error('no live draft');
+    const xi = Array.from(m.container.querySelectorAll('p')).find(p => /Your XI so far/.test(p.textContent ?? ''));
+    const slots = xi?.parentElement ? Array.from(xi.parentElement.querySelectorAll('span')).map(s => (s.textContent ?? '').trim()).join(' | ') : '';
+    return [(line.textContent ?? '').trim(), (xi?.textContent ?? '').trim(), slots].join('\n');
+  },
+
   /* The card's own button leads back to the mode menu; Daily gauntlet from
      there is the only way back at today's draft. A live board at any point
      is drafted to the end, because that is the replay that would re-pay

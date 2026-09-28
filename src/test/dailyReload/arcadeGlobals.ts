@@ -47,3 +47,26 @@ export function freezeArcadeGlobals(): () => void {
     if (window.setInterval === frozen) window.setInterval = realInterval;
   };
 }
+
+/**
+ * Round 645 part three, assertion 7: run `act` with the ball really in the
+ * air. matchMedia reports full motion, so useArcadeFlight takes the animated
+ * path, and requestAnimationFrame never calls back, so the flight cannot
+ * land on its own frame; the backup timer is the page's, and the test
+ * unmounts before it can fire, exactly as a refresh during the flight
+ * would. Both globals are put back before this returns.
+ */
+export async function withFullMotion(run: () => Promise<void>): Promise<void> {
+  const reducedMatch = window.matchMedia;
+  const realFrame = window.requestAnimationFrame;
+  const fullMatch = ((query: string) => ({ ...reducedMatch(query), matches: false })) as typeof window.matchMedia;
+  const noFrame = (() => 1) as typeof window.requestAnimationFrame;
+  window.matchMedia = fullMatch;
+  window.requestAnimationFrame = noFrame;
+  try {
+    await run();
+  } finally {
+    if (window.matchMedia === fullMatch) window.matchMedia = reducedMatch;
+    if (window.requestAnimationFrame === noFrame) window.requestAnimationFrame = realFrame;
+  }
+}

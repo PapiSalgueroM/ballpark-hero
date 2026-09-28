@@ -104,6 +104,13 @@ export default defineConfig({
       ...(process.env.SEASON_LEDGER_MODULE
         ? { "@/lib/seasonLedger": path.resolve(process.env.SEASON_LEDGER_MODULE) }
         : {}),
+      /* Round 645 part three fix, negative controls: scripts/simDailyLockEdges.mjs
+         and scripts/simDailyReload.mjs write a broken copy of one module and
+         name it here as {"@/module": "/abs/copy"}. Same ordering rule: above
+         "@". Off in every ordinary run. */
+      ...(process.env.DAILY_LOCK_SWAP
+        ? (JSON.parse(process.env.DAILY_LOCK_SWAP) as Record<string, string>)
+        : {}),
       "@": path.resolve(__dirname, "./src"),
     },
   },

@@ -6,10 +6,11 @@ import { useArcadeFlight } from '@/hooks/useArcadeFlight';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { getTodayET } from '@/lib/dateUtils';
 import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+import { countedLehmer, MAX_DRAWS_PER_ROUND, type CountedRng } from '@/lib/arcadeRecord';
 import { DrillFigure, DrillKeeper } from '@/components/soccer-career/DrillPlayers';
 import type { CareerState } from '@/lib/soccerCareerEngine';
 import {
-  DRILL_META, drillForPosition, drillSeed, lehmer, ROUNDS_PER_RUN,
+  DRILL_META, drillForPosition, drillSeed, ROUNDS_PER_RUN,
   sessionScore, drillBoost, drillHeadroom,
   buildWallShotRun, takeWallShot, wallGapAt, wallTravel, maxWallShotScore,
   buildTackleRun, makeTackle, tackleFeetAt, tackleBallAt, tackleDeadline, maxTackleScore,
@@ -46,7 +47,7 @@ type AnySetup = WallShotSetup | TackleSetup | GloveSetup;
 type AnyInput = WallShotInput | TackleInput | GloveInput;
 type AnyResult = WallShotResult | TackleResult | GloveResult;
 
-interface DrillRecord { score: number; count: number; banked: boolean; rounds: number }
+interface DrillRecord { score: number; count: number; banked: boolean; rounds: number; draws: number; fouls: number }
 
 /* How long the resolve is drawn for, in milliseconds. */
 const FLIGHT_MS = 700;
@@ -84,7 +85,18 @@ function readRecord(slug: string, today: string): DrillRecord | null {
     const rounds = f.rounds === undefined ? ROUNDS_PER_RUN : f.rounds;
     if (typeof rounds !== 'number' || !Number.isInteger(rounds) || rounds < 0 || rounds > ROUNDS_PER_RUN) return null;
     if (rounds < ROUNDS_PER_RUN && f.banked === true) return null;
-    return { score: f.score, count: f.count, banked: f.banked, rounds };
+    /* Round 645 part three: `draws` is how far the wall shot's spray stream
+       had run, so a resume picks the stream up there (src/lib/arcadeRecord.ts,
+       shared with Free Kick and Buzzer Beater). A record from before the field
+       resumes from the top of the stream, which is what it always did. */
+    const draws = f.draws === undefined ? 0 : f.draws;
+    if (typeof draws !== 'number' || !Number.isInteger(draws) || draws < 0 || draws > rounds * MAX_DRAWS_PER_ROUND) return null;
+    /* Round 645 part three fix: the tackle drill's fouls, so a resumed or
+       reloaded session card says how many there were instead of none. A
+       record from before the field had no way to say, and reads as none. */
+    const fouls = f.fouls === undefined ? 0 : f.fouls;
+    if (typeof fouls !== 'number' || !Number.isInteger(fouls) || fouls < 0 || fouls > rounds) return null;
+    return { score: f.score, count: f.count, banked: f.banked, rounds, draws, fouls };
   });
 }
 
@@ -155,7 +167,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
     query.addEventListener('change', change);
     return () => query.removeEventListener('change', change);
   }, []);
-  const rngRef = useRef<() => number>(lehmer(1));
+  const rngRef = useRef<CountedRng>(countedLehmer(1));
   const savedRef = useRef(false);
 
   /* The live clock: seconds since the round began, drawn every frame, or
@@ -209,12 +221,16 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
       savedRef.current = done;
       setMode('daily');
       const seed = drillSeed(kind, todayStr);
-      rngRef.current = lehmer(seed ^ 0x5eed1234);
+      /* Round 645 part three: and the spray stream carries on from where the
+         settled rounds left it, so the rounds still to come are sprayed with
+         exactly the numbers an unbroken run would have met, not the ones the
+         player already watched at the top of the stream. */
+      rngRef.current = countedLehmer(seed ^ 0x5eed1234, record.draws);
       setSetups(buildRun(kind, seed));
       setIdx(done ? ROUNDS_PER_RUN - 1 : record.rounds);
       setScore(record.score);
       setCount(record.count);
-      setFouls(0);
+      setFouls(record.fouls);
       setResult(null); setInput(null);
       resetFlight();
       resetControls();
@@ -222,7 +238,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
       return;
     }
     const seed = m === 'daily' ? drillSeed(kind, todayStr) : Math.floor(Math.random() * 2147483645) + 1;
-    rngRef.current = lehmer(seed ^ 0x5eed1234);
+    rngRef.current = countedLehmer(seed ^ 0x5eed1234);
     resetFlight();
     setMode(m);
     setSetups(buildRun(kind, seed));
@@ -248,6 +264,14 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
     if (kind === 'wallshot') { const w = takeWallShot(inp as WallShotInput, setup as WallShotSetup, rngRef.current); r = w; won = w.won; }
     else if (kind === 'tackle') { const tk = makeTackle(inp as TackleInput, setup as TackleSetup); r = tk; won = tk.won; foul = tk.foul; }
     else { const g = makeSave(inp as GloveInput, setup as GloveSetup); r = g; won = g.saved; }
+    /* Round 645 part three: the round is on today's record the moment it is
+       resolved, before the ball is drawn, so a refresh during the flight
+       cannot hand back a round whose outcome is already on screen. */
+    if (mode === 'daily' && !savedRef.current) {
+      const rec = { score: score + r.points, count: count + (won ? 1 : 0), banked: false, rounds: Math.min(ROUNDS_PER_RUN, idx + 1), draws: rngRef.current.draws, fouls: fouls + (foul ? 1 : 0) };
+      writeDailyRecord(meta.slug, todayStr, rec);
+      setRecord(rec);
+    }
     setInput(inp);
     setResult(r);
     setDragging(false);
@@ -258,7 +282,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
       if (foul) setFouls(f => f + 1);
       setPhase('roundEnd');
     });
-  }, [phase, setup, kind, launch]);
+  }, [phase, setup, kind, launch, mode, score, count, fouls, idx, meta.slug, todayStr]);
 
   /* The chance can run out without a press: the attacker leaves the screen,
      the ball crosses the line. */
@@ -287,10 +311,10 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
     if (phase !== 'roundEnd' && phase !== 'done') return;
     const rounds = phase === 'done' ? ROUNDS_PER_RUN : Math.min(ROUNDS_PER_RUN, idx + 1);
     if (phase === 'done') savedRef.current = true;
-    const rec = { score, count, banked: false, rounds };
+    const rec = { score, count, banked: false, rounds, draws: rngRef.current.draws, fouls };
     writeDailyRecord(meta.slug, todayStr, rec);
     setRecord(rec);
-  }, [phase, mode, score, count, idx, meta.slug, todayStr]);
+  }, [phase, mode, score, count, fouls, idx, meta.slug, todayStr]);
 
   const bank = useCallback(() => {
     /* Only a finished run banks. Since the record is written after every

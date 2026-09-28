@@ -1,5 +1,5 @@
 import { FlagImg } from '@/components/FlagImg';
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import { Loader2, TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -11,6 +11,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 import {
   fetchPackPool,
@@ -20,6 +21,8 @@ import {
   buildPackEmojiGrid,
   fmtCompactUsd,
   packScore,
+  readPackDaily,
+  writePackDaily,
   type PlayMode,
   type PackCard,
   type PackResult,
@@ -27,12 +30,21 @@ import {
 
 type Phase = 'boot' | 'error' | 'playing' | 'reveal' | 'done';
 
+const SLUG = 'pack-battle';
+
+/* Round 645 part three: today's pack as far as it was played is filed through
+   readPackDaily and writePackDaily in src/lib/packBattle.ts, one check for
+   both directions. */
+
 /**
  * Pack Battle: daily football-trumps pack opener (R6 build plan Part 1 item
  * 9, MASTER_PLAN Wave 15d). See src/lib/packBattle.ts for the full mechanic
  * writeup and the data source docs.
  */
 const PackBattle = () => {
+  /* Round 428's rule: the day is pinned at mount, and the pack, the record
+     and the caption all read this one value. */
+  const todayStr = useRef(getTodayET()).current;
   const [playMode, setPlayMode] = useState<PlayMode>('daily');
 
   const [phase, setPhase] = useState<Phase>('boot');
@@ -43,26 +55,69 @@ const PackBattle = () => {
   const [bankedValue, setBankedValue] = useState(0);
   const [lastCorrect, setLastCorrect] = useState<boolean | null>(null);
   const [busted, setBusted] = useState(false);
+  /* Round 645 part three fix: the reveal timer belongs to the run that armed
+     it. Left running across a mode toggle it turned the next pack over with
+     the old call: a wrong Unlimited call busted a fresh daily with no calls
+     made (recorded, and filed as a finish the reader refuses, so the day
+     dealt and paid again), and a right one moved the daily on a card. Every
+     new deal goes through startRun, which cancels it, and so does unmount. */
+  const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  /* Round 645 part three fix: the phase as last committed, for startRun. A
+     finished daily reopened over a page that is already on a result card is
+     no transition, so the recorder never looks, and a mark left unconsumed
+     would swallow the next real finish inside its window. */
+  const phaseRef = useRef<Phase>('boot');
+  useLayoutEffect(() => { phaseRef.current = phase; }, [phase]);
+  useEffect(() => () => { if (revealTimer.current) clearTimeout(revealTimer.current); }, []);
 
   // Every hook lives above this point and none of them are conditional, per
   // the site's React error #310 rule (hooks must never sit below an early
   // return). The loading/error UI is decided entirely in the JSX below.
 
   const startRun = useCallback((nextPlayMode: PlayMode, sourcePool: PackCard[]) => {
+    if (revealTimer.current) clearTimeout(revealTimer.current);
+    revealTimer.current = null;
     setPlayMode(nextPlayMode);
-    const pack = buildPackForMode(nextPlayMode, sourcePool);
+    const pack = buildPackForMode(nextPlayMode, sourcePool, todayStr);
     if (!pack || pack.length < 2) {
       setPhase('error');
       return;
     }
+    /* Round 645 part three: today's pack is dealt once. Every correct call
+       banked the next card, so the banked card is the one after the last
+       correct call, and a miss can only be the last call. */
+    const saved = nextPlayMode === 'daily' ? readPackDaily(todayStr, pack) : null;
+    const savedCalls = saved?.calls ?? [];
+    const banked = savedCalls.filter(c => c).length;
+    const bust = savedCalls[savedCalls.length - 1] === false;
     setCards(pack);
-    setCardIndex(0);
-    setCalls([]);
-    setBankedValue(pack[0].value);
+    setCardIndex(banked);
+    setCalls(savedCalls);
+    setBankedValue(pack[banked].value);
     setLastCorrect(null);
-    setBusted(false);
-    setPhase('playing');
-  }, []);
+    setBusted(bust);
+    if (saved?.done) {
+      /* shown and recorded before the refresh: not a new finish, and only a
+         restore the recorder will see as one is marked */
+      if (phaseRef.current !== 'done') markRestoredFinish(SLUG);
+      setPhase('done');
+      return;
+    }
+    /* A pack whose last call was made but whose result card never showed
+       finishes now, and that is the finish recorded. */
+    const finishing = bust || savedCalls.length >= pack.length - 1;
+    if (finishing && phaseRef.current === 'done') {
+      /* Round 645 part three fix: over a page already on a result card (the
+         daily's last call left in its reveal for Unlimited, played to its
+         end) the recorder would see no finish arrive and the daily would
+         never be recorded, so the board is on boot for one tick first. The
+         timer is the run's own, so a toggle inside the tick cancels it. */
+      setPhase('boot');
+      revealTimer.current = setTimeout(() => { revealTimer.current = null; setPhase('done'); }, 0);
+      return;
+    }
+    setPhase(finishing ? 'done' : 'playing');
+  }, [todayStr]);
 
   // Boot: fetch the pool once, then start the daily run.
   useEffect(() => {
@@ -97,10 +152,15 @@ const PackBattle = () => {
   const call = (calledHigher: boolean) => {
     if (phase !== 'playing' || !bankedCard || !nextCard) return;
     const correct = resolveCall(bankedCard.value, nextCard.value, calledHigher);
+    /* Round 645 part three: on the record before the card turns over */
+    if (playMode === 'daily') {
+      writePackDaily(todayStr, cards, [...calls, correct] as boolean[], false);
+    }
     setLastCorrect(correct);
     setCalls(c => [...c, correct]);
     setPhase('reveal');
-    setTimeout(() => {
+    revealTimer.current = setTimeout(() => {
+      revealTimer.current = null;
       if (correct) {
         setBankedValue(nextCard.value);
         const isLastCard = cardIndex + 1 >= cards.length - 1;
@@ -137,6 +197,13 @@ const PackBattle = () => {
   // of correct calls. Round 645: the free opening card banks nothing (packScore),
   // and only the daily is ranked.
   useGameCompletion('pack-battle', isComplete, packScore(result), correctCalls, playMode === 'daily');
+
+  /* Round 645 part three: the daily's result card is on screen and the run
+     recorded, so a refresh brings this card back and records nothing. */
+  useEffect(() => {
+    if (phase !== 'done' || playMode !== 'daily') return;
+    writePackDaily(todayStr, cards, calls as boolean[], true);
+  }, [phase, playMode, cards, calls, todayStr]);
 
   const { grade, headline } = useMemo(() => gradePack(result), [result]);
   const emojiGrid = useMemo(() => buildPackEmojiGrid(result), [result]);
@@ -228,7 +295,7 @@ const PackBattle = () => {
             </div>
 
             {playMode === 'daily' && (
-              <p className="text-xs text-muted-foreground mt-3">Today's pack, {getTodayET()}. Same 5 cards for everyone.</p>
+              <p className="text-xs text-muted-foreground mt-3">Today's pack, {todayStr}. Same 5 cards for everyone.</p>
             )}
           </>
         }

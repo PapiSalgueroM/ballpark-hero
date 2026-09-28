@@ -30,22 +30,44 @@
  * context, the recorder and the Supabase client are mocked in
  * src/test/dailyReload/mocks.ts.
  *
+ * Round 645 part three added a sixth, for the run based dailies that used to
+ * save only at the end (a driver that exports playSome and progress):
+ *   (6) settle part of the run, unmount, mount, enter the daily: the board is
+ *       on the same step with the same score and count, nothing was
+ *       recorded, finishing the rest records exactly once, and the finished
+ *       card is byte identical to step (1)'s, since the driver plays the
+ *       same moves split by the reload
+ * and a seventh, for a board where a step is decided before it lands (a
+ * driver that also exports oneStep and interruptStep):
+ *   (7) take one step and unmount before it lands, as a refresh during the
+ *       flight would; the reloaded board reads exactly what one landed step
+ *       reads, so the step can never be taken again with its outcome seen
+ *
  * scripts/simDailyReload.mjs runs this file and carries the negative
  * controls: DAILY_RELOAD_CONTROL=clear drops every prefixed key between the
  * unmount and the remount, so (2) must fail on every row;
  * DAILY_RELOAD_CONTROL=silent turns markRestoredFinish into a no-op, so
  * (4) must fail on every row whose restore depends on the mark and stay
- * green on every other. ONLY=<slug> runs one row.
+ * green on every other; DAILY_RELOAD_CONTROL=midrun drops every prefixed
+ * key between the part played unmount and the remount, so (6) must fail on
+ * every row that has it. Three more take a piece out of the code rather than
+ * the storage (see ./dailyReload/mocks): nolock (one game's record never
+ * read), nosave (the arcade engine's per shot save gone) and restream (the
+ * arcade spray stream restarted on a resume); each must turn red exactly the
+ * rows it hit. ONLY=<slug> runs one row.
  */
 import './dailyReload/mocks';
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { getTodayET } from '@/lib/dateUtils';
 import { consumeRestoredFinish, markRestoredFinish } from '@/lib/restoredFinish';
-import { recordCompletion, resetMocks, silencedMarks } from './dailyReload/mocks';
+import { controlHits, recordCompletion, resetMocks, silencedMarks } from './dailyReload/mocks';
 import { DRIVER_FIELDS, type AnyDriver } from './dailyReload/driver';
 
 const CONTROL = process.env.DAILY_RELOAD_CONTROL || '';
 const ONLY = process.env.ONLY || '';
+/* The controls that take a piece of the lock out of the real code path
+   (./dailyReload/mocks), as against the storage controls above them. */
+const CODE_CONTROLS = ['nolock', 'nosave', 'restream'];
 
 /* The same six forms scripts/sweepSaves.mjs writes, in its order. */
 const WRECKAGE: [string, string][] = [
@@ -71,6 +93,9 @@ for (const [file, mod] of Object.entries(modules).sort(([a], [b]) => (a < b ? -1
 const drivers = discovered.filter(d => !ONLY || d.slug === ONLY);
 
 const usesMark = (d: AnyDriver) => d.restoreStyle === 'handler' && d.usesRestoreMark !== false;
+const resumes = (d: AnyDriver) => typeof d.playSome === 'function' && typeof d.progress === 'function';
+const records = (d: AnyDriver) => d.records !== false;
+const interrupts = (d: AnyDriver) => resumes(d) && typeof d.oneStep === 'function' && typeof d.interruptStep === 'function';
 
 describe('daily reload', () => {
   it('discovers drivers', () => {
@@ -84,6 +109,9 @@ describe('daily reload', () => {
         restoreFile: d.restoreFile ?? null,
         finishedSetter: d.finishedSetter ?? null,
         slugBoundIn: d.slugBoundIn ?? null,
+        resumes: resumes(d),
+        interrupts: interrupts(d),
+        records: records(d),
       }));
     }
     console.log(`DAILY_RELOAD_DRIVERS ${drivers.length} of ${discovered.length}${ONLY ? ` (ONLY=${ONLY})` : ''}`);
@@ -117,8 +145,16 @@ describe('daily reload', () => {
       let record: string | null = null;
 
       beforeAll(() => {
-        resetMocks();
+        resetMocks(driver.slug);
         localStorage.clear();
+      });
+
+      /* Round 645 part three: under a code control, how many times it took
+         its piece of the lock out while this row ran. The wrapper requires a
+         hit on every row it expects to go red, so red means the control, and
+         a row with no hit must stay green. */
+      afterAll(() => {
+        if (CODE_CONTROLS.includes(CONTROL)) console.log(`DAILY_RELOAD_HITS ${driver.slug} ${controlHits(driver.slug)}`);
       });
 
       it('(1) writes exactly one record for today when the daily is finished', async () => {
@@ -179,7 +215,7 @@ describe('daily reload', () => {
 
       it('(4) records the completion exactly once across the finish, the remount, the re-entry and the replay', () => {
         const paths = recordCompletion.mock.calls.map(c => String(c[0]));
-        expect(paths, `recordCompletion calls so far: ${paths.join(', ') || 'none'}`).toEqual([`/${driver.slug}`]);
+        expect(paths, `recordCompletion calls so far: ${paths.join(', ') || 'none'}`).toEqual(records(driver) ? [`/${driver.slug}`] : []);
       });
 
       it('(5) mounts as a fresh daily on each of the six wreckage forms without throwing', async () => {
@@ -200,6 +236,87 @@ describe('daily reload', () => {
         }
         expect(recordCompletion.mock.calls.length - before, 'a fresh daily records nothing on mount').toBe(0);
       });
+
+      if (resumes(driver)) {
+        it('(6) resumes a part played daily at the same step after an unmount and a remount, and records the run once', async () => {
+          const playSome = driver.playSome!;
+          const progress = driver.progress!;
+          for (const k of keysOf()) localStorage.removeItem(k);
+          const before = recordCompletion.mock.calls.length;
+          let api: unknown = await driver.mount();
+          let mid = '';
+          try {
+            await driver.enterDaily(api);
+            expect(driver.status(api), 'a fresh daily should be playing').toBe('playing');
+            await playSome(api);
+            expect(driver.status(api), 'a part played daily should still be playing').toBe('playing');
+            mid = progress(api);
+            expect(mid.length, 'the progress text carries the step and the score').toBeGreaterThan(0);
+            expect(keysOf(), `a part played daily writes exactly one ${driver.keyPrefix}* key, dated today`).toEqual([todayKey]);
+          } finally {
+            driver.unmount(api);
+          }
+          if (CONTROL === 'midrun') {
+            const dropped = keysOf();
+            for (const k of dropped) localStorage.removeItem(k);
+            console.log(`DAILY_RELOAD_MIDRUN ${driver.slug} dropped ${dropped.length} key(s)`);
+          }
+          api = await driver.mount();
+          try {
+            await driver.enterDaily(api);
+            expect(driver.status(api), 'the reloaded daily should come back mid run, not finished and not on a fresh board').toBe('playing');
+            expect(progress(api), 'the reloaded board should be on the same step with the same score and count').toBe(mid);
+            expect(recordCompletion.mock.calls.length - before, 'resuming records nothing').toBe(0);
+            await driver.finish(api);
+            expect(driver.status(api), 'the resumed run should finish').toBe('finished');
+            expect(keysOf(), 'the finished run leaves exactly one key').toEqual([todayKey]);
+            expect(recordCompletion.mock.calls.length - before, records(driver) ? 'the whole run records exactly once' : 'a board that banks records nothing').toBe(records(driver) ? 1 : 0);
+            /* The same moves as step (1), split by a reload, must end exactly
+               where the unbroken run ended: same score, same card, same
+               stream. A resume that re-deals a step, drops one, or restarts
+               the arcade spray generator from the top ends somewhere else. */
+            expect(fingerprint, 'step (1) did not finish, there is nothing to compare').not.toBeNull();
+            expect(driver.fingerprint(api), 'the resumed run should finish exactly as the unbroken run did').toBe(fingerprint);
+          } finally {
+            driver.unmount(api);
+          }
+        });
+      }
+
+      if (interrupts(driver)) {
+        it('(7) keeps a step that was decided but not yet landed when the page was refreshed', async () => {
+          const progress = driver.progress!;
+          const before = recordCompletion.mock.calls.length;
+          for (const k of keysOf()) localStorage.removeItem(k);
+          let api: unknown = await driver.mount();
+          let landed = '';
+          try {
+            await driver.enterDaily(api);
+            await driver.oneStep!(api);
+            landed = progress(api);
+          } finally {
+            driver.unmount(api);
+          }
+          for (const k of keysOf()) localStorage.removeItem(k);
+          api = await driver.mount();
+          try {
+            await driver.enterDaily(api);
+            await driver.interruptStep!(api);
+          } finally {
+            /* the refresh, with the step decided and still in the air */
+            driver.unmount(api);
+          }
+          api = await driver.mount();
+          try {
+            await driver.enterDaily(api);
+            expect(driver.status(api), 'the reloaded daily should come back mid run').toBe('playing');
+            expect(progress(api), 'the step taken before the refresh should be on the board, outcome counted, never dealt again').toBe(landed);
+            expect(recordCompletion.mock.calls.length - before, 'a part played daily records nothing').toBe(0);
+          } finally {
+            driver.unmount(api);
+          }
+        });
+      }
     });
   }
 });

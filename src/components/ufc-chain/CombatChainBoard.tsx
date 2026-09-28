@@ -18,7 +18,7 @@ interface LeaderboardEntry {
 }
 
 export function CombatChainBoard() {
-  const { gameState, startGame, makeGuess, giveUp, resetGame, getAvailableFighters } = useUfcChain();
+  const { gameState, startGame, makeGuess, giveUp, resetGame, getAvailableFighters, markLeaderboardSaved } = useUfcChain();
   const gameRef = useScrollToGame(gameState);
   const [nickname, setNickname] = useState('');
   const [scoreSubmitted, setScoreSubmitted] = useState(false);
@@ -46,7 +46,7 @@ export function CombatChainBoard() {
   }, [gameState?.gameStatus]);
 
   const handleSaveScore = async () => {
-    if (!gameState || !nickname.trim() || saving) return;
+    if (!gameState || !nickname.trim() || saving || gameState.leaderboardSaved) return;
     setSaving(true);
     const chainLength = gameState.chain.length - 1;
 
@@ -64,6 +64,7 @@ export function CombatChainBoard() {
         .gt('chain_length', chainLength);
       setPlayerRank((count ?? 0) + 1);
       setScoreSubmitted(true);
+      markLeaderboardSaved();
       fetchLeaderboard();
     }
     setSaving(false);
@@ -224,7 +225,10 @@ export function CombatChainBoard() {
               </div>
 
               {/* Nickname & Save */}
-              {!scoreSubmitted ? (
+              {/* Round 645 part three fix: a restored daily whose row is already saved is not offered the form again */}
+              {gameState.leaderboardSaved && !scoreSubmitted ? (
+                <p className="mb-6 text-gray-400">Your score for today is already on the leaderboard.</p>
+              ) : !scoreSubmitted ? (
                 <div className="mb-6">
                   <p className="text-gray-400 mb-2">Enter your nickname to save your score</p>
                   <div className="flex gap-2 max-w-xs mx-auto">
@@ -285,7 +289,8 @@ export function CombatChainBoard() {
                   onClick={handleReset}
                   className="w-full bg-red-600 hover:bg-red-700 text-white"
                 >
-                  Play Again
+                  {/* Round 645 part three: today's daily is played once */}
+                  {gameState.mode === 'daily' ? 'Back to modes' : 'Play Again'}
                 </Button>
                 
                 <ShareButtons 

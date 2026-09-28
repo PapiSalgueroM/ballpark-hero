@@ -14,8 +14,8 @@ import { getTodayET } from '@/lib/dateUtils';
 import {
   Campaign, Holding, START_YEARS, STOCK_BUDGET, StockCard, StockFinish, YearStep,
   assembleCampaign, buildHoldings, canAfford, dailyCampaignSeed, fetchHoldingHistories,
-  fetchStartSeasonPool, finishCampaign, formatMoney, formatPct, loadDailyResult,
-  randomCampaignSeed, saveDailyResult, startYearFor, yearSteps,
+  fetchStartSeasonPool, finishCampaign, formatMoney, formatPct, loadDailyProgress, loadDailyResult,
+  randomCampaignSeed, saveDailyProgress, saveDailyResult, startYearFor, yearSteps,
 } from '@/lib/playerStockMarket';
 
 /**
@@ -50,6 +50,20 @@ export default function PlayerStockMarket() {
   const [stepIndex, setStepIndex] = useState(0);
   const [error, setError] = useState('');
 
+  /* The eleventh buy rolls the years: one query for the eleven, every
+     season from the start to the final one, then a step per season. */
+  const roll = useCallback(async (c: Campaign, bought: StockCard[]) => {
+    setPhase('rolling');
+    const names = bought.map(card => c.identities[card.id]).filter(Boolean);
+    const rows = await fetchHoldingHistories(names, c.startYear, c.finalYear);
+    if (!rows) { setError("Couldn't fetch the seasons after your buys. The year by year values need a connection."); setPhase('error'); return; }
+    const built = buildHoldings(c, bought, rows);
+    setHoldings(built);
+    setSteps(yearSteps(built, c.startYear, c.finalYear));
+    setStepIndex(0);
+    setPhase('stepping');
+  }, []);
+
   const start = useCallback(async (m: Mode, chosenYear?: number) => {
     if (m === 'daily' && dailyResult) {
       /* Today's market is closed: the result reopens, the cards do not.
@@ -72,31 +86,26 @@ export default function PlayerStockMarket() {
     const built = rows ? assembleCampaign(rows, seed, year) : null;
     if (!built) { setError(`Couldn't open the ${year} market right now. The season's rows need a connection.`); setPhase('error'); return; }
     setCampaign(built);
-    setSlotIndex(0);
-    setPicks([]);
+    /* Round 645 part three fix: a daily market part bought today comes back
+       with the buys already made. All eleven bought means the years were
+       rolling when it was left: they roll again from the start, over the same
+       XI, and the finish at the end is the one recorded. */
+    const bought = m === 'daily' ? loadDailyProgress(todayStr, built) ?? [] : [];
+    setPicks(bought);
+    if (bought.length >= built.slots.length) { void roll(built, bought); return; }
+    setSlotIndex(bought.length);
     setPhase('buying');
-  }, [dailyResult, todayStr, finish]);
+  }, [dailyResult, todayStr, finish, roll]);
 
   const remaining = STOCK_BUDGET - picks.reduce((s, c) => s + c.price, 0);
   const current = campaign && phase === 'buying' ? campaign.slots[slotIndex] : null;
 
-  /* The eleventh buy rolls the years: one query for the eleven, every
-     season from the start to the final one, then a step per season. */
-  const roll = useCallback(async (c: Campaign, bought: StockCard[]) => {
-    setPhase('rolling');
-    const names = bought.map(card => c.identities[card.id]).filter(Boolean);
-    const rows = await fetchHoldingHistories(names, c.startYear, c.finalYear);
-    if (!rows) { setError("Couldn't fetch the seasons after your buys. The year by year values need a connection."); setPhase('error'); return; }
-    const built = buildHoldings(c, bought, rows);
-    setHoldings(built);
-    setSteps(yearSteps(built, c.startYear, c.finalYear));
-    setStepIndex(0);
-    setPhase('stepping');
-  }, []);
-
   const buy = (c: StockCard) => {
     if (!campaign || !current || !canAfford(campaign, slotIndex, c, remaining)) return;
     const next = [...picks, c];
+    /* Round 645 part three fix: on the record the moment it is bought, before
+       the next slot is dealt or the years roll. */
+    if (mode === 'daily') saveDailyProgress(todayStr, next);
     setPicks(next);
     if (slotIndex + 1 >= campaign.slots.length) { void roll(campaign, next); return; }
     setSlotIndex(i => i + 1);

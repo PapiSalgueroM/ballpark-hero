@@ -51,7 +51,7 @@ import './dailyReload/mocks';
 import type { ReactElement } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { act, cleanup, renderHook, waitFor } from '@testing-library/react';
-import { recordCompletion, resetMocks, setTableFixture } from './dailyReload/mocks';
+import { recordCompletion, resetMocks, setAutocompleteFallback, setTableFixture } from './dailyReload/mocks';
 import { button, click, findButton, mountPage, typeInto } from './dailyReload/harness';
 import stockDriver from './dailyReload/player-stock-market.driver';
 import { consumeRestoredFinish, markRestoredFinish } from '@/lib/restoredFinish';
@@ -229,13 +229,14 @@ vi.mock('@/lib/cbbGrid', async (importOriginal) => ({
 /* The search box is a network autocomplete, and it is not what is under
    test. The stand in hands the page one name: by default one nobody in the
    (empty) grid data matches, which a grid scores as a wrong guess, or the
-   name a row put in F.STUB.pick. */
-vi.mock('@/components/game/PlayerAutocomplete', () => ({
-  PlayerAutocomplete: ({ onSelect }: { onSelect: (e: { name: string; rawName: string }) => void }) => {
-    const name = F.STUB.pick || 'Nobody Real';
-    return <button type="button" onClick={() => onSelect({ name, rawName: name })}>stub guess</button>;
-  },
-}));
+   name a row put in F.STUB.pick. Round 645 part three fix: handed to the
+   shared mock in ./dailyReload/mocks rather than mocked here, because that
+   module mocks the same box and its mock, registered second, replaced this
+   one (the four grids and Puck Detective went red on a missing button). */
+setAutocompleteFallback(({ onSelect }: { onSelect: (e: { name: string; rawName: string }) => void }) => {
+  const name = F.STUB.pick || 'Nobody Real';
+  return <button type="button" onClick={() => onSelect({ name, rawName: name })}>stub guess</button>;
+});
 
 /* ------------------------------------------------------------------------ */
 /* Helpers                                                                   */

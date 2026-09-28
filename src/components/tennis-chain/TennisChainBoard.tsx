@@ -18,7 +18,7 @@ interface LeaderboardEntry {
 }
 
 export function TennisChainBoard() {
-  const { gameState, startGame, makeGuess, giveUp, resetGame, validating } = useTennisChain();
+  const { gameState, startGame, makeGuess, giveUp, resetGame, validating, markLeaderboardSaved } = useTennisChain();
   const gameRef = useScrollToGame(gameState);
   const [nickname, setNickname] = useState('');
   const [scoreSubmitted, setScoreSubmitted] = useState(false);
@@ -46,7 +46,7 @@ export function TennisChainBoard() {
   }, [gameState?.gameStatus]);
 
   const handleSaveScore = async () => {
-    if (!gameState || !nickname.trim() || saving) return;
+    if (!gameState || !nickname.trim() || saving || gameState.leaderboardSaved) return;
     setSaving(true);
     const chainLength = gameState.chain.length - 1;
 
@@ -64,6 +64,7 @@ export function TennisChainBoard() {
         .gt('chain_length', chainLength);
       setPlayerRank((count ?? 0) + 1);
       setScoreSubmitted(true);
+      markLeaderboardSaved();
       fetchLeaderboard();
     }
     setSaving(false);
@@ -160,8 +161,10 @@ export function TennisChainBoard() {
             </div>
 
             <div className="text-center">
+              {/* Round 645 part three fix: shut while a guess is out being verified */}
               <Button
                 onClick={giveUp}
+                disabled={validating}
                 variant="outline"
                 className="bg-transparent border-purple-600 text-purple-400 hover:bg-purple-900/30"
               >
@@ -190,7 +193,10 @@ export function TennisChainBoard() {
               )}
               <div className="text-lg text-emerald-300 mb-6">Chain Length: {chainLength}</div>
 
-              {!scoreSubmitted ? (
+              {/* Round 645 part three fix: a restored daily whose row is already saved is not offered the form again */}
+              {gameState.leaderboardSaved && !scoreSubmitted ? (
+                <p className="mb-6 text-gray-400">Your score for today is already on the leaderboard.</p>
+              ) : !scoreSubmitted ? (
                 <div className="mb-6">
                   <p className="text-gray-400 mb-2">Enter your nickname to save your score</p>
                   <div className="flex gap-2 max-w-xs mx-auto">
@@ -239,7 +245,8 @@ export function TennisChainBoard() {
 
               <div className="space-y-4">
                 <Button onClick={handleReset} className="w-full bg-emerald-600 hover:bg-emerald-700 text-black">
-                  Play Again
+                  {/* Round 645 part three: today's daily is played once */}
+                  {gameState.mode === 'daily' ? 'Back to modes' : 'Play Again'}
                 </Button>
                 <ShareButtons
                   score={`${gameState.score} points • Chain of ${chainLength}${gameState.earnedBadge ? ` • ${gameState.earnedBadge.emoji} ${gameState.earnedBadge.name}` : ''}`}

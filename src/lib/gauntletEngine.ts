@@ -417,3 +417,37 @@ export function loadDailyRun<P>(config: GauntletConfig<P>, date: string): Gauntl
 export function saveDailyRun<P>(config: GauntletConfig<P>, date: string, run: GauntletRun): void {
   writeDailyRecord(config.gameId, date, { run });
 }
+
+/**
+ * Round 645 part three fix: the daily draft part made, on the same key. The
+ * run saved only when the last pick decided it, so a refresh on pick six dealt
+ * pick one again with the next five deals already seen, and the draft could
+ * be made again knowing every option still to come. Every pick is now filed
+ * the moment it is kept: the names kept so far, in pick order, and nothing
+ * else. On the way back the draft is dealt again from the day's seed and each
+ * name must be one of the choices its own pick dealt, so a record naming a
+ * player the deal never offered (or a pool that has since changed under it)
+ * is refused. It never carries `run`, so loadDailyRun refuses it, and this
+ * refuses anything carrying `run` or a full draft (the last pick writes the
+ * finished run instead), so the two readers never accept the same record.
+ */
+export function loadDailyDraft<P>(config: GauntletConfig<P>, date: string, draft: GauntletDraftResult<P>): P[] | null {
+  return readDailyRecord(config.gameId, date, fields => {
+    if (fields.run !== undefined) return null;
+    const kept = fields.kept;
+    if (!Array.isArray(kept) || kept.length < 1 || kept.length >= draft.picks.length) return null;
+    const squad: P[] = [];
+    for (let i = 0; i < kept.length; i += 1) {
+      const name = kept[i];
+      if (typeof name !== 'string') return null;
+      const player = draft.picks[i].choices.find(c => config.nameOf(c) === name);
+      if (player === undefined) return null;
+      squad.push(player);
+    }
+    return squad;
+  });
+}
+
+export function saveDailyDraft<P>(config: GauntletConfig<P>, date: string, kept: P[]): void {
+  writeDailyRecord(config.gameId, date, { kept: kept.map(p => config.nameOf(p)) });
+}

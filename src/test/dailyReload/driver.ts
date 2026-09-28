@@ -87,6 +87,12 @@ export interface DailyReloadDriver<Api = unknown> {
    *  call only if that file binds the parameter name to exactly one literal,
    *  the slug, and imports the restore file's module. */
   slugBoundIn?: string;
+  /** Default true. False for a board that banks its day into a save instead
+   *  of recording a completion (Round 645 part three: the Soccer Career
+   *  drills, which pay a career stat, not the scoreboard). Assertions 4 and
+   *  6 then require that recordCompletion is never called at all, so a
+   *  regression that starts recording a practice or a replay is still red. */
+  records?: boolean;
   /** Default 'v1': the stored JSON must carry v === 1 and date === today,
    *  the src/lib/dailyRecord.ts shape. 'legacy' for a route that predates
    *  the helper and dates only its key (nba-stat-line stores {picks}). */
@@ -100,6 +106,32 @@ export interface DailyReloadDriver<Api = unknown> {
   replay(api: Api): Promise<void>;
   hasDailyReplayControl(api: Api): boolean;
   unmount(api: Api): void;
+
+  /** Round 645 part three, run based dailies only (the arcade engine's ten
+   *  rounds). From a live daily board, settle SOME of the run's steps but
+   *  not all, by the same honest path finish uses. Assertion 6 then
+   *  unmounts, remounts, re-enters the daily and requires progress() to
+   *  read the same, finishes the rest, and requires exactly one completion
+   *  for the whole run. A row without this pair gets no assertion 6. */
+  playSome?(api: Api): Promise<void>;
+  /** With playSome: the mid run state as text, which must carry the step
+   *  the board is on and the score and count so far, byte identical across
+   *  a reload. Throw when no live board is on screen. */
+  progress?(api: Api): string;
+
+  /** Round 645 part three, for a board where a step's outcome is decided
+   *  (and drawn) before the step settles: a ball in the air, a card turning
+   *  over, an answer on its reveal. The pair gives assertion 7:
+   *    oneStep        take exactly one step from a fresh board, all the
+   *                   way to the next live step
+   *    interruptStep  take one step from a fresh board and STOP while its
+   *                   outcome is decided but not settled (throw if it
+   *                   settled anyway, or the check would measure nothing);
+   *                   the test unmounts straight after, as a refresh would
+   *  After the interrupted step and a reload, progress() must read exactly
+   *  what it read after oneStep: the step stays taken, outcome and all. */
+  oneStep?(api: Api): Promise<void>;
+  interruptStep?(api: Api): Promise<void>;
 }
 
 /** Identity with inference, so a driver file reads as one typed object. */
