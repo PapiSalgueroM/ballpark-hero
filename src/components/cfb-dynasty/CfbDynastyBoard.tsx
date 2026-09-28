@@ -6,11 +6,15 @@ import {
   CFB_SCHOOLS, CFB_SCHOOL_MAP, CFB_CONFS, CFB_ROUNDS,
   initCfb, simCfbRound, cfbRankings, confStandings, runCfbPostseason,
   heismanRace, cfbRecruitClass, cfbPortalPool, signRecruit, cfbOffseason,
-  nilBudgetFor, cfbStrength,
+  nilBudgetFor, cfbStrength, cfbSeasonResult,
   type CfbState, type CfbGame, type CfbPlayoffGame, type CfbRecruit, type HeismanFinalist,
   ensureCfbIds,
 } from '@/lib/cfbDynasty';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+/* Round 647: every closed season is one row, scored on that season alone.
+   The scoring, the row and the refusal of a season already closed live in
+   the shared module, the same one the four front offices read. */
+import { appendSeason, ledgerOf, ledgerRow, ledgerTotal, type SeasonRow } from '@/lib/seasonLedger';
 import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
@@ -48,9 +52,12 @@ export default function CfbDynastyBoard() {
   const [postseason, setPostseason] = useState<Postseason | null>(null);
   const [recruits, setRecruits] = useState<CfbRecruit[] | null>(null);
   const [portal, setPortal] = useState<CfbRecruit[] | null>(null);
-  const [wonNow, setWonNow] = useState(false);
+  /* Round 647: the row this mount closed. The completion fires on it (false
+     to true while mounted, which is what the recorder witnesses), so a reload
+     on the recap, where nothing was closed, records nothing again. */
+  const [closedRow, setClosedRow] = useState<SeasonRow | null>(null);
 
-  useGameCompletion('cfb-dynasty', wonNow, (st?.myTitles ?? 0) * 100 + (st?.seasonsPlayed ?? 0) * 5);
+  useGameCompletion('cfb-dynasty', closedRow !== null, closedRow?.score);
 
   const persist = useCallback((state: CfbState, ph: Phase, rec: CfbRecruit[] | null, por: CfbRecruit[] | null, post: Postseason | null = null) => {
     try {
@@ -109,7 +116,7 @@ export default function CfbDynastyBoard() {
     const state = initCfb(id);
     setSt(state); setPhase('season'); setTab('team');
     setFeed([`Welcome to ${label(id)}. The ${state.season} season kicks off with a 12-game slate, a conference title to defend, and a 12-team Playoff waiting in December.`]);
-    setPostseason(null); setWonNow(false);
+    setPostseason(null); setClosedRow(null);
     persist(state, 'season', null, null);
   };
 
@@ -151,7 +158,12 @@ export default function CfbDynastyBoard() {
       state.natties.push({ season: state.season, team: post.champion });
       if (won) state.myTitles += 1;
       state.seasonsPlayed += 1;
-      setWonNow(won);
+      /* Round 647: the season closes into the ledger as one row, scored on
+         its own record and its own Playoff. The row is what the completion
+         records; the program is carried, never scored. */
+      const ledgered = appendSeason(ledgerOf(state.ledger), cfbSeasonResult(state, post));
+      state.ledger = ledgered.ledger;
+      setClosedRow(ledgered.row);
       const closed: Postseason = { ccgs: post.ccgs, bracket: post.bracket, champion: post.champion, heisman };
       setPostseason(closed);
       setPhase('recap');
@@ -192,7 +204,7 @@ export default function CfbDynastyBoard() {
     const state: CfbState = JSON.parse(JSON.stringify(st));
     const notes = cfbOffseason(state, Math.random);
     setSt(state); setPhase('season'); setTab('team');
-    setRecruits(null); setPortal(null); setPostseason(null); setWonNow(false);
+    setRecruits(null); setPortal(null); setPostseason(null); setClosedRow(null);
     setFeed(notes.slice(0, 5));
     persist(state, 'season', null, null);
   };
@@ -238,6 +250,10 @@ export default function CfbDynastyBoard() {
   if (phase === 'recap' && postseason) {
     const isChamp = postseason.champion === st.myTeam;
     const title = postseason.bracket[postseason.bracket.length - 1];
+    /* Round 647: this season's ledger row and the career sum, present on a
+       reload too because both are read from the save. */
+    const careerLedger = ledgerOf(st.ledger);
+    const seasonRow = ledgerRow(careerLedger, st.season);
     /* Round 530: the season curtain. Pure presentation over the postseason
        the engine already ran: the champion slams in, your own line rises, the
        Heisman lands after the champion, then the title game and the ledger
@@ -274,9 +290,12 @@ export default function CfbDynastyBoard() {
               <p key={`${st.season}:${i}`} className="cm-tick-in" style={{ animationDelay: revealDelay(i + 1) }}>{line}</p>
             ))}
           </div>
-          <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: '0.9s' }}>
+          <div className="cm-rise mt-3 flex flex-wrap items-center justify-center gap-3 text-sm" style={{ animationDelay: '0.9s' }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Natties <b className="text-gold">{st.myTitles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{st.seasonsPlayed}</b></span>
+            {/* Round 647: the number this season recorded, and the career's ledger sum. */}
+            <span className="rounded-full border border-border bg-background px-3 py-1.5">This season <b className="text-gold">{seasonRow?.score ?? 0}</b> pts</span>
+            <span className="rounded-full border border-border bg-background px-3 py-1.5">Career <b className="text-primary">{ledgerTotal(careerLedger)}</b> pts</span>
           </div>
           <div className="cm-rise mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center" style={{ animationDelay: '0.9s' }}>
             <button onClick={startRecruiting} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
@@ -285,8 +304,8 @@ export default function CfbDynastyBoard() {
             <ShareButtons
               gameName="CFB Dynasty"
               gamePath="/cfb-dynasty"
-              score={`${st.myTitles} natties in ${st.seasonsPlayed} seasons`}
-              customText={`CFB Dynasty 🏈 ${isChamp ? `${label(st.myTeam)} just won the natty!` : `${label(postseason.champion)} took the title.`} ${st.myTitles} championships in ${st.seasonsPlayed} seasons. douknowball.com/cfb-dynasty`}
+              score={`${seasonRow?.score ?? 0} pts this season, ${st.myTitles} natties in ${st.seasonsPlayed} seasons`}
+              customText={`CFB Dynasty 🏈 ${isChamp ? `${label(st.myTeam)} just won the natty!` : `${label(postseason.champion)} took the title.`} ${seasonRow?.score ?? 0} pts this season, ${st.myTitles} championships in ${st.seasonsPlayed} seasons. douknowball.com/cfb-dynasty`}
             />
           </div>
         </div>

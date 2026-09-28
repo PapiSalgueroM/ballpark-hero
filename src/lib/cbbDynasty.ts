@@ -1,4 +1,8 @@
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
+/* Round 647: a type only import, erased at build, so the engine bundles in
+   the harnesses without the scoring module and the harness can load the
+   module (or a control copy of it) beside the engine. */
+import type { SeasonResult, SeasonRow } from '@/lib/seasonLedger';
 /**
  * CBB Dynasty engine (2026-08-05). College basketball sibling of
  * cfbDynasty.ts. Real programs, fully fictional generated players (class
@@ -112,6 +116,11 @@ export interface CbbState {
   myTitles: number;
   seasonsPlayed: number;
   poyWinners: string[];
+  /* Round 647: one row per closed season, scored on that season alone, in
+     the shared shape the four front offices keep (src/lib/seasonLedger.ts).
+     Optional so a save from before this round opens with an empty ledger and
+     no retroactive points. */
+  ledger?: SeasonRow[];
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -156,7 +165,7 @@ export function initCbb(myTeam: string, rng: () => number = Math.random): CbbSta
     });
     teams[s.id] = { id: s.id, players, wins: 0, losses: 0, confChamp: false };
   }
-  return { season: 2026, teams, round: 1, myTeam, nil: cbbNilFor(CBB_SCHOOL_MAP.get(myTeam)!.prestige, 0), titles: [], myTitles: 0, seasonsPlayed: 0, poyWinners: [] };
+  return { season: 2026, teams, round: 1, myTeam, nil: cbbNilFor(CBB_SCHOOL_MAP.get(myTeam)!.prestige, 0), titles: [], myTitles: 0, seasonsPlayed: 0, poyWinners: [], ledger: [] };
 }
 
 export function cbbStrength(t: CbbTeam): number {
@@ -300,6 +309,30 @@ export function runMarch(st: CbbState, rng: () => number): MarchResult {
     }
   }
   return { confFinals, autoBids, field, bracket, champion, cinderella, myExit };
+}
+
+/**
+ * Round 647: the season as the shared ledger scores it, read off the March
+ * runMarch produced. The conference tournament is played unrecorded (the
+ * engine passes record=false), so the record is the twenty game season; the
+ * Dance is read on the same ladder the front offices use: in the field, won
+ * a game, played the title game, won it. The program is carried, never
+ * scored.
+ */
+export function cbbSeasonResult(st: CbbState, march: Pick<MarchResult, 'bracket' | 'champion' | 'field'>): SeasonResult {
+  const me = st.myTeam;
+  const mine = st.teams[me];
+  const fin = march.bracket[march.bracket.length - 1];
+  return {
+    season: st.season,
+    team: me,
+    wins: mine.wins,
+    games: mine.wins + mine.losses,
+    madePlayoffs: march.field.includes(me),
+    roundsWon: march.bracket.filter(g => g.winner === me).length,
+    reachedFinal: !!fin && (fin.home === me || fin.away === me),
+    wonTitle: march.champion === me,
+  };
 }
 
 export interface PoyFinalist { name: string; team: string; pos: CbbPos; score: number }

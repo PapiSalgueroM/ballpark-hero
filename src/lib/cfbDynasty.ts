@@ -1,4 +1,8 @@
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
+/* Round 647: a type only import, erased at build, so the engine bundles in
+   the harnesses without the scoring module and the harness can load the
+   module (or a control copy of it) beside the engine. */
+import type { SeasonResult, SeasonRow } from '@/lib/seasonLedger';
 /**
  * CFB Dynasty engine (2026-08-05). The college pillar of the sim suite.
  *
@@ -120,6 +124,11 @@ export interface CfbState {
   myTitles: number;
   seasonsPlayed: number;
   heismanWinners: string[];
+  /* Round 647: one row per closed season, scored on that season alone, in
+     the shared shape the four front offices keep (src/lib/seasonLedger.ts).
+     Optional so a save from before this round opens with an empty ledger and
+     no retroactive points. */
+  ledger?: SeasonRow[];
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -162,7 +171,7 @@ export function initCfb(myTeam: string, rng: () => number = Math.random): CfbSta
     });
     teams[s.id] = { id: s.id, players, wins: 0, losses: 0, confWins: 0, confLosses: 0, champion: false };
   }
-  return { season: 2026, teams, round: 1, myTeam, nil: nilBudgetFor(CFB_SCHOOL_MAP.get(myTeam)!.prestige, 0), natties: [], myTitles: 0, seasonsPlayed: 0, heismanWinners: [] };
+  return { season: 2026, teams, round: 1, myTeam, nil: nilBudgetFor(CFB_SCHOOL_MAP.get(myTeam)!.prestige, 0), natties: [], myTitles: 0, seasonsPlayed: 0, heismanWinners: [], ledger: [] };
 }
 
 function clampi(v: number, lo: number, hi: number): number { return Math.max(lo, Math.min(hi, v)); }
@@ -290,6 +299,29 @@ export function runCfbPostseason(st: CfbState, rng: () => number): { ccgs: CfbPl
   const sf2 = playPair('CFP Semifinal', qf[1], qf[2], st, rng, bracket);
   const champion = playPair('National Championship', sf1, sf2, st, rng, bracket);
   return { ccgs, bracket, champion, field };
+}
+
+/**
+ * Round 647: the season as the shared ledger scores it, read off the
+ * postseason runCfbPostseason produced. The record includes the conference
+ * title game (the engine counts it in wins and losses); the Playoff is read
+ * on the same ladder the front offices use: in the field, won a game,
+ * played the title game, won it. The school is carried, never scored.
+ */
+export function cfbSeasonResult(st: CfbState, post: { bracket: CfbPlayoffGame[]; champion: string; field: string[] }): SeasonResult {
+  const me = st.myTeam;
+  const mine = st.teams[me];
+  const fin = post.bracket[post.bracket.length - 1];
+  return {
+    season: st.season,
+    team: me,
+    wins: mine.wins,
+    games: mine.wins + mine.losses,
+    madePlayoffs: post.field.includes(me),
+    roundsWon: post.bracket.filter(g => g.winner === me).length,
+    reachedFinal: !!fin && (fin.home === me || fin.away === me),
+    wonTitle: post.champion === me,
+  };
 }
 
 function playPair(name: string, aId: string, bId: string, st: CfbState, rng: () => number, out: CfbPlayoffGame[]): string {

@@ -27,6 +27,10 @@ import { openTalks, standFirm, type TalksState } from '@/lib/foTradeTalks';
 import { TradeTalksCard } from '@/components/front-office-shared/TradeTalksCard';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { recordActivity } from '@/lib/completions';
+/* Round 647: every closed season is one row, scored on that season alone.
+   The scoring, the row and the refusal of a season already closed live in
+   the shared module, the same one the other five boards read. */
+import { appendSeason, ledgerOf, ledgerRow, ledgerTotal, type SeasonRow } from '@/lib/seasonLedger';
 import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 // Round 180: the owner upstairs, shared engine and card.
@@ -80,6 +84,9 @@ interface SaveShape {
   /* Round 431. Present on a save written from the recap screen, so the recap
      can be drawn again after a reload. Absent on older saves. */
   postseason?: Postseason | null;
+  /* Round 647. One row per closed season. Absent on an older save, which
+     opens with an empty ledger and no retroactive points. */
+  ledger?: SeasonRow[];
 }
 
 export default function FrontOfficeBoard() {
@@ -124,7 +131,12 @@ export default function FrontOfficeBoard() {
   const [talks, setTalks] = useState<{ state: TalksState; partner: string; myPieceId: string; wantId: string } | null>(null);
   const [titles, setTitles] = useState(0);
   const [seasonsPlayed, setSeasonsPlayed] = useState(0);
-  const [wonTitleNow, setWonTitleNow] = useState(false);
+  /* Round 647: the ledger, one row per closed season, and the row this mount
+     closed. The completion fires on that row (false to true while mounted,
+     which is what the recorder witnesses), so a reload on the recap, where
+     nothing was closed, records nothing again. */
+  const [ledger, setLedger] = useState<SeasonRow[]>([]);
+  const [closedRow, setClosedRow] = useState<SeasonRow | null>(null);
   /* Round 180: the owner upstairs. */
   const [mandate, setMandate] = useState<OwnerMandate | null>(null);
   const [trust, setTrust] = useState(FO_TRUST_START);
@@ -135,7 +147,7 @@ export default function FrontOfficeBoard() {
   const [pressTilt, setPressTilt] = useState<-1 | 0 | 1>(0);
   const [seasonTradeLine, setSeasonTradeLine] = useState<string | null>(null);
 
-  useGameCompletion('front-office', wonTitleNow, titles * 100 + seasonsPlayed * 5);
+  useGameCompletion('front-office', closedRow !== null, closedRow?.score);
 
   /* Round 180: rank my roster against the league and let ownership set the ask.
      Round 192: the press tilt can move it one tier either way. */
@@ -160,6 +172,7 @@ export default function FrontOfficeBoard() {
       setMyTeam(s.myTeam);
       setTitles(s.titles ?? 0);
       setSeasonsPlayed(s.seasonsPlayed ?? 0);
+      setLedger(ledgerOf(s.ledger));
       setDraftClass(s.draftClass ?? null);
       setPicksLeft(s.picksLeft ?? 0);
       /* Round 180, repair-on-load house pattern: a pre-180 save has no owner
@@ -196,11 +209,12 @@ export default function FrontOfficeBoard() {
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
         mandate, trust, fired, pressTilt, seasonTradeLine,
         postseason: champion ? { rounds: playoffRounds, champion, gradeLine } : null,
+        ledger,
         ...patch,
       };
       localStorage.setItem(SAVE_KEY, JSON.stringify(base));
     } catch { /* storage full: play on */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine, ledger]);
 
   const start = (abbr: string) => {
     const lg = initLeague();
@@ -218,6 +232,8 @@ export default function FrontOfficeBoard() {
     setPlayoffRounds([]);
     setTitles(0);
     setSeasonsPlayed(0);
+    setLedger([]);
+    setClosedRow(null);
     setMandate(m);
     setTrust(FO_TRUST_START);
     setFired(false);
@@ -229,7 +245,7 @@ export default function FrontOfficeBoard() {
     }));
     setPressTilt(0);
     setSeasonTradeLine(null);
-    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
+    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null, ledger: [] }, lg, abbr);
   };
 
   /* Round 192: one answer, three registers. Trust moves now, the tilt
@@ -306,17 +322,25 @@ export default function FrontOfficeBoard() {
       setPlayoffRounds(rounds);
       setChampion(champ);
       const won = champ === myTeam;
-      setWonTitleNow(won);
       const newTitles = titles + (won ? 1 : 0);
       const newSeasons = seasonsPlayed + 1;
       setTitles(newTitles);
       setSeasonsPlayed(newSeasons);
+      /* Round 647: the season closes into the ledger as one row, scored on
+         its own record and its own postseason. The row is what the
+         completion records; the pick of team is carried, never scored. */
+      const post = nflPostseason(rounds, myTeam);
+      const mine = lg.teams[myTeam];
+      const closed = appendSeason(ledger, {
+        season: lg.season, team: myTeam, wins: mine.wins, games: mine.wins + mine.losses, ...post, wonTitle: won,
+      });
+      setLedger(closed.ledger);
+      setClosedRow(closed.row);
       /* Round 180: ownership grades the season against the mandate. */
       let newTrust = trust, nowFired = fired;
       let gradeResult: ReturnType<typeof gradeSeason>['result'] | null = null;
       let gradeVerdict: string | null = null;
       if (mandate) {
-        const post = nflPostseason(rounds, myTeam);
         const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
         const applied = applyMandateResult(trust, grade);
         newTrust = applied.trust;
@@ -336,7 +360,7 @@ export default function FrontOfficeBoard() {
       }));
       setPhase('recap');
       setLeague(lg);
-      persist({ phase: nowFired ? 'fired' : 'recap', titles: newTitles, seasonsPlayed: newSeasons, trust: newTrust, fired: nowFired, postseason: { rounds, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
+      persist({ phase: nowFired ? 'fired' : 'recap', titles: newTitles, seasonsPlayed: newSeasons, trust: newTrust, fired: nowFired, postseason: { rounds, champion: champ, gradeLine: gradeVerdict }, ledger: closed.ledger }, lg, myTeam);
       return;
     }
     lg.week += 1;
@@ -441,7 +465,7 @@ export default function FrontOfficeBoard() {
       setWeekResults([]);
       setPlayoffRounds([]);
       setChampion('');
-      setWonTitleNow(false);
+      setClosedRow(null);
       setPressTilt(0);
       setSeasonTradeLine(null);
       /* Round 530: the phase stays 'draft' so the last pick's card is seen;
@@ -629,6 +653,8 @@ export default function FrontOfficeBoard() {
   if (phase === 'recap') {
     const table = standings(league.teams);
     const myRank = table.findIndex(t => t.abbr === myTeam) + 1;
+    /* Round 647: this season's ledger row, present on a reload too. */
+    const seasonRow = ledgerRow(ledger, league.season);
     /* Round 187: the verdict curtain. Every string below is exactly what
        Round 180 wrote; stageVerdict only decides confetti and tone, and
        the harness pins that a good grade is not a parade. */
@@ -669,9 +695,13 @@ export default function FrontOfficeBoard() {
               </p>
             ))}
           </div>
-          <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: '1.2s' }}>
+          <div className="cm-rise mt-3 flex flex-wrap items-center justify-center gap-3 text-sm" style={{ animationDelay: '1.2s' }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Titles <b className="text-gold">{titles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{seasonsPlayed}</b></span>
+            {/* Round 647: the number this season recorded, and the career's
+                ledger sum. Read from the ledger so a reload shows the same two. */}
+            <span className="rounded-full border border-border bg-background px-3 py-1.5">This season <b className="text-gold">{seasonRow?.score ?? 0}</b> pts</span>
+            <span className="rounded-full border border-border bg-background px-3 py-1.5">Career <b className="text-primary">{ledgerTotal(ledger)}</b> pts</span>
           </div>
           {/* Round 180: zero trust ends the save here instead of a draft. */}
           {fired ? (
@@ -697,8 +727,8 @@ export default function FrontOfficeBoard() {
               <ShareButtons
                 gameName="NFL Front Office"
                 gamePath="/front-office"
-                score={`${titles} titles in ${seasonsPlayed} seasons`}
-                customText={`NFL Front Office 🏈 ${champion === myTeam ? `My ${label(myTeam)} just won it all!` : `${label(champion)} took the title.`} ${titles} rings in ${seasonsPlayed} seasons as a GM. douknowball.com/front-office`}
+                score={`${seasonRow?.score ?? 0} pts this season, ${titles} titles in ${seasonsPlayed} seasons`}
+                customText={`NFL Front Office 🏈 ${champion === myTeam ? `My ${label(myTeam)} just won it all!` : `${label(champion)} took the title.`} ${seasonRow?.score ?? 0} pts this season, ${titles} rings in ${seasonsPlayed} seasons as a GM. douknowball.com/front-office`}
               />
             </div>
           )}

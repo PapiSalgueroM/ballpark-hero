@@ -6,11 +6,15 @@ import {
   CBB_SCHOOLS, CBB_SCHOOL_MAP, CBB_CONFS, CBB_ROUNDS,
   initCbb, simCbbRound, cbbRankings, cbbConfStandings, runMarch,
   poyRace, cbbRecruitClass, cbbPortalPool, cbbSignRecruit, cbbOffseason,
-  cbbNilFor, cbbStrength,
+  cbbNilFor, cbbStrength, cbbSeasonResult,
   type CbbState, type CbbGame, type CbbRecruit, type MarchResult, type PoyFinalist,
   ensureCbbIds,
 } from '@/lib/cbbDynasty';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+/* Round 647: every closed season is one row, scored on that season alone.
+   The scoring, the row and the refusal of a season already closed live in
+   the shared module, the same one the four front offices read. */
+import { appendSeason, ledgerOf, ledgerRow, ledgerTotal, type SeasonRow } from '@/lib/seasonLedger';
 import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
@@ -19,9 +23,16 @@ type Tab = 'team' | 'play' | 'rankings' | 'standings';
 
 const SAVE_KEY = 'cbb-dynasty-save-v1';
 
+type Postseason = { march: MarchResult; poy: PoyFinalist[] };
+
 interface SaveShape {
   st: CbbState; phase: Phase;
   recruits: CbbRecruit[] | null; portal: CbbRecruit[] | null;
+  /* Round 647, the Round 426 part three shape CFB Dynasty got and this board
+     never did: present on a save written from the recap screen, so the recap
+     can be drawn again after a reload instead of the final round being
+     offered a second time. Absent on older saves. */
+  postseason?: Postseason | null;
 }
 
 const confLabel = (c: string) => c === 'B1G' ? 'Big Ten' : c === 'B12' ? 'Big 12' : c === 'BE' ? 'Big East' : c === 'MM' ? 'Mid-Majors' : c;
@@ -42,13 +53,34 @@ export default function CbbDynastyBoard() {
   const revealRef = useRevealScroll<HTMLDivElement>(
     `${phase}:${lastGames.length}:${lastGames[0]?.home ?? ''}:${lastGames[0]?.away ?? ''}`,
   );
-  const [march, setMarch] = useState<MarchResult | null>(null);
-  const [poy, setPoy] = useState<PoyFinalist[] | null>(null);
+  const [postseason, setPostseason] = useState<Postseason | null>(null);
   const [recruits, setRecruits] = useState<CbbRecruit[] | null>(null);
   const [portal, setPortal] = useState<CbbRecruit[] | null>(null);
-  const [wonNow, setWonNow] = useState(false);
+  /* Round 647: the row this mount closed. The completion fires on it (false
+     to true while mounted, which is what the recorder witnesses), so a reload
+     on the recap, where nothing was closed, records nothing again. */
+  const [closedRow, setClosedRow] = useState<SeasonRow | null>(null);
 
-  useGameCompletion('cbb-dynasty', wonNow, (st?.myTitles ?? 0) * 100 + (st?.seasonsPlayed ?? 0) * 5);
+  useGameCompletion('cbb-dynasty', closedRow !== null, closedRow?.score);
+
+  const persist = useCallback((state: CbbState, ph: Phase, rec: CbbRecruit[] | null, por: CbbRecruit[] | null, post: Postseason | null = null) => {
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify({ st: state, phase: ph, recruits: rec, portal: por, postseason: post } satisfies SaveShape));
+    } catch { /* full */ }
+  }, []);
+
+  /* The step after the recap: an NIL budget, a recruiting class and a portal
+     pool for the season just closed. Shared by the recap's button and by the
+     restore of an older save that was written on the recap screen. */
+  const openRecruiting = useCallback((source: CbbState) => {
+    const state: CbbState = JSON.parse(JSON.stringify(source));
+    state.nil = cbbNilFor(CBB_SCHOOL_MAP.get(state.myTeam)!.prestige, state.teams[state.myTeam].wins);
+    const cls = cbbRecruitClass(Math.random);
+    const por = cbbPortalPool(Math.random);
+    setSt(state); setRecruits(cls); setPortal(por); setPhase('recruit');
+    setFeed([`💰 NIL budget: ${state.nil} points. Replace the departed, raid the portal, run it back.`]);
+    persist(state, 'recruit', cls, por);
+  }, [persist]);
 
   useEffect(() => {
     try {
@@ -61,17 +93,27 @@ export default function CbbDynastyBoard() {
          are one id space and the repair has to see all three at once. */
       ensureCbbIds(s.st, s.recruits, s.portal);
       setSt(s.st);
-      setPhase(s.phase === 'recap' ? 'season' : s.phase);
       setRecruits(s.recruits ?? null);
       setPortal(s.portal ?? null);
+      /* Round 647, the Round 426 part three fix this board never got: a
+         reload on the recap screen used to replay the season. The save
+         carried phase 'recap' with round still at the last one and no
+         March, this effect mapped it back to 'season', the button read
+         "Final round + March" again, and one click ran the last round and
+         the whole tournament a second time on a season that was already
+         closed: seasonsPlayed and titles advanced twice and the title could
+         be won twice. The save now carries the March, so the recap is
+         simply drawn again. A save from before this round has nothing to
+         draw, so it opens on the recruiting trail, which is where the
+         recap's only button leads. */
+      if (s.phase === 'recap') {
+        if (s.postseason) { setPostseason(s.postseason); setPhase('recap'); }
+        else openRecruiting(s.st);
+      } else {
+        setPhase(s.phase);
+      }
     } catch { /* fresh */ }
-  }, []);
-
-  const persist = useCallback((state: CbbState, ph: Phase, rec: CbbRecruit[] | null, por: CbbRecruit[] | null) => {
-    try {
-      localStorage.setItem(SAVE_KEY, JSON.stringify({ st: state, phase: ph, recruits: rec, portal: por } satisfies SaveShape));
-    } catch { /* full */ }
-  }, []);
+  }, [openRecruiting]);
 
   const label = (id: string) => CBB_SCHOOL_MAP.get(id)?.name ?? id;
 
@@ -79,7 +121,7 @@ export default function CbbDynastyBoard() {
     const state = initCbb(id);
     setSt(state); setPhase('season'); setTab('team');
     setFeed([`Welcome to ${label(id)}. Twenty games, a conference tournament, and one shot at surviving March.`]);
-    setMarch(null); setPoy(null); setWonNow(false);
+    setPostseason(null); setClosedRow(null);
     persist(state, 'season', null, null);
   };
 
@@ -99,19 +141,35 @@ export default function CbbDynastyBoard() {
       lines.push(`${won ? '✅' : '❌'} ${won ? 'Beat' : 'Lost to'} ${label(opp)} ${us}-${them}.`);
     }
     if (state.round >= CBB_ROUNDS) {
+      /* Round 647, the closed season guard CFB Dynasty has had since Round
+         426 part three: the record carries an entry for this season the
+         moment March is played, so a state that already has one is a closed
+         season being clicked again (an old save restored on the recap, or a
+         double click), and the answer is to do nothing rather than play the
+         last round and the tournament twice. */
+      if (state.titles.some(t => t.season === state.season)) return;
       const result = runMarch(state, Math.random);
       const race = poyRace(state, Math.random);
-      state.poyWinners = [...(state.poyWinners ?? []), race[0].name];
+      /* Round 647: guarded the way CFB's Heisman race is (Round 426). An
+         empty race must not brick the final round. */
+      const poyWinner = race[0];
+      if (poyWinner) state.poyWinners = [...(state.poyWinners ?? []), poyWinner.name];
       const won = result.champion === state.myTeam;
       state.titles.push({ season: state.season, team: result.champion });
       if (won) state.myTitles += 1;
       state.seasonsPlayed += 1;
-      setWonNow(won);
-      setMarch(result); setPoy(race);
+      /* Round 647: the season closes into the ledger as one row, scored on
+         its own record and its own March. The row is what the completion
+         records; the program is carried, never scored. */
+      const ledgered = appendSeason(ledgerOf(state.ledger), cbbSeasonResult(state, result));
+      state.ledger = ledgered.ledger;
+      setClosedRow(ledgered.row);
+      const closed: Postseason = { march: result, poy: race };
+      setPostseason(closed);
       setPhase('recap');
       setSt(state);
       setFeed(lines);
-      persist(state, 'recap', null, null);
+      persist(state, 'recap', null, null, closed);
       return;
     }
     state.round += 1;
@@ -122,13 +180,7 @@ export default function CbbDynastyBoard() {
 
   const startRecruiting = () => {
     if (!st) return;
-    const state: CbbState = JSON.parse(JSON.stringify(st));
-    state.nil = cbbNilFor(CBB_SCHOOL_MAP.get(state.myTeam)!.prestige, state.teams[state.myTeam].wins);
-    const cls = cbbRecruitClass(Math.random);
-    const por = cbbPortalPool(Math.random);
-    setSt(state); setRecruits(cls); setPortal(por); setPhase('recruit');
-    setFeed([`💰 NIL budget: ${state.nil} points. Replace the departed, raid the portal, run it back.`]);
-    persist(state, 'recruit', cls, por);
+    openRecruiting(st);
   };
 
   const sign = (r: CbbRecruit, fromPortal: boolean) => {
@@ -152,14 +204,14 @@ export default function CbbDynastyBoard() {
     const state: CbbState = JSON.parse(JSON.stringify(st));
     const notes = cbbOffseason(state, Math.random);
     setSt(state); setPhase('season'); setTab('team');
-    setRecruits(null); setPortal(null); setMarch(null); setPoy(null); setWonNow(false);
+    setRecruits(null); setPortal(null); setPostseason(null); setClosedRow(null);
     setFeed(notes.slice(0, 5));
     persist(state, 'season', null, null);
   };
 
   const reset = () => {
     localStorage.removeItem(SAVE_KEY);
-    setPhase('pick'); setSt(null); setMarch(null);
+    setPhase('pick'); setSt(null); setPostseason(null);
   };
 
   if (phase === 'pick' || !st || !my) {
@@ -195,9 +247,14 @@ export default function CbbDynastyBoard() {
   const strength = Math.round(cbbStrength(my));
   const myRank = cbbRankings(st).findIndex(t => t.id === st.myTeam) + 1;
 
-  if (phase === 'recap' && march && poy) {
+  if (phase === 'recap' && postseason) {
+    const { march, poy } = postseason;
     const isChamp = march.champion === st.myTeam;
     const title = march.bracket[march.bracket.length - 1];
+    /* Round 647: this season's ledger row and the career sum, present on a
+       reload too because both are read from the save. */
+    const careerLedger = ledgerOf(st.ledger);
+    const seasonRow = ledgerRow(careerLedger, st.season);
     /* Round 530: the season curtain. Pure presentation over the March the
        engine already ran: the champion slams in, your own line rises, the
        player of the year lands after the champion, Cinderella after him, then
@@ -215,9 +272,13 @@ export default function CbbDynastyBoard() {
           <p className="cm-rise mt-1 text-sm text-muted-foreground" style={{ animationDelay: '0.25s' }}>
             {isChamp ? 'One Shining Moment is about you this year.' : `Your ${label(st.myTeam)}: ${my.wins}-${my.losses}. ${march.myExit}.`}
           </p>
-          <p className="cm-rise mt-1 text-xs text-amber-300 font-bold" style={{ animationDelay: '0.45s' }}>
-            🏆 National Player of the Year: {poy[0].name} ({poy[0].pos}, {label(poy[0].team)})
-          </p>
+          {/* Round 647: guarded like CFB's Heisman line, an empty race must
+              not crash the recap. */}
+          {poy[0] && (
+            <p className="cm-rise mt-1 text-xs text-amber-300 font-bold" style={{ animationDelay: '0.45s' }}>
+              🏆 National Player of the Year: {poy[0].name} ({poy[0].pos}, {label(poy[0].team)})
+            </p>
+          )}
           {march.cinderella && (
             <p className="cm-rise mt-1 text-xs font-bold text-emerald-400" style={{ animationDelay: '0.55s' }}>
               🕰️ Cinderella: {label(march.cinderella.team)} crashed the Final Four as a {march.cinderella.seed} seed
@@ -231,9 +292,12 @@ export default function CbbDynastyBoard() {
               <p key={`${st.season}:${i}`} className="cm-tick-in" style={{ animationDelay: revealDelay(i + 1) }}>{g.name}: ({g.homeSeed}) {label(g.home)} vs ({g.awaySeed}) {label(g.away)}, {label(g.winner)} advance</p>
             ))}
           </div>
-          <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: '0.9s' }}>
+          <div className="cm-rise mt-3 flex flex-wrap items-center justify-center gap-3 text-sm" style={{ animationDelay: '0.9s' }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Titles <b className="text-gold">{st.myTitles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{st.seasonsPlayed}</b></span>
+            {/* Round 647: the number this season recorded, and the career's ledger sum. */}
+            <span className="rounded-full border border-border bg-background px-3 py-1.5">This season <b className="text-gold">{seasonRow?.score ?? 0}</b> pts</span>
+            <span className="rounded-full border border-border bg-background px-3 py-1.5">Career <b className="text-primary">{ledgerTotal(careerLedger)}</b> pts</span>
           </div>
           <div className="cm-rise mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center" style={{ animationDelay: '0.9s' }}>
             <button onClick={startRecruiting} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
@@ -242,8 +306,8 @@ export default function CbbDynastyBoard() {
             <ShareButtons
               gameName="CBB Dynasty"
               gamePath="/cbb-dynasty"
-              score={`${st.myTitles} titles in ${st.seasonsPlayed} seasons`}
-              customText={`CBB Dynasty 🏀 ${isChamp ? `${label(st.myTeam)} just cut down the nets!` : `${label(march.champion)} won it all.`} ${st.myTitles} titles in ${st.seasonsPlayed} seasons. douknowball.com/cbb-dynasty`}
+              score={`${seasonRow?.score ?? 0} pts this season, ${st.myTitles} titles in ${st.seasonsPlayed} seasons`}
+              customText={`CBB Dynasty 🏀 ${isChamp ? `${label(st.myTeam)} just cut down the nets!` : `${label(march.champion)} won it all.`} ${seasonRow?.score ?? 0} pts this season, ${st.myTitles} titles in ${st.seasonsPlayed} seasons. douknowball.com/cbb-dynasty`}
             />
           </div>
         </div>

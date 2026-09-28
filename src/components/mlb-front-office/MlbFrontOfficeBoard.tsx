@@ -25,6 +25,10 @@ import { openTalks, standFirm, type TalksState } from '@/lib/foTradeTalks';
 import { TradeTalksCard } from '@/components/front-office-shared/TradeTalksCard';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { recordActivity } from '@/lib/completions';
+/* Round 647: every closed season is one row, scored on that season alone.
+   The scoring, the row and the refusal of a season already closed live in
+   the shared module, the same one the other five boards read. */
+import { appendSeason, ledgerOf, ledgerRow, ledgerTotal, type SeasonRow } from '@/lib/seasonLedger';
 import { cn } from '@/lib/utils';
 // Round 180: the owner upstairs, shared engine and card.
 import {
@@ -71,6 +75,9 @@ interface SaveShape {
   /* Round 431. Present on a save written from the recap screen, so the recap
      can be drawn again after a reload. Absent on older saves. */
   postseason?: Postseason | null;
+  /* Round 647. One row per closed season. Absent on an older save, which
+     opens with an empty ledger and no retroactive points. */
+  ledger?: SeasonRow[];
 }
 
 export default function MlbFrontOfficeBoard() {
@@ -107,7 +114,12 @@ export default function MlbFrontOfficeBoard() {
   const [talks, setTalks] = useState<{ state: TalksState; partner: string; myPieceId: string; wantId: string } | null>(null);
   const [titles, setTitles] = useState(0);
   const [seasonsPlayed, setSeasonsPlayed] = useState(0);
-  const [wonNow, setWonNow] = useState(false);
+  /* Round 647: the ledger, one row per closed season, and the row this mount
+     closed. The completion fires on that row (false to true while mounted,
+     which is what the recorder witnesses), so a reload on the recap, where
+     nothing was closed, records nothing again. */
+  const [ledger, setLedger] = useState<SeasonRow[]>([]);
+  const [closedRow, setClosedRow] = useState<SeasonRow | null>(null);
   /* Round 180: the owner upstairs. */
   const [mandate, setMandate] = useState<OwnerMandate | null>(null);
   const [trust, setTrust] = useState(FO_TRUST_START);
@@ -118,7 +130,7 @@ export default function MlbFrontOfficeBoard() {
   const [pressTilt, setPressTilt] = useState<-1 | 0 | 1>(0);
   const [seasonTradeLine, setSeasonTradeLine] = useState<string | null>(null);
 
-  useGameCompletion('mlb-front-office', wonNow, titles * 100 + seasonsPlayed * 5);
+  useGameCompletion('mlb-front-office', closedRow !== null, closedRow?.score);
 
   /* Round 180: rank my roster against the league and let ownership set the ask. */
   const mandateFor = (lg: MlbLeague, team: string, defendingChamp: boolean, tilt: -1 | 0 | 1 = 0): OwnerMandate => {
@@ -139,6 +151,7 @@ export default function MlbFrontOfficeBoard() {
       ensureMlbLeagueIds(s.league, s.draftClass);
       setLeague(s.league); setMyTeam(s.myTeam);
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
+      setLedger(ledgerOf(s.ledger));
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
       /* Round 180, repair-on-load: a pre-180 save gets an owner today. */
       setMandate(s.mandate ?? mandateFor(s.league, s.myTeam, false));
@@ -171,10 +184,10 @@ export default function MlbFrontOfficeBoard() {
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
         mandate, trust, fired, pressTilt, seasonTradeLine,
-        postseason: champion ? { series, champion, gradeLine } : null, ...patch,
+        postseason: champion ? { series, champion, gradeLine } : null, ledger, ...patch,
       } satisfies SaveShape));
     } catch { /* full */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, ledger]);
 
   const label = (abbr: string) => {
     const t = MLB_TEAM_MAP.get(abbr);
@@ -190,6 +203,7 @@ export default function MlbFrontOfficeBoard() {
       `🏛️ The ownership mandate: ${m.text}`,
     ]);
     setChampion(''); setSeries([]); setTitles(0); setSeasonsPlayed(0);
+    setLedger([]); setClosedRow(null);
     setMandate(m); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
     /* Round 192: the introduction presser. First day, full room. */
     setPresser(buildGmPresser(MLB_WORDS, {
@@ -197,7 +211,7 @@ export default function MlbFrontOfficeBoard() {
       gradeResult: null, tradeLine: null, seasonsPlayed: 0,
     }));
     setPressTilt(0); setSeasonTradeLine(null);
-    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
+    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null, ledger: [] }, lg, abbr);
   };
 
   /* Round 192: one answer, three registers. Trust moves now, the tilt
@@ -261,16 +275,24 @@ export default function MlbFrontOfficeBoard() {
       setSeries(sr);
       setChampion(champ);
       const won = champ === myTeam;
-      setWonNow(won);
       const nt = titles + (won ? 1 : 0);
       const ns = seasonsPlayed + 1;
       setTitles(nt); setSeasonsPlayed(ns);
+      /* Round 647: the season closes into the ledger as one row, scored on
+         its own record and its own postseason. The row is what the
+         completion records; the pick of team is carried, never scored. */
+      const post = seriesPostseason(sr, myTeam);
+      const mine = lg.teams[myTeam];
+      const closed = appendSeason(ledger, {
+        season: lg.season, team: myTeam, wins: mine.wins, games: mine.wins + mine.losses, ...post, wonTitle: won,
+      });
+      setLedger(closed.ledger);
+      setClosedRow(closed.row);
       /* Round 180: ownership grades the season against the mandate. */
       let newTrust = trust, nowFired = fired;
       let gradeResult: ReturnType<typeof gradeSeason>['result'] | null = null;
       let gradeVerdict: string | null = null;
       if (mandate) {
-        const post = seriesPostseason(sr, myTeam);
         const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
         const applied = applyMandateResult(trust, grade);
         newTrust = applied.trust; nowFired = applied.fired;
@@ -288,7 +310,7 @@ export default function MlbFrontOfficeBoard() {
       setPhase('recap');
       setLeague(lg);
       setFeed(newFeed); setFeedSlam(null);
-      persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
+      persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict }, ledger: closed.ledger }, lg, myTeam);
       return;
     }
     lg.round += 1;
@@ -362,7 +384,7 @@ export default function MlbFrontOfficeBoard() {
         ...notes,
       ].slice(0, 6));
       setPressTilt(0); setSeasonTradeLine(null);
-      setSeries([]); setChampion(''); setWonNow(false);
+      setSeries([]); setChampion(''); setClosedRow(null);
       /* Round 530: the phase stays 'draft' so the last pick's card is seen;
          leaveDraft moves it on. The save says 'hub' as it always did, so a
          reload skips the reveal and opens where it opened before. */
@@ -523,6 +545,8 @@ export default function MlbFrontOfficeBoard() {
   }
 
   if (phase === 'recap') {
+    /* Round 647: this season's ledger row, present on a reload too. */
+    const seasonRow = ledgerRow(ledger, league.season);
     const ws = series.find(s => s.name === 'World Series');
     const myLeague = AL.includes(myTeam) ? 'AL' : 'NL';
     const myRank = mlbStandings(league, AL.includes(myTeam) ? AL : undefined)
@@ -567,9 +591,13 @@ export default function MlbFrontOfficeBoard() {
               <p key={i}>{s.name}: {label(s.winner)} {s.winner === s.home ? s.homeWins : s.awayWins}-{s.winner === s.home ? s.awayWins : s.homeWins}</p>
             ))}
           </div>
-          <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: '1.2s' }}>
+          <div className="cm-rise mt-3 flex flex-wrap items-center justify-center gap-3 text-sm" style={{ animationDelay: '1.2s' }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Rings <b className="text-gold">{titles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{seasonsPlayed}</b></span>
+            {/* Round 647: the number this season recorded, and the career's
+                ledger sum. Read from the ledger so a reload shows the same two. */}
+            <span className="rounded-full border border-border bg-background px-3 py-1.5">This season <b className="text-gold">{seasonRow?.score ?? 0}</b> pts</span>
+            <span className="rounded-full border border-border bg-background px-3 py-1.5">Career <b className="text-primary">{ledgerTotal(ledger)}</b> pts</span>
           </div>
           {/* Round 180: zero trust ends the save here instead of a draft. */}
           {fired ? (
@@ -595,8 +623,8 @@ export default function MlbFrontOfficeBoard() {
               <ShareButtons
                 gameName="MLB Front Office"
                 gamePath="/mlb-front-office"
-                score={`${titles} rings in ${seasonsPlayed} seasons`}
-                customText={`MLB Front Office ⚾ ${champion === myTeam ? `My ${label(myTeam)} just won the World Series!` : `${label(champion)} took the World Series.`} ${titles} rings in ${seasonsPlayed} seasons. douknowball.com/mlb-front-office`}
+                score={`${seasonRow?.score ?? 0} pts this season, ${titles} rings in ${seasonsPlayed} seasons`}
+                customText={`MLB Front Office ⚾ ${champion === myTeam ? `My ${label(myTeam)} just won the World Series!` : `${label(champion)} took the World Series.`} ${seasonRow?.score ?? 0} pts this season, ${titles} rings in ${seasonsPlayed} seasons. douknowball.com/mlb-front-office`}
               />
             </div>
           )}
