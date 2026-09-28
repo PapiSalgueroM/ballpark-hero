@@ -155,7 +155,7 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
       'No championship: was dropped by Red Bull after 2020 before returning with Williams',
       'Williams (2022-present), previously Red Bull (2019-2020) and Toro Rosso (2019)',
       'Thai-British driver who debuted in 2019, dropped by Red Bull but rebuilt his career',
-      'Known for consistently out-performing his car and his wholesome personality off-track',
+      'Took his first podium with third place at the 2020 Tuscan Grand Prix at Mugello',
     ],
   },
   {

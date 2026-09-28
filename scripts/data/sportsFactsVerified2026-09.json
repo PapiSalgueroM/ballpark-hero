@@ -9450,10 +9450,12 @@
      "on": "2026-09-28"
     },
     {
-     "text": "Known for consistently out-performing his car and his wholesome personality off-track",
-     "src": [],
-     "on": "2026-09-28",
-     "unverifiable": "Opinion, no factual claim to check. Nothing in it is contradicted by the sources opened. Keep as is."
+     "text": "Took his first podium with third place at the 2020 Tuscan Grand Prix at Mugello",
+     "src": [
+      "https://www.formula1.com/en/latest/article/hamilton-beats-bottas-to-win-crazy-tuscan-gp-as-albon-secures-maiden-podium.6TqXlnjsxf0fZ5q0tubg18",
+      "https://africa.espn.com/f1/story/_/id/29892316/surprise-formula-1-podium-finisher-red-bulls-alex-albons-confidence-never-wavered"
+     ],
+     "on": "2026-09-28"
     }
    ]
   },
@@ -9943,9 +9945,11 @@
     },
     {
      "text": "Famous for their all-red livery, known as \"Rosso Corsa\"",
-     "src": [],
-     "on": "2026-09-28",
-     "unverifiable": "No opened page names the colour Rosso Corsa. The all-red livery itself is not in dispute. Drop the name or leave as is; nothing found contradicts it."
+     "src": [
+      "https://www.formula1.com/en/latest/article/a-history-of-ferraris-iconic-racing-liveries-in-f1-rosso-corsa-and-all-the-times-they-havent-raced-in-red.5gK8REBWYiX2h36Hv2Jcir",
+      "https://www.motorsport.com/f1/news/ferrari-reveals-special-livery-for-f1-italian-grand-prix/10513251/"
+     ],
+     "on": "2026-09-28"
     },
     {
      "text": "Had both a 7-time and a 5-time world champion drive for them",
@@ -9971,10 +9975,10 @@
     {
      "text": "United Kingdom",
      "src": [
-      "https://www.formula1.com/en/teams/mclaren"
+      "https://www.formula1.com/en/teams/mclaren",
+      "https://racingnews365.com/mclaren"
      ],
-     "on": "2026-09-28",
-     "unverifiable": "formula1.com gives base Woking, United Kingdom. No second host among opened pages states it (the Motor Sport team page rendered without its biography). Not in d"
+     "on": "2026-09-28"
     },
     {
      "text": "Dominated the late 1980s and late 1990s, then won the Constructors' title again in 2024",
@@ -10062,10 +10066,11 @@
     {
      "text": "Raced in various liveries but most associated with blue and white",
      "src": [
+      "https://f1colours.sebpatrick.co.uk/teams/williams/",
+      "https://www.williamsf1.com/articles/f66fc017-8278-4ecd-9747-cfcd187ca2f6/the-different-shades-of-williams-racing-world-heritage-day",
       "https://www.formula1.com/en/latest/article/from-iconic-designs-to-one-off-favourites-10-retro-liveries-wed-love-to-see.M2I8UQuYcl7xKXBkiAQdH"
      ],
-     "on": "2026-09-28",
-     "unverifiable": "Only one opened page describes a Williams livery (FW14B of 1992: blue, yellow and white). The association claim is a judgement; nothing found contradicts it."
+     "on": "2026-09-28"
     },
     {
      "text": "Nigel Mansell won his only title with this team in 1992",
@@ -10163,10 +10168,14 @@
      "on": "2026-09-28"
     },
     {
-     "text": "Race in dark blue with red and yellow bull branding",
-     "src": [],
-     "on": "2026-09-28",
-     "unverifiable": "No opened page describes the Red Bull livery. Nothing found contradicts it."
+     "text": "Race in blue with red and yellow bull branding",
+     "src": [
+      "https://www.formula1.com/en/latest/headlines/2015/3/red-bull-reveal--traditional--2015-livery.html",
+      "https://formulanerds.com/flash/red-gold-and-blue-the-f1-liveries-every-fan-instantly-recognizes/",
+      "https://www.planetf1.com/features/ranked-every-f1-2026-livery-launched-so-far",
+      "https://www.redbullracing.com/int-en/top-5-red-bull-racing-liveries-of-f1-history-050126"
+     ],
+     "on": "2026-09-28"
     },
     {
      "text": "Max Verstappen has won multiple consecutive titles with this team",
@@ -10188,10 +10197,11 @@
     {
      "text": "United Kingdom",
      "src": [
-      "https://www.motorsportmagazine.com/database/championships/1965-f1-world-championship/"
+      "https://f1colours.sebpatrick.co.uk/teams/lotus-1958/",
+      "https://classicteamlotus.co.uk/en/past/the-early-years-1950s/"
      ],
      "on": "2026-09-28",
-     "unverifiable": "Only the Motor Sport 1965 season page describes Lotus as a British constructor; no official page opened states it (the Motor Sport team page rendered empty, sta"
+     "noOfficial": "formula1.com has no team page for the defunct Team Lotus and no opened formula1.com page states its nationality; its green cars feature only calls the factory cars proudly British Racing Green."
     },
     {
      "text": "Revolutionized car design in the 1960s and 1970s with ground-breaking aerodynamics",
@@ -10219,10 +10229,12 @@
     {
      "text": "Raced in iconic British Racing Green, later in black and gold with a tobacco sponsor",
      "src": [
-      "https://www.motorsportmagazine.com/database/championships/1972-f1-world-championship/"
+      "https://www.formula1.com/en/latest/article/8-of-the-coolest-green-f1-cars-of-all-time.30L4X21K5c5JbWcyUrau4B",
+      "https://www.motorsportmagazine.com/database/championships/1972-f1-world-championship/",
+      "https://classicteamlotus.co.uk/en/news/posts/2019/black-gold-the-story-of-the-john-player-specials/",
+      "https://www.lotuscars.com/en/lotus-story/race-cars/type-72"
      ],
-     "on": "2026-09-28",
-     "unverifiable": "Black and gold John Player Special livery from 1972 confirmed on Motor Sport only; the green era is not described on any opened page. Nothing found contradicts "
+     "on": "2026-09-28"
     },
     {
      "text": "Jim Clark won both his championships driving for this legendary constructor",
@@ -10303,11 +10315,11 @@
     {
      "text": "United Kingdom (founded by an Australian)",
      "src": [
-      "https://www.formula1.com/en/drivers/hall-of-fame/Jack_Brabham.html",
-      "https://www.formula1.com/en/results/1966/drivers"
+      "https://www.formulaonehistory.com/teams/brabham/",
+      "https://f1colours.sebpatrick.co.uk/teams/brabham/",
+      "https://www.formula1.com/en/drivers/hall-of-fame/Jack_Brabham.html"
      ],
-     "on": "2026-09-28",
-     "unverifiable": "Founder Australian is confirmed (born Hurstville near Sydney; formed Motor Racing Developments with Ron Tauranac; AUS on the 1966 standings). No opened page sta"
+     "on": "2026-09-28"
     },
     {
      "text": "Competitive from the 1960s through the 1980s",
@@ -10333,9 +10345,14 @@
     },
     {
      "text": "Raced in various liveries including dark green and later blue",
-     "src": [],
+     "src": [
+      "https://www.motorauthority.com/news/1117158_brabham-bt62-to-wear-liveries-inspired-by-brabham-f1-winners",
+      "https://www.autoguide.com/auto-news/2018/06/brabham-pays-respect-to-its-heritage-with-signature-series-livery.html",
+      "https://f1colours.sebpatrick.co.uk/teams/brabham/",
+      "https://www.racefans.net/2021/02/10/how-the-designer-behind-a-classic-f1-livery-rates-the-look-of-todays-cars/"
+     ],
      "on": "2026-09-28",
-     "unverifiable": "No opened page describes a Brabham livery. Nothing found contradicts it."
+     "noOfficial": "No formula1.com or fia.com page opened describes a Brabham livery (the formula1.com BT52 and Hall of Fame pages do not give colours)."
     },
     {
      "text": "Founded by Jack Brabham, who won a championship in his own car, a unique achievement",
@@ -10357,9 +10374,12 @@
     },
     {
      "text": "United Kingdom",
-     "src": [],
+     "src": [
+      "https://f1colours.sebpatrick.co.uk/teams/tyrrell/",
+      "https://www.formulaonehistory.com/teams/tyrrell/"
+     ],
      "on": "2026-09-28",
-     "unverifiable": "No opened page states Tyrrell's nationality or base (Motor Sport team page rendered empty, statsf1 down). Not in dispute."
+     "noOfficial": "formula1.com has no team page for the defunct Tyrrell and no opened formula1.com or fia.com page states its nationality."
     },
     {
      "text": "Most successful in the early 1970s before declining through the 1980s and 1990s",
@@ -10409,10 +10429,11 @@
     {
      "text": "United Kingdom (Italian ownership)",
      "src": [
-      "https://www.formulaonehistory.com/teams/benetton/"
+      "https://www.formulaonehistory.com/teams/benetton/",
+      "https://f1colours.sebpatrick.co.uk/teams/benetton/"
      ],
      "on": "2026-09-28",
-     "unverifiable": "One non-official page confirms Witney then Enstone bases and ownership by the Italian Benetton family; it also says the team raced under a British licence 1986 "
+     "noOfficial": "formula1.com has no team page for the defunct Benetton and no opened formula1.com or fia.com page states its base or ownership."
     },
     {
      "text": "Rose to prominence in the early-to-mid 1990s",
@@ -10538,9 +10559,12 @@
     },
     {
      "text": "Raced in traditional British Racing Green",
-     "src": [],
+     "src": [
+      "https://www.grandprix.com/features/david-tremayne/news-feature-john-cooper-a-very-british-marque-a-very-british-man.html",
+      "https://www.motorsportmagazine.com/archive/article/march-2001/16/legends-john-cooper"
+     ],
      "on": "2026-09-28",
-     "unverifiable": "No opened page describes the Cooper livery. Nothing found contradicts it."
+     "noOfficial": "No formula1.com or fia.com page opened describes the Cooper livery (the formula1.com Jack Brabham Hall of Fame page gives no colours, and the formula1.com green cars feature does not include Cooper)."
     },
     {
      "text": "Jack Brabham won back-to-back championships with this team before founding his own constructor",
@@ -10564,9 +10588,12 @@
     },
     {
      "text": "France",
-     "src": [],
+     "src": [
+      "https://f1colours.sebpatrick.co.uk/teams/matra/",
+      "https://www.formulaonehistory.com/teams/matra/"
+     ],
      "on": "2026-09-28",
-     "unverifiable": "No opened page states Matra's nationality (Motor Sport team page rendered empty, statsf1 down). Not in dispute. Note the 1969 title car was entered by Ken Tyrre"
+     "noOfficial": "formula1.com has no team page for the defunct Matra and no opened formula1.com or fia.com page states its nationality."
     },
     {
      "text": "Brief but successful period in the late 1960s and early 1970s",
@@ -10587,9 +10614,12 @@
     },
     {
      "text": "Raced in French blue livery",
-     "src": [],
+     "src": [
+      "https://f1colours.sebpatrick.co.uk/teams/matra/",
+      "https://www.formulaonehistory.com/teams/matra/"
+     ],
      "on": "2026-09-28",
-     "unverifiable": "No opened page describes the Matra livery. Nothing found contradicts it."
+     "noOfficial": "No formula1.com or fia.com page opened describes the Matra livery."
     },
     {
      "text": "Jackie Stewart won the 1969 World Championship driving a chassis built by this manufacturer, with a Ford Cosworth engine",
@@ -10612,10 +10642,11 @@
     {
      "text": "Italy",
      "src": [
-      "https://www.motorsportmagazine.com/database/teams/alfa-romeo/"
+      "https://www.motorsportmagazine.com/database/teams/alfa-romeo/",
+      "https://www.formulaonehistory.com/teams/alfa-romeo/"
      ],
      "on": "2026-09-28",
-     "unverifiable": "Motor Sport gives Milan, Italy. No official page opened states it (formula1.com Hall of Fame page for Farina returned 404). Not in dispute."
+     "noOfficial": "formula1.com has no page for the historic Alfa Romeo works team; the 2019 to 2023 Alfa Romeo entry was the Swiss Sauber team, so no formula1.com team page states Italy."
     },
     {
      "text": "Won the very first Formula 1 World Championship in 1950",
@@ -10960,11 +10991,10 @@
     {
      "text": "Raced in various liveries including blue, white, and red over the years",
      "src": [
-      "https://f1colours.sebpatrick.co.uk/teams/sauber/",
-      "https://www.the-race.com/formula-1/the-10-key-moments-in-saubers-f1-history-ahead-of-audi-deal/"
+      "https://www.formula1.com/en/latest/article/saubers-best-moments-and-most-memorable-liveries-in-f1.6OIgJH4jiY29sJIHNFrG1W",
+      "https://f1colours.sebpatrick.co.uk/teams/sauber/"
      ],
-     "on": "2026-09-28",
-     "unverifiable": "Not believed wrong. An independent livery archive gives black at the start, Red Bull blue from 1995, white under BMW, then blue, white and yellow; The Race desc"
+     "on": "2026-09-28"
     },
     {
      "text": "Gave Kimi Räikkönen his F1 debut in 2001 despite the Finn having minimal single-seater experience",
@@ -11016,10 +11046,11 @@
     {
      "text": "Raced in British Racing Green in the 1950s",
      "src": [
-      "https://www.formula1.com/en/latest/article/8-of-the-coolest-green-f1-cars-of-all-time.30L4X21K5c5JbWcyUrau4B"
+      "https://www.formula1.com/en/latest/article/8-of-the-coolest-green-f1-cars-of-all-time.30L4X21K5c5JbWcyUrau4B",
+      "https://automedia.revsinstitute.org/the-valiant-vanwalls",
+      "https://collectorscarworld.com/vanwall-is-back/"
      ],
-     "on": "2026-09-28",
-     "unverifiable": "Not believed wrong. formula1.com's feature on the coolest green F1 cars includes the Vanwall as the archetype of the breed, but none of the four independent Van"
+     "on": "2026-09-28"
     },
     {
      "text": "Stirling Moss and Tony Brooks drove the team to glory in the inaugural constructors' title fight",
@@ -11126,12 +11157,13 @@
      "noOfficial": "No formula1.com or fia.com page states this line as written; it stands on 2 independent hosts: Absent from both champion lists. No official all time list exists."
     },
     {
-     "text": "Raced in various customer liveries, most notably orange and white",
+     "text": "Raced in many sponsor liveries, including STP, Beta, Rothmans and Leyton House",
      "src": [
+      "https://f1colours.sebpatrick.co.uk/teams/march/",
       "https://www.grandprix.com/constructors/march-engineering.html"
      ],
      "on": "2026-09-28",
-     "unverifiable": "grandprix.com only says the 1970 works cars ran in STP colours; no opened page names orange or white. Could not confirm or refute."
+     "noOfficial": "No formula1.com or fia.com page opened describes March liveries; formula1.com has no page for the defunct team."
     },
     {
      "text": "Won 3 Grands Prix over its history, providing competitive cars to privateers across many formulas",
@@ -11181,9 +11213,13 @@
     },
     {
      "text": "Raced in British Racing Green",
-     "src": [],
+     "src": [
+      "https://www.goodwood.com/grr/columnists/doug-nye/2017/4/doug-nye-old-faithful-brm-p5781--a-candidate-for-dougs-favourite-car/",
+      "https://www.motorsportmagazine.com/archive/article/february-2021/118/v16-brm-p15-the-sensational-gp-car-thats-forever-england",
+      "https://www.ultimatecarpage.com/car/72/BRM-Type-15--V16-.html"
+     ],
      "on": "2026-09-28",
-     "unverifiable": "Not believed wrong for the 1950s and 1960s cars, but none of the opened pages (formula1.com Hall of Fame, Autosport BRM feature, formula1.com green cars feature"
+     "noOfficial": "No formula1.com or fia.com page opened describes the BRM livery (the formula1.com Graham Hill Hall of Fame page gives no colours, and the formula1.com green cars feature does not include BRM)."
     },
     {
      "text": "Graham Hill won the 1962 World Championship driving for this team",
@@ -11233,9 +11269,12 @@
     },
     {
      "text": "Raced in white with a red circle inspired by the Japanese flag",
-     "src": [],
+     "src": [
+      "https://www.ultimatecarpage.com/car/1308/Honda-RA272.html",
+      "https://thegentlemanracer.com/2025/10/honda-ra272/"
+     ],
      "on": "2026-09-28",
-     "unverifiable": "Not believed wrong for the 1960s cars and the 2006 RA106, but none of the four Honda pages opened (formula1.com, Motor Sport, The Race, motorsport.com) describe"
+     "noOfficial": "The global.honda RA272 machine page (https://global.honda/en/F1/machine/1965_HondaRA272/) renders no text about colours, and no formula1.com or fia.com page opened describes the Honda livery."
     },
     {
      "text": "Their withdrawal after 2008 led directly to the formation of Brawn GP, who won the 2009 title with Honda's car",
@@ -11287,9 +11326,13 @@
     },
     {
      "text": "Raced in white and red livery",
-     "src": [],
+     "src": [
+      "https://f1colours.sebpatrick.co.uk/teams/toyota/",
+      "https://www.grandprix.com/news/panasonic-toyota-f1-team-unveils-race-car-for-2002.html",
+      "https://media.toyota.co.uk/panasonic-toyota-racing-unveils-2002-contender/"
+     ],
      "on": "2026-09-28",
-     "unverifiable": "Not believed wrong, but none of the five Toyota pages opened describes the colours."
+     "noOfficial": "No formula1.com or fia.com page opened describes the Toyota livery; formula1.com has no page for the defunct team."
     },
     {
      "text": "Despite being one of the most well-funded teams in history, they never won a single Grand Prix",
@@ -11340,10 +11383,15 @@
      "noOfficial": "No formula1.com or fia.com page states this line as written; it stands on 2 independent hosts: Absent from both champion lists."
     },
     {
-     "text": "Raced in red and black, later blue and orange liveries",
-     "src": [],
+     "text": "Raced in red and black, later blue and red liveries",
+     "src": [
+      "https://f1colours.sebpatrick.co.uk/teams/virgin/",
+      "https://www.ultimatecarpage.com/car/4420/Virgin-VR-01-Cosworth.html",
+      "https://f1colours.sebpatrick.co.uk/news/have-manor-won-the-2016-livery-competition/",
+      "https://www.formulaonehistory.com/teams/manor/"
+     ],
      "on": "2026-09-28",
-     "unverifiable": "None of the four Manor pages opened describes the liveries. Could not confirm or refute."
+     "noOfficial": "No formula1.com or fia.com page opened gives the colours: the formula1.com MRT05 launch story (22 Feb 2016) and its 2016 cars at a glance feature describe the car but not its livery."
     },
     {
      "text": "Jules Bianchi scored their first ever points with a remarkable 9th place at the 2014 Monaco Grand Prix",
@@ -11450,10 +11498,12 @@
     {
      "text": "Raced in white and blue BMW livery",
      "src": [
-      "https://f1colours.sebpatrick.co.uk/teams/sauber/"
+      "https://f1colours.sebpatrick.co.uk/teams/bmw-sauber/",
+      "https://www.formula1.com/en/latest/article/saubers-best-moments-and-most-memorable-liveries-in-f1.6OIgJH4jiY29sJIHNFrG1W",
+      "https://www.racefans.net/2006/01/17/bmw-low-ball-f106-hopes/",
+      "https://www.grandprix.com/news/sauber-launches-2010-chassis.html"
      ],
-     "on": "2026-09-28",
-     "unverifiable": "Not believed wrong. One independent livery archive says the team turned white when bought by BMW; blue was not quoted and no official host describes the colours"
+     "on": "2026-09-28"
     },
     {
      "text": "Robert Kubica won their only race at the 2008 Canadian Grand Prix, briefly leading the championship",
@@ -12894,404 +12944,521 @@
    "sport": {
     "v": "Athletics: Sprints",
     "src": [
+     "https://worldathletics.org/athletes/jamaica/usain-bolt-14201847",
      "https://www.olympedia.org/athletes/105512"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇯🇲",
     "src": [
+     "https://worldathletics.org/athletes/jamaica/usain-bolt-14201847",
      "https://www.olympedia.org/athletes/105512"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2008,
     "src": [
+     "https://worldathletics.org/news/news/world-records-set-at-beijing-olympics-are-rat",
      "https://www.olympedia.org/athletes/105512"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Beijing",
     "src": [
+     "https://worldathletics.org/news/news/world-records-set-at-beijing-olympics-are-rat",
      "https://www.olympedia.org/athletes/105512"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won 2 individual gold medals at these Games, the 100m and 200m, both in world record time. A relay gold from the same Games got stripped years later over a teammate's doping case",
     "src": [
+     "https://worldathletics.org/news/news/world-records-set-at-beijing-olympics-are-rat",
      "https://www.olympedia.org/athletes/105512",
-     "https://worldathletics.org/athletes/jamaica/usain-bolt-14201847",
+     "https://worldathletics.org/results/olympic-games/2008/the-xxix-olympic-games-6977748/men/4x100-metres-relay/final/result",
      "https://www.abc.net.au/news/2017-01-26/usain-bolt-stripped-of-gold-medal/8214164"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
-    "v": "Dominated sprinting for a decade, earning the nickname \"Lightning\"",
+    "v": "Dominated sprinting for a decade, earning a nickname that starts with \"Lightning\"",
     "src": [
+     "https://worldathletics.org/news/feature/usain-bolt-world-champs-london-2017",
      "https://www.olympedia.org/athletes/105512"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "8 Gold across three Games",
     "src": [
+     "https://worldathletics.org/athletes/jamaica/usain-bolt-14201847",
      "https://www.olympedia.org/athletes/105512",
-     "https://worldathletics.org/athletes/jamaica/usain-bolt-14201847"
+     "https://worldathletics.org/news/feature/usain-bolt-world-champs-london-2017",
+     "https://www.abc.net.au/news/2017-01-26/usain-bolt-stripped-of-gold-medal/8214164"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Usain Bolt",
+    "src": [
+     "https://worldathletics.org/athletes/jamaica/usain-bolt-14201847",
+     "https://www.olympedia.org/athletes/105512"
+    ],
+    "on": "2026-09-28"
    }
   },
   "phelps-2008": {
    "sport": {
     "v": "Swimming",
     "src": [
+     "https://www.teamusa.com/profiles/michael-phelps",
      "https://www.olympedia.org/athletes/93860"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://www.teamusa.com/profiles/michael-phelps",
      "https://www.olympedia.org/athletes/93860"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2008,
     "src": [
+     "https://www.teamusa.com/profiles/michael-phelps",
      "https://www.olympedia.org/athletes/93860"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Beijing",
     "src": [
+     "https://www.teamusa.com/profiles/michael-phelps",
      "https://www.olympedia.org/athletes/93860"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won 8 gold medals at a single Games, the most ever by one athlete",
     "src": [
-     "https://www.olympedia.org/athletes/93860",
-     "https://www.espn.com/olympics/story/_/id/40625332/who-won-most-gold-medals-olympics"
+     "https://www.teamusa.com/hall-of-fame/class-of-2022/2022-olympic-ballot-bios",
+     "https://www.olympedia.org/athletes/93860"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "The most decorated athlete in the history of the Games with 28 medals total",
     "src": [
-     "https://www.olympedia.org/athletes/93860",
-     "https://www.worldaquatics.com/athletes/1001621/wd"
+     "https://www.teamusa.com/hall-of-fame/class-of-2022/2022-olympic-ballot-bios",
+     "https://www.olympedia.org/athletes/93860"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "23 Gold, 3 Silver, 2 Bronze",
     "src": [
-     "https://www.olympedia.org/athletes/93860",
-     "https://www.worldaquatics.com/athletes/1001621/wd"
+     "https://www.teamusa.com/profiles/michael-phelps",
+     "https://www.olympedia.org/athletes/93860"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Michael Phelps",
+    "src": [
+     "https://www.teamusa.com/profiles/michael-phelps",
+     "https://www.olympedia.org/athletes/93860"
+    ],
+    "on": "2026-09-28"
    }
   },
   "biles-2024": {
    "sport": {
     "v": "Gymnastics: Artistic",
     "src": [
+     "https://www.gymnastics.sport/site/athletes/bio_detail.php?amp=&id=22571&type=licence",
      "https://www.olympedia.org/athletes/132107"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://www.teamusa.com/profiles/simone-biles",
      "https://www.olympedia.org/athletes/132107"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2024,
     "src": [
+     "https://www.teamusa.com/profiles/simone-biles",
      "https://www.olympedia.org/athletes/132107"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Paris",
     "src": [
+     "https://www.teamusa.com/profiles/simone-biles",
      "https://www.olympedia.org/athletes/132107"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
-    "v": "Returned from a 3-year break to win 3 gold medals and 1 silver at the 2024 Paris Games",
+    "v": "Returned from a 2-year break to win 3 gold medals and 1 silver at the 2024 Paris Games",
     "src": [
+     "https://www.nbcolympics.com/news/simone-biles-road-paris",
+     "https://usagym.org/biles-dominates-all-around-during-comeback-at-2023-core-hydrations-classic/",
+     "https://www.teamusa.com/news/2023/september/01/this-time-around-simone-biles-is-doing-it-for-herself",
+     "https://www.teamusa.com/profiles/simone-biles",
      "https://www.olympedia.org/athletes/132107"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Won 11 Olympic medals across three Games, seven of them gold",
     "src": [
+     "https://www.teamusa.com/profiles/simone-biles",
      "https://www.olympedia.org/athletes/132107"
     ],
-    "on": "2026-09-19",
-    "note": "trimmed to the part two sources confirm: the 11 Olympic medals figure checks out once medalSummary is fixed, but the 30 World Championship medals and most decorated in Worlds history claim could not be"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "7 Gold, 2 Silver, 2 Bronze (across three Games)",
     "src": [
+     "https://www.teamusa.com/profiles/simone-biles",
      "https://www.olympedia.org/athletes/132107"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Simone Biles",
+    "src": [
+     "https://www.teamusa.com/profiles/simone-biles",
+     "https://www.olympedia.org/athletes/132107"
+    ],
+    "on": "2026-09-28"
    }
   },
   "ali-1960": {
    "sport": {
     "v": "Boxing: Light Heavyweight",
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/muhammad-ali",
      "https://www.olympedia.org/athletes/8643"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/muhammad-ali",
      "https://www.olympedia.org/athletes/8643"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1960,
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/muhammad-ali",
      "https://www.olympedia.org/athletes/8643"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Rome",
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/muhammad-ali",
      "https://www.olympedia.org/athletes/8643"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won Olympic light heavyweight boxing gold as an 18 year old, at his very first Olympics",
     "src": [
-     "https://www.olympedia.org/athletes/8643"
+     "https://www.nbcolympics.com/news/boxing-101-olympic-history-records-and-results",
+     "https://www.olympedia.org/athletes/8643",
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/muhammad-ali"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Won gold as a teenager in 1960 and became the heavyweight champion of the world three times",
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/muhammad-ali",
      "https://www.olympedia.org/athletes/8643"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "1 Gold (1960)",
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/muhammad-ali",
      "https://www.olympedia.org/athletes/8643"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Muhammad Ali",
+    "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/muhammad-ali",
+     "https://www.olympedia.org/athletes/8643"
+    ],
+    "on": "2026-09-28"
    }
   },
   "ledecky-2024": {
    "sport": {
     "v": "Swimming: Distance Freestyle",
     "src": [
+     "https://www.teamusa.com/profiles/katie-ledecky-851377",
      "https://www.olympedia.org/athletes/126653"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://www.teamusa.com/profiles/katie-ledecky-851377",
      "https://www.olympedia.org/athletes/126653"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2024,
     "src": [
+     "https://www.teamusa.com/profiles/katie-ledecky-851377",
      "https://www.olympedia.org/athletes/126653"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Paris",
     "src": [
+     "https://www.teamusa.com/profiles/katie-ledecky-851377",
      "https://www.olympedia.org/athletes/126653"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won 4 more medals in Paris, including gold in the 800m and 1500m freestyle, extending her reign as the greatest female distance swimmer ever",
     "src": [
-     "https://www.olympedia.org/athletes/126653"
+     "https://www.teamusa.com/profiles/katie-ledecky-851377",
+     "https://www.olympedia.org/athletes/126653",
+     "https://www.nbcolympics.com/news/katie-ledecky-career-accomplishments",
+     "https://www.si.com/olympics/legend-katie-ledecky-most-gold-medals-paris-olympics-swimming"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Won her first gold at age 15 in London 2012; has 14 Olympic medals across four Games",
     "src": [
+     "https://www.teamusa.com/news/2024/august/03/with-nine-olympic-gold-medals-and-14-total-katie-ledecky-becomes-the-most-decorated-u-s-female-olympian",
      "https://www.olympedia.org/athletes/126653",
-     "https://www.worldaquatics.com/athletes/1002483/wd"
+     "https://www.teamusa.com/profiles/katie-ledecky-851377"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "9 Gold, 4 Silver, 1 Bronze (across four Games)",
     "src": [
-     "https://www.olympedia.org/athletes/126653",
-     "https://www.worldaquatics.com/athletes/1002483/wd"
+     "https://www.teamusa.com/profiles/katie-ledecky-851377",
+     "https://www.olympedia.org/athletes/126653"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Katie Ledecky",
+    "src": [
+     "https://www.teamusa.com/profiles/katie-ledecky-851377",
+     "https://www.olympedia.org/athletes/126653"
+    ],
+    "on": "2026-09-28"
    }
   },
   "jordan-1992": {
    "sport": {
     "v": "Basketball",
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/1992-us-olympic-mens-basketball-team",
      "https://www.olympedia.org/athletes/6342"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/1992-us-olympic-mens-basketball-team",
      "https://www.olympedia.org/athletes/6342"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1992,
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/1992-us-olympic-mens-basketball-team",
      "https://www.olympedia.org/athletes/6342"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Barcelona",
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/1992-us-olympic-mens-basketball-team",
      "https://www.olympedia.org/athletes/6342"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Part of the legendary \"Dream Team\" that dominated the basketball tournament",
     "src": [
-     "https://www.olympedia.org/athletes/6342"
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/1992-us-olympic-mens-basketball-team",
+     "https://www.olympedia.org/athletes/6342",
+     "https://www.nbcolympics.com/news/basketball-101-olympic-history-records-and-results"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Six-time NBA champion widely considered the greatest basketball player ever",
     "src": [
+     "https://www.nba.com/history/legends/profiles/michael-jordan",
      "https://www.olympedia.org/athletes/6342"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "noOfficial": "NBA titles are not an Olympic fact: the Team USA Dream Team page calls him an all-time great but gives no NBA title count, Team USA has no Jordan profile (404), and olympics.com timed out on every request, so this stands on nba.com plus Olympedia"
    },
    "medalSummary": {
     "v": "2 Gold (1984, 1992)",
     "src": [
+     "https://www.nbcolympics.com/news/basketball-101-olympic-history-records-and-results",
      "https://www.olympedia.org/athletes/6342"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Michael Jordan",
+    "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/1992-us-olympic-mens-basketball-team",
+     "https://www.olympedia.org/athletes/6342"
+    ],
+    "on": "2026-09-28"
    }
   },
   "messi-2008": {
    "sport": {
     "v": "Football (Soccer)",
     "src": [
+     "https://www.nbcolympics.com/news/soccer-101-olympic-history-records-and-results",
      "https://www.olympedia.org/results/259883"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇦🇷",
     "src": [
-     "https://www.olympedia.org/results/259883"
+     "https://www.nbcolympics.com/news/soccer-101-olympic-history-records-and-results",
+     "https://www.olympedia.org/athletes/111386"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2008,
     "src": [
+     "https://www.nbcolympics.com/news/soccer-101-olympic-history-records-and-results",
      "https://www.olympedia.org/results/259883"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Beijing",
     "src": [
+     "https://www.nbcolympics.com/news/soccer-101-olympic-history-records-and-results",
      "https://www.olympedia.org/results/259883"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won gold medal in the football tournament at age 21",
     "src": [
+     "https://www.nbcolympics.com/news/soccer-101-olympic-history-records-and-results",
+     "https://www.olympedia.org/athletes/111386",
      "https://www.olympedia.org/results/259883",
      "https://www.espn.com/soccer/player/_/id/45843/lionel-messi"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Eight-time Ballon d'Or winner; led his country to the 2022 World Cup title",
     "src": [
-     "https://www.espn.com/soccer/player/_/id/45843/lionel-messi"
+     "https://www.mlssoccer.com/news/lionel-messi-nominated-ballon-dor-2026-inter-miami-argentina",
+     "https://www.intermiamicf.com/news/leo-messi-nominated-for-2026-ballon-d-or",
+     "https://www.olympedia.org/athletes/111386"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "noOfficial": "Ballon d'Or and World Cup are not Olympic facts, no listed Olympic host covers them and olympics.com timed out on every request; the count of eight (2009 to 2023) is through the 2025 edition, and the 2026 ceremony is set for 26 Oct 2026 per MLS (8 Sep 2026)"
    },
    "medalSummary": {
     "v": "1 Gold (2008)",
     "src": [
-     "https://www.olympedia.org/results/259883"
+     "https://www.nbcolympics.com/news/soccer-101-olympic-history-records-and-results",
+     "https://www.olympedia.org/athletes/111386"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Lionel Messi",
+    "src": [
+     "https://www.nbcolympics.com/news/soccer-101-olympic-history-records-and-results",
+     "https://www.olympedia.org/athletes/111386"
+    ],
+    "on": "2026-09-28"
    }
   },
   "fraser-pryce-2012": {
    "sport": {
     "v": "Athletics: 100m Sprint",
     "src": [
+     "https://worldathletics.org/athletes/jamaica/shelly-ann-fraser-pryce-14285680",
      "https://www.olympedia.org/athletes/114740"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇯🇲",
     "src": [
+     "https://worldathletics.org/athletes/jamaica/shelly-ann-fraser-pryce-14285680",
      "https://www.olympedia.org/athletes/114740"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2012,
     "src": [
+     "https://www.nbcolympics.com/news/track-field-day-2-preview",
      "https://www.olympedia.org/athletes/114740"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "London",
     "src": [
+     "https://www.nbcolympics.com/news/track-field-day-2-preview",
      "https://www.olympedia.org/athletes/114740"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Successfully defended the 100m title, becoming a back-to-back champion",
     "src": [
+     "https://www.nbcolympics.com/news/track-field-day-2-preview",
      "https://www.olympedia.org/athletes/114740"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Known as the fastest woman alive for her era; competed in five Games total",
@@ -13303,167 +13470,237 @@
    "medalSummary": {
     "v": "3 Gold, 4 Silver, 1 Bronze",
     "src": [
+     "https://worldathletics.org/athletes/jamaica/shelly-ann-fraser-pryce-14285680",
      "https://www.olympedia.org/athletes/114740",
-     "https://worldathletics.org/athletes/-/14285680"
+     "https://worldathletics.org/results/olympic-games/2016/the-xxxi-olympic-games-7093747/women/100-metres/final/result"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Shelly-Ann Fraser-Pryce",
+    "src": [
+     "https://worldathletics.org/athletes/jamaica/shelly-ann-fraser-pryce-14285680",
+     "https://www.olympedia.org/athletes/114740"
+    ],
+    "on": "2026-09-28"
    }
   },
   "djokovic-2024": {
    "sport": {
     "v": "Tennis: Men's Singles",
     "src": [
-     "https://www.olympedia.org/athletes/117575"
+     "https://www.olympedia.org/athletes/117575",
+     "https://www.atptour.com/en/players/novak-djokovic/d643/bio"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "noOfficial": "No listed official host covers him: olympics.com (the only one for a Serbian tennis player) timed out on every request and the NBC Olympics tennis history page is gone (404); ITF and ATP are not on the official list, so this stands on Olympedia plus the player's own site, ATP and ESPN"
    },
    "country": {
     "v": "🇷🇸",
     "src": [
-     "https://www.olympedia.org/athletes/117575"
+     "https://www.olympedia.org/athletes/117575",
+     "https://www.espn.com/tennis/player/_/id/296/novak-djokovic"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "noOfficial": "No listed official host covers him: olympics.com (the only one for a Serbian tennis player) timed out on every request and the NBC Olympics tennis history page is gone (404); ITF and ATP are not on the official list, so this stands on Olympedia plus the player's own site, ATP and ESPN"
    },
    "gamesYear": {
     "v": 2024,
     "src": [
-     "https://www.olympedia.org/athletes/117575"
+     "https://www.olympedia.org/athletes/117575",
+     "https://novakdjokovic.com/en/novak-djokovic/",
+     "https://www.atptour.com/en/players/novak-djokovic/d643/bio"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "noOfficial": "No listed official host covers him: olympics.com (the only one for a Serbian tennis player) timed out on every request and the NBC Olympics tennis history page is gone (404); ITF and ATP are not on the official list, so this stands on Olympedia plus the player's own site, ATP and ESPN"
    },
    "hostCity": {
     "v": "Paris",
     "src": [
-     "https://www.olympedia.org/athletes/117575"
+     "https://www.olympedia.org/athletes/117575",
+     "https://novakdjokovic.com/en/novak-djokovic/",
+     "https://www.atptour.com/en/players/novak-djokovic/d643/bio"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "noOfficial": "No listed official host covers him: olympics.com (the only one for a Serbian tennis player) timed out on every request and the NBC Olympics tennis history page is gone (404); ITF and ATP are not on the official list, so this stands on Olympedia plus the player's own site, ATP and ESPN"
    },
    "achievement": {
     "v": "Won his first-ever gold medal at age 37, completing the career Golden Slam",
     "src": [
-     "https://www.olympedia.org/athletes/117575"
+     "https://www.olympedia.org/athletes/117575",
+     "https://novakdjokovic.com/en/novak-djokovic/",
+     "https://www.atptour.com/en/players/novak-djokovic/d643/bio"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "noOfficial": "No listed official host covers him: olympics.com (the only one for a Serbian tennis player) timed out on every request and the NBC Olympics tennis history page is gone (404); ITF and ATP are not on the official list, so this stands on Olympedia plus the player's own site, ATP and ESPN"
    },
    "careerContext": {
     "v": "24-time Grand Slam champion, the most in men's tennis history",
     "src": [
-     "https://www.olympedia.org/athletes/117575"
+     "https://www.atptour.com/en/players/novak-djokovic/d643/bio",
+     "https://www.espn.com/tennis/story/_/id/49779598/novak-djokovic-loses-5-set-marathon-mariano-navone-us-open-first-round",
+     "https://novakdjokovic.com/en/novak-djokovic/"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "noOfficial": "Grand Slam titles are not an Olympic fact and no listed Olympic host states them (olympics.com timed out on every request). Count is through the 2026 US Open: the ATP bio (updated 26 Aug 2026) and ESPN (31 Aug 2026, first round loss to Navone) both give the record 24, and that US Open was the last major of 2026"
    },
    "medalSummary": {
     "v": "1 Gold, 1 Bronze",
     "src": [
-     "https://www.olympedia.org/athletes/117575"
+     "https://www.olympedia.org/athletes/117575",
+     "https://novakdjokovic.com/en/novak-djokovic/"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "noOfficial": "No listed official host covers him: olympics.com (the only one for a Serbian tennis player) timed out on every request and the NBC Olympics tennis history page is gone (404); ITF and ATP are not on the official list, so this stands on Olympedia plus the player's own site, ATP and ESPN"
+   },
+   "name": {
+    "v": "Novak Djokovic",
+    "src": [
+     "https://www.olympedia.org/athletes/117575",
+     "https://novakdjokovic.com/en/novak-djokovic/",
+     "https://www.espn.com/tennis/player/_/id/296/novak-djokovic"
+    ],
+    "on": "2026-09-28",
+    "noOfficial": "No listed official host covers him: olympics.com (the only one for a Serbian tennis player) timed out on every request and the NBC Olympics tennis history page is gone (404); ITF and ATP are not on the official list, so this stands on Olympedia plus the player's own site, ATP and ESPN"
    }
   },
   "felix-2012": {
    "sport": {
     "v": "Athletics: Sprints & Relays",
     "src": [
+     "https://www.teamusa.com/profiles/allyson-felix-807126",
      "https://www.olympedia.org/athletes/105293"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://www.teamusa.com/profiles/allyson-felix-807126",
      "https://www.olympedia.org/athletes/105293"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2012,
     "src": [
+     "https://www.teamusa.com/profiles/allyson-felix-807126",
      "https://www.olympedia.org/athletes/105293"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "London",
     "src": [
+     "https://www.teamusa.com/profiles/allyson-felix-807126",
      "https://www.olympedia.org/athletes/105293"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won 3 gold medals including the 200m after finishing with silver in the previous two Games",
     "src": [
+     "https://www.teamusa.com/profiles/allyson-felix-807126",
      "https://www.olympedia.org/athletes/105293",
-     "https://worldathletics.org/athletes/-/14309983"
+     "https://www.nbcolympics.com/news/track-and-field-101-olympic-history-records-and-results"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "The most decorated female track and field athlete in Games history",
     "src": [
-     "https://worldathletics.org/athletes/-/14309983"
+     "https://www.teamusa.com/profiles/allyson-felix-807126",
+     "https://www.espn.com/olympics/story/_/id/31979476/us-dominates-women-4x400-relay-allyson-felix-becomes-most-decorated-american-track-star",
+     "https://www.nbcolympics.com/news/track-and-field-101-olympic-history-records-and-results",
+     "https://www.olympedia.org/athletes/105293"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "7 Gold, 3 Silver, 1 Bronze",
     "src": [
+     "https://www.teamusa.com/profiles/allyson-felix-807126",
      "https://www.olympedia.org/athletes/105293",
-     "https://worldathletics.org/athletes/-/14309983"
+     "https://www.espn.com/olympics/story/_/id/31979476/us-dominates-women-4x400-relay-allyson-felix-becomes-most-decorated-american-track-star"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Allyson Felix",
+    "src": [
+     "https://www.teamusa.com/profiles/allyson-felix-807126",
+     "https://www.olympedia.org/athletes/105293"
+    ],
+    "on": "2026-09-28"
    }
   },
   "shaun-white-2018": {
    "sport": {
     "v": "Snowboarding: Halfpipe",
     "src": [
+     "https://www.teamusa.com/profiles/shaun-white",
      "https://www.olympedia.org/athletes/109860"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://www.teamusa.com/profiles/shaun-white",
      "https://www.olympedia.org/athletes/109860"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2018,
     "src": [
+     "https://www.teamusa.com/profiles/shaun-white",
      "https://www.olympedia.org/athletes/109860"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Pyeongchang",
     "src": [
-     "https://www.olympedia.org/athletes/109860"
+     "https://www.teamusa.com/profiles/shaun-white",
+     "https://www.olympedia.org/results/9000874"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won his third gold medal in the halfpipe with a legendary final run",
     "src": [
-     "https://www.olympedia.org/athletes/109860",
-     "https://www.teamusa.com/profiles/shaun-white"
+     "https://www.teamusa.com/profiles/shaun-white",
+     "https://www.olympedia.org/results/9000874",
+     "https://sports.yahoo.com/shaun-white-delivers-dramatic-finish-win-third-olympic-gold-medal-halfpipe-030559354.html"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Known as \"The Flying Tomato,\" dominated winter halfpipe for over a decade",
     "src": [
-     "https://www.teamusa.com/profiles/shaun-white"
+     "https://www.teamusa.com/profiles/shaun-white",
+     "https://www.olympedia.org/athletes/109860",
+     "https://www.espn.com/espn/page2/index?id=4872339"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "noOfficial": "The decade of dominance (halfpipe golds 2006, 2010 and 2018) is on the Team USA profile, but no official page opened states the nickname: the Team USA bio omits it and olympics.com timed out on every request, so the nickname stands on Olympedia (Nick/petnames: The Flying Tomato) plus ESPN (30 Jan 2010)"
    },
    "medalSummary": {
     "v": "3 Gold",
     "src": [
-     "https://www.olympedia.org/athletes/109860",
-     "https://www.teamusa.com/profiles/shaun-white"
+     "https://www.teamusa.com/profiles/shaun-white",
+     "https://www.olympedia.org/athletes/109860"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Shaun White",
+    "src": [
+     "https://www.teamusa.com/profiles/shaun-white",
+     "https://www.olympedia.org/athletes/109860"
+    ],
+    "on": "2026-09-28"
    }
   },
   "kipchoge-2020": {
@@ -14044,913 +14281,1205 @@
    "sport": {
     "v": "Swimming: 4×100m Freestyle Relay",
     "src": [
-     "https://www.olympics.com/en/olympic-games/beijing-2008/results/swimming/4x100m-freestyle-relay-men"
+     "https://www.teamusa.com/profiles/jason-lezak",
+     "https://www.olympedia.org/athletes/93857"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
-     "https://www.olympics.com/en/athletes/jason-lezak"
+     "https://www.teamusa.com/profiles/jason-lezak",
+     "https://www.olympedia.org/athletes/93857"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2008,
     "src": [
-     "https://www.olympics.com/en/olympic-games/beijing-2008/results/swimming/4x100m-freestyle-relay-men"
+     "https://www.teamusa.com/profiles/jason-lezak",
+     "https://www.olympedia.org/athletes/93857"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Beijing",
     "src": [
-     "https://www.olympics.com/en/olympic-games/beijing-2008/results/swimming/4x100m-freestyle-relay-men"
+     "https://www.teamusa.com/profiles/jason-lezak",
+     "https://www.olympedia.org/editions/53"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
-    "v": "Swam what was then the fastest relay split in history to anchor the USA to gold, overcoming a body-length deficit",
+    "v": "Swam what was then the fastest relay split in history to anchor the USA to gold, overcoming a deficit of over half a body length",
     "src": [
-     "https://www.olympics.com/en/olympic-games/beijing-2008/results/swimming/4x100m-freestyle-relay-men"
+     "https://www.olympics.com/ioc/news/-miracle-man-lezak-reveals-how-he-made-phelps-record-haul-a-reality",
+     "https://www.swimmingworldmagazine.com/news/jason-lezak-to-be-inducted-into-the-international-swimming-hall-of-fame/",
+     "https://www.espn.com/olympics/summer08/columns/story?columnist=forde_pat&id=3529125",
+     "https://www.olympedia.org/results/261632"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "His anchor leg is considered one of the greatest individual swims in history",
     "src": [
-     "https://www.olympics.com/en/athletes/jason-lezak"
+     "https://www.olympics.com/ioc/news/-miracle-man-lezak-reveals-how-he-made-phelps-record-haul-a-reality",
+     "https://www.olympedia.org/results/261632",
+     "https://www.swimmingworldmagazine.com/news/jason-lezak-discusses-the-46-06-split-10-years-later-at-the-asca-world-clinic/"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "4 Gold, 2 Silver, 2 Bronze",
     "src": [
-     "https://www.olympics.com/en/athletes/jason-lezak"
+     "https://www.teamusa.com/profiles/jason-lezak",
+     "https://www.olympedia.org/athletes/93857"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Jason Lezak",
+    "src": [
+     "https://www.teamusa.com/profiles/jason-lezak",
+     "https://www.olympedia.org/athletes/93857"
+    ],
+    "on": "2026-09-28"
    }
   },
   "sotomayor-1992": {
    "sport": {
     "v": "Athletics: High Jump",
     "src": [
+     "https://worldathletics.org/athletes/cuba/javier-sotomayor-14169305",
      "https://www.olympedia.org/athletes/66830"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇨🇺",
     "src": [
+     "https://worldathletics.org/athletes/cuba/javier-sotomayor-14169305",
      "https://www.olympedia.org/athletes/66830"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1992,
     "src": [
+     "https://www.olympics.com/en/olympic-games/barcelona-1992/results/athletics/high-jump-men",
      "https://www.olympedia.org/athletes/66830"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Barcelona",
     "src": [
-     "https://www.olympics.com/en/olympic-games/barcelona-1992/results/athletics/high-jump-men"
+     "https://www.olympics.com/en/olympic-games/barcelona-1992/results/athletics/high-jump-men",
+     "https://www.olympedia.org/editions/23"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won gold in the high jump; his world record of 2.45m from 1993 still stands",
     "src": [
      "https://www.olympics.com/en/olympic-games/barcelona-1992/results/athletics/high-jump-men",
-     "https://www.olympics.com/en/news/athletics-all-track-and-field-world-records-at-a-glance"
+     "https://worldathletics.org/athletes/cuba/javier-sotomayor-14169305",
+     "https://www.olympedia.org/athletes/66830"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "The only human to clear 8 feet (2.44m+) in the high jump, record holder for over 30 years",
     "src": [
+     "https://worldathletics.org/heritage/news/lopez-pedroso-sotomayor-1995-world-indoor-barcelona",
+     "https://www.guinnessworldrecords.com/world-records/highest-high-jump-(male)",
+     "https://worldathletics.org/news/series/fab-five-landmark-moments-in-athletics",
      "https://www.olympedia.org/athletes/66830"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "1 Gold, 1 Silver",
     "src": [
+     "https://worldathletics.org/athletes/cuba/javier-sotomayor-14169305",
      "https://www.olympedia.org/athletes/66830"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Javier Sotomayor",
+    "src": [
+     "https://worldathletics.org/athletes/cuba/javier-sotomayor-14169305",
+     "https://www.olympedia.org/athletes/66830"
+    ],
+    "on": "2026-09-28"
    }
   },
   "chloe-kim-2022": {
    "sport": {
     "v": "Snowboarding: Halfpipe",
     "src": [
-     "https://www.olympics.com/en/athletes/chloe-kim"
+     "https://www.teamusa.com/profiles/chloe-kim",
+     "https://www.olympedia.org/athletes/138361"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
-     "https://www.olympics.com/en/athletes/chloe-kim"
+     "https://www.teamusa.com/profiles/chloe-kim",
+     "https://www.olympedia.org/athletes/138361"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2022,
     "src": [
-     "https://www.olympics.com/en/athletes/chloe-kim"
+     "https://www.teamusa.com/profiles/chloe-kim",
+     "https://www.olympedia.org/results/19020782"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Beijing",
     "src": [
-     "https://www.olympics.com/en/athletes/chloe-kim"
+     "https://www.teamusa.com/profiles/chloe-kim",
+     "https://www.olympedia.org/editions/62"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Defended her halfpipe gold medal with a dominant performance, scoring 94.0 in the final",
     "src": [
-     "https://www.olympics.com/en/athletes/chloe-kim"
+     "https://www.nbcolympics.com/news/chloe-kim-claims-second-straight-olympic-halfpipe-gold",
+     "https://www.olympedia.org/results/19020782"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Became the youngest woman to win a snowboarding gold in 2018; two-time Olympic champion",
     "src": [
-     "https://www.olympics.com/en/athletes/chloe-kim"
+     "https://www.nbcolympics.com/news/chloe-kim-meet-athlete",
+     "https://www.nbcnews.com/sports/olympics/chloe-kim-winter-olympics-snowboarding-gold-rcna258703",
+     "https://www.teamusa.com/profiles/chloe-kim",
+     "https://time.com/5151999/chloe-kim-gold-olympics-2018/",
+     "https://www.olympedia.org/athletes/138361",
+     "https://time.com/7378341/chloe-kim-2026-winter-olympics-snowboarding-halfpipe-silver-medal/"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "2 Gold, 1 Silver",
     "src": [
-     "https://www.olympics.com/en/athletes/chloe-kim",
-     "https://www.nbcolympics.com/videos/chloe-kim-earns-halfpipe-silver-tries-back-back-doubles"
+     "https://www.teamusa.com/profiles/chloe-kim",
+     "https://www.olympedia.org/athletes/138361"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Chloe Kim",
+    "src": [
+     "https://www.teamusa.com/profiles/chloe-kim",
+     "https://www.olympedia.org/athletes/138361"
+    ],
+    "on": "2026-09-28"
    }
   },
   "noah-lyles-2024": {
    "sport": {
     "v": "Athletics: 100m Sprint",
     "src": [
-     "https://www.olympics.com/en/athletes/noah-lyles"
+     "https://www.teamusa.com/profiles/noah-lyles",
+     "https://www.olympedia.org/results/2013500"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
-     "https://www.olympics.com/en/athletes/noah-lyles"
+     "https://www.teamusa.com/profiles/noah-lyles",
+     "https://www.olympedia.org/athletes/2104512"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2024,
     "src": [
-     "https://www.olympics.com/en/athletes/noah-lyles"
+     "https://www.teamusa.com/profiles/noah-lyles",
+     "https://www.olympedia.org/results/2013500"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Paris",
     "src": [
-     "https://www.olympics.com/en/athletes/noah-lyles"
+     "https://www.teamusa.com/profiles/noah-lyles",
+     "https://www.olympedia.org/editions/63"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won the 100m gold by 5 thousandths of a second in one of the closest finishes ever",
     "src": [
-     "https://www.olympics.com/en/athletes/noah-lyles"
+     "https://www.nbcolympics.com/paris-olympics-men-100m-final",
+     "https://worldathletics.org/competitions/olympic-games/the-xxxiii-olympic-games-7153115/news/article/paris-2024-olympics-report-men-100m",
+     "https://www.olympedia.org/results/2013500"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
-    "v": "Self-proclaimed successor to Usain Bolt; also won bronze in the 200m while battling COVID",
+    "v": "Swept the 100m, 200m and relay at the 2023 Worlds; also won bronze in the 200m while battling COVID",
     "src": [
-     "https://www.olympics.com/en/athletes/noah-lyles"
+     "https://www.teamusa.com/profiles/noah-lyles",
+     "https://www.olympedia.org/results/2013500",
+     "https://www.olympedia.org/results/2013518"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "1 Gold, 1 Bronze (2024)",
     "src": [
-     "https://www.olympics.com/en/athletes/noah-lyles"
+     "https://www.teamusa.com/profiles/noah-lyles",
+     "https://www.olympedia.org/athletes/2104512"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Noah Lyles",
+    "src": [
+     "https://www.teamusa.com/profiles/noah-lyles",
+     "https://www.olympedia.org/athletes/2104512"
+    ],
+    "on": "2026-09-28"
    }
   },
   "leon-marchand-2024": {
    "sport": {
     "v": "Swimming: IM & Breaststroke",
     "src": [
-     "https://www.olympics.com/en/athletes/leon-marchand"
+     "https://www.olympics.com/en/athletes/leon-marchand",
+     "https://www.olympedia.org/athletes/142925"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇫🇷",
     "src": [
-     "https://www.olympics.com/en/athletes/leon-marchand"
+     "https://www.olympics.com/en/athletes/leon-marchand",
+     "https://www.olympedia.org/athletes/142925"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2024,
     "src": [
-     "https://www.olympics.com/en/athletes/leon-marchand"
+     "https://www.olympics.com/en/athletes/leon-marchand",
+     "https://www.olympedia.org/results/2001659"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Paris",
     "src": [
-     "https://www.olympics.com/en/athletes/leon-marchand"
+     "https://www.olympics.com/en/athletes/leon-marchand",
+     "https://www.olympedia.org/editions/63"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won 4 individual gold medals at his home Games, the most by any swimmer at Paris 2024",
     "src": [
-     "https://www.olympics.com/en/athletes/leon-marchand"
+     "https://www.olympics.com/en/athletes/leon-marchand",
+     "https://www.olympics.com/en/news/paris-2024-swimming-france-marchand-mania-gold-sweep",
+     "https://www.olympedia.org/results/2001659",
+     "https://www.olympedia.org/editions/63"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Trained by Bob Bowman (Michael Phelps' coach) and broke Phelps' 400m IM world record",
     "src": [
-     "https://www.olympics.com/en/athletes/leon-marchand"
+     "https://www.worldaquatics.com/news/3601329/4-minutes-250-seconds-leon-marchand-breaks-the-oldest-world-record-in-the-books-phelps-400m-im",
+     "https://www.olympics.com/en/news/paris-2024-swimming-france-marchand-mania-gold-sweep",
+     "https://www.olympedia.org/results/2001659",
+     "https://africa.espn.com/olympics/story/_/id/40694208/olympics-paris-leon-marchand-swimming-gold-medals-records-king"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "4 Gold, 1 Bronze",
     "src": [
-     "https://www.olympics.com/en/athletes/leon-marchand"
+     "https://www.olympics.com/en/athletes/leon-marchand",
+     "https://www.olympedia.org/athletes/142925"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Léon Marchand",
+    "src": [
+     "https://www.olympics.com/en/athletes/leon-marchand",
+     "https://www.olympedia.org/athletes/142925"
+    ],
+    "on": "2026-09-28"
    }
   },
   "julien-alfred-2024": {
    "sport": {
     "v": "Athletics: 100m Sprint",
     "src": [
-     "https://worldathletics.org/women-in-athletics/news/julien-alfred-st-lucia-thea-lafond-dominica-olympic-gold"
+     "https://worldathletics.org/competitions/olympic-games/the-xxxiii-olympic-games-7153115/news/article/paris-2024-olympics-report-women-100m",
+     "https://www.olympedia.org/results/2013815"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇱🇨",
     "src": [
-     "https://worldathletics.org/women-in-athletics/news/julien-alfred-st-lucia-thea-lafond-dominica-olympic-gold"
+     "https://www.olympics.com/en/athletes/julien-alfred",
+     "https://www.olympedia.org/athletes/2505468"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2024,
     "src": [
-     "https://worldathletics.org/women-in-athletics/news/julien-alfred-st-lucia-thea-lafond-dominica-olympic-gold"
+     "https://www.olympics.com/en/athletes/julien-alfred",
+     "https://www.olympedia.org/results/2013815"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Paris",
     "src": [
-     "https://worldathletics.org/women-in-athletics/news/julien-alfred-st-lucia-thea-lafond-dominica-olympic-gold"
+     "https://worldathletics.org/competitions/olympic-games/the-xxxiii-olympic-games-7153115/news/article/paris-2024-olympics-report-women-100m",
+     "https://www.olympedia.org/editions/63"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won Saint Lucia's first-ever Olympic gold medal in the women's 100m",
     "src": [
-     "https://www.nbcolympics.com/news/big-day-small-countries-saint-lucia-dominica-and-more-make-history-paris-2024"
+     "https://worldathletics.org/competitions/olympic-games/the-xxxiii-olympic-games-7153115/news/article/paris-2024-olympics-report-women-100m",
+     "https://www.olympedia.org/results/2013815",
+     "https://www.olympedia.org/countries/LCA"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
-    "v": "Her victory made Saint Lucia the first Olympic medalist in its history, one of the smallest nations ever to win an Olympic athletics gold",
+    "v": "Became Saint Lucia's first Olympic medalist in any sport, then added a 200m silver days later",
     "src": [
-     "https://worldathletics.org/women-in-athletics/news/julien-alfred-st-lucia-thea-lafond-dominica-olympic-gold"
+     "https://worldathletics.org/competitions/olympic-games/the-xxxiii-olympic-games-7153115/news/article/paris-2024-olympics-report-women-100m",
+     "https://www.olympics.com/en/athletes/julien-alfred",
+     "https://www.olympedia.org/results/2013815"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "1 Gold, 1 Silver (2024)",
     "src": [
-     "https://www.nbcolympics.com/news/big-day-small-countries-saint-lucia-dominica-and-more-make-history-paris-2024"
+     "https://www.olympics.com/en/athletes/julien-alfred",
+     "https://www.olympedia.org/athletes/2505468"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Julien Alfred",
+    "src": [
+     "https://www.olympics.com/en/athletes/julien-alfred",
+     "https://www.olympedia.org/athletes/2505468"
+    ],
+    "on": "2026-09-28"
    }
   },
   "shiffrin-2026": {
    "sport": {
     "v": "Alpine Skiing",
     "src": [
-     "https://www.olympics.com/en/milano-cortina-2026/news/winter-olympics-2026-mikaela-shiffrin-soars-to-first-gold-of-games-in-women-s-slalom"
+     "https://www.teamusa.com/profiles/mikaela-shiffrin",
+     "https://www.olympedia.org/athletes/128669"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
-     "https://www.olympics.com/en/milano-cortina-2026/news/winter-olympics-2026-mikaela-shiffrin-soars-to-first-gold-of-games-in-women-s-slalom"
+     "https://www.teamusa.com/profiles/mikaela-shiffrin",
+     "https://www.olympedia.org/athletes/128669"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2026,
     "src": [
-     "https://www.olympics.com/en/milano-cortina-2026/news/winter-olympics-2026-mikaela-shiffrin-soars-to-first-gold-of-games-in-women-s-slalom"
+     "https://www.teamusa.com/profiles/mikaela-shiffrin",
+     "https://www.olympedia.org/results/15000016"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Milan-Cortina",
     "src": [
-     "https://www.olympics.com/en/milano-cortina-2026/news/winter-olympics-2026-mikaela-shiffrin-soars-to-first-gold-of-games-in-women-s-slalom"
+     "https://www.teamusa.com/profiles/mikaela-shiffrin",
+     "https://www.olympedia.org/editions/72"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won gold in the slalom at Milan-Cortina, a record third career Olympic gold for any American alpine skier",
     "src": [
-     "https://www.olympics.com/en/milano-cortina-2026/news/winter-olympics-2026-mikaela-shiffrin-soars-to-first-gold-of-games-in-women-s-slalom",
-     "https://www.nbcolympics.com/news/mikaela-shiffrin-wins-slalom-gold"
+     "https://www.nbcolympics.com/news/mikaela-shiffrin-wins-slalom-gold",
+     "https://www.teamusa.com/profiles/mikaela-shiffrin",
+     "https://www.olympedia.org/results/15000016",
+     "https://www.olympedia.org/countries/USA/sports/ALP"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "The all-time leader in World Cup victories with 100+ wins; 4 Olympic medals across four Games",
     "src": [
-     "https://www.nbcolympics.com/news/mikaela-shiffrin-won-more-ways-one-2026-milan-cortina-winter-olympics"
+     "https://www.nbcolympics.com/news/mikaela-shiffrin-won-more-ways-one-2026-milan-cortina-winter-olympics",
+     "https://www.teamusa.com/profiles/mikaela-shiffrin",
+     "https://time.com/7379357/mikaela-shiffrin-wins-gold-2026-winter-olympics/",
+     "https://www.olympedia.org/athletes/128669"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "3 Gold, 1 Silver (career)",
     "src": [
-     "https://www.nbcolympics.com/news/mikaela-shiffrin-wins-slalom-gold"
+     "https://www.teamusa.com/profiles/mikaela-shiffrin",
+     "https://www.olympedia.org/athletes/128669"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Mikaela Shiffrin",
+    "src": [
+     "https://www.teamusa.com/profiles/mikaela-shiffrin",
+     "https://www.olympedia.org/athletes/128669"
+    ],
+    "on": "2026-09-28"
    }
   },
   "brignone-2026": {
    "sport": {
     "v": "Alpine Skiing",
     "src": [
-     "https://www.nbcolympics.com/news/federica-brignone-pounces-early-lead-womens-giant-slalom"
+     "https://www.olympics.com/en/athletes/federica-brignone",
+     "https://www.olympedia.org/athletes/118361"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇮🇹",
     "src": [
-     "https://www.nbcolympics.com/news/federica-brignone-pounces-early-lead-womens-giant-slalom"
+     "https://www.olympics.com/en/athletes/federica-brignone",
+     "https://www.olympedia.org/athletes/118361"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2026,
     "src": [
-     "https://www.nbcolympics.com/news/federica-brignone-pounces-early-lead-womens-giant-slalom"
+     "https://www.olympics.com/en/news/winter-olympics-2026-federica-brignone-second-gold-games-womens-giant-slalom-results",
+     "https://www.olympedia.org/athletes/118361"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Milan-Cortina",
     "src": [
-     "https://www.nbcolympics.com/news/federica-brignone-pounces-early-lead-womens-giant-slalom"
+     "https://www.olympics.com/en/news/winter-olympics-2026-federica-brignone-second-gold-games-womens-giant-slalom-results",
+     "https://www.olympedia.org/editions/72"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won two golds, in the super-G and giant slalom, in front of home fans at Milan-Cortina, becoming Italy's most decorated female alpine skier",
     "src": [
+     "https://www.olympics.com/en/news/winter-olympics-2026-federica-brignone-second-gold-games-womens-giant-slalom-results",
      "https://www.nbcolympics.com/news/federica-brignone-pounces-early-lead-womens-giant-slalom",
-     "https://www.olympics.com/en/milano-cortina-2026/news/winter-olympics-2026-federica-brignone-second-gold-games-womens-giant-slalom-results"
+     "https://www.fis-ski.com/alpine-skiing/news/2025-26/brignone-gets-second-olympic-gold-in-incredible-giant-slalom",
+     "https://www.olympedia.org/athletes/118361",
+     "https://www.olympedia.org/countries/ITA/sports/ALP"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "The first Italian woman to win the overall World Cup title (2020); thrived on home snow",
     "src": [
-     "https://www.nbcolympics.com/news/federica-brignone-pounces-early-lead-womens-giant-slalom"
+     "https://www.fis-ski.com/alpine-skiing/news/2019-20/federica-brignone-makes-italian-history-vlhova-too",
+     "https://mam-e.it/federica-brignone-chi-e-la-prima-italiana-a-vincere-la-coppa-del-mondo-di-sci",
+     "https://www.nbcsports.com/olympics/news/federica-brignone-lindsey-vonn-cortina-world-cup-super-g",
+     "https://www.olympedia.org/athletes/118361"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "2 Gold, 1 Silver, 2 Bronze (career)",
     "src": [
-     "https://www.nbcolympics.com/news/federica-brignone-pounces-early-lead-womens-giant-slalom",
-     "https://www.olympics.com/en/milano-cortina-2026/news/winter-olympics-2026-federica-brignone-second-gold-games-womens-giant-slalom-results"
+     "https://www.olympics.com/en/athletes/federica-brignone",
+     "https://www.olympedia.org/athletes/118361"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Federica Brignone",
+    "src": [
+     "https://www.olympics.com/en/athletes/federica-brignone",
+     "https://www.olympedia.org/athletes/118361"
+    ],
+    "on": "2026-09-28"
    }
   },
   "carl-lewis-1984": {
    "sport": {
     "v": "Athletics: Sprints / Long Jump",
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/carl-lewis",
      "https://www.olympedia.org/athletes/78692"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://worldathletics.org/athletes/_/carl-lewis-14244008",
      "https://www.olympedia.org/athletes/78692"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1984,
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/carl-lewis",
      "https://www.olympedia.org/athletes/78692"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Los Angeles",
     "src": [
-     "https://www.olympedia.org/athletes/78692"
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/carl-lewis",
+     "https://www.olympedia.org/editions/21"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won 4 gold medals at the 1984 Games matching Jesse Owens: 100m, 200m, 4×100m relay, and long jump",
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/carl-lewis",
      "https://www.olympedia.org/athletes/78692"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Won 9 Olympic gold medals across 4 consecutive Games (1984-1996), dominating both sprints and long jump",
     "src": [
-     "https://www.olympedia.org/athletes/78692",
-     "https://worldathletics.org/athletes/_/carl-lewis-14244008"
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/carl-lewis",
+     "https://worldathletics.org/athletes/_/carl-lewis-14244008",
+     "https://www.olympedia.org/athletes/78692"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "9 Gold, 1 Silver",
     "src": [
-     "https://www.olympedia.org/athletes/78692",
-     "https://worldathletics.org/athletes/_/carl-lewis-14244008"
+     "https://worldathletics.org/athletes/_/carl-lewis-14244008",
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/carl-lewis",
+     "https://www.olympedia.org/athletes/78692"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Carl Lewis",
+    "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/carl-lewis",
+     "https://www.olympedia.org/athletes/78692"
+    ],
+    "on": "2026-09-28"
    }
   },
   "latynina-1956": {
    "sport": {
     "v": "Gymnastics: Artistic",
     "src": [
+     "https://www.olympics.com/en/athletes/larisa-latynina",
      "https://www.olympedia.org/athletes/29198"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "Soviet Union",
     "src": [
+     "https://www.olympics.com/en/athletes/larisa-latynina",
      "https://www.olympedia.org/athletes/29198"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1956,
     "src": [
+     "https://www.olympics.com/en/athletes/larisa-latynina",
      "https://www.olympedia.org/athletes/29198"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Melbourne",
     "src": [
-     "https://www.olympedia.org/athletes/29198"
+     "https://www.olympics.com/en/athletes/larisa-latynina",
+     "https://www.olympedia.org/editions/14"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won the all-around gold at her debut Games and collected 4 gold medals total",
     "src": [
+     "https://www.olympics.com/en/athletes/larisa-latynina",
+     "https://www.olympics.com/en/olympic-games/melbourne-1956/results/gymnastics-artistic/floor-exercises-women",
      "https://www.olympedia.org/athletes/29198"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Held the all-time record of 18 Olympic medals (9 gold) for 48 years until Michael Phelps surpassed her in 2012",
     "src": [
+     "https://www.olympics.com/en/athletes/larisa-latynina",
      "https://www.olympedia.org/athletes/29198",
      "https://www.olympedia.org/athletes/93860"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "9 Gold, 5 Silver, 4 Bronze",
     "src": [
+     "https://www.olympics.com/en/athletes/larisa-latynina",
      "https://www.olympedia.org/athletes/29198"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Larisa Latynina",
+    "src": [
+     "https://www.olympics.com/en/athletes/larisa-latynina",
+     "https://www.olympedia.org/athletes/29198"
+    ],
+    "on": "2026-09-28"
    }
   },
   "comaneci-1976": {
    "sport": {
     "v": "Gymnastics: Artistic",
     "src": [
+     "https://www.olympics.com/en/athletes/nadia-comaneci",
      "https://www.olympedia.org/athletes/28995"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇷🇴",
     "src": [
+     "https://www.olympics.com/en/athletes/nadia-comaneci",
      "https://www.olympedia.org/athletes/28995"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1976,
     "src": [
+     "https://www.olympics.com/en/athletes/nadia-comaneci",
      "https://www.olympedia.org/athletes/28995"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Montreal",
     "src": [
-     "https://www.olympedia.org/athletes/28995"
+     "https://www.olympics.com/en/athletes/nadia-comaneci",
+     "https://www.olympedia.org/editions/19"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Scored the first-ever perfect 10 in Olympic gymnastics history at just 14 years old",
     "src": [
-     "https://www.olympedia.org/athletes/28995"
+     "https://www.olympics.com/en/athletes/nadia-comaneci",
+     "https://www.olympedia.org/athletes/28995",
+     "https://www.usghof.org/files/bio/n_comaneci/n_comaneci.html"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Achieved seven perfect 10s at the 1976 Games and won 5 Olympic gold medals across two Games",
     "src": [
+     "https://www.olympics.com/en/athletes/nadia-comaneci",
      "https://www.olympedia.org/athletes/28995"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "5 Gold, 3 Silver, 1 Bronze",
     "src": [
+     "https://www.olympics.com/en/athletes/nadia-comaneci",
      "https://www.olympedia.org/athletes/28995"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Nadia Comaneci",
+    "src": [
+     "https://www.olympics.com/en/athletes/nadia-comaneci",
+     "https://www.olympedia.org/athletes/28995"
+    ],
+    "on": "2026-09-28"
    }
   },
   "coe-1980": {
    "sport": {
     "v": "Athletics: Middle Distance",
     "src": [
+     "https://www.olympics.com/en/athletes/sebastian-coe",
      "https://www.olympedia.org/athletes/68969"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇬🇧",
     "src": [
+     "https://www.olympics.com/en/athletes/sebastian-coe",
      "https://www.olympedia.org/athletes/68969"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1980,
     "src": [
+     "https://www.olympics.com/en/athletes/sebastian-coe",
      "https://www.olympedia.org/athletes/68969"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Moscow",
     "src": [
+     "https://www.olympics.com/en/athletes/sebastian-coe",
      "https://www.olympedia.org/athletes/68969"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won the 1500m gold medal, bouncing back after a shock loss in his favored 800m",
     "src": [
+     "https://www.olympics.com/en/athletes/sebastian-coe",
+     "https://worldathletics.org/news/news/hall-of-fame-profile-sebastian-coe-great-br",
      "https://www.olympedia.org/athletes/68969"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Won back-to-back 1500m Olympic gold medals at Moscow 1980 and Los Angeles 1984, later became World Athletics president",
     "src": [
-     "https://worldathletics.org/athletes/_/sebastian-coe-14354392"
+     "https://www.olympics.com/en/athletes/sebastian-coe",
+     "https://worldathletics.org/news/press-releases/sebastian-coe-president-congress-2023-gender-equal-council",
+     "https://www.olympedia.org/athletes/68969"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "2 Gold, 2 Silver",
     "src": [
-     "https://www.olympedia.org/athletes/68969",
-     "https://worldathletics.org/athletes/_/sebastian-coe-14354392"
+     "https://www.olympics.com/en/athletes/sebastian-coe",
+     "https://www.olympedia.org/athletes/68969"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Sebastian Coe",
+    "src": [
+     "https://www.olympics.com/en/athletes/sebastian-coe",
+     "https://www.olympedia.org/athletes/68969"
+    ],
+    "on": "2026-09-28"
    }
   },
   "owens-1936": {
    "sport": {
     "v": "Athletics: Sprints / Long Jump",
     "src": [
+     "https://www.olympics.com/en/athletes/jesse-owens",
      "https://www.olympedia.org/athletes/78869"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://www.olympics.com/en/athletes/jesse-owens",
      "https://www.olympedia.org/athletes/78869"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1936,
     "src": [
+     "https://www.olympics.com/en/athletes/jesse-owens",
      "https://www.olympedia.org/athletes/78869"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Berlin",
     "src": [
+     "https://www.olympics.com/en/athletes/jesse-owens",
      "https://www.olympedia.org/athletes/78869"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won 4 gold medals at the 1936 Berlin Games, defying Nazi ideology of racial supremacy",
     "src": [
+     "https://www.olympics.com/en/athletes/jesse-owens",
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/jesse-owens",
      "https://www.olympedia.org/athletes/78869"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "His triumph at the Berlin Games became one of the most iconic moments in Olympic and civil rights history",
     "src": [
-     "https://worldathletics.org/athletes/_/jesse-owens-14343816"
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/jesse-owens",
+     "https://www.olympics.com/en/athletes/jesse-owens",
+     "https://www.olympedia.org/athletes/78869"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "4 Gold",
     "src": [
-     "https://www.olympedia.org/athletes/78869",
-     "https://worldathletics.org/athletes/_/jesse-owens-14343816"
+     "https://www.olympics.com/en/athletes/jesse-owens",
+     "https://www.olympedia.org/athletes/78869"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Jesse Owens",
+    "src": [
+     "https://www.olympics.com/en/athletes/jesse-owens",
+     "https://www.olympedia.org/athletes/78869"
+    ],
+    "on": "2026-09-28"
    }
   },
   "flo-jo-1988": {
    "sport": {
     "v": "Athletics: Sprints",
     "src": [
+     "https://www.olympics.com/en/athletes/florence-griffith-joyner",
      "https://www.olympedia.org/athletes/77849"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://www.olympics.com/en/athletes/florence-griffith-joyner",
      "https://www.olympedia.org/athletes/77849"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1988,
     "src": [
+     "https://www.olympics.com/en/athletes/florence-griffith-joyner",
      "https://www.olympedia.org/athletes/77849"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Seoul",
     "src": [
+     "https://www.olympics.com/en/athletes/florence-griffith-joyner",
      "https://www.olympedia.org/athletes/77849"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
-    "v": "Won 3 gold medals and set world records in the 100m (10.49s) and 200m (21.34s) that still stand",
+    "v": "Won 3 gold medals and set a 200m world record (21.34s) that still stands, as does her 100m mark (10.49s) from the US Trials",
     "src": [
-     "https://worldathletics.org/athletes/_/florence-griffith-joyner-14359548"
+     "https://www.olympics.com/en/athletes/florence-griffith-joyner",
+     "https://worldathletics.org/records/by-category/world-records",
+     "https://www.olympedia.org/athletes/77849"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Known as \"Flo-Jo\", her 1988 100m and 200m world records are still the longest standing marks at those two distances",
     "src": [
-     "https://worldathletics.org/athletes/_/florence-griffith-joyner-14359548",
-     "https://worldathletics.org/athletes/_/marita-koch-14349315"
+     "https://www.olympics.com/en/athletes/florence-griffith-joyner",
+     "https://worldathletics.org/records/by-category/world-records",
+     "https://worldathletics.org/athletes/jamaica/usain-bolt-14201847",
+     "https://www.olympedia.org/athletes/77849",
+     "https://www.olympedia.org/lists/76/manual"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "3 Gold, 2 Silver",
     "src": [
-     "https://www.olympedia.org/athletes/77849",
-     "https://worldathletics.org/athletes/_/florence-griffith-joyner-14359548"
+     "https://www.olympics.com/en/athletes/florence-griffith-joyner",
+     "https://www.olympedia.org/athletes/77849"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Florence Griffith-Joyner",
+    "src": [
+     "https://www.olympics.com/en/athletes/florence-griffith-joyner",
+     "https://www.olympedia.org/athletes/77849"
+    ],
+    "on": "2026-09-28"
    }
   },
   "nurmi-1924": {
    "sport": {
     "v": "Athletics: Distance Running",
     "src": [
+     "https://www.olympics.com/en/athletes/paavo-nurmi",
      "https://www.olympedia.org/athletes/67728"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇫🇮",
     "src": [
+     "https://www.olympics.com/en/athletes/paavo-nurmi",
      "https://www.olympedia.org/athletes/67728"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1924,
     "src": [
+     "https://www.olympics.com/en/athletes/paavo-nurmi",
      "https://www.olympedia.org/athletes/67728"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Paris",
     "src": [
+     "https://www.olympics.com/en/athletes/paavo-nurmi",
      "https://www.olympedia.org/athletes/67728"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won 5 gold medals at the 1924 Paris Games, including the 1500m and 5000m within 90 minutes of each other",
     "src": [
+     "https://www.olympics.com/en/athletes/paavo-nurmi",
+     "https://worldathletics.org/heritage/news/paavo-nurmi-five-paris-olympic-victories-1924",
      "https://www.olympedia.org/results/57390",
      "https://www.olympedia.org/results/57399"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "The \"Flying Finn\" won 9 Olympic gold medals across 1920-1928, dominating distance running like no one before",
     "src": [
-     "https://worldathletics.org/athletes/_/paavo-nurmi-14561891"
+     "https://www.olympics.com/en/athletes/paavo-nurmi",
+     "https://worldathletics.org/heritage/news/paavo-nurmi-five-paris-olympic-victories-1924",
+     "https://www.olympedia.org/athletes/67728"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "9 Gold, 3 Silver",
     "src": [
-     "https://www.olympedia.org/athletes/67728",
-     "https://worldathletics.org/athletes/_/paavo-nurmi-14561891"
+     "https://www.olympics.com/en/athletes/paavo-nurmi",
+     "https://www.olympedia.org/athletes/67728"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Paavo Nurmi",
+    "src": [
+     "https://www.olympics.com/en/athletes/paavo-nurmi",
+     "https://www.olympedia.org/athletes/67728"
+    ],
+    "on": "2026-09-28"
    }
   },
   "bubka-1988": {
    "sport": {
     "v": "Athletics: Pole Vault",
     "src": [
+     "https://www.olympics.com/en/olympic-games/seoul-1988/results/athletics/pole-vault-men",
      "https://www.olympedia.org/athletes/77394"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "Soviet Union",
     "src": [
+     "https://www.olympics.com/en/olympic-games/seoul-1988/results/athletics/pole-vault-men",
      "https://www.olympedia.org/athletes/77394"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1988,
     "src": [
+     "https://www.olympics.com/en/athletes/sergii-bubka",
      "https://www.olympedia.org/athletes/77394"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Seoul",
     "src": [
+     "https://www.olympics.com/en/athletes/sergii-bubka",
      "https://www.olympedia.org/athletes/77394"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won Olympic gold in pole vault at Seoul, the only Olympic title of his career",
     "src": [
+     "https://www.olympics.com/en/news/this-week-in-olympic-history-july-8-14-sergii-bubka-became-first-to-vault-over-6-metres",
+     "https://www.olympics.com/en/athletes/sergii-bubka",
      "https://www.olympedia.org/athletes/77394"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
-    "v": "The first person to clear 6 metres in pole vault, broke the world record 28 times throughout his career",
+    "v": "The first person to clear 6 metres in pole vault, broke the world record 35 times throughout his career",
     "src": [
-     "https://www.olympedia.org/athletes/77394"
+     "https://worldathletics.org/heritage/news/sergey-bubka-first-six-metre-pole-vault",
+     "https://www.olympics.com/en/athletes/sergii-bubka",
+     "https://www.laureus.com/world-sports-academy/members/sergey-bubka"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "1 Gold",
     "src": [
-     "https://www.olympedia.org/athletes/77394",
-     "https://worldathletics.org/athletes/_/sergei-bubka-14229786"
+     "https://www.olympics.com/en/athletes/sergii-bubka",
+     "https://www.olympedia.org/athletes/77394"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Sergei Bubka",
+    "src": [
+     "https://www.olympics.com/en/news/this-week-in-olympic-history-july-8-14-sergii-bubka-became-first-to-vault-over-6-metres",
+     "https://www.encyclopedia.com/sports/encyclopedias-almanacs-transcripts-and-maps/bubka-sergei",
+     "https://www.olympedia.org/athletes/77394"
+    ],
+    "on": "2026-09-28"
    }
   },
   "zatopek-1952": {
    "sport": {
     "v": "Athletics: Distance Running",
     "src": [
+     "https://www.olympics.com/en/athletes/emil-zatopek",
      "https://www.olympedia.org/athletes/76736"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "Czechoslovakia",
     "src": [
+     "https://www.olympics.com/en/athletes/emil-zatopek",
      "https://www.olympedia.org/athletes/76736"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1952,
     "src": [
+     "https://worldathletics.org/news/news/hall-of-fame-profile-emil-zatopek-czechoslo",
      "https://www.olympedia.org/athletes/76736"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Helsinki",
     "src": [
+     "https://www.olympics.com/en/athletes/emil-zatopek",
      "https://www.olympedia.org/athletes/76736"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won the 5000m, 10000m, AND marathon at the same Games, a feat never repeated",
     "src": [
+     "https://www.olympics.com/en/athletes/emil-zatopek",
+     "https://worldathletics.org/news/news/hall-of-fame-profile-emil-zatopek-czechoslo",
      "https://www.olympedia.org/athletes/76736"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Known as the \"Czech Locomotive\", his triple gold at Helsinki 1952 is considered the greatest distance running achievement ever",
     "src": [
-     "https://worldathletics.org/athletes/_/emil-zatopek-14356601"
+     "https://worldathletics.org/heritage/news/emil-zatopek-olympic-treble-helsinki-1952",
+     "https://www.olympics.com/en/athletes/emil-zatopek",
+     "https://www.theweek.in/news/sports/the-czech-locomotive-long-run-into-our-hearts.html",
+     "https://www.olympedia.org/athletes/76736"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "4 Gold, 1 Silver",
     "src": [
-     "https://www.olympedia.org/athletes/76736",
-     "https://worldathletics.org/athletes/_/emil-zatopek-14356601"
+     "https://www.olympics.com/en/athletes/emil-zatopek",
+     "https://www.olympedia.org/athletes/76736"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Emil Zatopek",
+    "src": [
+     "https://www.olympics.com/en/athletes/emil-zatopek",
+     "https://www.olympedia.org/athletes/76736"
+    ],
+    "on": "2026-09-28"
    }
   },
   "rudolph-1960": {
    "sport": {
     "v": "Athletics: Sprints",
     "src": [
+     "https://www.olympics.com/en/athletes/wilma-rudolph",
      "https://www.olympedia.org/athletes/77958"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://www.olympics.com/en/athletes/wilma-rudolph",
      "https://www.olympedia.org/athletes/77958"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1960,
     "src": [
+     "https://www.olympics.com/en/athletes/wilma-rudolph",
      "https://www.olympedia.org/athletes/77958"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Rome",
     "src": [
+     "https://www.olympics.com/en/athletes/wilma-rudolph",
      "https://www.olympedia.org/athletes/77958"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won 3 gold medals (100m, 200m, 4x100m relay), becoming the first American woman to complete the Olympic sprint double at one Games",
@@ -14963,173 +15492,237 @@
    "careerContext": {
     "v": "Overcame childhood polio to become the fastest woman in the world, inspiring a generation",
     "src": [
+     "https://www.olympics.com/en/athletes/wilma-rudolph",
+     "https://www.olympics.com/en/news/remarkable-rudolph-defies-odds-with-sprint-treble",
+     "https://worldathletics.org/competitions/heritage/news/wilma-rudolph-1960-olympics-100m-usa",
+     "https://www.usatf.org/athlete-bios/wilma-rudolph",
      "https://www.olympedia.org/athletes/77958"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "3 Gold, 1 Bronze",
     "src": [
-     "https://www.olympedia.org/athletes/77958",
-     "https://worldathletics.org/athletes/_/wilma-rudolph-14372878"
+     "https://www.olympics.com/en/athletes/wilma-rudolph",
+     "https://www.olympedia.org/athletes/77958"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Wilma Rudolph",
+    "src": [
+     "https://www.olympics.com/en/athletes/wilma-rudolph",
+     "https://www.olympedia.org/athletes/77958"
+    ],
+    "on": "2026-09-28"
    }
   },
   "spitz-1972": {
    "sport": {
     "v": "Swimming",
     "src": [
+     "https://www.olympics.com/en/athletes/mark-spitz",
      "https://www.olympedia.org/athletes/51572"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://www.olympics.com/en/athletes/mark-spitz",
      "https://www.olympedia.org/athletes/51572"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1972,
     "src": [
+     "https://www.olympics.com/en/athletes/mark-spitz",
      "https://www.olympedia.org/athletes/51572"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Munich",
     "src": [
+     "https://www.olympics.com/en/athletes/mark-spitz",
      "https://www.olympedia.org/athletes/51572"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won 7 gold medals at the 1972 Munich Games, setting world records in every event",
     "src": [
+     "https://www.olympics.com/en/athletes/mark-spitz",
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/mark-spitz",
      "https://www.olympedia.org/athletes/51572"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "His record of 7 golds at a single Games stood for 36 years until Michael Phelps won 8 in 2008",
     "src": [
-     "https://www.olympedia.org/athletes/93860"
+     "https://www.olympics.com/en/athletes/mark-spitz",
+     "https://www.olympedia.org/athletes/51572"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "9 Gold, 1 Silver, 1 Bronze",
     "src": [
+     "https://www.olympics.com/en/athletes/mark-spitz",
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/mark-spitz",
      "https://www.olympedia.org/athletes/51572"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Mark Spitz",
+    "src": [
+     "https://www.olympics.com/en/athletes/mark-spitz",
+     "https://www.olympedia.org/athletes/51572"
+    ],
+    "on": "2026-09-28"
    }
   },
   "thompson-1984": {
    "sport": {
     "v": "Athletics: Decathlon",
     "src": [
+     "https://www.olympics.com/en/athletes/daley-thompson",
      "https://www.olympedia.org/athletes/69530"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇬🇧",
     "src": [
+     "https://www.olympics.com/en/athletes/daley-thompson",
      "https://www.olympedia.org/athletes/69530"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1984,
     "src": [
+     "https://www.olympics.com/en/athletes/daley-thompson",
      "https://www.olympedia.org/athletes/69530"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Los Angeles",
     "src": [
+     "https://www.olympics.com/en/athletes/daley-thompson",
      "https://www.olympedia.org/athletes/69530"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won back-to-back Olympic decathlon gold medals at Moscow 1980 and Los Angeles 1984",
     "src": [
-     "https://www.olympedia.org/athletes/69530",
-     "https://worldathletics.org/athletes/_/daley-thompson-14355218"
+     "https://www.olympics.com/en/athletes/daley-thompson",
+     "https://www.teamgb.com/athlete/daley-thompson/1DSJsFAF1F4l47uffRDLFE",
+     "https://www.olympedia.org/athletes/69530"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Dominated the decathlon for a decade, also winning three Commonwealth golds and breaking the world record four times",
     "src": [
+     "https://www.olympics.com/en/athletes/daley-thompson",
+     "https://www.teamgb.com/athlete/daley-thompson/1DSJsFAF1F4l47uffRDLFE",
      "https://www.olympedia.org/athletes/69530"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "2 Gold",
     "src": [
-     "https://www.olympedia.org/athletes/69530",
-     "https://worldathletics.org/athletes/_/daley-thompson-14355218"
+     "https://www.olympics.com/en/athletes/daley-thompson",
+     "https://www.olympedia.org/athletes/69530"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Daley Thompson",
+    "src": [
+     "https://www.olympics.com/en/athletes/daley-thompson",
+     "https://www.olympedia.org/athletes/69530"
+    ],
+    "on": "2026-09-28"
    }
   },
   "witt-1988": {
    "sport": {
     "v": "Figure Skating",
     "src": [
+     "https://www.olympics.com/en/athletes/katarina-witt",
      "https://www.olympedia.org/athletes/83053"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "East Germany (GDR)",
     "src": [
+     "https://www.olympics.com/en/news/figure-skating-witt-and-charm-prevail-on-the-ice",
+     "https://www.olympics.com/en/athletes/katarina-witt",
      "https://www.olympedia.org/athletes/83053"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1988,
     "src": [
+     "https://www.olympics.com/en/news/figure-skating-witt-and-charm-prevail-on-the-ice",
      "https://www.olympedia.org/athletes/83053"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Calgary",
     "src": [
+     "https://www.olympics.com/en/news/figure-skating-witt-and-charm-prevail-on-the-ice",
      "https://www.olympedia.org/athletes/83053"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won her second consecutive Olympic gold in figure skating, the first woman to defend the title since 1936",
     "src": [
+     "https://www.olympics.com/en/athletes/katarina-witt",
+     "https://www.olympics.com/en/athletes/sonja-henie",
      "https://www.olympedia.org/athletes/83053",
      "https://www.olympedia.org/athletes/81280"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "East German figure skating icon who won back-to-back Olympic golds (1984, 1988) and 4 World Championship titles",
     "src": [
-     "https://www.olympedia.org/athletes/83053"
+     "https://www.olympics.com/en/athletes/katarina-witt",
+     "https://www.olympics.com/en/news/figure-skating-witt-and-charm-prevail-on-the-ice",
+     "https://www.olympedia.org/athletes/83053",
+     "https://www.laureus.com/world-sports-academy/members/katarina-witt"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "noOfficial": "The count of four World titles is stated by two independent hosts (olympedia: 1984-85 and 1987-88; Laureus: 1984, 1985, 1987 and 1988). The official pages opened confirm the East German golds of 1984 and 1988 and the 1985 and 1987 world titles, but none states the total of four, and no ISU historical results page for the 1984 and 1988 Worlds could be found or opened (web search budget exhausted)."
    },
    "medalSummary": {
     "v": "2 Gold",
     "src": [
+     "https://www.olympics.com/en/athletes/katarina-witt",
      "https://www.olympedia.org/athletes/83053"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Katarina Witt",
+    "src": [
+     "https://www.olympics.com/en/athletes/katarina-witt",
+     "https://www.olympedia.org/athletes/83053"
+    ],
+    "on": "2026-09-28"
    }
   }
  },
