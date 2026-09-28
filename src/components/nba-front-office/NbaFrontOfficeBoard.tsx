@@ -25,6 +25,13 @@ import { openTalks, standFirm, type TalksState } from '@/lib/foTradeTalks';
 import { TradeTalksCard } from '@/components/front-office-shared/TradeTalksCard';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { recordActivity } from '@/lib/completions';
+/* Round 647: every closed season is one row, scored against the projection
+   made when its decisions opened. The scoring, the projection, the row and
+   the refusal of a season already closed live in the shared module, the
+   same one the other five boards read; this sport's season shape is data. */
+import { appendSeason, expectationOf, ledgerOf, ledgerRow, projectionFor, seasonResultOf, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
+import { NBA_SEASON } from '@/lib/seasonFormats';
+import { SeasonLedgerChips, SeasonProjectionNote } from '@/components/game/SeasonLedgerChips';
 import { cn } from '@/lib/utils';
 // Round 180: the owner upstairs, shared engine and card.
 import {
@@ -70,6 +77,13 @@ interface SaveShape {
   /* Round 431. Present on a save written from the recap screen, so the recap
      can be drawn again after a reload. Absent on older saves. */
   postseason?: Postseason | null;
+  /* Round 647. One row per closed season. Absent on an older save, which
+     opens with an empty ledger and no retroactive points. */
+  ledger?: SeasonRow[];
+  /* Round 647. The projection this season is scored against, made at the
+     pick and again when the offseason hands over the next roster. Absent on
+     an older save, which is projected from the league as it loads. */
+  expect?: SeasonExpectation | null;
 }
 
 export default function NbaFrontOfficeBoard() {
@@ -106,7 +120,13 @@ export default function NbaFrontOfficeBoard() {
   const [shopTried, setShopTried] = useState(false);
   const [titles, setTitles] = useState(0);
   const [seasonsPlayed, setSeasonsPlayed] = useState(0);
-  const [wonNow, setWonNow] = useState(false);
+  /* Round 647: the ledger, one row per closed season, and the row this mount
+     closed. The completion fires on that row (false to true while mounted,
+     which is what the recorder witnesses), so a reload on the recap, where
+     nothing was closed, records nothing again. */
+  const [ledger, setLedger] = useState<SeasonRow[]>([]);
+  const [closedRow, setClosedRow] = useState<SeasonRow | null>(null);
+  const [expect, setExpect] = useState<SeasonExpectation | null>(null);
   /* Round 180: the owner upstairs. */
   const [mandate, setMandate] = useState<OwnerMandate | null>(null);
   const [trust, setTrust] = useState(FO_TRUST_START);
@@ -117,13 +137,17 @@ export default function NbaFrontOfficeBoard() {
   const [pressTilt, setPressTilt] = useState<-1 | 0 | 1>(0);
   const [seasonTradeLine, setSeasonTradeLine] = useState<string | null>(null);
 
-  useGameCompletion('nba-front-office', wonNow, titles * 100 + seasonsPlayed * 5);
+  useGameCompletion('nba-front-office', closedRow !== null, closedRow?.score);
 
   /* Round 180: rank my roster against the league and let ownership set the ask. */
   const mandateFor = (lg: NbaLeague, team: string, defendingChamp: boolean, tilt: -1 | 0 | 1 = 0): OwnerMandate => {
     const strengths = Object.fromEntries(Object.entries(lg.teams).map(([a, tm]) => [a, nbaStrength(tm)]));
     return buildOwnerMandate(strengthRank(strengths, team), Object.keys(lg.teams).length, defendingChamp, NBA_WORDS, lg.season, tilt);
   };
+  /* Round 647: the season's projection from the league as it stands, made
+     at the same two moments as the mandate: the pick, and the offseason. */
+  const projectFor = (lg: NbaLeague, team: string): SeasonExpectation =>
+    projectionFor(NBA_SEASON.teams(lg), NBA_SEASON.format, lg.season, team);
 
   useEffect(() => {
     try {
@@ -138,9 +162,13 @@ export default function NbaFrontOfficeBoard() {
       ensureNbaLeagueIds(s.league, s.draftClass);
       setLeague(s.league); setMyTeam(s.myTeam);
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
+      setLedger(ledgerOf(s.ledger));
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
       /* Round 180, repair-on-load: a pre-180 save gets an owner today. */
       setMandate(s.mandate ?? mandateFor(s.league, s.myTeam, false));
+      /* Round 647, the same repair: a save with no projection for its
+         season is projected from the league as it stands today. */
+      setExpect(expectationOf(s.expect, s.league.season) ?? projectFor(s.league, s.myTeam));
       setTrust(s.trust ?? FO_TRUST_START);
       setFired(s.fired ?? false);
       setPressTilt(s.pressTilt ?? 0);
@@ -170,10 +198,10 @@ export default function NbaFrontOfficeBoard() {
       localStorage.setItem(SAVE_KEY, JSON.stringify({
         league: lg, myTeam: team, phase, titles, seasonsPlayed, draftClass, picksLeft,
         mandate, trust, fired, pressTilt, seasonTradeLine,
-        postseason: champion ? { series, champion, gradeLine } : null, ...patch,
+        postseason: champion ? { series, champion, gradeLine } : null, ledger, expect, ...patch,
       } satisfies SaveShape));
     } catch { /* full */ }
-  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine]);
+  }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, series, gradeLine, ledger, expect]);
 
   const label = (abbr: string) => {
     const t = NBA_TEAM_MAP.get(abbr);
@@ -183,12 +211,14 @@ export default function NbaFrontOfficeBoard() {
   const start = (abbr: string) => {
     const lg = initNbaLeague();
     const m = mandateFor(lg, abbr, false);
+    const e = projectFor(lg, abbr);
     setLeague(lg); setMyTeam(abbr); setPhase('hub'); setTab(null);
     setFeed([
       `Welcome to the ${label(abbr)} front office. The ${lg.season} season tips off now.`,
       `🏛️ The ownership mandate: ${m.text}`,
     ]);
     setChampion(''); setSeries([]); setTitles(0); setSeasonsPlayed(0);
+    setLedger([]); setClosedRow(null); setExpect(e);
     setMandate(m); setTrust(FO_TRUST_START); setFired(false); setGradeLine(null);
     /* Round 192: the introduction presser. First day, full room. */
     setPresser(buildGmPresser(NBA_WORDS, {
@@ -196,7 +226,7 @@ export default function NbaFrontOfficeBoard() {
       gradeResult: null, tradeLine: null, seasonsPlayed: 0,
     }));
     setPressTilt(0); setSeasonTradeLine(null);
-    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null }, lg, abbr);
+    persist({ phase: 'hub', titles: 0, seasonsPlayed: 0, mandate: m, trust: FO_TRUST_START, fired: false, pressTilt: 0, seasonTradeLine: null, ledger: [], expect: e }, lg, abbr);
   };
 
   /* Round 192: one answer, three registers. Trust moves now, the tilt
@@ -239,8 +269,9 @@ export default function NbaFrontOfficeBoard() {
   const playRound = () => {
     if (!league || !my) return;
     /* Round 195: a played round counts as playing TODAY, the same per-session mark
-       Club Manager has had since Round 157. Unscored on purpose: the
-       scored completion stays the title. */
+       Club Manager has had since Round 157. Unscored on purpose: the scored
+       completion is the season's ledger row, recorded once when the season
+       closes (Round 647). */
     recordActivity('/nba-front-office');
     /* Round 431: a season's postseason runs once. The record carries an entry
        for this season the moment its playoffs are played, so a league that
@@ -259,17 +290,26 @@ export default function NbaFrontOfficeBoard() {
       setSeries(sr);
       setChampion(champ);
       const won = champ === myTeam;
-      setWonNow(won);
       const nt = titles + (won ? 1 : 0);
       const ns = seasonsPlayed + 1;
       setTitles(nt); setSeasonsPlayed(ns);
+      /* Round 647: the season closes into the ledger as one row: its
+         regular season and the round it reached, scored against the
+         projection made when its decisions opened, never against the
+         roster at the whistle. The row is what the completion records. */
+      const post = seriesPostseason(sr, myTeam, 'Play-In');
+      const mine = lg.teams[myTeam];
+      const result = seasonResultOf(lg.season, myTeam, { wins: mine.wins, games: mine.wins + mine.losses },
+        { games: sr, champion: champ }, NBA_SEASON);
+      const closed = appendSeason(ledger, result, expectationOf(expect, lg.season) ?? projectFor(league, myTeam));
+      setLedger(closed.ledger);
+      setClosedRow(closed.row);
       /* Round 180: ownership grades the season. Play-in games do not count
          as playoff appearances or wins. */
       let newTrust = trust, nowFired = fired;
       let gradeResult: ReturnType<typeof gradeSeason>['result'] | null = null;
       let gradeVerdict: string | null = null;
       if (mandate) {
-        const post = seriesPostseason(sr, myTeam, 'Play-In');
         const grade = gradeSeason(mandate, { wins: lg.teams[myTeam].wins, ...post, wonTitle: won });
         const applied = applyMandateResult(trust, grade);
         newTrust = applied.trust; nowFired = applied.fired;
@@ -287,7 +327,7 @@ export default function NbaFrontOfficeBoard() {
       setPhase('recap');
       setLeague(lg);
       setFeed(newFeed); setFeedSlam(null);
-      persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict } }, lg, myTeam);
+      persist({ phase: nowFired ? 'fired' : 'recap', titles: nt, seasonsPlayed: ns, trust: newTrust, fired: nowFired, postseason: { series: sr, champion: champ, gradeLine: gradeVerdict }, ledger: closed.ledger }, lg, myTeam);
       return;
     }
     lg.round += 1;
@@ -354,6 +394,10 @@ export default function NbaFrontOfficeBoard() {
          tilt is spent. */
       const m = mandateFor(lg, myTeam, champion === myTeam, pressTilt);
       setMandate(m);
+      /* Round 647: the next season's projection, from the roster the
+         offseason hands over. Everything from here to the whistle is yours. */
+      const e = projectFor(lg, myTeam);
+      setExpect(e);
       setFeed([
         `🏛️ The new mandate: ${m.text}`,
         ...(pressTilt === 1 ? ['🎙️ Your season-end answer raised the bar upstairs.']
@@ -361,13 +405,13 @@ export default function NbaFrontOfficeBoard() {
         ...notes,
       ].slice(0, 6));
       setPressTilt(0); setSeasonTradeLine(null);
-      setSeries([]); setChampion(''); setWonNow(false);
+      setSeries([]); setChampion(''); setClosedRow(null);
       /* Round 530: the phase stays 'draft' so the last pick's card is seen;
          leaveDraft moves it on. The save says 'hub' as it always did, so a
          reload skips the reveal and opens where it opened before. */
       setFeedSlam(null); setTab(null);
       setLeague(lg);
-      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null }, lg, myTeam);
+      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null, expect: e }, lg, myTeam);
       return;
     }
     setLeague(lg);
@@ -521,6 +565,8 @@ export default function NbaFrontOfficeBoard() {
   }
 
   if (phase === 'recap') {
+    /* Round 647: this season's ledger row, present on a reload too. */
+    const seasonRow = ledgerRow(ledger, league.season);
     const finals = series.find(s => s.name === 'NBA Finals');
     const myConf = EAST.includes(myTeam) ? 'East' : 'West';
     const myRank = nbaStandings(league, myConf as 'East' | 'West').findIndex(t => t.abbr === myTeam) + 1;
@@ -563,10 +609,15 @@ export default function NbaFrontOfficeBoard() {
               <p key={i}>{s.name}: {label(s.winner)} {s.winner === s.home ? s.homeWins : s.awayWins}-{s.winner === s.home ? s.awayWins : s.homeWins}</p>
             ))}
           </div>
-          <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: '1.2s' }}>
+          <div className="cm-rise mt-3 flex flex-wrap items-center justify-center gap-3 text-sm" style={{ animationDelay: '1.2s' }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Titles <b className="text-gold">{titles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{seasonsPlayed}</b></span>
+            {/* Round 647: the number this season recorded, and the ledger sum.
+                Read from the ledger so a reload shows the same two, and left out
+                on a save from before the ledger, which has no row to show. */}
+            <SeasonLedgerChips row={seasonRow} ledger={ledger} seasonsPlayed={seasonsPlayed} />
           </div>
+          <SeasonProjectionNote row={seasonRow} />
           {/* Round 180: zero trust ends the save here instead of a draft. */}
           {fired ? (
             <div className="cm-loss-shake mt-4 rounded-2xl border border-destructive/50 bg-destructive/5 p-4">
@@ -591,8 +642,8 @@ export default function NbaFrontOfficeBoard() {
               <ShareButtons
                 gameName="NBA Front Office"
                 gamePath="/nba-front-office"
-                score={`${titles} titles in ${seasonsPlayed} seasons`}
-                customText={`NBA Front Office 🏀 ${champion === myTeam ? `My ${label(myTeam)} just won it all!` : `${label(champion)} took the title.`} ${titles} banners in ${seasonsPlayed} seasons. douknowball.com/nba-front-office`}
+                score={`${seasonRow ? `${seasonRow.score} pts this season, ` : ''}${titles} titles in ${seasonsPlayed} seasons`}
+                customText={`NBA Front Office 🏀 ${champion === myTeam ? `My ${label(myTeam)} just won it all!` : `${label(champion)} took the title.`} ${seasonRow ? `${seasonRow.score} pts this season, ` : ''}${titles} banners in ${seasonsPlayed} seasons. douknowball.com/nba-front-office`}
               />
             </div>
           )}

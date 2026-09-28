@@ -1,4 +1,8 @@
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
+/* Round 647: a type only import, erased at build, so the engine bundles in
+   the harnesses without the scoring module and the harness can load the
+   module (or a control copy of it) beside the engine. */
+import type { SeasonExpectation, SeasonRow } from '@/lib/seasonLedger';
 /**
  * CFB Dynasty engine (2026-08-05). The college pillar of the sim suite.
  *
@@ -120,6 +124,16 @@ export interface CfbState {
   myTitles: number;
   seasonsPlayed: number;
   heismanWinners: string[];
+  /* Round 647: one row per closed season, each scored against its own
+     projection, in the shared shape the four front offices keep
+     (src/lib/seasonLedger.ts). Optional so a save from before this round
+     opens with an empty ledger and no retroactive points. */
+  ledger?: SeasonRow[];
+  /* Round 647: the projection the next season to close is scored against,
+     made when that season's decisions opened: at the pick, then when the
+     recruiting trail opens. Optional; a save without one is projected as it
+     loads. */
+  expect?: SeasonExpectation;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -162,7 +176,7 @@ export function initCfb(myTeam: string, rng: () => number = Math.random): CfbSta
     });
     teams[s.id] = { id: s.id, players, wins: 0, losses: 0, confWins: 0, confLosses: 0, champion: false };
   }
-  return { season: 2026, teams, round: 1, myTeam, nil: nilBudgetFor(CFB_SCHOOL_MAP.get(myTeam)!.prestige, 0), natties: [], myTitles: 0, seasonsPlayed: 0, heismanWinners: [] };
+  return { season: 2026, teams, round: 1, myTeam, nil: nilBudgetFor(CFB_SCHOOL_MAP.get(myTeam)!.prestige, 0), natties: [], myTitles: 0, seasonsPlayed: 0, heismanWinners: [], ledger: [] };
 }
 
 function clampi(v: number, lo: number, hi: number): number { return Math.max(lo, Math.min(hi, v)); }
@@ -176,9 +190,13 @@ export function cfbStrength(t: CfbTeam): number {
   return avg(top, 60) * 0.6 + avg(depth, 60) * 0.2 + (qb ? qb.ovr : 60) * 0.2;
 }
 
+/** Round 647: the win curve's spread, exported so the season projection
+    (src/lib/seasonFormats.ts) reads the same curve this engine plays. */
+export const CFB_WIN_SCALE = 9;
+
 export function cfbWinProb(a: CfbTeam, b: CfbTeam): number {
   const gap = cfbStrength(a) - cfbStrength(b);
-  return 1 / (1 + Math.pow(10, -gap / 9)); // college blowout variance: steeper than pro
+  return 1 / (1 + Math.pow(10, -gap / CFB_WIN_SCALE)); // college blowout variance: steeper than pro
 }
 
 export interface CfbGame { home: string; away: string; hs: number; as: number; winner: string; conference: boolean }
@@ -290,6 +308,24 @@ export function runCfbPostseason(st: CfbState, rng: () => number): { ccgs: CfbPl
   const sf2 = playPair('CFP Semifinal', qf[1], qf[2], st, rng, bracket);
   const champion = playPair('National Championship', sf1, sf2, st, rng, bracket);
   return { ccgs, bracket, champion, field };
+}
+
+/**
+ * Round 647: the twelve game regular season's record, which is what the
+ * shared ledger's form term reads (src/lib/seasonLedger.ts). The record at
+ * the whistle is not it: runCfbPostseason adds the conference title game to
+ * wins and losses, and the first version of the ledger read that, so an
+ * 11-1 team that reached the title game and lost it (11-2) scored less form
+ * than an 11-1 team that never got there, and a 12-0 team that stayed home
+ * outscored a 12-1 conference champion. The title game is taken back out.
+ */
+export function cfbRegularRecord(st: CfbState, ccgs: readonly CfbPlayoffGame[], team: string = st.myTeam): { wins: number; games: number } {
+  const t = st.teams[team];
+  const played = ccgs.filter(g => g.home === team || g.away === team);
+  const ccgWins = played.filter(g => g.winner === team).length;
+  const wins = t.wins - ccgWins;
+  const losses = t.losses - (played.length - ccgWins);
+  return { wins, games: wins + losses };
 }
 
 function playPair(name: string, aId: string, bId: string, st: CfbState, rng: () => number, out: CfbPlayoffGame[]): string {

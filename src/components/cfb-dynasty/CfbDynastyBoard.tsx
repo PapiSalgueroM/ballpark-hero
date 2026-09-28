@@ -6,16 +6,29 @@ import {
   CFB_SCHOOLS, CFB_SCHOOL_MAP, CFB_CONFS, CFB_ROUNDS,
   initCfb, simCfbRound, cfbRankings, confStandings, runCfbPostseason,
   heismanRace, cfbRecruitClass, cfbPortalPool, signRecruit, cfbOffseason,
-  nilBudgetFor, cfbStrength,
+  nilBudgetFor, cfbStrength, cfbRegularRecord,
   type CfbState, type CfbGame, type CfbPlayoffGame, type CfbRecruit, type HeismanFinalist,
   ensureCfbIds,
 } from '@/lib/cfbDynasty';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+/* Round 647: every closed season is one row, scored against the projection
+   made when its decisions opened. The scoring, the projection, the row and
+   the refusal of a season already closed live in the shared module, the
+   same one the four front offices read; this sport's season shape is data. */
+import { appendSeason, expectationOf, ledgerOf, ledgerRow, projectionFor, seasonResultOf, type SeasonRow } from '@/lib/seasonLedger';
+import { CFB_SEASON } from '@/lib/seasonFormats';
+import { SeasonLedgerChips, SeasonProjectionNote } from '@/components/game/SeasonLedgerChips';
 import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 type Phase = 'pick' | 'season' | 'recap' | 'recruit';
 type Tab = 'team' | 'play' | 'rankings' | 'standings';
+
+/* Round 647: a season's projection from the league as it stands. Made at
+   the pick, and for the next season when the recruiting trail opens, so the
+   recruiting, the portal and the offseason all count as yours. */
+const projectFor = (state: CfbState, season: number) =>
+  projectionFor(CFB_SEASON.teams(state), CFB_SEASON.format, season, state.myTeam);
 
 const SAVE_KEY = 'cfb-dynasty-save-v1';
 
@@ -48,9 +61,12 @@ export default function CfbDynastyBoard() {
   const [postseason, setPostseason] = useState<Postseason | null>(null);
   const [recruits, setRecruits] = useState<CfbRecruit[] | null>(null);
   const [portal, setPortal] = useState<CfbRecruit[] | null>(null);
-  const [wonNow, setWonNow] = useState(false);
+  /* Round 647: the row this mount closed. The completion fires on it (false
+     to true while mounted, which is what the recorder witnesses), so a reload
+     on the recap, where nothing was closed, records nothing again. */
+  const [closedRow, setClosedRow] = useState<SeasonRow | null>(null);
 
-  useGameCompletion('cfb-dynasty', wonNow, (st?.myTitles ?? 0) * 100 + (st?.seasonsPlayed ?? 0) * 5);
+  useGameCompletion('cfb-dynasty', closedRow !== null, closedRow?.score);
 
   const persist = useCallback((state: CfbState, ph: Phase, rec: CfbRecruit[] | null, por: CfbRecruit[] | null, post: Postseason | null = null) => {
     try {
@@ -64,6 +80,9 @@ export default function CfbDynastyBoard() {
   const openRecruiting = useCallback((source: CfbState) => {
     const state: CfbState = JSON.parse(JSON.stringify(source));
     state.nil = nilBudgetFor(CFB_SCHOOL_MAP.get(state.myTeam)!.prestige, state.teams[state.myTeam].wins);
+    /* Round 647: next season's projection, from the roster as the trail
+       opens. A trail reopened on a reload keeps the one it already has. */
+    if (!expectationOf(state.expect, state.season + 1)) state.expect = projectFor(state, state.season + 1);
     const cls = cfbRecruitClass(Math.random);
     const por = cfbPortalPool(Math.random);
     setSt(state); setRecruits(cls); setPortal(por); setPhase('recruit');
@@ -81,6 +100,12 @@ export default function CfbDynastyBoard() {
          portal are minted from the same counter as the rosters, so all three
          are one id space and the repair has to see all three at once. */
       ensureCfbIds(s.st, s.recruits, s.portal);
+      /* Round 647: a save with no projection for the season it is playing,
+         or on the trail for the season about to start, is projected from
+         the league as it stands, the way the front offices repair a
+         missing mandate. The recap's projection is made when its trail opens. */
+      if (s.phase === 'season' && !expectationOf(s.st.expect, s.st.season)) s.st.expect = projectFor(s.st, s.st.season);
+      if (s.phase === 'recruit' && !expectationOf(s.st.expect, s.st.season + 1)) s.st.expect = projectFor(s.st, s.st.season + 1);
       setSt(s.st);
       setRecruits(s.recruits ?? null);
       setPortal(s.portal ?? null);
@@ -107,9 +132,10 @@ export default function CfbDynastyBoard() {
 
   const start = (id: string) => {
     const state = initCfb(id);
+    state.expect = projectFor(state, state.season);
     setSt(state); setPhase('season'); setTab('team');
     setFeed([`Welcome to ${label(id)}. The ${state.season} season kicks off with a 12-game slate, a conference title to defend, and a 12-team Playoff waiting in December.`]);
-    setPostseason(null); setWonNow(false);
+    setPostseason(null); setClosedRow(null);
     persist(state, 'season', null, null);
   };
 
@@ -151,7 +177,14 @@ export default function CfbDynastyBoard() {
       state.natties.push({ season: state.season, team: post.champion });
       if (won) state.myTitles += 1;
       state.seasonsPlayed += 1;
-      setWonNow(won);
+      /* Round 647: the season closes into the ledger as one row: its
+         regular season and the round it reached, scored against the
+         projection made when its decisions opened, never against the
+         roster at the whistle. The row is what the completion records. */
+      const closing = seasonResultOf(state.season, state.myTeam, cfbRegularRecord(state, post.ccgs), { games: post.bracket, champion: post.champion }, CFB_SEASON);
+      const ledgered = appendSeason(ledgerOf(state.ledger), closing, expectationOf(state.expect, state.season) ?? projectFor(st, state.season));
+      state.ledger = ledgered.ledger;
+      setClosedRow(ledgered.row);
       const closed: Postseason = { ccgs: post.ccgs, bracket: post.bracket, champion: post.champion, heisman };
       setPostseason(closed);
       setPhase('recap');
@@ -192,7 +225,7 @@ export default function CfbDynastyBoard() {
     const state: CfbState = JSON.parse(JSON.stringify(st));
     const notes = cfbOffseason(state, Math.random);
     setSt(state); setPhase('season'); setTab('team');
-    setRecruits(null); setPortal(null); setPostseason(null); setWonNow(false);
+    setRecruits(null); setPortal(null); setPostseason(null); setClosedRow(null);
     setFeed(notes.slice(0, 5));
     persist(state, 'season', null, null);
   };
@@ -238,6 +271,10 @@ export default function CfbDynastyBoard() {
   if (phase === 'recap' && postseason) {
     const isChamp = postseason.champion === st.myTeam;
     const title = postseason.bracket[postseason.bracket.length - 1];
+    /* Round 647: this season's ledger row and the career sum, present on a
+       reload too because both are read from the save. */
+    const careerLedger = ledgerOf(st.ledger);
+    const seasonRow = ledgerRow(careerLedger, st.season);
     /* Round 530: the season curtain. Pure presentation over the postseason
        the engine already ran: the champion slams in, your own line rises, the
        Heisman lands after the champion, then the title game and the ledger
@@ -274,10 +311,14 @@ export default function CfbDynastyBoard() {
               <p key={`${st.season}:${i}`} className="cm-tick-in" style={{ animationDelay: revealDelay(i + 1) }}>{line}</p>
             ))}
           </div>
-          <div className="cm-rise mt-3 flex items-center justify-center gap-3 text-sm" style={{ animationDelay: '0.9s' }}>
+          <div className="cm-rise mt-3 flex flex-wrap items-center justify-center gap-3 text-sm" style={{ animationDelay: '0.9s' }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Natties <b className="text-gold">{st.myTitles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{st.seasonsPlayed}</b></span>
+            {/* Round 647: the number this season recorded, and the ledger sum,
+                left out on a save from before the ledger, which has no row to show. */}
+            <SeasonLedgerChips row={seasonRow} ledger={careerLedger} seasonsPlayed={st.seasonsPlayed} />
           </div>
+          <SeasonProjectionNote row={seasonRow} />
           <div className="cm-rise mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center" style={{ animationDelay: '0.9s' }}>
             <button onClick={startRecruiting} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
               <GraduationCap className="h-4 w-4" /> Hit the recruiting trail
@@ -285,8 +326,8 @@ export default function CfbDynastyBoard() {
             <ShareButtons
               gameName="CFB Dynasty"
               gamePath="/cfb-dynasty"
-              score={`${st.myTitles} natties in ${st.seasonsPlayed} seasons`}
-              customText={`CFB Dynasty 🏈 ${isChamp ? `${label(st.myTeam)} just won the natty!` : `${label(postseason.champion)} took the title.`} ${st.myTitles} championships in ${st.seasonsPlayed} seasons. douknowball.com/cfb-dynasty`}
+              score={`${seasonRow ? `${seasonRow.score} pts this season, ` : ''}${st.myTitles} natties in ${st.seasonsPlayed} seasons`}
+              customText={`CFB Dynasty 🏈 ${isChamp ? `${label(st.myTeam)} just won the natty!` : `${label(postseason.champion)} took the title.`} ${seasonRow ? `${seasonRow.score} pts this season, ` : ''}${st.myTitles} championships in ${st.seasonsPlayed} seasons. douknowball.com/cfb-dynasty`}
             />
           </div>
         </div>

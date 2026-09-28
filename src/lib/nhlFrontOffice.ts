@@ -184,9 +184,13 @@ export function nhlStrength(t: NhlGmTeam): number {
   return avg(fwd, 62) * 0.5 + avg(d, 62) * 0.3 + avg(g, 62) * 0.2;
 }
 
+/** Round 647: the win curve's spread, exported so the season projection
+    (src/lib/seasonFormats.ts) reads the same curve this engine plays. */
+export const NHL_WIN_SCALE = 14;
+
 export function nhlWinProb(a: NhlGmTeam, b: NhlGmTeam): number {
   const gap = nhlStrength(a) - nhlStrength(b);
-  return 1 / (1 + Math.pow(10, -gap / 14));
+  return 1 / (1 + Math.pow(10, -gap / NHL_WIN_SCALE));
 }
 
 export interface NhlRoundReport {

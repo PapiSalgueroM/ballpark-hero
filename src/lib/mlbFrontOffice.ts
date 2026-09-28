@@ -184,10 +184,14 @@ export function mlbStrength(t: MlbGmTeam): number {
   return avg(bats, 62) * 0.55 + avg(rot, 62) * 0.33 + avg(pen, 62) * 0.12;
 }
 
+/** Round 647: the win curve's spread, exported so the season projection
+    (src/lib/seasonFormats.ts) reads the same curve this engine plays. */
+export const MLB_WIN_SCALE = 25;
+
 /** Baseball is the high-variance sport: even great teams sit near .600. */
 export function mlbWinProb(a: MlbGmTeam, b: MlbGmTeam): number {
   const gap = mlbStrength(a) - mlbStrength(b);
-  return 1 / (1 + Math.pow(10, -gap / 25));
+  return 1 / (1 + Math.pow(10, -gap / MLB_WIN_SCALE));
 }
 
 export interface MlbRoundReport {

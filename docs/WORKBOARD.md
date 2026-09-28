@@ -1,5 +1,20 @@
 # Work board
 
+**Round 647 BUILT AND FIXED AFTER REVIEW, branch `r647-season-ledger`, pushed, not yet on main.**
+The four front offices and both dynasties score every closed season through one shared ledger,
+`src/lib/seasonLedger.ts`: one row per season, recorded once at the whistle, the ledger sum shown
+as the career (or "Since 2026" on a save that predates the ledger). The build pass scored results
+only and called that "team never scored"; the review measured the pick deciding it anyway (hands
+off, 0.77 CFB, 0.90 CBB, 0.70 NFL). **The fix:** each season is scored against its own projection,
+made from the engine's own strengths, win curve and bracket when the season's decisions open (the
+pick, then after the offseason, or when the recruiting trail opens), so a season scores par plus
+how far it beat that; the six season shapes sit side by side in `src/lib/seasonFormats.ts`. The
+ladder counts the round reached (byes no longer lose to lower seeds), and CFB's form term is the
+regular season. New fence `simSeasonLedger` (pick correlation within 0.052 of zero in all six
+sports, from 0.53 to 0.86; managed beats neglected in all six), plus the reworked rows in
+`simGmReload` and `simCfbDynasty`. **Round 646 is what pays it right:** the six caps hold the old
+cumulative scale until 646 sets each to the exported `seasonCeiling()` (100).
+
 **2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof
 in `docs/PROJECT-STATE.md`.

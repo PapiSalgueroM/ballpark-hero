@@ -1,4 +1,8 @@
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
+/* Round 647: a type only import, erased at build, so the engine bundles in
+   the harnesses without the scoring module and the harness can load the
+   module (or a control copy of it) beside the engine. */
+import type { SeasonExpectation, SeasonRow } from '@/lib/seasonLedger';
 /**
  * CBB Dynasty engine (2026-08-05). College basketball sibling of
  * cfbDynasty.ts. Real programs, fully fictional generated players (class
@@ -112,6 +116,16 @@ export interface CbbState {
   myTitles: number;
   seasonsPlayed: number;
   poyWinners: string[];
+  /* Round 647: one row per closed season, each scored against its own
+     projection, in the shared shape the four front offices keep
+     (src/lib/seasonLedger.ts). Optional so a save from before this round
+     opens with an empty ledger and no retroactive points. */
+  ledger?: SeasonRow[];
+  /* Round 647: the projection the next season to close is scored against,
+     made when that season's decisions opened: at the pick, then when the
+     recruiting trail opens. Optional; a save without one is projected as it
+     loads. */
+  expect?: SeasonExpectation;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -156,7 +170,7 @@ export function initCbb(myTeam: string, rng: () => number = Math.random): CbbSta
     });
     teams[s.id] = { id: s.id, players, wins: 0, losses: 0, confChamp: false };
   }
-  return { season: 2026, teams, round: 1, myTeam, nil: cbbNilFor(CBB_SCHOOL_MAP.get(myTeam)!.prestige, 0), titles: [], myTitles: 0, seasonsPlayed: 0, poyWinners: [] };
+  return { season: 2026, teams, round: 1, myTeam, nil: cbbNilFor(CBB_SCHOOL_MAP.get(myTeam)!.prestige, 0), titles: [], myTitles: 0, seasonsPlayed: 0, poyWinners: [], ledger: [] };
 }
 
 export function cbbStrength(t: CbbTeam): number {
@@ -167,9 +181,13 @@ export function cbbStrength(t: CbbTeam): number {
   return avg(five, 60) * 0.75 + avg(bench, 60) * 0.25;
 }
 
+/** Round 647: the win curve's spread, exported so the season projection
+    (src/lib/seasonFormats.ts) reads the same curve this engine plays. */
+export const CBB_WIN_SCALE = 6.5;
+
 export function cbbWinProb(a: CbbTeam, b: CbbTeam): number {
   const gap = cbbStrength(a) - cbbStrength(b);
-  return 1 / (1 + Math.pow(10, -gap / 6.5)); // one bad night can still end a season
+  return 1 / (1 + Math.pow(10, -gap / CBB_WIN_SCALE)); // one bad night can still end a season
 }
 
 export interface CbbGame { home: string; away: string; hs: number; as: number; winner: string }
@@ -300,6 +318,18 @@ export function runMarch(st: CbbState, rng: () => number): MarchResult {
     }
   }
   return { confFinals, autoBids, field, bracket, champion, cinderella, myExit };
+}
+
+/**
+ * Round 647: the twenty game regular season's record, which is what the
+ * shared ledger's form term reads (src/lib/seasonLedger.ts). The conference
+ * tournament and March are played unrecorded (runMarch passes
+ * record=false), so the win and loss columns are the regular season as they
+ * stand.
+ */
+export function cbbRegularRecord(st: CbbState, team: string = st.myTeam): { wins: number; games: number } {
+  const t = st.teams[team];
+  return { wins: t.wins, games: t.wins + t.losses };
 }
 
 export interface PoyFinalist { name: string; team: string; pos: CbbPos; score: number }
