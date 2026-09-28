@@ -1,5 +1,48 @@
 # Project state
 
+## POLISHED 2026-09-28, NOT ON MAIN: the Round 670 re-review's three minors (branch `r670-cm-extra-time`)
+
+The re-review of the fixes below said ship and left three minors. All three are fixed on the same
+branch, commits `b31e1c91` and `c8c78b2d`.
+- **The extra time banner says what is true.** On a second leg it said "Level after 90 minutes"
+  beside a scoreboard that often was not level (3-1 on the night after a 1-3 first leg). The
+  engine words it now (`extraTimeCall`, `levelAt90Words`): "Level after 90 minutes" on a one
+  legged tie, "Level 4-4 on aggregate" on a second leg, plus "and on away goals" in the eras that
+  had them. The viewer's banner and the report's timeline marker read the same words. A shootout
+  after extra time on a second leg says the aggregate is still level in the event line and on the
+  report card, and the bracket says "Level on aggregate after extra time". `simExtraTime` section
+  10 works the aggregate out from the bracket's first leg and holds all five, floored on second
+  legs not level on the night (142 to 171 a run over five samples, floor 60). Controls
+  `levelline`, `pensline`, `cardlevel` and `bracketlevel` each turn only section 10 red, and `noet`
+  now tolerates 10, which it empties. The banner itself is drawn in an effect react-dom/server
+  never runs, so a new test in `src/test/liveSimMotion.test.tsx` mounts the viewer on a second leg
+  level on aggregate and not on the night, control `LIVE_MOTION_CONTROL=banner`.
+- **Two stale comments**: the `liveStatsAt` doc and the viewer header say the final whistle (90,
+  or 120 after extra time) rather than 90.
+- **`simSoccerCareerUcl` section 7 can see extra time played on a tie already settled at 90.** A
+  decider row that went to extra time also carries its extra time goals now (`etFor`,
+  `etAgainst`, optional and additive, no change to the random stream). The harness takes them away
+  to get the score at 90, works the verdict out itself (aggregate, then away goals) and fails when
+  extra time was played on a tie not level at 90, or skipped on one that was. Floored on ties
+  settled on away goals at 90 (about 3,000 a run in 2015-16 and 2,650 in 1995-96, floor 1,000).
+  Control `etsettled` plays extra time on those ties and turns only section 7 red (3,045 and
+  2,734 failures on its run, several still reading as away goals after extra time, the case the
+  old check passed).
+- **Gates, on one frozen tree (signature taken before and after every batch).** tsc 0, exit code
+  read. `simExtraTime` green on its own seed and SIM_SEED 1 to 4, all fifteen controls firing on
+  exactly their sections. `simSoccerCareerUcl` green on its own seed and SIM_SEED 1 to 4,
+  `etsettled`, `etaway`, `coinflip` and `noagg` firing. `simLiveSimMotion` green (21 tests) and
+  all eleven controls failing only their own tests, on assertions. The six vitest files that
+  import a changed module: 57 tests green (one timed out at 12.8 s against its 5 s limit while
+  six harness lanes ran, and passed alone in 0.4 s). The 137 harnesses that read a changed file,
+  counting every one that walks all of `src` or `scripts`, in three lanes each with its own TEMP:
+  136 green (five after thin react and router shims in the worktree's `node_modules`, which need a
+  `package.json` with `"type": "commonjs"` because the repo's own says module), and
+  `simWritesAreSent` green on its static half with its runtime half needing a `dist`.
+  `simHarnessAnchors` and `simNoRivalNames` green. Not run, by instruction: `simPrerender`,
+  `simMobileChrome`, `simRevealScroll` and `simVictoryMoment` (a build and a browser), and the
+  browser check at 390 by 844. No migration.
+
 ## FIXED 2026-09-28, NOT ON MAIN: the Round 670 review, every defect (branch `r670-cm-extra-time`)
 
 The adversarial review found one blocker, two majors and eight minors behind the green gates the
