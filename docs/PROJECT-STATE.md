@@ -1,5 +1,55 @@
 # Project state
 
+## 2026-09-28: Round 647 fixed after review, branch `r647-season-ledger`, NOT on main
+
+One of the six points rounds (645a, 645b, 645c, 646, 647, 648) that ship together. Nothing here is
+applied or deployed; 647 carries no migration of its own, and the caps it needs are Round 646's.
+
+**What changed for players.** The four front offices and the two dynasties record one number per
+closed season, once, instead of the old titles * 100 + seasons * 5 on title seasons only. The
+review of the build pass found that number still decided by the team picked (hands off, the
+correlation with opening roster strength was 0.77 CFB, 0.90 CBB, 0.70 NFL: Duke averaged 84 and
+Butler 6 for doing nothing). Now every season is scored against its own projection: when the
+season's decisions open (the pick; then after the offseason in a front office, or when the
+recruiting trail opens in a dynasty) the board plays the season 300 times from the strengths the
+engine simulates with, through its own win curve and its own bracket, and the season scores 50
+plus how far it beat that, 0 to 100. A roster made better after the projection beats it; the pick
+alone does not. The ladder counts the round reached, so a bye seed out in its first game sits level
+with the lower seed out in the same round. CFB's form term reads the twelve game regular season, so
+reaching a conference title game can no longer lower it. The recap shows the season's number, the
+ledger sum (labelled "Since 2026" on a save older than the ledger, not "Career"), and one line with
+the projected wins.
+
+**Where it lives.** `src/lib/seasonLedger.ts` (the projection, the score, the ledger, `stageOf`),
+`src/lib/seasonFormats.ts` (the six season shapes side by side), `src/components/game/
+SeasonLedgerChips.tsx`, the six boards, and a win scale constant exported from each engine.
+
+**The fence.** New `scripts/simSeasonLedger.mjs`, headless on the real engines: the shapes match
+their engines; hands off careers over 20 leagues by 5 seasons in each sport, the score's
+correlation with opening strength stays within 0.12 and the strongest fifth against the weakest
+within 5 points (measured -0.052 to +0.010 and -1.6 to +0.5 over five seed sets), while the old
+titles rule and the results alone, run on the same careers, must fail those bounds (measured 0.16
+to 0.28 and 0.53 to 0.86); 80 paired seasons show a better managed season outscoring a worse one on
+the same roster in every sport (measured 3.8 to 18.3 points, margin 1.5); bye seed pairs out in
+the same round are paid the same; CFB title game teams keep their regular season record. Controls
+`raw`, `titles`, `flat`, `wins`, `ccg`, `spread`, each firing exactly its own checks.
+`simGmReload` (44 rows) and `simCfbDynasty` (18 board rows plus the headless ledger) carry the
+board rows: scored against the projection the save carries, two seasons on one mount (the closed
+row reset is now tested), the older save's label, and the pick's projection against the roster at
+the whistle, with controls `replay`, `late`, `noreset`, `double`, `raw` and `drain`, `replay`,
+`double`, `raw`.
+
+**Known limits, not fixed here.** A player who cuts his stars in the last week and signs them back
+after the offseason lowers the next projection; the owner's mandate has had the same exposure since
+Round 180. In a dynasty managed every offseason (the best graded class and portal the NIL buys) the
+pick leans slightly the OTHER way, because a good class upgrades a thin roster more than a deep one:
+measured over 120 careers of 5 seasons, seasons 2 to 5 correlate -0.10 (CFB) and -0.19 (CBB) with
+opening strength, the weakest fifth of programs scoring 4.5 and 7.2 points more than the strongest.
+Hands off it is 0.06 and -0.02. Turning a small program round is scored as beating its projection,
+which is arguably the point, but it is a lean and it is recorded here rather than hidden.
+The first two commits of the round carry the wrong model trailer; they were pushed, so history was
+not rewritten.
+
 ## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
 
 Assembled and gated by the desktop Claude lane in the CRLF gate clone on `release-d`, pushed to

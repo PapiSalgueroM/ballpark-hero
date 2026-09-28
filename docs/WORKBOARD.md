@@ -1,19 +1,19 @@
 # Work board
 
-**Round 647 BUILT, branch `r647-season-ledger`, pushed, not yet on main.** The four front offices
-and both dynasties now score every closed season through one shared ledger,
-`src/lib/seasonLedger.ts`: one row per season scored on that season alone (win share up to 50 plus
-a postseason ladder of 10, 18, 26 or 50, ceiling 100), recorded once at the whistle, career total
-equal to the ledger sum, team never scored. Older saves open with an empty ledger and earn nothing
-retroactively. CBB Dynasty also got the Round 426 reload fix CFB always had (a reload on its recap
-used to replay the season). Before and after over 160 seeded seasons per college engine: the old
-rule recorded 46 of 160 CFB seasons (title seasons only, about 217 a title because each title
-re-paid the earlier ones), the ledger records 160 of 160 once each. Fence:
-`FrontOfficeSeasonClose.test.tsx` through `simGmReload` section 2, and `simCfbDynasty` sections 4
-and 5. Controls `double` and `pick` (plus the old `replay` and `drain`) each turn exactly their own
-rows red and are refused if anything else goes red. **Round 646 is what pays it right:** the six
-caps still hold the old cumulative scale, so a season row pays under its share until 646 sets each
-to the exported `seasonCeiling()` (100).
+**Round 647 BUILT AND FIXED AFTER REVIEW, branch `r647-season-ledger`, pushed, not yet on main.**
+The four front offices and both dynasties score every closed season through one shared ledger,
+`src/lib/seasonLedger.ts`: one row per season, recorded once at the whistle, the ledger sum shown
+as the career (or "Since 2026" on a save that predates the ledger). The build pass scored results
+only and called that "team never scored"; the review measured the pick deciding it anyway (hands
+off, 0.77 CFB, 0.90 CBB, 0.70 NFL). **The fix:** each season is scored against its own projection,
+made from the engine's own strengths, win curve and bracket when the season's decisions open (the
+pick, then after the offseason, or when the recruiting trail opens), so a season scores par plus
+how far it beat that; the six season shapes sit side by side in `src/lib/seasonFormats.ts`. The
+ladder counts the round reached (byes no longer lose to lower seeds), and CFB's form term is the
+regular season. New fence `simSeasonLedger` (pick correlation within 0.052 of zero in all six
+sports, from 0.53 to 0.86; managed beats neglected in all six), plus the reworked rows in
+`simGmReload` and `simCfbDynasty`. **Round 646 is what pays it right:** the six caps hold the old
+cumulative scale until 646 sets each to the exported `seasonCeiling()` (100).
 
 **2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof
