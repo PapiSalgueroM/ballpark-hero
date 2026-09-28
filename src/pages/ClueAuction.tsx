@@ -18,7 +18,6 @@ import {
   pickSecret,
   shortPosition,
   suggestPlayers,
-  listedAgeLabel,
 } from '@/lib/whoAmI';
 import {
   CLUE_BY_ID,
@@ -30,6 +29,7 @@ import {
   WRONG_GUESS_COST,
   buildClubDisplayMap,
   buildClueReveals,
+  clueAge,
 } from '@/lib/clueAuction';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
@@ -227,7 +227,7 @@ const ClueAuction = () => {
         </div>
         <div className="bg-card border border-border rounded-lg p-2">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Listed age</div>
-          <div className="font-bold text-foreground text-sm">{listedAgeLabel(secret)}</div>
+          <div className="font-bold text-foreground text-sm">{clueAge(secret).label}</div>
         </div>
         <div className="bg-card border border-border rounded-lg p-2">
           <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Value</div>

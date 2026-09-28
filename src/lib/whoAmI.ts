@@ -126,7 +126,8 @@ import { isNotCurrentPlayer } from '@/data/notCurrentPlayers';
  *      dedupes by, so the two can never disagree. Before: 1 of the 600 pool
  *      players could not be won by typing his name. After: 0.
  *   2. The club history pooled every row under one spelling, so Rodri carried
- *      the clubs of three different men and the Past club link chip could light
+ *      the clubs of three other men (the table's 18 "Rodri" rows are four men
+ *      by their ages and positions) and the Past club link chip could light
  *      for a guess who never shared a club with him. A history row now has to
  *      be the man's own by isSameMan below (Round 385's rule, lifted here from
  *      Player Bingo so both games share one).
@@ -361,6 +362,28 @@ export function listedAgeLabel(p: { age: number; year: number }): string {
 }
 
 /**
+ * What the age chip may say about a guess (Round 668 fix, from the review).
+ * The arrows compare on the newest list, so a guess listed at 29 on the 2025
+ * list and a secret listed at 30 on the 2026 list come out level. The chip
+ * shows 29 against the end card's 30, so calling that "same listed age" with
+ * a green check was false. 'same' now means the same listed number on the
+ * same list; 'level' is the cross-list tie and says so. 'older' and
+ * 'younger' are about the secret, as the arrows are. `ageDiff` is
+ * scoreGuess's, so the chip and the score can never disagree.
+ */
+export type AgeReading = 'none' | 'same' | 'level' | 'older' | 'younger';
+export function ageReading(
+  guess: { age: number; year: number },
+  secret: { age: number; year: number },
+  ageDiff: number,
+): AgeReading {
+  if (!(guess.age > 0) || !(secret.age > 0)) return 'none';
+  if (ageDiff > 0) return 'older';
+  if (ageDiff < 0) return 'younger';
+  return guess.age === secret.age && guess.year === secret.year ? 'same' : 'level';
+}
+
+/**
  * ROUND 385, lifted here from Player Bingo in Round 668 so Who Am I's club
  * history shares it: person_key is NULL on every row of player_market_values,
  * so one name is one career and "Rodri" is at least three men (a Barcelona
@@ -579,7 +602,7 @@ export interface PoolRow {
  * in blocks of 1000 rows (ordered by id) to respect the PostgREST row cap.
  *
  * Round 668: a row counts only when it is the pool player's own. Every row
- * under one spelling used to be pooled, so Rodri carried three men's clubs
+ * under one spelling used to be pooled, so Rodri carried three other men's clubs
  * and the Past club link chip could light for a guess who never shared a club
  * with the secret. A row must be the same person by whoAmIPersonKey, and a
  * row with no person_key must also walk with the pool row's age (isSameMan).
