@@ -3,6 +3,7 @@ import { TOTAL_GAMES } from '@/data/gameRegistry';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
+import { readTodayRows, mergeGamesToday } from '@/lib/gamesToday';
 import { getGlobalCurrentStreak } from '@/lib/streaks';
 
 interface GameNavbarStats {
@@ -68,18 +69,15 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
       fetching = true;
 
       try {
-        const todayUtc = new Date().toISOString().split('T')[0];
-
+        /* Round 645: the games today read is src/lib/gamesToday.ts, the one
+           the profile's Games Today tile reads too, so the two agree. */
         const [rankRes, playedRes] = await Promise.all([
           (supabase.rpc as any)('global_rank', {
             p_player: playerName,
             p_period: 'today',
             p_games: null,
           }),
-          (supabase.from as any)('game_completions')
-            .select('game')
-            .eq('player_name', playerName)
-            .eq('completed_on', todayUtc),
+          readTodayRows(playerName),
         ]);
 
         if (!active) return;
@@ -87,15 +85,13 @@ export function useGameNavbarStats(): GameNavbarStats & { totalGames: number } {
         const totalPointsToday = rankRow ? Number(rankRow.total_points) || 0 : 0;
         const dailyRank = rankRow && Number(rankRow.rank) > 0 ? Number(rankRow.rank) : null;
 
-        const serverGames = playedRes?.data
-          ? new Set((playedRes.data as Array<{ game: string }>).map((r) => r.game)).size
-          : 0;
         /* Round 301, audit finding 7: both sides of this max now count
            DISTINCT games completed today (getLocalTodayCount returns the size
            of a local slug set since Round 301), so the merge no longer mixes
            a raw completion count against a distinct count and a replay of one
-           game cannot inflate the chip. */
-        const gamesPlayedToday = Math.max(serverGames, getLocalTodayCount());
+           game cannot inflate the chip. Round 645 moved the merge into
+           mergeGamesToday, unchanged. */
+        const gamesPlayedToday = mergeGamesToday(playedRes?.data as Array<{ game: string }> | null | undefined, getLocalTodayCount());
 
         setStats({
           gamesPlayedToday,

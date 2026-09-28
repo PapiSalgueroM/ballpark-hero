@@ -16,9 +16,12 @@
  * requiring it), each through Unlimited and through the daily.
  *
  * scripts/simRankedRecorder.mjs runs this file and carries the negative
- * control: RANKED_CONTROL=hookignores points COMPLETION_HOOK at a copy of
- * the hook that records every finish as ranked, and every Unlimited case
- * here must go red while the daily ones stay green.
+ * controls, each pointing COMPLETION_HOOK at a copy of the hook:
+ * hookignores records every finish as ranked (every Unlimited case here must
+ * go red while the daily ones stay green), hooknoname drops the name from
+ * the unranked door (only the name case), and stalemark stops a restore that
+ * lands on a finish already on screen from spending its mark (only the
+ * stale mark case).
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { act, cleanup, renderHook } from '@testing-library/react';
@@ -108,6 +111,29 @@ describe('the recorder, rendered', () => {
     markRestoredFinish('footle');
     rerender({ done: true, flag: true });
     expect(plays()).toEqual([]);
+    expect(ranked()).toEqual([]);
+  });
+
+  it("the unranked door files the play under the player's name, as the ranked door does", () => {
+    const { rerender } = renderHook(({ done }) => useGameCompletion('footle', done, 400, 0, false), { initialProps: { done: false } });
+    rerender({ done: true });
+    expect(vi.mocked(recordUnrankedPlay).mock.calls).toEqual([['/footle', 'Tester']]);
+  });
+
+  /* An Unlimited result is on screen and the player presses Daily with
+     today's already played: the page marks the restore, but the phase stays
+     done, so there is no transition for the main path to spend the mark on.
+     Left alone it would swallow the next real finish inside its window. */
+  it('a restore landing on a finish already on screen spends its mark, so the next finish still records', () => {
+    const { rerender } = renderHook(({ done, flag }) => useGameCompletion('footle', done, 400, 0, flag), { initialProps: { done: false, flag: false } });
+    rerender({ done: true, flag: false });
+    expect(plays()).toEqual(['/footle']);
+    markRestoredFinish('footle');
+    rerender({ done: true, flag: true });
+    expect(ranked()).toEqual([]);
+    rerender({ done: false, flag: false });
+    rerender({ done: true, flag: false });
+    expect(plays()).toEqual(['/footle', '/footle']);
     expect(ranked()).toEqual([]);
   });
 

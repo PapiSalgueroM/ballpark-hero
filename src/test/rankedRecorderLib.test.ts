@@ -4,15 +4,16 @@
  * The REAL src/lib/completions.ts against a recording Supabase client and
  * jsdom's real localStorage. recordUnrankedPlay inserts the anonymous
  * game_completions row with no score (a play for Most Played Today, never a
- * row the day board reads), records the local streak day, and touches
- * nothing ranked: no rpc, no session read, no local today set. The last case
- * is the ranked recorder beside it, so the client would have seen those calls
- * had they been made.
+ * row the day board reads) under the name it is handed, records the local
+ * streak day and counts in today's games (the one Games Today count the
+ * header, the home page and the profile share), and touches nothing ranked:
+ * no rpc, no session read. The last case is the ranked recorder beside it,
+ * so the client would have seen those calls had they been made.
  *
  * scripts/simRankedRecorder.mjs runs this file and carries the negative
- * controls: RANKED_CONTROL=libleaks (a score on the row) and libsaves (the
- * signed in save put back) each point RANKED_LIB at a copy of the lib and
- * must turn exactly their own case red.
+ * controls: RANKED_CONTROL=libleaks (a score on the row), libsaves (the
+ * signed in save put back) and libnotoday (the today set dropped) each point
+ * RANKED_LIB at a copy of the lib and must turn exactly their own case red.
  */
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 
@@ -75,9 +76,18 @@ describe('recordUnrankedPlay, the real lib', () => {
     expect(state.totalPoints).toBe(0);
   });
 
-  it('an unranked play leaves the local today set alone', () => {
-    recordUnrankedPlay('/free-kick');
+  it("an unranked play counts in today's games", () => {
     expect(getLocalTodayCount()).toBe(0);
+    recordUnrankedPlay('/free-kick');
+    expect(getLocalTodayCount()).toBe(1);
+    recordUnrankedPlay('/free-kick');
+    expect(getLocalTodayCount()).toBe(1);
+  });
+
+  it('an unranked play files under the name it is handed', async () => {
+    recordUnrankedPlay('/free-kick', 'Signed In Name');
+    await flush();
+    expect(S.inserts[0].row.player_name).toBe('Signed In Name');
   });
 
   it('a ranked finish still reaches the session, the scored row and the today set', async () => {

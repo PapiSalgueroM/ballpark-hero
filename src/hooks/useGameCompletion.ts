@@ -71,14 +71,26 @@ export function useGameCompletion(
   }, [isComplete]);
 
   useEffect(() => {
-    if (!isComplete || trackedRef.current || !seenIncompleteRef.current) return;
+    if (!isComplete) return;
+    if (trackedRef.current || !seenIncompleteRef.current) {
+      /* Round 645: no transition, so nothing to record. A restore can still
+         land here, on a finish already on screen: an Unlimited result, then
+         Daily with today's already played, and the phase stays done. Before
+         the flag, the mode in the done flag made that toggle a transition
+         that spent the mark; now the flag changes instead, this effect runs
+         again, and the mark is spent here, or it would sit out its window
+         and swallow the next real finish. */
+      consumeRestoredFinish(gameSlug);
+      return;
+    }
     trackedRef.current = true;
     /* A finish the daily hook restored after mount said so first. */
     if (consumeRestoredFinish(gameSlug)) return;
 
-    /* Round 645: a free run is a play, not a record. */
+    /* Round 645: a free run is a play, not a record, filed under the same
+       name as the ranked door below. */
     if (!ranked) {
-      recordUnrankedPlay(`/${gameSlug}`);
+      recordUnrankedPlay(`/${gameSlug}`, getCurrentPlayerName(profile));
       return;
     }
 

@@ -19,6 +19,7 @@ import html2canvas from 'html2canvas';
 import { useStreaks } from '@/hooks/useStreaks';
 import { getLocalTodayCount } from '@/lib/completions';
 import { getBadgeState, BADGE_DEFS, type BadgeState } from '@/lib/badges';
+import { readOwnTodayRows, mergeGamesToday } from '@/lib/gamesToday';
 import AchievementCase from '@/components/profile/AchievementCase';
 import { nameModerationError } from '@/lib/nameModeration';
 import { CATEGORIES } from '@/data/gameRegistry';
@@ -134,7 +135,9 @@ export default function Profile() {
   // general"). Same local source the navbar chip uses.
   // Round 301, audit finding 7: this is now a DISTINCT game count (the
   // local tracker stores a set of today's slugs), so it can be merged with
-  // the server's daily_completions distinct count without mixing units.
+  // the server's distinct count without mixing units. Round 645: the server
+  // half is the header's own read (src/lib/gamesToday.ts), not
+  // daily_completions, which a free run never ticks.
   const [localGamesToday] = useState(() => getLocalTodayCount());
 
   const [viewingProfile, setViewingProfile] = useState<any>(null);
@@ -147,7 +150,7 @@ export default function Profile() {
   const [userScoreData, setUserScoreData] = useState<{ current_streak: number; longest_streak: number; total_points: number } | null>(null);
   const [leaderboardRank, setLeaderboardRank] = useState<number | null>(null);
   const [savedBracket, setSavedBracket] = useState<any>(null);
-  const [dailyGameSlugs, setDailyGameSlugs] = useState<string[]>([]);
+  const [todayRows, setTodayRows] = useState<Array<{ game: string }> | null>(null);
   // Round 301, audit finding 1: profiles has no total_games_played column,
   // so viewed profiles need a real count of the player's user_game_scores
   // rows instead of a dead field that always read 0.
@@ -226,7 +229,7 @@ export default function Profile() {
 
       if (!targetUserId) { setLoading(false); return; }
 
-      const [scoresRes, recentRes, userScoreRes, gamesCountRes, gameTypesRes, bracketRes, todayRes, prefsRes] = await Promise.all([
+      const [scoresRes, recentRes, userScoreRes, gamesCountRes, gameTypesRes, bracketRes, prefsRes] = await Promise.all([
         supabase.from('user_best_scores').select('*').eq('user_id', targetUserId).order('best_score', { ascending: false }),
         supabase.from('user_game_scores').select('game_type, score, created_at').eq('user_id', targetUserId).order('created_at', { ascending: false }).limit(5),
         supabase.from('user_scores').select('current_streak, longest_streak, total_points').eq('user_id', targetUserId).maybeSingle(),
@@ -237,7 +240,6 @@ export default function Profile() {
         // so Fav Sport can count actual plays per sport.
         supabase.from('user_game_scores').select('game_type').eq('user_id', targetUserId),
         supabase.from('saved_brackets').select('id, bracket_data').eq('user_id', targetUserId).limit(1),
-        supabase.from('daily_completions').select('game_slug').eq('user_id', targetUserId).eq('date', new Date().toISOString().split('T')[0]),
         supabase.from('user_preferences').select('*').eq('user_id', targetUserId).maybeSingle(),
       ]);
 
@@ -247,7 +249,6 @@ export default function Profile() {
       setServerTotalGames(gamesCountRes.count ?? 0);
       setPlayedGameTypes((gameTypesRes.data || []).map((r: any) => r.game_type));
       if (bracketRes.data && bracketRes.data.length > 0) setSavedBracket(bracketRes.data[0]);
-      if (todayRes.data) setDailyGameSlugs(todayRes.data.map((c: any) => c.game_slug));
 
       // Preferences
       if (prefsRes.data) {
@@ -293,6 +294,16 @@ export default function Profile() {
     });
     return () => { cancelled = true; };
   }, [authLoading, isOwnProfile, profile]);
+
+  /* ── Games Today (Round 645): the header's read, under the same handle ── */
+  useEffect(() => {
+    if (authLoading || !user || !isOwnProfile) { setTodayRows(null); return; }
+    let cancelled = false;
+    readOwnTodayRows(profile)
+      .then(res => { if (!cancelled) setTodayRows(res?.data ?? null); })
+      .catch(() => { /* the local half still counts */ });
+    return () => { cancelled = true; };
+  }, [authLoading, user, isOwnProfile, profile]);
 
   /* ── Time tracking (increment every minute while this page is visible) ── */
   /* Round 301, audit finding 11: one interval, created once on mount and
@@ -424,11 +435,13 @@ export default function Profile() {
   const averageScore = totalGames > 0 ? Math.round(totalPoints / totalGames) : 0;
 
   /* Round 301, audit findings 7 and 13: both halves count DISTINCT games
-     completed today, the local slug set for instant credit and the server's
-     daily_completions rows (unique per user, game and date) for cross
-     device truth, so the max of the two is the honest count and the
-     fetched slugs are finally used instead of sitting in dead state. */
-  const gamesToday = Math.max(localGamesToday, new Set(dailyGameSlugs).size);
+     completed today, the local slug set for instant credit and the server
+     rows for cross device truth, so the max of the two is the honest count.
+     Round 645: the server half was daily_completions, which only ever held
+     ranked finishes, so a finished free run counted on the game header and
+     not here. It is game_completions under the player's handle now, through
+     the header's own read and merge (src/lib/gamesToday.ts). */
+  const gamesToday = mergeGamesToday(todayRows, localGamesToday);
 
   // Round 75: count sports via the registry; unknown slugs are skipped
   // instead of bucketing into a meaningless "General".
