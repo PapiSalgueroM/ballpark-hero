@@ -127,6 +127,16 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
   const penLine = r.decidedBy === 'pens'
     ? ((r.shootoutWon ?? r.won) ? 'Through on penalties' : 'Out on penalties')
     : '';
+  /* Round 670: a tie settled in extra time says so, and on a second leg says
+     where the tie ended, because the night's word and the tie can differ (a
+     second leg lost 1-2 after extra time can still be a tie won 3-2). */
+  const aetThrough = r.tie?.through ?? r.won;
+  const aetLine = r.decidedBy !== 'aet' ? ''
+    : r.tie?.leg === 2
+      ? (r.tie.byAwayGoals
+        ? `Level ${r.tie.aggMine}-${r.tie.aggTheirs} on aggregate after extra time, ${aetThrough ? 'through' : 'out'} on away goals`
+        : `${aetThrough ? 'Through' : 'Out'} ${r.tie.aggMine}-${r.tie.aggTheirs} on aggregate after extra time`)
+      : (aetThrough ? 'Won in extra time' : 'Lost in extra time');
   /* Round 157: the ratings list folds away because ten rows of numbers is a
      lot of card, but the man of the match is always on show. */
   const [showRatings, setShowRatings] = useState(false);
@@ -199,15 +209,26 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
             <span className="rounded-full bg-secondary px-2 py-0.5 tabular-nums" data-cm-added="h2">
               90+{detail.added.h2}&apos;
             </span>
+            {/* Round 670: and the thirty minutes after it, when they were played. */}
+            {detail.et && (
+              <span className="rounded-full bg-secondary px-2 py-0.5 tabular-nums font-bold text-foreground" data-cm-added="et">
+                AET {detail.et.to}&apos;
+              </span>
+            )}
           </div>
         )}
         {/* Laid out at final size from frame one; only opacity moves in. */}
         <h2 className={cn('text-2xl font-display font-bold mb-3', resultTone, verdict ? 'cm-slam' : 'opacity-0')}>
-          {resultWord}{r.decidedBy === 'pens' ? ' (PENS)' : ''}
+          {resultWord}{r.decidedBy === 'pens' ? ' (PENS)' : r.decidedBy === 'aet' ? ' (AET)' : ''}
         </h2>
         {penLine && (
           <div className={cn('text-[11px] font-bold mb-2', (r.shootoutWon ?? r.won) ? 'text-correct' : 'text-destructive')}>
-            {penLine}
+            {detail?.et ? 'Still level after extra time. ' : ''}{penLine}
+          </div>
+        )}
+        {aetLine && (
+          <div data-cm-aet-line className={cn('text-[11px] font-bold mb-2', aetThrough ? 'text-correct' : 'text-destructive')}>
+            {aetLine}
           </div>
         )}
 
@@ -333,8 +354,12 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
                 <span className="truncate">▲ {clubName}</span>
                 <span className="truncate">▼ {opponent}</span>
               </div>
+              {/* Round 670: a match with extra time draws twelve ten minute
+                  buckets, so its axis runs to 120. */}
               <div className="flex justify-between text-[8px] text-muted-foreground/70">
-                <span>0'</span><span>45'</span><span>90'</span>
+                {detail.et
+                  ? <><span>0'</span><span>60'</span><span>{detail.et.to}'</span></>
+                  : <><span>0'</span><span>45'</span><span>90'</span></>}
               </div>
               <div className="flex items-center justify-between text-[9px] mt-0.5">
                 <span className="text-foreground tabular-nums font-bold">{detail.stats.shots} <span className="font-normal text-muted-foreground">({detail.stats.onTarget})</span></span>

@@ -77,6 +77,7 @@ function Harness() {
         onTalk={g.halftimeTalk}
         onSecondHalf={g.secondHalf}
         onStartSecondHalf={g.startSecondHalfLive}
+        onStartExtraTime={g.startExtraTimeLive}
         onChange={g.changeAt}
         onMark={g.markMinute}
         onExit={() => { /* watch mode off, the page stays */ }}

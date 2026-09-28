@@ -4,6 +4,7 @@ import { Pause, Play, FastForward, Users, ArrowLeftRight, Gauge, X } from 'lucid
 import {
   FORMATIONS, MENTALITIES, slotPosition, pitchLineOf, resolveXI,
   liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, MAX_SUBS, liveGoneIds,
+  isExtraTimeDue,
 } from '@/lib/clubManager';
 import type {
   CareerState, CMPlayer, LiveMatch, MatchWeekReport, MatchStats, Mentality, TalkTone,
@@ -44,6 +45,10 @@ import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';
  * draws the second half; onSecondHalf FINISHES the match at 90 and lands the
  * report.
  *
+ * Round 670: a level Champions League decider does not finish at 90. The
+ * engine is asked (isExtraTimeDue, never decided here), onStartExtraTime draws
+ * the thirty minutes, and the clock runs on to 120 before onSecondHalf.
+ *
  * The choreography between events (who is carrying the ball, the shape
  * pushing up and dropping back, the drift) is theatre, drawn only inside the
  * beat effect, never in a state initialiser. The score, the scorers and every
@@ -51,7 +56,7 @@ import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';
  * allowed to dance around it.
  */
 
-type Stage = 'first' | 'interval' | 'second' | 'done';
+type Stage = 'first' | 'interval' | 'second' | 'extra' | 'done';
 type Side = 'me' | 'opp';
 
 /** One man on the grass before he is placed: who he is and the slot his shape gives him. */
@@ -88,6 +93,8 @@ interface LiveSimScreenProps {
   onExit: () => void;
   /** Round 504: draws the second half when they go back out. */
   onStartSecondHalf: () => void;
+  /** Round 670: draws extra time at 90, when the engine says it is due. */
+  onStartExtraTime: () => void;
   /** Round 504: a sub or a shape change at a minute of the half being played. */
   onChange: (minute: number, change: LiveChange) => void;
   /** Round 504: tells the save where the clock stands (the interval, the
@@ -116,6 +123,7 @@ function initialStage(live: LiveMatch | null, report: MatchWeekReport | null): S
   if (report) return 'done';
   if (!live) return 'first';
   const m = live.minute ?? 0;
+  if (live.et && m >= live.et.from) return 'extra';
   if (live.h2Drawn && m >= 46) return 'second';
   if (m >= 45) return 'interval';
   return 'first';
@@ -286,12 +294,12 @@ function LiveStats({ stats, clubName, opponent }: { stats: MatchStats | null; cl
 }
 
 export function LiveSimScreen({
-  career, live, report, clubColor, onSub, onShape, onTalk, onSecondHalf, onExit, onStartSecondHalf, onChange, onMark,
+  career, live, report, clubColor, onSub, onShape, onTalk, onSecondHalf, onExit, onStartSecondHalf, onStartExtraTime, onChange, onMark,
 }: LiveSimScreenProps) {
   /* The clock and the stage come off the save, so a match closed at the 30th
      minute opens again at the 30th. No randomness in here. */
   const [stage, setStage] = useState<Stage>(() => initialStage(live, report));
-  const [clock, setClock] = useState<number>(() => (report ? 90 : live?.minute ?? 0));
+  const [clock, setClock] = useState<number>(() => (report ? report.detail?.et?.to ?? 90 : live?.minute ?? 0));
   const openedAt = useRef(clock);
   const [speed, setSpeed] = useState<(typeof SPEEDS)[number]>(2);
   const [paused, setPaused] = useState(false);
@@ -317,18 +325,22 @@ export function LiveSimScreen({
   useEffect(() => { if (live) lastLive.current = live; }, [live]);
   const liveNow = live ?? lastLive.current;
 
-  const minute = stage === 'done' ? 90 : stage === 'interval' ? 45 : Math.min(90, Math.floor(clock));
+  /* Round 670: where the stage being played ends on the clock, and where the
+     match ended: 120 when there was extra time, 90 otherwise. */
+  const stageEnd = stage === 'first' ? 45 : stage === 'extra' ? liveNow?.et?.to ?? 120 : 90;
+  const endMinute = report?.detail?.et?.to ?? 90;
+  const minute = stage === 'done' ? endMinute : stage === 'interval' ? 45 : Math.min(stageEnd, Math.floor(clock));
   const mentality: Mentality = liveNow?.mentality ?? career.mentality;
   const opponent = liveNow?.opponent ?? (report ? (report.home === career.clubName ? report.away : report.home) : '');
   const compLabel = liveNow?.compLabel ?? report?.compLabel ?? '';
   const finalMy = report ? (report.home === career.clubName ? report.homeGoals : report.awayGoals) : null;
   const finalOpp = report ? (report.home === career.clubName ? report.awayGoals : report.homeGoals) : null;
-  const running = stage === 'first' || stage === 'second';
+  const running = stage === 'first' || stage === 'second' || stage === 'extra';
   const canChange = running && !finished && !!liveNow;
 
   /* ---- the truth this walk goes through ---- */
   const feed: LiveFeedEvent[] = useMemo(() => (liveNow ? liveFeed(liveNow) : []), [liveNow]);
-  const terminalMinute = stage === 'first' ? 45 : 90;
+  const terminalMinute = stageEnd;
   // The last action at the whistle gets its wind-up before the clock reaches it.
   // Feed order gives a goal priority over another chance at the same minute.
   const terminalAction = useMemo(() => [...feed].reverse().find(e => e.minute === terminalMinute
@@ -388,7 +400,7 @@ export function LiveSimScreen({
   /* ---- the clock: BASE_RATE sim minutes per real second, times speed ---- */
   useEffect(() => {
     if (paused || !running || finished) { lastTs.current = null; return; }
-    const cap = stage === 'first' ? 45 : 90;
+    const cap = stageEnd;
     const step = (ts: number) => {
       if (lastTs.current === null) lastTs.current = ts;
       const dt = Math.min(0.25, (ts - lastTs.current) / 1000);
@@ -398,7 +410,7 @@ export function LiveSimScreen({
     };
     rafRef.current = requestAnimationFrame(step);
     return () => { if (rafRef.current) cancelAnimationFrame(rafRef.current); };
-  }, [paused, running, finished, stage, speed]);
+  }, [paused, running, finished, stage, speed, stageEnd]);
 
   /* Stage transitions off the clock. The whistle is called exactly once. */
   useEffect(() => {
@@ -411,13 +423,31 @@ export function LiveSimScreen({
       onMark(45);
     }
     if (stage === 'second' && clock >= 90 && !finishedRef.current) {
+      setClock(90);
+      setPicking(null);
+      /* Round 670: the engine says whether a level decider goes on. The
+         page never decides football; if this answer were ever wrong the
+         whistle would still draw extra time itself, unwatched. */
+      if (isExtraTimeDue(career)) {
+        setStage('extra');
+        onStartExtraTime();
+        setBanner({ segs: [{ t: 'Extra time' }], club: 'Level after 90 minutes', tone: 'none' });
+        if (bannerTimer.current) clearTimeout(bannerTimer.current);
+        bannerTimer.current = setTimeout(() => setBanner(null), 2600);
+        return;
+      }
       finishedRef.current = true;
       setFinished(true);
-      setClock(90);
+      onSecondHalf();
+    }
+    if (stage === 'extra' && clock >= stageEnd && !finishedRef.current) {
+      finishedRef.current = true;
+      setFinished(true);
+      setClock(stageEnd);
       setPicking(null);
       onSecondHalf();
     }
-  }, [clock, stage, onSecondHalf, onMark]);
+  }, [clock, stage, stageEnd, career, onSecondHalf, onStartExtraTime, onMark]);
 
   /* Where the clock stands goes to the save when the page is hidden or
      leaves (a tab switch, the app going to the background, a reload), never
@@ -466,7 +496,7 @@ export function LiveSimScreen({
   useEffect(() => {
     if (report && stage !== 'done') {
       setStage('done');
-      setClock(90);
+      setClock(report.detail?.et?.to ?? 90);
       setPicking(null);
       setEventLine(null);
     }
@@ -515,8 +545,8 @@ export function LiveSimScreen({
   /* ---- banners and the event line, off the committed feed ---- */
   useEffect(() => {
     if (!running || finished) return;
-    const lo = stage === 'first' ? 0 : 46;
-    const hi = stage === 'first' ? 45 : 90;
+    const lo = stage === 'first' ? 0 : stage === 'extra' ? 91 : 46;
+    const hi = stageEnd;
     let big: Banner | null = null;
     let small: Seg[] | null = null;
     let ballAt: { x: number; y: number } | null = null;
@@ -590,7 +620,7 @@ export function LiveSimScreen({
     }
     // The feed, its extras and the clock are the inputs; the rest are stable per render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [clock, stage, feed, extras, running, finished, terminalWindup]);
+  }, [clock, stage, stageEnd, feed, extras, running, finished, terminalWindup]);
   useEffect(() => () => { if (bannerTimer.current) clearTimeout(bannerTimer.current); }, []);
 
   /* ---- the beat: who has the ball, and the drift. The only place this file draws. ---- */
@@ -648,7 +678,7 @@ export function LiveSimScreen({
     if (picking === null) { pausedBefore.current = paused; setPaused(true); }
     setPicking(id);
   };
-  const changeMinute = Math.min(90, Math.floor(clock));
+  const changeMinute = Math.min(stageEnd, Math.floor(clock));
   /* The sheet holds the clock, and the pause button is locked under it, so
      the only way the picked man leaves the grass with it open is a skip or
      a redraw. Either way the sheet closes rather than offering a change the
@@ -746,9 +776,10 @@ export function LiveSimScreen({
     .filter((p): p is CMPlayer => !!p)
     .sort((a, b) => a.fitness - b.fitness);
 
+  /* Round 670: a match that went to extra time ends AET, and its clock reads ET while it runs. */
   const badge = stage === 'done'
-    ? (report?.detail?.added ? `FT 90+${report.detail.added.h2}'` : 'FT')
-    : finished ? 'Full time' : `LIVE ${minute}'`;
+    ? (report?.detail?.et ? 'AET' : report?.detail?.added ? `FT 90+${report.detail.added.h2}'` : 'FT')
+    : finished ? 'Full time' : stage === 'extra' ? `ET ${minute}'` : `LIVE ${minute}'`;
 
   return (
     <div className="max-w-md mx-auto space-y-2.5" data-cm-live-stage={stage} data-cm-live-minute={minute}>
@@ -860,6 +891,9 @@ export function LiveSimScreen({
               {report?.decidedBy === 'pens' && (
                 <div className="text-white/90 text-xs mt-1">Decided on penalties</div>
               )}
+              {report?.decidedBy === 'aet' && (
+                <div className="text-white/90 text-xs mt-1">Decided in extra time</div>
+              )}
             </div>
           </div>
         )}
@@ -931,7 +965,7 @@ export function LiveSimScreen({
           </button>
         ) : finished ? null : (
           <button
-            onClick={() => setClock(stage === 'first' ? 45 : 90)}
+            onClick={() => setClock(stageEnd)}
             className="min-h-[44px] rounded-lg border border-border bg-card px-2.5 text-[11px] font-bold text-foreground hover:border-primary/60 transition-colors inline-flex items-center gap-1"
           >
             <FastForward className="w-3.5 h-3.5" /> Skip

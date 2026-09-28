@@ -12,7 +12,7 @@ import {
   resumeMatch, makeHalftimeSub, setHalftimeMentality, setSquadRole,
   setTeamTalk, giveHalftimeTalk, answerPress, duckPress,
   matchFacts,
-  changeLive, startSecondHalf, markLiveMinute,
+  changeLive, startSecondHalf, startExtraTime, markLiveMinute,
   setDuty, dutyOptions, dutyLineOf, pitchLineOf, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
   DEFAULT_ERA_ID,
   releasePlayer, signFreeAgent,
@@ -719,6 +719,13 @@ export function useClubManager() {
     setCareer(prev => (prev ? startSecondHalf(prev) ?? prev : prev));
   }, []);
 
+  /* Round 670: extra time, drawn by the engine when the viewer's clock
+     reaches 90 on a level decider, so the viewer walks thirty minutes that are
+     already football. The engine refuses (null) when it is not due. */
+  const startExtraTimeLive = useCallback(() => {
+    setCareer(prev => (prev ? startExtraTime(prev) ?? prev : prev));
+  }, []);
+
   /* Round 504: a sub or a shape change at any minute of a live match. The
      engine keeps everything at or before that minute and redraws the rest of
      the half off the eleven and the shape you just chose. */
@@ -789,7 +796,7 @@ export function useClubManager() {
     acceptIncomingBid, rejectIncomingBid,
     setStatus, loanOut, renew, renewWithClause, terminate, signFree, setRole,
     upgradeFacility, sendScout, callScoutHome, promote, release, setTraining,
-    subAtHalftime, shapeAtHalftime, secondHalf, startSecondHalfLive, changeAt, markMinute,
+    subAtHalftime, shapeAtHalftime, secondHalf, startSecondHalfLive, startExtraTimeLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,
     answer,
   };
