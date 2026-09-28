@@ -48,6 +48,11 @@ const { completion } = vi.hoisted(() => ({ completion: vi.fn() }));
 vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: (...args: unknown[]) => { completion(...args); } }));
 vi.mock('@/components/game/ShareButtons', () => ({ default: () => null }));
 vi.mock('@/hooks/useRevealScroll', () => ({ useRevealScroll: () => ({ current: null }) }));
+/* Round 647 fix: every close now projects the next season too (twelve
+   offseasons played on copies of the league), so a row that closes a season
+   takes longer, and on a loaded machine rows passed the five second default.
+   The rows are unchanged; they get room. */
+vi.setConfig({ testTimeout: 30_000 });
 
 const boardPath = process.env.CFB_BOARD;
 const { default: CfbDynastyBoard } = boardPath
@@ -320,7 +325,7 @@ describe('CFB Dynasty: the season ledger', () => {
     expect(ledgerTotal(after.ledger)).toBe(first.score + second.score);
     expect(after.seasonsPlayed).toBe(2);
     expect(screen.getByText(/Career/).textContent).toContain(String(first.score + second.score));
-  }, 30_000);
+  });
 
   it('the projection is the pick\'s: a season is scored against what its roster was projected to do, not the roster at the whistle', () => {
     /* The pick, on the real pick screen. */

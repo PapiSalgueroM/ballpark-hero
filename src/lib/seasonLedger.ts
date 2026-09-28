@@ -58,8 +58,10 @@
  * That is the headroom normalised in the one unit every pick shares: the
  * projection's own seasons. A season left alone lands anywhere in its
  * projection with the same odds whoever the pick is, so it scores more than
- * 0 about one year in twenty and 2.5 on average whatever the roster, and
- * its best of ten is the same for Duke and for Butler. A favourite's
+ * 0 about one year in twenty and 2.5 on average whatever the roster (the
+ * real engines, played the way the boards play them, measured 2.1 to 4.0,
+ * a real season spreading a little wider than its projection), and its
+ * best of ten is the same for Duke and for Butler. A favourite's
  * ceiling and an underdog's pay the same for the same share of headroom
  * won. Measured in points instead (the value past the bar over the value
  * left above it), a favourite's small headroom made its lucky seasons pay

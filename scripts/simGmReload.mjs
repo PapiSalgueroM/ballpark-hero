@@ -69,8 +69,9 @@
        ledger's replay row legitimately goes red too.
      GM_RELOAD_CONTROL=late rewrites copies of the four boards whose close
        projects the season from the league at the whistle instead of reading
-       the projection the save carries. The title, plain and pick rows must
-       go red on every board; the two season and older save rows may.
+       the projection the save carries. The title and pick rows must go red
+       on every board; the plain, two season and older save rows may (a
+       winless season scores 0 against any projection).
      GM_RELOAD_CONTROL=offseason rewrites copies of the four boards that
        project the next season after the draft and the offseason, the way
        this round's second version did, instead of at the close. The two
@@ -85,8 +86,10 @@
        Every row that closes a title (title, older, replay, two, pick) must
        go red on every board, and plain must stay green.
      GM_RELOAD_CONTROL=raw points them at a copy that scores the results and
-       not the projection. The plain and pick rows must go red on every
-       board; the title, older, two season and cut rows may.
+       not the projection. The pick row must go red on every board (the
+       pick's projection and the whistle's then score the same); the others
+       may (a winless season scores 0 either way, and an unbeaten title
+       season 100).
      GM_RELOAD_CONTROL=nokeep points the boards and the test, through
        NO_DOUBLE_SWAP, at a copy of src/lib/seasonFormats.ts whose untouched
        offseason does not count the men a GM cut. Exactly the cut row must go
@@ -132,11 +135,11 @@ const LEDGER_ROWS = [
   ['cut', 'a man cut before the close still counts'],
 ];
 const BREAKS = {
-  late: { must: ['title', 'plain', 'pick'], may: ['two', 'older'] },
+  late: { must: ['title', 'pick'], may: ['plain', 'two', 'older'] },
   offseason: { must: ['two', 'cut'], may: [] },
   noreset: { must: ['two'], may: [] },
   double: { must: ['title', 'older', 'replay', 'two', 'pick'], may: ['cut'] },
-  raw: { must: ['plain', 'pick'], may: ['title', 'older', 'two', 'cut'] },
+  raw: { must: ['pick'], may: ['plain', 'title', 'older', 'two', 'cut'] },
   nokeep: { must: ['cut'], may: [] },
 };
 

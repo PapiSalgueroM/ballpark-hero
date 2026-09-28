@@ -77,9 +77,10 @@
        title, older, replay, two season and pick rows (every row that closes
        a title), go red.
      CFB_DYNASTY_CONTROL=raw loads a copy that scores the results and not
-       the projection: both boards' plain and pick rows go red (a season
-       under the bar scores its results, and the pick's projection and the
-       whistle's score the same); the title, older and two season rows may.
+       the projection: both boards' title and pick rows go red (the title
+       season scores its results, not its share of the projection, and the
+       pick's projection and the whistle's score the same); the plain, older
+       and two season rows may (a winless season scores 0 either way).
      Every control refuses to run unless its anchor is in the file exactly
      once and its rewrite changed something.
 
@@ -105,7 +106,7 @@ const EXPECT = {
   drain: { must: ['cfb-drain', 'cbb-drain'], may: [] },
   replay: { must: ['cfb-board-reload', 'cbb-board-reload'], may: BOARD_LEDGER(['replay']) },
   double: { must: ['cfb:row', 'cbb:row', 'cfb:replay', 'cbb:replay', 'cfb:sum', 'cbb:sum', ...BOARD_LEDGER(['title', 'older', 'replay', 'two', 'pick'])], may: [] },
-  raw: { must: BOARD_LEDGER(['plain', 'pick']), may: BOARD_LEDGER(['title', 'older', 'two']) },
+  raw: { must: BOARD_LEDGER(['title', 'pick']), may: BOARD_LEDGER(['plain', 'older', 'two']) },
 };
 /* Every control rewrites an anchor that must be in its file exactly once. */
 const matches = (src, anchor) => (typeof anchor === 'string' ? src.split(anchor).length - 1 : (src.match(new RegExp(anchor.source, 'g')) || []).length);
