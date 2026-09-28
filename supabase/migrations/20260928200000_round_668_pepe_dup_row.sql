@@ -22,7 +22,9 @@
 -- cannot change what it matches.
 --
 -- Not in scope here, seen on the same read: 14 more '(dup)' rows, all 2023,
--- each with an exact twin under the plain name. The code hides them too.
+-- each with an exact twin under the plain name. The search hides them too;
+-- readers that go to this table directly across every year do not, which is
+-- why a cleanup round should delete all 15.
 
 do $migration$
 declare

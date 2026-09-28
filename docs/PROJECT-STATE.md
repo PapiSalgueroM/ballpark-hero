@@ -34,7 +34,15 @@ now also carries `r667-player-reports` merged in (Release E ships it). Migration
   name. `supabase/migrations/20260928200000_round_668_pepe_dup_row.sql` removes only "Pepê (dup)" (id
   156902), and only if it still duplicates a "Pepê" row with the same club, year, value, age, position
   and nationality; otherwise it renames nothing and raises. Read only check on 2026-09-28: the twin is id
-  156887. The other 14 are hidden by the code and left for a cleanup round.
+  156887. The other 14 are hidden from the search only, and left for a cleanup round: readers that go
+  to the table directly across every year (Rarity Round's club pools, the club notable players clue in
+  `fetchSoccerClubNotablePlayers.ts`) can still carry a "(dup)" name until that round deletes all 15.
+  Re-read 2026-09-28 by the verify pass: 15 rows, every one with an exact twin (same club, year, value,
+  age, position, nationality), "Pepê (dup)" stored with U+00EA as the migration expects.
+  `player_market_values_dedup` (read by dealPlayers, packBattle, signThePlayer, playerStockMarket,
+  triviaQuestionBank and alphabetSprint in `src/lib/`) carries
+  all 15 as well. Its definition is not in the repo, so whoever applies the migration should check
+  whether it is a materialized view; if it is, the deleted row stays in it until it is refreshed.
 - **Controls**: the three uncontrolled checks now have one each (lostpick, nonote, nolistname), and every
   new check has its own (dupshown, pagetie, cardraw, samecheck, bracketshift, ladderfold, ladderjudge).
   A control must now also produce the finding it names, or it exits 3, and a control run that checked
@@ -60,6 +68,15 @@ now also carries `r667-player-reports` merged in (Release E ships it). Migration
   simNationalityFlags, simAccessibility, simNoRivalNames, simEarlyReturnScope, simInventedNames,
   simNoInventedConduct, simReportContext, simScoringCoverage, simIdleTimers, simSiteSearch,
   simGuideHeadings. Not run, as instructed: runAllSims, the build, build:seo, browser harnesses.
+- **Verified again 2026-09-28, 15:45 to 16:00, before the push** (the first fix session committed but
+  never pushed; every gate rerun on the pushed tree, TEMP and TMP per run under `fix-668`): tsc exit 0,
+  0 lines; vitest 4 files, 120 tests, exit 0; simWhoAmINamesakes exit 0 (pool 600, 7 on the 2025
+  list; baselines 1,244 pooled mislights, 1,410 raw age misreads, 704 cross-list ties, 2 mis-sold
+  brackets; 15 "(dup)" rows, 0 offered); all 18 controls exit 1 with CONTROL FIRED and their own
+  finding, each only in its own section; an unknown control exits 2; simNotCurrentPlayers exit 0, and
+  carriedleg and unfold exit 1 on sections 2 and 3 only. simNoZeroFacts and the 22 harnesses listed
+  above rerun green, plus simAuthSave and simBuzzerBeater (they read every migration): 25 in all, each
+  exit 0 with its closing line.
 
 ## ROUND 668 BUILT 2026-09-28: Who Am I tells namesakes apart and says how old its ages are
 
