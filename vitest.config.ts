@@ -87,6 +87,14 @@ export default defineConfig({
       ...(process.env.NO_DOUBLE_SWAP
         ? (JSON.parse(process.env.NO_DOUBLE_SWAP) as Record<string, string>)
         : {}),
+      /* Round 647 negative controls. scripts/simSeasonLedger.mjs and
+         scripts/simCfbDynasty.mjs write a copy of the season ledger that
+         double counts a title or scores the pick of team, and point the six
+         boards' suites at it through this variable. Same ordering rule:
+         above "@". Off in every ordinary run. */
+      ...(process.env.SEASON_LEDGER_MODULE
+        ? { "@/lib/seasonLedger": path.resolve(process.env.SEASON_LEDGER_MODULE) }
+        : {}),
       "@": path.resolve(__dirname, "./src"),
     },
   },

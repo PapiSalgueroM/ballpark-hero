@@ -25,6 +25,18 @@
  * FO_BOARD_NFL, FO_BOARD_NBA, FO_BOARD_MLB and FO_BOARD_NHL point it at
  * copies of the boards with the old restore and no guard, and the reload
  * tests must then fail.
+ *
+ * Round 647: the second describe per board is the season ledger. A title
+ * season and a season without one each add exactly one row to the save,
+ * scored on that season alone, and that row's score is what the board hands
+ * the completion hook; a reload on the recap hands it nothing; a closed
+ * season played again adds nothing; and the same results score the same
+ * whichever team was picked. The roster is rigged to force the two outcomes
+ * (every player 99, every player 40) because the seeded rng decides the
+ * rest. scripts/simSeasonLedger.mjs runs these rows and carries their
+ * controls: SEASON_LEDGER_MODULE points the boards and this file at a copy
+ * of src/lib/seasonLedger.ts that double counts a title or scores the pick,
+ * and the ledger rows must then fail while the reload rows stay green.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
@@ -33,12 +45,16 @@ import { initLeague, simGame, REGULAR_WEEKS } from '@/lib/frontOffice';
 import { initNbaLeague, simRound, NBA_ROUNDS } from '@/lib/nbaFrontOffice';
 import { initMlbLeague, simMlbRound, MLB_ROUNDS } from '@/lib/mlbFrontOffice';
 import { initNhlLeague, simNhlRound, NHL_FO_ROUNDS } from '@/lib/nhlFrontOffice';
+import { scoreSeason, appendSeason, ledgerTotal, W_TITLE, SEASON_CEILING, type SeasonRow } from '@/lib/seasonLedger';
 
 // Completion tracking reads the auth context and writes to the database,
 // recordActivity inserts a row through the Supabase client, the share
 // buttons draw a canvas card, the reveal scroll calls scrollIntoView which
 // jsdom does not have. None is under test and none may touch the network.
-vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: () => undefined }));
+// Round 647: the completion hook is a spy, so the ledger rows can read what
+// the board handed it: the slug, whether a finish is on screen, the score.
+const { completion } = vi.hoisted(() => ({ completion: vi.fn() }));
+vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: (...args: unknown[]) => { completion(...args); } }));
 vi.mock('@/lib/completions', () => ({ recordActivity: () => undefined }));
 vi.mock('@/components/game/ShareButtons', () => ({ default: () => null }));
 vi.mock('@/hooks/useRevealScroll', () => ({ useRevealScroll: () => ({ current: null }) }));
@@ -50,13 +66,31 @@ function lehmer(seed: number) {
 }
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* Round 647: force the season's outcome. 'strong' rates every man on the
+   GM's roster 99 and every man on every other roster 40, which is a title
+   under any seed (a 99 roster against ordinary ones still lost the NFL and
+   MLB titles under seed 11, so the gap has to be the whole scale); 'weak'
+   rates the GM's roster 40 against ordinary rosters, which is last place and
+   no playoffs. Applied before the regular season is played, so the record
+   matches the roster the way it would in play. */
+type Rig = 'strong' | 'weak' | undefined;
+const rigLeague = (teams: Record<string, any>, me: string, rig: Rig) => {
+  if (!rig) return;
+  for (const [abbr, t] of Object.entries(teams)) {
+    const mine = abbr === me;
+    if (!mine && rig === 'weak') continue;
+    for (const p of t.players) { p.ovr = mine === (rig === 'strong') ? 99 : 40; p.out = 0; }
+  }
+};
+
 interface BoardCase {
   name: string;
   env: string;
   load: () => Promise<{ default: ComponentType }>;
   saveKey: string;
+  slug: string;
   /* A league on the morning of its final week or round, with the team the GM runs. */
-  finalWeek: (rng: () => number) => { league: any; team: string };
+  finalWeek: (rng: () => number, rig?: Rig) => { league: any; team: string };
   tile: string;
   finalButton: string;
   headline: RegExp;
@@ -72,11 +106,13 @@ const CASES: BoardCase[] = [
   {
     name: 'NFL Front Office', env: 'FO_BOARD_NFL',
     load: () => import('@/components/front-office/FrontOfficeBoard'),
-    saveKey: 'front-office-save-v1',
-    finalWeek: rng => {
+    saveKey: 'front-office-save-v1', slug: 'front-office',
+    finalWeek: (rng, rig) => {
       const lg = initLeague(rng);
+      const team = Object.keys(lg.teams)[0];
+      rigLeague(lg.teams, team, rig);
       for (let w = 1; w < REGULAR_WEEKS; w += 1) { lg.schedule[w - 1].forEach(g => simGame(g, lg.teams, rng)); lg.week += 1; }
-      return { league: lg, team: Object.keys(lg.teams)[0] };
+      return { league: lg, team };
     },
     tile: 'This week', finalButton: 'Play the final week + playoffs',
     headline: /win the 2026 title/, draftHeading: 'The 2027 Draft',
@@ -85,10 +121,11 @@ const CASES: BoardCase[] = [
   {
     name: 'NBA Front Office', env: 'FO_BOARD_NBA',
     load: () => import('@/components/nba-front-office/NbaFrontOfficeBoard'),
-    saveKey: 'nba-front-office-save-v1',
-    finalWeek: rng => {
+    saveKey: 'nba-front-office-save-v1', slug: 'nba-front-office',
+    finalWeek: (rng, rig) => {
       const lg = initNbaLeague(rng);
       const team = Object.keys(lg.teams)[0];
+      rigLeague(lg.teams, team, rig);
       for (let r = 1; r < NBA_ROUNDS; r += 1) { simRound(lg, team, rng); lg.round += 1; }
       return { league: lg, team };
     },
@@ -99,10 +136,11 @@ const CASES: BoardCase[] = [
   {
     name: 'MLB Front Office', env: 'FO_BOARD_MLB',
     load: () => import('@/components/mlb-front-office/MlbFrontOfficeBoard'),
-    saveKey: 'mlb-front-office-save-v1',
-    finalWeek: rng => {
+    saveKey: 'mlb-front-office-save-v1', slug: 'mlb-front-office',
+    finalWeek: (rng, rig) => {
       const lg = initMlbLeague(rng);
       const team = Object.keys(lg.teams)[0];
+      rigLeague(lg.teams, team, rig);
       for (let r = 1; r < MLB_ROUNDS; r += 1) { simMlbRound(lg, team, rng); lg.round += 1; }
       return { league: lg, team };
     },
@@ -113,10 +151,11 @@ const CASES: BoardCase[] = [
   {
     name: 'NHL Front Office', env: 'FO_BOARD_NHL',
     load: () => import('@/components/nhl-front-office/NhlFrontOfficeBoard'),
-    saveKey: 'nhl-front-office-save-v1',
-    finalWeek: rng => {
+    saveKey: 'nhl-front-office-save-v1', slug: 'nhl-front-office',
+    finalWeek: (rng, rig) => {
       const lg = initNhlLeague(rng);
       const team = Object.keys(lg.teams)[0];
+      rigLeague(lg.teams, team, rig);
       for (let r = 1; r < NHL_FO_ROUNDS; r += 1) { simNhlRound(lg, team, rng); lg.round += 1; }
       return { league: lg, team };
     },
@@ -243,6 +282,113 @@ for (const c of CASES) {
       expect(read().league[c.periodKey]).toBe(2);
       expect(read().seasonsPlayed).toBe(1);
       expect(read().league.champions).toHaveLength(1);
+    });
+  });
+
+  /* Round 647. What the board handed the completion hook while a finish was
+     on screen: the third argument of every call whose second was true. */
+  const recorded = (): number[] => completion.mock.calls.filter(a => a[0] === c.slug && a[1] === true).map(a => a[2] as number);
+  const closeSeason = (rig: Rig) => {
+    const { league, team } = c.finalWeek(lehmer(7), rig);
+    save({ league, myTeam: team, phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0 });
+    const view = render(<Board />);
+    expect(recorded(), 'nothing is recorded before the season closes').toHaveLength(0);
+    fireEvent.click(screen.getByText(c.tile));
+    fireEvent.click(screen.getByText(c.finalButton));
+    return { league, team, view, closed: read() };
+  };
+  const rowOf = (s: any): SeasonRow => {
+    expect(Array.isArray(s.ledger), 'the save carries a ledger').toBe(true);
+    expect(s.ledger, 'exactly one row for the one season closed').toHaveLength(1);
+    return s.ledger[0];
+  };
+
+  describe(`${c.name}: the season ledger`, () => {
+    let restoreRandom: (() => void) | null = null;
+    beforeEach(() => {
+      localStorage.clear();
+      completion.mockClear();
+      const rng = lehmer(11);
+      const spy = vi.spyOn(Math, 'random').mockImplementation(rng);
+      restoreRandom = () => spy.mockRestore();
+    });
+    afterEach(() => { cleanup(); restoreRandom?.(); });
+
+    it('a title season adds exactly one row, scored on that season, and records that score', () => {
+      const { league, team, closed } = closeSeason('strong');
+      expect(closed.league.champions[0].team, 'the 99 rated roster did not win the title under this seed; re-seed the rig').toBe(team);
+      const row = rowOf(closed);
+      expect(row.season).toBe(league.season);
+      expect(row.team).toBe(team);
+      expect(row.wonTitle).toBe(true);
+      expect(row.games).toBeGreaterThan(0);
+      expect(row.wins).toBeLessThanOrEqual(row.games);
+      expect(row.score).toBe(scoreSeason(row));
+      expect(row.score).toBeGreaterThanOrEqual(W_TITLE);
+      expect(row.score).toBeLessThanOrEqual(SEASON_CEILING);
+      const scores = recorded();
+      expect(scores.length, 'the board handed the hook a finish').toBeGreaterThan(0);
+      expect([...new Set(scores)], 'the recorded number is the row, and only the row').toEqual([row.score]);
+      expect(ledgerTotal(closed.ledger)).toBe(row.score);
+      expect(closed.titles).toBe(1);
+      expect(screen.getByText(/This season/).textContent).toContain(String(row.score));
+    });
+
+    it('a season without a title adds exactly one row too, and records it', () => {
+      const { league, team, closed } = closeSeason('weak');
+      expect(closed.league.champions[0].team, 'the 40 rated roster won the title under this seed; re-seed the rig').not.toBe(team);
+      const row = rowOf(closed);
+      expect(row.season).toBe(league.season);
+      expect(row.team).toBe(team);
+      expect(row.wonTitle).toBe(false);
+      expect(row.score).toBe(scoreSeason(row));
+      expect(row.score).toBeLessThan(W_TITLE);
+      const scores = recorded();
+      expect(scores.length, 'a season without a title is still a finish').toBeGreaterThan(0);
+      expect([...new Set(scores)]).toEqual([row.score]);
+      expect(closed.titles).toBe(0);
+      expect(screen.getByText(/This season/).textContent).toContain(String(row.score));
+    });
+
+    it('replaying a closed title adds nothing: a reload records nothing and the final week refuses', () => {
+      const { league, team, view, closed } = closeSeason('strong');
+      const row = rowOf(closed);
+      const before = recorded().length;
+      view.unmount();
+
+      /* A reload on the recap: the same row, no second finish. */
+      render(<Board />);
+      expect(screen.getByText(c.headline)).toBeTruthy();
+      expect(read().ledger).toHaveLength(1);
+      expect(recorded().length, 'a reload on the recap is not a finish').toBe(before);
+      expect(screen.getByText(/This season/).textContent).toContain(String(row.score));
+      cleanup();
+
+      /* The closed season clicked again from the hub: refused, ledger untouched. */
+      save({ league: closed.league, myTeam: team, phase: 'hub', titles: 1, seasonsPlayed: 1, draftClass: null, picksLeft: 0, ledger: closed.ledger });
+      render(<Board />);
+      fireEvent.click(screen.getByText(c.tile));
+      fireEvent.click(screen.getByText(c.finalButton));
+      expect(read().ledger).toHaveLength(1);
+      expect(read().ledger[0].score).toBe(row.score);
+      expect(recorded().length).toBe(before);
+
+      /* And the module itself refuses a second row for the same season. */
+      const again = appendSeason(closed.ledger, { ...row });
+      expect(again.row).toBeNull();
+      expect(again.ledger).toHaveLength(1);
+      expect(league.season).toBe(row.season);
+    });
+
+    it('the pick of team changes nothing: the same results score the same for every team', () => {
+      const { league, closed } = closeSeason('weak');
+      const row = rowOf(closed);
+      const teams = Object.keys(league.teams);
+      expect(teams.length).toBeGreaterThan(10);
+      for (const abbr of teams) {
+        expect(scoreSeason({ ...row, team: abbr }), `${abbr} with the same results`).toBe(row.score);
+        expect(scoreSeason({ ...row, team: abbr, wonTitle: true, reachedFinal: true, madePlayoffs: true }), `${abbr} with a title`).toBe(scoreSeason({ ...row, wonTitle: true, reachedFinal: true, madePlayoffs: true }));
+      }
     });
   });
 }
