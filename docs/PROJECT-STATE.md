@@ -1,5 +1,59 @@
 # Project state
 
+## 2026-09-28: Round 645 part two, no score for no skill (branch `r645b-free-points-w2`, NOT on main)
+
+Ships with the rest of the points economy (645a, 645c, 646, 647, 648), not alone. Built, reviewed
+(verdict fix first: one blocker, four majors, five minors), fixed, gated on the branch. No
+migration in this round.
+
+- **For players.** Nineteen games paid a run that got nothing right a big share of a perfect one
+  (Build Your XI and NBA Starting 5 paid 500 of 500 for any verdict, Rebuild 77 percent for
+  changing nothing, Sign the Player 69 percent for never bidding). Every one now records what the
+  run earns above the worst choices on the same board (`src/lib/skillPoints.ts`), and a perfect run
+  records exactly what it always did, so every cap stays right. After the review: HOF or Bust's
+  daily deals only players with a verdict and never yesterday's player (it walks `dailyIndex`, and
+  a save from before the change restores against the player it was cast on); World XI's suggestion
+  list shows names and clubs only, a wrong position pick is a strike and a point off, the third
+  ends the run; Build Your XI and NBA Starting 5 hand every stand-in body their referee functions
+  send when the AI is out to the offline judge instead of scoring it as a verdict; the offline XI
+  judge counts a name it cannot price at its floor, not 64 on trust; every rescaled game shares the
+  points it records; Rebuild's pass and play seats say their points are not recorded on this device;
+  Pack Battle's free opening card is no longer labelled Banked; the Gauntlet, Sign the Player,
+  Search and Discard, Budget Builder, World XI, HOF or Bust and Build Your XI guides say how the new
+  scores work (the Gauntlet examples recounted: three rounds survived is 48, and the run records
+  38 or 48 depending on the weakest squad), with the frozen sentences in
+  `scripts/data/guideHeadingsFrozen.json` changed deliberately in the same commit and
+  `searchKeywords.json` regenerated.
+- **The live Starting 5 finding.** The repo copy of `nba-evaluate-lineup` was not the deployed
+  function. Version 5, read back from production on 2026-09-28, answers every lineup from its
+  quick data read (its AI line is `gemini-2.0-flash`, the model Round 485 found has no free quota
+  on this key), and that read rates any five real names All-Star Starters, 429 of 500 on this
+  branch, whatever the challenge. A live probe the same day confirmed it (a probe of
+  `evaluate-lineup`, which runs `gemini-2.5-flash` on the same key, got a real AI verdict, so
+  Build Your XI's stand-ins are the rarer degraded path). The page now catches that
+  read, so **until the function is redeployed every Starting 5 on the live site records 0** (the
+  offline judge cannot read the challenge, and the result card says so). The repo file is now the
+  deployed source with the model line corrected to `gemini-2.5-flash` and its dashes taken out;
+  it is NOT deployed and stays in simEdgeSync's `unverified` list. **Owed with this release:**
+  deploy it, move it to `synced` in `scripts/data/edgeDeployed.json`, and probe it once.
+- **Fence** `scripts/simFreePoints.mjs`, four sections: one row per game (132), the zero skill
+  run against a perfect one through the real scorer, with its own checks for HOF or Bust (366
+  dates, 0 deal yesterday's player, 0 a borderline one) and World XI (a blind two letter tapper on
+  the real list, 0.2 of 11, 1.9 percent); coverage both ways, including every shared engine
+  config; every judge label on a ladder and every referee stand-in (both functions' own fallback
+  code run with stubbed tables, 9 XI bodies and 8 Starting 5 bodies) held as no verdict; every
+  rescaled game's share names its points. Highest zero skill shares left: score-predictor 5.0,
+  dart-draft 4.9, Perfect Season NFL 3.6, Fight Gym 3.5 percent.
+- **Controls.** 24, `FREE_POINTS_CONTROL=<name>`, each refusing an anchor that is not in the code
+  exactly once, each turning only its own rows or section red with a measured floor (for example
+  fivestandin 429 of 500, standstill 766 of 990, hofstep 79 of 366 days repeating yesterday). The
+  NFL Gauntlet and the MLB and NHL Perfect Seasons have no red control of their own because the
+  formula they replaced already paid under 5 percent.
+- **Known and left:** best scores recorded before this round stay on the old scales (every
+  Build Your XI finisher already holds 500); that is a data question for 646 and 648, not a
+  backfill here. HOF or Bust's walk repeats a player two days apart 4 times a year at `dailyIndex`
+  cycle boundaries, like every game on that walk.
+
 ## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
 
 Assembled and gated by the desktop Claude lane in the CRLF gate clone on `release-d`, pushed to
