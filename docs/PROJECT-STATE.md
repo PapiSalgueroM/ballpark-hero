@@ -134,6 +134,36 @@ game's own score and records a perfect run unchanged, so each ceiling stays an u
 stays reached. Whoever merges second keeps 646's named constants inside 645b's formulas, then
 reruns simCapsAreCeilings (with its controls) and simFreePoints.
 
+## 2026-09-28: Round 645 part one, a free run is a play (branch `r645a-ranked-recorder`, NOT on main)
+
+Ships with the rest of the points economy (645b, 645c, 646, 647, 648), not alone. Built, reviewed
+(verdict fix first), fixed, gated on the branch. No migration in this round.
+
+- **For players.** 35 live games with a daily and a free mode (Unlimited, free play, a new season,
+  versus, a CPU card) used to record every free run like the daily: on the day board, paid into
+  points, ticking the Daily Checklist. A free run is now a play: no score, no points, no daily tick,
+  but it keeps the streak day and counts in Games Today (five more, HOF or Bust, Score Predictor,
+  Shirt Number, Minefield and Sports Millionaire, used to record nothing at all for a free run and
+  now record it as a play). In all 40 of those live games the free run's result card now says so
+  under the score, in one shared line ("Free play: this one's just for fun. Only the daily
+  counts for points and today's leaderboard."), from `ResultScreen`'s new `ranked` prop or the
+  board's own `UnrankedNote`. The profile's Games Today tile and the game header now count the
+  same thing through `src/lib/gamesToday.ts` (the profile read `daily_completions`, which a free
+  run never ticks). A free play is filed under the signed in player's name, not the guest handle,
+  and a Daily press on a finished Unlimited screen no longer leaves a restore mark that swallows
+  the next finish.
+- **Fence** `scripts/simRankedRecorder.mjs`, five sections: every recorder read as code (the flag
+  must be a pure && chain with a mode === 'daily' term; literal false only on a registry game with
+  no daily; daily only done names from a closed set, with 17 probes), the lib and the hook as code,
+  three rendered files (25 cases), every result card of a flagged recorder carries the line (33
+  recorders, 34 cards), and games today read one way. **21 controls**, `RANKED_CONTROL=all`, each
+  turning only its own section or cases red.
+- **Unapplied, by design:** not merged, no PR. Expect merge conflicts with 645b in the four Perfect
+  Season pages and `GauntletDraft`/`PackBattle` recorder lines, with 645c in the chain, arcade,
+  Pack Battle and Rarity Round files, and with 648 in `Profile.tsx` and `completions.ts`: all are
+  neighbouring edits, none is a logic clash. The home page's Played today chip already read the
+  header's source and was left as it is.
+
 ## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
 
 Assembled and gated by the desktop Claude lane in the CRLF gate clone on `release-d`, pushed to

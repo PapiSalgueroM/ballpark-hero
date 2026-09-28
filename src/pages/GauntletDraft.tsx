@@ -132,7 +132,7 @@ export default function GauntletDraft() {
      reveal had the day locked with the completion never booked, and the restore
      afterwards marked itself and swallowed it for good. Booking on the run
      itself puts the save and the completion at the same instant. */
-  useGameCompletion(SLUG, run !== null, run?.score ?? 0, run?.roundsCleared ?? 0);
+  useGameCompletion(SLUG, run !== null, run?.score ?? 0, run?.roundsCleared ?? 0, mode === 'daily');
 
   const pick = draft && phase === 'drafting' ? draft.picks[pickIndex] : null;
   const dailyDone = phase === 'setup' && loadDailyRun(todayStr) !== null;
@@ -244,6 +244,7 @@ export default function GauntletDraft() {
 
         {isDone && run && (
           <ResultScreen
+            ranked={mode === 'daily'}
             won={run.champion}
             outcomeEmoji={run.champion ? '🏆' : run.roundsCleared >= 3 ? '🥈' : '🫠'}
             headline={run.champion ? 'Champions! The gauntlet is run!' : `Out at ${run.matches[run.matches.length - 1]?.round.name ?? 'the start'}`}

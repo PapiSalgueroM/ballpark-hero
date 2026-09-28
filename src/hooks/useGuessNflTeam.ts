@@ -163,7 +163,7 @@ export function useGuessNflTeam() {
     return [...new Set(allTeams)].sort();
   }, [gameState]);
 
-  useGameCompletion('guess-nfl-team', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+  useGameCompletion('guess-nfl-team', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0, 0, gameState?.mode === 'daily');
 
   /* ROUND 428: the daily board is kept current on every move, the fields
      validate reads back. Unlimited and conference play are never written. */

@@ -8,6 +8,7 @@ import ConquestStandingsStrip from '@/components/conquest/ConquestStandingsStrip
 import { ImperialismHowToPlay } from '@/components/conquest/ImperialismHowToPlay';
 import { CelebrationStyles, ConfettiBurst } from '@/components/club-manager/Celebration';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import type { ConquestMapSport } from '@/lib/conquestMapLook';
 import { bboxArea, pathBoundingBox } from '@/lib/conquestMapGeometry';
 import { arrowAngle, buildScenes, wheelSpec } from '@/lib/conquestScenes';
@@ -234,7 +235,7 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
     return labels;
   }, [run]);
 
-  useGameCompletion(game.gameId, phase === 'done', score, favorite ? statesOf(owners, favorite).length : 0);
+  useGameCompletion(game.gameId, phase === 'done', score, favorite ? statesOf(owners, favorite).length : 0, mode === 'daily');
 
   /* Round 476: the call card sits under the map, the wiped-out line, the
      standings toggle and, in the recap, a list of every game. Measured on a
@@ -631,6 +632,7 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
                 <span className="rounded-full border border-border bg-background px-3 py-1.5">Streak <b className="text-gold">🔥{dailyStreak}</b></span>
               )}
             </div>
+            <UnrankedNote ranked={mode === 'daily'} className="mt-2" />
             <div data-season-records className="cm-rise mt-4 grid grid-cols-1 gap-1.5 text-left sm:grid-cols-2" style={{ animationDelay: '560ms' }}>
               {seasonBook.map(r => (
                 <div

@@ -97,7 +97,7 @@ export function useScorePredictor(): ScorePredictorState {
   const status: 'predicting' | 'revealed' = guessHome !== null ? 'revealed' : 'predicting';
   const isComplete = status === 'revealed';
 
-  useGameCompletion('score-predictor', isComplete && mode === 'daily', score, isComplete ? 1 : 0);
+  useGameCompletion('score-predictor', isComplete, score, isComplete ? 1 : 0, mode === 'daily');
 
   const submit = useCallback((home: number, away: number) => {
     if (guessHome !== null) return;

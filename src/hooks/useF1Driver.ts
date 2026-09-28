@@ -102,7 +102,7 @@ export function useF1Driver() {
   const pointsForCurrentClue =
     gameState ? (POINTS_BY_CLUE[gameState.revealedClues - 1] ?? 0) : POINTS_BY_CLUE[0];
 
-  useGameCompletion('f1-driver', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+  useGameCompletion('f1-driver', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0, 0, gameState?.mode === 'daily');
 
   useEffect(() => {
     if (gameState?.mode !== 'daily') return;

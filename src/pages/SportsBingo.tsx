@@ -165,7 +165,7 @@ export default function SportsBingo() {
      result never records, and the fresh one records once, in the same
      commit that then books it below. */
   const bookedDaily = mode === 'daily' && dailyDone !== null;
-  useGameCompletion(SLUG, isDone && !bookedDaily, finalScore, mySquares);
+  useGameCompletion(SLUG, isDone && !bookedDaily, finalScore, mySquares, mode === 'daily');
 
   useEffect(() => {
     if (!isDone || mode !== 'daily' || dailyDone) return;
@@ -315,6 +315,7 @@ export default function SportsBingo() {
 
         {isDone && (
           <ResultScreen
+            ranked={mode === 'daily'}
             won={won}
             outcomeEmoji={won ? '🎉' : '🫠'}
             headline={

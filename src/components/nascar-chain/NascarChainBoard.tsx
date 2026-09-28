@@ -5,6 +5,7 @@ import { NascarChainSearch } from './NascarChainSearch';
 import { NascarChainTimeline } from './NascarChainTimeline';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { getNascarChainMultiplier } from '@/types/nascarChain';
 import { supabase } from '@/integrations/supabase/client';
 import { GameNav } from '@/components/game/GameNav';
@@ -187,6 +188,7 @@ export function NascarChainBoard() {
               )}
 
               <div className="text-xl text-red-400 font-bold mb-2">Final Score: {gameState.score}</div>
+              <UnrankedNote ranked={gameState.mode === 'daily'} className="mb-2" />
               {multiplier > 1 && (
                 <div className="text-sm text-red-300 mb-4">Includes x{multiplier} chain bonus!</div>
               )}

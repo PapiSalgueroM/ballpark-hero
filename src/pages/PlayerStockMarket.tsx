@@ -114,7 +114,7 @@ export default function PlayerStockMarket() {
     setPhase('done');
   };
 
-  useGameCompletion(SLUG, finish !== null, finish?.score ?? 0, finish ? finish.holdings.filter(h => h.final > h.price).length : 0);
+  useGameCompletion(SLUG, finish !== null, finish?.score ?? 0, finish ? finish.holdings.filter(h => h.final > h.price).length : 0, mode === 'daily');
 
   const step = phase === 'stepping' ? steps[stepIndex] : null;
   const prevTotal = step ? (stepIndex === 0 ? holdings.reduce((s, h) => s + h.price, 0) : steps[stepIndex - 1].total) : 0;
@@ -274,6 +274,7 @@ export default function PlayerStockMarket() {
 
         {phase === 'done' && finish && (
           <ResultScreen
+            ranked={mode === 'daily'}
             won={finish.growth >= 1}
             outcomeEmoji={finish.growth >= 1.5 ? '🚀' : finish.growth >= 1 ? '📈' : '📉'}
             headline={finish.growth >= 1.5 ? 'The market loved you!' : finish.growth >= 1 ? 'In the green' : 'The market bit back'}

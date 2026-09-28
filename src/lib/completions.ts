@@ -240,6 +240,54 @@ export function recordActivity(gamePath: string, score?: number, playerName?: st
 }
 
 /**
+ * Round 645: a finished run that is NOT the daily is a play, never a record.
+ *
+ * Thirty five live games (thirty six counting Guess The Club, retired and
+ * redirected to the home page) carry a daily and a free mode (Unlimited,
+ * free play, a new season, versus) under one slug, and until this round
+ * their free finishes went through recordCompletion exactly like the
+ * daily: a scored
+ * game_completions row, so the day board's "best" was the best of as many
+ * attempts as a player cared to make; the signed in save, so every attempt
+ * paid its score into total_points and ticked daily_completions for a
+ * daily that was never played. Face Off was the one game that already told
+ * the two apart (the daily through useGameCompletion, any other match a
+ * bare recordCompletion with no score, which still made the signed in save
+ * with a zero), and this is that shape lifted into the recorder itself:
+ * useGameCompletion takes a `ranked` flag and routes an unranked finish here.
+ *
+ * What an unranked play writes: the anonymous game_completions row with NO
+ * score (a play for Most Played Today, never a ranked row: the board reads
+ * scored rows only), under the same name the ranked door files under (the
+ * hook passes getCurrentPlayerName(profile), so a signed in player whose
+ * cached display name is empty is not filed under the guest handle), the
+ * local streak day and the local today set (the player played a game today,
+ * which is what Games Today counts on the game header and the profile,
+ * through src/lib/gamesToday.ts, and the home page's Played today chip).
+ * What it never writes: a score, the signed in save (no points, no
+ * user_game_scores row, no best score) and daily_completions (the daily
+ * key, which the Daily Checklist and Daily Legend read).
+ * scripts/simRankedRecorder.mjs reads this body and fails if any of those
+ * come back, or if the row, the streak day or the today set go.
+ */
+export function recordUnrankedPlay(gamePath: string, playerName?: string): void {
+  try {
+    const game = gamePath.replace(/^\//, '');
+    if (!game) return;
+    (supabase.from as any)('game_completions')
+      .insert({ game, player_name: playerName || getCurrentPlayerName() })
+      .then(({ error }: { error: unknown }) => {
+        if (error) console.debug('[completions] unranked insert failed (ignored):', error);
+        else { try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ } }
+      });
+    recordStreakCompletion(game, new Date(), 0);
+    bumpLocalTodayCount(game);
+  } catch {
+    // Never let a tracking failure break gameplay.
+  }
+}
+
+/**
  * Fire-and-forget insert into game_completions. Never throws, never blocks
  * gameplay: any failure (network, RLS, offline) is caught and swallowed.
  *

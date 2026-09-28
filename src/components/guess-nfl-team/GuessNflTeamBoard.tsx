@@ -189,6 +189,7 @@ export function GuessNflTeamBoard() {
         {(isWon || isLost) && (
           <div className="flex justify-center">
             <ResultScreen
+              ranked={gameState.mode === 'daily'}
               won={isWon}
               outcomeEmoji={isWon ? '🎉' : '😞'}
               headline={isWon ? 'Correct!' : 'Game Over'}

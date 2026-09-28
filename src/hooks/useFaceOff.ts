@@ -10,7 +10,6 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { getTodayET } from '@/lib/dateUtils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { recordCompletion } from '@/lib/completions';
 import {
   SAVE_KEY, SHOT_CLOCK, DAILY_DIFFICULTY, ROUNDS,
   type Difficulty, type Round, type RoundResult, type FaceOffSave, type Rng, type Category,
@@ -144,9 +143,6 @@ export function useFaceOff() {
       setSave(booked);
       writeSave(booked);
     }
-    /* the daily goes through useGameCompletion below (leaderboard, streak,
-       badges); any other match is a play but never a ranked score */
-    if (mode !== 'daily') recordCompletion('/face-off');
     setPhase('done');
   }, [phase, results, rounds.length, difficulty, mode, save]);
 
@@ -154,7 +150,10 @@ export function useFaceOff() {
 
   const t = totals(results);
   const right = results.filter(r => r.youCorrect).length;
-  useGameCompletion('face-off', phase === 'done' && mode === 'daily', t.you, right);
+  /* the daily is the ranked match (leaderboard, streak, badges); any other
+     match is a play but never a ranked score, which since Round 645 is the
+     recorder's own flag rather than a second call beside it */
+  useGameCompletion('face-off', phase === 'done', t.you, right, mode === 'daily');
   const lastResult = results.length ? results[results.length - 1] : null;
   const rivalLocked = phase === 'playing' && mode !== 'versus' && current ? elapsed >= current.rival.seconds : false;
 

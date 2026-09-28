@@ -4,6 +4,7 @@ import { GameHelp } from '@/components/game/GameHelp';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { Button } from '@/components/ui/button';
 import { Bomb, CalendarDays, Heart, Infinity as InfinityIcon, RotateCcw } from 'lucide-react';
 import { cn } from '@/lib/utils';
@@ -46,8 +47,9 @@ const Minefield = () => {
   const [roundWon, setRoundWon] = useState(false);
   const [revealDone, setRevealDone] = useState(false);
 
-  // Daily completion fires once the whole 3-board run is finished.
-  useGameCompletion('minefield', phase === 'done' && gameMode === 'daily', score, roundsWon);
+  // Every finished 3-board run records once. Round 645: only the daily run
+  // is ranked; an unlimited run is a play (no points, no leaderboard row).
+  useGameCompletion('minefield', phase === 'done', score, roundsWon, gameMode === 'daily');
 
   const round: MinefieldRound | undefined = rounds[roundIdx];
   const totalCorrect = round ? round.tiles.filter(t => !t.isMine).length : 0;
@@ -247,6 +249,7 @@ const Minefield = () => {
                   {roundsWon}/{ROUNDS_PER_RUN} boards cleared · max was {maxScore}
                   {roundsWon === ROUNDS_PER_RUN ? ' · FLAWLESS SWEEP 🔥' : ''}
                 </p>
+                <UnrankedNote ranked={gameMode === 'daily'} />
                 <ShareButtons
                   gameName="Minefield"
                   gamePath="/minefield"

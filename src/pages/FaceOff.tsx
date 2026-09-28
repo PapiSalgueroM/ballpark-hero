@@ -279,6 +279,7 @@ const FaceOff = () => {
         {g.phase === 'done' && (
           <div className="max-w-md mx-auto">
             <ResultScreen
+              ranked={g.mode === 'daily'}
               won={g.outcome === 'draw' || versus ? undefined : g.outcome === 'win'}
               outcomeEmoji={g.outcome === 'win' ? (versus ? '🟢' : '🏆') : g.outcome === 'loss' ? otherEmoji : '🤝'}
               headline={versus

@@ -213,7 +213,7 @@ export function useGuessTheNation() {
     return ensureAnswerInList(countries, gameState.puzzle.countryName, c => c.countryName, gameState.puzzle);
   }, [countries, gameState?.puzzle]);
 
-  useGameCompletion('guess-the-nation', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+  useGameCompletion('guess-the-nation', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0, 0, gameState?.mode === 'daily');
 
   useEffect(() => {
     if (gameState?.mode !== 'daily') return;

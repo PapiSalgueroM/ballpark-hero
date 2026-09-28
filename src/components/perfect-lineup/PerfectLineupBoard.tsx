@@ -166,6 +166,7 @@ const PerfectLineupBoard = () => {
       {game.phase === 'result' && game.result && (
         <div className="mt-6">
           <ResultScreen
+            ranked={game.mode === 'daily'}
             outcomeEmoji={<span className="text-4xl font-black text-primary">{game.result.goalsFor}-{game.result.goalsAgainst}</span>}
             headline={`Grade ${game.result.grade}`}
             statRow={[

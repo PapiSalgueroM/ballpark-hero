@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { CalendarDays, Infinity as InfinityIcon, RotateCcw, Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -65,7 +66,7 @@ export default function FreeKickBoard() {
   const setup = kicks[kickIdx] ?? null;
   const isDone = phase === 'done';
   const bookedAlready = mode === 'daily' && restored !== null;
-  useGameCompletion(SLUG, isDone && !bookedAlready, score, goals);
+  useGameCompletion(SLUG, isDone && !bookedAlready, score, goals, mode === 'daily');
 
   /* The power meter sweeps while the player holds, which is the timing part of
      the input: it is not a slider you set, it is a bar you stop. */
@@ -364,6 +365,7 @@ export default function FreeKickBoard() {
             {score} points{best ? ` out of a possible ${best}` : ''}.
             {goals >= 8 ? ' Dead ball specialist.' : goals >= 5 ? ' You would take one in a final.' : goals >= 3 ? ' Keep hitting them.' : ' The wall says hello.'}
           </p>
+          <UnrankedNote ranked={mode === 'daily'} className="mt-2" />
           <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
             {mode === 'unlimited' || !restored ? (
               <Button onClick={() => start('unlimited')} className="gap-2"><RotateCcw className="h-4 w-4" /> Another ten</Button>

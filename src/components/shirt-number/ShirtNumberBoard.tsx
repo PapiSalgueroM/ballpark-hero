@@ -131,6 +131,7 @@ export function ShirtNumberBoard() {
         {/* Result */}
         {isComplete && (
           <ResultScreen
+            ranked={mode === 'daily'}
             won={status === 'won'}
             outcomeEmoji={status === 'won' ? '🎉' : '😞'}
             headline={status === 'won' ? 'Correct!' : `The answer was #${puzzle.kitNumber}`}

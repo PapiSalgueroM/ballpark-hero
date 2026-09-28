@@ -121,6 +121,7 @@ export function HofOrBustBoard() {
         {/* Result */}
         {isRevealed && (
           <ResultScreen
+            ranked={mode === 'daily'}
             outcomeEmoji={userVote === 'hof' ? '🏆' : '💀'}
             headline="Verdict Revealed"
             statLine={

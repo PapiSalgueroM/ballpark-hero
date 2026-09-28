@@ -330,6 +330,7 @@ export function GuessTheNationBoard() {
         {/* Game over */}
         {(isWon || isLost) && (
           <ResultScreen
+            ranked={gameState.mode === 'daily'}
             won={isWon}
             outcomeEmoji={isWon ? '🎉' : '😞'}
             headline={isWon ? 'Correct!' : 'Game Over'}

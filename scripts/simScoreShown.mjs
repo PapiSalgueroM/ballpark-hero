@@ -201,8 +201,8 @@ const PAGE_COPY = {
   rarityzero: {
     file: 'src/pages/RarityRound.tsx', envKey: 'SCORE_SHOWN_RARITY_PAGE',
     rewrite: s => swap(s,
-      "useGameCompletion('rarity-round', isComplete, rankedRun ? recordedScore : undefined, results.length);",
-      "useGameCompletion('rarity-round', isComplete, finalScore, results.length);",
+      "useGameCompletion('rarity-round', isComplete, rankedRun ? recordedScore : undefined, results.length, playMode === 'daily');",
+      "useGameCompletion('rarity-round', isComplete, finalScore, results.length, playMode === 'daily');",
       'RarityRound.tsx (the recorded score)'),
   },
   fantasyshare: {

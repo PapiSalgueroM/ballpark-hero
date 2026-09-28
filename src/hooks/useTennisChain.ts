@@ -160,7 +160,7 @@ export function useTennisChain() {
     setGameState(null);
   }, []);
 
-  useGameCompletion('tennis-chain', gameState?.gameStatus === 'ended', gameState?.score ?? 0);
+  useGameCompletion('tennis-chain', gameState?.gameStatus === 'ended', gameState?.score ?? 0, 0, gameState?.mode === 'daily');
 
   return { gameState, startGame, makeGuess, giveUp, resetGame, validating };
 }

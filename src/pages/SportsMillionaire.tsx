@@ -251,7 +251,7 @@ const SportsMillionaire = () => {
   const scoreForCompletion = finalAmount ?? 0;
 
   // Score = dollar amount reached (internal points), correctAnswers = questions cleared correctly.
-  useGameCompletion('sports-millionaire', isComplete && playMode === 'daily', scoreForCompletion, Math.max(lastCorrectIndex + 1, 0));
+  useGameCompletion('sports-millionaire', isComplete, scoreForCompletion, Math.max(lastCorrectIndex + 1, 0), playMode === 'daily');
 
   /* Round 428: the one record a daily gets, written once the run ends on
      any of its three paths (the million, a wrong answer, a walk away).
@@ -521,6 +521,7 @@ const SportsMillionaire = () => {
         {phase === 'done' && (
           <div className="mt-4 flex justify-center">
             <ResultScreen
+              ranked={playMode === 'daily'}
               won={walkedAway ? undefined : wonTheGame}
               outcomeEmoji={wonTheGame ? '🏆' : walkedAway ? '🚪' : (finalAmount ?? 0) >= 32_000 ? '🎉' : (finalAmount ?? 0) > 0 ? '😬' : '💥'}
               headline={

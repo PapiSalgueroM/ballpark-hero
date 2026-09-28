@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { RotateCcw, Loader2, FastForward, Dices, Trophy, Lock, EyeOff, CalendarClock } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
@@ -23,7 +24,7 @@ import {
 import {
   PerfectSeasonTheme, getDailyTheme, applyTheme, buildVerificationLine, themesForSport,
 } from '@/lib/perfectSeasonThemes';
-import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const SPORT_KEY = 'nhl';
 
@@ -243,20 +244,17 @@ const PerfectSeasonNhl = () => {
 
   // Round 299, the scoring audit: finishing a season never recorded a play,
   // so a run earned no streak day, no played-today credit and no points.
-  // The season landing on the final record is the completion moment. One
-  // row per run (the ref, reset by restart), score is the win count the
-  // result screen leads with.
-  const completionSaved = useRef(false);
-  useEffect(() => {
-    if (phase !== 'done' || !sim || completionSaved.current) return;
-    completionSaved.current = true;
-    recordCompletion('/perfect-season-nhl', sim.wins, getCurrentPlayerName());
-  }, [phase, sim]);
+  // The season landing on the final record is the completion moment, score
+  // is the win count the result screen leads with. Round 645: through the
+  // shared recorder, which records the transition once per run (restart
+  // takes the phase back, re-arming it), and only the daily is ranked. A
+  // classic or hard season is a play, never a record: no day board
+  // row, no points, no daily key.
+  useGameCompletion('perfect-season-nhl', phase === 'done' && !!sim, sim?.wins ?? 0, 0, mode === 'daily');
 
   const skipSim = () => setRevealed(NHL_GAMES);
 
   const restart = () => {
-    completionSaved.current = false;
     setPicks(Object.fromEntries(NHL_SLOTS.map(s => [s.key, null])));
     setUsedNames(new Set());
     setSelected(null);
@@ -608,6 +606,7 @@ const PerfectSeasonNhl = () => {
                     ? 'A juggernaut, but not perfect.'
                     : 'The wheel giveth, the wheel taketh.'}
                 </h2>
+                <UnrankedNote ranked={mode === 'daily'} className="mb-2" />
                 <p className="text-sm text-muted-foreground mb-3">
                   {mode === 'daily' && `Daily · ${todayStr} · `}
                   Team overall {sim.overall} · drafted in {spins} spin{spins === 1 ? '' : 's'}

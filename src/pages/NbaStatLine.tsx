@@ -53,7 +53,7 @@ export default function NbaStatLine() {
   const isDone = phase === 'done';
   const score = result?.total ?? 0;
   const hit = score >= HIT_SCORE;
-  useGameCompletion(SLUG, isDone && !g.alreadyPlayed, score, hit ? 1 : 0);
+  useGameCompletion(SLUG, isDone && !g.alreadyPlayed, score, hit ? 1 : 0, g.mode === 'daily');
 
   const emojiGrid = useMemo(() => {
     if (!result) return '';
@@ -222,6 +222,7 @@ export default function NbaStatLine() {
 
         {isDone && result && target && (
           <ResultScreen
+            ranked={g.mode === 'daily'}
             won={hit}
             outcomeEmoji={hit ? '🎯' : score >= 70 ? '📊' : '🧱'}
             headline={

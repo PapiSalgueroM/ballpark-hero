@@ -4,6 +4,7 @@ import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { CbbProgramSearch } from './CbbProgramSearch';
 import { CbbProgramHowToPlay } from './CbbProgramHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
+import { UnrankedNote } from '@/components/game/UnrankedNote';
 import { GameNav } from '@/components/game/GameNav';
 import { MAX_CLUES } from '@/types/cbbProgram';
 
@@ -177,6 +178,8 @@ export function CbbProgramBoard() {
                 <p className="text-slate-400">Better luck next time!</p>
               </>
             )}
+
+            <UnrankedNote ranked={gameState.mode === 'daily'} />
 
             <ShareButtons score={shareScore} gameName="Guess The CBB Program" gamePath="/guess-cbb-team" />
 

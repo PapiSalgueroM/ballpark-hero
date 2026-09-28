@@ -182,7 +182,9 @@ export function usePerfectLineup() {
   const completionScore =
     unbeatenPhase === 'done' && unbeatenRun ? unbeatenRun.points : result?.rating ?? 0;
 
-  useGameCompletion('perfect-lineup', isComplete, completionScore);
+  /* Round 645: only the daily classic lineup is ranked. An Unlimited lineup
+     and a Go Unbeaten season (a random seed every run) are plays. */
+  useGameCompletion('perfect-lineup', isComplete, completionScore, 0, mode === 'daily' && phase === 'result');
 
   return {
     mode,

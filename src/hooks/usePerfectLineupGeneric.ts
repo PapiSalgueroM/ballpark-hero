@@ -128,7 +128,7 @@ export function usePerfectLineupGeneric<P>(config: LineupConfig<P>) {
   /* A daily already in the books is not a finish: a reloaded or toggled
      back result never records, and the fresh one records once, in the same
      commit that then books it below. */
-  useGameCompletion(config.gameId, phase === 'result' && !(mode === 'daily' && dailyDone), result?.rating ?? 0);
+  useGameCompletion(config.gameId, phase === 'result' && !(mode === 'daily' && dailyDone), result?.rating ?? 0, 0, mode === 'daily');
 
   useEffect(() => {
     if (mode !== 'daily' || phase !== 'result' || dailyDone) return;

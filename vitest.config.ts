@@ -23,6 +23,14 @@ export default defineConfig({
       ...(process.env.COMPLETION_HOOK
         ? { "@/hooks/useGameCompletion": path.resolve(process.env.COMPLETION_HOOK) }
         : {}),
+      /* Round 645 negative control. scripts/simRankedRecorder.mjs writes a copy
+         of the completions lib whose unranked play writes a score (libleaks),
+         makes the signed in save (libsaves) or stops counting in today's games
+         (libnotoday), and points the ranked recorder lib test at it.
+         Same ordering rule: above "@". Off in every ordinary run. */
+      ...(process.env.RANKED_LIB
+        ? { "@/lib/completions": path.resolve(process.env.RANKED_LIB) }
+        : {}),
       /* Round 657 negative control. scripts/simIdleTimers.mjs writes a copy of
          useOwnedTimeouts that never clears and points the idle floater suite
          at it. Same ordering rule: above "@". Off in every ordinary run. */
@@ -82,8 +90,9 @@ export default defineConfig({
         : {}),
       /* Round 643 negative controls: scripts/simNoDoubleRecord.mjs writes a
          broken copy of one module (the restore mark, one daily hook, one
-         toggle page) and names it here as {"@/module": "/abs/copy"}. Same
-         ordering rule: above "@". */
+         toggle page) and names it here as {"@/module": "/abs/copy"}. Round
+         645's scripts/simRankedRecorder.mjs swaps the free play line and
+         ResultScreen the same way. Same ordering rule: above "@". */
       ...(process.env.NO_DOUBLE_SWAP
         ? (JSON.parse(process.env.NO_DOUBLE_SWAP) as Record<string, string>)
         : {}),
