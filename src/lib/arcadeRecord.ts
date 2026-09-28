@@ -55,8 +55,10 @@ export interface ArcadeProgress extends ArcadeRun {
 
 /* A shot takes a handful of numbers from the stream (the spray, the keeper's
    guess), so anything past this many a round is a tampered record, and a
-   resume would otherwise spin through it before the page could draw. */
-const MAX_DRAWS_PER_ROUND = 32;
+   resume would otherwise spin through it before the page could draw. The
+   career drills file the same count in their own record and use the same
+   ceiling. */
+export const MAX_DRAWS_PER_ROUND = 32;
 
 function parseRun(fields: Record<string, unknown>, countField: string, maxCount: number): ArcadeRun | null {
   const score = fields.score;
