@@ -88,8 +88,9 @@ export default defineConfig({
         ? (JSON.parse(process.env.NO_DOUBLE_SWAP) as Record<string, string>)
         : {}),
       /* Round 648 negative controls: scripts/simProfileTotal.mjs writes a
-         broken copy of the caps module, the streak store, the recorder or the
-         profile total hook and names it here the same way. Above "@". */
+         broken copy of the points rule, the streak store, the recorder, the
+         profile total hook or the Profile page and names it here the same
+         way. Above "@". */
       ...(process.env.PROFILE_TOTAL_SWAP
         ? (JSON.parse(process.env.PROFILE_TOTAL_SWAP) as Record<string, string>)
         : {}),

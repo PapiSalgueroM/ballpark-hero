@@ -1,30 +1,31 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { fetchAllRows } from '@/lib/fetchAllRows';
-import { primeScoreCaps, sumClampedRecords } from '@/lib/scoreCaps';
+import { profileTotal } from '@/lib/pointsRule';
+import { primeScoreCaps } from '@/lib/scoreCaps';
 
 /**
  * Round 648: the profile's all time total, summed from the player's own
- * records with each one clamped at its game's cap.
+ * records by the profile's rule (src/lib/pointsRule.ts): one row per game per
+ * day, the day's best, capped. That is the owner directed recompute of
+ * 2026-09-19, and the Round 648 migration holds user_scores.total_points to
+ * the same rule with the same caps, so this total and the stored one the all
+ * time rank counts are one number once the migration has landed.
  *
- * Until this round the page read user_scores.total_points, a running sum that
- * record_auth_completion grew by the raw score of every save, so one Pack
- * Battle pack (the banked value in dollars) added about 8.8 million to a total
- * where a whole Club Manager season is worth 130. This hook reads the records
- * behind that number (user_game_scores, every row, paged past the 1,000 row
- * response cap) and the caps the World Leaderboard scores against
- * (public.game_denominators, through src/lib/scoreCaps.ts), and adds each
- * record at no more than its cap.
+ * The records are user_game_scores (every row, paged past the 1,000 row
+ * response cap), read as game, score and puzzle_date, the three columns the
+ * rule groups and ranks by. The caps are public.game_score_caps through
+ * src/lib/scoreCaps.ts, the plain table cached in this browser for six hours,
+ * never the game_denominators view, whose NULL fallback runs a percentile
+ * over game_completions.
  *
  * total is null while loading and when either read fails, so the page can
  * fall back to the stored total rather than show a zero it does not believe.
- * The Round 648 migration brings the stored total onto the same rule, so the
- * fallback and the all time rank agree with this number once it has landed.
  *
  * Fence: scripts/simProfileTotal.mjs (src/test/profileTotal.test.tsx).
  */
 export interface ProfileTotal {
-  /** The sum of the records, each clamped at its cap; null while loading or when a read failed. */
+  /** The rule over the player's records; null while loading or when a read failed. */
   total: number | null;
   loading: boolean;
 }
@@ -32,6 +33,7 @@ export interface ProfileTotal {
 interface ScoreRow {
   game_type: string;
   score: number | null;
+  puzzle_date: string | null;
 }
 
 export function useProfileTotal(userId: string | null | undefined): ProfileTotal {
@@ -50,7 +52,7 @@ export function useProfileTotal(userId: string | null | undefined): ProfileTotal
         fetchAllRows<ScoreRow>((from, to) =>
           supabase
             .from('user_game_scores')
-            .select('game_type, score')
+            .select('game_type, score, puzzle_date')
             .eq('user_id', userId)
             .order('created_at', { ascending: true })
             .order('id', { ascending: true })
@@ -61,7 +63,7 @@ export function useProfileTotal(userId: string | null | undefined): ProfileTotal
         setState({ total: null, loading: false });
         return;
       }
-      const total = sumClampedRecords(rows.data.map(r => ({ game: r.game_type, score: r.score })), caps);
+      const total = profileTotal(rows.data.map(r => ({ game: r.game_type, score: r.score, day: r.puzzle_date })), caps);
       setState({ total, loading: false });
     })().catch(() => {
       if (!cancelled) setState({ total: null, loading: false });

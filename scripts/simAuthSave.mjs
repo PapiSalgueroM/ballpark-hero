@@ -153,10 +153,12 @@ console.log('2) no auth server round trip in front of the save');
 console.log('3) the migration keeps what makes it correct and safe');
 {
   const dir = path.join(ROOT, 'supabase/migrations');
-  /* Round 648 redefines the function in a second migration (the add is
-     clamped at the game's cap), so EVERY migration that defines it is held to
-     the same properties: the last one applied is the one that runs, and a
-     later file that dropped a property would otherwise pass on the first. */
+  /* Round 648 redefines the function in a second migration (the add is what
+     the play adds to the day's capped best for its game), so EVERY migration
+     that defines it is held to the same properties: the last one applied is
+     the one that runs, and a later file that dropped a property would
+     otherwise pass on the first. The add rule itself is held by
+     scripts/simProfileTotal.mjs section 3. */
   const files = fs.readdirSync(dir).filter(f => f.endsWith('.sql') && /create or replace function public\.record_auth_completion\(/i.test(stripSql(fs.readFileSync(path.join(dir, f), 'utf8'))));
   if (!files.length) {
     fail(3, 'no migration in supabase/migrations defines record_auth_completion, so the repo cannot rebuild the function the app now depends on');

@@ -18,21 +18,22 @@ taken from the table and fenced so nobody tidies them: Gordie Howe (the table tr
 table holds no goalie, so they keep their shipped values, are recorded unverified, and the card
 says "season not confirmed").
 
-**Round 648 CLAIMED AND BUILT, branch `r648-profile-clamp`, not yet on main.** The profile's all
-time total adds each record at no more than its game's cap, with the caps the World Leaderboard
-uses (`public.game_denominators`, read through the new `src/lib/scoreCaps.ts`). The page sums the
-player's own `user_game_scores` rows through `src/hooks/useProfileTotal.ts` (paged past the 1,000
-row cap) instead of reading the raw running sum; the browser's own tally (`src/lib/streaks.ts`)
-clamps at record time from a cached copy of the view, or holds a play until a fresh read settles it,
-so nothing is ever added at a value nobody decided. Measured on the planted set: before, one Pack
-Battle row of 8,800,000 was 99.88% of a 8,810,570 total; after, it contributes exactly its cap and
-the total is 11,500. Fence `scripts/simProfileTotal.mjs` (six cases, six controls). The badge and
-achievement cases read the same clamped totals. **The stored total needs the migration
-`supabase/migrations/20260928_round_648_profile_clamp.sql`**, which makes `record_auth_completion`
-add the clamped score and recomputes every `user_scores.total_points` as the clamped sum of its
-records; it was written without a database session, is unapplied and untested against a database,
-and must go on only after Round 644 part 2's last rerun (its md5 guard on the function refuses to
-run once this lands, by design). Until it lands the all time rank still counts raw stored totals.
+**Round 648 BUILT, REVIEWED AND FIXED, branch `r648-profile-clamp`, not yet on main, migration
+NOT applied.** Ships with 645a, 645b, 645c, 646 and 647 as one points economy. The profile's all
+time total is the owner's 2026-09-19 recompute rule, one row per game per day at the day's best,
+capped (`src/lib/pointsRule.ts`), with the caps from `public.game_score_caps`, the table (never the
+percentile view). The page sums the player's records by it (`src/hooks/useProfileTotal.ts`), the
+browser's tally credits every play by it (`src/lib/streaks.ts`), and an inflated pre 648 tally is
+retired once on read. The first build summed every record clamped, which would have put back the
+per match Club Manager rows and the reload repeats the recompute took out, and planted a Pack
+Battle cap of 1,000 that does not exist (live and after 646 it is 54,000,000). Fence
+`scripts/simProfileTotal.mjs`: eight cases (the Profile page rendered among them) and fourteen
+controls, three of them on the SQL. **The stored total needs
+`supabase/migrations/20260928_round_648_profile_clamp.sql`**: it refuses to run before 646 and
+before Round 644 part 2's last rerun, replaces the save so it adds the day's capped improvement,
+and recomputes every stored total by the rule with a backup. Rerun its part 2 whenever a cap
+changes. Until it lands the all time rank counts the old stored totals. Full account in
+`docs/PROJECT-STATE.md`.
 
 **Round 663 is the obvious next one and the audit is already done.** The same fault is in the NBA
 sibling: `nbaHLPlayers.ts` is a consistent snapshot of 2024-25 while the table is through 2025-26,

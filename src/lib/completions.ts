@@ -294,12 +294,13 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
        session exists. useGameCompletion no longer writes any of this
        itself, it calls this function like everybody else, so nothing counts
        twice. */
-    /* Round 648: the browser's tally adds at most the game's cap, the same
-       cap the World Leaderboard scores against (src/lib/scoreCaps.ts). The
-       cap comes from this browser's cached copy of the caps view; when there
-       is none yet the play is held and settled by the read kicked off just
-       below, so a Pack Battle pack can never add its banked dollars to the
-       profile total the way it did before this round. */
+    /* Round 648: the browser's tally is credited by the profile's rule
+       (src/lib/pointsRule.ts): one row per game per day at the day's best,
+       capped by public.game_score_caps, and nothing for a play above what
+       the server can store, which is where a Pack Battle pack's banked
+       dollars land. The cap comes from this browser's cached copy of the
+       table (src/lib/scoreCaps.ts); when there is none yet the play is held
+       and settled by the read kicked off just below. */
     recordStreakCompletion(game, new Date(), typeof score === 'number' && Number.isFinite(score) ? score : 0, knownCap(game));
     primeScoreCaps().catch(() => { /* the next play tries again; the held play waits */ });
 

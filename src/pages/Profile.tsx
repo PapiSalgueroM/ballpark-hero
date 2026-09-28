@@ -146,10 +146,11 @@ export default function Profile() {
   const [editForm, setEditForm] = useState({ display_name: '', username: '' });
   const [saving, setSaving] = useState(false);
   const [userScoreData, setUserScoreData] = useState<{ current_streak: number; longest_streak: number; total_points: number } | null>(null);
-  /* Round 648: the all time total is summed from the viewed player's records
-     with each one clamped at its game's cap (the leaderboard's caps), not read
-     off the raw running sum in user_scores. See src/hooks/useProfileTotal.ts. */
-  const { total: clampedTotal, loading: totalLoading } = useProfileTotal(viewingProfile?.user_id ?? null);
+  /* Round 648: the all time total is the viewed player's records summed by
+     the profile's rule (one row per game per day, the day's best, capped),
+     not read off the running sum in user_scores. See
+     src/hooks/useProfileTotal.ts and src/lib/pointsRule.ts. */
+  const { total: ruleTotal, loading: totalLoading } = useProfileTotal(viewingProfile?.user_id ?? null);
   const [leaderboardRank, setLeaderboardRank] = useState<number | null>(null);
   const [savedBracket, setSavedBracket] = useState<any>(null);
   const [dailyGameSlugs, setDailyGameSlugs] = useState<string[]>([]);
@@ -406,12 +407,14 @@ export default function Profile() {
      saw, so neither alone is complete and the larger of the two is the
      honest floor (a new device no longer shows Points 0 beside a real
      rank). Viewed profiles have only the server number. */
-  /* Round 648: the server number is the clamped sum of the player's records.
-     The stored running sum is only the fallback for a failed read; the Round
-     648 migration recomputes it under the same rule, so the fallback and the
-     all time rank agree with this once it has landed. The local half clamps
-     at record time (src/lib/streaks.ts), so the max stays like against like. */
-  const serverPoints = clampedTotal ?? (userScoreData?.total_points ?? 0);
+  /* Round 648: the server number is the player's records summed by the
+     profile's rule. The stored user_scores total is only the fallback for a
+     failed read: the Round 648 migration recomputes it by the same rule and
+     the save keeps it there, so the fallback and the all time rank (a count
+     of stored totals) are this same number once the migration has landed.
+     The local half is credited by the same rule at record time
+     (src/lib/streaks.ts), so the max stays like against like. */
+  const serverPoints = ruleTotal ?? (userScoreData?.total_points ?? 0);
   const totalPoints = isOwnProfile
     ? Math.max(serverPoints, localTotalPoints)
     : serverPoints;
