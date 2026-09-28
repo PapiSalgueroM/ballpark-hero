@@ -107,7 +107,11 @@ const shared = vi.hoisted(() => {
     updateProfile: async () => ({ error: null }),
   };
 
-  return { recordCompletion: vi.fn(), recordUnranked: vi.fn(), tables, rpcs, pools, functions, silenced, hits, row, hit, auth, supabase: build('root', null, []) };
+  /* Round 645 part three fix: what the shared search box renders when no
+     'autocomplete' fixture is registered (setAutocompleteFallback). */
+  const autocomplete: { fallback: unknown } = { fallback: null };
+
+  return { recordCompletion: vi.fn(), recordUnranked: vi.fn(), tables, rpcs, pools, functions, silenced, hits, row, hit, auth, autocomplete, supabase: build('root', null, []) };
 });
 
 vi.mock('@/integrations/supabase/client', () => ({
@@ -287,14 +291,20 @@ vi.mock('@/lib/dailyRecord', async (importOriginal) => {
    registered: a plain input plus one "pick <name>" button per fixture
    entity, so a driver can hand a page the entity a real search would have
    resolved without the debounce, the network and the dropdown. Every other
-   row renders the real component. */
+   row renders the real component, or the stand in a test file hands
+   setAutocompleteFallback.
+   Round 645 part three fix: this mock is registered after a test file's own
+   hoisted vi.mock of the same module, so it replaced it outright. That is
+   how src/test/noDoubleRecord.test.tsx lost its "stub guess" stand in and
+   simNoDoubleRecord went red on the four grids and Puck Detective; that
+   file now hands its stand in over through setAutocompleteFallback. */
 vi.mock('@/components/game/PlayerAutocomplete', async (importOriginal) => {
   const real = await importOriginal<typeof import('@/components/game/PlayerAutocomplete')>();
   const { createElement } = await import('react');
   type Props = Parameters<typeof real.PlayerAutocomplete>[0];
   function Stub(props: Props) {
     const entities = shared.pools.get('autocomplete') as Array<{ key: string; name: string }> | undefined;
-    if (!entities) return createElement(real.PlayerAutocomplete, props);
+    if (!entities) return createElement((shared.autocomplete.fallback as typeof real.PlayerAutocomplete | null) ?? real.PlayerAutocomplete, props);
     return createElement(
       'div',
       { 'data-testid': 'autocomplete-stub' },
@@ -351,6 +361,14 @@ export function setPoolFixture(name: 'nbaStatLine' | 'squad' | 'millionaire' | '
  *  function of the body returning it. Unregistered names throw. */
 export function setFunctionFixture(name: string, value: unknown): void {
   shared.functions.set(name, value);
+}
+
+/** What the shared search box renders for every row with no 'autocomplete'
+ *  fixture, for the whole test file (resetMocks leaves it). A test file that
+ *  wants its own stand in for the box calls this instead of a vi.mock of
+ *  its own, which this module's mock would replace. null: the real box. */
+export function setAutocompleteFallback(component: unknown): void {
+  shared.autocomplete.fallback = component;
 }
 
 /** How many marks the silent control swallowed so far. */
