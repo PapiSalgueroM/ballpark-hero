@@ -154,6 +154,10 @@ const projectOf = (shape: SeasonShape<any>, lg: any, team: string): SeasonExpect
 /* Round 647 fix: the next season's projection, the way the boards make it at the close. */
 const projectAfter = (shape: SeasonShape<any>, lg: any, team: string): SeasonExpectation =>
   projectNext(shape, lg, team, lg.season + 1);
+/* The rows that play a whole season through the board and project the next
+   one twice run in about two seconds alone; on a loaded machine they passed
+   the five second default, so they carry their own limit. */
+const SEASON_ROW_TIMEOUT = 30_000;
 const opening = (shape: SeasonShape<any>, init: (rng: () => number) => any, toFinal: BoardCase['toFinal']) =>
   (rng: () => number, rig?: Rig) => {
     const lg = init(rng);
@@ -515,7 +519,7 @@ for (const c of CASES) {
       expect(ledgerTotal(after.ledger)).toBe(first.score + second.score);
       expect(after.seasonsPlayed).toBe(2);
       expect(screen.getByText(/Career/).textContent).toContain(String(first.score + second.score));
-    });
+    }, SEASON_ROW_TIMEOUT);
 
     it('the projection is the pick\'s: a season is scored against what its roster was projected to do, not the roster at the whistle', () => {
       /* The pick, on the real pick screen. */
@@ -573,6 +577,6 @@ for (const c of CASES) {
       gone.teams[team].releasedThisSeason = [];
       expect(projectAfter(c.shape, gone, team).top[0], 'without him the bar would sit lower, which is the dodge').toBeLessThanOrEqual(closed.expect.top[0]);
       expect(projectAfter(c.shape, gone, team), 'the cut changes the projection only when it is not counted').not.toEqual(closed.expect);
-    });
+    }, SEASON_ROW_TIMEOUT);
   });
 }

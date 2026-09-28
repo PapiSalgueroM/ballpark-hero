@@ -21,9 +21,10 @@
    title paid for every title before it again, and the number was decided by
    the program picked. They now close each season into the shared ledger
    (src/lib/seasonLedger.ts, the module the four front offices use too): one
-   row per season, scored against the projection made when that season's
-   decisions opened (the pick, then the recruiting trail), recorded once, the
-   ledger total the sum. Whether the pick still decides the number is
+   row per season, scored against the projection made at the pick and then
+   at every close for the season after it (the Round 647 fix: from the
+   roster the season finished with, carried through the offseason an
+   untouched coach gets), recorded once, the ledger total the sum. Whether the pick still decides the number is
    measured over hands off careers in scripts/simSeasonLedger.mjs; the first
    version of this harness only proved that two schools with IDENTICAL
    results scored the same, which the old titles rule passed too, so that
@@ -47,8 +48,9 @@
         an older save adds one row with nothing retroactive and its sum is
         labelled "Since 2026"; replaying a closed title adds nothing; two
         seasons on one mounted board add two rows and two finishes, the
-        second scored against the projection the recruiting trail made; and
-        the projection is the pick's, made on the real pick screen);
+        second scored against the projection made at the first close, which
+        the trail does not make again; and the projection is the pick's,
+        made on the real pick screen);
      5) the ledger headless, both engines, 20 seeds and 8 seasons each,
         closing every season the way the boards do: every season adds
         exactly one row, title or not; appending the same season again adds
@@ -75,7 +77,9 @@
        title, older, replay, two season and pick rows (every row that closes
        a title), go red.
      CFB_DYNASTY_CONTROL=raw loads a copy that scores the results and not
-       the projection: both boards' pick rows go red.
+       the projection: both boards' plain and pick rows go red (a season
+       under the bar scores its results, and the pick's projection and the
+       whistle's score the same); the title, older and two season rows may.
      Every control refuses to run unless its anchor is in the file exactly
      once and its rewrite changed something.
 
@@ -101,7 +105,7 @@ const EXPECT = {
   drain: { must: ['cfb-drain', 'cbb-drain'], may: [] },
   replay: { must: ['cfb-board-reload', 'cbb-board-reload'], may: BOARD_LEDGER(['replay']) },
   double: { must: ['cfb:row', 'cbb:row', 'cfb:replay', 'cbb:replay', 'cfb:sum', 'cbb:sum', ...BOARD_LEDGER(['title', 'older', 'replay', 'two', 'pick'])], may: [] },
-  raw: { must: BOARD_LEDGER(['pick']), may: [] },
+  raw: { must: BOARD_LEDGER(['plain', 'pick']), may: BOARD_LEDGER(['title', 'older', 'two']) },
 };
 /* Every control rewrites an anchor that must be in its file exactly once. */
 const matches = (src, anchor) => (typeof anchor === 'string' ? src.split(anchor).length - 1 : (src.match(new RegExp(anchor.source, 'g')) || []).length);
@@ -110,6 +114,15 @@ let failures = 0;
 const fired = new Set();
 const fail = (key, m) => { failures += 1; fired.add(key); console.error(`  FAIL [${key}]: ${m}`); };
 const abort = m => { console.error(m); process.exit(1); };
+
+/* A worktree inside the repo has no node_modules of its own: walk up for the tools. */
+const tool = rel => {
+  for (let d = ROOT; ; d = path.dirname(d)) {
+    const p = path.join(d, 'node_modules', rel);
+    if (fs.existsSync(p)) return p;
+    if (path.dirname(d) === d) abort(`${rel} is not installed anywhere above this tree`);
+  }
+};
 
 /* ---- bundle the two engines and the ledger, regressed under a control ---- */
 const TMP = os.tmpdir().replace(/\\/g, '/');
@@ -153,7 +166,7 @@ export * as cbb from '${cbbSrc}';
 export * as ledger from '${ledgerSrc}';
 export * as formats from '${ROOT_URL}/src/lib/seasonFormats.ts';
 `);
-execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`, { stdio: 'inherit' });
+execSync(`"${process.execPath}" "${tool('esbuild/bin/esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`, { stdio: 'inherit' });
 const { cfb, cbb, ledger, formats } = await import(pathToFileURL(BUNDLE).href);
 
 function lehmer(seed) {
@@ -289,7 +302,7 @@ console.log('4) the two boards: a reload on the recap never replays the season, 
   if (LEDGER_CONTROLS.includes(CONTROL)) env.SEASON_LEDGER_MODULE = ledgerSrc;
   let r;
   try {
-    r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', ...TESTS, '--reporter=verbose'],
+    r = spawnSync(process.execPath, [tool('vitest/vitest.mjs'), 'run', ...TESTS, '--reporter=verbose'],
       { cwd: ROOT, encoding: 'utf8', env: { ...process.env, ...env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024,
         timeout: 10 * 60 * 1000, killSignal: 'SIGKILL' });
   } finally {
@@ -336,7 +349,7 @@ console.log('4) the two boards: a reload on the recap never replays the season, 
 
 console.log(`5) the season ledger headless: both engines, ${SEEDS} seeds and ${SEASONS} seasons each, every season closed the way the boards close it`);
 {
-  const { appendSeason, expectationOf, ledgerOf, ledgerTotal, projectionFor, scoreSeason, seasonResultOf, SEASON_CEILING } = ledger;
+  const { appendSeason, expectationOf, ledgerOf, ledgerTotal, projectionFor, projectNext, scoreSeason, seasonResultOf, SEASON_CEILING } = ledger;
   const ENGINES = [
     {
       key: 'cfb', label: 'CFB', myTeam: 'UGA', seedMul: 7919, shape: formats.CFB_SEASON,
@@ -352,8 +365,10 @@ console.log(`5) the season ledger headless: both engines, ${SEEDS} seeds and ${S
     },
   ];
   /* The board's projection: at the pick for the first season, and for the
-     next one when the recruiting trail opens, before the offseason. */
+     next one at the close, from the roster the season finished with carried
+     through the offseason an untouched coach gets. */
   const project = (e, st, season) => projectionFor(e.shape.teams(st), e.shape.format, season, st.myTeam);
+  const projectAtClose = (e, st) => projectNext(e.shape, st, st.myTeam, st.season + 1);
   const playSeason = (e, st, rng) => {
     for (let r = 1; r <= e.rounds; r += 1) { e.round(st, rng); st.round += 1; }
     const p = e.post(st, rng);
@@ -400,7 +415,7 @@ console.log(`5) the season ledger headless: both engines, ${SEEDS} seeds and ${S
         /* The old rule, for the before and after: it fired only on a title,
            with the cumulative number. */
         if (won) { oldCount += 1; oldSum += st.myTitles * 100 + st.seasonsPlayed * 5; }
-        st.expect = project(e, st, st.season + 1);
+        st.expect = projectAtClose(e, st);
         e.offseason(st, rng);
       }
       const total = ledgerTotal(st.ledger);

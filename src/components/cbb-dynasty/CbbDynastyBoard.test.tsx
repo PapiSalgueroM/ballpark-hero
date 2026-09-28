@@ -314,7 +314,7 @@ describe('CBB Dynasty: the season ledger', () => {
     expect(ledgerTotal(after.ledger)).toBe(first.score + second.score);
     expect(after.seasonsPlayed).toBe(2);
     expect(screen.getByText(/Career/).textContent).toContain(String(first.score + second.score));
-  });
+  }, 30_000);
 
   it('the projection is the pick\'s: a season is scored against what its roster was projected to do, not the roster at the whistle', () => {
     /* The pick, on the real pick screen. */
