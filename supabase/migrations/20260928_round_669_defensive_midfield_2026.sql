@@ -13,7 +13,7 @@
 --
 -- What this writes, all of it recorded row by row with both sources in
 -- scripts/data/defensiveMidfield2026.json:
---   1. 400 year-2026 "Defensive Midfield" rows. The population is Transfermarkt's
+--   1. 399 year-2026 "Defensive Midfield" rows. The population is Transfermarkt's
 --      most valuable players at that main position (the top 500, EUR 140m down to
 --      EUR 2m, read 2026-09-28), minus the men the 2026 snapshot already carries
 --      and minus every row the two hosts (Transfermarkt and FotMob) did not agree
@@ -381,7 +381,6 @@ insert into r669_dm (player_name, club, nationality, age, market_value_usd, name
   ('Edimilson Fernandes', 'BSC Young Boys', 'Switzerland', 30, 2376000, null, null),
   ('Felipe Peña Biafore', 'CA Lanús', 'Argentina', 25, 2376000, null, null),
   ('Nikolas Sattlberger', 'KRC Genk', 'Austria', 22, 2376000, null, null),
-  ('Abdoulaye Sissako', 'Sint-Truidense VV', 'Uganda', 28, 2160000, null, null),
   ('Andri Fannar Baldursson', 'Kasimpasa', 'Iceland', 24, 2160000, null, null),
   ('Andrusw Araujo', 'Polissya Zhytomyr', 'Venezuela', 23, 2160000, null, null),
   ('Callum McGregor', 'Celtic FC', 'Scotland', 33, 2160000, null, null),
@@ -465,7 +464,7 @@ declare
   bad text;
 begin
   select count(*) into n from r669_dm;
-  if n <> 400 then raise exception 'Round 669: expected 400 staged rows, staged %', n; end if;
+  if n <> 399 then raise exception 'Round 669: expected 399 staged rows, staged %', n; end if;
 
   select dm_2026 into n from r669_before;
   if n <> 46 then raise exception 'Round 669: expected the 46 checked Defensive Midfield rows in 2026 before, found %', n; end if;
@@ -525,10 +524,10 @@ begin
   select * into b from r669_before;
 
   select count(*) into n from public.player_market_values where year = 2026 and position = 'Defensive Midfield';
-  if n <> 46 + 400 then raise exception 'Round 669: expected % Defensive Midfield rows in 2026 after, found %', 46 + 400, n; end if;
+  if n <> 46 + 399 then raise exception 'Round 669: expected % Defensive Midfield rows in 2026 after, found %', 46 + 399, n; end if;
 
   select count(*) into n from public.player_market_values where year = 2026;
-  if n <> b.total_2026 + 400 then raise exception 'Round 669: expected % rows in 2026 after, found %', b.total_2026 + 400, n; end if;
+  if n <> b.total_2026 + 399 then raise exception 'Round 669: expected % rows in 2026 after, found %', b.total_2026 + 399, n; end if;
 
   -- every staged row landed exactly once, with its own values
   select count(*) into n from r669_dm d
