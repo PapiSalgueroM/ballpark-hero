@@ -181,9 +181,9 @@ vi.mock('@/lib/sportsMillionaire', async (importOriginal) => {
   const real = await importOriginal<typeof import('@/lib/sportsMillionaire')>();
   return {
     ...real,
-    loadMillionairePool: (mode: 'daily' | 'unlimited') => {
+    loadMillionairePool: (mode: 'daily' | 'unlimited', day?: string) => {
       const fx = shared.pools.get('millionaire');
-      return Promise.resolve((typeof fx === 'function' ? fx(mode, real) : fx ?? { pool: null, ladder: [] }) as never);
+      return Promise.resolve((typeof fx === 'function' ? fx(mode, real, day) : fx ?? { pool: null, ladder: [] }) as never);
     },
   };
 });

@@ -634,6 +634,16 @@ console.log('7) Every file that files a daily record reads the clock ONCE, pinne
      tomorrow is checked the day it ships. */
   const CLOCK = /\b(getTodayET|getDailyDateET|getPollDayET)\s*\(\s*\)/g;
   const PIN = /\buseRef\s*\(\s*(getTodayET|getDailyDateET|getPollDayET|getTodayStr)\s*\(\s*\)\s*\)\s*\.current\b/;
+  /* Round 645 part three, second fix: or the pin kept in the ref itself and
+     taken again when a daily is dealt, so a Daily pressed after midnight
+     deals, reads and files the new day (Minefield and Sports Millionaire,
+     whose deal read the live clock while their record read the pin). Such a
+     file may read the clock only INTO that ref: once to declare it and once
+     per `<ref>.current = getTodayET()`. Any other read is the Round 428
+     defect. Where a re-pin may sit (at a deal, never at a write) is behaviour,
+     and src/test/dailyLockEdges.test.tsx [day-rekey] holds it. */
+  const REF_PIN = /\bconst\s+(\w+)\s*=\s*useRef\s*\(\s*(getTodayET|getDailyDateET|getPollDayET|getTodayStr)\s*\(\s*\)\s*\)\s*;/;
+  const repins = (code, ref) => (code.match(new RegExp(`\\b${ref}\\.current\\s*=\\s*(getTodayET|getDailyDateET|getPollDayET)\\s*\\(\\s*\\)`, 'g')) || []).length;
   /* Round 645 part three: the two arcade writers, the chain writer and the
      Pack Battle writer are wrappers over writeDailyRecord in src/lib, so the
      file that calls them is the file whose clock read matters. */
@@ -656,21 +666,29 @@ console.log('7) Every file that files a daily record reads the clock ONCE, pinne
   }
   if (suspects.length < 10) fail(`only ${suspects.length} file(s) write a daily record, which is too few to be the real set, so this section did not check anything`);
   let pinned = 0;
+  let refPinned = 0;
+  const allowedReads = code => {
+    const ref = code.match(REF_PIN);
+    return ref ? 1 + repins(code, ref[1]) : 1;
+  };
   for (const { rel, code } of suspects) {
     const reads = code.match(CLOCK) || [];
     /* A file may read the clock through a local wrapper (useGuessTheNation's
        getTodayStr), so the pin is what is required, not the callee's name. */
-    if (!PIN.test(code)) {
+    if (!PIN.test(code) && !REF_PIN.test(code)) {
       fail(`${rel} writes a daily record but never pins the day at mount (useRef(getTodayET()).current), so a session crossing midnight ET files the old day under the new date`);
       continue;
     }
-    if (reads.length > 1) {
-      fail(`${rel} reads the clock ${reads.length} times; a daily route reads it once, into the mount pin, or the deal and the record can name different days`);
+    const allowed = allowedReads(code);
+    if (reads.length > allowed) {
+      fail(`${rel} reads the clock ${reads.length} times; a daily route reads it once, into the mount pin${allowed > 1 ? ` (and ${allowed - 1} time(s) more, into that pin, where it deals a daily)` : ''}, or the deal and the record can name different days`);
       continue;
     }
     pinned += 1;
+    if (allowed > 1) refPinned += 1;
   }
-  console.log(`   ${suspects.length} file(s) write a daily record, ${pinned} of them read the clock once at mount`);
+  console.log(`   ${suspects.length} file(s) write a daily record, ${pinned} of them read the clock only into their pin (${refPinned} take the pin again where a daily is dealt)`);
+  if (refPinned === 0) fail('no file takes its pin again where a daily is dealt, so the re-pin rule above checked nothing (Minefield and Sports Millionaire should)');
   /* The negative: a copy of one real file with a second clock read added back
      must go red, or green above means the check did not look. */
   const victim = suspects.find(s => PIN.test(s.code));
@@ -682,6 +700,22 @@ console.log('7) Every file that files a daily record reads the clock ONCE, pinne
     if (!changed) console.log('   (negative skipped: the sample file does not pass todayStr to writeDailyRecord, so nothing to unpin)');
     else if (reReads > 1) console.log(`   negative: ${victim.rel} with one write unpinned reads the clock ${reReads} times, which this section rejects`);
     else fail('the section 7 negative unpinned a write and the check stayed green, so it is dead');
+  }
+  /* The re-pin negative: a copy of a file that takes its pin again, with one
+     write handed the clock instead of the pin, must go red too, or the extra
+     reads the re-pin rule allows would hide the defect this section is for. */
+  const repinned = suspects.find(s => !PIN.test(s.code) && REF_PIN.test(s.code) && allowedReads(s.code) > 1);
+  if (!repinned) fail('the section 7 re-pin negative has no file that takes its pin again to work from');
+  else {
+    const ref = repinned.code.match(REF_PIN)[1];
+    const write = new RegExp(`(${WRITES_A_DAILY.source.replace(/\\\($/, '')}\\s*\\(\\s*)${ref}\\.current\\b`);
+    const regressed = repinned.code.replace(write, '$1getTodayET()');
+    if (regressed === repinned.code) fail(`the section 7 re-pin negative found no write in ${repinned.rel} that is handed ${ref}.current`);
+    else {
+      const reReads = (regressed.match(CLOCK) || []).length;
+      if (reReads > allowedReads(regressed)) console.log(`   re-pin negative: ${repinned.rel} with one write handed the clock reads it ${reReads} times against ${allowedReads(regressed)} allowed, which this section rejects`);
+      else fail('the section 7 re-pin negative handed a write the clock and the check stayed green, so the re-pin allowance hides the defect');
+    }
   }
 }
 

@@ -89,11 +89,31 @@ export function hofVoteScore(player: HofPlayer, v: 'hof' | 'bust', hintsRevealed
 }
 
 interface DailySave {
-  userVote: 'hof' | 'bust';
+  /** Round 645 part three, second fix: null while hints are being bought and
+   *  no vote is cast yet. */
+  userVote: 'hof' | 'bust' | null;
   hintsRevealed: number;
   score: number;
   /** Round 645: the player the vote was cast on. */
   playerId?: string;
+}
+
+/* Round 645 part three, second fix: every hint bought on the daily is filed
+   the moment it is revealed, so a reload cannot hand it back and a vote after
+   a refresh still pays for it. A save with no vote is that record, and the
+   vote it leads to is recorded, so it is read strictly: it has to name
+   today's own daily player and hold a whole number of hints that player has,
+   or it is ignored and the day deals fresh. A save WITH a vote comes back
+   finished in the initializers and is never recorded (useGameCompletion sees
+   no transition), so it is read as it always was. */
+function checkDailySave(v: unknown, today: string): DailySave | null {
+  if (!v || typeof v !== 'object') return null;
+  const s = v as DailySave;
+  if (s.userVote === 'hof' || s.userVote === 'bust') return s;
+  const p = dailyHofPlayer(today);
+  const h = s.hintsRevealed;
+  if (s.playerId !== p.id || !Number.isInteger(h) || h < 0 || h > p.hints.length) return null;
+  return { userVote: null, hintsRevealed: h, score: 0, playerId: s.playerId };
 }
 
 function loadDailyState(): DailySave | null {
@@ -101,12 +121,12 @@ function loadDailyState(): DailySave | null {
   const key = `${STORAGE_PREFIX}daily-${today}`;
   try {
     const raw = localStorage.getItem(key);
-    if (raw) return JSON.parse(raw) as DailySave;
+    if (raw) return checkDailySave(JSON.parse(raw), today);
   } catch { /* ignore */ }
   return null;
 }
 
-function saveDailyState(userVote: string, hintsRevealed: number, score: number, playerId: string) {
+function saveDailyState(userVote: 'hof' | 'bust' | null, hintsRevealed: number, score: number, playerId: string) {
   const today = getTodayET();
   const key = `${STORAGE_PREFIX}daily-${today}`;
   localStorage.setItem(key, JSON.stringify({ userVote, hintsRevealed, score, playerId }));
@@ -174,9 +194,11 @@ export function useHofOrBust(): HofState {
 
   const revealHint = useCallback(() => {
     if (hintsRevealed < player.hints.length && !userVote) {
+      /* Round 645 part three, second fix: on the record before it is shown. */
+      if (mode === 'daily') saveDailyState(null, hintsRevealed + 1, 0, player.id);
       setHintsRevealed(h => h + 1);
     }
-  }, [hintsRevealed, player.hints.length, userVote]);
+  }, [hintsRevealed, player.hints.length, player.id, userVote, mode]);
 
   const switchToUnlimited = useCallback(() => {
     setMode('unlimited');

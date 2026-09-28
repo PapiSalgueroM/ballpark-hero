@@ -54,6 +54,11 @@
  *   [chain-bound]            NASCAR and Tennis resumed any names a part
  *                            played record held, so invented links were
  *                            recorded on Give Up
+ *   [day-rekey]              Minefield and Sports Millionaire dealt a daily
+ *                            started after midnight ET from the new day and
+ *                            read and filed it under the old one
+ *   [hof-hint]               HOF or Bust filed nothing before the vote, so a
+ *                            refresh handed back every hint bought
  *
  * Everything runs through the same mocks as the reload fence (./dailyReload
  * /mocks): the real pages and hooks, the real recorder hook and restore
@@ -75,7 +80,8 @@ import ufcDriver from './dailyReload/ufc-chain.driver';
 import freeKickDriver from './dailyReload/free-kick.driver';
 import marketDriver from './dailyReload/player-stock-market.driver';
 import millionaireDriver, { POOL as MILLIONAIRE_POOL } from './dailyReload/sports-millionaire.driver';
-import { buildFreshLadder } from '@/lib/sportsMillionaire';
+import { buildFreshLadder, freshLifelines, saveDailyProgress as saveMillionaireProgress } from '@/lib/sportsMillionaire';
+import { buildRun as buildMinefield, daySeed as minefieldSeed } from '@/lib/minefield';
 import { getTodayET } from '@/lib/dateUtils';
 import { writeDailyRecord } from '@/lib/dailyRecord';
 import { writeChainDaily } from '@/lib/chainDaily';
@@ -95,6 +101,9 @@ import TennisChain from '@/pages/TennisChain';
 import PackBattle from '@/pages/PackBattle';
 import RarityRound from '@/pages/RarityRound';
 import NbaGauntletDraft from '@/pages/NbaGauntletDraft';
+import Minefield from '@/pages/Minefield';
+import { dailyHofPlayer, useHofOrBust } from '@/hooks/useHofOrBust';
+import hofPlayers from '@/data/hofPlayers';
 import DrillBoard from '@/components/soccer-career/DrillBoard';
 
 const today = getTodayET();
@@ -993,6 +1002,190 @@ describe('daily lock edges', () => {
       } finally {
         millionaireDriver.unmount(m);
       }
+    });
+  });
+
+  /* ------------------------------------------ a session across midnight */
+
+  /* Round 645 part three, second fix: Minefield and Sports Millionaire dealt
+     the daily from the live clock while their progress was read and filed
+     under the day pinned at mount. A page opened before midnight ET and
+     started after it replayed the old day's clicks or climb onto the new
+     day's deal, and filed it under the old date. Starting a daily now takes
+     the pin again. A run already dealt keeps its own day (Round 428's rule),
+     which is the second test of each pair. */
+  describe('[day-rekey] a daily started after midnight ET deals, reads and files the new day', () => {
+    const DAY = '2026-09-28';
+    const NEXT = '2026-09-29';
+    /* Eastern daylight time, UTC minus four. */
+    const at = (etDay: string, hhmm: string) => new Date(`${etDay}T${hhmm}:00-04:00`);
+    const stored = (slug: string, day: string) => JSON.parse(localStorage.getItem(`${slug}-daily-${day}`) ?? 'null') as Record<string, unknown> | null;
+    const boardsOf = (day: string) => buildMinefield(minefieldSeed(new Date(`${day}T12:00:00Z`)));
+    const liveTiles = (m: MountedPage, names: string[]) => Array.from(m.container.querySelectorAll('button')).filter(b => names.includes((b.textContent ?? '').trim()));
+    const tile = (m: MountedPage, name: string) => {
+      const b = Array.from(m.container.querySelectorAll('button')).find(x => (x.textContent ?? '').trim() === name && !x.disabled);
+      if (!b) throw new Error(`no live tile reads ${name}`);
+      return b;
+    };
+    async function mountMinefield(): Promise<MountedPage> {
+      const m = mountPage(<Minefield />, '/minefield');
+      await waitFor(() => button(m.container, /^Daily Boards$/));
+      return m;
+    }
+    const questionLine = (m: MountedPage) => Array.from(m.container.querySelectorAll('span')).map(s => (s.textContent ?? '').trim()).find(t => /^Question \d+ of \d+$/.test(t)) ?? '';
+    const questionShown = (m: MountedPage, q: { question: string }) => Array.from(m.container.querySelectorAll('p')).some(p => (p.textContent ?? '').trim() === q.question);
+
+    it('Minefield: a page opened before midnight and started after it deals the new day fresh and files it there', async () => {
+      const dayTiles = boardsOf(DAY)[0].tiles.map(t => t.name);
+      const nextTiles = boardsOf(NEXT)[0].tiles.map(t => t.name);
+      vi.useFakeTimers({ toFake: ['Date'] });
+      try {
+        vi.setSystemTime(at(DAY, '23:40'));
+        let m = await mountMinefield();
+        try {
+          await click(button(m.container, /^Daily Boards$/));
+          await click(tile(m, dayTiles[0]));
+        } finally {
+          m.unmount();
+        }
+        expect(stored('minefield', DAY)?.boards, 'the earlier visit filed one click').toEqual([[0]]);
+        vi.setSystemTime(at(DAY, '23:50'));
+        m = await mountMinefield();
+        try {
+          vi.setSystemTime(at(NEXT, '00:10'));
+          await click(button(m.container, /^Daily Boards$/));
+          const shown = liveTiles(m, [...dayTiles, ...nextTiles]);
+          expect(shown.filter(b => b.disabled).length, 'nothing is picked on the new day\'s board').toBe(0);
+          expect(shown.map(b => (b.textContent ?? '').trim()).sort(), 'the board is the new day\'s first').toEqual([...nextTiles].sort());
+          await click(tile(m, nextTiles[0]));
+          expect(stored('minefield', NEXT)?.boards, 'the click is filed under the new day').toEqual([[0]]);
+          expect(finishes()).toBe(0);
+        } finally {
+          m.unmount();
+        }
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it('Minefield: a board dealt before midnight and played after it keeps filing under its own day', async () => {
+      const dayTiles = boardsOf(DAY)[0].tiles.map(t => t.name);
+      vi.useFakeTimers({ toFake: ['Date'] });
+      try {
+        vi.setSystemTime(at(DAY, '23:58'));
+        const m = await mountMinefield();
+        try {
+          await click(button(m.container, /^Daily Boards$/));
+          await click(tile(m, dayTiles[0]));
+          vi.setSystemTime(at(NEXT, '00:05'));
+          await click(tile(m, dayTiles[1]));
+          expect(stored('minefield', DAY)?.boards, 'both clicks are the day the board was dealt on').toEqual([[0, 1]]);
+          expect(stored('minefield', NEXT), 'nothing is filed under the new day').toBeNull();
+        } finally {
+          m.unmount();
+        }
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it('Sports Millionaire: a page opened before midnight, toggled to Daily after it, deals the new day\'s ladder fresh', async () => {
+      const ladderOf = (day: string) => buildFreshLadder(MILLIONAIRE_POOL, 'daily', day);
+      vi.useFakeTimers({ toFake: ['Date'] });
+      try {
+        vi.setSystemTime(at(DAY, '23:50'));
+        saveMillionaireProgress(DAY, { at: 1, lifelines: freshLifelines(), swap: null, visible: null, crowd: null, outcome: null });
+        const m = await millionaireDriver.mount();
+        try {
+          expect(questionLine(m), 'today\'s climb resumes').toBe('Question 2 of 15');
+          expect(questionShown(m, ladderOf(DAY)[1])).toBe(true);
+          vi.setSystemTime(at(NEXT, '00:10'));
+          await click(millionaireToggle(m, 'unlimited'));
+          await click(millionaireToggle(m, 'daily'));
+          expect(questionLine(m), 'the new day starts at the bottom').toBe('Question 1 of 15');
+          expect(questionShown(m, ladderOf(NEXT)[0]), 'on the new day\'s first question').toBe(true);
+          expect(m.container.textContent ?? '', 'and the caption names the new day').toContain(`Today's ladder, ${NEXT}.`);
+          expect(finishes()).toBe(0);
+        } finally {
+          millionaireDriver.unmount(m);
+        }
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it('Sports Millionaire: a ladder dealt before midnight and played after it keeps filing under its own day', async () => {
+      vi.useFakeTimers({ toFake: ['Date'] });
+      try {
+        vi.setSystemTime(at(DAY, '23:58'));
+        const m = await millionaireDriver.mount();
+        try {
+          expect(questionLine(m)).toBe('Question 1 of 15');
+          vi.setSystemTime(at(NEXT, '00:05'));
+          await click(button(m.container, /50:50/));
+          expect((stored('sports-millionaire', DAY)?.lifelines as { used: Record<string, boolean> } | undefined)?.used['fifty-fifty'], 'the lifeline is filed under the day the ladder was dealt on').toBe(true);
+          expect(stored('sports-millionaire', NEXT), 'nothing is filed under the new day').toBeNull();
+        } finally {
+          millionaireDriver.unmount(m);
+        }
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+  });
+
+  /* ------------------------------------------------------- HOF or Bust */
+
+  /* Round 645 part three, second fix: the daily filed nothing until the vote,
+     and every hint costs 100 of the 1000, so a player could read every hint,
+     refresh, and vote on a clean board for the full score. */
+  describe('[hof-hint] HOF or Bust: a hint bought on the daily stays bought across a refresh', () => {
+    const key = `hof-or-bust-daily-${today}`;
+    const rightVote = (p: { verdict: string }) => (p.verdict === 'hof' ? 'hof' : 'bust');
+
+    it('two hints, a reload, and the right vote records 1000 less both hints', () => {
+      let h = renderHook(() => useHofOrBust());
+      try {
+        expect(h.result.current.mode).toBe('daily');
+        act(() => h.result.current.revealHint());
+        act(() => h.result.current.revealHint());
+        expect(h.result.current.hintsRevealed).toBe(2);
+      } finally {
+        h.unmount();
+      }
+      h = renderHook(() => useHofOrBust());
+      try {
+        expect(h.result.current.hintsRevealed, 'the reload keeps both hints bought').toBe(2);
+        expect(h.result.current.status).toBe('voting');
+        expect(h.result.current.player.id).toBe(dailyHofPlayer(today).id);
+        act(() => h.result.current.vote(rightVote(h.result.current.player)));
+        expect(recordCompletion.mock.calls.map(c => [c[0], c[1]]), 'the vote pays for the hints').toEqual([['/hof-or-bust', 800]]);
+      } finally {
+        h.unmount();
+      }
+    });
+
+    it('a save with no vote that names another player, or hints the player does not have, is ignored', () => {
+      const daily = dailyHofPlayer(today);
+      const borderline = hofPlayers.find(p => p.verdict === 'borderline');
+      if (!borderline) throw new Error('no borderline player to tamper with, the check has nothing to take');
+      const forged: Record<string, unknown>[] = [
+        { userVote: null, hintsRevealed: 0, score: 0, playerId: borderline.id },
+        { userVote: null, hintsRevealed: -10, score: 0, playerId: daily.id },
+        { userVote: null, hintsRevealed: daily.hints.length + 1, score: 0, playerId: daily.id },
+        { hintsRevealed: 1.5, playerId: daily.id },
+      ];
+      for (const save of forged) {
+        localStorage.setItem(key, JSON.stringify(save));
+        const h = renderHook(() => useHofOrBust());
+        try {
+          expect(h.result.current.player.id, `the daily player, whatever ${JSON.stringify(save)} names`).toBe(daily.id);
+          expect(h.result.current.hintsRevealed, `no hints from ${JSON.stringify(save)}`).toBe(0);
+        } finally {
+          h.unmount();
+        }
+      }
+      expect(finishes()).toBe(0);
     });
   });
 });

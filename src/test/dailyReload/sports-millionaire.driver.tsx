@@ -155,7 +155,7 @@ export default defineDriver<MountedPage>({
   finishedSetter: "setPhase('done')",
 
   async mount() {
-    setPoolFixture('millionaire', (mode: 'daily' | 'unlimited') => ({ pool: POOL, ladder: buildFreshLadder(POOL, mode) }));
+    setPoolFixture('millionaire', (mode: 'daily' | 'unlimited', _lib: unknown, day?: string) => ({ pool: POOL, ladder: buildFreshLadder(POOL, mode, day) }));
     const m = mountPage(<SportsMillionaire />, '/sports-millionaire');
     await waitFor(() => {
       if (!resultCard(m) && !questionOnScreen(m)) throw new Error('the page has not left boot');

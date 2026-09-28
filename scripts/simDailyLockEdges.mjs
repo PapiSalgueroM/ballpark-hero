@@ -16,7 +16,12 @@
    result card is no transition to a recorder whose done flag is the phase,
    so Pack Battle and Rarity Round dropped the daily finish that way, and
    Sports Millionaire will once Round 645 part one drops the mode from its
-   done flag.
+   done flag. The re-review of the fix pass (the second fix) found four more:
+   Rarity Round's restore read a pool that failed to load as a refusal and
+   dealt the day again, NASCAR and Tennis resumed invented names from a part
+   played record, Minefield and Sports Millionaire filed a daily started after
+   midnight under the old day, and HOF or Bust handed back its hints on a
+   refresh.
 
    The test is src/test/dailyLockEdges.test.tsx, one section per door, each
    tagged [id]. It renders the real pages and hooks with the reload fence's
@@ -78,7 +83,7 @@ const SECTIONS = [
   'pack-toggle', 'pack-writer', 'pack-mark', 'rarity-mark', 'rarity-derive',
   'arcade-bound', 'gauntlet-board', 'drill-fouls', 'market-roll',
   'pack-new-finish', 'rarity-new-finish', 'millionaire-new-finish',
-  'rarity-unread', 'chain-bound',
+  'rarity-unread', 'chain-bound', 'day-rekey', 'hof-hint',
 ];
 
 function parse(out) {
@@ -258,6 +263,26 @@ const CONTROLS = [
       { ...NASCAR_HOOK, cuts: [['  if (!rec.ended && !linksKnown(rec.links, nascarChampionNames.names)) return null;\n', '']] },
       { ...TENNIS_HOOK, cuts: [['  if (!rec.ended && !linksKnown(rec.links, tennisChampionNames.names)) return null;\n', '']] },
     ],
+  },
+  {
+    name: 'minefield-rekey', red: 'day-rekey',
+    what: 'Minefield keeps the mount day when Daily is pressed after midnight',
+    swaps: [{ module: '@/pages/Minefield', file: 'src/pages/Minefield.tsx', cuts: [['      todayRef.current = getTodayET();\n', '']] }],
+  },
+  {
+    name: 'millionaire-rekey', red: 'day-rekey',
+    what: 'Sports Millionaire keeps the mount day when the Daily toggle deals after midnight',
+    swaps: [{ module: '@/pages/SportsMillionaire', file: 'src/pages/SportsMillionaire.tsx', cuts: [["    if (mode === 'daily') todayRef.current = getTodayET();\n", '']] }],
+  },
+  {
+    name: 'hof-hint-save', red: 'hof-hint',
+    what: 'HOF or Bust files a daily hint only with the vote',
+    swaps: [{ module: '@/hooks/useHofOrBust', file: 'src/hooks/useHofOrBust.ts', cuts: [["      if (mode === 'daily') saveDailyState(null, hintsRevealed + 1, 0, player.id);\n", '']] }],
+  },
+  {
+    name: 'hof-hint-bound', red: 'hof-hint',
+    what: 'HOF or Bust takes a save with no vote at its word',
+    swaps: [{ module: '@/hooks/useHofOrBust', file: 'src/hooks/useHofOrBust.ts', cuts: [['  if (s.playerId !== p.id || !Number.isInteger(h) || h < 0 || h > p.hints.length) return null;\n', '']] }],
   },
 ];
 

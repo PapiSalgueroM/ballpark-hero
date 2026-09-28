@@ -27,17 +27,25 @@ const Minefield = () => {
      filed under TOMORROW, so the next day opened already finished with a score
      from boards it never dealt. Pinning is the convention useDailyPuzzle
      already follows (its own todayStr ref). A session that crosses midnight
-     finishes the day it started; a reload after midnight deals the new day. */
-  const todayStr = useRef(getTodayET()).current;
+     finishes the day it started; a reload after midnight deals the new day.
+     Round 645 part three, second fix: and pressing Daily after midnight deals
+     the new day too. The boards were dealt from the live clock (daySeed())
+     while the progress and the result were read and filed under the pin, so
+     a page opened before midnight and started after it replayed the old
+     day's clicks onto the new day's boards and filed the run under the old
+     date. Starting a daily now takes the pin again, and the boards, the
+     reads and every write of that run all use it. */
+  const todayRef = useRef(getTodayET());
+  const dayBoards = (day: string) => buildRun(daySeed(new Date(`${day}T12:00:00Z`)));
   /* Round 428: a finished daily opens on its final score. Restored here, in
      the initializers, so useGameCompletion sees no transition and records
      nothing on a reload, and the intro (the only way to start('daily')) is
      not drawn again for the rest of the ET day. The boards are rebuilt from
      the day seed so the max on the card is the real one. */
-  const [restored] = useState(() => loadDailyResult(todayStr));
+  const [restored] = useState(() => loadDailyResult(todayRef.current));
   const [gameMode, setGameMode] = useState<GameMode>('daily');
   const [phase, setPhase] = useState<Phase>(restored ? 'done' : 'intro');
-  const [rounds, setRounds] = useState<MinefieldRound[]>(() => (restored ? buildRun(daySeed()) : []));
+  const [rounds, setRounds] = useState<MinefieldRound[]>(() => (restored ? dayBoards(todayRef.current) : []));
   const [roundIdx, setRoundIdx] = useState(0);
   const [picked, setPicked] = useState<number[]>([]);
   const [lives, setLives] = useState(LIVES_PER_ROUND);
@@ -62,14 +70,15 @@ const Minefield = () => {
 
   const start = (gm: GameMode) => {
     if (gm === 'daily') {
+      todayRef.current = getTodayET();
       /* A second tab still on the intro after another tab finished the
          daily: open the result rather than deal the boards again. This is a
          finished state set after mount, so it says so first or the recorder
          books it a second time (Round 399). */
-      const saved = loadDailyResult(todayStr);
+      const saved = loadDailyResult(todayRef.current);
       if (saved) {
         setGameMode('daily');
-        setRounds(buildRun(daySeed()));
+        setRounds(dayBoards(todayRef.current));
         setScore(saved.score);
         setRoundsWon(saved.roundsWon);
         markRestoredFinish('minefield');
@@ -77,7 +86,7 @@ const Minefield = () => {
         return;
       }
     }
-    const run = buildRun(gm === 'daily' ? daySeed() : undefined);
+    const run = gm === 'daily' ? dayBoards(todayRef.current) : buildRun();
     setGameMode(gm);
     setRounds(run);
     /* Round 645 part three fix: a daily part played today comes back on the
@@ -85,7 +94,7 @@ const Minefield = () => {
        that had ended comes back on its end panel; the last one ending with
        the final score never shown finishes from there, and that is the
        finish recorded. */
-    const part = gm === 'daily' ? loadDailyProgress(todayStr, run) : null;
+    const part = gm === 'daily' ? loadDailyProgress(todayRef.current, run) : null;
     if (part) {
       setPastBoards(part.boards.slice(0, part.roundIdx));
       setRoundIdx(part.roundIdx);
@@ -128,7 +137,7 @@ const Minefield = () => {
     const nextPicked = [...picked, i];
     /* Round 645 part three fix: on the record the moment it is clicked, so a
        refresh cannot hand back a board whose mines it has named. */
-    if (gameMode === 'daily') saveDailyProgress(todayStr, { boards: [...pastBoards, nextPicked] });
+    if (gameMode === 'daily') saveDailyProgress(todayRef.current, { boards: [...pastBoards, nextPicked] });
     setPicked(nextPicked);
     if (tile.isMine) {
       setLastMine(tile.name);
@@ -144,7 +153,7 @@ const Minefield = () => {
 
   const nextBoard = () => {
     if (roundIdx + 1 >= rounds.length) {
-      if (gameMode === 'daily') saveDailyResult(todayStr, { score, roundsWon });
+      if (gameMode === 'daily') saveDailyResult(todayRef.current, { score, roundsWon });
       setPhase('done');
       return;
     }

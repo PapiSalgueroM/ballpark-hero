@@ -81,7 +81,14 @@ const SportsMillionaire = () => {
      ladder it played; loadMillionairePool stamps the ladder at the same
      moment. dailySaved latches the one record a daily gets. */
   const dailySaved = useRef(false);
-  const todayStr = useRef(getTodayET()).current;
+  /* Round 645 part three, second fix: the pin is taken again whenever the
+     Daily toggle deals a daily. buildFreshLadder read the live clock while
+     the record and the progress were read and filed under the mount pin, so
+     a page open across midnight ET dealt the new day's ladder, resumed the
+     old day's climb onto it and filed the answers under the old date. The
+     ladder, the reads, every write and the caption now all use this one
+     value, and a run in flight keeps the day it was dealt on. */
+  const todayRef = useRef(getTodayET());
   /* Round 645 part three fix: the phase as last committed, set in the commit
      itself (a layout effect). The Daily toggle can land a decided daily
      answer on a page already on the Unlimited result card. Once Round 645
@@ -160,19 +167,20 @@ const SportsMillionaire = () => {
     if (revealTimer.current) { clearTimeout(revealTimer.current); revealTimer.current = null; }
     setPlayMode(mode);
     if (!sourcePool) return;
-    const freshLadder = buildFreshLadder(sourcePool, mode);
+    if (mode === 'daily') todayRef.current = getTodayET();
+    const freshLadder = buildFreshLadder(sourcePool, mode, todayRef.current);
     if (freshLadder.length < LADDER_SIZE) {
       setPhase('error');
       return;
     }
     setLadder(freshLadder);
     if (mode === 'daily') {
-      const done = loadDailyRecord(todayStr);
+      const done = loadDailyRecord(todayRef.current);
       if (done) {
         restoreDaily(done);
         return;
       }
-      const part = loadDailyProgress(todayStr, freshLadder);
+      const part = loadDailyProgress(todayRef.current, freshLadder);
       if (part) {
         resumeDaily(freshLadder, part);
         return;
@@ -190,14 +198,13 @@ const SportsMillionaire = () => {
     setFinalAmount(null);
     setWalkedAway(false);
     setPhase('playing');
-  }, [restoreDaily, resumeDaily, todayStr]);
+  }, [restoreDaily, resumeDaily]);
 
   // Boot: load the shared trivia pool once, then start daily mode. The two
-  // deps are a stable callback and a per mount constant, so this still runs
-  // once.
+  // deps are stable callbacks, so this still runs once.
   useEffect(() => {
     let cancelled = false;
-    loadMillionairePool('daily')
+    loadMillionairePool('daily', todayRef.current)
       .then(({ pool: loadedPool, ladder: dailyLadder }) => {
         if (cancelled) return;
         if (!loadedPool || dailyLadder.length < LADDER_SIZE) {
@@ -206,12 +213,12 @@ const SportsMillionaire = () => {
         }
         setPool(loadedPool);
         setLadder(dailyLadder);
-        const done = loadDailyRecord(todayStr);
+        const done = loadDailyRecord(todayRef.current);
         if (done) {
           restoreDaily(done);
           return;
         }
-        const part = loadDailyProgress(todayStr, dailyLadder);
+        const part = loadDailyProgress(todayRef.current, dailyLadder);
         if (part) {
           resumeDaily(dailyLadder, part);
           return;
@@ -228,7 +235,7 @@ const SportsMillionaire = () => {
       cancelled = true;
       if (revealTimer.current) clearTimeout(revealTimer.current);
     };
-  }, [restoreDaily, resumeDaily, todayStr]);
+  }, [restoreDaily, resumeDaily]);
 
   const switchPlayMode = (mode: PlayMode) => {
     if (mode === playMode || !pool) return;
@@ -242,7 +249,7 @@ const SportsMillionaire = () => {
   /* Round 645 part three fix: the daily's climb as it stands, filed on every
      step that decides something, before any reveal. */
   const fileClimb = (p: MillionaireProgress) => {
-    if (playMode === 'daily') saveDailyProgress(todayStr, p);
+    if (playMode === 'daily') saveDailyProgress(todayRef.current, p);
   };
   const shownVisible = () => (visibleOptions ? [...visibleOptions] : null);
 
@@ -349,8 +356,8 @@ const SportsMillionaire = () => {
   useEffect(() => {
     if (playMode !== 'daily' || phase !== 'done' || finalAmount === null || dailySaved.current) return;
     dailySaved.current = true;
-    saveDailyRecord(todayStr, { currentIndex, lastCorrectIndex, finalAmount, walkedAway });
-  }, [playMode, phase, finalAmount, currentIndex, lastCorrectIndex, walkedAway, todayStr]);
+    saveDailyRecord(todayRef.current, { currentIndex, lastCorrectIndex, finalAmount, walkedAway });
+  }, [playMode, phase, finalAmount, currentIndex, lastCorrectIndex, walkedAway]);
 
   const emojiGrid = useMemo(() => {
     if (!isComplete) return '';
@@ -430,7 +437,7 @@ const SportsMillionaire = () => {
               ))}
             </div>
             {playMode === 'daily' && (
-              <p className="text-xs text-muted-foreground mt-3">Today's ladder, {getTodayET()}. Same 15 questions for everyone.</p>
+              <p className="text-xs text-muted-foreground mt-3">Today's ladder, {todayRef.current}. Same 15 questions for everyone.</p>
             )}
           </>
         }
