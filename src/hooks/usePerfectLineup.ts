@@ -6,6 +6,7 @@ import {
   rollLineup,
   eligiblePlayers,
   simulate,
+  classicLineupPoints,
   FORMATION_SIZE,
 } from '@/data/perfectLineup';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -164,8 +165,11 @@ export function usePerfectLineup() {
   // slug per spec (no new game slug), so this hook must only call
   // useGameCompletion once with one combined isComplete/score pair.
   const isComplete = phase === 'result' || unbeatenPhase === 'done';
+  /* Round 645: a classic board records its rating above the worst board's
+     (classicLineupPoints), not the rating itself. Go Unbeaten already pays
+     only for matches the run survived. */
   const completionScore =
-    unbeatenPhase === 'done' && unbeatenRun ? unbeatenRun.points : result?.rating ?? 0;
+    unbeatenPhase === 'done' && unbeatenRun ? unbeatenRun.points : classicLineupPoints(slots, result);
 
   useGameCompletion('perfect-lineup', isComplete, completionScore);
 
@@ -175,6 +179,8 @@ export function usePerfectLineup() {
     picks,
     phase,
     result,
+    /** Round 645: what a finished classic board records and shows. */
+    points: classicLineupPoints(slots, result),
     usedNames,
     filledCount,
     allFilled,

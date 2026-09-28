@@ -1,5 +1,6 @@
 import { Player, Position } from '@/types/game';
 import { players } from '@/data/players';
+import { skillPoints } from '@/lib/skillPoints';
 
 export type ConstraintType = 'league' | 'nationality' | 'any';
 
@@ -153,6 +154,41 @@ export function simulate(picks: Player[]): SimResult {
   });
 
   return { rating, chemistry, squadValue, goalsFor, goalsAgainst, grade, slotGrades };
+}
+
+/**
+ * Round 645: the ratings the worst and the best picks reach on this board,
+ * the same measure src/lib/perfectLineupEngine.ts takes for the other sports:
+ * slot by slot, each name used once, the lowest valued eligible player for the
+ * worst board and the highest for the best. Measured before this round over
+ * 300 boards: the worst picks rated 7 to 24 against best boards of 66 on
+ * average, so the classic board floor was smaller than the other sports' but
+ * still a sixth of a perfect score for nothing.
+ */
+export function lineupBounds(slots: LineupSlot[]): { zero: number; perfect: number } {
+  const board = (worst: boolean): number | null => {
+    const used = new Set<string>();
+    const picks: Player[] = [];
+    for (const slot of slots) {
+      const el = eligiblePlayers(slot, used);
+      if (el.length === 0) return null;
+      const p = worst ? el[el.length - 1] : el[0];
+      used.add(p.name);
+      picks.push(p);
+    }
+    return simulate(picks).rating;
+  };
+  const zero = board(true);
+  const perfect = board(false);
+  return zero === null || perfect === null ? { zero: 0, perfect: 100 } : { zero, perfect };
+}
+
+/** Round 645: what a finished classic board records, the rating above the
+ *  worst board's, with the best board's rating kept exactly. */
+export function classicLineupPoints(slots: LineupSlot[], result: SimResult | null): number {
+  if (!result) return 0;
+  const { zero, perfect } = lineupBounds(slots);
+  return skillPoints(result.rating, zero, perfect);
 }
 
 const GRADE_EMOJI: Record<SlotGrade, string> = { green: '🟩', yellow: '🟨', black: '⬛' };

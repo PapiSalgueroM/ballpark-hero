@@ -8,6 +8,7 @@ import {
   rollLineup,
   eligiblePlayers,
   simulate,
+  lineupPoints,
 } from '@/lib/perfectLineupEngine';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
@@ -128,7 +129,11 @@ export function usePerfectLineupGeneric<P>(config: LineupConfig<P>) {
   /* A daily already in the books is not a finish: a reloaded or toggled
      back result never records, and the fresh one records once, in the same
      commit that then books it below. */
-  useGameCompletion(config.gameId, phase === 'result' && !(mode === 'daily' && dailyDone), result?.rating ?? 0);
+  /* Round 645: the rating above what the worst picks on this board reach,
+     not the rating itself, which the worst picks already carried to 70 and
+     more (lineupBounds). The best board records its rating unchanged. */
+  const points = useMemo(() => lineupPoints(config, slots, result), [config, slots, result]);
+  useGameCompletion(config.gameId, phase === 'result' && !(mode === 'daily' && dailyDone), lineupPoints(config, slots, result));
 
   useEffect(() => {
     if (mode !== 'daily' || phase !== 'result' || dailyDone) return;
@@ -143,6 +148,7 @@ export function usePerfectLineupGeneric<P>(config: LineupConfig<P>) {
       picks,
       phase,
       result,
+      points,
       filledCount,
       allFilled,
       rollDaily,
@@ -153,6 +159,6 @@ export function usePerfectLineupGeneric<P>(config: LineupConfig<P>) {
       simulateLineup,
       reset,
     }),
-    [mode, slots, picks, phase, result, filledCount, allFilled, rollDaily, rollUnlimited, eligibleFor, pickPlayer, clearSlot, simulateLineup, reset],
+    [mode, slots, picks, phase, result, points, filledCount, allFilled, rollDaily, rollUnlimited, eligibleFor, pickPlayer, clearSlot, simulateLineup, reset],
   );
 }

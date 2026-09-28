@@ -170,6 +170,7 @@ const PerfectLineupBoard = () => {
             headline={`Grade ${game.result.grade}`}
             statRow={[
               { label: 'Rating', value: game.result.rating },
+              { label: 'Points', value: game.points },
               { label: 'Chemistry', value: `${game.result.chemistry}%` },
               { label: 'Squad', value: `€${game.result.squadValue}M` },
               ...(chemistry.totalBonus > 0 ? [{ label: 'Chem. Bonus', value: `+${chemistry.totalBonus}` }] : []),
