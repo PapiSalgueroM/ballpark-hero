@@ -1,5 +1,51 @@
 # Project state
 
+## ROUND 669 FIXED 2026-09-28: World XI defensive midfielders, branch `r669-worldxi-dm`, migration UNAPPLIED
+
+Not on main. The review found a blocker: the migration's second DO block closed with `end $;`, so
+everything after it, `commit;` included, sat inside one dollar quote and Postgres would have
+refused the file. Fixed, and the file was then **dry run on live twice** (once by the first fix
+pass, once again by the second rather than take it on trust) as `BEGIN; <body>; ROLLBACK;` through
+the Supabase MCP: no exception, 46 Defensive Midfield rows and 5496 rows in 2026 before and after.
+The record's `dryRun` carries the sha256 of the file it ran, and `simWorldXiDefensiveMids` goes red
+if the file changes after that.
+
+- **What it writes:** 366 year-2026 Defensive Midfield rows (was 398), 4 club corrections and 1
+  age correction (Dendoncker) among the existing 46. 80 held, each with its reason: 20 because
+  FotMob's primary for them is a defender or a winger (defensive midfield rested on Transfermarkt
+  alone; they wait for a third host), 12 outside the value band, and the builder's 48.
+- **Value band:** Tukey's fence on ln(FotMob / Transfermarkt), 0.323 to 1.341 (quartiles 0.551 and
+  0.786, median 0.655, over the builder's 398). Was 0.222 to 1.994.
+- **Ages:** the table's convention, his age on 2026-01-01. Rodri (29) and Bissouma (29) are right on
+  that rule, as are Bennacer and Brozovic; Dendoncker's 31 becomes 30.
+- **Apply at 00:00 America/New_York (04:00 UTC now, 05:00 UTC from 2026-11-01), not 00:00 UTC.**
+  Measured with the game's own fetchFootlePlayerPool: the rows move Footle's daily answer for 344
+  of today and the next 365 days (2026-09-28 would go from Mateo Retegui to Jorrel Hato). No past
+  answer is ever read again (no archive, no yesterday reveal, the daily record keeps the score,
+  streaks keep dates), so Footle's daily pool is NOT frozen. Footle's tiers are fixed size, so 15
+  players leave its famous 300 (Gavi, Jobe Bellingham, Tah, Joelinton and more) and 103 leave the
+  insane 1200: the pool rule working on a table that finally has its defensive midfielders.
+- **Fence:** `simWorldXiDefensiveMids`, 4 sections, 33 controls, green on LF and on a CRLF copy.
+  `WXIDM_CONTROL=all` needs `WXIDM_PROJECT=1` until the migration is applied. The projection
+  projects the RECORD, never the SQL; section 1 proves the SQL stages exactly the record, and the
+  dry run proves it executes.
+- **Bangladesh** is in `confederationGroups.ts` (AFC) and `FLAG_CODES`, ready for Hamza Choudhury,
+  whose row is one of the 20 held.
+- **After applying:** rerun `simWorldXiDefensiveMids` in default mode, then the live readers of
+  `player_market_values` (simPlayerBingoPool, simPlayersPool, simRarityPools, simNationalities,
+  simSignThePlayerAuction, simValueFreshness and the rest). `simPrerender` section 8 needs a
+  `build:seo` before it sees the new What's New line.
+
+**Follow ups, not in this round.** World XI keys same year namesakes by (year, club) and section 4
+now fails on any name in the pool twice that is not declared; move it onto Round 668's shared
+`PlayerIdentityConfig` (person_key plus spelling) when 668 lands, because the name keyed readers
+(playerSearch, Player Bingo, Footle) still keep one Vitinha. 29 more of the 46 hand written rows
+carry an age that is not their age on 2026-01-01 (listed in the record's `ageFollowUp`), several
+values have drifted (Rodri stored at USD 90M, Transfermarkt EUR 55M today), Paredes says 'Boca
+Juniors' where 13 rows say 'CA Boca Juniors', Lewis-Skelly and Kricfalusi sit at LB and CB where
+Transfermarkt now has DM, and William Carvalho's club is unconfirmed. `WhatsNew.tsx` and the top of
+`WORKBOARD.md` will conflict textually with the Round 668 branch.
+
 ## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
 
 Assembled and gated by the desktop Claude lane in the CRLF gate clone on `release-d`, pushed to
