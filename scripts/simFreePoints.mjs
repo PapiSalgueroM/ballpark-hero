@@ -37,9 +37,11 @@
  * so this table certified a run nobody can play (the rows now deal random
  * legal lineups of real players); the four front offices and two dynasties
  * were held to their pre 647 shape (only a title records) and went red the
- * moment 647 landed (the rows now play hands off seasons through 647's
- * ledger); and Rebuild and the Perfect Seasons shared a rating or a record,
- * not the points they record.
+ * moment 647 landed (their six rows are rewritten by the 647 fix, which plays
+ * idle seasons through its own ledger in scripts/lib/seasonLedgerPlay.mjs, so
+ * one copy of how a season is played lives beside the ledger; this file keeps
+ * their control, seasonpar); and Rebuild and the Perfect Seasons shared a
+ * rating or a record, not the points they record.
  *
  * THE RULE THIS HOLDS, one row per game that records a score: the zero skill
  * run records at most 5 percent of the perfect run (ZERO_SHARE_LIMIT), and for
@@ -142,7 +144,8 @@
  *              section4
  *   seasonpar  every closed season pays 50 on top of the ledger's own score,
  *              the par 647's re-review found: the four front offices and both
- *              dynasties
+ *              dynasties (their rows are the 647 fix's, so this control needs
+ *              that fix merged to have a green run to turn red)
  *
  * The control that used to be called untrusted (the offline judge rates a
  * name it cannot price 64 on trust) is gone: under the baseline an XI of such
@@ -467,14 +470,6 @@ export * as nbaCareer from '@/lib/nbaMyCareer';
 export * as mlbCareer from '@/lib/mlbMyCareer';
 export * as nhlCareer from '@/lib/nhlMyCareer';
 export * as ledger from '@/lib/clubManagerScore';
-export * as sl from '@/lib/seasonLedger';
-export * as sf from '@/lib/seasonFormats';
-export * as nflFo from '@/lib/frontOffice';
-export * as nbaFo from '@/lib/nbaFrontOffice';
-export * as mlbFo from '@/lib/mlbFrontOffice';
-export * as nhlFo from '@/lib/nhlFrontOffice';
-export * as cfbDyn from '@/lib/cfbDynasty';
-export * as cbbDyn from '@/lib/cbbDynasty';
 export * as soccer from '@/lib/soccerCareerEngine';
 export * as faceOff from '@/lib/faceOff';
 export * as predictor from '@/hooks/useScorePredictor';
@@ -1176,116 +1171,21 @@ for (const [key, file] of [
   });
 }
 
-/* The four front offices and the two dynasties, on Round 647's season
-   ledger. Each board records its closed season's ledger row, which it builds
-   with appendSeason: the regular season record and the round reached, scored
-   by scoreSeason against the projection made at the pick (projectionFor, the
-   league as it stands). A manager with no skill touches nothing: he takes a
-   team and sims the season. So each row plays every team of a league as the
-   pick, hands off, over SEASON_LEAGUES leagues, through the real engine, the
-   real season shape and the real ledger, and scores the season the way the
-   board does. The perfect run is the same picks' perfect seasons, every
-   regular season game won and the title, scored against the same
-   projections; its mean is the perfect.
-
-   Only the first season is played here. A later season is projected at the
-   previous close through the offseason an untouched manager gets, which is
-   647's own business and changes with it; scripts/simSeasonLedger.mjs plays
-   idle careers season after season through that projection and holds their
-   mean to the same 5 percent (its section 2). The first season needs nothing
-   but the functions every version of the ledger has had, so this row reads
-   the scorer whatever 647 does to it. The engines are driven the way
-   simSeasonLedger drives them, which checks each shape against its engine.
-   64 leagues keep the noise on each mean near 0.3 points of 100. */
-const SEASON_LEAGUES = 64;
-const SEASON_ENGINES = {
-  nfl: () => ({
-    shape: L.sf.NFL_SEASON, salt: 101,
-    init: rng => L.nflFo.initLeague(rng),
-    regular: (lg, rng) => { for (let w = 1; w <= L.nflFo.REGULAR_WEEKS; w += 1) { L.nflFo.injuryPass(lg.teams, rng); for (const g of lg.schedule[w - 1]) L.nflFo.simGame(g, lg.teams, rng); lg.week = w; } },
-    record: (lg, id) => ({ wins: lg.teams[id].wins, games: lg.teams[id].wins + lg.teams[id].losses }),
-    post: (lg, rng) => { const { rounds, champion } = L.nflFo.runPlayoffs(lg.teams, rng); return { games: L.sf.nflPlayoffGames(rounds), champion }; },
-  }),
-  nba: () => ({
-    shape: L.sf.NBA_SEASON, salt: 103,
-    init: rng => L.nbaFo.initNbaLeague(rng),
-    regular: (lg, rng) => { for (let r = 1; r <= L.nbaFo.NBA_ROUNDS; r += 1) { L.nbaFo.simRound(lg, '', rng); lg.round = r; } },
-    record: (lg, id) => ({ wins: lg.teams[id].wins, games: lg.teams[id].wins + lg.teams[id].losses }),
-    post: (lg, rng) => { const { series, champion } = L.nbaFo.runNbaPlayoffs(lg, rng); return { games: series, champion }; },
-  }),
-  mlb: () => ({
-    shape: L.sf.MLB_SEASON, salt: 107,
-    init: rng => L.mlbFo.initMlbLeague(rng),
-    regular: (lg, rng) => { for (let r = 1; r <= L.mlbFo.MLB_ROUNDS; r += 1) { L.mlbFo.simMlbRound(lg, '', rng); lg.round = r; } },
-    record: (lg, id) => ({ wins: lg.teams[id].wins, games: lg.teams[id].wins + lg.teams[id].losses }),
-    post: (lg, rng) => { const { series, champion } = L.mlbFo.runMlbPlayoffs(lg, rng); return { games: series, champion }; },
-  }),
-  nhl: () => ({
-    shape: L.sf.NHL_SEASON, salt: 109,
-    init: rng => L.nhlFo.initNhlLeague(rng),
-    regular: (lg, rng) => { for (let r = 1; r <= L.nhlFo.NHL_FO_ROUNDS; r += 1) { L.nhlFo.simNhlRound(lg, '', rng); lg.round = r; } },
-    record: (lg, id) => ({ wins: lg.teams[id].wins, games: lg.teams[id].wins + lg.teams[id].losses + lg.teams[id].otLosses }),
-    post: (lg, rng) => { const { series, champion } = L.nhlFo.runNhlFoPlayoffs(lg, rng); return { games: series, champion }; },
-  }),
-  cfb: () => ({
-    shape: L.sf.CFB_SEASON, salt: 113,
-    init: rng => L.cfbDyn.initCfb('UGA', rng),
-    regular: (st, rng) => { for (let r = 1; r <= L.cfbDyn.CFB_ROUNDS; r += 1) { L.cfbDyn.simCfbRound(st, rng); st.round += 1; } },
-    record: (st, id, post) => L.cfbDyn.cfbRegularRecord(st, post.ccgs, id),
-    post: (st, rng) => { const p = L.cfbDyn.runCfbPostseason(st, rng); st.natties.push({ season: st.season, team: p.champion }); return { games: p.bracket, champion: p.champion, ccgs: p.ccgs }; },
-  }),
-  cbb: () => ({
-    shape: L.sf.CBB_SEASON, salt: 127,
-    init: rng => L.cbbDyn.initCbb(L.cbbDyn.CBB_SCHOOLS[0].id, rng),
-    regular: (st, rng) => { for (let r = 1; r <= L.cbbDyn.CBB_ROUNDS; r += 1) { L.cbbDyn.simCbbRound(st, rng); st.round += 1; } },
-    record: (st, id) => L.cbbDyn.cbbRegularRecord(st, id),
-    post: (st, rng) => { const p = L.cbbDyn.runMarch(st, rng); st.titles.push({ season: st.season, team: p.champion }); return { games: p.bracket, champion: p.champion }; },
-  }),
-};
-/** The first season hands off, every team the pick, closed the way the
- *  boards close it, and the same picks' perfect seasons. */
-function handsOffSeasons(sport) {
-  const e = SEASON_ENGINES[sport]();
-  const idle = [];
-  const perfect = [];
-  for (let league = 1; league <= SEASON_LEAGUES; league += 1) {
-    const rng = mulberry(6450 * e.salt + league);
-    const lg = e.init(rng);
-    const proj = L.sl.projectSeason(e.shape.teams(lg), e.shape.format, lg.season);
-    e.regular(lg, rng);
-    const post = e.post(lg, rng);
-    for (const t of e.shape.teams(lg)) {
-      const exp = L.sl.expectationOf(proj.get(t.id), lg.season);
-      if (!exp) throw new Error(`${sport}: no projection for ${t.id} in season ${lg.season}`);
-      const r = L.sl.seasonResultOf(lg.season, t.id, e.record(lg, t.id, post), post, e.shape);
-      const closed = L.sl.appendSeason([], r, exp).row;
-      const best = L.sl.appendSeason([], { ...r, wins: r.games, stage: r.rounds + 1 }, exp).row;
-      if (!closed || !best) throw new Error(`${sport}: appendSeason refused a first row`);
-      idle.push({ closedRow: closed });
-      perfect.push({ closedRow: best });
-    }
-  }
-  return { idle, perfect };
-}
-const SEASON_RUNS = new Map();
-const seasonRuns = sport => {
-  if (!SEASON_RUNS.has(sport)) SEASON_RUNS.set(sport, handsOffSeasons(sport));
-  return SEASON_RUNS.get(sport);
-};
-const SEASON_ROWS = [
-  ['front-office', 'src/components/front-office/FrontOfficeBoard.tsx', 'nfl'],
-  ['mlb-front-office', 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'mlb'],
-  ['nba-front-office', 'src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'nba'],
-  ['nhl-front-office', 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', 'nhl'],
-  ['cbb-dynasty', 'src/components/cbb-dynasty/CbbDynastyBoard.tsx', 'cbb'],
-  ['cfb-dynasty', 'src/components/cfb-dynasty/CfbDynastyBoard.tsx', 'cfb'],
-];
-for (const [key, file, sport] of SEASON_ROWS) {
+/* The front offices and dynasties record only a title (Round 647 is their
+   per season ledger); zero skill wins nothing and never records. */
+for (const [key, file, flag] of [
+  ['front-office', 'src/components/front-office/FrontOfficeBoard.tsx', 'wonTitleNow'],
+  ['mlb-front-office', 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'wonNow'],
+  ['nba-front-office', 'src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'wonNow'],
+  ['nhl-front-office', 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', 'wonNow'],
+  ['cbb-dynasty', 'src/components/cbb-dynasty/CbbDynastyBoard.tsx', 'wonNow'],
+  ['cfb-dynasty', 'src/components/cfb-dynasty/CfbDynastyBoard.tsx', 'wonNow'],
+]) {
   row(key, {
     site: [file],
-    zero: () => seasonRuns(sport).idle,
-    perfect: () => seasonRuns(sport).perfect,
-    requires: [[file, /const (\w+) = appendSeason\([^;]*\);[\s\S]{0,200}?setClosedRow\(\1\.row\);/, 'records the row appendSeason closes the season into']],
+    zero: () => ({ titles: 0, seasonsPlayed: 0, st: { myTitles: 0, seasonsPlayed: 0 }, recorded: false }),
+    perfect: null,
+    gatedZero: [file, new RegExp(`useGameCompletion\\('${key}', ${flag},`), 'records only a title season'],
   });
 }
 
@@ -2022,9 +1922,7 @@ for (const r of ROWS) {
     }
     if (r.perfect) {
       const ps = r.perfect();
-      /* A list of perfect runs (one per pick, the season rows) has its mean
-         for the perfect, against the zero skill runs on the same picks. */
-      perfect = Array.isArray(ps) ? mean(ps.map(valueOf)) : valueOf(ps);
+      perfect = valueOf(ps);
       if (r.before) before = Number(r.before(ps));
     }
     if (!Number.isFinite(zero)) throw new Error(`the zero skill run evaluates to ${zero}`);
@@ -2037,7 +1935,7 @@ for (const r of ROWS) {
   measured.push({ key, zero, perfect, before, zeroBefore, share });
   const tooMuch = perfect === null ? zero !== 0 : share > ZERO_SHARE_LIMIT;
   if (tooMuch) {
-    fail(`${key}: zero skill records ${zero.toFixed(1)}${perfect === null ? ' where nothing but 0 is allowed' : ` of a perfect ${Number.isInteger(perfect) ? perfect : perfect.toFixed(1)}, ${(share * 100).toFixed(1)} percent (limit ${ZERO_SHARE_LIMIT * 100})`}`);
+    fail(`${key}: zero skill records ${zero.toFixed(1)}${perfect === null ? ' where nothing but 0 is allowed' : ` of a perfect ${perfect}, ${(share * 100).toFixed(1)} percent (limit ${ZERO_SHARE_LIMIT * 100})`}`);
     red.add(key);
   }
   if (perfect !== null && !(perfect > 0)) { fail(`${key}: the perfect run records ${perfect}`); red.add(key); }
@@ -2047,19 +1945,9 @@ const pad = (s, n) => String(s).padEnd(n);
 console.log(`   ${pad('game', 30)}${pad('zero skill', 12)}${pad('perfect', 12)}${pad('share', 9)}${pad('perfect before', 16)}zero skill before`);
 for (const m of measured) {
   const was = m.zeroBefore === null ? '' : `${m.zeroBefore.toFixed(1)} (${m.perfect ? ((100 * m.zeroBefore) / m.perfect).toFixed(1) : '-'}%)`;
-  const perfectShown = m.perfect === null ? 'none' : Number.isInteger(m.perfect) ? m.perfect : m.perfect.toFixed(1);
-  console.log(`   ${pad(m.key, 30)}${pad(m.zero.toFixed(1), 12)}${pad(perfectShown, 12)}${pad(`${(m.share * 100).toFixed(1)}%`, 9)}${pad(m.before ?? '', 16)}${was}`);
+  console.log(`   ${pad(m.key, 30)}${pad(m.zero.toFixed(1), 12)}${pad(m.perfect ?? 'none', 12)}${pad(`${(m.share * 100).toFixed(1)}%`, 9)}${pad(m.before ?? '', 16)}${was}`);
 }
 console.log(`   ${measured.length} rows measured, ${ROWS.length - measured.length} could not be`);
-/* The season rows in detail: how often a hands off season scored at all, and
-   its mean as a share of the ceiling Round 646 caps these games at. */
-for (const [key, , sport] of SEASON_ROWS) {
-  if (!SEASON_RUNS.has(sport)) continue;
-  const { idle, perfect } = SEASON_RUNS.get(sport);
-  const scores = idle.map(s => s.closedRow.score);
-  const ceiling = L.sl.seasonCeiling();
-  console.log(`   ${key}: ${idle.length} first seasons hands off, ${(100 * scores.filter(x => x > 0).length / scores.length).toFixed(1)} percent scored at all, mean ${mean(scores).toFixed(2)} (${(100 * mean(scores) / ceiling).toFixed(1)} percent of the ${ceiling} ceiling), perfect season mean ${mean(perfect.map(s => s.closedRow.score)).toFixed(1)}`);
-}
 
 /* ---------------- section 2: coverage ---------------- */
 
