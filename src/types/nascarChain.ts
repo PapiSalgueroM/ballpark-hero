@@ -27,6 +27,8 @@ export interface NascarChainState {
   gameOverReason?: string;
   mode: NascarChainMode;
   earnedBadge?: NascarChainBadge;
+  /** Round 645 part three fix: today's daily already has its nickname row on the leaderboard. */
+  leaderboardSaved?: boolean;
 }
 
 export function getNascarChainMultiplier(chainLength: number): number {

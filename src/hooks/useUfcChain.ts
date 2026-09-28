@@ -48,7 +48,7 @@ function restoreDaily(today: string): GameState | null {
     gameStatus: rec.ended ? 'ended' : 'playing',
     usedFighters: new Set(fighters.map(f => f.name)),
     mode: 'daily',
-    ...(rec.ended ? { gameOverReason: rec.reason ?? '', correctAnswer, earnedBadge: getEarnedBadge(chainLength) } : {}),
+    ...(rec.ended ? { gameOverReason: rec.reason ?? '', correctAnswer, earnedBadge: getEarnedBadge(chainLength), leaderboardSaved: rec.leaderboard } : {}),
   };
 }
 
@@ -192,6 +192,12 @@ export function useUfcChain() {
     }) : null);
   }, [gameState]);
 
+  /* Round 645 part three fix: today's nickname row is on the leaderboard, so
+     the finished daily, reloaded, does not offer the form a second time. */
+  const markLeaderboardSaved = useCallback(() => {
+    setGameState(prev => (prev && prev.gameStatus === 'ended' ? { ...prev, leaderboardSaved: true } : prev));
+  }, []);
+
   const resetGame = useCallback(() => {
     setGameState(null);
   }, []);
@@ -218,6 +224,7 @@ export function useUfcChain() {
       ended: gameState.gameStatus === 'ended',
       reason: gameState.gameOverReason ?? null,
       correctAnswer: gameState.correctAnswer?.name ?? null,
+      leaderboard: gameState.leaderboardSaved === true,
     });
   }, [gameState, todayStr]);
 
@@ -230,5 +237,6 @@ export function useUfcChain() {
     giveUp,
     resetGame,
     getAvailableFighters,
+    markLeaderboardSaved,
   };
 }

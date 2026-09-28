@@ -34,6 +34,10 @@ export interface ChainDailyRecord {
   reason: string | null;
   /** Combat Chain's "correct answer was" name on an ended chain. */
   correctAnswer: string | null;
+  /** Round 645 part three fix: the finished daily's nickname row is on the
+   *  leaderboard, so a reload does not offer the form again. Only an ended
+   *  chain can carry it; a record from before the field reads as false. */
+  leaderboard: boolean;
 }
 
 /* A chain can never be longer than the names that exist to extend it; this
@@ -60,10 +64,12 @@ export function readChainDaily(slug: string, today: string, starter: string): Ch
     if (f.reason !== null && typeof f.reason !== 'string') return null;
     if (f.ended && typeof f.reason !== 'string') return null;
     if (f.correctAnswer !== null && typeof f.correctAnswer !== 'string') return null;
-    return { links, ended: f.ended, reason: f.reason as string | null, correctAnswer: f.correctAnswer as string | null };
+    const leaderboard = f.leaderboard === undefined ? false : f.leaderboard;
+    if (typeof leaderboard !== 'boolean' || (leaderboard && !f.ended)) return null;
+    return { links, ended: f.ended, reason: f.reason as string | null, correctAnswer: f.correctAnswer as string | null, leaderboard };
   });
 }
 
 export function writeChainDaily(slug: string, today: string, rec: ChainDailyRecord): void {
-  writeDailyRecord(slug, today, { links: rec.links, ended: rec.ended, reason: rec.reason, correctAnswer: rec.correctAnswer });
+  writeDailyRecord(slug, today, { links: rec.links, ended: rec.ended, reason: rec.reason, correctAnswer: rec.correctAnswer, leaderboard: rec.leaderboard });
 }

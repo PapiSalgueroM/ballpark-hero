@@ -67,7 +67,7 @@ function restoreDaily(today: string): TennisChainState | null {
     gameStatus: rec.ended ? 'ended' : 'playing',
     usedPlayers: new Set(chain.map(l => l.playerName.toLowerCase())),
     mode: 'daily',
-    ...(rec.ended ? { gameOverReason: rec.reason ?? '', earnedBadge: getTennisEarnedBadge(chainLength) } : {}),
+    ...(rec.ended ? { gameOverReason: rec.reason ?? '', earnedBadge: getTennisEarnedBadge(chainLength), leaderboardSaved: rec.leaderboard } : {}),
   };
 }
 
@@ -77,6 +77,9 @@ export function useTennisChain() {
   const todayStr = useRef(getTodayET()).current;
   const [gameState, setGameState] = useState<TennisChainState | null>(null);
   const [validating, setValidating] = useState(false);
+  /* Round 645 part three fix: read by giveUp, which must refuse while a guess
+     is out being verified. A ref, so the refusal never reads a stale render. */
+  const validatingRef = useRef(false);
 
   const startGame = useCallback((mode: TennisChainMode) => {
     /* Round 645 part three: today's daily is dealt once. A finished chain
@@ -119,6 +122,14 @@ export function useTennisChain() {
     }
 
     setValidating(true);
+    validatingRef.current = true;
+    /* Round 645 part three fix: a verdict belongs to the chain it was asked
+       about. If that chain has ended or been replaced by the time the answer
+       comes back, the answer is dropped, so it can never change a finish the
+       recorder has already been handed. */
+    const askedOn = gameState.chain;
+    const stillAsked = (prev: TennisChainState | null): prev is TennisChainState =>
+      !!prev && prev.gameStatus === 'playing' && prev.chain === askedOn;
 
     try {
       const { data, error } = await supabase.functions.invoke('tennis-chain-validate', {
@@ -146,14 +157,29 @@ export function useTennisChain() {
         const multiplier = getTennisChainMultiplier(chainLength);
         const newScore = Math.floor(newRawScore * multiplier);
 
-        setGameState(prev => prev ? ({
-          ...prev,
-          currentPlayer: fullName,
-          chain: newChain,
-          score: newScore,
-          rawScore: newRawScore,
-          usedPlayers: new Set([...prev.usedPlayers, fullName.toLowerCase()]),
-        }) : null);
+        setGameState(prev => {
+          if (!stillAsked(prev)) return prev;
+          /* Round 645 part three fix: the used check runs again on the name
+             the validator settled on, which can differ from the one picked
+             (an alias it folded). A chain never holds one player twice, the
+             rule the daily record is read back by. */
+          if (prev.usedPlayers.has(fullName.toLowerCase())) {
+            return {
+              ...prev,
+              gameStatus: 'ended',
+              gameOverReason: `You already used ${fullName} in this chain!`,
+              earnedBadge: getTennisEarnedBadge(prev.chain.length - 1),
+            };
+          }
+          return {
+            ...prev,
+            currentPlayer: fullName,
+            chain: newChain,
+            score: newScore,
+            rawScore: newRawScore,
+            usedPlayers: new Set([...prev.usedPlayers, fullName.toLowerCase()]),
+          };
+        });
       } else if (data.unverified) {
         /* ROUND 500: A DEFERRAL IS NOT A WRONG ANSWER, AND THIS BRANCH IS WHERE
            IT WAS BEING TURNED INTO ONE.
@@ -168,12 +194,12 @@ export function useTennisChain() {
         toast.error(data.reason || "Couldn't verify that guess right now, please try again.");
       } else {
         const chainLength = gameState.chain.length - 1;
-        setGameState(prev => prev ? ({
+        setGameState(prev => (stillAsked(prev) ? {
           ...prev,
           gameStatus: 'ended',
           gameOverReason: data.reason || 'Incorrect! That player did not beat them at a Grand Slam.',
           earnedBadge: getTennisEarnedBadge(chainLength),
-        }) : null);
+        } : prev));
       }
     } catch {
       // FAIL CLOSED: a network failure is not a wrong answer, don't accept
@@ -181,12 +207,15 @@ export function useTennisChain() {
       // Leave the chain untouched and ask the player to retry.
       toast.error("Couldn't verify that guess right now, please try again.");
     } finally {
+      validatingRef.current = false;
       setValidating(false);
     }
   }, [gameState, validating]);
 
   const giveUp = useCallback(() => {
-    if (!gameState) return;
+    /* Round 645 part three fix: not while a guess is out being verified. The
+       board shuts the button for the same window; this is the rule itself. */
+    if (!gameState || validatingRef.current) return;
     const chainLength = gameState.chain.length - 1;
     setGameState(prev => prev ? ({
       ...prev,
@@ -195,6 +224,12 @@ export function useTennisChain() {
       earnedBadge: getTennisEarnedBadge(chainLength),
     }) : null);
   }, [gameState]);
+
+  /* Round 645 part three fix: today's nickname row is on the leaderboard, so
+     the finished daily, reloaded, does not offer the form a second time. */
+  const markLeaderboardSaved = useCallback(() => {
+    setGameState(prev => (prev && prev.gameStatus === 'ended' ? { ...prev, leaderboardSaved: true } : prev));
+  }, []);
 
   const resetGame = useCallback(() => {
     setGameState(null);
@@ -210,10 +245,11 @@ export function useTennisChain() {
       ended: gameState.gameStatus === 'ended',
       reason: gameState.gameOverReason ?? null,
       correctAnswer: null,
+      leaderboard: gameState.leaderboardSaved === true,
     });
   }, [gameState, todayStr]);
 
   useGameCompletion('tennis-chain', gameState?.gameStatus === 'ended', gameState?.score ?? 0);
 
-  return { gameState, startGame, makeGuess, giveUp, resetGame, validating };
+  return { gameState, startGame, makeGuess, giveUp, resetGame, validating, markLeaderboardSaved };
 }

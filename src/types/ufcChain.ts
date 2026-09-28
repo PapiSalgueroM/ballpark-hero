@@ -65,6 +65,8 @@ export interface GameState {
   mode: GameMode;
   selectedWeightClass?: WeightClass;
   earnedBadge?: Badge;
+  /** Round 645 part three fix: today's daily already has its nickname row on the leaderboard. */
+  leaderboardSaved?: boolean;
 }
 
 export function getChainLengthMultiplier(chainLength: number): number {
