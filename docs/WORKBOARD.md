@@ -1,5 +1,21 @@
 # Work board
 
+**2026-09-28, desktop Claude lane: Rounds 663 to 666 BUILT on `r662-nhl-hl-points`, pushed, not yet on
+main.** One Higher or Lower fence (`scripts/lib/higherLowerFence.mjs`, driven by
+`scripts/simHigherLowerFacts.mjs`) now holds five of the six games to a record of what the site's own
+tables say: hockey (662), NBA (663), MLB (664), tennis (665), NFL (666). 31 checks, nine controls.
+MLB and tennis were already right (0 of 1,475 and 0 of 867 matchups inverted); the record exists so
+they stay that way. **The NFL round is the one to read**: two source tables were rejected because
+they count playoff touchdowns (Emmitt Smith 183 against a regular season 164), and the table that was
+used, nflfastr, merges namesakes when grouped by name: a Bears back's 8 touchdowns onto Adrian
+Peterson, the Giants receiver's 12 onto Steve Smith Sr. The fence flagged both, the file was right
+both times, and the record is built per player id. Tennis needed four married-name merges (Court is
+13 as Court plus 11 as Smith). **CFB stays open**: cfb_qb_stats holds only 32 of its 65 quarterbacks
+(Flutie, Herbert, Eli Manning, Luck and 29 more are absent), so it needs a second source before it can
+join. The next free number for anyone else is 667, except that **645a, 645b, 645c, 646, 647, 648 are
+being built right now by parallel agents on branches of those names**; do not claim them.
+
+
 **2026-09-19 evening, desktop Claude lane: Rounds 649 and 650 claimed, for search traffic.**
 Lovable's numbers for 2026-09-05 to 09-19: about 1,000 visitors a day, and Bing sends 3,882 of
 the search visits against Google's 1,705, so the raw HTML a crawler reads without running the app
