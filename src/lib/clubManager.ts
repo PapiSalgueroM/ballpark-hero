@@ -9886,10 +9886,15 @@ export const ET_MINUTES = 30;
  * playsExtraTime; the AI's too) therefore draws its lambdas multiplied by
  * 1 / (1 + P x 30/90), which holds its expected goals where they were
  * before extra time existed. League, group and first leg matches never see
- * it. P is the engine's own share, measured under this deflator by
- * scripts/simExtraTime.mjs (the fixed point): see the measurement there.
+ * it. P is the engine's own share, measured by scripts/simExtraTime.mjs on
+ * 2026-09-28 over five samples of about 3,000 replayed deciders each (the
+ * manager's, across the modern save and the three eras): P from 0.104 to
+ * 0.123, and the fixed point (B's expected goals over A's, times the
+ * constant) at 0.960 to 0.967 for the manager's deciders and 0.960 to 0.978
+ * for the AI's second legs, whose goals are noisier. 1 / (1 + 0.112 x 30/90)
+ * is 0.964; the constant sits at 0.965, between the two.
  */
-export const ET_DEFLATOR = 0.95;
+export const ET_DEFLATOR = 0.965;
 
 /** Round 670: does this week's match, if level when the ninety minutes are
  *  up, play extra time? Only a Champions League match that settles its tie. */
