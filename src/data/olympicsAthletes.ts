@@ -1,22 +1,17 @@
 import { OlympicAthlete } from '@/types/olympics';
 
-/* Round 660, NOT FINISHED. Read this before trusting anything below it.
-
-   What was done on 2026-09-19: the entries here were re-checked against
-   Olympedia plus the sport's federation, the athlete's national committee or a
-   news report. Medal totals are what the IOC recognises today, so Bolt's 2008
-   line no longer counts the relay gold stripped in 2017. Five entries went:
-   two duplicates, a puzzle built on a World Championship rather than an
-   Olympics, a 2026 entry about a man who had retired before those Games, and a
-   pairs entry whose answer nobody could type.
-
-   What was NOT done: the record behind this file,
-   scripts/data/sportsFactsVerified2026-09.json, is only part written. Most
-   fields here carry one source where scripts/simSportsFacts.mjs asks for two,
-   and that harness is red. So this file is better than what it replaced but it
-   is not yet held to the standard the harness sets, and the round cannot ship
-   until the harness is green. Do not read the record as complete, and do not
-   quote this comment as proof any single line was two sourced. */
+/* Round 660. Every field a player can be shown here stands on two sources on
+   two hosts, recorded in scripts/data/sportsFactsVerified2026-09.json and held
+   to this file by scripts/simSportsFacts.mjs section 8 (section 1 checks the
+   sourcing itself). Checked 2026-09-19 against Olympedia and finished
+   2026-09-28 with an official host for each field (olympics.com, a federation,
+   or the athlete's national committee), or a stated reason where no official
+   page says it. Medal totals are what the IOC recognises today, so Bolt's 2008
+   line does not count the relay gold stripped in 2017. Five entries went on
+   2026-09-19: two duplicates, a puzzle built on a World Championship rather
+   than an Olympics, a 2026 entry about a man who had retired before those
+   Games, and a pairs entry whose answer nobody could type. Change a line here
+   and the record must change with it, sources and date included. */
 export const olympicAthletes: OlympicAthlete[] = [
   // === EASY (1-10) ===
   {
@@ -171,7 +166,7 @@ export const olympicAthletes: OlympicAthlete[] = [
     gamesYear: 2010,
     hostCity: 'Vancouver',
     achievement: 'Won gold by leading both the short program and the free skate',
-    careerContext: 'Known as "Queen Yuna," a national hero who revolutionized women\'s figure skating',
+    careerContext: 'A national icon in South Korea, where she was hailed as the queen of figure skating',
     medalSummary: '1 Gold, 1 Silver',
     name: 'Kim Yuna',
     season: 'winter',
@@ -220,7 +215,7 @@ export const olympicAthletes: OlympicAthlete[] = [
     hostCity: 'Tokyo',
     achievement: 'Won 5 gold medals in a single Games including the 50m free and 100m butterfly',
     careerContext: 'Drew comparisons to Michael Phelps with his dominant multi-event performances',
-    medalSummary: '5 Gold (single Games)',
+    medalSummary: '9 Gold, 1 Silver (across three Games)',
     name: 'Caeleb Dressel',
     season: 'summer',
   },
@@ -231,7 +226,7 @@ export const olympicAthletes: OlympicAthlete[] = [
     gamesYear: 2010,
     hostCity: 'Vancouver',
     achievement: 'Won gold in the downhill despite a painful shin injury',
-    careerContext: 'Won 82 World Cup races in her career, a record at the time; returned from retirement to compete at Milan-Cortina 2026',
+    careerContext: 'Retired in 2019 with 82 World Cup wins, then a women\'s record; returned from retirement to compete at Milan-Cortina 2026',
     medalSummary: '1 Gold, 2 Bronze',
     name: 'Lindsey Vonn',
     season: 'winter',
@@ -496,7 +491,7 @@ export const olympicAthletes: OlympicAthlete[] = [
     country: '🇺🇸',
     gamesYear: 1960,
     hostCity: 'Rome',
-    achievement: 'Won 3 gold medals (100m, 200m, 4x100m relay), becoming the first American woman to complete the Olympic sprint double at one Games',
+    achievement: 'Won 3 gold medals (100m, 200m, 4x100m relay), becoming the first American woman to win three track and field golds at one Games',
     careerContext: 'Overcame childhood polio to become the fastest woman in the world, inspiring a generation',
     medalSummary: '3 Gold, 1 Bronze',
     name: 'Wilma Rudolph',

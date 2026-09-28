@@ -13463,9 +13463,13 @@
    "careerContext": {
     "v": "Known as the fastest woman alive for her era; competed in five Games total",
     "src": [
+     "https://www.nbcolympics.com/news/track-field-day-2-preview",
+     "https://athleticsweekly.com/news/meetings/shelly-ann-fraser-pryce-becomes-the-fastest-woman-alive-1039945530/",
+     "https://worldathletics.org/results/olympic-games/2016/the-xxxi-olympic-games-7093747/women/100-metres/final/result",
+     "https://worldathletics.org/results/olympic-games/2024/the-xxxiii-olympic-games-7087/women/100-metres/round-1/result",
      "https://www.olympedia.org/athletes/114740"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "3 Gold, 4 Silver, 1 Bronze",
@@ -13707,461 +13711,600 @@
    "sport": {
     "v": "Athletics: Marathon",
     "src": [
+     "https://worldathletics.org/athletes/kenya/eliud-kipchoge-14208194",
      "https://www.olympedia.org/athletes/106584"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇰🇪",
     "src": [
+     "https://worldathletics.org/athletes/kenya/eliud-kipchoge-14208194",
      "https://www.olympedia.org/athletes/106584"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2020,
     "src": [
-     "https://www.olympedia.org/athletes/106584"
+     "https://worldathletics.org/news/feature/eliud-kipchoge-marathon-tokyo-2020-olympics-anoc-awards",
+     "https://www.olympedia.org/results/19000437"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Tokyo",
     "src": [
+     "https://worldathletics.org/results/olympic-games/2021/the-xxxii-olympic-games-athletics-7132391/men/marathon/final/result",
      "https://www.olympedia.org/athletes/106584"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Successfully defended his marathon gold with an 80-second winning margin",
     "src": [
-     "https://www.olympedia.org/results/19000437"
+     "https://worldathletics.org/news/report/tokyo-olympic-games-men-marathon-report",
+     "https://www.olympedia.org/results/19000437",
+     "https://athleticsweekly.com/news/reports/greatest-of-all-time-eliud-kipchoge-retains-marathon-title-1039948420/"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "First human to run a marathon in under 2 hours (unofficial), widely considered the greatest marathoner",
     "src": [
-     "https://worldathletics.org/athletes/kenya/eliud-kipchoge-14208194"
+     "https://worldathletics.org/news/report/eliud-kipchoge-breaks-two-hours-vienna",
+     "https://worldathletics.org/news/report/tokyo-olympic-games-men-marathon-report",
+     "https://www.pbs.org/newshour/amp/world/kipchoge-first-under-2-hours-for-marathon-but-no-record",
+     "https://athleticsweekly.com/news/reports/greatest-of-all-time-eliud-kipchoge-retains-marathon-title-1039948420/"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "2 Gold, 1 Silver, 1 Bronze",
     "src": [
-     "https://www.olympedia.org/athletes/106584",
-     "https://worldathletics.org/athletes/kenya/eliud-kipchoge-14208194"
+     "https://worldathletics.org/athletes/kenya/eliud-kipchoge-14208194",
+     "https://www.olympedia.org/athletes/106584"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Eliud Kipchoge",
+    "src": [
+     "https://worldathletics.org/athletes/kenya/eliud-kipchoge-14208194",
+     "https://www.olympedia.org/athletes/106584"
+    ],
+    "on": "2026-09-28"
    }
   },
   "kim-yuna-2010": {
    "sport": {
     "v": "Figure Skating: Women's Singles",
     "src": [
+     "https://results.isu.org/bios/isufs00007232.htm",
      "https://www.olympedia.org/athletes/119090"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇰🇷",
     "src": [
+     "https://results.isu.org/bios/isufs00007232.htm",
      "https://www.olympedia.org/athletes/119090"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2010,
     "src": [
-     "https://www.olympedia.org/athletes/119090"
+     "https://results.isu.org/results/owg2010/SEG004.HTM",
+     "https://www.olympedia.org/results/924268"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Vancouver",
     "src": [
-     "https://www.olympedia.org/athletes/119090"
+     "https://results.isu.org/results/owg2010/",
+     "https://www.olympedia.org/editions/57/sports/FSK"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won gold by leading both the short program and the free skate",
     "src": [
-     "https://www.olympedia.org/athletes/119090"
+     "https://results.isu.org/results/owg2010/SEG003.HTM",
+     "https://results.isu.org/results/owg2010/SEG004.HTM",
+     "https://www.olympedia.org/results/924268"
     ],
-    "on": "2026-09-19",
-    "note": "trimmed to the part two sources confirm: the gold and short program plus free skate wins are confirmed true, but the world record score clause could not be independently re-confirmed with two qualifyin"
+    "on": "2026-09-28"
    },
    "careerContext": {
-    "v": "Known as \"Queen Yuna,\" a national hero who revolutionized women's figure skating",
+    "v": "A national icon in South Korea, where she was hailed as the queen of figure skating",
     "src": [
-     "https://www.olympedia.org/athletes/119090"
+     "https://www.nbcolympics.com/news/figure-skating-101-olympic-history",
+     "https://www.nbcsports.com/olympics/news/yuna-kim-vancouver-2010",
+     "https://www.korea.net/NewsFocus/Sports/view?articleId=119282"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "noOfficial": "The national icon half is on the official host (NBC Olympics: she delivered a near-perfect performance in 2010, becoming a national icon). The queen nickname is on no official page that would open: olympics.com carries it (Yuna Kim, the queen of the rink; Queen Yuna returns as YOG Ambassador) but timed out on all five fetches, olympic.org only redirects there, and the ISU bio and NBC Olympics pages do not use it. It stands on two independent hosts: NBC Sports (Philip Hersh, 25 Feb 2020: South Koreans called her Queen Yuna, and she remains a national icon) and korea.net (8 May 2014: Queen of Figure Skating, used as her established title)."
    },
    "medalSummary": {
     "v": "1 Gold, 1 Silver",
     "src": [
+     "https://results.isu.org/bios/isufs_cr_00007232.htm",
      "https://www.olympedia.org/athletes/119090"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Kim Yuna",
+    "src": [
+     "https://results.isu.org/bios/isufs00007232.htm",
+     "https://www.olympedia.org/athletes/119090"
+    ],
+    "on": "2026-09-28"
    }
   },
   "thompson-herah-2020": {
    "sport": {
     "v": "Athletics: 100m & 200m Sprint",
     "src": [
+     "https://worldathletics.org/athletes/jamaica/elaine-thompson-herah-14285956",
      "https://www.olympedia.org/athletes/130722"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇯🇲",
     "src": [
+     "https://worldathletics.org/athletes/jamaica/elaine-thompson-herah-14285956",
      "https://www.olympedia.org/athletes/130722"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2020,
     "src": [
+     "https://worldathletics.org/news/feature/elaine-thompson-herah-olympic-record-100m-tokyo",
      "https://www.olympedia.org/athletes/130722"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Tokyo",
     "src": [
+     "https://worldathletics.org/news/feature/elaine-thompson-herah-olympic-record-100m-tokyo",
      "https://www.olympedia.org/athletes/130722"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Completed the 100m-200m double for the second consecutive Games",
     "src": [
-     "https://www.olympedia.org/athletes/130722"
+     "https://worldathletics.org/women-in-athletics/news/tokyo-olympic-games-women-200m-report",
+     "https://www.olympedia.org/athletes/130722",
+     "https://www.si.com/olympics/2021/08/03/elaine-thompson-herah-200-meters-gold-medal-result-tokyo-track-and-field-gabby-thomas"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "The fastest woman alive during her era, the first woman ever to complete back-to-back Olympic sprint doubles",
     "src": [
-     "https://worldathletics.org/news/feature/elaine-thompson-herah-2021-world-athlete"
+     "https://worldathletics.org/news/news/eugene-diamond-league-thompson-herah",
+     "https://www.nbcolympics.com/news/thompson-herah-attains-double-double-thomas-bronze-200m",
+     "https://athleticsweekly.com/news/reports/elaine-thompson-herah-closes-in-on-world-100m-record-1039948873/",
+     "https://www.si.com/olympics/2021/08/03/elaine-thompson-herah-200-meters-gold-medal-result-tokyo-track-and-field-gabby-thomas"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "5 Gold, 1 Silver",
     "src": [
-     "https://www.olympedia.org/athletes/130722",
-     "https://worldathletics.org/athletes/jamaica/elaine-thompson-herah-14285956"
+     "https://worldathletics.org/athletes/jamaica/elaine-thompson-herah-14285956",
+     "https://www.olympedia.org/athletes/130722"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Elaine Thompson-Herah",
+    "src": [
+     "https://worldathletics.org/athletes/jamaica/elaine-thompson-herah-14285956",
+     "https://www.olympedia.org/athletes/130722"
+    ],
+    "on": "2026-09-28"
    }
   },
   "redmond-1992": {
    "sport": {
     "v": "Athletics: 400m",
     "src": [
+     "https://www.olympics.com/en/news/this-week-in-olympic-history-29-july-aug-4-derek-redmond-s-father-helps-injured-son-finish-race",
      "https://www.olympedia.org/athletes/69416"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇬🇧",
     "src": [
+     "https://www.olympics.com/en/athletes/derek-redmond",
      "https://www.olympedia.org/athletes/69416"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1992,
     "src": [
+     "https://www.olympics.com/en/athletes/derek-redmond",
      "https://www.olympedia.org/athletes/69416"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Barcelona",
     "src": [
+     "https://www.olympics.com/en/athletes/derek-redmond",
      "https://www.olympedia.org/athletes/69416"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Tore his hamstring in the 400m semi-final and was helped across the finish line by his father",
     "src": [
+     "https://www.olympics.com/en/news/this-week-in-olympic-history-29-july-aug-4-derek-redmond-s-father-helps-injured-son-finish-race",
      "https://www.olympedia.org/athletes/69416",
-     "https://apnews.com/article/sports-olympic-games-sports-general-2020-tokyo-olympics-aab5152ac8cb447e80d0ee9a784fe49a"
+     "https://www.nbcnews.com/news/sports/jim-redmond-helped-son-cross-finish-line-1992-olympics-dies-81-rcna50906"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "One of the most iconic and emotional moments in the history of the Games",
     "src": [
-     "https://apnews.com/article/sports-olympic-games-sports-general-2020-tokyo-olympics-aab5152ac8cb447e80d0ee9a784fe49a"
+     "https://www.olympics.com/en/news/this-week-in-olympic-history-29-july-aug-4-derek-redmond-s-father-helps-injured-son-finish-race",
+     "https://www.olympedia.org/athletes/69416",
+     "https://www.nbcnews.com/news/sports/jim-redmond-helped-son-cross-finish-line-1992-olympics-dies-81-rcna50906"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "No medals (injured in semi-final)",
     "src": [
-     "https://www.olympedia.org/athletes/69416",
-     "https://worldathletics.org/athletes/-/14351433"
+     "https://www.olympics.com/en/athletes/derek-redmond",
+     "https://www.olympedia.org/athletes/69416"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Derek Redmond",
+    "src": [
+     "https://www.olympics.com/en/athletes/derek-redmond",
+     "https://www.olympedia.org/athletes/69416"
+    ],
+    "on": "2026-09-28"
    }
   },
   "ohno-2002": {
    "sport": {
     "v": "Short Track Speed Skating",
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/apolo-anton-ohno",
      "https://www.olympedia.org/athletes/101555"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/apolo-anton-ohno",
      "https://www.olympedia.org/athletes/101555"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2002,
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/apolo-anton-ohno",
      "https://www.olympedia.org/athletes/101555"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Salt Lake City",
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/apolo-anton-ohno",
      "https://www.olympedia.org/athletes/101555"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won gold in the 1500m after the leader was disqualified for cutting him off, in one of the most controversial calls in Olympic history",
     "src": [
+     "https://www.nbcolympics.com/news/short-track-101-olympic-history",
      "https://www.olympedia.org/athletes/101555",
-     "https://www.espn.com/olympics/winter02/speed/story?id=1339797"
+     "https://www.nbcsports.com/olympics/news/olympic-controversies-finishes",
+     "https://www.yardbarker.com/olympics/articles/the_most_notorious_moments_in_winter_olympics_history/s1__25637123",
+     "https://www.france24.com/en/live-news/20220121-abuse-bullying-the-dark-side-of-south-korean-olympic-skating-glory"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "noOfficial": "The facts are on the official host: NBC Olympics says Ohno crossed the line after Kim Dong-sung and Kim was disqualified for impeding his path on the last turn. The closing clause, one of the most controversial calls in Olympic history, is a characterisation no official page opened makes (NBC Olympics tells it neutrally; olympics.com timed out on every fetch). It stands on independent hosts: NBC Sports puts it in its Ten controversial Olympic outcomes (6 May 2019), Yardbarker in The most notorious moments in Winter Olympics history, France 24 calls it arguably the most famous South Korean short track controversy, and Olympedia calls the disqualification controversial."
    },
    "careerContext": {
     "v": "The most decorated U.S. Winter athlete at the time of his retirement",
     "src": [
-     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/apolo-anton-ohno"
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/apolo-anton-ohno",
+     "https://www.usspeedskating.org/about/hall-of-fame-content/skaters/apolo-anton-ohno",
+     "https://usopm.org/apolo-anton-ohno/"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "2 Gold, 2 Silver, 4 Bronze",
     "src": [
+     "https://www.teamusa.com/hall-of-fame/hall-of-fame-members/apolo-anton-ohno",
      "https://www.olympedia.org/athletes/101555"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Apolo Ohno",
+    "src": [
+     "https://www.nbcolympics.com/news/short-track-101-olympic-history",
+     "https://www.olympedia.org/athletes/101555"
+    ],
+    "on": "2026-09-28"
    }
   },
   "dressel-2020": {
    "sport": {
     "v": "Swimming: Sprint Freestyle & Butterfly",
     "src": [
+     "https://www.teamusa.com/profiles/caeleb-dressel-861661",
      "https://www.olympedia.org/athletes/136353"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://www.teamusa.com/profiles/caeleb-dressel-861661",
      "https://www.olympedia.org/athletes/136353"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2020,
     "src": [
+     "https://www.teamusa.com/profiles/caeleb-dressel-861661",
      "https://www.olympedia.org/athletes/136353"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Tokyo",
     "src": [
-     "https://www.olympedia.org/athletes/136353"
+     "https://www.teamusa.com/profiles/caeleb-dressel-861661",
+     "https://www.olympedia.org/editions/61"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won 5 gold medals in a single Games including the 50m free and 100m butterfly",
     "src": [
+     "https://www.teamusa.com/profiles/caeleb-dressel-861661",
+     "https://www.nbcolympics.com/news/caeleb-dressel-career-highlights",
      "https://www.olympedia.org/athletes/136353"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Drew comparisons to Michael Phelps with his dominant multi-event performances",
     "src": [
-     "https://www.olympedia.org/athletes/136353"
+     "https://www.worldaquatics.com/news/1909896/caeleb-dressel-usa-i-dont-want-to-be-compared-to-michael-",
+     "https://time.com/6085266/caeleb-dressel-team-usa-gold/",
+     "https://sports.yahoo.com/caeleb-dressel-precipice-becoming-next-020725496.html"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
-    "v": "5 Gold (single Games)",
+    "v": "9 Gold, 1 Silver (across three Games)",
     "src": [
+     "https://www.teamusa.com/profiles/caeleb-dressel-861661",
      "https://www.olympedia.org/athletes/136353"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Caeleb Dressel",
+    "src": [
+     "https://www.teamusa.com/profiles/caeleb-dressel-861661",
+     "https://www.olympedia.org/athletes/136353"
+    ],
+    "on": "2026-09-28"
    }
   },
   "vonn-2010": {
    "sport": {
     "v": "Alpine Skiing: Downhill",
     "src": [
+     "https://www.teamusa.com/profiles/lindsey-vonn-815505",
      "https://www.olympedia.org/athletes/101437"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇺🇸",
     "src": [
+     "https://www.teamusa.com/profiles/lindsey-vonn-815505",
      "https://www.olympedia.org/athletes/101437"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2010,
     "src": [
+     "https://www.teamusa.com/profiles/lindsey-vonn-815505",
      "https://www.olympedia.org/athletes/101437"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Vancouver",
     "src": [
+     "https://www.teamusa.com/profiles/lindsey-vonn-815505",
      "https://www.olympedia.org/athletes/101437"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won gold in the downhill despite a painful shin injury",
     "src": [
+     "https://www.nbcolympics.com/news/lindsey-vonns-latest-olympic-quest-isnt-perfect-its-her-own",
      "https://www.espn.com/olympics/winter/2010/alpineskiing/news/story?id=4921825"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
-    "v": "Won 82 World Cup races in her career, a record at the time; returned from retirement to compete at Milan-Cortina 2026",
+    "v": "Retired in 2019 with 82 World Cup wins, then a women's record; returned from retirement to compete at Milan-Cortina 2026",
     "src": [
-     "https://www.olympedia.org/athletes/101437",
-     "https://www.nbcolympics.com/news/mikaela-shiffrin-wins-slalom-gold"
+     "https://www.teamusa.com/profiles/lindsey-vonn-815505",
+     "https://www.olympedia.org/athletes/101437"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "1 Gold, 2 Bronze",
     "src": [
-     "https://www.olympedia.org/athletes/101437",
-     "https://www.fis-ski.com/DB/general/athlete-biography.html?sectorcode=AL&competitorid=30368"
+     "https://www.teamusa.com/profiles/lindsey-vonn-815505",
+     "https://www.olympedia.org/athletes/101437"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Lindsey Vonn",
+    "src": [
+     "https://www.teamusa.com/profiles/lindsey-vonn-815505",
+     "https://www.olympedia.org/athletes/101437"
+    ],
+    "on": "2026-09-28"
    }
   },
   "mo-farah-2012": {
    "sport": {
     "v": "Athletics: Long Distance",
     "src": [
+     "https://worldathletics.org/athletes/great-britain-ni/mo-farah-14189197",
      "https://www.olympedia.org/athletes/115344"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇬🇧",
     "src": [
+     "https://worldathletics.org/athletes/great-britain-ni/mo-farah-14189197",
      "https://www.olympedia.org/athletes/115344"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2012,
     "src": [
+     "https://www.teamgb.com/article/mo-farah-in-numbers/uVB2blSsVjtX1pXKHeiID",
      "https://www.olympedia.org/athletes/115344"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "London",
     "src": [
-     "https://www.olympedia.org/athletes/115344"
+     "https://www.teamgb.com/article/mo-farah-in-numbers/uVB2blSsVjtX1pXKHeiID",
+     "https://www.olympedia.org/editions/54"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won the 5000m and 10000m double in front of a home crowd",
     "src": [
+     "https://www.teamgb.com/article/mo-farah-in-numbers/uVB2blSsVjtX1pXKHeiID",
+     "https://www.teamgb.com/article/sir-mo-farah-mos-greatest-moments/4HJvKoKHclSKJgC4lOB0a2",
+     "https://runningmagazine.ca/the-scene/top-5-mo-farah-career-moments/",
      "https://www.olympedia.org/athletes/115344"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Successfully defended both titles in 2016, becoming one of the greatest distance runners",
     "src": [
-     "https://www.olympedia.org/athletes/115344",
-     "https://worldathletics.org/athletes/-/14189197"
+     "https://www.teamgb.com/article/mo-farahs-double-double-10-years-later/17RLHAnkOasuwxRs0oqsoP",
+     "https://runningmagazine.ca/the-scene/top-5-mo-farah-career-moments/",
+     "https://www.olympedia.org/athletes/115344"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "4 Gold",
     "src": [
+     "https://worldathletics.org/athletes/great-britain-ni/mo-farah-14189197",
      "https://www.olympedia.org/athletes/115344"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Mo Farah",
+    "src": [
+     "https://worldathletics.org/athletes/great-britain-ni/mo-farah-14189197",
+     "https://www.olympedia.org/athletes/115344"
+    ],
+    "on": "2026-09-28"
    }
   },
   "bjorgen-2018": {
    "sport": {
     "v": "Cross-Country Skiing",
     "src": [
+     "https://www.olympics.com/en/athletes/marit-bjoergen",
      "https://www.olympedia.org/athletes/101008"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇳🇴",
     "src": [
+     "https://www.olympics.com/en/athletes/marit-bjoergen",
      "https://www.olympedia.org/athletes/101008"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 2018,
     "src": [
+     "https://www.olympics.com/en/athletes/marit-bjoergen",
      "https://www.olympedia.org/athletes/101008"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Pyeongchang",
     "src": [
+     "https://www.olympics.com/en/athletes/marit-bjoergen",
      "https://www.olympedia.org/athletes/101008"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won 2 gold medals at her final Games, bringing her career total to 15 medals",
     "src": [
-     "https://www.olympics.com/en/athletes/marit-bjoergen"
+     "https://www.olympics.com/en/athletes/marit-bjoergen",
+     "https://www.olympedia.org/athletes/101008"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "The most decorated Winter athlete of all time across all sports",
     "src": [
-     "https://www.olympics.com/en/milano-cortina-2026/news/johannes-hosflot-kl%C3%A6bo-becomes-winter-olympics-all-time-gold-medal-leader-full-list-of-most-decorated-winter-olympians"
+     "https://www.olympics.com/en/milano-cortina-2026/news/johannes-hosflot-kl%C3%A6bo-becomes-winter-olympics-all-time-gold-medal-leader-full-list-of-most-decorated-winter-olympians",
+     "https://www.nbclosangeles.com/olympics/2026-milan-cortina/winter-olympians-most-medals-history/3763505/",
+     "https://www.olympics.com/en/athletes/marit-bjoergen"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "8 Gold, 4 Silver, 3 Bronze",
@@ -14169,52 +14312,67 @@
      "https://www.olympics.com/en/athletes/marit-bjoergen",
      "https://www.olympedia.org/athletes/101008"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Marit Bjørgen",
+    "src": [
+     "https://www.olympics.com/en/athletes/marit-bjoergen",
+     "https://www.olympedia.org/athletes/101008"
+    ],
+    "on": "2026-09-28"
    }
   },
   "deng-yaping-1992": {
    "sport": {
     "v": "Table Tennis",
     "src": [
+     "https://www.olympics.com/en/athletes/yaping-deng",
      "https://www.olympedia.org/athletes/781"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇨🇳",
     "src": [
+     "https://www.olympics.com/en/athletes/yaping-deng",
      "https://www.olympedia.org/athletes/781"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1992,
     "src": [
+     "https://www.olympics.com/en/athletes/yaping-deng",
      "https://www.olympedia.org/athletes/781"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Barcelona",
     "src": [
+     "https://www.olympics.com/en/athletes/yaping-deng",
      "https://www.olympedia.org/athletes/781"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Won gold in both singles and doubles at just 19 years old",
     "src": [
      "https://www.olympics.com/en/athletes/yaping-deng",
-     "https://www.olympedia.org/athletes/781"
+     "https://www.olympedia.org/athletes/781",
+     "https://www.britannica.com/biography/Deng-Yaping"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Dominated table tennis despite standing only 4'11\", defended both titles in 1996",
     "src": [
-     "https://www.olympedia.org/athletes/781"
+     "https://www.olympics.com/en/athletes/yaping-deng",
+     "https://www.olympedia.org/athletes/781",
+     "https://www.britannica.com/biography/Deng-Yaping"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "4 Gold",
@@ -14222,59 +14380,86 @@
      "https://www.olympics.com/en/athletes/yaping-deng",
      "https://www.olympedia.org/athletes/781"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Deng Yaping",
+    "src": [
+     "https://www.olympics.com/en/athletes/yaping-deng",
+     "https://www.olympedia.org/athletes/781"
+    ],
+    "on": "2026-09-28"
    }
   },
   "bonaly-1994": {
    "sport": {
     "v": "Figure Skating: Women's Singles",
     "src": [
+     "https://www.olympics.com/en/olympic-games/nagano-1998/results/figure-skating/individual-women",
      "https://www.olympedia.org/athletes/80691"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "country": {
     "v": "🇫🇷",
     "src": [
+     "https://www.olympics.com/en/athletes/surya-bonaly",
      "https://www.olympedia.org/athletes/80691"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "gamesYear": {
     "v": 1998,
     "src": [
+     "https://www.olympics.com/en/olympic-games/nagano-1998/results/figure-skating/individual-women",
      "https://www.olympedia.org/athletes/80691"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "hostCity": {
     "v": "Nagano",
     "src": [
+     "https://www.olympics.com/en/olympic-games/nagano-1998/results/figure-skating/individual-women",
      "https://www.olympedia.org/athletes/80691"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "achievement": {
     "v": "Performed a banned backflip during her free skate, landing on one blade",
     "src": [
-     "https://www.olympics.com/en/news/surya-bonaly-backflips-figure-skating-fashion-discrimination"
+     "https://www.olympics.com/en/news/surya-bonaly-backflips-figure-skating-fashion-discrimination",
+     "https://www.today.com/news/sports/surya-bonaly-interview-figure-skater-quad-olympics-flip-rcna258973",
+     "https://www.cbsnews.com/news/surya-bonaly-backflip-olympics-years-before-ilia-malinin/"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "careerContext": {
     "v": "Five-time European champion known for her athleticism and defiance of skating conventions",
     "src": [
-     "https://www.olympedia.org/athletes/80691"
+     "https://www.olympics.com/en/athletes/surya-bonaly",
+     "https://www.today.com/news/sports/surya-bonaly-interview-figure-skater-quad-olympics-flip-rcna258973",
+     "https://www.olympedia.org/athletes/80691",
+     "https://www.olympics.com/en/news/surya-bonaly-backflips-figure-skating-fashion-discrimination"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "medalSummary": {
     "v": "No medals (best Olympic finish: 4th at Lillehammer 1994; finished 10th at these Games)",
     "src": [
+     "https://www.olympics.com/en/olympic-games/lillehammer-1994/results/figure-skating/individual-women",
+     "https://www.olympedia.org/athletes/80691",
+     "https://www.olympics.com/en/olympic-games/nagano-1998/results/figure-skating/individual-women",
+     "https://www.olympics.com/en/olympic-games/albertville-1992/results/figure-skating/individual-women"
+    ],
+    "on": "2026-09-28"
+   },
+   "name": {
+    "v": "Surya Bonaly",
+    "src": [
      "https://www.olympics.com/en/athletes/surya-bonaly",
      "https://www.olympedia.org/athletes/80691"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    }
   },
   "lezak-2008": {
@@ -15482,12 +15667,14 @@
     "on": "2026-09-28"
    },
    "achievement": {
-    "v": "Won 3 gold medals (100m, 200m, 4x100m relay), becoming the first American woman to complete the Olympic sprint double at one Games",
+    "v": "Won 3 gold medals (100m, 200m, 4x100m relay), becoming the first American woman to win three track and field golds at one Games",
     "src": [
-     "https://www.olympedia.org/athletes/77958",
-     "https://www.olympedia.org/athletes/50967"
+     "https://www.nbcsports.com/olympics/news/wilma-rudolph-rome-olympics",
+     "https://www.womenshistory.org/education-resources/biographies/wilma-rudolph",
+     "https://www.olympedia.org/athletes/77958"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "noOfficial": "teamusa.com, the official page, lists the three events but calls her the first American woman to win three golds at one Games, which Helene Madison did in swimming in 1932, so it cannot stand for this line. NBC Sports and the National Women's History Museum state the track and field first; Olympedia lists the three golds."
    },
    "careerContext": {
     "v": "Overcame childhood polio to become the fastest woman in the world, inspiring a generation",

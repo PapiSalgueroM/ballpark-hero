@@ -122,7 +122,11 @@ if (CONTROL === 'finishes') {
 const fighters = parseRows(fighterSrc, 'export const ufcFighters');
 const chain = parseRows(chainSrc, 'export const UFC_FIGHTERS');
 console.log(`Parsed ${fighters.length} rows from ${FIGHTERS} and ${chain.length} from ${CHAIN}`);
-if (fighters.length < 100 || chain.length < 50) {
+/* Floors that prove the parse worked. The guesser was 104 fighters when this
+   was written; Round 660 took out the fourteen whose sources disagree on a
+   number the game shows, so 90 ship. A round that removes one lowers this on
+   purpose. */
+if (fighters.length < 90 || chain.length < 50) {
   fail(-1, `parsed too few rows (${fighters.length} and ${chain.length}), so the parse is broken and nothing below means anything`);
 }
 
@@ -202,7 +206,7 @@ for (const [file, rows] of [[FIGHTERS, fighters], [CHAIN, chain]]) {
 
    For a fighter who genuinely fought in two divisions both answers are true,
    so forcing them equal would not fix a wrong fact, it would break a working
-   game to make a harness quiet. These four are declared instead: both
+   game to make a harness quiet. These are declared instead: both
    divisions named, and the harness checks the declared pair is exactly the
    pair observed and that the two are neighbours in WEIGHT_CLASS_ORDER,
    because a fighter moves to the division next door and a typo usually does
@@ -210,7 +214,18 @@ for (const [file, rows] of [[FIGHTERS, fighters], [CHAIN, chain]]) {
 const WEIGHT_CLASS_ORDER = ['Strawweight', 'Flyweight', 'Bantamweight', 'Featherweight',
   'Lightweight', 'Welterweight', 'Middleweight', 'Light Heavyweight', 'Heavyweight'];
 const MULTI_DIVISION = {
-  'Randy Couture': { fighters: 'Heavyweight', chain: 'Light Heavyweight', why: 'held titles in both' },
+  'Alex Pereira': { fighters: 'Heavyweight', chain: 'Light Heavyweight', why: 'the guesser shows the division ufc.com lists (checked 2026-09-19 with ESPN and Sherdog, Round 660); the chain keeps him in the division of the fights it links' },
+  'Robert Whittaker': { fighters: 'Light Heavyweight', chain: 'Middleweight', why: 'the guesser shows the division ufc.com lists (checked 2026-09-19 with ESPN and Sherdog, Round 660); the chain keeps him in the division of the fights it links' },
+  'Paulo Costa': { fighters: 'Light Heavyweight', chain: 'Middleweight', why: 'the guesser shows the division ufc.com lists (checked 2026-09-19 with ESPN and Sherdog, Round 660); the chain keeps him in the division of the fights it links' },
+  'Kamaru Usman': { fighters: 'Middleweight', chain: 'Welterweight', why: 'the guesser shows the division ufc.com lists (checked 2026-09-19 with ESPN and Sherdog, Round 660); the chain keeps him in the division of the fights it links' },
+  'Georges St-Pierre': { fighters: 'Middleweight', chain: 'Welterweight', why: 'the guesser shows the division ufc.com lists (checked 2026-09-19 with ESPN and Sherdog, Round 660); the chain keeps him in the division of the fights it links' },
+  'Islam Makhachev': { fighters: 'Welterweight', chain: 'Lightweight', why: 'the guesser shows the division ufc.com lists (checked 2026-09-19 with ESPN and Sherdog, Round 660); the chain keeps him in the division of the fights it links' },
+  'Conor McGregor': { fighters: 'Welterweight', chain: 'Lightweight', why: 'the guesser shows the division ufc.com lists (checked 2026-09-19 with ESPN and Sherdog, Round 660); the chain keeps him in the division of the fights it links' },
+  'Tony Ferguson': { fighters: 'Welterweight', chain: 'Lightweight', why: 'the guesser shows the division ufc.com lists (checked 2026-09-19 with ESPN and Sherdog, Round 660); the chain keeps him in the division of the fights it links' },
+  'BJ Penn': { fighters: 'Featherweight', chain: 'Lightweight', why: 'the guesser shows the division ufc.com lists (checked 2026-09-19 with ESPN and Sherdog, Round 660); the chain keeps him in the division of the fights it links' },
+  'Ilia Topuria': { fighters: 'Lightweight', chain: 'Featherweight', why: 'the guesser shows the division ufc.com lists (checked 2026-09-19 with ESPN and Sherdog, Round 660); the chain keeps him in the division of the fights it links' },
+  'Max Holloway': { fighters: 'Lightweight', chain: 'Featherweight', why: 'the guesser shows the division ufc.com lists (checked 2026-09-19 with ESPN and Sherdog, Round 660); the chain keeps him in the division of the fights it links' },
+  'Aljamain Sterling': { fighters: 'Featherweight', chain: 'Bantamweight', why: 'the guesser shows the division ufc.com lists (checked 2026-09-19 with ESPN and Sherdog, Round 660); the chain keeps him in the division of the fights it links' },
   'Frankie Edgar': { fighters: 'Bantamweight', chain: 'Featherweight', why: 'dropped from lightweight through featherweight to bantamweight' },
   'Deiveson Figueiredo': { fighters: 'Bantamweight', chain: 'Flyweight', why: 'flyweight champion, then moved up' },
   'Henry Cejudo': { fighters: 'Bantamweight', chain: 'Flyweight', why: 'held titles in both' },
