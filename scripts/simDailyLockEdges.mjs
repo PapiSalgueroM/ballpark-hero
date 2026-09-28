@@ -78,7 +78,7 @@ const SECTIONS = [
   'pack-toggle', 'pack-writer', 'pack-mark', 'rarity-mark', 'rarity-derive',
   'arcade-bound', 'gauntlet-board', 'drill-fouls', 'market-roll',
   'pack-new-finish', 'rarity-new-finish', 'millionaire-new-finish',
-  'rarity-unread',
+  'rarity-unread', 'chain-bound',
 ];
 
 function parse(out) {
@@ -250,6 +250,14 @@ const CONTROLS = [
     name: 'rarity-unread-throw', red: 'rarity-unread',
     what: 'a pool that fails on the way back is reported as the game failing to load',
     swaps: [{ module: '@/pages/RarityRound', file: 'src/pages/RarityRound.tsx', cuts: [['        if (token === runToken.current) unread();\n', "        if (token === runToken.current) setPhase('error');\n"]] }],
+  },
+  {
+    name: 'chain-bound', red: 'chain-bound',
+    what: 'both server validated chains resume whatever names a part played record holds',
+    swaps: [
+      { ...NASCAR_HOOK, cuts: [['  if (!rec.ended && !linksKnown(rec.links, nascarChampionNames.names)) return null;\n', '']] },
+      { ...TENNIS_HOOK, cuts: [['  if (!rec.ended && !linksKnown(rec.links, tennisChampionNames.names)) return null;\n', '']] },
+    ],
   },
 ];
 

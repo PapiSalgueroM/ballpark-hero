@@ -5,8 +5,9 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import type { PlayerSourceConfig } from '@/lib/playerSearch';
 import { toast } from 'sonner';
 import { getTodayET } from '@/lib/dateUtils';
-import { readChainDaily, writeChainDaily } from '@/lib/chainDaily';
+import { linksKnown, readChainDaily, writeChainDaily } from '@/lib/chainDaily';
 import { markRestoredFinish } from '@/lib/restoredFinish';
+import nascarChampionNames from '@/data/nascarChampionNames.json';
 
 const SLUG = 'nascar-chain';
 
@@ -57,6 +58,11 @@ function getRandomStarter(): string {
 function restoreDaily(today: string): NascarChainState | null {
   const rec = readChainDaily(SLUG, today, getDailyStarter(today));
   if (!rec) return null;
+  /* Round 645 part three, second fix: a chain left part way resumes, and its
+     finish is recorded, so every driver past the starter has to be a Cup
+     champion, the only names nascar-chain-validate passes (see
+     scripts/genChainChampions.mjs). */
+  if (!rec.ended && !linksKnown(rec.links, nascarChampionNames.names)) return null;
   const chain = rec.links.map(l => (l.note !== undefined ? { driverName: l.name, connection: l.note } : { driverName: l.name }));
   const chainLength = chain.length - 1;
   const rawScore = chainLength * 100;

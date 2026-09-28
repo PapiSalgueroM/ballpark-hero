@@ -145,16 +145,21 @@ export function chainDriver(row: ChainRow): DailyReloadDriver<MountedPage> {
 }
 
 /** The two network validated chains: the stubbed search box offers one
- *  fixture name, and the edge function says it beat whoever is current. */
-export function networkChain(slug: string, path: string, page: ReactElement, fn: string, guessField: string, currentField: string): ChainRow {
-  const PICK = 'Fixture Rival';
+ *  name, and the edge function says it beat whoever is current.
+ *  Round 645 part three, second fix: the name is a real champion the sport's
+ *  validator can hand back (`pick`, read from the bundled list and never a
+ *  starter), because a part played chain naming anyone else is refused on
+ *  the way back. */
+export function networkChain(slug: string, path: string, page: ReactElement, fn: string, guessField: string, currentField: string, pick: () => string): ChainRow {
+  let PICK = '';
   return {
     slug,
     path,
     page,
     dailyButton: /Daily Challenge/,
     fixtures() {
-      setPoolFixture('autocomplete', [{ key: 'fixture rival', name: PICK, rawName: PICK, meta: {}, matchRank: 0, prominence: 1 }]);
+      PICK = pick();
+      setPoolFixture('autocomplete', [{ key: PICK.toLowerCase(), name: PICK, rawName: PICK, meta: {}, matchRank: 0, prominence: 1 }]);
       setFunctionFixture(fn, (body: Record<string, string>) => ({
         valid: true,
         fullName: body[guessField],
@@ -163,7 +168,7 @@ export function networkChain(slug: string, path: string, page: ReactElement, fn:
     },
     async addLink(m) {
       const before = currentName(m);
-      await click(await waitFor(() => button(m.container, new RegExp(`^pick ${PICK}$`))));
+      await click(await waitFor(() => button(m.container, new RegExp(`^pick ${PICK.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`))));
       await waitFor(() => { if (currentName(m) === before) throw new Error('the link has not landed'); });
     },
   };

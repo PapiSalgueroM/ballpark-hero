@@ -51,6 +51,9 @@
  *   [rarity-unread]          Rarity Round's restore read a pool that did not
  *                            load as "the answer is not in its pool", refused
  *                            the record and dealt the day fresh
+ *   [chain-bound]            NASCAR and Tennis resumed any names a part
+ *                            played record held, so invented links were
+ *                            recorded on Give Up
  *
  * Everything runs through the same mocks as the reload fence (./dailyReload
  * /mocks): the real pages and hooks, the real recorder hook and restore
@@ -75,6 +78,9 @@ import millionaireDriver, { POOL as MILLIONAIRE_POOL } from './dailyReload/sport
 import { buildFreshLadder } from '@/lib/sportsMillionaire';
 import { getTodayET } from '@/lib/dateUtils';
 import { writeDailyRecord } from '@/lib/dailyRecord';
+import { writeChainDaily } from '@/lib/chainDaily';
+import nascarChampionNames from '@/data/nascarChampionNames.json';
+import tennisChampionNames from '@/data/tennisChampionNames.json';
 import { readArcadeProgress, readArcadeRun } from '@/lib/arcadeRecord';
 import { buildRun as buildKicks, daySeed as kickSeed, maxRunScore as maxKickScore, ROUNDS_PER_RUN as KICKS } from '@/lib/freeKick';
 import { buildDailyPack, buildUnlimitedPack, readPackDaily, writePackDaily, type PackCard } from '@/lib/packBattle';
@@ -281,6 +287,92 @@ describe('daily lock edges', () => {
         } finally {
           driver.unmount(api);
         }
+      });
+    }
+  });
+
+  /* Round 645 part three, second fix: the two server validated chains
+     resumed any names a part played record held, so a hand edited record of
+     invented names came back at thousands of points and was recorded on Give
+     Up. Every link past the starter now has to be a name the sport's
+     validator can pass (the bundled champion lists), which bounds the chain's
+     length as well. */
+  describe('[chain-bound] a part played NASCAR or Tennis chain holds only names its validator passes', () => {
+    const KNOWN: Record<string, readonly string[]> = {
+      'nascar-chain': nascarChampionNames.names,
+      'tennis-chain': tennisChampionNames.names,
+    };
+
+    function todaysStarter(chain: NetworkChain): string {
+      const { result, unmount } = renderHook(() => chain.useHook());
+      try {
+        act(() => result.current.startGame('daily'));
+        return (result.current.gameState as unknown as Record<string, string>)[chain.currentField];
+      } finally {
+        unmount();
+        localStorage.clear();
+      }
+    }
+
+    function file(chain: NetworkChain, names: string[], ended = false): void {
+      writeChainDaily(chain.slug, today, { links: names.map(name => ({ name })), ended, reason: ended ? 'You gave up!' : null, correctAnswer: null, leaderboard: false });
+    }
+
+    function resumedLength(chain: NetworkChain): { length: number; status: string } {
+      const { result, unmount } = renderHook(() => chain.useHook());
+      try {
+        act(() => result.current.startGame('daily'));
+        return { length: result.current.gameState?.chain.length ?? 0, status: result.current.gameState?.gameStatus ?? '' };
+      } finally {
+        unmount();
+      }
+    }
+
+    for (const chain of NETWORK_CHAINS) {
+      it(`${chain.slug}: forty invented names past the starter are dealt fresh, and Give Up records 0`, () => {
+        const starter = todaysStarter(chain);
+        file(chain, [starter, ...Array.from({ length: 40 }, (_, i) => `Invented Name ${i + 1}`)]);
+        const { result, unmount } = renderHook(() => chain.useHook());
+        try {
+          act(() => result.current.startGame('daily'));
+          expect(result.current.gameState?.chain.length, 'the day deals fresh from its starter').toBe(1);
+          act(() => result.current.giveUp());
+          expect(recordCompletion.mock.calls.map(c => [c[0], c[1]]), 'the finish recorded is the fresh chain\'s').toEqual([[`/${chain.slug}`, 0]]);
+        } finally {
+          unmount();
+        }
+      });
+
+      it(`${chain.slug}: one invented name among real champions refuses the record`, () => {
+        const starter = todaysStarter(chain);
+        const real = KNOWN[chain.slug].filter(n => n.toLowerCase() !== starter.toLowerCase()).slice(0, 3);
+        expect(real.length).toBe(3);
+        file(chain, [starter, ...real]);
+        expect(resumedLength(chain), 'real champions resume').toEqual({ length: 4, status: 'playing' });
+        localStorage.clear();
+        file(chain, [starter, ...real, 'Invented Name']);
+        expect(resumedLength(chain), 'one invented name and the day deals fresh').toEqual({ length: 1, status: 'playing' });
+        expect(finishes()).toBe(0);
+      });
+
+      it(`${chain.slug}: no part played chain resumes longer than every champion plus the starter`, () => {
+        const starter = todaysStarter(chain);
+        const every = KNOWN[chain.slug].filter(n => n.toLowerCase() !== starter.toLowerCase());
+        file(chain, [starter, ...every]);
+        const longest = resumedLength(chain);
+        expect(longest.status).toBe('playing');
+        expect(longest.length, 'the longest chain the check lets back is every champion plus the starter').toBe(every.length + 1);
+        expect(longest.length).toBeLessThanOrEqual(KNOWN[chain.slug].length + 1);
+        localStorage.clear();
+        file(chain, [starter, ...every, 'Invented Name']);
+        expect(resumedLength(chain).length, 'one link past it and the day deals fresh').toBe(1);
+      });
+
+      it(`${chain.slug}: a finished chain is not checked, so it comes back finished and records nothing`, () => {
+        const starter = todaysStarter(chain);
+        file(chain, [starter, 'Invented Name'], true);
+        expect(resumedLength(chain).status, 'a finished day never reopens').toBe('ended');
+        expect(finishes(), 'and its restore records nothing').toBe(0);
       });
     }
   });
