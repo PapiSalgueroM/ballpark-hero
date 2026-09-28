@@ -137,6 +137,10 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
         ? `Level ${r.tie.aggMine}-${r.tie.aggTheirs} on aggregate after extra time, ${aetThrough ? 'through' : 'out'} on away goals`
         : `${aetThrough ? 'Through' : 'Out'} ${r.tie.aggMine}-${r.tie.aggTheirs} on aggregate after extra time`)
       : (aetThrough ? 'Won in extra time' : 'Lost in extra time');
+  /* Round 670 polish: a shootout after extra time. On a second leg it is the
+     aggregate that is still level, not the night printed under it. */
+  const etPensLead = !r.detail?.et ? ''
+    : r.tie?.leg === 2 ? `Still level ${r.tie.aggMine}-${r.tie.aggTheirs} on aggregate after extra time. ` : 'Still level after extra time. ';
   /* Round 157: the ratings list folds away because ten rows of numbers is a
      lot of card, but the man of the match is always on show. */
   const [showRatings, setShowRatings] = useState(false);
@@ -223,7 +227,7 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
         </h2>
         {penLine && (
           <div className={cn('text-[11px] font-bold mb-2', (r.shootoutWon ?? r.won) ? 'text-correct' : 'text-destructive')}>
-            {detail?.et ? 'Still level after extra time. ' : ''}{penLine}
+            {etPensLead}{penLine}
           </div>
         )}
         {aetLine && (

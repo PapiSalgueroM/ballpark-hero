@@ -89,15 +89,31 @@
         and a change in the 100th minute that alters nothing (the same
         shape, with no goal, red or injury of mine since 90) leaves it
         exactly where it was.
+    10) Round 670 polish: what announces extra time is true. A one legged
+        tie is level on the night; a second leg is level on the AGGREGATE,
+        and the night's own score often is not (0-3 after a 3-0 first leg),
+        so "Level after 90 minutes" beside a 0-3 was false. The aggregate
+        at 90 is worked out here from the bracket's first leg and the goals
+        drawn by 90. The viewer's banner line (extraTimeCall) and the
+        report's timeline marker must say "Level after 90 minutes" on a one
+        legged tie and "Level X-X on aggregate" on a second leg (with "and on
+        away goals" in the eras that had them); a shootout after extra time
+        says the aggregate is still level in the report's event line and on
+        the report card, and the bracket says "Level on aggregate after
+        extra time". Floored on second legs that were NOT level on the night,
+        the case that was false. The viewer's banner itself is drawn inside
+        an effect, which react-dom/server never runs, so the banner on the
+        screen is held by src/test/liveSimMotion.test.tsx (simLiveSimMotion,
+        control banner).
 
    Negative controls, EXTRA_TIME_CONTROL=<name>. Each rewrites a copy (the
-   engine or the report card) under .sim-control/extratime, refuses to run
-   (exit 2) unless its anchor is found exactly once, and then must turn its
-   named section red and no other (a tolerated section is listed where one
-   is red by construction):
-     noet       playsExtraTime answers false. Section 1 must go red (7, 8
-                and 9 are tolerated: with no extra time they have nothing to
-                read).
+   engine, the report card or the bracket) under .sim-control/extratime,
+   refuses to run (exit 2) unless its anchor is found exactly once, and then
+   must turn its named section red and no other (a tolerated section is
+   listed where one is red by construction):
+     noet       playsExtraTime answers false. Section 1 must go red (7, 8,
+                9 and 10 are tolerated: with no extra time they have nothing
+                to read).
      nodeflate  ET_DEFLATOR is 1. Section 3 must go red.
      etleague   playsExtraTime answers true for every match that is not a
                 first leg. Section 2 must go red.
@@ -118,6 +134,15 @@
      possstale  drawing extra time leaves the second half's possession
                 alone, so a change that alters nothing moves it. Section 9
                 must go red.
+     levelline  the engine says "Level after 90 minutes" on a second leg
+                again (the banner line and the timeline). Section 10 must go
+                red.
+     pensline   the report's event line says "Still level after extra time"
+                on a second leg again. Section 10 must go red.
+     cardlevel  the report card says it on a second leg again. Section 10
+                must go red.
+     bracketlevel  the bracket says "Level after extra time" on a two legged
+                tie again. Section 10 must go red.
    Under a control the run exits 1 when the control fired on exactly its
    section (the engine it ran is a regression, so the harness is red) and 3
    when the control did not fire or bled into another section.
@@ -188,7 +213,14 @@ const NM = modulesDir();
        (possinflate measured +2.359 here, the review's +2.17; the mean is
         over about 340 matches whose single shifts spread about two points,
         so its own SD is near 0.1 and 0.5 is five of them)
-     unchanged matches, same shape at 100   210 to 274, none moved       floor 100 */
+     unchanged matches, same shape at 100   210 to 274, none moved       floor 100
+   Round 670 polish, measured 2026-09-28 on the same five samples (each
+   floor is under half the lowest):
+     one legged ties to extra time (10)     100 to 151                   floor 45
+     second legs to extra time not level
+       on the night (10)                    142 to 171                   floor 60
+     second legs to extra time in the
+       away goals eras (10)                 67 to 146                    floor 30 */
 const T = {
   minEt: 40,
   minLevelLeague: 100,
@@ -204,11 +236,15 @@ const T = {
   minPast99: 1000,
   tolPoss: 0.5,
   minNoop: 100,
+  minNotLevelNight: 60,
+  minAwayEra: 30,
+  minSingleEt: 45,
 };
 
 /* ---- controls ---- */
 const ENGINE = path.join(ROOT, 'src', 'lib', 'clubManager.ts');
 const CARD = path.join(ROOT, 'src', 'components', 'club-manager', 'MatchReportCard.tsx');
+const BRACKET = path.join(ROOT, 'src', 'components', 'club-manager', 'UclBracketCard.tsx');
 const DEFLATOR_LINE = /export const ET_DEFLATOR = [0-9.]+;\n/g;
 const AI_EDITS = [
   ['      const [a2, h2] = simAiMatch(state, t.away, t.home, ET_DEFLATOR);\n', '      const [a2, h2] = simAiMatch(state, t.away, t.home);\n'],
@@ -217,7 +253,7 @@ const AI_EDITS = [
 ];
 const NO_ET_EDIT = ['function playsExtraTime(state: CareerState, entry: CalendarEntry): boolean {\n', 'function playsExtraTime(state: CareerState, entry: CalendarEntry): boolean {\n  if (entry) return false;\n'];
 const CONTROLS = {
-  noet: { must: [1], also: [7, 8, 9], file: 'engine', edits: [NO_ET_EDIT], note: 'playsExtraTime answers false; section 1 must go red' },
+  noet: { must: [1], also: [7, 8, 9, 10], file: 'engine', edits: [NO_ET_EDIT], note: 'playsExtraTime answers false; section 1 must go red' },
   noaet: {
     must: [4], also: [], file: 'engine',
     edits: [["      advanced = (out.winner === 'home') === iAmHome;\n      if (etPlayed) decidedBy = 'aet';\n", "      advanced = (out.winner === 'home') === iAmHome;\n"]],
@@ -258,6 +294,32 @@ const CONTROLS = {
     must: [7], also: [], file: 'engine',
     edits: [['  drawExtraTime(state, state.calendar[live.week], live);\n  live.minute = Math.max(90, live.minute ?? 0);\n', '  Math.random();\n  drawExtraTime(state, state.calendar[live.week], live);\n  live.minute = Math.max(90, live.minute ?? 0);\n']],
     note: 'the viewer draws one number before extra time; section 7 must go red',
+  },
+  levelline: {
+    must: [10], also: [], file: 'engine',
+    edits: [["  if (!secondLegTonight(state, entry)) return 'Level after 90 minutes';\n", "  return 'Level after 90 minutes';\n"]],
+    note: 'the ninetieth minute says "Level after 90 minutes" on a second leg again; section 10 must go red',
+  },
+  pensline: {
+    must: [10], also: [], file: 'engine',
+    edits: [[
+      "    events.push(tieLine ? `⏱️ Still level ${tieLine.aggMine}-${tieLine.aggTheirs} on aggregate after extra time.` : '⏱️ Still level after extra time.');\n",
+      "    events.push('⏱️ Still level after extra time.');\n",
+    ]],
+    note: 'the event line says "Still level after extra time" on a second leg again; section 10 must go red',
+  },
+  cardlevel: {
+    must: [10], also: [], file: 'card',
+    edits: [[
+      "    : r.tie?.leg === 2 ? `Still level ${r.tie.aggMine}-${r.tie.aggTheirs} on aggregate after extra time. ` : 'Still level after extra time. ';\n",
+      "    : 'Still level after extra time. ';\n",
+    ]],
+    note: 'the report card says "Still level after extra time" on a second leg again; section 10 must go red',
+  },
+  bracketlevel: {
+    must: [10], also: [], file: 'bracket',
+    edits: [["{t.aet ? (t.legs === 2 ? 'Level on aggregate after extra time.' : 'Level after extra time.') : ", "{t.aet ? 'Level after extra time.' : "]],
+    note: 'the bracket says "Level after extra time" on a two legged tie again; section 10 must go red',
   },
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
@@ -301,13 +363,16 @@ const writeCopy = (name, text) => {
 
 const engineSrc = lf(fs.readFileSync(ENGINE, 'utf8'));
 const cardSrc = lf(fs.readFileSync(CARD, 'utf8'));
+const bracketSrc = lf(fs.readFileSync(BRACKET, 'utf8'));
 let engineA = engineSrc;
 let cardA = cardSrc;
+let bracketA = bracketSrc;
 if (CONTROL) {
   const spec = CONTROLS[CONTROL];
   for (const e of spec.edits) {
     if (spec.file === 'engine') engineA = rewrite(engineA, e, `EXTRA_TIME_CONTROL=${CONTROL}`);
-    else cardA = rewrite(cardA, e, `EXTRA_TIME_CONTROL=${CONTROL}`);
+    else if (spec.file === 'card') cardA = rewrite(cardA, e, `EXTRA_TIME_CONTROL=${CONTROL}`);
+    else bracketA = rewrite(bracketA, e, `EXTRA_TIME_CONTROL=${CONTROL}`);
   }
   console.log(`NEGATIVE CONTROL ON (${CONTROL}): ${spec.note}`);
 }
@@ -320,6 +385,7 @@ const pathA = engineA === engineSrc ? `${ROOT_URL}/src/lib/clubManager.ts` : wri
 const pathB = writeCopy('clubManagerB', engineB);
 const pathC = writeCopy('clubManagerC', engineC);
 const cardPath = cardA === cardSrc ? `${ROOT_URL}/src/components/club-manager/MatchReportCard.tsx` : writeCopy('MatchReportCardA', cardA);
+const bracketPath = bracketA === bracketSrc ? `${ROOT_URL}/src/components/club-manager/UclBracketCard.tsx` : writeCopy('UclBracketCardA', bracketA);
 
 fs.writeFileSync(ENTRY, `
 export * as cmA from '${pathA}';
@@ -327,7 +393,7 @@ export * as cmB from '${pathB}';
 export * as cmC from '${pathC}';
 export { MatchReportCard } from '${cardPath}';
 export { LiveSimScreen } from '${ROOT_URL}/src/components/club-manager/LiveSimScreen.tsx';
-export { UclBracketCard } from '${ROOT_URL}/src/components/club-manager/UclBracketCard.tsx';
+export { UclBracketCard } from '${bracketPath}';
 import React from '${NM}/react/index.js';
 import { renderToStaticMarkup } from '${NM}/react-dom/server.node.js';
 export const render = (Component, props) => renderToStaticMarkup(React.createElement(Component, props));
@@ -340,7 +406,7 @@ globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) 
 const { cmA, cmB, cmC, MatchReportCard, LiveSimScreen, UclBracketCard, render } = createRequire(import.meta.url)(BUNDLE);
 for (const [arm, cm] of [['A', cmA], ['B', cmB], ['C', cmC]]) {
   for (const name of ['startCareer', 'playNextEntry', 'resumeMatch', 'startSecondHalf', 'startExtraTime', 'isExtraTimeDue',
-    'changeLive', 'markLiveMinute', 'uclTieOutcome', 'uclAwayGoalsApply', 'uclLegsFor', 'ET_DEFLATOR', 'ET_MINUTES', 'myOnPitchAt']) {
+    'changeLive', 'markLiveMinute', 'uclTieOutcome', 'uclAwayGoalsApply', 'uclLegsFor', 'ET_DEFLATOR', 'ET_MINUTES', 'myOnPitchAt', 'extraTimeCall']) {
     if (cm[name] === undefined) { console.error(`arm ${arm}: the engine does not export ${name}`); process.exit(2); }
   }
 }
@@ -528,7 +594,8 @@ const S4 = { checked: 0, aet: 0, pens: 0 };
 const S7 = { compared: 0, base: 0, changes: 0 };
 const S8 = { matches: 0, events: 0, past99: 0 };
 const S9 = { n: 0, shift: [], noop: 0, noopMoved: 0, noopSkipped: 0 };
-const kept = { etA: [], plainA: null, aetC: null, pensEtC: null, regularC: null, aet2C: null };
+const S10 = { single: 0, second: 0, secondNotLevelNight: 0, awayEra: 0, pensSingle: 0, pensSecond: 0 };
+const kept = { etA: [], plainA: null, aetC: null, pensEtC: null, regularC: null, aet2C: null, pens2A: null, pens1A: null };
 
 function readS1(r) {
   const f = r.f;
@@ -677,6 +744,55 @@ function readS9(r) {
   if (after.live.possH2 !== pEt) { S9.noopMoved += 1; fail(9, `${ctx}: the same shape at 100 moved possession from ${pEt} to ${after.live.possH2}`); }
 }
 
+/* Section 10: what announces extra time is true. The aggregate is worked out
+   here from the bracket's first leg in the save before the match, in my
+   orientation, plus tonight's goals; the three historic eras are the ones
+   with away goals. */
+function firstLegOf(f) {
+  const t = myTie(f.pre, f.round);
+  const iAmHome = t.home === f.club;
+  return { mine: iAmHome ? t.leg1.homeGoals : t.leg1.awayGoals, theirs: iAmHome ? t.leg1.awayGoals : t.leg1.homeGoals };
+}
+function wordsAt90(f, at90) {
+  if (!f.secondLeg) return 'Level after 90 minutes';
+  const l1 = firstLegOf(f);
+  return `Level ${l1.mine + at90.mine}-${l1.theirs + at90.opp} on aggregate${f.era === 'modern' ? '' : ' and on away goals'}`;
+}
+function readS10(r) {
+  if (!r.live.et) return;
+  const f = r.f;
+  const ctx = `${f.club} (${f.era}) ${f.round}${f.secondLeg ? ' second leg' : ''} seed ${r.j}`;
+  const want = wordsAt90(f, r.at90);
+  if (f.secondLeg) {
+    S10.second += 1;
+    if (r.at90.mine !== r.at90.opp) S10.secondNotLevelNight += 1;
+    if (f.era !== 'modern') S10.awayEra += 1;
+  } else {
+    S10.single += 1;
+  }
+  const call = cmA.extraTimeCall(r.withEt, r.withEt.live);
+  if (call !== want) fail(10, `${ctx}: ${r.at90.mine}-${r.at90.opp} on the night at 90, and the banner line reads "${call}" where the tie says "${want}"`);
+  const d = r.report.detail;
+  const mark = (d?.timeline ?? []).find(e => e.kind === 'extratime');
+  const wantMark = `${want} (+${d?.added?.h2}'), extra time`;
+  if (!mark || mark.text !== wantMark) fail(10, `${ctx}: the timeline marker reads "${mark?.text}", not "${wantMark}"`);
+  if (r.report.decidedBy !== 'pens') return;
+  let wantEvent;
+  if (f.secondLeg) {
+    S10.pensSecond += 1;
+    const l1 = firstLegOf(f);
+    wantEvent = `Still level ${l1.mine + mineOf(r.report, f.club)}-${l1.theirs + theirsOf(r.report, f.club)} on aggregate after extra time.`;
+    if (!kept.pens2A) kept.pens2A = r;
+  } else {
+    S10.pensSingle += 1;
+    wantEvent = 'Still level after extra time.';
+    if (!kept.pens1A) kept.pens1A = r;
+  }
+  if (!r.report.events.some(e => e.includes(wantEvent))) {
+    fail(10, `${ctx}: a shootout after extra time, and no event line reads "${wantEvent}" (${J(r.report.events.filter(e => e.includes('extra time')))})`);
+  }
+}
+
 function readS7(r) {
   const hasEt = !!r.live.et;
   if (hasEt ? S7.compared >= 40 : S7.base >= 10) return;
@@ -713,6 +829,7 @@ for (const [arm, cm] of [['A', cmA], ['B', cmB], ['C', cmC]]) {
         readS7(r);
         readS8(r);
         readS9(r);
+        readS10(r);
         if (r.live.et && kept.etA.length < 12) kept.etA.push(r);
         if (!r.live.et && !kept.plainA) kept.plainA = r;
       }
@@ -799,10 +916,10 @@ report(5, 'Every AI tie settled by these replays plays extra time before penalti
 ]);
 
 /* ================= 6 ================= */
+const visible = html => html.replace(/<[^>]*>/g, ' ').replace(/&#x27;|&#39;/g, "'").replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
 {
   /* From arm C, which is built from the source on disk whatever control is
      on, so a control on the engine cannot take the material away. */
-  const visible = html => html.replace(/<[^>]*>/g, ' ').replace(/&#x27;|&#39;/g, "'").replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
   const { aetC, pensEtC, regularC, aet2C } = kept;
   const lines = [];
   if (!aetC || !pensEtC || !regularC || !aet2C) {
@@ -815,7 +932,9 @@ report(5, 'Every AI tie settled by these replays plays extra time before penalti
     if (!/in extra time|after extra time/.test(a)) fail(6, 'the report card of an aet match has no extra time line');
     if (!/on aggregate after extra time/.test(card(aet2C))) fail(6, 'the report card of an aet second leg does not give the aggregate after extra time');
     const p = card(pensEtC);
-    if (!p.includes('(PENS)') || !p.includes('Still level after extra time')) fail(6, 'the report card of a shootout after extra time does not say both');
+    /* Round 670 polish: on a second leg it is the aggregate that is still
+       level, and section 10 holds which of the two it says. */
+    if (!p.includes('(PENS)') || !/Still level (\d+-\d+ on aggregate )?after extra time/.test(p)) fail(6, 'the report card of a shootout after extra time does not say both');
     const g = card(regularC);
     if (g.includes('(AET)') || g.includes('extra time')) fail(6, 'a regular report mentions extra time');
     /* The viewer, 97 minutes in, and at the end. */
@@ -888,6 +1007,45 @@ report(8, 'Extra time is played by men with names, on the pitch at the minute', 
   ]);
 }
 
+/* ================= 10 ================= */
+{
+  if (S10.secondNotLevelNight < T.minNotLevelNight) fail(10, `only ${S10.secondNotLevelNight} second legs went to extra time with the night's own score not level, under the floor of ${T.minNotLevelNight}, so the case that was false went unread`);
+  if (S10.awayEra < T.minAwayEra) fail(10, `only ${S10.awayEra} second legs in the away goals eras went to extra time, under the floor of ${T.minAwayEra}`);
+  if (S10.single < T.minSingleEt) fail(10, `only ${S10.single} one legged ties went to extra time, under the floor of ${T.minSingleEt}`);
+  const lines = [
+    `${S10.single} one legged ties and ${S10.second} second legs to extra time (${S10.secondNotLevelNight} of those not level on the night, ${S10.awayEra} in the away goals eras): the banner line and the timeline marker say what the tie says`,
+  ];
+  const card = r => visible(render(MatchReportCard, { report: r.report, clubName: r.f.club, onContinue: () => {} }));
+  const bracketLine = r => {
+    const b = visible(render(UclBracketCard, { career: r.state }));
+    return { b, winner: myTie(r.state, r.f.round)?.winner };
+  };
+  if (!kept.pens2A) {
+    fail(10, 'no second leg went to penalties after extra time, so the report card and the bracket went unread');
+  } else {
+    const r = kept.pens2A;
+    const l1 = firstLegOf(r.f);
+    const want = `Still level ${l1.mine + mineOf(r.report, r.f.club)}-${l1.theirs + theirsOf(r.report, r.f.club)} on aggregate after extra time`;
+    const c = card(r);
+    if (!c.includes(want)) fail(10, `the report card of a second leg shootout after extra time does not read "${want}": ${c.slice(0, 160)}`);
+    if (c.includes('Still level after extra time')) fail(10, 'the report card of a second leg shootout after extra time says the night was still level');
+    const { b, winner } = bracketLine(r);
+    const wantB = `Level on aggregate after extra time. ${winner} win on penalties.`;
+    if (!b.includes(wantB)) fail(10, `the bracket after a second leg shootout after extra time does not read "${wantB}"`);
+    lines.push(`a second leg shootout after extra time: the report card reads "${want}", the bracket "${wantB}"`);
+  }
+  if (kept.pens1A) {
+    const r = kept.pens1A;
+    if (!card(r).includes('Still level after extra time')) fail(10, 'the report card of a one legged shootout after extra time does not say it was still level');
+    const { b, winner } = bracketLine(r);
+    if (!b.includes(`Level after extra time. ${winner} win on penalties.`)) fail(10, 'the bracket after a one legged shootout after extra time does not say it was level after it');
+    lines.push('a one legged shootout after extra time: the report card and the bracket say it was level after it');
+  } else {
+    lines.push(`no one legged tie of mine went to penalties after extra time in this sample (${S10.pensSingle}), so that card line went unread`);
+  }
+  report(10, 'What announces extra time is true: level on the night, or level on aggregate on a second leg', lines);
+}
+
 /* ---------- the verdict ---------- */
 const red = [...failedIn.keys()].sort((a, b) => a - b);
 if (CONTROL) {
@@ -904,6 +1062,6 @@ if (CONTROL) {
   process.exit(1);
 }
 console.log(failures === 0
-  ? '\nsimExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (finals included), the screens say so, the two ways of playing it are one match, named men play it, and its possession is read off rates.'
+  ? '\nsimExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (finals included), the screens say so, the two ways of playing it are one match, named men play it, its possession is read off rates, and what announces it says level on the night or level on aggregate, whichever is true.'
   : `\nsimExtraTime: ${failures} FAILURES in section(s) ${red.join(', ')}`);
 process.exit(failures === 0 ? 0 : 1);

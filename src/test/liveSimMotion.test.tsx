@@ -390,4 +390,37 @@ describe('Live simcast motion', () => {
     await step(200);
     expect(callbacks.onSecondHalf).toHaveBeenCalledTimes(1);
   }, 30000);
+
+  /* Round 670 polish: the banner at 90 says what is true. On a second leg the
+     night's score is often not level (0-3 after a 3-0 first leg), so "Level
+     after 90 minutes" beside it was false: it is the aggregate that is level,
+     and the banner says so and gives it. The aggregate is worked out here from
+     the bracket's first leg and the goals the feed has by 90. */
+  it('the extra time banner says what is true: a second leg is level on aggregate', async () => {
+    const { due } = findWhistleMaterial();
+    const entry = due.calendar[due.live!.week];
+    expect(entry.uclLeg === 2 && uclLegsFor(due.eraId, entry.uclRound!) === 2, 'the decider this walk reached is a second leg').toBe(true);
+    const tie = due.uclBracket!.find(t => t.round === entry.uclRound && t.mine)!;
+    const iAmHome = tie.home === due.clubName;
+    const [mine90, opp90] = scoreAt(due, 90).split(' - ').map(Number);
+    const aggMine = (iAmHome ? tie.leg1!.homeGoals : tie.leg1!.awayGoals) + mine90;
+    const aggTheirs = (iAmHome ? tie.leg1!.awayGoals : tie.leg1!.homeGoals) + opp90;
+    expect(aggMine, 'level on aggregate at 90').toBe(aggTheirs);
+    /* This walk's decider was 3-1 on the night after a 1-3 first leg when this
+       was written (2026-09-28): the case the old banner got wrong. */
+    expect(mine90, 'the night itself is not level').not.toBe(opp90);
+    const drawn = startExtraTime(structuredClone(due))!;
+    const callbacks = { onSub: vi.fn(), onShape: vi.fn(), onTalk: vi.fn(), onSecondHalf: vi.fn(), onExit: vi.fn(), onStartSecondHalf: vi.fn(), onStartExtraTime: vi.fn(), onChange: vi.fn(), onMark: vi.fn() };
+    function Page() {
+      const [career, setCareer] = useState<CareerState>(() => structuredClone(due));
+      return <LiveSimScreen career={career} live={career.live ?? null} report={null} clubColor="#86bced" {...callbacks}
+        onStartExtraTime={() => { callbacks.onStartExtraTime(); setCareer(() => drawn); }} />;
+    }
+    const mounted = render(<Page />);
+    await step(1200);
+    expect(stageOf(mounted.container)).toBe('extra');
+    const text = mounted.container.textContent!;
+    expect(text).toContain(`Level ${aggMine}-${aggTheirs} on aggregate`);
+    expect(text).not.toContain('Level after 90 minutes');
+  }, 30000);
 });

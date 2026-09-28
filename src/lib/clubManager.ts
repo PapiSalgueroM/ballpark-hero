@@ -11738,8 +11738,9 @@ function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, 
  * first, the second is decided when it starts) as goals, chances, corners,
  * throw ins, fouls, cards, an injury and the other dugout's substitutions,
  * every one with a minute, and the report's stats block is counted off the
- * same list the viewer walks (liveStatsAt), so the counter on screen at 90
- * and the number on the report are one number.
+ * same list the viewer walks (liveStatsAt), so the counter on screen at the
+ * final whistle (90, or 120 after extra time) and the number on the report
+ * are one number.
  *
  * A change the manager makes at minute M keeps every event at or before M
  * and redraws the rest of the half off the eleven and the shape he just
@@ -12693,9 +12694,39 @@ function scoreAt90(live: LiveMatch): { mine: number; opp: number } {
 function extraTimeDue(state: CareerState, entry: CalendarEntry, live: LiveMatch): boolean {
   if (live.et || !live.h2Drawn || !playsExtraTime(state, entry)) return false;
   const { mine, opp } = scoreAt90(live);
-  const secondLeg = entry.uclRound && entry.uclLeg === 2 && uclLegsFor(state.eraId, entry.uclRound) === 2;
-  if (secondLeg) return mySecondLegOutcome(state, entry.uclRound!, mine, opp).out.winner === null;
+  if (secondLegTonight(state, entry)) return mySecondLegOutcome(state, entry.uclRound!, mine, opp).out.winner === null;
   return mine === opp;
+}
+
+/** Round 670: tonight is the second leg of a two legged tie, so the tie is read on the aggregate. */
+function secondLegTonight(state: CareerState, entry: CalendarEntry): boolean {
+  return !!entry.uclRound && entry.uclLeg === 2 && uclLegsFor(state.eraId, entry.uclRound) === 2;
+}
+
+/**
+ * Round 670 polish: what the ninetieth minute says when extra time follows,
+ * in words that are true of the scoreboard beside them. A one legged tie is
+ * level on the night. A second leg is level on the AGGREGATE, and the night's
+ * own score often is not (0-3 after a 3-0 first leg), so "level after 90
+ * minutes" printed beside a 0-3 was false. In the seasons with away goals the
+ * tie was level on those as well, or it would have been settled at 90
+ * (extraTimeDue). The viewer's banner and the report's timeline both read
+ * this, so the two cannot say different things. Asked only of a match that
+ * plays extra time.
+ */
+function levelAt90Words(state: CareerState, entry: CalendarEntry, live: LiveMatch): string {
+  if (!secondLegTonight(state, entry)) return 'Level after 90 minutes';
+  const { mine, opp } = scoreAt90(live);
+  const { iAmHome, out } = mySecondLegOutcome(state, entry.uclRound!, mine, opp);
+  const aggMine = iAmHome ? out.homeAgg : out.awayAgg;
+  const aggTheirs = iAmHome ? out.awayAgg : out.homeAgg;
+  return `Level ${aggMine}-${aggTheirs} on aggregate${uclAwayGoalsApply(state.eraId) ? ' and on away goals' : ''}`;
+}
+
+/** Round 670 polish: the viewer's extra time banner line, read off the save it is handed. */
+export function extraTimeCall(career: CareerState, live: LiveMatch): string {
+  const entry = career.calendar[live.week];
+  return entry ? levelAt90Words(career, entry, live) : 'Level after 90 minutes';
 }
 
 /**
@@ -12897,8 +12928,9 @@ export function liveFeed(live: LiveMatch): LiveFeedEvent[] {
 
 /**
  * The stats block as it stands at a minute, counted off the committed play.
- * The report's stats ARE this function at 90, so a counter on the live
- * screen and the number on the report are the same number by construction.
+ * The report's stats ARE this function at the last minute played (90, or 120
+ * after extra time since Round 670), so a counter on the live screen and the
+ * number on the report are the same number by construction.
  * Possession is the first half's share, then the running average of the two
  * halves' shares, which lands on the match figure at the whistle.
  */
@@ -13173,6 +13205,8 @@ function buildMatchDetail(args: {
   oppCards: CardLine[];
   /** Round 670: the extra time stretch, when there was one. */
   et?: { from: number; to: number };
+  /** Round 670 polish: why it went on, levelAt90Words, when there was extra time. */
+  etWords?: string;
 }): MatchDetail {
   const { myGoals, oppGoals, lamMine, lamOpp } = args;
   const round2 = (n: number) => Math.round(n * 100) / 100;
@@ -13229,8 +13263,10 @@ function buildMatchDetail(args: {
   for (const c of args.oppCards) timeline.push({ minute: c.minute, side: 'opp', kind: c.kind, text: c.name });
   for (const s of args.oppSubs) timeline.push({ minute: s.minute, side: 'opp', kind: 'sub', text: `${s.on} on for ${s.off}` });
   timeline.push({ minute: 45, side: 'none', kind: 'halftime', text: `Half time (+${added.h1}')` });
-  /* Round 670: the ninety minutes end with the board, and extra time starts. */
-  if (args.et) timeline.push({ minute: args.et.from, side: 'none', kind: 'extratime', text: `Level after 90 (+${added.h2}'), extra time` });
+  /* Round 670: the ninety minutes end with the board, and extra time starts.
+     Round 670 polish: in the viewer's own words, so a second leg says it is
+     the aggregate that is level. */
+  if (args.et) timeline.push({ minute: args.et.from, side: 'none', kind: 'extratime', text: `${args.etWords ?? 'Level after 90 minutes'} (+${added.h2}'), extra time` });
   if (args.decidedBy === 'pens') {
     /* Round 507: the shootout's own result, not the night's. On a two legged
        tie you can lose the second leg and win the shootout, so reading `won`
@@ -13484,6 +13520,8 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      goals are in the h2 lists, so every count below includes them. */
   if (extraTimeDue(state, entry, live)) drawExtraTime(state, entry, live);
   const etPlayed = !!live.et;
+  /* Round 670 polish: read before anything below touches the bracket. */
+  const etWords = etPlayed ? levelAt90Words(state, entry, live) : undefined;
   const h1My = live.myGoals;
   const h1Opp = live.oppGoals;
   const myGoals = h1My + (live.h2My ?? []).length;
@@ -13617,7 +13655,10 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   });
   /* Round 670: extra time gets a line of its own, before the shootout's. */
   if (decidedBy === 'aet') events.push(advanced ? '⏱️ Settled in extra time, and you are through.' : '⏱️ Settled in extra time, and you are out.');
-  else if (etPlayed) events.push('⏱️ Still level after extra time.');
+  else if (etPlayed) {
+    /* Round 670 polish: a second leg is level on the aggregate, not on the night. */
+    events.push(tieLine ? `⏱️ Still level ${tieLine.aggMine}-${tieLine.aggTheirs} on aggregate after extra time.` : '⏱️ Still level after extra time.');
+  }
   if (decidedBy === 'pens') {
     /* The shootout, not the night. */
     events.push((shootoutWon ?? won) ? '🥅 Nerves of steel. You win the shootout.' : '🥅 Heartbreak from the spot: shootout defeat.');
@@ -14298,6 +14339,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     oppSubs: live.oppSubs ?? [],
     oppCards: [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])],
     et: live.et,
+    etWords,
   });
 
   const iAmHome = fx.home !== false; // neutral finals list us first

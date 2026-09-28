@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 import { Pause, Play, FastForward, Users, ArrowLeftRight, Gauge, X } from 'lucide-react';
 import {
-  FORMATIONS, MENTALITIES, slotPosition, pitchLineOf, resolveXI,
+  FORMATIONS, MENTALITIES, slotPosition, pitchLineOf, resolveXI, extraTimeCall,
   liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, MAX_SUBS, liveGoneIds,
 } from '@/lib/clubManager';
 import type {
@@ -34,15 +34,15 @@ import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';
  * subs, every one with a minute), the first at kick off and the second when
  * the manager sends them back out, and this screen walks liveFeed(live) with
  * a clock. The stats strip is liveStatsAt(live, minute), the same function
- * the report's stats block is counted with, so the counter at 90 and the
- * number on the report are one number by construction.
+ * the report's stats block is counted with, so the counter at the final
+ * whistle and the number on the report are one number by construction.
  *
  * A change at any minute (tap one of your dots, bring somebody on or change
  * the shape) goes to the engine through onChange, which keeps everything at
  * or before that minute and redraws the rest of the half. The interval is
  * still the real dressing room (HalftimeScreen, embedded). onStartSecondHalf
- * draws the second half; onSecondHalf FINISHES the match at 90 and lands the
- * report.
+ * draws the second half; onSecondHalf FINISHES the match at the final whistle
+ * and lands the report.
  *
  * Round 670: a level Champions League decider does not finish at 90. At 90 the
  * viewer calls onStartExtraTime once, the engine draws the thirty minutes on
@@ -327,7 +327,7 @@ export function LiveSimScreen({
   const ballRef = useRef({ x: 50, y: 50 });
   const carrierRef = useRef<Carrier | null>(null);
   /* The whistle takes the live match off the save in the same tick the report
-     lands, so the last one seen keeps the pitch drawn at 90 until then. */
+     lands, so the last one seen keeps the pitch drawn at the whistle until then. */
   const lastLive = useRef<LiveMatch | null>(live);
   useEffect(() => { if (live) lastLive.current = live; }, [live]);
   const liveNow = live ?? lastLive.current;
@@ -450,7 +450,10 @@ export function LiveSimScreen({
       }
       if (liveNow?.et) {
         setStage('extra');
-        setBanner({ segs: [{ t: 'Extra time' }], club: 'Level after 90 minutes', tone: 'none' });
+        /* Round 670 polish: a second leg is level on the aggregate, and the
+           night's score beside the banner often is not, so the engine says
+           which (and gives the aggregate) rather than a line typed here. */
+        setBanner({ segs: [{ t: 'Extra time' }], club: extraTimeCall(career, liveNow), tone: 'none' });
         if (bannerTimer.current) clearTimeout(bannerTimer.current);
         bannerTimer.current = setTimeout(() => setBanner(null), 2600);
         return;
@@ -466,7 +469,7 @@ export function LiveSimScreen({
       setPicking(null);
       onSecondHalf();
     }
-  }, [clock, stage, stageEnd, askedAt90, liveNow, onSecondHalf, onStartExtraTime, onMark]);
+  }, [clock, stage, stageEnd, askedAt90, liveNow, career, onSecondHalf, onStartExtraTime, onMark]);
 
   /* Where the clock stands goes to the save when the page is hidden or
      leaves (a tab switch, the app going to the background, a reload), never

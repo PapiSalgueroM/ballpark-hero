@@ -122,7 +122,7 @@ export function UclBracketCard({ career, onClubClick }: UclBracketCardProps) {
                   )}
                   {t.pens && (
                     <div className="text-[8px] text-muted-foreground px-2 pb-0.5">
-                      {t.aet ? 'Level after extra time.' : t.legs === 2 ? 'Level over two legs.' : 'Level after 90.'} {t.winner} win on penalties.
+                      {t.aet ? (t.legs === 2 ? 'Level on aggregate after extra time.' : 'Level after extra time.') : t.legs === 2 ? 'Level over two legs.' : 'Level after 90.'} {t.winner} win on penalties.
                     </div>
                   )}
                 </div>
