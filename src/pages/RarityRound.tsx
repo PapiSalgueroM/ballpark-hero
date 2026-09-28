@@ -125,6 +125,9 @@ const RarityRound = () => {
   const [inputValue, setInputValue] = useState('');
   const [selectedEntity, setSelectedEntity] = useState<PlayerEntity | null>(null);
   const [errorMsg, setErrorMsg] = useState('');
+  /* Round 645 part three, second fix: the saved daily could not be checked
+     against its pools, so the error panel says so (see startRun). */
+  const [restoreUnread, setRestoreUnread] = useState(false);
   const [lastResult, setLastResult] = useState<RoundResult | null>(null);
 
   // Owner 2026-08-05: after each round show what everyone ELSE picked (the
@@ -171,16 +174,34 @@ const RarityRound = () => {
     setSelectedEntity(null);
     setErrorMsg('');
     setLastResult(null);
+    setRestoreUnread(false);
     if (!saved || saved.answers.length === 0) {
       setPhase('loading-round');
       return;
     }
     /* Round 645 part three fix: the saved answers are scored from their own
-       pools before anything is shown. */
+       pools before anything is shown.
+       Round 645 part three, second fix: and a pool that did not load checks
+       nothing. The pool loaders answer [] on any database error, and an empty
+       pool read as "the answer is not in its pool" refused the whole record,
+       so a network blip dealt the day fresh, a finished daily was played and
+       recorded again, and the first new answer wrote over the saved run. A
+       pool that is empty or that throws is now a restore that could not be
+       checked: the page says so and offers Try again, nothing is scored, and
+       nothing is recorded or written. Only an answer missing from a pool that
+       did load refuses the record. */
+    const unread = () => {
+      setRestoreUnread(true);
+      setPhase('error');
+    };
     setPhase('boot');
     Promise.all(saved.answers.map((_, i) => categories[i].fetchPool()))
       .then(pools => {
         if (token !== runToken.current) return;
+        if (pools.some(p => !Array.isArray(p) || p.length === 0)) {
+          unread();
+          return;
+        }
         const restored = scoreSaved(categories, saved.answers, pools);
         if (!restored) {
           /* an answer its category's pool does not hold: not a real run */
@@ -212,7 +233,7 @@ const RarityRound = () => {
         setPhase(finishing ? 'done' : 'loading-round');
       })
       .catch(() => {
-        if (token === runToken.current) setPhase('error');
+        if (token === runToken.current) unread();
       });
   }, [todayStr]);
 
@@ -583,7 +604,9 @@ const RarityRound = () => {
 
         {phase === 'error' && (
           <div className="text-center py-12">
-            <p className="text-destructive font-semibold mb-3">Couldn't load Rarity Round right now.</p>
+            <p className="text-destructive font-semibold mb-3">
+              {restoreUnread ? "Couldn't check your saved run right now. Try again in a moment." : "Couldn't load Rarity Round right now."}
+            </p>
             <button
               onClick={() => startRun(playMode, rarityMode)}
               className="px-6 py-2.5 bg-primary text-primary-foreground rounded-full font-semibold"

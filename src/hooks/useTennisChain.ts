@@ -5,8 +5,9 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import type { PlayerSourceConfig } from '@/lib/playerSearch';
 import { toast } from 'sonner';
 import { getTodayET } from '@/lib/dateUtils';
-import { readChainDaily, writeChainDaily } from '@/lib/chainDaily';
+import { linksKnown, readChainDaily, writeChainDaily } from '@/lib/chainDaily';
 import { markRestoredFinish } from '@/lib/restoredFinish';
+import tennisChampionNames from '@/data/tennisChampionNames.json';
 
 const SLUG = 'tennis-chain';
 
@@ -56,6 +57,11 @@ function getRandomStarter(): string {
 function restoreDaily(today: string): TennisChainState | null {
   const rec = readChainDaily(SLUG, today, getDailyStarter(today));
   if (!rec) return null;
+  /* Round 645 part three, second fix: a chain left part way resumes, and its
+     finish is recorded, so every player past the starter has to be a Grand
+     Slam singles champion, the only names tennis-chain-validate passes (see
+     scripts/genChainChampions.mjs). */
+  if (!rec.ended && !linksKnown(rec.links, tennisChampionNames.names)) return null;
   const chain = rec.links.map(l => (l.note !== undefined ? { playerName: l.name, slamConnection: l.note } : { playerName: l.name }));
   const chainLength = chain.length - 1;
   const rawScore = chainLength * 100;

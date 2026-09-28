@@ -16,7 +16,12 @@
    result card is no transition to a recorder whose done flag is the phase,
    so Pack Battle and Rarity Round dropped the daily finish that way, and
    Sports Millionaire will once Round 645 part one drops the mode from its
-   done flag.
+   done flag. The re-review of the fix pass (the second fix) found four more:
+   Rarity Round's restore read a pool that failed to load as a refusal and
+   dealt the day again, NASCAR and Tennis resumed invented names from a part
+   played record, Minefield and Sports Millionaire filed a daily started after
+   midnight under the old day, and HOF or Bust handed back its hints on a
+   refresh.
 
    The test is src/test/dailyLockEdges.test.tsx, one section per door, each
    tagged [id]. It renders the real pages and hooks with the reload fence's
@@ -78,6 +83,7 @@ const SECTIONS = [
   'pack-toggle', 'pack-writer', 'pack-mark', 'rarity-mark', 'rarity-derive',
   'arcade-bound', 'gauntlet-board', 'drill-fouls', 'market-roll',
   'pack-new-finish', 'rarity-new-finish', 'millionaire-new-finish',
+  'rarity-unread', 'chain-bound', 'day-rekey', 'hof-hint',
 ];
 
 function parse(out) {
@@ -239,6 +245,45 @@ const CONTROLS = [
     what: 'a decided daily answer lands straight on the Unlimited result card',
     swaps: [{ module: '@/pages/SportsMillionaire', file: 'src/pages/SportsMillionaire.tsx', cuts: [["      if (phaseRef.current === 'done') {\n", '      if (false) {\n']] }],
   },
+  /* Round 645 part three, second fix. */
+  {
+    name: 'rarity-unread', red: 'rarity-unread',
+    what: 'a saved run whose pool came back empty is scored against it, refused, and the day dealt fresh',
+    swaps: [{ module: '@/pages/RarityRound', file: 'src/pages/RarityRound.tsx', cuts: [['        if (pools.some(p => !Array.isArray(p) || p.length === 0)) {\n', '        if (false) {\n']] }],
+  },
+  {
+    name: 'rarity-unread-throw', red: 'rarity-unread',
+    what: 'a pool that fails on the way back is reported as the game failing to load',
+    swaps: [{ module: '@/pages/RarityRound', file: 'src/pages/RarityRound.tsx', cuts: [['        if (token === runToken.current) unread();\n', "        if (token === runToken.current) setPhase('error');\n"]] }],
+  },
+  {
+    name: 'chain-bound', red: 'chain-bound',
+    what: 'both server validated chains resume whatever names a part played record holds',
+    swaps: [
+      { ...NASCAR_HOOK, cuts: [['  if (!rec.ended && !linksKnown(rec.links, nascarChampionNames.names)) return null;\n', '']] },
+      { ...TENNIS_HOOK, cuts: [['  if (!rec.ended && !linksKnown(rec.links, tennisChampionNames.names)) return null;\n', '']] },
+    ],
+  },
+  {
+    name: 'minefield-rekey', red: 'day-rekey',
+    what: 'Minefield keeps the mount day when Daily is pressed after midnight',
+    swaps: [{ module: '@/pages/Minefield', file: 'src/pages/Minefield.tsx', cuts: [['      todayRef.current = getTodayET();\n', '']] }],
+  },
+  {
+    name: 'millionaire-rekey', red: 'day-rekey',
+    what: 'Sports Millionaire keeps the mount day when the Daily toggle deals after midnight',
+    swaps: [{ module: '@/pages/SportsMillionaire', file: 'src/pages/SportsMillionaire.tsx', cuts: [["    if (mode === 'daily') todayRef.current = getTodayET();\n", '']] }],
+  },
+  {
+    name: 'hof-hint-save', red: 'hof-hint',
+    what: 'HOF or Bust files a daily hint only with the vote',
+    swaps: [{ module: '@/hooks/useHofOrBust', file: 'src/hooks/useHofOrBust.ts', cuts: [["      if (mode === 'daily') saveDailyState(null, hintsRevealed + 1, 0, player.id);\n", '']] }],
+  },
+  {
+    name: 'hof-hint-bound', red: 'hof-hint',
+    what: 'HOF or Bust takes a save with no vote at its word',
+    swaps: [{ module: '@/hooks/useHofOrBust', file: 'src/hooks/useHofOrBust.ts', cuts: [['  if (s.playerId !== p.id || !Number.isInteger(h) || h < 0 || h > p.hints.length) return null;\n', '']] }],
+  },
 ];
 
 const sectionsCovered = new Set(CONTROLS.map(c => c.red));
@@ -288,7 +333,7 @@ for (const ctl of CONTROLS) {
     console.log(`   ${ctl.name}: ${ctl.what}; [${ctl.red}] ${ownRed.length} of ${own.length} red, ${others.length - othersRed.length} of ${others.length} other test(s) green${asDesigned ? ', as designed' : ', NOT AS DESIGNED'}`);
     if (!loaded) fail(`control ${ctl.name}: the copy was never loaded, so it changed nothing`);
     if (ownRed.length === 0) fail(`control ${ctl.name}: [${ctl.red}] stayed green with the fix taken out, so the section does not see it\n${detail(run.out)}`);
-    if (othersRed.length > 0) fail(`control ${ctl.name}: also red outside [${ctl.red}]: ${othersRed.map(t => `[${t.section}] ${t.name}`).join('; ')}`);
+    if (othersRed.length > 0) fail(`control ${ctl.name}: also red outside [${ctl.red}]: ${othersRed.map(t => `[${t.section}] ${t.name}`).join('; ')}\n${detail(run.out)}`);
     if (p.tests.length !== base.tests.length) fail(`control ${ctl.name} ran ${p.tests.length} test(s), the suite ${base.tests.length}`);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });

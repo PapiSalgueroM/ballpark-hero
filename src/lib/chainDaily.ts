@@ -14,11 +14,20 @@
  * What is stored is the chain itself and how it ended; everything a card
  * shows is DERIVED from that on the way back by the hook that owns the sport
  * (the score from the chain length and the game's own multiplier, the badge
- * from the length, a fighter from his name), so a tampered record can claim
- * nothing the rules would not have produced. Fails closed on shape like every
+ * from the length, a fighter from his name). Fails closed on shape like every
  * loader here: a chain that does not open on today's starter, a link without
  * a name, a name used twice, an ended chain with no reason, and the route
  * deals a fresh daily.
+ *
+ * Round 645 part three, second fix: what a link may name. Combat Chain's
+ * results are bundled, so its restore checks every link against them. NASCAR
+ * and Tennis are validated on the server, and their restores trusted every
+ * name in the record, so a hand edited part played chain of invented names
+ * resumed and was recorded on Give Up. They now check the part played chain
+ * with linksKnown against the names their validator can hand back, bundled
+ * by scripts/genChainChampions.mjs. An ended chain is not checked: it comes
+ * back behind the restore mark and is never recorded, and refusing it would
+ * reopen a finished day.
  */
 import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 
@@ -68,6 +77,15 @@ export function readChainDaily(slug: string, today: string, starter: string): Ch
     if (typeof leaderboard !== 'boolean' || (leaderboard && !f.ended)) return null;
     return { links, ended: f.ended, reason: f.reason as string | null, correctAnswer: f.correctAnswer as string | null, leaderboard };
   });
+}
+
+/** Every link past the starter names someone in `known`, the names the
+ *  sport's validator can hand back as a right answer. readChainDaily already
+ *  refuses a name used twice, so a chain that passes is never longer than
+ *  `known` plus its starter. */
+export function linksKnown(links: ChainDailyLink[], known: readonly string[]): boolean {
+  const names = new Set(known);
+  return links.slice(1).every(l => names.has(l.name));
 }
 
 export function writeChainDaily(slug: string, today: string, rec: ChainDailyRecord): void {

@@ -46,6 +46,20 @@
  *                            way (it bites once Round 645 part one drops the
  *                            mode from the page's done flag)
  *
+ * Found by the re-review of the fix pass (Round 645 part three, second fix):
+ *
+ *   [rarity-unread]          Rarity Round's restore read a pool that did not
+ *                            load as "the answer is not in its pool", refused
+ *                            the record and dealt the day fresh
+ *   [chain-bound]            NASCAR and Tennis resumed any names a part
+ *                            played record held, so invented links were
+ *                            recorded on Give Up
+ *   [day-rekey]              Minefield and Sports Millionaire dealt a daily
+ *                            started after midnight ET from the new day and
+ *                            read and filed it under the old one
+ *   [hof-hint]               HOF or Bust filed nothing before the vote, so a
+ *                            refresh handed back every hint bought
+ *
  * Everything runs through the same mocks as the reload fence (./dailyReload
  * /mocks): the real pages and hooks, the real recorder hook and restore
  * handshake, jsdom's real localStorage. Each section has a negative control
@@ -66,9 +80,13 @@ import ufcDriver from './dailyReload/ufc-chain.driver';
 import freeKickDriver from './dailyReload/free-kick.driver';
 import marketDriver from './dailyReload/player-stock-market.driver';
 import millionaireDriver, { POOL as MILLIONAIRE_POOL } from './dailyReload/sports-millionaire.driver';
-import { buildFreshLadder } from '@/lib/sportsMillionaire';
+import { buildFreshLadder, freshLifelines, saveDailyProgress as saveMillionaireProgress } from '@/lib/sportsMillionaire';
+import { buildRun as buildMinefield, daySeed as minefieldSeed } from '@/lib/minefield';
 import { getTodayET } from '@/lib/dateUtils';
 import { writeDailyRecord } from '@/lib/dailyRecord';
+import { writeChainDaily } from '@/lib/chainDaily';
+import nascarChampionNames from '@/data/nascarChampionNames.json';
+import tennisChampionNames from '@/data/tennisChampionNames.json';
 import { readArcadeProgress, readArcadeRun } from '@/lib/arcadeRecord';
 import { buildRun as buildKicks, daySeed as kickSeed, maxRunScore as maxKickScore, ROUNDS_PER_RUN as KICKS } from '@/lib/freeKick';
 import { buildDailyPack, buildUnlimitedPack, readPackDaily, writePackDaily, type PackCard } from '@/lib/packBattle';
@@ -83,9 +101,21 @@ import TennisChain from '@/pages/TennisChain';
 import PackBattle from '@/pages/PackBattle';
 import RarityRound from '@/pages/RarityRound';
 import NbaGauntletDraft from '@/pages/NbaGauntletDraft';
+import Minefield from '@/pages/Minefield';
+import { dailyHofPlayer, useHofOrBust } from '@/hooks/useHofOrBust';
+import hofPlayers from '@/data/hofPlayers';
 import DrillBoard from '@/components/soccer-career/DrillBoard';
 
 const today = getTodayET();
+
+/* Round 645 part three, second fix: the longest sections play whole runs
+   through the real pages ([rarity-mark] answers fifteen rounds). Measured at
+   1.1 seconds on a quiet machine and 3.4 to 4.4 seconds while the four fix
+   branches ran their gates side by side, against vitest's 5 second default,
+   and past it they timed out and turned whichever control was running red
+   outside its own section. Nothing here asserts on time, so the budget is
+   raised well clear of the loaded measurement. */
+vi.setConfig({ testTimeout: 30_000 });
 
 /* Every finish the recorder hook handed on, ranked or (after Round 645 part
    one lands) unranked. */
@@ -275,6 +305,92 @@ describe('daily lock edges', () => {
         } finally {
           driver.unmount(api);
         }
+      });
+    }
+  });
+
+  /* Round 645 part three, second fix: the two server validated chains
+     resumed any names a part played record held, so a hand edited record of
+     invented names came back at thousands of points and was recorded on Give
+     Up. Every link past the starter now has to be a name the sport's
+     validator can pass (the bundled champion lists), which bounds the chain's
+     length as well. */
+  describe('[chain-bound] a part played NASCAR or Tennis chain holds only names its validator passes', () => {
+    const KNOWN: Record<string, readonly string[]> = {
+      'nascar-chain': nascarChampionNames.names,
+      'tennis-chain': tennisChampionNames.names,
+    };
+
+    function todaysStarter(chain: NetworkChain): string {
+      const { result, unmount } = renderHook(() => chain.useHook());
+      try {
+        act(() => result.current.startGame('daily'));
+        return (result.current.gameState as unknown as Record<string, string>)[chain.currentField];
+      } finally {
+        unmount();
+        localStorage.clear();
+      }
+    }
+
+    function file(chain: NetworkChain, names: string[], ended = false): void {
+      writeChainDaily(chain.slug, today, { links: names.map(name => ({ name })), ended, reason: ended ? 'You gave up!' : null, correctAnswer: null, leaderboard: false });
+    }
+
+    function resumedLength(chain: NetworkChain): { length: number; status: string } {
+      const { result, unmount } = renderHook(() => chain.useHook());
+      try {
+        act(() => result.current.startGame('daily'));
+        return { length: result.current.gameState?.chain.length ?? 0, status: result.current.gameState?.gameStatus ?? '' };
+      } finally {
+        unmount();
+      }
+    }
+
+    for (const chain of NETWORK_CHAINS) {
+      it(`${chain.slug}: forty invented names past the starter are dealt fresh, and Give Up records 0`, () => {
+        const starter = todaysStarter(chain);
+        file(chain, [starter, ...Array.from({ length: 40 }, (_, i) => `Invented Name ${i + 1}`)]);
+        const { result, unmount } = renderHook(() => chain.useHook());
+        try {
+          act(() => result.current.startGame('daily'));
+          expect(result.current.gameState?.chain.length, 'the day deals fresh from its starter').toBe(1);
+          act(() => result.current.giveUp());
+          expect(recordCompletion.mock.calls.map(c => [c[0], c[1]]), 'the finish recorded is the fresh chain\'s').toEqual([[`/${chain.slug}`, 0]]);
+        } finally {
+          unmount();
+        }
+      });
+
+      it(`${chain.slug}: one invented name among real champions refuses the record`, () => {
+        const starter = todaysStarter(chain);
+        const real = KNOWN[chain.slug].filter(n => n.toLowerCase() !== starter.toLowerCase()).slice(0, 3);
+        expect(real.length).toBe(3);
+        file(chain, [starter, ...real]);
+        expect(resumedLength(chain), 'real champions resume').toEqual({ length: 4, status: 'playing' });
+        localStorage.clear();
+        file(chain, [starter, ...real, 'Invented Name']);
+        expect(resumedLength(chain), 'one invented name and the day deals fresh').toEqual({ length: 1, status: 'playing' });
+        expect(finishes()).toBe(0);
+      });
+
+      it(`${chain.slug}: no part played chain resumes longer than every champion plus the starter`, () => {
+        const starter = todaysStarter(chain);
+        const every = KNOWN[chain.slug].filter(n => n.toLowerCase() !== starter.toLowerCase());
+        file(chain, [starter, ...every]);
+        const longest = resumedLength(chain);
+        expect(longest.status).toBe('playing');
+        expect(longest.length, 'the longest chain the check lets back is every champion plus the starter').toBe(every.length + 1);
+        expect(longest.length).toBeLessThanOrEqual(KNOWN[chain.slug].length + 1);
+        localStorage.clear();
+        file(chain, [starter, ...every, 'Invented Name']);
+        expect(resumedLength(chain).length, 'one link past it and the day deals fresh').toBe(1);
+      });
+
+      it(`${chain.slug}: a finished chain is not checked, so it comes back finished and records nothing`, () => {
+        const starter = todaysStarter(chain);
+        file(chain, [starter, 'Invented Name'], true);
+        expect(resumedLength(chain).status, 'a finished day never reopens').toBe('ended');
+        expect(finishes(), 'and its restore records nothing').toBe(0);
       });
     }
   });
@@ -571,6 +687,87 @@ describe('daily lock edges', () => {
     });
   });
 
+  /* Round 645 part three, second fix: the restore scores the saved answers
+     from their pools, and the pool loaders answer [] on any database error.
+     An empty pool read as "not in its pool" refused the record and dealt the
+     day fresh, so a network blip replayed a finished daily and recorded it
+     again. A pool that did not load checks nothing: the page says so, and
+     scores, records and writes nothing until Try again finds it loaded. */
+  describe('[rarity-unread] Rarity Round: a saved run whose pools cannot be read is not rescored, recorded or written', () => {
+    const key = `rarity-round-daily-${today}`;
+    const unread = /Couldn't check your saved run right now\. Try again in a moment\./;
+
+    async function mountUnread(pools: (id: string) => unknown): Promise<MountedPage> {
+      setPoolFixture('rarity', pools);
+      setPoolFixture('autocomplete', RARITY_POOL.map(p => entity(p.name)));
+      const m = mountPage(<RarityRound />, '/rarity-round');
+      await waitFor(() => {
+        if (unread.test(m.container.textContent ?? '') || resultCard(m.container) || findButton(m.container, /^pick /)) return;
+        throw new Error('rarity round has not settled');
+      });
+      return m;
+    }
+
+    async function tryAgainHealed(m: MountedPage): Promise<void> {
+      setPoolFixture('rarity', RARITY_POOL);
+      await click(button(m.container, /^Try again$/));
+      await settleRarity(m);
+    }
+
+    it('a finished daily with one later pool empty: says so, deals nothing, and Try again brings the result back', async () => {
+      let m = await mountRarity();
+      try {
+        await answerRarity(m, 'Fixture Bravo', 5);
+      } finally {
+        m.unmount();
+      }
+      expect(finishes()).toBe(1);
+      const filed = localStorage.getItem(key);
+      expect(filed, 'the finished daily is filed').not.toBeNull();
+      const empty = pickDailyCategories(CATEGORIES, today)[3].id;
+      m = await mountUnread(id => (id === empty ? [] : RARITY_POOL));
+      try {
+        expect(m.container.textContent ?? '', 'the page says the saved run could not be checked').toMatch(unread);
+        expect(rarityLine(m), 'no round is dealt').toBe('');
+        expect(resultCard(m.container), 'no result is shown').toBeNull();
+        expect(finishes(), 'nothing is recorded').toBe(1);
+        expect(localStorage.getItem(key), 'nothing is written').toBe(filed);
+        await tryAgainHealed(m);
+        expect(resultCard(m.container), 'the finished daily comes back').not.toBeNull();
+        expect(finishes(), 'and records nothing more').toBe(1);
+        expect(localStorage.getItem(key)).toBe(filed);
+      } finally {
+        m.unmount();
+      }
+    });
+
+    it('a part played daily with a pool that fails: says so, writes nothing, and Try again resumes where it was', async () => {
+      let m = await mountRarity();
+      let left = '';
+      try {
+        await answerRarity(m, 'Fixture Bravo', 2);
+        left = rarityLine(m);
+        expect(left).toMatch(/^Round 3 of 5/);
+      } finally {
+        m.unmount();
+      }
+      const filed = localStorage.getItem(key);
+      const failing = pickDailyCategories(CATEGORIES, today)[1].id;
+      m = await mountUnread(id => (id === failing ? Promise.reject(new Error('fixture network failure')) : RARITY_POOL));
+      try {
+        expect(m.container.textContent ?? '', 'the page says the saved run could not be checked').toMatch(unread);
+        expect(rarityLine(m), 'no round is dealt').toBe('');
+        expect(finishes(), 'nothing is recorded').toBe(0);
+        expect(localStorage.getItem(key), 'nothing is written').toBe(filed);
+        await tryAgainHealed(m);
+        expect(rarityLine(m), 'the run resumes on the round it was left on').toBe(left);
+        expect(finishes()).toBe(0);
+      } finally {
+        m.unmount();
+      }
+    });
+  });
+
   /* ----------------------------------------------------- the arcade bound */
 
   describe('[arcade-bound] an arcade record scoring past its shots\' ceiling is refused', () => {
@@ -814,6 +1011,190 @@ describe('daily lock edges', () => {
       } finally {
         millionaireDriver.unmount(m);
       }
+    });
+  });
+
+  /* ------------------------------------------ a session across midnight */
+
+  /* Round 645 part three, second fix: Minefield and Sports Millionaire dealt
+     the daily from the live clock while their progress was read and filed
+     under the day pinned at mount. A page opened before midnight ET and
+     started after it replayed the old day's clicks or climb onto the new
+     day's deal, and filed it under the old date. Starting a daily now takes
+     the pin again. A run already dealt keeps its own day (Round 428's rule),
+     which is the second test of each pair. */
+  describe('[day-rekey] a daily started after midnight ET deals, reads and files the new day', () => {
+    const DAY = '2026-09-28';
+    const NEXT = '2026-09-29';
+    /* Eastern daylight time, UTC minus four. */
+    const at = (etDay: string, hhmm: string) => new Date(`${etDay}T${hhmm}:00-04:00`);
+    const stored = (slug: string, day: string) => JSON.parse(localStorage.getItem(`${slug}-daily-${day}`) ?? 'null') as Record<string, unknown> | null;
+    const boardsOf = (day: string) => buildMinefield(minefieldSeed(new Date(`${day}T12:00:00Z`)));
+    const liveTiles = (m: MountedPage, names: string[]) => Array.from(m.container.querySelectorAll('button')).filter(b => names.includes((b.textContent ?? '').trim()));
+    const tile = (m: MountedPage, name: string) => {
+      const b = Array.from(m.container.querySelectorAll('button')).find(x => (x.textContent ?? '').trim() === name && !x.disabled);
+      if (!b) throw new Error(`no live tile reads ${name}`);
+      return b;
+    };
+    async function mountMinefield(): Promise<MountedPage> {
+      const m = mountPage(<Minefield />, '/minefield');
+      await waitFor(() => button(m.container, /^Daily Boards$/));
+      return m;
+    }
+    const questionLine = (m: MountedPage) => Array.from(m.container.querySelectorAll('span')).map(s => (s.textContent ?? '').trim()).find(t => /^Question \d+ of \d+$/.test(t)) ?? '';
+    const questionShown = (m: MountedPage, q: { question: string }) => Array.from(m.container.querySelectorAll('p')).some(p => (p.textContent ?? '').trim() === q.question);
+
+    it('Minefield: a page opened before midnight and started after it deals the new day fresh and files it there', async () => {
+      const dayTiles = boardsOf(DAY)[0].tiles.map(t => t.name);
+      const nextTiles = boardsOf(NEXT)[0].tiles.map(t => t.name);
+      vi.useFakeTimers({ toFake: ['Date'] });
+      try {
+        vi.setSystemTime(at(DAY, '23:40'));
+        let m = await mountMinefield();
+        try {
+          await click(button(m.container, /^Daily Boards$/));
+          await click(tile(m, dayTiles[0]));
+        } finally {
+          m.unmount();
+        }
+        expect(stored('minefield', DAY)?.boards, 'the earlier visit filed one click').toEqual([[0]]);
+        vi.setSystemTime(at(DAY, '23:50'));
+        m = await mountMinefield();
+        try {
+          vi.setSystemTime(at(NEXT, '00:10'));
+          await click(button(m.container, /^Daily Boards$/));
+          const shown = liveTiles(m, [...dayTiles, ...nextTiles]);
+          expect(shown.filter(b => b.disabled).length, 'nothing is picked on the new day\'s board').toBe(0);
+          expect(shown.map(b => (b.textContent ?? '').trim()).sort(), 'the board is the new day\'s first').toEqual([...nextTiles].sort());
+          await click(tile(m, nextTiles[0]));
+          expect(stored('minefield', NEXT)?.boards, 'the click is filed under the new day').toEqual([[0]]);
+          expect(finishes()).toBe(0);
+        } finally {
+          m.unmount();
+        }
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it('Minefield: a board dealt before midnight and played after it keeps filing under its own day', async () => {
+      const dayTiles = boardsOf(DAY)[0].tiles.map(t => t.name);
+      vi.useFakeTimers({ toFake: ['Date'] });
+      try {
+        vi.setSystemTime(at(DAY, '23:58'));
+        const m = await mountMinefield();
+        try {
+          await click(button(m.container, /^Daily Boards$/));
+          await click(tile(m, dayTiles[0]));
+          vi.setSystemTime(at(NEXT, '00:05'));
+          await click(tile(m, dayTiles[1]));
+          expect(stored('minefield', DAY)?.boards, 'both clicks are the day the board was dealt on').toEqual([[0, 1]]);
+          expect(stored('minefield', NEXT), 'nothing is filed under the new day').toBeNull();
+        } finally {
+          m.unmount();
+        }
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it('Sports Millionaire: a page opened before midnight, toggled to Daily after it, deals the new day\'s ladder fresh', async () => {
+      const ladderOf = (day: string) => buildFreshLadder(MILLIONAIRE_POOL, 'daily', day);
+      vi.useFakeTimers({ toFake: ['Date'] });
+      try {
+        vi.setSystemTime(at(DAY, '23:50'));
+        saveMillionaireProgress(DAY, { at: 1, lifelines: freshLifelines(), swap: null, visible: null, crowd: null, outcome: null });
+        const m = await millionaireDriver.mount();
+        try {
+          expect(questionLine(m), 'today\'s climb resumes').toBe('Question 2 of 15');
+          expect(questionShown(m, ladderOf(DAY)[1])).toBe(true);
+          vi.setSystemTime(at(NEXT, '00:10'));
+          await click(millionaireToggle(m, 'unlimited'));
+          await click(millionaireToggle(m, 'daily'));
+          expect(questionLine(m), 'the new day starts at the bottom').toBe('Question 1 of 15');
+          expect(questionShown(m, ladderOf(NEXT)[0]), 'on the new day\'s first question').toBe(true);
+          expect(m.container.textContent ?? '', 'and the caption names the new day').toContain(`Today's ladder, ${NEXT}.`);
+          expect(finishes()).toBe(0);
+        } finally {
+          millionaireDriver.unmount(m);
+        }
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    it('Sports Millionaire: a ladder dealt before midnight and played after it keeps filing under its own day', async () => {
+      vi.useFakeTimers({ toFake: ['Date'] });
+      try {
+        vi.setSystemTime(at(DAY, '23:58'));
+        const m = await millionaireDriver.mount();
+        try {
+          expect(questionLine(m)).toBe('Question 1 of 15');
+          vi.setSystemTime(at(NEXT, '00:05'));
+          await click(button(m.container, /50:50/));
+          expect((stored('sports-millionaire', DAY)?.lifelines as { used: Record<string, boolean> } | undefined)?.used['fifty-fifty'], 'the lifeline is filed under the day the ladder was dealt on').toBe(true);
+          expect(stored('sports-millionaire', NEXT), 'nothing is filed under the new day').toBeNull();
+        } finally {
+          millionaireDriver.unmount(m);
+        }
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+  });
+
+  /* ------------------------------------------------------- HOF or Bust */
+
+  /* Round 645 part three, second fix: the daily filed nothing until the vote,
+     and every hint costs 100 of the 1000, so a player could read every hint,
+     refresh, and vote on a clean board for the full score. */
+  describe('[hof-hint] HOF or Bust: a hint bought on the daily stays bought across a refresh', () => {
+    const key = `hof-or-bust-daily-${today}`;
+    const rightVote = (p: { verdict: string }) => (p.verdict === 'hof' ? 'hof' : 'bust');
+
+    it('two hints, a reload, and the right vote records 1000 less both hints', () => {
+      let h = renderHook(() => useHofOrBust());
+      try {
+        expect(h.result.current.mode).toBe('daily');
+        act(() => h.result.current.revealHint());
+        act(() => h.result.current.revealHint());
+        expect(h.result.current.hintsRevealed).toBe(2);
+      } finally {
+        h.unmount();
+      }
+      h = renderHook(() => useHofOrBust());
+      try {
+        expect(h.result.current.hintsRevealed, 'the reload keeps both hints bought').toBe(2);
+        expect(h.result.current.status).toBe('voting');
+        expect(h.result.current.player.id).toBe(dailyHofPlayer(today).id);
+        act(() => h.result.current.vote(rightVote(h.result.current.player)));
+        expect(recordCompletion.mock.calls.map(c => [c[0], c[1]]), 'the vote pays for the hints').toEqual([['/hof-or-bust', 800]]);
+      } finally {
+        h.unmount();
+      }
+    });
+
+    it('a save with no vote that names another player, or hints the player does not have, is ignored', () => {
+      const daily = dailyHofPlayer(today);
+      const borderline = hofPlayers.find(p => p.verdict === 'borderline');
+      if (!borderline) throw new Error('no borderline player to tamper with, the check has nothing to take');
+      const forged: Record<string, unknown>[] = [
+        { userVote: null, hintsRevealed: 0, score: 0, playerId: borderline.id },
+        { userVote: null, hintsRevealed: -10, score: 0, playerId: daily.id },
+        { userVote: null, hintsRevealed: daily.hints.length + 1, score: 0, playerId: daily.id },
+        { hintsRevealed: 1.5, playerId: daily.id },
+      ];
+      for (const save of forged) {
+        localStorage.setItem(key, JSON.stringify(save));
+        const h = renderHook(() => useHofOrBust());
+        try {
+          expect(h.result.current.player.id, `the daily player, whatever ${JSON.stringify(save)} names`).toBe(daily.id);
+          expect(h.result.current.hintsRevealed, `no hints from ${JSON.stringify(save)}`).toBe(0);
+        } finally {
+          h.unmount();
+        }
+      }
+      expect(finishes()).toBe(0);
     });
   });
 });

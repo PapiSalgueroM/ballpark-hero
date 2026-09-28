@@ -172,20 +172,23 @@ export interface LoadResult {
   ladder: TriviaQuestion[];
 }
 
-export async function loadMillionairePool(mode: 'daily' | 'unlimited'): Promise<LoadResult> {
+/* Round 645 part three, second fix: the daily ladder is dealt for the day the
+   page files it under (`day`, its pin), not whatever the clock says when the
+   pool lands, so the ladder and the record always name the same day. */
+export async function loadMillionairePool(mode: 'daily' | 'unlimited', day: string = getTodayET()): Promise<LoadResult> {
   const pool = await loadTriviaPool();
   if (!isTriviaPoolPlayable(pool)) {
     return { pool: null, ladder: [] };
   }
   const ladder = mode === 'daily'
-    ? generateDailyLadder(pool, getTodayET(), LADDER_SIZE)
+    ? generateDailyLadder(pool, day, LADDER_SIZE)
     : generateRandomLadder(pool, LADDER_SIZE);
   return { pool, ladder };
 }
 
-export function buildFreshLadder(pool: TriviaPool, mode: 'daily' | 'unlimited'): TriviaQuestion[] {
+export function buildFreshLadder(pool: TriviaPool, mode: 'daily' | 'unlimited', day: string = getTodayET()): TriviaQuestion[] {
   return mode === 'daily'
-    ? generateDailyLadder(pool, getTodayET(), LADDER_SIZE)
+    ? generateDailyLadder(pool, day, LADDER_SIZE)
     : generateRandomLadder(pool, LADDER_SIZE);
 }
 
