@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { localEvaluateSoccerXI } from '@/lib/localLineupEval';
+import { buildXiPoints } from '@/lib/lineupVerdictPoints';
 import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS } from '@/data/lineupTeams';
 import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment } from '@/types/lineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
@@ -298,14 +299,17 @@ export function useLineupBuilder() {
       if (!resp.ok) {
         // AI referee down/out of quota -> offline judge, never a dead-end
         const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
-        setVerdict(local);
+        setVerdict({ ...local, judge: 'offline' });
         setPhase('result');
         return;
       }
-      
+
       if (!data.rating || !data.analysis) {
         setVerdict({
-          rating: data.rating || 'Mid-Table 😐',
+          /* Round 645: a body with no rating was never judged, so it is not
+             dressed up as a Mid-Table verdict any more, which it then scored
+             as one. An unjudged lineup records 0 (lineupVerdictPoints.ts). */
+          rating: data.rating || 'Unrated',
           headline: data.headline || 'Squad evaluated',
           analysis: data.analysis || 'Your squad has been evaluated.',
         });
@@ -317,7 +321,7 @@ export function useLineupBuilder() {
       console.error('Evaluation error:', err);
       try {
         const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
-        setVerdict(local);
+        setVerdict({ ...local, judge: 'offline' });
       } catch {
         setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: 'Network error. Please check your connection and try again.' });
       }
@@ -338,7 +342,9 @@ export function useLineupBuilder() {
     setIsSpinning(false);
   }, []);
 
-  useGameCompletion('build-your-xi', phase === 'result', verdict ? 500 : 0);
+  /* Round 645: the verdict is the score. This recorded `verdict ? 500 : 0`,
+     the whole cap for any finished lineup, the Error card included. */
+  useGameCompletion('build-your-xi', phase === 'result', buildXiPoints(verdict));
 
   return {
     formation, phase, selectedPositionIndex, currentTeam, positions,

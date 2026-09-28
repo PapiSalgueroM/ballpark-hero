@@ -5,7 +5,7 @@ import { GameNav } from '@/components/game/GameNav';
 import { useBallIq } from '@/hooks/useBallIq';
 
 export function BallIqBoard() {
-  const { loading, questions, index, current, status, correctCount, iq, rank, answer, next, shareText } =
+  const { loading, questions, index, current, status, correctCount, iq, points, rank, answer, next, shareText } =
     useBallIq();
   const [copied, setCopied] = useState(false);
 
@@ -47,7 +47,7 @@ export function BallIqBoard() {
           <p className="mt-2 font-display text-7xl font-black text-primary">{iq}</p>
           <p className="mt-1 font-display text-xl font-bold text-gold">{rank}</p>
           <p className="mt-3 text-sm text-muted-foreground">
-            {correctCount}/{questions.length} correct
+            {correctCount}/{questions.length} correct, <span data-testid="ball-iq-points" className="font-semibold text-foreground">{points} points</span>
           </p>
 
           <div className="mt-5 flex flex-wrap justify-center gap-1 text-xl">

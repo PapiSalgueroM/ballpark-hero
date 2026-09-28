@@ -51,6 +51,8 @@ export interface AIVerdict {
   rating: string;
   headline: string;
   analysis: string;
+  /** Round 645: set when the offline judge gave this verdict. */
+  judge?: 'offline';
 }
 
 export const FORMATIONS: Record<Formation, PositionSlot[]> = {

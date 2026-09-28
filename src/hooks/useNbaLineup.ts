@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { localEvaluateNbaFive } from '@/lib/localLineupEval';
+import { startingFivePoints } from '@/lib/lineupVerdictPoints';
 import { getRandomNbaTeams, NBA_TEAMS, type NbaTeam } from '@/data/nbaTeams';
 import { getRandomStatChallenge } from '@/data/nbaStats';
 import type { NbaFilledSlot, NbaGamePhase, NbaAIVerdict, StatChallenge, NbaPosition } from '@/types/nba';
@@ -324,7 +325,7 @@ export function useNbaLineup() {
           filledSlotsArray.map(s => s.playerName),
           `${challenge.direction === 'highest' ? 'Highest' : 'Lowest'} ${challenge.stat}`,
         );
-        setVerdict(local);
+        setVerdict({ ...local, judge: 'offline' });
         setPhase('result');
       } catch {
         setEvaluationError('Could not evaluate your lineup. Please try again.');
@@ -353,7 +354,10 @@ export function useNbaLineup() {
     }, 100);
   }, []);
 
-  useGameCompletion('nba-starting-5', phase === 'result', verdict ? 500 : 0);
+  /* Round 645: the verdict is the score. This recorded `verdict ? 500 : 0`,
+     the whole cap for any finished five; an offline verdict records 0 because
+     that judge cannot read the challenge (lineupVerdictPoints.ts). */
+  useGameCompletion('nba-starting-5', phase === 'result', startingFivePoints(verdict));
 
   return {
     phase, challenge, selectedPosition, currentTeam, filledSlots, filledSlotsArray,
