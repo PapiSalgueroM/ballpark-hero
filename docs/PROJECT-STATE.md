@@ -1,6 +1,31 @@
 # Project state
 
-## 2026-09-28: Round 647 fixed after review, branch `r647-season-ledger`, NOT on main
+## 2026-09-28: the points economy merged on branch `points-economy`, NOT on main, nothing applied
+
+The six points rounds are merged onto one branch from main `22bc0f7e`, in this order: 647, 646,
+645a, 645b, 645c, 648. The six dated round entries below are each round's own account and are kept
+as written. What the merge itself decided:
+
+- **645b over 646 (fourteen scoring files).** 645b's formulas record, with 646's named constants
+  inside them, so every ceiling still reads the code that records: Ball IQ, Budget Builder, Mystery
+  Box (one `PLAYER_RATING_MAX`), Rebuild (`REBUILD_RECORD_SCALE` now lives in `rebuildLoop.ts`),
+  Squad Deal, Sign the Player (`auctionScoreOf` with third and last place at 0, scaled by the
+  squad share), the Gauntlet (`gauntletPoints` scores against `gauntletCeiling`), Fantasy Draft and
+  Search and Discard. Build Your XI and Starting 5 keep their 500 ceilings, now the top rung of
+  645b's verdict ladder.
+- **645a over 645b.** The four Perfect Season pages record 645b's points through 645a's hook with
+  the daily flag; taking 645a's hunk alone would have put the raw win count back.
+- **Harnesses the merge broke, fixed on the branch.** `simFreePoints` binds 646's shared scorers
+  and reads its named clamps (40 of its rows went red on the merged tree, 38 on names it could not
+  bind and 2 on code checks); `rankedRecorderLib.test.ts` gives the browser a caps
+  copy under 648's tally; `simDailyLockEdges` pack-mark and rarity-mark take out 645a's hook guard
+  as well as the page's, because either one alone now stops the stale mark.
+- **Still red, owed a lead decision.** `simFreePoints` fails six rows (the four front offices and
+  both dynasties): they assert 645b's pre 647 shape (only a title records). Rewriting them to read
+  647's ledger would still fail 645b's 5 percent rule, because 647 pays an untouched season par, 50
+  of 100 (the 647 re-review's first major). Every other gate is green, and all 24 `simFreePoints`
+  controls fire exactly, the six rows above being the only extra reds.
+- Migrations: none applied. 646 refuses until 647 is live; 648 refuses until 646 is applied.
 
 One of the six points rounds (645a, 645b, 645c, 646, 647, 648) that ship together. Nothing here is
 applied or deployed; 647 carries no migration of its own, and the caps it needs are Round 646's.
