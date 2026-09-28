@@ -31,7 +31,7 @@ import { recordActivity } from '@/lib/completions';
    made when its decisions opened. The scoring, the projection, the row and
    the refusal of a season already closed live in the shared module, the
    same one the other five boards read; the NFL's season shape is data. */
-import { appendSeason, expectationOf, ledgerOf, ledgerRow, projectionFor, seasonResultOf, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
+import { appendSeason, expectationOf, ledgerOf, ledgerRow, projectionFor, projectNext, seasonResultOf, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
 import { NFL_SEASON, nflPlayoffGames } from '@/lib/seasonFormats';
 import { SeasonLedgerChips, SeasonProjectionNote } from '@/components/game/SeasonLedgerChips';
 import { cn } from '@/lib/utils';
@@ -90,9 +90,11 @@ interface SaveShape {
   /* Round 647. One row per closed season. Absent on an older save, which
      opens with an empty ledger and no retroactive points. */
   ledger?: SeasonRow[];
-  /* Round 647. The projection this season is scored against, made at the
-     pick and again when the offseason hands over the next roster. Absent on
-     an older save, which is projected from the league as it loads. */
+  /* Round 647. The projection the next season to close is scored against:
+     made at the pick, and at every close for the season after it (the fix:
+     from the roster the season finished with, carried through the offseason
+     a GM who touches nothing gets). Absent on an older save, which is
+     projected as it loads. */
   expect?: SeasonExpectation | null;
 }
 
@@ -164,9 +166,18 @@ export default function FrontOfficeBoard() {
     return buildOwnerMandate(strengthRank(strengths, team), Object.keys(lg.teams).length, defendingChamp, NFL_WORDS, lg.season, tilt);
   };
   /* Round 647: the season's projection from the league as it stands, made
-     at the same two moments as the mandate: the pick, and the offseason. */
+     at the pick (and for an older save caught mid season, as it loads). */
   const projectFor = (lg: LeagueState, team: string): SeasonExpectation =>
     projectionFor(NFL_SEASON.teams(lg), NFL_SEASON.format, lg.season, team);
+  /* Round 647 fix: the next season's projection, made at the close from the
+     league as the regular season finished it and carried through the
+     offseason a GM who touches nothing gets (the draft's first names, the
+     retirements, the walk outs, the refill), with every man this GM cut this
+     season counted as his. Nothing done after the close moves it, so the
+     draft, the signings and the trades are what beat it, and cutting a man
+     and signing him back gains nothing. */
+  const projectNextFor = (lg: LeagueState, team: string): SeasonExpectation =>
+    projectNext(NFL_SEASON, lg, team, lg.season + 1);
 
   // ---- persistence ----
   useEffect(() => {
@@ -191,9 +202,14 @@ export default function FrontOfficeBoard() {
          yet, so ownership walks in and sets the ask from the roster as it
          stands today. */
       setMandate(s.mandate ?? mandateFor(s.league, s.myTeam, false));
-      /* Round 647, the same repair: a save with no projection for its
-         season is projected from the league as it stands today. */
-      setExpect(expectationOf(s.expect, s.league.season) ?? projectFor(s.league, s.myTeam));
+      /* Round 647, the same repair: a save with no projection for the
+         season it is scored against is projected as it loads. Once a season
+         has closed (the recap, the draft) that is the next one, projected
+         from the league as it closed. */
+      const closedNow = s.league.champions.some(c => c.season === s.league.season);
+      setExpect(closedNow
+        ? expectationOf(s.expect, s.league.season + 1) ?? projectNextFor(s.league, s.myTeam)
+        : expectationOf(s.expect, s.league.season) ?? projectFor(s.league, s.myTeam));
       setTrust(s.trust ?? FO_TRUST_START);
       setFired(s.fired ?? false);
       setPressTilt(s.pressTilt ?? 0);
@@ -346,8 +362,8 @@ export default function FrontOfficeBoard() {
       setSeasonsPlayed(newSeasons);
       /* Round 647: the season closes into the ledger as one row: its
          regular season and the round it reached, scored against the
-         projection made when its decisions opened, never against the
-         roster at the whistle. The row is what the completion records. */
+         projection made at the pick or at the last close, never against
+         the roster at the whistle. The row is what the completion records. */
       const post = nflPostseason(rounds, myTeam);
       const mine = lg.teams[myTeam];
       const result = seasonResultOf(lg.season, myTeam, { wins: mine.wins, games: mine.wins + mine.losses },
@@ -355,6 +371,8 @@ export default function FrontOfficeBoard() {
       const closed = appendSeason(ledger, result, expectationOf(expect, lg.season) ?? projectFor(league, myTeam));
       setLedger(closed.ledger);
       setClosedRow(closed.row);
+      const nextExpect = projectNextFor(lg, myTeam);
+      setExpect(nextExpect);
       /* Round 180: ownership grades the season against the mandate. */
       let newTrust = trust, nowFired = fired;
       let gradeResult: ReturnType<typeof gradeSeason>['result'] | null = null;
@@ -379,7 +397,7 @@ export default function FrontOfficeBoard() {
       }));
       setPhase('recap');
       setLeague(lg);
-      persist({ phase: nowFired ? 'fired' : 'recap', titles: newTitles, seasonsPlayed: newSeasons, trust: newTrust, fired: nowFired, postseason: { rounds, champion: champ, gradeLine: gradeVerdict }, ledger: closed.ledger }, lg, myTeam);
+      persist({ phase: nowFired ? 'fired' : 'recap', titles: newTitles, seasonsPlayed: newSeasons, trust: newTrust, fired: nowFired, postseason: { rounds, champion: champ, gradeLine: gradeVerdict }, ledger: closed.ledger, expect: nextExpect }, lg, myTeam);
       return;
     }
     lg.week += 1;
@@ -470,10 +488,6 @@ export default function FrontOfficeBoard() {
          the ask one tier, then the tilt is spent. */
       const m = mandateFor(lg, myTeam, champion === myTeam, pressTilt);
       setMandate(m);
-      /* Round 647: the next season's projection, from the roster the
-         offseason hands over. Everything from here to the whistle is yours. */
-      const e = projectFor(lg, myTeam);
-      setExpect(e);
       const feed = [
         note,
         `🏛️ The new mandate: ${m.text}`,
@@ -496,7 +510,7 @@ export default function FrontOfficeBoard() {
          reload skips the reveal and opens where it opened before. */
       setTab(null);
       setLeague(lg);
-      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null, expect: e }, lg, myTeam);
+      persist({ phase: 'hub', draftClass: null, picksLeft: 0, mandate: m, pressTilt: 0, seasonTradeLine: null, postseason: null }, lg, myTeam);
       return;
     }
     setLeague(lg);
@@ -726,7 +740,7 @@ export default function FrontOfficeBoard() {
                 on a save from before the ledger, which has no row to show. */}
             <SeasonLedgerChips row={seasonRow} ledger={ledger} seasonsPlayed={seasonsPlayed} />
           </div>
-          <SeasonProjectionNote row={seasonRow} />
+          <SeasonProjectionNote row={seasonRow} shape={NFL_SEASON} />
           {/* Round 180: zero trust ends the save here instead of a draft. */}
           {fired ? (
             <div className="cm-loss-shake mt-4 rounded-2xl border border-destructive/50 bg-destructive/5 p-4">

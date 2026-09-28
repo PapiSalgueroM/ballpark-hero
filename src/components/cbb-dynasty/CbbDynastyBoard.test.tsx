@@ -9,8 +9,8 @@
  * again, and one click ran the last round and the whole tournament a second
  * time. This file is CfbDynastyBoard.test.tsx for the sibling board, the
  * same rows in the same order: every closed season adds exactly one row,
- * scored against the projection the save carries (made at the pick, and for
- * the next season when the recruiting trail opens), and the row's score is
+ * scored against the projection the save carries (made at the pick, and at
+ * every close for the next season, from the roster it finished with), and the row's score is
  * what the board hands the completion hook; an older save gets one row and
  * nothing retroactive, its sum labelled as counted since that season; a
  * reload hands the hook nothing; a closed season played again adds nothing;
@@ -25,8 +25,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { initCbb, simCbbRound, CBB_ROUNDS, CBB_SCHOOLS, CBB_SCHOOL_MAP, type CbbState } from '@/lib/cbbDynasty';
-import { scoreSeason, appendSeason, ledgerTotal, projectionFor, PAR, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
-import { CBB_SEASON } from '@/lib/seasonFormats';
+import { scoreSeason, appendSeason, ledgerTotal, projectionFor, projectNext, BAR_SHARE, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
+import { CBB_SEASON, roundPhrase } from '@/lib/seasonFormats';
 
 // Completion tracking reads the auth context and writes to the database;
 // the share buttons draw a canvas card; the reveal scroll calls
@@ -55,6 +55,8 @@ function lehmer(seed: number) {
 /* A program's projection, the way the board makes it. */
 const project = (st: CbbState, season = st.season): SeasonExpectation =>
   projectionFor(CBB_SEASON.teams(st), CBB_SEASON.format, season, st.myTeam);
+/* Round 647 fix: the next season's projection, the way the board makes it at the close. */
+const projectAfter = (st: CbbState): SeasonExpectation => projectNext(CBB_SEASON, st, st.myTeam, st.season + 1);
 
 /* Force the outcome. 'strong' rates every man on the roster 99 and every
    man on every other roster 40, a title under any seed; 'weak' rates the
@@ -173,7 +175,6 @@ const rowOf = (s: any): SeasonRow => {
   expect(s.st.ledger, 'exactly one row for the one season closed').toHaveLength(1);
   return s.st.ledger[0];
 };
-const expOf = (row: SeasonRow) => ({ share: row.expShare, ladder: row.expLadder });
 
 describe('CBB Dynasty: the season ledger', () => {
   let restoreRandom: (() => void) | null = null;
@@ -194,15 +195,30 @@ describe('CBB Dynasty: the season ledger', () => {
     expect(row.stage, 'a title is the round past the last').toBe(row.rounds + 1);
     expect(row.games, 'the form term reads the twenty game regular season').toBe(CBB_ROUNDS * 2);
     expect(row.expShare).toBe(pickExpect.share);
-    expect(row.expLadder).toBe(pickExpect.ladder);
+    expect(row.expBar).toBe(pickExpect.top[0]);
     expect(row.score).toBe(scoreSeason(row, pickExpect));
-    expect(row.score, 'a 99 rated roster beats an ordinary roster\'s projection by far').toBeGreaterThan(PAR + 10);
-    expect(row.score).toBeLessThanOrEqual(SEASON_CEILING);
+    /* A perfect season beats every season the roster was projected to have
+       except the projection's own perfect ones, which it ties, and a tie
+       counts half. The first school is strong enough to go perfect in a few of its
+       projected seasons, so it wins that share of the headroom, not always
+       the whole ceiling, and one that goes perfect one season in ten or more
+       (the first CBB school does) scores nothing for it: see THE LIMIT IT
+       CANNOT HELP in src/lib/seasonLedger.ts. A pick that never went perfect
+       gets the whole ceiling. */
+    expect(row.wins, 'the rigged roster went unbeaten').toBe(row.games);
+    const tied = pickExpect.top.filter(v => v >= SEASON_CEILING).length;
+    const beat = 1 - tied / 2 / pickExpect.runs;
+    expect(row.score, 'a perfect season scores the share of the projection it beat, ties half').toBe(Math.max(0, Math.min(SEASON_CEILING, Math.round(SEASON_CEILING * (beat - BAR_SHARE) / (1 - BAR_SHARE)))));
     expect(finishes(), 'one finish, and the number it records is the row').toEqual([row.score]);
     expect(ledgerTotal(closed.st.ledger)).toBe(row.score);
     expect(screen.getByText(/This season/).textContent).toContain(String(row.score));
     expect(screen.getByText(/Career/).textContent).toContain(String(row.score));
-    expect(screen.getByText(/before your moves/).textContent).toContain(`won ${row.wins}`);
+    /* The recap states the whole projection: the wins and the round it
+       projected, the bar a season had to get past, and the season. */
+    const note = screen.getByText(/Points start past/).textContent ?? '';
+    expect(note).toContain(`Projected: ${Math.round(row.expShare * row.games)} wins, ${roundPhrase(CBB_SEASON, row.expStage)}.`);
+    expect(note).toContain(`: ${Math.round(row.barShare * row.games)} wins, ${roundPhrase(CBB_SEASON, row.barStage)}.`);
+    expect(note).toContain(`Yours: ${row.wins} wins, the title.`);
   });
 
   it('a season without a title adds exactly one row too, and records it once', () => {
@@ -212,7 +228,7 @@ describe('CBB Dynasty: the season ledger', () => {
     expect(row.season).toBe(st.season);
     expect(row.stage).toBeLessThanOrEqual(row.rounds);
     expect(row.score).toBe(scoreSeason(row, pickExpect));
-    expect(row.score, 'a 40 rated roster falls short of an ordinary roster\'s projection').toBeLessThan(PAR);
+    expect(row.score, 'a 40 rated roster\'s season is under the bar an ordinary roster was projected to reach: it scores nothing').toBe(0);
     expect(finishes(), 'a season without a title is still a finish, recorded once').toEqual([row.score]);
     expect(ledgerTotal(closed.st.ledger)).toBe(row.score);
     expect(closed.st.myTitles).toBe(0);
@@ -228,7 +244,7 @@ describe('CBB Dynasty: the season ledger', () => {
     const row = rowOf(closed);
     const repaired = project(st);
     expect(row.expShare, 'projected from the league as the save loaded').toBe(repaired.share);
-    expect(row.expLadder).toBe(repaired.ladder);
+    expect(row.expBar).toBe(repaired.top[0]);
     expect(row.score).toBe(scoreSeason(row, repaired));
     expect(finishes()).toEqual([row.score]);
     expect(ledgerTotal(closed.st.ledger), 'no retroactive points for the titles the old save already held').toBe(row.score);
@@ -239,7 +255,7 @@ describe('CBB Dynasty: the season ledger', () => {
   });
 
   it('replaying a closed title adds nothing: a reload records nothing and the final round refuses', () => {
-    const { view, closed } = closeSeason('strong');
+    const { pickExpect, view, closed } = closeSeason('strong');
     const row = rowOf(closed);
     expect(finishes()).toEqual([row.score]);
     view.unmount();
@@ -262,7 +278,7 @@ describe('CBB Dynasty: the season ledger', () => {
     expect(finishes()).toEqual([row.score]);
 
     /* And the module itself refuses a second row for the same season. */
-    const again = appendSeason(closed.st.ledger, { ...row }, expOf(row));
+    const again = appendSeason(closed.st.ledger, { ...row }, pickExpect);
     expect(again.row).toBeNull();
     expect(again.ledger).toHaveLength(1);
   });
@@ -270,14 +286,18 @@ describe('CBB Dynasty: the season ledger', () => {
   it('every closed season adds its own row: two seasons in one sitting, two rows, two finishes, and the career is their sum', () => {
     const { closed } = closeSeason('strong');
     const first = rowOf(closed);
+    /* The next season is projected at the close, from the roster the
+       season finished with, carried through the offseason an untouched
+       coach gets: the moment the four front offices project theirs. */
+    const closeExpect = projectAfter(closed.st);
+    expect(closed.st.expect, 'next season is projected at the close').toEqual(closeExpect);
     /* The whole second season on the same mounted board: the recruiting
        trail, the offseason, every round, and the final round. The board's
        closed row has to reset between the two, or the second close is no
        rise and records nothing. */
     fireEvent.click(screen.getByText('Hit the recruiting trail'));
     const trail = read().st;
-    const trailExpect = project(trail, trail.season + 1);
-    expect(trail.expect, 'next season is projected the moment the trail opens').toEqual(trailExpect);
+    expect(trail.expect, 'the trail does not project it again: the class and the portal are the coach\'s').toEqual(closeExpect);
     fireEvent.click(screen.getByText('Close the class, run it back'));
     expect(read().st.season).toBe(first.season + 1);
     fireEvent.click(screen.getByText('Play'));
@@ -287,8 +307,9 @@ describe('CBB Dynasty: the season ledger', () => {
     expect(after.ledger.map((r: SeasonRow) => r.season), 'one row per closed season, in order').toEqual([first.season, first.season + 1]);
     expect(after.ledger[0]).toEqual(first);
     const second: SeasonRow = after.ledger[1];
-    expect(second.expShare, 'the second season is scored against the trail\'s projection').toBe(trailExpect.share);
-    expect(second.score).toBe(scoreSeason(second, trailExpect));
+    expect(second.expShare, 'the second season is scored against the projection made at the first close').toBe(closeExpect.share);
+    expect(second.expBar).toBe(closeExpect.top[0]);
+    expect(second.score).toBe(scoreSeason(second, closeExpect));
     expect(finishes(), 'each season recorded once, on its own number').toEqual([first.score, second.score]);
     expect(ledgerTotal(after.ledger)).toBe(first.score + second.score);
     expect(after.seasonsPlayed).toBe(2);
@@ -315,7 +336,7 @@ describe('CBB Dynasty: the season ledger', () => {
     fireEvent.click(screen.getByText('Final round + March'));
     const row = rowOf(read());
     expect(row.expShare, 'scored against the pick\'s projection').toBe(pickExpect.share);
-    expect(row.expLadder).toBe(pickExpect.ladder);
+    expect(row.expBar).toBe(pickExpect.top[0]);
     expect(row.score).toBe(scoreSeason(row, pickExpect));
     expect(scoreSeason(row, atWhistle), 'the same season against the roster at the whistle would score less: the pick sets the bar, the moves after it beat it').toBeLessThan(row.score);
   });

@@ -28,33 +28,40 @@
  *
  * Round 647: the second describe per board is the season ledger. Every
  * closed season adds exactly one row to the save, scored against the
- * projection the save carries (made at the pick, and again when the
- * offseason hands over the next roster), and that row's score is what the
- * board hands the completion hook, recorded once (finishes() counts the
- * rises the real hook witnesses); an older save with titles and no ledger
- * gets one row and nothing retroactive, and its sum is labelled as counted
- * since that season; a reload on the recap hands the hook nothing; a closed
- * season played again adds nothing; two seasons played in one sitting on one
- * mounted board are two rows and two finishes (the closed row has to reset
- * between them); and the projection is the pick's, so a roster made better
- * after the pick beats it, while the same season scored against the roster
- * at the whistle would not. The roster is rigged to force the outcomes
- * (every player 99, every player 40) because the seeded rng decides the
- * rest. scripts/simGmReload.mjs section 2 runs these rows and carries their
- * controls: SEASON_LEDGER_MODULE points the boards and this file at a copy
- * of src/lib/seasonLedger.ts with one rule put back, and the FO_BOARD_*
- * variables at board copies that project at the whistle or never reset the
+ * projection the save carries (made at the pick, and at every close for the
+ * season after it), and that row's score is what the board hands the
+ * completion hook, recorded once (finishes() counts the rises the real hook
+ * witnesses); a season past every season its roster was projected to have
+ * scores the ceiling, and one under the bar scores nothing; the recap line
+ * states the whole projection, wins and round, the bar and the season; an
+ * older save with titles and no ledger gets one row and nothing
+ * retroactive, and its sum is labelled as counted since that season; a
+ * reload on the recap hands the hook nothing; a closed season played again
+ * adds nothing; two seasons played in one sitting on one mounted board are
+ * two rows and two finishes (the closed row has to reset between them), the
+ * second scored against the projection made at the first close and not
+ * made again after the offseason; the projection is the pick's, so a roster
+ * made better after the pick beats it, while the same season scored against
+ * the roster at the whistle would not; and a man cut before the close still
+ * counts in the next projection, so the cut lowers nothing. The roster is
+ * rigged to force the outcomes (every player 99, every player 40) because
+ * the seeded rng decides the rest. scripts/simGmReload.mjs section 2 runs
+ * these rows and carries their controls: SEASON_LEDGER_MODULE points the
+ * boards and this file at a copy of src/lib/seasonLedger.ts with one rule
+ * put back, NO_DOUBLE_SWAP at a copy of src/lib/seasonFormats.ts that does
+ * not count a cut man, and the FO_BOARD_* variables at board copies that
+ * project at the whistle, project after the offseason or never reset the
  * closed row, and exactly the rows written for that fault must then fail.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import type { ComponentType } from 'react';
-import { initLeague, simGame, REGULAR_WEEKS } from '@/lib/frontOffice';
-import { initNbaLeague, simRound, NBA_ROUNDS } from '@/lib/nbaFrontOffice';
-import { initMlbLeague, simMlbRound, MLB_ROUNDS } from '@/lib/mlbFrontOffice';
-import { initNhlLeague, simNhlRound, NHL_FO_ROUNDS } from '@/lib/nhlFrontOffice';
-import { scoreSeason, appendSeason, ledgerTotal, projectionFor, PAR, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
-import { NFL_SEASON, NBA_SEASON, MLB_SEASON, NHL_SEASON, type SeasonShape } from '@/lib/seasonFormats';
+import { initLeague, simGame, REGULAR_WEEKS, releasePlayer } from '@/lib/frontOffice';
+import { initNbaLeague, simRound, NBA_ROUNDS, nbaRelease } from '@/lib/nbaFrontOffice';
+import { initMlbLeague, simMlbRound, MLB_ROUNDS, mlbRelease } from '@/lib/mlbFrontOffice';
+import { initNhlLeague, simNhlRound, NHL_FO_ROUNDS, nhlRelease } from '@/lib/nhlFrontOffice';
+import { scoreSeason, appendSeason, ledgerTotal, projectionFor, projectNext, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
+import { NFL_SEASON, NBA_SEASON, MLB_SEASON, NHL_SEASON, roundPhrase, type SeasonShape } from '@/lib/seasonFormats';
 import { FO_TEAMS } from '@/data/frontOfficePlayers';
 import { NBA_TEAMS } from '@/data/conquestDataNba';
 import { MLB_TEAMS } from '@/data/conquestDataMlb';
@@ -114,6 +121,8 @@ interface BoardCase {
   toFinal: (league: any, team: string, rng: () => number) => void;
   /* Round 647: the first team on the pick screen, by its label, and its id. */
   pick: () => { label: string; id: string };
+  /* Round 647 fix: the engine's own cut, the one the board's Cut button runs. */
+  release: (league: any, team: string, id: string) => boolean;
   tile: string;
   finalButton: string;
   headline: RegExp;
@@ -142,6 +151,9 @@ const nhlToFinal = (lg: any, team: string, rng: () => number) => {
 /* Round 647: a league's projection for one team, the way the boards make it. */
 const projectOf = (shape: SeasonShape<any>, lg: any, team: string): SeasonExpectation =>
   projectionFor(shape.teams(lg), shape.format, lg.season, team);
+/* Round 647 fix: the next season's projection, the way the boards make it at the close. */
+const projectAfter = (shape: SeasonShape<any>, lg: any, team: string): SeasonExpectation =>
+  projectNext(shape, lg, team, lg.season + 1);
 const opening = (shape: SeasonShape<any>, init: (rng: () => number) => any, toFinal: BoardCase['toFinal']) =>
   (rng: () => number, rig?: Rig) => {
     const lg = init(rng);
@@ -160,6 +172,7 @@ const CASES: BoardCase[] = [
     finalWeek: opening(NFL_SEASON, initLeague, nflToFinal),
     toFinal: nflToFinal,
     pick: () => ({ label: `${FO_TEAMS[0].city} ${FO_TEAMS[0].name}`, id: FO_TEAMS[0].abbr }),
+    release: (lg, team, id) => releasePlayer(lg.teams[team], lg.freeAgents, id),
     tile: 'This week', finalButton: 'Play the final week + playoffs',
     headline: /win the 2026 title/, draftHeading: 'The 2027 Draft',
     picks: 3, firstButton: 'Play Week 1', periodKey: 'week',
@@ -171,6 +184,7 @@ const CASES: BoardCase[] = [
     finalWeek: opening(NBA_SEASON, initNbaLeague, nbaToFinal),
     toFinal: nbaToFinal,
     pick: () => ({ label: `${NBA_TEAMS[0].city} ${NBA_TEAMS[0].name}`, id: NBA_TEAMS[0].id }),
+    release: (lg, team, id) => nbaRelease(lg.teams[team], lg.freeAgents, id),
     tile: 'Play', finalButton: 'Final stretch + playoffs',
     headline: /win the 2026 title/, draftHeading: 'The 2027 Draft',
     picks: 2, firstButton: 'Play Round 1', periodKey: 'round',
@@ -182,6 +196,7 @@ const CASES: BoardCase[] = [
     finalWeek: opening(MLB_SEASON, initMlbLeague, mlbToFinal),
     toFinal: mlbToFinal,
     pick: () => ({ label: `${MLB_TEAMS[0].city} ${MLB_TEAMS[0].name}`, id: MLB_TEAMS[0].id }),
+    release: (lg, team, id) => mlbRelease(lg.teams[team], lg.freeAgents, id),
     tile: 'Play', finalButton: 'Final stretch + October',
     headline: /win the 2026 World Series/, draftHeading: 'The 2027 Draft',
     picks: 2, firstButton: 'Play Round 1', periodKey: 'round',
@@ -193,6 +208,7 @@ const CASES: BoardCase[] = [
     finalWeek: opening(NHL_SEASON, initNhlLeague, nhlToFinal),
     toFinal: nhlToFinal,
     pick: () => ({ label: `${NHL_TEAMS[0].city} ${NHL_TEAMS[0].name}`, id: NHL_TEAMS[0].id }),
+    release: (lg, team, id) => nhlRelease(lg.teams[team], lg.freeAgents, id),
     tile: 'Play', finalButton: 'Final stretch + playoffs',
     headline: /lift the 2027 Stanley Cup/, draftHeading: 'The 2027 Draft',
     picks: 2, firstButton: 'Play Round 1', periodKey: 'round',
@@ -356,7 +372,6 @@ for (const c of CASES) {
     expect(s.ledger, 'exactly one row for the one season closed').toHaveLength(1);
     return s.ledger[0];
   };
-  const expOf = (row: SeasonRow) => ({ share: row.expShare, ladder: row.expLadder });
   /* Play the hub's season to its final week or round on the mounted board,
      one period at a time, the way a player does. */
   const playToFinal = () => {
@@ -389,16 +404,20 @@ for (const c of CASES) {
       expect(row.games).toBeGreaterThan(0);
       expect(row.wins).toBeLessThanOrEqual(row.games);
       expect(row.expShare).toBe(pickExpect.share);
-      expect(row.expLadder).toBe(pickExpect.ladder);
+      expect(row.expBar).toBe(pickExpect.top[0]);
       expect(row.score).toBe(scoreSeason(row, pickExpect));
-      expect(row.score, 'a 99 rated roster beats an ordinary roster\'s projection by far').toBeGreaterThan(PAR + 10);
-      expect(row.score).toBeLessThanOrEqual(SEASON_CEILING);
+      expect(row.score, 'a 99 rated roster\'s title season is past every season an ordinary roster was projected to have').toBe(SEASON_CEILING);
       expect(finishes(), 'one finish, and the number it records is the row').toEqual([row.score]);
       expect(ledgerTotal(closed.ledger)).toBe(row.score);
       expect(closed.titles).toBe(1);
       expect(screen.getByText(/This season/).textContent).toContain(String(row.score));
       expect(screen.getByText(/Career/).textContent).toContain(String(row.score));
-      expect(screen.getByText(/before your moves/).textContent).toContain(`won ${row.wins}`);
+      /* The recap states the whole projection: the wins and the round it
+         projected, the bar a season had to get past, and the season. */
+      const note = screen.getByText(/Points start past/).textContent ?? '';
+      expect(note).toContain(`Projected: ${Math.round(row.expShare * row.games)} wins, ${roundPhrase(c.shape, row.expStage)}.`);
+      expect(note).toContain(`: ${Math.round(row.barShare * row.games)} wins, ${roundPhrase(c.shape, row.barStage)}.`);
+      expect(note).toContain(`Yours: ${row.wins} wins, the title.`);
     });
 
     it('a season without a title adds exactly one row too, and records it once', () => {
@@ -409,7 +428,7 @@ for (const c of CASES) {
       expect(row.team).toBe(team);
       expect(row.stage).toBeLessThanOrEqual(row.rounds);
       expect(row.score).toBe(scoreSeason(row, pickExpect));
-      expect(row.score, 'a 40 rated roster falls short of an ordinary roster\'s projection').toBeLessThan(PAR);
+      expect(row.score, 'a 40 rated roster\'s season is under the bar an ordinary roster was projected to reach: it scores nothing').toBe(0);
       expect(finishes(), 'a season without a title is still a finish, recorded once').toEqual([row.score]);
       expect(ledgerTotal(closed.ledger)).toBe(row.score);
       expect(closed.titles).toBe(0);
@@ -425,7 +444,7 @@ for (const c of CASES) {
       const row = rowOf(closed);
       const repaired = projectOf(c.shape, league, team);
       expect(row.expShare, 'projected from the league as the save loaded').toBe(repaired.share);
-      expect(row.expLadder).toBe(repaired.ladder);
+      expect(row.expBar).toBe(repaired.top[0]);
       expect(row.score).toBe(scoreSeason(row, repaired));
       expect(finishes()).toEqual([row.score]);
       expect(ledgerTotal(closed.ledger), 'no retroactive points for the titles the old save already held').toBe(row.score);
@@ -436,7 +455,7 @@ for (const c of CASES) {
     });
 
     it('replaying a closed title adds nothing: a reload records nothing and the final week refuses', () => {
-      const { league, team, view, closed } = closeSeason('strong');
+      const { league, team, pickExpect, view, closed } = closeSeason('strong');
       const row = rowOf(closed);
       expect(finishes()).toEqual([row.score]);
       view.unmount();
@@ -459,7 +478,7 @@ for (const c of CASES) {
       expect(finishes()).toEqual([row.score]);
 
       /* And the module itself refuses a second row for the same season. */
-      const again = appendSeason(closed.ledger, { ...row }, expOf(row));
+      const again = appendSeason(closed.ledger, { ...row }, pickExpect);
       expect(again.row).toBeNull();
       expect(again.ledger).toHaveLength(1);
       expect(league.season).toBe(row.season);
@@ -468,6 +487,10 @@ for (const c of CASES) {
     it('every closed season adds its own row: two seasons in one sitting, two rows, two finishes, and the career is their sum', () => {
       const { closed } = closeSeason('strong');
       const first = rowOf(closed);
+      /* The next season is projected at the close, from the league as it
+         closed, carried through the offseason a GM who touches nothing gets. */
+      const closeExpect = projectAfter(c.shape, closed.league, closed.myTeam);
+      expect(closed.expect, 'next season is projected at the close').toEqual(closeExpect);
       /* The whole second season on the SAME mounted board: the presser, the
          draft, the offseason, every period and the final one. The board's
          closed row has to reset between the two seasons, or the second close
@@ -478,16 +501,16 @@ for (const c of CASES) {
       const next = read();
       expect(next.phase).toBe('hub');
       expect(next.league.season).toBe(first.season + 1);
-      const offseasonExpect = projectOf(c.shape, next.league, next.myTeam);
-      expect(next.expect, 'next season is projected from the roster the offseason hands over').toEqual(offseasonExpect);
+      expect(next.expect, 'the draft and the offseason do not project it again: what the GM does there is his').toEqual(closeExpect);
       fireEvent.click(screen.getByText('Continue to the hub'));
       playToFinal();
       const after = read();
       expect(after.ledger.map((r: SeasonRow) => r.season), 'one row per closed season, in order').toEqual([first.season, first.season + 1]);
       expect(after.ledger[0]).toEqual(first);
       const second: SeasonRow = after.ledger[1];
-      expect(second.expShare, 'the second season is scored against the offseason\'s projection').toBe(offseasonExpect.share);
-      expect(second.score).toBe(scoreSeason(second, offseasonExpect));
+      expect(second.expShare, 'the second season is scored against the projection made at the first close').toBe(closeExpect.share);
+      expect(second.expBar).toBe(closeExpect.top[0]);
+      expect(second.score).toBe(scoreSeason(second, closeExpect));
       expect(finishes(), 'each season recorded once, on its own number, on one mount').toEqual([first.score, second.score]);
       expect(ledgerTotal(after.ledger)).toBe(first.score + second.score);
       expect(after.seasonsPlayed).toBe(2);
@@ -515,9 +538,41 @@ for (const c of CASES) {
       fireEvent.click(screen.getByText(c.finalButton));
       const row = rowOf(read());
       expect(row.expShare, 'scored against the pick\'s projection').toBe(pickExpect.share);
-      expect(row.expLadder).toBe(pickExpect.ladder);
+      expect(row.expBar).toBe(pickExpect.top[0]);
       expect(row.score).toBe(scoreSeason(row, pickExpect));
       expect(scoreSeason(row, atWhistle), 'the same season against the roster at the whistle would score less: the pick sets the bar, the moves after it beat it').toBeLessThan(row.score);
+    });
+
+    it('a man cut before the close still counts: the next projection is the roster the season was played with', () => {
+      /* The review's dodge: cut the best man before the final week, let the
+         close project the thinner roster, and sign him back after the
+         offseason. The cut is the engine's own (the board's Cut button),
+         made on the save before the final week is played. */
+      const { league, team, pickExpect } = c.finalWeek(lehmer(7));
+      const best = [...league.teams[team].players].sort((a: any, b: any) => b.ovr - a.ovr)[0];
+      expect(c.release(league, team, best.id), 'the engine refused the cut').toBe(true);
+      save({ league, myTeam: team, phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0, expect: pickExpect });
+      render(<Board />);
+      fireEvent.click(screen.getByText(c.tile));
+      fireEvent.click(screen.getByText(c.finalButton));
+      const closed = read();
+      rowOf(closed);
+      expect(closed.league.teams[team].players.some((p: any) => p.id === best.id), 'he is off the roster at the close').toBe(false);
+      /* The same league with him back on the roster and no cut on record. */
+      const kept = JSON.parse(JSON.stringify(closed.league));
+      const pool = [...kept.freeAgents, ...Object.values(kept.teams as Record<string, any>).filter((t: any) => t !== kept.teams[team]).flatMap((t: any) => t.players)];
+      const him = pool.find((p: any) => p.id === best.id);
+      expect(him, 'the cut man is still in the league').toBeTruthy();
+      kept.freeAgents = kept.freeAgents.filter((p: any) => p.id !== best.id);
+      for (const t of Object.values(kept.teams as Record<string, any>)) t.players = t.players.filter((p: any) => p.id !== best.id);
+      kept.teams[team].players.push(him);
+      kept.teams[team].releasedThisSeason = [];
+      expect(closed.expect, 'projected as if he had never been cut').toEqual(projectAfter(c.shape, kept, team));
+      /* And the same close with him gone for good would have set a lower bar. */
+      const gone = JSON.parse(JSON.stringify(closed.league));
+      gone.teams[team].releasedThisSeason = [];
+      expect(projectAfter(c.shape, gone, team).top[0], 'without him the bar would sit lower, which is the dodge').toBeLessThanOrEqual(closed.expect.top[0]);
+      expect(projectAfter(c.shape, gone, team), 'the cut changes the projection only when it is not counted').not.toEqual(closed.expect);
     });
   });
 }
