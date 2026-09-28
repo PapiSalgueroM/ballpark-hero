@@ -140,6 +140,28 @@ export function allowedLabel(slot: FormationSlot): string {
   return allowedLabelFor(slotAllowedPositions(slot.label, slot.allowed));
 }
 
+/**
+ * Round 645: wrong position picks a run can make; the last one ends it. A
+ * wrong pick still bounces with the explanation below, so the game still
+ * teaches, but clicking through the suggestion list until a name sticks
+ * stopped being free: with wrong picks free it filled all 11 slots for no
+ * knowledge. simFreePoints plays that clicker through this rule.
+ */
+export const WRONG_PICK_LIMIT = 3;
+
+/**
+ * Round 645: what a World XI run records and its result screen shows, the
+ * slots it filled less one for every wrong position pick, never below 0. The
+ * strike limit alone was not enough: a clicker who taps a random name from the
+ * country list until one sticks, three strikes and out, still filled 0.8 of 11
+ * (7 percent) on the measured pool. Taking the strikes off the score leaves a
+ * clicker about 0.3 even when he stops the moment he is ahead, while a player
+ * who knows who plays where fills 11 with no strikes and keeps all 11.
+ */
+export function worldXiScore(filled: number, strikes: number): number {
+  return Math.max(0, filled - Math.max(0, strikes));
+}
+
 /** Friendly rejection line for a player who is real but plays elsewhere. */
 export function wrongPositionMessage(p: WxPlayer, slot: FormationSlot): string {
   return `${p.name} plays ${p.position}. This ${slot.label} slot needs ${allowedLabel(slot)}. Try a different player.`;
@@ -368,6 +390,13 @@ export function respinSlotCountry(
  * list is value-sorted so famous names float up). Requires 2+ letters.
  * Any position is suggested on purpose: picking a wrong-position player is
  * how the friendly rejection message gets triggered.
+ *
+ * Round 645: the page lists these by name and club only. It used to print
+ * each one's position and light up the ones that fit the slot, and a wrong
+ * click cost nothing, so typing any two letters and tapping a lit name filled
+ * all 11 with no knowledge at all, the whole score. Who plays where is the
+ * question the game asks, so the list no longer answers it, and a wrong
+ * position pick is a strike (WRONG_PICK_LIMIT).
  */
 export function suggestCountryPlayers(
   data: WorldXiData,

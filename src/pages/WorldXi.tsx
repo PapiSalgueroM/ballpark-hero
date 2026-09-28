@@ -24,6 +24,8 @@ import {
   fitsSlot,
   allowedLabel,
   wrongPositionMessage,
+  WRONG_PICK_LIMIT,
+  worldXiScore,
   displayCountry,
   shuffle,
   respinSlotCountry,
@@ -54,6 +56,8 @@ const WorldXi = () => {
   const [filled, setFilled] = useState<(WxPlayer | null)[]>([]);
   const [query, setQuery] = useState('');
   const [feedback, setFeedback] = useState<string | null>(null);
+  /* Round 645: wrong position picks this run (WRONG_PICK_LIMIT ends it). */
+  const [strikes, setStrikes] = useState(0);
   const [timeLeft, setTimeLeft] = useState(0);
   const [spinning, setSpinning] = useState(false);
   /* Owner 2026-08-05: limited respins so a bad draw costs a decision.
@@ -106,6 +110,7 @@ const WorldXi = () => {
     setFeedback(null);
     setTimeLeft(timerMode.seconds);
     setRespinsLeft(respinBudget);
+    setStrikes(0);
     prevStepRef.current = -1; // so the first slot of a replay spins too
     setPhase('playing');
   }, [data, formation, timerMode]);
@@ -161,6 +166,9 @@ const WorldXi = () => {
   );
 
   const filledCount = filled.filter(Boolean).length;
+  /* Round 645: the run's score, the slots filled less the strikes
+     (worldXiScore). The result screen, the share and the record all show it. */
+  const recordedScore = worldXiScore(filledCount, strikes);
   const timedOut = timerMode.seconds > 0 && timeLeft <= 0;
 
   /* Round 299, the scoring audit: this page never recorded a play, so a
@@ -170,7 +178,8 @@ const WorldXi = () => {
      'playing', so mount, the setup screen and the season sim never record.
      Score is filledCount, the slots-covered count the result screen and the
      share line both show as N/11. Placed below filledCount on purpose, the
-     TDZ rule from tonight. */
+     TDZ rule from tonight. Round 645: the score is recordedScore now, the
+     slots filled less one for each wrong position pick. */
   const recordedRef = useRef(false);
   useEffect(() => {
     if (phase === 'playing') {
@@ -179,13 +188,18 @@ const WorldXi = () => {
     }
     if ((phase !== 'won' && phase !== 'lost') || recordedRef.current) return;
     recordedRef.current = true;
-    recordCompletion('/world-xi', filledCount, getCurrentPlayerName());
-  }, [phase, filledCount]);
+    recordCompletion('/world-xi', recordedScore, getCurrentPlayerName());
+  }, [phase, recordedScore]);
 
   const pick = (p: WxPlayer) => {
     if (phase !== 'playing' || !slot || slotIndex < 0) return;
     if (!fitsSlot(p, slot)) {
-      setFeedback(wrongPositionMessage(p, slot));
+      /* Round 645: a wrong position pick bounces with the reason and costs a
+         strike; the last strike ends the run on what it filled. */
+      const struck = strikes + 1;
+      setStrikes(struck);
+      setFeedback(`${wrongPositionMessage(p, slot)} Strike ${struck} of ${WRONG_PICK_LIMIT}, one point off your score.`);
+      if (struck >= WRONG_PICK_LIMIT) setPhase('lost');
       return;
     }
     const next = [...filled];
@@ -211,6 +225,7 @@ const WorldXi = () => {
     setStep(0);
     setQuery('');
     setFeedback(null);
+    setStrikes(0);
     setSeasonReport(null);
     setPhase('setup');
   };
@@ -254,7 +269,7 @@ const WorldXi = () => {
   const emojiGrid = [
     `🌍 World XI ${formation.name}${timerMode.seconds > 0 ? ' ⏱️ ' + timerMode.label : ''}`,
     flagRow,
-    `${filledCount}/11 nations covered`,
+    `${filledCount}/11 nations covered${strikes > 0 ? `, ${strikes} strike${strikes === 1 ? '' : 's'}` : ''}, ${recordedScore} points`,
   ].join('\n');
 
   const pitchView = (
@@ -411,6 +426,7 @@ const WorldXi = () => {
             <div className="flex items-center justify-between mb-3 text-sm">
               <span className="text-muted-foreground">
                 Filled <span className="text-primary font-bold">{filledCount}</span>/11
+                <span className="ml-2">Strikes <span className={cn('font-bold', strikes > 0 ? 'text-destructive' : 'text-primary')}>{strikes}</span>/{WRONG_PICK_LIMIT}</span>
               </span>
               {timerMode.seconds > 0 && (
                 <span
@@ -485,22 +501,16 @@ const WorldXi = () => {
 
               {suggestions.length > 0 && (
                 <div className="mt-2 rounded-xl border border-border overflow-hidden max-h-64 overflow-y-auto">
+                  {/* Round 645: name and club only. The list used to print each
+                      player's position and light up the ones that fit, which
+                      answered the question the slot asks. */}
                   {suggestions.map(p => {
-                    const fits = fitsSlot(p, slot);
                     return (
                       <button
                         key={p.name}
                         onClick={() => pick(p)}
                         className="w-full flex items-center gap-2 px-3 py-2.5 text-left bg-background hover:bg-accent transition-colors border-b border-border/50 last:border-b-0"
                       >
-                        <span
-                          className={cn(
-                            'text-[10px] font-bold px-1.5 py-0.5 rounded shrink-0 w-11 text-center',
-                            fits ? 'bg-primary/15 text-primary' : 'bg-secondary text-muted-foreground',
-                          )}
-                        >
-                          {p.position}
-                        </span>
                         <span className="font-semibold text-sm text-foreground truncate min-w-0 flex-1">{p.name}</span>
                         <span className="text-xs text-muted-foreground truncate shrink-0 max-w-[35%] ml-auto">{p.club}</span>
                       </button>
@@ -529,12 +539,16 @@ const WorldXi = () => {
               <div className="text-4xl mb-2">{phase === 'won' ? '🏆' : timedOut ? '⏱️' : '🏳️'}</div>
               <h2 className="text-2xl font-bold text-primary font-display mb-1 inline-flex items-center gap-2">
                 {phase === 'won' && <Trophy className="w-6 h-6" />}
-                {phase === 'won' ? 'World XI complete!' : timedOut ? 'Full time!' : 'Squad abandoned'}
+                {phase === 'won' ? 'World XI complete!' : timedOut ? 'Full time!' : strikes >= WRONG_PICK_LIMIT ? 'Three strikes' : 'Squad abandoned'}
               </h2>
               <p className="text-sm text-muted-foreground">
                 {phase === 'won'
                   ? `All 11 nations covered in a ${formation.name}. Squad value ${fmtCompactUsd(squadValue)}.`
-                  : `You filled ${filledCount} of 11 slots. ${timedOut ? 'The clock won this one.' : 'The draw lives to fight another day.'}`}
+                  : `You filled ${filledCount} of 11 slots. ${timedOut ? 'The clock won this one.' : strikes >= WRONG_PICK_LIMIT ? `${WRONG_PICK_LIMIT} wrong position picks ended the run.` : 'The draw lives to fight another day.'}`}
+              </p>
+              {/* Round 645: the number this run records (worldXiScore). */}
+              <p className="mt-2 font-display text-xl font-bold text-gold" data-testid="world-xi-score">
+                {recordedScore} points{strikes > 0 ? ` (${filledCount} filled, less ${strikes} for wrong position picks)` : ''}
               </p>
             </div>
 
@@ -622,8 +636,8 @@ const WorldXi = () => {
               <ShareButtons
                 score={
                   seasonReport
-                    ? `${seasonReport.squadRating}/100, ${ordinal(seasonReport.tablePosition)} place`
-                    : `${filledCount}/11`
+                    ? `${recordedScore} points, ${seasonReport.squadRating}/100, ${ordinal(seasonReport.tablePosition)} place`
+                    : `${recordedScore} points (${filledCount}/11)`
                 }
                 gameName="World XI"
                 gamePath="/world-xi"
@@ -657,7 +671,8 @@ const WorldXi = () => {
             'Pick a formation, an optional timer, and how many respins you want (none up to ten, three is the default).',
             'Eleven countries are drawn at random, one per slot, revealed in random order.',
             'For each country, type and select a real player of that nationality who can play the slot.',
-            'Wrong position or wrong country picks are rejected. A respin rerolls the current slot\'s nation. Fill all 11 to win.',
+            'Suggestions show names and clubs, never positions: knowing who plays where is the game. A wrong position pick is rejected and costs a strike, and a third strike ends the run. A respin rerolls the current slot\'s nation. Fill all 11 to win.',
+            'Your score is the slots you filled less one for every strike, so a clean full XI scores 11.',
           ]}
           examples={[
             'Brazil in goal? Alisson, Ederson and 29 other Brazilian keepers count.',
