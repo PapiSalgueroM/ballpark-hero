@@ -1,5 +1,44 @@
 # Project state
 
+## BUILT 2026-09-28, NOT ON MAIN: Round 670, Club Manager plays extra time (branch `r670-cm-extra-time`)
+
+Part B of the stoppage time contract, copied with its departures to
+`docs/design/round-670-extra-time-contract.md`. A Champions League match that settles its tie
+(the final, a one legged tie, a second leg) and is level when the ninety run out (on the night, or
+on the aggregate after away goals in the eras that had them) plays one thirty minute stretch,
+minutes 91 to 120, before penalties. The AI's ties play it too. The live viewer asks the engine at
+90 (`isExtraTimeDue`), draws it through `startExtraTime` and runs the clock on to 120 with an ET
+badge; the quick sim and the classic dressing room draw the same stretch at the whistle, by the
+same function (`simExtraTime` section 7 holds the two ways equal on 40 extra time matches). The
+report says (AET), carries an AET chip, a tie line on a second leg and twelve momentum buckets;
+the bracket says who won it in extra time. Save shape additive and optional, SAVE_VERSION
+unchanged.
+- **The rule, two source verified.** Before 2021-22 the away goals rule ran on through extra time
+  (uefa.com's 2021-06-24 abolition announcement, si.com 2018-05-26), from 2021-22 extra time goals
+  count like any other. Folding extra time into leg two and reading the tie again through
+  `uclTieOutcome` reproduces both.
+- **Domestic cups deliberately unchanged**, still straight to penalties: the real rule differs by
+  cup, round and season (the Coppa Italia skips extra time before its semi finals since 2024-25,
+  onefootball.com and football-italia.net), and seventeen cups over four eras were not verified in
+  this round. **Follow up: a per cup, per season extra time table, two source verified, then
+  `playsExtraTime` reads it.** The web search budget ran out mid verification, which is why it
+  stopped at the Champions League.
+- **Balance.** Every decider (mine and the AI's) draws at `ET_DEFLATOR` 0.965, solved from the
+  measured share of deciders level at 90 (0.104 to 0.123 over five samples). Expected goals per
+  decider move by -0.006 against a 0.04 tolerance, extra time without the deflator adds +0.098.
+- **Fence** `scripts/simExtraTime.mjs`, seven sections, six controls (noet, nodeflate, etleague,
+  noaiet, nolabel, livedraw), each firing on exactly its own section (noet tolerates section 7,
+  which it empties). About 100 seconds.
+- **Sibling checked, defect found, not fixed here.** Soccer Career's Round 546 extra time
+  (`simulateUCL` in `soccerCareerEngine.ts`) says away goals counted in extra time in the old
+  seasons, but decides extra time on its goals alone, so a 1-1 extra time in an away goals season
+  goes to penalties when the away side should be through. Flagged as its own task: lift
+  `uclTieOutcome` into a small shared module both engines use, rather than a second copy.
+- **Not done in this round:** Round A (stoppage time goals, the aggregate before and during a
+  second leg) is still to build and must move extra time to start at 90 plus the second half
+  board; the browser check at 390 by 844 was not run (a release suite was running on the
+  machine); the adversarial review the memory asks for on a rule change has not been run.
+
 ## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
 
 Assembled and gated by the desktop Claude lane in the CRLF gate clone on `release-d`, pushed to
