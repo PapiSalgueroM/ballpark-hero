@@ -47,7 +47,7 @@ type AnySetup = WallShotSetup | TackleSetup | GloveSetup;
 type AnyInput = WallShotInput | TackleInput | GloveInput;
 type AnyResult = WallShotResult | TackleResult | GloveResult;
 
-interface DrillRecord { score: number; count: number; banked: boolean; rounds: number; draws: number }
+interface DrillRecord { score: number; count: number; banked: boolean; rounds: number; draws: number; fouls: number }
 
 /* How long the resolve is drawn for, in milliseconds. */
 const FLIGHT_MS = 700;
@@ -91,7 +91,12 @@ function readRecord(slug: string, today: string): DrillRecord | null {
        resumes from the top of the stream, which is what it always did. */
     const draws = f.draws === undefined ? 0 : f.draws;
     if (typeof draws !== 'number' || !Number.isInteger(draws) || draws < 0 || draws > rounds * MAX_DRAWS_PER_ROUND) return null;
-    return { score: f.score, count: f.count, banked: f.banked, rounds, draws };
+    /* Round 645 part three fix: the tackle drill's fouls, so a resumed or
+       reloaded session card says how many there were instead of none. A
+       record from before the field had no way to say, and reads as none. */
+    const fouls = f.fouls === undefined ? 0 : f.fouls;
+    if (typeof fouls !== 'number' || !Number.isInteger(fouls) || fouls < 0 || fouls > rounds) return null;
+    return { score: f.score, count: f.count, banked: f.banked, rounds, draws, fouls };
   });
 }
 
@@ -225,7 +230,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
       setIdx(done ? ROUNDS_PER_RUN - 1 : record.rounds);
       setScore(record.score);
       setCount(record.count);
-      setFouls(0);
+      setFouls(record.fouls);
       setResult(null); setInput(null);
       resetFlight();
       resetControls();
@@ -263,7 +268,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
        resolved, before the ball is drawn, so a refresh during the flight
        cannot hand back a round whose outcome is already on screen. */
     if (mode === 'daily' && !savedRef.current) {
-      const rec = { score: score + r.points, count: count + (won ? 1 : 0), banked: false, rounds: Math.min(ROUNDS_PER_RUN, idx + 1), draws: rngRef.current.draws };
+      const rec = { score: score + r.points, count: count + (won ? 1 : 0), banked: false, rounds: Math.min(ROUNDS_PER_RUN, idx + 1), draws: rngRef.current.draws, fouls: fouls + (foul ? 1 : 0) };
       writeDailyRecord(meta.slug, todayStr, rec);
       setRecord(rec);
     }
@@ -277,7 +282,7 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
       if (foul) setFouls(f => f + 1);
       setPhase('roundEnd');
     });
-  }, [phase, setup, kind, launch, mode, score, count, idx, meta.slug, todayStr]);
+  }, [phase, setup, kind, launch, mode, score, count, fouls, idx, meta.slug, todayStr]);
 
   /* The chance can run out without a press: the attacker leaves the screen,
      the ball crosses the line. */
@@ -306,10 +311,10 @@ export default function DrillBoard({ career, canBank, onBank, onBack }: {
     if (phase !== 'roundEnd' && phase !== 'done') return;
     const rounds = phase === 'done' ? ROUNDS_PER_RUN : Math.min(ROUNDS_PER_RUN, idx + 1);
     if (phase === 'done') savedRef.current = true;
-    const rec = { score, count, banked: false, rounds, draws: rngRef.current.draws };
+    const rec = { score, count, banked: false, rounds, draws: rngRef.current.draws, fouls };
     writeDailyRecord(meta.slug, todayStr, rec);
     setRecord(rec);
-  }, [phase, mode, score, count, idx, meta.slug, todayStr]);
+  }, [phase, mode, score, count, fouls, idx, meta.slug, todayStr]);
 
   const bank = useCallback(() => {
     /* Only a finished run banks. Since the record is written after every

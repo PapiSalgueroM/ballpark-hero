@@ -60,28 +60,37 @@ export interface ArcadeProgress extends ArcadeRun {
    ceiling. */
 export const MAX_DRAWS_PER_ROUND = 32;
 
-function parseRun(fields: Record<string, unknown>, countField: string, maxCount: number): ArcadeRun | null {
+/* Round 645 part three fix: the score is bounded by the run it claims to be.
+   A part played record resumes and its finish is recorded with the total it
+   carries, so a record naming more points than the shots it has taken could
+   possibly pay would be a score nobody earned. Every shot's points are whole
+   and never more than that shot's ceiling (the same sum the final card
+   prints as "of a possible"), so the caller hands the ceiling in and anything
+   above it, below zero or fractional reads as no record at all. */
+function parseRun(fields: Record<string, unknown>, countField: string, maxCount: number, maxScore: number): ArcadeRun | null {
   const score = fields.score;
   const count = fields[countField];
-  if (typeof score !== 'number' || !Number.isFinite(score)) return null;
+  if (typeof score !== 'number' || !Number.isInteger(score) || score < 0 || score > maxScore) return null;
   if (typeof count !== 'number' || !Number.isFinite(count)) return null;
   if (count < 0 || count > maxCount) return null;
   return { score, count };
 }
 
-export function readArcadeRun(slug: string, today: string, countField: string, maxCount: number): ArcadeRun | null {
+/** `maxScore` is the ceiling of today's whole run. */
+export function readArcadeRun(slug: string, today: string, countField: string, maxCount: number, maxScore: number): ArcadeRun | null {
   return readDailyRecord<ArcadeRun>(slug, today, fields => {
     if (fields.rounds !== undefined) return null;
-    return parseRun(fields, countField, maxCount);
+    return parseRun(fields, countField, maxCount, maxScore);
   });
 }
 
-export function readArcadeProgress(slug: string, today: string, countField: string, maxRounds: number): ArcadeProgress | null {
+/** `maxScoreFor(rounds)` is the ceiling of today's first `rounds` shots. */
+export function readArcadeProgress(slug: string, today: string, countField: string, maxRounds: number, maxScoreFor: (rounds: number) => number): ArcadeProgress | null {
   return readDailyRecord<ArcadeProgress>(slug, today, fields => {
-    const run = parseRun(fields, countField, maxRounds);
-    if (!run) return null;
     const { rounds, draws } = fields;
     if (typeof rounds !== 'number' || !Number.isInteger(rounds) || rounds < 1 || rounds > maxRounds) return null;
+    const run = parseRun(fields, countField, maxRounds, maxScoreFor(rounds));
+    if (!run) return null;
     if (typeof draws !== 'number' || !Number.isInteger(draws) || draws < 0 || draws > rounds * MAX_DRAWS_PER_ROUND) return null;
     if (run.count > rounds) return null;
     return { ...run, rounds, draws };

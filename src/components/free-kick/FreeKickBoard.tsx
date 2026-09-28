@@ -36,15 +36,19 @@ const GOAL_BOT = 150;
 const toViewX = (x: number) => GOAL_L + ((x + 1) / 2) * (GOAL_R - GOAL_L);
 const toViewY = (y: number) => GOAL_BOT - y * (GOAL_BOT - GOAL_TOP);
 
+/* Round 645 part three fix: the most today's first `rounds` shots can pay,
+   the bound a stored score is read back against (src/lib/arcadeRecord.ts). */
+const dayCeiling = (today: string, rounds: number) => maxRunScore(buildRun(daySeed(today)).slice(0, rounds));
+
 export default function FreeKickBoard() {
   /* Round 428's rule: the day is pinned at mount and every read, write and
      deal uses it, so a run that crosses midnight ET stays on the day it
      started instead of being filed under tomorrow. */
   const todayStr = useRef(getTodayET()).current;
-  const [restored] = useState(() => readArcadeRun(SLUG, todayStr, COUNT_FIELD, ROUNDS_PER_RUN));
+  const [restored] = useState(() => readArcadeRun(SLUG, todayStr, COUNT_FIELD, ROUNDS_PER_RUN, dayCeiling(todayStr, ROUNDS_PER_RUN)));
   /* Round 645 part three: today's run part played, so the intro can say where
      Today's ten picks up. start() reads it again when it deals. */
-  const [partPlayed] = useState(() => (restored ? null : readArcadeProgress(SLUG, todayStr, COUNT_FIELD, ROUNDS_PER_RUN)));
+  const [partPlayed] = useState(() => (restored ? null : readArcadeProgress(SLUG, todayStr, COUNT_FIELD, ROUNDS_PER_RUN, n => dayCeiling(todayStr, n))));
 
   const [mode, setMode] = useState<Mode>('daily');
   const [phase, setPhase] = useState<Phase>(restored ? 'done' : 'intro');
@@ -100,7 +104,7 @@ export default function FreeKickBoard() {
        stream picked up where it stopped, so the remaining kicks are the ones a
        player who never left would face. All ten taken means the final card
        was never shown: it is shown now, and that is the finish recorded. */
-    const part = m === 'daily' ? readArcadeProgress(SLUG, todayStr, COUNT_FIELD, ROUNDS_PER_RUN) : null;
+    const part = m === 'daily' ? readArcadeProgress(SLUG, todayStr, COUNT_FIELD, ROUNDS_PER_RUN, n => dayCeiling(todayStr, n)) : null;
     const seed = m === 'daily' ? daySeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
     rngRef.current = countedLehmer(seed ^ 0x5eed1234, part?.draws ?? 0);
     resetFlight();
