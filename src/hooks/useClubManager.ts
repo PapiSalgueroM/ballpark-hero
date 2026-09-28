@@ -721,7 +721,10 @@ export function useClubManager() {
 
   /* Round 670: extra time, drawn by the engine when the viewer's clock
      reaches 90 on a level decider, so the viewer walks thirty minutes that are
-     already football. The engine refuses (null) when it is not due. */
+     already football. The engine refuses (null) when it is not due.
+     Round 670 review: the viewer asks at every 90 and this answers on the
+     latest save (prev), so a change still on its way when the clock got
+     there is part of the answer; the viewer reads it off live.et. */
   const startExtraTimeLive = useCallback(() => {
     setCareer(prev => (prev ? startExtraTime(prev) ?? prev : prev));
   }, []);

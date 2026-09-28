@@ -4,7 +4,6 @@ import { Pause, Play, FastForward, Users, ArrowLeftRight, Gauge, X } from 'lucid
 import {
   FORMATIONS, MENTALITIES, slotPosition, pitchLineOf, resolveXI,
   liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, MAX_SUBS, liveGoneIds,
-  isExtraTimeDue,
 } from '@/lib/clubManager';
 import type {
   CareerState, CMPlayer, LiveMatch, MatchWeekReport, MatchStats, Mentality, TalkTone,
@@ -45,9 +44,11 @@ import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';
  * draws the second half; onSecondHalf FINISHES the match at 90 and lands the
  * report.
  *
- * Round 670: a level Champions League decider does not finish at 90. The
- * engine is asked (isExtraTimeDue, never decided here), onStartExtraTime draws
- * the thirty minutes, and the clock runs on to 120 before onSecondHalf.
+ * Round 670: a level Champions League decider does not finish at 90. At 90 the
+ * viewer calls onStartExtraTime once, the engine draws the thirty minutes on
+ * the latest save when they are due (never decided here), and the viewer
+ * reads the answer off live.et: extra time runs the clock on to 120 before
+ * onSecondHalf, and no extra time finishes the match at 90.
  *
  * The choreography between events (who is carrying the ball, the shape
  * pushing up and dropping back, the drift) is theatre, drawn only inside the
@@ -88,12 +89,15 @@ interface LiveSimScreenProps {
   onSub: (outId: string, inId: string) => void;
   onShape: (m: Mentality) => void;
   onTalk: (tone: TalkTone | null) => void;
-  /** Round 504: finishes the match (the page passes resumeMatch). Called once, when the clock reaches 90. */
+  /** Round 504: finishes the match (the page passes resumeMatch). Called once,
+   *  at the final whistle: at 90, or at the end of extra time (Round 670). */
   onSecondHalf: () => void;
   onExit: () => void;
   /** Round 504: draws the second half when they go back out. */
   onStartSecondHalf: () => void;
-  /** Round 670: draws extra time at 90, when the engine says it is due. */
+  /** Round 670: called once when the clock reaches 90. The engine draws extra
+   *  time on the LATEST save when it is due and leaves the save alone when it
+   *  is not; the viewer then reads live.et to know which it was. */
   onStartExtraTime: () => void;
   /** Round 504: a sub or a shape change at a minute of the half being played. */
   onChange: (minute: number, change: LiveChange) => void;
@@ -311,6 +315,9 @@ export function LiveSimScreen({
   const [motionEvent, setMotionEvent] = useState<MotionEvent | null>(null);
   const [beat, setBeat] = useState<Beat>(() => ({ n: 0, carrier: { side: 'me', index: 9 }, drift: [] }));
   const [picking, setPicking] = useState<string | null>(null);
+  /* Round 670 review: the clock reached 90 and the engine has been asked
+     about extra time; the next render reads its answer off the live match. */
+  const [askedAt90, setAskedAt90] = useState(false);
   const rafRef = useRef<number | null>(null);
   const lastTs = useRef<number | null>(null);
   const bannerTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -336,7 +343,8 @@ export function LiveSimScreen({
   const finalMy = report ? (report.home === career.clubName ? report.homeGoals : report.awayGoals) : null;
   const finalOpp = report ? (report.home === career.clubName ? report.awayGoals : report.homeGoals) : null;
   const running = stage === 'first' || stage === 'second' || stage === 'extra';
-  const canChange = running && !finished && !!liveNow;
+  /* Round 670 review: no change while the engine is answering at 90. */
+  const canChange = running && !finished && !(stage === 'second' && askedAt90) && !!liveNow;
 
   /* ---- the truth this walk goes through ---- */
   const feed: LiveFeedEvent[] = useMemo(() => (liveNow ? liveFeed(liveNow) : []), [liveNow]);
@@ -423,14 +431,25 @@ export function LiveSimScreen({
       onMark(45);
     }
     if (stage === 'second' && clock >= 90 && !finishedRef.current) {
-      setClock(90);
-      setPicking(null);
-      /* Round 670: the engine says whether a level decider goes on. The
-         page never decides football; if this answer were ever wrong the
-         whistle would still draw extra time itself, unwatched. */
-      if (isExtraTimeDue(career)) {
-        setStage('extra');
+      /* Round 670: the engine says whether a level decider goes on, and the
+         page never decides football.
+         Round 670 review: it is asked on the LATEST save, not on the career
+         this render was given. A change landing at 89 or 90 can still be on
+         its way to the save when the clock gets here, so a question asked of
+         this render's career could say level when the score had just moved,
+         and the viewer ran thirty empty minutes badged ET into a report with
+         no extra time. So the ninetieth minute asks once (the hook draws extra
+         time on the latest save, or leaves it alone), and the render that
+         follows, which carries that answer, reads it off live.et. */
+      if (!askedAt90) {
+        setClock(90);
+        setPicking(null);
+        setAskedAt90(true);
         onStartExtraTime();
+        return;
+      }
+      if (liveNow?.et) {
+        setStage('extra');
         setBanner({ segs: [{ t: 'Extra time' }], club: 'Level after 90 minutes', tone: 'none' });
         if (bannerTimer.current) clearTimeout(bannerTimer.current);
         bannerTimer.current = setTimeout(() => setBanner(null), 2600);
@@ -447,7 +466,7 @@ export function LiveSimScreen({
       setPicking(null);
       onSecondHalf();
     }
-  }, [clock, stage, stageEnd, career, onSecondHalf, onStartExtraTime, onMark]);
+  }, [clock, stage, stageEnd, askedAt90, liveNow, onSecondHalf, onStartExtraTime, onMark]);
 
   /* Where the clock stands goes to the save when the page is hidden or
      leaves (a tab switch, the app going to the background, a reload), never

@@ -59,7 +59,10 @@
      5) The AI plays it too. Across every AI tie the replays settle: every
         shootout came after extra time and was level after it, every tie
         settled in extra time has the winner the tie's own score says, and
-        there is at least one of each.
+        there is at least one of each. Round 670 review: and the one legged
+        AI ties too, every AI final the capture walk played, read the same
+        way and floored so the final's own branch is held (the replays only
+        ever settle two legged rounds).
      6) The screens, through react-dom/server. The report card prints (AET),
         an AET chip and the extra time line on an aet report, "Still level
         after extra time" on a shootout after it, and none of that on a
@@ -72,22 +75,49 @@
         everything at or before it and redraws the rest inside 101..120; a
         change at 121 is refused, a change at 91 is refused in a match with
         no extra time, and the clock mark caps at 120.
+     8) Round 670 review: extra time is played by men with names. Every
+        event of mine in an extra time match (every chance, corner, foul and
+        throw in, every goal and every card) names a man who is on my pitch
+        at that minute, going by the eleven, the changes, the reds and the
+        injuries. The review found every one of my events from the 99th
+        minute on with no name at all, because "never leaves the pitch" was
+        written as minute 99. Floored on events past the 99th minute.
+     9) Round 670 review: possession in extra time is read off rates. The
+        share of the ball over the second period moves no further from 50
+        on average when extra time is drawn than the football in it
+        explains (the raw 45 to 120 sum pushed it about two points out),
+        and a change in the 100th minute that alters nothing (the same
+        shape, with no goal, red or injury of mine since 90) leaves it
+        exactly where it was.
 
    Negative controls, EXTRA_TIME_CONTROL=<name>. Each rewrites a copy (the
    engine or the report card) under .sim-control/extratime, refuses to run
    (exit 2) unless its anchor is found exactly once, and then must turn its
    named section red and no other (a tolerated section is listed where one
    is red by construction):
-     noet       playsExtraTime answers false. Section 1 must go red (7 is
-                tolerated: with no extra time there is nothing to compare).
+     noet       playsExtraTime answers false. Section 1 must go red (7, 8
+                and 9 are tolerated: with no extra time they have nothing to
+                read).
      nodeflate  ET_DEFLATOR is 1. Section 3 must go red.
      etleague   playsExtraTime answers true for every match that is not a
                 first leg. Section 2 must go red.
+     noaet      a second leg settled in extra time is reported as 'regular'.
+                Section 4 must go red.
      noaiet     the AI plays its deciders the pre 670 way (no extra time, no
                 deflator). Section 5 must go red.
+     noaifinal  only the AI's one legged ties (the final) go back to the pre
+                670 way. Section 5 must go red, which is what proves the
+                final's branch is read.
      nolabel    the report card drops (AET). Section 6 must go red.
      livedraw   startExtraTime draws one number before extra time, so the
                 viewer's extra time is not the whistle's. Section 7 must go red.
+     noname     "never leaves" is minute 99 again in drawSegment. Section 8
+                must go red.
+     possinflate  possession reads the raw 45 to 120 sum again. Section 9
+                must go red.
+     possstale  drawing extra time leaves the second half's possession
+                alone, so a change that alters nothing moves it. Section 9
+                must go red.
    Under a control the run exits 1 when the control fired on exactly its
    section (the engine it ran is a regression, so the harness is red) and 3
    when the control did not fire or bled into another section.
@@ -146,7 +176,19 @@ const NM = modulesDir();
         level; 0.08 is under twice the largest seen and three and a half SD)
      AI second legs, C - B                  +0.062 to +0.090             floor 0.02
        (the same noise; the section's positive signal is the expected
-        goals line above, this one only says the AI's extra time adds) */
+        goals line above, this one only says the AI's extra time adds)
+   Round 670 review, measured 2026-09-28 on the same five samples after the
+   review's fixes (the Infinity sentinel moves the random stream inside extra
+   time, so the numbers above moved a little too: P 0.103 to 0.125, A - B
+   -0.006 to +0.016, AI A - B -0.046 to +0.004, all inside their tolerances):
+     AI finals read (section 5)             289 to 328                   floor 100
+     AI finals that went to extra time      69 to 91                     floor 20
+     my events from the 99th minute on (8)  3665 to 4510                 floor 1000
+     possession shift at extra time (9)     -0.029 to +0.038             tolerance 0.5
+       (possinflate measured +2.359 here, the review's +2.17; the mean is
+        over about 340 matches whose single shifts spread about two points,
+        so its own SD is near 0.1 and 0.5 is five of them)
+     unchanged matches, same shape at 100   210 to 274, none moved       floor 100 */
 const T = {
   minEt: 40,
   minLevelLeague: 100,
@@ -157,6 +199,11 @@ const T = {
   tolGoals: 0.10,
   tolAi: 0.08,
   gainAi: 0.02,
+  minFinals: 100,
+  minFinalsAet: 20,
+  minPast99: 1000,
+  tolPoss: 0.5,
+  minNoop: 100,
 };
 
 /* ---- controls ---- */
@@ -170,7 +217,28 @@ const AI_EDITS = [
 ];
 const NO_ET_EDIT = ['function playsExtraTime(state: CareerState, entry: CalendarEntry): boolean {\n', 'function playsExtraTime(state: CareerState, entry: CalendarEntry): boolean {\n  if (entry) return false;\n'];
 const CONTROLS = {
-  noet: { must: [1], also: [7], file: 'engine', edits: [NO_ET_EDIT], note: 'playsExtraTime answers false; section 1 must go red' },
+  noet: { must: [1], also: [7, 8, 9], file: 'engine', edits: [NO_ET_EDIT], note: 'playsExtraTime answers false; section 1 must go red' },
+  noaet: {
+    must: [4], also: [], file: 'engine',
+    edits: [["      advanced = (out.winner === 'home') === iAmHome;\n      if (etPlayed) decidedBy = 'aet';\n", "      advanced = (out.winner === 'home') === iAmHome;\n"]],
+    note: "a second leg settled in extra time is reported as 'regular'; section 4 must go red",
+  },
+  noaifinal: { must: [5], also: [], file: 'engine', edits: [AI_EDITS[2]], note: 'only the AI final goes back to the pre 670 way; section 5 must go red' },
+  noname: {
+    must: [8], also: [], file: 'engine',
+    edits: [['  const mineAt = (m: number): CMPlayer[] => xi.filter(p => (exits.get(p.id) ?? Infinity) > m);\n', '  const mineAt = (m: number): CMPlayer[] => xi.filter(p => (exits.get(p.id) ?? 99) > m);\n']],
+    note: '"never leaves" is minute 99 again; section 8 must go red',
+  },
+  possinflate: {
+    must: [9], also: [], file: 'engine',
+    edits: [['  const halves = ((live.et ? live.et.to : 90) - 45) / 45;\n', '  const halves = 1;\n']],
+    note: 'possession reads the raw 45 to 120 sum again; section 9 must go red',
+  },
+  possstale: {
+    must: [9], also: [], file: 'engine',
+    edits: [['lamOpp * ET_MINUTES / 45);\n  live.possH2 = secondPeriodPossession(live);\n', 'lamOpp * ET_MINUTES / 45);\n']],
+    note: "drawing extra time leaves the second half's possession alone; section 9 must go red",
+  },
   nodeflate: { must: [3], also: [], file: 'engine', edits: [[DEFLATOR_LINE, 'export const ET_DEFLATOR = 1;\n']], note: 'ET_DEFLATOR is 1; section 3 must go red' },
   etleague: {
     must: [2], also: [], file: 'engine',
@@ -272,7 +340,7 @@ globalThis.localStorage = { getItem: k => store.get(k) ?? null, setItem: (k, v) 
 const { cmA, cmB, cmC, MatchReportCard, LiveSimScreen, UclBracketCard, render } = createRequire(import.meta.url)(BUNDLE);
 for (const [arm, cm] of [['A', cmA], ['B', cmB], ['C', cmC]]) {
   for (const name of ['startCareer', 'playNextEntry', 'resumeMatch', 'startSecondHalf', 'startExtraTime', 'isExtraTimeDue',
-    'changeLive', 'markLiveMinute', 'uclTieOutcome', 'uclAwayGoalsApply', 'uclLegsFor', 'ET_DEFLATOR', 'ET_MINUTES']) {
+    'changeLive', 'markLiveMinute', 'uclTieOutcome', 'uclAwayGoalsApply', 'uclLegsFor', 'ET_DEFLATOR', 'ET_MINUTES', 'myOnPitchAt']) {
     if (cm[name] === undefined) { console.error(`arm ${arm}: the engine does not export ${name}`); process.exit(2); }
   }
 }
@@ -357,6 +425,26 @@ function readWalkReport(r, era) {
     else fail(2, `${ctx}: a level cup tie was decided by ${r.decidedBy}`);
   }
 }
+/* Round 670 review: the AI's one legged ties. The replays below only ever
+   settle a two legged round (a decider of mine is never the AI's final), so
+   the finals the walk plays are read here, each once, by readAiTie (section 5). */
+const S5 = { ties: 0, twoLeg: 0, aetSettled: 0, pens: 0, finals: 0, finalsAet: 0, finalsPens: 0 };
+const finalsSeen = new Set();
+const finalPres = [];
+const WANT_FINAL_PRES = 12;
+const FINAL_SEEDS = 25;
+function readWalkFinals(s, era, careerNo) {
+  for (const t of s.uclBracket ?? []) {
+    if (t.legs === 2 || t.mine || !t.winner) continue;
+    const key = `${careerNo}|${t.round}|${t.home}|${t.away}`;
+    if (finalsSeen.has(key)) continue;
+    finalsSeen.add(key);
+    S5.finals += 1;
+    if (t.aet) S5.finalsAet += 1;
+    if (t.pens) S5.finalsPens += 1;
+    readAiTie(t, s.eraId, `${t.home} v ${t.away} (${era} ${t.round}, the walk's career ${careerNo})`);
+  }
+}
 let careersWalked = 0;
 let walked = 0;
 for (let pass = 0; pass < 6 && fixtures.length < WANT_FIXTURES; pass++) {
@@ -369,11 +457,14 @@ for (let pass = 0; pass < 6 && fixtures.length < WANT_FIXTURES; pass++) {
     while (guard++ < 200) {
       const entry = s.calendar[s.week];
       const decider = isDecider(cmA, s, entry);
+      /* Round 670 review: a final week my club is not in, kept to replay the AI final on many seeds. */
+      if (!decider && entry && entry.type === 'uclKo' && entry.uclRound === 'F' && finalPres.length < WANT_FINAL_PRES) finalPres.push({ pre: s, era: era ?? 'modern', careerNo: careersWalked });
       if (decider) fixtures.push({ pre: s, club, era: era ?? 'modern', round: entry.uclRound, secondLeg: secondLegOf(cmA, s, entry) });
       const res = withSeed(52000 + careersWalked * 997 + guard, () => cmA.playNextEntry(s, { skipHalftime: true }));
       if (!res || !res.state) break;
       if (res.report) { walked += 1; if (!decider) readWalkReport(res.report, era ?? 'modern'); }
       s = res.state;
+      readWalkFinals(s, era ?? 'modern', careersWalked);
       if (res.kind === 'seasonOver' || s.sacked) break;
     }
   }
@@ -385,6 +476,15 @@ if (fixtures.length < 30) {
 const byEra = {};
 for (const f of fixtures) byEra[f.era] = (byEra[f.era] ?? 0) + 1;
 console.log(`material: ${careersWalked} careers walked, ${walked} matches played, ${fixtures.length} deciders captured (${Object.entries(byEra).map(([e, n]) => `${e} ${n}`).join(', ')}; ${fixtures.filter(f => f.secondLeg).length} second legs)`);
+/* Round 670 review: each final week my club was not in, replayed on its own
+   seeds, so the AI's one legged branch is read on a few hundred finals
+   rather than the dozen the walk happens to play. */
+finalPres.forEach((fp, fi) => {
+  for (let j = 0; j < FINAL_SEEDS; j++) {
+    const res = withSeed(700001 + fi * 1009 + j * 13, () => cmA.playNextEntry(fp.pre, { skipHalftime: true }));
+    if (res && res.state) readWalkFinals(res.state, fp.era, `${fp.careerNo} replay ${j}`);
+  }
+});
 
 /* ---- one replay through the live path ---- */
 const mineOf = (r, club) => (r.home === club ? r.homeGoals : r.awayGoals);
@@ -425,8 +525,9 @@ const seedOf = (fi, j) => 900001 + fi * 1009 + j * 13;
 const S1 = { n: 0, level: 0, et: 0 };
 const S3 = { A: { n: 0, xg: [], goals: [], ai: [], aiAet: 0 }, B: { n: 0, xg: [], goals: [], ai: [], aiAet: 0 }, C: { n: 0, xg: [], goals: [], ai: [], aiAet: 0 } };
 const S4 = { checked: 0, aet: 0, pens: 0 };
-const S5 = { ties: 0, twoLeg: 0, aetSettled: 0, pens: 0 };
 const S7 = { compared: 0, base: 0, changes: 0 };
+const S8 = { matches: 0, events: 0, past99: 0 };
+const S9 = { n: 0, shift: [], noop: 0, noopMoved: 0, noopSkipped: 0 };
 const kept = { etA: [], plainA: null, aetC: null, pensEtC: null, regularC: null, aet2C: null };
 
 function readS1(r) {
@@ -498,28 +599,82 @@ function readS4(r) {
   if (!rep.events.some(e => e.includes('extra time'))) fail(4, `${ctx}: no event line mentions extra time`);
 }
 
+/* One AI tie, one legged or two, read the way the competition reads it. */
+function readAiTie(t, eraId, ctx) {
+  S5.ties += 1;
+  const out = t.legs === 2 ? cmA.uclTieOutcome(t, cmA.uclAwayGoalsApply(eraId)) : null;
+  if (t.legs === 2) {
+    S5.twoLeg += 1;
+    if (t.homeGoals !== out.homeAgg || t.awayGoals !== out.awayAgg) fail(5, `${ctx}: the headline ${t.homeGoals}-${t.awayGoals} is not the legs' ${out.homeAgg}-${out.awayAgg}`);
+  }
+  const levelNow = t.legs === 2 ? out.winner === null : t.homeGoals === t.awayGoals;
+  if (t.pens) {
+    S5.pens += 1;
+    if (!t.aet) fail(5, `${ctx}: went to penalties without extra time`);
+    if (!levelNow) fail(5, `${ctx}: went to penalties while not level after extra time`);
+  } else {
+    if (levelNow) fail(5, `${ctx}: level after everything and no penalties`);
+    const want = t.legs === 2 ? (out.winner === 'home' ? t.home : t.away) : (t.homeGoals > t.awayGoals ? t.home : t.away);
+    if (t.winner !== want) fail(5, `${ctx}: ${t.winner} through where the score says ${want}`);
+    if (t.aet) S5.aetSettled += 1;
+  }
+}
+
 function readS5(r) {
   for (const t of r.state.uclBracket ?? []) {
     if (t.round !== r.f.round || t.mine || !t.winner) continue;
-    S5.ties += 1;
-    const ctx = `${t.home} v ${t.away} (${r.f.era} ${t.round}, seed ${r.j})`;
-    const out = t.legs === 2 ? cmA.uclTieOutcome(t, cmA.uclAwayGoalsApply(r.f.pre.eraId)) : null;
-    if (t.legs === 2) {
-      S5.twoLeg += 1;
-      if (t.homeGoals !== out.homeAgg || t.awayGoals !== out.awayAgg) fail(5, `${ctx}: the headline ${t.homeGoals}-${t.awayGoals} is not the legs' ${out.homeAgg}-${out.awayAgg}`);
-    }
-    const levelNow = t.legs === 2 ? out.winner === null : t.homeGoals === t.awayGoals;
-    if (t.pens) {
-      S5.pens += 1;
-      if (!t.aet) fail(5, `${ctx}: went to penalties without extra time`);
-      if (!levelNow) fail(5, `${ctx}: went to penalties while not level after extra time`);
-    } else {
-      if (levelNow) fail(5, `${ctx}: level after everything and no penalties`);
-      const want = t.legs === 2 ? (out.winner === 'home' ? t.home : t.away) : (t.homeGoals > t.awayGoals ? t.home : t.away);
-      if (t.winner !== want) fail(5, `${ctx}: ${t.winner} through where the score says ${want}`);
-      if (t.aet) S5.aetSettled += 1;
-    }
+    readAiTie(t, r.f.pre.eraId, `${t.home} v ${t.away} (${r.f.era} ${t.round}, seed ${r.j})`);
   }
+}
+
+/* Section 8: every event of mine in an extra time match names a man on my
+   pitch at that minute. The pitch is worked out here from the match's own
+   record (the eleven, the changes, the reds and the injuries), not through
+   the engine's own picker, so this reads what the picker did. A man is still
+   out there at the minute he walks or limps off (the foul behind his red is
+   his, at that minute). */
+function readS8(r) {
+  if (!r.live.et) return;
+  const live = r.live;
+  const s = r.withEt;
+  const ctx = `${r.f.club} (${r.f.era}) ${r.f.round}${r.f.secondLeg ? ' second leg' : ''} seed ${r.j}`;
+  const nameOf = new Map((s.squad ?? []).map(p => [p.id, p.name]));
+  const exits = new Map();
+  for (const c of [...(live.h1Cards ?? []), ...(live.h2Cards ?? [])]) if (c.kind === 'red' && c.id) exits.set(c.id, c.minute);
+  for (const x of [...(live.h1Injuries ?? []), ...(live.h2Injuries ?? [])]) if (x.id) exits.set(x.id, Math.min(exits.get(x.id) ?? Infinity, x.minute));
+  const onAt = m => new Set(cmA.myOnPitchAt(live, m).filter(id => !((exits.get(id) ?? Infinity) < m)).map(id => nameOf.get(id)));
+  const events = [
+    ...(live.h2Play ?? []).filter(e => e.side === 'me').map(e => ({ minute: e.minute, who: e.who, what: e.kind })),
+    ...(live.h2My ?? []).map(g => ({ minute: g.minute, who: g.name, what: 'goal' })),
+    ...(live.h2Cards ?? []).map(c => ({ minute: c.minute, who: c.name, what: `${c.kind} card` })),
+  ].filter(e => e.minute > live.et.from);
+  S8.matches += 1;
+  for (const e of events) {
+    S8.events += 1;
+    if (e.minute >= 99) S8.past99 += 1;
+    if (!e.who) { fail(8, `${ctx}: my ${e.what} at ${e.minute} has no name`); continue; }
+    if (!onAt(e.minute).has(e.who)) fail(8, `${ctx}: my ${e.what} at ${e.minute} names ${e.who}, who is not on my pitch then`);
+  }
+}
+
+/* Section 9: possession across the second period, off rates. */
+function readS9(r) {
+  if (!r.live.et) return;
+  const ctx = `${r.f.club} ${r.f.round} seed ${r.j}`;
+  const p90 = r.beforeEt.live.possH2;
+  const pEt = r.withEt.live.possH2;
+  if (!Number.isFinite(p90) || !Number.isFinite(pEt)) { fail(9, `${ctx}: possession ${p90} at 90 and ${pEt} with extra time`); return; }
+  S9.n += 1;
+  S9.shift.push(Math.abs(pEt - 50) - Math.abs(p90 - 50));
+  /* The same shape at 100, where nothing of mine has changed since 90: the
+     lambdas it redraws with are the ones extra time was drawn with. */
+  const live = r.withEt.live;
+  const since90 = xs => (xs ?? []).some(e => e.minute > 90 && e.minute <= 100);
+  if (since90(live.h2My) || since90(live.h2Opp) || since90((live.h2Cards ?? []).filter(c => c.kind === 'red')) || since90(live.h2Injuries)) { S9.noopSkipped += 1; return; }
+  const after = cmA.changeLive(r.withEt, 100, { kind: 'shape', mentality: live.mentality });
+  if (!after) { fail(9, `${ctx}: the same shape at 100 was refused`); return; }
+  S9.noop += 1;
+  if (after.live.possH2 !== pEt) { S9.noopMoved += 1; fail(9, `${ctx}: the same shape at 100 moved possession from ${pEt} to ${after.live.possH2}`); }
 }
 
 function readS7(r) {
@@ -556,6 +711,8 @@ for (const [arm, cm] of [['A', cmA], ['B', cmB], ['C', cmC]]) {
         readS4(r);
         readS5(r);
         readS7(r);
+        readS8(r);
+        readS9(r);
         if (r.live.et && kept.etA.length < 12) kept.etA.push(r);
         if (!r.live.et && !kept.plainA) kept.plainA = r;
       }
@@ -634,8 +791,11 @@ report(2, 'No league, group, domestic cup or first leg match ever gets extra tim
 if (S5.ties < 100) fail(5, `only ${S5.ties} AI ties, too few to read`);
 if (S5.aetSettled < 1) fail(5, 'no AI tie was settled in extra time');
 if (S5.pens < 1) fail(5, 'no AI tie went to penalties');
+if (S5.finals < T.minFinals) fail(5, `only ${S5.finals} AI finals were read, under the floor of ${T.minFinals}`);
+if (S5.finalsAet < T.minFinalsAet) fail(5, `only ${S5.finalsAet} AI finals went to extra time, under the floor of ${T.minFinalsAet}, so the one legged branch went unread`);
 report(5, 'Every AI tie settled by these replays plays extra time before penalties', [
   `${S5.ties} AI ties read (${S5.twoLeg} over two legs): ${S5.aetSettled} settled in extra time, ${S5.pens} to penalties after it`,
+  `of them ${S5.finals} AI finals, one legged (the walk's own, and ${finalPres.length} final weeks my club was not in, replayed ${FINAL_SEEDS} times each): ${S5.finalsAet} went to extra time, ${S5.finalsPens} of those to penalties`,
 ]);
 
 /* ================= 6 ================= */
@@ -711,6 +871,23 @@ report(5, 'Every AI tie settled by these replays plays extra time before penalti
   ]);
 }
 
+/* ================= 8 ================= */
+if (S8.past99 < T.minPast99) fail(8, `only ${S8.past99} events of mine from the 99th minute on, under the floor of ${T.minPast99}`);
+report(8, 'Extra time is played by men with names, on the pitch at the minute', [
+  `${S8.matches} extra time matches, ${S8.events} events of mine past 90 (${S8.past99} from the 99th minute on), each naming a man on my pitch`,
+]);
+
+/* ================= 9 ================= */
+{
+  const shift = mean(S9.shift);
+  if (S9.n < T.minEt) fail(9, `only ${S9.n} extra time matches read, under ${T.minEt}`);
+  if (!(Math.abs(shift) <= T.tolPoss)) fail(9, `drawing extra time moved possession ${f3(shift)} points further from 50 on average, over the tolerance of ${T.tolPoss}`);
+  if (S9.noop < T.minNoop) fail(9, `only ${S9.noop} unchanged extra time matches for the same shape at 100, under ${T.minNoop}`);
+  report(9, 'Possession in extra time is read off rates, and a change that alters nothing leaves it', [
+    `${S9.n} extra time matches: possession moved ${f3(shift)} points further from 50 on average when extra time was drawn (tolerance ${T.tolPoss}); the same shape at 100 left it exactly where it was in ${S9.noop - S9.noopMoved} of ${S9.noop} (${S9.noopSkipped} skipped, something of mine changed after 90)`,
+  ]);
+}
+
 /* ---------- the verdict ---------- */
 const red = [...failedIn.keys()].sort((a, b) => a - b);
 if (CONTROL) {
@@ -727,6 +904,6 @@ if (CONTROL) {
   process.exit(1);
 }
 console.log(failures === 0
-  ? '\nsimExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too, the screens say so, and the two ways of playing it are one match.'
+  ? '\nsimExtraTime: PASS. A level Champions League decider plays thirty minutes of extra time before penalties, nothing else does, goals per decider hold, the AI plays it too (finals included), the screens say so, the two ways of playing it are one match, named men play it, and its possession is read off rates.'
   : `\nsimExtraTime: ${failures} FAILURES in section(s) ${red.join(', ')}`);
 process.exit(failures === 0 ? 0 : 1);

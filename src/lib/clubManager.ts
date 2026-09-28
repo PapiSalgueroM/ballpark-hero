@@ -85,6 +85,9 @@ import { BOARD_ASKS_VERSION, askStatus, buildBoardAsks, ensureBoardAsks, isBoard
    so there is no cycle at all. */
 import { UCL_GROUP_LEDGER, countWaitingLevelRuns, noteUclGroupResult, sortedUclGroupTable, uclGroupFootnote } from '@/lib/clubManagerUclGroups';
 import type { UclGroupRule } from '@/lib/clubManagerUclGroups';
+/* Round 670 review: how a Champions League tie is read, shared with Soccer
+   Career. The module imports nothing. */
+import { uclTieOutcome } from '@/lib/uclTieRule';
 
 /**
  * Club Manager engine.
@@ -9813,36 +9816,12 @@ export function uclAwayGoalsApply(eraId: string | undefined): boolean {
 }
 
 /**
- * Who goes through, reading the tie the way the competition reads it.
- *
- * Both legs are stored in the TIE's orientation, tie.home first, and leg two is
- * played at tie.away's ground. So the goals that count as away goals are the
- * ones tie.away scored in leg one and the ones tie.home scored in leg two, and
- * writing that down here once is what stops every caller getting it backwards.
- *
- * Returns null for the winner when the tie is still level after everything the
- * era's rules can separate it by, which is the engine's signal for penalties.
+ * Who goes through, reading the tie the way the competition reads it: the one
+ * rule in src/lib/uclTieRule.ts, which Soccer Career settles its ties with too
+ * (Round 670 review), so the two games cannot disagree. Exported from here as
+ * well, because every Club Manager harness reads it off this engine.
  */
-export function uclTieOutcome(
-  tie: Pick<UclTie, 'leg1' | 'leg2'>,
-  awayGoalsRule: boolean,
-): { homeAgg: number; awayAgg: number; winner: 'home' | 'away' | null; byAwayGoals: boolean } {
-  const l1 = tie.leg1 ?? { homeGoals: 0, awayGoals: 0 };
-  const l2 = tie.leg2 ?? { homeGoals: 0, awayGoals: 0 };
-  const homeAgg = l1.homeGoals + l2.homeGoals;
-  const awayAgg = l1.awayGoals + l2.awayGoals;
-  if (homeAgg !== awayAgg) {
-    return { homeAgg, awayAgg, winner: homeAgg > awayAgg ? 'home' : 'away', byAwayGoals: false };
-  }
-  if (awayGoalsRule) {
-    const homeAway = l2.homeGoals;   // scored at tie.away's ground
-    const awayAway = l1.awayGoals;   // scored at tie.home's ground
-    if (homeAway !== awayAway) {
-      return { homeAgg, awayAgg, winner: homeAway > awayAway ? 'home' : 'away', byAwayGoals: true };
-    }
-  }
-  return { homeAgg, awayAgg, winner: null, byAwayGoals: false };
-}
+export { uclTieOutcome };
 
 /**
  * Round 670: extra time before penalties.
@@ -9857,10 +9836,12 @@ export function uclTieOutcome(
  * away goals in the eras that had them). Never a first leg, a league or a
  * group match. And not, for now, a domestic cup: the real rule differs by cup,
  * by round and by season (the Coppa Italia has played its one off rounds up
- * to the quarter finals straight to penalties since 2024-25, onefootball.com
- * 2024-05-28, with football-italia.net agreeing), and seventeen cups across
- * four eras are not two source verified yet, so a cup keeps the pre 670 rule
- * its bracket already states. docs/design/round-670-extra-time-contract.md.
+ * to the quarter finals straight to penalties since 2024-25, and extra time
+ * only in the semi finals and the final: football-italia.net 2024-05-28,
+ * which onefootball.com carries under Football Italia's name, and
+ * calcioefinanza.it the same day), and seventeen cups across four eras are
+ * not two source verified yet, so a cup keeps the pre 670 rule its bracket
+ * already states. docs/design/round-670-extra-time-contract.md has the URLs.
  *
  * THE RULE, two source verified 2026-09-28. Two fifteen minute periods, then
  * penalties if still level. Before 2021-22 the away goals rule ran on through
@@ -9869,7 +9850,10 @@ export function uclTieOutcome(
  * unfairness as a reason for the change; si.com 2018-05-26). From 2021-22 an
  * extra time goal counts like any other (the Round 507 sources). Adding the
  * extra time goals to leg two and reading the tie again through uclTieOutcome
- * with the era's own rule is exactly both, so there is no second copy of it.
+ * with the era's own rule is exactly both, so there is no second copy of it,
+ * and Soccer Career reads its ties through the same function. A second leg
+ * level on aggregate but split on away goals at ninety is settled there and
+ * plays no extra time.
  *
  * ONE STRETCH. Extra time is one thirty minute stretch on the event clock,
  * minutes 91 to 120, with no interval at 105 and no board of its own. The
@@ -9888,11 +9872,13 @@ export const ET_MINUTES = 30;
  * before extra time existed. League, group and first leg matches never see
  * it. P is the engine's own share, measured by scripts/simExtraTime.mjs on
  * 2026-09-28 over five samples of about 3,000 replayed deciders each (the
- * manager's, across the modern save and the three eras): P from 0.104 to
- * 0.123, and the fixed point (B's expected goals over A's, times the
- * constant) at 0.960 to 0.967 for the manager's deciders and 0.960 to 0.978
- * for the AI's second legs, whose goals are noisier. 1 / (1 + 0.112 x 30/90)
- * is 0.964; the constant sits at 0.965, between the two.
+ * manager's, across the modern save and the three eras). Round 670 review,
+ * measured again after its fixes on the harness's own seed and SIM_SEED 1
+ * to 4: P from 0.103 to 0.125, and the fixed point (B's expected goals over
+ * A's, times the constant) at 0.959 to 0.967 for the manager's deciders and
+ * 0.963 to 0.982 for the AI's second legs, whose goals are noisier and fewer
+ * of whose ties are level. 1 / (1 + 0.113 x 30/90) is 0.964; the constant
+ * sits at 0.965, inside both ranges.
  */
 export const ET_DEFLATOR = 0.965;
 
@@ -12644,11 +12630,16 @@ function drawSegment(
   markOppSetPieceGoals(oppGoals);
   if (half === 1) live.h1Opp = [...(live.h1Opp ?? []), ...oppGoals].sort(byMinute);
   else live.h2Opp = [...(live.h2Opp ?? []), ...oppGoals].sort(byMinute);
-  /* Mine at a minute: the stretch's eleven minus anyone who has since walked or limped off. */
+  /* Mine at a minute: the stretch's eleven minus anyone who has since walked or limped off.
+     Round 670 review: a man who never leaves is out there for good. The old
+     "never" was minute 99, which was safe while nothing happened past 90 and
+     emptied my pitch from the 99th minute of extra time on, so every chance,
+     corner and foul of mine after it had no name, and an injury in extra time
+     took its man off at 99 rather than at his own minute. */
   const exits = new Map<string, number>();
   for (const c of me.cards) if (c.kind === 'red' && c.id) exits.set(c.id, c.minute);
-  for (const inj of me.injuries) if (inj.id) exits.set(inj.id, Math.min(exits.get(inj.id) ?? 99, inj.minute));
-  const mineAt = (m: number): CMPlayer[] => xi.filter(p => (exits.get(p.id) ?? 99) > m);
+  for (const inj of me.injuries) if (inj.id) exits.set(inj.id, Math.min(exits.get(inj.id) ?? Infinity, inj.minute));
+  const mineAt = (m: number): CMPlayer[] => xi.filter(p => (exits.get(p.id) ?? Infinity) > m);
   const play = drawSegmentPlay({
     from, to, lamMine: segM, lamOpp: segO,
     myGoals: me.goals, oppGoals,
@@ -12728,7 +12719,27 @@ function drawExtraTime(state: CareerState, entry: CalendarEntry, live: LiveMatch
   const before = live.h2Segs ?? [{ from: 45, to: 90, lamMine: live.lam2Mine ?? lamMine, lamOpp: live.lam2Opp ?? lamOpp }];
   live.h2Segs = [...before, { from, to, lamMine, lamOpp }];
   ({ lamMine: live.lam2Mine, lamOpp: live.lam2Opp } = effectiveLambdas(live.h2Segs));
+  /* Round 670 review: and the second period now runs to 120, so its share of
+     the ball is read over all of it once the stretch is drawn, on the same
+     basis a change in extra time reads it (secondPeriodPossession), so a
+     change that alters nothing leaves it where it is. */
   drawSegment(state, live, fx, 2, from, to, lamMine * ET_MINUTES / 45, lamOpp * ET_MINUTES / 45);
+  live.possH2 = secondPeriodPossession(live);
+}
+
+/**
+ * Round 670 review: the second period's share of the ball, off the per half
+ * rates its stretches carried. lam2Mine and lam2Opp are the stretches summed
+ * by their share of 45 minutes (effectiveLambdas), which over 45 to 120 is
+ * five thirds of a half, and possessionOf reads one half's numbers, so the
+ * sum goes back to a half's worth first. Read off the raw sum, a change in
+ * extra time pushed possession about two points further from 50 even when
+ * it changed nothing. With no extra time this divides by one, so a match of
+ * ninety minutes reads exactly what it always did.
+ */
+function secondPeriodPossession(live: LiveMatch): number {
+  const halves = ((live.et ? live.et.to : 90) - 45) / 45;
+  return possessionOf((live.lam2Mine ?? 0) / halves, (live.lam2Opp ?? 0) / halves, live.possNoise?.[1]);
 }
 
 /**
@@ -12771,11 +12782,12 @@ function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
     live.h1Injuries = injuries;
     const exits = new Map<string, number>();
     for (const c of cards) if (c.kind === 'red' && c.id) exits.set(c.id, c.minute);
-    for (const x of injuries) if (x.id) exits.set(x.id, Math.min(exits.get(x.id) ?? 99, x.minute));
+    /* Round 670 review: "never leaves" is Infinity here too, as in drawSegment. */
+    for (const x of injuries) if (x.id) exits.set(x.id, Math.min(exits.get(x.id) ?? Infinity, x.minute));
     live.h1Play = drawSegmentPlay({
       from: 0, to: 45, lamMine: live.lamMine, lamOpp: live.lamOpp,
       myGoals: live.h1My, oppGoals: live.h1Opp,
-      mineAt: m => started.filter(p => (exits.get(p.id) ?? 99) > m), oppAt: () => null,
+      mineAt: m => started.filter(p => (exits.get(p.id) ?? Infinity) > m), oppAt: () => null,
       myCards: cards, oppCards: [],
       setPieces: state.setPieces ?? null,
       myDuty: dutyOf,
@@ -12835,7 +12847,8 @@ function recutSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
   live.h2Segs = recutSegments(live.h2Segs, { from: 45, to: 90, lamMine: live.lam2Mine ?? lamMine, lamOpp: live.lam2Opp ?? lamOpp }, minute, end, lamMine, lamOpp);
   ({ lamMine: live.lam2Mine, lamOpp: live.lam2Opp } = effectiveLambdas(live.h2Segs));
   drawSegment(state, live, fx, 2, minute, end, lamMine * share, lamOpp * share);
-  live.possH2 = possessionOf(live.lam2Mine, live.lam2Opp, live.possNoise?.[1]);
+  /* Round 670 review: off the per half rates, not the 45 to 120 sum. */
+  live.possH2 = secondPeriodPossession(live);
 }
 
 export interface LiveFeedEvent {
@@ -13247,7 +13260,9 @@ function buildMatchDetail(args: {
      Round 504: and the shots now carry their own minutes, so a bucket holds
      the chances that really fell in those ten minutes rather than a share
      dealt out at random at the whistle. */
-  const base = clamp((lamMine - lamOpp) * 0.35, -0.6, 0.6);
+  /* Round 670 review: the lambdas are the whole match's, so with extra time
+     they carry 120 minutes; the tilt is per ninety, as it always was. */
+  const base = clamp((lamMine - lamOpp) * 0.35 * (90 / end), -0.6, 0.6);
   /* Round 670: three more ten minute buckets when there was extra time,
      rather than thirty minutes folded into the 81st to the 90th. */
   const BUCKETS = args.et ? 12 : 9;
@@ -15381,10 +15396,12 @@ export function startSecondHalf(career: CareerState): CareerState | null {
 }
 
 /**
- * Round 670: the viewer's question at the ninetieth minute, answered by the
- * engine so the page never decides football: is this match going to extra
- * time? True only when the second half is drawn, extra time is not yet, and
- * the tie this match settles is level. Pure, no draw.
+ * Round 670: the question at the ninetieth minute, answered by the engine so
+ * the page never decides football: is this match going to extra time? True
+ * only when the second half is drawn, extra time is not yet, and the tie
+ * this match settles is level. Pure, no draw. Round 670 review: the viewer no
+ * longer asks this of the career it was rendered with; it calls
+ * startExtraTime through the hook, which asks it of the latest save.
  */
 export function isExtraTimeDue(career: CareerState): boolean {
   const live = career.live;

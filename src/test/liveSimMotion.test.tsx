@@ -1,6 +1,7 @@
 import { act, cleanup, fireEvent, render } from '@testing-library/react';
+import { useState } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
-import { startCareer, playNextEntry, resumeMatch, startSecondHalf, liveFeed, changeLive, benchFor } from '@/lib/clubManager';
+import { startCareer, playNextEntry, resumeMatch, startSecondHalf, liveFeed, changeLive, benchFor, isExtraTimeDue, startExtraTime, uclLegsFor } from '@/lib/clubManager';
 import type { CareerState, LiveFeedEvent } from '@/lib/clubManager';
 const motionPath = process.env.LIVE_MOTION_COMPONENT;
 const { actionFrame } = motionPath ? await import(/* @vite-ignore */ motionPath) : await import('@/components/club-manager/LiveSimMotion');
@@ -63,6 +64,44 @@ function findTerminalFixtures() {
   }
   expect([...terminalFixtures.keys()].sort()).toEqual(['45:goal', '45:save', '90:goal', '90:save']);
 }
+/* Round 670 review: one real Champions League decider of a real walk, its
+   second half drawn on many seeds by the engine, kept twice: once level at 90
+   (extra time due) and once not. Nothing about either is typed by hand. */
+let whistleMaterial: { due: CareerState; notDue: CareerState } | null = null;
+function findWhistleMaterial() {
+  if (whistleMaterial) return whistleMaterial;
+  let pre: CareerState | null = null;
+  /* A walk can go out in the groups (the first seed does), so a few are tried. */
+  for (let walk = 0; walk < 10 && !pre; walk++) {
+    vi.mocked(Math.random).mockImplementation(seeded(670001 + walk));
+    let career = startCareer('Real Madrid');
+    for (let week = 0; week < 200; week++) {
+      const entry = career.calendar[career.week];
+      if (entry && entry.type === 'uclKo' && entry.uclRound && career.uclKoRound === entry.uclRound
+        && !(entry.uclLeg === 1 && uclLegsFor(career.eraId, entry.uclRound) === 2)) { pre = career; break; }
+      const next = playNextEntry(career, { skipHalftime: true });
+      if (!next?.state || next.kind === 'seasonOver' || next.state.sacked) break;
+      career = next.state;
+    }
+  }
+  expect(pre, 'the walk reached no Champions League decider').not.toBeNull();
+  let due: CareerState | null = null;
+  let notDue: CareerState | null = null;
+  for (let k = 0; k < 400 && (!due || !notDue); k++) {
+    vi.mocked(Math.random).mockImplementation(seeded(6700000 + k * 7919));
+    const r1 = playNextEntry(pre!);
+    if (r1.kind !== 'halftime' || !r1.state.live) continue;
+    const second = startSecondHalf(r1.state)!;
+    if (isExtraTimeDue(second)) due ??= second; else notDue ??= second;
+  }
+  expect(due, 'no seed left the decider level at 90').not.toBeNull();
+  expect(notDue, 'every seed left the decider level at 90').not.toBeNull();
+  due!.live!.minute = 89.4;
+  notDue!.live!.minute = 89.4;
+  whistleMaterial = { due: due!, notDue: notDue! };
+  return whistleMaterial;
+}
+const stageOf = (container: HTMLElement) => container.querySelector('[data-cm-live-stage]')!.getAttribute('data-cm-live-stage');
 const scoreAt = (career: CareerState, minute: number) => ['me', 'opp'].map(side => liveFeed(career.live!)
   .filter(e => e.kind === 'goal' && e.side === side && e.minute <= minute).length).join(' - ');
 const readScore = (container: HTMLElement) => container.querySelector('[data-cm-live-score]')!.textContent!.trim();
@@ -308,4 +347,47 @@ describe('Live simcast motion', () => {
     expect(mounted.container.querySelector('[data-cm-motion]')!.getAttribute('data-cm-motion')).toBe('pass');
     expectWhistle(mounted, 45, false);
   });
+
+  /* Round 670 review: the viewer decided extra time off the career it was
+     rendered with, and the engine drew it off the latest save. A change
+     landing at 89 or 90 can still be on its way when the clock gets there,
+     so the two could disagree: thirty empty minutes badged ET before a report
+     with no extra time, or no extra time watched when the save had it. The
+     viewer now asks once at 90 and reads the answer off the save. */
+  it('the ninetieth minute asks the latest save: refused means full time, never thirty empty minutes', async () => {
+    const { due } = findWhistleMaterial();
+    const career = structuredClone(due);
+    expect(isExtraTimeDue(career), 'the career this render is given is level at 90').toBe(true);
+    /* onStartExtraTime is a bare spy: the latest save said no, as it does when a change moved the score on its way. */
+    const mounted = mount(career);
+    await step(1200);
+    expect(mounted.callbacks.onStartExtraTime).toHaveBeenCalledTimes(1);
+    expect(mounted.callbacks.onSecondHalf).toHaveBeenCalledTimes(1);
+    expect(stageOf(mounted.container)).not.toBe('extra');
+    expect(mounted.container.textContent).not.toMatch(/ET \d+'/);
+  }, 30000);
+
+  it('the ninetieth minute asks the latest save: extra time drawn there is played, whatever this render was given', async () => {
+    const { due, notDue } = findWhistleMaterial();
+    const drawn = startExtraTime(structuredClone(due))!;
+    expect(drawn.live!.et).toEqual({ from: 90, to: 120 });
+    const start = structuredClone(notDue);
+    expect(isExtraTimeDue(start), 'the career this render is given is not level at 90').toBe(false);
+    const callbacks = { onSub: vi.fn(), onShape: vi.fn(), onTalk: vi.fn(), onSecondHalf: vi.fn(), onExit: vi.fn(), onStartSecondHalf: vi.fn(), onStartExtraTime: vi.fn(), onChange: vi.fn(), onMark: vi.fn() };
+    /* The page: the latest save is the one with extra time drawn on it. */
+    function Page() {
+      const [career, setCareer] = useState<CareerState>(start);
+      return <LiveSimScreen career={career} live={career.live ?? null} report={null} clubColor="#86bced" {...callbacks}
+        onStartExtraTime={() => { callbacks.onStartExtraTime(); setCareer(() => drawn); }} />;
+    }
+    const mounted = render(<Page />);
+    await step(1200);
+    expect(callbacks.onStartExtraTime).toHaveBeenCalledTimes(1);
+    expect(callbacks.onSecondHalf).not.toHaveBeenCalled();
+    expect(stageOf(mounted.container)).toBe('extra');
+    expect(mounted.container.textContent).toMatch(/ET \d+'/);
+    fireEvent.click(mounted.getByRole('button', { name: /Skip/ }));
+    await step(200);
+    expect(callbacks.onSecondHalf).toHaveBeenCalledTimes(1);
+  }, 30000);
 });

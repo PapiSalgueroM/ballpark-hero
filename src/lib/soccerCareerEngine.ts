@@ -5,6 +5,8 @@ import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
    importing nothing, so the knockout ladder and the leg count are read rather
    than kept as a second hardcoded copy here. */
 import { periodFor, UCL_AWAY_GOALS } from '@/lib/uclFormatHistory';
+/* Round 670 review: the tie rule Club Manager reads its ties by. Imports nothing. */
+import { uclTieOutcome } from '@/lib/uclTieRule';
 import {
   getEraStars, getEraTopClubs, getEraLeagueClubs, getEraUclOpponents,
   getEraRivalName, adjustClubsForYear, getExtraEvents, rollSeasonInjury,
@@ -285,6 +287,11 @@ export interface UCLKnockoutMatch {
   aggAgainst?: number;
   /** How a level tie was settled. */
   decidedBy?: 'aggregate' | 'awayGoals' | 'extraTime' | 'penalties';
+  /** Round 670 review: extra time was played on this deciding leg, and its
+   *  goals are in goalsFor, goalsAgainst and the aggregate. Set with
+   *  'extraTime' and 'penalties', and with 'awayGoals' when an away goal in
+   *  extra time settled it. Absent on every result from before. */
+  afterExtraTime?: boolean;
   pensFor?: number;
   pensAgainst?: number;
 }
@@ -5967,8 +5974,6 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
 
     let aggFor = 0;
     let aggAgainst = 0;
-    let myAwayGoals = 0;
-    let theirAwayGoals = 0;
     const legRows: UCLKnockoutMatch[] = [];
 
     for (let leg = 1; leg <= legs; leg++) {
@@ -5982,8 +5987,6 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
       const ga = uclLegGoals(clamp(UCL_BASE_LAMBDA - edge - venue, 0.25, 3.4));
       aggFor += gf;
       aggAgainst += ga;
-      if (legs === 2 && !home) myAwayGoals += gf;
-      if (legs === 2 && home) theirAwayGoals += ga;
       const pg = legPlayerGoals(legs);
       totalPlayerGoals += pg;
       legRows.push({ opponent, round, leg, home, goalsFor: gf, goalsAgainst: ga, playerGoals: pg, won: false });
@@ -5993,27 +5996,42 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
     decider.aggFor = aggFor;
     decider.aggAgainst = aggAgainst;
 
+    /* Round 670 review: the tie is read by the one rule Club Manager reads its
+       ties by (src/lib/uclTieRule.ts), so the two games cannot disagree. Leg
+       one is at my ground and leg two at theirs, so I am the tie's home side
+       and my leg two goals are my away goals; a one legged final is leg two
+       on its own, with no away goals rule. */
+    const awayRule = legs === 2 && awayGoalsApply;
+    const legOf = (row: UCLKnockoutMatch) => ({ homeGoals: row.goalsFor, awayGoals: row.goalsAgainst });
+    const tieAt90 = legs === 2 ? { leg1: legOf(legRows[0]), leg2: legOf(decider) } : { leg2: legOf(decider) };
+    const at90 = uclTieOutcome(tieAt90, awayRule);
+
     let through: boolean;
-    if (aggFor !== aggAgainst) {
-      through = aggFor > aggAgainst;
-      decider.decidedBy = 'aggregate';
-    } else if (legs === 2 && awayGoalsApply && myAwayGoals !== theirAwayGoals) {
-      through = myAwayGoals > theirAwayGoals;
-      decider.decidedBy = 'awayGoals';
+    if (at90.winner !== null) {
+      through = at90.winner === 'home';
+      decider.decidedBy = at90.byAwayGoals ? 'awayGoals' : 'aggregate';
     } else {
-      /* Extra time, then penalties. Away goals in extra time were part of the
-         rule while it applied, and are abolished with it. */
+      /* Extra time at the second leg's ground, then penalties. Its goals go
+         into leg two and the tie is read again by the season's rule, so in the
+         away goals seasons an away goal in extra time counts (a 1-1 extra time
+         puts the away side through, as it did for Paris Saint-Germain at
+         Chelsea in March 2015) and from 2021-22 it does not. Before this
+         review extra time was read on its own goals, so that 1-1 went to
+         penalties, while the comment here said away goals counted in it. */
       const etFor = uclLegGoals(clamp(0.34 + edge * 0.25, 0.05, 1.1));
       const etAgainst = uclLegGoals(clamp(0.34 - edge * 0.25, 0.05, 1.1));
       decider.goalsFor += etFor;
       decider.goalsAgainst += etAgainst;
+      decider.afterExtraTime = true;
       aggFor += etFor;
       aggAgainst += etAgainst;
       decider.aggFor = aggFor;
       decider.aggAgainst = aggAgainst;
-      if (etFor !== etAgainst) {
-        through = etFor > etAgainst;
-        decider.decidedBy = 'extraTime';
+      const tieAfterExtraTime = { ...tieAt90, leg2: legOf(decider) };
+      const afterEt = uclTieOutcome(tieAfterExtraTime, awayRule);
+      if (afterEt.winner !== null) {
+        through = afterEt.winner === 'home';
+        decider.decidedBy = afterEt.byAwayGoals ? 'awayGoals' : 'extraTime';
       } else {
         /* A shootout is close to a coin flip and only slightly weighted. */
         const pensFor = rand(2, 5);

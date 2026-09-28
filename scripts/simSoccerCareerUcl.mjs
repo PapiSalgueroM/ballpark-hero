@@ -44,6 +44,18 @@
  *      card tells L1 from L2 by exactly that, and prints the aggregate line
  *      from it, so without this the labels and the line go quietly blank
  *      while everything else stays green.
+ *   7. Round 670 review: extra time is read by the season's own rule. Every
+ *      tie of three seasons (2015-16 and 1995-96, which had away goals, and
+ *      2026-27, which does not) is settled again here from its own legs, in
+ *      this file's own arithmetic: aggregate first, then away goals in the
+ *      seasons that had them (my leg two goals, extra time included, against
+ *      their leg one goals), then penalties. The engine must agree on who
+ *      went through and how. The case that matters is a level extra time
+ *      with goals in it, a 1-1: in an away goals season the away side (me,
+ *      leg two is at their ground) is through on away goals, and before this
+ *      review Soccer Career sent it to penalties while its own comment said
+ *      away goals counted in extra time. Floored on that case in both away
+ *      goals seasons, and none of it in 2026-27.
  *
  * ON THE TOLERANCES, and on a mistake worth keeping written down. Section 3
  * first gated on the WORST single cell across the grid, and it went red at 11
@@ -62,6 +74,10 @@
  * because the aggregate and the winner stop agreeing. SC_UCL_CONTROL=noagg
  * takes the aggregate off the deciding leg and section 6 must go red, because
  * the result card cannot then tell a second leg from a first.
+ * SC_UCL_CONTROL=etaway reads the tie after extra time with no away goals
+ * rule in any season, the pre-review defect; it refuses to run unless its
+ * anchor is in the bundle exactly once, and it must turn section 7 red and
+ * nothing before it.
  *
  * Run: node scripts/simSoccerCareerUcl.mjs      (no database)
  */
@@ -77,7 +93,7 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 const CONTROL = process.env.SC_UCL_CONTROL || '';
-const KNOWN_CONTROLS = ['coinflip', 'noagg'];
+const KNOWN_CONTROLS = ['coinflip', 'noagg', 'etaway'];
 if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
   console.error(`SC_UCL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
@@ -121,6 +137,21 @@ if (CONTROL === 'noagg') {
   if (mutated === text) { console.error('CONTROL noagg changed nothing'); process.exit(1); }
   fs.writeFileSync(BUNDLE, mutated);
   console.log('   NEGATIVE CONTROL ON: the deciding leg carries no aggregate, section 6 must go red');
+}
+
+if (CONTROL === 'etaway') {
+  /* Round 670 review: read the tie after extra time with no away goals rule,
+     which is what the engine did before the review (an extra time 1-1 went
+     to penalties in every season). Section 7 must go red, and only it. */
+  const text = fs.readFileSync(BUNDLE, 'utf8').replaceAll('\r\n', '\n');
+  const anchor = 'uclTieOutcome(tieAfterExtraTime, awayRule)';
+  const n = text.split(anchor).length - 1;
+  if (n !== 1) {
+    console.error(`CONTROL etaway cannot run: its anchor is in the bundle ${n} times, not once (${anchor})`);
+    process.exit(1);
+  }
+  fs.writeFileSync(BUNDLE, text.replace(anchor, 'uclTieOutcome(tieAfterExtraTime, false)'));
+  console.log('   NEGATIVE CONTROL ON: extra time read with no away goals rule, section 7 must go red and nothing before it');
 }
 
 const cm = (await import(pathToFileURL(BUNDLE).href)).engine;
@@ -371,6 +402,94 @@ console.log('5) Away goals only in the seasons that had them');
 }
 
 /* ------------------------------------------------------------------ */
+/* Round 670 review: extra time is read by the season's own rule. The tie is
+   settled again here from its own legs, in this file's own arithmetic rather
+   than through the engine's rule function, so this reads what the engine did.
+   Leg one is at my ground and leg two at theirs, so my away goals are my leg
+   two goals (extra time included) and theirs are their leg one goals. */
+console.log('7) Extra time is read by the season\'s own rule: away goals count in it only in the seasons that had them');
+const failuresBeforeS7 = failures;
+{
+  const before = failures;
+  const SEASONS = [
+    { year: 2015, away: true, label: '2015-16' },
+    { year: 1995, away: true, label: '1995-96' },
+    { year: 2026, away: false, label: '2026-27' },
+  ];
+  /* Measured 2026-09-28 at 20,000 campaigns a season, on the house seed and
+     SIM_SEED 1 to 3: a level extra time with goals in it (a 1-1) settled on
+     away goals in 113 to 128 ties of 2015-16 and 103 to 118 of 1995-96. The
+     floor sits at under half the lowest. Under the etaway control every one
+     of those ties goes to penalties instead (108 in 2015-16 and 119 in
+     1995-96 on its run), and each is a failure here. */
+  const CAMPAIGNS = 20000;
+  const MIN_ET_AWAY = 50;
+  const lines = [];
+  let wrong = 0;
+  for (const s of SEASONS) {
+    const c = { ties: 0, et: 0, etAway: 0, pens: 0 };
+    for (let i = 0; i < CAMPAIGNS; i++) {
+      const r = simulateUCL(stateFor(82, 1, 'Ajax', s.year), {});
+      if (!r.qualified) continue;
+      const byRound = new Map();
+      for (const m of r.matches) {
+        if (!byRound.has(m.round)) byRound.set(m.round, []);
+        byRound.get(m.round).push(m);
+      }
+      for (const [round, legs] of byRound) {
+        const decider = legs.find(m => m.decidedBy !== undefined);
+        if (!decider) continue;
+        c.ties += 1;
+        const first = legs.find(m => m.leg === 1 && m !== decider);
+        const twoLegs = !!first && decider.leg === 2;
+        const aggFor = decider.goalsFor + (twoLegs ? first.goalsFor : 0);
+        const aggAgainst = decider.goalsAgainst + (twoLegs ? first.goalsAgainst : 0);
+        const myAway = twoLegs ? decider.goalsFor : 0;
+        const theirAway = twoLegs ? first.goalsAgainst : 0;
+        const et = !!decider.afterExtraTime;
+        let want;
+        let through;
+        if (aggFor !== aggAgainst) {
+          want = et ? 'extraTime' : 'aggregate';
+          through = aggFor > aggAgainst;
+        } else if (twoLegs && s.away && myAway !== theirAway) {
+          want = 'awayGoals';
+          through = myAway > theirAway;
+          if (et) c.etAway += 1;
+        } else {
+          want = 'penalties';
+          through = decider.pensFor > decider.pensAgainst;
+        }
+        if (et) c.et += 1;
+        if (want === 'penalties') c.pens += 1;
+        const bad = decider.decidedBy !== want || decider.won !== through
+          || ((want === 'extraTime' || want === 'penalties') && !et);
+        if (bad) {
+          wrong += 1;
+          if (wrong <= 8) {
+            fail(`${s.label} ${round}: legs ${legs.map(m => `${m.goalsFor}-${m.goalsAgainst}`).join(', ')}${et ? ' (extra time in the last)' : ''} was settled ${decider.decidedBy}, won ${decider.won}; the rule says ${want}, won ${through}`);
+          } else {
+            failures += 1;
+          }
+        }
+      }
+    }
+    if (s.away && c.etAway < MIN_ET_AWAY) fail(`${s.label}: only ${c.etAway} ties settled on an away goal in extra time, under the floor of ${MIN_ET_AWAY}, so the rule went unmeasured`);
+    if (!s.away && c.etAway > 0) fail(`${s.label}: ${c.etAway} ties settled on away goals after extra time, in a season with no away goals rule`);
+    lines.push(`${s.label}: ${c.ties} ties, ${c.et} to extra time, ${c.etAway} settled there on an away goal, ${c.pens} to penalties`);
+  }
+  if (failures === before) for (const l of lines) console.log(`   ${l}`);
+  else console.error(`   ${lines.join('; ')}`);
+}
+
+/* ------------------------------------------------------------------ */
+if (CONTROL === 'etaway') {
+  const red7 = failures > failuresBeforeS7;
+  if (red7 && failuresBeforeS7 === 0) { console.log('\n   CONTROL FIRED: section 7 went red and nothing before it'); process.exit(0); }
+  console.error(`\n   CONTROL DID NOT FIRE CLEANLY: section 7 ${red7 ? 'red' : 'green'}, ${failuresBeforeS7} failure(s) before it`);
+  process.exit(1);
+}
+
 if (CONTROL === 'coinflip') {
   if (failures > 0) { console.log('\n   CONTROL FIRED: the flipped result was caught'); process.exit(0); }
   console.error('\n   CONTROL DID NOT FIRE: the harness cannot see a result decided before the score');
