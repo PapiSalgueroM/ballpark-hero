@@ -1,9 +1,13 @@
 # Work board
 
-**Round 669 CLAIMED, branch `r669-worldxi-dm`.** World XI knows its defensive midfielders again:
-the "Defensive Midfield" bucket of `player_market_values` is empty for 2023 to 2025, so Ugarte,
-Amrabat, Endo, Tyler Adams and PSG's Vitinha are not in the pool. Two source rows written as an
-UNAPPLIED fail closed migration, the 46 existing 2026 DM rows checked, and a pool fence.
+**Round 669 CLAIMED AND BUILT, branch `r669-worldxi-dm`, pushed, not on main.** World XI knows its
+defensive midfielders again: the "Defensive Midfield" bucket of `player_market_values` is empty for
+2023 to 2025, so Ugarte, Amrabat, Endo, Tyler Adams and PSG's Vitinha are not in the pool. 399 rows
+two sourced (Transfermarkt and FotMob) in `scripts/data/defensiveMidfield2026.json`, written as the
+**UNAPPLIED** fail closed migration `supabase/migrations/20260928_round_669_defensive_midfield_2026.sql`
+(plus four club corrections among the existing 46). **Apply it before merging**:
+`simWorldXiDefensiveMids` reads the live pool and is red until it lands (`WXIDM_PROJECT=1` measures
+it before, green; `WXIDM_CONTROL=all` runs its nine controls).
 
 **2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof
