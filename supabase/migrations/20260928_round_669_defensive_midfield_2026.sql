@@ -3,11 +3,62 @@
 --
 -- UNAPPLIED. Written for review; the lead applies it. Every statement below is
 -- guarded: a precondition that does not hold raises and nothing is written.
--- Before it was committed it was run once on the live database as
+-- Before it was committed it was run on the live database as
 -- BEGIN; <this file without its own begin and commit>; ROLLBACK; and the record
 -- (scripts/data/defensiveMidfield2026.json, dryRun) carries that result and
--- the sha256 of this file as it was run. simWorldXiDefensiveMids fails if the
--- file has changed since.
+-- the sha256 of the statements it ran. simWorldXiDefensiveMids fails if any
+-- statement has changed since. Comments do not run, so this header may change.
+--
+-- APPLY PROCEDURE. The lead, in this order. docs/PROJECT-STATE.md carries the
+-- same steps and the measurements behind them.
+--   1. Apply this file in the first minutes after 00:00 America/New_York
+--      (04:00 UTC until 2026-11-01, 05:00 UTC from then), never at 00:00 UTC,
+--      which is 20:00 Eastern. The rows change Footle's daily answer on 344 of
+--      the 366 days from 2026-09-28, and a Footle day turns over at Eastern
+--      midnight. Applied mid-day, whoever loads Footle afterwards gets a new
+--      answer: a saved board is thrown away (and a finished game can be played
+--      and scored a second time), or kept and shown against an answer it was
+--      never played for. Run the whole file, its own begin and commit included,
+--      through the Supabase MCP's execute_sql, the tool the dry run used.
+--   2. Read the counts with count(*), not the table list: 412 rows at
+--      "Defensive Midfield" in 2026 (46 + 366) and 5862 rows in 2026 (5496 + 366).
+--   3. Re-bake the Footle fallback pool from the new rows, on this round's branch:
+--        node scripts/bakePlayers.mjs
+--      It rewrites src/data/players.ts and nothing else. Measured on a stand in
+--      for the table (the live 2026 rows plus this file's rows): 538 rows become
+--      553. 16 written men are in the pool's seed and join; Genoa's Vitinha
+--      leaves, because the seed name "Vitinha" now matches two 2026 rows and the
+--      bake never guesses which man a seed name meant; 11 players change tier;
+--      the header takes the bake day's date. Skip this and simPlayersPool is red
+--      on every branch, main included, since the database is shared.
+--   4. Run each of these and read its closing line and its exit code:
+--        node_modules/.bin/tsc --noEmit -p tsconfig.app.json
+--        simPlayersPool, then PLAYERS_CONTROL=handedit and PLAYERS_CONTROL=agezero
+--        simWorldXiDefensiveMids with no WXIDM_PROJECT, then WXIDM_CONTROL=all
+--        the readers of src/data/players.ts: simFootleDaily, simFootleAtomicPool,
+--          simFootleLeagues, simFootleKitNumbers, simSportsBingo, simGauntletDraft,
+--          simGauntletEngine, simDraftShowdown, simManagerSpec, simManagers,
+--          simSearchDiscard, simCreateClub
+--        the other harnesses that name player_market_values (27 in all on
+--          2026-09-28, three of them above): simAdminAccess, simAlphabetSprint,
+--          simAnswerFromRecords, simDatabaseReadEfficiency, simLineupPositions,
+--          simMarketYearScope, simMissingXiReach, simNationalPools,
+--          simNationalities, simNoZeroFacts, simPlayerBingoPool,
+--          simPlayerSearchAccents, simRarityAgreement, simRarityPoolRecovery,
+--          simRarityPools, simRebuildEconomy, simRosterAdjudication,
+--          simSchemaNames, simSignThePlayerAuction, simSoccerConquest,
+--          simTransferOverlay, simValidatePlayerRecords, simValidatorCache,
+--          simValueFreshness. simRarityPools, simRarityAgreement and
+--          simSchemaNames read views the stand in could not model, so this is
+--          their first run on the new rows; docs/PROJECT-STATE.md has what the
+--          others showed on it.
+--   5. Commit exactly one generated file, src/data/players.ts, on this round's
+--      branch, and merge the branch the same night: from step 1 until that
+--      merge, simPlayersPool is red on main and on every other branch.
+--   6. Publish the release that carries that file at an Eastern midnight as
+--      well. Footle files a saved board under its answer's place in that file,
+--      and the re-bake moves the place on 140 of 366 days, so a mid-day publish
+--      throws those boards away for anyone who reloads.
 --
 -- The report (World XI "Wrong answer", 2026-09-21): a CDM or CM slot said
 -- "Nobody from X matches that" for Manuel Ugarte, Sofyan Amrabat, Wataru Endo,
