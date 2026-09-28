@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { baseballCareerPuzzles } from '@/data/baseballCareerPlayers';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { CAREER_CLUE_SCORES } from '@/lib/careerClueScores';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 
 export type BaseballCareerStatus = 'playing' | 'guessed' | 'revealed';
@@ -9,7 +10,7 @@ export type BaseballCareerStatus = 'playing' | 'guessed' | 'revealed';
 export type BaseballCareerMode = 'daily' | 'unlimited';
 
 // Round 52: the last clue pays 100 like the board says (it silently paid 0)
-const CLUE_SCORES = [1000, 850, 700, 550, 400, 250, 100];
+const CLUE_SCORES = CAREER_CLUE_SCORES;
 
 // Action events stored in the daily action log
 type CareerAction = { t: 'skip' } | { t: 'won' } | { t: 'give' };

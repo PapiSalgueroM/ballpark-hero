@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { nflConnectionsPuzzles } from '@/data/nflConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { CONNECTIONS_LIVES, CONNECTIONS_POINTS_PER_LIFE } from '@/lib/connectionsScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchNflConnectionsPuzzles } from '@/lib/fetchNflConnectionsPuzzles';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
@@ -93,7 +94,7 @@ export function useNflConnections() {
   const dailySolvedGroups: SolvedGroup[] = dailyActions
     .filter((a): a is Extract<NflConnAction, { t: 'ok' }> => a.t === 'ok')
     .map(a => ({ theme: a.theme, players: a.players, difficulty: a.diff }));
-  const dailyLives = 4 - dailyActions.filter(a => a.t === 'x').length;
+  const dailyLives = CONNECTIONS_LIVES - dailyActions.filter(a => a.t === 'x').length;
 
   // Auto-reveal remaining groups when lives hit 0 (mirrors original behavior)
   const dailySolvedGroupsFinal = useMemo(() => {
@@ -243,7 +244,7 @@ export function useNflConnections() {
 
   // ---- COMPLETION ----------------------------------------------------------
   const dailyWon = rawDailyStatus === 'won';
-  const completionScore = dailyWon ? (dailyLives * 250) : 0;
+  const completionScore = dailyWon ? (dailyLives * CONNECTIONS_POINTS_PER_LIFE) : 0;
   useGameCompletion('nfl-connections', rawDailyStatus !== 'playing', completionScore);
 
   return {

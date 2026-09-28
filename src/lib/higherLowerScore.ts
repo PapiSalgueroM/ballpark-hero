@@ -20,3 +20,19 @@ export function higherLowerScore(results: ReadonlyArray<{ correct: boolean }>): 
   }, 0);
   return correctCount * 10 + streakBonus * 5;
 }
+
+/** Round 646: the rounds in every sport's daily. The nine hooks read it
+    rather than each keeping its own 10, so the ceiling below moves with it. */
+export const HIGHER_LOWER_DAILY_ROUNDS = 10;
+
+/**
+ * Round 646: the most a Higher or Lower daily can record, in all nine sports.
+ * Every round right: 10 rounds at 10 is 100, and the streak bonus pays 5 for
+ * each step a run has reached before the round, 0 + 1 + ... + 9 = 45 steps,
+ * 225. So 325. Scored through the function above rather than written down,
+ * so a change to the rule or the round count moves it. game_score_caps holds
+ * this number for every *-higher-lower key (scripts/simCapsAreCeilings.mjs).
+ */
+export const HIGHER_LOWER_DAILY_CEILING = higherLowerScore(
+  Array.from({ length: HIGHER_LOWER_DAILY_ROUNDS }, () => ({ correct: true })),
+);

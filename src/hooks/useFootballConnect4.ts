@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { CONNECT4_WIN_POINTS } from '@/lib/connect4Score';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { normalizeName } from '@/lib/playerSearch';
 import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from '@/integrations/supabase/client';
@@ -343,7 +344,7 @@ export function useFootballConnect4() {
     return `⚽ Soccer Connect 4\n${result}\n\n${grid}\n\nPlay at douknowball.com/football-connect-4`;
   }, [board, winner, isDraw]);
 
-  useGameCompletion('football-connect-4', rawDailyStatus !== 'playing', winner ? 500 : 0);
+  useGameCompletion('football-connect-4', rawDailyStatus !== 'playing', winner ? CONNECT4_WIN_POINTS : 0);
 
   return {
     mode, switchMode,

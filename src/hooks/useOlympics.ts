@@ -4,12 +4,13 @@ import { OlympicAthlete } from '@/types/olympics';
 import { supabase } from '@/integrations/supabase/client';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { CAREER_CLUE_SCORES } from '@/lib/careerClueScores';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { getTodayET } from '@/lib/dateUtils';
 import { toast } from 'sonner';
 
 const TOTAL_CLUES = 7;
-const CLUE_SCORES = [1000, 850, 700, 550, 400, 250, 100];
+const CLUE_SCORES = CAREER_CLUE_SCORES;
 
 export type OlympicsMode = 'daily' | 'unlimited';
 export type OlympicsStatus = 'playing' | 'guessed' | 'revealed';

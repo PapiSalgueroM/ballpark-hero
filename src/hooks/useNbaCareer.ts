@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { nbaCareerPuzzles } from '@/data/nbaCareerPlayers';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { CAREER_CLUE_SCORES } from '@/lib/careerClueScores';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 
 /**
@@ -12,7 +13,7 @@ export type NbaCareerStatus = 'playing' | 'guessed' | 'revealed';
 
 export type NbaCareerMode = 'daily' | 'unlimited';
 
-const CLUE_SCORES = [1000, 850, 700, 550, 400, 250, 100];
+const CLUE_SCORES = CAREER_CLUE_SCORES;
 
 // Action events stored in the daily action log
 type CareerAction = { t: 'skip' } | { t: 'won' } | { t: 'give' };
