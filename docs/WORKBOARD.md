@@ -105,15 +105,17 @@ time total is the owner's 2026-09-19 recompute rule, one row per game per day at
 capped (`src/lib/pointsRule.ts`), with the caps from `public.game_score_caps`, the table (never the
 percentile view). The page sums the player's records by it (`src/hooks/useProfileTotal.ts`), the
 browser's tally credits every play by it (`src/lib/streaks.ts`), and an inflated pre 648 tally is
-retired once on read. The first build summed every record clamped, which would have put back the
+checked on read (fixed again 2026-09-28: only a tally above what the rule could have paid is cut,
+badges already earned stay, the day is the Eastern day, an old tab cannot drop the new fields). The
+first build summed every record clamped, which would have put back the
 per match Club Manager rows and the reload repeats the recompute took out, and planted a Pack
 Battle cap of 1,000 that does not exist (live and after 646 it is 54,000,000). Fence
-`scripts/simProfileTotal.mjs`: eight cases (the Profile page rendered among them) and fourteen
-controls, three of them on the SQL. **The stored total needs
-`supabase/migrations/20260928_round_648_profile_clamp.sql`**: it refuses to run before 646 and
-before Round 644 part 2's last rerun, replaces the save so it adds the day's capped improvement,
-and recomputes every stored total by the rule with a backup. Rerun its part 2 whenever a cap
-changes. Until it lands the all time rank counts the old stored totals. Full account in
+`scripts/simProfileTotal.mjs`: ten cases (the Profile page rendered among them) and 28 controls,
+seven of them on the SQL. **The stored total needs two migrations, each its own transaction:**
+`supabase/migrations/20260928_round_648_profile_clamp.sql` refuses to run before 646 and before
+Round 644 part 2's last rerun and replaces the save so it adds the Eastern day's capped
+improvement; once it has committed, `20260928_round_648_profile_recompute.sql` recomputes every
+stored total by the rule with a backup. Rerun the recompute whenever a cap changes. Until it lands the all time rank counts the old stored totals. Full account in
 `docs/PROJECT-STATE.md`.
 
 **Round 663 is the obvious next one and the audit is already done.** The same fault is in the NBA

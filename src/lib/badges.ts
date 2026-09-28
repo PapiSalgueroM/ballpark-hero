@@ -136,6 +136,11 @@ export async function getBadgeState(
   });
   const maxDistinctGamesInADay = Math.max(0, ...[...perDayCounts.values()].map(s => s.size));
 
+  /* Round 648: a points badge reads the larger of the tally and the highest
+     tally a Round 648 cut ever lowered (src/lib/streaks.ts), so the cut never
+     takes back a badge already earned. */
+  const badgePoints = Math.max(streaks.totalPoints || 0, streaks.pointsBadgeFloor || 0);
+
   const earnedById: Record<string, boolean> = {
     'streak-3': streaks.global.longest >= 3,
     'streak-7': streaks.global.longest >= 7,
@@ -152,8 +157,8 @@ export async function getBadgeState(
     'games-25': gamesPlayed >= 25,
     'games-250': gamesPlayed >= 250,
     'visited-100': streaks.loginDates.length >= 100,
-    'points-1000': (streaks.totalPoints || 0) >= 1000,
-    'points-10000': (streaks.totalPoints || 0) >= 10000,
+    'points-1000': badgePoints >= 1000,
+    'points-10000': badgePoints >= 10000,
   };
 
   return BADGE_DEFS.map(def => ({ ...def, earned: !!earnedById[def.id] }));

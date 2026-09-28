@@ -1,6 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { settlePendingPoints } from '@/lib/streaks';
-import type { ScoreCaps } from '@/lib/pointsRule';
+import { CAPS_CACHE_KEY, CAPS_FRESH_MS, parseCapsCache, storedCap, type ScoreCaps } from '@/lib/pointsRule';
 
 /**
  * Round 648: the caps the profile's points rule reads (src/lib/pointsRule.ts),
@@ -10,10 +10,11 @@ import type { ScoreCaps } from '@/lib/pointsRule';
  * same table whose NULL cap fallback runs a percentile over game_completions,
  * the table Round 370 (supabase/migrations/20260831_disk_io_leaderboard_cache.sql)
  * took off the page path after the Disk IO budget alert. The table is a plain
- * read of about 180 rows, public read, and after Round 646 every scored game's
- * row in it is that game's real ceiling. record_auth_completion and the
- * recompute in the Round 648 migration read the same table with the same rule,
- * so the total this browser shows and the one the database stores agree.
+ * read of about 150 rows (151 on 2026-09-28), public read, and after Round
+ * 646 every scored game's row in it is that game's real ceiling.
+ * record_auth_completion and the recompute in the Round 648 migrations read
+ * the same table with the same rule, so the total this browser shows and the
+ * one the database stores agree.
  *
  * The cache is one localStorage key, refreshed when older than FRESH_MS, so a
  * profile view or a play reads the table at most once in six hours per
@@ -29,8 +30,11 @@ import type { ScoreCaps } from '@/lib/pointsRule';
  * Fence: scripts/simProfileTotal.mjs (src/test/profileTotal.test.tsx).
  */
 
-const CACHE_KEY = 'dukb-score-caps-v2';
-const FRESH_MS = 6 * 60 * 60 * 1000;
+/* The key and the freshness window live beside the rule (src/lib/pointsRule.ts),
+   because the streak store reads this same copy to check a tally it counted
+   before the rule (src/lib/streaks.ts). */
+const CACHE_KEY = CAPS_CACHE_KEY;
+const FRESH_MS = CAPS_FRESH_MS;
 
 interface CachedCaps {
   caps: ScoreCaps;
@@ -40,25 +44,9 @@ interface CachedCaps {
 let memory: CachedCaps | null = null;
 let inFlight: Promise<ScoreCaps | null> | null = null;
 
-/** A cap as stored: a finite number, or null for a row with no ceiling on record. Anything else is not a cap. */
-function capValue(raw: unknown): number | null | undefined {
-  if (raw === null) return null;
-  const n = typeof raw === 'number' ? raw : typeof raw === 'string' && raw.trim() !== '' ? Number(raw) : Number.NaN;
-  return Number.isFinite(n) ? n : undefined;
-}
-
 function readCache(): CachedCaps | null {
   try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw);
-    if (!parsed || typeof parsed !== 'object' || typeof parsed.fetchedAt !== 'number' || !parsed.caps || typeof parsed.caps !== 'object') return null;
-    const caps: ScoreCaps = {};
-    for (const [game, cap] of Object.entries(parsed.caps)) {
-      const value = capValue(cap);
-      if (value !== undefined) caps[game] = value;
-    }
-    return Object.keys(caps).length ? { caps, fetchedAt: parsed.fetchedAt } : null;
+    return parseCapsCache(localStorage.getItem(CACHE_KEY));
   } catch {
     return null;
   }
@@ -94,14 +82,14 @@ export async function fetchScoreCaps(): Promise<ScoreCaps | null> {
   inFlight = (async () => {
     try {
       /* The table is newer than the generated types, same dynamic access as
-         src/pages/RarityRound.tsx. About 180 rows, under the 1,000 row
+         src/pages/RarityRound.tsx. About 150 rows, under the 1,000 row
          response cap, so no paging. */
       const { data, error } = await (supabase.from as any)('game_score_caps').select('game, max_score');
       if (error || !Array.isArray(data)) return null;
       const caps: ScoreCaps = {};
       for (const row of data as Array<{ game?: unknown; max_score?: unknown }>) {
         if (typeof row?.game !== 'string' || !row.game) continue;
-        const value = capValue(row.max_score);
+        const value = storedCap(row.max_score);
         if (value !== undefined) caps[row.game] = value;
       }
       if (!Object.keys(caps).length) return null;

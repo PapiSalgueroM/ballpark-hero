@@ -50,12 +50,22 @@
  *   loginDates: string[] // distinct ET dates the app was opened (for #13 days-visited stat, and days-logged-in on Profile)
  * }
  *
+ * Round 648: the points kept by the profile's rule (src/lib/pointsRule.ts)
+ * live under a second key, POINTS_KEY, which no client from before this
+ * round knows. Such a client, still open in an old tab, rebuilds the key
+ * above from the six fields it knows and writes that back, so anything new
+ * kept there would be dropped on its next play or visit. Under a key of
+ * their own the new fields survive it, and the points it adds to
+ * totalPoints are found (totalPoints moved past what this client last wrote)
+ * and checked against the rule like any sum counted without it. Every write
+ * also keeps whatever fields it does not know in both keys.
+ *
  * Everything here is synchronous and side-effect-free except for the
  * localStorage read/write helpers, so it's cheap to call from render paths
  * and from the useGameCompletion hook-in without any network round trip.
  */
 
-import { capOf, dayValue, pointsDay, recordedPoints, type ScoreCaps } from '@/lib/pointsRule';
+import { CAPS_CACHE_KEY, CAPS_FRESH_MS, TALLY_START, capOf, dayValue, parseCapsCache, recordedPoints, ruleAllowance, type ScoreCaps } from '@/lib/pointsRule';
 
 export interface StreakEntry {
   /** Consecutive ET days up to and including lastDate. 0 if never recorded or broken with no replay yet. */
@@ -74,12 +84,16 @@ export interface StreakState {
   loginDates: string[];
   /** Lifetime count of game completions on this browser (every finished game counts once). */
   totalPlays: number;
-  /** Lifetime points from completed games on this browser, summed since Round 648 by the profile's rule (src/lib/pointsRule.ts): per game per day, the day's best, capped. */
+  /** Lifetime points from completed games on this browser. Since Round 648 every play is credited by the profile's rule (src/lib/pointsRule.ts): per game per Eastern day, the day's best, capped. A sum counted without the rule is kept wherever the rule could have paid it (readState). */
   totalPoints: number;
-  /** Round 648: the rule totalPoints is kept under. A store without it holds a pre 648 raw sum, which readState retires once. */
+  /** Round 648: the rule totalPoints is kept under, the marker of the points record under POINTS_KEY. */
   pointsRule: typeof POINTS_RULE;
-  /** Round 648: the pre 648 raw sum, set aside once and never shown. The browser kept no plays behind it, so the rule cannot recount it. */
+  /** Round 648: what the check cut from a sum counted without the rule, the part above anything the rule could have paid on this browser's records. Kept, never shown. */
   retiredPoints: number;
+  /** Round 648: the highest tally a cut has ever lowered. The points badges and achievements read the larger of this and totalPoints, so a cut never takes back one already earned. Never shown as a total. */
+  pointsBadgeFloor: number;
+  /** Round 648: points counted without the rule (and how many plays counted them) that have not been checked yet, because this browser had no fresh copy of the caps when they were found. They stay in totalPoints until the check runs. */
+  unchecked: { points: number; plays: number };
   /** Round 648: per game, the points already credited for its latest points day, so a second play that day adds only what it beats the first by. */
   dayPoints: Record<string, DayPoints>;
   /** Round 648: plays recorded before this browser had a cap for their game, held here until a fresh read of the caps settles them into totalPoints. */
@@ -101,8 +115,10 @@ export interface PendingPoints {
 
 const STORAGE_KEY = 'dukb-streaks-v1';
 
-/* Round 648: the marker a store carries once its points are kept under the
-   profile's rule. */
+/* Round 648: the points record, a key of its own (see the header). */
+const POINTS_KEY = 'dukb-points-v1';
+
+/* Round 648: the rule the points record is kept under. */
 const POINTS_RULE = 648 as const;
 
 /* Round 648: a bound on the pending list, so a browser that can never reach
@@ -116,8 +132,25 @@ const EMPTY_ENTRY: StreakEntry = { current: 0, longest: 0, lastDate: null };
 function emptyState(): StreakState {
   return {
     version: 1, global: { ...EMPTY_ENTRY }, perGame: {}, loginDates: [], totalPlays: 0,
-    totalPoints: 0, pointsRule: POINTS_RULE, retiredPoints: 0, dayPoints: {}, pendingPoints: [],
+    totalPoints: 0, pointsRule: POINTS_RULE, retiredPoints: 0, pointsBadgeFloor: 0, unchecked: { points: 0, plays: 0 },
+    dayPoints: {}, pendingPoints: [],
   };
+}
+
+/** A stored key as a plain object, or null when it is missing, unreadable or not an object. */
+function readJson(key: string): Record<string, unknown> | null {
+  try {
+    const raw = localStorage.getItem(key);
+    if (!raw) return null;
+    const parsed: unknown = JSON.parse(raw);
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed as Record<string, unknown> : null;
+  } catch {
+    return null;
+  }
+}
+
+function finiteOr0(x: unknown): number {
+  return typeof x === 'number' && Number.isFinite(x) ? x : 0;
 }
 
 function validPending(p: unknown): p is PendingPoints {
@@ -168,57 +201,143 @@ function daysBetween(a: string, b: string): number {
 }
 
 /*
- * Round 648: the repair, run on read, once per browser.
+ * Round 648: the check, run on read, on points counted without the rule.
  *
  * Before this round the tally added every play's raw score: a Pack Battle
  * pack's banked dollars (8,800,000 is an ordinary pack), every Club Manager
- * match's running season score, every reload of a finished daily. That sum
- * is what the own profile showed whenever it beat the server's number, and
- * what the points badges read. The profile's rule (src/lib/pointsRule.ts)
- * counts one row per game per day at the day's best, capped, and it can only
- * be applied to plays it can see. This store never kept the plays, only the
- * sum, so the rule can vouch for none of it: whatever a pre 648 sum holds is
- * more than the rule allows on the records this browser has, which are none.
- * The sum is set aside in retiredPoints (kept, never shown) and the tally
- * counts from here under the rule, which is also what the badges read. A
- * signed in player's own profile still shows the larger of this and the
- * server total, and the server total is the rule over every record the
- * database holds, so nothing a signed in player earned is lost from the page.
+ * match's running season score, every reload of a finished daily. An old tab
+ * (a client from before this round, still open) goes on doing that after the
+ * release. Such points are found by comparing totalPoints with ruleTotal, the
+ * number this client last wrote beside it: a store with no points record
+ * holds nothing but them, and an old tab's play moves totalPoints past
+ * ruleTotal by what it added.
+ *
+ * They are held to the most the rule could have paid on the records this
+ * browser kept of them (ruleAllowance in src/lib/pointsRule.ts: how many
+ * plays counted them, which games, and the days since the tally began, with
+ * the caps from this browser's fresh copy of public.game_score_caps). A sum
+ * at or below that is one the rule could have paid, and it is left exactly
+ * as it is. Only the part above it is cut, into retiredPoints (kept, never
+ * shown). The browser kept no plays, so nothing finer is possible: a sum
+ * cannot be recounted play by play, only held to what its plays could have
+ * earned. With no fresh copy of the caps the points wait in `unchecked`,
+ * counted in totalPoints meanwhile, and are checked on the first read after
+ * a copy lands (src/lib/scoreCaps.ts writes it, then settles through here).
+ *
+ * A cut never takes back a badge: pointsBadgeFloor keeps the tally it
+ * lowered, and the points badges (src/lib/badges.ts) and achievements
+ * (src/lib/achievements.ts) read the larger of the two.
  */
 function readState(): StreakState {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return emptyState();
-    const parsed = JSON.parse(raw);
-    if (!parsed || parsed.version !== 1) return emptyState();
-    const state: StreakState = {
-      version: 1,
-      global: { ...EMPTY_ENTRY, ...(parsed.global || {}) },
-      perGame: parsed.perGame && typeof parsed.perGame === 'object' ? parsed.perGame : {},
-      loginDates: Array.isArray(parsed.loginDates) ? parsed.loginDates : [],
-      totalPlays: typeof parsed.totalPlays === 'number' ? parsed.totalPlays : 0,
-      totalPoints: typeof parsed.totalPoints === 'number' && Number.isFinite(parsed.totalPoints) ? parsed.totalPoints : 0,
-      pointsRule: POINTS_RULE,
-      retiredPoints: typeof parsed.retiredPoints === 'number' && Number.isFinite(parsed.retiredPoints) ? parsed.retiredPoints : 0,
-      dayPoints: validDayPoints(parsed.dayPoints),
-      pendingPoints: Array.isArray(parsed.pendingPoints) ? parsed.pendingPoints.filter(validPending) : [],
-    };
-    if (parsed.pointsRule !== POINTS_RULE) {
-      state.retiredPoints += Math.max(0, state.totalPoints);
-      state.totalPoints = 0;
-      state.dayPoints = {};
-      state.pendingPoints = [];
-      writeState(state);
+    const parsed = readJson(STORAGE_KEY);
+    if (parsed && parsed.version !== 1) return emptyState();
+    const record = readJson(POINTS_KEY);
+    const side = record && record.v === 1 ? record : null;
+    const state = emptyState();
+    if (parsed) {
+      state.global = { ...EMPTY_ENTRY, ...((parsed.global as Partial<StreakEntry>) || {}) };
+      state.perGame = parsed.perGame && typeof parsed.perGame === 'object' ? parsed.perGame as Record<string, StreakEntry> : {};
+      state.loginDates = Array.isArray(parsed.loginDates) ? parsed.loginDates : [];
+      state.totalPlays = typeof parsed.totalPlays === 'number' ? parsed.totalPlays : 0;
+      state.totalPoints = finiteOr0(parsed.totalPoints);
     }
+    const ruleTotal = side ? Math.max(0, finiteOr0(side.ruleTotal)) : 0;
+    const rulePlays = side ? Math.max(0, finiteOr0(side.rulePlays)) : 0;
+    if (side) {
+      const unchecked = (side.unchecked || {}) as { points?: unknown; plays?: unknown };
+      state.retiredPoints = Math.max(0, finiteOr0(side.retiredPoints));
+      state.pointsBadgeFloor = Math.max(0, finiteOr0(side.pointsBadgeFloor));
+      state.unchecked = { points: Math.max(0, finiteOr0(unchecked.points)), plays: Math.max(0, finiteOr0(unchecked.plays)) };
+      state.dayPoints = validDayPoints(side.dayPoints);
+      state.pendingPoints = Array.isArray(side.pendingPoints) ? side.pendingPoints.filter(validPending) : [];
+    }
+    let changed = false;
+    const foreign = state.totalPoints - ruleTotal;
+    if (foreign > 0) {
+      state.unchecked.points += foreign;
+      state.unchecked.plays += Math.max(0, state.totalPlays - rulePlays);
+      changed = true;
+    } else if (foreign < 0) {
+      /* totalPoints fell under what this client wrote, which only a writer
+         that does not know the rule does (a client that read a damaged store
+         as empty and wrote that back). The rule's own number stands. */
+      state.totalPoints = ruleTotal;
+      changed = true;
+    }
+    if (state.unchecked.points > 0 && checkUnchecked(state)) changed = true;
+    if (changed) writeState(state);
     return state;
   } catch {
     return emptyState();
   }
 }
 
+/** This browser's copy of public.game_score_caps while it is fresh, else null. */
+function freshCaps(): ScoreCaps | null {
+  try {
+    const copy = parseCapsCache(localStorage.getItem(CAPS_CACHE_KEY));
+    return copy && Date.now() - copy.fetchedAt < CAPS_FRESH_MS ? copy.caps : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Days from the tally's first day to the latest this store knows of (today, or a later date it holds), counted inclusive. */
+function tallyDays(state: StreakState): number {
+  let latest = getEtDateString();
+  const known = [state.global.lastDate, ...state.loginDates, ...Object.values(state.perGame).map(entry => entry?.lastDate)];
+  for (const date of known) {
+    if (typeof date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(date) && date > latest) latest = date;
+  }
+  return Math.max(1, daysBetween(TALLY_START, latest) + 1);
+}
+
+/** The check itself (see readState). False when there is no fresh copy of the caps to check with, and nothing changes. */
+function checkUnchecked(state: StreakState): boolean {
+  const caps = freshCaps();
+  if (!caps) return false;
+  const { points, plays } = state.unchecked;
+  const allowed = ruleAllowance(points, plays, Object.keys(state.perGame), caps, tallyDays(state));
+  const cut = Math.min(state.totalPoints, points - allowed);
+  if (cut > 0) {
+    state.pointsBadgeFloor = Math.max(state.pointsBadgeFloor, state.totalPoints);
+    state.totalPoints -= cut;
+    state.retiredPoints += cut;
+  }
+  state.unchecked = { points: 0, plays: 0 };
+  return true;
+}
+
+/*
+ * Both keys are written over what they already hold, so a field this client
+ * does not know (one a later client added) is kept, never dropped. The points
+ * record goes first: a tab closed between the two writes then leaves
+ * totalPoints under ruleTotal, and readState keeps the rule's number.
+ */
 function writeState(state: StreakState): void {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    localStorage.setItem(POINTS_KEY, JSON.stringify({
+      ...(readJson(POINTS_KEY) ?? {}),
+      v: 1,
+      rule: POINTS_RULE,
+      ruleTotal: state.totalPoints,
+      rulePlays: state.totalPlays,
+      unchecked: state.unchecked,
+      retiredPoints: state.retiredPoints,
+      pointsBadgeFloor: state.pointsBadgeFloor,
+      dayPoints: state.dayPoints,
+      pendingPoints: state.pendingPoints,
+    }));
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      ...(readJson(STORAGE_KEY) ?? {}),
+      version: 1,
+      global: state.global,
+      perGame: state.perGame,
+      loginDates: state.loginDates,
+      totalPlays: state.totalPlays,
+      totalPoints: state.totalPoints,
+    }));
   } catch {
     // localStorage unavailable (quota / private mode) - streaks just won't
     // persist this session. Never throw, this must not break gameplay.
@@ -284,14 +403,15 @@ export function recordGameCompletion(gameSlug: string, when: Date = new Date(), 
   // server tables also record signed in play, so this is the guest era and
   // same browser record that the Profile page merges with the server's.
   state.totalPlays = (state.totalPlays || 0) + 1;
+  /* The points day is the Eastern day the streaks count, the same one the
+     profile's records are grouped by (src/lib/pointsRule.ts). */
   const points = recordedPoints(score);
   if (points > 0) {
-    const day = pointsDay(when);
     if (cap === undefined) {
-      state.pendingPoints.push({ game: gameSlug, day, score: points });
+      state.pendingPoints.push({ game: gameSlug, day: today, score: points });
       if (state.pendingPoints.length > PENDING_LIMIT) state.pendingPoints.splice(0, state.pendingPoints.length - PENDING_LIMIT);
     } else {
-      creditDay(state, gameSlug, day, points, cap === null ? null : Math.max(1, cap));
+      creditDay(state, gameSlug, today, points, cap === null ? null : Math.max(1, cap));
     }
   }
 

@@ -24,6 +24,19 @@
    its cap and this file says so rather than planting a cap that does not
    exist.
 
+   THE DAY IS THE EASTERN DAY of a record's created_at (case 9), the day Round
+   537 moved the site and the World Leaderboard to, never the UTC puzzle_date
+   the save writes. The planted records are saved at 16:00 UTC, midday
+   Eastern, so their day is the same in either clock and only case 9 tells
+   the two apart.
+
+   A TALLY COUNTED WITHOUT THE RULE (case 7: one from before this round; case
+   10: one an old tab, a client from before this round still open, adds to) is
+   cut only where it is above the most the rule could have paid on the records
+   the browser kept of it, and never takes back a points badge already earned.
+   An old tab's write must not drop the new fields, and a write keeps fields
+   it does not know (case 10).
+
    Every expected number is written out here by hand, never computed by the
    module under test. */
 import { cleanup, render, renderHook, waitFor } from '@testing-library/react';
@@ -91,10 +104,12 @@ vi.mock('@/integrations/supabase/client', () => {
 
 import { profileTotal, type PointsRecord, type ScoreCaps } from '@/lib/pointsRule';
 import { fetchScoreCaps, resetScoreCapsForTests } from '@/lib/scoreCaps';
-import { getStreakState, recordGameCompletion, settlePendingPoints } from '@/lib/streaks';
+import { getEtDateString, getStreakState, recordGameCompletion, settlePendingPoints } from '@/lib/streaks';
 import { recordCompletion } from '@/lib/completions';
 import { getBadgeState } from '@/lib/badges';
+import { buildAchievementFacts } from '@/lib/achievements';
 import { useProfileTotal } from '@/hooks/useProfileTotal';
+import { useStreaks } from '@/hooks/useStreaks';
 import Profile from '@/pages/Profile';
 
 /* game_score_caps after Round 644 and Round 646, from Round 646's snapshot. */
@@ -123,7 +138,7 @@ const GROUPS: Array<{ what: string; leak: boolean; records: PointsRecord[]; wort
     records: [rec('club-manager', '2026-09-11', 130), rec('club-manager', '2026-09-11', 95)], worth: 130, perRecordClamp: 225 },
   { what: 'a Soccer Grid daily saved again on two reloads', leak: true,
     records: [rec('soccer-grid', '2026-09-10', 700), rec('soccer-grid', '2026-09-10', 700), rec('soccer-grid', '2026-09-10', 700)], worth: 700, perRecordClamp: 2100 },
-  { what: 'Club Manager rows with no puzzle date, one group as GROUP BY makes them', leak: true,
+  { what: 'Club Manager rows whose day cannot be read, one group as GROUP BY makes them', leak: true,
     records: [rec('club-manager', null, 60), rec('club-manager', null, 100)], worth: 100, perRecordClamp: 160 },
   { what: 'a front office title on the cumulative scale', leak: false,
     records: [rec('front-office', '2026-09-12', 305)], worth: 100, perRecordClamp: 100 },
@@ -145,10 +160,13 @@ const EXPECTED = GROUPS.reduce((s, g) => s + g.worth, 0);
 const RAW = PLANTED.reduce((s, r) => s + Number(r.score), 0);
 const PER_RECORD = GROUPS.reduce((s, g) => s + g.perRecordClamp, 0);
 
+/* Each record saved at 16:00 UTC on its day, late morning or noon Eastern in
+   any season, so its Eastern day and its UTC day agree; a day that cannot be
+   read has no time. */
 function plantRecords(): void {
   db.tables.user_game_scores = PLANTED.map((r, i) => ({
     id: `row-${String(i).padStart(5, '0')}`, user_id: 'user-1', game_type: r.game, score: r.score, puzzle_date: r.day,
-    created_at: `2026-09-0${1 + (i % 9)}T00:00:00Z`,
+    created_at: r.day ? `${r.day}T16:00:00Z` : null,
   }));
   /* Another account's rows, which the user filter must leave out. */
   db.tables.user_game_scores.unshift(
@@ -162,6 +180,49 @@ function plantCaps(): void {
 }
 
 const at = (day: string) => new Date(`${day}T15:00:00Z`);
+
+/* This browser's copy of the caps, fresh, as src/lib/scoreCaps.ts writes it. */
+function plantFreshCopy(): void {
+  localStorage.setItem('dukb-score-caps-v2', JSON.stringify({ caps: CAPS, fetchedAt: Date.now() }));
+}
+
+/* A store the client from before this round wrote: the six fields it knows,
+   and a raw sum. Every date in it is on or before 2026-09-20, so the days
+   since the tally began (2026-07-08) always outnumber the plays planted here
+   and no expected number below depends on the clock. */
+function plantLegacyTally({ games, plays, points }: { games: string[]; plays: number; points: number }): void {
+  localStorage.setItem('dukb-streaks-v1', JSON.stringify({
+    version: 1,
+    global: { current: 3, longest: 9, lastDate: '2026-09-20' },
+    perGame: Object.fromEntries(games.map(g => [g, { current: 1, longest: 2, lastDate: '2026-09-20' }])),
+    loginDates: ['2026-09-18', '2026-09-19', '2026-09-20'],
+    totalPlays: plays,
+    totalPoints: points,
+  }));
+}
+
+/* The client from before this round (main 22bc0f7e, src/lib/streaks.ts),
+   still open in an old tab: its readState keeps the six fields it knows, its
+   recordGameCompletion adds the raw score, and its writeState writes that
+   object back whole. Its streak arithmetic is left out; it writes the same
+   six fields either way. */
+function oldTabPlay(game: string, when: Date, score: number): void {
+  const parsed = JSON.parse(localStorage.getItem('dukb-streaks-v1') as string);
+  const day = getEtDateString(when);
+  const state = {
+    version: 1,
+    global: { current: 0, longest: 0, lastDate: null, ...(parsed.global || {}) },
+    perGame: parsed.perGame && typeof parsed.perGame === 'object' ? parsed.perGame : {},
+    loginDates: Array.isArray(parsed.loginDates) ? parsed.loginDates : [],
+    totalPlays: typeof parsed.totalPlays === 'number' ? parsed.totalPlays : 0,
+    totalPoints: typeof parsed.totalPoints === 'number' ? parsed.totalPoints : 0,
+  };
+  state.global = { ...state.global, lastDate: day };
+  state.perGame[game] = { current: 1, longest: Math.max(1, state.perGame[game]?.longest ?? 0), lastDate: day };
+  state.totalPlays += 1;
+  state.totalPoints += Math.max(0, Math.round(score));
+  localStorage.setItem('dukb-streaks-v1', JSON.stringify(state));
+}
 
 beforeEach(() => {
   localStorage.clear();
@@ -186,7 +247,7 @@ describe('Round 648: the profile total is one row per game per day, the day\'s b
     }));
   });
 
-  it('2 the profile hook: the planted records, paged past 1,000 rows and grouped by puzzle date, sum by the rule', async () => {
+  it('2 the profile hook: the planted records, paged past 1,000 rows and grouped by their day, sum by the rule', async () => {
     plantCaps();
     plantRecords();
     const { result } = renderHook(() => useProfileTotal('user-1'));
@@ -286,33 +347,61 @@ describe('Round 648: the profile total is one row per game per day, the day\'s b
     expect(getStreakState().totalPoints).toBe(900);
   });
 
-  it('7 an inflated browser tally from before this round is repaired once on read, and the badges read the repaired number', async () => {
-    localStorage.setItem('dukb-streaks-v1', JSON.stringify({
-      version: 1,
-      global: { current: 3, longest: 9, lastDate: '2026-09-20' },
-      perGame: { 'pack-battle': { current: 1, longest: 2, lastDate: '2026-09-20' } },
-      loginDates: ['2026-09-18', '2026-09-19', '2026-09-20'],
-      totalPlays: 41,
-      totalPoints: 8_810_000,
-    }));
-    const repaired = getStreakState();
-    expect(repaired.totalPoints).toBe(0);
-    expect(repaired.retiredPoints).toBe(8_810_000);
-    expect(repaired.global.longest).toBe(9);
-    expect(repaired.totalPlays).toBe(41);
-    expect(repaired.loginDates).toHaveLength(3);
-    expect(JSON.parse(localStorage.getItem('dukb-streaks-v1') as string).pointsRule).toBe(648);
+  it('7 a tally from before this round: an honest one is left exactly as it is, one above what the rule allows is cut to it, and no badge already earned is taken away', async () => {
+    /* (a) HONEST. 4,000 over 40 plays of Soccer Grid and Footle: the rule
+       could have paid up to 900 a day for Soccer Grid alone, so nothing about
+       the sum is more than the rule allows. Before this browser has a copy of
+       the caps the points wait, counted; the copy is asked for by the streak
+       hook a page mounts, and once it lands the tally is exactly what it was. */
+    plantLegacyTally({ games: ['soccer-grid', 'footle'], plays: 40, points: 4_000 });
+    expect(getStreakState().totalPoints).toBe(4_000);
+    expect(getStreakState().unchecked).toEqual({ points: 4_000, plays: 40 });
+    plantCaps();
+    const honest = renderHook(() => useStreaks());
+    await waitFor(() => expect(getStreakState().unchecked).toEqual({ points: 0, plays: 0 }));
+    expect(getStreakState()).toMatchObject({ totalPoints: 4_000, retiredPoints: 0, pointsBadgeFloor: 0 });
+    expect(honest.result.current.totalPoints).toBe(4_000);
+    expect(JSON.parse(localStorage.getItem('dukb-streaks-v1') as string).totalPoints).toBe(4_000);
+    recordGameCompletion('soccer-grid', at('2026-09-21'), 700, 900);
+    expect(getStreakState()).toMatchObject({ totalPoints: 4_700, retiredPoints: 0 });
+    honest.unmount();
 
+    /* (b) ABOVE THE RULE. 25,331 over 60 plays, every one of them Club
+       Manager (a season recorded once per match at its running score). One
+       game can be credited once a day at 130 at most, so 60 plays can have
+       earned 60 * 130 = 7,800 and no more. Cut to that, through the same
+       streak hook; the points badge the old number earned stays earned. */
+    localStorage.clear();
+    resetScoreCapsForTests();
+    plantLegacyTally({ games: ['club-manager'], plays: 60, points: 25_331 });
+    const cut = renderHook(() => useStreaks());
+    await waitFor(() => expect(cut.result.current.totalPoints).toBe(7_800));
+    expect(getStreakState()).toMatchObject({ totalPoints: 7_800, retiredPoints: 17_531, pointsBadgeFloor: 25_331 });
     const badges = await getBadgeState(null);
     const earned = (id: string) => badges.find(b => b.id === id)?.earned;
-    expect(earned('points-1000')).toBe(false);
-    expect(earned('points-10000')).toBe(false);
+    expect(earned('points-10000')).toBe(true);
+    expect(earned('points-1000')).toBe(true);
     expect(earned('streak-7')).toBe(true);
-
-    /* Once: a play after the repair stays, and the next read repairs nothing. */
+    expect(buildAchievementFacts([], getStreakState()).totalPoints).toBe(25_331);
     recordGameCompletion('soccer-grid', at('2026-09-21'), 700, 900);
-    expect(getStreakState().totalPoints).toBe(700);
-    expect(getStreakState().retiredPoints).toBe(8_810_000);
+    expect(getStreakState()).toMatchObject({ totalPoints: 8_500, retiredPoints: 17_531 });
+    cut.unmount();
+
+    /* (c) THE OWNER'S PACK. 8,810,000 over 41 plays of Pack Battle and Soccer
+       Grid. That is more than 41 plays at 100,000 (the most a record holds),
+       so at least one play is one the rule refuses: at most 40 game days,
+       each worth at most 100,000 (Pack Battle's cap is 54,000,000, but a
+       record cannot hold more than 100,000). Cut to 4,000,000, which is
+       still a lot: the rule counts a Pack Battle day in dollars up to that
+       bound until the game has a scale of its own (Round 646 left it). With
+       a fresh copy already in this browser the check runs on the first read. */
+    localStorage.clear();
+    resetScoreCapsForTests();
+    plantFreshCopy();
+    plantLegacyTally({ games: ['pack-battle', 'soccer-grid'], plays: 41, points: 8_810_000 });
+    expect(getStreakState()).toMatchObject({ totalPoints: 4_000_000, retiredPoints: 4_810_000, pointsBadgeFloor: 8_810_000 });
+    /* Once: the next read cuts nothing more. */
+    expect(getStreakState()).toMatchObject({ totalPoints: 4_000_000, retiredPoints: 4_810_000 });
   });
 
   it('8 the profile page shows the rule total, not the stored running sum', async () => {
@@ -336,5 +425,69 @@ describe('Round 648: the profile total is one row per game per day, the day\'s b
     const label = await page.findByText('Total Points', {}, { timeout: 5000 });
     /* 120 for the season's best match row, 700 for the grid once, 100 for the title at its cap. */
     expect(label.previousElementSibling?.textContent).toBe((920).toLocaleString());
+  });
+  it('9 the day is the Eastern day: two dailies either side of 8pm Eastern are two days, two seasons either side of it on one Eastern evening are one', async () => {
+    /* All four saved on UTC 2026-09-22 or 23. Monday's daily at 21:00 EDT and
+       Tuesday's at 18:00 EDT share a UTC date, so under puzzle_date one of
+       them earns nothing; two Club Manager seasons at 19:50 and 20:10 EDT are
+       one Eastern evening but two UTC dates, so under puzzle_date both pay.
+       Eastern: 700 + 650 + 120 = 1,470. UTC would give 700 + 100 + 120 = 920. */
+    const PLAYS = [
+      { game: 'soccer-grid', at: '2026-09-22T01:00:00Z', score: 700 },
+      { game: 'soccer-grid', at: '2026-09-22T22:00:00Z', score: 650 },
+      { game: 'club-manager', at: '2026-09-22T23:50:00Z', score: 100 },
+      { game: 'club-manager', at: '2026-09-23T00:10:00Z', score: 120 },
+    ];
+    expect(PLAYS.map(p => getEtDateString(new Date(p.at)))).toEqual(['2026-09-21', '2026-09-22', '2026-09-22', '2026-09-22']);
+
+    plantCaps();
+    db.tables.user_game_scores = PLAYS.map((p, i) => ({
+      id: `et-${i}`, user_id: 'user-1', game_type: p.game, score: p.score, puzzle_date: p.at.slice(0, 10), created_at: p.at,
+    }));
+    const { result } = renderHook(() => useProfileTotal('user-1'));
+    await waitFor(() => expect(result.current.loading).toBe(false));
+    expect(result.current.total).toBe(1_470);
+
+    for (const p of PLAYS) recordGameCompletion(p.game, new Date(p.at), p.score, CAPS[p.game]);
+    expect(getStreakState().totalPoints).toBe(1_470);
+  });
+
+  it('10 an old tab writing the store keeps the new fields, its points are checked like any counted without the rule, and a write keeps fields it does not know', () => {
+    plantFreshCopy();
+    plantLegacyTally({ games: ['club-manager'], plays: 60, points: 25_331 });
+    expect(getStreakState()).toMatchObject({ totalPoints: 7_800, retiredPoints: 17_531, pointsBadgeFloor: 25_331 });
+    recordGameCompletion('soccer-grid', at('2026-09-21'), 700, 900);
+    expect(getStreakState().totalPoints).toBe(8_500);
+
+    /* An old tab plays Footle for 50 and writes the store in its own shape. */
+    oldTabPlay('footle', at('2026-09-21'), 50);
+    const written = JSON.parse(localStorage.getItem('dukb-streaks-v1') as string);
+    expect(Object.keys(written).sort()).toEqual(['global', 'loginDates', 'perGame', 'totalPlays', 'totalPoints', 'version']);
+    expect(written.totalPoints).toBe(8_550);
+
+    /* One play of 50 is within what the rule could pay, so it stays, and
+       nothing this round keeps was lost: the cut, the badge floor, and the
+       day already credited, so a better Soccer Grid play that day adds only
+       what it beats 700 by. */
+    expect(getStreakState()).toMatchObject({ totalPoints: 8_550, retiredPoints: 17_531, pointsBadgeFloor: 25_331 });
+    expect(getStreakState().dayPoints['soccer-grid']).toEqual({ day: '2026-09-21', points: 700 });
+    recordGameCompletion('soccer-grid', at('2026-09-21'), 800, 900);
+    expect(getStreakState().totalPoints).toBe(8_650);
+
+    /* The old tab banks a pack: one play above what a record can hold is one
+       the rule refuses, so all of it is cut. */
+    oldTabPlay('pack-battle', at('2026-09-21'), 8_800_000);
+    expect(getStreakState()).toMatchObject({ totalPoints: 8_650, retiredPoints: 8_817_531 });
+
+    /* A field a later client added, in either key, survives this client's write. */
+    for (const key of ['dukb-streaks-v1', 'dukb-points-v1']) {
+      const stored = JSON.parse(localStorage.getItem(key) as string);
+      localStorage.setItem(key, JSON.stringify({ ...stored, laterField: 'kept' }));
+    }
+    recordGameCompletion('footle', at('2026-09-22'), 300, 700);
+    expect(getStreakState().totalPoints).toBe(8_950);
+    for (const key of ['dukb-streaks-v1', 'dukb-points-v1']) {
+      expect(JSON.parse(localStorage.getItem(key) as string).laterField, key).toBe('kept');
+    }
   });
 });
