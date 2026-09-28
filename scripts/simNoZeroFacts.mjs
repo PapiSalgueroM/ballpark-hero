@@ -53,6 +53,9 @@
        Am I guess resolver. Section 3 must go red naming Carlos Bello.
      SIM_NO_ZERO_FACTS_CONTROL=fullfetch   lets the boot sweep the whole
        current season again. Section 4 must go red on requests and bytes.
+     SIM_NO_ZERO_FACTS_CONTROL=deadlisted  takes the not current guard off
+       the pool's carried leg (Round 667). Diogo Jota comes back as a live
+       player and section 4 must go red on the seats below him.
 
    Run: node scripts/simNoZeroFacts.mjs
 */
@@ -65,7 +68,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const TMP = os.tmpdir().replaceAll('\\', '/');
-const CONTROLS = ['kitmatch', 'nullassist', 'zeroage', 'fullfetch'];
+const CONTROLS = ['kitmatch', 'nullassist', 'zeroage', 'fullfetch', 'deadlisted'];
 const CONTROL = process.env.SIM_NO_ZERO_FACTS_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`SIM_NO_ZERO_FACTS_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
@@ -122,6 +125,14 @@ if (CONTROL === 'zeroage') {
     'the guess resolver refuses a current row whose age column is empty again',
   );
 }
+if (CONTROL === 'deadlisted') {
+  control(
+    'src/lib/whoAmI.ts', '@/lib/whoAmI',
+    '|| byKey.has(normalizeName(p.name)) || isNotCurrentPlayer(p.name)) continue;',
+    '|| byKey.has(normalizeName(p.name))) continue;',
+    'the pool carries a player on the not current list forward again',
+  );
+}
 if (CONTROL === 'fullfetch') {
   control(
     'src/lib/whoAmI.ts', '@/lib/whoAmI',
@@ -139,6 +150,7 @@ export * as logic from '@/lib/gameLogic';
 export * as careerFetch from '@/lib/fetchCareerPlayers';
 export * as careerCells from '@/lib/careerBoardCells';
 export * as w from '@/lib/whoAmI';
+export * as notCurrent from '@/data/notCurrentPlayers';
 export { supabase } from '@/integrations/supabase/client';
 `);
 execSync(
@@ -174,7 +186,7 @@ globalThis.fetch = async (input, init) => {
   return new Response(c.body, { status: c.status, statusText: c.statusText, headers: c.headers });
 };
 
-const { footle, logic, careerFetch, careerCells, w, supabase } = await import(pathToFileURL(BUNDLE).href);
+const { footle, logic, careerFetch, careerCells, w, notCurrent, supabase } = await import(pathToFileURL(BUNDLE).href);
 const nothingChecked = () => abort('\nSUPABASE UNREACHABLE. NOTHING WAS CHECKED.');
 
 /* ------------------------------------------------------------------ */
@@ -408,7 +420,11 @@ console.log('3) Who Am I: a player with a current listing resolves to it, never 
      both seasons, and the pool it produces must be the pool the game returned,
      in the same order. The RULE (latest year wins, value breaks a tie, rank by
      value with the name as tiebreak) is imported from whoAmI.ts, not restated:
-     this section supplies rows and compares outputs, nothing more. */
+     this section supplies rows and compares outputs, nothing more. The one
+     rule the pool applies before ranking, since Round 667, is that a name on
+     src/data/notCurrentPlayers.ts is never a current player; that list is
+     imported too, so a man who died or retired between snapshots cannot shift
+     every seat below him and read as drift. */
   const sweep = new Map();
   for (const year of [2026, 2025]) {
     for (let from = 0; ; from += 1000) {
@@ -421,7 +437,10 @@ console.log('3) Who Am I: a player with a current listing resolves to it, never 
         .order('id', { ascending: true })
         .range(from, from + 999);
       if (error) nothingChecked();
-      for (const r of rows ?? []) w.keepLatest(sweep, w.currentRowFrom(r));
+      for (const r of rows ?? []) {
+        const row = w.currentRowFrom(r);
+        if (!notCurrent.isNotCurrentPlayer(row.name)) w.keepLatest(sweep, row);
+      }
       if (!rows || rows.length < 1000) break;
     }
   }
@@ -447,7 +466,7 @@ console.log('3) Who Am I: a player with a current listing resolves to it, never 
 console.log(`\nnetwork: ${net.live} live GETs, ${net.memo} answered from the memo, ${net.failed} failed`);
 if (net.refused) abort('\nSUPABASE UNREACHABLE. NOTHING WAS CHECKED.');
 if (CONTROL) {
-  const targetSection = { kitmatch: 1, nullassist: 2, zeroage: 3, fullfetch: 4 }[CONTROL];
+  const targetSection = { kitmatch: 1, nullassist: 2, zeroage: 3, fullfetch: 4, deadlisted: 4 }[CONTROL];
   if (bySection[targetSection] === 0) {
     console.error(`\nCONTROL DID NOT FIRE: section ${targetSection} stayed green with SIM_NO_ZERO_FACTS_CONTROL=${CONTROL}`);
     process.exit(1);
