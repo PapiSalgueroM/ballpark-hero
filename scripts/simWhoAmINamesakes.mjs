@@ -41,7 +41,9 @@
         offered as his own row, resolves through the real whoAmIPlayerFromEntity
         and wins; every other row of the same name resolves and does NOT win;
         and every row whose name another row shares says which man it is, with
-        the club of his latest row.
+        the club of his own latest row (the Round 668 re-review: a later row is
+        his only when a person_key says so or its listed age walks with its
+        year, by the pristine isSameMan).
      2. The Past club link only through the man's own rows. The rows under each
         pool spelling are read independently here and split by the Round 385
         rule (isSameMan, imported from a pristine bundle so a control cannot
@@ -80,6 +82,17 @@
         is folded away, and a pick wins exactly when it is the pool man.
         Floor: 2 names shared by more than one man (measured 4).
 
+   Added by the Round 668 re-review:
+     1 also: the line under a shared name describes the man shown, never the
+        latest row of a spelling several men share. Every name the table
+        stores more than one way (45 on 2026-09-28, found by reading every
+        row's name) goes through the game's dedupe with all its rows, and
+        every line must be the club, position and year of the shown row's own
+        latest row. Baseline: the spelling's latest row, the line before the
+        re-review (8 of 91 lines on another man, "Cafu" the Milan right-back
+        with a Portuguesa left midfielder's line). Floors: 45 lines, 4
+        baseline misses.
+
    Negative controls. Each asserts its anchor appears EXACTLY once in an in
    memory copy (exit 2 and refuse to run otherwise), rewrites the copy in the
    temp folder, points esbuild at it, and must redden its own section only:
@@ -111,6 +124,11 @@
      bracketshift  the bracket is sold from the newest list age. Section 5.
      ladderfold    Career Ladder merges by folded name. Section 6.
      ladderjudge   Career Ladder judges by folded name. Section 6.
+   Added by the Round 668 re-review:
+     hintspelling  the line under a shared name comes from the spelling's
+                   latest row again, whoever that is. Section 1.
+     hintshown     the line comes from the shown row itself, his row but not
+                   his latest. Section 1.
    A control that turns nothing red, turns another section red too, or turns
    its section red without the finding it names, exits 3, so it can never
    read as a pass or as the red it was meant to produce.
@@ -254,6 +272,21 @@ const CONTROLS = {
     broken: 'return normalizeName(name) === normalizeName(answer);',
     expect: 'judge',
     note: 'Career Ladder judges by folded name alone, so a namesake wins',
+  },
+  /* Added by the Round 668 re-review. */
+  hintspelling: {
+    section: 1, file: 'src/lib/playerSearch.ts', alias: '@/lib/playerSearch',
+    anchor: "const hint = disambiguatorFor(ownLatestRow(e.raw, e.rows, e.personKey?.startsWith('pk:') === true));",
+    broken: 'const hint = disambiguatorFor(ownLatestRow(e.raw, e.rows, true));',
+    expect: 'describe another man',
+    note: 'the line under a shared name comes from the spelling\'s latest row again, whoever that is',
+  },
+  hintshown: {
+    section: 1, file: 'src/lib/playerSearch.ts', alias: '@/lib/playerSearch',
+    anchor: "const hint = disambiguatorFor(ownLatestRow(e.raw, e.rows, e.personKey?.startsWith('pk:') === true));",
+    broken: 'const hint = disambiguatorFor(e.raw);',
+    expect: 'not the shown man\'s latest row',
+    note: 'the line under a shared name comes from the shown row itself, his but not his latest',
   },
 };
 const CONTROL = process.env.SIM_WHOAMI_NAMESAKES_CONTROL || '';
@@ -451,6 +484,22 @@ async function eachLimited(items, n, fn) {
   }));
 }
 
+/* Round 668 re-review: which table rows are the man a search result shows.
+   The shown row is the result's meta (the row the search kept). A row is his
+   when it is that row, when a person_key put it under his key, or when both
+   list an age and it walks with the year by the pristine isSameMan. A row
+   that proves neither is not his. The line under a shared name must be the
+   club, position and year of his latest such row. */
+const lineOf = r => [r.club, r.position, r.year].filter(v => v !== undefined && v !== null && v !== '').map(String).join(' · ');
+const latestRow = rows => rows.reduce((a, b) => (b.year > a.year || (b.year === a.year && Number(b.market_value_usd) > Number(a.market_value_usd)) ? b : a));
+function rowsOfShownMan(e, ownRows) {
+  const s = { age: Number(e.meta.age) || 0, year: Number(e.meta.year) || 0 };
+  const isShown = r => (r.club ?? undefined) === e.meta.club && r.year === e.meta.year && r.market_value_usd === e.meta.value
+    && (r.position ?? undefined) === e.meta.position && (r.age ?? undefined) === e.meta.age;
+  return ownRows.filter(r => isShown(r) || String(e.personKey ?? '').startsWith('pk:')
+    || (s.age > 0 && s.year > 0 && r.age > 0 && r.year > 0 && ref.ps.isSameMan(s, { age: r.age, year: r.year })));
+}
+
 /* ------------------------------------------------------------------ */
 section = 1;
 console.log('\n1) the search tells namesakes apart, and the judge agrees');
@@ -473,18 +522,18 @@ console.log('\n1) the search tells namesakes apart, and the judge agrees');
       collided += 1;
       for (const e of same) {
         rowsShared += 1;
-        /* Which man: his latest row, read straight from the table. */
-        const own = (rowsBySpelling.get(e.rawName) ?? []).filter(r => ref.w.whoAmIPersonKey(r.player_name, r.person_key) === e.personKey);
-        let latest = null;
-        if (own.length) latest = own.reduce((a, b) => (b.year > a.year || (b.year === a.year && b.market_value_usd > a.market_value_usd) ? b : a));
-        else {
+        /* Which man: the shown row's own latest row (the Round 668 re-review),
+           read straight from the table. */
+        let spellingRows = rowsBySpelling.get(e.rawName);
+        if (!spellingRows) {
           try {
-            const { body } = await rest(`player_market_values?select=club,year,market_value_usd&player_name=eq.${encodeURIComponent(e.rawName)}&order=year.desc,market_value_usd.desc&limit=1`);
-            latest = body[0] ?? null;
+            spellingRows = await restAll(`player_market_values?select=id,player_name,club,position,age,year,market_value_usd,person_key&player_name=eq.${encodeURIComponent(e.rawName)}&order=id.asc`);
           } catch (err) { unreachable(err); }
         }
+        const his = rowsOfShownMan(e, spellingRows.filter(r => ref.w.whoAmIPersonKey(r.player_name, r.person_key) === e.personKey));
+        const latest = his.length ? latestRow(his) : null;
         const hintClub = (e.disambiguator ?? '').split(' · ')[0];
-        if (!e.disambiguator || !latest || hintClub !== latest.club) {
+        if (!e.disambiguator || !latest || hintClub !== (latest.club ?? '')) {
           badHint += 1;
           note('hint', `typing "${secret.name}" offers ${e.rawName} with ${e.disambiguator ? `"${e.disambiguator}"` : 'no line saying which man he is'}, his latest row is at ${latest?.club ?? 'nowhere'}`);
         }
@@ -513,11 +562,11 @@ console.log('\n1) the search tells namesakes apart, and the judge agrees');
     }
   });
   console.log(`   ${pool.length} pool players typed by name: ${notOffered} not offered, ${lost} offered but not winnable, ${namesakeWins} namesake wins, ${lookupFailed} lookups failed`);
-  console.log(`   ${collided} pool names are shared by more than one man in the list, ${rowsShared} rows between them, ${badHint} without a line naming the latest club`);
+  console.log(`   ${collided} pool names are shared by more than one man in the list, ${rowsShared} rows between them, ${badHint} without a line naming his own latest club`);
   if (notOffered) fail(`${notOffered} pool players cannot be picked by typing their name: ${firsts.offered}`);
   if (lost) fail(`${lost} pool players are offered but picking them does not win: ${firsts.lost}`);
   if (namesakeWins) fail(`${namesakeWins} times a namesake wins in the secret's place: ${firsts.wins}`);
-  if (badHint) fail(`${badHint} rows share a name without saying which man they are: ${firsts.hint}`);
+  if (badHint) fail(`${badHint} rows share a name without a line naming his own latest club: ${firsts.hint}`);
   if (lookupFailed) fail(`${lookupFailed} lookups failed, so those players were not checked: ${firsts.lookup}`);
   /* Measured 3 on 2026-09-28 (Éderson, Ladislav Krejčí, Pepê). Floor at
      half, rounded up: below it the namesake half of this section would be
@@ -549,6 +598,80 @@ console.log('\n1) the search tells namesakes apart, and the judge agrees');
   }
   console.log(`   leftover "(dup)" rows: ${dupNames.length} in the table, ${dupShown} offered as players (pure rows plus a search for each)`);
   if (dupShown) fail(`${dupShown} "(dup)" rows are offered as players: ${firstDup}`);
+
+  /* Round 668 re-review: the line under a shared name describes the man
+     shown, over every name the table stores more than one way, not only the
+     pool's. Every row's name is read (keyset pages of 1,000), the names are
+     folded with the pristine normalizeName, and every folded name with more
+     than one stored spelling has all its rows put through the game's own
+     dedupe. Each line must be his own latest row (rowsOfShownMan above). The
+     baseline is the line before the re-review, the latest row under the
+     spelling whoever that is. */
+  const allNames = [];
+  try {
+    for (let last = 0; ;) {
+      const { body } = await rest(`player_market_values?select=id,player_name&id=gt.${last}&order=id.asc&limit=1000`);
+      for (const r of body) allNames.push(r.player_name ?? '');
+      if (body.length < 1000) break;
+      last = body[body.length - 1].id;
+    }
+  } catch (err) { unreachable(err); }
+  const spellingsByFold = new Map();
+  for (const n of allNames) {
+    const f = ref.ps.normalizeName(n);
+    if (!f) continue;
+    if (!spellingsByFold.has(f)) spellingsByFold.set(f, new Set());
+    spellingsByFold.get(f).add(n);
+  }
+  const multi = [...spellingsByFold].filter(([, s]) => new Set([...s].map(ref.ps.storedSpelling)).size > 1);
+  const multiRaw = [...new Set(multi.flatMap(([, s]) => [...s]))];
+  const rowsByRaw = new Map();
+  try {
+    for (let i = 0; i < multiRaw.length; i += 30) {
+      const inList = multiRaw.slice(i, i + 30).map(n => `"${n.replaceAll('"', '')}"`).join(',');
+      for (const r of await restAll(`player_market_values?select=id,player_name,club,position,age,year,market_value_usd,person_key&player_name=in.(${encodeURIComponent(inList)})&order=id.asc`)) {
+        if (!rowsByRaw.has(r.player_name)) rowsByRaw.set(r.player_name, []);
+        rowsByRaw.get(r.player_name).push(r);
+      }
+    }
+  } catch (err) { unreachable(err); }
+  const identity = ref.ps.SOCCER_MARKET_VALUE_SOURCE.identity;
+  let lines = 0, noLine = 0, otherMan = 0, notLatest = 0, baseOtherMan = 0;
+  let firstOther = '', firstNotLatest = '', firstNoLine = '', firstBase = '';
+  for (const [f, spellingSet] of multi) {
+    const rows = [...spellingSet].flatMap(n => rowsByRaw.get(n) ?? []);
+    const res = ps.dedupeAndRank([rows], ps.SOCCER_MARKET_VALUE_SOURCE, f, { limit: 100 });
+    if (res.length < 2) continue;
+    for (const e of res) {
+      const shownAs = `${e.rawName} (${e.meta.club}, ${e.meta.position}, ${e.meta.year}, listed ${e.meta.age})`;
+      if (!e.disambiguator) { noLine += 1; if (!firstNoLine) firstNoLine = shownAs; continue; }
+      lines += 1;
+      const own = rows.filter(r => ref.ps.personKeyOf(identity, r.player_name, r.person_key) === e.personKey);
+      const his = rowsOfShownMan(e, own);
+      if (!his.some(r => lineOf(r) === e.disambiguator)) {
+        otherMan += 1;
+        if (!firstOther) firstOther = `${shownAs} carries "${e.disambiguator}"`;
+      } else if (his.length && e.disambiguator !== lineOf(latestRow(his))) {
+        notLatest += 1;
+        if (!firstNotLatest) firstNotLatest = `${shownAs} carries "${e.disambiguator}", his latest row says "${lineOf(latestRow(his))}"`;
+      }
+      if (own.length && !his.some(r => lineOf(r) === lineOf(latestRow(own)))) {
+        baseOtherMan += 1;
+        if (!firstBase) firstBase = `${shownAs} would carry "${lineOf(latestRow(own))}"`;
+      }
+    }
+  }
+  console.log(`   every name the table stores more than one way: ${allNames.length} rows read, ${multi.length} such names, ${lines} lines under a shared name`);
+  console.log(`   baseline, the line from the spelling's latest row (before the re-review): ${baseOtherMan} lines on another man, e.g. ${firstBase || 'none'}`);
+  console.log(`   the game: ${otherMan} lines on another man, ${notLatest} on his row but not his latest, ${noLine} shared names with no line`);
+  if (otherMan) fail(`${otherMan} lines under a shared name describe another man than the row shown: ${firstOther}`);
+  if (notLatest) fail(`${notLatest} lines under a shared name are not the shown man's latest row: ${firstNotLatest}`);
+  if (noLine) fail(`${noLine} results share a name with no line saying which man they are: ${firstNoLine}`);
+  /* Measured 91 lines and 8 baseline misses on 2026-09-28. The floors are
+     half: below them this check is no longer testing the defect it was
+     written for. */
+  if (lines < 45) fail(`only ${lines} lines under a shared name, under the floor of 45 (measured 91), so too few namesakes are being checked`);
+  if (baseOtherMan < 4) fail(`the spelling's latest row puts only ${baseOtherMan} lines on another man, under the floor of 4 (measured 8), so this check may no longer be testing the defect it was written for`);
 }
 
 /* ------------------------------------------------------------------ */
@@ -855,4 +978,4 @@ if (failures > 0) {
   console.error(`\nsimWhoAmINamesakes: ${failures} findings (${Object.entries(bySection).map(([s, n]) => `section ${s}: ${n}`).join(', ')})`);
   process.exit(1);
 }
-console.log('\nsimWhoAmINamesakes: all green, namesakes apart, the judge and the club history agree, ages say what they are, Clue Auction sells the age it reveals, Career Ladder keeps namesakes apart');
+console.log('\nsimWhoAmINamesakes: all green, namesakes apart and each line describes the man shown, the judge and the club history agree, ages say what they are, Clue Auction sells the age it reveals, Career Ladder keeps namesakes apart');
