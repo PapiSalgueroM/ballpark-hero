@@ -37,18 +37,33 @@
                                   the same batch. A probe test proves the
                                   stub fired even on a day with no mark
                                   dependent rows.
-   Round 645 part three added a sixth assertion for the run based dailies
-   that used to save only at the end (Buzzer Beater, Free Kick: a run walked
-   away from on shot four was dealt again from shot one with every spray
-   already seen): settle part of the run, unmount, remount, and the board must
-   be on the same step with the same score and count, record nothing on the
-   way back, and record exactly once when the rest is played. A row opts in
-   by exporting playSome and progress (see src/test/dailyReload/driver.ts).
-   Its control:
+   Round 645 part three added seven rows that never locked (the NASCAR,
+   Tennis and Combat chains, Pro Football Timeline, Pack Battle, Rarity
+   Round) and a sixth assertion for the dailies that used to save only at the
+   end (Buzzer Beater, Free Kick: a run walked away from on shot four was
+   dealt again from shot one with every spray already seen; the chains, Pack
+   Battle and Rarity Round the same way): settle part of the run, unmount,
+   remount, and the board must be on the same step with the same score and
+   count, record nothing on the way back, record exactly once when the rest
+   is played, and end on the card step (1) ended on, since the driver plays
+   the same moves split by the reload. A row opts in by exporting playSome
+   and progress (see src/test/dailyReload/driver.ts). Its controls:
      DAILY_RELOAD_CONTROL=midrun  drops every prefixed key between the part
                                   played unmount and the remount; assertion
                                   (6) must then FAIL on every row that has it
                                   and every other assertion stay green
+   and three that take a piece out of the CODE rather than the storage
+   (src/test/dailyReload/mocks.ts), each counted per row so a red is proved
+   to be the control's:
+     nolock    one game's record is never read (DAILY_RELOAD_NOLOCK_SLUG,
+               default football-timeline): (2) must FAIL on that row alone
+               and every other row stay green
+     nosave    the arcade engine's per shot save writes nothing: (6) must
+               FAIL on every row it hit, (1) to (5) stay green, and every
+               row it did not hit stay green
+     restream  the arcade spray stream restarts from the top on a resume:
+               (6) must FAIL on every row it hit (the split run ends on a
+               different card), everything else green
    Then the source backstop: for every row that depends on the mark, the
    restoring file is read as code (comments and string contents stripped)
    and must call markRestoredFinish with the slug ahead of the finished
@@ -247,8 +262,82 @@ console.log('4) NEGATIVE CONTROL midrun: the part played record is dropped betwe
   if (resuming === 0) fail('no row resumes a part played run, so assertion 6 and this control checked nothing (the arcade rows export playSome and progress)');
 }
 
-/* ------------------------------------------- 5) the source backstop */
-console.log('5) Source backstop: every mark dependent restore names markRestoredFinish(<slug>) ahead of its finished state set, as code');
+/* --------------------- 5) code controls: a piece of the lock taken out */
+/* Round 645 part three. The storage controls above prove each restore reads
+   storage; these take one piece out of the real code path instead (mocks.ts)
+   and count, per row, every time it changed something (DAILY_RELOAD_HITS).
+   A row the control hit must go red on exactly the assertion that piece
+   exists for, with the ones it cannot touch still green; a row it never hit
+   must stay green throughout, so a red elsewhere is a real leak between
+   rows rather than the control. A control that hit nothing changed nothing
+   and fails the section. */
+const CODE_CONTROLS = [
+  {
+    name: 'nolock',
+    what: `one game's record is never read (${process.env.DAILY_RELOAD_NOLOCK_SLUG || 'football-timeline'}), (2) must fail on that row alone`,
+    mustRed: [2],
+    mustGreen: [1, 5],
+    onlyRow: process.env.DAILY_RELOAD_NOLOCK_SLUG || 'football-timeline',
+  },
+  {
+    name: 'nosave',
+    what: "the arcade engine's per shot save writes nothing, (6) must fail on every row it hit",
+    mustRed: [6],
+    mustGreen: [1, 2, 3, 4, 5],
+  },
+  {
+    name: 'restream',
+    what: 'the arcade spray stream restarts from the top on a resume, (6) must fail on every row it hit',
+    mustRed: [6],
+    mustGreen: [1, 2, 3, 4, 5],
+  },
+];
+const hitsOf = out => {
+  const hits = new Map();
+  for (const m of out.matchAll(/DAILY_RELOAD_HITS (\S+) (\d+)/g)) hits.set(m[1], Number(m[2]));
+  return hits;
+};
+let codeControlsRun = 0;
+for (const ctl of CODE_CONTROLS) {
+  console.log(`5.${codeControlsRun + 1}) NEGATIVE CONTROL ${ctl.name}: ${ctl.what}, and every row it did not hit stays green`);
+  codeControlsRun += 1;
+  if (ctl.onlyRow && ONLY && ONLY !== ctl.onlyRow) { console.log(`   skipped: ONLY=${ONLY} does not include ${ctl.onlyRow}`); continue; }
+  const run = runVitest({ DAILY_RELOAD_CONTROL: ctl.name });
+  const p = parse(run.out);
+  if (!p.named) abort(`control ${ctl.name} cannot run: vitest did not report on the test file:\n` + run.out.slice(-2000));
+  const hits = hitsOf(run.out);
+  const rows = [...p.rows.values()].filter(r => r.info);
+  if (rows.length !== rowList.length) fail(`control ${ctl.name} ran ${rows.length} row(s), the normal run ${rowList.length}`);
+  let flipped = 0;
+  let held = 0;
+  for (const row of rows) {
+    const n = hits.get(row.info.slug);
+    if (n === undefined) { fail(`control ${ctl.name}: ${row.info.slug} printed no hit count, so nothing says whether the control touched it`); continue; }
+    if (n > 0) {
+      const wanted = ctl.mustRed.filter(a => assertionsOf(row).includes(a));
+      const red = wanted.length > 0 && wanted.every(a => row.marks[a] === '×');
+      const intact = ctl.mustGreen.every(a => row.marks[a] === '✓');
+      console.log(`   ${row.info.slug}: [${marksOf(row)}] hit ${n} time(s), ${red && intact ? `went red on ${wanted.map(a => `(${a})`).join(' ')} as designed` : 'DID NOT FLIP AS DESIGNED'}`);
+      if (wanted.length === 0) fail(`control ${ctl.name}: ${row.info.slug} was hit but has none of ${ctl.mustRed.map(a => `(${a})`).join(' ')}, so nothing could see it`);
+      else if (!red) fail(`control ${ctl.name}: ${row.info.slug} was hit ${n} time(s) and ${wanted.map(a => `(${a})`).join(' ')} stayed green, so the assertion does not see this piece of the lock`);
+      if (!intact) fail(`control ${ctl.name}: ${row.info.slug} is also red on ${ctl.mustGreen.filter(a => row.marks[a] !== '✓').map(a => `(${a})`).join(' ')}, which this control cannot touch`);
+      if (ctl.onlyRow && row.info.slug !== ctl.onlyRow) fail(`control ${ctl.name}: ${row.info.slug} was hit, but the control targets ${ctl.onlyRow} alone`);
+      if (red && intact) flipped += 1;
+    } else {
+      const allGreen = assertionsOf(row).every(a => row.marks[a] === '✓');
+      console.log(`   ${row.info.slug}: [${marksOf(row)}] ${allGreen ? 'not hit, held' : 'WENT RED without being hit'}`);
+      if (!allGreen) fail(`control ${ctl.name}: ${row.info.slug} is red on ${redOnes(row)} though the control never touched it`);
+      else held += 1;
+    }
+  }
+  const hitRows = rows.filter(r => (hits.get(r.info.slug) ?? 0) > 0).length;
+  console.log(`   ${flipped} of ${hitRows} hit row(s) flipped, ${held} of ${rows.length - hitRows} other row(s) held`);
+  if (hitRows === 0) fail(`control ${ctl.name} hit no row at all, so it changed nothing and proved nothing`);
+  if (ctl.onlyRow && !ONLY && !rows.some(r => r.info.slug === ctl.onlyRow)) fail(`control ${ctl.name}: no row named ${ctl.onlyRow}`);
+}
+
+/* ------------------------------------------- 6) the source backstop */
+console.log('6) Source backstop: every mark dependent restore names markRestoredFinish(<slug>) ahead of its finished state set, as code');
 const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 /* Same length as the input, so an index found in the blanked text is valid
    in the comment stripped text it came from. */
@@ -358,7 +447,7 @@ function markBeforeSet(code, slug, setter, binding = null) {
   }
 }
 
-console.log('6) Every file that files a daily record reads the clock ONCE, pinned at mount');
+console.log('7) Every file that files a daily record reads the clock ONCE, pinned at mount');
 {
   /* Round 428 part two, the defect this section exists for. A route dealt its
      puzzle from the date at mount and then called the clock AGAIN at write
@@ -415,14 +504,14 @@ console.log('6) Every file that files a daily record reads the clock ONCE, pinne
   /* The negative: a copy of one real file with a second clock read added back
      must go red, or green above means the check did not look. */
   const victim = suspects.find(s => PIN.test(s.code));
-  if (!victim) fail('the section 5 negative has no pinned file to work from');
+  if (!victim) fail('the section 7 negative has no pinned file to work from');
   else {
     const regressed = victim.code.replace(/\bwriteDailyRecord\s*\(([^,]+),\s*todayStr\b/, '$&_UNPINNED').replace('todayStr_UNPINNED', 'getTodayET()');
     const changed = regressed !== victim.code;
     const reReads = (regressed.match(CLOCK) || []).length;
     if (!changed) console.log('   (negative skipped: the sample file does not pass todayStr to writeDailyRecord, so nothing to unpin)');
     else if (reReads > 1) console.log(`   negative: ${victim.rel} with one write unpinned reads the clock ${reReads} times, which this section rejects`);
-    else fail('the section 5 negative unpinned a write and the check stayed green, so it is dead');
+    else fail('the section 7 negative unpinned a write and the check stayed green, so it is dead');
   }
 }
 
@@ -430,4 +519,4 @@ if (failures > 0) {
   console.error(`\nsimDailyReload: ${failures} failure(s)`);
   process.exit(1);
 }
-console.log(`\nsimDailyReload: all green (${rowList.length} row(s), all three controls fired)`);
+console.log(`\nsimDailyReload: all green (${rowList.length} row(s), all six controls fired)`);

@@ -34,7 +34,9 @@
  * save only at the end (a driver that exports playSome and progress):
  *   (6) settle part of the run, unmount, mount, enter the daily: the board is
  *       on the same step with the same score and count, nothing was
- *       recorded, and finishing the rest records exactly once
+ *       recorded, finishing the rest records exactly once, and the finished
+ *       card is byte identical to step (1)'s, since the driver plays the
+ *       same moves split by the reload
  *
  * scripts/simDailyReload.mjs runs this file and carries the negative
  * controls: DAILY_RELOAD_CONTROL=clear drops every prefixed key between the
@@ -43,17 +45,24 @@
  * (4) must fail on every row whose restore depends on the mark and stay
  * green on every other; DAILY_RELOAD_CONTROL=midrun drops every prefixed
  * key between the part played unmount and the remount, so (6) must fail on
- * every row that has it. ONLY=<slug> runs one row.
+ * every row that has it. Three more take a piece out of the code rather than
+ * the storage (see ./dailyReload/mocks): nolock (one game's record never
+ * read), nosave (the arcade engine's per shot save gone) and restream (the
+ * arcade spray stream restarted on a resume); each must turn red exactly the
+ * rows it hit. ONLY=<slug> runs one row.
  */
 import './dailyReload/mocks';
-import { describe, it, expect, beforeAll } from 'vitest';
+import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { getTodayET } from '@/lib/dateUtils';
 import { consumeRestoredFinish, markRestoredFinish } from '@/lib/restoredFinish';
-import { recordCompletion, resetMocks, restreamedRuns, silencedMarks } from './dailyReload/mocks';
+import { controlHits, recordCompletion, resetMocks, silencedMarks } from './dailyReload/mocks';
 import { DRIVER_FIELDS, type AnyDriver } from './dailyReload/driver';
 
 const CONTROL = process.env.DAILY_RELOAD_CONTROL || '';
 const ONLY = process.env.ONLY || '';
+/* The controls that take a piece of the lock out of the real code path
+   (./dailyReload/mocks), as against the storage controls above them. */
+const CODE_CONTROLS = ['nolock', 'nosave', 'restream'];
 
 /* The same six forms scripts/sweepSaves.mjs writes, in its order. */
 const WRECKAGE: [string, string][] = [
@@ -127,8 +136,16 @@ describe('daily reload', () => {
       let record: string | null = null;
 
       beforeAll(() => {
-        resetMocks();
+        resetMocks(driver.slug);
         localStorage.clear();
+      });
+
+      /* Round 645 part three: under a code control, how many times it took
+         its piece of the lock out while this row ran. The wrapper requires a
+         hit on every row it expects to go red, so red means the control, and
+         a row with no hit must stay green. */
+      afterAll(() => {
+        if (CODE_CONTROLS.includes(CONTROL)) console.log(`DAILY_RELOAD_HITS ${driver.slug} ${controlHits(driver.slug)}`);
       });
 
       it('(1) writes exactly one record for today when the daily is finished', async () => {
@@ -235,11 +252,9 @@ describe('daily reload', () => {
             for (const k of dropped) localStorage.removeItem(k);
             console.log(`DAILY_RELOAD_MIDRUN ${driver.slug} dropped ${dropped.length} key(s)`);
           }
-          const restreamBefore = restreamedRuns();
           api = await driver.mount();
           try {
             await driver.enterDaily(api);
-            if (CONTROL === 'restream') console.log(`DAILY_RELOAD_RESTREAM ${driver.slug} restarted ${restreamedRuns() - restreamBefore} stream(s)`);
             expect(driver.status(api), 'the reloaded daily should come back mid run, not finished and not on a fresh board').toBe('playing');
             expect(progress(api), 'the reloaded board should be on the same step with the same score and count').toBe(mid);
             expect(recordCompletion.mock.calls.length - before, 'resuming records nothing').toBe(0);

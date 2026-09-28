@@ -9,12 +9,22 @@
  * so only the network call is replaced). What is mocked: the auth context
  * (signed out), the Supabase client (a chainable stub answering from
  * fixtures a driver registers), recordCompletion (a vi.fn the test counts),
- * badges and toasts (network and UI noise), and the three pool loaders.
+ * badges and toasts (network and UI noise), the pool loaders, the edge
+ * functions a driver registers, and Combat Chain's daily starter.
  *
  * The silent control lives here too: with DAILY_RELOAD_CONTROL=silent the
  * markRestoredFinish wrapper swallows the mark, so a route whose restore
  * depends on it records the completion again on every remount, which
- * assertion 4 must then see.
+ * assertion 4 must then see. So do Round 645 part three's three code
+ * controls, each of which takes one piece of the lock out of the real code
+ * path and counts every time it did (controlHits, per row):
+ *   nolock    readDailyRecord refuses every read for one slug
+ *             (DAILY_RELOAD_NOLOCK_SLUG, default football-timeline): that
+ *             game's lock is gone and nothing else is touched
+ *   nosave    writeArcadeProgress writes nothing: the arcade engine's mid
+ *             run save is gone, the finished run is still filed
+ *   restream  countedLehmer ignores the draws a part played run filed, so
+ *             a resume restarts the spray stream from the top
  */
 import { vi } from 'vitest';
 
@@ -26,7 +36,11 @@ const shared = vi.hoisted(() => {
   const pools = new Map<string, unknown>();
   const functions = new Map<string, unknown>();
   const silenced = { count: 0 };
-  const restreamed = { count: 0 };
+  /* Round 645 part three: how often a code control changed the path, per
+     row (the row the test is on when it happened). */
+  const hits = new Map<string, number>();
+  const row = { slug: '' };
+  const hit = () => { hits.set(row.slug, (hits.get(row.slug) ?? 0) + 1); };
 
   const IGNORED = new Set(['toJSON', '$$typeof', 'constructor', 'asymmetricMatch', 'nodeType', 'length', 'name']);
 
@@ -91,7 +105,7 @@ const shared = vi.hoisted(() => {
     updateProfile: async () => ({ error: null }),
   };
 
-  return { recordCompletion: vi.fn(), tables, rpcs, pools, functions, silenced, restreamed, auth, supabase: build('root', null, []) };
+  return { recordCompletion: vi.fn(), tables, rpcs, pools, functions, silenced, hits, row, hit, auth, supabase: build('root', null, []) };
 });
 
 vi.mock('@/integrations/supabase/client', () => ({
@@ -208,22 +222,44 @@ vi.mock('@/data/ufcChainData', async (importOriginal) => {
   };
 });
 
-/* Round 645 part three, the restream control: with
-   DAILY_RELOAD_CONTROL=restream the arcade spray stream restarts from the top
-   on a resume instead of carrying on from the draws the part played run
-   filed. That is the shape of the regression (the stream re-seeded, every
-   remaining shot sprayed with numbers the player has already seen), and
-   assertion 6's final comparison must catch it on every arcade row. */
+/* Round 645 part three, two of the code controls on the arcade engine's
+   record. restream: the spray stream restarts from the top on a resume
+   instead of carrying on from the draws the part played run filed, the shape
+   of the regression (every remaining shot sprayed with numbers the player
+   has already seen), which assertion 6's final comparison must catch on
+   every arcade row. nosave: the per shot save is gone, so a run walked away
+   from is dealt again from the first shot, which assertion 6 must catch the
+   moment the part played run leaves no record. */
 vi.mock('@/lib/arcadeRecord', async (importOriginal) => {
   const real = await importOriginal<typeof import('@/lib/arcadeRecord')>();
   return {
     ...real,
     countedLehmer: (seed: number, skip = 0) => {
       if (process.env.DAILY_RELOAD_CONTROL === 'restream' && skip > 0) {
-        shared.restreamed.count += 1;
+        shared.hit();
         return real.countedLehmer(seed, 0);
       }
       return real.countedLehmer(seed, skip);
+    },
+    writeArcadeProgress: (...args: Parameters<typeof real.writeArcadeProgress>) => {
+      if (process.env.DAILY_RELOAD_CONTROL === 'nosave') { shared.hit(); return; }
+      real.writeArcadeProgress(...args);
+    },
+  };
+});
+
+/* Round 645 part three, the nolock code control: one game's lock taken out
+   by refusing every read of its record, which every game on the Round 428
+   helper (and the arcade and chain records built on it) goes through. The
+   writes stay, so the finish is still filed; only the lock is gone. */
+vi.mock('@/lib/dailyRecord', async (importOriginal) => {
+  const real = await importOriginal<typeof import('@/lib/dailyRecord')>();
+  return {
+    ...real,
+    readDailyRecord: (...args: Parameters<typeof real.readDailyRecord>) => {
+      const target = process.env.DAILY_RELOAD_NOLOCK_SLUG || 'football-timeline';
+      if (process.env.DAILY_RELOAD_CONTROL === 'nolock' && args[0] === target) { shared.hit(); return null; }
+      return real.readDailyRecord(...args);
     },
   };
 });
@@ -300,16 +336,18 @@ export function silencedMarks(): number {
   return shared.silenced.count;
 }
 
-/** How many resumes the restream control sent back to the top of the stream. */
-export function restreamedRuns(): number {
-  return shared.restreamed.count;
+/** How many times a code control (nolock, nosave, restream) changed the
+ *  path while the test was on this row. */
+export function controlHits(slug: string): number {
+  return shared.hits.get(slug) ?? 0;
 }
 
 /** Called by the test at the start of every row. */
-export function resetMocks(): void {
+export function resetMocks(slug = ''): void {
   shared.tables.clear();
   shared.rpcs.clear();
   shared.pools.clear();
   shared.functions.clear();
   shared.recordCompletion.mockClear();
+  shared.row.slug = slug;
 }
