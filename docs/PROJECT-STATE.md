@@ -1,5 +1,50 @@
 # Project state
 
+## BUILT 2026-09-28: Round 661, the trivia banks tell the truth (branch `r661-trivia-facts`, not on main)
+
+Hall of Fame or Bust, Guess the Year and Score Predictor are hand typed files with no source behind
+any line, and a two pass check (researchers, then skeptics who reopened every URL) found them full
+of wrong facts. Hall of Fame or Bust had at least 18 of its 25 cards carrying a false line, several
+of them another player's totals (Jordan on Kobe's 33,643 points, Ortiz on Jeter's hits and Sosa's
+home runs, Howe with no Stanley Cups, Yakupov on half his goals). Guess the Year had 38 of its 300
+clues pointing at the wrong year, fitting two puzzle years or plainly false (Brady's Tampa Bay title
+in 2020, a Chiefs three-peat the Eagles denied, Seattle's February 2026 Super Bowl in 2025, three
+Heisman Trophies a year early), and far more whose detail no page opened would state. Score
+Predictor dated the 1994 Milan final six days late and had nine road sides listed as the home team.
+
+- **What changed.** Every line was either confirmed on two sources or rewritten to a fact two
+  sources state, in the same voice and length. Upheld corrections were applied; overturned ones
+  were not (the five "not inducted" verdict corrections would have put an empty string in the
+  verdict union and crashed the reveal). Active players carry floors (`43,000+`, `22,000+`,
+  `650+`). Guess the Year keeps six clues a year and its year order, so no daily moved; it now uses
+  the calendar year throughout, so a January Super Bowl or bowl game belongs to the new year. Score
+  Predictor puts the real home side first where one side was at home (the board stopped printing
+  Home and Away in this round, since most of the pool is finals at neutral grounds).
+- **The record.** `scripts/data/triviaFactsVerified2026-09.json`: 597 facts (200 card lines, 300
+  clues, 35 matches plus 62 hints and fun facts), each on two sites with at least one independent
+  one; 429 carry an official source (league, governing body or hall), 168 carry a stated reason why
+  not (olympics.com timed out on every fetch, mlb.com answers 406, fifa.com tournament pages render
+  empty, no sanctioning body page for a fight). 33 lines are editorial and say why: the 25 verdict
+  labels and 8 Score Predictor teaser hints.
+- **The fence.** `scripts/simTriviaFacts.mjs`, five sections (the record's rules, each game word
+  for word, nothing the files dropped) and eight controls (`onesource`, `hofline`, `floor`,
+  `gtyclue`, `gtyfive`, `spscore`, `spdate`, `stale`), each proven to redden only its own section,
+  and proven again with the three data files converted to CRLF.
+- **Gates run.** tsc 0; `simTriviaFacts` green; `simNoRivalNames` green (it flagged a source URL
+  whose slug spelled a tournament name in a shape its FIFA allowlist does not know, so that source
+  was replaced rather than the check loosened); `simGuideHeadings` green; `simSiteSearch` green; the Guess the Year row of the daily
+  reload test green. Not run, by instruction: `runAllSims`, the build, `build:seo`, the browser
+  harnesses.
+- **For whoever releases it.** The branch sits on `5c082e71`, 61 commits behind main, so What's New,
+  the board and this file will conflict; keep both sides. A Score Predictor player who played
+  sp-11, sp-13 or sp-15 on the release day and reloads will see their saved guess against the
+  swapped sides, once. No game guide or search keyword changed, so `searchKeywords.json` needs no
+  regeneration for this round.
+- **Open, for the owner rather than the fence.** The reveal prints "Official verdict: Hall of Fame"
+  for LeBron, Crosby, Brady, Peterson and Jagr, none of whom is inducted yet; the verdict is the
+  game's judgment label and scoring depends on it, so it was left as is. Michael Owen is labelled a
+  bust beside a Ballon d'Or.
+
 ## LIVE 2026-09-19 evening: Rounds 632, 640, 642, 636 and 650 (release C), main `8a3bb5ba`
 
 Built and gated by the desktop Claude lane in the CRLF gate clone on branch `release-c`, on top of

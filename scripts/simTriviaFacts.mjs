@@ -212,7 +212,7 @@ head(1, 'the record: two sources on two sites, one official or a reason, one ind
     }
     if (!sites.some(h => !official.includes(h))) fail(`${where}: no independent source, every source is official`);
     if (!/^\d{4}-\d{2}-\d{2}$/.test(node.on || '') || node.on > today) fail(`${where}: check date "${node.on}" is missing or in the future`);
-    if (typeof node.text === 'string' && /[–—]/.test(node.text)) fail(`${where}: the text carries a dash the site never uses`);
+    if (typeof node.text === 'string' && /[\u2013\u2014]/.test(node.text)) fail(`${where}: the text carries a dash the site never uses`);
   };
   for (const [id, e] of Object.entries(record.hofOrBust || {})) {
     if (!e.verdict?.editorial) fail(`hofOrBust.${id}: the verdict is the game's label and must be marked editorial with its reason`);
