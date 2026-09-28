@@ -1272,7 +1272,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Scoring survival points and the trophy",
         items: [
-          "Survive a round for 16 points; lift the trophy for exactly 100.",
+          "You score for every round you survive past where a team of the weakest card in each pick would go out; lift the trophy for 100.",
         ],
       },
     ],

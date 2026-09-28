@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { Loader2, Swords } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -16,7 +16,7 @@ import { FlagImg } from '@/components/FlagImg';
 import { Player } from '@/types/game';
 import {
   GAUNTLET_ROUNDS, GauntletDraft as DraftShape, GauntletRun,
-  buildDraft, dailyDraftSeed, loadDailyRun, runGauntlet, saveDailyRun, squadRatingOf,
+  buildDraft, dailyDraftSeed, loadDailyRun, runGauntlet, saveDailyRun, squadRatingOf, gauntletPoints,
 } from '@/lib/gauntletDraft';
 
 /**
@@ -132,7 +132,15 @@ export default function GauntletDraft() {
      reveal had the day locked with the completion never booked, and the restore
      afterwards marked itself and swallowed it for good. Booking on the run
      itself puts the save and the completion at the same instant. */
-  useGameCompletion(SLUG, run !== null, run?.score ?? 0, run?.roundsCleared ?? 0);
+  /* Round 645: the run scored against the cup the weakest card in every pick
+     of the same draft runs (gauntletPoints). A restored daily keeps only the
+     run, so its draft is dealt again from the day seed and today's pool. */
+  const dealt = useMemo(
+    () => draft ?? (run && mode === 'daily' && pool.length > 0 ? buildDraft(pool, dailyDraftSeed(todayStr)) : null),
+    [draft, run, mode, pool, todayStr],
+  );
+  const points = run && dealt ? gauntletPoints(dealt, run) : 0;
+  useGameCompletion(SLUG, run !== null, run && dealt ? gauntletPoints(dealt, run) : 0, run?.roundsCleared ?? 0);
 
   const pick = draft && phase === 'drafting' ? draft.picks[pickIndex] : null;
   const dailyDone = phase === 'setup' && loadDailyRun(todayStr) !== null;
@@ -168,7 +176,7 @@ export default function GauntletDraft() {
               <p className="font-bold text-foreground">How to play</p>
               <p>A formation is drawn. For each of its eleven slots you get five real players who fit it, spread from a star to a bargain, and you keep exactly one.</p>
               <p>Then your XI runs the gauntlet: five knockout rounds against opposition rated 70 up to 89. Level after ninety goes to extra time, then pens.</p>
-              <p>The run is decided by the squad you drafted: the same XI always runs the same gauntlet. 16 points a round survived, the trophy lands exactly 100.</p>
+              <p>The run is decided by the squad you drafted: the same XI always runs the same gauntlet. You score for going further than an XI of the weakest card in every pick would have. Match that and it's 0, lift the trophy and it's 100.</p>
             </div>
             <button onClick={() => start('daily')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Daily gauntlet</span>
@@ -248,9 +256,9 @@ export default function GauntletDraft() {
             outcomeEmoji={run.champion ? '🏆' : run.roundsCleared >= 3 ? '🥈' : '🫠'}
             headline={run.champion ? 'Champions! The gauntlet is run!' : `Out at ${run.matches[run.matches.length - 1]?.round.name ?? 'the start'}`}
             statLine={`${run.roundsCleared} of ${GAUNTLET_ROUNDS.length} rounds survived with a ${run.rating} rated XI`}
-            statRow={[{ label: 'Score', value: run.score }]}
-            emojiGrid={[`⚔️ Gauntlet Draft: ${run.score} pts`, ...run.matches.map(m => `${m.won ? '🟩' : '🟥'} ${matchLine(m)}`)].join('\n')}
-            share={{ score: String(run.score), gameName: 'Gauntlet Draft', gamePath: '/gauntlet-draft' }}
+            statRow={[{ label: 'Points', value: points }]}
+            emojiGrid={[`⚔️ Gauntlet Draft: ${points} pts`, ...run.matches.map(m => `${m.won ? '🟩' : '🟥'} ${matchLine(m)}`)].join('\n')}
+            share={{ score: String(points), gameName: 'Gauntlet Draft', gamePath: '/gauntlet-draft' }}
             onPlayAgain={() => setPhase('setup')}
             playAgainLabel={mode === 'daily' ? 'Back to modes' : 'New draft'}
             playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new draft.</p> : undefined}

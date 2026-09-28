@@ -1,5 +1,6 @@
 import { dailyPrngSeed } from '@/lib/dateUtils';
 import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+import { skillPoints } from '@/lib/skillPoints';
 
 /**
  * Gauntlet Draft, the generic engine (Round 520).
@@ -290,6 +291,27 @@ export function runGauntlet<P>(config: GauntletConfig<P>, squad: (P | null)[]): 
   const champion = cleared === config.rounds.length;
   const score = Math.min(100, cleared * 16 + (champion ? 20 : 0));
   return { rating, matches, roundsCleared: cleared, champion, score };
+}
+
+/** Round 645: the squad a player who kept the lowest rated card in every
+ *  pick would have drafted from this very draft. */
+export function worstSquadOf<P>(config: GauntletConfig<P>, draft: GauntletDraftResult<P>): P[] {
+  return draft.picks.map(p => [...p.choices].sort((a, b) => config.ratingOf(a) - config.ratingOf(b))[0]);
+}
+
+/**
+ * Round 645: what a finished gauntlet records and its card shows. It recorded
+ * the run's own score, and the weakest card in every pick is still a real
+ * squad that clears rounds: measured over 400 drafts before this round, the
+ * always-weakest squad averaged 25 of 100 on the live soccer pool, 14 in the
+ * MLB and NBA ladders and under 1 in the NFL's. The run is scored against
+ * that squad now, the cup it would have run on the same draw (the run is
+ * deterministic in the squad): matching it records 0, and a trophy still
+ * records 100. One engine, so all four sports get the same rule.
+ */
+export function gauntletPoints<P>(config: GauntletConfig<P>, draft: GauntletDraftResult<P>, run: GauntletRun): number {
+  const floor = runGauntlet(config, worstSquadOf(config, draft));
+  return skillPoints(run.score, floor.score, 100);
 }
 
 /**

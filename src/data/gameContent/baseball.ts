@@ -514,7 +514,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       {
         heading: "Scoring points for each round survived",
         items: [
-          "Survive a round for 16 points; win the Series for exactly 100.",
+          "You score for every round you survive past where a lineup of the weakest card in each pick would go out; win the Series for 100.",
         ],
       },
     ],
