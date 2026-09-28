@@ -313,9 +313,10 @@ export function useNbaLineup() {
       if (!resp.ok) throw new Error(`Evaluation request failed (${resp.status})`);
       const data = await resp.json();
       /* Guard against a malformed/empty body so we never land on a blank
-         result. Round 645: the function's own stand-in for an answer it could
-         not parse (a flat Regular Season) is not a verdict either
-         (fiveRefereeVerdict), so it goes to the offline judge with the rest. */
+         result. Round 645: the function's own stand-ins when its AI is out
+         (the quick data read that rates any five real names All-Star
+         Starters, and its exception placeholder) are not verdicts either
+         (fiveRefereeVerdict), so they go to the offline judge with the rest. */
       const judged = fiveRefereeVerdict(data);
       if (!judged) throw new Error('No referee verdict');
       setVerdict(judged);

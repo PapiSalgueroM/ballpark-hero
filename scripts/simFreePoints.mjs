@@ -70,7 +70,7 @@
  *      judge can give is on a ladder in src/lib/lineupVerdictPoints.ts, so a new
  *      rung cannot quietly score 0 (that file's header promises it). And every
  *      stand-in body the two referee functions can send when their AI is out
- *      (their own fallback code, run here with a stubbed price table) is caught
+ *      (their own fallback code, run here with the tables they read stubbed) is caught
  *      as no verdict, so the page hands the lineup to the offline judge.
  *   4) The shares: every game this round rescaled shares the number it records.
  *
@@ -85,7 +85,8 @@
  *   untrusted  the offline judge rates a name it cannot price 64 on trust
  *              again: build-your-xi
  *   fivefloor  NBA Starting 5 records `verdict ? 500 : 0` again: nba-starting-5
- *   fivestandin the unparsed Regular Season stand-in is scored again:
+ *   fivestandin the function's quick data read (any five real names read
+ *              All-Star Starters) is scored as a referee verdict again:
  *              nba-starting-5 and section3
  *   iqfloor    Ball IQ records `iq * 10` again: ball-iq
  *   emptybox   Mystery Box's floor back to 0, so binning every pack pays 450:
@@ -207,8 +208,8 @@ const CONTROLS = {
   },
   fivestandin: {
     file: 'src/lib/lineupVerdictPoints.ts',
-    from: 'return v.headline.trim().toLowerCase() === FIVE_STAND_IN_HEADLINE ? null : v;',
-    to: 'return v;',
+    from: "const FIVE_STAND_IN_WORDS = ['ai analyst is offline', 'analyst is taking a'];",
+    to: "const FIVE_STAND_IN_WORDS = ['analyst is taking a'];",
     rows: ['nba-starting-5', 'section3'],
   },
   borderline: {
@@ -1201,9 +1202,15 @@ row('dart-draft', {
 /* The referees' stand-ins, run from the edge functions' own source. When the
    AI referee is out, evaluate-lineup still answers 200 with a verdict of its
    own (its market value read, or a flat placeholder on an exception), and
-   nba-evaluate-lineup dresses an answer it could not parse as Regular Season.
-   The functions are Deno, so the code is cut out of each file, stripped of its
-   types and run here with fetch and the price table stubbed. */
+   nba-evaluate-lineup answers with its quick data read (statFallback, which
+   rates the five by how many names it finds in the stats table) or a flat
+   placeholder. The functions are Deno, so the code is cut out of each file,
+   stripped of its types and run here with fetch and the tables stubbed.
+   This is only as true as the repo copies: evaluate-lineup is in the synced
+   list of scripts/data/edgeDeployed.json, and nba-evaluate-lineup was read
+   back from production on 2026-09-28 (its old repo copy was a different
+   program, so the first cut of this section certified a stand-in the live
+   function never sends). */
 const XI_FN = 'supabase/functions/evaluate-lineup/index.ts';
 const FIVE_FN = 'supabase/functions/nba-evaluate-lineup/index.ts';
 /** The text of `function name(...) {...}` in a file, braces matched with
@@ -1247,17 +1254,33 @@ async function xiStandIns() {
   out.push({ what: 'exception placeholder', zeroSkill: true, body: Function(`return (${placeholder[1]});`)() });
   return out;
 }
-function fiveStandIns() {
-  const m = stripComments(readLF(FIVE_FN)).match(/catch\s*\{\s*parsed\s*=\s*(\{[\s\S]*?\});/);
-  if (!m) throw new Error(`${FIVE_FN}: the unparsed answer stand-in is not in the shape this harness reads`);
-  const make = Function('content', `return (${m[1]});`);
-  return [
-    { what: 'an answer that would not parse', zeroSkill: true, body: make('The five is fine I guess, hard to say.') },
-    { what: 'an empty answer', zeroSkill: true, body: make('') },
-  ];
+const WORST_FIVE = range(5).map(i => `Deep Bench ${i}`);
+async function fiveStandIns() {
+  const text = readLF(FIVE_FN);
+  const fns = ['sanitizeName', 'resolveStat', 'fetchStats', 'statFallback'].map(n => functionSource(text, n)).join('\n');
+  const js = (await transform(fns, { loader: 'ts' })).code;
+  /* A zero skill five: real players, every one the worst the challenge
+     could ask for, so each is in the stats table. `listed` is how many of the
+     five the table knows. */
+  const challenge = { stat: 'Career points per game', unit: 'PPG', direction: 'highest' };
+  const run = async listed => {
+    const fetchStub = async () => {
+      if (listed === 'down') throw new Error('the stats table is down');
+      return { ok: true, json: async () => WORST_FIVE.slice(0, listed).map(n => ({ player_name: n, points: 1200, games: 400, trb: 0, ast: 0, three_p: 0, stl: 0, blk: 0 })) };
+    };
+    const make = Function('SUPABASE_URL', 'SUPABASE_ANON_KEY', 'fetch', `${js}\nreturn statFallback;`);
+    return make('https://stub.invalid', 'stub', fetchStub)(WORST_FIVE.map(n => ({ label: 'PG', playerName: n, assignedTeam: 'Nowhere' })), challenge);
+  };
+  const out = [];
+  for (const listed of [5, 4, 3, 2, 1, 0]) out.push({ what: `quick data read, ${listed} of 5 in the stats table`, zeroSkill: true, body: await run(listed) });
+  out.push({ what: 'quick data read, stats table down', zeroSkill: true, body: await run('down') });
+  const placeholder = stripComments(text).match(/\}\s*catch\s*\(_e\)\s*\{\s*return json\((\{[\s\S]*?\}),\s*200\);/);
+  if (!placeholder) throw new Error(`${FIVE_FN}: the exception placeholder is not in the shape this harness reads`);
+  out.push({ what: 'exception placeholder', zeroSkill: true, body: Function(`return (${placeholder[1]});`)() });
+  return out;
 }
 const XI_STAND_INS = await xiStandIns();
-const FIVE_STAND_INS = fiveStandIns();
+const FIVE_STAND_INS = await fiveStandIns();
 /* What the real offline judges say about a zero skill lineup: eleven of the
    cheapest names in the value table, and eleven names it cannot price at all
    (Build Your XI takes any real player of the club or country, every era). */
@@ -1791,10 +1814,13 @@ console.log('3) every label a lineup judge can give is on a ladder, and no refer
 {
   const key = s => s.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
   const onLadder = (label, ladder) => ladder.some(l => key(l) === key(label));
-  /* The verdict list lines, not the JSON field lines (`- "rating": ...`). */
+  /* evaluate-lineup lists its verdicts one to a line (not the JSON field lines,
+     `- "rating": ...`); nba-evaluate-lineup lists them on one "Pick ONE
+     verdict:" line. */
   const promptLabels = rel => [...readLF(rel).matchAll(/^- "([^"]+)"(?!:)/gm)].map(m => m[1]);
+  const pickLine = readLF(FIVE_FN).match(/^Pick ONE verdict: (.*)$/m);
   const xiReferee = promptLabels(XI_FN);
-  const fiveReferee = promptLabels(FIVE_FN);
+  const fiveReferee = pickLine ? [...pickLine[1].matchAll(/"([^"]+)"/g)].map(m => m[1]) : [];
   const local = code('src/lib/localLineupEval.ts');
   const localSplit = local.split('export async function localEvaluateNbaFive');
   const xiOffline = [...localSplit[0].matchAll(/rating: '([^']+)'/g)].map(m => m[1]);
@@ -1807,12 +1833,14 @@ console.log('3) every label a lineup judge can give is on a ladder, and no refer
   /* The stand-ins: every body the functions' own fallback code sends must be
      caught as no verdict, whatever XI it was sent for. A caught one goes to
      the offline judge on the page, which is what the rows above measure. */
-  if (XI_STAND_INS.length < 9 || FIVE_STAND_INS.length < 2) failIn('section3', `the stand-in read is broken: ${XI_STAND_INS.length} XI, ${FIVE_STAND_INS.length} Starting 5`);
+  if (XI_STAND_INS.length < 9 || FIVE_STAND_INS.length < 8) failIn('section3', `the stand-in read is broken: ${XI_STAND_INS.length} XI, ${FIVE_STAND_INS.length} Starting 5`);
   const rungs = new Set(XI_STAND_INS.map(s => key(s.body.rating)));
   if (rungs.size < 6) failIn('section3', `the market read produced only ${rungs.size} distinct rungs, so it did not run the way this harness drives it`);
+  const fiveRungs = new Set(FIVE_STAND_INS.map(s => key(s.body.rating)));
+  if (fiveRungs.size < 4) failIn('section3', `the quick data read produced only ${fiveRungs.size} distinct rungs, so it did not run the way this harness drives it`);
   for (const s of XI_STAND_INS) if (L.verdicts.xiRefereeVerdict(s.body) !== null) failIn('section3', `Build Your XI scores the function's ${s.what} ("${s.body.rating}") as a referee verdict`);
   for (const s of FIVE_STAND_INS) if (L.verdicts.fiveRefereeVerdict(s.body) !== null) failIn('section3', `NBA Starting 5 scores the function's stand-in for ${s.what} ("${s.body.rating}") as a referee verdict`);
-  console.log(`   ${xiReferee.length} XI referee labels, ${xiOffline.length} XI offline labels, ${fiveReferee.length} Starting 5 referee labels; ${XI_STAND_INS.length} XI stand-ins over ${rungs.size} rungs and ${FIVE_STAND_INS.length} Starting 5 stand-ins, run from the functions' own code`);
+  console.log(`   ${xiReferee.length} XI referee labels, ${xiOffline.length} XI offline labels, ${fiveReferee.length} Starting 5 referee labels; ${XI_STAND_INS.length} XI stand-ins over ${rungs.size} rungs and ${FIVE_STAND_INS.length} Starting 5 stand-ins over ${fiveRungs.size} rungs, run from the functions' own code`);
 }
 
 /* ---------------- section 4: the shares ---------------- */

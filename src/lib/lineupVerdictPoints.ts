@@ -90,18 +90,24 @@ export interface RefereeVerdict {
  * exception a flat Top 4 Finish placeholder. The first cut scored those on the
  * referee ladder, so the market read's bottom rung, Relegation Battle, paid 125
  * of 500 for the worst XI there is and the flat Top 4 Finish paid 313 for any
- * XI. nba-evaluate-lineup has one stand-in, a model answer that would not
- * parse dressed as Regular Season (214 of 500). Nothing in those bodies but
- * their own words tells them from a referee verdict, so these are the words,
- * lower cased, and simFreePoints runs the functions' own fallback code and
- * holds that every body it can send is caught here. A caught body is a
- * referee failure like a refused request: the page hands the lineup to the
- * offline judge, so a degraded Build Your XI is scored on the same basis as
- * any other offline one (the quality of the XI, its worst verdict 0), and a
- * degraded Starting 5 records 0.
+ * XI. nba-evaluate-lineup does the same with its own quick data read
+ * (statFallback): it rates the five by how many of the names it finds in the
+ * stats table, whatever the challenge asked, so five real names read All-Star
+ * Starters (429 of 500) on any challenge, and on an exception it sends a flat
+ * Solid Rotation placeholder (286). The repo held an older copy of that
+ * function until the second fix of this round, so the first fix caught a
+ * stand-in the live function never sends; a live probe on 2026-09-28 came
+ * back from statFallback. Nothing in those bodies but their own words tells
+ * them from a referee verdict, so these are the words, lower cased, and
+ * simFreePoints runs the functions' own fallback code and holds that every
+ * body it can send is caught here. A caught body is a referee failure like a
+ * refused request: the page hands the lineup to the offline judge, so a
+ * degraded Build Your XI is scored on the same basis as any other offline one
+ * (the quality of the XI, its worst verdict 0), and a degraded Starting 5
+ * records 0.
  */
 const XI_STAND_IN_WORDS = ['market-value read', 'pundit is taking a'];
-const FIVE_STAND_IN_HEADLINE = 'interesting squad choices';
+const FIVE_STAND_IN_WORDS = ['ai analyst is offline', 'analyst is taking a'];
 
 function bodyOf(body: unknown): RefereeVerdict | null {
   if (!body || typeof body !== 'object') return null;
@@ -110,20 +116,23 @@ function bodyOf(body: unknown): RefereeVerdict | null {
   return { rating: b.rating, headline: typeof b.headline === 'string' ? b.headline : '', analysis: b.analysis };
 }
 
-/** A Build Your XI referee body the page may score, or null when it is not a
- *  referee verdict (malformed, or one of the function's stand-ins). */
-export function xiRefereeVerdict(body: unknown): RefereeVerdict | null {
+/** A referee body the page may score, or null when it is not a referee
+ *  verdict (malformed, or one of the function's stand-ins). */
+function refereeVerdict(body: unknown, standInWords: readonly string[]): RefereeVerdict | null {
   const v = bodyOf(body);
   if (!v) return null;
   const words = `${v.headline} ${v.analysis}`.toLowerCase();
-  return XI_STAND_IN_WORDS.some(w => words.includes(w)) ? null : v;
+  return standInWords.some(w => words.includes(w)) ? null : v;
+}
+
+/** A Build Your XI referee body the page may score, or null. */
+export function xiRefereeVerdict(body: unknown): RefereeVerdict | null {
+  return refereeVerdict(body, XI_STAND_IN_WORDS);
 }
 
 /** An NBA Starting 5 referee body the page may score, or null. */
 export function fiveRefereeVerdict(body: unknown): RefereeVerdict | null {
-  const v = bodyOf(body);
-  if (!v) return null;
-  return v.headline.trim().toLowerCase() === FIVE_STAND_IN_HEADLINE ? null : v;
+  return refereeVerdict(body, FIVE_STAND_IN_WORDS);
 }
 
 function labelKey(label: string): string {
