@@ -97,6 +97,11 @@ export function isStaleChunkError(err: unknown): boolean {
 
 /** True when this call performed the reload, so a caller can stop rendering. */
 export function reloadOnceForStaleChunk(): boolean {
+  /* Never under the prerenderer. It hands every route the built bundle, so a
+     chunk cannot be stale there, and a reload mid capture would leave it
+     waiting on a document that was just replaced. The flag is the one the
+     404 marker in index.html already honours. */
+  if ((window as unknown as { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return false;
   try {
     if (sessionStorage.getItem(STALE_KEY) === '1') return false;
     sessionStorage.setItem(STALE_KEY, '1');
