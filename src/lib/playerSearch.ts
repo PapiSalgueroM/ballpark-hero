@@ -150,9 +150,12 @@ function capitalizeSegment(seg: string): string {
 
 export interface PlayerEntity {
   /**
-   * Stable key for React lists: the normalized name, unique per player within
-   * a search. Round 668: when two people share that normalized name on a
-   * source that can tell them apart, each key also carries its personKey.
+   * Stable key for React lists and dedupe: normalized name, unique per player
+   * within a search. Round 668: on a source that can tell namesakes apart two
+   * results can share it (Éderson and Ederson are both "ederson"), and it is
+   * kept that way on purpose, because callers compare it with normalized
+   * names (Rarity Round's pool, simRarityAgreement). A list renders by
+   * `personKey ?? key`, which is unique.
    */
   key: string;
   /**
@@ -526,7 +529,7 @@ export function dedupeAndRank(
   const ranked = entries.map(e => {
     const shared = (sharing.get(e.normalized) ?? 0) > 1;
     const entity: PlayerEntity = {
-      key: shared && e.personKey ? `${e.normalized}#${e.personKey}` : e.normalized,
+      key: e.normalized,
       name: displayName(e.raw.name),
       rawName: e.raw.name,
       meta: e.raw.meta,
@@ -692,10 +695,6 @@ export function mergeLocalNames(
   }
   if (locals.length === 0) return remote;
   const seen = new Set(remote.map(r => r.key));
-  // Round 668: a person's key carries more than his name when a namesake
-  // shares it, so the name itself counts as seen too. Only on a source with
-  // an identity: everywhere else key is already the normalized name.
-  for (const r of remote) if (r.personKey !== undefined) seen.add(normalizeName(r.name));
   return [...remote, ...locals.filter(l => !seen.has(l.key))];
 }
 

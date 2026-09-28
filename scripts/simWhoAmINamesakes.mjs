@@ -118,14 +118,14 @@ const CONTROLS = {
   },
   pooled: {
     section: 2, file: 'src/lib/whoAmI.ts', alias: '@/lib/whoAmI',
-    anchor: 'if (!r.person_key && !isSameMan(owner, { age: r.age, year: r.year })) continue;',
+    anchor: 'if (!r.k && !isSameMan(owner, { age: r.a, year: r.y })) continue;',
     broken: '',
     note: 'the club history pools every row under the spelling again',
   },
   overstrict: {
     section: 2, file: 'src/lib/whoAmI.ts', alias: '@/lib/whoAmI',
-    anchor: 'if (!r.person_key && !isSameMan(owner, { age: r.age, year: r.year })) continue;',
-    broken: 'if (!r.person_key && r.year !== owner.year) continue;',
+    anchor: 'if (!r.k && !isSameMan(owner, { age: r.a, year: r.y })) continue;',
+    broken: 'if (!r.k && r.y !== owner.year) continue;',
     note: 'the club history keeps only rows from the current row\'s year',
   },
   rawlabel: {

@@ -259,8 +259,9 @@ describe('2. the soccer source keeps Éderson and Ederson apart', () => {
     expect(before.map(r => r.rawName)).toEqual(['Ederson']);
   });
 
-  it('keys are unique, so React can list both', () => {
-    expect(new Set(results.map(r => r.key)).size).toBe(results.length);
+  it('key stays the normalized name callers compare with, and the list key (personKey ?? key) is unique', () => {
+    expect(results.map(r => r.key)).toEqual(['ederson', 'ederson']);
+    expect(new Set(results.map(r => r.personKey ?? r.key)).size).toBe(results.length);
   });
 
   it('each shared name says which man it is, from his LATEST row', () => {

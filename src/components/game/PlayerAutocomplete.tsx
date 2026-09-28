@@ -386,7 +386,7 @@ export function PlayerAutocomplete({
             const subtitle = entity.disambiguator ?? metaSubtitle(entity);
             return (
               <button
-                key={entity.key}
+                key={entity.personKey ?? entity.key}
                 type="button"
                 role="option"
                 aria-selected={i === highlightedIndex}

@@ -582,6 +582,10 @@ export interface PoolRow {
  * and the Past club link chip could light for a guess who never shared a club
  * with the secret. A row must be the same person by whoAmIPersonKey, and a
  * row with no person_key must also walk with the pool row's age (isSameMan).
+ * That needs three more columns per row, so the columns come back under one
+ * letter names. Measured 2026-09-28, same 11 requests every time: the boot
+ * was 497 KiB before this round, 684 KiB with the full column names, 575 KiB
+ * with these (the owner has asked for a quick load; simNoZeroFacts holds 800).
  */
 async function fetchClubHistory(pool: WhoAmIPlayer[]): Promise<Map<string, Set<string>>> {
   const map = new Map<string, Set<string>>();
@@ -597,17 +601,17 @@ async function fetchClubHistory(pool: WhoAmIPlayer[]): Promise<Map<string, Set<s
       for (let page = 0; page < HISTORY_MAX_PAGES; page++) {
         const { data, error } = await supabase
           .from('player_market_values')
-          .select('player_name, club, age, year, person_key')
+          .select('n:player_name, c:club, a:age, y:year, k:person_key')
           .in('player_name', chunk)
           .order('id', { ascending: true })
           .range(from, from + HISTORY_PAGE - 1);
         if (error) throw error;
         for (const r of data ?? []) {
-          const key = clubKey(r.club ?? '');
+          const key = clubKey(r.c ?? '');
           if (!key) continue;
-          const owner = byPerson.get(whoAmIPersonKey(r.player_name, r.person_key));
+          const owner = byPerson.get(whoAmIPersonKey(r.n, r.k));
           if (!owner) continue;
-          if (!r.person_key && !isSameMan(owner, { age: r.age, year: r.year })) continue;
+          if (!r.k && !isSameMan(owner, { age: r.a, year: r.y })) continue;
           let set = map.get(owner.personKey);
           if (!set) {
             set = new Set<string>();
