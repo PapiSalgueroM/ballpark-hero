@@ -179,7 +179,8 @@ const PerfectLineupBoard = () => {
             share={{
               gameName: 'Perfect Lineup',
               gamePath: '/perfect-lineup',
-              score: `a ${game.result.goalsFor}-${game.result.goalsAgainst} win (Grade ${game.result.grade}, ${game.result.rating} rating)`,
+              /* Round 645: the share carries the points the run records. */
+              score: `a ${game.result.goalsFor}-${game.result.goalsAgainst} win (Grade ${game.result.grade}, ${game.result.rating} rating), ${game.points} points`,
             }}
             onPlayAgain={game.mode === 'daily' ? game.reset : game.rollUnlimited}
             playAgainLabel={game.mode === 'daily' ? 'Edit Lineup' : 'New Lineup'}

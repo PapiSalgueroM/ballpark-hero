@@ -289,7 +289,8 @@ const SquadDeal = () => {
             ]}
             emojiGrid={'🏟️ ' + g.formation.name + ' · ' + r.grade}
             share={{
-              score: 'Grade ' + r.grade + ' (' + r.rating + ')',
+              /* Round 645: the share carries the points the run records. */
+              score: 'Grade ' + r.grade + ' (' + r.rating + '), ' + g.points + ' points',
               gameName: 'Squad Deal',
               gamePath: '/squad-deal',
             }}

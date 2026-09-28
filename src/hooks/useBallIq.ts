@@ -208,7 +208,7 @@ export function useBallIq(): BallIqState {
   const shareText = useMemo(() => {
     if (!finished) return '';
     const squares = questions.map(q => (q.chosen === q.clue.answer ? '🟩' : '🟥')).join('');
-    return `Ball Knowledge IQ, ${today}\n${squares}\nIQ ${iq} · ${rank}\ndouknowball.com/ball-iq`;
+    return `Ball Knowledge IQ, ${today}\n${squares}\nIQ ${iq} · ${rank} · ${ballIqPoints(iq)} points\ndouknowball.com/ball-iq`;
   }, [finished, questions, iq, rank, today]);
 
   return {

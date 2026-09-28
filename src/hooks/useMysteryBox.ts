@@ -220,7 +220,7 @@ export function useMysteryBox(): MysteryBoxState {
       superstar: '🟪', star: '🟨', quality: '🟩', squad: '⬜', fringe: '🟫',
     };
     const pulls = packs.map(p => tierEmoji[p.tier]).join('');
-    return `Mystery Box, ${today}\n${pulls}\nXI rating ${rating} · ${filled}/11 filled · best pull: ${bestPull?.name ?? ', '}\nBeat my pulls: douknowball.com/mystery-box`;
+    return `Mystery Box, ${today}\n${pulls}\nXI rating ${rating} · ${mysteryBoxPoints(rating)} points · ${filled}/11 filled · best pull: ${bestPull?.name ?? ', '}\nBeat my pulls: douknowball.com/mystery-box`;
   }, [finished, packs, rating, filled, bestPull, today]);
 
   return {

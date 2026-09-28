@@ -442,7 +442,10 @@ const LineupBuilder = () => {
                   : `Build Your XI: ${formation} rated ${verdict.rating}`
               }
               share={{
-                score: seasonReport ? `${verdict.rating}, ${seasonReport.squadRating}/100` : verdict.rating,
+                /* Round 645: the share carries the points the run records. */
+                score: seasonReport
+                  ? `${verdict.rating}, ${buildXiPoints(verdict)} points, ${seasonReport.squadRating}/100`
+                  : `${verdict.rating}, ${buildXiPoints(verdict)} points`,
                 gameName: 'Build Your XI',
                 gamePath: '/build-your-xi',
               }}

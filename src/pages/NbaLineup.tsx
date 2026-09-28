@@ -384,7 +384,7 @@ const NbaLineup = () => {
             </div>
 
             <ShareButtons
-              score={verdict.rating}
+              score={`${verdict.rating}, ${startingFivePoints(verdict)} points`}
               gameName="NBA Starting 5"
               gamePath="/nba-starting-5"
             />

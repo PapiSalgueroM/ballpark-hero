@@ -197,7 +197,7 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
           <ShareButtons
             gameName={config.gameName}
             gamePath={config.gamePath}
-            score={score.shareScore}
+            score={`${score.shareScore}, ${game.points} points`}
             emojiGrid={slotGradesToEmoji(game.result.slotGrades)}
           />
 
