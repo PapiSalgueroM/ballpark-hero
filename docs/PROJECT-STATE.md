@@ -1,5 +1,43 @@
 # Project state
 
+## ROUND 668 BUILT 2026-09-28: Who Am I tells namesakes apart and says how old its ages are
+
+Branch `r668-whoami-namesakes`, pushed, not on main, no migration. From the Who Am I "Wrong answer"
+report of 2026-09-26. Every number below measured against the live table on 2026-09-28.
+
+- **person_key is NULL on all 141,916 rows** of player_market_values, so no pool collision maps to
+  more than one person_key. It is declared as the identity that wins the day it is filled; until
+  then the only identity the table holds is the stored spelling (45 of 27,803 normalized names have
+  more than one, and all 3 in Who Am I's pool are different men: Éderson and Ederson, Ladislav
+  Krejčí and Krejci, Pepê, Pêpê and Pepe). Known untidy case: one man typed two ways (Michal and
+  Michał Karbownik) shows as two rows, each honest. One spelling shared by several men (three
+  Rodris) stays one row, the table cannot tell them apart.
+- **Search**: `SOCCER_MARKET_VALUE_SOURCE.identity` and `dedupeAndRank` in `src/lib/playerSearch.ts`.
+  One row per person, a club, position and year line on any row whose name another row shares.
+  Sources with no identity give exactly the old results (vitest against a copy of the old dedupe). Every
+  soccer caller now offers Atalanta's Éderson. Before: 1 of 600 pool players could not be won by
+  typing his name; after 0, and no namesake wins in his place.
+- **Club history**: a row must walk with the pool row's age (Round 385's `isSameMan`, moved into
+  `whoAmI.ts`, Player Bingo re-exports it). 1,248 pool pairs lit Past club link only through another
+  man's rows; after 0. Cost: 3 own rows with mistyped ages are dropped too (Keane Lewis-Potter's Hull
+  City, Diego Moreira's Benfica and Lyon), out of 159 club entries removed.
+- **Ages**: shown as listed, never worked out to today (no birth dates held), the older list named
+  ("29 (2025 list)"), the arrows compare both players on the newest list. The table's own yearly
+  rule: 3,914 of 4,013 players are exactly a year older from the 2025 list to the 2026 list. The 98
+  hand swept rows of 2026-08-29 sit a year above that rule for 68 of them, which puts the list's age
+  point around the turn of the year, a sampling estimate, not a printed date. Raw ages misread 1,570
+  cross-list pool pairs; after 0. Clue Auction shares the pool and got the same label.
+- Boot weight: 497 KiB before, 575 KiB after (11 requests either way, history under one letter
+  column aliases), budget 800.
+- Fences: `scripts/simWhoAmINamesakes.mjs` (4 sections, 8 controls, each reddens only its own) and
+  `src/test/playerSearchIdentity.test.ts`. Also green on this branch: tsc, simNoZeroFacts,
+  simWhoAmIAccuracy (its attrs now read history by person and ages on the newest list),
+  simPlayerBingoPool, simRarityAgreement, simMissingXiReach, simPlayerSearchAccents, simMarketYearScope
+  and the rest that read the changed files.
+- **Merge with r667**: both edit the pool legs of `fetchWhoAmIPool`. Keep both: the carried leg reads
+  `byKey.has(p.personKey) || isNotCurrentPlayer(p.name)`.
+- Seen, not fixed: Diogo Jota sits in the pool on his 2025 row (r667's not current list removes him).
+
 ## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
 
 Assembled and gated by the desktop Claude lane in the CRLF gate clone on `release-d`, pushed to
