@@ -53,7 +53,7 @@ if (CONTROL === 'gkonly') {
   /* The copy lives outside src/lib, so the engine's relative imports
      ("./careerEras", "./soccerPhone") would not resolve from there. Point
      them back at the real files; the "@/" imports resolve through the alias. */
-  const lib = `${ROOT}/src/lib/`.replaceAll('\', '/');
+  const lib = `${ROOT}/src/lib/`.replaceAll('\\', '/');
   const relocated = src.replace(anchor, 'const keepsSheets = isGK;').replace(/from (['"])\.\//g, `from $1${lib}`);
   fs.writeFileSync(enginePath, relocated);
 }

@@ -1,5 +1,20 @@
 # Work board
 
+**2026-09-28 morning, desktop Claude lane: CLAIMS, so nobody builds these twice.**
+- **Release E** (662 to 667) passed `build:seo` in the gate clone (169 routes, 0 failed) and its full
+  node and browser suite is running. It ships when that is green.
+- **Round 668 CLAIMED**, branch `r668-whoami-namesakes`: Who Am I tells namesakes apart by person_key and
+  says how old its ages are.
+- **Round 669 CLAIMED**, branch `r669-worldxi-dm`: the Defensive Midfield bucket, two sources per row, in
+  the Round 344 shape. Migration written, applied by the lead after review.
+- **Round 670 CLAIMED**, branch `r670-cm-extra-time`: Club Manager plays extra time before penalties
+  (part B of the stoppage time contract). **Round 671 is reserved** for part A (stoppage time goals and
+  the aggregate line on a second leg).
+- **645a, 645b, 645c, 646, 647** are being rebuilt on their existing branch names, and 648 is getting
+  the review it never had. **660** is down to its sourcing sections (1 and 8); **661** gets its fence once
+  the Hall of Fame, Guess the Year and Score Predictor records land.
+- The next free number for anyone else is **672**.
+
 **2026-09-28 late, desktop Claude lane: Round 667 parts one to three on `r667-player-reports`, and what the
 agent fleet found before the session limit cut it.** Round 667 answers the player reports of 2026-09-21
 to 27 (fences: simCareerCleanSheets, simStaleChunk, simNotCurrentPlayers, and the vitest
