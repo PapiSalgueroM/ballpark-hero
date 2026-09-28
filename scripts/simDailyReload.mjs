@@ -37,6 +37,18 @@
                                   the same batch. A probe test proves the
                                   stub fired even on a day with no mark
                                   dependent rows.
+   Round 645 part three added a sixth assertion for the run based dailies
+   that used to save only at the end (Buzzer Beater, Free Kick: a run walked
+   away from on shot four was dealt again from shot one with every spray
+   already seen): settle part of the run, unmount, remount, and the board must
+   be on the same step with the same score and count, record nothing on the
+   way back, and record exactly once when the rest is played. A row opts in
+   by exporting playSome and progress (see src/test/dailyReload/driver.ts).
+   Its control:
+     DAILY_RELOAD_CONTROL=midrun  drops every prefixed key between the part
+                                  played unmount and the remount; assertion
+                                  (6) must then FAIL on every row that has it
+                                  and every other assertion stay green
    Then the source backstop: for every row that depends on the mark, the
    restoring file is read as code (comments and string contents stripped)
    and must call markRestoredFinish with the slug ahead of the finished
@@ -60,10 +72,23 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const abort = m => { console.error(m); process.exit(1); };
 
+/* vitest lives in this tree's node_modules, or in the main tree's when this
+   runs from a worktree nested inside it: walk up, as node's own resolution
+   does (the same rule scripts/simNoDoubleRecord.mjs follows). */
+function findVitest() {
+  for (let dir = ROOT; ; dir = path.dirname(dir)) {
+    const p = path.join(dir, 'node_modules', 'vitest', 'vitest.mjs');
+    if (fs.existsSync(p)) return p;
+    if (path.dirname(dir) === dir) return null;
+  }
+}
+const VITEST = findVitest();
+if (!VITEST) abort('vitest is not installed anywhere above this tree, nothing can run');
+
 function runVitest(extraEnv) {
   const r = spawnSync(
     process.execPath,
-    [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', TEST, '--reporter=verbose'],
+    [VITEST, 'run', TEST, '--reporter=verbose'],
     { cwd: ROOT, encoding: 'utf8', env: { ...process.env, ...extraEnv, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 },
   );
   return { code: r.status, out: (r.stdout || '') + (r.stderr || '') };
@@ -106,9 +131,12 @@ function parse(out) {
   };
 }
 
-const marksOf = row => ASSERTIONS.map(n => row.marks[n] || '?').join('');
-const redOnes = row => ASSERTIONS.filter(n => row.marks[n] !== '✓').map(n => `(${n})`).join(' ');
-const describe = info => `${info.restoreStyle} restore${info.usesRestoreMark ? ', mark dependent' : info.restoreStyle === 'handler' ? ', no mark needed' : ''}, ${info.payloadShape} payload`;
+/* A row that resumes a part played run (playSome and progress exported)
+   carries assertion 6 as well; every other row has the five. */
+const assertionsOf = row => (row.info && row.info.resumes ? [...ASSERTIONS, 6] : ASSERTIONS);
+const marksOf = row => assertionsOf(row).map(n => row.marks[n] || '?').join('');
+const redOnes = row => assertionsOf(row).filter(n => row.marks[n] !== '✓').map(n => `(${n})`).join(' ');
+const describe = info => `${info.restoreStyle} restore${info.usesRestoreMark ? ', mark dependent' : info.restoreStyle === 'handler' ? ', no mark needed' : ''}, ${info.payloadShape} payload${info.resumes ? ', resumes mid run' : ''}`;
 const detailLines = out => out.split('\n').filter(l => /AssertionError|Error:|expected|×/.test(l)).slice(0, 14).map(l => '    ' + l.trim()).join('\n');
 
 /* ------------------------------------------------------------ 1) the run */
@@ -122,12 +150,14 @@ if (parsed.top['markRestoredFinish is live'] !== '✓') fail('the restoredFinish
 const rowList = [...parsed.rows.values()].filter(r => r.info);
 if (rowList.length === 0) fail('no driver rows ran, so nothing was checked (add src/test/dailyReload/<slug>.driver.tsx)');
 for (const row of rowList) {
-  const allGreen = ASSERTIONS.every(n => row.marks[n] === '✓');
+  const allGreen = assertionsOf(row).every(n => row.marks[n] === '✓');
   console.log(`   ${row.info.slug}: ${allGreen ? 'green' : 'RED ' + redOnes(row)}  [${marksOf(row)}]  ${describe(row.info)}`);
   if (!allGreen) fail(`${row.info.slug} is red on ${redOnes(row)}`);
 }
 for (const [slug, row] of parsed.rows) if (!row.info) fail(`marks appeared for "${slug}" but the test printed no row description for it`);
-const expectedTests = rowList.length * ASSERTIONS.length + 2;
+const resumeRows = rowList.filter(r => r.info.resumes);
+console.log(`   ${resumeRows.length} row(s) resume a part played run: ${resumeRows.map(r => r.info.slug).join(', ') || 'none'}`);
+const expectedTests = rowList.reduce((n, row) => n + assertionsOf(row).length, 0) + 2;
 if (main.code !== 0 || parsed.failed > 0 || parsed.passed !== expectedTests) {
   fail(`expected ${expectedTests} passed and none failed, vitest says: ${parsed.summary || 'nothing'}`);
   console.error(detailLines(main.out));
@@ -185,8 +215,40 @@ console.log('3) NEGATIVE CONTROL silent: markRestoredFinish is a no-op, (4) must
   if (dependent === 0) console.log('   no mark dependent rows today; the probe alone proves the stub, and the first Group A or Group C row will be the first to flip here');
 }
 
-/* ------------------------------------------- 4) the source backstop */
-console.log('4) Source backstop: every mark dependent restore names markRestoredFinish(<slug>) ahead of its finished state set, as code');
+/* ------------------------------------ 4) control: the mid run save dropped */
+console.log('4) NEGATIVE CONTROL midrun: the part played record is dropped between the unmount and the remount, (6) must fail on every resuming row and everything else stay green');
+{
+  const run = runVitest({ DAILY_RELOAD_CONTROL: 'midrun' });
+  const p = parse(run.out);
+  if (!p.named) abort('control cannot run: vitest did not report on the test file:\n' + run.out.slice(-2000));
+  const rows = [...p.rows.values()].filter(r => r.info);
+  if (rows.length !== rowList.length) fail(`control midrun ran ${rows.length} row(s), the normal run ${rowList.length}`);
+  let flipped = 0;
+  let held = 0;
+  for (const row of rows) {
+    const others = ASSERTIONS.every(n => row.marks[n] === '✓');
+    if (row.info.resumes) {
+      const dropped = new RegExp(`^DAILY_RELOAD_MIDRUN ${row.info.slug} dropped ([1-9]\\d*) key`, 'm').test(run.out);
+      const resumeRed = row.marks[6] === '×';
+      const asDesigned = others && dropped && resumeRed;
+      console.log(`   ${row.info.slug}: [${marksOf(row)}] ${asDesigned ? 'resume went red with the record gone, as designed' : 'DID NOT FLIP'}`);
+      if (!others) fail(`control midrun: ${row.info.slug} is red on ${ASSERTIONS.filter(n => row.marks[n] !== '✓').map(n => `(${n})`).join(' ')}; dropping the mid run record must only change whether the run resumes`);
+      if (!dropped) fail(`control midrun: ${row.info.slug} had no part played record to drop, the control changed nothing`);
+      if (!resumeRed) fail(`control midrun: ${row.info.slug} still resumed with its record gone; the resume does not depend on storage, so a refresh is not what assertion 6 measures`);
+      if (asDesigned) flipped += 1;
+    } else {
+      console.log(`   ${row.info.slug}: [${marksOf(row)}] ${others ? 'held, no mid run save to drop' : 'WENT RED without a mid run save'}`);
+      if (!others) fail(`control midrun: ${row.info.slug} is red on ${redOnes(row)} with nothing dropped`);
+      else held += 1;
+    }
+  }
+  const resuming = rows.filter(r => r.info.resumes).length;
+  console.log(`   ${flipped} of ${resuming} resuming row(s) flipped, ${held} of ${rows.length - resuming} other row(s) held`);
+  if (resuming === 0) fail('no row resumes a part played run, so assertion 6 and this control checked nothing (the arcade rows export playSome and progress)');
+}
+
+/* ------------------------------------------- 5) the source backstop */
+console.log('5) Source backstop: every mark dependent restore names markRestoredFinish(<slug>) ahead of its finished state set, as code');
 const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 /* Same length as the input, so an index found in the blanked text is valid
    in the comment stripped text it came from. */
@@ -296,7 +358,7 @@ function markBeforeSet(code, slug, setter, binding = null) {
   }
 }
 
-console.log('5) Every file that files a daily record reads the clock ONCE, pinned at mount');
+console.log('6) Every file that files a daily record reads the clock ONCE, pinned at mount');
 {
   /* Round 428 part two, the defect this section exists for. A route dealt its
      puzzle from the date at mount and then called the clock AGAIN at write
@@ -313,7 +375,10 @@ console.log('5) Every file that files a daily record reads the clock ONCE, pinne
      tomorrow is checked the day it ships. */
   const CLOCK = /\b(getTodayET|getDailyDateET|getPollDayET)\s*\(\s*\)/g;
   const PIN = /\buseRef\s*\(\s*(getTodayET|getDailyDateET|getPollDayET|getTodayStr)\s*\(\s*\)\s*\)\s*\.current\b/;
-  const WRITES_A_DAILY = /\b(writeDailyRecord|saveDailyRecord|saveDailyResult|saveDailyBingo|saveDailyRun|saveDailyAttempt)\s*\(/;
+  /* Round 645 part three: the two arcade writers and the chain writer are
+     wrappers over writeDailyRecord in src/lib, so the file that calls them
+     is the file whose clock read matters. */
+  const WRITES_A_DAILY = /\b(writeDailyRecord|saveDailyRecord|saveDailyResult|saveDailyBingo|saveDailyRun|saveDailyAttempt|writeArcadeRun|writeArcadeProgress|writeChainDaily)\s*\(/;
   const roots = ['src/hooks', 'src/pages', 'src/components'];
   const walk = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => {
     const p = path.join(dir, e.name);
@@ -365,4 +430,4 @@ if (failures > 0) {
   console.error(`\nsimDailyReload: ${failures} failure(s)`);
   process.exit(1);
 }
-console.log(`\nsimDailyReload: all green (${rowList.length} row(s), both controls fired)`);
+console.log(`\nsimDailyReload: all green (${rowList.length} row(s), all three controls fired)`);

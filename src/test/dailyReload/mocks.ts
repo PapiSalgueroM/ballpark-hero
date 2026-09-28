@@ -148,6 +148,61 @@ vi.mock('@/lib/sportsMillionaire', async (importOriginal) => {
   };
 });
 
+/* Round 645 part three: the two pool readers behind Pack Battle and Rarity
+   Round, wrapped the same way. With no fixture registered the real loader
+   runs (and answers from the Supabase stub), so no other row changes. */
+vi.mock('@/lib/packBattle', async (importOriginal) => {
+  const real = await importOriginal<typeof import('@/lib/packBattle')>();
+  return {
+    ...real,
+    fetchPackPool: () => {
+      const fx = shared.pools.get('pack');
+      return fx ? Promise.resolve(fx as never) : real.fetchPackPool();
+    },
+  };
+});
+
+vi.mock('@/lib/rarityRound', async (importOriginal) => {
+  const real = await importOriginal<typeof import('@/lib/rarityRound')>();
+  return {
+    ...real,
+    CATEGORIES: real.CATEGORIES.map(c => ({
+      ...c,
+      fetchPool: () => {
+        const fx = shared.pools.get('rarity');
+        return fx ? Promise.resolve(fx as never) : c.fetchPool();
+      },
+    })),
+  };
+});
+
+/* The shared search box, replaced only while an 'autocomplete' fixture is
+   registered: a plain input plus one "pick <name>" button per fixture
+   entity, so a driver can hand a page the entity a real search would have
+   resolved without the debounce, the network and the dropdown. Every other
+   row renders the real component. */
+vi.mock('@/components/game/PlayerAutocomplete', async (importOriginal) => {
+  const real = await importOriginal<typeof import('@/components/game/PlayerAutocomplete')>();
+  const { createElement } = await import('react');
+  type Props = Parameters<typeof real.PlayerAutocomplete>[0];
+  function Stub(props: Props) {
+    const entities = shared.pools.get('autocomplete') as Array<{ key: string; name: string }> | undefined;
+    if (!entities) return createElement(real.PlayerAutocomplete, props);
+    return createElement(
+      'div',
+      { 'data-testid': 'autocomplete-stub' },
+      createElement('input', {
+        'aria-label': 'Search for a player',
+        value: props.value,
+        placeholder: props.placeholder ?? '',
+        onChange: (e: { target: { value: string } }) => props.onChange(e.target.value),
+      }),
+      ...entities.map(e => createElement('button', { key: e.key, type: 'button', onClick: () => props.onSelect(e as never) }, `pick ${e.name}`)),
+    );
+  }
+  return { ...real, PlayerAutocomplete: Stub, default: Stub };
+});
+
 /* jsdom has no layout: scrollIntoView is missing outright (a call throws)
    and scrollTo logs "not implemented" on every reveal. Neither is under
    test. */
@@ -170,11 +225,14 @@ export function setRpcFixture(name: string, value: unknown): void {
   shared.rpcs.set(name, value);
 }
 
-/** The three wrapped loaders. 'nbaStatLine': the StatLineSeason[] pool (or
+/** The wrapped loaders. 'nbaStatLine': the StatLineSeason[] pool (or
  *  null for the error state). 'squad': the Player[] fetchSquadPool resolves,
  *  or a function of its arguments. 'millionaire': the {pool, ladder}
- *  loadMillionairePool resolves, or a function (mode, realLib) => that. */
-export function setPoolFixture(name: 'nbaStatLine' | 'squad' | 'millionaire', value: unknown): void {
+ *  loadMillionairePool resolves, or a function (mode, realLib) => that.
+ *  'pack': the PackCard[] fetchPackPool resolves. 'rarity': the PoolEntry[]
+ *  every Rarity Round category's fetchPool resolves. 'autocomplete': the
+ *  PlayerEntity[] the stubbed search box offers as pick buttons. */
+export function setPoolFixture(name: 'nbaStatLine' | 'squad' | 'millionaire' | 'pack' | 'rarity' | 'autocomplete', value: unknown): void {
   shared.pools.set(name, value);
 }
 

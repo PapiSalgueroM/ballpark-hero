@@ -30,12 +30,20 @@
  * context, the recorder and the Supabase client are mocked in
  * src/test/dailyReload/mocks.ts.
  *
+ * Round 645 part three added a sixth, for the run based dailies that used to
+ * save only at the end (a driver that exports playSome and progress):
+ *   (6) settle part of the run, unmount, mount, enter the daily: the board is
+ *       on the same step with the same score and count, nothing was
+ *       recorded, and finishing the rest records exactly once
+ *
  * scripts/simDailyReload.mjs runs this file and carries the negative
  * controls: DAILY_RELOAD_CONTROL=clear drops every prefixed key between the
  * unmount and the remount, so (2) must fail on every row;
  * DAILY_RELOAD_CONTROL=silent turns markRestoredFinish into a no-op, so
  * (4) must fail on every row whose restore depends on the mark and stay
- * green on every other. ONLY=<slug> runs one row.
+ * green on every other; DAILY_RELOAD_CONTROL=midrun drops every prefixed
+ * key between the part played unmount and the remount, so (6) must fail on
+ * every row that has it. ONLY=<slug> runs one row.
  */
 import './dailyReload/mocks';
 import { describe, it, expect, beforeAll } from 'vitest';
@@ -71,6 +79,7 @@ for (const [file, mod] of Object.entries(modules).sort(([a], [b]) => (a < b ? -1
 const drivers = discovered.filter(d => !ONLY || d.slug === ONLY);
 
 const usesMark = (d: AnyDriver) => d.restoreStyle === 'handler' && d.usesRestoreMark !== false;
+const resumes = (d: AnyDriver) => typeof d.playSome === 'function' && typeof d.progress === 'function';
 
 describe('daily reload', () => {
   it('discovers drivers', () => {
@@ -84,6 +93,7 @@ describe('daily reload', () => {
         restoreFile: d.restoreFile ?? null,
         finishedSetter: d.finishedSetter ?? null,
         slugBoundIn: d.slugBoundIn ?? null,
+        resumes: resumes(d),
       }));
     }
     console.log(`DAILY_RELOAD_DRIVERS ${drivers.length} of ${discovered.length}${ONLY ? ` (ONLY=${ONLY})` : ''}`);
@@ -200,6 +210,46 @@ describe('daily reload', () => {
         }
         expect(recordCompletion.mock.calls.length - before, 'a fresh daily records nothing on mount').toBe(0);
       });
+
+      if (resumes(driver)) {
+        it('(6) resumes a part played daily at the same step after an unmount and a remount, and records the run once', async () => {
+          const playSome = driver.playSome!;
+          const progress = driver.progress!;
+          for (const k of keysOf()) localStorage.removeItem(k);
+          const before = recordCompletion.mock.calls.length;
+          let api: unknown = await driver.mount();
+          let mid = '';
+          try {
+            await driver.enterDaily(api);
+            expect(driver.status(api), 'a fresh daily should be playing').toBe('playing');
+            await playSome(api);
+            expect(driver.status(api), 'a part played daily should still be playing').toBe('playing');
+            mid = progress(api);
+            expect(mid.length, 'the progress text carries the step and the score').toBeGreaterThan(0);
+            expect(keysOf(), `a part played daily writes exactly one ${driver.keyPrefix}* key, dated today`).toEqual([todayKey]);
+          } finally {
+            driver.unmount(api);
+          }
+          if (CONTROL === 'midrun') {
+            const dropped = keysOf();
+            for (const k of dropped) localStorage.removeItem(k);
+            console.log(`DAILY_RELOAD_MIDRUN ${driver.slug} dropped ${dropped.length} key(s)`);
+          }
+          api = await driver.mount();
+          try {
+            await driver.enterDaily(api);
+            expect(driver.status(api), 'the reloaded daily should come back mid run, not finished and not on a fresh board').toBe('playing');
+            expect(progress(api), 'the reloaded board should be on the same step with the same score and count').toBe(mid);
+            expect(recordCompletion.mock.calls.length - before, 'resuming records nothing').toBe(0);
+            await driver.finish(api);
+            expect(driver.status(api), 'the resumed run should finish').toBe('finished');
+            expect(keysOf(), 'the finished run leaves exactly one key').toEqual([todayKey]);
+            expect(recordCompletion.mock.calls.length - before, 'the whole run records exactly once').toBe(1);
+          } finally {
+            driver.unmount(api);
+          }
+        });
+      }
     });
   }
 });

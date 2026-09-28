@@ -100,6 +100,18 @@ export interface DailyReloadDriver<Api = unknown> {
   replay(api: Api): Promise<void>;
   hasDailyReplayControl(api: Api): boolean;
   unmount(api: Api): void;
+
+  /** Round 645 part three, run based dailies only (the arcade engine's ten
+   *  rounds). From a live daily board, settle SOME of the run's steps but
+   *  not all, by the same honest path finish uses. Assertion 6 then
+   *  unmounts, remounts, re-enters the daily and requires progress() to
+   *  read the same, finishes the rest, and requires exactly one completion
+   *  for the whole run. A row without this pair gets no assertion 6. */
+  playSome?(api: Api): Promise<void>;
+  /** With playSome: the mid run state as text, which must carry the step
+   *  the board is on and the score and count so far, byte identical across
+   *  a reload. Throw when no live board is on screen. */
+  progress?(api: Api): string;
 }
 
 /** Identity with inference, so a driver file reads as one typed object. */
