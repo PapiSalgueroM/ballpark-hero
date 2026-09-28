@@ -55,6 +55,8 @@
  * and from the useGameCompletion hook-in without any network round trip.
  */
 
+import { capOf, dayValue, pointsDay, recordedPoints, type ScoreCaps } from '@/lib/pointsRule';
+
 export interface StreakEntry {
   /** Consecutive ET days up to and including lastDate. 0 if never recorded or broken with no replay yet. */
   current: number;
@@ -72,16 +74,67 @@ export interface StreakState {
   loginDates: string[];
   /** Lifetime count of game completions on this browser (every finished game counts once). */
   totalPlays: number;
-  /** Lifetime sum of scores from completed games on this browser. */
+  /** Lifetime points from completed games on this browser, summed since Round 648 by the profile's rule (src/lib/pointsRule.ts): per game per day, the day's best, capped. */
   totalPoints: number;
+  /** Round 648: the rule totalPoints is kept under. A store without it holds a pre 648 raw sum, which readState retires once. */
+  pointsRule: typeof POINTS_RULE;
+  /** Round 648: the pre 648 raw sum, set aside once and never shown. The browser kept no plays behind it, so the rule cannot recount it. */
+  retiredPoints: number;
+  /** Round 648: per game, the points already credited for its latest points day, so a second play that day adds only what it beats the first by. */
+  dayPoints: Record<string, DayPoints>;
+  /** Round 648: plays recorded before this browser had a cap for their game, held here until a fresh read of the caps settles them into totalPoints. */
+  pendingPoints: PendingPoints[];
+}
+
+/** What the rule has credited for one game on one points day. */
+export interface DayPoints {
+  day: string;
+  points: number;
+}
+
+/** A play waiting for its game's cap: the slug, its points day and the points it recorded. */
+export interface PendingPoints {
+  game: string;
+  day: string;
+  score: number;
 }
 
 const STORAGE_KEY = 'dukb-streaks-v1';
 
+/* Round 648: the marker a store carries once its points are kept under the
+   profile's rule. */
+const POINTS_RULE = 648 as const;
+
+/* Round 648: a bound on the pending list, so a browser that can never reach
+   the caps table (an ad blocker on the database host, say) cannot grow the
+   streak record without limit. Two hundred unsettled plays is weeks of play
+   offline; the oldest are dropped past it. */
+const PENDING_LIMIT = 200;
+
 const EMPTY_ENTRY: StreakEntry = { current: 0, longest: 0, lastDate: null };
 
 function emptyState(): StreakState {
-  return { version: 1, global: { ...EMPTY_ENTRY }, perGame: {}, loginDates: [], totalPlays: 0, totalPoints: 0 };
+  return {
+    version: 1, global: { ...EMPTY_ENTRY }, perGame: {}, loginDates: [], totalPlays: 0,
+    totalPoints: 0, pointsRule: POINTS_RULE, retiredPoints: 0, dayPoints: {}, pendingPoints: [],
+  };
+}
+
+function validPending(p: unknown): p is PendingPoints {
+  return !!p && typeof p === 'object'
+    && typeof (p as PendingPoints).game === 'string' && (p as PendingPoints).game.length > 0
+    && typeof (p as PendingPoints).day === 'string' && (p as PendingPoints).day.length > 0
+    && typeof (p as PendingPoints).score === 'number' && Number.isFinite((p as PendingPoints).score) && (p as PendingPoints).score > 0;
+}
+
+function validDayPoints(raw: unknown): Record<string, DayPoints> {
+  const out: Record<string, DayPoints> = {};
+  if (!raw || typeof raw !== 'object') return out;
+  for (const [game, entry] of Object.entries(raw as Record<string, unknown>)) {
+    const e = entry as DayPoints;
+    if (e && typeof e.day === 'string' && typeof e.points === 'number' && Number.isFinite(e.points)) out[game] = { day: e.day, points: e.points };
+  }
+  return out;
 }
 
 /**
@@ -114,20 +167,50 @@ function daysBetween(a: string, b: string): number {
   return Math.round(ms / (24 * 60 * 60 * 1000));
 }
 
+/*
+ * Round 648: the repair, run on read, once per browser.
+ *
+ * Before this round the tally added every play's raw score: a Pack Battle
+ * pack's banked dollars (8,800,000 is an ordinary pack), every Club Manager
+ * match's running season score, every reload of a finished daily. That sum
+ * is what the own profile showed whenever it beat the server's number, and
+ * what the points badges read. The profile's rule (src/lib/pointsRule.ts)
+ * counts one row per game per day at the day's best, capped, and it can only
+ * be applied to plays it can see. This store never kept the plays, only the
+ * sum, so the rule can vouch for none of it: whatever a pre 648 sum holds is
+ * more than the rule allows on the records this browser has, which are none.
+ * The sum is set aside in retiredPoints (kept, never shown) and the tally
+ * counts from here under the rule, which is also what the badges read. A
+ * signed in player's own profile still shows the larger of this and the
+ * server total, and the server total is the rule over every record the
+ * database holds, so nothing a signed in player earned is lost from the page.
+ */
 function readState(): StreakState {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return emptyState();
     const parsed = JSON.parse(raw);
     if (!parsed || parsed.version !== 1) return emptyState();
-    return {
+    const state: StreakState = {
       version: 1,
       global: { ...EMPTY_ENTRY, ...(parsed.global || {}) },
       perGame: parsed.perGame && typeof parsed.perGame === 'object' ? parsed.perGame : {},
       loginDates: Array.isArray(parsed.loginDates) ? parsed.loginDates : [],
       totalPlays: typeof parsed.totalPlays === 'number' ? parsed.totalPlays : 0,
-      totalPoints: typeof parsed.totalPoints === 'number' ? parsed.totalPoints : 0,
+      totalPoints: typeof parsed.totalPoints === 'number' && Number.isFinite(parsed.totalPoints) ? parsed.totalPoints : 0,
+      pointsRule: POINTS_RULE,
+      retiredPoints: typeof parsed.retiredPoints === 'number' && Number.isFinite(parsed.retiredPoints) ? parsed.retiredPoints : 0,
+      dayPoints: validDayPoints(parsed.dayPoints),
+      pendingPoints: Array.isArray(parsed.pendingPoints) ? parsed.pendingPoints.filter(validPending) : [],
     };
+    if (parsed.pointsRule !== POINTS_RULE) {
+      state.retiredPoints += Math.max(0, state.totalPoints);
+      state.totalPoints = 0;
+      state.dayPoints = {};
+      state.pendingPoints = [];
+      writeState(state);
+    }
+    return state;
   } catch {
     return emptyState();
   }
@@ -178,8 +261,16 @@ function advanceEntry(entry: StreakEntry, today: string): StreakEntry {
  *
  * Returns the resulting state so callers (e.g. useStreaks) can update
  * without a second localStorage read.
+ *
+ * Round 648: `cap` is the game's cap from public.game_score_caps
+ * (src/lib/scoreCaps.ts knownCap): a number, null for a game with no ceiling
+ * on record, or undefined when this browser has no cap for the game yet. The
+ * play is credited by the profile's rule (creditDay below); with no cap to
+ * hand it is held on pendingPoints and settled by settlePendingPoints when a
+ * fresh read lands. A play that records nothing (a score of 0, or one above
+ * what the server can store) has nothing to add and is never held.
  */
-export function recordGameCompletion(gameSlug: string, when: Date = new Date(), score = 0): StreakState {
+export function recordGameCompletion(gameSlug: string, when: Date = new Date(), score = 0, cap?: number | null): StreakState {
   const today = getEtDateString(when);
   const state = readState();
 
@@ -193,8 +284,67 @@ export function recordGameCompletion(gameSlug: string, when: Date = new Date(), 
   // server tables also record signed in play, so this is the guest era and
   // same browser record that the Profile page merges with the server's.
   state.totalPlays = (state.totalPlays || 0) + 1;
-  state.totalPoints = (state.totalPoints || 0) + (Number.isFinite(score) ? Math.max(0, Math.round(score)) : 0);
+  const points = recordedPoints(score);
+  if (points > 0) {
+    const day = pointsDay(when);
+    if (cap === undefined) {
+      state.pendingPoints.push({ game: gameSlug, day, score: points });
+      if (state.pendingPoints.length > PENDING_LIMIT) state.pendingPoints.splice(0, state.pendingPoints.length - PENDING_LIMIT);
+    } else {
+      creditDay(state, gameSlug, day, points, cap === null ? null : Math.max(1, cap));
+    }
+  }
 
+  writeState(state);
+  return state;
+}
+
+/**
+ * Round 648: one play credited by the profile's rule. A game day is worth its
+ * best play at most the cap, so the first play of the day adds its value and
+ * a later play the same day adds only what it beats the day's best by. A
+ * held play settled late may belong to a day older than the game's latest
+ * credited one; that day was never credited (a play is only held when no cap
+ * was known), so it adds its value in full and the latest day stays tracked.
+ */
+function creditDay(state: StreakState, game: string, day: string, points: number, cap: number | null): void {
+  const value = dayValue(points, cap);
+  if (value <= 0) return;
+  const held = state.dayPoints[game];
+  if (held && held.day === day) {
+    if (value > held.points) {
+      state.totalPoints = (state.totalPoints || 0) + (value - held.points);
+      held.points = value;
+    }
+    return;
+  }
+  state.totalPoints = (state.totalPoints || 0) + value;
+  if (!held || held.day < day) state.dayPoints[game] = { day, points: value };
+}
+
+/**
+ * Round 648: credit every held play by the profile's rule, in the order it
+ * was played. `caps` must be a FRESH read of public.game_score_caps, because
+ * a play whose game is absent from it is dropped for nothing: that is the
+ * board's own rule for a game that is not on the allowlist, and it is only
+ * true of a complete list. The held plays are first reduced to one per game
+ * per day at that day's best, so a day is credited once however many of its
+ * plays were held. Idempotent: the list is emptied as it is settled.
+ */
+export function settlePendingPoints(caps: ScoreCaps): StreakState {
+  const state = readState();
+  if (!state.pendingPoints.length) return state;
+  const days = new Map<string, PendingPoints>();
+  for (const pending of state.pendingPoints) {
+    const key = `${pending.game}|${pending.day}`;
+    const seen = days.get(key);
+    if (!seen || pending.score > seen.score) days.set(key, { ...pending });
+  }
+  for (const pending of days.values()) {
+    const cap = capOf(caps, pending.game);
+    if (cap !== undefined) creditDay(state, pending.game, pending.day, pending.score, cap);
+  }
+  state.pendingPoints = [];
   writeState(state);
   return state;
 }

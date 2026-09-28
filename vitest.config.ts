@@ -111,6 +111,13 @@ export default defineConfig({
       ...(process.env.DAILY_LOCK_SWAP
         ? (JSON.parse(process.env.DAILY_LOCK_SWAP) as Record<string, string>)
         : {}),
+      /* Round 648 negative controls: scripts/simProfileTotal.mjs writes a
+         broken copy of the points rule, the streak store, the recorder, the
+         profile total hook or the Profile page and names it here the same
+         way. Above "@". */
+      ...(process.env.PROFILE_TOTAL_SWAP
+        ? (JSON.parse(process.env.PROFILE_TOTAL_SWAP) as Record<string, string>)
+        : {}),
       "@": path.resolve(__dirname, "./src"),
     },
   },

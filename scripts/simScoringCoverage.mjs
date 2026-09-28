@@ -135,6 +135,16 @@ console.log('2) one recordCompletion call feeds all three pipelines, with the ri
 export const SUPABASE_URL = 'stub';
 export const SUPABASE_PUBLISHABLE_KEY = 'stub';
 export const ledger: Record<string, any[]> = {};
+/* Round 648: the recorder credits the browser tally by the profile's rule
+   (one row per game per day, the day's best, capped by
+   public.game_score_caps) and holds a play until it has read the table once.
+   This stub answers that read with the two games below, so the 140 points
+   asserted further down are earned under the same rule the site runs: 40 at
+   a cap of 100 and 100 at a cap of 100, two games on one day. */
+ledger['game_score_caps'] = [
+  { game: 'soccer-grid', max_score: 100 },
+  { game: 'missing-xi', max_score: 100 },
+];
 let sessionUser: { id: string } | null = null;
 export function setSessionUser(u: { id: string } | null) { sessionUser = u; }
 function table(name: string) {
@@ -170,7 +180,12 @@ function table(name: string) {
    increment of total_points, and a best score that only rises. It is NOT a test
    of the SQL itself. The SQL is pinned by simAuthSave section 3 and was
    exercised against the real database in a rolled back transaction, recorded
-   in supabase/migrations/20260914120000_record_auth_completion.sql. */
+   in supabase/migrations/20260914120000_record_auth_completion.sql.
+   Round 648 changed one term of the contract: the total grows by what the
+   play adds to the day's capped best for its game (the first play of a game
+   on a day adds its score at the cap, a better one later adds the
+   difference, a game with no caps row adds nothing), per
+   supabase/migrations/20260928_round_648_profile_clamp.sql. */
 function recordAuthCompletion(args: any) {
   if (!sessionUser) return { data: null, error: { code: '42501' } };
   const uid = sessionUser.id;
@@ -178,15 +193,21 @@ function recordAuthCompletion(args: any) {
   const slug = args.p_game_slug;
   const score = Number(args.p_score) || 0;
   table('user_game_scores');
-  ledger['user_game_scores'].push({ user_id: uid, game_type: slug, score, correct_answers: args.p_correct || 0 });
+  const dayRows = ledger['user_game_scores'].filter(r => r.user_id === uid && r.game_type === slug && r.puzzle_date === day);
+  const before = dayRows.length ? Math.max(...dayRows.map(r => r.score)) : null;
+  ledger['user_game_scores'].push({ user_id: uid, game_type: slug, score, correct_answers: args.p_correct || 0, puzzle_date: day });
+  const capRow = (ledger['game_score_caps'] || []).find(r => r.game === slug);
+  const after = before === null ? score : Math.max(before, score);
+  const worth = (b: number | null) => b === null ? 0 : capRow.max_score === null ? b : Math.min(b, Math.max(1, capRow.max_score));
+  const add = capRow ? worth(after) - worth(before) : 0;
   table('daily_completions');
   if (!ledger['daily_completions'].some(r => r.user_id === uid && r.game_slug === slug && r.date === day)) {
     ledger['daily_completions'].push({ user_id: uid, game_slug: slug, date: day });
   }
   table('user_scores');
   const mine = ledger['user_scores'].find(r => r.user_id === uid);
-  if (mine) mine.total_points += score;
-  else ledger['user_scores'].push({ user_id: uid, total_points: score });
+  if (mine) mine.total_points += add;
+  else ledger['user_scores'].push({ user_id: uid, total_points: add });
   table('user_best_scores');
   const best = ledger['user_best_scores'].find(r => r.user_id === uid && r.game_type === slug);
   if (!best) ledger['user_best_scores'].push({ user_id: uid, game_type: slug, best_score: score });

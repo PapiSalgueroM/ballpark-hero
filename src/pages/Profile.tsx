@@ -17,6 +17,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import html2canvas from 'html2canvas';
 import { useStreaks } from '@/hooks/useStreaks';
+import { useProfileTotal } from '@/hooks/useProfileTotal';
 import { getLocalTodayCount } from '@/lib/completions';
 import { getBadgeState, BADGE_DEFS, type BadgeState } from '@/lib/badges';
 import { readOwnTodayRows, mergeGamesToday } from '@/lib/gamesToday';
@@ -148,6 +149,11 @@ export default function Profile() {
   const [editForm, setEditForm] = useState({ display_name: '', username: '' });
   const [saving, setSaving] = useState(false);
   const [userScoreData, setUserScoreData] = useState<{ current_streak: number; longest_streak: number; total_points: number } | null>(null);
+  /* Round 648: the all time total is the viewed player's records summed by
+     the profile's rule (one row per game per day, the day's best, capped),
+     not read off the running sum in user_scores. See
+     src/hooks/useProfileTotal.ts and src/lib/pointsRule.ts. */
+  const { total: ruleTotal, loading: totalLoading } = useProfileTotal(viewingProfile?.user_id ?? null);
   const [leaderboardRank, setLeaderboardRank] = useState<number | null>(null);
   const [savedBracket, setSavedBracket] = useState<any>(null);
   const [todayRows, setTodayRows] = useState<Array<{ game: string }> | null>(null);
@@ -412,9 +418,17 @@ export default function Profile() {
      saw, so neither alone is complete and the larger of the two is the
      honest floor (a new device no longer shows Points 0 beside a real
      rank). Viewed profiles have only the server number. */
+  /* Round 648: the server number is the player's records summed by the
+     profile's rule. The stored user_scores total is only the fallback for a
+     failed read: the Round 648 migration recomputes it by the same rule and
+     the save keeps it there, so the fallback and the all time rank (a count
+     of stored totals) are this same number once the migration has landed.
+     The local half is credited by the same rule at record time
+     (src/lib/streaks.ts), so the max stays like against like. */
+  const serverPoints = ruleTotal ?? (userScoreData?.total_points ?? 0);
   const totalPoints = isOwnProfile
-    ? Math.max(userScoreData?.total_points ?? 0, localTotalPoints)
-    : (userScoreData?.total_points ?? 0);
+    ? Math.max(serverPoints, localTotalPoints)
+    : serverPoints;
   /* Round 301, audit finding 1: profiles has no total_games_played (or
      all_time_score) column, so the old fallbacks were dead and someone
      else's profile always showed Games Played 0. Viewed profiles now use
@@ -481,7 +495,9 @@ export default function Profile() {
   }
 
   /* ── Loading states ── */
-  if (loading || authLoading) {
+  /* Round 648: the total's own read is part of the load, so the page never
+     paints the stored running sum and then swaps it for the clamped one. */
+  if (loading || authLoading || totalLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="w-10 h-10 animate-spin text-primary" />

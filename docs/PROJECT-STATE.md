@@ -293,6 +293,62 @@ this branch's committed phase checks agree (measured, above). Not run here, and 
 reads the built `dist` and `simDrillMotion` is a browser harness, and this lane may not build or
 drive a browser while the release suite runs; the release gate runs both.
 
+## BUILT 2026-09-28: Round 648, the profile total on the owner's recompute rule (branch `r648-profile-clamp`, NOT on main, migration NOT applied)
+
+Part of the points economy that ships as one release: 645a (free and Unlimited runs record
+unranked), 645b, 645c, 646 (caps at each game's real ceiling), 647 (the season ledger) and 648.
+Built, then adversarially reviewed (verdict fix first: four majors, three minors), then fixed.
+
+**What changes for players.** The profile's Total Points is the rule the owner directed on
+2026-09-19 (decisions item 5 below): one row per game per day, the day's best, capped. Before, it
+was two running sums of raw scores, and the browser's one is where a Pack Battle pack's banked
+dollars (8,800,000 is an ordinary pack) landed; the server never held those, because its insert
+policy refuses any record above 100,000. Now the page sums the player's records by the rule
+(`src/lib/pointsRule.ts`, `src/hooks/useProfileTotal.ts`), with the caps read from
+`public.game_score_caps`, the table, cached six hours per browser, never the `game_denominators`
+view whose NULL fallback is the percentile Round 370 took off the page path. The browser's tally
+credits every play by the same rule, and counts nothing for a play the server could not store. An
+inflated tally from before this round is retired once on read (kept in `retiredPoints`, never
+shown): the browser kept no plays behind the sum, so the rule cannot recount it. The points badges
+read the repaired number. A signed in player's own profile still shows the larger of the tally and
+the server total, and the server total is the rule over every record the database holds.
+
+**What the first build got wrong, fixed here.** It summed EVERY record clamped at its cap, which
+would have put back the per match Club Manager rows and the reload repeats the recompute removed
+(profile totals would have gone up); it planted a Pack Battle cap of 1,000 when the live cap, and
+646's, is 54,000,000; it read the percentile view on client paths; it never repaired an inflated
+browser tally; and nothing checked the page wiring or the SQL.
+
+**Not fixed, by design.** A cap is a ceiling here, not a divisor (the World Leaderboard divides,
+the recompute did not). So a game whose cap is not a real ceiling counts its day's best up to it:
+a stored Pack Battle record can still add up to 100,000 a day. Pack Battle (retired from menus)
+and Sports Millionaire need a scale of their own first, which Round 646 also left. Signed in saves
+above 100,000 are still refused whole by the insert policy, as before this round. Several seasons
+of Club Manager or a front office closed on one day pay the day's best season, as on the board.
+
+**The fence.** `scripts/simProfileTotal.mjs` runs `src/test/profileTotal.test.tsx`, eight cases on
+the real record shape with the real caps (646's snapshot): the rule, the hook paging past 1,000
+rows, a failed read, the tally, the real recorder end to end, an empty caps read, the once only
+repair and the badges, and the Profile page rendered showing the rule total over a stale stored
+1,234,567. Measured on the planted 1,029 records: raw 155,043, the first build's per record clamp
+109,261, the rule 107,034; of the leak rows, raw and per record both keep 3,265, the rule 1,050.
+Section 3 reads the migration as code. **Controls: 14 of 14 proved**, 11 source controls each
+turning exactly their own cases red (perrecord, nocap, nodaycolumn, firstpage, localrepeat,
+recordmax, settleraw, nocapwire, noprime, norepair, pagewiring) and 3 on the SQL (sqlnoclamp,
+sqlperrecord, sqlnoguard). simScoringCoverage (140 points, its stub now models the day rule) and
+simAuthSave (every migration defining the save) green with all their controls.
+
+**Unapplied: `supabase/migrations/20260928_round_648_profile_clamp.sql`**, never run against a
+database. It fails closed: before any write it refuses unless Round 646 is applied, Round 644 part
+1 has run and its part 2 has nothing left to divide (this file ends that part 2 for good through
+its md5 guard), the save is the Round 569 one 644 fingerprinted or this file's own, the caps table
+is not empty, and authenticated may take the advisory lock. Part 1 replaces the save so it adds
+the day's capped improvement under a per player lock. Part 2 (rerunnable; rerun it whenever a cap
+changes) copies the caps out, locks `user_scores` against writers, recomputes every stored total
+by the rule, backs up what changes into `private.r648_totals_bak`, and rolls back if any total
+still differs. Order: publish 647, apply 646, finish 644, then this, then get_advisors. Until it
+lands the page shows the rule total while the all time rank counts the old stored totals.
+
 ## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
 
 Assembled and gated by the desktop Claude lane in the CRLF gate clone on `release-d`, pushed to
