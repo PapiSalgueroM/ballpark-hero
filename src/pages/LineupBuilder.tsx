@@ -22,7 +22,7 @@ import { computeChemistry, formatChemistry } from '@/lib/chemistry';
 import { StatTile } from '@/components/game/StatTile';
 import { normalizePosition, playerRating } from '@/lib/squadDeal';
 import { ordinal, simulateWorldXiSeason, type WxPlayer } from '@/lib/worldXi';
-import { buildXiPoints } from '@/lib/lineupVerdictPoints';
+import { buildXiPoints, xiPointsNote } from '@/lib/lineupVerdictPoints';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -433,7 +433,7 @@ const LineupBuilder = () => {
             <ResultScreen
               outcomeEmoji={<Trophy className="w-12 h-12 text-primary mx-auto" />}
               headline={verdict.rating}
-              statLine={<span className="font-semibold">{verdict.headline}</span>}
+              statLine={<><span className="font-semibold">{verdict.headline}</span><span className="block mt-1 text-xs text-muted-foreground">{xiPointsNote(verdict)}</span></>}
               statRow={[{ label: 'Points', value: buildXiPoints(verdict) }]}
               funFact={<span className="whitespace-pre-line">{verdict.analysis}</span>}
               emojiGrid={

@@ -29,6 +29,20 @@
  * two letters and tapped a highlighted name, while this table fed it eleven
  * empty slots and called it 0; and twenty rescaled rows had no control.
  *
+ * AND WHAT THE SECOND REVIEW AND THE MERGE FOUND: Build Your XI and Starting 5
+ * still paid for no skill on their main path (an XI of known flops judged
+ * live read Relegation Battle, 125 of 500; a random legal XI, read the way
+ * this table reads the referee, about 266), because the referee's bottom
+ * rung (made up names) was where 0 sat and no real lineup can reach it,
+ * so this table certified a run nobody can play (the rows now deal random
+ * legal lineups of real players); the four front offices and two dynasties
+ * were held to their pre 647 shape (only a title records) and went red the
+ * moment 647 landed (their six rows are rewritten by the 647 fix, which plays
+ * idle seasons through its own ledger in scripts/lib/seasonLedgerPlay.mjs, so
+ * one copy of how a season is played lives beside the ledger; this file keeps
+ * their control, seasonpar); and Rebuild and the Perfect Seasons shared a
+ * rating or a record, not the points they record.
+ *
  * THE RULE THIS HOLDS, one row per game that records a score: the zero skill
  * run records at most 5 percent of the perfect run (ZERO_SHARE_LIMIT), and for
  * every game this round changed, the perfect run records exactly what the
@@ -60,7 +74,9 @@
  *      games this round rescaled. Some rows carry a check of their own: HOF or
  *      Bust walks a year of dates through the real daily draw and fails on any
  *      day that deals yesterday's player; World XI fails if its suggestion list
- *      shows a position again.
+ *      shows a position again; Starting 5's referee, which no random five can
+ *      be measured against yet, may pay no more of its top verdicts than Build
+ *      Your XI's measured referee does.
  *   2) Coverage, both ways: every recorder in src that records a numeric score
  *      has a row, and every row names a recorder that still exists. Every
  *      config a shared engine runs on (every *_LINEUP_CONFIG, *_GAUNTLET_CONFIG
@@ -72,7 +88,8 @@
  *      stand-in body the two referee functions can send when their AI is out
  *      (their own fallback code, run here with the tables they read stubbed) is caught
  *      as no verdict, so the page hands the lineup to the offline judge.
- *   4) The shares: every game this round rescaled shares the number it records.
+ *   4) The shares: every game this round rescaled shares the number it records,
+ *      Rebuild and the four Perfect Seasons included.
  *
  * NEGATIVE CONTROLS, FREE_POINTS_CONTROL=<name>. Each puts one free floor back
  * in an in-memory copy of one file (the recorder read and the bundle both see
@@ -81,9 +98,12 @@
  * section name stands for a failure outside the table):
  *   xifloor    Build Your XI records `verdict ? 500 : 0` again: build-your-xi
  *   xistandin  the market value read is scored as a referee verdict again:
- *              build-your-xi and section3
- *   untrusted  the offline judge rates a name it cannot price 64 on trust
- *              again: build-your-xi
+ *              section3 (since the baseline, the read's rung pays what the
+ *              referee's would for the same XI, so the lie is about who judged)
+ *   xibaseline the referee ladder pays from its bottom rung again, the first
+ *              cut: build-your-xi (a random legal XI records a fair share)
+ *   offbaseline the offline ladder pays from its bottom rung: build-your-xi
+ *   fivebaseline Starting 5's referee pays from its bottom rung: nba-starting-5
  *   fivefloor  NBA Starting 5 records `verdict ? 500 : 0` again: nba-starting-5
  *   fivestandin the function's quick data read (any five real names read
  *              All-Star Starters) is scored as a referee verdict again:
@@ -120,6 +140,17 @@
  *   newsport   a sport is added to the shared Perfect Lineup engine with no
  *              row here: section2
  *   sharerating Squad Deal shares the rating without the points: section4
+ *   seasonshare the NBA Perfect Season shares its record without the points:
+ *              section4
+ *   seasonpar  every closed season pays 50 on top of the ledger's own score,
+ *              the par 647's re-review found: the four front offices and both
+ *              dynasties (their rows are the 647 fix's, so this control needs
+ *              that fix merged to have a green run to turn red)
+ *
+ * The control that used to be called untrusted (the offline judge rates a
+ * name it cannot price 64 on trust) is gone: under the baseline an XI of such
+ * names reads Solid, which records 0, so putting the trust back pays nothing
+ * and the control could not fire.
  *
  * Nothing here reads the database, dist or the clock: pools are the repo's own
  * static data, and every stochastic draw is seeded (scripts/lib/seedRandom.mjs).
@@ -193,13 +224,30 @@ const CONTROLS = {
     file: 'src/lib/lineupVerdictPoints.ts',
     from: "const XI_STAND_IN_WORDS = ['market-value read', 'pundit is taking a'];",
     to: "const XI_STAND_IN_WORDS = ['pundit is taking a'];",
-    rows: ['build-your-xi', 'section3'],
+    /* Since the baseline, a stand-in's rung pays what the referee's would for
+       the same XI (the market read is what measures the referee here), so
+       scoring it is a lie about who judged, not a free floor: section 3. */
+    rows: ['section3'],
   },
-  untrusted: {
-    file: 'src/lib/localLineupEval.ts',
-    from: 'rating: x.hit ? soccerRating(x.hit.mv) : SOCCER_OFFLINE_FLOOR,',
-    to: 'rating: x.hit ? soccerRating(x.hit.mv) : 64,',
+  xibaseline: {
+    /* The first cut: the referee ladder paid from its bottom rung, which no
+       real lineup reaches, so a random legal XI records about 266 of 500. */
+    file: 'src/lib/lineupVerdictPoints.ts',
+    from: "export const XI_REFEREE_BASELINE = 'Top 4 Finish';",
+    to: "export const XI_REFEREE_BASELINE = 'Sunday League';",
     rows: ['build-your-xi'],
+  },
+  offbaseline: {
+    file: 'src/lib/lineupVerdictPoints.ts',
+    from: "export const XI_OFFLINE_BASELINE = 'Solid';",
+    to: "export const XI_OFFLINE_BASELINE = 'Relegation Scrap';",
+    rows: ['build-your-xi'],
+  },
+  fivebaseline: {
+    file: 'src/lib/lineupVerdictPoints.ts',
+    from: "export const FIVE_REFEREE_BASELINE = 'Solid Rotation';",
+    to: "export const FIVE_REFEREE_BASELINE = 'Picked From the Stands';",
+    rows: ['nba-starting-5'],
   },
   fivefloor: {
     file: 'src/hooks/useNbaLineup.ts',
@@ -303,6 +351,14 @@ const CONTROLS = {
     to: "score: 'Grade ' + r.grade + ' (' + r.rating + ')',",
     rows: ['section4'],
   },
+  seasonshare: {
+    /* The record without the number it records, the word "points" left in
+       the copy: the check reads code, so the word cannot stand in for it. */
+    file: 'src/pages/PerfectSeasonNba.tsx',
+    from: 'score={`${sim.wins}-${sim.losses}, ${points} points`}',
+    to: 'score={`${sim.wins}-${sim.losses} points`}',
+    rows: ['section4'],
+  },
   cupfloor: {
     file: 'src/lib/gauntletEngine.ts',
     from: 'return skillPoints(run.score, floor.score, gauntletCeiling(config));',
@@ -311,6 +367,15 @@ const CONTROLS = {
        clear under a tenth of a round on average (0.6 of 100 measured), so
        the old score never paid the NFL a floor and stays green here. */
     rows: ['gauntlet-draft', 'nba-gauntlet-draft', 'mlb-gauntlet-draft'],
+  },
+  seasonpar: {
+    /* The par the Round 647 re-review found: every closed season paid 50 on
+       top of how far it beat its projection, so a season nobody touched
+       recorded half the ceiling. Wraps the real scorer, whatever its body. */
+    file: 'src/lib/seasonLedger.ts',
+    from: 'export function scoreSeason(',
+    to: 'export function scoreSeason(r, exp) { return Math.min(100, 50 + scoreSeasonOwn(r, exp)); }\nfunction scoreSeasonOwn(',
+    rows: ['front-office', 'mlb-front-office', 'nba-front-office', 'nhl-front-office', 'cbb-dynasty', 'cfb-dynasty'],
   },
   sitout: {
     file: 'src/lib/auctionHouse.ts',
@@ -359,6 +424,9 @@ export { footballDraftDailyScore } from '@/hooks/useFootballDraft';
 export { puckDetectiveScore } from '@/pages/PuckDetective';
 export * as ladder from '@/lib/careerLadder';
 export * as verdicts from '@/lib/lineupVerdictPoints';
+export { clubs as XI_CLUBS, nations as XI_NATIONS, clubTableNames, nationSearchTerm } from '@/data/lineupTeams';
+export { FORMATIONS as XI_FORMATIONS } from '@/types/lineupBuilder';
+export { checkLineupPick } from '@/lib/positionFit';
 export * as iq from '@/hooks/useBallIq';
 export * as box from '@/hooks/useMysteryBox';
 export * as hof from '@/hooks/useHofOrBust';
@@ -453,7 +521,9 @@ let L;
 /* The offline Build Your XI judge, bundled on its own with the database
    client swapped for a price table this harness fills (PRICES, lower cased
    name to US dollars): it looks each pick up in player_market_values, and a
-   name with no row is one it cannot price. */
+   name with no row is one it cannot price. The lookup is the judge's own
+   query, ilike '%name%' ordered by value, highest first: any priced name that
+   CONTAINS the pick answers, and the dearest of them wins, as it does live. */
 let OFFLINE;
 const PRICES = new Map();
 globalThis.__freePointsPrices = PRICES;
@@ -466,8 +536,9 @@ export const supabase = {
       select() { return q; }, eq() { return q; }, order() { return q; },
       ilike(_col, pattern) { q.name = String(pattern).replace(/%/g, '').trim().toLowerCase(); return q; },
       limit() {
-        const v = PRICES.get(q.name);
-        return Promise.resolve({ data: v === undefined ? [] : [{ player_name: q.name, market_value_usd: v }] });
+        let best = null;
+        for (const [n, v] of PRICES) if (n.includes(q.name) && (best === null || v > best.v)) best = { n, v };
+        return Promise.resolve({ data: best === null ? [] : [{ player_name: best.n, market_value_usd: best.v }] });
       },
     };
     return q;
@@ -1280,17 +1351,20 @@ function functionSource(text, name) {
   throw new Error(`function ${name} never closes`);
 }
 const WORST_XI = range(11).map(i => `Journeyman ${i}`);
+const XI_MARKET_JS = (await transform(`${functionSource(readLF(XI_FN), 'sanitizeName')}\n${functionSource(readLF(XI_FN), 'marketValueFallback')}`, { loader: 'ts' })).code;
+/** The function's own market value read of an XI, with the price table
+ *  stubbed to `rows` (or down). */
+async function marketRead(names, rows) {
+  const fetchStub = async () => {
+    if (rows === 'down') throw new Error('the price table is down');
+    return { ok: true, json: async () => rows };
+  };
+  const make = Function('SUPABASE_URL', 'SUPABASE_ANON_KEY', 'fetch', `${XI_MARKET_JS}\nreturn marketValueFallback;`);
+  return make('https://stub.invalid', 'stub', fetchStub)(names.map(n => ({ label: 'CM', playerName: n, assignedTeam: 'Nowhere' })));
+}
 async function xiStandIns() {
   const text = readLF(XI_FN);
-  const js = (await transform(`${functionSource(text, 'sanitizeName')}\n${functionSource(text, 'marketValueFallback')}`, { loader: 'ts' })).code;
-  const run = async rows => {
-    const fetchStub = async () => {
-      if (rows === 'down') throw new Error('the price table is down');
-      return { ok: true, json: async () => rows };
-    };
-    const make = Function('SUPABASE_URL', 'SUPABASE_ANON_KEY', 'fetch', `${js}\nreturn marketValueFallback;`);
-    return make('https://stub.invalid', 'stub', fetchStub)(WORST_XI.map(n => ({ label: 'CM', playerName: n, assignedTeam: 'Nowhere' })));
-  };
+  const run = rows => marketRead(WORST_XI, rows);
   const priced = (names, usd) => names.map(n => ({ player_name: n, market_value_usd: usd }));
   const out = [];
   /* One body per rung of the market read, from the richest XI to the cheapest. */
@@ -1340,32 +1414,127 @@ const OFFLINE_XI = [
 ];
 const OFFLINE_FIVE = { ...(await OFFLINE.localEvaluateNbaFive(range(5).map(i => `Bench Guy ${i}`), 'Highest points')), judge: 'offline' };
 /* The page's own path for a body: a referee verdict is scored as one, and
-   anything else goes to the offline judge (useLineupBuilder, useNbaLineup). */
-const xiPath = body => L.verdicts.xiRefereeVerdict(body) ?? OFFLINE_XI[0].verdict;
+   anything else goes to the offline judge (useLineupBuilder, useNbaLineup),
+   which judges the same XI. */
+const xiPath = (body, offline = OFFLINE_XI[0].verdict) => L.verdicts.xiRefereeVerdict(body) ?? offline;
 const fivePath = body => L.verdicts.fiveRefereeVerdict(body) ?? OFFLINE_FIVE;
+
+/* Build Your XI with no skill, after the second review: a random legal XI of
+   real players. The first cut measured the referee's bottom rung, which the
+   referee keeps for made up names, and no real run can reach it: every pick
+   passes the position gate (checkLineupPick, on the row's own position) and
+   validate-player, which fails closed. So a player who knows nothing still
+   fields eleven real men who fit, and that is the policy measured here: a
+   random formation, the teams dealt in a random order (lineupTeams, eleven
+   different clubs and countries), and for every slot a random pick among the
+   team's real players the gate lets in, the next team when one has none (the
+   page's reroll). The pool is the repo's 2026 snapshot of player_market_values
+   (scripts/data/rebuildMarket.json, the top of the market); the live dropdown
+   draws from every year of the same table.
+
+   The referee is an AI call and cannot run here. What stands in for it is the
+   one piece of the function's own code that puts an XI on the referee's
+   ladder, its market value read, and the live referee was harsher than that
+   read on the random XIs it judged: probed on 2026-09-28 with six XIs built
+   this way, it answered Relegation Battle and Mid-Table on the two it judged
+   itself, where the read says Europa League Level (the other four came back
+   as the read, its AI out). The offline judge is real code and runs as is,
+   with its price lookup answered from the same snapshot. */
+const XI_RANDOM_RUNS = 400;
+const XI_MARKET_ROWS = JSON.parse(readLF('scripts/data/rebuildMarket.json')).rows
+  .map(([name, rawPos, , nation, club, value]) => ({ name, rawPos, nation, club, value }))
+  .filter(p => p.value > 0);
+for (const p of XI_MARKET_ROWS) PRICES.set(p.name.toLowerCase(), Math.max(PRICES.get(p.name.toLowerCase()) ?? 0, p.value));
+function randomLegalXis() {
+  const byClub = new Map();
+  const byNation = new Map();
+  for (const p of XI_MARKET_ROWS) {
+    if (!byClub.has(p.club)) byClub.set(p.club, []);
+    byClub.get(p.club).push(p);
+    if (!byNation.has(p.nation)) byNation.set(p.nation, []);
+    byNation.get(p.nation).push(p);
+  }
+  const poolOf = t => (t.isNation ? byNation.get(L.nationSearchTerm(t.name)) ?? [] : L.clubTableNames(t.name).flatMap(n => byClub.get(n) ?? []));
+  const teams = [...L.XI_CLUBS.map(name => ({ name, isNation: false })), ...L.XI_NATIONS.map(name => ({ name, isNation: true }))];
+  const formations = Object.keys(L.XI_FORMATIONS);
+  const rng = mulberry(64511);
+  const xis = [];
+  for (let run = 0; run < XI_RANDOM_RUNS; run += 1) {
+    const slots = L.XI_FORMATIONS[formations[Math.floor(rng() * formations.length)]];
+    const order = [...teams];
+    for (let i = order.length - 1; i > 0; i -= 1) { const j = Math.floor(rng() * (i + 1)); [order[i], order[j]] = [order[j], order[i]]; }
+    const used = new Set();
+    const picks = [];
+    let next = 0;
+    for (const slot of slots) {
+      for (;;) {
+        if (next >= order.length) throw new Error('a random XI ran out of teams to deal');
+        const team = order[next++];
+        const legal = poolOf(team).filter(p => !used.has(p.name.toLowerCase()) && L.checkLineupPick(p.name, slot.role, slot.label, p.rawPos, L.sd.normalizePosition).ok);
+        if (legal.length === 0) continue;
+        const p = legal[Math.floor(rng() * legal.length)];
+        used.add(p.name.toLowerCase());
+        picks.push(p);
+        break;
+      }
+    }
+    xis.push(picks);
+  }
+  return xis;
+}
+const RANDOM_XIS = [];
+for (const xi of randomLegalXis()) {
+  const names = xi.map(p => p.name);
+  RANDOM_XIS.push({
+    offline: { ...(await OFFLINE.localEvaluateSoccerXI(names)), judge: 'offline' },
+    read: await marketRead(names, xi.map(p => ({ player_name: p.name, market_value_usd: p.value }))),
+  });
+}
+const rungTally = labels => {
+  const m = new Map();
+  for (const l of labels) { const k = l.replace(/[^A-Za-z0-9 -]/g, '').trim(); m.set(k, (m.get(k) ?? 0) + 1); }
+  return [...m].map(([k, v]) => `${k} ${v}`).join(', ');
+};
 
 row('build-your-xi', {
   site: ['src/hooks/useLineupBuilder.ts'],
-  /* Every path a zero skill XI can finish on, each its own group: the
-     referee's bottom rung, the offline judge on the cheapest and on unpriced
-     names, the Error card, and every stand-in the function can send it. */
+  /* Every path a zero skill XI can finish on, each its own group: the referee
+     on a random legal XI (read off the market read, above), the offline judge
+     on the same XIs, the page's path when the function sends its market read
+     for them, the offline judge on the cheapest and on unpriced names, the
+     Error card, and every other stand-in the function can send. */
   zero: () => ({
     groups: [
-      { what: 'referee, bottom rung', verdict: { rating: 'Sunday League 😂' } },
-      ...OFFLINE_XI,
-      { what: 'Error card', verdict: { rating: 'Error' } },
-      ...XI_STAND_INS.filter(s => s.zeroSkill).map(s => ({ what: `referee out, ${s.what}`, verdict: xiPath(s.body) })),
-    ].map(s => [{ ...s, buildXiPoints: L.verdicts.buildXiPoints }]),
+      { what: 'referee, a random legal XI', runs: RANDOM_XIS.map(x => ({ verdict: { rating: x.read.rating } })) },
+      { what: 'offline judge, a random legal XI', runs: RANDOM_XIS.map(x => ({ verdict: x.offline })) },
+      { what: 'referee out, a random legal XI', runs: RANDOM_XIS.map(x => ({ verdict: xiPath(x.read, x.offline) })) },
+      ...OFFLINE_XI.map(s => ({ what: s.what, runs: [{ verdict: s.verdict }] })),
+      { what: 'Error card', runs: [{ verdict: { rating: 'Error' } }] },
+      ...XI_STAND_INS.filter(s => s.zeroSkill).map(s => ({ what: `referee out, ${s.what}`, runs: [{ verdict: xiPath(s.body) }] })),
+    ].map(g => g.runs.map(s => ({ ...s, buildXiPoints: L.verdicts.buildXiPoints }))),
   }),
   perfect: () => ({ verdict: { rating: 'Treble Winners 🏆🏆🏆' }, buildXiPoints: L.verdicts.buildXiPoints }),
   before: s => (s.verdict ? 500 : 0),
+  check: () => {
+    console.log(`   build-your-xi: ${RANDOM_XIS.length} random legal XIs. The market read puts them at ${rungTally(RANDOM_XIS.map(x => x.read.rating))} (points start above ${L.verdicts.XI_REFEREE_BASELINE}); the offline judge at ${rungTally(RANDOM_XIS.map(x => x.offline.rating))} (points start above ${L.verdicts.XI_OFFLINE_BASELINE})`);
+    return [];
+  },
   requires: [['src/hooks/useLineupBuilder.ts', /const judged = resp\.ok \? xiRefereeVerdict\(data\) : null;\s*if \(!judged\) \{[^}]*?localEvaluateSoccerXI\(/, 'hands a body that is no referee verdict to the offline judge']],
 });
+/* NBA Starting 5. What the live site runs today is measured: the deployed
+   nba-evaluate-lineup (version 5) has no AI that answers, so every five comes
+   back from statFallback, whatever the five, and every one of those bodies is
+   caught and scored by the offline judge, which records 0 (its groups below).
+   What cannot be measured is the referee's rung for a random legal five, and
+   it cannot be until the repo copy (gemini-2.5-flash) is deployed and probed.
+   So its baseline is held to the one referee ladder that was measured: the
+   Starting 5 referee pays no more of its top verdicts than Build Your XI's
+   does (the check below). The probe is owed with the deploy, in
+   docs/PROJECT-STATE.md. */
 row('nba-starting-5', {
   site: ['src/hooks/useNbaLineup.ts'],
   zero: () => ({
     groups: [
-      { what: 'referee, bottom rung', verdict: { rating: 'Picked From the Stands 😂' } },
       { what: 'offline judge', verdict: OFFLINE_FIVE },
       { what: 'Error card', verdict: { rating: 'Error' } },
       ...FIVE_STAND_INS.map(s => ({ what: `referee out, ${s.what}`, verdict: fivePath(s.body) })),
@@ -1373,6 +1542,12 @@ row('nba-starting-5', {
   }),
   perfect: () => ({ verdict: { rating: 'GOAT Squad 🐐' }, startingFivePoints: L.verdicts.startingFivePoints }),
   before: s => (s.verdict ? 500 : 0),
+  check: () => {
+    const xi = L.verdicts.rungOf(L.verdicts.XI_REFEREE_BASELINE, L.verdicts.XI_REFEREE_LADDER);
+    const five = L.verdicts.rungOf(L.verdicts.FIVE_REFEREE_BASELINE, L.verdicts.FIVE_REFEREE_LADDER);
+    console.log(`   nba-starting-5: the referee pays its top ${five} of ${L.verdicts.FIVE_REFEREE_LADDER.length} verdicts, Build Your XI's measured referee its top ${xi} of ${L.verdicts.XI_REFEREE_LADDER.length}`);
+    return five > xi ? [`the referee pays its top ${five} verdicts, more than the ${xi} Build Your XI's measured ladder pays, and no random five has been measured against it`] : [];
+  },
   requires: [['src/hooks/useNbaLineup.ts', /const judged = fiveRefereeVerdict\(data\);\s*if \(!judged\) throw/, 'sends a body that is no referee verdict to the offline judge']],
 });
 row('ball-iq', {
@@ -1913,7 +2088,42 @@ console.log('4) every rescaled game shares the points it records');
     ['src/pages/SearchAndDiscard.tsx', 'finalScore'],
     ['src/hooks/useBudgetBuilder.ts', 'points'],
     ['src/pages/WorldXi.tsx', 'recordedScore'],
+    ['src/hooks/useRebuild.ts', 'points'],
+    ['src/pages/PerfectSeasonNba.tsx', 'points', 'lockedAttempt.points'],
+    ['src/pages/PerfectSeasonNfl.tsx', 'points', 'lockedAttempt.points'],
+    ['src/pages/PerfectSeasonMlb.tsx', 'points', 'lockedAttempt.points'],
+    ['src/pages/PerfectSeasonNhl.tsx', 'points', 'lockedAttempt.points'],
   ];
+  /* The code of a share site with the text of its strings taken out, so the
+     word "points" in a share's own copy cannot stand in for the number: a
+     template literal keeps only what is inside its ${...}. */
+  const codeOnly = s => {
+    let out = '';
+    const stack = [{ tpl: false, depth: 0 }];
+    for (let i = 0; i < s.length; i++) {
+      const c = s[i];
+      const top = stack[stack.length - 1];
+      if (top.tpl) {
+        if (c === '\\') { i += 1; continue; }
+        if (c === '`') { stack.pop(); out += ' '; continue; }
+        if (c === '$' && s[i + 1] === '{') { stack.push({ tpl: false, depth: 0 }); i += 1; out += ' '; }
+        continue;
+      }
+      if (c === '"' || c === "'") {
+        for (i += 1; i < s.length && s[i] !== c; i++) if (s[i] === '\\') i += 1;
+        out += ' ';
+        continue;
+      }
+      if (c === '`') { stack.push({ tpl: true, depth: 0 }); continue; }
+      if (c === '{') top.depth += 1;
+      if (c === '}') {
+        if (top.depth === 0 && stack.length > 1) { stack.pop(); out += ' '; continue; }
+        top.depth -= 1;
+      }
+      out += c;
+    }
+    return out;
+  };
   const shareSites = s => {
     const out = [];
     for (const m of s.matchAll(/share=\{\{/g)) {
@@ -1931,13 +2141,15 @@ console.log('4) every rescaled game shares the points it records');
     return out;
   };
   let sites = 0;
-  for (const [rel, token] of SHARES) {
+  /* A file names the one expression it records, or two when a restored
+     result shares the number it saved (the Perfect Seasons' locked daily). */
+  for (const [rel, ...tokens] of SHARES) {
     const found = shareSites(code(rel));
     if (found.length === 0) { failIn('section4', `${rel}: no share site this harness can read`); continue; }
-    const tokenRe = new RegExp(`(?<![\\w.])${token.replace(/[.()[\]]/g, c => `\\${c}`)}(?![\\w])`);
+    const tokenRes = tokens.map(token => new RegExp(`(?<![\\w.])${token.replace(/[.()[\]]/g, c => `\\${c}`)}(?![\\w])`));
     for (const f of found) {
       sites += 1;
-      if (!tokenRe.test(f)) failIn('section4', `${rel}: a share line leaves out the recorded ${token}: ${f.replace(/\s+/g, ' ').slice(0, 120)}`);
+      if (!tokenRes.some(re => re.test(codeOnly(f)))) failIn('section4', `${rel}: a share line leaves out the recorded ${tokens.join(' or ')}: ${f.replace(/\s+/g, ' ').slice(0, 120)}`);
     }
   }
   console.log(`   ${sites} share sites across ${SHARES.length} files, each naming what its game records`);

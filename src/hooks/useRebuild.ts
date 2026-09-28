@@ -497,7 +497,8 @@ export function useRebuild(): RebuildState {
           const pos = shared.positions[tbl.seats.filter(x => x.run && x.club).findIndex(x => x.index === s.index)] ?? 0;
           const after = loop.ratingOf(s.run!);
           const delta = after - s.run!.startRating;
-          return `${pos}. ${s.emoji} ${s.name} · ${s.club!.club} ${after} (${delta >= 0 ? '+' : ''}${delta})`;
+          /* Round 645: each window's points for the climb, the number its card shows. */
+          return `${pos}. ${s.emoji} ${s.name} · ${s.club!.club} ${after} (${delta >= 0 ? '+' : ''}${delta}), ${loop.rebuildPoints(s.run!)} points`;
         });
       const cups = shared.trophies.map(t => `${t.emoji} ${t.title}: ${t.winner}`);
       return `Rebuild, ${tbl.seats.length} at the table\n${lines.join('\n')}\n${cups.join('\n')}\ndouknowball.com/rebuild`;
@@ -507,8 +508,9 @@ export function useRebuild(): RebuildState {
       ? `\nvs ${rivals[0].name} ${rivals[0].finalRating} · ${rivals[1].name} ${rivals[1].finalRating}`
       : '';
     const seasonLine = season ? `\nSeason: #${season.position} of ${season.table.length}` : '';
-    return `Rebuild: ${run.club.club}\n${startRating} → ${currentRating} (target ${target})\nManager: ${run.manager?.name ?? KEEP_MANAGER.name}\n${grade}${rivalLine}${seasonLine}\nSold ${run.sold.length} · Signed ${run.signed.length} · €${finalFunds}M left\ndouknowball.com/rebuild`;
-  }, [solo, tbl, run, startRating, currentRating, target, grade, finalFunds, rivals, season]);
+    /* Round 645: the share carries the points the run records. */
+    return `Rebuild: ${run.club.club}\n${startRating} → ${currentRating} (target ${target})\nManager: ${run.manager?.name ?? KEEP_MANAGER.name}\n${grade}, ${points} points${rivalLine}${seasonLine}\nSold ${run.sold.length} · Signed ${run.signed.length} · €${finalFunds}M left\ndouknowball.com/rebuild`;
+  }, [solo, tbl, run, startRating, currentRating, target, grade, points, finalFunds, rivals, season]);
 
   return {
     phase, loading, clubs, club: seat?.club ?? null, preset, setPreset, chooseClub, reset,

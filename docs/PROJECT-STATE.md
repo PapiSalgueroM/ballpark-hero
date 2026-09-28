@@ -216,15 +216,70 @@ migration in this round.
 - **The live Starting 5 finding.** The repo copy of `nba-evaluate-lineup` was not the deployed
   function. Version 5, read back from production on 2026-09-28, answers every lineup from its
   quick data read (its AI line is `gemini-2.0-flash`, the model Round 485 found has no free quota
-  on this key), and that read rates any five real names All-Star Starters, 429 of 500 on this
-  branch, whatever the challenge. A live probe the same day confirmed it (a probe of
+  on this key), and that read rates any five real names All-Star Starters, whatever the challenge.
+  A live probe the same day confirmed it (a probe of
   `evaluate-lineup`, which runs `gemini-2.5-flash` on the same key, got a real AI verdict, so
   Build Your XI's stand-ins are the rarer degraded path). The page now catches that
   read, so **until the function is redeployed every Starting 5 on the live site records 0** (the
   offline judge cannot read the challenge, and the result card says so). The repo file is now the
   deployed source with the model line corrected to `gemini-2.5-flash` and its dashes taken out;
-  it is NOT deployed and stays in simEdgeSync's `unverified` list. **Owed with this release:**
-  deploy it, move it to `synced` in `scripts/data/edgeDeployed.json`, and probe it once.
+  it is NOT deployed and stays in simEdgeSync's `unverified` list.
+- **Edge dependency, checked 2026-09-28 against production (list and read through the management
+  API).** The client in this release is correct against what is deployed today and needs no
+  deploy to be right: `evaluate-lineup` is **version 5**, and its stand-in wording ("market-value
+  read", "pundit is taking a") is what `xiRefereeVerdict` catches; `nba-evaluate-lineup` is
+  **version 5**, whose every answer is its quick data read or its placeholder ("AI analyst is
+  offline", "analyst is taking a"), which `fiveRefereeVerdict` catches, so a Starting 5 records 0
+  and says so rather than paying a verdict nothing judged. What waits on a deploy is Starting 5
+  scoring anything at all. **Owed, after this release ships:** deploy the repo copy of
+  `nba-evaluate-lineup` (it becomes version 6 on `gemini-2.5-flash`), move it to `synced` in
+  `scripts/data/edgeDeployed.json` with the new hash and version, probe it once, and probe a few
+  random legal fives: the Starting 5 baseline (Solid Rotation, below) was set by parity with Build
+  Your XI's measured ladder, not measured, and a random five must land at Solid Rotation or under.
+  If the probes pay more, raise `FIVE_REFEREE_BASELINE` in `src/lib/lineupVerdictPoints.ts`.
+- **The fix on `points-economy` (branch `eco-fix-645b`, 2026-09-28).** Three things the second
+  review and the merge found. (1) Build Your XI and Starting 5 still paid for no skill on the
+  main path: 0 sat on the referee's bottom rung, which the referee keeps for made up names, and no
+  real lineup reaches it (every pick passes the position gate and a validator), so real players
+  still paid (an XI of known flops judged live: 125 of 500; a random legal XI read the way the
+  fence reads the referee: about 266). Each ladder now has a baseline and only a verdict
+  above it pays, spread up to 500 at the top: Build Your XI's referee above Top 4 Finish, its
+  offline judge above Solid, Starting 5's referee above Solid Rotation. `simFreePoints` deals 400
+  random legal XIs of real players (the page's gate, one pick a team, the repo's 2026 value
+  snapshot) and reads them through the function's own market value read (Europa League Level 279,
+  Top 4 Finish 112, Mid-Table 9) and the real offline judge (Mid-Table 265, Solid 133, Relegation
+  Scrap 2): both record 0. The live referee judged random XIs harsher than the read (Relegation
+  Battle and Mid-Table, 2026-09-28). The result card says where points start. (2) The four front
+  offices and both dynasties: the rows asserted the pre 647 shape (only a title records) and went
+  red on the merged tree. The lead's call: these rows read 647's `scoreSeason` and still hold the 5
+  percent rule, and the 647 fix dropped the par (a season now scores only past its projection's
+  best). The 647 fix (`eco-fix-647`, commit `91f5bc28`) also rewrote the six rows in this file:
+  400 idle seasons a sport (100 careers of 4), through the real engines and 647's own ledger
+  player `scripts/lib/seasonLedgerPlay.mjs`, which scores each season with `scoreSeason`, against
+  the ledger's ceiling. This branch had rewritten the same rows its own way, so the two fix
+  branches conflicted in that hunk; this branch now leaves the six rows as they are on
+  `points-economy` and takes 647's, so one copy of how a season is played lives beside the ledger
+  and the branches merge cleanly. The six are **red on this branch alone** (647 as merged pays a
+  par of 50) and green once 647's fix is in: front-office 3.0, mlb 4.3, nba 2.1, nhl 2.3, cbb 2.4,
+  cfb 2.2 percent of a perfect season. The `seasonpar` control (below) stays with this file.
+  (3) Rebuild (solo and every seat of a table) and the four Perfect Seasons (fresh and restored
+  daily) now share the points they record; the shares check reads code with the strings taken
+  out, so the word "points" in a share's copy cannot stand in for the number.
+- **Gates, 2026-09-28, on a trial merge** of `points-economy` with this branch, `eco-fix-647`
+  (`d9835626`), `eco-fix-645c` (`869827cf`) and `eco-fix-648` (`776e7c48`), all four merging
+  with no conflict: tsc 0 (exit code read); `simFreePoints` green (132 rows) and all 28 of its
+  controls exit 0, each turning exactly its own rows or section red; green: simRankedRecorder,
+  simDailyLockEdges (42 tests, 25 controls), simDailyReload (30 rows, 10 controls),
+  simCapsAreCeilings, simSeasonLedger, simCfbDynasty, simGmReload, simProfileTotal,
+  simNoDoubleRecord, simScoreShown, simScoringCoverage, simLeaderboardCaps, simGuideHeadings,
+  simSiteSearch, simDailyLegend, simCompletionOnce, simRebuildSave, simRebuildSeats,
+  simRebuildLoop, simPerfectSeason, simLineupPositions, simNbaLineupSearch, simQuotaHonesty,
+  simEdgeSync, simHarnessAnchors, simNoRivalNames, and the vitest files FrontOfficeSeasonClose (48),
+  CbbDynastyBoard (9), CfbDynastyBoard (9), noDoubleRecord (69), scoreShown (16) and unrankedNote
+  (5). On this branch alone: tsc 0, and `simFreePoints` red on exactly the six season rows. The
+  harnesses that hardcode a `node_modules` under the checkout ran from temporary copies pointed at
+  the main checkout's, since the worktree has none; the copies are deleted. No runAllSims, build or
+  browser harness.
 - **Fence** `scripts/simFreePoints.mjs`, four sections: one row per game (132), the zero skill
   run against a perfect one through the real scorer, with its own checks for HOF or Bust (366
   dates, 0 deal yesterday's player, 0 a borderline one) and World XI (a blind two letter tapper on
@@ -233,9 +288,17 @@ migration in this round.
   code run with stubbed tables, 9 XI bodies and 8 Starting 5 bodies) held as no verdict; every
   rescaled game's share names its points. Highest zero skill shares left: score-predictor 5.0,
   dart-draft 4.9, Perfect Season NFL 3.6, Fight Gym 3.5 percent.
-- **Controls.** 24, `FREE_POINTS_CONTROL=<name>`, each refusing an anchor that is not in the code
-  exactly once, each turning only its own rows or section red with a measured floor (for example
-  fivestandin 429 of 500, standstill 766 of 990, hofstep 79 of 366 days repeating yesterday). The
+- **Controls.** 28 since the `eco-fix-645b` pass, `FREE_POINTS_CONTROL=<name>`, each refusing an
+  anchor that is not in the code exactly once, each turning only its own rows or section red with
+  a measured floor (for example standstill 766 of 990, hofstep 79 of 366 days repeating yesterday,
+  xibaseline 266 of 500, offbaseline 166 of 500, seasonpar 51.6 to 52.9 of 100). That pass added
+  xibaseline, offbaseline, fivebaseline, seasonshare and seasonpar, and retired `untrusted` (an XI
+  of names the offline judge cannot price reads Solid, which the baseline pays 0, so trusting them
+  again pays nothing and the control could not fire); xistandin now reddens section 3 only.
+  `seasonpar` wraps `scoreSeason` so every closed season pays 50 more, and turns exactly the six
+  season rows red (51.6 to 52.9 of 100); it needs 647's rows to have a green run to turn. All 28
+  were run on the trial merge (see the gates bullet above), each exit 0 and exact. On this branch
+  alone every control also reddens the six season rows, which are red without it. The
   NFL Gauntlet and the MLB and NHL Perfect Seasons have no red control of their own because the
   formula they replaced already paid under 5 percent.
 - **Known and left:** best scores recorded before this round stay on the old scales (every

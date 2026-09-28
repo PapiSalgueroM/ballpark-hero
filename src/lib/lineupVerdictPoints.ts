@@ -8,10 +8,40 @@
  * number.
  *
  * WHAT THIS IS. The verdict is the score. Each judge gives one label off a
- * fixed ladder, and the ladder is spread evenly from 0 at its bottom rung to
- * 500 at its top, so a perfect lineup records the same 500 it always did and
- * the worst verdict records 0. A label no ladder knows (the "Error" card, or
+ * fixed ladder, the top rung records 500, so a perfect lineup records the
+ * same 500 it always did, and a label no ladder knows (the "Error" card, or
  * anything a judge invents) records 0: an unjudged lineup is not a scored one.
+ *
+ * THE BASELINE, after the second review. The first cut spread each ladder
+ * from 0 at its BOTTOM rung, and the bottom rung is one no real lineup can
+ * reach: the referees keep it for made up names, and neither page lets a
+ * made up name in (Build Your XI checks every pick with validate-player,
+ * which fails closed, and Starting 5 fills a slot only from a suggestion).
+ * So a lineup of real players still paid: an XI of known flops the live
+ * referee judged read Relegation Battle, 125 of 500, and a random legal XI
+ * read through the function's market value read about 266. Now each ladder
+ * has a baseline, the rung a random legal lineup of real players reaches, and
+ * only a rung ABOVE it pays: the baseline and everything under it record 0,
+ * and the rungs above it are spread evenly up to 500 at the top.
+ *
+ *   Build Your XI, referee: Top 4 Finish. scripts/simFreePoints.mjs deals
+ *     400 random legal XIs of real players (the position gate, one pick a
+ *     team, the repo's 2026 snapshot of the value table) and reads them
+ *     through the function's own market value read, the one piece of its code
+ *     that puts an XI on this ladder: 279 read Europa League Level, 112 Top 4
+ *     Finish, 9 Mid-Table, none higher. Top 4 Finish has to be the baseline:
+ *     paying it would hand a random XI 125 points more than a quarter of the
+ *     time. The live referee was harsher than that read: probed on 2026-09-28
+ *     with random legal XIs of the same kind, it answered Relegation Battle
+ *     and Mid-Table where the read says Europa League Level.
+ *   Build Your XI, offline judge: Solid. The same 400 XIs through the real
+ *     offline judge: 265 Mid-Table, 133 Solid, 2 Relegation Scrap.
+ *   NBA Starting 5, referee: Solid Rotation, the top three verdicts paying
+ *     like Build Your XI's. This one is not measured: the deployed
+ *     nba-evaluate-lineup (version 5) runs no AI that answers, so there is no
+ *     referee verdict on a random five to read until the repo copy is
+ *     deployed and probed (owed in docs/PROJECT-STATE.md). simFreePoints holds
+ *     that it pays no more of its top verdicts than the measured XI ladder.
  *
  * THE OFFLINE JUDGE. When the AI referee is out of quota the page falls back
  * to src/lib/localLineupEval.ts so the game still finishes. For Build Your XI
@@ -46,6 +76,8 @@ export const XI_REFEREE_LADDER = [
   'Relegated',
   'Sunday League',
 ] as const;
+/** The rung a random legal XI of real players reaches on the referee's ladder. */
+export const XI_REFEREE_BASELINE = 'Top 4 Finish';
 
 /** Build Your XI, the offline judge, best first. */
 export const XI_OFFLINE_LADDER = [
@@ -55,6 +87,8 @@ export const XI_OFFLINE_LADDER = [
   'Mid-Table',
   'Relegation Scrap',
 ] as const;
+/** The rung a random legal XI of real players reaches with the offline judge. */
+export const XI_OFFLINE_BASELINE = 'Solid';
 
 /** NBA Starting 5, the AI referee, best first. */
 export const FIVE_REFEREE_LADDER = [
@@ -67,6 +101,9 @@ export const FIVE_REFEREE_LADDER = [
   'G-League Level',
   'Picked From the Stands',
 ] as const;
+/** The rung a random legal five is held to on the referee's ladder (not yet
+ *  measured against the live referee, see the header). */
+export const FIVE_REFEREE_BASELINE = 'Solid Rotation';
 
 export interface JudgedVerdict {
   rating: string;
@@ -139,25 +176,39 @@ function labelKey(label: string): string {
   return label.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
 }
 
-/** Points for a label on a ladder: its top rung pays LINEUP_PERFECT, its
- *  bottom rung 0, evenly between, and a label not on it 0. */
-export function ladderPoints(label: string, ladder: readonly string[]): number {
+/** A label's rung on a ladder, 0 at the top, or -1 when it is not on it. */
+export function rungOf(label: string, ladder: readonly string[]): number {
   const key = labelKey(label);
-  const rung = ladder.findIndex(l => labelKey(l) === key);
-  if (rung < 0 || ladder.length < 2) return 0;
-  const bottom = ladder.length - 1;
-  return Math.round((LINEUP_PERFECT * (bottom - rung)) / bottom);
+  return ladder.findIndex(l => labelKey(l) === key);
+}
+
+/** Points for a label on a ladder: its top rung pays LINEUP_PERFECT, the
+ *  baseline and every rung under it 0, the rungs between evenly spread, and
+ *  a label not on the ladder 0. */
+export function ladderPoints(label: string, ladder: readonly string[], baseline: string): number {
+  const rung = rungOf(label, ladder);
+  const base = rungOf(baseline, ladder);
+  if (rung < 0 || base <= 0 || rung >= base) return 0;
+  return Math.round((LINEUP_PERFECT * (base - rung)) / base);
 }
 
 /** What a finished Build Your XI records. */
 export function buildXiPoints(verdict: JudgedVerdict | null): number {
   if (!verdict) return 0;
-  return ladderPoints(verdict.rating, verdict.judge === 'offline' ? XI_OFFLINE_LADDER : XI_REFEREE_LADDER);
+  return verdict.judge === 'offline'
+    ? ladderPoints(verdict.rating, XI_OFFLINE_LADDER, XI_OFFLINE_BASELINE)
+    : ladderPoints(verdict.rating, XI_REFEREE_LADDER, XI_REFEREE_BASELINE);
+}
+
+/** The line under a Build Your XI result's points: where the points start. */
+export function xiPointsNote(verdict: JudgedVerdict): string {
+  const base = verdict.judge === 'offline' ? XI_OFFLINE_BASELINE : XI_REFEREE_BASELINE;
+  return `Points start above ${base}. A random XI of real players almost never gets past it.`;
 }
 
 /** What a finished NBA Starting 5 records. The offline judge cannot read the
  *  challenge, so its verdict records 0. */
 export function startingFivePoints(verdict: JudgedVerdict | null): number {
   if (!verdict || verdict.judge === 'offline') return 0;
-  return ladderPoints(verdict.rating, FIVE_REFEREE_LADDER);
+  return ladderPoints(verdict.rating, FIVE_REFEREE_LADDER, FIVE_REFEREE_BASELINE);
 }

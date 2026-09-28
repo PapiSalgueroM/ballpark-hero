@@ -400,7 +400,7 @@ const PerfectSeasonMlb = () => {
               )}
               <pre className="text-sm tracking-wide whitespace-pre-wrap mb-3">{lockedEmojiGrid}</pre>
               <ShareButtons
-                score={`${lockedAttempt.sim.wins}-${lockedAttempt.sim.losses}`}
+                score={lockedAttempt.points !== undefined ? `${lockedAttempt.sim.wins}-${lockedAttempt.sim.losses}, ${lockedAttempt.points} points` : `${lockedAttempt.sim.wins}-${lockedAttempt.sim.losses}`}
                 gameName="162-0 Perfect Season (Daily)"
                 gamePath="/perfect-season-mlb"
                 emojiGrid={lockedEmojiGrid}
@@ -642,7 +642,7 @@ const PerfectSeasonMlb = () => {
                 )}
                 <pre className="text-sm tracking-wide whitespace-pre-wrap mb-2">{emojiGrid}</pre>
                 <ShareButtons
-                  score={`${sim.wins}-${sim.losses}`}
+                  score={`${sim.wins}-${sim.losses}, ${points} points`}
                   gameName={mode === 'daily' ? '162-0 Perfect Season (Daily)' : '162-0 Perfect Season'}
                   gamePath="/perfect-season-mlb"
                   emojiGrid={emojiGrid}
