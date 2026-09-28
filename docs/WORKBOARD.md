@@ -1,5 +1,20 @@
 # Work board
 
+**Round 647 BUILT, branch `r647-season-ledger`, pushed, not yet on main.** The four front offices
+and both dynasties now score every closed season through one shared ledger,
+`src/lib/seasonLedger.ts`: one row per season scored on that season alone (win share up to 50 plus
+a postseason ladder of 10, 18, 26 or 50, ceiling 100), recorded once at the whistle, career total
+equal to the ledger sum, team never scored. Older saves open with an empty ledger and earn nothing
+retroactively. CBB Dynasty also got the Round 426 reload fix CFB always had (a reload on its recap
+used to replay the season). Before and after over 160 seeded seasons per college engine: the old
+rule recorded 46 of 160 CFB seasons (title seasons only, about 217 a title because each title
+re-paid the earlier ones), the ledger records 160 of 160 once each. Fence:
+`FrontOfficeSeasonClose.test.tsx` through `simGmReload` section 2, and `simCfbDynasty` sections 4
+and 5. Controls `double` and `pick` (plus the old `replay` and `drain`) each turn exactly their own
+rows red and are refused if anything else goes red. **Round 646 is what pays it right:** the six
+caps still hold the old cumulative scale, so a season row pays under its share until 646 sets each
+to the exported `seasonCeiling()` (100).
+
 **2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof
 in `docs/PROJECT-STATE.md`.
