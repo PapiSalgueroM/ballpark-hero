@@ -18,7 +18,9 @@
       that cancels the event, and watchForNewBuild wires it;
    2. the reload is guarded by a sessionStorage once flag, so a host that is
       genuinely down shows the boundary on the second failure instead of
-      reloading forever;
+      reloading forever, and it stands down under the prerenderer
+      (window.__DUKB_PRERENDER__), where no chunk can be stale and a reload
+      mid capture would strand the snapshot;
    3. RouteErrorBoundary catches a chunk load error and reloads once before
       painting, through the same guard rather than a second one;
    4. src/main.tsx still calls watchForNewBuild at boot, so the listener is
@@ -27,14 +29,15 @@
    Negative controls (SIM_STALE_CHUNK_CONTROL): nolistener deletes the
    addEventListener call from an in memory copy (section 1 red), noguard
    removes the sessionStorage set so the once flag never lands (section 2
-   red). Each asserts its anchor exists exactly once first. */
+   red), noprerender deletes the prerender stand down (section 2 red). Each
+   asserts its anchor exists exactly once first. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_STALE_CHUNK_CONTROL || '';
-const EXPECT = { nolistener: [1], noguard: [2] };
+const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2] };
 if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(1); }
 
 /* Strip block and line comments so a check can only be satisfied by code. */
@@ -50,6 +53,7 @@ const boundary = code(fs.readFileSync(path.join(ROOT, 'src/components/RouteError
 const main = code(fs.readFileSync(path.join(ROOT, 'src/main.tsx'), 'utf8').replaceAll('\r\n', '\n'));
 if (CONTROL === 'nolistener') fresh = rewrite(fresh, "window.addEventListener('vite:preloadError', (event: Event) => {", "((event: Event) => {", 'nolistener');
 if (CONTROL === 'noguard') fresh = rewrite(fresh, "sessionStorage.setItem(STALE_KEY, '1');", '', 'noguard');
+if (CONTROL === 'noprerender') fresh = rewrite(fresh, "if ((window as unknown as { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return false;", '', 'noprerender');
 const freshCode = code(fresh);
 
 let failures = 0; const red = new Set(); let section = 0;
@@ -79,11 +83,13 @@ console.log('2) the reload happens once per tab, through a sessionStorage flag')
     const sets = /sessionStorage\.setItem\(STALE_KEY/.test(body);
     const reloads = /window\.location\.reload\(\)/.test(body);
     const setBeforeReload = sets && reloads && body.indexOf('sessionStorage.setItem') < body.indexOf('window.location.reload');
+    const standsDown = /__DUKB_PRERENDER__[^\n]*return false/.test(body);
+    if (!standsDown) fail('the guard does not stand down under the prerenderer (window.__DUKB_PRERENDER__), so a capture could reload mid page');
     if (!reads) fail('the guard never reads the flag');
     if (!sets) fail('the guard never sets the flag, so it would reload on every failure');
     if (!reloads) fail('the guard never reloads');
     if (sets && reloads && !setBeforeReload) fail('the flag is set after the reload call, so a fast reload could skip it');
-    if (reads && sets && reloads && setBeforeReload) ok('flag read, set, then reload, in that order');
+    if (standsDown && reads && sets && reloads && setBeforeReload) ok('stands down under the prerenderer, then flag read, set, then reload, in that order');
   }
 }
 
