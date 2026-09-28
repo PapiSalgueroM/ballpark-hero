@@ -7,9 +7,9 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useArcadeFlight } from '@/hooks/useArcadeFlight';
 import { getTodayET } from '@/lib/dateUtils';
 import { markRestoredFinish } from '@/lib/restoredFinish';
-import { readArcadeRun, writeArcadeRun } from '@/lib/arcadeRecord';
+import { countedLehmer, readArcadeProgress, readArcadeRun, writeArcadeProgress, writeArcadeRun, type CountedRng } from '@/lib/arcadeRecord';
 import {
-  buildRun, daySeed, lehmer, launchDegFor, maxRunScore, takeShot,
+  buildRun, daySeed, launchDegFor, maxRunScore, takeShot,
   BALL_RADIUS, RELEASE_HEIGHT, RIM_HEIGHT, RIM_RADIUS, ROUNDS_PER_RUN,
   type HoopSetup, type HoopResult,
 } from '@/lib/buzzerBeater';
@@ -55,6 +55,9 @@ export default function BuzzerBeaterBoard() {
      started instead of being filed under tomorrow. */
   const todayStr = useRef(getTodayET()).current;
   const [restored] = useState(() => readArcadeRun(SLUG, todayStr, COUNT_FIELD, ROUNDS_PER_RUN));
+  /* Round 645 part three: today's run part played, so the intro can say where
+     Today's ten picks up. start() reads it again when it deals. */
+  const [partPlayed] = useState(() => (restored ? null : readArcadeProgress(SLUG, todayStr, COUNT_FIELD, ROUNDS_PER_RUN)));
 
   const [mode, setMode] = useState<Mode>('daily');
   const [phase, setPhase] = useState<Phase>(restored ? 'done' : 'intro');
@@ -71,7 +74,7 @@ export default function BuzzerBeaterBoard() {
   const [power, setPower] = useState(0.4);
   const [charging, setCharging] = useState(false);
 
-  const rngRef = useRef<() => number>(lehmer(1));
+  const rngRef = useRef<CountedRng>(countedLehmer(1));
   const savedRef = useRef(restored !== null);
 
   const setup = shots[shotIdx] ?? null;
@@ -106,24 +109,41 @@ export default function BuzzerBeaterBoard() {
       setPhase('done');
       return;
     }
+    /* Round 645 part three: a daily part played today carries on from the shot
+       it was left on, with the shots already taken behind it and the spray
+       stream picked up where it stopped, so the remaining shots are the ones a
+       player who never left would face. All ten taken means the final card
+       was never shown: it is shown now, and that is the finish recorded. */
+    const part = m === 'daily' ? readArcadeProgress(SLUG, todayStr, COUNT_FIELD, ROUNDS_PER_RUN) : null;
     const seed = m === 'daily' ? daySeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
-    rngRef.current = lehmer(seed ^ 0x5eed1234);
+    rngRef.current = countedLehmer(seed ^ 0x5eed1234, part?.draws ?? 0);
     resetFlight();
     setMode(m);
     setShots(buildRun(seed));
-    setShotIdx(0);
-    setScore(0);
-    setMade(0);
+    setShotIdx(part ? Math.min(part.rounds, ROUNDS_PER_RUN - 1) : 0);
+    setScore(part?.score ?? 0);
+    setMade(part?.count ?? 0);
     setResult(null);
     setFade(0); setArc(0.6); setPower(0.4);
     savedRef.current = false;
-    setPhase('aiming');
+    setPhase(part && part.rounds >= ROUNDS_PER_RUN ? 'done' : 'aiming');
   }, [restored, todayStr, resetFlight]);
 
   const release = useCallback(() => {
     if (phase !== 'aiming' || !setup) return;
     setCharging(false);
     const r = takeShot({ x: fade, arc, power }, setup, rngRef.current);
+    /* Round 645 part three: the shot is on the record the moment it is taken,
+       before the ball is in the air, so a refresh mid flight cannot hand it
+       back to be taken again with the outcome already seen. */
+    if (mode === 'daily') {
+      writeArcadeProgress(SLUG, todayStr, COUNT_FIELD, {
+        score: score + r.points,
+        count: made + (r.made ? 1 : 0),
+        rounds: shotIdx + 1,
+        draws: rngRef.current.draws,
+      });
+    }
     setResult(r);
     setPhase('flying');
     /* The flight is drawn from the path the rules already computed, so what the
@@ -134,7 +154,7 @@ export default function BuzzerBeaterBoard() {
       if (r.made) setMade(n => n + 1);
       setPhase('shotEnd');
     });
-  }, [phase, setup, fade, arc, power, launch]);
+  }, [phase, setup, fade, arc, power, launch, mode, score, made, shotIdx, todayStr]);
 
   const nextShot = useCallback(() => {
     resetFlight();
@@ -211,6 +231,13 @@ export default function BuzzerBeaterBoard() {
         <p className="mt-2 text-xs text-muted-foreground">
           You back up every shot and the closeout gets higher. Ten shots, one run.
         </p>
+        {partPlayed && (
+          <p className="mt-2 text-xs font-semibold text-primary">
+            {partPlayed.rounds >= ROUNDS_PER_RUN
+              ? "All ten of today's shots are up. Tap Today's ten to see how the run went."
+              : `You've taken ${partPlayed.rounds} of today's ten. Those count, so you pick up at shot ${partPlayed.rounds + 1}.`}
+          </p>
+        )}
         <div className="mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center">
           <Button onClick={() => start('daily')} className="gap-2">
             <CalendarDays className="h-4 w-4" /> Today's ten

@@ -245,6 +245,12 @@ describe('daily reload', () => {
             expect(driver.status(api), 'the resumed run should finish').toBe('finished');
             expect(keysOf(), 'the finished run leaves exactly one key').toEqual([todayKey]);
             expect(recordCompletion.mock.calls.length - before, 'the whole run records exactly once').toBe(1);
+            /* The same moves as step (1), split by a reload, must end exactly
+               where the unbroken run ended: same score, same card, same
+               stream. A resume that re-deals a step, drops one, or restarts
+               the arcade spray generator from the top ends somewhere else. */
+            expect(fingerprint, 'step (1) did not finish, there is nothing to compare').not.toBeNull();
+            expect(driver.fingerprint(api), 'the resumed run should finish exactly as the unbroken run did').toBe(fingerprint);
           } finally {
             driver.unmount(api);
           }
