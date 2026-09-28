@@ -333,7 +333,7 @@ for (const ctl of CONTROLS) {
     console.log(`   ${ctl.name}: ${ctl.what}; [${ctl.red}] ${ownRed.length} of ${own.length} red, ${others.length - othersRed.length} of ${others.length} other test(s) green${asDesigned ? ', as designed' : ', NOT AS DESIGNED'}`);
     if (!loaded) fail(`control ${ctl.name}: the copy was never loaded, so it changed nothing`);
     if (ownRed.length === 0) fail(`control ${ctl.name}: [${ctl.red}] stayed green with the fix taken out, so the section does not see it\n${detail(run.out)}`);
-    if (othersRed.length > 0) fail(`control ${ctl.name}: also red outside [${ctl.red}]: ${othersRed.map(t => `[${t.section}] ${t.name}`).join('; ')}`);
+    if (othersRed.length > 0) fail(`control ${ctl.name}: also red outside [${ctl.red}]: ${othersRed.map(t => `[${t.section}] ${t.name}`).join('; ')}\n${detail(run.out)}`);
     if (p.tests.length !== base.tests.length) fail(`control ${ctl.name} ran ${p.tests.length} test(s), the suite ${base.tests.length}`);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });

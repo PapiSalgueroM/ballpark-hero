@@ -108,6 +108,15 @@ import DrillBoard from '@/components/soccer-career/DrillBoard';
 
 const today = getTodayET();
 
+/* Round 645 part three, second fix: the longest sections play whole runs
+   through the real pages ([rarity-mark] answers fifteen rounds). Measured at
+   1.1 seconds on a quiet machine and 3.4 to 4.4 seconds while the four fix
+   branches ran their gates side by side, against vitest's 5 second default,
+   and past it they timed out and turned whichever control was running red
+   outside its own section. Nothing here asserts on time, so the budget is
+   raised well clear of the loaded measurement. */
+vi.setConfig({ testTimeout: 30_000 });
+
 /* Every finish the recorder hook handed on, ranked or (after Round 645 part
    one lands) unranked. */
 const finishes = () => recordCompletion.mock.calls.length + recordUnranked.mock.calls.length;
