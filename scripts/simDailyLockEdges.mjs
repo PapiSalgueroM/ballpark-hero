@@ -11,7 +11,12 @@
    refused, a stale restore mark swallowing a real finish, hand edited arcade
    and Rarity totals resumed and recorded, the shared Gauntlet board keeping
    no pick of a draft part made, the tackle drill's fouls never filed, and a
-   Player Stock Market daily refreshed mid reveal.
+   Player Stock Market daily refreshed mid reveal. The fix pass found three
+   more on the Daily toggle: a new daily finish landed on a page already on a
+   result card is no transition to a recorder whose done flag is the phase,
+   so Pack Battle and Rarity Round dropped the daily finish that way, and
+   Sports Millionaire will once Round 645 part one drops the mode from its
+   done flag.
 
    The test is src/test/dailyLockEdges.test.tsx, one section per door, each
    tagged [id]. It renders the real pages and hooks with the reload fence's
@@ -72,6 +77,7 @@ const SECTIONS = [
   'giveup-shut', 'giveup-refused', 'late-verdict', 'canonical', 'leaderboard',
   'pack-toggle', 'pack-writer', 'pack-mark', 'rarity-mark', 'rarity-derive',
   'arcade-bound', 'gauntlet-board', 'drill-fouls', 'market-roll',
+  'pack-new-finish', 'rarity-new-finish', 'millionaire-new-finish',
 ];
 
 function parse(out) {
@@ -206,6 +212,21 @@ const CONTROLS = [
     name: 'market-roll', red: 'market-roll',
     what: 'a daily market with all eleven bought does not roll again',
     swaps: [{ module: '@/pages/PlayerStockMarket', file: 'src/pages/PlayerStockMarket.tsx', cuts: [['    if (bought.length >= built.slots.length) { void roll(built, bought); return; }\n', '']] }],
+  },
+  {
+    name: 'pack-new-finish', red: 'pack-new-finish',
+    what: 'a daily finish lands straight on the Unlimited result card',
+    swaps: [{ module: '@/pages/PackBattle', file: 'src/pages/PackBattle.tsx', cuts: [["    if (finishing && phaseRef.current === 'done') {\n", '    if (false) {\n']] }],
+  },
+  {
+    name: 'rarity-new-finish', red: 'rarity-new-finish',
+    what: 'a daily finish lands straight on the Unlimited result screen',
+    swaps: [{ module: '@/pages/RarityRound', file: 'src/pages/RarityRound.tsx', cuts: [["        if (finishing && phaseRef.current === 'done') {\n", '        if (false) {\n']] }],
+  },
+  {
+    name: 'millionaire-new-finish', red: 'millionaire-new-finish',
+    what: 'a decided daily answer lands straight on the Unlimited result card',
+    swaps: [{ module: '@/pages/SportsMillionaire', file: 'src/pages/SportsMillionaire.tsx', cuts: [["      if (phaseRef.current === 'done') {\n", '      if (false) {\n']] }],
   },
 ];
 

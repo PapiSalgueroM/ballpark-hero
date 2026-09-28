@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import { Loader2, Lock, Scissors, Users, Repeat, Flag } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -82,6 +82,15 @@ const SportsMillionaire = () => {
      moment. dailySaved latches the one record a daily gets. */
   const dailySaved = useRef(false);
   const todayStr = useRef(getTodayET()).current;
+  /* Round 645 part three fix: the phase as last committed, set in the commit
+     itself (a layout effect). The Daily toggle can land a decided daily
+     answer on a page already on the Unlimited result card. Once Round 645
+     part one drops the mode from the recorder's done flag (it passes the
+     mode as its ranked flag instead), that is no transition to the recorder,
+     and the daily finish would never be recorded, so resumeDaily asks this
+     first. */
+  const phaseRef = useRef<Phase>('boot');
+  useLayoutEffect(() => { phaseRef.current = phase; }, [phase]);
 
   // Every hook above this line, none conditional. Loading/error/done states
   // are rendered conditionally in JSX further down, not via early return.
@@ -125,6 +134,14 @@ const SportsMillionaire = () => {
     dailySaved.current = false;
     if (part.outcome) {
       setFinalAmount(part.outcome === 'million' ? MONEY_LADDER[MONEY_LADDER.length - 1] : safeHavenAmount(part.at - 1));
+      if (phaseRef.current === 'done') {
+        /* Over a page already on a result card the recorder can see no
+           finish arrive, so the board is on boot for one tick first. The
+           timer is the run's own, so a toggle inside the tick cancels it. */
+        setPhase('boot');
+        revealTimer.current = setTimeout(() => { revealTimer.current = null; setPhase('done'); }, 0);
+        return;
+      }
       setPhase('done');
       return;
     }

@@ -31,7 +31,8 @@ const CLUBS = ['Fixture Athletic', 'Probe United', 'Harness Town', 'Driver City'
 const NATIONS = ['Fixtureland', 'Probia', 'Harnessia', 'Drivonia', 'Mockstan'];
 const POSITIONS = ['GK', 'CB', 'CM', 'ST'];
 
-const POOL: TriviaPool = {
+/* Exported for the side door sections in src/test/dailyLockEdges.test.tsx. */
+export const POOL: TriviaPool = {
   /* Sorted by value descending, every value distinct, the shape
      fetchMarketPool hands back. */
   market: Array.from({ length: 320 }, (_, i) => ({

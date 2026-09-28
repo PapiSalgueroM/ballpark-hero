@@ -32,6 +32,20 @@
  *   [drill-fouls]    the tackle drill's foul count was never filed
  *   [market-roll]    a Player Stock Market daily refreshed mid reveal
  *
+ * Found by the fix pass on the same shape (the Daily toggle landing a new
+ * daily finish on a page already on a result card, which to a recorder whose
+ * done flag is the phase alone is no transition):
+ *
+ *   [pack-new-finish]        a daily's last call left in its reveal for
+ *                            Unlimited, played out, then Daily: the daily's
+ *                            finish was never recorded
+ *   [rarity-new-finish]      the fifth daily answer locked in and left the
+ *                            same way (the restore's boot did not reach the
+ *                            screen, so the pages met result to result)
+ *   [millionaire-new-finish] a decided answer left in its suspense, the same
+ *                            way (it bites once Round 645 part one drops the
+ *                            mode from the page's done flag)
+ *
  * Everything runs through the same mocks as the reload fence (./dailyReload
  * /mocks): the real pages and hooks, the real recorder hook and restore
  * handshake, jsdom's real localStorage. Each section has a negative control
@@ -51,6 +65,8 @@ import tennisDriver from './dailyReload/tennis-chain.driver';
 import ufcDriver from './dailyReload/ufc-chain.driver';
 import freeKickDriver from './dailyReload/free-kick.driver';
 import marketDriver from './dailyReload/player-stock-market.driver';
+import millionaireDriver, { POOL as MILLIONAIRE_POOL } from './dailyReload/sports-millionaire.driver';
+import { buildFreshLadder } from '@/lib/sportsMillionaire';
 import { getTodayET } from '@/lib/dateUtils';
 import { writeDailyRecord } from '@/lib/dailyRecord';
 import { readArcadeProgress, readArcadeRun } from '@/lib/arcadeRecord';
@@ -396,6 +412,43 @@ describe('daily lock edges', () => {
     });
   });
 
+  describe('[pack-new-finish] Pack Battle: a daily finish landed over a result card is still recorded', () => {
+    it('the daily miss left in its reveal, Unlimited played out, then Daily: the daily finish is handed on once', async () => {
+      const daily = buildDailyPack(PACK_POOL, today);
+      let m = await mountPack();
+      try {
+        await calls(m, daily, [true]);
+        vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+        let unl: PackCard[] = [];
+        try {
+          await press(m, daily, false);
+          unl = await dealUnlimited(m, /^∞ Unlimited$/);
+          await act(async () => { vi.advanceTimersByTime(3000); });
+        } finally {
+          vi.useRealTimers();
+        }
+        expect(readPackDaily(today, daily), 'the miss is filed and its card never shown').toEqual({ calls: [true, false], done: false });
+        await calls(m, unl, [false]);
+        expect(finishes(), 'the Unlimited finish').toBe(1);
+        await click(button(m.container, /^📅 Daily$/));
+        await waitFor(() => { if (!resultCard(m.container)) throw new Error('the daily result has not landed'); });
+        expect(finishes(), 'the daily finish is handed on, over the Unlimited result card').toBe(2);
+        const last = recordCompletion.mock.calls[recordCompletion.mock.calls.length - 1];
+        expect([last?.[0], last?.[1]], 'the last finish handed on is the daily, with its banked card').toEqual(['/pack-battle', daily[1].value]);
+        expect(readPackDaily(today, daily), 'the finished daily is one its reader accepts').toEqual({ calls: [true, false], done: true });
+      } finally {
+        m.unmount();
+      }
+      m = await mountPack();
+      try {
+        expect(resultCard(m.container), 'the day stays locked').not.toBeNull();
+        expect(finishes(), 'and records nothing more').toBe(2);
+      } finally {
+        m.unmount();
+      }
+    });
+  });
+
   /* ------------------------------------------------------- Rarity Round */
 
   const RARITY_NAMES = ['Fixture Alpha', 'Fixture Bravo', 'Fixture Charlie', 'Fixture Delta', 'Fixture Echo'];
@@ -447,6 +500,36 @@ describe('daily lock edges', () => {
         await settleRarity(m);
         await answerRarity(m, 'Fixture Bravo', 5);
         expect(finishes(), 'the last Unlimited finish is handed on, not swallowed by a stale mark').toBe(3);
+      } finally {
+        m.unmount();
+      }
+    });
+  });
+
+  describe('[rarity-new-finish] Rarity Round: a daily finish landed over a result screen is still recorded', () => {
+    it('the fifth daily answer locked in and left for Unlimited, played out, then Daily: the daily finish is handed on once', async () => {
+      let m = await mountRarity();
+      try {
+        await answerRarity(m, 'Fixture Bravo', 4);
+        await click(await waitFor(() => button(m.container, /^pick Fixture Bravo$/)));
+        await click(button(m.container, /^Lock in answer$/));
+        await waitFor(() => button(m.container, /^See final score$/));
+        await click(button(m.container, /^∞ Unlimited$/));
+        await settleRarity(m);
+        await answerRarity(m, 'Fixture Bravo', 5);
+        expect(resultCard(m.container), 'the Unlimited result screen is up').not.toBeNull();
+        expect(finishes(), 'the Unlimited finish').toBe(1);
+        await click(button(m.container, /^📅 Daily$/));
+        await waitFor(() => expect(finishes(), 'the daily finish is handed on, over the Unlimited result screen').toBe(2));
+        await settleRarity(m);
+        expect(resultCard(m.container), 'the daily result is on screen').not.toBeNull();
+      } finally {
+        m.unmount();
+      }
+      m = await mountRarity();
+      try {
+        expect(resultCard(m.container), 'the day stays locked').not.toBeNull();
+        expect(finishes(), 'and records nothing more').toBe(2);
       } finally {
         m.unmount();
       }
@@ -665,6 +748,69 @@ describe('daily lock edges', () => {
         expect(recordCompletion.mock.calls.map(c => c[0])).toEqual(['/player-stock-market']);
       } finally {
         marketDriver.unmount(api);
+      }
+    });
+  });
+
+  /* ---------------------------------------------- Sports Millionaire */
+
+  /* The header toggle, never the result card's Play Unlimited. */
+  const millionaireToggle = (m: MountedPage, to: 'daily' | 'unlimited') => button(m.container, to === 'daily' ? /^📅 Daily$/ : /^∞ Unlimited$/);
+  const walkAway = (m: MountedPage) => click(button(m.container, /^Walk away with /));
+
+  /* On this branch the page's recorder flag is `phase === 'done' && playMode
+     === 'daily'`, so Unlimited records nothing and the Daily toggle is a
+     transition whatever the phase does. Round 645 part one moves the mode out
+     of that flag (into its ranked argument), and from then on a decided daily
+     answer landed straight on the Unlimited result card is no transition and
+     is never recorded. So the section asserts both: the outcome (the daily is
+     handed on once and the day stays locked), which holds on either tree with
+     the fix, and the cause (the board leaves the result card before the daily
+     result lands), which is what the control takes out and what the outcome
+     rests on once part one lands. */
+  describe('[millionaire-new-finish] Sports Millionaire: a daily finish landed over a result card is left for, then recorded once', () => {
+    it('a wrong daily answer left in its suspense, Unlimited walked away from, then Daily: the board leaves the card, and the daily records once', async () => {
+      const q = buildFreshLadder(MILLIONAIRE_POOL, 'daily')[0];
+      const wrong = (q.correctIndex + 1) % q.options.length;
+      const wanted = String.fromCharCode(65 + wrong) + q.options[wrong];
+      let m = await millionaireDriver.mount();
+      let after = 0;
+      try {
+        vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+        try {
+          const option = Array.from(m.container.querySelectorAll('button')).find(b => (b.textContent ?? '').trim() === wanted);
+          if (!option) throw new Error(`no option button reads ${wanted}`);
+          await click(option);
+          await click(millionaireToggle(m, 'unlimited'));
+          await act(async () => { vi.advanceTimersByTime(5000); });
+        } finally {
+          vi.useRealTimers();
+        }
+        expect(resultCard(m.container), 'the daily suspense did not land on the Unlimited ladder').toBeNull();
+        await walkAway(m);
+        expect(resultCard(m.container), 'the Unlimited result card is up').not.toBeNull();
+        const before = finishes();
+        vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
+        try {
+          await click(millionaireToggle(m, 'daily'));
+          expect(resultCard(m.container), 'the board leaves the Unlimited result card before the daily result lands').toBeNull();
+          await act(async () => { vi.advanceTimersByTime(50); });
+        } finally {
+          vi.useRealTimers();
+        }
+        await waitFor(() => { if (!resultCard(m.container)) throw new Error('the daily result has not landed'); });
+        after = finishes();
+        expect(after - before, 'the daily finish is handed on once').toBe(1);
+        expect(recordCompletion.mock.calls.map(c => c[0]), 'and it is the one ranked finish').toEqual(['/sports-millionaire']);
+      } finally {
+        millionaireDriver.unmount(m);
+      }
+      m = await millionaireDriver.mount();
+      try {
+        expect(resultCard(m.container), 'the day stays locked').not.toBeNull();
+        expect(finishes(), 'and records nothing more').toBe(after);
+      } finally {
+        millionaireDriver.unmount(m);
       }
     });
   });

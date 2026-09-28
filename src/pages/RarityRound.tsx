@@ -198,7 +198,18 @@ const RarityRound = () => {
         }
         /* All five answered with the result screen never shown: it shows
            now, and that is the finish recorded. */
-        setPhase(restored.length >= categories.length ? 'done' : 'loading-round');
+        const finishing = restored.length >= categories.length;
+        if (finishing && phaseRef.current === 'done') {
+          /* Round 645 part three fix: the boot above never reached the
+             screen, so the page would go from the Unlimited result straight
+             to this one, no finish the recorder can see arrive, and the daily
+             would never be recorded. The board is on boot for one tick first,
+             and the tick belongs to this run. */
+          setPhase('boot');
+          setTimeout(() => { if (token === runToken.current) setPhase('done'); }, 0);
+          return;
+        }
+        setPhase(finishing ? 'done' : 'loading-round');
       })
       .catch(() => {
         if (token === runToken.current) setPhase('error');

@@ -104,7 +104,18 @@ const PackBattle = () => {
     }
     /* A pack whose last call was made but whose result card never showed
        finishes now, and that is the finish recorded. */
-    setPhase(bust || savedCalls.length >= pack.length - 1 ? 'done' : 'playing');
+    const finishing = bust || savedCalls.length >= pack.length - 1;
+    if (finishing && phaseRef.current === 'done') {
+      /* Round 645 part three fix: over a page already on a result card (the
+         daily's last call left in its reveal for Unlimited, played to its
+         end) the recorder would see no finish arrive and the daily would
+         never be recorded, so the board is on boot for one tick first. The
+         timer is the run's own, so a toggle inside the tick cancels it. */
+      setPhase('boot');
+      revealTimer.current = setTimeout(() => { revealTimer.current = null; setPhase('done'); }, 0);
+      return;
+    }
+    setPhase(finishing ? 'done' : 'playing');
   }, [todayStr]);
 
   // Boot: fetch the pool once, then start the daily run.
