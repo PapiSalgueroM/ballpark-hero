@@ -1057,7 +1057,9 @@ export interface MatchStats {
 }
 
 export type TimelineKind =
-  | 'kickoff' | 'goal' | 'yellow' | 'red' | 'injury' | 'sub' | 'halftime' | 'fulltime' | 'pens';
+  | 'kickoff' | 'goal' | 'yellow' | 'red' | 'injury' | 'sub' | 'halftime' | 'fulltime' | 'pens'
+  /** Round 670: the ninety minutes are up with the tie level, and extra time starts. */
+  | 'extratime';
 
 export interface TimelineEvent {
   minute: number;
@@ -1125,6 +1127,10 @@ export interface MatchDetail {
   /** Round 504: the opposition eleven that kicked off, in formation slot order. */
   oppXi?: OppXiLine[];
   oppFormationIndex?: number;
+  /** Round 670: the extra time stretch on the event clock, (from, to], set
+   *  only when extra time was played. Absent on every other match and on
+   *  every report written before this round. */
+  et?: { from: number; to: number };
 }
 
 export interface MatchWeekReport {
@@ -1136,7 +1142,10 @@ export interface MatchWeekReport {
   awayGoals: number;
   won: boolean;
   drawn: boolean;
-  decidedBy: 'regular' | 'pens';
+  /** Round 670: 'aet' when extra time was played and settled it without a
+   *  shootout. A match that went to penalties after extra time stays 'pens'
+   *  and carries detail.et. Reports before this round are 'regular' or 'pens'. */
+  decidedBy: 'regular' | 'aet' | 'pens';
   /**
    * Round 507: who won the SHOOTOUT. On a single leg tie that is the same as
    * `won`, because the tie is the match. On a two legged tie it is not: you can
@@ -1156,6 +1165,11 @@ export interface MatchWeekReport {
   /** Round 157: stats, cards, timeline, ratings. Optional so saves and
       fixtures from before this round stay readable. */
   detail?: MatchDetail;
+  /** Round 670: the tie this match settled, on a second leg: the aggregate
+   *  after any extra time, in my orientation, whether away goals split it,
+   *  and whether my club went through. Absent on every other match and on
+   *  every report written before this round. */
+  tie?: { leg: 1 | 2; aggMine: number; aggTheirs: number; byAwayGoals?: boolean; through?: boolean };
 }
 
 /** Round 157: one past meeting with an opponent, kept across seasons. */
@@ -1255,6 +1269,13 @@ export interface UclTie {
   leg2?: { homeGoals: number; awayGoals: number };
   /** Round 507: the tie was separated by away goals rather than aggregate. */
   byAwayGoals?: boolean;
+  /**
+   * Round 670: extra time was played, and the score above (for a two legged
+   * tie, leg2 and the aggregate) includes its goals. `pens` is set only when
+   * it was still level after it. Absent on every tie written before this
+   * round, which the bracket keeps printing as "Level after 90".
+   */
+  aet?: boolean;
 }
 
 export interface SeasonRecord {
@@ -2206,6 +2227,13 @@ export interface LiveMatch {
    *  lam2Mine are these lists summed by length. */
   h1Segs?: LamSegment[];
   h2Segs?: LamSegment[];
+  /** Round 670: extra time, (from, to] on the event clock, set only once it
+   *  has been drawn (startExtraTime live, or the whistle on a quick sim). Its
+   *  goals, play, cards, injury and the other dugout's changes live in the
+   *  h2 lists with minutes past `from`, and its lambdas are one more h2Segs
+   *  stretch, so nothing that merges the second half needs to know about it.
+   *  Absent means no extra time, which is every save before this round. */
+  et?: { from: number; to: number };
 }
 
 /** Round 504: a stretch of a half and the full half lambdas that were in force over it. */
@@ -9817,6 +9845,77 @@ export function uclTieOutcome(
 }
 
 /**
+ * Round 670: extra time before penalties.
+ *
+ * A player's footer report asked for it, and the game was also saying a thing
+ * it did not do: a Champions League decider level after ninety minutes went
+ * straight to a shootout.
+ *
+ * WHO PLAYS IT. A Champions League knockout match that settles its tie: the
+ * final, any one legged tie, and the second leg of a two legged one, when it
+ * is level as the ninety minutes run out (a second leg on the aggregate, after
+ * away goals in the eras that had them). Never a first leg, a league or a
+ * group match. And not, for now, a domestic cup: the real rule differs by cup,
+ * by round and by season (the Coppa Italia has played its one off rounds up
+ * to the quarter finals straight to penalties since 2024-25, onefootball.com
+ * 2024-05-28, with football-italia.net agreeing), and seventeen cups across
+ * four eras are not two source verified yet, so a cup keeps the pre 670 rule
+ * its bracket already states. docs/design/round-670-extra-time-contract.md.
+ *
+ * THE RULE, two source verified 2026-09-28. Two fifteen minute periods, then
+ * penalties if still level. Before 2021-22 the away goals rule ran on through
+ * extra time, so an away goal in it meant the home side had to score twice
+ * (UEFA's own abolition announcement, uefa.com 2021-06-24, which names that
+ * unfairness as a reason for the change; si.com 2018-05-26). From 2021-22 an
+ * extra time goal counts like any other (the Round 507 sources). Adding the
+ * extra time goals to leg two and reading the tie again through uclTieOutcome
+ * with the era's own rule is exactly both, so there is no second copy of it.
+ *
+ * ONE STRETCH. Extra time is one thirty minute stretch on the event clock,
+ * minutes 91 to 120, with no interval at 105 and no board of its own. The
+ * second half's board is still display only (nothing can happen in it until
+ * stoppage time goals exist), so extra time starts at 90 on the clock.
+ */
+export const ET_MINUTES = 30;
+/**
+ * Round 670: the balance, solved rather than tuned (Round 546's rule). Extra
+ * time adds thirty minutes of football to exactly the matches that are level
+ * after ninety, so on its own it would put about P x 30/90 more goals into
+ * every match that can go to it, where P is the share of those that are
+ * level. Every match that can go to extra time (a decider, see
+ * playsExtraTime; the AI's too) therefore draws its lambdas multiplied by
+ * 1 / (1 + P x 30/90), which holds its expected goals where they were
+ * before extra time existed. League, group and first leg matches never see
+ * it. P is the engine's own share, measured under this deflator by
+ * scripts/simExtraTime.mjs (the fixed point): see the measurement there.
+ */
+export const ET_DEFLATOR = 0.95;
+
+/** Round 670: does this week's match, if level when the ninety minutes are
+ *  up, play extra time? Only a Champions League match that settles its tie. */
+function playsExtraTime(state: CareerState, entry: CalendarEntry): boolean {
+  if (entry.type !== 'uclKo' || !entry.uclRound) return false;
+  /* A legacy week carries no uclLeg and is the whole tie (Round 507). */
+  const twoLegs = uclLegsFor(state.eraId, entry.uclRound) === 2 && !!entry.uclLeg;
+  return !(twoLegs && entry.uclLeg === 1);
+}
+
+/** Round 670: my two legged tie read with tonight as leg two, in the tie's
+ *  own orientation (Round 507), by the competition's rule for this season. */
+function mySecondLegOutcome(
+  state: CareerState, round: UclKoRound, myGoals: number, oppGoals: number,
+): { iAmHome: boolean; out: ReturnType<typeof uclTieOutcome> } {
+  const tie = state.uclBracket?.find(t => t.round === round && t.mine);
+  const iAmHome = tie ? tie.home === state.clubName : true;
+  const leg1 = tie?.leg1 ?? { homeGoals: 0, awayGoals: 0 };
+  const leg2 = {
+    homeGoals: iAmHome ? myGoals : oppGoals,
+    awayGoals: iAmHome ? oppGoals : myGoals,
+  };
+  return { iAmHome, out: uclTieOutcome({ leg1, leg2 }, uclAwayGoalsApply(state.eraId)) };
+}
+
+/**
  * Round 507 fix: does THIS SAVE actually play its round of 16 over two legs?
  *
  * Not the same question as what the era's format says, and the difference is a
@@ -10076,11 +10175,21 @@ function advanceUclBracket(state: CareerState, round: UclKoRound): void {
          reversed and is turned back into this tie's orientation here rather
          than at the four places that read it. */
       const [h1, a1] = simAiMatch(state, t.home, t.away);
-      const [a2, h2] = simAiMatch(state, t.away, t.home);
+      /* Round 670: leg two settles the tie, so it can go to extra time and
+         draws at the deflator the manager's own deciders draw at. */
+      const [a2, h2] = simAiMatch(state, t.away, t.home, ET_DEFLATOR);
       t.legs = 2;
       t.leg1 = { homeGoals: h1, awayGoals: a1 };
       t.leg2 = { homeGoals: h2, awayGoals: a2 };
-      const out = uclTieOutcome(t, uclAwayGoalsApply(state.eraId));
+      let out = uclTieOutcome(t, uclAwayGoalsApply(state.eraId));
+      if (out.winner === null) {
+        /* Round 670: level after ninety, so thirty more minutes at the same
+           ground, added to leg two and read again by the era's rule. */
+        const [ea, eh] = simAiMatch(state, t.away, t.home, ET_DEFLATOR * ET_MINUTES / 90);
+        t.leg2 = { homeGoals: h2 + eh, awayGoals: a2 + ea };
+        t.aet = true;
+        out = uclTieOutcome(t, uclAwayGoalsApply(state.eraId));
+      }
       t.homeGoals = out.homeAgg;
       t.awayGoals = out.awayAgg;
       t.byAwayGoals = out.byAwayGoals || undefined;
@@ -10092,11 +10201,18 @@ function advanceUclBracket(state: CareerState, round: UclKoRound): void {
       }
       continue;
     }
-    const [hg, ag] = simAiMatch(state, t.home, t.away);
+    let [hg, ag] = simAiMatch(state, t.home, t.away, ET_DEFLATOR);
+    if (hg === ag) {
+      /* Round 670: level after ninety, so extra time first. */
+      const [eh, ea] = simAiMatch(state, t.home, t.away, ET_DEFLATOR * ET_MINUTES / 90);
+      hg += eh;
+      ag += ea;
+      t.aet = true;
+    }
     t.homeGoals = hg;
     t.awayGoals = ag;
     if (hg === ag) {
-      // Knockout football always produces a winner, and level means penalties.
+      // Knockout football always produces a winner, and level after extra time means penalties.
       t.pens = true;
       t.winner = Math.random() < 0.5 ? t.home : t.away;
     } else {
@@ -10140,9 +10256,12 @@ function recordMyUclTie(
   iWon: boolean,
   leg: 1 | 2 = 1,
   twoLegs = false,
+  /** Round 670: tonight went to extra time, and the goals above include it. */
+  aet = false,
 ): void {
   const tie = state.uclBracket?.find(t => t.round === round && t.mine);
   if (!tie) return;
+  if (aet) tie.aet = true;
   /* The tie's own orientation, not tonight's. Leg two is played at tie.away,
      but it is STORED home first like leg one, so uclTieOutcome can read the
      away goals without every caller having to remember which way round it was. */
@@ -11257,10 +11376,12 @@ function poisson(lambda: number): number {
 }
 
 /** Score for A vs B given strengths + extra xG boosts for each side. */
-function simScore(sA: number, sB: number, boostA: number, boostB: number): [number, number] {
+function simScore(sA: number, sB: number, boostA: number, boostB: number, scale = 1): [number, number] {
   const lA = clamp(1.25 + (sA - sB) * 0.055 + boostA, 0.12, 4.2);
   const lB = clamp(1.25 + (sB - sA) * 0.055 + boostB, 0.12, 4.2);
-  return [poisson(lA), poisson(lB)];
+  /* Round 670: `scale` is 1 for every ninety minutes that cannot go to extra
+     time, ET_DEFLATOR for a decider, and that times 30/90 for its extra time. */
+  return [poisson(lA * scale), poisson(lB * scale)];
 }
 
 /**
@@ -11326,8 +11447,8 @@ function simHalf(sA: number, sB: number, boostA: number, boostB: number): [numbe
 }
 
 /** Quick AI-vs-AI league result (small home edge). */
-function simAiMatch(state: CareerState, home: string, away: string): [number, number] {
-  return simScore(strengthOf(state, home), strengthOf(state, away), 0.2, -0.08);
+function simAiMatch(state: CareerState, home: string, away: string, scale = 1): [number, number] {
+  return simScore(strengthOf(state, home), strengthOf(state, away), 0.2, -0.08, scale);
 }
 
 /**
@@ -12311,7 +12432,8 @@ function drawOppSubs(live: LiveMatch, from: number, to: number, oppGoalMinutes: 
   if (!live.oppXi || !live.oppBench || room <= 0) return made;
   const len = (to - from) / 45;
   const lo = Math.max(from + 1, 56);
-  const hi = Math.min(to, 88);
+  /* Round 670: in extra time they may use whatever changes they have left. */
+  const hi = from >= 90 ? to - 2 : Math.min(to, 88);
   if (lo > hi) return made;
   const count = Math.min(room, Math.round(ri(1, 3) * len));
   if (count <= 0) return made;
@@ -12370,8 +12492,13 @@ function firstHalfLambdas(state: CareerState, fx: MyFixture, xi: XiSlot[], menta
   /* Round 505: the duties, wherever the mentality is. */
   const duty = dutyBoost(xi, state);
   const [lamMine, lamOpp] = halfLambdas(mine, oppS, ment.atk + homeAtk + duty.atk, ment.def + oppAtk + duty.def);
-  return { lamMine, lamOpp, mine, oppS };
+  /* Round 670: a match that can go to extra time draws at the deflator. */
+  const k = etScale(fx);
+  return { lamMine: lamMine * k, lamOpp: lamOpp * k, mine, oppS };
 }
+
+/** Round 670: 1 for a match that cannot go to extra time, ET_DEFLATOR for one that can. */
+function etScale(fx: MyFixture): number { return fx.extraTime ? ET_DEFLATOR : 1; }
 
 /**
  * The second half's lambdas, the Round 119 and 121 formula: whichever talk
@@ -12402,7 +12529,9 @@ function secondHalfLambdas(
   /* Round 505: the duties, the same way the first half adds them. */
   const duty = dutyBoost(xi, state);
   const [lamMine, lamOpp] = halfLambdas(mine, oppS + fire, ment2.atk + homeAtk + opp2.def + duty.atk, ment2.def + oppAtk + opp2.atk + duty.def);
-  return { lamMine, lamOpp, mine, oppS };
+  /* Round 670: the same deflator as the first half, and extra time's too. */
+  const k = etScale(fx);
+  return { lamMine: lamMine * k, lamOpp: lamOpp * k, mine, oppS };
 }
 
 /** Where my scorers, injury and cards for a segment get drawn, both halves, one shape. */
@@ -12553,6 +12682,50 @@ function drawSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
   live.h2Drawn = true;
 }
 
+/** Round 670: goals at or before the ninetieth minute, mine and theirs. */
+function scoreAt90(live: LiveMatch): { mine: number; opp: number } {
+  const upTo90 = (xs: { minute: number }[] | undefined): number => (xs ?? []).filter(g => g.minute <= 90).length;
+  return { mine: live.myGoals + upTo90(live.h2My), opp: live.oppGoals + upTo90(live.h2Opp) };
+}
+
+/**
+ * Round 670: is extra time due at the ninetieth minute? The second half is
+ * drawn, extra time is not, this match settles a tie that plays it, and the
+ * tie is level: on the night for a one legged tie, on the aggregate (after
+ * away goals in the eras that had them) for a second leg.
+ */
+function extraTimeDue(state: CareerState, entry: CalendarEntry, live: LiveMatch): boolean {
+  if (live.et || !live.h2Drawn || !playsExtraTime(state, entry)) return false;
+  const { mine, opp } = scoreAt90(live);
+  const secondLeg = entry.uclRound && entry.uclLeg === 2 && uclLegsFor(state.eraId, entry.uclRound) === 2;
+  if (secondLeg) return mySecondLegOutcome(state, entry.uclRound!, mine, opp).out.winner === null;
+  return mine === opp;
+}
+
+/**
+ * Round 670: extra time, one thirty minute stretch after the ninety, drawn by
+ * the same segment draw as everything else, off the eleven still standing and
+ * the shape in force, at the second half's lambdas for a level score scaled
+ * to thirty minutes. Appended to the second half's lists and its stretches,
+ * so the report, the feed and the stats read it without a special case. The
+ * viewer asks for it at 90 (startExtraTime); the quick sim, a fast forward and
+ * the classic dressing room get it at the whistle. Same function, same order.
+ */
+function drawExtraTime(state: CareerState, entry: CalendarEntry, live: LiveMatch): void {
+  const fx = fixtureFor(state, entry)!;
+  const off = offPitchIds(live);
+  const xi = livePairs(state, live).filter(x => !off.has(x.p.id));
+  const { mine, opp } = scoreAt90(live);
+  const { lamMine, lamOpp } = secondHalfLambdas(state, fx, live, xi, mine, opp);
+  const from = 90;
+  const to = from + ET_MINUTES;
+  live.et = { from, to };
+  const before = live.h2Segs ?? [{ from: 45, to: 90, lamMine: live.lam2Mine ?? lamMine, lamOpp: live.lam2Opp ?? lamOpp }];
+  live.h2Segs = [...before, { from, to, lamMine, lamOpp }];
+  ({ lamMine: live.lam2Mine, lamOpp: live.lam2Opp } = effectiveLambdas(live.h2Segs));
+  drawSegment(state, live, fx, 2, from, to, lamMine * ET_MINUTES / 45, lamOpp * ET_MINUTES / 45);
+}
+
 /**
  * A first half for a save paused at the interval before the pieces existed
  * (Round 158's lines, Round 504's play). Drawn now, off the eleven that
@@ -12633,6 +12806,14 @@ function recutFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMatc
 /** Keep what happened at or before `minute` in the second half and redraw the rest. */
 function recutSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMatch, minute: number): void {
   const fx = fixtureFor(state, entry)!;
+  /* Round 670: a change before the ninety are up redraws the score extra
+     time was decided on, so extra time is decided again at 90. The clock
+     only runs forward and extra time is drawn at 90, so the viewer cannot
+     reach this; it keeps the engine honest if anything else ever does. */
+  if (live.et && minute < live.et.from) delete live.et;
+  /* Round 670: the stretch being redrawn runs to the end of extra time when
+     it has been drawn, else to the ninety. */
+  const end = live.et ? live.et.to : 90;
   live.h2My = keepUpTo(live.h2My, minute);
   live.h2Opp = keepUpTo(live.h2Opp, minute);
   live.h2Play = keepUpTo(live.h2Play, minute);
@@ -12645,10 +12826,10 @@ function recutSecondHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
   const scoreMine = live.myGoals + live.h2My.length;
   const scoreOpp = live.oppGoals + live.h2Opp.length;
   const { lamMine, lamOpp } = secondHalfLambdas(state, fx, live, xi, scoreMine, scoreOpp);
-  const share = (90 - minute) / 45;
-  live.h2Segs = recutSegments(live.h2Segs, { from: 45, to: 90, lamMine: live.lam2Mine ?? lamMine, lamOpp: live.lam2Opp ?? lamOpp }, minute, 90, lamMine, lamOpp);
+  const share = (end - minute) / 45;
+  live.h2Segs = recutSegments(live.h2Segs, { from: 45, to: 90, lamMine: live.lam2Mine ?? lamMine, lamOpp: live.lam2Opp ?? lamOpp }, minute, end, lamMine, lamOpp);
   ({ lamMine: live.lam2Mine, lamOpp: live.lam2Opp } = effectiveLambdas(live.h2Segs));
-  drawSegment(state, live, fx, 2, minute, 90, lamMine * share, lamOpp * share);
+  drawSegment(state, live, fx, 2, minute, end, lamMine * share, lamOpp * share);
   live.possH2 = possessionOf(live.lam2Mine, live.lam2Opp, live.possNoise?.[1]);
 }
 
@@ -12704,9 +12885,10 @@ export function liveFeed(live: LiveMatch): LiveFeedEvent[] {
  * halves' shares, which lands on the match figure at the whistle.
  */
 export function liveStatsAt(
-  live: Pick<LiveMatch, 'h1Play' | 'h2Play' | 'possH1' | 'possH2'>, minute: number,
+  live: Pick<LiveMatch, 'h1Play' | 'h2Play' | 'possH1' | 'possH2' | 'et'>, minute: number,
 ): MatchStats {
-  const m = Math.max(0, Math.min(90, minute));
+  /* Round 670: the last minute played is the end of extra time when there was some. */
+  const m = Math.max(0, Math.min(live.et ? live.et.to : 90, minute));
   const play = [...(live.h1Play ?? []), ...(live.h2Play ?? [])].filter(e => e.minute <= m);
   const count = (side: 'me' | 'opp', f: (e: PlayEvent) => boolean): number => play.filter(e => e.side === side && f(e)).length;
   const xgOf = (side: 'me' | 'opp'): number => Math.round(play.filter(e => e.side === side && e.kind === 'shot').reduce((s, e) => s + (e.xg ?? 0), 0) * 100) / 100;
@@ -12862,6 +13044,9 @@ export interface MyFixture {
   compLabel: string;
   opponent: string;
   home: boolean | null;
+  /** Round 670: this match settles a tie that plays extra time when level
+   *  (playsExtraTime), so it draws at ET_DEFLATOR. Absent otherwise. */
+  extraTime?: boolean;
 }
 
 /** Resolves what my club is playing for a given entry (null if not involved).
@@ -12931,6 +13116,7 @@ export function fixtureFor(state: CareerState, entry: CalendarEntry): MyFixture 
       compLabel: `Champions League · ${UCL_LABELS[entry.uclRound]}${legLabel}`,
       opponent,
       home: atHome,
+      ...(playsExtraTime(state, entry) ? { extraTime: true } : {}),
     };
   }
   return null;
@@ -12947,7 +13133,7 @@ function buildMatchDetail(args: {
   myScorers: ScorerLine[]; oppScorers: ScorerLine[];
   cards: CardLine[]; injuries: InjuryLine[]; subs: SubLine[];
   ratings: PlayerRatingLine[];
-  decidedBy: 'regular' | 'pens'; won: boolean;
+  decidedBy: 'regular' | 'aet' | 'pens'; won: boolean;
   /** Round 507: who won the SHOOTOUT, which on a two legged tie is not the
       same thing as who won tonight. Null when there was no shootout. */
   shootoutWon?: boolean | null;
@@ -12967,9 +13153,13 @@ function buildMatchDetail(args: {
   oppFormationIndex?: number;
   oppSubs: SubLine[];
   oppCards: CardLine[];
+  /** Round 670: the extra time stretch, when there was one. */
+  et?: { from: number; to: number };
 }): MatchDetail {
   const { myGoals, oppGoals, lamMine, lamOpp } = args;
   const round2 = (n: number) => Math.round(n * 100) / 100;
+  /* Round 670: the last minute played, the end of extra time when there was some. */
+  const end = args.et ? args.et.to : 90;
 
   /* Round 504: the stats block is COUNTED off the committed play, the same
      list the live viewer walks, through the one function that reads it. The
@@ -12982,7 +13172,8 @@ function buildMatchDetail(args: {
     h2Play: args.play.filter(e => e.minute > 45),
     possH1: args.possHalves[0],
     possH2: args.possHalves[1],
-  }, 90);
+    et: args.et,
+  }, end);
   const { onTarget } = stats;
 
   /* The timeline: everything above, in minute order, ready to replay. */
@@ -13020,16 +13211,20 @@ function buildMatchDetail(args: {
   for (const c of args.oppCards) timeline.push({ minute: c.minute, side: 'opp', kind: c.kind, text: c.name });
   for (const s of args.oppSubs) timeline.push({ minute: s.minute, side: 'opp', kind: 'sub', text: `${s.on} on for ${s.off}` });
   timeline.push({ minute: 45, side: 'none', kind: 'halftime', text: `Half time (+${added.h1}')` });
+  /* Round 670: the ninety minutes end with the board, and extra time starts. */
+  if (args.et) timeline.push({ minute: args.et.from, side: 'none', kind: 'extratime', text: `Level after 90 (+${added.h2}'), extra time` });
   if (args.decidedBy === 'pens') {
     /* Round 507: the shootout's own result, not the night's. On a two legged
        tie you can lose the second leg and win the shootout, so reading `won`
        here printed the wrong club. */
     const penWon = args.shootoutWon ?? args.won;
-    timeline.push({ minute: 90, side: penWon ? 'me' : 'opp', kind: 'pens', text: penWon ? `${args.clubName} win on penalties` : `${args.opponent} win on penalties` });
+    timeline.push({ minute: end, side: penWon ? 'me' : 'opp', kind: 'pens', text: penWon ? `${args.clubName} win on penalties` : `${args.opponent} win on penalties` });
   }
-  timeline.push({ minute: 90, side: 'none', kind: 'fulltime', text: `Full time (+${added.h2}')` });
+  timeline.push(args.et
+    ? { minute: end, side: 'none', kind: 'fulltime', text: 'Full time, after extra time' }
+    : { minute: 90, side: 'none', kind: 'fulltime', text: `Full time (+${added.h2}')` });
   const KIND_ORDER: Record<TimelineKind, number> = {
-    kickoff: 0, goal: 1, yellow: 1, red: 1, injury: 1, sub: 1, halftime: 2, pens: 3, fulltime: 4,
+    kickoff: 0, goal: 1, yellow: 1, red: 1, injury: 1, sub: 1, halftime: 2, extratime: 2, pens: 3, fulltime: 4,
   };
   timeline.sort((a, b) => a.minute - b.minute || KIND_ORDER[a.kind] - KIND_ORDER[b.kind]);
 
@@ -13048,7 +13243,9 @@ function buildMatchDetail(args: {
      the chances that really fell in those ten minutes rather than a share
      dealt out at random at the whistle. */
   const base = clamp((lamMine - lamOpp) * 0.35, -0.6, 0.6);
-  const BUCKETS = 9;
+  /* Round 670: three more ten minute buckets when there was extra time,
+     rather than thirty minutes folded into the 81st to the 90th. */
+  const BUCKETS = args.et ? 12 : 9;
   const myChances: number[] = new Array(BUCKETS).fill(0);
   const oppChances: number[] = new Array(BUCKETS).fill(0);
   for (const e of args.play) {
@@ -13119,7 +13316,7 @@ function buildMatchDetail(args: {
       const theirGoalsBy = new Map<string, number>();
       for (const sc of args.oppScorers) theirGoalsBy.set(sc.name, (theirGoalsBy.get(sc.name) ?? 0) + 1);
       const theyWon = oppGoals > myGoals && args.decidedBy === 'regular' ? true : args.decidedBy === 'pens' ? !(args.shootoutWon ?? args.won) : oppGoals > myGoals;
-      const theyDrew = myGoals === oppGoals && args.decidedBy === 'regular';
+      const theyDrew = myGoals === oppGoals && args.decidedBy !== 'pens';
       const base = theyWon ? 7.0 : theyDrew ? 6.4 : 5.7;
       const theirCleanSheet = myGoals === 0;
       oppRatings = xi.map(pl => {
@@ -13163,6 +13360,7 @@ function buildMatchDetail(args: {
     oppSubs: args.oppSubs,
     oppCards: args.oppCards,
     ...(args.oppXi ? { oppXi: args.oppXi, oppFormationIndex: args.oppFormationIndex } : {}),
+    ...(args.et ? { et: args.et } : {}),
   };
 }
 
@@ -13260,6 +13458,12 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
      whistle no longer draws football; it settles what was drawn. */
   ensureFirstHalf(state, entry, live);
   if (!live.h2Drawn) drawSecondHalf(state, entry, live);
+  /* Round 670: a level decider plays extra time before anything is settled.
+     The viewer drew it at 90 (startExtraTime); a quick sim, a fast forward
+     and the classic dressing room get it here, by the same function. Its
+     goals are in the h2 lists, so every count below includes them. */
+  if (extraTimeDue(state, entry, live)) drawExtraTime(state, entry, live);
+  const etPlayed = !!live.et;
   const h1My = live.myGoals;
   const h1Opp = live.oppGoals;
   const myGoals = h1My + (live.h2My ?? []).length;
@@ -13299,25 +13503,28 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     ...(live.subs ?? []).map(sb => sb.onId).filter((id): id is string => !!id),
   ])];
   const xi = squadByIds(state, ids);
-  let decidedBy: 'regular' | 'pens' = 'regular';
+  let decidedBy: 'regular' | 'aet' | 'pens' = 'regular';
   /* Round 507: who won the shootout, kept apart from who won the night. */
   let shootoutWon: boolean | null = null;
   let won = myGoals > oppGoals;
   let drawn = myGoals === oppGoals;
   let advanced = won;
+  /* Round 670: the tie a second leg settled, for the report's aggregate line. */
+  let tieLine: MatchWeekReport['tie'];
   /* Round 507: on a second leg the tie decides, not the match. Tonight's own
      result is left alone on purpose, because it is what the stats, the morale
      and the record are about: you can lose a second leg 1-0 and still be in the
-     semi finals, and the report should say both of those things. */
+     semi finals, and the report should say both of those things.
+     Round 670: tonight includes any extra time, so the tie is read after it,
+     with away goals in extra time counting in the eras that counted them. */
   if (uclLeg && uclLeg.twoLegs && uclLeg.leg === 2) {
-    const tie = state.uclBracket?.find(t => t.round === uclLeg.round && t.mine);
-    const iAmHome = tie ? tie.home === state.clubName : true;
-    const leg1 = tie?.leg1 ?? { homeGoals: 0, awayGoals: 0 };
-    const leg2 = {
-      homeGoals: iAmHome ? myGoals : oppGoals,
-      awayGoals: iAmHome ? oppGoals : myGoals,
+    const { iAmHome, out } = mySecondLegOutcome(state, uclLeg.round, myGoals, oppGoals);
+    tieLine = {
+      leg: 2,
+      aggMine: iAmHome ? out.homeAgg : out.awayAgg,
+      aggTheirs: iAmHome ? out.awayAgg : out.homeAgg,
+      ...(out.byAwayGoals ? { byAwayGoals: true } : {}),
     };
-    const out = uclTieOutcome({ leg1, leg2 }, uclAwayGoalsApply(state.eraId));
     if (out.winner === null) {
       decidedBy = 'pens';
       const taker = assignedOnPitch(state.setPieces, 'penalties', men(finished));
@@ -13339,7 +13546,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
       shootoutWon = advanced;
     } else {
       advanced = (out.winner === 'home') === iAmHome;
+      if (etPlayed) decidedBy = 'aet';
     }
+    tieLine = { ...tieLine, through: advanced };
   } else if (isKnockout && drawn) {
     decidedBy = 'pens';
     /* Round 505: the assigned penalty taker, when he finished the match, moves the odds a bounded touch. */
@@ -13352,6 +13561,10 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     drawn = false;
     advanced = penWin;
     shootoutWon = penWin;
+  } else if (etPlayed) {
+    /* Round 670: a one legged tie settled in extra time. It was won on the
+       pitch, so it is a W or an L like any other. */
+    decidedBy = 'aet';
   }
 
   const events: string[] = [];
@@ -13382,6 +13595,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
   tally.forEach((count, name) => {
     if (count >= 3) events.push(`⚽ ${name} bagged a hat-trick!`);
   });
+  /* Round 670: extra time gets a line of its own, before the shootout's. */
+  if (decidedBy === 'aet') events.push(advanced ? '⏱️ Settled in extra time, and you are through.' : '⏱️ Settled in extra time, and you are out.');
+  else if (etPlayed) events.push('⏱️ Still level after extra time.');
   if (decidedBy === 'pens') {
     /* The shootout, not the night. */
     events.push((shootoutWon ?? won) ? '🥅 Nerves of steel. You win the shootout.' : '🥅 Heartbreak from the spot: shootout defeat.');
@@ -13509,7 +13725,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     const twoLegs = !!uclLeg && uclLeg.twoLegs;
     // Round 95: my result goes into the bracket, then the rest of that round
     // is played out so the picture is complete before the next draw.
-    recordMyUclTie(state, koRound, fx.opponent, myGoals, oppGoals, advanced, twoLegs ? uclLeg.leg : 1, twoLegs);
+    recordMyUclTie(state, koRound, fx.opponent, myGoals, oppGoals, advanced, twoLegs ? uclLeg.leg : 1, twoLegs, etPlayed);
     /* Round 507: half a tie settles nothing. The rest of the round waits too,
        so the bracket does not show every other club through while my own tie is
        still one match old, which is also how the real weeks run. */
@@ -13826,13 +14042,14 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     return Number.isFinite(a) && Number.isFinite(b) ? Math.abs(a - b) : -1;
   };
   const margin = Math.abs(myGoals - oppGoals);
-  if (won && decidedBy === 'regular') {
+  /* Round 670: a tie won in extra time was won on the pitch, so it counts; only a shootout does not. */
+  if (won && decidedBy !== 'pens') {
     const prev = state.careerStats.biggestWin;
     if (!prev || margin > scoreMargin(prev.score)) {
       state.careerStats.biggestWin = { opp: fx.opponent, score: `${myGoals}-${oppGoals}` };
     }
   }
-  if (!won && !drawn && decidedBy === 'regular') {
+  if (!won && !drawn && decidedBy !== 'pens') {
     const prev = state.careerStats.biggestDefeat;
     if (!prev || margin > scoreMargin(prev.score)) {
       state.careerStats.biggestDefeat = { opp: fx.opponent, score: `${oppGoals}-${myGoals}` };
@@ -14060,6 +14277,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     oppXi: live.oppXi, oppBench: live.oppBench, oppFormationIndex: live.oppFormationIndex,
     oppSubs: live.oppSubs ?? [],
     oppCards: [...(live.h1OppCards ?? []), ...(live.h2OppCards ?? [])],
+    et: live.et,
   });
 
   const iAmHome = fx.home !== false; // neutral finals list us first
@@ -14083,6 +14301,7 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     confidenceDelta: confDelta,
     otherResults,
     detail,
+    ...(tieLine ? { tie: tieLine } : {}),
   };
 }
 
@@ -15014,7 +15233,7 @@ export function liveGoneIds(live: LiveMatch, minute: number): Set<string> {
 export function markLiveMinute(career: CareerState, minute: number): CareerState {
   const live = career.live;
   if (!live || !Number.isFinite(minute)) return career;
-  const m = Math.floor(Math.max(0, Math.min(90, minute)));
+  const m = Math.floor(Math.max(0, Math.min(live.et ? live.et.to : 90, minute)));
   if (m <= (live.minute ?? 0)) return career;
   const state: CareerState = JSON.parse(JSON.stringify(career));
   if (state.live) state.live.minute = m;
@@ -15046,7 +15265,7 @@ export function benchFor(career: CareerState, outId?: string, slotIdx?: number):
   }
   const slot = idx !== undefined ? formation.slots[idx] ?? null : null;
   const on = new Set(lineup.filter((id): id is string => !!id));
-  const gone = live ? liveGoneIds(live, 90) : new Set<string>();
+  const gone = live ? liveGoneIds(live, live.et ? live.et.to : 90) : new Set<string>();
   const tierOf = (p: CMPlayer): number => {
     if (!slot) return 2;
     const g = fitGrade(p, slot);
@@ -15099,7 +15318,8 @@ export function changeLive(career: CareerState, minute: number, change: LiveChan
   const state: CareerState = JSON.parse(JSON.stringify(career));
   const live = state.live;
   if (!live) return null;
-  if (!Number.isFinite(minute) || minute < 0 || minute > 90) return null;
+  /* Round 670: the bench stays open through extra time. */
+  if (!Number.isFinite(minute) || minute < 0 || minute > (live.et ? live.et.to : 90)) return null;
   // Never earlier than the last thing that happened; a clock only runs forward.
   const m = Math.floor(Math.max(minute, live.minute ?? 0));
   if (change.kind === 'sub') {
@@ -15152,6 +15372,35 @@ export function startSecondHalf(career: CareerState): CareerState | null {
     drawSecondHalf(state, entry, live);
   }
   live.minute = Math.max(46, live.minute ?? 0);
+  return state;
+}
+
+/**
+ * Round 670: the viewer's question at the ninetieth minute, answered by the
+ * engine so the page never decides football: is this match going to extra
+ * time? True only when the second half is drawn, extra time is not yet, and
+ * the tie this match settles is level. Pure, no draw.
+ */
+export function isExtraTimeDue(career: CareerState): boolean {
+  const live = career.live;
+  if (!live) return false;
+  const entry = career.calendar[live.week];
+  return !!entry && extraTimeDue(career, entry, live);
+}
+
+/**
+ * Round 670: extra time, drawn when the viewer's clock reaches 90 on a level
+ * tie, the shape of startSecondHalf: the viewer then walks thirty minutes
+ * that are already football, and a change in the 100th minute has something
+ * to redraw. Null when extra time is not due. The quick sim never calls this;
+ * the whistle draws the same stretch itself, by the same function.
+ */
+export function startExtraTime(career: CareerState): CareerState | null {
+  if (!isExtraTimeDue(career)) return null;
+  const state: CareerState = JSON.parse(JSON.stringify(career));
+  const live = state.live!;
+  drawExtraTime(state, state.calendar[live.week], live);
+  live.minute = Math.max(90, live.minute ?? 0);
   return state;
 }
 
@@ -15258,8 +15507,11 @@ export function matchFacts(career: CareerState): MatchFacts | null {
        (before any team talk, which has not been given yet). Round 505: the
        duties go in here too, so the odds are the engine's own. */
     const duty = dutyBoost(xi, career);
-    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk, 0.12, 4.2);
-    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def, 0.12, 4.2);
+    /* Round 670: a decider draws at the extra time deflator, so its odds do too.
+       They stay the odds over ninety minutes: a level decider goes on. */
+    const k = etScale(fx);
+    const lamMe = clamp(1.25 + (mine - oppS) * 0.055 + ment.atk + homeAtk + duty.atk, 0.12, 4.2) * k;
+    const lamOpp = clamp(1.25 + (oppS - mine) * 0.055 + ment.def + oppAtk + duty.def, 0.12, 4.2) * k;
     let pWin = 0, pDraw = 0, pLoss = 0;
     for (let a = 0; a <= 9; a++) {
       for (let b = 0; b <= 9; b++) {
