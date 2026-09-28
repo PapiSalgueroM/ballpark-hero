@@ -12,10 +12,10 @@ export interface F1PoolDriver {
 // "team" = the constructor the driver is most associated with.
 export const F1_POOL: F1PoolDriver[] = [
   { name: 'Ayrton Senna', team: 'McLaren', era: '1990s', nationality: 'Brazil', rating: 98 },
-  { name: 'Alain Prost', team: 'McLaren', era: '1990s', nationality: 'France', rating: 96 },
+  { name: 'Alain Prost', team: 'McLaren', era: '1980s', nationality: 'France', rating: 96 },
   { name: 'Nigel Mansell', team: 'Williams', era: '1990s', nationality: 'United Kingdom', rating: 90 },
   { name: 'Nelson Piquet', team: 'Williams', era: '1980s', nationality: 'Brazil', rating: 90 },
-  { name: 'Niki Lauda', team: 'Ferrari', era: '1980s', nationality: 'Austria', rating: 92 },
+  { name: 'Niki Lauda', team: 'Ferrari', era: '1970s', nationality: 'Austria', rating: 92 },
   { name: 'Keke Rosberg', team: 'Williams', era: '1980s', nationality: 'Finland', rating: 82 },
   { name: 'Alan Jones', team: 'Williams', era: '1980s', nationality: 'Australia', rating: 82 },
   { name: 'Gerhard Berger', team: 'Ferrari', era: '1990s', nationality: 'Austria', rating: 84 },
@@ -29,7 +29,7 @@ export const F1_POOL: F1PoolDriver[] = [
   { name: 'Kimi Raikkonen', team: 'Ferrari', era: '2000s', nationality: 'Finland', rating: 92 },
   { name: 'Juan Pablo Montoya', team: 'Williams', era: '2000s', nationality: 'Colombia', rating: 85 },
   { name: 'Ralf Schumacher', team: 'Williams', era: '2000s', nationality: 'Germany', rating: 80 },
-  { name: 'Jenson Button', team: 'McLaren', era: '2000s', nationality: 'United Kingdom', rating: 88 },
+  { name: 'Jenson Button', team: 'McLaren', era: '2010s', nationality: 'United Kingdom', rating: 88 },
   { name: 'Rubens Barrichello', team: 'Ferrari', era: '2000s', nationality: 'Brazil', rating: 86 },
   { name: 'Felipe Massa', team: 'Ferrari', era: '2000s', nationality: 'Brazil', rating: 85 },
   { name: 'David Coulthard', team: 'McLaren', era: '2000s', nationality: 'United Kingdom', rating: 84 },
@@ -51,7 +51,7 @@ export const F1_POOL: F1PoolDriver[] = [
   { name: 'Pierre Gasly', team: 'Alpine', era: '2020s', nationality: 'France', rating: 82 },
   { name: 'Esteban Ocon', team: 'Alpine', era: '2020s', nationality: 'France', rating: 81 },
   { name: 'Lance Stroll', team: 'Aston Martin', era: '2020s', nationality: 'Canada', rating: 76 },
-  { name: 'Yuki Tsunoda', team: 'Red Bull', era: '2020s', nationality: 'Japan', rating: 78 },
+  { name: 'Yuki Tsunoda', team: 'Racing Bulls', era: '2020s', nationality: 'Japan', rating: 78 },
 ];
 
 export const F1_LINEUP_CONFIG: LineupConfig<F1PoolDriver> = {
