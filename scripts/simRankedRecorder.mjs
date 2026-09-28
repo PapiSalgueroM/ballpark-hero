@@ -57,10 +57,9 @@
    and no multi mode file may call recordCompletion directly or hand a
    ResultScreen recordCompletionOnMount (that door records ranked on mount,
    whatever the mode), because the flag lives on the hook. A recorder in a
-   multi mode file that is a single
-   mode game of its own (the 20 Questions tree beside Guess The Club's
-   daily) is a ratchet, SINGLE_MODE_BASELINE, with the reason beside it: a
-   new one fails, a stale entry fails.
+   multi mode file that is a single mode game of its own (the 20 Questions
+   tree beside Guess The Club's daily) is a ratchet, SINGLE_MODE_BASELINE,
+   with the reason beside it: a new one fails, a stale entry fails.
 
    SECTION 2, THE LIB AND THE HOOK, AS CODE. recordUnrankedPlay writes the
    anonymous row and the streak day and reaches neither a score, the signed
@@ -70,9 +69,10 @@
 
    SECTION 3, RENDERED. src/test/rankedRecorder.test.tsx renders the real
    hook (an unranked finish is one play and no record, a ranked one is one
-   record and no play, a restored unranked finish is nothing) and plays two
-   real hooks (F1 Driver, NASCAR Chain) through Unlimited and through the
-   daily. src/test/rankedRecorderLib.test.ts drives the real lib against a
+   record and no play, a restored unranked finish is nothing) and plays four
+   real hooks, one per shape (F1 Driver, NASCAR Chain, HOF or Bust, Perfect
+   Lineup NBA on the shared engine), through the daily and through Unlimited.
+   src/test/rankedRecorderLib.test.ts drives the real lib against a
    recording Supabase client: the unranked row carries no score, no rpc and
    no session read happen, the streak day lands, the today set does not.
 
@@ -95,8 +95,10 @@
    dist/.ranked-control and point vitest at it through an alias:
      hookignores  the hook records every finish as ranked (COMPLETION_HOOK);
                   the unranked cases go red, the ranked ones stay green
-     libleaks     recordUnrankedPlay writes a score and the signed in save
-                  (RANKED_LIB); section 2 and the lib cases go red
+     libleaks     recordUnrankedPlay writes a score on its row (RANKED_LIB);
+                  section 2 and the no score case go red
+     libsaves     recordUnrankedPlay makes the signed in save (RANKED_LIB);
+                  section 2 and the no signed in save case go red
    RANKED_CONTROL=all runs every control in turn. A control run exits 0 when
    it fired exactly as it should and 1 when it did not.
 
@@ -167,7 +169,7 @@ const VITEST_CONTROLS = {
     from: '    if (!ranked) {\n      recordUnrankedPlay(`/${gameSlug}`);\n      return;\n    }\n',
     to: '',
     why: 'the hook records every finish as ranked again',
-    red: /unranked finish is one play|Unlimited/,
+    red: /unranked finish is one play|a free run then a daily run|Unlimited/,
     lib: false,
   },
   libleaks: {
@@ -326,23 +328,27 @@ function bodyOf(code, signature) {
   const next = code.indexOf('\nexport ', start + 1);
   return code.slice(start, next < 0 ? code.length : next);
 }
+/* Returns the problems found; the default run fails on each, a control
+   expects at least one. */
 function checkLibAndHook(libRaw, hookRaw) {
+  const problems = [];
   const lib = stripComments(libRaw);
   const body = bodyOf(lib, 'export function recordUnrankedPlay(');
-  if (!body) { fail('recordUnrankedPlay is not exported from src/lib/completions.ts'); return; }
+  if (!body) return ['recordUnrankedPlay is not exported from src/lib/completions.ts'];
   for (const heavy of ['score', 'saveAuthCompletion(', 'getSession(', 'getUser(', 'record_auth_completion', 'bumpLocalTodayCount(', 'daily_completions']) {
-    if (body.includes(heavy)) fail(`recordUnrankedPlay reaches ${JSON.stringify(heavy)}, so a free run is a ranked record again`);
+    if (body.includes(heavy)) problems.push(`recordUnrankedPlay reaches ${JSON.stringify(heavy)}, so a free run is a ranked record again`);
   }
-  if (!body.includes("('game_completions')")) fail('recordUnrankedPlay no longer writes the anonymous game_completions row, so a free run is not a play');
-  if (!body.includes('recordStreakCompletion(')) fail('recordUnrankedPlay no longer records the local streak day, so a free run does not count as playing today');
+  if (!body.includes("('game_completions')")) problems.push('recordUnrankedPlay no longer writes the anonymous game_completions row, so a free run is not a play');
+  if (!body.includes('recordStreakCompletion(')) problems.push('recordUnrankedPlay no longer records the local streak day, so a free run does not count as playing today');
   const hook = stripComments(hookRaw);
   const consume = hook.indexOf('consumeRestoredFinish(gameSlug)');
   const unranked = hook.indexOf('recordUnrankedPlay(');
   const ranked = hook.indexOf('recordCompletion(');
-  if (consume < 0 || unranked < 0 || ranked < 0) fail('the hook is missing the restore mark, the unranked door or the ranked door');
-  else if (!(consume < unranked && unranked < ranked)) fail('the hook must consume the restore mark, then take the unranked door, then the ranked one, in that order');
-  if (!/\bif\s*\(\s*!ranked\s*\)/.test(hook)) fail('the hook no longer branches on !ranked');
-  console.log(`   recordUnrankedPlay body ${body.length} characters: the anonymous row and the streak day, nothing heavier; the hook consumes the mark, then routes on ranked`);
+  if (consume < 0 || unranked < 0 || ranked < 0) problems.push('the hook is missing the restore mark, the unranked door or the ranked door');
+  else if (!(consume < unranked && unranked < ranked)) problems.push('the hook must consume the restore mark, then take the unranked door, then the ranked one, in that order');
+  if (!/\bif\s*\(\s*!ranked\s*\)/.test(hook)) problems.push('the hook no longer branches on !ranked');
+  if (!problems.length) console.log(`   recordUnrankedPlay body ${body.length} characters: the anonymous row and the streak day, nothing heavier; the hook consumes the mark, then routes on ranked`);
+  return problems;
 }
 
 /* ------------------------------------------------------------------------ */
@@ -406,7 +412,7 @@ if (!CONTROL) {
   else console.log(`   prose check: an unflagged recorder, a direct call, a literal flag and an on mount card flag ${SHAPES.length} as code and nothing written in comments`);
 
   console.log('\n2) The lib and the hook, as code');
-  checkLibAndHook(readLF(LIB), readLF(HOOK));
+  for (const p of checkLibAndHook(readLF(LIB), readLF(HOOK))) fail(p);
 
   console.log(`\n3) Rendered: ${TESTS.join(', ')}`);
   const run = runSuite({});
@@ -470,10 +476,9 @@ try {
     if (/from '\.\.?\//.test(copy)) abort(`control ${name} cannot run: ${ctl.file} has a relative import, which a copy elsewhere cannot resolve`);
     /* Section 2 on the rewritten lib, in memory. */
     if (ctl.lib) {
-      const before = failures;
-      checkLibAndHook(copy, readLF(HOOK));
-      if (failures === before) { fail(`control ${name}: section 2 stayed green on the rewritten lib`); continue; }
-      failures = before;
+      const problems = checkLibAndHook(copy, readLF(HOOK));
+      if (!problems.length) { fail(`control ${name}: section 2 stayed green on the rewritten lib`); continue; }
+      for (const p of problems) console.log(`   section 2 on the copy: ${p}`);
       console.log('   section 2 went red on the rewritten lib, as it should');
     }
     const dir = path.join(controlDir, name);

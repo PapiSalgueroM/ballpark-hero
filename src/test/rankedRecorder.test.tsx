@@ -35,7 +35,7 @@ vi.mock('@/contexts/AuthContext', () => ({
   useAuth: () => ({ user: null, profile: null, refreshProfile: () => undefined }),
 }));
 vi.mock('sonner', () => ({ toast: { success: () => undefined } }));
-/* The three real hooks import the client for their validators and vote
+/* The real hooks import the client for their validators and vote
    tables; none of that is under test, so every chain resolves to nothing.
    HOF or Bust fires its vote insert with a bare .then(), no callback, so
    the thenable hands back a real promise whether or not one is passed. */
@@ -121,7 +121,7 @@ describe('the recorder, rendered', () => {
   });
 });
 
-describe('three real hooks', () => {
+describe('four real hooks', () => {
   it('F1 Driver through Unlimited is one play and no record', () => {
     const { result } = renderHook(() => useF1Driver());
     act(() => result.current.startGame('unlimited'));
