@@ -242,7 +242,7 @@ export function recordActivity(gamePath: string, score?: number, playerName?: st
 /**
  * Round 645: a finished run that is NOT the daily is a play, never a record.
  *
- * Twenty seven games carry a daily and a free mode (Unlimited, free play,
+ * Thirty six games carry a daily and a free mode (Unlimited, free play,
  * a new season, versus) under one slug, and until this round their free
  * finishes went through recordCompletion exactly like the daily: a scored
  * game_completions row, so the day board's "best" was the best of as many
@@ -250,16 +250,17 @@ export function recordActivity(gamePath: string, score?: number, playerName?: st
  * paid its score into total_points and ticked daily_completions for a
  * daily that was never played. Face Off was the one game that already told
  * the two apart (the daily through useGameCompletion, any other match a
- * bare recordCompletion with no score), and this is that shape lifted into
- * the recorder itself: useGameCompletion takes a `ranked` flag and routes
- * an unranked finish here.
+ * bare recordCompletion with no score, which still made the signed in save
+ * with a zero), and this is that shape lifted into the recorder itself:
+ * useGameCompletion takes a `ranked` flag and routes an unranked finish here.
  *
  * What an unranked play writes: the anonymous game_completions row with NO
  * score (a play for Most Played Today, never a ranked row: the board reads
  * scored rows only) and the local streak day (the player played today).
  * What it never writes: a score, the signed in save (no points, no
  * user_game_scores row, no best score), daily_completions (the daily key),
- * and the local today set, which mirrors that key. scripts/simRankedRecorder.mjs
+ * and the local today set, the same browser half of the games today count
+ * that the Profile merges with daily_completions. scripts/simRankedRecorder.mjs
  * reads this body and fails if any of those come back.
  */
 export function recordUnrankedPlay(gamePath: string): void {

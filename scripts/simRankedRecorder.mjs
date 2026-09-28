@@ -1,41 +1,63 @@
 /* Ranked recorder harness: a finish outside the daily is a play, never a record.
 
-   Round 645 part one. Twenty seven games carry a daily and a free mode under
-   one slug (Unlimited, free play, a new season, versus, a random deal), and
-   a read of every recorder on 2026-09-28 found their free finishes going
-   through the same recorder as the daily: a scored game_completions row, so
-   the day board's best was the best of as many attempts as a player cared
-   to make; the signed in save, so every attempt paid its score into
+   Round 645 part one. A read of every recorder on 2026-09-28 (origin/main
+   22bc0f7e) found 36 games whose free finishes (Unlimited, free play, a new
+   season, versus, a CPU card) went through the same recorder as their
+   daily, under the daily's slug: a scored game_completions row, so the day
+   board's best was the best of as many attempts as a player cared to make,
+   and the signed in save, so every attempt paid its score into
    total_points, wrote a user_game_scores row and ticked daily_completions
-   for a daily never played. Twenty three of them recorded the active game's
-   state whatever the mode (the seven guess hooks on gameState, the three
-   chains, the four gauntlets, Buzzer Beater, Free Kick, NBA Stat Line, Pack
-   Battle, Player Stock Market, Rarity Round, Sports Bingo, the five conquest
-   maps, the two Perfect Lineups), four Perfect Seasons recorded every season
-   through a bare recordCompletion, and Face Off, the one game that told the
-   two apart, still wrote its free matches through recordCompletion with no
-   score, which is the signed in save and the daily key with a zero.
+   for a daily never played. 28 call sites in 28 files:
+     23 recorded the active game's state whatever the mode, covering 31
+        games: the eight guess hooks on gameState (Guess The CBB Team, F1
+        Constructor, F1 Driver, Guess The NFL Team, Guess The Club, Guess The
+        Nation, Guess The NASCAR Driver, Guess The Tennis Player), the three
+        chains (NASCAR, Tennis, UFC), the four gauntlets (one page and one
+        board for three sports), the five conquest maps (one board), Buzzer
+        Beater, Free Kick, NBA Stat Line, Pack Battle, Player Stock Market,
+        Rarity Round, Sports Bingo, Perfect Lineup (Unlimited and Go
+        Unbeaten) and the three Perfect Lineups on the shared engine (F1,
+        NBA, NHL), whose done flag named the daily without requiring it:
+        phase === 'result' && !(mode === 'daily' && dailyDone) is true on
+        every Unlimited result;
+      4 Perfect Seasons recorded every classic and hard season through a
+        bare recordCompletion;
+      1 Face Off, the one game that told the two apart, still wrote its free
+        and versus matches through recordCompletion with no score, which is
+        the signed in save and the daily key with a zero.
+   Six more (Face Off's daily, HOF or Bust, Score Predictor, Shirt Number,
+   Minefield, Sports Millionaire) ANDed the mode into their done flag, so a
+   free finish wrote nothing at all, not even a play, and Round 643 found that
+   shape re-arming the recorder on a mode toggle.
 
    Face Off's shape is now the recorder's own: useGameCompletion takes a
    `ranked` flag, false routes to recordUnrankedPlay (the anonymous row with
    no score and the local streak day, nothing else), and a game with a daily
-   and a free mode under one slug passes its mode. Measured on the tree
-   before the fix: 28 unranked writes in 26 files. After: 0.
+   and a free mode under one slug passes its mode. Measured with this scan:
+   28 unranked writes in 28 files and 6 mode gated recorders before, 0 and 0
+   after.
 
    SECTION 1, THE SOURCE. Every recorder in src, read as code (comments
-   stripped). A file is MULTI MODE when its code compares something to the
+   stripped). A recorder's file is read as MULTI MODE when its code names the
    literal 'daily' (mode === 'daily', a 'daily' | 'unlimited' union, a
-   start('daily')): a game with a daily and nothing else has no reason to
-   name it. In a multi mode file every useGameCompletion call must either
-     - carry the ranked flag, an expression that compares to 'daily' (a
-       literal true would only silence the check, a literal false is an
-       explicit never ranked), or
+   start('daily')). That is wider than it needs to be on purpose: a daily
+   only game that names it passes anyway, because its done flag reads daily
+   state. The blind spot is a game whose modes live in another file than its
+   recorder, and the 2026-09-28 read found none: every recorder file that
+   does not name 'daily' either deals from the date alone or from the random
+   generator alone. In a multi mode file every useGameCompletion call must either
+     - carry the ranked flag, an expression true only in the daily: a top
+       level mode === 'daily' term, alone or ANDed with more (a literal true
+       would only silence the check and mode !== 'daily' would rank the
+       wrong runs; a literal false is an explicit never ranked), or
      - read daily only state: every identifier in its done expression names
        the daily (rawDailyStatus, dailyDone, effectiveDailyStatus,
        dailyPhase, dailyFilled), the Missing XI shape Round 643 settled on,
        which cannot fire in another mode;
-   and no multi mode file may call recordCompletion directly, because the
-   flag lives on the hook. A recorder in a multi mode file that is a single
+   and no multi mode file may call recordCompletion directly or hand a
+   ResultScreen recordCompletionOnMount (that door records ranked on mount,
+   whatever the mode), because the flag lives on the hook. A recorder in a
+   multi mode file that is a single
    mode game of its own (the 20 Questions tree beside Guess The Club's
    daily) is a ratchet, SINGLE_MODE_BASELINE, with the reason beside it: a
    new one fails, a stale entry fails.
@@ -60,11 +82,15 @@
      unranked   useCbbProgram's recorder loses its flag; exactly that file
                 flagged, kind unranked
      literal    useCbbProgram passes a literal true; exactly that file, kind
-                literal
+                flag
+     inverted   useCbbProgram passes mode !== 'daily'; exactly that file,
+                kind flag
      direct     Face Off's free matches go back through recordCompletion;
                 exactly that file, kind direct
+     onmount    Rarity Round's result card records on mount; exactly that
+                file, kind direct
      stale      a baseline entry that matches nothing; section 1 red
-   and every run proves the scan reads code: the three shapes written into
+   and every run proves the scan reads code: the four shapes written into
    comments flag nothing. The rendered ones edit a COPY under
    dist/.ranked-control and point vitest at it through an alias:
      hookignores  the hook records every finish as ranked (COMPLETION_HOOK);
@@ -107,8 +133,15 @@ const SCAN_CONTROLS = {
     file: 'src/hooks/useCbbProgram.ts',
     from: "gameState?.score ?? 0, 0, gameState?.mode === 'daily');",
     to: 'gameState?.score ?? 0, 0, true);',
-    kind: 'literal',
+    kind: 'flag',
     why: 'Guess The CBB Team silences the flag with a literal true',
+  },
+  inverted: {
+    file: 'src/hooks/useCbbProgram.ts',
+    from: "gameState?.score ?? 0, 0, gameState?.mode === 'daily');",
+    to: "gameState?.score ?? 0, 0, gameState?.mode !== 'daily');",
+    kind: 'flag',
+    why: 'Guess The CBB Team ranks every mode but the daily',
   },
   direct: {
     file: 'src/hooks/useFaceOff.ts',
@@ -116,6 +149,13 @@ const SCAN_CONTROLS = {
     to: "    if (mode !== 'daily') recordCompletion('/face-off');\n    setPhase('done');\n  }, [phase, results, rounds.length, difficulty, mode, save]);",
     kind: 'direct',
     why: "Face Off's free matches go back through a bare recordCompletion, the signed in save and the daily key with a zero",
+  },
+  onmount: {
+    file: 'src/pages/RarityRound.tsx',
+    from: '            <ResultScreen\n              outcomeEmoji={outcomeEmoji}\n',
+    to: '            <ResultScreen\n              recordCompletionOnMount\n              outcomeEmoji={outcomeEmoji}\n',
+    kind: 'direct',
+    why: "Rarity Round's result card records on mount, ranked in Unlimited as in the daily",
   },
 };
 /* Each rendered control rewrites one module into a copy and names the cases
@@ -164,7 +204,6 @@ const count = (hay, needle) => hay.split(needle).length - 1;
 /* Section 1: the scan                                                       */
 /* ------------------------------------------------------------------------ */
 const DAILY_LITERAL = /['"]daily['"]/;
-const DAILY_COMPARE = /[!=]==?\s*['"]daily['"]|['"]daily['"]\s*[!=]==?/;
 const CONSTANT = /^[A-Z][A-Z0-9_]*$/;
 const KEYWORD = new Set(['true', 'false', 'null', 'undefined', 'typeof', 'instanceof']);
 
@@ -182,6 +221,33 @@ function dailyScoped(done) {
   return ids.length > 0 && ids.every(id => /daily|day$/i.test(id));
 }
 
+/* The top level terms of an && chain: a term inside parentheses, brackets or
+   a string stays whole, so !(mode === 'daily' && dailyDone) is ONE term. */
+function conjuncts(expr) {
+  const terms = [];
+  let depth = 0;
+  let quote = '';
+  let cur = '';
+  for (let i = 0; i < expr.length; i += 1) {
+    const c = expr[i];
+    if (quote) { cur += c; if (c === '\\') { cur += expr[i + 1] ?? ''; i += 1; } else if (c === quote) quote = ''; continue; }
+    if (c === "'" || c === '"' || c === '`') { quote = c; cur += c; continue; }
+    if (c === '(' || c === '[' || c === '{') depth += 1;
+    if (c === ')' || c === ']' || c === '}') depth -= 1;
+    if (depth === 0 && c === '&' && expr[i + 1] === '&') { terms.push(cur.trim()); cur = ''; i += 1; continue; }
+    cur += c;
+  }
+  terms.push(cur.trim());
+  return terms.filter(Boolean);
+}
+/* A term that is true only in the daily: `x === 'daily'` or `'daily' === x`,
+   optionally wrapped in one pair of parentheses. A negation (!==, or a ! in
+   front) is not one, so an inverted flag cannot pass for a ranked one. */
+const DAILY_TERM = /^\(?\s*(?:[A-Za-z_$][\w$]*(?:\s*\??\.\s*[A-Za-z_$][\w$]*)*\s*={2,3}\s*['"]daily['"]|['"]daily['"]\s*={2,3}\s*[A-Za-z_$][\w$]*(?:\s*\??\.\s*[A-Za-z_$][\w$]*)*)\s*\)?$/;
+const onlyInDaily = expr => conjuncts(expr).some(t => DAILY_TERM.test(t));
+const RESULT_SCREEN = 'src/components/game/ResultScreen.tsx';
+const lineAt = (code, index) => code.slice(0, index).split('\n').length;
+
 function scan(files, baseline = SINGLE_MODE_BASELINE) {
   const findings = [];
   const baselineHits = new Set();
@@ -193,12 +259,18 @@ function scan(files, baseline = SINGLE_MODE_BASELINE) {
     const code = stripComments(raw);
     const recs = callsOf(code, 'useGameCompletion').filter(c => c.args.length >= 2);
     const direct = callsOf(code, 'recordCompletion').filter(c => c.args.length >= 1);
-    if (!recs.length && !direct.length) continue;
-    recorders += recs.length + direct.length;
+    /* ResultScreen's opt in recorder: the prop on a card records ranked on
+       mount through recordCompletion, with no way to pass a mode. */
+    const onMount = rel === RESULT_SCREEN ? [] : [...code.matchAll(/\brecordCompletionOnMount\b/g)];
+    if (!recs.length && !direct.length && !onMount.length) continue;
+    recorders += recs.length + direct.length + onMount.length;
     if (!DAILY_LITERAL.test(code)) continue;
     multi.push(rel);
     for (const d of direct) {
       findings.push({ kind: 'direct', file: rel, line: d.at, what: `recordCompletion(${d.args[0]}) called directly in a file with a daily and another mode: the ranked flag lives on useGameCompletion, so this writes the signed in save and the daily key whatever the mode` });
+    }
+    for (const m of onMount) {
+      findings.push({ kind: 'direct', file: rel, line: lineAt(code, m.index), what: 'a ResultScreen recordCompletionOnMount in a file with a daily and another mode: that card records ranked on mount whatever the mode, so a free finish writes the day board, the points and the daily key; record through useGameCompletion with the ranked flag instead' });
     }
     for (const r of recs) {
       const slug = resolveSlug(code, r.args[0]) ?? r.args[0];
@@ -207,14 +279,14 @@ function scan(files, baseline = SINGLE_MODE_BASELINE) {
       checked += 1;
       if (r.args.length >= 5) {
         const ranked = resolveExpr(code, r.args[4]);
-        if (DAILY_COMPARE.test(ranked) || ranked === 'false') continue;
-        findings.push({ kind: 'literal', file: rel, line: r.at, what: `${slug} passes "${ranked}" as its ranked flag, which does not read the mode: the flag must compare the mode to 'daily' (or be a literal false)` });
+        if (onlyInDaily(ranked) || ranked === 'false') continue;
+        findings.push({ kind: 'flag', file: rel, line: r.at, what: `${slug} passes "${ranked}" as its ranked flag, which is not true only in the daily: the flag must AND in a mode === 'daily' comparison (or be a literal false)` });
         continue;
       }
       const done = resolveExpr(code, r.args[1]);
       if (dailyScoped(done)) continue;
       const shown = done.replace(/\s+/g, ' ');
-      if (DAILY_COMPARE.test(done)) {
+      if (onlyInDaily(done)) {
         /* The pre 645 shape: the mode ANDed into the done flag. A free finish
            then records nothing at all, not even a play, and Round 643 found
            this shape re-arming the recorder on a mode toggle. The flag is the
@@ -222,6 +294,10 @@ function scan(files, baseline = SINGLE_MODE_BASELINE) {
         findings.push({ kind: 'gate', file: rel, line: r.at, what: `${slug} gates its done on the mode ("${shown}") instead of passing the ranked flag: a free finish is not even a play, and a toggle re-arms the recorder` });
         continue;
       }
+      /* Anything else, including a done that mentions the daily without
+         requiring it (the Perfect Lineup engine's
+         phase === 'result' && !(mode === 'daily' && dailyDone), true on every
+         Unlimited finish), fires outside the daily. */
       findings.push({ kind: 'unranked', file: rel, line: r.at, what: `${slug} records on "${shown}" in a file with a daily and another mode, with no ranked flag: a free finish writes the day board, the points and the daily key` });
     }
   }
@@ -230,15 +306,15 @@ function scan(files, baseline = SINGLE_MODE_BASELINE) {
 }
 
 function reportScan(res) {
-  console.log(`   ${res.recorders} recorder calls read; ${res.multi.length} files carry a daily and another mode; ${res.checked} of their recorders checked, ${SINGLE_MODE_BASELINE.length} in the single mode baseline`);
+  console.log(`   ${res.recorders} recorder calls read; ${res.multi.length} recorder files name the daily and are read as multi mode; ${res.checked} of their hook recorders checked, ${SINGLE_MODE_BASELINE.length} in the single mode baseline`);
   if (res.recorders < 100) fail(`only ${res.recorders} recorder calls found, the reader is broken`);
   if (res.multi.length < 20) fail(`only ${res.multi.length} multi mode files found, the reader is broken`);
   for (const f of res.findings) fail(`${f.file}:${f.line}: ${f.what}`);
   for (const s of res.stale) fail(`SINGLE_MODE_BASELINE lists ${s.file} (${s.slug}), which matches no recorder there: remove the entry`);
   const writes = res.findings.filter(f => f.kind === 'unranked' || f.kind === 'direct');
   const gates = res.findings.filter(f => f.kind === 'gate').length;
-  const literals = res.findings.filter(f => f.kind === 'literal').length;
-  console.log(`   unranked writes: ${writes.length} in ${new Set(writes.map(f => f.file)).size} file(s); mode gated recorders without the flag: ${gates}; literal flags: ${literals}`);
+  const flags = res.findings.filter(f => f.kind === 'flag').length;
+  console.log(`   unranked writes: ${writes.length} in ${new Set(writes.map(f => f.file)).size} file(s); mode gated recorders without the flag: ${gates}; flags that are not true only in the daily: ${flags}`);
 }
 
 /* ------------------------------------------------------------------------ */
@@ -309,15 +385,25 @@ if (!CONTROL) {
   const files = srcFiles();
   const res = scan(files);
   reportScan(res);
-  /* Prose is not code: the three shapes written into comments flag nothing. */
+  /* Prose is not code: the four shapes written into comments flag nothing,
+     and the same four written as code flag four, so the prose check is not
+     green only because the shapes could never be seen. */
   const probe = 'src/hooks/useNflHL.ts';
+  const SHAPES = [
+    "useGameCompletion('nfl-hl', gameState?.gameStatus === 'won', 0);",
+    "recordCompletion('/nfl-hl');",
+    "useGameCompletion('nfl-hl', finished, score, 0, true);",
+    'const card = <ResultScreen recordCompletionOnMount />;',
+  ];
+  const asCode = new Map(files);
+  asCode.set(probe, files.get(probe) + '\n' + SHAPES.join('\n') + '\n');
+  const codeRes = scan(asCode);
   const prose = new Map(files);
-  prose.set(probe, files.get(probe)
-    + "\n/* useGameCompletion('nfl-hl', gameState?.gameStatus === 'won', 0); recordCompletion('/nfl-hl'); */\n"
-    + "// useGameCompletion('nfl-hl', finished, score, 0, true);\n");
+  prose.set(probe, files.get(probe) + '\n/* ' + SHAPES.slice(0, 2).join(' ') + ' */\n' + SHAPES.slice(2).map(s => `// ${s}`).join('\n') + '\n');
   const proseRes = scan(prose);
-  if (proseRes.findings.length !== res.findings.length) fail(`the scan read a comment as code: ${proseRes.findings.length - res.findings.length} finding(s) from prose`);
-  else console.log('   prose check: an unflagged recorder, a direct call and a literal flag written in comments flag nothing');
+  if (codeRes.findings.length - res.findings.length !== SHAPES.length) fail(`the four shapes written as code added ${codeRes.findings.length - res.findings.length} finding(s), not ${SHAPES.length}: the scan cannot see them, so the prose check below proves nothing`);
+  else if (proseRes.findings.length !== res.findings.length) fail(`the scan read a comment as code: ${proseRes.findings.length - res.findings.length} finding(s) from prose`);
+  else console.log(`   prose check: an unflagged recorder, a direct call, a literal flag and an on mount card flag ${SHAPES.length} as code and nothing written in comments`);
 
   console.log('\n2) The lib and the hook, as code');
   checkLibAndHook(readLF(LIB), readLF(HOOK));

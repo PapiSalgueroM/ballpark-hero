@@ -8,11 +8,12 @@
  * its Unlimited, free play, new season or versus finishes.
  *
  * The first block renders the REAL hook with both doors mocked and counts
- * which one opens. The second plays three REAL hooks, one per shape the
- * audit found: F1 Driver (the seven guess hooks that record gameState
- * whatever its mode), NASCAR Chain (the three chains) and HOF or Bust (the
- * six recorders that used to AND the mode into their done flag), each
- * through Unlimited and through the daily.
+ * which one opens. The second plays four REAL hooks, one per shape the
+ * audit found: F1 Driver (the eight guess hooks that record gameState
+ * whatever its mode), NASCAR Chain (the three chains), HOF or Bust (the
+ * six recorders that used to AND the mode into their done flag) and the
+ * shared Perfect Lineup engine (a done flag that names the daily without
+ * requiring it), each through Unlimited and through the daily.
  *
  * scripts/simRankedRecorder.mjs runs this file and carries the negative
  * control: RANKED_CONTROL=hookignores points COMPLETION_HOOK at a copy of
@@ -58,6 +59,8 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useF1Driver } from '@/hooks/useF1Driver';
 import { useNascarChain } from '@/hooks/useNascarChain';
 import { useHofOrBust } from '@/hooks/useHofOrBust';
+import { usePerfectLineupGeneric } from '@/hooks/usePerfectLineupGeneric';
+import { NBA_LINEUP_CONFIG } from '@/data/nbaPerfectLineupPool';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 
 const ranked = () => vi.mocked(recordCompletion).mock.calls.map(c => String(c[0]));
@@ -181,5 +184,32 @@ describe('three real hooks', () => {
     act(() => result.current.vote('bust'));
     expect(ranked()).toEqual(['/hof-or-bust']);
     expect(plays()).toEqual(['/hof-or-bust']);
+  });
+
+  /* The shared Perfect Lineup engine (F1, NBA, NHL) is the shape that names
+     the daily without requiring it: its done flag was
+     phase === 'result' && !(mode === 'daily' && dailyDone), true on every
+     Unlimited result, so each one recorded ranked under the daily's slug. */
+  it('Perfect Lineup NBA: the daily lineup is one record, an Unlimited lineup after it is one play', () => {
+    const { result } = renderHook(() => usePerfectLineupGeneric(NBA_LINEUP_CONFIG));
+    const fill = () => {
+      for (const slot of result.current.slots) {
+        const pick = result.current.eligibleFor(slot.id)[0];
+        expect(pick, `slot ${slot.id} has an eligible player`).toBeTruthy();
+        act(() => result.current.pickPlayer(slot.id, pick));
+      }
+      expect(result.current.allFilled).toBe(true);
+      act(() => result.current.simulateLineup());
+      expect(result.current.phase).toBe('result');
+    };
+    expect(result.current.mode).toBe('daily');
+    fill();
+    expect(ranked()).toEqual(['/perfect-lineup-nba']);
+    expect(plays()).toEqual([]);
+    act(() => result.current.rollUnlimited());
+    expect(result.current.mode).toBe('unlimited');
+    fill();
+    expect(ranked()).toEqual(['/perfect-lineup-nba']);
+    expect(plays()).toEqual(['/perfect-lineup-nba']);
   });
 });
