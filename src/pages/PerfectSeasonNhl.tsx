@@ -247,7 +247,7 @@ const PerfectSeasonNhl = () => {
   // is the win count the result screen leads with. Round 645: through the
   // shared recorder, which records the transition once per run (restart
   // takes the phase back, re-arming it), and only the daily is ranked. A
-  // classic, hard or decade season is a play, never a record: no day board
+  // classic or hard season is a play, never a record: no day board
   // row, no points, no daily key.
   useGameCompletion('perfect-season-nhl', phase === 'done' && !!sim, sim?.wins ?? 0, 0, mode === 'daily');
 
