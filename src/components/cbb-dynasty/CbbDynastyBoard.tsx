@@ -295,9 +295,10 @@ export default function CbbDynastyBoard() {
           <div className="cm-rise mt-3 flex flex-wrap items-center justify-center gap-3 text-sm" style={{ animationDelay: '0.9s' }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Titles <b className="text-gold">{st.myTitles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{st.seasonsPlayed}</b></span>
-            {/* Round 647: the number this season recorded, and the career's ledger sum. */}
-            <span className="rounded-full border border-border bg-background px-3 py-1.5">This season <b className="text-gold">{seasonRow?.score ?? 0}</b> pts</span>
-            <span className="rounded-full border border-border bg-background px-3 py-1.5">Career <b className="text-primary">{ledgerTotal(careerLedger)}</b> pts</span>
+            {/* Round 647: the number this season recorded, and the career's ledger sum,
+                left out on a save from before the ledger, which has no row to show. */}
+            {seasonRow && <span className="rounded-full border border-border bg-background px-3 py-1.5">This season <b className="text-gold">{seasonRow.score}</b> pts</span>}
+            {seasonRow && <span className="rounded-full border border-border bg-background px-3 py-1.5">Career <b className="text-primary">{ledgerTotal(careerLedger)}</b> pts</span>}
           </div>
           <div className="cm-rise mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center" style={{ animationDelay: '0.9s' }}>
             <button onClick={startRecruiting} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
@@ -306,8 +307,8 @@ export default function CbbDynastyBoard() {
             <ShareButtons
               gameName="CBB Dynasty"
               gamePath="/cbb-dynasty"
-              score={`${seasonRow?.score ?? 0} pts this season, ${st.myTitles} titles in ${st.seasonsPlayed} seasons`}
-              customText={`CBB Dynasty 🏀 ${isChamp ? `${label(st.myTeam)} just cut down the nets!` : `${label(march.champion)} won it all.`} ${seasonRow?.score ?? 0} pts this season, ${st.myTitles} titles in ${st.seasonsPlayed} seasons. douknowball.com/cbb-dynasty`}
+              score={`${seasonRow ? `${seasonRow.score} pts this season, ` : ''}${st.myTitles} titles in ${st.seasonsPlayed} seasons`}
+              customText={`CBB Dynasty 🏀 ${isChamp ? `${label(st.myTeam)} just cut down the nets!` : `${label(march.champion)} won it all.`} ${seasonRow ? `${seasonRow.score} pts this season, ` : ''}${st.myTitles} titles in ${st.seasonsPlayed} seasons. douknowball.com/cbb-dynasty`}
             />
           </div>
         </div>

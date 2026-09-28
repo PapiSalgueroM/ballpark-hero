@@ -591,9 +591,10 @@ export default function NbaFrontOfficeBoard() {
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Titles <b className="text-gold">{titles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{seasonsPlayed}</b></span>
             {/* Round 647: the number this season recorded, and the career's
-                ledger sum. Read from the ledger so a reload shows the same two. */}
-            <span className="rounded-full border border-border bg-background px-3 py-1.5">This season <b className="text-gold">{seasonRow?.score ?? 0}</b> pts</span>
-            <span className="rounded-full border border-border bg-background px-3 py-1.5">Career <b className="text-primary">{ledgerTotal(ledger)}</b> pts</span>
+                ledger sum. Read from the ledger so a reload shows the same two, and
+                left out on a save from before the ledger, which has no row to show. */}
+            {seasonRow && <span className="rounded-full border border-border bg-background px-3 py-1.5">This season <b className="text-gold">{seasonRow.score}</b> pts</span>}
+            {seasonRow && <span className="rounded-full border border-border bg-background px-3 py-1.5">Career <b className="text-primary">{ledgerTotal(ledger)}</b> pts</span>}
           </div>
           {/* Round 180: zero trust ends the save here instead of a draft. */}
           {fired ? (
@@ -619,8 +620,8 @@ export default function NbaFrontOfficeBoard() {
               <ShareButtons
                 gameName="NBA Front Office"
                 gamePath="/nba-front-office"
-                score={`${seasonRow?.score ?? 0} pts this season, ${titles} titles in ${seasonsPlayed} seasons`}
-                customText={`NBA Front Office 🏀 ${champion === myTeam ? `My ${label(myTeam)} just won it all!` : `${label(champion)} took the title.`} ${seasonRow?.score ?? 0} pts this season, ${titles} banners in ${seasonsPlayed} seasons. douknowball.com/nba-front-office`}
+                score={`${seasonRow ? `${seasonRow.score} pts this season, ` : ''}${titles} titles in ${seasonsPlayed} seasons`}
+                customText={`NBA Front Office 🏀 ${champion === myTeam ? `My ${label(myTeam)} just won it all!` : `${label(champion)} took the title.`} ${seasonRow ? `${seasonRow.score} pts this season, ` : ''}${titles} banners in ${seasonsPlayed} seasons. douknowball.com/nba-front-office`}
               />
             </div>
           )}
