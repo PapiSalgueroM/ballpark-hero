@@ -19,8 +19,12 @@
                   0, and no namesake wins in anyone's place.
      club history every row under one spelling was pooled, so 27 pool players
                   share their spelling with rows of another birth year, and 23
-                  of them carried another man's clubs (Rodri the Real Betis,
-                  Huesca and Cartagena Rodris'; the Sporting Luis Suárez the
+                  of them carried another man's clubs (Rodri the clubs of the
+                  three other men the table calls Rodri, told apart by their
+                  ages and positions: a centre-back born about 1985 at
+                  Barcelona and Almeria, a right midfielder born about 1987 at
+                  Betis, Cartagena and Guadalajara, a left midfielder born
+                  about 1977 at Huesca; the Sporting Luis Suárez the
                   Uruguayan's Liverpool and Barcelona). 1,248 pool pairs lit the
                   Past club link only through such rows. After: 0.
      ages         every age is the table's, not today's. The table keeps a
@@ -57,6 +61,25 @@
         across the two lists the game's own age comparison must agree with it.
         The raw comparison is the baseline.
 
+   Added by the Round 668 fix, from the adversarial review:
+     1 also: no leftover "(dup)" row is offered as a player (on rows, then
+        live on every "(dup)" name the table holds).
+     3 also: Who Am I's age chip reads through ageReading, never a bare tie
+        of ageDiff, and Clue Auction's card goes through clueAge.
+     4 also: the age chip over every ordered pool pair is 'same' (the green
+        check) exactly when both are listed at the same number on the same
+        list. Baseline: the ties across the two lists.
+     5. Clue Auction sells the bracket of the age it reveals. Synthetic cases
+        that cross a bracket edge (the pristine old rule sells another bracket
+        for them) and every pool player: the clue bracket must hold the number
+        on the reveal card. Baseline: the pool players the newest list rule
+        mis-sold.
+     6. Career Ladder keeps the search's namesakes apart. Every Career Ladder
+        answer (career_players) is typed through the pristine search and the
+        ladder's own merge and judge: no man the search offers under that name
+        is folded away, and a pick wins exactly when it is the pool man.
+        Floor: 2 names shared by more than one man (measured 4).
+
    Negative controls. Each asserts its anchor appears EXACTLY once in an in
    memory copy (exit 2 and refuse to run otherwise), rewrites the copy in the
    temp folder, points esbuild at it, and must redden its own section only:
@@ -77,13 +100,29 @@
                                               onto the 2025 ones in memory (a
                                               refresh that broke the yearly rule).
                                               Section 4.
-   A control that turns nothing red, or turns another section red too, exits
-   3, so it can never read as a pass or as the red it was meant to produce.
+   Added by the Round 668 fix, each also naming the finding it must produce:
+     lostpick      the guess lookup hands back a folded key. Section 1 (lost).
+     dupshown      "(dup)" rows are offered again. Section 1.
+     nonote        the note under the guess box is gone. Section 3.
+     nolistname    the age label stops naming the older list. Section 3.
+     pagetie       the chip goes green on any ageDiff tie. Section 3.
+     cardraw       Clue Auction's card prints secret.age. Section 3.
+     samecheck     ageReading calls a cross-list tie 'same'. Section 4.
+     bracketshift  the bracket is sold from the newest list age. Section 5.
+     ladderfold    Career Ladder merges by folded name. Section 6.
+     ladderjudge   Career Ladder judges by folded name. Section 6.
+   A control that turns nothing red, turns another section red too, or turns
+   its section red without the finding it names, exits 3, so it can never
+   read as a pass or as the red it was meant to produce.
 
    Network: the live database, as simWorldXiPositions and simNoZeroFacts read
    it. Identical GET URLs are answered from a memo after the first live fetch.
    If the database cannot be reached the run says
-   DATABASE UNREACHABLE. NOTHING WAS CHECKED. and exits 1.
+   DATABASE UNREACHABLE. NOTHING WAS CHECKED. and exits 1 (2 under a control,
+   so a run that checked nothing never reads as a control firing). A server
+   error or a dropped connection is retried 3 times; a read that still fails
+   makes the run NO VERDICT with the same exit codes, because the search
+   quietly works from part of the data when one of its reads fails.
 
    Run: node scripts/simWhoAmINamesakes.mjs
 */
@@ -144,6 +183,78 @@ const CONTROLS = {
     section: 4, file: null, alias: null, anchor: null, broken: null,
     note: 'the fetched 2026 ages are moved back onto the 2025 ones in memory',
   },
+  /* Added by the Round 668 fix. Each names the finding it must produce
+     (`expect`), so a control proves its own check and not a neighbour's. */
+  lostpick: {
+    section: 1, file: 'src/lib/whoAmI.ts', alias: '@/lib/whoAmI',
+    anchor: 'resolvedCurrentRows.set(person, row ? currentRowFrom(row) : null);',
+    broken: "resolvedCurrentRows.set(person, row ? { ...currentRowFrom(row), personKey: 'nm:' + normalizeName(row.player_name ?? '') } : null);",
+    expect: 'offered but picking them does not win',
+    note: 'the guess lookup hands back a folded key, so the man the search offered cannot win',
+  },
+  dupshown: {
+    section: 1, file: 'src/lib/playerSearch.ts', alias: '@/lib/playerSearch',
+    anchor: 'if (DUP_MARK.test(name)) return null;',
+    broken: '',
+    expect: '"(dup)"',
+    note: 'the search offers leftover "(dup)" rows as players again',
+  },
+  nonote: {
+    section: 3, file: 'src/pages/WhoAmI.tsx', alias: null,
+    anchor: 'Ages are as our player list has them, so a birthday since makes him a bit older.',
+    broken: 'Good luck.',
+    expect: 'no longer tells the player',
+    note: 'the note under the guess box saying ages are as listed is gone',
+  },
+  nolistname: {
+    section: 3, file: 'src/lib/whoAmI.ts', alias: '@/lib/whoAmI',
+    anchor: 'return p.year > 0 && p.year < NEWEST_LIST_YEAR ? `${p.age} (${p.year} list)` : String(p.age);',
+    broken: 'return String(p.age);',
+    expect: 'hide which list it is from',
+    note: 'the age label stops naming the older list',
+  },
+  pagetie: {
+    section: 3, file: 'src/pages/WhoAmI.tsx', alias: null,
+    anchor: "age === 'none' ? 'miss' : age === 'same' ? 'hit' : Math.abs(b.ageDiff) <= 3 ? 'near' : 'miss',",
+    broken: "age === 'none' ? 'miss' : b.ageDiff === 0 ? 'hit' : Math.abs(b.ageDiff) <= 3 ? 'near' : 'miss',",
+    expect: 'green on a tie',
+    note: 'the age chip goes green on any tie again, whatever the two lists say',
+  },
+  cardraw: {
+    section: 3, file: 'src/pages/ClueAuction.tsx', alias: null,
+    anchor: '{clueAge(secret).label}',
+    broken: '{secret.age}',
+    expect: 'ClueAuction.tsx',
+    note: 'the Clue Auction reveal card prints the bare age instead of clueAge',
+  },
+  samecheck: {
+    section: 4, file: 'src/lib/whoAmI.ts', alias: '@/lib/whoAmI',
+    anchor: "return guess.age === secret.age && guess.year === secret.year ? 'same' : 'level';",
+    broken: "return 'same';",
+    expect: 'green check',
+    note: 'the age chip calls a cross-list tie the same listed age',
+  },
+  bracketshift: {
+    section: 5, file: 'src/lib/clueAuction.ts', alias: '@/lib/clueAuction',
+    anchor: 'ageBracket: clueAge(secret).bracket,',
+    broken: 'ageBracket: ageBracket(secret.age + Math.max(0, 2026 - (secret.year || 2026))),',
+    expect: 'sells a bracket that leaves out',
+    note: 'the age bracket is sold from the newest list age again while the card shows the listed one',
+  },
+  ladderfold: {
+    section: 6, file: 'src/lib/careerLadder.ts', alias: '@/lib/careerLadder',
+    anchor: 'const isPoolMan = poolName !== undefined && (!e.disambiguator || storedSpelling(e.rawName) === storedSpelling(poolName));',
+    broken: 'const isPoolMan = poolName !== undefined;',
+    expect: 'folds away',
+    note: 'Career Ladder merges the search rows by folded name again',
+  },
+  ladderjudge: {
+    section: 6, file: 'src/lib/careerLadder.ts', alias: '@/lib/careerLadder',
+    anchor: 'return normalizeName(name) === normalizeName(answer) && poolNames.includes(name);',
+    broken: 'return normalizeName(name) === normalizeName(answer);',
+    expect: 'judge',
+    note: 'Career Ladder judges by folded name alone, so a namesake wins',
+  },
 };
 const CONTROL = process.env.SIM_WHOAMI_NAMESAKES_CONTROL || '';
 if (CONTROL && !CONTROLS[CONTROL]) {
@@ -153,8 +264,9 @@ if (CONTROL && !CONTROLS[CONTROL]) {
 
 let failures = 0;
 let section = 0;
-const bySection = { 1: 0, 2: 0, 3: 0, 4: 0 };
-const fail = m => { failures += 1; bySection[section] += 1; console.error('  FAIL: ' + m); };
+const bySection = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0 };
+const failMessages = [];
+const fail = m => { failures += 1; bySection[section] += 1; failMessages.push({ section, m }); console.error('  FAIL: ' + m); };
 
 /* A worktree may check out CRLF while the anchors are written LF. */
 const readLf = rel => fs.readFileSync(path.join(ROOT, rel), 'utf8').replaceAll('\r\n', '\n');
@@ -202,7 +314,7 @@ const ESBUILD = findBin('esbuild');
 function bundle(tag, extra) {
   const entry = `${TMP}/whoAmINamesakes.${tag}.entry.mjs`;
   const out = `${TMP}/whoAmINamesakes.${tag}.bundle.mjs`;
-  fs.writeFileSync(entry, `export * as w from '@/lib/whoAmI';\nexport * as ps from '@/lib/playerSearch';\n`);
+  fs.writeFileSync(entry, `export * as w from '@/lib/whoAmI';\nexport * as ps from '@/lib/playerSearch';\nexport * as ca from '@/lib/clueAuction';\nexport * as cl from '@/lib/careerLadder';\n`);
   execSync(
     `"${ESBUILD}" "${entry}" --bundle --format=esm --platform=node --outfile="${out}" --log-level=error --alias:@=${ROOT_URL}/src ${extra.join(' ')}`,
     { stdio: 'inherit' },
@@ -218,7 +330,14 @@ const REF = bundle('ref', []);
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 const realFetch = globalThis.fetch;
 const memo = new Map();
-const net = { live: 0, memo: 0, failed: 0, refused: false };
+/* Round 668 fix: a server error (a statement timeout while other lanes load
+   the database) is retried, and one that outlasts the retries is never
+   memoised and makes the run no verdict (see the end). searchPlayers answers
+   from its prominence leg alone when its name leg errors, so a timeout there
+   once read as "typing Kevin offers nobody of that name" and reddened a
+   section no control had touched. */
+const RETRIES = 3;
+const net = { live: 0, memo: 0, failed: 0, refused: false, retried: 0, serverErrors: 0 };
 globalThis.fetch = async (input, init) => {
   const url = typeof input === 'string' ? input : input.url;
   const method = ((init && init.method) || (typeof input !== 'string' && input.method) || 'GET').toUpperCase();
@@ -226,11 +345,29 @@ globalThis.fetch = async (input, init) => {
   if (!memo.has(url)) {
     net.live += 1;
     memo.set(url, (async () => {
-      const r = await realFetch(input, init);
-      const body = await r.text();
-      if (/host not in allowlist/i.test(body)) net.refused = true;
-      const headers = [...r.headers.entries()].filter(([k]) => !/^content-(encoding|length)$/i.test(k));
-      return { status: r.status, statusText: r.statusText, headers, body };
+      for (let attempt = 0; ; attempt++) {
+        let r, body;
+        try {
+          r = await realFetch(input, init);
+          body = await r.text();
+        } catch (err) {
+          /* A dropped connection is retried the same way; only the last
+             attempt's error reaches the caller (and counts as failed). */
+          if (attempt >= RETRIES || (err && err.name === 'AbortError')) throw err;
+          net.retried += 1;
+          await new Promise(res => setTimeout(res, 1500 * (attempt + 1)));
+          continue;
+        }
+        if (r.status >= 500 && attempt < RETRIES) {
+          net.retried += 1;
+          await new Promise(res => setTimeout(res, 1500 * (attempt + 1)));
+          continue;
+        }
+        if (/host not in allowlist/i.test(body)) net.refused = true;
+        if (r.status >= 500) { net.serverErrors += 1; memo.delete(url); }
+        const headers = [...r.headers.entries()].filter(([k]) => !/^content-(encoding|length)$/i.test(k));
+        return { status: r.status, statusText: r.statusText, headers, body };
+      }
     })().catch(err => { net.failed += 1; memo.delete(url); throw err; }));
   } else {
     net.memo += 1;
@@ -239,7 +376,7 @@ globalThis.fetch = async (input, init) => {
   return new Response(c.body, { status: c.status, statusText: c.statusText, headers: c.headers });
 };
 
-const { w, ps } = await import(pathToFileURL(LIB).href);
+const { w, ps, ca, cl } = await import(pathToFileURL(LIB).href);
 const ref = await import(pathToFileURL(REF).href);
 
 const client = readLf('src/integrations/supabase/client.ts');
@@ -260,11 +397,16 @@ async function restAll(query) {
   }
   return out;
 }
+/* Under a control, a run that checked nothing exits 2 (the control could not
+   run), never 1, so a database timeout can never read as the red the control
+   was meant to produce. */
+const nothingCheckedExit = () => process.exit(CONTROL ? 2 : 1);
 const unreachable = why => {
   console.error(`the database could not be reached: ${String(why).slice(0, 160)}`);
   console.error('DATABASE UNREACHABLE. NOTHING WAS CHECKED.');
   console.error('This harness reads the live database, so it can only run where egress to it is open (the desktop lane).');
-  process.exit(1);
+  if (CONTROL) console.error(`control cannot run: ${CONTROL} checked nothing, rerun it`);
+  nothingCheckedExit();
 };
 
 let data;
@@ -276,7 +418,8 @@ try {
 if (!data || net.refused) {
   try { await rest('player_market_values?select=id&limit=1'); } catch (err) { unreachable(err); }
   console.error('  FAIL: the Who Am I pool did not load although the database answers');
-  process.exit(1);
+  if (CONTROL) console.error(`control cannot run: ${CONTROL} checked nothing, rerun it`);
+  nothingCheckedExit();
 }
 const pool = data.pool;
 console.log(`pool ${pool.length} players (${pool.filter(p => p.year === w.NEWEST_LIST_YEAR).length} on the ${w.NEWEST_LIST_YEAR} list), club history for ${data.clubHistory.size}`);
@@ -380,6 +523,32 @@ console.log('\n1) the search tells namesakes apart, and the judge agrees');
      half, rounded up: below it the namesake half of this section would be
      checking almost nothing. */
   if (collided < 2) fail(`only ${collided} pool names are offered as more than one man, too few for this section to be testing namesakes`);
+
+  /* Round 668 fix: a leftover "(dup)" row is never offered as a player. Run
+     on rows first (so the check holds whatever the table still carries), then
+     live on every "(dup)" name the table holds (15 on 2026-09-28, "Pepê (dup)"
+     among them, each the exact twin of a row under the plain name). */
+  const isDup = e => /\(\s*dup\s*\)/i.test(e.rawName ?? e.name ?? '');
+  const pepeRows = [
+    { player_name: 'Pepê', club: 'Grêmio Foot-Ball Porto Alegrense', position: 'Central Midfield', market_value_usd: 3000000, year: 2023, age: 24, person_key: null },
+    { player_name: 'Pepê (dup)', club: 'Grêmio Foot-Ball Porto Alegrense', position: 'Central Midfield', market_value_usd: 3000000, year: 2023, age: 24, person_key: null },
+  ];
+  let dupShown = ps.dedupeAndRank([pepeRows], ps.SOCCER_MARKET_VALUE_SOURCE, ps.normalizeName('pepe'), { limit: 8 }).filter(isDup).length;
+  let dupNames = [];
+  try {
+    dupNames = [...new Set((await restAll('player_market_values?select=player_name&player_name=ilike.*(dup)*&order=id.asc')).map(r => r.player_name))];
+  } catch (err) { unreachable(err); }
+  let firstDup = dupShown ? 'the rows "Pepê" and "Pepê (dup)" give a "(dup)" result' : '';
+  for (const dn of dupNames) {
+    const base = dn.replace(/\s*\(\s*dup\s*\)\s*$/i, '');
+    const res = await ps.searchPlayers({ source: ps.SOCCER_MARKET_VALUE_SOURCE, query: base, minChars: 2, limit: 8 });
+    if (res.error) { fail(`typing "${base}" failed (${res.error}), so its "(dup)" row was not checked`); continue; }
+    const shown = res.results.filter(isDup);
+    dupShown += shown.length;
+    if (shown.length && !firstDup) firstDup = `typing "${base}" offers "${shown[0].rawName}"`;
+  }
+  console.log(`   leftover "(dup)" rows: ${dupNames.length} in the table, ${dupShown} offered as players (pure rows plus a search for each)`);
+  if (dupShown) fail(`${dupShown} "(dup)" rows are offered as players: ${firstDup}`);
 }
 
 /* ------------------------------------------------------------------ */
@@ -440,17 +609,27 @@ section = 3;
 console.log('\n3) ages say what they are');
 {
   const strip = src => src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/[^\n]*/g, '$1');
-  const pages = { 'src/pages/WhoAmI.tsx': 2, 'src/pages/ClueAuction.tsx': 1 };
-  for (const [rel, minCalls] of Object.entries(pages)) {
+  /* Clue Auction's card goes through clueAge (Round 668 fix), which labels
+     with listedAgeLabel and is also where its bracket clue comes from. */
+  const pages = { 'src/pages/WhoAmI.tsx': ['listedAgeLabel(', 2], 'src/pages/ClueAuction.tsx': ['clueAge(', 1] };
+  for (const [rel, [via, minCalls]] of Object.entries(pages)) {
     const code = strip(pageOverride.get(rel) ?? readLf(rel));
     const bare = code.match(/\{\s*[A-Za-z_$][\w$]*(?:\.[\w$]+)*\.age\s*\}|\$\{\s*[A-Za-z_$][\w$]*(?:\.[\w$]+)*\.age\s*\}/g) ?? [];
-    const calls = occurrences(code, 'listedAgeLabel(');
-    console.log(`   ${rel}: ${bare.length} bare age renders, ${calls} listedAgeLabel calls`);
+    const calls = occurrences(code, via);
+    console.log(`   ${rel}: ${bare.length} bare age renders, ${calls} ${via.slice(0, -1)} calls`);
     if (bare.length) fail(`${rel} renders a bare listed age as though it were today's: ${bare.join(', ')}`);
-    if (calls < minCalls) fail(`${rel} calls listedAgeLabel ${calls} times, every age it shows (${minCalls}) must go through it`);
+    if (calls < minCalls) fail(`${rel} calls ${via.slice(0, -1)} ${calls} times, every age it shows (${minCalls}) must go through it`);
   }
   const whoAmI = strip(pageOverride.get('src/pages/WhoAmI.tsx') ?? readLf('src/pages/WhoAmI.tsx'));
   if (!whoAmI.includes('Ages are as our player list has them')) fail('Who Am I no longer tells the player that its ages are as listed');
+  /* Round 668 fix: the age chip's colour, mark and tooltip come from
+     ageReading, never from a bare tie of ageDiff, which is level across two
+     lists whose listed numbers differ by a year. */
+  const tieTests = whoAmI.match(/ageDiff\s*[!=]==?\s*0|0\s*[!=]==?\s*[\w.]*ageDiff|!\s*[\w.]*ageDiff\b/g) ?? [];
+  const readings = occurrences(whoAmI, 'ageReading(');
+  console.log(`   src/pages/WhoAmI.tsx: ${readings} ageReading calls, ${tieTests.length} bare ageDiff ties`);
+  if (tieTests.length) fail(`Who Am I's age chip goes green on a tie of ageDiff (${tieTests.join(', ')}), which is level across lists whose listed ages differ`);
+  if (readings < 1) fail('Who Am I does not read its age chip through ageReading');
 
   let unlabelled = 0, older = 0, firstBad = '';
   for (const p of pool) {
@@ -524,11 +703,134 @@ console.log('\n4) ages compare on one list');
   /* The baseline must exist, or this section compares nothing that can differ. */
   if (olderList.length === 0) fail('no pool player sits on an older list, so the cross-list comparison is untested');
   else if (rawWrong === 0) fail('raw listed ages misread no cross-list pair, so this section is not testing the defect it was written for');
+
+  /* Round 668 fix: what the age chip says (ageReading). Over every ordered
+     pool pair it must be 'same' (the green check) exactly when both are
+     listed at the same number on the same list, 'level' on any other tie,
+     and older or younger by the newest list reading otherwise. The baseline
+     is how many ties cross the two lists, each of which the round's first
+     build marked with a green check and "Same listed age". */
+  let readWrong = 0, crossTies = 0, sameTies = 0, firstRead = '';
+  for (const s of pool) {
+    for (const g of pool) {
+      if (s === g) continue;
+      const got = w.ageReading(g, s, w.scoreGuess(g, s, data.clubHistory).ageDiff);
+      const d = Math.sign(onNewest(s) - onNewest(g));
+      const sameListed = g.age === s.age && g.year === s.year;
+      const want = !(g.age > 0) || !(s.age > 0) ? 'none' : d > 0 ? 'older' : d < 0 ? 'younger' : sameListed ? 'same' : 'level';
+      if (want === 'level') crossTies += 1;
+      if (want === 'same') sameTies += 1;
+      if (got !== want) {
+        readWrong += 1;
+        if (!firstRead) firstRead = `${g.name} (${w.listedAgeLabel(g)}) against ${s.name} (${w.listedAgeLabel(s)}) reads ${got}, should be ${want}`;
+      }
+    }
+  }
+  console.log(`   the age chip over every pool pair: ${sameTies} same listed age, ${crossTies} ties across the two lists (the baseline the first build marked green), ${readWrong} read wrong`);
+  if (readWrong) fail(`${readWrong} pairs get the wrong age chip, a green check on two different listed ages among them: ${firstRead}`);
+  if (crossTies === 0) fail('no pool pair ties across the two lists, so the chip\'s cross-list reading is untested');
 }
 
 /* ------------------------------------------------------------------ */
-console.log(`\nnetwork: ${net.live} live GETs, ${net.memo} answered from the memo, ${net.failed} failed`);
+section = 5;
+console.log('\n5) Clue Auction sells the bracket of the age it reveals');
+{
+  const inBracket = (n, b) => {
+    if (b === 'Under 21') return n <= 20;
+    if (b === '33 or older') return n >= 33;
+    const m = /^(\d+) to (\d+)$/.exec(b ?? '');
+    return !!m && n >= Number(m[1]) && n <= Number(m[2]);
+  };
+  const older = w.NEWEST_LIST_YEAR - 1;
+  const synth = (age, year) => ({ name: `Edge ${age} ${year}`, nationality: 'Italy', position: 'Centre-Forward', club: 'SSC Napoli', value: 30000000, age, year, personKey: `sp:Edge ${age} ${year}` });
+  /* Listed 24, 20, 28 and 32 on the older list sit on a bracket edge, so a
+     year added crosses it (Raspadori was 24 on the 2025 list). The pristine
+     yardstick proves the case crosses: the old rule sells another bracket. */
+  const edges = [synth(24, older), synth(20, older), synth(28, older), synth(32, older), synth(24, w.NEWEST_LIST_YEAR)];
+  const crossing = edges.filter(p => !inBracket(p.age, ref.ca.ageBracket(ref.w.ageOnNewestList(p)))).length;
+  if (crossing === 0) fail('no synthetic case crosses a bracket edge, so this section proves nothing');
+  const display = ca.buildClubDisplayMap(pool);
+  let bad = 0, first = '', poolBase = 0, firstBase = '';
+  for (const p of [...edges, ...pool]) {
+    const shown = ca.clueAge(p);
+    const sold = ca.buildClueReveals(p, data.clubHistory.get(p.personKey), display).ageBracket;
+    const n = Number.parseInt(shown.label, 10);
+    if (!(n > 0) || !inBracket(n, sold)) {
+      bad += 1;
+      if (!first) first = `${p.name}: the card shows "${shown.label}" and the clue sold "${sold}"`;
+    }
+  }
+  for (const p of pool) {
+    if (!inBracket(p.age, ref.ca.ageBracket(ref.w.ageOnNewestList(p)))) {
+      poolBase += 1;
+      if (!firstBase) firstBase = `${p.name} (${w.listedAgeLabel(p)})`;
+    }
+  }
+  console.log(`   ${edges.length} edge cases (${crossing} crossing an edge by the old rule) and ${pool.length} pool players: ${bad} sold a bracket that leaves out the revealed age`);
+  console.log(`   baseline, the bracket from the newest list age (the round's first build): ${poolBase} pool players mis-sold, e.g. ${firstBase || 'none today'}`);
+  if (bad) fail(`${bad} secrets: the clue sells a bracket that leaves out the age the card reveals: ${first}`);
+}
+
+/* ------------------------------------------------------------------ */
+section = 6;
+console.log('\n6) Career Ladder keeps the search\'s namesakes apart');
+{
+  /* The search here is the pristine one (ref): this section tests the
+     ladder's merge and judge, not the search, and a search control must not
+     reach it. */
+  let ladderPool;
+  try {
+    ladderPool = (await restAll('career_players?select=player_name&order=id.asc')).map(r => String(r.player_name ?? '')).filter(n => n.length > 0);
+  } catch (err) { unreachable(err); }
+  const fold = ref.cl.normalizeName;
+  let shared = 0, foldedAway = 0, judgeWrong = 0, lookupFailed = 0;
+  let firstFolded = '', firstJudge = '', firstLookup = '';
+  const sharedNames = [];
+  await eachLimited(ladderPool, 6, async P => {
+    const res = await ref.ps.searchPlayers({ source: ref.ps.SOCCER_MARKET_VALUE_SOURCE, query: P, minChars: 2, limit: 12 });
+    if (res.error) { lookupFailed += 1; if (!firstLookup) firstLookup = `${P}: ${res.error}`; return; }
+    const f = fold(P);
+    const men = new Set(res.results.filter(e => fold(e.name) === f).map(e => e.personKey ?? e.key));
+    const rows = cl.ladderSuggestions(ladderPool, res.results, P, []).filter(s => fold(s.name) === f);
+    if (men.size > 1) {
+      shared += 1;
+      sharedNames.push(`${P} (${men.size} men, ${rows.length} rows)`);
+      if (rows.length < men.size) {
+        foldedAway += 1;
+        if (!firstFolded) firstFolded = `typing "${P}": the search offers ${men.size} men under that name, the ladder ${rows.length} (${rows.map(s => s.name).join(', ')})`;
+      }
+    }
+    /* A pick wins exactly when it is the pool man, and the pool man is offered. */
+    const poolRow = rows.find(s => ladderPool.includes(s.name));
+    const wrongHere = rows.filter(s => cl.ladderGuessWins(s.name, P, ladderPool) !== (s === poolRow)).length + (poolRow ? 0 : 1);
+    if (wrongHere) {
+      judgeWrong += 1;
+      if (!firstJudge) firstJudge = `typing "${P}": ${poolRow ? rows.filter(s => s !== poolRow && cl.ladderGuessWins(s.name, P, ladderPool)).map(s => `${s.name}${s.hint ? ` (${s.hint})` : ''}`).join(', ') + ' wins in his place' : 'the pool man is not offered'}`;
+    }
+  });
+  console.log(`   ${ladderPool.length} Career Ladder answers typed by name: ${shared} are shared by more than one man in the search, ${foldedAway} of those fold a man away, ${judgeWrong} judged wrong, ${lookupFailed} lookups failed`);
+  console.log(`   shared: ${sharedNames.sort().join('; ') || 'none'}`);
+  if (foldedAway) fail(`${foldedAway} Career Ladder names: the suggestion list folds away a man the search offered: ${firstFolded}`);
+  if (judgeWrong) fail(`${judgeWrong} Career Ladder names: the judge lets a namesake win or cannot be won by the pool man: ${firstJudge}`);
+  if (lookupFailed) fail(`${lookupFailed} Career Ladder lookups failed, so those names were not checked: ${firstLookup}`);
+  /* Four of the 253 answers share their folded name with another man in the
+     table (Raúl, Ederson, Pepe, Cafu, 2026-09-28); the search's first 12 hold
+     more than one man for 3 of them (Cafu, Ederson, Pepe; for Raúl they hold
+     one). Floor at 2. */
+  if (shared < 2) fail(`only ${shared} Career Ladder names are shared by more than one man in the search, too few for this section to be testing namesakes`);
+}
+
+/* ------------------------------------------------------------------ */
+console.log(`\nnetwork: ${net.live} live GETs, ${net.memo} answered from the memo, ${net.retried} retried after a server error or a dropped connection, ${net.serverErrors} still a server error and ${net.failed} still failing after ${RETRIES} retries`);
 if (net.refused) unreachable('the proxy refused the database host');
+/* A read that never came back leaves the game code working from part of the
+   data (the search silently drops its name leg), so red or green, the run is
+   no verdict. Rerun it when the database is quieter. */
+if (net.serverErrors || net.failed) {
+  console.error(`\nNO VERDICT: ${net.serverErrors + net.failed} database reads never answered, so the game code ran on part of the data. Rerun.`);
+  if (CONTROL) console.error(`control cannot run: ${CONTROL} ran on part of the data, rerun it`);
+  nothingCheckedExit();
+}
 
 if (CONTROL) {
   const target = CONTROLS[CONTROL].section;
@@ -541,11 +843,16 @@ if (CONTROL) {
     console.error(`\nCONTROL LEAKED: ${CONTROL} also reddened section(s) ${others.join(', ')}, so it does not isolate its own check`);
     process.exit(3);
   }
+  const want = CONTROLS[CONTROL].expect;
+  if (want && !failMessages.some(f => f.section === target && f.m.includes(want))) {
+    console.error(`\nCONTROL MISSED ITS CHECK: section ${target} went red, but no finding says "${want}", so ${CONTROL} did not prove the check it was written for`);
+    process.exit(3);
+  }
   console.log(`\nCONTROL FIRED: section ${target} went red (${bySection[target]} findings) and every other section stayed green`);
   process.exit(1);
 }
 if (failures > 0) {
-  console.error(`\nsimWhoAmINamesakes: ${failures} findings (section 1: ${bySection[1]}, 2: ${bySection[2]}, 3: ${bySection[3]}, 4: ${bySection[4]})`);
+  console.error(`\nsimWhoAmINamesakes: ${failures} findings (${Object.entries(bySection).map(([s, n]) => `section ${s}: ${n}`).join(', ')})`);
   process.exit(1);
 }
-console.log('\nsimWhoAmINamesakes: all green, namesakes apart, the judge and the club history agree, ages say what they are');
+console.log('\nsimWhoAmINamesakes: all green, namesakes apart, the judge and the club history agree, ages say what they are, Clue Auction sells the age it reveals, Career Ladder keeps namesakes apart');

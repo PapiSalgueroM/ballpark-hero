@@ -139,6 +139,7 @@ export * as logic from '@/lib/gameLogic';
 export * as careerFetch from '@/lib/fetchCareerPlayers';
 export * as careerCells from '@/lib/careerBoardCells';
 export * as w from '@/lib/whoAmI';
+export * as nc from '@/data/notCurrentPlayers';
 export { supabase } from '@/integrations/supabase/client';
 `);
 execSync(
@@ -174,7 +175,7 @@ globalThis.fetch = async (input, init) => {
   return new Response(c.body, { status: c.status, statusText: c.statusText, headers: c.headers });
 };
 
-const { footle, logic, careerFetch, careerCells, w, supabase } = await import(pathToFileURL(BUNDLE).href);
+const { footle, logic, careerFetch, careerCells, w, nc, supabase } = await import(pathToFileURL(BUNDLE).href);
 const nothingChecked = () => abort('\nSUPABASE UNREACHABLE. NOTHING WAS CHECKED.');
 
 /* ------------------------------------------------------------------ */
@@ -408,7 +409,10 @@ console.log('3) Who Am I: a player with a current listing resolves to it, never 
      both seasons, and the pool it produces must be the pool the game returned,
      in the same order. The RULE (latest year wins, value breaks a tie, rank by
      value with the name as tiebreak) is imported from whoAmI.ts, not restated:
-     this section supplies rows and compares outputs, nothing more. */
+     this section supplies rows and compares outputs, nothing more. Since
+     Round 667 the rule also leaves out every name on the not current list
+     (src/data/notCurrentPlayers.ts, both pool legs), so the sweep imports
+     that list and applies it to every row, as the pool does. */
   const sweep = new Map();
   for (const year of [2026, 2025]) {
     for (let from = 0; ; from += 1000) {
@@ -421,7 +425,7 @@ console.log('3) Who Am I: a player with a current listing resolves to it, never 
         .order('id', { ascending: true })
         .range(from, from + 999);
       if (error) nothingChecked();
-      for (const r of rows ?? []) w.keepLatest(sweep, w.currentRowFrom(r));
+      for (const r of rows ?? []) { const p = w.currentRowFrom(r); if (!nc.isNotCurrentPlayer(p.name)) w.keepLatest(sweep, p); }
       if (!rows || rows.length < 1000) break;
     }
   }
