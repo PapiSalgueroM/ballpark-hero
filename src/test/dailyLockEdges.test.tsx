@@ -418,12 +418,14 @@ describe('daily lock edges', () => {
       let m = await mountPack();
       try {
         await calls(m, daily, [true]);
+        /* The miss's reveal timer is armed on the fake clock and dropped with
+           it, never run, so this section does not lean on [pack-toggle]'s fix
+           (the toggle cancelling that timer) and its control stays its own. */
         vi.useFakeTimers({ toFake: ['setTimeout', 'clearTimeout'] });
         let unl: PackCard[] = [];
         try {
           await press(m, daily, false);
           unl = await dealUnlimited(m, /^∞ Unlimited$/);
-          await act(async () => { vi.advanceTimersByTime(3000); });
         } finally {
           vi.useRealTimers();
         }
