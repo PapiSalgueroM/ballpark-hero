@@ -1,0 +1,250 @@
+{
+ "about": "NFL Higher or Lower career rushing plus receiving touchdowns, regular season, Round 666. Values come from public.nflfastr_player_stats summed over season_type REG per player_id, read on 2026-09-28. scripts/simHigherLowerFacts.mjs holds the shipped file to this record.",
+ "read": "2026-09-28",
+ "source": "public.nflfastr_player_stats",
+ "note": "Built per player_id, never per display name: grouped by name, nflfastr adds a second Adrian Peterson (a Bears back, 2002 to 2009, 8 touchdowns) onto the famous one and a second Steve Smith (the Giants receiver, 12) onto Steve Smith Sr., and the fence caught both because the file was right. Two other NFL tables (nfl_rb_stats, nfl_wr_te_stats) were rejected as the source because their touchdown columns include playoff games: Emmitt Smith shows 183 there against a regular season 164. nflfastr begins with the 1999 season, so any player whose first season in it is 1999 may have earlier seasons missing and is held from the file rather than corrected, and any player absent from it retired before 1999 and is held from the file too. Those held values are the file's own and are not independently verified here.",
+ "players": {
+  "LaDainian Tomlinson": {
+   "points": 162,
+   "lastSeason": "2011"
+  },
+  "Adrian Peterson": {
+   "points": 126,
+   "lastSeason": "2021"
+  },
+  "Larry Fitzgerald": {
+   "points": 121,
+   "lastSeason": "2020"
+  },
+  "Antonio Gates": {
+   "points": 116,
+   "lastSeason": "2018"
+  },
+  "Shaun Alexander": {
+   "points": 112,
+   "lastSeason": "2008"
+  },
+  "Derrick Henry": {
+   "points": 111,
+   "lastSeason": "2024"
+  },
+  "Mike Evans": {
+   "points": 105,
+   "lastSeason": "2024"
+  },
+  "Davante Adams": {
+   "points": 103,
+   "lastSeason": "2024"
+  },
+  "Frank Gore": {
+   "points": 99,
+   "lastSeason": "2020"
+  },
+  "Marshawn Lynch": {
+   "points": 94,
+   "lastSeason": "2019"
+  },
+  "Rob Gronkowski": {
+   "points": 93,
+   "lastSeason": "2021"
+  },
+  "Jimmy Graham": {
+   "points": 89,
+   "lastSeason": "2023"
+  },
+  "LeSean McCoy": {
+   "points": 89,
+   "lastSeason": "2020"
+  },
+  "Tyreek Hill": {
+   "points": 89,
+   "lastSeason": "2024"
+  },
+  "Ezekiel Elliott": {
+   "points": 88,
+   "lastSeason": "2024"
+  },
+  "Alvin Kamara": {
+   "points": 85,
+   "lastSeason": "2024"
+  },
+  "Calvin Johnson": {
+   "points": 84,
+   "lastSeason": "2015"
+  },
+  "Anquan Boldin": {
+   "points": 83,
+   "lastSeason": "2016"
+  },
+  "Steve Smith Sr.": {
+   "points": 83,
+   "lastSeason": "2016"
+  },
+  "Antonio Brown": {
+   "points": 83,
+   "lastSeason": "2021"
+  },
+  "DeAndre Hopkins": {
+   "points": 83,
+   "lastSeason": "2024"
+  },
+  "Brandon Marshall": {
+   "points": 83,
+   "lastSeason": "2018"
+  },
+  "Reggie Wayne": {
+   "points": 82,
+   "lastSeason": "2014"
+  },
+  "Christian McCaffrey": {
+   "points": 81,
+   "lastSeason": "2024"
+  },
+  "Clinton Portis": {
+   "points": 80,
+   "lastSeason": "2010"
+  },
+  "Todd Gurley": {
+   "points": 79,
+   "lastSeason": "2020"
+  },
+  "Travis Kelce": {
+   "points": 79,
+   "lastSeason": "2024"
+  },
+  "Maurice Jones-Drew": {
+   "points": 79,
+   "lastSeason": "2014"
+  },
+  "Steven Jackson": {
+   "points": 78,
+   "lastSeason": "2015"
+  },
+  "Mark Ingram": {
+   "points": 75,
+   "lastSeason": "2022"
+  },
+  "Dez Bryant": {
+   "points": 75,
+   "lastSeason": "2020"
+  },
+  "Matt Forte": {
+   "points": 75,
+   "lastSeason": "2017"
+  },
+  "Jason Witten": {
+   "points": 74,
+   "lastSeason": "2020"
+  },
+  "Joe Mixon": {
+   "points": 74,
+   "lastSeason": "2024"
+  },
+  "Austin Ekeler": {
+   "points": 73,
+   "lastSeason": "2024"
+  },
+  "Jordy Nelson": {
+   "points": 72,
+   "lastSeason": "2018"
+  },
+  "Marques Colston": {
+   "points": 72,
+   "lastSeason": "2015"
+  },
+  "Thomas Jones": {
+   "points": 71,
+   "lastSeason": "2011"
+  },
+  "Brian Westbrook": {
+   "points": 71,
+   "lastSeason": "2010"
+  },
+  "Stefon Diggs": {
+   "points": 71,
+   "lastSeason": "2024"
+  },
+  "A.J. Green": {
+   "points": 70,
+   "lastSeason": "2022"
+  },
+  "DeAngelo Williams": {
+   "points": 70,
+   "lastSeason": "2016"
+  },
+  "James Conner": {
+   "points": 70,
+   "lastSeason": "2024"
+  },
+  "Willis McGahee": {
+   "points": 70,
+   "lastSeason": "2013"
+  },
+  "Aaron Jones": {
+   "points": 70,
+   "lastSeason": "2024"
+  },
+  "Andre Johnson": {
+   "points": 70,
+   "lastSeason": "2016"
+  },
+  "Melvin Gordon": {
+   "points": 70,
+   "lastSeason": "2023"
+  },
+  "Arian Foster": {
+   "points": 68,
+   "lastSeason": "2016"
+  },
+  "Chad Johnson": {
+   "points": 67,
+   "lastSeason": "2011"
+  },
+  "Michael Turner": {
+   "points": 67,
+   "lastSeason": "2012"
+  },
+  "Keenan Allen": {
+   "points": 66,
+   "lastSeason": "2024"
+  },
+  "Santana Moss": {
+   "points": 66,
+   "lastSeason": "2014"
+  },
+  "Julio Jones": {
+   "points": 66,
+   "lastSeason": "2023"
+  },
+  "Adam Thielen": {
+   "points": 65,
+   "lastSeason": "2024"
+  },
+  "Jamaal Charles": {
+   "points": 64,
+   "lastSeason": "2018"
+  },
+  "Plaxico Burress": {
+   "points": 64,
+   "lastSeason": "2012"
+  },
+  "Chris Johnson": {
+   "points": 64,
+   "lastSeason": "2017"
+  },
+  "Amari Cooper": {
+   "points": 64,
+   "lastSeason": "2024"
+  },
+  "Brandon Jacobs": {
+   "points": 64,
+   "lastSeason": "2013"
+  },
+  "Greg Jennings": {
+   "points": 64,
+   "lastSeason": "2015"
+  }
+ },
+ "heldFromFile": {},
+ "unverified": []
+}
