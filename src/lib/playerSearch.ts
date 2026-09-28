@@ -397,6 +397,8 @@ function buildSelectColumns(source: PlayerSourceConfig): string {
   return [...cols].join(', ');
 }
 
+const DUP_MARK = /\(\s*dup\s*\)/i;
+
 function rowToRaw(row: RawRow, source: PlayerSourceConfig): {
   name: string;
   prominence: number;
@@ -415,6 +417,12 @@ function rowToRaw(row: RawRow, source: PlayerSourceConfig): {
     name = [first, last].filter(Boolean).join(' ');
   }
   if (!name) return null;
+  /* Round 668 fix: a row whose name carries "(dup)" is a leftover copy, never
+     a player. player_market_values holds 15 of them (2023, e.g. "Pepê (dup)"
+     at Gremio), each the exact twin of a row under the plain name, measured
+     2026-09-28. They are never offered, whatever the cleanup migration has or
+     has not removed yet. */
+  if (DUP_MARK.test(name)) return null;
 
   let prominence = source.prominenceColumn ? Number(row[source.prominenceColumn]) || 0 : 0;
   // Some sources rank prominence by an ASCENDING column (e.g. player_id, where
@@ -734,7 +742,7 @@ export const SOCCER_MARKET_VALUE_SOURCE: PlayerSourceConfig = {
      one man typed two ways (Michal and Michał Karbownik, Martin and Martín
      Erlić); each spelling then shows as its own row with its own latest club,
      which is untidy but never wrong, where folding them hid a real player.
-     One spelling shared by several men (three Rodris) stays one row: the
+     One spelling shared by several men (four Rodris) stays one row: the
      table cannot tell them apart and this does not pretend to. */
   identity: { personKeyColumn: 'person_key', bySpelling: true },
 };

@@ -13,6 +13,12 @@
  * is compared against a verbatim copy of the pre-668 one on seeded random row
  * sets, and must agree on every one. Sections 2 to 5 are the new behaviour on
  * the soccer source, which declares person_key and spelling.
+ *
+ * Added by the Round 668 fix: section 6, a row whose name carries "(dup)" is
+ * never offered on any source (the one change to the old results, and the
+ * random row sets of section 1 never hold such a name); section 7, Career
+ * Ladder's suggestion list keeps the search's namesakes apart and its judge
+ * never lets a namesake win.
  */
 import { describe, it, expect } from 'vitest';
 import {
@@ -32,6 +38,7 @@ import {
   type PlayerEntityMeta,
   type PlayerSourceConfig,
 } from '@/lib/playerSearch';
+import { ladderGuessWins, ladderSuggestions } from '@/lib/careerLadder';
 
 type Row = Record<string, unknown>;
 
@@ -236,9 +243,13 @@ describe('1. a source with no identity is deduped exactly as before', () => {
   });
 });
 
-/* The Ederson rows exactly as the live table held them on 2026-09-28 (a
+/* The Ederson rows exactly as the live table held them on 2026-09-28. A
    subset: the keeper's Man City peak and Fenerbahce latest, the midfielder's
-   Atalanta peak and latest, and the older Ederson and Éderson of 2015/2017). */
+   Atalanta peak and latest, and one 2015 Kashiwa Reysol row, a centre-forward
+   (listed at 25 that year) who shares the 'Éderson' spelling with the
+   midfielder. The attacking midfielder who shares the 'Ederson' spelling with
+   the keeper (the table has him at Nice, Lyon, Lazio and Flamengo, 2005 to
+   2017) is not in this subset. */
 const EDERSON_ROWS: Row[] = [
   { player_name: 'Ederson', club: 'Manchester City', position: 'Goalkeeper', nationality: 'Brazil', market_value_usd: 76000000, year: 2019, age: 25, person_key: null },
   { player_name: 'Ederson', club: 'Fenerbahce', position: 'Goalkeeper', nationality: 'Brazil', market_value_usd: 14000000, year: 2026, age: 32, person_key: null },
@@ -343,5 +354,66 @@ describe('5. local names do not double up a split namesake', () => {
     const remote = dedupeAndRank([EDERSON_ROWS], SOCCER_MARKET_VALUE_SOURCE, 'ederson', { limit: 8 });
     const merged = mergeLocalNames(remote, ['Ederson', 'Kylian Mbappé'], 'e');
     expect(merged.map(r => r.name)).toEqual([...remote.map(r => r.name), 'Kylian Mbappé']);
+  });
+});
+
+/* The Pepê rows as the live table held them on 2026-09-28, the '(dup)' copy
+   included (id 156902, the exact twin of the Gremio row beside it). */
+const PEPE_ROWS: Row[] = [
+  { player_name: 'Pepê', club: 'FC Porto', position: 'Right Winger', market_value_usd: 32000000, year: 2024, age: 26, person_key: null },
+  { player_name: 'Pepê', club: 'FC Porto', position: 'Right Winger', market_value_usd: 22000000, year: 2026, age: 28, person_key: null },
+  { player_name: 'Pepê', club: 'Grêmio Foot-Ball Porto Alegrense', position: 'Central Midfield', market_value_usd: 3000000, year: 2023, age: 24, person_key: null },
+  { player_name: 'Pepê (dup)', club: 'Grêmio Foot-Ball Porto Alegrense', position: 'Central Midfield', market_value_usd: 3000000, year: 2023, age: 24, person_key: null },
+  { player_name: 'Pepe', club: 'Real Madrid', position: 'Centre-Back', market_value_usd: 32000000, year: 2012, age: 28, person_key: null },
+];
+
+describe('6. a leftover "(dup)" row is never offered (Round 668 fix)', () => {
+  it('the soccer search offers Pepe and Pepê, never "Pepê (dup)"', () => {
+    const res = dedupeAndRank([PEPE_ROWS], SOCCER_MARKET_VALUE_SOURCE, normalizeName('pepe'), { limit: 8 });
+    expect(res.map(r => r.rawName).sort()).toEqual(['Pepe', 'Pepê']);
+    /* The pre-668 code offered the copy as a player of its own. */
+    const before = legacyDedupe([PEPE_ROWS], SOCCER_MARKET_VALUE_SOURCE, normalizeName('pepe'), { limit: 8 });
+    expect(before.some(r => r.rawName === 'Pepê (dup)')).toBe(true);
+  });
+
+  it('on a source with no identity too, and nothing else about its results moves', () => {
+    const src = { ...SOCCER_MARKET_VALUE_SOURCE, identity: undefined };
+    const now = dedupeAndRank([PEPE_ROWS], src, normalizeName('pepe'), { limit: 8 });
+    const then = legacyDedupe([PEPE_ROWS], src, normalizeName('pepe'), { limit: 8 });
+    expect(now.map(r => r.rawName)).toEqual(then.map(r => r.rawName).filter(n => !n.includes('(dup)')));
+  });
+});
+
+describe('7. Career Ladder keeps the search\'s namesakes apart (Round 668 fix)', () => {
+  const pool = ['Ederson', 'Pavel Nedvěd', 'Kylian Mbappé'];
+  const found = dedupeAndRank([EDERSON_ROWS], SOCCER_MARKET_VALUE_SOURCE, normalizeName('ederson'), { limit: 12 });
+
+  it('offers the pool\'s Ederson and, on its own line, the Atalanta Éderson', () => {
+    const s = ladderSuggestions(pool, found, 'ederson', []);
+    expect(s.map(x => x.name)).toEqual(['Ederson', 'Éderson']);
+    expect(s[0].hint).toBeUndefined();
+    expect(s[1].hint).toBe('Atalanta BC · Central Midfield · 2026');
+    expect(new Set(s.map(x => x.key)).size).toBe(s.length);
+  });
+
+  it('picking the namesake never wins the pool man\'s round; picking the pool man does', () => {
+    expect(ladderGuessWins('Éderson', 'Ederson', pool)).toBe(false);
+    expect(ladderGuessWins('Ederson', 'Ederson', pool)).toBe(true);
+  });
+
+  it('a wrong guess on the namesake does not hide the pool man', () => {
+    expect(ladderSuggestions(pool, found, 'ederson', ['Éderson']).map(x => x.name)).toEqual(['Ederson']);
+  });
+
+  it('one man spelled two ways across two tables stays one row, under the pool\'s spelling', () => {
+    const nedved = dedupeAndRank(
+      [[{ player_name: 'Pavel Nedved', club: 'Juventus', position: 'Attacking Midfield', market_value_usd: 30000000, year: 2004, person_key: null }]],
+      SOCCER_MARKET_VALUE_SOURCE,
+      normalizeName('nedved'),
+      { limit: 12 },
+    );
+    const s = ladderSuggestions(pool, nedved, 'nedved', []);
+    expect(s.map(x => x.name)).toEqual(['Pavel Nedvěd']);
+    expect(ladderGuessWins(s[0].name, 'Pavel Nedvěd', pool)).toBe(true);
   });
 });
