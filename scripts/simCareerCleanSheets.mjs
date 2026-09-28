@@ -27,7 +27,7 @@
    engine with the pro gate put back to the keeper alone (the anchor must be
    present exactly once or it refuses to run), and sections 1 and 2 must fail
    while 3 and 4 stay green. Exit 1 when the control did its job, 2 when it
-   proved nothing.
+   proved nothing or its name is not one this harness knows.
 
    Run: node scripts/simCareerCleanSheets.mjs [careersPerPosition] */
 import { build } from 'esbuild';
@@ -38,7 +38,8 @@ import { pathToFileURL, fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_CLEAN_SHEETS_CONTROL || '';
-if (CONTROL && CONTROL !== 'gkonly') { console.error('unknown control ' + CONTROL + ' (known: gkonly)'); process.exit(1); }
+/* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
+if (CONTROL && CONTROL !== 'gkonly') { console.error('unknown control ' + CONTROL + ' (known: gkonly)'); process.exit(2); }
 const TMP = process.env.TEMP || process.env.TMP || os.tmpdir();
 const OUT = path.join(TMP, `sc-cleansheets-${process.pid}.mjs`);
 const ENTRY = path.join(TMP, `sc-cleansheets-entry-${process.pid}.mjs`);

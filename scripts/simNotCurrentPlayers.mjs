@@ -28,7 +28,8 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_NOT_CURRENT_CONTROL || '';
 const EXPECT = { carriedleg: [2], unfold: [3] };
-if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(1); }
+/* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
+if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(2); }
 const TMP = process.env.TEMP || process.env.TMP || ROOT;
 const code = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
 function rewrite(src, anchor, replacement, why) {
