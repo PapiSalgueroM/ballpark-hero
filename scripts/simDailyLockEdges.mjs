@@ -125,6 +125,17 @@ const count = (hay, needle) => hay.split(needle).length - 1;
    rewritten to the file's own folder, since the copy lives elsewhere. */
 const NASCAR_HOOK = { module: '@/hooks/useNascarChain', file: 'src/hooks/useNascarChain.ts' };
 const TENNIS_HOOK = { module: '@/hooks/useTennisChain', file: 'src/hooks/useTennisChain.ts' };
+/* Round 645 part one's recorder spends a stale restore mark itself when a
+   finish it already tracked comes back on screen (the same cut as
+   simRankedRecorder's stalemark control). Since the points economy merge that
+   is a second guard against the failure [pack-mark] and [rarity-mark] watch,
+   so taking out the page's own guard alone changes nothing a player sees. The
+   two controls take out both guards; each section still has to go red on
+   the failure shape and every other section has to stay green. */
+const HOOK_STALE_MARK = {
+  module: '@/hooks/useGameCompletion', file: 'src/hooks/useGameCompletion.ts',
+  cuts: [['      consumeRestoredFinish(gameSlug);\n      return;\n    }\n    trackedRef.current = true;', '      return;\n    }\n    trackedRef.current = true;']],
+};
 const CONTROLS = [
   {
     name: 'giveup-shut', red: 'giveup-shut',
@@ -175,13 +186,13 @@ const CONTROLS = [
   },
   {
     name: 'pack-mark', red: 'pack-mark',
-    what: 'Pack Battle marks every finished daily it reopens',
-    swaps: [{ module: '@/pages/PackBattle', file: 'src/pages/PackBattle.tsx', cuts: [["      if (phaseRef.current !== 'done') markRestoredFinish(SLUG);\n", '      markRestoredFinish(SLUG);\n']] }],
+    what: 'Pack Battle marks every finished daily it reopens, and the recorder keeps the stale mark',
+    swaps: [{ module: '@/pages/PackBattle', file: 'src/pages/PackBattle.tsx', cuts: [["      if (phaseRef.current !== 'done') markRestoredFinish(SLUG);\n", '      markRestoredFinish(SLUG);\n']] }, HOOK_STALE_MARK],
   },
   {
     name: 'rarity-mark', red: 'rarity-mark',
-    what: 'Rarity Round marks every finished daily it reopens',
-    swaps: [{ module: '@/pages/RarityRound', file: 'src/pages/RarityRound.tsx', cuts: [["          if (phaseRef.current !== 'done') markRestoredFinish(SLUG);\n", '          markRestoredFinish(SLUG);\n']] }],
+    what: 'Rarity Round marks every finished daily it reopens, and the recorder keeps the stale mark',
+    swaps: [{ module: '@/pages/RarityRound', file: 'src/pages/RarityRound.tsx', cuts: [["          if (phaseRef.current !== 'done') markRestoredFinish(SLUG);\n", '          markRestoredFinish(SLUG);\n']] }, HOOK_STALE_MARK],
   },
   {
     name: 'rarity-derive', red: 'rarity-derive',

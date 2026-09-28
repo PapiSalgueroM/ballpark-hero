@@ -38,6 +38,7 @@ vi.mock('@/integrations/supabase/client', () => ({
 
 import { recordCompletion, recordUnrankedPlay, getLocalTodayCount } from '@/lib/completions';
 import { getStreakState } from '@/lib/streaks';
+import { resetScoreCapsForTests } from '@/lib/scoreCaps';
 
 const flush = () => new Promise(resolve => setTimeout(resolve, 0));
 
@@ -91,6 +92,12 @@ describe('recordUnrankedPlay, the real lib', () => {
   });
 
   it('a ranked finish still reaches the session, the scored row and the today set', async () => {
+    /* Round 648: the browser's tally credits a play at its game's cap, and a
+       browser with no copy of the caps holds the play until a read lands
+       (src/lib/scoreCaps.ts). This client stub answers no caps read, so the
+       browser is given its copy first; a 7 is under any Free Kick cap. */
+    resetScoreCapsForTests();
+    localStorage.setItem('dukb-score-caps-v2', JSON.stringify({ caps: { 'free-kick': 3045 }, fetchedAt: Date.now() }));
     recordCompletion('/free-kick', 7, 'Tester', 3);
     await flush();
     expect(S.inserts).toHaveLength(1);
