@@ -133,6 +133,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
+import { seasonPlayer } from './lib/seasonLedgerPlay.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ZERO_SHARE_LIMIT = 0.05;
@@ -417,6 +418,14 @@ export * as millionaire from '@/lib/sportsMillionaire';
 export * as statLine from '@/lib/nbaStatLine';
 export * as stock from '@/lib/playerStockMarket';
 export * as rarity from '@/lib/rarityRound';
+export * as foNfl from '@/lib/frontOffice';
+export * as foNba from '@/lib/nbaFrontOffice';
+export * as foMlb from '@/lib/mlbFrontOffice';
+export * as foNhl from '@/lib/nhlFrontOffice';
+export * as dynCfb from '@/lib/cfbDynasty';
+export * as dynCbb from '@/lib/cbbDynasty';
+export * as seasonLedger from '@/lib/seasonLedger';
+export * as seasonFormats from '@/lib/seasonFormats';
 export { DAILY_ROUNDS as CHAMP_ROUNDS } from '@/lib/champOrNot';
 export { POINTS_BY_CLUE as CBB_CLUES } from '@/types/cbbProgram';
 export { POINTS_BY_CLUE as F1C_CLUES } from '@/types/f1Constructor';
@@ -1100,21 +1109,35 @@ for (const [key, file] of [
   });
 }
 
-/* The front offices and dynasties record only a title (Round 647 is their
-   per season ledger); zero skill wins nothing and never records. */
-for (const [key, file, flag] of [
-  ['front-office', 'src/components/front-office/FrontOfficeBoard.tsx', 'wonTitleNow'],
-  ['mlb-front-office', 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'wonNow'],
-  ['nba-front-office', 'src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'wonNow'],
-  ['nhl-front-office', 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', 'wonNow'],
-  ['cbb-dynasty', 'src/components/cbb-dynasty/CbbDynastyBoard.tsx', 'wonNow'],
-  ['cfb-dynasty', 'src/components/cfb-dynasty/CfbDynastyBoard.tsx', 'wonNow'],
+/* The front offices and dynasties record every closed season's ledger row
+   (Round 647, src/lib/seasonLedger.ts), scored only past the bar its own
+   projection set. The zero skill run is a season nobody touches, played
+   through the real engines the way the board plays it
+   (scripts/lib/seasonLedgerPlay.mjs): the draft's first name at every pick
+   in a front office, where the draft cannot be skipped, and nothing else; a
+   dynasty signs nobody. The perfect run is the ledger's own ceiling. */
+let seasonPlay = null;
+const idleSeasons = sport => {
+  seasonPlay ??= seasonPlayer({
+    nfl: L.foNfl, nba: L.foNba, mlb: L.foMlb, nhl: L.foNhl, cfb: L.dynCfb, cbb: L.dynCbb, L: L.seasonLedger, F: L.seasonFormats,
+  });
+  /* 400 seasons a sport: an idle season scores about one year in twenty,
+     so fewer leave the mean a coin toss against the 5 percent line. */
+  return range(100).flatMap(i => seasonPlay.career(sport, 645 + i, 'idle', 4)).map(r => ({ closedRow: { score: r.score } }));
+};
+for (const [key, file, sport, closes] of [
+  ['front-office', 'src/components/front-office/FrontOfficeBoard.tsx', 'nfl', 'closed'],
+  ['mlb-front-office', 'src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'mlb', 'closed'],
+  ['nba-front-office', 'src/components/nba-front-office/NbaFrontOfficeBoard.tsx', 'nba', 'closed'],
+  ['nhl-front-office', 'src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', 'nhl', 'closed'],
+  ['cbb-dynasty', 'src/components/cbb-dynasty/CbbDynastyBoard.tsx', 'cbb', 'ledgered'],
+  ['cfb-dynasty', 'src/components/cfb-dynasty/CfbDynastyBoard.tsx', 'cfb', 'ledgered'],
 ]) {
   row(key, {
     site: [file],
-    zero: () => ({ titles: 0, seasonsPlayed: 0, st: { myTitles: 0, seasonsPlayed: 0 }, recorded: false }),
-    perfect: null,
-    gatedZero: [file, new RegExp(`useGameCompletion\\('${key}', ${flag},`), 'records only a title season'],
+    zero: () => idleSeasons(sport),
+    perfect: () => ({ closedRow: { score: L.seasonLedger.seasonCeiling() } }),
+    requires: [[file, new RegExp(`setClosedRow\\(${closes}\\.row\\)`), 'records the row the season ledger closed']],
   });
 }
 
