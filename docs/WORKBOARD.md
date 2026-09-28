@@ -2,7 +2,7 @@
 
 **Round 669 CLAIMED AND BUILT, branch `r669-worldxi-dm`, pushed, not on main.** World XI knows its
 defensive midfielders again: the "Defensive Midfield" bucket of `player_market_values` is empty for
-2023 to 2025, so Ugarte, Amrabat, Endo, Tyler Adams and PSG's Vitinha are not in the pool. 399 rows
+2023 to 2025, so Ugarte, Amrabat, Endo, Tyler Adams and PSG's Vitinha are not in the pool. 398 rows
 two sourced (Transfermarkt and FotMob) in `scripts/data/defensiveMidfield2026.json`, written as the
 **UNAPPLIED** fail closed migration `supabase/migrations/20260928_round_669_defensive_midfield_2026.sql`
 (plus four club corrections among the existing 46). **Apply it before merging**:

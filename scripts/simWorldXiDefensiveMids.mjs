@@ -24,9 +24,10 @@
  *      migration: 0 of the named are there.
  *   3. They fit the slots Round 319's rules give them: every staged row found in
  *      the pool is a CDM and fits every CDM and every CM slot in every formation.
- *   4. Namesakes stay two people: Paris Saint-Germain's Vitinha and Genoa's, and
- *      Newcastle's Nico González and Juventus', are all in the pool, and a search
- *      for "vitinha" in Portugal's slot offers both.
+ *   4. Namesakes stay two people: Paris Saint-Germain's Vitinha and Genoa's are
+ *      both in the pool, and a search for "vitinha" in Portugal's slot offers
+ *      both. (He is the one namesake the migration writes; the record holds the
+ *      others, because most games outside World XI keep one player per name.)
  *
  * MODES. By default it reads the live pool, so it is RED until the migration is
  * applied: that is the point of it. WXIDM_PROJECT=1 measures the migration
@@ -141,7 +142,6 @@ const NAMED = [
 ];
 const NAMESAKES = [
   ['Vitinha', 'Paris Saint-Germain', 'Genoa CFC', 'Portugal'],
-  ['Nico González', 'Newcastle United', 'Juventus FC', null],
 ];
 
 /* ---- inputs, read once, mutated only in memory by a control ---- */

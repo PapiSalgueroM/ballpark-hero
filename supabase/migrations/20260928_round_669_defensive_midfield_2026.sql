@@ -13,7 +13,7 @@
 --
 -- What this writes, all of it recorded row by row with both sources in
 -- scripts/data/defensiveMidfield2026.json:
---   1. 399 year-2026 "Defensive Midfield" rows. The population is Transfermarkt's
+--   1. 398 year-2026 "Defensive Midfield" rows. The population is Transfermarkt's
 --      most valuable players at that main position (the top 500, EUR 140m down to
 --      EUR 2m, read 2026-09-28), minus the men the 2026 snapshot already carries
 --      and minus every row the two hosts (Transfermarkt and FotMob) did not agree
@@ -23,8 +23,8 @@
 --      different club today than the row does.
 --
 -- Keyed so a row cannot duplicate a person already present: no new row may share
--- a folded name with ANY existing 2026 row, except the two namesakes declared
--- here (Vitinha, Nico González), whose existing 2026 row must be exactly the
+-- a folded name with ANY existing 2026 row, except the namesake declared here
+-- (Vitinha of Paris Saint-Germain), whose existing 2026 row must be exactly the
 -- other man (club and position as declared) and whose new club must not already
 -- carry that name. Running it twice fails on the first check.
 
@@ -49,7 +49,6 @@ insert into r669_dm (player_name, club, nationality, age, market_value_usd, name
   ('Angelo Stiller', 'VfB Stuttgart', 'Germany', 25, 48600000, null, null),
   ('James Garner', 'Everton FC', 'England', 25, 48600000, null, null),
   ('Morten Hjulmand', 'Atlético de Madrid', 'Denmark', 27, 48600000, null, null),
-  ('Nico González', 'Newcastle United', 'Spain', 24, 43200000, 'Juventus FC', 'Left Winger'),
   ('Máximo Perrone', 'Como 1907', 'Argentina', 23, 37800000, null, null),
   ('Alan Varela', 'FC Porto', 'Argentina', 25, 34560000, null, null),
   ('Aleksandar Stanković', 'Inter Milan', 'Serbia', 21, 34560000, null, null),
@@ -464,7 +463,7 @@ declare
   bad text;
 begin
   select count(*) into n from r669_dm;
-  if n <> 399 then raise exception 'Round 669: expected 399 staged rows, staged %', n; end if;
+  if n <> 398 then raise exception 'Round 669: expected 398 staged rows, staged %', n; end if;
 
   select dm_2026 into n from r669_before;
   if n <> 46 then raise exception 'Round 669: expected the 46 checked Defensive Midfield rows in 2026 before, found %', n; end if;
@@ -524,10 +523,10 @@ begin
   select * into b from r669_before;
 
   select count(*) into n from public.player_market_values where year = 2026 and position = 'Defensive Midfield';
-  if n <> 46 + 399 then raise exception 'Round 669: expected % Defensive Midfield rows in 2026 after, found %', 46 + 399, n; end if;
+  if n <> 46 + 398 then raise exception 'Round 669: expected % Defensive Midfield rows in 2026 after, found %', 46 + 398, n; end if;
 
   select count(*) into n from public.player_market_values where year = 2026;
-  if n <> b.total_2026 + 399 then raise exception 'Round 669: expected % rows in 2026 after, found %', b.total_2026 + 399, n; end if;
+  if n <> b.total_2026 + 398 then raise exception 'Round 669: expected % rows in 2026 after, found %', b.total_2026 + 398, n; end if;
 
   -- every staged row landed exactly once, with its own values
   select count(*) into n from r669_dm d
