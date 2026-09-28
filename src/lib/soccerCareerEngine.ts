@@ -3635,7 +3635,12 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
   // Diving reputation: +2 goals from penalties
   if (state.divingActive && !isGK) goals += 2;
   const assists = calcAssists(position, apps, overall, fx.assistMult);
-  const cleanSheets = isGK ? clamp(Math.round(apps * rand(20, 45) / 100 * fx.cleanSheetMult), 0, apps) : 0;
+  /* A clean sheet belongs to the whole back line, not the keeper alone. This
+     was gated on GK, so a defender's Clean Sheets tile read 0 for an entire
+     career (a player reported it on 2026-09-23). The back line now draws the
+     same share of the team's shutouts as the keeper does. */
+  const keepsSheets = isGK || position === "CB" || position === "LB" || position === "RB";
+  const cleanSheets = keepsSheets ? clamp(Math.round(apps * rand(20, 45) / 100 * fx.cleanSheetMult), 0, apps) : 0;
   const yellowCards = rand(0, Math.min(8, Math.round(apps * 0.25)));
   const redCards = Math.random() < 0.08 ? 1 : 0;
   const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier, fx.ratingDelta);
@@ -4273,7 +4278,7 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
   s.seasons = [...s.seasons, {
     year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
     apps: rand(10, 25), goals: s.position === "GK" ? 0 : rand(0, 8), assists: rand(0, 5),
-    cleanSheets: s.position === "GK" ? rand(2, 8) : 0, yellowCards: rand(0, 4), redCards: 0, rating: 0,
+    cleanSheets: (s.position === "GK" || s.position === "CB" || s.position === "LB" || s.position === "RB") ? rand(2, 8) : 0, yellowCards: rand(0, 4), redCards: 0, rating: 0,
     leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "youth",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   }];
@@ -5449,7 +5454,7 @@ export function dismissNewspaper(prev: CareerState): CareerState {
 }
 
 /* ─── All 24 Random Events ─── */
-function getAllEvents(state: CareerState): RandomEvent[] {
+export function getAllEvents(state: CareerState): RandomEvent[] {
   const pos = state.position;
   const isAttacker = ["ST","CAM","LW","RW"].includes(pos);
   return [
@@ -6658,7 +6663,24 @@ export function retireFromInternational(prev: CareerState): CareerState {
 export function applyEventChoice(prev: CareerState, choiceIndex: number, clubs: ClubData[]): CareerState {
   const event = prev.pendingEvents[0];
   if (!event) return prev;
-  let s = event.choices[choiceIndex].apply({ ...prev });
+  /* Round 667. The page saves the career with JSON.stringify on every change
+     and a choice's apply is a function, which JSON drops without a word. A
+     save written while an event card was on screen came back with choices
+     that held only their label, the card drew as normal, and the tap on a
+     choice threw a TypeError in the click handler: the page painted "This
+     page broke" and the advance buttons were dead (a player reported it on
+     2026-09-25). The choice is resolved from the catalog by the event's id
+     first, and an event the catalog no longer carries is skipped rather than
+     crashed on. */
+  const fromCatalog = getAllEvents(prev).find(e => e.id === event.id);
+  const choice = fromCatalog?.choices[choiceIndex] ?? event.choices[choiceIndex];
+  if (typeof choice?.apply !== "function") {
+    const skipped: CareerState = { ...prev, lastEventId: event.id, pendingEvents: prev.pendingEvents.slice(1) };
+    if (skipped.pendingEvents.length > 0) { skipped.phase = "random_events"; return skipped; }
+    enterTransferWindow(skipped, clubs);
+    return skipped;
+  }
+  let s = choice.apply({ ...prev });
   s.lastEventId = event.id;
   s.pendingEvents = s.pendingEvents.slice(1);
   s.overall = calcOverall(s, s.position);

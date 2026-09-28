@@ -68,4 +68,52 @@ export function watchForNewBuild(): void {
     if (document.visibilityState === 'visible') void check();
   });
   window.addEventListener('focus', () => void check());
+  reloadOnStaleChunk();
+}
+
+/* ─── Round 667: a stale lazy chunk reloads the page, once, instead of breaking it ───
+   The focus check above only runs when a tab comes BACK. A tab that stays open
+   across a deploy keeps its old entry bundle, and the first time that bundle
+   asks for a lazily loaded chunk (Club Manager's tactics and board panels,
+   every route level page) the old hashed filename is gone from the host, the
+   import rejects, React throws, and RouteErrorBoundary paints "This page
+   broke" with "Back to the games" as its first button. Two players reported
+   exactly that in the days after the 2026-09-22 deploy: one that changing a
+   tactic in Club Manager "sends me to the home screen", one that Soccer
+   Career "says it broke and the advance buttons stop working". Nothing in
+   either game navigates home; the boundary does.
+
+   Vite fires vite:preloadError on the window when a dynamic import fails.
+   Cancelling the event stops the throw, and one reload picks up the new
+   index.html and its chunks. The same loop guard as check(): at most one
+   reload per tab for this reason, ever, so a host that is genuinely down
+   shows the boundary on the second failure rather than spinning. */
+const STALE_KEY = 'dukb-reloaded-stale-chunk';
+
+export function isStaleChunkError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : typeof err === 'string' ? err : '';
+  return /Failed to fetch dynamically imported module|Importing a module script failed|error loading dynamically imported module|Unable to preload CSS/i.test(msg);
+}
+
+/** True when this call performed the reload, so a caller can stop rendering. */
+export function reloadOnceForStaleChunk(): boolean {
+  /* Never under the prerenderer. It hands every route the built bundle, so a
+     chunk cannot be stale there, and a reload mid capture would leave it
+     waiting on a document that was just replaced. The flag is the one the
+     404 marker in index.html already honours. */
+  if ((window as unknown as { __DUKB_PRERENDER__?: boolean }).__DUKB_PRERENDER__) return false;
+  try {
+    if (sessionStorage.getItem(STALE_KEY) === '1') return false;
+    sessionStorage.setItem(STALE_KEY, '1');
+  } catch {
+    return false;
+  }
+  window.location.reload();
+  return true;
+}
+
+function reloadOnStaleChunk(): void {
+  window.addEventListener('vite:preloadError', (event: Event) => {
+    if (reloadOnceForStaleChunk()) event.preventDefault();
+  });
 }

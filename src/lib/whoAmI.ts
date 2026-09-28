@@ -2,6 +2,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import { personKeyOf, SOCCER_MARKET_VALUE_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { foldSpecialLatin } from '@/lib/nameFold';
+import { isNotCurrentPlayer } from '@/data/notCurrentPlayers';
 
 /**
  * Who Am I? (a secret-footballer game: each guess tells you how warm you are)
@@ -743,7 +744,10 @@ export async function fetchWhoAmIPool(): Promise<WhoAmIData | null> {
     if (latest.error) return null;
 
     const byKey = new Map<string, WhoAmIPlayer>();
-    for (const r of latest.data) keepLatest(byKey, currentRowFrom(r));
+    /* Round 667: a name on the not current list is never a secret, in either
+       leg below. See src/data/notCurrentPlayers.ts for why the carried leg is
+       the one that let Diogo Jota through. */
+    for (const r of latest.data) { const p = currentRowFrom(r); if (!isNotCurrentPlayer(p.name)) keepLatest(byKey, p); }
 
     const ranked = [...byKey.values()].sort(byCurrentValue);
     const cut = ranked.length >= POOL_SIZE ? ranked[POOL_SIZE - 1].value : 0;
@@ -767,7 +771,7 @@ export async function fetchWhoAmIPool(): Promise<WhoAmIData | null> {
     const candidates = new Map<string, WhoAmIPlayer>();
     for (const r of carried.data) {
       const p = currentRowFrom(r);
-      if (!p.name || p.value <= 0 || byKey.has(p.personKey)) continue;
+      if (!p.name || p.value <= 0 || byKey.has(p.personKey) || isNotCurrentPlayer(p.name)) continue;
       keepLatest(candidates, p);
     }
     if (candidates.size > 0) {

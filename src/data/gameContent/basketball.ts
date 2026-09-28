@@ -224,7 +224,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "What an 85 overall team usually wins",
         items: [
-          "An 85 overall team averages around 58 wins. A real shot at perfection starts in the mid 90s.",
+          "An 85 overall team averages around 58 wins. A 95 goes 82-0 about one run in 600 and a 99 about one in five, and the wheel almost never deals a 95, so most drafts land in the mid 80s where 82-0 does not happen. The chase is the win total, not perfection.",
         ],
       },
     ],

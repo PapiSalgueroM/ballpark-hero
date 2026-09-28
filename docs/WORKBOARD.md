@@ -10,6 +10,102 @@ rows, after 0; 1,570 cross-list pairs misread age by the raw listed number, afte
 note:** it edits the same pool lines in `src/lib/whoAmI.ts` as r667's not-current list (`isNotCurrentPlayer`
 on both legs); keep both, the carried leg reads `byKey.has(p.personKey) || isNotCurrentPlayer(p.name)`.
 
+**2026-09-28 morning, desktop Claude lane: CLAIMS, so nobody builds these twice.**
+- **Release E** (662 to 667) passed `build:seo` in the gate clone (169 routes, 0 failed) and its full
+  node and browser suite is running. It ships when that is green.
+- **Round 668 CLAIMED**, branch `r668-whoami-namesakes`: Who Am I tells namesakes apart by person_key and
+  says how old its ages are.
+- **Round 669 CLAIMED**, branch `r669-worldxi-dm`: the Defensive Midfield bucket, two sources per row, in
+  the Round 344 shape. Migration written, applied by the lead after review.
+- **Round 670 CLAIMED**, branch `r670-cm-extra-time`: Club Manager plays extra time before penalties
+  (part B of the stoppage time contract). **Round 671 is reserved** for part A (stoppage time goals and
+  the aggregate line on a second leg).
+- **645a, 645b, 645c, 646, 647** are being rebuilt on their existing branch names, and 648 is getting
+  the review it never had. **660** is down to its sourcing sections (1 and 8); **661** gets its fence once
+  the Hall of Fame, Guess the Year and Score Predictor records land.
+- The next free number for anyone else is **672**.
+
+**2026-09-28 late, desktop Claude lane: Round 667 parts one to three on `r667-player-reports`, and what the
+agent fleet found before the session limit cut it.** Round 667 answers the player reports of 2026-09-21
+to 27 (fences: simCareerCleanSheets, simStaleChunk, simNotCurrentPlayers, and the vitest
+src/test/eventChoiceAfterReload.test.ts):
+- Soccer Career "the page says it broke and the advance buttons stop working" (2026-09-25) was a real
+  crash: applyEventChoice called .apply() on the event object FROM THE SAVE, and JSON.stringify drops a
+  function without a word, so any save written while an event card was on screen came back with choices
+  that threw on tap. The choice now resolves from the catalog by the event's id; an unknown event is
+  skipped, not thrown on.
+- Who Am I "Wrong answer" (2026-09-26) could not be tied to a puzzle (the secret is Math.random, not the
+  date) but the pool audit found that **Diogo Jota was being dealt as a live Liverpool player with an
+  age and a price**, because the carried 2025 leg admits anyone with no 2026 row. Round 542 had removed
+  him from Club Manager as a bake time assertion nobody else could read. `src/data/notCurrentPlayers.ts`
+  is now the one list, applied on both pool legs (Clue Auction shares the fetch).
+- Defenders keep clean sheets (the season line was gated on GK), the 82-0 guide states the measured
+  odds, a stale lazy chunk after a deploy reloads once instead of painting the broken page, and
+  Alisson's Internacional 2015 and 2016 are in the baked pool with the migration WRITTEN BUT NOT APPLIED.
+
+**Owed from the same audit, none started, in the order they hurt:**
+- **Who Am I namesakes and stale ages (Round 668 candidate).** playerSearch dedupes by normalized name
+  and keeps the highest prominence row, so the Atalanta Éderson can never be guessed: typing his name
+  offers only the Fenerbahce keeper and scores him 40. fetchClubHistory pools every row under one
+  spelling regardless of age, so "Rodri" carries three men's clubs and the Past club link chip can light
+  for a guess who never shared a club. Every age in the pool is the autumn 2025 snapshot's, a year low
+  for anyone whose birthday has passed.
+- **World XI refuses real defensive midfielders (Round 669 candidate).** The market scrape has had no
+  Defensive Midfield bucket since 2023 (0 rows in 2023 to 2025, 46 hand typed rows in 2026), so Ugarte,
+  Amrabat, Endo, Adams and dozens more return "Nobody from X matches that" for a CDM or CM slot, and
+  PSG's Vitinha surfaces as Genoa's centre forward. Restore the bucket in the Round 344 shape (two
+  sources per row). The 2026-09-21 report is almost certainly this.
+- **Club Manager has no extra time at all**: a level knockout, single leg or second leg, goes straight
+  to penalties while the copy says "after extra time". Found by the stoppage-time design contract.
+- **Points rounds.** 648 (profile total clamps at the cap) is BUILT on `r648-profile-clamp` with a
+  written, unapplied migration and NO adversarial review yet. 645a, 645b, 645c, 646 and 647 died at the
+  session limit before a commit; their branches exist with nothing on them. Resume the workflow
+  `points-rounds-645-648` (run wf_16c18036-56a) to rebuild them; 648 replays from cache.
+- **660 and 661 verification** wrote F1 findings to disk (verify660/): drivers 20 wrong of 120 clues,
+  constructors 11 wrong of 187, pool 4 wrong of 41, only drivers a and d refuted so far; olympics, HOF,
+  guess-the-year and score-predictor slices died and are re-running.
+- **Player idea contracts** (workflow wf_c43b539a-f84, full text in its journal), effort as estimated:
+  - ucl-aggregate (show the tie score on the second leg): Partly live, and the half that is missing is the half the player asked for: shipped already=False, effort about 9 h. 1. Counting leg 2 twice at full time. At stage done the career already carries leg 2 on the tie, so a builder who derives the line from career at that stage sho
+  - penalty-takers (pick all eleven takers): Not live: shipped already=False, effort about 24 h. (1) The shootout now draws ten or more random numbers where it drew one, so every seeded harness that runs past a knockout shootout gets a new sample; Round 505
+  - request-transfer (ask to join a club): Not live: shipped already=False, effort about 26 h. (1) The mid-season transplant is the bulk of the round and the calendar alignment is the trap: the league round index, the cup round and the UCL matchday are th
+  - stoppage-time (goals in added time, extra time in knockouts): Not live: shipped already=False, effort about 28 h. Balance: the added stretch adds about 8 percent more goals in the manager's own matches if the deflator is wrong or omitted; section 3 is the guard and its tole
+  - gk-training (keeper drills in Soccer Career): Not live: shipped already=False, effort about 30 h. 1. Tuning. Angles is a geometric trade (come out to shrink the goal, but a closer shot gives less dive time and past the chip depth you are lobbed); the first c
+
+
+**2026-09-28 night, desktop Claude lane, USAGE LIMIT HIT MID-ROUND. Read this before anything else.**
+Round 667 (the player reports) is on `r667-player-reports`, pushed. Done and fenced: defenders keep
+clean sheets (BUT `simCareerCleanSheets` IS RED: its walk stops after the first pro season, 24 seasons over 24 careers, so section 1 fails on the driver, not the fix; drive the post-summary phases the way simCareerEngaged does before merging, or runAllSims goes red), the 82-0 guide tells the true odds, and a tab left open across a
+deploy reloads once on a stale lazy chunk instead of painting "This page broke" (`simStaleChunk`),
+which is the most likely cause of both crash reports (Club Manager "sends me home when I change
+tactic", Soccer Career "says it broke"). Alisson's Internacional 2015 and 2016 are in the baked pool AND
+in `supabase/migrations/20260928190000_alisson_internacional_seasons.sql`, which is **written but NOT
+applied**: apply it through the Supabase MCP, then run `node scripts/genTransferPathHints.mjs` and
+`simCareerFallback`, `simCareerSeasonTruth`, `simTransferPathHints`, which read that pool. Release E is
+assembled on `release-e` in the gate clone with 662 to 666 (tsc 0), not yet gated or pushed. **Six agent
+workflows were still running when the limit hit** and commit to branches or write to disk on their own:
+builders on `r645a-ranked-recorder`, `r645b-free-points`, `r645c-dailies-lock`, `r646-caps-real-ceiling`,
+`r647-season-ledger`, `r648-profile-clamp` (each was told to push when green); data verification writing
+to `C:/Users/antho/AppData/Local/Temp/claude/verify660/` and `verifyCfb/`; the 5th bug diagnosis
+(Soccer Career error boundary), two dated Wrong answer reports, and five design contracts for the player
+ideas in the workflow journals under `.claude/projects/.../subagents/workflows/`. The four unresolved
+`question_reports` rows from 2026-09-21 to 27 stay unresolved until the fixes are live.
+
+
+**2026-09-28, desktop Claude lane: Rounds 663 to 666 BUILT on `r662-nhl-hl-points`, pushed, not yet on
+main.** One Higher or Lower fence (`scripts/lib/higherLowerFence.mjs`, driven by
+`scripts/simHigherLowerFacts.mjs`) now holds five of the six games to a record of what the site's own
+tables say: hockey (662), NBA (663), MLB (664), tennis (665), NFL (666). 31 checks, nine controls.
+MLB and tennis were already right (0 of 1,475 and 0 of 867 matchups inverted); the record exists so
+they stay that way. **The NFL round is the one to read**: two source tables were rejected because
+they count playoff touchdowns (Emmitt Smith 183 against a regular season 164), and the table that was
+used, nflfastr, merges namesakes when grouped by name: a Bears back's 8 touchdowns onto Adrian
+Peterson, the Giants receiver's 12 onto Steve Smith Sr. The fence flagged both, the file was right
+both times, and the record is built per player id. Tennis needed four married-name merges (Court is
+13 as Court plus 11 as Smith). **CFB stays open**: cfb_qb_stats holds only 32 of its 65 quarterbacks
+(Flutie, Herbert, Eli Manning, Luck and 29 more are absent), so it needs a second source before it can
+join. The next free number for anyone else is 667, except that **645a, 645b, 645c, 646, 647, 648 are
+being built right now by parallel agents on branches of those names**; do not claim them.
+
 **2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof
 in `docs/PROJECT-STATE.md`.
