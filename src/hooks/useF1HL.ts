@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { f1HLDrivers, F1HLDriver } from '@/data/f1HLDrivers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { higherLowerScore } from '@/lib/higherLowerScore';
+import { higherLowerScore, HIGHER_LOWER_DAILY_ROUNDS } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
@@ -33,7 +33,7 @@ interface RoundResult {
 
 type HLAction = { t: 'result'; correct: boolean };
 
-const ROUNDS = 10;
+const ROUNDS = HIGHER_LOWER_DAILY_ROUNDS;
 // Sentinel puzzle array, useDailyPuzzle needs at least one element.
 const SENTINEL_PUZZLES = [{ id: 'f1hl-daily' }];
 

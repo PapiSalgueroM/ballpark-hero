@@ -116,6 +116,14 @@ export function eligiblePlayers<P>(config: LineupConfig<P>, slot: GenericSlot, u
     .sort((a, b) => config.ratingOf(b) - config.ratingOf(a));
 }
 
+/**
+ * Round 646: the top of the lineup rating, the clamp in simulate reads it, and
+ * so the most the F1, NBA and NHL Perfect Lineups can record (they record the
+ * rating). game_score_caps holds it for perfect-lineup-f1, perfect-lineup-nba
+ * and perfect-lineup-nhl (scripts/simCapsAreCeilings.mjs).
+ */
+export const PERFECT_LINEUP_RATING_CEILING = 100;
+
 export function simulate<P>(config: LineupConfig<P>, picks: P[]): GenericSimResult {
   const ratings = picks.map((p) => Math.max(1, Math.min(100, config.ratingOf(p))));
   const avg = ratings.reduce((s, r) => s + r, 0) / ratings.length;
@@ -133,7 +141,7 @@ export function simulate<P>(config: LineupConfig<P>, picks: P[]): GenericSimResu
   }
   const chemistry = Math.round((chemPts / (picks.length * config.chemistryOf.length)) * 100);
 
-  const rating = Math.round(Math.min(100, avg * 0.8 + chemistry * 0.2));
+  const rating = Math.round(Math.min(PERFECT_LINEUP_RATING_CEILING, avg * 0.8 + chemistry * 0.2));
   const squadValue = ratings.reduce((s, r) => s + r, 0);
   const grade =
     rating >= 92 ? 'A+' : rating >= 84 ? 'A' : rating >= 74 ? 'B' : rating >= 62 ? 'C' : 'D';

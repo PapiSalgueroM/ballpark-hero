@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
 import { hockeyHLPlayers, HockeyHLPlayer } from '@/data/hockeyHLPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { higherLowerScore } from '@/lib/higherLowerScore';
+import { higherLowerScore, HIGHER_LOWER_DAILY_ROUNDS } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
@@ -28,7 +28,7 @@ interface RoundResult {
 
 type HLAction = { t: 'result'; correct: boolean };
 
-const ROUNDS = 10;
+const ROUNDS = HIGHER_LOWER_DAILY_ROUNDS;
 // Sentinel puzzle array, useDailyPuzzle needs at least one element.
 // The hook ignores the puzzle data and uses todayStr for seeding instead.
 const SENTINEL_PUZZLES = [{ id: 'hkhl-daily' }];

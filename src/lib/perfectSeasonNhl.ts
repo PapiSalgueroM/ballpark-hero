@@ -26,6 +26,10 @@ export const NHL_SLOTS: SeasonSlot[] = [
 ];
 
 export const NHL_GAMES = 82;
+/** Round 646: the most a Perfect Season NHL run can record, its wins, every
+    one of NHL_GAMES won: 82. game_score_caps holds it for perfect-season-nhl
+    (scripts/simCapsAreCeilings.mjs). */
+export const PERFECT_SEASON_NHL_CEILING = NHL_GAMES;
 
 const MIN_GAMES = 15;
 const DECADES = [1960, 1970, 1980, 1990, 2000, 2010, 2020];

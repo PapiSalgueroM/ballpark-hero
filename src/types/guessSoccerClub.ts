@@ -55,6 +55,10 @@ export interface QuestionTreeState {
 // for the pre-existing 5 clues is stretched proportionally rather than
 // having a 6th clue bolted on with a mismatched point jump.
 export const POINTS_BY_CLUE = [1200, 960, 720, 480, 240, 0];
+/** Round 646: the most a game on this clue ladder can record, a right guess on
+    the first clue, the top of POINTS_BY_CLUE. game_score_caps holds it for
+    this game (scripts/simCapsAreCeilings.mjs). */
+export const SCORE_CEILING = Math.max(...POINTS_BY_CLUE);
 
 export const CLUE_LABELS = [
   'Vibe',

@@ -34,6 +34,17 @@ const ROUNDS = 5;
 const STORAGE_PREFIX = 'grade-transfer-';
 
 /**
+ * Round 646: the most a Grade the Transfer day can record: every one of the
+ * ROUNDS graded exactly, 100 each through scoreFor, 500. The route redirects
+ * home since it retired, but the hook can still send the key, so its cap row
+ * stays true. game_score_caps holds it for grade-transfer
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export function gradeTransferCeiling(): number {
+  return ROUNDS * Math.max(...GRADES.map(g => scoreFor(g, g)));
+}
+
+/**
  * Round 224: the old walk here multiplied the raw date by the glibc LCG
  * multiplier, which overflows float precision and collapsed the reachable
  * indices; measured over a simulated year it showed 81 of the 800 fetched

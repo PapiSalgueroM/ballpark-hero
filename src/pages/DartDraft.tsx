@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
   fetchDartDraftPool, finalScore, simulateSeries, squadGrade, squadRating,
-  type SeriesResult,
+  SQUAD_RATING_MAX, type SeriesResult,
 } from '@/lib/dartDraft';
 import { GEO_COUNTRIES, WORLD_H, WORLD_W, type GeoCountry } from '@/data/worldMapGeo';
 import {
@@ -19,7 +19,7 @@ import {
   countryChoices, countryFill, dbNamesFor, isWcNation, legendChoices,
   machineMapDraft, mysteryChoices, oceanTrialist, pathOf, resolveMapThrow,
   rollZones, stormChoices, viewBoxOf, wildcardChoices, wonderkidChoices,
-  type DraftChoice, type MapHit, type MapTopic, type Zone,
+  ACCURACY_POINTS_MAX, type DraftChoice, type MapHit, type MapTopic, type Zone,
 } from '@/lib/dartMap';
 import { LEGENDS, WC2026_NATIONS, playerRating } from '@/lib/squadDeal';
 import type { Player } from '@/types/game';
@@ -29,6 +29,18 @@ type Phase = 'intro' | 'loading' | 'squad' | 'aim' | 'draft' | 'done';
 type AimStage = 'x' | 'y' | 'landed';
 
 const XI_SIZE = DART_SLOTS.length;
+
+/**
+ * Round 646: the most a Dart Draft game can record. One dart a slot, eleven
+ * slots, each at most ACCURACY_POINTS_MAX (55, a tiny nation; the lifeboat's
+ * second dart only follows a dart that paid 0, the ocean or a blocked nation),
+ * so 605; the squad rating tops out at SQUAD_RATING_MAX (99); a won series
+ * adds 120 through finalScore. 605 + 99 + 120 = 824. game_score_caps holds
+ * it for dart-draft (scripts/simCapsAreCeilings.mjs).
+ */
+export function dartDraftCeiling(): number {
+  return finalScore(DART_SLOTS.length * ACCURACY_POINTS_MAX, SQUAD_RATING_MAX, 'win');
+}
 
 const money = (m: number) => (m >= 1000 ? `£${(m / 1000).toFixed(1)}B` : `£${m}M`);
 

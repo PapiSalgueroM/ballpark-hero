@@ -221,6 +221,9 @@ export function machineDraft(current: Player[], legends: Player[], formation: Fo
 }
 
 /* ---------------- Squad rating + chemistry ---------------- */
+/** Round 646: the top of the squad rating, the clamp below reads it. */
+export const SQUAD_RATING_MAX = 99;
+
 export function squadRating(players: (Player | null)[]): number {
   const real = players.filter((p): p is Player => p !== null);
   if (real.length === 0) return 0;
@@ -234,7 +237,7 @@ export function squadRating(players: (Player | null)[]): number {
     return m.size ? Math.max(...m.values()) : 0;
   };
   const chem = Math.min(4, Math.max(0, count(p => p.league) - 3) + Math.max(0, count(p => p.nationality) - 3));
-  return Math.min(99, Math.round(avg + chem));
+  return Math.min(SQUAD_RATING_MAX, Math.round(avg + chem));
 }
 
 export function squadGrade(rating: number): { grade: string; line: string } {

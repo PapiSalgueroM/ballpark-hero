@@ -56,6 +56,13 @@ async function verifiedSecondaries(name: string, primary: Position | null): Prom
 }
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
+/**
+ * Round 646: what a finished Build Your XI records, and so its ceiling: any
+ * result with a verdict pays this flat amount, anything else 0. game_score_caps
+ * holds it for build-your-xi (scripts/simCapsAreCeilings.mjs).
+ */
+export const BUILD_YOUR_XI_CEILING = 500;
+
 export function useLineupBuilder() {
   const [formation, setFormation] = useState<Formation | null>(null);
   const [phase, setPhase] = useState<GamePhase>('formation');
@@ -338,7 +345,7 @@ export function useLineupBuilder() {
     setIsSpinning(false);
   }, []);
 
-  useGameCompletion('build-your-xi', phase === 'result', verdict ? 500 : 0);
+  useGameCompletion('build-your-xi', phase === 'result', verdict ? BUILD_YOUR_XI_CEILING : 0);
 
   return {
     formation, phase, selectedPositionIndex, currentTeam, positions,

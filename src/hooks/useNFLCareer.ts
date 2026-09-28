@@ -38,10 +38,18 @@ function persistDaily(date: string, status: 'won' | 'lost', cluesRevealed: numbe
    it took; a loss or a give up scores 0, as every sibling Career Path does
    (the NBA, NHL and baseball ones record 0 unless the daily was solved). It
    used to record the clue score whatever the outcome, so giving up at the
-   first clue recorded 6, the same as the best possible solve. */
-function dailyScoreOf(status: 'won' | 'lost', cluesRevealed: number): number {
+   first clue recorded 6, the same as the best possible solve. Round 646:
+   exported so scripts/simCapsAreCeilings.mjs section 5 plays it. */
+export function dailyScoreOf(status: 'won' | 'lost', cluesRevealed: number): number {
   return status === 'won' ? Math.max(1, TOTAL_CLUES + 1 - cluesRevealed) : 0;
 }
+
+/**
+ * Round 646: the most an NFL Career Path daily can record, a win on the first
+ * clue scored through dailyScoreOf: TOTAL_CLUES, 6. game_score_caps holds it
+ * for nfl-career (scripts/simCapsAreCeilings.mjs).
+ */
+export const NFL_CAREER_CEILING = dailyScoreOf('won', 1);
 
 export type NflCareerMode = 'daily' | 'unlimited';
 

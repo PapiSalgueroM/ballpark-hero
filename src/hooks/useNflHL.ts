@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { NFL_HL_CATEGORIES, type NflHLCategory, type NflHLCatPlayer } from '@/data/nflHLCategories';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { higherLowerScore } from '@/lib/higherLowerScore';
+import { higherLowerScore, HIGHER_LOWER_DAILY_ROUNDS } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
@@ -43,7 +43,7 @@ interface RoundResult extends HLRound {
 
 type HLAction = { t: 'result'; correct: boolean };
 
-const ROUNDS = 10;
+const ROUNDS = HIGHER_LOWER_DAILY_ROUNDS;
 const SENTINEL_PUZZLES = [{ id: 'nflhl-daily' }];
 
 function buildRounds(seed: number, hard = false): HLRound[] {

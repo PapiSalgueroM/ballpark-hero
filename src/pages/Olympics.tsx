@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useOlympics } from '@/hooks/useOlympics';
+import { careerClueScore } from '@/lib/careerClueScores';
 import OlympicsHowToPlay from '@/components/olympics/OlympicsHowToPlay';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
@@ -124,7 +125,7 @@ export default function Olympics() {
               <span>Clue {Math.min(clueLevel + 1, totalClues)} / {totalClues}</span>
               <span className="text-[hsl(43,85%,55%)] font-bold">
                 {status === 'playing'
-                  ? `${[1000, 850, 700, 550, 400, 250, 100][Math.min(clueLevel, 6)]} pts available`
+                  ? `${careerClueScore(true, clueLevel)} pts available`
                   : status === 'guessed'
                     ? `Score: ${score}`
                     : 'Game Over'}

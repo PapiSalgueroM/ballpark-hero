@@ -882,6 +882,13 @@ export function shouldRetire(st: FightCareerState): boolean {
   return false;
 }
 
+/**
+ * Round 646: the top of the legacy score, the clamp in legacyOf reads it, and
+ * so the most a Fight Career can record. game_score_caps holds it for
+ * fight-career (scripts/simCapsAreCeilings.mjs).
+ */
+export const FIGHT_CAREER_CEILING = 100;
+
 export function legacyOf(st: FightCareerState): LegacyVerdict {
   const f = st.fighter;
   const titleWins = st.history.filter(h => h.title && h.result === 'W').length;
@@ -917,7 +924,7 @@ export function legacyOf(st: FightCareerState): LegacyVerdict {
     titleWins * 12 +
     st.titleDefences * 7 -
     Math.max(0, f.damage - 50) * 0.22,
-    0, 100,
+    0, FIGHT_CAREER_CEILING,
   );
   const { tier, hof } = legacyTier(score);
   const bullets: string[] = [

@@ -7,6 +7,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { getTodayET, getDailyTier, dailyIndex } from '@/lib/dateUtils';
 import { fetchFootlePlayerPool } from '@/lib/fetchFootlePlayerPool';
+import { guessCountScore } from '@/lib/guessCountScore';
 
 const MAX_GUESSES = 8;
 
@@ -14,9 +15,20 @@ const MAX_GUESSES = 8;
    distribution panel both read it, because the panel used to be handed its
    own formula (1000 down 125 a guess) while the record held this one (700
    down 100 a guess), so it placed you with a number nobody else's row was
-   ever measured in. */
+   ever measured in. Round 646: the rule is the one Career and UFC share
+   (src/lib/guessCountScore.ts), at Footle's limit. */
 export function footleScore(won: boolean, guessCount: number): number {
-  return won ? Math.max(100, (MAX_GUESSES - guessCount) * 100) : 0;
+  return guessCountScore(won, guessCount, MAX_GUESSES);
+}
+
+/**
+ * Round 646: the most a Footle daily can record, a first guess win scored
+ * through footleScore: (8 - 1) x 100 = 700. game_score_caps holds it for
+ * footle (scripts/simCapsAreCeilings.mjs). A function, so the imported rule
+ * is not evaluated at module scope.
+ */
+export function footleCeiling(): number {
+  return footleScore(true, 1);
 }
 
 /** Round 644: the score panel's rows on the scale footleScore records, 700

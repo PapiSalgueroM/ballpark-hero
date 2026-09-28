@@ -34,7 +34,14 @@ const TOTAL_PICKS = TEAM_SIZE * 2;
    round the verdict card and the share line say it too, because before it the
    card showed season points and the board counted this number, which nobody
    was ever shown. */
-const seasonScore = (points: number) => Math.min(100, Math.round((points / 114) * 100));
+const seasonScore = (points: number) => Math.min(FANTASY_DRAFT_CEILING, Math.round((points / 114) * 100));
+
+/**
+ * Round 646: the most a Fantasy Draft can record, the season score's own
+ * clamp: a perfect 38 game season is 114 of 114, 100. game_score_caps holds it
+ * for fantasy-draft (scripts/simCapsAreCeilings.mjs).
+ */
+export const FANTASY_DRAFT_CEILING = 100;
 
 /* Round 644: the share says how the season really went and carries the same
    season score. It used to claim "I outdrafted the AI" whatever the table said. */

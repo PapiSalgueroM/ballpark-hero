@@ -49,7 +49,7 @@
  */
 import {
   buildLadder, clamp, daySeed, lehmer, sprayFor as arcadeSpray,
-  ROUNDS_PER_RUN, type SprayConfig,
+  ROUNDS_PER_RUN, LEHMER_MAX, type SprayConfig,
 } from './arcade';
 
 export { daySeed, lehmer, ROUNDS_PER_RUN };
@@ -142,22 +142,38 @@ export interface HoopResult {
   verdict: string;
 }
 
+/** One shot of the ladder: t runs 0 to 1 up the run, i is its index. */
+function hoopAt(t: number, rng: () => number, i: number): HoopSetup {
+  const distance = Math.round((FREE_THROW + t * 4.41) * 10) / 10;
+  const contestReach = i === 0 ? 0 : Math.round(clamp(2.44 + t * 0.66 + (rng() - 0.5) * 0.16, 2.34, 3.12) * 100) / 100;
+  const contestDist = i === 0 ? 0 : Math.round((1.1 - t * 0.44) * 100) / 100;
+  const contestSide = i === 0 ? 0 : (rng() > 0.5 ? 1 : -1);
+  const hand = contestReach >= 2.88 ? 'a big hand up' : contestReach >= 2.66 ? 'a hand up' : 'a late closeout';
+  return {
+    distance,
+    contestReach,
+    contestDist,
+    contestSide,
+    label: i === 0 ? 'Free throw line, nobody there' : `${distance} m, ${hand} on your ${contestSide < 0 ? 'left' : 'right'}`,
+  };
+}
+
 /** The ten shots of a run: further out, a higher hand, and it arrives sooner. */
 export function buildRun(seed: number): HoopSetup[] {
-  return buildLadder(seed, ROUNDS_PER_RUN, (t, rng, i) => {
-    const distance = Math.round((FREE_THROW + t * 4.41) * 10) / 10;
-    const contestReach = i === 0 ? 0 : Math.round(clamp(2.44 + t * 0.66 + (rng() - 0.5) * 0.16, 2.34, 3.12) * 100) / 100;
-    const contestDist = i === 0 ? 0 : Math.round((1.1 - t * 0.44) * 100) / 100;
-    const contestSide = i === 0 ? 0 : (rng() > 0.5 ? 1 : -1);
-    const hand = contestReach >= 2.88 ? 'a big hand up' : contestReach >= 2.66 ? 'a hand up' : 'a late closeout';
-    return {
-      distance,
-      contestReach,
-      contestDist,
-      contestSide,
-      label: i === 0 ? 'Free throw line, nobody there' : `${distance} m, ${hand} on your ${contestSide < 0 ? 'left' : 'right'}`,
-    };
-  });
+  return buildLadder(seed, ROUNDS_PER_RUN, hoopAt);
+}
+
+/**
+ * Round 646: the most any day's run can pay, from the rules rather than from
+ * the dates tried so far. maxRunScore already scores every shot made pure, so
+ * the only thing a day changes is how high each hand reaches, and a higher
+ * hand pays more. The ladder's generator never returns more than
+ * LEHMER_MAX, so drawing every hand at LEHMER_MAX gives each shot its highest
+ * reach and the run its highest pay: 3045, against 3012 over 800 real dates.
+ * game_score_caps holds it for buzzer-beater (scripts/simCapsAreCeilings.mjs).
+ */
+export function buzzerBeaterCeiling(): number {
+  return maxRunScore(buildLadder(1, ROUNDS_PER_RUN, (t, _rng, i) => hoopAt(t, () => LEHMER_MAX, i)));
 }
 
 /**
@@ -260,10 +276,7 @@ export function takeShot(release: Release, setup: HoopSetup, rng: () => number):
   /* Points reward the shot nobody else takes: the distance, the hand you shot
      over, and how cleanly it went through. A free throw pays least. */
   let points = 0;
-  if (made) {
-    const contestPay = setup.contestReach > 0 ? Math.max(0, setup.contestReach - 2.3) * 120 : 0;
-    points = Math.round(80 + (setup.distance - FREE_THROW) * 28 + contestPay + purity * 100);
-  }
+  if (made) points = shotPoints(setup, purity);
 
   const verdict = blocked
     ? 'Blocked. He got a hand to it.'
@@ -285,12 +298,23 @@ export function takeShot(release: Release, setup: HoopSetup, rng: () => number):
   };
 }
 
-/** The best a run can pay, for the honest "you made N of M" line. */
+/**
+ * What a made shot pays: the distance, the hand you shot over and how cleanly
+ * it went through (purity, 0 off the iron to 1 dead centre). takeShot scores
+ * every make through this, and Round 646 made maxRunScore read the same rule
+ * rather than a copy of its numbers, so the leaderboard ceiling
+ * (buzzerBeaterCeiling) moves when the rule does.
+ */
+export function shotPoints(setup: HoopSetup, purity: number): number {
+  const contestPay = setup.contestReach > 0 ? Math.max(0, setup.contestReach - 2.3) * 120 : 0;
+  return Math.round(80 + (setup.distance - FREE_THROW) * 28 + contestPay + purity * 100);
+}
+
+/** The best a run can pay, for the honest "you made N of M" line: every shot
+    made dead centre, which a real release approaches to within a rounding
+    point. */
 export function maxRunScore(shots: HoopSetup[]): number {
-  return shots.reduce((n, s) => {
-    const contestPay = s.contestReach > 0 ? Math.max(0, s.contestReach - 2.3) * 120 : 0;
-    return n + Math.round(80 + (s.distance - FREE_THROW) * 28 + contestPay + 100);
-  }, 0);
+  return shots.reduce((n, s) => n + shotPoints(s, 1), 0);
 }
 
 /** The launch angle a given arc setting means, for the on screen readout. */

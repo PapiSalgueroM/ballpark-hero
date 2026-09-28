@@ -905,8 +905,23 @@ export function totalScore(rounds: RoundResult[]): number {
  */
 export function recordedRunScore(rounds: RoundResult[], mode: RarityMode): number {
   const total = totalScore(rounds);
-  return mode === 'rarity' ? rounds.length * 100 - total : total;
+  return mode === 'rarity' ? rounds.length * RARITY_POINTS_PER_ROUND - total : total;
 }
+
+/** Round 646: what a Rarity round is worth at best, the scale recordedRunScore
+    subtracts each round's points from. */
+export const RARITY_POINTS_PER_ROUND = 100;
+
+/**
+ * Round 646: the most a Rarity Round run can record. Only Rarity runs are
+ * ranked (Crowd Says records a play with no score), and one records
+ * RARITY_POINTS_PER_ROUND less the round's points for each of at most
+ * ROUNDS_PER_RUN rounds (recordedRunScore reads the same constant), so a run
+ * of zero point picks records 5 x 100 = 500. game_score_caps holds it for
+ * rarity-round, set by the Round 644 migration
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export const RARITY_ROUND_CEILING = ROUNDS_PER_RUN * RARITY_POINTS_PER_ROUND;
 
 /**
  * The one line that says what you are actually trying to do, in the mode you

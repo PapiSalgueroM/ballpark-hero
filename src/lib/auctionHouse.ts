@@ -84,10 +84,14 @@ async function fetchCurrentPool(theme: AuctionTheme): Promise<Player[]> {
   } catch { return []; }
 }
 
+/** Round 646: the top of an auction player's rating, the legends clamp below
+    (playerRating's own top, 96, sits under it). */
+const AUCTION_RATING_MAX = 99;
+
 function ratingOf(p: Player, theme: AuctionTheme): number {
   if (theme === 'legends') {
     const r = 85 + ((Math.max(140, Math.min(230, p.marketValue)) - 140) * 14) / 90;
-    return Math.round(Math.max(85, Math.min(99, r)));
+    return Math.round(Math.max(85, Math.min(AUCTION_RATING_MAX, r)));
   }
   return playerRating(p);
 }
@@ -465,10 +469,45 @@ export function simulateShowdown(bidders: Bidder[]): ShowdownResult {
   return { table: rows, lines, champion: rows[0].bidderId, topScorer: top };
 }
 
+/** Round 646: auctionScore's terms, named so the ceiling reads the same rule. */
+export const AUCTION_FIRST_PLACE_POINTS = 300;
+export const AUCTION_SECOND_PLACE_POINTS = 150;
+export const AUCTION_OTHER_PLACE_POINTS = 50;
+export const AUCTION_RATING_WEIGHT = 3;
+export const AUCTION_MONEY_PER_POINT = 10;
+
+/**
+ * Round 646: the auction's score from its three terms: your place in the
+ * mini league (0 is first), your squad rating and the money you kept.
+ * auctionScore below reads a finished showdown into it, and the ceiling reads
+ * it at the top of each term.
+ */
+export function auctionScoreOf(place: number, squadRating: number, moneyLeft: number): number {
+  const placeBonus = place === 0 ? AUCTION_FIRST_PLACE_POINTS
+    : place === 1 ? AUCTION_SECOND_PLACE_POINTS
+    : AUCTION_OTHER_PLACE_POINTS;
+  return placeBonus + squadRating * AUCTION_RATING_WEIGHT + Math.round(moneyLeft / AUCTION_MONEY_PER_POINT);
+}
+
+/**
+ * Round 646: the most a Sign the Player auction can record, auctionScoreOf
+ * with every term at its top: first place, a squad rated AUCTION_RATING_MAX
+ * (99, the top of an auction player's rating, so the top of their average)
+ * and the whole START_BUDGET kept (the budget only ever shrinks):
+ * 300 + 297 + 100 = 697. It is a bound rather than a run anyone plays: a 99
+ * rated squad costs the budget it would keep, and what an auction can really
+ * reach depends on the pool the database deals. The cap it replaces was 56
+ * million, a value frozen from the old scale, so a real auction paid a
+ * thousandth of a point. game_score_caps holds it for sign-the-player
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export function signThePlayerCeiling(): number {
+  return auctionScoreOf(0, AUCTION_RATING_MAX, START_BUDGET);
+}
+
 /** Final score for the leaderboard: table position + squad quality + thrift. */
 export function auctionScore(result: ShowdownResult, you: Bidder): number {
   const place = result.table.findIndex(r => r.bidderId === 'you');
-  const placeBonus = place === 0 ? 300 : place === 1 ? 150 : 50;
   const yourRow = result.table[place];
-  return placeBonus + squadRatingOf(you) * 3 + Math.round(yourRow.moneyLeft / 10);
+  return auctionScoreOf(place, squadRatingOf(you), yourRow.moneyLeft);
 }

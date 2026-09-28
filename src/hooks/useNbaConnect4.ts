@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
 import { getRandomConnect4Board } from '@/data/nbaConnect4Boards';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { connect4Score } from '@/lib/connect4Score';
 import { normalizeName } from '@/lib/playerSearch';
 import type {
   Connect4Team,
@@ -231,7 +232,7 @@ export function useNbaConnect4() {
     setUsedPlayers(new Set());
   }, []);
 
-  useGameCompletion('nba-connect-4', phase === 'won' || phase === 'draw', phase === 'won' ? 500 : 200);
+  useGameCompletion('nba-connect-4', phase === 'won' || phase === 'draw', connect4Score(phase === 'won' ? 'won' : 'draw'));
 
   return {
     board,

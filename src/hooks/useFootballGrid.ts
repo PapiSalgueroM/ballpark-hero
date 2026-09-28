@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useEffect } from 'react';
 import { CellState, FootballGridGameStatus, GridAttribute, GridPuzzle } from '@/types/footballGrid';
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { gridScore } from '@/lib/gridScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { toast } from 'sonner';
 import { rarityPercent } from '@/lib/gridRarity';
@@ -222,7 +223,7 @@ export function useFootballGrid() {
     [activeCell, gameStatus, validating, gridData, cells, puzzle, getRowCol, fetchRarity, addDailyGuess],
   );
 
-  useGameCompletion('football-grid', rawDailyStatus !== 'playing', correctCount * 100);
+  useGameCompletion('football-grid', rawDailyStatus !== 'playing', gridScore(correctCount));
 
   return {
     puzzle, cells, activeCell, setActiveCell, submitGuess,

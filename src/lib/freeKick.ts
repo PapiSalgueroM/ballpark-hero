@@ -29,7 +29,7 @@
  */
 import {
   buildLadder, clamp, daySeed, lehmer, sprayFor as arcadeSpray,
-  ROUNDS_PER_RUN, type SprayConfig,
+  ROUNDS_PER_RUN, LEHMER_MAX, type SprayConfig,
 } from './arcade';
 
 export { daySeed, lehmer, ROUNDS_PER_RUN };
@@ -78,21 +78,39 @@ export interface Aim {
   curve: number;
 }
 
+/** One kick of the ladder: t runs 0 to 1 up the run, i is its index. */
+function kickAt(t: number, rng: () => number, i: number): KickSetup {
+  const distance = Math.round((11 + t * 14) * 10) / 10;
+  const wallSize = i === 0 ? 0 : Math.min(5, 1 + Math.floor(t * 5 + rng() * 0.9));
+  const keeperSkill = clamp(0.28 + t * 0.42 + (rng() - 0.5) * 0.12, 0.2, 0.82);
+  const keeperLean = Math.round((rng() * 2 - 1) * 100) / 100;
+  return {
+    distance,
+    wallSize,
+    keeperSkill,
+    keeperLean,
+    label: i === 0 ? 'Penalty spot, no wall' : `${distance} m, ${wallSize} in the wall`,
+  };
+}
+
 /** The ten kicks of a run: further out, more men in the wall, better keepers. */
 export function buildRun(seed: number): KickSetup[] {
-  return buildLadder(seed, ROUNDS_PER_RUN, (t, rng, i) => {
-    const distance = Math.round((11 + t * 14) * 10) / 10;
-    const wallSize = i === 0 ? 0 : Math.min(5, 1 + Math.floor(t * 5 + rng() * 0.9));
-    const keeperSkill = clamp(0.28 + t * 0.42 + (rng() - 0.5) * 0.12, 0.2, 0.82);
-    const keeperLean = Math.round((rng() * 2 - 1) * 100) / 100;
-    return {
-      distance,
-      wallSize,
-      keeperSkill,
-      keeperLean,
-      label: i === 0 ? 'Penalty spot, no wall' : `${distance} m, ${wallSize} in the wall`,
-    };
-  });
+  return buildLadder(seed, ROUNDS_PER_RUN, kickAt);
+}
+
+/**
+ * Round 646: the most any day's run can pay, from the rules rather than from
+ * the dates tried so far. maxRunScore already scores every kick into the top
+ * corner, so the only thing a day changes is the wall and the keeper, and a
+ * bigger wall and a better keeper both pay more. The ladder's generator never
+ * returns more than LEHMER_MAX, so drawing everything at LEHMER_MAX gives every
+ * kick its biggest wall and best keeper: 3490. The cap it replaces, 3424, was
+ * the best of 60 dates, and 800 dates already reach 3445, so honest perfect
+ * runs were being clipped. game_score_caps holds it for free-kick
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export function freeKickCeiling(): number {
+  return maxRunScore(buildLadder(1, ROUNDS_PER_RUN, (t, _rng, i) => kickAt(t, () => LEHMER_MAX, i)));
 }
 
 /**
@@ -194,13 +212,7 @@ export function takeShot(aim: Aim, setup: KickSetup, rng: () => number): ShotRes
   let points = 0;
   if (scored) {
     const corner = Math.max(Math.abs(end.x), end.y > 0.5 ? end.y : 0);
-    points = Math.round(
-      100 +
-      (setup.distance - 11) * 6 +
-      setup.wallSize * 15 +
-      corner * 120 +
-      setup.keeperSkill * 60,
-    );
+    points = kickPoints(setup, corner);
   }
 
   const verdict = hitWall
@@ -218,11 +230,28 @@ export function takeShot(aim: Aim, setup: KickSetup, rng: () => number): ShotRes
   return { x: end.x, y: end.y, onTarget, saved, scored, hitPost, hitWall, points, keeperX: keeper.x, keeperY: keeper.y, path, verdict };
 }
 
-/** The best a run can pay, for the honest "you scored N of M" line. */
-export function maxRunScore(kicks: KickSetup[]): number {
-  return kicks.reduce(
-    (n, k) => n + Math.round(100 + (k.distance - 11) * 6 + k.wallSize * 15 + 120 + k.keeperSkill * 60),
-    0,
+/**
+ * What a kick that goes in pays: distance, the wall you beat, the corner you
+ * found (0 in the middle, towards 1 at the post or just under the bar) and
+ * the keeper you beat. takeShot scores every goal through this, and Round 646
+ * made maxRunScore read the same rule rather than a copy of its numbers, so
+ * the leaderboard ceiling (freeKickCeiling) moves when the rule does.
+ */
+export function kickPoints(setup: KickSetup, corner: number): number {
+  return Math.round(
+    100 +
+    (setup.distance - 11) * 6 +
+    setup.wallSize * 15 +
+    corner * 120 +
+    setup.keeperSkill * 60,
   );
+}
+
+/** The best a run can pay, for the honest "you scored N of M" line: every
+    kick in at the full corner. The post itself does not count, but a kick
+    just under the bar reads a corner as close to 1 as the aim allows, so a
+    real run can reach this to within a rounding point. */
+export function maxRunScore(kicks: KickSetup[]): number {
+  return kicks.reduce((n, k) => n + kickPoints(k, 1), 0);
 }
 

@@ -83,10 +83,12 @@ if (CONTROL === 'signed') {
 if (CONTROL === 'spendratio') {
   const src = fs.readFileSync(LIB, 'utf8').replace(/\r\n/g, '\n');
   const oldGrowth = '  const growth = campaign.budget > 0 ? finalValue / campaign.budget : 0;';
+  /* Round 646: the score line reads STOCK_MARKET_CEILING (the leaderboard cap
+     is read off it), so the anchor carries the constant. */
   const oldScore = [
     '  const score = bestValue === worstValue',
-    '    ? 100',
-    '    : Math.max(0, Math.min(100, Math.round((100 * (finalValue - worstValue)) / (bestValue - worstValue))));',
+    '    ? STOCK_MARKET_CEILING',
+    '    : Math.max(0, Math.min(STOCK_MARKET_CEILING, Math.round((STOCK_MARKET_CEILING * (finalValue - worstValue)) / (bestValue - worstValue))));',
   ].join('\n');
   if (!src.includes(oldGrowth) || !src.includes(oldScore)) {
     console.error('control cannot run: playerStockMarket.ts is not in the shape this control rewrites');

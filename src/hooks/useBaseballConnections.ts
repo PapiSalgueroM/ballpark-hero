@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { baseballConnectionsPuzzles } from '@/data/baseballConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { CONNECTIONS_LIVES, connectionsScore } from '@/lib/connectionsScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchBaseballConnectionsPuzzles } from '@/lib/fetchBaseballConnectionsPuzzles';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
@@ -89,7 +90,7 @@ export function useBaseballConnections() {
   const dailySolvedGroups: SolvedGroup[] = dailyActions
     .filter((a): a is Extract<BBConnAction, { t: 'ok' }> => a.t === 'ok')
     .map(a => ({ theme: a.theme, players: a.players, difficulty: a.diff }));
-  const dailyLives = 4 - dailyActions.filter(a => a.t === 'x').length;
+  const dailyLives = CONNECTIONS_LIVES - dailyActions.filter(a => a.t === 'x').length;
 
   // Auto-reveal remaining groups when lives hit 0 (mirrors original behavior)
   const dailySolvedGroupsFinal = useMemo(() => {
@@ -237,7 +238,7 @@ export function useBaseballConnections() {
 
   // ---- COMPLETION ----------------------------------------------------------
   const dailyWon = rawDailyStatus === 'won';
-  const completionScore = dailyWon ? (dailyLives * 250) : 0;
+  const completionScore = connectionsScore(dailyWon, dailyLives);
   useGameCompletion('baseball-connections', rawDailyStatus !== 'playing', completionScore);
 
   return {

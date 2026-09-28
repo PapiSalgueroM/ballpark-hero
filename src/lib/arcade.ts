@@ -39,6 +39,11 @@ export function lehmer(seed: number): () => number {
   };
 }
 
+/** Round 646: the largest value lehmer can return. The state stays in 1 to
+    2147483646 (the modulus is prime, so it never reaches 0), so the draw tops
+    out at 2147483645 / 2147483646. The two arcade ceilings draw at it. */
+export const LEHMER_MAX = 2147483645 / 2147483646;
+
 export const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
 export function daySeed(dateStr: string): number {

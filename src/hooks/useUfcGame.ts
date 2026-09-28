@@ -7,8 +7,23 @@ import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { getTodayET } from '@/lib/dateUtils';
+import { guessCountScore } from '@/lib/guessCountScore';
 
 const MAX_GUESSES = 8;
+
+/**
+ * Round 646: what a UFC daily records, the guess count rule Footle and Career
+ * share (src/lib/guessCountScore.ts) at this game's MAX_GUESSES. The recorder
+ * below calls it, and the ceiling is it on a first guess win: 700.
+ * game_score_caps holds that for ufc (scripts/simCapsAreCeilings.mjs).
+ */
+export function ufcDailyScore(won: boolean, guessesUsed: number): number {
+  return guessCountScore(won, guessesUsed, MAX_GUESSES);
+}
+
+export function ufcCeiling(): number {
+  return ufcDailyScore(true, 1);
+}
 
 export type UfcGameMode = 'daily' | 'unlimited';
 
@@ -115,9 +130,7 @@ export function useUfcGame() {
   }, [mode, dailyFighter, unlimitedFighter]);
 
   // ---- COMPLETION ----------------------------------------------------------
-  const dailyScore = effectiveDailyStatus === 'won'
-    ? Math.max(100, (MAX_GUESSES - dailyGuesses.length) * 100)
-    : 0;
+  const dailyScore = ufcDailyScore(effectiveDailyStatus === 'won', dailyGuesses.length);
   useGameCompletion('ufc', effectiveDailyStatus !== 'playing', dailyScore);
 
   return {

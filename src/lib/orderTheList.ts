@@ -137,6 +137,15 @@ export const RANK_ROUNDS: RankRound[] = [
 
 export const RANK_POINTS_PER_SLOT = 200; // 5 of 5 correct = 1000
 
+/**
+ * Round 646: the most a Rank 'Em day can record: every item of the round in
+ * its right slot at RANK_POINTS_PER_SLOT. Every round ranks 5 today, so 1000.
+ * game_score_caps holds it for rank-em (scripts/simCapsAreCeilings.mjs).
+ */
+export function rankEmCeiling(): number {
+  return Math.max(...RANK_ROUNDS.map(r => r.items.length)) * RANK_POINTS_PER_SLOT;
+}
+
 export function getDailyRankRound(): RankRound {
   return RANK_ROUNDS[dailyIndex(getTodayET(), RANK_ROUNDS.length)];
 }

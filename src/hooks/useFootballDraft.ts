@@ -20,7 +20,7 @@ const MAX_PER_PLAYER = 30;
 // Exact round earns more the fewer clues were revealed first (incentive to guess
 // early). cluesUsed is the reveal level (0-4). Close guesses keep modest partial
 // credit. The game guesses round (not pick), so there is no exact-pick bonus.
-function calcPoints(actual: number | null, guessed: number | null, cluesUsed: number): number {
+export function calcPoints(actual: number | null, guessed: number | null, cluesUsed: number): number {
   const a = actual ?? 0;
   const g = guessed ?? 0;
   if (a === g) return Math.max(15, MAX_PER_PLAYER - cluesUsed * 5); // 30/25/20/15/15 for 0..4 clues
@@ -28,6 +28,30 @@ function calcPoints(actual: number | null, guessed: number | null, cluesUsed: nu
   if (diff === 1) return 8;
   if (diff === 2) return 3;
   return 0;
+}
+
+/** Round 646: the recorder stores the day's points times this. */
+export const DRAFT_RECORD_SCALE = 10;
+
+/**
+ * Round 646: what a Football Draft daily records, named so the recorder below
+ * and the ceiling read the one rule: a won day's points (calcPoints, one entry
+ * a player) times DRAFT_RECORD_SCALE, and 0 for a day that was not won.
+ */
+export function footballDraftDailyScore(won: boolean, points: readonly number[]): number {
+  return won ? points.reduce((sum, p) => sum + p, 0) * DRAFT_RECORD_SCALE : 0;
+}
+
+/**
+ * Round 646: the most a Football Draft daily can record. Every player's round
+ * called exactly before any clue (calcPoints(1, 1, 0), MAX_PER_PLAYER) on the
+ * puzzle with the most players, through the rule above. Every puzzle has 5
+ * players today, so 1500. game_score_caps holds it for football-draft
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export function footballDraftCeiling(): number {
+  const most = Math.max(...draftGuesserPuzzles.map(p => p.players.length));
+  return footballDraftDailyScore(true, Array.from({ length: most }, () => calcPoints(1, 1, 0)));
 }
 
 type Puzzle = (typeof draftGuesserPuzzles)[number];
@@ -160,7 +184,7 @@ export function useFootballDraft() {
   }, [mode, resetDailyHook]);
 
   // ---- COMPLETION ----------------------------------------------------------
-  const dailyScore = rawDailyStatus === 'won' ? dailyGuesses.reduce((sum, g) => sum + g.points, 0) * 10 : 0;
+  const dailyScore = footballDraftDailyScore(rawDailyStatus === 'won', dailyGuesses.map(g => g.points));
   useGameCompletion('football-draft', rawDailyStatus !== 'playing', dailyScore);
 
   return {

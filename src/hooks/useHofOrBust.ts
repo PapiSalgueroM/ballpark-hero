@@ -35,6 +35,13 @@ const STORAGE_PREFIX = 'hof-or-bust-';
 const BASE_SCORE = 1000;
 const HINT_COST = 100;
 
+/**
+ * Round 646: the most a Hall of Fame or Bust daily can record, a right vote
+ * with no hint: BASE_SCORE, 1000 (every hint costs HINT_COST). game_score_caps
+ * holds it for hof-or-bust (scripts/simCapsAreCeilings.mjs).
+ */
+export const HOF_OR_BUST_CEILING = BASE_SCORE;
+
 function getDailyPlayer(): HofPlayer {
   const idx = getDateSeed() % hofPlayers.length;
   return hofPlayers[idx];

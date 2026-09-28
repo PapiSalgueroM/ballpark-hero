@@ -7168,6 +7168,10 @@ export function pickUnlimitedPuzzle(lineups: Lineup[] = LINEUPS): ActivePuzzle {
 
 export const MAX_GUESSES = 3;
 export const SCORE_BY_GUESS: Record<number, number> = { 1: 100, 2: 70, 3: 40 };
+/** Round 646: the most a Missing XI daily can record, a first guess find, the
+    top of SCORE_BY_GUESS. game_score_caps holds it for missing-xi
+    (scripts/simCapsAreCeilings.mjs). */
+export const MISSING_XI_CEILING = Math.max(...Object.values(SCORE_BY_GUESS));
 
 /** True if `guessName` matches this round's candidate by name or by one of its verified database aliases, accent/case-insensitive via the shared normalizeName pipeline. */
 export function isCorrectGuess(guessName: string, candidate: BlankCandidate): boolean {

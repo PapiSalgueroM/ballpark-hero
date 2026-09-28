@@ -28,6 +28,10 @@ export const NBA_SLOTS: SeasonSlot[] = [
 ];
 
 export const NBA_GAMES = 82;
+/** Round 646: the most a Perfect Season NBA run can record, its wins, every
+    one of NBA_GAMES won: 82. game_score_caps holds it for perfect-season-nba
+    (scripts/simCapsAreCeilings.mjs). */
+export const PERFECT_SEASON_NBA_CEILING = NBA_GAMES;
 
 const MIN_INDEX_MINUTES = 1000; // rotation regular over a season
 const MIN_SQUAD_MINUTES = 500;  // roughly 20 games of real run

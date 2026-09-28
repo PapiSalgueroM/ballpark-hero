@@ -2,13 +2,13 @@ import { useState, useMemo, useCallback } from 'react';
 import { hockeyCareerPuzzles } from '@/data/hockeyCareerPlayers';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { careerClueScore } from '@/lib/careerClueScores';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 
 export type HockeyCareerStatus = 'playing' | 'guessed' | 'revealed';
 
 export type HockeyCareerMode = 'daily' | 'unlimited';
 
-const CLUE_SCORES = [1000, 850, 700, 550, 400, 250, 100];
 
 // Action events stored in the daily action log
 type CareerAction = { t: 'skip' } | { t: 'won' } | { t: 'give' };
@@ -61,9 +61,7 @@ export function useHockeyCareer() {
 
   const player = puzzle?.player;
   const maxClue = 6;
-  const score = activeStatus === 'guessed'
-    ? CLUE_SCORES[Math.min(activeClueLevel, CLUE_SCORES.length - 1)]
-    : 0;
+  const score = careerClueScore(activeStatus === 'guessed', activeClueLevel);
 
   // ---- CLUES ---------------------------------------------------------------
   const visibleClues = useMemo(() => {
@@ -146,9 +144,7 @@ export function useHockeyCareer() {
   );
 
   // ---- COMPLETION ----------------------------------------------------------
-  const dailyScore = dailyStatus === 'guessed'
-    ? CLUE_SCORES[Math.min(dailyClueLevel, CLUE_SCORES.length - 1)]
-    : 0;
+  const dailyScore = careerClueScore(dailyStatus === 'guessed', dailyClueLevel);
   useGameCompletion('hockey-career', rawDailyStatus !== 'playing', dailyScore);
 
   return {

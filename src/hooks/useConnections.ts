@@ -2,6 +2,7 @@ import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { connectionsPuzzles } from '@/data/connectionsPuzzles';
 import type { ConnectionGroup, ConnectionDifficulty } from '@/types/connections';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { CONNECTIONS_LIVES, connectionsScore } from '@/lib/connectionsScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchConnectionsPuzzles } from '@/lib/fetchConnectionsPuzzles';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
@@ -85,7 +86,7 @@ export function useConnections() {
 
   const dailyLives = useMemo(() => {
     if (dailyActions.some((a) => a.t === 'give')) return 0;
-    return 4 - dailyActions.filter((a) => a.t === 'x').length;
+    return CONNECTIONS_LIVES - dailyActions.filter((a) => a.t === 'x').length;
   }, [dailyActions]);
 
   const dailyHintCats = useMemo(
@@ -276,7 +277,7 @@ export function useConnections() {
   }, [mode, resetUnlimitedState]);
 
   const totalPuzzles = puzzlePool.length;
-  const completionScore = gameStatus === 'won' ? activeLives * 250 : 0;
+  const completionScore = connectionsScore(gameStatus === 'won', activeLives);
   useGameCompletion('connections', rawDailyStatus !== 'playing', completionScore);
 
   return {

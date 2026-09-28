@@ -25,6 +25,15 @@ export interface ClubQuestion {
 
 export const QUESTION_TREE_START_SCORE = 1000;
 
+/**
+ * Round 646: the most a Guess the Club questions round can record.
+ * scoreQuestionTreeRound starts at QUESTION_TREE_START_SCORE and every question
+ * asked only costs, so the best is a right guess before asking anything: 1000.
+ * game_score_caps holds it for guess-soccer-club-questions
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export const QUESTION_TREE_CEILING = QUESTION_TREE_START_SCORE;
+
 // Cheaper/broader questions cost less; sharper, narrowing questions cost more.
 export const CLUB_QUESTIONS: ClubQuestion[] = [
   {

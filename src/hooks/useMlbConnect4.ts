@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
 import { getRandomConnect4Board } from '@/data/mlbConnect4Boards';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { connect4Score } from '@/lib/connect4Score';
 import { normalizeName } from '@/lib/playerSearch';
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '@/integrations/supabase/client';
 import type {
@@ -237,7 +238,7 @@ export function useMlbConnect4() {
     setUsedPlayers(new Set());
   }, []);
 
-  useGameCompletion('mlb-connect-4', phase === 'won' || phase === 'draw', phase === 'won' ? 500 : 200);
+  useGameCompletion('mlb-connect-4', phase === 'won' || phase === 'draw', connect4Score(phase === 'won' ? 'won' : 'draw'));
 
   return {
     board,

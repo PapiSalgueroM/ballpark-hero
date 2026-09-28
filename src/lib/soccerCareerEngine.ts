@@ -7060,6 +7060,14 @@ export function getCareerTotals(seasons: SeasonRecord[]) {
 /** Round 644: the most a TV career, or a club owner's run, adds to the legacy. */
 export const POST_RETIREMENT_BONUS_CAP = 6;
 
+/**
+ * Round 646: the top of the legacy score, both clamps in calculateLegacy read
+ * it, and so the most a Soccer Career can record since Round 644 records the
+ * legacy. game_score_caps holds it for soccer-career, set by the Round 644
+ * migration (scripts/simCapsAreCeilings.mjs).
+ */
+export const SOCCER_CAREER_CEILING = 100;
+
 /** Round 644: did this career play a senior season? Nothing after retirement
     counts toward the legacy of one that did not. */
 export function playedSeniorSeason(state: CareerState): boolean {
@@ -7230,7 +7238,7 @@ export function calculateLegacy(state: CareerState): LegacyResult {
     score += intPts;
   }
 
-  score = Math.round(clamp(score, 0, 100));
+  score = Math.round(clamp(score, 0, SOCCER_CAREER_CEILING));
   /* The climb is applied AFTER the hundred point clamp, and that is not a
      detail. A career that wins everything sums to about a hundred and fifty
      before the clamp, so a climb line added in with the rest would have been
@@ -7240,7 +7248,7 @@ export function calculateLegacy(state: CareerState): LegacyResult {
      than the greatest of all time, which is the honest read. */
   if (climbPoints !== 0) {
     breakdown.push({ label: "The Climb", points: climbPoints });
-    score = Math.round(clamp(score + climbPoints, 0, 100));
+    score = Math.round(clamp(score + climbPoints, 0, SOCCER_CAREER_CEILING));
   }
   return { score, tier: getLegacyTier(score), breakdown };
 }

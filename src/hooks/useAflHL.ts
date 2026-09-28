@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { aflGoalKickers, AflGoalKicker } from '@/data/aflGoalKickers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { higherLowerScore } from '@/lib/higherLowerScore';
+import { higherLowerScore, HIGHER_LOWER_DAILY_ROUNDS } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
 
@@ -36,7 +36,7 @@ interface RoundResult {
 
 type HLAction = { t: 'result'; correct: boolean };
 
-const ROUNDS = 10;
+const ROUNDS = HIGHER_LOWER_DAILY_ROUNDS;
 const SENTINEL_PUZZLES = [{ id: 'aflhl-daily' }];
 
 function buildPairs(seed: number, hard = false): [AflGoalKicker, AflGoalKicker][] {

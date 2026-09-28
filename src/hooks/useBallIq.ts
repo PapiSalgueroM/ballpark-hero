@@ -67,6 +67,18 @@ export function buildQuestion(correct: Clue, pool: Clue[], label: string): Quest
   return { clue: correct, options: order.map(i => options[i]), chosen: null };
 }
 
+/** Round 646: the top of the IQ scale, the clamp below reads it. */
+const IQ_TOP = 160;
+/** The recorder stores the IQ times this, so a 160 records 1600. */
+const IQ_RECORD_SCALE = 10;
+
+/**
+ * Round 646: the most a Ball IQ day can record. Every question right is an
+ * IQ of 55 + 105 = 160, clamped at IQ_TOP, recorded times 10: 1600.
+ * game_score_caps holds it for ball-iq (scripts/simCapsAreCeilings.mjs).
+ */
+export const BALL_IQ_CEILING = IQ_TOP * IQ_RECORD_SCALE;
+
 /**
  * Ball Knowledge IQ. Centred on 100, weighted so the hard questions carry more:
  * a $1000 clue is worth more IQ than a $200 one. Range clamps to 55-160.
@@ -79,7 +91,7 @@ function computeIq(questions: Question[]): number {
   );
   if (total === 0) return 100;
   const pct = earned / total;
-  return Math.round(Math.max(55, Math.min(160, 55 + pct * 105)));
+  return Math.round(Math.max(55, Math.min(IQ_TOP, 55 + pct * 105)));
 }
 
 function rankFor(iq: number): string {
@@ -170,7 +182,7 @@ export function useBallIq(): BallIqState {
   const iq = useMemo(() => computeIq(questions), [questions]);
   const rank = rankFor(iq);
 
-  useGameCompletion('ball-iq', finished, iq * 10, correctCount);
+  useGameCompletion('ball-iq', finished, iq * IQ_RECORD_SCALE, correctCount);
 
   const answer = useCallback((option: string) => {
     if (!current || current.chosen) return;

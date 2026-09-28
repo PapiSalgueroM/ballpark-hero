@@ -79,6 +79,14 @@ export interface TransferPathState {
   getPlayerClubs: (name: string) => Set<string>;
 }
 
+/**
+ * Round 646: the most a Transfer Path daily can record. A solved chain pays
+ * this, less 100 for every step past the puzzle's shortest (dailyScore below),
+ * so a chain of the shortest length pays 1000. game_score_caps holds it for
+ * transfer-path (scripts/simCapsAreCeilings.mjs).
+ */
+export const TRANSFER_PATH_CEILING = 1000;
+
 export function useTransferPath(): TransferPathState {
   // ── Pool state + dual fetch ────────────────────────────────────────────────
   const [puzzlePool, setPuzzlePool] = useState<TransferPathPuzzle[]>(fallbackPuzzles);
@@ -169,7 +177,7 @@ export function useTransferPath(): TransferPathState {
     if (dailyStatus !== 'won') return 0;
     const steps = dailyChain.length - 1;
     const extra = Math.max(0, steps - (dailyPuzzle?.minSteps ?? 0));
-    return Math.max(0, 1000 - extra * 100);
+    return Math.max(0, TRANSFER_PATH_CEILING - extra * 100);
   }, [dailyStatus, dailyChain, dailyPuzzle]);
 
   // ── Rule state (Round 460) ─────────────────────────────────────────────────

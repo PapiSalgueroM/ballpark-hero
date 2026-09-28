@@ -26,6 +26,13 @@ const MAX_GUESSES = 6;
 const BASE_SCORE = 600;
 const CLUE_COST = 100;
 
+/**
+ * Round 646: the most a Guess the Golfer daily can record, a win on the first
+ * clue: BASE_SCORE, 600 (every extra clue costs CLUE_COST). game_score_caps
+ * holds it for guess-the-golfer (scripts/simCapsAreCeilings.mjs).
+ */
+export const GUESS_THE_GOLFER_CEILING = BASE_SCORE;
+
 type Phase = 'playing' | 'won' | 'lost';
 type GuessAction = { t: 'guess'; name: string } | { t: 'won' } | { t: 'give' };
 

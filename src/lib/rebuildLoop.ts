@@ -216,15 +216,18 @@ export function xiOf(s: RunState): (Player | null)[] {
   });
 }
 
+/** Round 646: the top of the live rating, both clamps in ratingOf read it. */
+export const REBUILD_RATING_MAX = 99;
+
 /** The live rating, the manager's lift included, the reckoning's penalty included once there is one. */
 export function ratingOf(s: RunState, manager: ManagerOption | null = s.manager): number {
   const lift = liftOf(manager);
   if (s.reckoning) {
-    return Math.max(1, Math.min(99, xiRatingWithHoles(s.reckoning.xi, lift) - s.reckoning.ratingPen));
+    return Math.max(1, Math.min(REBUILD_RATING_MAX, xiRatingWithHoles(s.reckoning.xi, lift) - s.reckoning.ratingPen));
   }
   const xi = xiOf(s);
   if (!xi.some(Boolean)) return 0;
-  return Math.max(1, Math.min(99, xiRatingWithHoles(xi, lift)));
+  return Math.max(1, Math.min(REBUILD_RATING_MAX, xiRatingWithHoles(xi, lift)));
 }
 
 export interface ObjectiveView {

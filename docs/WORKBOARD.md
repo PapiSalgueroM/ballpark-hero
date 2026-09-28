@@ -15,6 +15,18 @@ sports, from 0.53 to 0.86; managed beats neglected in all six), plus the reworke
 `simGmReload` and `simCfbDynasty`. **Round 646 is what pays it right:** the six caps hold the old
 cumulative scale until 646 sets each to the exported `seasonCeiling()` (100).
 
+**Round 646 BUILT, REVIEWED AND FIXED 2026-09-28, branch `r646-caps-real-ceiling`, not on main,
+migration NOT applied.** Every scored game's engine exports the most it can record, read off the
+code that records it (113 games, plus the six season games reading Round 647's `seasonCeiling()`).
+`supabase/migrations/20260928_round_646_caps_at_real_ceilings.sql` sets 116 caps (56 move) and,
+new in the fix, keeps past days at the cap they were played under (`game_score_cap_history`,
+`game_cap_periods`, the board rebuilt on them). It fails closed and **refuses until Round 647 is
+live and a whole day has passed with no old scale season row**. Fence
+`scripts/simCapsAreCeilings.mjs`: six sections, twelve exact controls, and a perfect run through
+the scoring code for 50 games, each recorder read to use what is played. Merging with 645b
+conflicts in 14 scoring files (notes in `docs/PROJECT-STATE.md`, top section). Thirteen games have
+no rules ceiling and keep their caps; each needs a scoring scale first.
+
 **2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof
 in `docs/PROJECT-STATE.md`.

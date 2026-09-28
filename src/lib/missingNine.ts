@@ -428,3 +428,7 @@ export function nineHintForLevel(level: NineHintLevel, candidate: NineBlankCandi
 }
 
 export const NINE_SCORES = [100, 70, 40] as const;
+/** Round 646: the most a Missing Nine daily can record, a win with no miss,
+    the top of NINE_SCORES. game_score_caps holds it for missing-nine
+    (scripts/simCapsAreCeilings.mjs). */
+export const MISSING_NINE_CEILING = Math.max(...NINE_SCORES);

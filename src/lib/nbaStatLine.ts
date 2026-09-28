@@ -314,6 +314,17 @@ export interface ScoreResult {
   breakdown: StatScore[];
 }
 
+/** Round 646: the total maps the mean closeness (0 to 1) onto 0 to this. */
+const TOTAL_SCALE = 100;
+
+/**
+ * Round 646: the most an NBA Stat Line day can record. Every stat's closeness
+ * is at most 1 (an exact match), so their mean is at most 1 and the total at
+ * most TOTAL_SCALE: 100. game_score_caps holds it for nba-stat-line
+ * (scripts/simCapsAreCeilings.mjs).
+ */
+export const NBA_STAT_LINE_CEILING = TOTAL_SCALE;
+
 /**
  * Similarity score: per stat closeness is linear in the distance, clamped
  * at zero, and the total is the mean mapped to 0 to 100. An exact match on
@@ -342,7 +353,7 @@ export function scoreCombined(target: StatTarget, combined: CombinedLine): Score
     actual: combined.splitPct,
     closeness: closeness(combined.splitPct - target.splitPct, SPLIT_SCALES[target.split]),
   });
-  const total = Math.round((breakdown.reduce((a, s) => a + s.closeness, 0) / breakdown.length) * 100);
+  const total = Math.round((breakdown.reduce((a, s) => a + s.closeness, 0) / breakdown.length) * TOTAL_SCALE);
   return { total, breakdown };
 }
 

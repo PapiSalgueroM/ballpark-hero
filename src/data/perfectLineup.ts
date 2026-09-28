@@ -122,6 +122,9 @@ export function eligiblePlayers(slot: LineupSlot, usedNames: Set<string>): Playe
 
 const power = (p: Player) => Math.max(1, Math.min(200, p.marketValue));
 
+/** Round 646: the top of the classic rating, the clamp in simulate reads it. */
+export const LINEUP_RATING_MAX = 100;
+
 /** Deterministic squad simulation. */
 export function simulate(picks: Player[]): SimResult {
   const avgPower = picks.reduce((s, p) => s + power(p), 0) / picks.length;
@@ -140,7 +143,7 @@ export function simulate(picks: Player[]): SimResult {
   const chemistry = Math.round((chemPts / (picks.length * 2)) * 100);
 
   const normPower = Math.min(100, (avgPower / 150) * 100);
-  const rating = Math.round(Math.min(100, normPower * 0.75 + chemistry * 0.25));
+  const rating = Math.round(Math.min(LINEUP_RATING_MAX, normPower * 0.75 + chemistry * 0.25));
 
   const squadValue = picks.reduce((s, p) => s + p.marketValue, 0);
   const goalsFor = Math.max(1, Math.round((rating / 100) * 9) + (rating >= 90 ? 3 : 0));

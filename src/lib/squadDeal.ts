@@ -77,6 +77,10 @@ export const FORMATIONS: Formation[] = [
  *   mv=180 -> 80   (was 98)   star player
  *   mv=230 -> 83   (was 99)   Messi/Ronaldo-tier ceiling
  */
+/** Round 646: the top of playerRating's scale. Budget Builder and Mystery Box
+    record a squad average of it, so their leaderboard ceilings read this. */
+export const PLAYER_RATING_MAX = 96;
+
 export function playerRating(p: Player): number {
   // 0-99 player card scale (owner 2026-08-05): he wanted our ratings to sit
   // where a player expects them to, so the anchors land on familiar card
@@ -93,7 +97,7 @@ export function playerRating(p: Player): number {
   const ageBoost = age >= 30 ? Math.min(6, 1 + (age - 29) * 0.55) : 1;
   const mv = Math.max(0.5, p.marketValue * ageBoost);
   const r = 62 + (33 * Math.log10(mv)) / Math.log10(400);
-  return Math.max(52, Math.min(96, Math.round(r)));
+  return Math.max(52, Math.min(PLAYER_RATING_MAX, Math.round(r)));
 }
 
 /**
@@ -485,6 +489,13 @@ export const EXTRA_DEALS: ExtraCategory[] = [
 export interface SquadResult { rating: number; chemistry: number; grade: string; facts: string[]; }
 
 /**
+ * Round 646: the most a Squad Deal game can record, its final rating, which
+ * simulateSquad clamps to 1..100: 100. game_score_caps holds it for
+ * squad-deal (scripts/simCapsAreCeilings.mjs).
+ */
+export const SQUAD_DEAL_CEILING = 100;
+
+/**
  * Verdict tier audit (2026-07-03), run alongside the playerRating fix above.
  * Final `rating` = round(avgPlayerRating * 0.82 + chemistry * 0.18) + extraRating,
  * where extraRating sums to roughly -3 (worst extras) to +13 (best extras) and
@@ -516,7 +527,7 @@ export function simulateSquad(picks: Player[], extras: ExtraOption[] = [], era: 
   const extraRating = extras.reduce((s2, e) => s2 + e.ratingMod, 0);
   const extraChem = extras.reduce((s2, e) => s2 + e.chemMod, 0);
   const chemistry = Math.max(0, Math.min(100, Math.round((chemPts / (picks.length * accessors.length)) * 100) + extraChem));
-  const rating = Math.max(1, Math.min(100, Math.round(avg * 0.82 + chemistry * 0.18) + extraRating));
+  const rating = Math.max(1, Math.min(SQUAD_DEAL_CEILING, Math.round(avg * 0.82 + chemistry * 0.18) + extraRating));
   const grade = rating >= 84 ? 'A+' : rating >= 76 ? 'A' : rating >= 66 ? 'B' : rating >= 55 ? 'C' : 'D';
 
   const topScorer = [...picks].sort((a, b) => b.goals - a.goals)[0];

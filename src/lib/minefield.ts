@@ -547,6 +547,20 @@ export function maxRunScore(rounds: MinefieldRound[]): number {
   );
 }
 
+/**
+ * Round 646: the most any day's Minefield run can record. A run is
+ * ROUNDS_PER_RUN distinct boards and each pays maxRunScore's clean sweep, so
+ * the best day deals the boards with the most real tiles: today the two
+ * 12 tile boards and an 11, (12 + 12 + 11) x 10 + 3 x 30 = 440.
+ * game_score_caps holds it for minefield (scripts/simCapsAreCeilings.mjs).
+ */
+export function minefieldCeiling(): number {
+  const sweeps = MINEFIELD_CATEGORIES
+    .map(c => c.correct.length * POINTS_PER_FIND + CLEAR_BONUS)
+    .sort((a, b) => b - a);
+  return sweeps.slice(0, ROUNDS_PER_RUN).reduce((s, n) => s + n, 0);
+}
+
 /* ------- the finished daily, kept across a refresh (Round 428) ------ */
 /* Before this, a refresh after the final score dealt the same three boards
  * again with every mine already revealed, and the second run recorded a
