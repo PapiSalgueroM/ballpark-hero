@@ -16,32 +16,34 @@ import ShareButtons from '@/components/game/ShareButtons';
 import { cn } from '@/lib/utils';
 import { useToast } from '@/hooks/use-toast';
 import { useAuth } from '@/contexts/AuthContext';
-import { ruleForCriteria, pickIsLegal, anyLegalPick } from '@/lib/fantasyCriteria';
+import { ruleForCriteria, pickIsLegal, anyLegalPick, fantasySettlePlayer, zeroSkillFantasyXi } from '@/lib/fantasyCriteria';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
-import { settleSeason, type SdSeason } from '@/lib/searchDiscard';
-import type { Player } from '@/types/game';
+import { settleSeason, duelScore, type SdSeason } from '@/lib/searchDiscard';
 
 /** The settle engine reads marketValue, age and name; this table's rows map
  *  straight onto that. */
-const toSettlePlayer = (p: DraftPlayer): Player =>
-  ({ name: p.name, marketValue: Math.max(1, p.market_value_millions), age: p.age ?? 27, position: p.position } as Player);
+const toSettlePlayer = fantasySettlePlayer;
 
 const TEAM_SIZE = 11;
 const TOTAL_PICKS = TEAM_SIZE * 2;
 
-/* Round 644: the season score, your points as a share of the 114 a perfect
-   38 game season earns, out of 100. The completion records it, and since this
-   round the verdict card and the share line say it too, because before it the
-   card showed season points and the board counted this number, which nobody
-   was ever shown. */
-const seasonScore = (points: number) => Math.min(100, Math.round((points / 114) * 100));
+/* Round 644: the season score, out of 100. The completion records it, and the
+   verdict card and the share line say it too, because before that the card
+   showed season points and the board counted a number nobody was shown.
+   Round 645: it is no longer the bare share of the 114 points a perfect season
+   earns. The settle pays a fixed ladder of opposition, and the worst eleven in
+   this pool rate in the 80s, so the worst possible draft scored 73. The score
+   is the share above the season the worst legal pick every turn would have had
+   against the same AI team (duelScore, zeroSkillFantasyXi): that draft scores
+   0 and a perfect season still scores 100. The verdict carries it. */
+type FantasyVerdict = SdSeason & { score: number };
 
 /* Round 644: the share says how the season really went and carries the same
    season score. It used to claim "I outdrafted the AI" whatever the table said. */
-function fantasyShareText(verdict: SdSeason | null): string {
+function fantasyShareText(verdict: FantasyVerdict | null): string {
   const tail = 'Can you build a better squad? douknowball.com/fantasy-draft';
   if (!verdict) return `I drafted my XI on Fantasy Draft at DoUKnowBall. ${tail}`;
-  const line = `Season score ${seasonScore(verdict.points[0])}/100, ${verdict.points[0]} pts to the AI's ${verdict.points[1]}.`;
+  const line = `Season score ${verdict.score}/100, ${verdict.points[0]} pts to the AI's ${verdict.points[1]}.`;
   const result = verdict.winner === 0
     ? 'I outdrafted the AI on Fantasy Draft at DoUKnowBall!'
     : verdict.winner === -1
@@ -84,7 +86,7 @@ const FantasyDraft = () => {
   // Round 326, "unclear goal": the deterministic verdict, computed the
   // moment the draft completes, the same settle engine Search and Discard
   // uses. The narrated stories and the vote stay as flavor underneath.
-  const [verdict, setVerdict] = useState<SdSeason | null>(null);
+  const [verdict, setVerdict] = useState<FantasyVerdict | null>(null);
 
   // Season simulation state
   const [simulating, setSimulating] = useState(false);
@@ -115,10 +117,11 @@ const FantasyDraft = () => {
     if (!draftComplete || completionRef.current || userTeam.length < TEAM_SIZE || aiTeam.length < TEAM_SIZE) return;
     completionRef.current = true;
     const season = settleSeason(userTeam.map(toSettlePlayer), aiTeam.map(toSettlePlayer));
-    setVerdict(season);
-    const score = seasonScore(season.points[0]);
+    const zeroSeason = settleSeason(zeroSkillFantasyXi(players, aiTeam, ruleForCriteria(criteria), TEAM_SIZE).map(toSettlePlayer), aiTeam.map(toSettlePlayer));
+    const score = duelScore(season.points[0], zeroSeason.points[0]);
+    setVerdict({ ...season, score });
     recordCompletion('/fantasy-draft', score, getCurrentPlayerName(profile), season.winner === 0 ? 1 : 0);
-  }, [draftComplete, userTeam, aiTeam, profile]);
+  }, [draftComplete, userTeam, aiTeam, profile, players, criteria]);
 
   // Owner 2026-08-05: the daily criteria is a real rule, not decoration.
   // Illegal picks are blocked for BOTH the player and the AI. If a side has
@@ -404,7 +407,7 @@ const FantasyDraft = () => {
                         </p>
                         <p className="text-xs text-muted-foreground mt-1">{verdict.headToHead}.</p>
                         <p className="text-sm font-bold text-primary mt-2">
-                          Season score: {seasonScore(verdict.points[0])}/100
+                          Season score: {verdict.score}/100
                         </p>
                       </div>
                     )}
@@ -450,7 +453,7 @@ const FantasyDraft = () => {
                       <ShareButtons
                         gameName="Fantasy Draft"
                         gamePath="/fantasy-draft"
-                        score={verdict ? `Season score ${seasonScore(verdict.points[0])}/100 (${verdict.points[0]} pts vs the AI's ${verdict.points[1]})` : 'Drafted my XI and simulated a full season'}
+                        score={verdict ? `Season score ${verdict.score}/100 (${verdict.points[0]} pts vs the AI's ${verdict.points[1]})` : 'Drafted my XI and simulated a full season'}
                         customText={fantasyShareText(verdict)}
                       />
                     )}
