@@ -543,10 +543,10 @@ console.log('7) Every file that files a daily record reads the clock ONCE, pinne
      tomorrow is checked the day it ships. */
   const CLOCK = /\b(getTodayET|getDailyDateET|getPollDayET)\s*\(\s*\)/g;
   const PIN = /\buseRef\s*\(\s*(getTodayET|getDailyDateET|getPollDayET|getTodayStr)\s*\(\s*\)\s*\)\s*\.current\b/;
-  /* Round 645 part three: the two arcade writers and the chain writer are
-     wrappers over writeDailyRecord in src/lib, so the file that calls them
-     is the file whose clock read matters. */
-  const WRITES_A_DAILY = /\b(writeDailyRecord|saveDailyRecord|saveDailyResult|saveDailyBingo|saveDailyRun|saveDailyAttempt|writeArcadeRun|writeArcadeProgress|writeChainDaily)\s*\(/;
+  /* Round 645 part three: the two arcade writers, the chain writer and the
+     Pack Battle writer are wrappers over writeDailyRecord in src/lib, so the
+     file that calls them is the file whose clock read matters. */
+  const WRITES_A_DAILY = /\b(writeDailyRecord|saveDailyRecord|saveDailyResult|saveDailyBingo|saveDailyRun|saveDailyAttempt|writeArcadeRun|writeArcadeProgress|writeChainDaily|writePackDaily)\s*\(/;
   const roots = ['src/hooks', 'src/pages', 'src/components'];
   const walk = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => {
     const p = path.join(dir, e.name);

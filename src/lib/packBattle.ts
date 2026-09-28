@@ -1,6 +1,7 @@
 import { supabase } from '@/integrations/supabase/client';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import { dailyPrngSeed, dateSeed, getTodayET } from '@/lib/dateUtils';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 
 /**
  * Pack Battle (R6 build plan, Part 1 item 9; MASTER_PLAN Wave 15d, the final
@@ -192,4 +193,48 @@ export function fmtCompactUsd(n: number): string {
   if (n >= 1_000_000) return '$' + (n / 1_000_000).toFixed(1).replace(/\.0$/, '') + 'M';
   if (n >= 1_000) return '$' + Math.round(n / 1_000) + 'K';
   return '$' + Math.round(n);
+}
+
+// ---------------------------------------------------------------------------
+// Today's pack as far as it was played (Round 645 part three)
+// ---------------------------------------------------------------------------
+
+const PACK_SLUG = 'pack-battle';
+
+/* The daily never locked: a refresh dealt the same five cards again with every
+   value already seen, and every replay recorded another completion and paid the
+   bank again. Every call is filed the moment it is made, before the card turns
+   over, so a refresh during the reveal cannot hand the call back; `done` is
+   set once the result card has been shown (and the run recorded). The record must
+   name exactly today's five cards in today's order and hold calls a real run
+   could make (a miss only ever last), or the page deals a fresh daily.
+   Round 645 part three fix: the page kept the reader and the writer apart, and
+   a reveal timer left running across a mode toggle wrote a finished pack with
+   no calls, which the reader then refused, so the day dealt again and paid
+   again. Both directions now go through checkPackDaily, and the writer files
+   nothing the reader would refuse. */
+export interface PackDaily { calls: boolean[]; done: boolean }
+
+function checkPackDaily(pack: PackCard[], f: Record<string, unknown>): PackDaily | null {
+  const { cards, calls, done } = f;
+  if (!Array.isArray(cards) || cards.length !== pack.length || cards.some((n, i) => n !== pack[i].name)) return null;
+  if (!Array.isArray(calls) || calls.length > pack.length - 1 || !calls.every(c => typeof c === 'boolean')) return null;
+  if (calls.slice(0, -1).some(c => c === false)) return null;
+  if (typeof done !== 'boolean') return null;
+  const over = calls[calls.length - 1] === false || calls.length === pack.length - 1;
+  if (done && !over) return null;
+  return { calls: calls as boolean[], done };
+}
+
+export function readPackDaily(today: string, pack: PackCard[]): PackDaily | null {
+  return readDailyRecord<PackDaily>(PACK_SLUG, today, f => checkPackDaily(pack, f));
+}
+
+/** Files today's pack, or nothing when the record is one readPackDaily would
+ *  refuse. Returns whether it was filed. */
+export function writePackDaily(today: string, pack: PackCard[], calls: boolean[], done: boolean): boolean {
+  const fields = { cards: pack.map(c => c.name), calls, done };
+  if (!checkPackDaily(pack, fields)) return false;
+  writeDailyRecord(PACK_SLUG, today, fields);
+  return true;
 }

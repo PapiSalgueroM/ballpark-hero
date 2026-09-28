@@ -49,42 +49,56 @@ const SLUG = 'rarity-round';
    and rejoin to steal the rarest answer), and every replay recorded another
    completion and paid the score again. Each answer is filed the moment it
    is locked in, before the reveal, and `done` is set once the result screen
-   has shown (and the run recorded). A round keeps only what the page cannot
-   compute: the category id, the answer, its rank and the pool size; the
-   prompt comes from today's category and the points from scoreRound. Crowd
-   Says is the unranked warm up and files nothing. Fails closed: rounds that
-   are not today's categories in today's order, or a rank the pool could not
-   hold, and the page deals a fresh daily. */
-interface RarityDaily { results: RoundResult[]; done: boolean }
+   has shown (and the run recorded). Crowd Says is the unranked warm up and
+   files nothing. Fails closed: rounds that are not today's categories in
+   today's order, and the page deals a fresh daily.
+   Round 645 part three fix: a round keeps only the category and the answer.
+   The record used to keep the answer's rank and its pool's size as well, and
+   the resume trusted them, so a hand edited record could claim the rarest
+   answer in every round and have that total recorded. Now the rank, the pool
+   size and the points are scored again on the way back from that category's
+   own pool, exactly as submitGuess scores a live answer (scoreSaved), and an
+   answer that is not in its pool refuses the whole record. */
+interface RarityDaily { answers: string[]; done: boolean }
 
 function readRarityDaily(today: string, categories: RarityCategory[]): RarityDaily | null {
   return readDailyRecord<RarityDaily>(SLUG, today, f => {
     const { rounds, done } = f;
     if (!Array.isArray(rounds) || rounds.length > categories.length || typeof done !== 'boolean') return null;
     if (done && rounds.length !== categories.length) return null;
-    const results: RoundResult[] = [];
+    const answers: string[] = [];
     for (let i = 0; i < rounds.length; i += 1) {
       const r = rounds[i] as Record<string, unknown> | null;
       if (!r || typeof r !== 'object' || r.categoryId !== categories[i].id) return null;
-      const { answerName, rank, poolSize } = r;
-      if (typeof answerName !== 'string' || answerName.trim() === '') return null;
-      if (typeof poolSize !== 'number' || !Number.isInteger(poolSize) || poolSize < 1) return null;
-      if (typeof rank !== 'number' || !Number.isInteger(rank) || rank < 1 || rank > poolSize) return null;
-      results.push({
-        categoryId: categories[i].id,
-        prompt: categories[i].prompt,
-        answerName,
-        rank,
-        poolSize,
-        points: scoreRound(rank, poolSize, 'rarity'),
-      });
+      if (typeof r.answerName !== 'string' || r.answerName.trim() === '') return null;
+      answers.push(r.answerName);
     }
-    return { results, done };
+    return { answers, done };
   });
 }
 
+/** Today's saved answers scored against their categories' pools, the way
+ *  submitGuess scores a live one; null when any answer is not in its pool. */
+function scoreSaved(categories: RarityCategory[], answers: string[], pools: PoolEntry[][]): RoundResult[] | null {
+  const results: RoundResult[] = [];
+  for (let i = 0; i < answers.length; i += 1) {
+    const pool = pools[i] ?? [];
+    const match = pool.find(p => p.name === answers[i]);
+    if (!match) return null;
+    results.push({
+      categoryId: categories[i].id,
+      prompt: categories[i].prompt,
+      answerName: match.name,
+      rank: match.rank,
+      poolSize: pool.length,
+      points: scoreRound(match.rank, pool.length, 'rarity'),
+    });
+  }
+  return results;
+}
+
 const fileRounds = (results: RoundResult[]) =>
-  results.map(r => ({ categoryId: r.categoryId, answerName: r.answerName, rank: r.rank, poolSize: r.poolSize }));
+  results.map(r => ({ categoryId: r.categoryId, answerName: r.answerName }));
 
 /**
  * Rarity Round: name the most obscure valid answer you can ("Rarity Round"
@@ -121,11 +135,17 @@ const RarityRound = () => {
 
   const currentCategory = rounds[roundIndex];
 
+  /* Round 645 part three fix: which run a pool fetch belongs to, so a restore
+     still scoring its saved answers when the player toggles a mode lands on
+     nothing. */
+  const runToken = useRef(0);
+
   // Every hook lives above this point and none of them are conditional, per
   // the site's React error #310 rule (hooks must never sit below an early
   // return). The loading/error UI is decided entirely in the JSX below.
 
   const startRun = useCallback((nextPlayMode: PlayMode, nextRarityMode: RarityMode) => {
+    const token = ++runToken.current;
     setPlayMode(nextPlayMode);
     setRarityMode(nextRarityMode);
     const categories = nextPlayMode === 'daily' ? pickDailyCategories(CATEGORIES, todayStr) : pickRandomCategories(CATEGORIES);
@@ -136,23 +156,46 @@ const RarityRound = () => {
     /* Round 645 part three: today's ranked daily is dealt once, and one left
        part way picks up on the round after the last answer locked in. */
     const saved = nextPlayMode === 'daily' && nextRarityMode === 'rarity' ? readRarityDaily(todayStr, categories) : null;
-    const savedResults = saved?.results ?? [];
     setRounds(categories);
-    setRoundIndex(Math.min(savedResults.length, categories.length - 1));
-    setResults(savedResults);
+    setRoundIndex(0);
+    setResults([]);
     setInputValue('');
     setSelectedEntity(null);
     setErrorMsg('');
     setLastResult(null);
-    if (saved?.done) {
-      /* shown and recorded before the refresh: not a new finish */
-      markRestoredFinish(SLUG);
-      setPhase('done');
+    if (!saved || saved.answers.length === 0) {
+      setPhase('loading-round');
       return;
     }
-    /* All five answered with the result screen never shown: it shows now,
-       and that is the finish recorded. */
-    setPhase(savedResults.length >= categories.length ? 'done' : 'loading-round');
+    /* Round 645 part three fix: the saved answers are scored from their own
+       pools before anything is shown. The page passes through boot on the
+       way, so a finished daily reopened over a finished Unlimited run is
+       still a transition the recorder sees and its mark is consumed. */
+    setPhase('boot');
+    Promise.all(saved.answers.map((_, i) => categories[i].fetchPool()))
+      .then(pools => {
+        if (token !== runToken.current) return;
+        const restored = scoreSaved(categories, saved.answers, pools);
+        if (!restored) {
+          /* an answer its category's pool does not hold: not a real run */
+          setPhase('loading-round');
+          return;
+        }
+        setResults(restored);
+        setRoundIndex(Math.min(restored.length, categories.length - 1));
+        if (saved.done) {
+          /* shown and recorded before the refresh: not a new finish */
+          markRestoredFinish(SLUG);
+          setPhase('done');
+          return;
+        }
+        /* All five answered with the result screen never shown: it shows
+           now, and that is the finish recorded. */
+        setPhase(restored.length >= categories.length ? 'done' : 'loading-round');
+      })
+      .catch(() => {
+        if (token === runToken.current) setPhase('error');
+      });
   }, [todayStr]);
 
   // Boot the first run on mount (daily mode by default).

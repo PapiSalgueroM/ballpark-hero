@@ -44,6 +44,15 @@ function status(m: MountedPage): 'playing' | 'finished' {
   throw new Error('rarity round shows neither a round nor the result card (boot or error?)');
 }
 
+/* The status once the board has settled (a pick or the result card is up). */
+async function settled(m: MountedPage): Promise<'playing' | 'finished'> {
+  await waitFor(() => {
+    if (resultCard(m.container) || findButton(m.container, /^pick /)) return;
+    throw new Error('rarity round has not settled after the toggle');
+  });
+  return status(m);
+}
+
 /* Answer up to `count` rounds with the same pick, stopping when the run is
    over: a resumed run (Round 645 part three) has fewer than five left. */
 async function answer(m: MountedPage, count: number): Promise<void> {
@@ -114,15 +123,18 @@ export default defineDriver<MountedPage>({
     return card ? resultText(card) : 'no result card';
   },
 
+  /* Round 645 part three fix: a saved daily is scored from its categories'
+     pools before it is shown, so the Daily toggle settles a beat after the
+     click; every status read after a toggle waits for it. */
   async replay(m) {
     if (status(m) === 'playing') await finish(m);
     const unlimited = findButton(m.container, /^Play Unlimited$/);
     if (unlimited) await click(unlimited);
     await click(button(m.container, /^📅 Daily$/));
-    if (status(m) === 'playing') await finish(m);
+    if (await settled(m) === 'playing') await finish(m);
     await click(button(m.container, /^∞ Unlimited$/));
     await click(button(m.container, /^📅 Daily$/));
-    if (status(m) === 'playing') await finish(m);
+    if (await settled(m) === 'playing') await finish(m);
   },
 
   hasDailyReplayControl(m) {
