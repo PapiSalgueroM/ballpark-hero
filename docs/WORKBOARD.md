@@ -1,5 +1,24 @@
 # Work board
 
+**2026-09-28 night, desktop Claude lane, USAGE LIMIT HIT MID-ROUND. Read this before anything else.**
+Round 667 (the player reports) is on `r667-player-reports`, pushed. Done and fenced: defenders keep
+clean sheets (`simCareerCleanSheets`), the 82-0 guide tells the true odds, and a tab left open across a
+deploy reloads once on a stale lazy chunk instead of painting "This page broke" (`simStaleChunk`),
+which is the most likely cause of both crash reports (Club Manager "sends me home when I change
+tactic", Soccer Career "says it broke"). Alisson's Internacional 2015 and 2016 are in the baked pool AND
+in `supabase/migrations/20260928190000_alisson_internacional_seasons.sql`, which is **written but NOT
+applied**: apply it through the Supabase MCP, then run `node scripts/genTransferPathHints.mjs` and
+`simCareerFallback`, `simCareerSeasonTruth`, `simTransferPathHints`, which read that pool. Release E is
+assembled on `release-e` in the gate clone with 662 to 666 (tsc 0), not yet gated or pushed. **Six agent
+workflows were still running when the limit hit** and commit to branches or write to disk on their own:
+builders on `r645a-ranked-recorder`, `r645b-free-points`, `r645c-dailies-lock`, `r646-caps-real-ceiling`,
+`r647-season-ledger`, `r648-profile-clamp` (each was told to push when green); data verification writing
+to `C:/Users/antho/AppData/Local/Temp/claude/verify660/` and `verifyCfb/`; the 5th bug diagnosis
+(Soccer Career error boundary), two dated Wrong answer reports, and five design contracts for the player
+ideas in the workflow journals under `.claude/projects/.../subagents/workflows/`. The four unresolved
+`question_reports` rows from 2026-09-21 to 27 stay unresolved until the fixes are live.
+
+
 **2026-09-28, desktop Claude lane: Rounds 663 to 666 BUILT on `r662-nhl-hl-points`, pushed, not yet on
 main.** One Higher or Lower fence (`scripts/lib/higherLowerFence.mjs`, driven by
 `scripts/simHigherLowerFacts.mjs`) now holds five of the six games to a record of what the site's own

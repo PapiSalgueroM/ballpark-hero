@@ -218,6 +218,8 @@ export const careerPlayers: CareerPlayer[] = [
     nationality: "Brazil",
     position: "GK",
     career: [
+      { season: "2015", club: "Internacional", goals: 0, assists: 0, appearances: 57, marketValue: 5 },
+      { season: "2016", club: "Internacional", goals: 0, assists: 0, appearances: 28, marketValue: 8 },
       { season: "2016-2017", club: "Roma", goals: 0, assists: 0, appearances: 40, marketValue: 18 },
       { season: "2017-2018", club: "Roma", goals: 0, assists: 0, appearances: 48, marketValue: 35 },
       { season: "2018-2019", club: "Liverpool", goals: 0, assists: 1, appearances: 47, marketValue: 60 },
@@ -234,6 +236,8 @@ export const careerPlayers: CareerPlayer[] = [
     nationality: "Brazil",
     position: "GK",
     career: [
+      { season: "2015", club: "Internacional", goals: 0, assists: 0, appearances: 57, marketValue: 5 },
+      { season: "2016", club: "Internacional", goals: 0, assists: 0, appearances: 28, marketValue: 8 },
       { season: "2016-2017", club: "Roma", goals: 0, assists: 0, appearances: 37, marketValue: 15 },
       { season: "2017-2018", club: "Roma", goals: 0, assists: 0, appearances: 49, marketValue: 40 },
       { season: "2018-2019", club: "Liverpool", goals: 0, assists: 1, appearances: 51, marketValue: 60 },
