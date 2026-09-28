@@ -9,10 +9,14 @@
  * one of those the sum is labelled with the season it starts from rather
  * than sitting beside "Seasons 5" claiming to be the whole career.
  *
- * The line under them says what the season was scored against, because a
- * 13-4 season can score par when the roster was projected to go 13-4.
+ * The line under them states the whole projection the season was scored
+ * against, in wins and in the round (the first version gave only the wins,
+ * so a season that beat the projected wins could score nothing and the line
+ * read as if it should have): the season the roster was projected to have,
+ * the bar a season has to get past to score at all, and the season it had.
  */
-import { ledgerTotal, type SeasonRow } from '@/lib/seasonLedger';
+import { BAR_SHARE, ledgerTotal, type SeasonRow } from '@/lib/seasonLedger';
+import { roundPhrase, type SeasonShape } from '@/lib/seasonFormats';
 
 const CHIP = 'rounded-full border border-border bg-background px-3 py-1.5';
 
@@ -27,12 +31,17 @@ export function SeasonLedgerChips({ row, ledger, seasonsPlayed }: { row: SeasonR
   );
 }
 
-export function SeasonProjectionNote({ row }: { row: SeasonRow | null }) {
+type RoundWords = Pick<SeasonShape<unknown>, 'rounds' | 'roundNames' | 'noField'>;
+
+export function SeasonProjectionNote({ row, shape }: { row: SeasonRow | null; shape: RoundWords }) {
   if (!row) return null;
-  const projected = Math.round(row.expShare * row.games);
+  const wins = (share: number) => Math.round(share * row.games);
+  const rarely = Math.round((1 - BAR_SHARE) * 100);
   return (
     <p className="mt-2 text-xs text-muted-foreground">
-      Projected {projected} wins before your moves. You won {row.wins}, and beating the projection is what scores.
+      Projected: {wins(row.expShare)} wins, {roundPhrase(shape, row.expStage)}.
+      {' '}Points start past a season this roster tops only {rarely} times in 100: {wins(row.barShare)} wins, {roundPhrase(shape, row.barStage)}.
+      {' '}Yours: {row.wins} wins, {roundPhrase(shape, row.stage)}.
     </p>
   );
 }

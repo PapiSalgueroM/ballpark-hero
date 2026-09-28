@@ -20,8 +20,10 @@
    title paid for every title before it again, and the number was decided by
    the pick of team. They now close each season into one shared ledger
    (src/lib/seasonLedger.ts, the same module both dynasties use), one row per
-   season, scored against the projection made when that season's decisions
-   opened, and record that row once. Whether the pick still decides the
+   season, scored against the projection made at the pick and then at every
+   close for the season after it (the Round 647 fix: from the roster the
+   season finished with, the men cut that season counted, carried through
+   the offseason a GM who touches nothing gets), and record that row once. Whether the pick still decides the
    number is measured headless in scripts/simSeasonLedger.mjs; this harness
    proves the boards wire it: which projection a row is scored against, and
    that each close is one recorded finish.
@@ -34,18 +36,23 @@
         board, remounts, and reads the save. The REPRO row of each board
         prints what a reload let the player do, echoed here as the measured
         evidence.
-     2) the season ledger: six rows per board. A title season adds exactly
+     2) the season ledger: seven rows per board. A title season adds exactly
         one row, scored against the projection the save carries, recorded
-        once; a season without a title adds exactly one row, recorded once;
+        once, the ceiling for a season past every projected one, and the
+        recap line states the whole projection (wins and round, the bar, the
+        season); a season without a title adds exactly one row, recorded
+        once, and under the bar it scores nothing;
         an older save (two titles, four seasons, no ledger, no projection)
         adds one row, projected as it loads, with no retroactive points, and
         the recap calls the sum "Since 2026" rather than the career; replaying
         a closed title adds nothing (a reload records nothing, the final week
         refuses, the module refuses a second row); two seasons played on ONE
         mounted board add two rows and two finishes (the closed row has to
-        reset between them) and the career is their sum; and the projection
-        is the pick's, made on the real pick screen, so the same season
-        scored against the roster at the whistle would pay less.
+        reset between them), the next season is projected at the close and
+        not again after the draft, and the career is their sum; the
+        projection is the pick's, made on the real pick screen, so the same
+        season scored against the roster at the whistle would pay less; and
+        a man cut before the close still counts in the next projection.
 
    Negative controls (house rule: prove the check can fail, and fail only
    where it was written to). Every control asserts its anchor is in the file
@@ -62,8 +69,13 @@
        ledger's replay row legitimately goes red too.
      GM_RELOAD_CONTROL=late rewrites copies of the four boards whose close
        projects the season from the league at the whistle instead of reading
-       the projection the save carries. The title, plain and pick rows must
-       go red on every board; the two season and older save rows may.
+       the projection the save carries. The title and pick rows must go red
+       on every board; the plain, two season and older save rows may (a
+       winless season scores 0 against any projection).
+     GM_RELOAD_CONTROL=offseason rewrites copies of the four boards that
+       project the next season after the draft and the offseason, the way
+       this round's second version did, instead of at the close. The two
+       season and cut rows must go red on every board.
      GM_RELOAD_CONTROL=noreset rewrites copies of the four boards with the
        offseason's closed row reset deleted. The two season row must go red
        on every board, because the second close on the same mount is then no
@@ -74,7 +86,14 @@
        Every row that closes a title (title, older, replay, two, pick) must
        go red on every board, and plain must stay green.
      GM_RELOAD_CONTROL=raw points them at a copy that scores the results and
-       not the projection. Exactly the pick row must go red on every board.
+       not the projection. The pick row must go red on every board (the
+       pick's projection and the whistle's then score the same); the others
+       may (a winless season scores 0 either way, and an unbeaten title
+       season 100).
+     GM_RELOAD_CONTROL=nokeep points the boards and the test, through
+       NO_DOUBLE_SWAP, at a copy of src/lib/seasonFormats.ts whose untouched
+       offseason does not count the men a GM cut. Exactly the cut row must go
+       red on every board.
 
    Nothing here reads the clock. The control copies go in dist/.gm-control,
    which is removed afterwards.
@@ -89,9 +108,10 @@ import { LEDGER_CONTROL_WORDS, writeLedgerControl } from './lib/seasonLedgerCont
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.GM_RELOAD_CONTROL || '';
-const BOARD_CONTROLS = ['replay', 'late', 'noreset'];
+const BOARD_CONTROLS = ['replay', 'late', 'offseason', 'noreset'];
 const MODULE_CONTROLS = ['double', 'raw'];
-const CONTROLS = [...BOARD_CONTROLS, ...MODULE_CONTROLS];
+const FORMATS_CONTROLS = ['nokeep'];
+const CONTROLS = [...BOARD_CONTROLS, ...MODULE_CONTROLS, ...FORMATS_CONTROLS];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`GM_RELOAD_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`); process.exit(1); }
 
 const TEST = 'src/components/front-office-shared/FrontOfficeSeasonClose.test.tsx';
@@ -112,12 +132,15 @@ const LEDGER_ROWS = [
   ['replay', 'replaying a closed title adds nothing'],
   ['two', 'every closed season adds its own row'],
   ['pick', 'the projection is the pick\'s'],
+  ['cut', 'a man cut before the close still counts'],
 ];
 const BREAKS = {
-  late: { must: ['title', 'plain', 'pick'], may: ['two', 'older'] },
+  late: { must: ['title', 'pick'], may: ['plain', 'two', 'older'] },
+  offseason: { must: ['two', 'cut'], may: [] },
   noreset: { must: ['two'], may: [] },
-  double: { must: ['title', 'older', 'replay', 'two', 'pick'], may: [] },
-  raw: { must: ['pick'], may: [] },
+  double: { must: ['title', 'older', 'replay', 'two', 'pick'], may: ['cut'] },
+  raw: { must: ['pick'], may: ['plain', 'title', 'older', 'two', 'cut'] },
+  nokeep: { must: ['cut'], may: [] },
 };
 
 let failures = 0;
@@ -142,10 +165,20 @@ const RESETS = [
   ["      setSeries([]); setChampion(''); setClosedRow(null);\n", "      setSeries([]); setChampion('');\n"],
 ];
 
+/* The close's projection of the next season, and the offseason's persist
+   that the second version of this round projected in instead. */
+const AT_CLOSE = '      const nextExpect = projectNextFor(lg, myTeam);\n      setExpect(nextExpect);\n';
+const CLOSE_SAVE = ', ledger: closed.ledger, expect: nextExpect }, lg, myTeam);';
+const OFFSEASON_SAVE = 'postseason: null }, lg, myTeam);';
+
 /* Each board rewrite: [anchor, replacement] pairs, every anchor exactly once. */
 const boardRewrite = (control, src) => {
   if (control === 'replay') return [[NEW_RESTORE, OLD_RESTORE], [GUARD, '']];
   if (control === 'late') return [[STORED, AT_WHISTLE]];
+  if (control === 'offseason') {
+    return [[AT_CLOSE, ''], [CLOSE_SAVE, ', ledger: closed.ledger }, lg, myTeam);'],
+      [OFFSEASON_SAVE, 'postseason: null, expect: projectFor(lg, myTeam) }, lg, myTeam);\n      setExpect(projectFor(lg, myTeam));']];
+  }
   const reset = RESETS.find(([a]) => times(src, a) === 1);
   return reset ? [reset] : [[RESETS[0][0], RESETS[0][1]]];
 };
@@ -168,9 +201,21 @@ if (BOARD_CONTROLS.includes(CONTROL)) {
     const copy = path.join(dir, `${path.basename(file, '.tsx')}.control.tsx`);
     fs.writeFileSync(copy, regressed);
     env[key] = copy.replaceAll('\\', '/');
-    const words = { replay: 'maps a recap save back to the hub and has no closed season guard', late: 'projects the season at the whistle instead of reading the projection the save carries', noreset: 'never resets the closed row between seasons' }[CONTROL];
+    const words = { replay: 'maps a recap save back to the hub and has no closed season guard', late: 'projects the season at the whistle instead of reading the projection the save carries', offseason: 'projects the next season after the offseason instead of at the close', noreset: 'never resets the closed row between seasons' }[CONTROL];
     console.log(`NEGATIVE CONTROL ON: ${name} renders a copy that ${words}`);
   }
+} else if (FORMATS_CONTROLS.includes(CONTROL)) {
+  const file = 'src/lib/seasonFormats.ts';
+  const src = read(file);
+  const anchor = '  if (!mine || !cut.size) return;\n';
+  if (times(src, anchor) !== 1) abort(`control cannot run: ${file} holds the anchor it rewrites ${times(src, anchor)} times, not exactly once`);
+  const regressed = src.replace(anchor, '  if (!mine || !cut.size || cut.size > 0) return;\n');
+  if (regressed === src) abort(`control cannot run: the rewrite of ${file} changed nothing`);
+  fs.mkdirSync(dir, { recursive: true });
+  const copy = path.join(dir, 'seasonFormats.nokeep.control.ts');
+  fs.writeFileSync(copy, regressed);
+  env.NO_DOUBLE_SWAP = JSON.stringify({ '@/lib/seasonFormats': copy.replaceAll('\\', '/') });
+  console.log('NEGATIVE CONTROL ON: all four boards and the test read season shapes whose untouched offseason does not count the men a GM cut');
 } else if (CONTROL) {
   let copy;
   try { copy = writeLedgerControl(ROOT, CONTROL, dir); } catch (e) { abort(e.message); }
@@ -180,7 +225,13 @@ if (BOARD_CONTROLS.includes(CONTROL)) {
 
 let r;
 try {
-  r = spawnSync(process.execPath, [path.join(ROOT, 'node_modules', 'vitest', 'vitest.mjs'), 'run', TEST, '--reporter=verbose'],
+  /* A worktree inside the repo has no node_modules of its own: walk up. */
+  let vitest = null;
+  for (let d = ROOT; !vitest; d = path.dirname(d)) {
+    if (fs.existsSync(path.join(d, 'node_modules', 'vitest', 'vitest.mjs'))) vitest = path.join(d, 'node_modules', 'vitest', 'vitest.mjs');
+    else if (path.dirname(d) === d) abort('vitest is not installed anywhere above this tree');
+  }
+  r = spawnSync(process.execPath, [vitest, 'run', TEST, '--reporter=verbose'],
     { cwd: ROOT, encoding: 'utf8', env: { ...process.env, ...env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024,
       timeout: 10 * 60 * 1000, killSignal: 'SIGKILL' });
 } finally {

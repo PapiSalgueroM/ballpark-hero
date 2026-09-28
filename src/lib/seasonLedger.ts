@@ -27,32 +27,66 @@
  * Its fence could not see it, because it only proved that two teams with
  * IDENTICAL results scored the same, which the old titles rule passed too.
  *
- * WHAT THIS IS. Every closed season is scored against its own projection.
- * When the season's decisions open (at the pick, then after each offseason
- * in a front office and when the recruiting trail opens in a dynasty) the
- * board projects the season from the roster strengths the engine itself
- * simulates with, through the engine's own win curve and the sport's own
- * postseason shape (projectSeason, below). The season then scores
+ * THE SECOND VERSION PAID A SEASON NOBODY TOUCHED HALF THE CEILING. It
+ * scored PAR (50) plus the season's value minus the projection's, so a
+ * season that did exactly what its roster does paid 50 of 100, against
+ * Round 645's rule that zero skill pays at most 5 percent of a perfect run.
+ * The pick still moved what the economy paid through the spread (a
+ * favourite's seasons swing further on the ladder, so its best of ten idle
+ * seasons paid more) and the ceiling (a favourite's perfect season often
+ * paid under the cap). And the projection was made after the offseason, so a
+ * GM could cut his best men before the whistle, let it see the thin roster,
+ * and sign them back.
  *
- *   PAR + (what happened) - (what the projection expected)
- *
- * where both sides are counted in the same two terms:
+ * WHAT THIS IS. Every closed season is scored against its own projection,
+ * and only for what beats it. A season's value is counted in two terms:
  *
  *   form      0..W_FORM     regular season wins over regular season games
  *   ladder    0..W_TITLE    the ROUND REACHED in the postseason: in the
  *                           field, each round further, the final, the title
  *
- * so a team that does what its roster was expected to do scores PAR
- * whichever team it is, and the pick stops deciding the number. What still
- * moves it is everything after the projection: the signings, the trades,
- * the cuts, the recruiting class, and how the season fell. A better managed
- * season on the same roster outscores a worse one, because the projection
- * does not move with what you do after it.
+ * The projection plays the season PROJECTION_RUNS times from the roster
+ * strengths the engine itself simulates with, through the engine's own win
+ * curve and the sport's own postseason shape (projectionRuns, below). Its
+ * bar is the season BAR_SHARE (95 percent) of those reach or fall short of.
+ * A season at or under the bar scores 0. Past it, the season scores the
+ * share of the headroom above the bar it won, where the headroom is the
+ * projection's own seasons past the bar: beating half of them pays half the
+ * ceiling, beating all of them pays all of it (a season level with some
+ * counts them half).
  *
- * Measured in scripts/simSeasonLedger.mjs over hands off careers in all six
- * engines, the correlation between opening roster strength and season score
- * falls from 0.70 to 0.90 to near zero; the bound it holds, and the managed
- * against neglected margin it requires, are set from its own measured runs.
+ * That is the headroom normalised in the one unit every pick shares: the
+ * projection's own seasons. A season left alone lands anywhere in its
+ * projection with the same odds whoever the pick is, so it scores more than
+ * 0 about one year in twenty and 2.5 on average whatever the roster (the
+ * real engines, played the way the boards play them, measured 2.1 to 4.0,
+ * a real season spreading a little wider than its projection), and its
+ * best of ten is the same for Duke and for Butler. A favourite's
+ * ceiling and an underdog's pay the same for the same share of headroom
+ * won. Measured in points instead (the value past the bar over the value
+ * left above it), a favourite's small headroom made its lucky seasons pay
+ * more; that version is the "value" negative control.
+ *
+ * WHEN IT IS PROJECTED. The first season at the pick. Every season after it
+ * at the close of the one before (projectNext), from the league as that
+ * regular season finished it, carried through the offseason a GM who
+ * touches nothing gets: seasonFormats.ts plays it on copies of the league
+ * (in a front office the draft cannot be skipped, so the untouched GM takes
+ * the first name on the board at every pick; a dynasty coach signs nobody),
+ * every man the GM cut that season counted as his. Nothing done after the
+ * close moves it, so the draft past the board's first names, the signings,
+ * the trades and the recruiting class are what beat it, and cutting a man
+ * and signing him back gains nothing. All six boards project at that same
+ * moment.
+ *
+ * THE LIMIT IT CANNOT HELP. The value is capped at a perfect season (every
+ * regular season game and the title). A college program strong enough to
+ * go perfect in more than one of its projected seasons in ten can never
+ * beat its own bar by much: its perfect season ties the projection's and
+ * scores the share of the headroom that leaves, and at one in ten or more
+ * it scores 0. Paying it the ceiling anyway would pay those programs for
+ * seasons they have left alone, which is the defect this round removes.
+ * scripts/simSeasonLedger.mjs prints how many picks that is.
  *
  * THE LADDER COUNTS THE ROUND REACHED, NOT GAMES WON. The first version
  * counted wins, so a bye seed that went out in its first game (the CFB
@@ -67,16 +101,16 @@
  * cfbSeasonResult reads the twelve game regular season.
  *
  * THE CEILING IS 100 (seasonCeiling, which Round 646 sets each of the six
- * game_score_caps rows to). A season that beats its projection by PAR or
- * more reaches it: an underdog's title does, a favourite's perfect season
- * does not always, because a favourite was expected to win.
+ * game_score_caps rows to): a season past every season its projection
+ * played.
  *
  * OLDER SAVES. A save written before this round has no ledger. It opens
  * with an empty one and earns no retroactive points: titles and
  * seasonsPlayed stay as they were for the recap, the next season the player
  * closes is the first row, and the recap labels the ledger sum as counted
  * since that season rather than as the career. A save with no projection
- * is projected from the league as it loads, the way the owner's mandate is.
+ * is projected as it loads, the way the owner's mandate is: mid season from
+ * the league as it stands, and after a close through projectNext.
  *
  * Pure: no clock, no Math.random (the projection draws from its own seeded
  * generator), no storage, no imports.
@@ -130,8 +164,28 @@ export interface SeasonExpectation {
   season: number;
   /** Expected share of regular season games won, 0..1. */
   share: number;
-  /** Expected ladder points, 0..W_TITLE. */
-  ladder: number;
+  /** The round the projection's middle season ends in (its median stage). */
+  stage: number;
+  /** How many seasons the projection played. */
+  runs: number;
+  /** How many of them fell short of the bar. */
+  below: number;
+  /** The season values of the rest, ascending: the bar (the value BAR_SHARE
+      of the projection's seasons reach or fall short of, with every season
+      level with it) and every one above it. A season scores by the share of
+      the projection's seasons it beat, from the bar up. */
+  top: number[];
+  /** The bar season itself, its win share and its round, for the recap. */
+  barShare: number;
+  barStage: number;
+}
+
+/** One projected season for one team. */
+export interface ProjectionRun {
+  share: number;
+  stage: number;
+  /** seasonValue of that run. */
+  value: number;
 }
 
 /** What one season produced, as the score reads it. */
@@ -151,9 +205,13 @@ export interface SeasonResult {
 }
 
 export interface SeasonRow extends SeasonResult {
-  /** The projection this row was scored against. */
+  /** The projection this row was scored against: its expected win share and
+      middle round, and its bar (the value, the win share and the round). */
   expShare: number;
-  expLadder: number;
+  expStage: number;
+  expBar: number;
+  barShare: number;
+  barStage: number;
   score: number;
 }
 
@@ -164,8 +222,10 @@ export const W_FORM = 50;
 export const LADDER_FIELD = 10;
 export const LADDER_FINAL = 26;
 export const W_TITLE = 50;
-/** A season that did exactly what its projection expected. */
-export const PAR = 50;
+/** The bar: this share of the projection's seasons reach it or fall short,
+    so a season left alone scores one year in about seventeen. Set from the
+    idle seasons scripts/simSeasonLedger.mjs plays through the real engines. */
+export const BAR_SHARE = 0.95;
 /** The most one season can record. */
 export const SEASON_CEILING = 100;
 /** Seasons the projection plays. Measured: at 300 a team's expected ladder
@@ -195,22 +255,46 @@ export function ladderPoints(stage: number, rounds: number): number {
   return LADDER_FIELD + (LADDER_FINAL - LADDER_FIELD) * (s - 1) / (R - 1);
 }
 
+/* Season values are compared at four decimals on both sides, so a season
+   equal to a projected one is equal whatever the float noise. */
+const round4 = (v: number): number => Math.round(v * 1e4) / 1e4;
+
 /** What the season delivered, in the projection's units: form plus ladder. */
 export function seasonValue(r: Pick<SeasonResult, 'wins' | 'games' | 'rounds' | 'stage'>): number {
   const games = Math.max(1, int(r.games, 1, 500));
   const wins = Math.min(games, int(r.wins, 0, 500));
-  return W_FORM * (wins / games) + ladderPoints(r.stage, r.rounds);
+  return round4(W_FORM * (wins / games) + ladderPoints(r.stage, r.rounds));
 }
 
 /**
- * The season's score, 0..SEASON_CEILING: PAR plus how far the season beat
- * its projection. Reads the record, the round reached and the projection,
- * and nothing else: not r.team, not r.season.
+ * The season's score, 0..SEASON_CEILING: the share of the headroom above
+ * the bar that the season won, where the headroom is the projection's own
+ * seasons past the bar. A season at or under the bar scores 0; one better
+ * than every projected season scores the ceiling; one in between scores the
+ * share of those best seasons it beat (a tie counts half). Reads the record,
+ * the round reached and the projection, and nothing else: not r.team, not
+ * r.season.
  */
-export function scoreSeason(r: SeasonResult, exp: Pick<SeasonExpectation, 'share' | 'ladder'>): number {
-  const actual = seasonValue(r);
-  const expected = W_FORM * num(exp.share, 0, 1) + num(exp.ladder, 0, W_TITLE);
-  return int(PAR + actual - expected, 0, SEASON_CEILING);
+export function scoreSeason(r: SeasonResult, exp: Pick<SeasonExpectation, 'top' | 'below' | 'runs'>): number {
+  return scoreValue(seasonValue(r), exp);
+}
+
+/** scoreSeason's arithmetic on a season value, so a harness can score the
+    projection's own seasons against it. */
+export function scoreValue(value: number, exp: Pick<SeasonExpectation, 'top' | 'below' | 'runs'>): number {
+  const top = Array.isArray(exp.top) ? exp.top : [];
+  const runs = int(exp.runs, 1, 100000);
+  const below = int(exp.below, 0, runs);
+  if (!top.length || below + top.length !== runs) return 0;
+  const v = round4(value);
+  if (v < top[0]) return 0;
+  let under = 0;
+  let level = 0;
+  for (const x of top) { if (x < v) under += 1; else if (x === v) level += 1; }
+  /* The share of the projection's seasons this one beat, a tie counting
+     half, measured from the bar up: 0 at the bar, the ceiling past them all. */
+  const beat = (below + under + level / 2) / runs;
+  return int(SEASON_CEILING * (beat - BAR_SHARE) / (1 - BAR_SHARE), 0, SEASON_CEILING);
 }
 
 /** The number Round 646's cap fence reads for all six games. */
@@ -286,14 +370,10 @@ function seeded(seed: number): () => number {
  * bracket, and every team's expected form and ladder read off them. The
  * same league and season give the same projection every time.
  */
-export function projectSeason(teams: readonly ProjectionTeam[], f: SeasonFormat, season: number): Map<string, SeasonExpectation> {
+export function projectionRuns(teams: readonly ProjectionTeam[], f: SeasonFormat, season: number, count = PROJECTION_RUNS, salt = 0): Map<string, ProjectionRun[]> {
   const n = teams.length;
-  const out = new Map<string, SeasonExpectation>();
-  if (n < 2) {
-    for (const t of teams) out.set(t.id, { season, share: 0.5, ladder: 0 });
-    return out;
-  }
-  const rng = seeded(int(season, 0, 9999) * 7919 + n);
+  if (n < 2) return new Map(teams.map(t => [t.id, [{ share: 0.5, stage: 0, value: W_FORM * 0.5 }]]));
+  const rng = seeded(int(season, 0, 9999) * 7919 + n + int(salt, 0, 1000) * 104729);
   const s = teams.map(t => (Number.isFinite(t.strength) ? t.strength : 0));
   const scale = f.winScale > 0 ? f.winScale : 10;
   const p = (i: number, j: number) => 1 / (1 + Math.pow(10, -(s[i] - s[j]) / scale));
@@ -319,8 +399,7 @@ export function projectSeason(teams: readonly ProjectionTeam[], f: SeasonFormat,
   const spread = Math.max(0, Number.isFinite(f.gamesSpread) ? f.gamesSpread : 0);
   const normal = () => Math.sqrt(-2 * Math.log(1 - rng())) * Math.cos(2 * Math.PI * rng());
 
-  const shareSum = new Array(n).fill(0);
-  const ladderSum = new Array(n).fill(0);
+  const runsOf: ProjectionRun[][] = teams.map(() => []);
   const wins = new Array(n).fill(0);
   const played = new Array(n).fill(games);
   const stage = new Array(n).fill(0);
@@ -388,7 +467,8 @@ export function projectSeason(teams: readonly ProjectionTeam[], f: SeasonFormat,
     return slots[0];
   };
 
-  for (let run = 0; run < PROJECTION_RUNS; run += 1) {
+  const total = int(count, 1, 100000);
+  for (let run = 0; run < total; run += 1) {
     for (let i = 0; i < n; i += 1) {
       let w = 0;
       let gp = games;
@@ -428,30 +508,103 @@ export function projectSeason(teams: readonly ProjectionTeam[], f: SeasonFormat,
       stage[champ] = R + 1;
     }
     for (let i = 0; i < n; i += 1) {
-      shareSum[i] += wins[i] / played[i];
-      ladderSum[i] += ladderPoints(stage[i], R);
+      const share = wins[i] / played[i];
+      runsOf[i].push({ share, stage: stage[i], value: round4(W_FORM * share + ladderPoints(stage[i], R)) });
     }
   }
-  teams.forEach((t, i) => out.set(t.id, {
+  return new Map(teams.map((t, i) => [t.id, runsOf[i]]));
+}
+
+/**
+ * What a projection's runs say about one team: the average season (wins
+ * and the round most often reached) and the bar, the season value the
+ * roster reaches or beats BAR_SHARE of the time left alone.
+ */
+export function expectationFromRuns(runs: readonly ProjectionRun[], season: number): SeasonExpectation {
+  if (!runs.length) return { season, share: 0.5, stage: 0, runs: 1, below: 0, top: [SEASON_CEILING], barShare: 1, barStage: 0 };
+  const byValue = [...runs].sort((a, b) => a.value - b.value || a.stage - b.stage || a.share - b.share);
+  /* The bar is the run BAR_SHARE of the runs reach or fall short of (the
+     epsilon keeps 0.95 * 300 at 285 whichever way the float rounds). Every
+     run level with it is kept too, so a tie is counted wherever it falls. */
+  const at = Math.max(0, Math.min(byValue.length - 1, Math.ceil(BAR_SHARE * byValue.length - 1e-9) - 1));
+  let first = at;
+  while (first > 0 && byValue[first - 1].value === byValue[at].value) first -= 1;
+  const stages = runs.map(r => r.stage).sort((a, b) => a - b);
+  return {
     season,
-    share: shareSum[i] / PROJECTION_RUNS,
-    ladder: ladderSum[i] / PROJECTION_RUNS,
-  }));
+    share: runs.reduce((a, r) => a + r.share, 0) / runs.length,
+    stage: stages[Math.floor((stages.length - 1) / 2)],
+    runs: runs.length,
+    below: first,
+    top: byValue.slice(first).map(r => r.value),
+    barShare: byValue[at].share,
+    barStage: byValue[at].stage,
+  };
+}
+
+export function projectSeason(teams: readonly ProjectionTeam[], f: SeasonFormat, season: number): Map<string, SeasonExpectation> {
+  const out = new Map<string, SeasonExpectation>();
+  for (const [id, runs] of projectionRuns(teams, f, season)) out.set(id, expectationFromRuns(runs, season));
   return out;
+}
+
+/** What projectNext needs of a sport: its league as the projection reads it,
+    its season, and the offseason an untouched GM gets. seasonFormats.ts has
+    one for each of the six. */
+export interface OffseasonShape<L> {
+  readonly format: SeasonFormat;
+  teams: (league: L) => ProjectionTeam[];
+  untouched: (league: L, team: string, rng: () => number) => void;
+}
+
+/** Offseasons the projection of a next season plays, each on its own copy. */
+export const OFFSEASON_SAMPLES = 12;
+
+/**
+ * Round 647 fix: the next season's projection, made at the close from the
+ * league as the regular season finished it. Each of OFFSEASON_SAMPLES
+ * copies plays the offseason a GM who touches nothing gets (the draft's
+ * first names where the draft cannot be skipped, the retirements, the
+ * development, the walk outs, the refill), and plays the season after it;
+ * the runs are pooled. So what that offseason hands every GM for free is in
+ * the bar, and everything a GM does past it (a better pick, a signing, a
+ * trade, a recruiting class) is not. The league passed in is never touched.
+ * Seeded by the season, so the same close gives the same projection.
+ */
+export function projectNext<L>(shape: OffseasonShape<L>, league: L, team: string, season: number): SeasonExpectation {
+  const per = Math.max(1, Math.round(PROJECTION_RUNS / OFFSEASON_SAMPLES));
+  const runs: ProjectionRun[] = [];
+  for (let k = 0; k < OFFSEASON_SAMPLES; k += 1) {
+    const copy = JSON.parse(JSON.stringify(league)) as L;
+    shape.untouched(copy, team, seeded(int(season, 0, 9999) * 7919 + k * 104729 + 7));
+    runs.push(...(projectionRuns(shape.teams(copy), shape.format, season, per, k + 1).get(team) ?? []));
+  }
+  return expectationFromRuns(runs, season);
 }
 
 /** One team's projection, or a flat one if the team is not in the league. */
 export function projectionFor(teams: readonly ProjectionTeam[], f: SeasonFormat, season: number, team: string): SeasonExpectation {
-  return projectSeason(teams, f, season).get(team) ?? { season, share: 0.5, ladder: 0 };
+  return projectSeason(teams, f, season).get(team) ?? expectationFromRuns([], season);
 }
 
-/** A save's projection, cleaned; null when it is missing, malformed or for another season. */
+/**
+ * A save's projection, cleaned; null when it is missing, malformed, for
+ * another season, or in the shape this round's first version saved (a
+ * share and a ladder, no bar), so a board projects it again as it loads.
+ */
 export function expectationOf(raw: unknown, season: number): SeasonExpectation | null {
   if (!raw || typeof raw !== 'object') return null;
   const o = raw as Record<string, unknown>;
-  if (!Number.isFinite(o.season) || !Number.isFinite(o.share) || !Number.isFinite(o.ladder)) return null;
+  if (!Number.isFinite(o.season) || !Number.isFinite(o.share) || !Number.isFinite(o.runs)) return null;
   if (int(o.season, 0, 9999) !== season) return null;
-  return { season, share: num(o.share, 0, 1), ladder: num(o.ladder, 0, W_TITLE) };
+  const runs = int(o.runs, 1, 100000);
+  const top = Array.isArray(o.top) ? o.top : [];
+  if (!Number.isFinite(o.below) || int(o.below, 0, runs) + top.length !== runs) return null;
+  if (!top.length || !top.every((v, i) => Number.isFinite(v) && (i === 0 || v >= top[i - 1]))) return null;
+  return {
+    season, share: num(o.share, 0, 1), stage: int(o.stage, 0, 21), runs, below: int(o.below, 0, runs), top: top.map(v => round4(v as number)),
+    barShare: num(o.barShare, 0, 1), barStage: int(o.barStage, 0, 21),
+  };
 }
 
 /**
@@ -477,7 +630,10 @@ export function ledgerOf(raw: unknown): SeasonRow[] {
       rounds,
       stage: int(o.stage, 0, rounds + 1),
       expShare: num(o.expShare, 0, 1),
-      expLadder: num(o.expLadder, 0, W_TITLE),
+      expStage: int(o.expStage, 0, rounds + 1),
+      expBar: num(o.expBar, 0, SEASON_CEILING),
+      barShare: num(o.barShare, 0, 1),
+      barStage: int(o.barStage, 0, rounds + 1),
       score: int(o.score, 0, SEASON_CEILING),
     });
   }
@@ -492,9 +648,14 @@ export function ledgerOf(raw: unknown): SeasonRow[] {
  * title adds nothing" rests on when a board's own closed season guard is
  * not in the way.
  */
-export function appendSeason(ledger: SeasonRow[], r: SeasonResult, exp: Pick<SeasonExpectation, 'share' | 'ladder'>): { ledger: SeasonRow[]; row: SeasonRow | null } {
+export function appendSeason(ledger: SeasonRow[], r: SeasonResult, exp: SeasonExpectation): { ledger: SeasonRow[]; row: SeasonRow | null } {
   if (ledger.some(x => x.season === r.season)) return { ledger, row: null };
-  const row: SeasonRow = { ...r, expShare: num(exp.share, 0, 1), expLadder: num(exp.ladder, 0, W_TITLE), score: scoreSeason(r, exp) };
+  const row: SeasonRow = {
+    ...r,
+    expShare: num(exp.share, 0, 1), expStage: int(exp.stage, 0, r.rounds + 1),
+    expBar: num(exp.top?.[0], 0, SEASON_CEILING), barShare: num(exp.barShare, 0, 1), barStage: int(exp.barStage, 0, r.rounds + 1),
+    score: scoreSeason(r, exp),
+  };
   return { ledger: [...ledger, row], row };
 }
 

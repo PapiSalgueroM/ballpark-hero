@@ -15,7 +15,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
    made when its decisions opened. The scoring, the projection, the row and
    the refusal of a season already closed live in the shared module, the
    same one the four front offices read; this sport's season shape is data. */
-import { appendSeason, expectationOf, ledgerOf, ledgerRow, projectionFor, seasonResultOf, type SeasonRow } from '@/lib/seasonLedger';
+import { appendSeason, expectationOf, ledgerOf, ledgerRow, projectionFor, projectNext, seasonResultOf, type SeasonRow } from '@/lib/seasonLedger';
 import { CFB_SEASON } from '@/lib/seasonFormats';
 import { SeasonLedgerChips, SeasonProjectionNote } from '@/components/game/SeasonLedgerChips';
 import { cn } from '@/lib/utils';
@@ -24,11 +24,16 @@ import { useRevealScroll } from '@/hooks/useRevealScroll';
 type Phase = 'pick' | 'season' | 'recap' | 'recruit';
 type Tab = 'team' | 'play' | 'rankings' | 'standings';
 
-/* Round 647: a season's projection from the league as it stands. Made at
-   the pick, and for the next season when the recruiting trail opens, so the
-   recruiting, the portal and the offseason all count as yours. */
+/* Round 647: a season's projection from the league as it stands, made at
+   the pick (and for an older save caught mid season, as it loads). */
 const projectFor = (state: CfbState, season: number) =>
   projectionFor(CFB_SEASON.teams(state), CFB_SEASON.format, season, state.myTeam);
+/* Round 647 fix: the next season's projection, made at the close from the
+   roster the regular season finished with, the moment the four front offices
+   make theirs, and carried through the offseason an untouched coach gets
+   (graduation, the declarations, development and the refill, with nobody
+   signed). So the class, the portal and the NIL are what beat it. */
+const projectNextFor = (state: CfbState) => projectNext(CFB_SEASON, state, state.myTeam, state.season + 1);
 
 const SAVE_KEY = 'cfb-dynasty-save-v1';
 
@@ -80,9 +85,10 @@ export default function CfbDynastyBoard() {
   const openRecruiting = useCallback((source: CfbState) => {
     const state: CfbState = JSON.parse(JSON.stringify(source));
     state.nil = nilBudgetFor(CFB_SCHOOL_MAP.get(state.myTeam)!.prestige, state.teams[state.myTeam].wins);
-    /* Round 647: next season's projection, from the roster as the trail
-       opens. A trail reopened on a reload keeps the one it already has. */
-    if (!expectationOf(state.expect, state.season + 1)) state.expect = projectFor(state, state.season + 1);
+    /* Round 647: next season's projection was made at the close. Only a
+       save written before that has none, and it is made here, before any
+       signing. */
+    if (!expectationOf(state.expect, state.season + 1)) state.expect = projectNextFor(state);
     const cls = cfbRecruitClass(Math.random);
     const por = cfbPortalPool(Math.random);
     setSt(state); setRecruits(cls); setPortal(por); setPhase('recruit');
@@ -103,9 +109,10 @@ export default function CfbDynastyBoard() {
       /* Round 647: a save with no projection for the season it is playing,
          or on the trail for the season about to start, is projected from
          the league as it stands, the way the front offices repair a
-         missing mandate. The recap's projection is made when its trail opens. */
+         missing mandate. The recap's is made at the close, and an older
+         recap save gets one when its trail opens. */
       if (s.phase === 'season' && !expectationOf(s.st.expect, s.st.season)) s.st.expect = projectFor(s.st, s.st.season);
-      if (s.phase === 'recruit' && !expectationOf(s.st.expect, s.st.season + 1)) s.st.expect = projectFor(s.st, s.st.season + 1);
+      if (s.phase === 'recruit' && !expectationOf(s.st.expect, s.st.season + 1)) s.st.expect = projectNextFor(s.st);
       setSt(s.st);
       setRecruits(s.recruits ?? null);
       setPortal(s.portal ?? null);
@@ -179,11 +186,13 @@ export default function CfbDynastyBoard() {
       state.seasonsPlayed += 1;
       /* Round 647: the season closes into the ledger as one row: its
          regular season and the round it reached, scored against the
-         projection made when its decisions opened, never against the
-         roster at the whistle. The row is what the completion records. */
+         projection made at the pick or at the last close, never against
+         the roster at the whistle. The row is what the completion records.
+         Then the next season is projected, from this roster, now. */
       const closing = seasonResultOf(state.season, state.myTeam, cfbRegularRecord(state, post.ccgs), { games: post.bracket, champion: post.champion }, CFB_SEASON);
       const ledgered = appendSeason(ledgerOf(state.ledger), closing, expectationOf(state.expect, state.season) ?? projectFor(st, state.season));
       state.ledger = ledgered.ledger;
+      state.expect = projectNextFor(state);
       setClosedRow(ledgered.row);
       const closed: Postseason = { ccgs: post.ccgs, bracket: post.bracket, champion: post.champion, heisman };
       setPostseason(closed);
@@ -318,7 +327,7 @@ export default function CfbDynastyBoard() {
                 left out on a save from before the ledger, which has no row to show. */}
             <SeasonLedgerChips row={seasonRow} ledger={careerLedger} seasonsPlayed={st.seasonsPlayed} />
           </div>
-          <SeasonProjectionNote row={seasonRow} />
+          <SeasonProjectionNote row={seasonRow} shape={CFB_SEASON} />
           <div className="cm-rise mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center" style={{ animationDelay: '0.9s' }}>
             <button onClick={startRecruiting} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
               <GraduationCap className="h-4 w-4" /> Hit the recruiting trail
