@@ -1,6 +1,7 @@
 /* Round 647: the negative controls for the season ledger, shared by
-   scripts/simSeasonLedger.mjs (the six boards under vitest, and the module
-   headless) and scripts/simCfbDynasty.mjs (the two college engines headless).
+   scripts/simGmReload.mjs (the four front office boards under vitest) and
+   scripts/simCfbDynasty.mjs (the two college engines headless, and the two
+   dynasty boards under vitest).
 
    Each control writes a copy of src/lib/seasonLedger.ts with one rule put
    back the way the audit found it, and refuses to run if the anchor it

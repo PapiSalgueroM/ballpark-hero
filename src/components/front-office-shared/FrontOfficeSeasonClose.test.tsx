@@ -29,14 +29,18 @@
  * Round 647: the second describe per board is the season ledger. A title
  * season and a season without one each add exactly one row to the save,
  * scored on that season alone, and that row's score is what the board hands
- * the completion hook; a reload on the recap hands it nothing; a closed
- * season played again adds nothing; and the same results score the same
- * whichever team was picked. The roster is rigged to force the two outcomes
- * (every player 99, every player 40) because the seeded rng decides the
- * rest. scripts/simSeasonLedger.mjs runs these rows and carries their
- * controls: SEASON_LEDGER_MODULE points the boards and this file at a copy
- * of src/lib/seasonLedger.ts that double counts a title or scores the pick,
- * and the ledger rows must then fail while the reload rows stay green.
+ * the completion hook, recorded once (finishes() counts the rises the real
+ * hook witnesses); an older save with titles and no ledger earns nothing
+ * retroactively; a reload on the recap hands the hook nothing; a closed
+ * season played again adds nothing; a second season adds a second row and a
+ * second finish, and the career is the sum; and the same results score the
+ * same whichever team was picked. The roster is rigged to force the two
+ * outcomes (every player 99, every player 40) because the seeded rng decides
+ * the rest. scripts/simGmReload.mjs section 2 runs these rows and carries
+ * their controls: SEASON_LEDGER_MODULE points the boards and this file at a
+ * copy of src/lib/seasonLedger.ts that double counts a title or scores the
+ * pick, and exactly the rows written for that fault must then fail while
+ * every other row stays green.
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
@@ -91,6 +95,9 @@ interface BoardCase {
   slug: string;
   /* A league on the morning of its final week or round, with the team the GM runs. */
   finalWeek: (rng: () => number, rig?: Rig) => { league: any; team: string };
+  /* Round 647: play a league from wherever it stands to the morning of its
+     final week or round. */
+  toFinal: (league: any, team: string, rng: () => number) => void;
   tile: string;
   finalButton: string;
   headline: RegExp;
@@ -102,6 +109,22 @@ interface BoardCase {
   periodKey: 'week' | 'round';
 }
 
+/* Round 647: play a league from wherever it stands to the morning of its
+   final week or round. finalWeek opens a season with these, and the two
+   season ledger row closes a second season with them from a real save. */
+const nflToFinal = (lg: any, _team: string, rng: () => number) => {
+  for (let w = lg.week; w < REGULAR_WEEKS; w += 1) { lg.schedule[w - 1].forEach((g: any) => simGame(g, lg.teams, rng)); lg.week += 1; }
+};
+const nbaToFinal = (lg: any, team: string, rng: () => number) => {
+  for (let r = lg.round; r < NBA_ROUNDS; r += 1) { simRound(lg, team, rng); lg.round += 1; }
+};
+const mlbToFinal = (lg: any, team: string, rng: () => number) => {
+  for (let r = lg.round; r < MLB_ROUNDS; r += 1) { simMlbRound(lg, team, rng); lg.round += 1; }
+};
+const nhlToFinal = (lg: any, team: string, rng: () => number) => {
+  for (let r = lg.round; r < NHL_FO_ROUNDS; r += 1) { simNhlRound(lg, team, rng); lg.round += 1; }
+};
+
 const CASES: BoardCase[] = [
   {
     name: 'NFL Front Office', env: 'FO_BOARD_NFL',
@@ -111,9 +134,10 @@ const CASES: BoardCase[] = [
       const lg = initLeague(rng);
       const team = Object.keys(lg.teams)[0];
       rigLeague(lg.teams, team, rig);
-      for (let w = 1; w < REGULAR_WEEKS; w += 1) { lg.schedule[w - 1].forEach(g => simGame(g, lg.teams, rng)); lg.week += 1; }
+      nflToFinal(lg, team, rng);
       return { league: lg, team };
     },
+    toFinal: nflToFinal,
     tile: 'This week', finalButton: 'Play the final week + playoffs',
     headline: /win the 2026 title/, draftHeading: 'The 2027 Draft',
     picks: 3, firstButton: 'Play Week 1', periodKey: 'week',
@@ -126,9 +150,10 @@ const CASES: BoardCase[] = [
       const lg = initNbaLeague(rng);
       const team = Object.keys(lg.teams)[0];
       rigLeague(lg.teams, team, rig);
-      for (let r = 1; r < NBA_ROUNDS; r += 1) { simRound(lg, team, rng); lg.round += 1; }
+      nbaToFinal(lg, team, rng);
       return { league: lg, team };
     },
+    toFinal: nbaToFinal,
     tile: 'Play', finalButton: 'Final stretch + playoffs',
     headline: /win the 2026 title/, draftHeading: 'The 2027 Draft',
     picks: 2, firstButton: 'Play Round 1', periodKey: 'round',
@@ -141,9 +166,10 @@ const CASES: BoardCase[] = [
       const lg = initMlbLeague(rng);
       const team = Object.keys(lg.teams)[0];
       rigLeague(lg.teams, team, rig);
-      for (let r = 1; r < MLB_ROUNDS; r += 1) { simMlbRound(lg, team, rng); lg.round += 1; }
+      mlbToFinal(lg, team, rng);
       return { league: lg, team };
     },
+    toFinal: mlbToFinal,
     tile: 'Play', finalButton: 'Final stretch + October',
     headline: /win the 2026 World Series/, draftHeading: 'The 2027 Draft',
     picks: 2, firstButton: 'Play Round 1', periodKey: 'round',
@@ -156,9 +182,10 @@ const CASES: BoardCase[] = [
       const lg = initNhlLeague(rng);
       const team = Object.keys(lg.teams)[0];
       rigLeague(lg.teams, team, rig);
-      for (let r = 1; r < NHL_FO_ROUNDS; r += 1) { simNhlRound(lg, team, rng); lg.round += 1; }
+      nhlToFinal(lg, team, rng);
       return { league: lg, team };
     },
+    toFinal: nhlToFinal,
     tile: 'Play', finalButton: 'Final stretch + playoffs',
     headline: /lift the 2027 Stanley Cup/, draftHeading: 'The 2027 Draft',
     picks: 2, firstButton: 'Play Round 1', periodKey: 'round',
@@ -288,9 +315,25 @@ for (const c of CASES) {
   /* Round 647. What the board handed the completion hook while a finish was
      on screen: the third argument of every call whose second was true. */
   const recorded = (): number[] => completion.mock.calls.filter(a => a[0] === c.slug && a[1] === true).map(a => a[2] as number);
-  const closeSeason = (rig: Rig) => {
+  /* The finishes the real hook would record: it records only a transition it
+     witnessed, the flag going from false to true while mounted, with the
+     score of that moment. Every mount opens false (no row is closed yet), so
+     reading the calls in order and counting the rises is exactly that rule. */
+  const finishes = (): number[] => {
+    const out: number[] = [];
+    let on = false;
+    for (const a of completion.mock.calls) {
+      if (a[0] !== c.slug) continue;
+      if (a[1] === true && !on) out.push(a[2] as number);
+      on = a[1] === true;
+    }
+    return out;
+  };
+  /* history: a career already under way on a save written before this
+     round, with titles and seasons counted and no ledger at all. */
+  const closeSeason = (rig: Rig, history: { titles: number; seasonsPlayed: number } = { titles: 0, seasonsPlayed: 0 }) => {
     const { league, team } = c.finalWeek(lehmer(7), rig);
-    save({ league, myTeam: team, phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0 });
+    save({ league, myTeam: team, phase: 'hub', ...history, draftClass: null, picksLeft: 0 });
     const view = render(<Board />);
     expect(recorded(), 'nothing is recorded before the season closes').toHaveLength(0);
     fireEvent.click(screen.getByText(c.tile));
@@ -314,8 +357,11 @@ for (const c of CASES) {
     });
     afterEach(() => { cleanup(); restoreRandom?.(); });
 
-    it('a title season adds exactly one row, scored on that season, and records that score', () => {
-      const { league, team, closed } = closeSeason('strong');
+    it('a title season adds exactly one row, scored on that season, and records that score once, even on an older save', () => {
+      /* A career from before this round: two titles and four seasons in the
+         save, no ledger. The season closed now is the first row, and the two
+         old titles earn nothing retroactively. */
+      const { league, team, closed } = closeSeason('strong', { titles: 2, seasonsPlayed: 4 });
       expect(closed.league.champions[0].team, 'the 99 rated roster did not win the title under this seed; re-seed the rig').toBe(team);
       const row = rowOf(closed);
       expect(row.season).toBe(league.season);
@@ -326,15 +372,14 @@ for (const c of CASES) {
       expect(row.score).toBe(scoreSeason(row));
       expect(row.score).toBeGreaterThanOrEqual(W_TITLE);
       expect(row.score).toBeLessThanOrEqual(SEASON_CEILING);
-      const scores = recorded();
-      expect(scores.length, 'the board handed the hook a finish').toBeGreaterThan(0);
-      expect([...new Set(scores)], 'the recorded number is the row, and only the row').toEqual([row.score]);
-      expect(ledgerTotal(closed.ledger)).toBe(row.score);
-      expect(closed.titles).toBe(1);
+      expect(finishes(), 'one finish, and the number it records is the row').toEqual([row.score]);
+      expect(ledgerTotal(closed.ledger), 'no retroactive points for the titles the old save already held').toBe(row.score);
+      expect(closed.titles).toBe(3);
+      expect(closed.seasonsPlayed).toBe(5);
       expect(screen.getByText(/This season/).textContent).toContain(String(row.score));
     });
 
-    it('a season without a title adds exactly one row too, and records it', () => {
+    it('a season without a title adds exactly one row too, and records it once', () => {
       const { league, team, closed } = closeSeason('weak');
       expect(closed.league.champions[0].team, 'the 40 rated roster won the title under this seed; re-seed the rig').not.toBe(team);
       const row = rowOf(closed);
@@ -343,9 +388,8 @@ for (const c of CASES) {
       expect(row.wonTitle).toBe(false);
       expect(row.score).toBe(scoreSeason(row));
       expect(row.score).toBeLessThan(W_TITLE);
-      const scores = recorded();
-      expect(scores.length, 'a season without a title is still a finish').toBeGreaterThan(0);
-      expect([...new Set(scores)]).toEqual([row.score]);
+      expect(finishes(), 'a season without a title is still a finish, recorded once').toEqual([row.score]);
+      expect(ledgerTotal(closed.ledger)).toBe(row.score);
       expect(closed.titles).toBe(0);
       expect(screen.getByText(/This season/).textContent).toContain(String(row.score));
     });
@@ -353,14 +397,14 @@ for (const c of CASES) {
     it('replaying a closed title adds nothing: a reload records nothing and the final week refuses', () => {
       const { league, team, view, closed } = closeSeason('strong');
       const row = rowOf(closed);
-      const before = recorded().length;
+      expect(finishes()).toEqual([row.score]);
       view.unmount();
 
       /* A reload on the recap: the same row, no second finish. */
       render(<Board />);
       expect(screen.getByText(c.headline)).toBeTruthy();
       expect(read().ledger).toHaveLength(1);
-      expect(recorded().length, 'a reload on the recap is not a finish').toBe(before);
+      expect(finishes(), 'a reload on the recap is not a finish').toEqual([row.score]);
       expect(screen.getByText(/This season/).textContent).toContain(String(row.score));
       cleanup();
 
@@ -371,13 +415,44 @@ for (const c of CASES) {
       fireEvent.click(screen.getByText(c.finalButton));
       expect(read().ledger).toHaveLength(1);
       expect(read().ledger[0].score).toBe(row.score);
-      expect(recorded().length).toBe(before);
+      expect(finishes()).toEqual([row.score]);
 
       /* And the module itself refuses a second row for the same season. */
       const again = appendSeason(closed.ledger, { ...row });
       expect(again.row).toBeNull();
       expect(again.ledger).toHaveLength(1);
       expect(league.season).toBe(row.season);
+    });
+
+    it('every closed season adds its own row: two seasons, two rows, two finishes, and the career is their sum', () => {
+      const { view, closed } = closeSeason('strong');
+      const first = rowOf(closed);
+      view.unmount();
+      /* Through the draft on the real board. The reload ends the presser, so
+         the recap's draft button is drawn. */
+      render(<Board />);
+      fireEvent.click(screen.getByText('Go to the draft'));
+      for (let i = 0; i < c.picks; i += 1) fireEvent.click(screen.getAllByText(/· age \d+/)[0]);
+      const next = read();
+      expect(next.phase).toBe('hub');
+      expect(next.league.season).toBe(first.season + 1);
+      cleanup();
+      /* The second season played by the engine to its final week, then closed
+         on the board like the first. */
+      c.toFinal(next.league, next.myTeam, lehmer(13));
+      save(next);
+      render(<Board />);
+      fireEvent.click(screen.getByText(c.tile));
+      fireEvent.click(screen.getByText(c.finalButton));
+      const after = read();
+      expect(after.ledger.map((r: SeasonRow) => r.season), 'one row per closed season, in order').toEqual([first.season, first.season + 1]);
+      expect(after.ledger[0]).toEqual(first);
+      const second: SeasonRow = after.ledger[1];
+      expect(second.score).toBe(scoreSeason(second));
+      expect(finishes(), 'each season recorded once, on its own number').toEqual([first.score, second.score]);
+      expect(ledgerTotal(after.ledger)).toBe(first.score + second.score);
+      expect(after.seasonsPlayed).toBe(2);
+      expect(screen.getByText(/Career/).textContent).toContain(String(first.score + second.score));
     });
 
     it('the pick of team changes nothing: the same results score the same for every team', () => {

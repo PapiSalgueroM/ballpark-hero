@@ -67,9 +67,13 @@
  * appendSeason. The scoring, the row shape, the refusal of a season already
  * in the ledger and the sum live here and nowhere else.
  *
- * Pure: no clock, no Math.random, no storage, no imports. scripts/
- * simSeasonLedger.mjs drives it headless and runs the six boards' vitest
- * rows; its controls double count a title and score the pick.
+ * Pure: no clock, no Math.random, no storage, no imports. The fence is in
+ * two harnesses: scripts/simGmReload.mjs section 2 runs the four front
+ * offices' ledger rows (FrontOfficeSeasonClose.test.tsx), and
+ * scripts/simCfbDynasty.mjs drives both college engines through it headless
+ * and runs the two dynasty boards' rows. Both carry the same two controls,
+ * written by scripts/lib/seasonLedgerControl.mjs: double count a title, and
+ * score the pick.
  */
 
 /** What one season produced, as the score reads it. */
