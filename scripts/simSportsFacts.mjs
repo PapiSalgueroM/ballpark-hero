@@ -261,7 +261,12 @@ head(2, 'UFC Guesser: every fighter matches the verified record');
     if ('age' in f || 'highestP4PRank' in f) fail(`${f.name}: carries a typed age or P4P rank again; age is computed from birthDate and the P4P column was retired`);
   }
   for (const name of Object.keys(rec)) if (!seen.has(name)) fail(`the record holds ${name} but the UFC Guesser no longer ships him or her`);
-  if (n < 100) fail(`only ${n} fighters compared`);
+  /* A floor that proves the module loaded and the loop ran. It was 100 when the
+     pool was 104; Round 660 took out the fourteen fighters whose sources do not
+     agree on a number the game shows, and 90 is what ships. It is a ratchet: a
+     round that removes a fighter lowers it on purpose, and a load that comes
+     back short cannot pass as green. */
+  if (n < 90) fail(`only ${n} fighters compared`);
   else console.log(`  ${n} fighters match the record on all ten fields`);
 }
 

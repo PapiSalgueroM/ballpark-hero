@@ -7884,21 +7884,6 @@
    "on": "2026-09-19"
   },
   {
-   "winner": "Stipe Miocic",
-   "loser": "Junior dos Santos",
-   "event": "UFC 211",
-   "year": 2017,
-   "method": "KO/TKO",
-   "round": 1,
-   "time": "2:22",
-   "title": true,
-   "src": [
-    "https://www.ufc.com/event/ufc-211",
-    "https://www.sherdog.com/fighter/Stipe-Miocic-39537"
-   ],
-   "on": "2026-09-19"
-  },
-  {
    "winner": "Francis Ngannou",
    "loser": "Stipe Miocic",
    "event": "UFC 260",
@@ -7911,21 +7896,6 @@
     "https://www.ufc.com/event/ufc-260",
     "https://www.sherdog.com/fighter/Stipe-Miocic-39537",
     "https://www.espn.com/mma/fighter/_/id/3933168/francis-ngannou"
-   ],
-   "on": "2026-09-19"
-  },
-  {
-   "winner": "Francis Ngannou",
-   "loser": "Junior dos Santos",
-   "event": "UFC on ESPN 3",
-   "year": 2019,
-   "method": "KO/TKO",
-   "round": 1,
-   "time": "1:11",
-   "title": false,
-   "src": [
-    "https://www.ufc.com/athlete/francis-ngannou",
-    "https://www.mmamania.com/2019/6/29/20123849/ufc-espn-3-results-francis-ngannou-knockout-junior-dos-santos-minneapolis-mma"
    ],
    "on": "2026-09-19"
   },
@@ -8177,21 +8147,6 @@
    "src": [
     "https://www.ufc.com/event/ufc-253",
     "https://bleacherreport.com/articles/2910797-israel-adesanya-defeats-paulo-costa-via-2nd-round-tko-in-ufc-253-main-event"
-   ],
-   "on": "2026-09-19"
-  },
-  {
-   "winner": "Robert Whittaker",
-   "loser": "Yoel Romero",
-   "event": "UFC 213",
-   "year": 2017,
-   "method": "Decision (unanimous)",
-   "round": 5,
-   "time": "5:00",
-   "title": true,
-   "src": [
-    "https://www.ufc.com/event/ufc-213",
-    "https://www.cbssports.com/mma/news/ufc-213-results-robert-whittaker-earns-title-with-decision-over-yoel-romero/"
    ],
    "on": "2026-09-19"
   },
