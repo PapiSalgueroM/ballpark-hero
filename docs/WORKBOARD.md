@@ -13,7 +13,12 @@ daily answer, and Footle's day turns over at Eastern midnight (the record's `app
 measurement). `simWorldXiDefensiveMids` reads the live pool and is red until it lands.
 `WXIDM_PROJECT=1` measures the record before it lands (green), and **`WXIDM_CONTROL=all` needs
 `WXIDM_PROJECT=1` until the migration is applied** (its baseline is red by design before that); it
-runs 33 controls, green on LF and CRLF.
+runs 40 controls and 4 positive controls. **Applying it is six numbered steps, not one**: apply,
+count, re-bake `src/data/players.ts` with `node scripts/bakePlayers.mjs` (or `simPlayersPool` goes red
+on every branch, main included), run the named harnesses, commit that one file and merge the same
+night, publish at an Eastern midnight. The steps are in the migration's header and in
+`docs/PROJECT-STATE.md`. The fence holds the 366 rows to the record as of its check date only: a
+later data round that moves one adds a dated, two sourced entry to the record's `laterChecks`.
 
 **2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof

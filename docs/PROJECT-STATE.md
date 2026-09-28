@@ -1,14 +1,16 @@
 # Project state
 
-## ROUND 669 FIXED 2026-09-28: World XI defensive midfielders, branch `r669-worldxi-dm`, migration UNAPPLIED
+## ROUND 669 FIXED AND POLISHED 2026-09-28: World XI defensive midfielders, branch `r669-worldxi-dm`, migration UNAPPLIED
 
 Not on main. The review found a blocker: the migration's second DO block closed with `end $;`, so
 everything after it, `commit;` included, sat inside one dollar quote and Postgres would have
 refused the file. Fixed, and the file was then **dry run on live twice** (once by the first fix
 pass, once again by the second rather than take it on trust) as `BEGIN; <body>; ROLLBACK;` through
 the Supabase MCP: no exception, 46 Defensive Midfield rows and 5496 rows in 2026 before and after.
-The record's `dryRun` carries the sha256 of the file it ran, and `simWorldXiDefensiveMids` goes red
-if the file changes after that.
+The record's `dryRun` carries the sha256 of the file it ran and, since the polish pass, the sha256
+of that file's statements (`codeSha256`, derived from the same blob). `simWorldXiDefensiveMids`
+goes red if a statement changes after the dry run; comments may change, which is how the header
+now carries the apply procedure below without voiding the dry run.
 
 - **What it writes:** 366 year-2026 Defensive Midfield rows (was 398), 4 club corrections and 1
   age correction (Dendoncker) among the existing 46. 80 held, each with its reason: 20 because
@@ -18,25 +20,206 @@ if the file changes after that.
   0.786, median 0.655, over the builder's 398). Was 0.222 to 1.994.
 - **Ages:** the table's convention, his age on 2026-01-01. Rodri (29) and Bissouma (29) are right on
   that rule, as are Bennacer and Brozovic; Dendoncker's 31 becomes 30.
-- **Apply at 00:00 America/New_York (04:00 UTC now, 05:00 UTC from 2026-11-01), not 00:00 UTC.**
-  Measured with the game's own fetchFootlePlayerPool: the rows move Footle's daily answer for 344
-  of today and the next 365 days (2026-09-28 would go from Mateo Retegui to Jorrel Hato). No past
-  answer is ever read again (no archive, no yesterday reveal, the daily record keeps the score,
-  streaks keep dates), so Footle's daily pool is NOT frozen. Footle's tiers are fixed size, so 15
-  players leave its famous 300 (Gavi, Jobe Bellingham, Tah, Joelinton and more) and 103 leave the
-  insane 1200: the pool rule working on a table that finally has its defensive midfielders.
-- **Fence:** `simWorldXiDefensiveMids`, 4 sections, 33 controls, green on LF and on a CRLF copy.
+- **Applying it is six steps, not one** (below): apply in the first minutes after 00:00
+  America/New_York, count, re-bake `src/data/players.ts`, run the named harnesses, commit that one
+  file, publish at an Eastern midnight. Footle's tiers are fixed size, so the rows also displace:
+  15 players leave its famous 300 (Gavi, Jobe Bellingham, Tah, Joelinton and more) and 103 leave
+  the insane 1200, the pool rule working on a table that finally has its defensive midfielders.
+- **Fence:** `simWorldXiDefensiveMids`, 4 sections, 40 controls and 4 positive controls.
   `WXIDM_CONTROL=all` needs `WXIDM_PROJECT=1` until the migration is applied. The projection
   projects the RECORD, never the SQL; section 1 proves the SQL stages exactly the record, and the
-  dry run proves it executes.
+  dry run proves it executes. Sections 2 to 4 hold the table to the record as of its check date
+  only (below).
 - **Bangladesh** is in `confederationGroups.ts` (AFC) and `FLAG_CODES`, ready for Hamza Choudhury,
   whose row is one of the 20 held.
-- **After applying:** rerun `simWorldXiDefensiveMids` in default mode, then the live readers of
-  `player_market_values` (simPlayerBingoPool, simPlayersPool, simRarityPools, simNationalities,
-  simSignThePlayerAuction, simValueFreshness and the rest). `simPrerender` section 8 needs a
-  `build:seo` before it sees the new What's New line.
+- `simPrerender` section 8 needs a `build:seo` before it sees the new What's New line.
 
-**Follow ups, not in this round.** World XI keys same year namesakes by (year, club) and section 4
+### Round 669 apply procedure (the lead, in this order; the migration's header has the same steps)
+
+1. **Apply** `supabase/migrations/20260928_round_669_defensive_midfield_2026.sql` in the first
+   minutes after **00:00 America/New_York** (04:00 UTC until 2026-11-01, 05:00 UTC from then),
+   never at 00:00 UTC, which is 20:00 Eastern. Run the whole file, its own `begin` and `commit`
+   included, through the Supabase MCP's `execute_sql`, the tool the dry run used. It raises and
+   writes nothing unless every precondition holds. Why the hour matters: see "Footle when the rows
+   land" below.
+2. **Count** with `count(*)`, never the table list: 412 rows at `Defensive Midfield` in 2026
+   (46 + 366) and 5862 rows in 2026 (5496 + 366).
+3. **Re-bake** on the branch: `node scripts/bakePlayers.mjs`. The one baked file the new rows reach
+   through a gate is `src/data/players.ts` (the Footle fallback pool, also read by Squad Deal,
+   Club Manager, Perfect Lineup, Sports Bingo and Gauntlet Draft); `simPlayersPool` section 4
+   requires it to equal a fresh bake of the live table, so without this step it is red on every
+   branch, main included, because the database is shared. Measured on the stand in: 538 rows
+   become 553 (easy 158, hard 200, insane 195). 16 written men join because the pool's seed names
+   them: Wharton, Stiller and Hjulmand (easy); Ugarte, Berge, Tyler Adams, Youssouf Fofana and
+   Lavia (hard); Mangala, Pepelu, Amrabat, Adli, Cristante, Cajuste, Lerma and McGregor (insane).
+   **Genoa's Vitinha leaves, on purpose**: the seed name "Vitinha" now folds to two 2026 rows and
+   the bake skips an ambiguous seed name rather than guess which man it meant. The seed came from
+   the old hand typed file, which meant PSG's man; the bake only ever found Genoa's because PSG's
+   row was missing. 11 players change tier (Gonçalo Ramos, Igor Paixão and Ismaïla Sarr easy to
+   hard; Koopmeiners, Meret, Nketiah, Zhegrova, Di Gregorio, Maeda, Ederson and Nuno Tavares hard
+   to insane). No other row changes; the header's counts and its date (the bake day) move with it.
+4. **Run** each of these and read its closing line and its exit code, never an echo after it:
+   - `node_modules/.bin/tsc --noEmit -p tsconfig.app.json`
+   - `simPlayersPool`, then `PLAYERS_CONTROL=handedit` and `PLAYERS_CONTROL=agezero`
+   - `simWorldXiDefensiveMids` with no `WXIDM_PROJECT` (projection mode refuses once the rows are
+     live), then `WXIDM_CONTROL=all`
+   - the readers of `src/data/players.ts`: simFootleDaily, simFootleAtomicPool, simFootleLeagues,
+     simFootleKitNumbers, simSportsBingo, simGauntletDraft, simGauntletEngine, simDraftShowdown,
+     simManagerSpec, simManagers, simSearchDiscard, simCreateClub
+   - the other harnesses that name `player_market_values` (27 in all on 2026-09-28, three of them
+     above): simAdminAccess, simAlphabetSprint, simAnswerFromRecords, simDatabaseReadEfficiency,
+     simLineupPositions, simMarketYearScope, simMissingXiReach, simNationalPools, simNationalities,
+     simNoZeroFacts, simPlayerBingoPool, simPlayerSearchAccents, simRarityAgreement,
+     simRarityPoolRecovery, simRarityPools, simRebuildEconomy, simRosterAdjudication,
+     simSchemaNames, simSignThePlayerAuction, simSoccerConquest, simTransferOverlay,
+     simValidatePlayerRecords, simValidatorCache, simValueFreshness. Recount with
+     `grep -l player_market_values scripts/sim*.mjs` rather than trust this list.
+5. **Commit** exactly one generated file, `src/data/players.ts`, on this round's branch, and merge
+   the branch the same night. From step 1 until that merge, `simPlayersPool` is red on main and on
+   every other branch (the table moved and their `players.ts` did not), and a branch cut before the
+   merge stays red until it takes main.
+6. **Publish** the release that carries it at an Eastern midnight as well. Footle files a saved
+   board under its answer's place in `src/data/players.ts`, and the re-bake moves that place on
+   140 of the 366 days from 2026-09-28, so a mid-day publish throws those boards away for anyone
+   who reloads. The re-bake changes no daily answer itself (0 of 366).
+
+**Not in the procedure, on purpose.** Other bakes read `player_market_values` too
+(bakeClubManagerRosters through the dedup view, bakeClubSquads, bakeNationalPools, bakeRebuildSquads,
+bakeNationalities, the era bakes), but `simPlayersPool` is the only gate that compares a file baked
+from the 2026 rows with the live table (the other fresh bake checks read the career tables or the
+2005 to 2015 years), and the harnesses above that could be measured were green on the projected
+table with those files untouched. Re-baking Club Manager's rosters would put the written men at its
+clubs into its squads and let PSG's Vitinha displace Genoa's in the dedup view, which is a Club
+Manager data round of its own, not an apply step.
+`transfer_grade_pool` is a table materialised from the career tables and this one; it keeps its
+current moves until someone rebuilds it, which is the status quo, not a regression.
+
+### How the procedure was proved without touching the database
+
+A PostgREST stand in (scratch, not committed) replaced `fetch` for `player_market_values` and its
+dedup view, loaded into each script with `NODE_OPTIONS=--import` so child processes got it too. It
+serves the 2026 rows from a snapshot of the live 5496, either as they are or with exactly what the
+migration does: its 366 inserts read out of the SQL file (goals, assists and cards at the column
+default 0, read from `information_schema`; rank, matches and person_key null; ids above the live
+maximum), its 4 club updates and its 1 age update. A query that can reach other years merges the
+live table's other years with that snapshot; anything it cannot emulate is refused loudly, never
+answered from live. The only database access was anon REST reads and read only SQL
+(`information_schema`, `pg_trigger`, the view definitions, counts).
+
+Two sessions of the polish pass ran all of this. The second re-pulled the live 2026 rows first and
+found them identical to the snapshot row for row (5496 rows, 46 at Defensive Midfield, the
+migration still unapplied), then repeated every run below except the live snapshot batch of
+fourteen harnesses, which is the first session's. Both sessions' re-bakes are byte identical.
+
+- **Faithful.** On the live snapshot `bakePlayers` wrote a file byte identical to the committed
+  `src/data/players.ts`, and `simPlayersPool` was green (538 rows), as it is on the real table.
+  Footle's daily answer through it matched the real query on all 731 days measured.
+- **It reproduces the defect.** On the projected table with the committed file, `simPlayersPool`
+  is RED with exactly the re-review's three findings: Vitinha has 2 live 2026 rows, the header
+  date differs from a fresh bake, and the file has 566 lines against the bake's 581.
+- **The procedure fixes it.** `bakePlayers` on the projected table, then `simPlayersPool`: green,
+  553 rows, and both controls still fire (handedit reddens sections 3 and 4, agezero section 2).
+  `simWorldXiDefensiveMids` in default mode, which is what it runs once the rows are live, is
+  green on the projected table (30 of 30 named, 366 of 366 written rows, 412 CDMs in a pool of
+  5879), `WXIDM_CONTROL=all` is green there (40 controls, 4 positive), and `WXIDM_PROJECT=1`
+  refuses with exit 2, as it must once the rows are in the table.
+- **The named harnesses on the projected table, with the re-baked file in place**, each with its
+  own TEMP (the ones that call `node_modules/.bin/esbuild` by path ran as scratch copies pointed at
+  the main tree's binary, since a worktree has none, and were deleted after):
+  - green, with the projected rows actually served to them: simPlayersPool, simWorldXiDefensiveMids,
+    simFootleDaily, simFootleKitNumbers, simPlayerBingoPool, simNoZeroFacts, simLineupPositions,
+    simMissingXiReach, simPlayerSearchAccents, simAnswerFromRecords, simAdminAccess,
+    simTransferOverlay, simValidatePlayerRecords, simValidatorCache, simValueFreshness. The same
+    fourteen, other than simWorldXiDefensiveMids (red by design on today's table), are also green
+    on the stand in's live snapshot with the committed file, so its merging agrees with the table.
+    One read of simMissingXiReach's 1570, a 1998 to 2000 query the migration cannot reach, failed
+    at the network in both sessions (the stand in passes that year range to the live table); the
+    harness stayed green, as it is on the real table.
+  - green, reading the re-baked file or committed data and not the table at run time:
+    simFootleAtomicPool, simFootleLeagues, simSportsBingo, simGauntletDraft, simGauntletEngine,
+    simDraftShowdown, simManagerSpec, simManagers, simSearchDiscard, simCreateClub,
+    simAlphabetSprint (its saved season file), simDatabaseReadEfficiency, simMarketYearScope,
+    simNationalPools, simNationalities, simRarityPoolRecovery, simRebuildEconomy,
+    simRosterAdjudication, simSoccerConquest.
+  - not measurable on the stand in, so step 4 is their first run on the new rows: simRarityPools
+    and simRarityAgreement read the peak views and simSchemaNames probes every view's columns
+    (the migration changes no schema); the stand in refused those reads rather than answer them
+    from the unprojected table. REALDB simSignThePlayerAuction plays a committed snapshot, and its
+    page half calls the esbuild binary by path from `scripts/lib`, which a worktree lacks.
+- **Nothing generated from the stand in is committed.** `src/data/players.ts` was put back byte
+  for byte after the runs; the branch's copy is still the 538 row bake of 2026-09-14.
+
+### Footle when the rows land
+
+- **Which days move.** The day the rows land, from the moment they land, and every day after it.
+  Footle's answer is `dailyPool[dailyIndex(date, dailyPool.length)]` over the tier pool fetched
+  when the page loads, and the tiers are fixed size, so new rows reorder them. Measured over the
+  366 days from 2026-09-28: 344 answers change and 22 stay the same (2026-09-28 would go from
+  Mateo Retegui to Jorrel Hato, 2026-09-29 from Andrey Santos to Riccardo Calafiori, 2026-09-30
+  from Kiernan Dewsbury-Hall to Youri Tielemans). **No earlier day moves**: 350 of the 365 days
+  before would compute differently, but Footle never computes a past day again (no archive, no
+  yesterday reveal, the daily record keeps the score, streaks keep dates, and `useDailyPuzzle`
+  deletes older boards). Unlimited mode draws at random and has no schedule to move.
+- **Must the lead apply at 00:00 Eastern? Yes, in the first minutes after it.** A page that loaded
+  before the apply keeps its pool, but anyone who loads after it gets the new answer, and their
+  saved board for that day is matched by the answer's place in `src/data/players.ts`. Of the 344
+  moving days, 275 would throw that board away (a finished player gets a fresh board and can play
+  and score the day a second time) and 69 would keep it and show it against an answer it was never
+  played for, because neither answer is in the file and both sit at place 0. At Eastern midnight
+  the answer turns over anyway, so only someone who loaded between 00:00 and the apply can see
+  either. The same rule holds for publishing the re-baked file (step 6).
+
+### The fence no longer pins the 366 rows to 2026-09-28 forever
+
+`simWorldXiDefensiveMids` now reads the record as true on its `checkedOn` and no later. A row may
+differ from it only where a newer, sourced entry in the record's `laterChecks` says so: dated after
+`checkedOn`, from a round after 669, naming the row by the name and club the record wrote, the
+field it changes (`club`, `nationality` or `position`), the value the table now carries, and two
+sources on two different hosts (`transfermarkt.com` and `transfermarkt.de` are one). The newest
+valid entry per field wins and sections 2 to 4 read every row through it; the written rows and
+the SQL stay as the migration wrote them, so section 1 and the dry run are untouched by a later
+move. A row pooled at a club nothing sourced names fails as `moved`, for a country nothing sourced
+names as `differs`, at a position nothing sourced names as `cdm`, each with the instruction in the
+message; a broken entry fails as `laterentry` and explains nothing. An entry dated after the day
+the fence runs (UTC) is broken too, so the record cannot be pre-dated past a check nobody made.
+
+How a later data round moves one of these men, for example Ugarte to another club on 2026-10-15:
+update his 2026 row in the table as usual, leave his row under `write` and the migration alone,
+and add to `laterChecks` one entry `{"name": "Manuel Ugarte", "recordClub": "Manchester United",
+"field": "club", "to": "<the club as the table now spells it>", "checkedOn": "2026-10-15",
+"round": <that round>, "sources": [{"url": "https://www.transfermarkt.com/...", "says": "..."},
+{"url": "https://www.fotmob.com/...", "says": "..."}]}`. The record's `laterChecksRule` is the
+full rule.
+
+Controls, each run in memory on the control subject's row. The subject is the first named man no
+later check names, Ugarte today, so a round that moves Ugarte and records it moves the controls to
+the next man (Amrabat) rather than leaving them with no row to change; `noplayer` and `dupname`
+work the same way now, where before they were pinned to Ugarte at Manchester United. Negative
+`moved`, `recountry` and `reposition` (he is served at another club, for another country, at
+central midfield, with no entry: section 2 or 3 goes red); `latestale` (entry dated on the record's own day), `latefuture` (dated a year
+ahead), `lateonehost` (two sources on one host), `lateorphan` (an entry for a row the record does
+not write), each of which must be refused by its own rule and by no other; and positive
+`movedsourced`, `recountrysourced` and `repositionsourced` (the same three changes WITH a valid
+entry stay green, and must be seen to reach the check). On the record's own day no later check
+can be dated yet, so the controls that write one run the fence's clock as of the day after the
+record's check; only the clock moves, never a rule. That isolation caught a real hole in the
+first draft of these controls: dated the day after the record and run on the record's day, the
+host and orphan entries were also refused as future dated, so they would have stayed "behaved"
+with their own rule broken. The dry run check also gained a positive control, `commentonly`, and
+`dryrunstale` now changes a raise message rather than a comment. All 40 controls and 4 positive
+controls behave, with `WXIDM_PROJECT=1` on the live table today and in default mode on the
+projected stand in.
+
+**A later round was simulated end to end** (a scratch copy of the fence, deleted after): the fence
+dated the next day, Ugarte moved to another club in the table, and one valid `laterChecks` entry
+recording it. The fence was green with the entry applied, and `WXIDM_CONTROL=all` was green on
+it with the controls moved on to Amrabat. That run is what showed the first draft's positive
+controls counting every applied entry rather than their own, which a real entry would have
+broken; they now look for the entry they wrote.
+
+### Round 669 follow ups, not in this round
+
+World XI keys same year namesakes by (year, club) and section 4
 now fails on any name in the pool twice that is not declared; move it onto Round 668's shared
 `PlayerIdentityConfig` (person_key plus spelling) when 668 lands, because the name keyed readers
 (playerSearch, Player Bingo, Footle) still keep one Vitinha. 29 more of the 46 hand written rows
@@ -45,6 +228,15 @@ values have drifted (Rodri stored at USD 90M, Transfermarkt EUR 55M today), Pare
 Juniors' where 13 rows say 'CA Boca Juniors', Lewis-Skelly and Kricfalusi sit at LB and CB where
 Transfermarkt now has DM, and William Carvalho's club is unconfirmed. `WhatsNew.tsx` and the top of
 `WORKBOARD.md` will conflict textually with the Round 668 branch.
+
+Found by the polish pass, also not in it: the view `player_market_tracked` joins every row to a
+"final" value by player name alone, so once the rows land, every Vitinha row (Genoa's history
+included) carries PSG's 2026 value, where today PSG's history carries Genoa's; it wants the same
+person key as the rest. Club Manager's rosters (`bakeClubManagerRosters`, through the dedup view)
+would take the 366 men on a re-bake, a round of its own with its sims. And the stand in cannot
+model the six other views built on the table (`player_peak_values`, `player_position_peaks`,
+`player_nationality_peaks`, `game_player_pool`, `eligible_soccer_players`, `rebuild_clubs`), so
+the harnesses that read them get their first projected run live, after step 1.
 
 ## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
 
