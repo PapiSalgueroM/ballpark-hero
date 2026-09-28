@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { localEvaluateSoccerXI } from '@/lib/localLineupEval';
-import { buildXiPoints } from '@/lib/lineupVerdictPoints';
+import { buildXiPoints, xiRefereeVerdict } from '@/lib/lineupVerdictPoints';
 import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS } from '@/data/lineupTeams';
 import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment } from '@/types/lineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
@@ -295,8 +295,14 @@ export function useLineupBuilder() {
         }
       );
       const data = await resp.json();
-      
-      if (!resp.ok) {
+      /* Round 645: only a referee verdict is scored as one. A refused call, a
+         malformed body and the function's own stand-ins (its market value
+         read and its error placeholder, xiRefereeVerdict) all go to the
+         offline judge, so the lineup is judged on its quality either way and
+         a stand-in's flat rung never pays for an XI nobody judged. */
+      const judged = resp.ok ? xiRefereeVerdict(data) : null;
+
+      if (!judged) {
         // AI referee down/out of quota -> offline judge, never a dead-end
         const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
         setVerdict({ ...local, judge: 'offline' });
@@ -304,18 +310,7 @@ export function useLineupBuilder() {
         return;
       }
 
-      if (!data.rating || !data.analysis) {
-        setVerdict({
-          /* Round 645: a body with no rating was never judged, so it is not
-             dressed up as a Mid-Table verdict any more, which it then scored
-             as one. An unjudged lineup records 0 (lineupVerdictPoints.ts). */
-          rating: data.rating || 'Unrated',
-          headline: data.headline || 'Squad evaluated',
-          analysis: data.analysis || 'Your squad has been evaluated.',
-        });
-      } else {
-        setVerdict(data);
-      }
+      setVerdict(judged);
       setPhase('result');
     } catch (err) {
       console.error('Evaluation error:', err);

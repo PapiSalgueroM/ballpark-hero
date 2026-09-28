@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { localEvaluateNbaFive } from '@/lib/localLineupEval';
-import { startingFivePoints } from '@/lib/lineupVerdictPoints';
+import { fiveRefereeVerdict, startingFivePoints } from '@/lib/lineupVerdictPoints';
 import { getRandomNbaTeams, NBA_TEAMS, type NbaTeam } from '@/data/nbaTeams';
 import { getRandomStatChallenge } from '@/data/nbaStats';
 import type { NbaFilledSlot, NbaGamePhase, NbaAIVerdict, StatChallenge, NbaPosition } from '@/types/nba';
@@ -312,9 +312,13 @@ export function useNbaLineup() {
       );
       if (!resp.ok) throw new Error(`Evaluation request failed (${resp.status})`);
       const data = await resp.json();
-      // Guard against a malformed/empty body so we never land on a blank result.
-      if (!data || typeof data.rating !== 'string') throw new Error('Malformed verdict');
-      setVerdict(data);
+      /* Guard against a malformed/empty body so we never land on a blank
+         result. Round 645: the function's own stand-in for an answer it could
+         not parse (a flat Regular Season) is not a verdict either
+         (fiveRefereeVerdict), so it goes to the offline judge with the rest. */
+      const judged = fiveRefereeVerdict(data);
+      if (!judged) throw new Error('No referee verdict');
+      setVerdict(judged);
       setPhase('result');
     } catch (err) {
       // AI referee down/out of quota -> offline judge so the game still ends
