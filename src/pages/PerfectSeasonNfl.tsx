@@ -11,7 +11,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import {
   DraftablePlayer, SpinSquad, SimResult, GameMode,
-  teamOverall, randomSeed, ratingTier, squadFillsAny,
+  teamOverall, worstFitFor, perfectSeasonPoints, randomSeed, ratingTier, squadFillsAny,
   GAME_MODE_LABELS, GAME_MODE_BLURBS, HIDDEN_RATING_DISPLAY, isRatingHidden,
   getDailyDateET, makeDailyPicker, loadDailyAttempt, saveDailyAttempt,
   msUntilNextDailyET, formatCountdown, DailyAttemptRecord,
@@ -22,7 +22,7 @@ import {
   fetchTeamSeasonIndex, fetchSquad,
 } from '@/lib/perfectSeasonNfl';
 import {
-  simulateSeasonFair, buildPlayoffRun, playoffSeedForDaily, buildAnalysis,
+  simulateSeasonFair, fairExpectedWins, buildPlayoffRun, playoffSeedForDaily, buildAnalysis,
   PLAYOFF_THRESHOLD, PlayoffRun,
 } from '@/lib/perfectSeasonExpansion';
 import {
@@ -69,6 +69,12 @@ const PerfectSeasonNfl = () => {
   const [picks, setPicks] = useState<Record<string, DraftablePlayer | null>>(
     () => Object.fromEntries(NFL_SLOTS.map(s => [s.key, null]))
   );
+  /* Round 645: beside every real pick, the pick zero skill would have made
+     from the same squad for the same slot (worstFitFor). The season is scored
+     above what that draft expects to win. */
+  const [floorPicks, setFloorPicks] = useState<Record<string, DraftablePlayer | null>>(
+    () => Object.fromEntries(NFL_SLOTS.map(s => [s.key, null]))
+  );
   const [usedNames, setUsedNames] = useState<Set<string>>(new Set());
   const [selected, setSelected] = useState<DraftablePlayer | null>(null);
   const [rerolls, setRerolls] = useState(MAX_REROLLS);
@@ -91,6 +97,11 @@ const PerfectSeasonNfl = () => {
     [picks]
   );
   const overall = useMemo(() => teamOverall(NFL_SLOTS, picks), [picks]);
+  const zeroSkillWins = useMemo(
+    () => fairExpectedWins('nfl', teamOverall(NFL_SLOTS, floorPicks), NFL_GAMES),
+    [floorPicks],
+  );
+  const points = sim ? perfectSeasonPoints(sim.wins, NFL_GAMES, zeroSkillWins) : 0;
   const draftDone = openSlots.length === 0;
   const ratingsHidden = isRatingHidden(mode, phase === 'done');
 
@@ -209,6 +220,10 @@ const PerfectSeasonNfl = () => {
 
   const assign = (p: DraftablePlayer, slotKey: string) => {
     if (!openSlots.includes(slotKey) || !p.eligible.includes(slotKey)) return;
+    if (squad) {
+      const floor = worstFitFor(squad, slotKey, usedNames);
+      setFloorPicks(prev => ({ ...prev, [slotKey]: floor }));
+    }
     setPicks(prev => ({ ...prev, [slotKey]: p }));
     setUsedNames(prev => new Set(prev).add(p.name));
     setSelected(null);
@@ -270,8 +285,9 @@ const PerfectSeasonNfl = () => {
       spins,
       teamNames,
       themeId: dailyTheme?.id,
+      points,
     });
-  }, [mode, phase, sim, overall, spins, teamNames, dailyTheme]);
+  }, [mode, phase, sim, overall, spins, teamNames, dailyTheme, points]);
 
   // Round 299, the scoring audit: finishing a season never recorded a play,
   // so a run earned no streak day, no played-today credit and no points.
@@ -282,14 +298,15 @@ const PerfectSeasonNfl = () => {
   useEffect(() => {
     if (phase !== 'done' || !sim || completionSaved.current) return;
     completionSaved.current = true;
-    recordCompletion('/perfect-season-nfl', sim.wins, getCurrentPlayerName());
-  }, [phase, sim]);
+    recordCompletion('/perfect-season-nfl', perfectSeasonPoints(sim.wins, NFL_GAMES, zeroSkillWins), getCurrentPlayerName());
+  }, [phase, sim, zeroSkillWins]);
 
   const skipSim = () => setRevealed(NFL_GAMES);
 
   const restart = () => {
     completionSaved.current = false;
     setPicks(Object.fromEntries(NFL_SLOTS.map(s => [s.key, null])));
+    setFloorPicks(Object.fromEntries(NFL_SLOTS.map(s => [s.key, null])));
     setUsedNames(new Set());
     setSelected(null);
     setSquad(null);
@@ -487,6 +504,9 @@ const PerfectSeasonNfl = () => {
               <p className="text-sm text-muted-foreground mb-3">
                 Team overall {lockedAttempt.overall} · drafted in {lockedAttempt.spins} spin{lockedAttempt.spins === 1 ? '' : 's'}
               </p>
+              {lockedAttempt.points !== undefined && (
+                <p className="text-sm font-semibold text-foreground mb-3" data-testid="season-points">{lockedAttempt.points} points</p>
+              )}
               {lockedPlayoffRun && (
                 <p className="text-xs text-muted-foreground mb-3">
                   {lockedPlayoffRun.champion
@@ -727,6 +747,9 @@ const PerfectSeasonNfl = () => {
                 <p className="text-sm text-muted-foreground mb-3">
                   {mode === 'daily' && `Daily · ${todayStr} · `}
                   Team overall {ovrDisplay} · drafted in {spins} spin{spins === 1 ? '' : 's'}
+                </p>
+                <p className="text-sm font-semibold text-foreground mb-3" data-testid="season-points">
+                  {points} points, the wins above what the worst pick from every squad you spun would expect
                 </p>
                 {sim.perfect && (
                   <p className="text-sm text-correct font-semibold mb-2 inline-flex items-center gap-1.5">
