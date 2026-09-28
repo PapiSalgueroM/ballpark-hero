@@ -3627,7 +3627,12 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
   // Diving reputation: +2 goals from penalties
   if (state.divingActive && !isGK) goals += 2;
   const assists = calcAssists(position, apps, overall, fx.assistMult);
-  const cleanSheets = isGK ? clamp(Math.round(apps * rand(20, 45) / 100 * fx.cleanSheetMult), 0, apps) : 0;
+  /* A clean sheet belongs to the whole back line, not the keeper alone. This
+     was gated on GK, so a defender's Clean Sheets tile read 0 for an entire
+     career (a player reported it on 2026-09-23). The back line now draws the
+     same share of the team's shutouts as the keeper does. */
+  const keepsSheets = isGK || position === "CB" || position === "LB" || position === "RB";
+  const cleanSheets = keepsSheets ? clamp(Math.round(apps * rand(20, 45) / 100 * fx.cleanSheetMult), 0, apps) : 0;
   const yellowCards = rand(0, Math.min(8, Math.round(apps * 0.25)));
   const redCards = Math.random() < 0.08 ? 1 : 0;
   const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier, fx.ratingDelta);
@@ -4265,7 +4270,7 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
   s.seasons = [...s.seasons, {
     year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
     apps: rand(10, 25), goals: s.position === "GK" ? 0 : rand(0, 8), assists: rand(0, 5),
-    cleanSheets: s.position === "GK" ? rand(2, 8) : 0, yellowCards: rand(0, 4), redCards: 0, rating: 0,
+    cleanSheets: (s.position === "GK" || s.position === "CB" || s.position === "LB" || s.position === "RB") ? rand(2, 8) : 0, yellowCards: rand(0, 4), redCards: 0, rating: 0,
     leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "youth",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   }];
