@@ -1,6 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { fetchAllRows } from '@/lib/fetchAllRows';
-import { personKeyOf, SOCCER_MARKET_VALUE_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
+import { isSameMan, personKeyOf, SOCCER_MARKET_VALUE_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { isNotCurrentPlayer } from '@/data/notCurrentPlayers';
 
@@ -129,8 +129,8 @@ import { isNotCurrentPlayer } from '@/data/notCurrentPlayers';
  *      the clubs of three other men (the table's 18 "Rodri" rows are four men
  *      by their ages and positions) and the Past club link chip could light
  *      for a guess who never shared a club with him. A history row now has to
- *      be the man's own by isSameMan below (Round 385's rule, lifted here from
- *      Player Bingo so both games share one).
+ *      be the man's own by isSameMan (Round 385's rule, lifted from Player
+ *      Bingo so both games share one; it lives in playerSearch.ts).
  *   3. The ages are the table's, not today's. See LISTED AGES above
  *      ageOnNewestList for what was measured and what the page now says.
  * scripts/simWhoAmINamesakes.mjs holds all three.
@@ -159,7 +159,7 @@ export interface GuessBreakdown {
   posExactMatch: boolean;
   sameClub: boolean;
   sharedClubPast: boolean; // shared a club at some point, but not the current one
-  ageDiff: number; // secret.age - guess.age; positive means the secret player is older
+  ageDiff: number; // ageOnNewestList(secret) - ageOnNewestList(guess); positive means the secret player is older
   valueLogDiff: number; // log10(secret.value / guess.value); positive means the secret is worth more
   score: number; // 0-100
 }
@@ -383,24 +383,11 @@ export function ageReading(
   return guess.age === secret.age && guess.year === secret.year ? 'same' : 'level';
 }
 
-/**
- * ROUND 385, lifted here from Player Bingo in Round 668 so Who Am I's club
- * history shares it: person_key is NULL on every row of player_market_values,
- * so one name is one career and "Rodri" is at least three men (a Barcelona
- * midfielder aged 21 in 2006, a Huesca player aged 32 in 2009, and the
- * Manchester City one), and "Lucas Hernández" is a Frenchman and a Uruguayan.
- * A history row is the pool player's only if its age walks with its year:
- * the pool row says 29 in 2026, so a 2006 row should say about 9, and 21 is
- * somebody else. Rows with no age cannot be checked and are kept.
- */
-export function isSameMan(
-  ref: { age: number; year: number },
-  row: { age: number | null; year: number | null },
-): boolean {
-  if (!(ref.age > 0) || !(ref.year > 0)) return true;
-  if (row.age == null || row.year == null || !(row.age > 0) || !(row.year > 0)) return true;
-  return Math.abs((ref.age - row.age) - (ref.year - row.year)) <= 1;
-}
+/* isSameMan (Round 385's rule, the age has to walk with the year) lives in
+   playerSearch.ts since the Round 668 re-review, so the search's namesake line
+   can use it without an import cycle. It is re-exported here for Player Bingo
+   and the harnesses that import it from this file. */
+export { isSameMan };
 
 /**
  * Scores a guess against the secret player using the weights documented above.

@@ -3,9 +3,11 @@ import { flagFor } from '@/lib/dealPlayers';
 import { clubKey, isSameMan, normalizeName, positionGroup, primaryNationality } from '@/lib/whoAmI';
 import type { PositionGroup } from '@/lib/whoAmI';
 
-/* Round 668: isSameMan moved to whoAmI.ts so Who Am I's club history shares
-   the one rule; it is re-exported here for the harnesses that import it from
-   this file (scripts/simPlayerBingoPool.mjs). */
+/* Round 668: isSameMan moved out of this file so Who Am I's club history (and,
+   since the re-review, the search's namesake line) shares the one rule. It
+   lives in playerSearch.ts and reaches here through whoAmI.ts; it is
+   re-exported for the harnesses that import it from this file
+   (scripts/simPlayerBingoPool.mjs). */
 export { isSameMan };
 
 /**

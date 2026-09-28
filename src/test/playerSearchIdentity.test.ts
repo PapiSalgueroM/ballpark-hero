@@ -19,6 +19,10 @@
  * random row sets of section 1 never hold such a name); section 7, Career
  * Ladder's suggestion list keeps the search's namesakes apart and its judge
  * never lets a namesake win.
+ *
+ * Added by the Round 668 re-review: section 8, the line under a shared name
+ * describes the shown man's own latest row, never the latest row of a
+ * spelling several men share.
  */
 import { describe, it, expect } from 'vitest';
 import {
@@ -415,5 +419,81 @@ describe('7. Career Ladder keeps the search\'s namesakes apart (Round 668 fix)',
     const s = ladderSuggestions(pool, nedved, 'nedved', []);
     expect(s.map(x => x.name)).toEqual(['Pavel Nedvěd']);
     expect(ladderGuessWins(s[0].name, 'Pavel Nedvěd', pool)).toBe(true);
+  });
+});
+
+/* Every "Cafu" and "Cafú" row as the live table held them on 2026-09-28. The
+   'Cafu' spelling is two men by the table's own ages: the Milan right-back
+   (listed 33 in 2004 to 36 in 2007, born about 1971) and a left midfielder at
+   Botafogo, Sao Bento and Portuguesa (21 in 2018 to 23 in 2020, born about
+   1997). 'Cafú' is a third man, the Portugal midfielder. */
+const CAFU_ROWS: Row[] = [
+  { player_name: 'Cafu', club: 'AC Milan', position: 'Right-Back', nationality: 'Brazil', market_value_usd: 3000000, year: 2004, age: 33, person_key: null },
+  { player_name: 'Cafu', club: 'AC Milan', position: 'Right-Back', nationality: 'Brazil', market_value_usd: 3000000, year: 2005, age: 34, person_key: null },
+  { player_name: 'Cafu', club: 'AC Milan', position: 'Right-Back', nationality: 'Brazil', market_value_usd: 2000000, year: 2006, age: 35, person_key: null },
+  { player_name: 'Cafu', club: 'AC Milan', position: 'Right-Back', nationality: 'Brazil', market_value_usd: 2000000, year: 2007, age: 36, person_key: null },
+  { player_name: 'Cafu', club: 'Botafogo FC', position: 'Left Midfield', nationality: 'Brazil', market_value_usd: 1000000, year: 2018, age: 21, person_key: null },
+  { player_name: 'Cafu', club: 'Esporte Clube São Bento (SP)', position: 'Left Midfield', nationality: 'Brazil', market_value_usd: 1000000, year: 2019, age: 22, person_key: null },
+  { player_name: 'Cafu', club: 'AA Portuguesa', position: 'Left Midfield', nationality: 'Brazil', market_value_usd: 1000000, year: 2020, age: 23, person_key: null },
+  { player_name: 'Cafú', club: 'Vitória Guimarães SC', position: 'Central Midfield', nationality: 'Portugal', market_value_usd: 2000000, year: 2015, age: 21, person_key: null },
+  { player_name: 'Cafú', club: 'Vitória Guimarães SC', position: 'Central Midfield', nationality: 'Portugal', market_value_usd: 2000000, year: 2016, age: 22, person_key: null },
+  { player_name: 'Cafú', club: 'FC Lorient', position: 'Central Midfield', nationality: 'Portugal', market_value_usd: 3000000, year: 2017, age: 23, person_key: null },
+  { player_name: 'Cafú', club: 'Legia Warszawa', position: 'Central Midfield', nationality: 'Portugal', market_value_usd: 2000000, year: 2019, age: 25, person_key: null },
+];
+
+describe('8. the line under a shared name describes the man shown (Round 668 re-review)', () => {
+  const q = normalizeName('cafu');
+  const results = dedupeAndRank([CAFU_ROWS], SOCCER_MARKET_VALUE_SOURCE, q, { limit: 8 });
+  const cafu = results.find(r => r.rawName === 'Cafu')!;
+  const cafuAccent = results.find(r => r.rawName === 'Cafú')!;
+
+  it('the fixture holds the defect: the latest "Cafu" row is another man than the row shown', () => {
+    /* The shown row is the peak, the Milan right-back. The latest row under
+       the spelling is the Portuguesa left midfielder, which is what the line
+       said before the re-review. */
+    expect(cafu.meta.club).toBe('AC Milan');
+    expect(cafu.meta.position).toBe('Right-Back');
+    const spellingLatest = CAFU_ROWS.filter(r => r.player_name === 'Cafu').reduce((a, b) => (Number(b.year) > Number(a.year) ? b : a));
+    expect(spellingLatest.club).toBe('AA Portuguesa');
+    expect(Number(cafu.meta.year) - Number(cafu.meta.age)).not.toBe(Number(spellingLatest.year) - Number(spellingLatest.age));
+  });
+
+  it('the Milan right-back\'s line is his own latest row, never the Portuguesa left midfielder\'s', () => {
+    expect(cafu.disambiguator).toBe('AC Milan · Right-Back · 2007');
+  });
+
+  it('the other spelling gets its own man\'s latest row', () => {
+    expect(cafuAccent.disambiguator).toBe('Legia Warszawa · Central Midfield · 2019');
+  });
+
+  /* The rows below are made up (the "Synthetic FC" rows and the person keys
+     are not in the table) to reach the two paths live data does not have:
+     a row with no age, and a person_key. */
+  it('a later row with no age proves nothing and is never used; nor is anything when the shown row has none', () => {
+    const noAgeLater: Row[] = [
+      { player_name: 'Cafu', club: 'AC Milan', position: 'Right-Back', market_value_usd: 3000000, year: 2005, age: 34, person_key: null },
+      { player_name: 'Cafu', club: 'Synthetic FC', position: 'Right-Back', market_value_usd: 1000000, year: 2010, age: null, person_key: null },
+      { player_name: 'Cafú', club: 'FC Lorient', position: 'Central Midfield', market_value_usd: 3000000, year: 2017, age: 23, person_key: null },
+    ];
+    const res = dedupeAndRank([noAgeLater], SOCCER_MARKET_VALUE_SOURCE, q, { limit: 8 });
+    expect(res.find(r => r.rawName === 'Cafu')!.disambiguator).toBe('AC Milan · Right-Back · 2005');
+    const shownNoAge: Row[] = [
+      { player_name: 'Cafu', club: 'AC Milan', position: 'Right-Back', market_value_usd: 3000000, year: 2005, age: null, person_key: null },
+      { player_name: 'Cafu', club: 'AC Milan', position: 'Right-Back', market_value_usd: 2000000, year: 2007, age: 36, person_key: null },
+      { player_name: 'Cafú', club: 'FC Lorient', position: 'Central Midfield', market_value_usd: 3000000, year: 2017, age: 23, person_key: null },
+    ];
+    const res2 = dedupeAndRank([shownNoAge], SOCCER_MARKET_VALUE_SOURCE, q, { limit: 8 });
+    expect(res2.find(r => r.rawName === 'Cafu')!.disambiguator).toBe('AC Milan · Right-Back · 2005');
+  });
+
+  it('a person_key says the later row is him whatever its age says', () => {
+    const keyed: Row[] = [
+      { player_name: 'Cafu', club: 'AC Milan', position: 'Right-Back', market_value_usd: 3000000, year: 2005, age: 34, person_key: 'cafu-1970' },
+      { player_name: 'Cafu', club: 'Synthetic FC', position: 'Right-Back', market_value_usd: 1000000, year: 2008, age: 20, person_key: 'cafu-1970' },
+      { player_name: 'Cafu', club: 'AA Portuguesa', position: 'Left Midfield', market_value_usd: 1000000, year: 2020, age: 23, person_key: 'cafu-1997' },
+    ];
+    const res = dedupeAndRank([keyed], SOCCER_MARKET_VALUE_SOURCE, q, { limit: 8 });
+    expect(res.map(r => r.personKey)).toEqual(['pk:cafu-1970', 'pk:cafu-1997']);
+    expect(res.map(r => r.disambiguator)).toEqual(['Synthetic FC · Right-Back · 2008', 'AA Portuguesa · Left Midfield · 2020']);
   });
 });

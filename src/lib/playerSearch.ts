@@ -166,8 +166,8 @@ export interface PlayerEntity {
   personKey?: string;
   /**
    * Round 668. Only present when another result shares this one's normalized
-   * name: the club, position and year of this person's latest row, so two
-   * namesakes can be told apart in the list.
+   * name: the club, position and year of the shown man's own latest row (see
+   * ownLatestRow), so two namesakes can be told apart in the list.
    */
   disambiguator?: string;
   /** Display-ready name (title-cased, accents from source preserved). */
@@ -295,6 +295,28 @@ export function personKeyOf(
   }
   if (identity.bySpelling) return 'sp:' + storedSpelling(name);
   return 'nm:' + normalizeName(name);
+}
+
+/**
+ * ROUND 385, lifted into Who Am I in Round 668 so its club history shares it,
+ * and down into this file after the Round 668 re-review so the search's
+ * namesake line can use it too (whoAmI.ts imports this file, so it could not
+ * import back). person_key is NULL on every row of player_market_values, so
+ * one spelling can be several men: the table's 18 "Rodri" rows are four (a
+ * Barcelona centre-back aged 21 in 2006, a Betis right midfielder aged 20 in
+ * 2007, a Huesca left midfielder aged 32 in 2009, and the Manchester City
+ * one), and "Lucas Hernández" is a Frenchman and a Uruguayan. A history row
+ * is the pool player's only if its age walks with its year: the pool row
+ * says 29 in 2026, so a 2006 row should say about 9, and 21 is somebody
+ * else. Rows with no age cannot be checked and are kept.
+ */
+export function isSameMan(
+  ref: { age: number; year: number },
+  row: { age: number | null; year: number | null },
+): boolean {
+  if (!(ref.age > 0) || !(ref.year > 0)) return true;
+  if (row.age == null || row.year == null || !(row.age > 0) || !(row.year > 0)) return true;
+  return Math.abs((ref.age - row.age) - (ref.year - row.year)) <= 1;
 }
 
 export interface PlayerSourceFilter {
@@ -465,6 +487,30 @@ function disambiguatorFor(row: ParsedRow): string {
 }
 
 /**
+ * Round 668 re-review: the row a namesake line describes. One spelling can still
+ * be several men, so the latest row under a spelling is not always the man on
+ * screen: measured 2026-09-28 over every name the table stores more than one
+ * way, 8 of the 91 lines described somebody else, "Cafu" among them (the Milan
+ * right-back shown, the line of a Portuguesa left midfielder born 26 years
+ * later). The line now comes from the shown row's own latest row. A later row
+ * counts as his when a person_key says so, or when both rows list an age and
+ * it walks with the year (isSameMan). A row that proves nothing is never used,
+ * so at worst the line describes the shown row itself.
+ */
+function ownLatestRow(shown: ParsedRow, rows: ParsedRow[], byPersonKey: boolean): ParsedRow {
+  const ageYear = (r: ParsedRow) => ({ age: Number(r.meta.age) || 0, year: Number(r.meta.year ?? r.recency) || 0 });
+  const s = ageYear(shown);
+  const provable = s.age > 0 && s.year > 0;
+  let best = shown;
+  for (const r of rows) {
+    if (!(r.recency > best.recency || (r.recency === best.recency && r.prominence > best.prominence))) continue;
+    const a = ageYear(r);
+    if (byPersonKey || (provable && a.age > 0 && a.year > 0 && isSameMan(s, a))) best = r;
+  }
+  return best;
+}
+
+/**
  * The merge, dedupe and ranking half of searchPlayers, pure so it can be run
  * on rows without a database (src/test/playerSearchIdentity.test.ts).
  *
@@ -472,10 +518,11 @@ function disambiguatorFor(row: ParsedRow): string {
  * the better match rank, then the higher prominence, then the more recent
  * row. Round 668: on a source that declares an identity the merge is per
  * person instead (personKeyOf), and a result whose normalized name another
- * result shares carries a disambiguator from that person's latest row. The
- * sharing is counted before the slice, so a namesake just past `limit` still
- * marks the one on screen. `exclude` takes normalized names (every person of
- * that name) and, on such a source, person keys (that one person).
+ * result shares carries a disambiguator from the shown man's own latest row
+ * (ownLatestRow). The sharing is counted before the slice, so a namesake just
+ * past `limit` still marks the one on screen. `exclude` takes normalized names
+ * (every person of that name) and, on such a source, person keys (that one
+ * person).
  *
  * Ranked exact prefix, then word prefix, then contains; boosted names first
  * within a tier; then prominence. Sliced to `limit`.
@@ -489,7 +536,7 @@ export function dedupeAndRank(
   const { exclude } = options;
   const byPerson = new Map<
     string,
-    { raw: ParsedRow; rank: MatchRank; normalized: string; personKey?: string; latest: ParsedRow }
+    { raw: ParsedRow; rank: MatchRank; normalized: string; personKey?: string; rows: ParsedRow[] }
   >();
 
   for (const rows of rowSets) {
@@ -507,15 +554,10 @@ export function dedupeAndRank(
 
       const existing = byPerson.get(dedupeKey);
       if (!existing) {
-        byPerson.set(dedupeKey, { raw: parsed, rank, normalized, personKey, latest: parsed });
+        byPerson.set(dedupeKey, { raw: parsed, rank, normalized, personKey, rows: [parsed] });
         continue;
       }
-      if (
-        parsed.recency > existing.latest.recency ||
-        (parsed.recency === existing.latest.recency && parsed.prominence > existing.latest.prominence)
-      ) {
-        existing.latest = parsed;
-      }
+      existing.rows.push(parsed);
       // Keep the better match rank, and within equal rank keep the row with
       // the higher prominence (ties broken by recency).
       const better =
@@ -546,7 +588,7 @@ export function dedupeAndRank(
     };
     if (e.personKey !== undefined) entity.personKey = e.personKey;
     if (shared) {
-      const hint = disambiguatorFor(e.latest);
+      const hint = disambiguatorFor(ownLatestRow(e.raw, e.rows, e.personKey?.startsWith('pk:') === true));
       if (hint) entity.disambiguator = hint;
     }
     return { entity, normalized: e.normalized };
