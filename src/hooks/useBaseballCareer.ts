@@ -9,7 +9,8 @@ export type BaseballCareerStatus = 'playing' | 'guessed' | 'revealed';
 
 export type BaseballCareerMode = 'daily' | 'unlimited';
 
-// Round 52: the last clue pays 100 like the board says (it silently paid 0)
+// Round 52: the last clue pays 100 like the board says (it silently paid 0).
+// careerClueScore (src/lib/careerClueScores.ts) holds that rung for it now.
 
 // Action events stored in the daily action log
 type CareerAction = { t: 'skip' } | { t: 'won' } | { t: 'give' };

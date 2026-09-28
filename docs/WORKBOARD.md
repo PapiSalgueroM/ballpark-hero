@@ -1,15 +1,16 @@
 # Work board
 
-**Round 646 BUILT, branch `r646-caps-real-ceiling`, not on main, migration NOT applied.** Every
-scored game's engine exports the most it can record, computed from its rules (113 games, plus the
-six season games reading Round 647's `seasonCeiling()`). `supabase/migrations/20260928_round_646_caps_at_real_ceilings.sql`
-sets 116 caps (56 move) and backs the table up first; **apply it only after Round 647 is
-published**, because it sets the four front offices and the two dynasties to 100. Fence
-`scripts/simCapsAreCeilings.mjs` holds the engines, the committed table snapshot
-(`scripts/data/gameScoreCaps.mjs`) and the migration to one another, three controls. A perfect
-season paid 7.5, 11.3, 2.6 and 4.7 (NFL, MLB, NBA, NHL front offices) and pays 100 in all four
-after. Thirteen games have no rules ceiling (the streaks, the chains, the four My Careers, Alphabet
-Sprint, List Quiz, Pack Battle) and keep their caps; each needs a scoring scale first.
+**Round 646 BUILT, REVIEWED AND FIXED 2026-09-28, branch `r646-caps-real-ceiling`, not on main,
+migration NOT applied.** Every scored game's engine exports the most it can record, read off the
+code that records it (113 games, plus the six season games reading Round 647's `seasonCeiling()`).
+`supabase/migrations/20260928_round_646_caps_at_real_ceilings.sql` sets 116 caps (56 move) and,
+new in the fix, keeps past days at the cap they were played under (`game_score_cap_history`,
+`game_cap_periods`, the board rebuilt on them). It fails closed and **refuses until Round 647 is
+live and a whole day has passed with no old scale season row**. Fence
+`scripts/simCapsAreCeilings.mjs`: six sections, twelve exact controls, and a perfect run through
+the scoring code for 50 games, each recorder read to use what is played. Merging with 645b
+conflicts in 14 scoring files (notes in `docs/PROJECT-STATE.md`, top section). Thirteen games have
+no rules ceiling and keep their caps; each needs a scoring scale first.
 
 **2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof

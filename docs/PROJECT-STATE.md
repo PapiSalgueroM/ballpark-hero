@@ -1,5 +1,89 @@
 # Project state
 
+## BUILT 2026-09-28: Round 646, every leaderboard cap at its game's real ceiling (branch `r646-caps-real-ceiling`, NOT on main, migration NOT applied)
+
+Part of the points economy that ships as one release (645a, 645b, 645c, 646, 647, 648). Built,
+adversarially reviewed (fix first: four majors, four minors), then fixed on the same branch.
+
+**What changes for players.** A game's cap is what its day is worth, so it now sits at what a
+perfect run records, read off the code that records the score. Golf, Tennis, MLB and AFL Higher or
+Lower stop paying the full 100 for half a run; Face Off stops paying its median play 100 (cap 1900,
+a flawless outright win: a tied match that runs longer is clamped, so playing for a tie earns
+nothing); Budget Builder (1120 to 126) and Sign the Player (56,000,000 to 697) stop paying a perfect
+build 11 points and an auction a thousandth of one; Perfect Lineup is capped at the classic daily's
+100, because after 645a only that lineup is ranked; and the four front offices and two dynasties
+pay one number for one achievement (100 for a season at its ceiling, where they paid 7.5, 11.3, 2.6
+and 4.7). **Past days keep what they were worth when played:** the migration writes each moved
+cap into `public.game_score_cap_history`, valid until the moment it applies, and the board
+(`global_leaderboard`, `global_rank`, `player_ranks`) scores every row against the cap in force
+when it was played, through the new view `game_cap_periods`. The 1,498 old cumulative front office
+and dynasty title rows and Budget Builder's old scale rows are not revalued.
+
+**What the fix changed in code.** Every ceiling now reads the scoring code: Career, UFC and Footle
+share one guess count rule (`src/lib/guessCountScore.ts`); the career clue ladder, Connections,
+the grids and Connect 4 record through one function each and the Olympics page's "pts available"
+reads the shared ladder; Sign the Player, Guess the Transfer Value, Puck Detective, Football
+Draft, Rebuild, Rarity Round and the stock market's score read named constants their ceilings read;
+Free Kick and Buzzer Beater score a goal or a make through one function that `maxRunScore` (the
+ceiling) also calls. No recorded score changes.
+
+**The fence, `scripts/simCapsAreCeilings.mjs`, six sections.** Classification of all 139 keys; every
+ceiling resolves (and the season games wait on 647's `seasonCeiling()`, Perfect Lineup on 645a's
+ranked flag); snapshot equals ceiling; the migration equals the ceilings, each written against the
+value read, with 13 guards read in its code; **a perfect run through the scoring function the
+recorder calls** for 47 games (53 with 647), with the input domain swept so nothing records past
+the cap, plus three games dealt on 400 real days (a day's perfect Minefield pays 70.5 to 100, Free
+Kick and Buzzer Beater 95.6 to 98.7), and 63 games listed with the reason no run is played; and the
+live table all on one side (a half applied table, or an older caps migration re-run, is red) with
+the history matching. Section 5 also reads, in the code, that the recorder uses what it plays: for
+37 games the useGameCompletion score argument calls the scorer, for the other 13 the function that
+makes the score (takeShot, runGauntlet, the hook) uses it, 50 of 50, so a formula written into a
+recorder line instead of the scoring function goes red. **Twelve controls, each exact** (classify,
+resolve, season, ranked, ceiling, snapshot, migration, guard, perfect, recorder, scoredin, live).
+Trial merge of this branch with the current `r645a-ranked-recorder` and `r647-season-ledger` (only
+docs conflict): green, 119 ceilings, the season games through `scoreSeason`, and the season, ranked,
+perfect, recorder and scoredin controls exact. The reviewer's two probes (Sign the Player's first
+place at 400, a Career first guess at 800) now go red.
+
+**Gates (2026-09-28, fix pass).** tsc 0 (exit code read). Fence green, all twelve controls exact,
+an unknown control name exits 1. Vitest: the 10 files covering changed modules, 121 of 121, exit 0.
+Every harness that reads a changed file, plus the source wide scanners, 39 in all, green, among
+them simLeaderboardCaps (and its
+stalelist control), simNoDoubleRecord, simScoreShown, simScoringCoverage, simHarnessAnchors,
+simNoRivalNames, simHigherLower, simFaceOff, simFreeKick, simBuzzerBeater, both gauntlets, and
+simStockCampaign and simStockScoring with both spendratio controls firing on the new anchors.
+simSignThePlayerAuction ran green through a temporary copy whose page helper reads the main
+checkout's node_modules (this worktree has none; the copy is deleted). simLeaderboardCache, which
+reads the live board, got a statement timeout from `global_leaderboard('alltime')` once and was
+green on the rerun. Not run: simPrerender (reads `dist`), and the two browser harnesses that read
+`freeKick.ts` (simSetPiecePresentation, playTycoonSetPieceFit); no runAllSims, build or browser
+harness, because the release suite owns this machine.
+
+**Unapplied: `supabase/migrations/20260928_round_646_caps_at_real_ceilings.sql`.** One DO block,
+fails closed. Before any write it refuses unless: a season game row on 647's scale exists in the
+last 24 hours and none above 100 (647 live, old tabs gone; so publish 647 and wait a quiet day);
+it has not run before; every row still reads the cap it was written against (2026-09-28); the board
+functions are the Round 537 ones; Postgres 15 or later. It backs the table up
+(`private.r646_caps_bak`), writes the history, the view, the caps and the board, then proves every
+player day before the switch scores exactly as before, and raises otherwise. Round 644 applies in
+either order; Round 648 after it (it checks the backup). Run `get_advisors` after, and time
+`global_leaderboard('alltime')` before and after (the new board adds one join to the periods).
+**Round 648's profile total is not history safe**: it adds least(day best, today's cap) on every
+past day, so a profile total moves on past days when this lands (once 648's part 2 is rerun) even
+though the World Leaderboard does not. And its browser copy of the caps is kept six hours: a play
+credited to a browser's running tally in those hours keeps the old cap's credit for good, and only
+later plays count at the new caps.
+
+**Merging the economy.** With 645a: clean. With 647: only the docs conflict. With 645c: one import
+line in `src/lib/gauntletDraft.ts` (keep both additions). **With 645b: 14 source files conflict**
+(Ball IQ, Budget Builder, HOF or Bust, Build Your XI, Mystery Box, NBA Starting 5, Rebuild, Score
+Predictor, the auction house, both gauntlet files, Squad Deal, Fantasy Draft, Search and Discard),
+because both rounds rewrote the same scoring lines: 646 named the constants, 645b scaled the score
+above zero skill. The caps survive the merge: 645b's `skillPoints` never records more than the
+game's own score and records a perfect run unchanged, so each ceiling stays an upper bound and
+stays reached. Whoever merges second keeps 646's named constants inside 645b's formulas, then
+reruns simCapsAreCeilings (with its controls) and simFreePoints.
+
 ## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
 
 Assembled and gated by the desktop Claude lane in the CRLF gate clone on `release-d`, pushed to
