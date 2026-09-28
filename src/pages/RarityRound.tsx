@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -12,6 +12,8 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
+import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 import { supabase } from '@/integrations/supabase/client';
 import {
   CATEGORIES,
@@ -39,6 +41,51 @@ type PlayMode = 'daily' | 'unlimited';
 const RARITY_SCORE_SWITCH_DAY = '2026-09-19';
 type Phase = 'boot' | 'error' | 'loading-round' | 'playing' | 'revealed' | 'done';
 
+const SLUG = 'rarity-round';
+
+/* Round 645 part three: today's ranked Rarity daily as far as it was played.
+   It never locked: a refresh dealt the same five categories again with each
+   board reveal already seen (Round 319 had already watched players back out
+   and rejoin to steal the rarest answer), and every replay recorded another
+   completion and paid the score again. Each answer is filed the moment it
+   is locked in, before the reveal, and `done` is set once the result screen
+   has shown (and the run recorded). A round keeps only what the page cannot
+   compute: the category id, the answer, its rank and the pool size; the
+   prompt comes from today's category and the points from scoreRound. Crowd
+   Says is the unranked warm up and files nothing. Fails closed: rounds that
+   are not today's categories in today's order, or a rank the pool could not
+   hold, and the page deals a fresh daily. */
+interface RarityDaily { results: RoundResult[]; done: boolean }
+
+function readRarityDaily(today: string, categories: RarityCategory[]): RarityDaily | null {
+  return readDailyRecord<RarityDaily>(SLUG, today, f => {
+    const { rounds, done } = f;
+    if (!Array.isArray(rounds) || rounds.length > categories.length || typeof done !== 'boolean') return null;
+    if (done && rounds.length !== categories.length) return null;
+    const results: RoundResult[] = [];
+    for (let i = 0; i < rounds.length; i += 1) {
+      const r = rounds[i] as Record<string, unknown> | null;
+      if (!r || typeof r !== 'object' || r.categoryId !== categories[i].id) return null;
+      const { answerName, rank, poolSize } = r;
+      if (typeof answerName !== 'string' || answerName.trim() === '') return null;
+      if (typeof poolSize !== 'number' || !Number.isInteger(poolSize) || poolSize < 1) return null;
+      if (typeof rank !== 'number' || !Number.isInteger(rank) || rank < 1 || rank > poolSize) return null;
+      results.push({
+        categoryId: categories[i].id,
+        prompt: categories[i].prompt,
+        answerName,
+        rank,
+        poolSize,
+        points: scoreRound(rank, poolSize, 'rarity'),
+      });
+    }
+    return { results, done };
+  });
+}
+
+const fileRounds = (results: RoundResult[]) =>
+  results.map(r => ({ categoryId: r.categoryId, answerName: r.answerName, rank: r.rank, poolSize: r.poolSize }));
+
 /**
  * Rarity Round: name the most obscure valid answer you can ("Rarity Round"
  * mode), with a popularity mirror where famous wins ("Crowd Says" mode). See
@@ -47,6 +94,9 @@ type Phase = 'boot' | 'error' | 'loading-round' | 'playing' | 'revealed' | 'done
  * result, lower is better in Rarity Round, higher is better in Crowd Says.
  */
 const RarityRound = () => {
+  /* Round 428's rule: the day is pinned at mount, and the categories, the
+     record and the caption all read this one value. */
+  const todayStr = useRef(getTodayET()).current;
   // Daily / Unlimited toggle, same convention as Footle (mode + switchMode).
   const [playMode, setPlayMode] = useState<PlayMode>('daily');
   // Rarity Round / Crowd Says toggle, the game's own mirror-mode axis.
@@ -78,20 +128,32 @@ const RarityRound = () => {
   const startRun = useCallback((nextPlayMode: PlayMode, nextRarityMode: RarityMode) => {
     setPlayMode(nextPlayMode);
     setRarityMode(nextRarityMode);
-    const categories = nextPlayMode === 'daily' ? pickDailyCategories(CATEGORIES) : pickRandomCategories(CATEGORIES);
+    const categories = nextPlayMode === 'daily' ? pickDailyCategories(CATEGORIES, todayStr) : pickRandomCategories(CATEGORIES);
     if (!categories || categories.length === 0) {
       setPhase('error');
       return;
     }
+    /* Round 645 part three: today's ranked daily is dealt once, and one left
+       part way picks up on the round after the last answer locked in. */
+    const saved = nextPlayMode === 'daily' && nextRarityMode === 'rarity' ? readRarityDaily(todayStr, categories) : null;
+    const savedResults = saved?.results ?? [];
     setRounds(categories);
-    setRoundIndex(0);
-    setResults([]);
+    setRoundIndex(Math.min(savedResults.length, categories.length - 1));
+    setResults(savedResults);
     setInputValue('');
     setSelectedEntity(null);
     setErrorMsg('');
     setLastResult(null);
-    setPhase('loading-round');
-  }, []);
+    if (saved?.done) {
+      /* shown and recorded before the refresh: not a new finish */
+      markRestoredFinish(SLUG);
+      setPhase('done');
+      return;
+    }
+    /* All five answered with the result screen never shown: it shows now,
+       and that is the finish recorded. */
+    setPhase(savedResults.length >= categories.length ? 'done' : 'loading-round');
+  }, [todayStr]);
 
   // Boot the first run on mount (daily mode by default).
   useEffect(() => {
@@ -165,6 +227,10 @@ const RarityRound = () => {
       poolSize: pool.length,
       points,
     };
+    /* Round 645 part three: on the record before the reveal */
+    if (playMode === 'daily' && rarityMode === 'rarity') {
+      writeDailyRecord(SLUG, todayStr, { rounds: fileRounds([...results, result]), done: false });
+    }
     setLastResult(result);
     setResults(r => [...r, result]);
     setPhase('revealed');
@@ -280,6 +346,13 @@ const RarityRound = () => {
   }, [isComplete, rankedRun, recordedScore]);
 
   useGameCompletion('rarity-round', isComplete, rankedRun ? recordedScore : undefined, results.length);
+
+  /* Round 645 part three: the ranked daily's result screen is up and the run
+     recorded, so a refresh brings this screen back and records nothing. */
+  useEffect(() => {
+    if (phase !== 'done' || playMode !== 'daily' || rarityMode !== 'rarity') return;
+    writeDailyRecord(SLUG, todayStr, { rounds: fileRounds(results), done: true });
+  }, [phase, playMode, rarityMode, results, todayStr]);
 
   const emojiGrid = useMemo(() => buildEmojiGrid(results, rarityMode), [results, rarityMode]);
 
@@ -435,7 +508,7 @@ const RarityRound = () => {
             </div>
 
             {playMode === 'daily' && (
-              <p className="text-xs text-muted-foreground mt-3">Today's categories, {getTodayET()}. Same 5 for everyone.</p>
+              <p className="text-xs text-muted-foreground mt-3">Today's categories, {todayStr}. Same 5 for everyone.</p>
             )}
           </>
         }

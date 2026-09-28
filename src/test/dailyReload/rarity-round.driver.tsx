@@ -15,6 +15,10 @@
  * daily; Crowd Says on the same day is its own warm up play with no score
  * and is left alone here. replay() takes Play Unlimited and both routes
  * back to the Daily toggle and plays any live daily board it finds.
+ *
+ * Round 645 part three: the row also resumes (assertion 6). Each answer is
+ * filed as it is locked in, so two answers, a reload and the Daily board
+ * must come back on round 3 with the same score so far.
  */
 import './mocks';
 import { waitFor } from '@testing-library/react';
@@ -40,8 +44,10 @@ function status(m: MountedPage): 'playing' | 'finished' {
   throw new Error('rarity round shows neither a round nor the result card (boot or error?)');
 }
 
-async function finish(m: MountedPage): Promise<void> {
-  for (let guard = 0; guard < ROUNDS_PER_RUN + 1; guard += 1) {
+/* Answer up to `count` rounds with the same pick, stopping when the run is
+   over: a resumed run (Round 645 part three) has fewer than five left. */
+async function answer(m: MountedPage, count: number): Promise<void> {
+  for (let i = 0; i < count; i += 1) {
     if (resultCard(m.container)) return;
     const pick = await waitFor(() => button(m.container, new RegExp(`^pick ${PICK}$`)));
     await click(pick);
@@ -49,7 +55,18 @@ async function finish(m: MountedPage): Promise<void> {
     const next = await waitFor(() => button(m.container, /^Next round$|^See final score$/));
     await click(next);
   }
+}
+
+async function finish(m: MountedPage): Promise<void> {
+  await answer(m, ROUNDS_PER_RUN);
   await waitFor(() => { if (!resultCard(m.container)) throw new Error('the run has not finished'); });
+}
+
+/* The line over the live board: the round it is on and the score so far. */
+function progress(m: MountedPage): string {
+  const span = Array.from(m.container.querySelectorAll('span')).find(s => /^Round \d+ of \d+$/.test((s.textContent ?? '').trim()));
+  if (!span?.parentElement) throw new Error('no live round');
+  return (span.parentElement.textContent ?? '').replace(/\s+/g, ' ').trim();
 }
 
 export default defineDriver<MountedPage>({
@@ -76,6 +93,11 @@ export default defineDriver<MountedPage>({
 
   finish,
   status,
+
+  /* Round 645 part three: two answers, then a reload has to come back on
+     round 3 with the same score so far. */
+  playSome: m => answer(m, 2),
+  progress,
 
   fingerprint(m) {
     const card = resultCard(m.container);
