@@ -8,15 +8,29 @@ export const MAX_GUESSES = 6;
 /** Win threshold: guess within this fractional distance of true value. */
 export const WIN_THRESHOLD = 0.05;
 
+/** Round 646: what a win pays for every guess left, the winning one counted. */
+export const POINTS_PER_GUESS_LEFT = 150;
+/** Round 646: a win never pays less than this. */
+export const WIN_FLOOR = 100;
+
 /**
- * Round 646: the most a Guess the Transfer Value daily can record. A win pays
- * 150 for every guess left counting the winning one, so a first guess win is
- * (6 - 1 + 1) x 150 = 900 (dailyScore below). The route redirects home since
- * it retired, but the hook can still send the key, so its cap row stays true.
+ * Round 646: what a Guess the Transfer Value daily records, named so the
+ * recorder below and the ceiling read the one rule. A win pays
+ * POINTS_PER_GUESS_LEFT for every guess left counting the winning one, never
+ * under WIN_FLOOR; a miss pays 0.
+ */
+export function transferValueDailyScore(won: boolean, guessesUsed: number): number {
+  return won ? Math.max(WIN_FLOOR, (MAX_GUESSES - guessesUsed + 1) * POINTS_PER_GUESS_LEFT) : 0;
+}
+
+/**
+ * Round 646: the most a Guess the Transfer Value daily can record, a first
+ * guess win through the rule above: 900. The route redirects home since it
+ * retired, but the hook can still send the key, so its cap row stays true.
  * game_score_caps holds it for guess-transfer-value
  * (scripts/simCapsAreCeilings.mjs).
  */
-export const GUESS_TRANSFER_VALUE_CEILING = MAX_GUESSES * 150;
+export const GUESS_TRANSFER_VALUE_CEILING = transferValueDailyScore(true, 1);
 
 export interface ValueGuess {
   value: number;            // user's guess in USD
@@ -134,9 +148,7 @@ export function useGuessTransferValue() {
   const switchMode = useCallback((m: Mode) => setMode(m), []);
 
   // Daily score: more remaining guesses = better
-  const dailyScore = dailyStatus === 'won'
-    ? Math.max(100, (MAX_GUESSES - dailyGuesses.length + 1) * 150)
-    : 0;
+  const dailyScore = transferValueDailyScore(dailyStatus === 'won', dailyGuesses.length);
 
   useGameCompletion('guess-transfer-value', dailyStatus !== 'playing', dailyScore);
 

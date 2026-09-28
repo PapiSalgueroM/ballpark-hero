@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { nbaCareerPuzzles } from '@/data/nbaCareerPlayers';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { CAREER_CLUE_SCORES } from '@/lib/careerClueScores';
+import { careerClueScore } from '@/lib/careerClueScores';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 
 /**
@@ -13,7 +13,6 @@ export type NbaCareerStatus = 'playing' | 'guessed' | 'revealed';
 
 export type NbaCareerMode = 'daily' | 'unlimited';
 
-const CLUE_SCORES = CAREER_CLUE_SCORES;
 
 // Action events stored in the daily action log
 type CareerAction = { t: 'skip' } | { t: 'won' } | { t: 'give' };
@@ -66,9 +65,7 @@ export function useNbaCareer() {
 
   const player = puzzle?.player;
   const maxClue = 6;
-  const score = activeStatus === 'guessed'
-    ? CLUE_SCORES[Math.min(activeClueLevel, CLUE_SCORES.length - 1)]
-    : 0;
+  const score = careerClueScore(activeStatus === 'guessed', activeClueLevel);
 
   // ---- CLUES ---------------------------------------------------------------
   const visibleClues = useMemo(() => {
@@ -151,9 +148,7 @@ export function useNbaCareer() {
   );
 
   // ---- COMPLETION ----------------------------------------------------------
-  const dailyScore = dailyStatus === 'guessed'
-    ? CLUE_SCORES[Math.min(dailyClueLevel, CLUE_SCORES.length - 1)]
-    : 0;
+  const dailyScore = careerClueScore(dailyStatus === 'guessed', dailyClueLevel);
   useGameCompletion('nba-career', rawDailyStatus !== 'playing', dailyScore);
 
   return {

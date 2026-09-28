@@ -297,7 +297,8 @@ export const GAUNTLET_ROUND_POINTS = 16;
 export const GAUNTLET_TROPHY_POINTS = 20;
 export const GAUNTLET_SCORE_MAX = 100;
 
-function gauntletScore(cleared: number, champion: boolean): number {
+/** Exported for scripts/simCapsAreCeilings.mjs section 5, which plays it. */
+export function gauntletScore(cleared: number, champion: boolean): number {
   return Math.min(GAUNTLET_SCORE_MAX, cleared * GAUNTLET_ROUND_POINTS + (champion ? GAUNTLET_TROPHY_POINTS : 0));
 }
 

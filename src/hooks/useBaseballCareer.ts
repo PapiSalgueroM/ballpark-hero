@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback } from 'react';
 import { baseballCareerPuzzles } from '@/data/baseballCareerPlayers';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { CAREER_CLUE_SCORES } from '@/lib/careerClueScores';
+import { careerClueScore } from '@/lib/careerClueScores';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 
 export type BaseballCareerStatus = 'playing' | 'guessed' | 'revealed';
@@ -10,7 +10,6 @@ export type BaseballCareerStatus = 'playing' | 'guessed' | 'revealed';
 export type BaseballCareerMode = 'daily' | 'unlimited';
 
 // Round 52: the last clue pays 100 like the board says (it silently paid 0)
-const CLUE_SCORES = CAREER_CLUE_SCORES;
 
 // Action events stored in the daily action log
 type CareerAction = { t: 'skip' } | { t: 'won' } | { t: 'give' };
@@ -63,9 +62,7 @@ export function useBaseballCareer() {
 
   const player = puzzle?.player;
   const maxClue = 6;
-  const score = activeStatus === 'guessed'
-    ? CLUE_SCORES[Math.min(activeClueLevel, CLUE_SCORES.length - 1)]
-    : 0;
+  const score = careerClueScore(activeStatus === 'guessed', activeClueLevel);
 
   // ---- CLUES ---------------------------------------------------------------
   const visibleClues = useMemo(() => {
@@ -150,9 +147,7 @@ export function useBaseballCareer() {
   );
 
   // ---- COMPLETION ----------------------------------------------------------
-  const dailyScore = dailyStatus === 'guessed'
-    ? CLUE_SCORES[Math.min(dailyClueLevel, CLUE_SCORES.length - 1)]
-    : 0;
+  const dailyScore = careerClueScore(dailyStatus === 'guessed', dailyClueLevel);
   useGameCompletion('baseball-career', rawDailyStatus !== 'playing', dailyScore);
 
   return {

@@ -13,19 +13,21 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
   UnbeatenRunResult,
   simulateUnbeatenRun,
-  UNBEATEN_MAX_POINTS,
 } from '@/lib/unbeatenMode';
 import { randomSeed } from '@/lib/perfectSeason';
 
 /**
- * Round 646: the most a Perfect Lineup day can record. Two views record under
- * the one key on two scales: the classic rating tops out at LINEUP_RATING_MAX
- * (100) and a Go Unbeaten season at UNBEATEN_MAX_POINTS (38 wins, 114), so the
- * ceiling is the larger, 114, and a perfect classic lineup records 100 of it.
- * game_score_caps holds it for perfect-lineup (scripts/simCapsAreCeilings.mjs).
+ * Round 646: the most a ranked Perfect Lineup day can record. Round 645 ranks
+ * only the daily classic lineup (the ranked flag it adds to this hook's
+ * useGameCompletion call): an Unlimited lineup and a Go Unbeaten season (a
+ * random seed every run) record as plays with no score. So the ceiling is the classic rating's top,
+ * LINEUP_RATING_MAX, the clamp simulate reads: 100. Go Unbeaten's points (up
+ * to 114) never reach the board once 645 is live, and until it is they clamp
+ * at 100 there. game_score_caps holds it for perfect-lineup
+ * (scripts/simCapsAreCeilings.mjs, whose section 2 reads the ranked flag).
  */
 export function perfectLineupCeiling(): number {
-  return Math.max(LINEUP_RATING_MAX, UNBEATEN_MAX_POINTS);
+  return LINEUP_RATING_MAX;
 }
 
 export type Phase = 'picking' | 'result';

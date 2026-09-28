@@ -19,13 +19,17 @@ import {
 } from '@/lib/rebuildSave';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 
+/** Round 646: the recorder stores the scored seat's rating times this. */
+export const REBUILD_RECORD_SCALE = 10;
+
 /**
  * Round 646: the most a Rebuild run can record, the scored seat's rating
- * times 10, and loop.ratingOf clamps the rating at REBUILD_RATING_MAX (99):
- * 990. game_score_caps holds it for rebuild (scripts/simCapsAreCeilings.mjs).
+ * times REBUILD_RECORD_SCALE (the recorder below reads the same constant), and
+ * loop.ratingOf clamps the rating at REBUILD_RATING_MAX (99): 990.
+ * game_score_caps holds it for rebuild (scripts/simCapsAreCeilings.mjs).
  */
 export function rebuildCeiling(): number {
-  return loop.REBUILD_RATING_MAX * 10;
+  return loop.REBUILD_RATING_MAX * REBUILD_RECORD_SCALE;
 }
 
 /**
@@ -470,7 +474,7 @@ export function useRebuild(): RebuildState {
      drift, and a restore that marked a finish this line did not call complete
      would leave a mark sitting for the next real finish to swallow. */
   const complete = isFinishedTable(tbl);
-  useGameCompletion('rebuild', complete, Math.max(0, scoredRating * 10), scored && scoredRating >= scored.target ? 1 : 0);
+  useGameCompletion('rebuild', complete, Math.max(0, scoredRating * REBUILD_RECORD_SCALE), scored && scoredRating >= scored.target ? 1 : 0);
 
   const shareText = useMemo(() => {
     if (!solo) {

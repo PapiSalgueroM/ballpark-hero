@@ -258,20 +258,33 @@ export function pointsFor(correct: boolean, secondsUsed: number): number {
 }
 
 /**
- * Round 646: the most a Face Off daily can record, your points total. A round
- * pays you at most pointsFor(true, 0), 100 + 10 x 10 = 200, and a flawless
- * match wins outright in ROUNDS: 2000. More rounds only come from a tie
- * (needsExtra, up to MAX_EXTRA more), and a tie means your total equals a
- * rival's, who answers no faster than his `fastest`, so at most
- * pointsFor(true, 1.5) = 180 a round. The longest match is level through 12
- * rounds at 180 and then yours at 200: 12 x 180 + 200 = 2360, above the
- * outright 2000, so 2360. game_score_caps holds it for face-off
- * (scripts/simCapsAreCeilings.mjs).
+ * Round 646: the quickest an answer can arrive, a millisecond. The shot clock
+ * is running before anybody can pick (useFaceOff reads performance.now() at
+ * the pick), so the first whole second is always gone by the time an answer
+ * lands: pointsFor gives a right answer at most 100 + 10 x 9 = 190, and 200
+ * only at exactly zero seconds, which no pick can be.
+ */
+export const QUICKEST_ANSWER = 0.001;
+
+/**
+ * Round 646: what a perfect Face Off daily records, and so its leaderboard
+ * cap: every round right at QUICKEST_ANSWER, 10 x 190 = 1900. No rival can
+ * match 190 in a round (the quickest answers in 1.5 seconds, 180 at most), so
+ * a flawless match wins outright in ROUNDS.
+ *
+ * A LONGER MATCH CAN RECORD MORE, AND THAT IS DELIBERATELY NOT THE CAP. Extra
+ * rounds only come from a tie (needsExtra, up to MAX_EXTRA more), and a tie
+ * means slowing down to sit level with the rival: twelve rounds level at 180
+ * and a thirteenth at 190 records 2350. Capping at that would pay a flawless
+ * outright win 81 points and the full 100 only to someone who played for a
+ * tie, which is the free points shape Round 645 removes elsewhere. So the cap
+ * is the flawless win, and a tied match's total past it is clamped: playing
+ * for a tie earns nothing a perfect match does not. game_score_caps holds this
+ * for face-off (scripts/simCapsAreCeilings.mjs, whose section 5 plays the
+ * flawless daily through resolveRound and totals on real deals).
  */
 export function faceOffCeiling(): number {
-  const yours = pointsFor(true, 0);
-  const rivals = Math.min(yours, Math.max(...RIVALS.map(r => pointsFor(true, r.fastest))));
-  return Math.max(ROUNDS * yours, (ROUNDS + MAX_EXTRA - 1) * rivals + yours);
+  return ROUNDS * pointsFor(true, QUICKEST_ANSWER);
 }
 
 export interface RoundResult {

@@ -15,7 +15,7 @@ import { PlayerAutocomplete } from '@/components/game/PlayerAutocomplete';
 import { normalizeName, type PlayerEntity } from '@/lib/playerSearch';
 import { dateSeed, getTodayET } from '@/lib/dateUtils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { GRID_CELL_POINTS } from '@/lib/gridScore';
+import { gridScore } from '@/lib/gridScore';
 import {
   CbbCategory,
   CbbCellStatus,
@@ -199,7 +199,7 @@ const CbbGrid = () => {
      restored in a state initializer, so a finished one mounts complete and
      records nothing. The same line in all four grid pages. */
   const dailyFilled = Object.keys(dailyCells).length;
-  useGameCompletion('cbb-grid', dailyFilled >= 9 || dailyWrongCount >= GUESS_LIMIT, dailyFilled * GRID_CELL_POINTS);
+  useGameCompletion('cbb-grid', dailyFilled >= 9 || dailyWrongCount >= GUESS_LIMIT, gridScore(dailyFilled));
 
   const cellStatuses: CbbCellStatus[] = useMemo(
     () => Array.from({ length: 9 }, (_, i) => (cells[i] ? 'correct' : 'empty')),

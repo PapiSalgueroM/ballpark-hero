@@ -2,7 +2,7 @@ import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { connectionsPuzzles } from '@/data/connectionsPuzzles';
 import type { ConnectionGroup, ConnectionDifficulty } from '@/types/connections';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { CONNECTIONS_LIVES, CONNECTIONS_POINTS_PER_LIFE } from '@/lib/connectionsScore';
+import { CONNECTIONS_LIVES, connectionsScore } from '@/lib/connectionsScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchConnectionsPuzzles } from '@/lib/fetchConnectionsPuzzles';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
@@ -277,7 +277,7 @@ export function useConnections() {
   }, [mode, resetUnlimitedState]);
 
   const totalPuzzles = puzzlePool.length;
-  const completionScore = gameStatus === 'won' ? activeLives * CONNECTIONS_POINTS_PER_LIFE : 0;
+  const completionScore = connectionsScore(gameStatus === 'won', activeLives);
   useGameCompletion('connections', rawDailyStatus !== 'playing', completionScore);
 
   return {

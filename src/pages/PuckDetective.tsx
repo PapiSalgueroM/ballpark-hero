@@ -37,14 +37,25 @@ import {
   teamLabel,
 } from '@/lib/puckDetective';
 
+/** Round 646: what a win pays for every guess left, the winning one counted. */
+const POINTS_PER_GUESS_LEFT = 10;
+
 /**
- * Round 646: the most a Puck Detective daily can record. A win pays 10 for
- * every guess left counting the winning one, (GUESS_LIMIT - guesses + 1) x 10,
- * so a first guess win is 8 x 10 = 80. game_score_caps holds it for
- * puck-detective (scripts/simCapsAreCeilings.mjs).
+ * Round 646: what a Puck Detective daily records, named so the recorder below
+ * and the ceiling read the one rule: POINTS_PER_GUESS_LEFT for every guess
+ * left of GUESS_LIMIT counting the winning one, 0 for a miss.
+ */
+export function puckDetectiveScore(won: boolean, guessesUsed: number): number {
+  return won ? (GUESS_LIMIT - guessesUsed + 1) * POINTS_PER_GUESS_LEFT : 0;
+}
+
+/**
+ * Round 646: the most a Puck Detective daily can record, a first guess win
+ * through the rule above: 80. game_score_caps holds it for puck-detective
+ * (scripts/simCapsAreCeilings.mjs).
  */
 export function puckDetectiveCeiling(): number {
-  return GUESS_LIMIT * 10;
+  return puckDetectiveScore(true, 1);
 }
 
 type Phase = 'boot' | 'error' | 'playing' | 'done';
@@ -294,7 +305,7 @@ const PuckDetective = () => {
      restored in a state initializer and a finished guess log through
      useDailyPuzzle's markRestoredFinish handshake, so a reload records
      nothing. */
-  useGameCompletion('puck-detective', dailyGaveUp || rawDailyStatus !== 'playing', won ? (GUESS_LIMIT - guesses.length + 1) * 10 : 0);
+  useGameCompletion('puck-detective', dailyGaveUp || rawDailyStatus !== 'playing', puckDetectiveScore(won, guesses.length));
 
   const isLoading = phase === 'boot' || (mode === 'daily' && dailyLoading);
   const emojiGrid = mystery ? buildShareGrid(guesses) : '';

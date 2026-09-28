@@ -3,7 +3,7 @@ import { collegeGridPuzzles } from '@/data/collegeGridPuzzles';
 import { CellState, FootballGridGameStatus, GridAttribute, GridPuzzle } from '@/types/footballGrid';
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { GRID_CELL_POINTS } from '@/lib/gridScore';
+import { gridScore } from '@/lib/gridScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { toast } from 'sonner';
 import { rarityPercent } from '@/lib/gridRarity';
@@ -246,7 +246,7 @@ export function useCollegeGrid() {
     [activeCell, gameStatus, validating, gridData, staleLog, cells, puzzle, getRowCol, fetchRarity, addDailyGuess],
   );
 
-  useGameCompletion('college-grid', rawDailyStatus !== 'playing', correctCount * GRID_CELL_POINTS);
+  useGameCompletion('college-grid', rawDailyStatus !== 'playing', gridScore(correctCount));
 
   return {
     puzzle, cells, activeCell, setActiveCell, submitGuess,

@@ -3,7 +3,7 @@ import { soccerGridPuzzles } from '@/data/soccerGridPuzzles';
 import { SoccerGridCell, SoccerGridGameStatus, SoccerGridPuzzle } from '@/types/soccerGrid';
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { GRID_CELL_POINTS } from '@/lib/gridScore';
+import { gridScore } from '@/lib/gridScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchSoccerGridPuzzles } from '@/lib/fetchSoccerGridPuzzles';
 import { toast } from 'sonner';
@@ -345,7 +345,7 @@ export function useSoccerGrid() {
   // rawDailyStatus directly, so a timed-mode round that ends by the clock
   // running out records a completion the same way running out of guesses
   // or winning does.
-  useGameCompletion('soccer-grid', gameStatus === 'complete', correctCount * GRID_CELL_POINTS);
+  useGameCompletion('soccer-grid', gameStatus === 'complete', gridScore(correctCount));
 
   return {
     puzzle, activeCell, setActiveCell, submitGuess,

@@ -522,10 +522,11 @@ export function worstAffordableXI(campaign: Campaign): StockCard[] {
 /**
  * Round 646: the top of the campaign score, the most a Player Stock Market day
  * can record: the best affordable eleven, or any eleven on a board where best
- * and worst are worth the same. scoreCampaign clamps to 100 (its line is
- * left as it was, because simStockCampaign and simStockScoring rewrite that
- * exact line for their controls). game_score_caps holds it for
- * player-stock-market (scripts/simCapsAreCeilings.mjs).
+ * and worst are worth the same. scoreCampaign's scale and its clamp both read
+ * it, so the ceiling moves with the rule. simStockCampaign and simStockScoring
+ * rewrite the score line for their spendratio controls, and their anchors
+ * carry this constant. game_score_caps holds it for player-stock-market
+ * (scripts/simCapsAreCeilings.mjs).
  */
 export const STOCK_MARKET_CEILING = 100;
 
@@ -536,8 +537,8 @@ export function scoreCampaign(campaign: Campaign, picks: StockCard[]): CampaignR
   const worstValue = worstAffordableXI(campaign).reduce((s, c) => s + c.final, 0);
   const growth = campaign.budget > 0 ? finalValue / campaign.budget : 0;
   const score = bestValue === worstValue
-    ? 100
-    : Math.max(0, Math.min(100, Math.round((100 * (finalValue - worstValue)) / (bestValue - worstValue))));
+    ? STOCK_MARKET_CEILING
+    : Math.max(0, Math.min(STOCK_MARKET_CEILING, Math.round((STOCK_MARKET_CEILING * (finalValue - worstValue)) / (bestValue - worstValue))));
   return { spend, finalValue, growth, bestValue, worstValue, score };
 }
 

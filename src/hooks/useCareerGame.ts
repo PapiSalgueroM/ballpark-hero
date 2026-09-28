@@ -7,6 +7,7 @@ import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed, getTodayET } from '@/lib/dateUtils';
+import { guessCountScore } from '@/lib/guessCountScore';
 
 /** One recorded action in a daily Career Path run. Round 55: this type was
     USED in three places but never actually defined or imported, so the daily
@@ -22,12 +23,20 @@ const MAX_GUESSES = 8;
 const COLS = ['club', 'appearances', 'goals', 'assists', 'marketValue'] as const;
 
 /**
- * Round 646: the most a Career daily can record. A win pays 100 for every
- * guess left of MAX_GUESSES, and the winning guess counts as used, so the best
- * is a first guess win: (8 - 1) x 100 = 700 (completionScore below).
- * game_score_caps holds it for career (scripts/simCapsAreCeilings.mjs).
+ * Round 646: what a Career daily records, the guess count rule Footle and UFC
+ * share (src/lib/guessCountScore.ts) at this game's MAX_GUESSES. The recorder
+ * below calls it, and the ceiling is it on a first guess win: 700.
+ * game_score_caps holds that for career (scripts/simCapsAreCeilings.mjs).
+ * A function rather than a constant, so nothing imported is evaluated at
+ * module scope.
  */
-export const CAREER_CEILING = (MAX_GUESSES - 1) * 100;
+export function careerDailyScore(won: boolean, guessesUsed: number): number {
+  return guessCountScore(won, guessesUsed, MAX_GUESSES);
+}
+
+export function careerCeiling(): number {
+  return careerDailyScore(true, 1);
+}
 
 export type CareerGameMode = 'daily' | 'unlimited';
 
@@ -282,9 +291,7 @@ export function useCareerGame() {
     return ensureAnswerInOptions(source.map((p) => p.name), targetPlayer.name);
   }, [mode, unlimitedPool, playerPool, targetPlayer]);
 
-  const completionScore = dailyGameStatus === 'won'
-    ? Math.max(100, (MAX_GUESSES - dailyGuessesUsed) * 100)
-    : 0;
+  const completionScore = careerDailyScore(dailyGameStatus === 'won', dailyGuessesUsed);
   useGameCompletion('career', rawDailyStatus !== 'playing', completionScore);
 
   return {

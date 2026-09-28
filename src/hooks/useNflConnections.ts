@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { nflConnectionsPuzzles } from '@/data/nflConnectionsPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { CONNECTIONS_LIVES, CONNECTIONS_POINTS_PER_LIFE } from '@/lib/connectionsScore';
+import { CONNECTIONS_LIVES, connectionsScore } from '@/lib/connectionsScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { fetchNflConnectionsPuzzles } from '@/lib/fetchNflConnectionsPuzzles';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
@@ -244,7 +244,7 @@ export function useNflConnections() {
 
   // ---- COMPLETION ----------------------------------------------------------
   const dailyWon = rawDailyStatus === 'won';
-  const completionScore = dailyWon ? (dailyLives * CONNECTIONS_POINTS_PER_LIFE) : 0;
+  const completionScore = connectionsScore(dailyWon, dailyLives);
   useGameCompletion('nfl-connections', rawDailyStatus !== 'playing', completionScore);
 
   return {

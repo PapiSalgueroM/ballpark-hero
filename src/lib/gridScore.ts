@@ -3,14 +3,19 @@
  * football, college, NBA, MLB, NHL and college basketball).
  *
  * The board is three rows by three columns, and every cell filled with a right
- * answer pays the same flat amount.
+ * answer pays the same flat amount. The seven recorders call gridScore.
  */
 export const GRID_CELLS = 3 * 3;
 export const GRID_CELL_POINTS = 100;
 
+/** What a finished grid records: the cells filled with a right answer. */
+export function gridScore(cellsRight: number): number {
+  return cellsRight * GRID_CELL_POINTS;
+}
+
 /**
- * The most a grid daily can record: all nine cells filled, 9 x 100 = 900.
- * game_score_caps holds it for every *-grid key
+ * The most a grid daily can record: all nine cells filled, through the rule
+ * above: 900. game_score_caps holds it for every *-grid key
  * (scripts/simCapsAreCeilings.mjs).
  */
-export const GRID_CEILING = GRID_CELLS * GRID_CELL_POINTS;
+export const GRID_CEILING = gridScore(GRID_CELLS);

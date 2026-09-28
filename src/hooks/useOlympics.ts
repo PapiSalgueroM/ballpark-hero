@@ -4,13 +4,12 @@ import { OlympicAthlete } from '@/types/olympics';
 import { supabase } from '@/integrations/supabase/client';
 import { ensureAnswerInOptions } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { CAREER_CLUE_SCORES } from '@/lib/careerClueScores';
+import { careerClueScore } from '@/lib/careerClueScores';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { getTodayET } from '@/lib/dateUtils';
 import { toast } from 'sonner';
 
 const TOTAL_CLUES = 7;
-const CLUE_SCORES = CAREER_CLUE_SCORES;
 
 export type OlympicsMode = 'daily' | 'unlimited';
 export type OlympicsStatus = 'playing' | 'guessed' | 'revealed';
@@ -60,7 +59,7 @@ export function useOlympics() {
   const [guessInput, setGuessInput] = useState('');
   const [wrongGuess, setWrongGuess] = useState(false);
 
-  const score = status === 'guessed' ? CLUE_SCORES[Math.min(clueLevel, CLUE_SCORES.length - 1)] : 0;
+  const score = careerClueScore(status === 'guessed', clueLevel);
 
   const visibleClues = useMemo(() => {
     const clues: { label: string; value: string }[] = [];
@@ -102,7 +101,7 @@ export function useOlympics() {
     const target = athlete.name.toLowerCase();
     const lastName = target.split(' ').pop() ?? '';
     if (normalized === target || normalized === lastName) {
-      const finalScore = CLUE_SCORES[Math.min(clueLevel, CLUE_SCORES.length - 1)];
+      const finalScore = careerClueScore(true, clueLevel);
       toast.success(`🏅 Correct! You scored ${finalScore} points!`);
       logScore(clueLevel + 1, finalScore, true);
       if (mode === 'daily') {

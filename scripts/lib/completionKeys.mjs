@@ -30,31 +30,38 @@ const GAME_ID = /gameId:\s*['"]([a-z0-9-]+)['"]/g;
 const ON_MOUNT = /recordCompletionOnMount/;
 const GAME_PATH = /gamePath:\s*['"]\/([a-z0-9-]+)['"]/g;
 
-/** Every completion key src can send, as a Set. */
-export function sourceCompletionKeys(root) {
+/** The keys one source file can send, added to `found`. */
+function scanSource(src, found) {
+  for (const m of src.matchAll(LITERAL)) found.add(m[1] || m[2]);
+  for (const m of src.matchAll(GAME_ID)) found.add(m[1]);
+  if (ON_MOUNT.test(src)) for (const m of src.matchAll(GAME_PATH)) found.add(m[1]);
+  /* Resolve an identifier argument against the string constants declared
+     in the same file. Deliberately file local: following an import would
+     mean building a module graph, and every case in this repo is local. */
+  const consts = new Map();
+  for (const m of src.matchAll(CONSTANT)) consts.set(m[1], m[2]);
+  for (const m of src.matchAll(VIA_IDENT)) {
+    const v = consts.get(m[1]);
+    if (v) found.add(v);
+  }
+}
+
+/**
+ * Every completion key src can send, as a Set. `extraSources` (texts) are
+ * scanned exactly as a file in src would be: simCapsAreCeilings' classify
+ * control hands one in so its check is proved through this same scan.
+ */
+export function sourceCompletionKeys(root, extraSources = []) {
   const found = new Set();
   const walk = dir => {
     for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
       const p = path.join(dir, e.name);
       if (e.isDirectory()) walk(p);
-      else if (/\.tsx?$/.test(e.name)) {
-        const src = fs.readFileSync(p, 'utf8');
-        for (const m of src.matchAll(LITERAL)) found.add(m[1] || m[2]);
-        for (const m of src.matchAll(GAME_ID)) found.add(m[1]);
-        if (ON_MOUNT.test(src)) for (const m of src.matchAll(GAME_PATH)) found.add(m[1]);
-        /* Resolve an identifier argument against the string constants declared
-           in the same file. Deliberately file local: following an import would
-           mean building a module graph, and every case in this repo is local. */
-        const consts = new Map();
-        for (const m of src.matchAll(CONSTANT)) consts.set(m[1], m[2]);
-        for (const m of src.matchAll(VIA_IDENT)) {
-          const v = consts.get(m[1]);
-          if (v) found.add(v);
-        }
-      }
+      else if (/\.tsx?$/.test(e.name)) scanSource(fs.readFileSync(p, 'utf8'), found);
     }
   };
   walk(path.join(root, 'src'));
+  for (const src of extraSources) scanSource(src, found);
   return found;
 }
 

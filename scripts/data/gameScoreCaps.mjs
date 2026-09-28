@@ -19,7 +19,18 @@
  *
  * WHEN IT GOES STALE. Changing a cap means a migration and a matching edit
  * here, in the same change; simCapsAreCeilings section 6 reads the live table
- * and fails on a row that is neither the value read nor the value after.
+ * and fails on a row that is neither the value read nor the value after, and
+ * on a table where some moved rows sit at one and some at the other (the
+ * migration is one statement, so half of it applied means something else
+ * moved the table).
+ *
+ * PAST DAYS. The migration does not rewrite what a past day is worth: it
+ * writes the cap each moved game had before into
+ * public.game_score_cap_history, valid until the moment it applies, and the
+ * board reads the cap in force when each row was played. The denominator
+ * column below is what that history row holds for a game whose cap was read
+ * as a number; a NULL cap's fallback is frozen at whatever the view gives on
+ * the day the migration applies.
  *
  * Each row: [game, cap after the migrations, cap read on READ_ON, the
  * game_denominators value read on READ_ON (what a NULL cap fell back to)].
@@ -61,7 +72,7 @@ export const CAPS = [
   ['f1-constructor', 1000, 1000, 1000],
   ['f1-driver', 1000, 1000, 1000],
   ['f1-higher-lower', 325, 325, 325],
-  ['face-off', 2360, 470, 470],
+  ['face-off', 1900, 470, 470],
   ['fantasy-draft', 100, 83, 83],
   ['fight-career', 100, 100, 100],
   ['fight-gym', 100, 100, 100],
@@ -136,7 +147,7 @@ export const CAPS = [
   ['olympics', 1000, 1000, 1000],
   ['overrated-underrated', 800, 800, 800],
   ['pack-battle', 54000000, 54000000, 54000000],
-  ['perfect-lineup', 114, 75, 75],
+  ['perfect-lineup', 100, 75, 75],
   ['perfect-lineup-f1', 100, 94, 94],
   ['perfect-lineup-nba', 100, 96, 96],
   ['perfect-lineup-nhl', 100, 93, 93],

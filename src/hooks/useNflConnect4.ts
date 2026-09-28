@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { makeFirstDraw } from '@/lib/firstDraw';
 import { getRandomConnect4Board } from '@/data/nflConnect4Boards';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-import { CONNECT4_WIN_POINTS, CONNECT4_DRAW_POINTS } from '@/lib/connect4Score';
+import { connect4Score } from '@/lib/connect4Score';
 import { normalizeName } from '@/lib/playerSearch';
 import { SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY } from '@/integrations/supabase/client';
 import type {
@@ -238,7 +238,7 @@ export function useNflConnect4() {
     setUsedPlayers(new Set());
   }, []);
 
-  useGameCompletion('nfl-connect-4', phase === 'won' || phase === 'draw', phase === 'won' ? CONNECT4_WIN_POINTS : CONNECT4_DRAW_POINTS);
+  useGameCompletion('nfl-connect-4', phase === 'won' || phase === 'draw', connect4Score(phase === 'won' ? 'won' : 'draw'));
 
   return {
     board,

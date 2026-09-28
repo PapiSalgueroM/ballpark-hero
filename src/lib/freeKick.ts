@@ -212,13 +212,7 @@ export function takeShot(aim: Aim, setup: KickSetup, rng: () => number): ShotRes
   let points = 0;
   if (scored) {
     const corner = Math.max(Math.abs(end.x), end.y > 0.5 ? end.y : 0);
-    points = Math.round(
-      100 +
-      (setup.distance - 11) * 6 +
-      setup.wallSize * 15 +
-      corner * 120 +
-      setup.keeperSkill * 60,
-    );
+    points = kickPoints(setup, corner);
   }
 
   const verdict = hitWall
@@ -236,11 +230,28 @@ export function takeShot(aim: Aim, setup: KickSetup, rng: () => number): ShotRes
   return { x: end.x, y: end.y, onTarget, saved, scored, hitPost, hitWall, points, keeperX: keeper.x, keeperY: keeper.y, path, verdict };
 }
 
-/** The best a run can pay, for the honest "you scored N of M" line. */
-export function maxRunScore(kicks: KickSetup[]): number {
-  return kicks.reduce(
-    (n, k) => n + Math.round(100 + (k.distance - 11) * 6 + k.wallSize * 15 + 120 + k.keeperSkill * 60),
-    0,
+/**
+ * What a kick that goes in pays: distance, the wall you beat, the corner you
+ * found (0 in the middle, towards 1 at the post or just under the bar) and
+ * the keeper you beat. takeShot scores every goal through this, and Round 646
+ * made maxRunScore read the same rule rather than a copy of its numbers, so
+ * the leaderboard ceiling (freeKickCeiling) moves when the rule does.
+ */
+export function kickPoints(setup: KickSetup, corner: number): number {
+  return Math.round(
+    100 +
+    (setup.distance - 11) * 6 +
+    setup.wallSize * 15 +
+    corner * 120 +
+    setup.keeperSkill * 60,
   );
+}
+
+/** The best a run can pay, for the honest "you scored N of M" line: every
+    kick in at the full corner. The post itself does not count, but a kick
+    just under the bar reads a corner as close to 1 as the aim allows, so a
+    real run can reach this to within a rounding point. */
+export function maxRunScore(kicks: KickSetup[]): number {
+  return kicks.reduce((n, k) => n + kickPoints(k, 1), 0);
 }
 

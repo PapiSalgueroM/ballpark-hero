@@ -276,10 +276,7 @@ export function takeShot(release: Release, setup: HoopSetup, rng: () => number):
   /* Points reward the shot nobody else takes: the distance, the hand you shot
      over, and how cleanly it went through. A free throw pays least. */
   let points = 0;
-  if (made) {
-    const contestPay = setup.contestReach > 0 ? Math.max(0, setup.contestReach - 2.3) * 120 : 0;
-    points = Math.round(80 + (setup.distance - FREE_THROW) * 28 + contestPay + purity * 100);
-  }
+  if (made) points = shotPoints(setup, purity);
 
   const verdict = blocked
     ? 'Blocked. He got a hand to it.'
@@ -301,12 +298,23 @@ export function takeShot(release: Release, setup: HoopSetup, rng: () => number):
   };
 }
 
-/** The best a run can pay, for the honest "you made N of M" line. */
+/**
+ * What a made shot pays: the distance, the hand you shot over and how cleanly
+ * it went through (purity, 0 off the iron to 1 dead centre). takeShot scores
+ * every make through this, and Round 646 made maxRunScore read the same rule
+ * rather than a copy of its numbers, so the leaderboard ceiling
+ * (buzzerBeaterCeiling) moves when the rule does.
+ */
+export function shotPoints(setup: HoopSetup, purity: number): number {
+  const contestPay = setup.contestReach > 0 ? Math.max(0, setup.contestReach - 2.3) * 120 : 0;
+  return Math.round(80 + (setup.distance - FREE_THROW) * 28 + contestPay + purity * 100);
+}
+
+/** The best a run can pay, for the honest "you made N of M" line: every shot
+    made dead centre, which a real release approaches to within a rounding
+    point. */
 export function maxRunScore(shots: HoopSetup[]): number {
-  return shots.reduce((n, s) => {
-    const contestPay = s.contestReach > 0 ? Math.max(0, s.contestReach - 2.3) * 120 : 0;
-    return n + Math.round(80 + (s.distance - FREE_THROW) * 28 + contestPay + 100);
-  }, 0);
+  return shots.reduce((n, s) => n + shotPoints(s, 1), 0);
 }
 
 /** The launch angle a given arc setting means, for the on screen readout. */

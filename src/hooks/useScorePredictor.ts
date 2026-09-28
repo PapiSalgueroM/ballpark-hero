@@ -42,7 +42,8 @@ function getDailyPuzzle(): ScorePredictorPuzzle {
  */
 export const SCORE_PREDICTOR_CEILING = 1000;
 
-function calcScore(
+/** Exported for scripts/simCapsAreCeilings.mjs section 5, which plays it. */
+export function calcScore(
   guessH: number, guessA: number,
   actualH: number, actualA: number,
 ): number {
