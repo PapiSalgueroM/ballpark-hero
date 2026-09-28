@@ -5446,7 +5446,7 @@ export function dismissNewspaper(prev: CareerState): CareerState {
 }
 
 /* ─── All 24 Random Events ─── */
-function getAllEvents(state: CareerState): RandomEvent[] {
+export function getAllEvents(state: CareerState): RandomEvent[] {
   const pos = state.position;
   const isAttacker = ["ST","CAM","LW","RW"].includes(pos);
   return [
@@ -6655,7 +6655,24 @@ export function retireFromInternational(prev: CareerState): CareerState {
 export function applyEventChoice(prev: CareerState, choiceIndex: number, clubs: ClubData[]): CareerState {
   const event = prev.pendingEvents[0];
   if (!event) return prev;
-  let s = event.choices[choiceIndex].apply({ ...prev });
+  /* Round 667. The page saves the career with JSON.stringify on every change
+     and a choice's apply is a function, which JSON drops without a word. A
+     save written while an event card was on screen came back with choices
+     that held only their label, the card drew as normal, and the tap on a
+     choice threw a TypeError in the click handler: the page painted "This
+     page broke" and the advance buttons were dead (a player reported it on
+     2026-09-25). The choice is resolved from the catalog by the event's id
+     first, and an event the catalog no longer carries is skipped rather than
+     crashed on. */
+  const fromCatalog = getAllEvents(prev).find(e => e.id === event.id);
+  const choice = fromCatalog?.choices[choiceIndex] ?? event.choices[choiceIndex];
+  if (typeof choice?.apply !== "function") {
+    const skipped: CareerState = { ...prev, lastEventId: event.id, pendingEvents: prev.pendingEvents.slice(1) };
+    if (skipped.pendingEvents.length > 0) { skipped.phase = "random_events"; return skipped; }
+    enterTransferWindow(skipped, clubs);
+    return skipped;
+  }
+  let s = choice.apply({ ...prev });
   s.lastEventId = event.id;
   s.pendingEvents = s.pendingEvents.slice(1);
   s.overall = calcOverall(s, s.position);

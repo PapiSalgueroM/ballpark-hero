@@ -50,7 +50,12 @@ if (CONTROL === 'gkonly') {
   const n = src.split(anchor).length - 1;
   if (n !== 1) { console.error(`control: the gate line appears ${n} times, refusing to run a dead control`); process.exit(2); }
   enginePath = path.join(TMP, `soccerCareerEngine.gkonly-${process.pid}.ts`);
-  fs.writeFileSync(enginePath, src.replace(anchor, 'const keepsSheets = isGK;'));
+  /* The copy lives outside src/lib, so the engine's relative imports
+     ("./careerEras", "./soccerPhone") would not resolve from there. Point
+     them back at the real files; the "@/" imports resolve through the alias. */
+  const lib = `${ROOT}/src/lib/`.replaceAll('\', '/');
+  const relocated = src.replace(anchor, 'const keepsSheets = isGK;').replace(/from (['"])\.\//g, `from $1${lib}`);
+  fs.writeFileSync(enginePath, relocated);
 }
 
 /* Same two stage entry with a localStorage stub as simCareerEngaged (Round 124):
@@ -63,8 +68,14 @@ export const engine = mod;
 `);
 await build({ entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node', outfile: OUT, logLevel: 'error', alias: { '@': './src' }, absWorkingDir: ROOT });
 const { engine } = await import(pathToFileURL(OUT).href);
-const { initCareer, advanceYouthYear, acceptOffer, advanceProSeason, dismissSummary, dismissNewspaper, dismissDebut, dismissWorldCup, FALLBACK_CLUBS } = engine;
-for (const [k, v] of Object.entries({ initCareer, advanceYouthYear, acceptOffer, advanceProSeason, dismissSummary, dismissNewspaper, dismissDebut, dismissWorldCup, FALLBACK_CLUBS })) {
+const {
+  initCareer, advanceYouthYear, acceptOffer, advanceProSeason,
+  dismissSummary, dismissNewspaper, dismissDebut, dismissWorldCup,
+  dismissRivalryEvent, dismissBallonDor, applyEventChoice, dismissMoralDilemma,
+  dismissSocialMediaPhase, dismissAppealResult, applyBdorSpeech, applyWorldCupSpeech,
+  acceptRetirementSuggestion, stayAtClub, signExtension, FALLBACK_CLUBS,
+} = engine;
+for (const [k, v] of Object.entries({ initCareer, advanceYouthYear, acceptOffer, advanceProSeason, dismissSummary, dismissNewspaper, dismissDebut, dismissWorldCup, dismissRivalryEvent, dismissBallonDor, applyEventChoice, dismissMoralDilemma, dismissSocialMediaPhase, dismissAppealResult, applyBdorSpeech, applyWorldCupSpeech, acceptRetirementSuggestion, stayAtClub, signExtension, FALLBACK_CLUBS })) {
   if (!v) { console.error('engine export missing: ' + k + ', so nothing below measures anything'); process.exit(1); }
 }
 try { fs.rmSync(OUT); fs.rmSync(ENTRY); if (CONTROL) fs.rmSync(enginePath); } catch { /* temp only */ }
@@ -89,7 +100,13 @@ function runCareer(position, seed) {
     let s = initCareer(`Sim ${seed}`, 'England', position, '2020s', stats(64), 64, 2020, clubs, null, 80);
     let guard = 0, pro = 0;
     const youth = [], proSeasons = [];
-    while (!s.retired && guard++ < 200 && pro < SEASONS) {
+    /* The first draft of this walk drove only the youth, offer, playing and
+       summary phases and set the guard on anything else, so every career
+       stopped after its first pro season and section 1 read "24 seasons over
+       24 careers". This is simCareerEngaged's full phase switch: every pause
+       the engine can raise between seasons is answered, and an unknown one is
+       nudged with advanceProSeason once rather than ending the career. */
+    while (!s.retired && guard++ < 400 && pro < SEASONS) {
       switch (s.phase) {
         case 'youth': s = advanceYouthYear(s, clubs); break;
         case 'contract_offer': { const offers = s.pendingOffers || []; if (!offers.length) { s = { ...s, phase: 'playing' }; break; } s = acceptOffer(s, offers[0]); break; }
@@ -98,13 +115,28 @@ function runCareer(position, seed) {
         case 'season_summary': s = dismissSummary(s, clubs); break;
         case 'international_debut': s = dismissDebut(s, clubs); break;
         case 'world_cup': s = dismissWorldCup(s, clubs); break;
+        case 'rehab_choice': s = engine.applyRehabChoice(s, 1); break;
+        case 'rivalry_event': s = dismissRivalryEvent(s, clubs); break;
+        case 'ballon_dor': s = dismissBallonDor(s, clubs); break;
+        case 'bdor_speech': s = applyBdorSpeech(s, 0); break;
+        case 'wc_speech': s = applyWorldCupSpeech(s, 0); break;
+        case 'moral_dilemma': s = dismissMoralDilemma(s, clubs); break;
+        case 'social_media_action': s = dismissSocialMediaPhase(s, clubs); break;
+        case 'red_card_appeal_result': s = dismissAppealResult(s, clubs); break;
+        case 'retirement_suggestion': s = acceptRetirementSuggestion(s); break;
+        case 'retirement_ceremony': case 'retired': s = { ...s, retired: true }; break;
+        case 'random_events': {
+          const ev = (s.pendingEvents || [])[0];
+          if (!ev || !ev.choices || !ev.choices.length) { s = { ...s, phase: 'playing', pendingEvents: [] }; break; }
+          s = applyEventChoice(s, ev.choices.length - 1, clubs);
+          break;
+        }
+        case 'contract_expiring': s = stayAtClub(s); break;
+        case 'transfer_window': s = stayAtClub(s); break;
         default: {
-          /* Any other pause (rehab, rivalry, dilemma, social) is a phase this
-             walk does not drive. Take the first generic dismisser the engine
-             offers, else stop this career: the seasons already drawn count. */
-          const dis = engine[`dismiss${s.phase.split('_').map(w => w[0].toUpperCase() + w.slice(1)).join('')}`];
-          if (typeof dis === 'function') { try { s = dis(s, clubs); break; } catch { /* fall through */ } }
-          guard = 999;
+          const before = s.phase;
+          s = advanceProSeason(s, clubs);
+          if (s.phase === before) guard = 999;
         }
       }
     }

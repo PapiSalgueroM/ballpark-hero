@@ -1,5 +1,52 @@
 # Work board
 
+**2026-09-28 late, desktop Claude lane: Round 667 parts one to three on `r667-player-reports`, and what the
+agent fleet found before the session limit cut it.** Round 667 answers the player reports of 2026-09-21
+to 27 (fences: simCareerCleanSheets, simStaleChunk, simNotCurrentPlayers, and the vitest
+src/test/eventChoiceAfterReload.test.ts):
+- Soccer Career "the page says it broke and the advance buttons stop working" (2026-09-25) was a real
+  crash: applyEventChoice called .apply() on the event object FROM THE SAVE, and JSON.stringify drops a
+  function without a word, so any save written while an event card was on screen came back with choices
+  that threw on tap. The choice now resolves from the catalog by the event's id; an unknown event is
+  skipped, not thrown on.
+- Who Am I "Wrong answer" (2026-09-26) could not be tied to a puzzle (the secret is Math.random, not the
+  date) but the pool audit found that **Diogo Jota was being dealt as a live Liverpool player with an
+  age and a price**, because the carried 2025 leg admits anyone with no 2026 row. Round 542 had removed
+  him from Club Manager as a bake time assertion nobody else could read. `src/data/notCurrentPlayers.ts`
+  is now the one list, applied on both pool legs (Clue Auction shares the fetch).
+- Defenders keep clean sheets (the season line was gated on GK), the 82-0 guide states the measured
+  odds, a stale lazy chunk after a deploy reloads once instead of painting the broken page, and
+  Alisson's Internacional 2015 and 2016 are in the baked pool with the migration WRITTEN BUT NOT APPLIED.
+
+**Owed from the same audit, none started, in the order they hurt:**
+- **Who Am I namesakes and stale ages (Round 668 candidate).** playerSearch dedupes by normalized name
+  and keeps the highest prominence row, so the Atalanta Éderson can never be guessed: typing his name
+  offers only the Fenerbahce keeper and scores him 40. fetchClubHistory pools every row under one
+  spelling regardless of age, so "Rodri" carries three men's clubs and the Past club link chip can light
+  for a guess who never shared a club. Every age in the pool is the autumn 2025 snapshot's, a year low
+  for anyone whose birthday has passed.
+- **World XI refuses real defensive midfielders (Round 669 candidate).** The market scrape has had no
+  Defensive Midfield bucket since 2023 (0 rows in 2023 to 2025, 46 hand typed rows in 2026), so Ugarte,
+  Amrabat, Endo, Adams and dozens more return "Nobody from X matches that" for a CDM or CM slot, and
+  PSG's Vitinha surfaces as Genoa's centre forward. Restore the bucket in the Round 344 shape (two
+  sources per row). The 2026-09-21 report is almost certainly this.
+- **Club Manager has no extra time at all**: a level knockout, single leg or second leg, goes straight
+  to penalties while the copy says "after extra time". Found by the stoppage-time design contract.
+- **Points rounds.** 648 (profile total clamps at the cap) is BUILT on `r648-profile-clamp` with a
+  written, unapplied migration and NO adversarial review yet. 645a, 645b, 645c, 646 and 647 died at the
+  session limit before a commit; their branches exist with nothing on them. Resume the workflow
+  `points-rounds-645-648` (run wf_16c18036-56a) to rebuild them; 648 replays from cache.
+- **660 and 661 verification** wrote F1 findings to disk (verify660/): drivers 20 wrong of 120 clues,
+  constructors 11 wrong of 187, pool 4 wrong of 41, only drivers a and d refuted so far; olympics, HOF,
+  guess-the-year and score-predictor slices died and are re-running.
+- **Player idea contracts** (workflow wf_c43b539a-f84, full text in its journal), effort as estimated:
+  - ucl-aggregate (show the tie score on the second leg): Partly live, and the half that is missing is the half the player asked for: shipped already=False, effort about 9 h. 1. Counting leg 2 twice at full time. At stage done the career already carries leg 2 on the tie, so a builder who derives the line from career at that stage sho
+  - penalty-takers (pick all eleven takers): Not live: shipped already=False, effort about 24 h. (1) The shootout now draws ten or more random numbers where it drew one, so every seeded harness that runs past a knockout shootout gets a new sample; Round 505
+  - request-transfer (ask to join a club): Not live: shipped already=False, effort about 26 h. (1) The mid-season transplant is the bulk of the round and the calendar alignment is the trap: the league round index, the cup round and the UCL matchday are th
+  - stoppage-time (goals in added time, extra time in knockouts): Not live: shipped already=False, effort about 28 h. Balance: the added stretch adds about 8 percent more goals in the manager's own matches if the deflator is wrong or omitted; section 3 is the guard and its tole
+  - gk-training (keeper drills in Soccer Career): Not live: shipped already=False, effort about 30 h. 1. Tuning. Angles is a geometric trade (come out to shrink the goal, but a closer shot gives less dive time and past the chip depth you are lobbed); the first c
+
+
 **2026-09-28 night, desktop Claude lane, USAGE LIMIT HIT MID-ROUND. Read this before anything else.**
 Round 667 (the player reports) is on `r667-player-reports`, pushed. Done and fenced: defenders keep
 clean sheets (BUT `simCareerCleanSheets` IS RED: its walk stops after the first pro season, 24 seasons over 24 careers, so section 1 fails on the driver, not the fix; drive the post-summary phases the way simCareerEngaged does before merging, or runAllSims goes red), the 82-0 guide tells the true odds, and a tab left open across a
