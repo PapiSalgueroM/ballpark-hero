@@ -1,6 +1,7 @@
 import { Player } from '@/types/game';
 import { FORMATIONS, playerRating, type Formation } from '@/lib/squadDeal';
 import type { RebuildClub } from '@/lib/fetchRebuild';
+import { skillPoints } from '@/lib/skillPoints';
 import {
   hashSeed, budgetFor, managerOptionsFor, KEEP_MANAGER, managerFits, boardEnvelopeFor, fortuneDeckFor,
   drawFinEvent, planRivals, isContested, warRivalIndex, rivalCapFor, nextRaise, spinOrder, dealReplacements,
@@ -245,6 +246,22 @@ export function finalFundsOf(s: RunState): number {
 
 export function gradeOf(s: RunState): string {
   return gradeFor(ratingOf(s), s.startRating, s.target);
+}
+
+/** The highest rating ratingOf reads. */
+export const REBUILD_RATING_CEILING = 99;
+
+/**
+ * Round 645: what a finished window records and its card shows. It recorded
+ * the closing rating times ten, and a club is handed its rating before the
+ * window opens: keep every shirt, change nothing, and a 78 rated club recorded
+ * 780 of the 940 cap, a Real Madrid more than a Genk for the same nothing. The
+ * window is scored on the climb now: the rating above where the club started,
+ * 0 for changing nothing or making it worse, and 990 for a 99 rated XI, the
+ * same 990 it always recorded.
+ */
+export function rebuildPoints(s: RunState): number {
+  return skillPoints(ratingOf(s) * 10, s.startRating * 10, REBUILD_RATING_CEILING * 10);
 }
 
 /** Can the scouts be asked for a fresh list right now: the list is a dead end, or a perk pays for it. */

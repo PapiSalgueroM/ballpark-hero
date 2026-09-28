@@ -90,6 +90,9 @@ export interface RebuildState {
   finalFunds: number;
   objectives: ObjectiveView[];
   grade: string;
+  /** Round 645: the points this seat's window scores; the first human seat's
+   *  are the ones recorded. */
+  points: number;
   shareText: string;
   /** What the XI would read right now with this manager in charge. */
   managerReading: (m: ManagerOption) => number;
@@ -438,6 +441,8 @@ export function useRebuild(): RebuildState {
   const startRating = run?.startRating ?? 0;
   const target = run?.target ?? 0;
   const grade = run ? loop.gradeOf(run) : '';
+  /* Round 645: the points this seat's window scores (rebuildPoints). */
+  const points = run ? loop.rebuildPoints(run) : 0;
   const managerReading = useCallback((m: ManagerOption) => (run ? loop.ratingOf(run, m) : 0), [run]);
   const offerPrice = useCallback((p: Player) => (run ? loop.offerPrice(run, p) : p.marketValue), [run]);
   const canRedeal = run ? loop.canRedeal(run) : false;
@@ -461,7 +466,9 @@ export function useRebuild(): RebuildState {
      drift, and a restore that marked a finish this line did not call complete
      would leave a mark sitting for the next real finish to swallow. */
   const complete = isFinishedTable(tbl);
-  useGameCompletion('rebuild', complete, Math.max(0, scoredRating * 10), scored && scoredRating >= scored.target ? 1 : 0);
+  /* Round 645: the climb above the club's starting rating (rebuildPoints),
+     not the closing rating, which a club carries into the window for free. */
+  useGameCompletion('rebuild', complete, scored ? loop.rebuildPoints(scored) : 0, scored && scoredRating >= scored.target ? 1 : 0);
 
   const shareText = useMemo(() => {
     if (!solo) {
@@ -490,7 +497,7 @@ export function useRebuild(): RebuildState {
     phase, loading, clubs, club: seat?.club ?? null, preset, setPreset, chooseClub, reset,
     run,
     seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason: tbl.season,
-    startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
+    startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, points, shareText,
     managerReading, offerPrice, canRedeal,
     pickFinance, toManager, hireManager, keepManager: KEEP_MANAGER, setFormation,
     spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun,
