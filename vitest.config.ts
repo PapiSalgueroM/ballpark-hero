@@ -24,8 +24,9 @@ export default defineConfig({
         ? { "@/hooks/useGameCompletion": path.resolve(process.env.COMPLETION_HOOK) }
         : {}),
       /* Round 645 negative control. scripts/simRankedRecorder.mjs writes a copy
-         of the completions lib whose unranked play writes a score and the
-         signed in save again, and points the ranked recorder lib test at it.
+         of the completions lib whose unranked play writes a score (libleaks)
+         or makes the signed in save (libsaves) again, and points the ranked
+         recorder lib test at it.
          Same ordering rule: above "@". Off in every ordinary run. */
       ...(process.env.RANKED_LIB
         ? { "@/lib/completions": path.resolve(process.env.RANKED_LIB) }
