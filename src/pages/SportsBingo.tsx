@@ -16,7 +16,7 @@ import { Player } from '@/types/game';
 import {
   BingoGame, CARD_SIZE, CPU_LEVELS, CpuLevel, FREE_INDEX, PACK_COUNT, PACK_SECONDS,
   buildGame, claimableSquares, cpuClaims, dailySeed, lehmer, lineCount, loadDailyBingo, saveDailyBingo,
-  scoreGame, squareCondition,
+  loadDailyBingoProgress, saveDailyBingoProgress, scoreGame, squareCondition,
 } from '@/lib/sportsBingo';
 
 /**
@@ -96,12 +96,15 @@ export default function SportsBingo() {
     const seed = m === 'daily' ? dailySeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;
     const g = buildGame(pool, seed);
     cpuRngRef.current = lehmer(seed ^ 0x5bf03635 || 7);
+    /* Round 645 part three fix: a daily card part played today comes back on
+       the pack that was open, with its seconds and the squares marked. */
+    const part = m === 'daily' ? loadDailyBingoProgress(todayStr, g) : null;
     setMode(m);
     setCpuLevel(level);
     setGame(g);
-    setPackIndex(0);
-    setSecondsLeft(PACK_SECONDS);
-    setMarked(new Array(CARD_SIZE).fill(false));
+    setPackIndex(part?.pack ?? 0);
+    setSecondsLeft(part?.left ?? PACK_SECONDS);
+    setMarked(part?.marked ?? new Array(CARD_SIZE).fill(false));
     setCpuMarked(new Array(CARD_SIZE).fill(false));
     setPhase('playing');
   }, [pool, dailyDone]);
@@ -173,6 +176,14 @@ export default function SportsBingo() {
     saveDailyBingo(rec);
     setDailyDone(rec);
   }, [isDone, mode, dailyDone, marked]);
+
+  /* Round 645 part three fix: the daily card is filed as it is played, every
+     pack opened, every square marked and every second ticked, so a refresh
+     comes back on the pack that was open instead of dealing the ten again. */
+  useEffect(() => {
+    if (mode !== 'daily' || phase !== 'playing' || !game || dailyDone) return;
+    saveDailyBingoProgress(todayStr, { pack: packIndex, left: Math.max(1, secondsLeft), marked });
+  }, [mode, phase, game, dailyDone, packIndex, secondsLeft, marked, todayStr]);
   const doneSquares = dailyDone ? dailyDone.marked.filter((m, i) => m && i !== FREE_INDEX).length : 0;
 
   const emojiGrid = useMemo(() => {

@@ -198,6 +198,8 @@ export interface DailyBingoRecord {
 export function loadDailyBingo(date: string): DailyBingoRecord | null {
   return readDailyRecord<DailyBingoRecord>(SLUG, date, f => {
     const { marked } = f;
+    /* Round 645 part three fix: a card still being played is not a result */
+    if (f.pack !== undefined) return null;
     if (!Array.isArray(marked) || marked.length !== CARD_SIZE || !marked.every(x => typeof x === 'boolean')) return null;
     return { date, marked: marked as boolean[] };
   });
@@ -205,6 +207,44 @@ export function loadDailyBingo(date: string): DailyBingoRecord | null {
 
 export function saveDailyBingo(rec: DailyBingoRecord): void {
   writeDailyRecord(SLUG, rec.date, { marked: rec.marked });
+}
+
+/* Round 645 part three fix: the daily card part played, on the same key. The
+   page saved only once the tenth pack closed, so a refresh on pack six dealt
+   the same card and the same ten packs again from pack one, every pull
+   already seen. The card is now filed as it is played: the pack that is open,
+   the seconds it has left and the squares marked. On the way back the game is
+   dealt again from the day's seed and every marked square must be one some
+   pack opened so far could claim, so a record can mark nothing the packs would
+   not have allowed. It carries `pack`, which loadDailyBingo refuses, and this
+   refuses anything without it, so the two readers never accept the same
+   record. */
+export interface DailyBingoProgress {
+  /** The open pack, 0 based. */
+  pack: number;
+  /** Seconds the open pack has left. */
+  left: number;
+  marked: boolean[];
+}
+
+export function loadDailyBingoProgress(date: string, game: BingoGame): DailyBingoProgress | null {
+  return readDailyRecord<DailyBingoProgress>(SLUG, date, f => {
+    const { pack, left, marked } = f;
+    if (!Number.isInteger(pack) || (pack as number) < 0 || (pack as number) >= PACK_COUNT) return null;
+    if (!Number.isInteger(left) || (left as number) < 1 || (left as number) > PACK_SECONDS) return null;
+    if (!Array.isArray(marked) || marked.length !== CARD_SIZE || !marked.every(x => typeof x === 'boolean')) return null;
+    const opened = game.packs.slice(0, (pack as number) + 1);
+    for (let sq = 0; sq < CARD_SIZE; sq += 1) {
+      if (!marked[sq] || sq === FREE_INDEX) continue;
+      const cond = squareCondition(game, sq);
+      if (!cond || !opened.some(p => p.some(player => cond.test(player)))) return null;
+    }
+    return { pack: pack as number, left: left as number, marked: marked as boolean[] };
+  });
+}
+
+export function saveDailyBingoProgress(date: string, progress: DailyBingoProgress): void {
+  writeDailyRecord(SLUG, date, { pack: progress.pack, left: progress.left, marked: progress.marked });
 }
 
 /** Which squares the CURRENT pack can still claim. */
