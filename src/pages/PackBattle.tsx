@@ -1,5 +1,5 @@
 import { FlagImg } from '@/components/FlagImg';
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import { Loader2, TrendingUp, TrendingDown } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -66,7 +66,7 @@ const PackBattle = () => {
      no transition, so the recorder never looks, and a mark left unconsumed
      would swallow the next real finish inside its window. */
   const phaseRef = useRef<Phase>('boot');
-  useEffect(() => { phaseRef.current = phase; }, [phase]);
+  useLayoutEffect(() => { phaseRef.current = phase; }, [phase]);
   useEffect(() => () => { if (revealTimer.current) clearTimeout(revealTimer.current); }, []);
 
   // Every hook lives above this point and none of them are conditional, per

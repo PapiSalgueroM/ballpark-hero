@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useCallback, useLayoutEffect, useMemo, useRef } from 'react';
 import { Loader2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { GameShell } from '@/components/game/GameShell';
@@ -139,6 +139,14 @@ const RarityRound = () => {
      still scoring its saved answers when the player toggles a mode lands on
      nothing. */
   const runToken = useRef(0);
+  /* Round 645 part three fix: the phase as last committed, set in the commit
+     itself (a layout effect), for the restore below. A finished daily reopened
+     over a page already on its result screen is no transition, so the
+     recorder never looks, and a mark left unconsumed would swallow the next
+     real finish inside its window. Whether the boot in between reached the
+     screen is React's call, not this page's, so the restore asks. */
+  const phaseRef = useRef<Phase>('boot');
+  useLayoutEffect(() => { phaseRef.current = phase; }, [phase]);
 
   // Every hook lives above this point and none of them are conditional, per
   // the site's React error #310 rule (hooks must never sit below an early
@@ -168,9 +176,7 @@ const RarityRound = () => {
       return;
     }
     /* Round 645 part three fix: the saved answers are scored from their own
-       pools before anything is shown. The page passes through boot on the
-       way, so a finished daily reopened over a finished Unlimited run is
-       still a transition the recorder sees and its mark is consumed. */
+       pools before anything is shown. */
     setPhase('boot');
     Promise.all(saved.answers.map((_, i) => categories[i].fetchPool()))
       .then(pools => {
@@ -184,8 +190,9 @@ const RarityRound = () => {
         setResults(restored);
         setRoundIndex(Math.min(restored.length, categories.length - 1));
         if (saved.done) {
-          /* shown and recorded before the refresh: not a new finish */
-          markRestoredFinish(SLUG);
+          /* shown and recorded before the refresh: not a new finish, and only
+             a restore the recorder will see as one is marked */
+          if (phaseRef.current !== 'done') markRestoredFinish(SLUG);
           setPhase('done');
           return;
         }
