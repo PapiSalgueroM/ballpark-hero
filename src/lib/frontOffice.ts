@@ -421,9 +421,13 @@ export function buildSchedule(rng: () => number): GmGame[][] {
 // Game sim
 // ---------------------------------------------------------------------------
 
+/** Round 647: the win curve's spread, exported so the season projection
+    (src/lib/seasonFormats.ts) reads the same curve this engine plays. */
+export const NFL_WIN_SCALE = 14;
+
 export function winProb(home: GmTeamState, away: GmTeamState): number {
   const gap = teamStrength(home) - teamStrength(away) + 2;
-  return 1 / (1 + Math.pow(10, -gap / 14));
+  return 1 / (1 + Math.pow(10, -gap / NFL_WIN_SCALE));
 }
 
 export function simGame(g: GmGame, teams: Record<string, GmTeamState>, rng: () => number): GmGame {

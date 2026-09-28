@@ -2,7 +2,7 @@ import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /* Round 647: a type only import, erased at build, so the engine bundles in
    the harnesses without the scoring module and the harness can load the
    module (or a control copy of it) beside the engine. */
-import type { SeasonResult, SeasonRow } from '@/lib/seasonLedger';
+import type { SeasonExpectation, SeasonRow } from '@/lib/seasonLedger';
 /**
  * CBB Dynasty engine (2026-08-05). College basketball sibling of
  * cfbDynasty.ts. Real programs, fully fictional generated players (class
@@ -116,11 +116,16 @@ export interface CbbState {
   myTitles: number;
   seasonsPlayed: number;
   poyWinners: string[];
-  /* Round 647: one row per closed season, scored on that season alone, in
-     the shared shape the four front offices keep (src/lib/seasonLedger.ts).
-     Optional so a save from before this round opens with an empty ledger and
-     no retroactive points. */
+  /* Round 647: one row per closed season, each scored against its own
+     projection, in the shared shape the four front offices keep
+     (src/lib/seasonLedger.ts). Optional so a save from before this round
+     opens with an empty ledger and no retroactive points. */
   ledger?: SeasonRow[];
+  /* Round 647: the projection the next season to close is scored against,
+     made when that season's decisions opened: at the pick, then when the
+     recruiting trail opens. Optional; a save without one is projected as it
+     loads. */
+  expect?: SeasonExpectation;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -176,9 +181,13 @@ export function cbbStrength(t: CbbTeam): number {
   return avg(five, 60) * 0.75 + avg(bench, 60) * 0.25;
 }
 
+/** Round 647: the win curve's spread, exported so the season projection
+    (src/lib/seasonFormats.ts) reads the same curve this engine plays. */
+export const CBB_WIN_SCALE = 6.5;
+
 export function cbbWinProb(a: CbbTeam, b: CbbTeam): number {
   const gap = cbbStrength(a) - cbbStrength(b);
-  return 1 / (1 + Math.pow(10, -gap / 6.5)); // one bad night can still end a season
+  return 1 / (1 + Math.pow(10, -gap / CBB_WIN_SCALE)); // one bad night can still end a season
 }
 
 export interface CbbGame { home: string; away: string; hs: number; as: number; winner: string }
@@ -312,27 +321,15 @@ export function runMarch(st: CbbState, rng: () => number): MarchResult {
 }
 
 /**
- * Round 647: the season as the shared ledger scores it, read off the March
- * runMarch produced. The conference tournament is played unrecorded (the
- * engine passes record=false), so the record is the twenty game season; the
- * Dance is read on the same ladder the front offices use: in the field, won
- * a game, played the title game, won it. The program is carried, never
- * scored.
+ * Round 647: the twenty game regular season's record, which is what the
+ * shared ledger's form term reads (src/lib/seasonLedger.ts). The conference
+ * tournament and March are played unrecorded (runMarch passes
+ * record=false), so the win and loss columns are the regular season as they
+ * stand.
  */
-export function cbbSeasonResult(st: CbbState, march: Pick<MarchResult, 'bracket' | 'champion' | 'field'>): SeasonResult {
-  const me = st.myTeam;
-  const mine = st.teams[me];
-  const fin = march.bracket[march.bracket.length - 1];
-  return {
-    season: st.season,
-    team: me,
-    wins: mine.wins,
-    games: mine.wins + mine.losses,
-    madePlayoffs: march.field.includes(me),
-    roundsWon: march.bracket.filter(g => g.winner === me).length,
-    reachedFinal: !!fin && (fin.home === me || fin.away === me),
-    wonTitle: march.champion === me,
-  };
+export function cbbRegularRecord(st: CbbState, team: string = st.myTeam): { wins: number; games: number } {
+  const t = st.teams[team];
+  return { wins: t.wins, games: t.wins + t.losses };
 }
 
 export interface PoyFinalist { name: string; team: string; pos: CbbPos; score: number }

@@ -6,20 +6,29 @@ import {
   CBB_SCHOOLS, CBB_SCHOOL_MAP, CBB_CONFS, CBB_ROUNDS,
   initCbb, simCbbRound, cbbRankings, cbbConfStandings, runMarch,
   poyRace, cbbRecruitClass, cbbPortalPool, cbbSignRecruit, cbbOffseason,
-  cbbNilFor, cbbStrength, cbbSeasonResult,
+  cbbNilFor, cbbStrength, cbbRegularRecord,
   type CbbState, type CbbGame, type CbbRecruit, type MarchResult, type PoyFinalist,
   ensureCbbIds,
 } from '@/lib/cbbDynasty';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
-/* Round 647: every closed season is one row, scored on that season alone.
-   The scoring, the row and the refusal of a season already closed live in
-   the shared module, the same one the four front offices read. */
-import { appendSeason, ledgerOf, ledgerRow, ledgerTotal, type SeasonRow } from '@/lib/seasonLedger';
+/* Round 647: every closed season is one row, scored against the projection
+   made when its decisions opened. The scoring, the projection, the row and
+   the refusal of a season already closed live in the shared module, the
+   same one the four front offices read; this sport's season shape is data. */
+import { appendSeason, expectationOf, ledgerOf, ledgerRow, projectionFor, seasonResultOf, type SeasonRow } from '@/lib/seasonLedger';
+import { CBB_SEASON } from '@/lib/seasonFormats';
+import { SeasonLedgerChips, SeasonProjectionNote } from '@/components/game/SeasonLedgerChips';
 import { cn } from '@/lib/utils';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 
 type Phase = 'pick' | 'season' | 'recap' | 'recruit';
 type Tab = 'team' | 'play' | 'rankings' | 'standings';
+
+/* Round 647: a season's projection from the league as it stands. Made at
+   the pick, and for the next season when the recruiting trail opens, so the
+   recruiting, the portal and the offseason all count as yours. */
+const projectFor = (state: CbbState, season: number) =>
+  projectionFor(CBB_SEASON.teams(state), CBB_SEASON.format, season, state.myTeam);
 
 const SAVE_KEY = 'cbb-dynasty-save-v1';
 
@@ -75,6 +84,9 @@ export default function CbbDynastyBoard() {
   const openRecruiting = useCallback((source: CbbState) => {
     const state: CbbState = JSON.parse(JSON.stringify(source));
     state.nil = cbbNilFor(CBB_SCHOOL_MAP.get(state.myTeam)!.prestige, state.teams[state.myTeam].wins);
+    /* Round 647: next season's projection, from the roster as the trail
+       opens. A trail reopened on a reload keeps the one it already has. */
+    if (!expectationOf(state.expect, state.season + 1)) state.expect = projectFor(state, state.season + 1);
     const cls = cbbRecruitClass(Math.random);
     const por = cbbPortalPool(Math.random);
     setSt(state); setRecruits(cls); setPortal(por); setPhase('recruit');
@@ -92,6 +104,12 @@ export default function CbbDynastyBoard() {
          portal are minted from the same counter as the rosters, so all three
          are one id space and the repair has to see all three at once. */
       ensureCbbIds(s.st, s.recruits, s.portal);
+      /* Round 647: a save with no projection for the season it is playing,
+         or on the trail for the season about to start, is projected from
+         the league as it stands, the way the front offices repair a
+         missing mandate. The recap's projection is made when its trail opens. */
+      if (s.phase === 'season' && !expectationOf(s.st.expect, s.st.season)) s.st.expect = projectFor(s.st, s.st.season);
+      if (s.phase === 'recruit' && !expectationOf(s.st.expect, s.st.season + 1)) s.st.expect = projectFor(s.st, s.st.season + 1);
       setSt(s.st);
       setRecruits(s.recruits ?? null);
       setPortal(s.portal ?? null);
@@ -119,6 +137,7 @@ export default function CbbDynastyBoard() {
 
   const start = (id: string) => {
     const state = initCbb(id);
+    state.expect = projectFor(state, state.season);
     setSt(state); setPhase('season'); setTab('team');
     setFeed([`Welcome to ${label(id)}. Twenty games, a conference tournament, and one shot at surviving March.`]);
     setPostseason(null); setClosedRow(null);
@@ -158,10 +177,12 @@ export default function CbbDynastyBoard() {
       state.titles.push({ season: state.season, team: result.champion });
       if (won) state.myTitles += 1;
       state.seasonsPlayed += 1;
-      /* Round 647: the season closes into the ledger as one row, scored on
-         its own record and its own March. The row is what the completion
-         records; the program is carried, never scored. */
-      const ledgered = appendSeason(ledgerOf(state.ledger), cbbSeasonResult(state, result));
+      /* Round 647: the season closes into the ledger as one row: its
+         regular season and the round it reached, scored against the
+         projection made when its decisions opened, never against the
+         roster at the whistle. The row is what the completion records. */
+      const closing = seasonResultOf(state.season, state.myTeam, cbbRegularRecord(state), { games: result.bracket, champion: result.champion }, CBB_SEASON);
+      const ledgered = appendSeason(ledgerOf(state.ledger), closing, expectationOf(state.expect, state.season) ?? projectFor(st, state.season));
       state.ledger = ledgered.ledger;
       setClosedRow(ledgered.row);
       const closed: Postseason = { march: result, poy: race };
@@ -295,11 +316,11 @@ export default function CbbDynastyBoard() {
           <div className="cm-rise mt-3 flex flex-wrap items-center justify-center gap-3 text-sm" style={{ animationDelay: '0.9s' }}>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Titles <b className="text-gold">{st.myTitles}</b></span>
             <span className="rounded-full border border-border bg-background px-3 py-1.5">Seasons <b className="text-primary">{st.seasonsPlayed}</b></span>
-            {/* Round 647: the number this season recorded, and the career's ledger sum,
+            {/* Round 647: the number this season recorded, and the ledger sum,
                 left out on a save from before the ledger, which has no row to show. */}
-            {seasonRow && <span className="rounded-full border border-border bg-background px-3 py-1.5">This season <b className="text-gold">{seasonRow.score}</b> pts</span>}
-            {seasonRow && <span className="rounded-full border border-border bg-background px-3 py-1.5">Career <b className="text-primary">{ledgerTotal(careerLedger)}</b> pts</span>}
+            <SeasonLedgerChips row={seasonRow} ledger={careerLedger} seasonsPlayed={st.seasonsPlayed} />
           </div>
+          <SeasonProjectionNote row={seasonRow} />
           <div className="cm-rise mt-4 flex flex-col items-center gap-3 sm:flex-row sm:justify-center" style={{ animationDelay: '0.9s' }}>
             <button onClick={startRecruiting} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
               <GraduationCap className="h-4 w-4" /> Hit the recruiting trail

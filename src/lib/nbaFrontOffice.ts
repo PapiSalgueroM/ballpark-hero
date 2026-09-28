@@ -174,9 +174,13 @@ export function nbaStrength(t: NbaGmTeam): number {
   return fiveAvg * 0.72 + benchAvg * 0.28;
 }
 
+/** Round 647: the win curve's spread, exported so the season projection
+    (src/lib/seasonFormats.ts) reads the same curve this engine plays. */
+export const NBA_WIN_SCALE = 12;
+
 export function nbaWinProb(a: NbaGmTeam, b: NbaGmTeam): number {
   const gap = nbaStrength(a) - nbaStrength(b);
-  return 1 / (1 + Math.pow(10, -gap / 12));
+  return 1 / (1 + Math.pow(10, -gap / NBA_WIN_SCALE));
 }
 
 export interface RoundReport {
