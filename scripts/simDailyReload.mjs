@@ -75,6 +75,17 @@
    the real Free Kick board with the per kick save moved to where the ball
    lands, the drills' Round 468 shape:
      landing   (7) must FAIL on free-kick alone, everything else green
+   Round 645 part three fix: the fix pass gave assertion 6 to Minefield,
+   Player Stock Market, Sports Millionaire, the Gauntlet draft, Sports Bingo
+   and the tackle and glove save drills (the midrun control reaches every one
+   of them), and assertion 7 to Sports Millionaire and the two new drill rows.
+   Two more controls take the decided-step save out of a copy of the real
+   module (DAILY_LOCK_SWAP in vitest.config.ts) so the step is filed where it
+   lands again:
+     lockin    (7) must FAIL on sports-millionaire alone
+     drillland (7) must FAIL on the three drill rows alone
+   (the landing control's leftover dist/.daily-reload-control folder is
+   removed once these have run.)
    Then the source backstop: for every row that depends on the mark, the
    restoring file is read as code (comments and string contents stripped)
    and must call markRestoredFinish with the slug ahead of the finished
@@ -415,6 +426,86 @@ else {
   }
 }
 
+/* ------------- 5.5) swap controls: a step filed where it lands again */
+/* Round 645 part three fix. The fix pass gave assertion 7 to three more
+   boards: Sports Millionaire (an answer is decided when it is locked in, and
+   the reveal is a second and a half of suspense and a flash) and the tackle
+   and glove save drills beside the wall shot. The landing control above can
+   only move Free Kick's save; these two take the decided-step save out of a
+   copy of the real module, served through the DAILY_LOCK_SWAP alias in
+   vitest.config.ts (a copy under dist, as the landing control stages its
+   own), so the step is filed only when it lands, the shape each had before.
+   (7) must go red on exactly the rows the module serves, with (1) to (6)
+   still green there, and every other row must stay green. Each refuses to run
+   unless its anchor occurs exactly once, in the code, and the copy proves it
+   was loaded. */
+const SWAP_CONTROLS = [
+  {
+    name: 'lockin',
+    what: 'Sports Millionaire files an answer only once its reveal has landed',
+    rows: ['sports-millionaire'],
+    module: '@/pages/SportsMillionaire',
+    file: 'src/pages/SportsMillionaire.tsx',
+    anchor: "    fileClimb(right && currentIndex + 1 < LADDER_SIZE\n      ? { at: currentIndex + 1, lifelines, swap: swapped, visible: null, crowd: null, outcome: null }\n      : { at: currentIndex, lifelines, swap: swapped, visible: shownVisible(), crowd: crowdPoll, outcome: right ? 'million' : 'wrong' });\n",
+  },
+  {
+    name: 'drillland',
+    what: 'the career drills file a round only once it has landed',
+    rows: ['career-drill-wallshot', 'career-drill-tackle', 'career-drill-gloves'],
+    module: '@/components/soccer-career/DrillBoard',
+    file: 'src/components/soccer-career/DrillBoard.tsx',
+    anchor: "    if (mode === 'daily' && !savedRef.current) {\n      const rec = { score: score + r.points, count: count + (won ? 1 : 0), banked: false, rounds: Math.min(ROUNDS_PER_RUN, idx + 1), draws: rngRef.current.draws, fouls: fouls + (foul ? 1 : 0) };\n      writeDailyRecord(meta.slug, todayStr, rec);\n      setRecord(rec);\n    }\n",
+  },
+];
+const stripForAnchor = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+let swapControlsRun = 0;
+for (const ctl of SWAP_CONTROLS) {
+  swapControlsRun += 1;
+  console.log(`5.5.${swapControlsRun}) NEGATIVE CONTROL ${ctl.name}: ${ctl.what}, (7) must fail on ${ctl.rows.join(', ')} alone and every other row stay green`);
+  if (ONLY && !ctl.rows.includes(ONLY)) { console.log(`   skipped: ONLY=${ONLY} is not one of its rows`); continue; }
+  const src = fs.readFileSync(path.join(ROOT, ctl.file), 'utf8').split('\r\n').join('\n');
+  const n = src.split(ctl.anchor).length - 1;
+  if (n !== 1 || stripForAnchor(src).split(ctl.anchor).length - 1 !== 1) abort(`control ${ctl.name} cannot run: ${ctl.file} holds its anchor ${n} time(s), or not once in the code`);
+  fs.mkdirSync(path.join(ROOT, 'dist', '.daily-reload-control'), { recursive: true });
+  const dir = fs.mkdtempSync(path.join(ROOT, 'dist', '.daily-reload-control', `${ctl.name}-`));
+  const copy = path.join(dir, path.basename(ctl.file).replace(/\.(tsx?)$/, '.control.$1'));
+  const copySrc = src.replace(ctl.anchor, '') + `\nconsole.log('DAILY_RELOAD_SWAP_LOADED ${ctl.name}');\n`;
+  if (copySrc.includes(ctl.anchor)) abort(`control ${ctl.name} cannot run: the copy still holds its anchor`);
+  fs.writeFileSync(copy, copySrc);
+  try {
+    const run = runVitest({ DAILY_RELOAD_CONTROL: ctl.name, DAILY_LOCK_SWAP: JSON.stringify({ [ctl.module]: copy.replaceAll('\\', '/') }) });
+    const p = parse(run.out);
+    if (!p.named) abort(`control ${ctl.name} cannot run: vitest did not report on the test file:\n` + run.out.slice(-2000));
+    if (!run.out.includes(`DAILY_RELOAD_SWAP_LOADED ${ctl.name}`)) fail(`control ${ctl.name}: the test never loaded the copy, so it changed nothing`);
+    else console.log('   the copy was loaded in place of the real module');
+    const rows = [...p.rows.values()].filter(r => r.info);
+    if (rows.length !== rowList.length) fail(`control ${ctl.name} ran ${rows.length} row(s), the normal run ${rowList.length}`);
+    let flipped = 0;
+    let held = 0;
+    for (const row of rows) {
+      if (ctl.rows.includes(row.info.slug)) {
+        const red = row.marks[7] === '×';
+        const intact = [1, 2, 3, 4, 5, 6].every(a => row.marks[a] === '✓');
+        console.log(`   ${row.info.slug}: [${marksOf(row)}] ${red && intact ? 'went red on (7) alone, as designed' : 'DID NOT FLIP AS DESIGNED'}`);
+        if (!row.info.interrupts) fail(`control ${ctl.name}: ${row.info.slug} carries no assertion 7`);
+        else if (!red) fail(`control ${ctl.name}: ${row.info.slug} stayed green on (7) with its step filed where it lands, so assertion 7 does not see the window`);
+        if (!intact) fail(`control ${ctl.name}: ${row.info.slug} is also red on ${[1, 2, 3, 4, 5, 6].filter(a => row.marks[a] !== '✓').map(a => `(${a})`).join(' ')}, which moving the save cannot touch`);
+        if (red && intact) flipped += 1;
+      } else {
+        const allGreen = assertionsOf(row).every(a => row.marks[a] === '✓');
+        if (!allGreen) fail(`control ${ctl.name}: ${row.info.slug} is red on ${redOnes(row)} though only ${ctl.module} was swapped`);
+        else held += 1;
+      }
+    }
+    const targets = rows.filter(r => ctl.rows.includes(r.info.slug)).length;
+    console.log(`   ${flipped} of ${targets} target row(s) flipped, ${held} of ${rows.length - targets} other row(s) held`);
+    if (targets !== ctl.rows.length && !ONLY) fail(`control ${ctl.name}: expected rows ${ctl.rows.join(', ')}, ran ${targets} of them`);
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
+}
+try { fs.rmdirSync(path.join(ROOT, 'dist', '.daily-reload-control')); } catch { /* not empty or already gone */ }
+
 /* ------------------------------------------- 6) the source backstop */
 console.log('6) Source backstop: every mark dependent restore names markRestoredFinish(<slug>) ahead of its finished state set, as code');
 const stripComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
@@ -546,7 +637,7 @@ console.log('7) Every file that files a daily record reads the clock ONCE, pinne
   /* Round 645 part three: the two arcade writers, the chain writer and the
      Pack Battle writer are wrappers over writeDailyRecord in src/lib, so the
      file that calls them is the file whose clock read matters. */
-  const WRITES_A_DAILY = /\b(writeDailyRecord|saveDailyRecord|saveDailyResult|saveDailyBingo|saveDailyRun|saveDailyAttempt|writeArcadeRun|writeArcadeProgress|writeChainDaily|writePackDaily)\s*\(/;
+  const WRITES_A_DAILY = /\b(writeDailyRecord|saveDailyRecord|saveDailyResult|saveDailyBingo|saveDailyBingoProgress|saveDailyRun|saveDailyDraft|saveDailyProgress|saveDailyAttempt|writeArcadeRun|writeArcadeProgress|writeChainDaily|writePackDaily)\s*\(/;
   const roots = ['src/hooks', 'src/pages', 'src/components'];
   const walk = dir => fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => {
     const p = path.join(dir, e.name);
@@ -598,4 +689,4 @@ if (failures > 0) {
   console.error(`\nsimDailyReload: ${failures} failure(s)`);
   process.exit(1);
 }
-console.log(`\nsimDailyReload: all green (${rowList.length} row(s), all seven controls fired)`);
+console.log(`\nsimDailyReload: all green (${rowList.length} row(s), all ${4 + CODE_CONTROLS.length + 1 + SWAP_CONTROLS.length} controls fired)`);

@@ -83,7 +83,9 @@ const shared = vi.hoisted(() => {
               const fx = functions.get(String(name));
               if (fx === undefined) throw new TypeError(`supabase.functions.invoke('${String(name)}') has no fixture`);
               const data = typeof fx === 'function' ? (fx as (body: unknown) => unknown)(opts?.body) : fx;
-              return Promise.resolve({ data, error: null });
+              /* Round 645 part three fix: a fixture may answer later (a
+                 promise), so a check can hold a verdict out while it acts. */
+              return Promise.resolve(data).then(d => ({ data: d, error: null }));
             },
           };
         }
@@ -105,7 +107,7 @@ const shared = vi.hoisted(() => {
     updateProfile: async () => ({ error: null }),
   };
 
-  return { recordCompletion: vi.fn(), tables, rpcs, pools, functions, silenced, hits, row, hit, auth, supabase: build('root', null, []) };
+  return { recordCompletion: vi.fn(), recordUnranked: vi.fn(), tables, rpcs, pools, functions, silenced, hits, row, hit, auth, supabase: build('root', null, []) };
 });
 
 vi.mock('@/integrations/supabase/client', () => ({
@@ -121,7 +123,12 @@ vi.mock('@/contexts/AuthContext', () => ({
 
 vi.mock('@/lib/completions', async (importOriginal) => {
   const real = await importOriginal<typeof import('@/lib/completions')>();
-  return { ...real, recordCompletion: shared.recordCompletion, getCurrentPlayerName: () => 'Tester' };
+  /* Round 645 part three fix: Round 645 part one routes a free run's finish to
+     recordUnrankedPlay. Where the lib has it, it is counted here beside the
+     recorder, so a check that counts every finish holds on either side of
+     that merge. */
+  const unranked = 'recordUnrankedPlay' in real ? { recordUnrankedPlay: shared.recordUnranked } : {};
+  return { ...real, recordCompletion: shared.recordCompletion, getCurrentPlayerName: () => 'Tester', ...unranked };
 });
 
 vi.mock('@/lib/badges', () => ({
@@ -314,6 +321,9 @@ if (typeof window !== 'undefined') {
 /** The recorder the test counts: exactly one call per row, ever. */
 export const recordCompletion = shared.recordCompletion;
 
+/** Round 645 part one's unranked play, where the lib has it (see above). */
+export const recordUnranked = shared.recordUnranked;
+
 /** Rows a `supabase.from(table)` chain resolves to, or a function of the
  *  chained method names (['select', 'eq', 'order']) returning them. */
 export function setTableFixture(table: string, rows: TableFixture): void {
@@ -361,5 +371,6 @@ export function resetMocks(slug = ''): void {
   shared.pools.clear();
   shared.functions.clear();
   shared.recordCompletion.mockClear();
+  shared.recordUnranked.mockClear();
   shared.row.slug = slug;
 }
