@@ -210,7 +210,9 @@ vi.mock('@/lib/rarityRound', async (importOriginal) => {
       ...c,
       fetchPool: () => {
         const fx = shared.pools.get('rarity');
-        return fx ? Promise.resolve(fx as never) : c.fetchPool();
+        /* Round 645 part three, second fix: or a function of the category's
+           id, so one category's pool can come back empty or fail. */
+        return fx ? Promise.resolve((typeof fx === 'function' ? fx(c.id) : fx) as never) : c.fetchPool();
       },
     })),
   };
@@ -350,7 +352,8 @@ export function setRpcFixture(name: string, value: unknown): void {
  *  or a function of its arguments. 'millionaire': the {pool, ladder}
  *  loadMillionairePool resolves, or a function (mode, realLib) => that.
  *  'pack': the PackCard[] fetchPackPool resolves. 'rarity': the PoolEntry[]
- *  every Rarity Round category's fetchPool resolves. 'autocomplete': the
+ *  every Rarity Round category's fetchPool resolves, or a function of the
+ *  category id returning it (or a rejected promise). 'autocomplete': the
  *  PlayerEntity[] the stubbed search box offers as pick buttons.
  *  'ufcStarter': the UfcFighter Combat Chain's daily deals. */
 export function setPoolFixture(name: 'nbaStatLine' | 'squad' | 'millionaire' | 'pack' | 'rarity' | 'autocomplete' | 'ufcStarter', value: unknown): void {

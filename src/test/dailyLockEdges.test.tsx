@@ -46,6 +46,12 @@
  *                            way (it bites once Round 645 part one drops the
  *                            mode from the page's done flag)
  *
+ * Found by the re-review of the fix pass (Round 645 part three, second fix):
+ *
+ *   [rarity-unread]          Rarity Round's restore read a pool that did not
+ *                            load as "the answer is not in its pool", refused
+ *                            the record and dealt the day fresh
+ *
  * Everything runs through the same mocks as the reload fence (./dailyReload
  * /mocks): the real pages and hooks, the real recorder hook and restore
  * handshake, jsdom's real localStorage. Each section has a negative control
@@ -565,6 +571,87 @@ describe('daily lock edges', () => {
       m = await mountRarity();
       try {
         expect(rarityLine(m), 'the resumed score is the one the pool pays for that answer').toBe(honest);
+      } finally {
+        m.unmount();
+      }
+    });
+  });
+
+  /* Round 645 part three, second fix: the restore scores the saved answers
+     from their pools, and the pool loaders answer [] on any database error.
+     An empty pool read as "not in its pool" refused the record and dealt the
+     day fresh, so a network blip replayed a finished daily and recorded it
+     again. A pool that did not load checks nothing: the page says so, and
+     scores, records and writes nothing until Try again finds it loaded. */
+  describe('[rarity-unread] Rarity Round: a saved run whose pools cannot be read is not rescored, recorded or written', () => {
+    const key = `rarity-round-daily-${today}`;
+    const unread = /Couldn't check your saved run right now\. Try again in a moment\./;
+
+    async function mountUnread(pools: (id: string) => unknown): Promise<MountedPage> {
+      setPoolFixture('rarity', pools);
+      setPoolFixture('autocomplete', RARITY_POOL.map(p => entity(p.name)));
+      const m = mountPage(<RarityRound />, '/rarity-round');
+      await waitFor(() => {
+        if (unread.test(m.container.textContent ?? '') || resultCard(m.container) || findButton(m.container, /^pick /)) return;
+        throw new Error('rarity round has not settled');
+      });
+      return m;
+    }
+
+    async function tryAgainHealed(m: MountedPage): Promise<void> {
+      setPoolFixture('rarity', RARITY_POOL);
+      await click(button(m.container, /^Try again$/));
+      await settleRarity(m);
+    }
+
+    it('a finished daily with one later pool empty: says so, deals nothing, and Try again brings the result back', async () => {
+      let m = await mountRarity();
+      try {
+        await answerRarity(m, 'Fixture Bravo', 5);
+      } finally {
+        m.unmount();
+      }
+      expect(finishes()).toBe(1);
+      const filed = localStorage.getItem(key);
+      expect(filed, 'the finished daily is filed').not.toBeNull();
+      const empty = pickDailyCategories(CATEGORIES, today)[3].id;
+      m = await mountUnread(id => (id === empty ? [] : RARITY_POOL));
+      try {
+        expect(m.container.textContent ?? '', 'the page says the saved run could not be checked').toMatch(unread);
+        expect(rarityLine(m), 'no round is dealt').toBe('');
+        expect(resultCard(m.container), 'no result is shown').toBeNull();
+        expect(finishes(), 'nothing is recorded').toBe(1);
+        expect(localStorage.getItem(key), 'nothing is written').toBe(filed);
+        await tryAgainHealed(m);
+        expect(resultCard(m.container), 'the finished daily comes back').not.toBeNull();
+        expect(finishes(), 'and records nothing more').toBe(1);
+        expect(localStorage.getItem(key)).toBe(filed);
+      } finally {
+        m.unmount();
+      }
+    });
+
+    it('a part played daily with a pool that fails: says so, writes nothing, and Try again resumes where it was', async () => {
+      let m = await mountRarity();
+      let left = '';
+      try {
+        await answerRarity(m, 'Fixture Bravo', 2);
+        left = rarityLine(m);
+        expect(left).toMatch(/^Round 3 of 5/);
+      } finally {
+        m.unmount();
+      }
+      const filed = localStorage.getItem(key);
+      const failing = pickDailyCategories(CATEGORIES, today)[1].id;
+      m = await mountUnread(id => (id === failing ? Promise.reject(new Error('fixture network failure')) : RARITY_POOL));
+      try {
+        expect(m.container.textContent ?? '', 'the page says the saved run could not be checked').toMatch(unread);
+        expect(rarityLine(m), 'no round is dealt').toBe('');
+        expect(finishes(), 'nothing is recorded').toBe(0);
+        expect(localStorage.getItem(key), 'nothing is written').toBe(filed);
+        await tryAgainHealed(m);
+        expect(rarityLine(m), 'the run resumes on the round it was left on').toBe(left);
+        expect(finishes()).toBe(0);
       } finally {
         m.unmount();
       }

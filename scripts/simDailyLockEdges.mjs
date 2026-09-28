@@ -78,6 +78,7 @@ const SECTIONS = [
   'pack-toggle', 'pack-writer', 'pack-mark', 'rarity-mark', 'rarity-derive',
   'arcade-bound', 'gauntlet-board', 'drill-fouls', 'market-roll',
   'pack-new-finish', 'rarity-new-finish', 'millionaire-new-finish',
+  'rarity-unread',
 ];
 
 function parse(out) {
@@ -238,6 +239,17 @@ const CONTROLS = [
     name: 'millionaire-new-finish', red: 'millionaire-new-finish',
     what: 'a decided daily answer lands straight on the Unlimited result card',
     swaps: [{ module: '@/pages/SportsMillionaire', file: 'src/pages/SportsMillionaire.tsx', cuts: [["      if (phaseRef.current === 'done') {\n", '      if (false) {\n']] }],
+  },
+  /* Round 645 part three, second fix. */
+  {
+    name: 'rarity-unread', red: 'rarity-unread',
+    what: 'a saved run whose pool came back empty is scored against it, refused, and the day dealt fresh',
+    swaps: [{ module: '@/pages/RarityRound', file: 'src/pages/RarityRound.tsx', cuts: [['        if (pools.some(p => !Array.isArray(p) || p.length === 0)) {\n', '        if (false) {\n']] }],
+  },
+  {
+    name: 'rarity-unread-throw', red: 'rarity-unread',
+    what: 'a pool that fails on the way back is reported as the game failing to load',
+    swaps: [{ module: '@/pages/RarityRound', file: 'src/pages/RarityRound.tsx', cuts: [['        if (token === runToken.current) unread();\n', "        if (token === runToken.current) setPhase('error');\n"]] }],
   },
 ];
 
