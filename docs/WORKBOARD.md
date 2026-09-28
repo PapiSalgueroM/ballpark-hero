@@ -1,5 +1,19 @@
 # Work board
 
+**2026-09-28, Round 645 part three BUILT, branch `r645c-dailies-lock`, pushed, not yet on main.**
+The dailies that never locked now remember the finished day and refuse a replay across a reload:
+the NASCAR, Tennis and Combat chains (one shared record, `src/lib/chainDaily.ts`), Pro Football
+Timeline, Pack Battle and Rarity Round, all on the Round 428 helper. The run based dailies now file
+every step the moment it is decided (before the ball lands or the card turns), and a reload
+resumes on the same step with the same remaining attempts: Buzzer Beater and Free Kick (the spray
+stream picks up where it stopped, `countedLehmer` in `src/lib/arcadeRecord.ts`), the chains, Pack
+Battle, Rarity Round, and the third game on the arcade engine, the Soccer Career drills, which
+already saved per round but filed on landing and re-seeded the stream on a resume. Perfect Lineup
+classic was left alone: `/perfect-lineup` has redirected home since Round 34, so nobody can reach
+it. Fence `simDailyReload`: 28 rows, 8 resume, 5 keep a step refreshed in flight, seven controls.
+Found and filed as a task: 9 of Combat Chain's 60 possible daily starters have no recorded winner
+in its bundled results, so on those days the daily cannot be extended.
+
 **2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof
 in `docs/PROJECT-STATE.md`.
