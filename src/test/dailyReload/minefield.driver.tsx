@@ -15,7 +15,7 @@ import './mocks';
 import { waitFor } from '@testing-library/react';
 import { defineDriver } from './driver';
 import { button, click, findButton, mountPage, type MountedPage } from './harness';
-import { buildRun, daySeed, ROUNDS_PER_RUN } from '@/lib/minefield';
+import { buildRun, daySeed } from '@/lib/minefield';
 import Minefield from '@/pages/Minefield';
 
 type Api = MountedPage & { restoreTimeout: () => void };
@@ -35,18 +35,39 @@ function status(m: MountedPage): 'playing' | 'finished' {
   throw new Error('minefield shows neither a board nor the final score (intro?)');
 }
 
-function tileButton(m: MountedPage, name: string): HTMLButtonElement {
-  const b = Array.from(m.container.querySelectorAll('button')).find(x => (x.textContent ?? '').trim() === name && !x.disabled);
-  if (!b) throw new Error(`no live tile named ${name}`);
-  return b;
+function liveTile(m: MountedPage, name: string): HTMLButtonElement | null {
+  return Array.from(m.container.querySelectorAll('button')).find(x => (x.textContent ?? '').trim() === name && !x.disabled) ?? null;
+}
+
+function boardNumber(m: MountedPage): number {
+  const span = Array.from(m.container.querySelectorAll('span')).find(s => /^Board \d+\/\d+$/.test((s.textContent ?? '').trim()));
+  if (!span) throw new Error('no board on screen');
+  return Number((span.textContent ?? '').trim().match(/^Board (\d+)\//)![1]) - 1;
+}
+
+/* Round 645 part three fix: the honest path now takes a life on the first
+   board (its first mine, then every real name), so the run carries a hit, a
+   named mine and a lost heart for a reload to keep; the other two boards are
+   cleared clean. Each board's moves are played from wherever the board is, a
+   tile already picked being skipped, so a run resumed part way (assertion 6)
+   plays exactly the moves the unbroken run did. */
+function movesFor(board: number): string[] {
+  const tiles = buildRun(daySeed())[board].tiles;
+  const real = tiles.filter(t => !t.isMine).map(t => t.name);
+  if (board > 0) return real;
+  return [tiles.find(t => t.isMine)!.name, ...real];
+}
+
+async function playBoard(m: MountedPage, moves: string[]): Promise<void> {
+  for (const name of moves) {
+    const tile = liveTile(m, name);
+    if (tile) await click(tile);
+  }
 }
 
 async function finish(m: MountedPage): Promise<void> {
-  const run = buildRun(daySeed());
-  for (let r = 0; r < ROUNDS_PER_RUN; r++) {
-    for (const tile of run[r].tiles) {
-      if (!tile.isMine) await click(tileButton(m, tile.name));
-    }
+  while (!doneCard(m)) {
+    await playBoard(m, movesFor(boardNumber(m)));
     const next = await waitFor(() => button(m.container, /^Next board|^See final score$/), { timeout: 4000 });
     await click(next);
   }
@@ -79,6 +100,19 @@ export default defineDriver<Api>({
   enterDaily,
   finish,
   status,
+
+  /* Round 645 part three fix: the mine and two real names on the first
+     board, then a reload has to come back on board 1 with the same picks,
+     one heart gone, the mine still named and 20 points. */
+  playSome: m => playBoard(m, movesFor(0).slice(0, 3)),
+  progress(m) {
+    if (status(m) !== 'playing') throw new Error('no live board');
+    const row = Array.from(m.container.querySelectorAll('span')).find(s => /^Board \d+\/\d+$/.test((s.textContent ?? '').trim()))!.parentElement!;
+    const hearts = row.querySelectorAll('.fill-red-400').length;
+    const mine = Array.from(m.container.querySelectorAll('div')).map(d => (d.textContent ?? '').trim()).find(t => /was a mine/.test(t) && t.startsWith('💥')) ?? '';
+    const picked = Array.from(m.container.querySelectorAll('button')).filter(b => b.disabled && /✓|💥/.test(b.textContent ?? '')).map(b => (b.textContent ?? '').trim()).sort();
+    return [Array.from(row.querySelectorAll('span')).map(s => (s.textContent ?? '').trim()).join(' | '), `hearts ${hearts}`, mine, picked.join(', ')].join('\n');
+  },
 
   /* The score and the boards line, every number on the final card. */
   fingerprint(m) {

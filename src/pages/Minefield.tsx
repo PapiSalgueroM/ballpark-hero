@@ -11,7 +11,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 import {
-  buildRun, daySeed, loadDailyResult, maxRunScore, saveDailyResult,
+  buildRun, daySeed, loadDailyProgress, loadDailyResult, maxRunScore, saveDailyProgress, saveDailyResult,
   CLEAR_BONUS, LIVES_PER_ROUND, POINTS_PER_FIND, ROUNDS_PER_RUN,
   type MinefieldRound,
 } from '@/lib/minefield';
@@ -45,6 +45,9 @@ const Minefield = () => {
   const [lastMine, setLastMine] = useState<string | null>(null);
   const [roundWon, setRoundWon] = useState(false);
   const [revealDone, setRevealDone] = useState(false);
+  /* Round 645 part three fix: the picks of the boards already behind the run,
+     filed with the current board's on every click of a daily. */
+  const [pastBoards, setPastBoards] = useState<number[][]>([]);
 
   // Daily completion fires once the whole 3-board run is finished.
   useGameCompletion('minefield', phase === 'done' && gameMode === 'daily', score, roundsWon);
@@ -72,8 +75,29 @@ const Minefield = () => {
         return;
       }
     }
+    const run = buildRun(gm === 'daily' ? daySeed() : undefined);
     setGameMode(gm);
-    setRounds(buildRun(gm === 'daily' ? daySeed() : undefined));
+    setRounds(run);
+    /* Round 645 part three fix: a daily part played today comes back on the
+       board it was left on, every pick replayed through the rules. A board
+       that had ended comes back on its end panel; the last one ending with
+       the final score never shown finishes from there, and that is the
+       finish recorded. */
+    const part = gm === 'daily' ? loadDailyProgress(todayStr, run) : null;
+    if (part) {
+      setPastBoards(part.boards.slice(0, part.roundIdx));
+      setRoundIdx(part.roundIdx);
+      setPicked(part.picked);
+      setLives(part.lives);
+      setScore(part.score);
+      setRoundsWon(part.roundsWon);
+      setLastMine(part.lastMine);
+      setRoundWon(part.roundWon);
+      setRevealDone(part.roundOver);
+      setPhase(part.roundOver ? 'roundEnd' : 'playing');
+      return;
+    }
+    setPastBoards([]);
     setRoundIdx(0);
     setPicked([]);
     setLives(LIVES_PER_ROUND);
@@ -100,6 +124,9 @@ const Minefield = () => {
     if (phase !== 'playing' || !round || picked.includes(i)) return;
     const tile = round.tiles[i];
     const nextPicked = [...picked, i];
+    /* Round 645 part three fix: on the record the moment it is clicked, so a
+       refresh cannot hand back a board whose mines it has named. */
+    if (gameMode === 'daily') saveDailyProgress(todayStr, { boards: [...pastBoards, nextPicked] });
     setPicked(nextPicked);
     if (tile.isMine) {
       setLastMine(tile.name);
@@ -119,6 +146,7 @@ const Minefield = () => {
       setPhase('done');
       return;
     }
+    setPastBoards(pb => [...pb, picked]);
     setRoundIdx(roundIdx + 1);
     setPicked([]);
     setLives(LIVES_PER_ROUND);
