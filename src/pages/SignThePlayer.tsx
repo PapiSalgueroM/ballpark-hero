@@ -433,7 +433,7 @@ const SignThePlayer = () => {
             'Pass one is a lot per position in a random order, pass two is the elite band, and the single most valuable player is held back to headline the close.',
             'Every lot opens at real list price. Two or more bidders and it is a war in £5M/£10M/£25M steps; exactly one bidder and he takes him at the list price; nobody at all and the price falls step by step, and you can snap the bargain any time before the floor withdraws the lot.',
             'When the last hammer falls, every open chair on every squad is filled from the journeyman list at a fee, and the showdown simulates a double round-robin league: table position, goal difference and money left decide your score.',
-            'Winning the league pays 300 and second pays 150. Your squad rating and the money you kept pay on top, in proportion to how far your XI rates above a squad of journeymen: bid on nobody and that part is 0, land the best player in every slot and you get all of it.',
+            'Winning the league pays 300 and second pays 150, plus three times your squad rating and a tenth of the money you kept. All of it counts in proportion to how far your XI rates above a squad of journeymen: bid on nobody and you score 0, land the best player in every slot and you get the lot.',
           ]}
           examples={[
             'The Sheikh jumps £25M when he wants someone, so bait him early',
