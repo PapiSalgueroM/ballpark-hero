@@ -4,15 +4,17 @@
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof
 in `docs/PROJECT-STATE.md`.
 
-**Round 645 part one CLAIMED AND BUILT, branch `r645a-ranked-recorder`, pushed, not yet on main.**
-A `ranked` flag on the shared recorder, Face Off's shape lifted into `useGameCompletion`: an
-unranked finish goes to the new `recordUnrankedPlay` (the anonymous row with no score and the
-local streak day; never a score, the signed in save, `daily_completions` or the local today set).
-Measured on main `22bc0f7e`: **36 games' free modes recorded under the daily key** (28 call sites:
-8 guess hooks, 3 chains, 4 gauntlets, 5 conquest maps, 4 Perfect Seasons, 3 Perfect Lineups on
-the shared engine, Perfect Lineup, Buzzer Beater, Free Kick, NBA Stat Line, Pack Battle, Player
-Stock Market, Rarity Round, Sports Bingo, and Face Off's zero score save), plus 6 recorders that
-ANDed the mode into done. On the branch: 0 and 0. Fence `scripts/simRankedRecorder.mjs`, nine
+**Round 645 part one CLAIMED, BUILT, REVIEWED AND FIXED, branch `r645a-ranked-recorder`, pushed,
+not yet on main.** A `ranked` flag on the shared recorder, Face Off's shape lifted into
+`useGameCompletion`: an unranked finish goes to the new `recordUnrankedPlay` (the anonymous row
+with no score under the player's name, the local streak day and today's games; never a score, the
+signed in save or `daily_completions`). Measured on main `22bc0f7e`: **35 live games' free modes
+recorded under the daily key** (36 counting the retired Guess The Club; 28 call sites: 8 guess
+hooks, 3 chains, 4 gauntlets, 5 conquest maps, 4 Perfect Seasons, 3 Perfect Lineups on the shared
+engine, Perfect Lineup, Buzzer Beater, Free Kick, NBA Stat Line, Pack Battle, Player Stock Market,
+Rarity Round, Sports Bingo, and Face Off's zero score save), plus 6 recorders that ANDed the mode
+into done. On the branch: 0 and 0, every free run's result card says it is free play, and the
+profile's Games Today reads the header's source. Fence `scripts/simRankedRecorder.mjs`, 21
 controls. Parts two (free points) and three (dailies that never lock) are separate branches.
 
 **Round 662 CLAIMED AND BUILT, branch `r662-nhl-hl-points`, pushed, not yet on main.** NHL Higher
