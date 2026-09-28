@@ -46,8 +46,10 @@
 --     and rescales Soccer Career's history on purpose. This file writes no
 --     row of theirs and no history for them, so the two apply in either
 --     order and 644's rescale still applies to every day.
---   * Round 648's migration applies after this one (its own precondition
---     checks that private.r646_caps_bak exists).
+--   * Round 648's two migrations apply after this one, each as its own
+--     transaction: 20260928_round_648_profile_clamp.sql (the save), then
+--     20260928_round_648_profile_recompute.sql once the first has committed.
+--     Both check that private.r646_caps_bak exists.
 --   * perfect-lineup goes to 100, the classic daily lineup's ceiling, because
 --     Round 645 ranks only that lineup (Go Unbeaten and Unlimited record as
 --     plays with no score). Published in the same release as 645, that holds
@@ -215,15 +217,16 @@
 -- every five minutes by the refresh-player-ranks cron job.
 --
 -- ROUND 648 IS NOT HISTORY SAFE, AND THIS FILE DOES NOT MAKE IT SO. 648's
--- profile total (src/lib/pointsRule.ts, and its migration's stored
--- user_scores.total_points) adds least(day best, cap) with TODAY's cap on
--- every past day, and 648's migration says its part 2 recompute must be rerun
--- whenever a cap changes. So when this applies, a profile's all time total
+-- profile total (src/lib/pointsRule.ts, and the stored
+-- user_scores.total_points its migrations keep) adds least(day best, cap)
+-- with TODAY's cap on every past day, and 648's recompute
+-- (20260928_round_648_profile_recompute.sql) must be rerun whenever a cap
+-- changes. So when this applies, a profile's all time total
 -- moves on its past days even though the World Leaderboard's does not: a
 -- Budget Builder day recorded at 1000 counted 1000 and counts 126, a front
 -- office title recorded at 305 counted 305 and counts 100, and a raised cap
 -- (Golf Higher or Lower, 155 to 325) lets past plays count up to it. And in
--- the browser, src/lib/scoreCaps.ts (on r648-profile-clamp) keeps its read of
+-- the browser, src/lib/scoreCaps.ts (Round 648) keeps its read of the table
 -- game_score_caps in localStorage for six hours (FRESH_MS), and a play only
 -- asks for a new read once that copy is older than that: for up to six hours
 -- after this applies, a browser holding a fresh copy credits new plays in its
@@ -234,7 +237,7 @@
 -- that credit for good, and only plays after the next read count at the new
 -- caps. The server's save reads the table itself, so a play saved after this
 -- applies counts at the new cap at once; what past days add to a stored
--- total moves only when 648's part 2 is rerun, as above.
+-- total moves only when 648's recompute is rerun, as above.
 --
 -- =====================================================================
 -- BACKUP AND UNDO

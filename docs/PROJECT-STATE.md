@@ -383,6 +383,52 @@ drive a browser while the release suite runs; the release gate runs both.
 
 ## BUILT 2026-09-28: Round 648, the profile total on the owner's recompute rule (branch `r648-profile-clamp`, NOT on main, migration NOT applied)
 
+**Fixed again on 2026-09-28 after the re-review (branch `eco-fix-648`, from `points-economy`), to
+the lead's five points.** This block beats anything below it that disagrees.
+
+- **The day is the Eastern day.** A record's day is the Eastern day of its `created_at`, the
+  expression Round 537 moved the World Leaderboard to (`(created_at at time zone
+  'America/New_York')::date`), in the page (`getEtDateString`), the browser's tally, the save's
+  day best read and the recompute's grouping. Never the UTC `puzzle_date`, under which Monday's
+  daily at 21:00 Eastern and Tuesday's at 18:00 were one day (one earned nothing) and two Club
+  Manager seasons at 19:50 and 20:10 Eastern were two. The save still writes `puzzle_date`, the
+  daily mark and the streak on the UTC date, as Round 569 did.
+- **The repair only touches a tally above what the rule allows.** The first fix retired EVERY pre
+  648 tally, honest ones too. Now a sum counted without the rule is held to the most the rule could
+  have paid on the records the browser kept of it (`ruleAllowance` in `src/lib/pointsRule.ts`:
+  how many plays, which games, the days since the tally began on 2026-07-08, each game day worth
+  at most its cap and never more than a record holds). At or below that it is left exactly as it
+  is; above it, it is cut to it and the rest kept in `retiredPoints`. The check needs a fresh copy
+  of the caps, so until one lands the points wait, counted; the streak hook asks for the copy on
+  any page while something waits. A cut never takes back a badge or an achievement: both read the
+  larger of the tally and `pointsBadgeFloor`, the tally a cut lowered. **Residue, printed by the
+  fence:** the browser kept counts, not plays, so the bound is loose where a game's cap is high. The
+  owner's 8,810,000 over 41 plays of Pack Battle and Soccer Grid is cut to 4,000,000 (40 Pack
+  Battle days at the 100,000 a record holds), not further. A Club Manager tally inflated per match
+  is cut hard (25,331 over 60 plays becomes 7,800).
+- **An old tab cannot drop the new fields.** A client from before 648 rebuilds `dukb-streaks-v1`
+  from the six fields it knows and writes that back, so the points record now lives under its own
+  key, `dukb-points-v1`, which no old client touches. What an old tab adds to `totalPoints` is
+  found (the total moved past what this client last wrote) and checked like any other sum counted
+  without the rule. Every write also keeps the fields it does not know, in both keys.
+- **The migration is two files, two transactions.** `20260928_round_648_profile_clamp.sql`
+  replaces the save and commits. `20260928_round_648_profile_recompute.sql` then recomputes every
+  stored total under the exclusive lock, and refuses unless the save is file 1's AND was not written
+  by its own transaction (the `pg_proc` row's xmin against `txid_current()`). In one transaction the
+  saves queued behind the lock ran the old save and added raw scores on top of the recompute. The
+  recompute's after-update check, which compared the table with the model it had just been updated
+  from and so could never fire, is gone.
+- **646's migration** now names the two files and the recompute instead of "part 2", and no longer
+  names 648's old branch.
+- **Fence:** `simProfileTotal` is ten cases (new: 9 the Eastern day on the hook and the tally, 10 an
+  old tab's write and a later client's fields; 7 rewritten: honest left, inflated cut, badges and
+  achievements kept) and **28 controls**, 21 on the source (among them `utchook`, `utctally`,
+  `nocut`, `cutall`, `noforeign`, `novisitprime`, `nofloor`, `nofloorach`, `onekey`, `nomerge`,
+  `nomergepoints`) and 7 on the SQL (`sqlutcread`, `sqlutcgroup`, `sqlonefile`, `sqlsametx`
+  among them). Section 3 reads both files.
+- **Release order:** publish 647, apply 646, finish 644, apply 648's clamp file, let it commit,
+  apply 648's recompute file, get_advisors. Rerun the recompute file whenever a cap changes.
+
 Part of the points economy that ships as one release: 645a (free and Unlimited runs record
 unranked), 645b, 645c, 646 (caps at each game's real ceiling), 647 (the season ledger) and 648.
 Built, then adversarially reviewed (verdict fix first: four majors, three minors), then fixed.
@@ -395,10 +441,10 @@ policy refuses any record above 100,000. Now the page sums the player's records 
 (`src/lib/pointsRule.ts`, `src/hooks/useProfileTotal.ts`), with the caps read from
 `public.game_score_caps`, the table, cached six hours per browser, never the `game_denominators`
 view whose NULL fallback is the percentile Round 370 took off the page path. The browser's tally
-credits every play by the same rule, and counts nothing for a play the server could not store. An
-inflated tally from before this round is retired once on read (kept in `retiredPoints`, never
-shown): the browser kept no plays behind the sum, so the rule cannot recount it. The points badges
-read the repaired number. A signed in player's own profile still shows the larger of the tally and
+credits every play by the same rule, and counts nothing for a play the server could not store. A
+tally from before this round is cut only where it is above what the rule could have paid on the
+browser's own records, and a cut never takes back a badge (the fix block above). A signed in
+player's own profile still shows the larger of the tally and
 the server total, and the server total is the rule over every record the database holds.
 
 **What the first build got wrong, fixed here.** It summed EVERY record clamped at its cap, which
@@ -426,16 +472,19 @@ recordmax, settleraw, nocapwire, noprime, norepair, pagewiring) and 3 on the SQL
 sqlperrecord, sqlnoguard). simScoringCoverage (140 points, its stub now models the day rule) and
 simAuthSave (every migration defining the save) green with all their controls.
 
-**Unapplied: `supabase/migrations/20260928_round_648_profile_clamp.sql`**, never run against a
-database. It fails closed: before any write it refuses unless Round 646 is applied, Round 644 part
-1 has run and its part 2 has nothing left to divide (this file ends that part 2 for good through
-its md5 guard), the save is the Round 569 one 644 fingerprinted or this file's own, the caps table
-is not empty, and authenticated may take the advisory lock. Part 1 replaces the save so it adds
-the day's capped improvement under a per player lock. Part 2 (rerunnable; rerun it whenever a cap
-changes) copies the caps out, locks `user_scores` against writers, recomputes every stored total
-by the rule, backs up what changes into `private.r648_totals_bak`, and rolls back if any total
-still differs. Order: publish 647, apply 646, finish 644, then this, then get_advisors. Until it
-lands the page shows the rule total while the all time rank counts the old stored totals.
+**Unapplied: `supabase/migrations/20260928_round_648_profile_clamp.sql` then
+`supabase/migrations/20260928_round_648_profile_recompute.sql`**, two migrations, each its own
+transaction, never run against a database. Both fail closed. The first, before any write, refuses
+unless Round 646 is applied, Round 644 part 1 has run and its part 2 has nothing left to divide
+(this file ends that part 2 for good through its md5 guard), the save is the Round 569 one 644
+fingerprinted or this file's own, the caps table is not empty, and authenticated may take the
+advisory lock; it replaces the save so it adds the Eastern day's capped improvement under a per
+player lock, and commits. The second (rerunnable; rerun it whenever a cap changes) refuses unless
+that save is in place and was committed by an earlier transaction, copies the caps out, locks
+`user_scores` against writers, recomputes every stored total by the rule on the Eastern day, and
+backs up what changes into `private.r648_totals_bak`. Order: publish 647, apply 646, finish 644,
+then the first, then the second, then get_advisors. Until they land the page shows the rule total
+while the all time rank counts the old stored totals.
 
 ## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
 

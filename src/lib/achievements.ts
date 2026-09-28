@@ -410,7 +410,10 @@ export function buildAchievementFacts(
        consulted at all for this number; it is the count of distinct game days,
        which is a fact the database can state exactly. */
     totalPlays: seenPairs.size,
-    totalPoints: Math.max(serverPoints, streaks.totalPoints ?? 0),
+    /* Round 648: with the highest local tally a Round 648 cut ever lowered
+       (src/lib/streaks.ts), so the cut never takes back a points achievement
+       already earned. */
+    totalPoints: Math.max(serverPoints, streaks.totalPoints ?? 0, streaks.pointsBadgeFloor ?? 0),
     longestStreak: streaks.global?.longest ?? 0,
     bestGameStreak,
     daysPlayed: gamesPerDay.size,

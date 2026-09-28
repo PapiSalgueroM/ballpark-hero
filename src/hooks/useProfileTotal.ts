@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { fetchAllRows } from '@/lib/fetchAllRows';
 import { profileTotal } from '@/lib/pointsRule';
 import { primeScoreCaps } from '@/lib/scoreCaps';
+import { getEtDateString } from '@/lib/streaks';
 
 /**
  * Round 648: the profile's all time total, summed from the player's own
@@ -13,8 +14,10 @@ import { primeScoreCaps } from '@/lib/scoreCaps';
  * time rank counts are one number once the migration has landed.
  *
  * The records are user_game_scores (every row, paged past the 1,000 row
- * response cap), read as game, score and puzzle_date, the three columns the
- * rule groups and ranks by. The caps are public.game_score_caps through
+ * response cap), read as game, score and created_at. A record's day is the
+ * Eastern day of its created_at (getEtDateString, the day Round 537 moved
+ * the site and the World Leaderboard to), never puzzle_date, which the save
+ * writes as the UTC date. The caps are public.game_score_caps through
  * src/lib/scoreCaps.ts, the plain table cached in this browser for six hours,
  * never the game_denominators view, whose NULL fallback runs a percentile
  * over game_completions.
@@ -33,7 +36,14 @@ export interface ProfileTotal {
 interface ScoreRow {
   game_type: string;
   score: number | null;
-  puzzle_date: string | null;
+  created_at: string | null;
+}
+
+/** The Eastern day a record was saved on, or null for a time that does not parse. */
+function recordDay(createdAt: string | null): string | null {
+  if (!createdAt) return null;
+  const at = new Date(createdAt);
+  return Number.isNaN(at.getTime()) ? null : getEtDateString(at);
 }
 
 export function useProfileTotal(userId: string | null | undefined): ProfileTotal {
@@ -52,7 +62,7 @@ export function useProfileTotal(userId: string | null | undefined): ProfileTotal
         fetchAllRows<ScoreRow>((from, to) =>
           supabase
             .from('user_game_scores')
-            .select('game_type, score, puzzle_date')
+            .select('game_type, score, created_at')
             .eq('user_id', userId)
             .order('created_at', { ascending: true })
             .order('id', { ascending: true })
@@ -63,7 +73,7 @@ export function useProfileTotal(userId: string | null | undefined): ProfileTotal
         setState({ total: null, loading: false });
         return;
       }
-      const total = profileTotal(rows.data.map(r => ({ game: r.game_type, score: r.score, day: r.puzzle_date })), caps);
+      const total = profileTotal(rows.data.map(r => ({ game: r.game_type, score: r.score, day: recordDay(r.created_at) })), caps);
       setState({ total, loading: false });
     })().catch(() => {
       if (!cancelled) setState({ total: null, loading: false });

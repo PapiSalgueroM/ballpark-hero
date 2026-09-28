@@ -1,13 +1,25 @@
--- Round 648: the profile's all time total, one rule for the page and for the
--- database: one row per game per day, the day's best, capped.
+-- Round 648, file 1 of 2: the save adds what a play adds to the profile's
+-- rule, one row per game per Eastern day, the day's best, capped.
 --
 -- NOT APPLIED BY THE ROUND THAT WROTE IT, and never run against any database
--- by it: neither the build pass nor the fix pass had a database session. The
--- release manager applies it through the Supabase MCP (apply_migration, one
--- transaction) after review, and runs get_advisors afterwards as the database
--- rules require. It FAILS CLOSED: every precondition below is asserted inside
--- the same block that makes the change, and a failed one raises before
--- anything is written, however the file is run.
+-- by it: no pass of this round had a database session. The release manager
+-- applies it through the Supabase MCP (apply_migration) after review, and runs
+-- get_advisors afterwards as the database rules require. It FAILS CLOSED:
+-- every precondition below is asserted inside the same block that makes the
+-- change, and a failed one raises before anything is written, however the
+-- file is run.
+--
+-- TWO FILES, TWO TRANSACTIONS, IN THIS ORDER.
+--   1. This file replaces record_auth_completion. apply_migration runs it as
+--      one transaction, and it COMMITS before file 2 starts.
+--   2. 20260928_round_648_profile_recompute.sql recomputes every stored total
+--      by the rule, under an exclusive lock on user_scores. It refuses unless
+--      the save this file writes is the committed one.
+-- They were one file until the fix of 2026-09-28. In one transaction the new
+-- save is not visible to anyone until the commit, so every save that queued
+-- behind the recompute's lock ran the OLD committed save, added its raw score
+-- on top of the recomputed total, and left that total off the rule. Committed
+-- first, the new save is the one those queued saves run.
 --
 -- =====================================================================
 -- WHAT WAS WRONG
@@ -33,22 +45,34 @@
 -- =====================================================================
 -- THE RULE (src/lib/pointsRule.ts is the same rule, for the page)
 -- =====================================================================
---   total = the sum over (game_type, puzzle_date) of least(max(score), cap)
+--   total = the sum over (game_type, Eastern day) of least(max(score), cap)
 --
--- exactly the grouping of the 2026-09-19 recompute, whose model Round 644
--- reproduces in its part 1 check. The cap is read from public.game_score_caps,
--- the TABLE: greatest(max_score, 1) where max_score is set. A row whose
--- max_score is NULL has no ceiling on record and its day's best counts as
--- recorded; a game with no row is not on the allowlist and counts nothing.
+-- THE DAY IS THE EASTERN DAY of the record's created_at,
+--   (created_at at time zone 'America/New_York')::date
+-- the expression Round 537 moved the World Leaderboard to
+-- (20260911_leaderboard_eastern_day.sql; timezone(text, timestamptz) is
+-- IMMUTABLE, as that file checked). NOT puzzle_date: the save writes it as the
+-- UTC date, and 537 measured 20.3% of plays filed under a UTC day that was not
+-- their Eastern day. Under it Monday's daily played at 21:00 Eastern and
+-- Tuesday's at 18:00 share a day and one of them earns nothing, while two Club
+-- Manager seasons at 19:50 and 20:10 Eastern are two days and both pay. The
+-- save still writes puzzle_date, the daily mark and the streak on the UTC
+-- date exactly as Round 569 did; only the points rule reads the Eastern day.
+-- That is one difference from the 2026-09-19 recompute, which grouped by
+-- puzzle_date.
 --
--- One deliberate difference from 2026-09-19: that recompute joined the
--- game_denominators VIEW, whose NULL cap fallback is a 99th percentile over
--- game_completions, the scan Round 370 took off the page path for Disk IO.
--- The page reads the table (it must not run that percentile on a profile
--- view), so the database reads the same table, or the two totals would not
--- be the same number. After Round 646 the only scored games left with a NULL
--- cap are list-quiz and higher-lower-transfers; by the percentile's own
--- definition it clamped about one play in a hundred of theirs.
+-- The cap is read from public.game_score_caps, the TABLE: greatest(max_score,
+-- 1) where max_score is set. A row whose max_score is NULL has no ceiling on
+-- record and its day's best counts as recorded; a game with no row is not on
+-- the allowlist and counts nothing. That is the other difference from
+-- 2026-09-19: that recompute joined the game_denominators VIEW, whose NULL cap
+-- fallback is a 99th percentile over game_completions, the scan Round 370 took
+-- off the page path for Disk IO. The page reads the table (it must not run
+-- that percentile on a profile view), so the database reads the same table,
+-- or the two totals would not be the same number. After Round 646 the only
+-- scored games left with a NULL cap are list-quiz and higher-lower-transfers;
+-- by the percentile's own definition it clamped about one play in a hundred
+-- of theirs.
 --
 -- The cap is a ceiling here, not a divisor. The World Leaderboard scores a
 -- game day as 100 * best / cap; the profile total, like the recompute it
@@ -78,36 +102,30 @@
 --   4. game_score_caps is not empty (an empty allowlist would zero every
 --      total), and authenticated may execute the two catalog functions the
 --      new save takes its lock with.
---   Then PART 1 (the save adds the day's improvement), PART 2 (every stored
---   total recomputed by the rule, backed up first), get_advisors.
+--   Then the save is replaced, the transaction commits, and file 2 follows.
 --
--- PART 2 IS RERUNNABLE on its own, and must be rerun whenever a cap in
--- game_score_caps changes: the save adds each play at the cap of its day, so
--- a changed cap leaves stored totals on the old one until the recompute.
-
--- =====================================================================
--- PART 1. The save adds what the play adds to the rule, and nothing more.
--- =====================================================================
 -- Everything else is exactly the Round 569 function: SECURITY INVOKER, the
 -- player from auth.uid() and never a parameter, a pinned search_path, the in
 -- place increment that serialises racing saves, the conflict safe daily
 -- mark, a best that only rises, EXECUTE for authenticated only.
 -- scripts/simAuthSave.mjs section 3 holds every migration that defines the
 -- function to those properties, and scripts/simProfileTotal.mjs section 3
--- holds this file to the rule.
+-- holds this file and file 2 to the rule.
 --
 -- THE ADD. The play's game day was worth least(best so far, cap) before this
 -- save and least(greatest(best so far, score), cap) after it; the save adds
--- the difference, which is never negative. The first play of a game on a day
--- adds its capped score, a better one later that day adds what it beats the
--- best by, a worse one adds nothing.
+-- the difference, which is never negative. The first play of a game on an
+-- Eastern day adds its capped score, a better one later that day adds what it
+-- beats the best by, a worse one adds nothing. The play's own day is the
+-- Eastern day of now(), which is the created_at its row is stamped with.
 --
 -- THE LOCK. Two saves of one player for one game on one day would each read
 -- the day's best without seeing the other's uncommitted row, and both would
 -- add. A transaction advisory lock keyed on the player is taken before the
 -- read, so the second save waits for the first to commit and then reads its
 -- row (each statement in a plpgsql function takes a fresh snapshot under
--- READ COMMITTED). It is released at commit.
+-- READ COMMITTED). It is released at commit. The day's best is read through
+-- the index on user_id: one player's rows, filtered to the game and the day.
 do $r648_part1$
 declare
   v_p timestamptz;
@@ -142,7 +160,7 @@ begin
     raise exception 'Round 648: Round 644 part 2 still has % soccer-career rows to divide. Rerun Round 644 part 2 first: once this file replaces record_auth_completion its md5 guard refuses to run for good. Nothing was changed.', v_left;
   end if;
   v_def := pg_get_functiondef('public.record_auth_completion(text,integer,integer)'::regprocedure);
-  if md5(v_def) is distinct from v_md5_569 and position('round 648 profile rule' in lower(v_def)) = 0 then
+  if md5(v_def) is distinct from v_md5_569 and position('round 648 profile rule (eastern day)' in lower(v_def)) = 0 then
     raise exception 'Round 648: record_auth_completion is neither the Round 569 definition Round 644 fingerprinted nor this file''s own, so something else has changed it since. Merge by hand. Nothing was changed.';
   end if;
   if not has_function_privilege('authenticated', 'pg_catalog.pg_advisory_xact_lock(bigint)', 'execute')
@@ -164,6 +182,7 @@ as $body$
 declare
   v_user uuid := auth.uid();
   v_today date := (now() at time zone 'utc')::date;
+  v_day date := (now() at time zone 'America/New_York')::date;
   v_score integer := coalesce(p_score, 0);
   v_games integer;
   v_total integer;
@@ -182,8 +201,9 @@ begin
     raise exception 'record_auth_completion needs a game slug';
   end if;
 
-  /* Round 648 profile rule. One save of this player at a time from here to
-     the commit, so the day's best read below sees every earlier save. */
+  /* Round 648 profile rule (Eastern day). One save of this player at a time
+     from here to the commit, so the day's best read below sees every earlier
+     save. */
   perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended('record_auth_completion:' || v_user::text, 0));
 
   /* The game's cap from the table the page reads: a row with a cap, a row
@@ -195,12 +215,14 @@ begin
     from public.game_score_caps c
    where c.game = p_game_slug;
 
-  /* The day's best before this save: this player, this game, this day. */
+  /* The day's best before this save: this player, this game, this Eastern
+     day, the day Round 537 moved the board to. Not puzzle_date, which is the
+     UTC date. */
   select max(s.score) into v_before
     from public.user_game_scores s
    where s.user_id = v_user
      and s.game_type = p_game_slug
-     and s.puzzle_date = v_today;
+     and (s.created_at at time zone 'America/New_York')::date = v_day;
 
   insert into public.user_game_scores (user_id, game_type, score, correct_answers, puzzle_date)
   values (v_user, p_game_slug, v_score, coalesce(p_correct, 0), v_today);
@@ -271,113 +293,9 @@ $fn$;
 end
 $r648_part1$;
 
--- =====================================================================
--- PART 2. RERUNNABLE. Every stored total becomes the rule over its records.
--- Backs up first, in the same transaction, and touches only the rows that
--- differ.
--- =====================================================================
--- The caps are copied out of game_score_caps into a temporary table BEFORE
--- the lock, so nothing but one grouped aggregate over user_game_scores runs
--- while writers wait. user_scores is then locked against writers (readers,
--- the profile's rank count among them, are not blocked): a save that is
--- waiting holds its user_game_scores row uncommitted and its per player lock,
--- this statement does not see that row, and once the lock lifts the save
--- adds that row's improvement on top of the recomputed total, which is the
--- rule over every row. After the update the block counts the accounts whose
--- stored total differs from the model and raises (rolling everything back)
--- if there is one.
-
-create table if not exists private.r648_totals_bak (
-  user_id uuid not null,
-  total_points integer,
-  recomputed_to integer,
-  backed_up_at timestamptz not null default now()
-);
-revoke all on private.r648_totals_bak from public, anon, authenticated;
-
-do $r648_part2$
-declare
-  v_def text;
-  v_changed integer;
-  v_accounts integer;
-  v_before bigint;
-  v_after bigint;
-  v_off integer;
-begin
-  v_def := pg_get_functiondef('public.record_auth_completion(text,integer,integer)'::regprocedure);
-  if position('round 648 profile rule' in lower(v_def)) = 0 then
-    raise exception 'Round 648 part 2: record_auth_completion is not this file''s definition, so the save would move the totals off the rule again straight after the recompute. Run part 1 first. Nothing was changed.';
-  end if;
-  if to_regclass('private.r646_caps_bak') is null then
-    raise exception 'Round 648 part 2: Round 646 has not been applied, so the caps are not yet each game''s real ceiling. Nothing was changed.';
-  end if;
-  if not exists (select 1 from public.game_score_caps) then
-    raise exception 'Round 648 part 2: public.game_score_caps is empty. Nothing was changed.';
-  end if;
-
-  create temporary table r648_caps on commit drop as
-    select c.game,
-           case when c.max_score is null then null else greatest(c.max_score, 1) end as cap
-      from public.game_score_caps c;
-
-  lock table public.user_scores in exclusive mode;
-
-  create temporary table r648_model on commit drop as
-    select u.user_id, coalesce(t.total, 0)::integer as total
-      from public.user_scores u
-      left join (
-        select d.user_id, sum(d.worth) as total
-          from (
-            select s.user_id,
-                   case when k.cap is null then max(s.score)
-                        else least(max(s.score), k.cap) end as worth
-              from public.user_game_scores s
-              join r648_caps k on k.game = s.game_type
-             group by s.user_id, s.game_type, s.puzzle_date, k.cap
-          ) d
-         group by d.user_id
-      ) t on t.user_id = u.user_id;
-
-  insert into private.r648_totals_bak (user_id, total_points, recomputed_to)
-    select u.user_id, u.total_points, m.total
-      from public.user_scores u
-      join r648_model m on m.user_id = u.user_id
-     where u.total_points is distinct from m.total;
-
-  select coalesce(sum(u.total_points), 0), coalesce(sum(m.total), 0)
-    into v_before, v_after
-    from public.user_scores u
-    join r648_model m on m.user_id = u.user_id;
-
-  update public.user_scores u
-     set total_points = m.total,
-         updated_at = now()
-    from r648_model m
-   where m.user_id = u.user_id
-     and u.total_points is distinct from m.total;
-  get diagnostics v_changed = row_count;
-
-  select count(*) into v_off
-    from public.user_scores u
-    join r648_model m on m.user_id = u.user_id
-   where u.total_points is distinct from m.total;
-  if v_off > 0 then
-    raise exception 'Round 648 part 2: % stored totals still differ from the rule after the update. Everything in this block is rolled back.', v_off;
-  end if;
-
-  select count(*) into v_accounts from r648_model;
-  raise notice 'Round 648 part 2: % of % stored totals recomputed by the rule, % points before and % after; the previous values are in private.r648_totals_bak.', v_changed, v_accounts, v_before, v_after;
-  drop table if exists r648_model;
-  drop table if exists r648_caps;
-end
-$r648_part2$;
-
--- To put every total back exactly as it was before the most recent run:
---   update public.user_scores u
---      set total_points = b.total_points
---     from (select distinct on (user_id) user_id, total_points
---             from private.r648_totals_bak
---            order by user_id, backed_up_at desc) b
---    where b.user_id = u.user_id;
--- and put record_auth_completion back from
--- supabase/migrations/20260914120000_record_auth_completion.sql.
+-- Next, as its own apply_migration once this one has committed:
+-- 20260928_round_648_profile_recompute.sql.
+--
+-- To put the save back, rerun the function from
+-- supabase/migrations/20260914120000_record_auth_completion.sql. File 2's
+-- footer puts the stored totals back.

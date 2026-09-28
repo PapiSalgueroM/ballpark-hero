@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
+import { primeScoreCaps } from '@/lib/scoreCaps';
 import {
   getStreakState,
   getTopPerGameStreaks,
@@ -93,8 +94,14 @@ export function useStreaks(): UseStreaksResult {
   // Idempotent per ET day inside recordVisit itself, so mounting this hook
   // from multiple components in the same page load never inflates the count.
   useEffect(() => {
-    recordVisit();
+    const visited = recordVisit();
     refresh();
+    /* Round 648: points this browser counted without the profile's rule (a
+       tally from before it, or an old tab's) wait for a fresh copy of the caps
+       before they are checked (src/lib/streaks.ts). A player who opens a page
+       and plays nothing would otherwise keep seeing them unchecked, so the
+       copy is asked for here, and only while something waits for it. */
+    if (visited.unchecked.points > 0) primeScoreCaps().then(refresh, () => {});
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
