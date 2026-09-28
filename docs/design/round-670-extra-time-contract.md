@@ -16,9 +16,11 @@ place it departs from the text, with the reason.
 2. **Extra time is played in Champions League knockout ties only, not in the domestic cups.** The
    contract treats every domestic cup as playing extra time. The real rule differs by cup, by round
    and by season, and at least one is known to be the opposite: the Coppa Italia scrapped extra time
-   for every one off game up to and including the quarter finals from 2024-25 (onefootball.com,
-   2024-05-28), and football-italia.net says Coppa Italia matches level after 90 go straight to
-   penalties. Seventeen cups across four eras could not be two source verified in this round, so a
+   for every one off game up to and including the quarter finals from 2024-25, keeping it for the
+   semi finals and the final (football-italia.net, 2024-05-28, and calcioefinanza.it the same day;
+   the onefootball.com page the build first cited carries Football Italia's own article, so it is
+   the same source, not a second one). Seventeen cups across four eras could not be two source
+   verified in this round, so a
    domestic cup keeps exactly the pre 670 rule (level after 90, penalties) and the bracket copy that
    says so stays true. A verified per cup, per season table is the follow up.
 3. **The Champions League rule is verified.** UEFA's own announcement of the abolition
@@ -46,7 +48,56 @@ place it departs from the text, with the reason.
 6. **Momentum.** A match with extra time gets twelve ten minute buckets rather than folding thirty
    minutes into the 81 to 90 bucket, and the chart's axis reads 0', 60', 120' on those.
 
+7. **One rule, both games (Round 670 review).** How a Champions League tie is read now lives once, in
+   `src/lib/uclTieRule.ts` (`uclTieOutcome`, moved out of the Club Manager engine, which re-exports
+   it). Soccer Career's `simulateUCL` settles its ties through it too, 90 minutes and extra time
+   alike. Before the review Soccer Career read extra time on its own goals, so a 1-1 extra time in an
+   away goals season went to penalties while its comment said away goals counted in extra time;
+   now the away side is through, as Paris Saint-Germain were at Chelsea on 11 March 2015 (2-2 after
+   extra time, 3-3 on aggregate, through on away goals). `scripts/simSoccerCareerUcl.mjs` section 7
+   holds it for 2015-16, 1995-96 and 2026-27, with the control `SC_UCL_CONTROL=etaway`.
+
 The fence is `scripts/simExtraTime.mjs` (the contract's `simAddedTime.mjs` is Round A's).
+
+### Sources, with the URLs, so the two host check can be repeated (Round 670 review)
+
+Checked again on 2026-09-28 with WebFetch; each quote below is what the page said that day.
+
+- **Away goals ran on through extra time before 2021-22, and were abolished from 2021-22.**
+  - uefa.com, UEFA media release, 2021-06-24, "Abolition of the away goals rule in all UEFA club
+    competitions":
+    https://www.uefa.com/insideuefa/mediaservices/mediareleases/news/026a-1298aeb73a7a-5b64cb68d920-1000--abolition-of-the-away-goals-rule-in-all-uefa-club-competitions/
+    ("two 15-minute periods of extra time are played at the end of the second leg"; it names "the
+    unfairness, especially in extra time, of obliging the home team to score twice").
+  - si.com, Jenna West, 2018-05-26, "How Does Champions League Extra Time Work?":
+    https://www.si.com/soccer/2018/05/26/champions-league-extra-time-rules
+    ("The away goals rule continues to apply here, so if the away team scores in an extra time, the
+    home team must score twice").
+- **The worked real case, Chelsea 2-2 Paris Saint-Germain after extra time, 11 March 2015** (1-1
+  after 90, a goal each in extra time, 3-3 on aggregate, PSG through on away goals):
+  - nbcsports.com, 2015-03-11:
+    https://www.nbcsports.com/soccer/news/chelsea-3-2-paris-saint-germain
+  - aljazeera.com, 2015-03-11:
+    https://www.aljazeera.com/amp/sports/2015/3/11/psg-heads-to-champions-league-quarterfinal-over-chelsea
+  - uefa.com's match page (the score and the away goals decision; the review found it does not
+    show the extra time detail):
+    https://www.uefa.com/uefachampionsleague/season=2015/matches/round=2000549/match=2014413/postmatch/report/index.html
+- **The Coppa Italia from 2024-25: no extra time in one off rounds up to the quarter finals, extra
+  time kept for the semi finals and the final** (the reason the domestic cups were left alone):
+  - football-italia.net, 2024-05-28:
+    https://football-italia.net/changes-to-coppa-italia-format-for-2024-25/
+    (also carried, under Football Italia's name, by onefootball.com:
+    https://onefootball.com/en/news/changes-to-coppa-italia-format-for-2024-25-season-39553130)
+  - calcioefinanza.it, 2024-05-28:
+    https://www.calcioefinanza.it/2024/05/28/supplementari-coppa-italia-quando-si-giocano/
+  The rule has likely moved more than once (an undated fotmob.com page describes a season with no
+  extra time even in the semi finals and the final; not verified, and not used), which is why a per
+  cup, per season table is the follow up and no cup plays extra time until it exists.
+
+### Still not run (acceptance steps the review lists)
+
+The browser check at 390 by 844 and `simVictoryMoment` need a built `dist` and a browser harness,
+which the review fix round was told not to run. They stay with the release gate.
 
 ## The contract as written
 

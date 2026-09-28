@@ -1,5 +1,56 @@
 # Project state
 
+## FIXED 2026-09-28, NOT ON MAIN: the Round 670 review, every defect (branch `r670-cm-extra-time`)
+
+The adversarial review found one blocker, two majors and eight minors behind the green gates the
+section below reports. All are fixed on the same branch; this section corrects the one below.
+- **Blocker: `simGuideHeadings` was red**, so "79 green" below was wrong: the new guide sentence
+  had no frozen original. The sentence was rewritten (next point but three) and
+  `scripts/data/guideHeadingsFrozen.json` updated with it deliberately, the Round 640 way.
+- **Major: my side had no names from the 99th minute of extra time.** drawSegment wrote "never
+  leaves the pitch" as minute 99, and an injury in extra time took its man off at 99. It is
+  `Infinity` now. `simExtraTime` section 8 checks every event of mine past 90 names a man on my
+  pitch at that minute (about 3,700 to 4,500 events from the 99th minute a run), control `noname`.
+- **Major: section 4 had no control.** `noaet` reports a second leg won in extra time as regular.
+- **Possession** over a second period that ran to 120 was read off the 45 to 120 lambda sum, five
+  thirds of a half. `secondPeriodPossession` reads per half rates at the extra time draw and at
+  every change in it. Section 9: drawing extra time moves possession -0.029 to +0.038 points
+  further from 50 over five samples (the raw sum, control `possinflate`, +2.36), and the same
+  shape at 100 with nothing of mine changed leaves it exactly (control `possstale`). The momentum
+  tilt reads per ninety too (not fenced; it only shades the chart).
+- **The AI final is read.** Section 5 replays twelve final weeks my club was not in, 25 seeds each:
+  about 300 AI finals a run, 69 to 91 to extra time. Control `noaifinal` (only the one legged
+  branch back to pre 670) turns it red.
+- **Copy** in the guide, the help and What's New: the live match and the report say AET, the
+  bracket says the tie went to extra time, and in the away goals seasons a tie level on aggregate
+  but not on away goals is over at 90, with an away goal in extra time still counting.
+- **Soccer Career sibling fixed, one rule for both.** `uclTieOutcome` moved to
+  `src/lib/uclTieRule.ts` (Club Manager re-exports it) and Soccer Career's `simulateUCL` settles
+  every tie through it, extra time included, so a 1-1 extra time in an away goals season puts the
+  away side through, as PSG at Chelsea in March 2015. A decider row carries `afterExtraTime` and
+  the result card says "settled on away goals after extra time". `simSoccerCareerUcl` section 7
+  resettles every tie of 2015-16, 1995-96 and 2026-27 in its own arithmetic (103 to 128 such ties
+  per away goals season over four samples, none in 2026-27), control `etaway`.
+- **The 89 or 90 race.** The viewer asks once at 90 (`onStartExtraTime`, which the hook runs on
+  the latest save) and reads the answer off `live.et` on the next render, so it can no longer run
+  thirty empty minutes or skip extra time the save has. Two tests in
+  `src/test/liveSimMotion.test.tsx`, control `LIVE_MOTION_CONTROL=whistle` in `simLiveSimMotion`.
+- **Stale comments** (ET_DEFLATOR's measured ranges, `onSecondHalf`, `isExtraTimeDue`) and
+  **provenance**: every rule source now has its URL in the contract doc. The onefootball.com page
+  was Football Italia's own article, so calcioefinanza.it is the Coppa Italia's second host.
+- **Gates, on the committed tree.** tsc 0 (exit code read). `simExtraTime` green on its own seed
+  and SIM_SEED 1 to 4, all eleven controls firing on their own sections (noet tolerating 7, 8 and
+  9, which it empties). `simSoccerCareerUcl` green on four seeds, `etaway`, `coinflip` and `noagg`
+  firing. `simLiveSimMotion` green with `whistle` and its nine older controls firing, and
+  `simLiveMatch`'s five controls firing. The six vitest files that import a changed module: 56
+  tests green. The 116 harnesses that read a changed file, run in four lanes each with its own
+  TEMP: 115 green (five import `ROOT/node_modules/react` by path and were rerun with thin react
+  shims in the worktree), `simPrerender` not runnable without a `dist` (and `simFlagshipWeight`'s
+  section 3 skipped for the same reason). `simGuideHeadings`, `simSiteSearch`,
+  `simHarnessAnchors` and `simNoRivalNames` green.
+- **Not done, by instruction:** the browser check at 390 by 844, `simVictoryMoment`,
+  `simMobileChrome` and `simRevealScroll` (they need a build and a browser). No migration.
+
 ## BUILT 2026-09-28, NOT ON MAIN: Round 670, Club Manager plays extra time (branch `r670-cm-extra-time`)
 
 Part B of the stoppage time contract, copied with its departures to
