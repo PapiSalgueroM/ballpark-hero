@@ -51,6 +51,11 @@ export const DISPLAY_CONFED: Record<string, Confederation> = {
   Burundi: 'CAF', 'Central African Republic': 'CAF', Chad: 'CAF',
   'Equatorial Guinea': 'CAF', Mauritania: 'CAF', Seychelles: 'CAF',
   Yemen: 'AFC', Kyrgyzstan: 'AFC',
+  // Round 669: Bangladesh, ready for Hamza Choudhury's row (held in Round 669,
+  // the second site plays him at right back). Checked 2026-09-28 on
+  // inside.fifa.com/associations/BAN (confederation AFC) and saffederation.org
+  // (Bangladesh founded SAFF, which is part of the AFC).
+  Bangladesh: 'AFC',
 };
 
 /** The confederation a nationality string belongs to, or null if the site

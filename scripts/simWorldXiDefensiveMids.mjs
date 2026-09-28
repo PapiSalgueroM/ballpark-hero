@@ -65,7 +65,10 @@
  * check, or reddens another section, exits 4.
  *   section 1, the migration copy:
  *     dollarquote     the last `end $$;` becomes `end $;` (the builder's bug)   lex
+ *     nocommit        the closing `commit;` is dropped                          frame
+ *     innercommit     `commit; begin;` lands between the guards and the insert  txn
  *     guardcount      the staged row guard expects one row fewer                guards
+ *     guardafter      the post write DM count guard adds one row fewer          guards
  *     stagedrift      Ugarte's staged value moved by one dollar                 agree
  *     commented       Ugarte's staged line commented out                        unstaged
  *     extrastaged     a row the record does not write is staged                 extra
@@ -73,6 +76,8 @@
  *     fixmissing      Bennacer's club correction dropped from the SQL           fixUnstaged
  *     dryrunstale     one character of a comment changed after the dry run      dryrun
  *   section 1, the record copy:
+ *     dryrunkept      the dry run's counts after ROLLBACK keep the written rows dryrunoutcome
+ *     dryrunraised    the dry run's result says it raised                       dryrunoutcome
  *     recordcounts    the record's own count of written rows is off by one      counts
  *     fixextra        Bennacer's correction dropped from the record             fixUnrecorded
  *     namesakeflag    Vitinha's namesake declaration dropped                    namesakeflag
@@ -84,7 +89,9 @@
  *     recordtmage     FotMob's birth date for Ugarte moved to 31 December       identityage
  *     recordcitizenship  Transfermarkt's first citizenship for Ugarte changed   citizenship
  *     recordcountry   FotMob plays Ugarte for another country                   country
- *     heldband        a row held for its value is moved inside the band         heldconsistent
+ *     heldband        a row held for its value is moved inside the band         heldvalue
+ *     heldposition    a row held for its position gets a midfield primary       heldposition
+ *     heldwritten     a held row is given a written row's name and club         heldwritten
  *   section 2:
  *     noplayer        Ugarte's 2026 row dropped from what the game is served    named, staged
  *     nosearch        worldXi.ts' search refuses any query with a space         search
@@ -118,12 +125,14 @@ const RECORD = path.join(ROOT, 'scripts/data/defensiveMidfield2026.json');
 const MIGRATION = path.join(ROOT, 'supabase/migrations/20260928_round_669_defensive_midfield_2026.sql');
 const PROJECT = process.env.WXIDM_PROJECT === '1';
 const CONTROLS = {
-  dollarquote: [1, ['lex']], guardcount: [1, ['guards']], stagedrift: [1, ['agree']], commented: [1, ['unstaged']],
+  dollarquote: [1, ['lex']], nocommit: [1, ['frame']], innercommit: [1, ['txn']],
+  guardcount: [1, ['guards']], guardafter: [1, ['guards']], stagedrift: [1, ['agree']], commented: [1, ['unstaged']],
   extrastaged: [1, ['extra']], stagedtwice: [1, ['dupstaged']], fixmissing: [1, ['fixUnstaged']], dryrunstale: [1, ['dryrun']],
+  dryrunkept: [1, ['dryrunoutcome']], dryrunraised: [1, ['dryrunoutcome']],
   recordcounts: [1, ['counts']], fixextra: [1, ['fixUnrecorded']], namesakeflag: [1, ['namesakeflag']],
   recordvalue: [1, ['rate']], recordband: [1, ['band']], recordposition: [1, ['position']], recordprimary: [1, ['primary']],
   recordage: [1, ['age']], recordtmage: [1, ['identityage']], recordcitizenship: [1, ['citizenship']],
-  recordcountry: [1, ['country']], heldband: [1, ['heldconsistent']],
+  recordcountry: [1, ['country']], heldband: [1, ['heldvalue']], heldposition: [1, ['heldposition']], heldwritten: [1, ['heldwritten']],
   noplayer: [2, ['named', 'staged']], nosearch: [2, ['search']],
   normalize: [3, ['cdm']], cmslot: [3, ['slots']],
   namesake: [4, ['namesake']], dupname: [4, ['declared']],
@@ -303,7 +312,7 @@ const ugarteOf = rec => {
   if (rows.length !== 1) refuse(`the record carries ${rows.length} Manuel Ugarte rows, not one`);
   return rows[0];
 };
-if (CONTROL.startsWith('record') || ['fixextra', 'namesakeflag', 'heldband'].includes(CONTROL)) {
+if (CONTROL.startsWith('record') || ['fixextra', 'namesakeflag', 'heldband', 'heldposition', 'heldwritten', 'dryrunkept', 'dryrunraised'].includes(CONTROL)) {
   const u = ugarteOf(record);
   const expect = (got, want, what) => { if (got !== want) refuse(`${what} is ${JSON.stringify(got)}, the control expects ${JSON.stringify(want)}`); };
   if (CONTROL === 'recordcounts') { expect(record.counts.write, record.write.length, "the record's count of written rows"); record.counts.write += 1; }
@@ -330,6 +339,26 @@ if (CONTROL.startsWith('record') || ['fixextra', 'namesakeflag', 'heldband'].inc
     if (h.length !== 1) refuse(`the record holds ${h.length} Jon Gorrotxategi rows for their value, not one`);
     h[0].fotmob.valueEur = Math.round(h[0].transfermarktValueEur * record.valueBand.percentiles.median);
   }
+  if (CONTROL === 'heldposition') {
+    const h = record.held.filter(x => x.name === 'Jerdy Schouten' && x.heldBy === 'position');
+    if (h.length !== 1) refuse(`the record holds ${h.length} Jerdy Schouten rows for their position, not one`);
+    expect(h[0].fotmob.primary, 'Center Back', "Schouten's FotMob primary");
+    h[0].fotmob.primary = 'Defensive Midfielder';
+  }
+  if (CONTROL === 'heldwritten') {
+    const h = record.held.filter(x => x.name === 'Wouter Burger' && x.club === 'TSG 1899 Hoffenheim');
+    if (h.length !== 1) refuse(`the record holds ${h.length} Wouter Burger rows, not one`);
+    h[0].name = u.name;
+    h[0].club = u.club;
+  }
+  if (CONTROL === 'dryrunkept') {
+    expect(record.dryRun?.afterRollback?.dm2026, record.existingChecked.length, "the dry run's Defensive Midfield count after ROLLBACK");
+    record.dryRun.afterRollback.dm2026 += record.write.length;
+  }
+  if (CONTROL === 'dryrunraised') {
+    expect(record.dryRun?.result, 'ran to the end, no exception', "the dry run's result");
+    record.dryRun.result = 'raised: Round 669: expected 46 checked Defensive Midfield rows';
+  }
 }
 {
   const u = ugarteOf(recordDisk);
@@ -339,6 +368,22 @@ if (CONTROL.startsWith('record') || ['fixextra', 'namesakeflag', 'heldband'].inc
     const anchor = 'end $$;\n\ncommit;';
     once(sqlText, anchor, 'the migration copy');
     sqlText = sqlText.replace(anchor, () => 'end $;\n\ncommit;');
+  }
+  if (CONTROL === 'nocommit') {
+    const anchor = 'end $$;\n\ncommit;';
+    once(sqlText, anchor, 'the migration copy');
+    sqlText = sqlText.replace(anchor, () => 'end $$;\n');
+  }
+  if (CONTROL === 'innercommit') {
+    const anchor = '\ninsert into public.player_market_values (';
+    once(sqlText, anchor, 'the migration copy', sqlCode());
+    sqlText = sqlText.replace(anchor, () => `\ncommit;\nbegin;\n${anchor}`);
+  }
+  if (CONTROL === 'guardafter') {
+    const E = recordDisk.existingChecked.length, n = recordDisk.write.length;
+    const anchor = `if n <> ${E} + ${n} then`;
+    once(sqlText, anchor, 'the migration copy', sqlCode());
+    sqlText = sqlText.replace(anchor, () => `if n <> ${E} + ${n - 1} then`);
   }
   if (CONTROL === 'guardcount') {
     const n = recordDisk.write.length;
@@ -384,10 +429,10 @@ console.log('1) the record and the migration');
   const lex = lexSql(sqlText);
   if (lex.error) fail('lex', `the migration does not lex: ${lex.error}`);
   const top = lex.statements.map(s => s.text.toLowerCase());
-  if (top[0] !== 'begin') fail('lex', `the migration's first statement is not begin: ${JSON.stringify((top[0] || '').slice(0, 40))}`);
-  if (!lex.error && top[top.length - 1] !== 'commit') fail('lex', `the migration's last statement is not commit: ${JSON.stringify((top[top.length - 1] || '').slice(0, 40))}`);
+  if (top[0] !== 'begin') fail('frame', `the migration's first statement is not begin: ${JSON.stringify((top[0] || '').slice(0, 40))}`);
+  if (!lex.error && top[top.length - 1] !== 'commit') fail('frame', `the migration's last statement is not commit: ${JSON.stringify((top[top.length - 1] || '').slice(0, 40))}`);
   const txn = lex.statements.slice(1, -1).filter(s => /^(begin|commit|rollback|end|abort|start\s+transaction|savepoint|release)\b/i.test(s.text));
-  for (const s of txn) fail('lex', `a transaction statement sits inside the migration at line ${s.line}: ${s.text.slice(0, 40)}`);
+  for (const s of txn) fail('txn', `a transaction statement sits inside the migration at line ${s.line}: ${s.text.slice(0, 40)}`);
 
   /* every number a guard compares with is the record's own */
   const N = record.write.length;
@@ -454,12 +499,12 @@ console.log('1) the record and the migration');
   /* every held row is held for the reason it gives, and none is written */
   const written = new Set(record.write.map(key));
   for (const h of record.held) {
-    if (written.has(key(h))) fail('heldconsistent', `${h.name} (${h.club}) is both held and written`);
+    if (written.has(key(h))) fail('heldwritten', `${h.name} (${h.club}) is both held and written`);
     if (h.heldBy === 'valueBand') {
       const ratio = h.fotmob.valueEur / h.transfermarktValueEur;
-      if (ratio >= band.low && ratio <= band.high) fail('heldconsistent', `${h.name} is held for his value, but FotMob's figure is ${ratio.toFixed(3)} of Transfermarkt's, inside the band`);
+      if (ratio >= band.low && ratio <= band.high) fail('heldvalue', `${h.name} is held for his value, but FotMob's figure is ${ratio.toFixed(3)} of Transfermarkt's, inside the band`);
     }
-    if (h.heldBy === 'position' && !OUTSIDE_MIDFIELD.has(h.fotmob.primary)) fail('heldconsistent', `${h.name} is held for his position, but FotMob's primary is ${h.fotmob.primary}, a midfield role`);
+    if (h.heldBy === 'position' && !OUTSIDE_MIDFIELD.has(h.fotmob.primary)) fail('heldposition', `${h.name} is held for his position, but FotMob's primary is ${h.fotmob.primary}, a midfield role`);
   }
 
   /* the dry run the record carries is a run of this file, byte for byte */
@@ -468,8 +513,8 @@ console.log('1) the record and the migration');
   if (!dr) fail('dryrun', 'the record carries no dry run of the migration');
   else {
     if (dr.migrationSha256 !== sha) fail('dryrun', `the dry run was of a different file (sha256 ${String(dr.migrationSha256).slice(0, 12)}, the file on disk is ${sha.slice(0, 12)}): run it again and record it`);
-    if (dr.result !== 'ran to the end, no exception') fail('dryrun', `the dry run's result is ${JSON.stringify(dr.result)}`);
-    if (dr.before?.dm2026 !== E || dr.afterRollback?.dm2026 !== E || dr.before?.total2026 !== dr.afterRollback?.total2026) fail('dryrun', `the dry run's counts do not show an unchanged table: ${JSON.stringify({ before: dr.before, afterRollback: dr.afterRollback })}`);
+    if (dr.result !== 'ran to the end, no exception') fail('dryrunoutcome', `the dry run's result is ${JSON.stringify(dr.result)}`);
+    if (dr.before?.dm2026 !== E || dr.afterRollback?.dm2026 !== E || dr.before?.total2026 !== dr.afterRollback?.total2026) fail('dryrunoutcome', `the dry run's counts do not show an unchanged table: ${JSON.stringify({ before: dr.before, afterRollback: dr.afterRollback })}`);
   }
   console.log(`   ${staged.length} staged rows against ${N} in the record; ${gotFix.size} corrections against ${wantFix.size}; ${record.held.length} held; ${lex.statements.length} top level statements, begin to commit${dr ? `; dry run of ${dr.ranOn}` : ''}`);
 }
