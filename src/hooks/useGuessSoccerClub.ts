@@ -210,7 +210,9 @@ export function useGuessSoccerClub() {
   useGameCompletion(
     'guess-soccer-club',
     gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost',
-    gameState?.score ?? 0
+    gameState?.score ?? 0,
+    0,
+    gameState?.mode === 'daily'
   );
 
   /* ROUND 428: the daily board is kept current on every move, the fields

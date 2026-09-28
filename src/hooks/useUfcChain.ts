@@ -146,7 +146,7 @@ export function useUfcChain() {
     return UFC_FIGHTERS;
   }, [gameState]);
 
-  useGameCompletion('ufc-chain', gameState?.gameStatus === 'ended', gameState?.score ?? 0);
+  useGameCompletion('ufc-chain', gameState?.gameStatus === 'ended', gameState?.score ?? 0, 0, gameState?.mode === 'daily');
 
   return {
     gameState,

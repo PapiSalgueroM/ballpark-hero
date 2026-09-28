@@ -65,7 +65,7 @@ export default function FreeKickBoard() {
   const setup = kicks[kickIdx] ?? null;
   const isDone = phase === 'done';
   const bookedAlready = mode === 'daily' && restored !== null;
-  useGameCompletion(SLUG, isDone && !bookedAlready, score, goals);
+  useGameCompletion(SLUG, isDone && !bookedAlready, score, goals, mode === 'daily');
 
   /* The power meter sweeps while the player holds, which is the timing part of
      the input: it is not a slider you set, it is a bar you stop. */

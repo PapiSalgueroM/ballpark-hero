@@ -133,7 +133,7 @@ const PackBattle = () => {
   const correctCalls = calls.filter(c => c === true).length;
 
   // Score = total banked value (USD), correctAnswers = number of correct calls.
-  useGameCompletion('pack-battle', isComplete, bankedValue, correctCalls);
+  useGameCompletion('pack-battle', isComplete, bankedValue, correctCalls, playMode === 'daily');
 
   const { grade, headline } = useMemo(() => gradePack(result), [result]);
   const emojiGrid = useMemo(() => buildPackEmojiGrid(result), [result]);

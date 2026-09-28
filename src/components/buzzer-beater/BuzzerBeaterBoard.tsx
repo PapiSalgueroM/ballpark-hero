@@ -77,7 +77,7 @@ export default function BuzzerBeaterBoard() {
   const setup = shots[shotIdx] ?? null;
   const isDone = phase === 'done';
   const bookedAlready = mode === 'daily' && restored !== null;
-  useGameCompletion(SLUG, isDone && !bookedAlready, score, made);
+  useGameCompletion(SLUG, isDone && !bookedAlready, score, made, mode === 'daily');
 
   /* The strength bar sweeps while the player holds, which is the timing part of
      the input: it is not a slider you set, it is a bar you stop. It is absolute

@@ -76,7 +76,7 @@ export function useHofOrBust(): HofState {
   const status: 'voting' | 'revealed' = userVote ? 'revealed' : 'voting';
   const isComplete = status === 'revealed';
 
-  useGameCompletion('hof-or-bust', isComplete && mode === 'daily', score, userVote ? 1 : 0);
+  useGameCompletion('hof-or-bust', isComplete, score, userVote ? 1 : 0, mode === 'daily');
 
   // Fetch community votes when revealed
   useEffect(() => {

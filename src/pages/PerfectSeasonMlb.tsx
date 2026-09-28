@@ -23,7 +23,7 @@ import {
 import {
   PerfectSeasonTheme, getDailyTheme, applyTheme, buildVerificationLine, themesForSport,
 } from '@/lib/perfectSeasonThemes';
-import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 const SPORT_KEY = 'mlb';
 
@@ -243,20 +243,17 @@ const PerfectSeasonMlb = () => {
 
   // Round 299, the scoring audit: finishing a season never recorded a play,
   // so a run earned no streak day, no played-today credit and no points.
-  // The season landing on the final record is the completion moment. One
-  // row per run (the ref, reset by restart), score is the win count the
-  // result screen leads with.
-  const completionSaved = useRef(false);
-  useEffect(() => {
-    if (phase !== 'done' || !sim || completionSaved.current) return;
-    completionSaved.current = true;
-    recordCompletion('/perfect-season-mlb', sim.wins, getCurrentPlayerName());
-  }, [phase, sim]);
+  // The season landing on the final record is the completion moment, score
+  // is the win count the result screen leads with. Round 645: through the
+  // shared recorder, which records the transition once per run (restart
+  // takes the phase back, re-arming it), and only the daily is ranked. A
+  // classic, hard or decade season is a play, never a record: no day board
+  // row, no points, no daily key.
+  useGameCompletion('perfect-season-mlb', phase === 'done' && !!sim, sim?.wins ?? 0, 0, mode === 'daily');
 
   const skipSim = () => setRevealed(MLB_GAMES);
 
   const restart = () => {
-    completionSaved.current = false;
     setPicks(Object.fromEntries(MLB_SLOTS.map(s => [s.key, null])));
     setUsedNames(new Set());
     setSelected(null);

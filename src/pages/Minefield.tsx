@@ -47,7 +47,7 @@ const Minefield = () => {
   const [revealDone, setRevealDone] = useState(false);
 
   // Daily completion fires once the whole 3-board run is finished.
-  useGameCompletion('minefield', phase === 'done' && gameMode === 'daily', score, roundsWon);
+  useGameCompletion('minefield', phase === 'done', score, roundsWon, gameMode === 'daily');
 
   const round: MinefieldRound | undefined = rounds[roundIdx];
   const totalCorrect = round ? round.tiles.filter(t => !t.isMine).length : 0;

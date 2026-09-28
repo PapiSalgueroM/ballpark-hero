@@ -114,7 +114,7 @@ export default function GauntletBoard<P>({ config, children }: Props<P>) {
   }, [phase, run, shownMatches]);
 
   const isDone = phase === 'done';
-  useGameCompletion(config.gameId, run !== null, run?.score ?? 0, run?.roundsCleared ?? 0);
+  useGameCompletion(config.gameId, run !== null, run?.score ?? 0, run?.roundsCleared ?? 0, mode === 'daily');
 
   const pick = draft && phase === 'drafting' ? draft.picks[pickIndex] : null;
   const dailyDone = phase === 'setup' && loadDailyRun(config, todayStr) !== null;

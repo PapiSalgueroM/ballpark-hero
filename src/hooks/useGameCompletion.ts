@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
-import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import { recordCompletion, recordUnrankedPlay, getCurrentPlayerName } from '@/lib/completions';
 import { getNewlyEarnedBadges } from '@/lib/badges';
 import { consumeRestoredFinish } from '@/lib/restoredFinish';
 
@@ -32,7 +32,16 @@ export function useGameCompletion(
   /* Round 644: undefined records a play with no score, the row the recorder
      already writes when a game has no ranked number (Crowd Says). */
   score: number | undefined,
-  correctAnswers: number = 0
+  correctAnswers: number = 0,
+  /* Round 645: false for a finish outside the daily (Unlimited, free play,
+     a new season, versus). Such a finish is a play, never a record: it is
+     routed to recordUnrankedPlay, which writes no score, no signed in save
+     and no daily key, so the day board stays one attempt per player and a
+     free run pays no points. A game with a daily and a free mode under one
+     slug passes its mode here (mode === 'daily'); a game whose recorder
+     reads daily only state leaves the default. scripts/simRankedRecorder.mjs
+     reads every call site and fails on a multi mode game that does neither. */
+  ranked: boolean = true
 ) {
   const { user, profile, refreshProfile } = useAuth();
   const trackedRef = useRef(false);
@@ -67,13 +76,19 @@ export function useGameCompletion(
     /* A finish the daily hook restored after mount said so first. */
     if (consumeRestoredFinish(gameSlug)) return;
 
+    /* Round 645: a free run is a play, not a record. */
+    if (!ranked) {
+      recordUnrankedPlay(`/${gameSlug}`);
+      return;
+    }
+
     recordCompletion(`/${gameSlug}`, score, getCurrentPlayerName(profile), correctAnswers);
 
     // Badge toasts, best effort, guest or signed in.
     getNewlyEarnedBadges(profile)
       .then(newBadges => newBadges.forEach(b => toast.success(`Badge unlocked ${b.emoji}`, { description: `${b.name} - ${b.desc}` })))
       .catch(() => { /* best effort */ });
-  }, [isComplete, gameSlug, score, correctAnswers, profile]);
+  }, [isComplete, gameSlug, score, correctAnswers, profile, ranked]);
 
   /* The lib announces the signed in save with a second
      game-completion-saved event; refresh the profile then so the header

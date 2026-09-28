@@ -234,7 +234,7 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
     return labels;
   }, [run]);
 
-  useGameCompletion(game.gameId, phase === 'done', score, favorite ? statesOf(owners, favorite).length : 0);
+  useGameCompletion(game.gameId, phase === 'done', score, favorite ? statesOf(owners, favorite).length : 0, mode === 'daily');
 
   /* Round 476: the call card sits under the map, the wiped-out line, the
      standings toggle and, in the recap, a list of every game. Measured on a

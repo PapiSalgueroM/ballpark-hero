@@ -195,7 +195,7 @@ export function useTennisPlayer() {
     return ensureAnswerInList(allPlayers, gameState.puzzle.player_name, p => p.player_name, gameState.puzzle);
   }, [allPlayers, gameState?.puzzle]);
 
-  useGameCompletion('guess-tennis-player', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0);
+  useGameCompletion('guess-tennis-player', gameState?.gameStatus === 'won' || gameState?.gameStatus === 'lost', gameState?.score ?? 0, 0, gameState?.mode === 'daily');
 
   /* ROUND 428: the daily board is kept current on every move, the fields
      validate reads back. Unlimited is never written. */

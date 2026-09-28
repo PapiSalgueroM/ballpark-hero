@@ -114,7 +114,7 @@ export default function PlayerStockMarket() {
     setPhase('done');
   };
 
-  useGameCompletion(SLUG, finish !== null, finish?.score ?? 0, finish ? finish.holdings.filter(h => h.final > h.price).length : 0);
+  useGameCompletion(SLUG, finish !== null, finish?.score ?? 0, finish ? finish.holdings.filter(h => h.final > h.price).length : 0, mode === 'daily');
 
   const step = phase === 'stepping' ? steps[stepIndex] : null;
   const prevTotal = step ? (stepIndex === 0 ? holdings.reduce((s, h) => s + h.price, 0) : steps[stepIndex - 1].total) : 0;

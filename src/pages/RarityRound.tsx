@@ -252,7 +252,8 @@ const RarityRound = () => {
   // migration stamps after the new client is live), and until that has
   // happened there is no standing rather than a wrong one.
   useEffect(() => {
-    if (!isComplete || !rankedRun) { setTodayStanding(null); return; }
+    /* Round 645: an Unlimited run is not on the day board, so it has no standing on it. */
+    if (!isComplete || !rankedRun || playMode !== 'daily') { setTodayStanding(null); return; }
     let cancelled = false;
     (async () => {
       try {
@@ -277,9 +278,9 @@ const RarityRound = () => {
       } catch { /* standing is a bonus */ }
     })();
     return () => { cancelled = true; };
-  }, [isComplete, rankedRun, recordedScore]);
+  }, [isComplete, rankedRun, recordedScore, playMode]);
 
-  useGameCompletion('rarity-round', isComplete, rankedRun ? recordedScore : undefined, results.length);
+  useGameCompletion('rarity-round', isComplete, rankedRun ? recordedScore : undefined, results.length, playMode === 'daily');
 
   const emojiGrid = useMemo(() => buildEmojiGrid(results, rarityMode), [results, rarityMode]);
 

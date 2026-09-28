@@ -118,7 +118,7 @@ export function useShirtNumber(): ShirtNumberState {
 
   // ---- COMPLETION -----------------------------------------------------------
   const isComplete = status === 'won' || status === 'lost';
-  useGameCompletion('shirt-number', isComplete && mode === 'daily', score);
+  useGameCompletion('shirt-number', isComplete, score, 0, mode === 'daily');
 
   // ---- CALLBACKS ------------------------------------------------------------
 
