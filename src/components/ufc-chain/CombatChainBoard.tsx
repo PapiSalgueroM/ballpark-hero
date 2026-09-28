@@ -283,7 +283,8 @@ export function CombatChainBoard() {
                   onClick={handleReset}
                   className="w-full bg-red-600 hover:bg-red-700 text-white"
                 >
-                  Play Again
+                  {/* Round 645 part three: today's daily is played once */}
+                  {gameState.mode === 'daily' ? 'Back to modes' : 'Play Again'}
                 </Button>
                 
                 <ShareButtons 

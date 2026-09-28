@@ -1,18 +1,80 @@
-import { useState, useCallback } from 'react';
-import { GameState, GameMode, WeightClass, getChainLengthMultiplier, getEarnedBadge } from '@/types/ufcChain';
+import { useState, useCallback, useEffect, useRef } from 'react';
+import { GameState, GameMode, WeightClass, ChainLink, UfcFighter, getChainLengthMultiplier, getEarnedBadge } from '@/types/ufcChain';
 import { UFC_FIGHTERS, getFightersWhoBeat, getFightResult, getRandomStartingFighter, getDailyStartingFighter, getHallOfFamers, getFightersByWeightClass } from '@/data/ufcChainData';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { getTodayET } from '@/lib/dateUtils';
+import { readChainDaily, writeChainDaily } from '@/lib/chainDaily';
+import { markRestoredFinish } from '@/lib/restoredFinish';
 
 const CHAMPIONSHIP_BONUS = 50;
+const SLUG = 'ufc-chain';
+
+/* Round 645 part three: today's chain as it was left, rebuilt from the
+   shared record (src/lib/chainDaily.ts). Every link is looked up in the
+   bundled fight results and must really have beaten the one before it, and
+   the bonus, the score and the badge are derived by the same rules makeGuess
+   plays by, so the record carries names and nothing a player could inflate. */
+function restoreDaily(today: string): GameState | null {
+  const rec = readChainDaily(SLUG, today, getDailyStartingFighter(today).name);
+  if (!rec) return null;
+  const fighters: UfcFighter[] = [];
+  for (const l of rec.links) {
+    const f = UFC_FIGHTERS.find(x => x.name === l.name);
+    if (!f) return null;
+    fighters.push(f);
+  }
+  const chain: ChainLink[] = [];
+  let rawScore = 0;
+  for (let i = 0; i < fighters.length; i += 1) {
+    if (i === 0) { chain.push({ fighter: fighters[0] }); continue; }
+    const fight = getFightResult(fighters[i].name, fighters[i - 1].name);
+    if (!fight) return null;
+    const bonusPoints = fight.wasChampionshipFight ? CHAMPIONSHIP_BONUS : 0;
+    chain[i - 1].defeatedBy = fighters[i];
+    chain.push({ fighter: fighters[i], bonusPoints });
+    rawScore += 100 + bonusPoints;
+  }
+  let correctAnswer: UfcFighter | undefined;
+  if (rec.correctAnswer !== null) {
+    correctAnswer = UFC_FIGHTERS.find(x => x.name === rec.correctAnswer);
+    if (!correctAnswer) return null;
+  }
+  const chainLength = chain.length - 1;
+  return {
+    currentFighter: fighters[fighters.length - 1],
+    chain,
+    score: Math.floor(rawScore * getChainLengthMultiplier(chainLength)),
+    rawScore,
+    gameStatus: rec.ended ? 'ended' : 'playing',
+    usedFighters: new Set(fighters.map(f => f.name)),
+    mode: 'daily',
+    ...(rec.ended ? { gameOverReason: rec.reason ?? '', correctAnswer, earnedBadge: getEarnedBadge(chainLength) } : {}),
+  };
+}
 
 export function useUfcChain() {
+  /* Round 428's rule: the day is pinned at mount, so a session that crosses
+     midnight ET keeps dealing and filing the day it started on. */
+  const todayStr = useRef(getTodayET()).current;
   const [gameState, setGameState] = useState<GameState | null>(null);
 
   const startGame = useCallback((mode: GameMode, weightClass?: WeightClass) => {
-    let startingFighter;
-    
+    /* Round 645 part three: today's daily is dealt once. A finished chain
+       comes back finished (and is not a new finish, so it says so before it
+       is set), and one left part way comes back on the link it was left on. */
     if (mode === 'daily') {
-      startingFighter = getDailyStartingFighter();
+      const saved = restoreDaily(todayStr);
+      if (saved) {
+        if (saved.gameStatus === 'ended') markRestoredFinish(SLUG);
+        setGameState(saved);
+        return;
+      }
+    }
+
+    let startingFighter;
+
+    if (mode === 'daily') {
+      startingFighter = getDailyStartingFighter(todayStr);
     } else if (mode === 'hall-of-fame') {
       startingFighter = getRandomStartingFighter({ hallOfFameOnly: true });
     } else if (mode === 'weight-class' && weightClass) {
@@ -31,7 +93,7 @@ export function useUfcChain() {
       mode,
       selectedWeightClass: weightClass,
     });
-  }, []);
+  }, [todayStr]);
 
   const makeGuess = useCallback((guessedFighterName: string) => {
     if (!gameState || gameState.gameStatus !== 'playing') return;
@@ -145,6 +207,19 @@ export function useUfcChain() {
     }
     return UFC_FIGHTERS;
   }, [gameState]);
+
+  /* Round 645 part three: the daily chain is filed on every link and on the
+     end, so a refresh brings it back where it was instead of dealing the same
+     fighter again with the answers known. */
+  useEffect(() => {
+    if (!gameState || gameState.mode !== 'daily') return;
+    writeChainDaily(SLUG, todayStr, {
+      links: gameState.chain.map(l => ({ name: l.fighter.name })),
+      ended: gameState.gameStatus === 'ended',
+      reason: gameState.gameOverReason ?? null,
+      correctAnswer: gameState.correctAnswer?.name ?? null,
+    });
+  }, [gameState, todayStr]);
 
   useGameCompletion('ufc-chain', gameState?.gameStatus === 'ended', gameState?.score ?? 0);
 

@@ -212,22 +212,26 @@ export function getRandomStartingFighter(options?: {
   return eligibleFighters[Math.floor(Math.random() * eligibleFighters.length)];
 }
 
-export function getDailyStartingFighter(options?: { 
-  weightClass?: WeightClass; 
+/* Round 645 part three: the day is the ET date the hook pinned at mount
+   (YYYY-MM-DD), the site's one date authority. It used to be the viewer's
+   own local calendar date, so the starter rolled at local midnight while the
+   day's record and completion are filed against ET: a player west of ET got
+   the previous ET day's starter again on the new ET day, with the chain
+   already known. */
+export function getDailyStartingFighter(dateString: string, options?: {
+  weightClass?: WeightClass;
   hallOfFameOnly?: boolean;
 }): UfcFighter {
   let eligibleFighters = UFC_FIGHTERS.filter(fighter => fighter.losses > 0);
-  
+
   if (options?.weightClass) {
     eligibleFighters = eligibleFighters.filter(f => f.weightClass === options.weightClass);
   }
-  
+
   if (options?.hallOfFameOnly) {
     eligibleFighters = eligibleFighters.filter(f => f.isHallOfFamer);
   }
-  
-  const today = new Date();
-  const dateString = `${today.getFullYear()}-${today.getMonth()}-${today.getDate()}`;
+
   let hash = 0;
   for (let i = 0; i < dateString.length; i++) {
     hash = ((hash << 5) - hash) + dateString.charCodeAt(i);

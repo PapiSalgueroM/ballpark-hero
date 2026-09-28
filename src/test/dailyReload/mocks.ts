@@ -24,7 +24,9 @@ const shared = vi.hoisted(() => {
   const tables = new Map<string, unknown>();
   const rpcs = new Map<string, unknown>();
   const pools = new Map<string, unknown>();
+  const functions = new Map<string, unknown>();
   const silenced = { count: 0 };
+  const restreamed = { count: 0 };
 
   const IGNORED = new Set(['toJSON', '$$typeof', 'constructor', 'asymmetricMatch', 'nodeType', 'length', 'name']);
 
@@ -58,6 +60,19 @@ const shared = vi.hoisted(() => {
         if (prop === 'rpc') return (name: unknown) => build('rpc', String(name), []);
         if (prop === 'auth') return build('auth', null, []);
         if (prop === 'channel') return (name: unknown) => build('channel', String(name), []);
+        /* Round 645 part three: an edge function answers only when a driver
+           registered it (setFunctionFixture); any other call throws exactly
+           as the stub always did, so no other row changes. */
+        if (prop === 'functions') {
+          return {
+            invoke: (name: unknown, opts?: { body?: unknown }) => {
+              const fx = functions.get(String(name));
+              if (fx === undefined) throw new TypeError(`supabase.functions.invoke('${String(name)}') has no fixture`);
+              const data = typeof fx === 'function' ? (fx as (body: unknown) => unknown)(opts?.body) : fx;
+              return Promise.resolve({ data, error: null });
+            },
+          };
+        }
         return () => build(root, table, [...calls, String(prop)]);
       },
       apply() { return build(root, table, calls); },
@@ -76,7 +91,7 @@ const shared = vi.hoisted(() => {
     updateProfile: async () => ({ error: null }),
   };
 
-  return { recordCompletion: vi.fn(), tables, rpcs, pools, silenced, auth, supabase: build('root', null, []) };
+  return { recordCompletion: vi.fn(), tables, rpcs, pools, functions, silenced, restreamed, auth, supabase: build('root', null, []) };
 });
 
 vi.mock('@/integrations/supabase/client', () => ({
@@ -176,6 +191,43 @@ vi.mock('@/lib/rarityRound', async (importOriginal) => {
   };
 });
 
+/* Combat Chain's daily starter, pinned while a 'ufcStarter' fixture is
+   registered. The real pick is a hash of the day, and nine of its sixty
+   possible starters have no recorded winner in the bundled results, so on
+   those days no link can be added and a row that has to play one link would
+   be red for the calendar rather than for the code. With no fixture the real
+   pick runs. */
+vi.mock('@/data/ufcChainData', async (importOriginal) => {
+  const real = await importOriginal<typeof import('@/data/ufcChainData')>();
+  return {
+    ...real,
+    getDailyStartingFighter: (...args: Parameters<typeof real.getDailyStartingFighter>) => {
+      const fx = shared.pools.get('ufcStarter');
+      return (fx ?? real.getDailyStartingFighter(...args)) as ReturnType<typeof real.getDailyStartingFighter>;
+    },
+  };
+});
+
+/* Round 645 part three, the restream control: with
+   DAILY_RELOAD_CONTROL=restream the arcade spray stream restarts from the top
+   on a resume instead of carrying on from the draws the part played run
+   filed. That is the shape of the regression (the stream re-seeded, every
+   remaining shot sprayed with numbers the player has already seen), and
+   assertion 6's final comparison must catch it on every arcade row. */
+vi.mock('@/lib/arcadeRecord', async (importOriginal) => {
+  const real = await importOriginal<typeof import('@/lib/arcadeRecord')>();
+  return {
+    ...real,
+    countedLehmer: (seed: number, skip = 0) => {
+      if (process.env.DAILY_RELOAD_CONTROL === 'restream' && skip > 0) {
+        shared.restreamed.count += 1;
+        return real.countedLehmer(seed, 0);
+      }
+      return real.countedLehmer(seed, skip);
+    },
+  };
+});
+
 /* The shared search box, replaced only while an 'autocomplete' fixture is
    registered: a plain input plus one "pick <name>" button per fixture
    entity, so a driver can hand a page the entity a real search would have
@@ -231,9 +283,16 @@ export function setRpcFixture(name: string, value: unknown): void {
  *  loadMillionairePool resolves, or a function (mode, realLib) => that.
  *  'pack': the PackCard[] fetchPackPool resolves. 'rarity': the PoolEntry[]
  *  every Rarity Round category's fetchPool resolves. 'autocomplete': the
- *  PlayerEntity[] the stubbed search box offers as pick buttons. */
-export function setPoolFixture(name: 'nbaStatLine' | 'squad' | 'millionaire' | 'pack' | 'rarity' | 'autocomplete', value: unknown): void {
+ *  PlayerEntity[] the stubbed search box offers as pick buttons.
+ *  'ufcStarter': the UfcFighter Combat Chain's daily deals. */
+export function setPoolFixture(name: 'nbaStatLine' | 'squad' | 'millionaire' | 'pack' | 'rarity' | 'autocomplete' | 'ufcStarter', value: unknown): void {
   shared.pools.set(name, value);
+}
+
+/** What `supabase.functions.invoke(name, {body})` resolves to as data, or a
+ *  function of the body returning it. Unregistered names throw. */
+export function setFunctionFixture(name: string, value: unknown): void {
+  shared.functions.set(name, value);
 }
 
 /** How many marks the silent control swallowed so far. */
@@ -241,10 +300,16 @@ export function silencedMarks(): number {
   return shared.silenced.count;
 }
 
+/** How many resumes the restream control sent back to the top of the stream. */
+export function restreamedRuns(): number {
+  return shared.restreamed.count;
+}
+
 /** Called by the test at the start of every row. */
 export function resetMocks(): void {
   shared.tables.clear();
   shared.rpcs.clear();
   shared.pools.clear();
+  shared.functions.clear();
   shared.recordCompletion.mockClear();
 }

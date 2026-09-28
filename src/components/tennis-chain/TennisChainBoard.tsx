@@ -237,7 +237,8 @@ export function TennisChainBoard() {
 
               <div className="space-y-4">
                 <Button onClick={handleReset} className="w-full bg-emerald-600 hover:bg-emerald-700 text-black">
-                  Play Again
+                  {/* Round 645 part three: today's daily is played once */}
+                  {gameState.mode === 'daily' ? 'Back to modes' : 'Play Again'}
                 </Button>
                 <ShareButtons
                   score={`${gameState.score} points • Chain of ${chainLength}${gameState.earnedBadge ? ` • ${gameState.earnedBadge.emoji} ${gameState.earnedBadge.name}` : ''}`}

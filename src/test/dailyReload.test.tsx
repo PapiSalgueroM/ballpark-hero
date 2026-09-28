@@ -49,7 +49,7 @@ import './dailyReload/mocks';
 import { describe, it, expect, beforeAll } from 'vitest';
 import { getTodayET } from '@/lib/dateUtils';
 import { consumeRestoredFinish, markRestoredFinish } from '@/lib/restoredFinish';
-import { recordCompletion, resetMocks, silencedMarks } from './dailyReload/mocks';
+import { recordCompletion, resetMocks, restreamedRuns, silencedMarks } from './dailyReload/mocks';
 import { DRIVER_FIELDS, type AnyDriver } from './dailyReload/driver';
 
 const CONTROL = process.env.DAILY_RELOAD_CONTROL || '';
@@ -235,9 +235,11 @@ describe('daily reload', () => {
             for (const k of dropped) localStorage.removeItem(k);
             console.log(`DAILY_RELOAD_MIDRUN ${driver.slug} dropped ${dropped.length} key(s)`);
           }
+          const restreamBefore = restreamedRuns();
           api = await driver.mount();
           try {
             await driver.enterDaily(api);
+            if (CONTROL === 'restream') console.log(`DAILY_RELOAD_RESTREAM ${driver.slug} restarted ${restreamedRuns() - restreamBefore} stream(s)`);
             expect(driver.status(api), 'the reloaded daily should come back mid run, not finished and not on a fresh board').toBe('playing');
             expect(progress(api), 'the reloaded board should be on the same step with the same score and count').toBe(mid);
             expect(recordCompletion.mock.calls.length - before, 'resuming records nothing').toBe(0);

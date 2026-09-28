@@ -1,10 +1,14 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { TennisChainState, TennisChainMode, getTennisChainMultiplier, getTennisEarnedBadge, TENNIS_CHAIN_STARTERS } from '@/types/tennisChain';
 import { supabase } from '@/integrations/supabase/client';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import type { PlayerSourceConfig } from '@/lib/playerSearch';
 import { toast } from 'sonner';
 import { getTodayET } from '@/lib/dateUtils';
+import { readChainDaily, writeChainDaily } from '@/lib/chainDaily';
+import { markRestoredFinish } from '@/lib/restoredFinish';
+
+const SLUG = 'tennis-chain';
 
 /**
  * Tennis player pool for the shared PlayerAutocomplete input (see
@@ -28,12 +32,13 @@ export const TENNIS_PLAYER_SOURCE: PlayerSourceConfig = {
   prominenceLimit: 1000,
 };
 
-function getDailyStarter(): string {
+function getDailyStarter(today: string): string {
   /* ROUND 366: ET, not UTC. Found by simDailyPoolOrder section 4 rather than
      by the audit, which did not reach these two. toISOString is UTC, so the
      daily starter rolled at 8pm ET while the completion filed against
-     getEtDateString, putting the puzzle and the score on different days. */
-  const today = getTodayET();
+     getEtDateString, putting the puzzle and the score on different days.
+     Round 645 part three: the day comes in from the hook's mount pin, so the
+     starter and the record it is filed under always name the same day. */
   let hash = 0;
   for (let i = 0; i < today.length; i++) {
     hash = ((hash << 5) - hash + today.charCodeAt(i)) | 0;
@@ -45,12 +50,47 @@ function getRandomStarter(): string {
   return TENNIS_CHAIN_STARTERS[Math.floor(Math.random() * TENNIS_CHAIN_STARTERS.length)];
 }
 
+/* Round 645 part three: today's chain as it was left, rebuilt from the
+   shared record (src/lib/chainDaily.ts). The score, the badge and the used
+   names are derived from the links by the same rules makeGuess plays by. */
+function restoreDaily(today: string): TennisChainState | null {
+  const rec = readChainDaily(SLUG, today, getDailyStarter(today));
+  if (!rec) return null;
+  const chain = rec.links.map(l => (l.note !== undefined ? { playerName: l.name, slamConnection: l.note } : { playerName: l.name }));
+  const chainLength = chain.length - 1;
+  const rawScore = chainLength * 100;
+  return {
+    currentPlayer: chain[chain.length - 1].playerName,
+    chain,
+    score: Math.floor(rawScore * getTennisChainMultiplier(chainLength)),
+    rawScore,
+    gameStatus: rec.ended ? 'ended' : 'playing',
+    usedPlayers: new Set(chain.map(l => l.playerName.toLowerCase())),
+    mode: 'daily',
+    ...(rec.ended ? { gameOverReason: rec.reason ?? '', earnedBadge: getTennisEarnedBadge(chainLength) } : {}),
+  };
+}
+
 export function useTennisChain() {
+  /* Round 428's rule: the day is pinned at mount, so a session that crosses
+     midnight ET keeps dealing and filing the day it started on. */
+  const todayStr = useRef(getTodayET()).current;
   const [gameState, setGameState] = useState<TennisChainState | null>(null);
   const [validating, setValidating] = useState(false);
 
   const startGame = useCallback((mode: TennisChainMode) => {
-    const starter = mode === 'daily' ? getDailyStarter() : getRandomStarter();
+    /* Round 645 part three: today's daily is dealt once. A finished chain
+       comes back finished (and is not a new finish, so it says so before it
+       is set), and one left part way comes back on the link it was left on. */
+    if (mode === 'daily') {
+      const saved = restoreDaily(todayStr);
+      if (saved) {
+        if (saved.gameStatus === 'ended') markRestoredFinish(SLUG);
+        setGameState(saved);
+        return;
+      }
+    }
+    const starter = mode === 'daily' ? getDailyStarter(todayStr) : getRandomStarter();
     setGameState({
       currentPlayer: starter,
       chain: [{ playerName: starter }],
@@ -60,7 +100,7 @@ export function useTennisChain() {
       usedPlayers: new Set([starter.toLowerCase()]),
       mode,
     });
-  }, []);
+  }, [todayStr]);
 
   const makeGuess = useCallback(async (guessedName: string) => {
     if (!gameState || gameState.gameStatus !== 'playing' || validating) return;
@@ -159,6 +199,19 @@ export function useTennisChain() {
   const resetGame = useCallback(() => {
     setGameState(null);
   }, []);
+
+  /* Round 645 part three: the daily chain is filed on every link and on the
+     end, so a refresh brings it back where it was instead of dealing the same
+     starter again with the answers known. */
+  useEffect(() => {
+    if (!gameState || gameState.mode !== 'daily') return;
+    writeChainDaily(SLUG, todayStr, {
+      links: gameState.chain.map(l => (l.slamConnection !== undefined ? { name: l.playerName, note: l.slamConnection } : { name: l.playerName })),
+      ended: gameState.gameStatus === 'ended',
+      reason: gameState.gameOverReason ?? null,
+      correctAnswer: null,
+    });
+  }, [gameState, todayStr]);
 
   useGameCompletion('tennis-chain', gameState?.gameStatus === 'ended', gameState?.score ?? 0);
 
