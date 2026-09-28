@@ -2,7 +2,7 @@
 
 **2026-09-28 night, desktop Claude lane, USAGE LIMIT HIT MID-ROUND. Read this before anything else.**
 Round 667 (the player reports) is on `r667-player-reports`, pushed. Done and fenced: defenders keep
-clean sheets (`simCareerCleanSheets`), the 82-0 guide tells the true odds, and a tab left open across a
+clean sheets (BUT `simCareerCleanSheets` IS RED: its walk stops after the first pro season, 24 seasons over 24 careers, so section 1 fails on the driver, not the fix; drive the post-summary phases the way simCareerEngaged does before merging, or runAllSims goes red), the 82-0 guide tells the true odds, and a tab left open across a
 deploy reloads once on a stale lazy chunk instead of painting "This page broke" (`simStaleChunk`),
 which is the most likely cause of both crash reports (Club Manager "sends me home when I change
 tactic", Soccer Career "says it broke"). Alisson's Internacional 2015 and 2016 are in the baked pool AND
