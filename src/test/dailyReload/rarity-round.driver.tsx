@@ -99,6 +99,16 @@ export default defineDriver<MountedPage>({
   playSome: m => answer(m, 2),
   progress,
 
+  /* Assertion 7: one answer locked in and the page refreshed on its reveal,
+     with the board's famous names showing. The answer is decided when it is
+     locked in, so it has to stay given. */
+  oneStep: m => answer(m, 1),
+  async interruptStep(m) {
+    await click(await waitFor(() => button(m.container, new RegExp(`^pick ${PICK}$`))));
+    await click(button(m.container, /^Lock in answer$/));
+    await waitFor(() => button(m.container, /^Next round$|^See final score$/));
+  },
+
   fingerprint(m) {
     const card = resultCard(m.container);
     return card ? resultText(card) : 'no result card';

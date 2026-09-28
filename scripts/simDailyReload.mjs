@@ -64,6 +64,17 @@
      restream  the arcade spray stream restarts from the top on a resume:
                (6) must FAIL on every row it hit (the split run ends on a
                different card), everything else green
+   A seventh assertion covers the window between a step being decided and
+   it landing (a ball in the air, a card turning over, an answer on its
+   reveal): take one step, refresh before it lands, and the reloaded board
+   must read exactly what one landed step reads. A row opts in with oneStep
+   and interruptStep. Rows: Buzzer Beater, Free Kick, Pack Battle, Rarity
+   Round, and the Soccer Career wall shot drill, the third game on the arcade
+   engine, which banks into a career rather than recording (`records: false`,
+   so assertion 4 requires no completion at all). Its control is a copy of
+   the real Free Kick board with the per kick save moved to where the ball
+   lands, the drills' Round 468 shape:
+     landing   (7) must FAIL on free-kick alone, everything else green
    Then the source backstop: for every row that depends on the mark, the
    restoring file is read as code (comments and string contents stripped)
    and must call markRestoredFinish with the slug ahead of the finished
@@ -147,11 +158,17 @@ function parse(out) {
 }
 
 /* A row that resumes a part played run (playSome and progress exported)
-   carries assertion 6 as well; every other row has the five. */
-const assertionsOf = row => (row.info && row.info.resumes ? [...ASSERTIONS, 6] : ASSERTIONS);
+   carries assertion 6 as well, and one that can be refreshed with a step
+   decided but not landed (oneStep and interruptStep) carries 7; every other
+   row has the five. */
+const assertionsOf = row => [
+  ...ASSERTIONS,
+  ...(row.info && row.info.resumes ? [6] : []),
+  ...(row.info && row.info.interrupts ? [7] : []),
+];
 const marksOf = row => assertionsOf(row).map(n => row.marks[n] || '?').join('');
 const redOnes = row => assertionsOf(row).filter(n => row.marks[n] !== '✓').map(n => `(${n})`).join(' ');
-const describe = info => `${info.restoreStyle} restore${info.usesRestoreMark ? ', mark dependent' : info.restoreStyle === 'handler' ? ', no mark needed' : ''}, ${info.payloadShape} payload${info.resumes ? ', resumes mid run' : ''}`;
+const describe = info => `${info.restoreStyle} restore${info.usesRestoreMark ? ', mark dependent' : info.restoreStyle === 'handler' ? ', no mark needed' : ''}, ${info.payloadShape} payload${info.resumes ? ', resumes mid run' : ''}${info.interrupts ? ', keeps a step refreshed in flight' : ''}${info.records === false ? ', banks instead of recording' : ''}`;
 const detailLines = out => out.split('\n').filter(l => /AssertionError|Error:|expected|×/.test(l)).slice(0, 14).map(l => '    ' + l.trim()).join('\n');
 
 /* ------------------------------------------------------------ 1) the run */
@@ -172,6 +189,8 @@ for (const row of rowList) {
 for (const [slug, row] of parsed.rows) if (!row.info) fail(`marks appeared for "${slug}" but the test printed no row description for it`);
 const resumeRows = rowList.filter(r => r.info.resumes);
 console.log(`   ${resumeRows.length} row(s) resume a part played run: ${resumeRows.map(r => r.info.slug).join(', ') || 'none'}`);
+const interruptRows = rowList.filter(r => r.info.interrupts);
+console.log(`   ${interruptRows.length} row(s) keep a step refreshed before it landed: ${interruptRows.map(r => r.info.slug).join(', ') || 'none'}`);
 const expectedTests = rowList.reduce((n, row) => n + assertionsOf(row).length, 0) + 2;
 if (main.code !== 0 || parsed.failed > 0 || parsed.passed !== expectedTests) {
   fail(`expected ${expectedTests} passed and none failed, vitest says: ${parsed.summary || 'nothing'}`);
@@ -281,8 +300,8 @@ const CODE_CONTROLS = [
   },
   {
     name: 'nosave',
-    what: "the arcade engine's per shot save writes nothing, (6) must fail on every row it hit",
-    mustRed: [6],
+    what: "the arcade engine's per shot save writes nothing, (6) and (7) must fail on every row it hit",
+    mustRed: [6, 7],
     mustGreen: [1, 2, 3, 4, 5],
   },
   {
@@ -334,6 +353,66 @@ for (const ctl of CODE_CONTROLS) {
   console.log(`   ${flipped} of ${hitRows} hit row(s) flipped, ${held} of ${rows.length - hitRows} other row(s) held`);
   if (hitRows === 0) fail(`control ${ctl.name} hit no row at all, so it changed nothing and proved nothing`);
   if (ctl.onlyRow && !ONLY && !rows.some(r => r.info.slug === ctl.onlyRow)) fail(`control ${ctl.name}: no row named ${ctl.onlyRow}`);
+}
+
+/* ------------------ 5.4) control: the save moved to where the ball lands */
+/* Assertion 7 exists for one regression, the shape the career drills had
+   since Round 468: the step filed when its flight lands, so a refresh during
+   the flight hands a seen outcome back. No storage or mock control can make
+   that shape, so this one is a copy of the real Free Kick board with its per
+   kick save moved into the landing callback, served through
+   DAILY_RELOAD_FREEKICK_BOARD (src/test/dailyReload/mocks.ts). Under dist,
+   inside the project root, one folder per run, as simScoreShown stages its
+   copies. It refuses to run unless both anchors are found exactly once and
+   the copy differs from the board. */
+console.log('5.4) NEGATIVE CONTROL landing: a copy of the Free Kick board that files each kick when the ball lands, (7) must fail on free-kick alone and every other row stay green');
+if (ONLY && ONLY !== 'free-kick') console.log(`   skipped: ONLY=${ONLY} does not include free-kick`);
+else {
+  const boardFile = path.join(ROOT, 'src/components/free-kick/FreeKickBoard.tsx');
+  const board = fs.readFileSync(boardFile, 'utf8').split('\r\n').join('\n');
+  const SAVE = "    if (mode === 'daily') {\n      writeArcadeProgress(";
+  const LAND = '    launch(() => {\n      setScore(s => s + r.points);\n';
+  const once = (hay, needle) => hay.split(needle).length - 1 === 1;
+  if (!once(board, SAVE) || !once(board, LAND)) abort(`control landing cannot run: FreeKickBoard.tsx no longer holds the per kick save (${once(board, SAVE)}) and the landing callback (${once(board, LAND)}) exactly once each`);
+  const start = board.indexOf(SAVE);
+  const end = board.indexOf('\n    }\n', start) + '\n    }\n'.length;
+  const block = board.slice(start, end);
+  if (!/writeArcadeProgress\(/.test(block) || block.split('\n').length > 12) abort('control landing cannot run: could not cut the per kick save out as one block');
+  const moved = board.slice(0, start) + board.slice(end);
+  const copySrc = moved.replace(LAND, '    launch(() => {\n' + block.split('\n').map(l => (l ? '  ' + l : l)).join('\n') + '      setScore(s => s + r.points);\n');
+  if (copySrc === board || copySrc.split('writeArcadeProgress(').length !== board.split('writeArcadeProgress(').length) abort('control landing cannot run: the copy is the board, or lost or doubled the save');
+  fs.mkdirSync(path.join(ROOT, 'dist', '.daily-reload-control'), { recursive: true });
+  const dir = fs.mkdtempSync(path.join(ROOT, 'dist', '.daily-reload-control', 'landing-'));
+  const copy = path.join(dir, 'FreeKickBoard.control.tsx');
+  fs.writeFileSync(copy, copySrc);
+  try {
+    const run = runVitest({ DAILY_RELOAD_CONTROL: 'landing', DAILY_RELOAD_FREEKICK_BOARD: copy.replaceAll('\\', '/') });
+    const p = parse(run.out);
+    if (!p.named) abort('control landing cannot run: vitest did not report on the test file:\n' + run.out.slice(-2000));
+    if (!/DAILY_RELOAD_BOARD_SWAP free-kick /.test(run.out)) fail('control landing: the test never loaded the copy, so it changed nothing');
+    else console.log('   the copy was loaded in place of the real board');
+    const rows = [...p.rows.values()].filter(r => r.info);
+    if (rows.length !== rowList.length) fail(`control landing ran ${rows.length} row(s), the normal run ${rowList.length}`);
+    let held = 0;
+    for (const row of rows) {
+      if (row.info.slug === 'free-kick') {
+        const red = row.marks[7] === '×';
+        const intact = [1, 2, 3, 4, 5, 6].every(a => row.marks[a] === '✓');
+        console.log(`   free-kick: [${marksOf(row)}] ${red && intact ? 'went red on (7) alone, as designed' : 'DID NOT FLIP AS DESIGNED'}`);
+        if (!row.info.interrupts) fail('control landing: the free-kick row carries no assertion 7');
+        else if (!red) fail('control landing: free-kick stayed green on (7) with its save moved to the landing, so assertion 7 does not see the flight window');
+        if (!intact) fail(`control landing: free-kick is also red on ${[1, 2, 3, 4, 5, 6].filter(a => row.marks[a] !== '✓').map(a => `(${a})`).join(' ')}, which moving the save cannot touch`);
+      } else {
+        const allGreen = assertionsOf(row).every(a => row.marks[a] === '✓');
+        if (!allGreen) fail(`control landing: ${row.info.slug} is red on ${redOnes(row)} though only the Free Kick board was swapped`);
+        else held += 1;
+      }
+    }
+    console.log(`   ${held} of ${rows.length - 1} other row(s) held`);
+    if (!rows.some(r => r.info.slug === 'free-kick')) fail('control landing: no free-kick row ran');
+  } finally {
+    fs.rmSync(dir, { recursive: true, force: true });
+  }
 }
 
 /* ------------------------------------------- 6) the source backstop */
@@ -519,4 +598,4 @@ if (failures > 0) {
   console.error(`\nsimDailyReload: ${failures} failure(s)`);
   process.exit(1);
 }
-console.log(`\nsimDailyReload: all green (${rowList.length} row(s), all six controls fired)`);
+console.log(`\nsimDailyReload: all green (${rowList.length} row(s), all seven controls fired)`);

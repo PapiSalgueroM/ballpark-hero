@@ -54,7 +54,7 @@ function status(m: MountedPage): 'playing' | 'finished' {
 /* Call on the card that is face down: correctly or wrongly, from the pack
    the day deals. "Card N of 5" is the face down card's position, so the
    banked card is pack[N - 2]. */
-async function call(m: MountedPage, correctly: boolean): Promise<void> {
+async function press(m: MountedPage, correctly: boolean): Promise<void> {
   const pack = buildDailyPack(POOL);
   const n = cardLine(m);
   if (n === null) throw new Error('no face down card to call on');
@@ -63,6 +63,10 @@ async function call(m: MountedPage, correctly: boolean): Promise<void> {
   const higherIsRight = next.value >= banked.value;
   const callHigher = correctly ? higherIsRight : !higherIsRight;
   await click(button(m.container, callHigher ? /^Higher$/ : /^Lower$/));
+}
+
+async function call(m: MountedPage, correctly: boolean): Promise<void> {
+  await press(m, correctly);
   await waitFor(() => {
     if (findButton(m.container, /^Higher$/) || resultCard(m.container)) return;
     throw new Error('the reveal has not settled');
@@ -112,6 +116,15 @@ export default defineDriver<Api>({
      on card 3 with the same card banked. */
   playSome: m => call(m, true),
   progress,
+
+  /* Assertion 7: one call made and the page refreshed while the card is
+     still turning over. The call is decided when it is made, so it has to
+     stay made. */
+  oneStep: m => call(m, true),
+  async interruptStep(m) {
+    await press(m, true);
+    if (findButton(m.container, /^Higher$/) || resultCard(m.container)) throw new Error('the card settled before the refresh, so the reveal was never interrupted');
+  },
 
   fingerprint(m) {
     const card = resultCard(m.container);

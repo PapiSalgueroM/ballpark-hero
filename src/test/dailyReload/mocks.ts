@@ -248,6 +248,18 @@ vi.mock('@/lib/arcadeRecord', async (importOriginal) => {
   };
 });
 
+/* Round 645 part three, the landing control: scripts/simDailyReload.mjs
+   writes a copy of the Free Kick board with its per kick save moved from
+   the strike to where the ball lands (the shape the career drills had since
+   Round 468) and points DAILY_RELOAD_FREEKICK_BOARD at it. Assertion 7 must
+   go red on free-kick alone. Off in every ordinary run. */
+vi.mock('@/components/free-kick/FreeKickBoard', async (importOriginal) => {
+  const copy = process.env.DAILY_RELOAD_FREEKICK_BOARD;
+  if (!copy) return importOriginal();
+  console.log(`DAILY_RELOAD_BOARD_SWAP free-kick ${copy}`);
+  return import(/* @vite-ignore */ copy);
+});
+
 /* Round 645 part three, the nolock code control: one game's lock taken out
    by refusing every read of its record, which every game on the Round 428
    helper (and the arcade and chain records built on it) goes through. The

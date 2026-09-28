@@ -16,7 +16,7 @@
 import './mocks';
 import { act, fireEvent, waitFor } from '@testing-library/react';
 import { defineDriver } from './driver';
-import { freezeArcadeGlobals } from './arcadeGlobals';
+import { freezeArcadeGlobals, withFullMotion } from './arcadeGlobals';
 import { button, click, findButton, mountPage, type MountedPage } from './harness';
 import { ROUNDS_PER_RUN } from '@/lib/freeKick';
 import FreeKick from '@/pages/FreeKick';
@@ -97,6 +97,20 @@ export default defineDriver<Api>({
      on kick four with the same goals and points. */
   playSome: m => takeKicks(m, 3),
   progress,
+
+  /* Assertion 7: one kick struck with the ball left in the air, then the
+     refresh. The kick is decided at the strike, so it has to stay taken. */
+  oneStep: m => takeKicks(m, 1),
+  async interruptStep(m) {
+    const strike = button(m.container, /^Hold to strike$/);
+    await withFullMotion(async () => {
+      await act(async () => {
+        fireEvent.mouseDown(strike);
+        fireEvent.mouseUp(strike);
+      });
+    });
+    if (findButton(m.container, /^Next kick$|^See the run$/)) throw new Error('the kick landed before the refresh, so the flight was never interrupted');
+  },
 
   /* Every number on the final card. The one line left out is the "come back
      tomorrow" note, which appears only on a restored daily and stands where

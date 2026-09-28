@@ -11,7 +11,7 @@
 import './mocks';
 import { act, fireEvent, waitFor } from '@testing-library/react';
 import { defineDriver } from './driver';
-import { freezeArcadeGlobals } from './arcadeGlobals';
+import { freezeArcadeGlobals, withFullMotion } from './arcadeGlobals';
 import { button, click, findButton, mountPage, type MountedPage } from './harness';
 import { ROUNDS_PER_RUN } from '@/lib/buzzerBeater';
 import BuzzerBeater from '@/pages/BuzzerBeater';
@@ -92,6 +92,20 @@ export default defineDriver<Api>({
      on shot four with the same makes and points. */
   playSome: m => takeShots(m, 3),
   progress,
+
+  /* Assertion 7: one shot released with the ball left in the air, then the
+     refresh. The shot is decided at the release, so it has to stay taken. */
+  oneStep: m => takeShots(m, 1),
+  async interruptStep(m) {
+    const shoot = button(m.container, /^Hold to shoot$/);
+    await withFullMotion(async () => {
+      await act(async () => {
+        fireEvent.mouseDown(shoot);
+        fireEvent.mouseUp(shoot);
+      });
+    });
+    if (findButton(m.container, /^Next shot$|^See the run$/)) throw new Error('the shot landed before the refresh, so the flight was never interrupted');
+  },
 
   /* Every number on the final card: the makes, the points and the ceiling.
      The one line left out is the "come back tomorrow" note, which appears
