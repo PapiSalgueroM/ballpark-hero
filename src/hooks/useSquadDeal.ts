@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { Player } from '@/types/game';
 import {
   Formation, FORMATIONS, Era, MEMES, EXTRA_DEALS, ExtraOption,
-  fetchSquadPool, buildCandidates, bankerOffer, simulateSquad, SquadResult,
+  fetchSquadPool, buildCandidates, bankerOffer, simulateSquad, SquadResult, squadDealPoints,
   loadLeaderboard, saveScore, LeaderEntry, Topic, TOPICS, filterByTopic, topicCanFill, ratingFor,
 } from '@/lib/squadDeal';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -30,6 +30,9 @@ export function useSquadDeal() {
   const [activeSlot, setActiveSlot] = useState<number | null>(null);
 
   const [candidates, setCandidates] = useState<Player[]>([]);
+  /* Round 645: every slot's ten boxes as they were dealt, so the run can be
+     scored against the worst and the best board it was offered. */
+  const [dealt, setDealt] = useState<Record<number, Player[]>>({});
   const [keptIdx, setKeptIdx] = useState<number | null>(null);
   const [eliminated, setEliminated] = useState<number[]>([]);
   const [selected, setSelected] = useState<number[]>([]);
@@ -66,6 +69,7 @@ export function useSquadDeal() {
     setSquad(f.slots.map(() => null));
     setActiveSlot(null);
     setExtrasChosen({});
+    setDealt({});
     setResult(null);
     setPhase('draft');
   }, [era, topic, formationIndex]);
@@ -101,7 +105,9 @@ export function useSquadDeal() {
   const selectSlot = (idx: number) => {
     if (phase !== 'draft' || activeSlot !== null || squad[idx]) return;
     const used = new Set(squad.filter((p): p is Player => !!p).map(p => p.name));
-    setCandidates(buildCandidates(pool, formation.slots[idx], used, memesPool));
+    const boxes = buildCandidates(pool, formation.slots[idx], used, memesPool);
+    setCandidates(boxes);
+    setDealt(prev => ({ ...prev, [idx]: boxes }));
     setKeptIdx(null); setEliminated([]); setSelected([]); setRoundIdx(0); setOffer(null);
     offeredRef.current = new Set();
     setSlotPhase('pickBox');
@@ -218,13 +224,17 @@ export function useSquadDeal() {
 
   const restart = () => {
     if (timer.current) clearTimeout(timer.current);
-    setPhase('config'); setSquad([]); setActiveSlot(null); setResult(null); setExtrasChosen({});
+    setPhase('config'); setSquad([]); setActiveSlot(null); setResult(null); setExtrasChosen({}); setDealt({});
   };
 
   const finalIndices = candidates.map((_, i) => i).filter(i => !eliminated.includes(i));
 
   // Global points/streaks/leaderboard credit (was missing, owner: every game must give points)
-  useGameCompletion('squad-deal', phase === 'done' && !!result, result?.rating ?? 0, 0);
+  /* Round 645: the rating above the worst board the run was dealt
+     (squadDealPoints), not the rating itself, which the worst boxes and the
+     worst extras already carried into the 50s. */
+  const points = result ? squadDealPoints(result, Object.values(dealt), era) : 0;
+  useGameCompletion('squad-deal', phase === 'done' && !!result, result ? squadDealPoints(result, Object.values(dealt), era) : 0, 0);
 
   return {
     phase, era, setEra, memesOn, setMemesOn, formationIndex, setFormationIndex, formation, playableTopics,
@@ -236,6 +246,6 @@ export function useSquadDeal() {
     topic, setTopic, era2Rating: (p: Player) => ratingFor(p, era),
     extraCat, extraStage, extraKept, extraElim, extraOffer, currentExtraCat,
     pickExtraCase, extraBankerCall, acceptExtraDeal, rejectExtraDeal, extraStay, extraSwap,
-    result, leaderboard, restart,
+    result, points, leaderboard, restart,
   };
 }

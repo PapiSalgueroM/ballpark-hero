@@ -2,6 +2,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { Player, Position, League } from '@/types/game';
 import { players as fallbackPlayers } from '@/data/players';
 import { getEnrichment } from '@/data/footleEnrichment';
+import { skillPoints } from '@/lib/skillPoints';
 
 /* ---------------- Position normalization ---------------- */
 export const POSITION_NORMALIZE: Record<string, Position> = {
@@ -77,8 +78,10 @@ export const FORMATIONS: Formation[] = [
  *   mv=180 -> 80   (was 98)   star player
  *   mv=230 -> 83   (was 99)   Messi/Ronaldo-tier ceiling
  */
-/** Round 646: the top of playerRating's scale. Budget Builder and Mystery Box
-    record a squad average of it, so their leaderboard ceilings read this. */
+/** Round 646: the top of playerRating's scale, the best card rating it gives
+    anyone. Budget Builder and Mystery Box record a squad average of it, so
+    their leaderboard ceilings read this. Round 645: Mystery Box scores up to
+    this, so a curve change moves its perfect score with it. */
 export const PLAYER_RATING_MAX = 96;
 
 export function playerRating(p: Player): number {
@@ -490,7 +493,8 @@ export interface SquadResult { rating: number; chemistry: number; grade: string;
 
 /**
  * Round 646: the most a Squad Deal game can record, its final rating, which
- * simulateSquad clamps to 1..100: 100. game_score_caps holds it for
+ * squadRatingParts (and so simulateSquad) clamps to 1..100: 100. Round 645's
+ * squadDealPoints never records more than that rating. game_score_caps holds it for
  * squad-deal (scripts/simCapsAreCeilings.mjs).
  */
 export const SQUAD_DEAL_CEILING = 100;
@@ -513,8 +517,11 @@ export const SQUAD_DEAL_CEILING = 100;
  * cutoffs (which made a mid-table XI a "B" and near-full Legends an "A+" no
  * matter how the draft or extras went, while "D" needed active sabotage).
  */
-export function simulateSquad(picks: Player[], extras: ExtraOption[] = [], era: Era = 'current'): SquadResult {
-  if (!picks.length) return { rating: 0, chemistry: 0, grade: 'D', facts: [] };
+/** The squad's rating and chemistry, the deterministic half of simulateSquad
+ *  (Round 645 split it out so a board can be rated without drawing the
+ *  season's random facts). */
+export function squadRatingParts(picks: Player[], extras: ExtraOption[] = [], era: Era = 'current'): { rating: number; chemistry: number } {
+  if (!picks.length) return { rating: 0, chemistry: 0 };
   const ratings = picks.map(p => ratingFor(p, era));
   const avg = ratings.reduce((a, b) => a + b, 0) / ratings.length;
   let chemPts = 0;
@@ -528,6 +535,42 @@ export function simulateSquad(picks: Player[], extras: ExtraOption[] = [], era: 
   const extraChem = extras.reduce((s2, e) => s2 + e.chemMod, 0);
   const chemistry = Math.max(0, Math.min(100, Math.round((chemPts / (picks.length * accessors.length)) * 100) + extraChem));
   const rating = Math.max(1, Math.min(SQUAD_DEAL_CEILING, Math.round(avg * 0.82 + chemistry * 0.18) + extraRating));
+  return { rating, chemistry };
+}
+
+/** What one extra is worth to the rating: its own mod plus its chemistry at
+ *  the weight the rating gives chemistry. */
+const extraWorth = (e: ExtraOption) => e.ratingMod + e.chemMod * 0.18;
+
+/**
+ * Round 645: the ratings the worst and the best choices reach on the boards a
+ * run was dealt. `dealt` is each slot's ten boxes as they were dealt; the
+ * worst board takes the lowest rated box in every slot and the worst extra in
+ * every category, the best board the highest. Measured before this round: the
+ * worst boxes on the live pool rate in the mid 70s and the worst extras take
+ * ten off, so a run of nothing but bad luck and bad calls still recorded a
+ * rating in the 50s of a 100 cap.
+ */
+export function squadDealBounds(dealt: Player[][], era: Era = 'current'): { zero: number; perfect: number } {
+  const byRating = (ps: Player[]) => [...ps].sort((a, b) => ratingFor(a, era) - ratingFor(b, era));
+  const byWorth = (os: ExtraOption[]) => [...os].sort((a, b) => extraWorth(a) - extraWorth(b));
+  const boxes = dealt.filter(c => c.length > 0);
+  const worst = squadRatingParts(boxes.map(c => byRating(c)[0]), EXTRA_DEALS.map(c => byWorth(c.options)[0]), era).rating;
+  const best = squadRatingParts(boxes.map(c => byRating(c)[c.length - 1]), EXTRA_DEALS.map(c => byWorth(c.options)[c.options.length - 1]), era).rating;
+  return { zero: worst, perfect: best };
+}
+
+/** Round 645: what a finished Squad Deal records and its card shows: the
+ *  rating above the worst board the run was dealt, the best board's rating
+ *  kept exactly. */
+export function squadDealPoints(result: SquadResult, dealt: Player[][], era: Era = 'current'): number {
+  const { zero, perfect } = squadDealBounds(dealt, era);
+  return skillPoints(result.rating, zero, perfect);
+}
+
+export function simulateSquad(picks: Player[], extras: ExtraOption[] = [], era: Era = 'current'): SquadResult {
+  if (!picks.length) return { rating: 0, chemistry: 0, grade: 'D', facts: [] };
+  const { rating, chemistry } = squadRatingParts(picks, extras, era);
   const grade = rating >= 84 ? 'A+' : rating >= 76 ? 'A' : rating >= 66 ? 'B' : rating >= 55 ? 'C' : 'D';
 
   const topScorer = [...picks].sort((a, b) => b.goals - a.goals)[0];

@@ -514,7 +514,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       {
         heading: "Scoring points for each round survived",
         items: [
-          "Survive a round for 16 points; win the Series for exactly 100.",
+          "Each round you survive is worth 16 and winning the Series makes it 100. Your run records how far that goes past a lineup of the weakest card in each pick on the same draw: matching that lineup records 0, and the Series always records 100.",
         ],
       },
     ],
@@ -568,7 +568,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       {
         heading: "Running an 89 rated lineup through October",
         paragraphs: [
-          "Your finished lineup rates 89. The Wild Card is comfortable, the Division Series goes to extra innings, the Championship Series is a shutout win, and the Pennant ends the run. Three rounds survived, 48 points, and the card you would take back is the 71 you shrugged at in right field.",
+          "Your finished lineup rates 89. The Wild Card is comfortable, the Division Series goes to extra innings, the Championship Series is a shutout win, and the Pennant ends the run. Three rounds survived is 48. On the same draw a lineup of the weakest card in each pick wins the Wild Card and goes out in the Division Series, 16, so your run records 38, and the card you would take back is the 71 you shrugged at in right field.",
         ],
       },
     ],

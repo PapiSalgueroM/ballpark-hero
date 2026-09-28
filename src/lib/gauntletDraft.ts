@@ -5,7 +5,8 @@ import {
   GauntletConfig, FormationSlotLike, PICK_SIZE as ENGINE_PICK_SIZE, gRng,
   buildDraft as engineBuildDraft, dailySeedFor, squadRatingOf as engineSquadRatingOf,
   runGauntlet as engineRunGauntlet, loadDailyRun as engineLoadDailyRun,
-  saveDailyRun as engineSaveDailyRun, GauntletRun, gauntletCeiling,
+  saveDailyRun as engineSaveDailyRun, GauntletRun, gauntletCeiling, GauntletDraftResult,
+  gauntletPoints as engineGauntletPoints,
 } from '@/lib/gauntletEngine';
 export type { GauntletRun } from '@/lib/gauntletEngine';
 
@@ -167,6 +168,13 @@ export function squadRatingOf(squad: (Player | null)[]): number {
 
 export function runGauntlet(squad: (Player | null)[]): GauntletRun {
   return engineRunGauntlet(soccerConfig([]), squad);
+}
+
+/** Round 645: what a finished soccer gauntlet records, the shared engine's
+ *  rule (src/lib/gauntletEngine.ts gauntletPoints): the run scored against
+ *  the cup the weakest card in every pick of the same draft would have run. */
+export function gauntletPoints(draft: GauntletDraft, run: GauntletRun): number {
+  return engineGauntletPoints(soccerConfig([]), draft as unknown as GauntletDraftResult<Player>, run);
 }
 
 /**

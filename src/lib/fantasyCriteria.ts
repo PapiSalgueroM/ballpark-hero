@@ -1,4 +1,6 @@
 import type { DraftPlayer } from '@/components/fantasy-draft/PlayerPool';
+import type { Player } from '@/types/game';
+import { playerRating } from '@/lib/squadDeal';
 
 /**
  * Fantasy Draft daily criteria, ENFORCED (owner 2026-08-05: "the criteria was
@@ -114,4 +116,33 @@ export function anyLegalPick(
 ): boolean {
   if (!rule) return true;
   return pool.some((p) => !draftedIds.has(p.id) && pickIsLegal(rule, team, p));
+}
+
+/** The settle engine reads marketValue, age and name; a draft row maps
+ *  straight onto that. */
+export function fantasySettlePlayer(p: DraftPlayer): Player {
+  return { name: p.name, marketValue: Math.max(1, p.market_value_millions), age: p.age ?? 27, position: p.position } as Player;
+}
+
+/**
+ * Round 645: the XI a player with no skill drafts against the same AI: every
+ * pick the lowest rated player still on the board, a legal one while any is
+ * left (the rule the page enforces), from everyone the AI did not take. The
+ * AI drafts from the top of the market, so it never wanted these players and
+ * its team stands as it was. Settled against that team, this is the season
+ * the draft would have earned for nothing.
+ */
+export function zeroSkillFantasyXi(pool: DraftPlayer[], aiTeam: DraftPlayer[], rule: CriteriaRule | null, size = 11): DraftPlayer[] {
+  const taken = new Set(aiTeam.map(p => p.id));
+  const team: DraftPlayer[] = [];
+  while (team.length < size) {
+    const available = pool.filter(p => !taken.has(p.id));
+    if (available.length === 0) break;
+    const legal = available.filter(p => pickIsLegal(rule, team, p));
+    const from = legal.length > 0 ? legal : available;
+    const worst = from.reduce((lo, p) => (playerRating(fantasySettlePlayer(p)) < playerRating(fantasySettlePlayer(lo)) ? p : lo));
+    team.push(worst);
+    taken.add(worst.id);
+  }
+  return team;
 }

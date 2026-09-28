@@ -18,7 +18,7 @@ const TIER_STYLE: Record<PackTier, { label: string; cls: string }> = {
 export function MysteryBoxBoard() {
   const {
     loading, formation, packIndex, current, revealed, squad, compatibleSlots,
-    discards, finished, rating, filled, bestPull, openPack, place, discard, shareText,
+    discards, finished, rating, points, filled, bestPull, openPack, place, discard, shareText,
   } = useMysteryBox();
   const [copied, setCopied] = useState(false);
 
@@ -87,6 +87,7 @@ export function MysteryBoxBoard() {
             Final squad
           </p>
           <p className="mt-2 font-display text-6xl font-black text-primary">{rating}</p>
+          <p className="mt-1 text-sm font-semibold text-foreground" data-testid="mystery-box-points">{points} points</p>
           <p className="mt-1 text-sm text-muted-foreground">
             {filled}/11 filled{bestPull ? <> · best pull: <span className="font-semibold text-gold">{bestPull.name}</span></> : null}
           </p>

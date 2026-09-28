@@ -137,7 +137,7 @@
         "The Today market is a flat 1,000 million, one billion. The 2015 and 2007 markets cap you at 62 percent of the priciest possible XI for your formation, rounded to the nearest 10 million and never below 100 million. Your budget is always shown on screen.",
         "Team rating is the average of your eleven ratings, on a ratings curve that tops out at 96.",
         "One board demand runs per day in each market, worth 10 bonus points if the finished XI meets it. It never blocks a signing.",
-        "Final score is your team rating, plus 1 point for every full 200 million left unspent, plus 10 for meeting the board demand, plus 15 for a series win or 5 for a draw."
+        "The board score is your team rating, plus 1 point for every full 200 million left unspent, plus 10 for meeting the board demand, plus 15 for a series win or 5 for a draw. Your points are that board score above what the lowest rated XI the budget buys would score: that XI scores 0, and the best XI it buys, with the series won, keeps its full board score."
       ],
       "example": [
         "You take the Today market in a 4-3-3 and blow half the cap on the front line, Haaland through the middle. The defense budget looks grim, so you release a winger and bargain hunt for fullbacks.",
@@ -162,7 +162,7 @@
         "A slot takes a player who plays there or right beside it: full backs and wing backs cover each other, wingers count on both flanks, CM covers CDM and CAM, strikers cover each other. A keeper only ever goes in goal.",
         "No duplicate players across your XI.",
         "Chemistry: each pair sharing a club is worth 3 points, a league 2, a nationality 1, capped at 9 per player.",
-        "If the AI judge is unreachable, a built in offline judge grades you instead, so a run never dead ends."
+        "If the AI judge is unreachable, a built in offline judge grades you instead off current market values, so a run never dead ends. It can only price players in today's value table, so any other pick counts at its floor."
       ],
       "example": [
         "You take 4-3-3. Liverpool lands on the goalkeeper slot, so Alisson goes in. Arsenal on the right wing is Saka. Then the striker slot spins a national team, and you weigh Harry Kane against saving England for a harder slot.",
@@ -1019,7 +1019,7 @@
         "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
         "For each slot, read the five cards, star to bargain, and tap the one you keep. Position families apply, so a winger card can cover either flank.",
         "After pick eleven the knockout starts on its own: five rounds, one match each, revealed one at a time.",
-        "Survive a round for 16 points; lift the trophy for exactly 100."
+        "Each round you survive is worth 16 and lifting the trophy makes it 100. Your run records how far that goes past an XI of the weakest card in each pick on the same draw: matching that XI records 0, and the trophy always records 100."
       ],
       "rules": [
         "Every card is a real player from the same verified market data the rest of the site uses; every opponent club is invented on purpose.",
@@ -1030,7 +1030,7 @@
       ],
       "example": [
         "The draw hands you a 4-3-3 and the striker slot deals a 91 rated superstar next to an 84, a 79, a 74 and a 68. You pay nothing for any of them, so the 91 is the pick unless you are chasing a story.",
-        "Your finished XI rates 84. The Qualifier ends 3-0, the Last Sixteen 2-1, the Quarter Final needs penalties, and the Semi Final ends the run 1-2. Four rounds survived, 64 points, and the draft you would redo is the 74 you took at left back."
+        "Your finished XI rates 84. The Qualifier ends 3-0, the Last Sixteen 2-1, the Quarter Final needs penalties, and the Semi Final ends the run 1-2. Three rounds survived is 48. On the same draw an XI of the weakest card in each pick wins the Qualifier and goes out in the Last Sixteen, 16, so your run records 38, and the draft you would redo is the 74 you took at left back."
       ],
       "tips": [
         "The keeper card matters as much as the striker card: one weak slot drags the whole rating.",
@@ -1385,7 +1385,7 @@
       "rules": [
         "A correct vote scores 1,000 points minus 100 for each hint you used. A wrong vote scores 0.",
         "You can reveal up to 3 hints per player, each costing 100 points off a win.",
-        "Verdicts are Hall of Fame, Bust, or Borderline, and on a Borderline player either vote counts as correct.",
+        "Verdicts are Hall of Fame, Bust, or Borderline. The daily only deals players with a verdict; a Borderline player turns up in Unlimited, where either vote counts as correct.",
         "One shared mystery player per day, with unlimited mode serving more after that."
       ],
       "example": [
@@ -1632,7 +1632,7 @@
         "For each spot, catcher through closer, read the five cards, star to bargain, and tap the one you keep.",
         "The spots follow real baseball. The corner outfield cards take either corner, center field does not, and the designated hitter card takes any position player at all, so a catcher turning up as your DH is correct rather than a glitch.",
         "After the eleventh pick the postseason starts on its own: five rounds, one game each, revealed one at a time.",
-        "Survive a round for 16 points; win the Series for exactly 100."
+        "Each round you survive is worth 16 and winning the Series makes it 100. Your run records how far that goes past a lineup of the weakest card in each pick on the same draw: matching that lineup records 0, and the Series always records 100."
       ],
       "rules": [
         "Every card is a real player off a real 2026 roster, 30 clubs and 13 players each, the same data MLB Front Office plays. Every opponent club is invented on purpose.",
@@ -1644,7 +1644,7 @@
       ],
       "example": [
         "The shortstop spot deals a 94 next to an 88, an 84, a 79 and a 71. Nothing costs anything, so the 94 is the pick unless you are collecting one club.",
-        "Your finished lineup rates 89. The Wild Card is comfortable, the Division Series goes to extra innings, the Championship Series is a shutout win, and the Pennant ends the run. Three rounds survived, 48 points, and the card you would take back is the 71 you shrugged at in right field."
+        "Your finished lineup rates 89. The Wild Card is comfortable, the Division Series goes to extra innings, the Championship Series is a shutout win, and the Pennant ends the run. Three rounds survived is 48. On the same draw a lineup of the weakest card in each pick wins the Wild Card and goes out in the Division Series, 16, so your run records 38, and the card you would take back is the 71 you shrugged at in right field."
       ],
       "tips": [
         "The pitching cards move the rating as much as the bats do. A 96 starter next to a 70 is the single biggest swing on the card.",
@@ -1923,7 +1923,7 @@
         "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
         "For each slot, PG through C, read the five cards, star to bargain, and tap the one you keep. Positions flex the same way Perfect Lineup's do: an SG slot also takes a PG or an SF.",
         "After pick five the knockout starts on its own: five rounds, one match each, revealed one at a time.",
-        "Survive a round for 16 points; lift the trophy for exactly 100."
+        "Each round you survive is worth 16 and lifting the trophy makes it 100. Your run records how far that goes past a five of the weakest card in each pick on the same draw: matching that five records 0, and the trophy always records 100."
       ],
       "rules": [
         "Every card is a real player from the same curated pool Perfect Lineup: NBA plays, roughly 66 names across every era; every opponent club is invented on purpose.",
@@ -1934,7 +1934,7 @@
       ],
       "example": [
         "The center slot deals a 98 rated all timer next to a 91, an 88, a 86 and an 84. There is no cost to any of them, so the 98 is the pick unless you are chasing a specific team or era on the card.",
-        "Your finished five rates 96. The Qualifier wins big, the Last Sixteen is close, the Quarter Final needs extra time, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 88 you took at power forward."
+        "Your finished five rates 96. The Qualifier wins big, the Last Sixteen is close, the Quarter Final needs extra time, and the Semi Final ends the run. Three rounds survived is 48. On the same draw a five of the weakest card in each pick goes out in the Qualifier, so all 48 count, and the card you would redo is the 88 you took at power forward."
       ],
       "tips": [
         "The center card matters as much as the point guard card: one weak slot drags the whole rating.",
@@ -2158,7 +2158,7 @@
         "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
         "For each of the seven slots (QB, two RB, three WR, TE) read the five cards, star to bargain, and tap the one you keep.",
         "After the seventh pick the knockout starts on its own: five rounds, one match each, revealed one at a time.",
-        "Survive a round for 16 points; lift the trophy for exactly 100."
+        "Each round you survive is worth 16 and lifting the trophy makes it 100. Your run records how far that goes past a team of the weakest card in each pick on the same draw: matching that team records 0, and the trophy always records 100."
       ],
       "rules": [
         "Every card is a real player off the same 2026 roster data NFL Front Office plays; every opponent club is invented on purpose.",
@@ -2170,7 +2170,7 @@
       ],
       "example": [
         "The quarterback slot deals a 97 rated MVP season next to an 88, an 82, a 76 and a 68. There is no cost to any of them, so the 97 is the pick unless you are chasing a specific team on the card.",
-        "Your finished offense rates 94. The Qualifier wins big, the Last Sixteen is tight, the Quarter Final needs overtime, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 76 you took at the third receiver spot."
+        "Your finished offense rates 94. The Qualifier wins big, the Last Sixteen is tight, the Quarter Final needs overtime, and the Semi Final ends the run. Three rounds survived is 48. On the same draw a team of the weakest card in each pick goes out in the Qualifier, so all 48 count, and the card you would redo is the 76 you took at the third receiver spot."
       ],
       "tips": [
         "The quarterback card carries the most weight of any single pick: a weak one drags the whole rating.",
@@ -2781,7 +2781,7 @@
         "Position rules use the sitewide families: wingers cover both flanks, central mids cover the holding and attacking slots, a keeper is only ever a keeper.",
         "A discarded player is out of the entire game. He cannot be searched again by either side.",
         "The settle is deterministic: the same two finished XIs always produce the same season, so the draft is the game.",
-        "Season scoring: 36 league games against a spread of opposition plus two head to head derbies, 3 points a win, 1 a draw. Your season score is your points as a share of the 114 available."
+        "Season scoring: 36 league games against a spread of opposition plus two head to head derbies, 3 points a win, 1 a draw. Your season score is your points as a share of the 114 available, counted above the season you would have had keeping the worst player every turn on the same deal: that season scores 0, and a perfect 114 point season still scores 100."
       ],
       "example": [
         "Your search deals an 89 rated winger, an 84 keeper and a 76 full back, with your goalkeeper slot still open. Keeping the winger is tempting, but keepers are scarce in a shrinking pool, so you take the 84 and bin the other two, and the 89 winger is gone from the duel entirely.",
@@ -2807,7 +2807,7 @@
         "If nobody bids at list price, the price falls step by step; anyone can snap it mid fall, and a lot that reaches thirty percent of list is withdrawn unsold.",
         "An end of auction fill costs just under half the player's list price, minimum 5 million.",
         "The showdown is a double round robin, 4 matches per club, ranked by points then goal difference.",
-        "Score is a place bonus (300, 150, or 50) plus 3 per point of squad rating plus 1 per 10 million left in the bank."
+        "Score is a place bonus (300 for the title, 150 for second, nothing for third) plus 3 per point of squad rating plus 1 per 10 million left in the bank, and all of it counts in proportion to how far your XI rates above a squad of the room's journeymen: bid on nobody and you score 0, land the best player in every slot and you keep the lot."
       ],
       "example": [
         "A striker lot opens mid running order at his real list price. The Sheikh wants him, so you nudge the price once and let go; he wins the war at 240 million, and when the elite striker headlines the close he is too broke to fight you.",
@@ -3356,9 +3356,9 @@
       "howToPlay": [
         "Pick one of 9 formations, a timer (none, 90 seconds or 60 seconds for the whole XI), and your respin budget.",
         "Hit draw and the reel reveals your nations in random slot order.",
-        "Type 2 or more letters and pick a player of that nationality who covers the slot.",
-        "Wrong position picks bounce off harmlessly with an explanation. Confirmed picks lock for good.",
-        "Fill all 11 to win, then check squad value and chemistry, and simulate a season if you are curious."
+        "Type 2 or more letters and pick a player of that nationality who covers the slot. The list shows names and clubs, never positions, so knowing who plays where is the game.",
+        "A wrong position pick bounces off with an explanation and costs a strike, which is a point off your score, and the third strike ends the run. Confirmed picks lock for good.",
+        "Fill all 11 to win. Your score is the slots you filled less one for every strike, so a clean full XI scores 11. Then check squad value and chemistry, and simulate a season if you are curious."
       ],
       "rules": [
         "Every slot gets a different nation, and only countries with depth make the draw: at least 2 goalkeepers, 2 centre backs, 3 defenders, 3 midfielders and 2 strikers in the database.",

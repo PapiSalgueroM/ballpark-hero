@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { localEvaluateSoccerXI } from '@/lib/localLineupEval';
+import { buildXiPoints, xiRefereeVerdict } from '@/lib/lineupVerdictPoints';
 import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS } from '@/data/lineupTeams';
 import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment } from '@/types/lineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
@@ -57,9 +58,13 @@ async function verifiedSecondaries(name: string, primary: Position | null): Prom
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 
 /**
- * Round 646: what a finished Build Your XI records, and so its ceiling: any
- * result with a verdict pays this flat amount, anything else 0. game_score_caps
- * holds it for build-your-xi (scripts/simCapsAreCeilings.mjs).
+ * Round 646: the most a finished Build Your XI records, and so its ceiling.
+ * Round 645 records buildXiPoints(verdict), which pays LINEUP_PERFECT (500,
+ * src/lib/lineupVerdictPoints.ts) for the top rung of the verdict ladder and
+ * less for every rung below it. Written as the number rather than the import,
+ * because no imported value is read at module scope; simFreePoints holds that
+ * a perfect lineup still records exactly 500. game_score_caps holds it for
+ * build-your-xi (scripts/simCapsAreCeilings.mjs).
  */
 export const BUILD_YOUR_XI_CEILING = 500;
 
@@ -301,30 +306,28 @@ export function useLineupBuilder() {
         }
       );
       const data = await resp.json();
-      
-      if (!resp.ok) {
+      /* Round 645: only a referee verdict is scored as one. A refused call, a
+         malformed body and the function's own stand-ins (its market value
+         read and its error placeholder, xiRefereeVerdict) all go to the
+         offline judge, so the lineup is judged on its quality either way and
+         a stand-in's flat rung never pays for an XI nobody judged. */
+      const judged = resp.ok ? xiRefereeVerdict(data) : null;
+
+      if (!judged) {
         // AI referee down/out of quota -> offline judge, never a dead-end
         const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
-        setVerdict(local);
+        setVerdict({ ...local, judge: 'offline' });
         setPhase('result');
         return;
       }
-      
-      if (!data.rating || !data.analysis) {
-        setVerdict({
-          rating: data.rating || 'Mid-Table 😐',
-          headline: data.headline || 'Squad evaluated',
-          analysis: data.analysis || 'Your squad has been evaluated.',
-        });
-      } else {
-        setVerdict(data);
-      }
+
+      setVerdict(judged);
       setPhase('result');
     } catch (err) {
       console.error('Evaluation error:', err);
       try {
         const local = await localEvaluateSoccerXI(filledSlotsArray.map(s => s.playerName));
-        setVerdict(local);
+        setVerdict({ ...local, judge: 'offline' });
       } catch {
         setVerdict({ rating: 'Error', headline: 'Could not evaluate', analysis: 'Network error. Please check your connection and try again.' });
       }
@@ -345,7 +348,9 @@ export function useLineupBuilder() {
     setIsSpinning(false);
   }, []);
 
-  useGameCompletion('build-your-xi', phase === 'result', verdict ? BUILD_YOUR_XI_CEILING : 0);
+  /* Round 645: the verdict is the score. This recorded `verdict ? 500 : 0`,
+     the whole cap for any finished lineup, the Error card included. */
+  useGameCompletion('build-your-xi', phase === 'result', buildXiPoints(verdict));
 
   return {
     formation, phase, selectedPositionIndex, currentTeam, positions,

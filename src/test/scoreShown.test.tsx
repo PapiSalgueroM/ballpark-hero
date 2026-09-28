@@ -594,7 +594,14 @@ describe('fantasy-draft', () => {
     const rec = recorded('/fantasy-draft');
     console.log(`SHOWN fantasy-draft: recorded ${JSON.stringify(rec)} verdict "Season score: ${shown}/100" from ${points} season points (${verdictLine}); share "${scoreLine}", text "${custom}"`);
     expect(rec).toEqual([shown]);
-    expect(shown).toBe(Math.min(100, Math.round((points / 114) * 100)));
+    /* Round 645: the score is the season share above what the worst legal
+       draft would have banked against the same AI (duelScore), so it can never
+       exceed the bare share it used to be, and it is a real number. The
+       formula itself is held by simFreePoints; this test holds that the card,
+       the share and the record all carry the same one. */
+    expect(Number.isInteger(shown)).toBe(true);
+    expect(shown).toBeGreaterThanOrEqual(0);
+    expect(shown).toBeLessThanOrEqual(Math.min(100, Math.round((points / 114) * 100)));
     expect(scoreLine).toContain(`Season score ${shown}/100`);
     expect(custom).toContain(`Season score ${shown}/100`);
     expect(told).toBe(verdictLine);

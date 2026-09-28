@@ -61,6 +61,12 @@ export function expectedWins(sport: ExpansionSport, overall: number): number {
   return curve[curve.length - 1][1];
 }
 
+/** The wins simulateSeasonFair averages for an overall, from the same clamped
+ *  per game chance it plays (Round 645 reads it for the zero skill season). */
+export function fairExpectedWins(sport: ExpansionSport, overall: number, games: number): number {
+  return games * Math.min(0.985, Math.max(0.03, expectedWins(sport, overall) / games));
+}
+
 /**
  * Season sim on the rebalanced curve. Same shape and flavor as the core
  * simulateSeason (deterministic seed, per-game booleans, light momentum so

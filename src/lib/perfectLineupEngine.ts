@@ -2,6 +2,7 @@
 // The original soccer version (src/data/perfectLineup.ts) is intentionally left
 // untouched; this engine powers the newer sports through a LineupConfig.
 import { makeRng } from '@/data/perfectLineup';
+import { skillPoints } from '@/lib/skillPoints';
 
 export type SlotGrade = 'green' | 'yellow' | 'black';
 
@@ -148,6 +149,43 @@ export function simulate<P>(config: LineupConfig<P>, picks: P[]): GenericSimResu
   const slotGrades: SlotGrade[] = ratings.map((r) => (r >= 88 ? 'green' : r >= 75 ? 'yellow' : 'black'));
 
   return { rating, chemistry, squadValue, grade, slotGrades };
+}
+
+/**
+ * Round 645: the ratings the worst and the best picks reach on this board.
+ * Slot by slot in formation order, each name used once, the worst board takes
+ * the lowest rated eligible player and the best board the highest. Measured
+ * before this round over 300 dealt boards: the worst picks already rated 73
+ * to 82 (NBA), 77 to 79 (NHL) and 65 to 76 (F1), against best boards of 82 to
+ * 91, so the rating the game recorded was most of the way to perfect before a
+ * single decision. A slot with nobody eligible leaves no board to measure,
+ * and reads as a zero of 0 and a perfect of 100.
+ */
+export function lineupBounds<P>(config: LineupConfig<P>, slots: GenericSlot[]): { zero: number; perfect: number } {
+  const board = (worst: boolean): number | null => {
+    const used = new Set<string>();
+    const picks: P[] = [];
+    for (const slot of slots) {
+      const el = eligiblePlayers(config, slot, used);
+      if (el.length === 0) return null;
+      const p = worst ? el[el.length - 1] : el[0];
+      used.add(config.nameOf(p));
+      picks.push(p);
+    }
+    return simulate(config, picks).rating;
+  };
+  const zero = board(true);
+  const perfect = board(false);
+  return zero === null || perfect === null ? { zero: 0, perfect: 100 } : { zero, perfect };
+}
+
+/** Round 645: what a finished lineup records and its result card shows: the
+ *  rating above what the worst picks on the same board reach. The best board
+ *  records its rating, exactly as before, and the worst board records 0. */
+export function lineupPoints<P>(config: LineupConfig<P>, slots: GenericSlot[], result: GenericSimResult | null): number {
+  if (!result) return 0;
+  const { zero, perfect } = lineupBounds(config, slots);
+  return skillPoints(result.rating, zero, perfect);
 }
 
 const GRADE_EMOJI: Record<SlotGrade, string> = { green: '🟩', yellow: '🟨', black: '⬛' };

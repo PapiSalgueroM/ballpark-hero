@@ -19,17 +19,15 @@ import {
 } from '@/lib/rebuildSave';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 
-/** Round 646: the recorder stores the scored seat's rating times this. */
-export const REBUILD_RECORD_SCALE = 10;
-
 /**
- * Round 646: the most a Rebuild run can record, the scored seat's rating
- * times REBUILD_RECORD_SCALE (the recorder below reads the same constant), and
+ * Round 646: the most a Rebuild run can record. The recorder below records
+ * Round 645's loop.rebuildPoints, the climb scored on the rating times
+ * loop.REBUILD_RECORD_SCALE, which keeps a 99 rated XI at its old 990, and
  * loop.ratingOf clamps the rating at REBUILD_RATING_MAX (99): 990.
  * game_score_caps holds it for rebuild (scripts/simCapsAreCeilings.mjs).
  */
 export function rebuildCeiling(): number {
-  return loop.REBUILD_RATING_MAX * REBUILD_RECORD_SCALE;
+  return loop.REBUILD_RATING_MAX * loop.REBUILD_RECORD_SCALE;
 }
 
 /**
@@ -103,6 +101,13 @@ export interface RebuildState {
   finalFunds: number;
   objectives: ObjectiveView[];
   grade: string;
+  /** Round 645: the points this seat's window scores; the first human seat's
+   *  are the ones recorded. */
+  points: number;
+  /** Round 645: whether this seat's points are the ones the site records (a
+   *  one seat table, or the first human seat at a fuller one). The hand over
+   *  card says so when they are not, rather than show points nothing keeps. */
+  pointsRecorded: boolean;
   shareText: string;
   /** What the XI would read right now with this manager in charge. */
   managerReading: (m: ManagerOption) => number;
@@ -451,6 +456,8 @@ export function useRebuild(): RebuildState {
   const startRating = run?.startRating ?? 0;
   const target = run?.target ?? 0;
   const grade = run ? loop.gradeOf(run) : '';
+  /* Round 645: the points this seat's window scores (rebuildPoints). */
+  const points = run ? loop.rebuildPoints(run) : 0;
   const managerReading = useCallback((m: ManagerOption) => (run ? loop.ratingOf(run, m) : 0), [run]);
   const offerPrice = useCallback((p: Player) => (run ? loop.offerPrice(run, p) : p.marketValue), [run]);
   const canRedeal = run ? loop.canRedeal(run) : false;
@@ -466,7 +473,9 @@ export function useRebuild(): RebuildState {
 
   /* The finish the site records: the run at a one seat table, the first
      human's run at a fuller one, and only once the season has been played. */
-  const firstHumanRun = tbl.seats.find(s => s.kind === 'human')?.run ?? null;
+  const firstHuman = tbl.seats.find(s => s.kind === 'human') ?? null;
+  const firstHumanRun = firstHuman?.run ?? null;
+  const pointsRecorded = solo || (firstHuman !== null && firstHuman.index === tbl.turn);
   const scored = solo ? run : firstHumanRun;
   const scoredRating = scored ? loop.ratingOf(scored) : 0;
   /* Round 477: one definition of finished, in src/lib/rebuildSave.ts, because
@@ -474,7 +483,9 @@ export function useRebuild(): RebuildState {
      drift, and a restore that marked a finish this line did not call complete
      would leave a mark sitting for the next real finish to swallow. */
   const complete = isFinishedTable(tbl);
-  useGameCompletion('rebuild', complete, Math.max(0, scoredRating * REBUILD_RECORD_SCALE), scored && scoredRating >= scored.target ? 1 : 0);
+  /* Round 645: the climb above the club's starting rating (rebuildPoints),
+     not the closing rating, which a club carries into the window for free. */
+  useGameCompletion('rebuild', complete, scored ? loop.rebuildPoints(scored) : 0, scored && scoredRating >= scored.target ? 1 : 0);
 
   const shareText = useMemo(() => {
     if (!solo) {
@@ -503,7 +514,7 @@ export function useRebuild(): RebuildState {
     phase, loading, clubs, club: seat?.club ?? null, preset, setPreset, chooseClub, reset,
     run,
     seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason: tbl.season,
-    startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
+    startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, points, pointsRecorded, shareText,
     managerReading, offerPrice, canRedeal,
     pickFinance, toManager, hireManager, keepManager: KEEP_MANAGER, setFormation,
     spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun,

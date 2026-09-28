@@ -1596,7 +1596,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Scoring survival points and the trophy",
         items: [
-          "Survive a round for 16 points; lift the trophy for exactly 100.",
+          "Each round you survive is worth 16 and lifting the trophy makes it 100. Your run records how far that goes past a five of the weakest card in each pick on the same draw: matching that five records 0, and the trophy always records 100.",
         ],
       },
     ],
@@ -1644,7 +1644,7 @@ export const BASKETBALL_CONTENT: GameContentMap = {
       {
         heading: "Two rounds survived and one regret at power forward",
         paragraphs: [
-          "Your finished five rates 96. The Qualifier wins big, the Last Sixteen is close, the Quarter Final needs extra time, and the Semi Final ends the run. Two rounds survived, 32 points, and the card you would redo is the 88 you took at power forward.",
+          "Your finished five rates 96. The Qualifier wins big, the Last Sixteen is close, the Quarter Final needs extra time, and the Semi Final ends the run. Three rounds survived is 48. On the same draw a five of the weakest card in each pick goes out in the Qualifier, so all 48 count, and the card you would redo is the 88 you took at power forward.",
         ],
       },
     ],

@@ -73,7 +73,8 @@ function save(today: string, grades: (Grade | null)[], index: number) {
 }
 
 /** Exact grade = 100, one grade off = 50, else 0. */
-function scoreFor(user: Grade, actual: Grade): number {
+/** Exported for simFreePoints (Round 645). */
+export function scoreFor(user: Grade, actual: Grade): number {
   const d = Math.abs(GRADES.indexOf(user) - GRADES.indexOf(actual));
   return d === 0 ? 100 : d === 1 ? 50 : 0;
 }

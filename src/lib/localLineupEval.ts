@@ -15,10 +15,20 @@ export interface LocalVerdict {
 
 /* ---------------- soccer: Build Your XI ---------------- */
 
+/**
+ * Round 645: the lowest rating the offline judge gives, and what a pick it
+ * cannot price counts as. It used to rate an unpriced name 64 on trust, and
+ * Build Your XI takes any real player of the assigned club or country, every
+ * era, so eleven obscure names the 2026 value table does not carry read Solid
+ * and recorded 250 of 500 for no skill whenever the AI referee was out. The
+ * judge only credits what it can price now; the AI referee judges every era.
+ */
+export const SOCCER_OFFLINE_FLOOR = 35;
+
 function soccerRating(mvUsd: number): number {
   const mvM = Math.max(1, mvUsd / 1_000_000);
-  const r = 35 + 64 * (Math.log10(mvM + 1) / Math.log10(1001));
-  return Math.max(35, Math.min(99, Math.round(r)));
+  const r = SOCCER_OFFLINE_FLOOR + 64 * (Math.log10(mvM + 1) / Math.log10(1001));
+  return Math.max(SOCCER_OFFLINE_FLOOR, Math.min(99, Math.round(r)));
 }
 
 async function lookupMarketValue(name: string): Promise<{ name: string; mv: number } | null> {
@@ -43,7 +53,7 @@ export async function localEvaluateSoccerXI(playerNames: string[]): Promise<Loca
     .map((f, i) => ({ input: playerNames[i], hit: f }))
     .map(x => ({
       name: x.hit?.name ?? x.input,
-      rating: x.hit ? soccerRating(x.hit.mv) : 64, // unknown = decent squad player benefit-of-doubt
+      rating: x.hit ? soccerRating(x.hit.mv) : SOCCER_OFFLINE_FLOOR, // Round 645: unpriced = the floor, never trusted
       known: !!x.hit,
     }));
   const avg = Math.round(rated.reduce((s, r) => s + r.rating, 0) / Math.max(1, rated.length));
@@ -63,7 +73,7 @@ export async function localEvaluateSoccerXI(playerNames: string[]): Promise<Loca
     `Squad average ${avg} on current 2026 market values.`,
     star ? `Star man: ${star.name} (${star.rating}).` : '',
     weakest && weakest !== star ? `Weak link: ${weakest.name} (${weakest.rating}).` : '',
-    unknowns > 0 ? `${unknowns} pick${unknowns === 1 ? '' : 's'} weren't in the value database, rated on trust.` : '',
+    unknowns > 0 ? `${unknowns} pick${unknowns === 1 ? '' : 's'} ${unknowns === 1 ? 'is' : 'are'} not in the 2026 value table, so the offline judge counts ${unknowns === 1 ? 'it' : 'them'} at its floor of ${SOCCER_OFFLINE_FLOOR}. The AI referee rates every era.` : '',
     'Verdict by the offline judge (AI referee back soon).',
   ].filter(Boolean);
 

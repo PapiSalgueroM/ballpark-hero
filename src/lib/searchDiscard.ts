@@ -1,6 +1,7 @@
 import { Player } from '@/types/game';
 import { FORMATIONS, Formation, FormationSlot, playerRating } from '@/lib/squadDeal';
 import { eligiblePositions } from '@/lib/worldXi';
+import { skillPoints } from '@/lib/skillPoints';
 
 /**
  * Search and Discard (Round 325, the second of the three new games from the
@@ -151,6 +152,64 @@ export function cpuKeep(state: SdState, offer: Player[]): { keep: Player; slotIn
   }
   if (!best) throw new Error('the offer guarantee failed: nothing in the offer fits the CPU');
   return { keep: best.keep, slotIndex: best.slotIndex };
+}
+
+/** Round 645: the keep a player with no skill makes, the lowest rated player
+ *  in the offer that fits an open slot, into the first open slot he fits. */
+export function worstKeep(state: SdState, offer: Player[]): { keep: Player; slotIndex: number } {
+  const open = emptySlots(state, state.turn);
+  let worst: { keep: Player; slotIndex: number; rating: number } | null = null;
+  for (const p of offer) {
+    const si = open.find(i => sdFits(p, SD_FORMATION.slots[i]));
+    if (si === undefined) continue;
+    const rating = playerRating(p);
+    if (!worst || rating < worst.rating) worst = { keep: p, slotIndex: si, rating };
+  }
+  if (!worst) throw new Error('the offer guarantee failed: nothing in the offer fits');
+  return { keep: worst.keep, slotIndex: worst.slotIndex };
+}
+
+/**
+ * Round 645: the season a player with no skill would have had on the same
+ * deal: the duel replayed from the same pool and seed, the worst keep every
+ * turn, the CPU keeping as it always does. The CPU is deterministic, so this
+ * is the exact counterfactual of a CPU duel. In pass and play it stands in
+ * for the second human with the CPU's keeps, which is the closest the deal
+ * alone can say about what nothing would have earned.
+ */
+export function zeroSkillDuel(pool: Player[], seed: number): SdSeason {
+  let st = newDuel(pool, seed);
+  while (!duelOver(st)) {
+    const offer = drawOffer(st);
+    const k = st.turn === 0 ? worstKeep(st, offer) : cpuKeep(st, offer);
+    st = applyKeep(st, offer, k.keep, k.slotIndex);
+  }
+  return settleSeason(st.squads[0], st.squads[1]);
+}
+
+/** The most points a 38 game season holds. */
+export const SEASON_POINTS_MAX = 114;
+
+/** A season's points as a share of a perfect season, out of 100: the season
+ *  score Search and Discard and Fantasy Draft showed and recorded before
+ *  Round 645. */
+export function seasonShare(points: number): number {
+  return Math.min(100, Math.round((points / SEASON_POINTS_MAX) * 100));
+}
+
+/**
+ * Round 645: what a settled duel records, Search and Discard and Fantasy
+ * Draft both. They recorded the season share, and the settle plays each side
+ * against a fixed ladder of opposition rated 55 to 88 while the pool's
+ * cheapest cards rate in the mid 70s, so the worst possible squad still banked
+ * most of a season: measured before this round, a keeper who took the worst
+ * card every turn scored 62 against the best keeper's 68 in Search and
+ * Discard, and the worst eleven of the Fantasy pool scored 73. The share is
+ * scored above the zero skill season on the same deal now: that season records
+ * 0 and a perfect 114 point season still records 100.
+ */
+export function duelScore(myPoints: number, zeroSkillPoints: number): number {
+  return skillPoints(seasonShare(myPoints), seasonShare(zeroSkillPoints), 100);
 }
 
 /* ---------------- The settle ---------------- */

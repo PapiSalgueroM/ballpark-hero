@@ -5,6 +5,7 @@
  */
 
 import { getTodayET, dateSeed } from '@/lib/dateUtils';
+import { skillPoints } from '@/lib/skillPoints';
 
 export interface SeasonSlot {
   key: string;      // 'C', '1B', 'SP', ...
@@ -93,6 +94,36 @@ export function simulateSeason(overall: number, games: number, seed: number): Si
     perfect: wins === games,
     overall: Math.round(overall),
   };
+}
+
+/** The wins simulateSeason averages for an overall: the per game chance
+ *  times the games. */
+export function coreExpectedWins(overall: number, games: number): number {
+  return games * winProbability(overall);
+}
+
+/**
+ * Round 645: the pick zero skill makes from a spun squad for a slot, the
+ * lowest rated player still on the board who could fill it.
+ */
+export function worstFitFor(squad: SpinSquad, slotKey: string, usedNames: Set<string>): DraftablePlayer | null {
+  const fits = squad.players.filter(p => !usedNames.has(p.name) && p.eligible.includes(slotKey));
+  if (fits.length === 0) return null;
+  return fits.reduce((lo, p) => (p.rating < lo.rating ? p : lo));
+}
+
+/**
+ * Round 645: what a finished season records and its card shows. The four
+ * Perfect Seasons recorded the win total, and a five of the worst player every
+ * spin offered still wins games: measured on real rosters over 300 drafts, the
+ * worst picks averaged 19.4 wins of 82 in the NBA, 2.0 of 17 in the NFL, 7.3 of
+ * 162 in MLB and 3.7 of 82 in the NHL. The season is scored above what the
+ * worst pick from every squad the run spun would expect to win (the page keeps
+ * that pick beside each real one): at or below it records 0, and a perfect
+ * season records every game, exactly as before.
+ */
+export function perfectSeasonPoints(wins: number, games: number, zeroSkillWins: number): number {
+  return skillPoints(wins, zeroSkillWins, games);
 }
 
 /** Ratings color tier for UI. */
@@ -278,6 +309,7 @@ export interface DailyAttemptRecord {
   spins: number;
   teamNames: string[];   // squads landed on, for the result recap
   themeId?: string;      // R6 Wave 13: theme applied to this daily run, if any
+  points?: number;       // Round 645: what the run recorded (perfectSeasonPoints)
 }
 
 /** Namespaced localStorage key: `perfect-season-{sport}-daily-{date}`. */

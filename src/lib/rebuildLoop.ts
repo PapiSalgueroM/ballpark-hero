@@ -1,6 +1,7 @@
 import { Player } from '@/types/game';
 import { FORMATIONS, playerRating, type Formation } from '@/lib/squadDeal';
 import type { RebuildClub } from '@/lib/fetchRebuild';
+import { skillPoints } from '@/lib/skillPoints';
 import {
   hashSeed, budgetFor, managerOptionsFor, KEEP_MANAGER, managerFits, boardEnvelopeFor, fortuneDeckFor,
   drawFinEvent, planRivals, isContested, warRivalIndex, rivalCapFor, nextRaise, spinOrder, dealReplacements,
@@ -216,8 +217,12 @@ export function xiOf(s: RunState): (Player | null)[] {
   });
 }
 
-/** Round 646: the top of the live rating, both clamps in ratingOf read it. */
+/** Round 646: the top of the live rating, both clamps in ratingOf read it.
+ *  Round 645's rebuildPoints scores up to it. */
 export const REBUILD_RATING_MAX = 99;
+/** Round 646: a window records its rating times this, so a 99 records 990
+ *  (rebuildPoints below, and rebuildCeiling in src/hooks/useRebuild.ts). */
+export const REBUILD_RECORD_SCALE = 10;
 
 /** The live rating, the manager's lift included, the reckoning's penalty included once there is one. */
 export function ratingOf(s: RunState, manager: ManagerOption | null = s.manager): number {
@@ -248,6 +253,19 @@ export function finalFundsOf(s: RunState): number {
 
 export function gradeOf(s: RunState): string {
   return gradeFor(ratingOf(s), s.startRating, s.target);
+}
+
+/**
+ * Round 645: what a finished window records and its card shows. It recorded
+ * the closing rating times ten, and a club is handed its rating before the
+ * window opens: keep every shirt, change nothing, and a 78 rated club recorded
+ * 780 of the 940 cap, a Real Madrid more than a Genk for the same nothing. The
+ * window is scored on the climb now: the rating above where the club started,
+ * 0 for changing nothing or making it worse, and 990 for a 99 rated XI, the
+ * same 990 it always recorded.
+ */
+export function rebuildPoints(s: RunState): number {
+  return skillPoints(ratingOf(s) * REBUILD_RECORD_SCALE, s.startRating * REBUILD_RECORD_SCALE, REBUILD_RATING_MAX * REBUILD_RECORD_SCALE);
 }
 
 /** Can the scouts be asked for a fresh list right now: the list is a dead end, or a perk pays for it. */

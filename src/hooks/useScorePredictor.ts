@@ -42,7 +42,9 @@ function getDailyPuzzle(): ScorePredictorPuzzle {
  */
 export const SCORE_PREDICTOR_CEILING = 1000;
 
-/** Exported for scripts/simCapsAreCeilings.mjs section 5, which plays it. */
+/** Exported for scripts/simCapsAreCeilings.mjs section 5, which plays it, and
+ *  for simFreePoints (Round 645): a wrong winner still pays 50, the 5 percent
+ *  participation floor the rule allows and no more. */
 export function calcScore(
   guessH: number, guessA: number,
   actualH: number, actualA: number,

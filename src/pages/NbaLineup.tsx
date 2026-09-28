@@ -16,6 +16,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { startingFivePoints } from '@/lib/lineupVerdictPoints';
 
 const NbaLineup = () => {
   const {
@@ -351,6 +352,10 @@ const NbaLineup = () => {
               <h2 className="text-3xl font-bold text-primary font-display mb-1">{verdict.rating}</h2>
               <p className="text-lg font-semibold text-foreground mb-3">{verdict.headline}</p>
               <p className="text-sm text-muted-foreground leading-relaxed whitespace-pre-line">{verdict.analysis}</p>
+              <p className="mt-4 text-sm text-muted-foreground">
+                <span data-testid="starting-five-points" className="font-display text-2xl font-black text-gold">{startingFivePoints(verdict)}</span> points
+                {verdict.judge === 'offline' && <span className="block mt-1 text-xs">The offline judge can't read the challenge, so this five scores no points. Play again once the referee is back.</span>}
+              </p>
             </div>
 
             <div className="bg-card border border-border rounded-2xl p-4">
@@ -379,7 +384,7 @@ const NbaLineup = () => {
             </div>
 
             <ShareButtons
-              score={verdict.rating}
+              score={`${verdict.rating}, ${startingFivePoints(verdict)} points`}
               gameName="NBA Starting 5"
               gamePath="/nba-starting-5"
             />

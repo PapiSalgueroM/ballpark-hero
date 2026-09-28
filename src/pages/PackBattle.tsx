@@ -19,6 +19,7 @@ import {
   gradePack,
   buildPackEmojiGrid,
   fmtCompactUsd,
+  packScore,
   type PlayMode,
   type PackCard,
   type PackResult,
@@ -132,8 +133,10 @@ const PackBattle = () => {
   const isComplete = phase === 'done';
   const correctCalls = calls.filter(c => c === true).length;
 
-  // Score = total banked value (USD), correctAnswers = number of correct calls.
-  useGameCompletion('pack-battle', isComplete, bankedValue, correctCalls, playMode === 'daily');
+  // Score = the banked value (USD) a landed call earned, correctAnswers = number
+  // of correct calls. Round 645: the free opening card banks nothing (packScore),
+  // and only the daily is ranked.
+  useGameCompletion('pack-battle', isComplete, packScore(result), correctCalls, playMode === 'daily');
 
   const { grade, headline } = useMemo(() => gradePack(result), [result]);
   const emojiGrid = useMemo(() => buildPackEmojiGrid(result), [result]);
@@ -250,11 +253,13 @@ const PackBattle = () => {
           <>
             <div className="flex items-center justify-center gap-2 text-xs text-muted-foreground font-semibold uppercase tracking-wider mb-4">
               <span>Card {cardIndex + 2} of {cards.length}</span>
-              <span className="text-primary">&middot; Banked {fmtCompactUsd(bankedValue)}</span>
+              <span className="text-primary">&middot; Banked {fmtCompactUsd(packScore({ calls, bankedValue }))}</span>
             </div>
 
             <div className="flex flex-col sm:flex-row gap-3 items-stretch mb-5">
-              {card(bankedCard, true, 'Banked')}
+              {/* Round 645: nothing is banked until a call lands (packScore), so
+                  the free opening card is not labelled banked either. */}
+              {card(bankedCard, true, calls.some(c => c === true) ? 'Banked' : 'Opening card (not banked)')}
               <div className="self-center text-muted-foreground font-bold text-sm shrink-0">VS</div>
               {card(
                 nextCard,
@@ -301,17 +306,17 @@ const PackBattle = () => {
               headline={headline}
               statLine={
                 result.cleared
-                  ? `Full pack cleared, ${fmtCompactUsd(bankedValue)} banked`
+                  ? `Full pack cleared, ${fmtCompactUsd(packScore(result))} banked`
                   : `Busted after ${correctCalls} correct call${correctCalls === 1 ? '' : 's'}`
               }
               statRow={[
                 { label: 'Grade', value: grade },
-                { label: 'Banked', value: fmtCompactUsd(bankedValue) },
+                { label: 'Banked', value: fmtCompactUsd(packScore(result)) },
                 { label: 'Calls', value: `${correctCalls}/${cards.length - 1}` },
               ]}
               emojiGrid={emojiGrid}
               share={{
-                score: fmtCompactUsd(bankedValue),
+                score: fmtCompactUsd(packScore(result)),
                 gameName: 'Pack Battle',
                 gamePath: '/pack-battle',
               }}

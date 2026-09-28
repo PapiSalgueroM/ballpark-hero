@@ -283,12 +283,14 @@ const SquadDeal = () => {
             headline={`Grade ${r.grade}`}
             statRow={[
               { label: 'Rating', value: r.rating },
+              { label: 'Points', value: g.points },
               { label: 'Grade', value: r.grade },
               ...(chemistry.totalBonus > 0 ? [{ label: 'Chem. Bonus', value: `+${chemistry.totalBonus}` }] : []),
             ]}
             emojiGrid={'🏟️ ' + g.formation.name + ' · ' + r.grade}
             share={{
-              score: 'Grade ' + r.grade + ' (' + r.rating + ')',
+              /* Round 645: the share carries the points the run records. */
+              score: 'Grade ' + r.grade + ' (' + r.rating + '), ' + g.points + ' points',
               gameName: 'Squad Deal',
               gamePath: '/squad-deal',
             }}

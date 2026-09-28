@@ -35,6 +35,8 @@ export interface NbaAIVerdict {
   rating: string;
   headline: string;
   analysis: string;
+  /** Round 645: set when the offline judge gave this verdict. */
+  judge?: 'offline';
 }
 
 export const NBA_POSITIONS: NbaPositionSlot[] = [

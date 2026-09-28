@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { localEvaluateNbaFive } from '@/lib/localLineupEval';
+import { fiveRefereeVerdict, startingFivePoints } from '@/lib/lineupVerdictPoints';
 import { getRandomNbaTeams, NBA_TEAMS, type NbaTeam } from '@/data/nbaTeams';
 import { getRandomStatChallenge } from '@/data/nbaStats';
 import type { NbaFilledSlot, NbaGamePhase, NbaAIVerdict, StatChallenge, NbaPosition } from '@/types/nba';
@@ -82,9 +83,13 @@ export function isPositionEligibleForSlot(dbPosition: string | null | undefined,
 }
 
 /**
- * Round 646: what a finished NBA Starting 5 records, and so its ceiling: any
- * result with a verdict pays this flat amount, anything else 0. game_score_caps
- * holds it for nba-starting-5 (scripts/simCapsAreCeilings.mjs).
+ * Round 646: the most a finished NBA Starting 5 records, and so its ceiling.
+ * Round 645 records startingFivePoints(verdict), which pays LINEUP_PERFECT
+ * (500, src/lib/lineupVerdictPoints.ts) for the top rung of the referee's
+ * ladder and less for every rung below it. Written as the number rather than
+ * the import, because no imported value is read at module scope; simFreePoints
+ * holds that a perfect five still records exactly 500. game_score_caps holds
+ * it for nba-starting-5 (scripts/simCapsAreCeilings.mjs).
  */
 export const NBA_STARTING_5_CEILING = 500;
 
@@ -317,9 +322,14 @@ export function useNbaLineup() {
       );
       if (!resp.ok) throw new Error(`Evaluation request failed (${resp.status})`);
       const data = await resp.json();
-      // Guard against a malformed/empty body so we never land on a blank result.
-      if (!data || typeof data.rating !== 'string') throw new Error('Malformed verdict');
-      setVerdict(data);
+      /* Guard against a malformed/empty body so we never land on a blank
+         result. Round 645: the function's own stand-ins when its AI is out
+         (the quick data read that rates any five real names All-Star
+         Starters, and its exception placeholder) are not verdicts either
+         (fiveRefereeVerdict), so they go to the offline judge with the rest. */
+      const judged = fiveRefereeVerdict(data);
+      if (!judged) throw new Error('No referee verdict');
+      setVerdict(judged);
       setPhase('result');
     } catch (err) {
       // AI referee down/out of quota -> offline judge so the game still ends
@@ -330,7 +340,7 @@ export function useNbaLineup() {
           filledSlotsArray.map(s => s.playerName),
           `${challenge.direction === 'highest' ? 'Highest' : 'Lowest'} ${challenge.stat}`,
         );
-        setVerdict(local);
+        setVerdict({ ...local, judge: 'offline' });
         setPhase('result');
       } catch {
         setEvaluationError('Could not evaluate your lineup. Please try again.');
@@ -359,7 +369,10 @@ export function useNbaLineup() {
     }, 100);
   }, []);
 
-  useGameCompletion('nba-starting-5', phase === 'result', verdict ? NBA_STARTING_5_CEILING : 0);
+  /* Round 645: the verdict is the score. This recorded `verdict ? 500 : 0`,
+     the whole cap for any finished five; an offline verdict records 0 because
+     that judge cannot read the challenge (lineupVerdictPoints.ts). */
+  useGameCompletion('nba-starting-5', phase === 'result', startingFivePoints(verdict));
 
   return {
     phase, challenge, selectedPosition, currentTeam, filledSlots, filledSlotsArray,

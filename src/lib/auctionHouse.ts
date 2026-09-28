@@ -469,10 +469,12 @@ export function simulateShowdown(bidders: Bidder[]): ShowdownResult {
   return { table: rows, lines, champion: rows[0].bidderId, topScorer: top };
 }
 
-/** Round 646: auctionScore's terms, named so the ceiling reads the same rule. */
+/** Round 646: auctionScore's terms, named so the ceiling reads the same rule.
+ *  Round 645: third and last place pay nothing (they paid 50), so a squad of
+ *  journeymen no longer banks a place bonus for sitting the auction out. */
 export const AUCTION_FIRST_PLACE_POINTS = 300;
 export const AUCTION_SECOND_PLACE_POINTS = 150;
-export const AUCTION_OTHER_PLACE_POINTS = 50;
+export const AUCTION_OTHER_PLACE_POINTS = 0;
 export const AUCTION_RATING_WEIGHT = 3;
 export const AUCTION_MONEY_PER_POINT = 10;
 
@@ -498,16 +500,54 @@ export function auctionScoreOf(place: number, squadRating: number, moneyLeft: nu
  * rated squad costs the budget it would keep, and what an auction can really
  * reach depends on the pool the database deals. The cap it replaces was 56
  * million, a value frozen from the old scale, so a real auction paid a
- * thousandth of a point. game_score_caps holds it for sign-the-player
- * (scripts/simCapsAreCeilings.mjs).
+ * thousandth of a point. Round 645's squad share (auctionScore below) is at
+ * most 1, so it never records past this. game_score_caps holds it for
+ * sign-the-player (scripts/simCapsAreCeilings.mjs).
  */
 export function signThePlayerCeiling(): number {
   return auctionScoreOf(0, AUCTION_RATING_MAX, START_BUDGET);
 }
 
-/** Final score for the leaderboard: table position + squad quality + thrift. */
-export function auctionScore(result: ShowdownResult, you: Bidder): number {
+/**
+ * Round 645: the squad ratings the room offered at its two ends, the weakest
+ * player in every slot (the squad a bidder who never raised a paddle is
+ * filled with at the end) and the best. `room` is every player the auction
+ * dealt, lots and journeymen together.
+ */
+export function auctionBounds(room: AuctionPlayer[]): { zero: number; perfect: number } {
+  const lows: number[] = [];
+  const highs: number[] = [];
+  for (const slot of AUCTION_SLOTS) {
+    const ratings = room.filter(p => p.slotKey === slot.key).map(p => p.rating);
+    if (ratings.length === 0) continue;
+    lows.push(Math.min(...ratings));
+    highs.push(Math.max(...ratings));
+  }
+  const avg = (xs: number[]) => (xs.length ? Math.round(xs.reduce((s, x) => s + x, 0) / xs.length) : 0);
+  return { zero: avg(lows), perfect: avg(highs) };
+}
+
+/**
+ * Final score for the leaderboard: table position + squad quality + thrift.
+ *
+ * Round 645: a bidder who never raised a paddle scored most of a winner's
+ * total. Last place still paid 50, three times the squad rating paid for the
+ * journeymen every open chair is filled with (rated in the 70s on the current
+ * pool), and the money never spent paid a tenth of itself, the most of anyone:
+ * about 340 of the 600 or so a winning auction scores, and a squad of
+ * journeymen still finishes second in a noisy four game mini league often
+ * enough to bank 150. Now last place pays nothing, and the whole score counts
+ * in proportion to how far the squad rates above the all journeyman squad the
+ * room would have filled you with (auctionBounds): nothing for that squad, all
+ * of it for the best squad the room offered, so a perfect auction scores
+ * exactly what it did.
+ */
+export function auctionScore(result: ShowdownResult, you: Bidder, bounds: { zero: number; perfect: number }): number {
   const place = result.table.findIndex(r => r.bidderId === 'you');
   const yourRow = result.table[place];
-  return auctionScoreOf(place, squadRatingOf(you), yourRow.moneyLeft);
+  const rating = squadRatingOf(you);
+  const share = bounds.perfect > bounds.zero
+    ? Math.max(0, Math.min(1, (rating - bounds.zero) / (bounds.perfect - bounds.zero)))
+    : 0;
+  return Math.round(share * auctionScoreOf(place, rating, yourRow.moneyLeft));
 }

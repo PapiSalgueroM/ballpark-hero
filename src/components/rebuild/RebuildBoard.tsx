@@ -50,7 +50,7 @@ export function RebuildBoard() {
     phase, loading, clubs, club, preset, setPreset, chooseClub, reset,
     run,
     seats, seat, solo, setSeatKinds, takeSeat, passOn, scoreboard, sharedSeason,
-    startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, shareText,
+    startingXi, startRating, currentRating, target, budget, spendCeiling, finalFunds, objectives, grade, points, pointsRecorded, shareText,
     managerReading, offerPrice, canRedeal,
     pickFinance, toManager, hireManager, keepManager, setFormation,
     spinning, spin, keepSpun, sellSpun, takeReplacement, promoteBench, takeForty, redealSpun,
@@ -579,6 +579,11 @@ export function RebuildBoard() {
             </div>
             <p className="cm-rise mt-2 text-sm text-muted-foreground" style={{ animationDelay: '1s' }}>target was {target}</p>
             <p className="cm-slam mt-3 font-display text-2xl font-bold text-gold" style={{ animationDelay: '0.15s' }}>{grade}</p>
+            {/* Round 645: only the first human seat's window is recorded on this
+                device, so every other seat's card says its points are not kept. */}
+            <p className="cm-rise mt-1 text-sm font-semibold text-foreground" style={{ animationDelay: '1.05s' }} data-testid="rebuild-points">
+              {pointsRecorded ? `${points} points for the climb` : `${points} points for the climb, not recorded: this device records the first human player's window`}
+            </p>
             <p className="cm-rise mt-2 text-xs text-muted-foreground" style={{ animationDelay: '1.1s' }}>
               Manager: {run.manager?.name ?? keepManager.name} · Sold {run.sold.length} · Signed {run.signed.length} · €{Math.abs(finalFunds)}M {finalFunds < 0 ? 'in debt' : 'left'}
             </p>
@@ -645,6 +650,7 @@ export function RebuildBoard() {
           </div>
           <p className="cm-rise mt-2 text-sm text-muted-foreground" style={{ animationDelay: '1s' }}>target was {target}</p>
           <p className="cm-slam mt-3 font-display text-2xl font-bold text-gold" style={{ animationDelay: '0.15s' }}>{grade}</p>
+          <p className="cm-rise mt-1 text-sm font-semibold text-foreground" style={{ animationDelay: '1.05s' }} data-testid="rebuild-points">{points} points for the climb</p>
           <p className="cm-rise mt-2 text-xs text-muted-foreground" style={{ animationDelay: '1.1s' }}>
             Manager: {run.manager?.name ?? keepManager.name} · Sold {run.sold.length} · Signed {run.signed.length} · €{Math.abs(finalFunds)}M {finalFunds < 0 ? 'in debt' : 'left'}
           </p>

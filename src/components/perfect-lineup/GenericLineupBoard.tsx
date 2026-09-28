@@ -177,6 +177,9 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
             <span>
               Chemistry <b className="text-foreground">{game.result.chemistry}%</b>
             </span>
+            <span>
+              Points <b className="text-gold" data-testid="lineup-points">{game.points}</b>
+            </span>
             {chemistry.totalBonus > 0 && (
               <span>
                 Chem. Bonus <b className="text-gold">+{chemistry.totalBonus}</b>
@@ -196,7 +199,7 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
           <ShareButtons
             gameName={config.gameName}
             gamePath={config.gamePath}
-            score={score.shareScore}
+            score={`${score.shareScore}, ${game.points} points`}
             emojiGrid={slotGradesToEmoji(game.result.slotGrades)}
           />
 

@@ -3,6 +3,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET, dailyDraw, shuffledRange } from '@/lib/dateUtils';
 import { fetchQuizBoardClues, type Clue, type ClueValue } from '@/lib/fetchQuizBoard';
 import { markRestoredFinish } from '@/lib/restoredFinish';
+import { skillPoints } from '@/lib/skillPoints';
 
 export interface Question {
   clue: Clue;
@@ -18,6 +19,8 @@ export interface BallIqState {
   status: 'answering' | 'revealed' | 'finished';
   correctCount: number;
   iq: number;
+  /** Round 645: the number the test records and the result card shows. */
+  points: number;
   rank: string;
   answer: (option: string) => void;
   next: () => void;
@@ -67,7 +70,10 @@ export function buildQuestion(correct: Clue, pool: Clue[], label: string): Quest
   return { clue: correct, options: order.map(i => options[i]), chosen: null };
 }
 
-/** Round 646: the top of the IQ scale, the clamp below reads it. */
+/** Round 645: the bottom of the IQ scale. A test with nothing right reads 55. */
+export const IQ_FLOOR = 55;
+/** Round 646: the top of the IQ scale, the clamp below reads it. A test with
+ *  all twelve right reads 160. */
 const IQ_TOP = 160;
 /** The recorder stores the IQ times this, so a 160 records 1600. */
 const IQ_RECORD_SCALE = 10;
@@ -76,6 +82,7 @@ const IQ_RECORD_SCALE = 10;
  * Round 646: the most a Ball IQ day can record. Every question right is an
  * IQ of 55 + 105 = 160, clamped at IQ_TOP, recorded times 10: 1600.
  * game_score_caps holds it for ball-iq (scripts/simCapsAreCeilings.mjs).
+ * Round 645's ballIqPoints records a perfect test at exactly this.
  */
 export const BALL_IQ_CEILING = IQ_TOP * IQ_RECORD_SCALE;
 
@@ -83,7 +90,7 @@ export const BALL_IQ_CEILING = IQ_TOP * IQ_RECORD_SCALE;
  * Ball Knowledge IQ. Centred on 100, weighted so the hard questions carry more:
  * a $1000 clue is worth more IQ than a $200 one. Range clamps to 55-160.
  */
-function computeIq(questions: Question[]): number {
+export function computeIq(questions: Question[]): number {
   const total = questions.reduce((s, q) => s + q.clue.value, 0);
   const earned = questions.reduce(
     (s, q) => s + (q.chosen === q.clue.answer ? q.clue.value : 0),
@@ -91,7 +98,18 @@ function computeIq(questions: Question[]): number {
   );
   if (total === 0) return 100;
   const pct = earned / total;
-  return Math.round(Math.max(55, Math.min(IQ_TOP, 55 + pct * 105)));
+  return Math.round(Math.max(IQ_FLOOR, Math.min(IQ_TOP, IQ_FLOOR + pct * (IQ_TOP - IQ_FLOOR))));
+}
+
+/**
+ * Round 645: what a finished test records. It recorded iq * 10, so twelve
+ * wrong answers still paid the 55 the scale starts at: 550 of a 1600 cap, 34
+ * leaderboard points for nothing. The IQ above that floor is what pays now,
+ * 0 for none right and 1600 for all twelve, the same 1600 a perfect test
+ * always recorded. The result card shows this number beside the IQ.
+ */
+export function ballIqPoints(iq: number): number {
+  return skillPoints(iq * IQ_RECORD_SCALE, IQ_FLOOR * IQ_RECORD_SCALE, BALL_IQ_CEILING);
 }
 
 function rankFor(iq: number): string {
@@ -182,7 +200,7 @@ export function useBallIq(): BallIqState {
   const iq = useMemo(() => computeIq(questions), [questions]);
   const rank = rankFor(iq);
 
-  useGameCompletion('ball-iq', finished, iq * IQ_RECORD_SCALE, correctCount);
+  useGameCompletion('ball-iq', finished, ballIqPoints(iq), correctCount);
 
   const answer = useCallback((option: string) => {
     if (!current || current.chosen) return;
@@ -201,11 +219,11 @@ export function useBallIq(): BallIqState {
   const shareText = useMemo(() => {
     if (!finished) return '';
     const squares = questions.map(q => (q.chosen === q.clue.answer ? '🟩' : '🟥')).join('');
-    return `Ball Knowledge IQ, ${today}\n${squares}\nIQ ${iq} · ${rank}\ndouknowball.com/ball-iq`;
+    return `Ball Knowledge IQ, ${today}\n${squares}\nIQ ${iq} · ${rank} · ${ballIqPoints(iq)} points\ndouknowball.com/ball-iq`;
   }, [finished, questions, iq, rank, today]);
 
   return {
     loading, questions, index, current, status,
-    correctCount, iq, rank, answer, next, shareText,
+    correctCount, iq, points: ballIqPoints(iq), rank, answer, next, shareText,
   };
 }

@@ -22,6 +22,7 @@ import { computeChemistry, formatChemistry } from '@/lib/chemistry';
 import { StatTile } from '@/components/game/StatTile';
 import { normalizePosition, playerRating } from '@/lib/squadDeal';
 import { ordinal, simulateWorldXiSeason, type WxPlayer } from '@/lib/worldXi';
+import { buildXiPoints } from '@/lib/lineupVerdictPoints';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -433,6 +434,7 @@ const LineupBuilder = () => {
               outcomeEmoji={<Trophy className="w-12 h-12 text-primary mx-auto" />}
               headline={verdict.rating}
               statLine={<span className="font-semibold">{verdict.headline}</span>}
+              statRow={[{ label: 'Points', value: buildXiPoints(verdict) }]}
               funFact={<span className="whitespace-pre-line">{verdict.analysis}</span>}
               emojiGrid={
                 seasonReport
@@ -440,7 +442,10 @@ const LineupBuilder = () => {
                   : `Build Your XI: ${formation} rated ${verdict.rating}`
               }
               share={{
-                score: seasonReport ? `${verdict.rating}, ${seasonReport.squadRating}/100` : verdict.rating,
+                /* Round 645: the share carries the points the run records. */
+                score: seasonReport
+                  ? `${verdict.rating}, ${buildXiPoints(verdict)} points, ${seasonReport.squadRating}/100`
+                  : `${verdict.rating}, ${buildXiPoints(verdict)} points`,
                 gameName: 'Build Your XI',
                 gamePath: '/build-your-xi',
               }}

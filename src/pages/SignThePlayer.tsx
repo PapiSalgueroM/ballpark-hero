@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import {
   AUCTION_SLOTS, AUCTION_THEMES, BID_STEPS, START_BUDGET,
-  applySale, auctionScore, buildAuctionPool, createBidders,
+  applySale, auctionBounds, auctionScore, buildAuctionPool, createBidders,
   decayFloorFor, decaySnapper, fillOpenChairs, nextDecayPrice,
   orderLots, runRivalBids, simulateShowdown,
   type AuctionPlayer, type AuctionTheme, type Bidder, type BidderId, type ShowdownResult,
@@ -225,7 +225,11 @@ const SignThePlayer = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [phase, lotIndex, lots]);
 
-  const score = result ? auctionScore(result, you) : 0;
+  /* Round 645: the squad is scored against the room this auction dealt, its
+     journeymen at one end and its best lot in every slot at the other
+     (auctionBounds), so sitting on your hands no longer banks the money and
+     the fill squad's rating. */
+  const score = result ? auctionScore(result, you, auctionBounds([...weakFills, ...lots.map(l => l.player)])) : 0;
   useGameCompletion('sign-the-player', phase === 'showdown' && !!result, score, result?.champion === 'you' ? 1 : 0);
 
   const squadList = (b: Bidder) => AUCTION_SLOTS.map(s => ({ slot: s, p: b.squad[s.key] }));
@@ -429,6 +433,7 @@ const SignThePlayer = () => {
             'Pass one is a lot per position in a random order, pass two is the elite band, and the single most valuable player is held back to headline the close.',
             'Every lot opens at real list price. Two or more bidders and it is a war in £5M/£10M/£25M steps; exactly one bidder and he takes him at the list price; nobody at all and the price falls step by step, and you can snap the bargain any time before the floor withdraws the lot.',
             'When the last hammer falls, every open chair on every squad is filled from the journeyman list at a fee, and the showdown simulates a double round-robin league: table position, goal difference and money left decide your score.',
+            'Winning the league pays 300 and second pays 150, plus three times your squad rating and a tenth of the money you kept. All of it counts in proportion to how far your XI rates above a squad of journeymen: bid on nobody and you score 0, land the best player in every slot and you get the lot.',
           ]}
           examples={[
             'The Sheikh jumps £25M when he wants someone, so bait him early',

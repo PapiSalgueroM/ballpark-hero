@@ -417,7 +417,13 @@ export const FIGHT_GYM_CEILING = 100;
  */
 export function gymVerdict(g: GymState): GymVerdict {
   const wrecked = g.alumni.filter(a => a.damage >= 70).length;
-  const clean = g.alumni.filter(a => a.damage < 45).length;
+  /* Round 645: getting a man out clean is only an achievement if he fought.
+     Counting everyone paid a gym that never booked a fight: release the two
+     kids on the books, sign the cheapest prospect every week and release him
+     too, and 60 seeded gyms closed on 17 points out of 100 without a single
+     bout, where a gym left alone closes on 3. */
+  const fought = (a: GymState['alumni'][number]) => a.record.split('-').reduce((n, x) => n + (Number(x) || 0), 0) > 0;
+  const clean = g.alumni.filter(a => a.damage < 45 && fought(a)).length;
   const score = clampi(
     g.reputation * 0.5 +
     g.titles * 13 +

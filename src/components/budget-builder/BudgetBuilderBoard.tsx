@@ -12,7 +12,7 @@ export function BudgetBuilderBoard() {
     era, setEra, budget,
     squad, activeSlot, setActiveSlot, candidates, search, setSearch,
     spent, remaining, filled, complete, teamRating,
-    criterion, criterionMet, moneyRating, series, playFinal, finalScore,
+    criterion, criterionMet, moneyRating, series, playFinal, finalScore, points,
     sign, release, reset, shareText,
   } = useBudgetBuilder();
   // Round 66: the owner's no scroll rule. Filling the last slot completes the
@@ -273,9 +273,9 @@ export function BudgetBuilderBoard() {
                   )),
                 )}
               </div>
-              <p className="mt-3 text-center font-display text-2xl font-black text-gold">Score: {finalScore}</p>
+              <p className="mt-3 text-center font-display text-2xl font-black text-gold" data-testid="budget-points">{points} points</p>
               <p className="text-center text-[11px] text-muted-foreground">
-                team rating + 1 per 200M unspent + 10 for the board demand + 15 for a series win or 5 for a draw
+                Board score {finalScore}: team rating + 1 per 200M unspent + 10 for the board demand + 15 for a series win or 5 for a draw. Points are the board score above what the lowest rated XI this budget buys would score. The best XI it buys, with the series won, keeps its full score.
               </p>
             </div>
           )}

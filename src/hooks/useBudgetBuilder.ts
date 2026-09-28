@@ -7,6 +7,7 @@ import {
 import { simulateSeries, type SeriesResult } from '@/lib/dartDraft';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { skillPoints } from '@/lib/skillPoints';
 
 /**
  * Budget Builder v2 (owner task 49, 2026-08-05: "criteria, eras, and a goal").
@@ -100,6 +101,8 @@ export interface BudgetBuilderState {
   series: SeriesResult | null;
   playFinal: () => void;
   finalScore: number;
+  /** Round 645: what the finished board records and its card shows. */
+  points: number;
   sign: (p: Player) => void;
   release: (slotIndex: number) => void;
   reset: () => void;
@@ -154,6 +157,79 @@ export function budgetFor(moneyXi: (Player | null)[], eraId?: string): number {
   if (eraId === 'today') return TODAY_BUDGET;
   const naive = moneyXi.reduce((s, p) => s + (p?.marketValue ?? 0), 0);
   return Math.max(100, Math.round((naive * 0.62) / 10) * 10);
+}
+
+/** The finished board's score on its own scale, the Round 315 formula: the
+ *  XI's rating, a point per 200M left, 10 for the board demand and 15 for
+ *  beating the Money XI (5 for a draw). */
+export function budgetScore(teamRating: number, remaining: number, criterionMet: boolean, outcome: SeriesResult['outcome'] | null): number {
+  let s = teamRating + Math.floor(Math.max(0, remaining) / UNSPENT_PER_POINT);
+  if (criterionMet) s += CRITERION_BONUS;
+  if (outcome) s += outcome === 'win' ? SERIES_WIN_BONUS : outcome === 'draw' ? SERIES_DRAW_BONUS : 0;
+  return s;
+}
+
+/**
+ * Round 645: the XI a board builds by always signing the lowest rated player
+ * it can afford (worst) or the highest (best), slot by slot in formation order,
+ * keeping back enough money for the cheapest fit in every slot still open.
+ */
+export function budgetXi(pool: Player[], formation: Formation, budget: number, worst: boolean): Player[] {
+  const used = new Set<string>();
+  const picked: Player[] = [];
+  let left = budget;
+  const fitsOf = (slot: FormationSlot) => pool.filter(p => slot.allowed.includes(p.position) && !used.has(p.name));
+  formation.slots.forEach((slot, i) => {
+    const reserve = formation.slots.slice(i + 1).reduce((s, later) => {
+      const cheapest = fitsOf(later).reduce((lo, p) => Math.min(lo, p.marketValue), Infinity);
+      return s + (Number.isFinite(cheapest) ? cheapest : 0);
+    }, 0);
+    const fits = fitsOf(slot);
+    const affordable = fits.filter(p => p.marketValue <= left - reserve);
+    const from = affordable.length > 0 ? affordable : fits;
+    if (from.length === 0) return;
+    const pick = from.reduce((a, b) => {
+      const ra = playerRating(a);
+      const rb = playerRating(b);
+      if (ra !== rb) return worst ? (rb < ra ? b : a) : (rb > ra ? b : a);
+      return b.marketValue < a.marketValue ? b : a;
+    });
+    used.add(pick.name);
+    picked.push(pick);
+    left -= pick.marketValue;
+  });
+  return picked;
+}
+
+/**
+ * Round 645: what zero skill and a perfect board score on the board a run
+ * plays. Budget Builder recorded its score on its own scale, and the rating
+ * term is most of that score whatever gets signed: an XI of the cheapest
+ * players on the Today pool still rates in the 70s, banks the most money left
+ * and can meet the day's demand by accident (two players under 15M, 10 percent
+ * unspent), so doing nothing scored 80 and more of a perfect board's 115 or so.
+ * The zero is the lowest rated XI the budget buys, scored with the Money XI
+ * final lost; the perfect is the highest rated XI it buys, scored with the
+ * final won.
+ */
+export function budgetBounds(pool: Player[], formation: Formation, budget: number, criterion: BbCriterion): { zero: number; perfect: number } {
+  const scoreOf = (xi: Player[], outcome: SeriesResult['outcome']) => {
+    if (xi.length === 0) return 0;
+    const rating = Math.round(xi.reduce((s, p) => s + playerRating(p), 0) / xi.length);
+    const left = budget - xi.reduce((s, p) => s + p.marketValue, 0);
+    return budgetScore(rating, left, criterion.check(xi, budget, left), outcome);
+  };
+  return {
+    zero: scoreOf(budgetXi(pool, formation, budget, true), 'loss'),
+    perfect: scoreOf(budgetXi(pool, formation, budget, false), 'win'),
+  };
+}
+
+/** Round 645: what a finished board records and its card shows, its score
+ *  above what the lowest rated XI the budget buys would score, with the
+ *  highest rated XI's winning score kept exactly. */
+export function budgetPoints(finalScore: number, bounds: { zero: number; perfect: number }): number {
+  return skillPoints(finalScore, bounds.zero, bounds.perfect);
 }
 
 export function useBudgetBuilder(): BudgetBuilderState {
@@ -261,13 +337,14 @@ export function useBudgetBuilder(): BudgetBuilderState {
        ingredients, one tenth the scale: a great day lands a bit over 100,
        like everywhere else. Old personal bests from the inflated scale will
        stand until genuinely beaten, which is the honest reading of a best. */
-    let s = teamRating + Math.floor(Math.max(0, remaining) / UNSPENT_PER_POINT);
-    if (criterionMet) s += CRITERION_BONUS;
-    if (series) s += series.outcome === 'win' ? SERIES_WIN_BONUS : series.outcome === 'draw' ? SERIES_DRAW_BONUS : 0;
-    return s;
+    return budgetScore(teamRating, remaining, criterionMet, series?.outcome ?? null);
   }, [complete, teamRating, remaining, criterionMet, series]);
 
-  useGameCompletion('budget-builder', complete && series !== null, finalScore, teamRating);
+  /* Round 645: the board's zero skill and perfect scores (budgetBounds), and
+     the points the finished board records above the zero. */
+  const bounds = useMemo(() => budgetBounds(topicPool, formation, budget, criterion), [topicPool, formation, budget, criterion]);
+  const points = budgetPoints(finalScore, bounds);
+  useGameCompletion('budget-builder', complete && series !== null, budgetPoints(finalScore, bounds), teamRating);
 
   const playFinal = useCallback(() => {
     if (!complete) return;
@@ -321,15 +398,15 @@ export function useBudgetBuilder(): BudgetBuilderState {
       ? `\nFinal vs the Money XI (${moneyRating}): ${series.userWins}-${series.aiWins}${series.outcome === 'win' ? ', beat the checkbook!' : series.outcome === 'draw' ? ', honors even' : ''}`
       : '';
     const critLine = `\nBoard demand: ${criterion.label} ${criterionMet ? '✅' : '❌'}`;
-    return `Budget Builder (${era.label}, $${budget}M cap), ${formation.name}\nRating ${teamRating} · Spent $${spent}M · Score ${finalScore}${critLine}${seriesLine}\ndouknowball.com/budget-builder`;
-  }, [complete, era, budget, formation, teamRating, spent, finalScore, criterion, criterionMet, series, moneyRating]);
+    return `Budget Builder (${era.label}, $${budget}M cap), ${formation.name}\nRating ${teamRating} · Spent $${spent}M · ${points} points${critLine}${seriesLine}\ndouknowball.com/budget-builder`;
+  }, [complete, era, budget, formation, teamRating, spent, points, criterion, criterionMet, series, moneyRating]);
 
   return {
     loading, pool: topicPool, formation, setFormation, topic, setTopic,
     era, setEra, budget,
     squad, activeSlot, setActiveSlot, candidates, search, setSearch,
     spent, remaining, filled, complete, teamRating,
-    criterion, criterionMet, moneyXi, moneyRating, series, playFinal, finalScore,
+    criterion, criterionMet, moneyXi, moneyRating, series, playFinal, finalScore, points,
     sign, release, reset, shareText,
   };
 }

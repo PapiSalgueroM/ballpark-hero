@@ -70,7 +70,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Final score: rating, savings and the series",
         items: [
-          "Final score is your team rating, plus 1 point for every full 200 million left unspent, plus 10 for meeting the board demand, plus 15 for a series win or 5 for a draw.",
+          "The board score is your team rating, plus 1 point for every full 200 million left unspent, plus 10 for meeting the board demand, plus 15 for a series win or 5 for a draw. Your points are that board score above what the lowest rated XI the budget buys would score: that XI scores 0, and the best XI it buys, with the series won, keeps its full board score.",
         ],
       },
     ],
@@ -691,13 +691,13 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Typing a player who covers the nation and slot",
         items: [
-          "Type 2 or more letters and pick a player of that nationality who covers the slot.",
+          "Type 2 or more letters and pick a player of that nationality who covers the slot. The list shows names and clubs, never positions, so knowing who plays where is the game.",
         ],
         subsections: [
           {
             heading: "Bouncing off wrong position picks",
             items: [
-              "Wrong position picks bounce off harmlessly with an explanation. Confirmed picks lock for good.",
+              "A wrong position pick bounces off with an explanation and costs a strike, which is a point off your score, and the third strike ends the run. Confirmed picks lock for good.",
             ],
           },
         ],
@@ -705,7 +705,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Filling all eleven and simulating a season",
         items: [
-          "Fill all 11 to win, then check squad value and chemistry, and simulate a season if you are curious.",
+          "Fill all 11 to win. Your score is the slots you filled less one for every strike, so a clean full XI scores 11. Then check squad value and chemistry, and simulate a season if you are curious.",
         ],
       },
     ],

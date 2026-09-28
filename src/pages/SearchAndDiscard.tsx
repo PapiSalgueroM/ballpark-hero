@@ -14,7 +14,7 @@ import { fetchSquadPool, playerRating } from '@/lib/squadDeal';
 import { Player } from '@/types/game';
 import {
   SD_FORMATION, SdSeason, SdState, applyKeep, cpuKeep, drawOffer, duelOver,
-  emptySlots, newDuel, sdFits, settleSeason, squadRating,
+  emptySlots, newDuel, sdFits, settleSeason, squadRating, zeroSkillDuel, duelScore,
 } from '@/lib/searchDiscard';
 
 /**
@@ -33,7 +33,9 @@ const SLUG = 'search-and-discard';
 
 /**
  * Round 646: the most a Search and Discard season can record, the season
- * score's own clamp: a perfect 38 game season is 114 of 114, 100.
+ * share's own clamp (seasonShare in src/lib/searchDiscard.ts, which Round
+ * 645's duelScore scores above the zero skill season and never past): a
+ * perfect 38 game season is 114 of 114, 100.
  * game_score_caps holds it for search-and-discard
  * (scripts/simCapsAreCeilings.mjs).
  */
@@ -47,6 +49,9 @@ export default function SearchAndDiscard() {
   const [offer, setOffer] = useState<Player[] | null>(null);
   const [keepPick, setKeepPick] = useState<Player | null>(null);
   const [season, setSeason] = useState<SdSeason | null>(null);
+  /* Round 645: the seed this duel was dealt from, so the season a keeper with
+     no skill would have had on the same deal can be played out at the end. */
+  const [seed, setSeed] = useState<number | null>(null);
 
   useEffect(() => {
     let cancelled = false;
@@ -62,7 +67,9 @@ export default function SearchAndDiscard() {
   }, []);
 
   const start = useCallback((m: Mode) => {
-    const duel = newDuel(pool, Math.floor(Math.random() * 2147483645) + 1);
+    const dealSeed = Math.floor(Math.random() * 2147483645) + 1;
+    const duel = newDuel(pool, dealSeed);
+    setSeed(dealSeed);
     setMode(m);
     setState(duel);
     setSeason(null);
@@ -108,7 +115,14 @@ export default function SearchAndDiscard() {
 
   const isDone = phase === 'settled';
   const myPoints = season?.points[0] ?? 0;
-  const finalScore = Math.min(SEARCH_AND_DISCARD_CEILING, Math.round((myPoints / 114) * 100));
+  /* Round 645: the season share above what the worst keep every turn would
+     have banked on the same deal (duelScore). The share alone paid the worst
+     keeper 62 against the best keeper's 68. */
+  const zeroSeason = useMemo(
+    () => (isDone && seed !== null && pool.length > 0 ? zeroSkillDuel(pool, seed) : null),
+    [isDone, seed, pool],
+  );
+  const finalScore = zeroSeason ? duelScore(myPoints, zeroSeason.points[0]) : 0;
   const won = season?.winner === 0;
   useGameCompletion(SLUG, isDone, finalScore, won ? 1 : 0);
 
@@ -173,6 +187,7 @@ export default function SearchAndDiscard() {
               <p className="font-bold text-foreground">How to play</p>
               <p>Both managers build the same 4-3-3 from one shared pool of real players. On your turn you search three, keep exactly one into a compatible open slot, and the other two are discarded from the whole game.</p>
               <p>A discard is a weapon: a star you bin can never reach the other squad. Eleven keeps each, then both XIs play the same simulated 38 game season, derbies included, and the table settles it.</p>
+              <p>Your score is your season beyond the one you'd get keeping the worst player every turn on the same deal. Do that and it's 0, a perfect 114 point season is 100.</p>
             </div>
             <button onClick={() => start('cpu')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
               <span className="block font-bold text-foreground">Versus the CPU</span>

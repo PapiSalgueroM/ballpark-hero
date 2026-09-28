@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
 import { Swords } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { ResultScreen } from '@/components/game/ResultScreen';
@@ -7,7 +7,7 @@ import { getTodayET } from '@/lib/dateUtils';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 import {
   buildDraft, dailySeedFor, displayScore, matchLine, GauntletConfig, GauntletDraftResult,
-  GauntletRun, loadDailyRun, runGauntlet, saveDailyRun, squadRatingOf,
+  GauntletRun, loadDailyRun, runGauntlet, saveDailyRun, squadRatingOf, gauntletPoints,
 } from '@/lib/gauntletEngine';
 
 /**
@@ -114,7 +114,18 @@ export default function GauntletBoard<P>({ config, children }: Props<P>) {
   }, [phase, run, shownMatches]);
 
   const isDone = phase === 'done';
-  useGameCompletion(config.gameId, run !== null, run?.score ?? 0, run?.roundsCleared ?? 0, mode === 'daily');
+  /* Round 645: the draft the run came from. A restored daily keeps only the
+     run, so its draft is dealt again from the day seed, which is the draft
+     it was. */
+  const dealt = useMemo(
+    () => draft ?? (run && mode === 'daily' ? buildDraft(config, dailySeedFor(config, todayStr)) : null),
+    [draft, run, mode, config, todayStr],
+  );
+  /* Round 645: the run above the cup the weakest cards of the same draft run
+     (gauntletPoints), not the run's own score, which the weakest cards reach
+     a quarter of on the soccer pool. Only the daily is ranked. */
+  const points = run && dealt ? gauntletPoints(config, dealt, run) : 0;
+  useGameCompletion(config.gameId, run !== null, run && dealt ? gauntletPoints(config, dealt, run) : 0, run?.roundsCleared ?? 0, mode === 'daily');
 
   const pick = draft && phase === 'drafting' ? draft.picks[pickIndex] : null;
   const dailyDone = phase === 'setup' && loadDailyRun(config, todayStr) !== null;
@@ -129,7 +140,7 @@ export default function GauntletBoard<P>({ config, children }: Props<P>) {
             <p className="font-bold text-foreground">How to play</p>
             <p>For each of the {countWord(slots)} {config.slotsPhrase} you get five real players who fit it, spread from a star to a bargain, and you keep exactly one.</p>
             <p>Then your {noun} runs the gauntlet: five knockout rounds against opposition rated {ladderLow} up to {ladderHigh}. A level game goes to {config.tiebreak.phrase}.</p>
-            <p>The run is decided by the {noun} you drafted: the same {noun} always runs the same gauntlet. 16 points a round survived, the trophy lands exactly 100.</p>
+            <p>The run is decided by the {noun} you drafted: the same {noun} always runs the same gauntlet. You score for going further than a {noun} of the weakest card in every pick would have. Match that and it's 0, lift the trophy and it's 100.</p>
           </div>
           <button onClick={() => start('daily')} className="w-full rounded-xl border border-border bg-surface-1 p-4 text-left hover:border-primary/50 hover:bg-primary/5 transition-colors">
             <span className="block font-bold text-foreground">Daily gauntlet</span>
@@ -212,9 +223,9 @@ export default function GauntletBoard<P>({ config, children }: Props<P>) {
           outcomeEmoji={run.champion ? '🏆' : run.roundsCleared >= 3 ? '🥈' : '🫠'}
           headline={run.champion ? 'Champions! The gauntlet is run!' : `Out at ${run.matches[run.matches.length - 1]?.round.name ?? 'the start'}`}
           statLine={`${run.roundsCleared} of ${config.rounds.length} rounds survived with a ${run.rating} rated ${noun}`}
-          statRow={[{ label: 'Score', value: run.score }]}
-          emojiGrid={[`${config.emoji} ${config.gameName}: ${run.score} pts`, ...run.matches.map(m => `${m.won ? '🟩' : '🟥'} ${matchLine(config, m)}`)].join('\n')}
-          share={{ score: String(run.score), gameName: config.gameName, gamePath: config.gamePath }}
+          statRow={[{ label: 'Points', value: points }]}
+          emojiGrid={[`${config.emoji} ${config.gameName}: ${points} pts`, ...run.matches.map(m => `${m.won ? '🟩' : '🟥'} ${matchLine(config, m)}`)].join('\n')}
+          share={{ score: String(points), gameName: config.gameName, gamePath: config.gamePath }}
           onPlayAgain={() => setPhase('setup')}
           playAgainLabel={mode === 'daily' ? 'Back to modes' : 'New draft'}
           playNext={mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new draft.</p> : undefined}
