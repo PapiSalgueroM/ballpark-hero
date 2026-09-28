@@ -56,6 +56,10 @@ export const FORMATIONS: Formation[] = [
 ];
 
 /* ---------------- Rating ---------------- */
+/** The best card rating playerRating gives anyone. Round 645: Mystery Box
+ *  scores up to this, so a curve change moves its perfect score with it. */
+export const PLAYER_RATING_CEILING = 96;
+
 /**
  * Rating spread audit (2026-07-03): the old curve was 45 + 55 * (log10(mv+1) / log10(231)),
  * which used log10(231) as its scale ceiling. That saturates hard: a mid-table
@@ -93,7 +97,7 @@ export function playerRating(p: Player): number {
   const ageBoost = age >= 30 ? Math.min(6, 1 + (age - 29) * 0.55) : 1;
   const mv = Math.max(0.5, p.marketValue * ageBoost);
   const r = 62 + (33 * Math.log10(mv)) / Math.log10(400);
-  return Math.max(52, Math.min(96, Math.round(r)));
+  return Math.max(52, Math.min(PLAYER_RATING_CEILING, Math.round(r)));
 }
 
 /**

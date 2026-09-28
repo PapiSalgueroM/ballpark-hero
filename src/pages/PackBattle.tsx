@@ -19,6 +19,7 @@ import {
   gradePack,
   buildPackEmojiGrid,
   fmtCompactUsd,
+  packScore,
   type PlayMode,
   type PackCard,
   type PackResult,
@@ -132,8 +133,9 @@ const PackBattle = () => {
   const isComplete = phase === 'done';
   const correctCalls = calls.filter(c => c === true).length;
 
-  // Score = total banked value (USD), correctAnswers = number of correct calls.
-  useGameCompletion('pack-battle', isComplete, bankedValue, correctCalls);
+  // Score = the banked value (USD) a landed call earned, correctAnswers = number
+  // of correct calls. Round 645: the free opening card banks nothing (packScore).
+  useGameCompletion('pack-battle', isComplete, packScore(result), correctCalls);
 
   const { grade, headline } = useMemo(() => gradePack(result), [result]);
   const emojiGrid = useMemo(() => buildPackEmojiGrid(result), [result]);
@@ -300,17 +302,17 @@ const PackBattle = () => {
               headline={headline}
               statLine={
                 result.cleared
-                  ? `Full pack cleared, ${fmtCompactUsd(bankedValue)} banked`
+                  ? `Full pack cleared, ${fmtCompactUsd(packScore(result))} banked`
                   : `Busted after ${correctCalls} correct call${correctCalls === 1 ? '' : 's'}`
               }
               statRow={[
                 { label: 'Grade', value: grade },
-                { label: 'Banked', value: fmtCompactUsd(bankedValue) },
+                { label: 'Banked', value: fmtCompactUsd(packScore(result)) },
                 { label: 'Calls', value: `${correctCalls}/${cards.length - 1}` },
               ]}
               emojiGrid={emojiGrid}
               share={{
-                score: fmtCompactUsd(bankedValue),
+                score: fmtCompactUsd(packScore(result)),
                 gameName: 'Pack Battle',
                 gamePath: '/pack-battle',
               }}

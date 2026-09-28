@@ -166,6 +166,19 @@ export function resolveCall(bankedValue: number, nextValue: number, calledHigher
   return calledHigher ? nextValue > bankedValue : nextValue < bankedValue;
 }
 
+/**
+ * Round 645: what a finished pack records and the result screen shows as
+ * banked. The run opens holding the first card face up, and that card's value
+ * used to be recorded on a first call bust: a pack busted on its only guess
+ * banked a player the pack handed out for free, often tens of millions, a
+ * third of the 54M cap. Nothing is banked until a call lands now, and every
+ * landed call banks what it always banked, so a cleared pack records the same
+ * as before.
+ */
+export function packScore(result: Pick<PackResult, 'calls' | 'bankedValue'>): number {
+  return result.calls.some(c => c === true) ? result.bankedValue : 0;
+}
+
 /** Grade + headline purely on how far through the pack the run got. */
 export function gradePack(result: PackResult): { grade: string; headline: string } {
   const correctCalls = result.calls.filter(c => c === true).length;
@@ -179,8 +192,8 @@ export function gradePack(result: PackResult): { grade: string; headline: string
 export function buildPackEmojiGrid(result: PackResult): string {
   const pips = result.calls.map(c => (c === true ? '🟢' : c === false ? '🔴' : '⚪'));
   const header = result.cleared
-    ? `Pack Battle: pack cleared, ${fmtCompactUsd(result.bankedValue)} banked`
-    : `Pack Battle: busted, ${fmtCompactUsd(result.bankedValue)} banked`;
+    ? `Pack Battle: pack cleared, ${fmtCompactUsd(packScore(result))} banked`
+    : `Pack Battle: busted, ${fmtCompactUsd(packScore(result))} banked`;
   return [header, pips.join('')].join('\n');
 }
 

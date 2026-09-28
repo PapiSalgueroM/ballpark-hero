@@ -1,12 +1,24 @@
 import { useState, useCallback, useMemo, useEffect } from 'react';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET, dailyDraw } from '@/lib/dateUtils';
-import { FORMATIONS, playerRating, type FormationSlot } from '@/lib/squadDeal';
+import { FORMATIONS, PLAYER_RATING_CEILING, playerRating, type FormationSlot } from '@/lib/squadDeal';
+import { skillPoints } from '@/lib/skillPoints';
 import { fetchPackPool, type PackPlayer, type PackTier } from '@/lib/fetchPackPool';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 
 export const TOTAL_PACKS = 15;
-const EMPTY_SLOT_RATING = 45;
+export const EMPTY_SLOT_RATING = 45;
+
+/**
+ * Round 645: what a finished box records. It recorded rating * 10, and a box
+ * where every pack went in the bin still rates 45 (eleven empty slots), so the
+ * worst possible run recorded 450, over half of the 760 cap. The rating above
+ * that empty floor is what pays now: 0 for binning everything, and 960 for an
+ * XI of the best card rating there is, exactly what that XI always recorded.
+ */
+export function mysteryBoxPoints(rating: number): number {
+  return skillPoints(rating * 10, EMPTY_SLOT_RATING * 10, PLAYER_RATING_CEILING * 10);
+}
 const STORAGE_PREFIX = 'mystery-box-';
 
 /**
@@ -33,6 +45,8 @@ export interface MysteryBoxState {
   discards: number;
   finished: boolean;
   rating: number;
+  /** Round 645: the number a finished box records and its card shows. */
+  points: number;
   filled: number;
   bestPull: PackPlayer | null;
   openPack: () => void;
@@ -172,7 +186,7 @@ export function useMysteryBox(): MysteryBoxState {
     return kept.reduce((best, p) => (playerRating(p) > playerRating(best) ? p : best));
   }, [squad]);
 
-  useGameCompletion('mystery-box', finished, rating * 10, filled);
+  useGameCompletion('mystery-box', finished, mysteryBoxPoints(rating), filled);
 
   const persist = useCallback((d: Array<{ slot: number | null }>, r: boolean) => {
     save(today, { decisions: d, revealedCurrent: r });
@@ -211,6 +225,6 @@ export function useMysteryBox(): MysteryBoxState {
 
   return {
     loading, formation, packIndex, current, revealed, squad, compatibleSlots,
-    discards, finished, rating, filled, bestPull, openPack, place, discard, shareText,
+    discards, finished, rating, points: mysteryBoxPoints(rating), filled, bestPull, openPack, place, discard, shareText,
   };
 }
