@@ -18,6 +18,22 @@ taken from the table and fenced so nobody tidies them: Gordie Howe (the table tr
 table holds no goalie, so they keep their shipped values, are recorded unverified, and the card
 says "season not confirmed").
 
+**Round 648 CLAIMED AND BUILT, branch `r648-profile-clamp`, not yet on main.** The profile's all
+time total adds each record at no more than its game's cap, with the caps the World Leaderboard
+uses (`public.game_denominators`, read through the new `src/lib/scoreCaps.ts`). The page sums the
+player's own `user_game_scores` rows through `src/hooks/useProfileTotal.ts` (paged past the 1,000
+row cap) instead of reading the raw running sum; the browser's own tally (`src/lib/streaks.ts`)
+clamps at record time from a cached copy of the view, or holds a play until a fresh read settles it,
+so nothing is ever added at a value nobody decided. Measured on the planted set: before, one Pack
+Battle row of 8,800,000 was 99.88% of a 8,810,570 total; after, it contributes exactly its cap and
+the total is 11,500. Fence `scripts/simProfileTotal.mjs` (six cases, six controls). The badge and
+achievement cases read the same clamped totals. **The stored total needs the migration
+`supabase/migrations/20260928_round_648_profile_clamp.sql`**, which makes `record_auth_completion`
+add the clamped score and recomputes every `user_scores.total_points` as the clamped sum of its
+records; it was written without a database session, is unapplied and untested against a database,
+and must go on only after Round 644 part 2's last rerun (its md5 guard on the function refuses to
+run once this lands, by design). Until it lands the all time rank still counts raw stored totals.
+
 **Round 663 is the obvious next one and the audit is already done.** The same fault is in the NBA
 sibling: `nbaHLPlayers.ts` is a consistent snapshot of 2024-25 while the table is through 2025-26,
 so **33 of 2,278 matchups (1.45%) are inverted today**, every one involving an active player.

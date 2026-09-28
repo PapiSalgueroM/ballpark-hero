@@ -72,16 +72,36 @@ export interface StreakState {
   loginDates: string[];
   /** Lifetime count of game completions on this browser (every finished game counts once). */
   totalPlays: number;
-  /** Lifetime sum of scores from completed games on this browser. */
+  /** Lifetime sum of scores from completed games on this browser, each clamped at its game's cap since Round 648. */
   totalPoints: number;
+  /** Round 648: plays recorded before this browser had read the caps, held here until a fresh read settles them into totalPoints. */
+  pendingPoints: PendingPoints[];
+}
+
+/** A play waiting for its game's cap: the slug and the rounded score it recorded. */
+export interface PendingPoints {
+  game: string;
+  score: number;
 }
 
 const STORAGE_KEY = 'dukb-streaks-v1';
 
+/* Round 648: a bound on the pending list, so a browser that can never reach
+   the caps view (an ad blocker on the database host, say) cannot grow the
+   streak record without limit. Two hundred unsettled plays is weeks of play
+   offline; the oldest are dropped past it. */
+const PENDING_LIMIT = 200;
+
 const EMPTY_ENTRY: StreakEntry = { current: 0, longest: 0, lastDate: null };
 
 function emptyState(): StreakState {
-  return { version: 1, global: { ...EMPTY_ENTRY }, perGame: {}, loginDates: [], totalPlays: 0, totalPoints: 0 };
+  return { version: 1, global: { ...EMPTY_ENTRY }, perGame: {}, loginDates: [], totalPlays: 0, totalPoints: 0, pendingPoints: [] };
+}
+
+function validPending(p: unknown): p is PendingPoints {
+  return !!p && typeof p === 'object'
+    && typeof (p as PendingPoints).game === 'string' && (p as PendingPoints).game.length > 0
+    && typeof (p as PendingPoints).score === 'number' && Number.isFinite((p as PendingPoints).score) && (p as PendingPoints).score > 0;
 }
 
 /**
@@ -127,6 +147,7 @@ function readState(): StreakState {
       loginDates: Array.isArray(parsed.loginDates) ? parsed.loginDates : [],
       totalPlays: typeof parsed.totalPlays === 'number' ? parsed.totalPlays : 0,
       totalPoints: typeof parsed.totalPoints === 'number' ? parsed.totalPoints : 0,
+      pendingPoints: Array.isArray(parsed.pendingPoints) ? parsed.pendingPoints.filter(validPending) : [],
     };
   } catch {
     return emptyState();
@@ -178,8 +199,15 @@ function advanceEntry(entry: StreakEntry, today: string): StreakEntry {
  *
  * Returns the resulting state so callers (e.g. useStreaks) can update
  * without a second localStorage read.
+ *
+ * Round 648: `cap` is the game's cap from the leaderboard's caps view
+ * (src/lib/scoreCaps.ts knownCap). A play adds at most the cap to
+ * totalPoints. With no cap to hand (the view not read yet in this browser)
+ * the play is held on pendingPoints and settled by settlePendingPoints when
+ * a fresh read lands, so nothing is ever added at a value nobody decided.
+ * A score of 0 has nothing to add and is never held.
  */
-export function recordGameCompletion(gameSlug: string, when: Date = new Date(), score = 0): StreakState {
+export function recordGameCompletion(gameSlug: string, when: Date = new Date(), score = 0, cap?: number): StreakState {
   const today = getEtDateString(when);
   const state = readState();
 
@@ -193,8 +221,37 @@ export function recordGameCompletion(gameSlug: string, when: Date = new Date(), 
   // server tables also record signed in play, so this is the guest era and
   // same browser record that the Profile page merges with the server's.
   state.totalPlays = (state.totalPlays || 0) + 1;
-  state.totalPoints = (state.totalPoints || 0) + (Number.isFinite(score) ? Math.max(0, Math.round(score)) : 0);
+  const points = Number.isFinite(score) ? Math.max(0, Math.round(score)) : 0;
+  if (points > 0) {
+    if (typeof cap === 'number' && Number.isFinite(cap) && cap >= 1) {
+      state.totalPoints = (state.totalPoints || 0) + Math.min(points, cap);
+    } else {
+      state.pendingPoints.push({ game: gameSlug, score: points });
+      if (state.pendingPoints.length > PENDING_LIMIT) state.pendingPoints.splice(0, state.pendingPoints.length - PENDING_LIMIT);
+    }
+  }
 
+  writeState(state);
+  return state;
+}
+
+/**
+ * Round 648: fold every held play into totalPoints at no more than its cap.
+ * `caps` must be a FRESH read of the leaderboard's caps view, because a play
+ * whose game is absent from it is dropped for nothing: that is the board's
+ * own rule for a game that is not allowed to score, and it is only true of a
+ * complete list. Idempotent: the list is emptied as it is settled.
+ */
+export function settlePendingPoints(caps: Record<string, number>): StreakState {
+  const state = readState();
+  if (!state.pendingPoints.length) return state;
+  let added = 0;
+  for (const pending of state.pendingPoints) {
+    const cap = caps[pending.game];
+    if (typeof cap === 'number' && Number.isFinite(cap) && cap >= 1) added += Math.min(pending.score, cap);
+  }
+  state.totalPoints = (state.totalPoints || 0) + added;
+  state.pendingPoints = [];
   writeState(state);
   return state;
 }

@@ -135,6 +135,15 @@ console.log('2) one recordCompletion call feeds all three pipelines, with the ri
 export const SUPABASE_URL = 'stub';
 export const SUPABASE_PUBLISHABLE_KEY = 'stub';
 export const ledger: Record<string, any[]> = {};
+/* Round 648: the recorder clamps the browser tally at each game's cap, read
+   from the leaderboard's caps view, and holds a play until it has read the
+   view once. This stub answers that read with the two games below, so the
+   140 points asserted further down are earned under the same rule the site
+   runs: 40 at a cap of 100 and 100 at a cap of 100. */
+ledger['game_denominators'] = [
+  { game: 'soccer-grid', max_score: 100 },
+  { game: 'missing-xi', max_score: 100 },
+];
 let sessionUser: { id: string } | null = null;
 export function setSessionUser(u: { id: string } | null) { sessionUser = u; }
 function table(name: string) {
