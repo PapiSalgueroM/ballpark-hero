@@ -13,6 +13,15 @@ classic was left alone: `/perfect-lineup` has redirected home since Round 34, so
 it. Fence `simDailyReload`: 28 rows, 8 resume, 5 keep a step refreshed in flight, seven controls.
 Found and filed as a task: 9 of Combat Chain's 60 possible daily starters have no recorded winner
 in its bundled results, so on those days the daily cannot be extended.
+**Same day, FIXED after review on the same branch.** The line above read as complete and was not:
+the review found Give Up live during a chain verify (recorded 0, shown 100), Pack Battle's reveal
+timer surviving a mode toggle, and Minefield, Player Stock Market, Sports Millionaire, Perfect
+Season and the Gauntlet drafts still saving only at the end. All fixed except Perfect Season, left
+with its reason in `docs/PROJECT-STATE.md`; Sports Bingo found by grep and fixed too, and so was a
+daily finish landed over an Unlimited result card and never recorded (Pack Battle, Rarity Round,
+and Sports Millionaire once 645a lands). New fence `simDailyLockEdges` (17 sections, 18 controls);
+`simDailyReload` now 30 rows, 15 resume, 8 in flight, ten controls; `simNoDoubleRecord`, red since
+the build pass, green again. Still not on main.
 
 **2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof
