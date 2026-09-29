@@ -36,7 +36,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { initCfb, simCfbRound, CFB_ROUNDS, CFB_SCHOOL_MAP, type CfbState } from '@/lib/cfbDynasty';
-import { scoreSeason, appendSeason, ledgerTotal, projectionFor, projectNext, BAR_SHARE, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
+import { scoreSeason, appendSeason, ledgerTotal, projectionFor, projectNext, stageOf, BAR_SHARE, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
 import { CFB_SEASON, roundPhrase } from '@/lib/seasonFormats';
 
 // Completion tracking reads the auth context and writes to the database;
@@ -350,5 +350,29 @@ describe('CFB Dynasty: the season ledger', () => {
     expect(row.expBar).toBe(pickExpect.top[0]);
     expect(row.score).toBe(scoreSeason(row, pickExpect));
     expect(scoreSeason(row, atWhistle), 'the same season against the roster at the whistle would score less: the pick sets the bar, the moves after it beat it').toBeLessThan(row.score);
+  });
+
+  /* Round 674, the fence lens review (R2.D3). The rows above score the
+     recorded row against itself, so a board that builds the row from the
+     wrong numbers stays green on them. This compares the row with what the
+     engine kept, on an ordinary season (no rig): the standings less the
+     conference title game (the only postseason game the engine writes into
+     them), which is the twelve game regular season every program plays, and
+     the round the engine's own bracket reached, from the crowned champion
+     and the bracket the save carries for the recap. */
+  it('the row is the season the engine played: the standings\' record and the round its bracket reached', () => {
+    const { closed } = closeSeason(undefined);
+    const row = rowOf(closed);
+    const me = closed.st.teams[closed.st.myTeam];
+    const titleGames = closed.postseason.ccgs.filter((g: any) => g.home === me.id || g.away === me.id);
+    const titleWins = titleGames.filter((g: any) => g.winner === me.id).length;
+    const champion = closed.st.natties.find((n: any) => n.season === row.season)?.team;
+    const stage = stageOf(closed.postseason.bracket, me.id, CFB_SEASON.roundOf, CFB_SEASON.rounds, champion);
+    console.log(`CFB_ENGINE_ROW wins ${row.wins}/${me.wins - titleWins}, games ${row.games}/${me.wins + me.losses - titleGames.length}, title games ${titleGames.length}, stage ${row.stage}/${stage} of ${row.rounds}, champion ${champion === me.id ? 'us' : champion}`);
+    expect(row.wins, 'the row\'s wins are the standings\' less a conference title game won').toBe(me.wins - titleWins);
+    expect(row.games, 'the row\'s games are the standings\' less the conference title game').toBe(me.wins + me.losses - titleGames.length);
+    expect(row.games, 'every program plays the whole twelve game regular season').toBe(CFB_ROUNDS);
+    expect(champion, 'the engine crowned a champion for the season').toBeTruthy();
+    expect(row.stage, 'the round is the one the engine\'s bracket reached').toBe(stage);
   });
 });

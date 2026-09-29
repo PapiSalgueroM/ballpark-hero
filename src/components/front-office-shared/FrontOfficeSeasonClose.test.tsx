@@ -60,8 +60,8 @@ import { initLeague, simGame, REGULAR_WEEKS, releasePlayer } from '@/lib/frontOf
 import { initNbaLeague, simRound, NBA_ROUNDS, nbaRelease } from '@/lib/nbaFrontOffice';
 import { initMlbLeague, simMlbRound, MLB_ROUNDS, mlbRelease } from '@/lib/mlbFrontOffice';
 import { initNhlLeague, simNhlRound, NHL_FO_ROUNDS, nhlRelease } from '@/lib/nhlFrontOffice';
-import { scoreSeason, appendSeason, ledgerTotal, projectionFor, projectNext, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
-import { NFL_SEASON, NBA_SEASON, MLB_SEASON, NHL_SEASON, roundPhrase, type SeasonShape } from '@/lib/seasonFormats';
+import { scoreSeason, appendSeason, ledgerTotal, projectionFor, projectNext, stageOf, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
+import { NFL_SEASON, NBA_SEASON, MLB_SEASON, NHL_SEASON, nflPlayoffGames, roundPhrase, type SeasonShape } from '@/lib/seasonFormats';
 import { FO_TEAMS } from '@/data/frontOfficePlayers';
 import { NBA_TEAMS } from '@/data/conquestDataNba';
 import { MLB_TEAMS } from '@/data/conquestDataMlb';
@@ -137,6 +137,9 @@ interface BoardCase {
   picks: number;
   firstButton: string;
   periodKey: 'week' | 'round';
+  /* Round 674: the bracket the engine played, as the save keeps it for the
+     recap, in the shape the season's round names are read from. */
+  bracketOf: (postseason: any) => { name: string; home: string; away: string; winner: string }[];
 }
 
 /* Round 647: play a league from wherever it stands to the morning of its
@@ -181,6 +184,7 @@ const CASES: BoardCase[] = [
     tile: 'This week', finalButton: 'Play the final week + playoffs',
     headline: /win the 2026 title/, draftHeading: 'The 2027 Draft',
     picks: 3, firstButton: 'Play Week 1', periodKey: 'week',
+    bracketOf: post => nflPlayoffGames(post.rounds),
   },
   {
     name: 'NBA Front Office', env: 'FO_BOARD_NBA',
@@ -193,6 +197,7 @@ const CASES: BoardCase[] = [
     tile: 'Play', finalButton: 'Final stretch + playoffs',
     headline: /win the 2026 title/, draftHeading: 'The 2027 Draft',
     picks: 2, firstButton: 'Play Round 1', periodKey: 'round',
+    bracketOf: post => post.series,
   },
   {
     name: 'MLB Front Office', env: 'FO_BOARD_MLB',
@@ -205,6 +210,7 @@ const CASES: BoardCase[] = [
     tile: 'Play', finalButton: 'Final stretch + October',
     headline: /win the 2026 World Series/, draftHeading: 'The 2027 Draft',
     picks: 2, firstButton: 'Play Round 1', periodKey: 'round',
+    bracketOf: post => post.series,
   },
   {
     name: 'NHL Front Office', env: 'FO_BOARD_NHL',
@@ -217,6 +223,7 @@ const CASES: BoardCase[] = [
     tile: 'Play', finalButton: 'Final stretch + playoffs',
     headline: /lift the 2027 Stanley Cup/, draftHeading: 'The 2027 Draft',
     picks: 2, firstButton: 'Play Round 1', periodKey: 'round',
+    bracketOf: post => post.series,
   },
 ];
 
@@ -578,6 +585,30 @@ for (const c of CASES) {
       gone.teams[team].releasedThisSeason = [];
       expect(projectAfter(c.shape, gone, team).top[0], 'without him the bar would sit lower, which is the dodge').toBeLessThanOrEqual(closed.expect.top[0]);
       expect(projectAfter(c.shape, gone, team), 'the cut changes the projection only when it is not counted').not.toEqual(closed.expect);
+    });
+
+    /* Round 674, the fence lens review (R2.D3). Every row above scores the
+       recorded row against itself (scoreSeason(row, ...)), so a board that
+       builds the row from the wrong numbers was invisible: the NHL board
+       dropping its overtime losses from the games played kept every row
+       green while it paid idle seasons over the five point rule. This row
+       compares the recorded row with what the engine itself kept: the
+       standings' wins, every game the standings count (wins, losses, and
+       overtime losses or ties where the sport keeps them), and the round
+       the engine's own bracket reached, from the league's crowned champion
+       and the bracket the save carries for the recap. */
+    it('the row is the season the engine played: the standings\' record and the round its bracket reached', () => {
+      const { team, closed } = closeSeason(undefined);
+      const row = rowOf(closed);
+      const mine = closed.league.teams[team];
+      const played = mine.wins + mine.losses + (mine.otLosses ?? 0) + (mine.ties ?? 0);
+      const champion = closed.league.champions.find((x: any) => x.season === row.season)?.team;
+      console.log(`FO_ENGINE_ROW ${c.name}: wins ${row.wins}/${mine.wins}, games ${row.games}/${played}, otLosses ${mine.otLosses ?? '-'}, ties ${mine.ties ?? '-'}, stage ${row.stage} of ${row.rounds}, champion ${champion === team ? 'us' : champion}`);
+      expect(row.wins, 'the row\'s wins are the standings\' wins').toBe(mine.wins);
+      expect(row.games, 'the row\'s games are every game the standings count').toBe(played);
+      expect(champion, 'the engine crowned a champion for the season').toBeTruthy();
+      expect(row.rounds).toBe(c.shape.rounds);
+      expect(row.stage, 'the round is the one the engine\'s bracket reached').toBe(stageOf(c.bracketOf(closed.postseason), team, c.shape.roundOf, c.shape.rounds, champion));
     });
   });
 }

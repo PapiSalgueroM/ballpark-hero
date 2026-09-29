@@ -25,7 +25,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { initCbb, simCbbRound, CBB_ROUNDS, CBB_SCHOOLS, CBB_SCHOOL_MAP, type CbbState } from '@/lib/cbbDynasty';
-import { scoreSeason, appendSeason, ledgerTotal, projectionFor, projectNext, BAR_SHARE, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
+import { scoreSeason, appendSeason, ledgerTotal, projectionFor, projectNext, stageOf, BAR_SHARE, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
 import { CBB_SEASON, roundPhrase } from '@/lib/seasonFormats';
 
 // Completion tracking reads the auth context and writes to the database;
@@ -344,5 +344,25 @@ describe('CBB Dynasty: the season ledger', () => {
     expect(row.expBar).toBe(pickExpect.top[0]);
     expect(row.score).toBe(scoreSeason(row, pickExpect));
     expect(scoreSeason(row, atWhistle), 'the same season against the roster at the whistle would score less: the pick sets the bar, the moves after it beat it').toBeLessThan(row.score);
+  });
+
+  /* Round 674, the fence lens review (R2.D3). The rows above score the
+     recorded row against itself, so a board that builds the row from the
+     wrong numbers stays green on them. This compares the row with what the
+     engine kept, on an ordinary season (no rig): the standings (March games
+     are played without writing to them, so the standings are the regular
+     season) and the round the engine's own bracket reached, from the
+     crowned champion and the bracket the save carries for the recap. */
+  it('the row is the season the engine played: the standings\' record and the round its bracket reached', () => {
+    const { closed } = closeSeason(undefined);
+    const row = rowOf(closed);
+    const me = closed.st.teams[closed.st.myTeam];
+    const champion = closed.st.titles.find((t: any) => t.season === row.season)?.team;
+    const stage = stageOf(closed.postseason.march.bracket, me.id, CBB_SEASON.roundOf, CBB_SEASON.rounds, champion);
+    console.log(`CBB_ENGINE_ROW wins ${row.wins}/${me.wins}, games ${row.games}/${me.wins + me.losses}, stage ${row.stage}/${stage} of ${row.rounds}, champion ${champion === me.id ? 'us' : champion}`);
+    expect(row.wins, 'the row\'s wins are the standings\' wins').toBe(me.wins);
+    expect(row.games, 'the row\'s games are every game the standings count').toBe(me.wins + me.losses);
+    expect(champion, 'the engine crowned a champion for the season').toBeTruthy();
+    expect(row.stage, 'the round is the one the engine\'s bracket reached').toBe(stage);
   });
 });

@@ -49,8 +49,15 @@
         labelled "Since 2026"; replaying a closed title adds nothing; two
         seasons on one mounted board add two rows and two finishes, the
         second scored against the projection made at the first close, which
-        the trail does not make again; and the projection is the pick's,
-        made on the real pick screen);
+        the trail does not make again; the projection is the pick's, made on
+        the real pick screen; and, Round 674 (the fence lens review's
+        R2.D3), the row is the season the engine played, on an ordinary
+        season: its wins and games are the engine's standings (CFB's less
+        the conference title game, the one postseason game the engine writes
+        into them, which leaves the twelve game regular season) and its round
+        is the one the engine's bracket reached. Every other row scores the
+        recorded row against itself, so a board that built the row from the
+        wrong numbers stayed green on all of them);
      5) the ledger headless, both engines, 20 seeds and 8 seasons each,
         closing every season the way the boards do: every season adds
         exactly one row, title or not; appending the same season again adds
@@ -81,31 +88,76 @@
        season scores its results, not its share of the projection, and the
        pick's projection and the whistle's score the same); the plain, older
        and two season rows may (a winless season scores 0 either way).
+     CFB_DYNASTY_CONTROL=record (Round 674) points the board tests at copies
+       of both boards that build the closed row from the wrong record: CFB
+       leaves the conference title game in the regular season (the review's
+       CFB analogue, [] passed as the title games), CBB closes on the record
+       from before the final round (the React state, not the round just
+       played). Both boards' engine rows go red; their title rows may (both
+       also count the regular season's length on a title season).
+     CFB_DYNASTY_CONTROL=parallel (Round 674, R2.D10) runs the replay and
+       double controls at the same moment, two children of this harness
+       sharing one TEMP; both must exit 0 on their own verdict line.
      Every control refuses to run unless its anchor is in the file exactly
-     once and its rewrite changed something.
+     once, in the code with the comments stripped as well as in the text,
+     and its rewrite changed something. Round 674 (R2.D10): every copy, the
+     engine bundle and its entry go in a per run folder under
+     ROOT/.sim-control (scripts/lib/controlScratch.mjs), never dist and
+     never a fixed name in TEMP, and nothing here deletes dist. Every copy
+     the board tests read prints a load line naming its run, and a control
+     whose copies did not all print it is refused.
 
    Run: node scripts/simCfbDynasty.mjs
 */
-import { execSync, spawnSync } from 'node:child_process';
+import { execSync, spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
-import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { LEDGER_CONTROL_WORDS, writeLedgerControl } from './lib/seasonLedgerControl.mjs';
+import { controlScratch, loadedLine, withLoadedLine } from './lib/controlScratch.mjs';
+import { stripComments } from './lib/readSource.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.CFB_DYNASTY_CONTROL || '';
 const LEDGER_CONTROLS = ['double', 'raw'];
-const CONTROLS = ['drain', 'replay', ...LEDGER_CONTROLS];
+const CONTROLS = ['drain', 'replay', 'record', ...LEDGER_CONTROLS, 'parallel'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`CFB_DYNASTY_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`); process.exit(1); }
+
+/* ---- the parallel control: two controls at once, both must fire ---- */
+if (CONTROL === 'parallel') {
+  const PAIR = ['replay', 'double'];
+  console.log(`NEGATIVE CONTROL ON: ${PAIR.join(' and ')} run at the same moment, sharing TEMP ${process.env.TEMP || process.env.TMP || '(default)'}; both must fire`);
+  const runOne = name => new Promise(resolve => {
+    const child = spawn(process.execPath, [fileURLToPath(import.meta.url)], { cwd: ROOT, env: { ...process.env, CFB_DYNASTY_CONTROL: name } });
+    let out = '';
+    child.stdout.on('data', d => { out += d; });
+    child.stderr.on('data', d => { out += d; });
+    child.on('close', code => resolve({ name, code, out }));
+  });
+  const results = await Promise.all(PAIR.map(runOne));
+  let ok = 0;
+  for (const r of results) {
+    const works = new RegExp(`control "${r.name}": exactly .* went red and nothing else did, the check works`).test(r.out);
+    const loaded = /every control copy the board tests read printed its load line/.test(r.out);
+    console.log(`   ${r.name}: exit ${r.code}, ${works ? 'fired' : 'DID NOT FIRE'}, ${loaded ? 'its own copies loaded' : 'NO LOAD LINE'}`);
+    if (r.code === 0 && works && loaded) ok += 1;
+    else console.log(r.out.split('\n').slice(-25).map(l => '     ' + l).join('\n'));
+  }
+  if (ok === PAIR.length) { console.log(`\ncontrol "parallel": ${PAIR.join(' and ')} both fired while running at once, each on its own copies, the check works`); process.exit(0); }
+  console.error(`\ncontrol "parallel": ${ok} of ${PAIR.length} controls fired while running at once, so running controls in parallel gives false verdicts`);
+  process.exit(1);
+}
 
 /* The checks each control must turn red, and the ones it may. */
 const BOARD_LEDGER = (keys) => ['cfb', 'cbb'].flatMap(b => keys.map(k => `${b}-board-ledger-${k}`));
 const EXPECT = {
   drain: { must: ['cfb-drain', 'cbb-drain'], may: [] },
   replay: { must: ['cfb-board-reload', 'cbb-board-reload'], may: BOARD_LEDGER(['replay']) },
-  double: { must: ['cfb:row', 'cbb:row', 'cfb:replay', 'cbb:replay', 'cfb:sum', 'cbb:sum', ...BOARD_LEDGER(['title', 'older', 'replay', 'two', 'pick'])], may: [] },
+  record: { must: BOARD_LEDGER(['engine']), may: BOARD_LEDGER(['title']) },
+  /* The engine row plays an ordinary season, which on CFB's seed is a title,
+     so a ledger that files a title twice may turn it red too. */
+  double: { must: ['cfb:row', 'cbb:row', 'cfb:replay', 'cbb:replay', 'cfb:sum', 'cbb:sum', ...BOARD_LEDGER(['title', 'older', 'replay', 'two', 'pick'])], may: BOARD_LEDGER(['engine']) },
   raw: { must: BOARD_LEDGER(['title', 'pick']), may: BOARD_LEDGER(['plain', 'older', 'two']) },
 };
 /* Every control rewrites an anchor that must be in its file exactly once. */
@@ -126,19 +178,27 @@ const tool = rel => {
 };
 
 /* ---- bundle the two engines and the ledger, regressed under a control ---- */
-const TMP = os.tmpdir().replace(/\\/g, '/');
+/* Round 674 (R2.D10): the entry, the bundle and every control copy go in a
+   folder of this run's own. The fixed names in TEMP collided the moment two
+   runs shared a TEMP, and the board copies sat in ROOT/dist/.cfb-control,
+   which the harness deleted along with dist. */
+const run = controlScratch(ROOT, 'cfb-dynasty');
+process.on('exit', () => run.cleanup());
+const TMP = run.dir.replace(/\\/g, '/');
 const ENTRY = `${TMP}/cfbDynasty.entry.mjs`;
 const BUNDLE = `${TMP}/cfbDynasty.bundle.mjs`;
+/* The load line every copy the board tests read must print. */
+const expectedLoads = [];
 let cfbSrc = `${ROOT_URL}/src/lib/cfbDynasty.ts`;
 let cbbSrc = `${ROOT_URL}/src/lib/cbbDynasty.ts`;
 let ledgerSrc = `${ROOT_URL}/src/lib/seasonLedger.ts`;
-const scratch = [];
 if (CONTROL === 'drain') {
   const fixed = 'pos: need.shift() ?? ROSTER_SHAPE[t.players.length % ROSTER_SHAPE.length],';
   const broken = 'pos: ROSTER_SHAPE[t.players.length % ROSTER_SHAPE.length],';
   for (const [name, target] of [['cfbDynasty', 'cfb'], ['cbbDynasty', 'cbb']]) {
     const src = fs.readFileSync(path.join(ROOT, 'src', 'lib', `${name}.ts`), 'utf8');
     if (matches(src, fixed) !== 1) abort(`control cannot run: ${name}.ts holds the line this control rewrites ${matches(src, fixed)} times, not exactly once`);
+    if (matches(stripComments(src), fixed) !== 1) abort(`control cannot run: the line in ${name}.ts is not in its code exactly once (comments stripped)`);
     const copy = `${TMP}/${name}.control.ts`;
     /* Round 568 gave both engines a relative import (./entityIds), which does
        not resolve from a copy in the temp folder, so this control died in
@@ -146,7 +206,6 @@ if (CONTROL === 'drain') {
     const regressed = src.replace(fixed, broken).replace(/from '\.\/([^']+)'/g, (_, rel) => `from '${ROOT_URL}/src/lib/${rel}'`);
     if (/from '\.\.?\//.test(regressed)) abort(`control cannot run: ${name}.ts has a relative import this control cannot point back at src`);
     fs.writeFileSync(copy, regressed);
-    scratch.push(copy);
     if (target === 'cfb') cfbSrc = copy; else cbbSrc = copy;
   }
   console.log('NEGATIVE CONTROL ON: both engines refill by roster size again');
@@ -154,7 +213,9 @@ if (CONTROL === 'drain') {
 if (LEDGER_CONTROLS.includes(CONTROL)) {
   let copy;
   try { copy = writeLedgerControl(ROOT, CONTROL, TMP); } catch (e) { abort(e.message); }
-  scratch.push(copy);
+  const what = `${CONTROL} seasonLedger.ts`;
+  fs.writeFileSync(copy, withLoadedLine(fs.readFileSync(copy, 'utf8'), run.tag, what));
+  expectedLoads.push(loadedLine(run.tag, what));
   ledgerSrc = copy.replaceAll('\\', '/');
   console.log(`NEGATIVE CONTROL ON: the bundle and both boards read a season ledger that ${LEDGER_CONTROL_WORDS[CONTROL]}`);
 }
@@ -280,38 +341,48 @@ console.log('4) the two boards: a reload on the recap never replays the season, 
     ['replay', 'replaying a closed title adds nothing'],
     ['two', 'every closed season adds its own row'],
     ['pick', 'the projection is the pick\'s'],
+    ['engine', 'the row is the season the engine played'],
   ];
   const env = {};
-  const dir = path.join(ROOT, 'dist', '.cfb-control');
-  const hadDist = fs.existsSync(path.join(ROOT, 'dist'));
-  if (CONTROL === 'replay') {
-    const RESTORE = /if \(s\.phase === 'recap'\) \{\n\s*if \(s\.postseason\) \{ setPostseason\(s\.postseason\); setPhase\('recap'\); \}\n\s*else openRecruiting\(s\.st\);\n\s*\} else \{\n\s*setPhase\(s\.phase\);\n\s*\}/;
-    const OLD = "setPhase(s.phase === 'recap' ? 'season' : s.phase);";
-    fs.mkdirSync(dir, { recursive: true });
+  /* Each board control: [anchor, replacement] pairs per board, every anchor
+     exactly once in the text and in the code with the comments stripped. */
+  const RESTORE = /if \(s\.phase === 'recap'\) \{\n\s*if \(s\.postseason\) \{ setPostseason\(s\.postseason\); setPhase\('recap'\); \}\n\s*else openRecruiting\(s\.st\);\n\s*\} else \{\n\s*setPhase\(s\.phase\);\n\s*\}/;
+  const OLD = "setPhase(s.phase === 'recap' ? 'season' : s.phase);";
+  const BOARD_REWRITES = {
+    replay: b => [[b.guard, ''], [RESTORE, OLD]],
+    /* Round 674: CFB leaves the conference title game in the regular season
+       ([] handed over as the title games), CBB closes on the React state's
+       record, from before the final round was played. */
+    record: b => (b.key === 'cfb'
+      ? [['cfbRegularRecord(state, post.ccgs)', 'cfbRegularRecord(state, [])']]
+      : [['cbbRegularRecord(state)', 'cbbRegularRecord(st!)']]),
+  };
+  if (BOARD_REWRITES[CONTROL]) {
     for (const b of BOARDS) {
-      /* normalised on read: both patterns end a line with \n, which a CRLF checkout never matches */
+      /* normalised on read: the patterns end a line with \n, which a CRLF checkout never matches */
       const src = fs.readFileSync(path.join(ROOT, b.file), 'utf8').replaceAll('\r\n', '\n');
-      if (matches(src, b.guard) !== 1 || matches(src, RESTORE) !== 1) abort(`control cannot run: ${b.file} does not hold the guard and the restore this control rewrites exactly once each`);
-      const regressed = src.replace(b.guard, '').replace(RESTORE, OLD);
-      if (regressed === src || b.guard.test(regressed) || !regressed.includes(OLD)) abort(`control cannot run: the rewrite of ${b.file} changed nothing`);
-      const copy = path.join(dir, `${path.basename(b.file, '.tsx')}.control.tsx`);
-      fs.writeFileSync(copy, regressed);
+      const code = stripComments(src);
+      let regressed = src;
+      for (const [anchor, repl] of BOARD_REWRITES[CONTROL](b)) {
+        if (matches(regressed, anchor) !== 1 || matches(code, anchor) !== 1) abort(`control cannot run: ${b.file} does not hold ${anchor} exactly once, in its text and in its code`);
+        regressed = regressed.replace(anchor, repl);
+      }
+      if (regressed === src) abort(`control cannot run: the rewrite of ${b.file} changed nothing`);
+      if (CONTROL === 'replay' && (b.guard.test(regressed) || !regressed.includes(OLD))) abort(`control cannot run: the rewrite of ${b.file} left the guard or missed the restore`);
+      const copy = path.join(run.dir, `${path.basename(b.file, '.tsx')}.${CONTROL}.control.tsx`);
+      const what = `${CONTROL} ${path.basename(b.file)}`;
+      fs.writeFileSync(copy, withLoadedLine(regressed, run.tag, what));
+      expectedLoads.push(loadedLine(run.tag, what));
       env[b.env] = copy.replaceAll('\\', '/');
     }
-    console.log('   NEGATIVE CONTROL ON: both tests render copies of the boards that map a recap save back to the season and have no closed season guard');
+    console.log(CONTROL === 'replay'
+      ? '   NEGATIVE CONTROL ON: both tests render copies of the boards that map a recap save back to the season and have no closed season guard'
+      : '   NEGATIVE CONTROL ON: both tests render copies of the boards that close the season on the wrong record (CFB keeps its conference title game in the regular season, CBB reads the record from before the final round)');
   }
   if (LEDGER_CONTROLS.includes(CONTROL)) env.SEASON_LEDGER_MODULE = ledgerSrc;
-  let r;
-  try {
-    r = spawnSync(process.execPath, [tool('vitest/vitest.mjs'), 'run', ...TESTS, '--reporter=verbose'],
-      { cwd: ROOT, encoding: 'utf8', env: { ...process.env, ...env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024,
-        timeout: 10 * 60 * 1000, killSignal: 'SIGKILL' });
-  } finally {
-    if (CONTROL === 'replay') {
-      fs.rmSync(dir, { recursive: true, force: true });
-      if (!hadDist) fs.rmSync(path.join(ROOT, 'dist'), { recursive: true, force: true });
-    }
-  }
+  const r = spawnSync(process.execPath, [tool('vitest/vitest.mjs'), 'run', ...TESTS, '--reporter=verbose'],
+    { cwd: ROOT, encoding: 'utf8', env: { ...process.env, ...env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024,
+      timeout: 10 * 60 * 1000, killSignal: 'SIGKILL' });
   if (r.error) abort(`vitest could not be run: ${r.error.message}`);
   if (r.signal) abort(`vitest was killed with ${r.signal}, so the tests did not finish`);
   const out = (r.stdout || '') + (r.stderr || '');
@@ -319,6 +390,12 @@ console.log('4) the two boards: a reload on the recap never replays the season, 
   const summary = out.match(/Tests\s+(.+)/);
   console.log(`   vitest exit ${r.status}, ${summary ? summary[1].trim() : 'no summary line'}`);
   if (CONTROL && /Failed to (load|resolve)|SyntaxError|Cannot find module|Transform failed/.test(out)) abort('control cannot run: a rewritten file did not load, so any red is a load error and not the check:\n' + out.slice(-1500));
+  if (expectedLoads.length) {
+    const missing = expectedLoads.filter(l => !out.includes(l));
+    if (missing.length) abort(`control cannot run: ${missing.length} of ${expectedLoads.length} control copies never printed their load line in the board tests, so they did not run on them:\n  ${missing.join('\n  ')}`);
+    console.log(`   every control copy the board tests read printed its load line (${expectedLoads.length}, run ${run.tag})`);
+  }
+  for (const l of out.split('\n').map(x => x.trim()).filter(x => /^C[FB]B_ENGINE_ROW /.test(x))) console.log(`   ${l.replace('_ENGINE_ROW', ' engine row:')}`);
   const lines = out.split('\n');
   const escape = s => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   const count = (mark, label, describe, row = '') => lines.filter(l => new RegExp(`${mark}.*${escape(label)}: ${describe} > ${escape(row)}`).test(l)).length;
@@ -455,7 +532,7 @@ console.log(`5) the season ledger headless: both engines, ${SEEDS} seeds and ${S
   }
 }
 
-for (const f of scratch) fs.rmSync(f, { force: true });
+run.cleanup();
 
 console.log('');
 if (CONTROL) {
