@@ -22,6 +22,8 @@
  *   suggestionBox    types two letters and takes the first suggestion
  *   structureStacker the option with the biggest visible bonus (chemistry)
  *   lifelineReader   spends a lifeline whenever one is left and follows it
+ *                    (evenly among the options it points at); with none
+ *                    left it guesses evenly
  *   speedTapper      the first listed option, answered at once
  *   firstSlot        each pull into the first open slot
  *   idle             changes nothing and lets the clock run
@@ -30,15 +32,31 @@
  * KNOWLEDGE_70 (the oracle's move 7 times in 10, else random, which must
  * average at least 15 or the game has no room for skill).
  *
+ * NOTHING TO READ IS AN ERROR. biggestNumber on a screen with no number,
+ * structureStacker with no bonus shown and lifelineReader when a lifeline
+ * points at nothing throw, never play the first option: a quiet fallback
+ * would turn each into a second topListed and measure nothing. So a game
+ * whose picks show no number leaves biggestNumber off its list, and
+ * policiesItOffers, which the fence reads, says which policies a game's
+ * moves give something to read, so it cannot leave off one that applies.
+ *
  * EXACT OR SAMPLED. A policy says, in each state, which moves it makes and
- * the chance of each. When the game has no chance of its own and the tree is
- * small, every path is walked and the outcome is exact (the choice dailies).
- * Otherwise it is SAMPLES runs from a generator seeded by the board's salt,
- * so the fence reproduces the engine's line to the last digit.
+ * the chance of each. When the game has no chance of its own, the tree is
+ * walked with equal states merged (Moves.key, or the state's own plain data),
+ * so the outcome is exact: a ten item, four option daily is a few hundred
+ * states, not 4^10 paths (the choice dailies, section 7.1). Only a walk past
+ * EXACT_STATES distinct states, or a game with chance, is SAMPLES runs from a
+ * generator seeded by the board's salt, so the fence reproduces the engine's
+ * line to the last digit.
+ *
+ * A BOARD WITH CHANCE is valued in expectation (the spec keeps luck out of
+ * the score): its perfect is the oracle's expected result, never its luckiest
+ * sample, and the line's floor is the expected result of the best
+ * deterministic policy.
  *
  * Pure: no clock, no storage, never Math.random.
  */
-import { lineFor, type PolicyOutcome } from './knowledgeLine';
+import { expectedResult, lineFor, type PolicyOutcome } from './knowledgeLine';
 
 export type NaivePolicyName =
   | 'topListed' | 'constant' | 'random' | 'counter' | 'biggestNumber' | 'medianCall'
@@ -99,6 +117,14 @@ export interface Moves<S> {
   type?(s: S, text: string): S;
   /** Let the clock run with no decision (a week, a season). */
   idle?(s: S, ctx: MoveContext): S;
+  /**
+   * A state's identity for the exact walk: two states with one key must be
+   * the same to every part above, now and after any moves. Without it the
+   * walk keys a state by its own plain data (numbers, strings, arrays, plain
+   * objects), so a state that keeps a log the game never reads again should
+   * give a key without the log, or its walk may run out of states and sample.
+   */
+  key?(s: S): string;
 }
 
 export interface Branch<S> {
@@ -178,7 +204,8 @@ const POLICIES: Record<Exclude<NaivePolicyName, 'constant'>, Policy> = {
     name: 'biggestNumber',
     step(m, s, rng) {
       const at = argMax(optionsOrThrow(m, s, 'biggestNumber').map(o => o.shown));
-      return one(m.play(s, Math.max(0, at), { rng }));
+      if (at < 0) throw new Error('biggestNumber: no option on screen shows a number, so it has nothing to read');
+      return one(m.play(s, at, { rng }));
     },
   },
   medianCall: {
@@ -209,8 +236,9 @@ const POLICIES: Record<Exclude<NaivePolicyName, 'constant'>, Policy> = {
   structureStacker: {
     name: 'structureStacker',
     step(m, s, rng) {
-      const at = argMax(optionsOrThrow(m, s, 'structureStacker').map(o => o.bonus ?? 0));
-      return one(m.play(s, Math.max(0, at), { rng }));
+      const at = argMax(optionsOrThrow(m, s, 'structureStacker').map(o => o.bonus));
+      if (at < 0) throw new Error('structureStacker: no option on screen shows a bonus, so it has nothing to read');
+      return one(m.play(s, at, { rng }));
     },
   },
   lifelineReader: {
@@ -219,8 +247,13 @@ const POLICIES: Record<Exclude<NaivePolicyName, 'constant'>, Policy> = {
       let t = s;
       const left = need(m.lifelines, 'lifelineReader', 'lifelines')(t);
       if (left.length > 0) t = need(m.useLifeline, 'lifelineReader', 'useLifeline')(t, left[0], { rng });
-      const advised = optionsOrThrow(m, t, 'lifelineReader').findIndex(o => o.advised);
-      return one(m.play(t, Math.max(0, advised), { rng }));
+      const opts = optionsOrThrow(m, t, 'lifelineReader');
+      const advised = opts.flatMap((o, i) => (o.advised ? [i] : []));
+      if (advised.length === 0 && left.length > 0) {
+        throw new Error(`lifelineReader: the ${left[0]} lifeline points at no option, so it has nothing to follow`);
+      }
+      const picks = advised.length > 0 ? advised : opts.map((_, i) => i);
+      return picks.map(i => ({ weight: 1 / picks.length, next: m.play(t, i, { rng }) }));
     },
   },
   speedTapper: {
@@ -301,36 +334,105 @@ export function saltedRng(salt: string): Rng {
 
 /** Runs sampled when a policy's outcome is not walked exactly. */
 export const SAMPLES = 200;
-/** The most finished paths an exact walk may reach before it gives way to sampling. */
-export const EXACT_PATHS = 1 << 16;
+/** The most distinct states an exact walk may expand before it gives way to sampling. */
+export const EXACT_STATES = 1 << 16;
 /** The most moves one run may take: a game that never ends is an error, not a hang. */
 const MOVE_LIMIT = 10_000;
 
-class TooManyPaths extends Error {}
+class TooManyStates extends Error {}
 
-function walkExact<S>(m: Moves<S>, p: Policy, rng: Rng): Map<number, number> {
-  const out = new Map<number, number>();
-  let paths = 0;
-  const walk = (s: S, w: number, depth: number) => {
-    if (depth > MOVE_LIMIT) throw new Error(`${p.name}: a run passed ${MOVE_LIMIT} moves`);
-    if (m.done(s)) {
-      paths += 1;
-      if (paths > EXACT_PATHS) throw new TooManyPaths();
-      const r = m.result(s);
-      out.set(r, (out.get(r) ?? 0) + w);
-      return;
-    }
-    for (const b of p.step(m, s, rng)) if (b.weight > 0) walk(b.next, w * b.weight, depth + 1);
-  };
-  walk(m.start(), 1, 0);
-  return out;
+/** A policy's outcome with how it was found: walked exactly, or sampled. */
+export interface MeasuredOutcome extends PolicyOutcome {
+  readonly exact: boolean;
 }
 
-function sampleOnce<S>(m: Moves<S>, p: Policy, rng: Rng): number {
+/**
+ * A state's own plain data as a string, or null when it holds anything else
+ * (a Map, a class, a function), which the walk then never merges.
+ */
+function plainKey(value: unknown): string | null {
+  const out: string[] = [];
+  const walk = (x: unknown, depth: number): boolean => {
+    if (depth > 64) return false;
+    if (x === null) { out.push('n'); return true; }
+    switch (typeof x) {
+      case 'number': out.push(`#${x}`); return true;
+      case 'string': out.push(JSON.stringify(x)); return true;
+      case 'boolean': out.push(x ? 'T' : 'F'); return true;
+      case 'undefined': out.push('u'); return true;
+      case 'object': {
+        if (Array.isArray(x)) {
+          out.push('[');
+          for (const e of x) { if (!walk(e, depth + 1)) return false; out.push(','); }
+          out.push(']');
+          return true;
+        }
+        const proto = Object.getPrototypeOf(x);
+        if (proto !== Object.prototype && proto !== null) return false;
+        out.push('{');
+        for (const k of Object.keys(x).sort()) {
+          out.push(JSON.stringify(k), ':');
+          if (!walk((x as Record<string, unknown>)[k], depth + 1)) return false;
+          out.push(',');
+        }
+        out.push('}');
+        return true;
+      }
+      default: return false;
+    }
+  };
+  return walk(value, 0) ? out.join('') : null;
+}
+
+const stateKey = <S>(m: Moves<S>, s: S): string | null => (m.key ? `k:${m.key(s)}` : plainKey(s));
+
+/** How a policy's steps went: whether it ever left its own choice to chance. */
+interface Seen { splits: boolean }
+
+const noteSplit = <S>(branches: readonly Branch<S>[], seen: Seen) => {
+  if (branches.filter(b => b.weight > 0).length > 1) seen.splits = true;
+};
+
+/**
+ * The exact distribution of a policy's results, walking the tree with equal
+ * states merged: a state's results are worked out once and reused wherever
+ * the tree reaches that state again.
+ */
+function walkExact<S>(m: Moves<S>, p: Policy, rng: Rng, seen: Seen): Map<number, number> {
+  const memo = new Map<string, Map<number, number>>();
+  let states = 0;
+  const from = (s: S, depth: number): Map<number, number> => {
+    if (depth > MOVE_LIMIT) throw new Error(`${p.name}: a run passed ${MOVE_LIMIT} moves`);
+    const key = stateKey(m, s);
+    if (key !== null) {
+      const known = memo.get(key);
+      if (known) return known;
+    }
+    states += 1;
+    if (states > EXACT_STATES) throw new TooManyStates();
+    const dist = new Map<number, number>();
+    if (m.done(s)) {
+      dist.set(m.result(s), 1);
+    } else {
+      const branches = p.step(m, s, rng);
+      noteSplit(branches, seen);
+      for (const b of branches) {
+        if (!(b.weight > 0)) continue;
+        for (const [r, w] of from(b.next, depth + 1)) dist.set(r, (dist.get(r) ?? 0) + b.weight * w);
+      }
+    }
+    if (key !== null) memo.set(key, dist);
+    return dist;
+  };
+  return from(m.start(), 0);
+}
+
+function sampleOnce<S>(m: Moves<S>, p: Policy, rng: Rng, seen: Seen): number {
   let s = m.start();
   for (let moves = 0; !m.done(s); moves++) {
     if (moves > MOVE_LIMIT) throw new Error(`${p.name}: a run passed ${MOVE_LIMIT} moves`);
     const branches = p.step(m, s, rng);
+    noteSplit(branches, seen);
     let roll = rng();
     let chosen = branches[branches.length - 1];
     for (const b of branches) {
@@ -344,40 +446,72 @@ function sampleOnce<S>(m: Moves<S>, p: Policy, rng: Rng): number {
 
 /**
  * Everything a policy reaches on one board. Exact when the game has no
- * chance of its own and the walk stays under EXACT_PATHS; otherwise
+ * chance of its own and the merged walk stays under EXACT_STATES; otherwise
  * `samples` runs seeded by `salt`.
  */
-export function outcomeOf<S>(m: Moves<S>, p: Policy, salt: string, samples: number = SAMPLES): PolicyOutcome {
+export function outcomeOf<S>(m: Moves<S>, p: Policy, salt: string, samples: number = SAMPLES): MeasuredOutcome {
   const rng = saltedRng(`${salt}|${p.name}`);
+  let seen: Seen = { splits: false };
   let dist: Map<number, number> | null = null;
   if (!m.chance) {
     try {
-      dist = walkExact(m, p, rng);
+      dist = walkExact(m, p, rng, seen);
     } catch (e) {
-      if (!(e instanceof TooManyPaths)) throw e;
+      if (!(e instanceof TooManyStates)) throw e;
     }
   }
+  const exact = dist !== null;
   if (!dist) {
+    seen = { splits: false };
     dist = new Map();
     const sampler = saltedRng(`${salt}|${p.name}|samples`);
     for (let i = 0; i < samples; i++) {
-      const r = sampleOnce(m, p, sampler);
+      const r = sampleOnce(m, p, sampler, seen);
       dist.set(r, (dist.get(r) ?? 0) + 1 / samples);
     }
   }
   const results = [...dist.entries()].sort((a, b) => a[0] - b[0]).map(([value, weight]) => ({ value, weight }));
-  return { policy: p.name, results, deterministic: results.length === 1 };
+  return { policy: p.name, results, deterministic: results.length === 1 || !seen.splits, exact };
 }
 
-/** What an engine needs at deal time: every naive outcome, the perfect and the line. */
+/**
+ * The naive policies a game's moves give something to read. A game must be
+ * measured on every one of them: a game that reveals its answers is measured
+ * on counter, one that prints a number on its options on biggestNumber, and
+ * so on. The options are read along the oracle's run.
+ */
+export function policiesItOffers<S>(m: Moves<S>, salt: string): NaivePolicyName[] {
+  const out = new Set<NaivePolicyName>();
+  if (m.revealed) out.add('counter');
+  if (m.shownValue && m.poolMedian !== undefined) out.add('medianCall');
+  if (m.lifelines) out.add('lifelineReader');
+  if (m.type) out.add('suggestionBox');
+  if (m.idle) out.add('idle');
+  const rng = saltedRng(`${salt}|offers`);
+  let s = m.start();
+  for (let moves = 0; !m.done(s); moves++) {
+    if (moves > MOVE_LIMIT) throw new Error(`the oracle's run passed ${MOVE_LIMIT} moves`);
+    const opts = m.options(s);
+    if (opts.some(o => typeof o.shown === 'number' && Number.isFinite(o.shown))) out.add('biggestNumber');
+    if (opts.some(o => typeof o.bonus === 'number' && Number.isFinite(o.bonus))) out.add('structureStacker');
+    s = m.play(s, m.best(s), { rng });
+  }
+  return NAIVE_POLICY_NAMES.filter(n => out.has(n));
+}
+
+/**
+ * What an engine needs at deal time: every naive outcome, the perfect and
+ * the line. The perfect is the oracle's result; on a board with chance, its
+ * expected result, never the luckiest of its samples.
+ */
 export function measureBoard<S>(
   m: Moves<S>,
   names: readonly NaivePolicyName[],
   salt: string,
   step: number = 1,
-): { outcomes: PolicyOutcome[]; perfect: number; line: number } {
+): { outcomes: MeasuredOutcome[]; perfect: number; line: number } {
   const outcomes = policiesFor(names, m).map(p => outcomeOf(m, p, salt));
   const oracle = outcomeOf(m, ORACLE, salt);
-  const perfect = Math.max(...oracle.results.map(r => r.value));
+  const perfect = expectedResult(oracle);
   return { outcomes, perfect, line: lineFor({ perfect, step }, outcomes) };
 }

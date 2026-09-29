@@ -15,11 +15,14 @@
  * never deals one and a free game redeals (hasRoom says which).
  *
  * THE BRAND. A DayPoints is a number only this file can make, through
- * dayPoints and pointsFromCeiling, so tsc refuses a raw score handed to
- * anything that asks for day points. src/lib/knowledgeLine.brand.ts holds
- * that refusal under tsc, and scripts/simKnowledgeLine.mjs section 3 proves
- * it with the brand taken off (control rawrecord) and checks nothing else in
- * src mints one.
+ * dayPoints and pointsFromCeiling (and pointsAnswer, which calls dayPoints),
+ * so tsc refuses a raw score handed to anything that asks for day points.
+ * src/lib/knowledgeLine.brand.ts holds that refusal under tsc, and
+ * scripts/simKnowledgeLine.mjs section 3 proves it with the brand taken off
+ * (control rawrecord). The same section reads src through the type checker:
+ * the one cast to the brand is `mint` below, which stays unexported; nothing
+ * else in src casts to it under any alias, hands it an `any`, or strips it;
+ * and this file exports nothing else that makes day points.
  *
  * Pure: no clock, no storage, no imports. src/lib/naivePolicies.ts drives the
  * naive policies through a game's own moves and hands their outcomes here.
@@ -49,7 +52,13 @@ export interface PolicyOutcome {
   readonly policy: string;
   /** Each result the policy can end on, with its chance; the chances sum to 1. */
   readonly results: readonly { readonly value: number; readonly weight: number }[];
-  /** True when the policy always ends on the same result on this board. */
+  /**
+   * True when the policy never leaves its own choice to chance: it makes one
+   * move in every state (the top listed name, a constant answer, standing
+   * pat). On a board with no chance of its own it always ends on one result;
+   * on a board with chance its results still spread, and the line's floor
+   * reads its expected result.
+   */
   readonly deterministic: boolean;
 }
 
@@ -68,8 +77,13 @@ function mint(n: number): DayPoints {
 export function dayPoints(result: number, line: number, perfect: number): DayPoints {
   if (!Number.isFinite(result) || !Number.isFinite(line) || !Number.isFinite(perfect)) return mint(0);
   if (!(perfect > line)) return mint(0);
-  const share = (result - line) / (perfect - line);
-  return mint(Math.round(100 * Math.min(1, Math.max(0, share))));
+  if (result <= line) return mint(0);
+  if (result >= perfect) return mint(100);
+  /* 100 times the gap first, then the division: on whole numbers that is
+     exact, so a result halfway between two points (575 of 1000) rounds up as
+     the database's numeric round does, not down on a float's error
+     (100 * 0.575 is 57.49999999999999). */
+  return mint(Math.round((100 * (result - line)) / (perfect - line)));
 }
 
 /**
@@ -102,22 +116,39 @@ export function expectedPoints(outcome: PolicyOutcome, line: number, perfect: nu
   return weight > 0 ? sum / weight : 0;
 }
 
+/**
+ * A policy's average result on a board, in the game's own number. On a board
+ * with no chance a deterministic policy's one result; on a board with chance
+ * the value in expectation, which is how the spec keeps luck out of a line
+ * and out of a perfect.
+ */
+export function expectedResult(outcome: PolicyOutcome): number {
+  let sum = 0;
+  let weight = 0;
+  for (const r of outcome.results) {
+    sum += r.weight * r.value;
+    weight += r.weight;
+  }
+  return weight > 0 ? sum / weight : NaN;
+}
+
 const onGrid = (k: number, step: number) => Math.round(k * step * 1e9) / 1e9;
 
 /**
  * The line for one board: the smallest multiple of `step`, at or above what
- * the best deterministic policy scores, at which every policy averages at
- * most NAIVE_LIMIT. A policy's average only falls as the line rises, so the
- * search halves. When nothing under `perfect` works, the answer is the
- * perfect itself and hasRoom is false.
+ * the best deterministic policy scores (in expectation, on a board with
+ * chance), at which every policy averages at most NAIVE_LIMIT on this board.
+ * A policy's average only falls as the line rises, so the search halves.
+ * When nothing under `perfect` works, the answer is the perfect itself and
+ * hasRoom is false.
  */
 export function lineFor(board: LineBoard, policies: readonly PolicyOutcome[]): number {
   const step = board.step && board.step > 0 ? board.step : 1;
   const values = policies.flatMap(p => p.results.map(r => r.value)).filter(Number.isFinite);
   if (values.length === 0 || !Number.isFinite(board.perfect)) return board.perfect;
-  const deterministic = policies.filter(p => p.deterministic).flatMap(p => p.results.map(r => r.value));
-  const low = deterministic.length > 0
-    ? Math.ceil(onGrid(Math.max(...deterministic) / step, 1))
+  const floors = policies.filter(p => p.deterministic).map(expectedResult).filter(Number.isFinite);
+  const low = floors.length > 0
+    ? Math.ceil(onGrid(Math.max(...floors) / step, 1))
     : Math.floor(Math.min(...values) / step);
   const high = Math.ceil(onGrid(board.perfect / step, 1));
   const fits = (k: number) => policies.every(p => expectedPoints(p, onGrid(k, step), board.perfect) <= NAIVE_LIMIT);

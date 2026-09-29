@@ -10,7 +10,10 @@
    Round 691 applies the seed as step E3b the day before the release, and E3b
    refuses unless the seed's md5 equals what `node scripts/genGameRules.mjs
    --check` prints on the frozen release tree. scripts/simKnowledgeLine.mjs
-   section 1 holds the committed file to a fresh generation on every run.
+   section 1 holds the committed file to a fresh generation on every run, and
+   both hold every row of it to the family table itself through
+   scripts/lib/gameRulesRows.mjs, which reads the SQL back without this file,
+   so a bug here cannot check out against its own output.
 
    loadFamilies  bundles pointsFamilies.ts with esbuild and imports it; a
                  control hands in a plugin that serves a planted copy

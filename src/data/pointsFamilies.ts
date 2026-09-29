@@ -30,6 +30,8 @@
  *             that does not pay, the round that brings it (back), or 'none'
  *             when nothing is planned (it records no score by design, or its
  *             page is gone).
+ *   holds     on a game that does not pay yet, the release that may not
+ *             publish until it does (holdsRelease below).
  *
  * WHY NOTHING PAYS YET. Every game here waits on its own round (681 to 688,
  * 695 to 697). A game flips to `paid(...)` in the round that lands its
@@ -38,10 +40,18 @@
  * release, its games are for fun, with no one having to remember to flip
  * them (the release floor in section 10).
  *
+ * THE ONE EXCEPTION TO THAT FLOOR. Section 7.6: "The flagship does not go for
+ * fun silently ... Release G waits for it." So Soccer Career is filed with
+ * holdsRelease('G', ...): `node scripts/genGameRules.mjs --release G` exits 1
+ * while it does not pay, and Round 691 runs that before it publishes.
+ * scripts/simKnowledgeLine.mjs section 1 holds the flagship to that filing
+ * until it pays.
+ *
  * scripts/genGameRules.mjs writes public.game_rules from this file
  * (scripts/data/gameRulesSeed.sql); scripts/simKnowledgeLine.mjs section 1
- * holds every sendable key here exactly once and the seed to this file.
- * src/lib/pointsHowTo.ts reads it for the card and the how to play.
+ * holds every sendable key here exactly once, the seed row by row to this
+ * file, and each family's policy list to the spec's. src/lib/pointsHowTo.ts
+ * reads it for the card and the how to play.
  */
 import type { NaivePolicyName } from '@/lib/naivePolicies';
 
@@ -49,15 +59,25 @@ export type PointsFamily = 'choice' | 'typed' | 'draft' | 'numbers' | 'arcade' |
 export type PointsScale = 'dp' | 'g';
 export type PointsClaim = 'first-action' | 'deal' | 'week-one' | 'finish';
 export type PointsRound = `${number}`;
+/** A release that can wait on a game (section 10). */
+export type PointsRelease = 'G';
 
 interface RuleBase {
   readonly claim: PointsClaim;
   /** This game's own naive policies, when the family's list does not fit it. */
   readonly policies?: readonly NaivePolicyName[];
 }
+export type WaitingRule = RuleBase & {
+  readonly pays: false;
+  readonly scale: null;
+  readonly round: PointsRound | 'none';
+  readonly forFun: string;
+  /** The release that may not publish while this game is for fun. */
+  readonly holds?: PointsRelease;
+};
 export type PointsRule =
   | (RuleBase & { readonly pays: true; readonly scale: PointsScale; readonly round: PointsRound })
-  | (RuleBase & { readonly pays: false; readonly scale: null; readonly round: PointsRound | 'none'; readonly forFun: string });
+  | WaitingRule;
 
 export interface FamilyGroup {
   readonly family: PointsFamily;
@@ -67,8 +87,16 @@ export interface FamilyGroup {
 }
 
 /** A game waiting on the round that puts it on the line, or on nothing. */
-function waits(claim: PointsClaim, round: PointsRound | 'none', forFun: string, policies?: readonly NaivePolicyName[]): PointsRule {
+function waits(claim: PointsClaim, round: PointsRound | 'none', forFun: string, policies?: readonly NaivePolicyName[]): WaitingRule {
   return policies ? { pays: false, scale: null, claim, round, forFun, policies } : { pays: false, scale: null, claim, round, forFun };
+}
+
+/**
+ * A waiting game the release cannot go without: it may not go for fun
+ * silently. The round that flips it to paid(...) drops this.
+ */
+function holdsRelease(release: PointsRelease, rule: WaitingRule): WaitingRule {
+  return { ...rule, holds: release };
 }
 
 /**
@@ -262,7 +290,7 @@ export const POINTS_FAMILIES: readonly FamilyGroup[] = [
     policies: ['idle'],
     games: {
       'club-manager': waits('week-one', '688', ONE_SEASON),
-      'soccer-career': waits('finish', '687', UNTOUCHED),
+      'soccer-career': holdsRelease('G', waits('finish', '687', UNTOUCHED)),
       'nfl-my-career': waits('finish', '687', UNTOUCHED),
       'nba-my-career': waits('finish', '687', UNTOUCHED),
       'mlb-my-career': waits('finish', '687', UNTOUCHED),
