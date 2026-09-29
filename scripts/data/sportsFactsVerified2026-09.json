@@ -8750,6 +8750,30 @@
  ],
  "f1Drivers": {
   "hamilton": {
+   "driverName": {
+    "v": "Lewis Hamilton",
+    "src": [
+     "https://www.formula1.com/en/drivers/lewis-hamilton",
+     "https://racingnews365.com/drivers/lewis-hamilton"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Hamilton",
+     "Lewis Hamilton",
+     "Lewis",
+     "HAM"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/lewis-hamilton",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/lewis-hamilton",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; HAM is his code on the 2026 standings of formula1.com and ESPN."
+   },
    "clues": [
     {
      "text": "Dominant",
@@ -8806,6 +8830,30 @@
    ]
   },
   "verstappen": {
+   "driverName": {
+    "v": "Max Verstappen",
+    "src": [
+     "https://www.formula1.com/en/drivers/max-verstappen",
+     "https://racingnews365.com/drivers/max-verstappen"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Verstappen",
+     "Max Verstappen",
+     "Max",
+     "VER"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/max-verstappen",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/max-verstappen",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; VER is his code on the 2026 standings of formula1.com and ESPN."
+   },
    "clues": [
     {
      "text": "Fierce",
@@ -8860,6 +8908,30 @@
    ]
   },
   "leclerc": {
+   "driverName": {
+    "v": "Charles Leclerc",
+    "src": [
+     "https://www.formula1.com/en/drivers/charles-leclerc",
+     "https://racingnews365.com/drivers/charles-leclerc"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Leclerc",
+     "Charles Leclerc",
+     "Charles",
+     "LEC"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/charles-leclerc",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/charles-leclerc",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; LEC is his code on the 2026 standings of formula1.com and ESPN."
+   },
    "clues": [
     {
      "text": "Passionate",
@@ -8918,6 +8990,30 @@
    ]
   },
   "norris": {
+   "driverName": {
+    "v": "Lando Norris",
+    "src": [
+     "https://www.formula1.com/en/drivers/lando-norris",
+     "https://racingnews365.com/drivers/lando-norris"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Norris",
+     "Lando Norris",
+     "Lando",
+     "NOR"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/lando-norris",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/lando-norris",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; NOR is his code on the 2026 standings of formula1.com and ESPN."
+   },
    "clues": [
     {
      "text": "Entertaining",
@@ -8972,6 +9068,30 @@
    ]
   },
   "piastri": {
+   "driverName": {
+    "v": "Oscar Piastri",
+    "src": [
+     "https://www.formula1.com/en/drivers/oscar-piastri",
+     "https://racingnews365.com/drivers/oscar-piastri"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Piastri",
+     "Oscar Piastri",
+     "Oscar",
+     "PIA"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/oscar-piastri",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/oscar-piastri",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; PIA is his code on the 2026 standings of formula1.com and ESPN."
+   },
    "clues": [
     {
      "text": "Composed",
@@ -9033,6 +9153,29 @@
    ]
   },
   "russell": {
+   "driverName": {
+    "v": "George Russell",
+    "src": [
+     "https://www.formula1.com/en/drivers/george-russell",
+     "https://racingnews365.com/drivers/george-russell"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Russell",
+     "George Russell",
+     "RUS"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/george-russell",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/george-russell",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; RUS is his code on the 2026 standings of formula1.com and ESPN."
+   },
    "clues": [
     {
      "text": "Polished",
@@ -9093,6 +9236,31 @@
    ]
   },
   "sainz": {
+   "driverName": {
+    "v": "Carlos Sainz",
+    "src": [
+     "https://www.formula1.com/en/drivers/carlos-sainz",
+     "https://racingnews365.com/drivers/carlos-sainz"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Sainz",
+     "Carlos Sainz",
+     "Carlos Sainz Jr",
+     "SAI"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/carlos-sainz",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/carlos-sainz",
+     "https://www.espn.com/f1/standings",
+     "https://www.crash.net/f1/racer/857/carlos-sainz-jr"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; SAI is his code on the 2026 standings of formula1.com and ESPN. 'Carlos Sainz Jr' is printed by racingnews365 ('Carlos Sainz Jr was destined for Formula 1') and crash.net (its driver page title); formula1.com prints Carlos Sainz."
+   },
    "clues": [
     {
      "text": "Resilient",
@@ -9160,6 +9328,30 @@
    ]
   },
   "alonso": {
+   "driverName": {
+    "v": "Fernando Alonso",
+    "src": [
+     "https://www.formula1.com/en/drivers/fernando-alonso",
+     "https://racingnews365.com/drivers/fernando-alonso"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Alonso",
+     "Fernando Alonso",
+     "Fernando",
+     "ALO"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/fernando-alonso",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/fernando-alonso",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; ALO is his code on the 2026 standings of formula1.com and ESPN. 'Nando' was dropped in Round 660: only fan comments use it, not formula1.com or a media page."
+   },
    "clues": [
     {
      "text": "Tenacious",
@@ -9197,7 +9389,7 @@
      "on": "2026-09-28"
     },
     {
-     "text": "Spanish driver who debuted in 2001, the elder statesman of the grid at 45 years old",
+     "text": "Spanish driver born in 1981 who debuted in 2001, the elder statesman of the grid",
      "src": [
       "https://www.formula1.com/en/drivers/fernando-alonso",
       "https://www.formula1.com/en/latest/article/14-drivers-from-different-eras-who-raced-each-other-in-f1.6SRozLWSoGU2jRYm7EmJZV",
@@ -9206,7 +9398,8 @@
       "https://www.gpfans.com/en/f1-news/1079360/oldest-f1-driver-2026-fernando-alonso-aston-martin-jenson-button/",
       "https://www.planetf1.com/news/f1-driver-ages"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "note": "Round 660 review: the typed age (45) went false every July, so the line gives the birth year instead. formula1.com and racingnews365 give 29 July 1981; gpfans and planetf1 call him the oldest driver on the 2026 grid; formula1.com and racingnews365 give the 2001 debut."
     },
     {
      "text": "The oldest driver on the 2026 grid, still racing competitively after more than two decades in F1",
@@ -9222,6 +9415,29 @@
    ]
   },
   "stroll": {
+   "driverName": {
+    "v": "Lance Stroll",
+    "src": [
+     "https://www.formula1.com/en/drivers/lance-stroll",
+     "https://racingnews365.com/drivers/lance-stroll"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Stroll",
+     "Lance Stroll",
+     "STR"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/lance-stroll",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/lance-stroll",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; STR is his code on the 2026 standings of formula1.com and ESPN."
+   },
    "clues": [
     {
      "text": "Polarizing",
@@ -9290,6 +9506,29 @@
    ]
   },
   "gasly": {
+   "driverName": {
+    "v": "Pierre Gasly",
+    "src": [
+     "https://www.formula1.com/en/drivers/pierre-gasly",
+     "https://racingnews365.com/drivers/pierre-gasly"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Gasly",
+     "Pierre Gasly",
+     "GAS"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/pierre-gasly",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/pierre-gasly",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; GAS is his code on the 2026 standings of formula1.com and ESPN."
+   },
    "clues": [
     {
      "text": "Reborn",
@@ -9354,6 +9593,29 @@
    ]
   },
   "ocon": {
+   "driverName": {
+    "v": "Esteban Ocon",
+    "src": [
+     "https://www.formula1.com/en/drivers/esteban-ocon",
+     "https://racingnews365.com/drivers/esteban-ocon"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Ocon",
+     "Esteban Ocon",
+     "OCO"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/esteban-ocon",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/esteban-ocon",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; OCO is his code on the 2026 standings of formula1.com and ESPN."
+   },
    "clues": [
     {
      "text": "Determined",
@@ -9395,18 +9657,41 @@
      "on": "2026-09-28"
     },
     {
-     "text": "Won his maiden race in chaotic conditions at Hungary 2021 with Alpine, crossing the line in tears",
+     "text": "Won his maiden race in chaotic conditions at Hungary 2021 with Alpine, holding off Vettel to the flag",
      "src": [
       "https://www.formula1.com/en/latest/article/ocon-beats-vettel-to-claim-shock-maiden-victory-in-action-packed-hungarian.4Ewxz6olluqX7Y4E1U8NOq",
       "https://www.motorauthority.com/news/1133087_2021-formula-one-hungarian-grand-prix-results",
       "https://www.formula1.com/en/latest/article/what-the-teams-said-race-day-in-hungary-2021.kaRDJ6GzhC746kreYLQKa"
      ],
      "on": "2026-09-28",
-     "unverifiable": "Maiden win, Alpine and the chaos (rain at the start, five cars out in a lap 1 crash, red flag) are confirmed on both hosts. The 'in tears' fragment is not: the "
+     "note": "Maiden win, Alpine and the chaos (rain at the start, five cars out on the first lap, a red flag) are on formula1.com's race report and Motor Authority; so is the Vettel fight (formula1.com: 'Ocon beats Vettel', holding off his advances; Motor Authority: held the lead 'despite multiple challenges from Vettel'). The old 'in tears' fragment was on neither and is gone."
     }
    ]
   },
   "albon": {
+   "driverName": {
+    "v": "Alex Albon",
+    "src": [
+     "https://www.formula1.com/en/drivers/alexander-albon",
+     "https://racingnews365.com/drivers/alex-albon"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Albon",
+     "Alex Albon",
+     "ALB"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/alexander-albon",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/alex-albon",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; ALB is his code on the 2026 standings of formula1.com and ESPN."
+   },
    "clues": [
     {
      "text": "Likeable",
@@ -9460,6 +9745,30 @@
    ]
   },
   "tsunoda": {
+   "driverName": {
+    "v": "Yuki Tsunoda",
+    "src": [
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/yuki-tsunoda"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Tsunoda",
+     "Yuki Tsunoda",
+     "Yuki",
+     "TSU"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/yuki-tsunoda",
+     "https://www.espn.com/f1/standings",
+     "https://www.formula1.com/en/results/2025/drivers"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; TSU is his code on the 2026 standings of formula1.com and ESPN. formula1.com has no driver page for him in 2026 (he is a reserve), so its 2026 and 2025 standings stand for it."
+   },
    "clues": [
     {
      "text": "Fiery",
@@ -9515,6 +9824,33 @@
    ]
   },
   "hulkenberg": {
+   "driverName": {
+    "v": "Nico Hülkenberg",
+    "src": [
+     "https://www.formula1.com/en/drivers/nico-hulkenberg",
+     "https://racingnews365.com/drivers/nico-hulkenberg"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Hulkenberg",
+     "Nico Hulkenberg",
+     "Hülkenberg",
+     "Nico Hülkenberg",
+     "HUL",
+     "Hulk"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/nico-hulkenberg",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/nico-hulkenberg",
+     "https://www.espn.com/f1/standings",
+     "https://www.mininggazette.com/sports/2025/07/f1-review-formula-1s-hulk-finally-transforms-in-the-uk/"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; HUL is his code on the 2026 standings of formula1.com and ESPN. Both spellings of the surname are on both pages. 'Hulk' is on formula1.com's driver page (\"F1's 'Hulk'\") and in the Mining Gazette headline \"Formula 1's Hulk finally transforms in the UK\"."
+   },
    "clues": [
     {
      "text": "Unlucky",
@@ -9569,6 +9905,29 @@
    ]
   },
   "lawson": {
+   "driverName": {
+    "v": "Liam Lawson",
+    "src": [
+     "https://www.formula1.com/en/drivers/liam-lawson",
+     "https://racingnews365.com/drivers/liam-lawson"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Lawson",
+     "Liam Lawson",
+     "LAW"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/liam-lawson",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/liam-lawson",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; LAW is his code on the 2026 standings of formula1.com and ESPN."
+   },
    "clues": [
     {
      "text": "Fearless",
@@ -9585,24 +9944,32 @@
      "on": "2026-09-28"
     },
     {
-     "text": "No championship yet: back at Racing Bulls after two races alongside Verstappen at Red Bull in 2025",
+     "text": "No championship yet: back at Racing Bulls after two races alongside Verstappen at Red Bull in 2025 and three more as a stand-in in 2026",
      "src": [
       "https://www.formula1.com/en/drivers/liam-lawson",
       "https://www.espn.com/f1/story/_/id/44396200/red-bull-driver-swap-liam-lawson-demoted-rb-yuki-tsunoda-promoted",
-      "https://www.grandprix247.com/formula-1-news/f1-news-lawson-and-lindblad-confirmed-for-2026-as-vcarb-reshapes-its-future",
+      "https://www.formula1.com/en/latest/article/lawson-to-replace-hadjar-again-at-red-bull-as-tsunoda-continues-to-substitute-for-racing-bulls-in-monza.4pI3a9wGM9uTDfK9DqRUMU",
+      "https://www.autosport.com/f1/news/isack-hadjar-to-sit-out-third-f1-race-in-madrid-as-yuki-tsunoda-returns/10853540/",
+      "https://www.formula1.com/en/latest/article/hadjar-to-make-racing-return-with-red-bull-at-azerbaijan-gp.1ddPnUSDEze0V9MCiQ9d2U",
       "https://www.formula1.com/en/results/2026/drivers"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "note": "2025: two races at Red Bull, then swapped back (ESPN, Sky). 2026: stood in for the injured Isack Hadjar at Red Bull at the Dutch, Italian and Spanish (Madrid) Grands Prix (formula1.com before Monza; Autosport: 'a third straight event'), then went back to Racing Bulls for Azerbaijan when Hadjar returned (formula1.com)."
     },
     {
-     "text": "Racing Bulls (2025-present) after two races for Red Bull Racing in 2025, previously RB and AlphaTauri as a substitute",
+     "text": "Racing Bulls (2025-present) with Red Bull Racing stints in 2025 and 2026, previously RB and AlphaTauri as a substitute",
      "src": [
       "https://www.formula1.com/en/drivers/liam-lawson",
       "https://www.espn.com/f1/story/_/id/44396200/red-bull-driver-swap-liam-lawson-demoted-rb-yuki-tsunoda-promoted",
       "https://www.skysports.com/f1/news/12433/13336347/liam-lawson-and-yuki-tsunoda-red-bull-swap-confirmed-from-japanese-grand-prix-as-max-verstappen-gets-new-f1-team-mate",
-      "https://racingnews365.com/drivers/liam-lawson"
+      "https://racingnews365.com/drivers/liam-lawson",
+      "https://www.formula1.com/en/latest/article/lawson-to-replace-hadjar-again-at-red-bull-as-tsunoda-continues-to-substitute-for-racing-bulls-in-monza.4pI3a9wGM9uTDfK9DqRUMU",
+      "https://www.autosport.com/f1/news/isack-hadjar-to-sit-out-third-f1-race-in-madrid-as-yuki-tsunoda-returns/10853540/",
+      "https://www.formula1.com/en/latest/article/hadjar-to-make-racing-return-with-red-bull-at-azerbaijan-gp.1ddPnUSDEze0V9MCiQ9d2U",
+      "https://www.formula1.com/en/results/2026/drivers"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "note": "2025: two races at Red Bull, then swapped back (ESPN, Sky). 2026: stood in for the injured Isack Hadjar at Red Bull at the Dutch, Italian and Spanish (Madrid) Grands Prix (formula1.com before Monza; Autosport: 'a third straight event'), then went back to Racing Bulls for Azerbaijan when Hadjar returned (formula1.com)."
     },
     {
      "text": "New Zealand driver who got his first full-time seat in 2025 after impressing as a substitute",
@@ -9624,6 +9991,30 @@
    ]
   },
   "antonelli": {
+   "driverName": {
+    "v": "Kimi Antonelli",
+    "src": [
+     "https://www.formula1.com/en/drivers/kimi-antonelli",
+     "https://racingnews365.com/drivers/kimi-antonelli"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Antonelli",
+     "Kimi Antonelli",
+     "Andrea Kimi Antonelli",
+     "ANT"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/kimi-antonelli",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/kimi-antonelli",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; ANT is his code on the 2026 standings of formula1.com and ESPN. 'Andrea Kimi Antonelli' is on formula1.com's driver page and racingnews365's."
+   },
    "clues": [
     {
      "text": "Prodigious",
@@ -9680,6 +10071,32 @@
    ]
   },
   "bearman": {
+   "driverName": {
+    "v": "Oliver Bearman",
+    "src": [
+     "https://www.formula1.com/en/drivers/oliver-bearman",
+     "https://racingnews365.com/drivers/oliver-bearman"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Bearman",
+     "Oliver Bearman",
+     "Ollie Bearman",
+     "BEA"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/oliver-bearman",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/oliver-bearman",
+     "https://www.espn.com/f1/standings",
+     "https://www.formula1.com/en/latest/article/breaking-f2-star-ollie-bearman-promoted-to-f1-with-haas-for-2025.3g8aG6ULdcvAxJYHB7v1j8",
+     "https://www.haasf1team.com/season/team/ollie-bearman"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; BEA is his code on the 2026 standings of formula1.com and ESPN. 'Ollie Bearman' is the formula1.com headline 'F2 star Ollie Bearman promoted to F1 with Haas for 2025' and his Haas team page."
+   },
    "clues": [
     {
      "text": "Brave",
@@ -9696,16 +10113,15 @@
      "on": "2026-09-28"
     },
     {
-     "text": "No championship yet: the youngest British driver on the grid",
+     "text": "No championship yet: was the third-youngest driver ever to start a Grand Prix when he debuted in 2024",
      "src": [
-      "https://www.formula1.com/en/drivers/arvid-lindblad",
-      "https://www.skysports.com/f1/news/12040/13477963/red-bull-confirm-isack-hadjar-as-max-verstappens-2026-f1-team-mate-with-british-teenager-arvid-lindblad-joining-racing-bulls",
+      "https://www.formula1.com/en/latest/article/10-youngest-drivers-to-race-in-f1-and-how-they-all-fared-as-lindblad-debuts.6v3qxVRmrw7AeLEbbascHu",
       "https://www.formula1.com/en/drivers/oliver-bearman",
       "https://www.skysports.com/f1/news/12433/13091553/oliver-bearman-how-the-18-year-old-british-driver-stole-the-show-in-a-ferrari-at-the-saudi-arabian-gp",
       "https://www.espn.com/f1/story/_/id/40490349/ferrari-supersub-oliver-bearman-join-haas-2025-f1-season"
      ],
      "on": "2026-09-28",
-     "overturnedCorrection": "No championship yet: was the third-youngest driver ever to start a Grand Prix when he debuted in 2024"
+     "note": "Round 660 review: the old line was false for 2026 (Arvid Lindblad, born 2007, is British and races for Racing Bulls). Sky ('the third youngest driver to feature in an F1 race') and ESPN ('18 years and 305 days old, he became the third-youngest driver to start an F1 race') state the rank; formula1.com's January 2026 list puts him fourth behind Verstappen, Stroll and Antonelli, whose debut came in 2025, so third when he debuted."
     },
     {
      "text": "Haas (2025-present), previously a Ferrari junior who substituted at Ferrari and Haas in 2024",
@@ -9739,6 +10155,28 @@
    ]
   },
   "doohan": {
+   "driverName": {
+    "v": "Jack Doohan",
+    "src": [
+     "https://www.formula1.com/en/results/2025/drivers",
+     "https://racingnews365.com/drivers/jack-doohan"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Doohan",
+     "Jack Doohan",
+     "DOO"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/2025/drivers",
+     "https://racingnews365.com/drivers/jack-doohan",
+     "https://www.espn.com/f1/standings/_/season/2025"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; DOO is his code on the 2025 standings of formula1.com and ESPN. formula1.com has no driver page for him in 2026 (he is a reserve), so its 2025 standings stand for it, with ESPN's 2025 standings for the code."
+   },
    "clues": [
     {
      "text": "Legacy",
@@ -9746,14 +10184,15 @@
      "why": "the one word opener is flavour, not a fact"
     },
     {
-     "text": "0 race wins: a rookie at a midfield team",
+     "text": "0 race wins: seven Grands Prix through the 2026 Azerbaijan Grand Prix, the 2024 Abu Dhabi finale plus the first six rounds of 2025",
      "src": [
       "https://www.formula1.com/en/latest/article/former-alpine-driver-doohan-joins-haas-as-reserve-for-2026-f1-campaign.5ww858LJJmD7tixdIjgo8K",
-      "https://www.espn.com/f1/story/_/id/45028212/alpine-demote-jack-doohan-franco-colapinto-driver-swap-ahead-imola",
-      "https://www.motorsport.com/f1/news/alpine-f1-team-releases-jack-doohan-after-demotion-to-reserve-role/10789633/"
+      "https://www.skysports.com/f1/news/12433/13502407/jack-doohan-joins-haas-a-reserve-driver-for-2026-f1-season-following-release-from-alpine",
+      "https://www.motorsport.com/f1/news/alpine-f1-team-releases-jack-doohan-after-demotion-to-reserve-role/10789633/",
+      "https://www.formula1.com/en/results/2026/drivers"
      ],
      "on": "2026-09-28",
-     "overturnedCorrection": "0 race wins: seven Grands Prix in total, the 2024 Abu Dhabi finale plus the first six rounds of 2025"
+     "note": "formula1.com: 'a seven-race stint as a race driver, beginning with the 2024 Abu Dhabi Grand Prix and the opening six races of 2025'; Sky: the first six rounds of 2025; motorsport.com: the 2024 Abu Dhabi debut. He is a Haas reserve in 2026 and is absent from formula1.com's 2026 standings, so the count holds through the Azerbaijan Grand Prix of 26 September 2026."
     },
     {
      "text": "No championship yet: working to establish himself in F1",
@@ -9795,6 +10234,29 @@
    ]
   },
   "hadjar": {
+   "driverName": {
+    "v": "Isack Hadjar",
+    "src": [
+     "https://www.formula1.com/en/drivers/isack-hadjar",
+     "https://racingnews365.com/drivers/isack-hadjar"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Hadjar",
+     "Isack Hadjar",
+     "HAD"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/isack-hadjar",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/isack-hadjar",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; HAD is his code on the 2026 standings of formula1.com and ESPN."
+   },
    "clues": [
     {
      "text": "Rapid",
@@ -9852,6 +10314,29 @@
    ]
   },
   "bortoleto": {
+   "driverName": {
+    "v": "Gabriel Bortoleto",
+    "src": [
+     "https://www.formula1.com/en/drivers/gabriel-bortoleto",
+     "https://racingnews365.com/drivers/gabriel-bortoleto"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Bortoleto",
+     "Gabriel Bortoleto",
+     "BOR"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/gabriel-bortoleto",
+     "https://www.formula1.com/en/results/2026/drivers",
+     "https://racingnews365.com/drivers/gabriel-bortoleto",
+     "https://www.espn.com/f1/standings"
+    ],
+    "on": "2026-09-28",
+    "note": "The surname, the full name and the first name are the name both pages print; BOR is his code on the 2026 standings of formula1.com and ESPN."
+   },
    "clues": [
     {
      "text": "Rising",
@@ -9859,15 +10344,16 @@
      "why": "the one word opener is flavour, not a fact"
     },
     {
-     "text": "0 race wins: a rookie finding his feet",
+     "text": "0 race wins through the 2026 Azerbaijan Grand Prix, now in his second season",
      "src": [
       "https://www.formula1.com/en/results/2026/races",
-      "https://www.espn.com/f1/story/_/id/49535228/formula-1-2026-results-kimi-antonelli-lewis-hamilton-george-russell-winners-podium-final-positions-every-race",
       "https://www.formula1.com/en/drivers/gabriel-bortoleto",
-      "https://www.formula1.com/en/latest/article/breaking-kick-sauber-confirm-rookie-bortoleto-as-second-driver-for-2025.2EL5ciR1wh3baHcobZqGl9"
+      "https://www.motorsport.com/f1/news/f1-2025-recap-gabriel-bortoleto-justifies-saubers-faith-in-the-rookie/10787191/",
+      "https://www.espn.com/f1/story/_/id/42224433/sauber-announce-gabriel-bortoleto-2025-valtteri-bottas-zhou-guanyu-out",
+      "https://www.espn.com/f1/story/_/id/49535228/formula-1-2026-results-kimi-antonelli-lewis-hamilton-george-russell-winners-podium-final-positions-every-race"
      ],
      "on": "2026-09-28",
-     "overturnedCorrection": "0 race wins through the 2026 Azerbaijan Grand Prix, now in his second season"
+     "note": "No win in any 2026 race on formula1.com or ESPN. 2025 was his rookie season (formula1.com driver page, motorsport.com 2025 recap, ESPN signing story), so 2026 is his second."
     },
     {
      "text": "No championship yet: 2024 F2 Champion",
@@ -9912,6 +10398,27 @@
  },
  "f1Constructors": {
   "ferrari": {
+   "constructorName": {
+    "v": "Ferrari",
+    "src": [
+     "https://www.formula1.com/en/teams/ferrari",
+     "https://www.motorsportmagazine.com/database/teams/ferrari/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Ferrari",
+     "Scuderia Ferrari"
+    ],
+    "src": [
+     "https://www.formula1.com/en/teams/ferrari",
+     "https://www.motorsportmagazine.com/database/teams/ferrari/",
+     "https://racingnews365.com/every-world-champion-in-formula-1-history"
+    ],
+    "on": "2026-09-28",
+    "note": "'Scuderia Ferrari' is the full team name on formula1.com's team page and Motor Sport's team history."
+   },
    "clues": [
     {
      "text": "Iconic",
@@ -9966,6 +10473,25 @@
    ]
   },
   "mclaren": {
+   "constructorName": {
+    "v": "McLaren",
+    "src": [
+     "https://www.formula1.com/en/teams/mclaren",
+     "https://www.motorsportmagazine.com/database/teams/mclaren/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "McLaren"
+    ],
+    "src": [
+     "https://www.formula1.com/en/teams/mclaren",
+     "https://www.motorsportmagazine.com/database/teams/mclaren/"
+    ],
+    "on": "2026-09-28",
+    "note": "'Mclaren' was dropped in Round 660: the game lowercases what a player types, so it was the same answer twice."
+   },
    "clues": [
     {
      "text": "Prestigious",
@@ -10022,6 +10548,26 @@
    ]
   },
   "williams": {
+   "constructorName": {
+    "v": "Williams",
+    "src": [
+     "https://www.formula1.com/en/teams/williams",
+     "https://www.motorsportmagazine.com/database/teams/williams/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Williams",
+     "Williams Racing"
+    ],
+    "src": [
+     "https://www.formula1.com/en/teams/williams",
+     "https://www.motorsportmagazine.com/database/teams/williams/"
+    ],
+    "on": "2026-09-28",
+    "note": "'Williams Racing' is on formula1.com's team page and Motor Sport's team history."
+   },
    "clues": [
     {
      "text": "Resilient",
@@ -10083,6 +10629,28 @@
    ]
   },
   "mercedes": {
+   "constructorName": {
+    "v": "Mercedes",
+    "src": [
+     "https://www.formula1.com/en/teams/mercedes",
+     "https://www.motorsportmagazine.com/database/teams/mercedes/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Mercedes",
+     "Mercedes-AMG",
+     "Mercedes AMG"
+    ],
+    "src": [
+     "https://www.formula1.com/en/teams/mercedes",
+     "https://www.motorsportmagazine.com/database/teams/mercedes/",
+     "https://www.skysports.com/f1/teams/mercedes/profile"
+    ],
+    "on": "2026-09-28",
+    "note": "'Mercedes-AMG' is in the full team name on formula1.com's team page and Sky Sports' team profile (Mercedes AMG Petronas); the version without the hyphen is the same name typed with a space."
+   },
    "clues": [
     {
      "text": "Dominant",
@@ -10093,10 +10661,11 @@
      "text": "Germany (based in the UK)",
      "src": [
       "https://www.formula1.com/en/teams/mercedes",
-      "https://www.motorsportmagazine.com/database/championships/2014-f1-world-championship/"
+      "https://www.formula1.com/en/latest/article/the-family-tree-f1-11-teams-and-how-they-came-to-be.2QBA1PPMf0bC8mp2xxqZeq",
+      "https://www.formulaonehistory.com/teams/mercedes/"
      ],
      "on": "2026-09-28",
-     "unverifiable": "Base Brackley, United Kingdom confirmed on both hosts. No opened page states the team's German racing nationality outright (Motor Sport calls the champion const"
+     "note": "formula1.com's team page gives the base as Brackley, United Kingdom, and its team family tree calls Mercedes 'the German manufacturer'; F1 History's team page gives the nationality German and the base Brackley, United Kingdom."
     },
     {
      "text": "Won eight consecutive Constructors' Championships from 2014 to 2021",
@@ -10134,6 +10703,29 @@
    ]
   },
   "red-bull": {
+   "constructorName": {
+    "v": "Red Bull Racing",
+    "src": [
+     "https://www.formula1.com/en/teams/red-bull-racing",
+     "https://www.motorsportmagazine.com/database/teams/red-bull/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Red Bull",
+     "Red Bull Racing",
+     "RBR"
+    ],
+    "src": [
+     "https://www.formula1.com/en/teams/red-bull-racing",
+     "https://www.motorsportmagazine.com/database/teams/red-bull/",
+     "https://www.formula1.com/en/results/2010/team",
+     "https://www.formulaonehistory.com/teams/red-bull-racing/"
+    ],
+    "on": "2026-09-28",
+    "note": "'RBR' is the constructor's name on formula1.com's 2010 standings (RBR Renault) and F1 History's team page ('also known as Red Bull or RBR')."
+   },
    "clues": [
     {
      "text": "Audacious",
@@ -10144,10 +10736,12 @@
      "text": "Austria (based in the UK)",
      "src": [
       "https://www.formula1.com/en/teams/red-bull-racing",
+      "https://www.formula1.com/en/information/red-bull-racing-year-by-year.5gsBMoMf3DhOSBOJ8Cx8Bi",
+      "https://www.formulaonehistory.com/teams/red-bull-racing/",
       "https://www.motorsportmagazine.com/database/teams/red-bull/"
      ],
      "on": "2026-09-28",
-     "unverifiable": "Base Milton Keynes, United Kingdom confirmed on both hosts. No opened page states the Austrian racing licence outright. Not in dispute."
+     "note": "formula1.com's team page gives the base as Milton Keynes, United Kingdom, and its year by year history calls it the 'Austrian-owned team'; F1 History's team page gives the nationality Austrian and says it is 'headquartered in the United Kingdom and operating under an Austrian license'."
     },
     {
      "text": "Rose from midfield to domination in the early 2010s, then again from 2021 onward",
@@ -10188,6 +10782,28 @@
    ]
   },
   "lotus": {
+   "constructorName": {
+    "v": "Lotus",
+    "src": [
+     "https://www.formula1.com/en/results/1978/team",
+     "https://www.motorsportmagazine.com/database/teams/lotus/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Lotus",
+     "Team Lotus"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/1978/team",
+     "https://www.motorsportmagazine.com/database/teams/lotus/",
+     "https://www.formula1.com/en/drivers/hall-of-fame/Jim_Clark.html",
+     "https://classicteamlotus.co.uk/en/past/the-early-years-1950s/"
+    ],
+    "on": "2026-09-28",
+    "note": "'Team Lotus' is on formula1.com's Jim Clark Hall of Fame page, Motor Sport's team history and Classic Team Lotus. 'Lotus Racing' moved to the Caterham card in Round 660: it was the 2010 name of that team, and on both cards the Caterham answer could never be accepted."
+   },
    "clues": [
     {
      "text": "Innovative",
@@ -10249,6 +10865,29 @@
    ]
   },
   "renault": {
+   "constructorName": {
+    "v": "Renault",
+    "src": [
+     "https://www.formula1.com/en/results/2005/team",
+     "https://www.motorsportmagazine.com/database/teams/renault-f1/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Renault",
+     "Alpine",
+     "Renault F1"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/2005/team",
+     "https://www.motorsportmagazine.com/database/teams/renault-f1/",
+     "https://www.formula1.com/en/teams/alpine",
+     "https://racingnews365.com/every-world-champion-in-formula-1-history"
+    ],
+    "on": "2026-09-28",
+    "note": "formula1.com's Alpine page and Motor Sport's Renault history print all three names; Alpine is the name the team races under today, which a clue says."
+   },
    "clues": [
     {
      "text": "Revolutionary",
@@ -10258,11 +10897,13 @@
     {
      "text": "France",
      "src": [
+      "https://www.formula1.com/en/latest/article/the-family-tree-f1-11-teams-and-how-they-came-to-be.2QBA1PPMf0bC8mp2xxqZeq",
+      "https://www.formulaonehistory.com/teams/renault/",
       "https://www.formula1.com/en/teams/alpine",
       "https://www.motorsportmagazine.com/database/teams/renault-f1/"
      ],
      "on": "2026-09-28",
-     "unverifiable": "Both hosts give the chassis base as Enstone, United Kingdom; neither states French nationality outright (Motor Sport says implied by company origin). Not in dis"
+     "note": "formula1.com's team family tree calls Renault 'the French constructor'; F1 History's team page gives the nationality French. Both, with formula1.com's Alpine page and Motor Sport, give the chassis base as Enstone in the UK, which the clue does not claim."
     },
     {
      "text": "Introduced the turbo engine to Formula 1 and won back-to-back titles in the mid-2000s",
@@ -10306,6 +10947,25 @@
    ]
   },
   "brabham": {
+   "constructorName": {
+    "v": "Brabham",
+    "src": [
+     "https://www.formula1.com/en/results/1966/team",
+     "https://www.motorsportmagazine.com/database/teams/brabham/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Brabham"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/1966/team",
+     "https://www.motorsportmagazine.com/database/teams/brabham/"
+    ],
+    "on": "2026-09-28",
+    "note": "The name both pages print for the team."
+   },
    "clues": [
     {
      "text": "Pioneering",
@@ -10366,6 +11026,27 @@
    ]
   },
   "tyrrell": {
+   "constructorName": {
+    "v": "Tyrrell",
+    "src": [
+     "https://www.formula1.com/en/results/1971/team",
+     "https://www.motorsportmagazine.com/database/teams/tyrrell/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Tyrrell",
+     "Tyrrell Racing"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/1971/team",
+     "https://www.motorsportmagazine.com/database/teams/tyrrell/",
+     "https://www.formulaonehistory.com/teams/tyrrell/"
+    ],
+    "on": "2026-09-28",
+    "note": "'Tyrrell Racing' is on Motor Sport's team history and F1 History's team page."
+   },
    "clues": [
     {
      "text": "Resourceful",
@@ -10420,6 +11101,27 @@
    ]
   },
   "benetton": {
+   "constructorName": {
+    "v": "Benetton",
+    "src": [
+     "https://www.formula1.com/en/results/1995/team",
+     "https://www.motorsportmagazine.com/database/teams/benetton/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Benetton",
+     "Benetton Formula"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/1995/team",
+     "https://www.motorsportmagazine.com/database/teams/benetton/",
+     "https://www.formulaonehistory.com/teams/benetton/"
+    ],
+    "on": "2026-09-28",
+    "note": "'Benetton Formula' is on Motor Sport's team history and F1 History's team page."
+   },
    "clues": [
     {
      "text": "Flashy",
@@ -10473,6 +11175,27 @@
    ]
   },
   "brawn": {
+   "constructorName": {
+    "v": "Brawn GP",
+    "src": [
+     "https://www.formula1.com/en/drivers/hall-of-fame/Jenson_Button.html",
+     "https://www.motorsportmagazine.com/database/teams/brawn/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Brawn",
+     "Brawn GP"
+    ],
+    "src": [
+     "https://www.formula1.com/en/drivers/hall-of-fame/Jenson_Button.html",
+     "https://www.motorsportmagazine.com/database/teams/brawn/",
+     "https://www.formula1.com/en/results/2009/team"
+    ],
+    "on": "2026-09-28",
+    "note": "formula1.com's 2009 standings name the constructor Brawn (Brawn Mercedes)."
+   },
    "clues": [
     {
      "text": "Fairytale",
@@ -10526,6 +11249,28 @@
    ]
   },
   "cooper": {
+   "constructorName": {
+    "v": "Cooper",
+    "src": [
+     "https://www.formula1.com/en/results/1959/team",
+     "https://www.motorsportmagazine.com/database/teams/cooper/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Cooper",
+     "Cooper Car Company"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/1959/team",
+     "https://www.motorsportmagazine.com/database/teams/cooper/",
+     "https://www.formula1.com/en/drivers/hall-of-fame/Jack_Brabham.html",
+     "https://www.grandprix.com/features/david-tremayne/news-feature-john-cooper-a-very-british-marque-a-very-british-man.html"
+    ],
+    "on": "2026-09-28",
+    "note": "'Cooper Car Company' is on formula1.com's Jack Brabham Hall of Fame page and grandprix.com's John Cooper feature."
+   },
    "clues": [
     {
      "text": "Trailblazing",
@@ -10580,6 +11325,25 @@
    ]
   },
   "matra": {
+   "constructorName": {
+    "v": "Matra",
+    "src": [
+     "https://www.formula1.com/en/results/1969/team",
+     "https://www.motorsportmagazine.com/database/teams/matra/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Matra"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/1969/team",
+     "https://www.motorsportmagazine.com/database/teams/matra/"
+    ],
+    "on": "2026-09-28",
+    "note": "The name both pages print for the team."
+   },
    "clues": [
     {
      "text": "Patriotic",
@@ -10633,6 +11397,27 @@
    ]
   },
   "alfa-romeo": {
+   "constructorName": {
+    "v": "Alfa Romeo",
+    "src": [
+     "https://www.formula1.com/en/results/1950/drivers",
+     "https://www.motorsportmagazine.com/database/teams/alfa-romeo/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Alfa Romeo",
+     "Alfa"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/1950/drivers",
+     "https://www.motorsportmagazine.com/database/teams/alfa-romeo/",
+     "https://www.motorsportmagazine.com/database/championships/1950-f1-world-championship/"
+    ],
+    "on": "2026-09-28",
+    "note": "'Alfa' is the first word of the name, as Motor Sport's 1950 season page shortens it ('the Alfa's engine')."
+   },
    "clues": [
     {
      "text": "Historic",
@@ -10686,6 +11471,28 @@
    ]
   },
   "haas": {
+   "constructorName": {
+    "v": "Haas",
+    "src": [
+     "https://www.formula1.com/en/teams/haas",
+     "https://www.motorsportmagazine.com/database/teams/haas/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Haas",
+     "Haas F1"
+    ],
+    "src": [
+     "https://www.formula1.com/en/teams/haas",
+     "https://www.motorsportmagazine.com/database/teams/haas/",
+     "https://www.haasf1team.com/news/haas-f1-team-earns-points-debut-race",
+     "https://racingnews365.com/every-world-champion-in-formula-1-history"
+    ],
+    "on": "2026-09-28",
+    "note": "'Haas F1' is in the team name on formula1.com's team page, the team's own site and racingnews365."
+   },
    "clues": [
     {
      "text": "Ambitious",
@@ -10738,6 +11545,28 @@
    ]
   },
   "racing-point": {
+   "constructorName": {
+    "v": "Racing Point",
+    "src": [
+     "https://www.formula1.com/en/results/2020/team",
+     "https://www.motorsportmagazine.com/database/teams/racing-point/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Racing Point",
+     "Force India"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/2020/team",
+     "https://www.motorsportmagazine.com/database/teams/racing-point/",
+     "https://www.formula1.com/en/results/2017/team",
+     "https://www.motorsportmagazine.com/database/teams/force-india/"
+    ],
+    "on": "2026-09-28",
+    "note": "'Force India' is the team's name on formula1.com's 2017 standings and in Motor Sport's histories. 'Aston Martin' left this card in Round 660: the team's later name has its own card, and listed here it sent a correct Aston Martin answer to this card."
+   },
    "clues": [
     {
      "text": "Overachieving",
@@ -10773,12 +11602,14 @@
     {
      "text": "Raced in pink livery that earned the nickname \"Pink Panthers\"",
      "src": [
+      "https://www.formula1.com/en/latest/article/top-eight-force-indias-target-for-melbourne-perez-qa.12Zz17HemiIsWQg8OAKeYm",
+      "https://www.motorsportweek.com/2017/07/15/15310/",
+      "https://www.grandprix247.com/formula-1-news/force-india-vjm11-pink-panther-uncovered",
       "https://www.formula1.com/en/latest/article/f1-gallery-pretty-in-pink-cars-helmets.74hks5xJYWSkcE0WwqKeKG",
-      "https://www.espn.com/f1/story/_/id/18904901/force-india-livery-goes-pink-arrival-new-sponsor",
       "https://www.skysports.com/f1/news/12433/10801578/force-india-reveal-striking-new-pink-livery-for-2017-formula-1-season"
      ],
      "on": "2026-09-28",
-     "unverifiable": "Pink livery from 2017 confirmed on three hosts. None of them, nor any other opened page, uses the nickname Pink Panthers. The suggested text keeps only what is "
+     "note": "Pink from 2017 (formula1.com gallery, Sky Sports). The nickname: formula1.com's 2017 Perez Q&A ('It already has a nickname: the Pink Panther'), Motorsport Week ('Rise of the Pink Panther', F1's first pink panther) and GrandPrix247, which embeds F1's own post 'The Pink Panthers are back' for the 2018 car."
     },
     {
      "text": "Sergio Pérez won their first race in years at the 2020 Sakhir Grand Prix",
@@ -10792,6 +11623,27 @@
    ]
   },
   "aston-martin": {
+   "constructorName": {
+    "v": "Aston Martin",
+    "src": [
+     "https://www.formula1.com/en/teams/aston-martin",
+     "https://www.motorsportmagazine.com/database/teams/aston-martin/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Aston Martin",
+     "Aston"
+    ],
+    "src": [
+     "https://www.formula1.com/en/teams/aston-martin",
+     "https://www.motorsportmagazine.com/database/teams/aston-martin/",
+     "https://www.skysports.com/f1/news/12477/12234426/aston-martin-licenced-to-thrill-in-formula-1-return-as-2021-car-revealed-with-historic-green-livery"
+    ],
+    "on": "2026-09-28",
+    "note": "'Aston' is the first word of the name, as Sky Sports shortens it ('the Aston name')."
+   },
    "clues": [
     {
      "text": "Glamorous",
@@ -10847,6 +11699,27 @@
    ]
   },
   "jordan": {
+   "constructorName": {
+    "v": "Jordan",
+    "src": [
+     "https://www.formula1.com/en/results/1999/team",
+     "https://www.motorsportmagazine.com/database/teams/jordan/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Jordan",
+     "Jordan Grand Prix"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/1999/team",
+     "https://www.motorsportmagazine.com/database/teams/jordan/",
+     "https://www.formula1.com/en/latest/article/from-memorable-debuts-to-unexpected-victories-jordan-grand-prixs-10-greatest.6CY81a5nTpky7ECfgfr138"
+    ],
+    "on": "2026-09-28",
+    "note": "'Jordan Grand Prix' is on formula1.com's Jordan feature and Motor Sport's team history."
+   },
    "clues": [
     {
      "text": "Colourful",
@@ -10898,6 +11771,33 @@
    ]
   },
   "toro-rosso": {
+   "constructorName": {
+    "v": "Toro Rosso",
+    "src": [
+     "https://www.formula1.com/en/teams/racing-bulls",
+     "https://www.motorsport.com/f1/news/ten-times-toro-rosso-stood-out-the-red-bull-junior-squad-reaches-200-f1-starts/3221316/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Toro Rosso",
+     "AlphaTauri",
+     "RB",
+     "VCARB",
+     "Minardi"
+    ],
+    "src": [
+     "https://www.formula1.com/en/teams/racing-bulls",
+     "https://www.motorsport.com/f1/news/ten-times-toro-rosso-stood-out-the-red-bull-junior-squad-reaches-200-f1-starts/3221316/",
+     "https://www.formula1.com/en/results/2024/team",
+     "https://racingnews365.com/red-bull-sister-team-to-undergo-another-name-change",
+     "https://www.the-race.com/formula-1/red-bull-second-f1-team-visa-cash-app-rb-explained/",
+     "https://www.skysports.com/f1/news/12433/11926924/alphatauri-begin-new-era-with-glitzy-f1-and-fashion-launch-reveal"
+    ],
+    "on": "2026-09-28",
+    "note": "formula1.com's Racing Bulls page prints Toro Rosso, AlphaTauri, RB, VCARB and Minardi (the team it was formed from); racingnews365 prints Toro Rosso, AlphaTauri, VCARB and RB; motorsport.com Toro Rosso and Minardi; Sky AlphaTauri; The Race VCARB."
+   },
    "clues": [
     {
      "text": "Nurturing",
@@ -10952,6 +11852,31 @@
    ]
   },
   "sauber": {
+   "constructorName": {
+    "v": "Sauber",
+    "src": [
+     "https://www.formula1.com/en/teams/audi",
+     "https://www.motorsportmagazine.com/database/teams/sauber/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Sauber",
+     "Stake",
+     "Kick Sauber",
+     "Audi"
+    ],
+    "src": [
+     "https://www.formula1.com/en/teams/audi",
+     "https://www.motorsportmagazine.com/database/teams/sauber/",
+     "https://www.formula1.com/en/teams/kick-sauber",
+     "https://www.formula1.com/en/information/kick-sauber-year-by-year.JoWXFc6oEcNk5ozeiPxG5",
+     "https://www.the-race.com/formula-1/the-10-key-moments-in-saubers-f1-history-ahead-of-audi-deal/"
+    ],
+    "on": "2026-09-28",
+    "note": "'Stake' and 'Kick Sauber' are the 2024 and 2025 name on formula1.com's Kick Sauber page (Stake F1 Team Kick Sauber) and Motor Sport's team history. 'Audi' was added in Round 660: it is the name the team races under in 2026 (formula1.com's Audi page, Motor Sport, The Race), which a clue says."
+   },
    "clues": [
     {
      "text": "Steady",
@@ -11008,6 +11933,25 @@
    ]
   },
   "vanwall": {
+   "constructorName": {
+    "v": "Vanwall",
+    "src": [
+     "https://www.formula1.com/en/results/1958/team",
+     "https://www.motorsportmagazine.com/database/teams/vanwall/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Vanwall"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/1958/team",
+     "https://www.motorsportmagazine.com/database/teams/vanwall/"
+    ],
+    "on": "2026-09-28",
+    "note": "The name both pages print for the team."
+   },
    "clues": [
     {
      "text": "Historic",
@@ -11022,7 +11966,7 @@
       "https://www.motorsportmagazine.com/articles/single-seaters/f1/vanwall-the-bitter-battle-for-historic-f1-name/"
      ],
      "on": "2026-09-28",
-     "noOfficial": "No formula1.com or fia.com page states this line as written; it stands on 2 independent hosts: Goodwood: the British team; Motor Sport: an all British outfit, one of the plucky British start up teams. No formula1.co"
+     "noOfficial": "No formula1.com or fia.com page states this line as written; it stands on 2 independent hosts: Goodwood: the British team; Motor Sport: an all British outfit, one of the plucky British start up teams. No formula1.com page states a nationality for a defunct team, so this rests on independent hosts."
     },
     {
      "text": "Won the very first Constructors' Championship ever awarded",
@@ -11064,6 +12008,25 @@
    ]
   },
   "ligier": {
+   "constructorName": {
+    "v": "Ligier",
+    "src": [
+     "https://www.formula1.com/en/results/1976/team",
+     "https://www.motorsportmagazine.com/database/teams/ligier/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Ligier"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/1976/team",
+     "https://www.motorsportmagazine.com/database/teams/ligier/"
+    ],
+    "on": "2026-09-28",
+    "note": "The name both pages print for the team."
+   },
    "clues": [
     {
      "text": "Spirited",
@@ -11097,7 +12060,7 @@
       "https://www.autosport.com/f1/news/top-10-ligier-f1-drivers-ranked-boutsen-pironi-laffite-and-more/10360927/"
      ],
      "on": "2026-09-28",
-     "noOfficial": "No formula1.com or fia.com page states this line as written; it stands on 2 independent hosts: Absent from both champion lists; Autosport gives second in 1980 as the peak. No official all time list exists, only per "
+     "noOfficial": "No formula1.com or fia.com page states this line as written; it stands on 2 independent hosts: Absent from both champion lists; Autosport gives second in 1980 as the peak. No official all time list exists, only per year standings."
     },
     {
      "text": "Raced in French blue, often with the Gitanes cigarette branding",
@@ -11107,7 +12070,7 @@
       "https://www.autosport.com/f1/news/former-formula-1-team-boss-and-racing-driver-guy-ligier-dies-5002257/5002257/"
      ],
      "on": "2026-09-28",
-     "noOfficial": "No formula1.com or fia.com page states this line as written; it stands on 2 independent hosts: Autosport: designs cloaked in the blue livery of Gitanes, pale blue and white cars. ESPN: Gitanes among the state owned "
+     "noOfficial": "No formula1.com or fia.com page states this line as written; it stands on 2 independent hosts: Autosport: designs cloaked in the blue livery of Gitanes, pale blue and white cars. ESPN: Gitanes among the state owned sponsors ordered to back Ligier. No official host describes colours."
     },
     {
      "text": "Founded by Guy Ligier in memory of his friend Jo Schlesser, who died racing in the 1968 French Grand Prix",
@@ -11121,6 +12084,28 @@
    ]
   },
   "march": {
+   "constructorName": {
+    "v": "March",
+    "src": [
+     "https://www.formula1.com/en/results/1970/team",
+     "https://www.motorsportmagazine.com/database/teams/march/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "March",
+     "March Engineering"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/1970/team",
+     "https://www.motorsportmagazine.com/database/teams/march/",
+     "https://www.grandprix.com/constructors/march-engineering.html",
+     "https://www.autosport.com/f1/news/march-formula-1-team-co-founder-robin-herd-dies-aged-80-4987226/4987226/"
+    ],
+    "on": "2026-09-28",
+    "note": "'March Engineering' is on Motor Sport's team history, grandprix.com and Autosport."
+   },
    "clues": [
     {
      "text": "Entrepreneurial",
@@ -11134,7 +12119,7 @@
       "https://www.espn.com/f1/story/_/id/26920598/remembering-march-co-founder-robin-herd-1939-2019"
      ],
      "on": "2026-09-28",
-     "noOfficial": "No formula1.com or fia.com page states this line as written; it stands on 2 independent hosts: Motor Sport (1970): factory on the edge of Bicester in Oxfordshire. ESPN: an Oxfordshire company. Independent hosts only"
+     "noOfficial": "No formula1.com or fia.com page states this line as written; it stands on 2 independent hosts: Motor Sport (1970): factory on the edge of Bicester in Oxfordshire. ESPN: an Oxfordshire company. Independent hosts only; formula1.com gives no nationality for defunct teams."
     },
     {
      "text": "Competed intermittently across the 1970s and 1980s, also a prolific customer chassis builder",
@@ -11179,6 +12164,28 @@
    ]
   },
   "brm": {
+   "constructorName": {
+    "v": "BRM",
+    "src": [
+     "https://www.formula1.com/en/results/1962/team",
+     "https://www.motorsportmagazine.com/database/teams/brm/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "BRM",
+     "British Racing Motors"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/1962/team",
+     "https://www.motorsportmagazine.com/database/teams/brm/",
+     "https://www.formula1.com/en/information/drivers-hall-of-fame-graham-hill.NUqzbttsJ2gsuGtW9PzNG",
+     "https://www.autosport.com/f1/news/top-10-brm-f1-drivers-ranked-fangio-stewart-hill-and-more/10360843/"
+    ],
+    "on": "2026-09-28",
+    "note": "'British Racing Motors' is on formula1.com's Graham Hill Hall of Fame page and Autosport's BRM feature."
+   },
    "clues": [
     {
      "text": "Tenacious",
@@ -11233,6 +12240,28 @@
    ]
   },
   "honda": {
+   "constructorName": {
+    "v": "Honda",
+    "src": [
+     "https://www.formula1.com/en/results/2006/team",
+     "https://www.motorsportmagazine.com/database/teams/honda/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Honda",
+     "Honda Racing"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/2006/team",
+     "https://www.motorsportmagazine.com/database/teams/honda/",
+     "https://www.formula1.com/en/latest/article/works-team-success-powering-senna-and-red-bull-triumphs-retracing-hondas-f1.505Z6Owe256nITfRFGjk9z",
+     "https://www.hagerty.co.uk/articles/motorsport/2006-hungarian-grand-prix-hondas-surprise-winner/"
+    ],
+    "on": "2026-09-28",
+    "note": "'Honda Racing' is the 2006 team name in formula1.com's Honda history and Hagerty's 2006 Hungarian Grand Prix story (Lucky Strike Honda Racing F1 Team). 'Honda F1' was dropped in Round 660 for want of a page that uses it."
+   },
    "clues": [
     {
      "text": "Engineering",
@@ -11246,7 +12275,7 @@
       "https://www.the-race.com/formula-1/the-last-time-honda-withdrew-from-f1-by-those-it-left-behind/"
      ],
      "on": "2026-09-28",
-     "noOfficial": "No formula1.com or fia.com page states this line as written; it stands on 2 independent hosts: Motor Sport: the Japanese marque, the Japanese manufacturer. The Race: Honda's Japanese personnel, its Sakura base in Ja"
+     "noOfficial": "No formula1.com or fia.com page states this line as written; it stands on 2 independent hosts: Motor Sport: the Japanese marque, the Japanese manufacturer. The Race: Honda's Japanese personnel, its Sakura base in Japan. formula1.com's Honda history never uses the word Japanese, so the official host is silent on the wording."
     },
     {
      "text": "Competed as both engine supplier and full constructor at different times",
@@ -11265,7 +12294,7 @@
       "https://www.autosport.com/f1/news/most-successful-f1-teams-which-team-has-the-most-constructors-titles-5367606/5367606/"
      ],
      "on": "2026-09-28",
-     "noOfficial": "No formula1.com or fia.com page states this line as written; it stands on 2 independent hosts: Honda is absent from both champion lists; McLaren's 1988 to 1991 titles were with Honda engines, which the wording as a "
+     "noOfficial": "No formula1.com or fia.com page states this line as written; it stands on 2 independent hosts: Honda is absent from both champion lists; McLaren's 1988 to 1991 titles were with Honda engines, which the wording as a full team correctly excludes."
     },
     {
      "text": "Raced in white with a red circle inspired by the Japanese flag",
@@ -11289,6 +12318,31 @@
    ]
   },
   "toyota": {
+   "constructorName": {
+    "v": "Toyota",
+    "src": [
+     "https://www.formula1.com/en/results/2005/team",
+     "https://www.motorsportmagazine.com/database/teams/toyota/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Toyota",
+     "Toyota Racing",
+     "Toyota F1"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/2005/team",
+     "https://www.motorsportmagazine.com/database/teams/toyota/",
+     "https://www.autosport.com/f1/news/toyota-unveil-2002-car-in-cologne-font-faceverdana-size1iupdated-i-font-5058601/5058601/",
+     "https://www.grandprix.com/news/panasonic-toyota-f1-team-unveils-race-car-for-2002.html",
+     "https://www.the-race.com/formula-1/why-toyota-first-f1-venture-failed-so-badly/",
+     "https://www.racefans.net/2009/11/04/toyota-quits-f1-after-eight-winless-years/"
+    ],
+    "on": "2026-09-28",
+    "note": "'Toyota Racing' (Panasonic Toyota Racing) is on Autosport and grandprix.com; 'Toyota F1' on The Race, RaceFans and grandprix.com."
+   },
    "clues": [
     {
      "text": "Underachieving",
@@ -11347,6 +12401,31 @@
    ]
   },
   "manor": {
+   "constructorName": {
+    "v": "Manor",
+    "src": [
+     "https://www.formula1.com/en/latest/article/manor-appoint-new-ceo.1G4ij6IAGHPRUdkegS2iQt",
+     "https://www.motorsportmagazine.com/database/teams/manor/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Manor",
+     "Marussia",
+     "Manor Racing",
+     "Virgin Racing"
+    ],
+    "src": [
+     "https://www.formula1.com/en/latest/article/manor-appoint-new-ceo.1G4ij6IAGHPRUdkegS2iQt",
+     "https://www.motorsportmagazine.com/database/teams/manor/",
+     "https://www.formula1.com/en/results/2012/team",
+     "https://www.formulaonehistory.com/teams/manor/",
+     "https://www.motorsport.com/f1/news/gallery-f1-teams-that-became-defunct-in-the-last-25-years-889186/889186/"
+    ],
+    "on": "2026-09-28",
+    "note": "Motor Sport's team history and F1 History print all four names; formula1.com prints Manor Racing and, on its 2012 standings, Marussia."
+   },
    "clues": [
     {
      "text": "Plucky",
@@ -11407,6 +12486,27 @@
    ]
   },
   "caterham": {
+   "constructorName": {
+    "v": "Caterham",
+    "src": [
+     "https://www.formula1.com/en/results/2012/team",
+     "https://www.motorsportmagazine.com/database/teams/caterham/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Caterham",
+     "Lotus Racing"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/2012/team",
+     "https://www.motorsportmagazine.com/database/teams/caterham/",
+     "https://www.skysports.com/f1/teams/manor/profile"
+    ],
+    "on": "2026-09-28",
+    "note": "'Lotus Racing' was this team's 2010 name (Motor Sport's team history; Sky Sports: 'Lotus Racing (later Caterham)'), and a clue says so. 'Team Lotus (2010s)' was dropped in Round 660: nobody types a bracket, and 'Team Lotus' belongs to the Lotus card."
+   },
    "clues": [
     {
      "text": "Struggling",
@@ -11460,6 +12560,28 @@
    ]
   },
   "bmw-sauber": {
+   "constructorName": {
+    "v": "BMW Sauber",
+    "src": [
+     "https://www.formula1.com/en/latest/article/in-his-own-words-kubica-on-his-08-canadian-gp-win.3Bs5Ap5XuM8sCWiimqGCuM",
+     "https://www.racefans.net/2006/01/17/bmw-low-ball-f106-hopes/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "BMW Sauber",
+     "BMW"
+    ],
+    "src": [
+     "https://www.formula1.com/en/latest/article/in-his-own-words-kubica-on-his-08-canadian-gp-win.3Bs5Ap5XuM8sCWiimqGCuM",
+     "https://www.racefans.net/2006/01/17/bmw-low-ball-f106-hopes/",
+     "https://www.formula1.com/en/results/2008/team",
+     "https://www.racefans.net/2008/06/08/2008-canadian-gp-review-kubica-takes-maiden-win-as-hamilton-hits-raikkonen/"
+    ],
+    "on": "2026-09-28",
+    "note": "formula1.com's 2008 standings and RaceFans call the team BMW. 'BMW F1' was dropped in Round 660 for want of a page that uses it."
+   },
    "clues": [
     {
      "text": "Clinical",
@@ -11517,6 +12639,28 @@
    ]
   },
   "jaguar": {
+   "constructorName": {
+    "v": "Jaguar",
+    "src": [
+     "https://www.formula1.com/en/results/2003/team",
+     "https://www.motorsportmagazine.com/database/teams/jaguar/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Jaguar",
+     "Jaguar Racing"
+    ],
+    "src": [
+     "https://www.formula1.com/en/results/2003/team",
+     "https://www.motorsportmagazine.com/database/teams/jaguar/",
+     "https://www.autosport.com/f1/news/red-bull-buys-jaguar-racing-5000774/5000774/",
+     "https://www.abc.net.au/news/2004-11-15/red-bull-boss-confirms-jaguar-f1-takeover-report/585752"
+    ],
+    "on": "2026-09-28",
+    "note": "'Jaguar Racing' is on Autosport and ABC News."
+   },
    "clues": [
     {
      "text": "Underperforming",
@@ -11573,6 +12717,30 @@
    ]
   },
   "cadillac": {
+   "constructorName": {
+    "v": "Cadillac",
+    "src": [
+     "https://www.formula1.com/en/teams/cadillac",
+     "https://www.motorsport.com/f1/news/cadillac-reveals-two-sided-2026-livery-for-its-maiden-f1-season/10796105/"
+    ],
+    "on": "2026-09-28"
+   },
+   "commonNames": {
+    "v": [
+     "Cadillac",
+     "GM",
+     "General Motors",
+     "Cadillac F1"
+    ],
+    "src": [
+     "https://www.formula1.com/en/teams/cadillac",
+     "https://www.motorsport.com/f1/news/cadillac-reveals-two-sided-2026-livery-for-its-maiden-f1-season/10796105/",
+     "https://www.si.com/onsi/f1/drivers/cadillac-f1-driver-signings-a-bold-statement-of-intent",
+     "https://f1miamigp.com/news/press-release/cadillac-set-for-f1-debut/"
+    ],
+    "on": "2026-09-28",
+    "note": "'Cadillac F1' is the team name (Cadillac F1 Team) on formula1.com, SI and the Miami GP release. General Motors (GM) owns the team: formula1.com says 'Cadillac owners General Motors (GM)', SI and the Miami GP release say the same."
+   },
    "clues": [
     {
      "text": "Bold",
@@ -11618,15 +12786,15 @@
      "on": "2026-09-28"
     },
     {
-     "text": "Became the 11th team on the grid after years of negotiations, marking GM's return to top-level open-wheel racing",
+     "text": "Became the 11th team on the grid after years of negotiations, backed by General Motors",
      "src": [
       "https://www.formula1.com/en/teams/cadillac",
+      "https://www.motorsport.com/f1/news/fia-f1-general-motors-11th-team-cadillac-2026/10701190/",
       "https://www.espn.com/f1/story/_/id/47869246/cadillac-launches-2026-f1-livery-super-bowl-commercial-break",
-      "https://www.si.com/onsi/f1/drivers/cadillac-f1-driver-signings-a-bold-statement-of-intent",
       "https://f1miamigp.com/news/press-release/cadillac-set-for-f1-debut/"
      ],
      "on": "2026-09-28",
-     "unverifiable": "The 11th team half is solid (formula1.com, ESPN, SI). The clause about GM's return to top level open wheel racing could not be sourced from any opened page and "
+     "note": "formula1.com: the grid's 11th team, 'Cadillac owners General Motors (GM)', a deal in principle in 2024 and the go-ahead in 2025. motorsport.com (March 2025): the FIA and F1 formally approved GM's entry, superseding the deal in principle of the previous November, after the Andretti application was rejected. The Miami GP release: 'the initial bid to enter the sport originated with Andretti before General Motors became directly involved'. The old clause about GM returning to top level open wheel racing was on no page and is gone (Chevrolet has supplied IndyCar engines throughout)."
     }
    ]
   }

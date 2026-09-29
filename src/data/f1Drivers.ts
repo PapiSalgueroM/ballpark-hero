@@ -96,13 +96,13 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
   {
     id: 'alonso',
     driverName: 'Fernando Alonso',
-    commonNames: ['Alonso', 'Fernando Alonso', 'Fernando', 'Nando', 'ALO'],
+    commonNames: ['Alonso', 'Fernando Alonso', 'Fernando', 'ALO'],
     clues: [
       'Tenacious',
       '32 race wins across his career',
       '2 World Championships (2005, 2006), ended Michael Schumacher\'s dominant era',
       'Aston Martin (2023-present), previously Alpine/Renault, McLaren, Ferrari across a 20+ year career',
-      'Spanish driver who debuted in 2001, the elder statesman of the grid at 45 years old',
+      'Spanish driver born in 1981 who debuted in 2001, the elder statesman of the grid',
       'The oldest driver on the 2026 grid, still racing competitively after more than two decades in F1',
     ],
   },
@@ -142,7 +142,7 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
       'No championship: typically a midfield runner',
       'Haas (2025-present), previously Alpine (2021-2024), Renault (2020), Force India/Racing Point (2017-2018)',
       'French driver who debuted in 2016, moved to Haas for 2025',
-      'Won his maiden race in chaotic conditions at Hungary 2021 with Alpine, crossing the line in tears',
+      'Won his maiden race in chaotic conditions at Hungary 2021 with Alpine, holding off Vettel to the flag',
     ],
   },
   {
@@ -191,8 +191,8 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
     clues: [
       'Fearless',
       '0 race wins: still in the early stages of his career',
-      'No championship yet: back at Racing Bulls after two races alongside Verstappen at Red Bull in 2025',
-      'Racing Bulls (2025-present) after two races for Red Bull Racing in 2025, previously RB and AlphaTauri as a substitute',
+      'No championship yet: back at Racing Bulls after two races alongside Verstappen at Red Bull in 2025 and three more as a stand-in in 2026',
+      'Racing Bulls (2025-present) with Red Bull Racing stints in 2025 and 2026, previously RB and AlphaTauri as a substitute',
       'New Zealand driver who got his first full-time seat in 2025 after impressing as a substitute',
       'Impressed as a last-minute substitute at multiple races, earning a promotion to the senior Red Bull team',
     ],
@@ -217,7 +217,7 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
     clues: [
       'Brave',
       '0 race wins: still building his F1 career',
-      'No championship yet: the youngest British driver on the grid',
+      'No championship yet: was the third-youngest driver ever to start a Grand Prix when he debuted in 2024',
       'Haas (2025-present), previously a Ferrari junior who substituted at Ferrari and Haas in 2024',
       'British driver who earned a full-time seat for 2025 after starring as a substitute',
       'Scored points on his F1 debut subbing for Sainz at Ferrari in Saudi Arabia 2024, finishing 7th at age 18',
@@ -229,7 +229,7 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
     commonNames: ['Doohan', 'Jack Doohan', 'DOO'],
     clues: [
       'Legacy',
-      '0 race wins: a rookie at a midfield team',
+      '0 race wins: seven Grands Prix through the 2026 Azerbaijan Grand Prix, the 2024 Abu Dhabi finale plus the first six rounds of 2025',
       'No championship yet: working to establish himself in F1',
       'Haas reserve driver (2026), previously Alpine (2024-2025), an Alpine Academy graduate',
       'Australian driver who debuted at the 2024 Abu Dhabi Grand Prix, son of motorcycle racing legend Mick Doohan',
@@ -255,7 +255,7 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
     commonNames: ['Bortoleto', 'Gabriel Bortoleto', 'BOR'],
     clues: [
       'Rising',
-      '0 race wins: a rookie finding his feet',
+      '0 race wins through the 2026 Azerbaijan Grand Prix, now in his second season',
       'No championship yet: 2024 F2 Champion',
       'Sauber/Audi (2025-present), joined as the team transitions to the Audi works project',
       'Brazilian driver who debuted in 2025 after winning the F2 championship',

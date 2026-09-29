@@ -18,7 +18,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
   {
     id: 'mclaren',
     constructorName: 'McLaren',
-    commonNames: ['McLaren', 'Mclaren'],
+    commonNames: ['McLaren'],
     clues: [
       'Prestigious',
       'United Kingdom',
@@ -70,7 +70,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
   {
     id: 'lotus',
     constructorName: 'Lotus',
-    commonNames: ['Lotus', 'Team Lotus', 'Lotus Racing'],
+    commonNames: ['Lotus', 'Team Lotus'],
     clues: [
       'Innovative',
       'United Kingdom',
@@ -200,7 +200,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
   {
     id: 'racing-point',
     constructorName: 'Racing Point',
-    commonNames: ['Racing Point', 'Force India', 'Aston Martin'],
+    commonNames: ['Racing Point', 'Force India'],
     clues: [
       'Overachieving',
       'United Kingdom',
@@ -252,7 +252,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
   {
     id: 'sauber',
     constructorName: 'Sauber',
-    commonNames: ['Sauber', 'Stake', 'Kick Sauber'],
+    commonNames: ['Sauber', 'Stake', 'Kick Sauber', 'Audi'],
     clues: [
       'Steady',
       'Switzerland',
@@ -317,7 +317,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
   {
     id: 'honda',
     constructorName: 'Honda',
-    commonNames: ['Honda', 'Honda Racing', 'Honda F1'],
+    commonNames: ['Honda', 'Honda Racing'],
     clues: [
       'Engineering',
       'Japan',
@@ -356,7 +356,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
   {
     id: 'caterham',
     constructorName: 'Caterham',
-    commonNames: ['Caterham', 'Lotus Racing', 'Team Lotus (2010s)'],
+    commonNames: ['Caterham', 'Lotus Racing'],
     clues: [
       'Struggling',
       'Malaysia / United Kingdom',
@@ -369,7 +369,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
   {
     id: 'bmw-sauber',
     constructorName: 'BMW Sauber',
-    commonNames: ['BMW Sauber', 'BMW', 'BMW F1'],
+    commonNames: ['BMW Sauber', 'BMW'],
     clues: [
       'Clinical',
       'Germany / Switzerland',
@@ -402,7 +402,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
       'Joined the grid in 2026 as a new American manufacturer entry backed by General Motors',
       'Won 0 Constructors\' Championships',
       'Race in a split livery, white on one side and black on the other',
-      'Became the 11th team on the grid after years of negotiations, marking GM\'s return to top-level open-wheel racing',
+      'Became the 11th team on the grid after years of negotiations, backed by General Motors',
     ],
   },
 ];
