@@ -28,6 +28,14 @@
    Run: node scripts/genChainChampions.mjs           (needs the database)
         node scripts/genChainChampions.mjs --check   (exit 1 if either file
                                                       differs from its table)
+
+   Round 674: scripts/simChainChampions.mjs runs the check in the suite, so a
+   champion added to either table is caught the day it lands rather than when
+   somebody remembers this script. Its negative control adds a champion to
+   the rows a check reads, through CHAIN_CHAMPIONS_EXTRA (a JSON object of
+   table name to extra names). That overlay is honoured under --check only:
+   a write with it set is refused, so a control can never write an invented
+   champion into src/data.
 */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -35,6 +43,11 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CHECK = process.argv.includes('--check');
+const EXTRA = process.env.CHAIN_CHAMPIONS_EXTRA ? JSON.parse(process.env.CHAIN_CHAMPIONS_EXTRA) : null;
+if (EXTRA && !CHECK) {
+  console.error('genChainChampions: CHAIN_CHAMPIONS_EXTRA is a check fixture and is refused on a write, nothing written');
+  process.exit(1);
+}
 
 const client = fs.readFileSync(path.join(ROOT, 'src', 'integrations', 'supabase', 'client.ts'), 'utf8');
 const URL_ = client.match(/SUPABASE_URL\s*=\s*["']([^"']+)["']/)[1];
@@ -70,9 +83,18 @@ const SPORTS = [
   },
 ];
 
+for (const t of Object.keys(EXTRA ?? {})) {
+  if (!SPORTS.some(s => s.table === t)) { console.error(`genChainChampions: CHAIN_CHAMPIONS_EXTRA names ${t}, which is not a table this checks`); process.exit(1); }
+}
+
 let drift = 0;
 for (const s of SPORTS) {
   const rows = await pull(s.table, s.column, s.order);
+  const extra = EXTRA?.[s.table] ?? [];
+  if (extra.length) {
+    rows.push(...extra.map(name => ({ [s.column]: name })));
+    console.log(`   CHECK FIXTURE: ${extra.length} name(s) added to the rows read from public.${s.table}: ${extra.join(', ')}`);
+  }
   const names = [...new Set(rows.map(r => r[s.column]).filter(n => typeof n === 'string' && n.trim() !== ''))].sort();
   if (rows.length === 0 || names.length === 0) throw new Error(`${s.table} came back empty, nothing written`);
   const doc = {

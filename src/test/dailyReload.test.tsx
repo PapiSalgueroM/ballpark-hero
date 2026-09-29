@@ -60,7 +60,7 @@ import './dailyReload/mocks';
 import { describe, it, expect, beforeAll, afterAll } from 'vitest';
 import { getTodayET } from '@/lib/dateUtils';
 import { consumeRestoredFinish, markRestoredFinish } from '@/lib/restoredFinish';
-import { controlHits, recordCompletion, resetMocks, silencedMarks } from './dailyReload/mocks';
+import { controlHits, recordCompletion, resetMocks, resetStreamLog, silencedMarks, streamRepeats } from './dailyReload/mocks';
 import { DRIVER_FIELDS, type AnyDriver } from './dailyReload/driver';
 
 const CONTROL = process.env.DAILY_RELOAD_CONTROL || '';
@@ -83,14 +83,22 @@ const modules = import.meta.glob('./dailyReload/*.driver.tsx', { eager: true }) 
 
 const malformed: string[] = [];
 const discovered: AnyDriver[] = [];
+/* Round 674: each driver's file name, printed with its row so the harness can
+   tie a row to the files it renders without running it. */
+const fileOf = new Map<AnyDriver, string>();
 for (const [file, mod] of Object.entries(modules).sort(([a], [b]) => (a < b ? -1 : 1))) {
   const d = mod.default as Partial<AnyDriver> | undefined;
   const missing = d && typeof d === 'object' ? DRIVER_FIELDS.filter(f => d[f] === undefined) : [...DRIVER_FIELDS];
   if (missing.length > 0) { malformed.push(`${file} is missing ${missing.join(', ')}`); continue; }
   if (d!.restoreStyle !== 'initializer' && d!.restoreStyle !== 'handler') { malformed.push(`${file} has restoreStyle ${String(d!.restoreStyle)}`); continue; }
   discovered.push(d as AnyDriver);
+  fileOf.set(d as AnyDriver, file.split('/').pop()!);
 }
-const drivers = discovered.filter(d => !ONLY || d.slug === ONLY);
+/* Round 674: a swap control runs only the rows its swapped module can reach
+   (DAILY_RELOAD_ROWS, which the harness works out from the import graph), so
+   its verdict does not hang on how busy the machine is. */
+const ROWS = (process.env.DAILY_RELOAD_ROWS || '').split(',').filter(Boolean);
+const drivers = discovered.filter(d => (!ONLY || d.slug === ONLY) && (!ROWS.length || ROWS.includes(d.slug)));
 
 const usesMark = (d: AnyDriver) => d.restoreStyle === 'handler' && d.usesRestoreMark !== false;
 const resumes = (d: AnyDriver) => typeof d.playSome === 'function' && typeof d.progress === 'function';
@@ -102,6 +110,7 @@ describe('daily reload', () => {
     for (const d of drivers) {
       console.log('DAILY_RELOAD_ROW ' + JSON.stringify({
         slug: d.slug,
+        file: fileOf.get(d),
         keyPrefix: d.keyPrefix,
         restoreStyle: d.restoreStyle,
         usesRestoreMark: usesMark(d),
@@ -117,6 +126,7 @@ describe('daily reload', () => {
     console.log(`DAILY_RELOAD_DRIVERS ${drivers.length} of ${discovered.length}${ONLY ? ` (ONLY=${ONLY})` : ''}`);
     expect(malformed, 'every driver file exports a complete driver').toEqual([]);
     if (ONLY) expect(drivers.length, `ONLY=${ONLY} names no driver; have ${discovered.map(d => d.slug).join(', ') || 'none'}`).toBe(1);
+    if (ROWS.length && !ONLY) expect(drivers.map(d => d.slug).sort(), `DAILY_RELOAD_ROWS names rows no driver plays; have ${discovered.map(d => d.slug).join(', ')}`).toEqual([...ROWS].sort());
     for (const d of drivers) {
       if (usesMark(d)) {
         expect(d.restoreFile, `${d.slug}: a handler restore that uses the mark must name its restoreFile`).toBeTruthy();
@@ -243,6 +253,7 @@ describe('daily reload', () => {
           const progress = driver.progress!;
           for (const k of keysOf()) localStorage.removeItem(k);
           const before = recordCompletion.mock.calls.length;
+          resetStreamLog();
           let api: unknown = await driver.mount();
           let mid = '';
           try {
@@ -277,6 +288,11 @@ describe('daily reload', () => {
                the arcade spray generator from the top ends somewhere else. */
             expect(fingerprint, 'step (1) did not finish, there is nothing to compare').not.toBeNull();
             expect(driver.fingerprint(api), 'the resumed run should finish exactly as the unbroken run did').toBe(fingerprint);
+            /* Round 674: and the stream itself. Whether a restarted stream
+               changes the card depends on the day's deal (on 2026-09-29 two
+               arcade rows finished the same either way), so the card alone
+               was a coin toss; a draw dealt twice across the reload is not. */
+            expect(streamRepeats(), 'the resumed run picks the stream up where it stopped: no draw is dealt twice').toBe(0);
           } finally {
             driver.unmount(api);
           }

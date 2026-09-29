@@ -291,7 +291,7 @@ if (BOARD_CONTROLS.includes(CONTROL) || ONE_BOARD_CONTROLS.includes(CONTROL)) {
 } else if (CONTROL) {
   let copy;
   try { copy = writeLedgerControl(ROOT, CONTROL, dir); } catch (e) { abort(e.message); }
-  writeCopy(copy, fs.readFileSync(copy, 'utf8'), `${CONTROL} seasonLedger.ts`);
+  writeCopy(copy, fs.readFileSync(copy, 'utf8').split('\r\n').join('\n'), `${CONTROL} seasonLedger.ts`);
   env.SEASON_LEDGER_MODULE = copy.replaceAll('\\', '/');
   console.log(`NEGATIVE CONTROL ON: all four boards and the test read a season ledger that ${LEDGER_CONTROL_WORDS[CONTROL]}`);
 }

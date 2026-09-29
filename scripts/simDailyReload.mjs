@@ -63,7 +63,13 @@
                row it did not hit stay green
      restream  the arcade spray stream restarts from the top on a resume:
                (6) must FAIL on every row it hit (the split run ends on a
-               different card), everything else green
+               different card), everything else green. Round 674: whether
+               a restarted stream changes the card depends on the day's deal
+               (on 2026-09-29 two of its three rows finished the same either
+               way, and a healthy tree went red), so (6) now also asks the
+               stream itself: no draw of the run is dealt twice across the
+               reload (mocks.ts logs every draw of countedLehmer by seed and
+               position), which a restart breaks on every day
    A seventh assertion covers the window between a step being decided and
    it landing (a ball in the air, a card turning over, an answer on its
    reveal): take one step, refresh before it lands, and the reloaded board
@@ -99,6 +105,7 @@ import { spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { importReader } from './lib/importClosure.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TEST = 'src/test/dailyReload.test.tsx';
@@ -122,10 +129,10 @@ function findVitest() {
 const VITEST = findVitest();
 if (!VITEST) abort('vitest is not installed anywhere above this tree, nothing can run');
 
-function runVitest(extraEnv) {
+function runVitest(extraEnv, extraArgs = []) {
   const r = spawnSync(
     process.execPath,
-    [VITEST, 'run', TEST, '--reporter=verbose'],
+    [VITEST, 'run', TEST, '--reporter=verbose', ...extraArgs],
     { cwd: ROOT, encoding: 'utf8', env: { ...process.env, ...extraEnv, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024 },
   );
   return { code: r.status, out: (r.stdout || '') + (r.stderr || '') };
@@ -436,9 +443,18 @@ else {
    vitest.config.ts (a copy under dist, as the landing control stages its
    own), so the step is filed only when it lands, the shape each had before.
    (7) must go red on exactly the rows the module serves, with (1) to (6)
-   still green there, and every other row must stay green. Each refuses to run
-   unless its anchor occurs exactly once, in the code, and the copy proves it
-   was loaded. */
+   still green there. Each refuses to run unless its anchor occurs exactly
+   once, in the code, and the copy proves it was loaded.
+   Round 674 (the fence lens review, R2.D11): these ran the whole table, and
+   under load a row the swap cannot touch timed out ("lockin: buzzer-beater is
+   red on (1) though only @/pages/SportsMillionaire was swapped") and failed a
+   healthy tree. Which rows a swapped module can reach is now read from the
+   import graph (scripts/lib/importClosure.mjs, from each driver file); it
+   must be exactly the rows the control names, or the control refuses to run.
+   Only those rows run (DAILY_RELOAD_ROWS), with room past vitest's five second
+   default, so no row the swap cannot reach is in the verdict at all, and the
+   rows that are get the time a loaded machine needs. That the other rows stay
+   green with the real module is what section 1 already proved. */
 const SWAP_CONTROLS = [
   {
     name: 'lockin',
@@ -459,47 +475,54 @@ const SWAP_CONTROLS = [
 ];
 const stripForAnchor = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
 let swapControlsRun = 0;
+const { closureOf } = importReader(ROOT);
 for (const ctl of SWAP_CONTROLS) {
   swapControlsRun += 1;
-  console.log(`5.5.${swapControlsRun}) NEGATIVE CONTROL ${ctl.name}: ${ctl.what}, (7) must fail on ${ctl.rows.join(', ')} alone and every other row stay green`);
+  console.log(`5.5.${swapControlsRun}) NEGATIVE CONTROL ${ctl.name}: ${ctl.what}, (7) must fail on ${ctl.rows.join(', ')} alone, the only rows the swapped module reaches`);
   if (ONLY && !ctl.rows.includes(ONLY)) { console.log(`   skipped: ONLY=${ONLY} is not one of its rows`); continue; }
+  /* Which rows can the swapped module reach at all: every driver whose
+     import closure holds the module's file. Exactly the rows the control
+     names, or it cannot be judged on those rows alone. */
+  const unfiled = rowList.filter(r => !r.info.file);
+  if (unfiled.length) abort(`control ${ctl.name} cannot run: the test printed no driver file for ${unfiled.map(r => r.info.slug).join(', ')}`);
+  const reach = rowList.filter(r => closureOf(`src/test/dailyReload/${r.info.file}`).has(ctl.file)).map(r => r.info.slug).sort();
+  if (!ONLY && reach.join(',') !== [...ctl.rows].sort().join(',')) abort(`control ${ctl.name} cannot run: ${ctl.file} is reached by the rows ${reach.join(', ') || 'none'}, and the control names ${ctl.rows.join(', ')}; name every row it reaches`);
+  console.log(`   ${ctl.file} is in the import closure of ${reach.join(', ')} and of no other of the ${rowList.length} rows, so only those run`);
   const src = fs.readFileSync(path.join(ROOT, ctl.file), 'utf8').split('\r\n').join('\n');
   const n = src.split(ctl.anchor).length - 1;
   if (n !== 1 || stripForAnchor(src).split(ctl.anchor).length - 1 !== 1) abort(`control ${ctl.name} cannot run: ${ctl.file} holds its anchor ${n} time(s), or not once in the code`);
   fs.mkdirSync(path.join(ROOT, 'dist', '.daily-reload-control'), { recursive: true });
   const dir = fs.mkdtempSync(path.join(ROOT, 'dist', '.daily-reload-control', `${ctl.name}-`));
   const copy = path.join(dir, path.basename(ctl.file).replace(/\.(tsx?)$/, '.control.$1'));
-  const copySrc = src.replace(ctl.anchor, '') + `\nconsole.log('DAILY_RELOAD_SWAP_LOADED ${ctl.name}');\n`;
+  const loaded = `DAILY_RELOAD_SWAP_LOADED ${ctl.name} ${path.basename(dir)}`;
+  const copySrc = src.replace(ctl.anchor, '') + `\nconsole.log('${loaded}');\n`;
   if (copySrc.includes(ctl.anchor)) abort(`control ${ctl.name} cannot run: the copy still holds its anchor`);
   fs.writeFileSync(copy, copySrc);
   try {
-    const run = runVitest({ DAILY_RELOAD_CONTROL: ctl.name, DAILY_LOCK_SWAP: JSON.stringify({ [ctl.module]: copy.replaceAll('\\', '/') }) });
+    const targets = ONLY ? [ONLY] : ctl.rows;
+    const run = runVitest(
+      { DAILY_RELOAD_CONTROL: ctl.name, DAILY_RELOAD_ROWS: targets.join(','), DAILY_LOCK_SWAP: JSON.stringify({ [ctl.module]: copy.replaceAll('\\', '/') }) },
+      ['--testTimeout=120000'],
+    );
     const p = parse(run.out);
     if (!p.named) abort(`control ${ctl.name} cannot run: vitest did not report on the test file:\n` + run.out.slice(-2000));
-    if (!run.out.includes(`DAILY_RELOAD_SWAP_LOADED ${ctl.name}`)) fail(`control ${ctl.name}: the test never loaded the copy, so it changed nothing`);
+    if (p.top['discovers drivers'] !== '✓') fail(`control ${ctl.name}: the driver discovery test is not green, so DAILY_RELOAD_ROWS did not select exactly ${targets.join(', ')}`);
+    if (!run.out.includes(loaded)) fail(`control ${ctl.name}: the test never loaded the copy, so it changed nothing`);
     else console.log('   the copy was loaded in place of the real module');
     const rows = [...p.rows.values()].filter(r => r.info);
-    if (rows.length !== rowList.length) fail(`control ${ctl.name} ran ${rows.length} row(s), the normal run ${rowList.length}`);
+    const ran = rows.map(r => r.info.slug).sort();
+    if (ran.join(',') !== [...targets].sort().join(',')) fail(`control ${ctl.name} ran ${ran.join(', ') || 'no row'}, expected exactly ${targets.join(', ')}`);
     let flipped = 0;
-    let held = 0;
     for (const row of rows) {
-      if (ctl.rows.includes(row.info.slug)) {
-        const red = row.marks[7] === '×';
-        const intact = [1, 2, 3, 4, 5, 6].every(a => row.marks[a] === '✓');
-        console.log(`   ${row.info.slug}: [${marksOf(row)}] ${red && intact ? 'went red on (7) alone, as designed' : 'DID NOT FLIP AS DESIGNED'}`);
-        if (!row.info.interrupts) fail(`control ${ctl.name}: ${row.info.slug} carries no assertion 7`);
-        else if (!red) fail(`control ${ctl.name}: ${row.info.slug} stayed green on (7) with its step filed where it lands, so assertion 7 does not see the window`);
-        if (!intact) fail(`control ${ctl.name}: ${row.info.slug} is also red on ${[1, 2, 3, 4, 5, 6].filter(a => row.marks[a] !== '✓').map(a => `(${a})`).join(' ')}, which moving the save cannot touch`);
-        if (red && intact) flipped += 1;
-      } else {
-        const allGreen = assertionsOf(row).every(a => row.marks[a] === '✓');
-        if (!allGreen) fail(`control ${ctl.name}: ${row.info.slug} is red on ${redOnes(row)} though only ${ctl.module} was swapped`);
-        else held += 1;
-      }
+      const red = row.marks[7] === '×';
+      const intact = [1, 2, 3, 4, 5, 6].every(a => row.marks[a] === '✓');
+      console.log(`   ${row.info.slug}: [${marksOf(row)}] ${red && intact ? 'went red on (7) alone, as designed' : 'DID NOT FLIP AS DESIGNED'}`);
+      if (!row.info.interrupts) fail(`control ${ctl.name}: ${row.info.slug} carries no assertion 7`);
+      else if (!red) fail(`control ${ctl.name}: ${row.info.slug} stayed green on (7) with its step filed where it lands, so assertion 7 does not see the window`);
+      if (!intact) fail(`control ${ctl.name}: ${row.info.slug} is also red on ${[1, 2, 3, 4, 5, 6].filter(a => row.marks[a] !== '✓').map(a => `(${a})`).join(' ')}, which moving the save cannot touch`);
+      if (red && intact) flipped += 1;
     }
-    const targets = rows.filter(r => ctl.rows.includes(r.info.slug)).length;
-    console.log(`   ${flipped} of ${targets} target row(s) flipped, ${held} of ${rows.length - targets} other row(s) held`);
-    if (targets !== ctl.rows.length && !ONLY) fail(`control ${ctl.name}: expected rows ${ctl.rows.join(', ')}, ran ${targets} of them`);
+    console.log(`   ${flipped} of ${rows.length} target row(s) flipped; the other ${rowList.length - rows.length} row(s) cannot reach ${ctl.module} and were not run`);
   } finally {
     fs.rmSync(dir, { recursive: true, force: true });
   }

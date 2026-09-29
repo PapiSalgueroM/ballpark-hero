@@ -25,6 +25,10 @@
  *             run save is gone, the finished run is still filed
  *   restream  countedLehmer ignores the draws a part played run filed, so
  *             a resume restarts the spray stream from the top
+ * Round 674: every draw countedLehmer deals is logged by seed and position
+ * (resetStreamLog, streamRepeats), so assertion 6 can see a draw dealt twice
+ * across a reload on any day, not only on a day whose deal happens to finish
+ * differently.
  */
 import { vi } from 'vitest';
 
@@ -111,7 +115,11 @@ const shared = vi.hoisted(() => {
      'autocomplete' fixture is registered (setAutocompleteFallback). */
   const autocomplete: { fallback: unknown } = { fallback: null };
 
-  return { recordCompletion: vi.fn(), recordUnranked: vi.fn(), tables, rpcs, pools, functions, silenced, hits, row, hit, auth, autocomplete, supabase: build('root', null, []) };
+  /* Round 674: every draw the arcade stream deals, by its seed and its
+     position in the stream, so a test can ask whether a resumed run dealt a
+     draw it had already dealt (a stream restarted from the top). */
+  const draws = new Map<string, number>();
+  return { recordCompletion: vi.fn(), recordUnranked: vi.fn(), tables, rpcs, pools, functions, silenced, hits, row, hit, draws, auth, autocomplete, supabase: build('root', null, []) };
 });
 
 vi.mock('@/integrations/supabase/client', () => ({
@@ -245,14 +253,27 @@ vi.mock('@/data/ufcChainData', async (importOriginal) => {
    moment the part played run leaves no record. */
 vi.mock('@/lib/arcadeRecord', async (importOriginal) => {
   const real = await importOriginal<typeof import('@/lib/arcadeRecord')>();
+  /* Round 674: the stream the page gets, with every draw logged by seed and
+     position (streamRepeats below). The page reads `draws` off it exactly as
+     off the real one, kept in step after every draw. */
+  const logged = (seed: number, rng: ReturnType<typeof real.countedLehmer>) => {
+    const out = Object.assign(() => {
+      const v = rng();
+      out.draws = rng.draws;
+      const key = `${seed}:${rng.draws}`;
+      shared.draws.set(key, (shared.draws.get(key) ?? 0) + 1);
+      return v;
+    }, { draws: rng.draws });
+    return out;
+  };
   return {
     ...real,
     countedLehmer: (seed: number, skip = 0) => {
       if (process.env.DAILY_RELOAD_CONTROL === 'restream' && skip > 0) {
         shared.hit();
-        return real.countedLehmer(seed, 0);
+        return logged(seed, real.countedLehmer(seed, 0));
       }
-      return real.countedLehmer(seed, skip);
+      return logged(seed, real.countedLehmer(seed, skip));
     },
     writeArcadeProgress: (...args: Parameters<typeof real.writeArcadeProgress>) => {
       if (process.env.DAILY_RELOAD_CONTROL === 'nosave') { shared.hit(); return; }
@@ -386,6 +407,20 @@ export function controlHits(slug: string): number {
 }
 
 /** Called by the test at the start of every row. */
+/** Round 674: forget every logged draw (the start of a run under test). */
+export function resetStreamLog(): void {
+  shared.draws.clear();
+}
+
+/** Round 674: how many draws since the last reset were dealt more than once,
+ *  the same seed at the same position. A run resumed where it stopped deals
+ *  each one once; a stream restarted from the top deals them again. */
+export function streamRepeats(): number {
+  let n = 0;
+  for (const c of shared.draws.values()) if (c > 1) n += c - 1;
+  return n;
+}
+
 export function resetMocks(slug = ''): void {
   shared.tables.clear();
   shared.rpcs.clear();

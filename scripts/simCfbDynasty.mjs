@@ -214,7 +214,7 @@ if (LEDGER_CONTROLS.includes(CONTROL)) {
   let copy;
   try { copy = writeLedgerControl(ROOT, CONTROL, TMP); } catch (e) { abort(e.message); }
   const what = `${CONTROL} seasonLedger.ts`;
-  fs.writeFileSync(copy, withLoadedLine(fs.readFileSync(copy, 'utf8'), run.tag, what));
+  fs.writeFileSync(copy, withLoadedLine(fs.readFileSync(copy, 'utf8').split('\r\n').join('\n'), run.tag, what));
   expectedLoads.push(loadedLine(run.tag, what));
   ledgerSrc = copy.replaceAll('\\', '/');
   console.log(`NEGATIVE CONTROL ON: the bundle and both boards read a season ledger that ${LEDGER_CONTROL_WORDS[CONTROL]}`);

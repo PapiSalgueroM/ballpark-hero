@@ -195,6 +195,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { stripComments, callsOf, resolveSlug, resolveExpr, readLF as readSourceLF, srcFiles as sourceFiles } from './lib/readSource.mjs';
 import { controlScratch, loadedLine, withLoadedLine } from './lib/controlScratch.mjs';
+import { importReader } from './lib/importClosure.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.RANKED_CONTROL || '';
@@ -748,40 +749,14 @@ function checkCards(files) {
    own card when it renders the line itself and no ResultScreen. A driver
    renders a file when the file is in the import closure of the driver (its
    own imports and the shared helpers it reads, followed through @/ and
-   relative imports into src). */
+   relative imports into src, scripts/lib/importClosure.mjs). */
 function handCards(files, cards) {
   return [...cards.surfaces.keys()].filter(card => {
     const code = stripComments(files.get(card) ?? '');
     return /<UnrankedNote\b/.test(code) && !/<ResultScreen\b/.test(code);
   }).sort();
 }
-function resolveImport(fromRel, spec) {
-  let base;
-  if (spec.startsWith('@/')) base = `src/${spec.slice(2)}`;
-  else if (spec.startsWith('.')) base = path.posix.normalize(path.posix.join(path.posix.dirname(fromRel), spec));
-  else return null;
-  for (const cand of [base, `${base}.ts`, `${base}.tsx`, `${base}/index.ts`, `${base}/index.tsx`]) {
-    if (!/\.tsx?$/.test(cand)) continue;
-    const abs = path.join(ROOT, cand);
-    if (fs.existsSync(abs) && fs.statSync(abs).isFile()) return cand;
-  }
-  return null;
-}
-const importCache = new Map();
-function importsOf(rel) {
-  if (!importCache.has(rel)) {
-    const code = stripComments(readLF(rel));
-    const specs = [...code.matchAll(/\bfrom\s*['"]([^'"]+)['"]|\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)|\bimport\s+['"]([^'"]+)['"]/g)].map(m => m[1] ?? m[2] ?? m[3]);
-    importCache.set(rel, specs.map(s => resolveImport(rel, s)).filter(Boolean));
-  }
-  return importCache.get(rel);
-}
-function closureOf(rel) {
-  const seen = new Set([rel]);
-  const queue = [rel];
-  while (queue.length) for (const next of importsOf(queue.shift())) if (!seen.has(next)) { seen.add(next); queue.push(next); }
-  return seen;
-}
+const { closureOf } = importReader(ROOT);
 /* Keyed by the driver's file name: the drill drivers build their slug at
    run time, and the file name is what the test's glob hands it too. */
 function driverRows() {
