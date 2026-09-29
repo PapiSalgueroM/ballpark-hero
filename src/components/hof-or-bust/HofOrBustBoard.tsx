@@ -4,6 +4,7 @@ import { ResultScreen } from '@/components/game/ResultScreen';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import { Eye, RotateCcw, Trophy, Skull } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { hallStatusLine } from '@/lib/hofHall';
 
 const SPORT_EMOJI: Record<string, string> = {
   soccer: '⚽', nfl: '🏈', nba: '🏀', baseball: '⚾', hockey: '🏒',
@@ -127,7 +128,11 @@ export function HofOrBustBoard() {
               <>
                 You voted: <span className="font-bold text-foreground">{userVote === 'hof' ? '🏆 Hall of Fame' : '💀 Bust'}</span>
                 {' · '}
-                Official verdict: <span className={cn('font-bold', verdictInfo.color)}>{verdictInfo.text}</span>
+                {/* Round 661 fix: the verdict is the game's call, not an
+                    induction, so it is labelled that way, and the real Hall
+                    of Fame record sits under it (src/lib/hofHall.ts). */}
+                Our call: <span className={cn('font-bold', verdictInfo.color)}>{verdictInfo.text}</span>
+                <span className="block text-xs text-muted-foreground mt-1">{hallStatusLine(player)}</span>
               </>
             }
             funFact={player.funFact}

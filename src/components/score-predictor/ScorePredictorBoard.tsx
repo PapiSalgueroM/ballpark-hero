@@ -66,8 +66,13 @@ export function ScorePredictorBoard() {
               <div className="w-14 h-14 rounded-full bg-muted/50 flex items-center justify-center mx-auto text-xl font-bold text-foreground">
                 {puzzle.homeTeam.slice(0, 3).toUpperCase()}
               </div>
+              {/* Round 661: these used to read "Home" and "Away". Most of this
+                  pool is cup finals played at a neutral ground (Istanbul, the
+                  Rose Bowl, every Super Bowl), where neither side was at home,
+                  so the label was a claim the data cannot back and was wrong
+                  on a dozen matches. The two sides are just first and second
+                  now, and each team still carries its own score. */}
               <p className="text-sm font-bold text-foreground mt-2">{puzzle.homeTeam}</p>
-              <p className="text-[10px] text-muted-foreground">Home</p>
             </div>
             <span className="text-lg font-bold text-muted-foreground">vs</span>
             <div className="flex-1 text-center">
@@ -75,7 +80,6 @@ export function ScorePredictorBoard() {
                 {puzzle.awayTeam.slice(0, 3).toUpperCase()}
               </div>
               <p className="text-sm font-bold text-foreground mt-2">{puzzle.awayTeam}</p>
-              <p className="text-[10px] text-muted-foreground">Away</p>
             </div>
           </div>
 

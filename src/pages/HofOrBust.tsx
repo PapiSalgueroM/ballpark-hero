@@ -21,13 +21,13 @@ export default function HofOrBust() {
           "You're shown anonymized career stats for a mystery player: no name, just numbers.",
           "Optionally reveal up to 3 hints (each costs 100 points).",
           "Vote: is this player a Hall of Famer or a Bust?",
-          "After voting, the player is revealed along with community vote percentages and the official verdict."
+          "After voting, the player is revealed along with community vote percentages, our call on him, and whether he's really in his sport's Hall of Fame."
         ]}
         examples={[
           "894 career goals, 4 Stanley Cups → Hall of Fame (Wayne Gretzky)",
           "762 career home runs, 7 MVPs → Borderline (Barry Bonds)",
-          "14,580 passing yards, 89 TDs → Bust (JaMarcus Russell)",
-          "672 club goals, 7 Ballon d'Ors → Hall of Fame (Lionel Messi)"
+          "4,083 passing yards, 18 TDs → Bust (JaMarcus Russell)",
+          "672 club goals, 8 Ballon d'Ors → Hall of Fame (Lionel Messi)"
         ]}
       />
     </>

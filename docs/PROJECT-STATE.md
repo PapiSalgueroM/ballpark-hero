@@ -255,6 +255,142 @@ harness mid-run (clean), and the delta since the green 341 run, one JSX attribut
 snapshots, gated against the full snapshot reader list instead. **Do not run anything else while
 the suite runs.**
 
+## BUILT 2026-09-28: Round 661, the trivia banks tell the truth (branch `r661-trivia-facts`, not on main)
+
+Hall of Fame or Bust, Guess the Year and Score Predictor are hand typed files with no source behind
+any line, and a two pass check (researchers, then skeptics who reopened every URL) found them full
+of wrong facts. Hall of Fame or Bust had at least 18 of its 25 cards carrying a false line, several
+of them another player's totals (Jordan on Kobe's 33,643 points, Ortiz on Jeter's hits and Sosa's
+home runs, Howe with no Stanley Cups, Yakupov on half his goals). The first pass found 38 of Guess
+the Year's 300 clues pointing at the wrong year, fitting two puzzle years or plainly false (Brady's
+Tampa Bay title in 2020, a Chiefs three-peat the Eagles denied, Seattle's February 2026 Super Bowl
+in 2025, three Heisman Trophies a year early), and far more whose detail no page opened would
+state. Score Predictor dated the 1994 Milan final six days late and had nine road sides listed as
+the home team. **That first pass missed some; see the fix below before trusting any claim in this
+paragraph about clues fitting one year.**
+
+- **What changed.** Every line was either confirmed on two sources or rewritten to a fact two
+  sources state, in the same voice and length. Upheld corrections were applied; overturned ones
+  were not (the five "not inducted" verdict corrections would have put an empty string in the
+  verdict union and crashed the reveal). Active players carry floors (`43,000+`, `22,000+`,
+  `650+`). Guess the Year keeps six clues a year and its year order, so no daily moved; it now uses
+  the calendar year throughout, so a January Super Bowl or bowl game belongs to the new year. Score
+  Predictor puts the real home side first where one side was at home (the board stopped printing
+  Home and Away in this round, since most of the pool is finals at neutral grounds). The nine
+  matches turned round are sp-11, sp-13, sp-15, nba-1, nba-2, nba-5, nba-7, nba-8 and nba-9.
+- **Also on this branch, commit `8bd17b2f` (2026-09-19), which the first account left out.** The
+  List Quiz puzzle `ucl-topscorers` was renamed "Champions League Season Top Scorers" and now reads
+  only the season shaped rows of `ucl_top_scorers_by_season` (the table is four scraped tables in
+  one; the old player column read served all time scorers, rank numbers and daggered names). The
+  shirt number question in Shirt Number (`src/pages/ShirtNumber.tsx`,
+  `src/components/shirt-number/ShirtNumberBoard.tsx`) and Sports Millionaire
+  (`src/lib/triviaQuestionBank.ts`) stopped asking what a player wears in the present tense over a
+  snapshot that holds retired men; it names the club and asks what he has worn there. The List
+  Quiz half of that commit left out every joint top scorer and 2025-26; the fix below repairs it.
+- **The fence.** `scripts/simTriviaFacts.mjs`, and the record
+  `scripts/data/triviaFactsVerified2026-09.json`; the counts and sections as they stand after the
+  fix are below.
+- **Gates run by the builder.** tsc 0; `simTriviaFacts` green; `simNoRivalNames` green (it flagged a
+  source URL whose slug spelled a tournament name in a shape its FIFA allowlist does not know, so
+  that source was replaced rather than the check loosened); `simGuideHeadings` green;
+  `simSiteSearch` green; the Guess the Year row of the daily reload test green. Not run, by
+  instruction: `runAllSims`, the build, `build:seo`, the browser harnesses.
+
+### FIXED 2026-09-28: Round 661 after its review (commit `aaf30a6d` on the same branch)
+
+The adversarial review returned fix first: seven majors and five minors, and an audit of every
+clue against every year the game accepts (1972 to 2026, not just the fifty puzzle years) found 31
+Guess the Year clues still wrong. All of it is fixed on `r661-trivia-facts`.
+
+- **Guess the Year.** 31 clues sharpened so only their year fits: 'another' titles that fitted
+  several years (Borg, Schumacher, Hamilton, the Oilers, Jordan's second straight Finals MVP),
+  repeat champions (Bruins 1972 and 2011, Royals 1985 and 2015, Braves, Devils, Canadiens,
+  Cardinals, Cowboys over the Bills in both 1993 and 1994), the Knicks' 1973 clue, which their June
+  2026 title made a second right answer, LeMond's three Tours, the two Texas Heismans, the two host
+  nations that won a first World Cup, and DeVonta Smith's Heisman, presented on January 5, 2021 and
+  so a year early again under the file's own calendar rule (2020 now has LSU's January 2020 title
+  game instead). Each new clue is on two sources and each record entry keeps `replaced.was` and
+  `replaced.why`. Six clues a year, same year order, no daily moved. **What is true now about
+  uniqueness:** every clue was read against every year from 1972 to 2026 on 2026-09-28 and no second
+  fitting year was found; no harness can prove that, because it is a claim about every other year,
+  and the file header says so. A new clue needs the same read.
+- **Hall of Fame or Bust.** The reveal no longer says "Official verdict". It says "Our call: ..."
+  (the game's label) and under it the real record from a new sourced `hall` field
+  (`src/lib/hofHall.ts`): "In the Naismith Hall of Fame, class of 2009", "Not in the Pro Football
+  Hall of Fame yet", or for Messi, Busquets and Ronaldo "Soccer has no single Hall of Fame, so this
+  one's all our call". 9 cards are inducted (two hosts each, the hall's own page where it renders),
+  13 are not (each dated with `asOf`), 3 are soccer with no single hall. **Michael Owen is no longer
+  a bust:** he has been in the National Football Museum Hall of Fame since 2014 (thefa.com and ITV),
+  so "bust" could not be stated as a fact or defended as a label; his verdict is now Hall of Fame,
+  and the fence fails on any card whose player is really in a hall but is called a bust or
+  borderline. The page's fallback how to play line and the guide said "official verdict" too and
+  are corrected; two examples on the page that were never rendered but were false (JaMarcus
+  Russell's 14,580 yards, Messi's 7 Ballon d'Ors) now match the record.
+- **The floor rule.** For a player still playing, a career total is a floor and every other count
+  on his card (titles, awards, a World Cup, spelled out counts too) is a floor or its record line
+  carries `asOf`. 22 lines carry it. The five the review named are true as of 2026-09-28: Messi's 8
+  Ballon d'Or awards (the 2026 ceremony is October 26 in London), LeBron's 4 titles and 4 Finals
+  MVPs (the Knicks won in 2026), Crosby's 3 Stanley Cups (Carolina won in 2026) and Lillard's 1
+  Rookie of the Year.
+- **Score Predictor saved guesses.** A save used to hold only two numbers. It now records the sides
+  it was typed against (`src/lib/scorePredictorSave.ts`), and reading one back lines it up with the
+  card: a save from before this release is turned round on exactly the nine turned round matches,
+  a save with the sides reversed is turned, one about another match or a broken one is dropped. The
+  score is kept (turning both the guess and the result gives the same score). The release day risk
+  the first account named is gone.
+- **List Quiz, Champions League season top scorers.** Every joint top scorer and 2025-26 is now
+  accepted: 24 rows (Mazzola, Eusebio 1964-65, Van Himst, Takac, Macari, Dunai, Markarov,
+  Cucinotta, Souness, Rummenigge, Platini, Michel, Papin three times, Rufer, Yorke, Rivaldo, Raul,
+  Messi and Ronaldo 2014-15, Mbappe 2023-24 and 2025-26, Raphinha), each on uefa.com's own season
+  page plus RSSSF (Planet Football for Yorke, because RSSSF counts qualifying goals). The game is
+  right today from `UCL_TOP_SCORER_SUPPLEMENT` in `src/lib/listQuiz.ts`, deduped against the table.
+  Names only one of the two sources gives (Kindvall 1969-70, the RSSSF only qualifying counts, the
+  early seasons where uefa.com and RSSSF disagree) stay out, each listed with its reason in the
+  record's `listQuizUclTopScorers.notAdded`.
+- **The migration, NOT APPLIED.** `supabase/migrations/20260928210000_ucl_joint_top_scorers.sql`
+  adds the same 24 rows to `ucl_top_scorers_by_season`, fail closed (it checks the table holds 144
+  rows, 70 season rows, Guirassy as 2024-25, no 2025-26 row and none of the new rows before one
+  write, gives ids above the current top and moves the sequence past them, and proves 168 rows, 94
+  season rows and 71 seasons after). **To apply:** run it through the Supabase MCP
+  `apply_migration`, then `get_advisors`, then `node scripts/simListQuizSources.mjs` (the quiz then
+  reads each supplement name twice and folds the pair). The builder could not reach the Supabase
+  MCP in this session; the live table was read through the public anon key only.
+- **fifa.com.** `www.fifa.com` article pages are a 4.5 KB script shell with no text, so they were
+  never a source. Every fact that cited one now cites a readable `inside.fifa.com` page (or, for
+  the "first final settled on penalties" hint, Guinness World Records and The Cult of Calcio with a
+  stated reason), and the fence rejects a `www.fifa.com` source outright.
+- **The record now.** 597 facts, each on two sites with an independent one: **421 on a readable
+  official source** (the first account's 429 counted the script shells), 176 with a stated reason,
+  33 editorial lines. Plus 25 hall entries (22 sourced, 3 editorial) and 24 List Quiz rows.
+- **The fence now.** `scripts/simTriviaFacts.mjs`, eight sections: the record's rules, each game
+  word for word with the floor and asOf rule, nothing the files dropped, the real Hall of Fame
+  (section 6), Score Predictor saved guesses (section 7) and the List Quiz supplement against the
+  record, the migration, the season shape and the alias map (section 8). 17 controls (`onesource`,
+  `shellsource`, `hofline`, `floor`, `asof`, `gtyclue`, `gtyfive`, `spscore`, `spdate`, `stale`,
+  `owenbust`, `official`, `spswap`, `spload`, `uclsupp`, `uclshape`, `uclsql`), each proven to
+  redden only its own section. `simListQuizSources` pins Mbappe, Raphinha, Yorke, Rivaldo and Papin
+  on the live list (proven red with Raphinha taken out). The doc comment in `listQuiz.ts` that
+  said "simTriviaFacts section 5 pins this" when nothing did now points at section 8, which does.
+- **Gates run by the fixer.** tsc 0 (exit code read, and proven to read the worktree with a
+  deliberate type error); `simTriviaFacts` green with all 17 controls firing; `simListQuizSources`,
+  `simGuideHeadings`, `simSiteSearch`, `simNoRivalNames`, `simAccessibility`, `simDailyPoolOrder`
+  and `simLeaderboardCaps` green; the Guess the Year row of the daily reload test 7 of 7. A
+  throwaway render test (deleted after) mounted both pages: the reveal shows "Our call" and the hall
+  line, and a saved guess shows against the right sides. Not run, by instruction: `runAllSims`,
+  the build, `build:seo`, the browser harnesses.
+- **For whoever releases it.** The branch sits on `5c082e71`, well behind main, so What's New, the
+  board, this file and `src/data/searchKeywords.json` will conflict: keep both sides of the docs
+  and What's New, then rerun `node scripts/genSearchKeywords.mjs` on the merged tree (this branch
+  changed one Hall of Fame or Bust guide sentence, so the index here was regenerated, and the
+  frozen original in `scripts/data/guideHeadingsFrozen.json` moved with it, as Round 640 did).
+  `build:seo` must re-prerender `/whats-new` and `/hof-or-bust` (simPrerender section 8 and the
+  saved guide text). Apply the migration above when convenient; the game does not wait on it.
+- **Left for a later round.** Five rows already in `ucl_top_scorers_by_season` rest on RSSSF alone
+  for their season (Kovacevic 1963-64, Piepenburg 1966-67, Cruyff 1971-72, Hagi 1987-88, Koeman
+  1993-94), and several early goal counts differ between uefa.com and RSSSF; recorded in the record's
+  `tableRowsOnOneSource`, not changed. Two pre-existing lines in `onlyNames` in `src/lib/listQuiz.ts`
+  (from July, not this round) carry literal en and em dash characters inside regexes; they should
+  become escapes.
 
 ## LIVE 2026-09-19 evening: Rounds 632, 640, 642, 636 and 650 (release C), main `8a3bb5ba`
 
