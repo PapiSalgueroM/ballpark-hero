@@ -153,21 +153,19 @@
     "v": 8,
     "src": [
      "https://www.sherdog.com/fighter/Georges-St-Pierre-3500",
-     "https://www.espn.com/mma/fighter/_/id/2335659/georges-st-pierre",
-     "https://www.ufc.com/athlete/georges-st-pierre"
+     "https://www.espn.com/mma/fighter/_/id/2335659/georges-st-pierre"
     ],
     "on": "2026-09-19",
-    "noOfficial": "ufc.com shows nothing for this; Sherdog and ESPN and a checked third page agree on 8"
+    "noOfficial": "ufc.com shows nothing for this; Sherdog and ESPN agree on 8"
    },
    "submissions": {
     "v": 6,
     "src": [
      "https://www.sherdog.com/fighter/Georges-St-Pierre-3500",
-     "https://www.espn.com/mma/fighter/_/id/2335659/georges-st-pierre",
-     "https://www.ufc.com/athlete/georges-st-pierre"
+     "https://www.espn.com/mma/fighter/_/id/2335659/georges-st-pierre"
     ],
     "on": "2026-09-19",
-    "noOfficial": "ufc.com shows nothing for this; Sherdog and ESPN and a checked third page agree on 6"
+    "noOfficial": "ufc.com shows nothing for this; Sherdog and ESPN agree on 6"
    }
   },
   "Anderson Silva": {
@@ -1555,11 +1553,10 @@
     "v": 3,
     "src": [
      "https://www.sherdog.com/fighter/Ronda-Rousey-73073",
-     "https://www.espn.com/mma/fighter/_/id/2563796/ronda-rousey",
-     "https://www.ufc.com/athlete/ronda-rousey"
+     "https://www.espn.com/mma/fighter/_/id/2563796/ronda-rousey"
     ],
     "on": "2026-09-19",
-    "noOfficial": "ufc.com shows nothing for this; Sherdog and ESPN and a checked third page agree on 3"
+    "noOfficial": "ufc.com shows nothing for this; Sherdog and ESPN agree on 3"
    },
    "submissions": {
     "v": 10,
@@ -2661,11 +2658,10 @@
     "v": 1,
     "src": [
      "https://www.sherdog.com/fighter/Sean-OMalley-135099",
-     "https://www.espn.com/mma/fighter/_/id/4205093/sean-omalley",
-     "https://www.ufc.com/athlete/sean-omalley"
+     "https://www.espn.com/mma/fighter/_/id/4205093/sean-omalley"
     ],
     "on": "2026-09-19",
-    "noOfficial": "ufc.com shows 0 for this; Sherdog and ESPN and a checked third page agree on 1"
+    "noOfficial": "ufc.com shows 0 for this; Sherdog and ESPN agree on 1"
    }
   },
   "Ilia Topuria": {
@@ -3238,11 +3234,10 @@
     "v": 1,
     "src": [
      "https://www.sherdog.com/fighter/Justin-Gaethje-46648",
-     "https://www.espn.com/mma/fighter/_/id/3022345/justin-gaethje",
-     "https://www.ufc.com/athlete/justin-gaethje"
+     "https://www.espn.com/mma/fighter/_/id/3022345/justin-gaethje"
     ],
     "on": "2026-09-19",
-    "noOfficial": "ufc.com shows 0 for this; Sherdog and ESPN and a checked third page agree on 1"
+    "noOfficial": "ufc.com shows 0 for this; Sherdog and ESPN agree on 1"
    }
   },
   "Brandon Moreno": {
@@ -3622,11 +3617,10 @@
     "v": 1,
     "src": [
      "https://www.sherdog.com/fighter/Derrick-Lewis-59284",
-     "https://www.espn.com/mma/fighter/_/id/2560713/derrick-lewis",
-     "https://www.ufc.com/athlete/derrick-lewis"
+     "https://www.espn.com/mma/fighter/_/id/2560713/derrick-lewis"
     ],
     "on": "2026-09-19",
-    "noOfficial": "ufc.com shows 0 for this; Sherdog and ESPN and a checked third page agree on 1"
+    "noOfficial": "ufc.com shows 0 for this; Sherdog and ESPN agree on 1"
    }
   },
   "Francis Ngannou": {
@@ -3677,11 +3671,10 @@
     "v": 14,
     "src": [
      "https://www.sherdog.com/fighter/Francis-Ngannou-152341",
-     "https://www.espn.com/mma/fighter/_/id/3933168/francis-ngannou",
-     "https://www.ufc.com/athlete/francis-ngannou"
+     "https://www.espn.com/mma/fighter/_/id/3933168/francis-ngannou"
     ],
     "on": "2026-09-19",
-    "noOfficial": "ufc.com shows 12 for this; Sherdog and ESPN and a checked third page agree on 14"
+    "noOfficial": "ufc.com shows 12 for this; Sherdog and ESPN agree on 14"
    },
    "submissions": {
     "v": 4,
@@ -5289,21 +5282,19 @@
     "v": 18,
     "src": [
      "https://www.sherdog.com/fighter/Vitor-Belfort-156",
-     "https://www.espn.com/mma/fighter/_/id/2354057/vitor-belfort",
-     "https://www.ufc.com/athlete/vitor-belfort"
+     "https://www.espn.com/mma/fighter/_/id/2354057/vitor-belfort"
     ],
     "on": "2026-09-19",
-    "noOfficial": "ufc.com shows nothing for this; Sherdog and ESPN and a checked third page agree on 18"
+    "noOfficial": "ufc.com shows nothing for this; Sherdog and ESPN agree on 18"
    },
    "submissions": {
     "v": 3,
     "src": [
      "https://www.sherdog.com/fighter/Vitor-Belfort-156",
-     "https://www.espn.com/mma/fighter/_/id/2354057/vitor-belfort",
-     "https://www.ufc.com/athlete/vitor-belfort"
+     "https://www.espn.com/mma/fighter/_/id/2354057/vitor-belfort"
     ],
     "on": "2026-09-19",
-    "noOfficial": "ufc.com shows nothing for this; Sherdog and ESPN and a checked third page agree on 3"
+    "noOfficial": "ufc.com shows nothing for this; Sherdog and ESPN agree on 3"
    }
   },
   "Jens Pulver": {

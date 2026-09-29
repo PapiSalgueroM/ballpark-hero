@@ -394,7 +394,7 @@ function applyControl(name) {
       over[F1C] = rewrite(src(F1C), "commonNames: ['Renault', 'Alpine', 'Renault F1']", "commonNames: ['Renault', 'Renault F1']", "Renault's accepted names");
       break;
     }
-    case 'alias': over[F1C] = rewrite(src(F1C), "commonNames: ['McLaren', 'Mclaren']", "commonNames: ['McLaren', 'Mclaren', 'Ferrari']", "McLaren's accepted names"); break;
+    case 'alias': over[F1C] = rewrite(src(F1C), "commonNames: ['McLaren']", "commonNames: ['McLaren', 'Ferrari']", "McLaren's accepted names"); break;
     case 'f1pool': over[F1P] = rewrite(src(F1P), "{ name: 'Alain Prost', team: 'McLaren', era: '1980s'", "{ name: 'Alain Prost', team: 'McLaren', era: '1990s'", "Prost's card"); break;
     case 'duppool': over[F1P] = listLineTwice(src(F1P), "{ name: 'Alain Prost',", "Prost's pool card"); break;
     case 'olympics':
