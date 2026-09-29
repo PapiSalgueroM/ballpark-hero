@@ -1,5 +1,23 @@
 # Work board
 
+**2026-09-29, Round 678 REVIEWED AND FIXED, branch `r678-knowledge-line` (points economy lane), not on
+`points-economy` yet, nothing applied.** All 11 review defects are fixed, each with a control:
+- The seed is checked row by row against the family table itself.
+- The line is asserted on every board.
+- The four option dailies now walk exactly, because equal states are merged.
+- The mint scan runs on the type checker.
+- The key scan and the brand markers read code, not comments.
+- 22 cases pin the formula.
+- A policy with nothing to read throws.
+- Chance boards are valued in expectation.
+- Soccer Career holds Release G: `genGameRules --release G` exits 1 until it pays, and Round 691
+  runs that check.
+
+`simKnowledgeLine` now carries 30 controls. The fix also found and fixed a rounding bug in
+`dayPoints`: 575 of 1000 came out as 57 where the database would give 58. Details and gates are in
+`docs/PROJECT-STATE.md`. Next: merge into `points-economy` alongside Round 674. They do not share a
+code file: 674 owns `completionKeys.mjs`, and this fix reads it without changing it.
+
 **Round 647 BUILT AND FIXED AFTER REVIEW, branch `r647-season-ledger`, pushed, not yet on main.**
 The four front offices and both dynasties score every closed season through one shared ledger,
 `src/lib/seasonLedger.ts`: one row per season, recorded once at the whistle, the ledger sum shown

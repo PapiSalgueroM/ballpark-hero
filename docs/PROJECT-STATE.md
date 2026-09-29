@@ -1,6 +1,106 @@
 # Project state
 
-## 2026-09-29: Round 678, the knowledge line core and the families, on `r678-knowledge-line` (from `points-economy`), nothing applied, nothing a player sees
+## 2026-09-29: Round 678 fixed after its review, on `r678-knowledge-line`, nothing applied, nothing a player sees
+
+The adversarial review said fix first: 3 majors, 8 minors. All 11 are fixed, and each fix has a control.
+The entry below this one is the build as it was, and some of its claims are corrected here.
+
+1. **The seed was only checked against its own generator (major).** New
+   `scripts/lib/gameRulesRows.mjs` reads the seed back as SQL: one insert with the six columns, then
+   value rows, then nothing else. It never imports the generator, and it compares every
+   (game, family, scale, pays, claim, round) with `POINTS_FAMILIES` in both directions.
+   `genGameRules` write mode refuses a seed that disagrees, `--check` exits 1 on one, and
+   `simKnowledgeLine` section 1 runs the same comparison. The reviewer's two mutations are now
+   controls: `seedpays` writes true for pays and `seeddrop` drops the 14 never scored rows, each
+   with the seed regenerated. By hand, with pays forced to true, the write refused and `--check`
+   exited 1.
+2. **The line was averaged across boards (major).** `measureRow` now checks every policy on every
+   board and reports how many boards break the limit and the worst one. Control: `lineonelow`
+   (lineFor one step low).
+3. **The four option dailies were sampled (major).** `walkExact` now merges equal states, keyed by
+   `Moves.key` or by the state's own plain data, with a limit of `EXACT_STATES` distinct states.
+   Every outcome carries `exact`, and a choice daily with no chance that falls back to sampling is
+   a red (`sampled`). There is a new probe with four options over twelve items (Ball IQ's shape),
+   plus cases that pin its exact walk. Control: `nomerge`.
+4. **The mint scan was a regex (minor).** Section 3 now builds one TypeScript program over all
+   of src with `tsconfig.app.json`'s settings. A type carries the brand when it holds the
+   `__dayPoints` property that `knowledgeLine.ts` declares, under any name. The only cast to such
+   a type must sit inside the unexported `mint`. It also fails on:
+   - an `any` flowing into day points, in any file that can reach `knowledgeLine.ts`
+   - day points cast to `any` or `unknown`
+   - `knowledgeLine.ts` exporting any maker other than `dayPoints`, `pointsFromCeiling` and
+     `pointsAnswer`
+
+   Controls: `mint`, `mintany`, `mintalias`, `mintindexed`, `mintredeclare`, `mintunbrand` and
+   `mintexport`, which cover all of the reviewer's spellings. The file skip by name for
+   `streaks.ts` is gone because the brand is found by its declaration. **Known gap, written in the
+   header:** a value passed through a generic helper (`identity<DayPoints>(x)`) is not caught.
+5. **A comment satisfied the key scan (minor).** Comment stripped code for every src file now goes
+   to the shared scan as extra sources over an empty tree. Control: `commentkey` comments out Ball
+   IQ's only recorder. `scripts/lib/completionKeys.mjs` is **not** touched, because Round 674
+   changes that file itself, so the two merge clean.
+6. **The brand markers counted raw text (minor).** Only a `@ts-expect-error` in the leading
+   comments of a `takesDayPoints` call counts now, and `takesDayPoints` has to take the brand.
+   Control: `markeroff`.
+7. **Core behaviours were unpinned (minor).** 22 cases worked out by hand, plus a wide scale
+   rating probe where one step under the top listed rating still pays 5. Controls: `k70oracle`,
+   `ceilinghalf`, `noround` and `nofloor`. **Pinning found a real bug:** `dayPoints` rounded 575
+   of 1000 down to 57, because `100 * 0.575` is `57.49999999999999`. The database's numeric round
+   gives 58, so the card and the board would have disagreed. The formula now multiplies by 100
+   before it divides, which is exact on whole numbers. Two Career Ladder runs changed. The how to
+   play examples did not.
+8. **The probe did not read the family table (minor).** `SPEC_POLICIES` copies sections 7.2 to
+   7.6. Section 1 holds every family's list, and each game's own list, to it. Draft's
+   `structureStacker` and `biggestNumber` only apply where a bonus or number is shown. The probes
+   play the spec's lists. There is also a runtime rule, `policiesItOffers`: a game has to be
+   measured on every policy its moves give something to read, so counter where answers are
+   revealed and biggestNumber where numbers are shown. It has a probe. Control: `familylist`.
+9. **Policies fell back to index 0 (minor).** `biggestNumber` with no number shown,
+   `structureStacker` with no bonus shown, and a lifeline pointing at nothing all throw now.
+   `lifelineReader` follows its advice evenly, and once the lifelines are spent it guesses evenly.
+   That is written in the file as defined behaviour. Three probes, and controls
+   `fallbacknumber`, `fallbackbonus` and `fallbackadvice`.
+10. **Chance boards took the luckiest sample (minor).** `perfect` is now the oracle's expected
+    result. `deterministic` means the policy never leaves its own choice to chance, and the
+    line's floor reads its expected result. On chance boards the runner checks the oracle and the
+    deterministic policies in expectation. The pure coin flip probe is now caught as having no
+    room, and a partly luck probe passes. Control: `luckyperfect`.
+11. **Soccer Career could go for fun silently (minor).** It is now filed as
+    `holdsRelease('G', waits(...))`. `node scripts/genGameRules.mjs --release G` exits 1 while it
+    does not pay, and it does exit 1 today. Round 691's fence line in the spec now runs that check
+    before E3b. Section 1 holds the flagship to this filing. Control: `flagship`. The seed is
+    unchanged (md5 `a22bb1f324ce8027d4b72c6b99fd326a`), since the hold is not a column.
+
+**Gates**, on the fix's final tree, each with TEMP and TMP set to their own directory:
+- `node_modules/.bin/tsc --noEmit -p tsconfig.app.json`: exit 0.
+- `genGameRules --check`: "...generates, and every row of it is the table's.", exit 0, with the
+  md5 unchanged. `--release G` exits 1 and names soccer-career, as designed.
+- `simKnowledgeLine`: "green. 139 keys filed once each with the seed the table's row by row, the
+  line held board by board on 13 probes and 22 cases...", exit 0, in about 15 s.
+- All 30 controls exited 0, each turning only its own section red. Each log was read to confirm
+  the red came from the intended check. For example, `lineonelow` reproduces the reviewer's
+  figures: 179 of 365 boards over 5, worst 5.96, pooled 3.78.
+- 16 more harnesses were green, each with its closing line and exit 0: simHarnessAnchors,
+  simNoRivalNames (0 findings), simLeaderboardCaps, simCapsAreCeilings, simFreePoints,
+  simRankedRecorder, simLegalPages, simSafari, simDateDraws, simDailyPoolOrder,
+  simDailyPuzzleContract, simIdleTimers, simRecordPages, simSchemaNames, simSingleFooter and
+  simMarketYearScope.
+- 8 harnesses were run from throwaway copies pointed at the main `node_modules`, then deleted:
+  simCompletionSlugs, simCompletionOnce, simNoInventedQuotes, simNoInventedConduct, simLiveScores,
+  simRevealMoments (its scratch went to a uniquely named cache folder, removed afterwards),
+  simSiteSearch and simDaily.
+- Two of those harnesses run vitest, which left a plain `node_modules/.vite` result cache in the
+  worktree. It was checked to be a real directory, not a junction, and then removed.
+- No runAllSims, no build and no browser harness.
+
+**Merge notes for `points-economy`:**
+- `measureBoard` now returns `MeasuredOutcome` (a `PolicyOutcome` plus `exact`).
+- `Moves` gains an optional `key`.
+- `EXACT_PATHS` is now `EXACT_STATES`.
+- `waits` returns `WaitingRule`.
+- No caller outside these files uses any of them.
+
+## 2026-09-29: Round 678, the knowledge line core and the families, on `r678-knowledge-line` (from `points-economy`), nothing applied, nothing a player sees (REVIEWED AND FIXED, see the entry above)
 
 **What landed** (docs/design/POINTS-ECONOMY-V2.md section 13, Round 678; no recorder changes):
 `src/lib/knowledgeLine.ts` (the one formula, `DayPoints` minted only by `dayPoints` and
