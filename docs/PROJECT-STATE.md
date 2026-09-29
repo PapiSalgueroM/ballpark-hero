@@ -1,5 +1,20 @@
 # Project state
 
+## HELD 2026-09-29: Round 673 (lock the doors) is built, reviewed twice, and NOT applied, on purpose
+
+Two security reviews found that bounding each save cannot bound the total. record_auth_completion adds
+the raw score to user_scores.total_points, and the games pay on scales five orders apart (Pack Battle in
+the hundreds of millions), so a per game ceiling that never refuses a real play still lets seven saves
+reach about 2^31. The public Profile rank reads that total. The second review also found L1's lock order
+can deadlock against a live save (L1 takes user_scores first; the 569 save takes user_game_scores, then
+daily_completions, then user_scores), and that the hard max rule reads game_completions, which anon can
+write. So L1 alone moves the hole instead of closing it. The lead's call: L1 ships with the economy's
+one scale rounds (675 and 676 in docs/design/POINTS-ECONOMY-V2.md), where the door adds a bounded day
+value rather than a raw score, with the lock order fixed to match the save and the hard max derived from
+the engines, not from writable rows. The PGlite rehearsal (simEconomyMigrations) and the door fences
+built here carry forward. Until then production is unchanged: direct writes to user_scores are still
+possible, and the World Leaderboard is the surface that stays bounded (it reads each day capped).
+
 ## BUILT, NOT APPLIED 2026-09-29: Round 673, economy step L1 "Lock the doors", branch `r673-lock-doors`
 
 The first step of `docs/design/POINTS-ECONOMY-V2.md` (on `points-economy`), built on main so it ships
