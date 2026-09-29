@@ -102,10 +102,25 @@
  *              counted as the call and the template call was not seen:
  *              3:stat-detective. Section 1 must stay green on it, because
  *              the key scan reads the template call as the key.
+ *   slugconst  Round 674 fix (the review's M6): StatDetective.tsx is read
+ *              with const SD_KEY = 'stat-detective' and
+ *              useGameCompletion(SD_KEY, done, 8 - guesses.length), the
+ *              SLUG constant shape the repo uses for seven recorders. The
+ *              unscored check matched a literal first argument only, so an
+ *              unscored game could record a score this way: 3:stat-detective.
+ *   nostrip    Round 674 fix (the review's M5): section 3's unscored check
+ *              reads each file WITHOUT stripping comments, the regression
+ *              the commented control could not see (it fires on the
+ *              template call alone). The section 3 read probes below must
+ *              go red on it, and no real game may: 3:unscored-probe.
  *   Every run also proves the key scan (scripts/lib/completionKeys.mjs)
  *   reads code and not prose or tests: keys named only in comments add
  *   nothing, template literal calls are read, and test and control copy
- *   paths are not scanned (1:scan-probe otherwise).
+ *   paths are not scanned (1:scan-probe otherwise). And (Round 674 fix,
+ *   the review's M5 and M6) it proves section 3's own unscored read the
+ *   same way, through the very function the check uses: calls written only
+ *   in comments are no call, a template literal call is one, and a call
+ *   through a file local constant is one (3:unscored-probe otherwise).
  *   live       one moved row of the live read is flipped to the other side in
  *              memory, a half applied table: 6 on that game. Needs the
  *              database, and refuses without it.
@@ -126,7 +141,7 @@ import {
 } from './lib/scoreCeilingTable.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTROLS = ['classify', 'resolve', 'season', 'ranked', 'ceiling', 'snapshot', 'migration', 'guard', 'perfect', 'recorder', 'scoredin', 'commented', 'live'];
+const CONTROLS = ['classify', 'resolve', 'season', 'ranked', 'ceiling', 'snapshot', 'migration', 'guard', 'perfect', 'recorder', 'scoredin', 'commented', 'slugconst', 'nostrip', 'live'];
 const CONTROL = process.env.CEILINGS_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`CEILINGS_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
@@ -244,6 +259,21 @@ if (CONTROL === 'commented') {
   scanOverrides.set(rel, text.replace(anchor, `// ${anchor}\n    recordCompletion(\`/stat-detective\`, 8 - guesses.length, getCurrentPlayerName());`));
   console.log('   NEGATIVE CONTROL ON: StatDetective.tsx is read recording 8 - guesses.length through a template literal call, with its old unscored call left in a comment beside it; section 3 must go red on stat-detective alone');
 }
+/* Round 674 fix, the review's M6: an unscored game recording a score
+   through a file local SLUG constant. */
+if (CONTROL === 'slugconst') {
+  const rel = 'src/pages/StatDetective.tsx';
+  const anchor = "recordCompletion('/stat-detective', undefined, getCurrentPlayerName());";
+  const text = read(rel);
+  needOnce(text, anchor, rel, stripComments);
+  if (count(text, anchor) !== 1) abort(`the slugconst control needs "${anchor}" exactly once in ${rel}, comments included`);
+  scanOverrides.set(rel, `const SD_KEY = 'stat-detective';\n${text.replace(anchor, `${anchor}\n    useGameCompletion(SD_KEY, done, 8 - guesses.length);`)}`);
+  console.log('   NEGATIVE CONTROL ON: StatDetective.tsx is read with const SD_KEY = \'stat-detective\' and useGameCompletion(SD_KEY, done, 8 - guesses.length); section 3 must go red on stat-detective alone');
+}
+/* Round 674 fix, the review's M5: section 3's read of a file, and the
+   comment stripping in it, which the nostrip control takes out. */
+const stripFor3 = CONTROL === 'nostrip' ? (s => s) : stripComments;
+if (CONTROL === 'nostrip') console.log('   NEGATIVE CONTROL ON: section 3\'s unscored check reads every file without stripping comments; its read probes must go red and no real game may');
 
 /* ======================= 1) classification ======================= */
 console.log('1) every key the source can send is classified once');
@@ -413,6 +443,54 @@ const walk = dir => {
 };
 walk(path.join(ROOT, 'src'));
 const relOf = f => path.relative(ROOT, f).replace(/\\/g, '/');
+/* Round 674 fix (the review's M5 and M6). One read and one reader for the
+   check and for its probes, so a probe can only pass if the check reads the
+   way the probe needs. A first argument counts as the key when it is a
+   string or template literal with no ${} in it, or an identifier bound to
+   one by a const or let in the same file (the SLUG shape, the same rule the
+   key scan's VIA_IDENT follows). */
+const unscoredCode = (rel, overrides = scanOverrides) => stripFor3(overrides.get(rel) ?? read(rel));
+const LITERAL_ARG = /^(['"`])([^'"`$]*)\1$/;
+const CONSTANT_DECL = /(?:const|let)\s+([A-Za-z_$][\w$]*)\s*(?::\s*[^=;]+)?=\s*(['"`])([^'"`$]*)\2/g;
+function unscoredCallsIn(text, game, rel) {
+  const consts = new Map([...text.matchAll(CONSTANT_DECL)].map(m => [m[1], m[3]]));
+  const keyOf = arg => {
+    const lit = (arg ?? '').match(LITERAL_ARG);
+    if (lit) return lit[2];
+    return /^[A-Za-z_$][\w$]*$/.test(arg ?? '') ? consts.get(arg) ?? null : null;
+  };
+  let calls = 0;
+  const problems = [];
+  for (const m of text.matchAll(/\brecordCompletion\(/g)) {
+    const c = callArgs(text, m.index + 'recordCompletion'.length);
+    if (!c || keyOf(c.args[0]) !== `/${game}`) continue;
+    calls += 1;
+    if (c.args.length > 1 && c.args[1] !== 'undefined') problems.push(`is classified as recording no score, but ${rel} records it with ${c.args[1]}`);
+  }
+  for (const m of text.matchAll(/\buseGameCompletion\(/g)) {
+    const c = callArgs(text, m.index + 'useGameCompletion'.length);
+    if (c && keyOf(c.args[0]) === game) problems.push(`is classified as recording no score, but ${rel} records it through useGameCompletion(${c.args[0]}, ...), which takes a score`);
+  }
+  return { calls, problems };
+}
+/* The probes: a game no code sends, written into one real file's text for
+   this read only. Prose must be no call; a template literal call, and calls
+   through a file local constant, must each be read. */
+{
+  const carrier = 'src/pages/StatDetective.tsx';
+  const probeGame = 'ceilings-probe-unscored';
+  const base = read(carrier);
+  const probe = extra => unscoredCallsIn(unscoredCode(carrier, new Map([[carrier, `${base}\n${extra}\n`]])), probeGame, carrier);
+  const prose = probe(`// recordCompletion('/${probeGame}', 5);\n/* useGameCompletion('${probeGame}', done, 5); */`);
+  const template = probe(`recordCompletion(\`/${probeGame}\`, 5);`);
+  const viaConst = probe(`const CEILINGS_PROBE_KEY = '${probeGame}';\nconst CEILINGS_PROBE_PATH = '/${probeGame}';\nuseGameCompletion(CEILINGS_PROBE_KEY, done, 5);\nrecordCompletion(CEILINGS_PROBE_PATH, 5);`);
+  const bad = [];
+  if (prose.calls !== 0 || prose.problems.length !== 0) bad.push(`calls written only in comments were read as ${prose.calls} call(s) and ${prose.problems.length} problem(s), so a commented out call can stand in for the real one`);
+  if (template.calls !== 1 || template.problems.length !== 1) bad.push(`a template literal call was read as ${template.calls} call(s) and ${template.problems.length} problem(s), not one scored call`);
+  if (viaConst.calls !== 1 || viaConst.problems.length !== 2) bad.push(`calls through file local constants were read as ${viaConst.calls} call(s) and ${viaConst.problems.length} problem(s), not a recordCompletion and a useGameCompletion that both take a score`);
+  for (const b of bad) fail(3, 'unscored-probe', b);
+  if (!bad.length) console.log('   unscored read probes: calls written only in comments are no call, a template literal call is read, and calls through a file local constant are read');
+}
 for (const game of UNSCORED) {
   const row = SNAP.get(game);
   if (!row) { fail(3, game, 'records no score and has no row in the snapshot'); continue; }
@@ -420,18 +498,9 @@ for (const game of UNSCORED) {
   let calls = 0;
   for (const f of srcFiles) {
     const rel = relOf(f);
-    const text = stripComments(scanOverrides.get(rel) ?? read(rel));
-    const re = new RegExp(`recordCompletion\\(\\s*(['"\`])/${game}\\1`, 'g');
-    for (const m of text.matchAll(re)) {
-      calls += 1;
-      const c = callArgs(text, m.index + 'recordCompletion'.length);
-      if (!c || (c.args.length > 1 && c.args[1] !== 'undefined')) {
-        fail(3, game, `is classified as recording no score, but ${rel} records it with ${c ? c.args[1] : 'an unreadable call'}`);
-      }
-    }
-    if (new RegExp(`useGameCompletion\\(\\s*(['"\`])${game}\\1`).test(text)) {
-      fail(3, game, `is classified as recording no score, but ${rel} records it through useGameCompletion, which takes a score`);
-    }
+    const found = unscoredCallsIn(unscoredCode(rel), game, rel);
+    calls += found.calls;
+    for (const p of found.problems) fail(3, game, p);
   }
   if (calls === 0) fail(3, game, 'is classified as recording no score, and no recordCompletion call for it was found to check');
 }
@@ -800,6 +869,8 @@ if (CONTROL) {
     recorder: ['5:career'],
     scoredin: ['5:free-kick'],
     commented: ['3:stat-detective'],
+    slugconst: ['3:stat-detective'],
+    nostrip: ['3:unscored-probe'],
     live: [`6:${firstMoved}`],
   }[CONTROL];
   const got = [...new Set(findings.map(f => `${f.section}:${f.game}`))].sort();
