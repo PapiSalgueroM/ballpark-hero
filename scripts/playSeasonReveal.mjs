@@ -120,7 +120,7 @@ const browser = await chromium.launch();
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
   /* A rivalry card from the second season is on the save, so it is back. */
-  await passRivalry(page);
+  if (await passRivalry(page)) console.log('  (the second season\'s rivalry card was back after the reload; clicked through it)');
   await page.locator('button:has-text("Play the")').first().click();
   await page.waitForTimeout(900);
   const banned = page.locator('[data-season-reveal]');
