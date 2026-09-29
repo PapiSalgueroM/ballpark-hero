@@ -23,6 +23,23 @@
  * control-must-bite rule) and section 2 must go red: the toggle can no
  * longer make the page light.
  *
+ * ROUND 672: THE TRENDING TAG IS MEASURED EVERY RUN, NOT WHEN TRAFFIC ALLOWS.
+ * The home page's "Most played today" tiles carry a Trending tag only when
+ * the database has three games that three different people played today
+ * (UTC); otherwise the curated trio shows with no tag. So whether this sweep
+ * measured the tag depended on the hour: one run read it at 4.17 against the
+ * 4.5 floor, and the same build run early in the UTC day came back green
+ * because the tag was not on the page. The ranking call is now answered
+ * with three real games, so the tag renders on every run, and section 3
+ * fails if the home page's sampled text does not include all three tags.
+ * LIGHTMODE_CONTROL=oldwarn puts the light --warn back to its pre-672
+ * 42 percent in the served CSS (refusing if that value is not found) and
+ * section 3 must go red on the Trending tag.
+ *
+ * With BASE set (the runner sets it) the harness reads that server instead
+ * of starting its own on 4187, so two harnesses that both default to 4187
+ * cannot end up measuring each other's build.
+ *
  * Run: node scripts/playLightMode.mjs   (needs dist/ from npm run build)
  */
 import { spawn } from 'node:child_process';
@@ -32,14 +49,15 @@ import { chromium } from './lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.LIGHTMODE_CONTROL || '';
-if (CONTROL && CONTROL !== 'nolight') {
+if (CONTROL && CONTROL !== 'nolight' && CONTROL !== 'oldwarn') {
   console.error(`LIGHTMODE_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
 
 /* One route per visual family rather than all 60 plus: the token system is
-   shared, so a family's fresh-load screen stands in for its siblings. */
-const ROUTES = [
+   shared, so a family's fresh-load screen stands in for its siblings. The
+   oldwarn control is about the home page's tag alone. */
+const ROUTES = CONTROL === 'oldwarn' ? ['/'] : [
   '/',
   '/soccer',
   '/squad-deal',
@@ -58,9 +76,11 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 /* Serve dist the way the live host serves it (see hostLikeServer's header).
    The port dodges 4173 so a manually started server never collides. */
 const PORT = 4187;
-const server = spawn(process.execPath, [path.join(ROOT, 'scripts', 'lib', 'hostLikeServer.mjs'), path.join(ROOT, 'dist'), String(PORT)], { stdio: 'ignore' });
-await new Promise(r => setTimeout(r, 800));
-const base = `http://127.0.0.1:${PORT}`;
+const server = process.env.BASE
+  ? { kill() {} }
+  : spawn(process.execPath, [path.join(ROOT, 'scripts', 'lib', 'hostLikeServer.mjs'), path.join(ROOT, 'dist'), String(PORT)], { stdio: 'ignore' });
+if (!process.env.BASE) await new Promise(r => setTimeout(r, 800));
+const base = process.env.BASE || `http://127.0.0.1:${PORT}`;
 const browser = await chromium.launch();
 const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
 /* The cookie banner is a fixed overlay across the footer and intercepts the
@@ -68,6 +88,33 @@ const context = await browser.newContext({ viewport: { width: 1280, height: 900 
 await context.addInitScript(() => {
   try { localStorage.setItem('cookie-consent', 'essential'); } catch { /* ignored */ }
 });
+/* Round 672: today's ranking, answered with three real games so the
+   Trending tags render whatever the hour (see the header). */
+let rankingAnswered = 0;
+await context.route('**/rest/v1/rpc/most_played_today*', async route => {
+  rankingAnswered += 1;
+  await route.fulfill({
+    status: 200,
+    contentType: 'application/json',
+    body: JSON.stringify([
+      { game: 'soccer-career', plays: 40 },
+      { game: 'club-manager', plays: 30 },
+      { game: 'soccer-grid', plays: 20 },
+    ]),
+  });
+});
+
+let warnRestored = 0;
+if (CONTROL === 'oldwarn') {
+  await context.route('**/*.css', async route => {
+    const res = await route.fetch();
+    let body = await res.text();
+    const next = body.replace(/(:root\.light\s*\{[^}]*--warn:\s*)25 90% 32%/, '$125 90% 42%');
+    if (next !== body) warnRestored += 1;
+    await route.fulfill({ response: res, body: next });
+  });
+  console.log('   NEGATIVE CONTROL ON: light --warn put back to 42 percent, section 3 must go red on Trending');
+}
 
 if (CONTROL === 'nolight') {
   let stripped = 0;
@@ -144,6 +191,8 @@ console.log('2) the footer toggle works and the choice is kept');
 }
 
 console.log('3) light mode is readable on every swept route');
+let trendingSampled = 0;
+let trendingRed = false;
 {
   let sampled = 0;
   for (const route of ROUTES) {
@@ -176,6 +225,7 @@ console.log('3) light mode is readable on every swept route');
       };
       const out = [];
       let count = 0;
+      let trending = 0;
       for (const el of document.querySelectorAll('body *')) {
         if (count >= 400) break;
         const ownText = [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim().length > 1);
@@ -187,6 +237,7 @@ console.log('3) light mode is readable on every swept route');
         const fg = parse(cs.color);
         if (!fg || fg.a < 0.5) continue;
         count += 1;
+        if (el.textContent.trim() === 'Trending') trending += 1;
         const bg = effectiveBg(el);
         const l1 = lumOf(fg.r, fg.g, fg.b);
         const l2 = lumOf(bg.r, bg.g, bg.b);
@@ -205,9 +256,16 @@ console.log('3) light mode is readable on every swept route');
           });
         }
       }
-      return { violations: out, count };
+      return { violations: out, count, trending };
     });
     sampled += bad.count;
+    if (route === '/') {
+      trendingSampled = bad.trending;
+      if (bad.trending < 3) {
+        fail(`/ sampled ${bad.trending} Trending tags, expected the 3 the answered ranking draws (ranking call answered ${rankingAnswered} times), so the tag was not measured`);
+      }
+    }
+    if (bad.violations.some(v => v.text === 'Trending')) trendingRed = true;
     for (const v of bad.violations.slice(0, 5)) {
       fail(`${route} <${v.tag} class="${v.cls}"> "${v.text}" measures ${v.contrast}, floor ${v.floor}`);
     }
@@ -219,11 +277,23 @@ console.log('3) light mode is readable on every swept route');
   if (sampled < ROUTES.length * 30) {
     fail(`only ${sampled} text nodes sampled across ${ROUTES.length} routes, the sweep did not really run`);
   }
-  console.log(`   ${sampled} text nodes sampled across ${ROUTES.length} routes in light mode`);
+  console.log(`   ${sampled} text nodes sampled across ${ROUTES.length} routes in light mode, ${trendingSampled} Trending tags among them`);
 }
 
 await browser.close();
 server.kill();
 console.log('');
+if (CONTROL === 'oldwarn') {
+  if (warnRestored === 0) {
+    console.error('control found no light --warn at 25 90% 32% in any served CSS, nothing to put back');
+    process.exit(1);
+  }
+  if (trendingSampled >= 3 && trendingRed) {
+    console.log('playLightMode control: green. With the light --warn back at 42 percent, section 3 flagged the Trending tag.');
+    process.exit(0);
+  }
+  console.error(`playLightMode control: did not bite (${trendingSampled} Trending tags sampled, flagged: ${trendingRed})`);
+  process.exit(1);
+}
 if (failures > 0) { console.error(`playLightMode: ${failures} failure${failures === 1 ? '' : 's'}`); process.exit(1); }
 console.log('playLightMode: green. Dark by default, light by choice, readable either way.');

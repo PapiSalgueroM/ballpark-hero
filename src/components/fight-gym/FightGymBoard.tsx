@@ -76,8 +76,8 @@ export default function FightGymBoard() {
     return (
       <div className="space-y-4">
         <div className="rounded-lg border bg-card p-4">
-          <label className="mb-1 block text-xs uppercase tracking-wide text-muted-foreground">Name the gym</label>
-          <input value={name} onChange={e => setName(e.target.value)} maxLength={28}
+          <label htmlFor="fight-gym-name" className="mb-1 block text-xs uppercase tracking-wide text-muted-foreground">Name the gym</label>
+          <input id="fight-gym-name" value={name} onChange={e => setName(e.target.value)} maxLength={28}
             placeholder="Leave it blank and it is just The Gym"
             className="w-full rounded-md border bg-background px-3 py-2 text-sm" />
           <p className="mt-2 text-[11px] leading-snug text-muted-foreground">

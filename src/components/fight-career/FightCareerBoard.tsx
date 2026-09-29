@@ -135,8 +135,9 @@ export default function FightCareerBoard() {
     return (
       <div className="space-y-4">
         <div className="rounded-lg border bg-card p-4">
-          <label className="mb-1 block text-xs uppercase tracking-wide text-muted-foreground">Your name</label>
+          <label htmlFor="fight-career-name" className="mb-1 block text-xs uppercase tracking-wide text-muted-foreground">Your name</label>
           <input
+            id="fight-career-name"
             value={name}
             onChange={e => setName(e.target.value)}
             placeholder="Leave it blank and we will name you"
