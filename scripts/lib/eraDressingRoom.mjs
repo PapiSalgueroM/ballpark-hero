@@ -10,8 +10,9 @@
  *      own "Take the job" and a "Skip: just manage". The walks never pressed
  *      either, so they sat on the form and never reached the hub at all.
  *   2. The "Squad" they clicked was `text=Squad`, a case blind substring
- *      match, and the first thing on the page matching it is the intro line
- *      ("squads as of August 2026"), so even on the hub it clicked a paragraph.
+ *      match. On the dugout step, where they were stuck, the first match was
+ *      the intro line ("squads as of August 2026"), a paragraph, not a tab,
+ *      and nothing tied the click to the Squad tab on any screen.
  *
  * And because they read the whole body, every name the Club Manager guide
  * happens to mention (Vardy, Dybala, Rooney) passed from the guide text at the
