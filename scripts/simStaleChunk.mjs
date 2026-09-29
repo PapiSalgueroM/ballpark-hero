@@ -38,7 +38,8 @@ import { fileURLToPath } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_STALE_CHUNK_CONTROL || '';
 const EXPECT = { nolistener: [1], noguard: [2], noprerender: [2] };
-if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(1); }
+/* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
+if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(2); }
 
 /* Strip block and line comments so a check can only be satisfied by code. */
 const code = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');

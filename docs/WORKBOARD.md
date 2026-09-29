@@ -1,5 +1,15 @@
 # Work board
 
+**2026-09-28, Round 668 CLAIMED AND BUILT, branch `r668-whoami-namesakes`, pushed, not on main.** Who Am I
+tells namesakes apart and says how old its ages are. person_key turned out NULL on all 141,916 market
+value rows, so the identity is person_key when present, else the stored spelling (45 of 27,803 names
+have more than one; all 3 in the pool are different men). Before 1 of 600 pool players (Éderson) could
+not be won by typing his name, after 0; 1,248 pool pairs lit Past club link only through another man's
+rows, after 0; 1,570 cross-list pairs misread age by the raw listed number, after 0. Fence
+`scripts/simWhoAmINamesakes.mjs` (8 controls) plus `src/test/playerSearchIdentity.test.ts`. **Merge
+note:** it edits the same pool lines in `src/lib/whoAmI.ts` as r667's not-current list (`isNotCurrentPlayer`
+on both legs); keep both, the carried leg reads `byKey.has(p.personKey) || isNotCurrentPlayer(p.name)`.
+
 **2026-09-28 morning, desktop Claude lane: CLAIMS, so nobody builds these twice.**
 - **Release E (662 to 667) IS LIVE**, main `cf18c92a`, deployment `3c8e3e1f`. Proof and gates in
   `docs/PROJECT-STATE.md`. Six player reports resolved. **Round 672 is claimed** for the 19 browser

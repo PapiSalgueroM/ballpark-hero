@@ -1,6 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { fetchAllRows } from '@/lib/fetchAllRows';
-import type { PlayerEntity } from '@/lib/playerSearch';
+import { isSameMan, personKeyOf, SOCCER_MARKET_VALUE_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { isNotCurrentPlayer } from '@/data/notCurrentPlayers';
 
@@ -115,6 +115,25 @@ import { isNotCurrentPlayer } from '@/data/notCurrentPlayers';
  * accordingly low. Attribute comparisons therefore always run on current
  * rows only. Round 443 moved the resolution off the boot and onto the guess
  * itself, see the BOOT WEIGHT note above fetchWhoAmIPool.
+ *
+ * NAMESAKES AND AGES (Round 668, a "Wrong answer" report of 2026-09-26).
+ * Three faults, each measured against the live table on 2026-09-28:
+ *   1. The search folded "Éderson" (Atalanta, the secret) into "Ederson" (the
+ *      Fenerbahce keeper), so he could not be typed at all and picking the
+ *      only Ederson on offer scored 40. Every place here that decides who is
+ *      who (the pool, the judge, the club history, the page's guessed list)
+ *      now uses personKeyOf from playerSearch, the same rule the search
+ *      dedupes by, so the two can never disagree. Before: 1 of the 600 pool
+ *      players could not be won by typing his name. After: 0.
+ *   2. The club history pooled every row under one spelling, so Rodri carried
+ *      the clubs of three other men (the table's 18 "Rodri" rows are four men
+ *      by their ages and positions) and the Past club link chip could light
+ *      for a guess who never shared a club with him. A history row now has to
+ *      be the man's own by isSameMan (Round 385's rule, lifted from Player
+ *      Bingo so both games share one; it lives in playerSearch.ts).
+ *   3. The ages are the table's, not today's. See LISTED AGES above
+ *      ageOnNewestList for what was measured and what the page now says.
+ * scripts/simWhoAmINamesakes.mjs holds all three.
  */
 
 export interface WhoAmIPlayer {
@@ -123,13 +142,14 @@ export interface WhoAmIPlayer {
   position: string; // Transfermarkt style, e.g. "Attacking Midfield"
   club: string; // club on the player's most recent row
   value: number; // market value in USD from the most recent row
-  age: number; // age on the most recent row
+  age: number; // age on the most recent row, as the table lists it (see ageOnNewestList)
   year: number; // year of the row we kept
+  personKey: string; // Round 668: who this is, by personKeyOf, the rule the search dedupes by
 }
 
 export interface WhoAmIData {
   pool: WhoAmIPlayer[]; // sorted by value desc
-  clubHistory: Map<string, Set<string>>; // player name -> normalized club keys across all years
+  clubHistory: Map<string, Set<string>>; // personKey -> normalized club keys across all years, his own rows only
 }
 
 export interface GuessBreakdown {
@@ -139,7 +159,7 @@ export interface GuessBreakdown {
   posExactMatch: boolean;
   sameClub: boolean;
   sharedClubPast: boolean; // shared a club at some point, but not the current one
-  ageDiff: number; // secret.age - guess.age; positive means the secret player is older
+  ageDiff: number; // ageOnNewestList(secret) - ageOnNewestList(guess); positive means the secret player is older
   valueLogDiff: number; // log10(secret.value / guess.value); positive means the secret is worth more
   score: number; // 0-100
 }
@@ -238,7 +258,15 @@ const POOL_FETCH_ROWS = 1000;
    slow load, it would silently drop a player whose last listed season is the
    previous one out of the pool, so the cheap number is the wrong one here. */
 const CARRIED_FETCH_MAX = 5000;
-const POOL_COLUMNS = 'player_name, nationality, position, club, market_value_usd, age, year';
+const POOL_COLUMNS = 'player_name, nationality, position, club, market_value_usd, age, year, person_key';
+/**
+ * Round 668: who a row of this table is, by the soccer search's own identity
+ * rule, so a pool player and a search row are the same person exactly when
+ * the search says so. Read at call time, never at module scope.
+ */
+export function whoAmIPersonKey(name: string | null | undefined, personKey?: string | null): string {
+  return personKeyOf(SOCCER_MARKET_VALUE_SOURCE.identity, name, personKey) ?? 'nm:' + (name ?? '').trim();
+}
 const HISTORY_CHUNK = 80; // names per .in() filter, keeps request URLs comfortably small
 const HISTORY_PAGE = 1000; // PostgREST row cap per request
 const HISTORY_MAX_PAGES = 6; // safety valve: 80 names x 23 seasons is well under 6000 rows
@@ -298,6 +326,69 @@ export function shortPosition(position: string): string {
   return SHORT_POS[(position || '').trim().toLowerCase()] ?? positionGroup(position);
 }
 
+/*
+ * LISTED AGES (Round 668). Every age here is the age the table lists on the
+ * player's row, never today's: the table holds no birth date, and one is not
+ * made up. What was measured on 2026-09-28:
+ *   - The pool: 592 of 600 players sit on a 2026 row, 8 on a 2025 row.
+ *   - The table's ages keep a yearly rule. From the 2025 list to the 2026
+ *     list 3,914 of 4,013 players listed once in each (97.5 percent) are
+ *     exactly one year older, and none is the same age, so an age is taken
+ *     at one fixed point of each list year, not on the day a row was scraped.
+ *     The rest are namesakes sharing a spelling or plain typing slips.
+ *   - Where that point sits: the 98 rows the 2026-08-29 stale sweep typed in
+ *     by hand, with each man's age on that day, read a year above the rule
+ *     for 68 of them, which puts the list's point roughly eight months before
+ *     late August, around the turn of the year. That is a sampling estimate
+ *     (about five weeks either way), not a date to print.
+ * So the page says what the number is: an age as listed, a year or so behind
+ * for anyone with a birthday since, and a row from an older list says which
+ * list. The comparison behind the arrows puts both players on the newest
+ * list first, by the yearly rule measured above, so a 2025 row and a 2026 row
+ * listing the same age are never called the same age.
+ */
+export const NEWEST_LIST_YEAR: number = CURRENT_YEARS[0];
+
+/** A player's listed age moved onto the newest list by the table's own yearly rule. 0 when no age is listed. */
+export function ageOnNewestList(p: { age: number; year: number }): number {
+  if (!(p.age > 0)) return 0;
+  return p.year > 0 ? p.age + (NEWEST_LIST_YEAR - p.year) : p.age;
+}
+
+/** The age as the page shows it: the listed number, plus which list when it is not the newest one. */
+export function listedAgeLabel(p: { age: number; year: number }): string {
+  if (!(p.age > 0)) return '';
+  return p.year > 0 && p.year < NEWEST_LIST_YEAR ? `${p.age} (${p.year} list)` : String(p.age);
+}
+
+/**
+ * What the age chip may say about a guess (Round 668 fix, from the review).
+ * The arrows compare on the newest list, so a guess listed at 29 on the 2025
+ * list and a secret listed at 30 on the 2026 list come out level. The chip
+ * shows 29 against the end card's 30, so calling that "same listed age" with
+ * a green check was false. 'same' now means the same listed number on the
+ * same list; 'level' is the cross-list tie and says so. 'older' and
+ * 'younger' are about the secret, as the arrows are. `ageDiff` is
+ * scoreGuess's, so the chip and the score can never disagree.
+ */
+export type AgeReading = 'none' | 'same' | 'level' | 'older' | 'younger';
+export function ageReading(
+  guess: { age: number; year: number },
+  secret: { age: number; year: number },
+  ageDiff: number,
+): AgeReading {
+  if (!(guess.age > 0) || !(secret.age > 0)) return 'none';
+  if (ageDiff > 0) return 'older';
+  if (ageDiff < 0) return 'younger';
+  return guess.age === secret.age && guess.year === secret.year ? 'same' : 'level';
+}
+
+/* isSameMan (Round 385's rule, the age has to walk with the year) lives in
+   playerSearch.ts since the Round 668 re-review, so the search's namesake line
+   can use it without an import cycle. It is re-exported here for Player Bingo
+   and the harnesses that import it from this file. */
+export { isSameMan };
+
 /**
  * Scores a guess against the secret player using the weights documented above.
  * Club history sets come from WhoAmIData.clubHistory.
@@ -307,7 +398,10 @@ export function scoreGuess(
   secret: WhoAmIPlayer,
   clubHistory: Map<string, Set<string>>,
 ): GuessBreakdown {
-  const isExact = guess.name === secret.name;
+  /* Round 668: the same person, by the identity the search dedupes by, not
+     the same letters. A player built without one (nothing in the app does
+     that) falls back to the exact stored name, the pre-668 rule. */
+  const isExact = guess.personKey && secret.personKey ? guess.personKey === secret.personKey : guess.name === secret.name;
 
   const gNat = primaryNationality(guess.nationality);
   const natMatch = gNat !== '' && gNat === primaryNationality(secret.nationality);
@@ -320,8 +414,8 @@ export function scoreGuess(
   const sameClub = gClub !== '' && gClub === clubKey(secret.club);
   let sharedClubPast = false;
   if (!sameClub) {
-    const gHist = clubHistory.get(guess.name);
-    const sHist = clubHistory.get(secret.name);
+    const gHist = clubHistory.get(guess.personKey);
+    const sHist = clubHistory.get(secret.personKey);
     if (gHist && sHist) {
       for (const c of gHist) {
         if (sHist.has(c)) {
@@ -332,7 +426,9 @@ export function scoreGuess(
     }
   }
 
-  const ageDiff = secret.age - guess.age;
+  /* Round 668: both ages on the newest list first (ageOnNewestList), so a
+     2025 row and a 2026 row that list the same number are a year apart. */
+  const ageDiff = ageOnNewestList(secret) - ageOnNewestList(guess);
   const agePts = WEIGHTS.age * Math.max(0, 1 - Math.abs(ageDiff) / AGE_RANGE);
 
   const valueLogDiff = Math.log10(Math.max(1, secret.value) / Math.max(1, guess.value));
@@ -360,7 +456,7 @@ export function pickSecret(pool: WhoAmIPlayer[], excludeName?: string): WhoAmIPl
 
 /**
  * One guessed player's current row, remembered for the session so a repeat
- * guess costs nothing. Keyed by the exact stored spelling, see below.
+ * guess costs nothing. Keyed by the person (Round 668), see below.
  */
 const resolvedCurrentRows = new Map<string, WhoAmIPlayer | null>();
 
@@ -399,6 +495,13 @@ const resolvedCurrentRows = new Map<string, WhoAmIPlayer | null>();
  *      "Éderson" (Atalanta, 26) were one entry and whoever was worth more won.
  *      Two different footballers. The lookup is on the exact stored spelling
  *      the search handed over, so each man resolves to his own row.
+ *      (Round 668: true here, but the search itself still folded the two into
+ *      one row, so the Atalanta one was never handed over. It no longer does.)
+ *
+ * ROUND 668: the lookup is by the person the search handed over
+ * (entity.personKey): his person_key where the table carries one, else his
+ * exact stored spelling. The player that comes back carries the same key, so
+ * scoreGuess compares the very identity the search returned.
  */
 export async function whoAmIPlayerFromEntity(entity: PlayerEntity): Promise<WhoAmIPlayer | null> {
   const meta = entity.meta;
@@ -406,22 +509,25 @@ export async function whoAmIPlayerFromEntity(entity: PlayerEntity): Promise<WhoA
   const position = typeof meta.position === 'string' ? meta.position : '';
   const spelling = (entity.rawName || entity.name || '').trim();
   if (!spelling) return null;
+  const person = entity.personKey ?? whoAmIPersonKey(spelling);
+  const idColumn = person.startsWith('pk:') ? 'person_key' : 'player_name';
+  const idValue = person.startsWith('pk:') ? person.slice(3) : spelling;
 
-  if (!resolvedCurrentRows.has(spelling)) {
+  if (!resolvedCurrentRows.has(person)) {
     const { data, error } = await supabase
       .from('player_market_values')
       .select(POOL_COLUMNS)
-      .eq('player_name', spelling)
+      .eq(idColumn, idValue)
       .in('year', CURRENT_YEARS_LIST)
       .order('year', { ascending: false })
       .order('market_value_usd', { ascending: false })
       .limit(1);
     if (error) return null;
     const row = (data ?? [])[0] as PoolRow | undefined;
-    resolvedCurrentRows.set(spelling, row ? currentRowFrom(row) : null);
+    resolvedCurrentRows.set(person, row ? currentRowFrom(row) : null);
   }
 
-  const current = resolvedCurrentRows.get(spelling) ?? null;
+  const current = resolvedCurrentRows.get(person) ?? null;
   if (current) return current;
 
   // No 2025+ row: retired (or out of covered football). Never display the
@@ -434,6 +540,7 @@ export async function whoAmIPlayerFromEntity(entity: PlayerEntity): Promise<WhoA
     value: 0,
     age: 0,
     year: 0,
+    personKey: person,
   };
 }
 
@@ -473,15 +580,28 @@ export interface PoolRow {
   market_value_usd: number | null;
   age: number | null;
   year: number | null;
+  person_key?: string | null;
 }
 
 /**
- * Career club sets for every pool player, from ALL years in the table.
- * Names are chunked into .in() filters and each chunk is paged in blocks of
- * 1000 rows (ordered by id) to respect the PostgREST row cap.
+ * Career club sets for every pool player, from ALL years in the table, keyed
+ * by personKey. Names are chunked into .in() filters and each chunk is paged
+ * in blocks of 1000 rows (ordered by id) to respect the PostgREST row cap.
+ *
+ * Round 668: a row counts only when it is the pool player's own. Every row
+ * under one spelling used to be pooled, so Rodri carried three other men's clubs
+ * and the Past club link chip could light for a guess who never shared a club
+ * with the secret. A row must be the same person by whoAmIPersonKey, and a
+ * row with no person_key must also walk with the pool row's age (isSameMan).
+ * That needs three more columns per row, so the columns come back under one
+ * letter names. Measured 2026-09-28, same 11 requests every time: the boot
+ * was 497 KiB before this round, 684 KiB with the full column names, 575 KiB
+ * with these (the owner has asked for a quick load; simNoZeroFacts holds 800).
  */
-async function fetchClubHistory(names: string[]): Promise<Map<string, Set<string>>> {
+async function fetchClubHistory(pool: WhoAmIPlayer[]): Promise<Map<string, Set<string>>> {
   const map = new Map<string, Set<string>>();
+  const byPerson = new Map(pool.map(p => [p.personKey, p] as const));
+  const names = [...new Set(pool.map(p => p.name))];
   const chunks: string[][] = [];
   for (let i = 0; i < names.length; i += HISTORY_CHUNK) {
     chunks.push(names.slice(i, i + HISTORY_CHUNK));
@@ -492,19 +612,21 @@ async function fetchClubHistory(names: string[]): Promise<Map<string, Set<string
       for (let page = 0; page < HISTORY_MAX_PAGES; page++) {
         const { data, error } = await supabase
           .from('player_market_values')
-          .select('player_name, club')
+          .select('n:player_name, c:club, a:age, y:year, k:person_key')
           .in('player_name', chunk)
           .order('id', { ascending: true })
           .range(from, from + HISTORY_PAGE - 1);
         if (error) throw error;
         for (const r of data ?? []) {
-          const name = (r.player_name ?? '').trim();
-          const key = clubKey(r.club ?? '');
-          if (!name || !key) continue;
-          let set = map.get(name);
+          const key = clubKey(r.c ?? '');
+          if (!key) continue;
+          const owner = byPerson.get(whoAmIPersonKey(r.n, r.k));
+          if (!owner) continue;
+          if (!r.k && !isSameMan(owner, { age: r.a, year: r.y })) continue;
+          let set = map.get(owner.personKey);
           if (!set) {
             set = new Set<string>();
-            map.set(name, set);
+            map.set(owner.personKey, set);
           }
           set.add(key);
         }
@@ -533,13 +655,18 @@ export function currentRowFrom(r: PoolRow): WhoAmIPlayer {
     value: Number(r.market_value_usd) || 0,
     age: Number(r.age) || 0,
     year: Number(r.year) || 0,
+    personKey: whoAmIPersonKey(r.player_name, r.person_key),
   };
 }
 
-/** Latest year wins, value breaks a same-year tie. The pool's ranking rule. */
+/**
+ * Latest year wins, value breaks a same-year tie. The pool's ranking rule.
+ * Round 668: one entry per person (personKey), not per folded name, so two
+ * namesakes can both be in the pool and neither pushes the other out.
+ */
 export function keepLatest(into: Map<string, WhoAmIPlayer>, p: WhoAmIPlayer): void {
   if (!p.name) return;
-  const key = normalizeName(p.name);
+  const key = p.personKey || whoAmIPersonKey(p.name);
   const prev = into.get(key);
   if (!prev || p.year > prev.year || (p.year === prev.year && p.value > prev.value)) into.set(key, p);
 }
@@ -548,21 +675,22 @@ export function keepLatest(into: Map<string, WhoAmIPlayer>, p: WhoAmIPlayer): vo
 export const byCurrentValue = (a: WhoAmIPlayer, b: WhoAmIPlayer) => b.value - a.value || a.name.localeCompare(b.name);
 
 /**
- * Which of these names are listed in `year` at all. Names only, so the answer
- * is a few KiB whatever the list holds. Null means the question could not be
- * asked, which fails the boot rather than guessing at it.
+ * Which of these names are listed in `year` at all, as person keys (Round 668:
+ * a namesake listed that year no longer counts for the other man). Names only,
+ * so the answer is a few KiB whatever the list holds. Null means the question
+ * could not be asked, which fails the boot rather than guessing at it.
  */
 async function namesListedIn(year: number, names: string[]): Promise<Set<string> | null> {
   const listed = new Set<string>();
   for (let i = 0; i < names.length; i += HISTORY_CHUNK) {
     const { data, error } = await supabase
       .from('player_market_values')
-      .select('player_name')
+      .select('player_name, person_key')
       .eq('year', year)
       .in('player_name', names.slice(i, i + HISTORY_CHUNK))
       .limit(POOL_FETCH_ROWS);
     if (error) return null;
-    for (const r of data ?? []) listed.add(normalizeName((r.player_name ?? '').trim()));
+    for (const r of data ?? []) listed.add(whoAmIPersonKey(r.player_name, r.person_key));
   }
   return listed;
 }
@@ -653,29 +781,29 @@ export async function fetchWhoAmIPool(): Promise<WhoAmIData | null> {
     const candidates = new Map<string, WhoAmIPlayer>();
     for (const r of carried.data) {
       const p = currentRowFrom(r);
-      if (!p.name || p.value <= 0 || byKey.has(normalizeName(p.name)) || isNotCurrentPlayer(p.name)) continue;
+      if (!p.name || p.value <= 0 || byKey.has(p.personKey) || isNotCurrentPlayer(p.name)) continue;
       keepLatest(candidates, p);
     }
     if (candidates.size > 0) {
       const stillListed = await namesListedIn(CURRENT_YEARS[0], [...candidates.values()].map(p => p.name));
       if (!stillListed) return null;
       for (const p of candidates.values()) {
-        if (!stillListed.has(normalizeName(p.name))) byKey.set(normalizeName(p.name), p);
+        if (!stillListed.has(p.personKey)) byKey.set(p.personKey, p);
       }
     }
 
     const pool = [...byKey.values()].sort(byCurrentValue).slice(0, POOL_SIZE);
     if (pool.length < 50) return null;
 
-    const clubHistory = await fetchClubHistory(pool.map(p => p.name));
+    const clubHistory = await fetchClubHistory(pool);
     // Every player at least carries their current club, even if a history page failed short.
     for (const p of pool) {
       const key = clubKey(p.club);
       if (!key) continue;
-      let set = clubHistory.get(p.name);
+      let set = clubHistory.get(p.personKey);
       if (!set) {
         set = new Set<string>();
-        clubHistory.set(p.name, set);
+        clubHistory.set(p.personKey, set);
       }
       set.add(key);
     }

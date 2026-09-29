@@ -56,9 +56,10 @@ import { loadSport, readSource, rewrite, checkSport } from './lib/higherLowerFen
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.HL_FACTS_CONTROL || '';
 const EXPECT = { stale: [2], inversion: [2, 3], nolast: [4], goalieok: [5], heldfix: [3, 6], nbastale: [2, 3], mlbstale: [2], nflstale: [2, 3], tennismerge: [2, 3] };
+/* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
 if (CONTROL && !(CONTROL in EXPECT)) {
   console.log(`   FAIL unknown control ${CONTROL} (known: ${Object.keys(EXPECT).join(', ')})`);
-  process.exit(1);
+  process.exit(2);
 }
 
 const SPORTS = [

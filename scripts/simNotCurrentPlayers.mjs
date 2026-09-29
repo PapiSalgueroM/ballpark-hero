@@ -28,7 +28,8 @@ import { build } from 'esbuild';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.SIM_NOT_CURRENT_CONTROL || '';
 const EXPECT = { carriedleg: [2], unfold: [3] };
-if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(1); }
+/* Exit 2, never 1: 1 is a control that fired, and a mistyped name must not read as one. */
+if (CONTROL && !(CONTROL in EXPECT)) { console.error('unknown control ' + CONTROL); process.exit(2); }
 const TMP = process.env.TEMP || process.env.TMP || ROOT;
 const code = s => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
 function rewrite(src, anchor, replacement, why) {
@@ -39,7 +40,7 @@ function rewrite(src, anchor, replacement, why) {
 
 let who = fs.readFileSync(path.join(ROOT, 'src/lib/whoAmI.ts'), 'utf8').replaceAll('\r\n', '\n');
 let listSrc = fs.readFileSync(path.join(ROOT, 'src/data/notCurrentPlayers.ts'), 'utf8').replaceAll('\r\n', '\n');
-if (CONTROL === 'carriedleg') who = rewrite(who, "|| byKey.has(normalizeName(p.name)) || isNotCurrentPlayer(p.name)) continue;", "|| byKey.has(normalizeName(p.name))) continue;", 'carriedleg');
+if (CONTROL === 'carriedleg') who = rewrite(who, "|| byKey.has(p.personKey) || isNotCurrentPlayer(p.name)) continue;", "|| byKey.has(p.personKey)) continue;", 'carriedleg');
 if (CONTROL === 'unfold') listSrc = rewrite(listSrc, "return FOLDED.has(foldPlayerName(name));", "return FOLDED.has(name);", 'unfold');
 
 /* Bundle the list module (with the control applied) to run its real functions. */

@@ -433,6 +433,170 @@ model the six other views built on the table (`player_peak_values`, `player_posi
 `player_nationality_peaks`, `game_player_pool`, `eligible_soccer_players`, `rebuild_clubs`), so
 the harnesses that read them get their first projected run live, after step 1.
 
+## ROUND 668 RE-REVIEW CLOSED 2026-09-28: its three minors, on `r668-whoami-namesakes`
+
+The re-review said ship, with three minors. All three are closed on the same branch. No migration.
+
+- **The namesake line describes the man shown.** The line under a shared name came from the latest row
+  of the stored spelling, and one spelling can be several men. Over every name the table stores more
+  than one way (45 names, 91 lines, all their rows read live), 8 lines described somebody else: "Cafu"
+  showed the Milan right-back (born about 1971) with the line "AA Portuguesa · Left Midfield · 2020",
+  a left midfielder born about 1997; the Bologna Ladislav Krejci carried a Hradec Kralove row two
+  birth years off; Cadu, Adaílton, Ramon, Ramón, Leandro and Andrezinho the same way. Now
+  `ownLatestRow` in `src/lib/playerSearch.ts` takes the shown row's own latest row: a later row counts
+  only when a person_key says it is him, or when both rows list an age that walks with the year
+  (`isSameMan`). A row that proves nothing is never used, so at worst the line is the shown row itself.
+  After: 0 of 91. `isSameMan` moved down into `playerSearch.ts` for this (whoAmI imports that file, so
+  it could not import back); `whoAmI.ts` and `playerBingo.ts` re-export it, so every caller and harness
+  is unchanged. Fence: simWhoAmINamesakes section 1 reads every row's name (141,916), folds them and
+  holds every such line, baseline the spelling's latest row (8 on another man, floor 4), plus the pool
+  check against his own latest row. Controls `hintspelling` (8 on another man) and `hintshown` (the
+  line from the shown row itself, 50 not his latest). vitest section 8 on the live Cafu and Cafú rows,
+  plus synthetic rows for a missing age and a person_key; two of its tests fail with the old rule.
+- **Two stale comments**: `GuessBreakdown.ageDiff` now says it compares both ages on the newest list,
+  and the `isSameMan` comment counts the table's four Rodris (a Barcelona centre-back aged 21 in 2006,
+  a Betis right midfielder aged 20 in 2007, a Huesca left midfielder aged 32 in 2009, the Manchester
+  City one), re-read live 2026-09-28.
+- **An unknown control name exits 2, never 1** (1 is a control that fired). Fixed in simNotCurrentPlayers,
+  simStaleChunk, simCareerCleanSheets (Round 667) and simHigherLowerFacts (Rounds 663 to 666), all carried
+  onto this branch by the r667 merge. simWhoAmINamesakes already exited 2. simWhoAmIAccuracy and
+  simNoZeroFacts exit 1 for an unknown name but 0 when a control fires, so a typo there can never read
+  as a firing; left alone.
+- Gates, on the final tree, TEMP and TMP per run under `pol-668`: tsc exit 0, 0 lines. vitest
+  playerSearchIdentity, listedAges, scoreShown, noDoubleRecord: 4 files, 125 tests, exit 0 (a first run
+  of the four together hit an unhandled "window is not defined" from useMlbHL's 2 second result timer
+  firing after noDoubleRecord's environment was torn down; noDoubleRecord alone twice and the four again
+  were clean, and no file this round touches is involved). simWhoAmINamesakes exit 0, and all 20
+  controls exit 1 with CONTROL FIRED, their own finding, their own section only. simNotCurrentPlayers,
+  simStaleChunk, simCareerCleanSheets and simHigherLowerFacts: plain exit 0, every control exit 1
+  (2 + 3 + 1 + 9), a bogus name exit 2. Green with their closing line: simWhoAmIAccuracy, simNoZeroFacts,
+  simPlayerBingoPool, simPlayerSearchAccents, simFetchRetry, simLineupPositions, simMarketYearScope,
+  simMissingXi, simMissingXiLayout, simMissingXiReach, simNbaLineupSearch, simRarityAgreement (363s),
+  simNoRivalNames, simHarnessAnchors, simInventedNames, simNoInventedQuotes, simNoInventedConduct,
+  simUnboundedSelects, simIdleTimers, simScoringCoverage, simEarlyReturnScope, simAccessibility,
+  simSiteSearch. Not run, as instructed: runAllSims, the build, build:seo, browser harnesses.
+- Seen, not fixed: 8 of the 91 lines name "Retired" or "Without Club" as the club (Denilson and
+  Denílson both say "Retired"). True to the table, and each is now the shown man's own row, but it does
+  not tell two men apart by club. The noDoubleRecord teardown race above is pre-existing.
+
+## ROUND 668 FIXED 2026-09-28: the review's seven defects, on `r668-whoami-namesakes`
+
+The adversarial review said fix first (1 major, 6 minor). All seven are fixed on the same branch, which
+now also carries `r667-player-reports` merged in (Release E ships it). Migration WRITTEN, NOT APPLIED.
+
+- **Merge with r667**: the carried pool leg skips a key already present AND a name on the not current
+  list; the first leg keeps a row only when it is not listed. simNotCurrentPlayers' carriedleg control
+  anchors on the merged line. The pool is now 600 with 7 on the 2025 list (Diogo Jota is out).
+- **Clue Auction (the major)**: the bracket clue and the reveal card both come from `clueAge` in
+  `src/lib/clueAuction.ts`, the listed age. The first build sold the bracket from the newest list age
+  and 2 of today's pool were sold a bracket that left out the age the card then showed (Giacomo
+  Raspadori, "24 (2025 list)", sold "25 to 28"); now 0. Fence section 5 plus synthetic cases that cross
+  a bracket edge.
+- **Who Am I age chip**: `ageReading` in `whoAmI.ts`. A green check only for the same listed number on
+  the same list; a tie across the two lists shows an = sign and a tooltip saying a year was added. 704
+  ordered pool pairs are such ties (the first build checked them green); 0 now read wrong. The rules
+  line says what the check and the = mean.
+- **Rodri**: the table's 18 "Rodri" rows are FOUR men by their listed ages and positions (year minus
+  age puts them at about 1985 for the centre-back at Barcelona and Almeria, about 1987 for the right
+  midfielder at Betis, Cartagena and Guadalajara, about 1977 for the left midfielder at Huesca, and
+  the Villarreal, Atletico, Man City and Barcelona Rodri), not three. Re-read 2026-09-28. What's New
+  and the comments corrected.
+- **Career Ladder** re-deduped the search by folded name. `ladderSuggestions` and `ladderGuessWins` in
+  `src/lib/careerLadder.ts` keep the search's identity: a namesake shows on its own line with club,
+  position and year, and never wins (every answer is a pool man). 4 of its 253 answers share a folded
+  name with another man in the table (Raúl, Ederson, Pepe, Cafu), and in all 4 the pool spells its man
+  the way the table does. Other callers checked: PlayerAutocomplete's mergeLocalNames keeps the search's
+  rows as they are, and Missing Eleven re-dedupes the NFL source, which has no identity, so nothing to
+  undo there.
+- **"(dup)" rows**: any name carrying "(dup)" is never offered by the search (`DUP_MARK` in
+  `playerSearch.ts`). The table holds 15 of them, all 2023, each the exact twin of a row under the plain
+  name. `supabase/migrations/20260928200000_round_668_pepe_dup_row.sql` removes only "Pepê (dup)" (id
+  156902), and only if it still duplicates a "Pepê" row with the same club, year, value, age, position
+  and nationality; otherwise it renames nothing and raises. Read only check on 2026-09-28: the twin is id
+  156887. The other 14 are hidden from the search only, and left for a cleanup round: readers that go
+  to the table directly across every year (Rarity Round's club pools, the club notable players clue in
+  `fetchSoccerClubNotablePlayers.ts`) can still carry a "(dup)" name until that round deletes all 15.
+  Re-read 2026-09-28 by the verify pass: 15 rows, every one with an exact twin (same club, year, value,
+  age, position, nationality), "Pepê (dup)" stored with U+00EA as the migration expects.
+  `player_market_values_dedup` (read by dealPlayers, packBattle, signThePlayer, playerStockMarket,
+  triviaQuestionBank and alphabetSprint in `src/lib/`) carries
+  all 15 as well. Its definition is not in the repo, so whoever applies the migration should check
+  whether it is a materialized view; if it is, the deleted row stays in it until it is refreshed.
+- **Controls**: the three uncontrolled checks now have one each (lostpick, nonote, nolistname), and every
+  new check has its own (dupshown, pagetie, cardraw, samecheck, bracketshift, ladderfold, ladderjudge).
+  A control must now also produce the finding it names, or it exits 3, and a control run that checked
+  nothing (a database timeout) exits 2, never 1. The vitest fixture comment is corrected (its 2015
+  Kashiwa row is a centre-forward sharing the Éderson spelling; the attacking midfielder sharing the
+  keeper's Ederson spelling is not in the fixture).
+- Seen, not fixed (out of scope): Missing XI still judges a pick by folded name, so a split namesake
+  (the Atalanta Éderson in a slot whose answer is the keeper) is accepted there. That is how it scored
+  before this round too; it is a name recall game and changing its judge is its own round.
+- **Fence under load**: a run of the ladderjudge control went red in section 1 too ("typing Kevin
+  offers nobody"), because a statement timeout on the search's name leg left it answering from the
+  prominence leg alone. Kevin sits 14th of the 200 rows that leg reads, so it was the database, not
+  the search. The fence now retries a server error or a dropped read 3 times, never memoises a
+  failure, and calls a run with a read that never answered NO VERDICT (exit 2 under a control).
+- Gates, all on the final tree, TEMP and TMP under `fix-668`: tsc exit 0, 0 lines. vitest listedAges,
+  playerSearchIdentity, scoreShown, noDoubleRecord: 4 files, 120 tests, exit 0. simWhoAmINamesakes
+  exit 0 (6 sections), and all 18 controls exit 1 with CONTROL FIRED, each reddening only its own
+  section; an unknown control exits 2. simNotCurrentPlayers green with both its controls firing
+  (carriedleg, unfold). simNoZeroFacts green (its sweep now applies the not current list, as the pool
+  does; red before that with Diogo Jota in the sweep). Green on the same src: simWhoAmIAccuracy,
+  simMarketYearScope, simFetchRetry, simPlayerBingoPool, simPlayerSearchAccents, simRarityAgreement,
+  simLineupPositions, simMissingXi, simMissingXiLayout, simMissingXiReach, simNbaLineupSearch,
+  simNationalityFlags, simAccessibility, simNoRivalNames, simEarlyReturnScope, simInventedNames,
+  simNoInventedConduct, simReportContext, simScoringCoverage, simIdleTimers, simSiteSearch,
+  simGuideHeadings. Not run, as instructed: runAllSims, the build, build:seo, browser harnesses.
+- **Verified again 2026-09-28, 15:45 to 16:00, before the push** (the first fix session committed but
+  never pushed; every gate rerun on the pushed tree, TEMP and TMP per run under `fix-668`): tsc exit 0,
+  0 lines; vitest 4 files, 120 tests, exit 0; simWhoAmINamesakes exit 0 (pool 600, 7 on the 2025
+  list; baselines 1,244 pooled mislights, 1,410 raw age misreads, 704 cross-list ties, 2 mis-sold
+  brackets; 15 "(dup)" rows, 0 offered); all 18 controls exit 1 with CONTROL FIRED and their own
+  finding, each only in its own section; an unknown control exits 2; simNotCurrentPlayers exit 0, and
+  carriedleg and unfold exit 1 on sections 2 and 3 only. simNoZeroFacts and the 22 harnesses listed
+  above rerun green, plus simAuthSave and simBuzzerBeater (they read every migration): 25 in all, each
+  exit 0 with its closing line.
+
+## ROUND 668 BUILT 2026-09-28: Who Am I tells namesakes apart and says how old its ages are
+
+Branch `r668-whoami-namesakes`, pushed, not on main, no migration. From the Who Am I "Wrong answer"
+report of 2026-09-26. Every number below measured against the live table on 2026-09-28.
+
+- **person_key is NULL on all 141,916 rows** of player_market_values, so no pool collision maps to
+  more than one person_key. It is declared as the identity that wins the day it is filled; until
+  then the only identity the table holds is the stored spelling (45 of 27,803 normalized names have
+  more than one, and all 3 in Who Am I's pool are different men: Éderson and Ederson, Ladislav
+  Krejčí and Krejci, Pepê, Pêpê and Pepe). Known untidy case: one man typed two ways (Michal and
+  Michał Karbownik) shows as two rows, each honest. One spelling shared by several men (four
+  Rodris, corrected by the fix above) stays one row, the table cannot tell them apart.
+- **Search**: `SOCCER_MARKET_VALUE_SOURCE.identity` and `dedupeAndRank` in `src/lib/playerSearch.ts`.
+  One row per person, a club, position and year line on any row whose name another row shares.
+  Sources with no identity give exactly the old results (vitest against a copy of the old dedupe). Every
+  soccer caller now offers Atalanta's Éderson (not true of Career Ladder until the fix above). Before: 1 of 600 pool players could not be won by
+  typing his name; after 0, and no namesake wins in his place.
+- **Club history**: a row must walk with the pool row's age (Round 385's `isSameMan`, moved into
+  `whoAmI.ts`, Player Bingo re-exports it; since the re-review it lives in `playerSearch.ts`). 1,248 pool pairs lit Past club link only through another
+  man's rows; after 0. Cost: 3 own rows with mistyped ages are dropped too (Keane Lewis-Potter's Hull
+  City, Diego Moreira's Benfica and Lyon), out of 159 club entries removed.
+- **Ages**: shown as listed, never worked out to today (no birth dates held), the older list named
+  ("29 (2025 list)"), the arrows compare both players on the newest list. The table's own yearly
+  rule: 3,914 of 4,013 players are exactly a year older from the 2025 list to the 2026 list. The 98
+  hand swept rows of 2026-08-29 sit a year above that rule for 68 of them, which puts the list's age
+  point around the turn of the year, a sampling estimate, not a printed date. Raw ages misread 1,570
+  cross-list pool pairs; after 0. Clue Auction shares the pool and got the same label (its bracket
+  clue disagreed with that label until the fix above).
+- Boot weight: 497 KiB before, 575 KiB after (11 requests either way, history under one letter
+  column aliases), budget 800.
+- Fences: `scripts/simWhoAmINamesakes.mjs` (4 sections, 8 controls, each reddens only its own) and
+  `src/test/playerSearchIdentity.test.ts`. Also green on this branch: tsc, simNoZeroFacts,
+  simWhoAmIAccuracy (its attrs now read history by person and ages on the newest list),
+  simPlayerBingoPool, simRarityAgreement, simMissingXiReach, simPlayerSearchAccents, simMarketYearScope
+  and the rest that read the changed files.
+- **Merge with r667**: both edit the pool legs of `fetchWhoAmIPool`. Keep both: the carried leg reads
+  `byKey.has(p.personKey) || isNotCurrentPlayer(p.name)`.
+- Seen, not fixed: Diogo Jota sits in the pool on his 2025 row (r667's not current list removes him;
+  fixed on this branch by the merge above).
+
 ## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
 
 Assembled and gated by the desktop Claude lane in the CRLF gate clone on `release-d`, pushed to

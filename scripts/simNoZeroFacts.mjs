@@ -128,8 +128,8 @@ if (CONTROL === 'zeroage') {
 if (CONTROL === 'deadlisted') {
   control(
     'src/lib/whoAmI.ts', '@/lib/whoAmI',
-    '|| byKey.has(normalizeName(p.name)) || isNotCurrentPlayer(p.name)) continue;',
-    '|| byKey.has(normalizeName(p.name))) continue;',
+    '|| byKey.has(p.personKey) || isNotCurrentPlayer(p.name)) continue;',
+    '|| byKey.has(p.personKey)) continue;',
     'the pool carries a player on the not current list forward again',
   );
 }

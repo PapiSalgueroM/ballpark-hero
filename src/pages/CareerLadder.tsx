@@ -28,12 +28,14 @@ import {
   careerScore,
   fetchCareerPool,
   fmtMarketValue,
+  ladderGuessWins,
+  ladderSuggestions,
   legendPool,
   normalizeName,
   pickDailyPlayer,
 } from '@/lib/careerLadder';
 import { flagForClub } from '@/lib/careerLadder';
-import { searchPlayers, SOCCER_MARKET_VALUE_SOURCE } from '@/lib/playerSearch';
+import { searchPlayers, SOCCER_MARKET_VALUE_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 
 type Phase = 'boot' | 'error' | 'playing' | 'won' | 'lost';
 type LadderMode = 'daily' | 'unlimited';
@@ -179,13 +181,14 @@ const CareerLadder = () => {
   // (same accent-tolerant pipeline as PlayerAutocomplete), debounced 200ms,
   // famous names first via the market-value prominence ordering. Pool names
   // stay at the top of the list so canonical answers always lead; DB names
-  // only enrich the SUGGESTIONS. The answer checker is untouched - a picked
-  // name is judged against the round's player exactly as before. ------------
-  const [dbNames, setDbNames] = useState<string[]>([]);
+  // only enrich the SUGGESTIONS. Round 668 fix: the rows keep the search's own
+  // identity, so a namesake shows on his own line and never wins in the pool
+  // man's place (ladderSuggestions, ladderGuessWins). -----------------------
+  const [dbFound, setDbFound] = useState<PlayerEntity[]>([]);
   useEffect(() => {
     const trimmed = input.trim();
     if (activePhase !== 'playing' || normalizeName(trimmed).length < 2) {
-      setDbNames([]);
+      setDbFound([]);
       return;
     }
     const controller = new AbortController();
@@ -197,7 +200,7 @@ const CareerLadder = () => {
         limit: 12,
         signal: controller.signal,
       }).then(({ results }) => {
-        if (!controller.signal.aborted) setDbNames(results.map(r => r.name));
+        if (!controller.signal.aborted) setDbFound(results);
       });
     }, 200);
     return () => {
@@ -216,29 +219,14 @@ const CareerLadder = () => {
   const potential = careerScore(Math.max(1, Math.min(activeRevealed, total)), activeWrongGuesses.length, total);
 
   const query = normalizeName(input);
-  const wrongNorms = activeWrongGuesses.map(normalizeName);
-  let suggestions: string[] = [];
-  if (activePhase === 'playing' && query.length >= 2) {
-    const seen = new Set<string>();
-    const merged: string[] = [];
-    const push = (name: string) => {
-      const norm = normalizeName(name);
-      if (!norm || seen.has(norm) || wrongNorms.includes(norm)) return;
-      seen.add(norm);
-      merged.push(name);
-    };
-    for (const n of allNames) if (normalizeName(n).includes(query)) push(n);
-    for (const n of dbNames) push(n);
-    suggestions = merged.slice(0, 12);
-  }
+  const suggestions = activePhase === 'playing' ? ladderSuggestions(allNames, dbFound, input, activeWrongGuesses) : [];
 
   const handleGuess = (name: string) => {
     if (activePhase !== 'playing' || !activePlayer) return;
     setInput('');
-    const norm = normalizeName(name);
-    if (wrongNorms.includes(norm)) return;
+    if (activeWrongGuesses.includes(name)) return;
 
-    if (norm === normalizeName(activePlayer.name)) {
+    if (ladderGuessWins(name, activePlayer.name, allNames)) {
       const score = careerScore(Math.min(activeRevealed, total), activeWrongGuesses.length, total);
       if (mode === 'daily') {
         addDailyAction({ t: 'won', score });
@@ -274,7 +262,7 @@ const CareerLadder = () => {
     if (query.length < 2) return;
     const exact =
       allNames.find(n => normalizeName(n) === query) ??
-      suggestions.find(n => normalizeName(n) === query);
+      suggestions.find(s => normalizeName(s.name) === query)?.name;
     if (exact) handleGuess(exact);
   };
 
@@ -535,14 +523,15 @@ const CareerLadder = () => {
                   />
                   {suggestions.length > 0 && (
                     <div className="absolute left-0 right-0 top-full mt-1 rounded-xl border border-border bg-card shadow-lg z-20 max-h-48 overflow-y-auto">
-                      {suggestions.map(name => (
+                      {suggestions.map(s => (
                         <button
-                          key={name}
+                          key={s.key}
                           type="button"
-                          onClick={() => handleGuess(name)}
+                          onClick={() => handleGuess(s.name)}
                           className="w-full text-left px-4 py-2.5 text-sm font-semibold text-foreground hover:bg-muted/50 transition-colors border-b border-border last:border-0"
                         >
-                          {name}
+                          {s.name}
+                          {s.hint && <span className="block text-[11px] font-normal text-muted-foreground">{s.hint}</span>}
                         </button>
                       ))}
                     </div>

@@ -1,4 +1,4 @@
-import { WhoAmIPlayer, clubKey, shortPosition } from '@/lib/whoAmI';
+import { WhoAmIPlayer, clubKey, listedAgeLabel, shortPosition } from '@/lib/whoAmI';
 import { flagFor } from '@/lib/dealPlayers';
 
 /**
@@ -77,6 +77,21 @@ export function ageBracket(age: number): string {
   return '33 or older';
 }
 
+/**
+ * The one age Clue Auction works from (Round 668 fix, from the review). The
+ * age bracket clue and the reveal card both come from here, so the range a
+ * player paid for always holds the age the card then shows. It is the age as
+ * listed on his row, with the list named when it is not the newest one (the
+ * same label Who Am I shows). For one round the bracket was worked out from
+ * the age moved onto the newest list while the card showed the listed one,
+ * and for a 2025 row that can cross an edge: Giacomo Raspadori was shown as
+ * "24 (2025 list)" after selling "25 to 28".
+ */
+export function clueAge(secret: { age: number; year: number }): { years: number; label: string; bracket: string } {
+  const years = secret.age > 0 ? secret.age : 0;
+  return { years, label: listedAgeLabel({ age: years, year: secret.year }), bracket: ageBracket(years) };
+}
+
 /** Band edges tuned to the live top-200 value spread (see header comment). */
 export function valueBand(value: number): string {
   if (value >= 120_000_000) return '$120M or more';
@@ -152,7 +167,8 @@ export function buildClueReveals(
   return {
     nationality: nationality ? `${flagFor(nationality)} ${nationality}` : null,
     position: position ? `${position} (${shortPosition(position)})` : null,
-    ageBracket: ageBracket(secret.age),
+    // Round 668 fix: the same number the reveal card shows (clueAge).
+    ageBracket: clueAge(secret).bracket,
     valueBand: valueBand(secret.value),
     clubInitial: currentKey ? `Starts with "${clubName.charAt(0).toUpperCase()}"` : null,
     club: currentKey ? clubName : null,
