@@ -17,9 +17,12 @@
    is gone from its table.
 
    It needs the database. A check that cannot read the tables proves nothing
-   either way, so it fails closed ("cannot read the database") rather than
-   passing, and the message says that is the environment, not a drifted
-   bundle.
+   either way, so it fails closed rather than passing, and says so in the
+   sentence scripts/runAllSims.mjs keys its sandbox skip on: "DATABASE
+   UNREACHABLE. NOTHING WAS CHECKED." (Round 674 fix: the first version said
+   only "cannot read the database", which the runner does not read, so on a
+   lane with no database this harness was a permanent FAIL instead of the
+   runner's documented skip.)
 
    NEGATIVE CONTROL, CHAIN_CHAMPIONS_CONTROL=added: the same check with a
    champion added to the rows it reads from public.nascar_champions (the
@@ -28,15 +31,26 @@
    NASCAR bundle alone while the Tennis bundle still matches, and the fixture
    line must show the name was added, or the control did not run.
 
+   NEGATIVE CONTROL, CHAIN_CHAMPIONS_CONTROL=offline (Round 674 fix): this
+   harness run as the suite runs it, in a child, with every fetch refused (a
+   preload handed down through NODE_OPTIONS to the check it spawns, nothing
+   else changes). The child must read neither table, exit nonzero, and print
+   a line the runner's own NOTHING_CHECKED pattern matches, read out of
+   scripts/runAllSims.mjs as code, so the sentence cannot drift from what the
+   runner looks for. Deleting the sentence from the unreachable path turns
+   this control red (measured).
+
    Run: node scripts/simChainChampions.mjs
 */
 import { spawnSync } from 'node:child_process';
+import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { stripComments } from './lib/readSource.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.CHAIN_CHAMPIONS_CONTROL || '';
-const CONTROLS = ['added'];
+const CONTROLS = ['added', 'offline'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`CHAIN_CHAMPIONS_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`); process.exit(1); }
 
 const BUNDLES = [
@@ -44,6 +58,39 @@ const BUNDLES = [
   { file: 'src/data/tennisChampionNames.json', table: 'tennis_grand_slam_winners' },
 ];
 const FIXTURE_NAME = 'Control Champion Round 674';
+/* What this prints when it read nothing: the sentence scripts/runAllSims.mjs
+   turns into a skip on a lane that cannot reach the database. */
+const UNREACHABLE = 'DATABASE UNREACHABLE. NOTHING WAS CHECKED.';
+/* The offline control's preload: every fetch in the process is refused. No
+   space in it, because NODE_OPTIONS splits on spaces. */
+const OFFLINE_PRELOAD = "--import=data:text/javascript,globalThis.fetch=()=>Promise.reject(new(Error)('offline-control'));";
+
+/* The offline control runs this harness as it runs in the suite, in a child
+   with no control set, and hands the preload through NODE_OPTIONS, which the
+   child passes on to the check it spawns. So what is judged is the real
+   unreachable path, not a line this branch prints for itself. */
+if (CONTROL === 'offline') {
+  console.log('NEGATIVE CONTROL ON: every fetch the check makes is refused; the harness, run as the suite runs it, must say the database was unreachable and nothing was checked, in the words the runner reads');
+  const runner = stripComments(fs.readFileSync(path.join(ROOT, 'scripts', 'runAllSims.mjs'), 'utf8').split('\r\n').join('\n'));
+  const decls = [...runner.matchAll(/const NOTHING_CHECKED = \/(.+)\/([a-z]*);/g)];
+  if (decls.length !== 1) { console.error(`\ncontrol "offline" cannot run: scripts/runAllSims.mjs declares NOTHING_CHECKED in its code ${decls.length} times, not exactly once`); process.exit(1); }
+  const runnerSkips = new RegExp(decls[0][1], decls[0][2]);
+  const childEnv = { ...process.env, NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ''} ${OFFLINE_PRELOAD}`.trim() };
+  delete childEnv.CHAIN_CHAMPIONS_CONTROL;
+  delete childEnv.CHAIN_CHAMPIONS_EXTRA;
+  const c = spawnSync(process.execPath, [fileURLToPath(import.meta.url)], { cwd: ROOT, encoding: 'utf8', env: childEnv, timeout: 5 * 60 * 1000 });
+  const childOut = (c.stdout || '') + (c.stderr || '');
+  for (const line of childOut.split('\n').filter(Boolean)) console.log(`   | ${line}`);
+  const refused = /offline-control/.test(childOut);
+  const readAny = BUNDLES.some(b => new RegExp(`${b.file.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}: \\d+ names, matches|DRIFT: ${b.file.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`).test(childOut));
+  if (!refused || readAny) { console.error('\ncontrol "offline" cannot run: the preload did not refuse the check\'s fetch (or a table was read anyway), so this proves nothing'); process.exit(1); }
+  if (c.status !== 0 && runnerSkips.test(childOut)) {
+    console.log(`\ncontrol "offline": the harness read no table, exited ${c.status}, and the runner's NOTHING_CHECKED (${runnerSkips}) matches what it printed, so a lane without the database gets the runner's skip, the check works`);
+    process.exit(0);
+  }
+  console.error(`\ncontrol "offline": expected a nonzero exit and a line the runner's ${runnerSkips} matches, got exit ${c.status}${runnerSkips.test(childOut) ? '' : ' and no such line'}`);
+  process.exit(1);
+}
 
 const env = { ...process.env };
 delete env.CHAIN_CHAMPIONS_EXTRA;
@@ -63,6 +110,7 @@ const drifts = b => new RegExp(`DRIFT: ${b.file.replace(/[.*+?^${}()|[\]\\]/g, '
 const read = BUNDLES.every(b => matches(b) || drifts(b));
 if (!read) {
   console.error('\nsimChainChampions: cannot read the database, so neither bundle was compared with its table. This is the environment (no network, or the tables refused the public key), not a drifted bundle; nothing here passes without the read.');
+  console.error(UNREACHABLE);
   process.exit(1);
 }
 

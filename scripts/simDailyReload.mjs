@@ -90,8 +90,11 @@
    lands again:
      lockin    (7) must FAIL on sports-millionaire alone
      drillland (7) must FAIL on the three drill rows alone
-   (the landing control's leftover dist/.daily-reload-control folder is
-   removed once these have run.)
+   (Round 674 fix: the landing and swap copies are staged in a folder of
+   this run's own under ROOT/.sim-control, scripts/lib/controlScratch.mjs,
+   never under dist, and after they run the harness fails if the old
+   dist/.daily-reload-control exists or if it created a dist the tree did
+   not have.)
    Then the source backstop: for every row that depends on the mark, the
    restoring file is read as code (comments and string contents stripped)
    and must call markRestoredFinish with the slug ahead of the finished
@@ -106,11 +109,30 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { importReader } from './lib/importClosure.mjs';
+import { controlScratch } from './lib/controlScratch.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TEST = 'src/test/dailyReload.test.tsx';
 const ONLY = process.env.ONLY || '';
 const ASSERTIONS = [1, 2, 3, 4, 5];
+
+/* Round 674 fix (the review's R2.D10 leftover): the landing and swap copies
+   are staged in this run's own folder under ROOT/.sim-control, not under
+   dist. The copy has to sit inside the project root so vite can walk up to
+   node_modules for its bare imports; .sim-control is inside it, gitignored,
+   and no build writes or empties it. */
+const DIST_AT_START = fs.existsSync(path.join(ROOT, 'dist'));
+const scratch = controlScratch(ROOT, 'daily-reload');
+process.on('exit', () => scratch.cleanup());
+const staged = [];
+function stageDir(name) {
+  const dir = path.join(scratch.dir, name);
+  const rel = path.relative(scratch.dir, dir);
+  if (!rel || rel.startsWith('..') || path.isAbsolute(rel)) abort(`a control copy folder ${dir} is not inside this run's folder ${scratch.dir}`);
+  fs.mkdirSync(dir, { recursive: true });
+  staged.push(dir);
+  return dir;
+}
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -379,10 +401,12 @@ for (const ctl of CODE_CONTROLS) {
    the flight hands a seen outcome back. No storage or mock control can make
    that shape, so this one is a copy of the real Free Kick board with its per
    kick save moved into the landing callback, served through
-   DAILY_RELOAD_FREEKICK_BOARD (src/test/dailyReload/mocks.ts). Under dist,
-   inside the project root, one folder per run, as simScoreShown stages its
-   copies. It refuses to run unless both anchors are found exactly once and
-   the copy differs from the board. */
+   DAILY_RELOAD_FREEKICK_BOARD (src/test/dailyReload/mocks.ts). Round 674
+   fix: in this run's own folder under ROOT/.sim-control
+   (scripts/lib/controlScratch.mjs), never under dist, which a build empties
+   under a running control and which this used to create when it was absent.
+   It refuses to run unless both anchors are found exactly once and the copy
+   differs from the board. */
 console.log('5.4) NEGATIVE CONTROL landing: a copy of the Free Kick board that files each kick when the ball lands, (7) must fail on free-kick alone and every other row stay green');
 if (ONLY && ONLY !== 'free-kick') console.log(`   skipped: ONLY=${ONLY} does not include free-kick`);
 else {
@@ -399,8 +423,7 @@ else {
   const moved = board.slice(0, start) + board.slice(end);
   const copySrc = moved.replace(LAND, '    launch(() => {\n' + block.split('\n').map(l => (l ? '  ' + l : l)).join('\n') + '      setScore(s => s + r.points);\n');
   if (copySrc === board || copySrc.split('writeArcadeProgress(').length !== board.split('writeArcadeProgress(').length) abort('control landing cannot run: the copy is the board, or lost or doubled the save');
-  fs.mkdirSync(path.join(ROOT, 'dist', '.daily-reload-control'), { recursive: true });
-  const dir = fs.mkdtempSync(path.join(ROOT, 'dist', '.daily-reload-control', 'landing-'));
+  const dir = stageDir('landing');
   const copy = path.join(dir, 'FreeKickBoard.control.tsx');
   fs.writeFileSync(copy, copySrc);
   try {
@@ -440,8 +463,9 @@ else {
    and glove save drills beside the wall shot. The landing control above can
    only move Free Kick's save; these two take the decided-step save out of a
    copy of the real module, served through the DAILY_LOCK_SWAP alias in
-   vitest.config.ts (a copy under dist, as the landing control stages its
-   own), so the step is filed only when it lands, the shape each had before.
+   vitest.config.ts (a copy in this run's folder, as the landing control
+   stages its own), so the step is filed only when it lands, the shape each
+   had before.
    (7) must go red on exactly the rows the module serves, with (1) to (6)
    still green there. Each refuses to run unless its anchor occurs exactly
    once, in the code, and the copy proves it was loaded.
@@ -491,10 +515,9 @@ for (const ctl of SWAP_CONTROLS) {
   const src = fs.readFileSync(path.join(ROOT, ctl.file), 'utf8').split('\r\n').join('\n');
   const n = src.split(ctl.anchor).length - 1;
   if (n !== 1 || stripForAnchor(src).split(ctl.anchor).length - 1 !== 1) abort(`control ${ctl.name} cannot run: ${ctl.file} holds its anchor ${n} time(s), or not once in the code`);
-  fs.mkdirSync(path.join(ROOT, 'dist', '.daily-reload-control'), { recursive: true });
-  const dir = fs.mkdtempSync(path.join(ROOT, 'dist', '.daily-reload-control', `${ctl.name}-`));
+  const dir = stageDir(ctl.name);
   const copy = path.join(dir, path.basename(ctl.file).replace(/\.(tsx?)$/, '.control.$1'));
-  const loaded = `DAILY_RELOAD_SWAP_LOADED ${ctl.name} ${path.basename(dir)}`;
+  const loaded = `DAILY_RELOAD_SWAP_LOADED ${ctl.name} ${scratch.tag}`;
   const copySrc = src.replace(ctl.anchor, '') + `\nconsole.log('${loaded}');\n`;
   if (copySrc.includes(ctl.anchor)) abort(`control ${ctl.name} cannot run: the copy still holds its anchor`);
   fs.writeFileSync(copy, copySrc);
@@ -527,7 +550,18 @@ for (const ctl of SWAP_CONTROLS) {
     fs.rmSync(dir, { recursive: true, force: true });
   }
 }
-try { fs.rmdirSync(path.join(ROOT, 'dist', '.daily-reload-control')); } catch { /* not empty or already gone */ }
+scratch.cleanup();
+/* Round 674 fix: the staged controls above never touch dist. Every copy was
+   written inside this run's folder (stageDir refuses anything else), the old
+   dist/.daily-reload-control is not there, and a tree that had no dist when
+   this started still has none (the review found an empty dist left behind,
+   which a later harness that reads dist could take for a broken build). */
+{
+  const legacy = path.join(ROOT, 'dist', '.daily-reload-control');
+  if (fs.existsSync(legacy)) fail(`${path.relative(ROOT, legacy)} exists after the staged controls: something staged a copy under dist again, where a build empties it under a running control`);
+  if (!DIST_AT_START && fs.existsSync(path.join(ROOT, 'dist'))) fail('this tree had no dist when the harness started and has one now: a control created it');
+  if (staged.length) console.log(`   staged controls: ${staged.length} copy folder(s), each inside ${path.relative(ROOT, scratch.dir).replaceAll('\\', '/')}, removed; dist ${DIST_AT_START ? 'untouched' : 'still absent'}`);
+}
 
 /* ------------------------------------------- 6) the source backstop */
 console.log('6) Source backstop: every mark dependent restore names markRestoredFinish(<slug>) ahead of its finished state set, as code');
