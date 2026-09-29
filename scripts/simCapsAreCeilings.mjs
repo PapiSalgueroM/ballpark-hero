@@ -94,6 +94,18 @@
  *              inline instead of through careerDailyScore: 5:career.
  *   scoredin   freeKick.ts is read with takeShot scoring a goal inline
  *              instead of through kickPoints: 5:free-kick.
+ *   commented  Round 674 (the fence lens review's m646-3): StatDetective.tsx
+ *              is read recording 8 - guesses.length through
+ *              recordCompletion(`/stat-detective`, ...), a template literal
+ *              call, with its old unscored call left in a comment beside
+ *              it. The unscored check used to read raw text, so the comment
+ *              counted as the call and the template call was not seen:
+ *              3:stat-detective. Section 1 must stay green on it, because
+ *              the key scan reads the template call as the key.
+ *   Every run also proves the key scan (scripts/lib/completionKeys.mjs)
+ *   reads code and not prose or tests: keys named only in comments add
+ *   nothing, template literal calls are read, and test and control copy
+ *   paths are not scanned (1:scan-probe otherwise).
  *   live       one moved row of the live read is flipped to the other side in
  *              memory, a half applied table: 6 on that game. Needs the
  *              database, and refuses without it.
@@ -106,14 +118,15 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { sourceCompletionKeys, declaredRetirements } from './lib/completionKeys.mjs';
+import { sourceCompletionKeys, declaredRetirements, scannedFile } from './lib/completionKeys.mjs';
+import { stripComments } from './lib/readSource.mjs';
 import {
   CEILINGS, SEASON_LEDGER, SEASON_GAMES, UNSCORED, NO_CEILING, PERFECT_RUNS, UNPLAYED,
   seasonRuns, bundleCeilingModules, resolveCeiling,
 } from './lib/scoreCeilingTable.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const CONTROLS = ['classify', 'resolve', 'season', 'ranked', 'ceiling', 'snapshot', 'migration', 'guard', 'perfect', 'recorder', 'scoredin', 'live'];
+const CONTROLS = ['classify', 'resolve', 'season', 'ranked', 'ceiling', 'snapshot', 'migration', 'guard', 'perfect', 'recorder', 'scoredin', 'commented', 'live'];
 const CONTROL = process.env.CEILINGS_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`CEILINGS_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
@@ -218,6 +231,20 @@ if (CONTROL === 'season' && seasonLedgerOnTree) {
     'seasonLedger.ts is bundled with seasonCeiling() not a whole number, section 2 must go red on the season ceiling alone');
 }
 
+/* Whole file rewrites in memory, read by the key scan (section 1) and by
+   section 3's unscored check alike, so a control is judged through the same
+   reads a real edit would be. */
+const scanOverrides = new Map();
+if (CONTROL === 'commented') {
+  const rel = 'src/pages/StatDetective.tsx';
+  const anchor = "recordCompletion('/stat-detective', undefined, getCurrentPlayerName());";
+  const text = read(rel);
+  needOnce(text, anchor, rel, stripComments);
+  if (count(text, anchor) !== 1) abort(`the commented control needs "${anchor}" exactly once in ${rel}, comments included`);
+  scanOverrides.set(rel, text.replace(anchor, `// ${anchor}\n    recordCompletion(\`/stat-detective\`, 8 - guesses.length, getCurrentPlayerName());`));
+  console.log('   NEGATIVE CONTROL ON: StatDetective.tsx is read recording 8 - guesses.length through a template literal call, with its old unscored call left in a comment beside it; section 3 must go red on stat-detective alone');
+}
+
 /* ======================= 1) classification ======================= */
 console.log('1) every key the source can send is classified once');
 const extraSources = [];
@@ -225,7 +252,22 @@ if (CONTROL === 'classify') {
   extraSources.push("  useGameCompletion('ceilings-control-unclassified', done, 1);\n");
   console.log('   NEGATIVE CONTROL ON: a source line recording an unclassified key is scanned, section 1 must go red on it alone');
 }
-const keys = sourceCompletionKeys(ROOT, extraSources);
+/* Round 674 (R2.D9): the scan reads code, not prose, and not tests. Proved on
+   every run: keys named only in comments add nothing, the same calls written
+   with template literals are read, and no test or control copy path is one
+   the scan reads. */
+{
+  const prose = sourceCompletionKeys(ROOT, ["/* useGameCompletion('ceilings-probe-comment', done, 1); */\n// recordCompletion('/ceilings-probe-line');\n"]);
+  const asCode = sourceCompletionKeys(ROOT, ["useGameCompletion(`ceilings-probe-template`, done, 1);\nrecordCompletion(`/ceilings-probe-path`);\n"]);
+  const testPaths = ['src/test/dailyReload/mocks.ts', 'src/pages/StatDetective.test.tsx', 'src/lib/points.spec.ts', 'src/hooks/__control_useGame.ts'];
+  const readTests = testPaths.filter(scannedFile);
+  if (prose.has('ceilings-probe-comment') || prose.has('ceilings-probe-line')) fail(1, 'scan-probe', 'a key named only in a comment was read as one the client can send');
+  if (!asCode.has('ceilings-probe-template') || !asCode.has('ceilings-probe-path')) fail(1, 'scan-probe', 'a call written with a template literal was not read, so the prose probe proves nothing');
+  if (readTests.length) fail(1, 'scan-probe', `the scan reads test and control files: ${readTests.join(', ')}`);
+  if (!scannedFile('src/pages/StatDetective.tsx')) fail(1, 'scan-probe', 'the scan does not read an ordinary page');
+  if (!findings.some(f => f.game === 'scan-probe')) console.log('   scan probes: keys named only in comments add nothing, template literal calls are read, test and control files are not read');
+}
+const keys = sourceCompletionKeys(ROOT, extraSources, scanOverrides);
 if (keys.size < 100) abort(`only ${keys.size} completion keys found in src, so the scan stopped reading the source`);
 if (CONTROL === 'classify' && !keys.has('ceilings-control-unclassified')) abort('the classify control line was scanned and its key was not found, so the scan does not read it');
 const retired = declaredRetirements(ROOT);
@@ -354,33 +396,41 @@ for (const game of Object.keys(SEASON_GAMES)) {
   }
 }
 /* A game that records no score: the cap stays NULL, and the claim itself is
-   checked, by reading every call that records the key. */
+   checked, by reading every call that records the key.
+   Round 674 (R2.D9): read as code, the same files the key scan reads. The
+   raw text read counted a call left in a comment as the call, and did not
+   see one written with a template literal, so Stat Detective could record
+   a score through recordCompletion(`/stat-detective`, ...) with its old call
+   commented out beside it and this stayed green. */
 const srcFiles = [];
 const walk = dir => {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     const p = path.join(dir, e.name);
-    if (e.isDirectory()) walk(p);
-    else if (/\.tsx?$/.test(e.name) && !/\.test\.tsx?$/.test(e.name)) srcFiles.push(p);
+    const rel = path.relative(ROOT, p).replace(/\\/g, '/');
+    if (e.isDirectory()) { if (rel !== 'src/test') walk(p); }
+    else if (scannedFile(rel)) srcFiles.push(p);
   }
 };
 walk(path.join(ROOT, 'src'));
+const relOf = f => path.relative(ROOT, f).replace(/\\/g, '/');
 for (const game of UNSCORED) {
   const row = SNAP.get(game);
   if (!row) { fail(3, game, 'records no score and has no row in the snapshot'); continue; }
   if (row.after !== null) fail(3, game, `records no score, yet the snapshot gives it a cap of ${row.after}`);
   let calls = 0;
   for (const f of srcFiles) {
-    const text = fs.readFileSync(f, 'utf8');
-    const re = new RegExp(`recordCompletion\\(\\s*['"]/${game}['"]`, 'g');
+    const rel = relOf(f);
+    const text = stripComments(scanOverrides.get(rel) ?? read(rel));
+    const re = new RegExp(`recordCompletion\\(\\s*(['"\`])/${game}\\1`, 'g');
     for (const m of text.matchAll(re)) {
       calls += 1;
       const c = callArgs(text, m.index + 'recordCompletion'.length);
       if (!c || (c.args.length > 1 && c.args[1] !== 'undefined')) {
-        fail(3, game, `is classified as recording no score, but ${path.relative(ROOT, f)} records it with ${c ? c.args[1] : 'an unreadable call'}`);
+        fail(3, game, `is classified as recording no score, but ${rel} records it with ${c ? c.args[1] : 'an unreadable call'}`);
       }
     }
-    if (new RegExp(`useGameCompletion\\(\\s*['"]${game}['"]`).test(text)) {
-      fail(3, game, `is classified as recording no score, but ${path.relative(ROOT, f)} records it through useGameCompletion, which takes a score`);
+    if (new RegExp(`useGameCompletion\\(\\s*(['"\`])${game}\\1`).test(text)) {
+      fail(3, game, `is classified as recording no score, but ${rel} records it through useGameCompletion, which takes a score`);
     }
   }
   if (calls === 0) fail(3, game, 'is classified as recording no score, and no recordCompletion call for it was found to check');
@@ -749,6 +799,7 @@ if (CONTROL) {
     perfect: ['5:footle'],
     recorder: ['5:career'],
     scoredin: ['5:free-kick'],
+    commented: ['3:stat-detective'],
     live: [`6:${firstMoved}`],
   }[CONTROL];
   const got = [...new Set(findings.map(f => `${f.section}:${f.game}`))].sort();

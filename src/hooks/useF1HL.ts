@@ -1,6 +1,7 @@
 import { useState, useMemo, useCallback } from 'react';
 import { f1HLDrivers, F1HLDriver } from '@/data/f1HLDrivers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import { higherLowerScore, HIGHER_LOWER_DAILY_ROUNDS } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { dateSeed } from '@/lib/dateUtils';
@@ -142,6 +143,12 @@ export function useF1HL() {
     return s;
   }, [baseResults]);
 
+  /* Round 674: the reveal timer is owned, so leaving the page clears it. A
+     bare setTimeout here fired two seconds after the page was gone and set
+     state on it; under the test suite that was "window is not defined" after
+     teardown, which turned a green run red at random. */
+  const later = useOwnedTimeouts();
+
   const makeGuess = useCallback(
     (choice: 'left' | 'right') => {
       if (!currentPair || showingResult || gameStatus !== 'playing') return;
@@ -158,7 +165,7 @@ export function useF1HL() {
 
       if (mode === 'daily') addDailyAction({ t: 'result', correct });
 
-      setTimeout(() => {
+      later(() => {
         if (mode !== 'daily') {
           setUnlimitedResults((prev) => [...prev, { player1: p1, player2: p2, correct }]);
           setUnlimitedRound((prev) => prev + 1);
@@ -167,7 +174,7 @@ export function useF1HL() {
         setShowingResult(false);
       }, 2000);
     },
-    [currentPair, showingResult, gameStatus, mode, addDailyAction],
+    [currentPair, showingResult, gameStatus, mode, addDailyAction, later],
   );
 
   const switchMode = useCallback((m: F1HLMode) => {

@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 import { HigherLowerPlayer, HigherLowerStatKey } from '@/types/higherLower';
 import { higherLowerPlayers, hlNoteFor } from '@/data/higherLowerPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import { makeFirstDraw } from '@/lib/firstDraw';
 
 type StatKey = HigherLowerStatKey;
@@ -118,6 +119,12 @@ export function useHigherLower() {
 
   const statLabels = STAT_LABELS;
 
+  /* Round 674: the reveal timer is owned, so leaving the page clears it. A
+     bare setTimeout here fired two seconds after the page was gone and set
+     state on it; under the test suite that was "window is not defined" after
+     teardown, which turned a green run red at random. */
+  const later = useOwnedTimeouts();
+
   const chooseStat = useCallback((stat: StatKey) => {
     if (gameStatus !== 'playing' || revealedStats) return;
 
@@ -129,7 +136,7 @@ export function useHigherLower() {
     setLastChoice({ stat, correct: isCorrect });
 
     if (isCorrect) {
-      setTimeout(() => {
+      later(() => {
 
         const newStreak = streak + 1;
         setStreak(newStreak);
@@ -143,11 +150,11 @@ export function useHigherLower() {
         setLastChoice(null);
       }, 3000);
     } else {
-      setTimeout(() => {
+      later(() => {
         setGameStatus('lost');
       }, 3000);
     }
-  }, [gameStatus, currentPlayer, nextPlayer, streak, bestStreak, revealedStats]);
+  }, [gameStatus, currentPlayer, nextPlayer, streak, bestStreak, revealedStats, later]);
 
   const giveUp = useCallback(() => {
     if (gameStatus !== 'playing') return;

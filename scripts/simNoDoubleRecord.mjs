@@ -42,11 +42,24 @@
    MODE_GATE_BASELINE, with the reason beside each: a new one fails, and an
    entry that no longer matches must leave the list.
 
+   SECTION 3, THE REVEAL TIMERS (Round 674). Every Higher or Lower hook
+   (src/hooks/use<Sport>HL.ts and useHigherLower.ts) takes its reveal timer
+   from useOwnedTimeouts, which clears it when the page unmounts, and starts
+   no bare setTimeout. The hockey hook's bare two second timer fired after
+   the table's teardown ("window is not defined"), so vitest exited 1 with
+   every row green: a coin toss red for a lane that gates in parallel. The
+   helper's own behaviour (tap, unmount, nothing fires) is fenced by
+   scripts/simIdleTimers.mjs; this reads that every hook uses it, as code.
+
    NEGATIVE CONTROLS (house rule: prove each check can fail). The vitest ones
-   edit a COPY of one module under dist/.no-double-control, refuse to run
-   unless their anchor occurs exactly once in that module as code, and point
-   vitest at the copy through the NO_DOUBLE_SWAP alias in vitest.config.ts;
-   src is never written. Every test is then judged: the ones the control
+   edit a COPY of one module in a folder of their own (a per run mkdtemp
+   under ROOT/.sim-control, scripts/lib/controlScratch.mjs, never under
+   dist), refuse to run unless their anchor
+   occurs exactly once in that module as code, and point vitest at the copy
+   through the NO_DOUBLE_SWAP alias in vitest.config.ts; src is never written.
+   Every copy prints a line naming its own run when it loads, and a control
+   whose copy never printed is refused, so a red cannot be another run's
+   copy or the real module. Every test is then judged: the ones the control
    targets must go red on their own assertion, every other must stay green.
      nomark        markRestoredFinish is a no-op; every row and check whose
                    reload relies on the mark (usesMark) goes red
@@ -75,13 +88,15 @@
                    only the nfl-career row, on its score
      hlscore       NFL Higher or Lower records the score on screen again;
                    only the nfl-higher-lower row, on its score
-   The source ones rewrite one file in memory and run section 2 on it:
+   The source ones rewrite one file in memory and run their section on it:
      scanslug      useNflHL's slug pair back to its mismatch; exactly that
-                   file flagged for its slug
+                   file flagged for its slug (section 2)
      scanmode      Rank 'Em's recorder ANDed with its mode again; exactly that
-                   file flagged for its mode gate
-   and every run also proves the scan reads code, not prose: the same two
-   shapes written into a comment flag nothing.
+                   file flagged for its mode gate (section 2)
+     hltimer       useHockeyHL's reveal timer back to a bare setTimeout;
+                   exactly that file flagged (section 3), section 2 unmoved
+   and every run also proves the scans read code, not prose: the same shapes
+   written into a comment flag nothing.
      NO_DOUBLE_CONTROL=all runs every control in turn. A control run exits 0
      when it fired exactly as it should and 1 when it did not.
 
@@ -94,6 +109,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { stripComments, callsOf, resolveSlug, resolveExpr, readLF as readSourceLF, srcFiles as sourceFiles } from './lib/readSource.mjs';
+import { controlScratch, loadedLine, withLoadedLine } from './lib/controlScratch.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const TEST = 'src/test/noDoubleRecord.test.tsx';
@@ -243,6 +259,14 @@ const SCAN_CONTROLS = {
     kind: 'mode',
     why: "Rank 'Em's recorder is ANDed with its mode again",
   },
+  hltimer: {
+    file: 'src/hooks/useHockeyHL.ts',
+    from: '      later(() => {\n',
+    to: '      setTimeout(() => {\n',
+    kind: 'timer',
+    section: 3,
+    why: "NHL Higher or Lower's reveal timer is a bare setTimeout again, which fires after the page is gone",
+  },
 };
 const ALL = [...Object.keys(VITEST_CONTROLS), ...Object.keys(SCAN_CONTROLS)];
 if (CONTROL && CONTROL !== 'all' && !ALL.includes(CONTROL)) {
@@ -315,6 +339,23 @@ function scan(files) {
   }
   const stale = MODE_GATE_BASELINE.filter(b => !baselineHits.has(`${b.file}|${b.slug}`));
   return { findings, stale, recorders, resolved };
+}
+
+/* Section 3: every Higher or Lower hook's reveal timer is owned. Read as
+   code, so a bare setTimeout left in a comment is not one. */
+const HL_HOOK = /^src\/hooks\/use(?:\w+HL|HigherLower)\.ts$/;
+const HL_HOOKS_AT_LEAST = 10;
+function hlTimers(files) {
+  const findings = [];
+  const hooks = [...files.keys()].filter(f => HL_HOOK.test(f)).sort();
+  for (const rel of hooks) {
+    const code = stripComments(files.get(rel));
+    for (const m of code.matchAll(/\bsetTimeout\s*\(/g)) {
+      findings.push({ kind: 'timer', file: rel, line: code.slice(0, m.index).split('\n').length, what: 'starts a bare setTimeout, which nothing clears when the page unmounts: take it from useOwnedTimeouts' });
+    }
+    if (!/\buseOwnedTimeouts\s*\(\s*\)/.test(code)) findings.push({ kind: 'timer', file: rel, line: 1, what: 'takes no timers from useOwnedTimeouts, so its reveal timer is not owned' });
+  }
+  return { findings, hooks };
 }
 
 /* ------------------------------------------------------------------------ */
@@ -409,11 +450,27 @@ if (!CONTROL) {
   else console.log('   prose check: a mode gate and a stray mark written in comments flag nothing');
   if (!res.findings.length && !res.stale.length) console.log('   no slug mismatch and no new mode gated recorder');
 
+  console.log('\n3) The reveal timers: every Higher or Lower hook takes its timer from useOwnedTimeouts, as code');
+  const timers = hlTimers(files);
+  console.log(`   ${timers.hooks.length} Higher or Lower hooks read: ${timers.hooks.map(h => path.basename(h, '.ts')).join(', ')}`);
+  if (timers.hooks.length < HL_HOOKS_AT_LEAST) fail(`only ${timers.hooks.length} Higher or Lower hooks found, expected at least ${HL_HOOKS_AT_LEAST}: the reader is broken or a hook was renamed`);
+  for (const f of timers.findings) fail(`${f.file}:${f.line}: ${f.what}`);
+  /* Prose is not code: a bare timer written into comments flags nothing. */
+  const hlProbe = 'src/hooks/useHockeyHL.ts';
+  const hlProse = new Map(files);
+  hlProse.set(hlProbe, files.get(hlProbe) + '\n/* setTimeout(() => setShowingResult(false), 2000); */\n// window.setTimeout(() => {}, 1);\n');
+  const hlAsCode = new Map(files);
+  hlAsCode.set(hlProbe, files.get(hlProbe) + '\nsetTimeout(() => {}, 1);\n');
+  if (hlTimers(hlAsCode).findings.length !== timers.findings.length + 1) fail('a bare timer written as code is not flagged, so the prose check below proves nothing');
+  else if (hlTimers(hlProse).findings.length !== timers.findings.length) fail('the timer scan read a comment as code');
+  else console.log('   prose check: a bare timer as code flags once, the same written in comments flags nothing');
+  if (!timers.findings.length) console.log('   every reveal timer is owned, so none outlives its page');
+
   if (failures) {
     console.error(`\nsimNoDoubleRecord: ${failures} failure(s)`);
     process.exit(1);
   }
-  console.log(`\nsimNoDoubleRecord: all green (${shown} rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; ${res.recorders} recorders read)`);
+  console.log(`\nsimNoDoubleRecord: all green (${shown} rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; ${res.recorders} recorders read; ${timers.hooks.length} Higher or Lower hooks own their reveal timers)`);
   process.exit(0);
 }
 
@@ -421,7 +478,12 @@ if (!CONTROL) {
 /* Controls                                                                  */
 /* ------------------------------------------------------------------------ */
 const which = CONTROL === 'all' ? ALL : [CONTROL];
-const controlDir = path.join(ROOT, 'dist', '.no-double-control');
+/* Round 674: a per run folder (scripts/lib/controlScratch.mjs). The fixed
+   dist/.no-double-control was shared by every run at once and sat where a
+   build empties dist. */
+const scratch = controlScratch(ROOT, 'no-double-control');
+const controlDir = scratch.dir;
+const runTag = scratch.tag;
 let fired = 0;
 try {
   for (const name of which) {
@@ -432,14 +494,22 @@ try {
       const src = files.get(ctl.file);
       if (!src || count(src, ctl.from) !== 1) abort(`control ${name} cannot run: ${ctl.file} does not carry exactly one ${JSON.stringify(ctl.from)}`);
       if (count(stripComments(src), ctl.from) !== 1) abort(`control ${name} cannot run: the anchor in ${ctl.file} is not code`);
-      const before = scan(files);
+      /* Each section on its own: the control must move its own section and
+         leave the other exactly where it was. */
+      const sections = { 2: fs2 => scan(fs2).findings, 3: fs3 => hlTimers(fs3).findings };
+      const own = ctl.section ?? 2;
+      const other = own === 2 ? 3 : 2;
+      const before = sections[own](files);
+      const otherBefore = sections[other](files).length;
       files.set(ctl.file, src.replace(ctl.from, ctl.to));
-      const after = scan(files);
-      const added = after.findings.filter(f => !before.findings.some(b => b.file === f.file && b.what === f.what));
-      for (const f of added) console.log(`   flagged ${f.kind}: ${f.file}:${f.line}: ${f.what}`);
+      const after = sections[own](files);
+      const otherAfter = sections[other](files).length;
+      const added = after.filter(f => !before.some(b => b.file === f.file && b.what === f.what && b.line === f.line));
+      for (const f of added) console.log(`   section ${own} flagged ${f.kind}: ${f.file}:${f.line}: ${f.what}`);
       const onTarget = added.length === 1 && added[0].file === ctl.file && added[0].kind === ctl.kind;
-      if (!onTarget) fail(`control ${name}: expected exactly one ${ctl.kind} finding in ${ctl.file}, the scan added ${added.length}`);
-      else { fired += 1; console.log(`   control ${name} fired: the scan flags exactly ${ctl.file}, in memory only, src untouched`); }
+      if (!onTarget) fail(`control ${name}: expected exactly one ${ctl.kind} finding in ${ctl.file} from section ${own}, it added ${added.length}`);
+      else if (otherAfter !== otherBefore) fail(`control ${name}: section ${own} fired, but section ${other} moved too (${otherBefore} to ${otherAfter})`);
+      else { fired += 1; console.log(`   control ${name} fired: section ${own} flags exactly ${ctl.file} and section ${other} does not move, in memory only, src untouched`); }
       continue;
     }
     const ctl = VITEST_CONTROLS[name];
@@ -460,7 +530,7 @@ try {
       const dir = path.join(controlDir, name);
       fs.mkdirSync(dir, { recursive: true });
       const file = path.join(dir, path.basename(rel));
-      fs.writeFileSync(file, copy);
+      fs.writeFileSync(file, withLoadedLine(copy, runTag, `${name} ${path.basename(rel)}`));
       swap[moduleOf(rel)] = file.replaceAll('\\', '/');
       console.log(`   ${rel} copied to ${path.relative(ROOT, file).replaceAll('\\', '/')} with ${edits.length} anchor(s) rewritten, src untouched`);
     }
@@ -468,6 +538,9 @@ try {
     const run = runSuite({ NO_DOUBLE_CONTROL: name, NO_DOUBLE_SWAP: JSON.stringify(swap) });
     if (!checkTable(run)) continue;
     if (run.loadError && !run.tests.size) { fail(`control ${name}: the copy did not load, so every red is a crash:\n${run.loadError}`); continue; }
+    const unloaded = [...byFile.keys()].filter(rel => !run.text.includes(loadedLine(runTag, `${name} ${path.basename(rel)}`)));
+    if (unloaded.length) { fail(`control ${name}: the copy of ${unloaded.join(', ')} never printed its load line, so the table did not run on it`); continue; }
+    console.log(`   every copy printed its load line for this run (${runTag})`);
     if (name === 'nomark' && run.tests.get('nomark control: markRestoredFinish is a no-op')?.status !== 'passed') {
       fail('control nomark: the probe says the swapped module still keeps the mark, so the swap did not take');
       continue;
@@ -492,7 +565,7 @@ try {
     else { fired += 1; console.log(`   control ${name} fired: ${red} red, exactly the ones it should, every other one green`); }
   }
 } finally {
-  fs.rmSync(controlDir, { recursive: true, force: true });
+  scratch.cleanup();
 }
 
 if (failures || fired !== which.length) {
