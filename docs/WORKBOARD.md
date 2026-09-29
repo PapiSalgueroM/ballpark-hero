@@ -1,5 +1,14 @@
 # Work board
 
+**2026-09-29 morning, desktop Claude lane: Release F IS LIVE** (660, 661, 668, 669 code, 670, 672),
+main `add1c6b0`, deployment `fe10102e`. Proof and gates in `docs/PROJECT-STATE.md`.
+- **Tonight at 00:00 America/New_York (2026-09-30):** Round 669's migration, the `players.ts` re-bake and
+  its publish, in the steps its migration header lists. Then the World XI report (2026-09-21) closes.
+- **Points economy:** spec `docs/design/POINTS-ECONOMY-V2.md` on `points-economy`, Rounds 673 to 698,
+  all claimed by this lane. 673 built and HELD (ships with 675 and 676). 674 and 678 are being built.
+- **Round 699 reserved** for the sports facts fence hardening Round 660 left (listed below). The seoMeta
+  split `sweepWeight` names (about 8K off every game page) is next free: **700**.
+
 **2026-09-28, Round 668 CLAIMED AND BUILT, branch `r668-whoami-namesakes`, pushed, not on main.** Who Am I
 tells namesakes apart and says how old its ages are. person_key turned out NULL on all 141,916 market
 value rows, so the identity is person_key when present, else the stored spelling (45 of 27,803 names

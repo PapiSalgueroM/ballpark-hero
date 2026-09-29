@@ -1,5 +1,53 @@
 # Project state
 
+## LIVE 2026-09-29: Release F (660, 661, 668, 669 code, 670, 672), main `add1c6b0`
+
+Assembled in the gate clone's `release-f` worktree, pushed to main as a fast forward from `ef16139d`.
+**douknowball.com is serving it:** deployment `fe10102e-f745-4ee6-a424-924680461225`, called only after
+`get_project` showed `latest_commit_sha` `add1c6b0`; the live entry moved from `index-BdV50HkD.js` to
+`index-_2k7DL7K.js`. Proof by content: `/whats-new` carries the extra time, trivia and Who Am I lines,
+and `/hof-or-bust` says "our call on him, whether he's really in his sport's Hall of Fame" with "the
+official verdict" gone. Before and after screenshots were sent to the owner.
+
+- **660, the sports facts.** Every shown fact in UFC Guesser, Combat Chain, Guess the F1 Driver, Guess
+  the Constructor, Perfect Lineup F1, The Medal Games and the golf games stands on two sources on two
+  organisations, recorded in `scripts/data/sportsFactsVerified2026-09.json` and held by
+  `simSportsFacts` (36 controls) and `simUfcFacts`. Three adversarial reviews sent it back before it
+  shipped, among them Bearman called the youngest Briton (Lindblad is), Soviet athletes drawn under the
+  modern Russian flag, four UFC divisions a majority vote took from ufc.com, and a fold script of mine
+  that dropped corrections a skeptic had upheld. Round 699 is reserved for the fence hardening left.
+- **661, the trivia games.** Hall of Fame or Bust, Guess the Year and Score Predictor on a two source
+  record (`simTriviaFacts`, 17 controls); the reveal says our call and the real induction record;
+  Michael Owen is in England's football Hall of Fame; every Guess the Year clue fits only its year;
+  the List Quiz Champions League top scorers take every joint scorer and 2025-26 (migration applied
+  2026-09-29: 168 rows).
+- **668, Who Am I namesakes.** Two people with one name are two answers, each line describes the man
+  shown, ages say which list they come from (`simWhoAmINamesakes`, 20 controls). The "Pepe (dup)" row
+  is deleted (migration applied 2026-09-29).
+- **670, Club Manager extra time** before penalties in every level knockout, with the away goals eras
+  right, and Soccer Career's Champions League on the same rule (`simExtraTime`).
+- **672, the browser debt.** The 19 browser harnesses red on main: 16 were stale checks (each fixed with
+  a control), 3 were real (light mode and contrast fixes, and the sport hub copy moved out of the
+  shared bundle, 14.6K lighter on every route), and one was load.
+- **669's code is live; its data is not yet.** The migration and the `players.ts` re-bake go in at
+  00:00 America/New_York on 2026-09-30, because the rows move Footle's daily answer from the moment
+  they land. Until then `simWorldXiDefensiveMids` is red on live by design.
+- **Reports resolved:** Who Am I (2026-09-26). World XI (2026-09-21) closes when 669's rows land.
+
+**Gates.** tsc 0. `build:seo` exit 0: 169 routes, 0 failed, 5 pages re-dated. Full node and browser suite
+on `2f30125c`: 409 of 415 green. The six: `simWorldXiDefensiveMids` (by design, above), `sweepWeight`
+(Club Manager 621K against 620K after 670's extra time; the budget is 622 with the measured reason
+written in, and the seoMeta split the harness names is the payback), `simLeaderboardCache` and
+`playBootShift` (green alone, twice), `simMobileChrome` (page load timeouts at a different route each
+run, green alone), and `simSetPiecePresentation` (the runner's EMPTY heuristic; the harness prints its
+own PASS, same on main).
+
+**The points economy** is not in this release. Its six rounds merged and failed three reviews as a
+whole, so a design panel wrote one spec, `docs/design/POINTS-ECONOMY-V2.md` on `points-economy`,
+Rounds 673 to 698. Round 673 (lock the doors) is built and HELD, unapplied: a per save bound cannot
+bound a total that adds raw scores from games five orders of magnitude apart, so it ships with the one
+scale rounds. Rounds 674 and 678 are being built.
+
 ## LIVE 2026-09-28: Release E (662 to 667), main `cf18c92a`
 
 Assembled and gated by the desktop Claude lane in the CRLF gate clone (`release-e`, then
