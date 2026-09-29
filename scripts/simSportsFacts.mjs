@@ -29,9 +29,14 @@
  *       (wikiwand, dbpedia and the like), and a check date that is a real
  *       calendar date and has happened. A node that says no official page
  *       supports it (noOfficial) cannot count the official URL it lists as a
- *       source. And no node may carry unverifiable, underSourced, unmatched,
- *       or a note saying part of it is unsourced: the record admitting a gap
- *       is a gap.
+ *       source, and its reason must name the official host it could not use
+ *       (ufc.com, formula1.com, olympics.com and the rest of the sport's
+ *       list) or say that no official page exists: a reason is checked, not
+ *       measured, so twenty letters of anything no longer pass. A verified
+ *       value that is a date (a birthDate, or any value shaped like one) must
+ *       be a real calendar date that has happened. And no node may carry
+ *       unverifiable, underSourced, unmatched, or a note saying part of it is
+ *       unsourced: the record admitting a gap is a gap.
  *    2. UFC Guesser (src/data/ufcFighters.ts): record, birth date, nationality,
  *       last UFC division, first and latest UFC year, knockouts, submissions.
  *    3. Combat Chain fighters (src/data/ufcChainData.ts UFC_FIGHTERS): record,
@@ -65,6 +70,9 @@
  *       golfLegends may be a dash.
  *   Sections 2 to 9 also refuse a duplicate: the same fighter, fight, driver,
  *   constructor, pool name, athlete (by name, whatever the id) or golfer twice.
+ *   Sections 2, 3, 7, 8 and 9 also require every field the game shows to be
+ *   there on both sides. Without that, a column deleted from the file and the
+ *   record together compared as undefined against undefined and passed.
  *
  * Nothing here touches the network: section 10 stubs the database client.
  *
@@ -87,8 +95,15 @@
  *                  sites and espn.com + africa.espn.com                   section 1
  *   contradicted   a noOfficial fact lists the official page it says
  *                  disagrees as one of its two sources                    section 1
+ *   noofficialwhy  a noOfficial reason becomes 22 letters naming nothing  section 1
+ *   datevalue      Rousey's birth date becomes 30 February, in the file
+ *                  and the record alike                                   section 1
  *   ufcfighter     one UFC Guesser fighter's win count changes            section 2
  *   dupufc         a UFC Guesser row is listed twice                      section 2
+ *   vanish         Pereira's knockouts leave his Guesser row and his
+ *                  record together                                        section 2
+ *   vanishpool     Prost's era leaves his pool card and his record
+ *                  together                                               section 7
  *   chainfighter   one chain fighter is flagged a Hall of Famer wrongly   section 3
  *   dupchain       a chain fighter row is listed twice                    section 3
  *   fakefight      the invented Aspinall over Jones link is put back      section 4
@@ -140,8 +155,12 @@ const CONTROLS = {
   baddate: { section: 1, tag: 'date', count: 2 },
   sameorg: { section: 1, tag: 'org', count: 4 },
   contradicted: { section: 1, tag: 'contradicted', count: 1 },
+  noofficialwhy: { section: 1, tag: 'noofficial', count: 1 },
+  datevalue: { section: 1, tag: 'datevalue', count: 1 },
   ufcfighter: { section: 2, tag: 'value' },
   dupufc: { section: 2, tag: 'duplicate' },
+  vanish: { section: 2, tag: 'missing', count: 2 },
+  vanishpool: { section: 7, tag: 'missing', count: 2 },
   chainfighter: { section: 3, tag: 'value' },
   dupchain: { section: 3, tag: 'duplicate' },
   fakefight: { section: 4, tag: 'link' },
@@ -347,6 +366,39 @@ function applyControl(name) {
       dj.src[1] = 'https://www.ufc.com/athlete/demetrious-johnson';
       break;
     }
+    case 'noofficialwhy': {
+      /* The shape the length rule let through: a reason that says nothing. */
+      const dj = record.ufcFighters['Demetrious Johnson']?.record;
+      must(dj && typeof dj.noOfficial === 'string' && /ufc\.com/.test(dj.noOfficial), "Demetrious Johnson's record with a noOfficial reason naming ufc.com");
+      dj.noOfficial = 'x'.repeat(22);
+      break;
+    }
+    case 'datevalue': {
+      /* The file and the record agree, so only the date check can see it. */
+      const bd = record.ufcFighters['Ronda Rousey']?.birthDate;
+      must(bd && bd.v === '1987-02-01', "Rousey's verified birth date of 1987-02-01");
+      bd.v = '1987-02-30';
+      const text = src(UFCF);
+      const line = text.split(/\r?\n/).find(l => l.includes("{ name: 'Ronda Rousey',"));
+      must(line && line.includes("birthDate: '1987-02-01'"), "Rousey's row with her birth date");
+      over[UFCF] = rewrite(text, line, line.replace("birthDate: '1987-02-01'", "birthDate: '1987-02-30'"), "Rousey's row in the UFC Guesser");
+      break;
+    }
+    case 'vanish': {
+      const text = src(UFCF);
+      const line = text.split(/\r?\n/).find(l => l.includes("{ name: 'Alex Pereira',"));
+      const m = line && line.match(/, koTko: \d+/);
+      must(m && record.ufcFighters['Alex Pereira']?.koTko, "Pereira's knockouts in his row and in his record");
+      over[UFCF] = rewrite(text, line, line.replace(m[0], ''), "Pereira's knockouts in the UFC Guesser");
+      delete record.ufcFighters['Alex Pereira'].koTko;
+      break;
+    }
+    case 'vanishpool': {
+      must(record.f1Pool['Alain Prost']?.era, "Prost's era in the record");
+      over[F1P] = rewrite(src(F1P), "{ name: 'Alain Prost', team: 'McLaren', era: '1980s',", "{ name: 'Alain Prost', team: 'McLaren',", "Prost's era on his pool card");
+      delete record.f1Pool['Alain Prost'].era;
+      break;
+    }
     case 'ufcfighter': {
       const text = src(UFCF);
       const line = text.split(/\r?\n/).find(l => l.includes("{ name: 'Alex Pereira',"));
@@ -481,6 +533,16 @@ const isRealDate = (s) => {
   const d = new Date(`${s}T00:00:00Z`);
   return !Number.isNaN(d.getTime()) && d.toISOString().slice(0, 10) === s;
 };
+/* A verified value is a date when its key says so (birthDate) or it is shaped
+   like one, and then it has to be a real day: 1987-02-30 is not a birthday.
+   The year takes four digits, so a fight record such as 28-1-0 is not a date. */
+const DATE_SHAPED = /^\d{4}-\d{1,2}-\d{1,2}$/;
+/* A noOfficial reason names the official host it could not use, or says no
+   official page exists. Matched against the sport's own list of official
+   hosts, so the reason has to say ufc.com or formula1.com, not just be long. */
+const NONE_OFFICIAL = /\b(?:no official (?:[a-z]+ ){0,3}(?:exists|is published|was ever published)|none exists|there is no official)\b/i;
+const namesOfficial = (reason, official) => NONE_OFFICIAL.test(reason)
+  || official.some(h => new RegExp(`(?:^|[^a-z0-9-])${h.replace(/\./g, '\\.')}(?![a-z0-9-])`, 'i').test(reason));
 /* Today, generous by a time zone: the later of the UTC and the local date. */
 const TODAY = (() => {
   const utc = new Date().toISOString().slice(0, 10);
@@ -515,10 +577,25 @@ async function runFence(record, over, quiet) {
       else seen.set(k, row);
     }
   };
+  /* Every field the game shows is there on both sides. The comparisons below
+     read a missing field as undefined, so a column deleted from the file and
+     the record together would compare equal and pass as verified. Returns
+     false when something is missing, so a caller can skip the arithmetic that
+     would otherwise throw on it. */
+  const requireShown = (label, row, fileKeys, rec, recKeys) => {
+    let ok = true;
+    for (const k of fileKeys) {
+      if (row[k] === undefined || row[k] === null || row[k] === '') { ok = false; fail('missing', `${label}: the file ships no ${k}, a field the game shows`); }
+    }
+    for (const k of recKeys) {
+      if (!rec?.[k] || typeof rec[k] !== 'object' || !('v' in rec[k])) { ok = false; fail('missing', `${label}: the record holds no verified ${k}, a field the game shows`); }
+    }
+    return ok;
+  };
 
-  head(1, 'the record: every fact sourced, two organisations, one official, one independent, no Wikipedia or copy of it, a real past check date, no admitted gap');
+  head(1, 'the record: every fact sourced, two organisations, one official, one independent, no Wikipedia or copy of it, a real past check date, a date value that is a real day, a noOfficial reason that names the official host, no admitted gap');
   {
-    let carriers = 0; let grouped = 0;
+    let carriers = 0; let grouped = 0; let dated = 0;
     const noOfficial = []; const nosrc = []; const editorialClues = [];
     const checkSources = (sport, where, node) => {
       const hosts = node.src.map(hostOf);
@@ -540,8 +617,9 @@ async function runFence(record, over, quiet) {
       if (orgs.size < 2) return fail('org', `${where}: ${supporting.join(' and ')} belong to one organisation (${[...orgs][0]}), which is one source twice`);
       const offHosts = supporting.filter(isOff);
       if (!offHosts.length) {
-        if (typeof node.noOfficial === 'string' && node.noOfficial.length > 20) noOfficial.push(where);
-        else return fail('official', `${where}: no official source (${official.join(', ')}) and no noOfficial reason`);
+        if (typeof node.noOfficial !== 'string' || !node.noOfficial.trim()) return fail('official', `${where}: no official source (${official.join(', ')}) and no noOfficial reason`);
+        if (!namesOfficial(node.noOfficial, official)) return fail('noofficial', `${where}: its noOfficial reason names none of the official hosts it could have used (${official.join(', ')}) and does not say that no official page exists, so it is not a reason: "${snip(node.noOfficial)}"`);
+        noOfficial.push(where);
       }
       const offOrgs = new Set(offHosts.map(orgOf));
       if (!supporting.some(h => !isOff(h) && !offOrgs.has(orgOf(h)))) return fail('independent', `${where}: no independent source, every source is official or owned by the same organisation as one`);
@@ -561,6 +639,12 @@ async function runFence(record, over, quiet) {
       if ('on' in node || hasSrc) {
         if (!isRealDate(node.on)) fail('date', `${where}: check date ${JSON.stringify(node.on)} is not a real calendar date`);
         else if (node.on > TODAY) fail('date', `${where}: check date ${node.on} is in the future (today is ${TODAY})`);
+      }
+      const key = (where.match(/\.([^.[\]]+)$/) || [])[1] ?? '';
+      if ('v' in node && (/date$/i.test(key) || (typeof node.v === 'string' && DATE_SHAPED.test(node.v)))) {
+        dated += 1;
+        if (!isRealDate(node.v)) fail('datevalue', `${where}: the verified value ${JSON.stringify(node.v)} is not a real calendar date`);
+        else if (node.v > TODAY) fail('datevalue', `${where}: the verified date ${node.v} has not happened yet (today is ${TODAY})`);
       }
       /* The one word opener: sections 5 and 6 judge whether it may be editorial. */
       if (isClue && node.editorial === true && !hasSrc) { editorialClues.push(where); return; }
@@ -587,7 +671,7 @@ async function runFence(record, over, quiet) {
       walk(sport, key, record[key], null);
     }
     if (carriers < 500) fail('floor', `only ${carriers} sourced nodes found in the record, so the walk is broken`);
-    else say(`  ${carriers} sourced nodes (plus ${grouped} fields covered by their golfer's sources and ${editorialClues.length} editorial openers left to sections 5 and 6); ${carriers - noOfficial.length} carry an official source`);
+    else say(`  ${carriers} sourced nodes (plus ${grouped} fields covered by their golfer's sources and ${editorialClues.length} editorial openers left to sections 5 and 6); ${carriers - noOfficial.length} carry an official source; ${dated} verified values are dates, each checked as a real day`);
     if (noOfficial.length) say(`  ${noOfficial.length} stand on two independent organisations with a stated reason: ${noOfficial.slice(0, 8).join('; ')}${noOfficial.length > 8 ? ' ...' : ''}`);
     if (nosrc.length) say(`  ${nosrc.length} fact node(s) carry no sources: ${nosrc.join('; ')}`);
   }
@@ -604,6 +688,9 @@ async function runFence(record, over, quiet) {
       const r = rec[f.name];
       if (!r) { fail('coverage', `${f.name} ships in the UFC Guesser with no verified record`); continue; }
       seen.add(f.name); n += 1;
+      requireShown(f.name, f,
+        ['record', 'wins', 'losses', 'draws', 'birthDate', 'nationality', 'weightClass', 'yearsActive', 'yearsActiveStart', 'yearsActiveEnd', 'koTko', 'submissions'],
+        r, ['record', 'birthDate', 'nationality', 'weightClass', 'yearsActive', 'koTko', 'submissions']);
       const want = {
         record: r.record?.v, wins: Number(r.record?.v.split('-')[0]), losses: Number(r.record?.v.split('-')[1]), draws: Number(r.record?.v.split('-')[2]),
         birthDate: r.birthDate?.v, weightClass: r.weightClass?.v, yearsActive: r.yearsActive?.v,
@@ -637,6 +724,7 @@ async function runFence(record, over, quiet) {
       const r = rec[f.name];
       if (!r) { fail('coverage', `${f.name} ships in the chain with no verified record`); continue; }
       seen.add(f.name);
+      if (!requireShown(`chain fighter ${f.name}`, f, ['record', 'wins', 'losses', 'draws', 'weightClass', 'isHallOfFamer'], r, ['record', 'divisions', 'hallOfFame'])) continue;
       const [w, l, d] = r.record.v.split('-').map(Number);
       if (f.record !== r.record.v || f.wins !== w || f.losses !== l || f.draws !== d) {
         fail('value', `${f.name}: chain shows ${f.record} (${f.wins}-${f.losses}-${f.draws}), verified ${r.record.v}`);
@@ -751,6 +839,7 @@ async function runFence(record, over, quiet) {
       const r = rec[d.name];
       if (!r) { fail('coverage', `${d.name} ships in the F1 pool with no verified record`); continue; }
       seen.add(d.name);
+      requireShown(`pool driver ${d.name}`, d, ['team', 'era', 'nationality'], r, ['team', 'era', 'nationality']);
       for (const k of ['team', 'era', 'nationality']) if (d[k] !== r[k]?.v) fail('value', `${d.name}: ${k} ships "${d[k]}", verified "${r[k]?.v}"`);
     }
     for (const n of Object.keys(rec)) if (!seen.has(n)) fail('coverage', `the record holds ${n} but the pool no longer ships him`);
@@ -780,6 +869,7 @@ async function runFence(record, over, quiet) {
       const r = rec[a.id];
       if (!r) { fail('coverage', `${a.id} ships with no verified record`); continue; }
       seen.add(a.id);
+      requireShown(`athlete ${a.id}`, a, FIELDS, r, FIELDS);
       for (const k of FIELDS) if (!same(a[k], r[k]?.v)) fail('value', `${a.id}: ${k} ships ${JSON.stringify(a[k])}, verified ${JSON.stringify(r[k]?.v)}`);
       /* The guess box accepts the full name or the last word of it, so an answer
          with a bracket or a symbol in it cannot be typed. */
@@ -823,6 +913,7 @@ async function runFence(record, over, quiet) {
       const r = rec[g.name];
       if (!r) { fail('coverage', `${g.name} ships with no verified record`); continue; }
       seen.add(g.name);
+      if (!requireShown(`golfer ${g.name}`, g, ['majors', 'firstWin', 'lastWin', 'nationality', 'tournaments'], r, ['majors', 'firstWin', 'lastWin', 'nationality', 'tournaments'])) continue;
       for (const k of ['majors', 'firstWin', 'lastWin', 'nationality']) if (g[k] !== r[k]?.v) fail('value', `${g.name}: ${k} ships ${g[k]}, verified ${r[k]?.v}`);
       if (!same([...g.tournaments].sort(), [...(r.tournaments?.v ?? [])].sort())) fail('value', `${g.name}: majors won ship as ${g.tournaments.join(', ')}, verified ${(r.tournaments?.v ?? []).join(', ')}`);
     }
@@ -911,7 +1002,7 @@ try {
       console.error(`\nsimSportsFacts: ${failures.length} failure(s). By section: ${[...bySection].sort((a, b) => a[0] - b[0]).map(([s, n]) => `${s} (${n})`).join(', ')}. By check: ${[...byTag].map(([t, n]) => `${t} ${n}`).join(', ')}`);
       exitCode = 1;
     } else {
-      console.log('\nsimSportsFacts: every fact in the record is sourced on two organisations with a real check date and no admitted gap, every shipped fact and answer in the seven files matches it, every chain link is a verified fight, the Olympic country is drawn as the record says, and no golf placeholder counts as a player.');
+      console.log('\nsimSportsFacts: every fact in the record is sourced on two organisations with a real check date and no admitted gap, every date it verifies is a real day, every noOfficial reason names the official host it could not use, every field the games show is there in the file and the record, every shipped fact and answer in the seven files matches it, every chain link is a verified fight, the Olympic country is drawn as the record says, and no golf placeholder counts as a player.');
     }
   } else {
     const want = CONTROLS[CONTROL];
