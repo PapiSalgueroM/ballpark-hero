@@ -25,7 +25,7 @@ import type { ReactElement } from 'react';
 import { waitFor } from '@testing-library/react';
 import type { DailyReloadDriver } from './driver';
 import { setFunctionFixture, setPoolFixture } from './mocks';
-import { button, click, findButton, mountPage, type MountedPage } from './harness';
+import { button, click, findButton, mountPage, unlimitedGiveUp, type MountedPage } from './harness';
 
 function gameOverCard(m: MountedPage): Element | null {
   const h2 = Array.from(m.container.querySelectorAll('h2')).find(h => /^Game Over!$/.test((h.textContent ?? '').trim()));
@@ -97,6 +97,8 @@ export function chainDriver(row: ChainRow): DailyReloadDriver<MountedPage> {
     },
 
     enterDaily,
+    /* Round 674 fix: a free run, for the free play line check (./driver). */
+    ...unlimitedGiveUp(status),
     finish,
     status,
 

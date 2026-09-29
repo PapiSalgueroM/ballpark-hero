@@ -101,6 +101,25 @@ export default defineDriver<Api>({
   finish,
   status,
 
+  /* Round 674 fix: a free run, for the free play line check (./driver).
+     Unlimited boards are dealt at random, so the run is walked out without
+     knowing the mines: the first open tile on each board until the board
+     ends, then on to the next. */
+  async enterFree(m) {
+    await click(button(m.container, /^Unlimited$/));
+    await waitFor(() => { if (status(m) !== 'playing') throw new Error('no free board yet'); });
+  },
+  async finishFree(m) {
+    for (let guard = 0; guard < 200 && !doneCard(m); guard += 1) {
+      const next = findButton(m.container, /^Next board|^See final score$/);
+      if (next) { await click(next); continue; }
+      const tile = Array.from(m.container.querySelectorAll('div.grid button')).find(b => !(b as HTMLButtonElement).disabled);
+      if (tile) { await click(tile); continue; }
+      await waitFor(() => { if (!findButton(m.container, /^Next board|^See final score$/) && !doneCard(m)) throw new Error('the board ended with no way on'); }, { timeout: 4000 });
+    }
+    if (!doneCard(m)) throw new Error('the free run never reached its final score');
+  },
+
   /* Round 645 part three fix: the mine and two real names on the first
      board, then a reload has to come back on board 1 with the same picks,
      one heart gone, the mine still named and 20 points. */

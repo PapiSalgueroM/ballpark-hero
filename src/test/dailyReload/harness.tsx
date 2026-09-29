@@ -6,7 +6,7 @@
  * mocked by ./mocks, which every driver imports first.
  */
 import type { ReactElement } from 'react';
-import { act, fireEvent, render } from '@testing-library/react';
+import { act, fireEvent, render, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { HelmetProvider } from 'react-helmet-async';
 
@@ -36,6 +36,42 @@ export function button(root: ParentNode, text: RegExp): HTMLButtonElement {
 
 export async function click(el: Element): Promise<void> {
   await act(async () => { fireEvent.click(el); });
+}
+
+/** Round 674 fix: end a live guess board the way a player walks away from a
+ *  free run: its Give Up button, and the confirmation when the board asks. */
+function giveUpButton(root: ParentNode): HTMLButtonElement | null {
+  return Array.from(root.querySelectorAll('button')).find(b => {
+    const t = (b.textContent ?? '').trim();
+    return /Give Up$/.test(t) && !/^Yes/.test(t);
+  }) ?? null;
+}
+
+export async function giveUp(root: ParentNode): Promise<void> {
+  const give = giveUpButton(root);
+  if (!give) throw new Error('no Give Up button on the live board');
+  await click(give);
+  const yes = findButton(root, /^Yes, Give Up$/);
+  if (yes) await click(yes);
+}
+
+/** Round 674 fix: the free run pair (see enterFree in ./driver) for a board
+ *  whose menu has an Unlimited button and whose live board has a Give Up.
+ *  Some boards offer Give Up only after a first guess: `firstGuess` makes
+ *  one (a guess of a real name, which may even be right and end the run),
+ *  and the run is given up if it is still live. */
+export function unlimitedGiveUp(status: (m: MountedPage) => 'playing' | 'finished', label: RegExp = /Unlimited/, firstGuess?: (m: MountedPage) => Promise<void>) {
+  return {
+    async enterFree(m: MountedPage): Promise<void> {
+      await click(button(m.container, label));
+      await waitFor(() => { if (status(m) !== 'playing') throw new Error('no live free play board yet'); });
+    },
+    async finishFree(m: MountedPage): Promise<void> {
+      if (firstGuess && !giveUpButton(m.container)) await firstGuess(m);
+      if (status(m) === 'playing') await giveUp(m.container);
+      await waitFor(() => { if (status(m) !== 'finished') throw new Error('the free run has not finished'); });
+    },
+  };
 }
 
 export async function typeInto(input: Element, value: string): Promise<void> {

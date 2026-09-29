@@ -18,7 +18,7 @@
 import './mocks';
 import { waitFor } from '@testing-library/react';
 import { defineDriver } from './driver';
-import { button, click, findButton, mountPage, typeInto, type MountedPage } from './harness';
+import { button, click, findButton, mountPage, typeInto, unlimitedGiveUp, type MountedPage } from './harness';
 import { setTableFixture } from './mocks';
 import { getTodayET } from '@/lib/dateUtils';
 import GuessCbbTeam from '@/pages/GuessCbbTeam';
@@ -93,6 +93,8 @@ export default defineDriver<MountedPage>({
   enterDaily,
   finish,
   status,
+  /* Round 674 fix: a free run, for the free play line check (./driver). */
+  ...unlimitedGiveUp(status),
 
   /* Every clue as revealed on the finished board, then the outcome lines
      (the name and the clue count with the score, or the answer and the

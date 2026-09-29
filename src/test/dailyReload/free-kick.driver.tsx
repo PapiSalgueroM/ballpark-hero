@@ -93,6 +93,14 @@ export default defineDriver<Api>({
   finish,
   status,
 
+  /* Round 674 fix: a free run, for the free play line check (./driver):
+     Unlimited deals ten kicks of its own, taken the same way. */
+  async enterFree(m) {
+    await click(button(m.container, /^Unlimited$/));
+    await waitFor(() => { if (status(m) !== 'playing') throw new Error('no free pitch yet'); });
+  },
+  finishFree: finish,
+
   /* Round 645 part three: three of the ten, then a reload has to come back
      on kick four with the same goals and points. */
   playSome: m => takeKicks(m, 3),

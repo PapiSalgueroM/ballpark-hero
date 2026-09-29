@@ -107,5 +107,39 @@ describe('the free play line on the finished card', () => {
       expect([...done.own, ...done.shared].every(f => f === 'ranked'), 'in the daily the line is flagged ranked, so it stays hidden').toBe(true);
       if (want !== undefined) expect(done.own.length, want === 1 ? 'the board\'s own finished card carries the line' : 'no line outside the shared card').toBe(want);
     });
+
+    /* Round 674 fix (the adversarial review's M1). The daily alone cannot
+       see the line go missing: the real UnrankedNote renders nothing there,
+       so a board that mounts it only in the daily ({mode === 'daily' &&
+       <UnrankedNote .../>}) passed the row above while an Unlimited finish
+       showed its score with nothing saying it pays no points. So every
+       board that draws its own card is also played through a free run
+       (the driver's enterFree and finishFree), and its finished card must
+       carry exactly one line of its own, flagged free, and none on the live
+       board. Under the harness that is every row it expects a line on; in
+       a plain run, every driver that offers a free run. */
+    if (want === 1 || (!EXPECT && d.enterFree)) {
+      it(`${d.slug}: a finished free run shows the board's own free play line, flagged free`, async () => {
+        if (!d.enterFree || !d.finishFree) throw new Error(`${file} renders a board that draws its own result card and has no enterFree and finishFree, so its free run cannot be played (src/test/dailyReload/driver.ts)`);
+        resetMocks(d.slug);
+        const api = await d.mount();
+        let live: { own: string[]; shared: string[] } = { own: [], shared: [] };
+        let done: { own: string[]; shared: string[] } = { own: [], shared: [] };
+        try {
+          await d.enterFree(api);
+          expect(d.status(api), 'a fresh free run is playing').toBe('playing');
+          live = probes();
+          await d.finishFree(api);
+          expect(d.status(api), 'the free run finished').toBe('finished');
+          done = probes();
+        } finally {
+          console.log('UNRANKED_FREE_ROW ' + JSON.stringify({ file, slug: d.slug, live: live.own.length + live.shared.length, own: done.own.length, shared: done.shared.length, flags: [...done.own, ...done.shared] }));
+          d.unmount(api);
+        }
+        expect(live.own.length + live.shared.length, 'the free play line is not on the live board, only on the finished card').toBe(0);
+        expect(done.own.length, 'the board\'s own finished card carries the line on a free run').toBe(1);
+        expect([...done.own, ...done.shared].every(f => f === 'free'), 'on a free run the line is flagged free, so it shows').toBe(true);
+      });
+    }
   }
 });

@@ -123,6 +123,16 @@
    daily always flagged ranked. Every board that draws its own card must be
    rendered by some driver or sit in RENDER_BASELINE with its reason, a
    ratchet (a new one fails, a stale one fails).
+   Round 674 fix (the adversarial review's M1): the daily alone could not
+   see the line go missing, because the real UnrankedNote renders nothing
+   when ranked; a board mounting it only in the daily ({mode === 'daily' &&
+   <UnrankedNote .../>}) stayed green while an Unlimited finish showed its
+   score bare. So every row that must carry a board's own line also plays a
+   FREE run to its finished card (the driver's enterFree and finishFree,
+   src/test/dailyReload/driver.ts), and that card must show exactly one line
+   of its own, flagged free, and none on the live board; a row without the
+   pair goes red, and so does a free run for a row the source says draws no
+   card of its own.
 
    SECTION 5, GAMES TODAY. The owner's number, how many games he played that
    day, is read ONE way: src/lib/gamesToday.ts, by the game header and the
@@ -182,7 +192,12 @@
      shotnote     Buzzer Beater's line moves from its finished card to the per
                   shot card (Round 674, the review's m645a-1); the source
                   check stays green by design, and exactly the buzzer-beater
-                  row of unrankedCards.test.tsx goes red
+                  rows of unrankedCards.test.tsx go red (its daily and, since
+                  the Round 674 fix, its free run)
+     dailyonly    the Round 674 fix's control for the review's M1: Buzzer
+                  Beater mounts the line only in the daily; the source check
+                  and the daily row stay green by design, and exactly the
+                  buzzer-beater free run row goes red
    RANKED_CONTROL=all runs every control in turn. A control run exits 0 when
    it fired exactly as it should and 1 when it did not.
 
@@ -383,7 +398,22 @@ const VITEST_CONTROLS = {
         "          <UnrankedNote ranked={mode === 'daily'} className=\"mt-2\" />\n"],
     ],
     why: "Buzzer Beater's free play line moves from its finished card to the per shot card, so an Unlimited run's final score shows with nothing beside it",
-    red: /buzzer-beater: the finished daily/,
+    /* Round 674 fix: the free run row sees it too, the line gone from the
+       card a free run ends on. */
+    red: /buzzer-beater: (the finished daily|a finished free run)/,
+    check: null,
+  },
+  /* Round 674 fix, the adversarial review's M1: the line stays on the
+     finished card but is mounted only in the daily, where the real note
+     renders nothing anyway. The daily row cannot tell (its probe still
+     shows, flagged ranked), the source check cannot either (the flag is
+     still daily only); only the finished free run can. */
+  dailyonly: {
+    file: 'src/components/buzzer-beater/BuzzerBeaterBoard.tsx', alias: 'NO_DOUBLE_SWAP', module: '@/components/buzzer-beater/BuzzerBeaterBoard', testFile: 'unrankedCards.test.tsx',
+    from: "          <UnrankedNote ranked={mode === 'daily'} className=\"mt-2\" />\n",
+    to: "          {mode === 'daily' && <UnrankedNote ranked={mode === 'daily'} className=\"mt-2\" />}\n",
+    why: "Buzzer Beater mounts its free play line only in the daily, so an Unlimited finish shows its score with nothing saying it pays no points",
+    red: /buzzer-beater: a finished free run/,
     check: null,
   },
 };
@@ -844,7 +874,8 @@ function runSuite(env) {
   }
   const loadError = /Failed to load|Cannot find module|Failed to resolve import|SyntaxError|Transform failed/.test(text) ? text.slice(-2000) : null;
   const cardRows = [...text.matchAll(/UNRANKED_CARD_ROW (\{.*\})/g)].map(m => JSON.parse(m[1]));
-  return { code: r.status, tests, loadError, text, cardRows };
+  const freeRows = [...text.matchAll(/UNRANKED_FREE_ROW (\{.*\})/g)].map(m => JSON.parse(m[1]));
+  return { code: r.status, tests, loadError, text, cardRows, freeRows };
 }
 
 /* ------------------------------------------------------------------------ */
@@ -922,6 +953,22 @@ if (!CONTROL) {
       else if (row.own !== want || row.live !== 0) fail(`${file}: the finished page shows ${row.own} free play line(s) of its own (want ${want}) and ${row.live} on the live board (want 0)`);
     }
     if (seen.size) console.log(`   rendered cards: ${seen.size} driver rows played their daily to the finish; ${[...seen.values()].filter(r => r.own === 1).length} show the board's own free play line on the finished card, none on a live board`);
+    /* Round 674 fix (the review's M1): the daily cannot see the line go
+       missing, because the real note renders nothing there. Every row that
+       must carry a board's own line also played a free run to its finished
+       card, and that card must show exactly one line of its own, flagged
+       free, with none on the live board. */
+    const freeSeen = new Map(run.freeRows.map(r => [r.file, r]));
+    const ownRows = Object.entries(cardExpect).filter(([, want]) => want === 1).map(([file]) => file);
+    let freeOk = 0;
+    for (const file of ownRows) {
+      const row = freeSeen.get(file);
+      if (!row) fail(`unrankedCards.test.tsx printed no free run for ${file}, so nothing shows its line lands on the card a free run ends on`);
+      else if (row.own !== 1 || row.live !== 0 || !row.flags.length || !row.flags.every(f => f === 'free')) fail(`${file}: a finished free run shows ${row.own} free play line(s) of its own (want 1), ${row.live} on the live board (want 0), flagged ${row.flags.join(', ') || 'nothing'} (want free)`);
+      else freeOk += 1;
+    }
+    for (const file of freeSeen.keys()) if (!ownRows.includes(file)) fail(`unrankedCards.test.tsx played a free run for ${file}, which the source says draws no card of its own`);
+    console.log(`   free runs: ${freeOk} of the ${ownRows.length} rows whose board draws its own card played a free run to the finish and showed that board's own line on the finished card, flagged free, and none on the live board`);
     if (run.code !== 0 && failures === 0) fail(`vitest exited ${run.code} with every case green, read its output:\n${run.text.slice(-2000)}`);
     console.log(`   vitest exit ${run.code}, ${run.tests.length} cases`);
   }

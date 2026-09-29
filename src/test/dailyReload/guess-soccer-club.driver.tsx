@@ -19,7 +19,7 @@
 import './mocks';
 import { waitFor } from '@testing-library/react';
 import { defineDriver } from './driver';
-import { button, click, findButton, mountPage, typeInto, type MountedPage } from './harness';
+import { button, click, findButton, mountPage, typeInto, unlimitedGiveUp, type MountedPage } from './harness';
 import { dailyIndex, getTodayET } from '@/lib/dateUtils';
 import { soccerClubPuzzles } from '@/data/soccerClubPuzzles';
 import GuessSoccerClub from '@/pages/GuessSoccerClub';
@@ -77,6 +77,8 @@ export default defineDriver<MountedPage>({
   enterDaily,
   finish,
   status,
+  /* Round 674 fix: a free run, for the free play line check (./driver). */
+  ...unlimitedGiveUp(status),
 
   /* Every clue as revealed on the finished board (the club name is the
      last one), then the card's headline, score line and fun fact. The

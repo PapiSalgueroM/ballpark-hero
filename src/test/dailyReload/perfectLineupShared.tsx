@@ -71,6 +71,14 @@ export function perfectLineupDriver(slug: string, path: string, page: ReactEleme
     finish,
     status,
 
+    /* Round 674 fix: a free run, for the free play line check (./driver):
+       New Lineup deals an unlimited board, played out the same way. */
+    async enterFree(m) {
+      await click(button(m.container, /New Lineup$/));
+      await waitFor(() => { if (status(m) !== 'playing') throw new Error('no free lineup to pick yet'); });
+    },
+    finishFree: finish,
+
     /* The scoreline, the grade, the rating and chemistry row, and every
        slot card with its name and grade square. */
     fingerprint(m) {

@@ -132,6 +132,21 @@ export interface DailyReloadDriver<Api = unknown> {
    *  what it read after oneStep: the step stays taken, outcome and all. */
   oneStep?(api: Api): Promise<void>;
   interruptStep?(api: Api): Promise<void>;
+
+  /** Round 674 fix (the adversarial review's M1), for a board that draws its
+   *  own result card. src/test/unrankedCards.test.tsx plays the daily AND a
+   *  free run to the finish, because the free play line renders nothing in
+   *  the daily, so a daily alone cannot see it go missing from the card a
+   *  free run ends on. The pair:
+   *    enterFree   from a fresh mount, get onto a free play board (the
+   *                Unlimited button, a new lineup)
+   *    finishFree  play that board to its finished card by the shortest
+   *                honest path (give up, walk the run out)
+   *  status() must read the free board and its finished card as it reads the
+   *  daily's. scripts/simRankedRecorder.mjs requires the pair on every driver
+   *  that renders a board drawing its own card. */
+  enterFree?(api: Api): Promise<void>;
+  finishFree?(api: Api): Promise<void>;
 }
 
 /** Identity with inference, so a driver file reads as one typed object. */

@@ -17,7 +17,7 @@
 import './mocks';
 import { waitFor } from '@testing-library/react';
 import { defineDriver } from './driver';
-import { button, click, findButton, mountPage, typeInto, type MountedPage } from './harness';
+import { button, click, findButton, mountPage, typeInto, unlimitedGiveUp, type MountedPage } from './harness';
 import { getTodayET } from '@/lib/dateUtils';
 import nascarDriverPool from '@/data/nascarDrivers.json';
 import type { NascarDriverPuzzle } from '@/types/nascarDriver';
@@ -82,6 +82,8 @@ export default defineDriver<MountedPage>({
   enterDaily,
   finish,
   status,
+  /* Round 674 fix: a free run, for the free play line check (./driver). */
+  ...unlimitedGiveUp(status, /Unlimited/, finish),
 
   /* The card's own lines: the trophy, the driver's name and the clue count
      with the score. The share row underneath is left out. */
