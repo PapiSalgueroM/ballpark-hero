@@ -58,7 +58,19 @@
  * lying around on an open PR. Run it when you have the window. The detection it
  * would exercise is the pair of checks below: an almost empty page (a render
  * throw unmounts the root) and the Round 544 error boundary's own copy.
+ *
+ * ROUND 672: IT HAD STOPPED SIGNING ANYBODY, AND IT HAS A CONTROL NOW. The
+ * clause hunt read the market as it opens, Best first, where a mid-table
+ * budget affords none of the clauses on show, so a full season went by with
+ * 0 signings and two SHALLOW findings (red on main, 2026-09-28). It sorts the
+ * list Cheapest first now and confirms a deal by the man's name in the saved
+ * squad. CM_CONTROL=nobusiness cuts the transfer business block out of the
+ * served review (no rebuild, nothing left in the tree) and exactly the two
+ * checks that read that block have to fire.
  */
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
 const { chromium } = pw;
 
@@ -89,6 +101,41 @@ const browser = await chromium.launch({
 /* Round 330: WIDTH=390 or 320 plays the season at a real phone width for the
    mobile depth walk; 430 stays the default baseline. */
 const ctx = await browser.newContext({ viewport: { width: Number(process.env.WIDTH || 430), height: Number(process.env.HEIGHT || 900) }, ignoreHTTPSErrors: true });
+
+/* Round 672: CM_CONTROL=nobusiness, the negative control for the season
+   review checks, now that the walk really signs somebody. The served season
+   summary chunk has its `signings.length>0&&` guard turned into `false&&`, so
+   the transfer business block never renders for a manager who did business,
+   which is the Round 550 crash's outcome without the crash. Exactly the two
+   checks that read that block have to fire, and nothing else. The shape must
+   match once in the served asset or the run refuses to start. */
+const CONTROL = process.env.CM_CONTROL || '';
+const BUSINESS_GUARD = /\w+\.signings\.length>0&&/g;
+const BUSINESS_TARGETS = [/review shows no transfer business block/, /block rendered no IN or OUT rows/];
+let controlSwaps = 0;
+if (CONTROL === 'nobusiness') {
+  const dir = path.join(path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..'), 'dist', 'assets');
+  const hits = fs.readdirSync(dir).filter(f => f.endsWith('.js'))
+    .map(f => ({ f, n: (fs.readFileSync(path.join(dir, f), 'utf8').match(BUSINESS_GUARD) || []).length }))
+    .filter(h => h.n > 0);
+  const total = hits.reduce((s, h) => s + h.n, 0);
+  let served = '';
+  if (total === 1) served = await fetch(`${BASE}/assets/${hits[0].f}`).then(r => r.text()).catch(() => '');
+  if (total !== 1 || (served.match(BUSINESS_GUARD) || []).length !== 1) {
+    console.error(`playClubManager control: RED before it started. The transfer business guard matched ${total} time(s) in the built assets${total === 1 ? ' but did not come back from the server' : ''}, so the swap would change nothing or the wrong thing.`);
+    await browser.close();
+    process.exit(1);
+  }
+  console.log(`  control  the transfer business guard confirmed once in the served /assets/${hits[0].f}`);
+  await ctx.route('**/*.js', async route => {
+    const res = await route.fetch();
+    let body = await res.text();
+    const swapped = body.replace(BUSINESS_GUARD, 'false&&');
+    if (swapped !== body) { body = swapped; controlSwaps += 1; }
+    await route.fulfill({ response: res, body });
+  });
+}
+
 const page = await ctx.newPage();
 
 const errs = [];
@@ -146,11 +193,30 @@ async function tapText(rx, label) {
  * because the price is different every run.
  */
 async function signSomebody() {
+  /* Round 672: sort the market Cheapest first, with the game's own control,
+     before looking for a clause. The market opens on Best first and shows 50
+     rows, and at a mid-table club every clause in that list costs more than
+     the budget: measured on 2026-09-28 at Brentford with 69m, Best first
+     carried 21 clause buttons and not one was affordable (the first read
+     377.5m), while Cheapest first carried 14 and every one was. So a whole
+     season went by with 0 signings, the review's transfer business branch was
+     never rendered, and the walk said so as two SHALLOW findings. A manager
+     looking for someone he can afford sorts the list; so does this. */
+  await page.getByLabel('Sort players').first().selectOption('cheap', { timeout: 4000 }).catch(() => {});
+  await page.waitForTimeout(300);
   const clause = page.locator('button:visible[title^="Release clause"]:not([disabled])').first();
   if (await clause.count().catch(() => 0) === 0) return false;
-  /* The clause button's own label is the fee, which is unique enough in the
-     market list to tell whether this deal actually went through. */
-  const before = ((await clause.innerText().catch(() => '')) || '').trim();
+  /* Round 672: the man's name, off his own market row. The fee on the button
+     used to stand in for him, and at the cheap end of a sorted list it is not
+     unique (several clauses read the same 1.2m), so a signed man could look
+     unsigned because a namesake fee stayed on screen. */
+  const who = await clause.evaluate(b => {
+    let row = b;
+    for (let i = 0; i < 5 && row && !row.classList.contains('border-b'); i++) row = row.parentElement;
+    const n = row && row.querySelector('span.text-xs.truncate');
+    return n ? (n.textContent || '').trim() : '';
+  }).catch(() => '');
+  if (!who) { say('could not read whose clause this is'); return false; }
   const ok = await clause.click({ timeout: 4000 }).then(() => true).catch(() => false);
   if (!ok) return false;
   await page.waitForTimeout(700);
@@ -160,12 +226,13 @@ async function signSomebody() {
   /* A CLICK IS NOT A SIGNING. Counting the press rather than the deal would let
      this harness claim a coverage it does not have, and then report "signings
      were made and the review shows no transfer business" as a finding when the
-     truth is that nothing was ever bought. A completed deal takes the player
-     out of the market, so his clause button goes with him. */
-  const still = page.locator(`button:visible[title^="Release clause"]:has-text(${JSON.stringify(before)})`);
-  const gone = await still.count().catch(() => 1) === 0;
-  if (!gone) { say('the clause press did not complete a deal'); return false; }
-  say('signed a player through his release clause');
+     truth is that nothing was ever bought. Round 672: a completed deal puts
+     him in the saved squad, so that is what is read. */
+  const signed = await page.evaluate(name => {
+    try { return JSON.parse(localStorage.getItem('dukb-club-manager-save') || 'null').squad.some(p => p.name === name); } catch { return false; }
+  }, who).catch(() => false);
+  if (!signed) { say(`the clause press for ${who} did not complete a deal`); return false; }
+  say(`signed ${who} through his release clause`);
   return true;
 }
 
@@ -599,4 +666,15 @@ if (windows > 0 && signingsMade === 0) {
 
 console.log(`\nPlayed Club Manager through its own screens. ${findings.length} findings.`);
 await browser.close();
+if (CONTROL === 'nobusiness') {
+  const hit = BUSINESS_TARGETS.filter(rx => findings.some(f => rx.test(f.detail)));
+  const collateral = findings.filter(f => !BUSINESS_TARGETS.some(rx => rx.test(f.detail)));
+  console.log(`   control: ${controlSwaps} served asset(s) rewritten, ${signingsMade} signing(s), ${hit.length} of ${BUSINESS_TARGETS.length} target checks fired, ${collateral.length} other finding(s)`);
+  if (controlSwaps > 0 && hit.length === BUSINESS_TARGETS.length && collateral.length === 0) {
+    console.error('playClubManager control: green. With the transfer business block cut out of the review, exactly the two checks that read it fired, so a review that drops a signed manager\'s business goes red. Exiting non zero, because a run with findings fails.');
+  } else {
+    console.error(`playClubManager control: RED. Expected exactly the two transfer business findings, got ${hit.length} of them and ${collateral.length} other(s)${controlSwaps ? '' : ', and the swap never landed on a served asset'}.`);
+  }
+  process.exit(1);
+}
 process.exit(findings.length === 0 ? 0 : 1);
