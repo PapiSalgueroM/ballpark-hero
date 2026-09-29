@@ -1,5 +1,71 @@
 # Project state
 
+## 2026-09-29: Round 678, the knowledge line core and the families, on `r678-knowledge-line` (from `points-economy`), nothing applied, nothing a player sees
+
+**What landed** (docs/design/POINTS-ECONOMY-V2.md section 13, Round 678; no recorder changes):
+`src/lib/knowledgeLine.ts` (the one formula, `DayPoints` minted only by `dayPoints` and
+`pointsFromCeiling`, `lineFor`, `pointsAnswer` for every engine's `pointsFor`),
+`src/lib/knowledgeLine.brand.ts` (makes tsc refuse a raw number as day points),
+`src/lib/naivePolicies.ts` (the twelve naive policies with `counter`, the oracle and the 70 percent
+player, driven through a game's own `Moves`, exact when the tree is small, else 200 samples seeded
+by the board's salt; `measureBoard` is what an engine calls at deal time),
+`src/data/pointsFamilies.ts` (all 139 sendable keys filed once), `src/lib/pointsHowTo.ts` and
+`src/components/game/PointsLine.tsx` (card line and how to play Points copy, wired into no game),
+`scripts/genGameRules.mjs` with `--check` over `scripts/lib/gameRulesSeed.mjs`, the generated
+`scripts/data/gameRulesSeed.sql` (md5 `a22bb1f324ce8027d4b72c6b99fd326a`), and `scripts/simKnowledgeLine.mjs`.
+
+**Nothing pays yet, on purpose.** Every key is `waits(claim, round, reason)` until its own round
+lands its `pointsFor` and its section 2 row and flips it to `paid(...)`. So the seed is honest on
+any tree and the release floor needs nobody to remember a flip. Waiting: 681 13, 682 2, 683 7,
+684 4, 685 8, 686 2, 687 79, 688 7, 695 1, 696 1, 697 1; 14 never scored (7 unscored by design, 7
+whose page redirects home: `world-cup`, `football-draft`, `guess-soccer-club` and its questions,
+`guess-transfer-value`, `grade-transfer`, `perfect-lineup`).
+
+**Calls made against the spec's lists, read off the code.** Teammates is filed under choice (it
+is yes or no calls; on the typed family's line of 0, random would pay about 50). Career Ladder and
+Soccer Connect 4 claim at first action, not at the deal: both record only their daily
+(`rawDailyStatus`). Football Draft (spec 7.4, 687) redirects home and Stadium Draft is retired, so
+neither has a row to build. `src/lib/streaks.ts` has its own `DayPoints` (648's day record); the
+mint scan skips a file that declares its own and takes none from the knowledge line, and Round
+690 removes that code.
+
+**What `simKnowledgeLine` holds.** 1) every sendable key filed in exactly one family, each with a
+`game_score_caps` row (the seed's foreign key), and the committed seed equal to a fresh
+generation. 2) paying games and `LINE_ROWS` match both ways (both empty today); the row runner
+(every family policy at most 5 through the engine's `pointsFor`, a deterministic policy exactly 0
+on every board, the oracle exactly 100, the 70 percent player at least 15, no roomless board)
+proved every run on five synthetic dailies, one that must pass (coin keys lined on the family,
+365 days: random 1.9, 70 percent 49.1) and four that must be caught (balanced keys lined without
+`counter`, a line under the constant answer, a perfect past the oracle, a coin flip after every
+pick); scale g's perfect side through `scoreCeilingTable.mjs`' drivers: 29 typed games record
+exactly 100 on a perfect run, 28 have no offline driver and prove theirs in 687. A row is always
+measured on the family table's policies, never its own. 3) `knowledgeLine.brand.ts` compiled
+with tsconfig.app.json's settings comes back clean with both raw numbers still refused; one
+`DayPoints` cast in src, in knowledgeLine.ts; every `LINE_ROWS` recorder sends
+`pointsFor(...).points` from its engine (argument index read off the recorders' own signatures,
+so Round 679 moving it is a red, not a misread), the read proved on nine probes.
+
+**Controls** (`KNOWLEDGE_LINE_CONTROL`, each exit 0 turning only its section red through a copy in
+the run's own mkdtemp, proved read by the reader its check uses): `unclassified`, `twofamilies`,
+`staleseed` (section 1); `unmeasured`, `counterblind`, `ceilingoff` (section 2); `rawrecord`,
+`mint` (section 3).
+
+**Gates, on the round's final tree (src unchanged since `3aa29cc0`).** `tsc --noEmit -p tsconfig.app.json` exit 0. `genGameRules --check`
+exit 0. `simKnowledgeLine` "green. 139 keys filed once each..." exit 0, and all eight controls.
+Green with their closing lines: simHarnessAnchors, simNoRivalNames (0 findings),
+simLeaderboardCaps, simCapsAreCeilings, simFreePoints, simRankedRecorder, simLegalPages,
+simSafari, simDateDraws, simDailyPoolOrder, simDailyPuzzleContract, simIdleTimers,
+simRecordPages, simSchemaNames, simSingleFooter, simMarketYearScope; from throwaway copies pointed
+at the main node_modules (deleted after): simCompletionSlugs, simCompletionOnce,
+simNoInventedQuotes, simNoInventedConduct, simLiveScores, simRevealMoments, simSiteSearch,
+simDaily. Not run, need a build: simDrawOrder, simVictoryMoment, simWritesAreSent.
+
+**Left for later rounds.** `LINE_ROWS` gets its first row and engine bundle in 681; 2(b) and 3(c)
+run on probes alone until then. Round 679 decides how a scale g game's raw result reaches the
+door while the recorder takes `DayPoints` (the spec has the door record raw on g). The season
+headroom exception list arrives with the season rows (688). Needs an adversarial review before
+merging into `points-economy`.
+
 ## 2026-09-28: the points economy (645a, 645b, 645c, 646, 647, 648) assembled and gated on `points-economy`, NOT on main, nothing applied or deployed
 
 **Where it is.** Branch `points-economy`, code head `c4f289b6` (this entry is the commit after it),
