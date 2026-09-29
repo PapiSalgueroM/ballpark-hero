@@ -18,12 +18,12 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
   {
     id: 'mclaren',
     constructorName: 'McLaren',
-    commonNames: ['McLaren', 'Mclaren'],
+    commonNames: ['McLaren'],
     clues: [
       'Prestigious',
       'United Kingdom',
-      'Dominated the late 1980s and late 1990s, then won the Constructors\' title again in 2024',
-      'Won 9 Constructors\' Championships',
+      'Dominated the late 1980s and late 1990s, then won back-to-back Constructors\' titles in 2024 and 2025',
+      'Won 10 Constructors\' Championships',
       'Historically raced in papaya orange, then red and white, now back to papaya',
       'Ayrton Senna won all three of his championships with this team',
     ],
@@ -61,16 +61,16 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
     clues: [
       'Audacious',
       'Austria (based in the UK)',
-      'Rose from midfield to domination in the early 2010s, then again from 2021 onward',
+      'Rose from midfield to dominate the early 2010s, then won the Constructors\' title again in 2022 and 2023',
       'Won 6 Constructors\' Championships',
-      'Race in dark blue with red and yellow bull branding',
+      'Race in blue with red and yellow bull branding',
       'Max Verstappen has won multiple consecutive titles with this team',
     ],
   },
   {
     id: 'lotus',
     constructorName: 'Lotus',
-    commonNames: ['Lotus', 'Team Lotus', 'Lotus Racing'],
+    commonNames: ['Lotus', 'Team Lotus'],
     clues: [
       'Innovative',
       'United Kingdom',
@@ -89,7 +89,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
       'France',
       'Introduced the turbo engine to Formula 1 and won back-to-back titles in the mid-2000s',
       'Won 2 Constructors\' Championships',
-      'Raced in blue and yellow, now competes as Alpine in blue, white, and red',
+      'Raced in blue and yellow, now competes as Alpine in blue and pink',
       'Fernando Alonso won both his world championships with this team',
     ],
   },
@@ -168,7 +168,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
       'Brief but successful period in the late 1960s and early 1970s',
       'Won 1 Constructors\' Championship',
       'Raced in French blue livery',
-      'Jackie Stewart won the 1969 World Championship driving a car powered by this manufacturer',
+      'Jackie Stewart won the 1969 World Championship driving a chassis built by this manufacturer, with a Ford Cosworth engine',
     ],
   },
   {
@@ -191,16 +191,16 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
     clues: [
       'Ambitious',
       'United States',
-      'Entered Formula 1 in 2016 as the newest American team',
+      'Entered Formula 1 in 2016 from a headquarters in Kannapolis, North Carolina',
       'Won 0 Constructors\' Championships',
-      'Race in white, red, and dark grey livery',
-      'Became the first American constructor to score points on debut since 1986',
+      'Race in white, red and black livery',
+      'Scored points on debut in 2016, the first new team to do so since Toyota in 2002, and the first American team on the grid since 1986',
     ],
   },
   {
     id: 'racing-point',
     constructorName: 'Racing Point',
-    commonNames: ['Racing Point', 'Force India', 'Aston Martin'],
+    commonNames: ['Racing Point', 'Force India'],
     clues: [
       'Overachieving',
       'United Kingdom',
@@ -220,7 +220,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
       'Returned to F1 as a constructor name in 2021 after decades away',
       'Won 0 Constructors\' Championships',
       'Race in British Racing Green with a modern twist',
-      'Fernando Alonso delivered surprise podiums in 2023, including back-to-back second places in the opening rounds',
+      'Fernando Alonso delivered surprise podiums in 2023, finishing third in each of the first three races',
     ],
   },
   {
@@ -239,7 +239,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
   {
     id: 'toro-rosso',
     constructorName: 'Toro Rosso',
-    commonNames: ['Toro Rosso', 'AlphaTauri', 'RB', 'VCARB', 'Minardi'],
+    commonNames: ['Toro Rosso', 'Racing Bulls', 'AlphaTauri', 'RB', 'VCARB', 'Minardi'],
     clues: [
       'Nurturing',
       'Italy (Austrian ownership)',
@@ -252,11 +252,11 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
   {
     id: 'sauber',
     constructorName: 'Sauber',
-    commonNames: ['Sauber', 'Stake', 'Kick Sauber'],
+    commonNames: ['Sauber', 'Stake', 'Kick Sauber', 'Audi'],
     clues: [
       'Steady',
       'Switzerland',
-      'A reliable midfield presence from the 1990s onward, set to become an Audi works team',
+      'A reliable midfield presence from the 1990s onward, now racing as the Audi works team',
       'Won 0 Constructors\' Championships',
       'Raced in various liveries including blue, white, and red over the years',
       'Gave Kimi Räikkönen his F1 debut in 2001 despite the Finn having minimal single-seater experience',
@@ -297,7 +297,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
       'United Kingdom',
       'Competed intermittently across the 1970s and 1980s, also a prolific customer chassis builder',
       'Won 0 Constructors\' Championships',
-      'Raced in various customer liveries, most notably orange and white',
+      'Raced in many sponsor liveries, including STP, Beta, Rothmans and Leyton House',
       'Won 3 Grands Prix over its history, providing competitive cars to privateers across many formulas',
     ],
   },
@@ -317,7 +317,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
   {
     id: 'honda',
     constructorName: 'Honda',
-    commonNames: ['Honda', 'Honda Racing', 'Honda F1'],
+    commonNames: ['Honda', 'Honda Racing'],
     clues: [
       'Engineering',
       'Japan',
@@ -349,14 +349,14 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
       'United Kingdom',
       'Perpetual backmarkers who competed from 2010 to 2016 under various names',
       'Won 0 Constructors\' Championships',
-      'Raced in red and black, later blue and orange liveries',
-      'Jules Bianchi scored their only ever points with a remarkable 9th place at the 2014 Monaco Grand Prix',
+      'Raced in red and black, later blue and red liveries',
+      'Jules Bianchi scored their first ever points with a remarkable 9th place at the 2014 Monaco Grand Prix',
     ],
   },
   {
     id: 'caterham',
     constructorName: 'Caterham',
-    commonNames: ['Caterham', 'Lotus Racing', 'Team Lotus (2010s)'],
+    commonNames: ['Caterham', 'Lotus Racing'],
     clues: [
       'Struggling',
       'Malaysia / United Kingdom',
@@ -369,7 +369,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
   {
     id: 'bmw-sauber',
     constructorName: 'BMW Sauber',
-    commonNames: ['BMW Sauber', 'BMW', 'BMW F1'],
+    commonNames: ['BMW Sauber', 'BMW'],
     clues: [
       'Clinical',
       'Germany / Switzerland',
@@ -399,10 +399,10 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
     clues: [
       'Bold',
       'United States',
-      'Set to join the grid in 2026 as a new American manufacturer entry backed by General Motors',
-      'Won 0 Constructors\' Championships (has not yet competed)',
-      'Expected to race in a livery reflecting their luxury American brand heritage',
-      'Became the 11th team on the grid after years of negotiations, marking GM\'s return to top-level open-wheel racing',
+      'Joined the grid in 2026 as a new American manufacturer entry backed by General Motors',
+      'Won 0 Constructors\' Championships',
+      'Race in a split livery, white on one side and black on the other',
+      'Became the 11th team on the grid, with Sergio Pérez and Valtteri Bottas as its first race drivers',
     ],
   },
 ];

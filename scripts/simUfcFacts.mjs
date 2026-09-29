@@ -25,9 +25,31 @@
  *      argument, and this is the one the inventory named.
  *
  * Plus the smell list entries that are arithmetic rather than opinion: more
- * finishes than wins, a negative count, a pay per view rank below one, a
- * career that ends before it starts or runs past today, an age that would
- * have the fighter debuting as a child, and the same name twice in one pool.
+ * finishes than wins, a negative count, a career that ends before it starts
+ * or runs past today, a birth date that would have the fighter debuting as a
+ * child, and the same name twice in one pool.
+ *
+ * Round 660 update: the verification pass this harness was the floor under
+ * has now happened. scripts/simSportsFacts.mjs pins every row of both files
+ * to a two source record (scripts/data/sportsFactsVerified2026-09.json), so a
+ * green run there means verified. This harness keeps its own job, the
+ * arithmetic and the cross file agreement, which needs no record.
+ *
+ * The places it reads the record (Round 660 review). The division
+ * declarations below say WHY a fighter may sit in two divisions, and eleven of
+ * them give the reason "the guesser shows the division of his last UFC bout as
+ * ufc.com's event page labels it". That is a claim about a source. The first
+ * wording ("the division ufc.com lists") was false for BJ Penn, whose guesser
+ * row said Featherweight while ufc.com and his last two bouts said
+ * Lightweight; his row is Lightweight now and needs no declaration. A reason
+ * that nothing checks is prose, so each such declaration carries shownAs:
+ * 'ufc.com', and section 6 requires the record's weightClass for that fighter
+ * to be the declared division, standing on a ufc.com EVENT page (a profile
+ * page's division can lag the last bout), with no noOfficial note saying
+ * ufc.com shows something else. And a declaration that spans more than one
+ * step (Max Holloway went featherweight, lightweight, then welterweight at
+ * UFC 329) must name every division in between as through, and section 5
+ * requires the record's verified UFC divisions for him to include each one.
  *
  * WHAT IT DOES NOT DO. It does not assert that any number is correct. That
  * needs two published sources and belongs in the same re-verification pass
@@ -49,11 +71,19 @@
  * separate decision; this note exists so the next person to find it does not
  * lose an afternoon to it the way this round nearly did.
  *
- * CONTROLS (each rewrites the source text and refuses to run if the rewrite
- * changed nothing):
- *   UFC_CONTROL=record     a record string no longer matches its own fields
- *   UFC_CONTROL=crossfile  a weight class changed in one file only
- *   UFC_CONTROL=finishes   more knockouts than wins
+ * CONTROLS (each rewrites the source text or the record in memory and refuses
+ * to run if the rewrite changed nothing). The harness runs twice, untouched
+ * and with the control, and the control proves its section only if the
+ * control run has NEW failures and every one of them is in that section.
+ * Comparing against the untouched run is what keeps a control meaningful
+ * while a section is already red for a real reason:
+ *   UFC_CONTROL=record       a record string no longer matches its own fields
+ *   UFC_CONTROL=crossfile    a weight class changed in one file only
+ *   UFC_CONTROL=finishes     more knockouts than wins
+ *   UFC_CONTROL=declaration  Pereira's verified division loses its ufc.com page
+ *   UFC_CONTROL=through      Holloway's verified divisions lose Lightweight, the
+ *                            division his declared move passes through
+ * Exit code under a control: 0 when the section fired as it must, 1 when not.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -64,10 +94,9 @@ const CONTROL = process.env.UFC_CONTROL || '';
 const THIS_YEAR = new Date().getFullYear();
 const FIGHTERS = 'src/data/ufcFighters.ts';
 const CHAIN = 'src/data/ufcChainData.ts';
-
-let failures = 0;
-const fired = new Set();
-const fail = (n, msg) => { fired.add(n); console.error('  FAIL: ' + msg); failures += 1; };
+const RECORD = 'scripts/data/sportsFactsVerified2026-09.json';
+const EXPECT = { record: 1, crossfile: 5, finishes: 3, declaration: 6, through: 5 };
+if (CONTROL && EXPECT[CONTROL] === undefined) { console.error(`Unknown UFC_CONTROL "${CONTROL}"`); process.exit(2); }
 
 const rewrite = (src, from, to, what) => {
   if (!src.includes(from)) {
@@ -95,93 +124,9 @@ const parseRows = (src, arrayName) => {
   return rows;
 };
 
-let fighterSrc = fs.readFileSync(path.join(ROOT, FIGHTERS), 'utf8');
-let chainSrc = fs.readFileSync(path.join(ROOT, CHAIN), 'utf8');
-
-if (CONTROL === 'record') {
-  fighterSrc = rewrite(fighterSrc, `record: '28-1-0', wins: 28`, `record: '27-1-0', wins: 28`,
-    "Jon Jones' record string");
-}
-if (CONTROL === 'crossfile') {
-  chainSrc = rewrite(chainSrc, `{ name: 'Israel Adesanya', weightClass: 'Middleweight'`,
-    `{ name: 'Israel Adesanya', weightClass: 'Welterweight'`, "Adesanya's weight class in the chain file");
-}
-if (CONTROL === 'finishes') {
-  fighterSrc = rewrite(fighterSrc, `wins: 29, losses: 0, draws: 0, age: 37, koTko: 8`,
-    `wins: 29, losses: 0, draws: 0, age: 37, koTko: 80`, "Khabib's knockout count");
-}
-
-const fighters = parseRows(fighterSrc, 'export const ufcFighters');
-const chain = parseRows(chainSrc, 'export const UFC_FIGHTERS');
-console.log(`Parsed ${fighters.length} rows from ${FIGHTERS} and ${chain.length} from ${CHAIN}`);
-if (fighters.length < 100 || chain.length < 50) {
-  fail(-1, `parsed too few rows (${fighters.length} and ${chain.length}), so the parse is broken and nothing below means anything`);
-}
-
 const WEIGHT_CLASSES = new Set(['Strawweight', 'Flyweight', 'Bantamweight', 'Featherweight',
   'Lightweight', 'Welterweight', 'Middleweight', 'Light Heavyweight', 'Heavyweight']);
 
-// ---------------------------------------------------------------------------
-console.log('\n--- 1. every record string matches the wins, losses and draws beside it ---');
-for (const [file, rows] of [[FIGHTERS, fighters], [CHAIN, chain]]) {
-  let checked = 0;
-  for (const f of rows) {
-    if (typeof f.record !== 'string' || f.wins === undefined) continue;
-    checked += 1;
-    const want = `${f.wins}-${f.losses}-${f.draws}`;
-    if (f.record !== want) fail(1, `${file}: ${f.name} says record "${f.record}" and ${want} in the same row`);
-  }
-  if (!checked) fail(1, `${file}: no row carried both a record string and a win count, so this section checked nothing`);
-  else console.log(`  ${file}: ${checked} records agree with their own fields`);
-}
-
-// ---------------------------------------------------------------------------
-console.log('\n--- 2. careers and ages are arithmetically possible ---');
-let yearsChecked = 0;
-for (const f of fighters) {
-  if (f.yearsActiveStart === undefined) continue;
-  yearsChecked += 1;
-  const want = `${f.yearsActiveStart}-${f.yearsActiveEnd}`;
-  if (f.yearsActive !== want) fail(2, `${FIGHTERS}: ${f.name} says yearsActive "${f.yearsActive}" and ${want} in the same row`);
-  if (f.yearsActiveEnd < f.yearsActiveStart) fail(2, `${FIGHTERS}: ${f.name} ends in ${f.yearsActiveEnd}, before starting in ${f.yearsActiveStart}`);
-  if (f.yearsActiveEnd > THIS_YEAR) fail(2, `${FIGHTERS}: ${f.name} is active until ${f.yearsActiveEnd}, which has not happened yet`);
-  // Nobody debuts in a professional promotion at fifteen.
-  const ageAtDebut = f.age - (THIS_YEAR - f.yearsActiveStart);
-  if (ageAtDebut < 16) fail(2, `${FIGHTERS}: ${f.name} is ${f.age} and started in ${f.yearsActiveStart}, which makes the debut age ${ageAtDebut}`);
-}
-if (!yearsChecked) fail(2, `${FIGHTERS}: no row carried a start year, so this section checked nothing`);
-else console.log(`  ${yearsChecked} careers start before they end, end by ${THIS_YEAR}, and imply a debut at 16 or older`);
-
-// ---------------------------------------------------------------------------
-console.log('\n--- 3. counts that cannot exceed each other, do not ---');
-let countChecked = 0;
-for (const f of fighters) {
-  if (f.koTko === undefined) continue;
-  countChecked += 1;
-  if (f.koTko + f.submissions > f.wins) {
-    fail(3, `${FIGHTERS}: ${f.name} has ${f.koTko} knockouts and ${f.submissions} submissions, which is more than his ${f.wins} wins`);
-  }
-  for (const k of ['wins', 'losses', 'draws', 'koTko', 'submissions', 'age']) {
-    if (f[k] < 0) fail(3, `${FIGHTERS}: ${f.name} has a negative ${k} (${f[k]})`);
-  }
-  if (f.highestP4PRank < 1) fail(3, `${FIGHTERS}: ${f.name} has a pound for pound rank of ${f.highestP4PRank}, and there is no rank below one`);
-}
-if (!countChecked) fail(3, `${FIGHTERS}: no row carried a finish count, so this section checked nothing`);
-else console.log(`  ${countChecked} fighters have no more finishes than wins and no negative counts`);
-
-// ---------------------------------------------------------------------------
-console.log('\n--- 4. no fighter appears twice in one pool, and every weight class is a real one ---');
-for (const [file, rows] of [[FIGHTERS, fighters], [CHAIN, chain]]) {
-  const seen = new Map();
-  for (const f of rows) {
-    if (seen.has(f.name)) fail(4, `${file}: ${f.name} appears twice`);
-    seen.set(f.name, f);
-    if (!WEIGHT_CLASSES.has(f.weightClass)) fail(4, `${file}: ${f.name} is in "${f.weightClass}", which is not a weight class`);
-  }
-  console.log(`  ${file}: ${seen.size} distinct fighters, all in real weight classes`);
-}
-
-// ---------------------------------------------------------------------------
 /* The one honest exception, and it is worth reading before adding to it.
    The two weightClass fields answer different questions. In ufcFighters.ts it
    is the division the fighter is guessed as, and the file uses the last one
@@ -192,67 +137,237 @@ for (const [file, rows] of [[FIGHTERS, fighters], [CHAIN, chain]]) {
 
    For a fighter who genuinely fought in two divisions both answers are true,
    so forcing them equal would not fix a wrong fact, it would break a working
-   game to make a harness quiet. These four are declared instead: both
+   game to make a harness quiet. These are declared instead: both
    divisions named, and the harness checks the declared pair is exactly the
    pair observed and that the two are neighbours in WEIGHT_CLASS_ORDER,
    because a fighter moves to the division next door and a typo usually does
-   not. Anything undeclared still fails. */
+   not. A fighter who really did cross two divisions names the one in between
+   as through, and the record must show him fighting in all three. Anything
+   undeclared still fails. A declaration whose reason is a source (shownAs:
+   'ufc.com') is checked against the record in section 6. */
 const WEIGHT_CLASS_ORDER = ['Strawweight', 'Flyweight', 'Bantamweight', 'Featherweight',
   'Lightweight', 'Welterweight', 'Middleweight', 'Light Heavyweight', 'Heavyweight'];
+const UFC_COM_WHY = 'the guesser shows the division of his last UFC bout as ufc.com\'s event page labels it (checked 2026-09-28 with the Sherdog event page, Round 660); the chain keeps him in the division of the fights it links';
 const MULTI_DIVISION = {
-  'Randy Couture': { fighters: 'Heavyweight', chain: 'Light Heavyweight', why: 'held titles in both' },
+  'Alex Pereira': { fighters: 'Heavyweight', chain: 'Light Heavyweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
+  'Robert Whittaker': { fighters: 'Light Heavyweight', chain: 'Middleweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
+  'Paulo Costa': { fighters: 'Light Heavyweight', chain: 'Middleweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
+  'Kamaru Usman': { fighters: 'Middleweight', chain: 'Welterweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
+  'Georges St-Pierre': { fighters: 'Middleweight', chain: 'Welterweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
+  'Islam Makhachev': { fighters: 'Welterweight', chain: 'Lightweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
+  'Conor McGregor': { fighters: 'Welterweight', chain: 'Lightweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
+  'Tony Ferguson': { fighters: 'Welterweight', chain: 'Lightweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
+  'Ilia Topuria': { fighters: 'Lightweight', chain: 'Featherweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
+  'Max Holloway': { fighters: 'Welterweight', chain: 'Featherweight', through: ['Lightweight'], shownAs: 'ufc.com', why: UFC_COM_WHY },
+  'Aljamain Sterling': { fighters: 'Featherweight', chain: 'Bantamweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
   'Frankie Edgar': { fighters: 'Bantamweight', chain: 'Featherweight', why: 'dropped from lightweight through featherweight to bantamweight' },
   'Deiveson Figueiredo': { fighters: 'Bantamweight', chain: 'Flyweight', why: 'flyweight champion, then moved up' },
   'Henry Cejudo': { fighters: 'Bantamweight', chain: 'Flyweight', why: 'held titles in both' },
 };
 
-console.log('\n--- 5. the two files agree about the fighters they both carry ---');
-const byName = new Map(fighters.map(f => [f.name, f]));
-let shared = 0;
-const usedDeclarations = new Set();
-for (const c of chain) {
-  const f = byName.get(c.name);
-  if (!f) continue;
-  shared += 1;
-  for (const field of ['record', 'wins', 'losses', 'draws']) {
-    if (c[field] !== f[field]) {
-      fail(5, `${c.name}: ${field} is ${JSON.stringify(f[field])} in ${FIGHTERS} and ${JSON.stringify(c[field])} in ${CHAIN}`);
+function runChecks(fighterSrc, chainSrc, record, quiet) {
+  const failures = [];
+  const say = (m) => { if (!quiet) console.log(m); };
+  const fail = (n, msg) => { failures.push({ section: n, msg }); if (!quiet) console.error('  FAIL: ' + msg); };
+
+  const fighters = parseRows(fighterSrc, 'export const ufcFighters');
+  const chain = parseRows(chainSrc, 'export const UFC_FIGHTERS');
+  say(`Parsed ${fighters.length} rows from ${FIGHTERS} and ${chain.length} from ${CHAIN}`);
+  /* Floors that prove the parse worked. The guesser was 104 fighters when this
+     was written; Round 660 took out the fourteen whose sources disagree on a
+     number the game shows, so 90 ship. A round that removes one lowers this on
+     purpose. */
+  if (fighters.length < 90 || chain.length < 50) {
+    fail(-1, `parsed too few rows (${fighters.length} and ${chain.length}), so the parse is broken and nothing below means anything`);
+  }
+
+  // ---------------------------------------------------------------------------
+  say('\n--- 1. every record string matches the wins, losses and draws beside it ---');
+  for (const [file, rows] of [[FIGHTERS, fighters], [CHAIN, chain]]) {
+    let checked = 0;
+    for (const f of rows) {
+      if (typeof f.record !== 'string' || f.wins === undefined) continue;
+      checked += 1;
+      const want = `${f.wins}-${f.losses}-${f.draws}`;
+      if (f.record !== want) fail(1, `${file}: ${f.name} says record "${f.record}" and ${want} in the same row`);
+    }
+    if (!checked) fail(1, `${file}: no row carried both a record string and a win count, so this section checked nothing`);
+    else say(`  ${file}: ${checked} records agree with their own fields`);
+  }
+
+  // ---------------------------------------------------------------------------
+  say('\n--- 2. careers and ages are arithmetically possible ---');
+  let yearsChecked = 0;
+  for (const f of fighters) {
+    if (f.yearsActiveStart === undefined) continue;
+    yearsChecked += 1;
+    const want = `${f.yearsActiveStart}-${f.yearsActiveEnd}`;
+    if (f.yearsActive !== want) fail(2, `${FIGHTERS}: ${f.name} says yearsActive "${f.yearsActive}" and ${want} in the same row`);
+    if (f.yearsActiveEnd < f.yearsActiveStart) fail(2, `${FIGHTERS}: ${f.name} ends in ${f.yearsActiveEnd}, before starting in ${f.yearsActiveStart}`);
+    if (f.yearsActiveEnd > THIS_YEAR) fail(2, `${FIGHTERS}: ${f.name} is active until ${f.yearsActiveEnd}, which has not happened yet`);
+    // Nobody debuts in a professional promotion at fifteen. Round 660: the row
+    // carries a birth date now (age is computed on the day of play), so the
+    // debut age comes from it.
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(f.birthDate || '')) { fail(2, `${FIGHTERS}: ${f.name} has no YYYY-MM-DD birthDate`); continue; }
+    const ageAtDebut = f.yearsActiveStart - Number(f.birthDate.slice(0, 4));
+    if (ageAtDebut < 16) fail(2, `${FIGHTERS}: ${f.name} was born ${f.birthDate} and started in ${f.yearsActiveStart}, which makes the debut age about ${ageAtDebut}`);
+  }
+  if (!yearsChecked) fail(2, `${FIGHTERS}: no row carried a start year, so this section checked nothing`);
+  else say(`  ${yearsChecked} careers start before they end, end by ${THIS_YEAR}, and imply a debut at 16 or older`);
+
+  // ---------------------------------------------------------------------------
+  say('\n--- 3. counts that cannot exceed each other, do not ---');
+  let countChecked = 0;
+  for (const f of fighters) {
+    if (f.koTko === undefined) continue;
+    countChecked += 1;
+    if (f.koTko + f.submissions > f.wins) {
+      fail(3, `${FIGHTERS}: ${f.name} has ${f.koTko} knockouts and ${f.submissions} submissions, which is more than his ${f.wins} wins`);
+    }
+    for (const k of ['wins', 'losses', 'draws', 'koTko', 'submissions']) {
+      if (f[k] < 0) fail(3, `${FIGHTERS}: ${f.name} has a negative ${k} (${f[k]})`);
     }
   }
-  if (c.weightClass === f.weightClass) continue;
-  const declared = MULTI_DIVISION[c.name];
-  if (!declared) {
-    fail(5, `${c.name}: weightClass is "${f.weightClass}" in ${FIGHTERS} and "${c.weightClass}" in ${CHAIN}, and nothing says why`);
-    continue;
+  if (!countChecked) fail(3, `${FIGHTERS}: no row carried a finish count, so this section checked nothing`);
+  else say(`  ${countChecked} fighters have no more finishes than wins and no negative counts`);
+
+  // ---------------------------------------------------------------------------
+  say('\n--- 4. no fighter appears twice in one pool, and every weight class is a real one ---');
+  for (const [file, rows] of [[FIGHTERS, fighters], [CHAIN, chain]]) {
+    const seen = new Map();
+    for (const f of rows) {
+      if (seen.has(f.name)) fail(4, `${file}: ${f.name} appears twice`);
+      seen.set(f.name, f);
+      if (!WEIGHT_CLASSES.has(f.weightClass)) fail(4, `${file}: ${f.name} is in "${f.weightClass}", which is not a weight class`);
+    }
+    say(`  ${file}: ${seen.size} distinct fighters, all in real weight classes`);
   }
-  usedDeclarations.add(c.name);
-  if (declared.fighters !== f.weightClass || declared.chain !== c.weightClass) {
-    fail(5, `${c.name} is declared as ${declared.fighters} / ${declared.chain} but the files now say ${f.weightClass} / ${c.weightClass}, so the declaration is covering a different disagreement than the one it was written for`);
-    continue;
+
+  // ---------------------------------------------------------------------------
+  say('\n--- 5. the two files agree about the fighters they both carry ---');
+  const byName = new Map(fighters.map(f => [f.name, f]));
+  let shared = 0;
+  const usedDeclarations = new Set();
+  for (const c of chain) {
+    const f = byName.get(c.name);
+    if (!f) continue;
+    shared += 1;
+    for (const field of ['record', 'wins', 'losses', 'draws']) {
+      if (c[field] !== f[field]) {
+        fail(5, `${c.name}: ${field} is ${JSON.stringify(f[field])} in ${FIGHTERS} and ${JSON.stringify(c[field])} in ${CHAIN}`);
+      }
+    }
+    if (c.weightClass === f.weightClass) continue;
+    const declared = MULTI_DIVISION[c.name];
+    if (!declared) {
+      fail(5, `${c.name}: weightClass is "${f.weightClass}" in ${FIGHTERS} and "${c.weightClass}" in ${CHAIN}, and nothing says why`);
+      continue;
+    }
+    usedDeclarations.add(c.name);
+    if (declared.fighters !== f.weightClass || declared.chain !== c.weightClass) {
+      fail(5, `${c.name} is declared as ${declared.fighters} / ${declared.chain} but the files now say ${f.weightClass} / ${c.weightClass}, so the declaration is covering a different disagreement than the one it was written for`);
+      continue;
+    }
+    const lo = Math.min(WEIGHT_CLASS_ORDER.indexOf(declared.fighters), WEIGHT_CLASS_ORDER.indexOf(declared.chain));
+    const hi = Math.max(WEIGHT_CLASS_ORDER.indexOf(declared.fighters), WEIGHT_CLASS_ORDER.indexOf(declared.chain));
+    const between = WEIGHT_CLASS_ORDER.slice(lo + 1, hi);
+    const through = declared.through ?? [];
+    if (JSON.stringify(through) !== JSON.stringify(between)) {
+      fail(5, `${c.name} is declared in ${declared.fighters} and ${declared.chain}, which are ${hi - lo} divisions apart; ${between.length ? `a move that far must name the division${between.length > 1 ? 's' : ''} in between (${between.join(', ')}) as through` : 'they are neighbours, so the declaration names no division in between'}, and it names ${through.length ? through.join(', ') : 'none'}`);
+    } else if (through.length) {
+      /* A fighter who moved two divisions must have fought in every one of them,
+         and the record, not this declaration, is what says so. */
+      const fought = record.ufcChain?.[c.name]?.divisions?.v ?? [];
+      const missing = [declared.chain, ...through, declared.fighters].filter(d => !fought.includes(d));
+      if (missing.length) fail(5, `${c.name} is declared as moving from ${declared.chain} through ${through.join(', ')} to ${declared.fighters}, but the record's verified UFC divisions (${fought.join(', ') || 'none'}) do not include ${missing.join(', ')}`);
+    }
   }
-  const gap = Math.abs(WEIGHT_CLASS_ORDER.indexOf(declared.fighters) - WEIGHT_CLASS_ORDER.indexOf(declared.chain));
-  if (gap !== 1) {
-    fail(5, `${c.name} is declared in ${declared.fighters} and ${declared.chain}, which are ${gap} divisions apart, not neighbours`);
+  const unusedDeclarations = Object.keys(MULTI_DIVISION).filter(n => !usedDeclarations.has(n));
+  if (unusedDeclarations.length) {
+    fail(5, `declared as two division fighters but no longer disagreeing across the files: ${unusedDeclarations.join(', ')}. Delete the declaration, do not leave it standing.`);
+  } else {
+    say(`  ${Object.keys(MULTI_DIVISION).length} multi division fighters declared, each a move to the division next door or through every division in between: ` +
+      Object.entries(MULTI_DIVISION).map(([n, d]) => `${n} (${d.chain} to ${d.through ? `${d.through.join(' to ')} to ` : ''}${d.fighters}, ${d.why})`).join('; '));
   }
+  if (!shared) fail(5, 'not one fighter appears in both files, so this section checked nothing and the inventory\'s "the two files duplicate records" is no longer true');
+  else say(`  ${shared} fighters are in both files`);
+
+  // ---------------------------------------------------------------------------
+  say('\n--- 6. a declaration that names ufc.com as its reason stands on ufc.com in the record ---');
+  let claims = 0;
+  for (const [name, d] of Object.entries(MULTI_DIVISION)) {
+    if (d.shownAs !== 'ufc.com') continue;
+    claims += 1;
+    const wc = record.ufcFighters?.[name]?.weightClass;
+    /* The reason names the event page's bout label, so a ufc.com profile page
+       (whose division can lag the last bout) does not count. */
+    const onUfc = (wc?.src ?? []).some(u => { try { const x = new URL(u); return /(^|\.)ufc\.com$/.test(x.hostname.toLowerCase()) && /^\/event\//.test(x.pathname); } catch { return false; } });
+    let why = '';
+    if (!wc) why = 'the record holds no verified weightClass for this fighter';
+    else if (wc.v !== d.fighters) why = `the record verifies ${JSON.stringify(wc.v)}, not ${d.fighters}`;
+    else if (wc.noOfficial) why = `the record says ufc.com does not show it: "${wc.noOfficial}"`;
+    else if (!onUfc) why = 'the record cites no ufc.com event page for it';
+    if (why) fail(6, `${name}: declared as ${d.fighters} because "the guesser shows the division of his last UFC bout as ufc.com labels it", but ${why}`);
+  }
+  if (!claims) fail(6, 'no declaration names ufc.com as its reason, so this section checked nothing');
+  else say(`  ${claims} declarations give ufc.com as the reason; each was held to the record`);
+
+  return failures;
 }
-const unusedDeclarations = Object.keys(MULTI_DIVISION).filter(n => !usedDeclarations.has(n));
-if (unusedDeclarations.length) {
-  fail(5, `declared as two division fighters but no longer disagreeing across the files: ${unusedDeclarations.join(', ')}. Delete the declaration, do not leave it standing.`);
-} else {
-  console.log(`  ${Object.keys(MULTI_DIVISION).length} two division fighters declared, each a move to the division next door: ` +
-    Object.entries(MULTI_DIVISION).map(([n, d]) => `${n} (${d.chain} to ${d.fighters}, ${d.why})`).join('; '));
-}
-if (!shared) fail(5, 'not one fighter appears in both files, so this section checked nothing and the inventory\'s "the two files duplicate records" is no longer true');
-else console.log(`  ${shared} fighters are in both files`);
 
 // ---------------------------------------------------------------------------
-const EXPECT = { record: 1, crossfile: 5, finishes: 3 };
-if (CONTROL) {
-  const want = EXPECT[CONTROL];
-  if (want === undefined) { console.error(`Unknown UFC_CONTROL "${CONTROL}"`); process.exit(2); }
-  if (fired.has(want)) { console.log(`\nCONTROL ${CONTROL}: section ${want} fired, as it must.`); process.exit(0); }
-  console.error(`\nCONTROL ${CONTROL}: section ${want} did NOT fire. The check is not measuring what it claims to.`);
-  process.exit(1);
+const baseFighters = fs.readFileSync(path.join(ROOT, FIGHTERS), 'utf8');
+const baseChain = fs.readFileSync(path.join(ROOT, CHAIN), 'utf8');
+const baseRecord = JSON.parse(fs.readFileSync(path.join(ROOT, RECORD), 'utf8'));
+
+if (!CONTROL) {
+  const failures = runChecks(baseFighters, baseChain, baseRecord, false);
+  if (failures.length) { console.error(`\nsimUfcFacts: ${failures.length} failure(s) in section(s) ${[...new Set(failures.map(f => f.section))].sort((a, b) => a - b).join(', ')}`); process.exit(1); }
+  console.log('\nsimUfcFacts: both UFC tables are internally consistent and agree with each other, and every declaration that names ufc.com stands on it in the record. This says consistent, not verified.');
+  process.exit(0);
 }
-if (failures) { console.error(`\nsimUfcFacts: ${failures} failure(s)`); process.exit(1); }
-console.log('\nsimUfcFacts: both UFC tables are internally consistent and agree with each other. This says consistent, not verified.');
+
+let fighterSrc = baseFighters;
+let chainSrc = baseChain;
+let record = baseRecord;
+if (CONTROL === 'record') {
+  /* Amanda Nunes is in the guesser only, so the break shows in section 1 and
+     not also in the cross file comparison, which a chain fighter would trip. */
+  if (/Amanda Nunes/.test(chainSrc)) { console.error('CONTROL record cannot run: Amanda Nunes is in the chain now, so the break would show in section 5 as well'); process.exit(2); }
+  fighterSrc = rewrite(fighterSrc, `record: '23-5-0', wins: 23`, `record: '22-5-0', wins: 23`,
+    "Amanda Nunes' record string");
+}
+if (CONTROL === 'crossfile') {
+  chainSrc = rewrite(chainSrc, `{ name: 'Israel Adesanya', weightClass: 'Middleweight'`,
+    `{ name: 'Israel Adesanya', weightClass: 'Welterweight'`, "Adesanya's weight class in the chain file");
+}
+if (CONTROL === 'finishes') {
+  const line = fighterSrc.split(/\r?\n/).find(l => l.includes("{ name: 'Khabib Nurmagomedov',"));
+  const m = line && line.match(/koTko: \d+,/);
+  if (!m) { console.error("CONTROL finishes cannot run: Khabib's row with a knockout count not found"); process.exit(2); }
+  fighterSrc = rewrite(fighterSrc, line, line.replace(m[0], 'koTko: 80,'), "Khabib's knockout count");
+}
+if (CONTROL === 'through') {
+  record = structuredClone(baseRecord);
+  const div = record.ufcChain?.['Max Holloway']?.divisions;
+  if (!div || !div.v.includes('Lightweight') || !MULTI_DIVISION['Max Holloway']?.through) { console.error("CONTROL through cannot run: Holloway's declared move through Lightweight, or Lightweight in his verified divisions, is not there"); process.exit(2); }
+  div.v = div.v.filter(d => d !== 'Lightweight');
+}
+if (CONTROL === 'declaration') {
+  record = structuredClone(baseRecord);
+  const wc = record.ufcFighters?.['Alex Pereira']?.weightClass;
+  const kept = (wc?.src ?? []).filter(u => !/ufc\.com/.test(u));
+  if (!wc || kept.length === wc.src.length) { console.error("CONTROL declaration cannot run: Pereira's verified division has no ufc.com page to remove"); process.exit(2); }
+  wc.src = kept;
+}
+
+const base = runChecks(baseFighters, baseChain, baseRecord, true);
+const ctl = runChecks(fighterSrc, chainSrc, record, true);
+const baseKeys = new Set(base.map(f => `${f.section}|${f.msg}`));
+const added = ctl.filter(f => !baseKeys.has(`${f.section}|${f.msg}`));
+const want = EXPECT[CONTROL];
+console.log(`CONTROL ${CONTROL}: ${added.length} new failure(s) against an untouched run with ${base.length}.`);
+for (const f of added) console.log(`  + [${f.section}] ${f.msg}`);
+if (added.length && added.every(f => f.section === want)) { console.log(`\nCONTROL ${CONTROL}: section ${want} fired, as it must, and nothing else did.`); process.exit(0); }
+console.error(`\nCONTROL ${CONTROL}: section ${want} did NOT fire on its own (new failures in sections ${[...new Set(added.map(f => f.section))].join(', ') || 'none'}). The check is not measuring what it claims to.`);
+process.exit(1);

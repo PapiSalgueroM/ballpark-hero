@@ -26,8 +26,12 @@ export const FLAG_CODES: Record<string, string> = {
   "Hungary": "hu", "Slovakia": "sk", "Bulgaria": "bg", "Finland": "fi",
   "Montenegro": "me", "North Macedonia": "mk", "Albania": "al",
   "Guinea-Bissau": "gw", "Slovenia": "si", "Georgia": "ge",
+  /* West Germany flew the flag Germany flies today and Czechoslovakia the one
+     the Czech Republic kept, so those two draw a true flag. The Soviet Union
+     and Yugoslavia are deliberately absent: their only codes here were Russia
+     and Serbia, whose flags they never flew, so Lev Yashin's Squad Deal card
+     drew Russia's flag. With no entry they render as their name (Round 660). */
   "Bosnia": "ba", "West Germany": "de", "Czechoslovakia": "cz",
-  "Soviet Union": "ru", "Yugoslavia": "rs",
   // Exact nationality strings as they appear in player_market_values (Türkiye,
   // Cote d'Ivoire, Korea, South, Bosnia-Herzegovina, Curacao) plus common
   // footballing nations that were missing - all render real flags now instead

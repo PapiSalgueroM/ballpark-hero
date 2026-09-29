@@ -221,6 +221,52 @@ so this board, What's New, `docs/PROJECT-STATE.md` and `src/data/searchKeywords.
 keep both sides of the docs and rerun `genSearchKeywords` on the merged tree. Account in
 `docs/PROJECT-STATE.md`.
 
+**2026-09-28, Round 660 final pass: Round 699 RESERVED for the rest of the sports facts fence (first
+reserved as 674, renumbered because the points economy spec numbers its rounds 673 to 698), claimed by
+nobody yet.** The Round 660 re-reviews broke `scripts/simSportsFacts.mjs` and `scripts/simUfcFacts.mjs`
+with mutations that stayed green. Round 660 closed the three cheap ones (a verified date value must be a
+real day, a field the game shows cannot vanish from the file and the record together, and a noOfficial
+reason must name the official host it could not use or say none exists, each with its own control).
+These are left, each a mutation the reviewers ran that still passes:
+- **A reason that only names a host.** The noOfficial check passes any reason containing an official
+  hostname, so "see ufc.com" or "ufc.com agrees with this value" goes green (found by the last Round 660
+  review).
+- **Ownership.** `ufc.com` plus `ufcfightpass.com` counts as official plus independent, though both are
+  the UFC's. The OWNER table only knows the owners someone wrote down.
+- **Wikipedia copies.** `explained.today`, a mirror not on WIKI_HOSTS, was accepted as Bobby Jones's
+  independent source. The mirror list is a denylist; an unknown copy passes.
+- **Check date window.** A check date of 2019-01-01 passes, though the record's `about` says every check
+  ran between 2026-09-19 and 2026-09-28. Hold every `on` to the stated window.
+- **Gap detection is a denylist.** An `overturnedCorrection` key on McLaren's title clue (the key behind
+  the original blocker) stays green, and so does a note saying "ESPN is silent on this and Sherdog alone
+  gives the count". Replace it with an allowlist of node keys (v, src, on, note, noOfficial,
+  officialConflict, text, editorial, why, inducted) and a single source note detector.
+- **The one word opener.** Nothing counts its words: "Dutch Red Bull champion" on Verstappen and "Italian
+  Scuderia from Maranello" on Ferrari pass as editorial openers with no sources.
+- **The identity check reads one phrasing.** Only "now racing/competes as X" is seen: a Renault clue
+  saying "rebranded as Alpine in 2021" with Alpine dropped from the accepted names stays green.
+- **Last UFC bout against the counts.** Nothing compares the last bout date in a weightClass note with
+  yearsActive's end year or with each count's `on` date. That is how Tsarukyan and Pantoja shipped the
+  night before UFC 331 with a check date of the night itself.
+- **A full pro record on two lagging hosts.** Almeida's record stood on ufc.com (which logs only UFC
+  bouts) and ESPN (stale) after his ACA 207 loss. A fighter who has fought outside the UFC needs a host
+  that logs every pro bout (Sherdog) behind his record.
+- **The Olympic render check.** (a) The label only has to map to the same flag through FLAG_CODES, so gb
+  labelled "United Kingdom" passes, as would West Germany for de and Czechoslovakia for cz. (b) The
+  result line prints the raw country inside funFact, outside OlympicCountry. (c) An aliased import
+  (`FlagFromEmoji as Flag`) escapes the stray flag grep. (d) A modern nation stored as text (Bolt as
+  "Kenya" in the file and the record) draws no flag and passes.
+- **Golf winYears.** The record carries them for all 61 golfers and they agree today, but the fence never
+  derives majors, first and last win or the majors won from them: Bobby Jones at 8 majors in the file and
+  the record, with winYears adding up to 7, stays green.
+- **simUfcFacts section 6.** Dropping `shownAs` while keeping `why: UFC_COM_WHY` leaves a declaration
+  that cites ufc.com unchecked, and any ufc.com `/event/` URL satisfies it, even the event page of a
+  different bout (UFC 308 for Holloway).
+- **A list valued fact is one node.** Holloway's chain divisions let Lightweight stand on ufc.com alone.
+  Each element needs two organisations.
+- **golf_majors reads (contrived).** The static scan matches the table name literally, so
+  `supabase.from('golf' + '_majors')` outside the four List Quiz lists escapes it.
+
 **2026-09-19 evening, desktop Claude lane: Rounds 649 and 650 claimed, for search traffic.**
 Lovable's numbers for 2026-09-05 to 09-19: about 1,000 visitors a day, and Bing sends 3,882 of
 the search visits against Google's 1,705, so the raw HTML a crawler reads without running the app

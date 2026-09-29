@@ -49,18 +49,15 @@ function compareYearsActive(guess: UfcFighter, target: UfcFighter): UfcCellResul
   return compareNumeric(guessYears, targetYears, 2);
 }
 
-
-function compareP4PRank(guessVal: number, targetVal: number): UfcCellResult {
-  const display = `#${guessVal}`;
-  if (guessVal === targetVal) return { value: display, status: 'correct' };
-  const diff = Math.abs(guessVal - targetVal);
-  // Lower rank number = better. If guess is lower number (better), target is "lower" (worse).
-  const arrow: UfcArrowDirection = targetVal > guessVal ? 'down' : 'up';
-  const status: UfcCellStatus = diff <= 2 ? 'close' : 'incorrect';
-  return { value: display, status, arrow };
+/** Round 660: whole years of age on dateStr (YYYY-MM-DD), from a YYYY-MM-DD
+    birth date. Computed on the day the game is played so it never goes stale. */
+export function ageOn(birthDate: string, dateStr: string): number {
+  const [by, bm, bd] = birthDate.split('-').map(Number);
+  const [y, m, d] = dateStr.split('-').map(Number);
+  return y - by - (m < bm || (m === bm && d < bd) ? 1 : 0);
 }
 
-export function compareUfcGuess(guess: UfcFighter, target: UfcFighter): UfcGuessResult {
+export function compareUfcGuess(guess: UfcFighter, target: UfcFighter, dateStr: string): UfcGuessResult {
   return {
     fighterName: guess.name,
     isCorrect: guess.name === target.name,
@@ -68,13 +65,12 @@ export function compareUfcGuess(guess: UfcFighter, target: UfcFighter): UfcGuess
       yearsActive: compareYearsActive(guess, target),
       weightClass: compareWeightClass(guess.weightClass, target.weightClass),
       nationality: compareNationality(guess.nationality, target.nationality),
-      age: compareNumeric(guess.age, target.age, 2),
+      age: compareNumeric(ageOn(guess.birthDate, dateStr), ageOn(target.birthDate, dateStr), 2),
       wins: compareNumeric(guess.wins, target.wins, 3),
       losses: compareNumeric(guess.losses, target.losses, 2),
       draws: compareNumeric(guess.draws, target.draws, 1),
       koTko: compareNumeric(guess.koTko, target.koTko, 3),
       submissions: compareNumeric(guess.submissions, target.submissions, 2),
-      p4pRank: compareP4PRank(guess.highestP4PRank, target.highestP4PRank),
     },
   };
 }

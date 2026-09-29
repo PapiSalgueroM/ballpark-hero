@@ -9,19 +9,9 @@ import GameSeoContent from '@/components/seo/GameSeoContent';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import { ChevronDown, Award } from 'lucide-react';
-import { FlagFromEmoji } from '@/components/FlagImg';
+import { OlympicCountry } from '@/components/olympics/OlympicCountry';
 import { revealDelay } from '@/components/club-manager/Celebration';
 import { cn } from '@/lib/utils';
-
-const EMOJI_TO_COUNTRY: Record<string, string> = {
-  '🇺🇸': 'USA', '🇦🇷': 'Argentina', '🇯🇲': 'Jamaica', '🇷🇸': 'Serbia',
-  '🇰🇷': 'South Korea', '🇮🇹': 'Italy', '🇫🇷': 'France', '🇬🇧': 'England',
-  '🇩🇪': 'Germany', '🇧🇷': 'Brazil', '🇪🇸': 'Spain', '🇳🇱': 'Netherlands',
-  '🇯🇵': 'Japan', '🇨🇦': 'Canada', '🇦🇺': 'Australia', '🇨🇳': 'China',
-  '🇷🇺': 'Russia', '🇸🇪': 'Sweden', '🇳🇴': 'Norway', '🇨🇿': 'Czech Republic',
-  '🇺🇦': 'Ukraine', '🇷🇴': 'Romania', '🇫🇮': 'Finland', '🇨🇺': 'Cuba',
-  '🇱🇨': 'Saint Lucia', '🇰🇪': 'Kenya',
-};
 
 export default function Olympics() {
   const {
@@ -144,7 +134,7 @@ export default function Olympics() {
                   </div>
                   <div className="text-foreground text-sm">
                     {clue.label === 'Country'
-                      ? <span className="inline-flex items-center gap-1"><FlagFromEmoji emoji={clue.value} size={18} />{EMOJI_TO_COUNTRY[clue.value] || ''}</span>
+                      ? <OlympicCountry country={clue.value} size={18} />
                       : clue.value}
                   </div>
                 </div>
@@ -160,7 +150,7 @@ export default function Olympics() {
                   headline={athlete.name}
                   statLine={
                     <span className="inline-flex items-center justify-center gap-1">
-                      {athlete.sport}, <FlagFromEmoji emoji={athlete.country} size={16} /> {EMOJI_TO_COUNTRY[athlete.country] || ''}
+                      {athlete.sport}, <OlympicCountry country={athlete.country} size={16} />
                     </span>
                   }
                   funFact={`${athlete.gamesYear} ${athlete.hostCity}`}
