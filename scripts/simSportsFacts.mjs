@@ -447,7 +447,6 @@ const OWNER = {
   'formula1.com': 'Formula 1', 'olympics.com': 'the IOC', 'ufc.com': 'the UFC', 'ufcstats.com': 'the UFC',
   'nbcsports.com': 'NBCUniversal', 'nbcolympics.com': 'NBCUniversal', 'nbcnews.com': 'NBCUniversal', 'nbc.com': 'NBCUniversal',
   'nbclosangeles.com': 'NBCUniversal', 'nbcmiami.com': 'NBCUniversal', 'nbcnewyork.com': 'NBCUniversal', 'today.com': 'NBCUniversal',
-  'cnbc.com': 'NBCUniversal', 'msnbc.com': 'NBCUniversal',
   'cbssports.com': 'CBS', 'cbsnews.com': 'CBS', 'cbs.com': 'CBS',
   'foxsports.com': 'Fox', 'foxnews.com': 'Fox', 'fox.com': 'Fox',
   'autosport.com': 'Motorsport Network', 'motorsport.com': 'Motorsport Network',
