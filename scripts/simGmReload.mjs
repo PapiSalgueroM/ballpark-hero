@@ -59,6 +59,17 @@
         the engine's bracket reached. Every other row scores the recorded row
         against itself, so a board that built the row from the wrong numbers
         (the NHL board dropping its overtime losses) kept all of them green.
+        Round 674 fix (the adversarial review's M3 and the vacuous
+        brackets): the round is read from the bracket's games alone
+        (src/test/bracketReached.ts: the final is the one game whose winner
+        never plays again, every other game is a round before the next game
+        its winner plays), never through stageOf, which the boards build the
+        row with; and the row plays 24 seeded seasons over different teams
+        plus a rigged title rather than one season, because on its one seed
+        the NFL team missed the playoffs and the MLB team went out in round
+        one. Each board must cover a season with no playoff spot, an exit in
+        round two or later short of the title, a title, and a season that
+        lost games, and the NHL one with overtime losses.
 
    Negative controls (house rule: prove the check can fail, and fail only
    where it was written to). Every control asserts its anchor is in the file
@@ -105,11 +116,24 @@
        NO_DOUBLE_SWAP, at a copy of src/lib/seasonFormats.ts whose untouched
        offseason does not count the men a GM cut. Exactly the cut row must go
        red on every board.
+     GM_RELOAD_CONTROL=stageplus (Round 674 fix, the review's M3) points
+       every board and the test at a copy of the ledger whose stageOf reads
+       every playoff team that did not win the title one round further than
+       it reached (scripts/lib/engineRowControls.mjs). Exactly the engine row
+       must go red, on every board. (Under double the engine row may go red
+       now too: it closes a rigged title among its seasons.)
      GM_RELOAD_CONTROL=parallel (Round 674, R2.D10) runs the offseason and
        raw controls at the same moment, two children of this harness sharing
        one TEMP, the pair the review saw fail when four ran at once
        ("offseason fired on 0 of 4 boards", "raw ... Failed to resolve
        import"). Both must exit 0 on their own "the check works" line.
+       Round 674 fix (the review's M9): that alone passed with controlScratch
+       put back to one fixed folder per name, because the pair's copies have
+       different names. So the two children must also report two different
+       run folders, and controlScratch must pass checkPerRun (two runs under
+       one name get two folders, each its own, and one's cleanup leaves the
+       other), which a copy of it put back to the fixed folder is first
+       proved to fail.
 
    Nothing here reads the clock. Round 674 (R2.D10): the control copies go in
    a per run folder under ROOT/.sim-control (scripts/lib/controlScratch.mjs),
@@ -122,9 +146,10 @@
 import { spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 import { LEDGER_CONTROL_WORDS, writeLedgerControl } from './lib/seasonLedgerControl.mjs';
-import { controlScratch, loadedLine, withLoadedLine } from './lib/controlScratch.mjs';
+import { controlScratch, loadedLine, withLoadedLine, checkPerRun, writeFixedScratchCopy } from './lib/controlScratch.mjs';
+import { writeEngineRowControl, engineRowControlWords } from './lib/engineRowControls.mjs';
 import { stripComments } from './lib/readSource.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -134,7 +159,10 @@ const BOARD_CONTROLS = ['replay', 'late', 'offseason', 'noreset'];
 const ONE_BOARD_CONTROLS = ['otlosses'];
 const MODULE_CONTROLS = ['double', 'raw'];
 const FORMATS_CONTROLS = ['nokeep'];
-const CONTROLS = [...BOARD_CONTROLS, ...ONE_BOARD_CONTROLS, ...MODULE_CONTROLS, ...FORMATS_CONTROLS, 'parallel'];
+/* Round 674 fix: the review's M3, a ledger copy whose stageOf reads one
+   round too far (scripts/lib/engineRowControls.mjs). */
+const ENGINE_CONTROLS = ['stageplus'];
+const CONTROLS = [...BOARD_CONTROLS, ...ONE_BOARD_CONTROLS, ...MODULE_CONTROLS, ...FORMATS_CONTROLS, ...ENGINE_CONTROLS, 'parallel'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`GM_RELOAD_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`); process.exit(1); }
 
 /* ---- the parallel control: two controls at once, both must fire ---- */
@@ -148,17 +176,43 @@ if (CONTROL === 'parallel') {
     child.stderr.on('data', d => { out += d; });
     child.on('close', code => resolve({ name, code, out }));
   });
+  /* Round 674 fix (the review's M9): the pair fired even with controlScratch
+     put back to one fixed folder per name, because offseason and raw write
+     different file names and each loads before the other cleans up. So the
+     folders themselves are checked: the factory must hand two runs under one
+     name two folders (checkPerRun), a copy of it put back to the fixed
+     folder must fail that check (or the check proves nothing), and the two
+     children must report different run folders in their load lines. */
+  const perRun = checkPerRun(controlScratch, ROOT, 'gm-control');
+  const probe = controlScratch(ROOT, 'gm-parallel-probe');
+  let fixedProblems = null;
+  try {
+    const fixedCopy = writeFixedScratchCopy(probe.dir, stripComments);
+    const fixed = await import(pathToFileURL(fixedCopy).href);
+    fixedProblems = checkPerRun(fixed.controlScratch, ROOT, 'gm-control-fixed-probe');
+  } catch (e) {
+    perRun.push(`the fixed folder copy could not be written (${e.message}), so controlScratch no longer makes its folder with mkdtemp`);
+  } finally {
+    probe.cleanup();
+  }
+  for (const p of perRun) console.log(`   per run folders: ${p}`);
+  if (fixedProblems && !fixedProblems.length) { console.error('\ncontrol "parallel" cannot run: a controlScratch put back to one fixed folder per name passes checkPerRun, so its green would prove nothing'); process.exit(1); }
+  if (fixedProblems) console.log(`   a controlScratch put back to one fixed folder fails the per run check, as it must (${fixedProblems.length} problem(s), first: ${fixedProblems[0]})`);
   const results = await Promise.all(PAIR.map(runOne));
   let ok = 0;
+  const tags = [];
   for (const r of results) {
     const works = new RegExp(`control "${r.name}": .*the check works`).test(r.out);
-    const loaded = /every control copy printed its load line/.test(r.out);
-    console.log(`   ${r.name}: exit ${r.code}, ${works ? 'fired' : 'DID NOT FIRE'}, ${loaded ? 'its own copies loaded' : 'NO LOAD LINE'}`);
-    if (r.code === 0 && works && loaded) ok += 1;
+    const loadedRun = r.out.match(/every control copy printed its load line \(\d+, run (\S+)\)/);
+    console.log(`   ${r.name}: exit ${r.code}, ${works ? 'fired' : 'DID NOT FIRE'}, ${loadedRun ? `its own copies loaded, run ${loadedRun[1]}` : 'NO LOAD LINE'}`);
+    if (loadedRun) tags.push(loadedRun[1]);
+    if (r.code === 0 && works && loadedRun) ok += 1;
     else console.log(r.out.split('\n').slice(-25).map(l => '     ' + l).join('\n'));
   }
-  if (ok === PAIR.length) { console.log(`\ncontrol "parallel": ${PAIR.join(' and ')} both fired while running at once, each on its own copies, the check works`); process.exit(0); }
-  console.error(`\ncontrol "parallel": ${ok} of ${PAIR.length} controls fired while running at once, so running controls in parallel gives false verdicts`);
+  const distinct = tags.length === PAIR.length && new Set(tags).size === PAIR.length;
+  if (tags.length === PAIR.length && !distinct) console.log(`   the two runs report the same run folder (${tags[0]}), so they shared one`);
+  if (ok === PAIR.length && distinct && !perRun.length) { console.log(`\ncontrol "parallel": ${PAIR.join(' and ')} both fired while running at once, each in a run folder of its own (${tags.join(', ')}), the check works`); process.exit(0); }
+  console.error(`\ncontrol "parallel": ${ok} of ${PAIR.length} controls fired while running at once${distinct ? '' : ', and the runs did not each get a folder of their own'}${perRun.length ? `, and controlScratch fails the per run check (${perRun.length} problem(s))` : ''}, so running controls in parallel gives false verdicts`);
   process.exit(1);
 }
 
@@ -187,7 +241,13 @@ const BREAKS = {
   late: { must: ['title', 'pick'], may: ['plain', 'two', 'older'] },
   offseason: { must: ['two', 'cut'], may: [] },
   noreset: { must: ['two'], may: [] },
-  double: { must: ['title', 'older', 'replay', 'two', 'pick'], may: ['cut'] },
+  /* Round 674 fix: the engine row plays a rigged title season among its
+     seasons now, which this ledger files twice. */
+  double: { must: ['title', 'older', 'replay', 'two', 'pick'], may: ['cut', 'engine'] },
+  /* Round 674 fix, the review's M3: every board's engine row, and nothing
+     else (the other rows close titles or seasons with no playoff spot,
+     which the one round more does not touch). */
+  stageplus: { must: ['engine'], may: [] },
   raw: { must: ['pick'], may: ['plain', 'title', 'older', 'two', 'cut'] },
   nokeep: { must: ['cut'], may: [] },
   /* One board only: the others are the real boards and must stay green. */
@@ -288,6 +348,12 @@ if (BOARD_CONTROLS.includes(CONTROL) || ONE_BOARD_CONTROLS.includes(CONTROL)) {
   writeCopy(copy, regressed, 'nokeep seasonFormats.ts');
   env.NO_DOUBLE_SWAP = JSON.stringify({ '@/lib/seasonFormats': copy.replaceAll('\\', '/') });
   console.log('NEGATIVE CONTROL ON: all four boards and the test read season shapes whose untouched offseason does not count the men a GM cut');
+} else if (ENGINE_CONTROLS.includes(CONTROL)) {
+  let copy;
+  try { copy = writeEngineRowControl(ROOT, CONTROL, dir); } catch (e) { abort(e.message); }
+  writeCopy(copy, fs.readFileSync(copy, 'utf8').split('\r\n').join('\n'), `${CONTROL} seasonLedger.ts`);
+  env.SEASON_LEDGER_MODULE = copy.replaceAll('\\', '/');
+  console.log(`NEGATIVE CONTROL ON: all four boards and the test read a season ledger whose stageOf ${engineRowControlWords(CONTROL)}`);
 } else if (CONTROL) {
   let copy;
   try { copy = writeLedgerControl(ROOT, CONTROL, dir); } catch (e) { abort(e.message); }

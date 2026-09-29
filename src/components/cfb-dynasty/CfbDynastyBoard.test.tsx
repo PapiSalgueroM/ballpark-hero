@@ -35,8 +35,9 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
-import { initCfb, simCfbRound, CFB_ROUNDS, CFB_SCHOOL_MAP, type CfbState } from '@/lib/cfbDynasty';
-import { scoreSeason, appendSeason, ledgerTotal, projectionFor, projectNext, stageOf, BAR_SHARE, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
+import { initCfb, simCfbRound, CFB_ROUNDS, CFB_SCHOOLS, CFB_SCHOOL_MAP, type CfbState } from '@/lib/cfbDynasty';
+import { scoreSeason, appendSeason, ledgerTotal, projectionFor, projectNext, BAR_SHARE, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
+import { reachedInBracket } from '@/test/bracketReached';
 import { CFB_SEASON, roundPhrase } from '@/lib/seasonFormats';
 
 // Completion tracking reads the auth context and writes to the database;
@@ -86,13 +87,21 @@ function rig(st: CfbState, how: Rig) {
   }
 }
 
+/* Round 674 fix: the seasons the engine row plays, each a seed, a program
+   and a seed for the board's final week and Playoff (Math.random), plus one
+   rigged title. Built when the row runs, not at module scope. */
+const ENGINE_SEASONS = (): { seed: number; random: number; school: string; rig?: Rig }[] => [
+  ...Array.from({ length: 16 }, (_, i) => ({ seed: i + 1, random: 101 + i, school: CFB_SCHOOLS[(i * 7) % CFB_SCHOOLS.length].id })),
+  { seed: 7, random: 11, school: 'UGA', rig: 'strong' as Rig },
+];
+
 /* A dynasty on the morning of its final regular season week. The save
    carries the projection made at the pick, from the roster the pick handed
    over, and the rig is applied after it: the roster that plays is not the
    roster that was projected, the way a manager's moves make it. */
-function finalWeekState(how?: Rig): { st: CfbState; pickExpect: SeasonExpectation } {
-  const rng = lehmer(7);
-  const st = initCfb('UGA', rng);
+function finalWeekState(how?: Rig, seed = 7, school = 'UGA'): { st: CfbState; pickExpect: SeasonExpectation } {
+  const rng = lehmer(seed);
+  const st = initCfb(school, rng);
   const pickExpect = project(st);
   st.expect = pickExpect;
   rig(st, how);
@@ -171,8 +180,8 @@ const finishes = (): number[] => {
 };
 /* history: a dynasty already under way on a save written before this round,
    with natties and seasons counted and no ledger and no projection at all. */
-const closeSeason = (how: Rig, history?: { myTitles: number; seasonsPlayed: number }) => {
-  const { st, pickExpect } = finalWeekState(how);
+const closeSeason = (how: Rig, history?: { myTitles: number; seasonsPlayed: number }, seed = 7, school = 'UGA') => {
+  const { st, pickExpect } = finalWeekState(how, seed, school);
   if (history) { delete st.ledger; delete st.expect; Object.assign(st, history); }
   save({ st, phase: 'season', recruits: null, portal: null });
   const view = render(<CfbDynastyBoard />);
@@ -360,19 +369,51 @@ describe('CFB Dynasty: the season ledger', () => {
      them), which is the twelve game regular season every program plays, and
      the round the engine's own bracket reached, from the crowned champion
      and the bracket the save carries for the recap. */
+  /* Round 674 fix (the adversarial review's M3 and M4). The round is
+     compared with reachedInBracket (src/test/bracketReached.ts), which reads
+     only who played whom and who won, never stageOf or a round name. And
+     the one season the first version played was a 12-0 title (UGA, seed 7),
+     where wins equal games and the bracket is the champion's, so a
+     cfbRegularRecord counting losses as wins stayed green, and so did any
+     bracket reading short of the title. The row now plays several programs
+     and seeds (ENGINE_SEASONS, plus one rigged title) and must cover a
+     season with no Playoff spot, a season out in round two or later short
+     of the title, and a title; a season that lost regular season games (so
+     wins and games differ); and a season that played a conference title
+     game (so the games column has to take it out). */
   it('the row is the season the engine played: the standings\' record and the round its bracket reached', () => {
-    const { closed } = closeSeason(undefined);
-    const row = rowOf(closed);
-    const me = closed.st.teams[closed.st.myTeam];
-    const titleGames = closed.postseason.ccgs.filter((g: any) => g.home === me.id || g.away === me.id);
-    const titleWins = titleGames.filter((g: any) => g.winner === me.id).length;
-    const champion = closed.st.natties.find((n: any) => n.season === row.season)?.team;
-    const stage = stageOf(closed.postseason.bracket, me.id, CFB_SEASON.roundOf, CFB_SEASON.rounds, champion);
-    console.log(`CFB_ENGINE_ROW wins ${row.wins}/${me.wins - titleWins}, games ${row.games}/${me.wins + me.losses - titleGames.length}, title games ${titleGames.length}, stage ${row.stage}/${stage} of ${row.rounds}, champion ${champion === me.id ? 'us' : champion}`);
-    expect(row.wins, 'the row\'s wins are the standings\' less a conference title game won').toBe(me.wins - titleWins);
-    expect(row.games, 'the row\'s games are the standings\' less the conference title game').toBe(me.wins + me.losses - titleGames.length);
-    expect(row.games, 'every program plays the whole twelve game regular season').toBe(CFB_ROUNDS);
-    expect(champion, 'the engine crowned a champion for the season').toBeTruthy();
-    expect(row.stage, 'the round is the one the engine\'s bracket reached').toBe(stage);
+    const stages: number[] = [];
+    let lostSome = false;
+    let playedTitleGame = false;
+    for (const s of ENGINE_SEASONS()) {
+      cleanup();
+      localStorage.clear();
+      completion.mockClear();
+      vi.spyOn(Math, 'random').mockImplementation(lehmer(s.random));
+      const { closed } = closeSeason(s.rig, undefined, s.seed, s.school);
+      const row = rowOf(closed);
+      const me = closed.st.teams[closed.st.myTeam];
+      const titleGames = closed.postseason.ccgs.filter((g: any) => g.home === me.id || g.away === me.id);
+      const titleWins = titleGames.filter((g: any) => g.winner === me.id).length;
+      const champion = closed.st.natties.find((n: any) => n.season === row.season)?.team;
+      expect(champion, 'the engine crowned a champion for the season').toBeTruthy();
+      const reached = reachedInBracket(closed.postseason.bracket, me.id, CFB_SEASON.rounds, champion);
+      const regWins = me.wins - titleWins;
+      const regGames = me.wins + me.losses - titleGames.length;
+      console.log(`CFB_ENGINE_ROW seed ${s.seed} ${s.school}${s.rig ? ` ${s.rig}` : ''}: wins ${row.wins}/${regWins}, games ${row.games}/${regGames}, title games ${titleGames.length}, stage ${row.stage}/${reached} of ${row.rounds}, champion ${champion === me.id ? 'us' : champion}`);
+      expect(row.wins, 'the row\'s wins are the standings\' less a conference title game won').toBe(regWins);
+      expect(row.games, 'the row\'s games are the standings\' less the conference title game').toBe(regGames);
+      expect(row.games, 'every program plays the whole twelve game regular season').toBe(CFB_ROUNDS);
+      expect(row.stage, 'the round is the one the engine\'s bracket reached, read from the games alone').toBe(reached);
+      stages.push(reached);
+      if (regWins > 0 && regWins < regGames) lostSome = true;
+      if (titleGames.length) playedTitleGame = true;
+    }
+    const rounds = CFB_SEASON.rounds;
+    expect(stages.some(x => x === 0), `a season with no Playoff spot, among ${stages.join(', ')}`).toBe(true);
+    expect(stages.some(x => x >= 2 && x <= rounds), `a season out in round two or later, short of the title, among ${stages.join(', ')}`).toBe(true);
+    expect(stages.some(x => x === rounds + 1), `a title season, among ${stages.join(', ')}`).toBe(true);
+    expect(lostSome, 'a season that won some regular season games and lost some, so wins and games differ').toBe(true);
+    expect(playedTitleGame, 'a season with a conference title game, which the games column must take out').toBe(true);
   });
 });

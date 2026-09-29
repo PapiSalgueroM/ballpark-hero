@@ -60,7 +60,8 @@ import { initLeague, simGame, REGULAR_WEEKS, releasePlayer } from '@/lib/frontOf
 import { initNbaLeague, simRound, NBA_ROUNDS, nbaRelease } from '@/lib/nbaFrontOffice';
 import { initMlbLeague, simMlbRound, MLB_ROUNDS, mlbRelease } from '@/lib/mlbFrontOffice';
 import { initNhlLeague, simNhlRound, NHL_FO_ROUNDS, nhlRelease } from '@/lib/nhlFrontOffice';
-import { scoreSeason, appendSeason, ledgerTotal, projectionFor, projectNext, stageOf, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
+import { scoreSeason, appendSeason, ledgerTotal, projectionFor, projectNext, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
+import { reachedInBracket } from '@/test/bracketReached';
 import { NFL_SEASON, NBA_SEASON, MLB_SEASON, NHL_SEASON, nflPlayoffGames, roundPhrase, type SeasonShape } from '@/lib/seasonFormats';
 import { FO_TEAMS } from '@/data/frontOfficePlayers';
 import { NBA_TEAMS } from '@/data/conquestDataNba';
@@ -109,6 +110,14 @@ const rigLeague = (teams: Record<string, any>, me: string, rig: Rig) => {
   }
 };
 
+/* Round 674 fix: the seasons the engine row plays, each a league seed (the
+   regular season to the final week) and a seed for the board's final week
+   and postseason (Math.random), plus one rigged title. */
+const ENGINE_SEASONS: { seed: number; random: number; pick: number; rig?: Rig }[] = [
+  ...Array.from({ length: 24 }, (_, i) => ({ seed: i + 1, random: 101 + i, pick: (i * 7) % 30 })),
+  { seed: 7, random: 11, pick: 0, rig: 'strong' as Rig },
+];
+
 interface BoardCase {
   name: string;
   env: string;
@@ -120,7 +129,7 @@ interface BoardCase {
   /* A league on the morning of its final week or round, with the team the
      GM runs, and the projection made from the league the pick handed over,
      before any rig. */
-  finalWeek: (rng: () => number, rig?: Rig) => { league: any; team: string; pickExpect: SeasonExpectation };
+  finalWeek: (rng: () => number, rig?: Rig, pick?: number) => { league: any; team: string; pickExpect: SeasonExpectation };
   /* Round 647: play a league from wherever it stands to the morning of its
      final week or round. */
   toFinal: (league: any, team: string, rng: () => number) => void;
@@ -163,9 +172,9 @@ const projectOf = (shape: SeasonShape<any>, lg: any, team: string): SeasonExpect
 const projectAfter = (shape: SeasonShape<any>, lg: any, team: string): SeasonExpectation =>
   projectNext(shape, lg, team, lg.season + 1);
 const opening = (shape: SeasonShape<any>, init: (rng: () => number) => any, toFinal: BoardCase['toFinal']) =>
-  (rng: () => number, rig?: Rig) => {
+  (rng: () => number, rig?: Rig, pick = 0) => {
     const lg = init(rng);
-    const team = Object.keys(lg.teams)[0];
+    const team = Object.keys(lg.teams)[pick];
     const pickExpect = projectOf(shape, lg, team);
     rigLeague(lg.teams, team, rig);
     toFinal(lg, team, rng);
@@ -367,8 +376,8 @@ for (const c of CASES) {
   /* history: a career already under way on a save written before this
      round, with titles and seasons counted and no ledger and no projection
      at all. Otherwise the save carries the pick's projection. */
-  const closeSeason = (rig: Rig, history?: { titles: number; seasonsPlayed: number }) => {
-    const { league, team, pickExpect } = c.finalWeek(lehmer(7), rig);
+  const closeSeason = (rig: Rig, history?: { titles: number; seasonsPlayed: number }, seed = 7, pick = 0) => {
+    const { league, team, pickExpect } = c.finalWeek(lehmer(seed), rig, pick);
     save({
       league, myTeam: team, phase: 'hub', titles: 0, seasonsPlayed: 0, draftClass: null, picksLeft: 0,
       ...(history ?? { expect: pickExpect }),
@@ -597,18 +606,49 @@ for (const c of CASES) {
        overtime losses or ties where the sport keeps them), and the round
        the engine's own bracket reached, from the league's crowned champion
        and the bracket the save carries for the recap. */
+    /* Round 674 fix (the adversarial review's M3 and the vacuous brackets).
+       The round is now compared with reachedInBracket (src/test/
+       bracketReached.ts), which reads only who played whom and who won,
+       never stageOf or a round name: the first version compared the row
+       with stageOf itself, so a stageOf paying every playoff team one round
+       more moved both sides and stayed green. And one season proved little:
+       on its seed the NFL team missed the playoffs (any bracket gives 0) and
+       the MLB team went out in round one. So the row plays several seasons
+       (ENGINE_SEASONS, seeded, plus one rigged title) and must cover a
+       season with no playoff spot, a season out in round two or later short
+       of the title, and a title, with at least one season that lost games
+       (so wins and games differ) and, in the NHL, one with overtime losses. */
     it('the row is the season the engine played: the standings\' record and the round its bracket reached', () => {
-      const { team, closed } = closeSeason(undefined);
-      const row = rowOf(closed);
-      const mine = closed.league.teams[team];
-      const played = mine.wins + mine.losses + (mine.otLosses ?? 0) + (mine.ties ?? 0);
-      const champion = closed.league.champions.find((x: any) => x.season === row.season)?.team;
-      console.log(`FO_ENGINE_ROW ${c.name}: wins ${row.wins}/${mine.wins}, games ${row.games}/${played}, otLosses ${mine.otLosses ?? '-'}, ties ${mine.ties ?? '-'}, stage ${row.stage} of ${row.rounds}, champion ${champion === team ? 'us' : champion}`);
-      expect(row.wins, 'the row\'s wins are the standings\' wins').toBe(mine.wins);
-      expect(row.games, 'the row\'s games are every game the standings count').toBe(played);
-      expect(champion, 'the engine crowned a champion for the season').toBeTruthy();
-      expect(row.rounds).toBe(c.shape.rounds);
-      expect(row.stage, 'the round is the one the engine\'s bracket reached').toBe(stageOf(c.bracketOf(closed.postseason), team, c.shape.roundOf, c.shape.rounds, champion));
+      const stages: number[] = [];
+      let lostSome = false;
+      let otSeen = false;
+      for (const s of ENGINE_SEASONS) {
+        cleanup();
+        localStorage.clear();
+        completion.mockClear();
+        vi.spyOn(Math, 'random').mockImplementation(lehmer(s.random));
+        const { team, closed } = closeSeason(s.rig, undefined, s.seed, s.pick);
+        const row = rowOf(closed);
+        const mine = closed.league.teams[team];
+        const played = mine.wins + mine.losses + (mine.otLosses ?? 0) + (mine.ties ?? 0);
+        const champion = closed.league.champions.find((x: any) => x.season === row.season)?.team;
+        expect(champion, 'the engine crowned a champion for the season').toBeTruthy();
+        const reached = reachedInBracket(c.bracketOf(closed.postseason), team, c.shape.rounds, champion);
+        console.log(`FO_ENGINE_ROW ${c.name} seed ${s.seed} team ${team}${s.rig ? ` ${s.rig}` : ''}: wins ${row.wins}/${mine.wins}, games ${row.games}/${played}, otLosses ${mine.otLosses ?? '-'}, ties ${mine.ties ?? '-'}, stage ${row.stage}/${reached} of ${row.rounds}, champion ${champion === team ? 'us' : champion}`);
+        expect(row.wins, 'the row\'s wins are the standings\' wins').toBe(mine.wins);
+        expect(row.games, 'the row\'s games are every game the standings count').toBe(played);
+        expect(row.rounds).toBe(c.shape.rounds);
+        expect(row.stage, 'the round is the one the engine\'s bracket reached, read from the games alone').toBe(reached);
+        stages.push(reached);
+        if (mine.losses > 0 && mine.wins > 0) lostSome = true;
+        if ((mine.otLosses ?? 0) > 0) otSeen = true;
+      }
+      const rounds = c.shape.rounds;
+      expect(stages.some(x => x === 0), `a season with no playoff spot, among ${stages.join(', ')}`).toBe(true);
+      expect(stages.some(x => x >= 2 && x <= rounds), `a season out in round two or later, short of the title, among ${stages.join(', ')}`).toBe(true);
+      expect(stages.some(x => x === rounds + 1), `a title season, among ${stages.join(', ')}`).toBe(true);
+      expect(lostSome, 'a season that won some games and lost some, so wins and games differ').toBe(true);
+      if (c.name === 'NHL Front Office') expect(otSeen, 'an NHL season with overtime losses, so games differ from wins plus losses').toBe(true);
     });
   });
 }

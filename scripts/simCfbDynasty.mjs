@@ -57,7 +57,16 @@
         into them, which leaves the twelve game regular season) and its round
         is the one the engine's bracket reached. Every other row scores the
         recorded row against itself, so a board that built the row from the
-        wrong numbers stayed green on all of them);
+        wrong numbers stayed green on all of them. Round 674 fix (the
+        adversarial review's M3 and M4): the round is read from the
+        bracket's games alone (src/test/bracketReached.ts), never through
+        stageOf, which the board builds the row with; and the row plays
+        sixteen programs and seeds plus a rigged title rather than one
+        season, because CFB's one season was a 12-0 title where wins equal
+        games and any bracket reading gives the champion's round. Each board
+        must cover a season with no bid, an exit in round two or later short
+        of the title, a title and a season that lost games, and CFB a
+        conference title game);
      5) the ledger headless, both engines, 20 seeds and 8 seasons each,
         closing every season the way the boards do: every season adds
         exactly one row, title or not; appending the same season again adds
@@ -65,7 +74,13 @@
         the score of that season against its projection on its own (an
         empty ledger scores it the same); and an older save closes into one
         row with no retroactive points. It also prints the old rule's
-        recordings beside the new ones over the same careers.
+        recordings beside the new ones over the same careers. Round 674 fix:
+        every row's record is also compared with the standings (CFB's less
+        its conference title game) and its round with the bracket read from
+        its games alone (record and round), since this section closes
+        through the same functions the boards do and could not see them go
+        wrong; the seasons must include an exit in round two or later short
+        of the title, a title, and 20 mixed records.
 
    Negative controls (house rule: prove the check can fail, and fail only
    where it was written to). Each control lists the checks it must turn red;
@@ -95,9 +110,22 @@
        from before the final round (the React state, not the round just
        played). Both boards' engine rows go red; their title rows may (both
        also count the regular season's length on a title season).
+     CFB_DYNASTY_CONTROL=stageplus (Round 674 fix, the review's M3) loads a
+       copy of the ledger whose stageOf reads every playoff team that did not
+       win the title one round further than it reached
+       (scripts/lib/engineRowControls.mjs), in the bundle and both boards:
+       both engine rows and section 5's round check on both engines go red,
+       nothing else.
+     CFB_DYNASTY_CONTROL=regwins (Round 674 fix, the review's M4) loads a
+       copy of the CFB engine whose cfbRegularRecord counts every loss as a
+       win, in the bundle and in both boards (NO_DOUBLE_SWAP): CFB's engine
+       row and section 5's record check on CFB go red, nothing else.
      CFB_DYNASTY_CONTROL=parallel (Round 674, R2.D10) runs the replay and
        double controls at the same moment, two children of this harness
-       sharing one TEMP; both must exit 0 on their own verdict line.
+       sharing one TEMP; both must exit 0 on their own verdict line, and
+       (Round 674 fix, the review's M9) they must report two different run
+       folders, and controlScratch must pass checkPerRun, which a copy of it
+       put back to one fixed folder per name is first proved to fail.
      Every control refuses to run unless its anchor is in the file exactly
      once, in the code with the comments stripped as well as in the text,
      and its rewrite changed something. Round 674 (R2.D10): every copy, the
@@ -114,14 +142,19 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { LEDGER_CONTROL_WORDS, writeLedgerControl } from './lib/seasonLedgerControl.mjs';
-import { controlScratch, loadedLine, withLoadedLine } from './lib/controlScratch.mjs';
+import { controlScratch, loadedLine, withLoadedLine, checkPerRun, writeFixedScratchCopy } from './lib/controlScratch.mjs';
+import { writeEngineRowControl, engineRowControlWords, engineRowControlFile } from './lib/engineRowControls.mjs';
 import { stripComments } from './lib/readSource.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const CONTROL = process.env.CFB_DYNASTY_CONTROL || '';
 const LEDGER_CONTROLS = ['double', 'raw'];
-const CONTROLS = ['drain', 'replay', 'record', ...LEDGER_CONTROLS, 'parallel'];
+/* Round 674 fix: the review's M3 (a ledger whose stageOf reads one round too
+   far) and M4 (a CFB engine whose cfbRegularRecord counts losses as wins),
+   scripts/lib/engineRowControls.mjs. */
+const ENGINE_CONTROLS = ['stageplus', 'regwins'];
+const CONTROLS = ['drain', 'replay', 'record', ...LEDGER_CONTROLS, ...ENGINE_CONTROLS, 'parallel'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`CFB_DYNASTY_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`); process.exit(1); }
 
 /* ---- the parallel control: two controls at once, both must fire ---- */
@@ -135,17 +168,38 @@ if (CONTROL === 'parallel') {
     child.stderr.on('data', d => { out += d; });
     child.on('close', code => resolve({ name, code, out }));
   });
+  /* Round 674 fix (the review's M9), as in simGmReload: the folders
+     themselves are checked, and the check is proved on a copy of
+     controlScratch put back to one fixed folder per name. */
+  const perRun = checkPerRun(controlScratch, ROOT, 'cfb-dynasty');
+  const probe = controlScratch(ROOT, 'cfb-parallel-probe');
+  let fixedProblems = null;
+  try {
+    const fixed = await import(pathToFileURL(writeFixedScratchCopy(probe.dir, stripComments)).href);
+    fixedProblems = checkPerRun(fixed.controlScratch, ROOT, 'cfb-dynasty-fixed-probe');
+  } catch (e) {
+    perRun.push(`the fixed folder copy could not be written (${e.message}), so controlScratch no longer makes its folder with mkdtemp`);
+  } finally {
+    probe.cleanup();
+  }
+  for (const p of perRun) console.log(`   per run folders: ${p}`);
+  if (fixedProblems && !fixedProblems.length) { console.error('\ncontrol "parallel" cannot run: a controlScratch put back to one fixed folder per name passes checkPerRun, so its green would prove nothing'); process.exit(1); }
+  if (fixedProblems) console.log(`   a controlScratch put back to one fixed folder fails the per run check, as it must (${fixedProblems.length} problem(s), first: ${fixedProblems[0]})`);
   const results = await Promise.all(PAIR.map(runOne));
   let ok = 0;
+  const tags = [];
   for (const r of results) {
     const works = new RegExp(`control "${r.name}": exactly .* went red and nothing else did, the check works`).test(r.out);
-    const loaded = /every control copy the board tests read printed its load line/.test(r.out);
-    console.log(`   ${r.name}: exit ${r.code}, ${works ? 'fired' : 'DID NOT FIRE'}, ${loaded ? 'its own copies loaded' : 'NO LOAD LINE'}`);
-    if (r.code === 0 && works && loaded) ok += 1;
+    const loadedRun = r.out.match(/every control copy the board tests read printed its load line \(\d+, run (\S+)\)/);
+    console.log(`   ${r.name}: exit ${r.code}, ${works ? 'fired' : 'DID NOT FIRE'}, ${loadedRun ? `its own copies loaded, run ${loadedRun[1]}` : 'NO LOAD LINE'}`);
+    if (loadedRun) tags.push(loadedRun[1]);
+    if (r.code === 0 && works && loadedRun) ok += 1;
     else console.log(r.out.split('\n').slice(-25).map(l => '     ' + l).join('\n'));
   }
-  if (ok === PAIR.length) { console.log(`\ncontrol "parallel": ${PAIR.join(' and ')} both fired while running at once, each on its own copies, the check works`); process.exit(0); }
-  console.error(`\ncontrol "parallel": ${ok} of ${PAIR.length} controls fired while running at once, so running controls in parallel gives false verdicts`);
+  const distinct = tags.length === PAIR.length && new Set(tags).size === PAIR.length;
+  if (tags.length === PAIR.length && !distinct) console.log(`   the two runs report the same run folder (${tags[0]}), so they shared one`);
+  if (ok === PAIR.length && distinct && !perRun.length) { console.log(`\ncontrol "parallel": ${PAIR.join(' and ')} both fired while running at once, each in a run folder of its own (${tags.join(', ')}), the check works`); process.exit(0); }
+  console.error(`\ncontrol "parallel": ${ok} of ${PAIR.length} controls fired while running at once${distinct ? '' : ', and the runs did not each get a folder of their own'}${perRun.length ? `, and controlScratch fails the per run check (${perRun.length} problem(s))` : ''}, so running controls in parallel gives false verdicts`);
   process.exit(1);
 }
 
@@ -155,10 +209,18 @@ const EXPECT = {
   drain: { must: ['cfb-drain', 'cbb-drain'], may: [] },
   replay: { must: ['cfb-board-reload', 'cbb-board-reload'], may: BOARD_LEDGER(['replay']) },
   record: { must: BOARD_LEDGER(['engine']), may: BOARD_LEDGER(['title']) },
-  /* The engine row plays an ordinary season, which on CFB's seed is a title,
-     so a ledger that files a title twice may turn it red too. */
+  /* The engine row plays title seasons among its seasons (a rigged one on
+     both boards, and CFB's seeds win some), so a ledger that files a title
+     twice may turn it red too. */
   double: { must: ['cfb:row', 'cbb:row', 'cfb:replay', 'cbb:replay', 'cfb:sum', 'cbb:sum', ...BOARD_LEDGER(['title', 'older', 'replay', 'two', 'pick'])], may: BOARD_LEDGER(['engine']) },
   raw: { must: BOARD_LEDGER(['title', 'pick']), may: BOARD_LEDGER(['plain', 'older', 'two']) },
+  /* Round 674 fix, M3: both boards' engine rows and section 5's round check
+     on both engines, nothing else (every other row closes a title or a
+     season with no bid, which the one round more does not touch). */
+  stageplus: { must: [...BOARD_LEDGER(['engine']), 'cfb:round', 'cbb:round'], may: [] },
+  /* Round 674 fix, M4: CFB's engine row and section 5's record check on the
+     CFB engine; CBB never reads the CFB engine. */
+  regwins: { must: ['cfb-board-ledger-engine', 'cfb:record'], may: [] },
 };
 /* Every control rewrites an anchor that must be in its file exactly once. */
 const matches = (src, anchor) => (typeof anchor === 'string' ? src.split(anchor).length - 1 : (src.match(new RegExp(anchor.source, 'g')) || []).length);
@@ -219,6 +281,21 @@ if (LEDGER_CONTROLS.includes(CONTROL)) {
   ledgerSrc = copy.replaceAll('\\', '/');
   console.log(`NEGATIVE CONTROL ON: the bundle and both boards read a season ledger that ${LEDGER_CONTROL_WORDS[CONTROL]}`);
 }
+/* Round 674 fix: M3 through the ledger, M4 through the CFB engine, each in
+   the bundle and in both boards (vitest reaches the engine copy through
+   NO_DOUBLE_SWAP, the ledger copy through SEASON_LEDGER_MODULE). */
+const engineSwap = {};
+if (ENGINE_CONTROLS.includes(CONTROL)) {
+  let copy;
+  try { copy = writeEngineRowControl(ROOT, CONTROL, TMP); } catch (e) { abort(e.message); }
+  const what = `${CONTROL} ${path.basename(engineRowControlFile(CONTROL))}`;
+  fs.writeFileSync(copy, withLoadedLine(fs.readFileSync(copy, 'utf8').split('\r\n').join('\n'), run.tag, what));
+  expectedLoads.push(loadedLine(run.tag, what));
+  const target = copy.replaceAll('\\', '/');
+  if (CONTROL === 'stageplus') ledgerSrc = target;
+  else { cfbSrc = target; engineSwap['@/lib/cfbDynasty'] = target; }
+  console.log(`NEGATIVE CONTROL ON: the bundle and both boards read a ${CONTROL === 'stageplus' ? 'season ledger whose stageOf' : 'CFB engine whose cfbRegularRecord'} ${engineRowControlWords(CONTROL)}`);
+}
 /* The season shapes read strengths off state objects and nothing else, so
    the real module serves the engine copies a control bundles too. */
 fs.writeFileSync(ENTRY, `
@@ -227,9 +304,10 @@ export * as cfb from '${cfbSrc}';
 export * as cbb from '${cbbSrc}';
 export * as ledger from '${ledgerSrc}';
 export * as formats from '${ROOT_URL}/src/lib/seasonFormats.ts';
+export * as bracket from '${ROOT_URL}/src/test/bracketReached.ts';
 `);
 execSync(`"${process.execPath}" "${tool('esbuild/bin/esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error --alias:@=${ROOT_URL}/src`, { stdio: 'inherit' });
-const { cfb, cbb, ledger, formats } = await import(pathToFileURL(BUNDLE).href);
+const { cfb, cbb, ledger, formats, bracket } = await import(pathToFileURL(BUNDLE).href);
 
 function lehmer(seed) {
   let s = seed % 2147483647;
@@ -379,7 +457,8 @@ console.log('4) the two boards: a reload on the recap never replays the season, 
       ? '   NEGATIVE CONTROL ON: both tests render copies of the boards that map a recap save back to the season and have no closed season guard'
       : '   NEGATIVE CONTROL ON: both tests render copies of the boards that close the season on the wrong record (CFB keeps its conference title game in the regular season, CBB reads the record from before the final round)');
   }
-  if (LEDGER_CONTROLS.includes(CONTROL)) env.SEASON_LEDGER_MODULE = ledgerSrc;
+  if (LEDGER_CONTROLS.includes(CONTROL) || CONTROL === 'stageplus') env.SEASON_LEDGER_MODULE = ledgerSrc;
+  if (Object.keys(engineSwap).length) env.NO_DOUBLE_SWAP = JSON.stringify(engineSwap);
   const r = spawnSync(process.execPath, [tool('vitest/vitest.mjs'), 'run', ...TESTS, '--reporter=verbose'],
     { cwd: ROOT, encoding: 'utf8', env: { ...process.env, ...env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' }, maxBuffer: 64 * 1024 * 1024,
       timeout: 10 * 60 * 1000, killSignal: 'SIGKILL' });
@@ -458,8 +537,12 @@ console.log(`5) the season ledger headless: both engines, ${SEEDS} seeds and ${S
   };
   for (const e of ENGINES) {
     const k = s => `${e.key}:${s}`;
-    const bad = { row: [], replay: [], sum: [], alone: [] };
+    const bad = { row: [], replay: [], sum: [], alone: [], record: [], round: [] };
     let titleSeasons = 0, plainSeasons = 0;
+    /* Round 674 fix: what the record and round checks below saw, so a green
+       cannot come from seasons where they could not fail. */
+    const stagesSeen = new Set();
+    let mixedRecords = 0;
     let oldCount = 0, oldSum = 0, titleRowSum = 0, plainRowSum = 0, newSum = 0;
     for (let seed = 1; seed <= SEEDS; seed += 1) {
       const rng = lehmer(seed * e.seedMul + 11);
@@ -472,6 +555,26 @@ console.log(`5) the season ledger headless: both engines, ${SEEDS} seeds and ${S
         const exp = expectationOf(st.expect, st.season);
         const tag = `seed ${seed} season ${st.season}${won ? ' (title)' : ''}`;
         if (!exp) { bad.row.push(`${tag}: no projection for the season being closed`); break; }
+        /* Round 674 fix (the review's M3 and M4): the row's record and round
+           against what the engine kept, read without the functions that
+           built them. The record is the standings (CFB's less its conference
+           title game, the one postseason game the engine writes into them),
+           and the round is the bracket read from its games alone
+           (src/test/bracketReached.ts), not stageOf. */
+        {
+          const t = st.teams[st.myTeam];
+          const own = e.key === 'cfb' ? p.ccgs.filter(g => g.home === st.myTeam || g.away === st.myTeam) : [];
+          const regWins = t.wins - own.filter(g => g.winner === st.myTeam).length;
+          const regGames = t.wins + t.losses - own.length;
+          if (result.wins !== regWins || result.games !== regGames) bad.record.push(`${tag}: the row says ${result.wins} of ${result.games}, the standings ${regWins} of ${regGames}`);
+          if (regWins > 0 && regWins < regGames) mixedRecords += 1;
+          let reached;
+          try { reached = bracket.reachedInBracket(p.bracket, st.myTeam, e.shape.rounds, p.champion); } catch (err) { bad.round.push(`${tag}: the bracket could not be read: ${err.message}`); }
+          if (reached !== undefined) {
+            stagesSeen.add(reached);
+            if (result.stage !== reached) bad.round.push(`${tag}: the row says round ${result.stage}, the bracket's games say ${reached}`);
+          }
+        }
         /* Exactly the board's close: the save's ledger, cleaned, plus this season. */
         const before = ledgerOf(st.ledger);
         const closed = appendSeason(before, result, exp);
@@ -529,6 +632,13 @@ console.log(`5) the season ledger headless: both engines, ${SEEDS} seeds and ${S
     /* Floors set from measured headroom (see the round's record): a check
        that saw no title season proved nothing about double counting one. */
     if (titleSeasons < 5 || plainSeasons < 20) fail('coverage', `${e.label}: ${titleSeasons} title seasons and ${plainSeasons} without, too few for the row checks to mean anything`);
+    const rounds = e.shape.rounds;
+    const deep = [...stagesSeen].some(x => x >= 2 && x <= rounds);
+    console.log(`   ${e.label} record and round: rounds reached ${[...stagesSeen].sort((a, b) => a - b).join(', ')}, ${mixedRecords} seasons that won some and lost some`);
+    /* The field itself is not required here: CBB's program is the first
+       school, which makes the Dance every season. The board rows play the
+       seasons with no bid. */
+    if (!deep || !stagesSeen.has(rounds + 1) || mixedRecords < 20) fail('coverage', `${e.label}: the record and round checks saw rounds ${[...stagesSeen].join(', ')} and ${mixedRecords} mixed records, which cannot prove them (an exit in round two or later short of the title, a title and 20 mixed records are needed)`);
   }
 }
 

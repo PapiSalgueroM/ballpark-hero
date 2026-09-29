@@ -25,7 +25,8 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { render, screen, fireEvent, cleanup } from '@testing-library/react';
 import { initCbb, simCbbRound, CBB_ROUNDS, CBB_SCHOOLS, CBB_SCHOOL_MAP, type CbbState } from '@/lib/cbbDynasty';
-import { scoreSeason, appendSeason, ledgerTotal, projectionFor, projectNext, stageOf, BAR_SHARE, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
+import { scoreSeason, appendSeason, ledgerTotal, projectionFor, projectNext, BAR_SHARE, SEASON_CEILING, type SeasonExpectation, type SeasonRow } from '@/lib/seasonLedger';
+import { reachedInBracket } from '@/test/bracketReached';
 import { CBB_SEASON, roundPhrase } from '@/lib/seasonFormats';
 
 // Completion tracking reads the auth context and writes to the database;
@@ -76,12 +77,20 @@ function rig(st: CbbState, how: Rig) {
   }
 }
 
+/* Round 674 fix: the seasons the engine row plays, each a seed, a program
+   and a seed for the board's final round and March (Math.random), plus one
+   rigged title. Built when the row runs, not at module scope. */
+const ENGINE_SEASONS = (): { seed: number; random: number; school: string; rig?: Rig }[] => [
+  ...Array.from({ length: 16 }, (_, i) => ({ seed: i + 1, random: 101 + i, school: CBB_SCHOOLS[(i * 7) % CBB_SCHOOLS.length].id })),
+  { seed: 7, random: 11, school: ME, rig: 'strong' as Rig },
+];
+
 /* A program on the morning of its final regular season round. The save
    carries the projection made at the pick, from the roster the pick handed
    over, and the rig is applied after it. */
-function finalRoundState(how?: Rig): { st: CbbState; pickExpect: SeasonExpectation } {
-  const rng = lehmer(7);
-  const st = initCbb(ME, rng);
+function finalRoundState(how?: Rig, seed = 7, me = ME): { st: CbbState; pickExpect: SeasonExpectation } {
+  const rng = lehmer(seed);
+  const st = initCbb(me, rng);
   const pickExpect = project(st);
   st.expect = pickExpect;
   rig(st, how);
@@ -165,8 +174,8 @@ const finishes = (): number[] => {
 };
 /* history: a dynasty already under way on a save written before this round,
    with titles and seasons counted and no ledger and no projection at all. */
-const closeSeason = (how: Rig, history?: { myTitles: number; seasonsPlayed: number }) => {
-  const { st, pickExpect } = finalRoundState(how);
+const closeSeason = (how: Rig, history?: { myTitles: number; seasonsPlayed: number }, seed = 7, me = ME) => {
+  const { st, pickExpect } = finalRoundState(how, seed, me);
   if (history) { delete st.ledger; delete st.expect; Object.assign(st, history); }
   save({ st, phase: 'season', recruits: null, portal: null });
   const view = render(<CbbDynastyBoard />);
@@ -353,16 +362,38 @@ describe('CBB Dynasty: the season ledger', () => {
      are played without writing to them, so the standings are the regular
      season) and the round the engine's own bracket reached, from the
      crowned champion and the bracket the save carries for the recap. */
+  /* Round 674 fix (the adversarial review's M3): the round is compared with
+     reachedInBracket (src/test/bracketReached.ts), which reads only who
+     played whom and who won, never stageOf or a round name, and the row
+     plays several programs and seeds (ENGINE_SEASONS, plus one rigged
+     title), which must cover a season with no bid, a season out in round
+     two or later short of the title, and a title, with at least one season
+     that lost games. */
   it('the row is the season the engine played: the standings\' record and the round its bracket reached', () => {
-    const { closed } = closeSeason(undefined);
-    const row = rowOf(closed);
-    const me = closed.st.teams[closed.st.myTeam];
-    const champion = closed.st.titles.find((t: any) => t.season === row.season)?.team;
-    const stage = stageOf(closed.postseason.march.bracket, me.id, CBB_SEASON.roundOf, CBB_SEASON.rounds, champion);
-    console.log(`CBB_ENGINE_ROW wins ${row.wins}/${me.wins}, games ${row.games}/${me.wins + me.losses}, stage ${row.stage}/${stage} of ${row.rounds}, champion ${champion === me.id ? 'us' : champion}`);
-    expect(row.wins, 'the row\'s wins are the standings\' wins').toBe(me.wins);
-    expect(row.games, 'the row\'s games are every game the standings count').toBe(me.wins + me.losses);
-    expect(champion, 'the engine crowned a champion for the season').toBeTruthy();
-    expect(row.stage, 'the round is the one the engine\'s bracket reached').toBe(stage);
+    const stages: number[] = [];
+    let lostSome = false;
+    for (const s of ENGINE_SEASONS()) {
+      cleanup();
+      localStorage.clear();
+      completion.mockClear();
+      vi.spyOn(Math, 'random').mockImplementation(lehmer(s.random));
+      const { closed } = closeSeason(s.rig, undefined, s.seed, s.school);
+      const row = rowOf(closed);
+      const me = closed.st.teams[closed.st.myTeam];
+      const champion = closed.st.titles.find((t: any) => t.season === row.season)?.team;
+      expect(champion, 'the engine crowned a champion for the season').toBeTruthy();
+      const reached = reachedInBracket(closed.postseason.march.bracket, me.id, CBB_SEASON.rounds, champion);
+      console.log(`CBB_ENGINE_ROW seed ${s.seed} ${s.school}${s.rig ? ` ${s.rig}` : ''}: wins ${row.wins}/${me.wins}, games ${row.games}/${me.wins + me.losses}, stage ${row.stage}/${reached} of ${row.rounds}, champion ${champion === me.id ? 'us' : champion}`);
+      expect(row.wins, 'the row\'s wins are the standings\' wins').toBe(me.wins);
+      expect(row.games, 'the row\'s games are every game the standings count').toBe(me.wins + me.losses);
+      expect(row.stage, 'the round is the one the engine\'s bracket reached, read from the games alone').toBe(reached);
+      stages.push(reached);
+      if (me.losses > 0 && me.wins > 0) lostSome = true;
+    }
+    const rounds = CBB_SEASON.rounds;
+    expect(stages.some(x => x === 0), `a season with no bid, among ${stages.join(', ')}`).toBe(true);
+    expect(stages.some(x => x >= 2 && x <= rounds), `a season out in round two or later, short of the title, among ${stages.join(', ')}`).toBe(true);
+    expect(stages.some(x => x === rounds + 1), `a title season, among ${stages.join(', ')}`).toBe(true);
+    expect(lostSome, 'a season that won some games and lost some, so wins and games differ').toBe(true);
   });
 });

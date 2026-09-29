@@ -16,8 +16,25 @@
    system temp folder has none above it and fails to load. So the folder is
    ROOT/.sim-control (gitignored since Round 435, and no build writes or
    empties it), one mkdtemp per run inside it. Cleanup removes that run's
-   folder and then .sim-control only if it is empty, so it can never take
-   another run's copies with it, and nothing here ever touches dist.
+   folder and nothing else, so it can never take another run's copies with
+   it, and nothing here ever touches dist.
+
+   Round 674 fix (the review's controlScratch finding): cleanup used to
+   remove .sim-control too when it was empty. A sibling run doing that
+   between another run's mkdirSync(base) and its mkdtempSync made the second
+   run throw ENOENT, which is exactly the concurrent case this file exists
+   for. The shared folder now stays (it is gitignored and empty between
+   runs), and the mkdtemp is retried once after making the folder again in
+   case anything else removed it.
+
+   Round 674 fix (the review's M9): a harness that says its controls run in
+   parallel on per run folders has to be able to tell a per run folder from
+   a fixed one. checkPerRun asks the factory for two folders under one name
+   at once and requires two different folders, both inside .sim-control,
+   neither of them the bare name, and the first one's cleanup leaving the
+   second in place. A controlScratch put back to a fixed .sim-control/<name>
+   fails it, and simGmReload's and simCfbDynasty's parallel controls prove
+   that on a copy of this file before they trust it.
 
    The load line: a harness appends it to every copy and requires it in the
    runner's output, with this run's folder name in it, so a red can be pinned
@@ -28,16 +45,67 @@ import path from 'node:path';
 export function controlScratch(root, name) {
   const base = path.join(root, '.sim-control');
   fs.mkdirSync(base, { recursive: true });
-  const dir = fs.mkdtempSync(path.join(base, `${name}-`));
+  let dir;
+  try {
+    dir = fs.mkdtempSync(path.join(base, `${name}-`));
+  } catch (e) {
+    if (e.code !== 'ENOENT') throw e;
+    fs.mkdirSync(base, { recursive: true });
+    dir = fs.mkdtempSync(path.join(base, `${name}-`));
+  }
   const tag = path.basename(dir);
   let cleaned = false;
   const cleanup = () => {
     if (cleaned) return;
     cleaned = true;
     fs.rmSync(dir, { recursive: true, force: true });
-    try { fs.rmdirSync(base); } catch { /* another run's folder is still in it */ }
   };
   return { dir, tag, cleanup };
+}
+
+/* What a factory shaped like controlScratch gets wrong about per run
+   folders, as a list of problems (empty when it is right). */
+export function checkPerRun(factory, root, name = 'per-run-check') {
+  const problems = [];
+  const base = path.resolve(root, '.sim-control');
+  const a = factory(root, name);
+  const b = factory(root, name);
+  try {
+    if (path.resolve(a.dir) === path.resolve(b.dir)) problems.push(`two runs under "${name}" were handed the same folder, ${a.dir}`);
+    if (a.tag === b.tag) problems.push(`two runs under "${name}" carry the same tag, ${a.tag}, so a load line cannot tell their copies apart`);
+    for (const s of [a, b]) {
+      if (path.dirname(path.resolve(s.dir)) !== base) problems.push(`${s.dir} is not a folder of its own directly inside ${base}`);
+      if (s.tag === name) problems.push(`the folder is the bare name "${name}", a fixed folder every run shares`);
+      if (!fs.existsSync(s.dir)) problems.push(`${s.dir} was not created`);
+    }
+    a.cleanup();
+    if (!fs.existsSync(b.dir)) problems.push('cleaning up one run removed the other run\'s folder');
+    if (!fs.existsSync(base)) problems.push('cleaning up one run removed .sim-control, which a sibling run creating its folder at that moment needs');
+  } finally {
+    a.cleanup();
+    b.cleanup();
+  }
+  return problems;
+}
+
+/* The review's M9 as a copy of this file: controlScratch back to one fixed
+   folder per name, no mkdtemp. Written into `dir` and returned, so a
+   parallel control can prove checkPerRun sees it before trusting a green.
+   Refuses unless the anchor is in this file's code exactly once. */
+export const FIXED_SCRATCH_ANCHOR = 'dir = fs.mkdtempSync(path.join(base, `${name}-`));\n  } catch (e) {';
+export function writeFixedScratchCopy(dir, stripComments) {
+  const file = new URL(import.meta.url);
+  const src = fs.readFileSync(file, 'utf8').split('\r\n').join('\n');
+  const count = (hay, needle) => hay.split(needle).length - 1;
+  if (count(src, FIXED_SCRATCH_ANCHOR) !== 1 || count(stripComments(src), FIXED_SCRATCH_ANCHOR) !== 1) {
+    throw new Error('the fixed folder copy cannot be written: controlScratch.mjs does not hold its mkdtemp anchor exactly once in its code');
+  }
+  const copy = src.replace(FIXED_SCRATCH_ANCHOR, 'dir = path.join(base, name); fs.mkdirSync(dir, { recursive: true });\n  } catch (e) {');
+  if (copy === src) throw new Error('the fixed folder copy cannot be written: the rewrite changed nothing');
+  fs.mkdirSync(dir, { recursive: true });
+  const out = path.join(dir, 'controlScratch.fixed.control.mjs');
+  fs.writeFileSync(out, copy);
+  return out;
 }
 
 export const loadedLine = (tag, what) => `DUKB_CONTROL_COPY_LOADED ${tag} ${what}`;
