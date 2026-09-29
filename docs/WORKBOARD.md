@@ -111,6 +111,26 @@ penalties, with a solved deflator so goals per match in those fixtures do not mo
 keep straight to penalties until a per cup rule table is two source verified (the Coppa Italia is
 known to skip extra time before its semi finals). Fence `scripts/simExtraTime.mjs`.
 
+**Round 669 BUILT, REVIEWED AND FIXED, branch `r669-worldxi-dm`, pushed, not on main.** World XI
+knows its defensive midfielders again: the "Defensive Midfield" bucket of `player_market_values` is
+empty for 2023 to 2025, so Ugarte, Amrabat, Endo, Tyler Adams and PSG's Vitinha are not in the pool.
+366 rows two sourced (Transfermarkt and FotMob, 80 held with their reasons) in
+`scripts/data/defensiveMidfield2026.json`, written as the **UNAPPLIED** fail closed migration
+`supabase/migrations/20260928_round_669_defensive_midfield_2026.sql` (plus four club corrections
+and one age correction among the existing 46). It was dry run twice on live inside BEGIN and
+ROLLBACK, no exception, 46 and 5496 rows before and after. **Apply it before merging, at 00:00
+America/New_York (04:00 UTC now, 05:00 UTC from 2026-11-01), not 00:00 UTC**: it moves Footle's
+daily answer, and Footle's day turns over at Eastern midnight (the record's `apply` block has the
+measurement). `simWorldXiDefensiveMids` reads the live pool and is red until it lands.
+`WXIDM_PROJECT=1` measures the record before it lands (green), and **`WXIDM_CONTROL=all` needs
+`WXIDM_PROJECT=1` until the migration is applied** (its baseline is red by design before that); it
+runs 40 controls and 4 positive controls. **Applying it is six numbered steps, not one**: apply,
+count, re-bake `src/data/players.ts` with `node scripts/bakePlayers.mjs` (or `simPlayersPool` goes red
+on every branch, main included), run the named harnesses, commit that one file and merge the same
+night, publish at an Eastern midnight. The steps are in the migration's header and in
+`docs/PROJECT-STATE.md`. The fence holds the 366 rows to the record as of its check date only: a
+later data round that moves one adds a dated, two sourced entry to the record's `laterChecks`.
+
 **2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof
 in `docs/PROJECT-STATE.md`.

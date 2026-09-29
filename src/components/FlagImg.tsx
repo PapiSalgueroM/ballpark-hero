@@ -78,6 +78,11 @@ export const FLAG_CODES: Record<string, string> = {
      showed the letters where every other club shows a flag. Monaco and
      Malaysia are the other two club countries in that table with no flag. */
   "UAE": "ae", "Monaco": "mc", "Malaysia": "my",
+  /* Round 669: Bangladesh, for Hamza Choudhury, the first Bangladesh
+     international the defensive midfield research found. His row is held
+     for now (the second site plays him at right back), so this is ready for
+     when it lands. flagcdn serves bd (probed 2026-09-28, w40 returns 200). */
+  "Bangladesh": "bd",
 };
 
 /* ─── Round 106: flags that actually appear ───

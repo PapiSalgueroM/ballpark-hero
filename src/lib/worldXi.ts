@@ -230,17 +230,25 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
     }
     if (rows.length === 0) return null;
 
-    // Dedupe by name keeping the newest year; higher value breaks ties.
-    const byName = new Map<string, { player: WxPlayer; year: number }>();
+    /* Dedupe by name keeping the newest year; higher value breaks ties.
+       Round 669, namesakes: a year's snapshot holds one row per person, so
+       two rows sharing a name in the SAME year at DIFFERENT clubs are two
+       people (PSG's Vitinha, a defensive mid, and Genoa's Vitinha, a centre
+       forward, both in 2026). They are kept apart by club instead of the
+       more valuable one swallowing the other. Across years a name is still
+       one career, exactly as before. */
+    const byName = new Map<string, { year: number; byClub: Map<string, WxPlayer> }>();
     for (const r of rows) {
       const name = (r.player_name ?? '').trim();
       const country = primaryCountry(r.nationality ?? '');
       const position = normalizePosition((r.position ?? '').trim());
       const value = Number(r.market_value_usd) || 0;
       const year = Number(r.year) || 0;
+      const club = (r.club ?? '').trim();
       if (!name || !country || !position || value <= 0) continue;
       const prev = byName.get(name);
-      if (!prev || year > prev.year || (year === prev.year && value > prev.player.value)) {
+      const sameClub = prev && year === prev.year ? prev.byClub.get(club) : undefined;
+      if (!prev || year > prev.year || (year === prev.year && (!sameClub || value > sameClub.value))) {
         /* Identity guard: the curated history belongs to the human whose
            primary role the curators recorded, so a same-named player in a
            different role gets nothing. The goalkeeper boundary stands behind
@@ -250,22 +258,21 @@ export async function fetchWorldXiPool(): Promise<WorldXiData | null> {
         const played = playedRaw && playedRaw.primary === position
           ? playedRaw.secs.filter(p => (position === 'GK') === (p === 'GK'))
           : undefined;
-        byName.set(name, {
-          player: {
-            name,
-            country,
-            position,
-            club: (r.club ?? '').trim(),
-            value,
-            age: Number((r as { age?: number | null }).age) || undefined,
-            ...(played && played.some(p => p !== position) ? { positionsPlayed: played } : {}),
-          },
-          year,
-        });
+        const player: WxPlayer = {
+          name,
+          country,
+          position,
+          club,
+          value,
+          age: Number((r as { age?: number | null }).age) || undefined,
+          ...(played && played.some(p => p !== position) ? { positionsPlayed: played } : {}),
+        };
+        if (prev && year === prev.year) prev.byClub.set(club, player);
+        else byName.set(name, { year, byClub: new Map([[club, player]]) });
       }
     }
 
-    const players = [...byName.values()].map(e => e.player);
+    const players = [...byName.values()].flatMap(e => [...e.byClub.values()]);
     if (players.length < MIN_POOL) return null;
 
     const byCountry = new Map<string, WxPlayer[]>();
