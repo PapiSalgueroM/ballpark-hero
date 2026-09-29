@@ -1,0 +1,52 @@
+-- simPlayDoor's catalog read (Round 673). READ ONLY: one SELECT of catalog
+-- functions and of private.economy_steps, which exists from economy step L1
+-- on. Run it through the Supabase MCP execute_sql (never through a function
+-- the browser can reach), and put its one JSON value in
+-- scripts/data/playDoorCatalog.json as "catalog". simPlayDoor refuses a fixture
+-- whose query_md5 is not the md5 of this file, so edit both together.
+with six(t) as (values ('daily_completions'), ('game_completions'), ('game_score_caps'),
+                       ('user_best_scores'), ('user_game_scores'), ('user_scores')),
+     cr(r) as (values ('anon'), ('authenticated')),
+     pv(p) as (values ('SELECT'), ('INSERT'), ('UPDATE'), ('DELETE'), ('TRUNCATE'), ('REFERENCES'), ('TRIGGER'))
+select jsonb_build_object(
+  'table_privileges', (select jsonb_object_agg(cr.r || ' ' || six.t,
+      coalesce((select jsonb_agg(pv.p order by pv.p) from pv where has_table_privilege(cr.r, 'public.' || six.t, pv.p)), '[]'::jsonb))
+    from cr, six),
+  'column_privileges', (select jsonb_object_agg(cr.r || ' ' || six.t,
+      coalesce((select jsonb_agg(pv.p order by pv.p) from pv
+                 where pv.p in ('SELECT', 'INSERT', 'UPDATE', 'REFERENCES') and has_any_column_privilege(cr.r, 'public.' || six.t, pv.p)), '[]'::jsonb))
+    from cr, six),
+  'gc_insert_columns', (select jsonb_object_agg(cr.r,
+      (select coalesce(jsonb_agg(a.attname::text order by a.attname::text collate "C"), '[]'::jsonb)
+         from pg_attribute a
+        where a.attrelid = 'public.game_completions'::regclass and a.attnum > 0 and not a.attisdropped
+          and has_column_privilege(cr.r, a.attrelid, a.attnum, 'INSERT')))
+    from cr),
+  'policies', (select coalesce(jsonb_agg(jsonb_build_object('t', tablename, 'n', policyname, 'cmd', cmd, 'roles', roles::text,
+                                                            'using', qual, 'check', with_check)
+                                         order by tablename::text collate "C", policyname::text collate "C"), '[]'::jsonb)
+                 from pg_policies where schemaname = 'public' and tablename::text in (select t from six)),
+  'definers', (select coalesce(jsonb_agg(jsonb_build_object(
+                   'fn', f.oid::regprocedure::text,
+                   'name', f.proname::text,
+                   'md5', md5(pg_get_functiondef(f.oid)),
+                   'config', f.proconfig,
+                   'owner', pg_get_userbyid(f.proowner),
+                   'execute_in_body', f.prosrc ~* '\mexecute\M',
+                   'format_in_body', f.prosrc ~* '\mformat\s*\(',
+                   'anon_exec', has_function_privilege('anon', f.oid, 'EXECUTE'),
+                   'authenticated_exec', has_function_privilege('authenticated', f.oid, 'EXECUTE'),
+                   'public_exec', exists (select 1 from aclexplode(coalesce(f.proacl, acldefault('f', f.proowner))) x where x.grantee = 0))
+                 order by f.oid::regprocedure::text), '[]'::jsonb)
+                 from pg_proc f where f.pronamespace = 'public'::regnamespace and f.prosecdef),
+  'door_signatures', (select jsonb_object_agg(n, (select count(*) from pg_proc f where f.proname = n and f.pronamespace = 'public'::regnamespace))
+                        from unnest(array['record_auth_completion', 'record_play', 'name_is_owned', 'claim_daily_badge']) n),
+  'save', (select jsonb_build_object('definer', f.prosecdef, 'config', f.proconfig, 'md5', md5(pg_get_functiondef(f.oid)), 'src_md5', md5(f.prosrc))
+             from pg_proc f where f.oid = to_regprocedure('public.record_auth_completion(text,integer,integer)')),
+  'ledger', (select coalesce(jsonb_agg(jsonb_build_object('step', step, 'seq', seq, 'live', undone_at is null, 'installed', installed) order by seq), '[]'::jsonb)
+               from private.economy_steps),
+  'ledger_guard', jsonb_build_object(
+    'rls', (select relrowsecurity from pg_class where oid = 'private.economy_steps'::regclass),
+    'anon_select', has_table_privilege('anon', 'private.economy_steps', 'SELECT'),
+    'authenticated_select', has_table_privilege('authenticated', 'private.economy_steps', 'SELECT'))
+) as catalog;

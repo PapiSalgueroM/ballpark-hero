@@ -1,0 +1,91 @@
+{
+  "_comment": "Round 673. simPlayDoor's snapshot of the production catalog: the output of scripts/data/playDoorCatalog.sql. source 'dry-run' means it was captured INSIDE a rolled back transaction on production on the captured date, right after economy step L1 ran there, so it is the catalog L1 produces and nothing was committed. After the lead applies L1 (the header of supabase/migrations/20260928_econ_l1_lock_the_doors.sql, step 5), rerun the query read only through the Supabase MCP, replace catalog with its output, set source to 'production' and captured to that date. From then on simPlayDoor also requires the live door to be shut.",
+  "source": "dry-run",
+  "captured": "2026-09-28",
+  "query_md5": "a9a89d33fb0c58a6aa7b9fbd1fe8e337",
+  "catalog": {
+    "save": {
+      "md5": "e3595fadaf31fd266beee2a0af3164a4",
+      "config": ["search_path=\"\""],
+      "definer": true,
+      "src_md5": "d4044c9c19fc6d9e68ca70236b36c853"
+    },
+    "ledger": [
+      {
+        "seq": 1,
+        "live": true,
+        "step": "L1",
+        "installed": {
+          "save_acl": "{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+          "save_def_md5": "e3595fadaf31fd266beee2a0af3164a4",
+          "save_src_md5": "d4044c9c19fc6d9e68ca70236b36c853",
+          "gc_column_acl": {
+            "game": "{anon=a/postgres,authenticated=a/postgres}",
+            "score": "{anon=a/postgres,authenticated=a/postgres}",
+            "player_name": "{anon=a/postgres,authenticated=a/postgres}"
+          },
+          "table_acl_md5": {
+            "user_scores": "40a72ba957a15bc867724e708c521208",
+            "game_score_caps": "40a72ba957a15bc867724e708c521208",
+            "game_completions": "40a72ba957a15bc867724e708c521208",
+            "user_best_scores": "40a72ba957a15bc867724e708c521208",
+            "user_game_scores": "40a72ba957a15bc867724e708c521208",
+            "daily_completions": "40a72ba957a15bc867724e708c521208"
+          },
+          "read_policies_md5": "b5d85512d8f4a17cde4620051971dfd5",
+          "write_policies_md5": "1c87ff7d590073141fe04b7169b40ebc"
+        }
+      }
+    ],
+    "definers": [
+      { "fn": "admin_exists(text)", "md5": "6098953677c963a40e218d99776c8023", "name": "admin_exists", "owner": "postgres", "config": ["search_path=\"\""], "anon_exec": true, "public_exec": false, "format_in_body": false, "execute_in_body": false, "authenticated_exec": true },
+      { "fn": "app_secret(text)", "md5": "9a79b3787c93fcb3f9ed306db3511ece", "name": "app_secret", "owner": "postgres", "config": ["search_path=private, pg_temp"], "anon_exec": false, "public_exec": false, "format_in_body": false, "execute_in_body": false, "authenticated_exec": false },
+      { "fn": "handle_new_user()", "md5": "966c4daebe578e3a71d762e7f804e096", "name": "handle_new_user", "owner": "postgres", "config": ["search_path=public"], "anon_exec": false, "public_exec": false, "format_in_body": false, "execute_in_body": false, "authenticated_exec": false },
+      { "fn": "has_role(uuid,app_role)", "md5": "964712856503e0a31d73451d32629426", "name": "has_role", "owner": "postgres", "config": ["search_path=public"], "anon_exec": false, "public_exec": false, "format_in_body": false, "execute_in_body": false, "authenticated_exec": true },
+      { "fn": "record_auth_completion(text,integer,integer)", "md5": "e3595fadaf31fd266beee2a0af3164a4", "name": "record_auth_completion", "owner": "postgres", "config": ["search_path=\"\""], "anon_exec": false, "public_exec": false, "format_in_body": false, "execute_in_body": false, "authenticated_exec": true }
+    ],
+    "policies": [
+      { "n": "daily_completions_read", "t": "daily_completions", "cmd": "SELECT", "check": null, "roles": "{public}", "using": "true" },
+      { "n": "Anyone can log a completion", "t": "game_completions", "cmd": "INSERT", "check": "(((length(game) >= 1) AND (length(game) <= 64)) AND ((length(player_name) >= 1) AND (length(player_name) <= 40)))", "roles": "{anon,authenticated}", "using": null },
+      { "n": "Public read completions", "t": "game_completions", "cmd": "SELECT", "check": null, "roles": "{public}", "using": "true" },
+      { "n": "caps are public read", "t": "game_score_caps", "cmd": "SELECT", "check": null, "roles": "{anon,authenticated}", "using": "true" },
+      { "n": "user_best_scores_read", "t": "user_best_scores", "cmd": "SELECT", "check": null, "roles": "{public}", "using": "true" },
+      { "n": "user_game_scores_read", "t": "user_game_scores", "cmd": "SELECT", "check": null, "roles": "{public}", "using": "true" },
+      { "n": "user_scores_read", "t": "user_scores", "cmd": "SELECT", "check": null, "roles": "{public}", "using": "true" }
+    ],
+    "ledger_guard": { "rls": true, "anon_select": false, "authenticated_select": false },
+    "door_signatures": { "record_play": 0, "name_is_owned": 0, "claim_daily_badge": 0, "record_auth_completion": 1 },
+    "table_privileges": {
+      "anon user_scores": ["SELECT"],
+      "anon game_score_caps": ["SELECT"],
+      "anon game_completions": ["SELECT"],
+      "anon user_best_scores": ["SELECT"],
+      "anon user_game_scores": ["SELECT"],
+      "anon daily_completions": ["SELECT"],
+      "authenticated user_scores": ["SELECT"],
+      "authenticated game_score_caps": ["SELECT"],
+      "authenticated game_completions": ["SELECT"],
+      "authenticated user_best_scores": ["SELECT"],
+      "authenticated user_game_scores": ["SELECT"],
+      "authenticated daily_completions": ["SELECT"]
+    },
+    "column_privileges": {
+      "anon user_scores": ["SELECT"],
+      "anon game_score_caps": ["SELECT"],
+      "anon game_completions": ["INSERT", "SELECT"],
+      "anon user_best_scores": ["SELECT"],
+      "anon user_game_scores": ["SELECT"],
+      "anon daily_completions": ["SELECT"],
+      "authenticated user_scores": ["SELECT"],
+      "authenticated game_score_caps": ["SELECT"],
+      "authenticated game_completions": ["INSERT", "SELECT"],
+      "authenticated user_best_scores": ["SELECT"],
+      "authenticated user_game_scores": ["SELECT"],
+      "authenticated daily_completions": ["SELECT"]
+    },
+    "gc_insert_columns": {
+      "anon": ["game", "player_name", "score"],
+      "authenticated": ["game", "player_name", "score"]
+    }
+  }
+}

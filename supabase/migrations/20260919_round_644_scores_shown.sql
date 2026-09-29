@@ -175,6 +175,19 @@
 --     from private.r644_soccer_scores_bak b
 --    where b.source = 'part1:game_score_caps' and b.row_id = c.game;
 
+-- SUPERSEDED BY POINTS-ECONOMY-V2 (docs/design/POINTS-ECONOMY-V2.md, section
+-- 9), added in Round 673. This file is never applied. Once the economy chain's
+-- ledger exists (private.economy_steps, created by Round 673's L1), running it
+-- would divide rows the chain's scale view already values, so this first block
+-- refuses before anything else in the file can run.
+do $superseded$
+begin
+  if to_regclass('private.economy_steps') is not null then
+    raise exception 'Round 644 is superseded by POINTS-ECONOMY-V2 and must never run over the economy chain (private.economy_steps exists). Nothing was changed.';
+  end if;
+end
+$superseded$;
+
 create table if not exists private.r644_state (
   id integer primary key default 1 check (id = 1),
   publish_time timestamptz not null,

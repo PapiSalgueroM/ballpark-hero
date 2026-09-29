@@ -1,5 +1,51 @@
 # Project state
 
+## BUILT, NOT APPLIED 2026-09-28: Round 673, economy step L1 "Lock the doors", branch `r673-lock-doors`
+
+The first step of `docs/design/POINTS-ECONOMY-V2.md` (on `points-economy`), built on main so it ships
+on its own before any other economy round. **Nothing is applied to production.** It changes nothing
+a player sees and not what any game pays.
+
+- **The hole, read only on production today.** anon and authenticated held INSERT, UPDATE, DELETE and
+  TRUNCATE on `user_scores`, `user_game_scores`, `user_best_scores`, `daily_completions`,
+  `game_completions` and `game_score_caps`, with RLS the only barrier: a signed in player could PATCH
+  their own `total_points`, and anyone could post a backdated board row under any name.
+- **`supabase/migrations/20260928_econ_l1_lock_the_doors.sql`**, one DO block, every precondition read
+  before any write (save md5 `5ae76ef7...`, no 644/646/648 object, the `created_at` defaults, the seven
+  write policies by name and expression, RLS on and not forced, no trigger), proofs executed before it
+  ends. It creates `private.economy_steps` (the chain's ledger), makes `record_auth_completion`
+  SECURITY DEFINER with its body untouched (the Round 569 arithmetic, so a save lands exactly as
+  today), revokes the direct writes on the six tables, drops the six client write policies, and
+  bounds the board insert to `(game, score, player_name)` with game 1 to 64 and name 1 to 40
+  characters (longest seen in 30 days: 27 and 21). No score bound. The apply steps are in its header.
+  Undo: `ROLLBACK_20260928_econ_l1_lock_the_doors.sql`, restoring from the ledger.
+- **Round 644's file** now refuses to run once the ledger exists. 646 and both 648 files are not on
+  main, so their guards belong to `points-economy` (or Round 675 deletes them).
+- **Dry runs on production, all rolled back:** `BEGIN; L1; ROLLBACK` clean; then L1, the fence
+  capture, the client paths, the undo and L1 again in one rolled back transaction. As anon and as
+  authenticated the client's board insert lands, the DEFINER save adds 7 then 5 to 12 for a probe id,
+  a direct PATCH of `user_scores` and a backdated board row are refused 42501, the undo restores the
+  catalog byte for byte (only the ledger's existence differs) and a reapply equals the first apply.
+  Read only before and after: nothing changed, no probe row exists.
+- **Every client write path:** the `game_completions` insert in `src/lib/completions.ts` (two
+  call sites, `{game, score, player_name}`, still allowed), `rpc('record_auth_completion')` (now the
+  only way into the four account tables). No module writes the account tables or `game_score_caps`
+  directly; `profiles` and `daily_badges` are untouched (694 closes the badge insert).
+- **Fences.** `simAuthSave` section 3 flipped (DEFINER across the chain, fixed SQL, L1's revokes and
+  drops; controls `invoker`, `norevoke`, `bodyexec`; the old `definer` control retired). New
+  `simPlayDoor`: rule 7 over a committed catalog snapshot (`scripts/data/playDoorCatalog.json`,
+  captured inside the dry run) plus anon probes that cannot write, plus the migrations after L1;
+  controls `grant`, `policy`, `definer`, `body`, `overload`, `livesource`, `regrant`. It reports the
+  live door as PENDING until L1 is applied, then fails until the snapshot is refreshed from
+  production (apply step 5).
+- **Not built here:** `simEconomyMigrations` and PGlite (a devDependency install is its own step; the
+  L1 cases were executed on production inside rolled back transactions instead). Rounds 673 to 698
+  still need reserving on `docs/WORKBOARD.md` on main.
+- **Seen, not changed:** `admin_exists(text)` is SECURITY DEFINER and executable by anon (pinned in
+  `simPlayDoor`, on the spec's allowlist); anon and authenticated keep MAINTAIN on the six tables
+  (not reachable through the API); the profile form has no display name length limit, so a future
+  name over 40 characters would have its board row refused until Round 679 mints a fresh handle.
+
 ## LIVE 2026-09-28: Release E (662 to 667), main `cf18c92a`
 
 Assembled and gated by the desktop Claude lane in the CRLF gate clone (`release-e`, then

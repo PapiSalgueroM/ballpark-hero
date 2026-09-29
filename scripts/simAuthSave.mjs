@@ -32,12 +32,29 @@
  *      reads the local session (getSession) rather than asking the auth
  *      server (getUser), because every hop in front of the write widens the
  *      interrupted save window, and the server authenticates the save anyway.
- *   3. The committed migration keeps the properties that make it both
+ *   3. The committed migrations keep the properties that make the save both
  *      correct and safe: an in place increment of total_points, the daily
- *      mark as ON CONFLICT DO NOTHING, SECURITY INVOKER (never DEFINER, see
- *      the exec_sql incident in CLAUDE.md), the player from auth.uid() and
- *      never a parameter, a pinned search_path, and EXECUTE for authenticated
- *      only.
+ *      mark as ON CONFLICT DO NOTHING, the player from auth.uid() and never a
+ *      parameter, a pinned search_path, fixed SQL (no execute, no format( in
+ *      the body), EXECUTE for authenticated only, and, since Round 673,
+ *      SECURITY DEFINER with the direct write grants and the client write
+ *      policies on the four account tables taken away (economy step L1,
+ *      supabase/migrations/20260928_econ_l1_lock_the_doors.sql). The effective
+ *      security is read across the whole chain in order, so a later migration
+ *      that sets it back to INVOKER fails here.
+ *
+ *      WHY THIS RULE INVERTED IN ROUND 673. Until then this section required
+ *      SECURITY INVOKER and failed on DEFINER, citing the exec_sql incident in
+ *      CLAUDE.md. That incident is about a definer that runs ARBITRARY SQL.
+ *      An INVOKER save only works while the player holds write grants on the
+ *      tables it writes, and on 2026-09-28 those grants were the hole: any
+ *      signed in player could PATCH their own total_points through the API
+ *      (row level security said only auth.uid() = user_id, over every
+ *      column). A definer with fixed SQL, auth.uid() only, an empty
+ *      search_path and EXECUTE for authenticated only lets the grants go, so
+ *      the save becomes the only door (docs/design/POINTS-ECONOMY-V2.md on the
+ *      points-economy branch, section 4, conflict 1). scripts/simPlayDoor.mjs
+ *      holds the live catalog side of the same rule.
  *   4. LIVE: the deployed function refuses an anonymous caller with a
  *      permission error. If anon could execute it, the function would answer
  *      with its own "needs a signed in user" instead, and that is a failure
@@ -54,8 +71,15 @@
  *                                the save; section 1 must fire.
  *   AUTH_SAVE_CONTROL=getuser    puts the auth server round trip back in
  *                                front of it; section 2 must fire.
- *   AUTH_SAVE_CONTROL=definer    turns the migration SECURITY DEFINER;
- *                                section 3 must fire.
+ *   AUTH_SAVE_CONTROL=invoker    sets the save back to SECURITY INVOKER in
+ *                                L1 (the migration back to INVOKER);
+ *                                section 3 must fire. It replaces the old
+ *                                definer control, which retired with the
+ *                                rule it tested.
+ *   AUTH_SAVE_CONTROL=norevoke   L1 keeps INSERT, UPDATE, DELETE and TRUNCATE
+ *                                for the client roles; section 3 must fire.
+ *   AUTH_SAVE_CONTROL=bodyexec   the save's body runs an execute; section 3
+ *                                must fire.
  *
  * Run: node scripts/simAuthSave.mjs   (section 4 needs the network, and fails
  * closed without it)
@@ -66,7 +90,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.AUTH_SAVE_CONTROL || '';
-const KNOWN = ['readwrite', 'getuser', 'definer'];
+const KNOWN = ['readwrite', 'getuser', 'invoker', 'norevoke', 'bodyexec'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`AUTH_SAVE_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -150,21 +174,59 @@ console.log('2) no auth server round trip in front of the save');
 }
 
 // ---------------------------------------------------------------------------
-console.log('3) the migration keeps what makes it correct and safe');
+console.log('3) the migrations keep what makes the save correct and safe, and make it the only door');
 {
   const dir = path.join(ROOT, 'supabase/migrations');
-  const file = fs.readdirSync(dir).find(f => /record_auth_completion/.test(f) && f.endsWith('.sql'));
+  const L1 = '20260928_econ_l1_lock_the_doors.sql';
+  /* The chain is the dated files in name order. ROLLBACK_ and _DO_NOT_APPLY
+     files are never part of it: an undo sets the save back to INVOKER on
+     purpose, and reading it as the chain would fail this on every run. */
+  const chain = fs.readdirSync(dir).filter(f => /^\d{8}.*\.sql$/.test(f)).sort();
+  const texts = new Map(chain.map(f => [f, fs.readFileSync(path.join(dir, f), 'utf8')]));
+  if (CONTROL === 'invoker') {
+    if (!texts.has(L1)) {
+      console.error(`CONTROL invoker cannot run: ${L1} is not in supabase/migrations, so the rewrite would change nothing and a green run would prove nothing.`);
+      process.exit(2);
+    }
+    texts.set(L1, rewrite(texts.get(L1),
+      'alter function public.record_auth_completion(text, integer, integer) security definer;',
+      'alter function public.record_auth_completion(text, integer, integer) security invoker;',
+      "L1's security definer statement"));
+    console.log('   NEGATIVE CONTROL ON: L1 sets the save back to SECURITY INVOKER');
+  }
+  if (CONTROL === 'norevoke') {
+    if (!texts.has(L1)) {
+      console.error(`CONTROL norevoke cannot run: ${L1} is not in supabase/migrations.`);
+      process.exit(2);
+    }
+    texts.set(L1, rewrite(texts.get(L1),
+      'revoke insert, update, delete, truncate, references, trigger',
+      'revoke references, trigger',
+      "L1's revoke of the direct writes"));
+    console.log('   NEGATIVE CONTROL ON: L1 leaves INSERT, UPDATE, DELETE and TRUNCATE with the client roles');
+  }
+  const norm = t => stripSql(t).toLowerCase().replace(/\s+/g, ' ');
+  const CREATE = 'create or replace function public.record_auth_completion(';
+  if (CONTROL === 'bodyexec') {
+    const f = [...chain].reverse().find(x => norm(texts.get(x)).includes(CREATE));
+    if (!f) {
+      console.error('CONTROL bodyexec cannot run: no migration defines record_auth_completion.');
+      process.exit(2);
+    }
+    texts.set(f, rewrite(texts.get(f),
+      '  insert into public.user_game_scores (user_id, game_type, score, correct_answers, puzzle_date)',
+      "  execute 'select 1';\n  insert into public.user_game_scores (user_id, game_type, score, correct_answers, puzzle_date)",
+      "the save body's first insert"));
+    console.log('   NEGATIVE CONTROL ON: the save body runs an execute');
+  }
+  const file = [...chain].reverse().find(f => norm(texts.get(f)).includes(CREATE));
   if (!file) {
     fail(3, 'no migration in supabase/migrations defines record_auth_completion, so the repo cannot rebuild the function the app now depends on');
+  } else if (!texts.has(L1)) {
+    fail(3, `${L1} is gone, so nothing takes the direct write grants away and the save is not the only door`);
   } else {
-    let sql = fs.readFileSync(path.join(dir, file), 'utf8');
-    if (CONTROL === 'definer') {
-      sql = rewrite(sql, 'security invoker', 'security definer', 'the security invoker clause');
-      console.log('   NEGATIVE CONTROL ON: the function made SECURITY DEFINER');
-    }
-    const s = stripSql(sql).toLowerCase().replace(/\s+/g, ' ');
+    const s = norm(texts.get(file));
     const must = [
-      ['security invoker', 'it is not SECURITY INVOKER, so it would bypass each table\'s row level security'],
       ['auth.uid()', 'it no longer takes the player from auth.uid()'],
       ["set search_path = ''", 'its search_path is not pinned'],
       ['total_points = s.total_points + excluded.total_points', 'total_points is no longer incremented in place, so racing saves can lose points again'],
@@ -174,11 +236,45 @@ console.log('3) the migration keeps what makes it correct and safe');
       ['grant execute on function public.record_auth_completion(text, integer, integer) to authenticated', 'authenticated is not granted execute, so signed in saves would all be refused'],
     ];
     for (const [needle, why] of must) if (!s.includes(needle)) fail(3, `${file}: ${why}`);
-    if (s.includes('security definer')) fail(3, `${file}: it is SECURITY DEFINER. The anon key is public, and a definer function runs as the table owner`);
     const sig = s.match(/create or replace function public\.record_auth_completion\(([^)]*)\)/);
     if (!sig) fail(3, `${file}: the function signature could not be read`);
     else if (/uuid|user/.test(sig[1])) fail(3, `${file}: the function takes a user parameter (${sig[1].trim()}), which would let a caller credit another account`);
-    if (!fired.has(3)) console.log(`   ${file}: invoker, auth.uid(), pinned search_path, in place increment, conflict safe daily mark, authenticated only`);
+    /* Fixed SQL: a definer that builds a statement at run time is the
+       exec_sql hole, whatever else it does. */
+    const at = s.indexOf(CREATE);
+    const open = s.indexOf(' as $$', at);
+    const close = s.indexOf('$$;', open + 6);
+    const body = open > 0 && close > open ? s.slice(open + 6, close) : '';
+    if (!body) fail(3, `${file}: the function body could not be read`);
+    else {
+      if (/\bexecute\b/.test(body)) fail(3, `${file}: the body runs execute, and as a definer that is arbitrary SQL as the table owner`);
+      if (/\bformat\s*\(/.test(body)) fail(3, `${file}: the body calls format(, the first half of building SQL at run time`);
+    }
+
+    /* The effective security, statement by statement across the chain. */
+    let security = null;
+    let setIn = null;
+    for (const f of chain) {
+      const t = norm(texts.get(f));
+      const re = /create or replace function public\.record_auth_completion\([^)]*\)[^;]*?\bsecurity (invoker|definer)\b|alter function public\.record_auth_completion\([^)]*\) security (invoker|definer)\b/g;
+      for (const m of t.matchAll(re)) { security = m[1] || m[2]; setIn = f; }
+    }
+    if (security !== 'definer') {
+      fail(3, `the save ends the chain SECURITY ${String(security).toUpperCase()} (last set in ${setIn}). With the direct grants revoked an INVOKER save refuses every signed in play, and with them restored any player can write their own total`);
+    }
+
+    /* L1 takes the direct writes away from the four account tables. */
+    const l1 = norm(texts.get(L1));
+    for (const t of ['user_scores', 'user_game_scores', 'user_best_scores', 'daily_completions']) {
+      const revoke = new RegExp(`revoke insert, update, delete, truncate, references, trigger on table [^;]*\\bpublic\\.${t}\\b[^;]*from anon, authenticated`);
+      if (!revoke.test(l1)) fail(3, `${L1} does not revoke the direct writes on ${t} from anon and authenticated`);
+    }
+    for (const [t, p] of [['user_scores', 'user_scores_ins'], ['user_scores', 'user_scores_upd'], ['user_game_scores', 'user_game_scores_ins'],
+                          ['user_best_scores', 'user_best_scores_ins'], ['user_best_scores', 'user_best_scores_upd'], ['daily_completions', 'daily_completions_ins']]) {
+      if (!l1.includes(`drop policy ${p} on public.${t}`)) fail(3, `${L1} does not drop the client write policy ${p} on ${t}`);
+    }
+    if (l1.includes(CREATE)) fail(3, `${L1} replaces the save's body; L1 must only change its security, so the Round 569 arithmetic lands exactly as before`);
+    if (!fired.has(3)) console.log(`   ${file} body: auth.uid(), pinned search_path, fixed SQL, in place increment, conflict safe daily mark, authenticated only; SECURITY DEFINER as of ${setIn}, which takes the direct writes and six client write policies away`);
   }
 }
 
@@ -220,7 +316,7 @@ if (CONTROL) {
 }
 
 // ---------------------------------------------------------------------------
-const EXPECT = { readwrite: 1, getuser: 2, definer: 3 };
+const EXPECT = { readwrite: 1, getuser: 2, invoker: 3, norevoke: 3, bodyexec: 3 };
 if (CONTROL) {
   const want = EXPECT[CONTROL];
   if (fired.has(want)) { console.log(`\nCONTROL ${CONTROL}: section ${want} fired, as it must.`); process.exit(0); }
