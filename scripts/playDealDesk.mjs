@@ -44,6 +44,18 @@
  * Measured with the control on: 2 findings, both of them section 3's meter
  * reads, every other section still green, and the run exits non zero.
  *
+ * Round 672 added two more, for the two things that were red on main:
+ *   DEAL_DESK_CONTROL=nosign
+ * rewrites the served clubManager chunk so an agreed personal terms sheet
+ * never reaches the settlement (offerTerms takes its refusal path instead),
+ * which is the game behaviour section 5 exists to guard. The minified branch
+ * is matched by shape and must match exactly once in the served asset or the
+ * run refuses to start. It has to turn exactly section 5's three checks red.
+ *   DEAL_DESK_CONTROL=lateclose
+ * puts back the order section 0 used before this round, doctoring the save
+ * while the game page is still open and closing it afterwards, and the budget
+ * read in section 0 has to stop the walk. See section 0 for why.
+ *
  * Run: ENGINES=chromium node scripts/playDealDesk.mjs
  * (dist must already be built. DEAL_DESK_PORT moves the server, VERBOSE=1
  * narrates every press.)
@@ -77,6 +89,19 @@ const CONTROL_TARGETS = [
   '3. a lowball reads as ending the talks',
   '3. the full ask reads as agreed',
 ];
+
+/* Round 672, the nosign control. offerTerms' agreed branch as the minifier
+   writes it, `if(t==="agreed"){const p=qv(a,e,o);if(!p)`, matched by shape
+   because the names change every build. The swap makes the settlement null,
+   so an agreed sheet takes the "cannot be completed" path, and the three
+   checks below are the ones that have to go red. */
+const AGREED_SETTLE = /if\((\w+)==="agreed"\)\{const (\w+)=\w+\(\w+,\w+,\w+\);if\(!\2\)/g;
+const NOSIGN_TARGETS = [
+  '5. the panel says DEAL DONE',
+  '5. the player is in the saved squad',
+  '5. he signed on the terms that were agreed',
+];
+const TARGETS = CONTROL === 'nosign' ? NOSIGN_TARGETS : CONTROL_TARGETS;
 
 const failed = [];
 let checksRun = 0;
@@ -163,6 +188,30 @@ if (CONTROL === 'nometer') {
   }
 }
 
+if (CONTROL === 'nosign') {
+  /* Same rule: the shape must be in what the server hands back, exactly once
+     across every asset, or the swap would change nothing (or the wrong thing). */
+  const dir = path.join(DIST, 'assets');
+  const hits = [];
+  for (const f of fs.readdirSync(dir)) {
+    if (!f.endsWith('.js')) continue;
+    const n = (fs.readFileSync(path.join(dir, f), 'utf8').match(AGREED_SETTLE) || []).length;
+    if (n) hits.push({ f, n });
+  }
+  const total = hits.reduce((s, h) => s + h.n, 0);
+  if (total !== 1) {
+    console.error(`playDealDesk control: RED before it started. The agreed terms branch matched ${total} times across the built assets, not once, so the swap would change nothing or the wrong thing. Rebuild dist, or the branch moved and this control needs updating.`);
+    stop(1);
+  }
+  let served = '';
+  try { served = await (await fetch(`${BASE}/assets/${hits[0].f}`)).text(); } catch { /* judged below */ }
+  if ((served.match(AGREED_SETTLE) || []).length !== 1) {
+    console.error(`playDealDesk control: RED before it started. /assets/${hits[0].f} did not come back from the server with the agreed terms branch in it.`);
+    stop(1);
+  }
+  console.log(`  control  the agreed terms branch confirmed once in the served /assets/${hits[0].f}`);
+}
+
 /* ---------------------------------------------------------------- */
 /* The browser                                                       */
 /* ---------------------------------------------------------------- */
@@ -181,6 +230,16 @@ if (CONTROL === 'nometer') {
       body = body.split(METER_AGREE).join(CONTROL_TEXT).split(METER_WALKOUT).join(CONTROL_TEXT);
       controlSwaps += 1;
     }
+    await route.fulfill({ response: res, body });
+  });
+}
+
+if (CONTROL === 'nosign') {
+  await ctx.route('**/*.js', async route => {
+    const res = await route.fetch();
+    let body = await res.text();
+    const swapped = body.replace(AGREED_SETTLE, 'if($1==="agreed"){const $2=null;if(!$2)');
+    if (swapped !== body) { body = swapped; controlSwaps += 1; }
     await route.fulfill({ response: res, body });
   });
 }
@@ -260,7 +319,21 @@ if (!/Season 1/i.test(await body())) bail('could not get past the club picker');
    open summer window; what it does not start with is enough money for the
    ask on any player worth talking to, and a bid over the budget disables
    the send button, which would make section 3 untestable for the wrong
-   reason. */
+   reason.
+
+   Round 672: the game page is CLOSED FIRST, and only then is the save
+   doctored. Round 538 taught the career to write itself when the page goes
+   away (pagehide, a hidden tab, the route unmounting), which is right for a
+   player and was fatal to the old order here: the save was doctored while the
+   game page was still open, and closing it afterwards wrote the career held
+   in memory, at the club's real budget (69m at Brentford), straight back over
+   the doctored 900m. The fee still fitted, the signing bonus then did not, the
+   terms table refused with "The fee and a 14.6m bonus come to more than the
+   budget", and section 5 reported a signing that never lands. That was the
+   harness undoing its own setup, not the game. The budget is read back after
+   the reload below and the walk refuses to go on without it.
+   DEAL_DESK_CONTROL=lateclose puts the old order back to prove that read. */
+if (CONTROL !== 'lateclose') await page.close();
 const helper = await ctx.newPage();
 await helper.goto(`${BASE}/robots.txt`, { waitUntil: 'domcontentloaded' });
 const doctored = await helper.evaluate(key => {
@@ -279,7 +352,7 @@ await helper.close();
 if (!doctored) bail('the career never wrote a save, so there was nothing to doctor');
 console.log(`   in the job at ${doctored.club}, ${doctored.squad} in the squad, £900m to spend`);
 
-await page.close();
+if (CONTROL === 'lateclose') await page.close();
 page = await ctx.newPage();
 watch(page);
 await page.goto(`${BASE}/club-manager`, { waitUntil: 'domcontentloaded', timeout: 25000 });
@@ -307,6 +380,25 @@ const readSave = async () => page.evaluate(key => {
   const raw = localStorage.getItem(key);
   return raw ? JSON.parse(raw) : null;
 }, SAVE_KEY);
+
+/* Round 672: the doctored budget is what the game loaded, or nothing below
+   is measured against the money this walk thinks it has. */
+const loaded = await readSave();
+const loadedBudget = loaded ? loaded.budget : null;
+if (loadedBudget !== 900) {
+  if (CONTROL === 'lateclose') {
+    console.log(`  BLOCKED  the doctored budget did not survive the reload: the save says ${loadedBudget}, the edit said 900`);
+    console.error('playDealDesk control: green. Closing the game page after the save was doctored let the career it held write back over the edit, and section 0 caught it before anything could be blamed on the deal desk. Exiting non zero, because a run with findings fails.');
+    browser.close().catch(() => {});
+    stop(1);
+  }
+  bail(`the doctored budget did not survive the reload (the save says ${loadedBudget}, the edit said 900), so the game wrote its own career back over the doctored save and every deal below would be struck against the wrong money`);
+}
+if (CONTROL === 'lateclose') {
+  console.error(`playDealDesk control: RED. The game page was closed after the save was doctored and the budget still read ${loadedBudget}, so the order this control reverts no longer matters and the check proves nothing.`);
+  browser.close().catch(() => {});
+  stop(1);
+}
 
 /* ---------------------------------------------------------------- */
 /* 1) The market prints a valuation read                             */
@@ -508,19 +600,26 @@ await browser.close();
 console.log(`\n   ${checksRun} checks run, ${rows.length} market rows read, ask £${ask}m, lowball ${lowball} read as "${lowVerdict}", full ask read as "${fullVerdict}", squad ${squadBefore} to ${squadAfter}`);
 console.log(`Walked Club Manager's deal desk through its own screens. ${failed.length} findings.`);
 
-if (CONTROL === 'nometer') {
+if (CONTROL === 'nometer' || CONTROL === 'nosign') {
   if (controlSwaps === 0) {
     console.error('playDealDesk control: RED. The swap never landed on a served asset, so a red run would be red for some other reason.');
     stop(1);
   }
-  const hit = CONTROL_TARGETS.filter(t => failed.includes(t));
-  const collateral = failed.filter(t => !CONTROL_TARGETS.includes(t));
-  console.log(`   control: ${controlSwaps} served asset(s) rewritten, ${hit.length} of ${CONTROL_TARGETS.length} target checks went red, ${collateral.length} other check(s) red`);
-  if (hit.length === CONTROL_TARGETS.length) {
-    console.error(`playDealDesk control: green. Breaking the meter's verdict lines was reported by exactly the checks that read them (${hit.join('; ')}), so the check works. Exiting non zero, because a run with findings fails.`);
+  const hit = TARGETS.filter(t => failed.includes(t));
+  const collateral = failed.filter(t => !TARGETS.includes(t));
+  console.log(`   control: ${controlSwaps} served asset(s) rewritten, ${hit.length} of ${TARGETS.length} target checks went red, ${collateral.length} other check(s) red`);
+  /* Round 672: nosign is judged on "exactly": its three targets red and
+     nothing else, because a signing that fails for some other reason (the
+     budget, as it did on main) must not be able to pass it. */
+  if (hit.length === TARGETS.length && (CONTROL === 'nometer' || collateral.length === 0)) {
+    console.error(CONTROL === 'nosign'
+      ? `playDealDesk control: green. Stopping an agreed terms sheet from signing him was reported by exactly section 5's checks (${hit.join('; ')}), so the walk tells a deal that lands from one that does not. Exiting non zero, because a run with findings fails.`
+      : `playDealDesk control: green. Breaking the meter's verdict lines was reported by exactly the checks that read them (${hit.join('; ')}), so the check works. Exiting non zero, because a run with findings fails.`);
     stop(1);
   }
-  console.error('playDealDesk control: RED. The meter was lying and the harness said nothing, so it proves nothing.');
+  console.error(CONTROL === 'nosign'
+    ? `playDealDesk control: RED. With the settlement cut out, section 5 said ${hit.length} of ${TARGETS.length} and ${collateral.length} other check(s) went red (${collateral.join('; ') || 'none'}), so it does not isolate a deal that never lands.`
+    : 'playDealDesk control: RED. The meter was lying and the harness said nothing, so it proves nothing.');
   stop(1);
 }
 
