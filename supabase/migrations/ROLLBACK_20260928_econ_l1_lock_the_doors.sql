@@ -3,34 +3,44 @@
 -- Only run it if L1 caused a problem (the apply steps in L1's header say
 -- when). It puts back exactly what L1 replaced, read from L1's own ledger row
 -- (private.economy_steps, column prior), not from memory:
---   record_auth_completion back to SECURITY INVOKER, whose definition then
---   md5s to 5ae76ef7cbf874d58d65ee9050e2023c again (the body was never
---   touched); the table grants anon and authenticated held on the six tables;
---   the six client write policies on the four account tables, recreated from
---   their recorded commands, roles and expressions; the game_completions
---   insert policy's old WITH CHECK; the column grants on game_completions as
---   they were (none). Then it marks L1 undone, so L1 can be applied again.
+--   record_auth_completion back to the definition it had before L1 (the
+--   Round 569 body, SECURITY INVOKER, md5 5ae76ef7cbf874d58d65ee9050e2023c),
+--   executed from the pg_get_functiondef text L1 recorded; the table grants
+--   anon and authenticated held on the six tables; the six client write
+--   policies on the four account tables, recreated from their recorded
+--   commands, roles and expressions; the game_completions insert policy's old
+--   WITH CHECK; the column grants on game_completions as they were (none).
+--   It drops private.game_hard_max, which only L1's save reads. Then it marks
+--   L1 undone, so L1 can be applied again.
 --
--- That reopens the write hole L1 closed, on purpose: this is the way back,
--- not a fix.
+-- That reopens the write hole L1 closed, and takes the save's refusals away
+-- with it, on purpose: this is the way back, not a fix.
 --
 -- It refuses, before any write, unless L1 is live, no later economy step is
--- live (undo runs newest first), and the save and the write policies are
--- still exactly what L1 installed (md5 against the ledger). It proves the
--- restore before the block ends: every table ACL and the save's definition
--- md5 equal the recorded prior, and the write policies equal the recorded
--- list. One DO block, one transaction.
+-- live (undo runs newest first), the save and the write policies are still
+-- exactly what L1 installed (md5 against the ledger), and
+-- private.game_hard_max exists. It proves the restore before the block ends:
+-- every table ACL and the save's definition md5 equal the recorded prior, the
+-- write policies equal the recorded list, and private.game_hard_max is gone.
+-- One DO block, one transaction. Like L1 it takes game_completions first,
+-- while holding nothing else, and gives up after 1 s of waiting for it.
+--
+-- REHEARSED IN PGLITE: scripts/simEconomyMigrations.mjs section 7 applies L1,
+-- runs this, and requires the catalog to equal the one before L1, object for
+-- object, then applies L1 again and requires the first apply's catalog.
 --
 -- The dynamic statements below take their table, role and privilege words
--- only from fixed lists in this block, and their policy expressions only
--- from the ledger row L1 wrote from pg_policies. This is a migration run by
--- the lead, never a function a client can reach.
+-- only from fixed lists in this block, and their policy expressions and the
+-- save's definition only from the ledger row L1 wrote from pg_policies and
+-- pg_get_functiondef. This is a migration run by the lead, never a function a
+-- client can reach.
 --
--- APPLY: apply_migration, name econ_l1_undo, query = this whole file; then
--- get_advisors (security); then node scripts/simAuthSave.mjs and
--- node scripts/simPlayDoor.mjs, which will now report the door open (that is
--- what undo means) and fail while the fixture says production. Record why in
--- docs/PROJECT-STATE.md.
+-- APPLY: the timing of L1's APPLY step 2 (just after a refresh-player-ranks
+-- run ends), then apply_migration, name econ_l1_undo, query = this whole file
+-- with LF line endings; then get_advisors (security); then
+-- node scripts/simAuthSave.mjs and node scripts/simPlayDoor.mjs, which will
+-- now report the door open (that is what undo means) and fail while the
+-- fixture says production. Record why in docs/PROJECT-STATE.md.
 
 do $u1$
 declare
@@ -43,7 +53,7 @@ declare
   v_roles text;
   v_bad text;
 begin
-  set local lock_timeout = '3s';
+  set local lock_timeout = '1s';
 
   -- PRECONDITIONS, reads only
   if to_regclass('private.economy_steps') is null then
@@ -59,15 +69,27 @@ begin
   if v_save is null or md5(pg_get_functiondef(v_save)) <> v_row.installed->>'save_def_md5' then
     raise exception 'L1 undo: record_auth_completion is not what L1 installed, so something changed it since. Read it before going on. Nothing was changed.';
   end if;
+  if coalesce(v_row.prior->>'save_def', '') = '' or md5(v_row.prior->>'save_def') is distinct from v_row.prior->>'save_def_md5' then
+    raise exception 'L1 undo: the ledger does not hold the save definition L1 replaced. Nothing was changed.';
+  end if;
   if (select md5(coalesce(jsonb_agg(jsonb_build_object('t', tablename, 'n', policyname, 'cmd', cmd, 'roles', roles::text, 'using', qual, 'check', with_check)
                                     order by tablename::text collate "C", policyname::text collate "C"), '[]'::jsonb)::text)
         from pg_policies where schemaname = 'public' and tablename::text = any (v_six) and cmd <> 'SELECT')
      <> v_row.installed->>'write_policies_md5' then
     raise exception 'L1 undo: the write policies are not what L1 left. Read pg_policies before going on. Nothing was changed.';
   end if;
+  if to_regclass('private.game_hard_max') is null then
+    raise exception 'L1 undo: private.game_hard_max is gone, but L1 is live and its save reads it. Read the catalog before going on. Nothing was changed.';
+  end if;
 
   -- WRITES
-  alter function public.record_auth_completion(text, integer, integer) security invoker;
+  lock table public.game_completions in access exclusive mode;
+
+  -- the save, exactly as it was: the definition L1 recorded, which carries
+  -- no SECURITY DEFINER, so it comes back INVOKER. Its grants are untouched
+  -- by CREATE OR REPLACE.
+  execute v_row.prior->>'save_def';
+  drop table private.game_hard_max;
 
   -- table grants, exactly the write privileges the prior ACLs gave the two client roles
   for v_g in
@@ -118,6 +140,15 @@ begin
   if md5(pg_get_functiondef(v_save)) <> v_row.prior->>'save_def_md5' then
     raise exception 'L1 undo proof: record_auth_completion does not match its prior definition.';
   end if;
+  if (select prosecdef from pg_proc where oid = v_save) then
+    raise exception 'L1 undo proof: record_auth_completion is still SECURITY DEFINER.';
+  end if;
+  if (select proacl::text from pg_proc where oid = v_save) is distinct from v_row.prior->>'save_acl' then
+    raise exception 'L1 undo proof: record_auth_completion''s grants differ from the prior.';
+  end if;
+  if to_regclass('private.game_hard_max') is not null then
+    raise exception 'L1 undo proof: private.game_hard_max is still there.';
+  end if;
   select string_agg(c.relname::text, ', ') into v_bad
     from pg_class c
    where c.relnamespace = 'public'::regnamespace and c.relname::text = any (v_six)
@@ -139,6 +170,6 @@ begin
   end if;
 
   update private.economy_steps set undone_at = now() where step = 'L1';
-  raise notice 'L1 undone: record_auth_completion is SECURITY INVOKER again, grants and policies restored from the ledger.';
+  raise notice 'L1 undone: record_auth_completion is the Round 569 save again (SECURITY INVOKER, no refusals), private.game_hard_max dropped, grants and policies restored from the ledger.';
 end
 $u1$;

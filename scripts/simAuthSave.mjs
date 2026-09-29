@@ -41,7 +41,14 @@
  *      policies on the four account tables taken away (economy step L1,
  *      supabase/migrations/20260928_econ_l1_lock_the_doors.sql). The effective
  *      security is read across the whole chain in order, so a later migration
- *      that sets it back to INVOKER fails here.
+ *      that sets it back to INVOKER fails here. L1 also replaces the body, and
+ *      only in front: four refusals (a slug over 64 characters or off the
+ *      game_score_caps allowlist, a score outside 0 to the game's hard
+ *      maximum in private.game_hard_max, a correct count outside 0 to 1000,
+ *      each SQLSTATE 22023), then the Round 569 body from its first insert to
+ *      its end, byte for byte against 20260914120000_record_auth_completion.sql.
+ *      simEconomyMigrations runs both in PGlite and proves the arithmetic
+ *      lands identically; this section holds the text.
  *
  *      WHY THIS RULE INVERTED IN ROUND 673. Until then this section required
  *      SECURITY INVOKER and failed on DEFINER, citing the exec_sql incident in
@@ -76,6 +83,10 @@
  *                                section 3 must fire. It replaces the old
  *                                definer control, which retired with the
  *                                rule it tested.
+ *   AUTH_SAVE_CONTROL=norefuse   L1's save loses its score check; section 3
+ *                                must fire.
+ *   AUTH_SAVE_CONTROL=arith      L1's save adds one point more than the
+ *                                Round 569 body; section 3 must fire.
  *   AUTH_SAVE_CONTROL=norevoke   L1 keeps INSERT, UPDATE, DELETE and TRUNCATE
  *                                for the client roles; section 3 must fire.
  *   AUTH_SAVE_CONTROL=bodyexec   the save's body runs an execute; section 3
@@ -90,7 +101,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.AUTH_SAVE_CONTROL || '';
-const KNOWN = ['readwrite', 'getuser', 'invoker', 'norevoke', 'bodyexec'];
+const KNOWN = ['readwrite', 'getuser', 'invoker', 'norevoke', 'bodyexec', 'norefuse', 'arith'];
 if (CONTROL && !KNOWN.includes(CONTROL)) {
   console.error(`AUTH_SAVE_CONTROL=${CONTROL} is not a control this harness knows (${KNOWN.join(', ')})`);
   process.exit(1);
@@ -182,17 +193,28 @@ console.log('3) the migrations keep what makes the save correct and safe, and ma
      files are never part of it: an undo sets the save back to INVOKER on
      purpose, and reading it as the chain would fail this on every run. */
   const chain = fs.readdirSync(dir).filter(f => /^\d{8}.*\.sql$/.test(f)).sort();
-  const texts = new Map(chain.map(f => [f, fs.readFileSync(path.join(dir, f), 'utf8')]));
+  /* LF throughout: a Windows checkout carries CRLF, and the byte for byte
+     comparison of the arithmetic below is about the SQL, not the checkout. */
+  const texts = new Map(chain.map(f => [f, fs.readFileSync(path.join(dir, f), 'utf8').split('\r\n').join('\n')]));
+  const SAVE_569 = '20260914120000_record_auth_completion.sql';
   if (CONTROL === 'invoker') {
     if (!texts.has(L1)) {
       console.error(`CONTROL invoker cannot run: ${L1} is not in supabase/migrations, so the rewrite would change nothing and a green run would prove nothing.`);
       process.exit(2);
     }
     texts.set(L1, rewrite(texts.get(L1),
-      'alter function public.record_auth_completion(text, integer, integer) security definer;',
-      'alter function public.record_auth_completion(text, integer, integer) security invoker;',
-      "L1's security definer statement"));
+      "  language plpgsql\n  security definer\n  set search_path = ''",
+      "  language plpgsql\n  security invoker\n  set search_path = ''",
+      "L1's security definer clause on the save"));
     console.log('   NEGATIVE CONTROL ON: L1 sets the save back to SECURITY INVOKER');
+  }
+  if (CONTROL === 'norefuse') {
+    texts.set(L1, rewrite(texts.get(L1), 'if coalesce(p_score, 0) < 0 or coalesce(p_score, 0) > v_hard_max then', 'if false then', "L1's score check"));
+    console.log('   NEGATIVE CONTROL ON: L1\'s save has no score check');
+  }
+  if (CONTROL === 'arith') {
+    texts.set(L1, rewrite(texts.get(L1), 'total_points = s.total_points + excluded.total_points,', 'total_points = s.total_points + excluded.total_points + 1,', "L1's increment"));
+    console.log('   NEGATIVE CONTROL ON: L1\'s save adds one point more than Round 569');
   }
   if (CONTROL === 'norevoke') {
     if (!texts.has(L1)) {
@@ -273,8 +295,34 @@ console.log('3) the migrations keep what makes the save correct and safe, and ma
                           ['user_best_scores', 'user_best_scores_ins'], ['user_best_scores', 'user_best_scores_upd'], ['daily_completions', 'daily_completions_ins']]) {
       if (!l1.includes(`drop policy ${p} on public.${t}`)) fail(3, `${L1} does not drop the client write policy ${p} on ${t}`);
     }
-    if (l1.includes(CREATE)) fail(3, `${L1} replaces the save's body; L1 must only change its security, so the Round 569 arithmetic lands exactly as before`);
-    if (!fired.has(3)) console.log(`   ${file} body: auth.uid(), pinned search_path, fixed SQL, in place increment, conflict safe daily mark, authenticated only; SECURITY DEFINER as of ${setIn}, which takes the direct writes and six client write policies away`);
+    /* L1 replaces the body only in front: from the first insert to the end it
+       is the Round 569 body, byte for byte (comments and all, since a comment
+       inside a body is part of it), and in front of that sit the refusals. */
+    const TAIL_AT = '  insert into public.user_game_scores (';
+    const rawBody = t => {
+      const a = t.indexOf('as $$\n', t.indexOf('create or replace function public.record_auth_completion('));
+      const b = a < 0 ? -1 : t.indexOf('\n$$;', a);
+      return a < 0 || b < 0 ? '' : t.slice(a + 'as $$'.length, b + 1);
+    };
+    const b569 = texts.has(SAVE_569) ? rawBody(texts.get(SAVE_569)) : '';
+    const bL1 = rawBody(texts.get(L1));
+    if (!b569 || !bL1) fail(3, `the save's body could not be read out of ${b569 ? L1 : SAVE_569}`);
+    else if (b569.indexOf(TAIL_AT) < 0 || bL1.indexOf(TAIL_AT) < 0) fail(3, `no "${TAIL_AT.trim()}" line in one of the two bodies, so the comparison needs re-anchoring`);
+    else {
+      if (bL1.slice(bL1.indexOf(TAIL_AT)) !== b569.slice(b569.indexOf(TAIL_AT))) {
+        fail(3, `${L1}: from its first insert to its end the save is not the Round 569 body byte for byte, so an accepted save no longer lands exactly as before`);
+      }
+      const head = stripSql(bL1.slice(0, bL1.indexOf(TAIL_AT))).toLowerCase().replace(/\s+/g, ' ');
+      for (const [needle, why] of [
+        ['length(p_game_slug) > 64', 'a slug over 64 characters is not refused'],
+        ['join private.game_hard_max h on h.game = c.game', 'the game is not looked up in game_score_caps and its hard maximum'],
+        ['if not found then', 'a game off the allowlist is not refused'],
+        ['if coalesce(p_score, 0) < 0 or coalesce(p_score, 0) > v_hard_max then', 'a score outside 0 to the hard maximum is not refused'],
+        ['if p_correct < 0 or p_correct > 1000 then', 'a correct count outside 0 to 1000 is not refused'],
+        ["using errcode = '22023'", 'the refusals do not raise 22023, which the client log names'],
+      ]) if (!head.includes(needle)) fail(3, `${L1}: ${why} (no "${needle}" before the first insert)`);
+    }
+    if (!fired.has(3)) console.log(`   ${file} body: auth.uid(), pinned search_path, fixed SQL, in place increment, conflict safe daily mark, authenticated only; the Round 569 arithmetic byte for byte behind four refusals; SECURITY DEFINER as of ${setIn}, which takes the direct writes and six client write policies away`);
   }
 }
 
@@ -316,7 +364,7 @@ if (CONTROL) {
 }
 
 // ---------------------------------------------------------------------------
-const EXPECT = { readwrite: 1, getuser: 2, invoker: 3, norevoke: 3, bodyexec: 3 };
+const EXPECT = { readwrite: 1, getuser: 2, invoker: 3, norevoke: 3, bodyexec: 3, norefuse: 3, arith: 3 };
 if (CONTROL) {
   const want = EXPECT[CONTROL];
   if (fired.has(want)) { console.log(`\nCONTROL ${CONTROL}: section ${want} fired, as it must.`); process.exit(0); }

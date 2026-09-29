@@ -9,16 +9,21 @@
  * player could PATCH their own total_points through the API, insert an
  * unbounded score row, and anyone could post a backdated board row under any
  * name. Economy step L1 (supabase/migrations/20260928_econ_l1_lock_the_doors.sql)
- * closes it: the save becomes SECURITY DEFINER with fixed SQL, direct write
- * grants and the client write policies go, and the board insert is three
- * columns with length bounds. This harness keeps it closed.
+ * closes it: the save becomes SECURITY DEFINER with fixed SQL and refuses
+ * what a player could abuse (a slug off the allowlist or over 64 characters,
+ * a score outside 0 to the game's hard maximum, a correct count outside 0 to
+ * 1000), direct write grants and the client write policies go, and the board
+ * insert is three columns with length bounds. This harness keeps it closed.
  *
  * WHAT IT READS. Two things, because the anon key cannot read the catalog:
  *   the SNAPSHOT, scripts/data/playDoorCatalog.json, the output of the read
- *     only query scripts/data/playDoorCatalog.sql run through the Supabase
- *     MCP. Its "source" says where it came from: "dry-run" (captured inside a
- *     rolled back transaction right after L1 ran on production, so it is the
- *     catalog L1 produces) or "production" (captured after the apply).
+ *     only query scripts/data/playDoorCatalog.sql. Its "source" says where it
+ *     came from: "rehearsal" (captured by node scripts/simEconomyMigrations.mjs
+ *     --write-fixture in PGlite, on production's objects read with SELECTs,
+ *     right after L1 ran there, so it is the catalog L1 produces; nothing ran
+ *     on production) or "production" (the same query run read only through
+ *     the Supabase MCP after the apply). simEconomyMigrations section 9 holds
+ *     the committed snapshot to what L1 really produces.
  *   the LIVE database, probed as anon over the REST API with requests that
  *     cannot write whatever the grants are: an UPDATE or DELETE filtered to an
  *     id that does not exist, or an INSERT whose body fails to parse. The
@@ -47,24 +52,45 @@
  *      executable by anon or PUBLIC, and its md5 is in a live row of
  *      private.economy_steps. The four definers that predate the chain are
  *      pinned by md5 and by who may execute them, so any change to one is a
- *      decision somebody re-pins here. record_auth_completion's body stays the
- *      Round 569 arithmetic byte for byte until T0 (Round 691).
+ *      decision somebody re-pins here. record_auth_completion's body is the
+ *      one L1 installs (its md5 read from L1's own pin), and from its first
+ *      insert to its end it stays the Round 569 arithmetic byte for byte
+ *      until T0 (Round 691).
  *   5. OVERLOADS. Exactly one pg_proc row per door name that exists, and
  *      exactly one record_auth_completion: a second signature with a default
  *      makes every 3 argument call ambiguous (PGRST203), which would fail
  *      every signed in save.
  *   6. THE LEDGER. L1 is live in private.economy_steps, the save's md5 is the
- *      one L1 recorded, RLS is on and no client role can read it.
+ *      one L1 recorded, RLS is on and no client role can read it. The same
+ *      for private.game_hard_max, which must cover every cap row (a game
+ *      with no hard maximum has every signed in save refused) and hold what
+ *      L1 recorded.
  *   7. LIVE, read only, anon. The six write probes agree with each other
  *      (all shut or all open; a mix is a partial apply and fails), and the
  *      client's board insert still passes the privilege check. While the
- *      snapshot says dry-run, an open door is reported as PENDING (L1 not
+ *      snapshot says rehearsal, an open door is reported as PENDING (L1 not
  *      applied yet) and a shut one fails until the snapshot is refreshed from
  *      production; once it says production, the door must be shut.
  *   8. MIGRATIONS AFTER L1. No committed migration after L1 grants a table
  *      level write, or any column UPDATE, on the six tables to a client role,
  *      or creates a write policy on the account tables or game_score_caps.
  *      ROLLBACK_ files are skipped: an undo is the way back, not a migration.
+ *   9. VIEWS. Every view that reads one of the six tables, directly or through
+ *      another view, is security_invoker or cannot be written through.
+ *      Supabase's default privileges give every new public view full anon and
+ *      authenticated grants, and a write through an auto-updatable view that
+ *      is not security_invoker runs as the view's owner, past every revoke
+ *      and policy above. game_denominators is the one updatable view today,
+ *      and it is security_invoker (the round's review, 2026-09-28).
+ *  10. RULES. No rewrite rule other than a view's own, anywhere outside the
+ *      system schemas: a rule runs its action as the rule's table owner, so
+ *      a rule on anything a client can write could write the six tables.
+ *      Production had none on 2026-09-29.
+ *  11. DEFINERS OUTSIDE PUBLIC. Section 3 looks only at public. Every SECURITY
+ *      DEFINER function anywhere else is one of the five the platform ships
+ *      (pg_graphql, pgbouncer, Vault), owned by supabase_admin and executable
+ *      by exactly whom production showed, and none is in graphql_public, the
+ *      schema the GraphQL endpoint serves.
  *
  * WHY THE SAVE IS DEFINER NOW. Until Round 673 the house rule was "never
  * SECURITY DEFINER" (the exec_sql incident of 2026-08-25). That rule is about
@@ -83,7 +109,10 @@
  *   body      record_auth_completion's body gains an execute       section 4
  *   overload  a second record_auth_completion signature            section 5
  *   regrant   a migration after L1 grants UPDATE on user_scores    section 8
- *   livesource the snapshot's source flipped (dry-run and production
+ *   view      an updatable view over user_scores, not invoker       section 9
+ *   rule      a rewrite rule on game_completions                    section 10
+ *   outside   a definer in graphql_public owned by postgres          section 11
+ *   livesource the snapshot's source flipped (rehearsal and production
  *              swapped), so the live door no longer matches what the
  *              snapshot says: red whether L1 is pending or applied  section 7
  * Section 7 runs only under livesource; every other control is judged on its
@@ -112,7 +141,7 @@ if (process.argv.includes('--query')) {
 }
 
 const CONTROL = process.env.PLAY_DOOR_CONTROL || '';
-const EXPECT = { grant: 1, policy: 2, definer: 3, body: 4, overload: 5, livesource: 7, regrant: 8 };
+const EXPECT = { grant: 1, policy: 2, definer: 3, body: 4, overload: 5, livesource: 7, regrant: 8, view: 9, rule: 10, outside: 11 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`PLAY_DOOR_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
   process.exit(1);
@@ -134,9 +163,23 @@ const LEGACY = {
   'handle_new_user()': { md5: '966c4daebe578e3a71d762e7f804e096', anon: false, authenticated: false },
   'has_role(uuid,app_role)': { md5: '964712856503e0a31d73451d32629426', anon: false, authenticated: true },
 };
-/* md5(prosrc) of the Round 569 save body, read inside L1's dry run: L1 keeps
-   it byte for byte, and only T0 (Round 691) may change it. */
-const SAVE_569_SRC_MD5 = 'd4044c9c19fc6d9e68ca70236b36c853';
+/* md5 of the Round 569 save body from its first insert to its end
+   ('  insert into public.user_game_scores (' onward), which L1 keeps byte for
+   byte behind its refusals; only T0 (Round 691) may change it. The whole
+   body's md5 is read from L1's own pin (v_new_src_md5), one source for both. */
+const SAVE_569_TAIL_MD5 = '4423bc05629b04814d742748d572468b';
+const SAVE_L1_SRC_MD5 = (readLF(path.join(MIGRATIONS, L1_FILE)).match(/v_new_src_md5 constant text := '([0-9a-f]{32})'/) || [])[1];
+/* The SECURITY DEFINER functions production has outside public, as read on
+   2026-09-29: the platform's, owned by supabase_admin, with who may execute
+   each. None is in an API schema. A new one fails section 11 until somebody
+   reads it and adds it here. */
+const PLATFORM_DEFINERS = {
+  'graphql.get_schema_version()': { anon: true, authenticated: true, why: 'pg_graphql reads its schema version; graphql is not an API schema' },
+  'graphql.increment_schema_version()': { anon: true, authenticated: true, why: 'pg_graphql event trigger function; an event trigger cannot be called' },
+  'pgbouncer.get_auth(text)': { anon: false, authenticated: false, why: "the pooler's password lookup; only pgbouncer may execute it" },
+  'vault.create_secret(text,text,text,uuid)': { anon: false, authenticated: false, why: 'Supabase Vault; only postgres and service_role may execute it' },
+  'vault.update_secret(uuid,text,text,text,uuid)': { anon: false, authenticated: false, why: 'Supabase Vault; only postgres and service_role may execute it' },
+};
 
 let failures = 0;
 const fired = new Set();
@@ -154,7 +197,8 @@ const queryMd5 = crypto.createHash('md5').update(readLF(QUERY_FILE)).digest('hex
 if (fixture.query_md5 !== queryMd5) {
   fail(0, `playDoorCatalog.json was captured with a different query (query_md5 ${fixture.query_md5}, the file is ${queryMd5}). Rerun the query and refresh the snapshot`);
 }
-if (!['dry-run', 'production'].includes(fixture.source)) fail(0, `snapshot source "${fixture.source}" is neither dry-run nor production`);
+if (!['rehearsal', 'production'].includes(fixture.source)) fail(0, `snapshot source "${fixture.source}" is neither rehearsal nor production`);
+if (!SAVE_L1_SRC_MD5) fail(0, `${L1_FILE} no longer pins v_new_src_md5, so section 4 has nothing to hold the save to`);
 if (!/^\d{4}-\d{2}-\d{2}$/.test(String(fixture.captured || ''))) fail(0, 'snapshot has no captured date');
 const cat = structuredClone(fixture.catalog || {});
 if (!fired.has(0)) console.log(`   ${fixture.source} snapshot of ${fixture.captured}, query ${queryMd5.slice(0, 8)}`);
@@ -192,10 +236,25 @@ if (CONTROL === 'regrant') {
   extraMigration = { file: '29991231_control_regrant.sql', sql: 'grant update on table public.user_scores to authenticated;' };
   console.log('   NEGATIVE CONTROL ON: a migration after L1 grants UPDATE on user_scores back');
 }
+if (CONTROL === 'view') {
+  if (!Array.isArray(cat.views) || cat.views.some(v => v.view === 'public.user_scores_patch')) plantFail('the snapshot has no view list, or the planted view is already in it');
+  cat.views.push({ view: 'public.user_scores_patch', kind: 'v', security_invoker: false, updatable: true, anon_write: true, authenticated_write: true });
+  console.log('   NEGATIVE CONTROL ON: an updatable view over user_scores that runs as its owner');
+}
+if (CONTROL === 'rule') {
+  if (!Array.isArray(cat.rules) || cat.rules.length) plantFail('the snapshot has no rule list, or it already lists a rule');
+  cat.rules.push({ rel: 'public.game_completions', rule: 'backdate', event: '3', instead: false });
+  console.log('   NEGATIVE CONTROL ON: a rewrite rule on game_completions');
+}
+if (CONTROL === 'outside') {
+  if (!Array.isArray(cat.outside_definers) || cat.outside_definers.some(d => d.schema === 'graphql_public')) plantFail('the snapshot has no outside definer list, or one is already in graphql_public');
+  cat.outside_definers.push({ fn: 'graphql_public.bump(text)', schema: 'graphql_public', owner: 'postgres', config: null, anon_exec: true, public_exec: true, authenticated_exec: true });
+  console.log('   NEGATIVE CONTROL ON: a definer owned by postgres in graphql_public');
+}
 let source = fixture.source;
 if (CONTROL === 'livesource') {
-  if (!['dry-run', 'production'].includes(source)) plantFail(`the snapshot source "${source}" is not one the flip knows`);
-  source = source === 'dry-run' ? 'production' : 'dry-run';
+  if (!['rehearsal', 'production'].includes(source)) plantFail(`the snapshot source "${source}" is not one the flip knows`);
+  source = source === 'rehearsal' ? 'production' : 'rehearsal';
   console.log(`   NEGATIVE CONTROL ON: the snapshot read as ${source}, the opposite of what it says`);
 }
 
@@ -321,8 +380,9 @@ console.log('4) definer bodies: fixed SQL, doors pinned and in the ledger, the o
     if (d.anon_exec) fail(4, `${d.fn} is executable by anon; a door is for signed in players only`);
     if (!ledgerMd5s.has(d.md5)) fail(4, `${d.fn} md5 ${d.md5} is in no live row of private.economy_steps, so it was installed or changed outside the chain`);
   }
-  if (cat.save?.src_md5 !== SAVE_569_SRC_MD5) fail(4, `record_auth_completion's body is not the Round 569 arithmetic (src md5 ${cat.save?.src_md5}); only T0 may change it`);
-  if (!fired.has(4)) console.log(`   no execute, no format(; ${Object.keys(LEGACY).length} pre-chain definers at their pins; the save's body is the 569 body`);
+  if (cat.save?.src_md5 !== SAVE_L1_SRC_MD5) fail(4, `record_auth_completion's body is not the one L1 installs (src md5 ${cat.save?.src_md5}, L1 pins ${SAVE_L1_SRC_MD5}); only T0 may change it`);
+  if (cat.save?.tail_md5 !== SAVE_569_TAIL_MD5) fail(4, `from its first insert on, record_auth_completion is not the Round 569 arithmetic (md5 ${cat.save?.tail_md5}); a save that adds differently changes every total`);
+  if (!fired.has(4)) console.log(`   no execute, no format(; ${Object.keys(LEGACY).length} pre-chain definers at their pins; the save is L1's, the Round 569 arithmetic behind its refusals`);
 }
 
 // ---------------------------------------------------------------------------
@@ -346,7 +406,11 @@ console.log('6) the ledger');
   if (cat.save?.definer !== true) fail(6, 'record_auth_completion is not SECURITY DEFINER in the snapshot');
   const g = cat.ledger_guard || {};
   if (g.rls !== true || g.anon_select !== false || g.authenticated_select !== false) fail(6, `private.economy_steps is reachable by a client role or has RLS off (${JSON.stringify(g)})`);
-  if (!fired.has(6)) console.log(`   L1 live, save md5 ${cat.save.md5.slice(0, 8)} as recorded, ledger private`);
+  const h = cat.hard_max || {};
+  if (h.rls !== true || h.anon_select !== false || h.authenticated_select !== false) fail(6, `private.game_hard_max is reachable by a client role or has RLS off (${JSON.stringify(h)})`);
+  if (!(h.rows > 0) || h.uncovered !== 0 || h.rows !== h.caps_rows) fail(6, `private.game_hard_max holds ${h.rows} rows for ${h.caps_rows} cap rows, ${h.uncovered} of them uncovered: a game with no hard maximum has every signed in save refused`);
+  if (l1.length === 1 && l1[0].installed?.hard_max_md5 !== h.md5) fail(6, `private.game_hard_max (md5 ${h.md5}) is not what L1 recorded (${l1[0].installed?.hard_max_md5})`);
+  if (!fired.has(6)) console.log(`   L1 live, save md5 ${cat.save.md5.slice(0, 8)} as recorded, ledger private; a hard maximum for all ${h.rows} caps, as recorded, private`);
 }
 
 // ---------------------------------------------------------------------------
@@ -407,10 +471,10 @@ if (CONTROL && CONTROL !== 'livesource') {
       if (shut && open) fail(7, `${shut} probes refused and ${open} open: a partial apply, which no migration step produces`);
       else if (shut === states.length) {
         if (source === 'production') console.log('   the door is shut on production');
-        else fail(7, 'L1 is live on production but the snapshot is still the dry run. Refresh scripts/data/playDoorCatalog.json from production (L1 header, APPLY step 5)');
+        else fail(7, 'L1 is live on production but the snapshot is still the rehearsal. Refresh scripts/data/playDoorCatalog.json from production (L1 header, APPLY step 6)');
       } else if (open === states.length) {
         if (source === 'production') fail(7, 'the snapshot says production, but every write probe is open: L1 has been undone or was never applied');
-        else console.log('   PENDING: L1 is not applied on production yet, so the direct writes are still open there. The snapshot is the dry run of L1');
+        else console.log('   PENDING: L1 is not applied on production yet, so the direct writes are still open there. The snapshot is the PGlite rehearsal of L1');
       }
     }
   }
@@ -439,6 +503,47 @@ console.log('8) no migration after L1 reopens a door');
 }
 
 // ---------------------------------------------------------------------------
+console.log('9) every view over the six is security_invoker or cannot be written through');
+{
+  if (!Array.isArray(cat.views)) fail(9, 'the snapshot lists no views, so it predates this check: refresh it');
+  else {
+    if (!cat.views.some(v => v.view === 'public.game_denominators')) fail(9, 'public.game_denominators is missing from the views over the six, so the dependency walk is not reading what it claims');
+    for (const v of cat.views) {
+      if (v.kind === 'v' && v.updatable && !v.security_invoker) {
+        fail(9, `${v.view} reads one of the six tables, can be written through (anon ${v.anon_write}, authenticated ${v.authenticated_write}) and is not security_invoker, so a write through it runs as its owner past every revoke and policy`);
+      }
+    }
+    if (!fired.has(9)) console.log(`   ${cat.views.length} view(s) over the six: ${cat.views.map(v => `${v.view}${v.kind === 'm' ? ' (materialized)' : v.security_invoker ? ' (invoker)' : ''}`).join(', ')}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
+console.log('10) no rewrite rule outside the system schemas');
+{
+  if (!Array.isArray(cat.rules)) fail(10, 'the snapshot has no rule list, so it predates this check: refresh it');
+  else {
+    for (const r of cat.rules) fail(10, `rule ${r.rule} on ${r.rel} (event ${r.event}${r.instead ? ', instead' : ''}): a rule runs its action as its table's owner, a door no check here reads`);
+    if (!fired.has(10)) console.log('   none');
+  }
+}
+
+// ---------------------------------------------------------------------------
+console.log('11) every SECURITY DEFINER outside public is the platform\'s, and none is in graphql_public');
+{
+  if (!Array.isArray(cat.outside_definers)) fail(11, 'the snapshot has no outside definer list, so it predates this check: refresh it');
+  else {
+    for (const d of cat.outside_definers) {
+      if (d.schema === 'graphql_public') { fail(11, `${d.fn} is a definer in graphql_public, the schema the GraphQL endpoint serves to anon and authenticated`); continue; }
+      const p = PLATFORM_DEFINERS[d.fn];
+      if (!p) { fail(11, `${d.fn} (owner ${d.owner}) is SECURITY DEFINER outside public and not one the platform shipped on 2026-09-29; it runs as its owner past every policy. Read it and pin it here, or drop it`); continue; }
+      if (d.owner !== 'supabase_admin') fail(11, `${d.fn} is owned by ${d.owner}, not supabase_admin: it is not the platform's any more`);
+      if (d.anon_exec !== p.anon || d.authenticated_exec !== p.authenticated) fail(11, `${d.fn} execute grants changed (anon ${d.anon_exec}, authenticated ${d.authenticated_exec}; pinned ${p.anon}, ${p.authenticated})`);
+    }
+    if (!fired.has(11)) console.log(`   ${cat.outside_definers.length} outside public, all the platform's: ${cat.outside_definers.map(d => d.fn).join(', ')}`);
+  }
+}
+
+// ---------------------------------------------------------------------------
 if (CONTROL) {
   const want = EXPECT[CONTROL];
   const leaked = [...fired].filter(n => n !== want);
@@ -448,4 +553,4 @@ if (CONTROL) {
   process.exit(0);
 }
 if (failures) { console.error(`\nsimPlayDoor: ${failures} failure(s)`); process.exit(1); }
-console.log('\nsimPlayDoor: green. Only the save writes the account tables, the board insert is three bounded columns, and every definer is accounted for.');
+console.log('\nsimPlayDoor: green. Only the save writes the account tables, the board insert is three bounded columns, every definer is accounted for, and no view or rule leads round the door.');
