@@ -22,7 +22,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
     clues: [
       'Prestigious',
       'United Kingdom',
-      'Dominated the late 1980s and late 1990s, then won the Constructors\' title again in 2024',
+      'Dominated the late 1980s and late 1990s, then won back-to-back Constructors\' titles in 2024 and 2025',
       'Won 10 Constructors\' Championships',
       'Historically raced in papaya orange, then red and white, now back to papaya',
       'Ayrton Senna won all three of his championships with this team',
@@ -61,7 +61,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
     clues: [
       'Audacious',
       'Austria (based in the UK)',
-      'Rose from midfield to domination in the early 2010s, then again from 2021 onward',
+      'Rose from midfield to dominate the early 2010s, then won the Constructors\' title again in 2022 and 2023',
       'Won 6 Constructors\' Championships',
       'Race in blue with red and yellow bull branding',
       'Max Verstappen has won multiple consecutive titles with this team',
@@ -191,7 +191,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
     clues: [
       'Ambitious',
       'United States',
-      'Entered Formula 1 in 2016 as the newest American team',
+      'Entered Formula 1 in 2016 from a headquarters in Kannapolis, North Carolina',
       'Won 0 Constructors\' Championships',
       'Race in white, red and black livery',
       'Scored points on debut in 2016, the first new team to do so since Toyota in 2002, and the first American team on the grid since 1986',
@@ -239,7 +239,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
   {
     id: 'toro-rosso',
     constructorName: 'Toro Rosso',
-    commonNames: ['Toro Rosso', 'AlphaTauri', 'RB', 'VCARB', 'Minardi'],
+    commonNames: ['Toro Rosso', 'Racing Bulls', 'AlphaTauri', 'RB', 'VCARB', 'Minardi'],
     clues: [
       'Nurturing',
       'Italy (Austrian ownership)',
@@ -402,7 +402,7 @@ export const F1_CONSTRUCTORS: F1ConstructorPuzzle[] = [
       'Joined the grid in 2026 as a new American manufacturer entry backed by General Motors',
       'Won 0 Constructors\' Championships',
       'Race in a split livery, white on one side and black on the other',
-      'Became the 11th team on the grid after years of negotiations, backed by General Motors',
+      'Became the 11th team on the grid, with Sergio Pérez and Valtteri Bottas as its first race drivers',
     ],
   },
 ];

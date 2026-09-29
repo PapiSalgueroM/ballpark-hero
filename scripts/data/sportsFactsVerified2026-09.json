@@ -4396,12 +4396,14 @@
   },
   "Jailton Almeida": {
    "record": {
-    "v": "22-5-0",
+    "v": "22-6-0",
     "src": [
-     "https://www.ufc.com/athlete/jailton-almeida",
-     "https://www.espn.com/mma/fighter/_/id/4873640/jailton-almeida"
+     "https://www.sherdog.com/fighter/Jailton-Almeida-114657",
+     "https://sports.yahoo.com/articles/jailton-almeida-loses-first-post-143101602.html"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "He stays in the UFC Guesser after his release, as Pulver, Overeem and the other fighters who left the UFC do, and like theirs his record is his full professional record. Sherdog lists his unanimous decision loss to Evgeniy Goncharov at ACA 207 on 12 September 2026 and shows 22-6; Yahoo Sports reports \"Almeida (22-6)\" after that bout, his first since parting ways with the UFC in February 2026.",
+    "noOfficial": "ufc.com shows 22-5-0 because it logs only UFC bouts, so his ACA 207 loss is not on it; ESPN's profile also still shows 22-5-0."
    },
    "birthDate": {
     "v": "1991-06-28",
@@ -5427,13 +5429,14 @@
   },
   "Arman Tsarukyan": {
    "record": {
-    "v": "23-3-0",
+    "v": "24-3-0",
     "src": [
      "https://www.ufc.com/athlete/arman-tsarukyan",
      "https://www.sherdog.com/fighter/Arman-Tsarukyan-213913",
-     "https://www.espn.com/mma/fighter/_/id/4419372/arman-tsarukyan"
+     "https://site.web.api.espn.com/apis/common/v3/sports/mma/athletes/4419372"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Includes his round 1 KO (elbow) of Mauricio Ruffy at UFC 331 on 19 September 2026: ufc.com, Sherdog and ESPN all show it."
    },
    "birthDate": {
     "v": "1996-10-11",
@@ -5463,30 +5466,32 @@
     "note": "Last UFC bout 2026-09-19: Tsarukyan vs Ruffy, UFC 331 - Van vs. Pantoja 2 (ufc.com: Lightweight Bout; Sherdog: Lightweight)."
    },
    "yearsActive": {
-    "v": "2019-2025",
+    "v": "2019-2026",
     "src": [
      "https://www.ufc.com/athlete/arman-tsarukyan",
      "https://www.sherdog.com/fighter/Arman-Tsarukyan-213913"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "ufc.com: Octagon debut 20 April 2019, last fight Tsarukyan vs Ruffy on 19 September 2026. Sherdog: first UFC bout 20 April 2019 (v Islam Makhachev, UFC Fight Night 149), latest 19 September 2026 (v Mauricio Ruffy, UFC 331)."
    },
    "koTko": {
-    "v": 9,
+    "v": 10,
     "src": [
      "https://www.ufc.com/athlete/arman-tsarukyan",
      "https://www.sherdog.com/fighter/Arman-Tsarukyan-213913",
-     "https://www.espn.com/mma/fighter/_/id/4419372/arman-tsarukyan"
+     "https://site.web.api.espn.com/apis/common/v3/sports/mma/athletes/4419372"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Includes his round 1 KO (elbow) of Mauricio Ruffy at UFC 331 on 19 September 2026: ufc.com, Sherdog and ESPN all show it."
    },
    "submissions": {
     "v": 6,
     "src": [
      "https://www.ufc.com/athlete/arman-tsarukyan",
      "https://www.sherdog.com/fighter/Arman-Tsarukyan-213913",
-     "https://www.espn.com/mma/fighter/_/id/4419372/arman-tsarukyan"
+     "https://site.web.api.espn.com/apis/common/v3/sports/mma/athletes/4419372"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    }
   },
   "Bo Nickal": {
@@ -5747,13 +5752,14 @@
   },
   "Alexandre Pantoja": {
    "record": {
-    "v": "30-6-0",
+    "v": "30-7-0",
     "src": [
      "https://www.ufc.com/athlete/alexandre-pantoja",
      "https://www.sherdog.com/fighter/Alexandre-Pantoja-25023",
-     "https://www.espn.com/mma/fighter/_/id/2560746/alexandre-pantoja"
+     "https://site.web.api.espn.com/apis/common/v3/sports/mma/athletes/2560746"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Includes his unanimous decision loss to Joshua Van at UFC 331 on 19 September 2026: ufc.com, Sherdog and ESPN all show it."
    },
    "birthDate": {
     "v": "1990-04-16",
@@ -5783,30 +5789,31 @@
     "note": "Last UFC bout 2026-09-19: Van vs Pantoja, UFC 331 - Van vs. Pantoja 2 (ufc.com: Flyweight Title Bout; Sherdog: Flyweight)."
    },
    "yearsActive": {
-    "v": "2017-2025",
+    "v": "2017-2026",
     "src": [
      "https://www.ufc.com/athlete/alexandre-pantoja",
      "https://www.sherdog.com/fighter/Alexandre-Pantoja-25023"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "ufc.com: Octagon debut 29 January 2017, last fight Van vs Pantoja on 19 September 2026. Sherdog: first UFC bout 28 January 2017 (v Eric Shelton, UFC on Fox 23; the same night in the United States), latest 19 September 2026 (v Joshua Van, UFC 331)."
    },
    "koTko": {
     "v": 8,
     "src": [
      "https://www.ufc.com/athlete/alexandre-pantoja",
      "https://www.sherdog.com/fighter/Alexandre-Pantoja-25023",
-     "https://www.espn.com/mma/fighter/_/id/2560746/alexandre-pantoja"
+     "https://site.web.api.espn.com/apis/common/v3/sports/mma/athletes/2560746"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    },
    "submissions": {
     "v": 12,
     "src": [
      "https://www.ufc.com/athlete/alexandre-pantoja",
      "https://www.sherdog.com/fighter/Alexandre-Pantoja-25023",
-     "https://www.espn.com/mma/fighter/_/id/2560746/alexandre-pantoja"
+     "https://site.web.api.espn.com/apis/common/v3/sports/mma/athletes/2560746"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28"
    }
   }
  },
@@ -6868,13 +6875,14 @@
   },
   "Arman Tsarukyan": {
    "record": {
-    "v": "23-3-0",
+    "v": "24-3-0",
     "src": [
      "https://www.ufc.com/athlete/arman-tsarukyan",
      "https://www.sherdog.com/fighter/Arman-Tsarukyan-213913",
-     "https://www.espn.com/mma/fighter/_/id/4419372/arman-tsarukyan"
+     "https://site.web.api.espn.com/apis/common/v3/sports/mma/athletes/4419372"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Includes his round 1 KO (elbow) of Mauricio Ruffy at UFC 331 on 19 September 2026: ufc.com, Sherdog and ESPN all show it."
    },
    "divisions": {
     "v": [
@@ -7656,13 +7664,14 @@
   },
   "Alexandre Pantoja": {
    "record": {
-    "v": "30-6-0",
+    "v": "30-7-0",
     "src": [
      "https://www.ufc.com/athlete/alexandre-pantoja",
      "https://www.sherdog.com/fighter/Alexandre-Pantoja-25023",
-     "https://www.espn.com/mma/fighter/_/id/2560746/alexandre-pantoja"
+     "https://site.web.api.espn.com/apis/common/v3/sports/mma/athletes/2560746"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Includes his unanimous decision loss to Joshua Van at UFC 331 on 19 September 2026: ufc.com, Sherdog and ESPN all show it."
    },
    "divisions": {
     "v": [
@@ -8954,15 +8963,14 @@
      "why": "the one word opener is flavour, not a fact"
     },
     {
-     "text": "8 race wins through the 2025 season",
+     "text": "9 race wins through the 2026 Azerbaijan Grand Prix",
      "src": [
       "https://www.formula1.com/en/drivers/charles-leclerc",
-      "https://www.formula1.com/en/results/2025/races",
-      "https://www.f1-fansite.com/f1-drivers/charles-leclerc-information-statistics/",
-      "https://www.espn.com/f1/story/_/id/49224516/british-grand-prix-2026-live-silverstone-f1-latest-updates-commentary-result-charles-leclerc-lewis-hamilton-george-russell-kimi-antonelli-max-verstappen",
-      "https://www.grandprix.com/races/british-gp-2026-race-notes.html"
+      "https://www.formula1.com/en/results/2026/races",
+      "https://www.f1-fansite.com/f1-drivers/charles-leclerc-information-statistics/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "note": "formula1.com driver page: highest race finish 1 (x9), one of them the 2026 British Grand Prix on the 2026 results page; f1-fansite: Grand Prix wins 9, last race the 2026 Azerbaijan Grand Prix."
     },
     {
      "text": "No championship yet: finished runner-up in 2022 before reliability issues derailed his campaign",
@@ -9036,13 +9044,14 @@
      "why": "the one word opener is flavour, not a fact"
     },
     {
-     "text": "10+ race wins through the 2025 season",
+     "text": "13 race wins through the 2026 Azerbaijan Grand Prix",
      "src": [
       "https://www.formula1.com/en/drivers/lando-norris",
-      "https://www.formula1.com/en/results/2025/races",
+      "https://www.formula1.com/en/results/2026/races",
       "https://www.f1-fansite.com/f1-drivers/lando-norris-information-statistics/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "note": "formula1.com driver page: highest race finish 1 (x13), two of them in 2026 (Hungary and the Netherlands on the 2026 results page); f1-fansite: Grand Prix wins 13, last race the 2026 Azerbaijan Grand Prix."
     },
     {
      "text": "2025 World Drivers' Champion: his maiden title",
@@ -9125,13 +9134,15 @@
      "on": "2026-09-28"
     },
     {
-     "text": "No championship yet but a strong contender at a top team",
+     "text": "No championship yet: finished third in the 2025 standings",
      "src": [
-      "https://www.formula1.com/en/drivers/oscar-piastri",
+      "https://www.formula1.com/en/results/2025/drivers",
+      "https://www.espn.com/f1/standings/_/season/2025",
       "https://www.fia.com/news/f1-norris-crowned-fia-formula-one-world-champion-verstappen-takes-abu-dhabi-win",
-      "https://www.espn.com/f1/story/_/id/47151000/lando-norris-wins-first-f1-world-title-championship-2025-abu-dhabi-mclaren"
+      "https://www.formula1.com/en/drivers/oscar-piastri"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "note": "formula1.com and ESPN 2025 standings: third on 410 points behind Norris (423) and Verstappen (421); the FIA report: \"P3 overall with 410 points\". His driver page shows no world championship."
     },
     {
      "text": "McLaren (2023-present), Norris's teammate",
@@ -10046,13 +10057,14 @@
      "on": "2026-09-28"
     },
     {
-     "text": "No championship yet: tipped as a future star",
+     "text": "No championship yet: led the 2026 standings by 66 points after the Azerbaijan Grand Prix",
      "src": [
       "https://www.formula1.com/en/results/2026/drivers",
-      "https://www.formula1.com/en/drivers/kimi-antonelli",
-      "https://www.si.com/onsi/f1/news/f1-standings-and-results-after-the-2026-azerbaijan-grand-prix"
+      "https://www.si.com/onsi/f1/news/f1-standings-and-results-after-the-2026-azerbaijan-grand-prix",
+      "https://www.formula1.com/en/drivers/kimi-antonelli"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "note": "formula1.com 2026 standings and SI's standings after the Azerbaijan Grand Prix: Antonelli 302, Russell 236. His driver page shows no world championship."
     },
     {
      "text": "Mercedes (2025-present), replaced Lewis Hamilton when he left for Ferrari",
@@ -10380,15 +10392,15 @@
      "on": "2026-09-28"
     },
     {
-     "text": "Sauber/Audi (2025-present), joined as the team transitions to the Audi works project",
+     "text": "Sauber/Audi (2025-present), stayed on as the team became the Audi works squad in 2026",
      "src": [
-      "https://www.formula1.com/en/latest/article/breaking-kick-sauber-confirm-rookie-bortoleto-as-second-driver-for-2025.2EL5ciR1wh3baHcobZqGl9",
-      "https://www.espn.com/f1/story/_/id/42224433/sauber-announce-gabriel-bortoleto-2025-valtteri-bottas-zhou-guanyu-out",
-      "https://www.motorsport.com/f1/news/sauber-signs-f2-star-bortoleto-to-complete-2025-formula-1-line-up/10671009/",
+      "https://www.formula1.com/en/teams/audi",
       "https://www.formula1.com/en/results/2026/drivers",
-      "https://www.si.com/onsi/f1/news/f1-standings-and-results-after-the-2026-azerbaijan-grand-prix"
+      "https://www.motorsport.com/f1/news/sauber-signs-f2-star-bortoleto-to-complete-2025-formula-1-line-up/10671009/",
+      "https://www.espn.com/f1/story/_/id/42224433/sauber-announce-gabriel-bortoleto-2025-valtteri-bottas-zhou-guanyu-out"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "note": "formula1.com Audi page: the acquisition of the Sauber team, \"now the first-ever Audi works squad\", with Bortoleto and Hulkenberg; its 2026 standings list him at Audi. motorsport.com (2024): Sauber signed him for 2025 \"in the future Audi squad\"; ESPN: Sauber announced him for 2025."
     },
     {
      "text": "Brazilian driver who debuted in 2025 after winning the F2 championship",
@@ -10522,13 +10534,16 @@
      "on": "2026-09-28"
     },
     {
-     "text": "Dominated the late 1980s and late 1990s, then won the Constructors' title again in 2024",
+     "text": "Dominated the late 1980s and late 1990s, then won back-to-back Constructors' titles in 2024 and 2025",
      "src": [
       "https://www.formula1.com/en/results/2024/team",
+      "https://www.formula1.com/en/results/2025/team",
       "https://www.formula1.com/en/teams/mclaren",
-      "https://racingnews365.com/every-world-champion-in-formula-1-history"
+      "https://racingnews365.com/every-world-champion-in-formula-1-history",
+      "https://www.espn.com/f1/story/_/id/46332070/mclaren-wins-back-back-f1-constructors-title"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "note": "formula1.com: McLaren first in the 2024 and 2025 teams' standings. ESPN: \"McLaren win back-to-back F1 constructors' championship; 10th overall\". The late 1980s and late 1990s part stands on the same formula1.com team page and racingnews365 as before."
     },
     {
      "text": "Won 10 Constructors' Championships",
@@ -10759,12 +10774,15 @@
      "note": "formula1.com's team page gives the base as Milton Keynes, United Kingdom, and its year by year history calls it the 'Austrian-owned team'; F1 History's team page gives the nationality Austrian and says it is 'headquartered in the United Kingdom and operating under an Austrian license'."
     },
     {
-     "text": "Rose from midfield to domination in the early 2010s, then again from 2021 onward",
+     "text": "Rose from midfield to dominate the early 2010s, then won the Constructors' title again in 2022 and 2023",
      "src": [
       "https://www.formula1.com/en/teams/red-bull-racing",
+      "https://www.formula1.com/en/results/2022/team",
+      "https://www.formula1.com/en/results/2023/team",
       "https://www.motorsportmagazine.com/database/teams/red-bull/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "note": "formula1.com team page: a first podium in 2006, second in 2009, then \"consecutive title doubles between 2010 and 2013\"; its 2022 and 2023 teams' standings put Red Bull first, and 2021 went to Mercedes. Motor Sport's database: slow early progress, came of age in 2009, both championships for the next four years, then 2022 was \"Red Bull's first constructors' title since 2013\" and 2023 \"a second consecutive constructors' crown\"."
     },
     {
      "text": "Won 6 Constructors' Championships",
@@ -11524,12 +11542,14 @@
      "on": "2026-09-28"
     },
     {
-     "text": "Entered Formula 1 in 2016 as the newest American team",
+     "text": "Entered Formula 1 in 2016 from a headquarters in Kannapolis, North Carolina",
      "src": [
       "https://www.formula1.com/en/teams/haas",
-      "https://www.haasf1team.com/news/haas-f1-team-earns-points-debut-race"
+      "https://www.motorsportmagazine.com/database/teams/haas-formula-1-team/",
+      "https://www.racefans.net/f1-information/f1-teams/haas/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "note": "formula1.com: first team entry 2016, based in the United States at Kannapolis, North Carolina, with a UK factory in Banbury. Motor Sport: \"headquarters in Kannapolis, North Carolina\"; RaceFans lists the headquarters at Haas Way, Kannapolis. Replaces \"the newest American team\", which stopped being true when Cadillac joined in 2026."
     },
     {
      "text": "Won 0 Constructors' Championships",
@@ -11797,6 +11817,7 @@
    "commonNames": {
     "v": [
      "Toro Rosso",
+     "Racing Bulls",
      "AlphaTauri",
      "RB",
      "VCARB",
@@ -11808,10 +11829,12 @@
      "https://www.formula1.com/en/results/2024/team",
      "https://racingnews365.com/red-bull-sister-team-to-undergo-another-name-change",
      "https://www.the-race.com/formula-1/red-bull-second-f1-team-visa-cash-app-rb-explained/",
-     "https://www.skysports.com/f1/news/12433/11926924/alphatauri-begin-new-era-with-glitzy-f1-and-fashion-launch-reveal"
+     "https://www.skysports.com/f1/news/12433/11926924/alphatauri-begin-new-era-with-glitzy-f1-and-fashion-launch-reveal",
+     "https://www.formula1.com/en/results/2026/team",
+     "https://www.si.com/onsi/f1/news/f1-standings-and-results-after-the-2026-azerbaijan-grand-prix"
     ],
     "on": "2026-09-28",
-    "note": "formula1.com's Racing Bulls page prints Toro Rosso, AlphaTauri, RB, VCARB and Minardi (the team it was formed from); racingnews365 prints Toro Rosso, AlphaTauri, VCARB and RB; motorsport.com Toro Rosso and Minardi; Sky AlphaTauri; The Race VCARB."
+    "note": "formula1.com's Racing Bulls page prints Toro Rosso, AlphaTauri, RB, VCARB and Minardi (the team it was formed from); racingnews365 prints Toro Rosso, AlphaTauri, VCARB and RB; motorsport.com Toro Rosso and Minardi; Sky AlphaTauri; The Race VCARB. Racing Bulls is the name it races under in 2026: formula1.com's Racing Bulls page (the team originally named Toro Rosso, then AlphaTauri, then RB) and its 2026 teams' standings print it, and so do SI's standings after the Azerbaijan Grand Prix."
    },
    "clues": [
     {
@@ -12808,15 +12831,14 @@
      "on": "2026-09-28"
     },
     {
-     "text": "Became the 11th team on the grid after years of negotiations, backed by General Motors",
+     "text": "Became the 11th team on the grid, with Sergio Pérez and Valtteri Bottas as its first race drivers",
      "src": [
       "https://www.formula1.com/en/teams/cadillac",
-      "https://www.motorsport.com/f1/news/fia-f1-general-motors-11th-team-cadillac-2026/10701190/",
-      "https://www.espn.com/f1/story/_/id/47869246/cadillac-launches-2026-f1-livery-super-bowl-commercial-break",
-      "https://f1miamigp.com/news/press-release/cadillac-set-for-f1-debut/"
+      "https://www.espn.com/f1/story/_/id/46077362/cadillac-confirm-sergio-perez-valtteri-bottas-2026-f1-debut",
+      "https://www.formula1.com/en/results/2026/drivers"
      ],
      "on": "2026-09-28",
-     "note": "formula1.com: the grid's 11th team, 'Cadillac owners General Motors (GM)', a deal in principle in 2024 and the go-ahead in 2025. motorsport.com (March 2025): the FIA and F1 formally approved GM's entry, superseding the deal in principle of the previous November, after the Andretti application was rejected. The Miami GP release: 'the initial bid to enter the sport originated with Andretti before General Motors became directly involved'. The old clause about GM returning to top level open wheel racing was on no page and is gone (Chevrolet has supplied IndyCar engines throughout)."
+     "note": "formula1.com: the grid's 11th team, \"Debut race line-up of Valtteri Bottas and Sergio Perez announced\" (2025), and both race for Cadillac in its 2026 standings. ESPN: \"Cadillac has confirmed Sergio Pérez and Valtteri Bottas will form its driver lineup for its Formula 1 debut season in 2026\" and \"will become Formula 1's 11th team\". The old \"after years of negotiations\" clause was on none of the cited pages and is gone."
     }
    ]
   }
@@ -12922,14 +12944,15 @@
   },
   "Nelson Piquet": {
    "team": {
-    "v": "Williams",
+    "v": "Brabham",
     "src": [
-     "https://www.formula1.com/en/results/1987/drivers",
      "https://www.formula1.com/en/results/1981/drivers",
      "https://www.formula1.com/en/results/1983/drivers",
+     "https://www.formula1.com/en/results/1987/drivers",
      "https://www.grandprix.com/drivers/nelson-piquet.html"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "note": "Under the pool rule (the constructor he is most associated with), Brabham: formula1.com gives his 1981 title in a Brabham Ford and his 1983 title in a Brabham BMW, against one with Williams in 1987. grandprix.com: signed by Brabham for 1979 after a third car late in 1978, champion with them in 1981 and 1983, and left for Williams at the end of 1985, which makes eight seasons with Brabham and two with Williams."
    },
    "era": {
     "v": "1980s",
@@ -12939,7 +12962,8 @@
      "https://www.formula1.com/en/results/1983/drivers",
      "https://www.grandprix.com/drivers/nelson-piquet.html"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "note": "The decade of his titles with Brabham, 1981 and 1983."
    },
    "nationality": {
     "v": "Brazil",

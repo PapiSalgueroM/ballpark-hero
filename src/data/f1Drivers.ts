@@ -34,7 +34,7 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
     commonNames: ['Leclerc', 'Charles Leclerc', 'Charles', 'LEC'],
     clues: [
       'Passionate',
-      '8 race wins through the 2025 season',
+      '9 race wins through the 2026 Azerbaijan Grand Prix',
       'No championship yet: finished runner-up in 2022 before reliability issues derailed his campaign',
       'Ferrari (2019-present), previously Sauber (2018)',
       'Monégasque driver who debuted in 2018, now partnered with a 7-time champion',
@@ -47,7 +47,7 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
     commonNames: ['Norris', 'Lando Norris', 'Lando', 'NOR'],
     clues: [
       'Entertaining',
-      '10+ race wins through the 2025 season',
+      '13 race wins through the 2026 Azerbaijan Grand Prix',
       '2025 World Drivers\' Champion: his maiden title',
       'McLaren (2019-present), has been with the team his entire F1 career',
       'British driver who debuted in 2019, one of the most popular drivers in the paddock',
@@ -61,7 +61,7 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
     clues: [
       'Composed',
       'Multiple race wins including his maiden victory at the 2024 Hungarian Grand Prix',
-      'No championship yet but a strong contender at a top team',
+      'No championship yet: finished third in the 2025 standings',
       'McLaren (2023-present), Norris\'s teammate',
       'Australian driver who debuted in 2023 after winning F3 and F2 back-to-back',
       'Was at the center of a dramatic contract dispute between Alpine and McLaren before even racing in F1',
@@ -204,7 +204,7 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
     clues: [
       'Prodigious',
       '8 race wins through the 2026 Azerbaijan Grand Prix, all of them in 2026',
-      'No championship yet: tipped as a future star',
+      'No championship yet: led the 2026 standings by 66 points after the Azerbaijan Grand Prix',
       'Mercedes (2025-present), replaced Lewis Hamilton when he left for Ferrari',
       'Italian driver who debuted in 2025 as one of the youngest ever, a Mercedes junior prodigy',
       'Crashed heavily during his first FP1 appearance at Monza 2024 but was still given the 2025 seat based on his immense talent',
@@ -257,7 +257,7 @@ export const F1_DRIVERS: F1DriverPuzzle[] = [
       'Rising',
       '0 race wins through the 2026 Azerbaijan Grand Prix, now in his second season',
       'No championship yet: 2024 F2 Champion',
-      'Sauber/Audi (2025-present), joined as the team transitions to the Audi works project',
+      'Sauber/Audi (2025-present), stayed on as the team became the Audi works squad in 2026',
       'Brazilian driver who debuted in 2025 after winning the F2 championship',
       'Won back-to-back junior titles (F3 2023, F2 2024) before stepping up to Formula 1',
     ],

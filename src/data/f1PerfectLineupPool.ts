@@ -19,7 +19,7 @@ export const F1_POOL: F1PoolDriver[] = [
   { name: 'Ayrton Senna', team: 'McLaren', era: '1990s', nationality: 'Brazil', rating: 98 },
   { name: 'Alain Prost', team: 'McLaren', era: '1980s', nationality: 'France', rating: 96 },
   { name: 'Nigel Mansell', team: 'Williams', era: '1990s', nationality: 'United Kingdom', rating: 90 },
-  { name: 'Nelson Piquet', team: 'Williams', era: '1980s', nationality: 'Brazil', rating: 90 },
+  { name: 'Nelson Piquet', team: 'Brabham', era: '1980s', nationality: 'Brazil', rating: 90 },
   { name: 'Niki Lauda', team: 'Ferrari', era: '1970s', nationality: 'Austria', rating: 92 },
   { name: 'Keke Rosberg', team: 'Williams', era: '1980s', nationality: 'Finland', rating: 82 },
   { name: 'Alan Jones', team: 'Williams', era: '1980s', nationality: 'Australia', rating: 82 },
