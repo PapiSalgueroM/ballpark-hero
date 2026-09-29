@@ -87,7 +87,8 @@ while (checked < 8 && state.week < state.calendar.length && guard < 40) {
     fail(`the report rewrote their first half: committed [${preOpp}], reported [${gotOppH1}]`);
   }
   for (const sc of rep.myScorers.filter(sc => sc.minute > 45)) {
-    if (sc.minute < 46 || sc.minute > 90) fail(`second half minute ${sc.minute} out of range`);
+    /* Round 670: extra time runs on past 90 to its own end. */
+    if (sc.minute < 46 || sc.minute > (rep.detail?.et ? rep.detail.et.to : 90)) fail(`second half minute ${sc.minute} out of range`);
   }
 
   /* ---------- 3. Stats credited exactly once ---------- */

@@ -4120,7 +4120,7 @@ function GameScreen({ career, clubs, onNextSeason, onAcceptOffer, onDismissSumma
                       {twoLegged && (
                         <div className="text-[10px] text-center text-muted-foreground">
                           {m.aggFor}-{m.aggAgainst} on aggregate{
-                            m.decidedBy === 'awayGoals' ? ', settled on away goals' :
+                            m.decidedBy === 'awayGoals' ? (m.afterExtraTime ? ', settled on away goals after extra time' : ', settled on away goals') :
                             m.decidedBy === 'extraTime' ? ', settled in extra time' :
                             m.decidedBy === 'penalties' ? `, ${m.pensFor}-${m.pensAgainst} on penalties` : ''
                           }

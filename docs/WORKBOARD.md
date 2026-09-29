@@ -103,6 +103,13 @@ both times, and the record is built per player id. Tennis needed four married-na
 join. The next free number for anyone else is 667, except that **645a, 645b, 645c, 646, 647, 648 are
 being built right now by parallel agents on branches of those names**; do not claim them.
 
+**Round 670 CLAIMED 2026-09-28, branch `r670-cm-extra-time`: Club Manager plays extra time before
+penalties.** Part B of the stoppage time contract (`docs/design/round-670-extra-time-contract.md`):
+a Champions League knockout level when the ninety minutes run out (the final and single leg ties on
+the night, second legs on the aggregate, the AI's ties too) plays one thirty minute stretch before
+penalties, with a solved deflator so goals per match in those fixtures do not move. Domestic cups
+keep straight to penalties until a per cup rule table is two source verified (the Coppa Italia is
+known to skip extra time before its semi finals). Fence `scripts/simExtraTime.mjs`.
 
 **2026-09-22, desktop Claude lane: Release D IS LIVE** (643, 644, 649, 651, 657, 658, 659), main
 `3bddc098`, deployment `c902a3af`. The home page redesign is on douknowball.com. Account and proof

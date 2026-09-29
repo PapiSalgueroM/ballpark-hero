@@ -105,7 +105,8 @@ function checkDetail(report, ctx, { viaHalftime, subsMade }) {
   const xiNames = new Set(d.myRatings.map(r => r.name));
   for (const c of d.cards) {
     if (!xiNames.has(c.name)) fail(`${ctx}: card for ${c.name}, who has no rating line (not in XI)`);
-    if (!isNum(c.minute) || c.minute < 1 || c.minute > 90) fail(`${ctx}: card minute ${c.minute}`);
+    /* Round 670: a match with extra time runs to its end. */
+    if (!isNum(c.minute) || c.minute < 1 || c.minute > (d.et ? d.et.to : 90)) fail(`${ctx}: card minute ${c.minute}`);
   }
   for (let i = 1; i < d.cards.length; i++) {
     if (d.cards[i].minute < d.cards[i - 1].minute) fail(`${ctx}: cards out of minute order`);
@@ -129,8 +130,8 @@ function checkDetail(report, ctx, { viaHalftime, subsMade }) {
   const motm = d.myRatings.filter(r => r.motm).length;
   if (motm !== 1) fail(`${ctx}: ${motm} men of the match`);
 
-  // Momentum: 9 buckets in [-1, 1].
-  if (d.momentum.length !== 9) fail(`${ctx}: ${d.momentum.length} momentum buckets`);
+  // Momentum: 9 buckets in [-1, 1], 12 when there was extra time (Round 670).
+  if (d.momentum.length !== (d.et ? 12 : 9)) fail(`${ctx}: ${d.momentum.length} momentum buckets`);
   for (const m of d.momentum) if (!isNum(m) || m < -1 || m > 1) fail(`${ctx}: momentum ${m}`);
 
   // Timeline bookends.

@@ -54,6 +54,147 @@ and `playTycoonGearFit` (the harness needs a Linux temp path or an env var), `pl
 `sweepWeight` (five routes 5K to 15K over their JavaScript budgets). **Round 672 should clear
 these**, each fixed or its harness corrected, with the reason written down.
 
+## POLISHED 2026-09-28, NOT ON MAIN: the Round 670 re-review's three minors (branch `r670-cm-extra-time`)
+
+The re-review of the fixes below said ship and left three minors. All three are fixed on the same
+branch, commits `b31e1c91` and `c8c78b2d`.
+- **The extra time banner says what is true.** On a second leg it said "Level after 90 minutes"
+  beside a scoreboard that often was not level (3-1 on the night after a 1-3 first leg). The
+  engine words it now (`extraTimeCall`, `levelAt90Words`): "Level after 90 minutes" on a one
+  legged tie, "Level 4-4 on aggregate" on a second leg, plus "and on away goals" in the eras that
+  had them. The viewer's banner and the report's timeline marker read the same words. A shootout
+  after extra time on a second leg says the aggregate is still level in the event line and on the
+  report card, and the bracket says "Level on aggregate after extra time". `simExtraTime` section
+  10 works the aggregate out from the bracket's first leg and holds all five, floored on second
+  legs not level on the night (142 to 171 a run over five samples, floor 60). Controls
+  `levelline`, `pensline`, `cardlevel` and `bracketlevel` each turn only section 10 red, and `noet`
+  now tolerates 10, which it empties. The banner itself is drawn in an effect react-dom/server
+  never runs, so a new test in `src/test/liveSimMotion.test.tsx` mounts the viewer on a second leg
+  level on aggregate and not on the night, control `LIVE_MOTION_CONTROL=banner`.
+- **Two stale comments**: the `liveStatsAt` doc and the viewer header say the final whistle (90,
+  or 120 after extra time) rather than 90.
+- **`simSoccerCareerUcl` section 7 can see extra time played on a tie already settled at 90.** A
+  decider row that went to extra time also carries its extra time goals now (`etFor`,
+  `etAgainst`, optional and additive, no change to the random stream). The harness takes them away
+  to get the score at 90, works the verdict out itself (aggregate, then away goals) and fails when
+  extra time was played on a tie not level at 90, or skipped on one that was. Floored on ties
+  settled on away goals at 90 (about 3,000 a run in 2015-16 and 2,650 in 1995-96, floor 1,000).
+  Control `etsettled` plays extra time on those ties and turns only section 7 red (3,045 and
+  2,734 failures on its run, several still reading as away goals after extra time, the case the
+  old check passed).
+- **Gates, on one frozen tree (signature taken before and after every batch).** tsc 0, exit code
+  read. `simExtraTime` green on its own seed and SIM_SEED 1 to 4, all fifteen controls firing on
+  exactly their sections. `simSoccerCareerUcl` green on its own seed and SIM_SEED 1 to 4,
+  `etsettled`, `etaway`, `coinflip` and `noagg` firing. `simLiveSimMotion` green (21 tests) and
+  all eleven controls failing only their own tests, on assertions. The six vitest files that
+  import a changed module: 57 tests green (one timed out at 12.8 s against its 5 s limit while
+  six harness lanes ran, and passed alone in 0.4 s). The 137 harnesses that read a changed file,
+  counting every one that walks all of `src` or `scripts`, in three lanes each with its own TEMP:
+  136 green (five after thin react and router shims in the worktree's `node_modules`, which need a
+  `package.json` with `"type": "commonjs"` because the repo's own says module), and
+  `simWritesAreSent` green on its static half with its runtime half needing a `dist`.
+  `simHarnessAnchors` and `simNoRivalNames` green. Not run, by instruction: `simPrerender`,
+  `simMobileChrome`, `simRevealScroll` and `simVictoryMoment` (a build and a browser), and the
+  browser check at 390 by 844. No migration.
+
+## FIXED 2026-09-28, NOT ON MAIN: the Round 670 review, every defect (branch `r670-cm-extra-time`)
+
+The adversarial review found one blocker, two majors and eight minors behind the green gates the
+section below reports. All are fixed on the same branch; this section corrects the one below.
+- **Blocker: `simGuideHeadings` was red**, so "79 green" below was wrong: the new guide sentence
+  had no frozen original. The sentence was rewritten (next point but three) and
+  `scripts/data/guideHeadingsFrozen.json` updated with it deliberately, the Round 640 way.
+- **Major: my side had no names from the 99th minute of extra time.** drawSegment wrote "never
+  leaves the pitch" as minute 99, and an injury in extra time took its man off at 99. It is
+  `Infinity` now. `simExtraTime` section 8 checks every event of mine past 90 names a man on my
+  pitch at that minute (about 3,700 to 4,500 events from the 99th minute a run), control `noname`.
+- **Major: section 4 had no control.** `noaet` reports a second leg won in extra time as regular.
+- **Possession** over a second period that ran to 120 was read off the 45 to 120 lambda sum, five
+  thirds of a half. `secondPeriodPossession` reads per half rates at the extra time draw and at
+  every change in it. Section 9: drawing extra time moves possession -0.029 to +0.038 points
+  further from 50 over five samples (the raw sum, control `possinflate`, +2.36), and the same
+  shape at 100 with nothing of mine changed leaves it exactly (control `possstale`). The momentum
+  tilt reads per ninety too (not fenced; it only shades the chart).
+- **The AI final is read.** Section 5 replays twelve final weeks my club was not in, 25 seeds each:
+  about 300 AI finals a run, 69 to 91 to extra time. Control `noaifinal` (only the one legged
+  branch back to pre 670) turns it red.
+- **Copy** in the guide, the help and What's New: the live match and the report say AET, the
+  bracket says the tie went to extra time, and in the away goals seasons a tie level on aggregate
+  but not on away goals is over at 90, with an away goal in extra time still counting.
+- **Soccer Career sibling fixed, one rule for both.** `uclTieOutcome` moved to
+  `src/lib/uclTieRule.ts` (Club Manager re-exports it) and Soccer Career's `simulateUCL` settles
+  every tie through it, extra time included, so a 1-1 extra time in an away goals season puts the
+  away side through, as PSG at Chelsea in March 2015. A decider row carries `afterExtraTime` and
+  the result card says "settled on away goals after extra time". `simSoccerCareerUcl` section 7
+  resettles every tie of 2015-16, 1995-96 and 2026-27 in its own arithmetic (103 to 128 such ties
+  per away goals season over four samples, none in 2026-27), control `etaway`.
+- **The 89 or 90 race.** The viewer asks once at 90 (`onStartExtraTime`, which the hook runs on
+  the latest save) and reads the answer off `live.et` on the next render, so it can no longer run
+  thirty empty minutes or skip extra time the save has. Two tests in
+  `src/test/liveSimMotion.test.tsx`, control `LIVE_MOTION_CONTROL=whistle` in `simLiveSimMotion`.
+- **Stale comments** (ET_DEFLATOR's measured ranges, `onSecondHalf`, `isExtraTimeDue`) and
+  **provenance**: every rule source now has its URL in the contract doc. The onefootball.com page
+  was Football Italia's own article, so calcioefinanza.it is the Coppa Italia's second host.
+- **Gates, on the committed tree.** tsc 0 (exit code read). `simExtraTime` green on its own seed
+  and SIM_SEED 1 to 4, all eleven controls firing on their own sections (noet tolerating 7, 8 and
+  9, which it empties). `simSoccerCareerUcl` green on four seeds, `etaway`, `coinflip` and `noagg`
+  firing. `simLiveSimMotion` green with `whistle` and its nine older controls firing, and
+  `simLiveMatch`'s five controls firing. The six vitest files that import a changed module: 56
+  tests green. The 116 harnesses that read a changed file, run in four lanes each with its own
+  TEMP: 115 green (five import `ROOT/node_modules/react` by path and were rerun with thin react
+  shims in the worktree), `simPrerender` not runnable without a `dist` (and `simFlagshipWeight`'s
+  section 3 skipped for the same reason). `simGuideHeadings`, `simSiteSearch`,
+  `simHarnessAnchors` and `simNoRivalNames` green.
+- **Not done, by instruction:** the browser check at 390 by 844, `simVictoryMoment`,
+  `simMobileChrome` and `simRevealScroll` (they need a build and a browser). No migration.
+
+## BUILT 2026-09-28, NOT ON MAIN: Round 670, Club Manager plays extra time (branch `r670-cm-extra-time`)
+
+Part B of the stoppage time contract, copied with its departures to
+`docs/design/round-670-extra-time-contract.md`. A Champions League match that settles its tie
+(the final, a one legged tie, a second leg) and is level when the ninety run out (on the night, or
+on the aggregate after away goals in the eras that had them) plays one thirty minute stretch,
+minutes 91 to 120, before penalties. The AI's ties play it too. The live viewer asks the engine at
+90 (`isExtraTimeDue`), draws it through `startExtraTime` and runs the clock on to 120 with an ET
+badge; the quick sim and the classic dressing room draw the same stretch at the whistle, by the
+same function (`simExtraTime` section 7 holds the two ways equal on 40 extra time matches). The
+report says (AET), carries an AET chip, a tie line on a second leg and twelve momentum buckets;
+the bracket says who won it in extra time. Save shape additive and optional, SAVE_VERSION
+unchanged.
+- **The rule, two source verified.** Before 2021-22 the away goals rule ran on through extra time
+  (uefa.com's 2021-06-24 abolition announcement, si.com 2018-05-26), from 2021-22 extra time goals
+  count like any other. Folding extra time into leg two and reading the tie again through
+  `uclTieOutcome` reproduces both.
+- **Domestic cups deliberately unchanged**, still straight to penalties: the real rule differs by
+  cup, round and season (the Coppa Italia skips extra time before its semi finals since 2024-25,
+  onefootball.com and football-italia.net), and seventeen cups over four eras were not verified in
+  this round. **Follow up: a per cup, per season extra time table, two source verified, then
+  `playsExtraTime` reads it.** The web search budget ran out mid verification, which is why it
+  stopped at the Champions League.
+- **Balance.** Every decider (mine and the AI's) draws at `ET_DEFLATOR` 0.965, solved from the
+  measured share of deciders level at 90 (0.104 to 0.123 over five samples). Expected goals per
+  decider move by -0.006 against a 0.04 tolerance, extra time without the deflator adds +0.098.
+- **Fence** `scripts/simExtraTime.mjs`, seven sections, six controls (noet, nodeflate, etleague,
+  noaiet, nolabel, livedraw), each firing on exactly its own section (noet tolerates section 7,
+  which it empties). About 100 seconds.
+- **Gates run.** tsc 0. `simExtraTime` green and all six controls firing. The four Club Manager
+  vitest files green. All 80 existing harnesses that read a changed file were run on the frozen
+  tree: 79 green, `simVictoryMoment` not runnable because it reads a built `dist` and no build was
+  allowed this round. `simLiveMatch`'s five controls and `simLiveSimMotion`'s nine still fire.
+  In a worktree, `simClubManagerSave`, `simActivityNotCompletion`, `simLiveSimMotion` and
+  `simClubManagerEraUcl` need `react`, `react-router-dom` and `vitest` under the worktree's own
+  `node_modules` (they hardcode `ROOT/node_modules`); thin re-exporting files did it, never a
+  junction. No build, no `runAllSims`, no browser harness (a release suite was running).
+- **Sibling checked, defect found, not fixed here.** Soccer Career's Round 546 extra time
+  (`simulateUCL` in `soccerCareerEngine.ts`) says away goals counted in extra time in the old
+  seasons, but decides extra time on its goals alone, so a 1-1 extra time in an away goals season
+  goes to penalties when the away side should be through. Flagged as its own task: lift
+  `uclTieOutcome` into a small shared module both engines use, rather than a second copy.
+- **Not done in this round:** Round A (stoppage time goals, the aggregate before and during a
+  second leg) is still to build and must move extra time to start at 90 plus the second half
+  board; the browser check at 390 by 844 was not run (a release suite was running on the
+  machine); the adversarial review the memory asks for on a rule change has not been run.
+
 ## LIVE 2026-09-22: Release D (643, 644, 649, 651, 657, 658, 659), main `3bddc098`
 
 Assembled and gated by the desktop Claude lane in the CRLF gate clone on `release-d`, pushed to
