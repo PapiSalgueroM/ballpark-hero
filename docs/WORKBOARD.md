@@ -5,7 +5,10 @@ main `add1c6b0`, deployment `fe10102e`. Proof and gates in `docs/PROJECT-STATE.m
 - **Tonight at 00:00 America/New_York (2026-09-30):** Round 669's migration, the `players.ts` re-bake and
   its publish, in the steps its migration header lists. Then the World XI report (2026-09-21) closes.
 - **Points economy:** spec `docs/design/POINTS-ECONOMY-V2.md` on `points-economy`, Rounds 673 to 698,
-  all claimed by this lane. 673 built and HELD (ships with 675 and 676). 674 and 678 are being built.
+  all claimed by this lane. 673 built and HELD (ships with 675 and 676). **674 built on `r674-fence-debt`,
+  adversarially reviewed (fix-first: 4 majors, 8 minors, mutations M1 to M10), every defect fixed on the
+  same branch with a control per mutation (2026-09-29); not merged into `points-economy` yet.** 678 is
+  being built.
 - **Round 699 reserved** for the sports facts fence hardening Round 660 left (listed below). The seoMeta
   split `sweepWeight` names (about 8K off every game page) is next free: **700**.
 

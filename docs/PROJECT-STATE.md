@@ -1,5 +1,66 @@
 # Project state
 
+## FIXED 2026-09-29: Round 674's adversarial review (fix-first), on `r674-fence-debt`, NOT on main
+
+The review of the entry below returned fix-first: 4 majors, 8 minors, ten mutations its fences let
+through. Every one is fixed on the same branch, and every mutation now has a control or a case that turns
+red on exactly it, run on this tree. Players see one change: the Transfer Market reveal timer is owned.
+
+- **M1 (major), the free play line never checked in free play.** The rendered card check played the
+  daily only, where the real UnrankedNote renders nothing. The driver contract gains `enterFree` and
+  `finishFree`; all 15 drivers whose board draws its own card play a free run to its finished card,
+  which must carry exactly one line of the board's own, flagged free, none on the live board
+  (`src/test/unrankedCards.test.tsx`, simRankedRecorder section 4). Control `RANKED_CONTROL=dailyonly`
+  (Buzzer Beater's line mounted only in the daily): exactly the buzzer-beater free run row goes red.
+- **M3 (major), the round compared with itself.** The engine rows now read the round from the bracket's
+  games alone (`src/test/bracketReached.ts`: the final is the one game whose winner never plays again,
+  every other game is a round before its winner's next game), never stageOf. Control `stageplus`
+  (`scripts/lib/engineRowControls.mjs`, stageOf pays every playoff team one round more): exactly the
+  engine row goes red on all four front offices (simGmReload) and both dynasties, plus simCfbDynasty's
+  new headless round check on both engines.
+- **M4 (major) and the vacuous brackets (minor).** One season per board proved little (CFB 12-0 title,
+  NFL no playoffs, MLB out in round one). The front office rows play 24 seeded seasons over different
+  teams plus a rigged title, the dynasty rows 16 programs plus a rigged title, and each must cover no
+  playoff spot, an exit in round two or later short of the title, a title and a season that lost games
+  (NHL overtime losses, a CFB conference title game). simCfbDynasty section 5 compares every headless row
+  with the standings and the bracket too. Control `CFB_DYNASTY_CONTROL=regwins` (cfbRegularRecord counts
+  losses as wins): CFB's engine row and CFB's headless record check go red, nothing else.
+- **M5 (major) and M6 (minor), simCapsAreCeilings section 3.** One reader (`unscoredCallsIn`) for the
+  check and its per run probes: comment only calls are no call, template literal calls and calls through
+  a file local constant are read. Controls `nostrip` (M5, `3:unscored-probe`) and `slugconst` (M6,
+  `3:stat-detective`).
+- **M9 (minor), the GM parallel control.** `checkPerRun` in `scripts/lib/controlScratch.mjs`; both
+  parallel controls require two different run folders and first prove the check fails on a copy put back
+  to one fixed folder. Measured with M9 applied to the real file: both parallel controls exit 1.
+- **M10 (minor), the reveal timers.** simNoDoubleRecord section 3 flags any reference to setTimeout,
+  requires the helper bound to `useOwnedTimeouts()` to be called, and reads every page routed at a
+  higher-lower address; `src/pages/HigherLowerTransfers.tsx` no longer starts a bare 1400 ms reveal.
+  Controls `hltimercall` (M10) and `hlpage`.
+- **simDailyReload** stages its copies in a per run `.sim-control` folder, never creates dist, and refuses
+  any copy handed to vitest outside that folder. **simChainChampions** prints `DATABASE UNREACHABLE.
+  NOTHING WAS CHECKED.` offline; control `offline` runs it as the suite does with every fetch refused and
+  matches the runner's own pattern. **controlScratch** no longer removes `.sim-control` (the rmdir race)
+  and retries its mkdtemp on ENOENT; `checkPerRun` proves it in a sandbox root (measured: the old cleanup
+  fails it). **WORKBOARD** updated.
+
+**Gates, on this tree, TEMP and TMP `econfix-674`, every job's closing line read, exit 0 each.** tsc
+(`tsconfig.app.json`) exit 0. simGmReload default and all 10 controls (stageplus, double, otlosses, raw,
+late, offseason, noreset, nokeep, replay, parallel). simCfbDynasty default and all 8 controls
+(stageplus, regwins, double, record, raw, replay, drain, parallel). simRankedRecorder default ("71
+rendered cases", 15 of 15 free runs) and `RANKED_CONTROL=all` (25 controls, dailyonly and shotnote
+included). simNoDoubleRecord default ("10 Higher or Lower hooks and 11 pages own their reveal timers")
+and `NO_DOUBLE_CONTROL=all` (hltimercall and hlpage included). simCapsAreCeilings default and all 15
+controls (slugconst, nostrip, live included). simDailyReload ("30 row(s), all 10 controls fired", dist
+still absent). simChainChampions default, added, offline. simIdleTimers, simFreePoints,
+simFrontOfficeCuts (1183 checks), simRevealMoments, simDailyLockEdges (42 tests, 25 controls),
+simFirstTeamPage and the six tycoon page harnesses (the ones that call ROOT/node_modules run from
+throwaway copies pointed at the main tree, then deleted), simHarnessAnchors, simNoRivalNames (0).
+**Mutations measured red:** M1 (dailyonly), M3 (stageplus, all six boards and both headless engines), M4
+(regwins), M5 (nostrip), M6 (slugconst), M9 applied to the real controlScratch (both parallel controls
+exit 1), M10 (hltimercall), the dist staging put back into simDailyReload (3 failures, exit 1), the
+unreachable sentence deleted from simChainChampions (offline control red), the old rmdir cleanup
+(checkPerRun red). Not run: simPrerender (needs a build; this pass adds no random draw).
+
 ## BUILT 2026-09-29: Round 674, fence debt (branch `r674-fence-debt` from `points-economy`, NOT on main, no migration)
 
 The fence lens review's gaps (R2.D3, D5, D6, D9, D10, D11) and 645c's leftover, per
