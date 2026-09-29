@@ -58,7 +58,10 @@
        own token. White on the 31 percent green fill measures 5.25; the green
        ink on a card measures 5.15; the red ink on a card measures 4.88. */
     --wc-green: 145 55% 31%;
-    --wc-green-ink: 145 55% 40%;
+    /* Round 672: 43, not 40. Club Manager's REAL DATA tag puts this ink on a
+       10 percent emerald tint over a card, where 40 measured 4.45 (sweepContrast
+       read the same 4.45). 43 measures 5.10 there and 5.91 on a bare card. */
+    --wc-green-ink: 145 55% 43%;
     --wc-gold: 43 85% 52%;
     --fg-navy: 225 50% 20%;
     --fg-gold: 43 80% 55%;
@@ -215,7 +218,12 @@
     --surface-3: 220 15% 91%;
 
     --success-glow: 142 71% 35% / 0.25;
-    --warn: 25 90% 42%;
+    /* Round 672: 32 percent, not 42. The home page's Trending tag is warn ink
+       on a 15 percent warn tint over a white tile, and at 42 it measured 4.15
+       on white alone (playLightMode read 4.17) and 3.43 on its real tinted
+       surface. 32 measures 5.15 at rest and 4.71 on the hovered tile's tint,
+       and white ink on a warn fill goes from 4.15 to 6.46. */
+    --warn: 25 90% 32%;
     --warn-foreground: 0 0% 100%;
 
     --sport-soccer: 145 60% 28%;

@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ReportSiteIssue } from '@/components/game/ReportSiteIssue';
 import { ThemeToggle } from '@/components/layout/ThemeToggle';
-import { SPORT_HUBS } from '@/lib/sportHub';
+import { HUB_NAV } from '@/lib/sportHubNav';
 
 /* Round 285: every visitor gets a way back to the cookie banner. Consent that
    can be given in one click and withdrawn only by finding the browser's site
@@ -31,11 +31,12 @@ export function Footer() {
           documents on 2026-08-25: /college 132 inbound, /soccer, /pro-football,
           /pro-basketball, /baseball and /hockey 6 each. Eighteen to one in
           favour of the smallest section over the largest, on five pages Google
-          has never indexed. The list is read from sportHub.ts so a seventh hub
-          lands here on its own; simInternalLinks holds every hub to the same
-          floor. */}
+          has never indexed. The list is read from sportHubNav.ts (Round 672:
+          the short list, so every page stops downloading the hubs' prose),
+          which simHubs holds equal to sportHub.ts; simInternalLinks holds
+          every hub to the same floor. */}
       <nav aria-label="Sports" className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 px-4">
-        {SPORT_HUBS.map((hub, i) => (
+        {HUB_NAV.map((hub, i) => (
           <span key={hub.route} className="inline-flex items-center gap-x-3">
             {i > 0 && <span aria-hidden="true">·</span>}
             <Link to={hub.route} className="underline hover:text-foreground transition-colors">

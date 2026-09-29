@@ -1431,9 +1431,11 @@ const WorldCupPredictor = () => {
                 loading={false}
                 onClick={handleRankFillAllGroups}
               />
+              {/* Round 672: ink at 64, not 60. At 60 it measured 4.29 on the
+                  hovered fill; 64 holds 5.67 at rest and 4.79 on hover. */}
               <button
                 onClick={handleAutoFillAll}
-                className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(150,12%,18%)] hover:bg-[hsl(150,12%,22%)] text-[hsl(150,15%,60%)] border border-[hsl(150,20%,25%)] transition-colors"
+                className="flex items-center gap-1.5 text-xs px-3 py-2 rounded-lg bg-[hsl(150,12%,18%)] hover:bg-[hsl(150,12%,22%)] text-[hsl(150,15%,64%)] border border-[hsl(150,20%,25%)] transition-colors"
               >
                 <Shuffle className="w-3.5 h-3.5" /> Random All
               </button>
