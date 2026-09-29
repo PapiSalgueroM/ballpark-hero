@@ -1,6 +1,121 @@
 # Project state
 
-## 2026-09-29: Round 678 fixed after its review, on `r678-knowledge-line`, nothing applied, nothing a player sees
+## 2026-09-29: Round 678 re-reviewed and closed, on `r678-knowledge-line`, nothing applied, nothing a player sees
+
+The re-review of the fix below said fix first again: 1 major, 9 minors, and one replay of the first
+review that stayed green. Under the lead's stopping rule for this pass, the major and every minor an
+honest change or an ordinary later round could cause are fixed, each with a control. What needs a
+deliberate break of the source to happen is listed under accepted residual risk below, and the
+harness header lists it too. Two claims in the entry below are corrected here: item 8's "it has a
+probe" held for counter only, and the harness's closing line ("day points are made only in the
+mint") claimed more than the scan reads; it now says what it checked.
+
+1. **The float boundary (major), fixed.** `hasRoom` compared the raw perfect with a line `lineFor`
+   had snapped to its grid. A perfect that is a float sum a hair over a grid value
+   (17.000000000000004 from 200 samples, or summed expected wins) then had "room" above a line the
+   search only reached because nothing under the perfect held the naive policies, so the top listed
+   option was paid 20 to 28 points. `hasRoom` now reads the perfect and the line on the line's own
+   grid, in steps rounded to 1e-9, through the same `inSteps` `lineFor` uses. Pinned by cases for
+   the search's untested high, its early return, a step of 10, a real gap that keeps its room, and
+   the review's board through `measureBoard` (`probe|sortedluck|2026-x-142`, perfect
+   17.000000000000004, line 17, now no room), and by a sweep of 3000 synthetic boards on steps of 1,
+   0.5 and 10 that reaches the untested high 375 times and the early return 189 times. Control
+   `rawroom`. Side effect worth knowing: the coin flip probe had been dealing boards on exactly this
+   boundary (its naive averages were about 4.6, now 0.0).
+2. **Thresholds read from the code under test (minor), fixed.** `simKnowledgeLine` restates
+   `NAIVE_LIMIT` 5 and `SKILL_FLOOR` 15 from spec section 7.1, uses its own, and requires
+   `knowledgeLine.ts` to export the same two. Every line must be the smallest on its grid: one step
+   down pays some naive policy past 5 or falls under the floor. Controls `limitwide`, `floorlow`,
+   `linehigh`.
+3. **Exact walk soundness (minor), fixed.** The walk is held to the harness's own count of every
+   path, nothing merged, on a six item board scored off its picks log (`keylength`). A twelve item
+   log the game never reads must walk exactly with a key that leaves it out (`nokey`) and must sample
+   without one, and a sampled outcome must say so (`exacttrue`).
+4. **Seven ways past the mint scan (minor), three fixed, four accepted.** `a.points++` and
+   `Object.assign(a, { points: 62 })` are the two writes tsc does not check against the brand, and
+   both are plain enough for a later round to write by accident: fixed (`mintstep`, `mintassign`).
+   A cast to a type nesting day points four or more steps deep is also an honest shape (a saved
+   history read back with `JSON.parse`), so the scan now reads eight steps instead of three, at no
+   measurable cost (`mintdeep`). The other four are accepted, below.
+5. **Text that is not code satisfies section 1 (minor), half fixed.** The retirements are now read
+   as code: the shared reader runs over a copy of `completionSlugs.ts` with its comments stripped, and
+   a synthetic block proves a commented retirement excuses nothing. The review's N5b (a new
+   `ball-iq-rapid` recorder excused only by a commented retirement) was replayed by hand across both
+   files and is red now; the files were restored byte for byte. `completionKeys.mjs` is still not
+   touched (Round 674 owns it). The string literal recorder is accepted, below.
+6. **`@ts-nocheck` on the brand file (minor), accepted.** Below.
+7. **`biggestNumber` and `lifelineReader` detections unproven (minor), fixed.** Two probes, each
+   caught for its own reason (the probe now checks the message, not just the kind). Controls
+   `nobiggest`, `nolifeline`.
+8. **Three quiet fallbacks unpinned (minor), fixed.** Probes require `counter` on a game with no
+   reveals, `medianCall` with no option keyed higher or lower, and `suggestionBox` with nothing
+   highlighted to throw. Controls `fallbackreveal`, `fallbackmedian`, `fallbacksuggest`.
+9. **The seed reader lexes comments unlike Postgres (minor), accepted.** Below.
+10. **The release gate had no fence (minor), fixed.** Its filter is now `heldBy` in
+    `scripts/lib/gameRulesSeed.mjs`; `genGameRules --release` runs it, and section 1 requires it to
+    list the flagship while it does not pay and to list nothing that pays. Control `releaseopen`
+    (the review's N11a).
+11. **Replay R10b stayed green (the pre-fix deterministic flag), fixed.** The fence knew which
+    policies are deterministic only from the flag under test. It now knows the one move policies by
+    name (`MAKES_ONE_MOVE`, from section 7.1's own list) and holds the flag to them, and a new probe,
+    a wide scale rating board with a coin on every pick, is where the floor in expectation binds.
+    The pre-fix flag (`detspread`), a floor at the lowest result (`floormin`, the review's N10c) and a
+    chance board walked as if it had none (`chancewalk`, N10b) all go red.
+
+**Accepted residual risk.** Each needs the source broken on purpose, so no honest refactor or later
+round produces it:
+- A generic helper (`identity<DayPoints>(x)`): to make day points from a number it has to cast to
+  its own type parameter, which is a laundering function by construction.
+- A cast from a union that already carries the brand (`u as DayPoints` on `DayPoints | number`):
+  someone has to declare a union that admits raw numbers beside day points and then cast it away;
+  tsc refuses the raw number everywhere day points are asked for.
+- A type guard `n is DayPoints` with no check behind it: a cast by another name, written as one.
+- An overload whose implementation returns `any`: the implementation signature exists only to hide
+  what it returns; every engine returns `pointsAnswer`'s result.
+- `{ ...a, ...({ points: 62 } as {}) }`: the cast to `{}` exists only to hide the property from tsc.
+- `@ts-nocheck` on `knowledgeLine.brand.ts`, alone, with `DayPoints` widened, or with the refused
+  calls turned into strings: it switches off the file's whole purpose. The widening alone (N6b) is
+  red.
+- A recorder written as a string literal that spells the call: nobody writes a recorder as a
+  string; it only fools a text scan.
+- SQL hidden behind a lone carriage return, or inside a nested block comment, in the seed: the
+  generator writes LF lines of value tuples under a header of `--` lines, and neither shape comes
+  out of an ordinary edit to its template.
+
+**Noted, not changed here:**
+- `scripts/simCapsAreCeilings.mjs` reads `declaredRetirements` on raw text too, the same class as
+  item 5. It is Round 674's harness and file, so it is for that lane.
+- The harness documents a static pool's rows as the 365 dailies of 2026, while spec section 7.1 has
+  the fence prove no day of 2026 or 2027 is dealt without room. Round 681's first rows should cover
+  both years.
+
+**Gates**, on the final tree, TEMP and TMP set to their own directory:
+- `node_modules/.bin/tsc --noEmit -p tsconfig.app.json`: exit 0.
+- `genGameRules --check`: exit 0, md5 unchanged (`a22bb1f324ce8027d4b72c6b99fd326a`).
+  `--release G`: exit 1, naming soccer-career (Round 687), as designed.
+- `simKnowledgeLine`: green with its closing line, exit 0, about 15 s: 21 probes, 33 cases, 9 of 9
+  exact walks against the full count, and the sweep with 0 problems.
+- All 49 controls (30 before, 19 new) exit 0, each turning only its own section red. Each log was
+  read for the intended reason.
+- 16 more harnesses green, each with its closing line and exit 0: simHarnessAnchors (it reads
+  the 19 new anchors), simNoRivalNames (0 findings), simLeaderboardCaps, simCapsAreCeilings,
+  simFreePoints, simRankedRecorder, simLegalPages, simSafari, simDateDraws, simDailyPoolOrder,
+  simDailyPuzzleContract, simIdleTimers, simRecordPages, simSchemaNames, simSingleFooter,
+  simMarketYearScope.
+- 8 harnesses call `<root>/node_modules/.bin/esbuild` or vitest by path, and a worktree has no
+  `node_modules` of its own, so each ran once from a throwaway copy in `scripts/` with only that
+  path pointed at the main checkout, deleted after its run: simCompletionSlugs, simCompletionOnce,
+  simNoInventedQuotes, simNoInventedConduct, simLiveScores, simRevealMoments (its scratch in a
+  uniquely named cache folder, removed), simSiteSearch, simDaily. All green with closing lines.
+  vitest left a plain `node_modules/.vite` cache in the worktree, checked to hold no reparse point
+  and removed; the main `node_modules` is intact.
+- No runAllSims, no build and no browser harness.
+
+**Merge notes for `points-economy`:** `scripts/lib/gameRulesSeed.mjs` exports `heldBy`, and
+`genGameRules.mjs` no longer imports `familyRows`. `hasRoom` reads the perfect on the line's grid.
+Nothing outside these files calls either.
+
+## 2026-09-29: Round 678 fixed after its review, on `r678-knowledge-line`, nothing applied, nothing a player sees (RE-REVIEWED AND CLOSED, see the entry above)
 
 The adversarial review said fix first: 3 majors, 8 minors. All 11 are fixed, and each fix has a control.
 The entry below this one is the build as it was, and some of its claims are corrected here.

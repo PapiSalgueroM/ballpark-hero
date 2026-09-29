@@ -1,6 +1,17 @@
 # Work board
 
-**2026-09-29, Round 678 REVIEWED AND FIXED, branch `r678-knowledge-line` (points economy lane), not on
+**2026-09-29, Round 678 RE-REVIEWED AND CLOSED, branch `r678-knowledge-line` (points economy lane),
+not on `points-economy` yet, nothing applied.** The re-review's major is fixed: `hasRoom` reads the
+perfect on the line's own grid, so a perfect a float's error over its line (17.000000000000004) no
+longer deals a board that pays the top listed option. The fence now owns its thresholds, knows the
+one move policies by name, asserts every line is the smallest, holds the exact walk to a full count
+of paths, proves the biggestNumber and lifelineReader detections and the three remaining no-fallback
+rules, reads retirements as code, catches `++` and `Object.assign` on day points, and holds the
+release gate (`heldBy`) to the table. `simKnowledgeLine` carries 49 controls. Eight breaks that need
+deliberate sabotage are listed as accepted residual risk in `docs/PROJECT-STATE.md`. Next: merge
+into `points-economy` alongside Round 674.
+
+**Earlier the same day, Round 678 REVIEWED AND FIXED, branch `r678-knowledge-line` (points economy lane), not on
 `points-economy` yet, nothing applied.** All 11 review defects are fixed, each with a control:
 - The seed is checked row by row against the family table itself.
 - The line is asserted on every board.
