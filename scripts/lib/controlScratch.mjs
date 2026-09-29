@@ -25,7 +25,9 @@
    run throw ENOENT, which is exactly the concurrent case this file exists
    for. The shared folder now stays (it is gitignored and empty between
    runs), and the mkdtemp is retried once after making the folder again in
-   case anything else removed it.
+   case anything else removed it. checkPerRun holds that too: in a sandbox
+   root of its own, .sim-control must still be there once both of its runs
+   are cleaned up (measured: the old cleanup fails it, this one passes).
 
    Round 674 fix (the review's M9): a harness that says its controls run in
    parallel on per run folders has to be able to tell a per run folder from
@@ -67,23 +69,35 @@ export function controlScratch(root, name) {
    folders, as a list of problems (empty when it is right). */
 export function checkPerRun(factory, root, name = 'per-run-check') {
   const problems = [];
-  const base = path.resolve(root, '.sim-control');
-  const a = factory(root, name);
-  const b = factory(root, name);
+  /* A root of its own, so its .sim-control holds nothing but these two runs
+     and "cleanup left the shared folder in place" is decided by this check
+     alone, not by whatever sibling runs happen to have in the real one. */
+  fs.mkdirSync(path.join(root, '.sim-control'), { recursive: true });
+  const sandbox = fs.mkdtempSync(path.join(root, '.sim-control', 'per-run-check-'));
+  const base = path.resolve(sandbox, '.sim-control');
   try {
-    if (path.resolve(a.dir) === path.resolve(b.dir)) problems.push(`two runs under "${name}" were handed the same folder, ${a.dir}`);
-    if (a.tag === b.tag) problems.push(`two runs under "${name}" carry the same tag, ${a.tag}, so a load line cannot tell their copies apart`);
-    for (const s of [a, b]) {
-      if (path.dirname(path.resolve(s.dir)) !== base) problems.push(`${s.dir} is not a folder of its own directly inside ${base}`);
-      if (s.tag === name) problems.push(`the folder is the bare name "${name}", a fixed folder every run shares`);
-      if (!fs.existsSync(s.dir)) problems.push(`${s.dir} was not created`);
+    const a = factory(sandbox, name);
+    const b = factory(sandbox, name);
+    try {
+      if (path.resolve(a.dir) === path.resolve(b.dir)) problems.push(`two runs under "${name}" were handed the same folder, ${a.dir}`);
+      if (a.tag === b.tag) problems.push(`two runs under "${name}" carry the same tag, ${a.tag}, so a load line cannot tell their copies apart`);
+      for (const s of [a, b]) {
+        if (path.dirname(path.resolve(s.dir)) !== base) problems.push(`${s.dir} is not a folder of its own directly inside ${base}`);
+        if (s.tag === name) problems.push(`the folder is the bare name "${name}", a fixed folder every run shares`);
+        if (!fs.existsSync(s.dir)) problems.push(`${s.dir} was not created`);
+      }
+      a.cleanup();
+      if (!fs.existsSync(b.dir)) problems.push('cleaning up one run removed the other run\'s folder');
+    } finally {
+      a.cleanup();
+      b.cleanup();
     }
-    a.cleanup();
-    if (!fs.existsSync(b.dir)) problems.push('cleaning up one run removed the other run\'s folder');
-    if (!fs.existsSync(base)) problems.push('cleaning up one run removed .sim-control, which a sibling run creating its folder at that moment needs');
+    /* The rmdir race: a cleanup that removes .sim-control once it is empty
+       can take it from under a sibling between its mkdirSync and its
+       mkdtempSync. With both runs gone the folder must still be there. */
+    if (!fs.existsSync(base)) problems.push('cleaning up the last run removed .sim-control itself, which a sibling run creating its folder at that moment needs');
   } finally {
-    a.cleanup();
-    b.cleanup();
+    fs.rmSync(sandbox, { recursive: true, force: true });
   }
   return problems;
 }

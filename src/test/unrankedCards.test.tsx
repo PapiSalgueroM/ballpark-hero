@@ -28,7 +28,15 @@
  *
  * scripts/simRankedRecorder.mjs section 4 runs this file; its shotnote
  * control swaps in a Buzzer Beater board whose line sits on the per shot
- * card, and exactly the buzzer-beater row must go red.
+ * card, and exactly the buzzer-beater rows must go red.
+ *
+ * Round 674 fix (the adversarial review's M1): the daily cannot see the line
+ * go missing, since the real note renders nothing there, so every row that
+ * must carry a board's own line also plays a free run (the driver's
+ * enterFree and finishFree) and prints UNRANKED_FREE_ROW; its finished card
+ * must carry exactly one line of the board's own, flagged free. The
+ * dailyonly control mounts Buzzer Beater's line only in the daily, and
+ * exactly its free run row must go red.
  */
 import './dailyReload/mocks';
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';

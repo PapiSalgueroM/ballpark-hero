@@ -151,7 +151,21 @@ function findVitest() {
 const VITEST = findVitest();
 if (!VITEST) abort('vitest is not installed anywhere above this tree, nothing can run');
 
+/* Round 674 fix: every control copy a run hands vitest must sit inside this
+   run's own folder, wherever it was written from, so a copy staged under
+   dist (or any fixed folder) again is refused whether or not dist existed. */
+const stagedCopies = extraEnv => [
+  ...(extraEnv.DAILY_RELOAD_FREEKICK_BOARD ? [extraEnv.DAILY_RELOAD_FREEKICK_BOARD] : []),
+  ...(extraEnv.DAILY_LOCK_SWAP ? Object.values(JSON.parse(extraEnv.DAILY_LOCK_SWAP)) : []),
+];
+const insideRun = p => {
+  const rel = path.relative(scratch.dir, path.resolve(p));
+  return !!rel && !rel.startsWith('..') && !path.isAbsolute(rel);
+};
 function runVitest(extraEnv, extraArgs = []) {
+  for (const p of stagedCopies(extraEnv)) {
+    if (!insideRun(p)) fail(`a control copy was staged at ${p}, outside this run's folder ${scratch.dir}: under dist a build empties it mid run, and a fixed folder is shared by every run at once`);
+  }
   const r = spawnSync(
     process.execPath,
     [VITEST, 'run', TEST, '--reporter=verbose', ...extraArgs],
