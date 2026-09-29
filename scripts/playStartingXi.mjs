@@ -17,17 +17,30 @@
  *      ENGINES=chromium node scripts/playStartingXi.mjs
  * (runAllSims files it as a browser harness automatically, it imports
  * playwright, and runs it only with --browser.)
+ *
+ * Round 672: red for two reasons, both the walk's. Round 302 renamed the era
+ * rows, so "Modern (2020s)" matched nothing and the walk died on the era
+ * picker; and Round 307's ticker pause is the first button on the page, which
+ * the "click anything else" step kept landing on (see FURNITURE below).
+ *
+ * NEGATIVE CONTROL: STARTING_XI_CONTROL=frontline rewrites the served sheet so
+ * it draws only the front line, the eleven in four lines reverted to three
+ * men. The checks on the eleven and the keeper must fail, which proves the
+ * walk still reaches the sheet and still counts it.
  */
 import pw from './lib/playwrightLoader.mjs';
+import { installServedCodeControl, controlledChecks } from './lib/servedCodeControl.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 
-let failures = 0;
-const say = (ok, what) => {
-  console.log((ok ? '  PASS  ' : '  FAIL  ') + what);
-  if (!ok) failures += 1;
-};
+const CONTROL = process.env.STARTING_XI_CONTROL || '';
+if (CONTROL && CONTROL !== 'frontline') {
+  console.error(`STARTING_XI_CONTROL=${CONTROL} is not a control this harness knows`);
+  process.exit(1);
+}
+const { say, verdict } = controlledChecks(CONTROL);
+const proof = {};
 
 const browser = await chromium.launch();
 const errors = [];
@@ -39,6 +52,13 @@ const errors = [];
 async function walk({ nation, ovr, expectStart, label }) {
 console.log(`--- ${label} ---`);
 const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+if (CONTROL) {
+  await installServedCodeControl(ctx, [{
+    label: 'fourLines',
+    find: /\[([\w$]+)\.squad\.xi\.att,[\w$]+\.squad\.xi\.mid,[\w$]+\.squad\.xi\.def,[\w$]+\.squad\.xi\.gk\]/g,
+    replace: '[$1.squad.xi.att]',
+  }], proof);
+}
 let page = await ctx.newPage();
 page.on('pageerror', e => errors.push(String(e)));
 
@@ -73,7 +93,11 @@ async function choose(placeholder, option, typeahead) {
 }
 await choose('Choose nationality', nation, nation);
 await choose('Choose position', 'Striker (ST)');
-await choose('Choose era', 'Modern (2020s)');
+/* Round 672: Round 302 renamed the era rows when it opened all eight
+   windows, and "Modern (2020s)" became "2020s (2020 start)". The old label
+   matched no option, so this walk timed out on the era picker and never
+   reached the squad screen it exists to read. Same era, its current name. */
+await choose('Choose era', '2020s (2020 start)');
 /* The rating has to be rolled before the career can begin. */
 await page.locator('button:has-text("Generate Starting Potential")').click();
 await page.waitForTimeout(2600);
@@ -117,10 +141,16 @@ await page.waitForTimeout(1500);
    career also stops on choice cards (a persona pick, a social media post),
    and the first debug run of this walk stalled on exactly those, so
    anything that is not furniture gets clicked. */
-const FURNITURE = /^(Back|Track stats|🚪 Retire|🔄 New Career|Full attributes|Retire from International|Open your phone|Report a bug|Retire|🏋️|📱)/;
+/* Round 672: the ticker's pause (⏸, ▶ once paused) joined the list. Round 307
+   put it at the top of every page, so it is the first button in the DOM, and
+   every "click anything else" landed on it instead of the choice card. The
+   click never lands at 390 wide (measured: a click timeout every time), so
+   the walk burned 30 seconds an iteration and ran for over twenty minutes.
+   playSoccerCareer skips it for the same reason. */
+const FURNITURE = /^(Back|Track stats|🚪 Retire|🔄 New Career|Full attributes|Retire from International|Open your phone|Report a bug|Retire|🏋️|📱|⏸|▶)/;
 let sawTournament = false;
 for (let i = 0; i < 60 && !sawTournament; i++) {
-  if (await page.locator('button:has-text("The Squad")').count()) { sawTournament = true; break; }
+  if (await page.locator('button:has(> div:text-is("The Squad"))').count()) { sawTournament = true; break; }
   const cont = page.locator('button:has-text("Continue")');
   if (await cont.count()) { await cont.first().click().catch(() => {}); await page.waitForTimeout(320); continue; }
   const next = page.locator('button:has-text("Next Season"), button:has-text("Next Year")');
@@ -140,7 +170,7 @@ let attempts = 0;
 while (sawTournament && !hasSheet && attempts < 4) {
   attempts += 1;
   console.log(`2) The Squad tile opens an actual team sheet (tournament ${attempts})`);
-  await page.locator('button:has-text("The Squad")').first().click();
+  await page.locator('button:has(> div:text-is("The Squad"))').first().click();
   await page.waitForTimeout(700);
   hasSheet = await page.locator('[data-team-sheet]').count() === 1;
   if (hasSheet) break;
@@ -153,7 +183,7 @@ while (sawTournament && !hasSheet && attempts < 4) {
   await page.waitForTimeout(600);
   sawTournament = false;
   for (let i = 0; i < 60 && !sawTournament; i++) {
-    if (await page.locator('button:has-text("The Squad")').count()) { sawTournament = true; break; }
+    if (await page.locator('button:has(> div:text-is("The Squad"))').count()) { sawTournament = true; break; }
     const cont = page.locator('button:has-text("Continue")');
     if (await cont.count()) { await cont.first().click().catch(() => {}); await page.waitForTimeout(320); continue; }
     const next = page.locator('button:has-text("Next Season"), button:has-text("Next Year")');
@@ -171,10 +201,10 @@ if (hasSheet) {
     const sheet = page.locator('[data-team-sheet]');
     const men = sheet.locator('[data-xi-man]');
     const count = await men.count();
-    say(count === 11, `eleven men are on it (${count})`);
+    say(count === 11, `eleven men are on it (${count})`, true);
     const text = await sheet.innerText();
     say(/4-3-3/.test(text), 'the formation is printed');
-    say(/GK/.test(text), 'the keeper wears GK');
+    say(/GK/.test(text), 'the keeper wears GK', true);
     const mine = sheet.locator('[data-xi-man="me"]');
     const mineCount = await mine.count();
     say(mineCount <= 1, `at most one man is highlighted as the player (${mineCount})`);
@@ -224,8 +254,8 @@ if (hasSheet) {
     page.on('pageerror', e => errors.push(String(e)));
     await page.goto(`${BASE}/soccer-career`, { waitUntil: 'networkidle' });
     await page.waitForTimeout(1500);
-    if (await page.locator('button:has-text("The Squad")').count()) {
-      await page.locator('button:has-text("The Squad")').first().click();
+    if (await page.locator('button:has(> div:text-is("The Squad"))').count()) {
+      await page.locator('button:has(> div:text-is("The Squad"))').first().click();
       await page.waitForTimeout(700);
       const hi = page.locator('[data-team-sheet] [data-xi-man="me"]');
       say(await hi.count() === 1, 'exactly one card is highlighted as his');
@@ -233,7 +263,7 @@ if (hasSheet) {
       say(/ST/.test(hiText) && /You/.test(hiText) && /91/.test(hiText), `his card shows shirt, name and rating (${hiText.replace(/\n/g, ' ')})`);
       const line = await page.locator('body').innerText();
       say(/You start at ST/.test(line), 'the line under the sheet names the shirt he starts in');
-      say((await page.locator('[data-team-sheet] [data-xi-man]').count()) === 11, 'still eleven men with him in it');
+      say((await page.locator('[data-team-sheet] [data-xi-man]').count()) === 11, 'still eleven men with him in it', true);
     } else {
       say(false, 'the tournament card survived the reload');
     }
@@ -249,9 +279,6 @@ await walk({ nation: 'Spain', ovr: 88, expectStart: false, label: 'A striker fig
 const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
 say(pageErrors.length === 0, `no real page errors across the walks (${pageErrors.length ? pageErrors[0] : 'clean'})`);
 await browser.close();
-console.log('');
-if (failures > 0) {
-  console.error(`playStartingXi: ${failures} failure${failures === 1 ? '' : 's'}`);
-  process.exit(1);
-}
+const code = verdict('playStartingXi', CONTROL ? proof : null, { minGuarded: 3 });
+if (code || CONTROL) process.exit(code);
 console.log('playStartingXi: green. The squad screen shows a team, not a scoreboard.');

@@ -672,7 +672,7 @@ export const WORLD_CONTENT: GameContentMap = {
       {
         heading: "Seeing the player, verdict and vote split",
         items: [
-          "The reveal shows the player, the official verdict, a fun fact and the community vote split.",
+          "The reveal shows the player, our call on him, whether he's really in his sport's Hall of Fame (and the year he went in), a fun fact and the community vote split.",
         ],
       },
       {

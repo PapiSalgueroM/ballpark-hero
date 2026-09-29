@@ -102,18 +102,27 @@ export function UclBracketCard({ career, onClubClick }: UclBracketCardProps) {
                   {t.legs === 2 && t.leg1 && (
                     <div className="text-[8px] text-muted-foreground px-2 pb-0.5">
                       {t.leg2
-                        ? `First leg ${t.leg1.homeGoals}-${t.leg1.awayGoals}, second leg ${t.leg2.awayGoals}-${t.leg2.homeGoals} at ${t.away}.`
+                        ? `First leg ${t.leg1.homeGoals}-${t.leg1.awayGoals}, second leg ${t.leg2.awayGoals}-${t.leg2.homeGoals}${t.aet ? ' after extra time' : ''} at ${t.away}.`
                         : `First leg ${t.leg1.homeGoals}-${t.leg1.awayGoals}. Second leg at ${t.away}.`}
                     </div>
                   )}
                   {t.byAwayGoals && (
                     <div className="text-[8px] text-muted-foreground px-2 pb-0.5">
-                      Level on aggregate. {t.winner} through on away goals.
+                      Level on aggregate{t.aet ? ' after extra time' : ''}. {t.winner} through on away goals.
+                    </div>
+                  )}
+                  {/* Round 670: a tie that went to extra time says so. One
+                      settled in it, and one still level after it. A tie
+                      written before this round carries no aet and keeps the
+                      line it always had. */}
+                  {t.aet && !t.pens && !t.byAwayGoals && (
+                    <div className="text-[8px] text-muted-foreground px-2 pb-0.5" data-cm-bracket-aet>
+                      {t.legs === 2 ? 'Level on aggregate after 90.' : 'Level after 90.'} {t.winner} won it in extra time.
                     </div>
                   )}
                   {t.pens && (
                     <div className="text-[8px] text-muted-foreground px-2 pb-0.5">
-                      {t.legs === 2 ? 'Level over two legs.' : 'Level after 90.'} {t.winner} win on penalties.
+                      {t.aet ? (t.legs === 2 ? 'Level on aggregate after extra time.' : 'Level after extra time.') : t.legs === 2 ? 'Level over two legs.' : 'Level after 90.'} {t.winner} win on penalties.
                     </div>
                   )}
                 </div>

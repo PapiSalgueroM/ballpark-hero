@@ -9,13 +9,17 @@ export interface UfcFighter {
   isHallOfFamer?: boolean;
 }
 
+/* Round 660: every result is a verified fight (scripts/simSportsFacts.mjs
+   section 4). year is the year of the bout; time is left off where the
+   official page and the independent record disagree by a second. */
 export interface FightResult {
   winner: string;
   loser: string;
   event: string;
+  year: number;
   method: string;
   round: number;
-  time: string;
+  time?: string;
   wasChampionshipFight?: boolean;
 }
 

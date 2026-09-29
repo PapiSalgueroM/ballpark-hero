@@ -26,8 +26,12 @@ export const FLAG_CODES: Record<string, string> = {
   "Hungary": "hu", "Slovakia": "sk", "Bulgaria": "bg", "Finland": "fi",
   "Montenegro": "me", "North Macedonia": "mk", "Albania": "al",
   "Guinea-Bissau": "gw", "Slovenia": "si", "Georgia": "ge",
+  /* West Germany flew the flag Germany flies today and Czechoslovakia the one
+     the Czech Republic kept, so those two draw a true flag. The Soviet Union
+     and Yugoslavia are deliberately absent: their only codes here were Russia
+     and Serbia, whose flags they never flew, so Lev Yashin's Squad Deal card
+     drew Russia's flag. With no entry they render as their name (Round 660). */
   "Bosnia": "ba", "West Germany": "de", "Czechoslovakia": "cz",
-  "Soviet Union": "ru", "Yugoslavia": "rs",
   // Exact nationality strings as they appear in player_market_values (Türkiye,
   // Cote d'Ivoire, Korea, South, Bosnia-Herzegovina, Curacao) plus common
   // footballing nations that were missing - all render real flags now instead
@@ -78,6 +82,11 @@ export const FLAG_CODES: Record<string, string> = {
      showed the letters where every other club shows a flag. Monaco and
      Malaysia are the other two club countries in that table with no flag. */
   "UAE": "ae", "Monaco": "mc", "Malaysia": "my",
+  /* Round 669: Bangladesh, for Hamza Choudhury, the first Bangladesh
+     international the defensive midfield research found. His row is held
+     for now (the second site plays him at right back), so this is ready for
+     when it lands. flagcdn serves bd (probed 2026-09-28, w40 returns 200). */
+  "Bangladesh": "bd",
 };
 
 /* ─── Round 106: flags that actually appear ───

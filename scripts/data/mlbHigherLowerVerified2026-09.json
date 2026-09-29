@@ -1,0 +1,230 @@
+{
+ "about": "MLB Higher or Lower career home runs, Round 664. Values come from public.mlb_batting_stats (hr) read on 2026-09-28, through year_to. scripts/simHigherLowerFacts.mjs holds the shipped file to this record.",
+ "read": "2026-09-28",
+ "source": "public.mlb_batting_stats",
+ "note": "The file was already right on all 55: the audit found 0 values differing and 0 of 1,475 matchups inverted. The record exists so it stays that way. Hank Aaron is stored as Henry Aaron in the table and matched by alias.",
+ "players": {
+  "Barry Bonds": {
+   "points": 762,
+   "lastSeason": "2007"
+  },
+  "Hank Aaron": {
+   "points": 755,
+   "lastSeason": "1976"
+  },
+  "Babe Ruth": {
+   "points": 714,
+   "lastSeason": "1935"
+  },
+  "Alex Rodriguez": {
+   "points": 696,
+   "lastSeason": "2016"
+  },
+  "Willie Mays": {
+   "points": 660,
+   "lastSeason": "1973"
+  },
+  "Ken Griffey Jr.": {
+   "points": 630,
+   "lastSeason": "2010"
+  },
+  "Jim Thome": {
+   "points": 612,
+   "lastSeason": "2012"
+  },
+  "Sammy Sosa": {
+   "points": 609,
+   "lastSeason": "2007"
+  },
+  "Frank Robinson": {
+   "points": 586,
+   "lastSeason": "1976"
+  },
+  "Mark McGwire": {
+   "points": 583,
+   "lastSeason": "2001"
+  },
+  "Harmon Killebrew": {
+   "points": 573,
+   "lastSeason": "1975"
+  },
+  "Rafael Palmeiro": {
+   "points": 569,
+   "lastSeason": "2005"
+  },
+  "Reggie Jackson": {
+   "points": 563,
+   "lastSeason": "1987"
+  },
+  "Manny Ramirez": {
+   "points": 555,
+   "lastSeason": "2011"
+  },
+  "Mike Schmidt": {
+   "points": 548,
+   "lastSeason": "1989"
+  },
+  "David Ortiz": {
+   "points": 541,
+   "lastSeason": "2016"
+  },
+  "Mickey Mantle": {
+   "points": 536,
+   "lastSeason": "1968"
+  },
+  "Jimmie Foxx": {
+   "points": 534,
+   "lastSeason": "1945"
+  },
+  "Willie McCovey": {
+   "points": 521,
+   "lastSeason": "1980"
+  },
+  "Ted Williams": {
+   "points": 521,
+   "lastSeason": "1960"
+  },
+  "Frank Thomas": {
+   "points": 521,
+   "lastSeason": "2008"
+  },
+  "Ernie Banks": {
+   "points": 512,
+   "lastSeason": "1971"
+  },
+  "Eddie Mathews": {
+   "points": 512,
+   "lastSeason": "1968"
+  },
+  "Mel Ott": {
+   "points": 511,
+   "lastSeason": "1947"
+  },
+  "Gary Sheffield": {
+   "points": 509,
+   "lastSeason": "2009"
+  },
+  "Eddie Murray": {
+   "points": 504,
+   "lastSeason": "1997"
+  },
+  "Fred McGriff": {
+   "points": 493,
+   "lastSeason": "2004"
+  },
+  "Lou Gehrig": {
+   "points": 493,
+   "lastSeason": "1939"
+  },
+  "Adrian Beltre": {
+   "points": 477,
+   "lastSeason": "2018"
+  },
+  "Stan Musial": {
+   "points": 475,
+   "lastSeason": "1963"
+  },
+  "Willie Stargell": {
+   "points": 475,
+   "lastSeason": "1982"
+  },
+  "Carlos Delgado": {
+   "points": 473,
+   "lastSeason": "2009"
+  },
+  "Chipper Jones": {
+   "points": 468,
+   "lastSeason": "2012"
+  },
+  "Dave Winfield": {
+   "points": 465,
+   "lastSeason": "1995"
+  },
+  "Jose Canseco": {
+   "points": 462,
+   "lastSeason": "2001"
+  },
+  "Adam Dunn": {
+   "points": 462,
+   "lastSeason": "2014"
+  },
+  "Carl Yastrzemski": {
+   "points": 452,
+   "lastSeason": "1983"
+  },
+  "Jeff Bagwell": {
+   "points": 449,
+   "lastSeason": "2005"
+  },
+  "Vladimir Guerrero": {
+   "points": 449,
+   "lastSeason": "2011"
+  },
+  "Dave Kingman": {
+   "points": 442,
+   "lastSeason": "1986"
+  },
+  "Jason Giambi": {
+   "points": 440,
+   "lastSeason": "2014"
+  },
+  "Paul Konerko": {
+   "points": 439,
+   "lastSeason": "2014"
+  },
+  "Andre Dawson": {
+   "points": 438,
+   "lastSeason": "1996"
+  },
+  "Carlos Beltran": {
+   "points": 435,
+   "lastSeason": "2017"
+  },
+  "Juan Gonzalez": {
+   "points": 434,
+   "lastSeason": "2005"
+  },
+  "Andruw Jones": {
+   "points": 434,
+   "lastSeason": "2012"
+  },
+  "Cal Ripken Jr.": {
+   "points": 431,
+   "lastSeason": "2001"
+  },
+  "Mike Piazza": {
+   "points": 427,
+   "lastSeason": "2007"
+  },
+  "Billy Williams": {
+   "points": 426,
+   "lastSeason": "1976"
+  },
+  "Darrell Evans": {
+   "points": 414,
+   "lastSeason": "1989"
+  },
+  "Alfonso Soriano": {
+   "points": 412,
+   "lastSeason": "2014"
+  },
+  "Mark Teixeira": {
+   "points": 409,
+   "lastSeason": "2016"
+  },
+  "Duke Snider": {
+   "points": 407,
+   "lastSeason": "1964"
+  },
+  "Andres Galarraga": {
+   "points": 399,
+   "lastSeason": "2004"
+  },
+  "Al Kaline": {
+   "points": 399,
+   "lastSeason": "1974"
+  }
+ },
+ "heldFromFile": {},
+ "unverified": []
+}

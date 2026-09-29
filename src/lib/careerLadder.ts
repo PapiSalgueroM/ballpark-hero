@@ -3,6 +3,7 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { supabase } from '@/integrations/supabase/client';
 import { dateSeed, getTodayET } from '@/lib/dateUtils';
+import { storedSpelling, type PlayerEntity } from '@/lib/playerSearch';
 
 export interface CareerStint {
   season: string;
@@ -116,6 +117,75 @@ export function normalizeName(s: string): string {
       .replace(/[\u0300-\u036f]/g, '')
       .trim(),
   );
+}
+
+/** One row of the guess box's suggestion list. */
+export interface LadderSuggestion {
+  /** What the row shows and what picking it submits: a pool man's own spelling, else the search's name. */
+  name: string;
+  /** Unique per man in the list (the React key). */
+  key: string;
+  /** Only on a namesake the pool does not hold: his club, position and latest year, from the search. */
+  hint?: string;
+}
+
+/**
+ * The guess box's suggestions (Round 668 fix, from the review). The page used
+ * to merge the soccer search's rows by folded name, which undid the search's
+ * namesake split: typing "ederson" offered only one Ederson. It now keeps the
+ * search's own identity. The pool's names lead, as before. A search row is
+ * the pool man himself when his folded name is the pool name's and either
+ * the search found nobody else under it (the table's "Pavel Nedved" is the
+ * pool's "Pavel Nedv\u011bd", one man spelled two ways across two tables) or he is
+ * spelled exactly as the pool spells him. Any other row under that name is a
+ * namesake: offered on its own line with the search's club, position and
+ * year, and never the answer (ladderGuessWins). Measured 2026-09-28: 4 of the
+ * 253 pool names are shared by more than one man in the table (Ra\u00fal,
+ * Ederson, Pepe, Cafu), and in all 4 the pool's spelling is the pool man's
+ * own spelling there. `wrong` holds the names already guessed, compared as
+ * spelled, so a wrong guess on a namesake does not hide the pool man.
+ */
+export function ladderSuggestions(
+  poolNames: string[],
+  found: PlayerEntity[],
+  query: string,
+  wrong: string[],
+  limit = 12,
+): LadderSuggestion[] {
+  const q = normalizeName(query);
+  if (q.length < 2) return [];
+  const poolByFold = new Map<string, string>();
+  for (const n of poolNames) {
+    const f = normalizeName(n);
+    if (f && !poolByFold.has(f)) poolByFold.set(f, n);
+  }
+  const guessed = new Set(wrong);
+  const seen = new Set<string>();
+  const out: LadderSuggestion[] = [];
+  const push = (s: LadderSuggestion) => {
+    if (seen.has(s.key) || guessed.has(s.name)) return;
+    seen.add(s.key);
+    out.push(s);
+  };
+  for (const [f, n] of poolByFold) if (f.includes(q)) push({ name: n, key: 'pool:' + f });
+  for (const e of found) {
+    const f = normalizeName(e.name);
+    const poolName = poolByFold.get(f);
+    const isPoolMan = poolName !== undefined && (!e.disambiguator || storedSpelling(e.rawName) === storedSpelling(poolName));
+    if (isPoolMan) push({ name: poolName, key: 'pool:' + f });
+    else push({ name: e.name, key: 'db:' + (e.personKey ?? e.key), hint: e.disambiguator });
+  }
+  return out.slice(0, limit);
+}
+
+/**
+ * Whether a pick is the answer (Round 668 fix). Every answer is a pool man
+ * and picking a pool man submits his pool spelling, so a name the pool does
+ * not hold (a namesake the search offered) never wins, even when it folds to
+ * the answer's letters.
+ */
+export function ladderGuessWins(name: string, answer: string, poolNames: string[]): boolean {
+  return normalizeName(name) === normalizeName(answer) && poolNames.includes(name);
 }
 
 /**

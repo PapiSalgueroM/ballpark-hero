@@ -27,11 +27,12 @@ type SearchEngine = typeof import('@/lib/siteSearch');
 let enginePromise: Promise<SearchEngine> | null = null;
 const loadSearchEngine = () => (enginePromise ??= import('@/lib/siteSearch'));
 import { getTodayET } from '@/lib/dateUtils';
-import { SPORT_HUBS } from '@/lib/sportHub';
+import { HUB_NAV } from '@/lib/sportHubNav';
 
-/** Round 270: the hub that gathers this category, or null when it has none. */
+/** Round 270: the hub that gathers this category, or null when it has none.
+    Round 672: read off the short list, so the entry chunk carries no hub prose. */
 const hubForCategory = (title: CategoryTitle) =>
-  SPORT_HUBS.find(h => h.titles.includes(title)) ?? null;
+  HUB_NAV.find(h => h.titles.includes(title)) ?? null;
 import { getCurrentPlayerName, getLocalTodayCount } from '@/lib/completions';
 
 /**

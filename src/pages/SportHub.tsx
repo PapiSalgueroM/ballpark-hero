@@ -26,7 +26,10 @@ import { hubFor } from '@/lib/sportHub';
    the whole card a tap target without a heading nested inside a link: the
    prerenderer writes a link out on its own before the blocks inside it, so a
    card that was a link around a heading would have shipped every game's name
-   twice. The link keeps a 30px floor so sweepPhone measures a real target. */
+   twice. The link keeps a 30px floor so sweepPhone measures a real target.
+   Round 672: the link no longer turns its focus outline off. Round 639 did,
+   leaving the card's one pixel border tint (the same tint hover gives it) as
+   the only sign of keyboard focus; the site's own focus ring draws again. */
 function GameCard({ game }: { game: GameDef }) {
   return (
     <div className="group relative flex items-start gap-3 rounded-xl border border-border bg-card p-4 hover:border-primary/40 hover:bg-card/80 focus-within:border-primary/60 transition-all">
@@ -36,7 +39,7 @@ function GameCard({ game }: { game: GameDef }) {
           <h3 className="text-base font-semibold text-foreground">
             <Link
               to={game.path}
-              className="inline-flex min-h-[30px] items-center focus:outline-none after:absolute after:inset-0 after:rounded-xl"
+              className="inline-flex min-h-[30px] items-center after:absolute after:inset-0 after:rounded-xl"
             >
               {game.label}
             </Link>

@@ -1893,7 +1893,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       rules: "UFC Guesser rules for guesses, colors and the fighter pool",
       example: "UFC Guesser walkthrough: from Conor McGregor to Khabib Nurmagomedov",
       tips: "UFC Guesser tips for narrowing down a mystery fighter",
-      faq: "UFC Guesser FAQ: stats, the pound for pound column and more",
+      faq: "UFC Guesser FAQ: stats, ages, the fighter pool and more",
     },
     howToPlaySections: [
       {
@@ -1906,7 +1906,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
       {
         heading: "Reading every stat in the row",
-        items: ["Read the row: years active, weight class, nationality, age, wins, losses, draws, knockouts, submissions and peak pound for pound rank."],
+        items: ["Read the row: years active, weight class, nationality, age, wins, losses, draws, knockouts and submissions."],
       },
       {
         heading: "Following the arrows higher or lower",
@@ -1924,7 +1924,7 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
       },
       {
         heading: "What a yellow, close call means",
-        items: ["Yellow means close: one weight class off, same continent, within 2 years on age or career length, 3 wins, 2 losses, 1 draw, 3 knockouts, 2 submissions, or 2 pound for pound spots."],
+        items: ["Yellow means close: one weight class off, same continent, within 2 years on age or career length, 3 wins, 2 losses, 1 draw, 3 knockouts or 2 submissions."],
       },
       {
         heading: "Saving progress until midnight",
@@ -1967,8 +1967,8 @@ export const MORE_SPORTS_CONTENT: GameContentMap = {
     ],
     faqs: [
       {
-        q: "What does the pound for pound column compare?",
-        a: "Each fighter's highest career pound for pound ranking. Within 2 spots shows yellow, and the arrow points toward the mystery fighter's rank.",
+        q: "How is a fighter's age worked out?",
+        a: "From their date of birth, on the day you play, so it is always their age today. Years active runs from their first UFC fight to their latest one.",
       },
       {
         q: "Are women fighters in the pool?",

@@ -55,6 +55,18 @@ import { supabase } from '@/integrations/supabase/client';
  * position rank (Salah: 19 rows across 15 distinct years), so every result
  * is deduped by normalized name, keeping the row with the highest value
  * (ties broken by the most recent year).
+ *
+ * NAMESAKES (Round 668, a Who Am I "Wrong answer" report of 2026-09-26).
+ * Deduping by normalized name alone folds two different people into one row
+ * whenever their names fold to the same letters: Atalanta's midfielder
+ * "Éderson" and the Fenerbahce keeper "Ederson" came back as one result,
+ * always the keeper (his peak value is higher), so the midfielder could not
+ * be picked anywhere the soccer search is used. A source can now say how it
+ * tells people apart (PlayerSourceConfig.identity) and the dedupe then keeps
+ * one row per PERSON, with a short disambiguator on any row whose name
+ * another row shares. A source that declares no identity is deduped exactly
+ * as before, which src/test/playerSearchIdentity.test.ts proves against a
+ * copy of the pre-668 dedupe.
  */
 
 // ---------------------------------------------------------------------------
@@ -137,8 +149,27 @@ function capitalizeSegment(seg: string): string {
 // ---------------------------------------------------------------------------
 
 export interface PlayerEntity {
-  /** Stable key for React lists and dedupe: normalized name, unique per player within a search. */
+  /**
+   * Stable key for React lists and dedupe: normalized name, unique per player
+   * within a search. Round 668: on a source that can tell namesakes apart two
+   * results can share it (Éderson and Ederson are both "ederson"), and it is
+   * kept that way on purpose, because callers compare it with normalized
+   * names (Rarity Round's pool, simRarityAgreement). A list renders by
+   * `personKey ?? key`, which is unique.
+   */
   key: string;
+  /**
+   * Round 668. Which person this row is, on a source that declares
+   * PlayerSourceConfig.identity (see personKeyOf). Absent on every other
+   * source, so nothing there changes.
+   */
+  personKey?: string;
+  /**
+   * Round 668. Only present when another result shares this one's normalized
+   * name: the club, position and year of the shown man's own latest row (see
+   * ownLatestRow), so two namesakes can be told apart in the list.
+   */
+  disambiguator?: string;
   /** Display-ready name (title-cased, accents from source preserved). */
   name: string;
   /** Raw name exactly as stored, kept for callers that need the untouched value. */
@@ -210,6 +241,82 @@ export interface PlayerSourceConfig {
   ilikeLimit?: number;
   /** Row cap for the prominence-pool accent-fallback leg. Default 1000 (PostgREST's per-request cap). */
   prominenceLimit?: number;
+  /**
+   * Round 668. How this source tells two people who share a name apart. When
+   * set, results are deduped per person (personKeyOf) instead of per
+   * normalized name. Leave it unset and the dedupe is exactly the old one.
+   */
+  identity?: PlayerIdentityConfig;
+}
+
+export interface PlayerIdentityConfig {
+  /**
+   * A column holding a stable id per person. A row that carries a value is
+   * that person whatever it is called, and it wins over every other rule.
+   */
+  personKeyColumn?: string;
+  /**
+   * Two different stored spellings of one normalized name are two different
+   * people. Only declare this where it has been measured to hold, see
+   * SOCCER_MARKET_VALUE_SOURCE.
+   */
+  bySpelling?: boolean;
+}
+
+/**
+ * Round 668. A stored name as the source spelled it, minus what is never part
+ * of a name: format characters (the trailing U+200E on one "Nemanja Vidic"
+ * row, Round 383) and stray whitespace. Case and accents are kept, because
+ * they are the part that tells "Éderson" from "Ederson".
+ */
+export function storedSpelling(s: string | null | undefined): string {
+  return (s ?? '').replace(FORMAT_CHARS, '').trim().replace(/\s+/g, ' ');
+}
+
+/**
+ * Round 668. The one identity rule: which person a row is. The search dedupe
+ * uses it, and so does every game that has to compare what the search handed
+ * over with its own rows (Who Am I's pool, its judge and its club history),
+ * so the two sides can never disagree about who is who.
+ *
+ * Undefined on a source with no identity config. Otherwise a person_key when
+ * the row carries one, else the stored spelling when the source declares
+ * bySpelling, else the normalized name (one person per name, as before).
+ */
+export function personKeyOf(
+  identity: PlayerIdentityConfig | undefined,
+  name: string | null | undefined,
+  personKeyValue?: unknown,
+): string | undefined {
+  if (!identity) return undefined;
+  if (identity.personKeyColumn && personKeyValue !== null && personKeyValue !== undefined) {
+    const id = String(personKeyValue).trim();
+    if (id) return 'pk:' + id;
+  }
+  if (identity.bySpelling) return 'sp:' + storedSpelling(name);
+  return 'nm:' + normalizeName(name);
+}
+
+/**
+ * ROUND 385, lifted into Who Am I in Round 668 so its club history shares it,
+ * and down into this file after the Round 668 re-review so the search's
+ * namesake line can use it too (whoAmI.ts imports this file, so it could not
+ * import back). person_key is NULL on every row of player_market_values, so
+ * one spelling can be several men: the table's 18 "Rodri" rows are four (a
+ * Barcelona centre-back aged 21 in 2006, a Betis right midfielder aged 20 in
+ * 2007, a Huesca left midfielder aged 32 in 2009, and the Manchester City
+ * one), and "Lucas Hernández" is a Frenchman and a Uruguayan. A history row
+ * is the pool player's only if its age walks with its year: the pool row
+ * says 29 in 2026, so a 2006 row should say about 9, and 21 is somebody
+ * else. Rows with no age cannot be checked and are kept.
+ */
+export function isSameMan(
+  ref: { age: number; year: number },
+  row: { age: number | null; year: number | null },
+): boolean {
+  if (!(ref.age > 0) || !(ref.year > 0)) return true;
+  if (row.age == null || row.year == null || !(row.age > 0) || !(row.year > 0)) return true;
+  return Math.abs((ref.age - row.age) - (ref.year - row.year)) <= 1;
 }
 
 export interface PlayerSourceFilter {
@@ -308,14 +415,18 @@ function buildSelectColumns(source: PlayerSourceConfig): string {
   if (source.metaColumns) {
     for (const col of Object.values(source.metaColumns)) cols.add(col);
   }
+  if (source.identity?.personKeyColumn) cols.add(source.identity.personKeyColumn);
   return [...cols].join(', ');
 }
+
+const DUP_MARK = /\(\s*dup\s*\)/i;
 
 function rowToRaw(row: RawRow, source: PlayerSourceConfig): {
   name: string;
   prominence: number;
   recency: number;
   meta: PlayerEntityMeta;
+  personKeyValue: unknown;
 } | null {
   const lastVal = row[source.nameColumn];
   const last = typeof lastVal === 'string' ? lastVal.trim() : '';
@@ -328,6 +439,12 @@ function rowToRaw(row: RawRow, source: PlayerSourceConfig): {
     name = [first, last].filter(Boolean).join(' ');
   }
   if (!name) return null;
+  /* Round 668 fix: a row whose name carries "(dup)" is a leftover copy, never
+     a player. player_market_values holds 15 of them (2023, e.g. "Pepê (dup)"
+     at Gremio), each the exact twin of a row under the plain name, measured
+     2026-09-28. They are never offered, whatever the cleanup migration has or
+     has not removed yet. */
+  if (DUP_MARK.test(name)) return null;
 
   let prominence = source.prominenceColumn ? Number(row[source.prominenceColumn]) || 0 : 0;
   // Some sources rank prominence by an ASCENDING column (e.g. player_id, where
@@ -345,7 +462,8 @@ function rowToRaw(row: RawRow, source: PlayerSourceConfig): {
     }
   }
 
-  return { name, prominence, recency, meta };
+  const personKeyValue = source.identity?.personKeyColumn ? row[source.identity.personKeyColumn] : undefined;
+  return { name, prominence, recency, meta, personKeyValue };
 }
 
 /** Classifies how a normalized candidate name matches a normalized query. Returns null when it doesn't match at all. */
@@ -356,14 +474,149 @@ function classifyMatch(normalizedName: string, normalizedQuery: string): MatchRa
   return 2;
 }
 
+type ParsedRow = NonNullable<ReturnType<typeof rowToRaw>>;
+
+/** Round 668: "club · position · year" of a person's latest row, whatever of the three the source carries. */
+function disambiguatorFor(row: ParsedRow): string {
+  const club = row.meta.club ?? row.meta.team;
+  const year = row.meta.year ?? (row.recency > 0 ? row.recency : undefined);
+  return [club, row.meta.position, year]
+    .filter(v => v !== undefined && v !== '')
+    .map(String)
+    .join(' · ');
+}
+
+/**
+ * Round 668 re-review: the row a namesake line describes. One spelling can still
+ * be several men, so the latest row under a spelling is not always the man on
+ * screen: measured 2026-09-28 over every name the table stores more than one
+ * way, 8 of the 91 lines described somebody else, "Cafu" among them (the Milan
+ * right-back shown, the line of a Portuguesa left midfielder born 26 years
+ * later). The line now comes from the shown row's own latest row. A later row
+ * counts as his when a person_key says so, or when both rows list an age and
+ * it walks with the year (isSameMan). A row that proves nothing is never used,
+ * so at worst the line describes the shown row itself.
+ */
+function ownLatestRow(shown: ParsedRow, rows: ParsedRow[], byPersonKey: boolean): ParsedRow {
+  const ageYear = (r: ParsedRow) => ({ age: Number(r.meta.age) || 0, year: Number(r.meta.year ?? r.recency) || 0 });
+  const s = ageYear(shown);
+  const provable = s.age > 0 && s.year > 0;
+  let best = shown;
+  for (const r of rows) {
+    if (!(r.recency > best.recency || (r.recency === best.recency && r.prominence > best.prominence))) continue;
+    const a = ageYear(r);
+    if (byPersonKey || (provable && a.age > 0 && a.year > 0 && isSameMan(s, a))) best = r;
+  }
+  return best;
+}
+
+/**
+ * The merge, dedupe and ranking half of searchPlayers, pure so it can be run
+ * on rows without a database (src/test/playerSearchIdentity.test.ts).
+ *
+ * Rows from every leg are merged into one result per normalized name, keeping
+ * the better match rank, then the higher prominence, then the more recent
+ * row. Round 668: on a source that declares an identity the merge is per
+ * person instead (personKeyOf), and a result whose normalized name another
+ * result shares carries a disambiguator from the shown man's own latest row
+ * (ownLatestRow). The sharing is counted before the slice, so a namesake just
+ * past `limit` still marks the one on screen. `exclude` takes normalized names
+ * (every person of that name) and, on such a source, person keys (that one
+ * person).
+ *
+ * Ranked exact prefix, then word prefix, then contains; boosted names first
+ * within a tier; then prominence. Sliced to `limit`.
+ */
+export function dedupeAndRank(
+  rowSets: (RawRow[] | null | undefined)[],
+  source: PlayerSourceConfig,
+  normalizedQuery: string,
+  options: { exclude?: Set<string>; boostNames?: Set<string>; limit: number },
+): PlayerEntity[] {
+  const { exclude } = options;
+  const byPerson = new Map<
+    string,
+    { raw: ParsedRow; rank: MatchRank; normalized: string; personKey?: string; rows: ParsedRow[] }
+  >();
+
+  for (const rows of rowSets) {
+    for (const row of rows ?? []) {
+      const parsed = rowToRaw(row, source);
+      if (!parsed) continue;
+      const normalized = normalizeName(parsed.name);
+      if (!normalized) continue;
+      const rank = classifyMatch(normalized, normalizedQuery);
+      if (rank === null) continue;
+      if (exclude?.has(normalized)) continue;
+      const personKey = personKeyOf(source.identity, parsed.name, parsed.personKeyValue);
+      if (personKey !== undefined && exclude?.has(personKey)) continue;
+      const dedupeKey = personKey ?? normalized;
+
+      const existing = byPerson.get(dedupeKey);
+      if (!existing) {
+        byPerson.set(dedupeKey, { raw: parsed, rank, normalized, personKey, rows: [parsed] });
+        continue;
+      }
+      existing.rows.push(parsed);
+      // Keep the better match rank, and within equal rank keep the row with
+      // the higher prominence (ties broken by recency).
+      const better =
+        rank < existing.rank ||
+        (rank === existing.rank &&
+          (parsed.prominence > existing.raw.prominence ||
+            (parsed.prominence === existing.raw.prominence && parsed.recency > existing.raw.recency)));
+      if (better) {
+        existing.raw = parsed;
+        existing.rank = Math.min(rank, existing.rank) as MatchRank;
+      }
+    }
+  }
+
+  const entries = [...byPerson.values()];
+  const sharing = new Map<string, number>();
+  for (const e of entries) sharing.set(e.normalized, (sharing.get(e.normalized) ?? 0) + 1);
+
+  const ranked = entries.map(e => {
+    const shared = (sharing.get(e.normalized) ?? 0) > 1;
+    const entity: PlayerEntity = {
+      key: e.normalized,
+      name: displayName(e.raw.name),
+      rawName: e.raw.name,
+      meta: e.raw.meta,
+      matchRank: e.rank,
+      prominence: e.raw.prominence,
+    };
+    if (e.personKey !== undefined) entity.personKey = e.personKey;
+    if (shared) {
+      const hint = disambiguatorFor(ownLatestRow(e.raw, e.rows, e.personKey?.startsWith('pk:') === true));
+      if (hint) entity.disambiguator = hint;
+    }
+    return { entity, normalized: e.normalized };
+  });
+
+  const boost = options.boostNames;
+  ranked.sort((a, b) => {
+    if (a.entity.matchRank !== b.entity.matchRank) return a.entity.matchRank - b.entity.matchRank;
+    if (boost && boost.size > 0) {
+      const ab = boost.has(a.normalized) ? 0 : 1;
+      const bb = boost.has(b.normalized) ? 0 : 1;
+      if (ab !== bb) return ab - bb;
+    }
+    return b.entity.prominence - a.entity.prominence;
+  });
+
+  return ranked.slice(0, options.limit).map(r => r.entity);
+}
+
 /**
  * Searches a configured player source with accent-insensitive, surname-aware
  * matching. Two queries run in parallel (see module docstring for why): a
  * direct ilike substring match on the raw typed text, and a fetch of the
  * source's most prominent rows used as an accent-fallback candidate pool.
  * Both are merged, deduped by normalized name (keeping the highest
- * prominence, then most recent), ranked (exact prefix, then word prefix,
- * then contains) and sliced to `limit`.
+ * prominence, then most recent; per person on a source with an identity,
+ * see dedupeAndRank), ranked (exact prefix, then word prefix, then contains)
+ * and sliced to `limit`.
  */
 export async function searchPlayers(options: SearchPlayersOptions): Promise<SearchPlayersResult> {
   const { source, query, exclude, signal } = options;
@@ -434,65 +687,13 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
       return { results: [], error: ilikeRes.error.message || 'Search failed' };
     }
 
-    const byNormalizedName = new Map<string, { raw: ReturnType<typeof rowToRaw>; rank: MatchRank }>();
-
-    const consider = (rows: RawRow[] | null | undefined) => {
-      for (const row of rows ?? []) {
-        const parsed = rowToRaw(row, source);
-        if (!parsed) continue;
-        const normalized = normalizeName(parsed.name);
-        if (!normalized) continue;
-        const rank = classifyMatch(normalized, normalizedQuery);
-        if (rank === null) continue;
-        if (exclude?.has(normalized)) continue;
-
-        const existing = byNormalizedName.get(normalized);
-        if (!existing) {
-          byNormalizedName.set(normalized, { raw: parsed, rank });
-          continue;
-        }
-        // Keep the better match rank, and within equal rank keep the row with
-        // the higher prominence (ties broken by recency).
-        const better =
-          rank < existing.rank ||
-          (rank === existing.rank &&
-            parsed &&
-            existing.raw &&
-            (parsed.prominence > existing.raw.prominence ||
-              (parsed.prominence === existing.raw.prominence && parsed.recency > existing.raw.recency)));
-        if (better) byNormalizedName.set(normalized, { raw: parsed, rank: Math.min(rank, existing.rank) as MatchRank });
-      }
-    };
-
-    consider(ilikeRes.data as RawRow[] | null);
-    consider(prominenceRes.data as RawRow[] | null);
-
-    const entities: PlayerEntity[] = [...byNormalizedName.entries()]
-      .filter(([, v]) => v.raw !== null)
-      .map(([normalized, v]) => {
-        const raw = v.raw!;
-        return {
-          key: normalized,
-          name: displayName(raw.name),
-          rawName: raw.name,
-          meta: raw.meta,
-          matchRank: v.rank,
-          prominence: raw.prominence,
-        };
-      });
-
-    const boost = options.boostNames;
-    entities.sort((a, b) => {
-      if (a.matchRank !== b.matchRank) return a.matchRank - b.matchRank;
-      if (boost && boost.size > 0) {
-        const ab = boost.has(a.key) ? 0 : 1;
-        const bb = boost.has(b.key) ? 0 : 1;
-        if (ab !== bb) return ab - bb;
-      }
-      return b.prominence - a.prominence;
-    });
-
-    return { results: entities.slice(0, limit), error: null };
+    const results = dedupeAndRank(
+      [ilikeRes.data as RawRow[] | null, prominenceRes.data as RawRow[] | null],
+      source,
+      normalizedQuery,
+      { exclude, boostNames: options.boostNames, limit },
+    );
+    return { results, error: null };
   } catch (err) {
     if (err instanceof DOMException && err.name === 'AbortError') {
       return { results: [], error: null };
@@ -573,6 +774,19 @@ export const SOCCER_MARKET_VALUE_SOURCE: PlayerSourceConfig = {
   },
   ilikeLimit: 200,
   prominenceLimit: 1000,
+  /* Round 668. person_key is declared so the day it is filled it wins, but on
+     2026-09-28 it was NULL on all 141,916 rows, so today the spelling is the
+     only thing this table says about who is who. Measured the same day:
+     27,803 normalized names, 45 of them stored under more than one spelling.
+     Every one of the 3 such names in Who Am I's 600 player pool is two or
+     more different men (Éderson and Ederson, Ladislav Krejčí and Krejci,
+     Pepê, Pêpê and Pepe). Two known exceptions across the whole table are
+     one man typed two ways (Michal and Michał Karbownik, Martin and Martín
+     Erlić); each spelling then shows as its own row with its own latest club,
+     which is untidy but never wrong, where folding them hid a real player.
+     One spelling shared by several men (four Rodris) stays one row: the
+     table cannot tell them apart and this does not pretend to. */
+  identity: { personKeyColumn: 'person_key', bySpelling: true },
 };
 
 /** NFL roster pool: nflfastr_rosters (60k rows, verified 2026-07-02). No market-value column, so prominence falls back to recency (season). */

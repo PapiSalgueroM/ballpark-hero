@@ -1,5 +1,155 @@
 # Work board
 
+**2026-09-29 morning, desktop Claude lane: Release F IS LIVE** (660, 661, 668, 669 code, 670, 672),
+main `add1c6b0`, deployment `fe10102e`. Proof and gates in `docs/PROJECT-STATE.md`.
+- **Tonight at 00:00 America/New_York (2026-09-30):** Round 669's migration, the `players.ts` re-bake and
+  its publish, in the steps its migration header lists. Then the World XI report (2026-09-21) closes.
+- **Points economy:** spec `docs/design/POINTS-ECONOMY-V2.md` on `points-economy`, Rounds 673 to 698,
+  all claimed by this lane. 673 built and HELD (ships with 675 and 676). 674 and 678 are being built.
+- **Round 699 reserved** for the sports facts fence hardening Round 660 left (listed below). The seoMeta
+  split `sweepWeight` names (about 8K off every game page) is next free: **700**.
+
+**2026-09-28, Round 668 CLAIMED AND BUILT, branch `r668-whoami-namesakes`, pushed, not on main.** Who Am I
+tells namesakes apart and says how old its ages are. person_key turned out NULL on all 141,916 market
+value rows, so the identity is person_key when present, else the stored spelling (45 of 27,803 names
+have more than one; all 3 in the pool are different men). Before 1 of 600 pool players (Éderson) could
+not be won by typing his name, after 0; 1,248 pool pairs lit Past club link only through another man's
+rows, after 0; 1,570 cross-list pairs misread age by the raw listed number, after 0. Fence
+`scripts/simWhoAmINamesakes.mjs` (8 controls) plus `src/test/playerSearchIdentity.test.ts`. **Merge
+note:** it edits the same pool lines in `src/lib/whoAmI.ts` as r667's not-current list (`isNotCurrentPlayer`
+on both legs); keep both, the carried leg reads `byKey.has(p.personKey) || isNotCurrentPlayer(p.name)`.
+
+**2026-09-28 morning, desktop Claude lane: CLAIMS, so nobody builds these twice.**
+- **Release E (662 to 667) IS LIVE**, main `cf18c92a`, deployment `3c8e3e1f`. Proof and gates in
+  `docs/PROJECT-STATE.md`. Six player reports resolved. **Round 672 is claimed** for the 19 browser
+  harnesses that are red on main as well (listed there).
+- **Round 668 CLAIMED**, branch `r668-whoami-namesakes`: Who Am I tells namesakes apart by person_key and
+  says how old its ages are.
+- **Round 669 CLAIMED**, branch `r669-worldxi-dm`: the Defensive Midfield bucket, two sources per row, in
+  the Round 344 shape. Migration written, applied by the lead after review.
+- **Round 670 CLAIMED**, branch `r670-cm-extra-time`: Club Manager plays extra time before penalties
+  (part B of the stoppage time contract). **Round 671 is reserved** for part A (stoppage time goals and
+  the aggregate line on a second leg).
+- **645a, 645b, 645c, 646, 647** are being rebuilt on their existing branch names, and 648 is getting
+  the review it never had. **660** is down to its sourcing sections (1 and 8); **661** gets its fence once
+  the Hall of Fame, Guess the Year and Score Predictor records land.
+- **Release F plan**: 660, 661, 668, 669 and 670 ship together, published in the first minutes after
+  00:00 America/New_York, because Round 669's migration moves Footle's daily answer from the moment it
+  lands (344 of the next 366 days, no past day) and its re-bake of src/data/players.ts moves a saved
+  Footle board's index. Steps are in the 669 migration header. The soccer Perfect Lineup board also
+  moves with the re-bake, but that page has redirected home since Round 34, so no player sees it. The
+  points economy (645a to 648) is Release G, after it passes its own review.
+- The next free number for anyone else is **673**.
+
+**2026-09-28 late, desktop Claude lane: Round 667 parts one to three on `r667-player-reports`, and what the
+agent fleet found before the session limit cut it.** Round 667 answers the player reports of 2026-09-21
+to 27 (fences: simCareerCleanSheets, simStaleChunk, simNotCurrentPlayers, and the vitest
+src/test/eventChoiceAfterReload.test.ts):
+- Soccer Career "the page says it broke and the advance buttons stop working" (2026-09-25) was a real
+  crash: applyEventChoice called .apply() on the event object FROM THE SAVE, and JSON.stringify drops a
+  function without a word, so any save written while an event card was on screen came back with choices
+  that threw on tap. The choice now resolves from the catalog by the event's id; an unknown event is
+  skipped, not thrown on.
+- Who Am I "Wrong answer" (2026-09-26) could not be tied to a puzzle (the secret is Math.random, not the
+  date) but the pool audit found that **Diogo Jota was being dealt as a live Liverpool player with an
+  age and a price**, because the carried 2025 leg admits anyone with no 2026 row. Round 542 had removed
+  him from Club Manager as a bake time assertion nobody else could read. `src/data/notCurrentPlayers.ts`
+  is now the one list, applied on both pool legs (Clue Auction shares the fetch).
+- Defenders keep clean sheets (the season line was gated on GK), the 82-0 guide states the measured
+  odds, a stale lazy chunk after a deploy reloads once instead of painting the broken page, and
+  Alisson's Internacional 2015 and 2016 are in the baked pool with the migration WRITTEN BUT NOT APPLIED.
+
+**Owed from the same audit, none started, in the order they hurt:**
+- **Who Am I namesakes and stale ages (Round 668 candidate).** playerSearch dedupes by normalized name
+  and keeps the highest prominence row, so the Atalanta Éderson can never be guessed: typing his name
+  offers only the Fenerbahce keeper and scores him 40. fetchClubHistory pools every row under one
+  spelling regardless of age, so "Rodri" carries three men's clubs and the Past club link chip can light
+  for a guess who never shared a club. Every age in the pool is the autumn 2025 snapshot's, a year low
+  for anyone whose birthday has passed.
+- **World XI refuses real defensive midfielders (Round 669 candidate).** The market scrape has had no
+  Defensive Midfield bucket since 2023 (0 rows in 2023 to 2025, 46 hand typed rows in 2026), so Ugarte,
+  Amrabat, Endo, Adams and dozens more return "Nobody from X matches that" for a CDM or CM slot, and
+  PSG's Vitinha surfaces as Genoa's centre forward. Restore the bucket in the Round 344 shape (two
+  sources per row). The 2026-09-21 report is almost certainly this.
+- **Club Manager has no extra time at all**: a level knockout, single leg or second leg, goes straight
+  to penalties while the copy says "after extra time". Found by the stoppage-time design contract.
+- **Points rounds.** 648 (profile total clamps at the cap) is BUILT on `r648-profile-clamp` with a
+  written, unapplied migration and NO adversarial review yet. 645a, 645b, 645c, 646 and 647 died at the
+  session limit before a commit; their branches exist with nothing on them. Resume the workflow
+  `points-rounds-645-648` (run wf_16c18036-56a) to rebuild them; 648 replays from cache.
+- **660 and 661 verification** wrote F1 findings to disk (verify660/): drivers 20 wrong of 120 clues,
+  constructors 11 wrong of 187, pool 4 wrong of 41, only drivers a and d refuted so far; olympics, HOF,
+  guess-the-year and score-predictor slices died and are re-running.
+- **Player idea contracts** (workflow wf_c43b539a-f84, full text in its journal), effort as estimated:
+  - ucl-aggregate (show the tie score on the second leg): Partly live, and the half that is missing is the half the player asked for: shipped already=False, effort about 9 h. 1. Counting leg 2 twice at full time. At stage done the career already carries leg 2 on the tie, so a builder who derives the line from career at that stage sho
+  - penalty-takers (pick all eleven takers): Not live: shipped already=False, effort about 24 h. (1) The shootout now draws ten or more random numbers where it drew one, so every seeded harness that runs past a knockout shootout gets a new sample; Round 505
+  - request-transfer (ask to join a club): Not live: shipped already=False, effort about 26 h. (1) The mid-season transplant is the bulk of the round and the calendar alignment is the trap: the league round index, the cup round and the UCL matchday are th
+  - stoppage-time (goals in added time, extra time in knockouts): Not live: shipped already=False, effort about 28 h. Balance: the added stretch adds about 8 percent more goals in the manager's own matches if the deflator is wrong or omitted; section 3 is the guard and its tole
+  - gk-training (keeper drills in Soccer Career): Not live: shipped already=False, effort about 30 h. 1. Tuning. Angles is a geometric trade (come out to shrink the goal, but a closer shot gives less dive time and past the chip depth you are lobbed); the first c
+
+
+**2026-09-28 night, desktop Claude lane, USAGE LIMIT HIT MID-ROUND. Read this before anything else.**
+Round 667 (the player reports) is on `r667-player-reports`, pushed. Done and fenced: defenders keep
+clean sheets (BUT `simCareerCleanSheets` IS RED: its walk stops after the first pro season, 24 seasons over 24 careers, so section 1 fails on the driver, not the fix; drive the post-summary phases the way simCareerEngaged does before merging, or runAllSims goes red), the 82-0 guide tells the true odds, and a tab left open across a
+deploy reloads once on a stale lazy chunk instead of painting "This page broke" (`simStaleChunk`),
+which is the most likely cause of both crash reports (Club Manager "sends me home when I change
+tactic", Soccer Career "says it broke"). Alisson's Internacional 2015 and 2016 are in the baked pool AND
+in `supabase/migrations/20260928190000_alisson_internacional_seasons.sql`, which is **written but NOT
+applied**: apply it through the Supabase MCP, then run `node scripts/genTransferPathHints.mjs` and
+`simCareerFallback`, `simCareerSeasonTruth`, `simTransferPathHints`, which read that pool. Release E is
+assembled on `release-e` in the gate clone with 662 to 666 (tsc 0), not yet gated or pushed. **Six agent
+workflows were still running when the limit hit** and commit to branches or write to disk on their own:
+builders on `r645a-ranked-recorder`, `r645b-free-points`, `r645c-dailies-lock`, `r646-caps-real-ceiling`,
+`r647-season-ledger`, `r648-profile-clamp` (each was told to push when green); data verification writing
+to `C:/Users/antho/AppData/Local/Temp/claude/verify660/` and `verifyCfb/`; the 5th bug diagnosis
+(Soccer Career error boundary), two dated Wrong answer reports, and five design contracts for the player
+ideas in the workflow journals under `.claude/projects/.../subagents/workflows/`. The four unresolved
+`question_reports` rows from 2026-09-21 to 27 stay unresolved until the fixes are live.
+
+
+**2026-09-28, desktop Claude lane: Rounds 663 to 666 BUILT on `r662-nhl-hl-points`, pushed, not yet on
+main.** One Higher or Lower fence (`scripts/lib/higherLowerFence.mjs`, driven by
+`scripts/simHigherLowerFacts.mjs`) now holds five of the six games to a record of what the site's own
+tables say: hockey (662), NBA (663), MLB (664), tennis (665), NFL (666). 31 checks, nine controls.
+MLB and tennis were already right (0 of 1,475 and 0 of 867 matchups inverted); the record exists so
+they stay that way. **The NFL round is the one to read**: two source tables were rejected because
+they count playoff touchdowns (Emmitt Smith 183 against a regular season 164), and the table that was
+used, nflfastr, merges namesakes when grouped by name: a Bears back's 8 touchdowns onto Adrian
+Peterson, the Giants receiver's 12 onto Steve Smith Sr. The fence flagged both, the file was right
+both times, and the record is built per player id. Tennis needed four married-name merges (Court is
+13 as Court plus 11 as Smith). **CFB stays open**: cfb_qb_stats holds only 32 of its 65 quarterbacks
+(Flutie, Herbert, Eli Manning, Luck and 29 more are absent), so it needs a second source before it can
+join. The next free number for anyone else is 667, except that **645a, 645b, 645c, 646, 647, 648 are
+being built right now by parallel agents on branches of those names**; do not claim them.
+
+**Round 670 CLAIMED 2026-09-28, branch `r670-cm-extra-time`: Club Manager plays extra time before
+penalties.** Part B of the stoppage time contract (`docs/design/round-670-extra-time-contract.md`):
+a Champions League knockout level when the ninety minutes run out (the final and single leg ties on
+the night, second legs on the aggregate, the AI's ties too) plays one thirty minute stretch before
+penalties, with a solved deflator so goals per match in those fixtures do not move. Domestic cups
+keep straight to penalties until a per cup rule table is two source verified (the Coppa Italia is
+known to skip extra time before its semi finals). Fence `scripts/simExtraTime.mjs`.
+
+**Round 669 BUILT, REVIEWED AND FIXED, branch `r669-worldxi-dm`, pushed, not on main.** World XI
+knows its defensive midfielders again: the "Defensive Midfield" bucket of `player_market_values` is
+empty for 2023 to 2025, so Ugarte, Amrabat, Endo, Tyler Adams and PSG's Vitinha are not in the pool.
+366 rows two sourced (Transfermarkt and FotMob, 80 held with their reasons) in
+`scripts/data/defensiveMidfield2026.json`, written as the **UNAPPLIED** fail closed migration
+`supabase/migrations/20260928_round_669_defensive_midfield_2026.sql` (plus four club corrections
+and one age correction among the existing 46). It was dry run twice on live inside BEGIN and
+ROLLBACK, no exception, 46 and 5496 rows before and after. **Apply it before merging, at 00:00
+America/New_York (04:00 UTC now, 05:00 UTC from 2026-11-01), not 00:00 UTC**: it moves Footle's
+daily answer, and Footle's day turns over at Eastern midnight (the record's `apply` block has the
+measurement). `simWorldXiDefensiveMids` reads the live pool and is red until it lands.
+`WXIDM_PROJECT=1` measures the record before it lands (green), and **`WXIDM_CONTROL=all` needs
+`WXIDM_PROJECT=1` until the migration is applied** (its baseline is red by design before that); it
+runs 40 controls and 4 positive controls. **Applying it is six numbered steps, not one**: apply,
+count, re-bake `src/data/players.ts` with `node scripts/bakePlayers.mjs` (or `simPlayersPool` goes red
+on every branch, main included), run the named harnesses, commit that one file and merge the same
+night, publish at an Eastern midnight. The steps are in the migration's header and in
+`docs/PROJECT-STATE.md`. The fence holds the 366 rows to the record as of its check date only: a
+later data round that moves one adds a dated, two sourced entry to the record's `laterChecks`.
+
 **Round 647 BUILT AND FIXED AFTER REVIEW, branch `r647-season-ledger`, pushed, not yet on main.**
 The four front offices and both dynasties score every closed season through one shared ledger,
 `src/lib/seasonLedger.ts`: one row per season, recorded once at the whistle, the ledger sum shown
@@ -164,6 +314,67 @@ full Vitest run exit 1 and turned simTycoonPitch red), **658 and 659** (the home
 **661** (the trivia banks: Guess The Year's wrong clues, Hall of Fame or Bust's false stat lines,
 Score Predictor's swapped home and away, the stale shirt numbers, and the List Quiz table whose
 shifted rows mark correct answers wrong). The next free number for anyone else is 662.
+
+**2026-09-28, Claude lane: Round 661 FIXED after review on `r661-trivia-facts`, pushed, not yet on main.**
+Claimed on 2026-09-19 (the trivia banks). Hall of Fame or Bust, Guess the Year and Score Predictor
+are rewritten to what two sources state and pinned to `scripts/data/triviaFactsVerified2026-09.json`
+(597 facts) by `scripts/simTriviaFacts.mjs`. The review's fixes landed in `aaf30a6d`: 31 Guess the
+Year clues sharpened to one year each, the Hall of Fame reveal says "Our call" beside the real
+induction record (Owen is no longer a bust), old Score Predictor saves follow the new sides, the
+List Quiz takes every joint Champions League top scorer and 2025-26, and the fence grew to eight
+sections and 17 controls, all green. The branch also carries `8bd17b2f` (List Quiz UCL rename and
+the shirt number wording in Shirt Number and Sports Millionaire), which the first account left out.
+**One migration waits for the lead:** `supabase/migrations/20260928210000_ucl_joint_top_scorers.sql`
+(unapplied, fail closed; the game is right without it). The branch sits on `5c082e71`, behind main,
+so this board, What's New, `docs/PROJECT-STATE.md` and `src/data/searchKeywords.json` will conflict;
+keep both sides of the docs and rerun `genSearchKeywords` on the merged tree. Account in
+`docs/PROJECT-STATE.md`.
+
+**2026-09-28, Round 660 final pass: Round 699 RESERVED for the rest of the sports facts fence (first
+reserved as 674, renumbered because the points economy spec numbers its rounds 673 to 698), claimed by
+nobody yet.** The Round 660 re-reviews broke `scripts/simSportsFacts.mjs` and `scripts/simUfcFacts.mjs`
+with mutations that stayed green. Round 660 closed the three cheap ones (a verified date value must be a
+real day, a field the game shows cannot vanish from the file and the record together, and a noOfficial
+reason must name the official host it could not use or say none exists, each with its own control).
+These are left, each a mutation the reviewers ran that still passes:
+- **A reason that only names a host.** The noOfficial check passes any reason containing an official
+  hostname, so "see ufc.com" or "ufc.com agrees with this value" goes green (found by the last Round 660
+  review).
+- **Ownership.** `ufc.com` plus `ufcfightpass.com` counts as official plus independent, though both are
+  the UFC's. The OWNER table only knows the owners someone wrote down.
+- **Wikipedia copies.** `explained.today`, a mirror not on WIKI_HOSTS, was accepted as Bobby Jones's
+  independent source. The mirror list is a denylist; an unknown copy passes.
+- **Check date window.** A check date of 2019-01-01 passes, though the record's `about` says every check
+  ran between 2026-09-19 and 2026-09-28. Hold every `on` to the stated window.
+- **Gap detection is a denylist.** An `overturnedCorrection` key on McLaren's title clue (the key behind
+  the original blocker) stays green, and so does a note saying "ESPN is silent on this and Sherdog alone
+  gives the count". Replace it with an allowlist of node keys (v, src, on, note, noOfficial,
+  officialConflict, text, editorial, why, inducted) and a single source note detector.
+- **The one word opener.** Nothing counts its words: "Dutch Red Bull champion" on Verstappen and "Italian
+  Scuderia from Maranello" on Ferrari pass as editorial openers with no sources.
+- **The identity check reads one phrasing.** Only "now racing/competes as X" is seen: a Renault clue
+  saying "rebranded as Alpine in 2021" with Alpine dropped from the accepted names stays green.
+- **Last UFC bout against the counts.** Nothing compares the last bout date in a weightClass note with
+  yearsActive's end year or with each count's `on` date. That is how Tsarukyan and Pantoja shipped the
+  night before UFC 331 with a check date of the night itself.
+- **A full pro record on two lagging hosts.** Almeida's record stood on ufc.com (which logs only UFC
+  bouts) and ESPN (stale) after his ACA 207 loss. A fighter who has fought outside the UFC needs a host
+  that logs every pro bout (Sherdog) behind his record.
+- **The Olympic render check.** (a) The label only has to map to the same flag through FLAG_CODES, so gb
+  labelled "United Kingdom" passes, as would West Germany for de and Czechoslovakia for cz. (b) The
+  result line prints the raw country inside funFact, outside OlympicCountry. (c) An aliased import
+  (`FlagFromEmoji as Flag`) escapes the stray flag grep. (d) A modern nation stored as text (Bolt as
+  "Kenya" in the file and the record) draws no flag and passes.
+- **Golf winYears.** The record carries them for all 61 golfers and they agree today, but the fence never
+  derives majors, first and last win or the majors won from them: Bobby Jones at 8 majors in the file and
+  the record, with winYears adding up to 7, stays green.
+- **simUfcFacts section 6.** Dropping `shownAs` while keeping `why: UFC_COM_WHY` leaves a declaration
+  that cites ufc.com unchecked, and any ufc.com `/event/` URL satisfies it, even the event page of a
+  different bout (UFC 308 for Holloway).
+- **A list valued fact is one node.** Holloway's chain divisions let Lightweight stand on ufc.com alone.
+  Each element needs two organisations.
+- **golf_majors reads (contrived).** The static scan matches the table name literally, so
+  `supabase.from('golf' + '_majors')` outside the four List Quiz lists escapes it.
 
 **2026-09-19 evening, desktop Claude lane: Rounds 649 and 650 claimed, for search traffic.**
 Lovable's numbers for 2026-09-05 to 09-19: about 1,000 visitors a day, and Bing sends 3,882 of

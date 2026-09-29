@@ -2,6 +2,7 @@ import { useState, useCallback, useMemo } from 'react';
 import { getTodayET } from '@/lib/dateUtils';
 import scorePredictorPuzzles, { type ScorePredictorPuzzle } from '@/data/scorePredictorPuzzles';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
+import { restoreDailyGuess, dailyGuessRecord } from '@/lib/scorePredictorSave';
 
 function getDateSeed(): number {
   const d = getTodayET();
@@ -64,25 +65,28 @@ export function calcScore(
   return 50;
 }
 
-function loadDailyState() {
+/* Round 661 fix: a save is read back through restoreDailyGuess, which lines
+   the guess up with the sides on today's card (nine matches had their sides
+   turned round in Round 661), and a save now records those sides. */
+function loadDailyState(puzzle: ScorePredictorPuzzle) {
   const today = getTodayET();
   const key = `${STORAGE_PREFIX}daily-${today}`;
   try {
     const raw = localStorage.getItem(key);
-    if (raw) return JSON.parse(raw) as { guessHome: number; guessAway: number; score: number };
+    if (raw) return restoreDailyGuess(JSON.parse(raw), puzzle);
   } catch { /* ignore */ }
   return null;
 }
 
-function saveDailyState(guessHome: number, guessAway: number, score: number) {
+function saveDailyState(guessHome: number, guessAway: number, score: number, puzzle: ScorePredictorPuzzle) {
   const today = getTodayET();
   const key = `${STORAGE_PREFIX}daily-${today}`;
-  localStorage.setItem(key, JSON.stringify({ guessHome, guessAway, score }));
+  localStorage.setItem(key, JSON.stringify(dailyGuessRecord({ guessHome, guessAway, score }, puzzle)));
 }
 
 export function useScorePredictor(): ScorePredictorState {
   const dailyPuzzle = useMemo(() => getDailyPuzzle(), []);
-  const saved = useMemo(() => loadDailyState(), []);
+  const saved = useMemo(() => loadDailyState(dailyPuzzle), [dailyPuzzle]);
 
   const [mode, setMode] = useState<ScorePredictorMode>('daily');
   const [unlimitedIndex, setUnlimitedIndex] = useState(0);
@@ -107,7 +111,7 @@ export function useScorePredictor(): ScorePredictorState {
     setGuessHome(home);
     setGuessAway(away);
     setScore(s);
-    if (mode === 'daily') saveDailyState(home, away, s);
+    if (mode === 'daily') saveDailyState(home, away, s, puzzle);
   }, [guessHome, puzzle, mode]);
 
   const switchToUnlimited = useCallback(() => {

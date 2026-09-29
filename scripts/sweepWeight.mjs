@@ -26,6 +26,46 @@
  *   /nfl-my-career    462K / 330K
  *   /front-office     388K / 256K
  *
+ * ROUND 672: FIVE ROUTES 5K TO 15K OVER, AND WHAT GREW, NAMED BEFORE ANYTHING
+ * WAS CUT. Measured 2026-09-28 the way this harness measures, a build of
+ * main (3e9d0210) against a build of f66bab76 (2026-09-15, the last commit
+ * that touched this file):
+ *
+ *   every game page  +9.1K  the seoMeta chunk: Round 642's 127 search titles
+ *                           and descriptions, loaded whole to read one entry
+ *                    -5.0K  the entry chunk (Round 659 moved the polls, the
+ *                           search engine and the flags out and put the new
+ *                           home front in)
+ *   /club-manager   +10.5K  its engine chunk: clubManager.ts (+33K of source,
+ *                           Round 619's free agents and contract termination
+ *                           and what followed), the 2025-26 final tables
+ *                           (+15K) and Round 633's season score (+5K)
+ *   soccer2 guides   +5.4K  on /soccer-grid, /footle and /soccer-career
+ *   football guides  +3.4K  on /nfl-my-career and /front-office
+ *
+ * THE CUT. The entry chunk every page downloads was carrying all six sport
+ * hubs' prose (src/lib/sportHub.ts, about 47K of text: why here, start here,
+ * reference, FAQs, about) because the footer and the home page imported
+ * SPORT_HUBS for three fields. They read src/lib/sportHubNav.ts now (simHubs
+ * holds the two lists equal) and every route measured exactly 14.6K lighter:
+ * /club-manager 634.5 to 619.9, /stadium-tycoon 295.1 to 280.5,
+ * /wonderkid-factory 275.1 to 260.5, /nfl-my-career 407.6 to 393.0,
+ * /soccer-grid 304.6 to 290.0, / 233.3 to 218.7. Three runs, same file
+ * counts and the same numbers every time.
+ *
+ * No budget was raised. The five routes that were red spent the win getting
+ * back under; every other route had its budget lowered by 14K, so each keeps
+ * exactly the headroom it had before and the win cannot be given back.
+ * Release F (2026-09-29) raised /club-manager from 620 to 622: Round 670
+ * added extra time to the match engine (the thirty minute stretch, the
+ * deflator and the tie context), measured at 621K on the release build, and
+ * that is the whole of the raise. The seoMeta split below would pay it back
+ * several times over and is filed as its own round.
+ * /club-manager and /minefield sit on their ceilings (0.1K and 0.2K spare),
+ * as /minefield already did. The next cut on the table is seoMeta: every
+ * game page downloads all 127 entries to read one, 9.1K gzipped, which a
+ * split by sport (the way Round 210 split the guides) would take to about 1K.
+ *
  * Run: npm run build && npx serve -s dist -l 4173, then
  *      ENGINES=chromium node scripts/sweepWeight.mjs
  */
@@ -43,20 +83,23 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 /** Route, and the ceiling in kilobytes of gzipped JavaScript. */
+/* Round 672: the six routes that had room were lowered by 14K, the whole
+   part of the 14.6K the hub prose cut took off every route (see the header);
+   the other five were over and spent it getting back under. */
 const BUDGETS = [
-  ['/', 240],
-  ['/club-manager', 620],
-  ['/soccer-career', 750],
+  ['/', 226],
+  ['/club-manager', 622],
+  ['/soccer-career', 736],
   ['/stadium-tycoon', 290],
   /* Round 216: the new idle game. Measured 243K on the day it shipped,
      mostly the shared index chunk. */
   ['/wonderkid-factory', 270],
-  ['/minefield', 290],
-  ['/footle', 330],
+  ['/minefield', 276],
+  ['/footle', 316],
   ['/nfl-my-career', 400],
-  ['/front-office', 310],
+  ['/front-office', 296],
   ['/soccer-grid', 300],
-  ['/leaderboard', 280],
+  ['/leaderboard', 266],
 ];
 
 const gzCache = new Map();

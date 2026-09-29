@@ -44,6 +44,25 @@
  *      card tells L1 from L2 by exactly that, and prints the aggregate line
  *      from it, so without this the labels and the line go quietly blank
  *      while everything else stays green.
+ *   7. Round 670 review: extra time is read by the season's own rule. Every
+ *      tie of three seasons (2015-16 and 1995-96, which had away goals, and
+ *      2026-27, which does not) is settled again here from its own legs, in
+ *      this file's own arithmetic: aggregate first, then away goals in the
+ *      seasons that had them (my leg two goals, extra time included, against
+ *      their leg one goals), then penalties. The engine must agree on who
+ *      went through and how. The case that matters is a level extra time
+ *      with goals in it, a 1-1: in an away goals season the away side (me,
+ *      leg two is at their ground) is through on away goals, and before this
+ *      review Soccer Career sent it to penalties while its own comment said
+ *      away goals counted in extra time. Floored on that case in both away
+ *      goals seasons, and none of it in 2026-27.
+ *      Round 670 polish: and extra time is played exactly when the tie is
+ *      level at ninety. The verdict at ninety is worked out here from the
+ *      score at ninety (the decider's goals less the extra time goals it
+ *      records), aggregate then away goals, so extra time played on a tie
+ *      already settled at ninety on away goals is seen even when the tie
+ *      still reads as away goals after it. Floored on ties settled on away
+ *      goals at ninety in both away goals seasons.
  *
  * ON THE TOLERANCES, and on a mistake worth keeping written down. Section 3
  * first gated on the WORST single cell across the grid, and it went red at 11
@@ -62,6 +81,13 @@
  * because the aggregate and the winner stop agreeing. SC_UCL_CONTROL=noagg
  * takes the aggregate off the deciding leg and section 6 must go red, because
  * the result card cannot then tell a second leg from a first.
+ * SC_UCL_CONTROL=etaway reads the tie after extra time with no away goals
+ * rule in any season, the pre-review defect; it refuses to run unless its
+ * anchor is in the bundle exactly once, and it must turn section 7 red and
+ * nothing before it. SC_UCL_CONTROL=etsettled plays extra time on a tie
+ * already settled on away goals at ninety (the engine reading only the
+ * aggregate there); same anchor rule, and it too must turn section 7 red and
+ * nothing before it.
  *
  * Run: node scripts/simSoccerCareerUcl.mjs      (no database)
  */
@@ -77,7 +103,7 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 
 const CONTROL = process.env.SC_UCL_CONTROL || '';
-const KNOWN_CONTROLS = ['coinflip', 'noagg'];
+const KNOWN_CONTROLS = ['coinflip', 'noagg', 'etaway', 'etsettled'];
 if (CONTROL && !KNOWN_CONTROLS.includes(CONTROL)) {
   console.error(`SC_UCL_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
@@ -121,6 +147,37 @@ if (CONTROL === 'noagg') {
   if (mutated === text) { console.error('CONTROL noagg changed nothing'); process.exit(1); }
   fs.writeFileSync(BUNDLE, mutated);
   console.log('   NEGATIVE CONTROL ON: the deciding leg carries no aggregate, section 6 must go red');
+}
+
+if (CONTROL === 'etaway') {
+  /* Round 670 review: read the tie after extra time with no away goals rule,
+     which is what the engine did before the review (an extra time 1-1 went
+     to penalties in every season). Section 7 must go red, and only it. */
+  const text = fs.readFileSync(BUNDLE, 'utf8').replaceAll('\r\n', '\n');
+  const anchor = 'uclTieOutcome(tieAfterExtraTime, awayRule)';
+  const n = text.split(anchor).length - 1;
+  if (n !== 1) {
+    console.error(`CONTROL etaway cannot run: its anchor is in the bundle ${n} times, not once (${anchor})`);
+    process.exit(1);
+  }
+  fs.writeFileSync(BUNDLE, text.replace(anchor, 'uclTieOutcome(tieAfterExtraTime, false)'));
+  console.log('   NEGATIVE CONTROL ON: extra time read with no away goals rule, section 7 must go red and nothing before it');
+}
+
+if (CONTROL === 'etsettled') {
+  /* Round 670 polish: play extra time on a tie already settled at ninety on
+     away goals, as an engine reading only the aggregate at ninety would.
+     After it such a tie can still read as away goals, so only the verdict at
+     ninety can see it. Section 7 must go red, and only it. */
+  const text = fs.readFileSync(BUNDLE, 'utf8').replaceAll('\r\n', '\n');
+  const anchor = 'if (at90.winner !== null) {';
+  const n = text.split(anchor).length - 1;
+  if (n !== 1) {
+    console.error(`CONTROL etsettled cannot run: its anchor is in the bundle ${n} times, not once (${anchor})`);
+    process.exit(1);
+  }
+  fs.writeFileSync(BUNDLE, text.replace(anchor, 'if (at90.winner !== null && !at90.byAwayGoals) {'));
+  console.log('   NEGATIVE CONTROL ON: extra time played on a tie settled on away goals at 90, section 7 must go red and nothing before it');
 }
 
 const cm = (await import(pathToFileURL(BUNDLE).href)).engine;
@@ -371,6 +428,121 @@ console.log('5) Away goals only in the seasons that had them');
 }
 
 /* ------------------------------------------------------------------ */
+/* Round 670 review: extra time is read by the season's own rule. The tie is
+   settled again here from its own legs, in this file's own arithmetic rather
+   than through the engine's rule function, so this reads what the engine did.
+   Leg one is at my ground and leg two at theirs, so my away goals are my leg
+   two goals (extra time included) and theirs are their leg one goals. */
+console.log('7) Extra time is read by the season\'s own rule: away goals count in it only in the seasons that had them');
+const failuresBeforeS7 = failures;
+{
+  const before = failures;
+  const SEASONS = [
+    { year: 2015, away: true, label: '2015-16' },
+    { year: 1995, away: true, label: '1995-96' },
+    { year: 2026, away: false, label: '2026-27' },
+  ];
+  /* Measured 2026-09-28 at 20,000 campaigns a season, on the house seed and
+     SIM_SEED 1 to 3: a level extra time with goals in it (a 1-1) settled on
+     away goals in 113 to 128 ties of 2015-16 and 103 to 118 of 1995-96. The
+     floor sits at under half the lowest. Under the etaway control every one
+     of those ties goes to penalties instead (108 in 2015-16 and 119 in
+     1995-96 on its run), and each is a failure here.
+     Round 670 polish, measured 2026-09-28 the same way: a tie level on
+     aggregate and split on away goals at ninety, the case where extra time
+     must not be played, in 2999 to 3071 ties of 2015-16 and 2626 to 2686 of
+     1995-96, none of them to extra time. The floor of 1000 is under half the
+     lowest. Under the etsettled control those ties play extra time, and each
+     is a failure here. */
+  const CAMPAIGNS = 20000;
+  const MIN_ET_AWAY = 50;
+  const MIN_AWAY_AT90 = 1000;
+  const lines = [];
+  let wrong = 0;
+  for (const s of SEASONS) {
+    const c = { ties: 0, et: 0, etAway: 0, pens: 0, awayAt90: 0, awayAt90Et: 0 };
+    for (let i = 0; i < CAMPAIGNS; i++) {
+      const r = simulateUCL(stateFor(82, 1, 'Ajax', s.year), {});
+      if (!r.qualified) continue;
+      const byRound = new Map();
+      for (const m of r.matches) {
+        if (!byRound.has(m.round)) byRound.set(m.round, []);
+        byRound.get(m.round).push(m);
+      }
+      for (const [round, legs] of byRound) {
+        const decider = legs.find(m => m.decidedBy !== undefined);
+        if (!decider) continue;
+        c.ties += 1;
+        const first = legs.find(m => m.leg === 1 && m !== decider);
+        const twoLegs = !!first && decider.leg === 2;
+        const aggFor = decider.goalsFor + (twoLegs ? first.goalsFor : 0);
+        const aggAgainst = decider.goalsAgainst + (twoLegs ? first.goalsAgainst : 0);
+        const myAway = twoLegs ? decider.goalsFor : 0;
+        const theirAway = twoLegs ? first.goalsAgainst : 0;
+        const et = !!decider.afterExtraTime;
+        /* Round 670 polish: the verdict at ninety, worked out here from the
+           score at ninety (the decider's goals less its extra time goals) by
+           the same arithmetic. Extra time is played exactly when that verdict
+           is level. Reading only the legs after extra time could not see extra
+           time played on a tie already settled at ninety on away goals: after
+           it the tie can still read as away goals, and did. */
+        const recorded = et
+          ? Number.isInteger(decider.etFor) && Number.isInteger(decider.etAgainst) && decider.etFor >= 0 && decider.etAgainst >= 0
+          : decider.etFor === undefined && decider.etAgainst === undefined;
+        const for90 = decider.goalsFor - (et ? decider.etFor : 0);
+        const against90 = decider.goalsAgainst - (et ? decider.etAgainst : 0);
+        const agg90For = for90 + (twoLegs ? first.goalsFor : 0);
+        const agg90Against = against90 + (twoLegs ? first.goalsAgainst : 0);
+        const awayAt90 = twoLegs && s.away && agg90For === agg90Against && for90 !== theirAway;
+        const levelAt90 = agg90For === agg90Against && !awayAt90;
+        if (awayAt90) c.awayAt90 += 1;
+        if (awayAt90 && et) c.awayAt90Et += 1;
+        let want;
+        let through;
+        if (aggFor !== aggAgainst) {
+          want = et ? 'extraTime' : 'aggregate';
+          through = aggFor > aggAgainst;
+        } else if (twoLegs && s.away && myAway !== theirAway) {
+          want = 'awayGoals';
+          through = myAway > theirAway;
+          if (et) c.etAway += 1;
+        } else {
+          want = 'penalties';
+          through = decider.pensFor > decider.pensAgainst;
+        }
+        if (et) c.et += 1;
+        if (want === 'penalties') c.pens += 1;
+        const bad = decider.decidedBy !== want || decider.won !== through
+          || ((want === 'extraTime' || want === 'penalties') && !et)
+          || !recorded || et !== levelAt90;
+        if (bad) {
+          wrong += 1;
+          if (wrong <= 8) {
+            const at90 = recorded ? `${agg90For}-${agg90Against} on aggregate at 90${awayAt90 ? ', split on away goals' : ''}` : 'no extra time goals recorded';
+            fail(`${s.label} ${round}: legs ${legs.map(m => `${m.goalsFor}-${m.goalsAgainst}`).join(', ')}${et ? ' (extra time in the last)' : ''}, ${at90}, was settled ${decider.decidedBy}, won ${decider.won}${et !== levelAt90 ? `, and extra time was ${et ? '' : 'not '}played on a tie ${levelAt90 ? '' : 'not '}level at 90` : ''}; the rule says ${want}, won ${through}`);
+          } else {
+            failures += 1;
+          }
+        }
+      }
+    }
+    if (s.away && c.etAway < MIN_ET_AWAY) fail(`${s.label}: only ${c.etAway} ties settled on an away goal in extra time, under the floor of ${MIN_ET_AWAY}, so the rule went unmeasured`);
+    if (!s.away && c.etAway > 0) fail(`${s.label}: ${c.etAway} ties settled on away goals after extra time, in a season with no away goals rule`);
+    if (s.away && c.awayAt90 < MIN_AWAY_AT90) fail(`${s.label}: only ${c.awayAt90} ties level on aggregate and split on away goals at 90, under the floor of ${MIN_AWAY_AT90}, so extra time on a settled tie went unmeasured`);
+    lines.push(`${s.label}: ${c.ties} ties, ${c.et} to extra time, ${c.etAway} settled there on an away goal, ${c.pens} to penalties; ${c.awayAt90} settled on away goals at 90, ${c.awayAt90Et} of those played extra time`);
+  }
+  if (failures === before) for (const l of lines) console.log(`   ${l}`);
+  else console.error(`   ${lines.join('; ')}`);
+}
+
+/* ------------------------------------------------------------------ */
+if (CONTROL === 'etaway' || CONTROL === 'etsettled') {
+  const red7 = failures > failuresBeforeS7;
+  if (red7 && failuresBeforeS7 === 0) { console.log('\n   CONTROL FIRED: section 7 went red and nothing before it'); process.exit(0); }
+  console.error(`\n   CONTROL DID NOT FIRE CLEANLY: section 7 ${red7 ? 'red' : 'green'}, ${failuresBeforeS7} failure(s) before it`);
+  process.exit(1);
+}
+
 if (CONTROL === 'coinflip') {
   if (failures > 0) { console.log('\n   CONTROL FIRED: the flipped result was caught'); process.exit(0); }
   console.error('\n   CONTROL DID NOT FIRE: the harness cannot see a result decided before the score');

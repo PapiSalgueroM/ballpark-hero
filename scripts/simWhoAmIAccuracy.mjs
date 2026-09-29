@@ -187,12 +187,14 @@ function attrs(g, t) {
   const gk = w.clubKey(g.club);
   const club = gk !== '' && gk === w.clubKey(t.club);
   let shared = false;
+  /* Round 668: club history is keyed by person, and ages are compared on the
+     newest list, both read through the module like everything else here. */
   if (!club) {
-    const gh = clubHistory.get(g.name);
-    const th = clubHistory.get(t.name);
+    const gh = clubHistory.get(g.personKey);
+    const th = clubHistory.get(t.personKey);
     if (gh && th) for (const c of gh) if (th.has(c)) { shared = true; break; }
   }
-  const ageDiff = Math.abs(t.age - g.age);
+  const ageDiff = Math.abs(w.ageOnNewestList(t) - w.ageOnNewestList(g));
   const valueDiff = Math.abs(Math.log10(Math.max(1, t.value) / Math.max(1, g.value)));
   const ageBand = ageDiff <= AGE_BAND;
   const valueBand = valueDiff <= VALUE_BAND;

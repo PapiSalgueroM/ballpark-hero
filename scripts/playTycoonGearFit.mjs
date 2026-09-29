@@ -14,11 +14,24 @@ import { build } from 'esbuild';
 import { chromium } from './lib/playwrightLoader.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const cssPath = process.env.TYCOON_GEAR_CSS;
+/* Round 672: with no TYCOON_GEAR_CSS this used to fail before measuring
+   anything, and runAllSims sets no such variable, so the suite could only ever
+   report it red. Unset now means what its siblings (playFirstTeamFit,
+   playLeagueTableFit) mean by it: the built index stylesheet in dist/assets,
+   which is the "final built index CSS" the header asks for. Exactly one, or
+   nothing is checked. The variable still wins when it is set. */
+function builtIndexCss() {
+  const assets = path.join(root, 'dist/assets');
+  const found = fs.existsSync(assets) ? fs.readdirSync(assets).filter(name => /^index-[\w-]+\.css$/.test(name)) : [];
+  assert.equal(found.length, 1, `No TYCOON_GEAR_CSS and ${found.length} built dist/assets/index-*.css files, not one. Run npm run build. Nothing was checked.`);
+  return path.join(assets, found[0]);
+}
+const cssPath = process.env.TYCOON_GEAR_CSS || builtIndexCss();
 const cssKind = process.env.TYCOON_GEAR_CSS_KIND || 'built';
 assert(['built', 'preview'].includes(cssKind), 'CSS kind must be built or preview');
 assert(cssPath && fs.existsSync(cssPath), 'TYCOON_GEAR_CSS must name the production build CSS');
 const css = fs.readFileSync(cssPath, 'utf8');
+console.log(`CSS: ${cssKind} ${process.env.TYCOON_GEAR_CSS ? 'named by TYCOON_GEAR_CSS' : 'from dist/assets'}, ${path.basename(cssPath)}`);
 assert(css.includes('min-h-') && css.includes('bg-card'), 'production utility CSS is required');
 const output = fs.mkdtempSync(path.join(os.tmpdir(), 'dukb-tycoon-gear-fit-'));
 const roomPath = path.join(root, 'src/components/tycoon/BootRoom.tsx');
@@ -219,6 +232,9 @@ try {
     await page.locator('[data-fixture-back]').waitFor();
     assert.deepEqual(errors, []);
     report.cases.push({ width, names: initial.state.firstTeam.map(p => p.name), pair: bootId, stages, move: true, upgrade: true, feeUnchanged: true, saveFailure: true, back: true, boundaries: { floor: floor.edge, aboveFloor: edge.edge, capped: cap.edge, finalLevel: max.ledger.gearLevel[bootId], exactKitCost: true } });
+    /* Round 672: one line per width, so the runner's quiet-harness rule can see
+       the work. A clean run printed a single PASS line and was marked EMPTY. */
+    console.log(`  ${width}px: ${stages.length} screens fit with 44px targets, pair moved and upgraded, save failure held, edge ${floor.edge} at 60, ${edge.edge} at 61, ${cap.edge} capped at 99, level ${max.ledger.gearLevel[bootId]} is the max`);
     const video = page.video();
     await context.close();
     if (video) await video.saveAs(path.join(output, 'boot-room-390.webm'));

@@ -14,21 +14,44 @@
  * playwright, and runs it only with --browser.)
  */
 import pw from './lib/playwrightLoader.mjs';
+import { ERA_CONTROL, assertDropControl, installDropControl, enterSquad, judgeDropControl } from './lib/eraDressingRoom.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 
 let failures = 0;
+const failed = [];
 const say = (ok, what) => {
   console.log((ok ? '  PASS  ' : '  FAIL  ') + what);
-  if (!ok) failures += 1;
+  if (!ok) { failures += 1; failed.push(what); }
 };
+
+/* Round 672: the men this walk claims, and the checks that claim them.
+   ERA_CONTROL=drop takes them out of the served era data and exactly these
+   checks must go red (see scripts/lib/eraDressingRoom.mjs). Vardy and Dybala
+   are the two that used to pass off the guide copy with no squad on screen. */
+const CLAIMS = {
+  'Jamie Vardy': 'Jamie Vardy is in the 2015 Leicester squad',
+  'Kasper Schmeichel': 'Kasper Schmeichel is in goal',
+  'Paulo Dybala': 'Dybala arrived from Palermo, the window correction landed',
+  'Gianluigi Buffon': 'Buffon is in goal',
+  'Paul Pogba': 'Pogba stayed for 2015-16, exactly as in real life',
+};
+const DROP = Object.keys(CLAIMS);
+const tally = { swaps: 0 };
+const stillNamed = new Set();
+if (ERA_CONTROL === 'drop') {
+  const why = await assertDropControl(BASE, DROP);
+  if (why) { console.error(`playEra2015 control: RED before it started. ${why}.`); process.exit(1); }
+}
+const noteNamed = body => { for (const n of DROP) if ((body ?? '').includes(n.split(' ').pop())) stillNamed.add(n); };
 
 const browser = await chromium.launch();
 
 /* ---------- Walk one: Spain, the giants and the thin squad ---------- */
 {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  if (ERA_CONTROL === 'drop') await installDropControl(page, DROP, tally);
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
   await page.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
@@ -68,6 +91,7 @@ const browser = await chromium.launch();
 /* ---------- Walk two: England, and the champions nobody rated ---------- */
 {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  if (ERA_CONTROL === 'drop') await installDropControl(page, DROP, tally);
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
   await page.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
@@ -95,15 +119,16 @@ const browser = await chromium.launch();
   await page.waitForTimeout(500);
   const essential = page.locator('button:has-text("Essential only")');
   if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
-  await page.locator('text=Take the job').click();
-  await page.waitForTimeout(2000);
-  const body = await page.locator('body').textContent();
-  say(/2015-16/.test(body ?? ''), 'the career header says 2015-16');
-  const squadTab = page.locator('text=Squad').first();
-  if (await squadTab.count()) { await squadTab.click(); await page.waitForTimeout(900); }
+  /* Round 672: through the dugout step (Round 303) to the Squad tab, and the
+     squad claims read off that tab's own panel rather than the whole page,
+     whose guide copy names Vardy by itself. See scripts/lib/eraDressingRoom. */
+  const room = await enterSquad(page);
+  say(/2015-16 · Season 1/.test(room.hub), 'the career header says 2015-16');
+  say(room.listed, 'the Squad tab listed the Leicester squad');
+  say(/Jamie Vardy/.test(room.squad), CLAIMS['Jamie Vardy']);
+  say(/Kasper Schmeichel/.test(room.squad), CLAIMS['Kasper Schmeichel']);
   const body2 = await page.locator('body').textContent();
-  say(/Vardy/.test(body2 ?? ''), 'Jamie Vardy is in the 2015 Leicester squad');
-  say(/Schmeichel/.test(body2 ?? ''), 'Kasper Schmeichel is in goal');
+  noteNamed(body2);
   say(!/Haaland/.test(body2 ?? ''), 'no 2026 player leaked into 2015');
   const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
   say(pageErrors.length === 0, `no real page errors on the England walk (${pageErrors.length ? pageErrors[0] : 'clean'})`);
@@ -113,6 +138,7 @@ const browser = await chromium.launch();
 /* ---------- Walk three: Round 191, Italy and the five-straight champions ---------- */
 {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  if (ERA_CONTROL === 'drop') await installDropControl(page, DROP, tally);
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
   await page.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
@@ -143,16 +169,15 @@ const browser = await chromium.launch();
   await page.waitForTimeout(500);
   const essential = page.locator('button:has-text("Essential only")');
   if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
-  await page.locator('text=Take the job').click();
-  await page.waitForTimeout(2000);
-  const body = await page.locator('body').textContent();
-  say(/2015-16/.test(body ?? ''), 'the career header says 2015-16');
-  const squadTab = page.locator('text=Squad').first();
-  if (await squadTab.count()) { await squadTab.click(); await page.waitForTimeout(900); }
+  /* Round 672: the same way in as walk two, and the same panel read. */
+  const room = await enterSquad(page);
+  say(/2015-16 · Season 1/.test(room.hub), 'the career header says 2015-16');
+  say(room.listed, 'the Squad tab listed the Juventus squad');
+  say(/Paulo Dybala/.test(room.squad), CLAIMS['Paulo Dybala']);
+  say(/Gianluigi Buffon/.test(room.squad), CLAIMS['Gianluigi Buffon']);
+  say(/Paul Pogba/.test(room.squad), CLAIMS['Paul Pogba']);
   const body2 = await page.locator('body').textContent();
-  say(/Dybala/.test(body2 ?? ''), 'Dybala arrived from Palermo, the window correction landed');
-  say(/Buffon/.test(body2 ?? ''), 'Buffon is in goal');
-  say(/Pogba/.test(body2 ?? ''), 'Pogba stayed for 2015-16, exactly as in real life');
+  noteNamed(body2);
   say(!/Vidal/.test(body2 ?? ''), 'Vidal is gone to a league outside this world');
   const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
   say(pageErrors.length === 0, `no real page errors on the Italy walk (${pageErrors.length ? pageErrors[0] : 'clean'})`);
@@ -161,6 +186,7 @@ const browser = await chromium.launch();
 
 await browser.close();
 console.log('');
+if (ERA_CONTROL === 'drop') process.exit(judgeDropControl('playEra2015', failed, Object.values(CLAIMS), tally, [...stillNamed]));
 if (failures > 0) {
   console.error(`playEra2015: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);

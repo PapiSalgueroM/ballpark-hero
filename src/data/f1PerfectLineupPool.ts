@@ -9,13 +9,18 @@ export interface F1PoolDriver {
 }
 
 // Curated pool of notable F1 drivers across eras (authored with the owner's OK).
-// "team" = the constructor the driver is most associated with.
+// "team" = the constructor the driver is most associated with, under the name it
+// raced as for most of his seasons there. "era" = the decade of his title or
+// titles with that team, and with no title there, the decade holding most of his
+// seasons with it; an even split (Massa, Berger) can read either way (Round 660;
+// each card's sources are in
+// scripts/data/sportsFactsVerified2026-09.json).
 export const F1_POOL: F1PoolDriver[] = [
   { name: 'Ayrton Senna', team: 'McLaren', era: '1990s', nationality: 'Brazil', rating: 98 },
-  { name: 'Alain Prost', team: 'McLaren', era: '1990s', nationality: 'France', rating: 96 },
+  { name: 'Alain Prost', team: 'McLaren', era: '1980s', nationality: 'France', rating: 96 },
   { name: 'Nigel Mansell', team: 'Williams', era: '1990s', nationality: 'United Kingdom', rating: 90 },
-  { name: 'Nelson Piquet', team: 'Williams', era: '1980s', nationality: 'Brazil', rating: 90 },
-  { name: 'Niki Lauda', team: 'Ferrari', era: '1980s', nationality: 'Austria', rating: 92 },
+  { name: 'Nelson Piquet', team: 'Brabham', era: '1980s', nationality: 'Brazil', rating: 90 },
+  { name: 'Niki Lauda', team: 'Ferrari', era: '1970s', nationality: 'Austria', rating: 92 },
   { name: 'Keke Rosberg', team: 'Williams', era: '1980s', nationality: 'Finland', rating: 82 },
   { name: 'Alan Jones', team: 'Williams', era: '1980s', nationality: 'Australia', rating: 82 },
   { name: 'Gerhard Berger', team: 'Ferrari', era: '1990s', nationality: 'Austria', rating: 84 },
@@ -29,7 +34,7 @@ export const F1_POOL: F1PoolDriver[] = [
   { name: 'Kimi Raikkonen', team: 'Ferrari', era: '2000s', nationality: 'Finland', rating: 92 },
   { name: 'Juan Pablo Montoya', team: 'Williams', era: '2000s', nationality: 'Colombia', rating: 85 },
   { name: 'Ralf Schumacher', team: 'Williams', era: '2000s', nationality: 'Germany', rating: 80 },
-  { name: 'Jenson Button', team: 'McLaren', era: '2000s', nationality: 'United Kingdom', rating: 88 },
+  { name: 'Jenson Button', team: 'McLaren', era: '2010s', nationality: 'United Kingdom', rating: 88 },
   { name: 'Rubens Barrichello', team: 'Ferrari', era: '2000s', nationality: 'Brazil', rating: 86 },
   { name: 'Felipe Massa', team: 'Ferrari', era: '2000s', nationality: 'Brazil', rating: 85 },
   { name: 'David Coulthard', team: 'McLaren', era: '2000s', nationality: 'United Kingdom', rating: 84 },
@@ -40,7 +45,7 @@ export const F1_POOL: F1PoolDriver[] = [
   { name: 'Daniel Ricciardo', team: 'Red Bull', era: '2010s', nationality: 'Australia', rating: 86 },
   { name: 'Valtteri Bottas', team: 'Mercedes', era: '2010s', nationality: 'Finland', rating: 85 },
   { name: 'Romain Grosjean', team: 'Haas', era: '2010s', nationality: 'France', rating: 78 },
-  { name: 'Kevin Magnussen', team: 'Haas', era: '2010s', nationality: 'Denmark', rating: 76 },
+  { name: 'Kevin Magnussen', team: 'Haas', era: '2020s', nationality: 'Denmark', rating: 76 },
   { name: 'Max Verstappen', team: 'Red Bull', era: '2020s', nationality: 'Netherlands', rating: 98 },
   { name: 'Charles Leclerc', team: 'Ferrari', era: '2020s', nationality: 'Monaco', rating: 92 },
   { name: 'Lando Norris', team: 'McLaren', era: '2020s', nationality: 'United Kingdom', rating: 91 },
@@ -51,7 +56,7 @@ export const F1_POOL: F1PoolDriver[] = [
   { name: 'Pierre Gasly', team: 'Alpine', era: '2020s', nationality: 'France', rating: 82 },
   { name: 'Esteban Ocon', team: 'Alpine', era: '2020s', nationality: 'France', rating: 81 },
   { name: 'Lance Stroll', team: 'Aston Martin', era: '2020s', nationality: 'Canada', rating: 76 },
-  { name: 'Yuki Tsunoda', team: 'Red Bull', era: '2020s', nationality: 'Japan', rating: 78 },
+  { name: 'Yuki Tsunoda', team: 'AlphaTauri', era: '2020s', nationality: 'Japan', rating: 78 },
 ];
 
 export const F1_LINEUP_CONFIG: LineupConfig<F1PoolDriver> = {

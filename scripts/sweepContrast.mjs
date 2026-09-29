@@ -52,6 +52,12 @@
  *      node scripts/sweepContrast.mjs
  * ROUTE=/club-manager sweeps one route. SKIP_BROWSER=1 runs only the source
  * scan, which is what you want while fixing findings.
+ *
+ * NEGATIVE CONTROL (Round 672): SWEEP_CONTRAST_CONTROL=noring skips the route
+ * sweep, strips every focus ring off the home page (outline and box shadow
+ * on :focus-visible) before the keyboard walk, and exits 0 only if section 2
+ * then reports ringless stops. It refuses to run if the served CSS carries no
+ * :focus-visible outline rule to strip.
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -61,6 +67,11 @@ import pw from './lib/playwrightLoader.mjs';
 const { chromium } = pw;
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
+const CONTROL = process.env.SWEEP_CONTRAST_CONTROL || '';
+if (CONTROL && CONTROL !== 'noring') {
+  console.error(`SWEEP_CONTRAST_CONTROL=${CONTROL} is not a control this harness knows`);
+  process.exit(1);
+}
 
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
@@ -263,7 +274,9 @@ function routes() {
     .map(m => m[1]);
   return [...new Set(all.filter(p => p.startsWith('/') && !p.includes(':') && p !== '*'))];
 }
-const ROUTES = process.env.ROUTE ? [process.env.ROUTE] : routes();
+/* the noring control is about section 2 only, so it does not spend six
+   minutes sweeping routes first */
+const ROUTES = CONTROL ? [] : process.env.ROUTE ? [process.env.ROUTE] : routes();
 
 /* Round 274: recreate the browser every 25 routes. One browser, one context
    and one page navigating every route in the site runs this container out of
@@ -584,8 +597,30 @@ try {
     if (skipInfo.offY >= 0) fail(`home: skip link is visible before focus (top ${Math.round(skipInfo.offY)}px)`);
   }
 
+  if (CONTROL === 'noring') {
+    /* the control must have something to revert: the served CSS has to carry
+       the global :focus-visible outline, or stripping it proves nothing */
+    const hasRingRule = await page.evaluate(() => [...document.styleSheets].some(sh => {
+      try { return [...sh.cssRules].some(r => /:focus-visible/.test(r.selectorText || '') && /outline/.test(r.cssText)); } catch { return false; }
+    }));
+    if (!hasRingRule) {
+      console.error('control found no :focus-visible outline rule in the served CSS, nothing to strip');
+      process.exit(1);
+    }
+    await page.addStyleTag({ content: '*:focus-visible { outline: none !important; box-shadow: none !important; }' });
+    console.log('   NEGATIVE CONTROL ON: every focus ring stripped, section 2 must report ringless stops');
+  }
+
+  /* Round 672: a stop is recognised by the ELEMENT, not by its text. The walk
+     used to key each stop on tag, first 30 characters of text and href, and
+     stop at the first repeated key, meaning "focus has come back round".
+     The home page's daily rail (Round 659) has two icon only scroll buttons,
+     and an icon only button has no text and no href, so the rail's first
+     button read as a repeat of the header's icon button at stop 3 and the
+     walk ended at 10 stops on a page with dozens. The ring check and the
+     15 stop floor are unchanged; only the "have we wrapped" test is honest
+     now. Measured after the change: 40 stops walked, none repeated. */
   let ringless = 0, stops = 0, firstIsSkip = false;
-  const seenStops = new Set();
   for (let i = 0; i < 40; i++) {
     await page.keyboard.press('Tab');
     /* the ring paints after the focus event settles, and cards here carry
@@ -597,12 +632,13 @@ try {
       const cs = getComputedStyle(el);
       const ring = (cs.outlineStyle !== 'none' && parseFloat(cs.outlineWidth) >= 1)
         || (cs.boxShadow && cs.boxShadow !== 'none' && /(\d+(\.\d+)?px\s+){2,}/.test(cs.boxShadow));
-      const key = el.tagName + '|' + (el.textContent || '').slice(0, 30) + '|' + (el.getAttribute('href') || '');
-      return { ring, key, isSkip: el.classList.contains('dukb-skip-link'), tag: el.tagName.toLowerCase(), label: (el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 30) };
+      const seen = (window.__dukbTabSeen ??= new WeakSet());
+      const again = seen.has(el);
+      seen.add(el);
+      return { ring, again, isSkip: el.classList.contains('dukb-skip-link'), tag: el.tagName.toLowerCase(), label: (el.getAttribute('aria-label') || el.textContent || '').trim().slice(0, 30) };
     });
     if (!info) break;
-    if (seenStops.has(info.key)) break;
-    seenStops.add(info.key);
+    if (info.again) break;
     stops += 1;
     if (stops === 1) firstIsSkip = info.isSkip;
     if (!info.ring) {
@@ -613,6 +649,16 @@ try {
   if (!firstIsSkip) fail('home: the first tab stop is not the skip link');
   if (stops < MIN_STOPS) fail(`home: only ${stops} tab stops walked, expected at least ${MIN_STOPS}; the walk broke, not the page`);
   console.log(`   ${stops} tab stops walked, ${ringless} without a ring, skip link ${firstIsSkip ? 'first' : 'NOT first'}`);
+  if (CONTROL === 'noring') {
+    await ctx.close();
+    await browser.close();
+    if (ringless > 0 && stops >= MIN_STOPS) {
+      console.log(`\nsweepContrast control: green. With every focus ring stripped, section 2 reported ${ringless} of ${stops} stops without one.`);
+      process.exit(0);
+    }
+    console.error(`\nsweepContrast control: did not bite. ${ringless} ringless of ${stops} stops walked with the rings stripped.`);
+    process.exit(1);
+  }
 } catch (e) {
   fail(`keyboard walk: ${String(e).split('\n')[0].slice(0, 120)}`);
 }

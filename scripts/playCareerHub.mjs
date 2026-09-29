@@ -13,19 +13,40 @@
  * season career said "play one and it goes on the books". The walk always
  * reloads before reading, so that regression cannot come back quietly.
  *
- * Run: npm run build && npx serve -s dist -l 4173, then
+ * Round 672: the walk had been red since Round 469, and it was the walk that
+ * was out of date, not the game. Round 469 turned the Bank box into the money
+ * app, whose headline is "Everything you have" (the old panel said "Net
+ * worth"), and Rounds 521 and 525 gave all four hubs a sixth box, the Inbox,
+ * appended beside the five shared ones. The walk now expects six boxes, reads
+ * the money app's headline, and walks the Inbox like the other five.
+ *
+ * NEGATIVE CONTROL: CAREER_HUB_CONTROL=revert rewrites the served chunks so
+ * the hubs lose the Inbox box and the money app loses its headline, which is
+ * the game as it stood before those rounds. Every check aimed at them must
+ * fail, and the run refuses to count if either rewrite matched nothing.
+ *
+ * Run: npm run build && node scripts/lib/hostLikeServer.mjs dist 4173, then
  *      ENGINES=chromium node scripts/playCareerHub.mjs
  */
 import pw from './lib/playwrightLoader.mjs';
+import { installServedCodeControl, controlledChecks } from './lib/servedCodeControl.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 
-let failures = 0;
-const say = (ok, what) => {
-  console.log((ok ? '  PASS  ' : '  FAIL  ') + what);
-  if (!ok) failures += 1;
-};
+const CONTROL = process.env.CAREER_HUB_CONTROL || '';
+if (CONTROL && CONTROL !== 'revert') {
+  console.error(`CAREER_HUB_CONTROL=${CONTROL} is not a control this harness knows`);
+  process.exit(1);
+}
+const { say, verdict } = controlledChecks(CONTROL);
+const REVERT = [
+  /* The board's own appended sixth box, [...shared, {key:"inbox",...}],
+     back to just the shared five. */
+  { label: 'inboxBox', find: /\[\.\.\.([\w$]+),\{key:"inbox",[^\]]*?\}\]/g, replace: '[...$1]' },
+  { label: 'moneyHeadline', find: 'Everything you have', replace: 'Probe control' },
+];
+const proof = {};
 
 const GAMES = [
   { path: '/nfl-my-career', key: 'nfl-my-career-save-v1', name: 'NFL', ring: 'ring' },
@@ -34,14 +55,18 @@ const GAMES = [
   { path: '/nhl-my-career', key: 'nhl-my-career-save-v1', name: 'NHL', ring: 'Cup' },
 ];
 
-/* Each box, and something that only appears once that box is open. */
+/* Each box, and something that only appears once that box is open. The
+   Inbox is empty on a fresh draft ("No texts yet"), and a row carries
+   data-inbox-row if a sport ever sends one on draft night. */
 const BOXES = [
   ['My Player', /overall/i],
-  ['The Bank', /Net worth/i],
+  ['The Bank', /Everything you have/i],
   ['Career Log', /No seasons on the books|\d{4}/],
   ['Trophy Case', /individual|Nothing on the shelf/i],
   ['News', /Quiet week|headline|·/i],
+  ['Inbox', /No texts yet/i, '[data-inbox-row]'],
 ];
+const N = BOXES.length;
 
 const tile = (page, word) =>
   page.locator('button:has(div.uppercase)').filter({ hasText: new RegExp(word, 'i') }).first();
@@ -51,6 +76,7 @@ const browser = await chromium.launch();
 for (const game of GAMES) {
   console.log(`${game.name} My Career`);
   const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+  if (CONTROL) await installServedCodeControl(ctx, REVERT, proof);
   const page = await ctx.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
@@ -87,10 +113,10 @@ for (const game of GAMES) {
   await page.waitForTimeout(1300);
 
   const boxes = page.locator('button:has(div.uppercase)');
-  say(await boxes.count() === 5, `${game.name}: the hub opens on five boxes (saw ${await boxes.count()})`);
+  say(await boxes.count() === N, `${game.name}: the hub opens on ${N} boxes (saw ${await boxes.count()})`, true);
   const hubText = (await page.locator('body').innerText()).toLowerCase();
   for (const [word] of BOXES) {
-    say(hubText.includes(word.toLowerCase()), `${game.name}: the hub names "${word}"`);
+    say(hubText.includes(word.toLowerCase()), `${game.name}: the hub names "${word}"`, word === 'Inbox');
   }
 
   /* The reload regression, stated as its own check: three seasons on the
@@ -109,18 +135,24 @@ for (const game of GAMES) {
     document.documentElement.scrollWidth - document.documentElement.clientWidth);
   say(overflow <= 2, `${game.name}: the hub fits the phone (${overflow}px of overflow)`);
 
-  /* Every box opens what it names and the way back works. */
-  for (const [word, marker] of BOXES) {
+  /* Every box opens what it names and the way back works. A box that is
+     not on the hub fails its check here rather than timing out the click. */
+  for (const [word, marker, rowSel] of BOXES) {
+    if (!(await tile(page, word).count())) {
+      say(false, `${game.name}: "${word}" opened the screen it names (no such box on the hub)`, word === 'Inbox');
+      continue;
+    }
     await tile(page, word).click();
     await page.waitForTimeout(450);
     const open = await page.locator('body').innerText();
-    say(marker.test(open), `${game.name}: "${word}" opened the screen it names`);
+    const opened = marker.test(open) || (rowSel ? (await page.locator(rowSel).count()) > 0 : false);
+    say(opened, `${game.name}: "${word}" opened the screen it names`, word === 'The Bank');
     say(await page.locator('button:has(div.uppercase)').count() === 0, `${game.name}: opening "${word}" replaced the grid`);
     const back = page.locator('button:has-text("Hub")');
     say(await back.count() === 1, `${game.name}: "${word}" has a way back`);
     await back.first().click();
     await page.waitForTimeout(400);
-    say(await page.locator('button:has(div.uppercase)').count() === 5, `${game.name}: back returned to all five boxes`);
+    say(await page.locator('button:has(div.uppercase)').count() === N, `${game.name}: back returned to all ${N} boxes`, true);
   }
 
   /* The trophy case, read off the screen against the history written above. */
@@ -142,9 +174,9 @@ for (const game of GAMES) {
 }
 
 await browser.close();
-console.log('');
-if (failures > 0) {
-  console.error(`playCareerHub: ${failures} failure${failures === 1 ? '' : 's'}`);
-  process.exit(1);
-}
+/* Per game under the control: the box count, the hub naming the Inbox, the
+   Inbox box itself, the Bank's headline, and the way back from the five
+   boxes that are still there. */
+const code = verdict('playCareerHub', CONTROL ? proof : null, { minGuarded: GAMES.length * 9 });
+if (code || CONTROL) process.exit(code);
 console.log('playCareerHub: green. Four career games on live boxes, and every award on the screen has a year on it.');

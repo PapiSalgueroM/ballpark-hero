@@ -516,7 +516,7 @@ const WorldXi = () => {
                   {suggestions.map(p => {
                     return (
                       <button
-                        key={p.name}
+                        key={`${p.name}|${p.club}`}
                         onClick={() => pick(p)}
                         className="w-full flex items-center gap-2 px-3 py-2.5 text-left bg-background hover:bg-accent transition-colors border-b border-border/50 last:border-b-0"
                       >

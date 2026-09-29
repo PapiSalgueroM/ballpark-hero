@@ -56,7 +56,7 @@
          KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
          scripts/simSchema.mjs parses this block and compares it against that
          export, so the two cannot drift apart quietly. -->
-    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"UFC Guesser","item":"https://douknowball.com/ufc"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What does the pound for pound column compare?","acceptedAnswer":{"@type":"Answer","text":"Each fighter's highest career pound for pound ranking. Within 2 spots shows yellow, and the arrow points toward the mystery fighter's rank."}},{"@type":"Question","name":"Are women fighters in the pool?","acceptedAnswer":{"@type":"Answer","text":"Yes. Amanda Nunes is in there, so don't assume the answer is a man."}},{"@type":"Question","name":"If I close the tab mid-puzzle, do I lose my guesses?","acceptedAnswer":{"@type":"Answer","text":"No. Progress is stored on your device for the day; the puzzle resets at midnight Eastern."}},{"@type":"Question","name":"Is UFC Guesser free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. UFC Guesser is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"UFC Guesser: Guess the MMA Fighter Game | DoUKnowBall","description":"Eight guesses to name a mystery UFC fighter. Every guess lights up green, yellow or red with arrows on each stat. Deduction, not luck. Free MMA trivia game.","url":"https://douknowball.com/ufc","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"UFC Guesser","item":"https://douknowball.com/ufc"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"How is a fighter's age worked out?","acceptedAnswer":{"@type":"Answer","text":"From their date of birth, on the day you play, so it is always their age today. Years active runs from their first UFC fight to their latest one."}},{"@type":"Question","name":"Are women fighters in the pool?","acceptedAnswer":{"@type":"Answer","text":"Yes. Amanda Nunes is in there, so don't assume the answer is a man."}},{"@type":"Question","name":"If I close the tab mid-puzzle, do I lose my guesses?","acceptedAnswer":{"@type":"Answer","text":"No. Progress is stored on your device for the day; the puzzle resets at midnight Eastern."}},{"@type":"Question","name":"Is UFC Guesser free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. UFC Guesser is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"UFC Guesser: Guess the MMA Fighter Game | DoUKnowBall","description":"Eight guesses to name a mystery UFC fighter. Every guess lights up green, yellow or red with arrows on each stat. Deduction, not luck. Free MMA trivia game.","url":"https://douknowball.com/ufc","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
     
     
     <!-- Round 286: the site's own social image, on its own domain. The old
@@ -225,7 +225,7 @@
 <h3>Submitting your opening probe</h3>
 <li>Search any fighter and submit them as your opening probe.</li>
 <h3>Reading every stat in the row</h3>
-<li>Read the row: years active, weight class, nationality, age, wins, losses, draws, knockouts, submissions and peak pound for pound rank.</li>
+<li>Read the row: years active, weight class, nationality, age, wins, losses, draws, knockouts and submissions.</li>
 <h3>Following the arrows higher or lower</h3>
 <li>Follow the arrows on numeric stats to aim your next guess higher or lower.</li>
 <h3>Closing the net within eight guesses</h3>
@@ -234,7 +234,7 @@
 <h3>Eight guesses in both modes</h3>
 <li>8 guesses maximum, in both Daily and Unlimited.</li>
 <h3>What a yellow, close call means</h3>
-<li>Yellow means close: one weight class off, same continent, within 2 years on age or career length, 3 wins, 2 losses, 1 draw, 3 knockouts, 2 submissions, or 2 pound for pound spots.</li>
+<li>Yellow means close: one weight class off, same continent, within 2 years on age or career length, 3 wins, 2 losses, 1 draw, 3 knockouts or 2 submissions.</li>
 <h3>Saving progress until midnight</h3>
 <li>Daily progress is saved through the day and a new fighter arrives at midnight Eastern.</li>
 <h3>Spanning all nine weight divisions</h3>
@@ -253,9 +253,9 @@
 <li>The weight class arrow is the fastest filter in the game; two guesses can pin the division.</li>
 <h3>Reading a red loss cell pointing to zero</h3>
 <li>A red loss cell pointing down toward zero screams elite champion.</li>
-<h2>UFC Guesser FAQ: stats, the pound for pound column and more</h2>
-<h3>What does the pound for pound column compare?</h3>
-<p>Each fighter's highest career pound for pound ranking. Within 2 spots shows yellow, and the arrow points toward the mystery fighter's rank.</p>
+<h2>UFC Guesser FAQ: stats, ages, the fighter pool and more</h2>
+<h3>How is a fighter's age worked out?</h3>
+<p>From their date of birth, on the day you play, so it is always their age today. Years active runs from their first UFC fight to their latest one.</p>
 <h3>Are women fighters in the pool?</h3>
 <p>Yes. Amanda Nunes is in there, so don't assume the answer is a man.</p>
 <h3>If I close the tab mid-puzzle, do I lose my guesses?</h3>

@@ -5,6 +5,8 @@ import { CAPTAIN_MIN_AGE, CAPTAIN_MIN_RATING } from '@/lib/captaincy';
    importing nothing, so the knockout ladder and the leg count are read rather
    than kept as a second hardcoded copy here. */
 import { periodFor, UCL_AWAY_GOALS } from '@/lib/uclFormatHistory';
+/* Round 670 review: the tie rule Club Manager reads its ties by. Imports nothing. */
+import { uclTieOutcome } from '@/lib/uclTieRule';
 import {
   getEraStars, getEraTopClubs, getEraLeagueClubs, getEraUclOpponents,
   getEraRivalName, adjustClubsForYear, getExtraEvents, rollSeasonInjury,
@@ -285,6 +287,16 @@ export interface UCLKnockoutMatch {
   aggAgainst?: number;
   /** How a level tie was settled. */
   decidedBy?: 'aggregate' | 'awayGoals' | 'extraTime' | 'penalties';
+  /** Round 670 review: extra time was played on this deciding leg, and its
+   *  goals are in goalsFor, goalsAgainst and the aggregate. Set with
+   *  'extraTime' and 'penalties', and with 'awayGoals' when an away goal in
+   *  extra time settled it. Absent on every result from before. */
+  afterExtraTime?: boolean;
+  /** Round 670 polish: the goals of extra time alone, already counted in
+   *  goalsFor and goalsAgainst, set with afterExtraTime. Taken away they give
+   *  the score at 90, which is what decided whether extra time was due. */
+  etFor?: number;
+  etAgainst?: number;
   pensFor?: number;
   pensAgainst?: number;
 }
@@ -3635,7 +3647,12 @@ function generateSeasonStats(state: CareerState): SeasonRecord {
   // Diving reputation: +2 goals from penalties
   if (state.divingActive && !isGK) goals += 2;
   const assists = calcAssists(position, apps, overall, fx.assistMult);
-  const cleanSheets = isGK ? clamp(Math.round(apps * rand(20, 45) / 100 * fx.cleanSheetMult), 0, apps) : 0;
+  /* A clean sheet belongs to the whole back line, not the keeper alone. This
+     was gated on GK, so a defender's Clean Sheets tile read 0 for an entire
+     career (a player reported it on 2026-09-23). The back line now draws the
+     same share of the team's shutouts as the keeper does. */
+  const keepsSheets = isGK || position === "CB" || position === "LB" || position === "RB";
+  const cleanSheets = keepsSheets ? clamp(Math.round(apps * rand(20, 45) / 100 * fx.cleanSheetMult), 0, apps) : 0;
   const yellowCards = rand(0, Math.min(8, Math.round(apps * 0.25)));
   const redCards = Math.random() < 0.08 ? 1 : 0;
   const rating = calcSeasonRating(position, apps, goals, assists, cleanSheets, overall, currentClubTier, fx.ratingDelta);
@@ -4273,7 +4290,7 @@ export function advanceYouthYear(prev: CareerState, clubs: ClubData[]): CareerSt
   s.seasons = [...s.seasons, {
     year: lastYear + 1, age: s.age, club: s.currentClub, clubCountry: s.currentClubCountry, clubTier: s.currentClubTier,
     apps: rand(10, 25), goals: s.position === "GK" ? 0 : rand(0, 8), assists: rand(0, 5),
-    cleanSheets: s.position === "GK" ? rand(2, 8) : 0, yellowCards: rand(0, 4), redCards: 0, rating: 0,
+    cleanSheets: (s.position === "GK" || s.position === "CB" || s.position === "LB" || s.position === "RB") ? rand(2, 8) : 0, yellowCards: rand(0, 4), redCards: 0, rating: 0,
     leagueTitle: false, domesticCup: false, championsLeague: false, worldCup: false, ballonDor: false, ballonDorRank: null, type: "youth",
     intApps: 0, intGoals: 0, intAssists: 0, intRating: 0, tournament: null, tournamentResult: null,
   }];
@@ -5449,7 +5466,7 @@ export function dismissNewspaper(prev: CareerState): CareerState {
 }
 
 /* ─── All 24 Random Events ─── */
-function getAllEvents(state: CareerState): RandomEvent[] {
+export function getAllEvents(state: CareerState): RandomEvent[] {
   const pos = state.position;
   const isAttacker = ["ST","CAM","LW","RW"].includes(pos);
   return [
@@ -5967,8 +5984,6 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
 
     let aggFor = 0;
     let aggAgainst = 0;
-    let myAwayGoals = 0;
-    let theirAwayGoals = 0;
     const legRows: UCLKnockoutMatch[] = [];
 
     for (let leg = 1; leg <= legs; leg++) {
@@ -5982,8 +5997,6 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
       const ga = uclLegGoals(clamp(UCL_BASE_LAMBDA - edge - venue, 0.25, 3.4));
       aggFor += gf;
       aggAgainst += ga;
-      if (legs === 2 && !home) myAwayGoals += gf;
-      if (legs === 2 && home) theirAwayGoals += ga;
       const pg = legPlayerGoals(legs);
       totalPlayerGoals += pg;
       legRows.push({ opponent, round, leg, home, goalsFor: gf, goalsAgainst: ga, playerGoals: pg, won: false });
@@ -5993,27 +6006,44 @@ export function simulateUCL(state: CareerState, season: SeasonRecord): UCLResult
     decider.aggFor = aggFor;
     decider.aggAgainst = aggAgainst;
 
+    /* Round 670 review: the tie is read by the one rule Club Manager reads its
+       ties by (src/lib/uclTieRule.ts), so the two games cannot disagree. Leg
+       one is at my ground and leg two at theirs, so I am the tie's home side
+       and my leg two goals are my away goals; a one legged final is leg two
+       on its own, with no away goals rule. */
+    const awayRule = legs === 2 && awayGoalsApply;
+    const legOf = (row: UCLKnockoutMatch) => ({ homeGoals: row.goalsFor, awayGoals: row.goalsAgainst });
+    const tieAt90 = legs === 2 ? { leg1: legOf(legRows[0]), leg2: legOf(decider) } : { leg2: legOf(decider) };
+    const at90 = uclTieOutcome(tieAt90, awayRule);
+
     let through: boolean;
-    if (aggFor !== aggAgainst) {
-      through = aggFor > aggAgainst;
-      decider.decidedBy = 'aggregate';
-    } else if (legs === 2 && awayGoalsApply && myAwayGoals !== theirAwayGoals) {
-      through = myAwayGoals > theirAwayGoals;
-      decider.decidedBy = 'awayGoals';
+    if (at90.winner !== null) {
+      through = at90.winner === 'home';
+      decider.decidedBy = at90.byAwayGoals ? 'awayGoals' : 'aggregate';
     } else {
-      /* Extra time, then penalties. Away goals in extra time were part of the
-         rule while it applied, and are abolished with it. */
+      /* Extra time at the second leg's ground, then penalties. Its goals go
+         into leg two and the tie is read again by the season's rule, so in the
+         away goals seasons an away goal in extra time counts (a 1-1 extra time
+         puts the away side through, as it did for Paris Saint-Germain at
+         Chelsea in March 2015) and from 2021-22 it does not. Before this
+         review extra time was read on its own goals, so that 1-1 went to
+         penalties, while the comment here said away goals counted in it. */
       const etFor = uclLegGoals(clamp(0.34 + edge * 0.25, 0.05, 1.1));
       const etAgainst = uclLegGoals(clamp(0.34 - edge * 0.25, 0.05, 1.1));
       decider.goalsFor += etFor;
       decider.goalsAgainst += etAgainst;
+      decider.afterExtraTime = true;
+      decider.etFor = etFor;
+      decider.etAgainst = etAgainst;
       aggFor += etFor;
       aggAgainst += etAgainst;
       decider.aggFor = aggFor;
       decider.aggAgainst = aggAgainst;
-      if (etFor !== etAgainst) {
-        through = etFor > etAgainst;
-        decider.decidedBy = 'extraTime';
+      const tieAfterExtraTime = { ...tieAt90, leg2: legOf(decider) };
+      const afterEt = uclTieOutcome(tieAfterExtraTime, awayRule);
+      if (afterEt.winner !== null) {
+        through = afterEt.winner === 'home';
+        decider.decidedBy = afterEt.byAwayGoals ? 'awayGoals' : 'extraTime';
       } else {
         /* A shootout is close to a coin flip and only slightly weighted. */
         const pensFor = rand(2, 5);
@@ -6658,7 +6688,24 @@ export function retireFromInternational(prev: CareerState): CareerState {
 export function applyEventChoice(prev: CareerState, choiceIndex: number, clubs: ClubData[]): CareerState {
   const event = prev.pendingEvents[0];
   if (!event) return prev;
-  let s = event.choices[choiceIndex].apply({ ...prev });
+  /* Round 667. The page saves the career with JSON.stringify on every change
+     and a choice's apply is a function, which JSON drops without a word. A
+     save written while an event card was on screen came back with choices
+     that held only their label, the card drew as normal, and the tap on a
+     choice threw a TypeError in the click handler: the page painted "This
+     page broke" and the advance buttons were dead (a player reported it on
+     2026-09-25). The choice is resolved from the catalog by the event's id
+     first, and an event the catalog no longer carries is skipped rather than
+     crashed on. */
+  const fromCatalog = getAllEvents(prev).find(e => e.id === event.id);
+  const choice = fromCatalog?.choices[choiceIndex] ?? event.choices[choiceIndex];
+  if (typeof choice?.apply !== "function") {
+    const skipped: CareerState = { ...prev, lastEventId: event.id, pendingEvents: prev.pendingEvents.slice(1) };
+    if (skipped.pendingEvents.length > 0) { skipped.phase = "random_events"; return skipped; }
+    enterTransferWindow(skipped, clubs);
+    return skipped;
+  }
+  let s = choice.apply({ ...prev });
   s.lastEventId = event.id;
   s.pendingEvents = s.pendingEvents.slice(1);
   s.overall = calcOverall(s, s.position);

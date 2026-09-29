@@ -61,8 +61,8 @@ export default function FightPromoterBoard() {
     return (
       <div className="space-y-4">
         <div className="rounded-lg border bg-card p-4">
-          <label className="mb-1 block text-xs uppercase tracking-wide text-muted-foreground">Name the promotion</label>
-          <input value={name} onChange={e => setName(e.target.value)} maxLength={28}
+          <label htmlFor="fight-promoter-name" className="mb-1 block text-xs uppercase tracking-wide text-muted-foreground">Name the promotion</label>
+          <input id="fight-promoter-name" value={name} onChange={e => setName(e.target.value)} maxLength={28}
             placeholder="Leave it blank and it is Small Hall Promotions"
             className="w-full rounded-md border bg-background px-3 py-2 text-sm" />
           <p className="mt-2 text-[11px] leading-snug text-muted-foreground">
@@ -243,11 +243,11 @@ export default function FightPromoterBoard() {
           })}
         </div>
         <div className="mt-3">
-          <label className="flex items-center justify-between text-xs text-muted-foreground">
+          <label htmlFor="fight-promoter-price" className="flex items-center justify-between text-xs text-muted-foreground">
             <span className="flex items-center gap-1"><Ticket className="h-3 w-3" />Ticket price</span>
             <span className="tabular-nums">{priceK} a seat</span>
           </label>
-          <input type="range" min={60} max={600} step={10} value={priceK}
+          <input id="fight-promoter-price" type="range" min={60} max={600} step={10} value={priceK}
             onChange={e => setPriceK(Number(e.target.value))}
             className="mt-1 h-6 w-full" />
         </div>

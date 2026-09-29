@@ -1,4 +1,5 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
+import { isStaleChunkError, reloadOnceForStaleChunk } from '@/lib/freshBuild';
 
 /**
  * Round 544: one game falling over must not take the site with it.
@@ -53,6 +54,10 @@ export class RouteErrorBoundary extends Component<Props, State> {
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
+    /* Round 667: a stale chunk after a deploy is not a broken page, it is a
+       page one reload away from working. Reload once, through the same guard
+       freshBuild uses, before painting the boundary. */
+    if (isStaleChunkError(error) && reloadOnceForStaleChunk()) { this.setState({ failed: false }); return; }
     /* Console only. No network call: a crash reporter here would be one more
        thing that can fail while something is already failing, and the report a
        bug button below gives the player a way to tell us in their own words. */

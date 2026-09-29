@@ -1,0 +1,191 @@
+{
+ "about": "Tennis Higher or Lower Grand Slam singles titles, Round 665. Each count is the number of rows in public.tennis_grand_slam_winners where the player is champion in a singles category, read on 2026-09-28. scripts/simHigherLowerFacts.mjs holds the shipped file to this record.",
+ "read": "2026-09-28",
+ "source": "public.tennis_grand_slam_winners",
+ "note": "The table records a champion under the name she used that year, so four players are split across maiden and married names and are summed here: Margaret Court (13 as Court, 11 as Smith), Helen Wills (9 as Wills, 5 as Moody, 5 as Wills Moody), Molla Mallory (4 as Bjurstedt, 4 as Mallory) and Margaret Osborne duPont (4 as Osborne, 2 as Osborne duPont). Every one of the 44 agreed with the file once merged: 0 values differing, 0 of 867 matchups inverted. Active players are through the last slam in the table: Alcaraz 7 (2026), Sinner 4 (2025), Swiatek 6 (2025), Sabalenka 4 (2025).",
+ "merges": {
+  "Margaret Court": "Margaret Court(13)+Margaret Smith(11)",
+  "Helen Wills": "Helen Wills(9)+Helen Moody(5)+Helen Wills Moody(5)",
+  "Margaret Osborne duPont": "Margaret Osborne(4)+Margaret Osborne duPont(2)"
+ },
+ "players": {
+  "Novak Djokovic": {
+   "points": 24,
+   "lastSeason": "2023"
+  },
+  "Margaret Court": {
+   "points": 24,
+   "lastSeason": "1973"
+  },
+  "Serena Williams": {
+   "points": 23,
+   "lastSeason": "2017"
+  },
+  "Rafael Nadal": {
+   "points": 22,
+   "lastSeason": "2022"
+  },
+  "Steffi Graf": {
+   "points": 22,
+   "lastSeason": "1999"
+  },
+  "Roger Federer": {
+   "points": 20,
+   "lastSeason": "2018"
+  },
+  "Helen Wills": {
+   "points": 19,
+   "lastSeason": "1938"
+  },
+  "Chris Evert": {
+   "points": 18,
+   "lastSeason": "1986"
+  },
+  "Martina Navratilova": {
+   "points": 18,
+   "lastSeason": "1990"
+  },
+  "Pete Sampras": {
+   "points": 14,
+   "lastSeason": "2002"
+  },
+  "Roy Emerson": {
+   "points": 12,
+   "lastSeason": "1967"
+  },
+  "Billie Jean King": {
+   "points": 12,
+   "lastSeason": "1975"
+  },
+  "Björn Borg": {
+   "points": 11,
+   "lastSeason": "1981"
+  },
+  "Rod Laver": {
+   "points": 11,
+   "lastSeason": "1969"
+  },
+  "Bill Tilden": {
+   "points": 10,
+   "lastSeason": "1930"
+  },
+  "Monica Seles": {
+   "points": 9,
+   "lastSeason": "1996"
+  },
+  "Maureen Connolly": {
+   "points": 9,
+   "lastSeason": "1954"
+  },
+  "Andre Agassi": {
+   "points": 8,
+   "lastSeason": "2003"
+  },
+  "Jimmy Connors": {
+   "points": 8,
+   "lastSeason": "1983"
+  },
+  "Ivan Lendl": {
+   "points": 8,
+   "lastSeason": "1990"
+  },
+  "Fred Perry": {
+   "points": 8,
+   "lastSeason": "1936"
+  },
+  "Ken Rosewall": {
+   "points": 8,
+   "lastSeason": "1972"
+  },
+  "Carlos Alcaraz": {
+   "points": 7,
+   "lastSeason": "2026"
+  },
+  "John McEnroe": {
+   "points": 7,
+   "lastSeason": "1984"
+  },
+  "John Newcombe": {
+   "points": 7,
+   "lastSeason": "1975"
+  },
+  "Mats Wilander": {
+   "points": 7,
+   "lastSeason": "1988"
+  },
+  "René Lacoste": {
+   "points": 7,
+   "lastSeason": "1929"
+  },
+  "Justine Henin": {
+   "points": 7,
+   "lastSeason": "2007"
+  },
+  "Venus Williams": {
+   "points": 7,
+   "lastSeason": "2008"
+  },
+  "Maria Bueno": {
+   "points": 7,
+   "lastSeason": "1966"
+  },
+  "Boris Becker": {
+   "points": 6,
+   "lastSeason": "1996"
+  },
+  "Stefan Edberg": {
+   "points": 6,
+   "lastSeason": "1992"
+  },
+  "Don Budge": {
+   "points": 6,
+   "lastSeason": "1938"
+  },
+  "Jack Crawford": {
+   "points": 6,
+   "lastSeason": "1935"
+  },
+  "Iga Świątek": {
+   "points": 6,
+   "lastSeason": "2025"
+  },
+  "Doris Hart": {
+   "points": 6,
+   "lastSeason": "1955"
+  },
+  "Louise Brough": {
+   "points": 6,
+   "lastSeason": "1955"
+  },
+  "Margaret Osborne duPont": {
+   "points": 6,
+   "lastSeason": "1950"
+  },
+  "Martina Hingis": {
+   "points": 5,
+   "lastSeason": "1999"
+  },
+  "Maria Sharapova": {
+   "points": 5,
+   "lastSeason": "2014"
+  },
+  "Jannik Sinner": {
+   "points": 4,
+   "lastSeason": "2025"
+  },
+  "Aryna Sabalenka": {
+   "points": 4,
+   "lastSeason": "2025"
+  },
+  "Naomi Osaka": {
+   "points": 4,
+   "lastSeason": "2021"
+  },
+  "Kim Clijsters": {
+   "points": 4,
+   "lastSeason": "2011"
+  }
+ },
+ "heldFromFile": {},
+ "unverified": []
+}

@@ -437,8 +437,14 @@ export function buildShirtNumberQuestion(
   if (distractors.length < 3) return null;
 
   const options = shuffleWithRng([correct.kit_number, ...distractors], rng).map(String);
+  // Round 661: this used to ask what the player "wears", in the present tense,
+  // over a table that is a snapshot and holds retired men as well as current
+  // ones. Every transfer window turned a batch of these into false questions,
+  // and a number Bobby Moore wore has never been a claim about today. Naming
+  // the club and asking what he HAS WORN there is the same question and it
+  // stays true after he leaves.
   return {
-    question: `What shirt number does ${correct.player_name} wear?`,
+    question: `What shirt number has ${correct.player_name} worn at ${correct.club}?`,
     options,
     correctIndex: options.indexOf(String(correct.kit_number)),
     difficulty,

@@ -14,15 +14,30 @@
  * playwright, and runs it only with --browser.)
  */
 import pw from './lib/playwrightLoader.mjs';
+import { ERA_CONTROL, assertDropControl, installDropControl, enterSquad, judgeDropControl } from './lib/eraDressingRoom.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 
 let failures = 0;
+const failed = [];
 const say = (ok, what) => {
   console.log((ok ? '  PASS  ' : '  FAIL  ') + what);
-  if (!ok) failures += 1;
+  if (!ok) { failures += 1; failed.push(what); }
 };
+
+/* Round 672: the men this walk claims, and the checks that claim them.
+   ERA_CONTROL=drop takes them out of the served era data and exactly these
+   checks must go red (see scripts/lib/eraDressingRoom.mjs). */
+const OWEN_CHECK = 'Michael Owen is at 2005 Newcastle (the window correction, visible in the UI)';
+const SHEARER_CHECK = 'Alan Shearer is in the squad';
+const DROP = ['Michael Owen', 'Alan Shearer'];
+const tally = { swaps: 0 };
+const stillNamed = new Set();
+if (ERA_CONTROL === 'drop') {
+  const why = await assertDropControl(BASE, DROP);
+  if (why) { console.error(`playEra2005 control: RED before it started. ${why}.`); process.exit(1); }
+}
 
 const browser = await chromium.launch();
 
@@ -66,6 +81,7 @@ const browser = await chromium.launch();
 /* ---------- Walk two: England, 2005 vocabulary, and Owen's Newcastle ---------- */
 {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  if (ERA_CONTROL === 'drop') await installDropControl(page, DROP, tally);
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
   await page.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
@@ -99,15 +115,16 @@ const browser = await chromium.launch();
   await page.waitForTimeout(500);
   const essential = page.locator('button:has-text("Essential only")');
   if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
-  await page.locator('text=Take the job').click();
-  await page.waitForTimeout(2000);
-  const body = await page.locator('body').textContent();
-  say(/2005-06/.test(body ?? ''), 'the career header says 2005-06');
-  const squadTab = page.locator('text=Squad').first();
-  if (await squadTab.count()) { await squadTab.click(); await page.waitForTimeout(900); }
+  /* Round 672: through the dugout step (Round 303) to the Squad tab, and the
+     squad claims read off that tab's own panel rather than the whole page,
+     whose guide copy names players of its own. See scripts/lib/eraDressingRoom. */
+  const room = await enterSquad(page);
+  say(/2005-06 · Season 1/.test(room.hub), 'the career header says 2005-06');
+  say(room.listed, 'the Squad tab listed the squad');
+  say(/Michael Owen/.test(room.squad), OWEN_CHECK);
+  say(/Alan Shearer/.test(room.squad), SHEARER_CHECK);
   const body2 = await page.locator('body').textContent();
-  say(/Michael Owen/.test(body2 ?? ''), 'Michael Owen is at 2005 Newcastle (the window correction, visible in the UI)');
-  say(/Shearer/.test(body2 ?? ''), 'Alan Shearer is in the squad');
+  for (const n of DROP) if ((body2 ?? '').includes(n)) stillNamed.add(n);
   say(!/Haaland/.test(body2 ?? ''), 'no 2026 player leaked into 2005');
   const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e));
   say(pageErrors.length === 0, `no real page errors on the England walk (${pageErrors.length ? pageErrors[0] : 'clean'})`);
@@ -116,6 +133,7 @@ const browser = await chromium.launch();
 
 await browser.close();
 console.log('');
+if (ERA_CONTROL === 'drop') process.exit(judgeDropControl('playEra2005', failed, [OWEN_CHECK, SHEARER_CHECK], tally, [...stillNamed]));
 if (failures > 0) {
   console.error(`playEra2005: ${failures} failure${failures === 1 ? '' : 's'}`);
   process.exit(1);

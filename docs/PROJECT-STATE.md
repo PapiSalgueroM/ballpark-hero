@@ -1,5 +1,650 @@
 # Project state
 
+## LIVE 2026-09-29: Release F (660, 661, 668, 669 code, 670, 672), main `add1c6b0`
+
+Assembled in the gate clone's `release-f` worktree, pushed to main as a fast forward from `ef16139d`.
+**douknowball.com is serving it:** deployment `fe10102e-f745-4ee6-a424-924680461225`, called only after
+`get_project` showed `latest_commit_sha` `add1c6b0`; the live entry moved from `index-BdV50HkD.js` to
+`index-_2k7DL7K.js`. Proof by content: `/whats-new` carries the extra time, trivia and Who Am I lines,
+and `/hof-or-bust` says "our call on him, whether he's really in his sport's Hall of Fame" with "the
+official verdict" gone. Before and after screenshots were sent to the owner.
+
+- **660, the sports facts.** Every shown fact in UFC Guesser, Combat Chain, Guess the F1 Driver, Guess
+  the Constructor, Perfect Lineup F1, The Medal Games and the golf games stands on two sources on two
+  organisations, recorded in `scripts/data/sportsFactsVerified2026-09.json` and held by
+  `simSportsFacts` (36 controls) and `simUfcFacts`. Three adversarial reviews sent it back before it
+  shipped, among them Bearman called the youngest Briton (Lindblad is), Soviet athletes drawn under the
+  modern Russian flag, four UFC divisions a majority vote took from ufc.com, and a fold script of mine
+  that dropped corrections a skeptic had upheld. Round 699 is reserved for the fence hardening left.
+- **661, the trivia games.** Hall of Fame or Bust, Guess the Year and Score Predictor on a two source
+  record (`simTriviaFacts`, 17 controls); the reveal says our call and the real induction record;
+  Michael Owen is in England's football Hall of Fame; every Guess the Year clue fits only its year;
+  the List Quiz Champions League top scorers take every joint scorer and 2025-26 (migration applied
+  2026-09-29: 168 rows).
+- **668, Who Am I namesakes.** Two people with one name are two answers, each line describes the man
+  shown, ages say which list they come from (`simWhoAmINamesakes`, 20 controls). The "Pepe (dup)" row
+  is deleted (migration applied 2026-09-29).
+- **670, Club Manager extra time** before penalties in every level knockout, with the away goals eras
+  right, and Soccer Career's Champions League on the same rule (`simExtraTime`).
+- **672, the browser debt.** The 19 browser harnesses red on main: 16 were stale checks (each fixed with
+  a control), 3 were real (light mode and contrast fixes, and the sport hub copy moved out of the
+  shared bundle, 14.6K lighter on every route), and one was load.
+- **669's code is live; its data is not yet.** The migration and the `players.ts` re-bake go in at
+  00:00 America/New_York on 2026-09-30, because the rows move Footle's daily answer from the moment
+  they land. Until then `simWorldXiDefensiveMids` is red on live by design.
+- **Reports resolved:** Who Am I (2026-09-26). World XI (2026-09-21) closes when 669's rows land.
+
+**Gates.** tsc 0. `build:seo` exit 0: 169 routes, 0 failed, 5 pages re-dated. Full node and browser suite
+on `2f30125c`: 409 of 415 green. The six: `simWorldXiDefensiveMids` (by design, above), `sweepWeight`
+(Club Manager 621K against 620K after 670's extra time; the budget is 622 with the measured reason
+written in, and the seoMeta split the harness names is the payback), `simLeaderboardCache` and
+`playBootShift` (green alone, twice), `simMobileChrome` (page load timeouts at a different route each
+run, green alone), and `simSetPiecePresentation` (the runner's EMPTY heuristic; the harness prints its
+own PASS, same on main).
+
+**The points economy** is not in this release. Its six rounds merged and failed three reviews as a
+whole, so a design panel wrote one spec, `docs/design/POINTS-ECONOMY-V2.md` on `points-economy`,
+Rounds 673 to 698. Round 673 (lock the doors) is built and HELD, unapplied: a per save bound cannot
+bound a total that adds raw scores from games five orders of magnitude apart, so it ships with the one
+scale rounds. Rounds 674 and 678 are being built.
+
+## LIVE 2026-09-28: Release E (662 to 667), main `cf18c92a`
+
+Assembled and gated by the desktop Claude lane in the CRLF gate clone (`release-e`, then
+`release-e2` in a worktree of it for the final fixes), pushed to main as a fast forward from
+`22bc0f7e`. **douknowball.com is serving it:** deployment `3c8e3e1f-0a61-449a-8b21-de3c6fa35a20`,
+called only after `get_project` showed `latest_commit_sha` `cf18c92a`. The live entry moved from
+`index-DLcJd_J8.js` to `index-BdV50HkD.js` (Lovable's own build; the local build of the same commit
+names it `index-R4SzqZCL.js`, so a hash is not proof here). Proof by content: the live entry bundle
+carries `dukb-reloaded-stale-chunk` and the `vite:preloadError` listener, and `/perfect-season-nba`
+serves the new 82-0 line with the old one gone. Before and after screenshots of the NHL card and
+the guide line were sent to the owner.
+
+- **662 to 666, the Higher or Lower family tells the truth.** NHL (26 values, 52 of 903 matchups
+  had been inverted, now 0), NBA (11 values), and the MLB, NFL and tennis records, all held to
+  their source tables by one shared fence (`scripts/lib/higherLowerFence.mjs`, driven by
+  `simHigherLowerFacts`). Every card says what season its total is through. College football is
+  documented open (its table is missing 33 quarterbacks).
+- **667, the player reports of 2026-09-21 to 27.** Defenders keep clean sheets in Soccer Career; a
+  tab left open across a deploy reloads once on a stale chunk instead of painting "This page
+  broke" (the likely cause of both crash reports), and stands down under the prerenderer; an event
+  card survives a reload (JSON had been dropping its choice functions); Diogo Jota is never dealt
+  as a current player (`src/data/notCurrentPlayers.ts`, one list for every pool); Alisson's
+  Internacional 2015 and 2016 are in the career data (migration applied, the fallback file
+  re-baked from the table byte for byte); the 82-0 guide line states the measured odds.
+- **Six player reports marked resolved** in `question_reports`: the two Soccer Career crashes, the
+  Club Manager tactic crash, the 82-0 report, Alisson, and clean sheets. Who Am I (2026-09-26) and
+  World XI (2026-09-21) stay open until Rounds 668 and 669 ship; the four idea reports stay open.
+
+**Gates.** tsc 0. `build:seo` exit 0 twice (169 routes, 0 failed; the final build re-dated one
+page, Perfect Season NBA, whose text changed). Full node suite on `1ace60f7`: **340 of 345**. The
+five reds were all real and all fixed before the push: simCareerCleanSheets did not parse (a
+backslash lost on the way into the file, which also reddened simHarnessAnchors), the career
+fallback header still counted 3,608 rows, the search index predated the 82-0 edit, and
+simNoZeroFacts' own sweep did not apply the not current list (it does now, with a control,
+`deadlisted`, that puts Jota back and must go red). On the final tree: the five, the Round 667
+fences and every snapshot reader in CLAUDE.md, **25 of 25 green**.
+
+**Browser group: 46 of 65 green, and the 19 reds are main's, not this release's.** Measured, not
+assumed: `origin/main` was built in its own worktree and the same 19 harnesses run on both builds
+one after the other. 18 fail identically on both; `playGmPress` passes on both (it was a timeout
+under load in the full run); `playSeasonReveal` fails on both, at a different step each run (a
+timeout, three runs on each build). The 19 are debt nobody had recorded, because Release D ran only
+five browser harnesses:
+`playCareerHub` (the NFL and NBA hub shows six boxes, the harness expects five),
+`playCareerPress`, `playClubManager`, `playDealDesk` (a signing never lands in the squad),
+`playEra2005` and `playEra2015` (named real players missing from era squads), `playFlagshipLazy`
+and `playTycoonGearFit` (the harness needs a Linux temp path or an env var), `playFootballConnect4Failures`
+(two headings match), `playLightMode` and `sweepContrast` (contrast floors: the Trending chip at
+4.17, Club Manager's REAL DATA at 4.45, unlabelled text inputs on the three fight games),
+`playNationalities`, `playSeasonReveal`, `playStartingXi`, `playWc2026Reset`, `playWilderness`
+(timeouts or a save shape the harness doctors), `simMobileChrome` (the signed in bar), and
+`sweepWeight` (five routes 5K to 15K over their JavaScript budgets). **Round 672 should clear
+these**, each fixed or its harness corrected, with the reason written down.
+
+## POLISHED 2026-09-28, NOT ON MAIN: the Round 670 re-review's three minors (branch `r670-cm-extra-time`)
+
+The re-review of the fixes below said ship and left three minors. All three are fixed on the same
+branch, commits `b31e1c91` and `c8c78b2d`.
+- **The extra time banner says what is true.** On a second leg it said "Level after 90 minutes"
+  beside a scoreboard that often was not level (3-1 on the night after a 1-3 first leg). The
+  engine words it now (`extraTimeCall`, `levelAt90Words`): "Level after 90 minutes" on a one
+  legged tie, "Level 4-4 on aggregate" on a second leg, plus "and on away goals" in the eras that
+  had them. The viewer's banner and the report's timeline marker read the same words. A shootout
+  after extra time on a second leg says the aggregate is still level in the event line and on the
+  report card, and the bracket says "Level on aggregate after extra time". `simExtraTime` section
+  10 works the aggregate out from the bracket's first leg and holds all five, floored on second
+  legs not level on the night (142 to 171 a run over five samples, floor 60). Controls
+  `levelline`, `pensline`, `cardlevel` and `bracketlevel` each turn only section 10 red, and `noet`
+  now tolerates 10, which it empties. The banner itself is drawn in an effect react-dom/server
+  never runs, so a new test in `src/test/liveSimMotion.test.tsx` mounts the viewer on a second leg
+  level on aggregate and not on the night, control `LIVE_MOTION_CONTROL=banner`.
+- **Two stale comments**: the `liveStatsAt` doc and the viewer header say the final whistle (90,
+  or 120 after extra time) rather than 90.
+- **`simSoccerCareerUcl` section 7 can see extra time played on a tie already settled at 90.** A
+  decider row that went to extra time also carries its extra time goals now (`etFor`,
+  `etAgainst`, optional and additive, no change to the random stream). The harness takes them away
+  to get the score at 90, works the verdict out itself (aggregate, then away goals) and fails when
+  extra time was played on a tie not level at 90, or skipped on one that was. Floored on ties
+  settled on away goals at 90 (about 3,000 a run in 2015-16 and 2,650 in 1995-96, floor 1,000).
+  Control `etsettled` plays extra time on those ties and turns only section 7 red (3,045 and
+  2,734 failures on its run, several still reading as away goals after extra time, the case the
+  old check passed).
+- **Gates, on one frozen tree (signature taken before and after every batch).** tsc 0, exit code
+  read. `simExtraTime` green on its own seed and SIM_SEED 1 to 4, all fifteen controls firing on
+  exactly their sections. `simSoccerCareerUcl` green on its own seed and SIM_SEED 1 to 4,
+  `etsettled`, `etaway`, `coinflip` and `noagg` firing. `simLiveSimMotion` green (21 tests) and
+  all eleven controls failing only their own tests, on assertions. The six vitest files that
+  import a changed module: 57 tests green (one timed out at 12.8 s against its 5 s limit while
+  six harness lanes ran, and passed alone in 0.4 s). The 137 harnesses that read a changed file,
+  counting every one that walks all of `src` or `scripts`, in three lanes each with its own TEMP:
+  136 green (five after thin react and router shims in the worktree's `node_modules`, which need a
+  `package.json` with `"type": "commonjs"` because the repo's own says module), and
+  `simWritesAreSent` green on its static half with its runtime half needing a `dist`.
+  `simHarnessAnchors` and `simNoRivalNames` green. Not run, by instruction: `simPrerender`,
+  `simMobileChrome`, `simRevealScroll` and `simVictoryMoment` (a build and a browser), and the
+  browser check at 390 by 844. No migration.
+
+## FIXED 2026-09-28, NOT ON MAIN: the Round 670 review, every defect (branch `r670-cm-extra-time`)
+
+The adversarial review found one blocker, two majors and eight minors behind the green gates the
+section below reports. All are fixed on the same branch; this section corrects the one below.
+- **Blocker: `simGuideHeadings` was red**, so "79 green" below was wrong: the new guide sentence
+  had no frozen original. The sentence was rewritten (next point but three) and
+  `scripts/data/guideHeadingsFrozen.json` updated with it deliberately, the Round 640 way.
+- **Major: my side had no names from the 99th minute of extra time.** drawSegment wrote "never
+  leaves the pitch" as minute 99, and an injury in extra time took its man off at 99. It is
+  `Infinity` now. `simExtraTime` section 8 checks every event of mine past 90 names a man on my
+  pitch at that minute (about 3,700 to 4,500 events from the 99th minute a run), control `noname`.
+- **Major: section 4 had no control.** `noaet` reports a second leg won in extra time as regular.
+- **Possession** over a second period that ran to 120 was read off the 45 to 120 lambda sum, five
+  thirds of a half. `secondPeriodPossession` reads per half rates at the extra time draw and at
+  every change in it. Section 9: drawing extra time moves possession -0.029 to +0.038 points
+  further from 50 over five samples (the raw sum, control `possinflate`, +2.36), and the same
+  shape at 100 with nothing of mine changed leaves it exactly (control `possstale`). The momentum
+  tilt reads per ninety too (not fenced; it only shades the chart).
+- **The AI final is read.** Section 5 replays twelve final weeks my club was not in, 25 seeds each:
+  about 300 AI finals a run, 69 to 91 to extra time. Control `noaifinal` (only the one legged
+  branch back to pre 670) turns it red.
+- **Copy** in the guide, the help and What's New: the live match and the report say AET, the
+  bracket says the tie went to extra time, and in the away goals seasons a tie level on aggregate
+  but not on away goals is over at 90, with an away goal in extra time still counting.
+- **Soccer Career sibling fixed, one rule for both.** `uclTieOutcome` moved to
+  `src/lib/uclTieRule.ts` (Club Manager re-exports it) and Soccer Career's `simulateUCL` settles
+  every tie through it, extra time included, so a 1-1 extra time in an away goals season puts the
+  away side through, as PSG at Chelsea in March 2015. A decider row carries `afterExtraTime` and
+  the result card says "settled on away goals after extra time". `simSoccerCareerUcl` section 7
+  resettles every tie of 2015-16, 1995-96 and 2026-27 in its own arithmetic (103 to 128 such ties
+  per away goals season over four samples, none in 2026-27), control `etaway`.
+- **The 89 or 90 race.** The viewer asks once at 90 (`onStartExtraTime`, which the hook runs on
+  the latest save) and reads the answer off `live.et` on the next render, so it can no longer run
+  thirty empty minutes or skip extra time the save has. Two tests in
+  `src/test/liveSimMotion.test.tsx`, control `LIVE_MOTION_CONTROL=whistle` in `simLiveSimMotion`.
+- **Stale comments** (ET_DEFLATOR's measured ranges, `onSecondHalf`, `isExtraTimeDue`) and
+  **provenance**: every rule source now has its URL in the contract doc. The onefootball.com page
+  was Football Italia's own article, so calcioefinanza.it is the Coppa Italia's second host.
+- **Gates, on the committed tree.** tsc 0 (exit code read). `simExtraTime` green on its own seed
+  and SIM_SEED 1 to 4, all eleven controls firing on their own sections (noet tolerating 7, 8 and
+  9, which it empties). `simSoccerCareerUcl` green on four seeds, `etaway`, `coinflip` and `noagg`
+  firing. `simLiveSimMotion` green with `whistle` and its nine older controls firing, and
+  `simLiveMatch`'s five controls firing. The six vitest files that import a changed module: 56
+  tests green. The 116 harnesses that read a changed file, run in four lanes each with its own
+  TEMP: 115 green (five import `ROOT/node_modules/react` by path and were rerun with thin react
+  shims in the worktree), `simPrerender` not runnable without a `dist` (and `simFlagshipWeight`'s
+  section 3 skipped for the same reason). `simGuideHeadings`, `simSiteSearch`,
+  `simHarnessAnchors` and `simNoRivalNames` green.
+- **Not done, by instruction:** the browser check at 390 by 844, `simVictoryMoment`,
+  `simMobileChrome` and `simRevealScroll` (they need a build and a browser). No migration.
+
+## BUILT 2026-09-28, NOT ON MAIN: Round 670, Club Manager plays extra time (branch `r670-cm-extra-time`)
+
+Part B of the stoppage time contract, copied with its departures to
+`docs/design/round-670-extra-time-contract.md`. A Champions League match that settles its tie
+(the final, a one legged tie, a second leg) and is level when the ninety run out (on the night, or
+on the aggregate after away goals in the eras that had them) plays one thirty minute stretch,
+minutes 91 to 120, before penalties. The AI's ties play it too. The live viewer asks the engine at
+90 (`isExtraTimeDue`), draws it through `startExtraTime` and runs the clock on to 120 with an ET
+badge; the quick sim and the classic dressing room draw the same stretch at the whistle, by the
+same function (`simExtraTime` section 7 holds the two ways equal on 40 extra time matches). The
+report says (AET), carries an AET chip, a tie line on a second leg and twelve momentum buckets;
+the bracket says who won it in extra time. Save shape additive and optional, SAVE_VERSION
+unchanged.
+- **The rule, two source verified.** Before 2021-22 the away goals rule ran on through extra time
+  (uefa.com's 2021-06-24 abolition announcement, si.com 2018-05-26), from 2021-22 extra time goals
+  count like any other. Folding extra time into leg two and reading the tie again through
+  `uclTieOutcome` reproduces both.
+- **Domestic cups deliberately unchanged**, still straight to penalties: the real rule differs by
+  cup, round and season (the Coppa Italia skips extra time before its semi finals since 2024-25,
+  onefootball.com and football-italia.net), and seventeen cups over four eras were not verified in
+  this round. **Follow up: a per cup, per season extra time table, two source verified, then
+  `playsExtraTime` reads it.** The web search budget ran out mid verification, which is why it
+  stopped at the Champions League.
+- **Balance.** Every decider (mine and the AI's) draws at `ET_DEFLATOR` 0.965, solved from the
+  measured share of deciders level at 90 (0.104 to 0.123 over five samples). Expected goals per
+  decider move by -0.006 against a 0.04 tolerance, extra time without the deflator adds +0.098.
+- **Fence** `scripts/simExtraTime.mjs`, seven sections, six controls (noet, nodeflate, etleague,
+  noaiet, nolabel, livedraw), each firing on exactly its own section (noet tolerates section 7,
+  which it empties). About 100 seconds.
+- **Gates run.** tsc 0. `simExtraTime` green and all six controls firing. The four Club Manager
+  vitest files green. All 80 existing harnesses that read a changed file were run on the frozen
+  tree: 79 green, `simVictoryMoment` not runnable because it reads a built `dist` and no build was
+  allowed this round. `simLiveMatch`'s five controls and `simLiveSimMotion`'s nine still fire.
+  In a worktree, `simClubManagerSave`, `simActivityNotCompletion`, `simLiveSimMotion` and
+  `simClubManagerEraUcl` need `react`, `react-router-dom` and `vitest` under the worktree's own
+  `node_modules` (they hardcode `ROOT/node_modules`); thin re-exporting files did it, never a
+  junction. No build, no `runAllSims`, no browser harness (a release suite was running).
+- **Sibling checked, defect found, not fixed here.** Soccer Career's Round 546 extra time
+  (`simulateUCL` in `soccerCareerEngine.ts`) says away goals counted in extra time in the old
+  seasons, but decides extra time on its goals alone, so a 1-1 extra time in an away goals season
+  goes to penalties when the away side should be through. Flagged as its own task: lift
+  `uclTieOutcome` into a small shared module both engines use, rather than a second copy.
+- **Not done in this round:** Round A (stoppage time goals, the aggregate before and during a
+  second leg) is still to build and must move extra time to start at 90 plus the second half
+  board; the browser check at 390 by 844 was not run (a release suite was running on the
+  machine); the adversarial review the memory asks for on a rule change has not been run.
+
+## ROUND 669 FIXED AND POLISHED 2026-09-28: World XI defensive midfielders, branch `r669-worldxi-dm`, migration UNAPPLIED
+
+Not on main. The review found a blocker: the migration's second DO block closed with `end $;`, so
+everything after it, `commit;` included, sat inside one dollar quote and Postgres would have
+refused the file. Fixed, and the file was then **dry run on live twice** (once by the first fix
+pass, once again by the second rather than take it on trust) as `BEGIN; <body>; ROLLBACK;` through
+the Supabase MCP: no exception, 46 Defensive Midfield rows and 5496 rows in 2026 before and after.
+The record's `dryRun` carries the sha256 of the file it ran and, since the polish pass, the sha256
+of that file's statements (`codeSha256`, derived from the same blob). `simWorldXiDefensiveMids`
+goes red if a statement changes after the dry run; comments may change, which is how the header
+now carries the apply procedure below without voiding the dry run.
+
+- **What it writes:** 366 year-2026 Defensive Midfield rows (was 398), 4 club corrections and 1
+  age correction (Dendoncker) among the existing 46. 80 held, each with its reason: 20 because
+  FotMob's primary for them is a defender or a winger (defensive midfield rested on Transfermarkt
+  alone; they wait for a third host), 12 outside the value band, and the builder's 48.
+- **Value band:** Tukey's fence on ln(FotMob / Transfermarkt), 0.323 to 1.341 (quartiles 0.551 and
+  0.786, median 0.655, over the builder's 398). Was 0.222 to 1.994.
+- **Ages:** the table's convention, his age on 2026-01-01. Rodri (29) and Bissouma (29) are right on
+  that rule, as are Bennacer and Brozovic; Dendoncker's 31 becomes 30.
+- **Applying it is six steps, not one** (below): apply in the first minutes after 00:00
+  America/New_York, count, re-bake `src/data/players.ts`, run the named harnesses, commit that one
+  file, publish at an Eastern midnight. Footle's tiers are fixed size, so the rows also displace:
+  15 players leave its famous 300 (Gavi, Jobe Bellingham, Tah, Joelinton and more) and 103 leave
+  the insane 1200, the pool rule working on a table that finally has its defensive midfielders.
+- **Fence:** `simWorldXiDefensiveMids`, 4 sections, 40 controls and 4 positive controls.
+  `WXIDM_CONTROL=all` needs `WXIDM_PROJECT=1` until the migration is applied. The projection
+  projects the RECORD, never the SQL; section 1 proves the SQL stages exactly the record, and the
+  dry run proves it executes. Sections 2 to 4 hold the table to the record as of its check date
+  only (below).
+- **Bangladesh** is in `confederationGroups.ts` (AFC) and `FLAG_CODES`, ready for Hamza Choudhury,
+  whose row is one of the 20 held.
+- `simPrerender` section 8 needs a `build:seo` before it sees the new What's New line.
+
+### Round 669 apply procedure (the lead, in this order; the migration's header has the same steps)
+
+1. **Apply** `supabase/migrations/20260928_round_669_defensive_midfield_2026.sql` in the first
+   minutes after **00:00 America/New_York** (04:00 UTC until 2026-11-01, 05:00 UTC from then),
+   never at 00:00 UTC, which is 20:00 Eastern. Run the whole file, its own `begin` and `commit`
+   included, through the Supabase MCP's `execute_sql`, the tool the dry run used. It raises and
+   writes nothing unless every precondition holds. Why the hour matters: see "Footle when the rows
+   land" below.
+2. **Count** with `count(*)`, never the table list: 412 rows at `Defensive Midfield` in 2026
+   (46 + 366) and 5862 rows in 2026 (5496 + 366).
+3. **Re-bake** on the branch: `node scripts/bakePlayers.mjs`. The one baked file the new rows reach
+   through a gate is `src/data/players.ts` (the Footle fallback pool, also read by Squad Deal,
+   Club Manager, Perfect Lineup, Sports Bingo and Gauntlet Draft); `simPlayersPool` section 4
+   requires it to equal a fresh bake of the live table, so without this step it is red on every
+   branch, main included, because the database is shared. Measured on the stand in: 538 rows
+   become 553 (easy 158, hard 200, insane 195). 16 written men join because the pool's seed names
+   them: Wharton, Stiller and Hjulmand (easy); Ugarte, Berge, Tyler Adams, Youssouf Fofana and
+   Lavia (hard); Mangala, Pepelu, Amrabat, Adli, Cristante, Cajuste, Lerma and McGregor (insane).
+   **Genoa's Vitinha leaves, on purpose**: the seed name "Vitinha" now folds to two 2026 rows and
+   the bake skips an ambiguous seed name rather than guess which man it meant. The seed came from
+   the old hand typed file, which meant PSG's man; the bake only ever found Genoa's because PSG's
+   row was missing. 11 players change tier (Gonçalo Ramos, Igor Paixão and Ismaïla Sarr easy to
+   hard; Koopmeiners, Meret, Nketiah, Zhegrova, Di Gregorio, Maeda, Ederson and Nuno Tavares hard
+   to insane). No other row changes; the header's counts and its date (the bake day) move with it.
+4. **Run** each of these and read its closing line and its exit code, never an echo after it:
+   - `node_modules/.bin/tsc --noEmit -p tsconfig.app.json`
+   - `simPlayersPool`, then `PLAYERS_CONTROL=handedit` and `PLAYERS_CONTROL=agezero`
+   - `simWorldXiDefensiveMids` with no `WXIDM_PROJECT` (projection mode refuses once the rows are
+     live), then `WXIDM_CONTROL=all`
+   - the readers of `src/data/players.ts`: simFootleDaily, simFootleAtomicPool, simFootleLeagues,
+     simFootleKitNumbers, simSportsBingo, simGauntletDraft, simGauntletEngine, simDraftShowdown,
+     simManagerSpec, simManagers, simSearchDiscard, simCreateClub
+   - the other harnesses that name `player_market_values` (27 in all on 2026-09-28, three of them
+     above): simAdminAccess, simAlphabetSprint, simAnswerFromRecords, simDatabaseReadEfficiency,
+     simLineupPositions, simMarketYearScope, simMissingXiReach, simNationalPools, simNationalities,
+     simNoZeroFacts, simPlayerBingoPool, simPlayerSearchAccents, simRarityAgreement,
+     simRarityPoolRecovery, simRarityPools, simRebuildEconomy, simRosterAdjudication,
+     simSchemaNames, simSignThePlayerAuction, simSoccerConquest, simTransferOverlay,
+     simValidatePlayerRecords, simValidatorCache, simValueFreshness. Recount with
+     `grep -l player_market_values scripts/sim*.mjs` rather than trust this list.
+5. **Commit** exactly one generated file, `src/data/players.ts`, on this round's branch, and merge
+   the branch the same night. From step 1 until that merge, `simPlayersPool` is red on main and on
+   every other branch (the table moved and their `players.ts` did not), and a branch cut before the
+   merge stays red until it takes main.
+6. **Publish** the release that carries it at an Eastern midnight as well. Footle files a saved
+   board under its answer's place in `src/data/players.ts`, and the re-bake moves that place on
+   140 of the 366 days from 2026-09-28, so a mid-day publish throws those boards away for anyone
+   who reloads. The re-bake changes no daily answer itself (0 of 366).
+
+**Not in the procedure, on purpose.** Other bakes read `player_market_values` too
+(bakeClubManagerRosters through the dedup view, bakeClubSquads, bakeNationalPools, bakeRebuildSquads,
+bakeNationalities, the era bakes), but `simPlayersPool` is the only gate that compares a file baked
+from the 2026 rows with the live table (the other fresh bake checks read the career tables or the
+2005 to 2015 years), and the harnesses above that could be measured were green on the projected
+table with those files untouched. Re-baking Club Manager's rosters would put the written men at its
+clubs into its squads and let PSG's Vitinha displace Genoa's in the dedup view, which is a Club
+Manager data round of its own, not an apply step.
+`transfer_grade_pool` is a table materialised from the career tables and this one; it keeps its
+current moves until someone rebuilds it, which is the status quo, not a regression.
+
+### How the procedure was proved without touching the database
+
+A PostgREST stand in (scratch, not committed) replaced `fetch` for `player_market_values` and its
+dedup view, loaded into each script with `NODE_OPTIONS=--import` so child processes got it too. It
+serves the 2026 rows from a snapshot of the live 5496, either as they are or with exactly what the
+migration does: its 366 inserts read out of the SQL file (goals, assists and cards at the column
+default 0, read from `information_schema`; rank, matches and person_key null; ids above the live
+maximum), its 4 club updates and its 1 age update. A query that can reach other years merges the
+live table's other years with that snapshot; anything it cannot emulate is refused loudly, never
+answered from live. The only database access was anon REST reads and read only SQL
+(`information_schema`, `pg_trigger`, the view definitions, counts).
+
+Two sessions of the polish pass ran all of this. The second re-pulled the live 2026 rows first and
+found them identical to the snapshot row for row (5496 rows, 46 at Defensive Midfield, the
+migration still unapplied), then repeated every run below except the live snapshot batch of
+fourteen harnesses, which is the first session's. Both sessions' re-bakes are byte identical.
+
+- **Faithful.** On the live snapshot `bakePlayers` wrote a file byte identical to the committed
+  `src/data/players.ts`, and `simPlayersPool` was green (538 rows), as it is on the real table.
+  Footle's daily answer through it matched the real query on all 731 days measured.
+- **It reproduces the defect.** On the projected table with the committed file, `simPlayersPool`
+  is RED with exactly the re-review's three findings: Vitinha has 2 live 2026 rows, the header
+  date differs from a fresh bake, and the file has 566 lines against the bake's 581.
+- **The procedure fixes it.** `bakePlayers` on the projected table, then `simPlayersPool`: green,
+  553 rows, and both controls still fire (handedit reddens sections 3 and 4, agezero section 2).
+  `simWorldXiDefensiveMids` in default mode, which is what it runs once the rows are live, is
+  green on the projected table (30 of 30 named, 366 of 366 written rows, 412 CDMs in a pool of
+  5879), `WXIDM_CONTROL=all` is green there (40 controls, 4 positive), and `WXIDM_PROJECT=1`
+  refuses with exit 2, as it must once the rows are in the table.
+- **The named harnesses on the projected table, with the re-baked file in place**, each with its
+  own TEMP (the ones that call `node_modules/.bin/esbuild` by path ran as scratch copies pointed at
+  the main tree's binary, since a worktree has none, and were deleted after):
+  - green, with the projected rows actually served to them: simPlayersPool, simWorldXiDefensiveMids,
+    simFootleDaily, simFootleKitNumbers, simPlayerBingoPool, simNoZeroFacts, simLineupPositions,
+    simMissingXiReach, simPlayerSearchAccents, simAnswerFromRecords, simAdminAccess,
+    simTransferOverlay, simValidatePlayerRecords, simValidatorCache, simValueFreshness. The same
+    fourteen, other than simWorldXiDefensiveMids (red by design on today's table), are also green
+    on the stand in's live snapshot with the committed file, so its merging agrees with the table.
+    One read of simMissingXiReach's 1570, a 1998 to 2000 query the migration cannot reach, failed
+    at the network in both sessions (the stand in passes that year range to the live table); the
+    harness stayed green, as it is on the real table.
+  - green, reading the re-baked file or committed data and not the table at run time:
+    simFootleAtomicPool, simFootleLeagues, simSportsBingo, simGauntletDraft, simGauntletEngine,
+    simDraftShowdown, simManagerSpec, simManagers, simSearchDiscard, simCreateClub,
+    simAlphabetSprint (its saved season file), simDatabaseReadEfficiency, simMarketYearScope,
+    simNationalPools, simNationalities, simRarityPoolRecovery, simRebuildEconomy,
+    simRosterAdjudication, simSoccerConquest.
+  - not measurable on the stand in, so step 4 is their first run on the new rows: simRarityPools
+    and simRarityAgreement read the peak views and simSchemaNames probes every view's columns
+    (the migration changes no schema); the stand in refused those reads rather than answer them
+    from the unprojected table. REALDB simSignThePlayerAuction plays a committed snapshot, and its
+    page half calls the esbuild binary by path from `scripts/lib`, which a worktree lacks.
+- **Nothing generated from the stand in is committed.** `src/data/players.ts` was put back byte
+  for byte after the runs; the branch's copy is still the 538 row bake of 2026-09-14.
+
+### Footle when the rows land
+
+- **Which days move.** The day the rows land, from the moment they land, and every day after it.
+  Footle's answer is `dailyPool[dailyIndex(date, dailyPool.length)]` over the tier pool fetched
+  when the page loads, and the tiers are fixed size, so new rows reorder them. Measured over the
+  366 days from 2026-09-28: 344 answers change and 22 stay the same (2026-09-28 would go from
+  Mateo Retegui to Jorrel Hato, 2026-09-29 from Andrey Santos to Riccardo Calafiori, 2026-09-30
+  from Kiernan Dewsbury-Hall to Youri Tielemans). **No earlier day moves**: 350 of the 365 days
+  before would compute differently, but Footle never computes a past day again (no archive, no
+  yesterday reveal, the daily record keeps the score, streaks keep dates, and `useDailyPuzzle`
+  deletes older boards). Unlimited mode draws at random and has no schedule to move.
+- **Must the lead apply at 00:00 Eastern? Yes, in the first minutes after it.** A page that loaded
+  before the apply keeps its pool, but anyone who loads after it gets the new answer, and their
+  saved board for that day is matched by the answer's place in `src/data/players.ts`. Of the 344
+  moving days, 275 would throw that board away (a finished player gets a fresh board and can play
+  and score the day a second time) and 69 would keep it and show it against an answer it was never
+  played for, because neither answer is in the file and both sit at place 0. At Eastern midnight
+  the answer turns over anyway, so only someone who loaded between 00:00 and the apply can see
+  either. The same rule holds for publishing the re-baked file (step 6).
+
+### The fence no longer pins the 366 rows to 2026-09-28 forever
+
+`simWorldXiDefensiveMids` now reads the record as true on its `checkedOn` and no later. A row may
+differ from it only where a newer, sourced entry in the record's `laterChecks` says so: dated after
+`checkedOn`, from a round after 669, naming the row by the name and club the record wrote, the
+field it changes (`club`, `nationality` or `position`), the value the table now carries, and two
+sources on two different hosts (`transfermarkt.com` and `transfermarkt.de` are one). The newest
+valid entry per field wins and sections 2 to 4 read every row through it; the written rows and
+the SQL stay as the migration wrote them, so section 1 and the dry run are untouched by a later
+move. A row pooled at a club nothing sourced names fails as `moved`, for a country nothing sourced
+names as `differs`, at a position nothing sourced names as `cdm`, each with the instruction in the
+message; a broken entry fails as `laterentry` and explains nothing. An entry dated after the day
+the fence runs (UTC) is broken too, so the record cannot be pre-dated past a check nobody made.
+
+How a later data round moves one of these men, for example Ugarte to another club on 2026-10-15:
+update his 2026 row in the table as usual, leave his row under `write` and the migration alone,
+and add to `laterChecks` one entry `{"name": "Manuel Ugarte", "recordClub": "Manchester United",
+"field": "club", "to": "<the club as the table now spells it>", "checkedOn": "2026-10-15",
+"round": <that round>, "sources": [{"url": "https://www.transfermarkt.com/...", "says": "..."},
+{"url": "https://www.fotmob.com/...", "says": "..."}]}`. The record's `laterChecksRule` is the
+full rule.
+
+Controls, each run in memory on the control subject's row. The subject is the first named man no
+later check names, Ugarte today, so a round that moves Ugarte and records it moves the controls to
+the next man (Amrabat) rather than leaving them with no row to change; `noplayer` and `dupname`
+work the same way now, where before they were pinned to Ugarte at Manchester United. Negative
+`moved`, `recountry` and `reposition` (he is served at another club, for another country, at
+central midfield, with no entry: section 2 or 3 goes red); `latestale` (entry dated on the record's own day), `latefuture` (dated a year
+ahead), `lateonehost` (two sources on one host), `lateorphan` (an entry for a row the record does
+not write), each of which must be refused by its own rule and by no other; and positive
+`movedsourced`, `recountrysourced` and `repositionsourced` (the same three changes WITH a valid
+entry stay green, and must be seen to reach the check). On the record's own day no later check
+can be dated yet, so the controls that write one run the fence's clock as of the day after the
+record's check; only the clock moves, never a rule. That isolation caught a real hole in the
+first draft of these controls: dated the day after the record and run on the record's day, the
+host and orphan entries were also refused as future dated, so they would have stayed "behaved"
+with their own rule broken. The dry run check also gained a positive control, `commentonly`, and
+`dryrunstale` now changes a raise message rather than a comment. All 40 controls and 4 positive
+controls behave, with `WXIDM_PROJECT=1` on the live table today and in default mode on the
+projected stand in.
+
+**A later round was simulated end to end** (a scratch copy of the fence, deleted after): the fence
+dated the next day, Ugarte moved to another club in the table, and one valid `laterChecks` entry
+recording it. The fence was green with the entry applied, and `WXIDM_CONTROL=all` was green on
+it with the controls moved on to Amrabat. That run is what showed the first draft's positive
+controls counting every applied entry rather than their own, which a real entry would have
+broken; they now look for the entry they wrote.
+
+### Round 669 follow ups, not in this round
+
+World XI keys same year namesakes by (year, club) and section 4
+now fails on any name in the pool twice that is not declared; move it onto Round 668's shared
+`PlayerIdentityConfig` (person_key plus spelling) when 668 lands, because the name keyed readers
+(playerSearch, Player Bingo, Footle) still keep one Vitinha. 29 more of the 46 hand written rows
+carry an age that is not their age on 2026-01-01 (listed in the record's `ageFollowUp`), several
+values have drifted (Rodri stored at USD 90M, Transfermarkt EUR 55M today), Paredes says 'Boca
+Juniors' where 13 rows say 'CA Boca Juniors', Lewis-Skelly and Kricfalusi sit at LB and CB where
+Transfermarkt now has DM, and William Carvalho's club is unconfirmed. `WhatsNew.tsx` and the top of
+`WORKBOARD.md` will conflict textually with the Round 668 branch.
+
+Found by the polish pass, also not in it: the view `player_market_tracked` joins every row to a
+"final" value by player name alone, so once the rows land, every Vitinha row (Genoa's history
+included) carries PSG's 2026 value, where today PSG's history carries Genoa's; it wants the same
+person key as the rest. Club Manager's rosters (`bakeClubManagerRosters`, through the dedup view)
+would take the 366 men on a re-bake, a round of its own with its sims. And the stand in cannot
+model the six other views built on the table (`player_peak_values`, `player_position_peaks`,
+`player_nationality_peaks`, `game_player_pool`, `eligible_soccer_players`, `rebuild_clubs`), so
+the harnesses that read them get their first projected run live, after step 1.
+
+## ROUND 668 RE-REVIEW CLOSED 2026-09-28: its three minors, on `r668-whoami-namesakes`
+
+The re-review said ship, with three minors. All three are closed on the same branch. No migration.
+
+- **The namesake line describes the man shown.** The line under a shared name came from the latest row
+  of the stored spelling, and one spelling can be several men. Over every name the table stores more
+  than one way (45 names, 91 lines, all their rows read live), 8 lines described somebody else: "Cafu"
+  showed the Milan right-back (born about 1971) with the line "AA Portuguesa · Left Midfield · 2020",
+  a left midfielder born about 1997; the Bologna Ladislav Krejci carried a Hradec Kralove row two
+  birth years off; Cadu, Adaílton, Ramon, Ramón, Leandro and Andrezinho the same way. Now
+  `ownLatestRow` in `src/lib/playerSearch.ts` takes the shown row's own latest row: a later row counts
+  only when a person_key says it is him, or when both rows list an age that walks with the year
+  (`isSameMan`). A row that proves nothing is never used, so at worst the line is the shown row itself.
+  After: 0 of 91. `isSameMan` moved down into `playerSearch.ts` for this (whoAmI imports that file, so
+  it could not import back); `whoAmI.ts` and `playerBingo.ts` re-export it, so every caller and harness
+  is unchanged. Fence: simWhoAmINamesakes section 1 reads every row's name (141,916), folds them and
+  holds every such line, baseline the spelling's latest row (8 on another man, floor 4), plus the pool
+  check against his own latest row. Controls `hintspelling` (8 on another man) and `hintshown` (the
+  line from the shown row itself, 50 not his latest). vitest section 8 on the live Cafu and Cafú rows,
+  plus synthetic rows for a missing age and a person_key; two of its tests fail with the old rule.
+- **Two stale comments**: `GuessBreakdown.ageDiff` now says it compares both ages on the newest list,
+  and the `isSameMan` comment counts the table's four Rodris (a Barcelona centre-back aged 21 in 2006,
+  a Betis right midfielder aged 20 in 2007, a Huesca left midfielder aged 32 in 2009, the Manchester
+  City one), re-read live 2026-09-28.
+- **An unknown control name exits 2, never 1** (1 is a control that fired). Fixed in simNotCurrentPlayers,
+  simStaleChunk, simCareerCleanSheets (Round 667) and simHigherLowerFacts (Rounds 663 to 666), all carried
+  onto this branch by the r667 merge. simWhoAmINamesakes already exited 2. simWhoAmIAccuracy and
+  simNoZeroFacts exit 1 for an unknown name but 0 when a control fires, so a typo there can never read
+  as a firing; left alone.
+- Gates, on the final tree, TEMP and TMP per run under `pol-668`: tsc exit 0, 0 lines. vitest
+  playerSearchIdentity, listedAges, scoreShown, noDoubleRecord: 4 files, 125 tests, exit 0 (a first run
+  of the four together hit an unhandled "window is not defined" from useMlbHL's 2 second result timer
+  firing after noDoubleRecord's environment was torn down; noDoubleRecord alone twice and the four again
+  were clean, and no file this round touches is involved). simWhoAmINamesakes exit 0, and all 20
+  controls exit 1 with CONTROL FIRED, their own finding, their own section only. simNotCurrentPlayers,
+  simStaleChunk, simCareerCleanSheets and simHigherLowerFacts: plain exit 0, every control exit 1
+  (2 + 3 + 1 + 9), a bogus name exit 2. Green with their closing line: simWhoAmIAccuracy, simNoZeroFacts,
+  simPlayerBingoPool, simPlayerSearchAccents, simFetchRetry, simLineupPositions, simMarketYearScope,
+  simMissingXi, simMissingXiLayout, simMissingXiReach, simNbaLineupSearch, simRarityAgreement (363s),
+  simNoRivalNames, simHarnessAnchors, simInventedNames, simNoInventedQuotes, simNoInventedConduct,
+  simUnboundedSelects, simIdleTimers, simScoringCoverage, simEarlyReturnScope, simAccessibility,
+  simSiteSearch. Not run, as instructed: runAllSims, the build, build:seo, browser harnesses.
+- Seen, not fixed: 8 of the 91 lines name "Retired" or "Without Club" as the club (Denilson and
+  Denílson both say "Retired"). True to the table, and each is now the shown man's own row, but it does
+  not tell two men apart by club. The noDoubleRecord teardown race above is pre-existing.
+
+## ROUND 668 FIXED 2026-09-28: the review's seven defects, on `r668-whoami-namesakes`
+
+The adversarial review said fix first (1 major, 6 minor). All seven are fixed on the same branch, which
+now also carries `r667-player-reports` merged in (Release E ships it). Migration WRITTEN, NOT APPLIED.
+
+- **Merge with r667**: the carried pool leg skips a key already present AND a name on the not current
+  list; the first leg keeps a row only when it is not listed. simNotCurrentPlayers' carriedleg control
+  anchors on the merged line. The pool is now 600 with 7 on the 2025 list (Diogo Jota is out).
+- **Clue Auction (the major)**: the bracket clue and the reveal card both come from `clueAge` in
+  `src/lib/clueAuction.ts`, the listed age. The first build sold the bracket from the newest list age
+  and 2 of today's pool were sold a bracket that left out the age the card then showed (Giacomo
+  Raspadori, "24 (2025 list)", sold "25 to 28"); now 0. Fence section 5 plus synthetic cases that cross
+  a bracket edge.
+- **Who Am I age chip**: `ageReading` in `whoAmI.ts`. A green check only for the same listed number on
+  the same list; a tie across the two lists shows an = sign and a tooltip saying a year was added. 704
+  ordered pool pairs are such ties (the first build checked them green); 0 now read wrong. The rules
+  line says what the check and the = mean.
+- **Rodri**: the table's 18 "Rodri" rows are FOUR men by their listed ages and positions (year minus
+  age puts them at about 1985 for the centre-back at Barcelona and Almeria, about 1987 for the right
+  midfielder at Betis, Cartagena and Guadalajara, about 1977 for the left midfielder at Huesca, and
+  the Villarreal, Atletico, Man City and Barcelona Rodri), not three. Re-read 2026-09-28. What's New
+  and the comments corrected.
+- **Career Ladder** re-deduped the search by folded name. `ladderSuggestions` and `ladderGuessWins` in
+  `src/lib/careerLadder.ts` keep the search's identity: a namesake shows on its own line with club,
+  position and year, and never wins (every answer is a pool man). 4 of its 253 answers share a folded
+  name with another man in the table (Raúl, Ederson, Pepe, Cafu), and in all 4 the pool spells its man
+  the way the table does. Other callers checked: PlayerAutocomplete's mergeLocalNames keeps the search's
+  rows as they are, and Missing Eleven re-dedupes the NFL source, which has no identity, so nothing to
+  undo there.
+- **"(dup)" rows**: any name carrying "(dup)" is never offered by the search (`DUP_MARK` in
+  `playerSearch.ts`). The table holds 15 of them, all 2023, each the exact twin of a row under the plain
+  name. `supabase/migrations/20260928200000_round_668_pepe_dup_row.sql` removes only "Pepê (dup)" (id
+  156902), and only if it still duplicates a "Pepê" row with the same club, year, value, age, position
+  and nationality; otherwise it renames nothing and raises. Read only check on 2026-09-28: the twin is id
+  156887. The other 14 are hidden from the search only, and left for a cleanup round: readers that go
+  to the table directly across every year (Rarity Round's club pools, the club notable players clue in
+  `fetchSoccerClubNotablePlayers.ts`) can still carry a "(dup)" name until that round deletes all 15.
+  Re-read 2026-09-28 by the verify pass: 15 rows, every one with an exact twin (same club, year, value,
+  age, position, nationality), "Pepê (dup)" stored with U+00EA as the migration expects.
+  `player_market_values_dedup` (read by dealPlayers, packBattle, signThePlayer, playerStockMarket,
+  triviaQuestionBank and alphabetSprint in `src/lib/`) carries
+  all 15 as well. Its definition is not in the repo, so whoever applies the migration should check
+  whether it is a materialized view; if it is, the deleted row stays in it until it is refreshed.
+- **Controls**: the three uncontrolled checks now have one each (lostpick, nonote, nolistname), and every
+  new check has its own (dupshown, pagetie, cardraw, samecheck, bracketshift, ladderfold, ladderjudge).
+  A control must now also produce the finding it names, or it exits 3, and a control run that checked
+  nothing (a database timeout) exits 2, never 1. The vitest fixture comment is corrected (its 2015
+  Kashiwa row is a centre-forward sharing the Éderson spelling; the attacking midfielder sharing the
+  keeper's Ederson spelling is not in the fixture).
+- Seen, not fixed (out of scope): Missing XI still judges a pick by folded name, so a split namesake
+  (the Atalanta Éderson in a slot whose answer is the keeper) is accepted there. That is how it scored
+  before this round too; it is a name recall game and changing its judge is its own round.
+- **Fence under load**: a run of the ladderjudge control went red in section 1 too ("typing Kevin
+  offers nobody"), because a statement timeout on the search's name leg left it answering from the
+  prominence leg alone. Kevin sits 14th of the 200 rows that leg reads, so it was the database, not
+  the search. The fence now retries a server error or a dropped read 3 times, never memoises a
+  failure, and calls a run with a read that never answered NO VERDICT (exit 2 under a control).
+- Gates, all on the final tree, TEMP and TMP under `fix-668`: tsc exit 0, 0 lines. vitest listedAges,
+  playerSearchIdentity, scoreShown, noDoubleRecord: 4 files, 120 tests, exit 0. simWhoAmINamesakes
+  exit 0 (6 sections), and all 18 controls exit 1 with CONTROL FIRED, each reddening only its own
+  section; an unknown control exits 2. simNotCurrentPlayers green with both its controls firing
+  (carriedleg, unfold). simNoZeroFacts green (its sweep now applies the not current list, as the pool
+  does; red before that with Diogo Jota in the sweep). Green on the same src: simWhoAmIAccuracy,
+  simMarketYearScope, simFetchRetry, simPlayerBingoPool, simPlayerSearchAccents, simRarityAgreement,
+  simLineupPositions, simMissingXi, simMissingXiLayout, simMissingXiReach, simNbaLineupSearch,
+  simNationalityFlags, simAccessibility, simNoRivalNames, simEarlyReturnScope, simInventedNames,
+  simNoInventedConduct, simReportContext, simScoringCoverage, simIdleTimers, simSiteSearch,
+  simGuideHeadings. Not run, as instructed: runAllSims, the build, build:seo, browser harnesses.
+- **Verified again 2026-09-28, 15:45 to 16:00, before the push** (the first fix session committed but
+  never pushed; every gate rerun on the pushed tree, TEMP and TMP per run under `fix-668`): tsc exit 0,
+  0 lines; vitest 4 files, 120 tests, exit 0; simWhoAmINamesakes exit 0 (pool 600, 7 on the 2025
+  list; baselines 1,244 pooled mislights, 1,410 raw age misreads, 704 cross-list ties, 2 mis-sold
+  brackets; 15 "(dup)" rows, 0 offered); all 18 controls exit 1 with CONTROL FIRED and their own
+  finding, each only in its own section; an unknown control exits 2; simNotCurrentPlayers exit 0, and
+  carriedleg and unfold exit 1 on sections 2 and 3 only. simNoZeroFacts and the 22 harnesses listed
+  above rerun green, plus simAuthSave and simBuzzerBeater (they read every migration): 25 in all, each
+  exit 0 with its closing line.
+
+## ROUND 668 BUILT 2026-09-28: Who Am I tells namesakes apart and says how old its ages are
+
+Branch `r668-whoami-namesakes`, pushed, not on main, no migration. From the Who Am I "Wrong answer"
+report of 2026-09-26. Every number below measured against the live table on 2026-09-28.
+
+- **person_key is NULL on all 141,916 rows** of player_market_values, so no pool collision maps to
+  more than one person_key. It is declared as the identity that wins the day it is filled; until
+  then the only identity the table holds is the stored spelling (45 of 27,803 normalized names have
+  more than one, and all 3 in Who Am I's pool are different men: Éderson and Ederson, Ladislav
+  Krejčí and Krejci, Pepê, Pêpê and Pepe). Known untidy case: one man typed two ways (Michal and
+  Michał Karbownik) shows as two rows, each honest. One spelling shared by several men (four
+  Rodris, corrected by the fix above) stays one row, the table cannot tell them apart.
+- **Search**: `SOCCER_MARKET_VALUE_SOURCE.identity` and `dedupeAndRank` in `src/lib/playerSearch.ts`.
+  One row per person, a club, position and year line on any row whose name another row shares.
+  Sources with no identity give exactly the old results (vitest against a copy of the old dedupe). Every
+  soccer caller now offers Atalanta's Éderson (not true of Career Ladder until the fix above). Before: 1 of 600 pool players could not be won by
+  typing his name; after 0, and no namesake wins in his place.
+- **Club history**: a row must walk with the pool row's age (Round 385's `isSameMan`, moved into
+  `whoAmI.ts`, Player Bingo re-exports it; since the re-review it lives in `playerSearch.ts`). 1,248 pool pairs lit Past club link only through another
+  man's rows; after 0. Cost: 3 own rows with mistyped ages are dropped too (Keane Lewis-Potter's Hull
+  City, Diego Moreira's Benfica and Lyon), out of 159 club entries removed.
+- **Ages**: shown as listed, never worked out to today (no birth dates held), the older list named
+  ("29 (2025 list)"), the arrows compare both players on the newest list. The table's own yearly
+  rule: 3,914 of 4,013 players are exactly a year older from the 2025 list to the 2026 list. The 98
+  hand swept rows of 2026-08-29 sit a year above that rule for 68 of them, which puts the list's age
+  point around the turn of the year, a sampling estimate, not a printed date. Raw ages misread 1,570
+  cross-list pool pairs; after 0. Clue Auction shares the pool and got the same label (its bracket
+  clue disagreed with that label until the fix above).
+- Boot weight: 497 KiB before, 575 KiB after (11 requests either way, history under one letter
+  column aliases), budget 800.
+- Fences: `scripts/simWhoAmINamesakes.mjs` (4 sections, 8 controls, each reddens only its own) and
+  `src/test/playerSearchIdentity.test.ts`. Also green on this branch: tsc, simNoZeroFacts,
+  simWhoAmIAccuracy (its attrs now read history by person and ages on the newest list),
+  simPlayerBingoPool, simRarityAgreement, simMissingXiReach, simPlayerSearchAccents, simMarketYearScope
+  and the rest that read the changed files.
+- **Merge with r667**: both edit the pool legs of `fetchWhoAmIPool`. Keep both: the carried leg reads
+  `byKey.has(p.personKey) || isNotCurrentPlayer(p.name)`.
+- Seen, not fixed: Diogo Jota sits in the pool on his 2025 row (r667's not current list removes him;
+  fixed on this branch by the merge above).
+
 ## 2026-09-28: the points economy (645a, 645b, 645c, 646, 647, 648) assembled and gated on `points-economy`, NOT on main, nothing applied or deployed
 
 **Where it is.** Branch `points-economy`, code head `c4f289b6` (this entry is the commit after it),
@@ -695,6 +1340,142 @@ harness mid-run (clean), and the delta since the green 341 run, one JSX attribut
 snapshots, gated against the full snapshot reader list instead. **Do not run anything else while
 the suite runs.**
 
+## BUILT 2026-09-28: Round 661, the trivia banks tell the truth (branch `r661-trivia-facts`, not on main)
+
+Hall of Fame or Bust, Guess the Year and Score Predictor are hand typed files with no source behind
+any line, and a two pass check (researchers, then skeptics who reopened every URL) found them full
+of wrong facts. Hall of Fame or Bust had at least 18 of its 25 cards carrying a false line, several
+of them another player's totals (Jordan on Kobe's 33,643 points, Ortiz on Jeter's hits and Sosa's
+home runs, Howe with no Stanley Cups, Yakupov on half his goals). The first pass found 38 of Guess
+the Year's 300 clues pointing at the wrong year, fitting two puzzle years or plainly false (Brady's
+Tampa Bay title in 2020, a Chiefs three-peat the Eagles denied, Seattle's February 2026 Super Bowl
+in 2025, three Heisman Trophies a year early), and far more whose detail no page opened would
+state. Score Predictor dated the 1994 Milan final six days late and had nine road sides listed as
+the home team. **That first pass missed some; see the fix below before trusting any claim in this
+paragraph about clues fitting one year.**
+
+- **What changed.** Every line was either confirmed on two sources or rewritten to a fact two
+  sources state, in the same voice and length. Upheld corrections were applied; overturned ones
+  were not (the five "not inducted" verdict corrections would have put an empty string in the
+  verdict union and crashed the reveal). Active players carry floors (`43,000+`, `22,000+`,
+  `650+`). Guess the Year keeps six clues a year and its year order, so no daily moved; it now uses
+  the calendar year throughout, so a January Super Bowl or bowl game belongs to the new year. Score
+  Predictor puts the real home side first where one side was at home (the board stopped printing
+  Home and Away in this round, since most of the pool is finals at neutral grounds). The nine
+  matches turned round are sp-11, sp-13, sp-15, nba-1, nba-2, nba-5, nba-7, nba-8 and nba-9.
+- **Also on this branch, commit `8bd17b2f` (2026-09-19), which the first account left out.** The
+  List Quiz puzzle `ucl-topscorers` was renamed "Champions League Season Top Scorers" and now reads
+  only the season shaped rows of `ucl_top_scorers_by_season` (the table is four scraped tables in
+  one; the old player column read served all time scorers, rank numbers and daggered names). The
+  shirt number question in Shirt Number (`src/pages/ShirtNumber.tsx`,
+  `src/components/shirt-number/ShirtNumberBoard.tsx`) and Sports Millionaire
+  (`src/lib/triviaQuestionBank.ts`) stopped asking what a player wears in the present tense over a
+  snapshot that holds retired men; it names the club and asks what he has worn there. The List
+  Quiz half of that commit left out every joint top scorer and 2025-26; the fix below repairs it.
+- **The fence.** `scripts/simTriviaFacts.mjs`, and the record
+  `scripts/data/triviaFactsVerified2026-09.json`; the counts and sections as they stand after the
+  fix are below.
+- **Gates run by the builder.** tsc 0; `simTriviaFacts` green; `simNoRivalNames` green (it flagged a
+  source URL whose slug spelled a tournament name in a shape its FIFA allowlist does not know, so
+  that source was replaced rather than the check loosened); `simGuideHeadings` green;
+  `simSiteSearch` green; the Guess the Year row of the daily reload test green. Not run, by
+  instruction: `runAllSims`, the build, `build:seo`, the browser harnesses.
+
+### FIXED 2026-09-28: Round 661 after its review (commit `aaf30a6d` on the same branch)
+
+The adversarial review returned fix first: seven majors and five minors, and an audit of every
+clue against every year the game accepts (1972 to 2026, not just the fifty puzzle years) found 31
+Guess the Year clues still wrong. All of it is fixed on `r661-trivia-facts`.
+
+- **Guess the Year.** 31 clues sharpened so only their year fits: 'another' titles that fitted
+  several years (Borg, Schumacher, Hamilton, the Oilers, Jordan's second straight Finals MVP),
+  repeat champions (Bruins 1972 and 2011, Royals 1985 and 2015, Braves, Devils, Canadiens,
+  Cardinals, Cowboys over the Bills in both 1993 and 1994), the Knicks' 1973 clue, which their June
+  2026 title made a second right answer, LeMond's three Tours, the two Texas Heismans, the two host
+  nations that won a first World Cup, and DeVonta Smith's Heisman, presented on January 5, 2021 and
+  so a year early again under the file's own calendar rule (2020 now has LSU's January 2020 title
+  game instead). Each new clue is on two sources and each record entry keeps `replaced.was` and
+  `replaced.why`. Six clues a year, same year order, no daily moved. **What is true now about
+  uniqueness:** every clue was read against every year from 1972 to 2026 on 2026-09-28 and no second
+  fitting year was found; no harness can prove that, because it is a claim about every other year,
+  and the file header says so. A new clue needs the same read.
+- **Hall of Fame or Bust.** The reveal no longer says "Official verdict". It says "Our call: ..."
+  (the game's label) and under it the real record from a new sourced `hall` field
+  (`src/lib/hofHall.ts`): "In the Naismith Hall of Fame, class of 2009", "Not in the Pro Football
+  Hall of Fame yet", or for Messi, Busquets and Ronaldo "Soccer has no single Hall of Fame, so this
+  one's all our call". 9 cards are inducted (two hosts each, the hall's own page where it renders),
+  13 are not (each dated with `asOf`), 3 are soccer with no single hall. **Michael Owen is no longer
+  a bust:** he has been in the National Football Museum Hall of Fame since 2014 (thefa.com and ITV),
+  so "bust" could not be stated as a fact or defended as a label; his verdict is now Hall of Fame,
+  and the fence fails on any card whose player is really in a hall but is called a bust or
+  borderline. The page's fallback how to play line and the guide said "official verdict" too and
+  are corrected; two examples on the page that were never rendered but were false (JaMarcus
+  Russell's 14,580 yards, Messi's 7 Ballon d'Ors) now match the record.
+- **The floor rule.** For a player still playing, a career total is a floor and every other count
+  on his card (titles, awards, a World Cup, spelled out counts too) is a floor or its record line
+  carries `asOf`. 22 lines carry it. The five the review named are true as of 2026-09-28: Messi's 8
+  Ballon d'Or awards (the 2026 ceremony is October 26 in London), LeBron's 4 titles and 4 Finals
+  MVPs (the Knicks won in 2026), Crosby's 3 Stanley Cups (Carolina won in 2026) and Lillard's 1
+  Rookie of the Year.
+- **Score Predictor saved guesses.** A save used to hold only two numbers. It now records the sides
+  it was typed against (`src/lib/scorePredictorSave.ts`), and reading one back lines it up with the
+  card: a save from before this release is turned round on exactly the nine turned round matches,
+  a save with the sides reversed is turned, one about another match or a broken one is dropped. The
+  score is kept (turning both the guess and the result gives the same score). The release day risk
+  the first account named is gone.
+- **List Quiz, Champions League season top scorers.** Every joint top scorer and 2025-26 is now
+  accepted: 24 rows (Mazzola, Eusebio 1964-65, Van Himst, Takac, Macari, Dunai, Markarov,
+  Cucinotta, Souness, Rummenigge, Platini, Michel, Papin three times, Rufer, Yorke, Rivaldo, Raul,
+  Messi and Ronaldo 2014-15, Mbappe 2023-24 and 2025-26, Raphinha), each on uefa.com's own season
+  page plus RSSSF (Planet Football for Yorke, because RSSSF counts qualifying goals). The game is
+  right today from `UCL_TOP_SCORER_SUPPLEMENT` in `src/lib/listQuiz.ts`, deduped against the table.
+  Names only one of the two sources gives (Kindvall 1969-70, the RSSSF only qualifying counts, the
+  early seasons where uefa.com and RSSSF disagree) stay out, each listed with its reason in the
+  record's `listQuizUclTopScorers.notAdded`.
+- **The migration, NOT APPLIED.** `supabase/migrations/20260928210000_ucl_joint_top_scorers.sql`
+  adds the same 24 rows to `ucl_top_scorers_by_season`, fail closed (it checks the table holds 144
+  rows, 70 season rows, Guirassy as 2024-25, no 2025-26 row and none of the new rows before one
+  write, gives ids above the current top and moves the sequence past them, and proves 168 rows, 94
+  season rows and 71 seasons after). **To apply:** run it through the Supabase MCP
+  `apply_migration`, then `get_advisors`, then `node scripts/simListQuizSources.mjs` (the quiz then
+  reads each supplement name twice and folds the pair). The builder could not reach the Supabase
+  MCP in this session; the live table was read through the public anon key only.
+- **fifa.com.** `www.fifa.com` article pages are a 4.5 KB script shell with no text, so they were
+  never a source. Every fact that cited one now cites a readable `inside.fifa.com` page (or, for
+  the "first final settled on penalties" hint, Guinness World Records and The Cult of Calcio with a
+  stated reason), and the fence rejects a `www.fifa.com` source outright.
+- **The record now.** 597 facts, each on two sites with an independent one: **421 on a readable
+  official source** (the first account's 429 counted the script shells), 176 with a stated reason,
+  33 editorial lines. Plus 25 hall entries (22 sourced, 3 editorial) and 24 List Quiz rows.
+- **The fence now.** `scripts/simTriviaFacts.mjs`, eight sections: the record's rules, each game
+  word for word with the floor and asOf rule, nothing the files dropped, the real Hall of Fame
+  (section 6), Score Predictor saved guesses (section 7) and the List Quiz supplement against the
+  record, the migration, the season shape and the alias map (section 8). 17 controls (`onesource`,
+  `shellsource`, `hofline`, `floor`, `asof`, `gtyclue`, `gtyfive`, `spscore`, `spdate`, `stale`,
+  `owenbust`, `official`, `spswap`, `spload`, `uclsupp`, `uclshape`, `uclsql`), each proven to
+  redden only its own section. `simListQuizSources` pins Mbappe, Raphinha, Yorke, Rivaldo and Papin
+  on the live list (proven red with Raphinha taken out). The doc comment in `listQuiz.ts` that
+  said "simTriviaFacts section 5 pins this" when nothing did now points at section 8, which does.
+- **Gates run by the fixer.** tsc 0 (exit code read, and proven to read the worktree with a
+  deliberate type error); `simTriviaFacts` green with all 17 controls firing; `simListQuizSources`,
+  `simGuideHeadings`, `simSiteSearch`, `simNoRivalNames`, `simAccessibility`, `simDailyPoolOrder`
+  and `simLeaderboardCaps` green; the Guess the Year row of the daily reload test 7 of 7. A
+  throwaway render test (deleted after) mounted both pages: the reveal shows "Our call" and the hall
+  line, and a saved guess shows against the right sides. Not run, by instruction: `runAllSims`,
+  the build, `build:seo`, the browser harnesses.
+- **For whoever releases it.** The branch sits on `5c082e71`, well behind main, so What's New, the
+  board, this file and `src/data/searchKeywords.json` will conflict: keep both sides of the docs
+  and What's New, then rerun `node scripts/genSearchKeywords.mjs` on the merged tree (this branch
+  changed one Hall of Fame or Bust guide sentence, so the index here was regenerated, and the
+  frozen original in `scripts/data/guideHeadingsFrozen.json` moved with it, as Round 640 did).
+  `build:seo` must re-prerender `/whats-new` and `/hof-or-bust` (simPrerender section 8 and the
+  saved guide text). Apply the migration above when convenient; the game does not wait on it.
+- **Left for a later round.** Five rows already in `ucl_top_scorers_by_season` rest on RSSSF alone
+  for their season (Kovacevic 1963-64, Piepenburg 1966-67, Cruyff 1971-72, Hagi 1987-88, Koeman
+  1993-94), and several early goal counts differ between uefa.com and RSSSF; recorded in the record's
+  `tableRowsOnOneSource`, not changed. Two pre-existing lines in `onlyNames` in `src/lib/listQuiz.ts`
+  (from July, not this round) carry literal en and em dash characters inside regexes; they should
+  become escapes.
 
 ## LIVE 2026-09-19 evening: Rounds 632, 640, 642, 636 and 650 (release C), main `8a3bb5ba`
 
