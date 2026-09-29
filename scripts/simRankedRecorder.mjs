@@ -68,10 +68,16 @@
    multi mode file that is a single mode game of its own (the 20 Questions
    tree beside Guess The Club's daily) is a ratchet, SINGLE_MODE_BASELINE,
    with the reason beside it: a new one fails, a stale entry fails.
-   Anywhere in src, a literal false flag is refused unless its slug resolves
-   to a registry game with no daily: false on a daily game would silently
-   take its day board, its points and its daily tick away, and nothing else
-   would notice (simDailyLegend only asks that some recorder exists).
+   Anywhere in src, a literal false flag is refused unless its own file has
+   no daily mode (its code never names 'daily') and its slug resolves to a
+   registry game with no daily: false on a daily game would silently take
+   its day board, its points and its daily tick away, and nothing else would
+   notice (simDailyLegend only asks that some recorder exists). Round 674
+   (the fence lens review, R2.D6): the rule read the registry alone, and
+   seven games with a real ranked daily carry no daily: true there (the
+   NASCAR, Tennis and Combat chains, the four Perfect Seasons), so Combat
+   Chain's flag set to false passed; the recorder's own mode detection now
+   refuses it first.
    Every run proves each of those rules on synthetic call sites (the probes):
    the shapes that must be refused are refused, and the ones that must pass,
    pass.
@@ -106,6 +112,17 @@
    Go Unbeaten season). Rendered: src/test/unrankedNote.test.tsx plays the
    shared card, Guess The F1 Driver's own card and HOF or Bust's shared card
    through Unlimited (the line shows) and the daily (it does not).
+   Round 674 (R2.D5): the source check only asked that a board drawing its
+   own card holds the line somewhere in the file, so the line moved to
+   Buzzer Beater's per shot card stayed green. src/test/unrankedCards.test.tsx
+   plays every daily reload driver's daily to the finish with the line
+   replaced by a probe, and this section hands it, per driver, the number of
+   own lines (outside the shared card) its finished page must show: 1 when
+   the driver renders a board that draws its own card (read here from the
+   driver's import closure), else 0; never one on the live board, and in the
+   daily always flagged ranked. Every board that draws its own card must be
+   rendered by some driver or sit in RENDER_BASELINE with its reason, a
+   ratchet (a new one fails, a stale one fails).
 
    SECTION 5, GAMES TODAY. The owner's number, how many games he played that
    day, is read ONE way: src/lib/gamesToday.ts, by the game header and the
@@ -123,6 +140,9 @@
      orflag     useCbbProgram's flag gains a top level || true; kind flag
      falseflag  useCbbProgram (a registry daily) passes a literal false;
                 kind flag
+     ufcfalse   useUfcChain passes a literal false (Round 674, the review's
+                m645a-2): its registry entry has no daily: true, so only its
+                own mode detection refuses it; kind flag
      direct     Face Off's free matches go back through recordCompletion;
                 kind direct
      onmount    Rarity Round's result card records on mount; kind direct
@@ -136,9 +156,12 @@
      noprop     the gauntlet board's ResultScreen loses its ranked prop;
                 section 4 flags exactly that file
      profilesplit  the profile tile stops reading gamesToday.ts; section 5
-   The rendered ones edit a COPY under dist/.ranked-control and point vitest
-   at it through an alias (COMPLETION_HOOK, RANKED_LIB, or NO_DOUBLE_SWAP for
-   any other module), and every case not named must stay green:
+   The rendered ones edit a COPY in a per run folder under .sim-control
+   (scripts/lib/controlScratch.mjs; Round 674 retired the fixed
+   dist/.ranked-control) and point vitest at it through an alias
+   (COMPLETION_HOOK, RANKED_LIB, or NO_DOUBLE_SWAP for any other module); the
+   copy prints a load line naming its run, and a control whose line never
+   appears is refused. Every case not named must stay green:
      hookignores  the hook records every finish as ranked; the unranked cases
                   go red, the ranked ones stay green
      hooknoname   the unranked door is handed no name; section 2 and the name
@@ -156,6 +179,10 @@
      screendrops  ResultScreen drops the line; section 4's ResultScreen check
                   and the shared card cases go red, F1 Driver's own card
                   stays green
+     shotnote     Buzzer Beater's line moves from its finished card to the per
+                  shot card (Round 674, the review's m645a-1); the source
+                  check stays green by design, and exactly the buzzer-beater
+                  row of unrankedCards.test.tsx goes red
    RANKED_CONTROL=all runs every control in turn. A control run exits 0 when
    it fired exactly as it should and 1 when it did not.
 
@@ -167,6 +194,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { stripComments, callsOf, resolveSlug, resolveExpr, readLF as readSourceLF, srcFiles as sourceFiles } from './lib/readSource.mjs';
+import { controlScratch, loadedLine, withLoadedLine } from './lib/controlScratch.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.RANKED_CONTROL || '';
@@ -178,7 +206,21 @@ const NOTE = 'src/components/game/UnrankedNote.tsx';
 const GAMES_TODAY = 'src/lib/gamesToday.ts';
 const NAVBAR = 'src/hooks/useGameNavbarStats.ts';
 const PROFILE = 'src/pages/Profile.tsx';
-const TESTS = ['src/test/rankedRecorder.test.tsx', 'src/test/rankedRecorderLib.test.ts', 'src/test/unrankedNote.test.tsx'];
+const TESTS = ['src/test/rankedRecorder.test.tsx', 'src/test/rankedRecorderLib.test.ts', 'src/test/unrankedNote.test.tsx', 'src/test/unrankedCards.test.tsx'];
+const DRIVERS_DIR = 'src/test/dailyReload';
+
+/* Round 674 (R2.D5): boards that draw their own result card and cannot yet
+   be rendered to a finished daily by a driver in src/test/dailyReload. Their
+   line is held by the source check alone. A ratchet: a new board that draws
+   its own card must bring a driver, and an entry whose board gets one (or
+   stops drawing its own card) must leave. */
+const RENDER_BASELINE = [
+  { file: 'src/components/conquest/ImperialismBoardShared.tsx', why: 'the five Conquest maps have no daily reload driver: a finished daily is a whole map played out against the CPU, which no driver plays yet' },
+  { file: 'src/pages/PerfectSeasonMlb.tsx', why: 'the four Perfect Seasons have no daily reload driver: the page boots its draft pool from the database, which the shared mocks do not serve yet' },
+  { file: 'src/pages/PerfectSeasonNba.tsx', why: 'as PerfectSeasonMlb.tsx' },
+  { file: 'src/pages/PerfectSeasonNfl.tsx', why: 'as PerfectSeasonMlb.tsx' },
+  { file: 'src/pages/PerfectSeasonNhl.tsx', why: 'as PerfectSeasonMlb.tsx' },
+];
 
 /* Recorders that sit in a multi mode file but are a single mode game of their
    own. Keyed by file and slug. A new one fails; a stale one fails. */
@@ -210,6 +252,13 @@ const SCAN_CONTROLS = {
   falseflag: {
     section: 1, file: 'src/hooks/useCbbProgram.ts', kind: 'flag', from: CBB_FLAG, to: 'gameState?.score ?? 0, 0, false);',
     why: 'Guess The CBB Team, a registry daily, silences the fence with a literal false and loses its day board',
+  },
+  /* Round 674, the fence lens review's m645a-2: Combat Chain's registry entry
+     carries no daily: true, so the registry alone let this through. */
+  ufcfalse: {
+    section: 1, file: 'src/hooks/useUfcChain.ts', kind: 'flag',
+    from: "gameState?.score ?? 0, 0, gameState?.mode === 'daily');", to: 'gameState?.score ?? 0, 0, false);',
+    why: 'Combat Chain passes a literal false, so its daily never records a score, points or the daily tick, and its registry entry says no daily',
   },
   direct: {
     section: 1, file: 'src/hooks/useFaceOff.ts', kind: 'direct',
@@ -320,6 +369,21 @@ const VITEST_CONTROLS = {
     why: 'the shared result card takes the flag and drops the line',
     red: /the shared card: a free run shows the line|HOF or Bust/,
     check: 'screen',
+  },
+  /* Round 674, the fence lens review's m645a-1: the line is still in the file
+     with a daily only flag, so the source check stays green by design; only
+     the rendered finished card can see it gone. */
+  shotnote: {
+    file: 'src/components/buzzer-beater/BuzzerBeaterBoard.tsx', alias: 'NO_DOUBLE_SWAP', module: '@/components/buzzer-beater/BuzzerBeaterBoard', testFile: 'unrankedCards.test.tsx',
+    edits: [
+      ["          <UnrankedNote ranked={mode === 'daily'} className=\"mt-2\" />\n", ''],
+      ['          {result.made && <p className="mt-1 text-sm text-muted-foreground">{result.points} points.</p>}\n',
+        '          {result.made && <p className="mt-1 text-sm text-muted-foreground">{result.points} points.</p>}\n' +
+        "          <UnrankedNote ranked={mode === 'daily'} className=\"mt-2\" />\n"],
+    ],
+    why: "Buzzer Beater's free play line moves from its finished card to the per shot card, so an Unlimited run's final score shows with nothing beside it",
+    red: /buzzer-beater: the finished daily/,
+    check: null,
   },
 };
 const ALL = [...Object.keys(SCAN_CONTROLS), 'stale', ...Object.keys(VITEST_CONTROLS)];
@@ -453,14 +517,22 @@ function scan(files, baseline = SINGLE_MODE_BASELINE, registry = registryGames()
     const onMount = rel === RESULT_SCREEN ? [] : [...code.matchAll(/\brecordCompletionOnMount\b/g)];
     if (!recs.length && !direct.length && !onMount.length) continue;
     recorders += recs.length + direct.length + onMount.length;
-    /* A literal false anywhere: allowed only on a registry game with no daily. */
+    /* A literal false anywhere: allowed only in a file with no daily mode of
+       its own, on a registry game with no daily. Round 674 (R2.D6): the
+       registry's daily field alone let a literal false through on seven games
+       with a real ranked daily the registry does not mark (the NASCAR,
+       Tennis and Combat chains, the four Perfect Seasons), so the recorder's
+       own mode detection (its code names 'daily') now refuses it first. */
+    const multiMode = DAILY_LITERAL.test(code);
     for (const r of recs.filter(x => x.args.length >= 5)) {
       if (resolveExpr(code, r.args[4]) !== 'false') continue;
       const slug = resolveSlug(code, r.args[0]);
-      if (slug !== null && registry.has(slug) && registry.get(slug) === false) continue;
-      findings.push({ kind: 'flag', file: rel, line: r.at, what: `${slug ?? r.args[0]} passes a literal false as its ranked flag, and ${slug === null ? 'its slug does not resolve' : registry.has(slug) ? 'it is a registry daily' : 'it is not a registry game'}: a daily game with false loses its day board, its points and its daily tick without anything noticing` });
+      if (!multiMode && slug !== null && registry.has(slug) && registry.get(slug) === false) continue;
+      const why = multiMode ? 'its own file names the daily, so it has a daily mode'
+        : slug === null ? 'its slug does not resolve' : registry.has(slug) ? 'it is a registry daily' : 'it is not a registry game';
+      findings.push({ kind: 'flag', file: rel, line: r.at, what: `${slug ?? r.args[0]} passes a literal false as its ranked flag, and ${why}: a daily game with false loses its day board, its points and its daily tick without anything noticing` });
     }
-    if (!DAILY_LITERAL.test(code)) continue;
+    if (!multiMode) continue;
     multi.push(rel);
     for (const d of direct) {
       findings.push({ kind: 'direct', file: rel, line: d.at, what: `recordCompletion(${d.args[0]}) called directly in a file with a daily and another mode: the ranked flag lives on useGameCompletion, so this writes the signed in save and the daily key whatever the mode` });
@@ -534,22 +606,31 @@ function probeSection1(files) {
     ['pass', null, "useGameCompletion('nfl-higher-lower', done, 0, 0, gameState?.mode === 'daily');", 'the flag through an optional chain'],
     ['pass', null, "useGameCompletion('nfl-higher-lower', done, 0, 0, (mode === 'daily' && phase === 'result'));", 'a daily term ANDed with more, in parentheses'],
     ['pass', null, "useGameCompletion('nfl-higher-lower', done, 0, 0, 'daily' === playMode);", 'the flag written the other way round'],
-    ['pass', null, `useGameCompletion('${noDaily}', done, 0, 0, false);`, `a literal false on ${noDaily}, a registry game with no daily`],
+    /* Round 674 (R2.D6): a literal false is read against the recorder's own
+       mode detection first. In a file that names the daily it is refused
+       whatever the registry says; in a file with no daily mode it passes
+       only on a registry game with no daily. */
+    ['refuse', 'flag', `useGameCompletion('${noDaily}', done, 0, 0, false);`, `a literal false on ${noDaily}, a registry game with no daily, in a file that names the daily`],
+    ['pass', null, `useGameCompletion('${noDaily}', done, 0, 0, false);`, `a literal false on ${noDaily} in a file with no daily mode`, 'single'],
+    ['refuse', 'flag', "useGameCompletion('nfl-higher-lower', done, 0, 0, false);", 'a literal false on a registry daily in a file with no daily mode', 'single'],
     ['pass', null, "useGameCompletion('nfl-higher-lower', rawDailyStatus !== 'playing', 0);", 'a done read off daily state'],
     ['pass', null, "useGameCompletion('nfl-higher-lower', dailyFinish?.date === dealtDay, 0);", 'a done read off the day the daily was dealt'],
   ];
   const probe = 'src/hooks/useNflHL.ts';
+  const singleProbe = 'src/hooks/__probe_singleMode.ts';
   if (!files.has(probe)) return [`the probe file ${probe} is gone, move the probes`];
+  if (files.has(singleProbe)) return [`${singleProbe} exists in src, so the single mode probe would overwrite a real file`];
   const base = scan(files, SINGLE_MODE_BASELINE, registry).findings.length;
   const problems = [];
-  for (const [want, kind, line, what] of PROBES) {
+  for (const [want, kind, line, what, where] of PROBES) {
     const copy = new Map(files);
-    copy.set(probe, files.get(probe) + "\nconst probeMode = 'daily';\n" + line + '\n');
+    if (where === 'single') copy.set(singleProbe, line + '\n');
+    else copy.set(probe, files.get(probe) + "\nconst probeMode = 'daily';\n" + line + '\n');
     const added = scan(copy, SINGLE_MODE_BASELINE, registry).findings.slice(base);
     const ok = want === 'refuse' ? added.length === 1 && added[0].kind === kind : added.length === 0;
     if (!ok) problems.push(`probe "${what}" should be ${want === 'refuse' ? `refused as ${kind}` : 'accepted'}, the scan added ${added.length} finding(s)${added.length ? ` (${added.map(f => f.kind).join(', ')})` : ''}: ${line}`);
   }
-  if (!problems.length) console.log(`   probes: ${PROBES.filter(p => p[0] === 'refuse').length} shapes refused (top level ||, ??, ternary, a non mode comparison, literal false on a daily or an unresolved slug, three loose daily names), ${PROBES.filter(p => p[0] === 'pass').length} accepted`);
+  if (!problems.length) console.log(`   probes: ${PROBES.filter(p => p[0] === 'refuse').length} shapes refused (top level ||, ??, ternary, a non mode comparison, literal false on a daily, on an unresolved slug or in a file that names the daily, three loose daily names), ${PROBES.filter(p => p[0] === 'pass').length} accepted`);
   return problems;
 }
 
@@ -662,6 +743,75 @@ function checkCards(files) {
   }
   return { findings, surfaces, recorders };
 }
+/* Round 674 (R2.D5): which boards draw their own card, which driver renders
+   each, and what every driver's finished page must carry. A board draws its
+   own card when it renders the line itself and no ResultScreen. A driver
+   renders a file when the file is in the import closure of the driver (its
+   own imports and the shared helpers it reads, followed through @/ and
+   relative imports into src). */
+function handCards(files, cards) {
+  return [...cards.surfaces.keys()].filter(card => {
+    const code = stripComments(files.get(card) ?? '');
+    return /<UnrankedNote\b/.test(code) && !/<ResultScreen\b/.test(code);
+  }).sort();
+}
+function resolveImport(fromRel, spec) {
+  let base;
+  if (spec.startsWith('@/')) base = `src/${spec.slice(2)}`;
+  else if (spec.startsWith('.')) base = path.posix.normalize(path.posix.join(path.posix.dirname(fromRel), spec));
+  else return null;
+  for (const cand of [base, `${base}.ts`, `${base}.tsx`, `${base}/index.ts`, `${base}/index.tsx`]) {
+    if (!/\.tsx?$/.test(cand)) continue;
+    const abs = path.join(ROOT, cand);
+    if (fs.existsSync(abs) && fs.statSync(abs).isFile()) return cand;
+  }
+  return null;
+}
+const importCache = new Map();
+function importsOf(rel) {
+  if (!importCache.has(rel)) {
+    const code = stripComments(readLF(rel));
+    const specs = [...code.matchAll(/\bfrom\s*['"]([^'"]+)['"]|\bimport\s*\(\s*['"]([^'"]+)['"]\s*\)|\bimport\s+['"]([^'"]+)['"]/g)].map(m => m[1] ?? m[2] ?? m[3]);
+    importCache.set(rel, specs.map(s => resolveImport(rel, s)).filter(Boolean));
+  }
+  return importCache.get(rel);
+}
+function closureOf(rel) {
+  const seen = new Set([rel]);
+  const queue = [rel];
+  while (queue.length) for (const next of importsOf(queue.shift())) if (!seen.has(next)) { seen.add(next); queue.push(next); }
+  return seen;
+}
+/* Keyed by the driver's file name: the drill drivers build their slug at
+   run time, and the file name is what the test's glob hands it too. */
+function driverRows() {
+  const rows = [];
+  for (const e of fs.readdirSync(path.join(ROOT, DRIVERS_DIR)).sort()) {
+    if (!/\.driver\.tsx$/.test(e)) continue;
+    const rel = `${DRIVERS_DIR}/${e}`;
+    rows.push({ rel, key: e, closure: closureOf(rel) });
+  }
+  if (rows.length < 20) abort(`only ${rows.length} daily reload drivers read from ${DRIVERS_DIR}, the reader is broken`);
+  return rows;
+}
+/* What each driver's finished page must carry outside the shared card: 1
+   when it renders a board that draws its own card, else 0. Then which of
+   those boards no driver renders, against the baseline. */
+function renderedCards(files, cards) {
+  const hand = handCards(files, cards);
+  const rows = driverRows();
+  const expect = {};
+  for (const r of rows) expect[r.key] = hand.some(h => r.closure.has(h)) ? 1 : 0;
+  const rendered = new Map(hand.map(h => [h, rows.filter(r => r.closure.has(h)).map(r => r.key.replace(/\.driver\.tsx$/, ''))]));
+  const findings = [];
+  for (const [h, slugs] of rendered) {
+    const base = RENDER_BASELINE.find(b => b.file === h);
+    if (!slugs.length && !base) findings.push({ kind: 'card', file: h, line: 1, what: 'draws its own result card, and no daily reload driver renders it to a finish, so nothing shows its free play line lands on that card: add a driver or a RENDER_BASELINE entry with the reason' });
+    if (slugs.length && base) findings.push({ kind: 'card', file: h, line: 1, what: `is in RENDER_BASELINE, but ${slugs.join(', ')} now render it: remove the entry` });
+  }
+  for (const b of RENDER_BASELINE) if (!rendered.has(b.file)) findings.push({ kind: 'card', file: b.file, line: 1, what: 'is in RENDER_BASELINE but no longer draws its own card with the line: remove the entry' });
+  return { hand, rows, expect, rendered, findings };
+}
 function checkScreenPassesFlag(screenRaw) {
   const code = stripComments(screenRaw);
   const note = tagsOf(code, 'UnrankedNote');
@@ -693,15 +843,21 @@ function findVitest() {
     if (path.dirname(dir) === dir) return null;
   }
 }
+/* Round 674: what every driver row of unrankedCards.test.tsx must carry,
+   read from the source once and handed to every run (section 4). */
+let cardExpect = null;
 function runSuite(env) {
   const VITEST = findVitest();
   if (!VITEST) abort('vitest is not installed anywhere above this tree, nothing can run');
+  if (!cardExpect) abort('the rendered card expectations were not read before vitest ran');
   const out = path.join(os.tmpdir(), `rankedRecorder-${process.pid}-${Math.random().toString(36).slice(2)}.json`);
-  const r = spawnSync(process.execPath, [VITEST, 'run', ...TESTS, '--reporter=json', `--outputFile.json=${out}`], {
+  /* The default reporter too: the rows' UNRANKED_CARD_ROW lines and a
+     control copy's load line reach this process only through it. */
+  const r = spawnSync(process.execPath, [VITEST, 'run', ...TESTS, '--reporter=json', `--outputFile.json=${out}`, '--reporter=default'], {
     cwd: ROOT, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024,
-    env: { ...process.env, ...env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' },
+    env: { ...process.env, ...env, UNRANKED_CARD_EXPECT: JSON.stringify(cardExpect), CI: '1', FORCE_COLOR: '0', NO_COLOR: '1' },
   });
-  const text = (r.stdout || '') + (r.stderr || '');
+  const text = ((r.stdout || '') + (r.stderr || '')).split(new RegExp(String.fromCharCode(27) + '\\[[0-9;]*m', 'g')).join('');
   if (!fs.existsSync(out)) return { error: 'vitest wrote no report:\n' + text.slice(-3000) };
   const report = JSON.parse(fs.readFileSync(out, 'utf8'));
   fs.rmSync(out, { force: true });
@@ -712,7 +868,8 @@ function runSuite(env) {
     }
   }
   const loadError = /Failed to load|Cannot find module|Failed to resolve import|SyntaxError|Transform failed/.test(text) ? text.slice(-2000) : null;
-  return { code: r.status, tests, loadError, text };
+  const cardRows = [...text.matchAll(/UNRANKED_CARD_ROW (\{.*\})/g)].map(m => JSON.parse(m[1]));
+  return { code: r.status, tests, loadError, text, cardRows };
 }
 
 /* ------------------------------------------------------------------------ */
@@ -757,6 +914,13 @@ if (!CONTROL) {
   for (const p of checkScreenPassesFlag(files.get(RESULT_SCREEN))) fail(p);
   if (cards.recorders < 30 || cards.surfaces.size < 30) fail(`only ${cards.recorders} flagged recorders and ${cards.surfaces.size} cards found, the card reader is broken`);
   if (!cards.findings.length) console.log(`   ${cards.recorders} flagged recorders, ${cards.surfaces.size} result cards, every one says when a run is free play; ResultScreen renders the line from its ranked prop`);
+  /* Round 674 (R2.D5): the boards that draw their own card, rendered. */
+  const rc = renderedCards(files, cards);
+  cardExpect = rc.expect;
+  for (const f of rc.findings) fail(`${f.file}: ${f.what}`);
+  const renderedHand = [...rc.rendered].filter(([, s]) => s.length);
+  console.log(`   ${rc.hand.length} boards draw their own card: ${renderedHand.length} rendered to a finished daily by a driver (${renderedHand.map(([h, s]) => `${path.basename(h, '.tsx')} by ${s.join(', ')}`).join('; ')}), ${RENDER_BASELINE.length} in RENDER_BASELINE (${RENDER_BASELINE.map(b => path.basename(b.file, '.tsx')).join(', ')})`);
+  console.log(`   ${rc.rows.length} driver rows, ${Object.values(rc.expect).filter(v => v === 1).length} of them must show a board's own line on the finished card, the rest none outside the shared card`);
 
   console.log('\n5) Games today: one read for the header and the profile');
   const todayProblems = checkGamesToday(files);
@@ -773,6 +937,16 @@ if (!CONTROL) {
       if (t.status !== 'passed') fail(`${t.file}: ${t.title}`);
     }
     for (const t of TESTS) if (!run.tests.some(x => x.file === path.basename(t))) fail(`vitest reported no case from ${t}`);
+    /* Every driver row printed what it saw, and its own lines are the ones
+       the source said to expect (the row's assertion, read again here so a
+       row that never ran cannot pass). */
+    const seen = new Map(run.cardRows.map(r => [r.file, r]));
+    for (const [file, want] of Object.entries(cardExpect)) {
+      const row = seen.get(file);
+      if (!row) fail(`unrankedCards.test.tsx printed no row for ${file}`);
+      else if (row.own !== want || row.live !== 0) fail(`${file}: the finished page shows ${row.own} free play line(s) of its own (want ${want}) and ${row.live} on the live board (want 0)`);
+    }
+    if (seen.size) console.log(`   rendered cards: ${seen.size} driver rows played their daily to the finish; ${[...seen.values()].filter(r => r.own === 1).length} show the board's own free play line on the finished card, none on a live board`);
     if (run.code !== 0 && failures === 0) fail(`vitest exited ${run.code} with every case green, read its output:\n${run.text.slice(-2000)}`);
     console.log(`   vitest exit ${run.code}, ${run.tests.length} cases`);
   }
@@ -789,12 +963,19 @@ if (!CONTROL) {
    on the rewritten file (section 2): the number of findings it reports. */
 function sectionFindings(section, files) {
   if (section === 1) return scan(files).findings;
-  if (section === 4) return checkCards(files).findings;
+  if (section === 4) { const cards = checkCards(files); return [...cards.findings, ...renderedCards(files, cards).findings]; }
   if (section === 5) return checkGamesToday(files).map(what => ({ kind: 'today', file: PROFILE, what }));
   return [];
 }
 const which = CONTROL === 'all' ? ALL : [CONTROL];
-const controlDir = path.join(ROOT, 'dist', '.ranked-control');
+{
+  const files = srcFiles();
+  cardExpect = renderedCards(files, checkCards(files)).expect;
+}
+/* Round 674: a per run folder (scripts/lib/controlScratch.mjs), never the
+   fixed dist/.ranked-control every run at once shared. */
+const scratch = controlScratch(ROOT, 'ranked-control');
+const controlDir = scratch.dir;
 let fired = 0;
 try {
   for (const name of which) {
@@ -843,9 +1024,12 @@ try {
     const ctl = VITEST_CONTROLS[name];
     console.log(`\nNEGATIVE CONTROL ${name}: ${ctl.why}`);
     const src = readLF(ctl.file);
-    if (count(src, ctl.from) !== 1) abort(`control ${name} cannot run: ${ctl.file} does not carry exactly one ${JSON.stringify(ctl.from)}`);
-    if (count(stripComments(src), ctl.from) !== 1) abort(`control ${name} cannot run: the anchor in ${ctl.file} is not code`);
-    const copy = src.replace(ctl.from, ctl.to);
+    let copy = src;
+    for (const [from, to] of ctl.edits ?? [[ctl.from, ctl.to]]) {
+      if (count(copy, from) !== 1) abort(`control ${name} cannot run: ${ctl.file} does not carry exactly one ${JSON.stringify(from)}`);
+      if (count(stripComments(copy), from) !== 1) abort(`control ${name} cannot run: the anchor in ${ctl.file} is not code`);
+      copy = copy.replace(from, to);
+    }
     if (copy === src) abort(`control ${name} cannot run: the rewrite changed nothing`);
     if (/from '\.\.?\//.test(copy)) abort(`control ${name} cannot run: ${ctl.file} has a relative import, which a copy elsewhere cannot resolve`);
     /* The source check that reads this module, on the copy, in memory. */
@@ -859,13 +1043,15 @@ try {
     const dir = path.join(controlDir, name);
     fs.mkdirSync(dir, { recursive: true });
     const file = path.join(dir, path.basename(ctl.file));
-    fs.writeFileSync(file, copy);
+    fs.writeFileSync(file, withLoadedLine(copy, scratch.tag, name));
     console.log(`   ${ctl.file} copied to ${path.relative(ROOT, file).replaceAll('\\', '/')} with the anchor rewritten, src untouched`);
     const target = file.replaceAll('\\', '/');
     const env = ctl.alias === 'NO_DOUBLE_SWAP' ? { NO_DOUBLE_SWAP: JSON.stringify({ [ctl.module]: target }) } : { [ctl.alias]: target };
     const run = runSuite(env);
     if (run.error) { fail(run.error); continue; }
     if (run.loadError && !run.tests.length) { fail(`control ${name}: the copy did not load, so every red is a crash:\n${run.loadError}`); continue; }
+    if (!run.text.includes(loadedLine(scratch.tag, name))) { fail(`control ${name}: the copy never printed its load line, so the suite did not run on it`); continue; }
+    console.log(`   the copy printed its load line for this run (${scratch.tag})`);
     let red = 0;
     let wrong = 0;
     for (const t of run.tests) {
@@ -883,7 +1069,7 @@ try {
     else { fired += 1; console.log(`   control ${name} fired: ${red} red, exactly the ones it should, every other one green`); }
   }
 } finally {
-  fs.rmSync(controlDir, { recursive: true, force: true });
+  scratch.cleanup();
 }
 
 if (failures || fired !== which.length) {
