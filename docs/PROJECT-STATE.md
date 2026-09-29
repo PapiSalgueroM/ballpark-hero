@@ -1,50 +1,92 @@
 # Project state
 
-## BUILT, NOT APPLIED 2026-09-28: Round 673, economy step L1 "Lock the doors", branch `r673-lock-doors`
+## BUILT, NOT APPLIED 2026-09-29: Round 673, economy step L1 "Lock the doors", branch `r673-lock-doors`
 
 The first step of `docs/design/POINTS-ECONOMY-V2.md` (on `points-economy`), built on main so it ships
 on its own before any other economy round. **Nothing is applied to production.** It changes nothing
-a player sees and not what any game pays.
+a player sees and not what any game pays. Second pass on 2026-09-29 after the round's two reviews:
+the save now refuses what a player could abuse, the rehearsal moved off production into PGlite, and
+the fences grew.
 
-- **The hole, read only on production today.** anon and authenticated held INSERT, UPDATE, DELETE and
+- **The hole, read only on production.** anon and authenticated held INSERT, UPDATE, DELETE and
   TRUNCATE on `user_scores`, `user_game_scores`, `user_best_scores`, `daily_completions`,
   `game_completions` and `game_score_caps`, with RLS the only barrier: a signed in player could PATCH
-  their own `total_points`, and anyone could post a backdated board row under any name.
-- **`supabase/migrations/20260928_econ_l1_lock_the_doors.sql`**, one DO block, every precondition read
-  before any write (save md5 `5ae76ef7...`, no 644/646/648 object, the `created_at` defaults, the seven
-  write policies by name and expression, RLS on and not forced, no trigger), proofs executed before it
-  ends. It creates `private.economy_steps` (the chain's ledger), makes `record_auth_completion`
-  SECURITY DEFINER with its body untouched (the Round 569 arithmetic, so a save lands exactly as
-  today), revokes the direct writes on the six tables, drops the six client write policies, and
-  bounds the board insert to `(game, score, player_name)` with game 1 to 64 and name 1 to 40
-  characters (longest seen in 30 days: 27 and 21). No score bound. The apply steps are in its header.
-  Undo: `ROLLBACK_20260928_econ_l1_lock_the_doors.sql`, restoring from the ledger.
-- **Round 644's file** now refuses to run once the ledger exists. 646 and both 648 files are not on
-  main, so their guards belong to `points-economy` (or Round 675 deletes them).
-- **Dry runs on production, all rolled back:** `BEGIN; L1; ROLLBACK` clean; then L1, the fence
-  capture, the client paths, the undo and L1 again in one rolled back transaction. As anon and as
-  authenticated the client's board insert lands, the DEFINER save adds 7 then 5 to 12 for a probe id,
-  a direct PATCH of `user_scores` and a backdated board row are refused 42501, the undo restores the
-  catalog byte for byte (only the ledger's existence differs) and a reapply equals the first apply.
-  Read only before and after: nothing changed, no probe row exists.
-- **Every client write path:** the `game_completions` insert in `src/lib/completions.ts` (two
-  call sites, `{game, score, player_name}`, still allowed), `rpc('record_auth_completion')` (now the
-  only way into the four account tables). No module writes the account tables or `game_score_caps`
-  directly; `profiles` and `daily_badges` are untouched (694 closes the badge insert).
-- **Fences.** `simAuthSave` section 3 flipped (DEFINER across the chain, fixed SQL, L1's revokes and
-  drops; controls `invoker`, `norevoke`, `bodyexec`; the old `definer` control retired). New
-  `simPlayDoor`: rule 7 over a committed catalog snapshot (`scripts/data/playDoorCatalog.json`,
-  captured inside the dry run) plus anon probes that cannot write, plus the migrations after L1;
-  controls `grant`, `policy`, `definer`, `body`, `overload`, `livesource`, `regrant`. It reports the
-  live door as PENDING until L1 is applied, then fails until the snapshot is refreshed from
-  production (apply step 5).
-- **Not built here:** `simEconomyMigrations` and PGlite (a devDependency install is its own step; the
-  L1 cases were executed on production inside rolled back transactions instead). Rounds 673 to 698
-  still need reserving on `docs/WORKBOARD.md` on main.
+  their own `total_points`, and anyone could post a backdated board row under any name. The review
+  found the save itself was the same power: one `rpc('record_auth_completion')` with p_score
+  2,000,000,000 set a total and a best to two billion, a negative score took the total back down,
+  and a 5,000 character slug ticked a daily for a game that does not exist.
+- **`supabase/migrations/20260928_econ_l1_lock_the_doors.sql`**, one DO block, every precondition
+  read before any write (save md5 `5ae76ef7...`, no 644/646/648 object, no `private.game_hard_max`,
+  the `created_at` defaults, the seven write policies by name and expression, RLS on and not forced,
+  no trigger, and the 151 games of `game_score_caps` exactly the file's), proofs executed before it
+  ends. It takes `game_completions` first, holding nothing else (`lock_timeout` 1 s, so a board
+  insert queued behind it waits at most a second, under anon's 3 s timeout), then creates
+  `private.economy_steps` (the ledger) and `private.game_hard_max`, replaces `record_auth_completion`
+  with a SECURITY DEFINER body that is **the Round 569 body with four refusals in front**, revokes the
+  direct writes on the six tables, drops the six client write policies, and bounds the board insert
+  to `(game, score, player_name)` with game 1 to 64 and name 1 to 40 characters.
+- **The door's refusals (the lead's call, ahead of the spec's Round 677 door).** Each raises SQLSTATE
+  22023, "record_auth_completion refused: ...", before the first write: a slug over 64 characters; a
+  slug not in `game_score_caps` (0 of 22,375 stored score rows are off it); a score below 0 or above
+  the game's hard maximum; a correct count, when sent, outside 0 to 1000 (highest stored: 127). From
+  its first insert to its end the body is the Round 569 text byte for byte (md5 of that tail
+  `4423bc05...`, whole body `0f4e3171...`), so every save it accepts lands exactly as today. **What
+  stays player settable until E3/T0:** a player can still save a legitimate score many times over,
+  each one adding to `total_points`; one ranked result a day is the door's, in Round 677.
+- **The hard maximum, per game, 151 rows, generous by construction.** CEILING games (113, a Round 646
+  ceiling read from `origin/points-economy`, plus the three Round 644 owns): the larger of twice the
+  ceiling and twice the highest score production holds. OPEN games (38: the thirteen endless or open
+  sum games, the six front offices and dynasties still on the old cumulative scale on main, the seven
+  that record no score, the twelve retired keys): the larger of ten times the highest held and
+  10,000. The table with every value and its basis is in the migration header; held scores were read
+  2026-09-29 04:31 UTC, and the read only check in APPLY step 1 returned no game above its bound.
+  Smallest bounds: nfl-career 12, world-xi 22, champ-or-not 20, whod-they-beat 20, silverware-sort 30,
+  perfect-season-nfl 34. Largest: pack-battle 540,000,000 (dollars), sign-the-player 112,000,000.
+- **The client.** `src/lib/completions.ts` logs a refused save and a refused board row with
+  `console.warn` and the database's message (it was a silent `console.debug`), and the play still
+  counts on the device: the local streak, plays and point tally are written before the save goes
+  out and never taken back. The board row's name is cut to 40 characters by code point
+  (`boardName`, `BOARD_NAME_MAX`). `src/pages/Profile.tsx` holds the display name to 40 in the input
+  and cuts it on save.
+- **Rehearsal, in PGlite only.** `@electric-sql/pglite` is a devDependency (0.5.8, Postgres 18.3).
+  `scripts/data/economySchema.sql` is production's objects read with SELECTs (the six tables, their
+  policies and grants, the two views, the save, the four older definers, `auth.uid()`, the 151 caps,
+  stubs of the five platform definers outside public); the save and the definers md5 to production's
+  values after loading. New **`simEconomyMigrations`**: the snapshot is production (0), L1 refuses a
+  drifted production before any write, including CRLF (1), applies with the 569 tail verbatim (2),
+  the 569 arithmetic byte for byte on 13 sample saves before and after (3), every refusal and no
+  write by one (4), 44 direct writes refused as anon and authenticated against a baseline that
+  accepts the PATCH (5), a second apply refused (6), the undo restores the catalog and L1 reapplies
+  identically (7), the hard maximum covers every cap and matches its basis (8), simPlayDoor's fixture
+  equals the rehearsal (9); controls `snapshot`, `noprecheck`, `tail`, `arith`, `norefuse`,
+  `nosetrole`, `regrant`, `rerun`, `undoleak`, `nohardmax`, `fixture`, each firing only its section.
+  `--held-query` prints APPLY step 1's read only check. **No transaction, DO block or DDL runs on
+  production to rehearse anything again**: the first pass's four rolled back runs held
+  AccessExclusive on `game_completions` and the account tables and stalled live saves.
+- **Fences.** `simAuthSave` section 3 also holds L1's body to the 569 file byte for byte from the
+  first insert and requires the four refusals (new controls `norefuse`, `arith`). `simPlayDoor`'s
+  catalog query now reads views over the six (security_invoker or not writable), rewrite rules (none
+  anywhere) and SECURITY DEFINER functions outside public (the platform's five, none in
+  `graphql_public`), and `private.game_hard_max`; its fixture is the PGlite rehearsal (source
+  `rehearsal`), recaptured with `node scripts/simEconomyMigrations.mjs --write-fixture`; new controls
+  `view`, `rule`, `outside`. Production's views, rules and outside definers were read and match the
+  rehearsal. `simScoringCoverage` section 2 plays a save the server refuses (control `accept`).
+- **Apply** (the lead): the steps are in L1's header. Apply just after a five minute
+  refresh-player-ranks run ends, with the file's LF line endings (a CRLF body is refused by L1's own
+  proof), then `get_advisors`, then refresh `scripts/data/playDoorCatalog.json` from production
+  (source `production`), after which `simEconomyMigrations` section 9 requires production to equal
+  the rehearsal. Undo: `ROLLBACK_20260928_econ_l1_lock_the_doors.sql`, restoring the save's exact
+  prior definition and the grants and policies from the ledger, and dropping `private.game_hard_max`.
+- **Round 644's file** refuses to run once the ledger exists. 646 and both 648 files are not on main;
+  once this merges into `points-economy`, `simAuthSave` section 3 reads 648's clamp file (dated after
+  L1, INVOKER) as the end of the chain and goes red there, a harness red, not a broken save (648
+  refuses unless 644 and 646 ran). Round 675 deletes them; until then that branch needs a guard or a
+  skip for them.
 - **Seen, not changed:** `admin_exists(text)` is SECURITY DEFINER and executable by anon (pinned in
   `simPlayDoor`, on the spec's allowlist); anon and authenticated keep MAINTAIN on the six tables
-  (not reachable through the API); the profile form has no display name length limit, so a future
-  name over 40 characters would have its board row refused until Round 679 mints a fresh handle.
+  (not reachable through the API); the six per game board tables (cbb, medal games, NASCAR, the
+  chains) still take anon inserts with no score bound, and `daily_badges` takes any date (694).
+  Rounds 673 to 698 still need reserving on `docs/WORKBOARD.md` on main.
 
 ## LIVE 2026-09-28: Release E (662 to 667), main `cf18c92a`
 
