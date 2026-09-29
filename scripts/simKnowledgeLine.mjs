@@ -239,9 +239,12 @@ try {
 
 console.log('1) every sendable key is filed in exactly one family, and the seed is the table');
 let rows = [];
+/* The naive policies each game is measured on, as the family table lists them. */
+const naiveOf = new Map();
 try {
   const groups = await loadFamilies(ROOT, TMP, [copyPlugin('families')]);
   rows = familyRows(groups);
+  for (const g of groups) for (const [key, rule] of Object.entries(g.games)) naiveOf.set(key, rule.policies ?? g.policies);
   if (CONTROL && CONTROLS[CONTROL].reseed) plant(SEED_FILE, seedSql(groups));
   /* The key scan reads src from disk; a planted recorder is scanned beside it. */
   const extra = [...COPIES.keys()]
@@ -302,7 +305,10 @@ try {
  *   points(b, result)  the engine's pointsFor(board, result)
  *   headroom  a round number when the 70 percent player is allowed under 15
  *             until that round (printed, never silent)
- * Rows need a bundle of their engines, which Round 681 brings with the first.
+ * A row never names its naive policies: it is measured on the list the
+ * family table gives its game, so a row cannot leave out the policy that
+ * beats it. Rows need a bundle of their engines, which Round 681 brings with
+ * the first.
  */
 const LINE_ROWS = [];
 
@@ -434,7 +440,8 @@ console.log('2) the line: every paying game measured, and the runner proved');
   for (const key of paying) if (!rowKeys.has(key)) failIn('section2', `${key} pays and no row in LINE_ROWS measures it`);
   for (const key of rowKeys) if (!paying.includes(key)) failIn('section2', `LINE_ROWS measures ${key}, which does not pay`);
   for (const row of LINE_ROWS) {
-    const rs = measureRow(row);
+    /* Measured on the family table's policies, never on a list the row picks. */
+    const rs = measureRow({ ...row, policies: naiveOf.get(row.key) ?? [] });
     for (const f of rs.fails) failIn('section2', `${row.key}: ${f.msg}`);
     if (row.headroom && rs.k70 < K.SKILL_FLOOR) console.log(`   ${row.key}: the 70 percent player averages ${rs.k70.toFixed(2)}, allowed until Round ${row.headroom}`);
     console.log(`   ${row.key}: ${rs.boards} boards, ${[...rs.means].map(([n, v]) => `${n} ${v.toFixed(2)}`).join(', ')}, 70 percent ${rs.k70.toFixed(1)}`);
@@ -532,7 +539,9 @@ const BRAND_FILE = 'src/lib/knowledgeLine.brand.ts';
     const code = stripComments(text);
     const takesBrand = /import\s*(?:type\s+)?\{[^}]*\bDayPoints\b[^}]*\}\s*from\s*['"][^'"]*knowledgeLine['"]/.test(code);
     if (!takesBrand && /\b(?:interface|type|class)\s+DayPoints\b/.test(code) && rel !== 'src/lib/knowledgeLine.ts') { ownName += 1; continue; }
-    for (const m of code.matchAll(/\bas\s+DayPoints\b|<DayPoints>/g)) mints.push(`${rel}:${code.slice(0, m.index).split('\n').length}`);
+    /* `x as DayPoints`, or the old angle cast `<DayPoints>x` where an
+       expression starts (never a type argument like Array<DayPoints>). */
+    for (const m of code.matchAll(/\bas\s+DayPoints\b|(?:[=(,:?!&|]|\breturn)\s*<DayPoints>/g)) mints.push(`${rel}:${code.slice(0, m.index).split('\n').length}`);
   }
   if (mints.length !== 1 || !mints[0].startsWith('src/lib/knowledgeLine.ts:')) {
     failIn('section3', `a DayPoints may be minted once, in src/lib/knowledgeLine.ts; found ${mints.length}: ${mints.join(', ') || 'none'}`);
