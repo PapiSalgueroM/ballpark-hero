@@ -1,11 +1,19 @@
 # Work board
 
-**2026-09-28, Claude lane: Round 661 FINISHED on `r661-trivia-facts`, pushed, not yet on main.**
+**2026-09-28, Claude lane: Round 661 FIXED after review on `r661-trivia-facts`, pushed, not yet on main.**
 Claimed on 2026-09-19 (the trivia banks). Hall of Fame or Bust, Guess the Year and Score Predictor
 are rewritten to what two sources state and pinned to `scripts/data/triviaFactsVerified2026-09.json`
-(597 facts) by `scripts/simTriviaFacts.mjs` (five sections, eight controls, all green). The branch
-sits on `5c082e71`, 61 commits behind main, so the release that takes it will see this board, What's
-New and `docs/PROJECT-STATE.md` conflict; keep both sides. Account in `docs/PROJECT-STATE.md`.
+(597 facts) by `scripts/simTriviaFacts.mjs`. The review's fixes landed in `aaf30a6d`: 31 Guess the
+Year clues sharpened to one year each, the Hall of Fame reveal says "Our call" beside the real
+induction record (Owen is no longer a bust), old Score Predictor saves follow the new sides, the
+List Quiz takes every joint Champions League top scorer and 2025-26, and the fence grew to eight
+sections and 17 controls, all green. The branch also carries `8bd17b2f` (List Quiz UCL rename and
+the shirt number wording in Shirt Number and Sports Millionaire), which the first account left out.
+**One migration waits for the lead:** `supabase/migrations/20260928210000_ucl_joint_top_scorers.sql`
+(unapplied, fail closed; the game is right without it). The branch sits on `5c082e71`, behind main,
+so this board, What's New, `docs/PROJECT-STATE.md` and `src/data/searchKeywords.json` will conflict;
+keep both sides of the docs and rerun `genSearchKeywords` on the merged tree. Account in
+`docs/PROJECT-STATE.md`.
 
 **2026-09-19 evening, desktop Claude lane: Rounds 649 and 650 claimed, for search traffic.**
 Lovable's numbers for 2026-09-05 to 09-19: about 1,000 visitors a day, and Bing sends 3,882 of
