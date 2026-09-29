@@ -17,7 +17,7 @@ import { toast } from 'sonner';
 import { format } from 'date-fns';
 import html2canvas from 'html2canvas';
 import { useStreaks } from '@/hooks/useStreaks';
-import { getLocalTodayCount } from '@/lib/completions';
+import { getLocalTodayCount, boardName, BOARD_NAME_MAX } from '@/lib/completions';
 import { getBadgeState, BADGE_DEFS, type BadgeState } from '@/lib/badges';
 import AchievementCase from '@/components/profile/AchievementCase';
 import { nameModerationError } from '@/lib/nameModeration';
@@ -345,8 +345,11 @@ export default function Profile() {
       setSaving(false);
       return;
     }
+    /* Round 673: the display name is the name on the board, and the board
+       insert refuses one over 40 characters, so it is held to 40 here too
+       (the input stops at 40; this cut covers anything that got past it). */
     const { error } = await updateProfile({
-      display_name: editForm.display_name || null,
+      display_name: boardName(editForm.display_name) || null,
       username: editForm.username || null,
     });
     if (error) {
@@ -514,7 +517,7 @@ export default function Profile() {
                   <div className="space-y-1">
                     {editing ? (
                       <div className="space-y-2">
-                        <Input value={editForm.display_name} onChange={e => setEditForm({ ...editForm, display_name: e.target.value })} placeholder="Display name" className="h-8 w-48" />
+                        <Input value={editForm.display_name} onChange={e => setEditForm({ ...editForm, display_name: e.target.value })} placeholder="Display name" maxLength={BOARD_NAME_MAX} className="h-8 w-48" />
                         <div className="flex items-center gap-1">
                           <span className="text-muted-foreground">@</span>
                           <Input value={editForm.username} onChange={e => setEditForm({ ...editForm, username: e.target.value.toLowerCase() })} placeholder="username" className="h-8 w-40" />

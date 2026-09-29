@@ -23,6 +23,12 @@
    switch from getUser to getSession could fail silently: the recorder asking
    for a session the client does not hand back.
 
+   Negative control: SIM_SCORING_CONTROL=accept (Round 673) makes the stub's
+   save take a score above the hard maximum, as the save did before economy
+   step L1. Section 2's refused play checks must go red: they have to tell a
+   refused save from an accepted one, or "the play still counts on this
+   device and the refusal is logged" proves nothing.
+
    Run: node scripts/simScoringCoverage.mjs
 */
 import fs from 'node:fs';
@@ -35,7 +41,9 @@ let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.SIM_SCORING_CONTROL === 'unwire';
 const NOSAVE = process.env.SIM_SCORING_CONTROL === 'nosave';
+const ACCEPT = process.env.SIM_SCORING_CONTROL === 'accept';
 let controlBit = false;
+let failuresBeforeRefusal = -1;
 
 const read = p => {
   for (const e of ['', '.tsx', '.ts']) {
@@ -177,6 +185,13 @@ function recordAuthCompletion(args: any) {
   const day = 'today';
   const slug = args.p_game_slug;
   const score = Number(args.p_score) || 0;
+  /* Round 673, economy step L1: the save refuses a score outside 0 to the
+     game's hard maximum before writing anything, with 22023 and a message
+     naming the value. One stand in bound for every game is enough here: this
+     models the contract the client sees, simEconomyMigrations runs the SQL. */
+  if (${ACCEPT ? 'false' : 'true'} && (score < 0 || score > 1000000)) {
+    return { data: null, error: { code: '22023', message: 'record_auth_completion refused: score ' + score + ' for "' + slug + '" is outside 0 to 1000000' } };
+  }
   table('user_game_scores');
   ledger['user_game_scores'].push({ user_id: uid, game_type: slug, score, correct_answers: args.p_correct || 0 });
   table('daily_completions');
@@ -267,8 +282,40 @@ export { ledger, setSessionUser } from '${STUB}';
   const savesAfter = (mod.ledger['__rpc__'] || []).filter(c => c.name === 'record_auth_completion').length;
   if (savesAfter !== 2) fail(`an activity ping made a signed in save call (${savesAfter} total, wanted still 2)`);
   console.log(`   1 activity ping: anonymous rows ${anonAfter}, plays still ${streaksAfter.totalPlays}, ranked rows still 2`);
+
+  /* Round 673: a save the server refuses is not a play lost in silence. The
+     local record (streak, plays, points) was written before the save went out
+     and stays; the refusal is logged with the server's own message; nothing
+     reaches the account tables; the board row still lands. And a name over
+     the board's 40 character bound is cut to 40 on the way out (by code
+     point, so an emoji at the cut is kept whole or dropped whole), where
+     before the insert would have been refused. */
+  failuresBeforeRefusal = failures;
+  const warned = [];
+  const realWarn = console.warn;
+  console.warn = (...a) => { warned.push(a.map(String).join(' ')); };
+  const longName = 'L'.repeat(39) + '\u{1F3C6}' + 'overflow';
+  mod.recordCompletion('/soccer-grid', 5000000, longName, 0);
+  await new Promise(r => setTimeout(r, 50));
+  console.warn = realWarn;
+  const s3 = mod.getStreakState();
+  const ranked3 = (mod.ledger['user_game_scores'] || []).length;
+  const total3 = (mod.ledger['user_scores'] || [])[0]?.total_points;
+  const board3 = (mod.ledger['game_completions'] || []).at(-1) || {};
+  if ((s3.totalPlays || 0) !== 3 || (s3.totalPoints || 0) !== 5000140) fail(`a refused save lost the play locally: ${s3.totalPlays} plays and ${s3.totalPoints} points on this device, wanted 3 and 5000140`);
+  if (!warned.some(w => /the server refused this signed in save/.test(w) && /record_auth_completion refused: score 5000000/.test(w))) fail(`a refused save was not logged with the server's reason (console.warn saw ${JSON.stringify(warned).slice(0, 160)})`);
+  if (ranked3 !== 2 || total3 !== 140) fail(`a refused save changed the account tables (${ranked3} ranked rows, total ${total3}), wanted 2 and 140`);
+  if (board3.score !== 5000000) fail('the refused play\'s board row did not land');
+  const cut = Array.from(String(board3.player_name || ''));
+  if (cut.length !== 40 || cut[39] !== '\u{1F3C6}') fail(`a 48 character name went to the board as ${cut.length} characters (${JSON.stringify(board3.player_name)}), wanted its first 40 with the trophy whole`);
+  console.log(`   1 play the server refuses: plays ${s3.totalPlays} and points ${s3.totalPoints} kept on this device, ${warned.length} warning(s) naming the refusal, ranked rows still ${ranked3}; its board row under a name cut to ${cut.length} characters`);
 }
 
+if (ACCEPT) {
+  if (failuresBeforeRefusal === 0 && failures > 0) { console.log(`\ncontrol run (accept): ${failures} failure(s), all in the refused play checks, as expected`); process.exit(0); }
+  console.error(`\ncontrol run (accept): ${failures === 0 ? 'a save that was ACCEPTED passed the refused play checks, so they do not tell the two apart' : `${failuresBeforeRefusal} failure(s) fired before the refused play checks, so this control is not isolated`}`);
+  process.exit(1);
+}
 if (NOSAVE) {
   if (failures > 0) { console.log(`\ncontrol run (nosave): ${failures} failure(s) fired as expected`); process.exit(0); }
   console.error('\ncontrol run (nosave): an empty session changed NOTHING, so section 2 is not measuring the signed in save');
