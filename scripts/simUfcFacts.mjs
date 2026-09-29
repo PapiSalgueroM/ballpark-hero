@@ -35,15 +35,21 @@
  * green run there means verified. This harness keeps its own job, the
  * arithmetic and the cross file agreement, which needs no record.
  *
- * The one place it reads the record (section 6, Round 660 review): the two
- * division declarations below say WHY a fighter may sit in two divisions, and
- * twelve of them give the reason "the guesser shows the division ufc.com
- * lists". That is a claim about a source, and the review found it false for
- * BJ Penn (ufc.com lists Lightweight, the guesser ships Featherweight). A
- * reason that nothing checks is prose, so each such declaration now carries
- * shownAs: 'ufc.com', and section 6 requires the record's weightClass for that
- * fighter to be the declared division, standing on a ufc.com page, with no
- * noOfficial note saying ufc.com shows something else.
+ * The places it reads the record (Round 660 review). The division
+ * declarations below say WHY a fighter may sit in two divisions, and eleven of
+ * them give the reason "the guesser shows the division of his last UFC bout as
+ * ufc.com's event page labels it". That is a claim about a source. The first
+ * wording ("the division ufc.com lists") was false for BJ Penn, whose guesser
+ * row said Featherweight while ufc.com and his last two bouts said
+ * Lightweight; his row is Lightweight now and needs no declaration. A reason
+ * that nothing checks is prose, so each such declaration carries shownAs:
+ * 'ufc.com', and section 6 requires the record's weightClass for that fighter
+ * to be the declared division, standing on a ufc.com EVENT page (a profile
+ * page's division can lag the last bout), with no noOfficial note saying
+ * ufc.com shows something else. And a declaration that spans more than one
+ * step (Max Holloway went featherweight, lightweight, then welterweight at
+ * UFC 329) must name every division in between as through, and section 5
+ * requires the record's verified UFC divisions for him to include each one.
  *
  * WHAT IT DOES NOT DO. It does not assert that any number is correct. That
  * needs two published sources and belongs in the same re-verification pass
@@ -75,6 +81,8 @@
  *   UFC_CONTROL=crossfile    a weight class changed in one file only
  *   UFC_CONTROL=finishes     more knockouts than wins
  *   UFC_CONTROL=declaration  Pereira's verified division loses its ufc.com page
+ *   UFC_CONTROL=through      Holloway's verified divisions lose Lightweight, the
+ *                            division his declared move passes through
  * Exit code under a control: 0 when the section fired as it must, 1 when not.
  */
 import fs from 'node:fs';
@@ -87,7 +95,7 @@ const THIS_YEAR = new Date().getFullYear();
 const FIGHTERS = 'src/data/ufcFighters.ts';
 const CHAIN = 'src/data/ufcChainData.ts';
 const RECORD = 'scripts/data/sportsFactsVerified2026-09.json';
-const EXPECT = { record: 1, crossfile: 5, finishes: 3, declaration: 6 };
+const EXPECT = { record: 1, crossfile: 5, finishes: 3, declaration: 6, through: 5 };
 if (CONTROL && EXPECT[CONTROL] === undefined) { console.error(`Unknown UFC_CONTROL "${CONTROL}"`); process.exit(2); }
 
 const rewrite = (src, from, to, what) => {
@@ -133,11 +141,13 @@ const WEIGHT_CLASSES = new Set(['Strawweight', 'Flyweight', 'Bantamweight', 'Fea
    divisions named, and the harness checks the declared pair is exactly the
    pair observed and that the two are neighbours in WEIGHT_CLASS_ORDER,
    because a fighter moves to the division next door and a typo usually does
-   not. Anything undeclared still fails. A declaration whose reason is a
-   source (shownAs: 'ufc.com') is checked against the record in section 6. */
+   not. A fighter who really did cross two divisions names the one in between
+   as through, and the record must show him fighting in all three. Anything
+   undeclared still fails. A declaration whose reason is a source (shownAs:
+   'ufc.com') is checked against the record in section 6. */
 const WEIGHT_CLASS_ORDER = ['Strawweight', 'Flyweight', 'Bantamweight', 'Featherweight',
   'Lightweight', 'Welterweight', 'Middleweight', 'Light Heavyweight', 'Heavyweight'];
-const UFC_COM_WHY = 'the guesser shows the division ufc.com lists (checked 2026-09-19 with ESPN and Sherdog, Round 660); the chain keeps him in the division of the fights it links';
+const UFC_COM_WHY = 'the guesser shows the division of his last UFC bout as ufc.com\'s event page labels it (checked 2026-09-28 with the Sherdog event page, Round 660); the chain keeps him in the division of the fights it links';
 const MULTI_DIVISION = {
   'Alex Pereira': { fighters: 'Heavyweight', chain: 'Light Heavyweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
   'Robert Whittaker': { fighters: 'Light Heavyweight', chain: 'Middleweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
@@ -147,9 +157,8 @@ const MULTI_DIVISION = {
   'Islam Makhachev': { fighters: 'Welterweight', chain: 'Lightweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
   'Conor McGregor': { fighters: 'Welterweight', chain: 'Lightweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
   'Tony Ferguson': { fighters: 'Welterweight', chain: 'Lightweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
-  'BJ Penn': { fighters: 'Featherweight', chain: 'Lightweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
   'Ilia Topuria': { fighters: 'Lightweight', chain: 'Featherweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
-  'Max Holloway': { fighters: 'Lightweight', chain: 'Featherweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
+  'Max Holloway': { fighters: 'Welterweight', chain: 'Featherweight', through: ['Lightweight'], shownAs: 'ufc.com', why: UFC_COM_WHY },
   'Aljamain Sterling': { fighters: 'Featherweight', chain: 'Bantamweight', shownAs: 'ufc.com', why: UFC_COM_WHY },
   'Frankie Edgar': { fighters: 'Bantamweight', chain: 'Featherweight', why: 'dropped from lightweight through featherweight to bantamweight' },
   'Deiveson Figueiredo': { fighters: 'Bantamweight', chain: 'Flyweight', why: 'flyweight champion, then moved up' },
@@ -259,17 +268,26 @@ function runChecks(fighterSrc, chainSrc, record, quiet) {
       fail(5, `${c.name} is declared as ${declared.fighters} / ${declared.chain} but the files now say ${f.weightClass} / ${c.weightClass}, so the declaration is covering a different disagreement than the one it was written for`);
       continue;
     }
-    const gap = Math.abs(WEIGHT_CLASS_ORDER.indexOf(declared.fighters) - WEIGHT_CLASS_ORDER.indexOf(declared.chain));
-    if (gap !== 1) {
-      fail(5, `${c.name} is declared in ${declared.fighters} and ${declared.chain}, which are ${gap} divisions apart, not neighbours`);
+    const lo = Math.min(WEIGHT_CLASS_ORDER.indexOf(declared.fighters), WEIGHT_CLASS_ORDER.indexOf(declared.chain));
+    const hi = Math.max(WEIGHT_CLASS_ORDER.indexOf(declared.fighters), WEIGHT_CLASS_ORDER.indexOf(declared.chain));
+    const between = WEIGHT_CLASS_ORDER.slice(lo + 1, hi);
+    const through = declared.through ?? [];
+    if (JSON.stringify(through) !== JSON.stringify(between)) {
+      fail(5, `${c.name} is declared in ${declared.fighters} and ${declared.chain}, which are ${hi - lo} divisions apart; ${between.length ? `a move that far must name the division${between.length > 1 ? 's' : ''} in between (${between.join(', ')}) as through` : 'they are neighbours, so the declaration names no division in between'}, and it names ${through.length ? through.join(', ') : 'none'}`);
+    } else if (through.length) {
+      /* A fighter who moved two divisions must have fought in every one of them,
+         and the record, not this declaration, is what says so. */
+      const fought = record.ufcChain?.[c.name]?.divisions?.v ?? [];
+      const missing = [declared.chain, ...through, declared.fighters].filter(d => !fought.includes(d));
+      if (missing.length) fail(5, `${c.name} is declared as moving from ${declared.chain} through ${through.join(', ')} to ${declared.fighters}, but the record's verified UFC divisions (${fought.join(', ') || 'none'}) do not include ${missing.join(', ')}`);
     }
   }
   const unusedDeclarations = Object.keys(MULTI_DIVISION).filter(n => !usedDeclarations.has(n));
   if (unusedDeclarations.length) {
     fail(5, `declared as two division fighters but no longer disagreeing across the files: ${unusedDeclarations.join(', ')}. Delete the declaration, do not leave it standing.`);
   } else {
-    say(`  ${Object.keys(MULTI_DIVISION).length} two division fighters declared, each a move to the division next door: ` +
-      Object.entries(MULTI_DIVISION).map(([n, d]) => `${n} (${d.chain} to ${d.fighters}, ${d.why})`).join('; '));
+    say(`  ${Object.keys(MULTI_DIVISION).length} multi division fighters declared, each a move to the division next door or through every division in between: ` +
+      Object.entries(MULTI_DIVISION).map(([n, d]) => `${n} (${d.chain} to ${d.through ? `${d.through.join(' to ')} to ` : ''}${d.fighters}, ${d.why})`).join('; '));
   }
   if (!shared) fail(5, 'not one fighter appears in both files, so this section checked nothing and the inventory\'s "the two files duplicate records" is no longer true');
   else say(`  ${shared} fighters are in both files`);
@@ -281,13 +299,15 @@ function runChecks(fighterSrc, chainSrc, record, quiet) {
     if (d.shownAs !== 'ufc.com') continue;
     claims += 1;
     const wc = record.ufcFighters?.[name]?.weightClass;
-    const onUfc = (wc?.src ?? []).some(u => { try { return /(^|\.)ufc\.com$/.test(new URL(u).hostname.toLowerCase()); } catch { return false; } });
+    /* The reason names the event page's bout label, so a ufc.com profile page
+       (whose division can lag the last bout) does not count. */
+    const onUfc = (wc?.src ?? []).some(u => { try { const x = new URL(u); return /(^|\.)ufc\.com$/.test(x.hostname.toLowerCase()) && /^\/event\//.test(x.pathname); } catch { return false; } });
     let why = '';
     if (!wc) why = 'the record holds no verified weightClass for this fighter';
     else if (wc.v !== d.fighters) why = `the record verifies ${JSON.stringify(wc.v)}, not ${d.fighters}`;
     else if (wc.noOfficial) why = `the record says ufc.com does not show it: "${wc.noOfficial}"`;
-    else if (!onUfc) why = 'the record cites no ufc.com page for it';
-    if (why) fail(6, `${name}: declared as ${d.fighters} because "the guesser shows the division ufc.com lists", but ${why}`);
+    else if (!onUfc) why = 'the record cites no ufc.com event page for it';
+    if (why) fail(6, `${name}: declared as ${d.fighters} because "the guesser shows the division of his last UFC bout as ufc.com labels it", but ${why}`);
   }
   if (!claims) fail(6, 'no declaration names ufc.com as its reason, so this section checked nothing');
   else say(`  ${claims} declarations give ufc.com as the reason; each was held to the record`);
@@ -326,6 +346,12 @@ if (CONTROL === 'finishes') {
   const m = line && line.match(/koTko: \d+,/);
   if (!m) { console.error("CONTROL finishes cannot run: Khabib's row with a knockout count not found"); process.exit(2); }
   fighterSrc = rewrite(fighterSrc, line, line.replace(m[0], 'koTko: 80,'), "Khabib's knockout count");
+}
+if (CONTROL === 'through') {
+  record = structuredClone(baseRecord);
+  const div = record.ufcChain?.['Max Holloway']?.divisions;
+  if (!div || !div.v.includes('Lightweight') || !MULTI_DIVISION['Max Holloway']?.through) { console.error("CONTROL through cannot run: Holloway's declared move through Lightweight, or Lightweight in his verified divisions, is not there"); process.exit(2); }
+  div.v = div.v.filter(d => d !== 'Lightweight');
 }
 if (CONTROL === 'declaration') {
   record = structuredClone(baseRecord);

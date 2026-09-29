@@ -70,11 +70,11 @@
    "weightClass": {
     "v": "Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/jon-jones",
-     "https://www.espn.com/mma/fighter/_/id/2335639/jon-jones",
-     "https://www.sherdog.com/fighter/Jon-Jones-27944"
+     "https://www.ufc.com/event/ufc-309#11684",
+     "https://www.sherdog.com/events/UFC-309-Jones-vs-Miocic-103896"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2024-11-16: Jones vs Miocic, UFC 309 - Jones vs. Miocic (ufc.com: Heavyweight Title Bout; Sherdog: Heavyweight)."
    },
    "yearsActive": {
     "v": "2008-2024",
@@ -134,10 +134,11 @@
    "weightClass": {
     "v": "Middleweight",
     "src": [
-     "https://www.ufc.com/athlete/georges-st-pierre",
-     "https://www.espn.com/mma/fighter/_/id/2335659/georges-st-pierre"
+     "https://www.ufc.com/event/ufc-217#6872",
+     "https://www.sherdog.com/events/UFC-217-Bisping-vs-St-Pierre-61989"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2017-11-04: Bisping vs St-Pierre, UFC 217 - Bisping vs. St. Pierre (ufc.com: Middleweight Title Bout; Sherdog: Middleweight)."
    },
    "yearsActive": {
     "v": "2004-2017",
@@ -200,11 +201,11 @@
    "weightClass": {
     "v": "Middleweight",
     "src": [
-     "https://www.ufc.com/athlete/anderson-silva",
-     "https://www.espn.com/mma/fighter/_/id/2335447/anderson-silva",
-     "https://www.sherdog.com/fighter/Anderson-Silva-1356"
+     "https://www.ufc.com/event/ufc-fight-night-october-31-2020#8762",
+     "https://www.sherdog.com/events/UFC-Fight-Night-181-Hall-vs-Silva-87364"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2020-10-31: Hall vs Silva, UFC Fight Night 181 - Hall vs. Silva (ufc.com: Middleweight Bout; Sherdog: Middleweight)."
    },
    "yearsActive": {
     "v": "2006-2020",
@@ -263,11 +264,11 @@
    "weightClass": {
     "v": "Lightweight",
     "src": [
-     "https://www.ufc.com/athlete/khabib-nurmagomedov",
-     "https://www.espn.com/mma/fighter/_/id/2611557/khabib-nurmagomedov",
-     "https://www.sherdog.com/fighter/Khabib-Nurmagomedov-56035"
+     "https://www.ufc.com/event/ufc-254#8595",
+     "https://www.sherdog.com/events/UFC-254-Nurmagomedov-vs-Gaethje-87041"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2020-10-24: Nurmagomedov vs Gaethje, UFC 254 - Nurmagomedov vs. Gaethje (ufc.com: Lightweight Title Bout; Sherdog: Lightweight)."
    },
    "yearsActive": {
     "v": "2012-2020",
@@ -327,10 +328,11 @@
    "weightClass": {
     "v": "Flyweight",
     "src": [
-     "https://www.ufc.com/athlete/demetrious-johnson",
-     "https://www.espn.com/mma/fighter/_/id/2512089/demetrious-johnson"
+     "https://www.ufc.com/event/ufc-227#7302",
+     "https://www.sherdog.com/events/UFC-227-Dillashaw-vs-Garbrandt-2-66977"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2018-08-04: Johnson vs Cejudo, UFC 227 - Dillashaw vs. Garbrandt 2 (ufc.com: Flyweight Title Bout; Sherdog: Flyweight)."
    },
    "yearsActive": {
     "v": "2011-2018",
@@ -391,11 +393,11 @@
    "weightClass": {
     "v": "Bantamweight",
     "src": [
-     "https://www.ufc.com/athlete/amanda-nunes",
-     "https://www.espn.com/mma/fighter/_/id/2516131/amanda-nunes",
-     "https://www.sherdog.com/fighter/Amanda-Nunes-31496"
+     "https://www.ufc.com/event/ufc-289#10550",
+     "https://www.sherdog.com/events/UFC-289-Nunes-vs-Aldana-97020"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2023-06-10: Nunes vs Aldana, UFC 289 - Nunes vs. Aldana (ufc.com: Women's Bantamweight Title Bout; Sherdog: Bantamweight)."
    },
    "yearsActive": {
     "v": "2013-2023",
@@ -455,11 +457,11 @@
    "weightClass": {
     "v": "Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/stipe-miocic",
-     "https://www.espn.com/mma/fighter/_/id/2504951/stipe-miocic",
-     "https://www.sherdog.com/fighter/Stipe-Miocic-39537"
+     "https://www.ufc.com/event/ufc-309#11684",
+     "https://www.sherdog.com/events/UFC-309-Jones-vs-Miocic-103896"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2024-11-16: Jones vs Miocic, UFC 309 - Jones vs. Miocic (ufc.com: Heavyweight Title Bout; Sherdog: Heavyweight)."
    },
    "yearsActive": {
     "v": "2011-2024",
@@ -515,12 +517,13 @@
     "on": "2026-09-19"
    },
    "weightClass": {
-    "v": "Lightweight",
+    "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/max-holloway",
-     "https://www.espn.com/mma/fighter/_/id/2614933/max-holloway"
+     "https://www.ufc.com/event/ufc-329#12858",
+     "https://www.sherdog.com/events/UFC-329-McGregor-vs-Holloway-2-111889"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-07-11: McGregor vs Holloway, UFC 329 - McGregor vs. Holloway 2 (ufc.com: Welterweight Bout; Sherdog: Welterweight). UFC 329 was his welterweight debut. Conor McGregor ships Welterweight from the same bout."
    },
    "yearsActive": {
     "v": "2012-2026",
@@ -580,11 +583,11 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/conor-mcgregor",
-     "https://www.espn.com/mma/fighter/_/id/3022677/conor-mcgregor",
-     "https://www.sherdog.com/fighter/Conor-McGregor-29688"
+     "https://www.ufc.com/event/ufc-329#12858",
+     "https://www.sherdog.com/events/UFC-329-McGregor-vs-Holloway-2-111889"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-07-11: McGregor vs Holloway, UFC 329 - McGregor vs. Holloway 2 (ufc.com: Welterweight Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2013-2026",
@@ -644,11 +647,11 @@
    "weightClass": {
     "v": "Featherweight",
     "src": [
-     "https://www.ufc.com/athlete/jose-aldo",
-     "https://www.espn.com/mma/fighter/_/id/2447641/jose-aldo",
-     "https://www.sherdog.com/fighter/Jose-Aldo-11506"
+     "https://www.ufc.com/event/ufc-315#11981",
+     "https://www.sherdog.com/events/UFC-315-Muhammad-vs-Della-Maddalena-106942"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2025-05-10: Aldo vs Zahabi, UFC 315 - Muhammad vs. Della Maddalena (ufc.com: Featherweight Bout; Sherdog: Featherweight)."
    },
    "yearsActive": {
     "v": "2011-2025",
@@ -708,11 +711,11 @@
    "weightClass": {
     "v": "Middleweight",
     "src": [
-     "https://www.ufc.com/athlete/kamaru-usman",
-     "https://www.espn.com/mma/fighter/_/id/3088812/kamaru-usman",
-     "https://www.sherdog.com/fighter/Kamaru-Usman-120691"
+     "https://www.ufc.com/event/ufc-fight-night-july-18-2026#12919",
+     "https://www.sherdog.com/events/UFC-Fight-Night-281-Du-Plessis-vs-Usman-112601"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-07-18: Du Plessis vs Usman, UFC Fight Night 281 - Du Plessis vs. Usman (ufc.com: Middleweight Bout; Sherdog: Middleweight)."
    },
    "yearsActive": {
     "v": "2015-2026",
@@ -772,11 +775,11 @@
    "weightClass": {
     "v": "Featherweight",
     "src": [
-     "https://www.ufc.com/athlete/alexander-volkanovski",
-     "https://www.espn.com/mma/fighter/_/id/3949584/alexander-volkanovski",
-     "https://www.sherdog.com/fighter/Alexander-Volkanovski-101527"
+     "https://www.ufc.com/event/ufc-325#12535",
+     "https://www.sherdog.com/events/UFC-325-Volkanovski-vs-Lopes-2-110692"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-01-31: Volkanovski vs Lopes, UFC 325 - Volkanovski vs. Lopes 2 (ufc.com: Featherweight Title Bout; Sherdog: Featherweight)."
    },
    "yearsActive": {
     "v": "2016-2026",
@@ -836,11 +839,11 @@
    "weightClass": {
     "v": "Middleweight",
     "src": [
-     "https://www.ufc.com/athlete/israel-adesanya",
-     "https://www.espn.com/mma/fighter/_/id/4285679/israel-adesanya",
-     "https://www.sherdog.com/fighter/Israel-Adesanya-56374"
+     "https://www.ufc.com/event/ufc-fight-night-march-28-2026#12604",
+     "https://www.sherdog.com/events/UFC-Fight-Night-271-Adesanya-vs-Pyfer-110786"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-03-28: Adesanya vs Pyfer, UFC Fight Night 271 - Adesanya vs. Pyfer (ufc.com: Middleweight Bout; Sherdog: Middleweight)."
    },
    "yearsActive": {
     "v": "2018-2026",
@@ -900,11 +903,11 @@
    "weightClass": {
     "v": "Bantamweight",
     "src": [
-     "https://www.ufc.com/athlete/henry-cejudo",
-     "https://www.espn.com/mma/fighter/_/id/3023388/henry-cejudo",
-     "https://www.sherdog.com/fighter/Henry-Cejudo-125297"
+     "https://www.ufc.com/event/ufc-323#12485",
+     "https://www.sherdog.com/events/UFC-323-Dvalishvili-vs-Yan-2-109392"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2025-12-06: Cejudo vs Talbott, UFC 323 - Dvalishvili vs. Yan 2 (ufc.com: Bantamweight Bout; Sherdog: Bantamweight)."
    },
    "yearsActive": {
     "v": "2014-2025",
@@ -964,11 +967,11 @@
    "weightClass": {
     "v": "Flyweight",
     "src": [
-     "https://www.ufc.com/athlete/valentina-shevchenko",
-     "https://www.espn.com/mma/fighter/_/id/2554705/valentina-shevchenko",
-     "https://www.sherdog.com/fighter/Valentina-Shevchenko-45384"
+     "https://www.ufc.com/event/ufc-322#12383",
+     "https://www.sherdog.com/events/UFC-322-Della-Maddalena-vs-Makhachev-109394"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2025-11-15: Shevchenko vs Weili, UFC 322 - Della Maddalena vs. Makhachev (ufc.com: Women's Flyweight Title Bout; Sherdog: Flyweight)."
    },
    "yearsActive": {
     "v": "2015-2025",
@@ -1027,11 +1030,11 @@
    "weightClass": {
     "v": "Light Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/robert-whittaker",
-     "https://www.espn.com/mma/fighter/_/id/3009717/robert-whittaker",
-     "https://www.sherdog.com/fighter/Robert-Whittaker-45132"
+     "https://www.ufc.com/event/ufc-329#12861",
+     "https://www.sherdog.com/events/UFC-329-McGregor-vs-Holloway-2-111889"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-07-11: Krylov vs Whittaker, UFC 329 - McGregor vs. Holloway 2 (ufc.com: Light Heavyweight Bout; Sherdog: Light Heavyweight)."
    },
    "yearsActive": {
     "v": "2012-2026",
@@ -1089,11 +1092,11 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/tony-ferguson",
-     "https://www.espn.com/mma/fighter/_/id/2560085/tony-ferguson",
-     "https://www.sherdog.com/fighter/Tony-Ferguson-31239"
+     "https://www.ufc.com/event/ufc-fight-night-august-03-2024#11438",
+     "https://www.sherdog.com/events/UFC-on-ABC-7-Sandhagen-vs-Nurmagomedov-101959"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2024-08-03: Ferguson vs Chiesa, UFC on ABC 7 - Sandhagen vs. Nurmagomedov (ufc.com: Welterweight Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2011-2024",
@@ -1153,11 +1156,11 @@
    "weightClass": {
     "v": "Lightweight",
     "src": [
-     "https://www.ufc.com/athlete/dustin-poirier",
-     "https://www.espn.com/mma/fighter/_/id/2506549/dustin-poirier",
-     "https://www.sherdog.com/fighter/Dustin-Poirier-50529"
+     "https://www.ufc.com/event/ufc-318#12097",
+     "https://www.sherdog.com/events/UFC-318-Holloway-vs-Poirier-3-107850"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2025-07-19: Holloway vs Poirier, UFC 318 - Holloway vs. Poirier 3 (ufc.com: Lightweight Bout; Sherdog: Lightweight)."
    },
    "yearsActive": {
     "v": "2011-2025",
@@ -1216,11 +1219,11 @@
    "weightClass": {
     "v": "Lightweight",
     "src": [
-     "https://www.ufc.com/athlete/charles-oliveira",
-     "https://www.espn.com/mma/fighter/_/id/2504169/charles-oliveira",
-     "https://www.sherdog.com/fighter/Charles-Oliveira-30300"
+     "https://www.ufc.com/event/ufc-326#12540",
+     "https://www.sherdog.com/events/UFC-326-Holloway-vs-Oliveira-2-110782"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-03-07: Holloway vs Oliveira, UFC 326 - Holloway vs. Oliveira 2 (ufc.com: Lightweight Bout; Sherdog: Lightweight)."
    },
    "yearsActive": {
     "v": "2010-2026",
@@ -1279,11 +1282,11 @@
    "weightClass": {
     "v": "Flyweight",
     "src": [
-     "https://www.ufc.com/athlete/rose-namajunas",
-     "https://www.espn.com/mma/fighter/_/id/3032973/rose-namajunas",
-     "https://www.sherdog.com/fighter/Rose-Namajunas-69083"
+     "https://www.ufc.com/event/ufc-324#12539",
+     "https://www.sherdog.com/events/UFC-324-Gaethje-vs-Pimblett-110614"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-01-24: Silva vs Namajunas, UFC 324 - Gaethje vs. Pimblett (ufc.com: Women's Flyweight Bout; Sherdog: Flyweight)."
    },
    "yearsActive": {
     "v": "2014-2026",
@@ -1342,11 +1345,11 @@
    "weightClass": {
     "v": "Strawweight",
     "src": [
-     "https://www.ufc.com/athlete/joanna-jedrzejczyk",
-     "https://www.espn.com/mma/fighter/_/id/3106617/joanna-jedrzejczyk",
-     "https://www.sherdog.com/fighter/Joanna-Jedrzejczyk-101411"
+     "https://www.ufc.com/event/ufc-275#9804",
+     "https://www.sherdog.com/events/UFC-275-Teixeira-vs-Prochazka-92186"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2022-06-11: Weili vs Jedrzejczyk, UFC 275 - Teixeira vs. Prochazka (ufc.com: Women's Strawweight Bout; Sherdog: Strawweight)."
    },
    "yearsActive": {
     "v": "2014-2022",
@@ -1406,11 +1409,11 @@
    "weightClass": {
     "v": "Bantamweight",
     "src": [
-     "https://www.ufc.com/athlete/dominick-cruz",
-     "https://www.espn.com/mma/fighter/_/id/2335888/dominick-cruz",
-     "https://www.sherdog.com/fighter/Dominick-Cruz-12107"
+     "https://www.ufc.com/event/ufc-fight-night-august-13-2022#9949",
+     "https://www.sherdog.com/events/UFC-on-ESPN-41-Vera-vs-Cruz-93192"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2022-08-13: Vera vs Cruz, UFC on ESPN 41 - Vera vs. Cruz (ufc.com: Bantamweight Bout; Sherdog: Bantamweight)."
    },
    "yearsActive": {
     "v": "2011-2022",
@@ -1469,11 +1472,11 @@
    "weightClass": {
     "v": "Bantamweight",
     "src": [
-     "https://www.ufc.com/athlete/tj-dillashaw",
-     "https://www.espn.com/mma/fighter/_/id/2611719/tj-dillashaw",
-     "https://www.sherdog.com/fighter/TJ-Dillashaw-62507"
+     "https://www.ufc.com/event/ufc-280#10055",
+     "https://www.sherdog.com/events/UFC-280-Oliveira-vs-Makhachev-92490"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2022-10-22: Sterling vs Dillashaw, UFC 280 - Oliveira vs. Makhachev (ufc.com: Bantamweight Title Bout; Sherdog: Bantamweight)."
    },
    "yearsActive": {
     "v": "2011-2022",
@@ -1531,13 +1534,13 @@
     "on": "2026-09-19"
    },
    "weightClass": {
-    "v": "Featherweight",
+    "v": "Bantamweight",
     "src": [
-     "https://www.espn.com/mma/fighter/_/id/2563796/ronda-rousey",
-     "https://www.sherdog.com/fighter/Ronda-Rousey-73073"
+     "https://www.ufc.com/event/ufc-207#6370",
+     "https://www.sherdog.com/events/UFC-207-Nunes-vs-Rousey-55005"
     ],
-    "on": "2026-09-19",
-    "noOfficial": "ufc.com shows \"Bantamweight\" for this; ESPN and Sherdog agree on \"Featherweight\""
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2016-12-30: Nunes vs Rousey, UFC 207 - Nunes vs. Rousey (ufc.com: Women's Bantamweight Title Bout; Sherdog: Bantamweight). Her last three UFC bouts (Correia UFC 190, Holm UFC 193, Nunes UFC 207) are each a Women's Bantamweight Title Bout on ufc.com and Bantamweight on Sherdog. ufc.com profile: Women's Bantamweight Division. The record's \"ESPN and Sherdog agree on Featherweight\" is a profile label, not a bout."
    },
    "yearsActive": {
     "v": "2013-2016",
@@ -1596,13 +1599,15 @@
     "on": "2026-09-19"
    },
    "weightClass": {
-    "v": "Featherweight",
+    "v": "Lightweight",
     "src": [
-     "https://www.espn.com/mma/fighter/_/id/2335629/bj-penn",
-     "https://www.sherdog.com/fighter/BJ-Penn-1307"
+     "https://www.ufc.com/event/ufc-237#7820",
+     "https://www.sherdog.com/events/UFC-237-Namajunas-vs-Andrade-73341",
+     "https://www.ufc.com/event/ufc-232#7552",
+     "https://www.sherdog.com/events/UFC-232-Jones-vs-Gustafsson-2-69297"
     ],
-    "on": "2026-09-19",
-    "noOfficial": "ufc.com shows \"Lightweight\" for this; ESPN and Sherdog agree on \"Featherweight\""
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2019-05-11: Penn vs Guida, UFC 237 - Namajunas vs. Andrade (ufc.com: Lightweight Bout; Sherdog: Lightweight). His last two UFC bouts were both at lightweight: Ryan Hall at UFC 232 (2018-12-29) and Clay Guida at UFC 237 (2019-05-11), each labelled Lightweight on the ufc.com event page and on the Sherdog event page. His last featherweight bout was Dennis Siver at UFC Fight Night 112 (2017-06-25). ufc.com profile: Lightweight Division."
    },
    "yearsActive": {
     "v": "2001-2019",
@@ -1661,11 +1666,12 @@
    "weightClass": {
     "v": "Light Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/randy-couture",
-     "https://www.espn.com/mma/fighter/_/id/2335338/randy-couture",
-     "https://www.sherdog.com/fighter/Randy-Couture-166"
+     "https://www.ufc.com/event/ufc-129#3369",
+     "https://www.sherdog.com/events/UFC-129-St-Pierre-vs-Shields-15427",
+     "https://bleacherreport.com/articles/686431-ufc-129-results-lyoto-machida-kos-randy-couture-with-a-leaping-front-kick"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2011-04-30: Machida vs Couture, UFC 129 - St. Pierre vs. Shields (ufc.com: Light Heavyweight Bout; Sherdog: no weight shown). Sherdog's UFC 129 page shows no weight for the bout, so the independent host for the division is Bleacher Report's UFC 129 result, which calls it 'his light heavyweight bout against Randy Couture'."
    },
    "yearsActive": {
     "v": "1997-2011",
@@ -1724,11 +1730,12 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/matt-serra",
-     "https://www.espn.com/mma/fighter/_/id/2335662/matt-serra",
-     "https://www.sherdog.com/fighter/Matt-Serra-1305"
+     "https://www.ufc.com/event/ufc-119#2979",
+     "https://www.sherdog.com/events/UFC-119-Mir-vs-Cro-Cop-13732",
+     "https://bleacherreport.com/articles/418534-welterweight-war-ii-chris-lytle-matt-serra-rematch-to-happen-at-ufc-119"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2010-09-25: Serra vs Lytle, UFC 119 - Mir vs. Cro Cop (ufc.com: Welterweight Bout; Sherdog: no weight shown). Sherdog's UFC 119 page shows no weight for the bout, so the independent host for the division is Bleacher Report's preview, headlined 'Welterweight War II: Chris Lytle-Matt Serra Rematch To Happen at UFC 119'."
    },
    "yearsActive": {
     "v": "2001-2010",
@@ -1787,11 +1794,11 @@
    "weightClass": {
     "v": "Bantamweight",
     "src": [
-     "https://www.ufc.com/athlete/frankie-edgar",
-     "https://www.espn.com/mma/fighter/_/id/2335694/frankie-edgar",
-     "https://www.sherdog.com/fighter/Frankie-Edgar-14204"
+     "https://www.ufc.com/event/ufc-281#10205",
+     "https://www.sherdog.com/events/UFC-281-Adesanya-vs-Pereira-94041"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2022-11-12: Edgar vs Gutierrez, UFC 281 - Adesanya vs. Pereira (ufc.com: Bantamweight Bout; Sherdog: Bantamweight)."
    },
    "yearsActive": {
     "v": "2007-2022",
@@ -1850,11 +1857,11 @@
    "weightClass": {
     "v": "Middleweight",
     "src": [
-     "https://www.ufc.com/athlete/lyoto-machida",
-     "https://www.espn.com/mma/fighter/_/id/2335524/lyoto-machida",
-     "https://www.sherdog.com/fighter/Lyoto-Machida-7513"
+     "https://www.ufc.com/event/ufc-224#7146",
+     "https://www.sherdog.com/events/UFC-224-Nunes-vs-Pennington-65419"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2018-05-12: Belfort vs Machida, UFC 224 - Nunes vs. Pennington (ufc.com: Middleweight Bout; Sherdog: Middleweight)."
    },
    "yearsActive": {
     "v": "2007-2018",
@@ -1914,11 +1921,11 @@
    "weightClass": {
     "v": "Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/cain-velasquez",
-     "https://www.espn.com/mma/fighter/_/id/2335654/cain-velasquez",
-     "https://www.sherdog.com/fighter/Cain-Velasquez-19102"
+     "https://www.ufc.com/event/ufc-fight-night-phoenix-2019#7654",
+     "https://www.sherdog.com/events/UFC-on-ESPN-1-Ngannou-vs-Velasquez-72025"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2019-02-17: Ngannou vs Velasquez, UFC on ESPN 1 - Ngannou vs. Velasquez (ufc.com: Heavyweight Bout; Sherdog: Heavyweight)."
    },
    "yearsActive": {
     "v": "2008-2019",
@@ -1978,11 +1985,15 @@
    "weightClass": {
     "v": "Middleweight",
     "src": [
-     "https://www.ufc.com/athlete/chris-weidman",
-     "https://www.espn.com/mma/fighter/_/id/2553993/chris-weidman",
-     "https://www.sherdog.com/fighter/Chris-Weidman-42804"
+     "https://www.ufc.com/event/ufc-310#11797",
+     "https://www.sherdog.com/events/UFC-310-Pantoja-vs-Asakura-103714",
+     "https://www.espn.com/mma/story/_/id/42432602/eryk-anders-falls-ill-fight-chris-weidman-ufc-309",
+     "https://www.thescore.com/mma/news/3134488/amp",
+     "https://www.ufc.com/event/ufc-fight-night-march-30-2024#11209",
+     "https://www.sherdog.com/events/UFC-on-ESPN-54-Blanchfield-vs-Fiorot-100718"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2024-12-07: Weidman vs Anders, UFC 310 - Pantoja vs. Asakura (ufc.com: Catchweight; Sherdog: 195lb Catchweight). His last UFC bout (UFC 310 v Eryk Anders, 2024-12-07) was a 195 lb catchweight, which is not a division: ufc.com says Catchweight Bout, Sherdog says 195lb Catchweight. It was booked as a middleweight bout at UFC 309, cancelled on fight day, and rebooked at 195 lb so neither man cut weight twice in two weeks (ESPN, theScore). His last bout in a division was middleweight (UFC on ESPN 54 v Bruno Silva, 2024-03-30: ufc.com Middleweight Bout, Sherdog Middleweight). Shipped Middleweight stands, with that caveat."
    },
    "yearsActive": {
     "v": "2011-2024",
@@ -2042,11 +2053,11 @@
    "weightClass": {
     "v": "Bantamweight",
     "src": [
-     "https://www.ufc.com/athlete/urijah-faber",
-     "https://www.espn.com/mma/fighter/_/id/2335682/urijah-faber",
-     "https://www.sherdog.com/fighter/Urijah-Faber-8847"
+     "https://www.ufc.com/event/ufc-245#8201",
+     "https://www.sherdog.com/events/UFC-245-Usman-vs-Covington-76607"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2019-12-14: Yan vs Faber, UFC 245 - Usman vs. Covington (ufc.com: Bantamweight Bout; Sherdog: Bantamweight)."
    },
    "yearsActive": {
     "v": "2011-2019",
@@ -2106,10 +2117,11 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/anthony-pettis",
-     "https://www.sherdog.com/fighter/Anthony-Pettis-26627"
+     "https://www.ufc.com/event/ufc-fight-night-december-19-2020#8897",
+     "https://www.sherdog.com/events/UFC-Fight-Night-183-Thompson-vs-Neal-87646"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2020-12-19: Pettis vs Morono, UFC Fight Night 183 - Thompson vs. Neal (ufc.com: Welterweight Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2011-2020",
@@ -2169,11 +2181,11 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.espn.com/mma/fighter/_/id/2335687/rafael-dos-anjos",
-     "https://www.sherdog.com/fighter/Rafael-dos-Anjos-11675"
+     "https://www.ufc.com/event/ufc-308#11569",
+     "https://www.sherdog.com/events/UFC-308-Topuria-vs-Holloway-102482"
     ],
-    "on": "2026-09-19",
-    "noOfficial": "ufc.com shows \"Lightweight\" for this; ESPN and Sherdog agree on \"Welterweight\""
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2024-10-26: Neal vs Dos Anjos, UFC 308 - Topuria vs. Holloway (ufc.com: Welterweight Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2008-2024",
@@ -2234,11 +2246,11 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/robbie-lawler",
-     "https://www.espn.com/mma/fighter/_/id/2431258/robbie-lawler",
-     "https://www.sherdog.com/fighter/Robbie-Lawler-2245"
+     "https://www.ufc.com/event/ufc-290#10531",
+     "https://www.sherdog.com/events/UFC-290-Volkanovski-vs-Rodriguez-96757"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2023-07-08: Lawler vs Price, UFC 290 - Volkanovski vs. Rodriguez (ufc.com: Welterweight Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2002-2023",
@@ -2299,11 +2311,11 @@
    "weightClass": {
     "v": "Bantamweight",
     "src": [
-     "https://www.ufc.com/athlete/holly-holm",
-     "https://www.espn.com/mma/fighter/_/id/3028404/holly-holm",
-     "https://www.sherdog.com/fighter/Holly-Holm-75125"
+     "https://www.ufc.com/event/ufc-300#11206",
+     "https://www.sherdog.com/events/UFC-300-Pereira-vs-Hill-100836"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2024-04-13: Holm vs Harrison, UFC 300 - Pereira vs. Hill (ufc.com: Women's Bantamweight Bout; Sherdog: Bantamweight)."
    },
    "yearsActive": {
     "v": "2015-2024",
@@ -2363,11 +2375,11 @@
    "weightClass": {
     "v": "Flyweight",
     "src": [
-     "https://www.ufc.com/athlete/zhang-weili",
-     "https://www.espn.com/mma/fighter/_/id/4350762/zhang-weili",
-     "https://www.sherdog.com/fighter/Weili-Zhang-186663"
+     "https://www.ufc.com/event/ufc-322#12383",
+     "https://www.sherdog.com/events/UFC-322-Della-Maddalena-vs-Makhachev-109394"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2025-11-15: Shevchenko vs Weili, UFC 322 - Della Maddalena vs. Makhachev (ufc.com: Women's Flyweight Title Bout; Sherdog: Flyweight)."
    },
    "yearsActive": {
     "v": "2018-2025",
@@ -2427,11 +2439,11 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/islam-makhachev",
-     "https://www.espn.com/mma/fighter/_/id/3332412/islam-makhachev",
-     "https://www.sherdog.com/fighter/Islam-Makhachev-76836"
+     "https://www.ufc.com/event/ufc-330#12910",
+     "https://www.sherdog.com/events/UFC-330-Makhachev-vs-Garry-112557"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-08-15: Makhachev vs Machado Garry, UFC 330 - Makhachev vs. Garry (ufc.com: Welterweight Title Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2015-2026",
@@ -2492,11 +2504,11 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/leon-edwards",
-     "https://www.espn.com/mma/fighter/_/id/3152929/leon-edwards",
-     "https://www.sherdog.com/fighter/Leon-Edwards-62665"
+     "https://www.ufc.com/event/ufc-322#12385",
+     "https://www.sherdog.com/events/UFC-322-Della-Maddalena-vs-Makhachev-109394"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2025-11-15: Edwards vs Prates, UFC 322 - Della Maddalena vs. Makhachev (ufc.com: Welterweight Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2014-2025",
@@ -2556,11 +2568,11 @@
    "weightClass": {
     "v": "Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/alex-pereira",
-     "https://www.espn.com/mma/fighter/_/id/4705658/alex-pereira",
-     "https://www.sherdog.com/fighter/Alex-Pereira-224511"
+     "https://www.ufc.com/event/ufc-freedom-250#12707",
+     "https://www.sherdog.com/events/UFC-White-House-Freedom-250-Topuria-vs-Gaethje-111990"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-06-14: Pereira vs Gane, UFC White House - Freedom 250: Topuria vs. Gaethje (ufc.com: Heavyweight Interim Title Bout; Sherdog: Heavyweight)."
    },
    "yearsActive": {
     "v": "2021-2026",
@@ -2621,11 +2633,11 @@
    "weightClass": {
     "v": "Bantamweight",
     "src": [
-     "https://www.ufc.com/athlete/sean-omalley",
-     "https://www.espn.com/mma/fighter/_/id/4205093/sean-omalley",
-     "https://www.sherdog.com/fighter/Sean-OMalley-135099"
+     "https://www.ufc.com/event/ufc-freedom-250#12708",
+     "https://www.sherdog.com/events/UFC-White-House-Freedom-250-Topuria-vs-Gaethje-111990"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-06-14: O'Malley vs Zahabi, UFC White House - Freedom 250: Topuria vs. Gaethje (ufc.com: Bantamweight Bout; Sherdog: Bantamweight)."
    },
    "yearsActive": {
     "v": "2017-2026",
@@ -2686,11 +2698,11 @@
    "weightClass": {
     "v": "Lightweight",
     "src": [
-     "https://www.ufc.com/athlete/ilia-topuria",
-     "https://www.espn.com/mma/fighter/_/id/4350812/ilia-topuria",
-     "https://www.sherdog.com/fighter/Ilia-Topuria-202445"
+     "https://www.ufc.com/event/ufc-freedom-250#12706",
+     "https://www.sherdog.com/events/UFC-White-House-Freedom-250-Topuria-vs-Gaethje-111990"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-06-14: Topuria vs Gaethje, UFC White House - Freedom 250: Topuria vs. Gaethje (ufc.com: Lightweight Title Bout; Sherdog: Lightweight)."
    },
    "yearsActive": {
     "v": "2020-2026",
@@ -2750,11 +2762,11 @@
    "weightClass": {
     "v": "Middleweight",
     "src": [
-     "https://www.ufc.com/athlete/dricus-du-plessis",
-     "https://www.espn.com/mma/fighter/_/id/3166126/dricus-du-plessis",
-     "https://www.sherdog.com/fighter/Dricus-Du-Plessis-146193"
+     "https://www.ufc.com/event/ufc-fight-night-july-18-2026#12919",
+     "https://www.sherdog.com/events/UFC-Fight-Night-281-Du-Plessis-vs-Usman-112601"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-07-18: Du Plessis vs Usman, UFC Fight Night 281 - Du Plessis vs. Usman (ufc.com: Middleweight Bout; Sherdog: Middleweight)."
    },
    "yearsActive": {
     "v": "2020-2026",
@@ -2814,11 +2826,11 @@
    "weightClass": {
     "v": "Bantamweight",
     "src": [
-     "https://www.ufc.com/athlete/merab-dvalishvili",
-     "https://www.espn.com/mma/fighter/_/id/3948572/merab-dvalishvili",
-     "https://www.sherdog.com/fighter/Merab-Dvalishvili-157355"
+     "https://www.ufc.com/event/ufc-323#12482",
+     "https://www.sherdog.com/events/UFC-323-Dvalishvili-vs-Yan-2-109392"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2025-12-06: Dvalishvili vs Yan, UFC 323 - Dvalishvili vs. Yan 2 (ufc.com: Bantamweight Title Bout; Sherdog: Bantamweight)."
    },
    "yearsActive": {
     "v": "2017-2025",
@@ -2879,11 +2891,11 @@
    "weightClass": {
     "v": "Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/tom-aspinall",
-     "https://www.espn.com/mma/fighter/_/id/4010976/tom-aspinall",
-     "https://www.sherdog.com/fighter/Tom-Aspinall-65231"
+     "https://www.ufc.com/event/ufc-321#12277",
+     "https://www.sherdog.com/events/UFC-321-Aspinall-vs-Gane-108759"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2025-10-25: Aspinall vs Gane, UFC 321 - Aspinall vs. Gane (ufc.com: Heavyweight Title Bout; Sherdog: Heavyweight)."
    },
    "yearsActive": {
     "v": "2020-2025",
@@ -2941,11 +2953,11 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/belal-muhammad",
-     "https://www.espn.com/mma/fighter/_/id/3172112/belal-muhammad",
-     "https://www.sherdog.com/fighter/Belal-Muhammad-108315"
+     "https://www.ufc.com/event/ufc-fight-night-june-06-2026#12732",
+     "https://www.sherdog.com/events/UFC-Fight-Night-278-Muhammad-vs-Bonfim-112060"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-06-06: Muhammad vs Bonfim, UFC Fight Night 278 - Muhammad vs. Bonfim (ufc.com: Welterweight Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2016-2026",
@@ -3006,11 +3018,11 @@
    "weightClass": {
     "v": "Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/ciryl-gane",
-     "https://www.espn.com/mma/fighter/_/id/4426000/ciryl-gane",
-     "https://www.sherdog.com/fighter/Ciryl-Gane-293973"
+     "https://www.ufc.com/event/ufc-freedom-250#12707",
+     "https://www.sherdog.com/events/UFC-White-House-Freedom-250-Topuria-vs-Gaethje-111990"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-06-14: Pereira vs Gane, UFC White House - Freedom 250: Topuria vs. Gaethje (ufc.com: Heavyweight Interim Title Bout; Sherdog: Heavyweight)."
    },
    "yearsActive": {
     "v": "2019-2026",
@@ -3070,11 +3082,11 @@
    "weightClass": {
     "v": "Light Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/jiri-prochazka",
-     "https://www.espn.com/mma/fighter/_/id/3156612/jiri-prochazka",
-     "https://www.sherdog.com/fighter/Jiri-Prochazka-97529"
+     "https://www.ufc.com/event/ufc-327#12689",
+     "https://www.sherdog.com/events/UFC-327-Prochazka-vs-Ulberg-111135"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-04-11: Prochazka vs Ulberg, UFC 327 - Prochazka vs. Ulberg (ufc.com: Light Heavyweight Title Bout; Sherdog: Light Heavyweight)."
    },
    "yearsActive": {
     "v": "2020-2026",
@@ -3134,11 +3146,11 @@
    "weightClass": {
     "v": "Middleweight",
     "src": [
-     "https://www.ufc.com/athlete/sean-strickland",
-     "https://www.espn.com/mma/fighter/_/id/3093653/sean-strickland",
-     "https://www.sherdog.com/fighter/Sean-Strickland-30452"
+     "https://www.ufc.com/event/ufc-328#12722",
+     "https://www.sherdog.com/events/UFC-328-Chimaev-vs-Strickland-111957"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-05-09: Chimaev vs Strickland, UFC 328 - Chimaev vs. Strickland (ufc.com: Middleweight Title Bout; Sherdog: Middleweight)."
    },
    "yearsActive": {
     "v": "2014-2026",
@@ -3198,11 +3210,11 @@
    "weightClass": {
     "v": "Lightweight",
     "src": [
-     "https://www.ufc.com/athlete/justin-gaethje",
-     "https://www.espn.com/mma/fighter/_/id/3022345/justin-gaethje",
-     "https://www.sherdog.com/fighter/Justin-Gaethje-46648"
+     "https://www.ufc.com/event/ufc-freedom-250#12706",
+     "https://www.sherdog.com/events/UFC-White-House-Freedom-250-Topuria-vs-Gaethje-111990"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-06-14: Topuria vs Gaethje, UFC White House - Freedom 250: Topuria vs. Gaethje (ufc.com: Lightweight Title Bout; Sherdog: Lightweight)."
    },
    "yearsActive": {
     "v": "2017-2026",
@@ -3263,11 +3275,11 @@
    "weightClass": {
     "v": "Flyweight",
     "src": [
-     "https://www.ufc.com/athlete/brandon-moreno",
-     "https://www.espn.com/mma/fighter/_/id/3027545/brandon-moreno",
-     "https://www.sherdog.com/fighter/Brandon-Moreno-80173"
+     "https://www.ufc.com/event/ufc-fight-night-september-12-2026#12977",
+     "https://www.sherdog.com/events/UFC-Fight-Night-288-Noche-UFC-4-113632"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-09-12: Moreno vs Morales, UFC Fight Night 288 - Noche UFC 4 (ufc.com: Flyweight Bout; Sherdog: Flyweight)."
    },
    "yearsActive": {
     "v": "2016-2026",
@@ -3327,11 +3339,11 @@
    "weightClass": {
     "v": "Bantamweight",
     "src": [
-     "https://www.ufc.com/athlete/deiveson-figueiredo",
-     "https://www.espn.com/mma/fighter/_/id/4189320/deiveson-figueiredo",
-     "https://www.sherdog.com/fighter/Deiveson-Figueiredo-110485"
+     "https://www.ufc.com/event/ufc-fight-night-may-30-2026#12727",
+     "https://www.sherdog.com/events/UFC-Fight-Night-277-Song-vs-Figueiredo-111528"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-05-30: Yadong vs Figueiredo, UFC Fight Night 277 - Song vs. Figueiredo (ufc.com: Bantamweight Bout; Sherdog: Bantamweight)."
    },
    "yearsActive": {
     "v": "2017-2026",
@@ -3391,11 +3403,11 @@
    "weightClass": {
     "v": "Bantamweight",
     "src": [
-     "https://www.ufc.com/athlete/petr-yan",
-     "https://www.espn.com/mma/fighter/_/id/4293517/petr-yan",
-     "https://www.sherdog.com/fighter/Petr-Yan-186873"
+     "https://www.ufc.com/event/ufc-323#12482",
+     "https://www.sherdog.com/events/UFC-323-Dvalishvili-vs-Yan-2-109392"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2025-12-06: Dvalishvili vs Yan, UFC 323 - Dvalishvili vs. Yan 2 (ufc.com: Bantamweight Title Bout; Sherdog: Bantamweight)."
    },
    "yearsActive": {
     "v": "2018-2025",
@@ -3455,11 +3467,11 @@
    "weightClass": {
     "v": "Featherweight",
     "src": [
-     "https://www.ufc.com/athlete/aljamain-sterling",
-     "https://www.espn.com/mma/fighter/_/id/3031559/aljamain-sterling",
-     "https://www.sherdog.com/fighter/Aljamain-Sterling-66313"
+     "https://www.ufc.com/event/ufc-fight-night-april-25-2026#12720",
+     "https://www.sherdog.com/events/UFC-Fight-Night-274-Sterling-vs-Zalal-111715"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-04-25: Sterling vs Zalal, UFC Fight Night 274 - Sterling vs. Zalal (ufc.com: Featherweight Bout; Sherdog: Featherweight)."
    },
    "yearsActive": {
     "v": "2014-2026",
@@ -3519,11 +3531,11 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/colby-covington",
-     "https://www.espn.com/mma/fighter/_/id/3088810/colby-covington",
-     "https://www.sherdog.com/fighter/Colby-Covington-57269"
+     "https://www.ufc.com/event/ufc-fight-night-december-14-2024#11792",
+     "https://www.sherdog.com/events/UFC-on-ESPN-63-Covington-vs-Buckley-104113"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2024-12-14: Covington vs Buckley, UFC on ESPN 63 - Covington vs. Buckley (ufc.com: Welterweight Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2014-2024",
@@ -3582,11 +3594,11 @@
    "weightClass": {
     "v": "Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/derrick-lewis",
-     "https://www.espn.com/mma/fighter/_/id/2560713/derrick-lewis",
-     "https://www.sherdog.com/fighter/Derrick-Lewis-59284"
+     "https://www.ufc.com/event/ufc-freedom-250#12810",
+     "https://www.sherdog.com/events/UFC-White-House-Freedom-250-Topuria-vs-Gaethje-111990"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-06-14: Hokit vs Lewis, UFC White House - Freedom 250: Topuria vs. Gaethje (ufc.com: Heavyweight Bout; Sherdog: Heavyweight)."
    },
    "yearsActive": {
     "v": "2014-2026",
@@ -3646,11 +3658,11 @@
    "weightClass": {
     "v": "Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/francis-ngannou",
-     "https://www.espn.com/mma/fighter/_/id/3933168/francis-ngannou",
-     "https://www.sherdog.com/fighter/Francis-Ngannou-152341"
+     "https://www.ufc.com/event/ufc-270#9529",
+     "https://www.sherdog.com/events/UFC-270-Ngannou-vs-Gane-90612"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2022-01-22: Ngannou vs Gane, UFC 270 - Ngannou vs. Gane (ufc.com: Heavyweight Title Bout; Sherdog: Heavyweight)."
    },
    "yearsActive": {
     "v": "2015-2022",
@@ -3711,11 +3723,11 @@
    "weightClass": {
     "v": "Lightweight",
     "src": [
-     "https://www.ufc.com/athlete/michael-chandler",
-     "https://www.espn.com/mma/fighter/_/id/2504988/michael-chandler",
-     "https://www.sherdog.com/fighter/Michael-Chandler-50829"
+     "https://www.ufc.com/event/ufc-freedom-250#12709",
+     "https://www.sherdog.com/events/UFC-White-House-Freedom-250-Topuria-vs-Gaethje-111990"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-06-14: Ruffy vs Chandler, UFC White House - Freedom 250: Topuria vs. Gaethje (ufc.com: Lightweight Bout; Sherdog: Lightweight)."
    },
    "yearsActive": {
     "v": "2021-2026",
@@ -3776,11 +3788,11 @@
    "weightClass": {
     "v": "Light Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/jamahal-hill",
-     "https://www.espn.com/mma/fighter/_/id/4425355/jamahal-hill",
-     "https://www.sherdog.com/fighter/Jamahal-Hill-280417"
+     "https://www.ufc.com/event/ufc-fight-night-june-21-2025#12047",
+     "https://www.sherdog.com/events/UFC-on-ABC-8-Hill-vs-Rountree-107376"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2025-06-21: Hill vs Rountree Jr., UFC on ABC 8 - Hill vs. Rountree (ufc.com: Light Heavyweight Bout; Sherdog: Light Heavyweight)."
    },
    "yearsActive": {
     "v": "2020-2025",
@@ -3840,11 +3852,11 @@
    "weightClass": {
     "v": "Light Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/glover-teixeira",
-     "https://www.espn.com/mma/fighter/_/id/2504929/glover-teixeira",
-     "https://www.sherdog.com/fighter/Glover-Teixeira-4655"
+     "https://www.ufc.com/event/ufc-283#10286",
+     "https://www.sherdog.com/events/UFC-283-Teixeira-vs-Hill-94331"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2023-01-21: Teixeira vs Hill, UFC 283 - Teixeira vs. Hill (ufc.com: Light Heavyweight Title Bout; Sherdog: Light Heavyweight)."
    },
    "yearsActive": {
     "v": "2012-2023",
@@ -3904,11 +3916,11 @@
    "weightClass": {
     "v": "Light Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/jan-blachowicz",
-     "https://www.espn.com/mma/fighter/_/id/2506250/jan-blachowicz",
-     "https://www.sherdog.com/fighter/Jan-Blachowicz-25821"
+     "https://www.ufc.com/event/ufc-fight-night-august-01-2026#12966",
+     "https://www.sherdog.com/events/UFC-Fight-Night-283-Medic-vs-Rodriguez-112723"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-08-01: Blachowicz vs Stirling, UFC Fight Night 283 - Medic vs. Rodriguez (ufc.com: Light Heavyweight Bout; Sherdog: Light Heavyweight)."
    },
    "yearsActive": {
     "v": "2014-2026",
@@ -3968,11 +3980,11 @@
    "weightClass": {
     "v": "Featherweight",
     "src": [
-     "https://www.ufc.com/athlete/yair-rodriguez",
-     "https://www.espn.com/mma/fighter/_/id/3155420/yair-rodriguez",
-     "https://www.sherdog.com/fighter/Yair-Rodriguez-106305"
+     "https://www.ufc.com/event/ufc-314#11965",
+     "https://www.sherdog.com/events/UFC-314-Volkanovski-vs-Lopes-106606"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2025-04-12: Rodriguez vs Freire, UFC 314 - Volkanovski vs. Lopes (ufc.com: Featherweight Bout; Sherdog: Featherweight)."
    },
    "yearsActive": {
     "v": "2014-2025",
@@ -4032,11 +4044,15 @@
    "weightClass": {
     "v": "Featherweight",
     "src": [
-     "https://www.ufc.com/athlete/brian-ortega",
-     "https://www.espn.com/mma/fighter/_/id/3045737/brian-ortega",
-     "https://www.sherdog.com/fighter/Brian-Ortega-65310"
+     "https://www.ufc.com/event/ufc-fight-night-august-23-2025#12215",
+     "https://www.sherdog.com/events/UFC-Fight-Night-257-Walker-vs-Zhang-108195",
+     "https://www.espn.com/mma/ufc/story/_/id/46044966/brian-ortega-aljamain-sterling-fight-155-pounds",
+     "https://x.com/ufc/status/1958724697757294692",
+     "https://www.ufc.com/event/riyadh-season-noche-ufc#11539",
+     "https://www.sherdog.com/events/UFC-306-Noche-UFC-OMalley-vs-Dvalishvili-100837"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2025-08-23: Ortega vs Sterling, UFC Fight Night 257 - Walker vs. Zhang (ufc.com: Catchweight; Sherdog: 153lb Catchweight). His last UFC bout (v Aljamain Sterling, UFC Fight Night Shanghai, 2025-08-23) was a 153 lb catchweight: ufc.com says Catchweight Bout, Sherdog says 153lb Catchweight. The UFC's own post says it was originally scheduled as a featherweight bout, and ESPN reported the move off featherweight after his weight cut went wrong. He has said he is moving to lightweight but has not fought there yet. His last bout in a division was featherweight (UFC 306 Noche UFC v Diego Lopes, 2024-09-14: ufc.com Featherweight Bout, Sherdog Featherweight). Shipped Featherweight stands, with that caveat."
    },
    "yearsActive": {
     "v": "2014-2025",
@@ -4096,11 +4112,11 @@
    "weightClass": {
     "v": "Flyweight",
     "src": [
-     "https://www.ufc.com/athlete/alexa-grasso",
-     "https://www.espn.com/mma/fighter/_/id/3136287/alexa-grasso",
-     "https://www.sherdog.com/fighter/Alexa-Grasso-142845"
+     "https://www.ufc.com/event/ufc-fight-night-september-12-2026#12976",
+     "https://www.sherdog.com/events/UFC-Fight-Night-288-Noche-UFC-4-113632"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-09-12: Fiorot vs Grasso, UFC Fight Night 288 - Noche UFC 4 (ufc.com: Women's Flyweight Bout; Sherdog: Flyweight)."
    },
    "yearsActive": {
     "v": "2016-2026",
@@ -4160,11 +4176,11 @@
    "weightClass": {
     "v": "Bantamweight",
     "src": [
-     "https://www.ufc.com/athlete/cody-garbrandt",
-     "https://www.espn.com/mma/fighter/_/id/3163637/cody-garbrandt",
-     "https://www.sherdog.com/fighter/Cody-Garbrandt-50381"
+     "https://www.ufc.com/event/ufc-329#12860",
+     "https://www.sherdog.com/events/UFC-329-McGregor-vs-Holloway-2-111889"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-07-11: Garbrandt vs Yanez, UFC 329 - McGregor vs. Holloway 2 (ufc.com: Bantamweight Bout; Sherdog: Bantamweight)."
    },
    "yearsActive": {
     "v": "2015-2026",
@@ -4224,11 +4240,11 @@
    "weightClass": {
     "v": "Light Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/paulo-costa",
-     "https://www.espn.com/mma/fighter/_/id/4080826/paulo-costa",
-     "https://www.sherdog.com/fighter/Paulo-Costa-147165"
+     "https://www.ufc.com/event/ufc-327#12682",
+     "https://www.sherdog.com/events/UFC-327-Prochazka-vs-Ulberg-111135"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-04-11: Murzakanov vs Costa, UFC 327 - Prochazka vs. Ulberg (ufc.com: Light Heavyweight Bout; Sherdog: Light Heavyweight)."
    },
    "yearsActive": {
     "v": "2017-2026",
@@ -4288,11 +4304,11 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/gilbert-burns",
-     "https://www.espn.com/mma/fighter/_/id/3090197/gilbert-burns",
-     "https://www.sherdog.com/fighter/Gilbert-Burns-91727"
+     "https://www.ufc.com/event/ufc-fight-night-april-18-2026#12673",
+     "https://www.sherdog.com/events/UFC-Fight-Night-273-Burns-vs-Malott-111672"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-04-18: Burns vs Malott, UFC Fight Night 273 - Burns vs. Malott (ufc.com: Welterweight Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2014-2026",
@@ -4351,11 +4367,11 @@
    "weightClass": {
     "v": "Middleweight",
     "src": [
-     "https://www.ufc.com/athlete/vicente-luque",
-     "https://www.espn.com/mma/fighter/_/id/3045887/vicente-luque",
-     "https://www.sherdog.com/fighter/Vicente-Luque-66474"
+     "https://www.ufc.com/event/ufc-330#12935",
+     "https://www.sherdog.com/events/UFC-330-Makhachev-vs-Garry-112557"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-08-15: Luque vs Gore, UFC 330 - Makhachev vs. Garry (ufc.com: Middleweight Bout; Sherdog: Middleweight)."
    },
    "yearsActive": {
     "v": "2015-2026",
@@ -4414,20 +4430,20 @@
    "weightClass": {
     "v": "Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/jailton-almeida",
-     "https://www.espn.com/mma/fighter/_/id/4873640/jailton-almeida",
-     "https://www.sherdog.com/fighter/Jailton-Almeida-114657"
+     "https://www.ufc.com/event/ufc-fight-night-february-07-2026#12619",
+     "https://www.sherdog.com/events/UFC-Fight-Night-266-Bautista-vs-Oliveira-110753"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-02-07: Almeida vs Kuniev, UFC Fight Night 266 - Bautista vs. Oliveira (ufc.com: Heavyweight Bout; Sherdog: Heavyweight)."
    },
    "yearsActive": {
     "v": "2022-2026",
     "src": [
      "https://www.sherdog.com/fighter/Jailton-Almeida-114657",
-     "https://www.ufc.com/athlete/jailton-almeida"
+     "https://www.espn.com/mma/fighter/history/_/id/4873640/jailton-almeida"
     ],
-    "on": "2026-09-19",
-    "noOfficial": "ufc.com shows \"2021-2026\" for this; Sherdog and a checked third page agree on \"2022-2026\""
+    "on": "2026-09-28",
+    "noOfficial": "ufc.com shows \"2021-2026\": its profile gives an Octagon debut of 13 November 2021, a date on which neither Sherdog nor ESPN lists a bout, and its history opens with his Dana White's Contender Series win of 14 September 2021, a Contender Series event rather than a UFC one; the first UFC Fight Night in that same history is 5 February 2022. Sherdog and ESPN both put his first UFC bout on 5 February 2022 (v Danilo Marques) and his latest on 7 February 2026 (v Rizvan Kuniev)."
    },
    "koTko": {
     "v": 8,
@@ -4479,11 +4495,11 @@
    "weightClass": {
     "v": "Lightweight",
     "src": [
-     "https://www.ufc.com/athlete/dan-hooker",
-     "https://www.espn.com/mma/fighter/_/id/3109135/dan-hooker",
-     "https://www.sherdog.com/fighter/Dan-Hooker-45122"
+     "https://www.ufc.com/event/ufc-fight-night-september-05-2026#12999",
+     "https://www.sherdog.com/events/UFC-Fight-Night-287-Hooker-vs-Parnasse-113189"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-09-05: Hooker vs Parnasse, UFC Fight Night 287 - Hooker vs. Parnasse (ufc.com: Lightweight Bout; Sherdog: Lightweight)."
    },
    "yearsActive": {
     "v": "2014-2026",
@@ -4543,11 +4559,11 @@
    "weightClass": {
     "v": "Middleweight",
     "src": [
-     "https://www.ufc.com/athlete/kelvin-gastelum",
-     "https://www.espn.com/mma/fighter/_/id/3026011/kelvin-gastelum",
-     "https://www.sherdog.com/fighter/Kelvin-Gastelum-74700"
+     "https://www.ufc.com/event/ufc-327#12719",
+     "https://www.sherdog.com/events/UFC-327-Prochazka-vs-Ulberg-111135"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-04-11: Gastelum vs Luque, UFC 327 - Prochazka vs. Ulberg (ufc.com: Middleweight Bout; Sherdog: Middleweight)."
    },
    "yearsActive": {
     "v": "2013-2026",
@@ -4607,11 +4623,11 @@
    "weightClass": {
     "v": "Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/curtis-blaydes",
-     "https://www.espn.com/mma/fighter/_/id/3922557/curtis-blaydes",
-     "https://www.sherdog.com/fighter/Curtis-Blaydes-172939"
+     "https://www.ufc.com/event/ufc-fight-night-september-12-2026#12975",
+     "https://www.sherdog.com/events/UFC-Fight-Night-288-Noche-UFC-4-113632"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-09-12: Cortes Acosta vs Blaydes, UFC Fight Night 288 - Noche UFC 4 (ufc.com: Heavyweight Bout; Sherdog: Heavyweight)."
    },
    "yearsActive": {
     "v": "2016-2026",
@@ -4671,11 +4687,11 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/demian-maia",
-     "https://www.espn.com/mma/fighter/_/id/2335778/demian-maia",
-     "https://www.sherdog.com/fighter/Demian-Maia-14637"
+     "https://www.ufc.com/event/ufc-263#9134",
+     "https://www.sherdog.com/events/UFC-263-Adesanya-vs-Vettori-2-88760"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2021-06-12: Maia vs Muhammad, UFC 263 - Adesanya vs. Vettori 2 (ufc.com: Welterweight Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2007-2021",
@@ -4736,10 +4752,11 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/donald-cerrone",
-     "https://www.sherdog.com/fighter/Donald-Cerrone-15105"
+     "https://www.ufc.com/event/ufc-276#9932",
+     "https://www.sherdog.com/events/UFC-276-Adesanya-vs-Cannonier-91882"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2022-07-02: Miller vs Cerrone, UFC 276 - Adesanya vs. Cannonier (ufc.com: Welterweight Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2011-2022",
@@ -4800,11 +4817,11 @@
    "weightClass": {
     "v": "Featherweight",
     "src": [
-     "https://www.ufc.com/athlete/cris-cyborg",
-     "https://www.espn.com/mma/fighter/_/id/2354564/cris-cyborg",
-     "https://www.sherdog.com/fighter/Cristiane-Justino-14477"
+     "https://www.ufc.com/event/ufc-240#7937",
+     "https://www.sherdog.com/events/UFC-240-Holloway-vs-Edgar-76577"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2019-07-27: Cyborg vs Spencer, UFC 240 - Holloway vs. Edgar (ufc.com: Women's Featherweight Bout; Sherdog: Featherweight)."
    },
    "yearsActive": {
     "v": "2016-2019",
@@ -4865,10 +4882,11 @@
    "weightClass": {
     "v": "Lightweight",
     "src": [
-     "https://www.ufc.com/athlete/eddie-alvarez",
-     "https://www.espn.com/mma/fighter/_/id/2431333/eddie-alvarez"
+     "https://www.ufc.com/event/fight-night-canada-july-28-2018#7281",
+     "https://www.sherdog.com/events/UFC-on-Fox-30-Alvarez-vs-Poirier-2-66975"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2018-07-28: Alvarez vs Poirier, UFC on Fox 30 - Alvarez vs. Poirier 2 (ufc.com: Lightweight Bout; Sherdog: Lightweight)."
    },
    "yearsActive": {
     "v": "2014-2018",
@@ -4929,11 +4947,11 @@
    "weightClass": {
     "v": "Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/mark-hunt",
-     "https://www.espn.com/mma/fighter/_/id/2354347/mark-hunt",
-     "https://www.sherdog.com/fighter/Mark-Hunt-10668"
+     "https://www.ufc.com/event/ufc-australia-2018#7520",
+     "https://www.sherdog.com/events/UFC-Fight-Night-142-Dos-Santos-vs-Tuivasa-69291"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2018-12-01: Hunt vs Willis, UFC Fight Night 142 - Dos Santos vs. Tuivasa (ufc.com: Heavyweight Bout; Sherdog: Heavyweight)."
    },
    "yearsActive": {
     "v": "2010-2018",
@@ -4993,11 +5011,11 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/stephen-thompson",
-     "https://www.espn.com/mma/fighter/_/id/2615077/stephen-thompson",
-     "https://www.sherdog.com/fighter/Stephen-Thompson-59608"
+     "https://www.ufc.com/event/ufc-fight-night-july-12-2025#12165",
+     "https://www.sherdog.com/events/UFC-on-ESPN-70-Lewis-vs-Teixeira-107548"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2025-07-12: Thompson vs Bonfim, UFC on ESPN 70 - Lewis vs. Teixeira (ufc.com: Welterweight Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2012-2025",
@@ -5057,20 +5075,20 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/jorge-masvidal",
-     "https://www.espn.com/mma/fighter/_/id/2500857/jorge-masvidal",
-     "https://www.sherdog.com/fighter/Jorge-Masvidal-7688"
+     "https://www.ufc.com/event/ufc-287#10378",
+     "https://www.sherdog.com/events/UFC-287-Pereira-vs-Adesanya-2-96031"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2023-04-08: Burns vs Masvidal, UFC 287 - Pereira vs. Adesanya 2 (ufc.com: Welterweight Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2013-2023",
     "src": [
      "https://www.sherdog.com/fighter/Jorge-Masvidal-7688",
-     "https://www.ufc.com/athlete/jorge-masvidal"
+     "https://www.espn.com/mma/fighter/history/_/id/2500857/jorge-masvidal"
     ],
-    "on": "2026-09-19",
-    "noOfficial": "ufc.com shows \"2012-2023\" for this; Sherdog and a checked third page agree on \"2013-2023\""
+    "on": "2026-09-28",
+    "noOfficial": "ufc.com shows \"2012-2023\": its profile gives an Octagon debut of 15 July 2012, but the same page files that bout (v Justin Wilcox, 14 July 2012) under his Strikeforce history, and ESPN's fight history lists it as Strikeforce too. Sherdog and ESPN both put his first UFC bout on 20 April 2013 (v Tim Means) and his last on 8 April 2023 (UFC 287 v Gilbert Burns)."
    },
    "koTko": {
     "v": 16,
@@ -5123,11 +5141,11 @@
    "weightClass": {
     "v": "Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/alistair-overeem",
-     "https://www.espn.com/mma/fighter/_/id/2335516/alistair-overeem",
-     "https://www.sherdog.com/fighter/Alistair-Overeem-461"
+     "https://www.ufc.com/event/ufc-fight-night-february-6-2021#8940",
+     "https://www.sherdog.com/events/UFC-Fight-Night-184-Overeem-vs-Volkov-87802"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2021-02-06: Overeem vs Volkov, UFC Fight Night 184 - Overeem vs. Volkov (ufc.com: Heavyweight Bout; Sherdog: Heavyweight)."
    },
    "yearsActive": {
     "v": "2011-2021",
@@ -5187,11 +5205,11 @@
    "weightClass": {
     "v": "Light Heavyweight",
     "src": [
-     "https://www.ufc.com/athlete/mauricio-rua",
-     "https://www.espn.com/mma/fighter/_/id/2335514/mauricio-rua",
-     "https://www.sherdog.com/fighter/Mauricio-Rua-5707"
+     "https://www.ufc.com/event/ufc-283#10238",
+     "https://www.sherdog.com/events/UFC-283-Teixeira-vs-Hill-94331"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2023-01-21: Rua vs Potieria, UFC 283 - Teixeira vs. Hill (ufc.com: Light Heavyweight Bout; Sherdog: Light Heavyweight)."
    },
    "yearsActive": {
     "v": "2007-2023",
@@ -5252,11 +5270,11 @@
    "weightClass": {
     "v": "Middleweight",
     "src": [
-     "https://www.ufc.com/athlete/vitor-belfort",
-     "https://www.espn.com/mma/fighter/_/id/2354057/vitor-belfort",
-     "https://www.sherdog.com/fighter/Vitor-Belfort-156"
+     "https://www.ufc.com/event/ufc-224#7146",
+     "https://www.sherdog.com/events/UFC-224-Nunes-vs-Pennington-65419"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2018-05-12: Belfort vs Machida, UFC 224 - Nunes vs. Pennington (ufc.com: Middleweight Bout; Sherdog: Middleweight)."
    },
    "yearsActive": {
     "v": "1997-2018",
@@ -5315,13 +5333,14 @@
     "on": "2026-09-19"
    },
    "weightClass": {
-    "v": "Bantamweight",
+    "v": "Lightweight",
     "src": [
-     "https://www.espn.com/mma/fighter/_/id/2335885/jens-pulver",
-     "https://www.sherdog.com/fighter/Jens-Pulver-228"
+     "https://www.ufc.com/event/The-Ultimate-Fighter-5-Finale#321",
+     "https://www.sherdog.com/events/UFC-The-Ultimate-Fighter-5-Finale-4681",
+     "https://www.espn.com/extra/mma/news/story?id=2914883"
     ],
-    "on": "2026-09-19",
-    "noOfficial": "ufc.com shows \"Lightweight\" for this; ESPN and Sherdog agree on \"Bantamweight\""
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2007-06-23: Penn vs Pulver, UFC - The Ultimate Fighter 5 Finale (ufc.com: Lightweight Bout; Sherdog: no weight shown). Sherdog's TUF 5 Finale page shows no weight for the bout, so the independent host for the division is ESPN's report of it, which has Pulver calling it the last word on the 155 lb weight class before his move down to 145. ufc.com profile: Lightweight Division. His later bantamweight and featherweight fights were outside the UFC."
    },
    "yearsActive": {
     "v": "1999-2007",
@@ -5381,11 +5400,11 @@
    "weightClass": {
     "v": "Welterweight",
     "src": [
-     "https://www.ufc.com/athlete/shavkat-rakhmonov",
-     "https://www.espn.com/mma/fighter/_/id/4020699/shavkat-rakhmonov",
-     "https://www.sherdog.com/fighter/Shavkat-Rakhmonov-179185"
+     "https://www.ufc.com/event/ufc-310#11793",
+     "https://www.sherdog.com/events/UFC-310-Pantoja-vs-Asakura-103714"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2024-12-07: Rakhmonov vs Machado Garry, UFC 310 - Pantoja vs. Asakura (ufc.com: Welterweight Bout; Sherdog: Welterweight)."
    },
    "yearsActive": {
     "v": "2020-2024",
@@ -5445,11 +5464,11 @@
    "weightClass": {
     "v": "Lightweight",
     "src": [
-     "https://www.ufc.com/athlete/arman-tsarukyan",
-     "https://www.espn.com/mma/fighter/_/id/4419372/arman-tsarukyan",
-     "https://www.sherdog.com/fighter/Arman-Tsarukyan-213913"
+     "https://www.ufc.com/event/cryptocom-ufc-331#13018",
+     "https://www.sherdog.com/events/UFC-331-Van-vs-Pantoja-2-113633"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-09-19: Tsarukyan vs Ruffy, UFC 331 - Van vs. Pantoja 2 (ufc.com: Lightweight Bout; Sherdog: Lightweight)."
    },
    "yearsActive": {
     "v": "2019-2025",
@@ -5509,11 +5528,11 @@
    "weightClass": {
     "v": "Middleweight",
     "src": [
-     "https://www.ufc.com/athlete/bo-nickal",
-     "https://www.espn.com/mma/fighter/_/id/5061870/bo-nickal",
-     "https://www.sherdog.com/fighter/Bo-Nickal-392031"
+     "https://www.ufc.com/event/ufc-freedom-250#12710",
+     "https://www.sherdog.com/events/UFC-White-House-Freedom-250-Topuria-vs-Gaethje-111990"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-06-14: Nickal vs Daukaus, UFC White House - Freedom 250: Topuria vs. Gaethje (ufc.com: Middleweight Bout; Sherdog: Middleweight)."
    },
    "yearsActive": {
     "v": "2023-2026",
@@ -5573,11 +5592,11 @@
    "weightClass": {
     "v": "Lightweight",
     "src": [
-     "https://www.ufc.com/athlete/paddy-pimblett",
-     "https://www.espn.com/mma/fighter/_/id/4008549/paddy-pimblett",
-     "https://www.sherdog.com/fighter/Paddy-Pimblett-84902"
+     "https://www.ufc.com/event/ufc-329#12859",
+     "https://www.sherdog.com/events/UFC-329-McGregor-vs-Holloway-2-111889"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-07-11: Saint Denis vs Pimblett, UFC 329 - McGregor vs. Holloway 2 (ufc.com: Lightweight Bout; Sherdog: Lightweight)."
    },
    "yearsActive": {
     "v": "2021-2026",
@@ -5637,11 +5656,11 @@
    "weightClass": {
     "v": "Featherweight",
     "src": [
-     "https://www.ufc.com/athlete/movsar-evloev",
-     "https://www.espn.com/mma/fighter/_/id/4029275/movsar-evloev",
-     "https://www.sherdog.com/fighter/Movsar-Evloev-183539"
+     "https://www.ufc.com/event/ufc-fight-night-march-21-2026#12623",
+     "https://www.sherdog.com/events/UFC-Fight-Night-270-Evloev-vs-Murphy-110783"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-03-21: Evloev vs Murphy, UFC Fight Night 270 - Evloev vs. Murphy (ufc.com: Featherweight Bout; Sherdog: Featherweight)."
    },
    "yearsActive": {
     "v": "2019-2026",
@@ -5701,11 +5720,11 @@
    "weightClass": {
     "v": "Featherweight",
     "src": [
-     "https://www.ufc.com/athlete/diego-lopes",
-     "https://www.espn.com/mma/fighter/_/id/4881999/diego-lopes",
-     "https://www.sherdog.com/fighter/Diego-Lopes-112531"
+     "https://www.ufc.com/event/ufc-freedom-250#12711",
+     "https://www.sherdog.com/events/UFC-White-House-Freedom-250-Topuria-vs-Gaethje-111990"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-06-14: Lopes vs Garcia, UFC White House - Freedom 250: Topuria vs. Gaethje (ufc.com: Featherweight Bout; Sherdog: Featherweight)."
    },
    "yearsActive": {
     "v": "2023-2026",
@@ -5765,11 +5784,11 @@
    "weightClass": {
     "v": "Flyweight",
     "src": [
-     "https://www.ufc.com/athlete/alexandre-pantoja",
-     "https://www.espn.com/mma/fighter/_/id/2560746/alexandre-pantoja",
-     "https://www.sherdog.com/fighter/Alexandre-Pantoja-25023"
+     "https://www.ufc.com/event/cryptocom-ufc-331#13017",
+     "https://www.sherdog.com/events/UFC-331-Van-vs-Pantoja-2-113633"
     ],
-    "on": "2026-09-19"
+    "on": "2026-09-28",
+    "note": "Last UFC bout 2026-09-19: Van vs Pantoja, UFC 331 - Van vs. Pantoja 2 (ufc.com: Flyweight Title Bout; Sherdog: Flyweight)."
    },
    "yearsActive": {
     "v": "2017-2025",
@@ -7101,10 +7120,12 @@
     ],
     "src": [
      "https://www.ufc.com/athlete/bj-penn",
-     "https://www.sherdog.com/events/UFC-237-Namajunas-vs-Andrade-73341"
+     "https://www.sherdog.com/events/UFC-237-Namajunas-vs-Andrade-73341",
+     "https://www.ufc.com/event/ufc-fight-night-oklahoma-city-2017#6610",
+     "https://www.sherdog.com/events/UFC-Fight-Night-112-Chiesa-vs-Lee-58847"
     ],
-    "on": "2026-09-19",
-    "note": "chained in Lightweight, the division ufc.com's profile names for the earlier part of the career; ufc.com and ESPN now list Featherweight"
+    "on": "2026-09-28",
+    "note": "Chained in Lightweight, the division of the fight the chain links (UFC 112) and of his last two UFC bouts (UFC 232 and UFC 237, labelled lightweight on ufc.com and Sherdog); ufc.com's profile lists Lightweight too. He also fought at featherweight: Dennis Siver at UFC Fight Night 112 in 2017 is a featherweight bout on ufc.com's event page and on Sherdog's."
    },
    "hallOfFame": {
     "v": true,
@@ -7195,15 +7216,17 @@
    "divisions": {
     "v": [
      "Featherweight",
-     "Lightweight"
+     "Lightweight",
+     "Welterweight"
     ],
     "src": [
      "https://www.ufc.com/athlete/max-holloway",
      "https://www.sherdog.com/events/UFC-308-Topuria-vs-Holloway-102482",
-     "https://www.ufc.com/athlete/max-holloway"
+     "https://www.ufc.com/event/ufc-329#12858",
+     "https://www.sherdog.com/events/UFC-329-McGregor-vs-Holloway-2-111889"
     ],
-    "on": "2026-09-19",
-    "note": "chained in Featherweight, the division ufc.com's profile names for the earlier part of the career; ufc.com and ESPN now list Lightweight"
+    "on": "2026-09-28",
+    "note": "Chained in Featherweight, the division of the fights the chain links. ufc.com's profile lists Lightweight, and his latest bout, UFC 329 v Conor McGregor on 11 July 2026, was his welterweight debut: a welterweight bout on ufc.com's event page and on Sherdog's."
    },
    "hallOfFame": {
     "v": false,

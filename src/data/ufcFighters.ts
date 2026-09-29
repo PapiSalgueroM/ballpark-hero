@@ -11,8 +11,12 @@ import { UfcFighter } from '@/types/ufc';
    or Ken Shamrock was invented, and no two sources record every fighter's peak.
    4 fighters left the pool because their sources do not agree on a number the
    game shows: Daniel Cormier, Michael Bisping, Tyron Woodley, Matt Hughes.
-   weightClass is the division the fighter last competed in, yearsActive the
-   years of the first and latest UFC bout. */
+   weightClass is the division of the fighter's last UFC bout, as the ufc.com
+   event page and the Sherdog event page label it, not the division a profile
+   page lists (those lag: Max Holloway's profile still said Lightweight after
+   his welterweight bout at UFC 329). A catchweight bout is not a division, so
+   for a fighter whose last bout was one it is the last bout fought in a
+   division. yearsActive is the years of the first and latest UFC bout. */
 export const ufcFighters: UfcFighter[] = [
   { name: 'Jon Jones', nationality: 'USA', weightClass: 'Heavyweight', yearsActive: '2008-2024', yearsActiveStart: 2008, yearsActiveEnd: 2024, record: '28-1-0', wins: 28, losses: 1, draws: 0, birthDate: '1987-07-19', koTko: 11, submissions: 7 },
   { name: 'Georges St-Pierre', nationality: 'Canada', weightClass: 'Middleweight', yearsActive: '2004-2017', yearsActiveStart: 2004, yearsActiveEnd: 2017, record: '26-2-0', wins: 26, losses: 2, draws: 0, birthDate: '1981-05-19', koTko: 8, submissions: 6 },
@@ -21,7 +25,7 @@ export const ufcFighters: UfcFighter[] = [
   { name: 'Demetrious Johnson', nationality: 'USA', weightClass: 'Flyweight', yearsActive: '2011-2018', yearsActiveStart: 2011, yearsActiveEnd: 2018, record: '25-4-1', wins: 25, losses: 4, draws: 1, birthDate: '1986-08-13', koTko: 5, submissions: 8 },
   { name: 'Amanda Nunes', nationality: 'Brazil', weightClass: 'Bantamweight', yearsActive: '2013-2023', yearsActiveStart: 2013, yearsActiveEnd: 2023, record: '23-5-0', wins: 23, losses: 5, draws: 0, birthDate: '1988-05-30', koTko: 13, submissions: 4 },
   { name: 'Stipe Miocic', nationality: 'USA', weightClass: 'Heavyweight', yearsActive: '2011-2024', yearsActiveStart: 2011, yearsActiveEnd: 2024, record: '20-5-0', wins: 20, losses: 5, draws: 0, birthDate: '1982-08-19', koTko: 15, submissions: 0 },
-  { name: 'Max Holloway', nationality: 'USA', weightClass: 'Lightweight', yearsActive: '2012-2026', yearsActiveStart: 2012, yearsActiveEnd: 2026, record: '28-9-0', wins: 28, losses: 9, draws: 0, birthDate: '1991-12-04', koTko: 13, submissions: 2 },
+  { name: 'Max Holloway', nationality: 'USA', weightClass: 'Welterweight', yearsActive: '2012-2026', yearsActiveStart: 2012, yearsActiveEnd: 2026, record: '28-9-0', wins: 28, losses: 9, draws: 0, birthDate: '1991-12-04', koTko: 13, submissions: 2 },
   { name: 'Conor McGregor', nationality: 'Ireland', weightClass: 'Welterweight', yearsActive: '2013-2026', yearsActiveStart: 2013, yearsActiveEnd: 2026, record: '22-7-0', wins: 22, losses: 7, draws: 0, birthDate: '1988-07-14', koTko: 19, submissions: 1 },
   { name: 'Jose Aldo', nationality: 'Brazil', weightClass: 'Featherweight', yearsActive: '2011-2025', yearsActiveStart: 2011, yearsActiveEnd: 2025, record: '32-10-0', wins: 32, losses: 10, draws: 0, birthDate: '1986-09-09', koTko: 17, submissions: 1 },
   { name: 'Kamaru Usman', nationality: 'Nigeria', weightClass: 'Middleweight', yearsActive: '2015-2026', yearsActiveStart: 2015, yearsActiveEnd: 2026, record: '21-5-0', wins: 21, losses: 5, draws: 0, birthDate: '1987-05-11', koTko: 9, submissions: 1 },
@@ -37,8 +41,8 @@ export const ufcFighters: UfcFighter[] = [
   { name: 'Joanna Jedrzejczyk', nationality: 'Poland', weightClass: 'Strawweight', yearsActive: '2014-2022', yearsActiveStart: 2014, yearsActiveEnd: 2022, record: '16-5-0', wins: 16, losses: 5, draws: 0, birthDate: '1987-08-18', koTko: 4, submissions: 1 },
   { name: 'Dominick Cruz', nationality: 'USA', weightClass: 'Bantamweight', yearsActive: '2011-2022', yearsActiveStart: 2011, yearsActiveEnd: 2022, record: '24-4-0', wins: 24, losses: 4, draws: 0, birthDate: '1985-03-09', koTko: 7, submissions: 1 },
   { name: 'TJ Dillashaw', nationality: 'USA', weightClass: 'Bantamweight', yearsActive: '2011-2022', yearsActiveStart: 2011, yearsActiveEnd: 2022, record: '18-5-0', wins: 18, losses: 5, draws: 0, birthDate: '1986-02-07', koTko: 8, submissions: 3 },
-  { name: 'Ronda Rousey', nationality: 'USA', weightClass: 'Featherweight', yearsActive: '2013-2016', yearsActiveStart: 2013, yearsActiveEnd: 2016, record: '13-2-0', wins: 13, losses: 2, draws: 0, birthDate: '1987-02-01', koTko: 3, submissions: 10 },
-  { name: 'BJ Penn', nationality: 'USA', weightClass: 'Featherweight', yearsActive: '2001-2019', yearsActiveStart: 2001, yearsActiveEnd: 2019, record: '16-14-2', wins: 16, losses: 14, draws: 2, birthDate: '1978-12-13', koTko: 7, submissions: 6 },
+  { name: 'Ronda Rousey', nationality: 'USA', weightClass: 'Bantamweight', yearsActive: '2013-2016', yearsActiveStart: 2013, yearsActiveEnd: 2016, record: '13-2-0', wins: 13, losses: 2, draws: 0, birthDate: '1987-02-01', koTko: 3, submissions: 10 },
+  { name: 'BJ Penn', nationality: 'USA', weightClass: 'Lightweight', yearsActive: '2001-2019', yearsActiveStart: 2001, yearsActiveEnd: 2019, record: '16-14-2', wins: 16, losses: 14, draws: 2, birthDate: '1978-12-13', koTko: 7, submissions: 6 },
   { name: 'Randy Couture', nationality: 'USA', weightClass: 'Light Heavyweight', yearsActive: '1997-2011', yearsActiveStart: 1997, yearsActiveEnd: 2011, record: '19-11-0', wins: 19, losses: 11, draws: 0, birthDate: '1963-06-22', koTko: 7, submissions: 4 },
   { name: 'Matt Serra', nationality: 'USA', weightClass: 'Welterweight', yearsActive: '2001-2010', yearsActiveStart: 2001, yearsActiveEnd: 2010, record: '11-7-0', wins: 11, losses: 7, draws: 0, birthDate: '1974-06-02', koTko: 2, submissions: 5 },
   { name: 'Frankie Edgar', nationality: 'USA', weightClass: 'Bantamweight', yearsActive: '2007-2022', yearsActiveStart: 2007, yearsActiveEnd: 2022, record: '23-11-1', wins: 23, losses: 11, draws: 1, birthDate: '1981-10-16', koTko: 6, submissions: 4 },
@@ -96,7 +100,7 @@ export const ufcFighters: UfcFighter[] = [
   { name: 'Alistair Overeem', nationality: 'Netherlands', weightClass: 'Heavyweight', yearsActive: '2011-2021', yearsActiveStart: 2011, yearsActiveEnd: 2021, record: '47-19-0', wins: 47, losses: 19, draws: 0, birthDate: '1980-05-17', koTko: 25, submissions: 17 },
   { name: 'Mauricio Rua', nationality: 'Brazil', weightClass: 'Light Heavyweight', yearsActive: '2007-2023', yearsActiveStart: 2007, yearsActiveEnd: 2023, record: '27-14-1', wins: 27, losses: 14, draws: 1, birthDate: '1981-11-25', koTko: 21, submissions: 1 },
   { name: 'Vitor Belfort', nationality: 'Brazil', weightClass: 'Middleweight', yearsActive: '1997-2018', yearsActiveStart: 1997, yearsActiveEnd: 2018, record: '26-14-0', wins: 26, losses: 14, draws: 0, birthDate: '1977-04-01', koTko: 18, submissions: 3 },
-  { name: 'Jens Pulver', nationality: 'USA', weightClass: 'Bantamweight', yearsActive: '1999-2007', yearsActiveStart: 1999, yearsActiveEnd: 2007, record: '27-19-1', wins: 27, losses: 19, draws: 1, birthDate: '1974-12-06', koTko: 14, submissions: 4 },
+  { name: 'Jens Pulver', nationality: 'USA', weightClass: 'Lightweight', yearsActive: '1999-2007', yearsActiveStart: 1999, yearsActiveEnd: 2007, record: '27-19-1', wins: 27, losses: 19, draws: 1, birthDate: '1974-12-06', koTko: 14, submissions: 4 },
   { name: 'Shavkat Rakhmonov', nationality: 'Kazakhstan', weightClass: 'Welterweight', yearsActive: '2020-2024', yearsActiveStart: 2020, yearsActiveEnd: 2024, record: '19-0-0', wins: 19, losses: 0, draws: 0, birthDate: '1994-10-23', koTko: 8, submissions: 10 },
   { name: 'Arman Tsarukyan', nationality: 'Armenia', weightClass: 'Lightweight', yearsActive: '2019-2025', yearsActiveStart: 2019, yearsActiveEnd: 2025, record: '23-3-0', wins: 23, losses: 3, draws: 0, birthDate: '1996-10-11', koTko: 9, submissions: 6 },
   { name: 'Bo Nickal', nationality: 'USA', weightClass: 'Middleweight', yearsActive: '2023-2026', yearsActiveStart: 2023, yearsActiveEnd: 2026, record: '9-1-0', wins: 9, losses: 1, draws: 0, birthDate: '1996-01-14', koTko: 4, submissions: 4 },
