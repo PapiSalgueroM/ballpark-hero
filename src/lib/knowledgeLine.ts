@@ -100,9 +100,17 @@ export function pointsAnswer(result: number, line: number, perfect: number, unit
   return { points: dayPoints(result, line, perfect), result, line, perfect, unit };
 }
 
-/** True when a board leaves room for skill above its line. */
+/**
+ * True when a board leaves room for skill above its line. The perfect and the
+ * line are compared on the line's own grid, in steps rounded to 1e-9, exactly
+ * as lineFor places the line: a perfect that is a float sum a hair over a
+ * grid value (17.000000000000004, from 200 samples or summed expected wins)
+ * is that grid value, so the line lineFor hands back when nothing under the
+ * perfect holds the naive policies leaves no room above it.
+ */
 export function hasRoom(board: LineBoard, line: number): boolean {
-  return Number.isFinite(line) && board.perfect > line;
+  const step = stepOf(board);
+  return Number.isFinite(line) && Number.isFinite(board.perfect) && inSteps(board.perfect, step) > inSteps(line, step);
 }
 
 /** A policy's average points on a board with this line. */
@@ -133,24 +141,33 @@ export function expectedResult(outcome: PolicyOutcome): number {
 }
 
 const onGrid = (k: number, step: number) => Math.round(k * step * 1e9) / 1e9;
+/** A value in steps of the line's grid, rounded to 1e-9: lineFor and hasRoom both read values this way. */
+function inSteps(x: number, step: number): number {
+  return Math.round((x / step) * 1e9) / 1e9;
+}
+function stepOf(board: LineBoard): number {
+  return board.step && board.step > 0 ? board.step : 1;
+}
 
 /**
  * The line for one board: the smallest multiple of `step`, at or above what
  * the best deterministic policy scores (in expectation, on a board with
  * chance), at which every policy averages at most NAIVE_LIMIT on this board.
  * A policy's average only falls as the line rises, so the search halves.
- * When nothing under `perfect` works, the answer is the perfect itself and
- * hasRoom is false.
+ * When no line under the perfect holds them, the answer is `high`, the first
+ * grid step at or above the perfect, which the search never tests: hasRoom
+ * reads the perfect on the same grid, so a line there has no room above it
+ * however `fits` would have answered.
  */
 export function lineFor(board: LineBoard, policies: readonly PolicyOutcome[]): number {
-  const step = board.step && board.step > 0 ? board.step : 1;
+  const step = stepOf(board);
   const values = policies.flatMap(p => p.results.map(r => r.value)).filter(Number.isFinite);
   if (values.length === 0 || !Number.isFinite(board.perfect)) return board.perfect;
   const floors = policies.filter(p => p.deterministic).map(expectedResult).filter(Number.isFinite);
   const low = floors.length > 0
-    ? Math.ceil(onGrid(Math.max(...floors) / step, 1))
+    ? Math.ceil(inSteps(Math.max(...floors), step))
     : Math.floor(Math.min(...values) / step);
-  const high = Math.ceil(onGrid(board.perfect / step, 1));
+  const high = Math.ceil(inSteps(board.perfect, step));
   const fits = (k: number) => policies.every(p => expectedPoints(p, onGrid(k, step), board.perfect) <= NAIVE_LIMIT);
   if (low >= high) return onGrid(low, step);
   if (fits(low)) return onGrid(low, step);

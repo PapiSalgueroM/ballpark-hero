@@ -31,7 +31,7 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { writeFileAtomic } from './lib/atomicWrite.mjs';
-import { loadFamilies, familyRows, seedSql, md5, SEED_FILE, FAMILIES_FILE } from './lib/gameRulesSeed.mjs';
+import { loadFamilies, heldBy, seedSql, md5, SEED_FILE, FAMILIES_FILE } from './lib/gameRulesSeed.mjs';
 import { seedAgainstTable } from './lib/gameRulesRows.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -46,7 +46,7 @@ try {
   const target = path.join(ROOT, SEED_FILE);
   if (RELEASE !== null) {
     if (!/^[A-Z]$/.test(RELEASE)) throw new Error(`--release takes a release letter, not ${JSON.stringify(RELEASE)}`);
-    const held = familyRows(groups).filter(([, , rule]) => rule.holds === RELEASE && !rule.pays).map(([key, , rule]) => `${key} (Round ${rule.round})`);
+    const held = heldBy(groups, RELEASE).map(h => `${h.key} (Round ${h.round})`);
     if (held.length) {
       console.error(`genGameRules --release ${RELEASE}: Release ${RELEASE} waits on ${held.length} game(s) that do not pay yet: ${held.join(', ')}. Section 7.6: the flagship does not go for fun silently.`);
       code = 1;

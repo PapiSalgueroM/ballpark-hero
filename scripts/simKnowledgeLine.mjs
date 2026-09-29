@@ -14,7 +14,9 @@
  * SECTIONS
  *   1) The families. Every completion key src can send (the shared scan in
  *      scripts/lib/completionKeys.mjs, handed comment stripped code, less the
- *      declared retirements) is filed in src/data/pointsFamilies.ts exactly
+ *      declared retirements, read as code as well, so a retirement commented
+ *      out excuses nothing, which a synthetic block proves on every run) is
+ *      filed in src/data/pointsFamilies.ts exactly
  *      once, in one family; every filed key is one src can send and has a
  *      game_score_caps row (scripts/data/gameScoreCaps.mjs), which the seed's
  *      foreign key needs. The committed seed, scripts/data/gameRulesSeed.sql,
@@ -25,31 +27,58 @@
  *      output. Each family's naive policy list, and each game's own, holds
  *      at least what spec sections 7.2 to 7.6 line it on (SPEC_POLICIES
  *      below). And the flagship, Soccer Career, is filed as holding Release
- *      G until it pays (section 7.6: it does not go for fun silently).
- *   2) The line. (a) Every paying game has a row in LINE_ROWS below and every
- *      row's game pays. (b) The runner plays each row over its boards (the
- *      365 dailies of 2026 for a static pool, or 400 seeded boards), on the
- *      policies the family table lists, and asserts, on EVERY board (section
- *      7.1 sets the line per board, so a pooled average hides a line set too
- *      low on half the days): every naive policy averages at most 5 of 100;
- *      a deterministic policy pays exactly 0 (on a board with chance, its
- *      expected result sits at or under the line); every points value is a
- *      whole number from 0 to 100; the oracle records exactly 100 (its
- *      expected result on a board with chance); no board is dealt without
- *      room; a choice daily with no chance is measured exactly, not sampled;
- *      and the game is measured on every policy its moves give something to
- *      read (a game that reveals answers on counter, one that prints numbers
- *      on biggestNumber, and so on). The 70 percent player averages at least
+ *      G until it pays (section 7.6: it does not go for fun silently), and
+ *      the release gate Round 691 runs (heldBy in scripts/lib/
+ *      gameRulesSeed.mjs, which genGameRules --release G exits 1 on) lists
+ *      it while it does not pay and lists nothing that pays.
+ *   2) The line. The thresholds are the spec's, restated here (NAIVE_LIMIT 5
+ *      and SKILL_FLOOR 15, section 7.1) and never read from the code under
+ *      test, which must export the same two. (a) Every paying game has a row
+ *      in LINE_ROWS below and every row's game pays. (b) The runner plays
+ *      each row over its boards (the 365 dailies of 2026 for a static pool,
+ *      or 400 seeded boards), on the policies the family table lists, and
+ *      asserts, on EVERY board (section 7.1 sets the line per board, so a
+ *      pooled average hides a line set too low on half the days): every
+ *      naive policy averages at most 5 of 100; a policy that makes one move
+ *      in every state (MAKES_ONE_MOVE, by name, never by the outcome's own
+ *      flag) is flagged deterministic and pays exactly 0 (on a board with
+ *      chance, its expected result sits at or under the line); the line is
+ *      the smallest (one grid step down pays some naive policy past 5 or
+ *      falls under that floor); every points value is a whole number from 0
+ *      to 100; the oracle records exactly 100 (its expected result on a
+ *      board with chance); no board is dealt without room (read with this
+ *      harness's own tolerance, never hasRoom); a choice daily with no chance
+ *      is measured exactly, not sampled, and a board with chance is never
+ *      reported walked exactly; and the game is measured on every policy its
+ *      moves give something to read (a game that reveals answers on counter,
+ *      one that prints numbers on biggestNumber, one with a lifeline on
+ *      lifelineReader, and so on). The 70 percent player averages at least
  *      15 over the boards (an exception is printed with the round that clears
  *      it). The runner is proved on every run on synthetic boards (PROBES):
- *      four that must pass (coin keys over 365 days, four options over twelve
- *      items walked exactly, a wide scale rating board where the one step
- *      under the top listed rating would still pay 5, and a board partly left
- *      to luck, valued in expectation) and nine that must be caught, each for
- *      its own reason. The formula and the policies are pinned by CASES:
- *      whole numbers, the line 0 of scale g, the floor at the best
- *      deterministic policy, the 70 percent player's exact average, the exact
- *      walk on four options, and what lifelineReader, biggestNumber and
+ *      six that must pass (coin keys over 365 days, four options over
+ *      twelve items walked exactly, a wide scale rating board where the one
+ *      step under the top listed rating would still pay 5, a board partly
+ *      left to luck, the rating board with a coin on every pick so only the
+ *      floor in expectation holds the top listed option to 0, and a twelve
+ *      item log the game never reads, keyed without it and walked exactly)
+ *      and fifteen that must be caught, each for its own reason (among them:
+ *      the same log with no key samples; three moves that give counter,
+ *      biggestNumber and
+ *      lifelineReader something to read, measured without them; six policies
+ *      handed a screen with nothing to read, each of which must throw rather
+ *      than fall back). The exact walk is held to this harness's own count of
+ *      every path, nothing merged, on a board scored off its picks log. The
+ *      line itself is swept over 3000 synthetic boards (perfects on the grid,
+ *      a float's error over or under it, or between steps; steps of 1, 0.5
+ *      and 10): hasRoom agrees with this harness's reading of room, the
+ *      search's untested high and its early return are both reached, and a
+ *      board with room pays no policy past 5, no one move policy past 0, and
+ *      has the smallest line. The formula and the policies are pinned by
+ *      CASES: the two thresholds, whole numbers, the line 0 of scale g, the
+ *      floor at the best deterministic policy, the float boundary (the
+ *      review's board through measureBoard among them), the 70 percent
+ *      player's exact average, the exact walk on four options and that a
+ *      sampled outcome says so, and what lifelineReader, biggestNumber and
  *      structureStacker read. (c) Scale g: every typed family game with a
  *      perfect run driver in scripts/lib/scoreCeilingTable.mjs records
  *      exactly 100 through pointsFromCeiling on its perfect runs, every run
@@ -65,10 +94,13 @@
  *      name: an alias, PointsAnswer['points'], a local type naming the same
  *      brand) is inside knowledgeLine.ts's unexported mint; no expression of
  *      type any flows into day points in any file that can reach
- *      knowledgeLine.ts; nothing casts day points to any or unknown; and
- *      knowledgeLine.ts exports no maker of day points but dayPoints,
- *      pointsFromCeiling and pointsAnswer. A value laundered through a
- *      generic helper (identity<DayPoints>(x)) is not caught here. (c) For
+ *      knowledgeLine.ts; nothing casts day points to any or unknown; no ++
+ *      or -- steps day points and no Object.assign writes a property its
+ *      target holds as day points from one that is not (the two writes tsc
+ *      does not check against the brand); and knowledgeLine.ts exports no
+ *      maker of day points but dayPoints, pointsFromCeiling and pointsAnswer.
+ *      A type is read as carrying the brand down to CARRY_DEPTH steps (a
+ *      saved history cast from JSON.parse is six deep). (c) For
  *      every row in LINE_ROWS, every recorder of its game, read as code with
  *      comments stripped, sends `pointsFor(...).points` (directly or through
  *      one local const) with pointsFor imported from the row's engine. The
@@ -76,6 +108,16 @@
  *
  * AT ROUND 678 nothing pays yet (each game waits on its own round), so
  * LINE_ROWS is empty and 2(b) and 3(c) run on their probes and cases alone.
+ *
+ * WHAT THIS DOES NOT CATCH, on purpose. Each needs a deliberate break written
+ * to get past a check, not an honest change, and docs/PROJECT-STATE.md lists
+ * them as accepted residual risk: day points laundered through a generic
+ * helper (identity<DayPoints>(x)), a cast from a union that already carries
+ * the brand, a type guard `n is DayPoints`, an overload whose implementation
+ * returns any, a cast to {} spread over day points, a @ts-nocheck on the
+ * brand file (with or without widening DayPoints), a recorder written as a
+ * string literal, and SQL a generator hides from the seed reader behind a
+ * lone carriage return or inside a nested block comment.
  *
  * NEGATIVE CONTROLS, KNOWLEDGE_LINE_CONTROL=<name>. Each writes one planted
  * copy of one file into this run's own temporary directory, refuses to run
@@ -96,6 +138,8 @@
  *                           the seed is regenerated with it
  *             familylist    counter leaves the choice family's list
  *             flagship      Soccer Career no longer holds Release G
+ *             releaseopen   the release gate holds the games that pay, not
+ *                           the ones that do not
  *   section2  unmeasured    Ball IQ pays with no row here
  *             counterblind  counter picks the answer revealed most
  *             ceilingoff    the grid ceiling sits one cell above a perfect grid
@@ -112,6 +156,27 @@
  *                           biggestNumber, structureStacker and
  *                           lifelineReader stop refusing a screen with
  *                           nothing to read
+ *             fallbackreveal, fallbackmedian, fallbacksuggest
+ *                           counter on a game with no reveals, medianCall
+ *                           with no option keyed higher or lower and
+ *                           suggestionBox with nothing highlighted fall back
+ *                           quietly (the first option, or no move at all)
+ *             rawroom       hasRoom compares the raw perfect with the line,
+ *                           off the grid (the review's float boundary)
+ *             linehigh      lineFor returns one step over the line it found
+ *             limitwide     NAIVE_LIMIT becomes 8
+ *             floorlow      SKILL_FLOOR becomes 4
+ *             floormin      the floor reads the lowest result of a one move
+ *                           policy, not its expected one
+ *             detspread     a one move policy whose results spread by chance
+ *                           is no longer flagged deterministic
+ *             chancewalk    a board with chance is walked as if it had none
+ *             exacttrue     every outcome reports an exact walk
+ *             keylength     the walk keys an array by its length only
+ *             nokey         the walk ignores Moves.key
+ *             nobiggest, nolifeline
+ *                           policiesItOffers stops seeing a number printed
+ *                           on an option, or a lifeline
  *   section3  rawrecord     DayPoints loses its brand
  *             markeroff     a refused call stops being a takesDayPoints call,
  *                           its directive still in the text
@@ -122,6 +187,9 @@
  *             mintredeclare a local type DayPoints naming the brand
  *             mintunbrand   day points cast to any and written over
  *             mintexport    knowledgeLine.ts exports mint
+ *             mintstep      answer.points++
+ *             mintassign    Object.assign(answer, { points: 62 })
+ *             mintdeep      JSON.parse cast to a saved history six deep
  *
  * Nothing here reads the database, dist or the clock. Every draw is seeded.
  *
@@ -201,6 +269,11 @@ const CONTROLS = {
     from: "'soccer-career': holdsRelease('G', waits('finish', '687', UNTOUCHED)),",
     to: "'soccer-career': waits('finish', '687', UNTOUCHED),",
   },
+  releaseopen: {
+    section: 'section1', via: 'generator', file: GEN_FILE,
+    from: '.filter(([, , rule]) => rule.holds === release && !rule.pays)',
+    to: '.filter(([, , rule]) => rule.holds === release && rule.pays)',
+  },
   unmeasured: {
     section: 'section2', via: 'families', file: FAMILIES_FILE, reseed: true,
     from: "      'ball-iq': waits('first-action', '681', LUCK),",
@@ -266,6 +339,81 @@ const CONTROLS = {
     from: 'if (advised.length === 0 && left.length > 0) {',
     to: 'if (advised.length === 0 && left.length < 0) {',
   },
+  fallbackreveal: {
+    section: 'section2', via: 'framework', file: 'src/lib/naivePolicies.ts',
+    from: "const seen = need(m.revealed, 'counter', 'revealed')(s);",
+    to: 'const seen = m.revealed ? m.revealed(s) : [];',
+  },
+  fallbackmedian: {
+    section: 'section2', via: 'framework', file: 'src/lib/naivePolicies.ts',
+    from: 'const at = opts.findIndex(o => o.key === want);',
+    to: 'const at = Math.max(0, opts.findIndex(o => o.key === want));',
+  },
+  fallbacksuggest: {
+    section: 'section2', via: 'framework', file: 'src/lib/naivePolicies.ts',
+    from: "if (typed.length === 0) throw new Error('suggestionBox: no two letters highlight anything');",
+    to: '',
+  },
+  rawroom: {
+    section: 'section2', via: 'framework', file: 'src/lib/knowledgeLine.ts',
+    from: 'return Number.isFinite(line) && Number.isFinite(board.perfect) && inSteps(board.perfect, step) > inSteps(line, step);',
+    to: 'return Number.isFinite(line) && board.perfect > line;',
+  },
+  linehigh: {
+    section: 'section2', via: 'framework', file: 'src/lib/knowledgeLine.ts',
+    from: 'return onGrid(hi, step);',
+    to: 'return onGrid(hi + 1, step);',
+  },
+  limitwide: {
+    section: 'section2', via: 'framework', file: 'src/lib/knowledgeLine.ts',
+    from: 'export const NAIVE_LIMIT = 5;',
+    to: 'export const NAIVE_LIMIT = 8;',
+  },
+  floorlow: {
+    section: 'section2', via: 'framework', file: 'src/lib/knowledgeLine.ts',
+    from: 'export const SKILL_FLOOR = 15;',
+    to: 'export const SKILL_FLOOR = 4;',
+  },
+  floormin: {
+    section: 'section2', via: 'framework', file: 'src/lib/knowledgeLine.ts',
+    from: 'const floors = policies.filter(p => p.deterministic).map(expectedResult).filter(Number.isFinite);',
+    to: 'const floors = policies.filter(p => p.deterministic).map(p => Math.min(...p.results.map(r => r.value))).filter(Number.isFinite);',
+  },
+  detspread: {
+    section: 'section2', via: 'framework', file: 'src/lib/naivePolicies.ts',
+    from: 'deterministic: results.length === 1 || !seen.splits,',
+    to: 'deterministic: results.length === 1,',
+  },
+  chancewalk: {
+    section: 'section2', via: 'framework', file: 'src/lib/naivePolicies.ts',
+    from: 'if (!m.chance) {',
+    to: 'if (true) {',
+  },
+  exacttrue: {
+    section: 'section2', via: 'framework', file: 'src/lib/naivePolicies.ts',
+    from: 'const exact = dist !== null;',
+    to: 'const exact = true;',
+  },
+  keylength: {
+    section: 'section2', via: 'framework', file: 'src/lib/naivePolicies.ts',
+    from: "for (const e of x) { if (!walk(e, depth + 1)) return false; out.push(','); }",
+    to: 'out.push(`#${x.length}`);',
+  },
+  nokey: {
+    section: 'section2', via: 'framework', file: 'src/lib/naivePolicies.ts',
+    from: 'const stateKey = <S>(m: Moves<S>, s: S): string | null => (m.key ? `k:${m.key(s)}` : plainKey(s));',
+    to: 'const stateKey = <S>(m: Moves<S>, s: S): string | null => plainKey(s);',
+  },
+  nobiggest: {
+    section: 'section2', via: 'framework', file: 'src/lib/naivePolicies.ts',
+    from: "if (opts.some(o => typeof o.shown === 'number' && Number.isFinite(o.shown))) out.add('biggestNumber');",
+    to: '',
+  },
+  nolifeline: {
+    section: 'section2', via: 'framework', file: 'src/lib/naivePolicies.ts',
+    from: "if (m.lifelines) out.add('lifelineReader');",
+    to: '',
+  },
   rawrecord: {
     section: 'section3', via: 'program', file: 'src/lib/knowledgeLine.ts',
     from: 'export type DayPoints = number & { readonly __dayPoints: true };',
@@ -304,6 +452,18 @@ const CONTROLS = {
     section: 'section3', via: 'program', file: 'src/lib/knowledgeLine.ts',
     from: 'function mint(n: number): DayPoints {',
     to: 'export function mint(n: number): DayPoints {',
+  },
+  mintstep: {
+    section: 'section3', via: 'program', file: 'src/lib/pointsHowTo.ts', from: HOWTO_ANCHOR,
+    to: `export function bump(answer: PointsAnswer): void { answer.points++; }\n${HOWTO_ANCHOR}`,
+  },
+  mintassign: {
+    section: 'section3', via: 'program', file: 'src/lib/pointsHowTo.ts', from: HOWTO_ANCHOR,
+    to: `export function patch(answer: PointsAnswer): void { Object.assign(answer, { points: 62 }); }\n${HOWTO_ANCHOR}`,
+  },
+  mintdeep: {
+    section: 'section3', via: 'program', file: 'src/lib/pointsHowTo.ts', from: HOWTO_ANCHOR,
+    to: `type SavedDays = Record<string, { runs: { day: { answer: PointsAnswer } }[] }>;\nexport const SAVED = JSON.parse('{}') as SavedDays;\n${HOWTO_ANCHOR}`,
   },
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
@@ -417,6 +577,24 @@ const SPEC_GAME_POLICIES = {
 /* Section 7.6: the flagship does not go for fun silently; Release G waits. */
 const SPEC_HOLDS = { 'soccer-career': { release: 'G', at: '7.6' } };
 
+/* The thresholds, restated from the spec and never read from the code under
+   test, so a change to either in knowledgeLine.ts is a red here rather than
+   a fence that loosens with it (section 2 also requires knowledgeLine.ts to
+   export these same two values). */
+/** Section 7.1 and rule 3: every naive policy averages at most 5 of 100 on a board. */
+const NAIVE_LIMIT = 5;
+/** Section 7.1, the headroom check: the 70 percent player averages at least 15. */
+const SKILL_FLOOR = 15;
+/* Section 7.1: the line is "never below the result of the best deterministic
+   naive policy on that board (so the top listed name, a constant answer or
+   standing pat pays exactly 0 every day)". These make one move in every
+   state by definition, so this list, not the outcome's own flag, says which
+   policies the floor and the pays-exactly-0 check read; the flag is held to
+   it. random, suggestionBox and lifelineReader spread their choice and are
+   not here. */
+const MAKES_ONE_MOVE = new Set(['topListed', 'constant', 'counter', 'biggestNumber', 'medianCall', 'structureStacker', 'speedTapper', 'firstSlot', 'idle']);
+const oneMove = name => MAKES_ONE_MOVE.has(String(name).split(':')[0]);
+
 /* ---------------- section 1: the families ---------------- */
 
 console.log('1) every sendable key is filed once, the seed is the table row by row, and the lists are the spec\'s');
@@ -441,8 +619,30 @@ try {
   const keyRoot = path.join(TMP, 'keyroot');
   fs.mkdirSync(path.join(keyRoot, 'src'), { recursive: true });
   const code = [...SRC.keys()].map(rel => stripComments(srcText(rel, 'keys')));
-  const retired = declaredRetirements(ROOT);
-  if (!retired) failIn('section1', 'src/data/completionSlugs.ts no longer holds RETIRED_COMPLETION_SLUGS where this reads it');
+  /* The retirements, read as code too: the shared reader (which reads raw
+     text, and whose file Round 674 edits) over a tree holding only
+     completionSlugs.ts with its comments stripped, so a retirement commented
+     out excuses nothing. Proved on every run on a synthetic block. */
+  const SLUGS_FILE = 'src/data/completionSlugs.ts';
+  let retireRoots = 0;
+  const retiredIn = text => {
+    const root = path.join(TMP, `retired-${retireRoots += 1}`);
+    fs.mkdirSync(path.join(root, 'src', 'data'), { recursive: true });
+    fs.writeFileSync(path.join(root, SLUGS_FILE), stripComments(text));
+    return declaredRetirements(root);
+  };
+  const RETIRE_PROBE = [
+    'export const RETIRED_COMPLETION_SLUGS: Record<string, string> = {',
+    "  'kept-key': 'retired in a probe',",
+    "  // 'line-comment-key': 'a retirement commented out',",
+    "  /* 'block-comment-key': 'a retirement inside a block comment', */",
+    '};',
+    '',
+  ].join('\n');
+  const probed = [...(retiredIn(RETIRE_PROBE) ?? [])].sort().join(', ');
+  if (probed !== 'kept-key') failIn('section1', `the retirement read takes a commented block as ${probed || 'nothing'}, not kept-key alone, so a retirement commented out would still excuse a key`);
+  const retired = retiredIn(srcText(SLUGS_FILE, 'keys'));
+  if (!retired) failIn('section1', `${SLUGS_FILE} no longer holds RETIRED_COMPLETION_SLUGS where this reads it`);
   const sendable = new Set([...sourceCompletionKeys(keyRoot, code)].filter(k => !retired?.has(k)));
   const filed = new Map();
   for (const [key, family] of rows) filed.set(key, [...(filed.get(key) ?? []), family]);
@@ -492,12 +692,27 @@ try {
   }
   for (const key of Object.keys(SPEC_GAME_POLICIES)) if (!familyOf.has(key)) failIn('section1', `the spec names ${key}'s policies and the table files no such key`);
 
-  /* The flagship holds its release until it pays. */
+  /* The flagship holds its release until it pays, and the release gate
+     (heldBy, which genGameRules --release runs) says so: it lists the
+     flagship while it does not pay, and it lists nothing that pays. */
+  const gates = new Map();
   for (const [key, h] of Object.entries(SPEC_HOLDS)) {
     const found = rows.find(r => r[0] === key);
     if (!found) failIn('section1', `${key} is not filed, and section ${h.at} makes Release ${h.release} wait on it`);
     else if (!found[2].pays && found[2].holds !== h.release) {
       failIn('section1', `${key} does not pay and is not filed as holding Release ${h.release}, so it would go for fun at the release silently (section ${h.at})`);
+    }
+    if (!gates.has(h.release)) gates.set(h.release, (G.heldBy?.(groups, h.release) ?? null));
+    const gate = gates.get(h.release);
+    if (!Array.isArray(gate)) { failIn('section1', `${GEN_FILE} has no heldBy, so genGameRules --release ${h.release} is held to nothing`); continue; }
+    const listed = gate.some(g => g.key === key);
+    if (found && !found[2].pays && !listed) failIn('section1', `genGameRules --release ${h.release} would pass while ${key} does not pay: heldBy lists ${gate.map(g => g.key).join(', ') || 'nothing'} (section ${h.at})`);
+    if (found && found[2].pays && listed) failIn('section1', `genGameRules --release ${h.release} holds ${key}, which pays`);
+  }
+  for (const [release, gate] of gates) {
+    for (const g of Array.isArray(gate) ? gate : []) {
+      const row = rows.find(r => r[0] === g.key);
+      if (!row || row[2].pays || row[2].holds !== release) failIn('section1', `genGameRules --release ${release} holds ${g.key}, which is ${!row ? 'not filed' : row[2].pays ? 'paying' : `not filed as holding Release ${release}`}`);
     }
   }
 
@@ -510,7 +725,8 @@ try {
   for (const [key, , rule] of rows) if (!rule.pays) waiting.set(rule.round, [...(waiting.get(rule.round) ?? []), key]);
   console.log(`   waiting: ${[...waiting].sort().map(([r, ks]) => `${r === 'none' ? 'never scored' : `Round ${r}`} ${ks.length}`).join(', ')}`);
   const held = rows.filter(r => r[2].holds && !r[2].pays).map(r => `${r[0]} holds Release ${r[2].holds} (Round ${r[2].round})`);
-  console.log(`   release holds: ${held.join(', ') || 'none'}`);
+  console.log(`   release holds: ${held.join(', ') || 'none'}; the gate: ${[...gates].map(([r, g]) => `--release ${r} holds ${Array.isArray(g) ? g.map(x => x.key).join(', ') || 'nothing' : 'nothing (no heldBy)'}`).join('; ')}`);
+  console.log(`   retirements read as code: ${retired?.size ?? 0} (the synthetic block read as ${probed || 'nothing'})`);
 } catch (e) {
   failIn('section1', `the family table did not load: ${e.message ?? e}`);
 }
@@ -527,6 +743,9 @@ try {
  *             carrying its `salt`
  *   moves(b)  the game's own moves on a board (naivePolicies' Moves)
  *   points(b, result)  the engine's pointsFor(board, result)
+ *   step      the line's grid, as the engine hands lineFor (1 for a count of
+ *             right answers, the default); the smallest line check steps
+ *             down by it
  *   headroom  a round number when the 70 percent player is allowed under 15
  *             until that round (printed, never silent)
  * A row never names its naive policies or its family: it is measured on what
@@ -538,6 +757,29 @@ const LINE_ROWS = [];
 
 const EPS = 1e-9;
 const days2026 = Array.from({ length: 365 }, (_, i) => new Date(Date.UTC(2026, 0, 1 + i)).toISOString().slice(0, 10));
+
+/** A policy's average points at `line`, on the pinned dayPoints. */
+const averageAt = (out, line, perfect) => out.results.reduce((s, r) => s + r.weight * K.dayPoints(r.value, line, perfect), 0);
+/**
+ * Section 7.1's floor as this harness reads it: the best one move policy's
+ * result (in expectation), or, with none measured, the lowest result any
+ * policy reaches. A policy the framework flags deterministic counts too, so
+ * a floor the engine is entitled to never reads as a line set too high.
+ */
+const floorOf = outs => {
+  const floors = outs.filter(o => oneMove(o.policy) || o.deterministic).map(K.expectedResult).filter(Number.isFinite);
+  if (floors.length) return Math.max(...floors);
+  const values = outs.flatMap(o => o.results.map(r => r.value)).filter(Number.isFinite);
+  return values.length ? Math.min(...values) : -Infinity;
+};
+/** Null when `line` is the smallest on its grid: one step down falls under the floor or pays some policy past the limit. */
+const notSmallest = (outs, line, perfect, step) => {
+  const below = line - step;
+  const floor = floorOf(outs);
+  if (below < floor - EPS) return null;
+  if (outs.some(o => averageAt(o, below, perfect) > NAIVE_LIMIT + EPS)) return null;
+  return `${below} also holds every policy to ${NAIVE_LIMIT} of 100 and sits at or above the floor ${floor.toFixed(3)}`;
+};
 
 /** Plays one row through the framework; returns its failures, each with a kind. */
 function measureRow(row) {
@@ -551,6 +793,7 @@ function measureRow(row) {
   };
   const sums = new Map();
   const over = new Map();
+  const step = row.step ?? 1;
   let k70 = 0;
   let boards = 0;
   try {
@@ -560,7 +803,10 @@ function measureRow(row) {
       const at = v => row.points(board, v);
       const first = at(0);
       const { line, perfect } = first;
-      if (!(perfect > line)) once('noroom', `board ${board.salt} was dealt with no room above its line (line ${line}, perfect ${perfect})`);
+      /* Room with this harness's own tolerance, never hasRoom: a perfect a
+         float's error over its line has none. */
+      const roomy = (perfect - line) / step > EPS;
+      if (!roomy) once('noroom', `board ${board.salt} was dealt with no room above its line (line ${line}, perfect ${perfect})`);
       const paid = (value, who) => {
         const pts = at(value).points;
         if (!(Number.isInteger(pts) && pts >= 0 && pts <= 100)) once('whole', `${who} ends on ${value} on board ${board.salt} and is paid ${pts}, not a whole number from 0 to 100`);
@@ -568,20 +814,27 @@ function measureRow(row) {
       };
       const unlisted = N.policiesItOffers(m, board.salt).filter(p => !row.policies.includes(p));
       if (unlisted.length) once('unlisted', `board ${board.salt}: the moves give ${unlisted.join(', ')} something to read, and the game is not measured on it`);
+      const outs = [];
       for (const p of N.policiesFor(row.policies, m)) {
         const out = N.outcomeOf(m, p, board.salt);
+        outs.push(out);
         if (row.family === 'choice' && !m.chance && !out.exact) once('sampled', `${p.name} on board ${board.salt} was sampled, and a choice daily with no chance is measured exactly`);
+        if (m.chance && out.exact) once('exactchance', `${p.name} on board ${board.salt} is reported walked exactly on a board with chance, where one draw per state is not the distribution`);
         const pts = out.results.reduce((s, r) => s + r.weight * paid(r.value, p.name), 0);
         sums.set(p.name, (sums.get(p.name) ?? 0) + pts);
-        if (pts > K.NAIVE_LIMIT + EPS) {
+        if (pts > NAIVE_LIMIT + EPS) {
           const o = over.get(p.name) ?? { n: 0, worst: -Infinity, at: '' };
           o.n += 1;
           if (pts > o.worst) { o.worst = pts; o.at = board.salt; }
           over.set(p.name, o);
         }
-        if (out.deterministic && !m.chance && pts !== 0) once('deterministic', `${p.name} always ends on ${out.results[0].value} on board ${board.salt} and is paid ${pts}`);
-        if (out.deterministic && m.chance && K.expectedResult(out) > line + EPS) once('deterministic', `${p.name} expects ${K.expectedResult(out).toFixed(3)} on board ${board.salt}, past its line ${line}`);
+        if (!oneMove(p.name)) continue;
+        if (!out.deterministic) once('flag', `${p.name} makes one move in every state and is not flagged deterministic on board ${board.salt}, so the line's floor never reads it`);
+        if (!m.chance && pts !== 0) once('deterministic', `${p.name} always ends on ${out.results[0]?.value} on board ${board.salt} and is paid ${pts}`);
+        if (m.chance && K.expectedResult(out) > line + EPS) once('deterministic', `${p.name} expects ${K.expectedResult(out).toFixed(3)} on board ${board.salt}, past its line ${line}`);
       }
+      const why = roomy ? notSmallest(outs, line, perfect, step) : null;
+      if (why) once('notsmallest', `board ${board.salt}: the line ${line} is not the smallest; ${why}`);
       const oracle = N.outcomeOf(m, N.ORACLE, board.salt);
       if (m.chance) {
         const e = K.expectedResult(oracle);
@@ -599,10 +852,10 @@ function measureRow(row) {
   for (const [kind, n] of counts) if (n > 3) note(kind, `and ${n - 3} more like it`);
   const means = new Map([...sums].map(([name, s]) => [name, s / boards]));
   for (const [name, o] of over) {
-    note(`naive:${name}`, `${name} averages more than ${K.NAIVE_LIMIT} of 100 on ${o.n} of ${boards} boards, worst ${o.worst.toFixed(2)} on ${o.at} (over all boards ${means.get(name).toFixed(2)})`);
+    note(`naive:${name}`, `${name} averages more than ${NAIVE_LIMIT} of 100 on ${o.n} of ${boards} boards, worst ${o.worst.toFixed(2)} on ${o.at} (over all boards ${means.get(name).toFixed(2)})`);
   }
   const k70mean = k70 / Math.max(1, boards);
-  if (k70mean < K.SKILL_FLOOR && !row.headroom) note('headroom', `the 70 percent player averages ${k70mean.toFixed(2)} (floor ${K.SKILL_FLOOR})`);
+  if (k70mean < SKILL_FLOOR && !row.headroom) note('headroom', `the 70 percent player averages ${k70mean.toFixed(2)} (floor ${SKILL_FLOOR})`);
   return { fails, means, k70: k70mean, boards };
 }
 
@@ -667,8 +920,8 @@ function keyedMoves(board, { luck = 0, lifeline = null, shown = false, bonus = f
    best 25, the rest 0 to 10, and the result the summed rating. On this wide a
    scale the step under the top listed rating would still pay it 5, so only
    the floor at the best deterministic policy holds it to 0. */
-function ratingBoard(day) {
-  const salt = `probe|rating|${day}`;
+function ratingBoard(day, tag = 'rating') {
+  const salt = `probe|${tag}|${day}`;
   const rng = N.saltedRng(salt);
   const slots = Array.from({ length: 4 }, () => {
     const rest = [25, ...Array.from({ length: 3 }, () => Math.floor(rng() * 11))];
@@ -680,15 +933,44 @@ function ratingBoard(day) {
   });
   return { salt, slots };
 }
-function ratingMoves(board) {
+/* `coin` adds a tenth of a point to a pick half the time, on the board's own
+   draw: every policy's results spread, even the ones that make one move in
+   every state, and only their expected result keeps the floor (section 7.1's
+   standing pat on a season with a match engine behind it). */
+function ratingMoves(board, { coin = false } = {}) {
   return {
+    chance: coin,
     start: () => ({ i: 0, sum: 0 }),
     options: s => board.slots[s.i].map((_, k) => ({ key: String(k) })),
-    play: (s, index) => ({ i: s.i + 1, sum: s.sum + board.slots[s.i][index] }),
+    play: (s, index, ctx) => ({ i: s.i + 1, sum: s.sum + board.slots[s.i][index] + (coin && ctx.rng() < 0.5 ? 0.1 : 0) }),
     done: s => s.i >= board.slots.length,
     result: s => s.sum,
     best: s => board.slots[s.i].indexOf(Math.max(...board.slots[s.i])),
   };
+}
+/* Moves on a keyed board whose state keeps a log of every pick. `scored`:
+   the result is read off the log at the end (so two states of one length and
+   different picks must never merge); otherwise the log is never read again,
+   and `keyed` gives the walk a key that leaves it out, as Moves.key says a
+   game should. Without that key a twelve item, four option walk runs past
+   EXACT_STATES and samples. */
+function loggedMoves(board, { scored = false, keyed = false } = {}) {
+  const w = board.width;
+  const m = {
+    /* A scored log is the whole state: no running count beside it that
+       would make two states of one length and one count equal anyway. */
+    start: () => (scored ? { i: 0, picks: [] } : { i: 0, right: 0, picks: [] }),
+    options: () => Array.from({ length: w }, (_, k) => ({ key: keyName(w, k) })),
+    play: (s, index) => (scored
+      ? { i: s.i + 1, picks: [...s.picks, index] }
+      : { i: s.i + 1, right: s.right + (index === board.answers[s.i] ? 1 : 0), picks: [...s.picks, index] }),
+    done: s => s.i >= board.answers.length,
+    result: s => (scored ? s.picks.filter((p, j) => p === board.answers[j]).length : s.right),
+    best: s => board.answers[s.i],
+    revealed: s => board.answers.slice(0, s.i).map(a => keyName(w, a)),
+  };
+  if (keyed) m.key = s => `${s.i}|${s.right}`;
+  return m;
 }
 
 /* A probe row: boards dealt the way each game's engine will deal them
@@ -728,15 +1010,34 @@ const PROBES = [
   { row: probeRow('four options over twelve items, walked exactly', { board: d => keyedBoard('four', d, { items: 12, width: 4 }), days: 60 }), want: [] },
   { row: probeRow('a wide scale rating board', { board: ratingBoard, moves: ratingMoves, family: 'draft', policies: SPEC_POLICIES.draft.needs }), want: [] },
   { row: probeRow('a board partly left to luck, valued in expectation', { board: d => keyedBoard('partly', d), moves: b => keyedMoves(b, { luck: 0.3 }), days: 60 }), want: [] },
+  { row: probeRow('a wide scale rating board with a coin on every pick, the floor in expectation', { board: d => ratingBoard(d, 'rating-coin'), moves: b => ratingMoves(b, { coin: true }), family: 'draft', policies: SPEC_POLICIES.draft.needs, days: 60 }), want: [] },
+  { row: probeRow('a log the game never reads, keyed without it, walked exactly', { board: d => keyedBoard('logkey', d, { items: 12, width: 4 }), moves: b => loggedMoves(b, { keyed: true }), days: 20 }), want: [] },
+  { row: probeRow('a log the game never reads, with no key', { board: d => keyedBoard('lognokey', d, { items: 12, width: 4 }), moves: b => loggedMoves(b), days: 2 }), want: ['sampled'] },
   { row: probeRow('balanced key lined without counter', { board: d => keyedBoard('balanced', d, { deal: 'balanced' }), enginePolicies: ['topListed', 'constant', 'random'] }), want: ['naive:counter'] },
   { row: probeRow('line under the constant answer', { lineOf: m => maxDeterministic(m) - 1 }), want: ['deterministic'] },
   { row: probeRow('perfect past the oracle', { perfectOf: m => m.perfect + 1 }), want: ['oracle'] },
   { row: probeRow('a sorted list, the top name right on 19 of 20', { board: d => keyedBoard('sorted', d, { items: 20, deal: 'sorted' }), days: 60 }), want: ['headroom'] },
   { row: probeRow('a coin flip after every pick', { moves: b => keyedMoves(b, { luck: 1 }), days: 8 }), want: ['noroom'] },
-  { row: probeRow('a board that reveals, measured without counter', { policies: ['topListed', 'constant', 'random'], days: 20 }), want: ['unlisted'] },
+  { row: probeRow('a board that reveals, measured without counter', { policies: ['topListed', 'constant', 'random'], days: 20 }), want: ['unlisted'], says: /give counter something/ },
+  { row: probeRow('a board that prints a number on each option, measured without biggestNumber', { moves: b => keyedMoves(b, { shown: true }), days: 3 }), want: ['unlisted'], says: /give biggestNumber something/ },
+  { row: probeRow('a board with a lifeline, measured without lifelineReader', { moves: b => keyedMoves(b, { lifeline: 'honest' }), days: 3 }), want: ['unlisted'], says: /give lifelineReader something/ },
   { row: probeRow('biggestNumber with no number on screen', { policies: ['biggestNumber'], days: 3 }), want: ['error'], error: /no option on screen shows a number/ },
   { row: probeRow('structureStacker with no bonus on screen', { policies: ['structureStacker'], days: 3 }), want: ['error'], error: /no option on screen shows a bonus/ },
   { row: probeRow('a lifeline that points at nothing', { moves: b => keyedMoves(b, { lifeline: 'blind' }), policies: ['lifelineReader'], days: 3 }), want: ['error'], error: /points at no option/ },
+  { row: probeRow('counter on a game that reveals nothing', { moves: b => ({ ...keyedMoves(b), revealed: undefined }), policies: ['counter'], days: 3 }), want: ['error'], error: /counter needs moves\.revealed/ },
+  { row: probeRow('medianCall with no option keyed higher or lower', { moves: b => ({ ...keyedMoves(b), shownValue: () => 50, poolMedian: 60 }), policies: ['medianCall'], days: 3 }), want: ['error'], error: /medianCall: no option keyed higher/ },
+  {
+    row: probeRow('suggestionBox where no two letters highlight anything', {
+      moves: b => {
+        const m = keyedMoves(b);
+        return { ...m, options: s => (s.typed ? [] : m.options(s)), type: (s, text) => ({ ...s, typed: text }) };
+      },
+      policies: ['suggestionBox'],
+      days: 3,
+    }),
+    want: ['error'],
+    error: /no two letters highlight anything/,
+  },
 ];
 
 /* The cases: the formula and the policies, pinned to numbers worked by hand. */
@@ -746,8 +1047,33 @@ const spread = (name, pairs) => ({ policy: name, results: pairs.map(([value, wei
 const tf = keyedBoard('case', '2026-01-01');
 const four = keyedBoard('case', '2026-01-01', { items: 12, width: 4 });
 const lucky = keyedBoard('case-luck', '2026-01-01');
+const bigLog = keyedBoard('case-log', '2026-01-01', { items: 12, width: 4 });
+/* The review's board: 200 samples of the oracle sum to 17.000000000000004. */
+const reviewBoard = keyedBoard('sortedluck', '2026-x-142', { items: 20, deal: 'sorted' });
+const overGrid = { perfect: 17.000000000000004 };
+const lineAndRoom = (board, outs) => {
+  const line = K.lineFor(board, outs);
+  return `${line} ${K.hasRoom(board, line)}`;
+};
 const expectedOf = (moves, p, b) => K.expectedResult(N.outcomeOf(moves, p, b.salt));
 const CASES = [
+  [`NAIVE_LIMIT is the spec's ${NAIVE_LIMIT} of 100 (section 7.1, rule 3)`, () => K.NAIVE_LIMIT, NAIVE_LIMIT],
+  [`SKILL_FLOOR is the spec's ${SKILL_FLOOR} (section 7.1, the headroom check)`, () => K.SKILL_FLOOR, SKILL_FLOOR],
+  ['a perfect a float\'s error over 17 with nothing held under it: the search ends on its untested high, 17, with no room', () => lineAndRoom(overGrid, [spread('random', [[0, 0.5], [18, 0.5]])]), '17 false'],
+  ['the same through the early return, the floor at 17 in expectation', () => lineAndRoom(overGrid, [{ policy: 'idle', results: [{ value: 16, weight: 0.5 }, { value: 18, weight: 0.5 }], deterministic: true }]), '17 false'],
+  ['a perfect of 17, or a float\'s error under it, has no room at 17', () => K.hasRoom({ perfect: 17 }, 17) || K.hasRoom({ perfect: 16.999999999999996 }, 17), false],
+  ['on a step of 10, a perfect 4e-9 over 170 is 170 on the grid, so no room at 170', () => K.hasRoom({ perfect: 170.000000004, step: 10 }, 170), false],
+  ['a real gap keeps its room: a perfect of 17.5 over a line of 17', () => K.hasRoom({ perfect: 17.5 }, 17), true],
+  ['the review\'s board through measureBoard: a sorted 20 item list partly left to luck, perfect 17.000000000000004, line 17, no room', () => {
+    const r = N.measureBoard(keyedMoves(reviewBoard, { luck: 0.3 }), SPEC_POLICIES.choice.needs, reviewBoard.salt);
+    return `${r.perfect} ${r.line} ${K.hasRoom({ perfect: r.perfect }, r.line)}`;
+  }, '17.000000000000004 17 false'],
+  ['a board with chance is sampled, and its outcome says so', () => N.outcomeOf(keyedMoves(lucky, { luck: 0.3 }), policy('topListed'), lucky.salt).exact, false],
+  ['a walk past EXACT_STATES (a twelve item log with no key) samples, and says so', () => N.outcomeOf(loggedMoves(bigLog), policy('random'), bigLog.salt).exact, false],
+  ['the top listed option on a board with chance is flagged deterministic while its results spread', () => {
+    const o = N.outcomeOf(keyedMoves(lucky, { luck: 0.3 }), policy('topListed'), lucky.salt);
+    return o.deterministic && o.results.length > 1;
+  }, true],
   ['8 right on a line of 7 of 10', () => K.dayPoints(8, 7, 10), 33],
   ['10 right on a line of 7 of 10', () => K.dayPoints(10, 7, 10), 100],
   ['7 right on a line of 7 of 10', () => K.dayPoints(7, 7, 10), 0],
@@ -785,19 +1111,22 @@ console.log('2) the line: every paying game measured board by board, the runner 
     /* Measured on the family table's policies and family, never on a list the row picks. */
     const rs = measureRow({ ...row, policies: naiveOf.get(row.key) ?? [], family: familyOf.get(row.key) });
     for (const f of rs.fails) failIn('section2', `${row.key}: ${f.msg}`);
-    if (row.headroom && rs.k70 < K.SKILL_FLOOR) console.log(`   ${row.key}: the 70 percent player averages ${rs.k70.toFixed(2)}, allowed until Round ${row.headroom}`);
+    if (row.headroom && rs.k70 < SKILL_FLOOR) console.log(`   ${row.key}: the 70 percent player averages ${rs.k70.toFixed(2)}, allowed until Round ${row.headroom}`);
     console.log(`   ${row.key}: ${rs.boards} boards, ${[...rs.means].map(([n, v]) => `${n} ${v.toFixed(2)}`).join(', ')}, 70 percent ${rs.k70.toFixed(1)}`);
   }
   console.log(`   ${paying.length} paying games, ${LINE_ROWS.length} rows`);
-  for (const { row, want, error } of PROBES) {
+  for (const { row, want, error, says } of PROBES) {
     const rs = measureRow(row);
     const kinds = new Set(rs.fails.map(f => f.kind));
     const missing = want.filter(k => !kinds.has(k));
     const extra = want.length === 0 ? [...kinds] : (kinds.has('error') && !want.includes('error') ? ['error'] : []);
     const errors = rs.fails.filter(f => f.kind === 'error').map(f => f.msg).join('; ');
     const wrongError = error && kinds.has('error') && !error.test(errors) ? [`an error other than ${error}: ${errors}`] : [];
-    if (missing.length || extra.length || wrongError.length) {
-      failIn('section2', `probe "${row.key}": ${missing.length ? `not caught for ${missing.join(', ')}` : ''}${extra.length ? ` flagged ${extra.join(', ')} (${rs.fails.map(f => f.msg).join('; ')})` : ''}${wrongError.join('')}`);
+    /* `says`: the wanted kinds were caught for this probe's own reason, not another's. */
+    const wanted = rs.fails.filter(f => want.includes(f.kind)).map(f => f.msg).join('; ');
+    const wrongReason = says && missing.length === 0 && !says.test(wanted) ? [` caught for a reason other than ${says}: ${wanted}`] : [];
+    if (missing.length || extra.length || wrongError.length || wrongReason.length) {
+      failIn('section2', `probe "${row.key}": ${missing.length ? `not caught for ${missing.join(', ')}` : ''}${extra.length ? ` flagged ${extra.join(', ')} (${rs.fails.map(f => f.msg).join('; ')})` : ''}${wrongError.join('')}${wrongReason.join('')}`);
     }
     const detail = [...rs.means].map(([n, v]) => `${n} ${v.toFixed(1)}`).join(', ');
     console.log(`   probe "${row.key}": ${want.length ? `caught (${[...kinds].join(', ')})` : 'passes'}${detail ? `; ${detail}, 70 percent ${rs.k70.toFixed(1)}` : ''}`);
@@ -815,6 +1144,115 @@ console.log('2) the line: every paying game measured board by board, the runner 
     else casesRight += 1;
   }
   console.log(`   ${casesRight} of ${CASES.length} cases hold`);
+
+  /* The exact walk against this harness's own count of every path, nothing
+     merged, on a six item, four option board scored off its picks log: a
+     merge key that keys less than the whole state (an array by its length,
+     say) folds different picks together and the two part. */
+  const enumerate = (m, p) => {
+    const dist = new Map();
+    const noDraw = () => { throw new Error('the enumeration draws nothing: this board has no chance'); };
+    const go = (s, w) => {
+      if (m.done(s)) { dist.set(m.result(s), (dist.get(m.result(s)) ?? 0) + w); return; }
+      for (const b of p.step(m, s, noDraw)) if (b.weight > 0) go(b.next, w * b.weight);
+    };
+    go(m.start(), 1);
+    return dist;
+  };
+  const walkBoard = keyedBoard('walk', '2026-01-01', { items: 6, width: 4 });
+  const walkMoves = loggedMoves(walkBoard, { scored: true });
+  const walkPolicies = [...N.policiesFor(['topListed', 'constant', 'random', 'counter'], walkMoves), N.KNOWLEDGE_70, N.ORACLE];
+  let walksRight = 0;
+  for (const p of walkPolicies) {
+    const out = N.outcomeOf(walkMoves, p, walkBoard.salt);
+    const want = enumerate(walkMoves, p);
+    const got = new Map(out.results.map(r => [r.value, r.weight]));
+    const off = [...new Set([...want.keys(), ...got.keys()])].filter(k => Math.abs((want.get(k) ?? 0) - (got.get(k) ?? 0)) > 1e-12);
+    if (!out.exact || off.length) {
+      failIn('section2', `the exact walk of ${p.name} on a board scored off its picks log ${out.exact ? '' : 'was sampled and '}parts from every path counted: ${off.map(k => `${k} right at ${(got.get(k) ?? 0).toFixed(6)}, counted ${(want.get(k) ?? 0).toFixed(6)}`).join('; ') || 'no value'}`);
+    } else walksRight += 1;
+  }
+  console.log(`   the exact walk: ${walksRight} of ${walkPolicies.length} policies match every path counted with nothing merged, on a board scored off its picks log`);
+
+  /* The line swept over synthetic boards: perfects on the grid, one or two
+     floats over it (the review's 17.000000000000004) or one under it, or
+     between grid steps, on steps of 1, 0.5 and 10; one move policies with a
+     single result or spread by chance; spread policies that sometimes hold
+     nothing under the perfect (the search ends on its untested high) or
+     whose floor reaches it (the early return). On every board hasRoom agrees
+     with this harness's own reading of room, the line is on the grid, and a
+     board with room pays no policy past NAIVE_LIMIT, no one move policy past
+     0 in expectation, and has the smallest line. */
+  const ulps = (x, n) => {
+    const f = new Float64Array([x]);
+    const bits = new BigInt64Array(f.buffer);
+    bits[0] += BigInt(n);
+    return f[0];
+  };
+  const srng = N.saltedRng('sweep|lines');
+  const sweep = { boards: 0, roomy: 0, noroom: 0, overHigh: 0, overEarly: 0, failed: 0, fails: [] };
+  const sweepFail = msg => {
+    sweep.failed += 1;
+    if (sweep.fails.length < 5) sweep.fails.push(msg);
+  };
+  for (let i = 0; i < 3000; i++) {
+    const step = [1, 0.5, 10][i % 3];
+    const k = 6 + Math.floor(srng() * 20);
+    const grid = k * step;
+    const shape = Math.floor(srng() * 5);
+    const perfect = [grid, ulps(grid, 1), ulps(grid, 2), ulps(grid, -1), grid + 0.4 * step][shape];
+    const outs = [];
+    const oneMoves = 1 + Math.floor(srng() * 2);
+    for (let j = 0; j < oneMoves; j++) {
+      const top = srng() < 0.1;
+      const v = (top ? k : Math.floor(srng() * k * 0.8)) * step;
+      outs.push(srng() < 0.5
+        ? { policy: j ? 'idle' : 'topListed', results: [{ value: v, weight: 1 }], deterministic: true }
+        : { policy: j ? 'idle' : 'topListed', results: [{ value: v - step, weight: 0.5 }, { value: v + step, weight: 0.5 }], deterministic: true });
+    }
+    if (srng() < 0.2) {
+      outs.push({ policy: 'random', results: [{ value: 0, weight: 0.5 }, { value: grid + step, weight: 0.5 }], deterministic: false });
+    } else {
+      const n = 3 + Math.floor(srng() * 3);
+      const raw = Array.from({ length: n }, () => srng() + 0.05);
+      const total = raw.reduce((a, b) => a + b, 0);
+      outs.push({ policy: 'random', results: raw.map(w => ({ value: Math.floor(srng() * (k + 1)) * step, weight: w / total })), deterministic: false });
+    }
+    const board = { perfect, step };
+    const line = K.lineFor(board, outs);
+    const room = K.hasRoom(board, line);
+    const ours = (perfect - line) / step > EPS;
+    sweep.boards += 1;
+    if (room) sweep.roomy += 1;
+    else sweep.noroom += 1;
+    /* A perfect a float over the grid with no room: the floor at or past the
+       grid (the early return), or nothing held under it (the untested high). */
+    if ((shape === 1 || shape === 2) && !ours) {
+      if (floorOf(outs) / step >= k - EPS) sweep.overEarly += 1;
+      else sweep.overHigh += 1;
+    }
+    const tag = `perfect ${perfect}, step ${step}, line ${line}`;
+    if (room !== ours) sweepFail(`hasRoom says ${room} where the perfect sits ${perfect - line} over the line (${tag})`);
+    if (Math.abs(line / step - Math.round(line / step)) > 1e-6) sweepFail(`the line is off its grid (${tag})`);
+    if (!ours) continue;
+    for (const o of outs) {
+      const avg = averageAt(o, line, perfect);
+      if (avg > NAIVE_LIMIT + EPS) sweepFail(`${o.policy} averages ${avg.toFixed(2)} with room above the line (${tag})`);
+      if (oneMove(o.policy) && K.expectedResult(o) > line + EPS) sweepFail(`${o.policy} expects ${K.expectedResult(o)} over the line (${tag})`);
+    }
+    const why = notSmallest(outs, line, perfect, step);
+    if (why) sweepFail(`the line is not the smallest: ${why} (${tag})`);
+  }
+  for (const f of sweep.fails) failIn('section2', `the line sweep: ${f}`);
+  if (sweep.failed > sweep.fails.length) failIn('section2', `the line sweep: and ${sweep.failed - sweep.fails.length} more`);
+  /* A sweep that never lands on the boundary proves nothing. The seed is
+     fixed, so these counts are too (SWEEP_LANDS below, as measured); a floor
+     at a tenth of each only asks that a change to the generator above still
+     reaches every path. */
+  const SWEEP_LANDS = { roomy: 1755, noroom: 1245, overHigh: 375, overEarly: 189 };
+  const thin = Object.entries(SWEEP_LANDS).filter(([kind, n]) => sweep[kind] < Math.max(1, Math.floor(n / 10)));
+  if (thin.length) failIn('section2', `the line sweep landed ${thin.map(([kind]) => `${sweep[kind]} ${kind}`).join(', ')}, too few to prove the boundary`);
+  console.log(`   the line sweep: ${sweep.boards} synthetic boards, ${sweep.roomy} with room and ${sweep.noroom} without; a float over the grid with no room ${sweep.overHigh} times on the search's untested high and ${sweep.overEarly} on its early return; ${sweep.failed} problems`);
 }
 
 /* Scale g, off the drivers the caps fence already plays: the perfect runs
@@ -894,11 +1332,15 @@ const MINTERS = ['dayPoints', 'pointsFromCeiling', 'pointsAnswer'];
      property of an object type written in src (or mapped from one), or what
      a function type returns. The brand is the property knowledgeLine.ts
      declares, so a local type that happens to be called DayPoints is not
-     it, and any alias of the real one is. */
+     it, and any alias of the real one is. CARRY_DEPTH is how many of those
+     steps it follows: a saved history read back with JSON.parse (a record
+     of days, each a list of runs, each holding a PointsAnswer) is six deep,
+     and the depth of 3 this started with let such a cast through. */
+  const CARRY_DEPTH = 8;
   const known = new Map();
   const carries = (type, depth = 0, seen = new Set()) => {
     if (!type || seen.has(type)) return false;
-    const left = 3 - depth;
+    const left = CARRY_DEPTH - depth;
     if (left < 0) return false;
     const cached = known.get(type);
     if (cached && (cached.value || cached.left >= left)) return cached.value;
@@ -1011,6 +1453,32 @@ const MINTERS = ['dayPoints', 'pointsFromCeiling', 'pointsAnswer'];
     for (const [rel, to] of importsOfFile) if (!reach.has(rel) && [...to].some(t => reach.has(t))) { reach.add(rel); grew = true; }
   }
   let sinks = 0;
+  /* Two writes tsc lets through without checking them against the brand:
+     ++ and -- on day points (it checks += and = against DayPoints, never a
+     step), and Object.assign writing a property its target holds as day
+     points from one that is not. */
+  const STEPS = new Map([[ts.SyntaxKind.PlusPlusToken, '++'], [ts.SyntaxKind.MinusMinusToken, '--']]);
+  const isObjectAssign = e => ts.isPropertyAccessExpression(e) && ts.isIdentifier(e.expression) && e.expression.text === 'Object' && e.name.text === 'assign';
+  const stepsOrAssigns = n => {
+    if ((ts.isPrefixUnaryExpression(n) || ts.isPostfixUnaryExpression(n)) && STEPS.has(n.operator)) {
+      sinks += 1;
+      if (carries(checker.getTypeAtLocation(n.operand))) leaks.push(`${where(n)} steps day points with ${STEPS.get(n.operator)} (${short(n)})`);
+    } else if (ts.isCallExpression(n) && isObjectAssign(n.expression) && n.arguments.length > 1) {
+      sinks += 1;
+      const [into, ...from] = n.arguments;
+      const target = checker.getTypeAtLocation(into);
+      for (const a of from) {
+        const src = ts.isSpreadElement(a) ? a.expression : a;
+        for (const p of checker.getTypeAtLocation(src).getProperties()) {
+          const held = target.getProperty(p.name);
+          if (!held) continue;
+          const want = checker.getTypeOfSymbolAtLocation(held, into);
+          const have = checker.getTypeOfSymbolAtLocation(p, src);
+          if (carries(want) && !carries(have)) leaks.push(`${where(a)} writes ${p.name} over day points with Object.assign (${short(n)})`);
+        }
+      }
+    }
+  };
   for (const rel of reach) {
     const sf = sfOf(rel);
     if (!sf) continue;
@@ -1036,6 +1504,7 @@ const MINTERS = ['dayPoints', 'pointsFromCeiling', 'pointsAnswer'];
       } else if (ts.isBinaryExpression(n) && n.operatorToken.kind === ts.SyntaxKind.EqualsToken) check(n.right);
       else if (ts.isArrayLiteralExpression(n)) n.elements.forEach(e => check(e));
       else if (ts.isJsxExpression(n)) check(n.expression);
+      stepsOrAssigns(n);
       ts.forEachChild(n, visit);
     };
     visit(sf);
@@ -1199,4 +1668,4 @@ if (failures) {
   console.error(`\nsimKnowledgeLine: ${failures} failure(s) in ${[...red].sort().join(', ')}.`);
   process.exit(1);
 }
-console.log(`\nsimKnowledgeLine: green. ${rows.length} keys filed once each with the seed the table's row by row, the line held board by board on ${PROBES.length} probes and ${CASES.length} cases, scale g's line of 0 held, and day points are made only in knowledgeLine.ts's mint.`);
+console.log(`\nsimKnowledgeLine: green. ${rows.length} keys filed once each with the seed the table's row by row, the line held board by board on ${PROBES.length} probes, ${CASES.length} cases and a sweep of synthetic boards, scale g's line of 0 held, and the mint scan finds day points made nowhere but knowledgeLine.ts's mint (what it does not read is listed in its header).`);

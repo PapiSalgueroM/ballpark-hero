@@ -20,7 +20,11 @@
    seedSql       the seed text, rows sorted by game; refuses a key in two
                  families and a rule the door would read wrong
    md5           the digest E3b compares, of the text with line endings
-                 folded to LF */
+                 folded to LF
+   heldBy        the games a release waits on that do not pay yet (filed
+                 with holdsRelease); genGameRules --release exits 1 while it
+                 lists any, and simKnowledgeLine section 1 holds it to the
+                 table (control releaseopen) */
 import crypto from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -90,3 +94,10 @@ export function seedSql(groups) {
 }
 
 export const md5 = text => crypto.createHash('md5').update(text.replace(/\r\n/g, '\n')).digest('hex');
+
+/** Section 7.6: every game Release `release` waits on that does not pay yet, as { key, round }. */
+export function heldBy(groups, release) {
+  return familyRows(groups)
+    .filter(([, , rule]) => rule.holds === release && !rule.pays)
+    .map(([key, , rule]) => ({ key, round: rule.round }));
+}
