@@ -79,14 +79,40 @@ const OUT = path.join(os.tmpdir(), 'hubs-bundle.mjs');
 writeFileSync(ENTRY, [
   `export * from '${path.join(ROOT, 'src/data/gameRegistry.ts').replaceAll('\\', '/')}';`,
   `export { SPORT_HUBS } from '${path.join(ROOT, 'src/lib/sportHub.ts').replaceAll('\\', '/')}';`,
+  `export { HUB_NAV } from '${path.join(ROOT, 'src/lib/sportHubNav.ts').replaceAll('\\', '/')}';`,
 ].join('\n'));
 await build({
   entryPoints: [ENTRY], bundle: true, format: 'esm', platform: 'node',
   outfile: OUT, logLevel: 'error', alias: { '@': path.join(ROOT, 'src') },
 });
-const { CATEGORIES, ALL_GAMES, SPORT_HUBS } = await import(pathToFileURL(OUT).href + '?t=' + process.pid);
+const { CATEGORIES, ALL_GAMES, SPORT_HUBS, HUB_NAV } = await import(pathToFileURL(OUT).href + '?t=' + process.pid);
 const HUBS = SPORT_HUBS.map(h => ({ route: h.route, titles: h.titles, count: COUNT_LINE }));
 console.log(`1) registry: ${CATEGORIES.length} categories, ${ALL_GAMES.length} games, ${HUBS.length} hubs`);
+
+/* ── Round 672: the short hub list says exactly what sportHub.ts says ────
+   The footer on every page and the home page's section headings read
+   HUB_NAV from src/lib/sportHubNav.ts, so the entry chunk every page
+   downloads stops carrying six hubs of prose (sweepWeight measured 14K
+   gzipped off every route). That list is a second copy of three fields, and
+   a second copy is only safe while something holds it equal to the first:
+   same hubs, same order, same h1 (the footer's label) and the same category
+   titles (the home page's heading links). HUBS_CONTROL=navdrift renames the
+   last hub's h1 in memory and this check must go red. */
+{
+  if (!Array.isArray(HUB_NAV) || HUB_NAV.length === 0) fail('src/lib/sportHubNav.ts exports no HUB_NAV entries');
+  const nav = (HUB_NAV || []).map(h => ({ route: h.route, h1: h.h1, titles: [...h.titles] }));
+  if (process.env.HUBS_CONTROL === 'navdrift' && nav.length) {
+    nav[nav.length - 1].h1 += ' Drifted';
+    console.log('   NEGATIVE CONTROL ON: the last HUB_NAV h1 renamed in memory, this check must go red');
+  }
+  const shape = h => JSON.stringify([h.route, h.h1, h.titles]);
+  const want = SPORT_HUBS.map(shape);
+  const got = nav.map(shape);
+  for (let i = 0; i < Math.max(want.length, got.length); i++) {
+    if (want[i] !== got[i]) fail(`sportHubNav.ts entry ${i + 1} reads ${got[i] ?? 'nothing'} where sportHub.ts says ${want[i] ?? 'nothing'}, so the footer or the home page links a hub wrongly`);
+  }
+  console.log(`   HUB_NAV carries the same ${got.length} hubs as SPORT_HUBS`);
+}
 
 /* ── 1: the hub list, App.tsx and the sitemap all say the same thing ──── */
 console.log('2) the hub list, the router and the sitemap agree');
@@ -211,7 +237,7 @@ console.log(`   ${chrome.size} chrome links, ${graded.length} games graded on bo
    bare link in memory, and this section must go red. */
 console.log('6) every game on a hub ships as an h3 holding its link, and every section heading names the sport');
 const CONTROL = process.env.HUBS_CONTROL || '';
-if (CONTROL && CONTROL !== 'cardlink') { console.error(`HUBS_CONTROL=${CONTROL} is not a control this harness knows (cardlink)`); process.exit(2); }
+if (CONTROL && CONTROL !== 'cardlink' && CONTROL !== 'navdrift') { console.error(`HUBS_CONTROL=${CONTROL} is not a control this harness knows (cardlink, navdrift)`); process.exit(2); }
 const H3_LINK = /<h3[^>]*>\s*<a href="([^"]+)"[^>]*>([^<]*)<\/a>\s*<\/h3>/g;
 const H2_TEXT = /<h2[^>]*>([\s\S]*?)<\/h2>/g;
 const clean = s => s.replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/\s+/g, ' ').trim();
