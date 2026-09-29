@@ -193,7 +193,11 @@ async function runScenario(scenario) {
      for validator behavior. The DOM assertions below still have to pass. */
   await page.goto(`${BASE}/football-connect-4`, { waitUntil: 'domcontentloaded', timeout: 15000 })
     .catch(() => page.goto(`${BASE}/football-connect-4`, { waitUntil: 'domcontentloaded', timeout: 15000 }));
-  await page.getByRole('heading', { name: 'SOCCER CONNECT 4' }).waitFor({ timeout: 30000 });
+  /* Round 672: level 1, the game's own heading. Round 651 retitled the guide
+     block's h2 to the game's name ("Soccer Connect 4"), and a role name match
+     ignores case, so the unscoped locator found two headings and Playwright's
+     strict mode threw before a single scenario ran. */
+  await page.getByRole('heading', { level: 1, name: 'SOCCER CONNECT 4' }).waitFor({ timeout: 30000 });
   await page.getByRole('button', { name: /Unlimited/ }).click();
   await page.getByRole('button', { name: /^Empty square,/ }).nth(35).click();
 

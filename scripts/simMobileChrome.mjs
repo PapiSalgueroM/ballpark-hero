@@ -112,6 +112,10 @@ const etToday = new Intl.DateTimeFormat('en-CA', {
    every field is at its widest at the same time. */
 const WORST = { points: 98765, rank: 12345, streak: 365, played: 106 };
 
+/* Round 672: the planted account's id, shared by the session and the profile
+   row below so the two can never drift apart. */
+const HARNESS_USER_ID = '00000000-0000-4000-8000-000000000129';
+
 const SIGNED_IN_SEED = `
 try {
   localStorage.setItem('sb-${SUPABASE_REF}-auth-token', ${JSON.stringify(JSON.stringify({
@@ -121,7 +125,7 @@ try {
   expires_at: Math.floor(Date.now() / 1000) + 999999,
   refresh_token: 'harness-refresh',
   user: {
-    id: '00000000-0000-4000-8000-000000000129',
+    id: HARNESS_USER_ID,
     aud: 'authenticated', role: 'authenticated', email: 'harness@example.com',
     app_metadata: {}, user_metadata: {}, identities: [],
     created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z',
@@ -208,6 +212,24 @@ async function measureNav(browser, { width, signedIn, route }) {
     await ctx.route('**/rest/v1/game_completions*', (r) => r.fulfill({
       status: 200, contentType: 'application/json', body: '[]',
     }));
+    /* Round 672: the account's own profile row. Since 2026-09-15 (Pause hidden
+       and signed-out navbar stats reads) the hook reads the two calls above
+       only once AuthContext has loaded a profile whose user_id matches the
+       session, which is what a real signed in player always has. With no
+       profile the bar deliberately stays on its local facts, 0 points and no
+       rank, so every signed in measurement here read "Points today: 0" and
+       "World rank today: -" and the widest bar was never drawn. The read is a
+       GET with maybeSingle, which takes the first row of an array. Writes to
+       this row (the streak sync) are answered here too, so that sync never
+       sends the harness token to the live profiles table. */
+    await ctx.route('**/rest/v1/profiles*', (r) => r.fulfill(r.request().method() === 'GET' ? {
+      status: 200, contentType: 'application/json',
+      body: JSON.stringify([{
+        id: '00000000-0000-4000-8000-000000000672', user_id: HARNESS_USER_ID,
+        username: 'harness', display_name: 'Harness', avatar_url: null, streak_state: null,
+        created_at: '2026-01-01T00:00:00Z', updated_at: '2026-01-01T00:00:00Z',
+      }]),
+    } : { status: 204, body: '' }));
   }
   const page = await ctx.newPage();
   const tag = `${String(width).padStart(4)} ${signedIn ? 'signed in ' : 'signed out'} ${route}`;
