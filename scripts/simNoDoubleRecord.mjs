@@ -50,6 +50,13 @@
    every row green: a coin toss red for a lane that gates in parallel. The
    helper's own behaviour (tap, unmount, nothing fires) is fenced by
    scripts/simIdleTimers.mjs; this reads that every hook uses it, as code.
+   Round 674 fix (the review's M10): no reference to setTimeout at all (a
+   call, .call, .apply, window.setTimeout, an alias), the name bound to
+   useOwnedTimeouts() must be called, and every page routed at a
+   higher-lower address in src/App.tsx is read too, which is how the
+   Transfer Market page's bare 1400 ms reveal was found and fixed. Every
+   run writes the shapes the first scan let through into the hockey hook
+   and requires each to flag it.
 
    NEGATIVE CONTROLS (house rule: prove each check can fail). The vitest ones
    edit a COPY of one module in a folder of their own (a per run mkdtemp
@@ -95,6 +102,10 @@
                    file flagged for its mode gate (section 2)
      hltimer       useHockeyHL's reveal timer back to a bare setTimeout;
                    exactly that file flagged (section 3), section 2 unmoved
+     hltimercall   the review's M10: useHockeyHL's reveal through
+                   setTimeout.call(window, ...); exactly that file flagged
+     hlpage        the Transfer Market page's reveal back to a bare
+                   setTimeout; exactly that page flagged
    and every run also proves the scans read code, not prose: the same shapes
    written into a comment flag nothing.
      NO_DOUBLE_CONTROL=all runs every control in turn. A control run exits 0
@@ -267,6 +278,26 @@ const SCAN_CONTROLS = {
     section: 3,
     why: "NHL Higher or Lower's reveal timer is a bare setTimeout again, which fires after the page is gone",
   },
+  /* Round 674 fix, the review's M10: the first scan looked for the token
+     "setTimeout(" and let this through. */
+  hltimercall: {
+    file: 'src/hooks/useHockeyHL.ts',
+    from: '      later(() => {\n',
+    to: '      setTimeout.call(window, () => {\n',
+    kind: 'timer',
+    section: 3,
+    why: "NHL Higher or Lower's reveal goes through setTimeout.call(window, ...), a bare timer the token scan did not see",
+  },
+  /* Round 674 fix: the eleventh Higher or Lower game runs its own reveal on
+     its page, which the hook only scan never read. */
+  hlpage: {
+    file: 'src/pages/HigherLowerTransfers.tsx',
+    from: '    later(() => {\n',
+    to: '    setTimeout(() => {\n',
+    kind: 'timer',
+    section: 3,
+    why: "Transfer Market's reveal timer is a bare setTimeout again, on a page and not a hook",
+  },
 };
 const ALL = [...Object.keys(VITEST_CONTROLS), ...Object.keys(SCAN_CONTROLS)];
 if (CONTROL && CONTROL !== 'all' && !ALL.includes(CONTROL)) {
@@ -341,21 +372,55 @@ function scan(files) {
   return { findings, stale, recorders, resolved };
 }
 
-/* Section 3: every Higher or Lower hook's reveal timer is owned. Read as
-   code, so a bare setTimeout left in a comment is not one. */
+/* Section 3: every Higher or Lower reveal timer is owned. Read as code, so a
+   bare setTimeout left in a comment is not one.
+   Round 674 fix (the review's M10): the first version looked for the token
+   "setTimeout(" and for a useOwnedTimeouts() call somewhere in the file, so
+   setTimeout.call(window, ...) passed, and so did a hook that bound the
+   helper and never used it. Now any reference to setTimeout at all is a bare
+   timer (a call, .call, .apply, window.setTimeout, an alias), and the name a
+   file binds to useOwnedTimeouts() must actually be called. And the scan
+   read the ten hooks only, so the eleventh Higher or Lower game, the
+   Transfer Market page, which runs its own reveal, kept a bare 1400 ms timer
+   no fence read: every page routed at a higher-lower address in
+   src/App.tsx is read too. A hook must take its timers from the helper; a
+   page that leaves the reveal to its hook needs none. One finding per file,
+   carrying every reason, so a control moves exactly one. */
 const HL_HOOK = /^src\/hooks\/use(?:\w+HL|HigherLower)\.ts$/;
 const HL_HOOKS_AT_LEAST = 10;
+const HL_PAGES_AT_LEAST = 11;
+const APP = 'src/App.tsx';
+function hlPages(files) {
+  const app = stripComments(files.get(APP) ?? '');
+  const lazyFile = new Map([...app.matchAll(/const\s+(\w+)\s*=\s*lazy\(\s*\(\)\s*=>\s*import\(\s*["']\.\/pages\/([\w/]+)["']\s*\)\s*\)/g)].map(m => [m[1], `src/pages/${m[2]}.tsx`]));
+  const pages = new Set();
+  for (const m of app.matchAll(/<Route\s+path="([^"]*higher-lower[^"]*)"\s+element=\{<(\w+)\s*\/>\}/g)) {
+    const file = lazyFile.get(m[2]);
+    if (file && files.has(file)) pages.add(file);
+  }
+  return [...pages].sort();
+}
 function hlTimers(files) {
   const findings = [];
   const hooks = [...files.keys()].filter(f => HL_HOOK.test(f)).sort();
-  for (const rel of hooks) {
+  const pages = hlPages(files);
+  for (const rel of [...hooks, ...pages]) {
     const code = stripComments(files.get(rel));
-    for (const m of code.matchAll(/\bsetTimeout\s*\(/g)) {
-      findings.push({ kind: 'timer', file: rel, line: code.slice(0, m.index).split('\n').length, what: 'starts a bare setTimeout, which nothing clears when the page unmounts: take it from useOwnedTimeouts' });
+    const reasons = [];
+    let line = 0;
+    const at = i => code.slice(0, i).split('\n').length;
+    for (const m of code.matchAll(/\bsetTimeout\b/g)) {
+      reasons.push(`line ${at(m.index)} reaches setTimeout itself, a timer nothing clears when the page unmounts`);
+      line ||= at(m.index);
     }
-    if (!/\buseOwnedTimeouts\s*\(\s*\)/.test(code)) findings.push({ kind: 'timer', file: rel, line: 1, what: 'takes no timers from useOwnedTimeouts, so its reveal timer is not owned' });
+    const helpers = [...code.matchAll(/\b(?:const|let)\s+([A-Za-z_$][\w$]*)\s*=\s*useOwnedTimeouts\s*\(\s*\)/g)].map(m => ({ name: m[1], at: at(m.index) }));
+    if (hooks.includes(rel) && !helpers.length) { reasons.push('takes no timers from useOwnedTimeouts, so its reveal timer is not owned'); line ||= 1; }
+    for (const h of helpers) {
+      if (!new RegExp(`(^|[^\\w$.])${h.name.replace(/\$/g, '\\$')}\\s*\\(`).test(code)) { reasons.push(`binds ${h.name} to useOwnedTimeouts() and never calls it, so the reveal is not scheduled through the owned helper`); line ||= h.at; }
+    }
+    if (reasons.length) findings.push({ kind: 'timer', file: rel, line, what: reasons.join('; ') });
   }
-  return { findings, hooks };
+  return { findings, hooks, pages };
 }
 
 /* ------------------------------------------------------------------------ */
@@ -450,11 +515,34 @@ if (!CONTROL) {
   else console.log('   prose check: a mode gate and a stray mark written in comments flag nothing');
   if (!res.findings.length && !res.stale.length) console.log('   no slug mismatch and no new mode gated recorder');
 
-  console.log('\n3) The reveal timers: every Higher or Lower hook takes its timer from useOwnedTimeouts, as code');
+  console.log('\n3) The reveal timers: every Higher or Lower hook and page schedules its reveal through useOwnedTimeouts, as code');
   const timers = hlTimers(files);
   console.log(`   ${timers.hooks.length} Higher or Lower hooks read: ${timers.hooks.map(h => path.basename(h, '.ts')).join(', ')}`);
+  console.log(`   ${timers.pages.length} pages routed at a higher-lower address read: ${timers.pages.map(h => path.basename(h, '.tsx')).join(', ')}`);
   if (timers.hooks.length < HL_HOOKS_AT_LEAST) fail(`only ${timers.hooks.length} Higher or Lower hooks found, expected at least ${HL_HOOKS_AT_LEAST}: the reader is broken or a hook was renamed`);
+  if (timers.pages.length < HL_PAGES_AT_LEAST) fail(`only ${timers.pages.length} pages routed at a higher-lower address found in ${APP}, expected at least ${HL_PAGES_AT_LEAST}: the route reader is broken`);
   for (const f of timers.findings) fail(`${f.file}:${f.line}: ${f.what}`);
+  /* Round 674 fix (M10): the shapes the first scan let through, each written
+     as code into the hockey hook, must each flag it. */
+  {
+    const probe = 'src/hooks/useHockeyHL.ts';
+    const src = files.get(probe);
+    const shapes = [
+      ['setTimeout.call', src.replace('      later(() => {\n', '      setTimeout.call(window, () => {\n')],
+      ['window.setTimeout', src.replace('      later(() => {\n', '      window.setTimeout(() => {\n')],
+      ['an alias', src.replace('      later(() => {\n', '      const wait = setTimeout; wait(() => {\n')],
+      ['a helper bound and never called', src.replace('      later(() => {\n', '      queueMicrotask(() => {\n').replace(/\}, 2000\);\n/, '});\n')],
+    ];
+    const missed = [];
+    for (const [label, text] of shapes) {
+      if (text === src) { missed.push(`${label} (the probe could not be written)`); continue; }
+      const m = new Map(files);
+      m.set(probe, text);
+      if (!hlTimers(m).findings.some(f => f.file === probe)) missed.push(label);
+    }
+    if (missed.length) fail(`the timer scan lets these reveal shapes through: ${missed.join(', ')}`);
+    else console.log(`   shape check: ${shapes.map(s => s[0]).join(', ')} each flag the hook`);
+  }
   /* Prose is not code: a bare timer written into comments flags nothing. */
   const hlProbe = 'src/hooks/useHockeyHL.ts';
   const hlProse = new Map(files);
@@ -470,7 +558,7 @@ if (!CONTROL) {
     console.error(`\nsimNoDoubleRecord: ${failures} failure(s)`);
     process.exit(1);
   }
-  console.log(`\nsimNoDoubleRecord: all green (${shown} rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; ${res.recorders} recorders read; ${timers.hooks.length} Higher or Lower hooks own their reveal timers)`);
+  console.log(`\nsimNoDoubleRecord: all green (${shown} rows and checks, each recorded once across the finish, the toggles, the coaching, the reveals and the reloads; ${res.recorders} recorders read; ${timers.hooks.length} Higher or Lower hooks and ${timers.pages.length} pages own their reveal timers)`);
   process.exit(0);
 }
 

@@ -9,6 +9,7 @@ import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { DealPlayer, fetchDealPlayers, fmtCompactUsd } from '@/lib/dealPlayers';
+import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 
 type Phase = 'boot' | 'error' | 'playing' | 'reveal' | 'done';
 
@@ -37,6 +38,10 @@ const HigherLowerTransfers = () => {
   // Run history (one entry per resolved guess this run) purely to build the
   // emoji grid per R5 spec 3.6 item 5. Does not affect scoring or timing.
   const [runHistory, setRunHistory] = useState<boolean[]>([]);
+  /* Round 674 fix: the reveal timer is owned, as in the ten Higher or Lower
+     hooks, so leaving the page during the reveal clears it instead of
+     setting state on a page that is gone. */
+  const later = useOwnedTimeouts();
 
   const boot = useCallback(async () => {
     setPhase('boot');
@@ -69,7 +74,7 @@ const HigherLowerTransfers = () => {
     setLastCorrect(correct);
     setRunHistory(h => [...h, correct]);
     setPhase('reveal');
-    setTimeout(() => {
+    later(() => {
       if (correct) {
         const s = streak + 1;
         setStreak(s);
