@@ -1,5 +1,5 @@
 {
- "about": "Round 661. Every fact the three hand typed trivia banks show a player (Hall of Fame or Bust, Guess the Year, Score Predictor), checked on 2026-09-28 against at least two sources on two different hosts, one of them the sport's governing body, league or hall of fame wherever that page would answer, and at least one that is not. scripts/simTriviaFacts.mjs holds the shipped files to this record word for word and fails if either side moves. Wikipedia and other wikis are never a source here. A fact that carries \"noOfficial\" stands on independent sources and says why the official page is missing. An entry marked \"editorial\" is a flavour line with no checkable claim (a Hall of Fame or Bust verdict label, a Score Predictor teaser hint) and says so. For Score Predictor, homeTeam is the side listed first: where one side really was at home it is that side, and \"neutral\" marks a final at a neutral ground, where the order is not a claim. Guess the Year uses the calendar year an event happened in, so a Super Bowl or bowl game played in January belongs to the new year.",
+ "about": "Round 661. Every fact the three hand typed trivia banks show a player (Hall of Fame or Bust, Guess the Year, Score Predictor), checked on 2026-09-28 against at least two sources on two different hosts, one of them the sport's governing body, league or hall of fame wherever that page would answer, and at least one that is not. scripts/simTriviaFacts.mjs holds the shipped files to this record word for word and fails if either side moves. Wikipedia and other wikis are never a source here. A fact that carries \"noOfficial\" stands on independent sources and says why the official page is missing. An entry marked \"editorial\" is a flavour line with no checkable claim (a Hall of Fame or Bust verdict label, a Score Predictor teaser hint) and says so. For Score Predictor, homeTeam is the side listed first: where one side really was at home it is that side, and \"neutral\" marks a final at a neutral ground, where the order is not a claim. Guess the Year uses the calendar year an event happened in, so a Super Bowl or bowl game played in January belongs to the new year. Round 661 fix: every Hall of Fame or Bust card also carries its real Hall of Fame record (hall), sourced like any other fact, with asOf on every 'not in' because that can change; a count on a card for a player still playing is a floor or carries asOf, the date it was last checked. www.fifa.com article pages turned out to be script shells with no text, so they count as no source and were replaced by readable inside.fifa.com pages. listQuizUclTopScorers holds the List Quiz's Champions League joint top scorers.",
  "checked": "2026-09-28",
  "officialHosts": {
   "nfl": [
@@ -24,7 +24,8 @@
    "uefa.com",
    "premierleague.com",
    "laliga.com",
-   "mlssoccer.com"
+   "mlssoccer.com",
+   "thefa.com"
   ],
   "wsoccer": [
    "fifa.com",
@@ -124,7 +125,12 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": null,
+    "editorial": true,
+    "why": "soccer has no single Hall of Fame, so the reveal says the call is all ours; that line is framing, not a claim about any one hall"
    },
    "stats": [
     {
@@ -134,7 +140,8 @@
       "https://www.espn.com/soccer/story/_/id/47220729/messi-score-900th-goal-2026-reach-1000-pass-ronaldo"
      ],
      "on": "2026-09-28",
-     "noOfficial": "a club scoring total across all competitions is kept by the club, not a governing body; Barcelona and ESPN both give 672"
+     "noOfficial": "a club scoring total across all competitions is kept by the club, not a governing body; Barcelona and ESPN both give 672",
+     "asOf": "2026-09-28"
     },
     {
      "text": "10 La Liga titles",
@@ -142,7 +149,8 @@
       "https://www.uefa.com/uefachampionsleague/news/0242-0e97e0ac1cb3-eef786ff788c-1000--lionel-messi-what-records-does-he-hold/",
       "https://www.fcbarcelona.com/en/news/3642383/leo-messi-becomes-the-most-decorated-player-in-history"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "asOf": "2026-09-28"
     },
     {
      "text": "8 Ballon d'Or awards",
@@ -151,16 +159,19 @@
       "https://www.espn.com/soccer/story/_/id/49962717/david-beckham-lionel-messi-win-ballon-dor-not-harry-kane",
       "https://www.skysports.com/lionel-messi"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "asOf": "2026-09-28"
     },
     {
      "text": "1 World Cup",
      "src": [
-      "https://www.espn.com/soccer/story/_/id/48913452/who-won-men-world-cup-all-winners-list-stats",
-      "https://www.fifa.com/en/tournaments/mens/worldcup/articles/kylian-mbappe-world-cup-finals-goals",
-      "https://www.skysports.com/football/news/11065/13388595/cristiano-ronaldo-al-nassr-forward-signs-new-two-year-deal-to-stay-at-saudi-arabian-club"
+      "https://inside.fifa.com/tournaments/mens/worldcup/qatar2022/news/triumphant-argentina-conclude-unprecedented-fifa-world-cup",
+      "https://abcnews.com/GMA/Culture/spain-argentina-win-2026-world-cup/story?id=134824556",
+      "https://www.espn.com/soccer/story/_/id/48913452/who-won-men-world-cup-all-winners-list-stats"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "srcNote": "www.fifa.com article pages are a script shell with no text (4.5 KB, checked 2026-09-28), so they were replaced by readable inside.fifa.com pages; the Sky Sports page on Ronaldo's Al Nassr contract said nothing about Messi and was dropped",
+     "asOf": "2026-09-28"
     }
    ],
    "hints": [
@@ -171,7 +182,8 @@
       "https://www.si.com/soccer/how-many-champions-league-titles-has-lionel-messi-won"
      ],
      "on": "2026-09-28",
-     "noOfficial": "uefa.com counts the three finals he played (2009, 2011, 2015); the fourth title, 2006, is a squad medal that Barcelona and SI both count"
+     "noOfficial": "uefa.com counts the three finals he played (2009, 2011, 2015); the fourth title, 2006, is a squad medal that Barcelona and SI both count",
+     "asOf": "2026-09-28"
     },
     {
      "text": "Played in Spain for over a decade",
@@ -201,7 +213,8 @@
      "https://www.fcbarcelona.com/en/news/3642383/leo-messi-becomes-the-most-decorated-player-in-history",
      "https://www.si.com/soccer/2023/08/20/lionel-messi-most-decorated-player-soccer-history-inter-miami-leagues-cup"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "asOf": "2026-09-28"
    }
   },
   "soc-2": {
@@ -210,7 +223,19 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Premier League Hall of Fame",
+     "year": 2021
+    },
+    "src": [
+     "https://www.premierleague.com/en/news/2103122",
+     "https://www.skysports.com/football/news/12287196/alan-shearer-and-thierry-henry-the-first-inductees-into-premier-league-hall-of-fame"
+    ],
+    "on": "2026-09-28",
+    "note": "announced April 26, 2021 with Alan Shearer as the first two inductees"
    },
    "stats": [
     {
@@ -296,7 +321,12 @@
    "verdict": {
     "v": "borderline",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": null,
+    "editorial": true,
+    "why": "soccer has no single Hall of Fame, so the reveal says the call is all ours; that line is framing, not a claim about any one hall"
    },
    "stats": [
     {
@@ -384,9 +414,21 @@
    "answer": "Michael Owen",
    "sport": "soccer",
    "verdict": {
-    "v": "bust",
+    "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, shown as 'Our call'. Owen was labelled a bust until the Round 661 fix; that could not stand beside a Ballon d'Or (2001) and his place in the National Football Museum Hall of Fame (inducted 2014), and a card whose player is really in a hall is never called a bust or borderline here"
+   },
+   "hall": {
+    "v": {
+     "name": "National Football Museum Hall of Fame",
+     "year": 2014
+    },
+    "src": [
+     "https://www.thefa.com/news/2014/apr/24/legends-inducted-to-hall-of-fame-240414",
+     "https://www.itv.com/news/granada/story/2014-10-16/north-west-stars-inducted-into-footballing-hall-of-fame/"
+    ],
+    "on": "2026-09-28",
+    "note": "the FA's announcement (April 2014) and ITV's report of the October 2014 ceremony both list him"
    },
    "stats": [
     {
@@ -477,7 +519,12 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": null,
+    "editorial": true,
+    "why": "soccer has no single Hall of Fame, so the reveal says the call is all ours; that line is framing, not a claim about any one hall"
    },
    "stats": [
     {
@@ -495,7 +542,8 @@
       "https://www.uefa.com/uefachampionsleague/news/0253-0d820b46805f-b78ccae2c451-1000--what-uefa-records-does-cristiano-ronaldo-hold/",
       "https://www.statmuse.com/fc/ask/how-many-champions-league-titles-does-cristiano-ronaldo-have"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "asOf": "2026-09-28"
     },
     {
      "text": "5 Ballon d'Or awards",
@@ -504,7 +552,8 @@
       "https://worldsoccertalk.com/news/missing-from-the-2026-ballon-dor-shortlist-when-did-cristiano-ronaldo-last-win-the-award/"
      ],
      "on": "2026-09-28",
-     "noOfficial": "the award is France Football's and its site was blocked to the checker; ESPN and World Soccer Talk both give five"
+     "noOfficial": "the award is France Football's and its site was blocked to the checker; ESPN and World Soccer Talk both give five",
+     "asOf": "2026-09-28"
     },
     {
      "text": "League titles in more than one country",
@@ -513,7 +562,8 @@
       "https://www.espn.com/soccer/story/_/id/48635460/cristiano-ronaldo-first-saudi-title-al-nassr-clinch-league"
      ],
      "on": "2026-09-28",
-     "noOfficial": "no single league covers titles in four countries; FOX and ESPN both list England, Spain, Italy and Saudi Arabia"
+     "noOfficial": "no single league covers titles in four countries; FOX and ESPN both list England, Spain, Italy and Saudi Arabia",
+     "asOf": "2026-09-28"
     }
    ],
    "hints": [
@@ -534,7 +584,8 @@
       "https://www.espn.com/soccer/story/_/id/46751020/cristiano-ronaldo-goal-tracker-road-1000-career-goals"
      ],
      "on": "2026-09-28",
-     "noOfficial": "no single league covers a career in four countries; FOX and ESPN both give England, Spain, Italy and Saudi Arabia"
+     "noOfficial": "no single league covers a career in four countries; FOX and ESPN both give England, Spain, Italy and Saudi Arabia",
+     "asOf": "2026-09-28"
     },
     {
      "text": "The first man to score at six World Cups",
@@ -543,7 +594,8 @@
       "https://www.espn.com/soccer/story/_/id/46751020/cristiano-ronaldo-goal-tracker-road-1000-career-goals"
      ],
      "on": "2026-09-28",
-     "noOfficial": "fifa.com match pages render with script and came back empty; Al Jazeera and ESPN both report the record from the 2026 tournament"
+     "noOfficial": "fifa.com match pages render with script and came back empty; Al Jazeera and ESPN both report the record from the 2026 tournament",
+     "asOf": "2026-09-28"
     }
    ],
    "funFact": {
@@ -561,7 +613,20 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Pro Football Hall of Fame",
+     "year": null
+    },
+    "src": [
+     "https://www.profootballhof.com/hall-of-famers/years",
+     "https://www.cbssports.com/nfl/news/pro-football-hall-of-fame-2026-induction-class/"
+    ],
+    "on": "2026-09-28",
+    "asOf": "2026-09-28",
+    "note": "the Hall lists every class through 2026 and he is in none; CBS Sports gives the 2026 class (Brees, Fitzgerald, Craig, Vinatieri, Kuechly)"
    },
    "stats": [
     {
@@ -643,7 +708,20 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Pro Football Hall of Fame",
+     "year": null
+    },
+    "src": [
+     "https://www.profootballhof.com/hall-of-famers/years",
+     "https://www.cbssports.com/nfl/news/pro-football-hall-of-fame-2026-induction-class/"
+    ],
+    "on": "2026-09-28",
+    "asOf": "2026-09-28",
+    "note": "the Hall lists every class through 2026 and he is in none; CBS Sports gives the 2026 class"
    },
    "stats": [
     {
@@ -723,7 +801,20 @@
    "verdict": {
     "v": "bust",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Pro Football Hall of Fame",
+     "year": null
+    },
+    "src": [
+     "https://www.profootballhof.com/hall-of-famers/years",
+     "https://www.cbssports.com/nfl/news/pro-football-hall-of-fame-2026-induction-class/"
+    ],
+    "on": "2026-09-28",
+    "asOf": "2026-09-28",
+    "note": "the Hall lists every class through 2026 and he is in none; CBS Sports gives the 2026 class"
    },
    "stats": [
     {
@@ -806,7 +897,19 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Pro Football Hall of Fame",
+     "year": 2021
+    },
+    "src": [
+     "https://www.profootballhof.com/players/peyton-manning/",
+     "https://www.cbssports.com/nfl/news/pro-football-hall-of-fame-class-of-2021-peyton-manning-calvin-johnson-lead-the-eight-member-class/"
+    ],
+    "on": "2026-09-28",
+    "note": "Class of 2021 on his Hall page"
    },
    "stats": [
     {
@@ -883,7 +986,19 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Pro Football Hall of Fame",
+     "year": 2010
+    },
+    "src": [
+     "https://www.profootballhof.com/players/jerry-rice/",
+     "https://www.foxnews.com/sports/emmitt-smith-jerry-rice-inducted-into-pro-footballs-hall-of-fame.amp"
+    ],
+    "on": "2026-09-28",
+    "note": "Class of 2010 on his Hall page; the AP report of the August 7, 2010 enshrinement"
    },
    "stats": [
     {
@@ -966,7 +1081,19 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Naismith Hall of Fame",
+     "year": 2009
+    },
+    "src": [
+     "https://www.hoophall.com/hall-of-famers/michael-jordan/",
+     "https://www.basketball-reference.com/awards/hof.html"
+    ],
+    "on": "2026-09-28",
+    "note": "Enshrined 2009 on his Hall page"
    },
    "stats": [
     {
@@ -1050,7 +1177,20 @@
    "verdict": {
     "v": "borderline",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Naismith Hall of Fame",
+     "year": null
+    },
+    "src": [
+     "https://www.hoophall.com/hall-of-famers/",
+     "https://www.basketball-reference.com/awards/hof.html"
+    ],
+    "on": "2026-09-28",
+    "asOf": "2026-09-28",
+    "note": "neither the Hall's full list nor Basketball-Reference's lists him; he has not retired"
    },
    "stats": [
     {
@@ -1086,7 +1226,8 @@
       "https://www.nba.com/player/203081/damian-lillard",
       "https://www.basketball-reference.com/players/l/lillada01.html"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "asOf": "2026-09-28"
     }
    ],
    "hints": [
@@ -1096,7 +1237,8 @@
       "https://www.nba.com/player/203081/damian-lillard",
       "https://www.basketball-reference.com/players/l/lillada01.html"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "asOf": "2026-09-28"
     },
     {
      "text": "Known for deep three-pointers",
@@ -1104,7 +1246,8 @@
       "https://www.nba.com/player/203081/damian-lillard",
       "https://www.espn.com/nba/story/_/id/45765001/sources-damian-lillard-finalizing-deal-return-trail-blazers"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "asOf": "2026-09-28"
     },
     {
      "text": "Played in the Pacific Northwest",
@@ -1130,7 +1273,19 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Naismith Hall of Fame",
+     "year": 2016
+    },
+    "src": [
+     "https://www.hoophall.com/hall-of-famers/yao-ming/",
+     "https://www.basketball-reference.com/awards/hof.html"
+    ],
+    "on": "2026-09-28",
+    "note": "Enshrined 2016 on his Hall page"
    },
    "stats": [
     {
@@ -1213,7 +1368,20 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Naismith Hall of Fame",
+     "year": null
+    },
+    "src": [
+     "https://www.hoophall.com/hall-of-famers/",
+     "https://www.basketball-reference.com/awards/hof.html"
+    ],
+    "on": "2026-09-28",
+    "asOf": "2026-09-28",
+    "note": "neither the Hall's full list nor Basketball-Reference's lists him; he has not retired"
    },
    "stats": [
     {
@@ -1231,7 +1399,8 @@
       "https://www.nba.com/player/2544/lebron-james",
       "https://www.espn.com/nba/player/bio/_/id/1966/lebron-james"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "asOf": "2026-09-28"
     },
     {
      "text": "4 Finals MVPs",
@@ -1240,7 +1409,8 @@
       "https://www.espn.com/nba/player/bio/_/id/1966/lebron-james",
       "https://www.nba.com/news/history-finals-mvp-winners"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "asOf": "2026-09-28"
     },
     {
      "text": "20+ All-Star selections",
@@ -1267,7 +1437,8 @@
       "https://www.espn.com/nba/player/bio/_/id/1966/lebron-james",
       "https://www.nba.com/news/history-nba-champions"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "asOf": "2026-09-28"
     },
     {
      "text": "Born in Akron, Ohio",
@@ -1295,7 +1466,20 @@
    "verdict": {
     "v": "bust",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Naismith Hall of Fame",
+     "year": null
+    },
+    "src": [
+     "https://www.hoophall.com/hall-of-famers/",
+     "https://www.basketball-reference.com/awards/hof.html"
+    ],
+    "on": "2026-09-28",
+    "asOf": "2026-09-28",
+    "note": "neither the Hall's full list nor Basketball-Reference's lists him"
    },
    "stats": [
     {
@@ -1379,7 +1563,21 @@
    "verdict": {
     "v": "borderline",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Baseball Hall of Fame",
+     "year": null
+    },
+    "src": [
+     "https://baseballhall.org/class-of-2026-contemporary-baseball-era-player-ballot",
+     "https://www.baseball-reference.com/awards/hof.shtml",
+     "https://www.cbssports.com/mlb/news/baseball-hall-of-fame-ballot-results-jeff-kent-giants-barry-bonds/"
+    ],
+    "on": "2026-09-28",
+    "asOf": "2026-09-28",
+    "note": "on the Contemporary Baseball Era ballot for the class of 2026 and not elected (Jeff Kent was); Baseball-Reference lists every inductee through 2026 and not him"
    },
    "stats": [
     {
@@ -1459,7 +1657,19 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Baseball Hall of Fame",
+     "year": 2022
+    },
+    "src": [
+     "https://baseballhall.org/hall-of-famers/ortiz-david",
+     "https://www.baseball-reference.com/awards/hof.shtml"
+    ],
+    "on": "2026-09-28",
+    "note": "Class of 2022 on his Hall page"
    },
    "stats": [
     {
@@ -1536,7 +1746,21 @@
    "verdict": {
     "v": "borderline",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Baseball Hall of Fame",
+     "year": null
+    },
+    "src": [
+     "https://www.baseball-reference.com/awards/hof.shtml",
+     "https://www.npr.org/2025/05/13/nx-s1-5397310/pete-rose-shoeless-joe-jackson-lifts-ban-hall-of-fame"
+    ],
+    "on": "2026-09-28",
+    "asOf": "2026-09-28",
+    "note": "reinstated in May 2025, which clears the way for a vote but is not induction; Baseball-Reference lists every inductee through 2026 and not him",
+    "noOfficial": "baseballhall.org's member explorer renders by script and its plaque pages exist only for members, and mlb.com's pages on the reinstatement answered 406 to the checker; Baseball-Reference's complete list and NPR agree"
    },
    "stats": [
     {
@@ -1602,7 +1826,7 @@
       "https://www.spokesman.com/stories/2025/may/13/mlb-reinstates-pete-rose-and-others-paving-way-for/"
      ],
      "on": "2026-09-28",
-     "noOfficial": "mlb.com player and history pages answered 406 to the checker, and baseballhall.org keeps plaque and ballot pages only; ESPN and Baseball-Reference agree"
+     "noOfficial": "mlb.com player and history pages answered 406 to the checker, and baseballhall.org keeps plaque and ballot pages only; ESPN and the Spokesman-Review agree (reinstated May 13, 2025)"
     }
    ],
    "funFact": {
@@ -1623,7 +1847,20 @@
    "verdict": {
     "v": "bust",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Baseball Hall of Fame",
+     "year": null
+    },
+    "src": [
+     "https://baseballhall.org/hall-of-fame/election-rules/bbwaa-rules",
+     "https://www.baseball-reference.com/awards/hof.shtml"
+    ],
+    "on": "2026-09-28",
+    "asOf": "2026-09-28",
+    "note": "the BBWAA rules need ten major league seasons and he played five; Baseball-Reference lists every inductee through 2026 and not him"
    },
    "stats": [
     {
@@ -1708,7 +1945,20 @@
    "verdict": {
     "v": "borderline",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Baseball Hall of Fame",
+     "year": null
+    },
+    "src": [
+     "https://www.mlb.com/news/2026-baseball-hall-of-fame-voting-results",
+     "https://www.baseball-reference.com/awards/hof.shtml"
+    ],
+    "on": "2026-09-28",
+    "asOf": "2026-09-28",
+    "note": "40 percent in his fifth year on the 2026 ballot, short of 75"
    },
    "stats": [
     {
@@ -1786,7 +2036,20 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Hockey Hall of Fame",
+     "year": 1999
+    },
+    "src": [
+     "https://hhof.com/induction_archives/ind99wg4.shtml",
+     "https://www.hockey-reference.com/awards/hhof.html",
+     "https://www.nhl.com/news/this-date-in-nhl-history-june-23-280997942"
+    ],
+    "on": "2026-09-28",
+    "note": "the Hall waived the waiting period and named him to the class of 1999"
    },
    "stats": [
     {
@@ -1864,7 +2127,20 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Hockey Hall of Fame",
+     "year": null
+    },
+    "src": [
+     "https://www.nhl.com/news/patrice-bergeron-carey-price-pekka-rinne-keith-tkachuk-elected-to-hockey-hall-of-fame",
+     "https://www.hockey-reference.com/awards/hhof.html"
+    ],
+    "on": "2026-09-28",
+    "asOf": "2026-09-28",
+    "note": "Hockey-Reference's full list of inductees through 2026 leaves him out, and he is not in the 2026 class; he says he is not officially retired"
    },
    "stats": [
     {
@@ -1942,7 +2218,20 @@
    "verdict": {
     "v": "bust",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Hockey Hall of Fame",
+     "year": null
+    },
+    "src": [
+     "https://www.nhl.com/news/patrice-bergeron-carey-price-pekka-rinne-keith-tkachuk-elected-to-hockey-hall-of-fame",
+     "https://www.hockey-reference.com/awards/hhof.html"
+    ],
+    "on": "2026-09-28",
+    "asOf": "2026-09-28",
+    "note": "Hockey-Reference's full list of inductees through 2026 leaves him out"
    },
    "stats": [
     {
@@ -2019,7 +2308,19 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Hockey Hall of Fame",
+     "year": 1972
+    },
+    "src": [
+     "https://www.hhof.com/induction/factsandfigures.html",
+     "https://www.hockey-reference.com/awards/hhof.html"
+    ],
+    "on": "2026-09-28",
+    "note": "the Hall lists him among members whose waiting period was waived, 1972"
    },
    "stats": [
     {
@@ -2097,7 +2398,20 @@
    "verdict": {
     "v": "hof",
     "editorial": true,
-    "why": "the verdict is the game's career judgment label, not a claim about induction (Bonds is borderline while not inducted, Yao is inducted)"
+    "why": "the verdict is the game's own call on the career, and the reveal labels it 'Our call'; whether he is really in a Hall of Fame is the sourced hall fact beside it"
+   },
+   "hall": {
+    "v": {
+     "name": "Hockey Hall of Fame",
+     "year": null
+    },
+    "src": [
+     "https://www.nhl.com/news/patrice-bergeron-carey-price-pekka-rinne-keith-tkachuk-elected-to-hockey-hall-of-fame",
+     "https://www.hockey-reference.com/awards/hhof.html"
+    ],
+    "on": "2026-09-28",
+    "asOf": "2026-09-28",
+    "note": "Hockey-Reference's full list of inductees through 2026 leaves him out; he has not retired"
    },
    "stats": [
     {
@@ -2122,7 +2436,8 @@
       "https://api-web.nhle.com/v1/player/8471675/landing",
       "https://www.hockey-reference.com/players/c/crosbsi01.html"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "asOf": "2026-09-28"
     },
     {
      "text": "2 Conn Smythe Trophies",
@@ -2130,7 +2445,8 @@
       "https://api-web.nhle.com/v1/player/8471675/landing",
       "https://www.hockey-reference.com/players/c/crosbsi01.html"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "asOf": "2026-09-28"
     }
    ],
    "hints": [
@@ -2148,7 +2464,8 @@
       "https://api-web.nhle.com/v1/player/8471675/landing",
       "https://www.hockey-reference.com/players/c/crosbsi01.html"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "asOf": "2026-09-28"
     },
     {
      "text": "Drafted first overall in 2005",
@@ -2156,7 +2473,8 @@
       "https://api-web.nhle.com/v1/player/8471675/landing",
       "https://www.hockey-reference.com/players/c/crosbsi01.html"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "asOf": "2026-09-28"
     }
    ],
    "funFact": {
@@ -2165,7 +2483,8 @@
      "https://api-web.nhle.com/v1/player/8471675/landing",
      "https://www.hockey-reference.com/players/c/crosbsi01.html"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "asOf": "2026-09-28"
    }
   }
  },
@@ -2173,14 +2492,19 @@
   "1972": {
    "clues": [
     {
-     "text": "Bobby Fischer beat Boris Spassky in a Cold War chess showdown",
+     "text": "Bobby Fischer beat Boris Spassky in Reykjavik to become world chess champion",
      "sport": "chess",
      "src": [
-      "https://www.history.com/this-day-in-history/september-1/bobby-fischer-first-american-winner-world-chess-championship",
+      "https://museum.fide.com/champions/robert-bobby-fischer",
+      "https://www.chessgames.com/perl/chess.pl?tid=54397",
       "https://www.chess.com/article/view/fischer-vs-spassky-world-chess-championship-1972"
      ],
      "on": "2026-09-28",
-     "noOfficial": "fide.com was not opened by the checker; History and Chess.com agree on the match, the result and the Cold War setting"
+     "replaced": {
+      "was": "Bobby Fischer beat Boris Spassky in a Cold War chess showdown",
+      "why": "The old wording also fitted 1992, when Fischer beat Spassky again in an unofficial rematch; Reykjavik and the title only fit 1972.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "A massacre of Israeli athletes overshadowed the Munich Summer Olympics",
@@ -2246,13 +2570,18 @@
      "noOfficial": "no sanctioning body page for this fight was opened by the checker; the two independent outlets named agree"
     },
     {
-     "text": "The New York Knicks won the NBA title",
+     "text": "The New York Knicks beat the Lakers in five games for the NBA title",
      "sport": "nba",
      "src": [
-      "https://www.nba.com/news/history-nba-champions",
-      "https://www.basketball-reference.com/playoffs/"
+      "https://www.nba.com/news/new-york-knicks-nba-championships",
+      "https://www.basketball-reference.com/playoffs/1973-nba-finals-knicks-vs-lakers.html"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "The New York Knicks won the NBA title",
+      "why": "The Knicks won the title again in June 2026 (over the Spurs), so the old clue had two right answers; the Lakers in five only fits 1973.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "The Oakland Athletics won a second straight World Series",
@@ -2308,14 +2637,19 @@
      "on": "2026-09-28"
     },
     {
-     "text": "The Pittsburgh Steelers won a second straight Super Bowl",
+     "text": "The Pittsburgh Steelers beat the Dallas Cowboys for a second straight Super Bowl",
      "sport": "nfl",
      "src": [
-      "https://www.profootballhof.com/football-history/general-history-chronology-1960-to-1979",
       "https://www.espn.com/nfl/superbowl/history/winners",
-      "https://www.nfl.com/news/super-bowl-champions-09000d5d8267aa7e"
+      "https://www.cbssports.com/nfl/news/super-bowl-results-winners-mvps-history-full-list/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "noOfficial": "no nfl.com or profootballhof.com page listing Super Bowl results was read this round; ESPN's and CBS Sports' Super Bowl lists both give IX (Jan 12, 1975, over Minnesota) and X (Jan 18, 1976, Steelers 21 Cowboys 17)",
+     "replaced": {
+      "was": "The Pittsburgh Steelers won a second straight Super Bowl",
+      "why": "Pittsburgh also won a second straight in January 1980 (XIII and XIV), but that one was over the Rams; the Cowboys only fit 1976.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "Bruce Jenner won the Olympic decathlon",
@@ -2402,13 +2736,19 @@
      "on": "2026-09-28"
     },
     {
-     "text": "Bjorn Borg won another Wimbledon title",
+     "text": "Bjorn Borg won a fourth straight Wimbledon title",
      "sport": "tennis",
      "src": [
-      "https://assets.wimbledon.com/archive/draws/pdfs/draws/1979_MS_A4.pdf",
-      "https://www.espn.com/tennis/story/_/id/40453484/wimbledon-winners-mens-womens-singles-champions-list"
+      "https://www.tennisfame.com/hall-of-famers/inductees/bjorn-borg",
+      "https://www.washingtonpost.com/archive/sports/1979/07/08/borg-rallies-beats-tanner-in-5-sets/1bcdd789-909e-4d9a-8ab3-e7b3e3842626/",
+      "https://www.atptour.com/en/news/borg-wimbledon-1976-50-years-on"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "Bjorn Borg won another Wimbledon title",
+      "why": "Borg won Wimbledon every year from 1976 to 1980, so 'another' fitted 1977, 1978 and 1980 too; the fourth straight is 1979 only.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "Magic Johnson's Michigan State beat Larry Bird's Indiana State for the NCAA title",
@@ -2489,14 +2829,19 @@
   "1981": {
    "clues": [
     {
-     "text": "A baseball season was interrupted by a midseason players' strike",
+     "text": "A midseason players' strike split the baseball season into two halves",
      "sport": "mlb",
      "src": [
-      "https://thisgreatgame.com/1981-baseball-history/",
-      "https://www.wbur.org/onlyagame/2015/06/13/split-season-jeff-katz"
+      "https://www.baseball-almanac.com/yearly/yr1981n.shtml",
+      "https://sabr.org/journal/article/split-season-1981-chicago-style/"
      ],
      "on": "2026-09-28",
-     "noOfficial": "mlb.com history pages answered 406 to the checker and its title list skips teams with fewer than three titles; the two independent pages named agree"
+     "noOfficial": "no mlb.com or baseballhall.org page on the 1981 split season was found; Baseball Almanac gives the strike (June 12 to August 10) and SABR's article is about the split into two halves",
+     "replaced": {
+      "was": "A baseball season was interrupted by a midseason players' strike",
+      "why": "Players also struck midseason in August 1985 and August 1994; only 1981 split the season into two halves.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "John McEnroe ended Bjorn Borg's Wimbledon reign",
@@ -2509,13 +2854,19 @@
      "on": "2026-09-28"
     },
     {
-     "text": "The Boston Celtics beat the Houston Rockets for the NBA title",
+     "text": "Cedric Maxwell won Finals MVP as the Celtics beat the Houston Rockets",
      "sport": "nba",
      "src": [
-      "https://www.nba.com/news/history-nba-champions",
+      "https://www.nba.com/news/history-finals-mvp-winners",
+      "https://www.basketball-reference.com/awards/finals_mvp.html",
       "https://www.basketball-reference.com/playoffs/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "The Boston Celtics beat the Houston Rockets for the NBA title",
+      "why": "The Celtics beat the Rockets in the Finals again in 1986, when Larry Bird was Finals MVP; Maxwell only fits 1981.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "Sugar Ray Leonard beat Thomas Hearns in a welterweight showdown",
@@ -2538,14 +2889,20 @@
      "on": "2026-09-28"
     },
     {
-     "text": "The Los Angeles Dodgers beat the Yankees to win the World Series",
+     "text": "The Los Angeles Dodgers beat the Yankees as three players shared World Series MVP",
      "sport": "mlb",
      "src": [
+      "https://www.espn.com/mlb/story/_/id/42060322/who-won-mlb-world-series-mvp-all-winners-list",
+      "https://sabr.org/gamesproj/game/october-28-1981-guerrero-dodgers-claim-world-series-championship-in-strike-torn-season/",
       "https://www.mlb.com/news/teams-with-the-most-world-series-titles-c299893938",
-      "https://www.baseball-reference.com/postseason/world-series.shtml",
-      "https://www.espn.com/mlb/worldseries/history/winners"
+      "https://www.baseball-reference.com/postseason/world-series.shtml"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "The Los Angeles Dodgers beat the Yankees to win the World Series",
+      "why": "The Dodgers beat the Yankees in the World Series again in 2024; the three shared MVPs (Cey, Guerrero, Yeager) only fit 1981.",
+      "on": "2026-09-28"
+     }
     }
    ]
   },
@@ -2571,24 +2928,34 @@
      "on": "2026-09-28"
     },
     {
-     "text": "The St. Louis Cardinals won the World Series",
+     "text": "The St. Louis Cardinals beat the Milwaukee Brewers in the World Series",
      "sport": "mlb",
      "src": [
-      "https://www.mlb.com/news/teams-with-the-most-world-series-titles-c299893938",
+      "https://www.baseball-almanac.com/ws/wsmenu.shtml",
       "https://www.baseball-reference.com/postseason/world-series.shtml",
-      "https://www.espn.com/mlb/worldseries/history/winners"
+      "https://www.mlb.com/news/teams-with-the-most-world-series-titles-c299893938"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "The St. Louis Cardinals won the World Series",
+      "why": "The Cardinals also won in 2006 and 2011; the Brewers are in the Cardinals' league now, so this pairing cannot come round again in a World Series.",
+      "on": "2026-09-28"
+     }
     },
     {
-     "text": "The Los Angeles Lakers won the NBA title behind Magic Johnson",
+     "text": "The Lakers beat the 76ers for the NBA title in Pat Riley's first season as coach",
      "sport": "nba",
      "src": [
-      "https://www.nba.com/news/history-finals-mvp-winners",
-      "https://www.nba.com/news/history-nba-champions",
-      "https://www.basketball-reference.com/playoffs/"
+      "https://www.nba.com/news/history-season-review-1981-82",
+      "https://www.basketball-reference.com/teams/LAL/1982.html",
+      "https://www.nba.com/news/pat-rileys-nineteen-nba-finals-timeline"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "The Los Angeles Lakers won the NBA title behind Magic Johnson",
+      "why": "The Lakers won five titles behind Magic (1980, 1982, 1985, 1987, 1988); Riley took over eleven games into 1981-82, so his first season as coach is 1982 only.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "The San Francisco 49ers won their first Super Bowl",
@@ -2730,30 +3097,38 @@
      "noOfficial": "olympics.com timed out on every fetch the checker made on 2026-09-28; the two independent pages named agree"
     },
     {
-     "text": "Miami won the national championship behind Bernie Kosar",
+     "text": "Bernie Kosar's Miami beat Nebraska 31-30 in the Orange Bowl for the national title",
      "sport": "cfb",
      "src": [
-      "https://www.umsportshalloffame.com/bernie-kosar.html",
-      "https://huskers.com/news/2002/07/09/1984-orange-bowl",
-      "https://www.espn.com/college-football/story/_/id/39192677/who-won-college-football-championship-winners-list"
+      "https://huskers.com/news/2002/07/09/1984-orange-bowl-1",
+      "https://www.espn.com/blog/sportscenter/post/_/id/64126/what-if-nebraska%E2%80%99s-2-point-conversion-in-the-1984-orange-bowl-is-successful"
      ],
      "on": "2026-09-28",
-     "noOfficial": "a major college football title of that era was a poll title with no NCAA-run final; the school and ESPN pages named agree"
+     "noOfficial": "no ncaa.com or ncaa.org page on the 1984 Orange Bowl was found; Nebraska's athletics site (Jan 2, 1984, 31-30, Kosar) and ESPN (31-30, a national championship for Miami, Kosar's touchdown pass) agree",
+     "replaced": {
+      "was": "Miami won the national championship behind Bernie Kosar",
+      "why": "Record books file the title under the 1983 season, so the old wording invited 1983; the game itself was played on January 2, 1984, which is the year this file counts.",
+      "on": "2026-09-28"
+     }
     }
    ]
   },
   "1985": {
    "clues": [
     {
-     "text": "An NFL team recorded a famous music video weeks before winning the Super Bowl",
+     "text": "An NFL team shot a famous music video the day after its only loss of the season",
      "sport": "nfl",
      "src": [
-      "https://www.cbsnews.com/chicago/news/40-years-ago-this-week-chicago-bears-super-bowl-shuffle",
-      "https://www.timeout.com/chicago/news/the-chicago-bears-1985-rap-classic-the-super-bowl-shuffle-rightfully-gets-the-documentary-treatment-from-hbo-120325",
-      "https://www.chicagobears.com/news/bears-won-super-bowl-40-years-ago-monday"
+      "https://www.espn.com/chicago/nfl/columns/story?columnist=greenberg_jon&id=4827883",
+      "https://nbcchicago.com/news/local/Bears-Super-Bowl-Shuffle-Video-Turns-30-Years-Old-Today--360478061.html"
      ],
      "on": "2026-09-28",
-     "noOfficial": "a team's novelty record has no governing body record page; the independent pages named agree"
+     "noOfficial": "no nfl.com page on the Super Bowl Shuffle shoot was found; ESPN (the day after the Bears' only loss, to Miami) and NBC Chicago (shot December 3, 1985, the week of the Monday night loss to the Dolphins) agree",
+     "replaced": {
+      "was": "An NFL team recorded a famous music video weeks before winning the Super Bowl",
+      "why": "The old clue pointed at a Super Bowl won in January 1986 while the video was shot in December 1985; the new one only names things that happened in 1985.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "A 17-year-old tennis prodigy won the Wimbledon men's title",
@@ -2777,14 +3152,19 @@
      "noOfficial": "mlb.com history pages answered 406 to the checker and its title list skips teams with fewer than three titles; the two independent pages named agree"
     },
     {
-     "text": "Edmonton won their second consecutive Stanley Cup with Gretzky",
+     "text": "Edmonton beat the Philadelphia Flyers for a second consecutive Stanley Cup",
      "sport": "nhl",
      "src": [
-      "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
-      "https://www.hockey-reference.com/awards/stanley.html",
-      "https://www.hockey-reference.com/players/g/gretzwa01.html"
+      "https://www.hhof.com/hockeypedia/edmontonoilers_8384_8990.html",
+      "https://www.hockey-reference.com/playoffs/NHL_1985.html",
+      "https://www.espn.com/nhl/story/_/id/37767601/stanley-cup-champions-nhl-title-winners-1915-present"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "Edmonton won their second consecutive Stanley Cup with Gretzky",
+      "why": "Edmonton also won back to back with Gretzky in 1987 and 1988, but the 1988 final was against Boston; the Flyers and a second straight Cup only fit 1985.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "Bo Jackson rushed for 1,786 yards in his Heisman campaign at Auburn",
@@ -2848,14 +3228,19 @@
      "noOfficial": "no sanctioning body page for this fight was opened by the checker; the two independent outlets named agree"
     },
     {
-     "text": "Greg LeMond won the Tour de France",
+     "text": "Greg LeMond became the first American to win the Tour de France",
      "sport": "cycling",
      "src": [
-      "https://www.bikeraceinfo.com/tdf/tdf1986.html",
-      "https://www.usbhof.org/greg-lemond"
+      "http://www.espn.com/classic/s/moment010727-lemond-tourdefrance.html",
+      "https://www.nbcsports.com/news/tour-de-france-past-champions-winners-list-american-winners-winners-by-country-fastest-times"
      ],
      "on": "2026-09-28",
-     "noOfficial": "letour.fr blocked the checker and the UCI keeps no page per edition; Bike Race Info and the US Bicycling Hall of Fame agree"
+     "noOfficial": "letour.fr's history pages render by script and gave no text; ESPN (the first American, 1986) and NBC Sports (his first win came in 1986, then 1989 and 1990) agree",
+     "replaced": {
+      "was": "Greg LeMond won the Tour de France",
+      "why": "LeMond also won in 1989 and 1990, both puzzle years; the first American win is 1986 only.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "Argentina won the World Cup led by Maradona's brilliance in Mexico",
@@ -2883,14 +3268,19 @@
      "noOfficial": "no sanctioning body page for this fight was opened by the checker; the two independent outlets named agree"
     },
     {
-     "text": "The Edmonton Oilers won another Stanley Cup with Wayne Gretzky",
+     "text": "The Edmonton Oilers beat the Flyers in seven games for another Stanley Cup",
      "sport": "nhl",
      "src": [
-      "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
-      "https://www.hockey-reference.com/awards/stanley.html",
-      "https://www.hockey-reference.com/players/g/gretzwa01.html"
+      "https://www.hockey-reference.com/playoffs/NHL_1987.html",
+      "https://www.si.com/nhl/2017/05/15/1987-philadelphia-flyers-stanley-cup-final-ron-hextall-mark-howe",
+      "https://www.hhof.com/hockeypedia/edmontonoilers_8384_8990.html"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "The Edmonton Oilers won another Stanley Cup with Wayne Gretzky",
+      "why": "Gretzky won four Cups in Edmonton (1984, 1985, 1987, 1988), so 'another' fitted three years; the only one over the Flyers in seven games is 1987 (1985 was in five).",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "Mike Tyson unified the heavyweight titles",
@@ -3236,14 +3626,18 @@
      "on": "2026-09-28"
     },
     {
-     "text": "Michael Jordan won his second straight NBA Finals MVP",
+     "text": "Michael Jordan won Finals MVP as the Bulls beat the Portland Trail Blazers",
      "sport": "nba",
      "src": [
       "https://www.nba.com/news/history-finals-mvp-winners",
-      "https://www.basketball-reference.com/playoffs/",
-      "https://www.basketball-reference.com/players/j/jordami01.html"
+      "https://www.basketball-reference.com/playoffs/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "Michael Jordan won his second straight NBA Finals MVP",
+      "why": "Jordan was also Finals MVP in 1996 and 1997, so 1997 was a second straight too; Portland was the opponent only in 1992.",
+      "on": "2026-09-28"
+     }
     }
    ]
   },
@@ -3270,23 +3664,34 @@
      "on": "2026-09-28"
     },
     {
-     "text": "The Montreal Canadiens won the Stanley Cup",
+     "text": "The Montreal Canadiens beat the Los Angeles Kings for the Stanley Cup",
      "sport": "nhl",
      "src": [
-      "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
-      "https://www.hockey-reference.com/awards/stanley.html"
+      "https://www.espn.com/nhl/story/_/id/37767601/stanley-cup-champions-nhl-title-winners-1915-present",
+      "https://www.hockey-reference.com/playoffs/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "noOfficial": "the Hockey Hall of Fame's champions pages render by script and no nhl.com page listing every final was read; ESPN's list and Hockey-Reference both give Montreal over Los Angeles in 1993",
+     "replaced": {
+      "was": "The Montreal Canadiens won the Stanley Cup",
+      "why": "Montreal also won in 1973, 1976, 1977, 1978, 1979 and 1986; the Kings were the opponent only in 1993.",
+      "on": "2026-09-28"
+     }
     },
     {
-     "text": "The Dallas Cowboys won the Super Bowl over the Buffalo Bills",
+     "text": "The Dallas Cowboys routed the Buffalo Bills 52-17 in the Super Bowl",
      "sport": "nfl",
      "src": [
-      "https://www.profootballhof.com/football-history/general-history-chronology-1980-to-1999",
       "https://www.espn.com/nfl/superbowl/history/winners",
-      "https://www.nfl.com/news/super-bowl-champions-09000d5d8267aa7e"
+      "https://www.cbssports.com/nfl/news/super-bowl-results-winners-mvps-history-full-list/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "noOfficial": "no nfl.com or profootballhof.com page listing Super Bowl results was read this round; ESPN and CBS Sports both give XXVII (Jan 31, 1993) as Cowboys 52, Bills 17",
+     "replaced": {
+      "was": "The Dallas Cowboys won the Super Bowl over the Buffalo Bills",
+      "why": "Dallas beat Buffalo again in January 1994, which the 1994 puzzle already uses; the 52-17 score only fits January 1993.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "Michael Jordan completed his first 'three-peat' with the Bulls",
@@ -3366,11 +3771,13 @@
      "text": "Brazil won the World Cup in a penalty shootout against Italy at the Rose Bowl",
      "sport": "soccer",
      "src": [
-      "https://www.fifa.com/en/articles/roberto-baggio-italy-azzurri-brazil-heartbreak-fifa-world-cup-final-rose-bowl",
+      "https://inside.fifa.com/en/news/milan-and-italy-s-imperial-sweeper",
+      "https://inside.fifa.com/news/romario-the-achievement-generation-517225",
       "https://www.rsssf.org/tables/94f.html",
       "https://www.upi.com/Archives/1994/07/17/Brazil-wins-1994-World-Cup-on-penalties/5743774417600/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "srcNote": "www.fifa.com article pages are a script shell with no text (4.5 KB, checked 2026-09-28), so they were replaced by readable inside.fifa.com pages"
     }
    ]
   },
@@ -3585,14 +3992,18 @@
      "noOfficial": "mlb.com answered 406 and its 1998 record chase document is a PDF the checker could not read; Baseball-Reference and Baseball Almanac agree on 70 in 1998 and 61 in 1961"
     },
     {
-     "text": "The host nation won its first ever FIFA World Cup",
+     "text": "The host nation won its first World Cup as Zinedine Zidane scored twice in the final",
      "sport": "soccer",
      "src": [
       "https://inside.fifa.com/news/zidane-heads-france-the-heavens-2134354",
-      "https://www.espn.com/soccer/story/_/id/48913452/who-won-men-world-cup-all-winners-list-stats",
       "https://www.rsssf.org/tables/98f.html"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "The host nation won its first ever FIFA World Cup",
+      "why": "Argentina also hosted and won its first World Cup in 1978; Zidane's two goals in the final only fit 1998.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "A legendary shooting guard won his sixth NBA Finals MVP",
@@ -3605,13 +4016,18 @@
      "on": "2026-09-28"
     },
     {
-     "text": "A Texas running back won the Heisman Trophy",
+     "text": "Ricky Williams won the Heisman at Texas",
      "sport": "cfb",
      "src": [
       "https://www.heisman.com/heisman-winners/",
       "https://www.espn.com/college-football/story/_/id/35213207/heisman-winners-list"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "A Texas running back won the Heisman Trophy",
+      "why": "Earl Campbell, also a Texas running back, won it in 1977.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "France defeated Brazil 3-0 in the World Cup Final",
@@ -3718,14 +4134,18 @@
      "on": "2026-09-28"
     },
     {
-     "text": "Venus Williams won both Wimbledon and the US Open",
+     "text": "Venus Williams won Wimbledon, the US Open and Olympic gold in Sydney",
      "sport": "tennis",
      "src": [
       "https://www.wtatennis.com/news/4307129/25-years-later-venus-williams-first-wimbledon-title-hasnt-lost-its-charge",
-      "https://www.espn.com/tennis/story/_/id/40453484/wimbledon-winners-mens-womens-singles-champions-list",
-      "https://www.espn.com/tennis/history/_/type/women"
+      "https://www.history.com/this-day-in-history/july-8/venus-williams-wins-wimbledon"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "Venus Williams won both Wimbledon and the US Open",
+      "why": "Venus won both Wimbledon and the US Open again in 2001; the Sydney Olympics only fit 2000.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "Chris Weinke became the oldest Heisman winner at age 28",
@@ -3762,13 +4182,19 @@
      "noOfficial": "mlb.com history pages answered 406 to the checker and its title list skips teams with fewer than three titles; the two independent pages named agree"
     },
     {
-     "text": "Michael Schumacher won another Formula 1 world championship with Ferrari",
+     "text": "Michael Schumacher broke Alain Prost's record for career Grand Prix wins",
      "sport": "f1",
      "src": [
-      "https://www.formula1.com/en/results/2001/drivers",
-      "https://www.espn.com/f1/standings/_/season/2001"
+      "https://www.motorsport.com/f1/news/on-this-day-michael-schumacher-beats-alain-prosts-f1-victory-record/10851125/",
+      "https://www.crash.net/f1/race-report/39933/1/belgium-gp-2001-schu-takes-a-record-52nd-win"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "noOfficial": "no formula1.com page on the 2001 Belgian Grand Prix record was found readable; Motorsport.com and Crash.net both give his 52nd win, past Prost's 51, at Spa in 2001",
+     "replaced": {
+      "was": "Michael Schumacher won another Formula 1 world championship with Ferrari",
+      "why": "Schumacher won the title with Ferrari every year from 2000 to 2004, so 'another' fitted four other years; passing Prost's win record happened once, in 2001.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "The Baltimore Ravens routed the New York Giants 34-7 in the Super Bowl",
@@ -3889,13 +4315,19 @@
      "on": "2026-09-28"
     },
     {
-     "text": "The New Jersey Devils won the Stanley Cup",
+     "text": "The New Jersey Devils beat Anaheim in Game 7 to win the Stanley Cup",
      "sport": "nhl",
      "src": [
-      "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
-      "https://www.hockey-reference.com/awards/stanley.html"
+      "https://www.hockey-reference.com/boxscores/200306090NJD.html",
+      "https://www.statmuse.com/nhl/ask/2003-stanley-cup-finals-game-7-results"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "noOfficial": "the Hockey Hall of Fame's champions pages render by script and no nhl.com recap of the game was read; Hockey-Reference's box score and StatMuse both give Game 7, June 9, 2003, Devils 3 Mighty Ducks 0",
+     "replaced": {
+      "was": "The New Jersey Devils won the Stanley Cup",
+      "why": "The Devils also won in 1995 and 2000; beating Anaheim in a Game 7 only fits 2003.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "Serena Williams first held all four Grand Slam titles at once (the 'Serena Slam')",
@@ -4385,13 +4817,19 @@
   "2011": {
    "clues": [
     {
-     "text": "The Boston Bruins won the Stanley Cup",
+     "text": "The Boston Bruins won Game 7 in Vancouver to take the Stanley Cup",
      "sport": "nhl",
      "src": [
-      "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
-      "https://www.hockey-reference.com/awards/stanley.html"
+      "https://www.espn.com/nhl/game/_/gameId/310615022/bruins-canucks",
+      "https://www.hockey-reference.com/boxscores/201106150VAN.html"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "noOfficial": "no nhl.com recap of the game was read; ESPN (Game 7, June 15, 2011, Bruins 4 Canucks 0 at Rogers Arena) and Hockey-Reference's box score agree",
+     "replaced": {
+      "was": "The Boston Bruins won the Stanley Cup",
+      "why": "The Bruins also won the Cup in 1972; Game 7 in Vancouver only fits 2011.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "Novak Djokovic went 70-6 and won three Grand Slams in a dominant season",
@@ -4533,13 +4971,18 @@
      "on": "2026-09-28"
     },
     {
-     "text": "The Chicago Blackhawks won their second Stanley Cup in four years",
+     "text": "The Chicago Blackhawks scored twice in 17 seconds to win the Stanley Cup",
      "sport": "nhl",
      "src": [
-      "https://www.nhl.com/news/nhl-stanley-cup-champions-winners-complete-list-287705398",
-      "https://www.hockey-reference.com/awards/stanley.html"
+      "https://www.nhl.com/blackhawks/news/feature-17-seconds-to-remember",
+      "https://www.foxnews.com/sports/chicago-blackhawks-beat-boston-bruins-to-win-stanley-cup"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "The Chicago Blackhawks won their second Stanley Cup in four years",
+      "why": "Read literally, the 2015 Cup was also their second in the four years from 2012 to 2015; the two goals 17 seconds apart only fit 2013.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "The Baltimore Ravens won the Super Bowl in a game interrupted by a power outage",
@@ -4579,11 +5022,12 @@
      "text": "A host nation lost 7-1 in a World Cup semifinal on home soil",
      "sport": "soccer",
      "src": [
-      "https://www.fifa.com/en/articles/100-great-world-cup-moments-qatar-2022-16-miroslav-klose-brazil-germany-2014",
+      "https://inside.fifa.com/tournaments/mens/worldcup/2014brazil/news/one-year-on-germany-s-seventh-heaven-2662009",
       "https://www.espn.com/soccer/match/_/gameId/383242/germany-brazil",
       "https://www.cbsnews.com/news/world-cup-2014-germany-routing-brazil-in-semifinal/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "srcNote": "www.fifa.com article pages are a script shell with no text (4.5 KB, checked 2026-09-28), so they were replaced by readable inside.fifa.com pages"
     },
     {
      "text": "The Spurs beat the Heat 4-1 in an NBA Finals rematch",
@@ -4625,11 +5069,12 @@
      "text": "Germany crushed Brazil 7-1 in Belo Horizonte",
      "sport": "soccer",
      "src": [
-      "https://www.fifa.com/en/articles/100-great-world-cup-moments-qatar-2022-16-miroslav-klose-brazil-germany-2014",
+      "https://inside.fifa.com/tournaments/mens/worldcup/2014brazil/news/one-year-on-germany-s-seventh-heaven-2662009",
       "https://www.espn.com/soccer/match/_/gameId/383242/germany-brazil",
       "https://www.cbsnews.com/news/world-cup-2014-germany-routing-brazil-in-semifinal/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "srcNote": "www.fifa.com article pages are a script shell with no text (4.5 KB, checked 2026-09-28), so they were replaced by readable inside.fifa.com pages"
     }
    ]
   },
@@ -4665,15 +5110,19 @@
      "on": "2026-09-28"
     },
     {
-     "text": "The Kansas City Royals won the World Series",
+     "text": "The Kansas City Royals beat the New York Mets in the World Series",
      "sport": "mlb",
      "src": [
-      "https://www.baseball-reference.com/postseason/world-series.shtml",
-      "https://www.baseball-reference.com/teams/KCR/",
-      "https://www.espn.com/mlb/worldseries/history/winners"
+      "https://www.espn.com/mlb/worldseries/history/winners",
+      "https://www.baseball-reference.com/postseason/world-series.shtml"
      ],
      "on": "2026-09-28",
-     "noOfficial": "mlb.com history pages answered 406 to the checker and its title list skips teams with fewer than three titles; the two independent pages named agree"
+     "noOfficial": "mlb.com's titles page lists only teams with three or more titles and leaves the Royals out; ESPN and Baseball-Reference both give Kansas City over the Mets, 4-1, in 2015",
+     "replaced": {
+      "was": "The Kansas City Royals won the World Series",
+      "why": "The Royals also won in 1985, over the Cardinals.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "The New England Patriots won the Super Bowl on a last-minute goal-line interception",
@@ -4760,13 +5209,19 @@
   "2017": {
    "clues": [
     {
-     "text": "Lewis Hamilton won another Formula 1 world championship",
+     "text": "Lewis Hamilton won his fourth Formula 1 world championship",
      "sport": "f1",
      "src": [
-      "https://www.formula1.com/en/results/2017/drivers",
-      "https://www.espn.com/f1/standings/_/season/2017"
+      "https://www.france24.com/en/20171029-lewis-hamilton-claims-fourth-f1-formula-one-world-title-mexico-grand-prix",
+      "https://bleacherreport.com/articles/2741344-mexican-f1-grand-prix-2017-results-lewis-hamilton-wins-4th-world-title"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "noOfficial": "formula1.com's pages were not read this round; France 24 and Bleacher Report both report his fourth title, clinched in Mexico in October 2017",
+     "replaced": {
+      "was": "Lewis Hamilton won another Formula 1 world championship",
+      "why": "Hamilton also won titles in 2014, 2015, 2018, 2019 and 2020; the fourth is 2017 only.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "Floyd Mayweather beat Conor McGregor in a crossover boxing match",
@@ -4780,14 +5235,19 @@
      "noOfficial": "no sanctioning body page for this fight was opened by the checker; the two independent outlets named agree"
     },
     {
-     "text": "The Golden State Warriors won the title after adding Kevin Durant",
+     "text": "Kevin Durant won his first NBA title in his first season with the Warriors",
      "sport": "nba",
      "src": [
-      "https://www.nba.com/news/history-finals-mvp-winners",
-      "https://www.nba.com/news/history-nba-champions",
-      "https://www.basketball-reference.com/playoffs/"
+      "https://www.si.com/nba/2017/06/12/golden-state-warriors-kevin-durant-finals-mvp",
+      "https://www.cbssports.com/nba/news/nba-finals-warriors-kevin-durant-is-unanimous-2017-finals-mvp-winner",
+      "https://www.nba.com/news/history-finals-mvp-winners"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "The Golden State Warriors won the title after adding Kevin Durant",
+      "why": "Golden State won again with Durant in 2018; his first title, in his first season there, is 2017 only.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "The Houston Astros won their first World Series",
@@ -4989,13 +5449,18 @@
      "on": "2026-09-28"
     },
     {
-     "text": "DeVonta Smith won the Heisman at Alabama",
+     "text": "Joe Burrow's LSU beat Clemson 42-25 in the College Football Playoff final",
      "sport": "cfb",
      "src": [
-      "https://www.heisman.com/heisman-winners/",
-      "https://www.espn.com/college-football/story/_/id/35213207/heisman-winners-list"
+      "https://www.ncaa.com/news/football/article/2020-01-14/lsu-joe-burrow-beat-clemson-win-college-football-playoff-national",
+      "https://www.espn.com/college-football/game/_/gameId/401135295/clemson-lsu"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "DeVonta Smith won the Heisman at Alabama",
+      "why": "DeVonta Smith's Heisman was presented at a virtual ceremony on January 5, 2021, so under this file's calendar year rule it belongs to 2021, not 2020; the LSU final was played on January 13, 2020.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "Patrick Mahomes won Super Bowl MVP at 24 as the Chiefs beat the 49ers",
@@ -5052,14 +5517,19 @@
      "noOfficial": "olympics.com timed out on every fetch the checker made on 2026-09-28; the two independent pages named agree"
     },
     {
-     "text": "The Atlanta Braves won the World Series",
+     "text": "The Atlanta Braves beat the Houston Astros in the World Series",
      "sport": "mlb",
      "src": [
-      "https://www.mlb.com/news/teams-with-the-most-world-series-titles-c299893938",
+      "https://www.espn.com/mlb/worldseries/history/winners",
       "https://www.baseball-reference.com/postseason/world-series.shtml",
-      "https://www.espn.com/mlb/worldseries/history/winners"
+      "https://www.mlb.com/news/teams-with-the-most-world-series-titles-c299893938"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "The Atlanta Braves won the World Series",
+      "why": "The Braves also won in 1995, over Cleveland.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "The Tampa Bay Buccaneers won the Super Bowl at home as Tom Brady got a seventh ring",
@@ -5076,13 +5546,19 @@
   "2022": {
    "clues": [
     {
-     "text": "A legendary quarterback retired, unretired, then retired again the next year",
+     "text": "A legendary quarterback retired, then unretired just 40 days later",
      "sport": "nfl",
      "src": [
-      "https://www.nfl.com/news/tom-brady-retirement-23-seasons-in-nfl-buccaneers-patriots",
-      "https://www.espn.com/nfl/story/_/id/35427660/retirement-playoffs-tom-brady-22-23-bucs-season"
+      "https://www.espn.com/nfl/story/_/id/35427660/retirement-playoffs-tom-brady-22-23-bucs-season",
+      "https://www.cbssports.com/nfl/news/tom-brady-explains-why-he-made-the-surprising-decision-to-retire-and-then-unretire-just-40-days-apart/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "noOfficial": "no nfl.com page on the retirement was read; ESPN (retired February 1, 2022, back on March 13, 2022) and CBS Sports (40 days apart) agree",
+     "replaced": {
+      "was": "A legendary quarterback retired, unretired, then retired again the next year",
+      "why": "Brett Favre retired in March 2008, came back that summer and retired again in 2009, so the old clue fitted 2008 too, and Brady's second retirement was in 2023, not 2022; 40 days, both in 2022, fits only Brady's.",
+      "on": "2026-09-28"
+     }
     },
     {
      "text": "Argentina won the World Cup for the first time in 36 years",
@@ -5127,11 +5603,12 @@
      "text": "Messi finally won the World Cup, beating France on penalties in the final",
      "sport": "soccer",
      "src": [
-      "https://www.fifa.com/en/tournaments/mens/worldcup/articles/kylian-mbappe-world-cup-finals-goals",
+      "https://inside.fifa.com/tournaments/mens/worldcup/qatar2022/news/triumphant-argentina-conclude-unprecedented-fifa-world-cup",
       "https://www.rsssf.org/tables/2022f.html",
       "https://www.aljazeera.com/amp/sports/2022/12/18/messis-argentina-beat-france-on-penalties-to-win-world-cup"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "srcNote": "www.fifa.com article pages are a script shell with no text (4.5 KB, checked 2026-09-28), so they were replaced by readable inside.fifa.com pages"
     }
    ]
   },
@@ -5188,13 +5665,18 @@
      "on": "2026-09-28"
     },
     {
-     "text": "The Kansas City Chiefs won the Super Bowl as Patrick Mahomes won another MVP",
+     "text": "The Kansas City Chiefs beat the Eagles 38-35 as Patrick Mahomes won another Super Bowl MVP",
      "sport": "nfl",
      "src": [
       "https://www.nfl.com/news/chiefs-quarterback-patrick-mahomes-named-super-bowl-lvii-mvp",
-      "https://www.espn.com/nfl/superbowl/history/mvps"
+      "https://www.espn.com/nfl/superbowl/history/winners"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "replaced": {
+      "was": "The Kansas City Chiefs won the Super Bowl as Patrick Mahomes won another MVP",
+      "why": "The Chiefs won again in February 2024 with Mahomes MVP again; the Eagles and 38-35 only fit February 2023.",
+      "on": "2026-09-28"
+     }
     }
    ]
   },
@@ -5407,20 +5889,22 @@
      "date": "July 8, 2014"
     },
     "src": [
-     "https://www.fifa.com/en/articles/100-great-world-cup-moments-qatar-2022-16-miroslav-klose-brazil-germany-2014",
+     "https://inside.fifa.com/tournaments/mens/worldcup/2014brazil/news/one-year-on-germany-s-seventh-heaven-2662009",
      "https://www.espn.com/soccer/match/_/gameId/383242/germany-brazil",
      "https://www.rsssf.org/tables/2014f.html"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "srcNote": "www.fifa.com article pages are a script shell with no text (4.5 KB, checked 2026-09-28), so they were replaced by readable inside.fifa.com pages"
    },
    "hint": {
     "text": "A host nation humiliated in Belo Horizonte",
     "src": [
-     "https://www.fifa.com/en/articles/100-great-world-cup-moments-qatar-2022-16-miroslav-klose-brazil-germany-2014",
+     "https://inside.fifa.com/tournaments/mens/worldcup/2014brazil/news/one-year-on-germany-s-seventh-heaven-2662009",
      "https://www.cbsnews.com/news/world-cup-2014-germany-routing-brazil-in-semifinal/",
      "https://www.espn.com/soccer/match/_/gameId/383242/germany-brazil"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "srcNote": "www.fifa.com article pages are a script shell with no text (4.5 KB, checked 2026-09-28), so they were replaced by readable inside.fifa.com pages"
    },
    "funFact": {
     "text": "Germany scored 5 goals in 18 first-half minutes.",
@@ -5429,7 +5913,7 @@
      "https://www.rsssf.org/tables/2014f.html"
     ],
     "on": "2026-09-28",
-    "noOfficial": "the fifa.com piece gives the result, not the minute of every goal; ESPN and RSSSF both list goals at 11, 23, 24, 26 and 29"
+    "noOfficial": "inside.fifa.com gives the result, not the minute of every goal; ESPN and RSSSF both list goals at 11, 23, 24, 26 and 29"
    }
   },
   "sp-4": {
@@ -5612,11 +6096,13 @@
      "date": "December 18, 2022"
     },
     "src": [
-     "https://www.fifa.com/en/tournaments/mens/worldcup/articles/kylian-mbappe-world-cup-finals-goals",
-     "https://www.rsssf.org/tables/2022f.html"
+     "https://inside.fifa.com/tournaments/mens/worldcup/qatar2022/news/triumphant-argentina-conclude-unprecedented-fifa-world-cup",
+     "https://www.rsssf.org/tables/2022f.html",
+     "https://www.aljazeera.com/amp/sports/2022/12/18/messis-argentina-beat-france-on-penalties-to-win-world-cup"
     ],
     "on": "2026-09-28",
-    "neutral": "played at a neutral ground, so neither side was at home and the order the file lists them in is not a claim"
+    "neutral": "played at a neutral ground, so neither side was at home and the order the file lists them in is not a claim",
+    "srcNote": "www.fifa.com article pages are a script shell with no text (4.5 KB, checked 2026-09-28), so they were replaced by readable inside.fifa.com pages"
    },
    "hint": {
     "text": "Messi's crowning glory, or was it?",
@@ -5626,10 +6112,12 @@
    "funFact": {
     "text": "Mbappé scored a hat trick but Argentina won on penalties.",
     "src": [
-     "https://www.fifa.com/en/tournaments/mens/worldcup/articles/kylian-mbappe-world-cup-finals-goals",
-     "https://www.rsssf.org/tables/2022f.html"
+     "https://inside.fifa.com/tournaments/mens/worldcup/qatar2022/news/triumphant-argentina-conclude-unprecedented-fifa-world-cup",
+     "https://www.rsssf.org/tables/2022f.html",
+     "https://www.aljazeera.com/amp/sports/2022/12/18/messis-argentina-beat-france-on-penalties-to-win-world-cup"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "srcNote": "www.fifa.com article pages are a script shell with no text (4.5 KB, checked 2026-09-28), so they were replaced by readable inside.fifa.com pages"
    }
   },
   "sp-10": {
@@ -5683,7 +6171,12 @@
      "https://www.aljazeera.com/news/2004/7/5/greek-underdogs-win-euro-2004"
     ],
     "on": "2026-09-28",
-    "note": "Portugal were the hosts, playing in Lisbon, and UEFA lists them first"
+    "note": "Portugal were the hosts, playing in Lisbon, and UEFA lists them first",
+    "before661": {
+     "homeTeam": "Greece",
+     "awayTeam": "Portugal",
+     "why": "the order the card had before Round 661; a guess saved against it is turned round on reload (src/lib/scorePredictorSave.ts)"
+    }
    },
    "hint": {
     "text": "The ultimate underdog story",
@@ -5754,7 +6247,12 @@
      "https://www.skysports.com/football/news/11945/11985411/ajax-2-3-tottenham-lucas-mouras-miracle-in-amsterdam-revisited"
     ],
     "on": "2026-09-28",
-    "note": "the second leg was at the Johan Cruyff Arena in Amsterdam"
+    "note": "the second leg was at the Johan Cruyff Arena in Amsterdam",
+    "before661": {
+     "homeTeam": "Tottenham",
+     "awayTeam": "Ajax",
+     "why": "the order the card had before Round 661; a guess saved against it is turned round on reload (src/lib/scorePredictorSave.ts)"
+    }
    },
    "hint": {
     "text": "Lucas Moura's hat trick miracle",
@@ -5787,29 +6285,35 @@
      "date": "July 17, 1994"
     },
     "src": [
-     "https://www.fifa.com/en/articles/roberto-baggio-italy-azzurri-brazil-heartbreak-fifa-world-cup-final-rose-bowl",
+     "https://inside.fifa.com/en/news/milan-and-italy-s-imperial-sweeper",
      "https://www.rsssf.org/tables/94f.html",
      "https://www.upi.com/Archives/1994/07/17/Brazil-wins-1994-World-Cup-on-penalties/5743774417600/"
     ],
     "on": "2026-09-28",
-    "neutral": "played at a neutral ground, so neither side was at home and the order the file lists them in is not a claim"
+    "neutral": "played at a neutral ground, so neither side was at home and the order the file lists them in is not a claim",
+    "srcNote": "www.fifa.com article pages are a script shell with no text (4.5 KB, checked 2026-09-28), so they were replaced by readable inside.fifa.com pages"
    },
    "hint": {
     "text": "The first World Cup final decided on penalties",
     "src": [
-     "https://www.upi.com/Archives/1994/07/17/Brazil-wins-1994-World-Cup-on-penalties/5743774417600/",
-     "https://www.fifa.com/en/articles/roberto-baggio-italy-azzurri-brazil-heartbreak-fifa-world-cup-final-rose-bowl"
+     "https://www.guinnessworldrecords.com/world-records/484514-first-penalty-shoot-out-in-a-fifa-world-cup-final",
+     "https://cultofcalcio.com/throwback-thursday-italy-brazil-the-first-world-cup-penalty-final/",
+     "https://www.upi.com/Archives/1994/07/17/Brazil-wins-1994-World-Cup-on-penalties/5743774417600/"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "noOfficial": "no readable fifa.com page calls it the first final settled on penalties (the article the record first cited is a script shell); Guinness World Records and The Cult of Calcio both do, and UPI reports the shootout",
+    "srcNote": "www.fifa.com article pages are a script shell with no text (4.5 KB, checked 2026-09-28), so they were replaced by readable inside.fifa.com pages"
    },
    "funFact": {
     "text": "Roberto Baggio missed the decisive penalty for Italy.",
     "src": [
-     "https://www.fifa.com/en/articles/roberto-baggio-italy-azzurri-brazil-heartbreak-fifa-world-cup-final-rose-bowl",
+     "https://inside.fifa.com/en/news/milan-and-italy-s-imperial-sweeper",
+     "https://inside.fifa.com/news/romario-the-achievement-generation-517225",
      "https://www.rsssf.org/tables/94f.html",
      "https://www.upi.com/Archives/1994/07/17/Brazil-wins-1994-World-Cup-on-penalties/5743774417600/"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "srcNote": "www.fifa.com article pages are a script shell with no text (4.5 KB, checked 2026-09-28), so they were replaced by readable inside.fifa.com pages"
    }
   },
   "sp-15": {
@@ -5829,7 +6333,12 @@
      "https://www.espn.com/soccer/match/_/gameId/341104"
     ],
     "on": "2026-09-28",
-    "note": "the final was played at Bayern's own Allianz Arena"
+    "note": "the final was played at Bayern's own Allianz Arena",
+    "before661": {
+     "homeTeam": "Chelsea",
+     "awayTeam": "Bayern Munich",
+     "why": "the order the card had before Round 661; a guess saved against it is turned round on reload (src/lib/scorePredictorSave.ts)"
+    }
    },
    "hint": {
     "text": "Drogba's destiny at the Allianz Arena",
@@ -6240,7 +6749,12 @@
      "https://www.basketball-reference.com/boxscores/201606190GSW.html",
      "https://www.nba.com/news/history-finals-moments-kyrie-irving-clutch-3-2016"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "before661": {
+     "homeTeam": "Cleveland Cavaliers",
+     "awayTeam": "Golden State Warriors",
+     "why": "the order the card had before Round 661; a guess saved against it is turned round on reload (src/lib/scorePredictorSave.ts)"
+    }
    },
    "hint": {
     "text": "The Block, The Shot, The Stop: down 3-1",
@@ -6275,7 +6789,12 @@
      "https://www.nba.com/news/history-finals-moments-michael-jordan-last-shot-1998",
      "https://www.foxsports.com/nba/nba-finals-game-6-chicago-bulls-vs-utah-jazz-jun-14-1998-game-boxscore-81372"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "before661": {
+     "homeTeam": "Chicago Bulls",
+     "awayTeam": "Utah Jazz",
+     "why": "the order the card had before Round 661; a guess saved against it is turned round on reload (src/lib/scorePredictorSave.ts)"
+    }
    },
    "hint": {
     "text": "Jordan's last shot as a Bull",
@@ -6375,7 +6894,12 @@
      "https://www.basketball-reference.com/boxscores/201306180MIA.html",
      "https://www.nba.com/news/history-top-moments-ray-allen-3-pointer-2013-finals"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "before661": {
+     "homeTeam": "San Antonio Spurs",
+     "awayTeam": "Miami Heat",
+     "why": "the order the card had before Round 661; a guess saved against it is turned round on reload (src/lib/scorePredictorSave.ts)"
+    }
    },
    "hint": {
     "text": "Ray Allen's clutch three-pointer",
@@ -6445,7 +6969,12 @@
      "https://www.nba.com/news/history-finals-moments-celtics-rally-game-4-2008",
      "https://www.espn.com/nba/game/_/gameId/280612013/celtics-lakers"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "before661": {
+     "homeTeam": "Boston Celtics",
+     "awayTeam": "Los Angeles Lakers",
+     "why": "the order the card had before Round 661; a guess saved against it is turned round on reload (src/lib/scorePredictorSave.ts)"
+    }
    },
    "hint": {
     "text": "The Celtics came back from way down in Los Angeles",
@@ -6481,7 +7010,12 @@
      "https://www.nba.com/watch/video/this-date-in-history-mavericks-win-franchises-first-championship-06-12-2011",
      "https://www.espn.com/nba/game/_/gameId/310612014/mavericks-heat"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "before661": {
+     "homeTeam": "Dallas Mavericks",
+     "awayTeam": "Miami Heat",
+     "why": "the order the card had before Round 661; a guess saved against it is turned round on reload (src/lib/scorePredictorSave.ts)"
+    }
    },
    "hint": {
     "text": "Dirk's moment: a first title for Dallas",
@@ -6518,7 +7052,12 @@
      "https://www.nba.com/news/history-finals-moments-allen-iverson-crossover-2001",
      "https://www.landofbasketball.com/box_scores/2001/0606PHILAL.htm"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "before661": {
+     "homeTeam": "Philadelphia 76ers",
+     "awayTeam": "Los Angeles Lakers",
+     "why": "the order the card had before Round 661; a guess saved against it is turned round on reload (src/lib/scorePredictorSave.ts)"
+    }
    },
    "hint": {
     "text": "Iverson steps over Lue",
@@ -6569,5 +7108,323 @@
     "on": "2026-09-28"
    }
   }
+ },
+ "listQuizUclTopScorers": {
+  "about": "Round 661 fix. The List Quiz puzzle 'Champions League Season Top Scorers' promises every player who finished a European Cup or Champions League season as its top scorer, joint ones included. public.ucl_top_scorers_by_season has one row per season (the first name only) and stops at 2024-25. These rows are the joint top scorers and the 2025-26 top scorer it leaves out. Each is on uefa.com's page for that season (the year in its address is the season's first for 2006-07 and earlier and its second from 2007-08 on) and on one independent source. src/lib/listQuiz.ts ships them as UCL_TOP_SCORER_SUPPLEMENT and supabase/migrations/20260928210000_ucl_joint_top_scorers.sql adds them to the table; scripts/simTriviaFacts.mjs section 8 holds all three together. uefa.com's season pages show the top three scorers only, and for the early European Cup years their counts often differ from RSSSF's, so a name goes in only when both put him level at the top.",
+  "rows": [
+   {
+    "season": "1963-64",
+    "player": "Sandro Mazzola",
+    "club": "Inter Milan",
+    "goals": 7,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1963/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "1964-65",
+    "player": "Eusébio",
+    "club": "Benfica",
+    "goals": null,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1964/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28",
+    "note": "joint with José Torres on both; uefa.com gives 6 goals and RSSSF 9, so the count is left empty"
+   },
+   {
+    "season": "1966-67",
+    "player": "Paul Van Himst",
+    "club": "Anderlecht",
+    "goals": 6,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1966/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "1971-72",
+    "player": "Silvester Takač",
+    "club": "Standard Liège",
+    "goals": 5,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1971/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "1971-72",
+    "player": "Lou Macari",
+    "club": "Celtic",
+    "goals": 5,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1971/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "1971-72",
+    "player": "Antal Dunai",
+    "club": "Újpesti Dózsa",
+    "goals": 5,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1971/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "1974-75",
+    "player": "Eduard Markarov",
+    "club": "Ararat Yerevan",
+    "goals": 5,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1974/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28",
+    "note": "uefa.com spells him Markarov, RSSSF Makarov"
+   },
+   {
+    "season": "1976-77",
+    "player": "Franco Cucinotta",
+    "club": "Zürich",
+    "goals": 5,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1976/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "1980-81",
+    "player": "Graeme Souness",
+    "club": "Liverpool",
+    "goals": 6,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1980/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "1980-81",
+    "player": "Karl-Heinz Rummenigge",
+    "club": "Bayern Munich",
+    "goals": 6,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1980/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "1984-85",
+    "player": "Michel Platini",
+    "club": "Juventus",
+    "goals": 7,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1984/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "1987-88",
+    "player": "Míchel",
+    "club": "Real Madrid",
+    "goals": 4,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1987/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28",
+    "note": "uefa.com shows three players level on 4 and RSSSF six; Míchel is the one both name besides the table's Hagi"
+   },
+   {
+    "season": "1989-90",
+    "player": "Jean-Pierre Papin",
+    "club": "Marseille",
+    "goals": 6,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1989/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "1990-91",
+    "player": "Jean-Pierre Papin",
+    "club": "Marseille",
+    "goals": 6,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1990/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "1991-92",
+    "player": "Jean-Pierre Papin",
+    "club": "Marseille",
+    "goals": 7,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1991/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "1993-94",
+    "player": "Wynton Rufer",
+    "club": "Werder Bremen",
+    "goals": 8,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1993/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28",
+    "note": "uefa.com gives Rufer alone on 8; RSSSF has him level with Koeman, the table's row"
+   },
+   {
+    "season": "1998-99",
+    "player": "Dwight Yorke",
+    "club": "Manchester United",
+    "goals": 8,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1998/",
+     "https://www.planetfootball.com/nostalgia/why-the-1998-99-champions-league-was-european-football-at-its-very-best"
+    ],
+    "on": "2026-09-28",
+    "note": "RSSSF counts qualifying round goals from 1992 on and has Shevchenko alone on 10, so the independent source here is Planet Football, which has them level on 8 as uefa.com does"
+   },
+   {
+    "season": "1999-2000",
+    "player": "Rivaldo",
+    "club": "Barcelona",
+    "goals": 10,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1999/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "1999-2000",
+    "player": "Raúl",
+    "club": "Real Madrid",
+    "goals": 10,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/1999/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "2014-15",
+    "player": "Lionel Messi",
+    "club": "Barcelona",
+    "goals": 10,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/2015/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "2014-15",
+    "player": "Cristiano Ronaldo",
+    "club": "Real Madrid",
+    "goals": 10,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/2015/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "2023-24",
+    "player": "Kylian Mbappé",
+    "club": "Paris Saint-Germain",
+    "goals": 8,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/2024/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "2024-25",
+    "player": "Raphinha",
+    "club": "Barcelona",
+    "goals": 13,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/2025/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   },
+   {
+    "season": "2025-26",
+    "player": "Kylian Mbappé",
+    "club": "Real Madrid",
+    "goals": 15,
+    "src": [
+     "https://www.uefa.com/uefachampionsleague/history/seasons/2026/",
+     "https://www.rsssf.org/ec/ec1tops.html"
+    ],
+    "on": "2026-09-28"
+   }
+  ],
+  "mustAccept": [
+   "Kylian Mbappe",
+   "Raphinha",
+   "Dwight Yorke",
+   "Rivaldo",
+   "Jean-Pierre Papin",
+   "Michel Platini",
+   "Mbappe",
+   "Yorke",
+   "Papin"
+  ],
+  "notAdded": [
+   {
+    "season": "1956-57, 1958-59, 1961-62, 1962-63, 1965-66",
+    "who": "Di Stéfano, Barison, Amancio, Hasanagić and others",
+    "why": "uefa.com's page and RSSSF name different top scorers for these seasons (RSSSF: Viollet 9, Fontaine 10, Strehl 8, Altafini 14, Eusébio and Albert 7); the table keeps its one row and nobody is added on one source"
+   },
+   {
+    "season": "1963-64",
+    "who": "Ferenc Puskás",
+    "why": "RSSSF has him level on 7, uefa.com does not list him; he is on the list anyway from 1959-60"
+   },
+   {
+    "season": "1969-70",
+    "who": "Ove Kindvall",
+    "why": "RSSSF has him level with Jones on 7 but notes a goal sometimes given to Jones, which makes Jones alone on 8, as uefa.com has it"
+   },
+   {
+    "season": "1982-83",
+    "who": "Michel Platini",
+    "why": "uefa.com has him level with Rossi on 5, RSSSF has Rossi alone on 6; he is on the list anyway from 1984-85"
+   },
+   {
+    "season": "1987-88",
+    "who": "Van der Gijp, Novak (uefa.com only); Rui Águas, Ferreri, McCoist, Madjer (RSSSF only)",
+    "why": "each is on one of the two lists and not the other"
+   },
+   {
+    "season": "1996-97, 1999-2000, 2000-01, 2004-05, 2023-24",
+    "who": "McCoist, Rebrov, Jardel and Shevchenko, Adriano, Luuk de Jong",
+    "why": "RSSSF counts qualifying round goals from 1992 on and uefa.com does not; on uefa.com none of them finished level at the top"
+   }
+  ],
+  "tableRowsOnOneSource": "rows already in the table that uefa.com does not list at the top for that season: Kovačević 1963-64, Piepenburg 1966-67, Cruyff 1971-72 (uefa.com shows three players level on 5 and cuts off), Hagi 1987-88, Koeman 1993-94; RSSSF has all of them. Left in place, owed to a round that re-scrapes the table"
  }
 }

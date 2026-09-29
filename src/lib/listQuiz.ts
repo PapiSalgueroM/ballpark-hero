@@ -152,7 +152,7 @@ async function awardWinners(awardName: string): Promise<string[]> {
 }
 
 /**
- * The Champions League season top scorers, and ONLY those.
+ * The Champions League season top scorers, joint ones included, and ONLY those.
  *
  * Round 661. ucl_top_scorers_by_season is four tables scraped into one, with a
  * different column shift in each shape, and the old reading of the 'player'
@@ -169,7 +169,8 @@ async function awardWinners(awardName: string): Promise<string[]> {
  *   3. 24 more all time rows shifted one further. season = the man, player =
  *      a number. Morata, Griezmann, Dzeko, Inzaghi and Gabriel Jesus sit here,
  *      so their names never reached the answer list at all.
- *   4. 22 rows of a wins by club and by nation table ('Yugoslavia', 'Milan').
+ *   4. 22 rows of the title count tables, by player, by club and by nation
+ *      ('Jean-Pierre Papin', 'Milan', 'Yugoslavia').
  *
  * Reading shape 1 only fixes all of it at once: no numbers, no daggers (the
  * good rows spell the names cleanly), and nobody is marked wrong for naming a
@@ -177,9 +178,65 @@ async function awardWinners(awardName: string): Promise<string[]> {
  *
  * The shape test is the season string itself, not a row count or an id list,
  * so a re-scrape that fixes the table keeps working and a new bad shape is
- * dropped rather than served. simTriviaFacts section 5 pins this.
+ * dropped rather than served.
+ *
+ * Round 661 fix: the table has one row per season and stops at 2024-25, so
+ * every joint top scorer after the first name and the whole 2025-26 season
+ * were missing, and Mbappe, Raphinha, Yorke, Rivaldo and Papin were all
+ * marked "not on the list". UCL_TOP_SCORER_SUPPLEMENT below adds them, and
+ * supabase/migrations/20260928210000_ucl_joint_top_scorers.sql adds the same
+ * rows to the table (not applied by the builder). Once it is applied, each
+ * name comes in twice and cleanAnswers folds the pair into one answer.
+ *
+ * scripts/simTriviaFacts.mjs section 8 pins all of this: the shape test
+ * against a sample of every row shape, the supplement against the
+ * verification record (uefa.com's season page plus one independent source
+ * per row) and against the migration, and every must accept name through
+ * the quiz's own alias map.
  */
-const UCL_SEASON_SHAPE = /^\d{4}[-‐-―]\d{2,4}$/;
+const UCL_SEASON_SHAPE = /^\d{4}[-\u2010-\u2015]\d{2,4}$/;
+
+/**
+ * Joint top scorers the table leaves out, and 2025-26, as [season, player].
+ * A row goes in only when uefa.com's page for that season and one
+ * independent source both put him level at the top; the sources sit in
+ * scripts/data/triviaFactsVerified2026-09.json (listQuizUclTopScorers), with
+ * the names one source gives and the other does not, and why they stay out.
+ */
+export const UCL_TOP_SCORER_SUPPLEMENT: ReadonlyArray<readonly [string, string]> = [
+  ['1963-64', 'Sandro Mazzola'],
+  ['1964-65', 'Eusébio'],
+  ['1966-67', 'Paul Van Himst'],
+  ['1971-72', 'Silvester Takač'],
+  ['1971-72', 'Lou Macari'],
+  ['1971-72', 'Antal Dunai'],
+  ['1974-75', 'Eduard Markarov'],
+  ['1976-77', 'Franco Cucinotta'],
+  ['1980-81', 'Graeme Souness'],
+  ['1980-81', 'Karl-Heinz Rummenigge'],
+  ['1984-85', 'Michel Platini'],
+  ['1987-88', 'Míchel'],
+  ['1989-90', 'Jean-Pierre Papin'],
+  ['1990-91', 'Jean-Pierre Papin'],
+  ['1991-92', 'Jean-Pierre Papin'],
+  ['1993-94', 'Wynton Rufer'],
+  ['1998-99', 'Dwight Yorke'],
+  ['1999-2000', 'Rivaldo'],
+  ['1999-2000', 'Raúl'],
+  ['2014-15', 'Lionel Messi'],
+  ['2014-15', 'Cristiano Ronaldo'],
+  ['2023-24', 'Kylian Mbappé'],
+  ['2024-25', 'Raphinha'],
+  ['2025-26', 'Kylian Mbappé'],
+];
+
+/** Every season top scorer name: the table's season shaped rows, then the supplement. */
+export function uclSeasonTopScorerNames(rows: ReadonlyArray<{ season?: unknown; player?: unknown }>): string[] {
+  const fromTable = rows
+    .filter(r => UCL_SEASON_SHAPE.test(String(r?.season ?? '').trim()))
+    .map(r => String(r?.player ?? '').trim());
+  return [...fromTable, ...UCL_TOP_SCORER_SUPPLEMENT.map(([, player]) => player)];
+}
 
 async function uclSeasonTopScorers(): Promise<string[]> {
   const { data, error } = await supabase
@@ -187,10 +244,7 @@ async function uclSeasonTopScorers(): Promise<string[]> {
     .select('season, player')
     .limit(5000);
   if (error || !data) throw new Error('ucl_top_scorers_by_season unavailable');
-  const names = (data as any[])
-    .filter(r => UCL_SEASON_SHAPE.test(String(r?.season ?? '').trim()))
-    .map(r => String(r?.player ?? '').trim());
-  return onlyNames(Promise.resolve(names));
+  return onlyNames(Promise.resolve(uclSeasonTopScorerNames(data as any[])));
 }
 
 /** A static list so the page still works if the database is unreachable. */

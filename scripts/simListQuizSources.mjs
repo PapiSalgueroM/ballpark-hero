@@ -137,6 +137,11 @@ if (!reachable && listsById.size === 0) {
     ["nrl-premiers", "north sydney"], ["nrl-premiers", "newtown"], ["nrl-premiers", "st george illawarra"],
     ["ballon-dor-winners", "messi"], ["ballon-dor-winners", "rodri"], ["ballon-dor-winners", "dembele"],
     ["heisman-winners", "travis hunter"], ["heisman-winners", "mendoza"],
+    // Round 661 fix: joint top scorers and 2025-26, which the table's one row
+    // per season left out (uefa.com season pages plus RSSSF, recorded in
+    // scripts/data/triviaFactsVerified2026-09.json).
+    ["ucl-topscorers", "mbappe"], ["ucl-topscorers", "raphinha"], ["ucl-topscorers", "yorke"],
+    ["ucl-topscorers", "rivaldo"], ["ucl-topscorers", "papin"],
   ];
   for (const [id, needle] of MUST_CONTAIN) {
     const v = has(id, needle);

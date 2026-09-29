@@ -5,6 +5,14 @@ export interface HofPlayer {
   hints: string[];
   answer: string;
   verdict: 'hof' | 'borderline' | 'bust';
+  /**
+   * The real Hall of Fame record, which is a fact, kept apart from the
+   * verdict, which is the game's own call. A year means he went into that
+   * hall that year; a null year means he is not in it (as of the date its
+   * record entry carries). null means no hall fits the card: soccer has no
+   * single Hall of Fame, so the reveal says the call is all ours.
+   */
+  hall: { name: string; year: number | null } | null;
   funFact: string;
 }
 
@@ -23,15 +31,22 @@ export interface HofPlayer {
  * disagree. Change a line here and the fence goes red until the record holds
  * the new text and its sources.
  *
- * Two rules that came out of the round:
- *   1. A player who is still playing gets a floor ('43,000+ career points'),
- *      never an exact total. An exact total for an active man is a fact with
- *      an expiry date, and this file has no build step to refresh it.
+ * Three rules that came out of the round:
+ *   1. A career total for a player who is still playing is a floor ('43,000+
+ *      career points'). Any other count on his card (titles, awards, a
+ *      World Cup) carries the date it was checked, its asOf in the record,
+ *      because it is a fact with an expiry date and this file has no build
+ *      step to refresh it. The fence fails on a count that has neither.
  *   2. A line that could not be two-sourced was rewritten to one that could,
  *      never shipped on one source.
- *
- * The verdict is the game's own career judgment label, not a claim about
- * induction (Bonds is borderline while not inducted, Yao is inducted).
+ *   3. The verdict is the game's own call on the career, and the reveal says
+ *      so ('Our call'). Whether he is really in a Hall of Fame is the hall
+ *      field, a sourced fact shown beside it. A player who is really in one
+ *      is never called a bust or borderline: Michael Owen was a bust here
+ *      until the Round 661 fix, while he has been in the National Football
+ *      Museum Hall of Fame since 2014, and the reveal used to say "Official
+ *      verdict: Hall of Fame" for Brady, LeBron and Crosby, none of whom is
+ *      in.
  *
  * The array length is load bearing: useHofOrBust picks with
  * getDateSeed() % hofPlayers.length, so adding or removing an entry moves
@@ -46,6 +61,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Won four Champions League titles with one club', 'Played in Spain for over a decade', 'Argentinian'],
     answer: 'Lionel Messi',
     verdict: 'hof',
+    hall: null,
     funFact: 'Became the most decorated player in football history in 2023.',
   },
   {
@@ -55,6 +71,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Known for incredible speed', 'French international', 'Won trophies in France, Spain and England'],
     answer: 'Thierry Henry',
     verdict: 'hof',
+    hall: { name: 'Premier League Hall of Fame', year: 2021 },
     funFact: 'Arsenal\'s all-time leading scorer and an invincible.',
   },
   {
@@ -64,6 +81,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Defensive midfielder', 'Spanish international', 'Moved to MLS in 2023 after his whole career at one Spanish club'],
     answer: 'Sergio Busquets',
     verdict: 'borderline',
+    hall: null,
     funFact: 'Third on his club\'s all-time appearance list, behind Xavi and Messi.',
   },
   {
@@ -72,7 +90,8 @@ const hofPlayers: HofPlayer[] = [
     anonymizedStats: ['158 goals for one English club', '150 Premier League goals', '1 Premier League title', '1 Ballon d\'Or'],
     hints: ['English striker', 'Known for pace and finishing', 'Played in England and Spain'],
     answer: 'Michael Owen',
-    verdict: 'bust',
+    verdict: 'hof',
+    hall: { name: 'National Football Museum Hall of Fame', year: 2014 },
     funFact: 'Won the Ballon d\'Or in 2001, but hamstring injuries dogged the rest of his career.',
   },
   {
@@ -82,6 +101,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Portuguese forward', 'Played top-flight football in four countries after leaving Portugal', 'The first man to score at six World Cups'],
     answer: 'Cristiano Ronaldo',
     verdict: 'hof',
+    hall: null,
     funFact: 'All-time top scorer in men\'s international football history.',
   },
 
@@ -93,6 +113,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Quarterback drafted in the 6th round', 'Played until age 45', 'New England and Tampa Bay'],
     answer: 'Tom Brady',
     verdict: 'hof',
+    hall: { name: 'Pro Football Hall of Fame', year: null },
     funFact: 'The 199th overall pick went on to win seven Super Bowls.',
   },
   {
@@ -102,6 +123,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Running back who also returned kicks', 'Played in the 2000s and 2010s', 'Spent most of career in Minnesota'],
     answer: 'Adrian Peterson',
     verdict: 'hof',
+    hall: { name: 'Pro Football Hall of Fame', year: null },
     funFact: 'Rushed for 2,097 yards in 2012, just 8 shy of the all-time record.',
   },
   {
@@ -111,6 +133,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['First overall draft pick', 'Played his college ball in the SEC', 'Released by his only NFL team after three seasons'],
     answer: 'JaMarcus Russell',
     verdict: 'bust',
+    hall: { name: 'Pro Football Hall of Fame', year: null },
     funFact: 'Considered one of the biggest draft busts in NFL history, out of the league by age 25.',
   },
   {
@@ -120,6 +143,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Son of an NFL quarterback', 'Played for 2 teams in his career', 'Drafted first overall in 1998'],
     answer: 'Peyton Manning',
     verdict: 'hof',
+    hall: { name: 'Pro Football Hall of Fame', year: 2021 },
     funFact: 'Retired with the most passing touchdowns in NFL history at the time.',
   },
   {
@@ -129,6 +153,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Wide receiver known for his work ethic', 'Spent prime years in San Francisco', 'Set the all-time TD record'],
     answer: 'Jerry Rice',
     verdict: 'hof',
+    hall: { name: 'Pro Football Hall of Fame', year: 2010 },
     funFact: 'Still holds the NFL career records for receiving yards and total touchdowns.',
   },
 
@@ -140,6 +165,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Shooting guard', 'Played in the 1990s dynasty', 'Won two three-peats'],
     answer: 'Michael Jordan',
     verdict: 'hof',
+    hall: { name: 'Naismith Hall of Fame', year: 2009 },
     funFact: 'Perfect 6-0 in NBA Finals, never lost a championship series.',
   },
   {
@@ -149,6 +175,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Point guard from the 2010s', 'Known for deep three-pointers', 'Played in the Pacific Northwest'],
     answer: 'Damian Lillard',
     verdict: 'borderline',
+    hall: { name: 'Naismith Hall of Fame', year: null },
     funFact: 'Famous for multiple series-ending buzzer-beaters in the playoffs.',
   },
   {
@@ -158,6 +185,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Center from China', 'Played his whole NBA career in Houston', 'Injuries ended career early'],
     answer: 'Yao Ming',
     verdict: 'hof',
+    hall: { name: 'Naismith Hall of Fame', year: 2016 },
     funFact: 'Inducted into the Hall of Fame in 2016 after just eight NBA seasons.',
   },
   {
@@ -167,6 +195,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Forward who entered the draft from high school', 'Won titles with three different franchises', 'Born in Akron, Ohio'],
     answer: 'LeBron James',
     verdict: 'hof',
+    hall: { name: 'Naismith Hall of Fame', year: null },
     funFact: 'The NBA\'s all-time leading scorer, surpassing Kareem Abdul-Jabbar.',
   },
   {
@@ -176,6 +205,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Big man drafted in 2007', 'Struggled to stay healthy', 'Played for Portland'],
     answer: 'Greg Oden',
     verdict: 'bust',
+    hall: { name: 'Naismith Hall of Fame', year: null },
     funFact: 'Drafted ahead of Kevin Durant, injuries made it one of the biggest what-ifs ever.',
   },
 
@@ -187,6 +217,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Left fielder', 'Career clouded by controversy', 'Played for Pittsburgh and San Francisco'],
     answer: 'Barry Bonds',
     verdict: 'borderline',
+    hall: { name: 'Baseball Hall of Fame', year: null },
     funFact: 'The all-time home run king has never been inducted into the Hall of Fame.',
   },
   {
@@ -196,6 +227,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Dominican designated hitter', 'Played in the AL East', 'Known as "Big Papi"'],
     answer: 'David Ortiz',
     verdict: 'hof',
+    hall: { name: 'Baseball Hall of Fame', year: 2022 },
     funFact: 'Inducted on his first ballot despite being a designated hitter for most of his career.',
   },
   {
@@ -205,6 +237,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Switch hitter who played 24 seasons', 'Managed after playing', 'Removed from baseball\'s ineligible list in 2025'],
     answer: 'Pete Rose',
     verdict: 'borderline',
+    hall: { name: 'Baseball Hall of Fame', year: null },
     funFact: 'Baseball\'s all-time hits leader was banned in 1989 for betting on games he managed. MLB removed him from the ineligible list in 2025, after his death, and he is not in the Hall of Fame.',
   },
   {
@@ -214,6 +247,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Pitcher drafted in 2001', 'Highly touted prospect', 'Never lived up to expectations'],
     answer: 'Mark Prior',
     verdict: 'bust',
+    hall: { name: 'Baseball Hall of Fame', year: null },
     funFact: 'Was considered a can\'t-miss prospect but injuries destroyed a promising career.',
   },
   {
@@ -223,6 +257,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Shortstop turned third baseman', 'Played for 3 AL teams', 'Career overshadowed by PED suspension'],
     answer: 'Alex Rodriguez',
     verdict: 'borderline',
+    hall: { name: 'Baseball Hall of Fame', year: null },
     funFact: 'One of the most talented players ever, but PED scandals may keep him out of Cooperstown.',
   },
 
@@ -234,6 +269,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Center from Canada', 'Known as "The Great One"', 'Played in the 1980s-90s'],
     answer: 'Wayne Gretzky',
     verdict: 'hof',
+    hall: { name: 'Hockey Hall of Fame', year: 1999 },
     funFact: 'Scored 92 goals in 1981-82, still the NHL single-season record.',
   },
   {
@@ -243,6 +279,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Right wing known for playmaking', 'Czech-born player', 'Spent his longest NHL stint in Pittsburgh'],
     answer: 'Jaromir Jagr',
     verdict: 'hof',
+    hall: { name: 'Hockey Hall of Fame', year: null },
     funFact: 'Played professionally at age 53, for his hometown club in Kladno.',
   },
   {
@@ -252,6 +289,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Russian forward drafted in 2012', 'Spent four seasons in Edmonton before moving on', 'Returned to the KHL'],
     answer: 'Nail Yakupov',
     verdict: 'bust',
+    hall: { name: 'Hockey Hall of Fame', year: null },
     funFact: 'The top pick ahead of a stacked 2012 draft class, never found his NHL footing.',
   },
   {
@@ -261,6 +299,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Right wing from Canada', 'Played 26 NHL seasons', 'Known as "Mr. Hockey"'],
     answer: 'Gordie Howe',
     verdict: 'hof',
+    hall: { name: 'Hockey Hall of Fame', year: 1972 },
     funFact: 'Played in the NHL across five different decades, from the 1940s to the 1980s.',
   },
   {
@@ -270,6 +309,7 @@ const hofPlayers: HofPlayer[] = [
     hints: ['Center from Canada', 'Wore #87', 'Drafted first overall in 2005'],
     answer: 'Sidney Crosby',
     verdict: 'hof',
+    hall: { name: 'Hockey Hall of Fame', year: null },
     funFact: 'Won back-to-back Stanley Cups in 2016 and 2017, and the Conn Smythe both times.',
   },
 ];
