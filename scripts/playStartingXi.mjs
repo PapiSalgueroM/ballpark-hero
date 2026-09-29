@@ -150,7 +150,7 @@ await page.waitForTimeout(1500);
 const FURNITURE = /^(Back|Track stats|🚪 Retire|🔄 New Career|Full attributes|Retire from International|Open your phone|Report a bug|Retire|🏋️|📱|⏸|▶)/;
 let sawTournament = false;
 for (let i = 0; i < 60 && !sawTournament; i++) {
-  if (await page.locator('button:has-text("The Squad")').count()) { sawTournament = true; break; }
+  if (await page.locator('button:has(> div:text-is("The Squad"))').count()) { sawTournament = true; break; }
   const cont = page.locator('button:has-text("Continue")');
   if (await cont.count()) { await cont.first().click().catch(() => {}); await page.waitForTimeout(320); continue; }
   const next = page.locator('button:has-text("Next Season"), button:has-text("Next Year")');
@@ -170,7 +170,7 @@ let attempts = 0;
 while (sawTournament && !hasSheet && attempts < 4) {
   attempts += 1;
   console.log(`2) The Squad tile opens an actual team sheet (tournament ${attempts})`);
-  await page.locator('button:has-text("The Squad")').first().click();
+  await page.locator('button:has(> div:text-is("The Squad"))').first().click();
   await page.waitForTimeout(700);
   hasSheet = await page.locator('[data-team-sheet]').count() === 1;
   if (hasSheet) break;
@@ -183,7 +183,7 @@ while (sawTournament && !hasSheet && attempts < 4) {
   await page.waitForTimeout(600);
   sawTournament = false;
   for (let i = 0; i < 60 && !sawTournament; i++) {
-    if (await page.locator('button:has-text("The Squad")').count()) { sawTournament = true; break; }
+    if (await page.locator('button:has(> div:text-is("The Squad"))').count()) { sawTournament = true; break; }
     const cont = page.locator('button:has-text("Continue")');
     if (await cont.count()) { await cont.first().click().catch(() => {}); await page.waitForTimeout(320); continue; }
     const next = page.locator('button:has-text("Next Season"), button:has-text("Next Year")');
@@ -254,8 +254,8 @@ if (hasSheet) {
     page.on('pageerror', e => errors.push(String(e)));
     await page.goto(`${BASE}/soccer-career`, { waitUntil: 'networkidle' });
     await page.waitForTimeout(1500);
-    if (await page.locator('button:has-text("The Squad")').count()) {
-      await page.locator('button:has-text("The Squad")').first().click();
+    if (await page.locator('button:has(> div:text-is("The Squad"))').count()) {
+      await page.locator('button:has(> div:text-is("The Squad"))').first().click();
       await page.waitForTimeout(700);
       const hi = page.locator('[data-team-sheet] [data-xi-man="me"]');
       say(await hi.count() === 1, 'exactly one card is highlighted as his');
