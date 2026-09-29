@@ -1,10 +1,153 @@
 # Project state
 
-## 2026-09-28: the points economy merged on branch `points-economy`, NOT on main, nothing applied
+## 2026-09-28: the points economy (645a, 645b, 645c, 646, 647, 648) assembled and gated on `points-economy`, NOT on main, nothing applied or deployed
 
-The six points rounds are merged onto one branch from main `22bc0f7e`, in this order: 647, 646,
-645a, 645b, 645c, 648. The six dated round entries below are each round's own account and are kept
-as written. What the merge itself decided:
+**Where it is.** Branch `points-economy`, code head `c4f289b6` (this entry is the commit after it),
+from main `22bc0f7e`. The six rounds were merged in the order 647, 646, 645a, 645b, 645c, 648, then
+the four second review fix branches in the order `eco-fix-647` (`d9835626`), `eco-fix-645b`
+(`657af4d6`), `eco-fix-645c` (`869827cf`), `eco-fix-648` (`776e7c48`), all four with no conflict
+(`git show --remerge-diff` on each merge is empty). The six round entries below are each round's
+own account; where one disagrees with this entry, this entry wins. Two statements below are
+superseded outright: 647's entry still describes a season scored "50 plus how far it beat" its
+projection (the par is gone), and the first assembly's "still red, owed a lead decision" item on
+`simFreePoints` is closed (the six season rows are green on this tree).
+
+**What changes for players, all six rounds together.**
+- **Only the daily counts (645a).** A free run in any of the 35 live games with a daily and a free
+  mode (Unlimited, free play, a new season, versus, a CPU card) is a play: no score, no points, no
+  daily tick, but it keeps the streak day and counts in Games Today, and its result card says
+  "Free play: this one's just for fun." The profile tile and the header count Games Today the same
+  way.
+- **No points for no skill (645b).** Nineteen games that paid a do nothing run a big share of a
+  perfect one now pay only what the run earns above the worst choices on the same board, and a
+  perfect run records exactly what it always did. Build Your XI and NBA Starting 5 pay only a
+  verdict above the rung a random legal lineup of real players reaches (Top 4 Finish on Build Your
+  XI's referee, Solid on its offline judge, Solid Rotation on Starting 5's referee), spread up to
+  500 at the top, and the result card says where points start. Every rescaled game, Rebuild and the
+  four Perfect Seasons included, shares the points it records. **Until `nba-evaluate-lineup` is
+  redeployed, every Starting 5 records 0 and says so** (the deployed version 5 has no working AI).
+- **Dailies lock and resume (645c).** The chains, Football Timeline, Pack Battle and Rarity
+  Round remember a finished day across a reload, and the run based dailies (Minefield, Player Stock
+  Market, Sports Millionaire, the Gauntlet drafts, Sports Bingo, the arcade games and the drills)
+  file every step and resume where they were left. From the second fix: Rarity Round's restore
+  says "Couldn't check your saved run right now" and keeps the record when a pool cannot be read,
+  instead of dealing the day again; a hand edited NASCAR or Tennis chain can hold only names their
+  validator passes (`src/data/nascarChampionNames.json`, `tennisChampionNames.json`, written by
+  `scripts/genChainChampions.mjs`); Minefield and Sports Millionaire started after midnight Eastern
+  deal and file the new day; HOF or Bust keeps a bought hint across a reload. Perfect Season still
+  saves only at the end (left, with its reason, in 645c's entry).
+- **Caps at each game's real ceiling (646, needs its migration).** A cap is what a perfect run
+  records, read from the scoring code, and past days keep the cap they were played under
+  (`game_score_cap_history`, `game_cap_periods`). The four front offices and the two dynasties pay
+  100 for a season at its ceiling in every sport.
+- **Front offices and dynasties score each season against its projection (647).** One ledger row
+  per closed season, recorded once. At the close of each season the board projects the next: 300
+  seasons from the league as it finished, through the offseason an untouched GM gets (the draft
+  taking the board's first name at every pick, the dynasties signing nobody), with every man the GM
+  cut that season put back. A season at or under the bar that 95 projected seasons in 100 reach
+  scores 0, one past every projected season scores 100, ties count half. An untouched season pays
+  2 to 4 of 100 in every sport (the limit is 5), and cutting stars before the close to lower the
+  next projection gains nothing (pooled over 1,200 paired seasons: -2.2). The recap says
+  "Projected: N wins, <round>. Points start past a season this roster tops only 5 times in 100: M
+  wins, <round>. Yours: W wins, <round>."
+- **The profile's Total Points is the owner's rule (648, the stored total needs its migrations).**
+  One row per game per Eastern day, the day's best, capped, in the page, the browser's tally, the
+  save and the recompute. A browser tally from before 648 is cut only where it is above what the
+  rule could have paid on the browser's own records, and a cut never takes back a badge or an
+  achievement. The points record lives under its own key, `dukb-points-v1`, so an old tab cannot
+  drop it.
+
+**Unapplied, and the order.** Nothing here has run against the database and nothing is deployed.
+Every migration fails closed and checks the step before it:
+1. Merge `points-economy` into main and publish it (deploy_project only after get_project shows
+   the merge's sha). This is "publish 647": the whole client goes live together.
+2. Wait a whole quiet day. `20260928_round_646_caps_at_real_ceilings.sql` refuses until the six
+   season games have a row on 647's scale (1 to 100) in the last 24 hours and none above 100 (an
+   old tab still recording titles).
+3. Apply 646, then get_advisors (it creates a table, a view and a materialized view), and time
+   `global_leaderboard('alltime')` before and after.
+4. Finish Round 644 (`20260919_round_644_scores_shown.sql`): part 1 applied with P (the moment
+   Release D's bundle went live) written in, and its part 2 rerun for the last time. 648's first
+   file refuses while 644 has not run or its part 2 still has soccer career rows to divide, and
+   ends 644's part 2 for good. This pass could not read the live state of 644 (the Supabase MCP
+   did not connect), so check `private.r644_state` first.
+5. Apply `20260928_round_648_profile_clamp.sql` as its own migration and let it commit. It refuses
+   unless 646's backup `private.r646_caps_bak` exists.
+6. Apply `20260928_round_648_profile_recompute.sql`. It refuses unless step 5's save is in place
+   and was committed by an earlier transaction. Then get_advisors. Rerun it whenever a cap changes.
+
+At apply time check the two things no static fence can: the recompute's xid comparison
+(`(p.xmin::text)::bigint = txid_current() % 4294967296`) and that `user_game_scores.created_at`
+defaults to `now()`. Until 646 applies, the games whose live cap is NULL (21 on 2026-09-28) count
+uncapped on the profile (646 caps the scored ones; `higher-lower-transfers` and `list-quiz` stay
+NULL until they get a scale of their own); until step 6, the all time rank counts the old stored
+totals while the page shows the rule total.
+
+**What the lead must do to ship it.**
+1. **Decide the open calls.** Each is measured and written up by its round, and none blocks the
+   code:
+   - 647, equal added rating: +2 on every man pays a weak pick more of its headroom than a strong
+     one (weak fifth against strong: NFL 13.2 against 3.5, NBA 30.4 against 18.7, CBB 19.6
+     against 8.5). The fence holds idle play and equal share of headroom, which is exact; no score
+     can hold both that and equal rating while seasons spread differently by pick.
+   - 647, dominant college picks: a perfect season pays 0 against 3 to 10 of 480 CFB and 1 to 3 of
+     480 CBB projections, the ones that go perfect often enough to tie it.
+   - 647, the draft counts as skill only past the board's first names, not from the pick as the
+     lead's wording had it (projected before the draft, an untouched NBA season paid 11 on average).
+   - 647 against 648, many idle seasons in one day: one untouched season pays 2 to 4, but 648 pays
+     the day's best, and the best of ten untouched seasons pays 15 to 30 (printed by
+     `simSeasonLedger`, not judged, 15.0 to 29.5 by sport and half of the pick order on this tree).
+   - 646 against 648, history: the World Leaderboard keeps each past day at the cap in force when it
+     was played, but the profile total scores every past day at today's cap (an old Budget Builder
+     day of 1,000 drops to 126 on the profile). 648 could read `game_cap_periods` instead.
+   - 646, Perfect Lineup's new cap of 100 is the rating clamp, and no real classic board reaches it
+     (the best board's median is about 70).
+   - 645b, old bests: personal and all time bests recorded before the release stay on the old scales
+     (every Build Your XI finisher holds 500). No migration is written for it.
+   - 648, residue: the browser kept counts, not plays, so an inflated Pack Battle tally is cut only
+     to 4,000,000; Pack Battle and Sports Millionaire need a scale of their own.
+2. **Merge main in.** Main has moved 21 commits since `22bc0f7e` (Release E). A trial
+   `git merge-tree` of main `3e9d0210` with this branch conflicts in `docs/PROJECT-STATE.md`,
+   `docs/WORKBOARD.md` and `src/data/searchKeywords.json`: keep both sides of the docs and
+   regenerate the keywords with `node scripts/genSearchKeywords.mjs` rather than hand merging them.
+3. **Run the release gates this pass was not allowed to run**, on the merged tree in the CRLF gate
+   clone: runAllSims, `npm run build:seo`, the snapshot reader list, and the browser harnesses,
+   among them `simPrerender`, `simDrillMotion`, `simSetPiecePresentation` and
+   `playTycoonSetPieceFit`, which the rounds named as not run.
+4. **Publish**, and prove it by finding a string from this release in the live chunk (for example
+   "Free play: this one's just for fun").
+5. **Deploy `nba-evaluate-lineup`** from the repo copy (it becomes version 6 on
+   `gemini-2.5-flash`), move it to `synced` in `scripts/data/edgeDeployed.json`, and probe a few
+   random legal fives: they must land at Solid Rotation or under, or raise `FIVE_REFEREE_BASELINE`
+   in `src/lib/lineupVerdictPoints.ts`.
+6. **The migrations**, in the order above.
+7. Afterwards, run `node scripts/genChainChampions.mjs --check` whenever a NASCAR or Grand Slam
+   champion is added. Nothing runs it; until it is rerun, a part played chain holding the new
+   champion is dealt fresh (never recorded twice).
+
+**Gates, 2026-09-28, on this tree (code head `c4f289b6`), every harness with its own TEMP and TMP.**
+tsc 0 (exit code read, no output). Green, each exit 0 with its closing summary line:
+`simRankedRecorder` (136 recorders, 25 rendered cases), `simFreePoints` (132 games; the six season
+rows at 3.0, 4.3, 2.1, 2.3, 2.4 and 2.2 percent of a perfect season, Build Your XI and Starting 5 at
+0.0), `simDailyLockEdges` (42 tests in 21 sections, all 25 controls fired), `simDailyReload` (30
+rows, all 10 controls fired), `simCapsAreCeilings` (119 ceilings), `simSeasonLedger`, `simGmReload`
+(`FrontOfficeSeasonClose.test.tsx`, 48 of 48), `simCfbDynasty` (18 of 18 board rows plus the
+headless ledger), `simProfileTotal`, `simNoDoubleRecord`, `simScoreShown`, `simScoringCoverage`,
+`simLeaderboardCaps`, `simGuideHeadings`, `simSiteSearch`, `simDailyLegend`, `simCompletionOnce`,
+`simHarnessAnchors` and `simNoRivalNames` (0 findings). Vitest run directly on the nine touched
+files outside the two daily suites: 186 of 186. Every negative control of the points fences was
+run on this tree too, 108 controls in 61 runs, each exit 0 and each turning exactly its own rows,
+cases or section red: `simFreePoints` 28, `simSeasonLedger` 8, `simGmReload` 7, `simCfbDynasty` 4,
+`simCapsAreCeilings` 12, `simProfileTotal` 28 (`all`), `simRankedRecorder` 21 (`all`), on top of
+the 35 the two daily fences fire in their own runs. `simScoringCoverage`, `simSiteSearch`,
+`simDailyLegend` and `simCompletionOnce` call a `node_modules` under the checkout, which the
+worktree does not have, so they ran from temporary copies pointed at the main checkout's; the
+copies are deleted. The thinnest margin is `simFreePoints`' MLB front office row, 4.3 against the
+limit of 5 on its fixed seed block (`simSeasonLedger`'s three seed sets put the MLB idle mean at
+2.45 to 3.08). Not run, by instruction: runAllSims, `npm run build`, `build:seo` and every browser
+harness.
+
+**How the first assembly resolved the rounds**, kept for the record:
 
 - **645b over 646 (fourteen scoring files).** 645b's formulas record, with 646's named constants
   inside them, so every ceiling still reads the code that records: Ball IQ, Budget Builder, Mystery
@@ -20,12 +163,12 @@ as written. What the merge itself decided:
   bind and 2 on code checks); `rankedRecorderLib.test.ts` gives the browser a caps
   copy under 648's tally; `simDailyLockEdges` pack-mark and rarity-mark take out 645a's hook guard
   as well as the page's, because either one alone now stops the stale mark.
-- **Still red, owed a lead decision.** `simFreePoints` fails six rows (the four front offices and
-  both dynasties): they assert 645b's pre 647 shape (only a title records). Rewriting them to read
-  647's ledger would still fail 645b's 5 percent rule, because 647 pays an untouched season par, 50
-  of 100 (the 647 re-review's first major). Every other gate is green, and all 24 `simFreePoints`
-  controls fire exactly, the six rows above being the only extra reds.
-- Migrations: none applied. 646 refuses until 647 is live; 648 refuses until 646 is applied.
+
+## 2026-09-28: Round 647 fixed after review, branch `r647-season-ledger`, NOT on main
+
+**Superseded in part by the second fix (`eco-fix-647`, merged into `points-economy`): there is no
+par any more, and the projection is made at the close. The points economy entry at the top has
+the current rule; the rest of this entry is the first fix's account.**
 
 One of the six points rounds (645a, 645b, 645c, 646, 647, 648) that ship together. Nothing here is
 applied or deployed; 647 carries no migration of its own, and the caps it needs are Round 646's.
@@ -144,7 +287,7 @@ player day before the switch scores exactly as before, and raises otherwise. Rou
 either order; Round 648 after it (it checks the backup). Run `get_advisors` after, and time
 `global_leaderboard('alltime')` before and after (the new board adds one join to the periods).
 **Round 648's profile total is not history safe**: it adds least(day best, today's cap) on every
-past day, so a profile total moves on past days when this lands (once 648's part 2 is rerun) even
+past day, so a profile total moves on past days when this lands (once 648's recompute file is rerun) even
 though the World Leaderboard does not. And its browser copy of the caps is kept six hours: a play
 credited to a browser's running tally in those hours keeps the old cap's credit for good, and only
 later plays count at the new caps.
@@ -307,6 +450,12 @@ migration in this round.
   cycle boundaries, like every game on that walk.
 
 ## 2026-09-28: Round 645 part three, the dailies lock, fixed after review (branch `r645c-dailies-lock`, NOT on main)
+
+**Fixed a second time on `eco-fix-645c` (merged into `points-economy`): Rarity Round's restore fails
+closed, the NASCAR and Tennis restores bound a chain by the names their validator passes, Minefield
+and Sports Millionaire take the day again when a daily is dealt, HOF or Bust saves a bought hint.
+The points economy entry at the top has the account; `simDailyLockEdges` is 42 tests in 21
+sections with 25 controls since.**
 
 Part of the six round points economy (645a, 645b, 645c, 646, 647, 648) that ships together. The
 build pass locked the dailies that never locked and made the run based ones file every step; the
