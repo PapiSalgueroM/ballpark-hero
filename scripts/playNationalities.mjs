@@ -12,21 +12,41 @@
  *      ENGINES=chromium node scripts/playNationalities.mjs
  * (runAllSims files it as a browser harness automatically, it imports
  * playwright, and runs it only with --browser.)
+ *
+ * Round 672: red since Round 303 put the Dugout step (the manager picker)
+ * behind the club card. Both walks now skip it, like their siblings.
+ *
+ * NEGATIVE CONTROL: NATIONALITIES_CONTROL=nofilter rewrites the served market
+ * so the nation dropdown filters nothing (its predicate always passes). The
+ * flag check must fail, which proves the walk still reaches the market and
+ * still reads the flags off the rows.
  */
 import pw from './lib/playwrightLoader.mjs';
+import { installServedCodeControl, controlledChecks } from './lib/servedCodeControl.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 
-let failures = 0;
-const say = (ok, what) => {
-  console.log((ok ? '  PASS  ' : '  FAIL  ') + what);
-  if (!ok) failures += 1;
-};
+const CONTROL = process.env.NATIONALITIES_CONTROL || '';
+if (CONTROL && CONTROL !== 'nofilter') {
+  console.error(`NATIONALITIES_CONTROL=${CONTROL} is not a control this harness knows`);
+  process.exit(1);
+}
+const { say, verdict } = controlledChecks(CONTROL);
+const proof = {};
 
 const browser = await chromium.launch();
 {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  if (CONTROL) {
+    /* natPick === 'any' || nationalityOf(eraId, name) === natPick, with the
+       first arm forced true. The backreference pins it to the same variable. */
+    await installServedCodeControl(page, [{
+      label: 'natPredicate',
+      find: /([\w$]+)==="any"\|\|([\w$]+)\(([\w$]+)\.eraId,([\w$]+)\.name\)===\1(?![\w$])/g,
+      replace: '!0||$2($3.eraId,$4.name)===$1',
+    }], proof);
+  }
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
   await page.goto(`${BASE}/club-manager`, { waitUntil: 'networkidle' });
@@ -46,6 +66,14 @@ const browser = await chromium.launch();
   const essential = page.locator('button:has-text("Essential only")');
   if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
   await page.locator('text=Take the job').click();
+  /* Round 672: Round 303 put the manager picker (the Dugout step) behind the
+     club card, with its own "Take the job" and a skip, and this walk never
+     learned it: it looked for the Market tab on the picker and timed out.
+     Skip past it the way playSponsors and playReleaseClause already do. The
+     picker is a lazy chunk, so wait for it rather than counting on a fixed
+     pause: a count taken 800ms after the click missed it under load. */
+  const skipManager = page.locator('button:has-text("Skip: just manage")').first();
+  await skipManager.waitFor({ timeout: 15000 }).then(() => skipManager.click()).catch(() => {});
   await page.waitForTimeout(2000);
   await page.locator('button:has-text("Market")').first().click();
   await page.waitForTimeout(900);
@@ -74,7 +102,7 @@ const browser = await chromium.launch();
   /* Every visible market row's flag should now be the picked nation's:
      FlagImg titles the image with the country name. */
   const wrongFlags = await page.locator(`.max-h-96 img[alt]:not([alt="${busiest}"])`).count();
-  say(wrongFlags === 0, `every visible flag is ${busiest}'s (${wrongFlags} strays)`);
+  say(wrongFlags === 0, `every visible flag is ${busiest}'s (${wrongFlags} strays)`, true);
   await nat.selectOption({ index: 0 });
   await page.waitForTimeout(500);
   const rowsReset = await page.locator('button:has-text("Talk ·")').count();
@@ -114,6 +142,8 @@ const browser = await chromium.launch();
   const essential = page.locator('button:has-text("Essential only")');
   if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
   await page.locator('text=Take the job').click();
+  const skipManager2010 = page.locator('button:has-text("Skip: just manage")').first();
+  await skipManager2010.waitFor({ timeout: 15000 }).then(() => skipManager2010.click()).catch(() => {});
   await page.waitForTimeout(2000);
   await page.locator('button:has-text("Market")').first().click();
   await page.waitForTimeout(900);
@@ -130,9 +160,6 @@ const browser = await chromium.launch();
 }
 
 await browser.close();
-console.log('');
-if (failures > 0) {
-  console.error(`playNationalities: ${failures} failure${failures === 1 ? '' : 's'}`);
-  process.exit(1);
-}
+const code = verdict('playNationalities', CONTROL ? proof : null, { minGuarded: 1 });
+if (code || CONTROL) process.exit(code);
 console.log('playNationalities: green. The filter narrows to real nations and every flag is the right man\'s.');

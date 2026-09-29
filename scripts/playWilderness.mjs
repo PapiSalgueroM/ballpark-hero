@@ -16,20 +16,36 @@
  *      ENGINES=chromium node scripts/playWilderness.mjs
  * (runAllSims files it as a browser harness automatically, it imports
  * playwright, and runs it only with --browser.)
+ *
+ * Round 672: red since Round 303 put the Dugout step (the manager picker)
+ * behind the club card. The walk now skips it, like its siblings.
+ *
+ * NEGATIVE CONTROL: WILDERNESS_CONTROL=nooffers rewrites the served
+ * wilderness so the offers never reach the screen, the phone that never
+ * rings. The "a club called" check must fail, which proves the walk still
+ * gets sacked, still reaches the wilderness and still reads it.
  */
 import pw from './lib/playwrightLoader.mjs';
+import { installServedCodeControl, controlledChecks } from './lib/servedCodeControl.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 
-let failures = 0;
-const say = (ok, what) => {
-  console.log((ok ? '  PASS  ' : '  FAIL  ') + what);
-  if (!ok) failures += 1;
-};
+const CONTROL = process.env.WILDERNESS_CONTROL || '';
+if (CONTROL && CONTROL !== 'nooffers') {
+  console.error(`WILDERNESS_CONTROL=${CONTROL} is not a control this harness knows`);
+  process.exit(1);
+}
+const { say, verdict } = controlledChecks(CONTROL);
+const proof = {};
 
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+if (CONTROL) {
+  await installServedCodeControl(ctx, [
+    { label: 'offerList', find: /\.offers\)\?\?\[\]\)\.map\(/g, replace: '.offers)??[]).slice(0,0).map(' },
+  ], proof);
+}
 let page = await ctx.newPage();
 const errors = [];
 page.on('pageerror', e => errors.push(String(e)));
@@ -50,6 +66,15 @@ await page.waitForTimeout(500);
 const essential = page.locator('button:has-text("Essential only")');
 if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
 await page.locator('text=Take the job').click();
+/* Round 672: Round 303 put the manager picker (the Dugout step) behind the
+   club card, with its own "Take the job" and a skip. This walk never learned
+   it, so it sat on the picker and every later check failed with it. Skip
+   past it the way playSponsors and playReleaseClause already do. The picker
+   is a lazy chunk, so wait for it rather than counting on a fixed pause: a
+   count taken 800ms after the click missed it under load. If it never shows,
+   the next check still fails on the missing hub. */
+const skipManager = page.locator('button:has-text("Skip: just manage")').first();
+await skipManager.waitFor({ timeout: 15000 }).then(() => skipManager.click()).catch(() => {});
 await page.waitForTimeout(2000);
 say(await page.locator('button:has-text("Finances")').count() > 0, 'the career is running');
 
@@ -142,7 +167,7 @@ if (sacked) {
     await page.waitForTimeout(450);
     offers = await page.locator('[data-wilderness-offer]').count();
   }
-  say(offers > 0, `a club called after waiting (${offers} on the table)`);
+  say(offers > 0, `a club called after waiting (${offers} on the table)`, true);
 
   if (offers > 0) {
     const first = page.locator('[data-wilderness-offer]').first();
@@ -165,9 +190,6 @@ const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e))
 say(pageErrors.length === 0, `no real page errors on the walk (${pageErrors.length ? pageErrors[0] : 'clean'})`);
 await page.close();
 await browser.close();
-console.log('');
-if (failures > 0) {
-  console.error(`playWilderness: ${failures} failure${failures === 1 ? '' : 's'}`);
-  process.exit(1);
-}
+const code = verdict('playWilderness', CONTROL ? proof : null, { minGuarded: 1 });
+if (code || CONTROL) process.exit(code);
 console.log('playWilderness: green. Getting sacked is a chapter now, not the last page.');
