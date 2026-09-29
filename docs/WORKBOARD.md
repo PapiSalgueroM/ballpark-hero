@@ -14,6 +14,12 @@
 - **645a, 645b, 645c, 646, 647** are being rebuilt on their existing branch names, and 648 is getting
   the review it never had. **660** is down to its sourcing sections (1 and 8); **661** gets its fence once
   the Hall of Fame, Guess the Year and Score Predictor records land.
+- **Release F plan**: 660, 661, 668, 669 and 670 ship together, published in the first minutes after
+  00:00 America/New_York, because Round 669's migration moves Footle's daily answer from the moment it
+  lands (344 of the next 366 days, no past day) and its re-bake of src/data/players.ts moves a saved
+  Footle board's index. Steps are in the 669 migration header. The soccer Perfect Lineup board also
+  moves with the re-bake, but that page has redirected home since Round 34, so no player sees it. The
+  points economy (645a to 648) is Release G, after it passes its own review.
 - The next free number for anyone else is **673**.
 
 **2026-09-28 late, desktop Claude lane: Round 667 parts one to three on `r667-player-reports`, and what the
