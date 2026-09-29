@@ -27,7 +27,8 @@
  * playwright, and runs it only with --browser.)
  */
 import { execSync } from 'node:child_process';
-import { writeFileSync, existsSync, readdirSync, readFileSync } from 'node:fs';
+import { writeFileSync, existsSync, readdirSync, readFileSync, mkdtempSync } from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
@@ -45,13 +46,22 @@ if (!existsSync(path.join(ROOT, 'dist', 'index.html'))) {
 
 /* ── a real career, played by the real engine, ending in the dugout ────── */
 console.log('1) play a career to the dugout in the engine, so the save is one the game could have written');
-const ENTRY = '/tmp/flagshipLazyEntry.mjs';
-const BUNDLE = '/tmp/flagshipLazy.bundle.mjs';
+/* Round 672: this used to write to a hardcoded /tmp and paste ROOT raw into
+   the import. On Windows ROOT is C:\Users\antho\ballpark-hero, and inside a
+   JS string \U, \a and \b are escapes, so esbuild was handed
+   "C:Usersantho<backspace>allpark-hero/src/..." and the harness died before
+   any browser opened, red on every Windows run whatever the game did. Same
+   shape as simAcademy and simMobileChrome now: the OS temp dir (its own
+   folder per run, so two runs cannot share a bundle), forward slashes in the
+   import, every path quoted. */
+const TMP = mkdtempSync(path.join(os.tmpdir(), 'dukb-flagship-lazy-'));
+const ENTRY = path.join(TMP, 'flagshipLazyEntry.mjs');
+const BUNDLE = path.join(TMP, 'flagshipLazy.bundle.mjs');
 writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
-export const e = await import('${ROOT}/src/lib/soccerCareerEngine.ts');
+export const e = await import('${ROOT.replaceAll('\\', '/')}/src/lib/soccerCareerEngine.ts');
 `);
-execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
+execSync(`"${ROOT}/node_modules/.bin/esbuild" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`, { stdio: 'inherit' });
 const { e } = await import(pathToFileURL(BUNDLE).href);
 
 /* If the engine has lost the loader entirely, that IS the defect: say so and
