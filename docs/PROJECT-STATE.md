@@ -1,5 +1,54 @@
 # Project state
 
+## BUILT 2026-09-29: Round 674, fence debt (branch `r674-fence-debt` from `points-economy`, NOT on main, no migration)
+
+The fence lens review's gaps (R2.D3, D5, D6, D9, D10, D11) and 645c's leftover, per
+`docs/design/POINTS-ECONOMY-V2.md` section 13. Players see nothing. Main (Releases E and F,
+`0b0711a8`) is merged into the branch; the UFC chain keeps both sides (the ET day the hook pins,
+Round 660's `eligibleStarters`) and `src/data/searchKeywords.json` is regenerated (127 games).
+
+- **Season rows against the engine (R2.D3).** All six season boards get a row comparing the recorded
+  ledger row with what the engine kept: the standings' wins and every game they count (overtime
+  losses included; CFB's conference title game taken out) and the round the engine's bracket reached.
+  Controls: `GM_RELOAD_CONTROL=otlosses` (the NHL board drops its overtime losses, m647-3),
+  `CFB_DYNASTY_CONTROL=record`.
+- **The free play line renders on the finished card (R2.D5).** `src/test/unrankedCards.test.tsx`
+  plays every daily reload driver's daily to the finish with the line as a probe; simRankedRecorder
+  section 4 hands it which pages must show a board's own line (15 of 30 rows, from each driver's import
+  closure). Conquest and the four Perfect Seasons have no driver yet and sit in `RENDER_BASELINE` with
+  the reason. Control `shotnote` (m645a-1).
+- **A literal false reads the file's own mode (R2.D6).** Refused in any file that names the daily,
+  whatever the registry says. Control `ufcfalse` (m645a-2).
+- **Scans read code (R2.D9).** `scripts/lib/completionKeys.mjs` and simCapsAreCeilings' unscored check
+  strip comments, skip tests and read template literal calls. Control `commented` (m646-3), and every
+  run probes comment, template and test paths.
+- **Control copies per run (R2.D10).** `scripts/lib/controlScratch.mjs`: a mkdtemp under the gitignored
+  `.sim-control`, a load line each copy prints, nothing ever touches dist. Used by simGmReload,
+  simCfbDynasty, simRankedRecorder, simNoDoubleRecord. `GM_RELOAD_CONTROL=parallel` and
+  `CFB_DYNASTY_CONTROL=parallel` run two controls at once on one TEMP and both must fire.
+- **Coin toss reds (R2.D11).** Every Higher or Lower hook takes its reveal timer from
+  `useOwnedTimeouts` (simNoDoubleRecord section 3, control `hltimer`). simDailyReload's `lockin` and
+  `drillland` run only the rows the swapped module reaches (import graph, `scripts/lib/importClosure.mjs`)
+  with room past the 5 s default. Found on the way: `restream` was a date coin toss (on 2026-09-29's
+  deal two arcade rows finished the same with the stream restarted), so assertion 6 now also fails on a
+  draw dealt twice across the reload.
+- **simChainChampions (645c leftover).** Runs `genChainChampions.mjs --check` read only; fails closed
+  without the database. Control `added` (a champion added to the rows the check reads, a fixture the
+  generator refuses on a write).
+
+**Gates, on the final tree, each run with its own TEMP.** tsc (`tsconfig.app.json`) exit 0. Green with
+every control firing: simGmReload (default, replay, late, offseason, noreset, otlosses, double, raw,
+nokeep, parallel), simCfbDynasty (default, drain, replay, record, double, raw, parallel),
+simRankedRecorder (default and `RANKED_CONTROL=all`), simNoDoubleRecord (default and
+`NO_DOUBLE_CONTROL=all`), simCapsAreCeilings (default and all 13 controls, live included), simDailyReload
+(30 rows, all 10 controls, run beside other harnesses), simChainChampions (default and added). Also
+green: simLeaderboardCaps, simSiteSearch, simHigherLower, simNoInventedQuotes, simUfcFacts,
+simSportsFacts, simIdleTimers, simDateDraws, simNoRivalNames, simFrontOfficeCuts, simRevealMoments,
+simHarnessAnchors, simDailyLockEdges, simFirstTeamPage and the six tycoon page harnesses that read the
+shared mocks. Not run: `simPrerender` (its section 16 reads the HL hooks) needs a build, which this round
+does not make. Left: Conquest and the Perfect Seasons need daily reload drivers to leave
+`RENDER_BASELINE`.
+
 ## LIVE 2026-09-29: Release F (660, 661, 668, 669 code, 670, 672), main `add1c6b0`
 
 Assembled in the gate clone's `release-f` worktree, pushed to main as a fast forward from `ef16139d`.
