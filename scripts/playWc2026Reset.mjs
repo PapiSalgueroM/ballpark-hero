@@ -13,12 +13,33 @@
    requires every assertion aimed at those restored bugs to fail.
 */
 import { spawn } from 'node:child_process';
+import { createRequire } from 'node:module';
+import net from 'node:net';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import pw from './lib/playwrightLoader.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const PORT = Number(process.env.PORT || 4396);
+/* Round 672: this walk runs its OWN vite dev server (the control rewrites a
+   dev module), so it must never take the port the runner hands every browser
+   harness. It used to read PORT, which runAllSims sets to the port it is
+   already serving dist on. On Linux vite then failed to bind and the walk
+   quietly tested dist, where the control can never land; on Windows vite binds
+   127.0.0.1 beside the runner's server and wins. It also found vite at
+   ROOT/node_modules, which a worktree does not have. So: a free port of its
+   own (or WC2026_RESET_PORT), vite resolved the way node resolves anything,
+   and a check below that the thing answering really is this dev server. */
+const require = createRequire(import.meta.url);
+const VITE_BIN = path.join(path.dirname(require.resolve('vite/package.json')), 'bin', 'vite.js');
+const freePort = () => new Promise((resolve, reject) => {
+  const probe = net.createServer();
+  probe.on('error', reject);
+  probe.listen(0, '127.0.0.1', () => {
+    const { port } = probe.address();
+    probe.close(() => resolve(port));
+  });
+});
+const PORT = Number(process.env.WC2026_RESET_PORT || 0) || await freePort();
 const BASE = `http://127.0.0.1:${PORT}`;
 const CONTROL = process.env.WC2026_RESET_CONTROL || '';
 if (CONTROL && CONTROL !== 'noinvalidate') {
@@ -26,9 +47,11 @@ if (CONTROL && CONTROL !== 'noinvalidate') {
   process.exit(1);
 }
 const server = spawn(process.execPath, [
-  path.join(ROOT, 'node_modules', 'vite', 'bin', 'vite.js'),
+  VITE_BIN,
   '--host', '127.0.0.1', '--port', String(PORT), '--strictPort',
-], { cwd: ROOT, stdio: 'ignore' });
+], { cwd: ROOT, stdio: ['ignore', 'ignore', 'pipe'] });
+let serverErr = '';
+server.stderr.on('data', d => { serverErr = (serverErr + d).slice(-2000); });
 
 let failures = 0;
 let controlChecks = 0;
@@ -52,10 +75,18 @@ const say = (ok, message, controlRelevant = false) => {
 
 async function waitForServer() {
   for (let attempt = 0; attempt < 50; attempt += 1) {
-    if (await fetch(BASE).then(response => response.ok).catch(() => false)) return;
+    if (await fetch(BASE).then(response => response.ok).catch(() => false)) {
+      /* Anything can answer a port. Only a vite dev server serves its client,
+         and only a dev server serves the module the control rewrites. */
+      const client = await fetch(`${BASE}/@vite/client`).then(r => (r.ok ? r.text() : '')).catch(() => '');
+      if (!/vite/i.test(client)) {
+        throw new Error(`something other than this walk's vite dev server answers on ${PORT}${serverErr ? `; vite said: ${serverErr.trim().slice(-300)}` : ''}`);
+      }
+      return;
+    }
     await new Promise(resolve => setTimeout(resolve, 200));
   }
-  throw new Error(`dev server never came up on ${PORT}`);
+  throw new Error(`dev server never came up on ${PORT}${serverErr ? `; vite said: ${serverErr.trim().slice(-300)}` : ''}`);
 }
 
 const emptyAwardState = raw => {

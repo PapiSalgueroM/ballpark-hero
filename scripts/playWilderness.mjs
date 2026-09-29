@@ -16,20 +16,40 @@
  *      ENGINES=chromium node scripts/playWilderness.mjs
  * (runAllSims files it as a browser harness automatically, it imports
  * playwright, and runs it only with --browser.)
+ *
+ * Round 672: red since Round 303 put the Dugout step (the manager picker)
+ * behind the club card. The walk now skips it, like its siblings. Once past
+ * it, a second red showed up in 2 of about 25 runs: a squad that kept
+ * winning reached the January window, where the walk had no click, and its
+ * every-40-steps re-doctor was being overwritten by the app. Both fixed in
+ * the loop below, with the measurements.
+ *
+ * NEGATIVE CONTROL: WILDERNESS_CONTROL=nooffers rewrites the served
+ * wilderness so the offers never reach the screen, the phone that never
+ * rings. The "a club called" check must fail, which proves the walk still
+ * gets sacked, still reaches the wilderness and still reads it.
  */
 import pw from './lib/playwrightLoader.mjs';
+import { installServedCodeControl, controlledChecks } from './lib/servedCodeControl.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 
-let failures = 0;
-const say = (ok, what) => {
-  console.log((ok ? '  PASS  ' : '  FAIL  ') + what);
-  if (!ok) failures += 1;
-};
+const CONTROL = process.env.WILDERNESS_CONTROL || '';
+if (CONTROL && CONTROL !== 'nooffers') {
+  console.error(`WILDERNESS_CONTROL=${CONTROL} is not a control this harness knows`);
+  process.exit(1);
+}
+const { say, verdict } = controlledChecks(CONTROL);
+const proof = {};
 
 const browser = await chromium.launch();
 const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+if (CONTROL) {
+  await installServedCodeControl(ctx, [
+    { label: 'offerList', find: /\.offers\)\?\?\[\]\)\.map\(/g, replace: '.offers)??[]).slice(0,0).map(' },
+  ], proof);
+}
 let page = await ctx.newPage();
 const errors = [];
 page.on('pageerror', e => errors.push(String(e)));
@@ -50,6 +70,15 @@ await page.waitForTimeout(500);
 const essential = page.locator('button:has-text("Essential only")');
 if (await essential.count()) { await essential.click(); await page.waitForTimeout(400); }
 await page.locator('text=Take the job').click();
+/* Round 672: Round 303 put the manager picker (the Dugout step) behind the
+   club card, with its own "Take the job" and a skip. This walk never learned
+   it, so it sat on the picker and every later check failed with it. Skip
+   past it the way playSponsors and playReleaseClause already do. The picker
+   is a lazy chunk, so wait for it rather than counting on a fixed pause: a
+   count taken 800ms after the click missed it under load. If it never shows,
+   the next check still fails on the missing hub. */
+const skipManager = page.locator('button:has-text("Skip: just manage")').first();
+await skipManager.waitFor({ timeout: 15000 }).then(() => skipManager.click()).catch(() => {});
 await page.waitForTimeout(2000);
 say(await page.locator('button:has-text("Finances")').count() > 0, 'the career is running');
 
@@ -91,6 +120,14 @@ const clickExact = async (name) => {
   await b.first().click({ timeout: 4000 }).catch(() => {});
   return true;
 };
+/* Round 672: Home is a Radix tab, role "tab", so clickExact('Home') never
+   matched it and the "way back" did nothing. */
+const homeTab = async () => {
+  const t = page.getByRole('tab', { name: 'Home', exact: true });
+  if (!(await t.count())) return false;
+  await t.first().click({ timeout: 4000 }).catch(() => {});
+  return true;
+};
 let sacked = false;
 /* Round 251: 60 iterations was measured headroom in a sandbox whose
    browser had no egress, where pages settled fast. With real egress the
@@ -101,9 +138,21 @@ let sacked = false;
    sack, the save is doctored back to the floor and the career resumed,
    which keeps the trigger inside the engine while making the outcome
    inevitable inside a bounded walk. */
+/* Round 672: two holes in that policing, both measured on a run where the
+   45 rated squad kept winning (board confidence climbed to 30 by week 26).
+   The re-doctor edited the save from the RUNNING app and then navigated, and
+   the app saved its own state over the edit on the way out: confidence read
+   28.8 before it and 30.1 one match after. It now leaves for robots.txt
+   first, the Round 196 rule the first doctoring already follows. And a career
+   that survives to the mid-season break meets "Open the Window", which none
+   of the clicks below matched, so the walk sat on the hub "pressing Home"
+   (a button that does not exist, see homeTab) for the rest of its 120 steps.
+   Opening the window lands on the Market tab, and the Home tab is the way
+   back to the fixture list; that is how playClubManager gets past it too. */
 for (let i = 0; i < 120 && !sacked; i++) {
   if (await page.locator('[data-wilderness]').count()) { sacked = true; break; }
   if (i > 0 && i % 40 === 0) {
+    await page.goto(`${BASE}/robots.txt`, { waitUntil: 'domcontentloaded' });
     await page.evaluate(() => {
       const key = 'dukb-club-manager-save';
       const raw = localStorage.getItem(key);
@@ -120,9 +169,15 @@ for (let i = 0; i < 120 && !sacked; i++) {
     continue;
   }
   if (await clickExact('⚡ Quick Sim')) { await page.waitForTimeout(600); continue; }
+  if (await clickExact('Open the Window')) {
+    await page.waitForTimeout(600);
+    await homeTab();
+    await page.waitForTimeout(400);
+    continue;
+  }
   const onward = page.locator('button:visible').filter({ hasText: /^(Continue|Next|Play on|Back to the club|Go to)/ });
   if (await onward.count()) { await onward.first().click({ timeout: 4000 }).catch(() => {}); await page.waitForTimeout(500); continue; }
-  await clickExact('Home');
+  await homeTab();
   await page.waitForTimeout(400);
 }
 say(sacked, 'the board ran out of patience and the wilderness opened');
@@ -142,7 +197,7 @@ if (sacked) {
     await page.waitForTimeout(450);
     offers = await page.locator('[data-wilderness-offer]').count();
   }
-  say(offers > 0, `a club called after waiting (${offers} on the table)`);
+  say(offers > 0, `a club called after waiting (${offers} on the table)`, true);
 
   if (offers > 0) {
     const first = page.locator('[data-wilderness-offer]').first();
@@ -165,9 +220,6 @@ const pageErrors = errors.filter(e => !/supabase|Failed to fetch|CORS/i.test(e))
 say(pageErrors.length === 0, `no real page errors on the walk (${pageErrors.length ? pageErrors[0] : 'clean'})`);
 await page.close();
 await browser.close();
-console.log('');
-if (failures > 0) {
-  console.error(`playWilderness: ${failures} failure${failures === 1 ? '' : 's'}`);
-  process.exit(1);
-}
+const code = verdict('playWilderness', CONTROL ? proof : null, { minGuarded: 1 });
+if (code || CONTROL) process.exit(code);
 console.log('playWilderness: green. Getting sacked is a chapter now, not the last page.');

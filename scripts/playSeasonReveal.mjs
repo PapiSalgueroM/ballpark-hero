@@ -15,23 +15,57 @@
  *      ENGINES=chromium node scripts/playSeasonReveal.mjs
  * (runAllSims files it as a browser harness automatically, it imports
  * playwright, and runs it only with --browser.)
+ *
+ * Round 672: a coin toss since Rounds 522 to 525. About half of all seasons
+ * now raise a rivalry card between the curtain and the crossroads, and it is
+ * saved on the career, so it also comes back after a reload. This walk knew
+ * neither, so it went red whenever the draw raised one: the screen behind the
+ * curtain was the rivalry card, and "Play the" was never on screen to click.
+ * The rivalry card now counts as a real screen and the walk clicks through
+ * it, the way a player does.
+ *
+ * NEGATIVE CONTROL: SEASON_REVEAL_CONTROL=muted rewrites the served reveal
+ * so the suspended year's card no longer says what the year was. The check
+ * at the far end of the walk must fail, which proves the walk still gets
+ * there and still reads the card.
  */
 import pw from './lib/playwrightLoader.mjs';
+import { installServedCodeControl, controlledChecks } from './lib/servedCodeControl.mjs';
 
 const { chromium } = pw;
 const BASE = process.env.BASE ?? process.env.SWEEP_BASE ?? 'http://localhost:4173';
 
-let failures = 0;
-const say = (ok, what) => {
-  console.log((ok ? '  PASS  ' : '  FAIL  ') + what);
-  if (!ok) failures += 1;
-};
+const CONTROL = process.env.SEASON_REVEAL_CONTROL || '';
+if (CONTROL && CONTROL !== 'muted') {
+  console.error(`SEASON_REVEAL_CONTROL=${CONTROL} is not a control this harness knows`);
+  process.exit(1);
+}
+const { say, verdict } = controlledChecks(CONTROL);
+const proof = {};
+
+/* The rivalry card has its own Continue. Returns whether one was up. */
+async function passRivalry(page) {
+  const rivalry = page.locator('[data-rivalry-event] button:has-text("Continue")');
+  if (!(await rivalry.count())) return false;
+  await rivalry.click();
+  await page.waitForTimeout(700);
+  return true;
+}
+const onRealScreen = async page =>
+  /Play the \d{4} season/.test(await page.locator('body').innerText())
+  || await page.locator('div.grid.gap-1\\.5 > button').count() > 0
+  || await page.locator('[data-rivalry-event]').count() > 0;
 
 const browser = await chromium.launch();
 
 /* ---------- Walk one: the NFL curtain, end to end ---------- */
 {
   const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+  if (CONTROL) {
+    await installServedCodeControl(page, [
+      { label: 'mutedLine', find: /(result:[\w$]+\?)"Season served on the suspended list"/g, replace: '$1"Season over"' },
+    ], proof);
+  }
   const errors = [];
   page.on('pageerror', e => errors.push(String(e)));
 
@@ -55,12 +89,16 @@ const browser = await chromium.launch();
   await reveal.locator('button:has-text("Continue")').click();
   await page.waitForTimeout(700);
   say(await page.locator('[data-season-reveal]').count() === 0, 'the curtain came down');
-  const afterBody = await page.locator('body').innerText();
-  say(/Play the \d{4} season/.test(afterBody) || await page.locator('div.grid.gap-1\\.5 > button').count() > 0,
-    'the crossroads or the hub is on screen behind it');
+  say(await onRealScreen(page), 'the rivalry card, the crossroads or the hub is on screen behind it');
 
   console.log('3) A reload mid-curtain lands on the real screen');
-  /* Answer whatever crossroads is up, then play the next season. */
+  /* Past the rivalry card if the draw raised one, answer whatever crossroads
+     is up, then play the next season. */
+  if (await passRivalry(page)) {
+    console.log('  (the draw raised a rivalry card; clicked through it)');
+    say(/Play the \d{4} season/.test(await page.locator('body').innerText()) || await page.locator('div.grid.gap-1\\.5 > button').count() > 0,
+      'the crossroads or the hub is behind the rivalry card');
+  }
   const opt = page.locator('div.grid.gap-1\\.5 > button').first();
   if (await opt.count()) { await opt.click(); await page.waitForTimeout(700); }
   await page.locator('button:has-text("Play the")').first().click();
@@ -69,9 +107,7 @@ const browser = await chromium.launch();
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
   say(await page.locator('[data-season-reveal]').count() === 0, 'the reveal did not survive the reload, transient by design');
-  const reloaded = await page.locator('body').innerText();
-  say(/Play the \d{4} season/.test(reloaded) || await page.locator('div.grid.gap-1\\.5 > button').count() > 0,
-    'the save reopened on a real screen');
+  say(await onRealScreen(page), 'the save reopened on a real screen');
 
   console.log('4) A suspended season gets the muted card');
   await page.evaluate(() => {
@@ -83,12 +119,14 @@ const browser = await chromium.launch();
   });
   await page.reload({ waitUntil: 'networkidle' });
   await page.waitForTimeout(1200);
+  /* A rivalry card from the second season is on the save, so it is back. */
+  if (await passRivalry(page)) console.log('  (the second season\'s rivalry card was back after the reload; clicked through it)');
   await page.locator('button:has-text("Play the")').first().click();
   await page.waitForTimeout(900);
   const banned = page.locator('[data-season-reveal]');
   say(await banned.count() === 1, 'the banned year still gets its card');
   const bText = await banned.innerText();
-  say(/suspended list/i.test(bText), 'the muted card says what the year was');
+  say(/suspended list/i.test(bText), 'the muted card says what the year was', true);
   say(errors.length === 0, `no page errors on the NFL walk (${errors.length ? errors[0] : 'clean'})`);
   await page.close();
 }
@@ -119,8 +157,6 @@ const browser = await chromium.launch();
 }
 
 await browser.close();
-if (failures > 0) {
-  console.error(`\n${failures} SEASON REVEAL WALK CHECK${failures === 1 ? '' : 'S'} FAILED`);
-  process.exit(1);
-}
+const code = verdict('playSeasonReveal', CONTROL ? proof : null, { minGuarded: 1 });
+if (code || CONTROL) process.exit(code);
 console.log('\nALL SEASON REVEAL WALK CHECKS PASSED');
