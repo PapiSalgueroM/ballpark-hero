@@ -56,6 +56,11 @@
  * No budget was raised. The five routes that were red spent the win getting
  * back under; every other route had its budget lowered by 14K, so each keeps
  * exactly the headroom it had before and the win cannot be given back.
+ * Release F (2026-09-29) raised /club-manager from 620 to 622: Round 670
+ * added extra time to the match engine (the thirty minute stretch, the
+ * deflator and the tie context), measured at 621K on the release build, and
+ * that is the whole of the raise. The seoMeta split below would pay it back
+ * several times over and is filed as its own round.
  * /club-manager and /minefield sit on their ceilings (0.1K and 0.2K spare),
  * as /minefield already did. The next cut on the table is seoMeta: every
  * game page downloads all 127 entries to read one, 9.1K gzipped, which a
@@ -83,7 +88,7 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
    the other five were over and spent it getting back under. */
 const BUDGETS = [
   ['/', 226],
-  ['/club-manager', 620],
+  ['/club-manager', 622],
   ['/soccer-career', 736],
   ['/stadium-tycoon', 290],
   /* Round 216: the new idle game. Measured 243K on the day it shipped,
