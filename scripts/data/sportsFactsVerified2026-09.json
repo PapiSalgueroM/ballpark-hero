@@ -1,6 +1,6 @@
 {
- "about": "Round 660. Every fact the seven hand typed sports files show a player, checked on 2026-09-19 against two independent sources, one of them official wherever the official source would answer. scripts/simSportsFacts.mjs holds the shipped files to this record and fails if either side moves. Wikipedia is never a source here. A fact that carries \"noOfficial\" stands on two independent sources because the official one was unreachable, silent or wrong, and says which.",
- "checked": "2026-09-19",
+ "about": "Round 660. Every fact the seven hand typed sports files show a player, checked between 2026-09-19 and 2026-09-28 (each node carries its own date) against two independent sources, one of them official wherever the official source would answer. scripts/simSportsFacts.mjs holds the shipped files to this record and fails if either side moves. Wikipedia is never a source here. A fact that carries \"noOfficial\" stands on two independent sources because the official one was unreachable, silent or wrong, and says which.",
+ "checked": "2026-09-28",
  "officialHosts": {
   "ufc": [
    "ufc.com",
@@ -24,7 +24,8 @@
    "teamusa.com",
    "olympic.ca",
    "teamgb.com",
-   "nbcolympics.com"
+   "nbcolympics.com",
+   "itftennis.com"
   ],
   "golf": [
    "masters.com",
@@ -11939,10 +11940,12 @@
     {
      "text": "Raced in various liveries including blue, white, and red over the years",
      "src": [
+      "https://www.formula1.com/en/latest/article/alfa-romeo-reveal-2019-livery-in-barcelona.7a5rOZkmrT3k20lrNBCHYn",
       "https://www.formula1.com/en/latest/article/saubers-best-moments-and-most-memorable-liveries-in-f1.6OIgJH4jiY29sJIHNFrG1W",
       "https://f1colours.sebpatrick.co.uk/teams/sauber/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "note": "formula1.com's Sauber livery feature gives the white-and-blue Red Bull years and the white BMW car, and its 2019 Alfa Romeo launch report the 'red and white colours that Sauber, as the team was formerly known, ran last year'; F1 Colours gives the blue, white and later colours."
     },
     {
      "text": "Gave Kimi Räikkönen his F1 debut in 2001 despite the Finn having minimal single-seater experience",
@@ -12013,11 +12016,13 @@
     {
      "text": "Raced in British Racing Green in the 1950s",
      "src": [
+      "https://www.goodwood.com/grr/race/historic/2017/7/on-this-day-in-1957/",
       "https://www.formula1.com/en/latest/article/8-of-the-coolest-green-f1-cars-of-all-time.30L4X21K5c5JbWcyUrau4B",
       "https://automedia.revsinstitute.org/the-valiant-vanwalls",
       "https://collectorscarworld.com/vanwall-is-back/"
      ],
-     "on": "2026-09-28"
+     "on": "2026-09-28",
+     "note": "formula1.com lists the Vanwall among its coolest green F1 cars; Goodwood calls the 1957 car 'Tony Vandervell's British Racing Green machine'; the Revs Institute calls it a dark blue-green livery."
     },
     {
      "text": "Stirling Moss and Tony Brooks drove the team to glory in the inaugural constructors' title fight",
@@ -12322,11 +12327,13 @@
     {
      "text": "Raced in white with a red circle inspired by the Japanese flag",
      "src": [
+      "https://www.formula1.com/en/latest/article/when-f1-drivers-step-back-in-time-modern-stars-in-legendary-machinery.3We31q6L76JI1zEofXWSF3",
+      "https://www.formula1.com/en/latest/article/must-see-verstappen-drives-hondas-1965-f1-car.61VA5kOXP522zdu9DV48sm",
       "https://www.ultimatecarpage.com/car/1308/Honda-RA272.html",
       "https://thegentlemanracer.com/2025/10/honda-ra272/"
      ],
      "on": "2026-09-28",
-     "noOfficial": "The global.honda RA272 machine page (https://global.honda/en/F1/machine/1965_HondaRA272/) renders no text about colours, and no formula1.com or fia.com page opened describes the Honda livery."
+     "note": "formula1.com: Ginther won the 1965 Mexican Grand Prix in 'the white-and-red machine, complete with its distinctive Japanese flag on the nose', and the RA272 was 'tiny, white'. The Round 660 skeptic found these after the first pass said no official page described the livery."
     },
     {
      "text": "Their withdrawal after 2008 led directly to the formation of Brawn GP, who won the 2009 title with Honda's car",
@@ -12404,12 +12411,13 @@
     {
      "text": "Raced in white and red livery",
      "src": [
+      "https://www.formula1.com/en/latest/article/9-times-superhero-movies-made-it-onto-the-f1-grid.6qW2FZZxjZo7HUgHe34TxI",
       "https://f1colours.sebpatrick.co.uk/teams/toyota/",
       "https://www.grandprix.com/news/panasonic-toyota-f1-team-unveils-race-car-for-2002.html",
       "https://media.toyota.co.uk/panasonic-toyota-racing-unveils-2002-contender/"
      ],
      "on": "2026-09-28",
-     "noOfficial": "No formula1.com or fia.com page opened describes the Toyota livery; formula1.com has no page for the defunct team."
+     "note": "formula1.com: Toyota's 2008 Batman branding 'was seen on the red and white livery'; grandprix.com and Toyota's own 2002 launch release describe the same colours. The Round 660 skeptic found the formula1.com page after the first pass said no official page described the livery."
     },
     {
      "text": "Despite being one of the most well-funded teams in history, they never won a single Grand Prix",
@@ -12903,11 +12911,13 @@
    "era": {
     "v": "1990s",
     "src": [
+     "https://www.formula1.com/en/results/1992/drivers",
      "https://www.formula1.com/en/results/1991/drivers",
      "https://www.formula1.com/en/results/1987/drivers",
      "https://www.motorsportmagazine.com/database/drivers/nigel-mansell/"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "note": "The pool's rule: team is the constructor the driver is most associated with, under the name it raced as for most of his seasons there; era is the decade of his title or titles with that team, and with no title there, the decade holding most of his seasons with it (an even split can read either way). Mansell won his title with Williams in 1992 (formula1.com 1992 standings: 1st, Williams Renault; Motor Sport), so the card is the 1990s, although four of his seven Williams seasons (1985 to 1988) came in the 1980s."
    },
    "nationality": {
     "v": "United Kingdom",
@@ -13754,14 +13764,16 @@
     "on": "2026-09-28"
    },
    "era": {
-    "v": "2010s",
+    "v": "2020s",
     "src": [
-     "https://www.formula1.com/en/results/2018/drivers",
      "https://www.formula1.com/en/results/2017/drivers",
+     "https://www.formula1.com/en/results/2020/drivers",
+     "https://www.formula1.com/en/results/2022/drivers",
      "https://www.formula1.com/en/results/2024/drivers",
      "https://www.racingnews365.com/drivers/kevin-magnussen"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "note": "The pool's rule: team is the constructor the driver is most associated with, under the name it raced as for most of his seasons there; era is the decade of his title or titles with that team, and with no title there, the decade holding most of his seasons with it (an even split can read either way). No title, so it is his seasons: Haas in 2017, 2018 and 2019 and in 2020, 2022, 2023 and 2024 (formula1.com standings; racingnews365: raced to 2020, returned in 2022, Haas to the end of 2024), four of seven in the 2020s. Round 660 had counted 2020 as the 2010s."
    },
    "nationality": {
     "v": "Denmark",
@@ -14093,16 +14105,17 @@
   },
   "Yuki Tsunoda": {
    "team": {
-    "v": "Racing Bulls",
+    "v": "AlphaTauri",
     "src": [
      "https://www.formula1.com/en/results/2021/drivers",
+     "https://www.formula1.com/en/results/2022/drivers",
      "https://www.formula1.com/en/results/2023/drivers",
      "https://www.formula1.com/en/results/2024/drivers",
-     "https://www.formula1.com/en/results/2025/drivers",
      "https://www.formula1.com/en/results/2026/drivers",
      "https://www.racingnews365.com/drivers/yuki-tsunoda"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "note": "The pool's rule: team is the constructor the driver is most associated with, under the name it raced as for most of his seasons there; era is the decade of his title or titles with that team, and with no title there, the decade holding most of his seasons with it (an even split can read either way). His team is the Faenza constructor: AlphaTauri in 2021, 2022 and 2023, RB in 2024 (formula1.com standings), then two races of 2025 and three stand-in races of 2026 as Racing Bulls, against one part season at Red Bull Racing. AlphaTauri is the name for most of those seasons (racingnews365: debuted in 2021 for AlphaTauri)."
    },
    "era": {
     "v": "2020s",
@@ -14684,79 +14697,87 @@
    "sport": {
     "v": "Tennis: Men's Singles",
     "src": [
+     "https://www.olympics.com/en/athletes/novak-djokovic",
      "https://www.olympedia.org/athletes/117575",
      "https://www.atptour.com/en/players/novak-djokovic/d643/bio"
     ],
     "on": "2026-09-28",
-    "noOfficial": "No listed official host covers him: olympics.com (the only one for a Serbian tennis player) timed out on every request and the NBC Olympics tennis history page is gone (404); ITF and ATP are not on the official list, so this stands on Olympedia plus the player's own site, ATP and ESPN"
+    "note": "olympics.com: Tennis, and the Paris 2024 final he won against Carlos Alcaraz was the singles final."
    },
    "country": {
     "v": "🇷🇸",
     "src": [
+     "https://www.olympics.com/en/athletes/novak-djokovic",
      "https://www.olympedia.org/athletes/117575",
      "https://www.espn.com/tennis/player/_/id/296/novak-djokovic"
     ],
     "on": "2026-09-28",
-    "noOfficial": "No listed official host covers him: olympics.com (the only one for a Serbian tennis player) timed out on every request and the NBC Olympics tennis history page is gone (404); ITF and ATP are not on the official list, so this stands on Olympedia plus the player's own site, ATP and ESPN"
+    "note": "olympics.com: Serbia."
    },
    "gamesYear": {
     "v": 2024,
     "src": [
+     "https://www.olympics.com/en/athletes/novak-djokovic",
      "https://www.olympedia.org/athletes/117575",
      "https://novakdjokovic.com/en/novak-djokovic/",
      "https://www.atptour.com/en/players/novak-djokovic/d643/bio"
     ],
     "on": "2026-09-28",
-    "noOfficial": "No listed official host covers him: olympics.com (the only one for a Serbian tennis player) timed out on every request and the NBC Olympics tennis history page is gone (404); ITF and ATP are not on the official list, so this stands on Olympedia plus the player's own site, ATP and ESPN"
+    "note": "olympics.com: at Paris 2024 he won the Olympic title against Carlos Alcaraz."
    },
    "hostCity": {
     "v": "Paris",
     "src": [
+     "https://www.olympics.com/en/athletes/novak-djokovic",
      "https://www.olympedia.org/athletes/117575",
      "https://novakdjokovic.com/en/novak-djokovic/",
      "https://www.atptour.com/en/players/novak-djokovic/d643/bio"
     ],
     "on": "2026-09-28",
-    "noOfficial": "No listed official host covers him: olympics.com (the only one for a Serbian tennis player) timed out on every request and the NBC Olympics tennis history page is gone (404); ITF and ATP are not on the official list, so this stands on Olympedia plus the player's own site, ATP and ESPN"
+    "note": "olympics.com: Paris 2024, the final at Roland Garros."
    },
    "achievement": {
     "v": "Won his first-ever gold medal at age 37, completing the career Golden Slam",
     "src": [
+     "https://www.olympics.com/en/athletes/novak-djokovic",
      "https://www.olympedia.org/athletes/117575",
      "https://novakdjokovic.com/en/novak-djokovic/",
      "https://www.atptour.com/en/players/novak-djokovic/d643/bio"
     ],
     "on": "2026-09-28",
-    "noOfficial": "No listed official host covers him: olympics.com (the only one for a Serbian tennis player) timed out on every request and the NBC Olympics tennis history page is gone (404); ITF and ATP are not on the official list, so this stands on Olympedia plus the player's own site, ATP and ESPN"
+    "note": "olympics.com: until 2024 Olympic gold eluded him, and winning it at Paris 2024 put him among the players with the Golden Slam. His age, 37, is from his birth date on Olympedia (22 May 1987) and his own site and the ATP bio."
    },
    "careerContext": {
     "v": "24-time Grand Slam champion, the most in men's tennis history",
     "src": [
+     "https://www.olympics.com/en/athletes/novak-djokovic",
      "https://www.atptour.com/en/players/novak-djokovic/d643/bio",
      "https://www.espn.com/tennis/story/_/id/49779598/novak-djokovic-loses-5-set-marathon-mariano-navone-us-open-first-round",
      "https://novakdjokovic.com/en/novak-djokovic/"
     ],
     "on": "2026-09-28",
-    "noOfficial": "Grand Slam titles are not an Olympic fact and no listed Olympic host states them (olympics.com timed out on every request). Count is through the 2026 US Open: the ATP bio (updated 26 Aug 2026) and ESPN (31 Aug 2026, first round loss to Navone) both give the record 24, and that US Open was the last major of 2026"
+    "note": "olympics.com: 'a record 24 Grand Slam singles titles'. The ATP bio (26 Aug 2026) and ESPN (31 Aug 2026, his US Open exit) give 24 through the 2026 US Open, the last major of 2026."
    },
    "medalSummary": {
     "v": "1 Gold, 1 Bronze",
     "src": [
+     "https://www.olympics.com/en/athletes/novak-djokovic",
      "https://www.olympedia.org/athletes/117575",
      "https://novakdjokovic.com/en/novak-djokovic/"
     ],
     "on": "2026-09-28",
-    "noOfficial": "No listed official host covers him: olympics.com (the only one for a Serbian tennis player) timed out on every request and the NBC Olympics tennis history page is gone (404); ITF and ATP are not on the official list, so this stands on Olympedia plus the player's own site, ATP and ESPN"
+    "note": "olympics.com: Olympic medals 1 gold, 1 bronze (bronze at Beijing 2008)."
    },
    "name": {
     "v": "Novak Djokovic",
     "src": [
+     "https://www.olympics.com/en/athletes/novak-djokovic",
      "https://www.olympedia.org/athletes/117575",
      "https://novakdjokovic.com/en/novak-djokovic/",
      "https://www.espn.com/tennis/player/_/id/296/novak-djokovic"
     ],
     "on": "2026-09-28",
-    "noOfficial": "No listed official host covers him: olympics.com (the only one for a Serbian tennis player) timed out on every request and the NBC Olympics tennis history page is gone (404); ITF and ATP are not on the official list, so this stands on Olympedia plus the player's own site, ATP and ESPN"
+    "note": "olympics.com: Novak Djokovic."
    }
   },
   "felix-2012": {
@@ -16171,15 +16192,16 @@
     "on": "2026-09-28"
    },
    "achievement": {
-    "v": "Won two golds, in the super-G and giant slalom, in front of home fans at Milan-Cortina, becoming Italy's most decorated female alpine skier",
+    "v": "Won two golds, in the super-G and giant slalom, in front of home fans at Milan-Cortina, taking her Olympic medal count to five",
     "src": [
      "https://www.olympics.com/en/news/winter-olympics-2026-federica-brignone-second-gold-games-womens-giant-slalom-results",
      "https://www.nbcolympics.com/news/federica-brignone-pounces-early-lead-womens-giant-slalom",
      "https://www.fis-ski.com/alpine-skiing/news/2025-26/brignone-gets-second-olympic-gold-in-incredible-giant-slalom",
-     "https://www.olympedia.org/athletes/118361",
-     "https://www.olympedia.org/countries/ITA/sports/ALP"
+     "https://www.olympics.com/en/athletes/federica-brignone",
+     "https://www.olympedia.org/athletes/118361"
     ],
-    "on": "2026-09-28"
+    "on": "2026-09-28",
+    "note": "olympics.com and FIS: the giant slalom was her second gold of these Games after the super-G. NBC Olympics: 'She now owns five total Olympic medals'; olympics.com's athlete page and Olympedia list them (2 gold, 1 silver, 2 bronze). The old 'most decorated female alpine skier' wording is true by that count but no official or major page said it, so the line now says the count itself."
    },
    "careerContext": {
     "v": "The first Italian woman to win the overall World Cup title (2020); thrived on home snow",

@@ -4,8 +4,9 @@ import { UfcFighter, FightResult, WeightClass } from '@/types/ufcChain';
    against ufc.com, Sherdog and ESPN, and the UFC Hall of Fame list. Stipe
    Miocic, Cain Velasquez and Henry Cejudo were flagged as Hall of Famers and
    are not; a fight wing induction (Jon Jones, Israel Adesanya) honours the
-   fight, not the fighter, so it does not count here either.
-    left the chain because the sources do not agree on their record.
+   fight, not the fighter, so it does not count here either. Junior dos Santos
+   and Yoel Romero left the chain because the sources do not agree on their
+   record.
 
    weightClass here is NOT the same field as weightClass in
    src/data/ufcFighters.ts, and the two are allowed to differ for one reason.

@@ -135,7 +135,7 @@ export const olympicAthletes: OlympicAthlete[] = [
     season: 'summer',
   },
   // === MEDIUM (11-20) ===
-    {
+  {
     id: 'shaun-white-2018',
     sport: 'Snowboarding: Halfpipe',
     country: '🇺🇸',
@@ -256,7 +256,7 @@ export const olympicAthletes: OlympicAthlete[] = [
     name: 'Marit Bjørgen',
     season: 'winter',
   },
-    {
+  {
     id: 'deng-yaping-1992',
     sport: 'Table Tennis',
     country: '🇨🇳',
@@ -353,7 +353,7 @@ export const olympicAthletes: OlympicAthlete[] = [
     season: 'summer',
   },
   // === MILAN-CORTINA 2026 WINTER OLYMPICS ===
-    {
+  {
     id: 'shiffrin-2026',
     sport: 'Alpine Skiing',
     country: '🇺🇸',
@@ -371,13 +371,13 @@ export const olympicAthletes: OlympicAthlete[] = [
     country: '🇮🇹',
     gamesYear: 2026,
     hostCity: 'Milan-Cortina',
-    achievement: 'Won two golds, in the super-G and giant slalom, in front of home fans at Milan-Cortina, becoming Italy\'s most decorated female alpine skier',
+    achievement: 'Won two golds, in the super-G and giant slalom, in front of home fans at Milan-Cortina, taking her Olympic medal count to five',
     careerContext: 'The first Italian woman to win the overall World Cup title (2020); thrived on home snow',
     medalSummary: '2 Gold, 1 Silver, 2 Bronze (career)',
     name: 'Federica Brignone',
     season: 'winter',
   },
-      {
+  {
     id: 'carl-lewis-1984',
     sport: 'Athletics: Sprints / Long Jump',
     country: '🇺🇸',
