@@ -39,12 +39,22 @@
         column is hidden below 768.
 
    Negative controls (SQUAD_ROWS_CONTROL=<name>), each refusing to run if its
-   rewrite matched nothing, each meant to turn exactly its own section red:
+   rewrite matched nothing. The section a control names must go red, and the
+   run exits non zero either way (1 when it did, 3 when the named section
+   stayed green). Three of them also turn a second section red, because the
+   defect they plant is one the later section reads too, and that is the
+   later section doing its job rather than the control leaking:
      truth      the band collapses onto the true ceiling          section 1b
+                (also 1d and 1e: a collapsed band leaves no unclamped
+                bands to centre and no width to narrow)
      centred    the band is centred on the truth                  section 1d
      flatscout  the width ignores the lead scout                  section 1e
      sorttruth  the ceiling sort reads the hidden truth            section 2
+                (also 4: that read of .potential sits outside scoutBand,
+                which is exactly what section 4 hunts)
      nowage     the row loses its wage cell                       section 3
+                (also 6: the wage cell is one of the desktop only
+                columns section 6 expects hidden below 768)
      rawpot     the ceiling cell's hover title prints the truth   section 4
      deaf       the interest tile ignores the bids on the table   section 5
      allopen    every row renders opened                          section 6
@@ -130,7 +140,7 @@ if (CONTROL) {
     console.error(`control cannot run: SQUAD_ROWS_CONTROL=${CONTROL} changed nothing`);
     process.exit(1);
   }
-  console.log(`NEGATIVE CONTROL ON: ${CONTROL}; the section it names must go red and nothing else`);
+  console.log(`NEGATIVE CONTROL ON: ${CONTROL}; the section it names must go red`);
 }
 
 /* One CommonJS bundle: the engine, the staff module and the real screen (the
@@ -509,12 +519,13 @@ console.log('');
 if (CONTROL) {
   const want = { truth: '1b', centred: '1d', flatscout: '1e', sorttruth: '2', nowage: '3', rawpot: '4', deaf: '5', allopen: '6' }[CONTROL];
   const red = [...failed];
-  console.log(`CONTROL ${CONTROL}: red sections ${red.join(', ') || '(none)'}; expected exactly ${want}`);
-  if (red.length === 1 && red[0] === want) {
-    console.log(`simSquadRows control ${CONTROL}: RED ON ITS OWN CHECK, as it should be`);
+  const others = red.filter(s => s !== want);
+  console.log(`CONTROL ${CONTROL}: red sections ${red.join(', ') || '(none)'}; section ${want} must be among them`);
+  if (red.includes(want)) {
+    console.log(`simSquadRows control ${CONTROL}: RED ON ITS OWN CHECK, as it should be${others.length ? ` (section${others.length > 1 ? 's' : ''} ${others.join(', ')} also read the planted defect, see the header)` : ''}`);
     process.exit(1);
   }
-  console.log(`simSquadRows control ${CONTROL}: DID NOT ISOLATE (the check it names ${red.includes(want) ? 'fired, but so did others' : 'stayed green'})`);
+  console.log(`simSquadRows control ${CONTROL}: DID NOT FIRE (the check it names stayed green${others.length ? `, and ${others.join(', ')} went red instead` : ''})`);
   process.exit(3);
 }
 console.log(failures ? `simSquadRows: ${failures} FAILURE(S)` : 'simSquadRows: all green');
