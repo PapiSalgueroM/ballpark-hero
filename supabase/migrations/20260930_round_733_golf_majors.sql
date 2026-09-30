@@ -1,8 +1,11 @@
 -- Round 733 (2026-09-30): public.golf_majors verified row by row.
 --
 -- UNAPPLIED. Written for review; the lead applies it. Nothing here was run on the
--- live database: the table was only read, with SELECT. The file was rehearsed on
--- a local copy of the rows it guards (PGlite), see the round notes.
+-- live database: the table was only read, with SELECT (the Supabase MCP on the check
+-- date, and again through the public REST endpoint during the fix: 526 rows, the
+-- read hash reproduced). scripts/simGolfMajors.mjs replays every statement below on
+-- the record's rows with the predicates as written here and requires the result to
+-- be the record's end state, with the hash the last block expects, on every run.
 --
 -- WHAT IT DOES. The record is scripts/data/golfMajorsVerified2026-09.json: every
 -- one of the 526 rows read, with its verified value, two source URLs and the
@@ -41,7 +44,12 @@
 --        nationality: https://www.lpga.com/tournaments/aigwomensopen/past-winners and https://www.espn.com/golf/story/_/id/49513981/shiho-kuwaki-wins-women-british-open-second-playoff-hole
 --      score and venue follow the column use of that championship's existing rows
 --      (the course in score, the town in venue), copied from the last row the table
---      holds at the same course. No game reads either column.
+--      holds at the same course: id 328 (2018, Shinnecock Hills), id 493 (2017,
+--      Royal Birkdale) and id 519 (2018, Royal Lytham). The record's filled entries
+--      carry the copied values under copiedFrom. 'Southport , England' keeps its
+--      stray space on purpose: all ten Open rows at Royal Birkdale store it that
+--      way, and the fence fails if the INSERT and the record disagree. No game
+--      reads either column.
 --   498 rows verified and left as they are, the 2026 Masters (Rory McIlroy) and the
 --      2026 PGA Championship (Aaron Rai) among them.
 --

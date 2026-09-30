@@ -8,7 +8,8 @@
   "rows": 526,
   "placeholders": 25,
   "hash": "4e5157a877017fa7283bc7389f619cf1",
-  "sequenceLastValue": 526
+  "sequenceLastValue": 526,
+  "confirmedThrough": "GET /rest/v1/golf_majors?select=id,year,tournament,player_name,nationality,score,venue,tour,rank&order=id.asc with the public anon key from src/integrations/supabase/client.ts, the read simAdminAccess makes, on 2026-09-30 during the round 733 fix: 526 rows, every stored value equal to this record, and the read hash reproduced"
  },
  "end": {
   "rows": 504,
@@ -8592,7 +8593,17 @@
     "https://www.pgatour.com/article/news/daily-wrapup/2026/06/21/round-4-us-open-shinnecock-hills-2026-major-championship-scores-leaderboard-recap-wyndham-clark-scottie-scheffler",
     "https://www.espn.com/golf/player/_/id/11119/wyndham-clark"
    ],
-   "why": "missing: the table stopped at 2025 for this championship; the 2026 champion is verified on both sources. score and venue follow the column use of this championship's existing rows (course in score, town in venue), copied from the last row the table holds at the same course"
+   "why": "missing: the table stopped at 2025 for this championship; the 2026 champion is verified on both sources. score and venue follow the column use of this championship's existing rows (course in score, town in venue), copied from the last row the table holds at the same course",
+   "copiedFrom": {
+    "id": 328,
+    "year": 2018,
+    "player_name": "Brooks Koepka",
+    "score": "Shinnecock Hills",
+    "venue": "Shinnecock Hills, New York",
+    "readOn": "2026-09-30",
+    "through": "GET /rest/v1/golf_majors?select=id,year,tournament,player_name,nationality,score,venue,tour,rank&order=id.asc with the public anon key from src/integrations/supabase/client.ts, the read simAdminAccess makes",
+    "note": "the last of 5 U.S. Open (golf) row(s) the table holds at Shinnecock Hills; every one of them stores venue \"Shinnecock Hills, New York\""
+   }
   },
   {
    "year": 2026,
@@ -8619,7 +8630,17 @@
     "https://www.theopen.com/latest/ryan-fox-wins-the-open-day-four-report",
     "https://www.espn.com/golf/story/_/id/49401078/ryan-fox-birdies-72nd-hole-capture-open-championship"
    ],
-   "why": "missing: the table stopped at 2025 for this championship; the 2026 champion is verified on both sources. score and venue follow the column use of this championship's existing rows (course in score, town in venue), copied from the last row the table holds at the same course"
+   "why": "missing: the table stopped at 2025 for this championship; the 2026 champion is verified on both sources. score and venue follow the column use of this championship's existing rows (course in score, town in venue), copied from the last row the table holds at the same course",
+   "copiedFrom": {
+    "id": 493,
+    "year": 2017,
+    "player_name": "Jordan Spieth",
+    "score": "Royal Birkdale",
+    "venue": "Southport , England",
+    "readOn": "2026-09-30",
+    "through": "GET /rest/v1/golf_majors?select=id,year,tournament,player_name,nationality,score,venue,tour,rank&order=id.asc with the public anon key from src/integrations/supabase/client.ts, the read simAdminAccess makes",
+    "note": "the last of 10 The Open Championship row(s) the table holds at Royal Birkdale; every one of them stores venue \"Southport , England\", stray space included"
+   }
   },
   {
    "year": 2026,
@@ -8646,7 +8667,17 @@
     "https://www.lpga.com/tournaments/aigwomensopen/past-winners",
     "https://www.espn.com/golf/story/_/id/49513981/shiho-kuwaki-wins-women-british-open-second-playoff-hole"
    ],
-   "why": "missing: the table stopped at 2025 for this championship; the 2026 champion is verified on both sources. score and venue follow the column use of this championship's existing rows (course in score, town in venue), copied from the last row the table holds at the same course"
+   "why": "missing: the table stopped at 2025 for this championship; the 2026 champion is verified on both sources. score and venue follow the column use of this championship's existing rows (course in score, town in venue), copied from the last row the table holds at the same course",
+   "copiedFrom": {
+    "id": 519,
+    "year": 2018,
+    "player_name": "Georgia Hall",
+    "score": "Royal Lytham & St Annes G.C.",
+    "venue": "Lytham St Annes",
+    "readOn": "2026-09-30",
+    "through": "GET /rest/v1/golf_majors?select=id,year,tournament,player_name,nationality,score,venue,tour,rank&order=id.asc with the public anon key from src/integrations/supabase/client.ts, the read simAdminAccess makes",
+    "note": "the last of 4 Women's British Open row(s) the table holds at Royal Lytham & St Annes G.C.; every one of them stores venue \"Lytham St Annes\""
+   }
   }
  ]
 }
