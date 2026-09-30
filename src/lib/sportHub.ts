@@ -43,6 +43,12 @@ export interface SportHub {
   route: string;
   emoji: string;
   h1: string;
+  /** Round 654: the short name the footer and the other hubs link this one
+   *  by ("NFL", "Soccer"). The h1 carries the league and the sport now, which
+   *  is too long for a footer row, and the footer's word for the NFL hub has
+   *  to be NFL: "Football" means something else to most of the readers
+   *  outside the US. */
+  navLabel: string;
   /** Round 639: the word a searcher uses for this section ("NFL", "soccer"),
    *  read into the page's section headings so each one says what the section
    *  is about instead of "Where to start" on six pages in a row. */
@@ -92,6 +98,7 @@ export const SPORT_HUBS: SportHub[] = [
     route: '/soccer',
     emoji: '⚽',
     h1: 'Soccer Games',
+    navLabel: 'Soccer',
     keyword: 'soccer',
     sport: 'Soccer',
     titles: ['Soccer'],
@@ -130,7 +137,7 @@ export const SPORT_HUBS: SportHub[] = [
       blurb:
         'Grids, guessers, transfer trivia and squad builders. Short enough for a queue, and the daily ones give everybody the same board so you can argue about it afterwards.',
     },
-    aboutTitle: 'Free Soccer Games on DoUKnowBall',
+    aboutTitle: 'Free Soccer and Football Games on DoUKnowBall',
     about:
       'The soccer section gathers every football game on the site into one page: 3x3 club grids, progressive-clue player guessers, connection puzzles, transfer market games built on real market values, squad builders, and the two long sims that most people come back for. Everything runs in a browser, free, with no account and no download. Real players and real clubs throughout, which is why a guess that feels right usually is.',
     howToPlay: [
@@ -142,7 +149,8 @@ export const SPORT_HUBS: SportHub[] = [
   {
     route: '/pro-basketball',
     emoji: '🏀',
-    h1: 'Basketball Games',
+    h1: 'NBA Basketball Games',
+    navLabel: 'NBA',
     keyword: 'NBA',
     sport: 'Basketball',
     titles: ['Pro Basketball'],
@@ -195,7 +203,8 @@ export const SPORT_HUBS: SportHub[] = [
   {
     route: '/hockey',
     emoji: '🏒',
-    h1: 'Hockey Games',
+    h1: 'NHL Hockey Games',
+    navLabel: 'NHL',
     keyword: 'NHL',
     sport: 'Hockey',
     titles: ['Hockey'],
@@ -247,9 +256,10 @@ export const SPORT_HUBS: SportHub[] = [
   {
     route: '/pro-football',
     emoji: '🏈',
-    h1: 'Football Games',
+    h1: 'NFL Football Games',
+    navLabel: 'NFL',
     keyword: 'NFL',
-    sport: 'Football',
+    sport: 'NFL football',
     titles: ['Pro Football'],
     seoTitle: 'Free Football Games: NFL Trivia, Grids and GM Sims | DoUKnowBall',
     seoDescription:
@@ -286,7 +296,7 @@ export const SPORT_HUBS: SportHub[] = [
       blurb:
         'The 3x3 grid scores you on how obscure your answers are, so the safe pick is rarely the best one. Most of these reset daily.',
     },
-    aboutTitle: 'Free Football Games on DoUKnowBall',
+    aboutTitle: 'Free NFL Football Games on DoUKnowBall',
     about:
       'The football section gathers every pro game on the site into one page: the 3x3 grid with rarity scoring, progressive-clue career paths, connection puzzles, touchdown head to heads, naming the missing starter from a famous Super Bowl offense, a map game where winners annex whole territories, and two long sims. Free in a browser, no account, no download.',
     howToPlay: [
@@ -298,7 +308,8 @@ export const SPORT_HUBS: SportHub[] = [
   {
     route: '/baseball',
     emoji: '⚾',
-    h1: 'Baseball Games',
+    h1: 'MLB Baseball Games',
+    navLabel: 'MLB',
     keyword: 'MLB',
     sport: 'Baseball',
     titles: ['Baseball'],
@@ -350,7 +361,8 @@ export const SPORT_HUBS: SportHub[] = [
   {
     route: '/college',
     emoji: '🎓',
-    h1: 'College Games Hub',
+    h1: 'College Football and Basketball Games',
+    navLabel: 'College',
     keyword: 'college sports',
     sport: 'College sports',
     titles: ['College Sports'],
