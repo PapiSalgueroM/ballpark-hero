@@ -18,8 +18,8 @@ interface ResultScreenStat {
 interface ResultScreenProps {
   /** True for a win-styled headline (text-correct), false for a loss-styled
    *  one (text-destructive). Omit for a neutral, streak-style outcome (no
-   *  fixed win/lose binary, e.g. HigherLowerTransfers) which renders the
-   *  headline in text-primary instead. */
+   *  fixed win/lose binary, e.g. HigherLowerTransfers) which the result
+   *  moment shows as a good try, headline in the sport's ink. */
   won?: boolean;
   /** Round 710: which of the result moment's three states this is. Omit it
    *  and `won` decides: true is a win, false a loss, and a neutral streak

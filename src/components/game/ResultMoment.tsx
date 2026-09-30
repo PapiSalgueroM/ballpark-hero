@@ -35,7 +35,7 @@ export const RESULT_STATE_COPY: Record<ResultOutcome, string> = {
 
 const HEADLINE_TONE: Record<ResultOutcome, string> = {
   win: 'text-correct',
-  close: 'text-primary',
+  close: 'text-tile',
   loss: 'text-destructive',
 };
 
@@ -92,6 +92,7 @@ export function ResultMoment({ outcome, gamePath, score, scoreLabel, headline, b
           className={cn(
             'rm-score relative grid h-20 min-w-[5.5rem] max-w-full place-items-center rounded-full border-[3px] bg-surface-1 px-5',
             outcome === 'loss' ? 'border-tile/50' : 'border-tile',
+            outcome === 'win' && 'shadow-[0_0_28px_hsl(var(--tile)/0.35)]',
           )}
         >
           {hasScore ? (
