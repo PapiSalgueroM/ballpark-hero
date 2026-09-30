@@ -1,0 +1,357 @@
+{
+  "_comment": "Round 673. simPlayDoor's snapshot of the catalog: the output of scripts/data/playDoorCatalog.sql. source 'rehearsal' means node scripts/simEconomyMigrations.mjs --write-fixture captured it in PGlite, on scripts/data/economySchema.sql (production's objects, read only) right after economy step L1 ran there; nothing ran on production. After the lead applies L1 (the header of supabase/migrations/20260928_econ_l1_lock_the_doors.sql, step 6), rerun the query read only through the Supabase MCP, replace catalog with its output, set source to 'production' and captured to that date. From then on simPlayDoor also requires the live door to be shut, and simEconomyMigrations section 9 requires production to equal the rehearsal.",
+  "source": "rehearsal",
+  "captured": "2026-09-29",
+  "query_md5": "faa81af1ad26691fed63c5b774ca6e6e",
+  "catalog": {
+    "column_privileges": {
+      "anon daily_completions": [
+        "SELECT"
+      ],
+      "anon game_completions": [
+        "INSERT",
+        "SELECT"
+      ],
+      "anon game_score_caps": [
+        "SELECT"
+      ],
+      "anon user_best_scores": [
+        "SELECT"
+      ],
+      "anon user_game_scores": [
+        "SELECT"
+      ],
+      "anon user_scores": [
+        "SELECT"
+      ],
+      "authenticated daily_completions": [
+        "SELECT"
+      ],
+      "authenticated game_completions": [
+        "INSERT",
+        "SELECT"
+      ],
+      "authenticated game_score_caps": [
+        "SELECT"
+      ],
+      "authenticated user_best_scores": [
+        "SELECT"
+      ],
+      "authenticated user_game_scores": [
+        "SELECT"
+      ],
+      "authenticated user_scores": [
+        "SELECT"
+      ]
+    },
+    "definers": [
+      {
+        "anon_exec": true,
+        "authenticated_exec": true,
+        "config": [
+          "search_path=\"\""
+        ],
+        "execute_in_body": false,
+        "fn": "admin_exists(text)",
+        "format_in_body": false,
+        "md5": "6098953677c963a40e218d99776c8023",
+        "name": "admin_exists",
+        "owner": "postgres",
+        "public_exec": false
+      },
+      {
+        "anon_exec": false,
+        "authenticated_exec": false,
+        "config": [
+          "search_path=private, pg_temp"
+        ],
+        "execute_in_body": false,
+        "fn": "app_secret(text)",
+        "format_in_body": false,
+        "md5": "9a79b3787c93fcb3f9ed306db3511ece",
+        "name": "app_secret",
+        "owner": "postgres",
+        "public_exec": false
+      },
+      {
+        "anon_exec": false,
+        "authenticated_exec": false,
+        "config": [
+          "search_path=public"
+        ],
+        "execute_in_body": false,
+        "fn": "handle_new_user()",
+        "format_in_body": false,
+        "md5": "966c4daebe578e3a71d762e7f804e096",
+        "name": "handle_new_user",
+        "owner": "postgres",
+        "public_exec": false
+      },
+      {
+        "anon_exec": false,
+        "authenticated_exec": true,
+        "config": [
+          "search_path=public"
+        ],
+        "execute_in_body": false,
+        "fn": "has_role(uuid,app_role)",
+        "format_in_body": false,
+        "md5": "964712856503e0a31d73451d32629426",
+        "name": "has_role",
+        "owner": "postgres",
+        "public_exec": false
+      },
+      {
+        "anon_exec": false,
+        "authenticated_exec": true,
+        "config": [
+          "search_path=\"\""
+        ],
+        "execute_in_body": false,
+        "fn": "record_auth_completion(text,integer,integer)",
+        "format_in_body": false,
+        "md5": "ce8dc329eeae203f38aabe26601edfa8",
+        "name": "record_auth_completion",
+        "owner": "postgres",
+        "public_exec": false
+      }
+    ],
+    "door_signatures": {
+      "claim_daily_badge": 0,
+      "name_is_owned": 0,
+      "record_auth_completion": 1,
+      "record_play": 0
+    },
+    "gc_insert_columns": {
+      "anon": [
+        "game",
+        "player_name",
+        "score"
+      ],
+      "authenticated": [
+        "game",
+        "player_name",
+        "score"
+      ]
+    },
+    "hard_max": {
+      "anon_select": false,
+      "authenticated_select": false,
+      "caps_rows": 151,
+      "md5": "44ff7c47f71c24428c14998da9a83a88",
+      "rls": true,
+      "rows": 151,
+      "uncovered": 0
+    },
+    "ledger": [
+      {
+        "installed": {
+          "gc_column_acl": {
+            "game": "{anon=a/postgres,authenticated=a/postgres}",
+            "player_name": "{anon=a/postgres,authenticated=a/postgres}",
+            "score": "{anon=a/postgres,authenticated=a/postgres}"
+          },
+          "hard_max_md5": "44ff7c47f71c24428c14998da9a83a88",
+          "read_policies_md5": "b5d85512d8f4a17cde4620051971dfd5",
+          "save_acl": "{postgres=X/postgres,authenticated=X/postgres,service_role=X/postgres}",
+          "save_def_md5": "ce8dc329eeae203f38aabe26601edfa8",
+          "save_src_md5": "0f4e31715514d98757f0080f555d995a",
+          "table_acl_md5": {
+            "daily_completions": "40a72ba957a15bc867724e708c521208",
+            "game_completions": "40a72ba957a15bc867724e708c521208",
+            "game_score_caps": "40a72ba957a15bc867724e708c521208",
+            "user_best_scores": "40a72ba957a15bc867724e708c521208",
+            "user_game_scores": "40a72ba957a15bc867724e708c521208",
+            "user_scores": "40a72ba957a15bc867724e708c521208"
+          },
+          "write_policies_md5": "1c87ff7d590073141fe04b7169b40ebc"
+        },
+        "live": true,
+        "seq": 1,
+        "step": "L1"
+      }
+    ],
+    "ledger_guard": {
+      "anon_select": false,
+      "authenticated_select": false,
+      "rls": true
+    },
+    "outside_definers": [
+      {
+        "anon_exec": true,
+        "authenticated_exec": true,
+        "config": null,
+        "fn": "graphql.get_schema_version()",
+        "owner": "supabase_admin",
+        "public_exec": true,
+        "schema": "graphql"
+      },
+      {
+        "anon_exec": true,
+        "authenticated_exec": true,
+        "config": null,
+        "fn": "graphql.increment_schema_version()",
+        "owner": "supabase_admin",
+        "public_exec": true,
+        "schema": "graphql"
+      },
+      {
+        "anon_exec": false,
+        "authenticated_exec": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "fn": "pgbouncer.get_auth(text)",
+        "owner": "supabase_admin",
+        "public_exec": false,
+        "schema": "pgbouncer"
+      },
+      {
+        "anon_exec": false,
+        "authenticated_exec": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "fn": "vault.create_secret(text,text,text,uuid)",
+        "owner": "supabase_admin",
+        "public_exec": false,
+        "schema": "vault"
+      },
+      {
+        "anon_exec": false,
+        "authenticated_exec": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "fn": "vault.update_secret(uuid,text,text,text,uuid)",
+        "owner": "supabase_admin",
+        "public_exec": false,
+        "schema": "vault"
+      }
+    ],
+    "policies": [
+      {
+        "check": null,
+        "cmd": "SELECT",
+        "n": "daily_completions_read",
+        "roles": "{public}",
+        "t": "daily_completions",
+        "using": "true"
+      },
+      {
+        "check": "(((length(game) >= 1) AND (length(game) <= 64)) AND ((length(player_name) >= 1) AND (length(player_name) <= 40)))",
+        "cmd": "INSERT",
+        "n": "Anyone can log a completion",
+        "roles": "{anon,authenticated}",
+        "t": "game_completions",
+        "using": null
+      },
+      {
+        "check": null,
+        "cmd": "SELECT",
+        "n": "Public read completions",
+        "roles": "{public}",
+        "t": "game_completions",
+        "using": "true"
+      },
+      {
+        "check": null,
+        "cmd": "SELECT",
+        "n": "caps are public read",
+        "roles": "{anon,authenticated}",
+        "t": "game_score_caps",
+        "using": "true"
+      },
+      {
+        "check": null,
+        "cmd": "SELECT",
+        "n": "user_best_scores_read",
+        "roles": "{public}",
+        "t": "user_best_scores",
+        "using": "true"
+      },
+      {
+        "check": null,
+        "cmd": "SELECT",
+        "n": "user_game_scores_read",
+        "roles": "{public}",
+        "t": "user_game_scores",
+        "using": "true"
+      },
+      {
+        "check": null,
+        "cmd": "SELECT",
+        "n": "user_scores_read",
+        "roles": "{public}",
+        "t": "user_scores",
+        "using": "true"
+      }
+    ],
+    "rules": [],
+    "save": {
+      "config": [
+        "search_path=\"\""
+      ],
+      "definer": true,
+      "md5": "ce8dc329eeae203f38aabe26601edfa8",
+      "src_md5": "0f4e31715514d98757f0080f555d995a",
+      "tail_md5": "4423bc05629b04814d742748d572468b"
+    },
+    "table_privileges": {
+      "anon daily_completions": [
+        "SELECT"
+      ],
+      "anon game_completions": [
+        "SELECT"
+      ],
+      "anon game_score_caps": [
+        "SELECT"
+      ],
+      "anon user_best_scores": [
+        "SELECT"
+      ],
+      "anon user_game_scores": [
+        "SELECT"
+      ],
+      "anon user_scores": [
+        "SELECT"
+      ],
+      "authenticated daily_completions": [
+        "SELECT"
+      ],
+      "authenticated game_completions": [
+        "SELECT"
+      ],
+      "authenticated game_score_caps": [
+        "SELECT"
+      ],
+      "authenticated user_best_scores": [
+        "SELECT"
+      ],
+      "authenticated user_game_scores": [
+        "SELECT"
+      ],
+      "authenticated user_scores": [
+        "SELECT"
+      ]
+    },
+    "views": [
+      {
+        "anon_write": true,
+        "authenticated_write": true,
+        "kind": "v",
+        "security_invoker": true,
+        "updatable": true,
+        "view": "public.game_denominators"
+      },
+      {
+        "anon_write": true,
+        "authenticated_write": true,
+        "kind": "m",
+        "security_invoker": false,
+        "updatable": false,
+        "view": "public.player_ranks"
+      }
+    ]
+  }
+}

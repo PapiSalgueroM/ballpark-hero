@@ -110,6 +110,21 @@ export function getGuestHandle(): string {
  * callers that need to react to a profile edit should re-read it, it does
  * not subscribe to anything.
  */
+/**
+ * Round 673: the board insert refuses a player_name over 40 characters (the
+ * length bound on game_completions' insert policy, economy step L1), and the
+ * profile form now holds a display name to the same 40. A name saved before
+ * that bound, or written some other way, is cut to its first 40 characters
+ * here rather than having every board row refused. Cut by code point, not
+ * UTF-16 unit, so an emoji is never split into half a character the
+ * database would reject, and so the count matches Postgres length().
+ */
+export const BOARD_NAME_MAX = 40;
+export function boardName(name: string): string {
+  const chars = Array.from(name);
+  return chars.length > BOARD_NAME_MAX ? chars.slice(0, BOARD_NAME_MAX).join('') : name;
+}
+
 export function getCurrentPlayerName(profile?: { display_name?: string | null; username?: string | null } | null): string {
   const fromProfile = profile?.display_name || profile?.username;
   return fromProfile || getCachedDisplayName() || getGuestHandle();
@@ -227,11 +242,11 @@ export function recordActivity(gamePath: string, score?: number, playerName?: st
     if (!game) return;
     const row: { game: string; score?: number; player_name?: string } = { game };
     if (typeof score === 'number' && Number.isFinite(score)) row.score = score;
-    row.player_name = playerName || getCurrentPlayerName();
+    row.player_name = boardName(playerName || getCurrentPlayerName());
     (supabase.from as any)('game_completions')
       .insert(row)
-      .then(({ error }: { error: unknown }) => {
-        if (error) console.debug('[completions] activity insert failed (ignored):', error);
+      .then(({ error }: { error: { message?: string } | null }) => {
+        if (error) console.warn('[completions] the board refused this activity row; it still counts on this device:', error.message ?? error);
         else { try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ } }
       });
     bumpLocalTodayCount(game);
@@ -311,7 +326,7 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
     if (typeof score === 'number' && Number.isFinite(score)) {
       row.score = score;
     }
-    row.player_name = playerName || getCurrentPlayerName();
+    row.player_name = boardName(playerName || getCurrentPlayerName());
 
     // Supabase client typings don't know about game_completions yet (it was
     // added directly via SQL, not through a generated-types migration), so
@@ -319,10 +334,12 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
     // `.from()` overloads.
     (supabase.from as any)('game_completions')
       .insert(row)
-      .then(({ error }: { error: unknown }) => {
+      .then(({ error }: { error: { message?: string } | null }) => {
         if (error) {
-          // Swallow silently, this must never surface to the player.
-          console.debug('[completions] insert failed (ignored):', error);
+          /* Never surfaced to the player, but never silent either (Round 673):
+             a refused board row is logged with the database's reason, and the
+             play still counts in this browser's streak and tally below. */
+          console.warn('[completions] the board refused this row; the play still counts on this device:', error.message ?? error);
         } else {
           /* Round 157: tell the header a play just landed, so games-played,
              points and rank move while you are actually playing instead of
@@ -349,6 +366,11 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
        dollars land. The cap comes from this browser's cached copy of the
        table (src/lib/scoreCaps.ts); when there is none yet the play is held
        and settled by the read kicked off just below. */
+    /* Round 673: this local record (the streak, the lifetime plays and the
+       point tally the profile shows as the larger of it and the server's) is
+       written BEFORE the signed in save is sent and is never taken back, so a
+       save the server refuses (a score above the game's hard maximum, a slug
+       off the allowlist) still counts on this device. */
     recordStreakCompletion(game, new Date(), typeof score === 'number' && Number.isFinite(score) ? score : 0, knownCap(game));
     primeScoreCaps().catch(() => { /* the next play tries again; the held play waits */ });
 
@@ -414,9 +436,12 @@ export function recordCompletion(gamePath: string, score?: number, playerName?: 
  * does all four writes in one transaction. total_points is incremented in
  * place by INSERT ... ON CONFLICT DO UPDATE, which locks the row, so racing
  * saves serialise and every one adds. The daily mark is ON CONFLICT DO
- * NOTHING. It is SECURITY INVOKER, so each table's existing row level
- * security (`auth.uid() = user_id`) still decides, and the player comes from
- * auth.uid() on the server.
+ * NOTHING. The player comes from auth.uid() on the server. Round 569 made it
+ * SECURITY INVOKER under each table's row level security; economy step L1
+ * (Round 673, supabase/migrations/20260928_econ_l1_lock_the_doors.sql) makes
+ * it SECURITY DEFINER with fixed SQL and takes the direct write grants away,
+ * so it is the only way into the four account tables, and it refuses a bad
+ * slug, score or count before writing anything.
  *
  * `userId` is therefore NOT sent to the save, so nothing a client passes can
  * credit another account. It is still used by the best effort profile streak
@@ -438,7 +463,13 @@ export async function saveAuthCompletion(userId: string, gameSlug: string, score
     p_correct: correctAnswers,
   });
   if (error) {
-    console.debug('[completions] signed in save refused (ignored):', error);
+    /* Round 673: the save refuses what a player could abuse (economy step L1:
+       a slug over 64 characters or off the allowlist, a score outside 0 to
+       the game's hard maximum, a correct count outside 0 to 1000), with
+       SQLSTATE 22023 and a message naming the value. Log that message, so a
+       refused real play is visible in the console rather than lost in
+       silence. The caller already wrote the play into the local record. */
+    console.warn('[completions] the server refused this signed in save; the play still counts on this device:', error.message ?? error);
     return false;
   }
 
