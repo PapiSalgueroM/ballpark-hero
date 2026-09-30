@@ -1,5 +1,13 @@
 # Work board
 
+**2026-09-30, Codex Round 763 CLAIMED: committed Fantasy Draft pick feedback.**
+Root owns `src/components/fantasy-draft/DraftRoster.tsx`, a new scoped motion stylesheet and focused
+tests/harness. Reveal only the existing lastPickId row after a committed pick, with finite feedback,
+quiet empty slots, stable row/player nodes and static reduced motion. Preserve both rosters, all
+eleven slots, current-turn accents, positions, exact values and pick identity. Keep full names
+accessible and measure phone fit. No parent FantasyDraft page, pool, selection, budgets, AI, scores,
+saves or real-player data changes. Other agents remain on 760, 761 and 762. Next free is **764**.
+
 **2026-09-30, Codex Rounds 757 and 759 COMPLETE: reachable arcade rules and focus return.**
 757 places a 44px inline help button beside each Free Kick/Buzzer Beater title, clearing phone
 wordmarks and the desktop ticker. 759 restores that instance's trigger on dialog close, without
