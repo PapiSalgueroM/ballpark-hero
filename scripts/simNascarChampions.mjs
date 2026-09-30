@@ -71,7 +71,9 @@ const start = (n, title) => { section = n; console.log(`${n}) ${title}`); };
 
 const record = JSON.parse(fs.readFileSync(RECORD_PATH, 'utf8'));
 let rows = record.rows;
-let sql = fs.readFileSync(MIGRATION_PATH, 'utf8');
+/* Line endings normalised: a Windows checkout turns this file CRLF, and the
+   controls below anchor on newlines. */
+let sql = fs.readFileSync(MIGRATION_PATH, 'utf8').replace(/\r\n/g, '\n');
 
 /* ---------- plants ---------- */
 const plantSql = (from, to, label) => {
