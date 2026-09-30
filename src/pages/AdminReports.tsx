@@ -19,6 +19,7 @@ import {
   noteUpdate,
   priorityOf,
   sortForTriage,
+  statusChoices,
   statusCounts,
   statusLabel,
   statusOf,
@@ -189,8 +190,9 @@ const AdminReports = () => {
         {!loading && !withColumns && (
           <div className="mb-5 rounded-lg border border-border bg-secondary/60 p-3 text-sm text-foreground" data-testid="triage-pending">
             The status, priority and note columns are not in the database yet (migration
-            20260930_round_713_report_triage.sql). Until it runs, a status saves as open or
-            closed only, and priority and notes are switched off.
+            20260930_round_713_report_triage.sql). Until it runs, the status box offers Open
+            and Closed only, because those are the two the database can keep, and priority
+            and notes are switched off.
           </div>
         )}
         {loadError && (
@@ -269,7 +271,7 @@ const AdminReports = () => {
                     {report.game_type}
                   </span>
                   <span className="text-xs px-2 py-0.5 rounded bg-secondary text-foreground" data-testid="status-badge">
-                    {statusLabel(status)}
+                    {statusLabel(status, withColumns)}
                   </span>
                   {priority && (
                     <span className={cn('text-xs px-2 py-0.5 rounded capitalize', PRIORITY_STYLE[priority])}>
@@ -321,7 +323,9 @@ const AdminReports = () => {
                       className="mt-1 block w-full min-h-[36px] rounded-lg border border-border bg-background px-2 text-sm text-foreground"
                       data-testid="status-select"
                     >
-                      {REPORT_STATUSES.map((s) => (
+                      {/* Round 713 fix: before the migration only Open and
+                          Closed can be kept, so only those are offered. */}
+                      {statusChoices(withColumns).map((s) => (
                         <option key={s.key} value={s.key}>{s.label}</option>
                       ))}
                     </select>

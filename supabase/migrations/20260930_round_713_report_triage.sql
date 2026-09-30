@@ -12,23 +12,36 @@
 -- The keys are the exact strings src/lib/reportTriage.ts uses, and
 -- simReportRelay section 5 fails if the two lists ever disagree.
 --
--- WHAT IT DOES NOT CHANGE. No policy, no grant, no trigger, no function. Read
--- live on 2026-09-30 before writing this, with SELECTs only:
+-- THE ONE POLICY IT REWRITES. Read live on 2026-09-30 before writing this,
+-- with SELECTs only:
 --   "Anyone can insert reports"   INSERT to anon, authenticated, with the
 --                                 description and game_type length checks
 --   "Admins can read reports"     SELECT to authenticated, has_role admin
 --   "Admins can update reports"   UPDATE to authenticated, has_role admin
 -- anon and authenticated hold the stock table level grants, so the new columns
--- are covered by the same grants and the same policies as the old ones. The
--- public insert path (the report-relay edge function, the direct insert
--- fallback in ReportQuestion and ReportSiteIssue, the scores-poll watchdog)
--- sends none of these columns and gets the defaults. Only an admin can read or
--- change them, through the existing admin policies.
+-- are covered by the same grants and the same policies as the old ones. Only
+-- an admin can read or change them, through the existing admin policies, which
+-- this file does not touch. No grant, no trigger, no function.
 --
--- KNOWN AND LEFT ALONE: the insert policy checks only the two lengths, so an
--- anonymous insert could set its own status or priority, exactly as it can set
--- resolved = true today. Closing that means changing the insert policy, which
--- this round was told to leave as it is. It is recorded for a follow up.
+-- The insert policy is the exception, and the Round 713 fix is why. As
+-- committed in 20260830_restore_committed_policy_intent.sql it checks only the
+-- two lengths, so once the triage columns exist an anonymous insert could file
+-- a report already marked Fixed, ranked Critical, carrying a made up admin
+-- note and fix reference, and it could always set resolved = true. The policy
+-- is replaced by name below, keeping both length checks word for word and
+-- adding: status must be 'new' (the default, so an insert that never mentions
+-- it still passes), priority, admin_note and fix_ref must be null, resolved
+-- must be false and resolved_at null. The admin's columns can then only be
+-- written through the admin update policy.
+--
+-- Safe for every public insert path, checked in the repo before writing this:
+-- the report-relay edge function and the scores-poll watchdog write through
+-- the service role (no policy applies), and the direct insert fallbacks in
+-- ReportQuestion and ReportSiteIssue send exactly game_type, game_context and
+-- description, so all of them take the defaults and pass. simReportRelay
+-- section 6 reads this policy out of the file and fails if any clause is
+-- missing, if it is not the only policy statement here, or if it targets
+-- anything but this table for insert.
 --
 -- BACKFILL. The old screen had one switch. Every row it closed becomes Fixed,
 -- which is the closest of the seven, and carries a note saying so, because the
@@ -54,6 +67,24 @@ alter table public.question_reports
     check (admin_note is null or char_length(admin_note) <= 2000),
   add constraint question_reports_fix_ref_length
     check (fix_ref is null or char_length(fix_ref) <= 200);
+
+-- The insert policy, replaced by name. Both length checks are the ones
+-- 20260830_restore_committed_policy_intent.sql committed, unchanged; the rest
+-- pins every column the admin owns to its default on the way in.
+drop policy if exists "Anyone can insert reports" on public.question_reports;
+create policy "Anyone can insert reports"
+  on public.question_reports for insert
+  to anon, authenticated
+  with check (
+    length(description) > 0 and length(description) <= 2000 and
+    length(game_type) > 0 and length(game_type) <= 50 and
+    status = 'new' and
+    priority is null and
+    admin_note is null and
+    fix_ref is null and
+    resolved = false and
+    resolved_at is null
+  );
 
 update public.question_reports
    set status = 'fixed',

@@ -38,6 +38,20 @@ export const REPORT_STATUSES: ReadonlyArray<{ key: ReportStatus; label: string; 
   { key: 'wont_fix', label: "Won't fix", closed: true },
 ];
 
+/* Round 713 fix: what the status select may offer before the migration. A
+   save then keeps only the old switch, so the two choices are the two the
+   switch had, under the names it had: Open is stored as new and Closed as
+   fixed, which is exactly what statusOf reads back. Offering the other five
+   would let a choice snap back to one of these on the next read. */
+export const REDUCED_STATUSES: ReadonlyArray<{ key: ReportStatus; label: string; closed: boolean }> = [
+  { key: 'new', label: 'Open', closed: false },
+  { key: 'fixed', label: 'Closed', closed: true },
+];
+
+export function statusChoices(withColumns: boolean): ReadonlyArray<{ key: ReportStatus; label: string; closed: boolean }> {
+  return withColumns ? REPORT_STATUSES : REDUCED_STATUSES;
+}
+
 export const REPORT_PRIORITIES: ReadonlyArray<{ key: ReportPriority; label: string }> = [
   { key: 'critical', label: 'Critical' },
   { key: 'high', label: 'High' },
@@ -74,8 +88,10 @@ export function isClosed(status: ReportStatus): boolean {
   return REPORT_STATUSES.some((s) => s.key === status && s.closed);
 }
 
-export function statusLabel(status: ReportStatus): string {
-  return REPORT_STATUSES.find((s) => s.key === status)?.label ?? status;
+/* The label the screen prints. Before the migration it is the reduced name,
+   so the badge and the select say the same thing. */
+export function statusLabel(status: ReportStatus, withColumns = true): string {
+  return statusChoices(withColumns).find((s) => s.key === status)?.label ?? status;
 }
 
 /* A row read before the migration has no status at all, so it falls back to

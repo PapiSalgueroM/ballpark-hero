@@ -41,11 +41,19 @@
         section 123, read from the spec itself; every one of the 49 status
         moves writes resolved and resolved_at correctly; the count on every
         chip equals the rows that chip shows, for every game; Critical sorts
-        first; notes are trimmed and clipped. The admin screen takes all of
-        that from the module and checks that a save really landed.
+        first; notes are trimmed and clipped. Every status the select offers
+        reads back as itself after a save, with the columns and without, so
+        nothing snaps back (Round 713 fix: before the migration the select
+        offers Open and Closed only). The admin screen takes all of that from
+        the module and checks that a save really landed.
      6) The migration and the module agree on every key and every length,
-        backfills the old switch, and touches no policy, grant, trigger or
-        function, so the public insert path is exactly what it was.
+        backfills the old switch, and rewrites exactly ONE policy: the public
+        insert policy, by name, keeping both length checks from
+        20260830_restore_committed_policy_intent.sql word for word and pinning
+        status, priority, admin_note, fix_ref, resolved and resolved_at to
+        their defaults, so a reporter cannot file a report pre marked Fixed
+        with a made up admin note (Round 713 fix). No other policy, no grant,
+        no trigger, no function.
 
    Negative controls (house rule: prove the check can fail). Each one must
    turn its OWN section red and leave every other section green:
@@ -57,10 +65,15 @@
        section 5.
      REPORT_RELAY_CONTROL=countdrift    the chip counts ignore the game filter;
        section 5.
+     REPORT_RELAY_CONTROL=snapback      the select offers all seven statuses
+       before the migration, five of which snap back; section 5.
      REPORT_RELAY_CONTROL=nostatus      the migration drops Duplicate from its
        check constraint; section 6.
-     REPORT_RELAY_CONTROL=policy        the migration also rewrites the insert
-       policy; section 6.
+     REPORT_RELAY_CONTROL=openinsert    the migration's insert policy goes back
+       to the two length checks alone, so an anonymous insert can set the
+       admin's columns; section 6.
+     REPORT_RELAY_CONTROL=policy        the migration also rewrites the admin
+       update policy, which it was to leave alone; section 6.
    Each refuses to run if its rewrite changed nothing.
 
    Run: node scripts/simReportRelay.mjs
@@ -72,7 +85,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROL = process.env.REPORT_RELAY_CONTROL || '';
-const CONTROL_SECTION = { silent: 2, oldkinds: 1, staleresolved: 5, countdrift: 5, nostatus: 6, policy: 6 };
+const CONTROL_SECTION = { silent: 2, oldkinds: 1, staleresolved: 5, countdrift: 5, snapback: 5, nostatus: 6, openinsert: 6, policy: 6 };
 if (CONTROL && !(CONTROL in CONTROL_SECTION)) {
   console.error(`REPORT_RELAY_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
@@ -228,6 +241,12 @@ console.log('5) the triage workflow, run: the spec statuses, every status move, 
       libSrc = libSrc.replace(needle, '');
       console.log('NEGATIVE CONTROL ON: the chip counts ignore the game filter');
     }
+    if (CONTROL === 'snapback') {
+      const needle = 'return withColumns ? REPORT_STATUSES : REDUCED_STATUSES;';
+      if (!libSrc.includes(needle)) { console.error('control cannot run: statusChoices is not in the shape this control rewrites'); process.exit(1); }
+      libSrc = libSrc.replace(needle, 'return REPORT_STATUSES;');
+      console.log('NEGATIVE CONTROL ON: the select offers all seven statuses before the migration');
+    }
     const modPath = path.join(tmp, 'reportTriage.mjs');
     const esbuild = await import('esbuild');
     await esbuild.build({
@@ -286,6 +305,30 @@ console.log('5) the triage workflow, run: the spec statuses, every status move, 
     if (moves !== keys.length * keys.length || moves < 25) fail(`only ${moves} status moves were walked`);
     if (wrong.length) fail(`${wrong.length} status move(s) write the wrong resolved state, for example ${wrong.slice(0, 3).join('; ')}`);
     else console.log(`   all ${moves} status moves keep resolved and resolved_at true, with and without the new columns`);
+
+    /* c2) Round 713 fix: every status the select offers must read back as
+       itself after its own save, with the columns and without. Before the
+       migration a save keeps only resolved, so a choice the old switch cannot
+       hold would snap back to New or Fixed on the next read. Checked by
+       saving each choice onto a fresh row and reading the merged row back.
+       Both modes must still offer a way to open and a way to close. */
+    for (const withColumns of [true, false]) {
+      const choices = lib.statusChoices(withColumns);
+      const snapped = [];
+      for (const c of choices) {
+        const row = withColumns
+          ? { id: 'y', game_type: 'site', created_at: T0, status: 'new', resolved: false, resolved_at: null }
+          : { id: 'y', game_type: 'site', created_at: T0, resolved: false, resolved_at: null };
+        const merged = { ...row, ...lib.statusUpdate(row, c.key, NOW, withColumns) };
+        if (lib.statusOf(merged) !== c.key) snapped.push(`${c.label} (reads back as ${lib.statusLabel(lib.statusOf(merged), withColumns)})`);
+        if (lib.statusLabel(c.key, withColumns) !== c.label) snapped.push(`${c.label} (the badge would say ${lib.statusLabel(c.key, withColumns)})`);
+      }
+      const mode = withColumns ? 'with the columns' : 'before the migration';
+      if (snapped.length) fail(`${snapped.length} of the ${choices.length} statuses offered ${mode} snap back after a save: ${snapped.join('; ')}`);
+      if (!choices.some(c => c.closed) || !choices.some(c => !c.closed)) fail(`the statuses offered ${mode} cannot both open and close a report`);
+    }
+    if (lib.statusChoices(true).length !== keys.length) fail('with the columns the select does not offer every status');
+    if (!bySection[5]) console.log(`   every status offered reads back as itself after a save (${lib.statusChoices(true).length} with the columns, ${lib.statusChoices(false).length} before the migration)`);
 
     /* d) A row read before the migration still lands in the right place. */
     if (lib.statusOf({ resolved: true }) !== 'fixed' || lib.statusOf({ resolved: false }) !== 'new' || lib.statusOf({ resolved: false, status: 'bogus' }) !== 'new') {
@@ -362,7 +405,7 @@ console.log('5) the triage workflow, run: the spec statuses, every status move, 
     const adminNoComments = admin.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
     const adminCode = asCode(admin);
     if (!/from '@\/lib\/reportTriage'/.test(adminNoComments)) fail('the admin screen does not import the triage module, so what this section ran is not what the screen does');
-    for (const fn of ['statusUpdate', 'statusCounts', 'gameCounts', 'matchesGame', 'matchesStatus', 'sortForTriage', 'noteUpdate', 'hasTriageColumns']) {
+    for (const fn of ['statusUpdate', 'statusCounts', 'gameCounts', 'matchesGame', 'matchesStatus', 'sortForTriage', 'noteUpdate', 'hasTriageColumns', 'statusChoices']) {
       if (!new RegExp(`\\b${fn}\\(`).test(adminCode)) fail(`the admin screen never calls ${fn}`);
     }
     if (!/\.update\([^)]*\)\s*\.eq\([^)]*\)\s*\.select\(/.test(adminCode)) fail('the admin save does not ask for the row back, so an update the database refused would still say saved');
@@ -371,9 +414,10 @@ console.log('5) the triage workflow, run: the spec statuses, every status move, 
 }
 
 section = 6;
-console.log('6) the migration and the module agree, and the public insert path is untouched');
+console.log('6) the migration and the module agree, and the public insert path can only take the defaults');
 {
   const MIG = 'supabase/migrations/20260930_round_713_report_triage.sql';
+  const EARLIER = 'supabase/migrations/20260830_restore_committed_policy_intent.sql';
   let sql = '';
   try { sql = read(MIG); } catch { fail(`${MIG} is missing, so the columns the screen writes do not exist anywhere`); }
   if (sql && CONTROL === 'nostatus') {
@@ -382,11 +426,19 @@ console.log('6) the migration and the module agree, and the public insert path i
     sql = sql.replace(needle, "'not_a_bug', 'wont_fix'");
     console.log('NEGATIVE CONTROL ON: the migration forgets Duplicate');
   }
+  if (sql && CONTROL === 'openinsert') {
+    /* The pre fix shape: the insert policy checks the two lengths and nothing
+       else, so a reporter can file a report already marked Fixed. */
+    const needle = "length(game_type) > 0 and length(game_type) <= 50 and\n    status = 'new' and\n    priority is null and\n    admin_note is null and\n    fix_ref is null and\n    resolved = false and\n    resolved_at is null\n";
+    if (!sql.includes(needle)) { console.error('control cannot run: the insert policy is not in the shape this control rewrites'); process.exit(1); }
+    sql = sql.replace(needle, 'length(game_type) > 0 and length(game_type) <= 50\n');
+    console.log('NEGATIVE CONTROL ON: the insert policy goes back to the two length checks alone');
+  }
   if (sql && CONTROL === 'policy') {
     const before = sql;
-    sql += '\ndrop policy "Anyone can insert reports" on public.question_reports;\ncreate policy "Anyone can insert reports" on public.question_reports for insert to anon, authenticated with check (true);\n';
+    sql += '\ndrop policy "Admins can update reports" on public.question_reports;\ncreate policy "Admins can update reports" on public.question_reports for update to anon, authenticated using (true);\n';
     if (sql === before) { console.error('control cannot run: appending the policy changed nothing'); process.exit(1); }
-    console.log('NEGATIVE CONTROL ON: the migration also rewrites the public insert policy');
+    console.log('NEGATIVE CONTROL ON: the migration also rewrites the admin update policy');
   }
   if (sql && lib) {
     const code = sql.replace(/--.*$/gm, '');
@@ -404,8 +456,56 @@ console.log('6) the migration and the module agree, and the public insert path i
     const refMax = Number(code.match(/char_length\(fix_ref\)\s*<=\s*(\d+)/i)?.[1]);
     if (noteMax !== lib.NOTE_MAX || refMax !== lib.FIX_REF_MAX) fail(`the migration caps notes at ${noteMax} and fix references at ${refMax}, the screen at ${lib.NOTE_MAX} and ${lib.FIX_REF_MAX}`);
     if (!/update\s+public\.question_reports\s+set\s+status\s*=\s*'fixed'[\s\S]*?where\s+resolved\s*=\s*true/i.test(code)) fail('the migration does not carry the old switch across, so every report already closed would reopen as New');
+    /* Round 713 fix: the insert policy. Exactly one policy may be rewritten,
+       the public insert policy, by name, and its WITH CHECK must carry every
+       clause the earlier migration committed (read from that file, not typed
+       here) plus a pin on every column the admin owns. Parsed from the code
+       with the comments gone, so the header describing the policy cannot
+       satisfy this. */
+    const POLICY = 'Anyone can insert reports';
+    const policyStatements = [...bare.matchAll(/\b(create|drop|alter)\s+policy\b[^;]*;/gi)].map(m => m[0]);
+    const other = policyStatements.filter(s => !s.includes(`"${POLICY}"`) || !/public\.question_reports/.test(s) || /\balter\b/i.test(s));
+    if (other.length) fail(`the migration touches ${other.length} policy statement(s) other than dropping and recreating "${POLICY}" on question_reports, and this round was to leave every other policy exactly as it was: ${other[0].replace(/\s+/g, ' ').slice(0, 90)}`);
+    if (policyStatements.length - other.length !== 2) fail(`"${POLICY}" is named in ${policyStatements.length - other.length} statement(s), expected exactly one drop and one create`);
+    const dropAt = code.search(new RegExp(`drop\\s+policy\\s+if\\s+exists\\s+"${POLICY}"\\s+on\\s+public\\.question_reports\\s*;`, 'i'));
+    const createRe = new RegExp(`create\\s+policy\\s+"${POLICY}"\\s+on\\s+public\\.question_reports\\s+for\\s+insert\\s+to\\s+anon\\s*,\\s*authenticated\\s+with\\s+check\\s*\\(`, 'i');
+    const createAt = code.search(createRe);
+    const columnsAt = code.search(/add\s+column\s+if\s+not\s+exists\s+status\b/i);
+    if (dropAt < 0 || createAt < 0) fail(`the migration does not drop and recreate "${POLICY}" on question_reports for insert to anon, authenticated, so an anonymous insert can still set status, priority, admin_note and fix_ref on its own row`);
+    else {
+      if (!(columnsAt >= 0 && columnsAt < dropAt && dropAt < createAt)) fail('the insert policy is not rewritten after the columns are added and after the old one is dropped, so applying the migration would fail or leave the old policy in place');
+      /* The WITH CHECK body, taken with balanced parentheses because the
+         length checks carry their own. */
+      const open = createAt + code.slice(createAt).match(createRe)[0].length - 1;
+      let depth = 0; let end = -1;
+      for (let i = open; i < code.length; i++) {
+        if (code[i] === '(') depth += 1;
+        else if (code[i] === ')') { depth -= 1; if (depth === 0) { end = i; break; } }
+      }
+      const body = end > open ? code.slice(open + 1, end) : '';
+      const norm = s => s.replace(/\s+/g, ' ').trim().toLowerCase();
+      const clauses = body.split(/\band\b/i).map(norm).filter(Boolean);
+      const earlier = read(EARLIER);
+      const earlierCreate = earlier.search(createRe);
+      const earlierBody = earlierCreate >= 0 ? earlier.slice(earlierCreate).match(/with\s+check\s*\(([\s\S]*?)\)\s*;/i)?.[1] || '' : '';
+      const earlierClauses = earlierBody.split(/\band\b/i).map(norm).filter(Boolean);
+      if (earlierClauses.length < 2) fail(`could not read the committed insert policy out of ${EARLIER}, so the length checks have no baseline`);
+      const missingOld = earlierClauses.filter(c => !clauses.includes(c));
+      if (missingOld.length) fail(`the rewritten insert policy drops ${missingOld.length} clause(s) the committed policy had: ${missingOld.join('; ')}`);
+      const pins = [
+        [/^status = 'new'$/, "status = 'new'"],
+        [/^priority is null$/, 'priority is null'],
+        [/^admin_note is null$/, 'admin_note is null'],
+        [/^fix_ref is null$/, 'fix_ref is null'],
+        [/^resolved = false$/, 'resolved = false'],
+        [/^resolved_at is null$/, 'resolved_at is null'],
+      ];
+      const missingPins = pins.filter(([re]) => !clauses.some(c => re.test(c))).map(([, what]) => what);
+      if (missingPins.length) fail(`the insert policy does not pin ${missingPins.join(', ')}, so a reporter could file a report with the admin's own columns already filled in`);
+      if (/\bor\b/i.test(body) || /\btrue\b/i.test(body)) fail('the insert policy carries an OR or a bare true, which lets a row through without every clause');
+      if (!bySection[6]) console.log(`   the insert policy keeps all ${earlierClauses.length} committed clauses and pins ${pins.length} admin columns to their defaults; no other policy is touched`);
+    }
     const forbidden = [
-      [/\b(create|drop|alter)\s+policy\b/i, 'a policy'],
       [/\bgrant\b/i, 'a grant'],
       [/\brevoke\b/i, 'a revoke'],
       [/\bcreate\s+(or\s+replace\s+)?(trigger|function)\b/i, 'a trigger or function'],
@@ -416,7 +516,7 @@ console.log('6) the migration and the module agree, and the public insert path i
     for (const [re, what] of forbidden) {
       if (re.test(bare)) fail(`the migration touches ${what}, and this round was to leave the public insert path exactly as it was`);
     }
-    if (!bySection[6]) console.log(`   ${sqlStatuses.length} statuses, ${sqlPriorities.length} priorities and both length caps match the module; the backfill is there; no policy, grant, trigger or function`);
+    if (!bySection[6]) console.log(`   ${sqlStatuses.length} statuses, ${sqlPriorities.length} priorities and both length caps match the module; the backfill is there; no grant, trigger or function`);
   } else if (sql && !lib) {
     fail('the module did not load, so the migration could not be compared against it');
   }
