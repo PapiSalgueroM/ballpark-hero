@@ -28,6 +28,7 @@ import {
   playerMatchesCell,
   saveGridDifficulty,
 } from '@/lib/hockeyGrid';
+import { pickNamesake } from '@/lib/gridEngine';
 
 type Phase = 'boot' | 'error' | 'playing';
 type Mode = 'daily' | 'unlimited';
@@ -162,7 +163,13 @@ const HockeyGrid = () => {
   const submitGuess = useCallback((entity: PlayerEntity) => {
     if (activeCell === null || !puzzle || !gridData || gameOver) return;
     const key = normalize(entity.rawName || entity.name);
-    const indexed = gridData.byNormalizedName.get(key);
+    const row = Math.floor(activeCell / 3);
+    const col = activeCell % 3;
+    const cell = { row: puzzle.rows[row], col: puzzle.cols[col] };
+    /* Round 653: every player under the typed name, and the one who fits the
+       cell is the one judged, so a name two players share is right when
+       either of them is. The same line in all four grid pages. */
+    const indexed = pickNamesake(gridData.byNormalizedName.get(key), (p) => playerMatchesCell(p, cell));
     if (!indexed) {
       setWrongFlash(activeCell);
       setTimeout(() => setWrongFlash(null), 1200);
@@ -172,9 +179,6 @@ const HockeyGrid = () => {
       return;
     }
 
-    const row = Math.floor(activeCell / 3);
-    const col = activeCell % 3;
-    const cell = { row: puzzle.rows[row], col: puzzle.cols[col] };
     const valid = playerMatchesCell(indexed, cell) && !guessedNames.has(key);
 
     if (valid) {

@@ -28,7 +28,7 @@
  * disagree with the table it came from.
  */
 import { supabase } from '@/integrations/supabase/client';
-import type { GridFetchOptions } from '@/lib/gridEngine';
+import { normalizeGridName, type GridFetchOptions } from '@/lib/gridEngine';
 import type { PlayerSourceConfig } from '@/lib/playerSearch';
 
 export type CbbCategoryKind = 'school' | 'achievement';
@@ -61,7 +61,12 @@ export interface CbbPlayer {
 
 export interface CbbGridData {
   players: CbbPlayer[];
-  byNormalizedName: Map<string, CbbPlayer>;
+  /** Every player under a normalized name, the same shape as the franchise
+      engine's (see FranchiseGridData in gridEngine.ts). Round 653: 1,697 names
+      in this table belong to two or more players, and a map that kept one row
+      per name refused Danny Manning at Kansas because the later Danny Manning
+      loaded last. The page reads it through pickNamesake. */
+  byNormalizedName: Map<string, CbbPlayer[]>;
 }
 
 export interface CbbGridCell {
@@ -130,11 +135,10 @@ interface RawCbbRow {
   year_to: string | null;
 }
 
-const DIACRITICS = new RegExp('[' + String.fromCharCode(0x0300) + '-' + String.fromCharCode(0x036f) + ']', 'g');
-
-function normalize(name: string): string {
-  return name.normalize('NFD').replace(DIACRITICS, '').toLowerCase().trim().replace(/\s+/g, ' ');
-}
+/* The engine's normaliser, which is the search layer's: the page looks a typed
+   name up with normalizeName, so the index has to be keyed the same way, special
+   Latin letters folded and all (see normalizeGridName, Round 653 fix). */
+const normalize = normalizeGridName;
 
 /** A season is stored as a string like "2005-06", so the year is its first four
  *  characters. Returns 0 when it is missing or malformed, and every check that
@@ -177,7 +181,7 @@ export async function fetchCbbGridData(opts: GridFetchOptions = {}): Promise<Cbb
     }
 
     const players: CbbPlayer[] = [];
-    const byNormalizedName = new Map<string, CbbPlayer>();
+    const byNormalizedName = new Map<string, CbbPlayer[]>();
 
     for (const raw of rows) {
       const name = String(raw.player_name ?? '').trim();
@@ -200,7 +204,9 @@ export async function fetchCbbGridData(opts: GridFetchOptions = {}): Promise<Cbb
       };
       if (opts.withIds && raw.player_slug) entry.id = String(raw.player_slug);
       players.push(entry);
-      byNormalizedName.set(normalize(name), entry);
+      const key = normalize(name);
+      const under = byNormalizedName.get(key);
+      if (under) under.push(entry); else byNormalizedName.set(key, [entry]);
     }
 
     return players.length >= CBB_MIN_POOL_SIZE ? { players, byNormalizedName } : null;
