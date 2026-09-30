@@ -69,7 +69,7 @@ const say = (ok, what) => {
    every page, so one route would have caught the bug that prompted this; the
    spread is here for the ones that will not ride on every page. Nine routes at
    two loads each is about ninety seconds, which is affordable in the suite. */
-const ROUTES = [
+const DEFAULT_ROUTES = [
   '/',
   '/soccer-career',
   '/club-manager',
@@ -83,6 +83,10 @@ const ROUTES = [
   '/whats-new',
   '/about',
 ];
+/* Round 653: ONLY=/a,/b runs just those routes, the way playRenderStability
+   takes it, so a round can put its own pages through this without editing the
+   spread above. */
+const ROUTES = process.env.ONLY ? process.env.ONLY.split(',').map(x => x.trim()).filter(Boolean) : DEFAULT_ROUTES;
 
 /* Exactly what scripts/prerender.mjs keeps, so this measures the thing that
    actually gets written rather than a rough approximation of it. Kept in step

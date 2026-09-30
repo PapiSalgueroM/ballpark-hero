@@ -418,7 +418,7 @@ const NbaGrid = () => {
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Missed a day?{' '}
           <Link to="/nba-grid/archive" className="underline hover:text-foreground">
-            See past boards and who solves them
+            NBA grid answers for past days
           </Link>
           .
         </p>

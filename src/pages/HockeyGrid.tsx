@@ -418,7 +418,7 @@ const HockeyGrid = () => {
         <p className="mt-6 text-center text-sm text-muted-foreground">
           Missed a day?{' '}
           <Link to="/hockey-grid/archive" className="underline hover:text-foreground">
-            See past boards and who solves them
+            NHL grid answers for past days
           </Link>
           .
         </p>
