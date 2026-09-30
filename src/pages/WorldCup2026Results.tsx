@@ -124,6 +124,9 @@ const WorldCup2026Results = () => {
     if (team === runnerUp) return 'Runners-up';
     if (team === third.winner) return 'Third place';
     if (team === loserOf(third)) return 'Fourth place';
+    /* A semi final loser who is somehow not in the third place row is still a semi finalist,
+       never out in the group stage (release G review of Round 656). */
+    if (WC2026_KNOCKOUT.some(m => m.round === 'sf' && (m.team1 === team || m.team2 === team) && m.winner !== team)) return 'Semi-finalists';
     const beaten = WC2026_KNOCKOUT.find(m => (m.team1 === team || m.team2 === team) && m.winner !== team && OUT_IN[m.round]);
     return beaten ? (OUT_IN[beaten.round] as string) : 'Out in the group stage';
   };

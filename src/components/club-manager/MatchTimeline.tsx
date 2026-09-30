@@ -68,7 +68,7 @@ export function MatchTimeline({ detail, clubName, opponent }: { detail: MatchDet
           className="mt-1 inline-flex items-center gap-1 min-h-[32px] px-2 text-[10px] text-muted-foreground hover:text-primary transition-colors"
         >
           <ChevronDown className={cn('w-3 h-3 transition-transform', all && 'rotate-180')} />
-          {all ? 'Key moments only' : `Every chance and corner (${extra} more)`}
+          {all ? 'Key moments only' : `Every shot and corner (${extra} more)`}
         </button>
       )}
     </div>
