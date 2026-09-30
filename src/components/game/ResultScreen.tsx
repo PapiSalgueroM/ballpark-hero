@@ -8,6 +8,7 @@ import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
  * home so Round 147's package stays byte-stable; a future tidy round can
  * move the file without changing a single behavior. */
 import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club-manager/Celebration';
+import { ResultMoment, type ResultOutcome } from '@/components/game/ResultMoment';
 
 interface ResultScreenStat {
   label: string;
@@ -17,9 +18,21 @@ interface ResultScreenStat {
 interface ResultScreenProps {
   /** True for a win-styled headline (text-correct), false for a loss-styled
    *  one (text-destructive). Omit for a neutral, streak-style outcome (no
-   *  fixed win/lose binary, e.g. HigherLowerTransfers) which renders the
-   *  headline in text-primary instead. */
+   *  fixed win/lose binary, e.g. HigherLowerTransfers) which the result
+   *  moment shows as a good try, headline in the sport's ink. */
   won?: boolean;
+  /** Round 710: which of the result moment's three states this is. Omit it
+   *  and `won` decides: true is a win, false a loss, and a neutral streak
+   *  style outcome is a good try. Pass 'close' where the game knows better,
+   *  e.g. a grid with some cells filled. It changes the look and the one line
+   *  of state copy only, never what the game records. */
+  outcome?: ResultOutcome;
+  /** Round 710: the score the result moment reveals, exactly as the game
+   *  worked it out ("7/9", "12", "$1.2M"). Omit it and the emoji takes the
+   *  score's place. */
+  score?: ReactNode;
+  /** Round 710: a few words under the revealed score, e.g. "cells filled". */
+  scoreLabel?: string;
   /** Big emoji or icon at the top of the card. */
   outcomeEmoji: ReactNode;
   /** Headline, e.g. "Correct!", "Game Over", "Run over at 12". */
@@ -77,6 +90,9 @@ interface ResultScreenProps {
  */
 export function ResultScreen({
   won,
+  outcome,
+  score,
+  scoreLabel,
   outcomeEmoji,
   headline,
   statLine,
@@ -101,7 +117,7 @@ export function ResultScreen({
     recordCompletion(share.gamePath, completionScore, getCurrentPlayerName());
   }, [recordCompletionOnMount, completionScore, share.gamePath]);
 
-  const headlineColor = won === true ? 'text-correct' : won === false ? 'text-destructive' : 'text-primary';
+  const state: ResultOutcome = outcome ?? (won === true ? 'win' : won === false ? 'loss' : 'close');
   /* Round 149: a stable per-game confetti seed, so the fall pattern is
      deterministic for a given game rather than reshuffling every render. */
   let seed = 1;
@@ -121,15 +137,20 @@ export function ResultScreen({
       <CelebrationStyles />
       {/* Round 149: wins rain, everywhere, and only wins. A loss stays
           quiet, because 56 games shaking at you gets old in an afternoon. */}
-      {won === true && <ConfettiBurst seed={seed % 997} count={28} />}
+      {state === 'win' && <ConfettiBurst seed={seed % 997} count={28} />}
 
-      {/* 1. Emoji / icon, tuned per outcome tier */}
-      <div className={cn('text-5xl mb-3', won === true && 'cm-slam')}>{outcomeEmoji}</div>
-
-      {/* 2. Headline */}
-      <h2 className={cn('text-2xl font-display font-bold mb-1 cm-rise', headlineColor)} style={{ animationDelay: '0.08s' }}>
-        {headline}
-      </h2>
+      {/* 1 and 2. Round 710: the shared result moment, the sport's ink and
+          drawn mark, the score revealed, and the game's own emoji and
+          headline. The headline is still this card's first h2. */}
+      <ResultMoment
+        outcome={state}
+        gamePath={share.gamePath}
+        score={score}
+        scoreLabel={scoreLabel}
+        badge={outcomeEmoji}
+        headline={headline}
+        className="mb-3"
+      />
 
       {/* 3. Stat line (score, streak, guesses used) */}
       {statLine && <p className="text-foreground text-sm md:text-base mb-1">{statLine}</p>}
