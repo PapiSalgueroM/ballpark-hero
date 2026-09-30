@@ -61,6 +61,10 @@ export const SEO_META: Record<string, SeoMeta> = {
     title: 'Wonderkid Factory: Idle Soccer Academy Game',
     description: 'Scout generated kids, coach them toward hidden ceilings and sell each one at the perfect moment. A free idle football academy game with no real players.',
   },
+  '/contract-chaos': {
+    title: 'Contract Chaos: Soccer Agent Contract Game',
+    description: 'Be the agent for a generated footballer. Compare wages, role, bonuses and release clauses, sign one deal and watch five seasons play out. Free soccer game.',
+  },
   '/world-xi': {
     title: 'World XI: International Soccer Squad Quiz',
     description: 'Pick a formation, spin in 11 random countries and name a real footballer from each nation who fits the slot. Optional timer. Free soccer trivia game.',
