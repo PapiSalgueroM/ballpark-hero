@@ -1275,7 +1275,7 @@ const ClubManager = () => {
         {/* -------- Squad -------- */}
         <TabsContent value="squad">
           <div className="space-y-3">
-            <ScreenLoading><SquadScreen squad={c.squad} xiIds={c.xiIds} eraId={c.eraId} captainId={c.setPieces?.captain ?? null} /></ScreenLoading>
+            <ScreenLoading><SquadScreen squad={c.squad} xiIds={c.xiIds} eraId={c.eraId} captainId={c.setPieces?.captain ?? null} career={c} /></ScreenLoading>
             {/* Round 193: the contracts desk, built in Round 105 and never
                mounted until now, so renewals were unreachable for 88 rounds.
                Plain renewal or the cheaper clause deal, and every clause you
