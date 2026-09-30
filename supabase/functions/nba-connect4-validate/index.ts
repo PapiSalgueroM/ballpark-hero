@@ -114,7 +114,9 @@ async function confirmTeamAttribute(playerName: string, attribute: string): Prom
   if (!folded) return null;
   try {
     const { data } = await sb.from(RECORDS_TABLE).select(`${RECORDS_NAME}, ${RECORDS_TEAMS}`)
-      .filter(RECORDS_NAME, "imatch", namePattern(folded)).limit(20);
+      .filter(RECORDS_NAME, "imatch", namePattern(folded)).limit(50);
+    /* A full page may not be every row, and "every row" is the whole rule. */
+    if ((data ?? []).length >= 50) return null;
     const rows = ((data ?? []) as Record<string, unknown>[])
       .filter((r) => foldName(String(r[RECORDS_NAME] ?? "")) === folded);
     if (rows.length === 0) return null;
