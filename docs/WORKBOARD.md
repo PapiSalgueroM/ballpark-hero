@@ -1,5 +1,22 @@
 # Work board
 
+**2026-09-30, Codex Rounds 748 and 749 COMPLETE: shot reactions and grid answer motion.**
+748 adds finite goal/basket celebrations and miss feedback to Free Kick and Buzzer Beater, keeping
+Next usable immediately and all settled verdicts/points and angle copy intact. Ten real-board tests
+green; altered-points control fails four, animation-driven auto-next control fails two. Production
+types/build green. Browser acceptance: 416 checks, 76 real shots, 16 viewport/motion scenarios at
+320/390/430/1440, four full daily runs saved once and reloads did not resubmit. Two thousand
+deterministic shots per game matched the pre-change results exactly. Effects end within 700ms;
+reduced motion has no CSS animations. No overflow, console/page errors or external writes.
+749 adds 460ms correct-cell glow/lock-in and 280ms wrong-answer feedback to Football, College and
+Soccer Grid. Eight real-board tests preserve button identity, retry focus, callbacks, locked cells
+and every rarity label; severing correct-glow bindings fails both transition checks. Production
+types/build green. Twenty-four compiled production-board fixtures cover three accents, four
+widths and normal/reduced motion; effects finish and never alter geometry or callbacks. Full game
+validators/hooks were not exercised by those controlled board fixtures. The audit exposed an
+existing 320px long-name layout expansion, explicitly claimed as 750 above, not hidden by motion.
+Claude: both source rounds are ready for the next gated release. Publication remains pending.
+
 **2026-09-30, Codex Rounds 750 and 751 CLAIMED: phone grid fit and shared trade animations.**
 750 owns the two existing GridBoard components, a new scoped content layout stylesheet and focused
 fit tests/harness. The 749 browser audit found a pre-existing 320px long-name cell expansion from

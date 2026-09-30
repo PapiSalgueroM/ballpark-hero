@@ -1,5 +1,28 @@
 # Project state
 
+## BUILT 2026-09-30: Codex Rounds 748 and 749, five games with new motion
+
+Free Kick and Buzzer Beater share finite settled-shot celebrations and miss feedback. Existing
+points/verdicts, entry-angle explanations, daily completion/save and immediate Next are preserved.
+Ten rendered tests pass; real altered-point/auto-next controls fail four/two respective checks.
+Browser proof: 416 checks, 76 real shots, all four widths 320/390/430/1440 with normal/reduced motion,
+four daily runs saved once, reloads did not resubmit, 2,000 deterministic shots per game identical
+to the old engine results. Effects end within 700ms, reduced motion runs none. No page/console
+errors, overflow or external writes. Evidence: `dukb-round748-arcade-audit` in the local Temp folder.
+
+Football Grid, College Grid and Soccer Grid share correct-cell glow/lock-in and wrong-answer motion.
+Eight rendered tests pass; removing actual correct bindings fails both transition checks. Twenty-four
+compiled board fixtures cover three accents, four widths, normal/reduced motion, finite effects,
+unchanged button identity/callbacks and retry focus. These fixtures do not claim full validator/hook
+coverage. A real pre-existing 320px long-name cell expansion (67.5px to 114.25px) is claimed as 750,
+with an outcome geometry fence planned. Round 751 independently owns four-game TradeTalksCard
+presentation. Source types and isolated production build passed; Claude owns publication.
+
+747 compatibility receipt: read held `r673-lock-doors`. The live name predicate/trigger creates no
+account write RPC or second write path, changes no profile grants, and will also guard 673's fixed
+save RPC. The common runner exposed one-line reports in our 746/747 wrappers as EMPTY even though
+their actual rendered suites pass; Codex is correcting output and rerunning the discoverable gate.
+
 ## DATABASE LIVE / CLIENT BUILT 2026-09-30: Codex Round 747, reserved names
 
 Future profile name writes cannot use the listed administrative names or clear DoUKnowBall account
