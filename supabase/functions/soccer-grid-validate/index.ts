@@ -5,8 +5,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
  * Soccer 3x3 grid validator (2026-08-13 v13).
  *
  * Resolution order:
- *   1. verified-verdict cache (Postgres). Round 707: a refusal the records
- *      pass wrote is worked out again rather than served.
+ *   1. verified-verdict cache (Postgres). Round 707: a club or nationality
+ *      refusal the records pass wrote is worked out again rather than served.
  *   2. DETERMINISTIC checks (Round 707: the verified 2026 moves in
  *      TRANSFER_OVERLAY_2026 count as club stints):
  *      a. "YYYY World Cup Winner" against public.world_cup_players squad rows
@@ -209,9 +209,10 @@ function clubMatches(stintClub: string, wanted: string): boolean {
    It can only ADD a yes for a club criterion: it never makes a no, never
    touches careerComplete (that is still read from the table's own rows) and
    never settles nationality or position. Keyed by norm() of the name, one entry
-   per overlay name. scripts/simSoccerStints.mjs fails if this list and the
-   overlay file ever differ; when the overlay grows, add the same line here and
-   in football-connect4-validate. */
+   per overlay name. football-connect4-validate carries the same list under the
+   same name, and scripts/simSoccerStints.mjs section 0 fails if this copy, that
+   copy and the overlay file ever differ (control SOCCER_STINTS_CONTROL=dropentry);
+   when the overlay grows, add the same line in both functions. */
 const TRANSFER_OVERLAY_2026: Record<string, { name: string; clubs: string[] }> = {
   "morgan rogers": { name: "Morgan Rogers", clubs: ["Chelsea FC"] },
   "elliot anderson": { name: "Elliot Anderson", clubs: ["Manchester City"] },
@@ -456,14 +457,56 @@ const TRANSFER_OVERLAY_2026: Record<string, { name: string; clubs: string[] }> =
   "mika godts": { name: "Mika Godts", clubs: ["Paris Saint-Germain"] },
 };
 
-function overlayClubsFor(foldedName: string): string[] {
-  return TRANSFER_OVERLAY_2026[foldedName]?.clubs ?? [];
+/* ROUND 707 FIX: THE VERIFIED MOVE BELONGS TO A MAN, NOT TO A NAME. The list
+   above is keyed by name and the table merges namesakes under one name: "Beto"
+   is three men over three nationalities, "Rodrigo Mora" is a Uruguayan at River
+   Plate and the Portuguese one at Porto, "Nico González" is a Spaniard and an
+   Argentine. Attached to the name alone, Beto's Fiorentina move would have
+   answered "Played for Fiorentina" x "Played for Sevilla" as verified for a
+   combination no one man satisfies, and cached it. So the move counts only when
+   the rows it is being attached to are one man (Round 489's identity rule, the
+   nationalities on the rows) AND that man is the one who moved: his 2026 market
+   row, the row the migration copies the stint from, carries the same
+   nationality. No 2026 market row (Griezmann) falls back to the one man rule
+   alone. No rows at all (the typed name reached nobody) takes the full overlay
+   name. Anything else, and any error, returns nothing, so the guess goes to the
+   model exactly as it did before this round. A same nationality merge (Costinha,
+   Gonzalo García) is not separable from these two tables and stays the lenient
+   direction the table itself already takes: a yes only, never a no. */
+async function overlayClubsFor(foldedName: string, identities: Set<string>): Promise<string[]> {
+  const entry = TRANSFER_OVERLAY_2026[foldedName];
+  if (!entry) return [];
+  if (identities.size > 1) return [];
+  if (identities.size === 1) {
+    try {
+      const { data, error } = await sb.from("player_market_values").select("nationality")
+        .eq("year", 2026).eq("player_name", entry.name).limit(2);
+      if (error) return [];
+      const rows = (data ?? []) as { nationality: string | null }[];
+      if (rows.length > 1) return [];
+      if (rows.length === 1 && !identities.has(norm(rows[0].nationality ?? ""))) return [];
+    } catch { return []; }
+  }
+  return entry.clubs;
 }
 
 /* Round 707: the one shape of refusal the records pass writes, kept beside the
    pattern the cache read uses to recognise it, so the two cannot drift. */
 const recordsRefusalReason = (shown: string, which: string) => `${shown} does not satisfy "${which}".`;
-const RECORDS_REFUSAL = / does not satisfy ".+"\.$/;
+const RECORDS_REFUSAL = / does not satisfy "(.+)"\.$/;
+/* Round 707 fix: which cached refusals are worked out again. The capture is the
+   criterion refused. A "YYYY World Cup Winner" refusal comes from a complete
+   winner squad (22 to 26 rows per year, nothing a stint fix can change), so it
+   is served as before; on 2026-09-30 those were 96 of the 299 records refusals
+   in the cache and each recompute cost a world_cup_players read. A club or
+   nationality refusal comes from the stint table, which is what the overlay and
+   the migrations change, so it is recomputed. */
+function isRecomputedRefusal(verdict: Record<string, unknown> | undefined): boolean {
+  if (!verdict || verdict.valid !== false) return false;
+  const m = RECORDS_REFUSAL.exec(String(verdict.reason ?? ""));
+  if (!m) return false;
+  return parseCriterion(m[1]).kind !== "wc_winner";
+}
 
 function evaluate(crit: Criterion, stints: Stint[], careerComplete: boolean, overlayClubs: string[] = []): Verdict {
   if (crit.kind === "wc_winner" || crit.kind === "honour") return "unknown"; // resolved elsewhere
@@ -560,7 +603,7 @@ serve(async (req) => {
        yes it is replaced. Model verdicts and every acceptance are served as
        before, and nothing unverified is accepted either way. */
     const cachedVerdict = hit?.verdict as Record<string, unknown> | undefined;
-    const recordsRefusal = cachedVerdict?.valid === false && RECORDS_REFUSAL.test(String(cachedVerdict.reason ?? ""));
+    const recordsRefusal = isRecomputedRefusal(cachedVerdict);
     if (cachedVerdict && !recordsRefusal) return json({ ...cachedVerdict, cached: true });
   } catch { /* cache down -> continue */ }
 
@@ -610,13 +653,14 @@ serve(async (req) => {
     const careerComplete = oneManOnly && stints.length > 0 && (debutYear >= 2005 || (debutAge != null && debutAge <= 21));
 
     /* Round 707: the verified moves, looked up under the name the rows resolved
-       to (so a surname that resolved to one player finds his moves too). */
+       to (so a surname that resolved to one player finds his moves too), and
+       only for the man who moved (see overlayClubsFor). */
     const overlayKey = stints.length ? norm(stints[0].player_name) : norm(sanitized.player);
-    const overlayClubs = overlayClubsFor(overlayKey);
+    const overlayClubs = await overlayClubsFor(overlayKey, identities);
 
     let rowV = evaluate(rowCrit, stints, careerComplete, overlayClubs);
     let colV = evaluate(colCrit, stints, careerComplete, overlayClubs);
-    let properName = stints.length ? stints[0].player_name : (TRANSFER_OVERLAY_2026[overlayKey]?.name ?? null);
+    let properName = stints.length ? stints[0].player_name : (overlayClubs.length ? TRANSFER_OVERLAY_2026[overlayKey].name : null);
 
     // v12: deterministic World Cup winner resolution, independent of stints.
     // v13: the winner squad row also settles a paired position criterion when
