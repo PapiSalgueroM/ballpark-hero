@@ -1,5 +1,24 @@
 # Work board
 
+**2026-09-30, Codex Rounds 751 and 752 COMPLETE: shared Front Office trade and ownership motion.**
+751: finite card/newest-reply reveal and agreed/ended feedback in NFL, NBA, MLB and NHL Front Office.
+Packages wrap on phones, existing actions are immediate and 44px high. Six actual-card tests green,
+removed-reply binding control fails four while two transition/focus checks stay green. Browser:
+739 checks in 32 controlled component contexts, all four sports, four widths, normal/reduced motion.
+Exact engine log/package values, callbacks, enabled-button focus/identity, one-shot disabled push,
+finite effects and long-name phone fit verified. Existing disabled buttons may natively blur in
+Chromium; the claim is focus retained on controls that remain enabled. No engine or parent changes.
+752: finite existing pace/hot-seat cues and reduced-motion support for the existing trust bar. Seven
+rendered tests green; a real trust-26 boundary mutation fails one while six unrelated checks stay
+green. Browser: 1,299 valid comparisons, 32 contexts and 192 trust samples, exact pre-change text,
+colors, width and card geometry retained. Normal width changes over 700ms; reduced motion has no
+effective transition (global duration reports 1e-06s but transition-property is none). Pace/warning
+nodes replay only on relevant changes. Independent source review approved. Types, isolated 752
+build and all 12 scoped common-runner harnesses green. Both browser matrices have no errors or
+external requests; their servers are stopped. Proof: local Temp `dukb-round751-trade-audit`.
+These are compiled actual components with production CSS; full board/hook integration is outside
+their fixtures and existing owner/trade engine sims passed. Claude owns final frontend publication.
+
 **2026-09-30, Codex Round 750 COMPLETE: square grid cells on narrow phones.**
 Scoped shrinkable cells and compact bounded content prevent long correct answers from increasing
 cell height or moving the next row in Football, College and Soccer Grid. Full names remain in DOM,

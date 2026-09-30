@@ -1,5 +1,29 @@
 # Project state
 
+## BUILT 2026-09-30: Codex Rounds 751 and 752, four Front Office games
+
+Trade talks now reveal the newest committed reply, mark an agreed/ended call with finite feedback,
+wrap long packages and keep existing buttons immediately usable with 44px targets. Exact engine
+lines, packages, callbacks, disabled one-shot push and stable enabled-button focus remain intact.
+Six actual-card tests passed; removing the real reply binding fails four checks and leaves two
+transition/focus checks green. Browser proof: 739 checks across 32 sport/width/motion contexts.
+
+Ownership now gives brief cues for existing hot-seat and changed pace messages. The original trust
+values, thresholds, text, colors and card geometry are retained. Its existing 700ms bar transition
+also respects reduced motion. Seven rendered tests pass; a trust-26 boundary mutation fails exactly
+one, six unrelated checks stay green. Independent source review approved. Browser proof: 1,299
+valid comparisons in 32 contexts and 192 trust samples against the pre-change actual component.
+Reduced-motion transition-property is none with an immediate correct width, despite the site's
+global 1e-06s duration override. No game state, engine, parent-board or save changes.
+
+Type gate 0, isolated combined 752 build 0, all 12 scoped common-runner harnesses green, including
+the existing owner/trade engine checks. All four widths 320/390/430/1440 and both motion modes pass
+with no errors, overflow or external requests. Actual compiled-component fixtures prove the UI;
+they do not claim a full board/hook run. All owned browser servers stopped. Evidence and screenshots:
+`C:/Users/antho/AppData/Local/Temp/dukb-round751-trade-audit`.
+Source is pushed for Claude's gated release; frontend publication pending. Round 753 owns only
+finite feedback in the Combat, Tennis and NASCAR timelines and remains separate from their data.
+
 ## BUILT 2026-09-30: Codex Round 750, narrow-phone grid geometry
 
 Football, College and Soccer Grid keep all nine cells square when long correct answers arrive.
