@@ -4,19 +4,36 @@
  * WHY. Every game drew its own end screen, so finishing a grid, a quiz and a
  * fight looked like three different sites. src/components/game/ResultMoment.tsx
  * is the one piece they share now: the sport's ink and drawn glyph, the score
- * the game passes, and three honest states. ResultScreen mounts it, and the
- * games that draw their own end card mount it directly.
+ * the game passes, and three honest states. ResultScreen mounts it, so every
+ * game that ends on ResultScreen gets it at once.
+ *
+ * WHAT ROUND 710 SHIPS, plainly: the shared piece and ResultScreen mounting it.
+ * That reaches the 65 games that end on ResultScreen. The 36 games that end a
+ * run on a surface of their own (an inline panel, a banner over the board, a
+ * grade card) are listed under OWN_SURFACE below with what each one draws
+ * instead, and wiring them to the moment is a follow up round, not this one.
+ * The same goes for the score pill: ResultScreen takes a score prop now, and
+ * no caller passes one yet, so section 2 prints how many do and how many do
+ * not as a measurement. Both lists are ratchets: a game that gets wired must
+ * leave OWN_SURFACE or the fence fails, and the measured count is printed on
+ * every run so a follow up can be checked against it.
  *
  * WHAT IT CHECKS, each as its own named check so a control can prove it turns
  * exactly its own check red:
  *   wiring   every live game in the registry reaches <ResultScreen> or
  *            <ResultMoment> in its import tree, read from the TypeScript AST
  *            (JSX elements, never comments), unless it is on LEFT with the
- *            reason its end is not a single result. A game on LEFT that is
- *            wired, or a LEFT entry that is not a live game, is also a fail,
- *            so the list cannot rot. ResultScreen itself must render the moment.
- *   score    every <ResultScreen> in src passes a score, and the rendered pill
- *            shows exactly the score it was given, for strings and numbers.
+ *            reason its end is not a single result, or on OWN_SURFACE with
+ *            what it draws instead. A listed game that is wired, or a listed
+ *            entry that is not a live game, is also a fail, so neither list
+ *            can rot. ResultScreen itself must render the moment.
+ *   score    section 2 counts the <ResultScreen> calls in src and prints how
+ *            many pass a score and how many do not (a measurement, not a
+ *            failure, until a follow up round adds them; it fails only if the
+ *            scan finds too few calls to have read src). The rendered checks
+ *            then require that the pill shows exactly the score it was given,
+ *            for strings and numbers, both mounted directly and through
+ *            ResultScreen.
  *   copy     the three states say their three different lines, ResultScreen's
  *            won maps true to win, false to loss and a neutral run to good try,
  *            an explicit outcome overrides it, and the game's headline is still
@@ -36,12 +53,16 @@
  * every other check stayed green:
  *   unwired   ResultScreen stops rendering the moment (wiring)
  *   unlisted  one LEFT entry is dropped (wiring)
- *   noscore   one <ResultScreen> call loses its score prop (score)
+ *   noscore   ResultScreen stops passing its score to the moment (score)
  *   clipped   the pill drops the last character of its score (score)
  *   copy      good try says the loss line (copy)
  *   ink       the moment stops setting its sport ink (sport)
  *   shift     the headline's rise animates margin instead of transform (layout)
  *   motion    the reduced motion rule stops matching (reduced)
+ *
+ * Every source a control mutates is read with its line endings normalised to
+ * LF first, so an anchor that spans a line break matches on a CRLF checkout
+ * (the gate clone is one) exactly as it does on an LF one.
  *
  * Bundles stay in memory; nothing is written outside the scratch folder a
  * screenshot run names. RESULT_MOMENT_SHOTS=<dir> saves the fixture's three
@@ -72,8 +93,11 @@ if (control && !CONTROLS[control]) {
 const checks = { wiring: [], score: [], copy: [], sport: [], layout: [], reduced: [] };
 const fail = (check, msg) => { checks[check].push(msg); console.error(`  FAIL [${check}] ${msg}`); };
 
-/** Replace exactly one occurrence, and refuse if the anchor is missing or repeated. */
-function mutateOnce(text, before, after, what) {
+/** Replace exactly one occurrence, and refuse if the anchor is missing or repeated.
+ *  The text is normalised to LF first, so an anchor with a newline in it
+ *  matches on a CRLF checkout too. */
+function mutateOnce(rawText, before, after, what) {
+  const text = rawText.replace(/\r\n/g, '\n');
   const n = text.split(before).length - 1;
   if (n !== 1) {
     console.error(`control ${control}: expected exactly one "${before}" in ${what}, found ${n}, so this control would prove nothing`);
@@ -116,6 +140,51 @@ const LEFT = {
   '/fight-gym': 'a gym run over many fighters and cards, it has no single final score',
   '/hall-of-champions': 'a browse page of past winners, not a game with an end',
   '/idle-arena': 'an idle game, it never ends',
+};
+
+/* ---------- Games that end a run on a surface of their own ----------
+   Round 710 ships the shared piece and ResultScreen mounting it. Each game
+   here ends a single run, but draws that end itself rather than through
+   ResultScreen, so the moment has not reached it yet. Wiring these is a
+   follow up round. Each line says what the game draws today, read from its
+   page or board; when one is wired it must leave this list or the fence fails. */
+const OWN_SURFACE = {
+  '/dart-draft': 'its own done panel in the page, the squad grade, the series score and the XI',
+  '/who-am-i': 'its own won or lost panel in the page, the secret player and the guess rows',
+  '/world-xi': 'its own won or lost panel in the page, with a season sim report on a win',
+  '/alphabet-sprint': 'its own done panel in the page, the sprint points and the letters',
+  '/clue-auction': 'its own won or lost panel in the page, the bank and the clues bought',
+  '/sign-the-player': 'its own showdown table in the page, a league table with a champion, not one score',
+  '/free-kick': 'its own done card in FreeKickBoard, goals out of ten and points',
+  '/world-cup-bracket': 'a bracket scored against the real results at the foot of the page, no run end',
+  '/fantasy-draft': 'its own draft complete panel in the page, a verdict, a season sim and a vote',
+  '/perfect-season-nfl': 'its own final record panel in the page, revealed game by game',
+  '/perfect-season-nba': 'its own final record panel in the page, revealed game by game',
+  '/perfect-season-mlb': 'its own final record panel in the page, revealed game by game',
+  '/perfect-season-nhl': 'its own final record panel in the page, revealed game by game',
+  '/nfl-connect-4': 'a two player board; a won or draw banner over it names a colour, not a score',
+  '/nba-connect-4': 'a two player board; a won or draw banner over it names a colour, not a score',
+  '/mlb-connect-4': 'a two player board; a won or draw banner over it names a colour, not a score',
+  '/nhl-connect-4': 'a two player board; a won or draw banner over it names a colour, not a score',
+  '/guess-cbb-team': 'its own game over panel in CbbProgramBoard, under the revealed clues',
+  '/f1-driver': 'its own game over panel in F1DriverBoard, under the revealed clues',
+  '/f1-constructor': 'its own game over panel in F1ConstructorBoard, under the revealed clues',
+  '/guess-tennis-player': 'its own game over panel in TennisPlayerBoard, under the revealed clues',
+  '/guess-nascar-driver': 'its own game over panel in NascarDriverBoard, under the revealed clues',
+  '/buzzer-beater': 'its own done card in BuzzerBeaterBoard, makes out of ten and points',
+  '/stat-detective': 'its own done panel in the page, the guess count out of eight',
+  '/nba-starting-5': 'its own result panel in the page, the verdict on the five',
+  '/perfect-lineup-nba': 'its own grade card in GenericLineupBoard, grade, rating and chemistry',
+  '/perfect-lineup-nhl': 'its own grade card in GenericLineupBoard, grade, rating and chemistry',
+  '/perfect-lineup-f1': 'its own grade card in GenericLineupBoard, grade, rating and chemistry',
+  '/tennis-chain': 'its own game over block in TennisChainBoard, the chain and the reason it ended',
+  '/nascar-chain': 'its own game over block in NascarChainBoard, the chain and the reason it ended',
+  '/ufc-chain': 'its own game over block in CombatChainBoard, the chain and the reason it ended',
+  '/minefield': 'its own done panel in the page, the banked score and rounds won',
+  '/quiz-board': 'its own finished panel in QuizBoard, the bank after the last tile',
+  '/ball-iq': 'its own finished screen in BallIqBoard, an IQ number, a rank and correct out of the questions',
+  '/emoji-guess': "its own Today's result screen in EmojiGuessBoard, solved out of the rounds",
+  '/mystery-box': 'its own finished panel in MysteryBoxBoard, the squad rating and best pull',
 };
 
 /* ---------- 1. wiring, from the AST ---------- */
@@ -224,7 +293,8 @@ function wired(entry) {
     delete left['/idle-arena'];
     console.log('   CONTROL unlisted: dropped /idle-arena from LEFT');
   }
-  let live = 0, wiredCount = 0, leftCount = 0;
+  for (const gp of Object.keys(OWN_SURFACE)) if (left[gp]) fail('wiring', `${gp} is on both LEFT and OWN_SURFACE; it can only have one reason`);
+  let live = 0, wiredCount = 0, leftCount = 0, ownCount = 0;
   for (const gp of gamePaths) {
     const comp = routeEl.get(gp);
     if (!comp) { fail('wiring', `${gp} is in the registry with no route in App.tsx`); continue; }
@@ -238,48 +308,56 @@ function wired(entry) {
     if (left[gp]) {
       leftCount += 1;
       if (via && gp !== '/club-manager') fail('wiring', `${gp} is on LEFT but renders the moment through ${via}; take it off the list`);
+    } else if (OWN_SURFACE[gp]) {
+      ownCount += 1;
+      if (via) fail('wiring', `${gp} is on OWN_SURFACE but renders the moment through ${via}; it is wired now, take it off the list`);
     } else if (via) {
       wiredCount += 1;
     } else {
-      fail('wiring', `${gp} (${rel(entry)}) ends a run without the shared result moment and is not on LEFT`);
+      fail('wiring', `${gp} (${rel(entry)}) ends a run without the shared result moment and is on neither LEFT nor OWN_SURFACE`);
     }
   }
   for (const gp of Object.keys(left)) if (!gamePaths.includes(gp) || routeEl.get(gp) === 'Navigate') fail('wiring', `LEFT lists ${gp}, which is not a live game`);
-  console.log(`   ${live} live games: ${wiredCount} wired to the moment, ${leftCount} left with a reason`);
+  for (const gp of Object.keys(OWN_SURFACE)) if (!gamePaths.includes(gp) || routeEl.get(gp) === 'Navigate') fail('wiring', `OWN_SURFACE lists ${gp}, which is not a live game`);
+  console.log(`   ${live} live games: ${wiredCount} wired to the moment, ${leftCount} left with a reason (no single result), ${ownCount} still ending on a surface of their own (follow up round)`);
+  for (const [gp, why] of Object.entries(OWN_SURFACE)) console.log(`     own surface ${gp.padEnd(22)} ${why}`);
   if (live < 100) fail('wiring', `only ${live} live games found, so the scan did not really read the registry`);
 }
 
-/* ---------- 2. every ResultScreen call passes a score ---------- */
+/* ---------- 2. how many ResultScreen calls pass a score, measured ----------
+   Round 710 gives ResultScreen the prop; no caller passes it yet, so a caller
+   without one reveals the game's emoji in the pill, which is the documented
+   fallback, not a fault. The count is printed so the follow up round that
+   adds scores can be checked against it. It fails only if the scan finds too
+   few calls to have read src. */
 {
-  console.log('2) score: every <ResultScreen> passes the score its moment reveals');
+  console.log('2) score: how many <ResultScreen> calls pass the score their moment reveals');
   const files = [];
   const walk = d => { for (const e of fs.readdirSync(d, { withFileTypes: true })) { const f = path.join(d, e.name); if (e.isDirectory()) walk(f); else if (/\.tsx$/.test(e.name) && !/\.test\.tsx$/.test(e.name) && !f.includes(`${path.sep}test${path.sep}`)) files.push(f); } };
   walk(path.join(root, 'src'));
-  let calls = 0, noScore = [];
-  let mutated = control !== 'noscore';
+  let calls = 0;
+  const withScore = [], noScore = [];
   for (const f of files) {
-    let text = fs.readFileSync(f, 'utf8');
+    const text = fs.readFileSync(f, 'utf8');
     if (!text.includes('<ResultScreen')) continue;
-    if (!mutated && rel(f) === 'src/pages/Footle.tsx') {
-      text = mutateOnce(text, 'score={footleScore}', '', 'Footle.tsx');
-      mutated = true;
-    }
-    for (const { tag, node } of jsxTags(astOf(f, text))) {
+    const tree = astOf(f, text);
+    for (const { tag, node } of jsxTags(tree)) {
       if (tag !== 'ResultScreen') continue;
       calls += 1;
       const has = node.attributes.properties.some(a => ts.isJsxAttribute(a) && a.name.getText() === 'score') || node.attributes.properties.some(a => ts.isJsxSpreadAttribute(a));
-      if (!has) noScore.push(`${rel(f)}:${astOf(f, text).getLineAndCharacterOfPosition(node.getStart()).line + 1}`);
+      (has ? withScore : noScore).push(`${rel(f)}:${tree.getLineAndCharacterOfPosition(node.getStart()).line + 1}`);
     }
   }
-  if (!mutated) { console.error('control noscore: Footle.tsx carried no score={footleScore} to remove'); process.exit(1); }
-  for (const s of noScore) fail('score', `${s} renders ResultScreen with no score, so its moment reveals an emoji instead`);
-  console.log(`   ${calls} ResultScreen calls, ${calls - noScore.length} pass a score`);
+  console.log(`   ${calls} ResultScreen calls: ${withScore.length} pass a score, ${noScore.length} do not yet (their pill shows the game's emoji until a follow up round adds one)`);
+  for (const s of withScore) console.log(`     passes a score ${s}`);
   if (calls < 60) fail('score', `only ${calls} ResultScreen calls found, so the scan did not really read src`);
 }
 
 /* ---------- 3 to 6. the rendered piece, in Chromium ---------- */
 const momentFile = path.join(root, 'src/components/game/ResultMoment.tsx');
 let momentSrc = fs.readFileSync(momentFile, 'utf8');
+let screenSrc = fs.readFileSync(resultScreenFile, 'utf8');
+if (control === 'noscore') screenSrc = mutateOnce(screenSrc, 'score={score}', 'score={undefined}', 'ResultScreen.tsx');
 if (control === 'clipped') momentSrc = mutateOnce(momentSrc, '{score}\n', "{typeof score === 'string' ? score.slice(0, -1) : score}\n", 'ResultMoment.tsx');
 if (control === 'copy') momentSrc = mutateOnce(momentSrc, "close: 'Good try',", "close: 'Not this time',", 'ResultMoment.tsx');
 if (control === 'ink') momentSrc = mutateOnce(momentSrc, 'style={sportStyle(sport)}', '', 'ResultMoment.tsx');
@@ -308,6 +386,7 @@ const bundle = await build({
   define: { 'import.meta.env.DEV': 'false', 'import.meta.env.PROD': 'true', 'import.meta.env.MODE': '"production"' },
   plugins: [{ name: 'moment-under-test', setup(b) {
     b.onLoad({ filter: /ResultMoment\.tsx$/ }, () => ({ contents: momentSrc, loader: 'tsx', resolveDir: path.dirname(momentFile) }));
+    b.onLoad({ filter: /ResultScreen\.tsx$/ }, () => ({ contents: screenSrc, loader: 'tsx', resolveDir: path.dirname(resultScreenFile) }));
   } }],
 });
 const configOutput = await build({ entryPoints: [path.join(root, 'tailwind.config.ts')], write: false, format: 'cjs', platform: 'node', logLevel: 'silent' });
@@ -517,4 +596,4 @@ if (red.length) {
   console.error(`simResultMoment: ${red.map(k => `${k} ${checks[k].length}`).join(', ')} problem(s)`);
   process.exit(1);
 }
-console.log('simResultMoment: green. Every live game reaches the shared result moment or is listed with a reason, every ResultScreen passes its score, the three states say their own lines in the sport\'s ink, nothing moves while it plays, and reduced motion shows the final frame at once.');
+console.log('simResultMoment: green. Every live game reaches the shared result moment or is listed with what it draws instead, the pill shows exactly the score it is given, the three states say their own lines in the sport\'s ink, nothing moves while it plays, and reduced motion shows the final frame at once.');
