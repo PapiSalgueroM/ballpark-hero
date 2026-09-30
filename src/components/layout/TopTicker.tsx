@@ -1,6 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObject } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { SPORT_HUB, SPORT_TAG, startLabel, teamShort, type LiveScoreRow } from '@/lib/liveScores';
+import { SPORT_HUB, SPORT_TAG, boardAt, startLabel, teamShort, type LiveScoreRow } from '@/lib/liveScores';
+import {
+  FILTER_ALL, FILTER_MINE, readFollows, readSportFilter, teamKey, toggleFollow, writeFollows, writeSportFilter,
+} from '@/lib/tickerPrefs';
+import {
+  DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel,
+  DropdownMenuRadioGroup, DropdownMenuRadioItem, DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 
 /**
  * Round 298: the strip becomes what the owner asked for in the 2026-08-26
@@ -23,10 +30,22 @@ import { SPORT_HUB, SPORT_TAG, startLabel, teamShort, type LiveScoreRow } from '
  * data-no-prerender. A snapshot outlives the build that wrote it, and a
  * score is stale twenty minutes later; the prerenderer drops what is marked
  * and its clock sampling catches what is not.
+ *
+ * Round 711, spec section 9 and D44. Four things a fan expects from a real
+ * bottom line: when it last heard from the feed ("Updated 2:05 PM", the
+ * poller's own stamp, never the browser clock), a plain Delayed notice when
+ * that is too long ago, a sport filter, and teams they follow, starred from a
+ * score card and led to the front. The follows and the filter live in this
+ * browser (src/lib/tickerPrefs.ts). None of it can reach a snapshot: it only
+ * renders once a read has answered, and the prerenderer never lets one.
  */
 
 export interface TopTickerProps {
   scores?: LiveScoreRow[];
+  /** how the last read went; a strip given only rows behaves as before */
+  status?: 'loading' | 'ok' | 'failed';
+  /** the server's clock at that read, in ms, the one freshness is judged by */
+  checkedAt?: number | null;
 }
 
 export interface SportGroup {
@@ -42,12 +61,32 @@ export interface SportGroup {
    behind the NBA, the way a bottom line pairs them, and tennis closes. */
 const SPORT_ORDER = ['soccer', 'mlb', 'nfl', 'cfb', 'nba', 'cbb', 'nhl', 'wnba', 'tennis'];
 
+const NO_FOLLOWS: ReadonlySet<string> = new Set();
+
+/** Round 711: a game involving a team the visitor follows. */
+export function isFollowedRow(r: LiveScoreRow, followed: ReadonlySet<string>): boolean {
+  if (!r || followed.size === 0) return false;
+  return followed.has(teamKey(r.sport, r.home)) || followed.has(teamKey(r.sport, r.away));
+}
+
+/** Round 711: the visitor's filter applied to the wire. 'all' is every
+ *  game, 'mine' is games with a followed team, anything else is one sport. */
+export function filterScores(scores: LiveScoreRow[], filter: string, followed: ReadonlySet<string>): LiveScoreRow[] {
+  if (filter === FILTER_ALL) return scores;
+  if (filter === FILTER_MINE) return scores.filter(r => isFollowedRow(r, followed));
+  return scores.filter(r => r?.sport === filter);
+}
+
 /**
  * Groups the wire into per-sport boxes, each ordered the way a fan scans a
  * bottom line: games in play first, then today's kickoffs soonest first,
  * then finals, most recent first. Empty sports simply do not appear.
+ *
+ * Round 711, spec 9.4 puts the visitor's own teams first: a game with a
+ * followed team leads its sport's box, and a sport with such a game leads
+ * the wire. Everything else keeps the order above.
  */
-export function groupScores(scores: LiveScoreRow[]): SportGroup[] {
+export function groupScores(scores: LiveScoreRow[], followed: ReadonlySet<string> = NO_FOLLOWS): SportGroup[] {
   const bySport = new Map<string, LiveScoreRow[]>();
   for (const r of scores) {
     if (!r || !r.sport) continue;
@@ -55,7 +94,11 @@ export function groupScores(scores: LiveScoreRow[]): SportGroup[] {
     list.push(r);
     bySport.set(r.sport, list);
   }
+  const mine = (sport: string) => (bySport.get(sport) ?? []).some(r => isFollowedRow(r, followed));
   const sports = [...bySport.keys()].sort((a, b) => {
+    const fa = mine(a) ? 0 : 1;
+    const fb = mine(b) ? 0 : 1;
+    if (fa !== fb) return fa - fb;
     const ia = SPORT_ORDER.indexOf(a);
     const ib = SPORT_ORDER.indexOf(b);
     if (ia !== -1 && ib !== -1) return ia - ib;
@@ -65,6 +108,9 @@ export function groupScores(scores: LiveScoreRow[]): SportGroup[] {
   });
   return sports.map(sport => {
     const rows = [...(bySport.get(sport) ?? [])].sort((a, b) => {
+      const followA = isFollowedRow(a, followed) ? 0 : 1;
+      const followB = isFollowedRow(b, followed) ? 0 : 1;
+      if (followA !== followB) return followA - followB;
       const stateA = a.live ? 0 : !a.finished ? 1 : 2;
       const stateB = b.live ? 0 : !b.finished ? 1 : 2;
       if (stateA !== stateB) return stateA - stateB;
@@ -88,38 +134,107 @@ export function dwellMs(gameCount: number): number {
   return Math.min(14000, Math.max(5000, 2500 + gameCount * 1500));
 }
 
-function ScoreCard({ row, hub }: { row: LiveScoreRow; hub: string }) {
+/** What a card needs from the strip to offer its follow star. */
+interface FollowProps {
+  followed: ReadonlySet<string>;
+  onToggle: (key: string) => void;
+  onMenu: (id: string, open: boolean) => void;
+  /** true while the menu being opened was opened by a pointer, see below */
+  pointerOpen: MutableRefObject<boolean>;
+}
+
+/* Round 711: star a team from its score card. The star opens a two line menu
+   (one per team) rather than guessing which side you meant. When the menu was
+   opened with a mouse or a finger, closing it must NOT hand focus back to the
+   star: focus inside the strip is itself a pause (Round 306), so returning it
+   there left the wire parked, the same trap Round 317 found under the pause
+   button. A keyboard user gets focus back where they were, as they should. */
+function FollowStar({ row, follow }: { row: LiveScoreRow; follow: FollowProps }) {
+  const teams = [
+    { key: teamKey(row.sport, row.away), name: row.away },
+    { key: teamKey(row.sport, row.home), name: row.home },
+  ];
+  const mine = teams.filter(t => follow.followed.has(t.key));
+  return (
+    <DropdownMenu modal={false} onOpenChange={o => follow.onMenu(row.id, o)}>
+      <DropdownMenuTrigger asChild>
+        <button
+          type="button"
+          data-follow-toggle={mine.length ? 'on' : 'off'}
+          onPointerDown={() => { follow.pointerOpen.current = true; }}
+          onKeyDown={() => { follow.pointerOpen.current = false; }}
+          aria-label={mine.length
+            ? `Following ${mine.map(t => t.name).join(' and ')}. Change who you follow`
+            : `Follow ${row.away} or ${row.home}`}
+          className={`inline-flex items-center justify-center h-full w-8 shrink-0 text-[13px] leading-none transition-colors hover:bg-muted/40 ${mine.length ? 'text-[hsl(var(--ticker-late))]' : 'text-muted-foreground hover:text-foreground'}`}
+        >
+          <span aria-hidden="true">{mine.length ? '★' : '☆'}</span>
+        </button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent
+        align="start"
+        data-no-prerender="true"
+        className="min-w-[13rem]"
+        onCloseAutoFocus={e => { if (follow.pointerOpen.current) e.preventDefault(); }}
+      >
+        <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">Follow a team and its games lead the ticker</DropdownMenuLabel>
+        {teams.map(t => (
+          <DropdownMenuCheckboxItem
+            key={t.key}
+            data-follow-team={t.name}
+            checked={follow.followed.has(t.key)}
+            onCheckedChange={() => follow.onToggle(t.key)}
+          >
+            {t.name}
+          </DropdownMenuCheckboxItem>
+        ))}
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+function ScoreCard({ row, hub, stale, follow }: { row: LiveScoreRow; hub: string; stale: boolean; follow: FollowProps }) {
   const home = teamShort(row.home, row.sport);
   const away = teamShort(row.away, row.sport);
-  const state = row.live ? (row.status_long || 'Live') : row.finished ? 'Final' : startLabel(row.start_at);
+  /* Round 711, D44: a game the feed stopped writing keeps its last real
+     score but never says LIVE; it says when that score is from. */
+  const asOf = stale ? startLabel(row.updated_at) : '';
+  const state = stale
+    ? (asOf ? `as of ${asOf}` : 'not updating')
+    : row.live ? (row.status_long || 'Live') : row.finished ? 'Final' : startLabel(row.start_at);
+  const liveNow = row.live && !stale;
   /* American sports read away then home ("Astros at Yankees"); soccer reads
      home then away. The strip follows the convention the fan expects. */
   const first = row.sport === 'soccer' ? [home, row.home_score] : [away, row.away_score];
   const second = row.sport === 'soccer' ? [away, row.away_score] : [home, row.home_score];
   return (
-    <Link
-      to={hub}
-      data-no-prerender="true"
-      data-score-card=""
-      className="inline-flex items-center gap-1.5 h-full px-3 border-l border-border/60 text-[11px] shrink-0 hover:bg-muted/40 transition-colors"
-      aria-label={`${first[0]} ${first[1] ?? ''} ${row.sport === 'soccer' ? 'v' : 'at'} ${second[0]} ${second[1] ?? ''}, ${state}`}
-    >
-      <span className="inline-flex items-baseline gap-1.5">
-        <span className="font-semibold text-foreground whitespace-nowrap">{first[0]}</span>
-        {first[1] != null && <span className="tabular-nums font-bold text-foreground">{first[1]}</span>}
-        <span className="text-muted-foreground px-0.5" aria-hidden="true">{row.sport === 'soccer' ? 'v' : '@'}</span>
-        <span className="font-semibold text-foreground whitespace-nowrap">{second[0]}</span>
-        {second[1] != null && <span className="tabular-nums font-bold text-foreground">{second[1]}</span>}
-      </span>
-      <span className={`inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap ${row.live ? 'text-destructive' : row.finished ? 'text-muted-foreground' : 'text-primary'}`}>
-        {row.live && <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" aria-hidden="true" />}
-        {state}
-      </span>
-    </Link>
+    <span data-no-prerender="true" className="inline-flex items-center h-full shrink-0 border-l border-border/60">
+      <Link
+        to={hub}
+        data-no-prerender="true"
+        data-score-card=""
+        data-stale={stale ? 'true' : undefined}
+        className="inline-flex items-center gap-1.5 h-full pl-3 pr-1 text-[11px] shrink-0 hover:bg-muted/40 transition-colors"
+        aria-label={`${first[0]} ${first[1] ?? ''} ${row.sport === 'soccer' ? 'v' : 'at'} ${second[0]} ${second[1] ?? ''}, ${stale ? `score ${state}, not updating` : state}`}
+      >
+        <span className="inline-flex items-baseline gap-1.5">
+          <span className="font-semibold text-foreground whitespace-nowrap">{first[0]}</span>
+          {first[1] != null && <span className="tabular-nums font-bold text-foreground">{first[1]}</span>}
+          <span className="text-muted-foreground px-0.5" aria-hidden="true">{row.sport === 'soccer' ? 'v' : '@'}</span>
+          <span className="font-semibold text-foreground whitespace-nowrap">{second[0]}</span>
+          {second[1] != null && <span className="tabular-nums font-bold text-foreground">{second[1]}</span>}
+        </span>
+        <span className={`inline-flex items-center gap-1 text-[9px] font-bold uppercase tracking-wider whitespace-nowrap ${stale ? 'text-[hsl(var(--ticker-late))]' : liveNow ? 'text-destructive' : row.finished ? 'text-muted-foreground' : 'text-primary'}`}>
+          {liveNow && <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" aria-hidden="true" />}
+          {state}
+        </span>
+      </Link>
+      <FollowStar row={row} follow={follow} />
+    </span>
   );
 }
 
-function SportBox({ group, open }: { group: SportGroup; open: boolean }) {
+function SportBox({ group, open, stale, follow }: { group: SportGroup; open: boolean; stale: ReadonlySet<string>; follow: FollowProps }) {
   return (
     <span data-no-prerender="true" className="inline-flex items-center h-full">
       <Link
@@ -134,7 +249,7 @@ function SportBox({ group, open }: { group: SportGroup; open: boolean }) {
         style={{ maxWidth: open ? '4000px' : '0px', opacity: open ? 1 : 0 }}
         aria-hidden={!open}
       >
-        {open && group.rows.map(r => <ScoreCard key={r.id} row={r} hub={group.hub} />)}
+        {open && group.rows.map(r => <ScoreCard key={r.id} row={r} hub={group.hub} stale={stale.has(r.id)} follow={follow} />)}
       </span>
     </span>
   );
@@ -142,11 +257,46 @@ function SportBox({ group, open }: { group: SportGroup; open: boolean }) {
 
 const HIDDEN_PREFIXES = ['/admin', '/reset-password'];
 
-export function TopTicker({ scores = [] }: TopTickerProps) {
+export function TopTicker({ scores = [], status = 'ok', checkedAt = null }: TopTickerProps) {
   const { pathname } = useLocation();
-  const groups = useMemo(() => groupScores(scores), [scores]);
-  const [idx, setIdx] = useState(0);
+  /* Round 711: the freshness rules run once per read, against the server's
+     clock at that read. Without a clock (a strip handed rows alone) the
+     newest stamp stands in, which judges rows against each other only. */
+  const board = useMemo(() => {
+    const newest = scores.reduce((m, r) => Math.max(m, Date.parse(r?.updated_at ?? '') || 0), 0);
+    return boardAt(scores, checkedAt ?? newest);
+  }, [scores, checkedAt]);
+  const [follows, setFollows] = useState<string[]>(() => readFollows());
+  const followed = useMemo(() => new Set(follows), [follows]);
+  const [filter, setFilter] = useState<string>(() => readSportFilter());
+  const shown = useMemo(() => filterScores(board.rows, filter, followed), [board, filter, followed]);
+  const groups = useMemo(() => groupScores(shown, followed), [shown, followed]);
+  /* Round 711: the open box is remembered by SPORT, not by position. Starring
+     a team moves its sport to the front, and a remembered index would then
+     point at a different box and fold up the one the visitor was using. */
+  const [openKey, setOpenKey] = useState<string | null>(null);
   const [reducedMotion, setReducedMotion] = useState(false);
+  /* Round 711: an open menu (the filter, or a card's follow star) holds the
+     wire still, or the card under the menu would crawl away from it. Ids are
+     pruned against what is on screen, so a card that leaves the board with
+     its menu open cannot park the wire for good. */
+  const [openMenus, setOpenMenus] = useState<string[]>([]);
+  const onMenu = useCallback((id: string, o: boolean) => {
+    setOpenMenus(s => (o ? (s.includes(id) ? s : [...s, id]) : s.filter(x => x !== id)));
+  }, []);
+  const menuOpen = openMenus.some(id => id === 'filter' || shown.some(r => r.id === id));
+  const pointerOpen = useRef(false);
+  const onToggle = useCallback((key: string) => {
+    const next = toggleFollow(follows, key);
+    setFollows(next);
+    writeFollows(next);
+  }, [follows]);
+  const follow = useMemo<FollowProps>(() => ({ followed, onToggle, onMenu, pointerOpen }), [followed, onToggle, onMenu]);
+  const chooseFilter = (v: string) => {
+    setFilter(v);
+    writeSportFilter(v);
+    setOpenKey(null);
+  };
   /* Round 306: auto advancing content needs a way to hold still. Pointer
      over the strip or keyboard focus inside it parks the wire on the open
      sport; leaving lets it run again. Reduced motion still shows everything
@@ -180,14 +330,20 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
      next sport when the last card has passed. A group that fits on screen
      holds for its old dwell instead. Reduced motion keeps the everything
      open, nothing moving layout. */
-  const lastIdxRef = useRef(-1);
+  /* A feed refresh can shrink the group list under the pointer, and a filter
+     or a follow can reorder it: the open box is found by its sport, and the
+     first box opens when that sport has left the wire. */
+  const open = Math.max(0, groups.findIndex(g => g.sport === openKey));
+  const openSport = groups[open]?.sport ?? null;
+  const lastSportRef = useRef<string | null>(null);
   useEffect(() => {
-    if (reducedMotion || paused || userPaused || groups.length === 0) return undefined;
+    if (reducedMotion || paused || userPaused || menuOpen || groups.length === 0) return undefined;
     const vp = viewportRef.current;
     if (!vp) return undefined;
-    const fresh = lastIdxRef.current !== idx;
-    lastIdxRef.current = idx;
+    const fresh = lastSportRef.current !== openSport;
+    lastSportRef.current = openSport;
     if (fresh) vp.scrollLeft = 0;
+    const advance = () => setOpenKey(groups[(open + 1) % groups.length].sport);
     /* a fresh sport gets the reading hold; a resume after hover or pause
        picks up mid glide almost at once */
     let holdLeft = fresh ? 1500 : 350;
@@ -215,8 +371,8 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
       if (maxScroll <= 4) {
         /* fits on screen: nothing to glide, so hold for the old dwell */
         settled += dt;
-        if (settled >= dwellMs(groups[idx % groups.length]?.rows.length ?? 0) && groups.length > 1) {
-          setIdx(i => (i + 1) % groups.length);
+        if (settled >= dwellMs(groups[open]?.rows.length ?? 0) && groups.length > 1) {
+          advance();
           return;
         }
         raf = requestAnimationFrame(step);
@@ -225,7 +381,7 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
       vp.scrollLeft = vp.scrollLeft + (SPEED * dt) / 1000;
       if (vp.scrollLeft >= maxScroll - 1) {
         if (groups.length > 1) {
-          setIdx(i => (i + 1) % groups.length);
+          advance();
           return;
         }
         /* a one sport wire loops itself: hold at the end, then restart */
@@ -236,15 +392,41 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
     };
     raf = requestAnimationFrame(step);
     return () => cancelAnimationFrame(raf);
-  }, [idx, groups, reducedMotion, paused, userPaused]);
+  }, [open, openSport, groups, reducedMotion, paused, userPaused, menuOpen]);
 
-  /* A feed refresh can shrink the group list under the pointer. */
-  const open = groups.length ? idx % groups.length : 0;
+  /* Round 711: a filter to one sport leaves a single box, and a single box
+     that overflows still glides (it loops itself). The pause button used to
+     show only for two or more boxes; it now shows for anything that moves.
+     Showing it only takes width from the viewport, so it cannot flicker. */
+  const [overflowing, setOverflowing] = useState(false);
+  useEffect(() => {
+    const vp = viewportRef.current;
+    setOverflowing(!!vp && vp.scrollWidth - vp.clientWidth > 4);
+  }, [groups, open]);
 
   if (HIDDEN_PREFIXES.some(p => pathname.startsWith(p))) return null;
 
   const home = pathname === '/';
-  const anyLive = groups.some(g => g.rows.some(r => r.live));
+  const anyLive = groups.some(g => g.rows.some(r => r.live && !board.stale.has(r.id)));
+  const answered = status !== 'loading';
+  /* The sports the filter offers: whatever is on the wire now, plus a saved
+     sport that is not on today, so the visitor can always get back out. */
+  const sportsOnWire = groupScores(board.rows).map(g => g.sport);
+  if (filter !== FILTER_ALL && filter !== FILTER_MINE && !sportsOnWire.includes(filter)) sportsOnWire.push(filter);
+  const filterLabel = filter === FILTER_ALL ? 'All' : filter === FILTER_MINE ? 'My teams' : (SPORT_TAG[filter] ?? filter.toUpperCase());
+  const showFilter = answered && (board.rows.length > 0 || filter !== FILTER_ALL);
+  const updated = board.updatedAt != null ? startLabel(new Date(board.updatedAt).toISOString(), new Date(checkedAt ?? board.updatedAt)) : '';
+  /* D44: what the wire says when it has nothing. A read that failed, or a
+     feed so late that nothing left is honest, is "unavailable", never "no
+     games"; an answered read with no games says so; and a filter that
+     empties the wire says which filter did it. */
+  const emptyLine = !answered
+    ? ''
+    : board.rows.length === 0
+      ? (status === 'failed' || board.late ? 'Live scores temporarily unavailable' : 'No games on the board right now')
+      : groups.length === 0
+        ? (filter === FILTER_MINE ? 'None of your teams are on the board right now' : `No ${filterLabel} games on the board right now`)
+        : '';
 
   return (
     /* Round 306: a section, not a div, because aria-label on a generic
@@ -275,7 +457,7 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
             Effective dwell also pauses under hover and focus; this button is
             the explicit choice that sticks. Hidden when there is nothing to
             cycle, because a pause button on a still strip is a lie. */}
-        {groups.length > 1 && !reducedMotion && (
+        {(groups.length > 1 || overflowing) && !reducedMotion && (
           <button
             type="button"
             onClick={() => setUserPaused(p => !p)}
@@ -295,16 +477,67 @@ export function TopTicker({ scores = [] }: TopTickerProps) {
         )}
         <div ref={viewportRef} className="flex-1 overflow-hidden h-full" aria-live="off">
           <div className="flex items-center h-full w-max">
-            {groups.length === 0 && (
-              <span data-no-prerender="true" className="inline-flex items-center h-full px-3 text-[11px] text-muted-foreground whitespace-nowrap">
-                No games on the board right now
+            {emptyLine && (
+              <span data-no-prerender="true" data-empty-line="" className="inline-flex items-center h-full px-3 text-[11px] text-muted-foreground whitespace-nowrap">
+                {emptyLine}
               </span>
             )}
             {reducedMotion
-              ? groups.map(g => <SportBox key={g.sport} group={g} open />)
-              : groups.map((g, i) => <SportBox key={g.sport} group={g} open={i === open} />)}
+              ? groups.map(g => <SportBox key={g.sport} group={g} open stale={board.stale} follow={follow} />)
+              : groups.map((g, i) => <SportBox key={g.sport} group={g} open={i === open} stale={board.stale} follow={follow} />)}
           </div>
         </div>
+        {/* Round 711, D44: when the feed last wrote, from the poller's own
+            stamp. Past two missed polls it turns into a plain Delayed notice
+            in the late colour, so nothing on the wire passes for current. */}
+        {answered && updated && (
+          <span
+            data-no-prerender="true"
+            data-feed-stamp={board.late ? 'late' : 'fresh'}
+            title={board.late ? `The scores feed has not updated since ${updated}` : `Scores last updated ${updated}`}
+            className={`shrink-0 h-full inline-flex items-center px-2 border-l border-border/60 text-[10px] whitespace-nowrap ${board.late ? 'font-bold text-[hsl(var(--ticker-late))]' : 'text-muted-foreground'}`}
+          >
+            {board.late ? `Delayed, updated ${updated}` : `Updated ${updated}`}
+          </span>
+        )}
+        {showFilter && (
+          <DropdownMenu modal={false} onOpenChange={o => onMenu('filter', o)}>
+            <DropdownMenuTrigger asChild>
+              <button
+                type="button"
+                data-no-prerender="true"
+                data-sport-filter={filter}
+                onPointerDown={() => { pointerOpen.current = true; }}
+                onKeyDown={() => { pointerOpen.current = false; }}
+                aria-label={`Showing ${filter === FILTER_ALL ? 'every sport' : filterLabel}. Choose what the ticker shows`}
+                className="shrink-0 h-full min-w-8 inline-flex items-center gap-1 px-2 border-l border-border/60 text-[10px] font-black uppercase tracking-[0.12em] text-foreground hover:bg-muted/40 transition-colors"
+              >
+                {filterLabel}
+                <span aria-hidden="true" className="text-muted-foreground">▾</span>
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent
+              align="end"
+              data-no-prerender="true"
+              className="min-w-[11rem]"
+              onCloseAutoFocus={e => { if (pointerOpen.current) e.preventDefault(); }}
+            >
+              <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">Show scores for</DropdownMenuLabel>
+              <DropdownMenuRadioGroup value={filter} onValueChange={chooseFilter}>
+                <DropdownMenuRadioItem value={FILTER_ALL}>Every sport</DropdownMenuRadioItem>
+                {(follows.length > 0 || filter === FILTER_MINE) && (
+                  <DropdownMenuRadioItem value={FILTER_MINE}>My teams ({follows.length})</DropdownMenuRadioItem>
+                )}
+                {sportsOnWire.map(s => (
+                  <DropdownMenuRadioItem key={s} value={s}>{SPORT_TAG[s] ?? s.toUpperCase()}</DropdownMenuRadioItem>
+                ))}
+              </DropdownMenuRadioGroup>
+              {follows.length === 0 && (
+                <p className="px-2 pb-1.5 pt-1 text-[11px] leading-snug text-muted-foreground">Tap the star on any score to follow a team. Its games go first.</p>
+              )}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
     </section>
   );

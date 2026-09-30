@@ -99,6 +99,10 @@
        background, promoted from a hardcoded arbitrary value so light mode
        can answer it (light mode text on the fixed dark bar measured 1.16). */
     --ticker: 225 25% 4%;
+    /* Round 711: the ticker's late colour, for Delayed and for a score the
+       feed stopped updating, and for a followed team's star. Amber, apart
+       from the red of live; about 10 to 1 on the bar. */
+    --ticker-late: 38 92% 60%;
 
     /* Round 658: the home front. One ink per sport, read through --tile
        (tailwind's tile colour) on the game cards, the section headers and
@@ -180,6 +184,7 @@
     --ring: 152 60% 30%;
 
     --ticker: 210 20% 94%;
+    --ticker-late: 30 90% 28%;
 
     --correct: 142 71% 30%;
     --correct-foreground: 0 0% 100%;
