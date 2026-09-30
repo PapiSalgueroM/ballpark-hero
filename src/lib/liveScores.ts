@@ -103,11 +103,21 @@ export function isShowable(r: LiveScoreRow): boolean {
   return true;
 }
 
-/* Round 711, the failure modes. The poller writes every row of the day's
-   slate every 20 minutes (the scores-poll-every-20-min cron), stamping each
-   one with updated_at, the moment it fetched the feed. That stamp is the only
-   clock these rules trust for the scores: nothing here ever says a score is
-   current because the browser's clock says so. */
+/* Round 711, the failure modes. What the poller really does, read from
+   supabase/functions/scores-poll and measured against the table on
+   2026-09-30: each run asks the feeds for ONE New York date and rewrites
+   every row it gets back, stamping each with updated_at, the moment it
+   fetched. The every-20-minutes cron asks for today in New York, so today's
+   slate is rewritten every 20 minutes (measured: 26 unfinished rows of the
+   day, none more than 2 seconds apart). Rows for any other date come from
+   the separate day=1 cron, which runs hours apart (stamps seen at 16:05Z
+   and 22:05Z), and from the follow-up pass that polls yesterday's date
+   through the morning so a game crossing midnight gets its final. So the
+   only stamps that can stand in for the 20 minute clock are those on rows
+   whose start falls on today's New York date; tomorrow's rows are judged
+   only by their own start time (not started and not due yet is always
+   current), and nothing here ever says a score is current because the
+   browser's clock says so. */
 
 /** No write for this long means at least two polls went missing. */
 export const FEED_LATE_MS = 45 * 60 * 1000;
@@ -119,6 +129,15 @@ const stamp = (iso: unknown): number => {
   const t = typeof iso === 'string' ? Date.parse(iso) : NaN;
   return Number.isFinite(t) ? t : NaN;
 };
+
+const NY_DAY = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' });
+
+/** The New York calendar date a moment belongs to, the way the poller
+ *  buckets a slate, as YYYY-MM-DD; '' for a moment that is not one. */
+export function nyDateOf(ms: number): string {
+  if (!Number.isFinite(ms)) return '';
+  try { return NY_DAY.format(new Date(ms)); } catch { return ''; }
+}
 
 /** When the poller last wrote anything on this board: the newest
  *  updated_at among its rows, or null when no row carries one. */
@@ -176,9 +195,20 @@ export interface LiveBoard {
   late: boolean;
 }
 
-/** Every freshness rule applied to one read of the table at one moment. */
+/** The rows the 20 minute cron owns: those whose start falls on today's
+ *  New York date. Their stamps are the only honest clock for the watchdog. */
+export function todaysRows(rows: LiveScoreRow[], now: number): LiveScoreRow[] {
+  const today = nyDateOf(now);
+  return rows.filter(r => !!r && nyDateOf(stamp(r.start_at)) === today);
+}
+
+/** Every freshness rule applied to one read of the table at one moment.
+ *  Lateness is judged on today's rows only: a board carrying nothing but
+ *  tomorrow's slate has no 20 minute clock to be late against, and its
+ *  newest write is shown as the "Updated" time without the alarm. */
 export function boardAt(rows: LiveScoreRow[], now: number): LiveBoard {
-  const updatedAt = feedUpdatedAt(rows);
+  const owned = todaysRows(rows, now);
+  const updatedAt = feedUpdatedAt(owned.length ? owned : rows);
   const stale = new Set<string>();
   const kept: LiveScoreRow[] = [];
   for (const r of rows) {
@@ -188,7 +218,7 @@ export function boardAt(rows: LiveScoreRow[], now: number): LiveBoard {
     if (f === 'stale') stale.add(r.id);
     kept.push(r);
   }
-  return { rows: kept, stale, updatedAt, late: feedIsLate(updatedAt, now) };
+  return { rows: kept, stale, updatedAt, late: owned.length > 0 && feedIsLate(updatedAt, now) };
 }
 
 /** Twelve hour clock in the visitor's own zone, e.g. "7:05 PM". Only ever

@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState, type MutableRefObjec
 import { Link, useLocation } from 'react-router-dom';
 import { SPORT_HUB, SPORT_TAG, boardAt, startLabel, teamShort, type LiveScoreRow } from '@/lib/liveScores';
 import {
-  FILTER_ALL, FILTER_MINE, readFollows, readSportFilter, teamKey, toggleFollow, writeFollows, writeSportFilter,
+  FILTER_ALL, FILTER_MINE, followableTeams, readFollows, readSportFilter, teamKey, toggleFollow, writeFollows, writeSportFilter,
 } from '@/lib/tickerPrefs';
 import {
   DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel,
@@ -150,10 +150,10 @@ interface FollowProps {
    there left the wire parked, the same trap Round 317 found under the pause
    button. A keyboard user gets focus back where they were, as they should. */
 function FollowStar({ row, follow }: { row: LiveScoreRow; follow: FollowProps }) {
-  const teams = [
-    { key: teamKey(row.sport, row.away), name: row.away },
-    { key: teamKey(row.sport, row.home), name: row.home },
-  ];
+  /* Only real, distinct sides get a line: the feed's "TBD @ TBD" placeholder
+     pair keys as one team twice, and "TBD" is nobody's team to follow. */
+  const teams = followableTeams(row.sport, row.away, row.home);
+  if (teams.length === 0) return null;
   const mine = teams.filter(t => follow.followed.has(t.key));
   return (
     <DropdownMenu modal={false} onOpenChange={o => follow.onMenu(row.id, o)}>
@@ -165,7 +165,7 @@ function FollowStar({ row, follow }: { row: LiveScoreRow; follow: FollowProps })
           onKeyDown={() => { follow.pointerOpen.current = false; }}
           aria-label={mine.length
             ? `Following ${mine.map(t => t.name).join(' and ')}. Change who you follow`
-            : `Follow ${row.away} or ${row.home}`}
+            : `Follow ${teams.map(t => t.name).join(' or ')}`}
           className={`inline-flex items-center justify-center h-full w-8 shrink-0 text-[13px] leading-none transition-colors hover:bg-muted/40 ${mine.length ? 'text-[hsl(var(--ticker-late))]' : 'text-muted-foreground hover:text-foreground'}`}
         >
           <span aria-hidden="true">{mine.length ? '★' : '☆'}</span>
@@ -286,17 +286,21 @@ export function TopTicker({ scores = [], status = 'ok', checkedAt = null }: TopT
   }, []);
   const menuOpen = openMenus.some(id => id === 'filter' || shown.some(r => r.id === id));
   const pointerOpen = useRef(false);
+  const chooseFilter = useCallback((v: string) => {
+    setFilter(v);
+    writeSportFilter(v);
+    setOpenKey(null);
+  }, []);
   const onToggle = useCallback((key: string) => {
     const next = toggleFollow(follows, key);
     setFollows(next);
     writeFollows(next);
-  }, [follows]);
+    /* Unfollowing the last team while showing "My teams" would leave a wire
+       with no card to star, and a menu hint pointing at stars that are not
+       there. The filter falls back to every sport instead. */
+    if (next.length === 0 && filter === FILTER_MINE) chooseFilter(FILTER_ALL);
+  }, [follows, filter, chooseFilter]);
   const follow = useMemo<FollowProps>(() => ({ followed, onToggle, onMenu, pointerOpen }), [followed, onToggle, onMenu]);
-  const chooseFilter = (v: string) => {
-    setFilter(v);
-    writeSportFilter(v);
-    setOpenKey(null);
-  };
   /* Round 306: auto advancing content needs a way to hold still. Pointer
      over the strip or keyboard focus inside it parks the wire on the open
      sport; leaving lets it run again. Reduced motion still shows everything
@@ -398,10 +402,23 @@ export function TopTicker({ scores = [], status = 'ok', checkedAt = null }: TopT
      that overflows still glides (it loops itself). The pause button used to
      show only for two or more boxes; it now shows for anything that moves.
      Showing it only takes width from the viewport, so it cannot flicker. */
+  /* Measured twice: once now, and once more after the box's 500ms opening
+     transition has run, because a box read while it is still sliding open
+     from maxWidth 0 has almost no width and the button would stay hidden
+     until the next read replaced the groups. A resize re-measures too. */
   const [overflowing, setOverflowing] = useState(false);
   useEffect(() => {
-    const vp = viewportRef.current;
-    setOverflowing(!!vp && vp.scrollWidth - vp.clientWidth > 4);
+    const measure = () => {
+      const vp = viewportRef.current;
+      setOverflowing(!!vp && vp.scrollWidth - vp.clientWidth > 4);
+    };
+    measure();
+    const settled = window.setTimeout(measure, 650);
+    window.addEventListener('resize', measure);
+    return () => {
+      window.clearTimeout(settled);
+      window.removeEventListener('resize', measure);
+    };
   }, [groups, open]);
 
   if (HIDDEN_PREFIXES.some(p => pathname.startsWith(p))) return null;
@@ -413,12 +430,21 @@ export function TopTicker({ scores = [], status = 'ok', checkedAt = null }: TopT
      sport that is not on today, so the visitor can always get back out. */
   const sportsOnWire = groupScores(board.rows).map(g => g.sport);
   if (filter !== FILTER_ALL && filter !== FILTER_MINE && !sportsOnWire.includes(filter)) sportsOnWire.push(filter);
-  const filterLabel = filter === FILTER_ALL ? 'All' : filter === FILTER_MINE ? 'My teams' : (SPORT_TAG[filter] ?? filter.toUpperCase());
+  /* Own keys only: a saved sport is text from localStorage, and a plain
+     object answers "constructor" with a function, not a tag. */
+  const tagOf = (s: string) => (Object.prototype.hasOwnProperty.call(SPORT_TAG, s) ? SPORT_TAG[s] : s.toUpperCase());
+  const filterLabel = filter === FILTER_ALL ? 'All' : filter === FILTER_MINE ? 'My teams' : tagOf(filter);
+  /* the phone strip is a third the width, so the button wears a short name */
+  const filterShort = filter === FILTER_MINE ? 'Mine' : filterLabel;
   const showFilter = answered && (board.rows.length > 0 || filter !== FILTER_ALL);
   const updated = board.updatedAt != null ? startLabel(new Date(board.updatedAt).toISOString(), new Date(checkedAt ?? board.updatedAt)) : '';
-  /* D44: what the wire says when it has nothing. A read that failed, or a
-     feed so late that nothing left is honest, is "unavailable", never "no
-     games"; an answered read with no games says so; and a filter that
+  const stampLine = board.late ? `Delayed, updated ${updated}` : `Updated ${updated}`;
+  /* D44: what the wire says when it has nothing. A read that failed is
+     "unavailable", never "no games"; so is a read whose every row of
+     today's slate was dropped as gone, because boardAt judges lateness on
+     the rows it was handed, dropped ones included, and the newest of them
+     can only be gone when it is itself past FEED_LATE_MS: the feed is late,
+     not quiet. An answered read with no games says so; and a filter that
      empties the wire says which filter did it. */
   const emptyLine = !answered
     ? ''
@@ -489,15 +515,20 @@ export function TopTicker({ scores = [], status = 'ok', checkedAt = null }: TopT
         </div>
         {/* Round 711, D44: when the feed last wrote, from the poller's own
             stamp. Past two missed polls it turns into a plain Delayed notice
-            in the late colour, so nothing on the wire passes for current. */}
+            in the late colour, so nothing on the wire passes for current.
+            On a phone (the strip shows there on the home page only) the
+            stamp and a long filter name would leave the wire narrower than
+            one card, measured at 390px: so below md the stamp moves into
+            the filter menu as its first line and the button wears the
+            short name. */}
         {answered && updated && (
           <span
             data-no-prerender="true"
             data-feed-stamp={board.late ? 'late' : 'fresh'}
             title={board.late ? `The scores feed has not updated since ${updated}` : `Scores last updated ${updated}`}
-            className={`shrink-0 h-full inline-flex items-center px-2 border-l border-border/60 text-[10px] whitespace-nowrap ${board.late ? 'font-bold text-[hsl(var(--ticker-late))]' : 'text-muted-foreground'}`}
+            className={`shrink-0 h-full hidden md:inline-flex items-center px-2 border-l border-border/60 text-[10px] whitespace-nowrap ${board.late ? 'font-bold text-[hsl(var(--ticker-late))]' : 'text-muted-foreground'}`}
           >
-            {board.late ? `Delayed, updated ${updated}` : `Updated ${updated}`}
+            {stampLine}
           </span>
         )}
         {showFilter && (
@@ -512,7 +543,8 @@ export function TopTicker({ scores = [], status = 'ok', checkedAt = null }: TopT
                 aria-label={`Showing ${filter === FILTER_ALL ? 'every sport' : filterLabel}. Choose what the ticker shows`}
                 className="shrink-0 h-full min-w-8 inline-flex items-center gap-1 px-2 border-l border-border/60 text-[10px] font-black uppercase tracking-[0.12em] text-foreground hover:bg-muted/40 transition-colors"
               >
-                {filterLabel}
+                <span className="md:hidden">{filterShort}</span>
+                <span className="hidden md:inline">{filterLabel}</span>
                 <span aria-hidden="true" className="text-muted-foreground">▾</span>
               </button>
             </DropdownMenuTrigger>
@@ -522,6 +554,9 @@ export function TopTicker({ scores = [], status = 'ok', checkedAt = null }: TopT
               className="min-w-[11rem]"
               onCloseAutoFocus={e => { if (pointerOpen.current) e.preventDefault(); }}
             >
+              {updated && (
+                <DropdownMenuLabel data-feed-stamp-phone={board.late ? 'late' : 'fresh'} className={`md:hidden text-[11px] font-normal ${board.late ? 'font-bold text-[hsl(var(--ticker-late))]' : 'text-muted-foreground'}`}>{stampLine}</DropdownMenuLabel>
+              )}
               <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">Show scores for</DropdownMenuLabel>
               <DropdownMenuRadioGroup value={filter} onValueChange={chooseFilter}>
                 <DropdownMenuRadioItem value={FILTER_ALL}>Every sport</DropdownMenuRadioItem>
@@ -529,7 +564,7 @@ export function TopTicker({ scores = [], status = 'ok', checkedAt = null }: TopT
                   <DropdownMenuRadioItem value={FILTER_MINE}>My teams ({follows.length})</DropdownMenuRadioItem>
                 )}
                 {sportsOnWire.map(s => (
-                  <DropdownMenuRadioItem key={s} value={s}>{SPORT_TAG[s] ?? s.toUpperCase()}</DropdownMenuRadioItem>
+                  <DropdownMenuRadioItem key={s} value={s}>{tagOf(s)}</DropdownMenuRadioItem>
                 ))}
               </DropdownMenuRadioGroup>
               {follows.length === 0 && (
