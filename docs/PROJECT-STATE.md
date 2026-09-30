@@ -11,7 +11,9 @@
   carried an ISO date.
 - **What changed.** `scripts/genGridArchive.mjs` accumulates: the window starts where the file
   starts and ends yesterday in America/New_York, and it refuses to write if a published board
-  would change or roll off, or if the college pool has moved off the recorded one. Players are
+  would roll off or change (rows, columns, and since the fix round every cell's count and names,
+  with `--republish` to write a deliberate recount and print what moved), or if the college
+  pool has moved off the recorded one. Players are
   counted by the source's own id (each grid lib loads it only when asked, `withIds`, so the games
   download nothing new); placeholder names still count, since the game accepts them, but never
   print; ties break by name then id, so a rerun writes the same bytes (checked). Regenerated to
@@ -44,9 +46,30 @@
   college board. Without a per board pool, `archive:grids` then refuses to run and
   `simGridArchive` section 5 goes red. The other three grid tables have no duplicate rows and no
   placeholder names.
+- **The fix round (same branch, after review).** Three reviewers found the same blocker: the
+  page promised that anything listed would be accepted in the game, and 227 college answers were
+  not. The game resolved a typed name through `byNormalizedName`, which kept ONE player per
+  name (the last row loaded), and 1,697 college names belong to two or more players, so typing
+  "Danny Manning" for Kansas x 1,500+ Career Points was judged on a later Danny Manning with 59
+  games and refused. That was a live game bug since Round 368, not only an archive one. Fixed on
+  the game side, one engine many sports: `byNormalizedName` is `Map<string, P[]>` in
+  `gridEngine.ts` and `cbbGrid.ts`, and the new `pickNamesake` in `gridEngine.ts` judges the
+  namesake who fits the cell; all four grid pages and both grid hooks (`useFootballGrid`,
+  `useCollegeGrid`) read it through that. The generator resolves every name it lists through
+  the same path and refuses otherwise, and `simGridArchive` section 2 types every listed answer
+  into the game's own lookup (control `shadowed`). Also from the review: the generator now
+  compares published cells too and refuses unless `--republish` (the docs said it did and it did
+  not); section 9 carries its own name rule instead of importing the generator's (a broken
+  `malformedName` left it green, measured); section 12 checks "rarest by career games played"
+  (control `notrarest`, and flipping the sort had left every section green); `miscount` control
+  for the distinct id count; the subtitle says "Past boards from August 17, 2026" instead of
+  "Every past board" (the grids have run since July, the archive starts 08-17), fenced in
+  section 10; and the hub links now read "NBA grid answers" with `why` lines that promise the
+  count and the rarest names rather than "every answer". The archive file itself did not move
+  (only its note did): with the game accepting any fitting namesake, every listed name was
+  already one the game takes.
 - **Follow ups.** The page's JSON grows by about 13K a day in one chunk (546K now): split it by
-  sport or by month well before a year. The hub pages still link "NBA Grid archive" (Round 654
-  touches hub links).
+  sport or by month well before a year.
 
 ## LIVE 2026-09-29: Release F (660, 661, 668, 669 code, 670, 672), main `add1c6b0`
 

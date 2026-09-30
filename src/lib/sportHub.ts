@@ -165,7 +165,7 @@ export const SPORT_HUBS: SportHub[] = [
       { path: '/records/nba-champions', label: 'NBA champions since 1947, year by year', why: 'every Finals since 1947 with the beaten side and the series score, and the Finals MVP from 1969 when the award began, checked against the record' },
       { path: '/nba-playoff-format-history', label: 'NBA playoff format history', why: 'how the bracket grew from six BAA teams to sixteen plus a play-in, and the draft lottery from the coin flip to the 3-2-1 lottery, each change twice sourced' },
       { path: '/records/wnba-champions', label: 'WNBA champions since 1997, year by year', why: 'every Finals with the runner-up, the series and the Finals MVP' },
-      { path: '/nba-grid/archive', label: 'NBA Grid archive', why: 'every past board with its full answer key, so a franchise crossed with a franchise reads as a list of the men who wore both' },
+      { path: '/nba-grid/archive', label: 'NBA grid answers', why: 'every past board with the count of players who fit each crossing and the rarest of them named, so a franchise crossed with a franchise reads as the deep cuts who wore both' },
     ],
     hubFaqs: [
       { q: 'Why do so many of these games use per 36 minute numbers instead of per game averages?', a: 'Because the historical season records store totals and minutes rather than game counts, so a per 36 rate is exact where a per game average would be an estimate. It also puts eras on one scale, since the 1960s were played at a much higher pace and per game numbers from then flatter everybody. /stat-detective and /nba-stat-line both work in per 36 for that reason.' },
@@ -216,7 +216,7 @@ export const SPORT_HUBS: SportHub[] = [
       'Two things about the NHL trip up people arriving from other sports. First, not every game hands out the same number of points. A win is worth two whether it comes in regulation, overtime or a shootout, and the team that loses in overtime or a shootout still keeps one, so a game settled inside sixty minutes is worth two points in total and one that goes past it is worth three. That is why the table is read in points rather than in wins and losses, and why losing late still feels like collecting something. Second, the playoffs drop the shootout entirely. Postseason overtime is 5-on-5 sudden death in full twenty minute periods, repeated until somebody scores, and sixteen teams play four best-of-seven rounds, sixteen wins in all, for the Stanley Cup, which is not remade each year for the new champion the way other North American trophies are but handed on with the winners\' names engraved on its bands.',
     referenceLinks: [
       { path: '/records/stanley-cup-winners', label: 'Stanley Cup winners since 1915, year by year', why: 'every final since 1915 with the beaten side and the series, with the two seasons nobody won left honestly empty' },
-      { path: '/hockey-grid/archive', label: 'NHL Grid archive', why: 'the past boards and their answer keys, which double as a record of who skated for two clubs' },
+      { path: '/hockey-grid/archive', label: 'NHL grid answers', why: 'the past boards with the count of players who fit each crossing and the rarest of them named, which double as a record of who skated for two clubs' },
       { path: '/nhl-playoff-format-history', label: 'NHL playoff format history', why: 'from the NHL champion meeting the West for the Cup to top three plus wild cards, every bracket since 1917-18 checked against the league\'s own account and Wikipedia, with the three places they disagree printed rather than picked' },
     ],
     hubFaqs: [
@@ -320,7 +320,7 @@ export const SPORT_HUBS: SportHub[] = [
     referenceLinks: [
       { path: '/records/world-series-winners', label: 'World Series winners since 1903, year by year', why: 'every series since 1903 with the beaten pennant winner and the series score, the two unplayed years missing on purpose' },
       { path: '/mlb-postseason-format-history', label: 'MLB postseason format history', why: 'how October grew from one series to a twelve club bracket, each round added since 1903 and how long it has been, checked against two publishers' },
-      { path: '/mlb-grid/archive', label: 'MLB Grid archive', why: 'past boards with the answers filled in, a quiet reference for which players suited up for two clubs' },
+      { path: '/mlb-grid/archive', label: 'MLB grid answers', why: 'past boards with the count of players who fit each crossing and the rarest of them named, a quiet reference for which players suited up for two clubs' },
     ],
     hubFaqs: [
       { q: 'Which of these reset every day?', a: 'Six of the ten. MLB Career Path, MLB Higher or Lower, MLB Franchise Grid, MLB Conquest, Missing Nine and MLB Connections all serve a new puzzle each day. 162-0 MLB Perfect Season, MLB Connect 4, MLB My Career and MLB Front Office are not on a clock, so you start those whenever you want.' },
@@ -371,7 +371,7 @@ export const SPORT_HUBS: SportHub[] = [
     referenceLinks: [
       { path: '/records/college-football-national-champions', label: 'College football national champions since 1981, year by year', why: 'the selector, the result and the coach for each season listed, split titles kept split' },
       { path: '/records/ncaa-basketball-champions', label: "Men's NCAA basketball champions since 1939, year by year", why: 'every title game since 1939 with the beaten finalist and the score' },
-      { path: '/cbb-grid/archive', label: 'College Basketball Grid archive', why: 'past boards with every answer, a reference for which players passed through which programs' },
+      { path: '/cbb-grid/archive', label: 'College Basketball grid answers', why: 'past boards with the count of players who fit each crossing and the rarest of them named, a reference for which players passed through which programs' },
     ],
     hubFaqs: [
       { q: 'Guess The College and Guess The CBB Program look like the same game. Which one do I want?', a: 'They share the format, clues released one at a time until you guess, but not the subject. Guess The College is about the school itself, the character of a place and its history across everything it does rather than one sport. Guess The CBB Program stays inside college basketball from the first clue to the last. Know campuses, start with the first. Know hoops, start with the second.' },

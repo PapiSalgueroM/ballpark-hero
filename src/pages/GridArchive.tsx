@@ -21,7 +21,13 @@ import archive from '@/data/gridArchive.json';
  *    however old the bake is when someone reads it.
  * 2. THE ANSWERS ARE COMPUTED, NOT COLLECTED. They come from each game's own
  *    playerMatchesCell over the same indexed player data the game validates
- *    guesses against, so this page cannot list a player the game would reject.
+ *    guesses against, and (Round 653) each listed name is also typed through
+ *    the game's own lookup, byNormalizedName then pickNamesake, before it is
+ *    written. Fitting the crossing was not enough: 1,697 college names belong
+ *    to two players, the game's map used to keep one of them, and 227 listed
+ *    names were refused when typed. The map now holds every namesake and the
+ *    generator and scripts/simGridArchive.mjs both resolve names the way the
+ *    page does, so this page cannot list a player the game would reject.
  *    Community picks were the obvious source and the wrong one: those tables
  *    hold a few hundred rows in total, so a picks page would be mostly empty.
  * 3. THESE SPORTS, NOT SOCCER OR THE NFL. Those grids draw from a fixed pool
@@ -64,7 +70,7 @@ const GridArchive = ({ sport }: { sport: string }) => {
       <GameShell
         width="narrow"
         title={`${data.label} Grid Answers: Past Daily Boards`}
-        subtitle="Every past board, with the players who solve each crossing"
+        subtitle={`Past boards from ${oldest ? longDate(oldest) : 'the first day'}, with the players who solve each crossing`}
         showReportQuestion
         reportGameType={`${sport}-grid-archive`}
       >

@@ -378,9 +378,13 @@ that deploys.** Both paths.
    file when it changed. It is deliberately in no build step, because a build must never need the
    database, which means nothing runs it unless this list does: that is how all four pages froze
    at 2026-08-30 for a month while they said "the last 14" (Round 653). It refuses to write if a
-   board it already published would change or roll off, or if the college grid's live school
-   pool has moved off the one the file records. Either refusal is a finding, not a flake: read
-   the message, do not rerun it until it goes away.
+   board it already published would roll off or change, and "change" covers the whole board: its
+   rows and columns, and every cell's count and listed names. It also refuses if the college
+   grid's live school pool has moved off the one the file records, and if any name it is about
+   to list would be refused by the game's own lookup. Every refusal is a finding, not a flake:
+   read the message, do not rerun it until it goes away. When a published count is meant to
+   move (the data was corrected, a duplicate row was deleted), rerun with `--republish`, which
+   writes and prints every cell that moved so the change is on the record.
 2. **`npm run build:seo`.** The prerender and the sitemap, which carry the new boards into the
    saved pages and re-date the pages that changed.
 3. The gates, then the push, then **Deploying** below.
