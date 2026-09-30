@@ -9,7 +9,7 @@ export const SOCCER_CONTENT_2: GameContentMap = {
       "There is a daily, the same club and the same target for everyone, and a free play mode where you can take any club you like.",
     ],
     headings: {
-      howToPlay: "How to play Manager Hot Seat, a free football manager game",
+      howToPlay: "How to play Manager Hot Seat, the free five game sack race",
       rules: "Manager Hot Seat rules: the target, the board and the fans",
       example: "A Manager Hot Seat walkthrough, five games to save the job",
       tips: "Manager Hot Seat tips for keeping your job",

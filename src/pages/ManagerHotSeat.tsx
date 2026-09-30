@@ -11,7 +11,7 @@ const ManagerHotSeat = () => {
     <>
       <PageSeo
         title="Manager Hot Seat - Five Games To Save Your Job | DoUKnowBall"
-        description="Take over a real club on a bad run. The board give you five league games and a points target. Hit it or you are sacked. Free football manager game."
+        description="Take over a real club on a bad run. The board give you five league games and a points target. Hit it or you are sacked. Free football management game."
         path="/manager-hot-seat"
       />
       <div className="min-h-screen bg-background text-foreground">
@@ -41,7 +41,7 @@ const ManagerHotSeat = () => {
           <GameSeoContent
             pageHasOwnH1
             title="Manager Hot Seat: Save Your Job in Five Games"
-            description="A short football manager game on the Club Manager engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you."
+            description="Manager Hot Seat is the short version of Club Manager, on the same engine. Take over a real club on a bad run, read the room before every match, handle the press, and hit the board's points target in five league games before they sack you."
           />
           <GameNav />
         </main>
