@@ -246,27 +246,29 @@ console.log('6) every cell survives prerendering and reaches a crawler');
      document global dedupe silently deleted any repeated table cell: 21 of 126
      labels and 70 of 126 counts were missing from /nba-grid/archive, with no
      visible gap to notice.
-     Walked in DOCUMENT ORDER: a label whose count is present somewhere else on
-     the page is not good enough, because every cell sharing that count matches
-     the same single paragraph. That distinction is exactly what a first attempt
-     at measuring this got wrong. */
-  const stripP = /<p>(.*?)<\/p>/gs;
+     Walked ROW BY ROW: a label whose count is present somewhere else on the
+     page is not good enough, because every cell sharing that count matches the
+     same text. That distinction is exactly what a first attempt at measuring
+     this got wrong. Until Round 652 the snapshot wrote every cell as its own
+     paragraph and this paired a label with the paragraph after it; since then
+     each crossing is saved as one <tr>, and its count is read from its own
+     row, which is the pairing a crawler sees too. */
   const escHtml = t => String(t).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   for (const s of present) {
     const sport = archive.sports[s.key];
     const file = path.join(ROOT, 'public', sport.game.replace(/^\//, ''), 'archive', 'index.html');
     if (!fs.existsSync(file)) { fail(`${s.key}: no prerendered snapshot at ${file}, so nothing was served to a crawler`); continue; }
     const doc = fs.readFileSync(file, 'utf8');
-    let paras = [...doc.matchAll(stripP)].map(m => m[1]);
+    let rows = [...doc.matchAll(/<tr>([\s\S]*?)<\/tr>/g)].map(m => [...m[1].matchAll(/<(td|th)>([\s\S]*?)<\/\1>/g)].map(c => c[2]));
     if (CONTROL === 'dedupe') {
       /* Reproduce the pre Round 371 prerenderer: one document global Set, so
-         the second and later occurrence of any identical paragraph is dropped.
+         the second and later occurrence of any identical cell is dropped.
          That is exactly what deleted 70 counts and 21 labels from
          /nba-grid/archive. */
-      const before = paras.length;
-      const seenP = new Set();
-      paras = paras.filter(x => (seenP.has(x) ? false : (seenP.add(x), true)));
-      if (paras.length >= before) { console.error('control cannot run: nothing repeated to dedupe'); process.exit(1); }
+      const before = rows.flat().length;
+      const seenC = new Set();
+      rows = rows.map(r => r.filter(x => (seenC.has(x) ? false : (seenC.add(x), true))));
+      if (rows.flat().length >= before) { console.error('control cannot run: nothing repeated to dedupe'); process.exit(1); }
     }
     const cells = sport.boards.flatMap(b => b.cells);
     const wanted = new Map();
@@ -281,14 +283,14 @@ console.log('6) every cell survives prerendering and reaches a crawler');
        forgetting that an ampersand is escaped in the output. The subject is
        slippery; count the thing you actually mean. */
     let intact = 0, noCount = 0, labelOccurrences = 0;
-    for (let i = 0; i < paras.length; i++) {
-      const lbl = paras[i];
+    for (const row of rows) {
+      const lbl = row[0];
       if (!wanted.has(lbl)) continue;
       labelOccurrences += 1;
-      if (paras[i + 1] === wanted.get(lbl)) intact += 1; else noCount += 1;
+      if (row[1] === wanted.get(lbl)) intact += 1; else noCount += 1;
     }
     const missingLabels = cells.length - labelOccurrences;
-    console.log(`   ${s.key}  ${intact} of ${cells.length} cells intact, ${noCount} missing their count, ${missingLabels} cells with no label paragraph`);
+    console.log(`   ${s.key}  ${intact} of ${cells.length} cells intact, ${noCount} missing their count, ${missingLabels} cells with no row of their own`);
     if (noCount > 0) fail(`${s.key}: ${noCount} crossings reach a crawler with no answer count, though the page promises one for every cell`);
     if (missingLabels > 0) fail(`${s.key}: ${missingLabels} crossing labels never reached the snapshot, so their answers appear under the wrong heading`);
   }

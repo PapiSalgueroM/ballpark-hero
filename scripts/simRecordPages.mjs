@@ -171,7 +171,9 @@ const stripComments = src => src
   .replace(/\/\*[\s\S]*?\*\//g, '')
   .replace(/(^|[^:'"`\\])\/\/.*$/gm, '$1');
 
-/** The readable body of a saved page, one block per line, site chrome removed. */
+/** The readable body of a saved page, one block per line, site chrome removed.
+    Since Round 652 a table is saved as a table, one <tr> per line, so its rows
+    are kept here as lines of their own. */
 function bodyLines(html) {
   const i = html.indexOf('<div id="dukb-snapshot">');
   if (i < 0) return [];
@@ -179,7 +181,7 @@ function bodyLines(html) {
     .replace(/<div data-site-chrome>[\s\S]*?<\/div>/g, '')
     .split('\n')
     .map(l => l.trim())
-    .filter(l => /^<(h[1-4]|p|li|a)\b/.test(l));
+    .filter(l => /^<(h[1-4]|p|li|a|tr)\b/.test(l));
 }
 const textOf = line => unesc(line.replace(/<[^>]+>/g, '')).trim();
 const tagOf = line => (line.match(/^<([a-z0-9]+)/) || [])[1];
@@ -196,9 +198,13 @@ function sectionAfter(lines, heading) {
 
 const rowsOf = def => book.sections[def.key] || [];
 const firstOf = def => Math.min(...rowsOf(def).map(r => r.year));
-const cellsOf = (def, r) => [String(r.year), r.champion, ...def.columns.map(([k]) => r.extra[k]).filter(v => v != null && String(v).trim() !== '')]
-  .map(c => `<p>${esc(c)}</p>`);
-const headerOf = def => [def.yearLabel, def.championLabel ?? 'Champion', ...def.columns.map(([, l]) => l)].map(c => `<p>${esc(c)}</p>`);
+/* One saved table row, as the prerenderer writes it since Round 652. Every
+   column has a cell, an empty one included, so a missing runner up no longer
+   shifts the venue into its place the way the one paragraph per cell shape did. */
+const rowOf = (cells, tag = 'td') => `<tr>${cells.map(c => `<${tag}>${esc(String(c).replace(/\s+/g, ' ').trim())}</${tag}>`).join('')}</tr>`;
+const cellsIn = line => [...line.matchAll(/<(td|th)>([\s\S]*?)<\/\1>/g)].map(m => unesc(m[2].replace(/<[^>]+>/g, '')).trim());
+const cellsOf = (def, r) => rowOf([String(r.year), r.champion, ...def.columns.map(([k]) => r.extra[k] ?? '')]);
+const headerOf = def => rowOf([def.yearLabel, def.championLabel ?? 'Champion', ...def.columns.map(([, l]) => l)], 'th');
 
 /** The recount: one per row for the name exactly as the row writes it. */
 function recount(rows) {
@@ -360,7 +366,7 @@ console.log('2) every row in recordBooks.json is in its saved page, under its ow
     if (!rows.length) { fail(`${def.key}: recordBooks.json has no rows`); continue; }
     if (CONTROL === 'droprow' && def === first) {
       const last = rows[rows.length - 1];
-      html = mutateSaved(def.slug, `<p>${last.year}</p>\n<p>${esc(last.champion)}</p>\n`, `<p>${last.year}</p>\n`, 'droprow');
+      html = mutateSaved(def.slug, `\n${cellsOf(def, last)}\n`, '\n', 'droprow');
     }
     const lines = bodyLines(html);
     const heading = `Every ${def.words.one} since ${firstOf(def)}, year by year`;
@@ -370,7 +376,7 @@ console.log('2) every row in recordBooks.json is in its saved page, under its ow
     let key = null;
     for (const l of every) {
       if (tagOf(l) === 'h3') { key = textOf(l); blocks.set(key, []); continue; }
-      if (key && tagOf(l) === 'p') blocks.get(key).push(l);
+      if (key && tagOf(l) === 'tr') blocks.get(key).push(l);
     }
     const byDecade = new Map();
     for (const r of rows) {
@@ -383,11 +389,11 @@ console.log('2) every row in recordBooks.json is in its saved page, under its ow
       const h3 = decadeText(def, d, fy, ly);
       const got = blocks.get(h3);
       if (!got) { fail(`${def.key}: no block for the ${d}s, so ${list.length} rows are missing`); continue; }
-      const expected = [...headerOf(def), ...list.flatMap(r => cellsOf(def, r))];
+      const expected = [headerOf(def), ...list.map(r => cellsOf(def, r))];
       const n = Math.max(expected.length, got.length);
       for (let i = 0; i < n; i++) {
         if (expected[i] !== got[i]) {
-          fail(`${def.key} ${d}s: cell ${i} is ${JSON.stringify(got[i] ?? '(nothing)')} and the data says ${JSON.stringify(expected[i] ?? '(nothing)')}`);
+          fail(`${def.key} ${d}s: row ${i} is ${JSON.stringify(got[i] ?? '(nothing)')} and the data says ${JSON.stringify(expected[i] ?? '(nothing)')}`);
           break;
         }
       }
@@ -413,23 +419,29 @@ console.log('3) the most titles table matches a recount of the JSON, per name as
     const once = multi.length ? all.length - multi.length : 0;
     if (CONTROL === 'miscount' && def === first) {
       const topRow = [...listed].sort((a, b) => b.count - a.count)[0];
-      html = mutateSaved(def.slug, `<p>${esc(topRow.name)}</p>\n<p>${topRow.count}</p>`, `<p>${esc(topRow.name)}</p>\n<p>${topRow.count + 1}</p>`, 'miscount');
+      html = mutateSaved(def.slug, `<tr><td>${esc(topRow.name)}</td><td>${topRow.count}</td>`, `<tr><td>${esc(topRow.name)}</td><td>${topRow.count + 1}</td>`, 'miscount');
     }
     const heading = `${def.words.most} since ${firstOf(def)}`;
     const sec = sectionAfter(bodyLines(html), heading);
     if (!sec) { fail(`${def.key}: no "${heading}" section`); continue; }
     const ps = sec.filter(l => tagOf(l) === 'p');
-    const head = [cap(def.words.who[0]), `${cap(def.words.unit[1])} under this name`, 'Years'].map(c => `<p>${esc(c)}</p>`);
-    const h = ps.findIndex((l, i) => l === head[0] && ps[i + 1] === head[1] && ps[i + 2] === head[2]);
-    if (h < 0) { fail(`${def.key}: the most titles table has no ${head.map(textOf).join(' / ')} header`); continue; }
+    const trs = sec.filter(l => tagOf(l) === 'tr');
+    const head = rowOf([cap(def.words.who[0]), `${cap(def.words.unit[1])} under this name`, 'Years'], 'th');
+    const h = trs.indexOf(head);
+    if (h < 0) { fail(`${def.key}: the most titles table has no ${cellsIn(head).join(' / ')} header row`); continue; }
     const got = new Map();
-    let prev = Infinity, i = h + 3, ordered = true;
-    while (i + 2 < ps.length && /^\d+$/.test(textOf(ps[i + 1])) && /^\d{4}(, \d{4})*$/.test(textOf(ps[i + 2]))) {
-      const name = textOf(ps[i]), n = Number(textOf(ps[i + 1])), yrs = textOf(ps[i + 2]);
+    let prev = Infinity, ordered = true;
+    for (const tr of trs.slice(h + 1)) {
+      const cells = cellsIn(tr);
+      if (cells.length !== 3 || !/^\d+$/.test(cells[1]) || !/^\d{4}(, \d{4})*$/.test(cells[2])) {
+        fail(`${def.key}: the most titles table has a row that is not name, count, years: ${JSON.stringify(cells)}`);
+        break;
+      }
+      const [name, count, yrs] = cells;
+      const n = Number(count);
       if (n > prev) ordered = false;
       prev = n;
       got.set(name, { n, yrs });
-      i += 3;
     }
     if (!ordered) fail(`${def.key}: the most titles table is not in order, most first`);
     for (const x of listed) {
@@ -657,9 +669,9 @@ console.log('8) /records shows the newest ten seasons of each section, links eac
     const { top, names: topNames } = topOf(rows);
     const leadPrefix = `Most ${def.words.unit[1]} under one name since ${f1}: `;
     if (CONTROL === 'fulltable' && def === first) {
-      const anchor = cellsOf(def, rows.filter(r => shown.has(r.year)).slice(-1)[0]).join('\n');
+      const anchor = `\n${cellsOf(def, rows.filter(r => shown.has(r.year)).slice(-1)[0])}\n`;
       if (!idx.includes(anchor)) refuse('the last shown row of the first section is not in the saved /records page');
-      idx = idx.replace(anchor, `${anchor}\n${eleventh.flatMap(r => cellsOf(def, r)).join('\n')}`);
+      idx = idx.replace(anchor, `${anchor}${eleventh.map(r => cellsOf(def, r)).join('\n')}\n`);
     }
     if (CONTROL === 'indexleader' && def === first) {
       const from = `<p>${esc(leadPrefix)}`;
@@ -673,10 +685,10 @@ console.log('8) /records shows the newest ten seasons of each section, links eac
     }
     const before = failedChecks.get(8) || 0;
     for (const r of rows.filter(x => shown.has(x.year))) {
-      if (!idx.includes(cellsOf(def, r).join('\n'))) fail(`/records ${def.key}: ${r.year} ${r.champion} is not shown`);
+      if (!idx.includes(`\n${cellsOf(def, r)}\n`)) fail(`/records ${def.key}: ${r.year} ${r.champion} is not shown`);
     }
     for (const r of eleventh) {
-      if (idx.includes(cellsOf(def, r).join('\n'))) fail(`/records ${def.key}: ${r.year} ${r.champion} is shown, the eleventh season, so the index is carrying the full table again`);
+      if (idx.includes(`\n${cellsOf(def, r)}\n`)) fail(`/records ${def.key}: ${r.year} ${r.champion} is shown, the eleventh season, so the index is carrying the full table again`);
     }
     const block = sectionAfter(bodyLines(idx), `${def.emoji} ${def.title}`) || [];
     const linkLine = block.find(l => l.includes(`href="/records/${def.slug}"`));
