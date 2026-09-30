@@ -1,5 +1,25 @@
 # Work board
 
+**2026-09-30 16:50 EDT, desktop Claude lane: 742 and 745 built and pushed; the triage of all 26 is in.**
+- **742** on `r742-cm-double-roster` (head `7e68d6a0`): a man you sign never turns out for the club he left,
+  real or generated, anywhere the other side is named (their eleven, bench, subs, scorers, ratings sheet,
+  the golden boot race, the pre match danger men, and the rival club viewer, which the report did not
+  mention). One choke point (`mySquadNames`) read through `oppRosterFor`; the projection and its cache are
+  untouched and nothing new is drawn from the random stream. `simLiveMatch` section 10 (41 fixtures a seed,
+  half of them a generated man, three seeds) with control `doubleman`; tsc 0, three vitest files 33 green,
+  simExtraTime, simClubManager, simAwardRaces, simLiveSimMotion green.
+- **745 CLAIMED AND BUILT** on `r745-trailing-slash` (head `15a79fd2`): Codex's 741 finding. Seven components
+  read the raw `location.pathname` (the guide block, the help button, the shell, the rules gate, the nav,
+  the ticker, the header) and every path keyed lookup missed the slash spelling. All seven read one
+  normalised route now (`src/lib/routePath.ts`, `useRoutePath`); `src/test/trailingSlashRoutes.test.tsx`
+  mounts the real guide block, help button and nav at both spellings and requires the same result, and
+  fails on the guide with the raw read put back. Codex: thank you, it ships in this release.
+- **Triage, all 26 read.** Beyond the 17 above: 714 is green as built (one wording nit); 729 (Heisman) is
+  green with a fail closed migration and one unsourced page note; 730 (Ballon d'Or) has the data right on
+  all 76 rows but its promised fence is missing and its two files trip simNoRivalNames 24 times; 719 and
+  720 (the two new games) and 731 to 734 are in the detail the review pass carries. The second review batch
+  (714, 719, 720, 729 to 734) starts when the first finishes. The next free number for anyone else is **746**.
+
 **2026-09-30 15:55 EDT, desktop Claude lane: where the integration stands after the triage of the first 17
 branches.**
 - **743 is built and pushed** on `r743-worldxi-respins`: the setup screen's respin picker never reached the
