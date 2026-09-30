@@ -221,6 +221,14 @@ const FIFA_ALLOWED = [
   // real world lineups. Removing the citation would break the audit trail.
   /FIFA\.com/i,
   /FIFA archive/i,
+  // Round 730 verified public.ballon_dor row by row. From 2010 to 2015 the
+  // Ballon d'Or and the governing body's World Player of the Year were one
+  // merged prize, and the independent source for those six winners is RSSSF's
+  // page on the governing body's awards, whose path carries the word. It is a
+  // citation in a record file and a migration header, the same case as
+  // fifa.com above, and it is scoped to that one path so nothing else rides in
+  // on it. The record's own prose describes the era as "the merged award".
+  /rsssf\.org\/miscellaneous\/fifa-awards/i,
   // The format of a real tournament, as set by the organisation.
   /format follows FIFA/i,
   // Every legal page carries a disclaimer listing FIFA as a governing body

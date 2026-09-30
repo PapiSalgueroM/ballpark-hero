@@ -19,7 +19,7 @@
 --   uefa2025Men: https://www.uefa.com/uefachampionsleague/news/029d-1ec96c30aa3f-f6868c869cbd-1000--ousmane-dembele-wins-2025-men-s-ballon-d-or/
 --   uefa2025Women: https://www.uefa.com/womenschampionsleague/news/029d-1ec96b619751-1db5282da758-1000--aitana-bonmati-wins-2025-women-s-ballon-d-or/
 --   rsssfEuropa: https://www.rsssf.org/miscellaneous/europa-poy.html
---   rsssfFifa: https://www.rsssf.org/miscellaneous/fifa-awards.html
+--   rsssfMerged: https://www.rsssf.org/miscellaneous/fifa-awards.html
 --   topendsportsMen: https://www.topendsports.com/sport/soccer/list-player-of-the-year-ballondor.htm
 --   topendsportsWomen: https://www.topendsports.com/sport/soccer/awards/ballondor-women.htm
 --   espnList: https://www.espn.com/soccer/story/_/id/42055052/ballon-dor-winners-list-messi-ronaldo-ronaldinho-more
@@ -80,12 +80,12 @@
 --   id 53 Men 2007 Kaka: nationality NULL -> Brazil; uefaLaureates, rsssfEuropa, espnList
 --   id 54 Men 2008 Cristiano Ronaldo: nationality NULL -> Portugal; uefaLaureates, rsssfEuropa, espnList
 --   id 55 Men 2009 Lionel Messi: nationality NULL -> Argentina; uefaLaureates, rsssfEuropa, espnList
---   id 56 Men 2010 Lionel Messi: nationality NULL -> Argentina; uefaLaureates, rsssfFifa, topendsportsMen
---   id 57 Men 2011 Lionel Messi: nationality NULL -> Argentina; uefaLaureates, rsssfFifa, topendsportsMen
---   id 58 Men 2012 Lionel Messi: nationality NULL -> Argentina; uefaLaureates, rsssfFifa, topendsportsMen
---   id 59 Men 2013 Cristiano Ronaldo: nationality NULL -> Portugal; uefaLaureates, rsssfFifa, topendsportsMen
---   id 60 Men 2014 Cristiano Ronaldo: nationality NULL -> Portugal; uefaLaureates, rsssfFifa, topendsportsMen
---   id 61 Men 2015 Lionel Messi: nationality NULL -> Argentina; uefaLaureates, rsssfFifa, topendsportsMen
+--   id 56 Men 2010 Lionel Messi: nationality NULL -> Argentina; uefaLaureates, rsssfMerged, topendsportsMen
+--   id 57 Men 2011 Lionel Messi: nationality NULL -> Argentina; uefaLaureates, rsssfMerged, topendsportsMen
+--   id 58 Men 2012 Lionel Messi: nationality NULL -> Argentina; uefaLaureates, rsssfMerged, topendsportsMen
+--   id 59 Men 2013 Cristiano Ronaldo: nationality NULL -> Portugal; uefaLaureates, rsssfMerged, topendsportsMen
+--   id 60 Men 2014 Cristiano Ronaldo: nationality NULL -> Portugal; uefaLaureates, rsssfMerged, topendsportsMen
+--   id 61 Men 2015 Lionel Messi: nationality NULL -> Argentina; uefaLaureates, rsssfMerged, topendsportsMen
 --   id 62 Men 2016 Cristiano Ronaldo: nationality NULL -> Portugal; uefaLaureates, rsssfEuropa, espnList
 --   id 63 Men 2017 Cristiano Ronaldo: nationality NULL -> Portugal; uefaLaureates, rsssfEuropa, espnList
 --   id 64 Men 2018 Luka Modric: nationality NULL -> Croatia; uefaLaureates, rsssfEuropa, espnList
