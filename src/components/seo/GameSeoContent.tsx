@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useRoutePath } from '@/hooks/useRoutePath';
 import { Helmet } from 'react-helmet-async';
 import { ALL_GAMES } from '@/data/gameRegistry';
 /* Round 210: the guide arrives one sport at a time instead of every word
@@ -97,8 +98,8 @@ const GuideStory = ({ sections }: { sections: GuideStorySection[] }) => (
 );
 
 const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeoContentProps) => {
-  const location = useLocation();
-  const path = location.pathname;
+  /* Round 745: the one spelling of the route, so /soccer-career/ finds its guide. */
+  const path = useRoutePath();
 
   const game = ALL_GAMES.find(g => g.path === path);
   /* Round 651: the heading is the game's search title, never the old page
