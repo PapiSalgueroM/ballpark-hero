@@ -1,5 +1,18 @@
 # Work board
 
+**2026-09-30, Codex desktop lane: Round 741 CLAIMED, AdSense rejection and Search Console noindex audit.**
+Anthony supplied an AdSense rejection email and a Search Console "Excluded by noindex tag" email.
+Neither email identifies the specific AdSense issue or affected URLs. Read the account reports when
+accessible, audit the published domain's sitemap URLs, robots directives, canonicals, crawler-visible
+content, ads.txt and deliberate noindex pages, then fix only a demonstrated defect. Ownership:
+`scripts/auditGoogleReadiness.mjs` (new), its isolated tests if needed, and
+`docs/audits/GOOGLE-READINESS-2026-09-30.md` (new). Board, state and reconciliation updates are append-only
+or surgical. Claude keeps every existing claim through 740, including SEO rounds 652 to 656,
+seoMeta 700, the points economy, data imports and flagship first-screen designs. Do not edit those
+files or rebuild their snapshots in the shared checkout. No AdSense resubmission until the exact
+rejection and deployed repairs are verified. Baseline: `git pull --ff-only` current at `0e48acee`.
+The next free round for anyone else is **742**.
+
 **2026-09-30 evening, desktop Claude lane: Rounds 735 to 740 CLAIMED, the 2026 transfer windows below the
 verified overlay** (the Player Bingo report of stale summer transfers): two source research of completed January and
 summer 2026 moves, one researcher per league (**735** Premier League gaps and the promoted clubs, **736** La Liga, **737**
