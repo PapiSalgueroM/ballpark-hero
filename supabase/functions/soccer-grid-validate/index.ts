@@ -5,8 +5,10 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
  * Soccer 3x3 grid validator (2026-08-13 v13).
  *
  * Resolution order:
- *   1. verified-verdict cache (Postgres)
- *   2. DETERMINISTIC checks:
+ *   1. verified-verdict cache (Postgres). Round 707: a refusal the records
+ *      pass wrote is worked out again rather than served.
+ *   2. DETERMINISTIC checks (Round 707: the verified 2026 moves in
+ *      TRANSFER_OVERLAY_2026 count as club stints):
  *      a. "YYYY World Cup Winner" against public.world_cup_players squad rows
  *         (complete winner squads 1970-2026, era-correct nationality strings).
  *         The squad row also settles the paired POSITION criterion when the
@@ -172,6 +174,12 @@ const CLUB_ALIASES: Record<string, string[]> = {
   "celta vigo": ["Celta de Vigo"],
   "rennes": ["Stade Rennais FC"],
   "la galaxy": ["Los Angeles Galaxy"],
+  /* ROUND 707: the same inserted word, found while wiring in the 2026 moves.
+     36 cells say "Played for Atlético Madrid" and 180 players are stored at
+     "Atlético de Madrid". The label never read as dead because one hand written
+     row (Luis Suarez) says "Atlético Madrid", so somebody could satisfy it, but
+     Griezmann was cached as a hard no for it twice. */
+  "atletico madrid": ["Atlético de Madrid"],
 };
 
 function clubMatches(stintClub: string, wanted: string): boolean {
@@ -188,8 +196,279 @@ function clubMatches(stintClub: string, wanted: string): boolean {
   });
 }
 
-function evaluate(crit: Criterion, stints: Stint[], careerComplete: boolean): Verdict {
+/* ROUND 707: THE VERIFIED 2026 MOVES COUNT AS STINTS.
+   soccer_player_club_stints was derived from the market value years before the
+   2026 window was written into them, so it never learned the moves in
+   scripts/transferOverlay2026.mjs, where every entry carries two named sources.
+   With a career that looks complete, a club this pass cannot find is a hard NO,
+   and it is cached: on 2026-09-30 the cache said Salah "does not satisfy Played
+   for Trabzonspor", and the same for Tonali at Tottenham and Moreira at Milan.
+   The migration that writes these moves into the table
+   (20260930170000_round_707_overlay_stints.sql) waits on a release, and a later
+   re-import could lose them again, so the function carries the list itself.
+   It can only ADD a yes for a club criterion: it never makes a no, never
+   touches careerComplete (that is still read from the table's own rows) and
+   never settles nationality or position. Keyed by norm() of the name, one entry
+   per overlay name. scripts/simSoccerStints.mjs fails if this list and the
+   overlay file ever differ; when the overlay grows, add the same line here and
+   in football-connect4-validate. */
+const TRANSFER_OVERLAY_2026: Record<string, { name: string; clubs: string[] }> = {
+  "morgan rogers": { name: "Morgan Rogers", clubs: ["Chelsea FC"] },
+  "elliot anderson": { name: "Elliot Anderson", clubs: ["Manchester City"] },
+  "sandro tonali": { name: "Sandro Tonali", clubs: ["Tottenham Hotspur"] },
+  "mateus fernandes": { name: "Mateus Fernandes", clubs: ["Tottenham Hotspur"] },
+  "bruno guimaraes": { name: "Bruno Guimarães", clubs: ["Arsenal FC"] },
+  "anthony gordon": { name: "Anthony Gordon", clubs: ["FC Barcelona"] },
+  "crysencio summerville": { name: "Crysencio Summerville", clubs: ["Al-Hilal SFC"] },
+  "jeremy jacquet": { name: "Jérémy Jacquet", clubs: ["Liverpool FC"] },
+  "jan paul van hecke": { name: "Jan Paul van Hecke", clubs: ["Tottenham Hotspur"] },
+  "maxence lacroix": { name: "Maxence Lacroix", clubs: ["Chelsea FC"] },
+  "johan manzambi": { name: "Johan Manzambi", clubs: ["Aston Villa"] },
+  "andrey santos": { name: "Andrey Santos", clubs: ["Manchester United"] },
+  "marco palestra": { name: "Marco Palestra", clubs: ["Chelsea FC"] },
+  "luka vuskovic": { name: "Luka Vuskovic", clubs: ["Brighton & Hove Albion"] },
+  "geovany quenda": { name: "Geovany Quenda", clubs: ["Chelsea FC"] },
+  "christos tzolis": { name: "Christos Tzolis", clubs: ["Arsenal FC"] },
+  "antoine semenyo": { name: "Antoine Semenyo", clubs: ["Manchester City"] },
+  "marc guehi": { name: "Marc Guéhi", clubs: ["Manchester City"] },
+  "bradley barcola": { name: "Bradley Barcola", clubs: ["Liverpool FC"] },
+  "omar marmoush": { name: "Omar Marmoush", clubs: ["Tottenham Hotspur"] },
+  "nick woltemade": { name: "Nick Woltemade", clubs: ["Juventus FC"] },
+  "tijjani reijnders": { name: "Tijjani Reijnders", clubs: ["Al-Qadsiah FC"] },
+  "yan diomande": { name: "Yan Diomande", clubs: ["Real Madrid"] },
+  "marc cucurella": { name: "Marc Cucurella", clubs: ["Real Madrid"] },
+  "bernardo silva": { name: "Bernardo Silva", clubs: ["Real Madrid"] },
+  "denzel dumfries": { name: "Denzel Dumfries", clubs: ["Real Madrid"] },
+  "karim adeyemi": { name: "Karim Adeyemi", clubs: ["FC Barcelona"] },
+  "rodri": { name: "Rodri", clubs: ["FC Barcelona"] },
+  "goncalo ramos": { name: "Gonçalo Ramos", clubs: ["AC Milan"] },
+  "rafael leao": { name: "Rafael Leão", clubs: ["Galatasaray"] },
+  "ismael saibari": { name: "Ismael Saibari", clubs: ["Bayern Munich"] },
+  "nathaniel brown": { name: "Nathaniel Brown", clubs: ["Bayern Munich"] },
+  "marc andre ter stegen": { name: "Marc-André ter Stegen", clubs: ["Ajax Amsterdam"] },
+  "julian brandt": { name: "Julian Brandt", clubs: ["Ajax Amsterdam"] },
+  "francisco trincao": { name: "Francisco Trincão", clubs: ["Al-Ahli SFC"] },
+  "eduard spertsyan": { name: "Eduard Spertsyan", clubs: ["Al-Ahli SFC"] },
+  "jan carlo simic": { name: "Jan-Carlo Simić", clubs: ["Al-Ittihad Club"] },
+  "malang sarr": { name: "Malang Sarr", clubs: ["NEOM SC"] },
+  "souffian el karouani": { name: "Souffian El Karouani", clubs: ["SL Benfica"] },
+  "angelo fulgini": { name: "Angelo Fulgini", clubs: ["Al-Khaleej FC"] },
+  "abdou diallo": { name: "Abdou Diallo", clubs: ["Abha Club"] },
+  "robert lewandowski": { name: "Robert Lewandowski", clubs: ["Chicago Fire FC"] },
+  "antoine griezmann": { name: "Antoine Griezmann", clubs: ["Orlando City SC"] },
+  "allan saint maximin": { name: "Allan Saint-Maximin", clubs: ["Charlotte FC"] },
+  "brais mendez": { name: "Brais Méndez", clubs: ["Columbus Crew"] },
+  "gabriel pec": { name: "Gabriel Pec", clubs: ["Cruzeiro Esporte Clube"] },
+  "enzo fernandez": { name: "Enzo Fernández", clubs: ["Manchester City"] },
+  "iliman ndiaye": { name: "Iliman Ndiaye", clubs: ["Manchester City"] },
+  "ayyoub bouaddi": { name: "Ayyoub Bouaddi", clubs: ["Manchester City"] },
+  "geronimo rulli": { name: "Gerónimo Rulli", clubs: ["Manchester City"] },
+  "vitor reis": { name: "Vitor Reis", clubs: ["Manchester City"] },
+  "john stones": { name: "John Stones", clubs: ["Inter Milan"] },
+  "nathan ake": { name: "Nathan Aké", clubs: ["Fenerbahce"] },
+  "james trafford": { name: "James Trafford", clubs: ["Leeds United"] },
+  "savinho": { name: "Savinho", clubs: ["Tottenham Hotspur"] },
+  "jeremy monga": { name: "Jeremy Monga", clubs: ["Swansea City"] },
+  "mathys detourbet": { name: "Mathys Detourbet", clubs: ["AS Monaco"] },
+  "claudio echeverri": { name: "Claudio Echeverri", clubs: ["SL Benfica"] },
+  "divine mukasa": { name: "Divine Mukasa", clubs: ["West Ham United"] },
+  "cristian romero": { name: "Cristian Romero", clubs: ["Atlético de Madrid"] },
+  "djed spence": { name: "Djed Spence", clubs: ["Inter Milan"] },
+  "guglielmo vicario": { name: "Guglielmo Vicario", clubs: ["Juventus FC"] },
+  "pape matar sarr": { name: "Pape Matar Sarr", clubs: ["Juventus FC"] },
+  "randal kolo muani": { name: "Randal Kolo Muani", clubs: ["Juventus FC"] },
+  "kevin danso": { name: "Kevin Danso", clubs: ["Sunderland AFC"] },
+  "radu dragusin": { name: "Radu Drăgușin", clubs: ["ACF Fiorentina"] },
+  "andrew robertson": { name: "Andrew Robertson", clubs: ["Tottenham Hotspur"] },
+  "marcos senesi": { name: "Marcos Senesi", clubs: ["Tottenham Hotspur"] },
+  "tosin adarabioyo": { name: "Tosin Adarabioyo", clubs: ["Tottenham Hotspur"] },
+  "ibrahima konate": { name: "Ibrahima Konaté", clubs: ["Real Madrid"] },
+  "curtis jones": { name: "Curtis Jones", clubs: ["Inter Milan"] },
+  "mohamed salah": { name: "Mohamed Salah", clubs: ["Trabzonspor"] },
+  "harvey elliott": { name: "Harvey Elliott", clubs: ["Valencia CF"] },
+  "ronald araujo": { name: "Ronald Araujo", clubs: ["Liverpool FC"] },
+  "victor munoz": { name: "Víctor Muñoz", clubs: ["Liverpool FC"] },
+  "gabriel martinelli": { name: "Gabriel Martinelli", clubs: ["Al-Hilal SFC"] },
+  "gabriel jesus": { name: "Gabriel Jesus", clubs: ["FC Barcelona"] },
+  "ezri konsa": { name: "Ezri Konsa", clubs: ["Arsenal FC"] },
+  "illan meslier": { name: "Illan Meslier", clubs: ["Arsenal FC"] },
+  "leandro trossard": { name: "Leandro Trossard", clubs: ["Besiktas JK"] },
+  "ethan nwaneri": { name: "Ethan Nwaneri", clubs: ["Borussia Dortmund"] },
+  "alejandro garnacho": { name: "Alejandro Garnacho", clubs: ["Aston Villa"] },
+  "nicolas jackson": { name: "Nicolas Jackson", clubs: ["Aston Villa"] },
+  "youri tielemans": { name: "Youri Tielemans", clubs: ["Manchester United"] },
+  "ollie watkins": { name: "Ollie Watkins", clubs: ["Al-Hilal SFC"] },
+  "leon bailey": { name: "Leon Bailey", clubs: ["Olympiacos Piraeus"] },
+  "evann guessand": { name: "Evann Guessand", clubs: ["Crystal Palace"] },
+  "ibrahim mbaye": { name: "Ibrahim Mbaye", clubs: ["Aston Villa"] },
+  "zion suzuki": { name: "Zion Suzuki", clubs: ["Aston Villa"] },
+  "matteo ruggeri": { name: "Matteo Ruggeri", clubs: ["Aston Villa"] },
+  "taylor harwood bellis": { name: "Taylor Harwood-Bellis", clubs: ["Aston Villa"] },
+  "leon goretzka": { name: "Leon Goretzka", clubs: ["Aston Villa"] },
+  "aaron wan bissaka": { name: "Aaron Wan-Bissaka", clubs: ["Aston Villa"] },
+  "lucas digne": { name: "Lucas Digne", clubs: ["Paris Saint-Germain"] },
+  "emiliano martinez": { name: "Emiliano Martínez", clubs: ["Chelsea FC"] },
+  "trevoh chalobah": { name: "Trevoh Chalobah", clubs: ["Como 1907"] },
+  "liam delap": { name: "Liam Delap", clubs: ["Nottingham Forest"] },
+  "benoit badiashile": { name: "Benoît Badiashile", clubs: ["SSC Napoli"] },
+  "axel disasi": { name: "Axel Disasi", clubs: ["Crystal Palace"] },
+  "marc guiu": { name: "Marc Guiu", clubs: ["RB Leipzig"] },
+  "robert sanchez": { name: "Robert Sánchez", clubs: ["Como 1907"] },
+  "valentin barco": { name: "Valentín Barco", clubs: ["Chelsea FC"] },
+  "pep chavarria": { name: "Pep Chavarría", clubs: ["Chelsea FC"] },
+  "emmanuel emegha": { name: "Emmanuel Emegha", clubs: ["Chelsea FC"] },
+  "danny welbeck": { name: "Danny Welbeck", clubs: ["Chelsea FC"] },
+  "honest ahanor": { name: "Honest Ahanor", clubs: ["Crystal Palace"] },
+  "brennan johnson": { name: "Brennan Johnson", clubs: ["Everton FC"] },
+  "dwight mcneil": { name: "Dwight McNeil", clubs: ["Crystal Palace"] },
+  "beto": { name: "Beto", clubs: ["ACF Fiorentina"] },
+  "nathan patterson": { name: "Nathan Patterson", clubs: ["Torino FC"] },
+  "tim iroegbunam": { name: "Tim Iroegbunam", clubs: ["Hull City"] },
+  "quinten timber": { name: "Quinten Timber", clubs: ["Crystal Palace"] },
+  "takehiro tomiyasu": { name: "Takehiro Tomiyasu", clubs: ["Crystal Palace"] },
+  "oscar mingueza": { name: "Óscar Mingueza", clubs: ["Crystal Palace"] },
+  "ben chilwell": { name: "Ben Chilwell", clubs: ["Crystal Palace"] },
+  "anan khalaili": { name: "Anan Khalaili", clubs: ["Crystal Palace"] },
+  "zavier gozo": { name: "Zavier Gozo", clubs: ["Crystal Palace"] },
+  "dario osorio": { name: "Darío Osorio", clubs: ["Crystal Palace"] },
+  "daniel munoz": { name: "Daniel Muñoz", clubs: ["Nottingham Forest"] },
+  "ousmane diomande": { name: "Ousmane Diomande", clubs: ["Nottingham Forest"] },
+  "xaver schlager": { name: "Xaver Schlager", clubs: ["Nottingham Forest"] },
+  "omari hutchinson": { name: "Omari Hutchinson", clubs: ["AC Milan"] },
+  "dilane bakwa": { name: "Dilane Bakwa", clubs: ["LOSC Lille"] },
+  "taiwo awoniyi": { name: "Taiwo Awoniyi", clubs: ["Coventry City"] },
+  "morato": { name: "Morato", clubs: ["West Ham United"] },
+  "bazoumana toure": { name: "Bazoumana Touré", clubs: ["Newcastle United"] },
+  "matias fernandez pardo": { name: "Matias Fernandez-Pardo", clubs: ["Newcastle United"] },
+  "sean steur": { name: "Sean Steur", clubs: ["Newcastle United"] },
+  "lukas hornicek": { name: "Lukas Hornicek", clubs: ["Newcastle United"] },
+  "amar dedic": { name: "Amar Dedić", clubs: ["Newcastle United"] },
+  "ewen jaouen": { name: "Ewen Jaouen", clubs: ["Newcastle United"] },
+  "kieran trippier": { name: "Kieran Trippier", clubs: ["Wolverhampton Wanderers"] },
+  "hugo larsson": { name: "Hugo Larsson", clubs: ["Fulham FC"] },
+  "gonzalo garcia": { name: "Gonzalo García", clubs: ["Fulham FC"] },
+  "cesar palacios": { name: "César Palacios", clubs: ["Fulham FC"] },
+  "david affengruber": { name: "David Affengruber", clubs: ["Fulham FC"] },
+  "harry wilson": { name: "Harry Wilson", clubs: ["Leeds United"] },
+  "raul jimenez": { name: "Raúl Jiménez", clubs: ["Wolverhampton Wanderers"] },
+  "sasa lukic": { name: "Saša Lukić", clubs: ["Ipswich Town"] },
+  "issa diop": { name: "Issa Diop", clubs: ["Ipswich Town"] },
+  "exequiel palacios": { name: "Exequiel Palacios", clubs: ["Ipswich Town"] },
+  "abdul fatawu": { name: "Abdul Fatawu", clubs: ["Ipswich Town"] },
+  "emersonn": { name: "Emersonn", clubs: ["Ipswich Town"] },
+  "daizen maeda": { name: "Daizen Maeda", clubs: ["Ipswich Town"] },
+  "kjell scherpen": { name: "Kjell Scherpen", clubs: ["Ipswich Town"] },
+  "zian flemming": { name: "Zian Flemming", clubs: ["Ipswich Town"] },
+  "malick fofana": { name: "Malick Fofana", clubs: ["Sunderland AFC"] },
+  "thomas meunier": { name: "Thomas Meunier", clubs: ["Sunderland AFC"] },
+  "dayann methalie": { name: "Dayann Methalie", clubs: ["Sunderland AFC"] },
+  "simon adingra": { name: "Simon Adingra", clubs: ["Ajax Amsterdam"] },
+  "eliezer mayenda": { name: "Eliezer Mayenda", clubs: ["Stade Rennais FC"] },
+  "dan neil": { name: "Dan Neil", clubs: ["Rangers FC"] },
+  "mamadou sangare": { name: "Mamadou Sangaré", clubs: ["Brentford FC"] },
+  "el hadji malick diouf": { name: "El Hadji Malick Diouf", clubs: ["Brentford FC"] },
+  "jaidon anthony": { name: "Jaidon Anthony", clubs: ["Brentford FC"] },
+  "callum wilson": { name: "Callum Wilson", clubs: ["Brentford FC"] },
+  "pascal struijk": { name: "Pascal Struijk", clubs: ["Brighton & Hove Albion"] },
+  "costinha": { name: "Costinha", clubs: ["Brighton & Hove Albion"] },
+  "jaouen hadjam": { name: "Jaouen Hadjam", clubs: ["Brighton & Hove Albion"] },
+  "femi azeez": { name: "Femi Azeez", clubs: ["Brighton & Hove Albion"] },
+  "evan ferguson": { name: "Evan Ferguson", clubs: ["Brighton & Hove Albion"] },
+  "brajan gruda": { name: "Brajan Gruda", clubs: ["RB Leipzig"] },
+  "igor julio": { name: "Igor Julio", clubs: ["Burnley FC"] },
+  "antonio silva": { name: "António Silva", clubs: ["AFC Bournemouth"] },
+  "juanlu sanchez": { name: "Juanlu Sánchez", clubs: ["AFC Bournemouth"] },
+  "alvaro rodriguez": { name: "Álvaro Rodríguez", clubs: ["AFC Bournemouth"] },
+  "michele di gregorio": { name: "Michele Di Gregorio", clubs: ["AFC Bournemouth"] },
+  "alex jimenez": { name: "Álex Jiménez", clubs: ["ACF Fiorentina"] },
+  "enes unal": { name: "Enes Ünal", clubs: ["Getafe CF"] },
+  "joel piroe": { name: "Joël Piroe", clubs: ["West Ham United"] },
+  "manor solomon": { name: "Manor Solomon", clubs: ["West Ham United"] },
+  "michael zetterer": { name: "Michael Zetterer", clubs: ["Leeds United"] },
+  "nico elvedi": { name: "Nico Elvedi", clubs: ["Leeds United"] },
+  "tarik muharemovic": { name: "Tarik Muharemović", clubs: ["Leeds United"] },
+  "jean matteo bahoya": { name: "Jean-Mattéo Bahoya", clubs: ["Leeds United"] },
+  "melvin bard": { name: "Melvin Bard", clubs: ["Leeds United"] },
+  "sebastiaan bornauw": { name: "Sebastiaan Bornauw", clubs: ["Hamburger SV"] },
+  "lucas perri": { name: "Lucas Perri", clubs: ["Torino FC"] },
+  "wilfried gnonto": { name: "Wilfried Gnonto", clubs: ["ACF Fiorentina"] },
+  "facundo buonanotte": { name: "Facundo Buonanotte", clubs: ["Elche CF"] },
+  "largie ramazani": { name: "Largie Ramazani", clubs: ["Burnley FC"] },
+  "jack harrison": { name: "Jack Harrison", clubs: ["New England Revolution"] },
+  "marcus rashford": { name: "Marcus Rashford", clubs: ["Manchester United"] },
+  "altay bayindir": { name: "Altay Bayındır", clubs: ["Celta de Vigo"] },
+  "mohamed ali cho": { name: "Mohamed-Ali Cho", clubs: ["Hull City"] },
+  "ilyas ansah": { name: "Ilyas Ansah", clubs: ["Hull City"] },
+  "konstantinos tzolakis": { name: "Konstantinos Tzolakis", clubs: ["Hull City"] },
+  "nobel mendy": { name: "Nobel Mendy", clubs: ["Hull City"] },
+  "hidemasa morita": { name: "Hidemasa Morita", clubs: ["Hull City"] },
+  "jack butland": { name: "Jack Butland", clubs: ["Hull City"] },
+  "matt targett": { name: "Matt Targett", clubs: ["Hull City"] },
+  "ivor pandur": { name: "Ivor Pandur", clubs: ["Rangers FC"] },
+  "radek vitek": { name: "Radek Vítek", clubs: ["Middlesbrough FC"] },
+  "will lankshear": { name: "Will Lankshear", clubs: ["Middlesbrough FC"] },
+  "ashley phillips": { name: "Ashley Phillips", clubs: ["Middlesbrough FC"] },
+  "caleb yirenkyi": { name: "Caleb Yirenkyi", clubs: ["Coventry City"] },
+  "aurele amenda": { name: "Aurèle Amenda", clubs: ["Coventry City"] },
+  "gustavo hamer": { name: "Gustavo Hamer", clubs: ["Coventry City"] },
+  "kota takai": { name: "Kota Takai", clubs: ["Sint-Truidense VV"] },
+  "min hyeok yang": { name: "Min-hyeok Yang", clubs: ["KVC Westerlo"] },
+  "mikey moore": { name: "Mikey Moore", clubs: ["1.FC Köln"] },
+  "alejo veliz": { name: "Alejo Veliz", clubs: ["Esporte Clube Bahia"] },
+  "david carmo": { name: "David Carmo", clubs: ["Olympiacos Piraeus"] },
+  "jota silva": { name: "Jota Silva", clubs: ["Olympiacos Piraeus"] },
+  "kang in lee": { name: "Kang-in Lee", clubs: ["Atlético de Madrid"] },
+  "alejandro grimaldo": { name: "Alejandro Grimaldo", clubs: ["Atlético de Madrid"] },
+  "jonathan david": { name: "Jonathan David", clubs: ["Atlético de Madrid"] },
+  "nahuel molina": { name: "Nahuel Molina", clubs: ["AS Roma"] },
+  "endrick": { name: "Endrick", clubs: ["Real Madrid"] },
+  "franco mastantuono": { name: "Franco Mastantuono", clubs: ["ACF Fiorentina"] },
+  "ferran torres": { name: "Ferran Torres", clubs: ["Paris Saint-Germain"] },
+  "mario gila": { name: "Mario Gila", clubs: ["AC Milan"] },
+  "diego moreira": { name: "Diego Moreira", clubs: ["AC Milan"] },
+  "christopher nkunku": { name: "Christopher Nkunku", clubs: ["RB Leipzig"] },
+  "santiago gimenez": { name: "Santiago Gimenez", clubs: ["FC Porto"] },
+  "dusan vlahovic": { name: "Dušan Vlahović", clubs: ["Besiktas JK"] },
+  "lois openda": { name: "Loïs Openda", clubs: ["Olympique Lyon"] },
+  "douglas luiz": { name: "Douglas Luiz", clubs: ["Juventus FC"] },
+  "nico gonzalez": { name: "Nico González", clubs: ["Juventus FC"] },
+  "davide frattesi": { name: "Davide Frattesi", clubs: ["SS Lazio"] },
+  "benjamin pavard": { name: "Benjamin Pavard", clubs: ["Inter Milan"] },
+  "santiago castro": { name: "Santiago Castro", clubs: ["AS Roma"] },
+  "artem dovbyk": { name: "Artem Dovbyk", clubs: ["Bologna FC 1909"] },
+  "neil el aynaoui": { name: "Neil El Aynaoui", clubs: ["RB Leipzig"] },
+  "rodrigo mora": { name: "Rodrigo Mora", clubs: ["AS Roma"] },
+  "romelu lukaku": { name: "Romelu Lukaku", clubs: ["Fenerbahce"] },
+  "moise kean": { name: "Moise Kean", clubs: ["Como 1907"] },
+  "pedro goncalves": { name: "Pedro Gonçalves", clubs: ["ACF Fiorentina"] },
+  "konstantinos karetsas": { name: "Konstantinos Karetsas", clubs: ["Borussia Dortmund"] },
+  "giannis konstantelias": { name: "Giannis Konstantelias", clubs: ["Borussia Dortmund"] },
+  "joey veerman": { name: "Joey Veerman", clubs: ["Borussia Dortmund"] },
+  "julien duranville": { name: "Julien Duranville", clubs: ["Olympique Lyon"] },
+  "moussa diaby": { name: "Moussa Diaby", clubs: ["Bayer 04 Leverkusen"] },
+  "guela doue": { name: "Guéla Doué", clubs: ["Bayer 04 Leverkusen"] },
+  "facundo medina": { name: "Facundo Medina", clubs: ["Bayer 04 Leverkusen"] },
+  "victor boniface": { name: "Victor Boniface", clubs: ["Bayer 04 Leverkusen"] },
+  "lutsharel geertruida": { name: "Lutsharel Geertruida", clubs: ["PSV Eindhoven"] },
+  "giovanni reyna": { name: "Giovanni Reyna", clubs: ["RC Strasbourg Alsace"] },
+  "mason greenwood": { name: "Mason Greenwood", clubs: ["Fenerbahce"] },
+  "maghnes akliouche": { name: "Maghnes Akliouche", clubs: ["Paris Saint-Germain"] },
+  "mika godts": { name: "Mika Godts", clubs: ["Paris Saint-Germain"] },
+};
+
+function overlayClubsFor(foldedName: string): string[] {
+  return TRANSFER_OVERLAY_2026[foldedName]?.clubs ?? [];
+}
+
+/* Round 707: the one shape of refusal the records pass writes, kept beside the
+   pattern the cache read uses to recognise it, so the two cannot drift. */
+const recordsRefusalReason = (shown: string, which: string) => `${shown} does not satisfy "${which}".`;
+const RECORDS_REFUSAL = / does not satisfy ".+"\.$/;
+
+function evaluate(crit: Criterion, stints: Stint[], careerComplete: boolean, overlayClubs: string[] = []): Verdict {
   if (crit.kind === "wc_winner" || crit.kind === "honour") return "unknown"; // resolved elsewhere
+  /* Round 707: a verified move proves a club with or without table rows. */
+  if (crit.kind === "club" && overlayClubs.some((c) => clubMatches(c, crit.value))) return true;
   if (stints.length === 0) return "unknown";
   if (crit.kind === "club") {
     if (stints.some((s) => clubMatches(s.club, crit.value))) return true;
@@ -272,10 +551,24 @@ serve(async (req) => {
   try {
     const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
       .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
-    if (hit?.verdict) return json({ ...(hit.verdict as Record<string, unknown>), cached: true });
+    /* ROUND 707: A REFUSAL THIS FUNCTION'S OWN RECORDS PASS WROTE IS WORKED OUT
+       AGAIN, NOT SERVED. It is deterministic and cheap to redo, and serving it
+       is how a data fix never reaches the player: Round 489 had to delete seven
+       of these by hand after fixing the PSG label, and on 2026-09-30 the cache
+       still refused Salah at Trabzonspor and Griezmann at Atletico. If the
+       records still say no, the same refusal is written back; if they now say
+       yes it is replaced. Model verdicts and every acceptance are served as
+       before, and nothing unverified is accepted either way. */
+    const cachedVerdict = hit?.verdict as Record<string, unknown> | undefined;
+    const recordsRefusal = cachedVerdict?.valid === false && RECORDS_REFUSAL.test(String(cachedVerdict.reason ?? ""));
+    if (cachedVerdict && !recordsRefusal) return json({ ...cachedVerdict, cached: true });
   } catch { /* cache down -> continue */ }
 
   const COLS = "player_name, club, nationality, position, first_year, last_year, debut_year, debut_age";
+  /* Round 707: which half a verified 2026 move proved, so the model is only
+     asked the other one (below). */
+  let provedRow = false;
+  let provedCol = false;
 
   try {
     /* ROUND 498: matched on the folded column, not the raw one. Measured over
@@ -316,9 +609,14 @@ serve(async (req) => {
     const oneManOnly = identities.size <= 1;
     const careerComplete = oneManOnly && stints.length > 0 && (debutYear >= 2005 || (debutAge != null && debutAge <= 21));
 
-    let rowV = evaluate(rowCrit, stints, careerComplete);
-    let colV = evaluate(colCrit, stints, careerComplete);
-    let properName = stints.length ? stints[0].player_name : null;
+    /* Round 707: the verified moves, looked up under the name the rows resolved
+       to (so a surname that resolved to one player finds his moves too). */
+    const overlayKey = stints.length ? norm(stints[0].player_name) : norm(sanitized.player);
+    const overlayClubs = overlayClubsFor(overlayKey);
+
+    let rowV = evaluate(rowCrit, stints, careerComplete, overlayClubs);
+    let colV = evaluate(colCrit, stints, careerComplete, overlayClubs);
+    let properName = stints.length ? stints[0].player_name : (TRANSFER_OVERLAY_2026[overlayKey]?.name ?? null);
 
     // v12: deterministic World Cup winner resolution, independent of stints.
     // v13: the winner squad row also settles a paired position criterion when
@@ -352,15 +650,30 @@ serve(async (req) => {
     if (rowV === false || colV === false) {
       const which = rowV === false ? sanitized.row : sanitized.col;
       const shown = properName ?? sanitized.player;
-      const verdict = { valid: false, reason: `${shown} does not satisfy "${which}".`, fullName: properName };
+      const verdict = { valid: false, reason: recordsRefusalReason(shown, which), fullName: properName };
       try { await sb.from("ai_validation_cache").upsert({ game: CACHE_GAME, cache_key: cacheKey, verdict }); } catch { /* non-fatal */ }
       return json(verdict);
     }
+    const byOverlay = (c: Criterion) => c.kind === "club" && overlayClubs.some((o) => clubMatches(o, c.value));
+    provedRow = byOverlay(rowCrit);
+    provedCol = byOverlay(colCrit);
   } catch { /* deterministic pass unavailable -> AI */ }
 
   if (!AI_KEY) return unverified();
 
-  const prompt = `You are a football/soccer trivia expert (knowledge through 2026). Does "${sanitized.player}" satisfy BOTH criteria?\n1. "${sanitized.row}"\n2. "${sanitized.col}"\nConsider all clubs (including loans), nationality, position (GK/DEF/MID/FWD), and honours (Champions League, World Cup, Ballon d'Or, league titles, Golden Boot, 100+ caps, leagues played in). Note: Spain won the 2026 World Cup, beating Argentina in the final. Be lenient with spelling and accept an unambiguous surname.\nReply with ONLY JSON: {"valid":true,"fullName":"First Last"} or {"valid":false,"reason":"brief"}`;
+  /* ROUND 707: A VERIFIED MOVE IS NOT PUT TO THE MODEL AGAIN. Its knowledge
+     predates the 2026 window: on 2026-09-30 Soccer Connect 4's cache held the
+     same model saying Tonali "has never played for Tottenham" and Rashford
+     "never played for Barcelona". So
+     when a verified move proves one half, the model is asked only the other
+     half, and its answer to that half is the verdict. A half proved by the
+     table's own rows is still put to it as before; with no verified move the
+     question is exactly the one it always was. */
+  const asked = provedRow ? [sanitized.col] : provedCol ? [sanitized.row] : [sanitized.row, sanitized.col];
+  const question = asked.length === 2
+    ? `Does "${sanitized.player}" satisfy BOTH criteria?\n1. "${sanitized.row}"\n2. "${sanitized.col}"`
+    : `Does "${sanitized.player}" satisfy this criterion?\n1. "${asked[0]}"`;
+  const prompt = `You are a football/soccer trivia expert (knowledge through 2026). ${question}\nConsider all clubs (including loans), nationality, position (GK/DEF/MID/FWD), and honours (Champions League, World Cup, Ballon d'Or, league titles, Golden Boot, 100+ caps, leagues played in). Note: Spain won the 2026 World Cup, beating Argentina in the final. Be lenient with spelling and accept an unambiguous surname.\nReply with ONLY JSON: {"valid":true,"fullName":"First Last"} or {"valid":false,"reason":"brief"}`;
 
   /* Round 407: max_tokens was 150, and the logs showed the model answering
      200 with a body of {"valid": and nothing more: its own reasoning tokens
