@@ -3,6 +3,7 @@ import { makeFirstDraw } from '@/lib/firstDraw';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { normalizeName } from '@/lib/playerSearch';
+import { normalizeValidationReason } from '@/lib/validationReason';
 import { SUPABASE_PUBLISHABLE_KEY, SUPABASE_URL } from '@/integrations/supabase/client';
 import {
   Board,
@@ -27,18 +28,6 @@ type ValidatorResponse = {
   error?: unknown;
   fullName?: unknown;
 };
-
-function normalizeValidationReason(reason: unknown, fallback: string): string {
-  if (typeof reason === 'string' && reason.trim()) return reason.trim();
-  if (reason && typeof reason === 'object') {
-    const parts = Object.values(reason)
-      .filter((value): value is string | number => typeof value === 'string' || typeof value === 'number')
-      .map(value => String(value).trim())
-      .filter(Boolean);
-    if (parts.length > 0) return parts.join(' ');
-  }
-  return fallback;
-}
 
 function createEmptyBoard(): Board {
   return Array.from({ length: ROWS }, () => Array(COLS).fill(null));
