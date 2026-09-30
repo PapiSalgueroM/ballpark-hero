@@ -1,3 +1,5 @@
+import { evenScoreBuckets } from '@/lib/dailyStanding';
+
 /**
  * The Higher or Lower score, one formula for every sport's daily: 10 for a
  * correct round, and a streak bonus of 5 for every step a correct run has
@@ -20,3 +22,11 @@ export function higherLowerScore(results: ReadonlyArray<{ correct: boolean }>): 
   }, 0);
   return correctCount * 10 + streakBonus * 5;
 }
+
+/** Round 716: every sport's daily is ten rounds, so a perfect day records
+    this (325), and today's standing panel runs its rows up to it. */
+export const HIGHER_LOWER_DAILY_ROUNDS = 10;
+export const HIGHER_LOWER_DAILY_MAX = higherLowerScore(
+  Array.from({ length: HIGHER_LOWER_DAILY_ROUNDS }, () => ({ correct: true })),
+);
+export const HIGHER_LOWER_SCORE_BUCKETS = evenScoreBuckets(HIGHER_LOWER_DAILY_MAX);
