@@ -105,9 +105,9 @@ const ContractChaos = () => {
 
           {deal && (g.phase === 'deal' || g.phase === 'offer') && (
             <div className="max-w-md mx-auto space-y-3">
-              <PlayerCard deal={deal} />
               {g.phase === 'deal' && (
                 <>
+                  <PlayerCard deal={deal} />
                   <p className="text-xs text-muted-foreground text-center">{dealNote(deal.note)} Tap an offer to read it.</p>
                   <div className="grid grid-cols-2 gap-2">
                     {deal.offers.map((o, i) => (
@@ -131,6 +131,7 @@ const ContractChaos = () => {
               {g.phase === 'offer' && deal.offers[g.focus] && (
                 <OfferDetail
                   offer={deal.offers[g.focus]}
+                  player={`${deal.player.name}, ${deal.player.age}, rated ${deal.player.ovr}, potential ${deal.player.pot}`}
                   ovr={deal.player.ovr}
                   line={g.talk[g.focus]}
                   onBack={g.back}
@@ -272,8 +273,8 @@ function PlayerCard({ deal }: { deal: NonNullable<ReturnType<typeof useContractC
   );
 }
 
-function OfferDetail({ offer: o, ovr, line, onBack, onPush, onSign }: {
-  offer: CcOffer; ovr: number; line?: string; onBack: () => void; onPush: () => void; onSign: () => void;
+function OfferDetail({ offer: o, player, ovr, line, onBack, onPush, onSign }: {
+  offer: CcOffer; player: string; ovr: number; line?: string; onBack: () => void; onPush: () => void; onSign: () => void;
 }) {
   const rows: [string, string][] = [
     ['Wage', `${fmtM(o.fa.salary)} a year`],
@@ -293,6 +294,7 @@ function OfferDetail({ offer: o, ovr, line, onBack, onPush, onSign }: {
       <button onClick={onBack} className="inline-flex items-center gap-1 text-sm text-muted-foreground hover:text-foreground min-h-[32px]">
         <ArrowLeft className="w-4 h-4" aria-hidden="true" /> All offers
       </button>
+      <p className="text-[11px] text-muted-foreground">For {player}</p>
       <div>
         <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{o.fa.incumbent ? 'Your club wants you back' : AMBITION_WORD[o.fa.tier]}</div>
         <h2 className="text-lg font-bold text-foreground leading-tight">{o.fa.label}</h2>
