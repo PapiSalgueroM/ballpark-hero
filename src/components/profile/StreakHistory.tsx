@@ -120,7 +120,7 @@ export default function StreakHistory({ legacyLabels = {} }: StreakHistoryProps)
         <p className="text-[11px] text-muted-foreground leading-snug" data-streak-summary>
           {neverPlayed
             ? 'Finish any game and your days start filling in here.'
-            : `Played ${played} of the last ${seen} days. ${current > 0 ? `${current} in a row right now` : 'No run going right now'}, best ever ${best}.`}
+            : `Played ${played} of the last ${seen - unknown} days${unknown > 0 ? ' on record' : ''}. ${current > 0 ? `${current} in a row right now` : 'No run going right now'}, best ever ${best}.`}
           {' '}Counted on this device, same as your streak.
         </p>
       </CardHeader>
@@ -129,7 +129,7 @@ export default function StreakHistory({ legacyLabels = {} }: StreakHistoryProps)
           className="grid gap-1 max-w-[360px]"
           style={{ gridTemplateColumns: `14px repeat(${WEEKS}, minmax(0, 1fr))` }}
           role="img"
-          aria-label={neverPlayed ? 'No days played yet' : `Played ${played} of the last ${seen} days`}
+          aria-label={neverPlayed ? 'No days played yet' : `Played ${played} of the last ${seen - unknown} days${unknown > 0 ? ' on record' : ''}`}
         >
           <span />
           {weeks.map((week, w) => {
