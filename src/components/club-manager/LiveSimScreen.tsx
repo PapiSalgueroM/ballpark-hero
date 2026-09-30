@@ -12,6 +12,8 @@ import type {
 import { HalftimeScreen } from '@/components/club-manager/HalftimeScreen';
 import { MadeUpTag } from '@/components/club-manager/SquadScreen';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import { cardsAndSubsAt, liveLines, reportLines } from '@/lib/clubManagerMatchCentre';
+import type { CardsAndSubs } from '@/lib/clubManagerMatchCentre';
 import { LivePitchPlayer, useLiveSimMotion } from '@/components/club-manager/LiveSimMotion';
 import type { MotionEvent } from '@/components/club-manager/LiveSimMotion';
 
@@ -264,7 +266,7 @@ function StatCell({ label, mine, theirs }: { label: string; mine: string; theirs
  * goals, corners and fouls, counted off the committed play at this minute.
  * Three short rows, so a 390 wide phone never scrolls sideways.
  */
-function LiveStats({ stats, clubName, opponent }: { stats: MatchStats | null; clubName: string; opponent: string }) {
+function LiveStats({ stats, counts, clubName, opponent }: { stats: MatchStats | null; counts: CardsAndSubs | null; clubName: string; opponent: string }) {
   const poss = stats ? Math.round(stats.possession) : 50;
   return (
     <div className="bg-card border border-border rounded-xl p-2.5" data-cm-live-stats="1">
@@ -292,6 +294,18 @@ function LiveStats({ stats, clubName, opponent }: { stats: MatchStats | null; cl
         <StatCell label="xG" mine={stats ? stats.xg.toFixed(2) : '-'} theirs={stats ? stats.oppXg.toFixed(2) : '-'} />
         <StatCell label="Corners" mine={stats ? String(stats.corners) : '-'} theirs={stats ? String(stats.oppCorners) : '-'} />
         <StatCell label="Fouls" mine={stats ? String(stats.fouls) : '-'} theirs={stats ? String(stats.oppFouls) : '-'} />
+      </div>
+      {/* Round 714: keeper saves off the same play, and both dugouts' bookings
+          and changes off their committed lines, at this minute. */}
+      <div className="grid grid-cols-4 gap-x-2 mt-1" data-cm-live-extra="1">
+        <StatCell
+          label="Saves"
+          mine={stats?.saves !== undefined ? String(stats.saves) : '-'}
+          theirs={stats?.oppSaves !== undefined ? String(stats.oppSaves) : '-'}
+        />
+        <StatCell label="Yellow" mine={counts ? String(counts.yellows) : '-'} theirs={counts ? String(counts.oppYellows) : '-'} />
+        <StatCell label="Red" mine={counts ? String(counts.reds) : '-'} theirs={counts ? String(counts.oppReds) : '-'} />
+        <StatCell label="Subs" mine={counts ? String(counts.subs) : '-'} theirs={counts ? String(counts.oppSubs) : '-'} />
       </div>
     </div>
   );
@@ -404,6 +418,15 @@ export function LiveSimScreen({
     return report?.detail?.stats ?? null;
   }, [stage, report, liveNow, minute]);
   const possMine = (stats?.possession ?? 50) / 100;
+  /* Round 714: bookings and changes at this minute, off the committed lines. */
+  const counts: CardsAndSubs | null = useMemo(() => {
+    if (stage === 'done' && report?.detail) {
+      const lines = reportLines(report.detail);
+      return lines ? cardsAndSubsAt(lines, endMinute) : null;
+    }
+    if (liveNow) return cardsAndSubsAt(liveLines(liveNow), minute);
+    return null;
+  }, [stage, report, liveNow, minute, endMinute]);
 
   /* ---- the clock: BASE_RATE sim minutes per real second, times speed ---- */
   useEffect(() => {
@@ -781,7 +804,7 @@ export function LiveSimScreen({
           </div>
           <div className="text-[10px] text-muted-foreground">{career.clubName} vs {opponent}</div>
         </div>
-        <LiveStats stats={stats} clubName={career.clubName} opponent={opponent} />
+        <LiveStats stats={stats} counts={counts} clubName={career.clubName} opponent={opponent} />
         <HalftimeScreen
           career={career}
           onSub={onSub}
@@ -944,7 +967,7 @@ export function LiveSimScreen({
 
       {/* the live stats, the report's own numbers counted up to this minute.
           Round 472: with the other club's name on it rather than "Them". */}
-      <LiveStats stats={stats} clubName={career.clubName} opponent={opponent} />
+      <LiveStats stats={stats} counts={counts} clubName={career.clubName} opponent={opponent} />
 
       {/* controls */}
       <div className="flex items-center gap-1.5">
