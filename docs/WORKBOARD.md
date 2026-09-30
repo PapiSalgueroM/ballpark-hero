@@ -1,5 +1,13 @@
 # Work board
 
+**2026-09-30, Codex Round 752 CLAIMED: Front Office ownership warning feedback.**
+Ownership: `src/components/front-office-shared/OwnerMandateCard.tsx`, a new scoped stylesheet,
+focused component tests/harness and docs receipts. This card serves all four Front Office games.
+Add a finite hot-seat warning cue and a short reveal when the existing pace message changes;
+honor reduced motion for the existing 700ms trust-bar transition too. Preserve every mandate,
+trust value, pace sentence and hot-seat threshold. No new narratives, timers, engines, account,
+parent boards or save changes. Claude retains earlier claims and release duty. Next free is **753**.
+
 **2026-09-30, Codex 746/747 harness reporting repair COMPLETE.**
 Both wrappers now print their actual rendered-test reports before the existing checked summary.
 The common runner passes both rather than rejecting their one-line reports as EMPTY: seven Academy
