@@ -58,7 +58,7 @@
  *      table is either the scrape or exactly what it promised
  *
  * THRESHOLDS, from measured headroom. The 'several names' rule fires at four
- * capitalised tokens: the most any of the 123 recorded winners has is 3
+ * capitalised tokens: the most any of the 119 recorded winners has is 3
  * ('Guillermo Barros Schelotto'), and the shortest two man cell the scrape
  * produced has 4 ('Oleg Salenko Hristo Stoichkov'). Section 5 asserts
  * equality with the record, not a floor, so a reader truncated to 20 rows

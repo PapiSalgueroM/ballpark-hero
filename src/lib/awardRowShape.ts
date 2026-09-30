@@ -160,7 +160,7 @@ function isOnlyNations(words: string[]): boolean {
  * Schelotto', 'Dwayne De Rosario'); particles stay lowercase ('Edwin van der
  * Sar', 'Jan Vennegoor of Hesselink'), so two men in one cell show up as four
  * or more ('Oleg Salenko Hristo Stoichkov', 'Oliver Kahn Rustu Recber').
- * Measured over the 123 recorded winners of the three verified awards on
+ * Measured over the 119 recorded winners of the three verified awards on
  * 2026-09-30: the most any one of them has is 3, and the test fires at 4.
  * Two men with one token each ('Pele Garrincha') have the shape of one man,
  * and no shape test can tell them apart; the allowlist is what keeps a cell
