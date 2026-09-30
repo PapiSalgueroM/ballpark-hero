@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import type { ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { useRoutePath } from '@/hooks/useRoutePath';
 import { Helmet } from 'react-helmet-async';
@@ -34,6 +35,9 @@ interface GameSeoContentProps {
    * and its components, so neither state can drift.
    */
   pageHasOwnH1?: boolean;
+  /** Round 655: a page's own readable addition, drawn below the guide and
+   *  above the related games, so it sits in this block rather than the game. */
+  children?: ReactNode;
 }
 
 // Round 48 (AdSense content build): this block grew from title + description only
@@ -100,7 +104,7 @@ const GuideStory = ({ sections }: { sections: GuideStorySection[] }) => (
   </div>
 );
 
-const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeoContentProps) => {
+const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1, children }: GameSeoContentProps) => {
   /* Round 745: the one spelling of the route, so /soccer-career/ finds its guide. */
   const path = useRoutePath();
 
@@ -328,6 +332,8 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
           </ol>
         </div>
       )}
+
+      {children}
 
       {/* ROUND 281: BOTH OF THESE USED TO BE RENDERED HERE, IN THE BODY, WHERE
           NO CRAWLER EVER SAW THEM.

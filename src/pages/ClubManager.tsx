@@ -30,6 +30,7 @@ import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import AdBanner from '@/components/ads/AdBanner';
 import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
+import { ClubManagerClubList } from '@/components/club-manager/ClubManagerClubList';
 import { CURRENCIES, STRICTNESS_INFO, startOptionsOf } from '@/lib/clubManagerStart';
 import { levelFor, pointsFree, xpOf, MAX_LEVEL } from '@/lib/clubManagerXp';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
@@ -235,7 +236,10 @@ const ClubManager = () => {
             'Handle the press when they come for you, and pick your team talk before kick off and again at half time.',
             'Win trophies, keep the board happy, and build a managerial career that can cross leagues and continents.',
           ]}
-        />
+        >
+          {/* Round 655: every league and club as readable text, below the guide. */}
+          <ClubManagerClubList />
+        </GameSeoContent>
         <GameNav />
       </GameShell>
     </>
