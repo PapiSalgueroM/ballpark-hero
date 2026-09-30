@@ -78,6 +78,7 @@ export const CATEGORIES: GameCategory[] = [
       { path: '/soccer-conquest', label: 'Soccer Conquest', emoji: '🗺️', description: 'Imperialism across the top five leagues: 96 clubs on one map of Europe, winners annex whole empires until one club rules the continent', daily: true, addedOn: '2026-09-05' },
       { path: '/stadium-tycoon', label: 'Stadium Tycoon', emoji: '🏟️', description: 'Idle empire: grow a tiny club through live toy matches, ten divisions, reputation stars and a legacy boardroom', addedOn: '2026-08-17' },
       { path: '/wonderkid-factory', label: 'Wonderkid Factory', emoji: '🔭', description: 'Idle academy: scout generated kids, grow them toward hidden ceilings and sell at the perfect moment', addedOn: '2026-08-21' },
+      { path: '/contract-chaos', label: 'Contract Chaos', emoji: '📝', description: 'Be the agent: compare wages, role and release clauses, sign one deal, then live with five seasons', daily: true, addedOn: '2026-09-30' },
       { path: '/world-xi', label: 'World XI', emoji: '🌍', description: 'Pick a formation, fill 11 random countries', addedOn: '2026-07-02' },
       { path: '/player-bingo', label: 'Player Bingo', emoji: '🎱', description: 'Complete a line on a 5x5 board before 3 strikes', addedOn: '2026-07-02' },
       { path: '/sports-bingo', label: 'Sports Bingo', emoji: '🎫', description: 'Open packs of real players on a timer, mark the squares they satisfy', daily: true, addedOn: '2026-08-29' },
