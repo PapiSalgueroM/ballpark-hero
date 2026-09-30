@@ -26,6 +26,7 @@ try {
   }
   const run = spawnSync(process.execPath, [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/reservedNames.test.ts'], { cwd: root, env, encoding: 'utf8', timeout: 120000 });
   const output = `${run.stdout || ''}\n${run.stderr || ''}`;
+  process.stdout.write(output);
   const diagnostic = output.slice(-2500);
   assert.ok(!run.error, String(run.error));
   assert.match(output, /reservedNames\.test\.ts/, 'The actual moderation tests must run');

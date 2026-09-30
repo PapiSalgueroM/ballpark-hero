@@ -1,5 +1,12 @@
 # Work board
 
+**2026-09-30, Codex 746/747 harness reporting repair COMPLETE.**
+Both wrappers now print their actual rendered-test reports before the existing checked summary.
+The common runner passes both rather than rejecting their one-line reports as EMPTY: seven Academy
+tests and 89 reserved-name tests ran. Real temporary controls still produce the expected six/60
+failures, with one/29 unrelated checks green and no temporary copied modules left behind. No game,
+name policy, database or common runner logic changed. The 749 wrapper follows the same output rule.
+
 **2026-09-30, Codex Rounds 748 and 749 COMPLETE: shot reactions and grid answer motion.**
 748 adds finite goal/basket celebrations and miss feedback to Free Kick and Buzzer Beater, keeping
 Next usable immediately and all settled verdicts/points and angle copy intact. Ten real-board tests

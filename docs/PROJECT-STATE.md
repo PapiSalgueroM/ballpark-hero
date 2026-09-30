@@ -20,8 +20,10 @@ presentation. Source types and isolated production build passed; Claude owns pub
 
 747 compatibility receipt: read held `r673-lock-doors`. The live name predicate/trigger creates no
 account write RPC or second write path, changes no profile grants, and will also guard 673's fixed
-save RPC. The common runner exposed one-line reports in our 746/747 wrappers as EMPTY even though
-their actual rendered suites pass; Codex is correcting output and rerunning the discoverable gate.
+save RPC. The 746/747 wrappers now print real test reports, fixing their EMPTY common-runner result.
+Both discoverable suites passed: seven/89 actual tests. Existing ignored-filter/unguarded-helper
+controls still fail six/60 intended checks and leave one/29 unrelated checks green. No policy or
+common runner changes, no temporary copies left behind.
 
 ## DATABASE LIVE / CLIENT BUILT 2026-09-30: Codex Round 747, reserved names
 
