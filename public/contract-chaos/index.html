@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Contract Chaos: Soccer Agent Contract Game | DoUKnowBall</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Soccer Games","item":"https://douknowball.com/soccer"},{"@type":"ListItem","position":3,"name":"Contract Chaos","item":"https://douknowball.com/contract-chaos"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Are the players and clubs real?","acceptedAnswer":{"@type":"Answer","text":"No. Every player and club is generated, so no real footballer's contract is being guessed at."}},{"@type":"Question","name":"Why is there no leaderboard score?","acceptedAnswer":{"@type":"Answer","text":"Plays are recorded without a score while the site's points are rebuilt. Your best and average are kept on this device."}},{"@type":"Question","name":"Is the daily the same for everyone?","acceptedAnswer":{"@type":"Answer","text":"Yes. Same client, same offers, same push results and the same five seasons for the same choice. You get one signature a day."}},{"@type":"Question","name":"Can I see what would have happened with another offer?","acceptedAnswer":{"@type":"Answer","text":"Yes. The verdict screen plays every offer out over the same five seasons and ranks them, with yours marked."}},{"@type":"Question","name":"Why did my promised starting spot disappear?","acceptedAnswer":{"@type":"Answer","text":"The manager who promised it got sacked. The new manager picks on form and rating, not on promises he never made."}},{"@type":"Question","name":"Is Contract Chaos free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Contract Chaos is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Contract Chaos: Soccer Agent Contract Game | DoUKnowBall","description":"Be the agent for a generated footballer. Compare wages, role, bonuses and release clauses, sign one deal and watch five seasons play out. Free soccer game.","url":"https://douknowball.com/contract-chaos","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/contract-chaos" data-rh="true"><meta name="description" content="Be the agent for a generated footballer. Compare wages, role, bonuses and release clauses, sign one deal and watch five seasons play out. Free soccer game." data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/contract-chaos" data-rh="true"><meta property="og:title" content="Contract Chaos: Soccer Agent Contract Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="Be the agent for a generated footballer. Compare wages, role, bonuses and release clauses, sign one deal and watch five seasons play out. Free soccer game." data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:title" content="Contract Chaos: Soccer Agent Contract Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Be the agent for a generated footballer. Compare wages, role, bonuses and release clauses, sign one deal and watch five seasons play out. Free soccer game." data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>📝 CONTRACT CHAOS</h1>
+<p>You are the agent. Pick the deal, then live with it for five seasons.</p>
+<h2>🗓️ Daily deal</h2>
+<p>One player, one set of offers, the same for everyone. You get one signature a day.</p>
+<h2>♾️ Free play</h2>
+<p>A new player and new offers every time.</p>
+<p>Plays count toward your streak. There is no leaderboard score here yet.</p>
+<p>Want the whole career, not just the deal? Try <a href="/soccer-career">Soccer Career</a> or grow kids in <a href="/wonderkid-factory">Wonderkid Factory</a>.</p>
+<h2>Contract Chaos: Soccer Agent Contract Game</h2>
+<p>A soccer agent game. Compare contract offers for a generated footballer on wages, years, role, bonuses, release clauses and club ambition, sign one and watch five seasons decide whether you got it right.</p>
+<p>Contract Chaos is a free soccer agent game. Your client's contract is up, his club wants him back, other clubs want him away, and you decide where he signs.</p>
+<p>The offers pull against each other on purpose: the title chasers pay less and bench more, the rebuilds pay more and promise the shirt, and a release clause can turn a small club into a stepping stone. Then five seasons play out and show whether you got it right.</p>
+<p>Every player and every club is generated. The offers run on the same contract market as the free agency window in the site's career games.</p>
+<h2>How to play Contract Chaos, a free soccer agent game</h2>
+<h3>Opening the daily deal or free play</h3>
+<li>Open today's offers or deal yourself a client in free play.</li>
+<h3>Reading your client's card</h3>
+<li>Read your client first: his age, his rating, his potential and what he is worth a year.</li>
+<h3>Comparing offers one tile at a time</h3>
+<li>Tap each offer to read the full terms, then use the back button to compare the next one.</li>
+<h4>Pushing for a better wage</h4>
+<li>Push any offer for more money once, if you think he has the leverage.</li>
+<h3>Signing and playing five seasons</h3>
+<li>Sign one deal and play the five seasons one at a time, or skip straight to the verdict.</li>
+<h2>Contract Chaos rules for offers, pushes and scoring</h2>
+<h3>What every offer on the table carries</h3>
+<li>Every offer shows the wage, the length, a signing bonus, a trophy bonus, a release clause if there is one, the promised role, how safe the manager is, home or abroad, the size of the city and how ambitious the club is.</li>
+<h3>How each kind of club pays</h3>
+<li>Title chasers pay below his market value, top half clubs pay about the market and rebuilds pay above it.</li>
+<li>A rebuild always promises the starting spot, while a title chaser's bench is crowded.</li>
+<h3>Negotiation and walkouts</h3>
+<li>A push works more often for a highly rated player and less often for a veteran past his peak.</li>
+<li>A failed push can make an outside club walk away, but your own club never walks and the last offer on the table never walks.</li>
+<h3>Promises, sackings and settling abroad</h3>
+<li>The promised role holds only while the manager who signed him keeps his job, and a hot seat manager is sacked half the time.</li>
+<li>Moving abroad costs a few games in the first season while he settles in.</li>
+<h3>Release clauses and expiring deals</h3>
+<li>If he outgrows his club and his contract has a release clause, a title chaser can pay it and take him.</li>
+<li>Every career is judged over five seasons. If his deal ends sooner he signs on somewhere at whatever he is worth by then.</li>
+<h3>Scoring out of 100</h3>
+<li>The score is out of 100: 30 for growth, 25 for minutes, 25 for trophies and 20 for money.</li>
+<h4>Growth measured against age</h4>
+<li>Growth is judged against his age, so a kid is measured on how close he got to his potential and a veteran on how well he held off the decline.</li>
+<h4>When a medal counts</h4>
+<li>A trophy only counts if he played at least a fifth of the minutes that season.</li>
+<h3>Streaks, points and generated names</h3>
+<li>Plays count toward your streak and your games played, but there is no leaderboard score for this game yet.</li>
+<li>Every player and every club in the game is made up.</li>
+<h2>Contract Chaos walkthrough: one wonderkid, three offers</h2>
+<h3>Meeting a nineteen year old winger</h3>
+<p>Today's client is a 19 year old winger rated 74 with a potential of 88, worth about €1.6M a year.</p>
+<h3>Three offers side by side</h3>
+<p>His club offers €1.4M for three years. A title chaser offers €1.3M for two years as a rotation player at a squad strength of 91. A rebuild offers €1.9M for four years, the starting spot and a €1.1M signing bonus.</p>
+<h3>The push and the release clause</h3>
+<p>You push the rebuild and they come up to €2.1M. You sign. He plays nearly every minute, climbs to 84 by his third season, and a title chaser pays his release clause to take him on a much bigger wage.</p>
+<h3>The verdict five seasons on</h3>
+<p>Five seasons later he is rated 87 with a league title, about €26M earned and a score of 83, a Great call. The roads not taken show his old club would have scored far less.</p>
+<h2>Contract Chaos tips for picking the right deal</h2>
+<h3>Minutes before badges for a kid</h3>
+<li>For a young player, minutes matter more than the badge on the shirt. A kid on the bench at a giant grows slower than a kid starting every week.</li>
+<h3>Money and minutes for a veteran</h3>
+<li>For a veteran, the money and the minutes are most of the score, because growth is mostly about slowing the decline.</li>
+<h3>Treating the clause as upside</h3>
+<li>A release clause is upside, not a risk. If he outgrows the club, it is his ticket to a bigger one.</li>
+<h3>Reading the manager's seat</h3>
+<li>Check the manager's seat before you trust a promised role. A hot seat promise can be gone by season two.</li>
+<h3>Choosing which offer to push</h3>
+<li>Push the offers you would be happy to lose, and think twice before pushing the one you want.</li>
+<h3>Short contracts as a growth bet</h3>
+<li>Short deals are a bet on growth. If he improves, the next contract pays for it; if he gets hurt, it does not.</li>
+<h2>Contract Chaos FAQ: generated players, the daily and scores</h2>
+<h3>Are the players and clubs real?</h3>
+<p>No. Every player and club is generated, so no real footballer's contract is being guessed at.</p>
+<h3>Why is there no leaderboard score?</h3>
+<p>Plays are recorded without a score while the site's points are rebuilt. Your best and average are kept on this device.</p>
+<h3>Is the daily the same for everyone?</h3>
+<p>Yes. Same client, same offers, same push results and the same five seasons for the same choice. You get one signature a day.</p>
+<h3>Can I see what would have happened with another offer?</h3>
+<p>Yes. The verdict screen plays every offer out over the same five seasons and ranks them, with yours marked.</p>
+<h3>Why did my promised starting spot disappear?</h3>
+<p>The manager who promised it got sacked. The new manager picks on form and rating, not on promises he never made.</p>
+<h3>Is Contract Chaos free to play?</h3>
+<p>Yes. Contract Chaos is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/world-xi">🌍 World XI Pick a formation, fill 11 random countries</a>
+<a href="/player-bingo">🎱 Player Bingo Complete a line on a 5x5 board before 3 strikes</a>
+<a href="/sports-bingo">🎫 Sports Bingo Open packs of real players on a timer, mark the squares they satisfy</a>
+<a href="/football-grid">🏈 NFL Grid 3×3 grid puzzle with rarity scores</a>
+<a href="/mystery-box">📦 Mystery Box Open 15 packs, keep or bin, build the best XI your luck allows</a>
+<a href="/tennis-chain">🔗 Tennis Chain Build a chain of Grand Slam defeats</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">NBA</a>
+<a href="/hockey">NHL</a>
+<a href="/pro-football">NFL</a>
+<a href="/baseball">MLB</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>
