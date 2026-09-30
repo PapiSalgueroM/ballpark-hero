@@ -1,5 +1,10 @@
 # Work board
 
+**2026-09-30 evening, desktop Claude lane: Rounds 729 to 734 CLAIMED, award and champion tables two source
+verified row by row** (each a pinned record, an unapplied migration and a fence): **729** Heisman (plus a Record Books
+page), **730** Ballon d'Or, **731** NASCAR champions, **732** tennis Grand Slam winners (the 2026 gaps), **733** golf
+majors (the placeholders and the Bobby Jones split), **734** F1 champions. The next free number is **735**.
+
 **2026-09-30 evening, desktop Claude lane: Rounds 711 to 728 CLAIMED, a master spec sweep.** One builder each,
 own branch from origin/main: **711** live ticker depth (last updated, stale notice, sport filter, followed
 teams), **712** streak history and achievement dates, **713** report admin statuses, **714** Club Manager match
