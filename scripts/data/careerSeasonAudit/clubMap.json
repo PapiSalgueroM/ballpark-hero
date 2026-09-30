@@ -1,0 +1,2686 @@
+{
+ "AC Milan": {
+  "wikidata": [
+   "Q1543"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "AC Milan"
+  ],
+  "country": "Italy",
+  "calendar": false
+ },
+ "AEK Athens": {
+  "wikidata": [
+   "Q201584"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Greece",
+  "calendar": false
+ },
+ "ATK": {
+  "wikidata": [
+   "Q16836329"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "India",
+  "calendar": true
+ },
+ "Adelaide United": {
+  "wikidata": [
+   "Q354059"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Australia",
+  "calendar": false
+ },
+ "Ajax": {
+  "wikidata": [
+   "Q81888"
+  ],
+  "reserve": [
+   "Q15178660"
+  ],
+  "marketValue": [
+   "Ajax Amsterdam"
+  ],
+  "country": "Netherlands",
+  "calendar": false
+ },
+ "Al-Ahli": {
+  "wikidata": [
+   "Q44441"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Al-Ahli SFC"
+  ],
+  "country": "Saudi Arabia",
+  "calendar": false
+ },
+ "Al-Ahli Dubai": {
+  "wikidata": [
+   "Q424943"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "United Arab Emirates",
+  "calendar": false
+ },
+ "Al-Arabi": {
+  "wikidata": [
+   "Q283760"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Al-Arabi SC"
+  ],
+  "country": "Qatar",
+  "calendar": false
+ },
+ "Al-Duhail": {
+  "wikidata": [
+   "Q1056948"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Al-Duhail SC"
+  ],
+  "country": "Qatar",
+  "calendar": false
+ },
+ "Al-Ettifaq": {
+  "wikidata": [
+   "Q72844"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Saudi Arabia",
+  "calendar": false
+ },
+ "Al-Gharafa": {
+  "wikidata": [
+   "Q428211"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Qatar",
+  "calendar": false
+ },
+ "Al-Hilal": {
+  "wikidata": [
+   "Q73965"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Saudi Arabia",
+  "calendar": false
+ },
+ "Al-Ittihad": {
+  "wikidata": [
+   "Q309480"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Al-Ittihad Club"
+  ],
+  "country": "Saudi Arabia",
+  "calendar": false
+ },
+ "Al-Nassr": {
+  "wikidata": [
+   "Q482764"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Saudi Arabia",
+  "calendar": false
+ },
+ "Al-Sadd": {
+  "wikidata": [
+   "Q283545"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Qatar",
+  "calendar": false
+ },
+ "Almería": {
+  "wikidata": [
+   "Q10407"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Alverca": {
+  "wikidata": [
+   "Q1386850"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Portugal",
+  "calendar": false
+ },
+ "América-RJ": {
+  "wikidata": [
+   "Q463147"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Anderlecht": {
+  "wikidata": [
+   "Q187528"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Belgium",
+  "calendar": false
+ },
+ "Anzhi Makhachkala": {
+  "wikidata": [
+   "Q19353"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Russia",
+  "calendar": false
+ },
+ "Argentinos Juniors": {
+  "wikidata": [
+   "Q220621"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "AA Argentinos Juniors"
+  ],
+  "country": "Argentina",
+  "calendar": false
+ },
+ "Arsenal": {
+  "wikidata": [
+   "Q9617"
+  ],
+  "reserve": [
+   "Q4384231"
+  ],
+  "marketValue": [
+   "Arsenal FC"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "Aston Villa": {
+  "wikidata": [
+   "Q18711"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Atalanta": {
+  "wikidata": [
+   "Q1886"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Athletic Bilbao": {
+  "wikidata": [
+   "Q8687"
+  ],
+  "reserve": [
+   "Q794970"
+  ],
+  "marketValue": [
+   "Athletic Bilbao"
+  ],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Athletico Paranaense": {
+  "wikidata": [
+   "Q506832"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Club Athletico Paranaense"
+  ],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Atlético Madrid": {
+  "wikidata": [
+   "Q8701"
+  ],
+  "reserve": [
+   "Q780539",
+   "Q20921799"
+  ],
+  "marketValue": [
+   "Atlético de Madrid"
+  ],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Atlético Mineiro": {
+  "wikidata": [
+   "Q270995"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Atlético Paranaense": {
+  "wikidata": [
+   "Q506832"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Club Athletico Paranaense"
+  ],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Audax": {
+  "wikidata": [
+   "Q43899915"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Auxerre": {
+  "wikidata": [
+   "Q182876"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "France",
+  "calendar": false
+ },
+ "Banfield": {
+  "wikidata": [
+   "Q692646"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Argentina",
+  "calendar": false
+ },
+ "Baniyas": {
+  "wikidata": [
+   "Q1344302"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "United Arab Emirates",
+  "calendar": false
+ },
+ "Barcelona": {
+  "wikidata": [
+   "Q7156"
+  ],
+  "reserve": [
+   "Q10467",
+   "Q2346842",
+   "Q13562063"
+  ],
+  "marketValue": [
+   "FC Barcelona"
+  ],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Barranquilla": {
+  "wikidata": [
+   "Q3293573"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Colombia",
+  "calendar": true
+ },
+ "Basel": {
+  "wikidata": [
+   "Q189671"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Switzerland",
+  "calendar": false
+ },
+ "Bayer Leverkusen": {
+  "wikidata": [
+   "Q104761"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Bayern Munich": {
+  "wikidata": [
+   "Q15789"
+  ],
+  "reserve": [
+   "Q994701",
+   "Q791554"
+  ],
+  "marketValue": [
+   "Bayern Munich"
+  ],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Benfica": {
+  "wikidata": [
+   "Q131499"
+  ],
+  "reserve": [
+   "Q7387221"
+  ],
+  "marketValue": [
+   "SL Benfica"
+  ],
+  "country": "Portugal",
+  "calendar": false
+ },
+ "Beşiktaş": {
+  "wikidata": [
+   "Q172567"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Turkey",
+  "calendar": false
+ },
+ "Birmingham City": {
+  "wikidata": [
+   "Q19444"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Blackburn Rovers": {
+  "wikidata": [
+   "Q19446"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Boca Juniors": {
+  "wikidata": [
+   "Q170703"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "CA Boca Juniors"
+  ],
+  "country": "Argentina",
+  "calendar": false
+ },
+ "Bologna": {
+  "wikidata": [
+   "Q1893"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Bolton Wanderers": {
+  "wikidata": [
+   "Q19451"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Bordeaux": {
+  "wikidata": [
+   "Q172476"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "France",
+  "calendar": false
+ },
+ "Borussia Dortmund": {
+  "wikidata": [
+   "Q41420"
+  ],
+  "reserve": [
+   "Q865720"
+  ],
+  "marketValue": [
+   "Borussia Dortmund"
+  ],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Borussia Mönchengladbach": {
+  "wikidata": [
+   "Q101959"
+  ],
+  "reserve": [
+   "Q13397712"
+  ],
+  "marketValue": [
+   "Borussia Mönchengladbach"
+  ],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Botafogo": {
+  "wikidata": [
+   "Q80958"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Bournemouth": {
+  "wikidata": [
+   "Q19568"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Brentford": {
+  "wikidata": [
+   "Q19571"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Brescia": {
+  "wikidata": [
+   "Q6651"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Brighton": {
+  "wikidata": [
+   "Q19453"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Brøndby": {
+  "wikidata": [
+   "Q211906"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Denmark",
+  "calendar": false
+ },
+ "Bunyodkor": {
+  "wikidata": [
+   "Q628763"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Uzbekistan",
+  "calendar": false
+ },
+ "CSA": {
+  "wikidata": [
+   "Q928885"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Caen": {
+  "wikidata": [
+   "Q193377"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "France",
+  "calendar": false
+ },
+ "Cagliari": {
+  "wikidata": [
+   "Q1900"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Cannes": {
+  "wikidata": [
+   "Q298267"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "France",
+  "calendar": false
+ },
+ "Celta Vigo": {
+  "wikidata": [
+   "Q8749"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Celta de Vigo"
+  ],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Celtic": {
+  "wikidata": [
+   "Q19593"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Scotland",
+  "calendar": false
+ },
+ "Cerezo Osaka": {
+  "wikidata": [
+   "Q855809"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Japan",
+  "calendar": true
+ },
+ "Cerro": {
+  "wikidata": [
+   "Q719344"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Uruguay",
+  "calendar": false
+ },
+ "Chelsea": {
+  "wikidata": [
+   "Q9616"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Chemnitzer FC": {
+  "wikidata": [
+   "Q161554"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Chennaiyin": {
+  "wikidata": [
+   "Q17594408"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "India",
+  "calendar": true
+ },
+ "Chicago Fire": {
+  "wikidata": [
+   "Q308683"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Chicago Fire FC"
+  ],
+  "country": "USA",
+  "calendar": true
+ },
+ "Chmel Blšany": {
+  "wikidata": [
+   "Q612017"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Czech Republic",
+  "calendar": false
+ },
+ "Cobh Ramblers": {
+  "wikidata": [
+   "Q1104682"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Ireland",
+  "calendar": false
+ },
+ "Como": {
+  "wikidata": [
+   "Q1120838"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Corinthians": {
+  "wikidata": [
+   "Q35933"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Coventry City": {
+  "wikidata": [
+   "Q19580"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Coventry City"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "Cremonese": {
+  "wikidata": [
+   "Q759482"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Cruzeiro": {
+  "wikidata": [
+   "Q188277"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Cruzeiro Esporte Clube"
+  ],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Crystal Palace": {
+  "wikidata": [
+   "Q19467"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Delhi Dynamos": {
+  "wikidata": [
+   "Q16838244"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "India",
+  "calendar": true
+ },
+ "Den Bosch": {
+  "wikidata": [
+   "Q875169"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Netherlands",
+  "calendar": false
+ },
+ "Deportivo La Coruña": {
+  "wikidata": [
+   "Q8760"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Deportivo de La Coruña"
+  ],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Derby County": {
+  "wikidata": [
+   "Q19470"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Dinamo Batumi": {
+  "wikidata": [
+   "Q1346756"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Georgia",
+  "calendar": false
+ },
+ "Dinamo Zagreb": {
+  "wikidata": [
+   "Q172803"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "GNK Dinamo Zagreb"
+  ],
+  "country": "Croatia",
+  "calendar": false
+ },
+ "Dukla Prague": {
+  "wikidata": [
+   "Q1199965"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Czech Republic",
+  "calendar": false
+ },
+ "Dynamo Kyiv": {
+  "wikidata": [
+   "Q179075"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Ukraine",
+  "calendar": false
+ },
+ "Eibar": {
+  "wikidata": [
+   "Q770740"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Eintracht Frankfurt": {
+  "wikidata": [
+   "Q38245"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Espanyol": {
+  "wikidata": [
+   "Q8780"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Estudiantes": {
+  "wikidata": [
+   "Q214940"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Argentina",
+  "calendar": false
+ },
+ "Everton": {
+  "wikidata": [
+   "Q5794"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Exeter City": {
+  "wikidata": [
+   "Q48939"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "FC Halifax Town": {
+  "wikidata": [
+   "Q5214935"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "FC Liefering": {
+  "wikidata": [
+   "Q1387293"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Austria",
+  "calendar": false
+ },
+ "Fenerbahçe": {
+  "wikidata": [
+   "Q6601875"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Turkey",
+  "calendar": false
+ },
+ "Feyenoord": {
+  "wikidata": [
+   "Q134241"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Feyenoord Rotterdam"
+  ],
+  "country": "Netherlands",
+  "calendar": false
+ },
+ "Fiorentina": {
+  "wikidata": [
+   "Q2052"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Flamengo": {
+  "wikidata": [
+   "Q17479"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Fleetwood Town": {
+  "wikidata": [
+   "Q48941"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Fluminense": {
+  "wikidata": [
+   "Q80987"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Fluminense Football Club",
+   "Fluminense"
+  ],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Fortaleza": {
+  "wikidata": [
+   "Q188841"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Fulham": {
+  "wikidata": [
+   "Q18708"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Galatasaray": {
+  "wikidata": [
+   "Q495299"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Turkey",
+  "calendar": false
+ },
+ "Genoa": {
+  "wikidata": [
+   "Q2074"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Gent": {
+  "wikidata": [
+   "Q18232"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Belgium",
+  "calendar": false
+ },
+ "Getafe": {
+  "wikidata": [
+   "Q8806"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Girona": {
+  "wikidata": [
+   "Q11945"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Grenoble": {
+  "wikidata": [
+   "Q209509"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "France",
+  "calendar": false
+ },
+ "Grêmio": {
+  "wikidata": [
+   "Q221695"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Grêmio Foot-Ball Porto Alegrense"
+  ],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Guangzhou Evergrande": {
+  "wikidata": [
+   "Q130521"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Guangzhou FC"
+  ],
+  "country": "China",
+  "calendar": true
+ },
+ "Haarlem": {
+  "wikidata": [
+   "Q854141"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Netherlands",
+  "calendar": false
+ },
+ "Hamburg": {
+  "wikidata": [
+   "Q51974"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Hamburger SV"
+  ],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Hebei China Fortune": {
+  "wikidata": [
+   "Q402038"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "China",
+  "calendar": true
+ },
+ "Heerenveen": {
+  "wikidata": [
+   "Q200321"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "SC Heerenveen"
+  ],
+  "country": "Netherlands",
+  "calendar": false
+ },
+ "Hellas Verona": {
+  "wikidata": [
+   "Q8639"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Hellas Verona"
+  ],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Hoffenheim": {
+  "wikidata": [
+   "Q22707"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Homburg": {
+  "wikidata": [
+   "Q137499"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Hull City": {
+  "wikidata": [
+   "Q19477"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Hvidovre": {
+  "wikidata": [
+   "Q843097"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Denmark",
+  "calendar": false
+ },
+ "Hércules": {
+  "wikidata": [
+   "Q11963"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Independiente": {
+  "wikidata": [
+   "Q214978"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Argentina",
+  "calendar": false
+ },
+ "Inter Miami": {
+  "wikidata": [
+   "Q16844931"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "USA",
+  "calendar": true
+ },
+ "Inter Milan": {
+  "wikidata": [
+   "Q631"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Inter Milan"
+  ],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Internacional": {
+  "wikidata": [
+   "Q80845"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Sport Club Internacional"
+  ],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Istanbul Basaksehir": {
+  "wikidata": [
+   "Q857938"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Turkey",
+  "calendar": false
+ },
+ "Istres": {
+  "wikidata": [
+   "Q797530"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "France",
+  "calendar": false
+ },
+ "Junior FC": {
+  "wikidata": [
+   "Q332524"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Junior FC"
+  ],
+  "country": "Colombia",
+  "calendar": true
+ },
+ "Juventude": {
+  "wikidata": [
+   "Q910453"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Juventus": {
+  "wikidata": [
+   "Q1422"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Juventus FC",
+   "Juventus"
+  ],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Kabuscorp": {
+  "wikidata": [
+   "Q693297"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Angola",
+  "calendar": false
+ },
+ "Kaiserslautern": {
+  "wikidata": [
+   "Q8466"
+  ],
+  "reserve": [
+   "Q16525407"
+  ],
+  "marketValue": [
+   "1.FC Kaiserslautern"
+  ],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Karlsruher SC": {
+  "wikidata": [
+   "Q105853"
+  ],
+  "reserve": [
+   "Q18704184"
+  ],
+  "marketValue": [],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Kitchee": {
+  "wikidata": [
+   "Q141045"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Hong Kong",
+  "calendar": false
+ },
+ "LA Galaxy": {
+  "wikidata": [
+   "Q204357"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Los Angeles Galaxy"
+  ],
+  "country": "USA",
+  "calendar": true
+ },
+ "LAFC": {
+  "wikidata": [
+   "Q18380286"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Los Angeles FC"
+  ],
+  "country": "USA",
+  "calendar": true
+ },
+ "Las Palmas": {
+  "wikidata": [
+   "Q11979"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Lazio": {
+  "wikidata": [
+   "Q2609"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Leeds United": {
+  "wikidata": [
+   "Q1128631"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Leeds United"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "Leffe": {
+  "wikidata": [
+   "Q3963306"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Leicester City": {
+  "wikidata": [
+   "Q19481"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Leicester City"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "Lens": {
+  "wikidata": [
+   "Q191843"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "France",
+  "calendar": false
+ },
+ "Levante": {
+  "wikidata": [
+   "Q8823"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Lille": {
+  "wikidata": [
+   "Q19516"
+  ],
+  "reserve": [
+   "Q16591640"
+  ],
+  "marketValue": [
+   "LOSC Lille"
+  ],
+  "country": "France",
+  "calendar": false
+ },
+ "Liverpool": {
+  "wikidata": [
+   "Q1130849"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Los Angeles Aztecs": {
+  "wikidata": [
+   "Q1156317"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "USA",
+  "calendar": true
+ },
+ "Lyon": {
+  "wikidata": [
+   "Q704"
+  ],
+  "reserve": [
+   "Q3924852"
+  ],
+  "marketValue": [
+   "Olympique Lyon"
+  ],
+  "country": "France",
+  "calendar": false
+ },
+ "Manchester City": {
+  "wikidata": [
+   "Q50602"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Manchester City"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "Manchester United": {
+  "wikidata": [
+   "Q18656"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Manchester United"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "Marsala": {
+  "wikidata": [
+   "Q2251415"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Marseille": {
+  "wikidata": [
+   "Q132885"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Olympique Marseille"
+  ],
+  "country": "France",
+  "calendar": false
+ },
+ "Marsonia": {
+  "wikidata": [
+   "Q1274317"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Croatia",
+  "calendar": false
+ },
+ "Martigues": {
+  "wikidata": [
+   "Q1132418"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "France",
+  "calendar": false
+ },
+ "Melbourne City": {
+  "wikidata": [
+   "Q748725"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Australia",
+  "calendar": false
+ },
+ "Melbourne Victory": {
+  "wikidata": [],
+  "reserve": [],
+  "marketValue": [
+   "Melbourne Victory"
+  ],
+  "country": null,
+  "calendar": false
+ },
+ "Miami FC": {
+  "wikidata": [],
+  "reserve": [],
+  "marketValue": [],
+  "country": null,
+  "calendar": false
+ },
+ "Miami United": {
+  "wikidata": [
+   "Q16844935"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "USA",
+  "calendar": true
+ },
+ "Mogi Mirim": {
+  "wikidata": [
+   "Q2419887"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Monaco": {
+  "wikidata": [
+   "Q180305"
+  ],
+  "reserve": [
+   "Q109500422"
+  ],
+  "marketValue": [
+   "AS Monaco"
+  ],
+  "country": "Monaco",
+  "calendar": false
+ },
+ "Montpellier": {
+  "wikidata": [
+   "Q19513"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "France",
+  "calendar": false
+ },
+ "Montreal Impact": {
+  "wikidata": [
+   "Q167615"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Canada",
+  "calendar": true
+ },
+ "Monza": {
+  "wikidata": [
+   "Q289482"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Mumbai City": {
+  "wikidata": [
+   "Q16845355"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "India",
+  "calendar": true
+ },
+ "Málaga": {
+  "wikidata": [
+   "Q8857"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Spain",
+  "calendar": false
+ },
+ "NK Zagreb": {
+  "wikidata": [
+   "Q462411"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Croatia",
+  "calendar": false
+ },
+ "Nacional": {
+  "wikidata": [
+   "Q499616"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Club Nacional"
+  ],
+  "country": "Uruguay",
+  "calendar": false
+ },
+ "Nancy": {
+  "wikidata": [
+   "Q19523"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "France",
+  "calendar": false
+ },
+ "Nantes": {
+  "wikidata": [
+   "Q192071"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "France",
+  "calendar": false
+ },
+ "Napoli": {
+  "wikidata": [
+   "Q2641"
+  ],
+  "reserve": [
+   "Q22936201"
+  ],
+  "marketValue": [
+   "SSC Napoli"
+  ],
+  "country": "Italy",
+  "calendar": false
+ },
+ "New York City FC": {
+  "wikidata": [
+   "Q13361030"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "New York City FC"
+  ],
+  "country": "USA",
+  "calendar": true
+ },
+ "New York Cosmos": {
+  "wikidata": [
+   "Q646135"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "USA",
+  "calendar": true
+ },
+ "New York Red Bulls": {
+  "wikidata": [
+   "Q204220"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Red Bull New York"
+  ],
+  "country": "USA",
+  "calendar": true
+ },
+ "Newcastle": {
+  "wikidata": [
+   "Q18716"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Newcastle United"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "Newcastle United": {
+  "wikidata": [
+   "Q18716"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Newcastle United"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "Newell's Old Boys": {
+  "wikidata": [
+   "Q221882"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Argentina",
+  "calendar": false
+ },
+ "Nice": {
+  "wikidata": [
+   "Q185163"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "OGC Nice"
+  ],
+  "country": "France",
+  "calendar": false
+ },
+ "Nottingham Forest": {
+  "wikidata": [
+   "Q19490"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Notts County": {
+  "wikidata": [
+   "Q19598"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Nîmes": {
+  "wikidata": [
+   "Q730809"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "France",
+  "calendar": false
+ },
+ "Olympiacos": {
+  "wikidata": [
+   "Q19628"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Olympiacos Piraeus"
+  ],
+  "country": "Greece",
+  "calendar": false
+ },
+ "Orlando City": {
+  "wikidata": [
+   "Q15214308"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Orlando City SC"
+  ],
+  "country": "USA",
+  "calendar": true
+ },
+ "Oxford United": {
+  "wikidata": [
+   "Q48946"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "PSG": {
+  "wikidata": [
+   "Q483020"
+  ],
+  "reserve": [
+   "Q2945336"
+  ],
+  "marketValue": [
+   "Paris Saint-Germain"
+  ],
+  "country": "France",
+  "calendar": false
+ },
+ "PSV": {
+  "wikidata": [
+   "Q11938"
+  ],
+  "reserve": [
+   "Q13534332"
+  ],
+  "marketValue": [
+   "PSV Eindhoven"
+  ],
+  "country": "Netherlands",
+  "calendar": false
+ },
+ "Padova": {
+  "wikidata": [
+   "Q8428"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Pafos": {
+  "wikidata": [
+   "Q17442894"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Cyprus",
+  "calendar": false
+ },
+ "Palermo": {
+  "wikidata": [
+   "Q2674"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Palmeiras": {
+  "wikidata": [
+   "Q80964"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Paris Saint-Germain": {
+  "wikidata": [
+   "Q483020"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Paris Saint-Germain"
+  ],
+  "country": "France",
+  "calendar": false
+ },
+ "Parma": {
+  "wikidata": [
+   "Q2693"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Perugia": {
+  "wikidata": [
+   "Q16344"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Pescara": {
+  "wikidata": [
+   "Q2710"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Peñarol": {
+  "wikidata": [
+   "Q16320"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Uruguay",
+  "calendar": false
+ },
+ "Piacenza": {
+  "wikidata": [
+   "Q459794"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Pisa": {
+  "wikidata": [
+   "Q289613"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Platense": {
+  "wikidata": [
+   "Q151907"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Argentina",
+  "calendar": false
+ },
+ "Porto": {
+  "wikidata": [
+   "Q128446"
+  ],
+  "reserve": [
+   "Q5423714"
+  ],
+  "marketValue": [
+   "FC Porto"
+  ],
+  "country": "Portugal",
+  "calendar": false
+ },
+ "Preston North End": {
+  "wikidata": [
+   "Q19612"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Pune City": {
+  "wikidata": [
+   "Q16967914"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "India",
+  "calendar": true
+ },
+ "Queens Park Rangers": {
+  "wikidata": [
+   "Q18723"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Querétaro": {
+  "wikidata": [
+   "Q606210"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Mexico",
+  "calendar": false
+ },
+ "RB Leipzig": {
+  "wikidata": [
+   "Q702455"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "RB Leipzig"
+  ],
+  "country": "Germany",
+  "calendar": false
+ },
+ "RB Salzburg": {
+  "wikidata": [
+   "Q994811"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Red Bull Salzburg"
+  ],
+  "country": "Austria",
+  "calendar": false
+ },
+ "Racing Club": {
+  "wikidata": [
+   "Q276533"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Argentina",
+  "calendar": false
+ },
+ "Rangers": {
+  "wikidata": [
+   "Q19597"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Scotland",
+  "calendar": false
+ },
+ "Ravenna": {
+  "wikidata": [
+   "Q1349814"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Reading": {
+  "wikidata": [
+   "Q18729"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Real Betis": {
+  "wikidata": [
+   "Q8723"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Real Madrid": {
+  "wikidata": [
+   "Q8682"
+  ],
+  "reserve": [
+   "Q12217",
+   "Q1246437"
+  ],
+  "marketValue": [
+   "Real Madrid"
+  ],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Real Madrid Castilla": {
+  "wikidata": [
+   "Q12217"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Real Madrid Castilla"
+  ],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Real Sociedad": {
+  "wikidata": [
+   "Q10315"
+  ],
+  "reserve": [
+   "Q1067750"
+  ],
+  "marketValue": [
+   "Real Sociedad"
+  ],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Real Zaragoza": {
+  "wikidata": [
+   "Q10308"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Red Star Belgrade": {
+  "wikidata": [
+   "Q173009"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Serbia",
+  "calendar": false
+ },
+ "Rennes": {
+  "wikidata": [
+   "Q19509"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Stade Rennais FC"
+  ],
+  "country": "France",
+  "calendar": false
+ },
+ "River Plate": {
+  "wikidata": [
+   "Q15799"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Argentina",
+  "calendar": false
+ },
+ "Roma": {
+  "wikidata": [
+   "Q2739"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Rot Weiss Ahlen": {
+  "wikidata": [
+   "Q170125"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Rotherham United": {
+  "wikidata": [
+   "Q48950"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Rotherham United"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "Saint-Étienne": {
+  "wikidata": [
+   "Q19521"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "France",
+  "calendar": false
+ },
+ "Salernitana": {
+  "wikidata": [
+   "Q847587"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Salgueiros": {
+  "wikidata": [
+   "Q1754163"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Portugal",
+  "calendar": false
+ },
+ "Sampdoria": {
+  "wikidata": [
+   "Q1457"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Santa Cruz": {
+  "wikidata": [
+   "Q508440"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Santos": {
+  "wikidata": [
+   "Q80955"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Schalke 04": {
+  "wikidata": [
+   "Q32494"
+  ],
+  "reserve": [
+   "Q3736767"
+  ],
+  "marketValue": [
+   "FC Schalke 04"
+  ],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Sevilla": {
+  "wikidata": [
+   "Q10329"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Shakhtar Donetsk": {
+  "wikidata": [
+   "Q172969"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Ukraine",
+  "calendar": false
+ },
+ "Shanghai Shenhua": {
+  "wikidata": [
+   "Q725367"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "China",
+  "calendar": true
+ },
+ "Sheffield Wednesday": {
+  "wikidata": [
+   "Q19498"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Sion": {
+  "wikidata": [
+   "Q321061"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Switzerland",
+  "calendar": false
+ },
+ "Sivasspor": {
+  "wikidata": [
+   "Q372599"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Turkey",
+  "calendar": false
+ },
+ "Southampton": {
+  "wikidata": [
+   "Q18732"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Sparta Prague": {
+  "wikidata": [
+   "Q193481"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Czech Republic",
+  "calendar": false
+ },
+ "Spartak Moscow": {
+  "wikidata": [
+   "Q29112"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Russia",
+  "calendar": false
+ },
+ "Spartak Subotica": {
+  "wikidata": [
+   "Q94605"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Serbia",
+  "calendar": false
+ },
+ "Sporting CP": {
+  "wikidata": [
+   "Q75729"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Portugal",
+  "calendar": false
+ },
+ "Sporting Gijón": {
+  "wikidata": [
+   "Q12278"
+  ],
+  "reserve": [
+   "Q2982210"
+  ],
+  "marketValue": [
+   "Sporting Gijón"
+  ],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Stocksbridge Park Steels": {
+  "wikidata": [
+   "Q18305"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Stoke City": {
+  "wikidata": [
+   "Q18736"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Sturm Graz": {
+  "wikidata": [
+   "Q124007617"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Austria",
+  "calendar": false
+ },
+ "Stuttgart": {
+  "wikidata": [
+   "Q4512"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Sunderland": {
+  "wikidata": [
+   "Q18739"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Swansea City": {
+  "wikidata": [
+   "Q18659"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Wales",
+  "calendar": false
+ },
+ "Swindon Town": {
+  "wikidata": [
+   "Q19634"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Sydney FC": {
+  "wikidata": [
+   "Q330143"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Australia",
+  "calendar": false
+ },
+ "São Caetano": {
+  "wikidata": [
+   "Q290940"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "São Paulo": {
+  "wikidata": [
+   "Q38568"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "São Paulo Futebol Clube"
+  ],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Talleres": {
+  "wikidata": [
+   "Q1022941"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Argentina",
+  "calendar": false
+ },
+ "Torino": {
+  "wikidata": [
+   "Q2768"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Toronto FC": {
+  "wikidata": [
+   "Q327238"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Canada",
+  "calendar": true
+ },
+ "Tottenham": {
+  "wikidata": [
+   "Q18741"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Tottenham Hotspur"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "Tottenham Hotspur": {
+  "wikidata": [
+   "Q18741"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Tottenham Hotspur"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "Toulouse": {
+  "wikidata": [
+   "Q19518"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "FC Toulouse"
+  ],
+  "country": "France",
+  "calendar": false
+ },
+ "Tours": {
+  "wikidata": [
+   "Q822021"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "France",
+  "calendar": false
+ },
+ "Twente": {
+  "wikidata": [
+   "Q19603"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "FC Twente Enschede"
+  ],
+  "country": "Netherlands",
+  "calendar": false
+ },
+ "Udinese": {
+  "wikidata": [
+   "Q2798"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "União São João": {
+  "wikidata": [
+   "Q2329137"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Valencia": {
+  "wikidata": [
+   "Q10333"
+  ],
+  "reserve": [
+   "Q918044"
+  ],
+  "marketValue": [
+   "Valencia CF"
+  ],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Vasco da Gama": {
+  "wikidata": [
+   "Q5014111"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Venezia": {
+  "wikidata": [
+   "Q501245"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "VfL Wolfsburg": {
+  "wikidata": [
+   "Q101859"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Germany",
+  "calendar": false
+ },
+ "Vicenza": {
+  "wikidata": [
+   "Q8643"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Italy",
+  "calendar": false
+ },
+ "Villarreal": {
+  "wikidata": [
+   "Q12297"
+  ],
+  "reserve": [
+   "Q1094113",
+   "Q20978061"
+  ],
+  "marketValue": [
+   "Villarreal CF"
+  ],
+  "country": "Spain",
+  "calendar": false
+ },
+ "Vissel Kobe": {
+  "wikidata": [
+   "Q844271"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Japan",
+  "calendar": true
+ },
+ "Vitesse": {
+  "wikidata": [
+   "Q219233"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Vitesse Arnhem"
+  ],
+  "country": "Netherlands",
+  "calendar": false
+ },
+ "Vitória": {
+  "wikidata": [
+   "Q274465"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Esporte Clube Vitória"
+  ],
+  "country": "Brazil",
+  "calendar": true
+ },
+ "Vélez Sarsfield": {
+  "wikidata": [
+   "Q215163"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Argentina",
+  "calendar": false
+ },
+ "Washington Diplomats": {
+  "wikidata": [
+   "Q1190526"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "USA",
+  "calendar": true
+ },
+ "Werder Bremen": {
+  "wikidata": [
+   "Q51976"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Germany",
+  "calendar": false
+ },
+ "West Brom": {
+  "wikidata": [
+   "Q18744"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "West Bromwich Albion"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "West Bromwich Albion": {
+  "wikidata": [
+   "Q18744"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "West Bromwich Albion"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "West Ham": {
+  "wikidata": [
+   "Q18747"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "West Ham United"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "West Ham United": {
+  "wikidata": [
+   "Q18747"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "West Ham United"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "Western Sydney Wanderers": {
+  "wikidata": [],
+  "reserve": [],
+  "marketValue": [],
+  "country": null,
+  "calendar": false
+ },
+ "Weston-super-Mare": {
+  "wikidata": [
+   "Q2343389"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "England",
+  "calendar": false
+ },
+ "Willem II": {
+  "wikidata": [
+   "Q332664"
+  ],
+  "reserve": [],
+  "marketValue": [],
+  "country": "Netherlands",
+  "calendar": false
+ },
+ "Wolverhampton": {
+  "wikidata": [
+   "Q19500"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Wolverhampton Wanderers"
+  ],
+  "country": "England",
+  "calendar": false
+ },
+ "Wolverhampton Wanderers": {
+  "wikidata": [
+   "Q19500"
+  ],
+  "reserve": [],
+  "marketValue": [
+   "Wolverhampton Wanderers"
+  ],
+  "country": "England",
+  "calendar": false
+ }
+}
