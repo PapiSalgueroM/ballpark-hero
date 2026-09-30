@@ -1,5 +1,14 @@
 # Work board
 
+**2026-09-30, Codex Round 758 CLAIMED: CBB Dynasty recruiting filters.**
+Ownership: `src/components/cbb-dynasty/CbbDynastyBoard.tsx`, focused rendered tests and a new
+discoverable sim harness. Add position and minimum-star filters using the existing generated
+high-school and portal prospects, with combined counts, empty-state guidance and reset. Preserve
+list order, prospect IDs, displayed scouting grades, sign actions, NIL spending and roster/save
+behavior. Never reveal hidden true overall or generate new prospects through filter changes.
+No CBB engine/data changes, no CFB files (Claude 728), no college facts (Claude 706), no parent page,
+account or database changes. Begin after the 754 through 757 build finishes. Next free is **759**.
+
 **2026-09-30, Codex Rounds 754 through 757 CLAIMED: another independent game UI batch.**
 754 owns `src/components/game/PlayerAutocomplete.tsx`, focused rendered tests and its new sim
 harness. The measured native option buttons ignore Enter/Space and remain selectable after the
