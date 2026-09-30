@@ -334,6 +334,57 @@ branch.
 - **Out of scope, on the follow up list.** Gaps in the market rows before 2026 (Tonali's Newcastle
   years are in neither table, so "Played for Newcastle" stays a hard no for him) and the 64 stale
   sweep pairs, each wanting a two source record.
+## ROUND 708 FIXED 2026-09-30, NOT ON MAIN: soccer_awards readers, shape test and record (branch `r708-small-soccer-tables`)
+Head `7b759017` on top of the round's `be9e2723`. **What shipped is the soccer_awards half only.** The board
+line for 708 still says "soccer_awards, national_team_squads, AFL goal kickers"; the lead narrows it at
+assembly. national_team_squads got no reader change (Build Your XI and validate-player already select
+`player_name` only) and no migration; AFL goal kickers got nothing at all.
+- **The reader.** `awardWinners()` in `src/lib/listQuiz.ts` refuses any award off `VERIFIED_SOCCER_AWARDS`
+  (throws, before the query), reads only `winner_name, club_or_team`, and runs every row through
+  `awardRowProblem()` in `src/lib/awardRowShape.ts`: a winner that is a number, a rank, blank, a paper, a
+  nation, 'Not awarded' or several men, or a club that is a scoreline, is skipped. In the three awards the
+  List Quiz reads that drops the five 'Not awarded' Golden Shoe seasons (an answer the quiz used to expect)
+  and `cleanAwardWinner()` takes the '(tie)' and '(2)' tags off, so Sanchez, Stoichkov, Forlan, Henry,
+  Ronaldo and Suarez stop being a second answer nobody could type.
+- **The record.** `scripts/data/soccerAwardsVerified2026-09.json`: European Golden Shoe (56 winners 1968 to
+  2025 plus the five suspended seasons), Premier League Player of the Season (32, 1994-95 to 2025-26) and
+  MLS MVP (30, 1996 to 2025), each on two organisations, no wiki. The Shoe's organiser page (ESM,
+  eusm.eu) is a script shell, recorded as `noOfficial`; Topend Sports, Futbol Update, SportsLib, Goal and
+  bundesliga.com carry it. The 2025-26 Golden Shoe (Harry Kane, 36 goals, 72 points, presented
+  2026-08-19) is decided and **not in the table**: it sits in `knownGaps`, the quiz deals one fewer season,
+  and a one row migration moves it into `winners`.
+- **The fence.** `scripts/simSoccerAwardsShape.mjs`, seven sections, eight controls, green on main before
+  any migration lands. Section 5 against the live table on 2026-09-30:
+  `European Golden Shoe: 61 rows, 5 dropped (Not awarded), 56 pass and match the record's 56; quiz deals 39 distinct names, record has 39; not in the table yet: 2026 Harry Kane`,
+  `Premier League Player of the Season: 32 rows, 0 dropped (none), 32 pass and match the record's 32; quiz deals 27 distinct names, record has 27`,
+  `MLS MVP: 30 rows, 0 dropped (none), 30 pass and match the record's 30; quiz deals 28 distinct names, record has 28`.
+  Sections 6 and 7 print PENDING while the World Cup rewrite and the squads realignment are unshipped
+  (183 of the 393 World Cup rows are junk shaped, the other 210 are name shaped rows under the wrong
+  award, which only the allowlist keeps out) and check the tables against the migrations once the files
+  exist.
+- **What the review found and the fix closed.** The harness as built read the two migrations and the
+  record at module scope and crashed with ENOENT before section 1, so no control could fire and
+  runAllSims would have gone red on merge. The squads fingerprint counted digit positions over the 60
+  statistics rows too (live 2784, typed 2724), so it could never match. The greedy control predicted one
+  section and turned two red. The squadcol control was "caught" by a section that was already red for
+  another reason: every control now asserts the failure text it exists to provoke. The 'several names'
+  rule fired only above five words, so 'Oleg Salenko Hristo Stoichkov' passed; it fires at four
+  capitalised tokens now (no recorded winner has more than three, the shortest two man cell has four).
+  The blank check had no fixture. Two rival name hits (a record field named after the governing body and
+  its fail message), three dashes in fixtures (built from code points now), and two names for one
+  unshipped migration.
+- **Gates.** tsc 0; simSoccerAwardsShape green with outlet, several, tie, allowlist, greedy, record,
+  wcverified and squadcol each exiting 1 on exactly their predicted sections; simNoRivalNames 0 findings;
+  simHarnessAnchors green; no U+2013 or U+2014 in the diff.
+**Follow ups, none started:** the World Cup awards record and
+`supabase/migrations/20260930120000_round_708_soccer_awards_world_cup.sql` (the harness's section 6 and
+the wcverified control are ready for them; add a control that drifts one migration row when it ships);
+`20260930121000_round_708_national_team_squads_realign.sql` (section 7 is ready; the fingerprint there
+pins exact live counts, so any row added to the table will turn it red until the migration lands, which
+is why it only runs once the file exists); the 2025-26 Golden Shoe row; AFL goal kickers, unstarted.
+**Trap for the next harness:** a harness that reads a file at module scope is red the moment the file is
+missing, on every run and under every control, and its own header can still say "green on main". Guard
+the read on existence and print PENDING, so the sections that fence the shipped code keep running.
 
 ## LIVE 2026-09-29: Release F (660, 661, 668, 669 code, 670, 672), main `add1c6b0`
 
