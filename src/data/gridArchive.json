@@ -1,6 +1,6 @@
 {
  "generatedFor": "2026-09-29",
- "note": "Answers are computed with each game's own playerMatchesCell against the same indexed player data the game validates guesses with. Counts are the number of distinct players, by the source's own id, valid for that crossing; the names listed are the rarest by career games played, each name once, with placeholder names left out.",
+ "note": "Answers are computed with each game's own playerMatchesCell against the same indexed player data the game validates guesses with, and every listed name was resolved through the game's own lookup (byNormalizedName and pickNamesake) and accepted. Counts are the number of distinct players, by the source's own id, valid for that crossing; the names listed are the rarest by career games played, each name once, with placeholder names left out.",
  "sports": {
   "nba": {
    "label": "NBA",

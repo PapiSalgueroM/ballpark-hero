@@ -1,9 +1,14 @@
 /**
  * Round 653: the rules the grid archive applies before it counts or names a
  * player. scripts/genGridArchive.mjs writes the file with these;
- * scripts/simGridArchive.mjs uses only malformedName and longDate from here and
- * counts players by id on its own, so a bug in the dedupe below cannot hide
- * itself by being shared with the fence that checks it.
+ * scripts/simGridArchive.mjs imports only longDate and addDays from here (the
+ * calendar helpers, which decide nothing about what is printed) and carries its
+ * own copy of the name rule, its own id count and its own rarest first check,
+ * so a bug in dedupeById, rarestFirst, malformedName or namesToShow below
+ * cannot hide itself by being shared with the fence that checks it. Measured
+ * before the fence was made independent: malformedName broken to return null
+ * put "_ Eldredge" back in the file and the fence, importing the same
+ * function, still said 0 malformed.
  *
  * WHY THIS EXISTS. ncaa_player_stats holds 1,600 players twice: two batches of
  * the 2026-05-09 load were sent again (ids 16201 to 17400 copy 15001 to 16200,
@@ -70,7 +75,11 @@ export function rarestFirst(a, b) {
 
 /** The names a cell prints: the rarest `perCell` players whose names can be
     printed, each name once. Two players sharing a name would read as one man
-    listed twice, so the second is skipped; the count still includes both. */
+    listed twice, so the second is skipped; the count still includes both.
+    The game accepts a shared name when ANY player under it fits (pickNamesake
+    in src/lib/gridEngine.ts), so a name listed for its rarer bearer is one the
+    game takes; the generator checks that through the game's own lookup before
+    it writes, and refuses if it ever stops being true. */
 export function namesToShow(valid, perCell) {
   const out = [];
   for (const pl of valid.slice().sort(rarestFirst)) {

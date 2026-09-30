@@ -29,8 +29,13 @@
  *      2026-08-30 while the page went on saying "the last 14". Now the window
  *      starts where the existing file starts and runs to yesterday, Eastern,
  *      and the script refuses to write if any board already published would
- *      change or disappear. It is a named release step: `npm run archive:grids`,
- *      before build:seo, in docs/SHIP-PIPELINE.md.
+ *      disappear or change: its rows and columns, and also every cell's count
+ *      and listed names. A published cell moving means the data moved under
+ *      it (a row deleted, a stat corrected), and that is a finding to read,
+ *      not a rewrite to let through. When the move is the point, as it was
+ *      when this round folded the duplicate college rows, `--republish` lets
+ *      the run write and prints every cell that moved. It is a named release
+ *      step: `npm run archive:grids`, before build:seo, in docs/SHIP-PIPELINE.md.
  *   2. PLAYERS ARE COUNTED BY ID. ncaa_player_stats holds 1,600 players twice,
  *      so counts ran high and names printed twice in a cell. Each lib now loads
  *      the source's own id when asked (the games never ask), and every count is
@@ -40,6 +45,16 @@
  *      listed.
  *   4. SAME INPUT, SAME FILE. Ties in the rarest list break by name and then id
  *      in code unit order, not by whatever order the rows arrived in.
+ *   5. EVERY LISTED NAME GOES THROUGH THE GAME'S OWN LOOKUP. The page promises
+ *      that anything listed would be accepted in the game, and the game does
+ *      not check a name against the whole table: it looks the typed name up in
+ *      byNormalizedName and judges what comes back through pickNamesake. Until
+ *      this round that map kept one player per name (the last row loaded), so
+ *      227 college answers were names the game refused, Danny Manning at Kansas
+ *      among them. The map now holds every namesake and the game accepts the
+ *      one who fits; this script still resolves each name it is about to list
+ *      exactly the way the page does and refuses to write if the game would
+ *      say no, so the promise cannot quietly go false again.
  *
  * CBB IS NOT QUITE THE SAME SHAPE, and the difference matters for an archive.
  * A franchise board is a function of the SEED ALONE. A CBB board is a function
@@ -51,6 +66,7 @@
  *
  * Run: npm run archive:grids   (needs the database, reads only)
  *      node scripts/genGridArchive.mjs --end=2026-09-29   (a fixed end, for a reproducible run)
+ *      node scripts/genGridArchive.mjs --republish        (write although published cells moved; prints them)
  * Output: src/data/gridArchive.json, committed.
  */
 import { execSync } from 'node:child_process';
@@ -63,6 +79,7 @@ import { addDays, dedupeById, malformedName, namesToShow } from './lib/gridArchi
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'src', 'data', 'gridArchive.json');
 const argVal = k => { const a = process.argv.find(x => x.startsWith(`--${k}=`)); return a ? a.slice(k.length + 3) : null; };
+const REPUBLISH = process.argv.includes('--republish');
 const refuse = m => { console.error(`genGridArchive: ${m}. Nothing was written.`); process.exit(1); };
 
 const SPORTS = [
@@ -113,19 +130,34 @@ fs.writeFileSync(ENTRY, `
 globalThis.localStorage = { getItem: () => null, setItem: () => {}, removeItem: () => {} };
 ${SPORTS.map(s => `const ${s.key} = await import('${p(s.lib)}');`).join('\n')}
 const dateLib = await import('${p('src/lib/dateUtils.ts')}');
+const engine = await import('${p('src/lib/gridEngine.ts')}');
+const search = await import('${p('src/lib/playerSearch.ts')}');
 export const libs = {
 ${SPORTS.map(s => s.derivesPool
   ? `  ${s.key}: { build: ${s.key}.buildCbbGridPuzzle, fetchData: ${s.key}.${s.fetch}, matches: ${s.key}.playerMatchesCell, pool: ${s.key}.eligibleSchools },`
   : `  ${s.key}: { build: ${s.key}.buildGridPuzzle, fetchData: ${s.key}.${s.fetch}, matches: ${s.key}.playerMatchesCell },`).join('\n')}
 };
 export const dateSeed = dateLib.dateSeed;
+/* The guess path of all four grid pages: normalizeName from playerSearch on
+   the typed name, byNormalizedName, then pickNamesake against the cell. */
+export const pickNamesake = engine.pickNamesake;
+export const normalizeTyped = search.normalizeName;
 `);
 execSync(`"${path.join(ROOT, 'node_modules', '.bin', 'esbuild')}" "${ENTRY}" --bundle --format=esm --platform=node --outfile="${BUNDLE}" --log-level=error`);
-const { libs, dateSeed } = await import(pathToFileURL(BUNDLE).href);
+const { libs, dateSeed, pickNamesake, normalizeTyped } = await import(pathToFileURL(BUNDLE).href);
+/** Exactly what the game does with a typed name in a cell: null when the game
+    would refuse it, the judged player when it would accept. */
+const gameAccepts = (lib, data, name, cell) => {
+  const judged = pickNamesake(data.byNormalizedName.get(normalizeTyped(name)), pl => lib.matches(pl, cell));
+  return judged && lib.matches(judged, cell) ? judged : null;
+};
 
 const sameList = (a, b) => JSON.stringify(a) === JSON.stringify(b);
 const sports = {};
 const summary = [];
+/* Published cells whose count or names would move under this run. */
+const moved = [];
+let rejectedByGame = 0;
 for (const sport of SPORTS) {
   const lib = libs[sport.key];
   /* Retry the whole pull: the libs retry each page, but a pull is up to 44
@@ -190,7 +222,21 @@ for (const sport of SPORTS) {
         const all = kept.filter(pl => lib.matches(pl, cell));
         const answers = namesToShow(all, PER_CELL);
         if (all.length < MIN_PER_CELL || answers.length === 0) thin = `${cell.row.label} x ${cell.col.label} has ${all.length}`;
-        cells.push({ row: cell.row.label, col: cell.col.label, total: all.length, answers });
+        /* The page's promise, checked the page's way: a listed name must come
+           back accepted when typed into the game for this cell. */
+        for (const name of answers) {
+          if (!gameAccepts(lib, data, name, cell)) {
+            rejectedByGame += 1;
+            if (rejectedByGame <= 5) console.error(`   ${sport.label} ${date} ${cell.row.label} x ${cell.col.label}: "${name}" would be refused by the game's own lookup`);
+          }
+        }
+        const next = { row: cell.row.label, col: cell.col.label, total: all.length, answers };
+        const was = prior?.cells?.[r * 3 + c];
+        if (was && (was.total !== next.total || !sameList(was.answers, next.answers))) {
+          moved.push(`${sport.label} ${date} ${next.row} x ${next.col}: ${was.total} to ${next.total} valid players` +
+            (sameList(was.answers, next.answers) ? '' : `, names ${was.answers.join(', ')} to ${next.answers.join(', ')}`));
+        }
+        cells.push(next);
       }
     }
     if (thin) {
@@ -212,9 +258,17 @@ for (const sport of SPORTS) {
   summary.push(`${sport.label}: ${before.size} boards before, ${boards.length} after (${skipped} skipped)`);
 }
 
+if (rejectedByGame) refuse(`${rejectedByGame} listed name${rejectedByGame === 1 ? '' : 's'} would be refused by the game's own lookup, and the page promises the opposite`);
+if (moved.length) {
+  for (const line of moved.slice(0, 20)) console.log(`   ${REPUBLISH ? 'republished' : 'would move'}: ${line}`);
+  if (moved.length > 20) console.log(`   ... and ${moved.length - 20} more`);
+  if (!REPUBLISH) refuse(`${moved.length} published cell${moved.length === 1 ? '' : 's'} would change under this run (listed above). The data moved under a board that is already public: read the list, and rerun with --republish only if that is what you meant`);
+  console.log(`--republish: ${moved.length} published cell${moved.length === 1 ? '' : 's'} rewritten on purpose`);
+}
+
 const out = {
   generatedFor: end,
-  note: "Answers are computed with each game's own playerMatchesCell against the same indexed player data the game validates guesses with. Counts are the number of distinct players, by the source's own id, valid for that crossing; the names listed are the rarest by career games played, each name once, with placeholder names left out.",
+  note: "Answers are computed with each game's own playerMatchesCell against the same indexed player data the game validates guesses with, and every listed name was resolved through the game's own lookup (byNormalizedName and pickNamesake) and accepted. Counts are the number of distinct players, by the source's own id, valid for that crossing; the names listed are the rarest by career games played, each name once, with placeholder names left out.",
   sports,
 };
 fs.writeFileSync(OUT, JSON.stringify(out, null, 1) + '\n');
