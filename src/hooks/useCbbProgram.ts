@@ -6,7 +6,7 @@ import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 import { markRestoredFinish } from '@/lib/restoredFinish';
-import { dedupePrograms } from '@/lib/cbbPrograms';
+import { dedupePrograms, type CbbProgramRowLike } from '@/lib/cbbPrograms';
 
 const SLUG = 'guess-cbb-team';
 
@@ -63,7 +63,11 @@ export function useCbbProgram() {
   const [loading, setLoading] = useState(false);
   const [programsStatus, setProgramsStatus] = useState<'loading' | 'ready' | 'error'>('loading');
   /* Round 706: a twin row hidden by dedupePrograms, to the row kept in its place. */
-  const replacedByRef = useRef<Map<string, any>>(new Map());
+  const replacedByRef = useRef<Map<string, CbbProgramRowLike>>(new Map());
+  /* Round 706: the daily pool, one entry per ROW in id order (a hidden twin's
+     slot holds its kept row), so hiding a twin moves no date's puzzle. The
+     pool only changes length when the migration deletes the rows. */
+  const dailyPoolRef = useRef<CbbProgramPuzzle[]>([]);
 
   // Load all programs on mount (for autocomplete + puzzle selection).
   const loadPrograms = useCallback(async () => {
@@ -90,8 +94,11 @@ export function useCbbProgram() {
     /* ROUND 706: one program, one row. Three schools were filed twice (both
        Loyolas and Seattle), so the search offered both twins and the dashed
        Loyola Chicago taught "0 titles". See src/lib/cbbPrograms.ts. */
-    const { programs, replacedBy } = dedupePrograms(data ?? []);
+    const rows: CbbProgramRowLike[] = data ?? [];
+    const { programs, replacedBy } = dedupePrograms(rows);
     replacedByRef.current = replacedBy;
+    const keptById = new Map(programs.map(p => [p.id, p]));
+    dailyPoolRef.current = rows.map(row => mapRow(keptById.get(row.id) ?? replacedBy.get(row.id) ?? row));
     setAllPrograms(programs.map(mapRow));
     setProgramsStatus('ready');
   }, []);
@@ -115,6 +122,10 @@ export function useCbbProgram() {
           setGameState(saved);
           return;
         }
+        /* Round 706: the twin map and the daily pool are filled by
+           loadPrograms, so a Daily click that beats the mount load waits for
+           it rather than dealing a hidden twin or an empty pool. */
+        if (dailyPoolRef.current.length === 0) await loadPrograms();
         const { data: daily } = await supabase
           .from('cbb_daily')
           .select('program_id')
@@ -134,10 +145,11 @@ export function useCbbProgram() {
             return;
           }
         }
-        // Fallback: deterministic pick
-        if (allPrograms.length > 0) {
+        // Fallback: deterministic pick over the rows as they arrived (Round 706: a hidden twin's slot deals its kept row)
+        const pool = dailyPoolRef.current;
+        if (pool.length > 0) {
           const seed = parseInt(today.replace(/-/g, ''), 10);
-          const puzzle = allPrograms[seed % allPrograms.length];
+          const puzzle = pool[seed % pool.length];
           setGameState({ puzzle, revealedClues: 1, guesses: [], gameStatus: 'playing', score: 0, mode });
         }
       } else {
@@ -149,7 +161,7 @@ export function useCbbProgram() {
     } finally {
       setLoading(false);
     }
-  }, [allPrograms]);
+  }, [allPrograms, loadPrograms]);
 
   const makeGuess = useCallback((input: string) => {
     if (!gameState || gameState.gameStatus !== 'playing') return;

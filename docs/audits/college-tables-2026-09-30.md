@@ -61,7 +61,7 @@ derivation gives that round.
 | 1970 | 313 | Billy Main, Steelers, Oregon State | 13 | Billy Main, Steelers, RB, Oregon State, round 13 | Billy Main, RB, Oregon State, Steelers, round 13 | yes |
 | 1970 | 442 | Rayford Jenkins, Chiefs, Alcorn A&M | 17 | Rayford Jenkins, Chiefs, DB, Alcorn State, round 17 (17 rounds, 442 picks) | Rayford Jenkins, DB, Alcorn State, Chiefs, round 17 (17 rounds, 442 picks) | yes |
 | 1971 | 442 | Charles Hill, Raiders, Sam Houston State | 17 | Charles Hill, Raiders, WR, Sam Houston State, round 17 (17 rounds, 442 picks) | Chuck Hill, WR, Sam Houston State, Raiders, round 17 (17 rounds, 442 picks) | yes |
-| 1972 | 150 | Curt Watson, Saints, Tennessee | 6 | Curt Watson, Saints, RB, Tennessee, round 6 | Curt Watson, RB, Tennessee, Saints, round 6 | yes |
+| 1972 | 150 | Curt Watson (stored mirrored, "Watson, CurtCurt Watson"), Saints, Tennessee | 6 | Curt Watson, Saints, RB, Tennessee, round 6 | Curt Watson, RB, Tennessee, Saints, round 6 | yes |
 | 1972 | 250 | Mike Franks, Cardinals, Eastern New Mexico | 10 | Mike Franks, Cardinals, QB, Eastern New Mexico, round 10 | Mike Franks, QB, Eastern New Mexico, Cardinals, round 10 | yes |
 | 1973 | 330 | Alan Kelso, 49ers, Washington | 13 | Alan Kelso, 49ers, C, Washington, round 13 | Al Kelso, C, Washington, 49ers, round 13 | yes |
 | 1973 | 400 | Ken Muhlbeier, Broncos, Idaho | 16 | Ken Muhlbeier, Broncos, C, Idaho, round 16 | Ken Muhlbeier, C, Idaho, Broncos, round 16 | yes |

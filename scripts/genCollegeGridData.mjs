@@ -775,8 +775,11 @@ if (isMain) {
   printStats(players, stats);
   if (check) {
     const current = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : null;
-    const same = current && JSON.stringify(current.columns) === JSON.stringify(COLUMNS) && JSON.stringify(current.rows) === JSON.stringify(toRows(players));
-    console.log(same ? 'up to date: the committed file matches the derivation' : 'STALE: the committed file differs from the derivation');
+    /* Round 706: the rules block is compared too, so the file cannot go on
+       documenting a rule the generator no longer applies (its draftRows line
+       said "forfeit rows dropped" after the cleaner widened to placeholders). */
+    const same = current && JSON.stringify(current.columns) === JSON.stringify(COLUMNS) && JSON.stringify(current.rules) === JSON.stringify(RULES) && JSON.stringify(current.rows) === JSON.stringify(toRows(players));
+    console.log(same ? 'up to date: the committed file matches the derivation' : 'STALE: the committed file differs from the derivation (columns, rules or rows)');
     process.exit(same ? 0 : 1);
   }
   fs.writeFileSync(OUT, renderFile(players, sources, stats));

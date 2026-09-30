@@ -12,16 +12,21 @@
  * THE RULE. Two rows are one program when their names fold alike (lower case,
  * letters and digits only), or when they name the same place and the same home
  * court (region_hint folded, and mascot_hint read from its last "play at" or
- * "plays at", a leading "the" dropped, folded). Measured: exactly the three
- * pairs above, nothing else. The row kept is the one its twin lists among its
- * common names ("Loyola (LA)" lists "Loyola Marymount"), else the earliest
- * created, else the smallest id; it takes over its twin's common names that it
- * lacks, so "Seattle U" still finds Seattle. A twin dealt by cbb_daily is
- * replaced by its kept row.
+ * "plays at", a leading "the" dropped, folded). A mascot hint with no such
+ * phrase names no court, so two schools in one city with a generic hint ("The
+ * Hawks, whose mascot never stops flapping") can never be folded into one.
+ * Measured: exactly the three pairs above, nothing else. The row kept is the
+ * one its twin lists among its common names ("Loyola (LA)" lists "Loyola
+ * Marymount"), else the earliest created, else the smallest id; it takes over
+ * its twin's common names and its twin's own name where it lacks them, so
+ * "Seattle U" still finds Seattle and "Loyola (LA)", the name the site itself
+ * showed until this round, still finds Loyola Marymount. A twin dealt by
+ * cbb_daily is replaced by its kept row.
  *
- * The daily pick is pool[date % pool.length] over the pool ordered by id, so
- * this shifts the daily once, the day it ships; the migration then removes
- * exactly the rows this already hides and shifts nothing.
+ * The daily pick is pool[date % pool.length] over the pool ordered by id. The
+ * hook keeps that index over the rows as they arrive (a twin's slot deals its
+ * kept row), so this code moves no daily; the pool only changes length when
+ * the migration deletes the rows, at 00:00 America/New_York with Round 653.
  * scripts/simCollegeTables.mjs holds this against the live table and the
  * migration.
  */
@@ -40,9 +45,11 @@ export function foldProgramText(s: string | null | undefined): string {
   return String(s ?? '').toLowerCase().replace(/[^a-z0-9]+/g, '');
 }
 
-/** The home court a mascot hint names: the text after its last "play at" or "plays at", a leading "the" dropped, folded. */
+/** The home court a mascot hint names: the text after its last "play at" or "plays at", a leading "the" dropped, folded. A hint with no such phrase names no court and returns ''. */
 export function homeCourt(mascotHint: string | null | undefined): string {
-  const court = String(mascotHint ?? '').replace(/^.*\bplays? at\s+/i, '').replace(/^the\s+/i, '');
+  const hint = String(mascotHint ?? '');
+  if (!/\bplays? at\s+/i.test(hint)) return '';
+  const court = hint.replace(/^.*\bplays? at\s+/i, '').replace(/^the\s+/i, '');
   return foldProgramText(court);
 }
 
@@ -97,8 +104,9 @@ export function dedupePrograms<T extends CbbProgramRowLike>(rows: T[]): DedupedP
     const [keep, ...hidden] = ranked;
     const names = [...(rows[keep].common_names ?? [])];
     const have = new Set(names.map(foldProgramText));
+    have.add(foldProgramText(rows[keep].school_name));
     for (const i of hidden) {
-      for (const n of rows[i].common_names ?? []) {
+      for (const n of [...(rows[i].common_names ?? []), rows[i].school_name]) {
         const f = foldProgramText(n);
         if (f && !have.has(f)) { names.push(n); have.add(f); }
       }

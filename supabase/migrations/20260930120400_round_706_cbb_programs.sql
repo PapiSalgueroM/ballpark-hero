@@ -22,13 +22,16 @@
 -- The row kept is the one its twin lists among its common names, else the earliest created (a uuid
 -- has no "lowest"). So Loyola Chicago (both list each other once folded; it is the earlier), Loyola
 -- Marymount (Loyola (LA) lists it) and Seattle (neither lists the other; it is the earlier). The kept
--- row takes over its twin's common names it lacks, so "Seattle U" and "Sister Jean's Ramblers" still
+-- row takes over its twin's common names and its twin's own name where it lacks them, so "Seattle U",
+-- "Sister Jean's Ramblers" and "Loyola (LA)" (the name the site itself showed until this round) still
 -- find the program. Nothing else in any kept row changes.
 --
--- WHAT THE GAME SEES. The page has hidden these rows since Round 706's code, and its daily pick is
--- pool[date % pool.length] over the pool ordered by id, so the daily shifted once when that code
--- shipped. This file deletes exactly the rows the page already hides and writes exactly the names it
--- already merges, so it moves nothing on the page.
+-- WHAT THE GAME SEES. The page has hidden these rows since Round 706's code and its search already
+-- offers the merged names, so this file writes exactly the names the code merges and deletes exactly
+-- the rows it hides. The daily pick is pool[date % pool.length] over the rows ordered by id, and the
+-- page keeps that index over the rows as they arrive (a twin's slot deals its kept row), so the code
+-- moved no daily; this file shortens the pool from 281 to 278 and so moves the daily once, which is
+-- why it is applied at 00:00 America/New_York, together with the ncaa migration and Round 653.
 --
 -- FAILS CLOSED. Every statement checks the value it replaces; any difference raises, and nothing
 -- changes.
@@ -87,6 +90,15 @@ begin
      and common_names = array['Seattle', 'Redhawks', 'SU'];
   get diagnostics n = row_count;
   if n <> 1 then raise exception 'Round 706: Seattle: expected to update 1 row, updated %. Nothing was changed.', n; end if;
+
+  -- Loyola Marymount takes its twin's own name, the spelling the site showed until this round.
+  update public.cbb_programs
+     set common_names = array['Loyola Marymount', 'LMU', 'Lions', 'Loyola (LA)']
+   where id = '5a1ce2ab-d589-449b-b1ba-4b22f6e2ab36'
+     and school_name = 'Loyola Marymount'
+     and common_names = array['Loyola Marymount', 'LMU', 'Lions'];
+  get diagnostics n = row_count;
+  if n <> 1 then raise exception 'Round 706: Loyola Marymount: expected to update 1 row, updated %. Nothing was changed.', n; end if;
 
   delete from public.cbb_programs where id = '996c65ec-0c78-4b26-be7a-60528dba07e7'
      and school_name = dashed and championships_hint = '0 national titles through 2025';
