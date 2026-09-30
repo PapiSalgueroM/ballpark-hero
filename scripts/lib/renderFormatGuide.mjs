@@ -41,17 +41,9 @@ export function guideText(node) {
 }
 
 export function tableCell(document, season, column) {
-  // The prerenderer flattens each table cell to an adjacent paragraph.
-  if (!document.querySelector('table')) {
-    const labels = [...document.querySelectorAll('#dukb-snapshot p')].filter(node => guideText(node) === season);
-    if (labels.length !== 1) throw new Error(`Expected one saved table row for ${season}, found ${labels.length}`);
-    let cell = labels[0];
-    for (let index = 0; index < column; index += 1) {
-      cell = cell.nextElementSibling;
-      if (cell?.tagName !== 'P') throw new Error(`Missing saved table cell ${column} for ${season}`);
-    }
-    return guideText(cell);
-  }
+  // Saved pages carry real tables since Round 652, so the component and the
+  // snapshot are read the same way. The old one paragraph per cell reading is
+  // gone on purpose: a snapshot that flattens its table again must fail here.
   const rows = [...document.querySelectorAll('table tbody tr')].filter(row => guideText(row.querySelector('td')) === season);
   if (rows.length !== 1) throw new Error(`Expected one table row for ${season}, found ${rows.length}`);
   const cell = rows[0].querySelectorAll('td')[column];
