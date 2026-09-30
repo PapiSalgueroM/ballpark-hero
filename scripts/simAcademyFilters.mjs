@@ -26,6 +26,7 @@ try {
   }
   const run = spawnSync(process.execPath, [path.join(root, 'node_modules/vitest/vitest.mjs'), 'run', 'src/test/academyFilters.test.tsx'], { cwd: root, env, encoding: 'utf8', timeout: 120000 });
   const output = `${run.stdout || ''}\n${run.stderr || ''}`;
+  process.stdout.write(output);
   const diagnostic = output.slice(-2500);
   assert.ok(!run.error, String(run.error));
   assert.match(output, /academyFilters\.test\.tsx/, 'The actual component tests must run');

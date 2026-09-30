@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
+import ArcadeShotFeedback from '@/components/arcade/ArcadeShotFeedback';
 import { CalendarDays, Infinity as InfinityIcon, RotateCcw, Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -399,21 +400,16 @@ export default function BuzzerBeaterBoard() {
       )}
 
       {phase === 'shotEnd' && result && (
-        <div className="rounded-2xl border border-border bg-card p-4 text-center">
-          <p className={cn('font-display text-lg font-black', result.made ? 'text-primary' : 'text-muted-foreground')}>
-            {result.verdict}
-          </p>
-          <p className="mt-1 text-xs text-muted-foreground">
+        <ArcadeShotFeedback key={`${mode}-${shotIdx}`} sport="basket" success={result.made} verdict={result.verdict} points={result.points} detail={<p className="mt-1 text-xs text-muted-foreground">
             Came in at {Math.round(result.entryDeg)}&deg;
             {result.depthWindow > 0
               ? `, so you had ${Math.round(result.depthWindow * 100)} cm of room short or long.`
               : ', which is too flat for the ball to fit through at all.'}
-          </p>
-          {result.made && <p className="mt-1 text-sm text-muted-foreground">{result.points} points.</p>}
+          </p>}>
           <Button className="mt-3 gap-2" onClick={nextShot}>
             {shotIdx + 1 >= ROUNDS_PER_RUN ? 'See the run' : 'Next shot'}
           </Button>
-        </div>
+        </ArcadeShotFeedback>
       )}
 
       {isDone && (

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import ShareButtons from '@/components/game/ShareButtons';
+import ArcadeShotFeedback from '@/components/arcade/ArcadeShotFeedback';
 import { CalendarDays, Infinity as InfinityIcon, RotateCcw, Target } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
@@ -346,15 +347,11 @@ export default function FreeKickBoard() {
       )}
 
       {phase === 'kickEnd' && result && (
-        <div className="rounded-2xl border border-border bg-card p-4 text-center">
-          <p className={cn('font-display text-lg font-black', result.scored ? 'text-primary' : 'text-muted-foreground')}>
-            {result.scored ? 'Goal' : result.verdict}
-          </p>
-          {result.scored && <p className="mt-1 text-sm text-muted-foreground">{result.points} points.</p>}
+        <ArcadeShotFeedback key={`${mode}-${kickIdx}`} sport="goal" success={result.scored} verdict={result.scored ? 'Goal' : result.verdict} points={result.points}>
           <Button className="mt-3 gap-2" onClick={nextKick}>
             {kickIdx + 1 >= ROUNDS_PER_RUN ? 'See the run' : 'Next kick'}
           </Button>
-        </div>
+        </ArcadeShotFeedback>
       )}
 
       {isDone && (

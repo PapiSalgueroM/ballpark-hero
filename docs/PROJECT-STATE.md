@@ -1,5 +1,119 @@
 # Project state
 
+## BUILT 2026-09-30: Codex Round 753, three chain games and completed release handoff
+
+Combat, Tennis and NASCAR timelines animate only the newest committed person and connection,
+finishing in 420/360ms. Empty/seed states stay quiet, existing nodes remain, identical running or
+settled chains and ended-state updates do not replay, and reduced motion is static. All factual
+display fields, bonuses, lengths, multipliers and ended colors remain unchanged. Scoped wrapping
+fixes the measured no-space name/connection overflow on narrow phones without clipping text.
+
+Fifteen actual-timeline tests passed. Each asserted removed-reveal/connection control causes three
+intended transition failures and twelve unrelated passes. The permanent compiled-timeline browser
+gate passes 24 sport/width/motion combinations at 320/390/430/1440. Its asserted pre-wrap control
+restores six measured 320px failures: Combat 115px, Tennis 371px, NASCAR 372px. Spaced baseline text
+still fits. Type gate 0, isolated 753 build 0, all nine final scoped node harnesses green. Independent
+source review approved. Fixtures cover presentation, not full chain validator/board integration.
+All owned browsers/servers and temporary copied modules are cleaned. Evidence:
+`C:/Users/antho/AppData/Local/Temp/dukb-round753-timeline-gate`.
+Permanent command: `node scripts/playChainTimelineMotion.mjs`, optional `CHAIN_TIMELINE_DIST` for
+a finished build, control `CHAIN_TIMELINE_CONTROL=nowrap`.
+
+Ten Codex rounds are complete on main: 741, 744 and 746 through 753. New animations cover twelve
+distinct games; other work adds native sharing, Academy filters, live reserved-name enforcement
+and truthful Google/indexing checks. Frontend publication is pending with Claude, whose release-g
+was observed at `7013fa6c` and needs the subsequent Codex main commits after its 746 base. The work
+board lists the exact handoff and new browser gates. Do not apply 747 twice or claim AdSense approval;
+Google remains Needs attention / Low value content, and pack-battle stays intentionally noindexed.
+
+## BUILT 2026-09-30: Codex Rounds 751 and 752, four Front Office games
+
+Trade talks now reveal the newest committed reply, mark an agreed/ended call with finite feedback,
+wrap long packages and keep existing buttons immediately usable with 44px targets. Exact engine
+lines, packages, callbacks, disabled one-shot push and stable enabled-button focus remain intact.
+Six actual-card tests passed; removing the real reply binding fails four checks and leaves two
+transition/focus checks green. Browser proof: 739 checks across 32 sport/width/motion contexts.
+
+Ownership now gives brief cues for existing hot-seat and changed pace messages. The original trust
+values, thresholds, text, colors and card geometry are retained. Its existing 700ms bar transition
+also respects reduced motion. Seven rendered tests pass; a trust-26 boundary mutation fails exactly
+one, six unrelated checks stay green. Independent source review approved. Browser proof: 1,299
+valid comparisons in 32 contexts and 192 trust samples against the pre-change actual component.
+Reduced-motion transition-property is none with an immediate correct width, despite the site's
+global 1e-06s duration override. No game state, engine, parent-board or save changes.
+
+Type gate 0, isolated combined 752 build 0, all 12 scoped common-runner harnesses green, including
+the existing owner/trade engine checks. All four widths 320/390/430/1440 and both motion modes pass
+with no errors, overflow or external requests. Actual compiled-component fixtures prove the UI;
+they do not claim a full board/hook run. All owned browser servers stopped. Evidence and screenshots:
+`C:/Users/antho/AppData/Local/Temp/dukb-round751-trade-audit`.
+Source is pushed for Claude's gated release; frontend publication pending. Round 753 owns only
+finite feedback in the Combat, Tennis and NASCAR timelines and remains separate from their data.
+
+## BUILT 2026-09-30: Codex Round 750, narrow-phone grid geometry
+
+Football, College and Soccer Grid keep all nine cells square when long correct answers arrive.
+Visual names are bounded while full names remain in DOM, accessible names and titles. Every rarity
+badge and percentage stays visible, including the unusual/unicorn and missing-rarity cases. Button
+identity, retry/wrong focus, selection indices, locked-cell behavior and 749 motion remain intact.
+Four rendered tests green; removing titles in asserted copies fails four. Browser geometry gate
+passes 24 combinations of three accents, four widths and both motion modes. A real unbound-copy
+control regains the original 46.75px expansion in all six 320px probes and flags 42 geometry changes.
+This closes the measured 749 phone defect, superseding the open receipt below. Controlled compiled
+Boards with finished production CSS prove layout, not validator/route-shell integration.
+
+Type gate 0, combined isolated 752 production build 0. Evidence/screenshots:
+`C:/Users/antho/AppData/Local/Temp/dukb-round750-geometry`. Permanent outcome check:
+`node scripts/playGridCellGeometry.mjs`, optional `GRID_GEOMETRY_DIST` for a finished build,
+negative control `GRID_GEOMETRY_CONTROL=unbound`; component fence `simGridCellLayout`.
+Source is ready for Claude's next gated release. No live frontend publication is claimed.
+
+## BUILT 2026-09-30: Codex Rounds 748 and 749, five games with new motion
+
+Free Kick and Buzzer Beater share finite settled-shot celebrations and miss feedback. Existing
+points/verdicts, entry-angle explanations, daily completion/save and immediate Next are preserved.
+Ten rendered tests pass; real altered-point/auto-next controls fail four/two respective checks.
+Browser proof: 416 checks, 76 real shots, all four widths 320/390/430/1440 with normal/reduced motion,
+four daily runs saved once, reloads did not resubmit, 2,000 deterministic shots per game identical
+to the old engine results. Effects end within 700ms, reduced motion runs none. No page/console
+errors, overflow or external writes. Evidence: `dukb-round748-arcade-audit` in the local Temp folder.
+
+Football Grid, College Grid and Soccer Grid share correct-cell glow/lock-in and wrong-answer motion.
+Eight rendered tests pass; removing actual correct bindings fails both transition checks. Twenty-four
+compiled board fixtures cover three accents, four widths, normal/reduced motion, finite effects,
+unchanged button identity/callbacks and retry focus. These fixtures do not claim full validator/hook
+coverage. A real pre-existing 320px long-name cell expansion (67.5px to 114.25px) is claimed as 750,
+with an outcome geometry fence planned. Round 751 independently owns four-game TradeTalksCard
+presentation. Source types and isolated production build passed; Claude owns publication.
+
+747 compatibility receipt: read held `r673-lock-doors`. The live name predicate/trigger creates no
+account write RPC or second write path, changes no profile grants, and will also guard 673's fixed
+save RPC. The 746/747 wrappers now print real test reports, fixing their EMPTY common-runner result.
+Both discoverable suites passed: seven/89 actual tests. Existing ignored-filter/unguarded-helper
+controls still fail six/60 intended checks and leave one/29 unrelated checks green. No policy or
+common runner changes, no temporary copies left behind.
+
+## DATABASE LIVE / CLIENT BUILT 2026-09-30: Codex Round 747, reserved names
+
+Future profile name writes cannot use the listed administrative names or clear DoUKnowBall account
+combinations. The existing client moderation/publicName path inherits the same whole-name rule;
+ordinary sports and fan names remain valid. No Profile, auth, completion or game-engine edits.
+`simReservedNames`: 89 tests green, 60 enforcement/substitution checks fail with the guard removed
+from an asserted copy, 29 unrelated checks stay green. App type/build proof is the isolated 746 gate
+on the same helper source. Frontend release pending with Claude.
+
+Migration `20260930200618_round_747_reserved_profile_names.sql` applied successfully. It self-verifies
+the real invoker trigger as authenticated against temporary rows: 150 rejected writes across 30
+reserved variants, 20 ordinary names with inserts/upserts, unchanged legacy names, streak updates,
+one-field edits and rollback. A disabled temporary trigger admits the reserved control. No stored
+profile is rewritten and no fixture remains. Live AFTER trigger and empty search path confirmed;
+RLS retained, predicate auth/service access and anon denial confirmed, NBSP/BOM parity confirmed.
+Security advisors show exactly the same categories/counts as before the migration.
+
+Separate pre-existing handle-pool issue handed to Claude's completion/points owner: some generated
+substitutes contain fragments the old profanity filter rejects (Scrappy, Closer). This round reserves
+authority names; it does not claim historical profile cleanup or the section 12 report/notify flow.
+
 ## BUILT 2026-09-30: Codex Round 746, Academy filters
 
 Academy prospects can be filtered by position and exact age together, with count/reset and clear

@@ -30,6 +30,17 @@ function fold(s: string): string {
     .replace(/[^a-z]/g, '');
 }
 
+const RESERVED_ROLE = '(?:admin|administrator|moderator|support|system|official|verified)';
+const RESERVED_AUTHORITY = `(?:${RESERVED_ROLE}(?:${RESERVED_ROLE}|staff|team|account)?|staff|team|account)`;
+const RESERVED_SITE = '(?:douknowball|doyouknowball|dukb)';
+const RESERVED_NAME = new RegExp(`^(?:the)?(?:${RESERVED_ROLE}(?:${RESERVED_ROLE}|staff|team|account)?|(?:${RESERVED_AUTHORITY})?${RESERVED_SITE}(?:${RESERVED_AUTHORITY})?)$`);
+
+/** Reserve authority names and site accounts, keeping sports and fan names valid. */
+export function isReservedName(name: string | null | undefined): boolean {
+  const raw = (name ?? '').trim();
+  return RESERVED_NAME.test(fold(raw)) || RESERVED_NAME.test(fold(raw.replace(/[0-9\s_.-]+$/, '')));
+}
+
 /** Collapse runs of 3+ of the same letter to one, so padded evasions
  *  ("sh1ttttt" -> "shit") still match. Round 318: this used to be part of
  *  the one normalize() applied to blocklist entries too, which collapsed
@@ -86,6 +97,9 @@ const BLOCKED = Array.from(new Set(RAW_BLOCKED))
  * separately by the caller).
  */
 export function nameModerationError(name: string | null | undefined): string | null {
+  if (isReservedName(name)) {
+    return 'Please choose a different name - that one is reserved for site accounts.';
+  }
   const folded = fold(name ?? '');
   if (!folded) return null;
   const collapsed = collapseRuns(folded);
