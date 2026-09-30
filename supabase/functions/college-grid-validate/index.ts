@@ -131,10 +131,21 @@ serve(async (req) => {
     json({ valid: false, unverified: true, exhausted, reason: exhausted ? "Answer checking has used up its allowance for today, so this guess was not counted. Please come back tomorrow." : "Couldn't verify your answer right now, please try again.", fullName: null }, corsHeaders);
 
   const cacheKey = cacheKeyOf(sanitized.player, sanitized.row, sanitized.col);
+  /* ROUND 703: a stored YES answers at once. A stored NO is HELD until the
+     records pass below has had its say, and is returned only when the records
+     do not accept the answer. The cache keeps a verdict forever and the
+     model's refusals are not always right. College Grid itself judges in the
+     browser since Round 611, but this function is still deployed and shares
+     the shape, so it gets the same rule. */
+  let cachedRefusal: Record<string, unknown> | null = null;
   try {
     const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
       .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
-    if (hit?.verdict) return json({ ...(hit.verdict as Record<string, unknown>), cached: true }, corsHeaders);
+    if (hit?.verdict) {
+      const stored = hit.verdict as Record<string, unknown>;
+      if (stored.valid === true) return json({ ...stored, cached: true }, corsHeaders);
+      cachedRefusal = stored;
+    }
   } catch { /* cache down */ }
 
   try {
@@ -223,6 +234,10 @@ serve(async (req) => {
       }
     }
   } catch { /* deterministic pass unavailable -> AI */ }
+
+  /* ROUND 703: the records did not accept it, so a held refusal stands,
+     exactly as it did before. */
+  if (cachedRefusal) return json({ ...cachedRefusal, cached: true }, corsHeaders);
 
   if (!AI_KEY) return unverified();
 
