@@ -1,5 +1,15 @@
 # Work board
 
+**2026-09-30, Codex Round 744 CLAIMED: native sharing in the common result buttons (master spec 102).**
+Ownership: `src/components/game/ShareButtons.tsx` only, plus surgical board/state/reconciliation
+receipts. Reuse the existing `src/lib/share.ts` helper without changing its contract. Add one accessible
+Share result button that opens the device share sheet when supported and copies through the existing
+fallback elsewhere. Keep existing custom text, emoji grids and destination-specific controls. Verify
+native success, cancellation, clipboard fallback and phone layout against the built UI. No new data,
+routes, economy, profile or result-moment edits. Claude retains every other active claim and publish
+duty, including the trailing-slash SEO repair. Streak/percentile enrichment remains separate; this
+claim closes only the missing shared native action. Next free number is **745**.
+
 **2026-09-30, Codex Round 741 COMPLETE, code `5c71f887`: the live audit reads indexing restrictions.**
 The real audit now rejects robots/googlebot noindex and none, including body tags and individual
 X-Robots-Tag headers with crawler scope. localhost outcome fence: 13 healthy pages pass, 11 changed
