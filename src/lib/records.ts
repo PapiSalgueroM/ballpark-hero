@@ -38,6 +38,11 @@ export interface RecordWords {
   seoTitle: (first: number) => string;
   /** the meta description around the span the rows cover, 120 to 160 characters once filled */
   seoDescription: (first: number, latest: number) => string;
+  /** Round 656: the award's name as a searcher types it ("Super Bowl MVP"), for a
+   *  section with a column keyed 'mvp'. Its page then counts that column into a
+   *  "Most Super Bowl MVP awards" table; simRecordPages check 11 fails if a
+   *  section has the column and not this, or this and not the column. */
+  mvp?: string;
 }
 
 /** Round 649: the format explainers, one list shared by /records and the section pages. */
@@ -128,6 +133,7 @@ export const RECORD_SECTIONS: RecordSection[] = [
       unit: ['title', 'titles'], who: ['team', 'teams'],
       seoTitle: f => `Super Bowl Winners by Year Since ${f} | DoUKnowBall`,
       seoDescription: (f, l) => `Every Super Bowl winner from ${f} to ${l}, with the runner-up, final score, MVP, stadium and host city, plus the most titles over those years.`,
+      mvp: 'Super Bowl MVP',
     },
     format: { path: '/nfl-playoff-format-history', heading: 'How the NFL playoffs work' },
     blurb: 'Every Super Bowl by the year it was played, with the final score, the MVP, the stadium as it was named that day and the host city as it was that day too: Miami until the Gardens incorporated, Stanford for XIX, Las Vegas for LVIII.',
@@ -160,6 +166,7 @@ export const RECORD_SECTIONS: RecordSection[] = [
       unit: ['title', 'titles'], who: ['team', 'teams'],
       seoTitle: f => `NBA Champions by Year Since ${f} | DoUKnowBall`,
       seoDescription: (f, l) => `Every NBA champion from ${f} to ${l}, the BAA years included, with the beaten finalist, the series score and the Finals MVP, plus the most titles in that span.`,
+      mvp: 'NBA Finals MVP',
     },
     format: { path: '/nba-playoff-format-history', heading: 'How the NBA playoffs work' },
     blurb: 'Every Finals back to the 1947 BAA with the beaten finalist, the series winner first, and every Finals MVP since the award began in 1969.',
@@ -220,6 +227,7 @@ export const RECORD_SECTIONS: RecordSection[] = [
       unit: ['title', 'titles'], who: ['team', 'teams'],
       seoTitle: f => `WNBA Champions by Year Since ${f} | DoUKnowBall`,
       seoDescription: (f, l) => `Every WNBA champion from ${f} to ${l}, with the beaten finalist, the series score and the Finals MVP, plus the most titles in that span.`,
+      mvp: 'WNBA Finals MVP',
     },
     blurb: 'Every WNBA Finals since the league began in 1997, with the beaten finalist and every Finals MVP from Cynthia Cooper on.',
     yearLabel: 'Year',

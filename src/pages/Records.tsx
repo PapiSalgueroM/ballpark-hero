@@ -141,6 +141,15 @@ const Records = () => {
           </p>
         ))}
       </div>
+      {/* Round 656: one tournament rather than a competition's history, so it sits
+          beside the explainers instead of among them. */}
+      <div className="mt-10 text-sm text-muted-foreground leading-relaxed space-y-2">
+        <h2 className="text-lg font-semibold text-foreground">One tournament, every result</h2>
+        <p>
+          <Link to="/world-cup-2026-results" className="inline-flex items-center min-h-[32px] font-semibold text-primary hover:underline">2026 World Cup results</Link>
+          : the final, every knockout score with extra time and penalties, all the groups in finishing order and the awards.
+        </p>
+      </div>
       <div className="mt-10 text-sm text-muted-foreground leading-relaxed space-y-3">
         <h2 className="text-lg font-semibold text-foreground">Where this comes from</h2>
         <p>{RECORD_SOURCING}</p>

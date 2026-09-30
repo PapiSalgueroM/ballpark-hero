@@ -120,6 +120,7 @@ export const SPORT_HUBS: SportHub[] = [
     referenceLinks: [
       { path: '/records/english-football-champions', label: 'English football champions since 1889, year by year', why: 'every English league title winner in the table, year by year, checked against the record' },
       { path: '/champions-league-format-history', label: 'Champions League format history, every change since 1955', why: 'every shape the competition has taken, with the sources for each, and what each Club Manager era actually plays' },
+      { path: '/world-cup-2026-results', label: '2026 World Cup results', why: 'every knockout score with extra time and penalties spelled out, every group in finishing order and the award winners, from the same two source record the bracket game scores against' },
     ],
     hubFaqs: [
       { q: 'Do I need to follow more than the Premier League?', a: 'No, but the further you look the more of this opens up. The guessing games lean on players who moved around the big European leagues, so if the Premier League is your limit you will still recognise most of them. Club Manager is the one that rewards breadth, since it reaches a long way past the big five and you can sit in whichever league you actually watch. If a puzzle throws up a name you have never heard of, there is another one along in a second.' },
