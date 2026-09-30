@@ -2,6 +2,8 @@ import { useGolfHL } from '@/hooks/useGolfHL';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
+import PostGameStats from '@/components/game/PostGameStats';
+import { HIGHER_LOWER_SCORE_BUCKETS } from '@/lib/higherLowerScore';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -131,7 +133,14 @@ const GolfHigherLower = () => {
               }}
               onPlayAgain={mode === 'unlimited' ? () => switchMode('unlimited') : undefined}
               playNext={mode !== 'unlimited' && <p className="text-sm text-muted-foreground">Come back tomorrow for a new challenge!</p>}
-            />
+            >
+              <PostGameStats
+                gameSlug="golf-higher-lower"
+                userScore={totalScore}
+                buckets={HIGHER_LOWER_SCORE_BUCKETS}
+                isVisible={mode === 'daily'}
+              />
+            </ResultScreen>
           </div>
         )}
 
