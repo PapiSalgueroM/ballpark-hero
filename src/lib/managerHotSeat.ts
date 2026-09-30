@@ -26,13 +26,28 @@
  *
  * DETERMINISM. The engine draws from Math.random. Every engine call made here
  * runs inside withSeed, which swaps in a seeded stream for the length of that
- * one synchronous call and puts the real one back after. So a run is a pure
- * function of its seed and the choices made, which is what lets the daily be
- * the same club, the same takeover week and the same target for everyone, and
- * lets an unfinished run be rebuilt after a refresh from nothing but the seed
- * and the list of choices. Each match draws from the stream for its own match
- * number rather than for the choice, so two players who make different calls
- * on the same day face the same dice and the difference is the calls.
+ * one synchronous call and puts the real one back after. So every OUTCOME of a
+ * run (the club, the takeover week, the table, the target, each score, each
+ * meter, the verdict) is a function of its seed and the choices made, which
+ * is what lets the daily be the same club, the same week and the same target
+ * for everyone, and lets an unfinished run be rebuilt after a refresh from
+ * nothing but the seed and the list of choices. Each match draws from the
+ * stream for its own match number rather than for the choice, so two players
+ * who make different calls on the same day face the same dice and the
+ * difference is the calls. What is NOT replayed byte for byte: the engine
+ * stamps a few of its own ids (youth intake, scout reports, press questions)
+ * with Date.now(), so a replay carries different id strings from the original
+ * run. Nothing here reads an id (the press is answered by option index), so
+ * the outcomes match and the ids do not, and scripts/simManagerHotSeat.mjs
+ * section 3 holds the outcome half of that.
+ *
+ * THE SHARED ENGINE'S SESSION STATE. clubManager.ts keeps two module level
+ * registrations, the active save's custom club and its league memberships,
+ * and a Club Manager save open in the same tab owns them. Every engine call
+ * made here runs through onStaticWorld, which registers the static world for
+ * the length of the call and puts back whatever the tab had, so a hot seat
+ * run never takes a Club Manager save's registration away and never plays
+ * inside its pyramid. Section 4 of the same harness holds that.
  *
  * Nothing here invents a fact about a real club or person. The previous
  * manager has no name, the manager is you, the opposition dugouts are the
@@ -42,6 +57,7 @@ import {
   REAL_LEAGUES,
   answerPress,
   clubDefFor,
+  engineRegistrations,
   fixtureFor,
   isPartialClub,
   leaguePosition,
@@ -52,6 +68,7 @@ import {
   registerCustomClub,
   registerLeagueOverrides,
   resolveXI,
+  restoreEngineRegistrations,
   startCareer,
   type CareerState,
   type Competition,
@@ -85,9 +102,14 @@ export const HOT_SEAT_REPRIEVE_FANS = FAN_SINGING;
  * An ordinary Saturday sits at an edge of 7 in this engine (the EDGE_LEVEL
  * the team talk reads, measured over 1,572 fixtures), so the board asks
  * TARGET_BASE points for an ordinary game and TARGET_PER_POINT more or less
- * per point of edge above or below that, inside the clamp. Set from
- * scripts/simManagerHotSeat.mjs, which measures how often a manager who
- * reads the room keeps the job against one who does not.
+ * per point of edge above or below that, inside the clamp. The numbers are a
+ * design call (an ordinary game asks for a shade over a point and a half,
+ * so five of them ask for eight, a clean sweep always clears the clamp) and
+ * scripts/simManagerHotSeat.mjs is what holds them to their job: it measures
+ * that the target rises with the club's own strength, that a manager who
+ * reads the room keeps the job more often than one who talks past it, and
+ * that neither arm always survives or never does. Change a number here and
+ * that harness is the check, with its bands and their headroom in its header.
  */
 export const TARGET_EDGE_LEVEL = 7;
 export const TARGET_BASE = 1.6;
@@ -133,6 +155,26 @@ export function withSeed<T>(seed: number, fn: () => T): T {
   }
 }
 
+/**
+ * Runs one synchronous stretch of engine calls on the static world (no
+ * custom club, the real league memberships) and puts back whatever the tab
+ * had registered, whatever happens. A tab with nothing registered, which is
+ * every tab without a Club Manager save open, pays nothing: the swap is
+ * skipped rather than busting the engine's def cache twice per call.
+ */
+export function onStaticWorld<T>(fn: () => T): T {
+  const had = engineRegistrations();
+  const swap = had.custom !== null || had.overrides !== null;
+  if (!swap) return fn();
+  registerCustomClub(null);
+  registerLeagueOverrides(null);
+  try {
+    return fn();
+  } finally {
+    restoreEngineRegistrations(had);
+  }
+}
+
 /* ---------------- the clubs ---------------- */
 
 export interface HotSeatClub { club: string; leagueId: string; leagueName: string }
@@ -146,13 +188,18 @@ let poolCache: HotSeatClub[] | null = null;
  */
 export function hotSeatPool(): HotSeatClub[] {
   if (poolCache) return poolCache;
-  const out: HotSeatClub[] = [];
-  for (const league of REAL_LEAGUES) {
-    for (const c of playableClubs(league.id)) {
-      if (isPartialClub(c.name)) continue;
-      out.push({ club: c.name, leagueId: league.id, leagueName: league.name });
+  /* On the static world, or a Club Manager save's promoted club would join
+     the daily's pool in that one tab and shift everybody else's pick. */
+  const out = onStaticWorld(() => {
+    const list: HotSeatClub[] = [];
+    for (const league of REAL_LEAGUES) {
+      for (const c of playableClubs(league.id)) {
+        if (isPartialClub(c.name)) continue;
+        list.push({ club: c.name, leagueId: league.id, leagueName: league.name });
+      }
     }
-  }
+    return list;
+  });
   poolCache = out;
   return out;
 }
@@ -318,11 +365,13 @@ function skipToMatch(run: HotSeatRun): void {
  * twenty engine calls), so the page runs it once per run and never in render.
  */
 export function startHotSeat(setup: HotSeatSetup): HotSeatRun {
-  /* A real club, on the static league memberships, whatever a Club Manager
-     save registered earlier in this tab. Club Manager registers its own save
-     again the moment it loads (loadCareer), so this takes nothing from it. */
-  registerCustomClub(null);
-  registerLeagueOverrides(null);
+  return onStaticWorld(() => startOnStaticWorld(setup));
+}
+
+function startOnStaticWorld(setup: HotSeatSetup): HotSeatRun {
+  /* startCareer itself registers the static world for a real club; the
+     onStaticWorld wrapper is what hands a Club Manager save's registrations
+     back once this returns. */
   let s = withSeed(mixSeed(setup.seed, 0), () => startCareer(setup.club));
   const rounds = leagueRounds(s);
   const lastWeek = Math.max(HOT_SEAT_TAKEOVER_MIN, Math.min(HOT_SEAT_TAKEOVER_MAX, rounds - HOT_SEAT_LEASH - 1));
@@ -439,6 +488,10 @@ function cloneRun(run: HotSeatRun): HotSeatRun {
  */
 export function playHotSeatMatch(prev: HotSeatRun, mentality: Mentality, talk: TalkTone | null): HotSeatRun {
   if (prev.verdict) return prev;
+  return onStaticWorld(() => playOnStaticWorld(prev, mentality, talk));
+}
+
+function playOnStaticWorld(prev: HotSeatRun, mentality: Mentality, talk: TalkTone | null): HotSeatRun {
   const run = cloneRun(prev);
   run.actions.push({ t: 'match', m: mentality, talk });
   skipToMatch(run);
@@ -492,7 +545,7 @@ export function answerHotSeatPress(prev: HotSeatRun, optionIdx: number): HotSeat
   if (!q || !q.options[optionIdx]) return prev;
   const run = cloneRun(prev);
   run.actions.push({ t: 'press', i: optionIdx });
-  run.state = withSeed(mixSeed(run.setup.seed, 3000 + run.actions.length), () => answerPress(run.state, optionIdx));
+  run.state = onStaticWorld(() => withSeed(mixSeed(run.setup.seed, 3000 + run.actions.length), () => answerPress(run.state, optionIdx)));
   run.step += 1;
   return run;
 }
