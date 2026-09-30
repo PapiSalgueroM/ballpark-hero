@@ -1,5 +1,13 @@
 # Work board
 
+**2026-09-30 evening, desktop Claude lane: Rounds 735 to 740 CLAIMED, the 2026 transfer windows below the
+verified overlay** (the Player Bingo report of stale summer transfers): two source research of completed January and
+summer 2026 moves, one researcher per league (**735** Premier League gaps and the promoted clubs, **736** La Liga, **737**
+Bundesliga, **738** Serie A, **739** Ligue 1) and **740** the players missing from the 2026 rows altogether (Herrington,
+Pavlovic, Metcalfe, Trewin, Gnabry and a club by club squad gap list). Each writes scripts/data/window2026/<league>.json
+in the overlay's shape and does NOT edit scripts/transferOverlay2026.mjs; one integration round merges them. The next
+free number is **741**.
+
 **2026-09-30 evening, desktop Claude lane: Rounds 729 to 734 CLAIMED, award and champion tables two source
 verified row by row** (each a pinned record, an unapplied migration and a fence): **729** Heisman (plus a Record Books
 page), **730** Ballon d'Or, **731** NASCAR champions, **732** tennis Grand Slam winners (the 2026 gaps), **733** golf
