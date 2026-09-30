@@ -52,7 +52,11 @@
 --   delete   id 396: 1945 French Open Women's Singles, Lolette Payot-Dodille. Not a French Championships title: the Roland-Garros list and ESPN both go from 1939 to 1946. Sources: https://www.rolandgarros.com/en-us/palmares and https://www.espn.com/tennis/history/_/type/women
 --   score    every score with no digit in it becomes NULL. No row held a score:
 --            1,010 held a three letter nation code, 7 held footnote debris, 2 were
---            NULL. No reader selects the column.
+--            NULL. No reader selects the column. All 1,017 stored values are kept
+--            in the record under "scores", keyed by id (read through the public
+--            REST API on 2026-09-30 from the same rows the opening guard hashes),
+--            so this wipe is reversible from the record alone; simTennisSlams
+--            replays the cleanup over those values and fails if one is missing.
 --
 -- AFTER APPLYING: run get_advisors (this adds a column and an index), read the
 -- count with count(*) (1015), and run node scripts/simTennisSlams.mjs.

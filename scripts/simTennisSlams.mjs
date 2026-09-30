@@ -14,9 +14,10 @@
  * produces, so it is green on the branch before the migration is applied and
  * stays the fence after. It reads the SQL with its comments stripped, so the
  * header's prose cannot satisfy a check. A statement it does not understand is
- * a failure, never skipped. Scores are modelled as read: no row held a digit in
- * its score (the record's "score" note), so every read score is modelled as a
- * digit free value.
+ * a failure, never skipped. Scores are replayed from the record's scores block,
+ * every stored value keyed by id (1,017 of them, none with a digit, read from
+ * the same rows the snapshot md5 covers), so the wipe the migration performs is
+ * reversible from the record and this harness sees the values it clears.
  *
  * CHECKS
  *   parse        every statement in the migration is one this harness can replay
@@ -33,7 +34,9 @@
  *   placeholder  no row ends with a NULL, blank or placeholder shaped champion
  *   stray        no row ends in the table that the record does not know
  *   unique       one row per tournament, category, year and edition
- *   score        no score without a digit survives
+ *   score        the record keeps every stored score (counts.scoresKept of them,
+ *                each keyed by a read id, none holding a digit) and no score
+ *                without a digit survives the replay
  *   sources      every record row carries two distinct source URLs (neither of
  *                them Wikipedia, which is a spot check here, never a source), a
  *                check date and a known status, and the record's counts add up
@@ -49,6 +52,7 @@
  *   unguarded   -> guard        the 1901 correction loses its read value guard
  *   noindex     -> unique       the one row per edition index is not created
  *   noscore     -> score        the score cleanup is removed
+ *   lostscore   -> score        one stored score is dropped from the record's scores block
  *   wikisource  -> sources      one row's second source becomes a Wikipedia page
  *   stalehash   -> hash         the opening guard names a different md5
  *   unknownsql  -> parse        a statement this harness cannot replay is added
@@ -67,7 +71,7 @@ const T = 'public.tennis_grand_slam_winners';
 
 const CONTROLS = {
   wrongvalue: 'agree', missingrow: 'present', undropped: 'dropped', placeholder: 'placeholder', stray: 'stray',
-  unguarded: 'guard', noindex: 'unique', noscore: 'score', wikisource: 'sources', stalehash: 'hash', unknownsql: 'parse',
+  unguarded: 'guard', noindex: 'unique', noscore: 'score', lostscore: 'score', wikisource: 'sources', stalehash: 'hash', unknownsql: 'parse',
 };
 const CONTROL = process.env.TENNIS_SLAMS_CONTROL || '';
 if (CONTROL && !CONTROLS[CONTROL]) {
@@ -97,6 +101,10 @@ if (CONTROL === 'noindex') plant(`create unique index tennis_grand_slam_winners_
 if (CONTROL === 'noscore') plant(SCORE_SQL + '\n', '');
 if (CONTROL === 'stalehash') plant(`h <> '${record.snapshot.md5}'`, `h <> '00000000000000000000000000000000'`);
 if (CONTROL === 'unknownsql') plant(SCORE_SQL, `truncate ${T};\n${SCORE_SQL}`);
+if (CONTROL === 'lostscore') {
+  if (!record.scores || record.scores['831'] !== 'Peru') { console.error('CONTROL lostscore changed nothing: the record does not keep the score of id 831'); process.exit(2); }
+  delete record.scores['831'];
+}
 if (CONTROL === 'wikisource') {
   const r = record.rows.find(x => x.id === 16);
   if (!r || /wikipedia/.test(r.sources[1])) { console.error('CONTROL wikisource changed nothing'); process.exit(2); }
@@ -176,7 +184,7 @@ const endHash = rows => {
 /* ---------- replay ---------- */
 let table = record.rows.filter(r => r.status !== 'filled').map(r => ({
   id: r.id, tournament: r.tournament, category: r.category, year: r.year,
-  edition: r.read.edition ?? null, champion: r.read.champion, score: 'NAT', hasEdition: false,
+  edition: r.read.edition ?? null, champion: r.read.champion, score: (record.scores || {})[String(r.id)] ?? null, hasEdition: false,
 }));
 const byId = new Map(record.rows.filter(r => r.id !== null).map(r => [r.id, r]));
 const guardProblems = []; const uniqueProblems = [];
@@ -240,7 +248,7 @@ const keyOf = r => `${r.tournament}|${r.category}|${r.year}|${r.edition ?? ''}`;
   const p = record.rows.filter(x => x.status === 'dropped' && endById.has(x.id)).map(r => `dropped row survives: id ${r.id} ${r.year} ${r.tournament} ${r.category} ${r.read.champion}`);
   check('dropped', p, `${record.rows.filter(x => x.status === 'dropped').length} dropped rows`);
 }
-const PLACEHOLDER = /^\s*$|^(tbd|tba|tbc|unknown|n\/?a|none|null|pending|winner|champion|placeholder|-+|—|\?+)$/i;
+const PLACEHOLDER = /^\s*$|^(tbd|tba|tbc|unknown|n\/?a|none|null|pending|winner|champion|placeholder|-+|\u2014|\?+)$/i;
 {
   const p = table.filter(r => r.champion === null || PLACEHOLDER.test(r.champion)).map(r => `${r.year} ${r.tournament} ${r.category} ends with champion ${JSON.stringify(r.champion)}`);
   check('placeholder', p, `${table.length} rows in the end state`);
@@ -253,8 +261,18 @@ const PLACEHOLDER = /^\s*$|^(tbd|tba|tbc|unknown|n\/?a|none|null|pending|winner|
 }
 check('unique', uniqueProblems, 'one row per tournament, category, year and edition');
 {
-  const p = table.filter(r => r.score !== null && !/[0-9]/.test(r.score)).length;
-  check('score', p ? [`${p} rows keep a score with no digit in it`] : [], 'scores without a digit are cleared');
+  const p = [];
+  const stored = Object.entries(record.scores || {});
+  const readIds = new Set(record.rows.filter(r => r.id !== null).map(r => String(r.id)));
+  if (stored.length !== record.counts.scoresKept) p.push(`the record keeps ${stored.length} scores, counts.scoresKept says ${record.counts.scoresKept}`);
+  for (const [id, v] of stored) {
+    if (!readIds.has(id)) p.push(`a score is kept for id ${id}, which the record never read`);
+    if (typeof v !== 'string' || !v.length) p.push(`the score kept for id ${id} is not a value`);
+    else if (/[0-9]/.test(v)) p.push(`the score kept for id ${id} holds a digit (${v}), so the cleanup would keep it and the model is wrong`);
+  }
+  const kept = table.filter(r => r.score !== null && !/[0-9]/.test(r.score)).length;
+  if (kept) p.push(`${kept} rows keep a score with no digit in it`);
+  check('score', p, `${stored.length} stored scores kept in the record, scores without a digit are cleared`);
 }
 {
   const p = []; const STATUS = new Set(['verified', 'corrected', 'filled', 'dropped']);
