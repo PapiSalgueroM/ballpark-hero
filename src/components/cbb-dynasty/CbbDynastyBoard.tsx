@@ -47,6 +47,8 @@ export default function CbbDynastyBoard() {
   const [recruits, setRecruits] = useState<CbbRecruit[] | null>(null);
   const [portal, setPortal] = useState<CbbRecruit[] | null>(null);
   const [wonNow, setWonNow] = useState(false);
+  const [positionFilter, setPositionFilter] = useState('');
+  const [starFilter, setStarFilter] = useState('');
 
   useGameCompletion('cbb-dynasty', wonNow, (st?.myTitles ?? 0) * 100 + (st?.seasonsPlayed ?? 0) * 5);
 
@@ -252,6 +254,9 @@ export default function CbbDynastyBoard() {
   }
 
   if (phase === 'recruit' && (recruits || portal)) {
+    const matchesFilters = (r: CbbRecruit) => (!positionFilter || r.pos === positionFilter) && (!starFilter || r.stars >= Number(starFilter));
+    const visibleRecruits = (recruits ?? []).filter(matchesFilters);
+    const visiblePortal = (portal ?? []).filter(matchesFilters);
     return (
       <div className="space-y-4">
         <CelebrationStyles />
@@ -260,6 +265,25 @@ export default function CbbDynastyBoard() {
           <p className="mt-1 text-xs text-muted-foreground">
             NIL budget: <b className="text-gold">{st.nil}</b> points. High school grades carry scouting error; portal players have real tape. Beware: sign a superstar freshman and he may be one-and-done.
           </p>
+        </div>
+        <div className="flex flex-wrap items-end gap-2 rounded-xl border border-border bg-card p-3">
+          <label className="min-w-32 flex-1 text-[11px] font-bold text-muted-foreground">
+            Position
+            <select value={positionFilter} onChange={e => setPositionFilter(e.target.value)} className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-background px-2 text-xs text-foreground">
+              <option value="">All positions</option>
+              {(['PG', 'SG', 'SF', 'PF', 'C'] as const).map(pos => <option key={pos} value={pos}>{pos}</option>)}
+            </select>
+          </label>
+          <label className="min-w-32 flex-1 text-[11px] font-bold text-muted-foreground">
+            Minimum stars
+            <select value={starFilter} onChange={e => setStarFilter(e.target.value)} className="mt-1 block min-h-11 w-full rounded-lg border border-border bg-background px-2 text-xs text-foreground">
+              <option value="">Any stars</option>
+              {[2, 3, 4, 5].map(stars => <option key={stars} value={stars}>{stars}+ stars</option>)}
+            </select>
+          </label>
+          <button onClick={() => { setPositionFilter(''); setStarFilter(''); }} disabled={!positionFilter && !starFilter} className="min-h-11 rounded-lg border border-border px-3 text-xs font-bold text-foreground hover:bg-secondary disabled:opacity-50">
+            Reset filters
+          </button>
         </div>
         {feed.length > 0 && (
           <div className="overflow-hidden rounded-2xl border border-border bg-card p-3 text-xs text-muted-foreground">
@@ -273,8 +297,10 @@ export default function CbbDynastyBoard() {
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
           <div>
             <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">High school board</p>
+            <p role="status" className="mb-2 text-center text-[11px] text-muted-foreground">Showing {visibleRecruits.length} of {recruits?.length ?? 0} high school recruits</p>
             <div className="max-h-72 space-y-1 overflow-y-auto">
-              {(recruits ?? []).map(r => (
+              {visibleRecruits.length === 0 && <p className="rounded-lg bg-secondary p-3 text-center text-xs text-muted-foreground">{recruits?.length ? 'No high school recruits match those filters.' : 'No high school recruits left in this class.'}</p>}
+              {visibleRecruits.map(r => (
                 <button key={r.id} onClick={() => sign(r, false)} className="flex w-full items-center justify-between rounded-lg border border-border bg-card px-2.5 py-1.5 text-left text-xs hover:border-primary/60">
                   <span className="min-w-0">
                     <span className="block truncate font-bold text-foreground">{'⭐'.repeat(r.stars)} {r.name}</span>
@@ -287,11 +313,13 @@ export default function CbbDynastyBoard() {
           </div>
           <div>
             <p className="mb-1 text-center text-[10px] font-bold uppercase tracking-wider text-muted-foreground">Transfer portal</p>
+            <p role="status" className="mb-2 text-center text-[11px] text-muted-foreground">Showing {visiblePortal.length} of {portal?.length ?? 0} portal players</p>
             <div className="max-h-72 space-y-1 overflow-y-auto">
-              {(portal ?? []).map(r => (
+              {visiblePortal.length === 0 && <p className="rounded-lg bg-secondary p-3 text-center text-xs text-muted-foreground">{portal?.length ? 'No portal players match those filters.' : 'No portal players left in this class.'}</p>}
+              {visiblePortal.map(r => (
                 <button key={r.id} onClick={() => sign(r, true)} className="flex w-full items-center justify-between rounded-lg border border-border bg-card px-2.5 py-1.5 text-left text-xs hover:border-gold/60">
                   <span className="min-w-0">
-                    <span className="block truncate font-bold text-foreground">{r.name}</span>
+                    <span className="block truncate font-bold text-foreground">{'⭐'.repeat(r.stars)} {r.name}</span>
                     <span className="block text-[10px] text-muted-foreground">{r.pos} · rated {r.grade} · asks {r.nilAsk} NIL</span>
                   </span>
                   <span className="ml-2 shrink-0 rounded-full border border-gold px-2.5 py-0.5 text-[10px] font-bold text-gold">Sign</span>

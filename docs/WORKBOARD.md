@@ -1,5 +1,35 @@
 # Work board
 
+**2026-09-30, Codex Round 762 CLAIMED: Free Kick and Buzzer Beater pause/resume.**
+Ownership: `src/hooks/useArcadeFlight.ts`, `src/components/free-kick/FreeKickBoard.tsx`,
+`src/components/buzzer-beater/BuzzerBeaterBoard.tsx`, focused actual-hook/board tests and sim wrapper.
+Add pause/resume controls during aiming/flight. Freeze active flight time, cancel RAF/backup work,
+resume only the remaining duration, and keep settlement/save/completion once. Pausing cancels
+charging without firing; stale key/pointer releases cannot shoot, resume requires a fresh press,
+and keyboard use of Pause/Resume cannot bubble into gameplay controls. Preserve aim, power, phase,
+points, setup, physics, RNG and existing settled feedback; reset/unmount invalidate pending work.
+Reduced motion still settles immediately once. No engine, daily record, completion, account,
+career drill parent or shared style edits. Next free round is **763**.
+
+**2026-09-30, Codex 754, 755, 756 and 758 COMPLETE, source ready for Claude's release.**
+754: eight actual autocomplete tests and three asserted controls green. Browser: 378 checks across
+four widths and both motion modes, six enabled activation paths select once, disabled/stale events
+select zero, identities/search/filter results preserved, 59px options and zero overflow/errors.
+755/756: independent actual compiled cards passed 64 sport/width/motion cases. Real extension engine
+improved/held/pulled/no-offer states retain all text/terms/actions/focus; both effects are finite,
+cloned running/settled props do not replay and reduced motion is static. Actual sport badge defs
+preserve labels/titles/blurbs/emojis/counts and unlock/relock nodes in place. Zero measured overflow.
+These fixtures prove presentation, not full career save/progression; evaluator facts are tested in RTL.
+758: seven actual CBB Board tests plus unfilter (five failures/two unrelated passes) and accidental
+resave (one failure/six passes) controls. Actual finished-route browser passed eight width/motion
+cases: 21 generated/local prospects, combined filters/order/counts/reset/empty checked, zero filter
+save writes; two correct-ID signings spend the existing 60 NIL and make exactly two save writes.
+44px filter controls, preserved select identity/focus, zero overlap/overflow. Hidden grades remain
+hidden. Existing engine, source order, NIL and FR/SO behavior unchanged. All remote requests blocked.
+Exact type gate and isolated 759 production build pass. Nine scoped common-runner harnesses green,
+including existing extension/career parity/accessibility and source guards. Source-only publication
+remains with Claude. 757/759 final browser acceptance is running; do not mark those complete yet.
+
 **2026-09-30, Codex Rounds 760 and 761 CLAIMED: shared gameplay features.**
 760 owns `src/components/conquest/ConquestRegionMap.tsx`, focused rendered tests and a new sim
 harness. Separate persistent tapped territory selection from hover, add Enter/Space activation and
