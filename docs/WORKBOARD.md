@@ -1,5 +1,98 @@
 # Work board
 
+**2026-09-30, Codex Round 762 CLAIMED: Free Kick and Buzzer Beater pause/resume.**
+Ownership: `src/hooks/useArcadeFlight.ts`, `src/components/free-kick/FreeKickBoard.tsx`,
+`src/components/buzzer-beater/BuzzerBeaterBoard.tsx`, focused actual-hook/board tests and sim wrapper.
+Add pause/resume controls during aiming/flight. Freeze active flight time, cancel RAF/backup work,
+resume only the remaining duration, and keep settlement/save/completion once. Pausing cancels
+charging without firing; stale key/pointer releases cannot shoot, resume requires a fresh press,
+and keyboard use of Pause/Resume cannot bubble into gameplay controls. Preserve aim, power, phase,
+points, setup, physics, RNG and existing settled feedback; reset/unmount invalidate pending work.
+Reduced motion still settles immediately once. No engine, daily record, completion, account,
+career drill parent or shared style edits. Next free round is **763**.
+
+**2026-09-30, Codex 754, 755, 756 and 758 COMPLETE, source ready for Claude's release.**
+754: eight actual autocomplete tests and three asserted controls green. Browser: 378 checks across
+four widths and both motion modes, six enabled activation paths select once, disabled/stale events
+select zero, identities/search/filter results preserved, 59px options and zero overflow/errors.
+755/756: independent actual compiled cards passed 64 sport/width/motion cases. Real extension engine
+improved/held/pulled/no-offer states retain all text/terms/actions/focus; both effects are finite,
+cloned running/settled props do not replay and reduced motion is static. Actual sport badge defs
+preserve labels/titles/blurbs/emojis/counts and unlock/relock nodes in place. Zero measured overflow.
+These fixtures prove presentation, not full career save/progression; evaluator facts are tested in RTL.
+758: seven actual CBB Board tests plus unfilter (five failures/two unrelated passes) and accidental
+resave (one failure/six passes) controls. Actual finished-route browser passed eight width/motion
+cases: 21 generated/local prospects, combined filters/order/counts/reset/empty checked, zero filter
+save writes; two correct-ID signings spend the existing 60 NIL and make exactly two save writes.
+44px filter controls, preserved select identity/focus, zero overlap/overflow. Hidden grades remain
+hidden. Existing engine, source order, NIL and FR/SO behavior unchanged. All remote requests blocked.
+Exact type gate and isolated 759 production build pass. Nine scoped common-runner harnesses green,
+including existing extension/career parity/accessibility and source guards. Source-only publication
+remains with Claude. 757/759 final browser acceptance is running; do not mark those complete yet.
+
+**2026-09-30, Codex Rounds 760 and 761 CLAIMED: shared gameplay features.**
+760 owns `src/components/conquest/ConquestRegionMap.tsx`, focused rendered tests and a new sim
+harness. Separate persistent tapped territory selection from hover, add Enter/Space activation and
+a closable compact details card below the map. Derive the region, live owner, empire count,
+invincibility and power-up presence from existing props; preserve camera, rendering layers, battle
+rules and all parent boards. No new facts or named power-up effects inferred from an icon.
+761 owns `src/components/game/ShareButtons.tsx`, `src/components/game/GameNavbar.tsx`, a new small
+shared-result decoder/card and focused tests/harness. Add a dedicated Copy challenge action that
+copies a registered game URL with only its current public score. Opening that URL shows the shared
+result above the playable game, labelled as a shared result, with dismissal. Validate the registry
+path and bounded score, render plain React text, reject malformed/duplicate fields, and include no
+username, email, account/session/save payload or invented percentile. Preserve existing native,
+custom-text, image and destination sharing behavior. No App routes, score writes, rankings,
+validation, snapshots or database changes. These are independent of Claude's existing lanes.
+Root owns shared docs/commits. Next free round is **762**.
+
+**2026-09-30, Codex 755 and 756 source BUILT, final browser acceptance running.**
+755 adds only a 320ms changed-reply reveal after an extension push; five actual-card tests use real
+improved/held/pulled engine results, preserve exact terms/actions and retain control identity/focus.
+Removing the actual response binding fails three checks, with two opening-state checks still green.
+756 adds 520ms earned-badge outline and 360ms icon feedback, locked cards quiet, stable badge keys,
+static reduced motion and full label titles. Six rendered tests preserve the real fictional-fixture
+evaluator results, counts, copy and nodes; four asserted controls fail 2, 2, 4 and 1 intended checks.
+Both wrappers print actual test output and clean their copied modules. Exact type gate and combined
+isolated 757 production build pass. Independent compiled-card browser checks are underway, so these
+rounds are not marked COMPLETE yet. No engines, narratives, real-player data or account writes changed.
+
+**2026-09-30, Codex Round 759 CLAIMED: help-dialog focus return.**
+Ownership: `src/components/game/HowToPlayPopover.tsx`, focused actual-dialog tests and a new sim
+harness. The 757 actual built-page check opens/closes the rules successfully but loses focus instead
+of returning it to the help button. Restore the trigger on every dialog close while preserving
+controlled/uncontrolled open behavior, exact content, existing initial focus and focus trapping.
+No global dialog primitive, game rules, content, parent games, account or engine changes. Reuse 757's
+real pointer/Enter/Space browser checks after the combined build. Next free round is **760**.
+
+**2026-09-30, Codex Round 758 CLAIMED: CBB Dynasty recruiting filters.**
+Ownership: `src/components/cbb-dynasty/CbbDynastyBoard.tsx`, focused rendered tests and a new
+discoverable sim harness. Add position and minimum-star filters using the existing generated
+high-school and portal prospects, with combined counts, empty-state guidance and reset. Preserve
+list order, prospect IDs, displayed scouting grades, sign actions, NIL spending and roster/save
+behavior. Never reveal hidden true overall or generate new prospects through filter changes.
+No CBB engine/data changes, no CFB files (Claude 728), no college facts (Claude 706), no parent page,
+account or database changes. Begin after the 754 through 757 build finishes. Next free is **759**.
+
+**2026-09-30, Codex Rounds 754 through 757 CLAIMED: another independent game UI batch.**
+754 owns `src/components/game/PlayerAutocomplete.tsx`, focused rendered tests and its new sim
+harness. The measured native option buttons ignore Enter/Space and remain selectable after the
+input is disabled. Restore one selection per enabled pointer/keyboard activation and zero when
+disabled, preserving search, namesake keys, filters and input arrow-key behavior.
+755 owns `src/components/us-career/ExtensionCard.tsx`, a new scoped response stylesheet and focused
+tests/harness. Add finite feedback to changed engine-authored replies in all four US My Career
+games. Preserve offer figures, outcomes, one-use Push, immediate actions and stable controls.
+756 owns only BadgeGrid in `src/components/us-career/SocialPanel.tsx`, a new scoped stylesheet and
+focused tests/harness. Give earned badges finite feedback with unchanged evaluator results, counts,
+copy and card identity; locked badges remain quiet and reduced motion is static.
+757 owns `src/pages/FreeKick.tsx`, `src/pages/BuzzerBeater.tsx` and a new scoped browser regression
+gate. Their floating help currently anchors at (0,0), over the phone wordmark and behind the desktop
+ticker. Place help inside each game header and verify normal pointer/keyboard access and unchanged
+rules at four widths. No arcade engines, boards, scores, saves, global styles or shared popover edits.
+All work is presentation or existing-control repair, with no new sports data, narratives, account
+writes or database changes. Root alone updates shared docs and commits exact owned paths. Claude
+retains every existing claim and release/publish duty. Next free round is **758**.
+
 **2026-09-30, Codex Round 753 COMPLETE: chain link reactions and unbroken-text phone fit.**
 Combat, Tennis and NASCAR timelines reveal only the newest validated link (420ms) and its committed
 connection (360ms). Empty/seed states remain quiet, existing nodes survive, same-chain and ended

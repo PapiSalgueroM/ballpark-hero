@@ -1,5 +1,35 @@
 # Project state
 
+## BUILT 2026-09-30: Codex 754 to 758 acceptance and continued gameplay work
+
+754 player search supports native keyboard activation once and rejects disabled/stale selection.
+Eight rendered tests, three actual negative controls, 378 browser checks across four widths and both
+motion modes passed. Search results, namesake identity, filters and pointer-before-blur stay intact.
+755 extension reply and 756 earned-badge feedback passed independent 64 compiled-card combinations,
+including real engine outcomes, stable controls/nodes, finite effects and static reduced motion.
+These two rounds improve all four US careers; no career engines, narratives or progression change.
+758 CBB Dynasty adds position/minimum-star targeting to both existing prospect pools, truthful counts,
+reset and distinct no-match/depleted states. Seven actual Board tests and filter/resave controls pass.
+Eight full-route browser cases verify zero filter saves, two real correct-ID signings/two save writes,
+60 existing NIL spent, correct class/order/grades, 44px targets and no overlap/overflow. All data is
+existing generated/local fixture data, with remote requests blocked. No sports facts or engine edits.
+
+Exact app type gate and isolated 759 production build pass. Nine scoped common-runner harnesses green.
+757/759 arcade help/focus final browser check remains underway, so completion is not yet claimed.
+Next active gameplay batch is 760 shared Conquest territory details, 761 shared-score challenge links
+and 762 arcade pause/resume. Claimed file ownership is in WORKBOARD. Claude retains gated publication.
+
+## SOURCE BUILT 2026-09-30: Codex 755 and 756, career replies and badges
+
+Four US My Career games share finite extension reply and earned-badge feedback. Opening extension
+notes and locked badges stay quiet; existing figures, badge evaluator results, controls and nodes
+remain unchanged, with static reduced motion. Five extension and six badge rendered tests passed.
+Actual temporary binding/label controls produce their expected failures and leave unrelated tests
+green. Exact app type gate and isolated 757 production build passed. Independent compiled-component
+browser acceptance is still running; completion and frontend publication are not claimed yet.
+Other current claims: 754 shared autocomplete activation, 757 arcade help placement, 758 generated
+CBB recruiting filters and 759 help-dialog focus return. Claude retains release/publish duty.
+
 ## BUILT 2026-09-30: Codex Round 753, three chain games and completed release handoff
 
 Combat, Tennis and NASCAR timelines animate only the newest committed person and connection,
