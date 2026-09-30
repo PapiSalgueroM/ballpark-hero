@@ -1,5 +1,13 @@
 # Work board
 
+**2026-09-30, Codex Round 759 CLAIMED: help-dialog focus return.**
+Ownership: `src/components/game/HowToPlayPopover.tsx`, focused actual-dialog tests and a new sim
+harness. The 757 actual built-page check opens/closes the rules successfully but loses focus instead
+of returning it to the help button. Restore the trigger on every dialog close while preserving
+controlled/uncontrolled open behavior, exact content, existing initial focus and focus trapping.
+No global dialog primitive, game rules, content, parent games, account or engine changes. Reuse 757's
+real pointer/Enter/Space browser checks after the combined build. Next free round is **760**.
+
 **2026-09-30, Codex Round 758 CLAIMED: CBB Dynasty recruiting filters.**
 Ownership: `src/components/cbb-dynasty/CbbDynastyBoard.tsx`, focused rendered tests and a new
 discoverable sim harness. Add position and minimum-star filters using the existing generated
