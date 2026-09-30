@@ -2,8 +2,9 @@
 --
 -- UNAPPLIED. Written for review; the release manager applies it, in any order
 -- with the other two Round 707 files (they touch different rows). Run the whole
--- file through the Supabase MCP. Afterwards scripts/simSoccerStints.mjs reports
--- "would delete 0" for this file.
+-- file through the Supabase MCP. Before, scripts/simSoccerStints.mjs section 2
+-- reports "would delete 1465" in 1423 groups, the constants below; afterwards it
+-- reports "would delete 0". Any other number is the table having moved.
 --
 -- MEASURED 2026-09-30, read only SELECTs over all 80,586 rows:
 --   1,423 groups of rows that agree on EVERY column but id (player_name, club,

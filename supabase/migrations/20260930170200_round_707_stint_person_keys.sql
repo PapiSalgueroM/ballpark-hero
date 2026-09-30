@@ -1,9 +1,13 @@
 -- Round 707 (2026-09-30): stint rows take the person_key their market rows carry.
 --
 -- UNAPPLIED. Written for review; the release manager applies it, in any order
--- with the other two Round 707 files. It is safe to run again at any time, and
--- it is meant to be: whenever a later identity round writes person_key onto
--- player_market_values, running this file carries the split into the stints.
+-- with the other two Round 707 files. It is written to be run again after a
+-- later identity round writes person_key onto player_market_values, so the
+-- split reaches the stints, but NOT blind: expected_updates below is the count
+-- the run must produce, measured first with the read only select in
+-- scripts/simSoccerStints.mjs section 3 ("would update N"), and the file
+-- raises and writes nothing when the count differs. Today that count is 0 and
+-- the file says so. A later run re-measures, sets the constant, and runs.
 --
 -- WHY. One name in soccer_player_club_stints can be several men. "Rodri" holds
 -- a Barcelona centre-back aged 21 in 2006, a Betis right midfielder, a Huesca
@@ -18,8 +22,10 @@
 -- evidence tags nothing, so no row is ever given an identity it cannot prove.
 --
 -- MEASURED 2026-09-30, read only SELECTs:
---   person_key is NULL on all 141,916 market rows, so today this updates 0 rows
---   and says so. There is nothing to split by person_key yet.
+--   person_key is NULL on all 141,915 market rows (count(*) over
+--   player_market_values, re-measured 2026-09-30 through the REST count header;
+--   an earlier draft said 141,916), so today this updates 0 rows and says so.
+--   There is nothing to split by person_key yet.
 --   The merges it cannot split are listed for the identity round instead. Of the
 --   5,496 names with a 2026 market row, 227 carry rows whose birth year (year
 --   minus age) jumps by 3 or more between two rows, which is two or more men:
@@ -40,6 +46,9 @@
 
 do $migration$
 declare
+  -- The count this run must produce. Measured 2026-09-30: 0 (no market row
+  -- carries a person_key). A later run sets it from simSoccerStints section 3.
+  expected_updates constant integer := 0;
   n integer;
 begin
   with evidence as (
@@ -62,6 +71,9 @@ begin
      and e.keys = 1
      and e.unkeyed = 0;
   get diagnostics n = row_count;
+  if n <> expected_updates then
+    raise exception 'Round 707: % stint rows qualified for a person_key, expected %. Re-measure with scripts/simSoccerStints.mjs section 3 and set expected_updates before running. Rolled back.', n, expected_updates;
+  end if;
   raise notice 'Round 707: % stint rows took a person_key from their market rows.', n;
 end
 $migration$;

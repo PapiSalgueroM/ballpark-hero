@@ -6,7 +6,9 @@
 --   20260930170100_round_707_stint_duplicates.sql  1,465 exact copies deleted
 --   20260930170200_round_707_stint_person_keys.sql person_key follows the market rows
 -- Run the whole file through the Supabase MCP (apply_migration or execute_sql).
--- Afterwards scripts/simSoccerStints.mjs reports "would insert 0" for this file.
+-- Before, scripts/simSoccerStints.mjs section 1 reports "would insert 240", the
+-- expected_missing below; afterwards it reports "would insert 0". Any other
+-- number is the table having moved, and the file refuses on its own count too.
 --
 -- WHY. soccer_player_club_stints was derived from the market value years before
 -- the Round 393 and Round 450 migrations wrote the verified 2026 window into the
@@ -40,6 +42,15 @@
 --   Xhaka at Sunderland, ...), whose record cites Wikipedia plus Transfermarkt
 --   rather than the overlay's two news sources; they are listed for a follow
 --   up, not written on this round's say so.
+--
+-- OUT OF SCOPE, SO NOBODY READS "ACCEPTS THE 2026 MOVES" AS "EVERY MOVE IS
+-- RIGHT": a gap in the market rows BEFORE 2026 stays a gap. Sandro Tonali's
+-- market rows run Brescia 2018 to 2020, AC Milan 2021 to 2022, then Tottenham
+-- 2026, with no 2023 to 2025 row, so his Newcastle years are in neither table.
+-- This file gives him Tottenham 2026; "Played for Newcastle" is still a hard,
+-- cached no for him under the deployed and the Round 707 function alike, and it
+-- joins the 64 stale sweep pairs above on the follow up list. That list needs a
+-- two source record per move, the same as this one.
 --
 -- SOURCE. Each row is one entry of scripts/transferOverlay2026.mjs. Its header
 -- and the comment above each block name the two sources for every move (for
