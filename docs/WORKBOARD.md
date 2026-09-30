@@ -1,5 +1,24 @@
 # Work board
 
+**2026-09-30, Codex Rounds 757 and 759 COMPLETE: reachable arcade rules and focus return.**
+757 places a 44px inline help button beside each Free Kick/Buzzer Beater title, clearing phone
+wordmarks and the desktop ticker. 759 restores that instance's trigger on dialog close, without
+changing controlled callbacks/content or the global Dialog primitive. Six actual-dialog tests
+pass; removing the one focus call fails five focus checks while the controlled-content test passes.
+Independent review approved. Actual finished-build browser passes eight route/width cases, each
+with pointer, Enter and Space opening; Let's Play, X and Escape closing; exact derived guide text
+and restored focus. Header/title fit, click hit-testing, 44px targets, zero overflow/page errors pass.
+The asserted unanchored browser control restores (0,0) in all eight cases and reproduces both desktop
+ticker interceptions through normal clicks. Screenshot rectangles inspected. Escape checks wait for
+actual dialog entrance/focus readiness; issuing it during animated layer setup was intermittently
+too early. Existing missing-description development warnings are unchanged. Only these close paths
+are claimed; outside-overlay dismissal has not been separately exercised. Isolated 759 build/types
+and node gates passed. Existing 748 shot feedback is unchanged; frontend publication stays with Claude.
+
+**762 input-safety ownership addendum:** its two already-claimed Board keyboard listeners may also
+ignore rules-dialog and interactive-control targets. Space on a help or pause button must not arm or
+release a gameplay shot. This changes input routing only, with no changes to physical shot outcomes.
+
 **2026-09-30, Codex Round 762 CLAIMED: Free Kick and Buzzer Beater pause/resume.**
 Ownership: `src/hooks/useArcadeFlight.ts`, `src/components/free-kick/FreeKickBoard.tsx`,
 `src/components/buzzer-beater/BuzzerBeaterBoard.tsx`, focused actual-hook/board tests and sim wrapper.

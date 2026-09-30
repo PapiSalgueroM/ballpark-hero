@@ -1,5 +1,23 @@
 # Project state
 
+## BUILT 2026-09-30: six further Codex rounds 754 through 759 complete
+
+757 arcade help clears the logo/ticker and has 44px targets. 759 rules dialogs return focus to their
+own help trigger on close, preserving controlled behavior and content. Six actual-dialog tests pass;
+the actual removed-focus control fails five with one unrelated pass. Independent review approved.
+Finished-build browser: eight route/width combinations, three opening and three closing methods,
+exact guide text, restored focus, no header/title overlap, overflow or page errors. Restoring the old
+floating position reproduces all eight out-of-header cases and both desktop blocked clicks. Browser
+Escape checks now wait for actual entrance/focus readiness; no outside-overlay dismissal claim.
+Existing development missing-description warnings remain unchanged. Screenshot rectangles inspected.
+
+All six rounds 754 through 759 are now built, checked and pushed for Claude's release. The isolated
+759 build/types passed, nine scoped node harnesses passed, and per-round controls/browser receipts
+are on WORKBOARD. Four US careers gained response/badge feedback, CBB recruiting gained targeting,
+shared player search gained keyboard/disabled correctness, and both arcade help controls are usable.
+Current next batch: 760 territory inspection, 761 challenge links and 762 arcade pause/resume.
+Frontend publication is still with Claude. Root dist/public and real accounts remain untouched.
+
 ## BUILT 2026-09-30: Codex 754 to 758 acceptance and continued gameplay work
 
 754 player search supports native keyboard activation once and rejects disabled/stale selection.
