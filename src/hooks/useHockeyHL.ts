@@ -5,7 +5,8 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import { higherLowerScore, HIGHER_LOWER_DAILY_ROUNDS } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
-import { dateSeed } from '@/lib/dateUtils';
+import { higherLowerDaily, type CloseCallSource } from '@/lib/higherLowerDaily';
+import { pointsFor } from '@/lib/choiceDaily';
 
 function seededShuffle<T>(arr: T[], seed: number): T[] {
   const a = [...arr];
@@ -34,15 +35,12 @@ const ROUNDS = HIGHER_LOWER_DAILY_ROUNDS;
 // The hook ignores the puzzle data and uses todayStr for seeding instead.
 const SENTINEL_PUZZLES = [{ id: 'hkhl-daily' }];
 
-function getDailyPairs(todayStr: string): [HockeyHLPlayer, HockeyHLPlayer][] {
-  const seed = dateSeed(todayStr);
-  const shuffled = seededShuffle(hockeyHLPlayers, seed);
-  const result: [HockeyHLPlayer, HockeyHLPlayer][] = [];
-  for (let i = 0; i < ROUNDS * 2 && i + 1 < shuffled.length; i += 2) {
-    result.push([shuffled[i], shuffled[i + 1]]);
-  }
-  return result;
-}
+/* Round 681: the daily is the shared close call deal (src/lib/higherLowerDaily.ts). */
+const CLOSE_CALLS: CloseCallSource<HockeyHLPlayer> = {
+  pools: [hockeyHLPlayers],
+  valueOf: p => p.careerPoints,
+  nameOf: p => p.name,
+};
 
 function getRandomPairs(hard = false): [HockeyHLPlayer, HockeyHLPlayer][] {
   const seed = Math.floor(Math.random() * 100000);
@@ -97,7 +95,13 @@ export function useHockeyHL() {
     deserializeGuesses: (raw) => raw as HLAction[],
   });
 
-  const dailyPairs = useMemo(() => getDailyPairs(todayStr), [todayStr]);
+  /* Round 681: the day's close calls, shown athlete on the left, and the
+     board they are lined on for the day's points. */
+  const daily = useMemo(() => higherLowerDaily('hockey-higher-lower', CLOSE_CALLS, todayStr), [todayStr]);
+  const dailyPairs = useMemo<[HockeyHLPlayer, HockeyHLPlayer][]>(
+    () => (daily ? daily.calls.map((c): [HockeyHLPlayer, HockeyHLPlayer] => [c.shown, c.hidden]) : []),
+    [daily],
+  );
 
   // currentResult: the in-progress round shown during the 2-second reveal window
   // Not persisted, purely local UX state that disappears on reload (which is fine)
@@ -222,10 +226,14 @@ export function useHockeyHL() {
     });
   }, []);
 
-  useGameCompletion('hockey-higher-lower', rawDailyStatus !== 'playing', dailyScore);
+  /* Round 681: the daily records its points on the day's line, the number
+     its result card shows. */
+  const dailyPoints = pointsFor(daily?.board, dailyScore);
+  useGameCompletion('hockey-higher-lower', rawDailyStatus !== 'playing', dailyPoints.points);
 
   return {
     mode, switchMode, hard, toggleHard, currentPair, currentRound, results, showingResult, streak,
     gameStatus, correctCount, totalScore, makeGuess, totalRounds: ROUNDS, isLoading,
+    dailyPoints, guessing: daily?.board.guessing,
   };
 }

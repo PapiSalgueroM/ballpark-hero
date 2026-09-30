@@ -4,7 +4,8 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import { higherLowerScore, HIGHER_LOWER_DAILY_ROUNDS } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
-import { dateSeed } from '@/lib/dateUtils';
+import { higherLowerDaily, type CloseCallSource } from '@/lib/higherLowerDaily';
+import { pointsFor } from '@/lib/choiceDaily';
 
 /**
  * F1 Higher/Lower, third Higher/Lower sport port (task #23), same rules as
@@ -37,6 +38,13 @@ type HLAction = { t: 'result'; correct: boolean };
 const ROUNDS = HIGHER_LOWER_DAILY_ROUNDS;
 // Sentinel puzzle array, useDailyPuzzle needs at least one element.
 const SENTINEL_PUZZLES = [{ id: 'f1hl-daily' }];
+
+/* Round 681: the daily is the shared close call deal (src/lib/higherLowerDaily.ts). */
+const CLOSE_CALLS: CloseCallSource<F1HLDriver> = {
+  pools: [f1HLDrivers],
+  valueOf: p => p.careerWins,
+  nameOf: p => p.name,
+};
 
 function buildPairs(seed: number, hard = false): [F1HLDriver, F1HLDriver][] {
   const shuffled = seededShuffle(f1HLDrivers, seed);
@@ -83,7 +91,13 @@ export function useF1HL() {
     deserializeGuesses: (raw) => raw as HLAction[],
   });
 
-  const dailyPairs = useMemo(() => buildPairs(dateSeed(todayStr)), [todayStr]);
+  /* Round 681: the day's close calls, shown athlete on the left, and the
+     board they are lined on for the day's points. */
+  const daily = useMemo(() => higherLowerDaily('f1-higher-lower', CLOSE_CALLS, todayStr), [todayStr]);
+  const dailyPairs = useMemo<[F1HLDriver, F1HLDriver][]>(
+    () => (daily ? daily.calls.map((c): [F1HLDriver, F1HLDriver] => [c.shown, c.hidden]) : []),
+    [daily],
+  );
 
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
@@ -203,10 +217,14 @@ export function useF1HL() {
     });
   }, []);
 
-  useGameCompletion('f1-higher-lower', rawDailyStatus !== 'playing', dailyScore);
+  /* Round 681: the daily records its points on the day's line, the number
+     its result card shows. */
+  const dailyPoints = pointsFor(daily?.board, dailyScore);
+  useGameCompletion('f1-higher-lower', rawDailyStatus !== 'playing', dailyPoints.points);
 
   return {
     mode, switchMode, hard, toggleHard, currentPair, currentRound, results, showingResult, streak,
     gameStatus, correctCount, totalScore, makeGuess, totalRounds: ROUNDS, isLoading,
+    dailyPoints, guessing: daily?.board.guessing,
   };
 }

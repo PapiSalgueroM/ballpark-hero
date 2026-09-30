@@ -4,7 +4,8 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import { higherLowerScore, HIGHER_LOWER_DAILY_ROUNDS } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
-import { dateSeed } from '@/lib/dateUtils';
+import { higherLowerDaily, type CloseCallSource } from '@/lib/higherLowerDaily';
+import { pointsFor } from '@/lib/choiceDaily';
 
 /**
  * AFL Higher/Lower, the site's first Australian rules game (Round 231; the
@@ -39,6 +40,13 @@ type HLAction = { t: 'result'; correct: boolean };
 
 const ROUNDS = HIGHER_LOWER_DAILY_ROUNDS;
 const SENTINEL_PUZZLES = [{ id: 'aflhl-daily' }];
+
+/* Round 681: the daily is the shared close call deal (src/lib/higherLowerDaily.ts). */
+const CLOSE_CALLS: CloseCallSource<AflGoalKicker> = {
+  pools: [aflGoalKickers],
+  valueOf: p => p.goals,
+  nameOf: p => p.name,
+};
 
 function buildPairs(seed: number, hard = false): [AflGoalKicker, AflGoalKicker][] {
   const shuffled = seededShuffle(aflGoalKickers, seed);
@@ -82,7 +90,13 @@ export function useAflHL() {
     deserializeGuesses: (raw) => raw as HLAction[],
   });
 
-  const dailyPairs = useMemo(() => buildPairs(dateSeed(todayStr)), [todayStr]);
+  /* Round 681: the day's close calls, shown athlete on the left, and the
+     board they are lined on for the day's points. */
+  const daily = useMemo(() => higherLowerDaily('afl-higher-lower', CLOSE_CALLS, todayStr), [todayStr]);
+  const dailyPairs = useMemo<[AflGoalKicker, AflGoalKicker][]>(
+    () => (daily ? daily.calls.map((c): [AflGoalKicker, AflGoalKicker] => [c.shown, c.hidden]) : []),
+    [daily],
+  );
 
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
@@ -198,10 +212,14 @@ export function useAflHL() {
     });
   }, []);
 
-  useGameCompletion('afl-higher-lower', rawDailyStatus !== 'playing', dailyScore);
+  /* Round 681: the daily records its points on the day's line, the number
+     its result card shows. */
+  const dailyPoints = pointsFor(daily?.board, dailyScore);
+  useGameCompletion('afl-higher-lower', rawDailyStatus !== 'playing', dailyPoints.points);
 
   return {
     mode, switchMode, hard, toggleHard, currentPair, currentRound, results, showingResult, streak,
     gameStatus, correctCount, totalScore, makeGuess, totalRounds: ROUNDS, isLoading,
+    dailyPoints, guessing: daily?.board.guessing,
   };
 }

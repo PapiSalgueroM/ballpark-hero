@@ -32,9 +32,13 @@
  *             page is gone).
  *   holds     on a game that does not pay yet, the release that may not
  *             publish until it does (holdsRelease below).
+ *   unit      on a paying choice game, what its result counts when that is
+ *             not right answers (the Higher or Lower streak score), for the
+ *             card and the how to play (src/lib/pointsHowTo.ts).
  *
- * WHY NOTHING PAYS YET. Every game here waits on its own round (681 to 688,
- * 695 to 697). A game flips to `paid(...)` in the round that lands its
+ * WHY A GAME WAITS. Every game here waits on its own round (681 to 688,
+ * 695 to 697); Round 681 put the first thirteen, the choice dailies, on the
+ * line. A game flips to `paid(...)` in the round that lands its
  * pointsFor and its section 2 row, never before, so the seed this file
  * generates is honest on every tree: if a game round has not landed by the
  * release, its games are for fun, with no one having to remember to flip
@@ -62,10 +66,18 @@ export type PointsRound = `${number}`;
 /** A release that can wait on a game (section 10). */
 export type PointsRelease = 'G';
 
+/**
+ * Round 681: what a choice game's result counts, for the card and the how to
+ * play: right answers, or a score (the Higher or Lower streak score). A game
+ * that says nothing counts right answers.
+ */
+export type PointsUnit = 'right' | 'score';
+
 interface RuleBase {
   readonly claim: PointsClaim;
   /** This game's own naive policies, when the family's list does not fit it. */
   readonly policies?: readonly NaivePolicyName[];
+  readonly unit?: PointsUnit;
 }
 export type WaitingRule = RuleBase & {
   readonly pays: false;
@@ -103,8 +115,9 @@ function holdsRelease(release: PointsRelease, rule: WaitingRule): WaitingRule {
  * A game on the line. Only the round that lands its pointsFor and its
  * section 2 row writes one of these.
  */
-function paid(scale: PointsScale, claim: PointsClaim, round: PointsRound, policies?: readonly NaivePolicyName[]): PointsRule {
-  return policies ? { pays: true, scale, claim, round, policies } : { pays: true, scale, claim, round };
+function paid(scale: PointsScale, claim: PointsClaim, round: PointsRound, policies?: readonly NaivePolicyName[], unit?: PointsUnit): PointsRule {
+  const rule: PointsRule = policies ? { pays: true, scale, claim, round, policies } : { pays: true, scale, claim, round };
+  return unit ? { ...rule, unit } : rule;
 }
 
 const LUCK = "Points are paused here while we make sure a lucky guess can't earn them.";
@@ -127,19 +140,21 @@ export const POINTS_FAMILIES: readonly FamilyGroup[] = [
     family: 'choice',
     policies: ['topListed', 'constant', 'random', 'counter'],
     games: {
-      'afl-higher-lower': waits('first-action', '681', LUCK, HL),
-      'cfb-higher-lower': waits('first-action', '681', LUCK, HL),
-      'f1-higher-lower': waits('first-action', '681', LUCK, HL),
-      'golf-higher-lower': waits('first-action', '681', LUCK, HL),
-      'hockey-higher-lower': waits('first-action', '681', LUCK, HL),
-      'mlb-higher-lower': waits('first-action', '681', LUCK, HL),
-      'nba-higher-lower': waits('first-action', '681', LUCK, HL),
-      'nfl-higher-lower': waits('first-action', '681', LUCK, HL),
-      'tennis-higher-lower': waits('first-action', '681', LUCK, HL),
-      'face-off': waits('first-action', '681', LUCK, ['topListed', 'constant', 'random', 'counter', 'speedTapper']),
-      'champ-or-not': waits('first-action', '681', LUCK),
-      'whod-they-beat': waits('first-action', '681', LUCK),
-      'ball-iq': waits('first-action', '681', LUCK),
+      /* Round 681: on the line (src/lib/choiceDaily.ts), each measured in
+         scripts/simKnowledgeLine.mjs section 2. */
+      'afl-higher-lower': paid('dp', 'first-action', '681', HL, 'score'),
+      'cfb-higher-lower': paid('dp', 'first-action', '681', HL, 'score'),
+      'f1-higher-lower': paid('dp', 'first-action', '681', HL, 'score'),
+      'golf-higher-lower': paid('dp', 'first-action', '681', HL, 'score'),
+      'hockey-higher-lower': paid('dp', 'first-action', '681', HL, 'score'),
+      'mlb-higher-lower': paid('dp', 'first-action', '681', HL, 'score'),
+      'nba-higher-lower': paid('dp', 'first-action', '681', HL, 'score'),
+      'nfl-higher-lower': paid('dp', 'first-action', '681', HL, 'score'),
+      'tennis-higher-lower': paid('dp', 'first-action', '681', HL, 'score'),
+      'face-off': paid('dp', 'first-action', '681', ['topListed', 'constant', 'random', 'counter', 'speedTapper']),
+      'champ-or-not': paid('dp', 'first-action', '681'),
+      'whod-they-beat': paid('dp', 'first-action', '681'),
+      'ball-iq': paid('dp', 'first-action', '681'),
       'sports-millionaire': waits('first-action', '682', LUCK, ['random', 'topListed', 'lifelineReader']),
       'pack-battle': waits('first-action', '682', LUCK, HL),
       'silverware-sort': waits('first-action', '686', LUCK, ORDERING),

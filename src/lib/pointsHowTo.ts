@@ -18,8 +18,9 @@
  * src/data/pointsFamilies.ts. A game that does not pay says so, with its
  * reason, instead of a points line.
  */
-import { pointsRuleFor, type PointsClaim, type PointsFamily } from '@/data/pointsFamilies';
+import { pointsRuleFor, type PointsClaim, type PointsFamily, type PointsUnit } from '@/data/pointsFamilies';
 import { dayPoints, pointsFromCeiling, type PointsAnswer } from '@/lib/knowledgeLine';
+import { HIGHER_LOWER_DAILY_CEILING } from '@/lib/higherLowerScore';
 
 export const FOR_FUN_LINE = "For fun: this one doesn't pay points yet.";
 export const NO_SCORE_LINE = "Just for fun: this one doesn't keep a score.";
@@ -56,7 +57,11 @@ const about = (n: number) => String(Math.round(n));
 
 const CARD: Record<PointsFamily, (f: CardFacts) => string> = {
   choice: ({ answer, guessing }) => {
-    const start = `Points started at ${Math.floor(answer.line) + 1} ${answer.unit} today.`;
+    /* Round 681: a score (the Higher or Lower streak score) moves in fives,
+       so the card says where the line is rather than the first score past it. */
+    const start = answer.unit === 'score'
+      ? `Points started past a score of ${about(answer.line)} today.`
+      : `Points started at ${Math.floor(answer.line) + 1} ${answer.unit} today.`;
     return guessing === undefined ? start : `Guessing gets about ${about(guessing)} of ${answer.perfect} here. ${start}`;
   },
   typed: () => 'Every right answer counts. A perfect board is 100.',
@@ -75,6 +80,11 @@ const CARD: Record<PointsFamily, (f: CardFacts) => string> = {
 /* Worked examples, each read off the formula itself. */
 const choiceExample = () =>
   `Say today's line is 7 of 10. Get 7 right and you score 0, 8 right scores ${dayPoints(8, 7, 10)}, 9 right scores ${dayPoints(9, 7, 10)}, and all 10 is ${dayPoints(10, 7, 10)}.`;
+/* Round 681: the Higher or Lower dailies line their streak score. */
+const scoreExample = () => {
+  const top = HIGHER_LOWER_DAILY_CEILING;
+  return `Say today's line is a score of 110 and all ten right scores ${top}. Score 110 or less and you get 0, a score of 200 gets ${dayPoints(200, 110, top)}, and all ten right gets ${dayPoints(top, 110, top)}.`;
+};
 const typedExample = () =>
   `Say a board is out of 9. Get 6 right and you score ${pointsFromCeiling(6, 9)}. Get all 9 and you score ${pointsFromCeiling(9, 9)}.`;
 const draftExample = () =>
@@ -84,11 +94,11 @@ const numbersExample = () =>
 const arcadeExample = () =>
   `Say tapping straight away gets 30 and today's best run gets 90. Score 60 and you get ${dayPoints(60, 30, 90)}.`;
 
-const GUIDE: Record<PointsFamily, () => Omit<PointsGuide, 'ranked'>> = {
-  choice: () => ({
+const GUIDE: Record<PointsFamily, (unit: PointsUnit) => Omit<PointsGuide, 'ranked'>> = {
+  choice: unit => ({
     zero: '0 means you did no better than guessing would on today\'s board.',
     hundred: '100 means every answer right.',
-    example: choiceExample(),
+    example: unit === 'score' ? scoreExample() : choiceExample(),
   }),
   typed: () => ({
     zero: '0 means no right answers.',
@@ -155,6 +165,6 @@ export function pointsHowTo(slug: string): PointsHowTo {
     family,
     pays: true,
     cardLine: facts => (facts ? CARD[family](facts) : ''),
-    guide: { ...GUIDE[family](), ranked },
+    guide: { ...GUIDE[family](rule.unit ?? 'right'), ranked },
   };
 }

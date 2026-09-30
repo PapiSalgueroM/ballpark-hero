@@ -4,7 +4,8 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import { higherLowerScore, HIGHER_LOWER_DAILY_ROUNDS } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
-import { dateSeed } from '@/lib/dateUtils';
+import { higherLowerDaily, type CloseCallSource } from '@/lib/higherLowerDaily';
+import { pointsFor } from '@/lib/choiceDaily';
 
 /**
  * Golf Higher/Lower - first game in the Golf tab (owner 2026-08-05: "start
@@ -38,6 +39,13 @@ type HLAction = { t: 'result'; correct: boolean };
 
 const ROUNDS = HIGHER_LOWER_DAILY_ROUNDS;
 const SENTINEL_PUZZLES = [{ id: 'golfhl-daily' }];
+
+/* Round 681: the daily is the shared close call deal (src/lib/higherLowerDaily.ts). */
+const CLOSE_CALLS: CloseCallSource<GolfLegend> = {
+  pools: [golfLegends],
+  valueOf: p => p.majors,
+  nameOf: p => p.name,
+};
 
 function buildPairs(seed: number, hard = false): [GolfLegend, GolfLegend][] {
   const shuffled = seededShuffle(golfLegends, seed);
@@ -81,7 +89,13 @@ export function useGolfHL() {
     deserializeGuesses: (raw) => raw as HLAction[],
   });
 
-  const dailyPairs = useMemo(() => buildPairs(dateSeed(todayStr)), [todayStr]);
+  /* Round 681: the day's close calls, shown athlete on the left, and the
+     board they are lined on for the day's points. */
+  const daily = useMemo(() => higherLowerDaily('golf-higher-lower', CLOSE_CALLS, todayStr), [todayStr]);
+  const dailyPairs = useMemo<[GolfLegend, GolfLegend][]>(
+    () => (daily ? daily.calls.map((c): [GolfLegend, GolfLegend] => [c.shown, c.hidden]) : []),
+    [daily],
+  );
 
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
@@ -197,10 +211,14 @@ export function useGolfHL() {
     });
   }, []);
 
-  useGameCompletion('golf-higher-lower', rawDailyStatus !== 'playing', dailyScore);
+  /* Round 681: the daily records its points on the day's line, the number
+     its result card shows. */
+  const dailyPoints = pointsFor(daily?.board, dailyScore);
+  useGameCompletion('golf-higher-lower', rawDailyStatus !== 'playing', dailyPoints.points);
 
   return {
     mode, switchMode, hard, toggleHard, currentPair, currentRound, results, showingResult, streak,
     gameStatus, correctCount, totalScore, makeGuess, totalRounds: ROUNDS, isLoading,
+    dailyPoints, guessing: daily?.board.guessing,
   };
 }

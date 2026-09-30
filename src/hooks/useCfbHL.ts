@@ -4,7 +4,8 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import { higherLowerScore, HIGHER_LOWER_DAILY_ROUNDS } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
-import { dateSeed } from '@/lib/dateUtils';
+import { higherLowerDaily, type CloseCallSource } from '@/lib/higherLowerDaily';
+import { pointsFor } from '@/lib/choiceDaily';
 
 /**
  * College Football Higher/Lower, sixth Higher/Lower sport port (task #23),
@@ -38,6 +39,13 @@ type HLAction = { t: 'result'; correct: boolean };
 const ROUNDS = HIGHER_LOWER_DAILY_ROUNDS;
 // Sentinel puzzle array, useDailyPuzzle needs at least one element.
 const SENTINEL_PUZZLES = [{ id: 'cfbhl-daily' }];
+
+/* Round 681: the daily is the shared close call deal (src/lib/higherLowerDaily.ts). */
+const CLOSE_CALLS: CloseCallSource<CfbHLPlayer> = {
+  pools: [cfbHLPlayers],
+  valueOf: p => p.careerPassYds,
+  nameOf: p => p.name,
+};
 
 function buildPairs(seed: number, hard = false): [CfbHLPlayer, CfbHLPlayer][] {
   const shuffled = seededShuffle(cfbHLPlayers, seed);
@@ -84,7 +92,13 @@ export function useCfbHL() {
     deserializeGuesses: (raw) => raw as HLAction[],
   });
 
-  const dailyPairs = useMemo(() => buildPairs(dateSeed(todayStr)), [todayStr]);
+  /* Round 681: the day's close calls, shown athlete on the left, and the
+     board they are lined on for the day's points. */
+  const daily = useMemo(() => higherLowerDaily('cfb-higher-lower', CLOSE_CALLS, todayStr), [todayStr]);
+  const dailyPairs = useMemo<[CfbHLPlayer, CfbHLPlayer][]>(
+    () => (daily ? daily.calls.map((c): [CfbHLPlayer, CfbHLPlayer] => [c.shown, c.hidden]) : []),
+    [daily],
+  );
 
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
@@ -202,10 +216,14 @@ export function useCfbHL() {
     });
   }, []);
 
-  useGameCompletion('cfb-higher-lower', rawDailyStatus !== 'playing', dailyScore);
+  /* Round 681: the daily records its points on the day's line, the number
+     its result card shows. */
+  const dailyPoints = pointsFor(daily?.board, dailyScore);
+  useGameCompletion('cfb-higher-lower', rawDailyStatus !== 'playing', dailyPoints.points);
 
   return {
     mode, switchMode, hard, toggleHard, currentPair, currentRound, results, showingResult, streak,
     gameStatus, correctCount, totalScore, makeGuess, totalRounds: ROUNDS, isLoading,
+    dailyPoints, guessing: daily?.board.guessing,
   };
 }

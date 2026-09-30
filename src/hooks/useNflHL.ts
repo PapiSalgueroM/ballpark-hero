@@ -4,7 +4,8 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useOwnedTimeouts } from '@/hooks/useOwnedTimeouts';
 import { higherLowerScore, HIGHER_LOWER_DAILY_ROUNDS } from '@/lib/higherLowerScore';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
-import { dateSeed } from '@/lib/dateUtils';
+import { higherLowerDaily, type CloseCallSource } from '@/lib/higherLowerDaily';
+import { pointsFor } from '@/lib/choiceDaily';
 
 /**
  * NFL Higher/Lower, multi-stat edition (owner 2026-08-05: "it should be more
@@ -46,6 +47,15 @@ type HLAction = { t: 'result'; correct: boolean };
 
 const ROUNDS = HIGHER_LOWER_DAILY_ROUNDS;
 const SENTINEL_PUZZLES = [{ id: 'nflhl-daily' }];
+
+/* Round 681: the daily is the shared close call deal
+   (src/lib/higherLowerDaily.ts), each round from one stat category, in an
+   order drawn for the day. */
+const CLOSE_CALLS: CloseCallSource<NflHLCatPlayer> = {
+  pools: NFL_HL_CATEGORIES.map(c => c.players),
+  valueOf: p => p.value,
+  nameOf: p => p.name,
+};
 
 function buildRounds(seed: number, hard = false): HLRound[] {
   const cats = seededShuffle(NFL_HL_CATEGORIES, seed);
@@ -92,7 +102,13 @@ export function useNflHL() {
     deserializeGuesses: (raw) => raw as HLAction[],
   });
 
-  const dailyRounds = useMemo(() => buildRounds(dateSeed(todayStr)), [todayStr]);
+  /* Round 681: the day's close calls, shown athlete on the left, and the
+     board they are lined on for the day's points. */
+  const daily = useMemo(() => higherLowerDaily('nfl-higher-lower', CLOSE_CALLS, todayStr), [todayStr]);
+  const dailyRounds = useMemo<HLRound[]>(
+    () => (daily ? daily.calls.map(c => ({ category: NFL_HL_CATEGORIES[c.pool], p1: c.shown, p2: c.hidden })) : []),
+    [daily],
+  );
 
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
@@ -210,11 +226,15 @@ export function useNflHL() {
     });
   }, []);
 
-  useGameCompletion('nfl-higher-lower', rawDailyStatus !== 'playing', dailyScore);
+  /* Round 681: the daily records its points on the day's line, the number
+     its result card shows. */
+  const dailyPoints = pointsFor(daily?.board, dailyScore);
+  useGameCompletion('nfl-higher-lower', rawDailyStatus !== 'playing', dailyPoints.points);
 
   return {
     mode, switchMode, hard, toggleHard,
     activeRound, currentPair, currentRound, results, showingResult, streak,
     gameStatus, correctCount, totalScore, makeGuess, totalRounds: ROUNDS, isLoading,
+    dailyPoints, guessing: daily?.board.guessing,
   };
 }

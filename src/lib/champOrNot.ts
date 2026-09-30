@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { dailyDraw, shuffledRange } from '@/lib/dateUtils';
+import { dealDaily, type ChoiceBoard, type LinedBoard } from '@/lib/choiceDaily';
 
 /**
  * Champ or Not (Round 235): quick daily true-or-false over the champion
