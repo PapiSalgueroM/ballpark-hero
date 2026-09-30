@@ -1,5 +1,37 @@
 # Project state
 
+## VERIFIED 2026-09-30: Round 741, AdSense decision and live indexing audit
+
+Codex directly observed AdSense **Needs attention / Low value content**, ads.txt
+**Authorized**, and a September 25, 2026 at 04:59 EDT last update. The September 15
+pending-review notes below are superseded. No review was requested or account setting
+changed. The policy card names no individual page.
+
+Search Console's noindex warning names exactly one URL: **/pack-battle**, intentionally
+retired and excluded since Round 198. Keep that noindex. The domain report's displayed
+September 20 data says 68 indexed and 94 excluded (5 redirects, 10 crawled, 1 noindex,
+78 discovered). No validation, indexing or sitemap request was made.
+
+All 163 published sitemap URLs return 200, one self-canonical, readable saved content
+and no robots/googlebot meta or X-Robots-Tag indexing restriction. The ten local
+deliberate noindex pages remain outside the sitemap. Unknown URLs still acquire the
+fallback noindex with the app bundle blocked. These measurements do not prove Google
+has indexed or recrawled every page.
+
+**Real content defect handed to Claude's owning SEO release:** `/soccer-career/` and
+`/club-manager/` lose their full guides and FAQ markup after React mounts, while their
+normal forms retain them. Article characters fall 11,086 to 0 and 15,345 to 0; FAQ
+questions fall 8 and 10 to absent. Exact pathname lookups in GameSeoContent miss the
+slash. Raw saved pages remain complete. No Codex edit to the claimed SEO files.
+
+**Audit repair committed `5c71f887`:** auditLive now reads actual indexing meta and
+individual HTTP headers, with crawler scope preserved. `simLiveIndexability` drives
+13 healthy localhost URLs then 11 real response mutations, verifying the actual audit
+rejects only changed pages. Types, isolated production build, indexing, hidden-page,
+AdSense, harness-anchor and rival-name guards passed. No application, data or snapshot
+change; no deploy required. Full proof and limits:
+[September 30 Google receipt](audits/GOOGLE-READINESS-2026-09-30.md).
+
 ## LIVE 2026-09-29: Release F (660, 661, 668, 669 code, 670, 672), main `add1c6b0`
 
 Assembled in the gate clone's `release-f` worktree, pushed to main as a fast forward from `ef16139d`.

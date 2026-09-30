@@ -1,5 +1,17 @@
 # Work board
 
+**2026-09-30, Codex Round 741 COMPLETE, code `5c71f887`: the live audit reads indexing restrictions.**
+The real audit now rejects robots/googlebot noindex and none, including body tags and individual
+X-Robots-Tag headers with crawler scope. localhost outcome fence: 13 healthy pages pass, 11 changed
+responses fail for the intended reason, two untouched remain clean. Types, isolated build and six
+scoped guards green, legal-page guard green. No application/snapshot/data changes or deploy.
+**The Search Console email is resolved:** its one example is `/pack-battle`, deliberately retired and
+noindexed since Round 198. The displayed September 20 report says 68 indexed, 94 excluded (5 redirects,
+10 crawled, 1 noindex, 78 discovered). Keep the retirement tag; no validation/request was submitted.
+AdSense is confirmed Low value content, ads.txt Authorized, last update September 25 at 04:59 EDT.
+Claude's SEO release still owns the live trailing-slash guide defect recorded below. Current receipt:
+`docs/audits/GOOGLE-READINESS-2026-09-30.md`. Next free number remains **744**.
+
 **2026-09-30, Round 741 finding for Claude's release lane: trailing-slash game URLs lose their guide.**
 Fresh browser contexts confirm `/soccer-career/` drops the 11,086-character article and all 8 FAQ
 questions after React mounts; `/club-manager/` drops the 15,345-character article and all 10 FAQ
