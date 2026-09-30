@@ -1,5 +1,89 @@
 # Project state
 
+## LIVE 2026-09-30: Release G (652, 654, 655, 656, 710, 712, 713, 714, 715, 716, 717, 720, 729, 731, 742, 743, 745), main `ee67e2e3`
+
+Assembled by the desktop Claude lane in the gate clone (`release-g`, the root checkout of
+`C:\Users\antho\dukb-gate`), pushed to main as a merge of the release branch and main,
+`ee67e2e3` (it carries Codex's 741 to 759 as they stood at 19:42). **douknowball.com is serving it:** deployment `704c2b13-a506-43b5-9313-eeabf869525a`, called only after `get_project`
+showed `latest_commit_sha` `ee67e2e3`; the live entry moved from `index-_2k7DL7K.js` to `index-D1UqICV9.js`. Proof
+by content: C:/Program Files/Git/whats-new serves the five new lines (Contract Chaos, the Heisman page, the double roster fix, the respin picker, the trailing slash), /contract-chaos, /records/heisman-trophy-winners and /world-cup-2026-results answer 200 with their own snapshots, and /records/super-bowl-winners carries nine real tables where it carried none.
+
+**How it was built.** The session that built these rounds died at 14:43 EDT with every builder mid
+flight, so every branch was triaged from scratch (26 agents: tsc, its own fences and their controls,
+a rules read of the diff, the claim against what shipped, every migration read line by line). The
+review fleet that followed was stopped at 16:24 EDT when the account's meter read 90 percent of the
+5 hour window and 85 percent of the week; what it finished is on the branches. Release G is the set
+that was green as built or fixed inline; the rest is held with a named defect (below).
+
+- **745, a trailing slash no longer costs a page its guide.** Codex's Round 741 live audit found
+  /soccer-career/ dropping its 11,086 character guide and all eight FAQ questions after React mounted.
+  Seven components read the raw location.pathname; all read one normalised route now
+  (`src/lib/routePath.ts`, `useRoutePath`), `src/test/trailingSlashRoutes.test.tsx` mounts the real
+  guide block, help button and nav at both spellings, and fails with the raw read put back.
+- **743, World XI keeps the respins you picked** (footer report 2026-09-29): a stale closure in the
+  start callback made 10 or None into 3. `src/test/worldXiRespins.test.tsx`, two of three tests fail on
+  the old dependency list. Report 0732f1db resolved.
+- **742, Club Manager: the man you sign no longer turns out for the club he left** (footer report
+  2026-09-29, real and generated men alike): one choke point, `mySquadNames`, read through
+  `oppRosterFor` at every site that names the other side (their eleven, bench, subs, scorers, ratings
+  sheet, the golden boot race, the pre match danger men, the rival club viewer). The projection and its
+  cache are untouched, nothing new is drawn from the random stream. `simLiveMatch` section 10 (41
+  fixtures a seed, half of them a generated man, three seeds), control `doubleman`. Report b0f5b81b
+  resolved.
+- **652, tables reach a crawler as tables**: the prerenderer writes a table as one block with one row
+  per line; simPrerenderTables, simRecordPages and simGridArchive read rows. Live only with this
+  release's rebuilt snapshots.
+- **654, hubs name their league and their games**, breadcrumbs trail through the sport hub, the format
+  pages carry keyword links, and each big sim links its other half (simRelatedGames section 7).
+- **655, Club Manager's leagues and clubs as readable text** under the guide (simClubManagerClubList,
+  six controls, the saved page read only from this release on).
+- **656, the 2026 World Cup results page** (/world-cup-2026-results, every knockout score, every group
+  in finishing order, the awards, from the Round 395 two source file) and the MVP tables on three
+  Record Books pages; simWc2026ResultsPage (ten controls) and simRecordPages check 11. A semi final
+  loser can never read as out in the group stage (a review guard).
+- **710, one result moment**: ResultScreen mounts a shared sport coloured moment with a fixed height
+  score pill; simResultMoment is true on its own tree (the 36 games that end a run on their own surface
+  are listed with reasons, wiring them is a follow up), controls CRLF safe.
+- **712, streak history**: an eight week calendar on the profile counting only days on record, and
+  achievement unlock dates (simStreakHistory, nine controls).
+- **713, the report queue gets a workflow**: seven statuses, priority, notes, a fix reference, a game
+  filter; the migration is APPLIED (2026-09-30, 55 closed rows became Fixed, 10 open stay New) and its
+  tightened insert policy pins status, priority, admin note and fix reference to their defaults on the
+  way in, so a reporter cannot file a report pre marked Fixed with a made up admin note.
+- **714, Club Manager match centre**: keeper saves, bookings and subs in the stats, a real event timeline
+  on the report (simCmMatchCentre, six controls).
+- **715, the squad page** carries the scouts' ceiling band, wage, deal and worth on every row, sorts, and
+  opens a row on tap (simSquadRows, eight controls, 83 saves).
+- **716, today's standing on the ten daily games**, counted in the database on the Eastern day by best
+  score per name, hidden under 20 players; the read only `daily_score_standing` function is APPLIED
+  (2026-09-30; `idx_game_completions_day_game` and the public read policy confirmed on production first).
+  No daily game has reached 20 players on any Eastern day in the last 30 days, so the panel is hidden
+  everywhere until one does.
+- **717, the home page remembers**: a Continue playing row from held saves and favourite sport chips
+  (simHomeFront sections 7 and 8, playHomeFold section 6).
+- **720, new game Contract Chaos**: five seasons of offers off the shared free agency engine, scored 0
+  to 100; simContractChaos (seven sections, six anchored controls). Its caps row is APPLIED (unscored
+  plays while the points economy is rebuilt).
+- **729, the Heisman**: all 91 winners verified against heisman.com and ESPN, 23 position codes
+  corrected on production (APPLIED 2026-09-30, fail closed on all 91 rows before and after), a Record
+  Books page at /records/heisman-trophy-winners, simHeisman (seven controls) and simRecords.
+- **731, NASCAR champions**: 77 seasons verified against nascar.com and Racing Reference, six fields
+  corrected on production (APPLIED 2026-09-30 behind before and after md5 guards), three wins counts
+  set to NULL where the league and the reference disagree, simNascarChampions (seven controls).
+
+**Held out of G, each with a named defect** (fix on its own branch, queued): 653 (227 listed College
+Basketball answers the game's own name lookup rejects, because `byNormalizedName` keeps the last
+namesake; the live College Grid refuses Danny Manning at Kansas for the same reason), 703 (four hand
+typed franchise code maps with no fence, a promised harness that does not exist), 706 (fence missing;
+its five migrations wait for 653), 707 (fence missing, the sibling Connect 4 validator untouched), 708
+(harness crashes at module scope, rival names, dashes; claim narrowed to soccer_awards), 711 (no
+harness), 718 (no harness; Career Ladder only, Clue Auction has no daily mode), 719 (three rival name
+strings, no harness), 730 (fence missing, 24 rival name hits), 732 (an em dash in a regex, a source
+question, a score wipe with no backup), 733 and 734 (fence missing; 734's record states a false fact
+15 times about Red Bull drivers). Round 669's data step runs at 00:03 America/New_York on 2026-10-01.
+
+**Gates.** tsc 0 on the release tree and again on the tree merged with Codex's 741 to 759. Six vitest files, 57 tests green. The 44 harness gate (the fifteen snapshot readers CLAUDE.md names plus every fence a merged round ships) ran twice in two lanes on the built tree: 38 of 44, then, after six integration fixes with 41 controls firing, 44 of 44; nine of them rerun green on the merged tree. Browser: playSoftFourOhFour green, playSnapshotDrift green (nothing a crawler reads depends on the day), sweepWeight green after four budgets were raised with their measured reasons (/club-manager 626K, /minefield 280K, /footle 320K, /front-office 300K; the shared result moment, the native share sheet and the hub trail sit in chunks every game loads). Two walks are owed a quiet machine: playHomeFold timed out loading the page while twelve fixers ran, and playRenderStability crashed the browser the same way and left 35 routes unchecked (simPrerender section 16, the source side of the same rule, is green). Migrations applied on production, each behind its own guards: 720, 731, 713, 716, 729; get_advisors shows no error level item. Not run: the full runAllSims on this tree (the 44 above and the release's own fences are the evidence; the full suite runs on the release H tree).
+
 ## BUILT 2026-09-30: six further Codex rounds 754 through 759 complete
 
 757 arcade help clears the logo/ticker and has 44px targets. 759 rules dialogs return focus to their

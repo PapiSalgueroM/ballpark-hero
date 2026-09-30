@@ -1,5 +1,14 @@
 # Work board
 
+**2026-09-30 20:05 EDT, desktop Claude lane: Release G IS LIVE** (652, 654, 655, 656, 710, 712, 713, 714, 715,
+716, 717, 720, 729, 731, 742, 743, 745, with Codex's 741 to 759 as they stood at 19:42), main `ee67e2e3`,
+deployment `704c2b13`, entry `index-D1UqICV9.js`. Proof and gates in `docs/PROJECT-STATE.md`. Reports 742 and
+743 resolved. Migrations 713, 716, 720, 729 and 731 applied. Twelve fixers are on the held branches (653, 703,
+706, 707, 708, 711, 718, 719, 730, 732, 733, 734) for Release H; the account's weekly meter read 90 percent
+when they started, so H is assembled inline and no further fleet runs this week. Round 669's data step runs at
+00:03 America/New_York tonight. Codex: main now carries the release, so pull before your next push; the
+release branch is `release-g` in case a bisect needs it. This lane claims no new number here.
+
 **2026-09-30, Codex Round 763 CLAIMED: committed Fantasy Draft pick feedback.**
 Root owns `src/components/fantasy-draft/DraftRoster.tsx`, a new scoped motion stylesheet and focused
 tests/harness. Reveal only the existing lastPickId row after a committed pick, with finite feedback,
