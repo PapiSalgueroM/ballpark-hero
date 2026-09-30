@@ -30,7 +30,7 @@
  * function of its seed and the choices made, which is what lets the daily be
  * the same club, the same takeover week and the same target for everyone, and
  * lets an unfinished run be rebuilt after a refresh from nothing but the seed
- * and the list of choices. Each match draws from the stream for its own step
+ * and the list of choices. Each match draws from the stream for its own match
  * number rather than for the choice, so two players who make different calls
  * on the same day face the same dice and the difference is the calls.
  *
@@ -230,7 +230,9 @@ export interface HotSeatRun {
   leash: number;
   leaguePlayed: number;
   points: number;
-  /** Engine calls made since the takeover, the stream each one draws from. */
+  /** Engine calls made since the takeover. The seeds come from the match
+   *  and action counts, not from this, so a press answer never shifts the
+   *  dice of the matches after it. */
   step: number;
   log: HotSeatMatch[];
   actions: HotSeatAction[];
@@ -304,7 +306,7 @@ function skipToMatch(run: HotSeatRun): void {
   while (guard++ < 10) {
     const fx = nextFixture(run.state);
     if (fx.kind !== 'window') return;
-    const r = withSeed(mixSeed(run.setup.seed, 5000 + run.step), () => playNextEntry(run.state, { skipHalftime: true }));
+    const r = withSeed(mixSeed(run.setup.seed, 5000 + run.log.length * 16 + guard), () => playNextEntry(run.state, { skipHalftime: true }));
     run.step += 1;
     run.state = r.state;
   }
@@ -442,7 +444,8 @@ export function playHotSeatMatch(prev: HotSeatRun, mentality: Mentality, talk: T
   skipToMatch(run);
   const before = run.state.boardConfidence;
   const ready: CareerState = { ...run.state, mentality, teamTalk: talk };
-  const r = withSeed(mixSeed(run.setup.seed, 1000 + run.step), () => playNextEntry(ready, { skipHalftime: true }));
+  /* The nth match of the job draws stream n, whatever was said in between. */
+  const r = withSeed(mixSeed(run.setup.seed, 1000 + run.log.length), () => playNextEntry(ready, { skipHalftime: true }));
   run.step += 1;
   run.state = r.state;
   if (r.kind === 'match' && r.report) {
@@ -489,7 +492,7 @@ export function answerHotSeatPress(prev: HotSeatRun, optionIdx: number): HotSeat
   if (!q || !q.options[optionIdx]) return prev;
   const run = cloneRun(prev);
   run.actions.push({ t: 'press', i: optionIdx });
-  run.state = withSeed(mixSeed(run.setup.seed, 3000 + run.step), () => answerPress(run.state, optionIdx));
+  run.state = withSeed(mixSeed(run.setup.seed, 3000 + run.actions.length), () => answerPress(run.state, optionIdx));
   run.step += 1;
   return run;
 }
