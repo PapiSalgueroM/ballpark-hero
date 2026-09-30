@@ -1,9 +1,13 @@
-import { supabase } from '@/integrations/supabase/client';
-import { recordGameCompletion as recordStreakCompletion, getEtDateString, getStreakState } from '@/lib/streaks';
-import { knownCap, primeScoreCaps } from '@/lib/scoreCaps';
+import { recordGameCompletion as recordStreakCompletion, getEtDateString } from '@/lib/streaks';
 import { nameModerationError } from '@/lib/nameModeration';
 
 /**
+ * Round 679: this file keeps who a row is filed under (the guest handle, the
+ * cached display name, the public name) and the local today count. The
+ * writers moved to src/lib/playLedger.ts, the one module that inserts into
+ * game_completions or calls the door; this file writes nothing to the
+ * database. What follows is the history of the table those writers feed.
+ *
  * Wave 3: anonymous, sitewide completion tracking.
  *
  * public.game_completions (id, game text, completed_on date default utc-today,
@@ -80,15 +84,37 @@ const HANDLE_RIGHT = [
    the dash), so this test can only ever catch a pre-Round-299 handle. */
 const LEGACY_HANDLE = /^Baller-\d+$/;
 
+function mint(): string {
+  const left = HANDLE_LEFT[Math.floor(Math.random() * HANDLE_LEFT.length)];
+  let right = HANDLE_RIGHT[Math.floor(Math.random() * HANDLE_RIGHT.length)];
+  /* never a doubled word; when the doubled word IS Baller, the old
+     fallback was a no-op and minted "BallerBaller" (Round 318 fix) */
+  if (right === left) right = left === 'Baller' ? 'Volley' : 'Baller';
+  return `${left}${right}-${Math.floor(10 + Math.random() * 90)}`;
+}
+
+/**
+ * Round 679: a fresh handle in place of one the board refused because another
+ * account owns that name (economy step E3's name rule). Only this browser's
+ * own stored handle is replaced, so a signed in name or a name handed in by a
+ * caller is never touched; returns the new handle, or null when the refused
+ * name is not the stored one. src/lib/playLedger.ts calls it once per refused
+ * row and sends that row once more, never twice.
+ */
+export function remintGuestHandle(refused: string): string | null {
+  try {
+    if (!refused || localStorage.getItem(GUEST_HANDLE_KEY) !== refused) return null;
+    let fresh = mint();
+    for (let i = 0; i < 4 && fresh === refused; i += 1) fresh = mint();
+    if (fresh === refused) return null;
+    localStorage.setItem(GUEST_HANDLE_KEY, fresh);
+    return fresh;
+  } catch {
+    return null;
+  }
+}
+
 export function getGuestHandle(): string {
-  const mint = () => {
-    const left = HANDLE_LEFT[Math.floor(Math.random() * HANDLE_LEFT.length)];
-    let right = HANDLE_RIGHT[Math.floor(Math.random() * HANDLE_RIGHT.length)];
-    /* never a doubled word; when the doubled word IS Baller, the old
-       fallback was a no-op and minted "BallerBaller" (Round 318 fix) */
-    if (right === left) right = left === 'Baller' ? 'Volley' : 'Baller';
-    return `${left}${right}-${Math.floor(10 + Math.random() * 90)}`;
-  };
   try {
     const existing = localStorage.getItem(GUEST_HANDLE_KEY);
     if (existing && !LEGACY_HANDLE.test(existing)) return existing;
@@ -189,20 +215,6 @@ function getCachedDisplayName(): string | null {
 }
 
 /**
- * Round 301, audit finding 2: the ACTIVITY ping, distinct from a completion.
- * The four front office boards and the four my career boards ping after
- * every simulated round so Most Played Today reflects live play. (Club
- * Manager and Soccer Career keep recordCompletion for a FINISHED SEASON and
- * a retirement, which are genuine plays. Round 392 moved their per match
- * and per season pings here too: Round 157 had put a completion after every
- * Club Manager match, and this comment believed it fired once a season.) That ping used to be recordCompletion back when it only wrote
- * the anonymous row; Round 300's fan out silently upgraded it, so one
- * fifteen season career counted as sixteen plays, sixteen ranked rows and a
- * diluted average. This is the old shape on purpose: the anonymous row and
- * the local today count, NO streak record, NO signed in save. A real finish
- * still goes through recordCompletion, exactly once.
- */
-/**
  * Round 399: the local streak day, on its own. Round 392 moved Club Manager's
  * match pings and Soccer Career's season pings onto recordActivity, which
  * writes the anonymous row and nothing else, and that silently stopped a
@@ -221,243 +233,6 @@ export function recordStreakDay(gamePath: string): void {
   }
 }
 
-export function recordActivity(gamePath: string, score?: number, playerName?: string): void {
-  try {
-    const game = gamePath.replace(/^\//, '');
-    if (!game) return;
-    const row: { game: string; score?: number; player_name?: string } = { game };
-    if (typeof score === 'number' && Number.isFinite(score)) row.score = score;
-    row.player_name = playerName || getCurrentPlayerName();
-    (supabase.from as any)('game_completions')
-      .insert(row)
-      .then(({ error }: { error: unknown }) => {
-        if (error) console.debug('[completions] activity insert failed (ignored):', error);
-        else { try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ } }
-      });
-    bumpLocalTodayCount(game);
-  } catch {
-    // Never let a tracking failure break gameplay.
-  }
-}
-
-/**
- * Round 645: a finished run that is NOT the daily is a play, never a record.
- *
- * Thirty five live games (thirty six counting Guess The Club, retired and
- * redirected to the home page) carry a daily and a free mode (Unlimited,
- * free play, a new season, versus) under one slug, and until this round
- * their free finishes went through recordCompletion exactly like the
- * daily: a scored
- * game_completions row, so the day board's "best" was the best of as many
- * attempts as a player cared to make; the signed in save, so every attempt
- * paid its score into total_points and ticked daily_completions for a
- * daily that was never played. Face Off was the one game that already told
- * the two apart (the daily through useGameCompletion, any other match a
- * bare recordCompletion with no score, which still made the signed in save
- * with a zero), and this is that shape lifted into the recorder itself:
- * useGameCompletion takes a `ranked` flag and routes an unranked finish here.
- *
- * What an unranked play writes: the anonymous game_completions row with NO
- * score (a play for Most Played Today, never a ranked row: the board reads
- * scored rows only), under the same name the ranked door files under (the
- * hook passes getCurrentPlayerName(profile), so a signed in player whose
- * cached display name is empty is not filed under the guest handle), the
- * local streak day and the local today set (the player played a game today,
- * which is what Games Today counts on the game header and the profile,
- * through src/lib/gamesToday.ts, and the home page's Played today chip).
- * What it never writes: a score, the signed in save (no points, no
- * user_game_scores row, no best score) and daily_completions (the daily
- * key, which the Daily Checklist and Daily Legend read).
- * scripts/simRankedRecorder.mjs reads this body and fails if any of those
- * come back, or if the row, the streak day or the today set go.
- */
-export function recordUnrankedPlay(gamePath: string, playerName?: string): void {
-  try {
-    const game = gamePath.replace(/^\//, '');
-    if (!game) return;
-    (supabase.from as any)('game_completions')
-      .insert({ game, player_name: playerName || getCurrentPlayerName() })
-      .then(({ error }: { error: unknown }) => {
-        if (error) console.debug('[completions] unranked insert failed (ignored):', error);
-        else { try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ } }
-      });
-    recordStreakCompletion(game, new Date(), 0);
-    bumpLocalTodayCount(game);
-  } catch {
-    // Never let a tracking failure break gameplay.
-  }
-}
-
-/**
- * Fire-and-forget insert into game_completions. Never throws, never blocks
- * gameplay: any failure (network, RLS, offline) is caught and swallowed.
- *
- * @param gamePath the game's route path, e.g. '/soccer-grid'. Leading slash
- * is stripped so the stored value is a bare slug like the rest of the site's
- * conventions (gameRegistry paths minus the leading '/').
- * @param score optional numeric score for this completion. Omitted/undefined
- * keeps the row out of leaderboard aggregation (score stays null) but the
- * insert still happens, matching the table's nullable-by-design column.
- * @param playerName optional display handle to attribute the score to. If
- * omitted, falls back to getCurrentPlayerName() with no profile (i.e. the
- * local guest handle), so every insert always carries some name.
- */
-export function recordCompletion(gamePath: string, score?: number, playerName?: string, correctAnswers = 0): void {
-  try {
-    const game = gamePath.replace(/^\//, '');
-    if (!game) return;
-
-    const row: { game: string; score?: number; player_name?: string } = { game };
-    if (typeof score === 'number' && Number.isFinite(score)) {
-      row.score = score;
-    }
-    row.player_name = playerName || getCurrentPlayerName();
-
-    // Supabase client typings don't know about game_completions yet (it was
-    // added directly via SQL, not through a generated-types migration), so
-    // this table is addressed dynamically rather than through the typed
-    // `.from()` overloads.
-    (supabase.from as any)('game_completions')
-      .insert(row)
-      .then(({ error }: { error: unknown }) => {
-        if (error) {
-          // Swallow silently, this must never surface to the player.
-          console.debug('[completions] insert failed (ignored):', error);
-        } else {
-          /* Round 157: tell the header a play just landed, so games-played,
-             points and rank move while you are actually playing instead of
-             waiting for the next poll. */
-          try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ }
-        }
-      });
-
-    /* Round 300: THE ONE RECORDER. Before this round there were three
-       pipelines and which ones a game fed depended on which helper it
-       happened to call: the 19 useGameCompletion games fed all three, the
-       direct callers fed only the anonymous row, so a signed in player could
-       finish a Club Manager season or any of Round 299's fourteen games and
-       watch their flame, their points and their rank not move. Now every
-       path through this function feeds all three: the anonymous row above,
-       the local streak record here, and the signed in save below when a
-       session exists. useGameCompletion no longer writes any of this
-       itself, it calls this function like everybody else, so nothing counts
-       twice. */
-    /* Round 648: the browser's tally is credited by the profile's rule
-       (src/lib/pointsRule.ts): one row per game per day at the day's best,
-       capped by public.game_score_caps, and nothing for a play above what
-       the server can store, which is where a Pack Battle pack's banked
-       dollars land. The cap comes from this browser's cached copy of the
-       table (src/lib/scoreCaps.ts); when there is none yet the play is held
-       and settled by the read kicked off just below. */
-    recordStreakCompletion(game, new Date(), typeof score === 'number' && Number.isFinite(score) ? score : 0, knownCap(game));
-    primeScoreCaps().catch(() => { /* the next play tries again; the held play waits */ });
-
-    /* Round 569: getSession, not getUser. getUser is a network round trip to
-       the auth server, and every round trip in front of the save widens the
-       window in which a player closing the tab loses the play's points (the
-       interrupted save this round measured). getSession reads the session
-       this browser already holds. That is safe because the save itself is
-       authenticated on the server: record_auth_completion takes the player
-       from auth.uid(), so a stale or forged local session is refused there
-       rather than trusted here. */
-    supabase.auth.getSession()
-      .then(({ data }) => {
-        const user = data?.session?.user;
-        if (user) return saveAuthCompletion(user.id, game, typeof score === 'number' && Number.isFinite(score) ? score : 0, correctAnswers);
-      })
-      .then(saved => {
-        if (saved) {
-          try { window.dispatchEvent(new Event('game-completion-saved')); } catch { /* SSR/harness */ }
-        }
-      })
-      .catch(() => { /* signed out or auth unreachable: the play still counted above */ });
-
-    bumpLocalTodayCount(game);
-  } catch {
-    // Never let a tracking failure break gameplay.
-  }
-}
-
-/**
- * Round 300 moved the signed in save out of useGameCompletion so every
- * recordCompletion caller feeds it. It writes user_game_scores,
- * daily_completions, the user_scores row the navbar and leaderboard read, and
- * user_best_scores. All errors are swallowed by the caller: a stats failure
- * must never surface to the player.
- *
- * ROUND 569: IT IS ONE ATOMIC DATABASE CALL NOW, BECAUSE THE OLD SHAPE LOST
- * PLAYERS' POINTS. Until this round this function made six sequential round
- * trips, and the fourth READ total_points so the fifth could WRITE back the
- * value it read plus the new score. Measured on the live tables on
- * 2026-09-14: 34 of 488 signed in accounts held fewer total points than their
- * own recorded plays add up to, 19,857 points in all, the worst account short
- * by 3,170. This function was the only writer of both tables (no trigger, no
- * database function), so they could only disagree two ways, and the data
- * carried the fingerprint of both:
- *
- *   an INTERRUPTED SAVE: the score row lands, the player closes the tab, the
- *   total never updates. Many accounts are short by exactly their final
- *   play's score (1,000 and a last play of 1,000; 600 and 600) with no plays
- *   near each other;
- *
- *   a LOST UPDATE: two saves read the same total and each writes back total
- *   plus its own score, so one vanishes. The heaviest accounts carry
- *   hundreds of plays within five seconds of the previous one, and shortfalls
- *   that match no single score.
- *
- * It also generated error noise that buried real faults: 177 duplicate key
- * violations a day, because the daily mark was de-duplicated by letting the
- * insert FAIL on its unique constraint, and 57 PostgREST 406s a day from
- * .single() against a player's first ever row.
- *
- * record_auth_completion (supabase/migrations/..._record_auth_completion.sql)
- * does all four writes in one transaction. total_points is incremented in
- * place by INSERT ... ON CONFLICT DO UPDATE, which locks the row, so racing
- * saves serialise and every one adds. The daily mark is ON CONFLICT DO
- * NOTHING. It is SECURITY INVOKER, so each table's existing row level
- * security (`auth.uid() = user_id`) still decides, and the player comes from
- * auth.uid() on the server.
- *
- * `userId` is therefore NOT sent to the save, so nothing a client passes can
- * credit another account. It is still used by the best effort profile streak
- * backup below, which the profiles table's own row level security gates.
- *
- * Returns true only when the database confirmed the save. The old version
- * returned true whether or not its writes succeeded, so the header announced
- * a save that may never have happened.
- *
- * NOT DONE HERE, on purpose: the 19,857 points already lost are not restored.
- * How historical points are treated is an open decision owed by the owner
- * (docs/PROJECT-STATE.md, the repeat saves across 152 accounts), and restoring
- * these would move the same public board he has not decided about yet.
- */
-export async function saveAuthCompletion(userId: string, gameSlug: string, score: number, correctAnswers: number): Promise<boolean> {
-  const { error } = await (supabase.rpc as any)('record_auth_completion', {
-    p_game_slug: gameSlug,
-    p_score: score,
-    p_correct: correctAnswers,
-  });
-  if (error) {
-    console.debug('[completions] signed in save refused (ignored):', error);
-    return false;
-  }
-
-  /* Round 301, audit finding 15: back up the local streak state to the
-     profile on every signed in save. useStreaks had this sync, but only
-     inside a method nothing called after Round 300 hollowed the hook, so
-     profiles.streak_state was never written and a cleared cache erased a
-     streak forever. Best effort, replicated from useStreaks verbatim:
-     dynamic access because the column is newer than the generated types. */
-  try {
-    await (supabase.from as any)('profiles').upsert(
-      { user_id: userId, streak_state: getStreakState(), updated_at: new Date().toISOString() },
-      { onConflict: 'user_id' },
-    );
-  } catch { /* best effort only */ }
-
-  return true;
-}
-
 /**
  * Local, same-browser tracking of which games were completed today, used as
  * the instant/optimistic half of the header's daily score chip so it doesn't
@@ -473,7 +248,7 @@ export async function saveAuthCompletion(userId: string, gameSlug: string, score
  * reset of the optimistic chip, acceptable because the server's distinct
  * count backstops signed in players and tomorrow starts clean anyway.
  */
-function bumpLocalTodayCount(game: string): void {
+export function bumpLocalTodayCount(game: string): void {
   try {
     const today = todayStr();
     const raw = localStorage.getItem(LOCAL_TODAY_KEY);
