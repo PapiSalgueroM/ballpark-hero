@@ -84,6 +84,7 @@ const NbaGauntletDraft = lazy(() => import("./pages/NbaGauntletDraft"));
 const MlbGauntletDraft = lazy(() => import("./pages/MlbGauntletDraft"));
 const NflGauntletDraft = lazy(() => import("./pages/NflGauntletDraft"));
 const ClubManager = lazy(() => import("./pages/ClubManager"));
+const ManagerHotSeat = lazy(() => import("./pages/ManagerHotSeat"));
 const StadiumTycoon = lazy(() => import("./pages/StadiumTycoon"));
 const WonderkidFactory = lazy(() => import("./pages/WonderkidFactory"));
 const ListQuiz = lazy(() => import("./pages/ListQuiz"));
@@ -405,6 +406,7 @@ const AppContent = () => {
         <Route path="/mlb-gauntlet-draft" element={<MlbGauntletDraft />} />
         <Route path="/nfl-gauntlet-draft" element={<NflGauntletDraft />} />
         <Route path="/club-manager" element={<ClubManager />} />
+        <Route path="/manager-hot-seat" element={<ManagerHotSeat />} />
         <Route path="/stadium-tycoon" element={<StadiumTycoon />} />
         <Route path="/wonderkid-factory" element={<WonderkidFactory />} />
         <Route path="/list-quiz" element={<ListQuiz />} />
