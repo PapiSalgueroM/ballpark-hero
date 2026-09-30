@@ -57,6 +57,14 @@
  *      word of a name, from that section's rows (who won how many is computed,
  *      never typed), and every "since YYYY" in them is the first year the rows
  *      hold.
+ *  11. The MVP tables (Round 656). Every section whose table has a column keyed
+ *      mvp names its award in words.mvp, and its page carries exactly one "Most
+ *      <award> awards, <first> to <latest>" table, the span being the years the
+ *      column holds. Recounted here from the JSON per name as the line writes
+ *      it: every name with two or more, counts, years, order, the leader line,
+ *      the "names appear once" line, and a counting note above the leader that
+ *      names the years the column leaves blank and any line naming two players.
+ *      A section with no such column carries no MVP heading.
  *
  * NEGATIVE CONTROLS. RECORD_PAGES_CONTROL=<name> breaks one input, in memory,
  * for the one check it targets, and the run is green only if THAT check went
@@ -90,6 +98,7 @@ const CONTROLS = {
   fulltable: 8, indexleader: 8,
   hashlink: 9, genericlabel: 9, jsxlabel: 9,
   blurbcount: 10, blurbsince: 10, shortcount: 10,
+  mvpleader: 11, mvpcount: 11, mvpwords: 11,
 };
 const CONTROL = process.env.RECORD_PAGES_CONTROL || '';
 
@@ -816,6 +825,131 @@ console.log('10) blurbs and notes carry no counts next to a name, and every "sin
     }
   }
   console.log(`   ${sentencesRead} sentences read, ${sinceChecked} "since" years checked against the rows`);
+}
+
+/* ======================================================================= */
+current = 11;
+console.log('11) every MVP column is counted into its own table, per name as written, span bound to the column');
+{
+  let tables = 0;
+  const firstMvp = RECORD_SECTIONS.find(d => d.columns.some(([k]) => k === 'mvp'));
+  for (const def of RECORD_SECTIONS) {
+    const col = def.columns.find(([k]) => k === 'mvp');
+    let html = saved.get(def.slug);
+    if (!html) { fail(`${def.key}: no saved page to read`); continue; }
+    let mvpWord = def.words.mvp;
+    if (CONTROL === 'mvpwords' && def === firstMvp) {
+      if (!mvpWord) refuse(`${def.key} has no words.mvp to take away`);
+      mvpWord = undefined;
+    }
+    const isMvpHeading = l => tagOf(l) === 'h2' && / MVP awards, \d{4} to \d{4}$/.test(textOf(l));
+    if (!col) {
+      if (mvpWord) fail(`${def.key}: words.mvp is set and the table has no MVP column to count`);
+      if (bodyLines(html).some(isMvpHeading)) fail(`${def.key}: an MVP heading on a page whose table has no MVP column`);
+      continue;
+    }
+    if (!mvpWord) { fail(`${def.key}: the table has an MVP column and the section has no words.mvp, so its page has no MVP table`); continue; }
+
+    /* the recount, written here: one award per line for the name as the line writes it */
+    const rows = rowsOf(def);
+    const named = rows.filter(r => String(r.extra[col[0]] ?? '').trim() !== '').map(r => ({ year: r.year, name: String(r.extra[col[0]]).trim() }));
+    if (!named.length) { fail(`${def.key}: the MVP column is empty in recordBooks.json`); continue; }
+    const by = new Map();
+    for (const r of named) {
+      if (!by.has(r.name)) by.set(r.name, []);
+      by.get(r.name).push(r.year);
+    }
+    const all = [...by.entries()].map(([name, ys]) => ({ name, count: ys.length, years: [...ys].sort((a, b) => a - b) }));
+    const multi = all.filter(x => x.count >= 2);
+    const listed = multi.length ? multi : all;
+    const once = multi.length ? all.length - multi.length : 0;
+    const top = Math.max(...all.map(x => x.count));
+    const topNames = all.filter(x => x.count === top).map(x => x.name).sort((a, b) => a.localeCompare(b));
+    const first = Math.min(...named.map(r => r.year));
+    const latest = Math.max(...named.map(r => r.year));
+    const withName = new Set(named.map(r => r.year));
+    const blank = [...new Set(rows.map(r => r.year))].filter(y => !withName.has(y)).sort((a, b) => a - b);
+    const shared = named.filter(r => / & | and /.test(r.name)).sort((a, b) => a.year - b.year);
+
+    if (CONTROL === 'mvpleader' && def === firstMvp) {
+      /* a wrong MVP leader: the runner up's name where the real leader's stands */
+      const intruder = [...all].sort((a, b) => b.count - a.count || a.name.localeCompare(b.name)).find(x => !topNames.includes(x.name));
+      if (!intruder) refuse(`${def.key} has nobody behind the MVP leader to put in front`);
+      html = mutateSaved(def.slug, `<p>Out in front: ${esc(join(topNames))}, ${top} `, `<p>Out in front: ${esc(intruder.name)}, ${top} `, 'mvpleader');
+    }
+    if (CONTROL === 'mvpcount' && def === firstMvp) {
+      const row = all.find(x => x.name === topNames[0]);
+      html = mutateSaved(def.slug, `<p>${esc(row.name)}</p>\n<p>${row.count}</p>`, `<p>${esc(row.name)}</p>\n<p>${row.count + 1}</p>`, 'mvpcount');
+    }
+
+    const before = failedChecks.get(11) || 0;
+    const lines = bodyLines(html);
+    const heading = `Most ${mvpWord} awards, ${first} to ${latest}`;
+    const mvpH2s = lines.filter(isMvpHeading).map(textOf);
+    if (mvpH2s.length !== 1) fail(`${def.key}: ${mvpH2s.length} MVP headings, expected exactly one`);
+    const sec = sectionAfter(lines, heading);
+    if (!sec) { fail(`${def.key}: no h2 ${JSON.stringify(heading)}, the span the column holds`); continue; }
+    const texts = sec.map(textOf);
+    const ps = sec.filter(l => tagOf(l) === 'p');
+
+    const head = ['Player', 'Awards under this name', 'Years'].map(c => `<p>${esc(c)}</p>`);
+    const h = ps.findIndex((l, i) => l === head[0] && ps[i + 1] === head[1] && ps[i + 2] === head[2]);
+    if (h < 0) { fail(`${def.key}: the MVP table has no Player / Awards under this name / Years header`); continue; }
+    const got = new Map();
+    let prev = Infinity, i = h + 3, ordered = true;
+    while (i + 2 < ps.length && /^\d+$/.test(textOf(ps[i + 1])) && /^\d{4}(, \d{4})*$/.test(textOf(ps[i + 2]))) {
+      const n = Number(textOf(ps[i + 1]));
+      if (n > prev) ordered = false;
+      prev = n;
+      got.set(textOf(ps[i]), { n, yrs: textOf(ps[i + 2]) });
+      i += 3;
+    }
+    if (!ordered) fail(`${def.key}: the MVP table is not in order, most first`);
+    for (const x of listed) {
+      const g = got.get(x.name);
+      if (!g) { fail(`${def.key}: ${x.name} has ${x.count} MVP awards and is missing from the table`); continue; }
+      if (g.n !== x.count) fail(`${def.key}: ${x.name} shows ${g.n} MVP awards, the rows give ${x.count}`);
+      if (g.yrs !== x.years.join(', ')) fail(`${def.key}: ${x.name} shows MVP years ${g.yrs}, the rows give ${x.years.join(', ')}`);
+    }
+    for (const name of got.keys()) if (!listed.some(x => x.name === name)) fail(`${def.key}: ${name} is in the MVP table and should not be`);
+
+    const onceWant = `${once} more ${once === 1 ? 'name appears' : 'names appear'} once in the ${col[1]} column.`;
+    const onceGot = texts.find(t => / once in the .+ column\.$/.test(t));
+    if (once > 0 && onceGot !== onceWant) fail(`${def.key}: the once line reads ${JSON.stringify(onceGot ?? '(missing)')}, the rows give ${JSON.stringify(onceWant)}`);
+    if (once === 0 && onceGot) fail(`${def.key}: the page says ${JSON.stringify(onceGot)} and every listed name won more than once`);
+
+    const frontAt = texts.findIndex(t => t.startsWith('Out in front: '));
+    const noteAt = texts.findIndex(t => t.startsWith('How we counted: '));
+    if (frontAt < 0) fail(`${def.key}: no "Out in front" line under the MVP heading`);
+    else {
+      const m = texts[frontAt].match(/^Out in front: (.+), (\d+) (awards?)( each)?\.$/);
+      if (!m) fail(`${def.key}: cannot read ${JSON.stringify(texts[frontAt])}`);
+      else {
+        /* no MVP line holds ", " or " and ", checked rather than assumed, so a joined
+           list splits back into names; otherwise the whole string is compared */
+        const splittable = all.every(x => !/, | and /.test(x.name));
+        const gotNames = splittable ? m[1].split(/, | and /).sort((a, b) => a.localeCompare(b)) : [m[1]];
+        const wantNames = splittable ? topNames : [join(topNames)];
+        if (JSON.stringify(gotNames) !== JSON.stringify(wantNames)) fail(`${def.key}: the MVP leader line names ${JSON.stringify(gotNames)}, the rows give exactly ${JSON.stringify(wantNames)}`);
+        if (Number(m[2]) !== top) fail(`${def.key}: the MVP leader line gives ${m[2]}, the rows give ${top}`);
+        if (m[3] !== (top === 1 ? 'award' : 'awards') || Boolean(m[4]) !== (topNames.length > 1)) fail(`${def.key}: "${texts[frontAt]}" words the count wrongly`);
+      }
+    }
+    if (noteAt < 0) fail(`${def.key}: no counting note under the MVP heading`);
+    else {
+      const note = texts[noteAt];
+      if (frontAt >= 0 && noteAt > frontAt) fail(`${def.key}: the MVP counting note comes after the leader, so a reader meets the count before the rule`);
+      if (!note.includes(`each line in the ${col[1]} column counts for the player name exactly as the table writes it`)) fail(`${def.key}: the MVP note does not say each line counts for the name exactly as written`);
+      const blankPart = (note.match(/Nothing is listed in that column for ([^.]*?), so no award/) || [])[1] || '';
+      if (JSON.stringify(yearsIn(blankPart)) !== JSON.stringify(blank)) fail(`${def.key}: the MVP note names blank years ${JSON.stringify(yearsIn(blankPart))}, the rows leave ${JSON.stringify(blank)}`);
+      const sharedSaid = [...note.matchAll(/The (\d{4}) line names more than one player \(([^)]*)\)/g)].map(x => `${x[1]} ${x[2]}`);
+      const sharedWant = shared.map(s => `${s.year} ${s.name}`);
+      if (JSON.stringify(sharedSaid) !== JSON.stringify(sharedWant)) fail(`${def.key}: the MVP note names shared lines ${JSON.stringify(sharedSaid)}, the rows have ${JSON.stringify(sharedWant)}`);
+    }
+    if ((failedChecks.get(11) || 0) === before) tables += 1;
+  }
+  const cols = RECORD_SECTIONS.filter(d => d.columns.some(([k]) => k === 'mvp')).length;
+  console.log(`   ${tables} of ${cols} sections with an MVP column carry a table that matches the recount`);
 }
 
 /* ======================================================================= */
