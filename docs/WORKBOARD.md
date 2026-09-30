@@ -1,5 +1,24 @@
 # Work board
 
+**2026-09-30, Codex Rounds 750 and 751 CLAIMED: phone grid fit and shared trade animations.**
+750 owns the two existing GridBoard components, a new scoped content layout stylesheet and focused
+fit tests/harness. The 749 browser audit found a pre-existing 320px long-name cell expansion from
+67.5px to 114.25px. Keep the board square through correct answers, preserve full accessible names,
+rarity and callbacks, and prove the geometry regression with a real browser negative control.
+751 owns `src/components/front-office-shared/TradeTalksCard.tsx`, its new scoped stylesheet and
+focused tests/harness. Add finite entrance, newest-reply and agreed/ended feedback shared by NFL,
+NBA, MLB and NHL Front Office, with static reduced-motion states and immediate existing buttons.
+Preserve all engine-authored lines, packages, callback identities and negotiation rules. No parent
+pages, engines, validators, data, save/completion, global styles or other Claude-owned paths.
+Codex also owns its existing 746/747 wrapper output correction: both rendered suites passed, but
+the common runner correctly rejected their one-line reports as EMPTY. Report real test output so
+the discoverable suite can verify that they ran. Claude retains earlier claims and publication.
+Next free number is **752**.
+
+**747 coordination receipt:** read the held `r673-lock-doors` migration. Round 747 adds only a pure
+reserved-name predicate and an invoker profile trigger. It creates no account write RPC or second
+write path, changes no grants on profiles, and also runs on writes from 673's future fixed save RPC.
+
 **2026-09-30, Codex Round 747 COMPLETE: reserved profile names, database applied.**
 The existing moderation helper now reserves administrative names and clear site-account combinations,
 including case, punctuation, common substitutions and numeric suffixes, while preserving ordinary
