@@ -65,6 +65,17 @@ export type GridDifficulty = 'easy' | 'normal' | 'hard';
 export interface FranchisePlayer {
   name: string;
   franchises: Set<string>;
+  /** The source's own id for this player, present only when the fetch was
+      asked for it (see GridFetchOptions). The games never ask. */
+  id?: string;
+}
+
+/** Round 653: what a caller can ask the fetch for beyond what the game needs.
+    The grid archive counts players by id, because a table can hold the same
+    player twice or two players under one name, and the page cannot. The games
+    do not need ids, so they do not download the column. */
+export interface GridFetchOptions {
+  withIds?: boolean;
 }
 
 export interface FranchiseGridData<P extends FranchisePlayer> {
@@ -85,6 +96,8 @@ export interface FranchiseGridConfig<P extends FranchisePlayer> {
   toPlayer: (raw: Record<string, unknown>) => P | null;
   /** Below this many indexed players the fetch is treated as broken and the page shows its error state. */
   minPoolSize: number;
+  /** The column that identifies a player, loaded only when a caller passes withIds. */
+  idColumn?: string;
 }
 
 // ---------------------------------------------------------------------------
@@ -124,7 +137,11 @@ export function splitFranchises(list: string): Set<string> {
  * validates every guess against. Returns null on failure or an implausibly
  * small result, so the page can show an error state instead of a broken grid.
  */
-export async function fetchFranchiseGridData<P extends FranchisePlayer>(cfg: FranchiseGridConfig<P>): Promise<FranchiseGridData<P> | null> {
+export async function fetchFranchiseGridData<P extends FranchisePlayer>(cfg: FranchiseGridConfig<P>, opts: GridFetchOptions = {}): Promise<FranchiseGridData<P> | null> {
+  /* Asked for ids with no column to read them from: refuse rather than hand
+     back players the caller will count wrong. */
+  if (opts.withIds && !cfg.idColumn) return null;
+  const select = opts.withIds ? `${cfg.idColumn}, ${cfg.select}` : cfg.select;
   try {
     // PostgREST caps every select at 1000 rows regardless of .limit(),
     // so page through the table with .range() until a short page arrives.
@@ -143,7 +160,7 @@ export async function fetchFranchiseGridData<P extends FranchisePlayer>(cfg: Fra
          rather than hang. */
       const page = async () => await supabase
         .from(cfg.table as any)
-        .select(cfg.select)
+        .select(select)
         .not(cfg.franchiseColumn, 'is', null)
         .order(cfg.orderColumn, { ascending: true })
         .range(from, from + PAGE_SIZE - 1);
@@ -162,6 +179,7 @@ export async function fetchFranchiseGridData<P extends FranchisePlayer>(cfg: Fra
     for (const raw of rows) {
       const entry = cfg.toPlayer(raw);
       if (!entry) continue;
+      if (opts.withIds && cfg.idColumn && raw[cfg.idColumn] != null) entry.id = String(raw[cfg.idColumn]);
       players.push(entry);
       byNormalizedName.set(normalizeGridName(entry.name), entry);
     }

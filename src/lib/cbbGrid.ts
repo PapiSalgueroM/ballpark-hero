@@ -28,6 +28,7 @@
  * disagree with the table it came from.
  */
 import { supabase } from '@/integrations/supabase/client';
+import type { GridFetchOptions } from '@/lib/gridEngine';
 import type { PlayerSourceConfig } from '@/lib/playerSearch';
 
 export type CbbCategoryKind = 'school' | 'achievement';
@@ -51,6 +52,11 @@ export interface CbbPlayer {
   /** First and last season, as the leading year of a season string like 2005-06. */
   fromYear: number;
   toYear: number;
+  /** The table's player_slug, present only when the fetch was asked for ids.
+      Round 653: the table holds 1,600 players twice, row for row, and the
+      slug is what the two copies share. The game does not need it, so it
+      does not download it. */
+  id?: string;
 }
 
 export interface CbbGridData {
@@ -112,6 +118,7 @@ export function playerMatchesCell(player: CbbPlayer, cell: CbbGridCell): boolean
 // ---------------------------------------------------------------------------
 
 interface RawCbbRow {
+  player_slug?: string | null;
   player_name: string | null;
   schools: string | null;
   points: number | null;
@@ -141,7 +148,9 @@ function seasonYear(v: string | null): number {
  *  small league, so the page shows its error state instead of a thin grid. */
 export const CBB_MIN_POOL_SIZE = 30000;
 
-export async function fetchCbbGridData(): Promise<CbbGridData | null> {
+export async function fetchCbbGridData(opts: GridFetchOptions = {}): Promise<CbbGridData | null> {
+  const COLUMNS = 'player_name, schools, points, trb, ast, games, position, year_from, year_to';
+  const select = opts.withIds ? `player_slug, ${COLUMNS}` : COLUMNS;
   try {
     const PAGE_SIZE = 1000;
     const rows: RawCbbRow[] = [];
@@ -153,7 +162,7 @@ export async function fetchCbbGridData(): Promise<CbbGridData | null> {
          shared paging helper. */
       const page = async () => await supabase
         .from('ncaa_player_stats' as never)
-        .select('player_name, schools, points, trb, ast, games, position, year_from, year_to')
+        .select(select)
         .not('schools', 'is', null)
         .order('id', { ascending: true })
         .range(from, from + PAGE_SIZE - 1);
@@ -189,6 +198,7 @@ export async function fetchCbbGridData(): Promise<CbbGridData | null> {
         fromYear: seasonYear(raw.year_from),
         toYear: seasonYear(raw.year_to),
       };
+      if (opts.withIds && raw.player_slug) entry.id = String(raw.player_slug);
       players.push(entry);
       byNormalizedName.set(normalize(name), entry);
     }
