@@ -253,7 +253,7 @@ function fitnessTone(f: number): string {
 /** One stat, mine left and theirs right, the way every stats block on this game reads. */
 function StatCell({ label, mine, theirs }: { label: string; mine: string; theirs: string }) {
   return (
-    <div className="flex items-center justify-between gap-1 text-[10px] min-w-0">
+    <div className="flex items-center justify-between gap-1 text-[10px] min-w-0" data-cm-live-stat={label}>
       <span className="font-bold text-foreground tabular-nums shrink-0">{mine}</span>
       <span className="text-[8px] uppercase tracking-wider text-muted-foreground truncate">{label}</span>
       <span className="font-bold text-muted-foreground tabular-nums shrink-0">{theirs}</span>
