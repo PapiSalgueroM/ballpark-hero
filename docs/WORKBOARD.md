@@ -1,5 +1,17 @@
 # Work board
 
+**2026-09-30, Codex Round 747 CLAIMED: reserved profile names (master D53).**
+Ownership: `src/lib/nameModeration.ts`, focused name tests and one CLI-created migration for a
+reserved-name predicate and a profile write trigger, plus surgical docs receipts. Protect the
+listed administrative names and clear DoUKnowBall impersonation, preserving ordinary sports names.
+The existing publicName reader then substitutes unsafe legacy names without changing stored rows.
+Database check: 873 profiles, zero exact listed reserved names, no existing profile triggers.
+Use an AFTER row trigger so unchanged names in profile upserts and unrelated streak writes keep
+working. Verify client/server agreement, direct inserts/updates/upserts, unchanged legacy values and
+a real disabled-trigger negative control on temporary fixtures. No Profile/AuthContext/completions
+edits, account changes, RLS changes, row rewrites or points work. Codex owns this bounded migration
+and will report its application proof; Claude keeps other schema/release work. Next free is **748**.
+
 **2026-09-30, Codex Round 744 COMPLETE: native sharing in the common result buttons.**
 `ShareButtons.tsx` now exposes Share result through the existing shareResult helper. The action
 uses the same default/custom text as the destination buttons, disables while pending and restores
