@@ -66,10 +66,37 @@ const pairScore = (page: string, candidate: string) => stableHash(`${page}|${can
 const byScoreFor = (page: string) => (x: GameDef, y: GameDef) =>
   pairScore(page, y.path) - pairScore(page, x.path) || x.path.localeCompare(y.path);
 
+/* ROUND 654: THE BIG SIMS LINK THEIR OTHER HALF.
+   Soccer Career and Club Manager are the two biggest ways into the site from
+   search, and neither page's related block named the other: the ring walks
+   the registry in order and they sit far apart in it, and the hashes never
+   happened to pick them. The same is true of every sport's career sim and its
+   front office. So each of these pages names its partner, straight after the
+   ring. A fixed pick does not move when a game is added, so it costs nothing
+   against section 6 of simRelatedGames, and section 7 there holds every pair
+   both ways. */
+export const COMPANIONS: Record<string, string> = {
+  '/soccer-career': '/club-manager',
+  '/club-manager': '/soccer-career',
+  '/nba-my-career': '/nba-front-office',
+  '/nba-front-office': '/nba-my-career',
+  '/nfl-my-career': '/front-office',
+  '/front-office': '/nfl-my-career',
+  '/mlb-my-career': '/mlb-front-office',
+  '/mlb-front-office': '/mlb-my-career',
+  '/nhl-my-career': '/nhl-front-office',
+  '/nhl-front-office': '/nhl-my-career',
+};
+
 /** Up to 6 related games for a page, by the rules in the header comment.
- *  The registry is a parameter so the harness can hand in one with an
- *  extra game and measure how many pages move; the site never passes it. */
-export function relatedGamesFor(path: string, categories: GameCategory[] = LIVE_CATEGORIES): RelatedPick[] {
+ *  The registry and the companion map are parameters so the harness can hand
+ *  in one with an extra game, or none, and measure what moves; the site never
+ *  passes either. */
+export function relatedGamesFor(
+  path: string,
+  categories: GameCategory[] = LIVE_CATEGORIES,
+  companions: Record<string, string> = COMPANIONS,
+): RelatedPick[] {
   const ci = categories.findIndex(c => c.games.some(g => g.path === path));
   if (ci < 0) return [];
   const cat = categories[ci];
@@ -84,6 +111,13 @@ export function relatedGamesFor(path: string, categories: GameCategory[] = LIVE_
   for (let k = 1; k <= 3 && k < cat.games.length; k++) {
     add(cat.games[(gi + k) % cat.games.length]);
   }
+
+  /* 1b. Round 654: the page's companion, when it has one. After the ring so
+     every ring link stays where it was, before the next category pick so the
+     partner is never the one cut at six. Read from the registry handed in, so
+     a companion that is not a live game is simply skipped. */
+  const partner = companions[path];
+  if (partner) add(categories.flatMap(c => c.games).find(g => g.path === partner));
 
   /* 2. The category cycle: one game from the next category, the one that
      scores highest for this page, so a category's games share the inbound
