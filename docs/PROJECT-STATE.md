@@ -1,5 +1,53 @@
 # Project state
 
+## BUILT 2026-09-30: Round 653, the grid answer archives (branch `r653-grid-archives`, not on main)
+
+- **What was wrong.** The four grid answer pages (`/nba-grid/archive`, `/mlb-grid/archive`,
+  `/hockey-grid/archive`, `/cbb-grid/archive`) stopped at 2026-08-30 while saying "the last 14" and
+  "Today's board is not here": the generator ran by hand only and rolled boards off on every run.
+  The college page printed "_ Eldredge" as a Hofstra guard, listed 13 players twice in one cell
+  (Bradley Beal at Florida and Started 2010 or Later) and ran 76 counts high, because
+  `ncaa_player_stats` holds 1,600 players twice. No heading said "answers", every board heading
+  carried an ISO date.
+- **What changed.** `scripts/genGridArchive.mjs` accumulates: the window starts where the file
+  starts and ends yesterday in America/New_York, and it refuses to write if a published board
+  would change or roll off, or if the college pool has moved off the recorded one. Players are
+  counted by the source's own id (each grid lib loads it only when asked, `withIds`, so the games
+  download nothing new); placeholder names still count, since the game accepts them, but never
+  print; ties break by name then id, so a rerun writes the same bytes (checked). Regenerated to
+  2026-09-29: 14 to 44 boards a sport, and the 42 franchise boards already published are byte for
+  byte unchanged. Headings "NBA Grid Answers: Past Daily Boards" and "NBA grid answers for August
+  30, 2026", copy stated from the data only, game page links "NBA grid answers for past days".
+- **The release step.** `npm run archive:grids`, then `build:seo`: the new "The release build"
+  section of `docs/SHIP-PIPELINE.md`. **This branch carries no rebuilt `public/` or
+  `scripts/data/lastmod.json`**, so whoever assembles the release runs both steps.
+  `simGridArchive` sections 6, 10 and 11 read `public/` and stay red until they do.
+- **The fence.** `simGridArchive` counts by id and adds sections 7 to 11 (freshness against the
+  file's own claim, no player twice in a cell, no malformed name, the saved copy's range and
+  counts, no ISO date in a board heading), with the controls `stale`, `repeat`, `malformed`,
+  `copyrange` and `isoh2`; every control, old and new, is now green only when its own section
+  goes red and no other one moves.
+- **For a later database round, reported and not touched (reads only).** The 1,600 extra rows
+  in `ncaa_player_stats` are ids 16201 to 17400 (copies of 15001 to 16200) and 23001 to 23400
+  (copies of 22601 to 23000): same slug, same rank, same stats, written seconds after the
+  originals in the 2026-05-09 load, so two batches of a ranked list were sent twice. The table's
+  only index is the id primary key. The three placeholder rows are 21867 "_ Johnston" (New
+  Hampshire, 1985-87), 32408 "_ Ford" (Maryland Eastern Shore, 1988-89) and 41595 "_ Eldredge"
+  (Hofstra, 1991-95); their slugs carry the underscore too, so the source had no first name. That
+  round should: (1) delete the extra ids after checking each row against its original column by
+  column; (2) add a unique index on `player_slug`; (3) find each placeholder's first name on two
+  sources or leave the row, never guess; (4) **first** give the archive a school pool per board.
+  Counted once per player, Marshall and Rutgers have 9 players with 700+ rebounds and UNC
+  Greensboro 9 with 350+ assists, under the pool's floor of 10, so today the live College Grid
+  can serve those crossings short of what the design promises (none is published yet). Deleting
+  the rows drops those three schools from the pool (106 to 103), which changes every future
+  college board. Without a per board pool, `archive:grids` then refuses to run and
+  `simGridArchive` section 5 goes red. The other three grid tables have no duplicate rows and no
+  placeholder names.
+- **Follow ups.** The page's JSON grows by about 13K a day in one chunk (546K now): split it by
+  sport or by month well before a year. The hub pages still link "NBA Grid archive" (Round 654
+  touches hub links).
+
 ## LIVE 2026-09-29: Release F (660, 661, 668, 669 code, 670, 672), main `add1c6b0`
 
 Assembled in the gate clone's `release-f` worktree, pushed to main as a fast forward from `ef16139d`.
