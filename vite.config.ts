@@ -4,6 +4,7 @@ import path from "path";
 import fs from "fs";
 import { componentTagger } from "lovable-tagger";
 import dyadComponentTagger from '@dyad-sh/react-vite-component-tagger';
+import { writeSeoMetaParts } from "./scripts/genSeoMetaParts.mjs";
 
 /**
  * Round 275: put the real asset tags into every prerendered snapshot at build
@@ -137,6 +138,21 @@ const inlineSnapshotAssets = (root: string) => {
   };
 };
 
+/* Round 700: the search title parts in src/data/seoMetaParts are written from
+   src/data/seoMeta.ts before anything is bundled, so every build ships parts
+   made from the source it was given, even when somebody edited the source and
+   never ran scripts/genSeoMetaParts.mjs. When the committed parts are already
+   in step, which is the normal case, it writes nothing. A source it cannot
+   read fails the build rather than shipping the old parts. simSeoTitles
+   section 6 is the fence on the committed copy. */
+const seoMetaParts = (root: string) => ({
+  name: "dukb-seo-meta-parts",
+  async buildStart() {
+    const changed = await writeSeoMetaParts(root);
+    if (changed.length) console.log(`[dukb] rewrote ${changed.length} search title part file(s) from src/data/seoMeta.ts; commit src/data/seoMetaParts`);
+  },
+});
+
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
   server: {
@@ -156,7 +172,7 @@ export default defineConfig(({ mode }) => ({
      version of it which does tag cannot quietly start rewriting every element
      and every snapshot. Anthony's Dyad session runs in development and still
      sees its tags. */
-  plugins: [mode === "development" && dyadComponentTagger(), react(), mode === "development" && componentTagger(), inlineSnapshotAssets(__dirname)].filter(Boolean),
+  plugins: [seoMetaParts(__dirname), mode === "development" && dyadComponentTagger(), react(), mode === "development" && componentTagger(), inlineSnapshotAssets(__dirname)].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),

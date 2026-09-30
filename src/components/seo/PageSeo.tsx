@@ -1,6 +1,8 @@
 import { useEffect, useSyncExternalStore } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { ALL_GAMES } from '@/data/gameRegistry';
+import type { SeoMeta } from '@/data/seoMeta';
+import { SEO_META_PARTS, seoMetaPart } from '@/data/seoMetaParts';
 import { jsonLdFor } from '@/lib/pageSchema';
 
 interface PageSeoProps {
@@ -106,24 +108,39 @@ export const searchTitle = (full: string): string =>
  * rendered with nothing always renders again with the map. (The stale Game
  * JSON-LD a prerender caught had a second cause as well, a stranded Helmet
  * instance; see holdJsonLd in the component.) */
-type SeoMetaMap = typeof import('@/data/seoMeta').SEO_META;
-let seoMeta: SeoMetaMap | null = null;
-let seoMetaLoad: Promise<SeoMetaMap | null> | null = null;
+/* Round 700: the chunk above held all 127 entries, 9.2K gzipped, fetched by
+ * every game page to read one. src/data/seoMeta.ts is still the one place the
+ * text is written, but scripts/genSeoMetaParts.mjs splits it into 32 parts by
+ * a hash of the path (src/data/seoMetaParts, its header says why a hash and
+ * not a file per game or per sport), and a page loads only the part that
+ * holds its own path. The cache is one slot per part now: a slot fills when
+ * its part lands, and the store is replaced with a new object each time, so
+ * useSyncExternalStore sees the change and every instance reading that part
+ * renders again. Everything said above holds per part: the page renders its
+ * own props until its part lands, the Game JSON-LD waits for it, a failed
+ * load clears only that part so the next page tries again, and a visit to a
+ * game in a part already loaded reads it on its first render. */
+type SeoMetaMap = Record<string, SeoMeta>;
+let seoMetaParts: Readonly<Record<number, SeoMetaMap>> = {};
+const seoMetaLoads = new Map<number, Promise<SeoMetaMap | null>>();
 const seoMetaListeners = new Set<() => void>();
-export const loadSeoMeta = (): Promise<SeoMetaMap | null> => {
-  if (!seoMetaLoad) {
-    seoMetaLoad = import('@/data/seoMeta')
+export const loadSeoMeta = (path: string): Promise<SeoMetaMap | null> => {
+  const part = seoMetaPart(path);
+  let load = seoMetaLoads.get(part);
+  if (!load) {
+    load = SEO_META_PARTS[part]()
       .then(m => {
-        seoMeta = m.SEO_META;
+        seoMetaParts = { ...seoMetaParts, [part]: m.SEO_META_PART };
         for (const notify of seoMetaListeners) notify();
-        return seoMeta;
+        return m.SEO_META_PART;
       })
       .catch(() => {
-        seoMetaLoad = null;
+        seoMetaLoads.delete(part);
         return null;
       });
+    seoMetaLoads.set(part, load);
   }
-  return seoMetaLoad;
+  return load;
 };
 const subscribeSeoMeta = (notify: () => void) => {
   seoMetaListeners.add(notify);
@@ -131,7 +148,18 @@ const subscribeSeoMeta = (notify: () => void) => {
     seoMetaListeners.delete(notify);
   };
 };
-const readSeoMeta = () => seoMeta;
+const readSeoMeta = () => seoMetaParts;
+/** The part holding this path once it has landed, undefined until then. Only a
+    game page asks for one, so the home page, the hubs and the legal pages
+    never fetch a part. */
+const useSeoMetaPart = (path: string, isGame: boolean): SeoMetaMap | undefined => {
+  const parts = useSyncExternalStore(subscribeSeoMeta, readSeoMeta, readSeoMeta);
+  const part = seoMetaPart(path);
+  useEffect(() => {
+    if (isGame && !seoMetaParts[part]) void loadSeoMeta(path);
+  }, [path, part, isGame]);
+  return parts[part];
+};
 
 /* Round 651: the guide block's heading reads the same store.
  *
@@ -146,23 +174,16 @@ const readSeoMeta = () => seoMeta;
 export const stripBrand = (title: string): string =>
   title.endsWith(BRAND_SUFFIX) ? title.slice(0, -BRAND_SUFFIX.length) : title;
 export const useSeoMetaTitle = (path: string): string | undefined => {
-  const meta = useSyncExternalStore(subscribeSeoMeta, readSeoMeta, readSeoMeta);
   const isGame = ALL_GAMES.some(g => g.path === path);
-  useEffect(() => {
-    if (!seoMeta && isGame) void loadSeoMeta();
-  }, [path, isGame]);
-  return meta?.[path]?.title;
+  return useSeoMetaPart(path, isGame)?.[path]?.title;
 };
 
 const PageSeo =({ title: pageTitle, description: pageDescription, path, ogImage, noindex }: PageSeoProps) => {
-  const meta = useSyncExternalStore(subscribeSeoMeta, readSeoMeta, readSeoMeta);
   /* Only a game page has an entry, so the home page, the hubs and the legal
      pages never fetch the chunk. The registry is already in the entry chunk
      (pageSchema reads it), so asking costs nothing. */
   const isGame = ALL_GAMES.some(g => g.path === path);
-  useEffect(() => {
-    if (!seoMeta && isGame) void loadSeoMeta();
-  }, [path, isGame]);
+  const meta = useSeoMetaPart(path, isGame);
   /* A GAME PAGE HOLDS ITS STRUCTURED DATA UNTIL ITS TEXT IS KNOWN. Helmet
      registers an instance while it RENDERS and forgets it only on unmount, so
      a render React throws away (a lazy route suspending on a cold load) leaves
