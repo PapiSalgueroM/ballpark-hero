@@ -1,5 +1,26 @@
 # Project state
 
+## DATABASE LIVE / CLIENT BUILT 2026-09-30: Codex Round 747, reserved names
+
+Future profile name writes cannot use the listed administrative names or clear DoUKnowBall account
+combinations. The existing client moderation/publicName path inherits the same whole-name rule;
+ordinary sports and fan names remain valid. No Profile, auth, completion or game-engine edits.
+`simReservedNames`: 89 tests green, 60 enforcement/substitution checks fail with the guard removed
+from an asserted copy, 29 unrelated checks stay green. App type/build proof is the isolated 746 gate
+on the same helper source. Frontend release pending with Claude.
+
+Migration `20260930200618_round_747_reserved_profile_names.sql` applied successfully. It self-verifies
+the real invoker trigger as authenticated against temporary rows: 150 rejected writes across 30
+reserved variants, 20 ordinary names with inserts/upserts, unchanged legacy names, streak updates,
+one-field edits and rollback. A disabled temporary trigger admits the reserved control. No stored
+profile is rewritten and no fixture remains. Live AFTER trigger and empty search path confirmed;
+RLS retained, predicate auth/service access and anon denial confirmed, NBSP/BOM parity confirmed.
+Security advisors show exactly the same categories/counts as before the migration.
+
+Separate pre-existing handle-pool issue handed to Claude's completion/points owner: some generated
+substitutes contain fragments the old profanity filter rejects (Scrappy, Closer). This round reserves
+authority names; it does not claim historical profile cleanup or the section 12 report/notify flow.
+
 ## BUILT 2026-09-30: Codex Round 746, Academy filters
 
 Academy prospects can be filtered by position and exact age together, with count/reset and clear

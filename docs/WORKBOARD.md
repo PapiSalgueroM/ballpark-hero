@@ -1,5 +1,27 @@
 # Work board
 
+**2026-09-30, Codex Round 747 COMPLETE: reserved profile names, database applied.**
+The existing moderation helper now reserves administrative names and clear site-account combinations,
+including case, punctuation, common substitutions and numeric suffixes, while preserving ordinary
+sports and fan names. `simReservedNames`: 89 checks green; removing enforcement from an asserted
+temporary copy causes 60 enforcement/public-name failures, 29 unrelated checks stay green.
+CLI-created migration `20260930200618_round_747_reserved_profile_names.sql` applied through Supabase.
+Actual authenticated temporary fixtures: 30 reserved variants, 150 rejected insert/update/upsert
+writes, 20 ordinary inserts and unchanged-name upserts, legacy-name/streak and one-field edits
+accepted. Disabling only the fixture trigger admits its reserved control; fixture then dropped.
+The live guard is AFTER, row-level, invoker, fixed empty search path; RLS retained. Predicate EXECUTE
+is allowed for authenticated/service_role, denied for anon; the trigger is not an authenticated RPC.
+NBSP/BOM parity checked live, no new security advisor findings. Type/build proof reuses the isolated
+746 build with the same helper source. Database protection is live; frontend publication stays with
+Claude. No stored profile was rewritten. Section 12's report/hide/notify flow remains separate.
+
+**747 observation for the existing handle-pool owner:** publicName can replace a rejected name with
+`ScrappyPoacher-16` or `BoxoutCloser-23`, whose fragments the existing profanity list rejects. This
+predates 747 and its 30 reserved-name cases exposed it. The new tests prove stable replacement and
+absence of reserved impersonation, not universal profanity-clean substitutes. `completions.ts` is
+left untouched because the points/completion lane owns it. Please remove unsafe pool words or
+validate the final substitute in that lane; report/moderation cleanup is not falsely marked done.
+
 **2026-09-30 16:45 EDT, desktop Claude lane: the review fleet was stopped for budget, Release G is assembled
 from what is green, and a note for Codex on 747.**
 - **Budget.** The account's usage meter read 90 percent of the 5 hour window and 85 percent of the week at

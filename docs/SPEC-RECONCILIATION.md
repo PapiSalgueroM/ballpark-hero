@@ -6,7 +6,7 @@ history and the releases landing that day (through Round 651), then spot checked
 that re-read 72 of the boldest grades and corrected 18. The 2026-08-29 grading (last updated
 2026-09-08) is replaced; its counts were done 38, partial 185, new 96.
 
-**Counts:** 361 sections. done 51, partial 216, new 42, constrained 5, decided 14, rule 32, app only 1.
+**Counts:** 361 sections. done 51, partial 217, new 41, constrained 5, decided 14, rule 32, app only 1. Round 747 moves D53 to partial: database enforcement is live, frontend publication pending.
 
 **Work left:** the open sections carry 523 builder rounds as graded. The critic found about 45 of
 those counted twice where sections overlap (for example D114, D115 and D122), so the honest total
@@ -67,7 +67,7 @@ Read this BEFORE claiming spec work, and move a row when you ship.
 - **D154 Mobile first for games**: sweepPhone passes 161 routes including tap target floors (R635), playIphone, full phone walks
 - **D158 Second milestone: Club Manager**: Previous PARTIAL: staff desk (471), board asks (474), finance and facilities (467), transfers (506), contracts and free agents (619), tactics (505), live match (504), era cups (462, 507), save that reports failure (634)
 
-## Partial, the shipped half is named, with rounds left (216)
+## Partial, the shipped half is named, with rounds left (217)
 
 - **1 Product vision and layers**: Layers A to C are shipped (dailies, grids, careers, Club Manager, front offices, Free Kick 433, Buzzer Beater 445). Layer D is part built (handles 318, achievements 527, profile) and so is E (ticker 311/414, hubs, Record Books 649, format histories 522/532-534). This is an umbrella: its remaining work is counted under 13 to 16. **0 rounds left.**
 - **2 Product north star**: Shipped: dailies, live scores, profile, streak, careers, club, drafts, conquest (457/459). Missing: site XP, friend challenges, tournaments, cloud worlds. This is an umbrella: its remaining work is counted in 13 to 16 and in the social sections past line 1315. **0 rounds left.**
@@ -76,7 +76,8 @@ Read this BEFORE claiming spec work, and move a row when you ship.
 - **7 Data quality system**: Many per-dataset fences exist (simCareerSeasonTruth, simNationalities, simWorldCupSquads 566, stale values sweep 344, column names 391, age-0 fix 443), plus CM_PARTIAL and the two-source rule. Missing: confidence and conflict metadata, and one pre-deploy lint that runs the 16 listed checks over every dataset. **3 rounds left.**
 - **9 Live sports ticker**: Shipped: the ESPN feed through scores-poll (311), feed status states (live, final, start time), sport and league tags, a 5 minute refresh, the stale-data watchdog (332), the slower and wider strip (414) and the playLiveTicker fence. Missing: a game center page (cards link to the sport hub), followed teams, filtering and priority order. Logos are CONSTRAINED. **2 rounds left.**
 - **11 Home page**: Shipped: short headline (314), keyword headings (650), Most Played Today counting people (481), the Dynasty and Career Sims showcase, per-sport sections with hub links, derived NEW badges (447), the ticker. Missing: Continue Playing and the profile summary. With Friends needs a social layer, and the owner removed the dailies block (297). **1 round left.**
-- **12 User identity system (usernames)**: Shipped: random safe handles with a render-side blocklist (318, simHandleNames) and the nameModeration profanity fold. Missing from 12.2: a reserved-name or impersonation list, and the hide, replace and notify flow for a reported name. The previous DONE was too generous. **1 round left.**
+- **12 User identity system (usernames)**: Random handles with a render-side blocklist (318, simHandleNames) and the nameModeration profanity fold. Round 747 adds reserved-name/clear impersonation protection, with live database enforcement and frontend publication pending. A pre-existing unsafe substitute-pool observation is handed to the completion owner. Missing from 12.2: the hide, replace and notify flow for a reported name. **1 round left.**
+- **D53 Reserved names**: Round 747's client helper and live AFTER profile trigger protect administrative names and clear site-account combinations. 89 client checks, 150 rejected authenticated fixture writes, ordinary/unchanged-name upserts and a disabled-trigger control verified. No real profile row rewrites. Frontend publication pending with Claude; the builder work is complete. **0 rounds left.**
 - **13 Profile system**: Profile.tsx has the header, all-time rank, favourites, stats, per-game streaks, badges, achievements (527), recently played, best scores and a registry-driven game list (simScoringCoverage). Missing: level and Ball IQ, and the career, management, conquest and social panels. Until claimed Round 648 lands, the all-time total adds raw scores. **3 rounds left.**
 - **15 Streak system**: streaks.ts uses the Eastern Time day, credits once per day, tracks current and longest per game and globally, and drives the header flame. Rounds 399 and 643 record a finish once. The canonical copy is still browser-local, with no history view, no guest-to-account migration, and no DST, multi-tab or offline tests. **2 rounds left.**
 - **16 Achievement system**: achievements.ts (527, fixed 539) is a derived, read-only case with id, title, description, icon, trigger, rarity and hidden state, fenced by simAchievements. Missing: XP, unlock date, and the win, championship, rank, perfect game and boss achievements. **2 rounds left.**
@@ -286,7 +287,7 @@ Read this BEFORE claiming spec work, and move a row when you ship.
 - **I Game result screen standard**: Shared ResultScreen on 75 pages: headline, score, stat row, share, play again, play next; report lives in GameShell; no percentile or rank, points earned or badges earned row **2 rounds left.**
 - **J Social result copy**: ShareButtons template 'I scored X on Game at DoUKnowBall! Can you beat me?' plus link, Conquest dailyShareText; no Top N percent line, no private data **1 round left.**
 
-## New, nothing shipped covers it (42)
+## New, nothing shipped covers it (41)
 
 - **14 Ball IQ**: /ball-iq is a 12-question quiz game, not an identity rating. There is no normalized skill rating, per-sport IQ or site XP, and it needs the real ceilings from claimed Round 646 first. **4 rounds left.**
 - **64 WNBA expansion**: No WNBA route in gameRegistry.ts; WNBA exists only as Record Books, Champ or Not, Who'd They Beat data and ticker feeds. Eleven families on shared engines, needs a verified player dataset **16 rounds left.**
@@ -310,7 +311,6 @@ Read this BEFORE claiming spec work, and move a row when you ship.
 - **D12 Game Versioning**: Some parts carry versions: Club Manager saveVersion 3, rebuildSave migrations, fight v1, Soccer Grid validator v23/24. But no game, rules or data version is recorded on any result row. **2 rounds left.**
 - **D19 Data Diff View**: The admin area reads only question_reports. There is no import diff and no accept or reject screen. **2 rounds left.**
 - **D29 Soccer Match Animation V3**: Nothing built: no sprites, skeletal animation, camera, crowd, stadium effects or audio commentary (the site has no audio at all). The spec says to build it only after the sim layer is solid. **5 rounds left.**
-- **D53 Reserved names**: No reserved or impersonation list anywhere in src or migrations; only the profanity blocklist **1 round left.**
 - **D54 Friend system**: No friend tables, requests or UI; PRODUCT-MISSION wants Versus Friends, so it is website work, not app work **3 rounds left.**
 - **D55 Blocking**: Depends on D54; nothing exists **1 round left.**
 - **D57 Save UI**: Every long form game has one fixed localStorage key (clubManager, stadiumTycoon, rebuild, idleArena and others); no My Saves screen, no rename, duplicate, archive or multiple slots **3 rounds left.**
