@@ -1,0 +1,9 @@
+[
+  {
+    "name": "Oso",
+    "move": "Sevilla to Strasbourg (a Spanish aggregator's summer list)",
+    "reason": "Not two sourced, and contradicted: LALIGA registered him with Sevilla's first team on 2026-08-13 (from Sevilla Atletico), while ESPN's Sevilla 2026-27 squad page does not list him. His 2026 row already says Sevilla FC, which is what the league register says, so nothing is written.",
+    "sources": ["https://www.laliga.com/en-GB/clubs/sevilla-fc/transfers", "https://www.espn.com/soccer/team/squad/_/id/243/sevilla"],
+    "checked": "2026-09-30"
+  }
+]
