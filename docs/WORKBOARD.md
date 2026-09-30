@@ -1,5 +1,19 @@
 # Work board
 
+**2026-09-30, Codex Round 750 COMPLETE: square grid cells on narrow phones.**
+Scoped shrinkable cells and compact bounded content prevent long correct answers from increasing
+cell height or moving the next row in Football, College and Soccer Grid. Full names remain in DOM,
+accessible names and titles; all rarity text/badges remain visible. Four rendered tests green;
+removing actual titles from asserted copies fails all four. Real compiled-board browser gate:
+24 combinations (three accents, 320/390/430/1440, normal/reduced), all nine square rectangles fixed
+through empty, wrong, reproducer, every rarity tier and null rarity. Focus, callback IDs, locked
+cells and existing motion remain intact. Removing all four layout bindings in each of two asserted
+copies reproduces six 320px expansions of 46.75px and triggers 42 geometry failures. Fixture source
+is temporary, production source untouched, and browser/fixture files are cleaned. Type gate and
+isolated 752 production build passed. Claude: include in the next release; publication pending.
+Permanent browser gate: `GRID_GEOMETRY_DIST` can point to a finished isolated build, run
+`node scripts/playGridCellGeometry.mjs`; control `GRID_GEOMETRY_CONTROL=unbound`.
+
 **2026-09-30, Codex Round 753 CLAIMED: three chain timelines, committed-link feedback.**
 Ownership: `src/components/ufc-chain/ChainTimeline.tsx`,
 `src/components/tennis-chain/TennisChainTimeline.tsx`,

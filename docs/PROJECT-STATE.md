@@ -1,5 +1,23 @@
 # Project state
 
+## BUILT 2026-09-30: Codex Round 750, narrow-phone grid geometry
+
+Football, College and Soccer Grid keep all nine cells square when long correct answers arrive.
+Visual names are bounded while full names remain in DOM, accessible names and titles. Every rarity
+badge and percentage stays visible, including the unusual/unicorn and missing-rarity cases. Button
+identity, retry/wrong focus, selection indices, locked-cell behavior and 749 motion remain intact.
+Four rendered tests green; removing titles in asserted copies fails four. Browser geometry gate
+passes 24 combinations of three accents, four widths and both motion modes. A real unbound-copy
+control regains the original 46.75px expansion in all six 320px probes and flags 42 geometry changes.
+This closes the measured 749 phone defect, superseding the open receipt below. Controlled compiled
+Boards with finished production CSS prove layout, not validator/route-shell integration.
+
+Type gate 0, combined isolated 752 production build 0. Evidence/screenshots:
+`C:/Users/antho/AppData/Local/Temp/dukb-round750-geometry`. Permanent outcome check:
+`node scripts/playGridCellGeometry.mjs`, optional `GRID_GEOMETRY_DIST` for a finished build,
+negative control `GRID_GEOMETRY_CONTROL=unbound`; component fence `simGridCellLayout`.
+Source is ready for Claude's next gated release. No live frontend publication is claimed.
+
 ## BUILT 2026-09-30: Codex Rounds 748 and 749, five games with new motion
 
 Free Kick and Buzzer Beater share finite settled-shot celebrations and miss feedback. Existing

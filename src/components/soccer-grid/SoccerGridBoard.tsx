@@ -1,6 +1,7 @@
 import { SoccerGridCell, SoccerGridPuzzle } from '@/types/soccerGrid';
 import { cn } from '@/lib/utils';
 import motion from '@/components/game/GridCellMotion.module.css';
+import layout from '@/components/game/GridCellLayout.module.css';
 
 interface Props {
   puzzle: SoccerGridPuzzle;
@@ -23,7 +24,7 @@ function RarityBadge({ rarity }: { rarity: number }) {
 
 export function SoccerGridBoard({ puzzle, cells, activeCell, onCellClick }: Props) {
   return (
-    <div className="w-full max-w-lg mx-auto">
+    <div className={cn('w-full max-w-lg mx-auto', layout.board)}>
       <div className="grid grid-cols-4 gap-1.5">
         <div />
 
@@ -61,6 +62,7 @@ export function SoccerGridBoard({ puzzle, cells, activeCell, onCellClick }: Prop
                   disabled={cell.status === 'correct'}
                   className={cn(
                     'aspect-square rounded-lg border-2 flex flex-col items-center justify-center p-1 transition-all text-center',
+                    layout.cell,
                     cell.status === 'correct' && motion.correct,
                     cell.status === 'correct'
                       ? 'bg-correct/20 border-correct cursor-default'
@@ -72,8 +74,8 @@ export function SoccerGridBoard({ puzzle, cells, activeCell, onCellClick }: Prop
                   )}
                 >
                   {cell.status === 'correct' && cell.playerName ? (
-                    <div className={cn('flex flex-col items-center gap-0.5', motion.correctContent)}>
-                      <span className="text-[11px] md:text-xs font-bold text-foreground leading-tight">
+                    <div className={cn('flex flex-col items-center gap-0.5', motion.correctContent, layout.content)}>
+                      <span title={cell.playerName} className={cn('text-[11px] md:text-xs font-bold text-foreground leading-tight', layout.name)}>
                         {cell.playerName}
                       </span>
                       {cell.rarity !== null && (
