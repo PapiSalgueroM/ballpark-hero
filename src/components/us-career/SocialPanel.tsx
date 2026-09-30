@@ -9,6 +9,7 @@
 import type { CareerRival } from '@/lib/careerRival';
 import type { BadgeDef } from '@/lib/careerBadges';
 import { cn } from '@/lib/utils';
+import motion from '@/components/us-career/BadgeGrid.module.css';
 
 function Meter({ value, color }: { value: number; color: string }) {
   return (
@@ -104,10 +105,10 @@ export function BadgeGrid<F>({ defs, earned }: { defs: BadgeDef<F>[]; earned: Ba
         {defs.map(b => {
           const on = have.has(b.id);
           return (
-            <div key={b.id} className={cn('rounded-xl border p-2', on ? 'border-gold/50 bg-gold/10' : 'border-border bg-secondary/40 opacity-60')}>
+            <div key={b.id} data-career-badge={b.id} data-earned={on ? 'true' : 'false'} className={cn('min-w-0 rounded-xl border p-2', on ? 'border-gold/50 bg-gold/10' : 'border-border bg-secondary/40 opacity-60', on && motion.earned)}>
               <p className="flex items-center gap-1.5 text-[11px] font-bold text-foreground">
-                <span>{on ? b.emoji : '🔒'}</span>
-                <span className="truncate">{b.label}</span>
+                <span data-badge-icon className={cn('shrink-0', on && motion.icon)}>{on ? b.emoji : '🔒'}</span>
+                <span className="min-w-0 truncate" title={b.label}>{b.label}</span>
               </p>
               <p className="mt-0.5 text-[10px] leading-snug text-muted-foreground">{b.blurb}</p>
             </div>

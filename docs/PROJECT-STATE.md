@@ -1,5 +1,16 @@
 # Project state
 
+## SOURCE BUILT 2026-09-30: Codex 755 and 756, career replies and badges
+
+Four US My Career games share finite extension reply and earned-badge feedback. Opening extension
+notes and locked badges stay quiet; existing figures, badge evaluator results, controls and nodes
+remain unchanged, with static reduced motion. Five extension and six badge rendered tests passed.
+Actual temporary binding/label controls produce their expected failures and leave unrelated tests
+green. Exact app type gate and isolated 757 production build passed. Independent compiled-component
+browser acceptance is still running; completion and frontend publication are not claimed yet.
+Other current claims: 754 shared autocomplete activation, 757 arcade help placement, 758 generated
+CBB recruiting filters and 759 help-dialog focus return. Claude retains release/publish duty.
+
 ## BUILT 2026-09-30: Codex Round 753, three chain games and completed release handoff
 
 Combat, Tennis and NASCAR timelines animate only the newest committed person and connection,

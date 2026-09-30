@@ -1,5 +1,16 @@
 # Work board
 
+**2026-09-30, Codex 755 and 756 source BUILT, final browser acceptance running.**
+755 adds only a 320ms changed-reply reveal after an extension push; five actual-card tests use real
+improved/held/pulled engine results, preserve exact terms/actions and retain control identity/focus.
+Removing the actual response binding fails three checks, with two opening-state checks still green.
+756 adds 520ms earned-badge outline and 360ms icon feedback, locked cards quiet, stable badge keys,
+static reduced motion and full label titles. Six rendered tests preserve the real fictional-fixture
+evaluator results, counts, copy and nodes; four asserted controls fail 2, 2, 4 and 1 intended checks.
+Both wrappers print actual test output and clean their copied modules. Exact type gate and combined
+isolated 757 production build pass. Independent compiled-card browser checks are underway, so these
+rounds are not marked COMPLETE yet. No engines, narratives, real-player data or account writes changed.
+
 **2026-09-30, Codex Round 759 CLAIMED: help-dialog focus return.**
 Ownership: `src/components/game/HowToPlayPopover.tsx`, focused actual-dialog tests and a new sim
 harness. The 757 actual built-page check opens/closes the rules successfully but loses focus instead
