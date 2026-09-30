@@ -328,11 +328,11 @@ const emptyUnmarked = [...modernClubs].filter(c => (CM_ROSTERS[c] ?? []).length 
 for (const c of emptyUnmarked) findings[3].push(`data: ${c} has no baked players and is not in CM_PARTIAL, so the page would call a youth squad full data`);
 
 const docCount = docs.length;
-notes[1] = `${REAL_LEAGUES.length} modern leagues checked as h3s in ${docCount} document${docCount === 1 ? '' : 's'}`;
-notes[2] = `${modernClubs.size} clubs, ${clubsSeen} club names read across the documents, picker and list agree on every league`;
-notes[3] = `${partialCount} partial clubs in the data, ${marksSeen} marks read, ${[...modernClubs].filter(c => (CM_ROSTERS[c] ?? []).length === 0).length} empty squads all marked`;
-notes[4] = `every document dated "${CM_ROSTER_META.asOf}"`;
-notes[5] = `${eraOnly.length} clubs only a past season holds, none in the block`;
+notes[1] = `${REAL_LEAGUES.length} modern leagues looked for as h3s in ${docCount} document${docCount === 1 ? '' : 's'}`;
+notes[2] = `${modernClubs.size} clubs in the data, ${clubsSeen} club names read, each league also read off the picker`;
+notes[3] = `${partialCount} partial clubs in the data, ${marksSeen} marks read, ${[...modernClubs].filter(c => (CM_ROSTERS[c] ?? []).length === 0).length} empty squads in the data`;
+notes[4] = `the bake's date is "${CM_ROSTER_META.asOf}"`;
+notes[5] = `${eraOnly.length} clubs only a past season holds, looked for in the block`;
 
 /* ---------- 6. wiring ---------- */
 {
@@ -359,7 +359,7 @@ notes[5] = `${eraOnly.length} clubs only a past season holds, none in the block`
   const related = renderHtml.search(/<h2\b[^>]*>More games to play<\/h2>/);
   if (sec < 0 || at < sec || at > secEnd) findings[6].push('render: GameSeoContent does not draw the list inside its section');
   else if (related >= 0 && at > related) findings[6].push('render: the list sits below the related games instead of below the guide');
-  notes[6] = 'passed into the guide block in the code, drawn inside its section above the related games, nothing strips it';
+  notes[6] = 'ClubManager.tsx and ClubManagerClubList.tsx read as code, the render read for where the block draws it';
 }
 
 /* ---------- the report ---------- */
