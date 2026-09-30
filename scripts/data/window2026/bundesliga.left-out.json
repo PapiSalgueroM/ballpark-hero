@@ -1,0 +1,132 @@
+[
+  {
+    "name": "Jeanuël Belocian",
+    "row": "Bayer 04 Leverkusen",
+    "claimed": "Racing Santander (loan)",
+    "window": "2026-summer",
+    "kind": "one-source",
+    "reason": "bundesliga.com lists the Leverkusen loan to Racing Santander (after his January 2026 Wolfsburg loan ended), but ESPN's Racing Santander 2026-27 squad page does not list him, so there is no second source yet.",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/87"
+    ]
+  },
+  {
+    "name": "Hyun-seok Hong",
+    "row": "KAA Gent",
+    "claimed": "FC Midtjylland (loan from Mainz)",
+    "window": "2026-summer",
+    "kind": "one-source",
+    "reason": "bundesliga.com has Mainz taking him back from Gent and loaning him to Midtjylland, but ESPN lists him on BOTH the Mainz and the Midtjylland 2026-27 squad pages, so ESPN does not settle where he plays.",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/572/fc-midtjylland",
+      "https://www.espn.com/soccer/team/squad/_/id/2950"
+    ]
+  },
+  {
+    "name": "Cleiton",
+    "row": "Red Bull Bragantino",
+    "claimed": "VfL Wolfsburg",
+    "window": "2026-01",
+    "kind": "namesake",
+    "reason": "Wolfsburg signed a Cleiton from Flamengo in January 2026 (bundesliga.com, ESPN Wolfsburg squad), but the table's only 2026 Cleiton is a 28 year old Bragantino goalkeeper. Could not prove they are the same man, so the row is not touched.",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-winter-january-2026-35159",
+      "https://www.espn.com/soccer/team/squad/_/id/138"
+    ]
+  },
+  {
+    "name": "Otávio",
+    "row": "Al-Qadsiah FC",
+    "claimed": "Eintracht Frankfurt",
+    "window": "2026-summer",
+    "kind": "namesake",
+    "reason": "Frankfurt signed an Otávio from Estrela Amadora (bundesliga.com, ESPN Frankfurt squad). The table's 2026 Otávio is the Portuguese midfielder at Al-Qadsiah, a different man, so his row must NOT be moved.",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/125"
+    ]
+  },
+  {
+    "name": "Joyeux Masanka Bungi",
+    "row": "Red Bull New York",
+    "claimed": "VfB Stuttgart II (loan from RB Leipzig)",
+    "window": "2026-summer",
+    "kind": "one-source",
+    "reason": "bundesliga.com lists his New York Red Bulls loan ending and a loan to Stuttgart's reserve side; ESPN's squad pages carry first teams only, so there is no second source.",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051"
+    ]
+  },
+  {
+    "name": "Aleksa Damjanovic",
+    "row": "Graficar Belgrad",
+    "claimed": "Bayer 04 Leverkusen",
+    "window": "2026-summer",
+    "kind": "one-source",
+    "reason": "bundesliga.com lists him as a Leverkusen signing from Red Star Belgrade, but ESPN's Leverkusen 2026-27 squad page does not list him (he may have been loaned straight back), so there is no second source.",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/131/ger.leverkusen"
+    ]
+  },
+  {
+    "name": "Luca Erlein",
+    "row": "TSG 1899 Hoffenheim II",
+    "claimed": "Energie Cottbus (loan from Leverkusen)",
+    "window": "2026-summer",
+    "kind": "one-source",
+    "reason": "bundesliga.com lists Leverkusen signing him from Hoffenheim and the 2. Bundesliga list has him on loan at Energie Cottbus (3. Liga). No second source, and the table carries no Cottbus spelling.",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.bundesliga.com/en/2bundesliga/news/official-bundesliga-2-second-division-transfer-centre-summer-2026-37052"
+    ]
+  },
+  {
+    "name": "Raphaël Guerreiro",
+    "row": "Bayern Munich",
+    "claimed": "without a club",
+    "window": "2026-summer",
+    "kind": "unresolved",
+    "reason": "His Bayern contract ended on 2026-06-30 (bundesliga.com: out of contract; not on ESPN's Bayern squad). No completed move found as of 2026-09-30; writing him as Without Club would need a second source saying he is unattached.",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-summer-2026-37051",
+      "https://www.espn.com/soccer/team/squad/_/id/132/ger.bayern_munich"
+    ]
+  },
+  {
+    "name": "Aarón Anselmino",
+    "row": "Borussia Dortmund",
+    "claimed": "Chelsea, after a January 2026 loan to Strasbourg",
+    "window": "2026-01",
+    "kind": "unresolved",
+    "reason": "Chelsea recalled him from Dortmund in January 2026 (bundesliga.com January list) and chelseafc.com announced a loan to Strasbourg for the rest of 2025-26. Where he plays in 2026-27 is not settled by two sources yet, so the stale Dortmund row is left for a follow up.",
+    "sources": [
+      "https://www.bundesliga.com/en/bundesliga/news/official-bundesliga-transfer-centre-winter-january-2026-35159",
+      "https://www.chelseafc.com/en/news/article/aaron-anselmino-completes-loan-switch"
+    ]
+  },
+  {
+    "name": "Alexander Prass",
+    "row": "SK Sturm Graz",
+    "claimed": "TSG 1899 Hoffenheim",
+    "window": "2026-summer",
+    "kind": "stale-row",
+    "reason": "ESPN's Hoffenheim 2026-27 squad lists him and the table even has a 2025 Hoffenheim row, but his 2026 row says Sturm Graz. He moved before the 2026 windows, so this is a snapshot error for a separate fix, not a window move.",
+    "sources": [
+      "https://www.espn.com/soccer/team/squad/_/id/7911"
+    ]
+  },
+  {
+    "name": "Robert Skov",
+    "row": "TSG 1899 Hoffenheim",
+    "claimed": "1.FC Union Berlin",
+    "window": "2026-summer",
+    "kind": "stale-row",
+    "reason": "ESPN's Union Berlin 2026-27 squad lists him and the table has a 2025 Union row, but his 2026 row says Hoffenheim. Neither bundesliga.com window list carries a 2026 move for him, so it is a snapshot error for a separate fix.",
+    "sources": [
+      "https://www.espn.com/soccer/team/squad/_/id/598"
+    ]
+  }
+]
