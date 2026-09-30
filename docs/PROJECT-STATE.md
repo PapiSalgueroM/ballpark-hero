@@ -1,5 +1,20 @@
 # Project state
 
+## BUILT 2026-09-30: Codex Round 744, common native result sharing
+
+The shared result buttons now include Share result, using the existing native-share and clipboard
+helper. Default and caller-supplied text agree with the existing destination buttons. The control
+disables while pending, quietly accepts cancellation and restores itself afterwards. No score,
+recording, data or save changes. Section 102's native action is closed; card streak/percentile
+enrichment is still open.
+
+Type gate 0, isolated production build 0, AdSense, harness-anchor and rival-name guards green.
+Browser acceptance passed 26 checks at 320, 390 and 1440 pixels, including native success,
+cancellation, unsupported sharing, clipboard fallback/failure, duplicate suppression and unchanged
+existing X/copy payloads. The new button is 44 pixels high and all three widths have no overflow.
+No page, console or request errors. Committed on shared main for Claude's next gated release;
+this receipt does not claim it is published. Round 746 is claimed for Academy position/age filters.
+
 ## VERIFIED 2026-09-30: Round 741, AdSense decision and live indexing audit
 
 Codex directly observed AdSense **Needs attention / Low value content**, ads.txt

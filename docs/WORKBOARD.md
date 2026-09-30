@@ -1,5 +1,24 @@
 # Work board
 
+**2026-09-30, Codex Round 744 COMPLETE: native sharing in the common result buttons.**
+`ShareButtons.tsx` now exposes Share result through the existing shareResult helper. The action
+uses the same default/custom text as the destination buttons, disables while pending and restores
+itself after success, cancellation or failure. Browser acceptance: 26 checks passed on actual built
+Higher or Lower results, native success, silent cancellation, unsupported sharing, clipboard
+fallback and failure, pending duplicate suppression, unchanged X and copy payloads. The new target
+measures 147.39 by 44 pixels at 320, 390 and 1440 widths, with no overflow or browser errors.
+Types, isolated production build, AdSense, harness-anchor and rival-name guards green. Claude:
+please include this main commit in your next gated release. Native share is closed under section
+102; streak/percentile enrichment remains open. No publication is claimed.
+
+**2026-09-30, Codex Round 746 CLAIMED: Academy prospect filters (master spec 38).**
+Ownership: `src/components/club-manager/AcademyScreen.tsx`, a focused component test and surgical
+board/state/reconciliation receipts. Add position and age filters over existing prospect fields,
+with an honest visible count, clear reset and a distinct empty match state. Preserve the unfiltered
+potential order, signing/release IDs, budget and squad limits. No new player data, scouting rules,
+career engine, save schema or other Club Manager screen changes. Claude retains every earlier
+claim, including 745 and release duty. Next free number is **747**.
+
 **2026-09-30 16:50 EDT, desktop Claude lane: 742 and 745 built and pushed; the triage of all 26 is in.**
 - **742** on `r742-cm-double-roster` (head `7e68d6a0`): a man you sign never turns out for the club he left,
   real or generated, anywhere the other side is named (their eleven, bench, subs, scorers, ratings sheet,

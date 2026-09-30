@@ -1,8 +1,9 @@
 import { useState, useRef } from 'react';
-import { Copy, Mail, Image as ImageIcon } from 'lucide-react';
+import { Copy, Mail, Share2, Image as ImageIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { ALL_GAMES } from '@/data/gameRegistry';
 import ShareCard from '@/components/game/ShareCard';
+import { shareResult } from '@/lib/share';
 
 interface ShareButtonsProps {
   score: string;
@@ -41,9 +42,10 @@ const MessagesIcon = ({ className }: { className?: string }) => (
 const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: ShareButtonsProps) => {
   const [igTooltip, setIgTooltip] = useState(false);
   const [savingImage, setSavingImage] = useState(false);
+  const [sharing, setSharing] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
 
-  // Default share text (used by X, WhatsApp, Instagram-copy, Gmail, Messages).
+  // Default share text (used by native share, X, WhatsApp, Instagram-copy, Gmail, Messages).
   // Always ends with the site URL + game path, and includes the emoji grid
   // when the caller supplied one. `customText` is a full override, authored
   // by the calling page, so it is trusted as-is and not re-wrapped here; every
@@ -73,6 +75,16 @@ const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: Shar
       toast.success('Score card copied!');
     } catch {
       toast.error('Could not copy to clipboard');
+    }
+  };
+
+  const handleShare = async () => {
+    if (sharing) return;
+    setSharing(true);
+    try {
+      await shareResult(shareText, gameName);
+    } finally {
+      setSharing(false);
     }
   };
 
@@ -155,8 +167,18 @@ const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: Shar
         />
       </div>
 
-      {/* Primary actions: copy text card + save image card */}
+      {/* Primary actions: share, copy text card + save image card */}
       <div className="flex flex-row flex-wrap items-center justify-center gap-2">
+        <button
+          type="button"
+          onClick={handleShare}
+          disabled={sharing}
+          aria-busy={sharing}
+          className="inline-flex min-h-[44px] items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-semibold hover:bg-accent hover:border-primary/30 transition-all shadow-sm disabled:opacity-60"
+        >
+          <Share2 className="w-4 h-4" aria-hidden="true" />
+          Share result
+        </button>
         <button
           onClick={handleCopyCard}
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-semibold hover:bg-accent hover:border-primary/30 transition-all shadow-sm"
