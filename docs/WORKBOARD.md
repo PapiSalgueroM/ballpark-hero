@@ -1,5 +1,11 @@
 # Work board
 
+**753 fence ownership addendum:** Codex's browser lane owns new
+`scripts/playChainTimelineMotion.mjs` to preserve the actual rendered phone/motion regression check.
+Use compiled real timelines and finished-build CSS, cover empty/seed/appended/same-chain/ended states,
+normal/reduced motion and four widths, and prove the old unbroken-text overflow through an asserted
+temporary no-wrap control. This stays within 753's presentation claim and adds no game state writes.
+
 **2026-09-30, Codex Rounds 751 and 752 COMPLETE: shared Front Office trade and ownership motion.**
 751: finite card/newest-reply reveal and agreed/ended feedback in NFL, NBA, MLB and NHL Front Office.
 Packages wrap on phones, existing actions are immediate and 44px high. Six actual-card tests green,
