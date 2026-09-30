@@ -111,6 +111,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { pullAll } from './genNflGridData.mjs';
 import { cleanDraftPicks, firstRoundEnds, inFirstRound } from './lib/draftRounds.mjs';
+import { isPlaceholderName } from './lib/placeholderName.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 export const OUT = path.join(ROOT, 'scripts', 'data', 'collegeGridPlayers.json');
@@ -536,6 +537,11 @@ export function buildCollegeKey(src, { control = {} } = {}) {
   const byAnyFold = new Map();
   for (const e of entries) for (const f of new Set([e.fold, ...e.rows.map(r => r.fold)])) byAnyFold.set(f, [...(byAnyFold.get(f) ?? []), e]);
   for (const s of [...src.qb, ...src.rb]) {
+    /* Round 706: "_ Sullivan" (UTEP, 2012) is a placeholder for a first name
+       the scrape never had, not a person, so it joins nobody. It could not
+       have joined anyway (its fold is a lone surname); this keeps it that way
+       whether or not the cleanup migrations have landed. */
+    if (isPlaceholderName(s.player_name)) continue;
     const fold = foldName(s.player_name);
     const schools = uniq(splitSchoolList(s.schools).map(canon));
     const last = Number(s.year_max);
@@ -684,7 +690,7 @@ export async function pullSources(log = () => {}) {
 
 export const RULES = {
   names: 'foldName: accents stripped, lower case, apostrophes and periods dropped, other non alphanumerics a space, runs of single letters joined, a trailing jr, sr, ii, iii or iv dropped, a quoted nickname dropped; a draft name mirrored as "Last, FirstFirst Last" is read as "First Last" and a Hall of Fame marker at its end (StaubachHOF, Warfield HOF) and a trailing lone number (Snell 3) are dropped; every dash character read as a hyphen',
-  draftRows: 'nfl_draft_picks with forfeit rows dropped, then one row per (year, pick), the lowest id (scripts/lib/draftRounds.mjs)',
+  draftRows: 'nfl_draft_picks with placeholder rows dropped (a forfeit sentence, or no position and no college), then one row per (year, pick), the lowest id (scripts/lib/draftRounds.mjs)',
   identity: `a draft row joins a career on folded name plus the key's equal draft year and pick, or a first season 0 to ${JOIN_WINDOW_YEARS} years after the draft with a compatible position group; tiers both, pick, then window after every equal-pick join, where a career already holding a row from that draft year is no candidate; two careers in the first non empty tier is ambiguous and the row joins and forms nothing; an undrafted career takes no window join; window joins leaving a career with rows sharing no college are dropped; a row that could be a career's but joined nobody turns that career's false first_round to null unless the row is past its boundary too, and its best_pick to null if the row's pick is smaller. A row still unjoined then joins the one career holding its slot (the NFL key draft year and pick, or the roster draft number in the year before or the year of the first season) whose surname folds alike and that holds no row from that year. Unjoined rows with one folded name, one college and years within ${JOIN_WINDOW_YEARS} of each other form a draft-only entry. A Heisman row joins the one entry of the same folded name whose colleges hold its school (a quoted nickname also tried as nickname plus surname; two such entries told apart by the winner's listed position group when exactly one holds it), else stands alone. A cfb stats row adds its schools when its folded name matches the entry's name or a name on one of its draft rows, its last season is in the ${JOIN_WINDOW_YEARS} seasons before one of the entry's draft years and its list holds that row's college; a row fitting two entries adds to neither`,
   colleges: `HTML entities decoded before splitting on semicolons; canonical spellings from a derived alias table (a roster spelling maps to a draft spelling on at least ${ALIAS_MIN_ENTRIES} joined careers and at least ${ALIAS_MIN_SHARE * 100} percent of that roster spelling's joined careers; on a career whose roster already spells one of its draft colleges exactly, its other roster spellings are transfer schools and not evidence), applied to every source; no alias typed by hand; a school held only inside a roster transfer list (a college string naming two or more schools) and by no other source is left out when the cfb stats tables cover it and a joined cfb row lists two or more schools without it`,
   collegesAgreed: 'a draft college also held by the roster, the joined Heisman row or a joined cfb stats row',

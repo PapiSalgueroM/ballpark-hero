@@ -6,6 +6,7 @@ import { ensureAnswerInList } from '@/lib/ensureAnswerInOptions';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { readDailyRecord, writeDailyRecord } from '@/lib/dailyRecord';
 import { markRestoredFinish } from '@/lib/restoredFinish';
+import { dedupePrograms } from '@/lib/cbbPrograms';
 
 const SLUG = 'guess-cbb-team';
 
@@ -61,6 +62,8 @@ export function useCbbProgram() {
   const [allPrograms, setAllPrograms] = useState<CbbProgramPuzzle[]>([]);
   const [loading, setLoading] = useState(false);
   const [programsStatus, setProgramsStatus] = useState<'loading' | 'ready' | 'error'>('loading');
+  /* Round 706: a twin row hidden by dedupePrograms, to the row kept in its place. */
+  const replacedByRef = useRef<Map<string, any>>(new Map());
 
   // Load all programs on mount (for autocomplete + puzzle selection).
   const loadPrograms = useCallback(async () => {
@@ -84,7 +87,12 @@ export function useCbbProgram() {
       setProgramsStatus('error');
       return;
     }
-    setAllPrograms((data ?? []).map(mapRow));
+    /* ROUND 706: one program, one row. Three schools were filed twice (both
+       Loyolas and Seattle), so the search offered both twins and the dashed
+       Loyola Chicago taught "0 titles". See src/lib/cbbPrograms.ts. */
+    const { programs, replacedBy } = dedupePrograms(data ?? []);
+    replacedByRef.current = replacedBy;
+    setAllPrograms(programs.map(mapRow));
     setProgramsStatus('ready');
   }, []);
 
@@ -120,7 +128,8 @@ export function useCbbProgram() {
             .eq('id', daily.program_id)
             .single();
           if (prog) {
-            setGameState({ puzzle: mapRow(prog), revealedClues: 1, guesses: [], gameStatus: 'playing', score: 0, mode });
+            const kept = replacedByRef.current.get(prog.id) ?? prog;
+            setGameState({ puzzle: mapRow(kept), revealedClues: 1, guesses: [], gameStatus: 'playing', score: 0, mode });
             setLoading(false);
             return;
           }
