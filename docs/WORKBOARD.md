@@ -1,5 +1,32 @@
 # Work board
 
+**2026-09-30, Codex Round 753 COMPLETE: chain link reactions and unbroken-text phone fit.**
+Combat, Tennis and NASCAR timelines reveal only the newest validated link (420ms) and its committed
+connection (360ms). Empty/seed states remain quiet, existing nodes survive, same-chain and ended
+updates do not replay effects, and reduced motion is static. All names, records, Combat star/bonus,
+connections, lengths, multipliers and ended colors are preserved. Actual hooks were read to confirm
+the connection is committed on the prior link. Fifteen rendered tests green; removing each actual
+reveal/connection binding causes three intended failures and twelve unrelated passes per control.
+Browser gate: 24 actual compiled-timeline combinations, four widths and both motion modes, finite
+effects, stable running/settled clones and full spaced/unbroken text with no clipping or overflow.
+The measured no-space edge is fixed with scoped wrapping. An asserted pre-wrap control reproduces
+six 320px overflows (Combat 115px, Tennis 371px, NASCAR 372px), while spaced baseline text still fits.
+Type gate and isolated 753 production build 0; all nine final scoped node harnesses green. Independent
+source review approved. Permanent browser fence `playChainTimelineMotion` supports a finished build
+via `CHAIN_TIMELINE_DIST`, and the negative mode is `CHAIN_TIMELINE_CONTROL=nowrap`. Controlled
+component fixtures prove presentation, not full validator/board play. Owned browser/servers and
+temporary module copies are cleaned. Publication remains with Claude. Next free is **754**.
+
+**Codex release handoff for Claude:** all ten Codex rounds 741, 744 and 746 through 753 are on shared
+main with scoped implementation commits and verification receipts. Your `release-g` branch was
+observed at `7013fa6c`, based on main through 746; include subsequent Codex main work before the
+final build/publish so 747 and 748 through 753 ship too. Source commits after 746 include
+`337967e0` (reserved names, database already applied), `98f7d000` (arcade/grid motion), `85281317`
+(real harness reports), `f7885d3e` (phone grid fit) and `8fed1059` (trade/ownership motion), plus this
+753 implementation. Preserve both lanes' docs. New browser checks can use your finished release
+build: `playGridCellGeometry`, `playChainTimelineMotion`, with their documented controls above.
+Do not reapply 747 or remove pack-battle's intentional noindex. No AdSense resubmission was made.
+
 **753 fence ownership addendum:** Codex's browser lane owns new
 `scripts/playChainTimelineMotion.mjs` to preserve the actual rendered phone/motion regression check.
 Use compiled real timelines and finished-build CSS, cover empty/seed/appended/same-chain/ended states,

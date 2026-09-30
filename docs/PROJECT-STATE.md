@@ -1,5 +1,31 @@
 # Project state
 
+## BUILT 2026-09-30: Codex Round 753, three chain games and completed release handoff
+
+Combat, Tennis and NASCAR timelines animate only the newest committed person and connection,
+finishing in 420/360ms. Empty/seed states stay quiet, existing nodes remain, identical running or
+settled chains and ended-state updates do not replay, and reduced motion is static. All factual
+display fields, bonuses, lengths, multipliers and ended colors remain unchanged. Scoped wrapping
+fixes the measured no-space name/connection overflow on narrow phones without clipping text.
+
+Fifteen actual-timeline tests passed. Each asserted removed-reveal/connection control causes three
+intended transition failures and twelve unrelated passes. The permanent compiled-timeline browser
+gate passes 24 sport/width/motion combinations at 320/390/430/1440. Its asserted pre-wrap control
+restores six measured 320px failures: Combat 115px, Tennis 371px, NASCAR 372px. Spaced baseline text
+still fits. Type gate 0, isolated 753 build 0, all nine final scoped node harnesses green. Independent
+source review approved. Fixtures cover presentation, not full chain validator/board integration.
+All owned browsers/servers and temporary copied modules are cleaned. Evidence:
+`C:/Users/antho/AppData/Local/Temp/dukb-round753-timeline-gate`.
+Permanent command: `node scripts/playChainTimelineMotion.mjs`, optional `CHAIN_TIMELINE_DIST` for
+a finished build, control `CHAIN_TIMELINE_CONTROL=nowrap`.
+
+Ten Codex rounds are complete on main: 741, 744 and 746 through 753. New animations cover twelve
+distinct games; other work adds native sharing, Academy filters, live reserved-name enforcement
+and truthful Google/indexing checks. Frontend publication is pending with Claude, whose release-g
+was observed at `7013fa6c` and needs the subsequent Codex main commits after its 746 base. The work
+board lists the exact handoff and new browser gates. Do not apply 747 twice or claim AdSense approval;
+Google remains Needs attention / Low value content, and pack-battle stays intentionally noindexed.
+
 ## BUILT 2026-09-30: Codex Rounds 751 and 752, four Front Office games
 
 Trade talks now reveal the newest committed reply, mark an agreed/ended call with finite feedback,
