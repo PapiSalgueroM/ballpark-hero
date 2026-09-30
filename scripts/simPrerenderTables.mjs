@@ -22,7 +22,8 @@
  *      the header first, and each row's cells (or, for the format histories, its
  *      seasons) in the data's order. The Record Books tables come from
  *      src/data/recordBooks.json, the archives from src/data/gridArchive.json,
- *      and the format histories from each page's own *_PERIODS list.
+ *      and the format histories from each page's own *_PERIODS list, with the
+ *      header labels its <thead> writes out.
  *   3. No page in the sitemap carries a cell outside a table, every table block
  *      holds nothing but rows, and the pages whose source draws a table from
  *      anything else are listed by name, so a new one cannot arrive unseen.
@@ -143,7 +144,12 @@ for (const [route, { comp }] of routeEl) {
     if (!periods || !names.includes('seasonRange')) continue;
     const tbody = (src.match(/<tbody>([\s\S]*?)<\/tbody>/) || [])[1] || '';
     if (!new RegExp(`\\{${periods}\\.map\\(`).test(tbody)) continue;
-    formatPages.push({ route, comp, lib: m[2], periods });
+    /* the header labels are written out in the page's own <thead>; when any of
+       them is an expression there is nothing literal to hold the header to */
+    const thead = (src.match(/<thead>([\s\S]*?)<\/thead>/) || [])[1] || '';
+    const ths = [...thead.matchAll(/<th\b[^>]*>([^<]*)<\/th>/g)].map(t => t[1]);
+    const header = ths.length && ths.every(t => norm(t) && !/[{}]/.test(t)) ? ths.map(norm) : null;
+    formatPages.push({ route, comp, lib: m[2], periods, header });
   }
 }
 
@@ -210,7 +216,7 @@ backed.set('/records', { kind: 'records index', tables: indexTables() });
 for (const [key, s] of Object.entries(archive.sports)) backed.set(`${s.game}/archive`, { kind: 'grid archive', tables: archiveTables(key) });
 formatPages.forEach((f, i) => backed.set(f.route, {
   kind: 'format history',
-  tables: [{ what: 'the format timeline', header: null, keys: FORMATS[i].periods.map(p => norm(FORMATS[i].seasonRange(p))) }],
+  tables: [{ what: 'the format timeline', header: f.header, keys: FORMATS[i].periods.map(p => norm(FORMATS[i].seasonRange(p))) }],
 }));
 
 /* ---- the controls, on copies in memory: one route of each kind ---- */
@@ -282,6 +288,7 @@ const paired = new Map();
     if (here) { flatRuns += here; fail(`${route}: ${here} header(s) or row(s) of its tables sit in the page as runs of paragraphs, one cell each`, route); }
   }
   console.log(`   ${pages} data backed pages, ${tables} tables paired with their data, ${flatRuns} rows written as paragraphs`);
+  console.log(`   ${formatPages.length} format pages found in source, ${formatPages.filter(f => f.header).length} with a literal header to hold them to`);
 }
 
 /* ======================================================================= */
