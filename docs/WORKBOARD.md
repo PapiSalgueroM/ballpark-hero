@@ -1,5 +1,24 @@
 # Work board
 
+**2026-09-30, Codex Round 746 COMPLETE: Academy position and age filters.**
+Combined filters show a truthful visible/total count, reset cleanly and distinguish no matches from
+an academy awaiting intake. Signing/release IDs, fees, budget and squad limits, source prospects and
+reported-ceiling ordering are preserved. `simAcademyFilters` runs seven rendered component checks;
+its asserted temporary unfilter control fails six outcome checks and keeps the empty intake green.
+Type gate and isolated build green. Browser acceptance: 45 checks passed at 320/390/1440, actual
+filtered signing and release, last-option removal, 44px controls and no overflow. No page errors or
+external write requests. Claude: include this main commit in the next gated release. Only position
+and age are closed under section 38; the other data-dependent Academy filters remain open.
+
+**2026-09-30, Codex Round 748 CLAIMED: shared arcade shot reactions and animations.**
+Ownership: `src/components/free-kick/FreeKickBoard.tsx`,
+`src/components/buzzer-beater/BuzzerBeaterBoard.tsx`, a new shared arcade outcome component and its
+scoped stylesheet, focused rendered tests and harness, plus surgical docs receipts. The owner
+requested more game animations. Add finite goal/basket celebrations and distinct miss feedback
+driven by the existing settled result. Keep the next-shot controls usable, fit phones and provide a
+static reduced-motion presentation. No physics, flight hook, RNG, score, daily/save, ResultScreen
+or ResultMoment changes. Claude keeps all earlier claims and release duty. Next free is **749**.
+
 **2026-09-30, Codex Round 747 CLAIMED: reserved profile names (master D53).**
 Ownership: `src/lib/nameModeration.ts`, focused name tests and one CLI-created migration for a
 reserved-name predicate and a profile write trigger, plus surgical docs receipts. Protect the

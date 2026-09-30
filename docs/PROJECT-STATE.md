@@ -1,5 +1,16 @@
 # Project state
 
+## BUILT 2026-09-30: Codex Round 746, Academy filters
+
+Academy prospects can be filtered by position and exact age together, with count/reset and clear
+empty states. Existing ceiling ordering, source list and signing/release rules remain intact.
+`simAcademyFilters`: seven rendered tests green, ignored-filter negative control produces six
+outcome failures while the original empty intake remains green. Type gate and isolated build 0.
+Browser acceptance: 45 checks at 320/390/1440, actual sign/release IDs and fees, unchanged budget
+and squad constraints, preserved saves, 44px controls and no overflow. No page errors or external
+writes. Source is ready for Claude's next gated release; publication pending. Round 748 is claimed
+for shared finite arcade goal/basket/miss reactions after the owner's animation request.
+
 ## BUILT 2026-09-30: Codex Round 744, common native result sharing
 
 The shared result buttons now include Share result, using the existing native-share and clipboard
