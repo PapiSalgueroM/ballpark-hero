@@ -445,7 +445,7 @@ function SquadRow({ p, career, eraId, inXI, isCaptain, isOpen, onToggle, sortKey
         <span data-cm-cell="mood" title={`Morale ${Math.round(p.morale)}`} className="text-sm w-5 shrink-0 text-center md:w-auto">{moraleEmoji(p.morale)}</span>
         <ChevronDown
           aria-hidden="true"
-          className={cn('w-3.5 h-3.5 shrink-0 text-muted-foreground transition-transform motion-reduce:transition-none', isOpen && 'rotate-180')}
+          className={cn('w-3.5 h-3.5 shrink-0 text-muted-foreground', isOpen && 'rotate-180')}
         />
       </button>
       {isOpen && <SquadRowDetail p={p} career={career} scoutLevel={scoutLevel} money={money} />}
