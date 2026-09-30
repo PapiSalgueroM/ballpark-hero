@@ -63,14 +63,14 @@
  * cannot plant what it describes, and each green only when its own section
  * goes red and no other section moves. They corrupt the data the page was
  * built from (the file, the loaded pool, the snapshot), never the checks:
- *   ARCHIVE_CONTROL=badanswer  one answer swapped for a player who does not fit (2)
+ *   ARCHIVE_CONTROL=badanswer  a cell's last name swapped for a player who does not fit (2)
  *   ARCHIVE_CONTROL=shadowed   the loaded index made to resolve one listed name to a
  *                              namesake who does not fit, the pre fix last row wins map (2)
  *   ARCHIVE_CONTROL=miscount   one cell's published count raised by one, in the file and
  *                              in the saved page built from it (2)
  *   ARCHIVE_CONTROL=dedupe     the pre Round 371 prerenderer's paragraph dedupe (6)
  *   ARCHIVE_CONTROL=stale      the file's generatedFor moved 4 days past its newest board (7)
- *   ARCHIVE_CONTROL=repeat     a cell's second name replaced by its first (8)
+ *   ARCHIVE_CONTROL=repeat     a cell's last name replaced by its first (8)
  *   ARCHIVE_CONTROL=malformed  a real valid player with a placeholder name listed (9)
  *   ARCHIVE_CONTROL=copyrange  the saved copy's newest date moved back a day (10)
  *   ARCHIVE_CONTROL=isoh2      one saved board heading written with its ISO date (11)
@@ -230,8 +230,11 @@ if (CONTROL === 'badanswer') {
     const valid = validPlayers(s.key, b.date, c);
     if (!valid) continue;
     const validNames = new Set(valid.map(pl => pl.name));
+    /* The LAST listed name goes, not the first: the man dropped is the
+       busiest listed, so section 12 has no rarer man left off to object to,
+       and only section 2 can. */
     const wrong = pools[s.key].players.find(pl => !validNames.has(pl.name) && !unprintable(pl.name) && !c.answers.includes(pl.name));
-    if (wrong) { c.answers[0] = wrong.name; planted = true; break; }
+    if (wrong) { c.answers[c.answers.length - 1] = wrong.name; planted = true; break; }
   }
   if (!planted) cannotRun('no invalid player could be found to swap in');
   console.log('   NEGATIVE CONTROL ON: one published answer replaced with a player who does not fit, section 2 must go red');
@@ -276,9 +279,11 @@ if (CONTROL === 'stale') {
   console.log(`   NEGATIVE CONTROL ON: the file now claims ${archive.generatedFor} while its newest boards stay where they were, section 7 must go red`);
 }
 if (CONTROL === 'repeat') {
-  const hit = allCells().find(({ c }) => c.answers.length >= 2 && c.answers[0] !== c.answers[1]);
+  /* The last name becomes a copy of the first: the man dropped is the busiest
+     listed, so section 12 has nobody rarer left off and only section 8 moves. */
+  const hit = allCells().find(({ c }) => c.answers.length >= 2 && c.answers[0] !== c.answers[c.answers.length - 1]);
   if (!hit) cannotRun('no cell lists two different names');
-  hit.c.answers[1] = hit.c.answers[0];
+  hit.c.answers[hit.c.answers.length - 1] = hit.c.answers[0];
   console.log(`   NEGATIVE CONTROL ON: ${hit.s.key} ${hit.b.date} ${hit.c.row} x ${hit.c.col} lists ${hit.c.answers[0]} twice, section 8 must go red`);
 }
 if (CONTROL === 'malformed') {
