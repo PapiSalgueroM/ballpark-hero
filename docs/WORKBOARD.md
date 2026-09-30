@@ -1,5 +1,15 @@
 # Work board
 
+**2026-09-30, Codex Round 749 CLAIMED: shared grid answer animations.**
+Ownership: `src/components/football-grid/GridBoard.tsx`,
+`src/components/soccer-grid/SoccerGridBoard.tsx`, one new shared scoped motion stylesheet,
+focused rendered tests and harness, plus surgical docs receipts. Add finite correct-answer lock-in
+and wrong-answer feedback to the existing boards, with static reduced-motion states. Preserve
+keyboard focus, disabled correct cells, callback IDs, labels, rarity and the actual validation result.
+No validators, hooks, data, guesses, scores, archives, AI/cache or global CSS changes. This is a
+separate animation builder while 748's arcade effects and 747's database guard proceed. Claude
+retains every earlier claim and release duty. Next free is **750**.
+
 **2026-09-30, Codex Round 746 COMPLETE: Academy position and age filters.**
 Combined filters show a truthful visible/total count, reset cleanly and distinguish no matches from
 an academy awaiting intake. Signing/release IDs, fees, budget and squad limits, source prospects and
