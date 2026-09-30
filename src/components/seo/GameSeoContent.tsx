@@ -1,7 +1,10 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { ALL_GAMES } from '@/data/gameRegistry';
+import { ALL_GAMES, CATEGORIES } from '@/data/gameRegistry';
+/* Round 654: the short hub list, not SPORT_HUBS, so the breadcrumb does not
+   pull every hub's prose into every game page (Round 672's weight work). */
+import { HUB_NAV } from '@/lib/sportHubNav';
 /* Round 210: the guide arrives one sport at a time instead of every word
    of prose on the site arriving on every page. See gameContent/loader.ts. */
 import { loadGameContent, peekGameContent } from '@/data/gameContent/loader';
@@ -193,6 +196,20 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
      simRelatedGames with a real BFS), and two hash-spread variety picks. */
   const related = useMemo(() => relatedGamesFor(path), [path]);
 
+  /* Round 654: the trail runs through the sport's hub when the game's category
+     has one, DoUKnowBall > NFL Football Games > NFL Grid, so a result can show
+     where a game sits and the hub gets the vote. A category with no hub keeps
+     the two step trail. The lookup is synchronous off static lists, so the
+     breadcrumb Helmet below still mounts once already holding its final
+     content, which is the Round 373 rule for these blocks. */
+  const category = CATEGORIES.find(c => c.games.some(g => g.path === path));
+  const hub = category ? HUB_NAV.find(h => h.titles.includes(category.title)) : undefined;
+  const crumbs = [
+    { name: 'DoUKnowBall', item: 'https://douknowball.com' },
+    ...(hub ? [{ name: hub.h1, item: `https://douknowball.com${hub.route}` }] : []),
+    { name: gameLabel, item: `https://douknowball.com${path}` },
+  ].map((c, i) => ({ '@type': 'ListItem', position: i + 1, ...c }));
+
   return (
     <section
       className="max-w-2xl mx-auto mt-12 mb-8 px-4"
@@ -336,10 +353,7 @@ const GameSeoContent = ({ title, description, howToPlay, pageHasOwnH1 }: GameSeo
           <script type="application/ld+json">{JSON.stringify({
             '@context': 'https://schema.org',
             '@type': 'BreadcrumbList',
-            itemListElement: [
-              { '@type': 'ListItem', position: 1, name: 'DoUKnowBall', item: 'https://douknowball.com' },
-              { '@type': 'ListItem', position: 2, name: gameLabel, item: `https://douknowball.com${path}` },
-            ],
+            itemListElement: crumbs,
           })}</script>
         </Helmet>
       )}
