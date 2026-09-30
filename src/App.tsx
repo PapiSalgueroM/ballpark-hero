@@ -161,6 +161,7 @@ const NflPlayoffFormatHistory = lazy(() => import("./pages/NflPlayoffFormatHisto
 const NbaPlayoffFormatHistory = lazy(() => import("./pages/NbaPlayoffFormatHistory"));
 const MlbPostseasonFormatHistory = lazy(() => import("./pages/MlbPostseasonFormatHistory"));
 const NhlPlayoffFormatHistory = lazy(() => import("./pages/NhlPlayoffFormatHistory"));
+const WorldCup2026Results = lazy(() => import("./pages/WorldCup2026Results"));
 const WhodTheyBeat = lazy(() => import("./pages/WhodTheyBeat"));
 const SilverwareSort = lazy(() => import("./pages/SilverwareSort"));
 const HallOfChampions = lazy(() => import("./pages/HallOfChampions"));
@@ -514,6 +515,8 @@ const AppContent = () => {
         <Route path="/nba-playoff-format-history" element={<NbaPlayoffFormatHistory />} />
         <Route path="/mlb-postseason-format-history" element={<MlbPostseasonFormatHistory />} />
         <Route path="/nhl-playoff-format-history" element={<NhlPlayoffFormatHistory />} />
+        {/* Round 656: the 2026 World Cup as played, read straight from src/data/wc2026Results.ts. */}
+        <Route path="/world-cup-2026-results" element={<WorldCup2026Results />} />
         <Route path="/whod-they-beat" element={<WhodTheyBeat />} />
         <Route path="/silverware-sort" element={<SilverwareSort />} />
         <Route path="/hall-of-champions" element={<HallOfChampions />} />
