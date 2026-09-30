@@ -6,29 +6,38 @@
  * whatever sat in each cell into whichever column came next. Measured
  * 2026-09-30 with read only SQL: the three World Cup awards (Golden Boot,
  * Golden Glove, Best Young Player) are 131 rows each, the SAME 131 rows
- * copied under all three names, and most of them are not winners of anything:
+ * copied under all three names. 183 of those 393 rows are junk shaped:
  * winner_name holds the outlet that picked an all star team ('ESPN Deportes',
- * 'Associated Press', 'France Football'), a count ('1'), a whole nation
- * ('Colombia', 'England France'), or five players at once, and club_or_team
- * holds goal of the tournament scorelines ('2 -0'). The awards the List Quiz
+ * 'Associated Press'), a count ('1'), a whole nation ('Colombia',
+ * 'England France'), or several players at once, and club_or_team holds goal
+ * of the tournament scorelines ('2 -0'). The other 210 are name shaped rows
+ * filed under the wrong award (Golden Ball and Golden Glove winners sitting
+ * under 'Golden Boot'), and no shape test can see that: only the allowlist
+ * below and the record keep them out of a game. The awards the List Quiz
  * reads carry smaller junk of their own: 'Not awarded' for the five years the
  * European Golden Shoe was suspended, and '(tie)' and '(2)' tags on repeat or
  * shared winners, which made the tagged man a second, unguessable answer.
  *
- * supabase/migrations/20260930120000_round_708_soccer_awards_cleanup.sql
- * deletes the junk and repairs what can be recovered. It is not applied by the
- * builder, and a re-scrape would put the junk straight back, so this test runs
- * whether or not it has landed: a row that fails it is skipped, and the game
- * gets fewer answers rather than a wrong one.
+ * A later round ships
+ * supabase/migrations/20260930120000_round_708_soccer_awards_world_cup.sql,
+ * which deletes the World Cup junk and rewrites those rows from a two source
+ * record; it is not in the repo yet. A re-scrape would put the junk straight
+ * back, so this test runs whether or not it has landed: a row that fails it is
+ * skipped, and the game gets fewer answers rather than a wrong one. It is the
+ * net for shape junk in the verified awards, not a proof that a name shaped
+ * row belongs to the award it sits under.
  *
  * Pure on purpose (no imports), so scripts/simSoccerAwardsShape.mjs can run
  * the exact function the quiz runs.
  */
 
 /**
- * The awards a game may read, each spot checked against the record. Anything
- * else in the table is unverified or known corrupt, and awardWinners() in
- * src/lib/listQuiz.ts refuses to read it rather than trusting a caller.
+ * The awards a game may read. Each one is recorded winner by winner, with two
+ * sources on two organisations, in scripts/data/soccerAwardsVerified2026-09.json,
+ * and scripts/simSoccerAwardsShape.mjs section 5 holds the live table and the
+ * dealt lists to that record. Anything else in the table is unverified or
+ * known corrupt, and awardWinners() in src/lib/listQuiz.ts refuses to read it
+ * rather than trusting a caller.
  */
 export const VERIFIED_SOCCER_AWARDS: readonly string[] = [
   'European Golden Shoe',
@@ -50,7 +59,7 @@ export const DO_NOT_USE_SOCCER_AWARDS: Readonly<Record<string, string>> = {
   'FIFA Best Goalkeeper': "winner_name holds '1' on all 16 rows; the keeper sits in nationality, men and women mixed",
   'Serie A Footballer of the Year': 'winner_name holds a position word on all 29 rows; the player sits in nationality',
   "Onze d'Or": 'unverified, with 3 duplicated rows',
-  'UEFA Player of the Year': "unverified; the year column looks one behind the award's own (Messi's 2010-11 award sits at 2010)",
+  'UEFA Player of the Year': 'unverified, no record yet; its 13 rows read right, with the year as the season start year like the PL award',
 };
 
 /** Lowercase, accents and punctuation gone, single spaces. */
@@ -145,6 +154,22 @@ function isOnlyNations(words: string[]): boolean {
   return words.length > 0 && ok[words.length];
 }
 
+/**
+ * How many whitespace separated tokens of the raw name start with a capital
+ * letter. A footballer's common name has at most three ('Guillermo Barros
+ * Schelotto', 'Dwayne De Rosario'); particles stay lowercase ('Edwin van der
+ * Sar', 'Jan Vennegoor of Hesselink'), so two men in one cell show up as four
+ * or more ('Oleg Salenko Hristo Stoichkov', 'Oliver Kahn Rustu Recber').
+ * Measured over the 123 recorded winners of the three verified awards on
+ * 2026-09-30: the most any one of them has is 3, and the test fires at 4.
+ * Two men with one token each ('Pele Garrincha') have the shape of one man,
+ * and no shape test can tell them apart; the allowlist is what keeps a cell
+ * like that out of a game.
+ */
+function capitalisedTokens(name: string): number {
+  return name.split(/\s+/).filter(t => /^\p{Lu}/u.test(t)).length;
+}
+
 export interface AwardRowLike {
   winner_name?: string | null;
   club_or_team?: string | null;
@@ -166,7 +191,7 @@ export function awardRowProblem(row: AwardRowLike): string | null {
   }
   if (words.some(w => OUTLET_WORDS.has(w))) return 'winner_name is a paper, a broadcaster or a sponsor';
   if (isOnlyNations(words)) return 'winner_name is a nation where a person belongs';
-  if (words.length > 5) return 'winner_name holds several names in one cell';
+  if (words.length > 5 || capitalisedTokens(name) > 3) return 'winner_name holds several names in one cell';
   if (/^\d+\s*[-‐-―]\s*\d+$/.test(club)) return 'club_or_team is a scoreline';
   return null;
 }
