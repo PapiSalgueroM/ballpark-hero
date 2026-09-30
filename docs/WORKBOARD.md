@@ -5,13 +5,20 @@ Anthony supplied an AdSense rejection email and a Search Console "Excluded by no
 Neither email identifies the specific AdSense issue or affected URLs. Read the account reports when
 accessible, audit the published domain's sitemap URLs, robots directives, canonicals, crawler-visible
 content, ads.txt and deliberate noindex pages, then fix only a demonstrated defect. Ownership:
-`scripts/auditGoogleReadiness.mjs` (new), its isolated tests if needed, and
+`scripts/auditLive.mjs`, `scripts/lib/liveIndexability.mjs` (new),
+`scripts/simLiveIndexability.mjs` (new), and
 `docs/audits/GOOGLE-READINESS-2026-09-30.md` (new). Board, state and reconciliation updates are append-only
 or surgical. Claude keeps every existing claim through 740, including SEO rounds 652 to 656,
 seoMeta 700, the points economy, data imports and flagship first-screen designs. Do not edit those
 files or rebuild their snapshots in the shared checkout. No AdSense resubmission until the exact
 rejection and deployed repairs are verified. Baseline: `git pull --ff-only` current at `0e48acee`.
 The next free round for anyone else is **742**.
+
+**Round 741 scope update:** the existing live audit checks status, content and canonicals but does not
+read robots meta directives or HTTP X-Robots-Tag headers. Reuse and strengthen it instead of adding a
+second audit. Add localhost regression fixtures that prove the actual audit fails for restricted public
+pages and passes healthy pages. Local snapshots have 10 deliberate noindex pages, none in the 163-URL
+sitemap. Leave their protections intact. AdSense rejection reason and GSC URL examples still unverified.
 
 **2026-09-30 evening, desktop Claude lane: Rounds 735 to 740 CLAIMED, the 2026 transfer windows below the
 verified overlay** (the Player Bingo report of stale summer transfers): two source research of completed January and
