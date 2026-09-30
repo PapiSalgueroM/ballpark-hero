@@ -891,7 +891,7 @@ console.log('11) every MVP column is counted into its own table, per name as wri
     }
     if (CONTROL === 'mvpcount' && def === firstMvp) {
       const row = all.find(x => x.name === topNames[0]);
-      html = mutateSaved(def.slug, `<p>${esc(row.name)}</p>\n<p>${row.count}</p>`, `<p>${esc(row.name)}</p>\n<p>${row.count + 1}</p>`, 'mvpcount');
+      html = mutateSaved(def.slug, `<tr><td>${esc(row.name)}</td><td>${row.count}</td>`, `<tr><td>${esc(row.name)}</td><td>${row.count + 1}</td>`, 'mvpcount');
     }
 
     const before = failedChecks.get(11) || 0;
@@ -902,19 +902,20 @@ console.log('11) every MVP column is counted into its own table, per name as wri
     const sec = sectionAfter(lines, heading);
     if (!sec) { fail(`${def.key}: no h2 ${JSON.stringify(heading)}, the span the column holds`); continue; }
     const texts = sec.map(textOf);
-    const ps = sec.filter(l => tagOf(l) === 'p');
-
-    const head = ['Player', 'Awards under this name', 'Years'].map(c => `<p>${esc(c)}</p>`);
-    const h = ps.findIndex((l, i) => l === head[0] && ps[i + 1] === head[1] && ps[i + 2] === head[2]);
+    /* Round 652 saves a table as rows, one <tr> per line, so the MVP table is read cell by cell */
+    const trs = sec.filter(l => tagOf(l) === 'tr');
+    const cellsOf = l => [...l.matchAll(/<(td|th)>([\s\S]*?)<\/\1>/g)].map(c => textOf(c[2]));
+    const h = trs.findIndex(l => JSON.stringify(cellsOf(l)) === JSON.stringify(['Player', 'Awards under this name', 'Years']));
     if (h < 0) { fail(`${def.key}: the MVP table has no Player / Awards under this name / Years header`); continue; }
     const got = new Map();
-    let prev = Infinity, i = h + 3, ordered = true;
-    while (i + 2 < ps.length && /^\d+$/.test(textOf(ps[i + 1])) && /^\d{4}(, \d{4})*$/.test(textOf(ps[i + 2]))) {
-      const n = Number(textOf(ps[i + 1]));
+    let prev = Infinity, ordered = true;
+    for (let i = h + 1; i < trs.length; i++) {
+      const c = cellsOf(trs[i]);
+      if (c.length !== 3 || !/^\d+$/.test(c[1]) || !/^\d{4}(, \d{4})*$/.test(c[2])) break;
+      const n = Number(c[1]);
       if (n > prev) ordered = false;
       prev = n;
-      got.set(textOf(ps[i]), { n, yrs: textOf(ps[i + 2]) });
-      i += 3;
+      got.set(c[0], { n, yrs: c[2] });
     }
     if (!ordered) fail(`${def.key}: the MVP table is not in order, most first`);
     for (const x of listed) {

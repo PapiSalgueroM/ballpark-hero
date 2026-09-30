@@ -139,7 +139,7 @@ function bodyLines(html) {
     .replace(/<div data-site-chrome>[\s\S]*?<\/div>/g, '')
     .split('\n')
     .map(l => l.trim())
-    .filter(l => /^<(h[1-4]|p|li|a)\b/.test(l));
+    .filter(l => /^<(h[1-4]|p|li|a|tr)\b/.test(l));
 }
 const textOf = line => unesc(line.replace(/<[^>]+>/g, '')).trim();
 const tagOf = line => (line.match(/^<([a-z0-9]+)/) || [])[1];
@@ -152,8 +152,8 @@ function sectionAfter(lines, heading) {
   for (let j = at + 1; j < lines.length; j++) if (tagOf(lines[j]) === 'h2') { end = j; break; }
   return lines.slice(at + 1, end);
 }
-/** the table cells of a section, as text, in order */
-const cellsIn = sec => sec.filter(l => tagOf(l) === 'p').map(textOf);
+/** the table cells of a section, as text, in order: since Round 652 a saved table is one <tr> per line */
+const cellsIn = sec => sec.flatMap(l => (tagOf(l) === 'tr' ? [...l.matchAll(/<(td|th)>([\s\S]*?)<\/\1>/g)].map(c => textOf(c[2])) : []));
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const day = iso => { const [, m, d] = iso.split('-').map(Number); return `${MONTHS[m - 1]} ${d}`; };
@@ -178,7 +178,7 @@ const mutatePage = (from, to, why) => {
 if (CONTROL === 'dropmatch') {
   const last = inRound('r32').slice(-1)[0];
   if (!last) refuse('there is no round of 32 row to drop');
-  mutatePage(rowCells(last).map(c => `<p>${esc(c)}</p>`).join('\n') + '\n', '', 'dropmatch');
+  mutatePage('<tr>' + rowCells(last).map(c => `<td>${esc(c)}</td>`).join('') + '</tr>\n', '', 'dropmatch');
 }
 if (CONTROL === 'longtitle') {
   const t = (page.match(/<title[^>]*>([^<]*)<\/title>/) || [])[1];

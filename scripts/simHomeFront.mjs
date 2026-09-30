@@ -462,6 +462,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   /* A save key in src that is deliberately NOT a card, and why. */
   const EXCUSED = {
     'dukb-face-off-v1': 'Face Off is a daily quiz; its save is a match record, not a run to go back to',
+    'dukb-contract-chaos-v1': 'Contract Chaos plays its five seasons in one sitting; its save is a play record (played, best, total, the daily), not a run to go back to',
   };
   const SAVE_CONST = /\bconst\s+[A-Z_]*SAVE_KEY\s*=\s*(['"])([^'"]+)\1/g;
   const code = rel => stripComments(read(rel));

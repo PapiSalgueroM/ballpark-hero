@@ -195,6 +195,14 @@ function recordPageTables(def) {
     what: 'the most titles table', header: [cap(def.words.who[0]), `${cap(def.words.unit[1])} under this name`, 'Years'],
     names: new Set(multi.length ? multi : [...counts.keys()]),
   });
+  /* Round 656: a section whose table has an MVP column draws one more table, the MVP
+     count per name as written, after the most titles table (release G integration). */
+  if (def.columns.some(([k]) => k === 'mvp') && def.words?.mvp) {
+    const byName = new Map();
+    for (const r of rows) { const n = String(r.extra?.mvp ?? '').trim(); if (n) byName.set(n, (byName.get(n) || 0) + 1); }
+    const many = [...byName].filter(([, n]) => n >= 2).map(([n]) => n);
+    if (byName.size) tables.push({ what: 'the MVP table', header: ['Player', 'Awards under this name', 'Years'], names: new Set(many.length ? many : [...byName.keys()]) });
+  }
   return tables;
 }
 function indexTables() {
