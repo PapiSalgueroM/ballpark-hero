@@ -1,5 +1,21 @@
 # Work board
 
+**2026-09-30, Codex Rounds 760 and 761 CLAIMED: shared gameplay features.**
+760 owns `src/components/conquest/ConquestRegionMap.tsx`, focused rendered tests and a new sim
+harness. Separate persistent tapped territory selection from hover, add Enter/Space activation and
+a closable compact details card below the map. Derive the region, live owner, empire count,
+invincibility and power-up presence from existing props; preserve camera, rendering layers, battle
+rules and all parent boards. No new facts or named power-up effects inferred from an icon.
+761 owns `src/components/game/ShareButtons.tsx`, `src/components/game/GameNavbar.tsx`, a new small
+shared-result decoder/card and focused tests/harness. Add a dedicated Copy challenge action that
+copies a registered game URL with only its current public score. Opening that URL shows the shared
+result above the playable game, labelled as a shared result, with dismissal. Validate the registry
+path and bounded score, render plain React text, reject malformed/duplicate fields, and include no
+username, email, account/session/save payload or invented percentile. Preserve existing native,
+custom-text, image and destination sharing behavior. No App routes, score writes, rankings,
+validation, snapshots or database changes. These are independent of Claude's existing lanes.
+Root owns shared docs/commits. Next free round is **762**.
+
 **2026-09-30, Codex 755 and 756 source BUILT, final browser acceptance running.**
 755 adds only a 320ms changed-reply reveal after an extension push; five actual-card tests use real
 improved/held/pulled engine results, preserve exact terms/actions and retain control identity/focus.
