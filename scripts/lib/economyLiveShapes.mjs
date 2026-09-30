@@ -64,7 +64,9 @@ export async function writeLiveShapes(db, scenario = 'base') {
   const int = (lo, hi) => lo + Math.floor(next() * (hi - lo + 1));
   const nowMs = new Date((await db.query(`select to_json(now())::text as t`)).rows[0].t.replace(/"/g, '')).getTime();
   const caps = new Map((await db.query(`select game, max_score from public.game_score_caps`)).rows.map(r => [r.game, r.max_score]));
-  const hardMax = new Map((await db.query(`select game, hard_max from private.game_hard_max`)).rows.map(r => [r.game, r.hard_max]));
+  /* L1's table, when L1 is applied (a refusal case writes the shapes without it) */
+  const hasHardMax = (await db.query(`select to_regclass('private.game_hard_max') is not null as e`)).rows[0].e;
+  const hardMax = new Map(hasHardMax ? (await db.query(`select game, hard_max from private.game_hard_max`)).rows.map(r => [r.game, r.hard_max]) : []);
   const p644 = Date.parse(P644);
   const start = Date.parse('2026-09-10T00:00:00Z');
   const end = nowMs - 3_600_000;

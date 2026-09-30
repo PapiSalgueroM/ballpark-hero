@@ -59,11 +59,48 @@
  *      are the rows the file carries, and no migration after L1 adds a cap
  *      row without a hard maximum for it (that game's signed in saves would
  *      all be refused).
- *   9. simPlayDoor's FIXTURE is the catalog L1 produces here: the committed
- *      scripts/data/playDoorCatalog.json must equal scripts/data/
- *      playDoorCatalog.sql run on the snapshot after L1. When the fixture
- *      says production (refreshed after the apply), this is the check that
- *      the rehearsal was the truth.
+ *   9. simPlayDoor's FIXTURE is the catalog the chain produces here: the
+ *      committed scripts/data/playDoorCatalog.json must equal scripts/data/
+ *      playDoorCatalog.sql run on the snapshot after the steps the fixture's
+ *      own ledger lists as live (L1 today; Round 675 made this follow the
+ *      fixture, so a fixture captured on production after E1 is compared
+ *      with a rehearsal that ran E1). When the fixture says production
+ *      (refreshed after an apply), this is the check that the rehearsal was
+ *      the truth.
+ *
+ * ROUND 675, economy steps E1 (scales and worth) and E1b (the cover index),
+ * over scripts/lib/economyLiveShapes.mjs, a copy of the live row shapes
+ * (no production row leaves production for this):
+ *  10. E1 REFUSES BEFORE ANY WRITE when the chain or production is not what
+ *      it read: no L1, L1 undone, a board function drifted, a cap moved, a
+ *      Round 646 object, one of E1's own objects already there, and the P644
+ *      evidence broken three ways (an old formula row off a multiple of 50
+ *      below 593987, a low id dated after P644, row 593987 gone). Tables and
+ *      catalog unchanged by each.
+ *  11. E1 APPLIES and its worth is the one the spec means, in four
+ *      scenarios. base: every day of the view equals a JavaScript model of
+ *      E1 over the rows written, the notice's class counts and point changes
+ *      equal the model's, the ledger records what E1 installed, the client
+ *      roles can read but write nothing (production's default privileges
+ *      included), and the view's rules hold when executed: a forged tag and
+ *      a tag with no period are worth nothing, a future ranked_day counts
+ *      nothing, ranked_day moves a row's day, a closed period pays nothing,
+ *      and the generated g and dp rows (scripts/data/scaleCapsSeed.sql) load
+ *      over E1 and value a tagged row at its cap. unrevalued: with no day E1
+ *      means to revalue, the live board's OWN objects (player_ranks
+ *      refreshed, global_rank for today, week and month, global_leaderboard)
+ *      equal the view player for player: the equality proof against the
+ *      board itself. shifted and forged: Player Bingo off 1700 and a
+ *      visitor's rows on two NULL cap games are revalued as declared,
+ *      reported, and never refuse E1.
+ *  12. A SECOND E1 REFUSES with "already applied", changing nothing.
+ *  13. E1b: refused before E1; built after it in three statements, its plan
+ *      uses the index, recorded at seq 3; refused a second time and over a
+ *      leftover index with no ledger row; E1's undo refused while it lives;
+ *      its own undo drops it and marks it undone; it applies again.
+ *  14. E1'S UNDO restores the catalog of L1 object for object, refuses while
+ *      a row carries a tag, refuses a second time; L1's undo refuses while
+ *      E1 lives; E1 reapplies to the catalog of its first apply.
  *
  * CONTROLS, ECON_MIG_CONTROL=<name>. Each plants its fault in memory (never in
  * a file), refuses to run if the plant changes nothing, runs only its own
@@ -79,6 +116,9 @@
  *   undoleak    after the undo a grant L1 took away is still missing       7
  *   nohardmax   a migration after L1 adds a cap row with no hard maximum     8
  *   fixture     one value of the committed fixture changes                  9
+ *   nochain     E1 without its check that L1 is live                       10
+ *   soccer1000  E1 writes Soccer Career's 644 cap as 1000, so the new
+ *               scale days stay paid a tenth                              11
  *
  * Run: node scripts/simEconomyMigrations.mjs
  *      node scripts/simEconomyMigrations.mjs --write-fixture   recapture
@@ -94,6 +134,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { fileURLToPath } from 'node:url';
 import { PGlite } from '@electric-sql/pglite';
+import { writeLiveShapes, modelDays, P644 } from './lib/economyLiveShapes.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const readLF = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
@@ -103,12 +144,26 @@ const SCHEMA_FILE = path.join(ROOT, 'scripts', 'data', 'economySchema.sql');
 const CATALOG_SQL_FILE = path.join(ROOT, 'scripts', 'data', 'playDoorCatalog.sql');
 const FIXTURE_FILE = path.join(ROOT, 'scripts', 'data', 'playDoorCatalog.json');
 const SAVE_569_FILE = path.join(MIGRATIONS, '20260914120000_record_auth_completion.sql');
+const E1_NAME = '20260930_econ_e1_scales_and_worth.sql';
+const E1B_NAME = '20260930_econ_e1b_cover_index.sql';
+const SCALE_SEED_FILE = path.join(ROOT, 'scripts', 'data', 'scaleCapsSeed.sql');
 
 let SCHEMA = readLF(SCHEMA_FILE);
 let L1 = readLF(path.join(MIGRATIONS, L1_NAME));
 const UNDO = readLF(path.join(MIGRATIONS, 'ROLLBACK_' + L1_NAME));
 let SAVE_569 = readLF(SAVE_569_FILE);
 const CATALOG_SQL = readLF(CATALOG_SQL_FILE);
+let E1 = readLF(path.join(MIGRATIONS, E1_NAME));
+const E1_UNDO = readLF(path.join(MIGRATIONS, 'ROLLBACK_' + E1_NAME));
+/* E1b and its undo are three statements each, one execute_sql call apiece
+   (CREATE and DROP INDEX CONCURRENTLY cannot share a transaction). */
+const threeStatements = (text, name) => {
+  const parts = text.split(/^-- STATEMENT \d of 3:.*$/m).slice(1).map(s => s.trim());
+  if (parts.length !== 3) throw new Error(`${name} does not carry exactly three marked statements, so this harness needs re-anchoring`);
+  return parts;
+};
+const E1B = threeStatements(readLF(path.join(MIGRATIONS, E1B_NAME)), E1B_NAME);
+const E1B_UNDO = threeStatements(readLF(path.join(MIGRATIONS, 'ROLLBACK_' + E1B_NAME)), 'ROLLBACK_' + E1B_NAME);
 
 /* What production answered on 2026-09-29, read only. */
 const PROD = {
@@ -123,6 +178,14 @@ const PROD = {
   },
   capsRows: 151,
   policies: 13,
+  /* Round 537's board and the caps content, read 2026-09-30 (E1 pins them) */
+  board: {
+    'global_leaderboard(text,text[])': '56a5f15c1f180dfdc82278391f3e52a8',
+    'global_rank(text,text,text[])': '4da21bd9801909bd0187e654c34ba52f',
+  },
+  playerRanksDef: '397d0f5ff1d102bcd9e7fd3cb1db24a9',
+  denominatorsDef: '8c566278c12cfeb8c900b7ccf0545fa2',
+  capsContent: '6c637738840d766a97c50032f48459e5',
   /* the md5 L1 records of the six tables' read policies; this value was
      first read inside Round 673's production dry run on 2026-09-28 */
   readPoliciesMd5: 'b5d85512d8f4a17cde4620051971dfd5',
@@ -154,7 +217,7 @@ order by 1;
 
 const WRITE_FIXTURE = process.argv.includes('--write-fixture');
 const CONTROL = process.env.ECON_MIG_CONTROL || '';
-const EXPECT = { snapshot: 0, noprecheck: 1, tail: 2, arith: 3, norefuse: 4, nosetrole: 5, regrant: 5, rerun: 6, undoleak: 7, nohardmax: 8, fixture: 9 };
+const EXPECT = { snapshot: 0, noprecheck: 1, tail: 2, arith: 3, norefuse: 4, nosetrole: 5, regrant: 5, rerun: 6, undoleak: 7, nohardmax: 8, fixture: 9, nochain: 10, soccer1000: 11 };
 if (CONTROL && !(CONTROL in EXPECT)) {
   console.error(`ECON_MIG_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
   process.exit(1);
@@ -217,7 +280,7 @@ async function one(db, sql, params = []) { return (await db.query(sql, params)).
 async function sums(db) {
   const out = {};
   const rels = [...SIX.map(t => 'public.' + t)];
-  for (const p of ['private.economy_steps', 'private.game_hard_max']) {
+  for (const p of ['private.economy_steps', 'private.game_hard_max', 'public.score_scales', 'public.game_scale_caps', 'public.legacy_scale_rules']) {
     if ((await one(db, `select to_regclass($1) is not null as e`, [p])).e) rels.push(p);
   }
   for (const r of rels) {
@@ -294,11 +357,25 @@ async function applyL1(db, text = L1) {
   const r = await attempt(db, text);
   if (!r.ok) throw new Error(`L1 did not apply over the snapshot: ${r.code} ${r.message}`);
 }
+/** E1 over whatever db holds; returns its notices. Throws on a refusal. */
+async function applyE1(db, text = E1) {
+  const notices = [];
+  try { await db.exec(text, { onNotice: n => notices.push(String(n.message)) }); }
+  catch (e) { const err = new Error(`E1 did not apply: ${e.code} ${e.message}`); err.code = e.code; err.pgMessage = String(e.message); throw err; }
+  return notices;
+}
+/** A fresh database with L1 applied and the live shapes written. */
+async function withShapes(scenario = 'base', { l1 = true } = {}) {
+  const db = await fresh();
+  if (l1) await applyL1(db);
+  const shapes = await writeLiveShapes(db, scenario);
+  return { db, shapes };
+}
 const U1 = '11111111-1111-4111-8111-111111111111';
 const U2 = '22222222-2222-4222-8222-222222222222';
 const U3 = '33333333-3333-4333-8333-333333333333';
 
-const runs = CONTROL ? [EXPECT[CONTROL]] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+const runs = CONTROL ? [EXPECT[CONTROL]] : [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14];
 const on = n => runs.includes(n);
 
 // ---------------------------------------------------------------------------
@@ -325,7 +402,13 @@ if (on(0)) {
                                   order by tablename::text collate "C", policyname::text collate "C"), '[]'::jsonb)::text) as m
                                   from pg_policies where schemaname = 'public' and cmd = 'SELECT'`)).m;
   if (reads !== PROD.readPoliciesMd5) fail(0, `the read policies md5 to ${reads}, production's to ${PROD.readPoliciesMd5}`);
-  if (!fired.has(0)) console.log(`   save ${PROD.saveDef.slice(0, 8)}, auth.uid() and four older definers at production's md5s; ${caps} caps, ${pols} policies`);
+  for (const [fn, m] of Object.entries(PROD.board)) if (by[fn]?.md5 !== m) fail(0, `${fn} md5s to ${by[fn]?.md5}, production's is ${m}: the board E1's equality proof compares against is not production's`);
+  const boardViews = await one(db, `select md5(pg_get_viewdef('public.player_ranks'::regclass)) as pr, md5(pg_get_viewdef('public.game_denominators'::regclass)) as gd,
+                                           (select md5(string_agg(game || ':' || coalesce(max_score::text, ''), ',' order by game collate "C")) from public.game_score_caps) as caps`);
+  if (boardViews.pr !== PROD.playerRanksDef) fail(0, `player_ranks' definition md5s to ${boardViews.pr}, production's is ${PROD.playerRanksDef}`);
+  if (boardViews.gd !== PROD.denominatorsDef) fail(0, `game_denominators' definition md5s to ${boardViews.gd}, production's is ${PROD.denominatorsDef}`);
+  if (boardViews.caps !== PROD.capsContent) fail(0, `the caps content md5s to ${boardViews.caps}, production's is ${PROD.capsContent}`);
+  if (!fired.has(0)) console.log(`   save ${PROD.saveDef.slice(0, 8)}, auth.uid() and four older definers at production's md5s; ${caps} caps, ${pols} policies; the board (global_leaderboard, global_rank, player_ranks, game_denominators) and the caps content at production's md5s`);
   await db.close();
 }
 
@@ -727,9 +810,20 @@ if (on(8)) {
 
 // ---------------------------------------------------------------------------
 if (on(9)) {
-  console.log('9) simPlayDoor\'s fixture is the catalog L1 produces');
+  console.log('9) simPlayDoor\'s fixture is the catalog the chain produces, up to the fixture\'s own last step');
   const db = await fresh();
-  await applyL1(db);
+  /* Round 675: the rehearsal runs the steps the fixture's ledger lists as
+     live, so a fixture refreshed on production after E1 is compared with a
+     rehearsal that ran E1, not with L1 alone. */
+  const steps = (fs.existsSync(FIXTURE_FILE) ? JSON.parse(fs.readFileSync(FIXTURE_FILE, 'utf8')).catalog?.ledger ?? [] : [])
+    .filter(s => s.live).map(s => s.step);
+  const chainSteps = steps.length ? steps : ['L1'];
+  for (const step of chainSteps) {
+    if (step === 'L1') await applyL1(db);
+    else if (step === 'E1') { await writeLiveShapes(db, 'base'); await applyE1(db); }
+    else if (step === 'E1b') { for (const s of E1B) await db.query(s); }
+    else { fail(9, `the fixture's ledger lists step ${step}, which this rehearsal cannot run yet`); break; }
+  }
   const produced = (await one(db, CATALOG_SQL)).catalog;
   const canon = v => Array.isArray(v) ? v.map(canon) : v && typeof v === 'object' ? Object.fromEntries(Object.keys(v).sort().map(k => [k, canon(v[k])])) : v;
   const queryMd5 = md5(CATALOG_SQL);
@@ -760,7 +854,311 @@ if (on(9)) {
       ? `production's catalog differs from the rehearsal in ${keysDiff.join(', ')}: economySchema.sql no longer describes production, or the apply did something the rehearsal did not. Read both before going on`
       : `the committed fixture differs from what L1 produces in ${keysDiff.join(', ')}; if L1 or the query changed on purpose, rerun with --write-fixture and commit it`);
   }
-  if (!fired.has(9)) console.log(`   the ${fixture.source} fixture of ${fixture.captured} equals the rehearsal's catalog, ${Object.keys(produced).length} keys`);
+  if (!fired.has(9)) console.log(`   the ${fixture.source} fixture of ${fixture.captured} equals the rehearsal's catalog after ${chainSteps.join(', ')}, ${Object.keys(produced).length} keys`);
+  await db.close();
+}
+
+// ---------------------------------------------------------------------------
+/* ============================ Round 675: E1 and E1b ============================ */
+async function attemptQuery(db, sql, notices) {
+  try { await db.query(sql, [], notices ? { onNotice: n => notices.push(String(n.message)) } : undefined); return { ok: true }; }
+  catch (e) { return { ok: false, code: e.code, message: String(e.message) }; }
+}
+async function attemptE1(db, text = E1) {
+  try { const notices = await applyE1(db, text); return { ok: true, notices }; }
+  catch (e) { return { ok: false, code: e.code, message: e.pgMessage ?? String(e.message) }; }
+}
+const approx = (a, b, tol) => Math.abs(a - b) <= tol;
+
+// ---------------------------------------------------------------------------
+if (on(10)) {
+  console.log('10) E1 refuses before any write when the chain or production is not what it read');
+  let e1 = E1;
+  if (CONTROL === 'nochain') {
+    e1 = plant(e1, "if to_regclass('private.economy_steps') is null then\n    raise exception 'Round 675 E1: private.economy_steps does not exist",
+      "if false then\n    raise exception 'Round 675 E1: private.economy_steps does not exist", "E1's check that the ledger exists");
+    e1 = plant(e1, "if not exists (select 1 from private.economy_steps where step = 'L1' and seq = 1 and undone_at is null) then", 'if false then', "E1's check that L1 is live");
+    console.log('   NEGATIVE CONTROL ON: E1 without its check that L1 is live');
+  }
+  const ins = (id, score, at) => `insert into public.game_completions (id, game, score, player_name, created_at) overriding system value values (${id}, 'soccer-career', ${score}, 'Shape Probe', ${at});`;
+  const cases = [
+    { what: 'L1 was never applied', l1: false, expect: /L1 has not been applied/ },
+    { what: 'L1 was undone', setup: async db => { const r = await attempt(db, UNDO); if (!r.ok) throw new Error(`L1's undo failed: ${r.message}`); }, expect: /L1 is not live/ },
+    { what: 'a board function drifted', setup: db => db.exec('alter function public.global_rank(text, text, text[]) set search_path = public, pg_temp;'), expect: /the board is not Round 537/ },
+    { what: 'a cap moved', setup: db => db.exec(`update public.game_score_caps set max_score = 701 where game = 'footle';`), expect: /game_score_caps is not the 151 rows/ },
+    { what: 'a Round 646 object exists', setup: db => db.exec('create table public.game_score_cap_history (game text);'), expect: /Round 644, 646 or 648 object/ },
+    { what: 'one of E1\'s own objects already exists', setup: db => db.exec('create function public.et_day(t timestamptz) returns date language sql immutable return t::date;'), expect: /already exists but no live E1/ },
+    { what: 'an old formula row below 593987 is off a multiple of 50', setup: db => db.exec(ins(500000, 73, `'${P644}'::timestamptz - interval '1 day'`)), expect: /is not a multiple of 50/ },
+    { what: 'a low id is dated after P644', setup: db => db.exec(ins(500001, 100, `'${P644}'::timestamptz + interval '1 hour'`)), expect: /at or after P644 is id 500001, not 593987/ },
+    { what: 'row 593987 is gone', setup: db => db.exec('delete from public.game_completions where id = 593987;'), expect: /at or after P644 is id \d+, not 593987/ },
+  ];
+  for (const c of cases) {
+    const { db } = await withShapes('base', { l1: c.l1 !== false });
+    if (c.setup) await c.setup(db);
+    const before = { s: JSON.stringify(await sums(db)), c: await catalog(db) };
+    const r = await attemptE1(db, e1);
+    const after = { s: JSON.stringify(await sums(db)), c: await catalog(db) };
+    if (r.ok) fail(10, `${c.what}: E1 APPLIED, which it must refuse`);
+    else if (!c.expect.test(r.message)) fail(10, `${c.what}: E1 refused, but not for this reason (${r.message.slice(0, 180)})`);
+    if (before.s !== after.s || before.c !== after.c) fail(10, `${c.what}: the refused E1 left the tables or the catalog changed (${diffCatalog(before.c, after.c).slice(0, 3).join('; ')})`);
+    if (!fired.has(10)) console.log(`   ${c.what}: refused, nothing changed`);
+    await db.close();
+  }
+}
+
+// ---------------------------------------------------------------------------
+if (on(11)) {
+  console.log('11) E1 applies, and its worth is the one the spec means');
+  let e1 = E1;
+  if (CONTROL === 'soccer1000') {
+    e1 = plant(e1, "('soccer-career', '644', v_p644, 'infinity', 100,", "('soccer-career', '644', v_p644, 'infinity', 1000,", "E1's Soccer Career 644 cap");
+    console.log('   NEGATIVE CONTROL ON: E1 writes Soccer Career\'s 644 cap as 1000, so its new scale days stay paid a tenth');
+  }
+  const NOTE = /Board: (\d+) player days, (\d+) worth what Round 537 pays today, .*soccer-644 (\d+) day\(s\), change (-?[\d.]+) points; bingo-644 (\d+) day\(s\), change (-?[\d.]+) points; fixed (\d+) day\(s\), change (-?[\d.]+) points\. Account: (\d+) days/;
+  for (const scenario of CONTROL === 'soccer1000' ? ['base'] : ['base', 'unrevalued', 'shifted', 'forged']) {
+    const { db, shapes } = await withShapes(scenario);
+    const t0 = Date.now();
+    const r = await attemptE1(db, e1);
+    const ms = Date.now() - t0;
+    if (!r.ok) { fail(11, `${scenario}: E1 did not apply: ${r.message.slice(0, 240)}`); await db.close(); continue; }
+    const model = modelDays(shapes);
+    /* every day of the view, both surfaces, against the model of E1 */
+    const days = (await db.query(`select surface, who, game, day::text as day, points::text as p from public.scored_days`)).rows;
+    let off = 0;
+    const seen = new Set();
+    for (const d of days) {
+      const k = `${d.surface}|${d.who}|${d.game}|${d.day}`;
+      seen.add(k);
+      const want = model.e1.get(k);
+      if (want === undefined || !approx(want, Number(d.p), 1e-9)) off += 1;
+    }
+    const missing = [...model.e1.keys()].filter(k => !seen.has(k)).length;
+    if (off || missing) fail(11, `${scenario}: ${off} day(s) of the view differ from the model of E1, and ${missing} of the model's days are not in the view`);
+    /* the notice's numbers, against the model's */
+    const cls = { 'soccer-644': [0, 0], 'bingo-644': [0, 0], fixed: [0, 0] };
+    let boardDays = 0;
+    let same = 0;
+    for (const [k, v] of model.e1) {
+      if (!k.startsWith('board|')) continue;
+      boardDays += 1;
+      const c = model.cls.get(k);
+      if (c) { cls[c][0] += 1; cls[c][1] += v - model.board537.get(k); }
+      else if (approx(v, model.board537.get(k), 1e-9)) same += 1;
+    }
+    const accountDays = [...model.e1.keys()].filter(k => k.startsWith('account|')).length;
+    const note = r.notices.find(n => n.startsWith('Round 675 E1 applied.'));
+    const m = note && note.match(NOTE);
+    if (!m) fail(11, `${scenario}: E1 applied without the closing notice this harness reads (${String(note).slice(0, 120)})`);
+    else {
+      const got = { board: +m[1], same: +m[2], soccer: [+m[3], +m[4]], bingo: [+m[5], +m[6]], fixed: [+m[7], +m[8]], account: +m[9] };
+      const agree = got.board === boardDays && got.same === same && got.account === accountDays
+        && got.soccer[0] === cls['soccer-644'][0] && approx(got.soccer[1], cls['soccer-644'][1], 0.001)
+        && got.bingo[0] === cls['bingo-644'][0] && approx(got.bingo[1], cls['bingo-644'][1], 0.001)
+        && got.fixed[0] === cls.fixed[0] && approx(got.fixed[1], cls.fixed[1], 0.001);
+      if (!agree) fail(11, `${scenario}: the proof's numbers are not the model's: ${note.slice(0, 400)}; model board ${boardDays}, same ${same}, soccer ${cls['soccer-644'].map(x => +x.toFixed(3))}, bingo ${cls['bingo-644'].map(x => +x.toFixed(3))}, fixed ${cls.fixed.map(x => +x.toFixed(3))}, account ${accountDays}`);
+      /* each scenario must exercise what it says it does */
+      const shape = {
+        base: got.soccer[0] > 0 && got.soccer[1] > 0 && approx(got.bingo[1], 0, 0.0005) && got.bingo[0] > 0 && got.fixed[0] === 0,
+        unrevalued: got.soccer[0] === 0 && approx(got.bingo[1], 0, 0.0005) && got.fixed[0] === 0,
+        shifted: !approx(got.bingo[1], 0, 0.0005),
+        forged: got.fixed[0] >= 1 && !approx(got.fixed[1], 0, 0.0005),
+      }[scenario];
+      if (!shape) fail(11, `${scenario}: the scenario did not exercise what it claims: ${note.slice(0, 300)}`);
+      if (!fired.has(11)) console.log(`   ${scenario}: E1 applied in ${ms} ms; ${days.length} days of the view equal the model of E1; board ${got.board} days, ${got.same} as Round 537 pays; soccer-644 ${got.soccer[0]} days ${got.soccer[1] >= 0 ? '+' : ''}${got.soccer[1]}, bingo-644 ${got.bingo[0]} days ${got.bingo[1] >= 0 ? '+' : ''}${got.bingo[1]}, fixed ${got.fixed[0]} days ${got.fixed[1] >= 0 ? '+' : ''}${got.fixed[1]}; account ${got.account} days`);
+    }
+
+    if (scenario === 'base') {
+      /* the ledger records what E1 installed */
+      const led = await one(db, `select seq, undone_at, installed from private.economy_steps where step = 'E1'`);
+      const live = await one(db, `select md5(pg_get_functiondef('public.et_day(timestamptz)'::regprocedure)) as et, md5(pg_get_viewdef('public.scored_plays'::regclass)) as sp, md5(pg_get_viewdef('public.scored_days'::regclass)) as sd`);
+      if (!led || led.seq !== 2 || led.undone_at !== null) fail(11, 'no live E1 row at seq 2 in private.economy_steps');
+      else if (led.installed.et_day_md5 !== live.et || led.installed.scored_plays_md5 !== live.sp || led.installed.scored_days_md5 !== live.sd) fail(11, 'the ledger does not record the et_day and views E1 installed');
+      /* the client roles read everything and write nothing, over production's default privileges */
+      const WRITES = [
+        `insert into public.game_scale_caps (game, scale, cap, note) values ('footle', 'g', 1, 'x')`,
+        'update public.game_scale_caps set cap = 1',
+        'delete from public.legacy_scale_rules',
+        `insert into public.score_scales (scale, note) values ('zz', 'x')`,
+        'truncate public.game_scale_caps',
+        `insert into public.game_completions (game, score, player_name, score_scale) values ('footle', 700, 'Shape Probe', 'g')`,
+        `insert into public.game_completions (game, score, player_name, ranked_day) values ('footle', 700, 'Shape Probe', current_date)`,
+        `update public.user_game_scores set score_scale = 'g'`,
+      ];
+      let shut = 0;
+      for (const role of ['anon', 'authenticated']) {
+        for (const sql of WRITES) {
+          const b = JSON.stringify(await sums(db));
+          const w = await asRole(db, role, U1, sql);
+          if (w.ok) fail(11, `${role} may run: ${sql}`);
+          else if (w.code !== '42501') fail(11, `${role} was refused ${sql.slice(0, 70)} with ${w.code}, not for want of privilege`);
+          else shut += 1;
+          if (b !== JSON.stringify(await sums(db))) fail(11, `${role}: a refused write changed a table: ${sql.slice(0, 70)}`);
+        }
+        const rd = await asRole(db, role, null, 'select (select count(*) from public.scored_days) + (select count(*) from public.scored_plays) + (select count(*) from public.game_scale_caps) + (select count(*) from public.score_scales) + (select count(*) from public.legacy_scale_rules) as n');
+        if (!rd.ok) fail(11, `${role} cannot read the views and tables (${rd.code} ${rd.message.slice(0, 80)})`);
+      }
+      /* the view's rules, executed, then rolled back */
+      await db.exec('begin');
+      const add = (name, score, tag, rday) => db.query(`insert into public.game_completions (game, score, player_name, score_scale, ranked_day, created_at) values ('footle', $1, $2, $3, ${rday}, now() - interval '2 hours')`, [score, name, tag]);
+      await add('Rule Forged', 700, 'zz', 'null');
+      await add('Rule Dp', 700, 'dp', 'null');
+      await add('Rule Legacy', 350, null, 'null');
+      await add('Rule Future', 700, null, 'public.et_day(now()) + 1');
+      await add('Rule Day', 700, null, 'public.et_day(now()) - 3');
+      const rules = async () => Object.fromEntries((await db.query(`select who, day::text as day, scale, worth::text as w from public.scored_plays where who like 'Rule %'`)).rows.map(x => [x.who, x]));
+      const todayEt = (await one(db, 'select public.et_day(now())::text as d')).d;
+      const minus3 = (await one(db, `select (public.et_day(now()) - 3)::text as d`)).d;
+      let rr = await rules();
+      const expectRule = (who, pred, why) => { if (!pred(rr[who])) fail(11, `the view's rule: ${why} (got ${JSON.stringify(rr[who] ?? null)})`); };
+      expectRule('Rule Forged', x => !x, 'a row tagged with a scale that does not exist is worth nothing');
+      expectRule('Rule Dp', x => !x, 'a row tagged dp is worth nothing while no dp period exists');
+      expectRule('Rule Legacy', x => x && x.scale === 'legacy' && approx(Number(x.w), 50, 1e-9), 'an untagged footle 350 is worth 50 on the legacy cap of 700');
+      expectRule('Rule Future', x => !x, 'a row whose ranked_day is tomorrow counts nothing');
+      expectRule('Rule Day', x => x && x.day === minus3 && approx(Number(x.w), 100, 1e-9), `a ranked_day three days back counts on that day (${minus3}), not on ${todayEt}`);
+      /* the generated g and dp rows load over E1 and value a tagged row */
+      if (!fs.existsSync(SCALE_SEED_FILE)) fail(11, `${path.relative(ROOT, SCALE_SEED_FILE)} is missing, so the g and dp rows were never checked against E1`);
+      else {
+        const seeded = await attemptQuery(db, readLF(SCALE_SEED_FILE));
+        if (!seeded.ok) fail(11, `the generated g and dp rows do not load over E1: ${seeded.message.slice(0, 200)}`);
+        else {
+          const n = await one(db, `select count(*) filter (where scale = 'g')::int as g, count(*) filter (where scale = 'dp')::int as dp,
+                                          (select count(*)::int from public.game_scale_caps a join public.game_scale_caps b on b.game = a.game and b.scale = a.scale
+                                            and a.valid_from < b.valid_from and b.valid_from < a.valid_until) as overlaps
+                                     from public.game_scale_caps`);
+          await add('Rule G', 350, 'g', 'null');
+          rr = await rules();
+          expectRule('Rule Dp', x => x && x.scale === 'dp' && approx(Number(x.w), 100, 1e-9), 'with the dp rows in, a dp tagged 700 is worth 100 (capped at 100)');
+          expectRule('Rule G', x => x && x.scale === 'g' && approx(Number(x.w), 50, 1e-9), 'with the g rows in, a g tagged footle 350 is worth 50 of its ceiling 700');
+          if (n.overlaps) fail(11, `the generated rows overlap a period: ${n.overlaps}`);
+          if (!fired.has(11)) console.log(`   the generated seed loads over E1: ${n.g} g rows and ${n.dp} dp rows, no overlap; a tagged row is valued at its scale's cap`);
+        }
+      }
+      await db.exec(`update public.game_scale_caps set valid_until = now() - interval '1 day' where game = 'footle' and scale = 'legacy'`);
+      rr = await rules();
+      expectRule('Rule Legacy', x => !x, 'a row played after its period closed is worth nothing');
+      await db.exec('rollback');
+      if (!fired.has(11)) console.log(`   ledger row live at seq 2 with what E1 installed; ${shut} client writes refused 42501 over production's default privileges, both roles read every view and table; a forged tag, a tag with no period, a future ranked_day and a closed period pay nothing, ranked_day moves a row's day`);
+    }
+
+    if (scenario === 'unrevalued') {
+      /* The equality proof against the live board's own objects. */
+      await db.exec('refresh materialized view public.player_ranks');
+      const viewTotals = async where => new Map((await db.query(`select who, round(sum(points))::text as t from public.scored_days where surface = 'board' ${where} group by who`)).rows.map(x => [x.who, x.t]));
+      const all = await viewTotals('');
+      const today = await viewTotals('and day = public.et_day(now())');
+      const week = await viewTotals('and day > public.et_day(now()) - 7');
+      const month = await viewTotals('and day > public.et_day(now()) - 30');
+      const ranks = (await db.query('select period, player_name, total_points::text as t from public.player_ranks')).rows;
+      let compared = 0;
+      let wrong = 0;
+      const cmp = (label, got, want) => { compared += 1; if (got !== want) { wrong += 1; if (wrong <= 3) console.error(`   ${label}: board ${got}, view ${want}`); } };
+      for (const x of ranks) cmp(`player_ranks ${x.period} ${x.player_name}`, x.t, (x.period === 'alltime' ? all : today).get(x.player_name));
+      if (ranks.filter(x => x.period === 'alltime').length !== all.size) fail(11, `player_ranks holds ${ranks.filter(x => x.period === 'alltime').length} players all time, the view ${all.size}`);
+      for (const [who] of all) {
+        for (const [period, map] of [['week', week], ['month', month]]) {
+          const g = await one(db, 'select total_points::text as t from public.global_rank($1, $2)', [who, period]);
+          cmp(`global_rank ${period} ${who}`, g?.t, map.get(who));
+        }
+        for (const game of ['soccer-career', 'footle', 'clue-auction']) {
+          const g = await one(db, `select total_points::text as t from public.global_rank($1, 'alltime', array[$2])`, [who, game]);
+          const v = await one(db, `select round(sum(points))::text as t from public.scored_days where surface = 'board' and who = $1 and game = $2`, [who, game]);
+          cmp(`global_rank alltime ${game} ${who}`, g?.t, v?.t ?? undefined);
+        }
+      }
+      const lb = (await db.query(`select player_name, total_points::text as t from public.global_leaderboard('alltime')`)).rows;
+      for (const x of lb) cmp(`global_leaderboard ${x.player_name}`, x.t, all.get(x.player_name));
+      if (wrong) fail(11, `unrevalued: ${wrong} of ${compared} totals from the live board's own objects differ from the view`);
+      else if (compared < 200) fail(11, `unrevalued: only ${compared} totals compared, so the proof against the board proves little`);
+      else if (!fired.has(11)) console.log(`   unrevalued: ${compared} totals from the live board's own objects (player_ranks all time and today, global_rank week, month and per game, global_leaderboard) equal the view, player for player`);
+    }
+    await db.close();
+  }
+}
+
+// ---------------------------------------------------------------------------
+if (on(12)) {
+  console.log('12) a second E1 refuses and changes nothing');
+  const { db } = await withShapes('base');
+  await applyE1(db);
+  const before = { s: JSON.stringify(await sums(db)), c: await catalog(db) };
+  const r = await attemptE1(db);
+  const after = { s: JSON.stringify(await sums(db)), c: await catalog(db) };
+  if (r.ok) fail(12, 'a second apply of E1 went through');
+  else if (!/already applied/.test(r.message)) fail(12, `a second apply was refused, but not by the ledger (${r.message.slice(0, 140)})`);
+  if (before.s !== after.s || before.c !== after.c) fail(12, 'the refused second apply changed something');
+  if (!fired.has(12)) console.log(`   refused: "${r.message.slice(0, 90)}"; tables and catalog unchanged`);
+  await db.close();
+}
+
+// ---------------------------------------------------------------------------
+if (on(13)) {
+  console.log('13) E1b: the chain around it, the build, the proof, its undo');
+  const { db } = await withShapes('base');
+  const pre = await attemptQuery(db, E1B[0]);
+  if (pre.ok || !/E1 is not live/.test(pre.message)) fail(13, `E1b before E1 was not refused as "E1 is not live" (${pre.ok ? 'it ran' : pre.message.slice(0, 120)})`);
+  await applyE1(db);
+  const notices = [];
+  for (const [i, s] of E1B.entries()) {
+    const r = await attemptQuery(db, s, notices);
+    if (!r.ok) fail(13, `E1b statement ${i + 1} failed: ${r.message.slice(0, 200)}`);
+  }
+  const idx = await one(db, `select i.indisvalid as v from pg_index i where i.indexrelid = to_regclass('public.idx_gc_scored_day_cover')`);
+  const led = await one(db, `select seq, undone_at from private.economy_steps where step = 'E1b'`);
+  if (!idx?.v) fail(13, 'the E1b index is missing or invalid after its three statements');
+  if (!led || led.seq !== 3 || led.undone_at !== null) fail(13, 'no live E1b row at seq 3');
+  if (!notices.some(n => /serves the view's day filter/.test(n))) fail(13, 'E1b\'s proof did not report the index serving the view');
+  const again = await attemptQuery(db, E1B[0]);
+  if (again.ok || !/already applied/.test(again.message)) fail(13, `a second E1b was not refused as already applied (${again.ok ? 'it ran' : again.message.slice(0, 120)})`);
+  const undoE1 = await attempt(db, E1_UNDO);
+  if (undoE1.ok || !/later economy step is live/.test(undoE1.message)) fail(13, `E1's undo was not refused while E1b lives (${undoE1.ok ? 'it ran' : undoE1.message.slice(0, 120)})`);
+  for (const [i, s] of E1B_UNDO.entries()) {
+    const r = await attemptQuery(db, s);
+    if (!r.ok) fail(13, `E1b undo statement ${i + 1} failed: ${r.message.slice(0, 200)}`);
+  }
+  const gone = await one(db, `select to_regclass('public.idx_gc_scored_day_cover') is null as g, (select undone_at is not null from private.economy_steps where step = 'E1b') as u`);
+  if (!gone.g || !gone.u) fail(13, 'after its undo the E1b index is still there or E1b is not marked undone');
+  await db.exec(`create index idx_gc_scored_day_cover on public.game_completions ((coalesce(ranked_day, public.et_day(created_at))), game) where score > 0;`);
+  const leftover = await attemptQuery(db, E1B[0]);
+  if (leftover.ok || !/already exists with no live E1b row/.test(leftover.message)) fail(13, `a leftover index with no ledger row was not refused (${leftover.ok ? 'it ran' : leftover.message.slice(0, 120)})`);
+  await db.query(E1B_UNDO[1]);
+  for (const [i, s] of E1B.entries()) {
+    const r = await attemptQuery(db, s);
+    if (!r.ok) fail(13, `E1b did not apply again, statement ${i + 1}: ${r.message.slice(0, 200)}`);
+  }
+  const back = await one(db, `select undone_at is null as live from private.economy_steps where step = 'E1b'`);
+  if (!back?.live) fail(13, 'E1b is not live after it was applied again');
+  if (!fired.has(13)) console.log('   refused before E1; built, proved and recorded at seq 3 after it; refused again and over a leftover index; E1\'s undo refused while it lives; its undo drops it; applied again');
+  await db.close();
+}
+
+// ---------------------------------------------------------------------------
+if (on(14)) {
+  console.log('14) E1\'s undo restores the catalog, and E1 reapplies to the same place');
+  const { db } = await withShapes('base');
+  const c1 = await catalog(db);
+  await applyE1(db);
+  const c2 = await catalog(db);
+  const l1undo = await attempt(db, UNDO);
+  if (l1undo.ok || !/later economy step is live/.test(l1undo.message)) fail(14, `L1's undo was not refused while E1 lives (${l1undo.ok ? 'it ran' : l1undo.message.slice(0, 120)})`);
+  await db.exec(`update public.game_completions set score_scale = 'legacy' where id = ${593987};`);
+  const tagged = JSON.stringify(await sums(db));
+  const blocked = await attempt(db, E1_UNDO);
+  if (blocked.ok || !/carry a score_scale or a ranked_day/.test(blocked.message)) fail(14, `E1's undo ran over a tagged row (${blocked.ok ? 'it ran' : blocked.message.slice(0, 120)})`);
+  if (tagged !== JSON.stringify(await sums(db))) fail(14, 'the refused undo changed a table');
+  await db.exec(`update public.game_completions set score_scale = null where id = ${593987};`);
+  const u = await attempt(db, E1_UNDO);
+  if (!u.ok) fail(14, `E1's undo raised: ${u.message.slice(0, 160)}`);
+  const d = diffCatalog(c1, await catalog(db));
+  if (d.length) fail(14, `after E1's undo the catalog is not L1's (${d.length} difference(s)): ${d.slice(0, 3).join('; ')}`);
+  const led = await one(db, `select undone_at is not null as u from private.economy_steps where step = 'E1'`);
+  if (!led?.u) fail(14, 'the ledger does not mark E1 undone');
+  const again = await attempt(db, E1_UNDO);
+  if (again.ok || !/not live/.test(again.message)) fail(14, `a second undo was not refused as "not live" (${again.ok ? 'it ran' : again.message.slice(0, 120)})`);
+  const re = await attemptE1(db);
+  if (!re.ok) fail(14, `E1 did not reapply after its undo: ${re.message.slice(0, 160)}`);
+  const d2 = diffCatalog(c2, await catalog(db));
+  if (d2.length) fail(14, `the reapplied E1 is not the first apply (${d2.length} difference(s)): ${d2.slice(0, 3).join('; ')}`);
+  if (!fired.has(14)) console.log(`   L1's undo refused while E1 lives; the undo refused over a tagged row; undone to L1's catalog across ${JSON.parse(c1).relations.length} relations and every function and policy; a second undo refused; the reapply equals the first apply`);
   await db.close();
 }
 
@@ -774,4 +1172,4 @@ if (CONTROL) {
   process.exit(0);
 }
 if (failures) { console.error(`\nsimEconomyMigrations: ${failures} failure(s)`); process.exit(1); }
-console.log('\nsimEconomyMigrations: green. L1 refuses a drifted production, applies once, keeps the Round 569 arithmetic byte for byte, refuses every abuse without writing, shuts every direct write, undoes to the catalog it found and reapplies to the same place.');
+console.log('\nsimEconomyMigrations: green. L1 refuses a drifted production, applies once, keeps the Round 569 arithmetic byte for byte, refuses every abuse without writing, shuts every direct write, undoes to the catalog it found and reapplies to the same place. E1 refuses off the chain or off production, values every row as the live board does outside the days it declares, E1b serves the view, and both undo and reapply.');
