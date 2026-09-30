@@ -227,6 +227,96 @@ create materialized view public.player_ranks as
 grant all on table public.game_denominators, public.player_ranks to anon, authenticated, service_role;
 
 -- ---------------------------------------------------------------------------
+-- the board, Round 537 (supabase/migrations/20260911_leaderboard_eastern_day.sql),
+-- byte for byte: md5(pg_get_functiondef) 56a5f15c1f180dfdc82278391f3e52a8 and
+-- 4da21bd9801909bd0187e654c34ba52f here and on production (read 2026-09-30,
+-- Round 675). E1's equality proof compares the view against these.
+-- ---------------------------------------------------------------------------
+create or replace function public.global_leaderboard(p_period text default 'alltime'::text, p_games text[] default null::text[])
+ returns table(rank bigint, player_name text, total_points numeric, games_played bigint)
+ language sql
+ stable
+ set search_path to 'public'
+as $function$
+  with bounds as (
+    select (now() at time zone 'America/New_York')::date as et_today
+  ),
+  best as (
+    select gc.player_name, gc.game,
+           (gc.created_at at time zone 'America/New_York')::date as et_day,
+           max(least(gc.score, d.max_score))::numeric as day_best, d.max_score
+    from public.game_completions gc
+    join public.game_denominators d on d.game = gc.game
+    cross join bounds b
+    where gc.score is not null and gc.score > 0 and gc.player_name is not null
+      and (p_games is null or gc.game = any(p_games))
+      and (gc.created_at at time zone 'America/New_York')::date <= b.et_today
+      and (
+        p_period not in ('today', 'week', 'month')
+        or (p_period = 'today' and (gc.created_at at time zone 'America/New_York')::date = b.et_today)
+        or (p_period = 'week'  and (gc.created_at at time zone 'America/New_York')::date > b.et_today - 7)
+        or (p_period = 'month' and (gc.created_at at time zone 'America/New_York')::date > b.et_today - 30)
+      )
+    group by gc.player_name, gc.game, (gc.created_at at time zone 'America/New_York')::date, d.max_score
+  ),
+  totals as (
+    select b.player_name, sum(100.0 * b.day_best / b.max_score) as pts, count(*) as plays
+    from best b group by b.player_name
+  )
+  select row_number() over (order by t.pts desc, t.player_name asc) as rank,
+         t.player_name, round(t.pts)::numeric as total_points, t.plays as games_played
+  from totals t
+  order by t.pts desc, t.player_name asc
+  limit 100;
+$function$;
+
+create or replace function public.global_rank(p_player text, p_period text default 'alltime'::text, p_games text[] default null::text[])
+ returns table(rank bigint, total_points numeric, total_players bigint)
+ language sql
+ stable
+ set search_path to 'public'
+as $function$
+  select r.rank::bigint, r.total_points, r.total_players::bigint
+  from public.player_ranks r
+  where p_games is null
+    and p_period in ('today', 'alltime')
+    and r.period = p_period
+    and r.player_name = p_player
+
+  union all
+
+  select ranked.rn, round(ranked.pts)::numeric, ranked.cnt
+  from (
+    select t.player_name, t.pts,
+           row_number() over (order by t.pts desc, t.player_name asc) as rn,
+           count(*) over () as cnt
+    from (
+      select b.player_name, sum(100.0 * b.day_best / b.max_score) as pts
+      from (
+        select gc.player_name, gc.game,
+               (gc.created_at at time zone 'America/New_York')::date as et_day,
+               max(least(gc.score, d.max_score))::numeric as day_best, d.max_score
+        from public.game_completions gc
+        join public.game_denominators d on d.game = gc.game
+        where (p_games is not null or p_period in ('week', 'month'))
+          and gc.score is not null and gc.score > 0 and gc.player_name is not null
+          and (p_games is null or gc.game = any(p_games))
+          and (gc.created_at at time zone 'America/New_York')::date <= (now() at time zone 'America/New_York')::date
+          and (
+            p_period not in ('today', 'week', 'month')
+            or (p_period = 'today' and (gc.created_at at time zone 'America/New_York')::date = (now() at time zone 'America/New_York')::date)
+            or (p_period = 'week'  and (gc.created_at at time zone 'America/New_York')::date > (now() at time zone 'America/New_York')::date - 7)
+            or (p_period = 'month' and (gc.created_at at time zone 'America/New_York')::date > (now() at time zone 'America/New_York')::date - 30)
+          )
+        group by gc.player_name, gc.game, (gc.created_at at time zone 'America/New_York')::date, d.max_score
+      ) b
+      group by b.player_name
+    ) t
+  ) ranked
+  where ranked.player_name = p_player;
+$function$;
+
+-- ---------------------------------------------------------------------------
 -- the save, Round 569 (md5 of its definition 5ae76ef7cbf874d58d65ee9050e2023c)
 -- ---------------------------------------------------------------------------
 create or replace function public.record_auth_completion(
@@ -438,5 +528,16 @@ insert into public.game_score_caps (game, max_score) values
   ('tier-list', 800), ('transfer-path', 1000), ('ufc', 700), ('ufc-chain', 450), ('ufc-game', 600),
   ('who-am-i', null), ('whod-they-beat', 6), ('wonderkid-factory', null), ('world-cup', 800),
   ('world-cup-bracket', null), ('world-xi', 11);
+
+-- ---------------------------------------------------------------------------
+-- production's default privileges in public (pg_default_acl, read 2026-09-30,
+-- Round 675): a table, function or sequence the migration owner creates there
+-- hands every privilege to anon, authenticated and service_role unless the
+-- migration takes them away. Last in the file, so no object above is touched
+-- by them; every object a migration creates in public is.
+-- ---------------------------------------------------------------------------
+alter default privileges for role postgres in schema public grant all on tables to anon, authenticated, service_role;
+alter default privileges for role postgres in schema public grant all on functions to anon, authenticated, service_role;
+alter default privileges for role postgres in schema public grant all on sequences to anon, authenticated, service_role;
 
 set check_function_bodies = on;
