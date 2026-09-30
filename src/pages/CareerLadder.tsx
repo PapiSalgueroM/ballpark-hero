@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronDown, Loader2, Lock } from 'lucide-react';
 import { FlagImg, FlagFromEmoji } from '@/components/FlagImg';
@@ -14,6 +14,7 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
+import { getTodayET } from '@/lib/dateUtils';
 import {
   BASE_SCORE,
   CareerPlayer,
@@ -72,7 +73,12 @@ const CareerLadder = () => {
   const [difficulty, setDifficulty] = useState<LadderDifficulty>('standard');
 
   // ---- Daily: target player is date-seeded once the pool has loaded -------
-  const dailyPlayer = useMemo(() => (pool.length > 0 ? pickDailyPlayer(pool) : null), [pool]);
+  /* Round 718: the day is pinned at mount, the same moment useDailyPuzzle pins
+     the day its save is filed under. Read when the pool arrived instead, a
+     page opened just before midnight ET could deal tomorrow's player into
+     today's save. */
+  const dailyDate = useRef(getTodayET()).current;
+  const dailyPlayer = useMemo(() => (pool.length > 0 ? pickDailyPlayer(pool, dailyDate) : null), [pool, dailyDate]);
 
   // dailyPlayer resolves asynchronously (Supabase fetch via boot()), so it is
   // passed as supabasePuzzle rather than via the static puzzles array.

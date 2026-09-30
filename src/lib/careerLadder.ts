@@ -2,7 +2,7 @@
 // Data lives in Supabase: career_players (identity) + career_seasons (the ladder rows).
 import { foldSpecialLatin } from '@/lib/nameFold';
 import { supabase } from '@/integrations/supabase/client';
-import { dateSeed, getTodayET } from '@/lib/dateUtils';
+import { dailyPrngSeed, dateSeed, dayNumber, getTodayET } from '@/lib/dateUtils';
 import { storedSpelling, type PlayerEntity } from '@/lib/playerSearch';
 
 export interface CareerStint {
@@ -46,13 +46,76 @@ export type LadderAction =
   | { t: 'give' };
 
 /**
- * Deterministically picks today's Career Ladder player: same result for
- * every user on the same ET date, using the site's canonical date-seed
- * utility (src/lib/dateUtils.ts). Eligibility mirrors startRound() in
- * CareerLadder.tsx (>= MIN_STINTS seasons) so the daily pool never differs
- * from what unlimited mode considers playable.
+ * Round 718: the first ET day the rotation deals. Every day before it keeps
+ * the pick it always had (legacyDailyPick), so nobody's finished ladder turns
+ * into another man on reload. The daily save does not record who the answer
+ * was (its puzzle index is always 0 here), so a day that changed its answer
+ * would hand a finished log to a different player. Set after the day this
+ * shipped; if the release slips past it, move it later, never earlier
+ * (scripts/simCareerLadderRotation.mjs holds the days before it).
+ */
+export const ROTATION_START = '2026-10-15';
+
+/**
+ * Today's Career Ladder player: same result for every user on the same ET
+ * date. Eligibility mirrors startRound() in CareerLadder.tsx (>= MIN_STINTS
+ * seasons) so the daily pool never differs from what unlimited mode
+ * considers playable. Days before ROTATION_START use the old pick, every day
+ * from it on uses the rotation (rotationPick).
  */
 export function pickDailyPlayer(pool: CareerPlayer[], dateStr: string = getTodayET()): CareerPlayer | null {
+  if (dayNumber(dateStr) < dayNumber(ROTATION_START)) return legacyDailyPick(pool, dateStr);
+  return rotationPick(pool, dateStr);
+}
+
+/**
+ * Round 718: the daily as a rotation, so nobody sees the same ladder again
+ * for months (spec section 110, "do not allow puzzle repetition too quickly").
+ *
+ * The old pick below was the date as a number modulo the pool, and it
+ * repeated fast: two lists sorted the same way (the harder half and the whole
+ * pool) took turns, so one man could come up in both inside a few weeks, and
+ * the date number jumps at every month end, which lands the walk back on
+ * ground it covered weeks ago.
+ *
+ * The owner's July lean stays exactly as the guide describes it: two days in
+ * three come from the harder half of the pool (legendPool), the third day
+ * from the other half. Each half is walked in one fixed order, every man
+ * once, before anyone comes back. So a harder half man returns only after
+ * the whole harder half has been dealt (about a day and a half per man in
+ * it) and the other half only after all of that half (three days per man).
+ * With the live pool (244 eligible, 122 a half, 2026-09-30) that is 183 days
+ * and 366 days.
+ *
+ * The order is by a hash of each man's id, not by his position in a list, so
+ * adding one player to the pool slots him in without reshuffling everyone
+ * else. The same order every cycle is what makes the gap exact: reshuffling
+ * each cycle could deal the last man of one cycle again two days later.
+ */
+function rotationPick(pool: CareerPlayer[], dateStr: string): CareerPlayer | null {
+  const eligible = pool.filter(p => p.seasons.length >= MIN_STINTS);
+  if (eligible.length === 0) return null;
+  const harder = legendPool(pool);
+  const harderIds = new Set(harder.map(p => p.id));
+  const easier = eligible.filter(p => !harderIds.has(p.id));
+  const k = dayNumber(dateStr) - dayNumber(ROTATION_START);
+  // A pool too small to split (legendPool returns all of it) is one list, walked a day at a time.
+  if (easier.length === 0) return rotationOrder(harder)[k % harder.length];
+  if (k % 3 === 2) return rotationOrder(easier)[Math.floor(k / 3) % easier.length];
+  return rotationOrder(harder)[(k - Math.floor(k / 3)) % harder.length];
+}
+
+/** One half in its fixed rotation order: by a hash of the id, ties by id. */
+function rotationOrder(players: CareerPlayer[]): CareerPlayer[] {
+  const key = new Map(players.map(p => [p.id, dailyPrngSeed(`career-ladder:${p.id}`)]));
+  return [...players].sort((a, b) => key.get(a.id)! - key.get(b.id)! || a.id.localeCompare(b.id));
+}
+
+/**
+ * The pick every day before ROTATION_START had, kept exactly as it shipped
+ * so those days keep their answers.
+ */
+function legacyDailyPick(pool: CareerPlayer[], dateStr: string): CareerPlayer | null {
   const eligible = pool.filter(p => p.seasons.length >= MIN_STINTS);
   if (eligible.length === 0) return null;
   // Difficulty skew (owner request, July 2026): two of every three days draw
