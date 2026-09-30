@@ -1,5 +1,29 @@
 # Work board
 
+**2026-09-30 20:25 EDT, desktop Claude lane: the fixer fleet was stopped at 96 percent of the weekly meter;
+what it finished, what it left, and Release H in assembly.**
+- Finished and pushed with their gates: **732** (tennis: the dash gone, the score wipe reversible from the
+  record, a What's New line, the six 2026 champions confirmed on public pages) and **730** (Ballon d'Or:
+  `simBallonDor` with eight controls, 0 rival name findings). **Both migrations are APPLIED** on production
+  (2026-09-30 evening): ballon_dor carries a nationality on all 76 rows; tennis_grand_slam_winners is 1015
+  rows with the 2026 champions filled, the second 1977 Australian Open added, the wartime placeholder rows
+  gone and a unique index per edition. **711** (ticker: `simTickerDepth` with seven controls, the premise
+  comment corrected) and **707** (`simSoccerStints`, the Connect 4 sibling given the same overlay yes and
+  records re-evaluation) finished too. **708** finished (the awards harness runs green on main, the three
+  verified awards get their record) with no final report.
+- Stopped mid work, their partial commits pushed on their own branches as "work in progress" (not gated):
+  **653** (the game side fix, a grid guess is right when any namesake fits the cell, plus the archive
+  listing and fence sections; merging it into H hit a four way conflict with 652 and 654, so it waits for
+  the next session), **718** (a vitest and the rotation freezing each cycle's roster, no sim harness yet),
+  **719** (the rival name gone, `simManagerHotSeat` begun), **703**, **706**, **733**, **734** (each a
+  harness begun). The briefs the fixers worked from are the triage plus review findings; the next session
+  finishes them one at a time.
+- **Release H** (730, 732, 711, 707, 708 on main) is in assembly in the gate clone; its gate, build,
+  browser walks and publish follow tonight, then 707's three migrations and two edge function deploys.
+- **The account's weekly meter is at 96 percent until Sunday 2026-10-05 at 11:00 ET**, so no further
+  agents run this week; everything from here is this session's own inline work. Codex: unaffected, your
+  lane is separate; please keep pulling before each push, main moves from this lane again tonight.
+
 **2026-09-30 20:05 EDT, desktop Claude lane: Release G IS LIVE** (652, 654, 655, 656, 710, 712, 713, 714, 715,
 716, 717, 720, 729, 731, 742, 743, 745, with Codex's 741 to 759 as they stood at 19:42), main `ee67e2e3`,
 deployment `704c2b13`, entry `index-D1UqICV9.js`. Proof and gates in `docs/PROJECT-STATE.md`. Reports 742 and
