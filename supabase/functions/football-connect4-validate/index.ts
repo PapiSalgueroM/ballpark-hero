@@ -233,20 +233,28 @@ serve(async (req) => {
     const colKey = attrKeyOf(playerName, columnAttribute);
 
     /* The pair cache is still read FIRST, and it is not being torn out: 144
-       rows were paid for and they keep answering until they age out. */
+       rows were paid for and they keep answering until they age out. A stored
+       YES answers at once. A stored NO is HELD rather than returned (Round
+       703): the club records get their say before it is believed. */
+    let pairRefusal: Record<string, unknown> | null = null;
     try {
       const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
         .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
       if (hit?.verdict) {
-        return new Response(JSON.stringify({ ...(hit.verdict as Record<string, unknown>), cached: true }), {
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+        const stored = hit.verdict as Record<string, unknown>;
+        if (stored.valid === true) {
+          return new Response(JSON.stringify({ ...stored, cached: true }), {
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        pairRefusal = stored;
       }
     } catch { /* cache down -> fall through */ }
 
-    /* Then the two single attribute facts. If BOTH are known this answers with
-       no AI call at all, which is the whole point: a player already seen on any
-       other board is very likely to be answerable here for nothing. */
+    /* Then the two single attribute facts. If BOTH halves end up known this
+       answers with no AI call at all, which is the whole point: a player
+       already seen on any other board is very likely to be answerable here for
+       nothing. */
     let knownFullName = playerName;
     let rowKnown: boolean | null = null;
     let colKnown: boolean | null = null;
@@ -259,60 +267,62 @@ serve(async (req) => {
       if (rowFact) rowKnown = rowFact.match === true;
       if (colFact) colKnown = colFact.match === true;
       knownFullName = (rowFact?.fullName as string) || (colFact?.fullName as string) || playerName;
-      if (rowFact && colFact) {
-        const rowOk = rowFact.match === true;
-        const colOk = colFact.match === true;
-        return new Response(JSON.stringify({
-          valid: rowOk && colOk,
-          reason: {
-            [rowAttribute]: rowOk ? "Verified previously." : "This player does not match this attribute.",
-            [columnAttribute]: colOk ? "Verified previously." : "This player does not match this attribute.",
-          },
-          fullName: (rowFact.fullName as string) || (colFact.fullName as string) || playerName,
-          cached: true,
-        }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
-      }
     } catch { /* cache down -> fall through to AI */ }
 
-    /* ROUND 497: the confirm-only records pass, inserted between the fact
-       lookup above and the cacheOnly check below so both keep working exactly
-       as they did. It is ADDITIVE: Round 379's decomposition is not touched.
+    /* ROUND 497: the confirm-only records pass, between the fact lookup above
+       and the cacheOnly check below so both keep working exactly as they did.
        Anything the table proves is written into the SAME fact cache the model
-       writes, so the next board asking about that player gets it free even for
-       an attribute this pass cannot answer. */
-    const determined: Array<{ game: string; cache_key: string; verdict: unknown }> = [];
-    if (rowKnown === null) {
-      const proved = await confirmClubAttribute(playerName, rowAttribute);
-      if (proved) {
-        rowKnown = true;
-        knownFullName = proved;
-        determined.push({ game: CACHE_GAME, cache_key: rowKey, verdict: { match: true, fullName: proved } });
-      }
+       writes, so the next board asking about that player gets it free.
+       ROUND 703: it used to run only for a half with NO stored fact, so a
+       stored "no" (a false fact, or a pair refusal returned before this pass
+       was reached) beat the stint table every time. Now it runs for every half
+       not already a yes, and for both halves whenever a pair refusal is
+       waiting, because that refusal may rest on exactly the half a record
+       overturns. */
+    const recheck = (known: boolean | null) => pairRefusal !== null || known !== true;
+    const rowProved = recheck(rowKnown) ? await confirmClubAttribute(playerName, rowAttribute) : null;
+    const colProved = recheck(colKnown) ? await confirmClubAttribute(playerName, columnAttribute) : null;
+    if (pairRefusal && !rowProved && !colProved) {
+      /* A refusal the records do not touch is kept, exactly as before. */
+      return new Response(JSON.stringify({ ...pairRefusal, cached: true }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
-    if (colKnown === null) {
-      const proved = await confirmClubAttribute(playerName, columnAttribute);
-      if (proved) {
-        colKnown = true;
-        knownFullName = proved;
-        determined.push({ game: CACHE_GAME, cache_key: colKey, verdict: { match: true, fullName: proved } });
-      }
+    const determined: Array<{ game: string; cache_key: string; verdict: unknown }> = [];
+    if (rowProved) {
+      if (rowKnown !== true) determined.push({ game: CACHE_GAME, cache_key: rowKey, verdict: { match: true, fullName: rowProved } });
+      rowKnown = true;
+      knownFullName = rowProved;
+    }
+    if (colProved) {
+      if (colKnown !== true) determined.push({ game: CACHE_GAME, cache_key: colKey, verdict: { match: true, fullName: colProved } });
+      colKnown = true;
+      knownFullName = colProved;
+    }
+    if (pairRefusal) {
+      /* The refusal can now only stand on a half the records did not overturn.
+         Its own per-half answers fill whatever the facts do not know. */
+      if (rowKnown === null && typeof pairRefusal.matchesRow === "boolean") rowKnown = pairRefusal.matchesRow;
+      if (colKnown === null && typeof pairRefusal.matchesColumn === "boolean") colKnown = pairRefusal.matchesColumn;
     }
     if (determined.length > 0) {
       try { await sb.from("ai_validation_cache").upsert(determined); } catch { /* non-fatal */ }
     }
     /* Answered without the AI only when BOTH halves are determined. A false
        here is never a records miss: it is a model verdict this cache already
-       paid for, exactly the verdict the block above would have returned had it
-       held both halves. A records miss leaves its half null and falls through. */
+       paid for. A records miss leaves its half null and falls through. */
     if (rowKnown !== null && colKnown !== null) {
+      const fromRecords = rowProved !== null || colProved !== null;
+      const halfReason = (proved: string | null, known: boolean) =>
+        proved ? "Verified from our club records." : known ? "Verified previously." : "This player does not match this attribute.";
       return new Response(JSON.stringify({
         valid: rowKnown && colKnown,
         reason: {
-          [rowAttribute]: rowKnown ? "Verified from our club records." : "This player does not match this attribute.",
-          [columnAttribute]: colKnown ? "Verified from our club records." : "This player does not match this attribute.",
+          [rowAttribute]: halfReason(rowProved, rowKnown),
+          [columnAttribute]: halfReason(colProved, colKnown),
         },
         fullName: knownFullName,
-        source: "records",
+        ...(fromRecords ? { source: "records" } : { cached: true }),
       }), { headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
@@ -487,6 +497,29 @@ times over.`,
       aiVerdict = true;
     } catch {
       parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again." };
+    }
+
+    /* ROUND 703: the model never outvotes the club records on a half they
+       proved. Before this, a proved half could reach this point with the other
+       half unknown, and the model's "no" on the proved half was returned and
+       then written back over the proved fact. */
+    if (aiVerdict && (rowProved || colProved) && parsed && typeof parsed === "object") {
+      const rec = parsed as Record<string, unknown>;
+      if (rowProved) rec.matchesRow = true;
+      if (colProved) rec.matchesColumn = true;
+      if (typeof rec.matchesRow === "boolean" && typeof rec.matchesColumn === "boolean") {
+        rec.valid = rec.matchesRow && rec.matchesColumn;
+        rec.reason = {
+          [rowAttribute]: rowProved ? "Verified from our club records." : rec.matchesRow ? "Verified." : "This player does not match this attribute.",
+          [columnAttribute]: colProved ? "Verified from our club records." : rec.matchesColumn ? "Verified." : "This player does not match this attribute.",
+        };
+      } else if (rec.valid !== true) {
+        /* A bare "no" that never says which half it meant cannot be read
+           against a half the records proved. Fail closed: unverified, and
+           nothing is cached. */
+        aiVerdict = false;
+        parsed = { valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again." };
+      }
     }
 
     // cache VERIFIED verdicts only, never the unverified fallbacks
