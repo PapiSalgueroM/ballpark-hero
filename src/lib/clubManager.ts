@@ -189,6 +189,35 @@ const RACE_TOP_SHARE = 0.42;
 const RACE_SECOND_SHARE = 0.26;
 
 /**
+ * Round 742: another club's roster as THIS save sees it. The projection knows
+ * nothing about transfers, so a man I bought (or loaned in) from a club is
+ * still on that club's projected list, and until this round every site that
+ * named the opposition read the raw list: buy Lamine Yamal, play Barcelona,
+ * and he turned out for both sides (a 2026-09-29 footer report; the generated
+ * men doubled the same way). The projection itself and its cache are shared
+ * with the era picker, realNameShare and the world sync, so they are left
+ * alone and the filter sits here, matched on name against my squad. A
+ * namesake (two real men with one name) goes with him; that is accepted,
+ * because a doubled man is the worse error. The filter runs BEFORE
+ * pickOppSquad and the scorer draws, so the match engine's random stream
+ * changes only through the men available to it.
+ */
+function projectedRosterWithout(club: string, yearsOnNow: number, eraId: string, exclude: ReadonlySet<string>): ProjectedPlayer[] {
+  return projectedRoster(club, yearsOnNow, eraId).filter(p => !exclude.has(p.n));
+}
+const NO_NAMES: ReadonlySet<string> = new Set();
+
+/** Every name in my squad, loans in included: a man on loan here is not at his own club this season. */
+export function mySquadNames(state: CareerState): Set<string> {
+  return new Set(state.squad.map(p => p.name));
+}
+
+/** A rival club's projected roster minus every man who is in my squad. */
+export function oppRosterFor(state: CareerState, club: string, mine: ReadonlySet<string> = mySquadNames(state)): ProjectedPlayer[] {
+  return projectedRosterWithout(club, yearsOn(state), state.eraId ?? 'now', mine);
+}
+
+/**
  * Build the golden boot race: two attack-minded men per rival club, taken
  * from the same projected rosters the Match Centre's danger men use. On a
  * fresh season everyone starts at zero. Attached to a RUNNING season (an
@@ -199,11 +228,10 @@ const RACE_SECOND_SHARE = 0.26;
  */
 export function initScorerRace(state: CareerState): RaceScorer[] {
   const entries: RaceScorer[] = [];
-  const years = yearsOn(state);
-  const eraId = state.eraId ?? 'now';
+  const mine = mySquadNames(state);
   for (const club of state.leagueClubs) {
     if (club === state.clubName) continue;
-    const men = [...projectedRoster(club, years, eraId)]
+    const men = [...oppRosterFor(state, club, mine)]
       .filter(p => groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID')
       .sort((a, b) => b.r - a.r)
       .slice(0, 2);
@@ -242,7 +270,12 @@ function creditRaceGoals(state: CareerState, club: string, goals: number): void 
  * the stats centre are one bookkeeping.
  */
 export function goldenBootTable(state: CareerState, limit = 12): RaceScorer[] {
-  const rows: RaceScorer[] = [...(state.scorerRace ?? [])];
+  /* Round 742: a rival entry carrying the name of a man now in my squad is
+     his old club's, seeded before he moved (or a namesake), so it is dropped
+     at read time rather than rewritten into the save. He is on the board
+     under my club off his own league line below, like any of my players. */
+  const mine = mySquadNames(state);
+  const rows: RaceScorer[] = (state.scorerRace ?? []).filter(e => !mine.has(e.name));
   for (const p of state.squad) {
     const lg = p.comp?.league?.goals ?? 0;
     if (lg > 0) rows.push({ name: p.name, club: state.clubName, goals: lg, mine: true, gen: p.generated ? true : undefined });
@@ -299,8 +332,6 @@ export interface BallonWatchLine {
  * boot race leaders, then the star of every league's current leaders.
  */
 export function ballonDorWatch(state: CareerState, limit = 5): BallonWatchLine[] {
-  const years = yearsOn(state);
-  const eraId = state.eraId ?? 'now';
   const out: BallonWatchLine[] = [];
   const seen = new Set<string>();
   const push = (name: string, club: string, note: string, gen?: boolean, mine?: boolean): void => {
@@ -328,7 +359,7 @@ export function ballonDorWatch(state: CareerState, limit = 5): BallonWatchLine[]
       const best = [...state.squad].sort((a, b) => b.rating - a.rating)[0];
       if (best) push(best.name, l.club, `carrying the ${l.league} leaders`, best.generated, true);
     } else {
-      const star = [...projectedRoster(l.club, years, eraId)].sort((a, b) => b.r - a.r)[0];
+      const star = [...oppRosterFor(state, l.club)].sort((a, b) => b.r - a.r)[0];
       if (star) push(star.n, l.club, `carrying the ${l.league} leaders`, star.g);
     }
   }
@@ -11694,7 +11725,7 @@ function creditMyScorers(
   return { goalCounts, assistCounts, assistNames };
 }
 
-function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set(), window?: [number, number]): ScorerLine[] {
+function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, yearsOnNow = 0, eraId: string = 'now', taken: Set<number> = new Set(), window?: [number, number], exclude: ReadonlySet<string> = NO_NAMES): ScorerLine[] {
   /* Round 504: a segment of a half asks for its own window; the whole match
      shape splits at the interval as before. */
   const minutes = window ? distinctMinutes(goals, window[0], window[1], taken) : splitMinutes(goals, firstHalfGoals, taken);
@@ -11703,7 +11734,10 @@ function generateOppScorers(opp: string, goals: number, firstHalfGoals: number, 
   // "Bournemouth No. 9". Round 132: from the projected roster, so a 2036 match
   // report does not name a scorer who retired eight years earlier. Round 146:
   // from the era's roster, so a 2010 match report names 2010 players.
-  const baked = projectedRoster(opp, yearsOnNow, eraId).filter(p =>
+  // Round 742: minus the men in my squad (`exclude`, passed in because no
+  // save is in scope here), so a man I bought off this club never scores
+  // against me for them. See oppRosterFor.
+  const baked = projectedRosterWithout(opp, yearsOnNow, eraId, exclude).filter(p =>
     groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID');
   const oppPool = getPool().filter(p =>
     p.club === opp && (groupOf(p.position) === 'ATT' || groupOf(p.position) === 'MID'));
@@ -12603,7 +12637,7 @@ function drawSegment(
   let oppGoals: ScorerLine[];
   let oppCards: CardLine[] = [];
   if (!oppStart) {
-    oppGoals = generateOppScorers(fx.opponent, poisson(segO), 0, yearsOn(state), state.eraId, taken, [from + 1, to]);
+    oppGoals = generateOppScorers(fx.opponent, poisson(segO), 0, yearsOn(state), state.eraId, taken, [from + 1, to], mySquadNames(state));
     live.oppSubs = drawOppSubs(live, from, to, []);
   } else {
     /* Their goals' MINUTES first (the other dugout reads the score as it
@@ -12797,7 +12831,7 @@ function ensureFirstHalf(state: CareerState, entry: CalendarEntry, live: LiveMat
     for (const l of live.h1My) taken.add(l.minute);
   }
   if (!live.h1Opp || live.h1Opp.length !== live.oppGoals) {
-    live.h1Opp = generateOppScorers(fx.opponent, live.oppGoals, live.oppGoals, yearsOn(state), state.eraId, taken);
+    live.h1Opp = generateOppScorers(fx.opponent, live.oppGoals, live.oppGoals, yearsOn(state), state.eraId, taken, undefined, mySquadNames(state));
     markOppSetPieceGoals(live.h1Opp);
   }
   if (!live.h1Play) {
@@ -14330,8 +14364,9 @@ function playMyMatch(state: CareerState, entry: CalendarEntry, live: LiveMatch):
     decidedBy, won, shootoutWon,
     clubName: state.clubName, opponent: fx.opponent,
     attendance: crowd.attendance, capacity: crowd.capacity, venue: crowd.venue,
-    // Round 178: same era-aware source their scorers came from.
-    oppRoster: projectedRoster(fx.opponent, yearsOn(state), state.eraId ?? 'now'),
+    // Round 178: same era-aware source their scorers came from. Round 742:
+    // minus the men in my squad, like every other read of their roster.
+    oppRoster: oppRosterFor(state, fx.opponent),
     // Round 504: the committed play, both halves, and the other dugout.
     play: [...(live.h1Play ?? []), ...(live.h2Play ?? [])],
     possHalves: [live.possH1 ?? 50, live.possH2 ?? live.possH1 ?? 50],
@@ -15205,8 +15240,10 @@ function kickOff(state: CareerState, entry: CalendarEntry): LiveMatch {
   /* Round 504: the other eleven, picked before anyone scores, so their
      scorers are men who are on the pitch and the report rates the same
      eleven the pitch showed. Null for a thin club, and then their scorers
-     come from the roster the way they always did. */
-  const squad = pickOppSquad(projectedRoster(fx.opponent, yearsOn(state), state.eraId ?? 'now'));
+     come from the roster the way they always did. Round 742: the roster is
+     read minus the men in my squad, so a man I signed off them is not on
+     their teamsheet against me. */
+  const squad = pickOppSquad(oppRosterFor(state, fx.opponent));
   const live: LiveMatch = {
     week: state.week,
     myGoals: 0,
@@ -15619,7 +15656,7 @@ export function matchFacts(career: CareerState): MatchFacts | null {
       .sort((a, b) => (b.seasonGoals - a.seasonGoals) || (b.rating - a.rating))
       .slice(0, 2)
       .map(p => p.name);
-    const oppDanger = projectedRoster(fx.opponent, yearsOn(career), career.eraId ?? 'now')
+    const oppDanger = oppRosterFor(career, fx.opponent)
       .filter(p => groupOf(p.p) === 'ATT' || groupOf(p.p) === 'MID')
       .slice(0, 2)
       .map(p => p.n);
@@ -15996,8 +16033,6 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
      the boot. Every candidate is the settled best of something, so the
      winner always has a sentence-long case. */
   const ballonDor = (() => {
-    const years = yearsOn(state);
-    const eraId = state.eraId ?? 'now';
     const cands: { name: string; club: string; score: number }[] = [];
     const add = (name: string | undefined, club: string, bonus: number): void => {
       if (!name) return;
@@ -16006,20 +16041,22 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
       // The candidate's own rating anchors the case, wherever he plays.
       const rating = club === state.clubName
         ? state.squad.find(p => p.name === name)?.rating ?? 70
-        : projectedRoster(club, years, eraId).find(p => p.n === name)?.r ?? 70;
+        : oppRosterFor(state, club).find(p => p.n === name)?.r ?? 70;
       cands.push({ name, club, score: rating + bonus });
     };
+    // Round 742: another club's star is read minus the men in my squad, so a
+    // man I signed mid season is never the case for the club he left.
     const uclWinner = state.uclBracket?.find(t => t.round === 'F')?.winner ?? null;
     if (uclWinner) {
       const star = uclWinner === state.clubName
         ? [...state.squad].sort((a, b) => b.rating - a.rating)[0]?.name
-        : [...projectedRoster(uclWinner, years, eraId)].sort((a, b) => b.r - a.r)[0]?.n;
+        : [...oppRosterFor(state, uclWinner)].sort((a, b) => b.r - a.r)[0]?.n;
       add(star, uclWinner, 6);
     }
     if (table[0]) {
       const champStar = table[0].club === state.clubName
         ? [...state.squad].sort((a, b) => b.rating - a.rating)[0]?.name
-        : [...projectedRoster(table[0].club, years, eraId)].sort((a, b) => b.r - a.r)[0]?.n;
+        : [...oppRosterFor(state, table[0].club)].sort((a, b) => b.r - a.r)[0]?.n;
       add(champStar, table[0].club, 3);
     }
     if (goldenBoot) add(goldenBoot.name, goldenBoot.club, 2 + goldenBoot.goals * 0.15);
