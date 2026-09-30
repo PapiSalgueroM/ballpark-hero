@@ -89,7 +89,9 @@ export function filterScores(scores: LiveScoreRow[], filter: string, followed: R
 export function groupScores(scores: LiveScoreRow[], followed: ReadonlySet<string> = NO_FOLLOWS): SportGroup[] {
   const bySport = new Map<string, LiveScoreRow[]>();
   for (const r of scores) {
-    if (!r || !r.sport) continue;
+    /* a sport is a text key or it is nothing: a row carrying a number there
+       would throw on toUpperCase below, on every route */
+    if (!r || typeof r.sport !== 'string' || !r.sport) continue;
     const list = bySport.get(r.sport) ?? [];
     list.push(r);
     bySport.set(r.sport, list);
@@ -120,8 +122,8 @@ export function groupScores(scores: LiveScoreRow[], followed: ReadonlySet<string
     });
     return {
       sport,
-      tag: SPORT_TAG[sport] ?? sport.toUpperCase(),
-      hub: SPORT_HUB[sport] ?? '/',
+      tag: Object.prototype.hasOwnProperty.call(SPORT_TAG, sport) ? SPORT_TAG[sport] : sport.toUpperCase(),
+      hub: Object.prototype.hasOwnProperty.call(SPORT_HUB, sport) ? SPORT_HUB[sport] : '/',
       rows,
     };
   });
