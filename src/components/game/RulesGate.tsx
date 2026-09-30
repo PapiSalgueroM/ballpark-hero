@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useRoutePath } from '@/hooks/useRoutePath';
 import { useState, useEffect, ReactNode } from 'react';
 import { HelpCircle } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
@@ -35,7 +35,7 @@ export function RulesGate({
   triggerLabel = 'How to play',
   className,
 }: RulesGateProps) {
-  const { pathname } = useLocation();
+  const pathname = useRoutePath();
   const [open, setOpen] = useState(false);
   const localStorageKey = `rules-gate-seen:${pathname}`;
 

@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useRoutePath } from '@/hooks/useRoutePath';
 import { SPORT_HUB, SPORT_TAG, startLabel, teamShort, type LiveScoreRow } from '@/lib/liveScores';
 
 /**
@@ -143,7 +144,7 @@ function SportBox({ group, open }: { group: SportGroup; open: boolean }) {
 const HIDDEN_PREFIXES = ['/admin', '/reset-password'];
 
 export function TopTicker({ scores = [] }: TopTickerProps) {
-  const { pathname } = useLocation();
+  const pathname = useRoutePath();
   const groups = useMemo(() => groupScores(scores), [scores]);
   const [idx, setIdx] = useState(0);
   const [reducedMotion, setReducedMotion] = useState(false);

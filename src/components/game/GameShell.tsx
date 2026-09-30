@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useRoutePath } from '@/hooks/useRoutePath';
 import { cn } from '@/lib/utils';
 import { GameNavbar } from '@/components/game/GameNavbar';
 import { GameHelp } from '@/components/game/GameHelp';
@@ -60,7 +60,7 @@ export function GameShell({
   reportGameType,
   reportGameContext,
 }: GameShellProps) {
-  const { pathname } = useLocation();
+  const pathname = useRoutePath();
   const TitleHeading = headingLevel === 2 ? 'h2' : 'h1';
 
   return (

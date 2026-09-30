@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import { useRoutePath } from '@/hooks/useRoutePath';
 import { CATEGORIES, GameCategory, GameDef } from '@/data/gameRegistry';
 import { ArrowRight } from 'lucide-react';
 import { getTodayET } from '@/lib/dateUtils';
@@ -54,8 +55,8 @@ function getIncompleteDailyGames(category: GameCategory, todayEt: string): GameD
 }
 
 export function GameNav({ currentPath, sportCategory }: GameNavProps = {}) {
-  const location = useLocation();
-  const path = currentPath || location.pathname;
+  const routePath = useRoutePath();
+  const path = currentPath || routePath;
 
   // Auto-detect category from path
   const detectedCategory = sportCategory
