@@ -1,5 +1,22 @@
 # Work board
 
+**2026-09-30 evening, desktop Claude lane: CLAIMS, so nobody builds these twice.** Verified first: every branch
+of 2026-09-19 is on main, Release F is what douknowball.com serves (deployment fe10102e, entry
+index-_2k7DL7K.js, checked live), and Round 669's midnight data step did NOT run (the table still holds 46
+and 5,496 rows); it is scheduled for 00:00 America/New_York on 2026-10-01 by this session. Rounds 674 and
+678 are merged into points-economy (c4eb7488). Being built now, each on its own branch from origin/main
+unless said otherwise: **652** (tables reach a crawler as tables), **653** (grid answer archives),
+**654** (links, hub names, breadcrumbs), **655** (Club Manager league and club lists), **656** (the 2026
+World Cup results page and the Record Books MVP tables), **699** (sports facts fence hardening),
+**700** (the seoMeta split), **701** (Missing XI lineups on a two source record), **702** (the US
+career path, teammates and CFB school facts), **703** (the AI validation cache rejecting true
+answers), **704** (NHL and NBA early eras), **705** (nfl_grid_players, nfl_team_seasons, nhl_draft),
+**706** (the college tables), **707** (soccer stints behind the verified overlay), **708** (soccer_awards,
+national_team_squads, AFL goal kickers), **709** (the career_seasons graph under Transfer Path),
+**710** (one result moment for every game); economy **675** and **677** from points-economy, then **679**,
+**680**, **681**. A design panel is drawing the Soccer Career and Club Manager first screens. The next
+free number for anyone else is **711**.
+
 **2026-09-29 morning, desktop Claude lane: Release F IS LIVE** (660, 661, 668, 669 code, 670, 672),
 main `add1c6b0`, deployment `fe10102e`. Proof and gates in `docs/PROJECT-STATE.md`.
 - **Tonight at 00:00 America/New_York (2026-09-30):** Round 669's migration, the `players.ts` re-bake and
