@@ -150,7 +150,7 @@ const AdminReports = () => {
   const counts = statusCounts(reports, game);
   const games = gameCounts(reports);
   const filtered = sortForTriage(reports.filter((r) => matchesGame(r, game) && matchesStatus(r, filter)));
-  const critical = reports.filter((r) => priorityOf(r) === 'critical' && !isClosed(statusOf(r))).length;
+  const critical = reports.filter((r) => matchesGame(r, game) && priorityOf(r) === 'critical' && !isClosed(statusOf(r))).length;
   const filterLabel = FILTERS.find((f) => f.key === filter)?.label ?? '';
 
   return (
@@ -344,7 +344,7 @@ const AdminReports = () => {
                     onChange={(e) => setDraft(report, { ...draft, note: e.target.value })}
                     rows={2}
                     placeholder="What you found, who else hit it, anything worth remembering"
-                    className="mt-1 block w-full rounded-lg border border-border bg-background px-2 py-1.5 text-sm text-foreground disabled:opacity-50"
+                    className="mt-1 block w-full rounded-lg border border-border bg-background px-2 py-1.5 text-sm text-foreground placeholder:text-muted-foreground placeholder:font-normal disabled:opacity-50"
                     data-testid="note-input"
                   />
                 </label>
@@ -357,7 +357,7 @@ const AdminReports = () => {
                       disabled={!withColumns}
                       onChange={(e) => setDraft(report, { ...draft, fixRef: e.target.value })}
                       placeholder="Round, commit or PR"
-                      className="mt-1 block w-full min-h-[36px] rounded-lg border border-border bg-background px-2 text-sm text-foreground disabled:opacity-50"
+                      className="mt-1 block w-full min-h-[36px] rounded-lg border border-border bg-background px-2 text-sm text-foreground placeholder:text-muted-foreground placeholder:font-normal disabled:opacity-50"
                       data-testid="fixref-input"
                     />
                   </label>
