@@ -4,7 +4,8 @@
  * Stephens they had never won a Grand Slam singles title. All three had.
  * tennis-chain-validate selected the whole of tennis_grand_slam_winners with no
  * .limit() and no .range(); PostgREST caps a select at 1,000 rows and says
- * nothing, the table holds 1,019, and the nineteen it never saw were every
+ * nothing, the table held 1,019 that day (1,015 once Round 732's migration
+ * lands, still over the cap), and the nineteen it never saw were every
  * women's US Open champion from 2007 to 2025. Those three have no other slam,
  * so they vanished completely; Serena Williams, Naomi Osaka, Coco Gauff, Iga
  * Swiatek and Aryna Sabalenka lost their US Open rows and survived only on
