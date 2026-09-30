@@ -1,8 +1,8 @@
 {
-  "_comment": "Round 673. simPlayDoor's snapshot of the catalog: the output of scripts/data/playDoorCatalog.sql. source 'rehearsal' means node scripts/simEconomyMigrations.mjs --write-fixture captured it in PGlite, on scripts/data/economySchema.sql (production's objects, read only) right after economy step L1 ran there; nothing ran on production. After the lead applies L1 (the header of supabase/migrations/20260928_econ_l1_lock_the_doors.sql, step 6), rerun the query read only through the Supabase MCP, replace catalog with its output, set source to 'production' and captured to that date. From then on simPlayDoor also requires the live door to be shut, and simEconomyMigrations section 9 requires production to equal the rehearsal.",
+  "_comment": "Rounds 673 and 677. simPlayDoor's snapshot of the catalog: the output of scripts/data/playDoorCatalog.sql. source 'rehearsal' means node scripts/simEconomyMigrations.mjs --write-fixture captured it in PGlite, on scripts/data/economySchema.sql and economySchemaE3.sql (production's objects, read only) after the chain this branch carries ran there: L1, the E1 and E2 stand-in (scripts/data/economyE2StandIn.sql), E3 and E3c; nothing ran on production. After the lead applies a step (L1's header step 6, E3's header step 6), rerun the query read only through the Supabase MCP, replace catalog with its output, set source to 'production' and captured to that date. From then on simPlayDoor also requires the live door to be shut, and simEconomyMigrations section 9 requires production to equal the rehearsal at the stage its ledger names.",
   "source": "rehearsal",
-  "captured": "2026-09-29",
-  "query_md5": "faa81af1ad26691fed63c5b774ca6e6e",
+  "captured": "2026-09-30",
+  "query_md5": "963588fb6ba3377a337684573621f29f",
   "catalog": {
     "column_privileges": {
       "anon daily_completions": [
@@ -102,6 +102,20 @@
         "public_exec": false
       },
       {
+        "anon_exec": true,
+        "authenticated_exec": true,
+        "config": [
+          "search_path=\"\""
+        ],
+        "execute_in_body": false,
+        "fn": "name_is_owned(text,uuid)",
+        "format_in_body": false,
+        "md5": "5ee27e9f2c1677c5dd01d9cc3afcbeff",
+        "name": "name_is_owned",
+        "owner": "postgres",
+        "public_exec": false
+      },
+      {
         "anon_exec": false,
         "authenticated_exec": true,
         "config": [
@@ -114,24 +128,68 @@
         "name": "record_auth_completion",
         "owner": "postgres",
         "public_exec": false
+      },
+      {
+        "anon_exec": false,
+        "authenticated_exec": true,
+        "config": [
+          "search_path=\"\""
+        ],
+        "execute_in_body": false,
+        "fn": "record_play(text,text,uuid,integer,integer,integer,text)",
+        "format_in_body": false,
+        "md5": "7cb43f6d2b95e545012ec01ba93213e2",
+        "name": "record_play",
+        "owner": "postgres",
+        "public_exec": false
       }
     ],
     "door_signatures": {
       "claim_daily_badge": 0,
-      "name_is_owned": 0,
+      "name_is_owned": 1,
       "record_auth_completion": 1,
-      "record_play": 0
+      "record_play": 1
+    },
+    "door_tables": {
+      "private.play_refusals": {
+        "anon": [],
+        "authenticated": [],
+        "rls": true
+      },
+      "private.ranked_claims": {
+        "anon": [],
+        "authenticated": [],
+        "rls": true
+      },
+      "private.season_closes": {
+        "anon": [],
+        "authenticated": [],
+        "rls": true
+      },
+      "public.game_rules": {
+        "anon": [
+          "SELECT"
+        ],
+        "authenticated": [
+          "SELECT"
+        ],
+        "rls": true
+      }
     },
     "gc_insert_columns": {
       "anon": [
         "game",
         "player_name",
-        "score"
+        "ranked_day",
+        "score",
+        "score_scale"
       ],
       "authenticated": [
         "game",
         "player_name",
-        "score"
+        "ranked_day",
+        "score",
+        "score_scale"
       ]
     },
     "hard_max": {
@@ -169,12 +227,85 @@
         "live": true,
         "seq": 1,
         "step": "L1"
+      },
+      {
+        "installed": {
+          "stand_in": true
+        },
+        "live": true,
+        "seq": 2,
+        "step": "E1"
+      },
+      {
+        "installed": {
+          "stand_in": true
+        },
+        "live": true,
+        "seq": 3,
+        "step": "E1b"
+      },
+      {
+        "installed": {
+          "stand_in": true
+        },
+        "live": true,
+        "seq": 4,
+        "step": "E2"
+      },
+      {
+        "installed": {
+          "gc_column_acl": {
+            "game": "{anon=a/postgres,authenticated=a/postgres}",
+            "player_name": "{anon=a/postgres,authenticated=a/postgres}",
+            "ranked_day": "{anon=a/postgres,authenticated=a/postgres}",
+            "score": "{anon=a/postgres,authenticated=a/postgres}",
+            "score_scale": "{anon=a/postgres,authenticated=a/postgres}"
+          },
+          "gc_policy_check": "(((length(game) >= 1) AND (length(game) <= 64)) AND ((length(player_name) >= 1) AND (length(player_name) <= 40)) AND ((score_scale IS NULL) OR (score_scale IN ( SELECT s.scale\n   FROM score_scales s))) AND ((ranked_day IS NULL) OR ((ranked_day >= (et_day(now()) - 1)) AND (ranked_day <= et_day(now())))) AND (NOT name_is_owned(player_name, auth.uid())))",
+          "gc_policy_check_md5": "8e57ccf1922bd894c504bc0b8c454437",
+          "internals_def_md5": {
+            "play_board_row": "d0bd279498beee8eab3884fdd34aa8fc",
+            "play_count": "0e21409ece346585757b5192ba4715f1",
+            "play_finish": "f08d0563e68f4297539ff7a7791abb42",
+            "play_points": "b02ddffb2c43439cc9f0f1be7a7f3ed7",
+            "play_start": "ef89131df25fdf363707ce93423201a0"
+          },
+          "name_is_owned_def_md5": "5ee27e9f2c1677c5dd01d9cc3afcbeff",
+          "profile_indexes_made": [
+            "profiles_lower_display_name",
+            "profiles_lower_username"
+          ],
+          "record_play_def_md5": "7cb43f6d2b95e545012ec01ba93213e2",
+          "tables": [
+            "public.game_rules",
+            "private.ranked_claims",
+            "private.season_closes",
+            "private.play_refusals"
+          ]
+        },
+        "live": true,
+        "seq": 5,
+        "step": "E3"
+      },
+      {
+        "installed": {
+          "index_def": "CREATE UNIQUE INDEX ugs_one_ranked_day ON public.user_game_scores USING btree (user_id, game_type, ranked_day) WHERE (ranked_day IS NOT NULL)",
+          "index_def_md5": "36bed93c46b895929374445837470473"
+        },
+        "live": true,
+        "seq": 6,
+        "step": "E3c"
       }
     ],
     "ledger_guard": {
       "anon_select": false,
       "authenticated_select": false,
       "rls": true
+    },
+    "one_ranked_day": {
+      "def": "CREATE UNIQUE INDEX ugs_one_ranked_day ON public.user_game_scores USING btree (user_id, game_type, ranked_day) WHERE (ranked_day IS NOT NULL)",
+      "unique": true,
+      "valid": true
     },
     "outside_definers": [
       {
@@ -239,7 +370,7 @@
         "using": "true"
       },
       {
-        "check": "(((length(game) >= 1) AND (length(game) <= 64)) AND ((length(player_name) >= 1) AND (length(player_name) <= 40)))",
+        "check": "(((length(game) >= 1) AND (length(game) <= 64)) AND ((length(player_name) >= 1) AND (length(player_name) <= 40)) AND ((score_scale IS NULL) OR (score_scale IN ( SELECT s.scale\n   FROM score_scales s))) AND ((ranked_day IS NULL) OR ((ranked_day >= (et_day(now()) - 1)) AND (ranked_day <= et_day(now())))) AND (NOT name_is_owned(player_name, auth.uid())))",
         "cmd": "INSERT",
         "n": "Anyone can log a completion",
         "roles": "{anon,authenticated}",
@@ -287,6 +418,67 @@
         "using": "true"
       }
     ],
+    "private_functions": [
+      {
+        "anon_exec": false,
+        "authenticated_exec": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": false,
+        "fn": "private.play_board_row(text,integer,text,date,text)",
+        "name": "play_board_row",
+        "public_exec": false
+      },
+      {
+        "anon_exec": false,
+        "authenticated_exec": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": false,
+        "fn": "private.play_count(text,text)",
+        "name": "play_count",
+        "public_exec": false
+      },
+      {
+        "anon_exec": false,
+        "authenticated_exec": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": false,
+        "fn": "private.play_finish(text,text,boolean,text,uuid,integer,integer,integer,text,text)",
+        "name": "play_finish",
+        "public_exec": false
+      },
+      {
+        "anon_exec": false,
+        "authenticated_exec": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": false,
+        "fn": "private.play_points(text,date)",
+        "name": "play_points",
+        "public_exec": false
+      },
+      {
+        "anon_exec": false,
+        "authenticated_exec": false,
+        "config": [
+          "search_path=\"\""
+        ],
+        "definer": false,
+        "fn": "private.play_start(text,text,boolean,uuid,integer)",
+        "name": "play_start",
+        "public_exec": false
+      }
+    ],
+    "private_usage": {
+      "anon": false,
+      "authenticated": false
+    },
     "rules": [],
     "save": {
       "config": [
@@ -351,6 +543,22 @@
         "security_invoker": false,
         "updatable": false,
         "view": "public.player_ranks"
+      },
+      {
+        "anon_write": false,
+        "authenticated_write": false,
+        "kind": "v",
+        "security_invoker": true,
+        "updatable": false,
+        "view": "public.scored_days"
+      },
+      {
+        "anon_write": false,
+        "authenticated_write": false,
+        "kind": "v",
+        "security_invoker": true,
+        "updatable": false,
+        "view": "public.scored_plays"
       }
     ]
   }

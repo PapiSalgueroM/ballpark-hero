@@ -1,4 +1,5 @@
--- simPlayDoor's catalog read (Round 673). READ ONLY: one SELECT of catalog
+-- simPlayDoor's catalog read (Round 673, grown in Round 677 by private_usage,
+-- private_functions, door_tables and one_ranked_day). READ ONLY: one SELECT of catalog
 -- functions and of the two private tables economy step L1 creates
 -- (private.economy_steps and private.game_hard_max), so it runs from L1 on.
 -- Run it through the Supabase MCP execute_sql (never through a function the
@@ -80,6 +81,29 @@ select jsonb_build_object(
              where r.rulename <> '_RETURN' and n.nspname not in ('pg_catalog', 'information_schema')),
   'door_signatures', (select jsonb_object_agg(n, (select count(*) from pg_proc f where f.proname = n and f.pronamespace = 'public'::regnamespace))
                         from unnest(array['record_auth_completion', 'record_play', 'name_is_owned', 'claim_daily_badge']) n),
+  -- Round 677: every function in private (the door's internals run there as
+  -- the definer that calls them, and no client role may call one), the door's
+  -- four tables, and the one ranked day index E3c builds
+  'private_usage', jsonb_build_object('anon', has_schema_privilege('anon', 'private', 'USAGE'),
+                                      'authenticated', has_schema_privilege('authenticated', 'private', 'USAGE')),
+  'private_functions', (select coalesce(jsonb_agg(jsonb_build_object(
+                   'fn', f.oid::regprocedure::text,
+                   'name', f.proname::text,
+                   'definer', f.prosecdef,
+                   'config', f.proconfig,
+                   'anon_exec', has_function_privilege('anon', f.oid, 'EXECUTE'),
+                   'authenticated_exec', has_function_privilege('authenticated', f.oid, 'EXECUTE'),
+                   'public_exec', exists (select 1 from aclexplode(coalesce(f.proacl, acldefault('f', f.proowner))) x where x.grantee = 0))
+                 order by f.oid::regprocedure::text), '[]'::jsonb)
+                 from pg_proc f where f.pronamespace = 'private'::regnamespace),
+  'door_tables', (select coalesce(jsonb_object_agg(n.nspname::text || '.' || c.relname::text, jsonb_build_object(
+                   'rls', c.relrowsecurity,
+                   'anon', coalesce((select jsonb_agg(pv.p order by pv.p) from pv where has_table_privilege('anon', c.oid, pv.p)), '[]'::jsonb),
+                   'authenticated', coalesce((select jsonb_agg(pv.p order by pv.p) from pv where has_table_privilege('authenticated', c.oid, pv.p)), '[]'::jsonb))), '{}'::jsonb)
+                 from pg_class c join pg_namespace n on n.oid = c.relnamespace
+                where n.nspname::text || '.' || c.relname::text in ('public.game_rules', 'private.ranked_claims', 'private.season_closes', 'private.play_refusals')),
+  'one_ranked_day', (select jsonb_build_object('def', pg_get_indexdef(i.indexrelid), 'valid', i.indisvalid and i.indisready, 'unique', i.indisunique)
+                       from pg_index i where i.indexrelid = to_regclass('public.ugs_one_ranked_day')),
   'save', (select jsonb_build_object('definer', f.prosecdef, 'config', f.proconfig, 'md5', md5(pg_get_functiondef(f.oid)), 'src_md5', md5(f.prosrc),
                                      'tail_md5', md5(substr(f.prosrc, strpos(f.prosrc, '  insert into public.user_game_scores ('))))
              from pg_proc f where f.oid = to_regprocedure('public.record_auth_completion(text,integer,integer)')),

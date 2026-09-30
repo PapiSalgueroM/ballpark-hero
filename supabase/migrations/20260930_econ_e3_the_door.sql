@@ -579,9 +579,6 @@ begin
     return jsonb_build_object('ranked', false, 'reason', 'no open cap');
   end if;
   v_score := least(greatest(coalesce(p_score, 0), 0), ceil(v_cap)::integer);
-  if v_score <> coalesce(p_score, 0) then
-    perform private.play_count(p_game, 'clamped');
-  end if;
   v_correct := least(greatest(coalesce(p_correct, 0), 0), 1000);
 
   -- 2. the claim for this run
@@ -611,9 +608,8 @@ begin
       v_reason := 'expired';
     end if;
   elsif exists (select 1 from private.ranked_claims c where c.user_id = v_user and c.game = p_game and c.et_day = v_today) then
-    v_reason := case when exists (select 1 from private.ranked_claims c
-                                   where c.user_id = v_user and c.game = p_game and c.et_day = v_today and c.state = 'open')
-                     then 'another run' else 'already played' end;
+    v_reason := (select case c.state when 'open' then 'another run' when 'settled' then 'already played' else 'forfeit' end
+                   from private.ranked_claims c where c.user_id = v_user and c.game = p_game and c.et_day = v_today);
   elsif v_season and exists (select 1 from private.ranked_claims c
                               where c.user_id = v_user and c.game = p_game and c.state = 'open' and c.step > 0) then
     v_reason := 'another season';
@@ -621,6 +617,12 @@ begin
     insert into private.ranked_claims (user_id, game, et_day, run_id, step, state, claimed_at)
     values (v_user, p_game, v_today, p_run, v_step, 'open', v_now)
     returning * into v_claim;
+  end if;
+
+  -- the clamp is counted once the finish is recorded, ranked or practice (a
+  -- retry answered from the store above counts nothing)
+  if v_score <> coalesce(p_score, 0) then
+    perform private.play_count(p_game, 'clamped');
   end if;
 
   -- 3. a season closes once per save
