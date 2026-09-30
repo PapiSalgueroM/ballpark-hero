@@ -1,5 +1,24 @@
 # Work board
 
+**2026-09-30, Codex Rounds 754 through 757 CLAIMED: another independent game UI batch.**
+754 owns `src/components/game/PlayerAutocomplete.tsx`, focused rendered tests and its new sim
+harness. The measured native option buttons ignore Enter/Space and remain selectable after the
+input is disabled. Restore one selection per enabled pointer/keyboard activation and zero when
+disabled, preserving search, namesake keys, filters and input arrow-key behavior.
+755 owns `src/components/us-career/ExtensionCard.tsx`, a new scoped response stylesheet and focused
+tests/harness. Add finite feedback to changed engine-authored replies in all four US My Career
+games. Preserve offer figures, outcomes, one-use Push, immediate actions and stable controls.
+756 owns only BadgeGrid in `src/components/us-career/SocialPanel.tsx`, a new scoped stylesheet and
+focused tests/harness. Give earned badges finite feedback with unchanged evaluator results, counts,
+copy and card identity; locked badges remain quiet and reduced motion is static.
+757 owns `src/pages/FreeKick.tsx`, `src/pages/BuzzerBeater.tsx` and a new scoped browser regression
+gate. Their floating help currently anchors at (0,0), over the phone wordmark and behind the desktop
+ticker. Place help inside each game header and verify normal pointer/keyboard access and unchanged
+rules at four widths. No arcade engines, boards, scores, saves, global styles or shared popover edits.
+All work is presentation or existing-control repair, with no new sports data, narratives, account
+writes or database changes. Root alone updates shared docs and commits exact owned paths. Claude
+retains every existing claim and release/publish duty. Next free round is **758**.
+
 **2026-09-30, Codex Round 753 COMPLETE: chain link reactions and unbroken-text phone fit.**
 Combat, Tennis and NASCAR timelines reveal only the newest validated link (420ms) and its committed
 connection (360ms). Empty/seed states remain quiet, existing nodes survive, same-chain and ended
