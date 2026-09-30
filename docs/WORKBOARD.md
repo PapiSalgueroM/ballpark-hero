@@ -1,5 +1,33 @@
 # Work board
 
+**2026-09-29, Round 678 RE-REVIEWED AND CLOSED, branch `r678-knowledge-line` (points economy lane),
+not on `points-economy` yet, nothing applied.** The re-review's major is fixed: `hasRoom` reads the
+perfect on the line's own grid, so a perfect a float's error over its line (17.000000000000004) no
+longer deals a board that pays the top listed option. The fence now owns its thresholds, knows the
+one move policies by name, asserts every line is the smallest, holds the exact walk to a full count
+of paths, proves the biggestNumber and lifelineReader detections and the three remaining no-fallback
+rules, reads retirements as code, catches `++` and `Object.assign` on day points, and holds the
+release gate (`heldBy`) to the table. `simKnowledgeLine` carries 49 controls. Eight breaks that need
+deliberate sabotage are listed as accepted residual risk in `docs/PROJECT-STATE.md`. Next: merge
+into `points-economy` alongside Round 674.
+
+**Earlier the same day, Round 678 REVIEWED AND FIXED, branch `r678-knowledge-line` (points economy lane), not on
+`points-economy` yet, nothing applied.** All 11 review defects are fixed, each with a control:
+- The seed is checked row by row against the family table itself.
+- The line is asserted on every board.
+- The four option dailies now walk exactly, because equal states are merged.
+- The mint scan runs on the type checker.
+- The key scan and the brand markers read code, not comments.
+- 22 cases pin the formula.
+- A policy with nothing to read throws.
+- Chance boards are valued in expectation.
+- Soccer Career holds Release G: `genGameRules --release G` exits 1 until it pays, and Round 691
+  runs that check.
+
+`simKnowledgeLine` now carries 30 controls. The fix also found and fixed a rounding bug in
+`dayPoints`: 575 of 1000 came out as 57 where the database would give 58. Details and gates are in
+`docs/PROJECT-STATE.md`. Next: merge into `points-economy` alongside Round 674. They do not share a
+code file: 674 owns `completionKeys.mjs`, and this fix reads it without changing it.
 **2026-09-29 morning, desktop Claude lane: Release F IS LIVE** (660, 661, 668, 669 code, 670, 672),
 main `add1c6b0`, deployment `fe10102e`. Proof and gates in `docs/PROJECT-STATE.md`.
 - **Tonight at 00:00 America/New_York (2026-09-30):** Round 669's migration, the `players.ts` re-bake and

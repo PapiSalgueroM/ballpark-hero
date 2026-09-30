@@ -967,7 +967,10 @@ workboard updated in the same round.
   `deploy_project`, prove by finding the recount card's text in the live entry chunk. Then
   `simEconomyLive` at +1 hour, +1 day, +7 days; `get_advisors`; PROJECT-STATE and What's New.
 - **Fence.** The whole suite on the frozen tree (green means each closing summary line and exit 0),
-  `simEconomyLive`, `simEdgeSync` with `nba-evaluate-lineup` synced.
+  `simEconomyLive`, `simEdgeSync` with `nba-evaluate-lineup` synced. Before E3b is generated,
+  `node scripts/genGameRules.mjs --release G` must exit 0: it exits 1 while any game filed with
+  `holdsRelease('G', ...)` in `pointsFamilies.ts` does not pay, and Soccer Career is filed that way
+  (section 7.6), so the release cannot go out with the flagship silently for fun (Round 678 fix).
 - **Controls.** Every control of every fence above, run once on the frozen tree.
 - **Migration.** E3b, T0.
 - **Player sees.** Everything in section 11.
