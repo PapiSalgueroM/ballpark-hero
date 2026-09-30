@@ -504,6 +504,7 @@ const AppContent = () => {
         <Route path="/records/stanley-cup-winners" element={<RecordPage slug="stanley-cup-winners" />} />
         <Route path="/records/wnba-champions" element={<RecordPage slug="wnba-champions" />} />
         <Route path="/records/college-football-national-champions" element={<RecordPage slug="college-football-national-champions" />} />
+        <Route path="/records/heisman-trophy-winners" element={<RecordPage slug="heisman-trophy-winners" />} />
         <Route path="/records/ncaa-basketball-champions" element={<RecordPage slug="ncaa-basketball-champions" />} />
         <Route path="/records/english-football-champions" element={<RecordPage slug="english-football-champions" />} />
         <Route path="/records/afl-premiers" element={<RecordPage slug="afl-premiers" />} />

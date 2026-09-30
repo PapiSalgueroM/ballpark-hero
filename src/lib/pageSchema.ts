@@ -51,6 +51,7 @@ const STATIC_TYPES: Record<string, string> = {
   '/records/stanley-cup-winners': 'WebPage',
   '/records/wnba-champions': 'WebPage',
   '/records/college-football-national-champions': 'WebPage',
+  '/records/heisman-trophy-winners': 'WebPage',
   '/records/ncaa-basketball-champions': 'WebPage',
   '/records/english-football-champions': 'WebPage',
   '/records/afl-premiers': 'WebPage',

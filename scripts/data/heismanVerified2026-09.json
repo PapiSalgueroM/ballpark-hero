@@ -1,0 +1,2509 @@
+{
+ "table": "cfb_heisman_winners",
+ "round": 729,
+ "checkedOn": "2026-09-30",
+ "fields": [
+  "year",
+  "winner",
+  "school",
+  "position"
+ ],
+ "method": "Every row read from the live table with a SELECT on 2026-09-30 (md5 of id|year|winner|school|position|class over all 91 rows, ordered by id: 673fbd5b7f866475520cd118bc3de8dc). Each row checked against the award body (heisman.com/heisman-winners/, read from the raw page's per winner data attributes) and ESPN's all time list with positions. Year, winner and school were also read against ESPN's winners list. A value ships only where both sources agree; where they print the same person, school or role two ways, the note on the row says which form is kept and why. Wikipedia was not used.",
+ "positionRule": "The award body's position code, which ESPN matches on 88 rows and prints as the same role on the other 3 (HB against RB for 1937 and 1944, CB/WR against WR/CB for 2024). Both sources list the running backs of every era as RB (two fullbacks as FB, two halfbacks as HB on heisman.com), the two way ends of 1936 and 1949 as TE, and give no second role to Kinnick, Horvath or Janowicz, so the table's era codes HB, E, HB/QB and HB/P were corrected to what both print.",
+ "classRule": "class is not one of the verified fields. The 10 rows that carry one agree with heisman.com and are kept; the 81 empty ones stay empty rather than filled from one source.",
+ "pageSources": [
+  "https://www.heisman.com/heisman-winners/",
+  "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies",
+  "https://www.espn.com/college-football/story/_/id/35213207/heisman-winners-list"
+ ],
+ "counts": {
+  "read": 91,
+  "verified": 68,
+  "corrected": 23,
+  "filled": 0,
+  "dropped": 0
+ },
+ "rows": [
+  {
+   "year": 1935,
+   "id": 1,
+   "status": "corrected",
+   "winner": "Jay Berwanger",
+   "school": "Chicago",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/jay-berwanger/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Jay Berwanger",
+     "school": "Chicago",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Jay Berwanger",
+     "school": "Chicago",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1936,
+   "id": 2,
+   "status": "corrected",
+   "winner": "Larry Kelley",
+   "school": "Yale",
+   "position": "TE",
+   "was": {
+    "position": "E"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/larry-kelley/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Larry Kelley",
+     "school": "Yale",
+     "position": "TE",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Larry Kelley",
+     "school": "Yale",
+     "position": "TE"
+    }
+   }
+  },
+  {
+   "year": 1937,
+   "id": 3,
+   "status": "verified",
+   "winner": "Clinton Frank",
+   "school": "Yale",
+   "position": "HB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/clinton-frank/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Clinton Frank",
+     "school": "Yale",
+     "position": "HB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Clint Frank",
+     "school": "Yale",
+     "position": "RB"
+    }
+   },
+   "notes": [
+    "heisman.com writes Clinton Frank, ESPN writes Clint Frank; the table keeps the award body's spelling.",
+    "heisman.com lists HB, ESPN lists RB: a halfback is a running back, and the award body's HB is kept."
+   ]
+  },
+  {
+   "year": 1938,
+   "id": 4,
+   "status": "verified",
+   "winner": "Davey O'Brien",
+   "school": "TCU",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/davey-obrien/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Davey O'Brien",
+     "school": "TCU",
+     "position": "QB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Davey O'Brien",
+     "school": "TCU",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 1939,
+   "id": 5,
+   "status": "corrected",
+   "winner": "Nile Kinnick",
+   "school": "Iowa",
+   "position": "RB",
+   "was": {
+    "position": "HB/QB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/nile-kinnick/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Nile Kinnick",
+     "school": "Iowa",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Nile Kinnick",
+     "school": "Iowa",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1940,
+   "id": 6,
+   "status": "corrected",
+   "winner": "Tom Harmon",
+   "school": "Michigan",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/tom-harmon/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Tom Harmon",
+     "school": "Michigan",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Tom Harmon",
+     "school": "Michigan",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1941,
+   "id": 7,
+   "status": "corrected",
+   "winner": "Bruce Smith",
+   "school": "Minnesota",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": "Senior",
+   "classCheck": "agrees with heisman.com (Senior, where * marks a redshirt season used); one source only, shown by no page, not changed",
+   "sources": [
+    "https://www.heisman.com/heisman-winners/bruce-smith/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Bruce Smith",
+     "school": "MInnesota",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Bruce Smith",
+     "school": "Minnesota",
+     "position": "RB"
+    }
+   },
+   "notes": [
+    "heisman.com writes the school as MInnesota (its own typo); the table keeps the name the site uses for it everywhere."
+   ]
+  },
+  {
+   "year": 1942,
+   "id": 8,
+   "status": "corrected",
+   "winner": "Frank Sinkwich",
+   "school": "Georgia",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/frank-sinkwich/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Frank Sinkwich",
+     "school": "Georgia",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Frank Sinkwich",
+     "school": "Georgia",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1943,
+   "id": 9,
+   "status": "verified",
+   "winner": "Angelo Bertelli",
+   "school": "Notre Dame",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/angelo-bertelli/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Angelo Bertelli",
+     "school": "Notre Dame",
+     "position": "QB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Angelo Bertelli",
+     "school": "Notre Dame",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 1944,
+   "id": 10,
+   "status": "corrected",
+   "winner": "Les Horvath",
+   "school": "Ohio State",
+   "position": "HB",
+   "was": {
+    "position": "HB/QB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/les-horvath/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Les Horvath",
+     "school": "Ohio State",
+     "position": "HB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Les Horvath",
+     "school": "Ohio State",
+     "position": "RB"
+    }
+   },
+   "notes": [
+    "heisman.com lists HB, ESPN lists RB: a halfback is a running back, and the award body's HB is kept."
+   ]
+  },
+  {
+   "year": 1945,
+   "id": 11,
+   "status": "verified",
+   "winner": "Felix \"Doc\" Blanchard",
+   "school": "Army",
+   "position": "FB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/felix-doc-blanchard/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Felix \"Doc\" Blanchard",
+     "school": "Army",
+     "position": "FB",
+     "class": "Junior"
+    },
+    "espn": {
+     "name": "Doc Blanchard",
+     "school": "Army",
+     "position": "FB"
+    }
+   },
+   "notes": [
+    "heisman.com writes Felix \"Doc\" Blanchard, ESPN writes Doc Blanchard; the table keeps the award body's spelling, and the College Grid join already tries the nickname plus surname."
+   ]
+  },
+  {
+   "year": 1946,
+   "id": 12,
+   "status": "corrected",
+   "winner": "Glenn Davis",
+   "school": "Army",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/glenn-davis/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Glenn Davis",
+     "school": "Army",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Glenn Davis",
+     "school": "Army",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1947,
+   "id": 13,
+   "status": "verified",
+   "winner": "Johnny Lujack",
+   "school": "Notre Dame",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/john-lujack/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "John Lujack",
+     "school": "Notre Dame",
+     "position": "QB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Johnny Lujack",
+     "school": "Notre Dame",
+     "position": "QB"
+    }
+   },
+   "notes": [
+    "heisman.com writes John Lujack, ESPN writes Johnny Lujack; the table keeps ESPN's spelling."
+   ]
+  },
+  {
+   "year": 1948,
+   "id": 14,
+   "status": "corrected",
+   "winner": "Doak Walker",
+   "school": "SMU",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/doak-walker/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Doak Walker",
+     "school": "SMU",
+     "position": "RB",
+     "class": "Junior"
+    },
+    "espn": {
+     "name": "Doak Walker",
+     "school": "SMU",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1949,
+   "id": 15,
+   "status": "corrected",
+   "winner": "Leon Hart",
+   "school": "Notre Dame",
+   "position": "TE",
+   "was": {
+    "position": "E"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/leon-hart/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Leon Hart",
+     "school": "Notre Dame",
+     "position": "TE",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Leon Hart",
+     "school": "Notre Dame",
+     "position": "TE"
+    }
+   }
+  },
+  {
+   "year": 1950,
+   "id": 16,
+   "status": "corrected",
+   "winner": "Vic Janowicz",
+   "school": "Ohio State",
+   "position": "RB",
+   "was": {
+    "position": "HB/P"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/vic-janowicz/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Vic Janowicz",
+     "school": "Ohio State",
+     "position": "RB",
+     "class": "Junior"
+    },
+    "espn": {
+     "name": "Vic Janowicz",
+     "school": "Ohio State",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1951,
+   "id": 17,
+   "status": "corrected",
+   "winner": "Dick Kazmaier",
+   "school": "Princeton",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/dick-kazmaier/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Dick Kazmaier",
+     "school": "Princeton",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Dick Kazmaier",
+     "school": "Princeton",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1952,
+   "id": 18,
+   "status": "corrected",
+   "winner": "Billy Vessels",
+   "school": "Oklahoma",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/billy-vessels/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Billy Vessels",
+     "school": "Oklahoma",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Billy Vessels",
+     "school": "Oklahoma",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1953,
+   "id": 19,
+   "status": "corrected",
+   "winner": "John Lattner",
+   "school": "Notre Dame",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/john-lattner/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "John Lattner",
+     "school": "Notre Dame",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "John Lattner",
+     "school": "Notre Dame",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1954,
+   "id": 20,
+   "status": "verified",
+   "winner": "Alan Ameche",
+   "school": "Wisconsin",
+   "position": "FB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/alan-ameche/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Alan Ameche",
+     "school": "Wisconsin",
+     "position": "FB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Alan Ameche",
+     "school": "Wisconsin",
+     "position": "FB"
+    }
+   }
+  },
+  {
+   "year": 1955,
+   "id": 21,
+   "status": "corrected",
+   "winner": "Howard \"Hopalong\" Cassady",
+   "school": "Ohio State",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/howard-cassady/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies",
+    "https://www.heisman.com/heisman-winners/howard-cassady/"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Howard Cassady",
+     "school": "Ohio State",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Howard Cassady",
+     "school": "Ohio State",
+     "position": "RB"
+    }
+   },
+   "notes": [
+    "heisman.com and ESPN list Howard Cassady; heisman.com's own profile names him Howard \"Hopalong\" Cassady, which the table keeps."
+   ]
+  },
+  {
+   "year": 1956,
+   "id": 22,
+   "status": "verified",
+   "winner": "Paul Hornung",
+   "school": "Notre Dame",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/paul-hornung/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Paul Hornung",
+     "school": "Notre Dame",
+     "position": "QB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Paul Hornung",
+     "school": "Notre Dame",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 1957,
+   "id": 23,
+   "status": "corrected",
+   "winner": "John David Crow",
+   "school": "Texas A&M",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/john-david-crow/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "John David Crow",
+     "school": "Texas A&M",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "John David Crow",
+     "school": "Texas A&M",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1958,
+   "id": 24,
+   "status": "corrected",
+   "winner": "Pete Dawkins",
+   "school": "Army",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/pete-dawkins/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Pete Dawkins",
+     "school": "Army",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Pete Dawkins",
+     "school": "Army",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1959,
+   "id": 25,
+   "status": "corrected",
+   "winner": "Billy Cannon",
+   "school": "LSU",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/billy-cannon/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Billy Cannon",
+     "school": "LSU",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Billy Cannon",
+     "school": "LSU",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1960,
+   "id": 26,
+   "status": "corrected",
+   "winner": "Joe Bellino",
+   "school": "Navy",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/joe-bellino/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Joe Bellino",
+     "school": "Navy",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Joe Bellino",
+     "school": "Navy",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1961,
+   "id": 27,
+   "status": "corrected",
+   "winner": "Ernie Davis",
+   "school": "Syracuse",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/ernie-davis/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Ernie Davis",
+     "school": "Syracuse",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Ernie Davis",
+     "school": "Syracuse",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1962,
+   "id": 28,
+   "status": "verified",
+   "winner": "Terry Baker",
+   "school": "Oregon State",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/terry-baker/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Terry Baker",
+     "school": "Oregon State",
+     "position": "QB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Terry Baker",
+     "school": "Oregon State",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 1963,
+   "id": 29,
+   "status": "verified",
+   "winner": "Roger Staubach",
+   "school": "Navy",
+   "position": "QB",
+   "class": "Junior",
+   "classCheck": "agrees with heisman.com (Junior, where * marks a redshirt season used); one source only, shown by no page, not changed",
+   "sources": [
+    "https://www.heisman.com/heisman-winners/roger-staubach/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Roger Staubach",
+     "school": "Navy",
+     "position": "QB",
+     "class": "Junior"
+    },
+    "espn": {
+     "name": "Roger Staubach",
+     "school": "Navy",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 1964,
+   "id": 30,
+   "status": "verified",
+   "winner": "John Huarte",
+   "school": "Notre Dame",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/john-huarte/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "John Huarte",
+     "school": "Notre Dame",
+     "position": "QB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "John Huarte",
+     "school": "Notre Dame",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 1965,
+   "id": 31,
+   "status": "corrected",
+   "winner": "Mike Garrett",
+   "school": "USC",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/mike-garrett/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Mike Garrett",
+     "school": "USC",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Mike Garrett",
+     "school": "USC",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1966,
+   "id": 32,
+   "status": "verified",
+   "winner": "Steve Spurrier",
+   "school": "Florida",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/steve-spurrier/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Steve Spurrier",
+     "school": "Florida",
+     "position": "QB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Steve Spurrier",
+     "school": "Florida",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 1967,
+   "id": 33,
+   "status": "verified",
+   "winner": "Gary Beban",
+   "school": "UCLA",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/gary-beban/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Gary Beban",
+     "school": "UCLA",
+     "position": "QB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Gary Beban",
+     "school": "UCLA",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 1968,
+   "id": 34,
+   "status": "corrected",
+   "winner": "O.J. Simpson",
+   "school": "USC",
+   "position": "RB",
+   "was": {
+    "position": "HB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/oj-simpson/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "O.J. Simpson",
+     "school": "USC",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "O.J. Simpson",
+     "school": "USC",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1969,
+   "id": 35,
+   "status": "corrected",
+   "winner": "Steve Owens",
+   "school": "Oklahoma",
+   "position": "RB",
+   "was": {
+    "position": "FB"
+   },
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/steve-owens/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Steve Owens",
+     "school": "Oklahoma",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Steve Owens",
+     "school": "Oklahoma",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1970,
+   "id": 36,
+   "status": "verified",
+   "winner": "Jim Plunkett",
+   "school": "Stanford",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/jim-plunkett/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Jim Plunkett",
+     "school": "Stanford",
+     "position": "QB",
+     "class": "Senior*"
+    },
+    "espn": {
+     "name": "Jim Plunkett",
+     "school": "Stanford",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 1971,
+   "id": 37,
+   "status": "verified",
+   "winner": "Pat Sullivan",
+   "school": "Auburn",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/pat-sullivan/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Pat Sullivan",
+     "school": "Auburn",
+     "position": "QB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Pat Sullivan",
+     "school": "Auburn",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 1972,
+   "id": 38,
+   "status": "verified",
+   "winner": "Johnny Rodgers",
+   "school": "Nebraska",
+   "position": "WR",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/johnny-rodgers/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Johnny Rodgers",
+     "school": "Nebraska",
+     "position": "WR",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Johnny Rodgers",
+     "school": "Nebraska",
+     "position": "WR"
+    }
+   }
+  },
+  {
+   "year": 1973,
+   "id": 39,
+   "status": "verified",
+   "winner": "John Cappelletti",
+   "school": "Penn State",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/john-cappelletti/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "John Cappelletti",
+     "school": "Penn State",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "John Cappelletti",
+     "school": "Penn State",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1974,
+   "id": 40,
+   "status": "verified",
+   "winner": "Archie Griffin",
+   "school": "Ohio State",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/archie-griffin/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Archie Griffin",
+     "school": "Ohio State",
+     "position": "RB",
+     "class": "Junior"
+    },
+    "espn": {
+     "name": "Archie Griffin",
+     "school": "Ohio State",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1975,
+   "id": 41,
+   "status": "verified",
+   "winner": "Archie Griffin",
+   "school": "Ohio State",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/archie-griffin-75/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Archie Griffin",
+     "school": "Ohio State",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Archie Griffin",
+     "school": "Ohio State",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1976,
+   "id": 42,
+   "status": "verified",
+   "winner": "Tony Dorsett",
+   "school": "Pittsburgh",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/tony-dorsett/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Tony Dorsett",
+     "school": "Pittsburgh",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Tony Dorsett",
+     "school": "Pittsburgh",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1977,
+   "id": 43,
+   "status": "verified",
+   "winner": "Earl Campbell",
+   "school": "Texas",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/earl-campbell/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Earl Campbell",
+     "school": "Texas",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Earl Campbell",
+     "school": "Texas",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1978,
+   "id": 44,
+   "status": "verified",
+   "winner": "Billy Sims",
+   "school": "Oklahoma",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/billy-sims/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Billy Sims",
+     "school": "Oklahoma",
+     "position": "RB",
+     "class": "Junior*"
+    },
+    "espn": {
+     "name": "Billy Sims",
+     "school": "Oklahoma",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1979,
+   "id": 45,
+   "status": "verified",
+   "winner": "Charles White",
+   "school": "USC",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/charles-white/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Charles White",
+     "school": "USC",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Charles White",
+     "school": "USC",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1980,
+   "id": 46,
+   "status": "verified",
+   "winner": "George Rogers",
+   "school": "South Carolina",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/george-rogers/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "George Rogers",
+     "school": "South Carolina",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "George Rogers",
+     "school": "South Carolina",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1981,
+   "id": 47,
+   "status": "verified",
+   "winner": "Marcus Allen",
+   "school": "USC",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/marcus-allen/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Marcus Allen",
+     "school": "USC",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Marcus Allen",
+     "school": "USC",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1982,
+   "id": 48,
+   "status": "verified",
+   "winner": "Herschel Walker",
+   "school": "Georgia",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/herschel-walker/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Herschel Walker",
+     "school": "Georgia",
+     "position": "RB",
+     "class": "Junior"
+    },
+    "espn": {
+     "name": "Herschel Walker",
+     "school": "Georgia",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1983,
+   "id": 49,
+   "status": "verified",
+   "winner": "Mike Rozier",
+   "school": "Nebraska",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/mike-rozier/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Mike Rozier",
+     "school": "Nebraska",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Mike Rozier",
+     "school": "Nebraska",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1984,
+   "id": 50,
+   "status": "verified",
+   "winner": "Doug Flutie",
+   "school": "Boston College",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/doug-flutie/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Doug Flutie",
+     "school": "Boston College",
+     "position": "QB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Doug Flutie",
+     "school": "Boston College",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 1985,
+   "id": 51,
+   "status": "verified",
+   "winner": "Bo Jackson",
+   "school": "Auburn",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/bo-jackson/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Bo Jackson",
+     "school": "Auburn",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Bo Jackson",
+     "school": "Auburn",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1986,
+   "id": 52,
+   "status": "verified",
+   "winner": "Vinny Testaverde",
+   "school": "Miami (FL)",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/vinny-testaverde/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Vinny Testaverde",
+     "school": "Miami (Fla.)",
+     "position": "QB",
+     "class": "Senior*"
+    },
+    "espn": {
+     "name": "Vinny Testaverde",
+     "school": "Miami",
+     "position": "QB"
+    }
+   },
+   "notes": [
+    "heisman.com writes the school as Miami (Fla.); the table keeps the name the site uses for it everywhere."
+   ]
+  },
+  {
+   "year": 1987,
+   "id": 53,
+   "status": "verified",
+   "winner": "Tim Brown",
+   "school": "Notre Dame",
+   "position": "WR",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/tim-brown/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Tim Brown",
+     "school": "Notre Dame",
+     "position": "WR",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Tim Brown",
+     "school": "Notre Dame",
+     "position": "WR"
+    }
+   }
+  },
+  {
+   "year": 1988,
+   "id": 54,
+   "status": "verified",
+   "winner": "Barry Sanders",
+   "school": "Oklahoma State",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/barry-sanders/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Barry Sanders",
+     "school": "Oklahoma State",
+     "position": "RB",
+     "class": "Junior"
+    },
+    "espn": {
+     "name": "Barry Sanders",
+     "school": "Oklahoma State",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1989,
+   "id": 55,
+   "status": "verified",
+   "winner": "Andre Ware",
+   "school": "Houston",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/andre-ware/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Andre Ware",
+     "school": "Houston",
+     "position": "QB",
+     "class": "Junior"
+    },
+    "espn": {
+     "name": "Andre Ware",
+     "school": "Houston",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 1990,
+   "id": 56,
+   "status": "verified",
+   "winner": "Ty Detmer",
+   "school": "BYU",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/ty-detmer/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Ty Detmer",
+     "school": "Brigham Young",
+     "position": "QB",
+     "class": "Junior*"
+    },
+    "espn": {
+     "name": "Ty Detmer",
+     "school": "BYU",
+     "position": "QB"
+    }
+   },
+   "notes": [
+    "heisman.com writes the school as Brigham Young; the table keeps the name the site uses for it everywhere."
+   ]
+  },
+  {
+   "year": 1991,
+   "id": 57,
+   "status": "verified",
+   "winner": "Desmond Howard",
+   "school": "Michigan",
+   "position": "WR",
+   "class": "RS Junior",
+   "classCheck": "agrees with heisman.com (Junior*, where * marks a redshirt season used); one source only, shown by no page, not changed",
+   "sources": [
+    "https://www.heisman.com/heisman-winners/desmond-howard/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Desmond Howard",
+     "school": "Michigan",
+     "position": "WR",
+     "class": "Junior*"
+    },
+    "espn": {
+     "name": "Desmond Howard",
+     "school": "Michigan",
+     "position": "WR"
+    }
+   }
+  },
+  {
+   "year": 1992,
+   "id": 58,
+   "status": "verified",
+   "winner": "Gino Torretta",
+   "school": "Miami (FL)",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/gino-torretta/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Gino Torretta",
+     "school": "Miami (Fla.)",
+     "position": "QB",
+     "class": "Senior*"
+    },
+    "espn": {
+     "name": "Gino Torretta",
+     "school": "Miami",
+     "position": "QB"
+    }
+   },
+   "notes": [
+    "heisman.com writes the school as Miami (Fla.); the table keeps the name the site uses for it everywhere."
+   ]
+  },
+  {
+   "year": 1993,
+   "id": 59,
+   "status": "verified",
+   "winner": "Charlie Ward",
+   "school": "Florida State",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/charlie-ward/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Charlie Ward",
+     "school": "Florida State",
+     "position": "QB",
+     "class": "Senior*"
+    },
+    "espn": {
+     "name": "Charlie Ward",
+     "school": "Florida State",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 1994,
+   "id": 60,
+   "status": "verified",
+   "winner": "Rashaan Salaam",
+   "school": "Colorado",
+   "position": "RB",
+   "class": "Junior",
+   "classCheck": "agrees with heisman.com (Junior, where * marks a redshirt season used); one source only, shown by no page, not changed",
+   "sources": [
+    "https://www.heisman.com/heisman-winners/rashaan-salaam/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Rashaan Salaam",
+     "school": "Colorado",
+     "position": "RB",
+     "class": "Junior"
+    },
+    "espn": {
+     "name": "Rashaan Salaam",
+     "school": "Colorado",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1995,
+   "id": 61,
+   "status": "verified",
+   "winner": "Eddie George",
+   "school": "Ohio State",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/eddie-george/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Eddie George",
+     "school": "Ohio State",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Eddie George",
+     "school": "Ohio State",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1996,
+   "id": 62,
+   "status": "verified",
+   "winner": "Danny Wuerffel",
+   "school": "Florida",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/danny-wuerffel/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Danny Wuerffel",
+     "school": "Florida",
+     "position": "QB",
+     "class": "Senior*"
+    },
+    "espn": {
+     "name": "Danny Wuerffel",
+     "school": "Florida",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 1997,
+   "id": 63,
+   "status": "verified",
+   "winner": "Charles Woodson",
+   "school": "Michigan",
+   "position": "CB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/charles-woodson/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Charles Woodson",
+     "school": "Michigan",
+     "position": "CB",
+     "class": "Junior"
+    },
+    "espn": {
+     "name": "Charles Woodson",
+     "school": "Michigan",
+     "position": "CB"
+    }
+   }
+  },
+  {
+   "year": 1998,
+   "id": 64,
+   "status": "verified",
+   "winner": "Ricky Williams",
+   "school": "Texas",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/ricky-williams/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Ricky Williams",
+     "school": "Texas",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Ricky Williams",
+     "school": "Texas",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 1999,
+   "id": 65,
+   "status": "verified",
+   "winner": "Ron Dayne",
+   "school": "Wisconsin",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/ron-dayne/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Ron Dayne",
+     "school": "Wisconsin",
+     "position": "RB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Ron Dayne",
+     "school": "Wisconsin",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 2000,
+   "id": 66,
+   "status": "verified",
+   "winner": "Chris Weinke",
+   "school": "Florida State",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/chris-weinke/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Chris Weinke",
+     "school": "Florida State",
+     "position": "QB",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "Chris Weinke",
+     "school": "Florida State",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2001,
+   "id": 67,
+   "status": "verified",
+   "winner": "Eric Crouch",
+   "school": "Nebraska",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/eric-crouch/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Eric Crouch",
+     "school": "Nebraska",
+     "position": "QB",
+     "class": "Senior*"
+    },
+    "espn": {
+     "name": "Eric Crouch",
+     "school": "Nebraska",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2002,
+   "id": 68,
+   "status": "verified",
+   "winner": "Carson Palmer",
+   "school": "USC",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/carson-palmer/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Carson Palmer",
+     "school": "USC",
+     "position": "QB",
+     "class": "Senior*"
+    },
+    "espn": {
+     "name": "Carson Palmer",
+     "school": "USC",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2003,
+   "id": 69,
+   "status": "verified",
+   "winner": "Jason White",
+   "school": "Oklahoma",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/jason-white/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Jason White",
+     "school": "Oklahoma",
+     "position": "QB",
+     "class": "Senior*"
+    },
+    "espn": {
+     "name": "Jason White",
+     "school": "Oklahoma",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2004,
+   "id": 70,
+   "status": "verified",
+   "winner": "Matt Leinart",
+   "school": "USC",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/matt-leinart/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Matt Leinart",
+     "school": "USC",
+     "position": "QB",
+     "class": "Junior*"
+    },
+    "espn": {
+     "name": "Matt Leinart",
+     "school": "USC",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2005,
+   "id": 71,
+   "status": "verified",
+   "winner": "Reggie Bush",
+   "school": "USC",
+   "position": "RB",
+   "class": "Junior",
+   "classCheck": "agrees with heisman.com (Junior, where * marks a redshirt season used); one source only, shown by no page, not changed",
+   "sources": [
+    "https://www.heisman.com/heisman-winners/reggie-bush/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies",
+    "https://www.espn.com/college-football/story/_/id/40014492/reggie-bush-heisman-trophy-returned/"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Reggie Bush",
+     "school": "USC",
+     "position": "RB",
+     "class": "Junior"
+    },
+    "espn": {
+     "name": "Reggie Bush",
+     "school": "USC",
+     "position": "RB"
+    }
+   },
+   "notes": [
+    "Reggie Bush forfeited the award in 2010 and the Heisman Trust reinstated it on 2024-04-24, so 2005 is his. ESPN's older list still tags the row as forfeited; its positions list and heisman.com carry him plainly."
+   ]
+  },
+  {
+   "year": 2006,
+   "id": 72,
+   "status": "verified",
+   "winner": "Troy Smith",
+   "school": "Ohio State",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/troy-smith/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Troy Smith",
+     "school": "Ohio State",
+     "position": "QB",
+     "class": "Senior*"
+    },
+    "espn": {
+     "name": "Troy Smith",
+     "school": "Ohio State",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2007,
+   "id": 73,
+   "status": "verified",
+   "winner": "Tim Tebow",
+   "school": "Florida",
+   "position": "QB",
+   "class": "Sophomore",
+   "classCheck": "agrees with heisman.com (Sophomore, where * marks a redshirt season used); one source only, shown by no page, not changed",
+   "sources": [
+    "https://www.heisman.com/heisman-winners/tim-tebow/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Tim Tebow",
+     "school": "Florida",
+     "position": "QB",
+     "class": "Sophomore"
+    },
+    "espn": {
+     "name": "Tim Tebow",
+     "school": "Florida",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2008,
+   "id": 74,
+   "status": "verified",
+   "winner": "Sam Bradford",
+   "school": "Oklahoma",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/sam-bradford/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Sam Bradford",
+     "school": "Oklahoma",
+     "position": "QB",
+     "class": "Sophomore*"
+    },
+    "espn": {
+     "name": "Sam Bradford",
+     "school": "Oklahoma",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2009,
+   "id": 75,
+   "status": "verified",
+   "winner": "Mark Ingram",
+   "school": "Alabama",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/mark-ingram/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Mark Ingram",
+     "school": "Alabama",
+     "position": "RB",
+     "class": "Sophomore"
+    },
+    "espn": {
+     "name": "Mark Ingram",
+     "school": "Alabama",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 2010,
+   "id": 76,
+   "status": "verified",
+   "winner": "Cam Newton",
+   "school": "Auburn",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/cam-newton/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Cam Newton",
+     "school": "Auburn",
+     "position": "QB",
+     "class": "Junior*"
+    },
+    "espn": {
+     "name": "Cam Newton",
+     "school": "Auburn",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2011,
+   "id": 77,
+   "status": "verified",
+   "winner": "Robert Griffin III",
+   "school": "Baylor",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/robert-griffin-iii/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Robert Griffin III",
+     "school": "Baylor",
+     "position": "QB",
+     "class": "Junior*"
+    },
+    "espn": {
+     "name": "Robert Griffin III",
+     "school": "Baylor",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2012,
+   "id": 78,
+   "status": "verified",
+   "winner": "Johnny Manziel",
+   "school": "Texas A&M",
+   "position": "QB",
+   "class": "RS Freshman",
+   "classCheck": "agrees with heisman.com (Freshman*, where * marks a redshirt season used); one source only, shown by no page, not changed",
+   "sources": [
+    "https://www.heisman.com/heisman-winners/johnny-manziel/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Johnny Manziel",
+     "school": "Texas A&M",
+     "position": "QB",
+     "class": "Freshman*"
+    },
+    "espn": {
+     "name": "Johnny Manziel",
+     "school": "Texas A&M",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2013,
+   "id": 79,
+   "status": "verified",
+   "winner": "Jameis Winston",
+   "school": "Florida State",
+   "position": "QB",
+   "class": "RS Freshman",
+   "classCheck": "agrees with heisman.com (Freshman*, where * marks a redshirt season used); one source only, shown by no page, not changed",
+   "sources": [
+    "https://www.heisman.com/heisman-winners/jameis-winston/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Jameis Winston",
+     "school": "Florida State",
+     "position": "QB",
+     "class": "Freshman*"
+    },
+    "espn": {
+     "name": "Jameis Winston",
+     "school": "Florida State",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2014,
+   "id": 80,
+   "status": "verified",
+   "winner": "Marcus Mariota",
+   "school": "Oregon",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/marcus-mariota/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Marcus Mariota",
+     "school": "Oregon",
+     "position": "QB",
+     "class": "Junior*"
+    },
+    "espn": {
+     "name": "Marcus Mariota",
+     "school": "Oregon",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2015,
+   "id": 81,
+   "status": "verified",
+   "winner": "Derrick Henry",
+   "school": "Alabama",
+   "position": "RB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/derrick-henry/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Derrick Henry",
+     "school": "Alabama",
+     "position": "RB",
+     "class": "Junior"
+    },
+    "espn": {
+     "name": "Derrick Henry",
+     "school": "Alabama",
+     "position": "RB"
+    }
+   }
+  },
+  {
+   "year": 2016,
+   "id": 82,
+   "status": "verified",
+   "winner": "Lamar Jackson",
+   "school": "Louisville",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/lamar-jackson/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Lamar Jackson",
+     "school": "Louisville",
+     "position": "QB",
+     "class": "Sophomore"
+    },
+    "espn": {
+     "name": "Lamar Jackson",
+     "school": "Louisville",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2017,
+   "id": 83,
+   "status": "verified",
+   "winner": "Baker Mayfield",
+   "school": "Oklahoma",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/baker-mayfield/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Baker Mayfield",
+     "school": "Oklahoma",
+     "position": "QB",
+     "class": "Senior*"
+    },
+    "espn": {
+     "name": "Baker Mayfield",
+     "school": "Oklahoma",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2018,
+   "id": 84,
+   "status": "verified",
+   "winner": "Kyler Murray",
+   "school": "Oklahoma",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/kyler-murray/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Kyler Murray",
+     "school": "Oklahoma",
+     "position": "QB",
+     "class": "Junior*"
+    },
+    "espn": {
+     "name": "Kyler Murray",
+     "school": "Oklahoma",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2019,
+   "id": 85,
+   "status": "verified",
+   "winner": "Joe Burrow",
+   "school": "LSU",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/joe-burrow/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Joe Burrow",
+     "school": "LSU",
+     "position": "QB",
+     "class": "Senior*"
+    },
+    "espn": {
+     "name": "Joe Burrow",
+     "school": "LSU",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2020,
+   "id": 86,
+   "status": "verified",
+   "winner": "DeVonta Smith",
+   "school": "Alabama",
+   "position": "WR",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/devonta-smith/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "DeVonta Smith",
+     "school": "Alabama",
+     "position": "WR",
+     "class": "Senior"
+    },
+    "espn": {
+     "name": "DeVonta Smith",
+     "school": "Alabama",
+     "position": "WR"
+    }
+   }
+  },
+  {
+   "year": 2021,
+   "id": 87,
+   "status": "verified",
+   "winner": "Bryce Young",
+   "school": "Alabama",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/bryce-young/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Bryce Young",
+     "school": "Alabama",
+     "position": "QB",
+     "class": "Sophomore"
+    },
+    "espn": {
+     "name": "Bryce Young",
+     "school": "Alabama",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2022,
+   "id": 88,
+   "status": "verified",
+   "winner": "Caleb Williams",
+   "school": "USC",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/caleb-williams/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Caleb Williams",
+     "school": "USC",
+     "position": "QB",
+     "class": "Sophomore"
+    },
+    "espn": {
+     "name": "Caleb Williams",
+     "school": "USC",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2023,
+   "id": 89,
+   "status": "verified",
+   "winner": "Jayden Daniels",
+   "school": "LSU",
+   "position": "QB",
+   "class": null,
+   "sources": [
+    "https://www.heisman.com/heisman-winners/jayden-daniels/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Jayden Daniels",
+     "school": "LSU",
+     "position": "QB",
+     "class": "Senior*"
+    },
+    "espn": {
+     "name": "Jayden Daniels",
+     "school": "LSU",
+     "position": "QB"
+    }
+   }
+  },
+  {
+   "year": 2024,
+   "id": 90,
+   "status": "verified",
+   "winner": "Travis Hunter",
+   "school": "Colorado",
+   "position": "CB/WR",
+   "class": "Junior",
+   "classCheck": "agrees with heisman.com (Junior, where * marks a redshirt season used); one source only, shown by no page, not changed",
+   "sources": [
+    "https://www.heisman.com/heisman-winners/travis-hunter/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Travis Hunter",
+     "school": "Colorado",
+     "position": "CB/WR",
+     "class": "Junior"
+    },
+    "espn": {
+     "name": "Travis Hunter",
+     "school": "Colorado",
+     "position": "WR/CB"
+    }
+   },
+   "notes": [
+    "heisman.com lists CB/WR, ESPN lists WR/CB: the same two positions, and the award body's order is kept."
+   ]
+  },
+  {
+   "year": 2025,
+   "id": 91,
+   "status": "verified",
+   "winner": "Fernando Mendoza",
+   "school": "Indiana",
+   "position": "QB",
+   "class": "RS Junior",
+   "classCheck": "agrees with heisman.com (Junior*, where * marks a redshirt season used); one source only, shown by no page, not changed",
+   "sources": [
+    "https://www.heisman.com/heisman-winners/fernando-mendoza/",
+    "https://www.espn.com/college-football/story/_/id/47245473/college-football-positions-most-heisman-trophies"
+   ],
+   "read": {
+    "heisman.com": {
+     "name": "Fernando Mendoza",
+     "school": "Indiana",
+     "position": "QB",
+     "class": "Junior*"
+    },
+    "espn": {
+     "name": "Fernando Mendoza",
+     "school": "Indiana",
+     "position": "QB"
+    }
+   }
+  }
+ ]
+}
