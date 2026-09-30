@@ -1057,18 +1057,30 @@ export interface MatchStats {
   xg: number; oppXg: number;
   corners: number; oppCorners: number;
   fouls: number; oppFouls: number;
+  /** Round 714: saves by MY keeper (their shots on target that were not
+   *  goals) and by theirs (mine). Counted off the same committed play as the
+   *  rest, so saves plus goals conceded is always the other side's on target.
+   *  Absent on a report written before this round. */
+  saves?: number; oppSaves?: number;
 }
 
 export type TimelineKind =
   | 'kickoff' | 'goal' | 'yellow' | 'red' | 'injury' | 'sub' | 'halftime' | 'fulltime' | 'pens'
   /** Round 670: the ninety minutes are up with the tie level, and extra time starts. */
-  | 'extratime';
+  | 'extratime'
+  /** Round 714: the committed play on the same clock. A shot off target, a
+   *  shot on target that the keeper kept out, a corner, and a penalty given
+   *  (its goal row or its save row follows at the same minute). */
+  | 'shot' | 'save' | 'corner' | 'penalty';
 
 export interface TimelineEvent {
   minute: number;
   side: 'me' | 'opp' | 'none';
   kind: TimelineKind;
   text: string;
+  /** Round 714: a goal or a save from the spot, a goal from a direct free kick. */
+  penalty?: boolean;
+  freeKick?: boolean;
 }
 
 export interface PlayerRatingLine {
@@ -12947,6 +12959,9 @@ export function liveStatsAt(
   const possession = m <= 45 ? p1 : Math.round((p1 * 45 + p2 * (m - 45)) / m);
   const isShot = (e: PlayEvent): boolean => e.kind === 'shot';
   const onTargetOf = (e: PlayEvent): boolean => e.kind === 'shot' && (!!e.on || !!e.goal);
+  /* Round 714: a shot on target that was not a goal is a save, the rule
+     liveFeed has walked since Round 504. My keeper's saves are THEIR shots. */
+  const savedOf = (e: PlayEvent): boolean => e.kind === 'shot' && !!e.on && !e.goal;
   return {
     possession,
     shots: count('me', isShot), oppShots: count('opp', isShot),
@@ -12954,6 +12969,7 @@ export function liveStatsAt(
     xg: xgOf('me'), oppXg: xgOf('opp'),
     corners: count('me', e => e.kind === 'corner'), oppCorners: count('opp', e => e.kind === 'corner'),
     fouls: count('me', e => e.kind === 'foul'), oppFouls: count('opp', e => e.kind === 'foul'),
+    saves: count('opp', savedOf), oppSaves: count('me', savedOf),
   };
 }
 
@@ -13252,10 +13268,28 @@ function buildMatchDetail(args: {
 
   const timeline: TimelineEvent[] = [];
   timeline.push({ minute: 0, side: 'none', kind: 'kickoff', text: 'Kick off' });
+  /* Round 714: a goal row says when it came from the spot or a free kick, off its own scorer line. */
+  const setPiece = (sc: ScorerLine): Partial<TimelineEvent> => ({
+    ...(sc.penalty ? { penalty: true } : {}), ...(sc.freeKick ? { freeKick: true } : {}),
+  });
   for (const sc of args.myScorers) {
-    timeline.push({ minute: sc.minute, side: 'me', kind: 'goal', text: sc.assist ? `${sc.name} (assist: ${sc.assist})` : sc.name });
+    timeline.push({ minute: sc.minute, side: 'me', kind: 'goal', text: sc.assist ? `${sc.name} (assist: ${sc.assist})` : sc.name, ...setPiece(sc) });
   }
-  for (const sc of args.oppScorers) timeline.push({ minute: sc.minute, side: 'opp', kind: 'goal', text: sc.name });
+  for (const sc of args.oppScorers) timeline.push({ minute: sc.minute, side: 'opp', kind: 'goal', text: sc.name, ...setPiece(sc) });
+  /* Round 714: the play itself on the same clock, read straight off the
+     committed list the stats are counted from, so a row can only exist where
+     the engine drew the event. A goal's chance is already its goal row and is
+     not listed twice; a penalty is marked where it was given, and its goal or
+     its save follows at the same minute. No draw here: the stream is untouched. */
+  for (const e of args.play) {
+    if (e.kind === 'shot') {
+      if (e.penalty) timeline.push({ minute: e.minute, side: e.side, kind: 'penalty', text: e.who });
+      if (e.goal) continue;
+      timeline.push({ minute: e.minute, side: e.side, kind: e.on ? 'save' : 'shot', text: e.who, ...(e.penalty ? { penalty: true } : {}) });
+    } else if (e.kind === 'corner') {
+      timeline.push({ minute: e.minute, side: e.side, kind: 'corner', text: e.who });
+    }
+  }
   for (const c of args.cards) timeline.push({ minute: c.minute, side: 'me', kind: c.kind, text: c.name });
   for (const inj of args.injuries) timeline.push({ minute: inj.minute, side: 'me', kind: 'injury', text: inj.name });
   for (const s of args.subs) timeline.push({ minute: s.minute, side: 'me', kind: 'sub', text: `${s.on} on for ${s.off}` });
@@ -13277,8 +13311,12 @@ function buildMatchDetail(args: {
   timeline.push(args.et
     ? { minute: end, side: 'none', kind: 'fulltime', text: 'Full time, after extra time' }
     : { minute: 90, side: 'none', kind: 'fulltime', text: `Full time (+${added.h2}')` });
+  /* Round 714: inside a minute, the corner and the penalty award come before
+     what they led to; everything else keeps the order it always had. */
   const KIND_ORDER: Record<TimelineKind, number> = {
-    kickoff: 0, goal: 1, yellow: 1, red: 1, injury: 1, sub: 1, halftime: 2, extratime: 2, pens: 3, fulltime: 4,
+    kickoff: 0, corner: 1, penalty: 1,
+    shot: 2, save: 2, goal: 2, yellow: 2, red: 2, injury: 2, sub: 2,
+    halftime: 3, extratime: 3, pens: 4, fulltime: 5,
   };
   timeline.sort((a, b) => a.minute - b.minute || KIND_ORDER[a.kind] - KIND_ORDER[b.kind]);
 
