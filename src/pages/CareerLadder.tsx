@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { cn } from '@/lib/utils';
 import { ChevronDown, Loader2, Lock } from 'lucide-react';
 import { FlagImg, FlagFromEmoji } from '@/components/FlagImg';
@@ -14,7 +14,6 @@ import PageSeo from '@/components/seo/PageSeo';
 import GameSeoContent from '@/components/seo/GameSeoContent';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
-import { getTodayET } from '@/lib/dateUtils';
 import {
   BASE_SCORE,
   CareerPlayer,
@@ -72,13 +71,17 @@ const CareerLadder = () => {
   // the shared daily has its own harder skew inside pickDailyPlayer. --------
   const [difficulty, setDifficulty] = useState<LadderDifficulty>('standard');
 
-  // ---- Daily: target player is date-seeded once the pool has loaded -------
-  /* Round 718: the day is pinned at mount, the same moment useDailyPuzzle pins
-     the day its save is filed under. Read when the pool arrived instead, a
-     page opened just before midnight ET could deal tomorrow's player into
-     today's save. */
-  const dailyDate = useRef(getTodayET()).current;
-  const dailyPlayer = useMemo(() => (pool.length > 0 ? pickDailyPlayer(pool, dailyDate) : null), [pool, dailyDate]);
+  // ---- Daily: target player is picked for the day useDailyPuzzle pinned ----
+  /* Round 718 fix: the day is useDailyPuzzle's own todayStr, the one its save
+     is filed under, so the page reads the clock once per mount and the pin is
+     structural rather than two reads that happen to agree. Read when the pool
+     arrived instead, a page opened just before midnight ET could deal
+     tomorrow's player into today's save. The hook takes the player as
+     supabasePuzzle and the player needs the hook's day, so the player is
+     state, set in the effect below the render after the pool lands; the hook
+     re-selects when supabasePuzzle goes from null to a value, the transition
+     it already waits on. */
+  const [dailyPlayer, setDailyPlayer] = useState<CareerPlayer | null>(null);
 
   // dailyPlayer resolves asynchronously (Supabase fetch via boot()), so it is
   // passed as supabasePuzzle rather than via the static puzzles array.
@@ -97,6 +100,7 @@ const CareerLadder = () => {
     addGuess: addDailyAction,
     gameStatus: rawDailyStatus,
     isLoading: isDailyLoading,
+    todayStr: dailyDate,
   } = useDailyPuzzle<CareerPlayer, LadderAction>({
     gameSlug: 'career-ladder',
     puzzles: [],
@@ -107,6 +111,10 @@ const CareerLadder = () => {
     isLost: (g) => g.some((a) => a.t === 'give') || g.filter((a) => a.t === 'wrong').length >= MAX_GUESSES,
     deserializeGuesses: (raw) => raw as LadderAction[],
   });
+
+  useEffect(() => {
+    setDailyPlayer(pool.length > 0 ? pickDailyPlayer(pool, dailyDate) : null);
+  }, [pool, dailyDate]);
 
   const dailyRevealed = useMemo(
     () => 1 + dailyActions.filter((a) => a.t === 'reveal' || a.t === 'wrong').length,

@@ -24,6 +24,15 @@ interface PersistedDailyState<G> {
   date: string;
   /** Index in the puzzles array that was served today. */
   puzzleIndex: number;
+  /**
+   * Round 718 fix: getPuzzleId of the puzzle the guesses were made against,
+   * when the game gave one. A save whose id is not today's puzzle's is
+   * discarded, so a puzzle that changed under a player (a live pool that grew
+   * on the same day, a rule that moved the day's answer) starts the day fresh
+   * instead of crediting a finished log to a different answer. Older saves
+   * have no id and are read as before, so no version bump.
+   */
+  puzzleId?: string;
   /** Full guess history. */
   guesses: G[];
   /** Game outcome at the time of last save. */
@@ -204,6 +213,7 @@ function readPersistedState<G>(
   storageKey: string,
   todayStr: string,
   puzzleIndex: number,
+  puzzleId: string | undefined,
   deserializeGuesses: (raw: unknown) => G[],
 ): { guesses: G[]; gameStatus: 'playing' | 'won' | 'lost' } | null {
   try {
@@ -212,11 +222,13 @@ function readPersistedState<G>(
 
     const saved = JSON.parse(raw) as PersistedDailyState<G>;
 
-    // Validate schema version, date, and puzzle index before trusting the data
+    // Validate schema version, date, puzzle index and, when both sides carry
+    // one (Round 718 fix), the puzzle id, before trusting the data
     if (
       saved.v === SCHEMA_VERSION &&
       saved.date === todayStr &&
-      saved.puzzleIndex === puzzleIndex
+      saved.puzzleIndex === puzzleIndex &&
+      (saved.puzzleId === undefined || puzzleId === undefined || saved.puzzleId === puzzleId)
     ) {
       return {
         guesses: deserializeGuesses(saved.guesses),
@@ -233,6 +245,7 @@ function writePersistedState<G>(
   storageKey: string,
   todayStr: string,
   puzzleIndex: number,
+  puzzleId: string | undefined,
   guesses: G[],
   gameStatus: 'playing' | 'won' | 'lost',
 ): void {
@@ -241,6 +254,7 @@ function writePersistedState<G>(
       v: SCHEMA_VERSION,
       date: todayStr,
       puzzleIndex,
+      ...(puzzleId !== undefined ? { puzzleId } : {}),
       guesses,
       gameStatus,
     };
@@ -308,10 +322,21 @@ export function useDailyPuzzle<T, G>(
   const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
   const [isLoading, setIsLoading] = useState(true);
 
-  // Track which puzzleIndex we have loaded state for.
+  /* Round 718 fix: the id of today's puzzle, when the game gives one. It goes
+     into every save and is checked on every restore, and the load below is
+     keyed on it as well as the index, so a Supabase puzzle arriving under the
+     same index (Career Ladder passes no static pool, so its index is always 0)
+     still re-reads the save against the man it is actually for. Mirrored in a
+     ref for addGuess, whose dependency list is anchored by simDailyRecord. */
+  const puzzleId = puzzle != null && getPuzzleId ? getPuzzleId(puzzle) : undefined;
+  const puzzleIdRef = useRef<string | undefined>(puzzleId);
+  puzzleIdRef.current = puzzleId;
+  const loadKey = `${puzzleIndex}:${puzzleId ?? ''}`;
+
+  // Track which puzzle (index plus id) we have loaded state for.
   // Prevents re-loading on every render, but allows re-loading when
-  // supabasePuzzle arrives and puzzleIndex changes.
-  const loadedForIndex = useRef<number | null>(null);
+  // supabasePuzzle arrives and the index or the id changes.
+  const loadedForKey = useRef<string | null>(null);
 
   /* Round 503: the guess log and the status are mirrored in refs that move
      synchronously, and addGuess reads those instead of the values its closure
@@ -337,8 +362,13 @@ export function useDailyPuzzle<T, G>(
 
   useEffect(() => {
     // Already loaded for this puzzle, skip
-    if (loadedForIndex.current === puzzleIndex) return;
-    loadedForIndex.current = puzzleIndex;
+    if (loadedForKey.current === loadKey) return;
+    /* Round 718 fix: a game with no static pool has no puzzle at all until its
+       Supabase puzzle lands. Restoring against nothing accepted a save for
+       whichever man arrived later, and nothing re-read it when he did; the
+       load waits for him, and isLoading says so. */
+    if (puzzle == null && puzzles.length === 0) return;
+    loadedForKey.current = loadKey;
 
     // Remove yesterday's (and older) entries for this game slug
     cleanupOldEntries(storageSlug, storageKey);
@@ -348,6 +378,7 @@ export function useDailyPuzzle<T, G>(
       storageKey,
       todayStr,
       puzzleIndex,
+      puzzleId,
       deserializeGuesses,
     );
 
@@ -387,11 +418,11 @@ export function useDailyPuzzle<T, G>(
     }
 
     setIsLoading(false);
-  // Intentionally narrow dep list: we want this to fire when puzzleIndex settles,
-  // not on every render. gameSlug, storageKey, todayStr, deserializeGuesses are
-  // all stable after mount.
+  // Intentionally narrow dep list: we want this to fire when the puzzle settles
+  // (its index, and since Round 718 its id), not on every render. gameSlug,
+  // storageKey, todayStr, deserializeGuesses are all stable after mount.
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [puzzleIndex]);
+  }, [loadKey]);
 
   const addGuess = useCallback(
     (guess: G) => {
@@ -418,7 +449,7 @@ export function useDailyPuzzle<T, G>(
       setGameStatus(newStatus);
 
       // Write synchronously so progress survives an immediate page close
-      writePersistedState(storageKey, todayStr, puzzleIndex, newGuesses, newStatus);
+      writePersistedState(storageKey, todayStr, puzzleIndex, puzzleIdRef.current, newGuesses, newStatus);
     },
     [puzzle, puzzleIndex, isWon, isLost, maxGuesses, storageKey, todayStr],
   );
