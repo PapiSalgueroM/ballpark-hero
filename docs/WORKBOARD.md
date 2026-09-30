@@ -1,5 +1,16 @@
 # Work board
 
+**2026-09-30, Codex Round 753 CLAIMED: three chain timelines, committed-link feedback.**
+Ownership: `src/components/ufc-chain/ChainTimeline.tsx`,
+`src/components/tennis-chain/TennisChainTimeline.tsx`,
+`src/components/nascar-chain/NascarChainTimeline.tsx`, one new shared scoped stylesheet and focused
+tests/harness. Add finite newest-link/connection feedback when a validated chain grows. Existing
+links stay mounted, re-rendering the same chain must not replay them, and reduced motion is static.
+Preserve names, records, badges, connection sentences, bonus points, lengths and multipliers.
+Check narrow-phone fit and correct only these timeline wrappers if content overflows. No chain
+validators, hooks, parent boards, sport data, scores, saves, RNG or global styles. Claude retains
+all earlier claims and publication. Next free is **754**.
+
 **2026-09-30, Codex Round 752 CLAIMED: Front Office ownership warning feedback.**
 Ownership: `src/components/front-office-shared/OwnerMandateCard.tsx`, a new scoped stylesheet,
 focused component tests/harness and docs receipts. This card serves all four Front Office games.
