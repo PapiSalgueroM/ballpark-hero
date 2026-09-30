@@ -303,6 +303,37 @@ rejects only changed pages. Types, isolated production build, indexing, hidden-p
 AdSense, harness-anchor and rival-name guards passed. No application, data or snapshot
 change; no deploy required. Full proof and limits:
 [September 30 Google receipt](audits/GOOGLE-READINESS-2026-09-30.md).
+## FIXED 2026-09-30, NOT ON MAIN: Round 707, the soccer stints behind the verified overlay (branch `r707-soccer-stints`)
+Two edge functions written and NOT deployed, three migrations written and NOT applied. The triage and
+three reviewers sent the first cut back (a fence cited in four places that did not exist, the sibling
+validator untouched, a verified move attached to a name rather than a man); all of it is closed on the
+branch.
+- **What it does.** The 241 moves of `scripts/transferOverlay2026.mjs` count as club stints in
+  `soccer-grid-validate` and `football-connect4-validate` (a yes only, never a no, careerComplete still
+  read from the table), and only for the man who moved: a name whose rows carry two nationalities, or
+  whose 2026 market row is another nationality, goes to the model as before ("Beto" is three men,
+  "Rodrigo Mora" and "Nico González" two each). The grid works a cached club or nationality refusal
+  out again rather than serving it (World Cup squad refusals, 96 of the 299 records refusals, are
+  served: the squads are complete); connect4 puts a cached no on a club half to the records before
+  serving it and replaces the stale fact. "Played for Atlético Madrid" reaches the 204 rows stored at
+  "Atlético de Madrid" in both games.
+- **The fence.** `scripts/simSoccerStints.mjs`: section 0 parity of the overlay file, both function
+  maps and the migration list (241 = 241 = 241 = 241, 0 mismatches); sections 1 to 3 the live read
+  only counts the migrations refuse on (would insert 240, would delete 1465 in 1423 groups, would
+  update 0, each equal to its file's constant on 2026-09-30, and 0 once applied); section 4 the
+  source shape. Five controls, all fire.
+- **At release, in this order.** (1) Apply `20260930170000_round_707_overlay_stints.sql` (240 rows,
+  refuses on any other count), `20260930170100_round_707_stint_duplicates.sql` (1,465 rows in 1,423
+  groups), `20260930170200_round_707_stint_person_keys.sql` (0 rows today; its expected_updates
+  constant must be re-measured with simSoccerStints section 3 before any later run). Any order
+  between them; run `node scripts/simSoccerStints.mjs` after and read "would insert 0" and "would
+  delete 0". (2) Deploy `soccer-grid-validate` and `football-connect4-validate` through the
+  Supabase MCP, then update both entries in `scripts/data/edgeDeployed.json` (sha256 of the merged
+  file, version +1, date) in the same commit; `simEdgeSync` is red until that is done and says which
+  file. (3) Rebuild the snapshots for the What's New line.
+- **Out of scope, on the follow up list.** Gaps in the market rows before 2026 (Tonali's Newcastle
+  years are in neither table, so "Played for Newcastle" stays a hard no for him) and the 64 stale
+  sweep pairs, each wanting a two source record.
 
 ## LIVE 2026-09-29: Release F (660, 661, 668, 669 code, 670, 672), main `add1c6b0`
 
