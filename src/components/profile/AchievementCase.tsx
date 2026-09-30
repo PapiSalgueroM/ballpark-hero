@@ -3,9 +3,10 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
 import {
-  ACHIEVEMENTS, emptyAchievementFacts, hiddenRemaining, loadAchievementFacts,
+  ACHIEVEMENTS, earnedAchievements, emptyAchievementFacts, hiddenRemaining, loadAchievementEvidence,
   visibleAchievements, type AchievementFacts, type AchievementRarity,
 } from '@/lib/achievements';
+import { settleUnlockDates, unlockLabel, type UnlockMark } from '@/lib/achievementDates';
 
 /* Round 527: the achievement case on the profile.
 
@@ -23,7 +24,14 @@ import {
    PHONE FIRST. Two columns at 320, three at 390 and up, and the card starts
    folded at twelve tiles with the earned ones first and the nearest misses
    behind them, so it is a card you can take in rather than a page you scroll
-   past. */
+   past.
+
+   ROUND 712, THE UNLOCK DATE. Still derived: what is earned is decided by the
+   facts exactly as before. Once they have loaded, the earned ids go to
+   src/lib/achievementDates.ts, which works out the day each one landed from
+   the same dated rows (and this browser's play diary) and keeps it in its own
+   small ledger. That ledger is the only thing written, it holds dates and
+   nothing else, and it can never move a number on this page. */
 
 interface AchievementCaseProps {
   /** The signed in profile, so the completion rows are matched to the right handle. */
@@ -55,11 +63,14 @@ const FOLDED = 12;
 export default function AchievementCase({ profile, bestScoreByGame, points }: AchievementCaseProps) {
   const [facts, setFacts] = useState<AchievementFacts>(() => emptyAchievementFacts());
   const [showAll, setShowAll] = useState(false);
+  const [marks, setMarks] = useState<Record<string, UnlockMark>>({});
 
   useEffect(() => {
     let cancelled = false;
-    loadAchievementFacts(profile, bestScoreByGame, points).then(next => {
-      if (!cancelled) setFacts(next);
+    loadAchievementEvidence(profile, bestScoreByGame, points).then(({ facts: next, rows }) => {
+      if (cancelled) return;
+      setFacts(next);
+      setMarks(settleUnlockDates(earnedAchievements(next).map(d => d.id), rows));
     });
     return () => { cancelled = true; };
   }, [profile, bestScoreByGame, points]);
@@ -155,6 +166,21 @@ export default function AchievementCase({ profile, bestScoreByGame, points }: Ac
                       {entry.have.toLocaleString()} / {entry.need.toLocaleString()}
                     </p>
                   </div>
+                )}
+                {entry.earned && unlockLabel(marks[entry.def.id]) && (
+                  <p
+                    className="text-[9px] text-muted-foreground mt-auto pt-1.5 leading-tight"
+                    data-unlock={entry.def.id}
+                    title={
+                      marks[entry.def.id]?.day === null
+                        ? 'You had this before your profile started keeping dates.'
+                        : marks[entry.def.id]?.exact
+                          ? 'Worked out from the days you played.'
+                          : 'Nothing dated backs this one, so this is the first day your profile saw it.'
+                    }
+                  >
+                    {unlockLabel(marks[entry.def.id])}
+                  </p>
                 )}
                 {entry.earned && (
                   <div className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-primary flex items-center justify-center">

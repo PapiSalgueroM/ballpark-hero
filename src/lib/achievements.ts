@@ -467,6 +467,20 @@ export async function loadAchievementFacts(
   bestScoreByGame: Record<string, number> = {},
   serverPoints = 0,
 ): Promise<AchievementFacts> {
+  return (await loadAchievementEvidence(profile, bestScoreByGame, serverPoints)).facts;
+}
+
+/**
+ * Round 712: the facts plus the dated rows they were counted from, so the
+ * unlock dates (src/lib/achievementDates.ts) can replay the same rows the case
+ * counted instead of asking the database a second time. Same single read, same
+ * nothing written.
+ */
+export async function loadAchievementEvidence(
+  profile?: { display_name?: string | null; username?: string | null } | null,
+  bestScoreByGame: Record<string, number> = {},
+  serverPoints = 0,
+): Promise<{ facts: AchievementFacts; rows: CompletionRow[] }> {
   try {
     /* Round 539: peek, never getCurrentPlayerName. That one reaches
        getGuestHandle, which MINTS and STORES a handle when there is not one,
@@ -474,8 +488,8 @@ export async function loadAchievementFacts(
        user whose profile row carries neither a display name nor a username.
        See src/lib/completions.ts for the read only variant. */
     const rows = await fetchOwnCompletions(peekCurrentPlayerName(profile));
-    return buildAchievementFacts(rows, getStreakState(), bestScoreByGame, serverPoints);
+    return { facts: buildAchievementFacts(rows, getStreakState(), bestScoreByGame, serverPoints), rows };
   } catch {
-    return emptyAchievementFacts();
+    return { facts: emptyAchievementFacts(), rows: [] };
   }
 }
