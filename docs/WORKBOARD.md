@@ -1,5 +1,16 @@
 # Work board
 
+**2026-09-30 evening, desktop Claude lane: Rounds 711 to 728 CLAIMED, a master spec sweep.** One builder each,
+own branch from origin/main: **711** live ticker depth (last updated, stale notice, sport filter, followed
+teams), **712** streak history and achievement dates, **713** report admin statuses, **714** Club Manager match
+centre stats and timeline kinds, **715** Club Manager squad row (potential band, wage, contract), **716** the
+daily standing on every daily, **717** home Continue playing row and favourite sport, **718** no repeat daily
+rotation (Career Ladder, Clue Auction), **719** new game Manager Hot Seat, **720** new game Contract Chaos,
+**721** new game Deadline Day, **722** NBA Front Office luxury tax and roster minimum, **723** NFL Front Office
+franchise tag and depth chart, **724** Gauntlet Draft NHL, **725** Soccer Career life event cooldowns and new
+events, **726** World XI respin choice and season report, **727** Sports Bingo pass the device, **728** CFB
+Dynasty depth. The next free number for anyone else is **729**.
+
 **2026-09-30 evening, desktop Claude lane: CLAIMS, so nobody builds these twice.** Verified first: every branch
 of 2026-09-19 is on main, Release F is what douknowball.com serves (deployment fe10102e, entry
 index-_2k7DL7K.js, checked live), and Round 669's midnight data step did NOT run (the table still holds 46
