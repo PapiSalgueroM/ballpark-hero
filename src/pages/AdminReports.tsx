@@ -111,7 +111,7 @@ const AdminReports = () => {
   /* One write path for every change. It asks for the row back, because an
      update RLS refuses is not an error to PostgREST, it is zero rows, and a
      screen that said "saved" over zero rows would be lying. */
-  const save = async (report: Report, patch: Record<string, unknown>) => {
+  const save = async (report: Report, patch: Record<string, unknown>): Promise<boolean> => {
     say(report.id, 'Saving...');
     const { data, error } = await supabase
       .from('question_reports' as any)
@@ -120,14 +120,15 @@ const AdminReports = () => {
       .select('id') as any;
     if (error) {
       say(report.id, `Not saved: ${error.message}`);
-      return;
+      return false;
     }
     if (!data?.length) {
       say(report.id, 'Not saved: the database took nothing. Are you still signed in as admin?');
-      return;
+      return false;
     }
     setReports((prev) => prev.map((r) => (r.id === report.id ? { ...r, ...patch } : r)));
     say(report.id, 'Saved');
+    return true;
   };
 
   const changeStatus = (report: Report, next: ReportStatus) =>
@@ -141,6 +142,12 @@ const AdminReports = () => {
 
   const setDraft = (report: Report, next: { note: string; fixRef: string }) =>
     setDrafts((prev) => ({ ...prev, [report.id]: next }));
+
+  /* The box shows what was actually stored, trimmed and clipped. */
+  const saveNote = async (report: Report, draft: { note: string; fixRef: string }) => {
+    const patch = noteUpdate(draft.note, draft.fixRef);
+    if (await save(report, patch)) setDraft(report, { note: patch.admin_note ?? '', fixRef: patch.fix_ref ?? '' });
+  };
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -362,7 +369,7 @@ const AdminReports = () => {
                     />
                   </label>
                   <button
-                    onClick={() => save(report, noteUpdate(draft.note, draft.fixRef))}
+                    onClick={() => saveNote(report, draft)}
                     disabled={!withColumns}
                     className="min-h-[36px] px-4 rounded-lg bg-primary text-primary-foreground text-sm font-medium disabled:opacity-50"
                     data-testid="note-save"
