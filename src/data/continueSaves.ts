@@ -44,7 +44,7 @@ export interface ContinueSave {
 export const CONTINUE_SAVES: readonly ContinueSave[] = [
   { path: '/soccer-career', saveKey: 'soccerCareerSave', name: ['currentClub'], count: { at: ['age'], say: 'age {n}' }, ended: { at: ['retired'], say: 'retired' } },
   { path: '/club-manager', saveKey: 'dukb-club-manager-save', name: ['clubName'], count: { at: ['season'], say: 'season {n}' }, ended: { at: ['sacked'], say: 'sacked' } },
-  { path: '/stadium-tycoon', saveKey: 'stadiumTycoonSaveV1', name: ['clubName'], count: { at: ['matchNo'], say: 'match {n}' } },
+  { path: '/stadium-tycoon', saveKey: 'stadiumTycoonSaveV1', name: ['clubName'], count: { at: ['matchNo'], say: '{n} matches played', one: '1 match played' } },
   { path: '/wonderkid-factory', saveKey: 'wonderkidFactoryV1', count: { at: ['prospects'], say: '{n} kids in the academy', one: '1 kid in the academy' } },
   { path: '/rebuild', saveKey: 'rebuild-table', name: ['seats', '0', 'club'] },
   { path: '/front-office', saveKey: 'front-office-save-v1', name: ['myTeam'], count: { at: ['league', 'season'], say: '{n} season' }, ended: { at: ['fired'], say: 'fired' } },
