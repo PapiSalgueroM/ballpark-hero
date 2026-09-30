@@ -1,5 +1,33 @@
 # Work board
 
+**2026-09-30 15:55 EDT, desktop Claude lane: where the integration stands after the triage of the first 17
+branches.**
+- **743 is built and pushed** on `r743-worldxi-respins`: the setup screen's respin picker never reached the
+  game (a stale closure in the start callback), so 10 or None became 3. Test `src/test/worldXiRespins.test.tsx`
+  mounts the real page; with the old dependency list put back two of its three tests fail. **742** (a bought man
+  turning out for both teams in Club Manager) is being built on `r742-cm-double-roster` with a section 10 in
+  `simLiveMatch` and a `doubleman` control.
+- **The dead builders' uncommitted files are saved** as "work in progress" commits, pushed on their own
+  branches: 700 (`r700-seometa-split`), 704, 705, 709, 679, 681, 736 (`r736-window-la-liga`), 737
+  (`r737-window-bundesliga`). Not gated, not for release as they stand.
+- **Triage, 17 of 26 read so far.** Nothing invented, no dashes, no rival names except one file (708), tsc 0
+  everywhere. The pattern: 652, 653, 654, 655 and 656 are source only and their fences are red until the
+  release tree runs `build:seo` once (they get that at assembly, not on their branches); 703, 706, 707 and
+  718 promise a harness by name that was never written; 708's harness crashes at module scope on files it
+  does not ship, carries two rival name hits and three dashes, and delivers only the soccer_awards third of
+  its claim (**the 708 claim is narrowed to soccer_awards**; national_team_squads and the AFL goal kickers
+  are open again); 710's fence is red on its own branch (36 games end a run on their own surface, 0 of 77
+  ResultScreen callers pass a score) and its controls anchor on LF only strings; 711 ships new display
+  rules with no harness; **718's Clue Auction half does not apply** (that page has no daily mode), so 718
+  is Career Ladder only. What's New lines are missing on most player visible rounds. 712, 713, 715 and 717
+  are green as built. Full detail lands in `docs/PROJECT-STATE.md` with the release record.
+- **In flight now:** an adversarial review (three lenses) of 653, 656, 703, 706, 707, 708, 711, 716 and
+  718, a fixer and a re-reviewer per branch, and fix only passes on 654, 655, 710, 713, 715 and 717; every
+  fix lands on the round's own branch. The remaining nine (714, 719, 720, 729 to 734) follow as their
+  triage returns. Then assembly in the gate clone, `build:seo`, the full suite, push, publish with proof.
+  Migrations (706, 707, 713, 716, 729 to 734) and the nine edge functions of 703 and 707 are applied and
+  deployed by this lane at assembly, the daily moving ones at an Eastern midnight.
+
 **2026-09-30, Codex Round 744 CLAIMED: native sharing in the common result buttons (master spec 102).**
 Ownership: `src/components/game/ShareButtons.tsx` only, plus surgical board/state/reconciliation
 receipts. Reuse the existing `src/lib/share.ts` helper without changing its contract. Add one accessible
