@@ -46,6 +46,7 @@ const BUNDLE_WORLDS = path.join(os.tmpdir(), 'inv.bundle.mjs');
 const GENERATORS = [
   { file: 'src/lib/cfbDynasty.ts', first: 'FIRST', last: 'LAST', what: 'college football recruits' },
   { file: 'src/lib/cbbDynasty.ts', first: 'FIRST', last: 'LAST', what: 'college basketball recruits' },
+  { file: 'src/lib/aussieRulesManager.ts', first: 'FIRST', last: 'LAST', what: 'fictional Aussie rules seniors' },
   { file: 'src/lib/frontOffice.ts', first: 'FIRST', last: 'LAST', what: 'GM game draft classes' },
   { file: 'src/lib/careerRival.ts', first: 'FIRST', last: 'LAST', what: 'career rivals' },
   { file: 'src/lib/clubManager.ts', first: 'YOUTH_FIRST', last: 'YOUTH_LAST', what: 'academy kids' },

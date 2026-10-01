@@ -218,7 +218,7 @@ vi.mock('@/lib/nflGrid', async (importOriginal) => ({
   ...(await importOriginal<typeof import('@/lib/nflGrid')>()),
   fetchNflGridData: async () => {
     const p = { name: 'Probe Player' };
-    return { players: [p], byNormalizedName: new Map([['probe player', p]]) };
+    return { players: [p], byNormalizedName: new Map([['probe player', [p]]]) };
   },
   playerMatchesCell: () => false,
 }));

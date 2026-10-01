@@ -46,6 +46,7 @@ import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club
 import { foHubTiles, type FoPanelKey } from '@/lib/foHub';
 import { FoHubTiles, FoPanelHeader } from '@/components/front-office-shared/FoHubTiles';
 import { mlbLeagueSeeds } from '@/lib/mlbFrontOffice';
+import tradeRosterStyles from './MlbTradeRoster.module.css';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
 type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
@@ -99,6 +100,8 @@ export default function MlbFrontOfficeBoard() {
   const [shopOffers, setShopOffers] = useState<FinderOffer[]>([]);
   const [shopTried, setShopTried] = useState(false);
   const [myTradePiece, setMyTradePiece] = useState('');
+  const [tradeOwnVisible, setTradeOwnVisible] = useState(8);
+  const [tradePartnerVisible, setTradePartnerVisible] = useState(8);
   /* Round 631: the man whose DFA button has been tapped once. The second tap
      is only offered once the dead money is on screen. Transient. */
   const [cutArmed, setCutArmed] = useState<string | null>(null);
@@ -687,6 +690,23 @@ export default function MlbFrontOfficeBoard() {
   const cutBlock = cutRefusal(my, MLB_ROSTER_MIN);
   const fullBlock = rosterFullRefusal(my, MLB_ROSTER_MAX);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
+  const tradeOwnPlayers = [...my.players].sort((a, b) => b.ovr - a.ovr);
+  const tradePartnerPlayers = tradePartner ? [...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr) : [];
+  const revealTradeRoster = (button: HTMLButtonElement, visible: number, reveal: () => void) => {
+    const panel = button.closest('[data-mlb-trade-roster]');
+    reveal();
+    requestAnimationFrame(() => {
+      if (!panel?.isConnected || (document.activeElement !== document.body && document.activeElement !== button)) return;
+      const list = panel.querySelector<HTMLDivElement>('[data-mlb-trade-list]');
+      const next = list?.querySelectorAll<HTMLButtonElement>('[data-mlb-trade-choice]')[visible];
+      if (next && !next.disabled && list) {
+        next.focus({ preventScroll: true });
+        const row = (next.closest('[data-trade-row]') ?? next).getBoundingClientRect(), bounds = list.getBoundingClientRect();
+        if (row.bottom > bounds.bottom) list.scrollTop += row.bottom - bounds.bottom;
+        else if (row.top < bounds.top) list.scrollTop += row.top - bounds.top;
+      } else panel.querySelector<HTMLElement>('[data-mlb-trade-count]')?.focus({ preventScroll: true });
+    });
+  };
 
   return (
     <div className="space-y-4">
@@ -819,17 +839,19 @@ export default function MlbFrontOfficeBoard() {
       {tab === 'trade' && (
         <div className="rounded-2xl border border-border bg-card p-3 space-y-2">
           {/* Round 82: Trade Finder, shop a player and let the league bid */}
-          <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2">
+          <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2" data-mlb-trade-roster="finder">
             <p className="text-center text-[11px] font-bold text-foreground">🔍 Trade Finder</p>
             <p className="text-center text-[10px] text-muted-foreground">Pick one of your players and shop him. Only deals the AI genuinely accepts show up, payroll checked.</p>
-            <div className="grid grid-cols-2 gap-1">
-              {[...my.players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
-                <button key={p.id} onClick={() => { setMyTradePiece(p.id); setShopOffers([]); setShopTried(false); }} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
-                  <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
+            <p tabIndex={-1} data-mlb-trade-count className="text-center text-[10px] text-muted-foreground">Showing {Math.min(tradeOwnVisible, tradeOwnPlayers.length)} of {tradeOwnPlayers.length} players</p>
+            <div className={cn(tradeRosterStyles.list, 'grid grid-cols-2 gap-1')} data-mlb-trade-list="finder">
+              {tradeOwnPlayers.slice(0, tradeOwnVisible).map(p => (
+                <button key={p.id} data-mlb-trade-choice={p.id} aria-pressed={myTradePiece === p.id} onKeyDown={e => { if (e.repeat && (e.key === 'Enter' || e.key === ' ')) e.preventDefault(); }} onClick={() => { setMyTradePiece(p.id); setShopOffers([]); setShopTried(false); }} className={cn(tradeRosterStyles.player, 'flex items-center justify-between gap-1 rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
+                  <span className={cn(tradeRosterStyles.name, 'text-foreground')}>{p.name} ({p.pos})</span><b className="shrink-0 text-primary">{p.ovr}</b>
                 </button>
               ))}
             </div>
-            <button onClick={doShop} disabled={!myTradePiece} className="w-full rounded-full bg-primary px-4 py-1.5 text-[11px] font-bold text-primary-foreground disabled:opacity-40">
+            <button type="button" disabled={tradeOwnVisible >= tradeOwnPlayers.length} onClick={e => revealTradeRoster(e.currentTarget, tradeOwnVisible, () => setTradeOwnVisible(n => n + 8))} className={cn(tradeRosterStyles.action, 'w-full rounded-lg border border-border text-xs font-semibold disabled:opacity-50')}>{tradeOwnVisible < tradeOwnPlayers.length ? 'Load more players' : 'All players shown'}</button>
+            <button onClick={doShop} disabled={!myTradePiece} className={cn(tradeRosterStyles.action, 'w-full rounded-full bg-primary px-4 py-1.5 text-[11px] font-bold text-primary-foreground disabled:opacity-40')}>
               Shop him around the league
             </button>
             {shopTried && shopOffers.length === 0 && (
@@ -848,7 +870,7 @@ export default function MlbFrontOfficeBoard() {
           <p className="text-center text-[10px] font-bold uppercase text-muted-foreground pt-1">Or build your own deal</p>
           <div className="flex flex-wrap items-center justify-center gap-1">
             {MLB_TEAMS.filter(x => x.id !== myTeam).map(x => (
-              <button key={x.id} onClick={() => setTradePartner(x.id)} className={cn('rounded-full border px-2 py-0.5 text-[10px] font-bold', tradePartner === x.id ? 'border-gold bg-gold/10 text-foreground' : 'border-border text-muted-foreground hover:text-foreground')}>
+              <button key={x.id} onClick={() => { setTradePartner(x.id); setTradePartnerVisible(8); }} className={cn(tradeRosterStyles.action, 'rounded-full border px-2 py-0.5 text-[10px] font-bold', tradePartner === x.id ? 'border-gold bg-gold/10 text-foreground' : 'border-border text-muted-foreground hover:text-foreground')}>
                 {x.id}
               </button>
             ))}
@@ -871,29 +893,37 @@ export default function MlbFrontOfficeBoard() {
             <>
               <p className="text-center text-[10px] text-muted-foreground">1. Pick who YOU send. 2. Tap who you want back and open talks. The other GM counters like a person: a pick to close the gap, a lesser man instead, or the dial tone.</p>
               <div className="grid grid-cols-2 gap-2">
-                <div className="space-y-1">
+                <div className="min-w-0 space-y-1" data-mlb-trade-roster="send">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You send</p>
-                  {[...my.players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
-                    <button key={p.id} onClick={() => setMyTradePiece(p.id)} className={cn('flex w-full items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
-                      <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
+                  <p tabIndex={-1} data-mlb-trade-count className="text-center text-[10px] text-muted-foreground">Showing {Math.min(tradeOwnVisible, tradeOwnPlayers.length)} of {tradeOwnPlayers.length} players</p>
+                  <div className={cn(tradeRosterStyles.list, 'space-y-1')} data-mlb-trade-list="send">
+                  {tradeOwnPlayers.slice(0, tradeOwnVisible).map(p => (
+                    <button key={p.id} data-mlb-trade-choice={p.id} aria-pressed={myTradePiece === p.id} onKeyDown={e => { if (e.repeat && (e.key === 'Enter' || e.key === ' ')) e.preventDefault(); }} onClick={() => setMyTradePiece(p.id)} className={cn(tradeRosterStyles.player, 'flex w-full items-center justify-between gap-1 rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
+                      <span className={cn(tradeRosterStyles.name, 'text-foreground')}>{p.name} ({p.pos})</span><b className="shrink-0 text-primary">{p.ovr}</b>
                     </button>
                   ))}
+                  </div>
+                  <button type="button" disabled={tradeOwnVisible >= tradeOwnPlayers.length} onClick={e => revealTradeRoster(e.currentTarget, tradeOwnVisible, () => setTradeOwnVisible(n => n + 8))} className={cn(tradeRosterStyles.action, 'w-full rounded-lg border border-border text-xs font-semibold disabled:opacity-50')}>{tradeOwnVisible < tradeOwnPlayers.length ? 'Load more players' : 'All players shown'}</button>
                 </div>
-                <div className="space-y-1">
+                <div className="min-w-0 space-y-1" data-mlb-trade-roster="receive">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You get ({tradePartner})</p>
-                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => {
+                  <p tabIndex={-1} data-mlb-trade-count className="text-center text-[10px] text-muted-foreground">Showing {Math.min(tradePartnerVisible, tradePartnerPlayers.length)} of {tradePartnerPlayers.length} players</p>
+                  <div className={cn(tradeRosterStyles.list, 'space-y-1')} data-mlb-trade-list="receive">
+                  {tradePartnerPlayers.slice(0, tradePartnerVisible).map(p => {
                     /* Round 631: the trade paths refuse a man you let go this season, so the screen says so. */
                     const back = tradeRefusal(my, p.id, CUT_SAID);
                     return (
-                    <div key={p.id} data-trade-row={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
-                      <span className="min-w-0">
-                        <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
+                    <div key={p.id} data-trade-row={p.id} className="flex flex-wrap items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
+                      <span className="w-full min-w-0">
+                        <span className={cn(tradeRosterStyles.name, 'block text-foreground')}>{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
                         {back && <span className="block text-[9px] text-destructive">{back}</span>}
                       </span>
-                      <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece || !!back} title={back ?? undefined} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
+                      <button data-mlb-trade-choice={p.id} onKeyDown={e => { if (e.repeat && (e.key === 'Enter' || e.key === ' ')) e.preventDefault(); }} onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece || !!back} title={back ?? undefined} className={cn(tradeRosterStyles.action, 'shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40')}>Open talks</button>
                     </div>
                     );
                   })}
+                  </div>
+                  <button type="button" disabled={tradePartnerVisible >= tradePartnerPlayers.length} onClick={e => revealTradeRoster(e.currentTarget, tradePartnerVisible, () => setTradePartnerVisible(n => n + 8))} className={cn(tradeRosterStyles.action, 'w-full rounded-lg border border-border text-xs font-semibold disabled:opacity-50')}>{tradePartnerVisible < tradePartnerPlayers.length ? 'Load more players' : 'All players shown'}</button>
                 </div>
               </div>
             </>

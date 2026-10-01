@@ -6,7 +6,7 @@ import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { toast } from 'sonner';
 import { rarityPercent } from '@/lib/gridRarity';
 import { dateSeed, getTodayET } from '@/lib/dateUtils';
-import { normalizeGridName, type GridCategory } from '@/lib/gridEngine';
+import { normalizeGridName, pickNamesake, type GridCategory } from '@/lib/gridEngine';
 import { buildGridPuzzle, fetchNflGridData, playerMatchesCell, type NflGridData } from '@/lib/nflGrid';
 
 /**
@@ -177,8 +177,12 @@ export function useFootballGrid() {
 
       /* Judged here, against the key: no network round trip, no quota. The
          search box offers the key's own display names, so a miss here is a
-         typed name the key does not carry, and it costs nothing. */
-      const player = gridData.byNormalizedName.get(normalizeGridName(playerName));
+         typed name the key does not carry, and it costs nothing. Round 653:
+         every player under the name, the one who fits the cell judged (the
+         key's display names are distinct, so this is one player today). */
+      const { row, col } = getRowCol(activeCell);
+      const engineCell = { row: puzzle.engine.rows[row], col: puzzle.engine.cols[col] };
+      const player = pickNamesake(gridData.byNormalizedName.get(normalizeGridName(playerName)), (p) => playerMatchesCell(p, engineCell));
       if (!player) {
         toast.error('Pick a player from the suggestions.');
         return;
@@ -189,9 +193,8 @@ export function useFootballGrid() {
       }
 
       setValidating(true);
-      const { row, col } = getRowCol(activeCell);
       const capturedCell = activeCell;
-      const fits = playerMatchesCell(player, { row: puzzle.engine.rows[row], col: puzzle.engine.cols[col] });
+      const fits = playerMatchesCell(player, engineCell);
 
       try {
         if (fits) {

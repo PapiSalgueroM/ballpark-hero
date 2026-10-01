@@ -7,7 +7,7 @@ vi.mock('@/hooks/useGameCompletion', () => ({ useGameCompletion: vi.fn() }));
 
 interface Player { name: string; position: string; rating: number }
 const config: LineupConfig<Player> = {
-  gameId: 'focus-fixture', gameName: 'Focus Fixture', gamePath: '/focus-fixture',
+  gameId: 'perfect-lineup-nba', gameName: 'Focus Fixture', gamePath: '/perfect-lineup-nba',
   formation: [{ label: 'Guard one', allowed: ['PG'] }, { label: 'Guard two', allowed: ['PG'] }],
   pool: [{ name: 'Generated Guard A', position: 'PG', rating: 82 }, { name: 'Generated Guard B', position: 'PG', rating: 79 }],
   nameOf: p => p.name, positionOf: p => p.position, ratingOf: p => p.rating,

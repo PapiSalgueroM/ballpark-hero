@@ -68,6 +68,10 @@
  *   continuefield  the Stadium Tycoon card reads a field the save does not have
  *   continueguard  a card prints a save's name at any length
  *   continuecold   the row renders its heading with no save in the browser
+ *   aussiemissing  the new manager's real save has no registered card
+ *   aussiekey      the manager card reads a key its hook never writes
+ *   aussiefield    the action log's club ID is mistaken for a display name
+ *   aussieround    the action count is falsely displayed as a round
  *   favfirst       the favourite sport is ignored
  *   favtrust       any stored string is taken as a sport
  *
@@ -84,6 +88,7 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const CONTROLS = {
   stage: 1, savekey: 2, nocolour: 3, noglyph: 3, rail: 4, shipped: 5, progress: 6,
   continuekey: 7, continuefield: 7, continueguard: 7, continuecold: 7, favfirst: 8, favtrust: 8,
+  aussiemissing: 7, aussiekey: 7, aussiefield: 7, aussieround: 7,
 };
 const CONTROL = process.env.HOME_FRONT_CONTROL || '';
 if (CONTROL && !(CONTROL in CONTROLS)) {
@@ -137,6 +142,14 @@ railSrc = controlled('progress', railSrc, '{game.label}',
 let shippedSrc = read('src/components/home/JustShipped.tsx');
 shippedSrc = controlled('shipped', shippedSrc, 'justShipped(JUST_SHIPPED_COUNT)', 'justShipped(JUST_SHIPPED_COUNT).reverse()');
 let continueSrc = read('src/data/continueSaves.ts');
+const aussieRow = "{ path: '/aussie-rules-manager', saveKey: 'aussie-rules-manager-save-v1' }";
+if (CONTROL.startsWith('aussie') && continueSrc.split(aussieRow).length !== 2) {
+  console.error('Aussie control needs one unique real Continue row'); process.exit(1);
+}
+continueSrc = controlled('aussiemissing', continueSrc, `  ${aussieRow},\n`, '');
+continueSrc = controlled('aussiekey', continueSrc, aussieRow, aussieRow.replace('save-v1', 'save-v2'));
+continueSrc = controlled('aussiefield', continueSrc, aussieRow, aussieRow.replace(' }', ", name: ['clubId'] }"));
+continueSrc = controlled('aussieround', continueSrc, aussieRow, aussieRow.replace(' }', ", count: { at: ['actions'], say: 'round {n}' } }"));
 continueSrc = controlled('continuekey', continueSrc, "saveKey: 'fight-gym-save-v1'", "saveKey: 'fight-gym-save-v2'");
 continueSrc = controlled('continuefield', continueSrc, "at: ['matchNo']", "at: ['matchNum']");
 continueSrc = controlled('continueguard', continueSrc,
@@ -197,6 +210,32 @@ await build({
       import * as FO from './src/lib/frontOffice';
       import * as CFB from './src/lib/cfbDynasty';
       import * as CBB from './src/lib/cbbDynasty';
+      import * as AR from './src/lib/aussieRulesManager';
+      export { SAVE_KEY as AUSSIE_SAVE_KEY } from './src/lib/aussieRulesManager';
+      export const restoreAussie = AR.readManagerSave;
+      export const aussieResumeSaves = () => {
+        const save = { version: 1, seed: 792, clubId: 'club-2', actions: [] };
+        let state = AR.createManager(save.seed, save.clubId);
+        const snapshots = [];
+        const capture = () => snapshots.push({ raw: JSON.stringify(save), state });
+        const commit = action => {
+          const next = AR.reduceManager(state, action);
+          if (next === state) throw new Error('The actual Aussie resume fixture rejected a legal action');
+          save.actions.push(action); state = next;
+        };
+        capture();
+        for (let round = 0; round < 10; round += 1) {
+          commit({ type: 'prepare', choice: 'rest' });
+          for (let quarter = 0; quarter < 4; quarter += 1) {
+            commit({ type: 'play', tactic: 'control' });
+            if (round === 0 && quarter === 0) capture();
+            if (quarter < 3) commit({ type: 'next' });
+          }
+          commit({ type: 'next' });
+        }
+        capture();
+        return snapshots;
+      };
       export const engineSaves = () => {
         let seed = 717;
         const rng = () => { seed = (seed * 1103515245 + 12345) % 2147483648; return seed / 2147483648; };
@@ -453,6 +492,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     '/mlb-front-office': ['src/components/mlb-front-office/MlbFrontOfficeBoard.tsx', 'src/lib/mlbFrontOffice.ts'],
     '/nhl-my-career': ['src/components/nhl-my-career/NhlMyCareerBoard.tsx', 'src/lib/nhlMyCareer.ts'],
     '/nhl-front-office': ['src/components/nhl-front-office/NhlFrontOfficeBoard.tsx', 'src/lib/nhlFrontOffice.ts'],
+    '/aussie-rules-manager': ['src/lib/aussieRulesManager.ts'],
     '/fight-career': ['src/components/fight-career/FightCareerBoard.tsx', 'src/lib/fightCareer.ts'],
     '/fight-promoter': ['src/components/fight-promoter/FightPromoterBoard.tsx', 'src/lib/fightPromoter.ts'],
     '/fight-gym': ['src/components/fight-gym/FightGymBoard.tsx', 'src/lib/fightGym.ts'],
@@ -616,6 +656,27 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
     if (got.length !== 1 || got[0].href !== e.path) fail(7, `a save under ${JSON.stringify(e.saveKey)} renders ${JSON.stringify(got.map(c => c.href))}, not one card for ${e.path}`);
     else if (g && !(got[0].inner.includes(g.label) && got[0].inner.includes(SAVED_FALLBACK))) fail(7, `the ${e.path} card reads ${JSON.stringify(got[0].inner)}`);
   }
+  /* Action logs contain no saved club name or round; replay belongs to the game. */
+  const aussie = CONTINUE_SAVES.find(entry => entry.path === '/aussie-rules-manager');
+  const aussieSaves = front.aussieResumeSaves();
+  if (JSON.stringify(aussieSaves.map(value => value.state.phase)) !== JSON.stringify(['prepare', 'break', 'complete'])) fail(7, 'the actual Aussie fixtures did not reach initial, quarter break and completed states');
+  for (const { raw, state } of aussieSaves) {
+    const restored = front.restoreAussie(raw);
+    if (!restored || JSON.stringify(restored.state) !== JSON.stringify(state)) fail(7, 'the serialized Aussie action log does not resume its actual engine state');
+    const shape = JSON.parse(raw);
+    if (JSON.stringify(Object.keys(shape).sort()) !== JSON.stringify(['actions', 'clubId', 'seed', 'version'])) fail(7, 'the Aussie fixture is not the strict saved action-log shape');
+    if (!aussie || describeSave(aussie, raw) !== null) fail(7, 'Aussie Continue must not invent a display name or round from the action log');
+    store.clear(); store.set(front.AUSSIE_SAVE_KEY, raw);
+    const got = cards(withWindow(() => front.renderContinue()));
+    const game = gameByPath.get('/aussie-rules-manager');
+    const expected = `${game.emoji} ${game.label} ${SAVED_FALLBACK}`;
+    if (got.length !== 1 || got[0].href !== '/aussie-rules-manager' || got[0].inner !== expected) fail(7, `a real ${state.phase} Aussie save must render exactly its generic saved card, got ${JSON.stringify(got)}`);
+    if (store.get(front.AUSSIE_SAVE_KEY) !== raw) fail(7, 'Continue changed the serialized Aussie save bytes');
+  }
+  for (const unrelated of [null, 'aussie-rules-manager-save-v2']) {
+    store.clear(); if (unrelated) store.set(unrelated, aussieSaves[1].raw);
+    if (savedGames(globalThis.localStorage).length !== 0 || cards(withWindow(() => front.renderContinue())).length !== 0) fail(7, 'an absent Aussie key or another save version must not create a Continue card');
+  }
   store.clear();
   for (const e of CONTINUE_SAVES) store.set(e.saveKey, '{}');
   const all = cards(withWindow(() => front.renderContinue())).map(c => c.href);
@@ -624,6 +685,7 @@ console.log('7) Continue playing: the right keys, real fields, hostile saves, on
   if (!failedSections.has(7)) {
     console.log(`   ${CONTINUE_SAVES.length} games, every key the game's own, ${found.size} save keys in src all accounted for (${Object.keys(EXCUSED).length} excused), ${fieldsChecked} fields declared by the games`);
     console.log(`   ${Object.keys(engine).length} engine built saves and ${Object.values(SAMPLES).flat().length} shaped saves read right, ${hostileRuns} hostile saves survived, empty with none, one card per save`);
+    console.log('   three real Aussie action logs resume exact initial/break/completed states, generic card only, bytes held and no absent/wrong-key card');
   }
 }
 

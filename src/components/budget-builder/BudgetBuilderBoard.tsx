@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { Check, Copy, RotateCcw, Swords, X } from 'lucide-react';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { FORMATIONS, TOPICS, playerRating } from '@/lib/squadDeal';
 import { BB_ERAS, useBudgetBuilder } from '@/hooks/useBudgetBuilder';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
+import type { Player } from '@/types/game';
+import styles from './BudgetBuilderBoard.module.css';
 
 export function BudgetBuilderBoard() {
   const {
@@ -20,6 +22,74 @@ export function BudgetBuilderBoard() {
   // view the moment the team is done.
   const revealRef = useRevealScroll<HTMLDivElement>(complete);
   const [copied, setCopied] = useState(false);
+  const [choice, setChoice] = useState<Player | null>(null);
+  const [request, setRequest] = useState<{
+    slot: number; before: Player | undefined; after: Player | undefined;
+    remaining: number; filled: number; formation: string; era: string; text: string;
+  } | null>(null);
+  const [cue, setCue] = useState<{ slot: number; text: string; id: number } | null>(null);
+  const slots = useRef<(HTMLButtonElement | null)[]>([]);
+  const opener = useRef<HTMLButtonElement | null>(null);
+  const previewOpener = useRef<HTMLButtonElement | null>(null);
+  const searchInput = useRef<HTMLInputElement | null>(null);
+  const choiceNumber = useRef(0);
+
+  useLayoutEffect(() => {
+    setChoice(null);
+    if (activeSlot !== null) searchInput.current?.focus({ preventScroll: true });
+  }, [activeSlot, formation.name, era.id, topic]);
+
+  useLayoutEffect(() => { setCue(null); }, [formation.name, era.id, topic]);
+
+  useLayoutEffect(() => {
+    if (!request) return;
+    const committed = squad[request.slot] === request.after && squad[request.slot] !== request.before &&
+      remaining === request.remaining && filled === request.filled &&
+      formation.name === request.formation && era.id === request.era;
+    if (committed) {
+      setActiveSlot(null);
+      setChoice(null);
+      setCue({ slot: request.slot, text: request.text, id: ++choiceNumber.current });
+      slots.current[request.slot]?.focus({ preventScroll: true });
+    }
+    setRequest(null);
+  }, [request, squad, remaining, filled, formation.name, era.id, setActiveSlot]);
+
+  useEffect(() => {
+    if (!cue) return;
+    const timer = window.setTimeout(() => setCue(null), 600);
+    return () => window.clearTimeout(timer);
+  }, [cue]);
+
+  const closePicker = () => {
+    setChoice(null);
+    setActiveSlot(null);
+    (opener.current?.isConnected ? opener.current : activeSlot === null ? null : slots.current[activeSlot])?.focus({ preventScroll: true });
+  };
+
+  const cancelPreview = () => {
+    setChoice(null);
+    (previewOpener.current?.isConnected ? previewOpener.current : searchInput.current)?.focus({ preventScroll: true });
+  };
+
+  const confirmSigning = () => {
+    if (activeSlot === null || !choice || !candidates.includes(choice) || squad[activeSlot] === choice) return;
+    const before = squad[activeSlot];
+    setRequest({ slot: activeSlot, before, after: choice,
+      remaining: remaining + (before?.marketValue ?? 0) - choice.marketValue,
+      filled: filled + (before ? 0 : 1), formation: formation.name, era: era.id,
+      text: `${choice.name} signed for $${choice.marketValue}M.` });
+    sign(choice);
+  };
+
+  const releasePlayer = () => {
+    if (activeSlot === null || !squad[activeSlot]) return;
+    const before = squad[activeSlot]!;
+    setRequest({ slot: activeSlot, before, after: undefined,
+      remaining: remaining + before.marketValue, filled: filled - 1,
+      formation: formation.name, era: era.id, text: `${before.name} released. $${before.marketValue}M returned.` });
+    release(activeSlot);
+  };
 
   const copyShare = async () => {
     try {
@@ -39,9 +109,15 @@ export function BudgetBuilderBoard() {
   }
 
   const pct = Math.max(0, Math.min(100, (spent / Math.max(1, budget)) * 100));
+  const current = activeSlot === null ? undefined : squad[activeSlot];
+  const afterRemaining = remaining + (current?.marketValue ?? 0) - (choice?.marketValue ?? 0);
+  const afterSquad = activeSlot === null || !choice ? [] :
+    Object.values({ ...squad, [activeSlot]: choice }).filter(Boolean) as Player[];
+  const afterRating = afterSquad.length ? Math.round(afterSquad.reduce((sum, player) => sum + playerRating(player), 0) / afterSquad.length) : 0;
+  const afterCondition = choice ? criterion.check(afterSquad, budget, afterRemaining) : false;
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-6">
+    <div className={`${styles.board} mx-auto max-w-3xl px-4 py-6`} data-budget-builder>
       {/* Era picker (owner task 49: eras) */}
       <div className="mb-3 grid grid-cols-3 gap-2">
         {BB_ERAS.map(e => (
@@ -95,6 +171,9 @@ export function BudgetBuilderBoard() {
             ? 'the Today market is a flat billion'
             : `${era.label} market cap: 62% of the priciest possible XI, to the nearest 10M`})
         </p>
+        <div className="min-h-10 pt-2 text-xs text-primary" role="status" aria-live="polite">
+          {cue && <p key={cue.id} className={styles.feedback} data-budget-feedback="committed">{cue.text}</p>}
+        </div>
       </div>
 
       {/* Board demand (owner task 49: criteria) */}
@@ -130,7 +209,7 @@ export function BudgetBuilderBoard() {
           </select>
         )}
         <button
-          onClick={reset}
+          onClick={() => { setCue(null); setChoice(null); reset(); }}
           className="ml-auto inline-flex items-center gap-1.5 rounded-lg border border-border px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground"
         >
           <RotateCcw className="h-3.5 w-3.5" /> Reset
@@ -148,7 +227,13 @@ export function BudgetBuilderBoard() {
           return (
             <button
               key={i}
-              onClick={() => setActiveSlot(isActive ? null : i)}
+              ref={node => { slots.current[i] = node; }}
+              aria-label={`${slot.label} slot ${i + 1}: ${p ? p.name : 'empty'}`}
+              aria-expanded={isActive}
+              aria-controls={isActive ? 'budget-signing-picker' : undefined}
+              data-budget-slot={i}
+              data-budget-slot-feedback={cue?.slot === i ? 'committed' : undefined}
+              onClick={event => { opener.current = event.currentTarget; setChoice(null); setCue(null); setActiveSlot(isActive ? null : i); }}
               style={{ left: `${slot.x}%`, top: `${slot.y}%` }}
               className={`absolute w-[19%] -translate-x-1/2 -translate-y-1/2 rounded-lg border-2 px-1 py-1.5 text-center transition-all ${
                 isActive
@@ -186,24 +271,48 @@ export function BudgetBuilderBoard() {
 
       {/* Picker */}
       {activeSlot !== null && (
-        <div className="mt-4 rounded-2xl border border-border bg-card p-4">
+        <div id="budget-signing-picker" className="mt-4 rounded-2xl border border-border bg-card p-4"
+          aria-label="Signing shortlist" role="region"
+          onKeyDown={event => { if (event.key === 'Escape') { event.preventDefault(); event.stopPropagation(); closePicker(); } }}>
           <div className="mb-3 flex items-center justify-between">
             <p className="font-display font-bold text-foreground">
               Sign a {formation.slots[activeSlot].label}
             </p>
-            <button onClick={() => setActiveSlot(null)}>
+            <button aria-label="Close signing shortlist" className="flex min-w-11 items-center justify-center" onClick={closePicker}>
               <X className="h-4 w-4 text-muted-foreground" />
             </button>
           </div>
           <input
+            ref={searchInput}
+            aria-label="Search eligible players by name or club"
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search name or club…"
             className="mb-3 w-full rounded-lg border border-border bg-background px-3 py-2 text-sm text-foreground"
           />
+          <p className="mb-3 text-xs text-muted-foreground">Showing {candidates.length} of up to 60 eligible matches, highest value first. Search to narrow the shortlist.</p>
+          {choice && <div className={`${styles.wrap} mb-3 rounded-xl border border-primary/40 bg-primary/5 p-3`} data-budget-preview>
+            <p className="text-sm font-bold text-foreground">{choice.name}</p>
+            <p className="flex flex-wrap items-center gap-1 text-xs text-muted-foreground">{choice.club} · {choice.position} · <FlagImg name={choice.nationality} size={12} /> {choice.nationality}</p>
+            <dl className="mt-2 grid grid-cols-2 gap-2 text-xs">
+              <div><dt className="text-muted-foreground">Signing cost</dt><dd>${choice.marketValue}M</dd></div>
+              <div><dt className="text-muted-foreground">Replacement refund</dt><dd>${current?.marketValue ?? 0}M</dd></div>
+              <div><dt className="text-muted-foreground">Remaining after signing</dt><dd>${afterRemaining}M</dd></div>
+              <div><dt className="text-muted-foreground">XI rating after signing</dt><dd>{afterRating}</dd></div>
+              <div><dt className="text-muted-foreground">Signed after this choice</dt><dd>{afterSquad.length}/{formation.slots.length}</dd></div>
+              <div><dt className="text-muted-foreground">Demand condition after signing</dt><dd>{afterCondition ? 'Met so far' : 'Not met yet'}</dd></div>
+            </dl>
+            <p className="mt-2 text-xs text-muted-foreground">The board demand bonus is checked on your completed XI. This preview does not sign anyone.</p>
+            <div className="mt-3 flex flex-wrap gap-2">
+              <button onClick={confirmSigning} disabled={!candidates.includes(choice) || current === choice}
+                onKeyDown={event => { if (event.repeat && (event.key === 'Enter' || event.key === ' ')) event.preventDefault(); }}
+                className="min-w-0 flex-1 rounded-lg bg-primary px-3 text-sm font-semibold text-primary-foreground disabled:opacity-50">Confirm signing</button>
+              <button onClick={cancelPreview} className="rounded-lg border border-border px-3 text-sm">Cancel preview</button>
+            </div>
+          </div>}
           {squad[activeSlot] && (
             <button
-              onClick={() => { release(activeSlot); setActiveSlot(null); }}
+              onClick={releasePlayer}
               className="mb-3 w-full rounded-lg border border-destructive/40 py-2 text-xs font-semibold text-destructive"
             >
               Release {squad[activeSlot]!.name} (+${squad[activeSlot]!.marketValue}M)
@@ -212,13 +321,16 @@ export function BudgetBuilderBoard() {
           <div className="max-h-64 space-y-1.5 overflow-y-auto">
             {candidates.length === 0 && (
               <p className="py-4 text-center text-xs text-muted-foreground">
-                Nobody in this position fits in ${remaining}M. Release someone, or pick cheaper.
+                No eligible matches in this shortlist. Try another name or club, or release a player to free up budget.
               </p>
             )}
             {candidates.map(p => (
               <button
                 key={p.name}
-                onClick={() => sign(p)}
+                onClick={event => { previewOpener.current = event.currentTarget; setChoice(p); }}
+                aria-label={`Preview signing ${p.name} for $${p.marketValue}M`}
+                aria-pressed={choice === p}
+                title={`${p.name}, ${p.club}`}
                 className="flex w-full items-center justify-between rounded-lg border border-border bg-background px-3 py-2 text-left hover:border-primary/50"
               >
                 <span className="flex min-w-0 items-center gap-2">
