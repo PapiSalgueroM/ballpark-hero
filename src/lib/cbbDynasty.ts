@@ -303,8 +303,9 @@ function hoopsScore(win: boolean, rng: () => number): number {
  * Round 823: the score of a game whose winner is already decided, with the
  * program layer on. Each side's points move by CBB_POINTS_PER_EDGE for every
  * point its offensive assistant's edge beats the other side's defensive
- * assistant's. When that leaves the loser level or ahead, the LOSER comes
- * down to one possession behind (1 to 3 points), never the winner up: raising
+ * assistant's. The loser always ends at least one possession behind (1 to 3
+ * points, drawn): when the shifted scores leave him closer than that, level
+ * or ahead, the LOSER comes down to it, never the winner up: raising
  * the winner looked equivalent in Round 728 and is not, because a better
  * coach could then score fewer points in a game he won. Every game makes the
  * same three draws whatever the scores, so a different assistant never
