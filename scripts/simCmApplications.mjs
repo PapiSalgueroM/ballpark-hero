@@ -252,7 +252,7 @@ console.log(`   ${bases.length} bases, tiers ${[...new Set(bases.map(myTier))].s
 /* ---------- 1. the answer is the manager's to earn ---------- */
 console.log(`1) Acceptance against standing and tier gap over ${bases.length * PER_BASE} applications`);
 const rows = [];
-let offSchedule = 0, badCopy = 0, noMessage = 0, missingOptions = 0;
+let offSchedule = 0, badCopy = 0, noMessage = 0, missingOptions = 0, sackedWaiting = 0;
 for (const base of bases) {
   const mine = myTier(base);
   const targets = applyTargets(base);
@@ -276,6 +276,10 @@ for (const base of bases) {
     const due = open.matchesLeft;
     const standing = jh.employedStanding(cm.wildernessProfile(s0));
     const run = playUntilAnswered(applied);
+    /* A sacking inside the wait is the sack race, not the feature: the row
+       is skipped and counted, and the floor on answered rows below holds the
+       count honest. */
+    if (run.outcome === 'sacked') { sackedWaiting += 1; continue; }
     if (run.outcome !== 'accepted' && run.outcome !== 'declined') { fail(`${base.clubName} to ${target.club}: ${run.outcome} after ${run.matches} matches`); continue; }
     if (run.matches !== due) offSchedule += 1;
     const msg = (run.state.inbox ?? []).find(m => m.kind === 'jobApplication' && m.from === `The ${target.club} board`);
@@ -297,7 +301,7 @@ for (const base of bases) {
 const rStanding = pearson(rows.map(r => r.standing), rows.map(r => r.accepted));
 const rTier = pearson(rows.map(r => r.tierUp), rows.map(r => r.accepted));
 const acceptedShare = pct(rows.filter(r => r.accepted).length, rows.length);
-console.log(`   ${rows.length} answered: ${acceptedShare.toFixed(1)} percent yes; r vs standing ${isNum(rStanding) ? rStanding.toFixed(3) : 'NaN'}, r vs tiers up ${isNum(rTier) ? rTier.toFixed(3) : 'NaN'}; standing ${Math.min(...rows.map(r => r.standing)).toFixed(0)} to ${Math.max(...rows.map(r => r.standing)).toFixed(0)}; off schedule ${offSchedule}, quoted ${badCopy}, no message ${noMessage}, wrong options ${missingOptions}`);
+console.log(`   ${rows.length} answered (${sackedWaiting} sacked while waiting): ${acceptedShare.toFixed(1)} percent yes; r vs standing ${isNum(rStanding) ? rStanding.toFixed(3) : 'NaN'}, r vs tiers up ${isNum(rTier) ? rTier.toFixed(3) : 'NaN'}; standing ${Math.min(...rows.map(r => r.standing)).toFixed(0)} to ${Math.max(...rows.map(r => r.standing)).toFixed(0)}; off schedule ${offSchedule}, quoted ${badCopy}, no message ${noMessage}, wrong options ${missingOptions}`);
 if (rows.length < bases.length * PER_BASE * 0.9) fail(`only ${rows.length} of ${bases.length * PER_BASE} applications were answered`);
 if (!(rStanding >= 0.25)) fail(`acceptance does not rise with standing: r=${isNum(rStanding) ? rStanding.toFixed(3) : 'NaN'} (floor 0.25)`);
 if (!(rTier <= -0.2)) fail(`acceptance does not fall with the tiers applied up: r=${isNum(rTier) ? rTier.toFixed(3) : 'NaN'} (ceiling -0.20)`);
@@ -361,6 +365,9 @@ console.log('3) A yes answered with the summer moves the manager at the rollover
     const applied = applyForJob(base, target.club);
     if (!applied) { fail(`probe ${i}: could not apply to ${target.club}`); continue; }
     applied.jobHunt.open.roll = 0;   /* a roll of 0 always clears the floor */
+    /* The board is warmed for the wait: the probe measures the application,
+       not the sack race, and a base at week ten can be one defeat from it. */
+    applied.boardConfidence = 85;
     const run = playUntilAnswered(applied);
     if (run.outcome !== 'accepted') { fail(`probe ${i}: the forced yes came back ${run.outcome}`); continue; }
     const before = run.state;
@@ -432,6 +439,7 @@ console.log('4) A yes answered with now moves the manager that week');
     const applied = applyForJob(base, target.club);
     if (!applied) { fail(`probe ${i}: could not apply to ${target.club}`); continue; }
     applied.jobHunt.open.roll = 0;
+    applied.boardConfidence = 85;   /* the same warming as section 3, same reason */
     const run = playUntilAnswered(applied);
     if (run.outcome !== 'accepted') { fail(`probe ${i}: the forced yes came back ${run.outcome}`); continue; }
     const before = run.state;
