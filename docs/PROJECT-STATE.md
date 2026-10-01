@@ -1,24 +1,65 @@
 # Project state
 
-831 is now accepted: final production browser checks show no document movement
-across all10 measured wrong/hint/result actions at320 normal/1440 reduced.
-Original score/save/share/completion and finite/static cues hold. Source and
-artifact gates pass; exact95-check receipt and cleanup are on WORKBOARD.
-828-832,836 and837 are ready in code;838 contest remains active. Next839.
+## LIVE 2026-10-01: Release O (820 honest Perfect Season odds for NFL, NHL and MLB; 821 the MLB and NHL wheels read their whole tables), main `fcdae1bf`
+
+Assembled by the desktop Claude lane in the gate clone (`release-o`). **douknowball.com is serving it:** deployment
+`102f28a4`, called only after `get_project` showed `latest_commit_sha` `fcdae1bf`; the live entry moved from
+`index-DIQbV2hM.js` to `index-Bj5VrkKR.js`. Proof by content: `/perfect-season-mlb` says "116 wins" in its saved
+page, `/whats-new` carries both new lines, and the four Perfect Season pages answer 200.
+
+- **820, from a player report (1,312 NBA seasons without an 82-0).** The NBA page got its honest odds and best
+  record card in Round 728. This round moves that into one shared piece and binds NFL, NHL and MLB to it, each
+  measured the same way: 200,000 drafts played the way a good player would and 200,000 seasons through each
+  game's own sim. No sim changed. Football: a typical roster (81.9) goes 17-0 about one run in 1,200. Hockey: a
+  typical lineup (86) goes 82-0 about one run in 190,000. Baseball never went 162-0 in 200,000 tries, so the page
+  points at the real record instead, 116 wins (the 1906 Cubs and the 2001 Mariners), which about one draft in
+  four reaches. Every result card prints the odds for the lineup just drafted and the best record in this browser.
+- **821, found by 820's reviewer.** The MLB wheel asked for every team season since 1901 in one request and the
+  REST endpoint hands back 1,000 rows at most, so the wheel stopped at 1962. It now pages the whole table (2,572
+  team seasons, 1901 to 2021). Hockey had the same leak and counted franchise decades from about a fifth of its
+  players; it gains 28 stops (222 now). **Classic and Hard spin the full wheel now; the daily keeps the old wheel
+  until 2026-10-08 ET (`FULL_WHEEL_DAILY_FROM`)** so no daily changes during a day already being played.
+- **Follow ups the reviewer left, not built:** the NHL and MLB win models are too generous (a typical NHL lineup
+  averages 70.5 wins against a real record of 65), so both should move to `simulateSeasonFair` with their own win
+  curve; `statDetective.ts` reads a fixed 25 pages; the NHL guide says "a century of hockey" and the NFL how to
+  says "1999 to today", both worth checking against the tables.
+
+**Gates.** Type gate 0. `simPerfectSeasonOdds`, `simPerfectSeasonWheel`, `simPerfectSeason`, `simGuideHeadings`,
+`simSeoTitles`, `simNoRivalNames`, `simHarnessAnchors` and 11 snapshot readers green after twelve pages were
+redrawn alone; vitest `perfectSeasonResult` 16 passed; `sweepWeight` green; `playRenderStability` green on seven
+routes. `simSeoMetaSplit` section 4 was red before the push only because it compares against `origin/main` and
+this release changes the MLB description on purpose: it was checked with `SEO_SPLIT_BASE_REF=HEAD` and is green by
+default now that main carries the change. The merge of main conflicted in `scripts/data/lastmod.json`; main's
+ledger was taken and `genSitemap.mjs` rerun, then `simSitemap`, `simPrerender` and `simIndexNow` were green.
 
 ## Current Codex handoff, 2026-10-01
 
-836 public-copy corrections and837 Stat Line manual ad eligibility are
-accepted and ready for Claude's next publish. Types, build,15 artifact
-harnesses and snapshot boot pass. Three saved pages are refreshed; only four
-page fingerprints changed, all other ledger entries are preserved.
-AdSense remains unresolved. The existing account panel still shows the
-September25 Low value content decision. Search Console refresh was blocked
-by the browser URL safety check, so68/94 remain September20 observations.
-No Google submission was made. The evidence and remaining era-copy correction
-are in audits/ADSENSE-QUALITY-2026-10-01.md and WORKBOARD.
-831's final no-jump browser pair is running;838's three-point contest is in
-implementation/targeted checks. Next free839. No new live-release claim.
+Codex828-832 and 836-838 are accepted in code and ready for Claude's next
+publish. Next free round 839. Older active/pending notes below are historical.
+
+838 completes master spec section 84's three-point contest in Buzzer Beater:
+five arcade racks, 25 shots, two-point money balls, 30 possible points, local
+unranked replay and reopenable rules. Daily saves and original ten-shot modes
+hold. Four focused cases, 11 existing practice cases, effective regression
+controls and a full 25-shot production phone play-through pass. The phone run
+made 14 shots for 17 points, including three money balls, without errors,
+broken assets or completion posts. Sources held and browser/server stopped.
+Real app types, build, 15 artifact harnesses and snapshot boot also pass.
+Only Buzzer Beater's saved-page fingerprint changed; 169 others remain held.
+Exact receipts and ownership are on WORKBOARD.
+
+831's final route-local fix keeps all 10 measured clue/hint/result actions
+from shifting the document at 320px normal and 1440px reduced motion.
+836 corrects unsupported public feature promises and explains real records
+versus generated simulation data. 837 holds the Stat Line manual ad until its
+game is usable. These fixes and their saved pages have passed production gates.
+
+AdSense remains unresolved. The account still shows the September 25 Low value
+content decision. Search Console refresh was blocked by the browser URL safety
+check, so 68 indexed and 94 excluded remain September 20 observations. No
+Google submission was made. Claude owns the remaining era-copy correction and
+full rendered audit. See audits/ADSENSE-QUALITY-2026-10-01.md. A Git push does
+not establish publication to douknowball.com or Google approval.
 
 Codex837 is implemented with12 focused outcomes and three effective copied
 regression checks. NBA Stat Line no longer requests a manual ad during loading
