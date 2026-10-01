@@ -16,7 +16,8 @@
  * desk), imported and driven unchanged. What is new here is only the frame:
  *
  *   1. THE BRIEF. The needs are the weakest places in the engine's own XI for
- *      the club, each with the rating that would be an upgrade. The approaches
+ *      the club that at least two men on the market could fill, each with the
+ *      rating that would be an upgrade. The approaches
  *      are real players from the engine's market who can play that slot and
  *      clear that rating, and the budget is read off what they cost.
  *   2. THE CLOCK. Opening talks is a phone call and costs nothing. A bid, an
@@ -249,8 +250,8 @@ function rivalPool(state: CareerState): string[] {
     .filter(n => n !== state.clubName);
 }
 
-/** The weakest places in the engine's XI, one per slot label, three or four of them. */
-function readNeeds(state: CareerState, count: number): DeadlineNeed[] {
+/** The places in the engine's XI, weakest first, one per slot label. The day takes the first three or four the market can fill. */
+function readNeeds(state: CareerState): DeadlineNeed[] {
   const formation = CM_FORMATIONS[state.formationIndex] ?? CM_FORMATIONS[0];
   const xi = resolveXI(state);
   const rated = xi.map(p => p?.rating).filter((r): r is number => typeof r === 'number');
@@ -263,7 +264,6 @@ function readNeeds(state: CareerState, count: number): DeadlineNeed[] {
   const out: DeadlineNeed[] = [];
   const seen = new Set<string>();
   for (const s of slots) {
-    if (out.length >= count) break;
     if (seen.has(s.slot.label)) continue;
     seen.add(s.slot.label);
     out.push({
@@ -317,17 +317,25 @@ export function startDeadlineDay(setup: DeadlineSetup): DeadlineRun {
   return onStaticWorld(() => {
     const state0 = withSeed(mixSeed(setup.seed, SEED_START), () => startCareer(setup.club));
     const rng = mulberry32(mixSeed(setup.seed, SEED_BRIEF));
-    const needs = readNeeds(state0, rng() < 0.5 ? 3 : 4);
+    const count = rng() < 0.5 ? 3 : 4;
     const market = buildMarket(state0);
     const taken = new Set<string>();
     const targets: DeadlineTarget[] = [];
+    const needs: DeadlineNeed[] = [];
     let kitty = 0;
-    needs.forEach((need, ni) => {
+    /* Weakest place first. A place nobody on the market clears is not a need
+       anybody could fill today (a top side's keeper, say), so the board look
+       at the next one rather than send you after nobody. */
+    for (const need of readNeeds(state0)) {
+      if (needs.length >= count) break;
       const picks = readCandidates(state0, need, market, taken, rng);
+      if (picks.length < 2) continue;
+      const ni = needs.length;
+      needs.push(need);
       picks.forEach(mp => taken.add(mp.name));
-      if (picks.length) kitty += Math.min(...picks.map(stickerOf));
+      kitty += Math.min(...picks.map(stickerOf));
       for (const mp of picks) targets.push({ mp, need: ni, status: 'idle', neg: null, rival: null, hours: 0, note: '' });
-    });
+    }
     /* Order the queue by need, then by price, so the screen reads cheap to dear. */
     targets.sort((a, b) => a.need - b.need || (a.mp.value ?? a.mp.price) - (b.mp.value ?? b.mp.price));
     const startBudget = Math.max(1, Math.round(kitty * BUDGET_SHARE * 2) / 2);
