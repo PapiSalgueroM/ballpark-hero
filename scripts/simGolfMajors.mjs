@@ -32,15 +32,21 @@
  *       different ORGANISATIONS (usga.org and usopen.com are the USGA, theopen.com,
  *       randa.org and aigwomensopen.com are The R&A, pga.com and pgachampionship.com
  *       are the PGA of America, and every regional subdomain of one site is that
- *       site), at least one on an official host for that championship per the
- *       record's own officialHosts map, none on Wikipedia or a copy of it, and a
- *       printed value for each. The check date and the read date are real
- *       calendar dates that have happened. A verified row's value equals what
- *       was stored; a corrected row's differs and says why; a dropped row's
- *       stored value is exactly the single dash (U+2014), its value is null and
- *       it says why. Ids are unique, every tournament has an official host list,
- *       the counts block agrees with the rows, and no year plus tournament appears
- *       twice in the end state. Each filled 2026 row carries its champion, venue
+ *       site), the FIRST on an official host for that championship per the
+ *       record's own officialHosts map (the championship's own list, then the
+ *       second organisation), none on Wikipedia or a copy of it, and a printed
+ *       value for each. The check date and the read date are real calendar dates
+ *       that have happened. A verified row's value equals what was stored; a
+ *       corrected row's differs and says why; a dropped row's stored value is
+ *       exactly the single dash (U+2014), its value is null and it says why.
+ *       Every surviving name is a name: not the dash, no footnote mark (dagger,
+ *       double dagger, asterisk), no whitespace at an edge or doubled inside, and
+ *       no two spellings in the end state collapse to one golfer once accents,
+ *       case and punctuation are dropped. That is the generic form of the Bobby
+ *       Jones split, written so the next mark fails without anyone naming it.
+ *       Ids are unique, every tournament has an official host list, the counts
+ *       block agrees with the rows, and no year plus tournament appears twice in
+ *       the end state. Each filled 2026 row carries its champion, venue
  *       and nationality sources (two organisations each, the champion and venue
  *       ones with an official host) and names, in copiedFrom, the live row its
  *       score and venue strings were copied from: that row must be in the record
@@ -66,9 +72,12 @@
  *       a row whose player is not the dash would delete nothing there and the
  *       count would be off, exactly as Postgres would leave it.
  *    4. The consumer. src/data/golfLegends.ts (read with comments stripped) ships
- *       a majors count and a first and last win year for every legend; each must
- *       equal what the record's end state gives that golfer over the four men's
- *       majors. That is the check that would have caught Bobby Jones at 5.
+ *       a majors count, a first and last win year and the list of which majors
+ *       each legend won; each must equal what the record's end state gives that
+ *       golfer over the four men's majors. The list is read through the file's
+ *       own short constants (const M = 'Masters' and so on), so a renamed label
+ *       fails as unmappable rather than passing as nothing. That is the check
+ *       that would have caught Bobby Jones at 5.
  *
  * Nothing here touches the network. The live table was read once, through the
  * public REST endpoint, when the record was written; the record carries the
@@ -81,19 +90,33 @@
  * one of them in each, and no other section gained or lost a failure. Under a
  * control the harness exits 1 when the break was caught that way and 2 when it
  * was not (the control proves nothing).
- *   hash        one verified row's stored and verified value both change,
- *               so the record drifts from both hashes, and the replay no
- *               longer lands where the SQL's end guard expects            sections 2, 3
- *   onesource   one row loses its second source                           section 1
- *   sameorg     one U.S. Open row's ESPN source becomes usopen.com, the
- *               USGA twice                                                section 1
- *   futuredate  the check date moves to 2099                              section 1
- *   copied      the Open's filled venue loses the space the table carries,
- *               in the record only: copiedFrom disagrees, and the INSERT
- *               no longer matches the record                              sections 1, 3
- *   deleteid    the SQL's DELETE loses id 10                              section 3
- *   insert      the SQL's INSERT venue loses that space                   section 3
- *   legend      golfLegends puts Bobby Jones back to 5 majors             section 4
+ *   hash          one verified row's stored and verified value both change,
+ *                 so the record drifts from both hashes, and the replay no
+ *                 longer lands where the SQL's end guard expects          sections 2, 3
+ *   dashkept      one dropped row is kept as a verified champion whose
+ *                 name is the dash: the counts, the end hash and the
+ *                 DELETE all disagree with the record                     sections 1, 2, 3
+ *   dagger        one corrected Bobby Jones row keeps its footnote mark
+ *                 as a verified name, the split put back: two spellings
+ *                 of one golfer, and the UPDATE names a row the record
+ *                 no longer corrects                                      sections 1, 2, 3
+ *   sqlhash       the SQL's end guard constant drifts by one hex digit,
+ *                 so the record and the file no longer agree and the
+ *                 replay would roll itself back                           sections 2, 3
+ *   onesource     one row loses its second source                         section 1
+ *   threesource   one row gains a third source                            section 1
+ *   sameorg       one U.S. Open row's ESPN source becomes usopen.com, the
+ *                 USGA twice                                              section 1
+ *   firstofficial one row's two sources swap, ESPN first                  section 1
+ *   futuredate    the check date moves to 2099                            section 1
+ *   copied        the Open's filled venue loses the space the table
+ *                 carries, in the record only: copiedFrom disagrees, and
+ *                 the INSERT no longer matches the record                 sections 1, 3
+ *   deleteid      the SQL's DELETE loses id 10                            section 3
+ *   insert        the SQL's INSERT venue loses that space                 section 3
+ *   legend        golfLegends puts Bobby Jones back to 5 majors           section 4
+ *   tournaments   golfLegends lists the Masters among Bobby Jones's wins  section 4
+ * An unknown control name exits 2 with the list above.
  *
  * Run: node scripts/simGolfMajors.mjs
  */
@@ -107,7 +130,11 @@ const RECORD = 'scripts/data/golfMajorsVerified2026-09.json';
 const MIGRATION = 'supabase/migrations/20260930_round_733_golf_majors.sql';
 const LEGENDS = 'src/data/golfLegends.ts';
 const CONTROL = process.env.SIM_GOLF_MAJORS_CONTROL || '';
-const EXPECT = { hash: [2, 3], onesource: [1], sameorg: [1], futuredate: [1], copied: [1, 3], deleteid: [3], insert: [3], legend: [4] };
+const EXPECT = {
+  hash: [2, 3], dashkept: [1, 2, 3], dagger: [1, 2, 3], sqlhash: [2, 3],
+  onesource: [1], threesource: [1], sameorg: [1], firstofficial: [1], futuredate: [1], copied: [1, 3],
+  deleteid: [3], insert: [3], legend: [4], tournaments: [4],
+};
 if (CONTROL && !(CONTROL in EXPECT)) {
   console.error(`SIM_GOLF_MAJORS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
   process.exit(2);
@@ -212,7 +239,7 @@ function runFence(record, sqlText, legendsText, quiet) {
   const official = record.officialHosts ?? {};
 
   const checkSources = (where, list, { needOfficial, tournament }) => {
-    if (!Array.isArray(list) || list.length < 2) return fail('sources', `${where}: ${Array.isArray(list) ? list.length : 'no'} source(s), two are required`);
+    if (!Array.isArray(list) || list.length !== 2) return fail('sources', `${where}: ${Array.isArray(list) ? list.length : 'no'} source(s), exactly two are required (the championship's own list first, then the second organisation)`);
     const hosts = list.map(hostOf);
     if (hosts.some(h => !h)) return fail('sources', `${where}: a source is not a URL (${snip(list)})`);
     const wiki = hosts.find(isWikiCopy);
@@ -222,8 +249,24 @@ function runFence(record, sqlText, legendsText, quiet) {
     if (needOfficial) {
       const hostsFor = official[tournament];
       if (!Array.isArray(hostsFor) || !hostsFor.length) return fail('official', `${where}: the record lists no official host for ${tournament}`);
-      if (!hosts.some(h => onHost(h, hostsFor))) return fail('official', `${where}: no source on an official host for ${tournament} (${hostsFor.join(', ')}); got ${hosts.join(', ')}`);
+      if (!onHost(hosts[0], hostsFor)) return fail('official', `${where}: the first source must be on an official host for ${tournament} (${hostsFor.join(', ')}); got ${hosts[0]} first, ${hosts[1]} second`);
     }
+    return undefined;
+  };
+  /* The generic form of the Bobby Jones split: a surviving name must be a name.
+     No placeholder dash, no footnote mark (dagger, double dagger, asterisk), no
+     whitespace at either edge or doubled inside, and no two spellings in the end
+     state that collapse to one golfer once accents, case and punctuation are
+     dropped. The dagger rows passed every per row check in the table for weeks;
+     only a rule about what a name may contain finds the next mark. */
+  /* Built from code points so this file carries no literal dash itself:
+     dagger, double dagger, asterisk, en dash, em dash. */
+  const MARKS = new RegExp(`[${String.fromCodePoint(0x2020, 0x2021, 0x2a, 0x2013, 0x2014)}]`);
+  const checkName = (where, name) => {
+    if (typeof name !== 'string' || !name.trim()) return fail('name', `${where}: the surviving name is empty`);
+    if (name === DASH) return fail('name', `${where}: the surviving name is the placeholder dash, so a year not played would count as a golfer`);
+    if (MARKS.test(name)) return fail('name', `${where}: ${JSON.stringify(name)} carries a footnote mark or a dash, which is not part of a name and splits one golfer in two`);
+    if (name !== name.trim() || /\s{2,}/.test(name)) return fail('name', `${where}: ${JSON.stringify(name)} has whitespace at an edge or doubled inside`);
     return undefined;
   };
 
@@ -257,7 +300,7 @@ function runFence(record, sqlText, legendsText, quiet) {
         if (r.value !== null) fail('status', `${where}: dropped, yet value is ${snip(r.value)}, not null`);
         if (r.stored !== DASH) fail('status', `${where}: dropped, yet stored ${JSON.stringify(r.stored)} is not the single dash placeholder (U+2014)`);
         if (r.reason !== 'notPlayed' || typeof r.why !== 'string' || !r.why.trim()) fail('status', `${where}: dropped without reason notPlayed and a why`);
-      }
+      } else checkName(where, r.value);
       checkSources(where, r.src, { needOfficial: true, tournament: r.tournament });
       if (!Array.isArray(r.printed) || r.printed.length !== (r.src?.length ?? 0) || r.printed.some(p => typeof p !== 'string' || !p.trim())) fail('printed', `${where}: printed must hold one non empty value per source`);
     }
@@ -280,6 +323,7 @@ function runFence(record, sqlText, legendsText, quiet) {
       for (const k of ['year', 'tournament', 'tour', 'rank', 'player_name', 'nationality', 'score', 'venue']) {
         if (f[k] === undefined || f[k] === null || f[k] === '') fail('shape', `${where}: no ${k}`);
       }
+      checkName(where, f.player_name);
       const k = `${f.year}|${f.tournament}`;
       if (seen.has(k)) fail('duplicate', `${where}: the record already holds this year and championship (id ${seen.get(k)}), so it is not a gap`);
       seen.set(k, `filled[${i}]`);
@@ -304,7 +348,17 @@ function runFence(record, sqlText, legendsText, quiet) {
       else if (cf.readOn > TODAY) fail('date', `${where}: copiedFrom.readOn ${cf.readOn} is in the future`);
       if (typeof cf.through !== 'string' || !/rest\/v1\/golf_majors/.test(cf.through)) fail('copied', `${where}: copiedFrom.through does not name the REST read it came from`);
     });
-    say(`  ${rows.length} rows: ${byStatus.verified} verified, ${byStatus.corrected} corrected, ${byStatus.dropped} dropped; ${filled.length} filled; end state ${want.endState}`);
+    /* Two spellings of one golfer in the end state is the split itself, whatever
+       character caused it. */
+    const spellings = new Map();
+    for (const n of [...rows.filter(x => x.status !== 'dropped').map(x => x.value), ...filled.map(f => f.player_name)]) {
+      if (typeof n !== 'string') continue;
+      const k = nameKey(n);
+      if (!spellings.has(k)) spellings.set(k, new Set());
+      spellings.get(k).add(n);
+    }
+    for (const [k, set] of spellings) if (set.size > 1) fail('name', `the end state spells one golfer ${set.size} ways: ${[...set].map(s => JSON.stringify(s)).join(', ')} (key ${JSON.stringify(k)})`);
+    say(`  ${rows.length} rows: ${byStatus.verified} verified, ${byStatus.corrected} corrected, ${byStatus.dropped} dropped; ${filled.length} filled; end state ${want.endState}; ${spellings.size} golfers, one spelling each`);
   }
 
   /* The read state and the end state, as rows of the table. */
@@ -404,12 +458,18 @@ function runFence(record, sqlText, legendsText, quiet) {
     say(`  ${mig.deletes.reduce((n, d) => n + d.ids.length, 0)} deleted, ${[...updatedIds].length} updated, ${inserted.length} inserted; replay lands on ${table.length} rows hashing ${replayHash}`);
   }
 
-  head(4, 'the consumer: every legend in src/data/golfLegends.ts has the majors count and the first and last win the end state gives that golfer');
+  head(4, 'the consumer: every legend in src/data/golfLegends.ts has the majors count, the first and last win and the list of majors won that the end state gives that golfer');
   {
     const code = stripTsComments(legendsText);
-    const legends = [...code.matchAll(/\{\s*name:\s*'((?:[^'\\]|\\.)+)',\s*majors:\s*(\d+),\s*firstWin:\s*(\d+),\s*lastWin:\s*(\d+)/g)]
-      .map(m => ({ name: m[1].replace(/\\'/g, "'"), majors: Number(m[2]), firstWin: Number(m[3]), lastWin: Number(m[4]) }));
-    if (legends.length < 20) fail('legends', `parsed ${legends.length} legend(s) from ${LEGENDS}, so the shape has changed and nothing here measures anything`);
+    /* The file names the four majors through short constants (const M = 'Masters')
+       and lists them per legend as tournaments: [M, P, O, U]. Read the constants
+       from the code, then map each label to the table's tournament name. */
+    const consts = new Map([...code.matchAll(/\bconst\s+([A-Za-z_]\w*)\s*=\s*'((?:[^'\\]|\\.)*)'\s*;/g)].map(m => [m[1], m[2]]));
+    const TABLE_NAME = { 'Masters': 'Masters Tournament', 'PGA Championship': 'PGA Championship', 'The Open': 'The Open Championship', 'U.S. Open': 'U.S. Open (golf)' };
+    const entries = (code.match(/\{\s*name:\s*'/g) || []).length;
+    const legends = [...code.matchAll(/\{\s*name:\s*'((?:[^'\\]|\\.)+)',\s*majors:\s*(\d+),\s*firstWin:\s*(\d+),\s*lastWin:\s*(\d+),\s*nationality:\s*'(?:[^'\\]|\\.)*',\s*tournaments:\s*\[([^\]]*)\]/g)]
+      .map(m => ({ name: m[1].replace(/\\'/g, "'"), majors: Number(m[2]), firstWin: Number(m[3]), lastWin: Number(m[4]), tournaments: m[5].split(',').map(s => s.trim()).filter(Boolean) }));
+    if (legends.length < 20 || legends.length !== entries) fail('legends', `parsed ${legends.length} legend(s) from ${entries} entries in ${LEGENDS}, so the shape has changed and nothing here measures anything`);
     const men = endState.filter(r => !/women/i.test(r.tournament));
     const byName = new Map();
     for (const r of men) { const k = nameKey(r.player_name); if (!byName.has(k)) byName.set(k, []); byName.get(k).push(r); }
@@ -421,8 +481,14 @@ function runFence(record, sqlText, legendsText, quiet) {
       if (got.length !== l.majors) fail('legend', `${l.name}: the file ships ${l.majors} majors, the end state holds ${got.length} (${got.map(r => `${r.year} ${r.tournament}`).join('; ')})`);
       if (first !== l.firstWin) fail('legend', `${l.name}: the file ships firstWin ${l.firstWin}, the end state's first is ${first}`);
       if (last !== l.lastWin) fail('legend', `${l.name}: the file ships lastWin ${l.lastWin}, the end state's last is ${last}`);
+      const listed = l.tournaments.map(t => { const label = consts.get(t); return label === undefined ? `?${t}` : (TABLE_NAME[label] ?? `?${label}`); });
+      const unknown = listed.filter(t => t.startsWith('?'));
+      if (unknown.length) { fail('legend', `${l.name}: tournaments lists ${unknown.join(', ')}, which this harness cannot map to a table tournament`); continue; }
+      const won = [...new Set(got.map(r => r.tournament))].sort();
+      const listedSorted = [...new Set(listed)].sort();
+      if (won.join('|') !== listedSorted.join('|')) fail('legend', `${l.name}: the file lists ${listedSorted.join(', ')}, the end state has him winning ${won.join(', ')}`);
     }
-    say(`  ${legends.length} legends checked against ${men.length} men's rows`);
+    say(`  ${legends.length} legends checked against ${men.length} men's rows (majors, first and last win, which majors)`);
   }
 
   return failures;
@@ -446,10 +512,50 @@ function applyControl(name, record, sql, legends) {
     if (JSON.stringify(r) === before) refuse('hash changed nothing');
     return { rec, sql, legends };
   }
+  if (name === 'dashkept') {
+    /* A dropped row kept as a golfer: the record now says the dash is a verified
+       champion, so the counts, the end hash and the DELETE all disagree with it. */
+    const r = rec.rows.find(x => x.status === 'dropped' && x.stored === DASH);
+    if (!r) refuse('no dropped dash row to keep');
+    r.status = 'verified'; r.value = r.stored; delete r.reason; delete r.why;
+    return { rec, sql, legends };
+  }
+  if (name === 'dagger') {
+    /* The Bobby Jones split put back: one corrected row keeps its footnote mark
+       as a verified name, so the end state spells him two ways. */
+    const r = rec.rows.find(x => x.status === 'corrected' && /Bobby Jones/.test(x.stored));
+    if (!r) refuse('no corrected Bobby Jones row');
+    if (r.stored === r.value) refuse('the corrected row stores what it verifies, nothing to keep');
+    r.status = 'verified'; r.value = r.stored; delete r.why;
+    return { rec, sql, legends };
+  }
+  if (name === 'sqlhash') {
+    /* The SQL's end guard drifts from the record by one hex digit: the file would
+       roll itself back, and the record no longer describes where it lands. */
+    const endHash = rec.end?.hash;
+    if (typeof endHash !== 'string' || endHash.length !== 32) refuse('record.end.hash is not a 32 digit hash');
+    const flipped = endHash.slice(0, 31) + (endHash[31] === '0' ? '1' : '0');
+    return { rec, sql: rewrite(sql, `<> '${endHash}'`, `<> '${flipped}'`, 'sqlhash'), legends };
+  }
   if (name === 'onesource') {
     const r = rec.rows.find(x => x.status === 'verified' && Array.isArray(x.src) && x.src.length === 2);
     if (!r) refuse('no two source row');
     r.src = r.src.slice(0, 1); r.printed = r.printed.slice(0, 1);
+    return { rec, sql, legends };
+  }
+  if (name === 'threesource') {
+    /* A third organisation added: the record's shape is two sources, the
+       championship's own list then one other, and a third hides which is which. */
+    const r = rec.rows.find(x => x.status === 'verified' && Array.isArray(x.src) && x.src.length === 2);
+    if (!r) refuse('no two source row');
+    r.src = [...r.src, 'https://www.pgatour.com/tournaments/majors']; r.printed = [...r.printed, r.printed[0]];
+    return { rec, sql, legends };
+  }
+  if (name === 'firstofficial') {
+    /* The two sources swapped, so the championship's own list is second. */
+    const r = rec.rows.find(x => x.status === 'verified' && Array.isArray(x.src) && x.src.length === 2);
+    if (!r) refuse('no two source row');
+    r.src = [r.src[1], r.src[0]]; r.printed = [r.printed[1], r.printed[0]];
     return { rec, sql, legends };
   }
   if (name === 'sameorg') {
@@ -475,6 +581,9 @@ function applyControl(name, record, sql, legends) {
      tuple and not in the header comment, which the parser strips. */
   if (name === 'insert') return { rec, sql: rewrite(sql, "'Royal Birkdale', 'Southport , England')", "'Royal Birkdale', 'Southport, England')", 'insert'), legends };
   if (name === 'legend') return { rec, sql, legends: rewrite(legends, "name: 'Bobby Jones', majors: 7", "name: 'Bobby Jones', majors: 5", 'legend') };
+  /* Bobby Jones never won the Masters (it began in 1934, after he retired), so
+     listing it is a wrong fact the count and the years cannot see. */
+  if (name === 'tournaments') return { rec, sql, legends: rewrite(legends, "name: 'Bobby Jones', majors: 7, firstWin: 1923, lastWin: 1930, nationality: 'United States', tournaments: [O, U] }", "name: 'Bobby Jones', majors: 7, firstWin: 1923, lastWin: 1930, nationality: 'United States', tournaments: [M, O, U] }", 'tournaments') };
   return refuse('unknown control');
 }
 
