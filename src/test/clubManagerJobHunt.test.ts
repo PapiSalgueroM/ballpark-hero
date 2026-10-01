@@ -210,7 +210,7 @@ describe('the words', () => {
     expect(roll).toContain('somebody they already knew');
     for (const line of [up, happy, thin, form, roll, acceptLine('Other Club', 'My Club'), leavingLine('A', 'B', 'now', 'Someone'), leavingLine('A', 'B', 'summer', '')]) {
       expect(line).not.toMatch(/["“”]/);
-      expect(line).not.toMatch(/[–—]/);
+      expect([...line].some(c => c === String.fromCharCode(0x2013) || c === String.fromCharCode(0x2014))).toBe(false);
     }
   });
 });

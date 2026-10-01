@@ -10,18 +10,23 @@
    What this harness holds, measured by outcome through the real engine:
 
      1) the answer is the manager's to earn. Bases are real careers played to
-        about week ten at clubs spread across the pyramid. Each base sends ten
-        applications, each from a copy carrying a different career record
-        (seasons managed, trophies, title finishes, the fields the engine
-        itself writes and the market reads), to targets spread across tier
-        gaps, and plays on until the club answers. Acceptance must RISE with
-        the manager's standing (Pearson r over the applications, floor) and
-        FALL with the number of tiers he is applying up (Pearson r, ceiling,
-        negative). Every answer must land on exactly the match day the
-        application fixed when it went out, inside two to five (hard), the
-        inbox must carry the answer from the club's board with no quoted
-        speech (hard), and neither answer may be the only one that ever
-        happens (band).
+        about week ten at clubs spread across the pyramid. Each base sends
+        twenty applications, each from a copy carrying a different career
+        record (seasons managed, trophies, title finishes, the fields the
+        engine itself writes and the market reads), to targets spread across
+        tier gaps, and plays on until the club answers. Acceptance must RISE
+        with the manager's standing (Pearson r over the applications, floor).
+        It must FALL with the gap in stature, measured PAIRED: the same
+        manager with the same record, the same roll and the same wait writes
+        once to a club at his own tier and once to a club above it, ten
+        records per base, and the gap in yeses between the two arms has a
+        floor. (Over the mixed applications the tier r is real but thin,
+        -0.19 to -0.38 over nineteen runs, because the standing spread swamps
+        it; a ceiling on it was a coin toss, so it is only reported.)
+        Every answer must land on exactly the match day the application fixed
+        when it went out, inside two to five (hard), the inbox must carry the
+        answer from the club's board with no quoted speech (hard), and neither
+        answer may be the only one that ever happens (band).
      2) the limits hold (hard). One open application at a time; a no shuts
         that club's door for the rest of this season and the whole of next
         and opens it the season after; three applications a season and the
@@ -53,17 +58,28 @@
    the bundled engine itself reads the rewrite:
      CM_APPLICATIONS_CONTROL=deaf        STANDING_WEIGHT goes to zero, the club
        stops reading the manager's standing. Section 1's standing r must go red.
+     CM_APPLICATIONS_CONTROL=tierblind   TIER_UP_WEIGHT and TIER_DOWN_WEIGHT go
+       to zero, the club stops reading the gap in stature. Section 1's paired
+       tier gap must go red.
      CM_APPLICATIONS_CONTROL=twice       consumeSummerMove stops clearing the
        booked move at the rollover. Section 3 must go red.
      CM_APPLICATIONS_CONTROL=nocooldown  applyRefusal stops reading cooldowns.
        Section 2 must go red.
 
-   Thresholds, from this harness on its own seed and on SIM_SEED=1, 2, 3
-   (2026-10-01, 24 bases, 240 applications a run):
-     acceptance vs standing, r        fixed 0.408 to 0.478   deaf -0.009 to 0.084   floor 0.25
-     acceptance vs tiers up, r        fixed -0.483 to -0.389                        ceiling -0.20
-     accepted share, percent          fixed 37.9 to 42.1                            band 12 to 75
-     answers inside 2 to 5 matches    fixed 240 of 240                              hard
+   Thresholds, measured 2026-10-01 (24 bases, 480 applications and about 220
+   pairs a run) on this harness's own seed and SIM_SEED=1 to 7 for the fixed
+   engine, and on its own seed and SIM_SEED=1, 2, 3 for each control:
+     acceptance vs standing, r     fixed 0.398 to 0.509   deaf -0.056 to 0.050       floor 0.25
+     paired tier gap, points       fixed 18.2 to 28.1     tierblind -1.8 to 3.7      floor 10
+     accepted share, percent       fixed 63.3 to 67.9     deaf 36.7 to 41.3          band 12 to 75
+     pairs answered                fixed 217 to 220                                  floor 100
+     answers inside 2 to 5 matches fixed every one of 479 or 480 answered            hard
+     twice: 8 failures, section 3, all four probes. nocooldown: 3 failures,
+     section 2. Each control's own section goes red and nothing else does.
+   (The r vs tiers up that is now only reported read -0.192 to -0.307 over
+   the same eight seeds, and -0.219 to -0.383 over eleven seeds at ten
+   applications a base: nineteen runs, -0.192 the one that broke the old
+   ceiling of -0.20.)
 
    Run: node scripts/simCmApplications.mjs
 */
@@ -319,7 +335,7 @@ console.log(`   ${rows.length} answered (${sackedWaiting} sacked while waiting):
 }
 
 /* The tier gap, paired. Over the mixed rows above the tier signal is real but
-   thin (r between -0.19 and -0.38 over fourteen seeds, the standing spread
+   thin (r between -0.19 and -0.38 over nineteen runs, the standing spread
    swamps it), so the gate is a paired measurement instead: the same manager,
    the same record, the same roll and the same wait, writing once to a club at
    his own tier and once to a club above it. The only thing that differs
