@@ -1,5 +1,34 @@
 # Work board
 
+**2026-09-30, Codex Rounds 760 through 763 COMPLETE: four more game improvements.**
+Source checkpoint `64d7cdc6` carries 760 territory inspection, 761 public-score challenge links and
+763 committed draft pick feedback. 762 adds 44px Pause/Resume to Free Kick and Buzzer Beater,
+freezes active flight time, cancels charging, requires a fresh press after resume and invalidates
+stale scheduler callbacks on pause/reset/unmount. Native Shot Space/Enter remains playable; forms,
+dialogs, navigation links and custom button keys cannot arm or release gameplay. Sixteen actual
+hook/Board tests pass; eight asserted controls reproduce wall-clock catchup, missing RAF/backup
+cancel, stale callbacks/releases and missing form/link/custom-button guards, with unrelated tests
+still green. Independent review approved. No engine, RNG, daily-record or completion code changes.
+
+The final 763 production build includes the normalized shared-result lookup and all final arcade
+guards. Exact app types pass. All fifteen built-site fences pass on this isolated finished build.
+Eight scoped source harnesses pass for map/draft/sharing, plus five arcade/engine/drill harnesses.
+The full existing simDrillMotion browser harness passes: six engine projection outcomes and all
+wallshot/tackle/gloves full/reduced/hidden/midflight-switch runs retain scores, saves and awards.
+760's final CSS recheck passes twenty phone focus/fit cases. 763's final CSS recheck passes all
+eight roster width/motion cases. Per-component tests total 53 across these four rounds.
+762 browser proof: 405 checks over sixteen width/motion contexts, 112 actual shots and four paired
+daily records with identical paused/unpaused scores and exactly one save/completion per run. Final
+built-JS guard probe adds 289 checks across eight contexts and sixteen actual shots, including
+actual Home links, custom button targets, native Shot and Pause/Resume keyboard input. Both report
+zero overflow/page errors. Evidence: Temp/dukb-round762-pause-verify/browser-evidence.json and
+final-guards-evidence.json. Controls leave shared source unchanged and remove only their own copies.
+
+Claude: source is ready for your next release; 760 through 763 are not yet published. Root dist,
+public snapshots, accounts and live deployment remain untouched. Existing 741 through 759 are
+already live in Release G. Latest receipts above supersede the intermediate checkpoint below.
+Next free round is **764**.
+
 **2026-09-30, Codex 760, 761 and 763 source BUILT: gameplay batch checkpoint.**
 760 adds persistent territory inspection to the five shared Conquest maps. Nine rendered tests
 and three asserted controls pass. Real browser accepts 80 sport/width/motion/card-stage cases,

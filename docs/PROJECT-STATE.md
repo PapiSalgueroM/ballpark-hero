@@ -1,5 +1,22 @@
 # Project state
 
+## BUILT 2026-09-30: Codex rounds 760 through 763 complete, ready for Claude's next publish
+
+760: persistent territory inspection across all five Conquest maps. 761: public-score challenge
+URLs and dismissible receiving results. 762: active-time pause/resume in Free Kick and Buzzer
+Beater, with safe charging and keyboard routing. 763: finite committed Fantasy Draft pick feedback.
+These add game functionality and motion without new sports data, engine outcomes or account writes.
+
+Final isolated production build and exact app type gate pass. All fifteen built-site fences pass;
+thirteen scoped source harnesses plus the full existing simDrillMotion browser harness pass.
+Fifty-three rendered tests and all nineteen asserted controls pass for the four rounds. Browser
+receipts cover eighty five-sport map cases plus twenty final CSS checks, eight sharing cases,
+eight draft cases, sixteen full arcade contexts and eight final input-guard contexts. Paired daily
+runs preserve identical scores with exactly one save/completion. Full evidence/fixture limits are
+on WORKBOARD. Broader suite and release publishing stay with Claude. Source-only 760 through 763
+are queued for the next publish; 741 through 759 are already live in Release G. No root dist/public
+or personal browser interaction. Next unclaimed number: 764.
+
 ## BUILT 2026-09-30: Codex gameplay rounds 760, 761 and 763, final 762 acceptance underway
 
 The six earlier Codex rounds 754 through 759 are now live in Release G. Root independently checked

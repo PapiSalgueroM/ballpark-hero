@@ -51,7 +51,7 @@ export default function FreeKickBoard() {
   const [score, setScore] = useState(restored?.score ?? 0);
   const [goals, setGoals] = useState(restored?.count ?? 0);
   const [result, setResult] = useState<ShotResult | null>(null);
-  const { progress: flight, launch, reset: resetFlight } = useArcadeFlight(FLIGHT_MS);
+  const { progress: flight, paused, launch, reset: resetFlight, pause, resume } = useArcadeFlight(FLIGHT_MS);
 
   /* Aim, power and curve: the three things the player actually controls. */
   const [aimX, setAimX] = useState(0);
@@ -59,6 +59,7 @@ export default function FreeKickBoard() {
   const [curve, setCurve] = useState(0);
   const [power, setPower] = useState(0.6);
   const [charging, setCharging] = useState(false);
+  const chargingRef = useRef(false);
 
   const rngRef = useRef<() => number>(lehmer(1));
   const savedRef = useRef(restored !== null);
@@ -71,9 +72,10 @@ export default function FreeKickBoard() {
   /* The power meter sweeps while the player holds, which is the timing part of
      the input: it is not a slider you set, it is a bar you stop. */
   useEffect(() => {
-    if (!charging) return;
+    if (!charging || paused) return;
     let raised = true;
     const id = window.setInterval(() => {
+      if (!chargingRef.current) return;
       setPower(p => {
         if (raised && p >= 0.99) raised = false;
         if (!raised && p <= 0.26) raised = true;
@@ -81,9 +83,11 @@ export default function FreeKickBoard() {
       });
     }, 16);
     return () => window.clearInterval(id);
-  }, [charging]);
+  }, [charging, paused]);
 
   const start = useCallback((m: Mode) => {
+    chargingRef.current = false;
+    setCharging(false);
     if (m === 'daily' && restored) {
       markRestoredFinish(SLUG);
       setMode('daily');
@@ -108,7 +112,8 @@ export default function FreeKickBoard() {
   }, [restored, todayStr, resetFlight]);
 
   const strike = useCallback(() => {
-    if (phase !== 'aiming' || !setup) return;
+    if (paused || phase !== 'aiming' || !setup) return;
+    chargingRef.current = false;
     setCharging(false);
     const r = takeShot({ x: aimX, y: aimY, power, curve }, setup, rngRef.current);
     setResult(r);
@@ -122,7 +127,29 @@ export default function FreeKickBoard() {
       if (r.scored) setGoals(g => g + 1);
       setPhase('kickEnd');
     });
-  }, [phase, setup, aimX, aimY, power, curve, launch]);
+  }, [paused, phase, setup, aimX, aimY, power, curve, launch]);
+
+  const beginCharge = useCallback(() => {
+    if (paused || phase !== 'aiming' || document.querySelector('[role="dialog"]')) return;
+    chargingRef.current = true;
+    setCharging(true);
+  }, [paused, phase]);
+
+  const endCharge = useCallback(() => {
+    if (!chargingRef.current) return;
+    chargingRef.current = false;
+    setCharging(false);
+    if (!paused && !document.querySelector('[role="dialog"]')) strike();
+  }, [paused, strike]);
+
+  const togglePause = () => {
+    if (paused) resume();
+    else {
+      chargingRef.current = false;
+      setCharging(false);
+      pause();
+    }
+  };
 
   const nextKick = useCallback(() => {
     resetFlight();
@@ -145,21 +172,29 @@ export default function FreeKickBoard() {
      not an accessibility afterthought. Arrows aim, Q and E bend it, space
      charges and releases. */
   useEffect(() => {
-    if (phase !== 'aiming') return;
+    if (paused || phase !== 'aiming') return;
+    const isInteractive = (e: KeyboardEvent) => document.querySelector('[role="dialog"]') ||
+      (e.target instanceof Element && e.target.closest('button, a[href], [role="button"], input, textarea, select, [contenteditable="true"]'));
     const down = (e: KeyboardEvent) => {
+      if (isInteractive(e)) return;
       if (e.key === 'ArrowLeft') { setAimX(x => Math.max(-1.15, x - 0.06)); e.preventDefault(); }
       else if (e.key === 'ArrowRight') { setAimX(x => Math.min(1.15, x + 0.06)); e.preventDefault(); }
       else if (e.key === 'ArrowUp') { setAimY(y => Math.min(1.1, y + 0.05)); e.preventDefault(); }
       else if (e.key === 'ArrowDown') { setAimY(y => Math.max(0, y - 0.05)); e.preventDefault(); }
       else if (e.key === 'q' || e.key === 'Q') setCurve(c => Math.max(-1, c - 0.12));
       else if (e.key === 'e' || e.key === 'E') setCurve(c => Math.min(1, c + 0.12));
-      else if (e.key === ' ' && !e.repeat) { setCharging(true); e.preventDefault(); }
+      else if (e.key === ' ' && !e.repeat) { beginCharge(); e.preventDefault(); }
     };
-    const up = (e: KeyboardEvent) => { if (e.key === ' ') { setCharging(false); strike(); e.preventDefault(); } };
+    const up = (e: KeyboardEvent) => {
+      if (e.key !== ' ') return;
+      if (isInteractive(e)) { chargingRef.current = false; setCharging(false); return; }
+      endCharge();
+      e.preventDefault();
+    };
     window.addEventListener('keydown', down);
     window.addEventListener('keyup', up);
     return () => { window.removeEventListener('keydown', down); window.removeEventListener('keyup', up); };
-  }, [phase, strike]);
+  }, [paused, phase, beginCharge, endCharge]);
 
   /* Touch and mouse: drag anywhere on the pitch to aim, let go to strike. */
   const pitchRef = useRef<SVGSVGElement | null>(null);
@@ -206,7 +241,7 @@ export default function FreeKickBoard() {
   }
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-3" data-arcade-phase={phase} data-arcade-paused={paused}>
       <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
         <span className="rounded-full border border-border bg-card px-3 py-1.5">
           Kick <b className="text-primary">{Math.min(kickIdx + 1, ROUNDS_PER_RUN)}</b>/{ROUNDS_PER_RUN}
@@ -220,15 +255,25 @@ export default function FreeKickBoard() {
         {setup && <span className="rounded-full border border-border bg-card px-3 py-1.5 text-muted-foreground">{setup.label}</span>}
       </div>
 
+      {(phase === 'aiming' || phase === 'flying') && (
+        <div className="flex flex-wrap items-center justify-end gap-2">
+          {paused && <p role="status" className="text-sm text-muted-foreground">Paused. Resume when you're ready.</p>}
+          <Button variant="secondary" className="min-h-[44px]" data-arcade-pause="" aria-pressed={paused}
+            onClick={togglePause} onKeyDown={e => e.stopPropagation()} onKeyUp={e => e.stopPropagation()}>
+            {paused ? 'Resume' : 'Pause'}
+          </Button>
+        </div>
+      )}
+
       <svg
         ref={pitchRef}
         viewBox={`0 0 ${VIEW_W} ${VIEW_H}`}
         className="w-full touch-none select-none rounded-2xl border border-border bg-[hsl(140_35%_18%)]"
         role="img"
         aria-label={setup ? `Free kick from ${setup.distance} metres with ${setup.wallSize} in the wall` : 'Free kick'}
-        onPointerDown={e => { if (phase === 'aiming') { pointerAim(e.clientX, e.clientY); setCharging(true); } }}
-        onPointerMove={e => { if (phase === 'aiming' && charging) pointerAim(e.clientX, e.clientY); }}
-        onPointerUp={() => { if (phase === 'aiming') { setCharging(false); strike(); } }}
+        onPointerDown={e => { if (!paused && phase === 'aiming') { pointerAim(e.clientX, e.clientY); beginCharge(); } }}
+        onPointerMove={e => { if (!paused && phase === 'aiming' && chargingRef.current) pointerAim(e.clientX, e.clientY); }}
+        onPointerUp={endCharge}
       >
         {/* grass stripes, so the pitch reads as a pitch */}
         {[0, 1, 2, 3, 4, 5].map(i => (
@@ -328,15 +373,18 @@ export default function FreeKickBoard() {
             <span className="w-14 shrink-0">Bend</span>
             <input
               type="range" min={-1} max={1} step={0.04} value={curve}
-              onChange={e => setCurve(Number(e.target.value))}
+              disabled={paused}
+              onChange={e => { if (!paused) setCurve(Number(e.target.value)); }}
               className="flex-1 accent-[hsl(var(--primary))]"
               aria-label="How much bend to put on the ball"
             />
             <span className="w-10 shrink-0 text-right tabular-nums">{curve > 0.05 ? 'out' : curve < -0.05 ? 'in' : 'none'}</span>
           </div>
           <div className="flex flex-wrap gap-2 pt-1">
-            <Button size="sm" className="flex-1" onMouseDown={() => setCharging(true)} onMouseUp={() => { setCharging(false); strike(); }}
-              onTouchStart={e => { e.preventDefault(); setCharging(true); }} onTouchEnd={e => { e.preventDefault(); setCharging(false); strike(); }}>
+            <Button size="sm" className="flex-1" disabled={paused} onMouseDown={beginCharge} onMouseUp={endCharge}
+              onTouchStart={e => { e.preventDefault(); beginCharge(); }} onTouchEnd={e => { e.preventDefault(); endCharge(); }}
+              onKeyDown={e => { e.stopPropagation(); if ((e.key === ' ' || e.key === 'Enter') && !e.repeat) { e.preventDefault(); beginCharge(); } }}
+              onKeyUp={e => { e.stopPropagation(); if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); endCharge(); } }}>
               Hold to strike
             </Button>
           </div>
