@@ -174,7 +174,8 @@ export function StatsScreen({ career }: StatsScreenProps) {
     <div className="space-y-2">
       {/* Competition filter */}
       <div className="flex gap-1.5 overflow-x-auto pb-1">
-        {VIEW_LABELS.filter(v => v.key !== 'ucl' || inEurope).map(v => (
+        {/* Round 832: a league with no domestic cup has no cup tab. */}
+        {VIEW_LABELS.filter(v => (v.key !== 'ucl' || inEurope) && (v.key !== 'cup' || cupName !== null)).map(v => (
           <button
             key={v.key}
             onClick={() => setView(v.key)}

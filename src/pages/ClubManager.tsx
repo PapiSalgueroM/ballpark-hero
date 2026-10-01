@@ -509,7 +509,7 @@ const ClubManager = () => {
                     <div className="min-w-0">
                       <div className="text-base font-bold text-foreground">{lg.name}</div>
                       <div className="text-[10px] text-muted-foreground">
-                        {lg.clubs.length} clubs · domestic cup: {lg.cupName}{lg.euro ? ' · Champions League spots' : ''}
+                        {lg.clubs.length} clubs · {lg.cupName !== null ? `domestic cup: ${lg.cupName}` : 'no domestic cup'}{lg.euro ? ' · Champions League spots' : ''}
                       </div>
                     </div>
                     <ChevronRight className="w-4 h-4 text-muted-foreground ml-auto shrink-0" />
@@ -782,7 +782,10 @@ const ClubManager = () => {
   const rivalName = c.boardObjectives?.find(o => o.id === 'rival')?.rivalName ?? null;
   const rivalIdx = rivalName ? g.tableRows.findIndex(r => r.club === rivalName) : -1;
   const bidsCount = (c.incomingBids ?? []).length;
-  const cupAlive = c.cupRound !== 'out' && c.cupRound !== 'won';
+  /* Round 832: null in a league with no domestic cup; every cup line below
+     then says there is none rather than "Knocked out". */
+  const cupName = careerLeagueOf(c).cupName;
+  const cupAlive = cupName !== null && c.cupRound !== 'out' && c.cupRound !== 'won';
   const uclAlive = (c.uclGroup !== null && c.uclKoRound === null) || (!!c.uclKoRound && c.uclKoRound !== 'out' && c.uclKoRound !== 'won');
 
   /* ---- Round 74: the rival viewer takes over the whole screen ---- */
@@ -1022,8 +1025,8 @@ const ClubManager = () => {
               />
               <HubTile
                 icon="🏅" title="Cups" accent={cupAlive && !!c.cupDraw[c.cupRound as CupRound]}
-                value={cupAlive ? 'Still alive' : c.cupRound === 'won' ? 'CUP WINNERS' : 'Knocked out'}
-                sub={uclAlive ? 'UCL alive too' : careerLeagueOf(c).cupName}
+                value={cupName === null ? 'No domestic cup' : cupAlive ? 'Still alive' : c.cupRound === 'won' ? 'CUP WINNERS' : 'Knocked out'}
+                sub={uclAlive ? (cupName === null ? 'UCL alive' : 'UCL alive too') : (cupName ?? careerLeagueOf(c).name)}
                 onClick={() => setHubPanel('cups')}
               />
               <HubTile
@@ -1252,8 +1255,15 @@ const ClubManager = () => {
                       panel put the UCL groups straight under the domestic cup
                       line, which read as the cup showing the wrong table, and
                       the domestic bracket card had never been mounted at all. */}
+                  {/* Round 832: a league with no domestic cup says so, once, and
+                      shows no bracket. */}
+                  {cupName === null ? (
+                    <div className="bg-card border border-border rounded-xl p-3 text-xs text-muted-foreground">
+                      🏅 There is no domestic cup in the {careerLeagueOf(c).name}, so the season is the league{careerLeagueOf(c).euro ? ' and Europe' : ''}.
+                    </div>
+                  ) : (<>
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider px-1">
-                    🏅 {careerLeagueOf(c).cupName}
+                    🏅 {cupName}
                   </div>
                   <div className="bg-card border border-border rounded-xl p-3 text-xs text-foreground">
                     {cupAlive ? (
@@ -1266,6 +1276,7 @@ const ClubManager = () => {
                   </div>
                   {/* Round 102 built this bracket; Round 312 finally mounts it. */}
                   <ScreenLoading><CupBracketCard career={c} onClubClick={setClubView} /></ScreenLoading>
+                  </>)}
                   <div className="text-[10px] text-muted-foreground uppercase tracking-wider px-1 pt-1">
                     ⭐ Champions League
                   </div>

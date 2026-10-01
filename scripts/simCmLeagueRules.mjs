@@ -327,11 +327,16 @@ async function partPure() {
       objectives: hash(objectives),
     };
   }
+  /* Lists keep their order (the picker reads NATIONS in order and the summer
+     walks PYRAMIDS in order); lookups by id are hashed with their keys
+     sorted, because nothing reads them in order and a rules table derives
+     them in its own. */
+  const sortedKeys = rec => Object.fromEntries(Object.keys(rec).sort().map(k => [k, rec[k]]));
   got.views = {
     pyramids: hash(cm.PYRAMIDS),
     nations: hash(cm.NATIONS),
-    leagueNations: hash(cm.LEAGUE_NATIONS),
-    euroSlots: hash(cm.EURO_SLOTS),
+    leagueNations: hash(sortedKeys(cm.LEAGUE_NATIONS)),
+    euroSlots: hash(sortedKeys(Object.fromEntries(Object.entries(cm.EURO_SLOTS).map(([k, v]) => [k, sortedKeys(v)])))),
     eraIds: hash(Object.keys(cm.ERA_LEAGUES)),
     historic: hash(['now', 'era2005', 'era2010', 'era2015', 'era2020', ''].map(e => eras.isHistoricEra(e))),
   };
