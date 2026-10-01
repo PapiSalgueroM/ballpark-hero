@@ -1,0 +1,335 @@
+{
+ "read": "2026-10-01",
+ "what": "Every man on a club roster the NHL published on the day read who is not in NHL Front Office, and why. Written by scripts/genNhlFrontOfficeRoster.mjs.",
+ "count": 41,
+ "leftOut": [
+  {
+   "team": "ANA",
+   "id": 8476316,
+   "name": "Laurent Brossoit",
+   "pos": "G",
+   "gp2025_26": 1,
+   "reason": "club still carried 33 on its published roster; outside the 23 kept by 2025-26 NHL games (1 game)"
+  },
+  {
+   "team": "ANA",
+   "id": 8480808,
+   "name": "Jett Woo",
+   "pos": "D",
+   "gp2025_26": 0,
+   "reason": "club still carried 33 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "ANA",
+   "id": 8481461,
+   "name": "Corey Schueneman",
+   "pos": "D",
+   "gp2025_26": 0,
+   "reason": "club still carried 33 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "ANA",
+   "id": 8481538,
+   "name": "Judd Caulfield",
+   "pos": "R",
+   "gp2025_26": 0,
+   "reason": "club still carried 33 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "ANA",
+   "id": 8482081,
+   "name": "Sean Farrell",
+   "pos": "C",
+   "gp2025_26": 0,
+   "reason": "club still carried 33 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "ANA",
+   "id": 8483521,
+   "name": "Noah Warren",
+   "pos": "D",
+   "gp2025_26": 0,
+   "reason": "club still carried 33 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "ANA",
+   "id": 8484859,
+   "name": "Stian Solberg",
+   "pos": "D",
+   "gp2025_26": 0,
+   "reason": "club still carried 33 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "ANA",
+   "id": 8485400,
+   "name": "Roger McQueen",
+   "pos": "C",
+   "gp2025_26": 0,
+   "reason": "club still carried 33 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "ANA",
+   "id": 8486052,
+   "name": "Nikita Klepov",
+   "pos": "R",
+   "gp2025_26": 0,
+   "reason": "club still carried 33 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "ANA",
+   "id": 8486072,
+   "name": "Marcus Nordmark",
+   "pos": "L",
+   "gp2025_26": 0,
+   "reason": "club still carried 33 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "BUF",
+   "id": 8481551,
+   "name": "Colten Ellis",
+   "pos": "G",
+   "gp2025_26": 16,
+   "reason": "club still carried 26 on its published roster; outside the 23 kept by 2025-26 NHL games (16 games)"
+  },
+  {
+   "team": "BUF",
+   "id": 8478502,
+   "name": "Dennis Gilbert",
+   "pos": "D",
+   "gp2025_26": 8,
+   "reason": "club still carried 26 on its published roster; outside the 23 kept by 2025-26 NHL games (8 games)"
+  },
+  {
+   "team": "BUF",
+   "id": 8479941,
+   "name": "Justin Danforth",
+   "pos": "R",
+   "gp2025_26": 4,
+   "reason": "club still carried 26 on its published roster; outside the 23 kept by 2025-26 NHL games (4 games)"
+  },
+  {
+   "team": "CGY",
+   "id": 8484180,
+   "name": "Samuel Honzek",
+   "pos": "L",
+   "gp2025_26": 18,
+   "reason": "club still carried 24 on its published roster; outside the 23 kept by 2025-26 NHL games (18 games)"
+  },
+  {
+   "team": "CHI",
+   "id": 8484390,
+   "name": "Roman Kantserov",
+   "pos": "R",
+   "gp2025_26": 0,
+   "reason": "club still carried 24 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "DAL",
+   "id": 8477335,
+   "name": "Kyle Burroughs",
+   "pos": "D",
+   "gp2025_26": 0,
+   "reason": "club still carried 24 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "DET",
+   "id": 8483679,
+   "name": "Anton Johansson",
+   "pos": "D",
+   "gp2025_26": 0,
+   "reason": "club still carried 24 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "EDM",
+   "id": 8479368,
+   "name": "Max Jones",
+   "pos": "L",
+   "gp2025_26": 21,
+   "reason": "club still carried 27 on its published roster; outside the 23 kept by 2025-26 NHL games (21 games)"
+  },
+  {
+   "team": "EDM",
+   "id": 8480029,
+   "name": "Alex Formenton",
+   "pos": "L",
+   "gp2025_26": 0,
+   "reason": "club still carried 27 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "EDM",
+   "id": 8482221,
+   "name": "Devon Levi",
+   "pos": "G",
+   "gp2025_26": 0,
+   "reason": "club still carried 27 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "EDM",
+   "id": 8486161,
+   "name": "Owen Michaels",
+   "pos": "R",
+   "gp2025_26": 0,
+   "reason": "club still carried 27 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "MIN",
+   "id": 8486166,
+   "name": "Viking Gustafsson Nyberg",
+   "pos": "D",
+   "gp2025_26": 2,
+   "reason": "club still carried 24 on its published roster; outside the 23 kept by 2025-26 NHL games (2 games)"
+  },
+  {
+   "team": "NYR",
+   "id": 8483669,
+   "name": "Adam Sykora",
+   "pos": "L",
+   "gp2025_26": 11,
+   "reason": "club still carried 26 on its published roster; outside the 23 kept by 2025-26 NHL games (11 games)"
+  },
+  {
+   "team": "NYR",
+   "id": 8482193,
+   "name": "Dylan Garand",
+   "pos": "G",
+   "gp2025_26": 3,
+   "reason": "club still carried 26 on its published roster; outside the 23 kept by 2025-26 NHL games (3 games)"
+  },
+  {
+   "team": "NYR",
+   "id": 8485957,
+   "name": "Alberts Smits",
+   "pos": "D",
+   "gp2025_26": 0,
+   "reason": "club still carried 26 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "PHI",
+   "id": 8475253,
+   "name": "Garrett Wilson",
+   "pos": "L",
+   "gp2025_26": 3,
+   "reason": "club still carried 24 on its published roster; outside the 23 kept by 2025-26 NHL games (3 games)"
+  },
+  {
+   "team": "PIT",
+   "id": 8482470,
+   "name": "Ilya Solovyov",
+   "pos": "D",
+   "gp2025_26": 30,
+   "reason": "club still carried 26 on its published roster; outside the 23 kept by 2025-26 NHL games (30 games)"
+  },
+  {
+   "team": "PIT",
+   "id": 8480842,
+   "name": "Filip Hallander",
+   "pos": "C",
+   "gp2025_26": 13,
+   "reason": "club still carried 26 on its published roster; outside the 23 kept by 2025-26 NHL games (13 games)"
+  },
+  {
+   "team": "PIT",
+   "id": 8481019,
+   "name": "David Gustafsson",
+   "pos": "C",
+   "gp2025_26": 0,
+   "reason": "club still carried 26 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "SEA",
+   "id": 8482866,
+   "name": "Ville Ottavainen",
+   "pos": "D",
+   "gp2025_26": 0,
+   "reason": "club still carried 25 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "SEA",
+   "id": 8485383,
+   "name": "Jake O'Brien",
+   "pos": "C",
+   "gp2025_26": 0,
+   "reason": "club still carried 25 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "SJS",
+   "id": 8482700,
+   "name": "Nolan Allan",
+   "pos": "D",
+   "gp2025_26": 0,
+   "reason": "club still carried 25 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "SJS",
+   "id": 8486103,
+   "name": "Ivar Stenberg",
+   "pos": "L",
+   "gp2025_26": 0,
+   "reason": "club still carried 25 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "STL",
+   "id": 8482784,
+   "name": "Zach Dean",
+   "pos": "C",
+   "gp2025_26": 0,
+   "reason": "club still carried 25 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "STL",
+   "id": 8484790,
+   "name": "Adam Jiricek",
+   "pos": "D",
+   "gp2025_26": 0,
+   "reason": "club still carried 25 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "TBL",
+   "id": 8477149,
+   "name": "Scott Sabourin",
+   "pos": "R",
+   "gp2025_26": 26,
+   "reason": "club still carried 25 on its published roster; outside the 23 kept by 2025-26 NHL games (26 games)"
+  },
+  {
+   "team": "TBL",
+   "id": 8483447,
+   "name": "Conor Geekie",
+   "pos": "C",
+   "gp2025_26": 14,
+   "reason": "club still carried 25 on its published roster; outside the 23 kept by 2025-26 NHL games (14 games)"
+  },
+  {
+   "team": "UTA",
+   "id": 8483472,
+   "name": "Maveric Lamoureux",
+   "pos": "D",
+   "gp2025_26": 5,
+   "reason": "club still carried 24 on its published roster; outside the 23 kept by 2025-26 NHL games (5 games)"
+  },
+  {
+   "team": "VAN",
+   "id": 8482447,
+   "name": "Leevi Meriläinen",
+   "pos": "G",
+   "gp2025_26": 20,
+   "reason": "club still carried 25 on its published roster; outside the 23 kept by 2025-26 NHL games (20 games)"
+  },
+  {
+   "team": "VAN",
+   "id": 8478465,
+   "name": "Guillaume Brisebois",
+   "pos": "D",
+   "gp2025_26": 0,
+   "reason": "club still carried 25 on its published roster; outside the 23 kept by 2025-26 NHL games (0 games)"
+  },
+  {
+   "team": "WPG",
+   "id": 8483532,
+   "name": "Clay Stevenson",
+   "pos": "G",
+   "gp2025_26": 4,
+   "reason": "club still carried 24 on its published roster; outside the 23 kept by 2025-26 NHL games (4 games)"
+  }
+ ]
+}

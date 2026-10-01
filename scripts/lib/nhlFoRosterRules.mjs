@@ -95,7 +95,7 @@ export function chooseTwentyThree(players, rate) {
   }
   const leftOut = sorted.filter(x => !kept.has(x)).map(x => ({
     ...x,
-    reason: `club still carried ${rated.length} on its published roster; outside the 23 kept by 2025-26 NHL games (${x.r.gp} games)`,
+    reason: `club still carried ${rated.length} on its published roster; outside the 23 kept by 2025-26 NHL games (${x.r.gp} game${x.r.gp === 1 ? '' : 's'})`,
   }));
   return { kept: sorted.filter(x => kept.has(x)), leftOut };
 }
