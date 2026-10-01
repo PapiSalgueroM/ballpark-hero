@@ -1,5 +1,30 @@
 # Work board
 
+**2026-10-01, Codex804 guide record refresh ACCEPTED.**
+The small explicit --refresh /route mode requires an existing converted/frozen
+guide and nonempty actual text for all four parts. It derives only that route's
+record, leaving every section/outline/ratchet/saved-page assertion unchanged.
+Generated F1 refresh changes only the verified clue-four worked score600 to400.
+Generated NHL refresh adds the actual contributor instructions/fictional mechanic
+example and accurate selection tips from794; all original unrelated lines/rules
+remain. All127 other route records hold exactly; record metadata explains refresh.
+No sentence entry was hand edited and no application/data/asset changed.
+
+The full guide guard passes against the finished801 physical gate. All five
+existing effective controls fail exactly their intended section while the other
+sections remain green. Missing/unknown/unfrozen/conflicting-mode requests preserve
+fixture raw bytes and the existing cannot-run exit2 contract. The first TEMP
+verifier's wrong expected exit1 is retained; the corrected refusal receipts prove
+the actual guard contract. The anchor scanner parses485 harnesses and all94
+multiline anchor readers remain normalized. Receipts:
+TEMP/dukb-round804-preservation-receipt.json,
+TEMP/dukb-round804-controls-receipt.json and dukb-round804-anchor-fence.log,
+plus five individual control logs and four refusal-final logs.
+802 will generate only its own revised rank-em record inside its production gate;
+its whole-guide/saved-page gate remains due.801 App acceptance and802/803 native
+work continue. The immutable413 suite still evaluates the older captured records,
+so its result remains due and cannot inherit this repair. Next free805.
+
 **2026-10-01, Codex804 CLAIMED: explicit guide record refresh after verified changes.**
 The unchanged guide-heading guard found stale frozen instructions for accepted794
 NHL contributor controls and799's corrected F1 score. The same original-text fence
