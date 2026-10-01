@@ -30,7 +30,10 @@
         src/data/transferPathPuzzles.ts against src/data/careerPlayers.ts by
         the same test, and each rule's oneOptimalPath walked link by link.
      3) THE LIVE TABLE, through the site's own fetcher plus a raw read for null
-        pair integrity. Europe equals the migration text for text. Active may
+        pair integrity. Europe equals the migration text for text (with the
+        Round 784 career migration's two Europe rewrites once it is applied,
+        and never a mix of before and after; simTransferPathHints section 7
+        derives them). Active may
         be in exactly one of two atomic rollout states: the applied 2026-09-07
         restore's 203 pairs exactly, or the Round 531 refresh's 212 pairs
         exactly (applied after the Round 531 frontend is live). Any partial
@@ -62,7 +65,7 @@ import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { build } from 'esbuild';
 import {
-  MODE_RULES, buildGraph, distances, expandCompactCareers, parseActiveRefreshMigration, parseActiveRestoreMigration, parseTransferPathCompanionMigration, ruleProblems, sharedClub, shortestPath,
+  MODE_RULES, ROUND_784_MIGRATION, buildGraph, distances, expandCompactCareers, parseActiveRefreshMigration, parseActiveRestoreMigration, parseRuleEntryRefresh, parseTransferPathCompanionMigration, ruleEntryRefreshState, ruleProblems, sharedClub, shortestPath,
 } from './lib/transferPathHints.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
@@ -272,6 +275,18 @@ console.log('3) the live table, through the site\'s own fetcher');
     for (const id of restoreRows.keys()) if (!livePuzzleIds.has(id)) fail(`proposed active restore ${id} is absent from the live table`);
     const everyday = buildGraph(players);
     const byName = new Map(players.map(p => [p.name, p]));
+    /* Round 784: the career migration rewrites its Europe entries in the same
+       transaction as its career rows; the table is all before it or all after */
+    const r784 = parseRuleEntryRefresh(fs.readFileSync(path.join(ROOT, ROUND_784_MIGRATION), 'utf8'));
+    const liveById = new Map(puzzles.map(p => [p.id, p]));
+    const r784State = ruleEntryRefreshState(r784, (id, rule) => {
+      const p = liveById.get(id);
+      if (!p) return null;
+      return rule === 'classic' ? { minSteps: p.minSteps, hint: p.hint } : (p[rule] ?? null);
+    });
+    if (r784State === 'mixed') fail(`live Transfer Path entries are in a mixed state against the ${r784.length} Round 784 rewrites: only all before or all after is valid`);
+    const r784Rewrites = new Map(r784State === 'after' ? r784.map(r => [`${r.id}|${r.rule}`, r]) : []);
+    console.log(`   Round 784 rewrite of ${r784.length} entries: ${r784State === 'after' ? 'applied' : r784State === 'before' ? 'PENDING, not applied' : 'MIXED'}`);
     for (const rule of MODE_RULES) {
       const graph = buildGraph(real.playersUnderRule(players, rule));
       let same = 0, withPath = 0, staleApplied = 0;
@@ -303,7 +318,8 @@ console.log('3) the live table, through the site\'s own fetcher');
       }
       for (const p of puzzles) {
         const live = p[rule] ?? null;
-        const mig = stored.get(p.id)?.[rule] ?? null;
+        const rewrite = r784Rewrites.get(`${p.id}|${rule}`);
+        const mig = rewrite ? { minSteps: rewrite.minSteps, hint: rewrite.hint } : stored.get(p.id)?.[rule] ?? null;
         if (!stored.has(p.id)) fail(`live ${p.id} is not in the migration`);
         else if ((live === null) !== (mig === null) || (live && (live.minSteps !== mig.minSteps || live.hint !== mig.hint))) fail(`live ${p.id} under ${rule} differs from the migration: live ${JSON.stringify(live)}, migration ${JSON.stringify(mig && { minSteps: mig.minSteps, hint: mig.hint })}`);
         else same += 1;

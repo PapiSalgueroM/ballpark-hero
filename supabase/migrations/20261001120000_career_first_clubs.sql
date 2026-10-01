@@ -14,13 +14,26 @@
 -- Fail closed: every expectation about the current rows is checked before the
 -- write it guards, and the whole block rolls back if any of them is off.
 -- After applying: node scripts/bakeCareerPlayers.mjs must leave
--- src/data/careerPlayers.ts unchanged except its date stamp, then rerun
--- node scripts/genTransferPathHints.mjs (new clubs and seasons are new links).
+-- src/data/careerPlayers.ts unchanged except its date stamp.
+--
+-- Transfer Path plays on the same tables, and the new seasons are new links
+-- (Alisson and Diego Forlán at Internacional in 2013, Musiala's 2019-2020
+-- Bayern game). Six puzzles get a shorter path: six classic minimums and two
+-- Europe only minimums the search now beats. The same transaction rewrites
+-- exactly those eight entries, each guarded by the value it replaces (the
+-- applied 2026-09-07 companion's), so the hints never disagree with the
+-- careers, not even for a moment. Every new value is the generator's own
+-- deriveHint on the baked pool, and simTransferPathHints section 7 re-derives
+-- all eight and fails if this list is short, long or typed. Active players
+-- only is untouched: no active minimum moves.
 
 do $migration$
 declare
   n integer;
   total integer;
+  desired record;
+  updated_this_row integer;
+  updated_rows integer := 0;
 begin
   select count(*) into total from public.career_seasons;
   if total <> 3612 then raise exception 'expected 3612 career_seasons rows before this migration, found %', total; end if;
@@ -245,5 +258,50 @@ begin
 
   select count(*) into n from public.career_seasons;
   if n <> 3640 then raise exception 'expected 3640 career_seasons rows after this migration, found %', n; end if;
+
+  -- Transfer Path: the eight rule entries the new links shorten, each written
+  -- only over the exact value it replaces.
+  select count(*) into n from public.transfer_path_puzzles;
+  if n <> 885 then raise exception 'expected 885 Transfer Path puzzles, found %', n; end if;
+  for desired in
+    select * from (values
+      ('tpa-106', 'Jamal Musiala', 'Luis Suárez', 'classic', 3, 'Two middle men at least. The first was at Bayern Munich with Jamal Musiala; the last was at Liverpool with Luis Suárez.', 2, 'One middle man does it. He was at Bayern Munich with Jamal Musiala and at Liverpool with Luis Suárez.'),
+      ('tpa-106', 'Jamal Musiala', 'Luis Suárez', 'europe', 3, 'Two middle men at least. The first was at Bayern Munich with Jamal Musiala; the last was at Liverpool with Luis Suárez.', 2, 'One middle man does it. He was at Bayern Munich with Jamal Musiala and at Liverpool with Luis Suárez.'),
+      ('tpa-285', 'Alisson', 'Thibaut Courtois', 'classic', 3, 'Two middle men at least. The first was at Liverpool with Alisson; the last was at Chelsea with Thibaut Courtois.', 2, 'One middle man does it. He was at Internacional with Alisson and at Atlético Madrid with Thibaut Courtois.'),
+      ('tpa-296', 'Alejandro Garnacho', 'Alisson', 'classic', 4, 'Three middle men at least. The first was at Manchester United with Alejandro Garnacho; the last was at Liverpool with Alisson.', 3, 'Two middle men at least. The first was at Manchester United with Alejandro Garnacho; the last was at Internacional with Alisson.'),
+      ('tpa-619', 'Alisson', 'Federico Valverde', 'classic', 3, 'Two middle men at least. The first was at Roma with Alisson; the last was at Real Madrid with Federico Valverde.', 2, 'One middle man does it. He was at Internacional with Alisson and at Peñarol with Federico Valverde.'),
+      ('tpa-640', 'Jamal Musiala', 'Xavi Simons', 'classic', 4, 'Three middle men at least. The first was at Bayern Munich with Jamal Musiala; the last was at PSV with Xavi Simons.', 3, 'Two middle men at least. The first was at Bayern Munich with Jamal Musiala; the last was at PSV with Xavi Simons.'),
+      ('tpa-640', 'Jamal Musiala', 'Xavi Simons', 'europe', 4, 'Three middle men at least. The first was at Bayern Munich with Jamal Musiala; the last was at PSV with Xavi Simons.', 3, 'Two middle men at least. The first was at Bayern Munich with Jamal Musiala; the last was at PSV with Xavi Simons.'),
+      ('tpa-708', 'Alisson', 'Wayne Rooney', 'classic', 3, 'Two middle men at least. The first was at Liverpool with Alisson; the last was at Manchester United with Wayne Rooney.', 2, 'One middle man does it. He was at Internacional with Alisson and at Manchester United with Wayne Rooney.')
+    ) as rows(puzzle_id, player_a, player_b, rule, old_min_steps, old_hint, min_steps, hint)
+  loop
+    if desired.rule = 'classic' then
+      update public.transfer_path_puzzles p
+      set min_steps = desired.min_steps,
+          hint = desired.hint
+      where p.puzzle_id = desired.puzzle_id
+        and p.player_a = desired.player_a
+        and p.player_b = desired.player_b
+        and p.min_steps = desired.old_min_steps
+        and p.hint = desired.old_hint;
+    elsif desired.rule = 'europe' then
+      update public.transfer_path_puzzles p
+      set europe_min_steps = desired.min_steps::smallint,
+          europe_hint = desired.hint
+      where p.puzzle_id = desired.puzzle_id
+        and p.player_a = desired.player_a
+        and p.player_b = desired.player_b
+        and p.europe_min_steps = desired.old_min_steps
+        and p.europe_hint = desired.old_hint;
+    else
+      raise exception 'unknown Transfer Path rule %', desired.rule;
+    end if;
+    get diagnostics updated_this_row = row_count;
+    if updated_this_row <> 1 then
+      raise exception 'Transfer Path % under %: expected one row carrying %, updated %', desired.puzzle_id, desired.rule, desired.old_min_steps, updated_this_row;
+    end if;
+    updated_rows := updated_rows + 1;
+  end loop;
+  if updated_rows <> 8 then raise exception 'expected to rewrite 8 Transfer Path entries, rewrote %', updated_rows; end if;
 end
 $migration$;

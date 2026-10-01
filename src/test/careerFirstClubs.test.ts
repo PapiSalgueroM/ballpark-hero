@@ -91,6 +91,29 @@ describe('every added row is in the pool exactly as both sources agree', () => {
     });
   }
 
+  it('the migration writes to the tables exactly the rows the ledger and the file carry', () => {
+    const sql = fs.readFileSync(path.resolve(process.cwd(), 'supabase/migrations/20261001120000_career_first_clubs.sql'), 'utf8').replace(/\r\n/g, '\n');
+    const unquote = (s: string) => s.replace(/''/g, "'");
+    const inserts = [...sql.matchAll(/^\s*\('(a0000001-[0-9a-f-]+)', '((?:[^']|'')+)', '((?:[^']|'')+)', (\d+), null, (\d+), 0, (\d+)\)[,;]$/gm)]
+      .map(m => ({ playerId: m[1], season: unquote(m[2]), club: unquote(m[3]), goals: Number(m[4]), appearances: Number(m[5]), sortOrder: Number(m[6]) }));
+    expect(inserts.length).toBe(ledger.added.length);
+    const want = ledger.added.map(r => ({ playerId: r.playerId, season: r.season, club: r.club, goals: r.goals, appearances: r.appearances }));
+    expect(inserts.map(r => ({ playerId: r.playerId, season: r.season, club: r.club, goals: r.goals, appearances: r.appearances })).sort((x, y) => JSON.stringify(x).localeCompare(JSON.stringify(y))))
+      .toEqual([...want].sort((x, y) => JSON.stringify(x).localeCompare(JSON.stringify(y))));
+    /* each player's rows open his path, in order, and the rows already there move down by exactly that many */
+    for (const id of new Set(inserts.map(r => r.playerId))) {
+      const mine = inserts.filter(r => r.playerId === id);
+      expect(mine.map(r => r.sortOrder)).toEqual(mine.map((_, i) => i));
+      expect(sql).toContain(`update public.career_seasons set sort_order = sort_order + ${mine.length} where player_id = '${id}';`);
+    }
+    const updates = [...sql.matchAll(/^\s*update public\.career_seasons set appearances = (\d+) where player_id = '([0-9a-f-]+)' and season = '([^']+)' and club = '([^']+)' and appearances = (\d+);$/gm)];
+    expect(updates.map(m => `${m[2]} ${m[3]} ${m[4]} ${m[5]}->${m[1]}`).sort())
+      .toEqual(ledger.changed.map(c => `${ledger.added.find(a => a.player === c.player)?.playerId} ${c.season} ${c.club} ${c.from}->${c.to}`).sort());
+    const before = Number(sql.match(/if total <> (\d+) then/)?.[1]);
+    const after = Number(sql.match(/if n <> (\d+) then raise exception 'expected \d+ career_seasons rows after/)?.[1]);
+    expect(after - before).toBe(ledger.added.length);
+  });
+
   it('the changed rows carry the corrected figure', () => {
     for (const c of ledger.changed) {
       const row = player(c.player).career.find(s => s.season === c.season && s.club === c.club);
