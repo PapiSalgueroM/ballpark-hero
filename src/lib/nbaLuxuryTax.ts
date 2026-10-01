@@ -59,6 +59,27 @@
  * have been near constant since the 2023 agreement because all four numbers
  * are set off the same revenue figure, so the ratio is the honest way to
  * carry them forward without inventing a dollar figure.
+ *
+ * THE GAME'S OWN SALARIES, and why the lines are scaled (Round 722 review).
+ * The rosters are real but their salaries are the game's (nbaSalaryFor, a
+ * function of rating), and they run richer at the top than the real league:
+ * at the real 200.4 line a new league opened with 14 of 30 clubs over it and
+ * the top club facing a 416.5 bill, more than twice anything ever paid. So
+ * every league carries a scale (NbaLeague.taxScale) that multiplies the tax
+ * line, both aprons AND the bracket width together, which keeps each of them
+ * in its real 2026-27 proportion to the line (the width stays 6.064 / 200.428,
+ * about 3.0% of the line) and keeps the real rates untouched. The scale is
+ * set once, from the league's own payrolls (nbaCalibrateTaxScale), and the
+ * lines then rise with the cap as before. What a real season looks like, the
+ * two numbers the scale aims at:
+ *   2023-24, final: eight clubs paid, the largest bill 176.9 (Golden State,
+ *   repeater), then 142.4, 68.2, 52.5, 43.8, 20.2, 15.7 and 6.9.
+ *   https://hoopsrumors.com/2024/06/warriors-top-list-of-nbas-2023-24-taxpayers.html
+ *   2023-24, projected before the season: eight clubs, the largest 188.2
+ *   (Golden State), median 44.9.
+ *   https://ca.sports.yahoo.com/news/luxury-tax-2023-24-much-094006005.html
+ *   Golden State's 2021-22 bill, the record before that, was 170.
+ *   https://nbcsports.com/nba/news/joe-lacob-warriors-in-trouble-with-rest-of-nba-for-spending
  */
 import { NBA_SALARY_CAP_2026_27, NBA_TAX_LEVEL_2026_27 } from './leagueCaps';
 
@@ -89,21 +110,35 @@ export const NBA_TIPOFF_MIN = 14;
  */
 export const NBA_MIN_CONTRACT = 2;
 
+/** Clubs over the line in a typical real season: the eight of 2023-24, both sources in the header. */
+export const NBA_TAXPAYERS_TYPICAL = 8;
+/**
+ * No club opens a league facing a projected bill above this, $M: the top of
+ * the real record, between the 176.9 Golden State paid in 2023-24 and the
+ * 188.2 it was projected to pay before that season (sources in the header).
+ */
+export const NBA_TAX_BILL_CEILING = 190;
+
 const round1 = (n: number): number => Math.round(n * 10) / 10;
 
-/** The tax level for a season whose cap is `cap`: the 2026-27 ratio, carried forward. */
-export function nbaTaxLine(cap: number): number {
-  return round1(cap * NBA_TAX_LEVEL_2026_27 / NBA_SALARY_CAP_2026_27);
+/*
+ * Every line below takes the league's scale (NbaLeague.taxScale). At scale 1
+ * they are the real 2026-27 figures carried forward with the cap, which is
+ * what scripts/simNbaLuxuryTax.mjs checks against the published table.
+ */
+/** The tax level for a season whose cap is `cap`: the 2026-27 ratio, carried forward, times the league's scale. */
+export function nbaTaxLine(cap: number, scale = 1): number {
+  return round1(cap * scale * NBA_TAX_LEVEL_2026_27 / NBA_SALARY_CAP_2026_27);
 }
-export function nbaFirstApron(cap: number): number {
-  return round1(cap * NBA_FIRST_APRON_2026_27 / NBA_SALARY_CAP_2026_27);
+export function nbaFirstApron(cap: number, scale = 1): number {
+  return round1(cap * scale * NBA_FIRST_APRON_2026_27 / NBA_SALARY_CAP_2026_27);
 }
-export function nbaSecondApron(cap: number): number {
-  return round1(cap * NBA_SECOND_APRON_2026_27 / NBA_SALARY_CAP_2026_27);
+export function nbaSecondApron(cap: number, scale = 1): number {
+  return round1(cap * scale * NBA_SECOND_APRON_2026_27 / NBA_SALARY_CAP_2026_27);
 }
-/** One bracket's width at this cap, unrounded so the bill is computed on the true width. */
-export function nbaTaxBracket(cap: number): number {
-  return cap * NBA_TAX_BRACKET_2026_27 / NBA_SALARY_CAP_2026_27;
+/** One bracket's width at this cap and scale, unrounded so the bill is computed on the true width. */
+export function nbaTaxBracket(cap: number, scale = 1): number {
+  return cap * scale * NBA_TAX_BRACKET_2026_27 / NBA_SALARY_CAP_2026_27;
 }
 
 /** The rate in bracket `i` (0 based), standard or repeater. */
@@ -119,10 +154,10 @@ export function nbaTaxRate(i: number, repeater: boolean): number {
  * rate, so a team a dollar over pays a little and a team far over pays a
  * great deal. Rounded to 0.1 like every money figure in the four GM sims.
  */
-export function nbaTaxBill(payroll: number, cap: number, repeater: boolean): number {
-  let over = payroll - nbaTaxLine(cap);
+export function nbaTaxBill(payroll: number, cap: number, repeater: boolean, scale = 1): number {
+  let over = payroll - nbaTaxLine(cap, scale);
   if (over <= 0) return 0;
-  const width = nbaTaxBracket(cap);
+  const width = nbaTaxBracket(cap, scale);
   let bill = 0;
   for (let i = 0; over > 1e-9; i += 1) {
     const slice = Math.min(over, width);
@@ -145,4 +180,24 @@ export interface NbaTaxEntry {
 export function nbaIsRepeater(history: NbaTaxEntry[] | undefined, season: number): boolean {
   const hits = (history ?? []).filter(e => e.bill > 0 && e.season < season && e.season >= season - NBA_REPEATER_WINDOW).length;
   return hits >= NBA_REPEATER_HITS;
+}
+
+/**
+ * The league's scale (see the header), from each club's payroll as it will
+ * stand at tip off, at a cap of `cap`. Two aims, both from real seasons:
+ * about NBA_TAXPAYERS_TYPICAL clubs over the line, and no club facing a
+ * standard bill above NBA_TAX_BILL_CEILING. The line starts midway between
+ * the eighth and ninth richest payrolls and rises a tenth at a time only as
+ * far as the ceiling needs. Where the two aims disagree the ceiling wins, so a
+ * league that is rich at the very top gets fewer taxpayers rather than a bill
+ * nobody has ever paid. Returns the line over the real one at this cap.
+ */
+export function nbaCalibrateTaxScale(payrolls: number[], cap: number): number {
+  const base = cap * NBA_TAX_LEVEL_2026_27 / NBA_SALARY_CAP_2026_27;
+  if (!payrolls.length) return 1;
+  const p = [...payrolls].sort((a, b) => b - a);
+  const k = Math.min(NBA_TAXPAYERS_TYPICAL, p.length - 1);
+  let line = Math.ceil(((p[k - 1] ?? p[0]) + p[k]) / 2 * 10) / 10;
+  while (nbaTaxBill(p[0], cap, false, line / base) > NBA_TAX_BILL_CEILING) line = round1(line + 0.1);
+  return line / base;
 }

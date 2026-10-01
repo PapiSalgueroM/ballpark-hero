@@ -471,7 +471,7 @@ export default function NbaFrontOfficeBoard() {
     if (!league || !talks || !talks.state.pkg) return;
     const pkg = talks.state.pkg;
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
-    const res = nbaExecuteTalksTrade(lg.teams[myTeam], lg.teams[talks.partner], talks.myPieceId, pkg.theirPlayerId, pkg.addPick, lg.cap);
+    const res = nbaExecuteTalksTrade(lg.teams[myTeam], lg.teams[talks.partner], talks.myPieceId, pkg.theirPlayerId, pkg.addPick, lg.cap, lg.taxScale);
     if (res === 'done') {
       slamFeed(`🤝 Deal done with ${label(talks.partner)}: ${pkg.theirPlayerName} arrives${pkg.addPick ? ', and a pick goes the other way' : ''}.`);
       setMyTradePiece(''); setShopOffers([]); setShopTried(false);
@@ -488,13 +488,13 @@ export default function NbaFrontOfficeBoard() {
   // Round 82: shop a player league-wide with the real trade rules
   const doShop = () => {
     if (!league || !myTradePiece) return;
-    const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, nbaTrade, nbaTradeValue);
+    const offers = findTrades(league.teams, myTeam, myTradePiece, league.cap, (m, t, a, b, s, c) => nbaTrade(m, t, a, b, s, c, league.taxScale), nbaTradeValue);
     setShopOffers(offers); setShopTried(true);
   };
   const acceptShopOffer = (o: FinderOffer) => {
     if (!league || !myTradePiece) return;
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
-    const res = nbaTrade(lg.teams[myTeam], lg.teams[o.teamId], myTradePiece, o.playerId, o.sweeten, lg.cap);
+    const res = nbaTrade(lg.teams[myTeam], lg.teams[o.teamId], myTradePiece, o.playerId, o.sweeten, lg.cap, lg.taxScale);
     if (res === 'accepted') {
       slamFeed(`🤝 Trade finder deal done with ${label(o.teamId)}: ${o.playerName} arrives.`);
       setMyTradePiece(''); setShopOffers([]); setShopTried(false);
@@ -742,7 +742,7 @@ export default function NbaFrontOfficeBoard() {
      the first round waits on a waiver; below fourteen the league fills in. */
   const tipBlock = league.round === 1 ? nbaTipOffRefusal(my) : null;
   const tipShort = league.round === 1 ? Math.max(0, NBA_TIPOFF_MIN - my.players.length) : 0;
-  const apronNote = nbaApronNote(my, league.cap);
+  const apronNote = nbaApronNote(my, league.cap, league.taxScale);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
 
   return (

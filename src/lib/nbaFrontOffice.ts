@@ -9,7 +9,7 @@ import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullR
 /* Round 722: the luxury tax, the aprons and the tip off roster floor, sourced in one file. */
 import {
   NBA_TIPOFF_MIN, NBA_MIN_CONTRACT, nbaTaxLine, nbaFirstApron, nbaSecondApron, nbaTaxBill, nbaIsRepeater,
-  type NbaTaxEntry,
+  nbaCalibrateTaxScale, type NbaTaxEntry,
 } from './nbaLuxuryTax';
 export { NBA_TIPOFF_MIN, NBA_MIN_CONTRACT, nbaTaxLine, nbaFirstApron, nbaSecondApron, nbaTaxBill } from './nbaLuxuryTax';
 
@@ -67,6 +67,15 @@ export interface NbaLeague {
   freeAgents: NbaGmPlayer[];
   round: number; // 1..NBA_ROUNDS
   champions: { season: number; team: string }[];
+  /**
+   * Round 722: the tax lines' scale, set from this league's own payrolls
+   * (nbaCalibrateLeagueTax, sources in nbaLuxuryTax.ts). A new league gets it
+   * at creation. Optional, because a league saved before the round has none:
+   * that league plays out its current season with no tax at all (no
+   * projection, no bill at close, no apron rule) and is calibrated at its
+   * next summer, so nobody is billed for a season that started untaxed.
+   */
+  taxScale?: number;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -118,7 +127,7 @@ export function initNbaLeague(rng: () => number = Math.random): NbaLeague {
     });
     teams[t.id] = { abbr: t.id, players, wins: 0, losses: 0, picks: [1, 2] };
   }
-  return {
+  const league: NbaLeague = {
     season: 2026,
     cap: NBA_CAP_BASE,
     teams,
@@ -127,6 +136,28 @@ export function initNbaLeague(rng: () => number = Math.random): NbaLeague {
     round: 1,
     champions: [],
   };
+  /* Round 722: the tax lines are set from this league's own payrolls. */
+  nbaCalibrateLeagueTax(league);
+  return league;
+}
+
+/**
+ * Round 722: what a club will carry at tip off. A club short of the floor is
+ * filled on the minimum there, so the shortfall is counted at that price.
+ */
+export function nbaTipOffPayroll(t: NbaGmTeam): number {
+  return Math.round((nbaCapUsed(t) + NBA_MIN_CONTRACT * Math.max(0, NBA_TIPOFF_MIN - t.players.length)) * 10) / 10;
+}
+
+/**
+ * Round 722: set the league's tax scale from every club's tip off payroll at
+ * the league's current cap (the rule and its real world aims are in
+ * nbaLuxuryTax.ts). Called at creation and, for a league saved before the
+ * round, once at the end of its next summer.
+ */
+export function nbaCalibrateLeagueTax(league: NbaLeague): void {
+  const payrolls = Object.values(league.teams).map(nbaTipOffPayroll);
+  league.taxScale = nbaCalibrateTaxScale(payrolls, league.cap);
 }
 
 /* Round 211: widened from 10x10 to 28x28. A hundred possible people is
@@ -197,17 +228,26 @@ export interface NbaTaxView {
   aboveSecond: boolean;
   /** Last season's bill, held back from this season's room. */
   due: number;
+  /** A league saved before Round 722 that has not had its summer yet: no tax this season. */
+  pending?: boolean;
 }
 
-export function nbaTaxView(t: NbaGmTeam, league: Pick<NbaLeague, 'cap' | 'season'>): NbaTaxView {
+export function nbaTaxView(t: NbaGmTeam, league: Pick<NbaLeague, 'cap' | 'season' | 'taxScale'>): NbaTaxView {
   const payroll = nbaCapUsed(t);
-  const line = nbaTaxLine(league.cap);
+  const scale = league.taxScale;
+  if (scale == null) {
+    return {
+      payroll, line: 0, over: 0, bill: 0, repeater: false,
+      firstApron: 0, secondApron: 0, aboveFirst: false, aboveSecond: false, due: t.taxDue ?? 0, pending: true,
+    };
+  }
+  const line = nbaTaxLine(league.cap, scale);
   const repeater = nbaIsRepeater(t.taxHistory, league.season);
-  const firstApron = nbaFirstApron(league.cap);
-  const secondApron = nbaSecondApron(league.cap);
+  const firstApron = nbaFirstApron(league.cap, scale);
+  const secondApron = nbaSecondApron(league.cap, scale);
   return {
     payroll, line, over: Math.round((payroll - line) * 10) / 10,
-    bill: nbaTaxBill(payroll, league.cap, repeater), repeater,
+    bill: nbaTaxBill(payroll, league.cap, repeater, scale), repeater,
     firstApron, secondApron, aboveFirst: payroll > firstApron, aboveSecond: payroll > secondApron,
     due: t.taxDue ?? 0,
   };
@@ -357,31 +397,35 @@ export function nbaTradeValue(p: NbaGmPlayer): number {
  * deal sits above the first apron may take back no more salary than it sends
  * out, which is the rule the 2023 agreement put on apron teams from 2024-25
  * (sources in nbaLuxuryTax.ts). Both trade paths and the Trade Finder ask
- * this one function, so the three can never disagree.
+ * this one function, so the three can never disagree. `taxScale` is the
+ * league's (NbaLeague.taxScale); without one, a league saved before the round
+ * and not yet calibrated, there is no apron this season.
  */
-export function nbaSalaryFits(receiver: NbaGmTeam, outgoing: NbaGmPlayer, incoming: NbaGmPlayer, cap: number): boolean {
+export function nbaSalaryFits(receiver: NbaGmTeam, outgoing: NbaGmPlayer, incoming: NbaGmPlayer, cap: number, taxScale?: number): boolean {
   const after = nbaCapUsed(receiver) - outgoing.salary + incoming.salary;
-  if (after > nbaFirstApron(cap)) return incoming.salary <= outgoing.salary;
+  if (taxScale != null && after > nbaFirstApron(cap, taxScale)) return incoming.salary <= outgoing.salary;
   return nbaCapRoom(receiver, cap) + outgoing.salary >= incoming.salary || incoming.salary <= outgoing.salary * 1.5 + 5;
 }
 
 /** Round 722: the one line the trade screen shows a club the apron rule binds on, or null. */
-export function nbaApronNote(t: NbaGmTeam, cap: number): string | null {
+export function nbaApronNote(t: NbaGmTeam, cap: number, taxScale?: number): string | null {
+  if (taxScale == null) return null;
   const payroll = nbaCapUsed(t);
-  if (payroll > nbaSecondApron(cap)) return `Over the second apron ($${nbaSecondApron(cap)}M): any trade must send out at least as much salary as it brings back.`;
-  if (payroll > nbaFirstApron(cap)) return `Over the first apron ($${nbaFirstApron(cap)}M): any trade must send out at least as much salary as it brings back.`;
+  const first = nbaFirstApron(cap, taxScale), second = nbaSecondApron(cap, taxScale);
+  if (payroll > second) return `Over the second apron ($${second}M): any trade must send out at least as much salary as it brings back.`;
+  if (payroll > first) return `Over the first apron ($${first}M): any trade must send out at least as much salary as it brings back.`;
   return null;
 }
 
 export function nbaTrade(
-  my: NbaGmTeam, their: NbaGmTeam, myId: string, theirId: string, sweeten: boolean, cap: number,
+  my: NbaGmTeam, their: NbaGmTeam, myId: string, theirId: string, sweeten: boolean, cap: number, taxScale?: number,
 ): 'accepted' | 'rejected' | 'invalid' {
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
   if (!mine || !theirs || my.players.length <= 8 || their.players.length <= 8) return 'invalid';
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
-  if (!nbaSalaryFits(my, mine, theirs, cap) || !nbaSalaryFits(their, theirs, mine, cap)) return 'invalid';
+  if (!nbaSalaryFits(my, mine, theirs, cap, taxScale) || !nbaSalaryFits(their, theirs, mine, cap, taxScale)) return 'invalid';
   const pickV = sweeten && my.picks.length ? 12 : 0;
   if (nbaTradeValue(mine) + pickV < nbaTradeValue(theirs) * 1.07) return 'rejected';
   my.players = my.players.filter(p => p.id !== myId);
@@ -397,7 +441,7 @@ export function nbaTrade(
    rules, roster floor and salary matching, exactly nbaTrade's, and
    moves the agreed pick when the package includes one. */
 export function nbaExecuteTalksTrade(
-  my: NbaGmTeam, their: NbaGmTeam, myId: string, theirId: string, addPick: boolean, cap: number,
+  my: NbaGmTeam, their: NbaGmTeam, myId: string, theirId: string, addPick: boolean, cap: number, taxScale?: number,
 ): 'done' | 'invalid' {
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
@@ -405,7 +449,7 @@ export function nbaExecuteTalksTrade(
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   if (addPick && !my.picks.length) return 'invalid';
-  if (!nbaSalaryFits(my, mine, theirs, cap) || !nbaSalaryFits(their, theirs, mine, cap)) return 'invalid';
+  if (!nbaSalaryFits(my, mine, theirs, cap, taxScale) || !nbaSalaryFits(their, theirs, mine, cap, taxScale)) return 'invalid';
   my.players = my.players.filter(p => p.id !== myId);
   their.players = their.players.filter(p => p.id !== theirId);
   my.players.push(theirs);
@@ -523,17 +567,21 @@ export interface NbaTaxAssessment extends NbaTaxEntry { team: string }
  * kept because that is the repeater window, and the bill becomes taxDue,
  * which nbaCapRoom holds back from next season's room. A season already in
  * the history is not assessed twice: the Round 431 rule that a season closes
- * once applies to the cheque as much as to the games.
+ * once applies to the cheque as much as to the games. A league with no scale
+ * yet (saved before the round, still in the season it was saved in) is not
+ * assessed at all: that season started without a tax, so it closes without one.
  */
 export function nbaAssessTax(league: NbaLeague): NbaTaxAssessment[] {
   const out: NbaTaxAssessment[] = [];
+  const scale = league.taxScale;
+  if (scale == null) return out;
   for (const t of Object.values(league.teams)) {
     const history = t.taxHistory ?? [];
     let entry = history.find(e => e.season === league.season);
     if (!entry) {
       const payroll = nbaCapUsed(t);
       const repeater = nbaIsRepeater(history, league.season);
-      entry = { season: league.season, payroll, line: nbaTaxLine(league.cap), bill: nbaTaxBill(payroll, league.cap, repeater), repeater };
+      entry = { season: league.season, payroll, line: nbaTaxLine(league.cap, scale), bill: nbaTaxBill(payroll, league.cap, repeater, scale), repeater };
       t.taxHistory = [...history, entry].filter(e => e.season > league.season - 4);
       t.taxDue = entry.bill;
     }
@@ -563,8 +611,8 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
        expiring man outside the best five walks. The steer is driven by the
        bill, not the line, so a tax with no teeth steers nobody. The user's
        club is never steered; the GM pays or sheds himself. */
-    const taxAverse = cpu && ((t.taxDue ?? 0) > 0
-      || nbaTaxBill(nbaCapUsed(t), nextCap, nbaIsRepeater(t.taxHistory, league.season + 1)) > 0);
+    const taxAverse = cpu && ((t.taxDue ?? 0) > 0 || (league.taxScale != null
+      && nbaTaxBill(nbaCapUsed(t), nextCap, nbaIsRepeater(t.taxHistory, league.season + 1), league.taxScale) > 0));
     const core = new Set([...t.players].sort((a, b) => b.ovr - a.ovr).slice(0, 5).map(p => p.id));
     const keep: NbaGmPlayer[] = [];
     for (const p of t.players) {
@@ -606,5 +654,9 @@ export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: stri
   league.cap = Math.round(league.cap * 1.07);
   league.season += 1;
   league.round = 1;
+  /* Round 722: a league saved before the round gets its tax lines here, at
+     its first summer, from the payrolls it will tip off with. A calibrated
+     league keeps its scale, and its lines rise with the cap. */
+  if (league.taxScale == null) nbaCalibrateLeagueTax(league);
   return notes;
 }

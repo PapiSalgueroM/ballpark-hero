@@ -128,6 +128,8 @@ export interface FoTaxFacts {
   secondApron: number;
   aboveFirst: boolean;
   aboveSecond: boolean;
+  /** A save from before the sport had a tax, still in that season: nothing to project yet. */
+  pending?: boolean;
 }
 export interface FoRosterFacts {
   count: number;
@@ -140,7 +142,9 @@ export interface FoCapLine { text: string; tone: 'muted' | 'bad' | 'good' }
 
 export function foCapLines(f: { tax?: FoTaxFacts; roster?: FoRosterFacts }): FoCapLine[] {
   const out: FoCapLine[] = [];
-  if (f.tax) {
+  if (f.tax?.pending) {
+    out.push({ text: 'No luxury tax this season. The league sets its tax line from the payrolls it carries out of the summer, and the tax starts next season.', tone: 'muted' });
+  } else if (f.tax) {
     const t = f.tax;
     out.push({ text: `Luxury tax line $${t.line}M, first apron $${t.firstApron}M, second apron $${t.secondApron}M.`, tone: 'muted' });
     out.push(t.bill > 0

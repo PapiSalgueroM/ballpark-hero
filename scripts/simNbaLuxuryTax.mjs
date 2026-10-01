@@ -44,9 +44,11 @@
         club was filled while the pool still had men (at least one, or the
         check is vacuous).
      4) an old save. A fresh league stripped of every optional field this
-        round and Round 631 added (taxHistory, taxDue, deadCap,
-        releasedThisSeason) tips off, plays, closes, is assessed and goes
-        through the summer, then closes a second season. And the shared
+        round and Round 631 added (taxScale, taxHistory, taxDue, deadCap,
+        releasedThisSeason) projects no tax, says so on the cap panel and has
+        no apron; it tips off, plays and closes WITHOUT a bill (that season
+        started untaxed), the summer sets its tax scale, and the second
+        season closes taxed with every club assessed once. And the shared
         season close test runs under vitest on all four boards, whose saves
         are exactly that old shape.
      5) the tax binds. "Payers shed more than non payers" is true but
@@ -68,21 +70,58 @@
         -0.0192 (seeds 1-10, the ones run here, are the lightest set), every
         one of the 60 per seed means negative, from -0.002 to -0.038. The
         real engine's payers tip off about 1.5% of the line, roughly 3M,
-        lighter than the same clubs in a league with no tax. The band is a
-        pooled mean under -0.0035, a quarter of the lightest set; under the
-        zero tax control both bundles are the twin and the difference is
-        exactly zero, and with the CPU steer switched off by hand it read
-        0.0000 too. A second, blunter read is printed and checked too: from
-        season three on, fewer clubs sit over the line with the tax than
-        without it (measured 34 against 48 club seasons on seeds 1-10, and
-        lower with the tax on all six sets; the GM's own club is in both
-        counts).
+        lighter than the same clubs in a league with no tax.
+        CALIBRATED LEAGUE (second review fix, 2026-10-01). With the lines set
+        from the league's own payrolls (section 7) only five clubs open over
+        the line instead of fourteen, so there are fewer payers to measure.
+        The twin is pinned to the real league's scale: with its rates at zero
+        its own calibration sees no bill to cap and sets a lower line, and a
+        first run that let it do so read a pooled -0.059 that was mostly the
+        gap between two lines. Pinned, over the same six seed sets: pooled
+        -0.0139, -0.0113, -0.0155, -0.0150, -0.0117 and -0.0102 over 77, 82,
+        79, 75, 80 and 78 club seasons, the per seed mean negative on 8, 8,
+        10, 10, 9 and 9 of each ten. The band is a pooled mean under -0.0025,
+        a quarter of the lightest set, and at least six of the ten seeds
+        negative, two under the fewest measured; under the zero tax control
+        both bundles are the twin and the difference is exactly zero, and
+        with the CPU steer switched off by hand it read 0.0000 too. The
+        blunter read, clubs over the line from season three on with the tax
+        and without it, is printed but no longer asserted: calibrated, it
+        measured 12/13, 3/4, 4/7, 11/13, 0/2 and 3/8, always lower with the
+        tax but by as little as one club season, too thin for a margin.
      6) the shared descriptor. foHubTiles with a tax and a roster floor says
         so on the Trades and Roster boxes and is byte identical without them;
         a sport that declares a roster ceiling but no tip off floor (the NHL
         and MLB boards) draws its long roster's Roster box exactly as before;
         foCapLines writes the tax, apron and roster lines and nothing when
         passed neither.
+     7) a league that looks like a real one (second review fix). The game's
+        salaries are its own and run rich at the top: at the real 200.4 line
+        a new league opened with 14 of 30 clubs over it and a 416.5 bill for
+        the top club, against eight payers and a 176.9 record in 2023-24. So
+        every league sets its lines from its own payrolls (nbaCalibrateTaxScale
+        in nbaLuxuryTax.ts) and this section holds the result to real seasons
+        over the ten seeds: clubs over the line at the first tip off, the
+        largest season one bill, the median season one taxpayer's bill, that
+        a CPU payer can shed its way under the line (it tips off under while
+        its no tax twin is still over, so the cap rise did not carry it), and
+        that the section 4 old save, calibrated at its first summer, lands the
+        same way. Measured 2026-10-01 over six seed sets of ten: the payroll
+        table is a function of rating alone, so the opening league is the same
+        on every seed: line 226.7 (scale 1.1311 on the real 200.4), aprons
+        236.4 and 250.7, brackets 6.859 wide, five clubs over, bills 189.6,
+        176.5, 59.5, 24.8 and 1.7, median 59.5. Five is under the eight of
+        2023-24 because the ceiling wins: the two richest payrolls (274.6 and
+        272.5) sit 21 or more above the third, and any line low enough for
+        eight payers bills the top club over 250. CPU payers shed under 5, 3, 6, 5, 3 and
+        9 times per set. The old save: line 227 at a cap of 177, five over,
+        largest projected bill 189.5. Bands: four to ten clubs over (the
+        real range of five to ten, one lower because the ceiling can take
+        precedence), no bill above 190 (the top of the real record: 176.9
+        paid, 188.2 projected), a median of 15 to 70 (real medians 44.9 to
+        48.2 over eight payers; a five payer league's median is its third
+        bill, and the real third bill in 2023-24 was 68.2), and at least one
+        shed under over the ten seeds.
 
    Controls, through NBA_TAX_CONTROL. None touches src: the rewritten source
    is served to the bundler from memory, and each refuses to run if its
@@ -90,7 +129,8 @@
    exactly the expected sections went red (the control fired), 3 and a loud
    line when they did not (the check is dead), and 2 when the control could
    not even be bundled:
-     zerotax      every rate driven to zero              -> 1, 2 and 5
+     zerotax      every rate driven to zero              -> 1, 2, 5 and 7
+                  (no bill means no median and nobody sheds)
      tipoff12     the tip off floor dropped to twelve     -> 3 and 4 (the old
                   save section reads the fourteen too)
      norepeater   the repeater schedule made the standard one -> 1 and 2
@@ -98,7 +138,9 @@
      viewrepeater the projection never uses repeater rates        -> 2
      noapron      the first apron never binds on a trade           -> 2
      hubfloor     the hub's tip off line for any declared ceiling  -> 6
-   The last four rewrite nbaFrontOffice.ts or foHub.ts (in both bundles, so
+     realline     every league keeps the real 200.4 line          -> 7
+     oldbill      an old save is billed for the season it was saved in -> 4
+   The last six rewrite nbaFrontOffice.ts or foHub.ts (in both bundles, so
    section 5 still compares like with like) and were added by the review.
 
    Run: node scripts/simNbaLuxuryTax.mjs
@@ -115,15 +157,22 @@ const LIB = path.join(ROOT, 'src', 'lib');
 const TAX_FILE = path.join(LIB, 'nbaLuxuryTax.ts');
 const CONTROL = process.env.NBA_TAX_CONTROL || '';
 const EXPECT = {
-  zerotax: [1, 2, 5],
+  /* with no rates at all the median bill is zero and nobody sheds, so section 7 goes too */
+  zerotax: [1, 2, 5, 7],
   /* the old save section reads the fourteen too, so a lower floor reaches it */
   tipoff12: [3, 4],
   norepeater: [1, 2],
   /* review fixes: each reaches only the one check written for it */
-  cpupool: [3],
+  /* and 7: the CPU clubs that took the pool's 72 to 81 men re-sign them at full
+     salary that summer, so the section 4 old save calibrates on a richer top
+     and opens with three payers, under the band */
+  cpupool: [3, 7],
   viewrepeater: [2],
   noapron: [2],
   hubfloor: [6],
+  /* the calibration fix: the line back at the real 200.4, and an old save billed for its own season */
+  realline: [7],
+  oldbill: [4],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NBA_TAX_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -137,6 +186,7 @@ const SECTION_NAMES = {
   4: 'an old save tips off, closes and is assessed',
   5: 'the tax binds: payers against their twins in a league with no tax',
   6: 'the shared descriptor says so',
+  7: 'a league that looks like a real one: taxpayers, the biggest bill, the typical bill, a way under',
 };
 
 /* ---- the published table, typed here on purpose ------------------------- */
@@ -154,6 +204,18 @@ const STEP = 0.50;
 /* the roster rule, hoopsrumors glossary and slamonline */
 const FLOOR = 14;
 const CEILING = 15;
+/* Real seasons, typed here for section 7 (the engine's own targets live in
+   nbaLuxuryTax.ts and are not read from there on purpose):
+   2023-24 final, eight payers: 176.9, 142.4, 68.2, 52.5, 43.8, 20.2, 15.7, 6.9, median 48.2
+     https://hoopsrumors.com/2024/06/warriors-top-list-of-nbas-2023-24-taxpayers.html
+   2023-24 projected before the season, eight payers, the largest 188.2, median 44.9
+     https://ca.sports.yahoo.com/news/luxury-tax-2023-24-much-094006005.html
+   Golden State's 2021-22 bill, the record before that, 170
+     https://nbcsports.com/nba/news/joe-lacob-warriors-in-trouble-with-rest-of-nba-for-spending
+   The bands are set in the header (section 7) from these and from the measurement. */
+const TAXPAYERS_BAND = [4, 10];
+const BILL_CEILING = 190;
+const MEDIAN_BAND = [15, 70];
 /* four bills worked by hand from the numbers above at the 2026-27 cap. The
    brackets end at 6.064, 12.128 and 18.192, so 20M over reaches a fourth one:
    10M over, standard: 6.064 x 1.00 + 3.936 x 1.25 = 10.984 -> 11.0
@@ -168,9 +230,9 @@ const round1 = n => Math.round(n * 10) / 10;
 const near = (a, b, eps = 0.051) => Math.abs(a - b) <= eps;
 const rateAt = (i, rep) => { const t = rep ? REP : STD; return i < t.length ? t[i] : t[t.length - 1] + STEP * (i - t.length + 1); };
 const lineAt = cap => round1(cap * TAX_2026 / CAP_2026);
-const expectBill = (over, cap, rep) => {
+const expectBill = (over, cap, rep, scale = 1) => {
   if (over <= 0) return 0;
-  const width = WIDTH_2026 * cap / CAP_2026;
+  const width = WIDTH_2026 * cap * scale / CAP_2026;
   let bill = 0, left = over;
   for (let i = 0; left > 1e-9; i += 1) { const s = Math.min(left, width); bill += s * rateAt(i, rep); left -= s; }
   return round1(bill);
@@ -229,7 +291,9 @@ const CONTROL_SWAPS = {
 const CONTROL_FILE_SWAPS = {
   cpupool: { 'nbaFrontOffice.ts': [['    const fromPool = t.abbr === myTeam;', '    const fromPool = true;']] },
   viewrepeater: { 'nbaFrontOffice.ts': [['  const repeater = nbaIsRepeater(t.taxHistory, league.season);', '  const repeater = false;']] },
-  noapron: { 'nbaFrontOffice.ts': [['  if (after > nbaFirstApron(cap)) return incoming.salary <= outgoing.salary;', '  if (after > Infinity) return incoming.salary <= outgoing.salary;']] },
+  noapron: { 'nbaFrontOffice.ts': [['  if (taxScale != null && after > nbaFirstApron(cap, taxScale)) return incoming.salary <= outgoing.salary;', '  if (taxScale != null && after > Infinity) return incoming.salary <= outgoing.salary;']] },
+  realline: { 'nbaFrontOffice.ts': [['  league.taxScale = nbaCalibrateTaxScale(payrolls, league.cap);', '  league.taxScale = 1;']] },
+  oldbill: { 'nbaFrontOffice.ts': [['  if (scale == null) return out;', '  if (scale === -1) return out;']] },
   hubfloor: { 'foHub.ts': [['const tooMany = f.rosterFloor != null && f.rosterMax != null ?', 'const tooMany = f.rosterMax != null ?']] },
 };
 const NOTE = {
@@ -240,6 +304,8 @@ const NOTE = {
   viewrepeater: 'the all season projection never uses the repeater rates',
   noapron: 'the first apron never binds on a trade',
   hubfloor: 'the hub says "waive before tip off" for any sport that declares a roster ceiling',
+  realline: 'every league keeps the real 200.4 line instead of one set from its own payrolls',
+  oldbill: 'a league saved before the round is billed at the close of the season it was saved in',
 }[CONTROL];
 if (NOTE) console.log(`   control ${CONTROL}: ${NOTE}`);
 
@@ -357,7 +423,8 @@ console.log('1) The bracket formula, against the published table typed in this f
     const lg = nba.initNbaLeague(lcg(722));
     const abbr = Object.keys(lg.teams)[0];
     const t = lg.teams[abbr];
-    lg.season = 2030; lg.cap = 180;
+    /* scale 1: the formula is checked at the published lines; section 7 checks the league's own scale */
+    lg.season = 2030; lg.cap = 180; lg.taxScale = 1;
     t.taxHistory = hist(2027, 2028, 2029);
     t.players.forEach(p => { p.salary = 0; });
     t.players[0].salary = round1(nba.nbaTaxLine(180) + 20);
@@ -380,7 +447,7 @@ console.log('2) A dollar over pays, a dollar under does not, more pays more, a r
   const lg = nba.initNbaLeague(lcg(2));
   const t = lg.teams[Object.keys(lg.teams)[3]];
   t.players.forEach(p => { p.salary = 0; });
-  const at = payroll => { t.players[0].salary = round1(payroll); return nba.nbaTaxView(t, { cap, season: 2026 }); };
+  const at = payroll => { t.players[0].salary = round1(payroll); return nba.nbaTaxView(t, { cap, season: 2026, taxScale: 1 }); };
   const under = at(line - 0.1);
   const over = at(line + 0.1);
   ok(2, 'a club 0.1M under the line projects no bill', under.bill === 0 && under.over < 0, JSON.stringify(under));
@@ -415,11 +482,13 @@ console.log('2) A dollar over pays, a dollar under does not, more pays more, a r
     plg.season = 2030;
     p.taxHistory = [2027, 2028, 2029].map(s => ({ season: s, payroll: 1, line: 0, bill: 1, repeater: false }));
     p.players.forEach(x => { x.salary = 0; });
-    p.players[0].salary = round1(nba.nbaTaxLine(plg.cap) + 20);
+    /* at the league's own scale, the one the cap panel draws */
+    p.players[0].salary = round1(nba.nbaTaxLine(plg.cap, plg.taxScale) + 20);
     const v = nba.nbaTaxView(p, plg);
     const charged = nba.nbaAssessTax(plg).find(e => e.team === p.abbr);
+    const want = expectBill(20, plg.cap, true, plg.taxScale);
     ok(2, 'the projection reads a repeater as a repeater', v.repeater === true, JSON.stringify(v));
-    ok(2, 'and quotes the repeater bill, not the standard one', near(v.bill, expectBill(20, plg.cap, true)), `${v.bill} against ${expectBill(20, plg.cap, true)}`);
+    ok(2, 'and quotes the repeater bill, not the standard one', near(v.bill, want), `${v.bill} against ${want}`);
     ok(2, 'and the close charges exactly what was projected', charged && charged.bill === v.bill, `${charged && charged.bill} vs ${v.bill}`);
   }
   /* Review fix: the first apron's matching rule. A club whose payroll after
@@ -434,18 +503,19 @@ console.log('2) A dollar over pays, a dollar under does not, more pays more, a r
     B.players.forEach(x => { x.salary = 1; });
     const out = A.players[1], inc = B.players[1];
     out.salary = 10;
-    const apron = nba.nbaFirstApron(alg.cap);
+    const sc = alg.taxScale;
+    const apron = nba.nbaFirstApron(alg.cap, sc);
     const setPayroll = total => { A.players[0].salary = round1(total - 10); };
     setPayroll(apron + 5);
     inc.salary = 12;
-    ok(2, 'above the first apron after the deal: 12 back for 10 out is refused', nba.nbaSalaryFits(A, out, inc, alg.cap) === false, `payroll ${nba.nbaCapUsed(A)}, apron ${apron}`);
-    ok(2, 'and the trade path refuses it as invalid', nba.nbaTrade(clone(A), clone(B), out.id, inc.id, false, alg.cap) === 'invalid');
+    ok(2, 'above the first apron after the deal: 12 back for 10 out is refused', nba.nbaSalaryFits(A, out, inc, alg.cap, sc) === false, `payroll ${nba.nbaCapUsed(A)}, apron ${apron}`);
+    ok(2, 'and the trade path refuses it as invalid', nba.nbaTrade(clone(A), clone(B), out.id, inc.id, false, alg.cap, sc) === 'invalid');
     inc.salary = 10;
-    ok(2, 'above the first apron: 10 back for 10 out is allowed', nba.nbaSalaryFits(A, out, inc, alg.cap) === true);
+    ok(2, 'above the first apron: 10 back for 10 out is allowed', nba.nbaSalaryFits(A, out, inc, alg.cap, sc) === true);
     inc.salary = 12;
     setPayroll(alg.cap - 30);
-    ok(2, 'under the cap the same 12 for 10 is allowed', nba.nbaSalaryFits(A, out, inc, alg.cap) === true, `payroll ${nba.nbaCapUsed(A)}`);
-    ok(2, 'and the trade path does not call it invalid', nba.nbaTrade(clone(A), clone(B), out.id, inc.id, false, alg.cap) !== 'invalid');
+    ok(2, 'under the cap the same 12 for 10 is allowed', nba.nbaSalaryFits(A, out, inc, alg.cap, sc) === true, `payroll ${nba.nbaCapUsed(A)}`);
+    ok(2, 'and the trade path does not call it invalid', nba.nbaTrade(clone(A), clone(B), out.id, inc.id, false, alg.cap, sc) !== 'invalid');
   }
   /* the owner's reaction */
   const r0 = real.owner.ownerTaxReaction(0), r1 = real.owner.ownerTaxReaction(32.5), r2 = real.owner.ownerTaxReaction(400);
@@ -498,13 +568,20 @@ function playSeason(E, lg, me, rng, log) {
       fromPool: poolBefore - lg.freeAgents.length,
     });
   }
-  const line = E.nbaTaxLine(lg.cap);
+  /* the league's own line; a league saved before the round has none in the
+     season it was saved in, and is measured against the real one there */
+  const line = E.nbaTaxLine(lg.cap, lg.taxScale ?? 1);
   const tipRatios = {};
+  const tipBills = [];
   for (const t of Object.values(lg.teams)) {
     log.rosters.push(t.players.length);
     tipRatios[t.abbr] = E.nbaCapUsed(t) / line;
+    tipBills.push(E.nbaTaxView(t, lg).bill);
   }
   log.tipRatios.push(tipRatios);
+  /* section 7: what the season tips off with, projected, every club */
+  log.tipOver.push(Object.values(tipRatios).filter(r => r > 1).length);
+  log.tipBills.push(tipBills);
   for (let r = 1; r < E.NBA_ROUNDS; r += 1) { E.simRound(lg, me, rng); lg.round += 1; }
   E.simRound(lg, me, rng);
   E.runNbaPlayoffs(lg, rng);
@@ -526,10 +603,15 @@ function playSeason(E, lg, me, rng, log) {
   E.nbaOffseason(lg, rng, me);
   for (const t of Object.values(lg.teams)) if (t.abbr !== me) log.cpuAfterSummer.push(t.players.length);
 }
-const freshLog = () => ({ userBefore: [], refusals: [], probes: [], waivers: [], tipRefused: [], fills: [], rosters: [], tipRatios: [], closes: [], cpuAfterSummer: [], poolLeaks: [], poolChances: 0 });
-const runLeague = (E, seed) => {
+const freshLog = () => ({ userBefore: [], refusals: [], probes: [], waivers: [], tipRefused: [], fills: [], rosters: [], tipRatios: [], closes: [], cpuAfterSummer: [], poolLeaks: [], poolChances: 0, tipOver: [], tipBills: [] });
+/* `scale` pins the league's tax scale. The twin passes the real league's: its
+   rates are zero, so its own calibration would see no bill to cap and set a
+   lower line, and every ratio in section 5 would then differ by the gap
+   between two lines rather than by what the tax made the clubs do. */
+const runLeague = (E, seed, scale) => {
   const rng = lcg(seed * 7919 + 17);
   const lg = E.initNbaLeague(rng);
+  if (scale != null) lg.taxScale = scale;
   const me = Object.keys(lg.teams)[seed % 30];
   const log = freshLog();
   for (let s = 0; s < SEASONS; s += 1) playSeason(E, lg, me, rng, log);
@@ -575,25 +657,37 @@ const realRuns = SEEDS.map(seed => ({ seed, ...runLeague(nba, seed) }));
 }
 
 /* ---- 4. an old save ------------------------------------------------------- */
-console.log('4) A save from before this round tips off, closes, is assessed and goes through the summer');
+console.log('4) A save from before this round plays its season untaxed, is calibrated in the summer, then closes taxed');
+/* What section 7 reads about the old save once it has been calibrated. */
+let oldSaveAfterSummer = null;
 {
   const rng = lcg(631);
   const lg = clone(nba.initNbaLeague(rng));
   for (const t of Object.values(lg.teams)) { delete t.deadCap; delete t.releasedThisSeason; delete t.taxHistory; delete t.taxDue; }
+  delete lg.taxScale;
   const me = Object.keys(lg.teams)[7];
   let threw = null;
   try {
     const view = nba.nbaTaxView(lg.teams[me], lg);
-    ok(4, 'the view reads a club with no tax fields', Number.isFinite(view.bill) && view.repeater === false && view.due === 0, JSON.stringify(view));
+    ok(4, 'the view reads a club with no tax fields and projects nothing this season', view.pending === true && view.bill === 0 && view.repeater === false && view.due === 0, JSON.stringify(view));
     ok(4, 'the room reads a club with no tax fields', Number.isFinite(nba.nbaCapRoom(lg.teams[me], lg.cap)));
+    const pendingLines = hub.foCapLines({ tax: view });
+    ok(4, 'the cap panel says there is no tax this season and quotes no line', pendingLines.length === 1 && /No luxury tax this season/.test(pendingLines[0].text) && !/\$/.test(pendingLines[0].text), JSON.stringify(pendingLines));
+    /* no apron in a season that started without one: the pre round matching rule decides */
+    const [aAbbr, bAbbr] = Object.keys(lg.teams).filter(a => a !== me).slice(0, 2);
+    const A = clone(lg.teams[aAbbr]), B = clone(lg.teams[bAbbr]);
+    A.players.forEach(x => { x.salary = 0; }); A.players[0].salary = 400; A.players[1].salary = 10; B.players[1].salary = 12;
+    ok(4, 'and no apron rule binds a trade', nba.nbaSalaryFits(A, A.players[1], B.players[1], lg.cap, lg.taxScale) === true);
     const log = freshLog();
     playSeason(nba, lg, me, rng, log);
     const first = log.closes[0];
-    ok(4, 'every club was assessed', Object.keys(first).length === 30 && Object.values(first).every(c => Number.isFinite(c.bill) && c.repeater === false));
-    ok(4, 'every club now carries one season of history and a taxDue', Object.values(lg.teams).every(t => (t.taxHistory ?? []).length === 1 && typeof t.taxDue === 'number'));
+    ok(4, 'the season the save was made in closes with no bill: nobody is assessed', Object.keys(first).length === 0, `${Object.keys(first).length} clubs assessed`);
+    ok(4, 'and no club carries a history or a held back bill into the summer', Object.values(lg.teams).every(t => t.taxHistory === undefined && t.taxDue === undefined));
     ok(4, 'the summer rolled the season on', lg.season === 2027 && lg.round === 1);
+    ok(4, 'and set the league\'s tax scale', typeof lg.taxScale === 'number' && Number.isFinite(lg.taxScale) && lg.taxScale > 0, String(lg.taxScale));
+    oldSaveAfterSummer = clone(lg);
     playSeason(nba, lg, me, rng, log);
-    ok(4, 'a second season closes and the history is two deep', Object.values(lg.teams).every(t => (t.taxHistory ?? []).length === 2));
+    ok(4, 'a second season closes taxed: every club assessed once', Object.keys(log.closes[1]).length === 30 && Object.values(lg.teams).every(t => (t.taxHistory ?? []).length === 1));
     ok(4, 'every roster was legal at both tip offs', log.rosters.every(n => n >= FLOOR && n <= CEILING));
   } catch (e) { threw = e; }
   ok(4, 'nothing threw on the old shape', !threw, threw ? String(threw.message).slice(0, 160) : '');
@@ -621,8 +715,11 @@ console.log('4) A save from before this round tips off, closes, is assessed and 
 
 /* ---- 5. the tax binds ----------------------------------------------------- */
 console.log('5) The tax binds: clubs over the line against the same clubs in a league with no tax');
+/* Section 7 reads the twin leagues too, to tell a club that shed from one the cap rise carried under. */
+let twinRunsForSeven = [];
 {
-  const twinRuns = SEEDS.map(seed => runLeague(twin.nba, seed));
+  const twinRuns = SEEDS.map((seed, i) => runLeague(twin.nba, seed, realRuns[i].lg.taxScale));
+  twinRunsForSeven = twinRuns;
   const perSeed = [];
   const diffs = [];
   let confReal = [], confTwin = [];
@@ -653,9 +750,9 @@ console.log('5) The tax binds: clubs over the line against the same clubs in a l
   const mean = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : NaN;
   console.log(`   per seed mean difference (real minus twin, ratio of payroll to line at the next tip off): ${perSeed.map(p => `${p.seed}:${p.mean.toFixed(3)}(${p.n})`).join(' ')}`);
   console.log(`   pooled ${pooled.toFixed(4)} over ${diffs.length} club seasons; the confounded payer gap reads ${mean(confReal).toFixed(3)} real and ${mean(confTwin).toFixed(3)} twin, which is why it is not the check`);
-  ok(5, 'payers tip off lighter than their twins in a league with no tax: pooled mean difference under -0.0035', Number.isFinite(pooled) && pooled < -0.0035, `pooled ${pooled.toFixed(4)}`);
+  ok(5, 'payers tip off lighter than their twins in a league with no tax: pooled mean difference under -0.0025', Number.isFinite(pooled) && pooled < -0.0025, `pooled ${pooled.toFixed(4)}`);
   const negative = perSeed.filter(p => p.mean < 0).length;
-  ok(5, 'the difference is negative on at least eight of the ten seeds', negative >= 8, `${negative} of ${perSeed.length}`);
+  ok(5, 'the difference is negative on at least six of the ten seeds', negative >= 6, `${negative} of ${perSeed.length}`);
   /* and the CPU behaviour behind it is visible: payers that paid in season one are fewer by season three */
   const payersBySeason = realRuns.map(r => r.log.closes.map(c => Object.values(c).filter(x => x.over).length));
   const twinPayers = twinRuns.map(r => r.log.closes.map(c => Object.values(c).filter(x => x.over).length));
@@ -663,8 +760,11 @@ console.log('5) The tax binds: clubs over the line against the same clubs in a l
   const realLate = payersBySeason.reduce((x, s) => x + late(s), 0), twinLate = twinPayers.reduce((x, s) => x + late(s), 0);
   console.log(`   clubs over the line by season, real: ${payersBySeason.map(s => s.join('/')).join(' ')}`);
   console.log(`   clubs over the line by season, twin: ${twinPayers.map(s => s.join('/')).join(' ')}`);
-  console.log(`   club seasons over the line from season three on: ${realLate} with the tax, ${twinLate} without it`);
-  ok(5, 'from season three on, fewer clubs sit over the line with the tax than without it', realLate < twinLate, `${realLate} real vs ${twinLate} twin`);
+  /* Printed, no longer asserted: on the calibrated league only 0 to 13 club
+     seasons sit over the line from season three on, and the gap measured
+     between 1 and 5 over six seed sets, too thin to carry a margin. The paired
+     read above is the check. */
+  console.log(`   club seasons over the line from season three on: ${realLate} with the tax, ${twinLate} without it (printed, not asserted)`);
 }
 
 /* ---- 6. the shared descriptor --------------------------------------------- */
@@ -714,6 +814,62 @@ console.log('6) The shared hub and cap panel say so, and say nothing new without
   ok(6, 'under the line reads as good and the legal roster adds no warning', under.some(l => l.tone === 'good' && l.text.includes('Under the tax line by $3.2M')) && !under.some(l => l.tone === 'bad'), JSON.stringify(under));
   ok(6, 'no descriptor, no lines', hub.foCapLines({}).length === 0);
   console.log(`   ${lines.length} cap lines with a tax and a short roster, ${under.length} under the line and legal, 0 without the descriptor`);
+}
+
+/* ---- 7. a league that looks like a real one ------------------------------- */
+console.log('7) The league the lines are set from: taxpayers, the biggest bill and the typical one, against real seasons');
+{
+  const median = a => { const s = [...a].sort((x, y) => x - y); return s.length ? (s.length % 2 ? s[(s.length - 1) / 2] : (s[s.length / 2 - 1] + s[s.length / 2]) / 2) : NaN; };
+  const firstTip = [], topBills = [], medians = [], payerCounts = [];
+  for (const { seed, log } of realRuns) {
+    const n = log.tipOver[0];
+    firstTip.push(n);
+    ok(7, `seed ${seed}: ${TAXPAYERS_BAND[0]} to ${TAXPAYERS_BAND[1]} clubs over the line at the first tip off`, n >= TAXPAYERS_BAND[0] && n <= TAXPAYERS_BAND[1], `${n} over`);
+    const bills = Object.values(log.closes[0]).map(c => c.bill).filter(b => b > 0);
+    payerCounts.push(bills.length);
+    const top = bills.length ? Math.max(...bills) : 0;
+    topBills.push(top);
+    /* a ceiling on the biggest bill is the rule the calibration keeps, not a statistic read off a max */
+    ok(7, `seed ${seed}: no season one bill above $${BILL_CEILING}M, the top of the real record`, top <= BILL_CEILING, `largest ${top}`);
+    const m = median(bills);
+    medians.push(m);
+    ok(7, `seed ${seed}: the median season one taxpayer owes $${MEDIAN_BAND[0]}M to $${MEDIAN_BAND[1]}M`, m >= MEDIAN_BAND[0] && m <= MEDIAN_BAND[1], `median ${Number.isFinite(m) ? m.toFixed(1) : m} over ${bills.length} payers`);
+  }
+  /* A CPU club over the line at a close that tips off under it next season,
+     while the same club in the no tax twin is still over: that club shed its
+     way under, the cap rise did not carry it. */
+  let shedUnder = 0, carried = 0;
+  const perSeed = [];
+  for (let i = 0; i < realRuns.length; i += 1) {
+    const R = realRuns[i].log, T = twinRunsForSeven[i]?.log, me = realRuns[i].me;
+    let mine = 0;
+    for (let s = 0; s + 1 < SEASONS; s += 1) {
+      for (const [abbr, c] of Object.entries(R.closes[s])) {
+        if (abbr === me || !c.over || R.tipRatios[s + 1][abbr] > 1) continue;
+        if (T && T.tipRatios[s + 1][abbr] > 1) { shedUnder += 1; mine += 1; } else carried += 1;
+      }
+    }
+    perSeed.push(mine);
+  }
+  ok(7, 'a CPU club that sheds salary gets under the line: at least once over the ten seeds, a payer tips off under while its no tax twin is still over', shedUnder > 0, `${shedUnder} shed under, ${carried} under in both leagues`);
+  /* The old save from section 4, calibrated at its first summer, lands in the same place. */
+  if (oldSaveAfterSummer) {
+    const o = oldSaveAfterSummer;
+    const line = nba.nbaTaxLine(o.cap, o.taxScale);
+    const proj = Object.values(o.teams).map(t => nba.nbaTipOffPayroll(t));
+    const over = proj.filter(p => p > line).length;
+    const top = Math.max(...proj.map(p => nba.nbaTaxBill(p, o.cap, false, o.taxScale)));
+    ok(7, `an old save calibrated at its first summer tips off with ${TAXPAYERS_BAND[0]} to ${TAXPAYERS_BAND[1]} clubs over its line`, over >= TAXPAYERS_BAND[0] && over <= TAXPAYERS_BAND[1], `${over} over a line of ${line}`);
+    ok(7, `and nobody there faces a projected bill above $${BILL_CEILING}M`, top <= BILL_CEILING, `largest ${top}`);
+    console.log(`   old save after its summer: line ${line} at a cap of ${o.cap}, ${over} clubs over, largest projected bill ${top}`);
+  } else {
+    ok(7, 'the old save from section 4 reached its summer', false, 'section 4 threw before the summer');
+  }
+  /* the scale is set once at creation and kept, so the finished league still carries it */
+  console.log(`   scale at creation by seed: ${realRuns.map(r => Number(r.lg.taxScale).toFixed(4)).join(' ')}; first tip off line ${nba.nbaTaxLine(CAP_2026, realRuns[0].lg.taxScale)}`);
+  console.log(`   clubs over the line at the first tip off by seed: ${firstTip.join(' ')}; season one payers ${payerCounts.join(' ')}`);
+  console.log(`   largest season one bill by seed: ${topBills.map(b => b.toFixed(1)).join(' ')}; median taxpayer bill by seed: ${medians.map(m => (Number.isFinite(m) ? m.toFixed(1) : String(m))).join(' ')}`);
+  console.log(`   CPU payers that shed under the line while their twin stayed over: ${perSeed.join(' ')} (${shedUnder} in all, ${carried} more under in both leagues)`);
 }
 
 /* ---- report --------------------------------------------------------------- */
