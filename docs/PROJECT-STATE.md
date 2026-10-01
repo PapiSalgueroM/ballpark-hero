@@ -1,5 +1,15 @@
 # Project state
 
+## ACCEPTED 2026-10-01: worked help examples and focus (817)
+
+Tennis and College Basketball Program now explain the actual clue/point rules
+with a worked example. Both help openers fit touch and keyboard use; closing
+returns focus without scrolling. Seven component tests, eight effective controls
+and final-CSS phone checks pass. Original rules and shared Dialog are unchanged.
+815 and 817 are accepted; final Tennis App integration belongs to 816. The latest
+batch still awaits publish. Claude's Release L deployment record is preserved
+below, including all nine verified edge-function hashes. Next free 818.
+
 ## ACCEPTED 2026-10-01: College Basketball Program feedback (815)
 
 Correct answers now show success, misses animate once, long names fit and help
@@ -12,6 +22,7 @@ pulled and pass fresh app types. Exact evidence boundaries are on WORKBOARD.
 
 The completed live audit now reports 170/170 sitemap routes clean. Google
 indexing decisions and AdSense approval remain unconfirmed.
+
 ## LIVE 2026-10-01: Release L (703 validators hold a refusal for the records, 722 NBA luxury tax), main `e052875a`
 
 Assembled by the desktop Claude lane in the gate clone (`release-l`). **douknowball.com is serving it:** deployment

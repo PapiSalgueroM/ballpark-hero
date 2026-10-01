@@ -1,5 +1,21 @@
 # Work board
 
+**2026-10-01, Codex817 ACCEPTED: Tennis and CBB worked help examples.**
+Both local help panels now explain the actual turn rules and show a fictional
+1000-to-800-to-100 example using their original scoring constants. Their 44px
+openers have visible keyboard focus. Close and Escape return focus to the exact
+opener without moving the page; the shared Dialog and original clue labels stay
+unchanged. Seven real Dialog tests and eight effective copied regressions pass.
+Four native phone contexts and two effective browser controls pass 102 checks
+against the final combined production CSS (3e99bf85), with all text fitting.
+Root reviewed the final phone screenshot. Source hashes held and owned browser,
+server and copied controls were cleaned up. Receipt: C:/Users/antho/AppData/
+Local/Temp/dukb-round817-clue-help/builder-receipt.json and native-cleanup.json.
+The combined type/build/artifact gates are recorded in 815 below. Its final CBB
+App pass also verifies help before and during play with unchanged saved state.
+816 owns the remaining final Tennis App integration. No duplicate game matrix
+or shared UI change. 815 and 817 are accepted; 816 continues. Next free 818.
+
 **2026-10-01, Codex815 ACCEPTED: College Basketball Program feedback.**
 Correct answers now show a success cue, replacing the old delayed wrong message.
 Accepted misses receive finite feedback, including truthful final-miss copy.
@@ -29,6 +45,7 @@ App checks continue. Please include these accepted commits in the next publish.
 Fresh live audit: 170/170 sitemap routes answer cleanly, zero failures. This is
 crawl eligibility evidence, not confirmation of Google indexing or AdSense
 approval. The newest code is not claimed live. Next free round remains 818.
+
 **2026-10-01 13:45 EDT, desktop Claude lane: Release L IS LIVE**, main `e052875a`, deployment `f91f3933`, entry
 `index-dSiH_yGf.js`: **703** (validators hold a stored refusal until our own records have been asked) and **722**
 (NBA Front Office luxury tax and roster minimum, calibrated to the game's own payrolls). Record in
