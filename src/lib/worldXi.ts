@@ -708,25 +708,39 @@ const ASSIST_WEIGHT: Record<string, number> = {
 };
 
 /* Role voices only. The month and its numbers are the only things filled in,
-   so no real name can end up as the speaker of any of these. */
+   so no real name can end up as the speaker of any of these. A pool is
+   picked by the month's record, and within a season a line is not used twice
+   until its pool has run out. */
 const MONTH_UNBEATEN = [
-  'Your assistant said the shape finally made sense in {month}: {w} wins, {d} draws, zero defeats.',
+  'Your assistant said the shape finally made sense in {month}. {p} games, not one of them lost.',
   'The fans sang through {month}. {p} games, no defeats, and the noise carried into the car park.',
   'Unbeaten in {month}. The coaching staff let the dressing room enjoy it for exactly one night.',
   'The board sent a short note after {month}. It said well done and nothing else, which from them is a lot.',
+  'Nobody beat you in {month}, and your assistant started pinning the table to the dressing room wall.',
 ];
 const MONTH_WINLESS = [
   'A winless {month}. The door stayed shut after the last one and the press got nothing.',
   'Your assistant called {month} a reset, which is the polite word for it.',
-  'The fans booed off {month}. {l} defeats in {p} games will do that.',
+  'The fans let {month} have it. No wins in {p} games will do that.',
   'Not a win all {month}. The dressing room went quiet and the board went quieter.',
+  'The coaching staff went back through every tape from {month}, twice.',
 ];
-const MONTH_MIXED = [
+/* More wins than defeats, at least one defeat. */
+const MONTH_GOOD = [
+  'Your assistant filed {month} under good: {wins} from {p}.',
+  '{wins} from {p} in {month}. The fans went home happy more often than not.',
+  'A decent {month}, {wins} from {p}. The coaching staff picked holes in it anyway.',
+  'The board liked {month}. {wins} from {p}, and nobody upstairs asked any questions.',
+];
+/* At least one win, but no more wins than defeats. */
+const MONTH_UNEVEN = [
   '{month} was a coin toss: {w}W {d}D {l}L, and the dressing room knew it.',
-  'The fans left {month} unsure what they were watching. {w} wins, {l} defeats, no pattern.',
-  'Your assistant filed {month} under fine. {w} wins from {p}.',
+  'The fans left {month} unsure what they were watching. {wins}, {defeats}, no pattern.',
   'A month of two halves in {month}: the good games were very good and the rest were not.',
+  'Your assistant called {month} uneven, which was generous. {wins} from {p}.',
 ];
+/* Only ever the month that holds the season's biggest win, and only when it
+   was by four or more, so it is said once a season at most. */
 const MONTH_BIG_WIN = [
   'The {gf}-{ga} in {month} is the one the fans will still be bringing up in ten years.',
   'A {gf}-{ga} in {month}. Your assistant kept the team sheet from that one.',
@@ -797,7 +811,12 @@ function shuffleWith<T>(rand: () => number, arr: T[]): T[] {
 }
 
 function fillMonth(template: string, v: Record<string, number | string>): string {
-  return template.replace(/\{(w|d|l|p|gf|ga|month)\}/g, (_, k: string) => String(v[k]));
+  return template.replace(/\{(w|d|l|p|gf|ga|month|wins|defeats)\}/g, (_, k: string) => String(v[k]));
+}
+
+/** "1 win", "3 wins": counted words for the month lines. */
+function counted(n: number, word: string): string {
+  return `${n} ${word}${n === 1 ? '' : 's'}`;
 }
 
 interface SeasonExtras {
@@ -838,7 +857,12 @@ function buildSeasonExtras(
   const topIdx = topScorer ? players.findIndex(p => p.name === topScorer.name) : -1;
   const topGoals = topScorer ? topScorer.goals : 0;
   const goalWeights = players.map((p, i) => (i === topIdx ? 0 : (GOAL_WEIGHT[p.position] ?? 1) * ratingFactor[i]));
-  const othersTarget = topScorer ? Math.round(topGoals * (1.4 + rand() * 0.8)) : Math.round(20 + squadRating / 4);
+  /* The side's goals follow its points (a real top flight runs close to a
+     goal a point), and the top scorer's printed tally never comes to more
+     than about half of them. Measured over 300 squads a tier: sides on 77
+     points scored about 73, sides on 110 about 104. */
+  const teamTarget = Math.round(points * (0.85 + rand() * 0.2));
+  const othersTarget = topScorer ? Math.max(Math.round(topGoals * 1.1), teamTarget - topGoals) : teamTarget;
   const caps = players.map(() => (topScorer ? Math.max(0, topGoals - 1) : LEAGUE_MATCHES * 2));
   const playerGoals = allocateByWeight(othersTarget, goalWeights, caps);
   if (topIdx >= 0) playerGoals[topIdx] = topGoals;
@@ -868,7 +892,7 @@ function buildSeasonExtras(
   /* A win concedes a little (none, one, now and then two, never as many as
      it scored), so a 5-0 does not turn into a 5-3; a defeat loses by one,
      two or three. Measured before this split, a 110 point side conceded 40
-     a season, which is a mid table defence. */
+     a season, which is a mid table defence; after it, about 24. */
   const ga = results.map((r, i) => {
     if (r === 'D') return gf[i];
     const m = rand();
@@ -919,6 +943,17 @@ function buildSeasonExtras(
   const monthOf: number[] = [];
   MONTH_MATCHES.forEach((count, mi) => { for (let k = 0; k < count; k++) monthOf.push(mi); });
   while (monthOf.length < results.length) monthOf.push(MONTHS.length - 1);
+  /* The season's biggest win, the first of them on a tie. */
+  const seasonBest = results.reduce((best, r, i) => (r === 'W' && gf[i] - ga[i] > best.margin ? { margin: gf[i] - ga[i], i } : best), { margin: 0, i: -1 });
+  const bigWinMonth = seasonBest.margin >= 4 ? monthOf[seasonBest.i] : -1;
+  const usedLines = new Set<string>();
+  const pickLine = (pool: string[]) => {
+    let open = pool.filter(l => !usedLines.has(l));
+    if (open.length === 0) { pool.forEach(l => usedLines.delete(l)); open = pool; }
+    const line = open[Math.floor(rand() * open.length)];
+    usedLines.add(line);
+    return line;
+  };
   const months: MonthReport[] = MONTHS.map((month, mi) => {
     const idx = results.map((_, i) => i).filter(i => monthOf[i] === mi);
     if (idx.length === 0) return null;
@@ -944,10 +979,23 @@ function buildSeasonExtras(
       const pi = monthCs > 0 && gk >= 0 ? gk : ratings.indexOf(Math.max(...ratings));
       standout = { name: players[pi].name, goals: 0, assists: 0, cleanSheets: keepsSheets(players[pi].position) ? monthCs : 0 };
     }
-    const biggest = idx.reduce((best, i) => (results[i] === 'W' && gf[i] - ga[i] > best.margin ? { margin: gf[i] - ga[i], i } : best), { margin: 0, i: -1 });
-    const pool = biggest.margin >= 4 ? MONTH_BIG_WIN : l === 0 && w > 0 ? MONTH_UNBEATEN : w === 0 ? MONTH_WINLESS : MONTH_MIXED;
-    const template = pool[Math.floor(rand() * pool.length)];
-    const moment = fillMonth(template, { month, w, d, l, p: idx.length, gf: biggest.i >= 0 ? gf[biggest.i] : 0, ga: biggest.i >= 0 ? ga[biggest.i] : 0 });
+    const pool = mi === bigWinMonth
+      ? MONTH_BIG_WIN
+      : l === 0 && w > 0
+      ? MONTH_UNBEATEN
+      : w === 0
+      ? MONTH_WINLESS
+      : w > l
+      ? MONTH_GOOD
+      : MONTH_UNEVEN;
+    const template = pickLine(pool);
+    const moment = fillMonth(template, {
+      month, w, d, l, p: idx.length,
+      wins: counted(w, 'win'),
+      defeats: counted(l, 'defeat'),
+      gf: mi === bigWinMonth ? gf[seasonBest.i] : 0,
+      ga: mi === bigWinMonth ? ga[seasonBest.i] : 0,
+    });
     return { month, played: idx.length, wins: w, draws: d, losses: l, goalsFor: mgf, goalsAgainst: mga, standout, moment };
   }).filter((m): m is MonthReport => m !== null);
 
@@ -1053,7 +1101,7 @@ function buildSeasonExtras(
       finishTo: bestShape.tablePosition,
       pointsFrom: finish.points,
       pointsTo: bestShape.points,
-      line: ['What would have changed: the shape, more than any one slot.', shapeSentence, slotSentence, `Your ${formationName} was the right call for this group.`, close].filter(Boolean).join(' '),
+      line: ['What would have changed: the shape, more than any one slot.', shapeSentence, slotSentence, chosenMisfits === 0 ? `Your ${formationName} was the right call for this group.` : '', close].filter(Boolean).join(' '),
     };
   } else {
     whatIf = {
