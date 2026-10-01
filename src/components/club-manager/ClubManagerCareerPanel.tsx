@@ -3,6 +3,7 @@ import { MANAGER_BACKGROUNDS, CLUB_IDENTITIES, money } from '@/lib/clubManager';
 import type { CareerState, nationOfferFor } from '@/lib/clubManager';
 import type { useClubManager } from '@/hooks/useClubManager';
 import JobHuntCard from '@/components/club-manager/JobHuntCard';
+import { huntBusy } from '@/lib/clubManagerJobHunt';
 
 export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
   c: CareerState;
@@ -57,12 +58,17 @@ export default function ClubManagerCareerPanel({ c, g, nationOffer }: {
                     <p className="text-[11px] text-muted-foreground mb-2">{c.approach.blurb}</p>
                     <p className="text-[10px] text-muted-foreground mb-2">Commit and it becomes a summer pre-agreement: the move happens when the season ends, the news breaks today, and your current board will not love it. Ignore it and they move on in a few weeks.</p>
                     <div className="flex gap-2">
-                      <button
-                        onClick={() => g.answerApproach(true)}
-                        className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
-                      >
-                        🤝 Shake hands for the summer
-                      </button>
+                      {/* Round 783 review: never promised to two clubs. The
+                          engine refuses the handshake while an application is
+                          out or a move is booked, so the button goes too. */}
+                      {!huntBusy(c) && (
+                        <button
+                          onClick={() => g.answerApproach(true)}
+                          className="flex-1 py-2 rounded-lg bg-primary text-primary-foreground text-xs font-bold hover:opacity-90 transition-opacity"
+                        >
+                          🤝 Shake hands for the summer
+                        </button>
+                      )}
                       <button
                         onClick={() => g.answerApproach(false)}
                         className="flex-1 py-2 rounded-lg border border-border bg-card text-xs font-bold text-foreground hover:border-primary transition-colors"

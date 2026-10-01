@@ -35,7 +35,14 @@
    season. A decline puts the club on a cooldown that covers the rest of this
    season and the whole of next. Nothing while a summer move or an approach's
    pre-agreement is already on the save, because two promised chairs is not a
-   game anybody can finish.
+   game anybody can finish, and nothing while an approach is waiting on your
+   answer either; the other way round, no club makes an approach while an
+   application is out or a move is booked (huntBusy). Nothing in the last
+   ANSWER_MAX_MATCHES league games, so every answer lands while there is a
+   season left to play, and a yes still waiting on you when the season ends
+   leads the summary's offers (waitingYes). The sack ends the hunt
+   (dropOnSack): what you agreed to comes onto the out of work screen as an
+   offer like any other, and the job you take there is the job you get.
 
    OLD SAVES. Every field here is optional on CareerState and jobHuntOf hands
    back the empty hunt when it is absent, so a save written before this round
@@ -127,21 +134,44 @@ export type ApplyRefusal =
   | 'cooldown'   // they said no recently
   | 'limit'      // three a season
   | 'committed'  // a summer move or a pre-agreement is already on the save
+  | 'approach'   // another club's approach is waiting on your answer
+  | 'late'       // too few league games left for them to answer in
   | 'sacked';    // out of work: the wilderness has its own market
 
-/** Why this application cannot go out, or null when it can. */
+/**
+ * Why this application cannot go out, or null when it can. `leagueMatchesLeft`
+ * is how many of your league games are still to play, which only the engine
+ * can count (myLeagueMatchesLeft); the engine's applyForJob always passes it,
+ * and a caller that leaves it out skips the 'late' check and nothing else.
+ */
 export function applyRefusal(
-  career: Pick<CareerState, 'jobHunt' | 'season' | 'clubName' | 'pendingMove' | 'sacked' | 'wilderness'>,
+  career: Pick<CareerState, 'jobHunt' | 'season' | 'clubName' | 'pendingMove' | 'sacked' | 'wilderness' | 'approach'>,
   club: string,
+  leagueMatchesLeft: number = Infinity,
 ): ApplyRefusal | null {
   if (career.sacked || career.wilderness) return 'sacked';
   if (club === career.clubName) return 'own';
   const hunt = jobHuntOf(career);
   if (hunt.summerMove || career.pendingMove) return 'committed';
+  if (career.approach) return 'approach';
   if (hunt.open) return 'open';
   if (hunt.cooldowns.some(c => c.club === club && career.season <= c.until)) return 'cooldown';
   if (hunt.sent >= APPLICATIONS_PER_SEASON) return 'limit';
+  /* The wait is drawn up to ANSWER_MAX_MATCHES of your match days and every
+     league game is one of them, so with this many left the answer always
+     lands before the season ends. */
+  if (leagueMatchesLeft < ANSWER_MAX_MATCHES) return 'late';
   return null;
+}
+
+/**
+ * Round 783 review: an application out or a move booked, the state in which
+ * no club makes an approach and an approach cannot be committed to. One rule
+ * read by maybeApproach, respondApproach and the approach card.
+ */
+export function huntBusy(career: Pick<CareerState, 'jobHunt' | 'season'>): boolean {
+  const hunt = jobHuntOf(career);
+  return !!(hunt.open || hunt.summerMove);
 }
 
 /** The season a decline at `club` keeps the door shut through, or null. */
@@ -160,11 +190,12 @@ export function applicationsLeft(career: Pick<CareerState, 'jobHunt' | 'season'>
  * hunt, or null when applyRefusal says no.
  */
 export function openApplication(
-  career: Pick<CareerState, 'jobHunt' | 'season' | 'week' | 'clubName' | 'pendingMove' | 'sacked' | 'wilderness'>,
+  career: Pick<CareerState, 'jobHunt' | 'season' | 'week' | 'clubName' | 'pendingMove' | 'sacked' | 'wilderness' | 'approach'>,
   target: { club: string; league: string; tier: number },
   rng: () => number = Math.random,
+  leagueMatchesLeft: number = Infinity,
 ): JobHunt | null {
-  if (applyRefusal(career, target.club)) return null;
+  if (applyRefusal(career, target.club, leagueMatchesLeft)) return null;
   const hunt = jobHuntOf(career);
   const span = ANSWER_MAX_MATCHES - ANSWER_MIN_MATCHES + 1;
   return {
@@ -336,6 +367,36 @@ export function consumeSummerMove(hunt: JobHunt, from: string, season: number, i
     sent: 0,
     lastMove: move ? { from, to: move.club, interim, season, week: 0, when: 'summer' } : hunt.lastMove,
   };
+}
+
+/**
+ * Round 783 review: the rollover when no booked move fires. The slot and the
+ * season's count reset; the cooldowns cross the summer untouched, because a
+ * decline covers the whole of next season. scripts/simCmApplications.mjs
+ * rewrites the return line below for its rollwipe control, so it stays
+ * exactly as written.
+ */
+export function rollOverHunt(hunt: JobHunt, season: number): JobHunt {
+  return { ...hunt, open: null, summerMove: null, sentSeason: season, sent: 0 };
+}
+
+/**
+ * Round 783 review: the club whose yes is still waiting on your answer, or
+ * null. finishSeason puts it at the head of the summary's offers, so a yes
+ * that lands on the last match day is never thrown away by the rollover.
+ */
+export function waitingYes(hunt: JobHunt): string | null {
+  return hunt.open && hunt.open.status === 'accepted' ? hunt.open.club : null;
+}
+
+/**
+ * Round 783 review: the sack ends the hunt. Nothing stays open and nothing
+ * stays booked, so the job taken on the out of work screen is the job the
+ * rollover gives you; the engine puts the club you had agreed to onto that
+ * screen as an offer first.
+ */
+export function dropOnSack(hunt: JobHunt): JobHunt {
+  return { ...hunt, open: null, summerMove: null };
 }
 
 /** The application closes as you walk in now. */

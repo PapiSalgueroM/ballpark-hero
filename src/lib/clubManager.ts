@@ -17,6 +17,7 @@ import type { JobOffer as MarketJobOffer, ManagerProfile, ClubTier } from '@/lib
 import {
   acceptLine, acceptanceOdds, applyRefusal, bookSummerMove, consumeSummerMove, countDown,
   decideApplication, declineLine, employedStanding, jobHuntOf, leavingLine, openApplication, recordDecision,
+  dropOnSack, huntBusy, rollOverHunt, waitingYes,
   LEAVING_BOARD_HIT,
 } from '@/lib/clubManagerJobHunt';
 import type { ApplicationInput, JobHunt } from '@/lib/clubManagerJobHunt';
@@ -1580,9 +1581,34 @@ export function wildernessProfile(career: CareerState): ManagerProfile {
 /** Open the wilderness. Called the moment the board pulls the trigger. */
 export function enterWilderness(career: CareerState): CareerState {
   if (career.wilderness) return career;
+  /* Round 783 review: the sack ends the job hunt. A move you had agreed to
+     (booked for the summer, or a yes still waiting on your answer) comes
+     onto this screen as the first offer, so it is still yours to take, and
+     whichever job you take here is the one you get. */
+  const hunt = career.jobHunt ? jobHuntOf(career) : null;
+  const agreed = hunt ? (hunt.summerMove?.club ?? waitingYes(hunt)) : null;
+  const offers = agreed ? [agreedJobOffer(career, agreed)] : [];
   return {
     ...career,
-    wilderness: { weeksOut: 0, formerClub: career.clubName, offers: [], seen: [] },
+    ...(hunt ? { jobHunt: dropOnSack(hunt) } : {}),
+    wilderness: { weeksOut: 0, formerClub: career.clubName, offers, seen: offers.map(o => o.club) },
+  };
+}
+
+/** The out of work screen's offer for a club that had already said yes. */
+function agreedJobOffer(career: CareerState, club: string): MarketJobOffer {
+  const eraHist = !!career.eraId && isHistoricEra(career.eraId);
+  const def = eraHist ? eraClubDefFor(club, career.eraId) : clubDefFor(club);
+  const league = (eraHist && eraLeagueOf(club, career.eraId)) || leagueOf(club);
+  return {
+    club,
+    country: allOfferClubs().find(c => c.name === club)?.country ?? '',
+    tier: def.tier as ClubTier,
+    league: league.name,
+    brief: 'Start in the summer, the way you agreed.',
+    reason: 'You agreed this move before the sack, and their board are still willing to go through with it.',
+    budget: def.budget,
+    keenness: 60,
   };
 }
 
@@ -1637,7 +1663,10 @@ export function wildernessWeek(career: CareerState, rng: () => number = Math.ran
 export function acceptWildernessJob(career: CareerState, club: string): CareerState | null {
   const w = career.wilderness;
   if (!w || !w.offers.some(o => o.club === club)) return null;
-  const next = startNextSeason({ ...career, sacked: false }, club);
+  /* Round 783 review: and nothing booked before the sack can outrank it at
+     the rollover, even on a path that skipped enterWilderness. */
+  const hunt = career.jobHunt ? { jobHunt: dropOnSack(jobHuntOf(career)) } : {};
+  const next = startNextSeason({ ...career, ...hunt, sacked: false }, club);
   return { ...next, sacked: false, wilderness: null };
 }
 
@@ -15962,7 +15991,7 @@ function maybeApproach(state: CareerState): string | null {
   if (state.approach || state.pendingMove || state.sacked) return null;
   /* Round 783: and not while you are the one on the phone. A club does not
      court a manager who has a summer move booked or an application out. */
-  if (state.jobHunt?.summerMove || state.jobHunt?.open) return null;
+  if (huntBusy(state)) return null;
   const playedLeague = state.calendar.slice(0, state.week + 1).filter(e => e.type === 'league').length;
   if (playedLeague < 8) return null;
   const eraHist = !!state.eraId && isHistoricEra(state.eraId);
@@ -15997,6 +16026,10 @@ export function respondApproach(career: CareerState, commit: boolean): CareerSta
   const state: CareerState = { ...career };
   const app = state.approach;
   if (!app) return career;
+  /* Round 783 review: never promised to two clubs. With an application out
+     or a move booked, a handshake is refused and the approach stays live
+     (the card offers only the turn down). */
+  if (commit && huntBusy(career)) return career;
   state.approach = null;
   if (commit) {
     state.pendingMove = { club: app.club, blurb: app.blurb };
@@ -16125,15 +16158,36 @@ export function applicationOdds(state: CareerState, club: string): number {
 }
 
 /**
+ * Round 783 review: my league games still to play, counting the one paused
+ * at the interval. Every one of them is one of my match days, so it is the
+ * floor under how many answers the season has room for (cup and European
+ * nights only add to it).
+ */
+export function myLeagueMatchesLeft(state: CareerState): number {
+  let n = 0;
+  for (let w = state.week; w < state.calendar.length; w++) {
+    const entry = state.calendar[w];
+    if (entry.type === 'league' && fixtureFor(state, entry)) n += 1;
+  }
+  return n;
+}
+
+/** Why an application to `club` cannot go out today, every rule included. */
+export function jobApplyRefusal(state: CareerState, club: string) {
+  return applyRefusal(state, club, myLeagueMatchesLeft(state));
+}
+
+/**
  * Send the application. Null when the pure rules refuse it or the club is not
  * in this world. The answer's delay and roll are fixed here; the inbox gets a
  * note so the status is readable from the day it went out.
  */
 export function applyForJob(career: CareerState, club: string): CareerState | null {
-  if (applyRefusal(career, club)) return null;
+  const left = myLeagueMatchesLeft(career);
+  if (applyRefusal(career, club, left)) return null;
   const target = applyTargets(career).find(t => t.club === club);
   if (!target) return null;
-  const hunt = openApplication(career, { club: target.club, league: target.league, tier: target.tier });
+  const hunt = openApplication(career, { club: target.club, league: target.league, tier: target.tier }, Math.random, left);
   if (!hunt) return null;
   const state: CareerState = { ...career, jobHunt: hunt, inbox: [...(career.inbox ?? [])] };
   pushMessage(state, {
@@ -16164,8 +16218,10 @@ function tickJobApplication(state: CareerState): string | null {
   const ticked = countDown(hunt);
   state.jobHunt = ticked.hunt;
   if (!ticked.due) return null;
-  /* A club that has left this world (an era save's target that no longer
-     resolves) cannot answer; the application lapses with no cooldown. */
+  /* The club resolved when you applied (applyTargets only lists clubs that
+     do) and the world only changes clubs at the rollover or when you move,
+     and both clear the slot, so a due application always has a club to
+     answer it. */
   const input = applicationInputFor(state, open.club);
   const verdict = decideApplication(input, open.roll);
   state.jobHunt = recordDecision(ticked.hunt, verdict.accepted, state.week, verdict.odds);
@@ -16204,6 +16260,13 @@ function tickJobApplication(state: CareerState): string | null {
   return `❌ ${open.club} have turned you down. The reason is in your inbox.`;
 }
 
+/** How a club that said yes is described: the booked move and the summary's offer. */
+function hiredBlurb(career: CareerState, club: string, league: string): string {
+  const eraHist = !!career.eraId && isHistoricEra(career.eraId);
+  const def = eraHist ? eraClubDefFor(club, career.eraId) : clubDefFor(club);
+  return `${TIER_INFO[def.tier].emoji} ${TIER_INFO[def.tier].label} club · ${league} · ${money(def.budget)} budget`;
+}
+
 /** The generated name a club you leave puts in its dugout. Never a real person. */
 export function interimManagerName(from: string, season: number, week: number): string {
   return makeGeneratedName(`interim|${from}|${season}|${week}`);
@@ -16219,10 +16282,7 @@ export function joinClubInSummer(career: CareerState): CareerState | null {
   const hunt = jobHuntOf(career);
   const open = hunt.open;
   if (!open || open.status !== 'accepted') return null;
-  const eraHist = !!career.eraId && isHistoricEra(career.eraId);
-  const def = eraHist ? eraClubDefFor(open.club, career.eraId) : clubDefFor(open.club);
-  const blurb = `${TIER_INFO[def.tier].emoji} ${TIER_INFO[def.tier].label} club · ${open.league} · ${money(def.budget)} budget`;
-  const booked = bookSummerMove(hunt, blurb);
+  const booked = bookSummerMove(hunt, hiredBlurb(career, open.club, open.league));
   if (!booked) return null;
   const state: CareerState = {
     ...career,
@@ -16318,6 +16378,22 @@ export function finishSeason(career: CareerState): { state: CareerState; summary
         blurb: `🤝 The pre-agreement you shook hands on mid-season · ${state.pendingMove.blurb}`,
       });
     }
+  }
+  /* Round 783 review: an application still out when the season ends is
+     answered now, on the roll it was sent with, and a yes nobody has answered
+     leads the offers the same way, so the rollover never throws one away.
+     Tapping Continue instead turns it down, because the rollover clears the
+     slot. A booked summer move is the rollover's own business. */
+  if (state.jobHunt?.open && state.jobHunt.open.status === 'pending' && !state.sacked) {
+    state.jobHunt = { ...state.jobHunt, open: { ...state.jobHunt.open, matchesLeft: 1 } };
+    tickJobApplication(state);
+  }
+  const yesClub = state.jobHunt ? waitingYes(jobHuntOf(state)) : null;
+  if (yesClub && !offers.some(o => o.club === yesClub)) {
+    offers.unshift({
+      club: yesClub,
+      blurb: `✅ They said yes to your application · ${hiredBlurb(state, yesClub, state.jobHunt?.open?.league ?? '')}`,
+    });
   }
   /* Round 309: the summer's sackings are decided HERE, before the offers,
      so a job you are offered is a chair that really empties and the
@@ -17170,7 +17246,7 @@ export function startNextSeason(career: CareerState, acceptOfferClub?: string): 
       : '';
     state.jobHunt = summerMove && moving
       ? consumeSummerMove(career.jobHunt, career.clubName, state.season, interim)
-      : { ...jobHuntOf(career), open: null, summerMove: null, sentSeason: state.season, sent: 0 };
+      : rollOverHunt(jobHuntOf(career), state.season);
   }
   ensureManagers(state);
   /* Round 135: a reputation follows you, so the press mood carries over the

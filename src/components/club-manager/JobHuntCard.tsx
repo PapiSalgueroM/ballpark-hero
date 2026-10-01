@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { TIER_INFO, applyTargets, applicationOdds, money } from '@/lib/clubManager';
+import { TIER_INFO, applyTargets, applicationOdds, jobApplyRefusal, money } from '@/lib/clubManager';
 import type { CareerState, ApplyTarget } from '@/lib/clubManager';
-import { APPLICATIONS_PER_SEASON, applicationsLeft, cooldownUntil, jobHuntOf, oddsWord } from '@/lib/clubManagerJobHunt';
+import { ANSWER_MAX_MATCHES, APPLICATIONS_PER_SEASON, applicationsLeft, cooldownUntil, jobHuntOf, oddsWord } from '@/lib/clubManagerJobHunt';
 
 /**
  * Round 783: the job hunt on the Manager panel. One small tile that opens a
@@ -33,7 +33,11 @@ export default function JobHuntCard({ c, onApply, onJoinNow, onJoinSummer }: {
   const chosenLeague = leagueId && leagues.some(l => l.id === leagueId) ? leagueId : leagues[0]?.id ?? null;
   const clubs = targets.filter(t => t.leagueId === chosenLeague);
   const left = applicationsLeft(c);
-  const committed = !!c.pendingMove;
+  /* The engine's own refusal, asked about no club in particular (no club is
+     called '', so neither the own club nor a cooldown can answer), which is
+     every rule that shuts the whole tile: a pre-agreement, an approach
+     waiting on you, the season's three, too few league games left. */
+  const block = jobApplyRefusal(c, '');
 
   const open = hunt.open;
   if (open && open.status === 'accepted') {
@@ -78,8 +82,8 @@ export default function JobHuntCard({ c, onApply, onJoinNow, onJoinSummer }: {
     );
   }
 
-  if (!picking) {
-    const blocked = committed || left === 0;
+  if (!picking || block) {
+    const blocked = block !== null;
     return (
       <button
         data-job-hunt="tile"
@@ -93,11 +97,15 @@ export default function JobHuntCard({ c, onApply, onJoinNow, onJoinSummer }: {
         <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">📨 Apply for a job</div>
         <div className="text-sm font-bold text-foreground">Fancy a move? Write to a club.</div>
         <div className="text-[10px] text-muted-foreground mt-0.5">
-          {committed
+          {block === 'committed'
             ? 'Not while a summer pre-agreement is on the table.'
-            : left === 0
-              ? `All ${APPLICATIONS_PER_SEASON} applications used this season.`
-              : `${left} of ${APPLICATIONS_PER_SEASON} left this season. They answer in two to five match days.`}
+            : block === 'approach'
+              ? `Answer the ${c.approach?.club ?? 'other club'} approach first.`
+              : block === 'limit'
+                ? `All ${APPLICATIONS_PER_SEASON} applications used this season.`
+                : block === 'late'
+                  ? `Too late this season. A club needs up to ${ANSWER_MAX_MATCHES} league games to answer, so write again next season.`
+                  : `${left} of ${APPLICATIONS_PER_SEASON} left this season. They answer in two to five match days.`}
         </div>
       </button>
     );
