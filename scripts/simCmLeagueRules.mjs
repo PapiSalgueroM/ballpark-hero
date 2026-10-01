@@ -58,13 +58,24 @@
                                  must go red;
      CM_RULES_CONTROL=fourth     drops the fourth relegated club of the
                                  synthetic league, part synthetic must go red;
-     CM_RULES_CONTROL=static     the chunk check reads a copy of the engine
-                                 chunk with an era roster block planted in it
-                                 (the shape a static era import produces), part
-                                 chunks must go red. The real static import is
-                                 also proven red by building with it, see the
-                                 Round 832 notes in the header of
-                                 src/lib/clubManagerEras.ts.
+     CM_RULES_CONTROL=static     the chunk check reads a copy of dist/assets
+                                 whose engine chunk carries 2010 rows and a
+                                 static import of the 2010 chunk (what a
+                                 static era import does to a vite build), part
+                                 chunks must go red (2 failures, measured);
+     CM_RULES_CONTROL=staticbuild the literal control: the engine is built by
+                                 a real code splitting bundler (esbuild,
+                                 minified) with clubManagerEras.ts given a
+                                 static import of the 2010 bake beside its
+                                 dynamic one, and part chunks must go red (the
+                                 2010 rows land in a chunk the entry imports
+                                 statically: 2 failures, measured). A vite
+                                 build with that patch ran past nine minutes
+                                 on the loaded build machine and was stopped,
+                                 so esbuild stands in for it.
+
+   Measured 2026-10-01: modern 53s, eras plus pure about 60s, drop4 17s,
+   cupless about 20s, chunks under 15s.
 
    Run: node scripts/simCmLeagueRules.mjs [--part=modern|eras|pure|synthetic|chunks] [--write]
    --write rewrites the baseline for the parts run, from this tree. Only do
@@ -92,7 +103,7 @@ const PARTS = partArg ? partArg.slice(7).split(',') : ['modern', 'eras', 'pure',
    another tree (CM_RULES_ROOT) runs the digest only. */
 const OWN_TREE = path.resolve(process.env.CM_RULES_ROOT || SCRIPT_ROOT) === path.resolve(SCRIPT_ROOT);
 const CONTROL = process.env.CM_RULES_CONTROL || '';
-const CONTROLS = ['dropcount', 'fourth', 'static'];
+const CONTROLS = ['dropcount', 'fourth', 'static', 'staticbuild'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) { console.error(`CM_RULES_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`); process.exit(1); }
 if (CONTROL && WRITE) { console.error('a control run never writes the baseline'); process.exit(1); }
 
@@ -590,7 +601,9 @@ async function partCupless() {
 
 async function partChunks() {
   console.log('5) the built chunks: each era in its own chunk, reached only by a dynamic import');
-  let dir = path.join(SCRIPT_ROOT, 'dist', 'assets');
+  /* CM_RULES_DIST reads another build (the real static import control). */
+  const distRoot = path.resolve(process.env.CM_RULES_DIST || path.join(SCRIPT_ROOT, 'dist'));
+  let dir = path.join(distRoot, 'assets');
   if (!fs.existsSync(dir)) { console.log('   (no build in dist/, skipped: run vite build first)'); return; }
   const mod = await bundleEngine(null);
   await mod.eras.ensureAllEraRosters?.();
@@ -613,6 +626,39 @@ async function partChunks() {
   for (const w of Object.keys(worlds)) {
     probes[w] = (probes[w] ?? []).slice(0, 40);
     if (probes[w].length < 20) { fail(`only ${probes[w].length} probes for ${w}`); return; }
+  }
+  if (CONTROL === 'staticbuild') {
+    /* The literal control: the engine built by a real code splitting bundler
+       (esbuild, minified, the same row shape) with clubManagerEras.ts given a
+       static import of the 2010 bake beside its dynamic one, the shape every
+       era had before this round. The check must find the 2010 rows outside
+       a chunk of their own. A full vite build takes over five minutes on a
+       loaded machine, so this stands in for it. */
+    const out = path.join(TMP, 'staticbuild', 'assets');
+    const erasPath = path.join(ROOT, 'src', 'lib', 'clubManagerEras.ts');
+    const importAnchor = "import type { BakedPlayer } from '@/data/clubManagerRosters';";
+    const regAnchor = 'export const HISTORIC_ROSTERS: Record<string, Record<string, BakedPlayer[]>> = {};';
+    await build({
+      stdin: { contents: `export * from '${ROOT_FWD}/src/lib/clubManager.ts';`, resolveDir: ROOT, loader: 'ts' },
+      bundle: true, splitting: true, format: 'esm', platform: 'node', minify: true,
+      outdir: out, alias: { '@': `${ROOT_FWD}/src` }, logLevel: 'error',
+      plugins: [{
+        name: 'static-era',
+        setup(b) {
+          b.onLoad({ filter: /[\\/]src[\\/]lib[\\/]clubManagerEras\.ts$/ }, a => {
+            let src = fs.readFileSync(a.path, 'utf8').replaceAll('\r\n', '\n');
+            if (path.resolve(a.path) === path.resolve(erasPath)) {
+              if (src.split(importAnchor).length !== 2 || src.split(regAnchor).length !== 2) { console.error('control cannot run: the anchors it patches are not in clubManagerEras.ts once each'); process.exit(1); }
+              src = src.replace(importAnchor, `${importAnchor}\nimport { ERA2010_ROSTERS as STATIC_2010 } from '@/data/clubManagerEra2010';`)
+                .replace(regAnchor, `${regAnchor}\nHISTORIC_ROSTERS.era2010 = STATIC_2010;`);
+            }
+            return { contents: src, loader: 'ts', resolveDir: path.dirname(a.path) };
+          });
+        },
+      }],
+    });
+    console.log('NEGATIVE CONTROL ON: a split build with the 2010 bake imported statically, part chunks must go red');
+    dir = out;
   }
   if (CONTROL === 'static') {
     /* What a static import of an era does to a build: its rows land in a
@@ -638,8 +684,11 @@ async function partChunks() {
   const eraChunks = {};
   for (const w of Object.keys(worlds).filter(x => x !== 'now')) {
     const hs = holders(w);
-    if (hs.length !== 1) { fail(`${w}'s rosters sit in ${hs.length} files: ${hs.join(', ')}`); continue; }
-    const f = hs[0];
+    if (hs.length !== 1) fail(`${w}'s rosters sit in ${hs.length} files: ${hs.join(', ')}`);
+    /* The era's own chunk is the holder that is not the engine; the import
+       checks below run on it even when the rows also leaked elsewhere. */
+    const f = hs.find(h => h !== engine) ?? hs[0];
+    if (!f) continue;
     eraChunks[w] = f;
     const found = probes[w].filter(k => text.get(f).includes(k)).length;
     if (found !== probes[w].length) fail(`${w}'s chunk ${f} holds ${found} of its ${probes[w].length} probe rows`);
@@ -654,7 +703,7 @@ async function partChunks() {
     const dynamics = files.filter(g => dynamicRe.test(text.get(g)));
     if (statics.length) fail(`${w}'s chunk ${f} is imported statically by ${statics.join(', ')}`);
     if (!dynamics.length) fail(`nothing imports ${w}'s chunk ${f} dynamically, so nothing can load it`);
-    const indexHtml = path.join(SCRIPT_ROOT, 'dist', 'index.html');
+    const indexHtml = path.join(distRoot, 'index.html');
     if (fs.existsSync(indexHtml) && fs.readFileSync(indexHtml, 'utf8').includes(f)) fail(`dist/index.html preloads ${w}'s chunk ${f}`);
     console.log(`   ${w}: ${f}, ${probes[w].length} probe rows, reached by import() from ${dynamics.length} file(s), statically from ${statics.length}`);
   }
