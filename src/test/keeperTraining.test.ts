@@ -18,6 +18,7 @@
 import { describe, it, expect } from 'vitest';
 import { applyTrainingResult, trainingStatFor, type CareerState, type TrainingDrill } from '@/lib/soccerCareerEngine';
 import { attrTreeFor } from '@/lib/soccerCareerAttributes';
+import { applyDrillResult, drillForPosition, drillStatFor, type DrillKind } from '@/lib/careerDrills';
 
 const DRILLS: TrainingDrill[] = ['dribbling', 'pace', 'passing', 'shooting'];
 
@@ -70,6 +71,43 @@ describe('keeper training drills', () => {
         const { stat, label } = trainingStatFor(position, drill);
         const family = families.find(f => f.key === stat);
         expect(family, `${position} ${drill} moves ${stat}, which is not a family on the attribute screen`).toBeDefined();
+        expect(label).toBe(family!.label);
+      }
+    }
+  });
+
+  /* The review of 2026-10-01: First Touch banks through applyDrillResult, which
+     read DRILL_META alone, so a keeper's First Touch paid dribbling (his
+     Penalty Saving) and said "+2 Dribbling". It is a dribbling drill, so it
+     trains what the cone slalom trains for the position. */
+  it('a keeper First Touch pays Positioning (defending), not dribbling', () => {
+    const gk = { ...state('GK'), overall: 70, potential: 80, potentialEarned: 0 } as unknown as CareerState;
+    const out = applyDrillResult(gk, 'firsttouch', 9);
+    expect(out.statBoostNextSeason.defending).toBe(2);
+    expect(out.statBoostNextSeason.dribbling).toBeUndefined();
+    expect(out.events[out.events.length - 1]).toContain('+2 Positioning');
+    expect(drillStatFor('firsttouch', 'GK')).toEqual(trainingStatFor('GK', 'dribbling'));
+  });
+
+  it('an outfield First Touch still pays Dribbling, and the position drills keep their stats', () => {
+    for (const position of ['ST', 'CB', 'CM', 'LW']) {
+      const p = { ...state(position), overall: 70, potential: 80, potentialEarned: 0 } as unknown as CareerState;
+      const out = applyDrillResult(p, 'firsttouch', 9);
+      expect(out.statBoostNextSeason.dribbling).toBe(2);
+      expect(out.events[out.events.length - 1]).toContain('+2 Dribbling');
+    }
+    expect(drillStatFor('gloves', 'GK')).toEqual({ stat: 'reflexes', label: 'Reflexes' });
+    expect(drillStatFor('tackle', 'CB')).toEqual({ stat: 'defending', label: 'Defending' });
+    expect(drillStatFor('wallshot', 'ST')).toEqual({ stat: 'shooting', label: 'Shooting' });
+  });
+
+  it('every drill a position can bank is labelled with that position family name', () => {
+    for (const position of ['GK', 'ST', 'CB', 'CDM', 'LW']) {
+      const families = attrTreeFor(position);
+      for (const kind of [drillForPosition(position), 'firsttouch'] as DrillKind[]) {
+        const { stat, label } = drillStatFor(kind, position);
+        const family = families.find(f => f.key === stat);
+        expect(family, `${position} ${kind} moves ${stat}, which is not a family on the attribute screen`).toBeDefined();
         expect(label).toBe(family!.label);
       }
     }

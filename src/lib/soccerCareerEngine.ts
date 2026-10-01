@@ -997,7 +997,10 @@ export type TrainingStat = "pace" | "shooting" | "passing" | "dribbling" | "defe
    sweeping speed, the gates are his distribution, and shot stopping was always
    his reflexes. The labels are the keeper tree's family names from
    soccerCareerAttributes, so the panel, the event line and the attribute
-   screen all say the same word (src/test/keeperTraining.test.ts holds that). */
+   screen all say the same word (src/test/keeperTraining.test.ts holds the
+   mapping, src/test/keeperTrainingPanel.test.tsx holds the panel's words
+   against what the engine pays). First Touch follows this mapping through
+   drillStatFor in careerDrills. */
 const OUTFIELD_TRAINING: Record<TrainingDrill, { stat: TrainingStat; label: string }> = {
   dribbling: { stat: "dribbling", label: "Dribbling" },
   pace: { stat: "pace", label: "Pace" },
