@@ -63,8 +63,50 @@
    CONTRACTS ARE FICTIONAL, and always were: salary and years are derived
    from the rating by the game's own salaryFor shape, not from real deals.
 
-   Output: src/data/frontOfficePlayers.ts, committed.
-   Fence: scripts/simFrontOfficeRoster.mjs.
+   ROUND 828: THE WHOLE ROSTER, NOT JUST THE STARTERS. The owner: "we are yet
+   to have way more leagues and players for ... all the gm games". The bake
+   kept fifteen men a club (SLOTS) out of a release that carries the whole
+   53 and the practice squad. It now writes a second file beside the first:
+     src/data/frontOfficePlayers.ts  the fifteen starters, chosen and rated
+                                     EXACTLY as before. Nothing about who is
+                                     picked or what he is worth changed, so
+                                     Gauntlet Draft: NFL (which reads this
+                                     file) and every saved league read the
+                                     same men at the same numbers.
+     src/data/frontOfficeDepth.ts    everybody else on the club: the rest of
+                                     the active roster (the bench) and the
+                                     practice squad, loaded by the board only
+                                     when a new league starts.
+   CURRENT MEANS THE LATEST WEEK. The release keeps one row per man, his
+   latest, so a man released in week two still reads ACT on a week two row
+   while everybody else has moved on to week four. Every status is read off
+   the file's latest week only (currentRows), which is what "on the roster
+   today" means.
+   KICKERS, PUNTERS AND LONG SNAPPERS ARE NOT IN THE GAME. It has no position
+   for them and nothing to rate them on yet, so a full roster here is the 53
+   less those three, which is 48 to 50 men a club on the real file.
+   RESERVE LISTS. A man on injured reserve stays in the starters file when the
+   old rule picks him (it always read ACT and RES), but he is not on the
+   bench: injured reserve is not the 53.
+   HOW A BACKUP IS RATED, and it is labelled because it is a judgement. The
+   same rule as everybody (per game production for skill players, the
+   production and pedigree blend for defenders, pedigree for linemen and for
+   anyone who did not play), ranked among the backups and practice squad men
+   at his position, and mapped onto a band just under the starters' scale
+   (DEPTH_SCALE). A backup's per game numbers measure his snaps as much as
+   his ability, so ranking him against starters would rate the role, and the
+   engine needs every backup below every starter for one more reason: the
+   starters' scale floor is where a club's own depth chart puts its starting
+   line, and a backup who outrated his own starter would quietly start in
+   his place and move every result. The band's floor, 61, sits above the
+   engine's replacement level (60, a man off the street), so a real backup is
+   always worth more than an empty slot.
+
+   Output: src/data/frontOfficePlayers.ts and src/data/frontOfficeDepth.ts,
+   both committed.
+   Fence: scripts/simFrontOfficeRoster.mjs (the starters) and
+   scripts/simNflFullRosters.mjs (the bench, the practice squad and the deep
+   league engine).
 
    Run: node scripts/genFrontOfficeRoster.mjs
         node scripts/genFrontOfficeRoster.mjs --check   (rebuild, compare, write nothing)
@@ -77,10 +119,16 @@ import { fetchSeasonStats } from './lib/nflverseStats.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const OUT = path.join(ROOT, 'src', 'data', 'frontOfficePlayers.ts');
+const OUT_DEPTH = path.join(ROOT, 'src', 'data', 'frontOfficeDepth.ts');
 export const ROSTER_SEASON = 2026;
 export const STATS_SEASON = 2025;
 /** On the roster: active, or held on a reserve list. Cut and practice squad are not. */
 export const ROSTER_STATUSES = ['ACT', 'RES'];
+/** Round 828: the bench is the rest of the active roster, the practice squad is DEV. */
+export const BENCH_STATUSES = ['ACT'];
+export const PRACTICE_STATUSES = ['DEV'];
+/** Round 828: the band a backup is mapped onto, just under each starters' scale. */
+export const DEPTH_SCALE = { skill: [61, 65], OL: [75, 79], def: [61, 65] };
 /** How many of each the file carries per team, biggest rating first. */
 export const SLOTS = { QB: 1, RB: 2, WR: 3, TE: 1, OL: 2, DL: 2, LB: 2, DB: 2 };
 /** Fewer than this in a fine position and it is ranked with its whole group. */
@@ -202,6 +250,24 @@ function ageOf(birth) {
   return age >= 18 && age <= 50 ? age : null;
 }
 
+/* Round 828: THE LATEST WEEK ONLY. The release keeps each man's latest row,
+   so a man cut after week two still reads ACT on his week two row. A row
+   with no week at all (the harness fixtures) is kept, so a file without the
+   column reads as it always did. */
+export function currentRows(roster) {
+  let latest = 0;
+  for (const r of roster) latest = Math.max(latest, num(r.week));
+  if (!latest) return roster;
+  return roster.filter(r => !String(r.week ?? '').trim() || num(r.week) === latest);
+}
+
+/** Round 828: the latest week the release carries, for the file header. */
+export function latestWeek(roster) {
+  let latest = 0;
+  for (const r of roster) latest = Math.max(latest, num(r.week));
+  return latest;
+}
+
 /** The fantasy basis the old bake used, so a skill rating means what it meant. */
 export function skillScore(s) {
   return num(s.passing_yards) / 25 + num(s.passing_tds) * 4
@@ -304,6 +370,30 @@ export function readTeamMeta(src) {
   return teams;
 }
 
+/** One roster row as the bake sees a man, or null when it cannot place him.
+    Round 828 lifted this out of buildRoster unchanged, so the bench and the
+    practice squad are read by exactly the code that reads the starters. */
+function personFrom(r, statsById, abbrs, perGame) {
+  const g = group(r.position);
+  if (!g) return null;
+  const team = String(r.team || '').toUpperCase();
+  if (!abbrs.has(team)) return null;
+  const age = ageOf(r.birth_date);
+  if (age == null) return null;
+  const name = String(r.full_name || '').trim();
+  if (!name) return null;
+  const row = r.gsis_id ? statsById.get(r.gsis_id) : null;
+  const games = row ? num(row.games) : 0;
+  /* a season too short to rate is not a season; he falls to pedigree */
+  const s = games >= MIN_GAMES ? row : null;
+  const played = !!s;
+  const score = g === 'OL' || !played
+    ? pedigreeScore(r)
+    : (DEFENSIVE.has(g) ? defenceScore(s) : skillScore(s)) / (perGame ? games : 1);
+  const fine = finePosition(r, s);
+  return { key: `${team}|${name}|${g}`, name, team, group: g, fine, age, score, played, matched: !!row, pedigree: pedigreeScore(r), status: r.status };
+}
+
 /* pedigreeWeight and perGame are seams, not settings. The bake always uses
    the exported PEDIGREE_WEIGHT and always rates per game; simFrontOfficeRoster
    drives each one off in turn to prove which rule is holding which player up:
@@ -323,24 +413,8 @@ export function buildRoster({
   const people = [];
   for (const r of roster) {
     if (!ROSTER_STATUSES.includes(r.status)) continue;
-    const g = group(r.position);
-    if (!g) continue;
-    const team = String(r.team || '').toUpperCase();
-    if (!abbrs.has(team)) continue;
-    const age = ageOf(r.birth_date);
-    if (age == null) continue;
-    const name = String(r.full_name || '').trim();
-    if (!name) continue;
-    const row = r.gsis_id ? statsById.get(r.gsis_id) : null;
-    const games = row ? num(row.games) : 0;
-    /* a season too short to rate is not a season; he falls to pedigree */
-    const s = games >= MIN_GAMES ? row : null;
-    const played = !!s;
-    const score = g === 'OL' || !played
-      ? pedigreeScore(r)
-      : (DEFENSIVE.has(g) ? defenceScore(s) : skillScore(s)) / (perGame ? games : 1);
-    const fine = finePosition(r, s);
-    people.push({ key: `${team}|${name}|${g}`, name, team, group: g, fine, age, score, played, matched: !!row, pedigree: pedigreeScore(r) });
+    const p = personFrom(r, statsById, abbrs, perGame);
+    if (p) people.push(p);
   }
 
   /* THE JOIN FAILS CLOSED. num() returns 0 for a field that is not there, so
@@ -430,77 +504,8 @@ export function buildRoster({
       chosen.push(...pool.slice(0, SLOTS[g]).map((p, i) => ({ ...p, slot: i })));
     }
     const scale = g === 'OL' ? SCALE.OL : (g === 'DL' || g === 'LB' || g === 'DB') ? SCALE.def : SCALE.skill;
-    const [lo, hi] = scale;
-    const played = chosen.filter(p => !usePedigree(p));
-    const rest = chosen.filter(p => usePedigree(p));
-    const split = played.length && rest.length ? lo + Math.round((hi - lo) * 0.3) : lo;
-    const rated = new Map();
-    /* A CORNER IS RANKED AGAINST CORNERS. The first pass ranked everyone in
-       a group on one production score and put Sauce Gardner, a cover corner
-       who was drafted fourth overall, at the bottom of the league: the score
-       rewards volume, and the whole point of a corner nobody throws at is
-       that he has nothing to accumulate. A safety racks up tackles, an edge
-       rusher racks up sacks, and comparing them is comparing nothing. So the
-       cohort is bucketed by the fine position the feed gives (CB, SAF, LB,
-       DE, DT and the rest), each bucket is ranked against itself, and the
-       resulting standing is what maps onto the group's scale. */
-    const fine = p => String(p.fine || p.group).toUpperCase();
-    const counts = new Map();
-    for (const p of played) counts.set(fine(p), (counts.get(fine(p)) || 0) + 1);
-    /* A bucket of one is not a ranking: its only member lands at the top of
-       the scale for having no rivals, because every bucket is mapped across
-       the whole range independently and midrank hands a lone entry 1.
-       The first version keyed the fallback on the group name, which did NOT
-       merge the strays into the group as its comment claimed. It built a
-       LEFTOVERS bucket out of them, so one man carrying an odd depth chart
-       label became a bucket of one and took the ceiling. It never merged for
-       defensive backs at all, since FINE_ALIAS rewrites a bare DB to S so no
-       player ever carries the group's own name. Measured on the real feed:
-       giving Demario Davis the bare LB label that two other linebackers
-       already carry took him from 69 to 95, the best in the league, without
-       changing one thing he did.
-       The strays now join the LARGEST bucket in the group, which is a real
-       cohort of real rivals, so a rare label is ranked against the nearest
-       thing to its own position rather than against nobody. */
-    const buckets = new Map();
-    const big = [...counts.entries()].filter(([, n]) => n >= MIN_BUCKET).sort((a, b) => b[1] - a[1])[0];
-    for (const p of played) {
-      const own = fine(p);
-      const stray = bucketFallback === 'group' || !big ? g : big[0];
-      const k = counts.get(own) >= MIN_BUCKET ? own : stray;
-      if (!buckets.has(k)) buckets.set(k, []);
-      buckets.get(k).push(p);
-    }
-    /* AND A DEFENDER IS NOT RATED ON COUNTING STATS ALONE. Bucketing was not
-       enough on its own: ranked against other corners, Sauce Gardner still
-       came last, because 28 tackles and no interceptions is what a season
-       looks like when quarterbacks stop throwing at you. The public release
-       has no coverage column at all (no completions allowed, no yards
-       allowed, no passer rating against; the only "targets" column is the
-       receiver's), so no amount of arranging these numbers can tell a
-       shutdown corner from a bad one, and shipping the raw ranking would put
-       a false claim about a real, named person into the game.
-       So a defender is rated on two facts instead of one: his 2025
-       production and where he was drafted. Both are public record and
-       neither is invented. This is the file's own method rather than a new
-       one, since offensive linemen have always been rated on pedigree alone
-       for exactly this reason, that their job does not produce a countable
-       event. Skill players keep production alone, because for them yards and
-       touchdowns ARE the job. How the two are weighted depends on the
-       position, for the reasons set out at PEDIGREE_WEIGHT_BY_POS: an even
-       split was arithmetically incapable of rescuing the very player it was
-       written for. */
-    const playedLo = rest.length ? split : lo;
-    for (const list of buckets.values()) {
-      const prod = percentileOf(list, p => p.score);
-      const ped = percentileOf(list, p => p.pedigree);
-      const blended = list.map(p => {
-        const w = pedigreeWeightFor(g, p.fine, pedigreeWeight);
-        return { key: p.key, score: (1 - w) * prod.get(p.key) + w * ped.get(p.key) };
-      });
-      for (const [k, v] of ratingsFor(blended, [playedLo, hi])) rated.set(k, v);
-    }
-    for (const [k, v] of ratingsFor(rest.map(p => ({ key: p.key, score: p.pedigree })), [lo, played.length ? Math.max(lo, split - 1) : hi])) rated.set(k, v);
+    const [lo] = scale;
+    const rated = rateCohort(chosen, g, scale, { pedigreeWeight, bucketFallback });
     for (const p of chosen) {
       const ovr = rated.get(p.key) ?? lo;
       byTeam.get(p.team).players.push({
@@ -519,6 +524,200 @@ export function buildRoster({
     t.players.sort((a, b) => order.indexOf(a.pos) - order.indexOf(b.pos) || b.ovr - a.ovr || a.name.localeCompare(b.name));
   }
   return [...byTeam.values()];
+}
+
+/* Round 828: the rating block, lifted out of buildRoster unchanged so the
+   bench and the practice squad are rated by exactly the code that rates
+   the starters, only onto a different band. `chosen` is the cohort: every
+   man it holds is ranked against the others in it and nobody else. */
+function rateCohort(chosen, g, scale, { pedigreeWeight = null, bucketFallback = 'largest' } = {}) {
+  const usePedigree = p => g === 'OL' || !p.played;
+  const [lo, hi] = scale;
+  const played = chosen.filter(p => !usePedigree(p));
+  const rest = chosen.filter(p => usePedigree(p));
+  const split = played.length && rest.length ? lo + Math.round((hi - lo) * 0.3) : lo;
+  const rated = new Map();
+  /* A CORNER IS RANKED AGAINST CORNERS. The first pass ranked everyone in
+     a group on one production score and put Sauce Gardner, a cover corner
+     who was drafted fourth overall, at the bottom of the league: the score
+     rewards volume, and the whole point of a corner nobody throws at is
+     that he has nothing to accumulate. A safety racks up tackles, an edge
+     rusher racks up sacks, and comparing them is comparing nothing. So the
+     cohort is bucketed by the fine position the feed gives (CB, SAF, LB,
+     DE, DT and the rest), each bucket is ranked against itself, and the
+     resulting standing is what maps onto the group's scale. */
+  const fine = p => String(p.fine || p.group).toUpperCase();
+  const counts = new Map();
+  for (const p of played) counts.set(fine(p), (counts.get(fine(p)) || 0) + 1);
+  /* A bucket of one is not a ranking: its only member lands at the top of
+     the scale for having no rivals, because every bucket is mapped across
+     the whole range independently and midrank hands a lone entry 1.
+     The first version keyed the fallback on the group name, which did NOT
+     merge the strays into the group as its comment claimed. It built a
+     LEFTOVERS bucket out of them, so one man carrying an odd depth chart
+     label became a bucket of one and took the ceiling. It never merged for
+     defensive backs at all, since FINE_ALIAS rewrites a bare DB to S so no
+     player ever carries the group's own name. Measured on the real feed:
+     giving Demario Davis the bare LB label that two other linebackers
+     already carry took him from 69 to 95, the best in the league, without
+     changing one thing he did.
+     The strays now join the LARGEST bucket in the group, which is a real
+     cohort of real rivals, so a rare label is ranked against the nearest
+     thing to its own position rather than against nobody. */
+  const buckets = new Map();
+  const big = [...counts.entries()].filter(([, n]) => n >= MIN_BUCKET).sort((a, b) => b[1] - a[1])[0];
+  for (const p of played) {
+    const own = fine(p);
+    const stray = bucketFallback === 'group' || !big ? g : big[0];
+    const k = counts.get(own) >= MIN_BUCKET ? own : stray;
+    if (!buckets.has(k)) buckets.set(k, []);
+    buckets.get(k).push(p);
+  }
+  /* AND A DEFENDER IS NOT RATED ON COUNTING STATS ALONE. Bucketing was not
+     enough on its own: ranked against other corners, Sauce Gardner still
+     came last, because 28 tackles and no interceptions is what a season
+     looks like when quarterbacks stop throwing at you. The public release
+     has no coverage column at all (no completions allowed, no yards
+     allowed, no passer rating against; the only "targets" column is the
+     receiver's), so no amount of arranging these numbers can tell a
+     shutdown corner from a bad one, and shipping the raw ranking would put
+     a false claim about a real, named person into the game.
+     So a defender is rated on two facts instead of one: his 2025
+     production and where he was drafted. Both are public record and
+     neither is invented. This is the file's own method rather than a new
+     one, since offensive linemen have always been rated on pedigree alone
+     for exactly this reason, that their job does not produce a countable
+     event. Skill players keep production alone, because for them yards and
+     touchdowns ARE the job. How the two are weighted depends on the
+     position, for the reasons set out at PEDIGREE_WEIGHT_BY_POS: an even
+     split was arithmetically incapable of rescuing the very player it was
+     written for. */
+  const playedLo = rest.length ? split : lo;
+  for (const list of buckets.values()) {
+    const prod = percentileOf(list, p => p.score);
+    const ped = percentileOf(list, p => p.pedigree);
+    const blended = list.map(p => {
+      const w = pedigreeWeightFor(g, p.fine, pedigreeWeight);
+      return { key: p.key, score: (1 - w) * prod.get(p.key) + w * ped.get(p.key) };
+    });
+    for (const [k, v] of ratingsFor(blended, [playedLo, hi])) rated.set(k, v);
+  }
+  for (const [k, v] of ratingsFor(rest.map(p => ({ key: p.key, score: p.pedigree })), [lo, played.length ? Math.max(lo, split - 1) : hi])) rated.set(k, v);
+  return rated;
+}
+
+/* Round 828: the rest of every club. The bench is every man on the active
+   list the starters file did not take, the practice squad is every DEV man,
+   both read off the latest week (the caller passes currentRows). A man on a
+   reserve list who is not a starter is held out: injured reserve is not the
+   53. Each is rated by rateCohort, the starters' own code, with the cohort
+   being every bench and practice squad man at his position league wide and
+   the band being DEPTH_SCALE, so every backup sits under every starter. */
+export function buildDepth({ roster, stats, teamMeta, core, perGame = true }) {
+  const statsById = new Map();
+  for (const s of stats) if (s.player_id) statsById.set(s.player_id, s);
+  const abbrs = new Set(teamMeta.map(t => t.abbr));
+  const coreKeys = new Set(core.flatMap(t => t.players.map(p => `${t.abbr}|${p.name}|${p.pos}`)));
+  const people = [];
+  const seen = new Set();
+  const held = { reserve: 0, specialists: 0, duplicate: 0 };
+  for (const r of roster) {
+    const bench = BENCH_STATUSES.includes(r.status);
+    const practice = PRACTICE_STATUSES.includes(r.status);
+    if (!bench && !practice) {
+      if (ROSTER_STATUSES.includes(r.status)) {
+        const p = personFrom(r, statsById, abbrs, perGame);
+        if (p && !coreKeys.has(p.key)) held.reserve += 1;
+      }
+      continue;
+    }
+    const p = personFrom(r, statsById, abbrs, perGame);
+    if (!p) {
+      if (['K', 'P', 'LS'].includes(String(r.position || '').toUpperCase())) held.specialists += 1;
+      continue;
+    }
+    if (coreKeys.has(p.key)) continue;
+    if (seen.has(p.key)) { held.duplicate += 1; continue; }
+    seen.add(p.key);
+    people.push({ ...p, tier: bench ? 'bench' : 'practice' });
+  }
+  buildDepth.lastHeld = held;
+  const byTeam = new Map(teamMeta.map(t => [t.abbr, { abbr: t.abbr, bench: [], practice: [] }]));
+  for (const g of Object.keys(SLOTS)) {
+    const chosen = people.filter(p => p.group === g);
+    const scale = g === 'OL' ? DEPTH_SCALE.OL : DEFENSIVE.has(g) ? DEPTH_SCALE.def : DEPTH_SCALE.skill;
+    const rated = rateCohort(chosen, g, scale);
+    const rows = chosen.map(p => ({ ...p, ovr: rated.get(p.key) ?? scale[0] }));
+    for (const t of teamMeta) {
+      const mine = rows.filter(p => p.team === t.abbr).sort((a, b) => b.ovr - a.ovr || a.name.localeCompare(b.name));
+      mine.forEach((p, i) => {
+        byTeam.get(t.abbr)[p.tier].push({
+          name: p.name, pos: p.group, age: p.age, ovr: p.ovr,
+          salary: salaryFor(p.group, p.ovr), years: yearsFor(p.age, i),
+        });
+      });
+    }
+  }
+  const order = Object.keys(SLOTS);
+  for (const t of byTeam.values()) {
+    for (const k of ['bench', 'practice']) {
+      t[k].sort((a, b) => order.indexOf(a.pos) - order.indexOf(b.pos) || b.ovr - a.ovr || a.name.localeCompare(b.name));
+    }
+  }
+  return [...byTeam.values()];
+}
+
+export function renderDepthFile(depth, sources) {
+  const q = s => `'${String(s).replace(/\\/g, '\\\\').replace(/'/g, "\\'")}'`;
+  const bench = depth.reduce((n, t) => n + t.bench.length, 0);
+  const practice = depth.reduce((n, t) => n + t.practice.length, 0);
+  const lines = [];
+  lines.push(`// GENERATED ${new Date().toISOString().slice(0, 10)} by scripts/genFrontOfficeRoster.mjs (do not hand-edit).`);
+  lines.push(`// Round 828. The rest of every club beside the fifteen starters in`);
+  lines.push(`// frontOfficePlayers.ts: ${bench} bench men (the active roster) and ${practice} practice squad men.`);
+  lines.push(`// Roster: nflverse rosters release, season ${ROSTER_SEASON}, week ${sources.week}, the latest week`);
+  lines.push(`// the release carried when this was baked (${sources.rosterRows} rows read; every status is read`);
+  lines.push('// off that week only). Kickers, punters and long snappers are left out: the game');
+  lines.push(`// has no position for them yet (${sources.held.specialists} held out). Reserve list men who are`);
+  lines.push(`// not starters are left out too, since injured reserve is not the 53 (${sources.held.reserve} held out).`);
+  lines.push(`// Ratings: the starters' own rule (nflverse stats_player ${STATS_SEASON}, per game, the`);
+  lines.push('// defenders\' production and draft blend, pedigree for linemen and for anyone');
+  lines.push('// who did not play), ranked among the bench and practice squad men at each');
+  lines.push(`// position and mapped onto a band under the starters: ${DEPTH_SCALE.skill.join(' to ')} for skill players`);
+  lines.push(`// and defenders, ${DEPTH_SCALE.OL.join(' to ')} for linemen. A backup's numbers measure his snaps`);
+  lines.push('// as much as his ability, so he is ranked against backups, never starters.');
+  lines.push('// Contracts, salaries and roster moves inside the game are fictional. The');
+  lines.push('// practice squad does not count against the game\'s cap.');
+  lines.push('// Membership second source: scripts/data/nflRosterSecondSource.json.');
+  lines.push('');
+  lines.push("import type { FoPlayer } from './frontOfficePlayers';");
+  lines.push('');
+  lines.push('export interface FoDepthTeam {');
+  lines.push('  /** The rest of the active roster. */');
+  lines.push('  bench: FoPlayer[];');
+  lines.push('  /** The practice squad. Real men, off the active roster. */');
+  lines.push('  practice: FoPlayer[];');
+  lines.push('}');
+  lines.push('');
+  /* the starters file's own row shape, so every harness that harvests real
+     names out of src/data (simInventedNames, simCareerInbox) reads these too */
+  lines.push(`export const FO_DEPTH_WEEK = ${sources.week};`);
+  lines.push('');
+  lines.push('export const FO_DEPTH: Record<string, FoDepthTeam> = {');
+  const row = p => `{ name: ${q(p.name)}, pos: ${q(p.pos)}, age: ${p.age}, ovr: ${p.ovr}, salary: ${p.salary}, years: ${p.years} }`;
+  for (const t of depth) {
+    lines.push(`  ${t.abbr}: {`);
+    lines.push('    bench: [');
+    for (const p of t.bench) lines.push(`      ${row(p)},`);
+    lines.push('    ],');
+    lines.push('    practice: [');
+    for (const p of t.practice) lines.push(`      ${row(p)},`);
+    lines.push('    ],');
+    lines.push('  },');
+  }
+  lines.push('};');
+  lines.push('');
+  return lines.join('\n');
 }
 
 export function renderFile(teams, sources) {
@@ -582,20 +781,30 @@ const isMain = process.argv[1] && path.resolve(process.argv[1]) === fileURLToPat
 if (isMain) {
   const log = m => console.log('   ' + m);
   const existing = fs.readFileSync(OUT, 'utf8');
+  const existingDepth = fs.existsSync(OUT_DEPTH) ? fs.readFileSync(OUT_DEPTH, 'utf8') : '';
   const teamMeta = readTeamMeta(existing.split('\r\n').join('\n'));
   if (teamMeta.length !== 32) throw new Error(`read ${teamMeta.length} teams from the existing file, expected 32`);
-  const { rows: roster } = await fetchSeasonRoster(ROSTER_SEASON, { log });
+  const { rows: rawRoster } = await fetchSeasonRoster(ROSTER_SEASON, { log });
   const { rows: stats } = await fetchSeasonStats(STATS_SEASON, { log });
-  log(`roster ${roster.length} rows, stats ${stats.length} rows, ${teamMeta.length} teams`);
+  /* Round 828: only the latest week is the roster as it stands today */
+  const week = latestWeek(rawRoster);
+  const roster = currentRows(rawRoster);
+  log(`roster ${rawRoster.length} rows (${roster.length} on the latest week, ${week}), stats ${stats.length} rows, ${teamMeta.length} teams`);
   const teams = buildRoster({ roster, stats, teamMeta });
   /* say the join out loud: a silent join is how the whole league got rated on
      draft position once already */
   const j = buildRoster.lastJoin;
   if (j) log(`join: ${j.matched} of ${j.considered} roster rows found a stats row (${(j.matched / j.considered * 100).toFixed(1)} percent), ${j.rated} of them cleared ${MIN_GAMES} games`);
-  const text = renderFile(teams, { rosterRows: roster.length, statRows: stats.length });
+  const text = renderFile(teams, { rosterRows: rawRoster.length, statRows: stats.length });
+  const depth = buildDepth({ roster, stats, teamMeta, core: teams });
+  const held = buildDepth.lastHeld;
+  const depthText = renderDepthFile(depth, { rosterRows: rawRoster.length, week, held });
   const counts = {};
   for (const t of teams) for (const p of t.players) counts[p.pos] = (counts[p.pos] ?? 0) + 1;
-  console.log(`${teams.length} teams, ${Object.values(counts).reduce((a, b) => a + b, 0)} players: ${Object.entries(counts).map(([k, v]) => `${k} ${v}`).join(', ')}`);
+  console.log(`${teams.length} teams, ${Object.values(counts).reduce((a, b) => a + b, 0)} starters: ${Object.entries(counts).map(([k, v]) => `${k} ${v}`).join(', ')}`);
+  const active = teams.map(t => t.players.length + depth.find(d => d.abbr === t.abbr).bench.length);
+  const ps = depth.map(d => d.practice.length);
+  console.log(`active roster per club ${Math.min(...active)} to ${Math.max(...active)} (${active.reduce((a, b) => a + b, 0)} in all), practice squad ${Math.min(...ps)} to ${Math.max(...ps)} (${ps.reduce((a, b) => a + b, 0)}); held out ${held.specialists} specialists, ${held.reserve} reserve list men, ${held.duplicate} duplicates`);
   if (process.argv.includes('--check')) {
     /* Compare the DERIVATION, not the day it was written. Line 1 carries the
        bake date, and it was inside the comparison, so from the day after a
@@ -604,10 +813,14 @@ if (isMain) {
        alarm that could not tell a genuinely stale file from a perfect one. */
     const dropStamp = t => t.split('\n').slice(1).join('\n');
     const same = dropStamp(existing.split('\r\n').join('\n')) === dropStamp(text);
-    console.log(same ? 'up to date: the committed file matches the derivation' : 'STALE: the committed file differs from the derivation');
-    process.exit(same ? 0 : 1);
+    const sameDepth = dropStamp(existingDepth.split('\r\n').join('\n')) === dropStamp(depthText);
+    console.log(same ? 'up to date: the starters file matches the derivation' : 'STALE: the starters file differs from the derivation');
+    console.log(sameDepth ? 'up to date: the depth file matches the derivation' : 'STALE: the depth file differs from the derivation');
+    process.exit(same && sameDepth ? 0 : 1);
   }
   const eol = existing.includes('\r\n') ? '\r\n' : '\n';
   fs.writeFileSync(OUT, text.split('\n').join(eol));
   console.log(`wrote ${path.relative(ROOT, OUT)}`);
+  fs.writeFileSync(OUT_DEPTH, depthText.split('\n').join(eol));
+  console.log(`wrote ${path.relative(ROOT, OUT_DEPTH)}`);
 }
