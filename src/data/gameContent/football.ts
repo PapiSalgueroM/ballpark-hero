@@ -84,7 +84,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "The finished squad's 15 win season",
         paragraphs: [
-          "The finished 92 overall squad starts 9 and 0, drops one game by a field goal, and lands at 15-2. Division winner, playoff run, no banner. You spin again.",
+          "The finished 87 overall squad, better than nine drafts in ten, starts 9 and 0, drops one game by a field goal, and lands at 15-2. Division winner, playoff run, no banner. At 87 a 17-0 comes about one run in 25, so you spin again.",
         ],
       },
     ],
@@ -104,7 +104,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "Treating 15 wins as a great run",
         items: [
-          "Even a stacked draft goes 17-0 only about one time in ten, so treat 15 wins as a good day.",
+          "A typical well drafted roster, around 82, goes 17-0 about one run in 1,100, and even an 88 only about one run in 14, so treat 15 wins as a good day.",
         ],
       },
     ],

@@ -106,9 +106,12 @@ export function withArticle(said: string): string {
   return `${/^(8|11(?!\d)|18(?!\d))/.test(said) ? 'an' : 'a'} ${said}`;
 }
 
-/** "one run in 5", "one run in 620", "one run in 33,000", "one run in 12 million". */
+/** "7 runs in 10", "one run in 5", "one run in 620", "one run in 33,000",
+    "one run in 12 million". Better than even odds read as runs in ten, since
+    "one run in 1" would say always (a 98 NFL roster goes 17-0 seven runs in ten). */
 export function formatOneIn(odds: number): string {
   if (!(odds > 0)) return 'never';
+  if (odds > 0.5) return `${Math.min(9, Math.round(odds * 10))} runs in 10`;
   const n = 1 / odds;
   if (n < 10) return `one run in ${Math.round(n)}`;
   if (n < 1e6) {
