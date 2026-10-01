@@ -1,5 +1,180 @@
 # Work board
 
+**2026-10-01, Codex803 CLAIMED: Name Them All answer feedback and readable reveals.**
+Master Build45/96/97 and historical roadmap45/116 playability slice. The current
+ListQuiz Page uses color alone for a hit, delayed focus can scroll the page, and
+revealed answer tiles truncate their text. Own only src/pages/ListQuiz.tsx, new
+src/pages/ListQuizFeedback.module.css, src/test/listQuizFeedback.test.tsx and
+scripts/simListQuizFeedback.mjs. Preserve actual listQuiz fetching/cleaning/aliases,
+original three-minute timer, answer order/found flags, tiers, completion-on-mount,
+score/share and retry/fallback behavior. Add truthful committed hit/duplicate/miss
+feedback, finite success/reveal motion with static reduced motion, full readable
+answer names, stable answer nodes,44px owned actions and deliberate preventScroll
+focus after accepted start/guess/final action. Blank/short input, typing, timer ticks
+and no-op rerenders must stay quiet; focus must honor an outside user target.
+Use actual Page/helpers with declared fictional list responses and the original
+ResultScreen completion path. Cover aliases/ambiguity, distinct hits, duplicate/miss,
+all-found/give-up/time expiry, exact tiers/share/completion and unchanged timer.
+Effective copied controls must fail their intended assertion while independent
+original outcomes pass. Native phone/desktop normal/reduced checks must prove
+full-name fit, real finite/static motion, native focus and no added document jump.
+Root owns Git/docs/build/generated; source work starts after the independent800
+App reviewer is free.801/802 continue in their existing lanes. No invented facts
+or new visitor-report claim. All Claude reservations stand. Next free804.
+
+**2026-10-01, Codex802 CLAIMED: Rank 'Em review before locking.**
+Master96 planning/playability slice. The actual fifth pick currently auto-submits
+inside a state updater, leaving no review or correction before the single daily
+action. Own src/pages/RankEm.tsx, new src/pages/RankEmOrder.module.css,
+src/test/rankEmOrder.test.tsx and scripts/simRankEmOrder.mjs. Keep the existing round,
+real data, scramble, date, useDailyPuzzle, scoreRankGuess,200-per-correct-slot,
+share and completion expression unchanged. Five picks become a local editable
+draft until explicit Lock order. Add44px native move up/down/remove controls, honest
+draft state, readable names, stable player/rung nodes, finite/static committed
+feedback and safe focus/repeat handling. Invalid/incomplete/boundary/no-op edits
+must not record, save, complete or change the underlying round/RNG.
+Actual Page/unchanged-hook/helper proof must edit a wrong draft to1000, independently
+lock600 and0, hold exact daily v/date/puzzleIndex/guesses/gameStatus/share and one
+final action/completion, and keep restores/mode flips quiet. Effective copied
+autosubmit/move/bounds/double-lock/focus/names/reduced controls plus eight native
+width/motion contexts must demonstrate real outcomes and independent baselines.
+Root additionally owns only rank-em's affected instruction sentences in
+src/data/gameContent/world.ts, the new required Lock click in only rank-em's driver
+in src/test/noDoubleRecord.test.tsx, and derived rank-em snapshot/ledger/sitemap/search
+generator output. These narrow integration changes preserve other guide sections
+and all other shared completion fixtures/booking assertions. No real stats changed.
+800 source is frozen and its production pipeline restarts after a test-only type
+annotation correction.801 picker work and immutable413 regression remain separate.
+Root owns Git/docs/build. All Claude claims stand. Next free803.
+
+**2026-10-01, Codex801 CLAIMED: NBA Stat Line eligible-season access and focus.**
+Master68/F/96 playability slice. Current name search returns only ten seasons with
+no paging or year-query matching, so later eligible season keys can stay unreachable.
+Own only src/pages/NbaStatLine.tsx, src/hooks/useNbaStatLine.ts (suggestion-limit and
+one-extra hasMore plumbing only), new src/pages/NbaStatLinePicker.module.css,
+src/test/nbaStatLinePicker.test.tsx and scripts/simNbaStatLinePicker.mjs.
+Use the original suggestSeasons limit parameter, order, normalization, exclusions
+and eligiblePoolFor without editing src/lib/nbaStatLine.ts or any real season data.
+Add explicit ten-season expansions and truthful bounded counts, readable names,
+44px labeled owned controls, a local bounded list and stable earlier nodes. Focus
+returns to search after accepted selection/removal, or Score after the fifth pick,
+with no page movement or held-key bleed. Query changes/new runs reset visibility;
+typing/paging do not score, save, complete or change targets/RNG.
+Actual Page/hook/helper tests must reach beyond20 exact synthetic season keys and
+preserve original minutes-weighted/summed-makes line, score, share, daily saved keys,
+restore and once-only completion. Prove first-ten order/exclusion/era eligibility,
+quiet/no-op paths, effective copied cap/focus controls and narrow/wide normal/reduced
+native reachability/full-text/target-size/scroll checks. Fixtures are explicitly
+fictional, not new verified sports facts or a visitor report. Original NBA Stat Line
+fences remain required. Root owns Git/docs/build/generated.800 controls/native are
+accepted and its separate production pipeline runs; frozen413 regression continues.
+All Claude reservations stand. Next free802.
+
+**2026-10-01, Codex798 MLB whole-roster trade access ACCEPTED.**
+The Finder, send and receive lists now expose every original player through explicit
+eight-player expansions and honest visible/total counts. Original first-eight rating
+and tie order, shared own-player selection, offers, packages, acceptance/refusals,
+salary/picks/full saves, RNG and completion remain held. The local272px lists retain
+44px controls, full names and stable earlier nodes. Load more focuses the first new
+choice without page movement; held Enter/Space cannot activate a newly focused choice.
+Native QA reproduced and fixed two concrete defects: a received row clipped4.5px
+after focusing its button, and expanded grid-name text overlapping by9.5px. The
+scoped helper now scrolls the enclosing row; two local CSS declarations keep grid
+rows at their content height without changing the outer list. Copied old behaviors
+reproduce the real clipping/overlap while original trade helpers and quiet saves hold.
+
+Nine actual Page/Board outcomes, twelve effective source controls and the rechecked
+focus control pass. Native acceptance covers eight widths/motion contexts and seven
+asserted source/CSS controls,112 settled action-Y samples all0, no document overflow,
+full-text containment before/after8/16/23 rows and all owned targets at least44px.
+The four original transaction/restore/Finder/talks fences remain green.
+Bounded actual production App acceptance adds320 normal and1440 reduced contexts:
+all23 choices, exact later BOS22/BOS21/NYY22 IDs reach original callbacks,12 document-Y
+samples all0,234 full-name measurements within cards with at least6.5px clearance,
+zero Save writes/removals/outward writes/errors/bad responses. This route loads its
+actual GameNavbar, ticker and global Footer; the global Header is correctly absent.
+Earlier root Header shorthand for the game-route probes below is corrected accordingly.
+Root inspected the final phone screenshot. Browser/server/copies stopped and source
+preservation verified. App types0 and final intrinsic-row production build pass;
+all15 rebuilt-artifact fences pass with existing snapshots and derived ledger held.
+Receipts: TEMP/dukb-round798-native/report.json and cleanup.json,
+TEMP/dukb-round798-production-app/report.json and cleanup.json,
+TEMP/dukb-round798-controls/report.json and the retained row/overlap before-controls;
+TEMP/dukb-round797-production-20261001/combined798-intrinsic-preservation-receipt.json,
+combined798-intrinsic-fourteen-artifact-fences.log and combined798-intrinsic-boot-fence.log.
+
+The frozen413-node regression started11:50 UTC against1780 captured inputs through
+799 plus final798, with70 browser harnesses explicitly excluded. It is still running,
+so no all-green/current-live claim.800's separate Emoji Guess source has nine passing
+actual outcomes; copied controls/native acceptance remain due. Next free801.
+
+**2026-10-01, Codex800 CLAIMED: Emoji Guess committed feedback and keyboard flow.**
+Master96/97 interaction/animation slice. The actual five-puzzle Board has no committed
+guess/hint/result feedback announcement, removes the completed input without handing
+focus to Next, and truncates final answers. Own only
+src/components/emoji-guess/EmojiGuessBoard.tsx, new EmojiGuessFeedback.module.css in
+that folder, src/test/emojiGuessFeedback.test.tsx and scripts/simEmojiGuessFeedback.mjs.
+Keep the actual useEmojiGuess hook, daily picker, normalization, puzzle bank, date,
+local-save format, completion and share bytes unchanged. Preserve five rounds, three
+guesses,100/60/30/0 scoring, hint after the first miss, and completion only after the
+fifth Next. No new real facts, photos, logos, quotes or game rules.
+Add a compact accurate before-play example, stable rows/full answers,44px owned
+controls, truthful finite committed miss/hint/solve/fail/next feedback with static
+reduced motion, and native Next/input/final-share focus without scroll or held-key
+bleed. Mount/restore/typing/empty/rejected actions stay quiet. Prove complete actual
+five-round scores/saves/share/completion against original hook outcomes, strict
+earlier node identity, effective changed-copy controls and narrow/wide native fit,
+keyboard reachability, finite/static animation and document-Y preservation.
+Original Emoji bank/date/hook fences remain required. Root owns docs/Git/build and
+any independently needed saved-page refresh. Claude and798/799 scopes stay held.
+Next free801. This is a verified implementation gap, not a new visitor report.
+
+**2026-10-01, Codex799 F1 worked-example correction ACCEPTED.**
+The actual rendered guide now agrees with the unchanged fourth-clue first-correct
+guess:400 points after three hints, with no prior wrong guesses. Three real-hook/
+shared-guide outcomes pass; the five independent earlier/later clue scores stay held.
+Both asserted changed copies produce one intended assertion failure, one independent
+real-hook pass and one explicit skip. The legacy McLaren example prop now says10;
+this is source consistency only, since that unused prop is not rendered by the guide.
+Primary sources checked Oct1: [Formula1 team profile](https://www.formula1.com/en/teams/mclaren)
+and the [FIA Oct5,2025 Singapore transcript](https://www.fia.com/news/f1-2025-singapore-grand-prix-post-race-press-conference-transcript).
+No puzzle facts, gameplay hooks, score rules or other guide sentences changed.
+
+Combined798/799 production types0 and two builds pass. The F1 saved page was sampled
+at0/5/11 days with zero failed/date-dependent blocks; all15 rebuilt-artifact fences
+pass, plus the focused F1, metadata and generated-search fences. Relative to the
+merged e0882389 baseline, only four owned raw saved pages changed and184 others held;
+only three real content fingerprints changed and165 other URL dates/hashes held.
+For this799 copy, all167 other current ledger rows and all168 sitemap URLs remain
+held. The search generator changed only its derived source hash. Existing accepted
+792/794 snapshots and both lanes' news were preserved.
+Receipts: TEMP/dukb-round799-f1-guide-score/builder-receipt.json,
+TEMP/dukb-round797-production-20261001/combined798799-preservation-receipt.json,
+combined798799-fourteen-artifact-fences.log, combined798799-boot-fence.log and
+combined799-focused-final.log; TEMP/dukb-round799-owned-copy-receipt.json.
+798 native QA is correcting measured local focused-row clipping; the next completed
+MLB build gets its own final artifact checks. Current full-suite/publication and
+Google approval remain separate. Next free800; Claude733/734 and other lanes held.
+
+**2026-10-01, Codex797 Tycoon runner correction ACCEPTED.**
+The unchanged six gameplay outcomes reproduced a Vitest worker RPC timeout during
+long synchronous fake-frame loops. The actual test now yields a real Node turn every
+64 sampled frames without advancing its fake clock, RAF queue, match or thresholds.
+The wrapper uses one worker and owned ignored control copies with working React
+resolution. Intended negative rows must contain an actual assertion failure; worker,
+timeout, transform and import errors remain rejected. No Tycoon product bytes changed.
+All six outcomes and all eight original controls pass. The unchanged baseline and
+corrected positive fixture both measure202 goals over30 matches,197 immediate replays,
+worst delay7 frames; the storm commits360 with179 landed and worst delay11 frames.
+The final classifier also rejected the retained before-fix worker-error report and
+bounded runner-error controls. The permanent control-copy factory independently
+loaded an actual changed copy and produced its intended assertion plus a passing
+Office baseline, with no leftover owned control folders or active runner.
+Receipts: TEMP/dukb-round797-tycoon-physical/builder-receipt.json,
+final-classifier-receipt.json and cleanup.json. The exact accepted test/wrapper are
+copied into the finished798/799 production gate. Current full-node regression remains
+due;798 native acceptance and799 artifact checks continue. Next free800.
+
 **2026-10-01, Codex799 CLAIMED: F1 constructor worked-example accuracy.**
 Actual rendered guide/saved page promises600 after the championship clue, but the
 unchanged game's fourth-clue first-guess result is400. Own only that worked-example
@@ -47,7 +222,7 @@ changed,166 other URL fingerprints/dates held,168 sitemap URLs remain. Both lane
 news stays present; its formatting refresh did not change its merged content hash.
 Receipt: TEMP/dukb-round797-production-20261001/final-preservation-receipt.json.
 
-Actual production App/global Header/Footer acceptance: NHL four320/1440 motion
+Actual production App/GameNavbar/Footer acceptance: NHL four320/1440 motion
 contexts with exact full saves, quiet stage/cancel, once Apply/Auto/no-ops and zero
 document movement. Search and Discard eight320/1440 motion/CPU/pass contexts preserve
 all22 original nodes, real keep placement, finite420ms/static feedback and zero scroll.
