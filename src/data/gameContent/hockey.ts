@@ -1092,7 +1092,7 @@ export const HOCKEY_CONTENT: GameContentMap = {
         items: [
           "Points are real: 2 for a win, 1 for an overtime loss, and roughly a quarter of losses go to overtime.",
           "Rosters run between 20 and 23 players, the real NHL numbers: 20 dresses twelve forwards, six defensemen and two goalies, and 23 is the active limit. You cannot waive below the floor or sign past the ceiling.",
-          "Draft picks still join your roster, so you can open a season above 23. You just cannot sign anyone until you are back under.",
+          "Draft picks join your roster, so the draft can take you past 23. If it does, Play waits until you waive down to 23 before puck drop, and every other club cuts its lowest rated spare player the same way over the summer.",
           "A franchise started before the full rosters arrived keeps its 13 player roster and the old 8 to 15 limits.",
         ],
       },

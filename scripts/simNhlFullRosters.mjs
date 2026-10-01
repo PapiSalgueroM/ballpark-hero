@@ -39,13 +39,24 @@
  *      starter is hurt, a real depth man steps in instead of the group averaging
  *      fewer men. Over 160 seeded seasons each, the mean points by club with and
  *      without the depth men agree closely (bands below, from measured headroom).
+ *   9. The cut down before puck drop (Round 830 review). The draft hands every
+ *      club its picks before the summer, so a full roster league could open a
+ *      season above 23 (before the fix: your club in 37 of 50 seasons, CPU clubs
+ *      in 113 of 1550, the largest 27). Now nhlPuckDropRefusal greys Play above
+ *      23 on a full league and never on an older save; nhlCutDownToLimit cuts a
+ *      CPU club's lowest rated man from a group above its 12/6/2 floor, older
+ *      first on a tie, through the shared cut; the summer cuts every CPU club and
+ *      never the GM's own; and over sixteen franchise seasons no CPU club opens a
+ *      season above 23 while the GM is refused exactly when he is above it and
+ *      can always waive down.
  *
  * Controls (NHL_FULL_CONTROL=<name>), each served from memory, nothing on disk
  * changes; a control passes only when exactly its sections go red:
- *   invent    an invented forward added to one club's seeds         -> 2, 4
+ *   invent    an invented forward added to one club's seeds         -> 2, 4, 9
+ *             (9 too: the extra man opens Anaheim at 24, above the limit)
  *   age       one real man a year older than his birth date          -> 2
  *   spot      the spot check carrying three mismatches               -> 1
- *   thirteen  the engine dealt each club's top 13 only               -> 4, 5, 8
+ *   thirteen  the engine dealt each club's top 13 only               -> 4, 5, 8, 9
  *   paycurve  a full league paid on the old 13 man line              -> 4
  *   partial   the stand in mark dropped at the deal                  -> 4
  *   ceiling   the full league's ceiling raised to 30                 -> 4, 5, 6
@@ -53,13 +64,18 @@
  *   legacy    the full roster refill run on every league, old saves too -> 7
  *   allmen    the strength read averaging every healthy forward      -> 7, 8
  *   dupname   every offseason fill named after a real man            -> 6
+ *   notrim    the summer's CPU cut down removed                      -> 9
+ *   nodrop    the puck drop refusal never fires                      -> 9
+ *   trimfloor the CPU cut down ignores the position floors           -> 9
+ *   trimall   the summer cuts the GM's own club too                  -> 9
+ *   droplegacy the puck drop refusal fires on an older save too      -> 9
+ *   flatfloor the CPU cut held at a flat 20 (a lopsided club opens at 24) -> 9
  *
  * Measured headroom (2026-10-01, this record):
  *   section 6: after every offseason 0 clubs short of 12/6/2 and 0 of 1600 club
- *   seasons over the cap. The draft can carry a club past 23 into a new season
- *   (your club in 37 of 50 seasons, CPU clubs in 113 of 1550, the largest 27):
- *   23 is the ceiling on signings, as 15 was before, and draftees join the roster
- *   until a development tier exists to send them to. Printed, never asserted.
+ *   seasons over the cap. The draft still carries your club past 23 in most
+ *   summers (printed); the GM's loop here waives down before Play, as the board
+ *   makes him, and no CPU club opens a season above 23 (section 9 asserts it).
  *   section 8: see the band constants; their measured values are printed each run.
  */
 import fs from 'node:fs';
@@ -77,15 +93,16 @@ const CONTROL = process.env.NHL_FULL_CONTROL || '';
 const PRINT_LEGACY = process.env.NHL_FULL_PRINT_LEGACY || '';
 
 const EXPECT = {
-  invent: [2, 4], age: [2], spot: [1], thirteen: [4, 5, 8], paycurve: [4], partial: [4],
-  ceiling: [4, 5, 6], refill: [6], legacy: [7], allmen: [7, 8], dupname: [6],
+  invent: [2, 4, 9], age: [2], spot: [1], thirteen: [4, 5, 8, 9], paycurve: [4], partial: [4],
+  ceiling: [4, 5, 6, 9], refill: [6], legacy: [7], allmen: [7, 8], dupname: [6],
+  notrim: [9], nodrop: [9], trimfloor: [9], trimall: [9], droplegacy: [9], flatfloor: [9],
 };
 if (CONTROL && !EXPECT[CONTROL]) { console.error(`NHL_FULL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`); process.exit(1); }
 
 const SECTION_NAMES = {
   1: 'the record and the bake', 2: 'every man traces to the record', 3: 'the rule is the lost bake\'s rule',
   4: 'a new league', 5: 'the roster limits', 6: 'ten franchises, five seasons each', 7: 'an old save plays as it did',
-  8: 'what moved, and why',
+  8: 'what moved, and why', 9: 'the cut down before puck drop',
 };
 const bySection = new Map();
 const fails = [];
@@ -121,6 +138,12 @@ const ENGINE_EDITS = {
   legacy: [['if (league.rosterDepth) replenishNhlRoster(t, rng, taken, NHL_FULL_FLOORS, nhlDepthSalaryFor);', 'if (true) replenishNhlRoster(t, rng, taken, NHL_FULL_FLOORS, nhlDepthSalaryFor);']],
   dupname: [['name: nhlGenName(rng, taken), pos,\n', "name: 'Elias Pettersson', pos,\n"]],
   allmen: [["healthy.filter(p => p.pos === 'C' || p.pos === 'W').sort((a, b) => b.ovr - a.ovr).slice(0, 6);", "healthy.filter(p => p.pos === 'C' || p.pos === 'W').sort((a, b) => b.ovr - a.ovr);"]],
+  notrim: [['if (league.rosterDepth && t.abbr !== myTeam) nhlCutDownToLimit(t, league.freeAgents);', 'void nhlCutDownToLimit;']],
+  nodrop: [['if (t.players.length > NHL_FULL_ROSTER_MAX) {\n    return `${t.players.length} on the roster.', 'if (false) {\n    return `${t.players.length} on the roster.']],
+  trimfloor: [['.filter(p => count[nhlGroupOf(p)] > NHL_FULL_FLOORS[nhlGroupOf(p)])\n', '.filter(() => true)\n']],
+  trimall: [['if (league.rosterDepth && t.abbr !== myTeam) nhlCutDownToLimit(t, league.freeAgents);', 'if (league.rosterDepth) nhlCutDownToLimit(t, league.freeAgents);']],
+  flatfloor: [['cutPlayer(t, freeAgents, victim.id, Math.max(0, NHL_FULL_ROSTER_MIN - short))', 'cutPlayer(t, freeAgents, victim.id, NHL_FULL_ROSTER_MIN)']],
+  droplegacy: [['  if (!lg.rosterDepth) return null;\n  if (t.players.length > NHL_FULL_ROSTER_MAX) {', '  if (!lg.rosterDepth) return t.players.length > 15 ? \'refused\' : null;\n  if (t.players.length > NHL_FULL_ROSTER_MAX) {']],
 };
 const DATA_EDITS = {
   invent: [["export const NHL_FO_FULL_ROSTERS: Record<string, NhlFoSeed[]> = {\n  ANA: [", "export const NHL_FO_FULL_ROSTERS: Record<string, NhlFoSeed[]> = {\n  ANA: [\n    { name: 'Torsten Halonen', pos: 'W', age: 27, ovr: 72 },"]],
@@ -182,7 +205,28 @@ function closeSeason(M, lg, me, rng) {
     aiTakes.forEach((p, i) => lg.teams[order[i % order.length]].players.push(E.nhlProspectToPlayer(p, rng)));
     cls = remaining.filter(p => !aiTakes.includes(p));
   }
-  return { post, notes: E.nhlOffseason(lg, rng) };
+  /* the board passes its own club, which the summer leaves to its GM (Round 830 review) */
+  return { post, notes: E.nhlOffseason(lg, rng, me) };
+}
+
+/* The GM at the start of a season above 23, as the board makes him: the Waive
+   button, lowest rated man from a group above twelve forwards, six defensemen
+   and two goalies, until Play is live. Returns the number of waivers, or -1
+   when a refusal stands and no waiver is possible (a dead end). */
+function gmCutDown(E, lg, me) {
+  const t = lg.teams[me];
+  const { min } = E.nhlRosterLimits(lg);
+  const floor = { F: 12, D: 6, G: 2 };
+  const grp = p => (p.pos === 'G' ? 'G' : p.pos === 'D' ? 'D' : 'F');
+  let n = 0;
+  while (E.nhlPuckDropRefusal(lg, t)) {
+    const count = { F: 0, D: 0, G: 0 };
+    for (const p of t.players) count[grp(p)] += 1;
+    const victim = [...t.players].filter(p => count[grp(p)] > floor[grp(p)]).sort((a, b) => a.ovr - b.ovr)[0];
+    if (!victim || !E.nhlRelease(t, lg.freeAgents, victim.id, min)) return -1;
+    n += 1;
+  }
+  return n;
 }
 
 /* Section 7's campaign, the one NHL_FULL_PRINT_LEGACY prints for a given engine. */
@@ -401,7 +445,7 @@ console.log('5) The roster limits');
 console.log('6) Ten seeded franchises, five seasons each');
 {
   const FRANCHISES = ['TOR', 'EDM', 'VAN', 'NSH', 'NJD', 'COL', 'TBL', 'SJS', 'WPG', 'BOS'];
-  let seasons = 0, largest = 0, overCap = 0, teamSeasons = 0, aiPast = 0, aboveMine = 0, aboveCpu = 0;
+  let seasons = 0, largest = 0, overCap = 0, teamSeasons = 0, aiPast = 0, aboveMine = 0, aboveCpu = 0, gmWaivers = 0;
   const realTwice = new Map();
   for (const seeds of Object.values(D.NHL_FO_FULL_ROSTERS)) for (const s of seeds) realTwice.set(s.name, (realTwice.get(s.name) ?? 0) + 1);
   const problems = [];
@@ -411,6 +455,10 @@ console.log('6) Ten seeded franchises, five seasons each');
       let lg = E.initNhlFullLeague(rng);
       for (let s = 0; s < 5; s += 1) {
         lg = JSON.parse(JSON.stringify(lg));
+        /* the board greys Play above 23, so the GM waives down first */
+        const waived = gmCutDown(E, lg, me);
+        if (waived < 0) problems.push(`${me} season ${s + 1}: above 23 and no waiver possible`);
+        else gmWaivers += waived;
         const before = Object.fromEntries(ABBRS.map(a => [a, lg.teams[a].players.length]));
         playRounds(E, lg, me, rng, l => {
           for (const a of ABBRS) if (a !== me && l.teams[a].players.length > Math.max(23, before[a])) aiPast += 1;
@@ -440,7 +488,7 @@ console.log('6) Ten seeded franchises, five seasons each');
       problems.push(`${me}: threw ${String(e && e.message ? e.message : e).slice(0, 160)}`);
     }
   });
-  console.log(`   ${seasons} franchise seasons, ${teamSeasons} club seasons; largest roster seen ${largest} (printed, not asserted); clubs over the cap at a season start ${overCap} of ${teamSeasons}; over 23 at a season start: your club ${aboveMine} of ${seasons}, CPU clubs ${aboveCpu} of ${teamSeasons - seasons}`);
+  console.log(`   ${seasons} franchise seasons, ${teamSeasons} club seasons; largest roster seen ${largest} (printed, not asserted); clubs over the cap at a season start ${overCap} of ${teamSeasons}; over 23 out of the summer: your club ${aboveMine} of ${seasons} (waived down by the GM before Play, ${gmWaivers} waivers), CPU clubs ${aboveCpu} of ${teamSeasons - seasons}`);
   ok(6, 'fifty franchise seasons played without a throw, a shared id or name, a broken number or a club short of 12/6/2', problems.length === 0, problems.slice(0, 4).join('; '));
   ok(6, 'all fifty seasons ran', seasons === 50, String(seasons));
   ok(6, 'the AI never signed a club past 23 in season', aiPast === 0, `${aiPast} club rounds past 23`);
@@ -508,6 +556,103 @@ console.log('8) What the depth men change');
   ok(8, 'mean points by club with and without the depth men correlate (r above BAND_R)', r > BAND_R, r.toFixed(3));
   ok(8, 'and sit close (mean gap under BAND_GAP points)', mad < BAND_GAP, mad.toFixed(2));
   ok(8, 'depth men really do step in for the injured (some club rounds)', stepIns > 0, String(stepIns));
+}
+
+/* ---------- 9. the cut down before puck drop ---------- */
+console.log('9) The cut down before puck drop');
+{
+  /* the refusal: a full league above 23 waits, at 23 it plays, an older save never waits */
+  const lg = E.initNhlFullLeague(mulberry(9));
+  const atLimit = Object.values(lg.teams).filter(t => t.players.length === 23);
+  ok(9, 'no club of a new league is refused at puck drop', Object.values(lg.teams).every(t => E.nhlPuckDropRefusal(lg, t) === null));
+  const t24 = atLimit[0];
+  ok(9, 'a club at the 23 man limit exists (fixture)', !!t24);
+  if (t24) {
+    t24.players.push(E.nhlProspectToPlayer({ id: 'x', name: 'Torsten Ranta', pos: 'C', age: 19, grade: 80, trueOvr: 80 }, mulberry(1)));
+    const said = E.nhlPuckDropRefusal(lg, t24);
+    ok(9, 'a full league club at 24 is refused, and the sentence says 24 and 23', typeof said === 'string' && said.includes('24') && said.includes('23'), String(said));
+    const { min } = E.nhlRosterLimits(lg);
+    const cutOne = [...t24.players].sort((a, b) => a.ovr - b.ovr)[0];
+    ok(9, 'one waiver takes him back to 23 and Play is live again', E.nhlRelease(t24, lg.freeAgents, cutOne.id, min) && E.nhlPuckDropRefusal(lg, t24) === null);
+  }
+  const old = E.initNhlLeague(mulberry(9));
+  const oldTeam = Object.values(old.teams)[0];
+  while (oldTeam.players.length < 18 && old.freeAgents.length) oldTeam.players.push(old.freeAgents.pop());
+  ok(9, 'an older save at 18 is never refused (its rules are 8 to 15 with no puck drop rule)', oldTeam.players.length === 18 && E.nhlPuckDropRefusal(old, oldTeam) === null, String(oldTeam.players.length));
+
+  /* the CPU cut down: lowest rated from a group above its floor, older first on a tie, through the shared cut */
+  const mk = (pos, ovr, age, i) => ({ id: `t${i}`, name: `Test ${i}`, pos, age, ovr, salary: 1, years: 2, out: 0, pot: ovr });
+  let i = 0;
+  const team = { abbr: 'TST', wins: 0, losses: 0, otLosses: 0, picks: [1, 2], players: [] };
+  for (let k = 0; k < 13; k += 1) team.players.push(mk(k % 3 === 0 ? 'C' : 'W', 70 + k, 25, i++));
+  for (let k = 0; k < 7; k += 1) team.players.push(mk('D', 70 + k, 25, i++));
+  team.players.push(mk('G', 60, 25, i++), mk('G', 61, 25, i++));
+  /* 22 so far: 13 F (70..82), 7 D (70..76), 2 G (60, 61). Four more make 26. */
+  team.players.push(mk('G', 59, 25, 'g3'), mk('D', 65, 25, 'd8'), mk('W', 69, 24, 'young'), mk('C', 69, 33, 'old'));
+  const pool = [];
+  const cut = E.nhlCutDownToLimit(team, pool);
+  ok(9, 'the CPU cut down leaves 23', team.players.length === 23, String(team.players.length));
+  ok(9, 'it cuts the lowest rated men from groups above their floor: the third goalie, the eighth D, then the older of two 69 forwards, never the second goalie (60)',
+    JSON.stringify(cut.map(p => p.id)) === JSON.stringify(['tg3', 'td8', 'told']), cut.map(p => `${p.id} ${p.pos} ${p.ovr}`).join(', '));
+  ok(9, 'it keeps twelve forwards, six defensemen and two goalies or more', team.players.filter(p => p.pos === 'G').length >= 2 && team.players.filter(p => p.pos === 'D').length >= 6 && team.players.filter(p => p.pos === 'C' || p.pos === 'W').length >= 12);
+  ok(9, 'it goes through the shared cut: each man is in the pool on one year with his dead money on the ledger',
+    pool.length === 3 && pool.every(p => p.years === 1) && (team.deadCap ?? []).length === 3 && (team.releasedThisSeason ?? []).length === 3);
+  /* a club short of a floor keeps room for the refill: 25 men with one goalie stops at 22, so the refill's goalie makes 23 */
+  const short = { abbr: 'SHT', wins: 0, losses: 0, otLosses: 0, picks: [1, 2], players: [] };
+  for (let k = 0; k < 17; k += 1) short.players.push(mk('W', 70 + k, 25, `s${k}`));
+  for (let k = 0; k < 7; k += 1) short.players.push(mk('D', 70 + k, 25, `sd${k}`));
+  short.players.push(mk('G', 75, 25, 'sg'));
+  E.nhlCutDownToLimit(short, []);
+  ok(9, 'a club one goalie short is cut to 22 so the summer refill lands it on 23', short.players.length === 22 && short.players.filter(p => p.pos === 'G').length === 1, String(short.players.length));
+  /* found by the review's 300 season probe: a lopsided club at exactly 20 (8 F, 10 D, 2 G) is owed four
+     forwards, so it must drop a defenseman below 20; held at a flat 20 it opened the season at 24 */
+  const lop = { abbr: 'LOP', wins: 0, losses: 0, otLosses: 0, picks: [1, 2], players: [] };
+  for (let k = 0; k < 8; k += 1) lop.players.push(mk('W', 75 + k, 25, `lf${k}`));
+  for (let k = 0; k < 10; k += 1) lop.players.push(mk('D', 70 + k, 25, `ld${k}`));
+  lop.players.push(mk('G', 75, 25, 'lg1'), mk('G', 76, 25, 'lg2'));
+  const lopCut = E.nhlCutDownToLimit(lop, []);
+  E.replenishNhlRoster(lop, mulberry(3), new Set(), { forwards: 12, defense: 6, goalies: 2, total: 20 });
+  ok(9, 'a lopsided club of 20 (8 F, 10 D, 2 G) drops its lowest defenseman so the refill lands it on 23, not 24',
+    lopCut.length === 1 && lopCut[0].id === 'tld0' && lop.players.length === 23, `${lopCut.map(p => p.id).join(',')} cut, ${lop.players.length} after the refill`);
+
+  /* the summer: every CPU club above 23 is cut, the GM's own never is */
+  const sl = E.initNhlFullLeague(mulberry(19));
+  const ME = 'MTL', CPU = 'BOS';
+  for (const abbr of [ME, CPU]) {
+    for (const p of sl.teams[abbr].players) { p.age = 25; p.years = 5; }
+    for (let k = 0; k < 3; k += 1) sl.teams[abbr].players.push(E.nhlProspectToPlayer({ id: `${abbr}${k}`, name: `${abbr === ME ? 'Wilhelm' : 'Valter'} ${['Grahn', 'Sjodin', 'Ranta'][k]}`, pos: 'W', age: 19, grade: 75, trueOvr: 75 }, mulberry(k)));
+  }
+  const meBefore = sl.teams[ME].players.length, cpuBefore = sl.teams[CPU].players.length;
+  E.nhlOffseason(sl, mulberry(29), ME);
+  ok(9, `the summer leaves the GM's club alone (${meBefore} in, nobody retiring or walking, ${meBefore} out)`, sl.teams[ME].players.length === meBefore, String(sl.teams[ME].players.length));
+  ok(9, `and cuts a CPU club from ${cpuBefore} to 23`, sl.teams[CPU].players.length === 23, String(sl.teams[CPU].players.length));
+  ok(9, 'and the GM is then refused at puck drop until he waives down', !!E.nhlPuckDropRefusal(sl, sl.teams[ME]) && gmCutDown(E, sl, ME) === meBefore - 23 && E.nhlPuckDropRefusal(sl, sl.teams[ME]) === null);
+
+  /* sixteen franchise seasons through the board's loop */
+  let cpuOver = 0, refusedRight = 0, refusedWrong = 0, mineOver = 0, deadEnds = 0, waivers = 0, clubSeasons = 0;
+  ['ANA', 'CAR', 'MTL', 'VGK'].forEach((me, k) => {
+    const rng = mulberry(9300 + k);
+    let lg2 = E.initNhlFullLeague(rng);
+    for (let s = 0; s < 4; s += 1) {
+      playRounds(E, lg2, me, rng);
+      closeSeason(M, lg2, me, rng);
+      lg2 = JSON.parse(JSON.stringify(lg2));
+      for (const [a, t] of Object.entries(lg2.teams)) {
+        clubSeasons += 1;
+        const refused = !!E.nhlPuckDropRefusal(lg2, t);
+        if (refused === (t.players.length > 23)) refusedRight += 1; else refusedWrong += 1;
+        if (a !== me && t.players.length > 23) cpuOver += 1;
+      }
+      if (lg2.teams[me].players.length > 23) mineOver += 1;
+      const w = gmCutDown(E, lg2, me);
+      if (w < 0) deadEnds += 1; else waivers += w;
+    }
+  });
+  console.log(`   16 franchise seasons: your club came out of the summer above 23 in ${mineOver} and waived ${waivers} men to get back to 23; CPU clubs above 23 at a season start ${cpuOver} of ${clubSeasons - 16}`);
+  ok(9, 'no CPU club opens a season above 23', cpuOver === 0, `${cpuOver} club seasons`);
+  ok(9, 'the refusal fires exactly when a club is above 23', refusedWrong === 0 && refusedRight === clubSeasons, `${refusedWrong} wrong of ${clubSeasons}`);
+  ok(9, 'the GM can always waive down to a legal roster', deadEnds === 0, `${deadEnds} dead ends`);
+  ok(9, 'the draft really did carry the GM past 23 (the refusal was exercised)', mineOver > 0, String(mineOver));
 }
 
 /* ---------- report ---------- */

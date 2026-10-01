@@ -108,6 +108,10 @@ export interface FoHubFacts {
   tax?: { bill: number; over: number };
   /** Round 722: the roster floor the season cannot tip off below, when the sport has one. */
   rosterFloor?: number;
+  /** Round 830 review: what the start of a season is called in this sport's
+      roster line. "tip off" when absent, so the NBA's box reads as it did;
+      the NHL passes "puck drop". */
+  startWord?: string;
 }
 
 /**
@@ -198,11 +202,14 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
     const starHurt = hurt.length > 0 ? [...hurt].sort((a, b) => b.ovr - a.ovr)[0] : null;
     /* Round 722: a roster the season cannot start with outranks a hurt star
        on the second line, because it is the one roster fact with a deadline.
-       Only a sport that declares a tip off floor has that deadline: the NHL
-       and MLB boards pass rosterMax for their sign path, can draft above it
-       and have no tip off refusal, so they keep their old line. */
+       Only a sport that declares a tip off floor has that deadline: the MLB
+       board passes rosterMax for its sign path, can draft above it and has no
+       tip off refusal, so it keeps its old line. Since the Round 830 review the
+       NHL board declares one on a full roster league (puck drop, 20 to 23);
+       an older NHL save keeps the old line. */
     const tooMany = f.rosterFloor != null && f.rosterMax != null ? f.roster.length - f.rosterMax : 0;
     const tooFew = f.rosterFloor != null ? f.rosterFloor - f.roster.length : 0;
+    const start = f.startWord ?? 'tip off';
     out.push({
       key: 'team',
       icon: '👔',
@@ -211,9 +218,9 @@ export function foHubTiles(f: FoHubFacts): FoTile[] {
         ? `${hurt.length} unavailable`
         : `${f.roster.length} under contract`,
       sub: tooMany > 0
-        ? `${tooMany} over the ${f.rosterMax} man limit. Waive before tip off.`
+        ? `${tooMany} over the ${f.rosterMax} man limit. Waive before ${start}.`
         : tooFew > 0
-          ? `${tooFew} short of the ${f.rosterFloor} man floor. Filled on minimum deals at tip off.`
+          ? `${tooFew} short of the ${f.rosterFloor} man floor. Filled on minimum deals at ${start}.`
           : starHurt
             ? `${starHurt.name} is out ${starHurt.out} ${f.periodWord}${starHurt.out === 1 ? '' : 's'}`
             : star

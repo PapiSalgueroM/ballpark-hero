@@ -557,7 +557,61 @@ export function nhlProspectToPlayer(pr: NhlProspect, rng: () => number): NhlGmPl
   };
 }
 
-export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
+/**
+ * Round 830 review: why this club cannot drop the puck on a new season, or
+ * null. The draft hands every club its picks before the summer, so a full
+ * roster league can come out of it above the 23 man limit. The board greys
+ * Play with this sentence and the GM waives down through the shared cut
+ * (dead money and all), the same shape as the NBA's tip off. A league saved
+ * before the full rosters has no rosterDepth and is never refused, so an old
+ * save plays exactly as it did.
+ */
+export function nhlPuckDropRefusal(lg: Pick<NhlLeague, 'rosterDepth'>, t: NhlGmTeam): string | null {
+  if (!lg.rosterDepth) return null;
+  if (t.players.length > NHL_FULL_ROSTER_MAX) {
+    return `${t.players.length} on the roster. Waive down to ${NHL_FULL_ROSTER_MAX} before puck drop.`;
+  }
+  return null;
+}
+
+const nhlGroupOf = (p: NhlGmPlayer): 'forwards' | 'defense' | 'goalies' =>
+  p.pos === 'G' ? 'goalies' : p.pos === 'D' ? 'defense' : 'forwards';
+
+/**
+ * Round 830 review: a CPU club above the limit cuts down the way a GM would,
+ * through the shared cut: the lowest rated man in a position group above its
+ * floor (twelve forwards, six defensemen, two goalies), until the roster plus
+ * whatever the refill still has to add fits 23. Ties go to the older man, so a
+ * prospect outlasts a veteran of the same rating. The floor the cut checks is
+ * 20 less the men the refill will add, because a lopsided club (8 forwards and
+ * 10 defensemen, say) has to drop a defenseman below 20 to leave room for the
+ * four forwards it is owed; held at a flat 20 that club opened at 24. Returns
+ * the men cut.
+ */
+export function nhlCutDownToLimit(t: NhlGmTeam, freeAgents: NhlGmPlayer[], max: number = NHL_FULL_ROSTER_MAX): NhlGmPlayer[] {
+  const cut: NhlGmPlayer[] = [];
+  for (;;) {
+    const count = { forwards: 0, defense: 0, goalies: 0 };
+    for (const p of t.players) count[nhlGroupOf(p)] += 1;
+    const short = (['forwards', 'defense', 'goalies'] as const).reduce((n, g) => n + Math.max(0, NHL_FULL_FLOORS[g] - count[g]), 0);
+    if (t.players.length + short <= max) return cut;
+    const victim = [...t.players]
+      .filter(p => count[nhlGroupOf(p)] > NHL_FULL_FLOORS[nhlGroupOf(p)])
+      .sort((a, b) => a.ovr - b.ovr || b.age - a.age)[0];
+    if (!victim || !cutPlayer(t, freeAgents, victim.id, Math.max(0, NHL_FULL_ROSTER_MIN - short))) return cut;
+    cut.push(victim);
+  }
+}
+
+/**
+ * The summer. Round 830 review added `myTeam`: on a full roster league every
+ * other club above 23 cuts down before the ledger rolls (nhlCutDownToLimit),
+ * while the GM's own club is left to its GM, whom nhlPuckDropRefusal stops at
+ * the start of the season. Callers that pass no team (the harnesses) get the
+ * CPU treatment on every club. An older save has no rosterDepth and nothing
+ * here changes for it.
+ */
+export function nhlOffseason(league: NhlLeague, rng: () => number, myTeam?: string): string[] {
   const notes: string[] = [];
   /* Round 211: one name book for the whole offseason. */
   const taken = leagueNames(league);
@@ -581,6 +635,9 @@ export function nhlOffseason(league: NhlLeague, rng: () => number): string[] {
     }
     t.players = keep;
     t.wins = 0; t.losses = 0; t.otLosses = 0; t.picks = [1, 2];
+    /* Round 830 review: a CPU club the draft carried past 23 cuts down here,
+       before the ledger rolls, as the NBA's CPU clubs do (Round 722). */
+    if (league.rosterDepth && t.abbr !== myTeam) nhlCutDownToLimit(t, league.freeAgents);
     rollDeadCap(t);
     /* Round 830: a full roster league refills to a dressable lineup first,
        which leaves the 13 man refill below nothing to do. */

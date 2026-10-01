@@ -18,6 +18,9 @@ import {
      carries its own roster floor and ceiling (20 to 23, or 8 to 15 on an
      older save). */
   initNhlFullLeague, nhlRosterLimits,
+  /* Round 830 review: the draft can carry the club past 23, and the season
+     waits until the GM waives down. */
+  nhlPuckDropRefusal,
 } from '@/lib/nhlFrontOffice';
 import { NHL_FO_FULL_READ } from '@/data/nhlFoRosters2026';
 /* Round 631: waiving a man costs dead money and he cannot come back this season. */
@@ -343,6 +346,10 @@ export default function NhlFrontOfficeBoard() {
        already has one is a closed season being clicked again, and the answer
        is to do nothing rather than play an extra round. */
     if (league.champions.some(c => c.season === league.season)) return;
+    /* Round 830 review: above 23 the season does not start. The Play button
+       is greyed with the reason; this is the belt to its braces. */
+    const dropWhy = league.round === 1 ? nhlPuckDropRefusal(league, my) : null;
+    if (dropWhy) { setFeed(f => [dropWhy, ...f].slice(0, 6)); return; }
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
     const report = simNhlRound(lg, myTeam, Math.random);
     nhlAiMoves(lg, myTeam, Math.random);
@@ -444,13 +451,17 @@ export default function NhlFrontOfficeBoard() {
     setDraftClass(nextClass); setPicksLeft(nextPicks);
     setFeed(f => [`📥 Drafted ${pr.name} (${pr.pos}), true rating ${pr.trueOvr} vs scouted ${pr.grade}.`, ...f].slice(0, 6));
     if (nextPicks <= 0) {
-      const notes = nhlOffseason(lg, Math.random);
+      /* Round 830 review: the other 31 clubs cut down to 23 in the summer;
+         yours is left to you, and the feed says so when it is over. */
+      const notes = nhlOffseason(lg, Math.random, myTeam);
+      const dropWhy = nhlPuckDropRefusal(lg, lg.teams[myTeam]);
       /* Round 180: ownership re-reads the roster and sets next season's ask. */
       /* Round 192: what you said at the podium tilts the ask, then the
          tilt is spent. */
       const m = mandateFor(lg, myTeam, champion === myTeam, pressTilt);
       setMandate(m);
       setFeed([
+        ...(dropWhy ? [`📋 ${dropWhy}`] : []),
         `🏛️ The new mandate: ${m.text}`,
         ...(pressTilt === 1 ? ['🎙️ Your season-end answer raised the bar upstairs.']
           : pressTilt === -1 ? ['🎙️ Your ask for patience was heard. The bar sits softer.'] : []),
@@ -771,6 +782,10 @@ export default function NhlFrontOfficeBoard() {
     /* Round 631: the box offers only men the sign path would take. */
     ledger: my,
     rosterMax: limits.max,
+    /* Round 830 review: a full roster league cannot start a season above 23,
+       so the Roster box says so the way the NBA's does before tip off. An
+       older save has no such rule and keeps its old line. */
+    ...(league.rosterDepth ? { rosterFloor: limits.min, startWord: 'puck drop' } : {}),
     wins: my.wins,
     losses: my.losses,
     period: league.round,
@@ -793,6 +808,8 @@ export default function NhlFrontOfficeBoard() {
   /* Round 631: at the engine's floor every Waive waits, at its ceiling every Sign does, and both say why. */
   const cutBlock = cutRefusal(my, limits.min);
   const fullBlock = rosterFullRefusal(my, limits.max);
+  /* Round 830 review: above 23 at the start of a season, Play waits on a waiver. */
+  const dropBlock = league.round === 1 ? nhlPuckDropRefusal(league, my) : null;
   /* Round 830: 23 men read as one long list, so the roster box splits them
      the way a hockey fan counts them. Every row is still on screen at once. */
   const rosterGroups = [
@@ -852,6 +869,7 @@ export default function NhlFrontOfficeBoard() {
           </p>
           <p className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}</p>
           {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
+          {dropBlock && <p data-puckdrop-block className="mb-2 text-center text-[10px] text-destructive">{dropBlock}</p>}
           <div className="max-h-96 space-y-2 overflow-y-auto">
             {rosterGroups.map(g => (
             <div key={g.key} data-roster-group={g.key}>
@@ -1035,7 +1053,8 @@ export default function NhlFrontOfficeBoard() {
       {tab === 'round' && (
         <div className="rounded-2xl border border-gold/40 bg-card p-4 text-center">
           <p className="mb-2 text-sm text-foreground">Each round simulates a stretch of games across the league. OT losses still earn a point.</p>
-          <button onClick={playRound} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90">
+          {dropBlock && <p data-puckdrop-block className="mb-2 text-[11px] text-destructive">{dropBlock}</p>}
+          <button onClick={playRound} disabled={!!dropBlock} title={dropBlock ?? undefined} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40">
             <ShieldHalf className="h-4 w-4" /> {league.round >= NHL_FO_ROUNDS ? 'Final stretch + playoffs' : `Play Round ${league.round}`}
           </button>
           <p className="mt-2 text-[10px] text-muted-foreground">Top three per division plus two wild cards per conference make the divisional bracket. Every round is best-of-7.</p>
