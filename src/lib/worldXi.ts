@@ -621,18 +621,26 @@ function squadRatingOf(ratings: number[]): number {
   return Math.max(1, Math.min(100, Math.round(avg)));
 }
 
-/* Round 726: a shape costs the side for every man it has no natural slot for.
-   Players are matched to slots with the same fitsSlot rule the game picks
-   with, as a proper matching rather than a greedy pass, so a man who could
-   cover two slots never blocks one. An eleven built through either game
-   fits its own formation by construction, so the chosen set up pays nothing
-   and every season reads as it did; only an alternative shape can be charged,
-   which is what makes the "what would have changed" line a real comparison. */
+/* Round 726: an alternative shape costs the side for every man it has no
+   natural slot for. Players are matched to slots with the same fitsSlot rule
+   the game picks with, as a proper matching rather than a greedy pass, so a
+   man who could cover two slots never blocks one.
+   The chosen set up is never charged, so every season reads exactly as it
+   did before this round. That matters for Build Your XI, which hands the sim
+   a pick's primary position only: a man his verified history let into a slot
+   counts as a misfit here although the game took him. So an alternative pays
+   only for the misfits it has BEYOND the chosen shape's, which also means no
+   other shape can ever gain on the same rolls, and the line can say so. */
 const MISFIT_PENALTY = 2.5;
 const MISFIT_CAP = 10;
 
 function misfitPenalty(misfits: number): number {
   return Math.min(MISFIT_CAP, misfits * MISFIT_PENALTY);
+}
+
+function shapePenalty(players: WxPlayer[], chosen: string, alternative: string | undefined): number {
+  if (!alternative || alternative === chosen) return 0;
+  return misfitPenalty(Math.max(0, formationMisfits(players, alternative) - formationMisfits(players, chosen)));
 }
 
 export function formationMisfits(players: WxPlayer[], formationName: string): number {
@@ -679,8 +687,8 @@ export function whatIfFinish(
     const weakest = ratings.indexOf(Math.min(...ratings));
     squadRating = squadRatingOf(ratings.filter((_, i) => i !== weakest));
   }
-  const misfits = formationMisfits(players, alt.formation ?? formationName);
-  const run = playLeague(rng(seed), winProbability(ratingToOverall(squadRating) - misfitPenalty(misfits)));
+  const penalty = shapePenalty(players, formationName, alt.formation);
+  const run = playLeague(rng(seed), winProbability(ratingToOverall(squadRating) - penalty));
   return { points: run.points, tablePosition: run.tablePosition };
 }
 
@@ -857,11 +865,15 @@ function buildSeasonExtras(
   const gf = results.map(r => (r === 'W' ? 1 : 0));
   const matchWeight = results.map(r => (r === 'W' ? 3 : r === 'D' ? 1.2 : 0.8));
   for (let left = goalsFor - league.wins; left > 0; left--) gf[pickWeighted(rand, matchWeight)] += 1;
+  /* A win concedes a little (none, one, now and then two, never as many as
+     it scored), so a 5-0 does not turn into a 5-3; a defeat loses by one,
+     two or three. Measured before this split, a 110 point side conceded 40
+     a season, which is a mid table defence. */
   const ga = results.map((r, i) => {
     if (r === 'D') return gf[i];
     const m = rand();
-    const margin = m < 0.5 ? 1 : m < 0.8 ? 2 : 3;
-    return r === 'W' ? Math.max(0, gf[i] - margin) : gf[i] + margin;
+    if (r === 'W') return Math.min(gf[i] - 1, m < 0.45 ? 0 : m < 0.82 ? 1 : 2);
+    return gf[i] + (m < 0.5 ? 1 : m < 0.8 ? 2 : 3);
   });
   const goalsAgainst = ga.reduce((s, g) => s + g, 0);
   const cleanSheets = ga.filter(g => g === 0).length;
@@ -999,19 +1011,27 @@ function buildSeasonExtras(
   const lifted = weakest >= 0 ? whatIfFinish(players, formationName, { liftWeakest: true }) : null;
   const liftedRating = weakest >= 0 ? squadRatingOf(ratings.filter((_, i) => i !== weakest)) : squadRating;
   const from = ordinal(finish.tablePosition);
+  /* Said the way it moved: a change of place names both places, and a
+     change of points alone says the place held, so no line ever reads
+     "from 2nd to 2nd". */
+  const moved = (alt: { points: number; tablePosition: number }) =>
+    alt.tablePosition !== finish.tablePosition
+      ? `the finish ${alt.tablePosition > finish.tablePosition ? 'drops' : 'climbs'} from ${from} to ${ordinal(alt.tablePosition)} (${alt.points} points, not ${finish.points})`
+      : `the finish stays ${from} but the points go from ${finish.points} to ${alt.points}`;
+  const chosenMisfits = formationMisfits(players, formationName);
   /* Both alternatives are told, then the bigger mover is named. A shape
      sentence and a slot sentence, each honest about moving nothing when it
      moved nothing, and the same close every time. */
   const shapeSentence = !bestShape
     ? ''
     : swing(bestShape) > 0
-    ? `In a ${bestShape.name}, ${bestShape.misfits} of these eleven ${bestShape.misfits === 1 ? 'has' : 'have'} no natural slot, and on the same rolls the finish drops from ${from} to ${ordinal(bestShape.tablePosition)}.`
+    ? `In a ${bestShape.name}, ${bestShape.misfits} of these eleven ${bestShape.misfits === 1 ? 'has' : 'have'} no natural slot${chosenMisfits > 0 ? ` (${chosenMisfits} in your ${formationName})` : ''}, and on the same rolls ${moved(bestShape)}.`
     : `Every other shape lands the same ${from} on the same rolls.`;
   const weakMan = weakest >= 0 ? players[weakest] : null;
   const slotSentence = !lifted || !weakMan
     ? ''
     : swing(lifted) > 0
-    ? `A pick at the rest of the eleven's level in the ${sagaRoleFor(weakMan.position)} slot (${weakMan.name}, the lowest rating at ${Math.round(ratings[weakest])}) takes the squad to ${liftedRating}/100 and the finish from ${from} to ${ordinal(lifted.tablePosition)}.`
+    ? `A pick at the rest of the eleven's level in the ${sagaRoleFor(weakMan.position)} slot (${weakMan.name}, the lowest rating at ${Math.round(ratings[weakest])}) takes the squad to ${liftedRating}/100, and on the same rolls ${moved(lifted)}.`
     : `Lifting the ${sagaRoleFor(weakMan.position)} slot, the lowest rating in the side, to the rest of the eleven's level moves nothing.`;
   const close = 'Same dice, no promises.';
   let whatIf: WhatIf;
@@ -1076,8 +1096,7 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
   const playerRatings = ratingsFor(players);
   const squadRating = squadRatingOf(playerRatings);
 
-  const misfits = formationMisfits(players, formationName);
-  const overall = ratingToOverall(squadRating) - misfitPenalty(misfits);
+  const overall = ratingToOverall(squadRating);
   const winP = winProbability(overall);
   const league = playLeague(rand, winP);
   const { points, wins, draws, losses, unbeatenRun, rivalPoints, tablePosition } = league;
