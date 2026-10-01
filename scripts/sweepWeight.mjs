@@ -66,6 +66,59 @@
  * game page downloads all 127 entries to read one, 9.1K gzipped, which a
  * split by sport (the way Round 210 split the guides) would take to about 1K.
  *
+ * ROUND 700: THAT CUT, MADE. The seoMeta chunk is 32 parts now, by a hash of
+ * the path (scripts/genSeoMetaParts.mjs says why a hash and not a sport), and
+ * a game page fetches only the part holding its own entry, 0.3K to 1.0K
+ * gzipped instead of the whole 9.3K. Measured 2026-10-01 the way this harness
+ * measures, a build of main (d99b58e4) against a build of the branch on the
+ * same machine, three runs each, the same file counts every run:
+ *
+ *   /club-manager      630.4 to 622.3   /footle          325.6 to 317.9
+ *   /soccer-career     696.8 to 689.0   /nfl-my-career   402.1 to 393.7
+ *   /stadium-tycoon    289.5 to 281.2   /front-office    303.6 to 295.5
+ *   /wonderkid-factory 268.4 to 260.3   /soccer-grid     303.9 to 295.7
+ *   /minefield         284.3 to 276.0
+ *   /                  225.4 to 226.0   /leaderboard     237.0 to 237.5
+ *
+ * Every game page is 7.7K to 8.4K lighter. The pages with no entry pay 0.5K
+ * to 0.6K, the 32 loaders and the part function in the entry chunk (the
+ * hashed file names do not compress). Each game route's budget came down by
+ * its own saving, so it keeps the headroom it had on main, except where that
+ * would leave under 2K over the branch's own figure (/club-manager, which sat
+ * on its ceiling, /stadium-tycoon, /minefield and /front-office), where it is
+ * that figure plus 2. / and /leaderboard are unchanged: / now sits on its
+ * ceiling (226.0 against 226), so the next thing added to the entry chunk
+ * has to pay for itself or raise that line in the open.
+ *
+ * Measured again after merging main (5d1aa2bb, Aussie Rules Manager in the
+ * registry), three runs each, identical every run: every game page 7.8K to
+ * 8.4K lighter (/club-manager 630.7 to 622.6, /front-office 303.8 to 295.7,
+ * /aussie-rules-manager 259.0 to 250.6), / 225.6 to 226.2, /leaderboard
+ * 237.1 to 237.7. Every budget below still holds with the headroom it was set
+ * for, so none moved.
+ *
+ * AND AGAIN AFTER RELEASE K (main e289ac66, which raised four budgets for
+ * its own growth), a build of main against a build of the merged branch,
+ * three runs each, identical every run:
+ *
+ *   /club-manager      637.4 to 629.1   /footle          329.8 to 322.0
+ *   /soccer-career     709.9 to 702.0   /nfl-my-career   403.6 to 395.1
+ *   /stadium-tycoon    290.2 to 281.8   /front-office    307.7 to 299.5
+ *   /wonderkid-factory 269.1 to 260.9   /soccer-grid     308.0 to 299.7
+ *   /minefield         285.1 to 276.8   /deadline-day    663.6 to 655.1
+ *   /                  225.9 to 226.6   /leaderboard     237.5 to 238.1
+ *
+ * Every game page 7.8K to 8.4K lighter again. Every game route's budget, and
+ * the home page's, was set afresh from these figures by one rule: the
+ * branch's measured figure plus the
+ * headroom the route had on main, held between 2K and 4K, rounded up. That
+ * is what main's own release raises leave (3K to 4K over the measured
+ * figure), and it takes /soccer-career from 736, 26K over main's figure, to
+ * 706, so its ceiling is a ceiling again. / is the one that RISES, 226 to
+ * 229, in the open: the 32 part loaders and the part function cost the entry
+ * chunk 0.6K, main already measured 225.9 on its 226, and 226.6 rounds to 227.
+ * /leaderboard pays the same 0.6K and stays at 266.
+ *
  * Run: npm run build && npx serve -s dist -l 4173, then
  *      ENGINES=chromium node scripts/sweepWeight.mjs
  */
@@ -87,18 +140,18 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
    part of the 14.6K the hub prose cut took off every route (see the header);
    the other five were over and spent it getting back under. */
 const BUDGETS = [
-  ['/', 226],
-  ['/club-manager', 630], /* release H: 628K measured, the ticker's sport filter menu (711) in the entry chunk; release G: 626K with the match centre (714), the squad rows (715) and the double roster fix (742); was 622 */
-  ['/soccer-career', 736],
-  ['/stadium-tycoon', 290],
+  ['/', 229], /* Round 700: 226.6K measured, 0.6K of it the seoMeta part loaders in the entry chunk, 225.9K on main; was 226 */
+  ['/club-manager', 633], /* Round 700: 629.1K measured with the seoMeta split, 637.4K on main; was 641 */ /* release K: 637K measured, the shootout order (782) and job applications (783) in the engine chunk; was 630 */ /* release H: 628K measured, the ticker's sport filter menu (711) in the entry chunk; release G: 626K with the match centre (714), the squad rows (715) and the double roster fix (742); was 622 */
+  ['/soccer-career', 706], /* Round 700: 702.0K measured with the seoMeta split, 709.9K on main; was 736 */
+  ['/stadium-tycoon', 284], /* Round 700: 281.8K measured with the seoMeta split, 290.2K on main; was 290 */
   /* Round 216: the new idle game. Measured 243K on the day it shipped,
      mostly the shared index chunk. */
-  ['/wonderkid-factory', 270],
-  ['/minefield', 284], /* release G: 280K measured; the shared result moment (710), the native share sheet (744) and the hub trail (654) sit in chunks every game loads; was 276 */
-  ['/footle', 328], /* release J: 325K measured after the Round 669 re-bake put 15 more players in the bundled pool (538 to 553); before that 324 at release G on 319K measured; was 316 */
-  ['/nfl-my-career', 404], /* release H: 401K measured; the ticker's sport filter menu (711) and the share sheet (744) sit in the entry chunk every page loads; was 400 */
-  ['/front-office', 304], /* release H: 302K measured, the entry chunk's ticker menu (711); was 300 */ /* release G: 299K measured, same shared chunks as above; was 296 */
-  ['/soccer-grid', 308], /* release J: 304K measured; this release changes no soccer grid code, the growth is in the shared chunks every route loads; was 300 */
+  ['/wonderkid-factory', 263], /* Round 700: 260.9K measured with the seoMeta split, 269.1K on main; was 270 */
+  ['/minefield', 280], /* Round 700: 276.8K measured with the seoMeta split, 285.1K on main; was 288 */ /* release K: 285K measured, two new games in the registry and the What's New entries in the shared chunks; was 284 */ /* release G: 280K measured; the shared result moment (710), the native share sheet (744) and the hub trail (654) sit in chunks every game loads; was 276 */
+  ['/footle', 326], /* Round 700: 322.0K measured with the seoMeta split, 329.8K on main; was 333 */ /* release K: 330K measured, the same shared chunk growth as /minefield; was 328 */ /* release J: 325K measured after the Round 669 re-bake put 15 more players in the bundled pool (538 to 553); before that 324 at release G on 319K measured; was 316 */
+  ['/nfl-my-career', 398], /* Round 700: 395.1K measured with the seoMeta split, 403.6K on main; was 404 */ /* release H: 401K measured; the ticker's sport filter menu (711) and the share sheet (744) sit in the entry chunk every page loads; was 400 */
+  ['/front-office', 304], /* Round 700: 299.5K measured with the seoMeta split, 307.7K on main; was 312 */ /* release K: 308K measured, the franchise tag and the depth chart (723); was 304 */ /* release H: 302K measured, the entry chunk's ticker menu (711); was 300 */ /* release G: 299K measured, same shared chunks as above; was 296 */
+  ['/soccer-grid', 302], /* Round 700: 299.7K measured with the seoMeta split, 308.0K on main; was 308 */ /* release J: 304K measured; this release changes no soccer grid code, the growth is in the shared chunks every route loads; was 300 */
   ['/leaderboard', 266],
 ];
 
@@ -188,7 +241,7 @@ console.log('3) Every guide is still reachable, one sport at a time');
   const loader = fs.readFileSync(path.join(dir, 'loader.ts'), 'utf-8');
   const mapped = new Map();
   for (const m of loader.matchAll(/^\s*'([^']+)': '([a-zA-Z0-9]+)',$/gm)) mapped.set(m[1], m[2]);
-  const BUNDLES = ['soccer1', 'soccer2', 'football', 'college', 'basketball', 'baseball', 'hockey', 'moreSports', 'world', 'clubManagement', 'stadiumManagement', 'academyManagement'];
+  const BUNDLES = ['soccer1', 'soccer2', 'football', 'college', 'basketball', 'baseball', 'hockey', 'moreSports', 'world', 'clubManagement', 'stadiumManagement', 'academyManagement', 'aussieRulesManagement'];
   let keys = 0;
   for (const b of BUNDLES) {
     const src = fs.readFileSync(path.join(dir, `${b}.ts`), 'utf-8');

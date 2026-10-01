@@ -22,6 +22,7 @@ import { computeChemistry, formatChemistry } from '@/lib/chemistry';
 import { StatTile } from '@/components/game/StatTile';
 import { normalizePosition, playerRating } from '@/lib/squadDeal';
 import { ordinal, simulateWorldXiSeason, type WxPlayer } from '@/lib/worldXi';
+import { SeasonReportTabs } from '@/components/world-xi/SeasonReportTabs';
 
 const formationOptions: Formation[] = ['4-3-3', '4-4-2', '3-5-2', '4-2-3-1', '3-4-3', '5-3-2'];
 
@@ -436,7 +437,12 @@ const LineupBuilder = () => {
               funFact={<span className="whitespace-pre-line">{verdict.analysis}</span>}
               emojiGrid={
                 seasonReport
-                  ? `Build Your XI: ${formation} rated ${verdict.rating}\nSeason sim: ${seasonReport.squadRating}/100, finished ${ordinal(seasonReport.tablePosition)}`
+                  ? [
+                      `Build Your XI: ${formation} rated ${verdict.rating}`,
+                      `Season sim: ${seasonReport.squadRating}/100, finished ${ordinal(seasonReport.tablePosition)} with ${seasonReport.points} points`,
+                      ...(seasonReport.topScorer ? [`Top scorer: ${seasonReport.topScorer.name} (${seasonReport.topScorer.goals})`] : []),
+                      ...(seasonReport.playerOfSeason ? [`Player of the season: ${seasonReport.playerOfSeason.name}`] : []),
+                    ].join('\n')
                   : `Build Your XI: ${formation} rated ${verdict.rating}`
               }
               share={{
@@ -527,6 +533,8 @@ const LineupBuilder = () => {
                         </p>
                       ))}
                   </div>
+
+                  <SeasonReportTabs report={seasonReport} />
                 </div>
               )}
             </ResultScreen>

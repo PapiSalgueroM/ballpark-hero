@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, Shuffle, CalendarDays, RotateCcw } from 'lucide-react';
 import ShareButtons from '@/components/game/ShareButtons';
+import { ResultMoment } from '@/components/game/ResultMoment';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useRevealScroll } from '@/hooks/useRevealScroll';
 import { markRestoredFinish } from '@/lib/restoredFinish';
@@ -156,12 +157,17 @@ export default function ManagerHotSeatBoard() {
         ...(r.verdict ? { kind: r.verdict.kind, points: r.points, target: r.target, dots: dotsOf(r) } : {}),
       });
       if (r.verdict) setDailyDone({ club: r.setup.club, kind: r.verdict.kind, points: r.points, target: r.target, dots: dotsOf(r) });
+      /* Round 721 review fix: the in memory copy moves with the store, or Menu
+         then reopening the daily went back to the brief and the next save
+         overwrote the matches already played. */
+      setDailySaved(r.verdict || !r.actions.length ? null : r.actions);
     } else {
       try {
         localStorage.setItem(FREE_KEY, JSON.stringify({ v: 1, club: r.setup.club, seed: r.setup.seed, actions: r.actions, done: !!r.verdict }));
       } catch {
         /* storage full or blocked: the run still plays, it just will not survive a refresh */
       }
+      setFreeSaved(r.verdict ? null : { setup: r.setup, actions: r.actions });
     }
   }, []);
 
@@ -395,8 +401,16 @@ export default function ManagerHotSeatBoard() {
         {run && phase === 'done' && run.verdict && (
           <div className="space-y-3 rounded-lg border border-border bg-card p-4" data-testid="hot-seat-verdict">
             <div className="text-xs font-semibold uppercase tracking-wide text-primary">{run.state.clubName}</div>
-            <div className="text-2xl font-bold">{VERDICT_WORDS[run.verdict.kind].title}</div>
-            <p className="text-sm text-muted-foreground">{VERDICT_WORDS[run.verdict.kind].line}</p>
+            {/* Round 710's rule, which Round 719 missed: a run that ends wears the one shared result moment. */}
+            <ResultMoment
+              outcome={run.verdict.kind === 'survived' ? 'win' : run.verdict.kind === 'reprieve' ? 'close' : 'loss'}
+              gamePath="/manager-hot-seat"
+              score={`${run.points}/${run.target}`}
+              scoreLabel="points"
+              headline={VERDICT_WORDS[run.verdict.kind].title}
+            >
+              <p className="text-sm text-muted-foreground">{VERDICT_WORDS[run.verdict.kind].line}</p>
+            </ResultMoment>
             <div className="rounded-md bg-muted px-3 py-2 text-sm">
               <div><span className="font-bold tabular-nums">{run.points}</span> of <span className="font-bold tabular-nums">{run.target}</span> points from {run.leaguePlayed} league game{run.leaguePlayed === 1 ? '' : 's'} {dotsOf(run)}</div>
               <ul className="mt-2 space-y-1 text-xs text-muted-foreground">

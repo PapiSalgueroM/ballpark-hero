@@ -9,6 +9,7 @@ import VictoryMoment from '@/components/game/VictoryMoment';
 import { cardsAndSubsAt, reportLines } from '@/lib/clubManagerMatchCentre';
 import type { CardsAndSubs } from '@/lib/clubManagerMatchCentre';
 import { MatchTimeline } from '@/components/club-manager/MatchTimeline';
+import { ShootoutKicks } from '@/components/club-manager/ShootoutKicks';
 
 /** Round 157: one stat as two bars meeting in the middle, matchday-app style. */
 function StatBar({ label, mine, theirs, decimals = 0, suffix = '' }: {
@@ -140,8 +141,10 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
      knocked out. The headline keeps the night's word, because that is the score
      printed under it, and the shootout gets its own line saying which way it
      went. */
+  /* Round 782: with the kicks played one by one, the count goes in the line. */
+  const penCount = r.shootout ? ` ${r.shootout.mine}-${r.shootout.theirs}` : '';
   const penLine = r.decidedBy === 'pens'
-    ? ((r.shootoutWon ?? r.won) ? 'Through on penalties' : 'Out on penalties')
+    ? ((r.shootoutWon ?? r.won) ? `Through${penCount} on penalties` : `Out${penCount} on penalties`)
     : '';
   /* Round 670: a tie settled in extra time says so, and on a second leg says
      where the tie ended, because the night's word and the tie can differ (a
@@ -317,6 +320,9 @@ export function MatchReportCard({ report, clubName, onContinue }: MatchReportCar
             </div>
           </div>
         )}
+
+        {/* Round 782: the shootout kick by kick, only when the manager had set an order. */}
+        {r.shootout && <ShootoutKicks shootout={r.shootout} clubName={clubName} opponent={opponent} className="mt-3" />}
 
         {/* Round 157: cards, injuries and subs with their minutes, right under
             the scorers where a matchday app puts them.

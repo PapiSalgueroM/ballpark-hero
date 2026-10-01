@@ -130,13 +130,28 @@ serve(async (req) => {
     json({ valid: false, unverified: true, reason: "Couldn't verify your answer right now, please try again.", fullName: null }, corsHeaders);
 
   const cacheKey = cacheKeyOf(sanitized.player, sanitized.row, sanitized.col);
+  /* ROUND 703: a stored YES answers at once. A stored NO is HELD until the
+     records pass below has had its say, and is returned only when the records
+     do not accept the answer. The cache keeps a verdict forever, the model's
+     refusals are not always right, and before this a cached "no" beat the
+     NFL stint table every time it was asked. */
+  let cachedRefusal: Record<string, unknown> | null = null;
   try {
     const { data: hit } = await sb.from("ai_validation_cache").select("verdict")
       .eq("game", CACHE_GAME).eq("cache_key", cacheKey).maybeSingle();
-    if (hit?.verdict) return json({ ...(hit.verdict as Record<string, unknown>), cached: true }, corsHeaders);
+    if (hit?.verdict) {
+      const stored = hit.verdict as Record<string, unknown>;
+      if (stored.valid === true) return json({ ...stored, cached: true }, corsHeaders);
+      cachedRefusal = stored;
+    }
   } catch { /* cache down */ }
 
   try {
+    /* ROUND 703 review: ilike reads the typed name as a PATTERN. "%" (or "*",
+       which PostgREST turns into one) reached 26 different players on
+       2026-10-01, and the records pass then said yes on their careers. No real
+       name carries a wildcard, so one that does skips the records. */
+    if (/[%_*\\]/.test(sanitized.player)) throw new Error("a wildcard is not a name");
     const { data } = await sb.from("nfl_player_team_stints")
       .select("player_name, team, position, college, first_season, last_season, debut_season, debut_age")
       .ilike("player_name", sanitized.player).limit(40);
@@ -189,6 +204,10 @@ serve(async (req) => {
       }
     }
   } catch { /* deterministic pass unavailable -> AI */ }
+
+  /* ROUND 703: the records did not accept it, so a held refusal stands,
+     exactly as it did before. */
+  if (cachedRefusal) return json({ ...cachedRefusal, cached: true }, corsHeaders);
 
   if (!AI_KEY) return unverified();
 

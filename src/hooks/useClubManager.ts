@@ -14,16 +14,18 @@ import {
   matchFacts,
   changeLive, startSecondHalf, startExtraTime, markLiveMinute,
   setDuty, dutyOptions, dutyLineOf, pitchLineOf, setSetPiece, autoSetPieces, startRetraining, stopRetraining,
+  setShootoutOrder,
   DEFAULT_ERA_ID,
   releasePlayer, signFreeAgent,
   doorRefusal, loanOutRefusal,
+  applyForJob, joinClubInSummer,
 } from '@/lib/clubManager';
 import type { MarketDoor } from '@/lib/clubManager';
 import type { MatchFacts, LiveChange, Duty, SetPieceKey, Formation, FormationSlot } from '@/lib/clubManager';
 import type { Position } from '@/types/game';
 import type { TransferStatus, FacilityKind, TrainingPlan, SquadRole, TalkTone, DealExtras } from '@/lib/clubManager';
 import type { NextFixtureInfo, TableRow, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
-import { simToWeek as runSimToWeek, startMidSeason } from '@/lib/clubManagerCalendar';
+import { simToWeek as runSimToWeek, startMidSeason, joinClubNow } from '@/lib/clubManagerCalendar';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
 import { upgradeFacility as upgradeClubFacility } from '@/lib/clubManagerFacilities';
 import type { FacilityId } from '@/lib/clubManagerFacilities';
@@ -293,6 +295,11 @@ export function useClubManager() {
 
   const autoPickSetPieces = useCallback(() => {
     setCareer(prev => (prev ? autoSetPieces(prev) : prev));
+  }, []);
+
+  /** Round 782: the shootout order, player ids in kicking order; an empty list clears it. A bad id leaves the save alone. */
+  const setShootoutOrderIds = useCallback((ids: string[]) => {
+    setCareer(prev => (prev ? setShootoutOrder(prev, ids) ?? prev : prev));
   }, []);
 
   /** Put an outfielder to work on a second position. A refusal leaves the save alone; the screen prints why. */
@@ -781,7 +788,26 @@ export function useClubManager() {
 
   /* ---------- Round 73: the inbox ---------- */
   const answer = useCallback((messageId: string, optionIdx: number) => {
-    setCareer(prev => (prev ? answerMessage(prev, messageId, optionIdx) : prev));
+    setCareer(prev => {
+      if (!prev) return prev;
+      /* Round 783: joining the club that said yes, today, is the mid season
+         takeover in clubManagerCalendar.ts rather than an inbox effect, so
+         that one answer is routed there. Everything else is the inbox's. */
+      const msg = (prev.inbox ?? []).find(m => m.id === messageId);
+      if (msg && !msg.resolved && msg.options[optionIdx]?.effect === 'joinNow') return joinClubNow(prev) ?? prev;
+      return answerMessage(prev, messageId, optionIdx);
+    });
+  }, []);
+
+  /* ---------- Round 783: the job hunt ---------- */
+  const applyJob = useCallback((club: string) => {
+    setCareer(prev => (prev ? applyForJob(prev, club) ?? prev : prev));
+  }, []);
+  const joinSummer = useCallback(() => {
+    setCareer(prev => (prev ? joinClubInSummer(prev) ?? prev : prev));
+  }, []);
+  const joinNow = useCallback(() => {
+    setCareer(prev => (prev ? joinClubNow(prev) ?? prev : prev));
   }, []);
 
   return {
@@ -791,7 +817,7 @@ export function useClubManager() {
     market, nextFx, tableRows, myPosition, facts,
     resume, startNew, chooseClub, confirmClub, confirmCustomClub,
     setFormationIndex, setMentality, setXiSlot, swapXiSlots, autoPick,
-    setSlotDuty, assignSetPiece, autoPickSetPieces, retrain, stopRetrain,
+    setSlotDuty, assignSetPiece, autoPickSetPieces, setShootoutOrder: setShootoutOrderIds, retrain, stopRetrain,
     play, quickPlay, continueFromReport, nextSeason,
     buy,
     negotiate, offer, walk, proposeTerms, buyLoanee, endLoanEarly, recallLoanee, answerApproach, setTickets, setConcessions, expandStadium, takeSponsor, pushSponsorOffer, buyFacility, waitAWeek, takeJob, acceptNation, resignNation, dismissNegotiation, clause, loan,
@@ -803,6 +829,7 @@ export function useClubManager() {
     subAtHalftime, shapeAtHalftime, secondHalf, startSecondHalfLive, startExtraTimeLive, changeAt, markMinute,
     talk, halftimeTalk, sayIt, sendAssistant,
     answer,
+    applyJob, joinSummer, joinNow,
   };
 }
 

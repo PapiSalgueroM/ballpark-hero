@@ -1,4 +1,4 @@
-import { useState, useMemo, useCallback } from 'react';
+import { useState, useMemo, useCallback, useEffect, useRef } from 'react';
 import { cfbHLPlayers, CfbHLPlayer } from '@/data/cfbHLPlayers';
 import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { higherLowerScore } from '@/lib/higherLowerScore';
@@ -87,6 +87,14 @@ export function useCfbHL() {
 
   const [currentResult, setCurrentResult] = useState<RoundResult | null>(null);
   const [showingResult, setShowingResult] = useState(false);
+  const revealTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const revealVersion = useRef(0);
+  const cancelReveal = useCallback(() => {
+    revealVersion.current += 1;
+    if (revealTimer.current !== null) clearTimeout(revealTimer.current);
+    revealTimer.current = null;
+  }, []);
+  useEffect(() => cancelReveal, [cancelReveal]);
 
   const [unlimitedPairs, setUnlimitedPairs] = useState<[CfbHLPlayer, CfbHLPlayer][]>(
     () => buildPairs(Math.floor(Math.random() * 100000), hard),
@@ -157,7 +165,11 @@ export function useCfbHL() {
 
       if (mode === 'daily') addDailyAction({ t: 'result', correct });
 
-      setTimeout(() => {
+      cancelReveal();
+      const version = revealVersion.current;
+      revealTimer.current = setTimeout(() => {
+        if (version !== revealVersion.current) return;
+        revealTimer.current = null;
         if (mode !== 'daily') {
           setUnlimitedResults((prev) => [...prev, { player1: p1, player2: p2, correct }]);
           setUnlimitedRound((prev) => prev + 1);
@@ -166,10 +178,11 @@ export function useCfbHL() {
         setShowingResult(false);
       }, 2000);
     },
-    [currentPair, showingResult, gameStatus, mode, addDailyAction],
+    [currentPair, showingResult, gameStatus, mode, addDailyAction, cancelReveal],
   );
 
   const switchMode = useCallback((m: CfbHLMode) => {
+    cancelReveal();
     if (m === 'unlimited') {
       setUnlimitedPairs(buildPairs(Math.floor(Math.random() * 100000), hard));
       setUnlimitedResults([]);
@@ -178,9 +191,10 @@ export function useCfbHL() {
     setMode(m);
     setCurrentResult(null);
     setShowingResult(false);
-  }, [hard]);
+  }, [hard, cancelReveal]);
 
   const toggleHard = useCallback(() => {
+    cancelReveal();
     setHard((prev) => {
       const next = !prev;
       // Hard pairs are an unlimited-mode feature, switching keeps the
@@ -193,7 +207,7 @@ export function useCfbHL() {
       setShowingResult(false);
       return next;
     });
-  }, []);
+  }, [cancelReveal]);
 
   useGameCompletion('cfb-higher-lower', rawDailyStatus !== 'playing', dailyScore);
 

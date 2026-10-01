@@ -1,0 +1,51 @@
+.status {
+  min-height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reply {
+  animation: nascarReply 420ms ease-out 1;
+}
+
+.guessName {
+  min-width: 0;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.won {
+  animation: nascarWon 420ms ease-out 1;
+}
+
+.lost {
+  animation: nascarLost 420ms ease-out 1;
+}
+
+@keyframes nascarReply {
+  from { opacity: 0.55; }
+  to { opacity: 1; }
+}
+
+@keyframes nascarWon {
+  35% { box-shadow: 0 0 0 3px rgb(52 211 153 / 35%); }
+}
+
+@keyframes nascarLost {
+  35% { box-shadow: 0 0 0 3px rgb(248 113 113 / 25%); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reply, .won, .lost { animation: none; }
+}
+
+.action {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.action:focus-visible {
+  outline: 2px solid #f87171;
+  outline-offset: 3px;
+}
