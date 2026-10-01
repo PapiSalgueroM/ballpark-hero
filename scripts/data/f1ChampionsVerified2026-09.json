@@ -6,8 +6,8 @@
   "Round 734. Every row of public.f1_driver_standings (3,095 rows, seasons 1950 to 2025) as read on 2026-09-30 through the Supabase MCP, checked against formula1.com (the official results archive: the final drivers standings page and the race winners page of each season) and the Jolpica F1 API (the documented dataset, maintained successor of the Ergast API, which the table was imported from). ESPN and Motor Sport magazine's database are the third sources that settled every disagreement. Wikipedia is not a source here.",
   "Each row is [id, driver_id, driver_name, constructor_id, constructor_name, position, points, wins, status] in its state AFTER the Round 734 migration. A row's two sources are its season's src pair (formula1.com standings, Jolpica), and its wins are also counted from formula1.com's race winners (winsSrc). A corrected row's sources are in changes. The top three of every season are repeated in top3 with their own source pair.",
   "Status: verified (position, points and wins agree with formula1.com and one more source; a scoreless unranked row agrees with Jolpica, is absent from formula1.com's points table, and raceStarts names the formula1.com race result that shows he started), corrected (the migration changes it, to the value formula1.com and a second source agree on), filled (the migration inserts it), marked (kept as read because the sources disagree or only one source speaks; notes says which). None is dropped.",
-  "Scope. The games read driver_name where position is 1 (the List Quiz F1 champions list), and src/data/f1HLDrivers.ts was baked from the wins column. Names are checked against formula1.com for the top three of every season and for every Fangio row; below the top three the name is Jolpica's. The constructor column is checked for the top three only (it must be a team formula1.com shows him driving that season). The table holds no constructors champion, so none is verified here.",
-  "tableAtRead holds the per season fingerprints the MCP returned on 2026-09-30 (row count, first id, and md5 digests of the rows), so scripts/simF1Champions.mjs can prove this record describes the table as read."
+  "Scope. The games read driver_name where position is 1 (the List Quiz F1 champions list), and src/data/f1HLDrivers.ts was baked from the wins column. Names are checked against formula1.com for the top three of every season and for every Fangio row; below the top three the name is Jolpica's. The constructor column is checked for the top three only (it must be a team formula1.com shows him driving that season). Where formula1.com's standings print a different team text from the column, the top3 entry records that text as constructorPrinted, and where Jolpica lists more than one constructor for him that season, the entry records Jolpica's list as constructors; both fields were read on 2026-10-01. A constructorNote says only what those two fields show. A long entrant name beside a short one (Red Bull Racing Renault beside Red Bull) is one team under two names, not a second team, and no note may say otherwise. The table holds no constructors champion, so none is verified here.",
+  "tableAtRead holds the per season fingerprints the MCP returned on 2026-09-30: row count, first id, and four md5 digests of the rows. hcore digests driver_id|position|points|wins with - for no position, hname digests driver_id|driver_name, hcons digests driver_id|constructor_id|constructor_name, each over the season's lines ordered by their own md5 and joined with newlines; hidorder digests the driver_ids in id order joined with commas. scripts/simF1Champions.mjs recomputes all four for every season from the rows with the changes reversed and the filled rows removed, and recomputes the migration's 26 season fingerprints the same way, so this record provably describes both the table as read and the table the migration leaves."
  ],
  "sources": {
   "formula1": "https://www.formula1.com/en/results/{season}/drivers and https://www.formula1.com/en/results/{season}/races (official); raceStarts entries complete https://www.formula1.com/en/results/{entry}/race-result",
@@ -1045,7 +1045,9 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/1951/drivers", "https://api.jolpi.ca/ergast/f1/1951/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/1951/races",
-     "constructorNote": "drove for more than one team in 1951; formula1.com's standings print no single team, the column holds Talbot-Lago, which his 1951 race results confirm he also drove"
+     "constructorPrinted": "",
+     "constructors": ["Talbot-Lago", "Ferrari"],
+     "constructorNote": "Jolpica lists two constructors for him in 1951, Talbot-Lago and Ferrari; formula1.com's standings print no team for him; the column holds Talbot-Lago"
     }
    ],
    "rows": [
@@ -1721,7 +1723,9 @@
      "old": {
       "driver_name": "Juan Fangio"
      },
-     "constructorNote": "drove for more than one team in 1954; formula1.com's standings print Mercedes-Benz, the column holds Maserati, which his 1954 race results confirm he also drove"
+     "constructorPrinted": "Mercedes-Benz",
+     "constructors": ["Maserati", "Mercedes"],
+     "constructorNote": "Jolpica lists two constructors for him in 1954, Maserati and Mercedes; formula1.com's standings print Mercedes-Benz; the column holds Maserati"
     },
     {
      "position": 2,
@@ -1965,7 +1969,9 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/1955/drivers", "https://api.jolpi.ca/ergast/f1/1955/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/1955/races",
-     "constructorNote": "drove for more than one team in 1955; formula1.com's standings print Ferrari, the column holds Lancia, which his 1955 race results confirm he also drove"
+     "constructorPrinted": "Ferrari",
+     "constructors": ["Lancia", "Ferrari"],
+     "constructorNote": "Jolpica lists two constructors for him in 1955, Lancia and Ferrari; formula1.com's standings print Ferrari; the column holds Lancia"
     }
    ],
    "rows": [
@@ -2349,7 +2355,9 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/1957/drivers", "https://api.jolpi.ca/ergast/f1/1957/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/1957/races",
-     "constructorNote": "drove for more than one team in 1957; formula1.com's standings print Vanwall, the column holds Maserati, which his 1957 race results confirm he also drove"
+     "constructorPrinted": "Vanwall",
+     "constructors": ["Maserati", "Vanwall"],
+     "constructorNote": "Jolpica lists two constructors for him in 1957, Maserati and Vanwall; formula1.com's standings print Vanwall; the column holds Maserati"
     },
     {
      "position": 3,
@@ -2531,7 +2539,9 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/1958/drivers", "https://api.jolpi.ca/ergast/f1/1958/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/1958/races",
-     "constructorNote": "drove for more than one team in 1958; formula1.com's standings print Vanwall, the column holds Cooper, which his 1958 race results confirm he also drove"
+     "constructorPrinted": "Vanwall",
+     "constructors": ["Cooper", "Vanwall"],
+     "constructorNote": "Jolpica lists two constructors for him in 1958, Cooper and Vanwall; formula1.com's standings print Vanwall; the column holds Cooper"
     },
     {
      "position": 3,
@@ -2720,7 +2730,9 @@
      "wins": 2,
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/1959/drivers", "https://api.jolpi.ca/ergast/f1/1959/driverstandings.json"],
-     "winsSrc": "https://www.formula1.com/en/results/1959/races"
+     "winsSrc": "https://www.formula1.com/en/results/1959/races",
+     "constructors": ["Ferrari", "Vanwall"],
+     "constructorNote": "Jolpica lists two constructors for him in 1959, Ferrari and Vanwall; formula1.com's standings print Ferrari, which the column holds"
     },
     {
      "position": 3,
@@ -2732,7 +2744,10 @@
      "wins": 2,
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/1959/drivers", "https://api.jolpi.ca/ergast/f1/1959/driverstandings.json"],
-     "winsSrc": "https://www.formula1.com/en/results/1959/races"
+     "winsSrc": "https://www.formula1.com/en/results/1959/races",
+     "constructorPrinted": "Cooper Climax",
+     "constructors": ["Cooper-Climax", "BRM"],
+     "constructorNote": "Jolpica lists two constructors for him in 1959, Cooper-Climax and BRM; formula1.com's standings print Cooper Climax; the column holds Cooper-Climax"
     }
    ],
    "rows": [
@@ -2918,7 +2933,9 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/1960/drivers", "https://api.jolpi.ca/ergast/f1/1960/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/1960/races",
-     "constructorNote": "drove for more than one team in 1960; formula1.com's standings print Lotus Climax, the column holds Cooper-Climax, which his 1960 race results confirm he also drove"
+     "constructorPrinted": "Lotus Climax",
+     "constructors": ["Cooper-Climax", "Team Lotus"],
+     "constructorNote": "Jolpica lists two constructors for him in 1960, Cooper-Climax and Team Lotus; formula1.com's standings print Lotus Climax; the column holds Cooper-Climax"
     }
    ],
    "rows": [
@@ -3125,7 +3142,10 @@
      "wins": 2,
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/1961/drivers", "https://api.jolpi.ca/ergast/f1/1961/driverstandings.json"],
-     "winsSrc": "https://www.formula1.com/en/results/1961/races"
+     "winsSrc": "https://www.formula1.com/en/results/1961/races",
+     "constructorPrinted": "Lotus Climax",
+     "constructors": ["Lotus-Climax", "Ferguson"],
+     "constructorNote": "Jolpica lists two constructors for him in 1961, Lotus-Climax and Ferguson; formula1.com's standings print Lotus Climax; the column holds Lotus-Climax"
     }
    ],
    "rows": [
@@ -3794,7 +3814,9 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/1966/drivers", "https://api.jolpi.ca/ergast/f1/1966/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/1966/races",
-     "constructorNote": "drove for more than one team in 1966; formula1.com's standings print Cooper Maserati, the column holds Ferrari, which his 1966 race results confirm he also drove"
+     "constructorPrinted": "Cooper Maserati",
+     "constructors": ["Ferrari", "Cooper-Maserati"],
+     "constructorNote": "Jolpica lists two constructors for him in 1966, Ferrari and Cooper-Maserati; formula1.com's standings print Cooper Maserati; the column holds Ferrari"
     },
     {
      "position": 3,
@@ -3905,7 +3927,10 @@
      "wins": 4,
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/1967/drivers", "https://api.jolpi.ca/ergast/f1/1967/driverstandings.json"],
-     "winsSrc": "https://www.formula1.com/en/results/1967/races"
+     "winsSrc": "https://www.formula1.com/en/results/1967/races",
+     "constructorPrinted": "Lotus Ford",
+     "constructors": ["Lotus-BRM", "Lotus-Climax", "Lotus-Ford"],
+     "constructorNote": "Jolpica lists three constructors for him in 1967, Lotus-BRM, Lotus-Climax and Lotus-Ford; formula1.com's standings print Lotus Ford; the column holds Lotus-BRM"
     }
    ],
    "rows": [
@@ -4022,7 +4047,10 @@
      "wins": 2,
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/1968/drivers", "https://api.jolpi.ca/ergast/f1/1968/driverstandings.json"],
-     "winsSrc": "https://www.formula1.com/en/results/1968/races"
+     "winsSrc": "https://www.formula1.com/en/results/1968/races",
+     "constructorPrinted": "McLaren Ford",
+     "constructors": ["McLaren-BRM", "McLaren-Ford", "McLaren"],
+     "constructorNote": "Jolpica lists three constructors for him in 1968, McLaren-BRM, McLaren-Ford and McLaren; formula1.com's standings print McLaren Ford; the column holds McLaren-BRM"
     }
    ],
    "rows": [
@@ -4312,7 +4340,10 @@
      "wins": 0,
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/1971/drivers", "https://api.jolpi.ca/ergast/f1/1971/driverstandings.json"],
-     "winsSrc": "https://www.formula1.com/en/results/1971/races"
+     "winsSrc": "https://www.formula1.com/en/results/1971/races",
+     "constructorPrinted": "March Ford",
+     "constructors": ["March-Ford", "March-Alfa Romeo"],
+     "constructorNote": "Jolpica lists two constructors for him in 1971, March-Ford and March-Alfa Romeo; formula1.com's standings print March Ford; the column holds March-Ford"
     },
     {
      "position": 3,
@@ -8210,7 +8241,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2011/drivers", "https://api.jolpi.ca/ergast/f1/2011/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2011/races",
-     "constructorNote": "drove for more than one team in 2011; formula1.com's standings print Red Bull Racing Renault, the column holds Red Bull, which his 2011 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing Renault",
+     "constructorNote": "Jolpica lists one constructor for him in 2011, Red Bull; formula1.com's standings print the entrant name Red Bull Racing Renault; the column holds the short name Red Bull"
     },
     {
      "position": 2,
@@ -8235,7 +8267,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2011/drivers", "https://api.jolpi.ca/ergast/f1/2011/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2011/races",
-     "constructorNote": "drove for more than one team in 2011; formula1.com's standings print Red Bull Racing Renault, the column holds Red Bull, which his 2011 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing Renault",
+     "constructorNote": "Jolpica lists one constructor for him in 2011, Red Bull; formula1.com's standings print the entrant name Red Bull Racing Renault; the column holds the short name Red Bull"
     }
    ],
    "rows": [
@@ -8287,7 +8320,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2012/drivers", "https://api.jolpi.ca/ergast/f1/2012/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2012/races",
-     "constructorNote": "drove for more than one team in 2012; formula1.com's standings print Red Bull Racing Renault, the column holds Red Bull, which his 2012 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing Renault",
+     "constructorNote": "Jolpica lists one constructor for him in 2012, Red Bull; formula1.com's standings print the entrant name Red Bull Racing Renault; the column holds the short name Red Bull"
     },
     {
      "position": 2,
@@ -8360,7 +8394,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2013/drivers", "https://api.jolpi.ca/ergast/f1/2013/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2013/races",
-     "constructorNote": "drove for more than one team in 2013; formula1.com's standings print Red Bull Racing Renault, the column holds Red Bull, which his 2013 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing Renault",
+     "constructorNote": "Jolpica lists one constructor for him in 2013, Red Bull; formula1.com's standings print the entrant name Red Bull Racing Renault; the column holds the short name Red Bull"
     },
     {
      "position": 2,
@@ -8385,7 +8420,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2013/drivers", "https://api.jolpi.ca/ergast/f1/2013/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2013/races",
-     "constructorNote": "drove for more than one team in 2013; formula1.com's standings print Red Bull Racing Renault, the column holds Red Bull, which his 2013 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing Renault",
+     "constructorNote": "Jolpica lists one constructor for him in 2013, Red Bull; formula1.com's standings print the entrant name Red Bull Racing Renault; the column holds the short name Red Bull"
     }
    ],
    "rows": [
@@ -8460,7 +8496,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2014/drivers", "https://api.jolpi.ca/ergast/f1/2014/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2014/races",
-     "constructorNote": "drove for more than one team in 2014; formula1.com's standings print Red Bull Racing Renault, the column holds Red Bull, which his 2014 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing Renault",
+     "constructorNote": "Jolpica lists one constructor for him in 2014, Red Bull; formula1.com's standings print the entrant name Red Bull Racing Renault; the column holds the short name Red Bull"
     }
    ],
    "rows": [
@@ -8607,7 +8644,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2016/drivers", "https://api.jolpi.ca/ergast/f1/2016/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2016/races",
-     "constructorNote": "drove for more than one team in 2016; formula1.com's standings print Red Bull Racing TAG Heuer, the column holds Red Bull, which his 2016 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing TAG Heuer",
+     "constructorNote": "Jolpica lists one constructor for him in 2016, Red Bull; formula1.com's standings print the entrant name Red Bull Racing TAG Heuer; the column holds the short name Red Bull"
     }
    ],
    "rows": [
@@ -8822,7 +8860,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2019/drivers", "https://api.jolpi.ca/ergast/f1/2019/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2019/races",
-     "constructorNote": "drove for more than one team in 2019; formula1.com's standings print Red Bull Racing Honda, the column holds Red Bull, which his 2019 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing Honda",
+     "constructorNote": "Jolpica lists one constructor for him in 2019, Red Bull; formula1.com's standings print the entrant name Red Bull Racing Honda; the column holds the short name Red Bull"
     }
    ],
    "rows": [
@@ -8890,7 +8929,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2020/drivers", "https://api.jolpi.ca/ergast/f1/2020/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2020/races",
-     "constructorNote": "drove for more than one team in 2020; formula1.com's standings print Red Bull Racing Honda, the column holds Red Bull, which his 2020 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing Honda",
+     "constructorNote": "Jolpica lists one constructor for him in 2020, Red Bull; formula1.com's standings print the entrant name Red Bull Racing Honda; the column holds the short name Red Bull"
     }
    ],
    "rows": [
@@ -8937,7 +8977,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2021/drivers", "https://api.jolpi.ca/ergast/f1/2021/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2021/races",
-     "constructorNote": "drove for more than one team in 2021; formula1.com's standings print Red Bull Racing Honda, the column holds Red Bull, which his 2021 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing Honda",
+     "constructorNote": "Jolpica lists one constructor for him in 2021, Red Bull; formula1.com's standings print the entrant name Red Bull Racing Honda; the column holds the short name Red Bull"
     },
     {
      "position": 2,
@@ -9006,7 +9047,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2022/drivers", "https://api.jolpi.ca/ergast/f1/2022/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2022/races",
-     "constructorNote": "drove for more than one team in 2022; formula1.com's standings print Red Bull Racing RBPT, the column holds Red Bull, which his 2022 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing RBPT",
+     "constructorNote": "Jolpica lists one constructor for him in 2022, Red Bull; formula1.com's standings print the entrant name Red Bull Racing RBPT; the column holds the short name Red Bull"
     },
     {
      "position": 2,
@@ -9031,7 +9073,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2022/drivers", "https://api.jolpi.ca/ergast/f1/2022/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2022/races",
-     "constructorNote": "drove for more than one team in 2022; formula1.com's standings print Red Bull Racing RBPT, the column holds Red Bull, which his 2022 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing RBPT",
+     "constructorNote": "Jolpica lists one constructor for him in 2022, Red Bull; formula1.com's standings print the entrant name Red Bull Racing RBPT; the column holds the short name Red Bull"
     }
    ],
    "rows": [
@@ -9077,7 +9120,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2023/drivers", "https://api.jolpi.ca/ergast/f1/2023/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2023/races",
-     "constructorNote": "drove for more than one team in 2023; formula1.com's standings print Red Bull Racing Honda RBPT, the column holds Red Bull, which his 2023 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing Honda RBPT",
+     "constructorNote": "Jolpica lists one constructor for him in 2023, Red Bull; formula1.com's standings print the entrant name Red Bull Racing Honda RBPT; the column holds the short name Red Bull"
     },
     {
      "position": 2,
@@ -9090,7 +9134,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2023/drivers", "https://api.jolpi.ca/ergast/f1/2023/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2023/races",
-     "constructorNote": "drove for more than one team in 2023; formula1.com's standings print Red Bull Racing Honda RBPT, the column holds Red Bull, which his 2023 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing Honda RBPT",
+     "constructorNote": "Jolpica lists one constructor for him in 2023, Red Bull; formula1.com's standings print the entrant name Red Bull Racing Honda RBPT; the column holds the short name Red Bull"
     },
     {
      "position": 3,
@@ -9148,7 +9193,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2024/drivers", "https://api.jolpi.ca/ergast/f1/2024/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2024/races",
-     "constructorNote": "drove for more than one team in 2024; formula1.com's standings print Red Bull Racing Honda RBPT, the column holds Red Bull, which his 2024 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing Honda RBPT",
+     "constructorNote": "Jolpica lists one constructor for him in 2024, Red Bull; formula1.com's standings print the entrant name Red Bull Racing Honda RBPT; the column holds the short name Red Bull"
     },
     {
      "position": 2,
@@ -9232,7 +9278,8 @@
      "status": "verified",
      "src": ["https://www.formula1.com/en/results/2025/drivers", "https://api.jolpi.ca/ergast/f1/2025/driverstandings.json"],
      "winsSrc": "https://www.formula1.com/en/results/2025/races",
-     "constructorNote": "drove for more than one team in 2025; formula1.com's standings print Red Bull Racing, the column holds Red Bull, which his 2025 race results confirm he also drove"
+     "constructorPrinted": "Red Bull Racing",
+     "constructorNote": "Jolpica lists one constructor for him in 2025, Red Bull; formula1.com's standings print the entrant name Red Bull Racing; the column holds the short name Red Bull"
     },
     {
      "position": 3,
