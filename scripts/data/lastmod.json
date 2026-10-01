@@ -53,8 +53,8 @@
     "date": "2026-09-30"
   },
   "/career-ladder": {
-    "hash": "79e08a7dc47cf2c4",
-    "date": "2026-09-30"
+    "hash": "3c49227284b1d1a2",
+    "date": "2026-10-01"
   },
   "/cbb-dynasty": {
     "hash": "55acf0673082d064",
@@ -85,8 +85,8 @@
     "date": "2026-09-19"
   },
   "/club-manager": {
-    "hash": "0d625d03d5f484a1",
-    "date": "2026-09-30"
+    "hash": "fac149db85982ed0",
+    "date": "2026-10-01"
   },
   "/clue-auction": {
     "hash": "bec1f70d20b743a2",
@@ -133,8 +133,8 @@
     "date": "2026-09-30"
   },
   "/emoji-guess": {
-    "hash": "10bd5d0fc7e276a6",
-    "date": "2026-09-19"
+    "hash": "311dabcddc8ad21c",
+    "date": "2026-10-01"
   },
   "/f1-constructor": {
     "hash": "e155187597ffacbe",
@@ -267,6 +267,10 @@
   "/list-quiz": {
     "hash": "b7b5bee9032621cc",
     "date": "2026-09-30"
+  },
+  "/manager-hot-seat": {
+    "hash": "024604e7c6abe8b6",
+    "date": "2026-10-01"
   },
   "/minefield": {
     "hash": "25de3b0ab3a5591f",
@@ -429,8 +433,8 @@
     "date": "2026-09-19"
   },
   "/olympics": {
-    "hash": "0c689376a86d400e",
-    "date": "2026-09-19"
+    "hash": "489cdabc0c8fcccb",
+    "date": "2026-10-01"
   },
   "/perfect-lineup-f1": {
     "hash": "087d160bba04b7d5",
@@ -573,8 +577,8 @@
     "date": "2026-09-19"
   },
   "/soccer": {
-    "hash": "bfbda0169b684f2d",
-    "date": "2026-09-30"
+    "hash": "66bbb4bdf522f90c",
+    "date": "2026-10-01"
   },
   "/soccer-career": {
     "hash": "36c5727f492039a6",
@@ -637,12 +641,12 @@
     "date": "2026-09-19"
   },
   "/whats-new": {
-    "hash": "a37d3ec9df59505a",
+    "hash": "de6e2125df780c62",
     "date": "2026-10-01"
   },
   "/who-am-i": {
-    "hash": "0908b04f73de1241",
-    "date": "2026-09-30"
+    "hash": "b2f72c65fd652de1",
+    "date": "2026-10-01"
   },
   "/whod-they-beat": {
     "hash": "bcf6176ad45a06be",
