@@ -65,8 +65,9 @@ const HEADER = [
   '   is not what the source makes. */',
 ].join('\n');
 
-/** src/data/seoMeta.ts, evaluated: the TypeScript stripped by esbuild, then imported. */
-async function readSource(root) {
+/** src/data/seoMeta.ts, evaluated: the TypeScript stripped by esbuild, then
+    imported. Exported for simSeoMetaSplit, which needs the same entries. */
+export async function readSource(root) {
   const { transform } = await import('esbuild');
   const ts = fs.readFileSync(path.join(root, SOURCE), 'utf8');
   const { code } = await transform(ts, { loader: 'ts', format: 'esm' });
