@@ -1,5 +1,26 @@
 # Work board
 
+**2026-10-01, Codex800 CLAIMED: Emoji Guess committed feedback and keyboard flow.**
+Master96/97 interaction/animation slice. The actual five-puzzle Board has no committed
+guess/hint/result feedback announcement, removes the completed input without handing
+focus to Next, and truncates final answers. Own only
+src/components/emoji-guess/EmojiGuessBoard.tsx, new EmojiGuessFeedback.module.css in
+that folder, src/test/emojiGuessFeedback.test.tsx and scripts/simEmojiGuessFeedback.mjs.
+Keep the actual useEmojiGuess hook, daily picker, normalization, puzzle bank, date,
+local-save format, completion and share bytes unchanged. Preserve five rounds, three
+guesses,100/60/30/0 scoring, hint after the first miss, and completion only after the
+fifth Next. No new real facts, photos, logos, quotes or game rules.
+Add a compact accurate before-play example, stable rows/full answers,44px owned
+controls, truthful finite committed miss/hint/solve/fail/next feedback with static
+reduced motion, and native Next/input/final-share focus without scroll or held-key
+bleed. Mount/restore/typing/empty/rejected actions stay quiet. Prove complete actual
+five-round scores/saves/share/completion against original hook outcomes, strict
+earlier node identity, effective changed-copy controls and narrow/wide native fit,
+keyboard reachability, finite/static animation and document-Y preservation.
+Original Emoji bank/date/hook fences remain required. Root owns docs/Git/build and
+any independently needed saved-page refresh. Claude and798/799 scopes stay held.
+Next free801. This is a verified implementation gap, not a new visitor report.
+
 **2026-10-01, Codex799 F1 worked-example correction ACCEPTED.**
 The actual rendered guide now agrees with the unchanged fourth-clue first-correct
 guess:400 points after three hints, with no prior wrong guesses. Three real-hook/

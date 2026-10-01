@@ -1,5 +1,14 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: Emoji Guess feedback and keyboard flow
+
+800 claims the isolated Board, scoped CSS and focused test/harness. Add truthful
+committed feedback/finite motion, stable readable answers and deliberate native
+keyboard handoffs without changing actual daily puzzles, scoring, saves, completion
+or share. Exact ownership and acceptance are on WORKBOARD.798 final row-bound fix
+is frozen with an effective clipping control; its production rebuild/native matrix
+continue.799 is committed/pushed. Next free801; all Claude reservations hold.
+
 ## ACCEPTED 2026-10-01: F1 guide score and saved-page agreement
 
 799's championship example now correctly promises400 at clue four. Three actual
