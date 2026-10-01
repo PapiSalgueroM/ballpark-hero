@@ -2,6 +2,162 @@ import type { GameContentMap } from './types';
 
 // Soccer game guides, batch 2. Casual human tone, no em dashes anywhere.
 export const SOCCER_CONTENT_2: GameContentMap = {
+  '/manager-hot-seat': {
+    intro: [
+      "Manager Hot Seat is the short, sharp version of Club Manager. You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are sacked.",
+      "It runs on the Club Manager engine, so every match, every meter and every press question is the same one the full game plays. Before each match you pick a shape and a team talk, and after it the board, the fans and the dressing room all react.",
+      "There is a daily, the same club and the same target for everyone, and a free play mode where you can take any club you like.",
+    ],
+    headings: {
+      howToPlay: "How to play Manager Hot Seat, the free five game sack race",
+      rules: "Manager Hot Seat rules: the target, the board and the fans",
+      example: "A Manager Hot Seat walkthrough, five games to save the job",
+      tips: "Manager Hot Seat tips for keeping your job",
+      faq: "Manager Hot Seat FAQ: the engine, the daily and the leaderboard",
+    },
+    howToPlaySections: [
+      {
+        heading: "Pick the daily club or your own",
+        items: [
+          "Pick today's hot seat for the shared daily club, or open free play and choose any club, or let the game pick one at random.",
+        ],
+      },
+      {
+        heading: "The takeover briefing",
+        items: [
+          "The engine plays the season up to the day the job opens, then shows you the table place, the recent form and the board's target.",
+        ],
+      },
+      {
+        heading: "Before every match",
+        items: [
+          "Tap Take the job and the first match comes up with a read on the game from the dugout.",
+        ],
+        subsections: [
+          {
+            heading: "Picking a shape",
+            items: ["Pick a shape: defensive, balanced or attacking."],
+          },
+          {
+            heading: "Picking a team talk",
+            items: ["Pick a team talk: calm them, fire them up, demand more, the hairdryer, or say nothing at all."],
+          },
+        ],
+      },
+      {
+        heading: "After the final whistle",
+        items: [
+          "Kick off. The result comes back with what it did to the board, the fans and the dressing room.",
+          "When the press have a question, answer it before the next match.",
+          "Keep going until you hit the target, run out of league games, or the board run out of patience.",
+        ],
+      },
+    ],
+    ruleSections: [
+      {
+        heading: "How the job opens",
+        items: [
+          "The job opens after the worst run of form the simulated season produced between league weeks 6 and 14.",
+          "The board start on 30 out of 100, whatever they thought of the last manager.",
+        ],
+      },
+      {
+        heading: "The points target",
+        items: [
+          "The target is a number of points from your next 5 league games.",
+          "It is read off those five fixtures: more is asked at home and against weaker sides, less away and against stronger ones.",
+          "Cup and European ties still get played and still move the meters, but only league points count toward the target.",
+        ],
+      },
+      {
+        heading: "Board, fans and dressing room",
+        items: [
+          "The dressing room meter is the average morale of the eleven the engine picks, and morale feeds straight into how well they play.",
+        ],
+        subsections: [
+          {
+            heading: "Keeping or losing the job",
+            items: [
+              "Hit the target and you keep the job straight away, even with games to spare.",
+              "Finish one point short with the fan meter at 65 or above and the fans save you.",
+              "If the board meter hits zero at any final whistle, you are sacked on the spot.",
+              "If even winning every league game left could not get you within a point of the target, the board do not wait for the last game.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "The daily and the leaderboard",
+        items: [
+          "The daily is the same club, the same takeover week and the same target for everyone, and every match on the day draws from the same seeded stream, so the difference between two players is the calls they made.",
+          "Manager Hot Seat records that you played but puts no points on the leaderboard for now, while the points system is being rebuilt.",
+        ],
+      },
+    ],
+    exampleSections: [
+      {
+        heading: "Walking into a slump",
+        paragraphs: [
+          "Say today's club is a mid table side that has taken two points from its last five. The job opens 15th after 11 games, the board expect 9th, and the target is 7 points from 5 league games.",
+        ],
+      },
+      {
+        heading: "The first two league games",
+        paragraphs: [
+          "Game one is at home to a weaker side. The read says the dressing room is flat, so you go balanced and say nothing. A 2 to 0 win puts 3 on the board and lifts the fans.",
+          "Game two is away at a stronger side. You sit deep with a defensive shape and take a 1 to 1 draw. That is 4. The press ask about the board and you back yourself.",
+        ],
+      },
+      {
+        heading: "A cup tie in the middle",
+        paragraphs: [
+          "A cup tie comes next. It does not count, but a bad defeat still costs board confidence, so you play it properly and go out on penalties.",
+        ],
+      },
+      {
+        heading: "Hitting the target early",
+        paragraphs: [
+          "Game three is at home and you need 3 points from 3 games. Balanced with a fire them up talk, and a 2 to 1 win makes it 7. Target hit, job kept, two league games to spare.",
+        ],
+      },
+    ],
+    tipSections: [
+      {
+        heading: "Reading the room",
+        items: [
+          "Read the line under the fixture before you pick a talk. It is the dugout's honest read of the mood and the odds.",
+          "Saying the same thing every week stops working, and after a few in a row it starts to grate.",
+        ],
+      },
+      {
+        heading: "Chasing or protecting",
+        items: [
+          "Attacking means more goals at both ends. Chase with it when you need wins, not when a draw will do.",
+          "Defensive means fewer goals and more draws. It is the shape for protecting a point you can afford.",
+        ],
+      },
+      {
+        heading: "The press and the cup",
+        items: [
+          "The press answers move morale and the board a little. Promising a win out loud fires the other lot up and costs you if you do not deliver.",
+          "Do not throw the cup games. They do not count toward the target, but a bad exit takes a chunk out of the board meter.",
+        ],
+      },
+      {
+        heading: "Fans as a safety net",
+        items: [
+          "One point short is not always the end. Keep the fans onside with results and they can buy you the job.",
+        ],
+      },
+    ],
+    faqs: [
+      { q: "Is Manager Hot Seat the same as Club Manager?", a: "It runs on the same engine. The clubs, squads, fixtures, match simulation, board meter, fan meter, team talks and press room all come from Club Manager unchanged. Hot Seat is the short version: one job, five league games, one target." },
+      { q: "Why did I take over a club near the top of the table?", a: "The job opens after the worst run of form between league weeks 6 and 14, so a strong side can still be in a slump. The target is set from the fixtures, so a good side gets asked for more." },
+      { q: "Are the results real?", a: "No. The clubs and squads are the real ones Club Manager uses, but every match is simulated, and so is the season before you arrive. Nothing that happens here is a claim about the real club." },
+      { q: "Can I replay today's hot seat?", a: "The daily is one go per day, and a refresh picks up where you left off. Free play has no limit." },
+      { q: "Does it count on the leaderboard?", a: "Not yet. It records that you played, but it puts no points on the leaderboard for now." },
+    ],
+  },
   '/sign-the-player': {
     intro: [
       "Three bidders, one billion pounds each: you, The Sheikh, and Moneyball Mike. Twenty two players go under the hammer across two passes, eleven journeymen wait to fill the gaps, and a simulated mini league decides who spent it best.",

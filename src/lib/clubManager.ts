@@ -4504,6 +4504,28 @@ export function registerLeagueOverrides(o: Record<string, string[]> | null): voi
   invalidateOfferClubCache();
 }
 
+/* Round 719: Manager Hot Seat runs this engine on the static world for one
+   synchronous call at a time and then puts back whatever the tab had, so a
+   Club Manager save open in the same tab keeps its custom club and its
+   pyramid. These two hand both registrations out and back as one opaque
+   value. Nothing else should read them; the save paths above stay the only
+   way a registration is made. */
+export interface EngineRegistrations {
+  custom: { spec: CustomClubSpec; def: ClubDef; xi: number } | null;
+  overrides: Record<string, string[]> | null;
+}
+
+export function engineRegistrations(): EngineRegistrations {
+  return { custom: ACTIVE_CUSTOM, overrides: ACTIVE_LEAGUE_OVERRIDES };
+}
+
+export function restoreEngineRegistrations(r: EngineRegistrations): void {
+  ACTIVE_CUSTOM = r.custom;
+  /* The overrides setter busts the def and offer caches, which is only
+     needed when the membership really moved. */
+  if (r.overrides !== ACTIVE_LEAGUE_OVERRIDES) registerLeagueOverrides(r.overrides);
+}
+
 /** A league's membership for the ACTIVE save: its override when one is
  *  registered, its static lineup otherwise. */
 function effectiveClubsOf(leagueId: string, clubs: string[]): string[] {
