@@ -1,5 +1,14 @@
 # Work board
 
+**2026-10-01, Codex807 scope addendum, truthful clue headings.**
+The original driver bank's clue order varies: the current pinned driver has race
+wins under Era & Nationality, titles under Teams and teams under Race Wins. No
+category is stored in F1DriverPuzzle, just six strings. Within the already-owned
+Board use numbered clue headings, preserving every actual clue/data/order/score.
+Do not infer categories or edit real facts. Add a current original-bank label
+check and verify that wrong fixed-category headings cannot return. Same807 files;
+this addendum is pushed before implementing the heading correction. Next free810.
+
 **2026-10-01, Codex806 F1 Driver committed feedback ACCEPTED.**
 Remove the stale50ms guess closure. Feedback comes from one actual accepted guess
 append and is bound to its turn/status. Correct wins show correct feedback; misses

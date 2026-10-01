@@ -1,5 +1,12 @@
 # Project state
 
+## CLAIM ADDENDUM 2026-10-01: truthful Driver clue headings
+
+807 also replaces fixed clue categories with numbered headings: original bank
+orders vary and several actual clues appear under wrong headings. Preserve every
+existing clue/data/order/payout; no invented categories or facts. Same owned Board
+scope, explicit claim before implementation. Evidence and checks are on WORKBOARD.
+
 ## ACCEPTED 2026-10-01: F1 Driver committed feedback
 
 806 removes stale wrong feedback after correct wins, binds finite420/static cues
