@@ -602,5 +602,130 @@
     "window": "2026-summer",
     "checked": "2026-10-01",
     "note": "Permanent from NEC Nijmegen, four year contract to 2030 (ligue1.com, the league's own site, 2026-07-14). ESPN's Lille 2026-27 squad page lists him as Basar Onal."
+  },
+  {
+    "name": "Andrew Omobamidele",
+    "to": "Anderlecht",
+    "db": "RSC Anderlecht",
+    "loan": true,
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/andrew-omobamidele-prete-a-anderlecht/",
+      "https://www.espn.com/soccer/team/squad/_/id/441/anderlecht"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from Strasbourg, announced by Strasbourg on 2026-09-02 (the Belgian window was still open). ESPN's Anderlecht 2026-27 squad page lists him."
+  },
+  {
+    "name": "Soumaïla Coulibaly",
+    "to": "Watford",
+    "db": "Watford FC",
+    "loan": true,
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/soumaila-coulibaly-prete-a-watford/",
+      "https://www.espn.com/soccer/team/squad/_/id/395/watford"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row sits at Brest. Strasbourg loaned him to Watford with an option to buy, announced by Strasbourg on 2026-09-01. ESPN's Watford 2026-27 squad page lists him (number 3)."
+  },
+  {
+    "name": "Abdoul Ouattara",
+    "to": "Ipswich Town",
+    "db": "Ipswich Town",
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/abdoul-ouattara-quitte-le-racing/",
+      "https://www.espn.com/soccer/team/squad/_/id/373/ipswich-town"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Strasbourg to Ipswich Town, announced by Strasbourg on 2026-08-17. ESPN's Ipswich 2026-27 squad page lists him."
+  },
+  {
+    "name": "Mathis Amougou",
+    "to": "Toulouse",
+    "db": "FC Toulouse",
+    "loan": true,
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/mathis-amougou-prete-a-toulouse/",
+      "https://www.espn.com/soccer/team/squad/_/id/179/toulouse"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from Strasbourg, announced by Strasbourg on 2026-09-01. ESPN's Toulouse 2026-27 squad page lists him."
+  },
+  {
+    "name": "Deivid Washington",
+    "to": "Strasbourg",
+    "db": "RC Strasbourg Alsace",
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/deivid-washington-signe-a-strasbourg/",
+      "https://www.espn.com/soccer/team/squad/_/id/180/strasbourg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Chelsea, contract to 2031, announced by Strasbourg on 2026-09-01. His 2026 row sits at Chelsea FC U21. ESPN's Strasbourg 2026-27 squad page lists him."
+  },
+  {
+    "name": "Mateo Del Blanco",
+    "to": "Strasbourg",
+    "db": "RC Strasbourg Alsace",
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/mateo-del-blanco-rejoint-le-racing/",
+      "https://www.espn.com/soccer/team/squad/_/id/180/strasbourg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Union de Santa Fe, contract to 2031, announced by Strasbourg on 2026-07-08. ESPN's Strasbourg 2026-27 squad page lists him."
+  },
+  {
+    "name": "Oso",
+    "to": "Strasbourg",
+    "db": "RC Strasbourg Alsace",
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/oso-rejoint-le-racing/",
+      "https://www.espn.com/soccer/team/squad/_/id/180/strasbourg"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Sevilla, contract to 2031, announced by Strasbourg on 2026-08-30. ESPN's Strasbourg 2026-27 squad page lists him."
+  },
+  {
+    "name": "Milos Lukovic",
+    "to": "Kaiserslautern",
+    "db": "1.FC Kaiserslautern",
+    "loan": true,
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/milos-lukovic-prete-a-kaiserslautern/",
+      "https://www.espn.com/soccer/player/_/id/370771/milos-lukovic"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Strasbourg player whose 2026 row sits at Preston, his 2025-26 loan club. Loaned to Kaiserslautern, announced by Strasbourg on 2026-08-27. ESPN's player page lists him at Kaiserslautern in the 2026-27 2. Bundesliga."
+  },
+  {
+    "name": "Rayane Messi",
+    "to": "Al-Ettifaq",
+    "db": "Al-Ettifaq FC",
+    "loan": true,
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/rayane-messi-prete-a-al-ettifaq/",
+      "https://www.espn.com/soccer/player/_/id/394467/rayane-messi"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Strasbourg player whose 2026 row sits at Pau. Loaned to Al-Ettifaq with an option to buy, announced by Strasbourg on 2026-08-14. ESPN's player page lists him at Al Ettifaq with 2026-27 Saudi Pro League stats."
+  },
+  {
+    "name": "Óscar Perea",
+    "to": null,
+    "db": "CF América",
+    "sources": [
+      "https://www.rcstrasbourgalsace.fr/oscar-perea-quitte-le-racing/",
+      "https://www.espn.com/soccer/player/_/id/336456/oscar-perea"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Strasbourg player whose 2026 row sits at AVS, his 2025-26 loan club. Sold to Club America (engine does not model the club), announced by Strasbourg on 2026-07-28 as a permanent transfer. ESPN's player page lists him at America with 2026-27 stats."
   }
 ]
