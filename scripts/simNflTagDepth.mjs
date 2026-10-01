@@ -453,10 +453,13 @@ const SEEDS = [723, 20261001, 61, 4242, 9, 1337];
        one with room just under the raise (refused), on every expiring man of
        the club whose old salary leaves a real gap between the two. */
     let between = 0, betweenBad = [], justUnder = 0, justUnderBad = [];
-    for (const man of engine.expiringPlayers(engine.initLeague(lcg(SEEDS[1])).teams[td.abbr])) {
-      if (man.salary < 1) continue;
+    /* each fixture is a fresh league, and ids are minted per league, so the
+       man is found again by name (names are unique in a league) */
+    for (const name of engine.expiringPlayers(engine.initLeague(lcg(SEEDS[1])).teams[td.abbr]).map(p => p.name)) {
       const lgg = engine.initLeague(lcg(SEEDS[1]));
       const tg = lgg.teams[td.abbr];
+      const man = tg.players.find(p => p.name === name);
+      if (!man || man.salary < 1) continue;
       const tender = engine.franchiseTagSalary(lgg, man);
       const raise = round1(tender - man.salary);
       lgg.cap = round1(engine.capUsed(tg) + raise + man.salary / 2);
@@ -470,9 +473,11 @@ const SEEDS = [723, 20261001, 61, 4242, 9, 1337];
       if (raise < 0.5) continue;
       const lgu = engine.initLeague(lcg(SEEDS[1]));
       const tu = lgu.teams[td.abbr];
+      const manU = tu.players.find(p => p.name === name);
       lgu.cap = round1(engine.capUsed(tu) + raise - 0.2);
       justUnder += 1;
-      if (engine.tagRefusal(lgu, tu, man.id) === null) justUnderBad.push(`${man.name}: room ${engine.capRoom(tu, lgu.cap)} under the raise ${raise} was allowed`);
+      const whyU = engine.tagRefusal(lgu, tu, manU.id);
+      if (whyU === null || !/over the cap/.test(whyU)) justUnderBad.push(`${man.name}: room ${engine.capRoom(tu, lgu.cap)} under the raise ${raise} gave ${JSON.stringify(whyU)}`);
     }
     ok(1, 'room for the raise but not the whole tender is enough to tag', between >= 1 && betweenBad.length === 0, betweenBad.slice(0, 3).join(' | ') || `${between} men`);
     ok(1, 'room just under the raise is refused', justUnder >= 1 && justUnderBad.length === 0, justUnderBad.slice(0, 3).join(' | ') || `${justUnder} men`);
@@ -490,20 +495,51 @@ const SEEDS = [723, 20261001, 61, 4242, 9, 1337];
 /* ======================================================================= 2 */
 {
   let tags = 0, inPool = [], lostTender = [], seasonsRun = 0;
+  let gmPassed = 0, cpuOnGm = [], picked = 0, skipBad = [], former = 0, marksKept = [];
+  const everyMan = lg => [...Object.values(lg.teams).flatMap(t => t.players), ...lg.freeAgents];
   for (const seed of SEEDS) {
     const rng = lcg(seed * 31 + 5);
     const lg = engine.initLeague(lcg(seed));
     const me = Object.keys(lg.teams)[seed % 32];
     for (let s = 0; s < 6; s += 1) {
+      /* The skip, where it matters: read off a copy the clubs the policy
+         would tag with no GM anywhere, then make each of the first three the
+         GM's club on a fresh copy. The policy must pass over him, called
+         directly and inside the offseason, and still tag somebody else. */
+      const wouldTag = engine.cpuFranchiseTags(clone(lg)).map(x => x.team);
+      for (const abbr of wouldTag.slice(0, 3)) {
+        picked += 1;
+        const asGm = clone(lg);
+        const byPolicy = engine.cpuFranchiseTags(asGm, abbr);
+        if (byPolicy.some(x => x.team === abbr) || asGm.teams[abbr].tagUsedFor === asGm.season + 1) skipBad.push(`${abbr} seed ${seed} offseason ${s + 1}: the policy tagged the GM's club`);
+        if (wouldTag.length > 1 && byPolicy.length === 0) skipBad.push(`${abbr} seed ${seed} offseason ${s + 1}: the policy tagged nobody at all`);
+        const inOff = clone(lg);
+        const newsOff = engine.runOffseason(inOff, lcg(seed * 101 + s), abbr);
+        if (newsOff.tagged.some(x => x.team === abbr)) skipBad.push(`${abbr} seed ${seed} offseason ${s + 1}: the offseason tagged the GM's club`);
+      }
+      /* the men on a tag for the season just played: unless tagged again,
+         this offseason ends it */
+      const onTag = new Set(everyMan(lg).filter(p => p.tagSeason === lg.season).map(p => p.id));
       const tagged = [];
       const mine = lg.teams[me];
-      const cand = engine.expiringPlayers(mine).find(p => engine.tagRefusal(lg, mine, p.id) === null);
+      /* the GM tags in even offseasons and passes in odd ones, so the skip is
+         also read where his club's tag is not already used */
+      const cand = s % 2 === 0 ? engine.expiringPlayers(mine).find(p => engine.tagRefusal(lg, mine, p.id) === null) : undefined;
+      if (s % 2 === 1) gmPassed += 1;
       if (cand) {
         const res = engine.applyFranchiseTag(lg, mine, cand.id);
         if (res.ok) tagged.push({ team: me, id: cand.id, name: cand.name, salary: res.salary });
       }
       const news = engine.runOffseason(lg, rng, me);
       seasonsRun += 1;
+      for (const tg of news.tagged) if (tg.team === me) cpuOnGm.push(`${me} ${tg.player} seed ${seed} offseason ${s + 1}`);
+      /* No tag marks and no guarantee on anyone, rostered or in the pool,
+         except a man on a tag for the coming season. */
+      for (const p of everyMan(lg)) {
+        if (onTag.has(p.id) && p.tagSeason !== lg.season) former += 1;
+        if (p.tagSeason === undefined && p.tagCount === undefined && p.guaranteed === undefined) continue;
+        if (!(p.tagSeason === lg.season && p.guaranteed === true && p.tagCount >= 1)) marksKept.push(`${p.name}: tagSeason ${p.tagSeason} tagCount ${p.tagCount} guaranteed ${p.guaranteed} in season ${lg.season}`);
+      }
       for (const tg of news.tagged) {
         const man = lg.teams[tg.team].players.find(p => p.name === tg.player) ?? lg.freeAgents.find(p => p.name === tg.player);
         tagged.push({ team: tg.team, id: man ? man.id : `?${tg.player}`, name: tg.player, salary: tg.salary });
@@ -523,6 +559,12 @@ const SEEDS = [723, 20261001, 61, 4242, 9, 1337];
   ok(2, 'enough tags happened for the check to mean anything', tags >= 60, `${tags} tags over ${seasonsRun} offseasons`);
   ok(2, 'no tagged man is in that year\'s free agent pool', inPool.length === 0, `${inPool.length} of ${tags}, e.g. ${inPool.slice(0, 3).join(' | ')}`);
   ok(2, 'every tagged man carries the tender into the season on one year', lostTender.length === 0, `${lostTender.length} of ${tags}, e.g. ${lostTender.slice(0, 3).join(' | ')}`);
+  console.log(`   tag year over: ${former} men came off a tag; the GM's club was put in front of the policy ${picked} times; the GM passed ${gmPassed} offseasons`);
+  ok(2, 'enough men came off a tag for the check to mean anything', former >= 100, `${former}`);
+  ok(2, 'a man whose tag year is over carries no tag marks and no guarantee, rostered or in the pool', marksKept.length === 0, `${marksKept.length}, e.g. ${marksKept.slice(0, 3).join(' | ')}`);
+  ok(2, 'the GM\'s club was put in front of the policy often enough', picked >= 60, `${picked}`);
+  ok(2, 'the CPU policy never tags the GM\'s club, a club it would tag otherwise', skipBad.length === 0, `${skipBad.length}, e.g. ${skipBad.slice(0, 3).join(' | ')}`);
+  ok(2, 'the offseason never names the GM\'s club among the CPU tags, in the years he passes too', cpuOnGm.length === 0 && gmPassed >= 18, `${cpuOnGm.length} of ${gmPassed} passing years, e.g. ${cpuOnGm.slice(0, 3).join(' | ')}`);
 }
 
 /* ======================================================================= 3 */
@@ -629,6 +671,107 @@ const SEEDS = [723, 20261001, 61, 4242, 9, 1337];
   console.log(`   injury cases: ${stepUps}, ${singleGroup} of them at QB or OL`);
   ok(3, 'injury cases were found, some in single group units', stepUps >= 100 && singleGroup >= 4, `${stepUps}, ${singleGroup} at QB or OL`);
   ok(3, 'an injured starter is skipped and the next man steps up', stuck.length === 0, `${stuck.length} of ${stepUps}, e.g. ${stuck.slice(0, 3).join(' | ')}`);
+
+  /* Newcomers. Every group of two or more men on every club gets a saved
+     order (the order by rating turned upside down, the furthest a GM's order
+     can sit from the ratings), then a new man arrives the way a signing, a
+     pick or a trade brings him: pushed onto the roster, named by no saved
+     order. Three arrivals, each on its own copy:
+       better  rated above everyone in the group and above the weakest man
+               his unit starts (and at least 70, so the quarterback floor of
+               64 cannot hide him): he starts, and team strength goes up,
+               every time;
+       worse   rated below everyone: he goes last;
+       random  anywhere from three under the group to three over it: he sits
+               exactly where the rule puts him, ahead of the first man in the
+               saved order rated below him, and everyone else keeps the GM's
+               order. */
+  const newcomer = (team, pos, ovr, tag) => ({ id: `new-${tag}-${team.abbr}-${pos}`, name: `New ${tag} ${pos}`, pos, age: 25, ovr, salary: 1, years: 2, out: 0, pot: ovr });
+  /* one over the weakest man the unit starts when its slots are full, so a
+     lineup picked by rating alone would start him too: a group that starts
+     nobody (its unit's slots all held by better men of other groups) is not
+     a group a merely better man walks into */
+  const unitFloor = (team, pos) => {
+    const [groups, slots] = UNITS.find(([g]) => g.includes(pos));
+    const now = engine.unitStarters(team, groups, slots);
+    return now.length >= slots ? Math.min(...now.map(p => p.ovr)) + 1 : 0;
+  };
+  const rngN = lcg(72302);
+  let cases = 0, betterBad = [], weakBad = [], worseBad = [], ruleBad = [], slotMoves = 0;
+  for (const lg of leagues) {
+    for (const t0 of Object.values(lg.teams)) {
+      for (const pos of engine.DEPTH_GROUPS) {
+        const team = clone(t0);
+        heal({ teams: { x: team } });
+        const group = engine.depthOrder(team, pos);
+        if (group.length < 2) continue;
+        engine.setDepthOrder(team, pos, group.map(p => p.id).reverse());
+        if (!engine.hasSavedDepth(team, pos)) continue; /* every man tied: upside down is the same order */
+        cases += 1;
+        const named = engine.depthOrder(team, pos);
+        const base = engine.teamStrength(team);
+        const sharesBefore = sharesOf(team);
+        const top = Math.max(...group.map(p => p.ovr)), bottom = Math.min(...group.map(p => p.ovr));
+
+        const tb = clone(team);
+        const better = newcomer(team, pos, Math.max(70, top + 2, unitFloor(team, pos)), 'better');
+        tb.players.push(better);
+        if (!engine.starterIds(tb).has(better.id)) betterBad.push(`${team.abbr} ${pos}: a ${better.ovr} over a group topping at ${top} sits`);
+        if (!(engine.teamStrength(tb) > base + 1e-9)) weakBad.push(`${team.abbr} ${pos}: a ${better.ovr} arrived and strength went ${base.toFixed(4)} -> ${engine.teamStrength(tb).toFixed(4)}`);
+        const sharesNow = sharesOf(tb);
+        if (Object.keys({ ...sharesBefore, ...sharesNow }).some(g => g !== pos && (sharesBefore[g] ?? 0) !== (sharesNow[g] ?? 0))) slotMoves += 1;
+
+        const tw = clone(team);
+        const worse = newcomer(team, pos, bottom - 2, 'worse');
+        tw.players.push(worse);
+        const wOrder = engine.depthOrder(tw, pos);
+        if (wOrder[wOrder.length - 1].id !== worse.id) worseBad.push(`${team.abbr} ${pos}: a ${worse.ovr} under a group bottoming at ${bottom} is number ${wOrder.findIndex(p => p.id === worse.id) + 1} of ${wOrder.length}`);
+
+        const tr = clone(team);
+        const mid = newcomer(team, pos, bottom - 3 + Math.floor(rngN() * (top - bottom + 7)), 'random');
+        tr.players.push(mid);
+        const at = named.findIndex(q => q.ovr < mid.ovr);
+        const want = [...named];
+        if (at < 0) want.push(mid); else want.splice(at, 0, mid);
+        const got = engine.depthOrder(tr, pos);
+        if (got.map(p => p.id).join() !== want.map(p => p.id).join()) ruleBad.push(`${team.abbr} ${pos}: a ${mid.ovr} into ${named.map(p => p.ovr).join('/')} read ${got.map(p => p.ovr).join('/')}`);
+      }
+    }
+  }
+  console.log(`   newcomers: ${cases} saved groups, ${slotMoves} of the better arrivals moved a slot between groups`);
+  ok(3, 'a real number of saved groups took a newcomer', cases >= 300, `${cases}`);
+  ok(3, 'a newcomer who outrates his whole group starts at once', betterBad.length === 0, `${betterBad.length} of ${cases}, e.g. ${betterBad.slice(0, 3).join(' | ')}`);
+  ok(3, 'that newcomer makes the team stronger, every time', weakBad.length === 0, `${weakBad.length} of ${cases}, e.g. ${weakBad.slice(0, 3).join(' | ')}`);
+  ok(3, 'a newcomer rated below his whole group goes last', worseBad.length === 0, `${worseBad.length} of ${cases}, e.g. ${worseBad.slice(0, 3).join(' | ')}`);
+  ok(3, 'any newcomer sits ahead of the first man rated below him, the GM\'s order kept', ruleBad.length === 0, `${ruleBad.length} of ${cases}, e.g. ${ruleBad.slice(0, 3).join(' | ')}`);
+
+  /* A swap and a swap back on a group nobody had touched hands it back to
+     the sim: nothing saved, and a better man signed after it starts and
+     makes the team stronger. This is the board's own flow, the one the
+     review found benching a 97 in 1520 of 3200 cases. */
+  let undone = 0, stillSaved = [], afterBad = [];
+  for (const lg of leagues) {
+    for (const t0 of Object.values(lg.teams)) {
+      for (const pos of engine.DEPTH_GROUPS) {
+        const team = clone(t0);
+        heal({ teams: { x: team } });
+        const order = engine.depthOrder(team, pos);
+        if (order.length < 2 || team.depth !== undefined) continue;
+        const [a, b] = [order[0], order[order.length - 1]];
+        if (a.ovr === b.ovr) continue;
+        const base = engine.teamStrength(team);
+        engine.swapDepth(team, pos, a.id, b.id);
+        engine.swapDepth(team, pos, a.id, b.id);
+        undone += 1;
+        if (engine.hasSavedDepth(team, pos) || team.depth !== undefined) { stillSaved.push(`${team.abbr} ${pos}: ${JSON.stringify(team.depth)}`); continue; }
+        const better = newcomer(team, pos, Math.max(70, a.ovr + 2, unitFloor(team, pos)), 'signed');
+        team.players.push(better);
+        if (!engine.starterIds(team).has(better.id) || !(engine.teamStrength(team) > base + 1e-9)) afterBad.push(`${team.abbr} ${pos}: a ${better.ovr} signed after a swap and back sits or adds nothing`);
+      }
+    }
+  }
+  ok(3, 'a swap and a swap back leaves nothing saved', undone >= 300 && stillSaved.length === 0, `${stillSaved.length} of ${undone}, e.g. ${stillSaved.slice(0, 2).join(' | ')}`);
+  ok(3, 'a better man signed after a swap and back starts and adds strength', afterBad.length === 0, `${afterBad.length} of ${undone}, e.g. ${afterBad.slice(0, 3).join(' | ')}`);
 }
 
 /* ======================================================================= 4 */
