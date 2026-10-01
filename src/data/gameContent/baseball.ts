@@ -5,7 +5,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
   '/perfect-season-mlb': {
     intro: [
       "The wheel spins across a century of baseball and stops on a real team season, maybe the 1927 Yankees, maybe a club nobody remembers. You draft one player, then spin again.",
-      "Eleven picks later you own a lineup stitched from every era, and the sim makes you sweat all 162 games. Going 158-4 hurts more than going 120-42. That is the point.",
+      "Eleven picks later you own a lineup stitched from every era, and the sim makes you sweat all 162 games. The number to chase is 116 wins, the big league record shared by the 1906 Cubs and the 2001 Mariners.",
     ],
     headings: {
       howToPlay: "How to play 162-0 MLB Perfect Season, a free baseball draft simulation",
@@ -84,9 +84,9 @@ export const BASEBALL_CONTENT: GameContentMap = {
         ],
       },
       {
-        heading: "58 straight wins before two August losses",
+        heading: "A strong draft takes a run at 116 wins",
         paragraphs: [
-          "The finished squad rates 93 overall. You start 58-0 and plan the parade. Then two losses land in the same August week and the board reads 157-5. A juggernaut, not a legend.",
+          "The finished squad rates 84 overall, better than nine well drafted lineups in ten. The sim never cools off and the board reads 131-31, fifteen wins past the record. A perfect 162-0 at 84 comes about one run in more than a trillion, so 131 is the brag.",
         ],
       },
     ],
@@ -111,7 +111,7 @@ export const BASEBALL_CONTENT: GameContentMap = {
       },
     ],
     faqs: [
-      { q: "Is 162-0 actually possible?", a: "Yes, but rare by design. Even a lineup of all-time greats drops a coin flip night now and then, which is why a perfect run is worth bragging about." },
+      { q: "Is 162-0 actually possible?", a: "On paper. A 95 lineup goes 162-0 about one run in 41, but the wheel almost never deals one: we drafted 200,000 lineups the way a good player would, and the best one in a hundred rated about 86, where 162-0 comes about one run in 27 billion. The real chase is 116 wins, and about one well drafted lineup in four gets there." },
       { q: "How does daily mode work?", a: "Everyone spins the same wheel under the same theme, one attempt per day, locked until midnight Eastern. Classic and Hard stay unlimited." },
     ],
   },

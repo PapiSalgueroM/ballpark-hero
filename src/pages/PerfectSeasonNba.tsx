@@ -14,8 +14,7 @@ import {
   teamOverall, randomSeed, ratingTier, squadFillsAny,
   GAME_MODE_LABELS, GAME_MODE_BLURBS, HIDDEN_RATING_DISPLAY, isRatingHidden,
   getDailyDateET, makeDailyPicker, loadDailyAttempt, saveDailyAttempt,
-  msUntilNextDailyET, formatCountdown, DailyAttemptRecord,
-  BestRecord, loadBestRecord, saveBestRecord,
+  msUntilNextDailyET, formatCountdown, DailyAttemptRecord, dailyUsesOldWheel,
 } from '@/lib/perfectSeason';
 import {
   NBA_SLOTS, NBA_GAMES, NbaTeamSeasonEntry,
@@ -24,8 +23,11 @@ import {
 } from '@/lib/perfectSeasonNba';
 import {
   simulateSeasonFair, buildPlayoffRun, playoffSeedForDaily, buildAnalysis,
-  PLAYOFF_THRESHOLD, PlayoffRun, perfectOddsLine,
+  PLAYOFF_THRESHOLD, PlayoffRun,
 } from '@/lib/perfectSeasonExpansion';
+import { perfectSeasonTagline } from '@/lib/perfectSeasonOdds';
+import { usePerfectSeasonBest } from '@/hooks/usePerfectSeasonBest';
+import { BestSoFar, SeasonOddsLines } from '@/components/perfect-season/SeasonOdds';
 import {
   PerfectSeasonTheme, getDailyTheme, applyTheme, buildVerificationLine, themesForSport,
 } from '@/lib/perfectSeasonThemes';
@@ -82,10 +84,8 @@ const PerfectSeasonNba = () => {
   const [decade, setDecade] = useState<NbaDecadeDef | null>(null);
   const [poSeed, setPoSeed] = useState<number | null>(null);
   /* Round 784: the best record this browser has posted, and whether the run on
-     screen set it. Read once at mount; the prerenderer sees an empty store and
-     draws nothing, so the snapshot is stable. */
-  const [best, setBest] = useState<BestRecord | null>(() => loadBestRecord(SPORT_KEY));
-  const [newBest, setNewBest] = useState(false);
+     screen set it. Round 820 moved it into the hook all four sports share. */
+  const { best, newBest, record: recordBest, reset: resetBest } = usePerfectSeasonBest(SPORT_KEY);
   const wheelTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const simTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -136,7 +136,8 @@ const PerfectSeasonNba = () => {
     if (phase !== 'boot') return;
     let alive = true;
     (async () => {
-      const idx = await fetchTeamSeasonIndex();
+      // Round 821: a daily dated before the switch deals from the old wheel.
+      const idx = await fetchTeamSeasonIndex({ oldWheel: mode === 'daily' && dailyUsesOldWheel(todayStr) });
       if (!alive) return;
       if (idx) {
         if (mode === 'daily') {
@@ -289,18 +290,14 @@ const PerfectSeasonNba = () => {
     recordCompletion('/perfect-season-nba', sim.wins, getCurrentPlayerName());
     // Round 784: the best record is the honest target, so every finished run
     // is weighed against it, in any mode.
-    const outcome = saveBestRecord(SPORT_KEY, {
-      wins: sim.wins, losses: sim.losses, overall: Math.round(overall), date: todayStr, mode,
-    });
-    setBest(outcome.best);
-    setNewBest(outcome.improved);
-  }, [phase, sim, overall, mode, todayStr]);
+    recordBest({ wins: sim.wins, losses: sim.losses, overall: Math.round(overall), date: todayStr, mode });
+  }, [phase, sim, overall, mode, todayStr, recordBest]);
 
   const skipSim = () => setRevealed(NBA_GAMES);
 
   const restart = () => {
     completionSaved.current = false;
-    setNewBest(false);
+    resetBest();
     setPicks(Object.fromEntries(NBA_SLOTS.map(s => [s.key, null])));
     setUsedNames(new Set());
     setSelected(null);
@@ -412,7 +409,7 @@ const PerfectSeasonNba = () => {
             <span className="block mt-1 text-sm md:text-base font-semibold tracking-[0.2em] uppercase text-muted-foreground">NBA Perfect Season</span>
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Spin the wheel of NBA history, draft one player per stop, and chase the best record you can. 82-0 takes a 95 plus roster and a lucky sim, and the odds are printed on every result.
+            {perfectSeasonTagline(SPORT_KEY)}
           </p>
           {phase !== 'mode-select' && (
             <div className="mt-3 inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full bg-secondary text-muted-foreground font-semibold uppercase tracking-wider">
@@ -476,11 +473,7 @@ const PerfectSeasonNba = () => {
             <p className="text-[11px] text-muted-foreground mt-2">
               Decade Mode: pick an era and every spin lands inside it. Daily mode always uses the full wheel.
             </p>
-            {best && (
-              <p className="text-xs text-muted-foreground mt-3" data-best-record>
-                Your best so far: <span className="font-semibold text-foreground">{best.wins}-{best.losses}</span> at {best.overall} OVR.
-              </p>
-            )}
+            <BestSoFar best={best} />
           </div>
           </>
         )}
@@ -747,16 +740,7 @@ const PerfectSeasonNba = () => {
                 {/* Round 784: the real target, in the page rather than the guide.
                     The odds come from the same curve that produced the record,
                     at the raw overall the sim played (sim.overall is rounded). */}
-                {!sim.perfect && (
-                  <p className="text-xs text-muted-foreground mb-2" data-perfect-odds>{perfectOddsLine('nba', overall)}</p>
-                )}
-                {best && (
-                  <p className="text-xs mb-3" data-best-record>
-                    {newBest
-                      ? <span className="text-correct font-semibold">New personal best.</span>
-                      : <span className="text-muted-foreground">Your best: <span className="font-semibold text-foreground">{best.wins}-{best.losses}</span> at {best.overall} OVR.</span>}
-                  </p>
-                )}
+                <SeasonOddsLines sport={SPORT_KEY} overall={overall} perfect={sim.perfect} best={best} newBest={newBest} />
                 {sim.perfect && (
                   <p className="text-sm text-correct font-semibold mb-2 inline-flex items-center gap-1.5">
                     <Trophy className="w-4 h-4" /> Share this. Nobody will believe you.

@@ -1,5 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { DraftablePlayer, SeasonSlot, SpinSquad } from '@/lib/perfectSeason';
+import { fetchAllRowsParallel } from '@/lib/fetchAllRows';
 
 export const MLB_SLOTS: SeasonSlot[] = [
   { key: 'C', label: 'Catcher', weight: 1 },
@@ -25,16 +26,31 @@ export interface TeamSeasonIndexEntry {
   l: number;
 }
 
-/** One light query, cached by the page: every team season since 1901. */
-export async function fetchTeamSeasonIndex(): Promise<TeamSeasonIndexEntry[] | null> {
+/* The wheel reads about 2,600 team seasons; three pages at once covers them. */
+const INDEX_PAGES = 3;
+/* What the old single read got back: the server's 1,000 row cap. */
+const OLD_WHEEL_ROWS = 1000;
+
+/**
+ * Every team season since 1901, cached by the page.
+ *
+ * Round 821: this was one request with .limit(5000), which the server caps at
+ * 1,000 rows, so the wheel only ever landed on 1901 to 1962 while the guide
+ * promised 1901 onward and drafted a 1968 Cardinal and a 1997 Mariner. It now
+ * pages through the whole table in id order. `oldWheel` (a daily dated before
+ * FULL_WHEEL_DAILY_FROM) keeps the first 1,000 rows, which are the rows and the
+ * order the old read returned, so a daily already dealt never changes.
+ */
+export async function fetchTeamSeasonIndex(opts: { oldWheel?: boolean } = {}): Promise<TeamSeasonIndexEntry[] | null> {
   try {
-    const { data, error } = await supabase
+    const { data, error } = await fetchAllRowsParallel<any>((from, to) => supabase
       .from('lahman_teams' as any)
       .select('yearid, teamid, name, w, l, g')
       .gte('yearid', 1901)
-      .limit(5000);
+      .order('id', { ascending: true })
+      .range(from, to), INDEX_PAGES);
     if (error || !data) return null;
-    const rows = (data as any[])
+    const rows = (opts.oldWheel ? data.slice(0, OLD_WHEEL_ROWS) : data)
       .filter(r => (Number(r.g) || 0) >= 100 && r.name && r.teamid)
       .map(r => ({
         yearid: Number(r.yearid),

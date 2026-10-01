@@ -2527,7 +2527,7 @@ Hit moving targets.
 
 # 84. BASKETBALL ARCADE
 
-- three-point contest;
+- three-point contest: implemented in Buzzer Beater (Codex838, 2026-10-01). Five arcade racks, 25 shots, final money balls worth two, 30 possible points, unranked replay, rules and worked example. Original daily scores and saves are preserved. Verified locally; live publication pending;
 - free throw;
 - dribble course;
 - pick-and-roll decision;
