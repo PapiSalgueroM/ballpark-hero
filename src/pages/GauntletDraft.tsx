@@ -16,7 +16,7 @@ import { FlagImg } from '@/components/FlagImg';
 import { Player } from '@/types/game';
 import {
   GAUNTLET_ROUNDS, GauntletDraft as DraftShape, GauntletRun,
-  buildDraft, dailyDraftSeed, loadDailyRun, runGauntlet, saveDailyRun, squadRatingOf,
+  buildDraft, dailyDraftSeed, loadDailyRun, matchNote, runGauntlet, saveDailyRun, squadRatingOf,
 } from '@/lib/gauntletDraft';
 
 /**
@@ -137,9 +137,12 @@ export default function GauntletDraft() {
   const pick = draft && phase === 'drafting' ? draft.picks[pickIndex] : null;
   const dailyDone = phase === 'setup' && loadDailyRun(todayStr) !== null;
 
-  const matchLine = (m: GauntletRun['matches'][number]) =>
-    `${m.round.name}: ${m.yourGoals}-${m.theirGoals} v ${m.round.opp}` +
-    (m.wonOnPens !== null ? (m.wonOnPens ? ', won on pens' : ', lost on pens') : '');
+  /* Round 826: extra time gets its label too. Before, a game won by the one
+     extra time goal read as a plain 2-1 in ninety minutes. */
+  const matchLine = (m: GauntletRun['matches'][number]) => {
+    const note = matchNote(m);
+    return `${m.round.name}: ${m.yourGoals}-${m.theirGoals} v ${m.round.opp}` + (note ? `, ${note.toLowerCase()}` : '');
+  };
 
   return (
     <>
@@ -236,7 +239,7 @@ export default function GauntletDraft() {
               <div key={i} className={cn('rounded-xl border p-3 text-center animate-fade-in', m.won ? 'border-correct/50 bg-correct/10' : 'border-destructive/50 bg-destructive/10')}>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{m.round.name} · they rate {m.round.rating}</p>
                 <p className="text-lg font-black text-foreground">{m.yourGoals} - {m.theirGoals} <span className="text-sm font-semibold text-muted-foreground">v {m.round.opp}</span></p>
-                {m.wonOnPens !== null && <p className="text-xs text-muted-foreground">{m.wonOnPens ? 'Won on penalties' : 'Lost on penalties'}</p>}
+                {matchNote(m) && <p className="text-xs text-muted-foreground">{matchNote(m)}</p>}
               </div>
             ))}
           </div>

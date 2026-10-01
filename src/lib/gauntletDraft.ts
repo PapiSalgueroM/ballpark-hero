@@ -5,7 +5,7 @@ import {
   GauntletConfig, FormationSlotLike, PICK_SIZE as ENGINE_PICK_SIZE, gRng,
   buildDraft as engineBuildDraft, dailySeedFor, squadRatingOf as engineSquadRatingOf,
   runGauntlet as engineRunGauntlet, loadDailyRun as engineLoadDailyRun,
-  saveDailyRun as engineSaveDailyRun, GauntletRun,
+  saveDailyRun as engineSaveDailyRun, GauntletRun, GauntletMatch, decidedNote,
 } from '@/lib/gauntletEngine';
 export type { GauntletRun } from '@/lib/gauntletEngine';
 
@@ -120,7 +120,11 @@ function soccerConfig(pool: Player[]): GauntletConfig<Player> {
     emoji: '⚔️',
     squadNoun: 'XI',
     slotsPhrase: 'slots in the formation you drew',
-    tiebreak: { phrase: 'extra time, then a shootout', won: 'Won in a shootout', lost: 'Lost in a shootout' },
+    /* Round 826: the decider's words are the ones this page has always
+       printed ("Won on penalties"), now that the page reads them from here
+       through matchNote instead of keeping its own copy. */
+    tiebreak: { phrase: 'extra time, then penalties', won: 'Won on penalties', lost: 'Lost on penalties' },
+    extraTime: { won: 'Won after extra time', lost: 'Lost after extra time' },
     subtitleOf: p => p.club,
     positionOf: p => p.position,
     tierFloors: [86, 78, 70],
@@ -157,6 +161,14 @@ export function squadRatingOf(squad: (Player | null)[]): number {
 
 export function runGauntlet(squad: (Player | null)[]): GauntletRun {
   return engineRunGauntlet(soccerConfig([]), squad);
+}
+
+/** Round 826: how a match was settled in soccer's words ('Won after extra
+ *  time', 'Lost on penalties'), or null for ninety minutes. The page prints
+ *  this on the running card and in the result list, through the same engine
+ *  function every other sport's board reads. */
+export function matchNote(m: GauntletMatch): string | null {
+  return decidedNote(soccerConfig([]), m);
 }
 
 /**
