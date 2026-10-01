@@ -223,6 +223,10 @@ export interface RandomEvent {
   description: string;
   category: "positive" | "negative" | "international" | "life";
   choices: EventChoice[];
+  /** Round 725: seasons this event sits out after it fires. Absent means the
+   *  category default in EVENT_COOLDOWN_DEFAULT. A career long story (a wax
+   *  statue, a biopic) uses a number no career can outlive. */
+  cooldown?: number;
 }
 
 /* ─── World Cup Types ─── */
@@ -760,6 +764,10 @@ export interface CareerState {
   // Random events
   pendingEvents: RandomEvent[];
   lastEventId: number | null;
+  /** Round 725: the season index each event id last fired in, so the picker
+   *  can hold an event out for its cooldown. Optional, absent on every save
+   *  written before this round, and absent means nothing has fired yet. */
+  eventLastFired?: Record<string, number>;
   statBoostNextSeason: Partial<Record<"pace"|"shooting"|"passing"|"dribbling"|"defending"|"physical"|"reflexes", number>>;
   internationalCareer: boolean;
   sponsorDeal: string | null;
@@ -2408,6 +2416,12 @@ export function repairCareer<T extends CareerState>(state: T): T {
      silently stop being billed for the way it lives. */
   const legacyLifestyle = s as unknown as { lifestyleLevel?: string };
   if (legacyLifestyle.lifestyleLevel === "Billionaire") s.lifestyleLevel = "Untouchable";
+  /* Round 725: the event cooldown ledger. Absent on every save written before
+     this round, and absent is the honest state: nothing is on cooldown. Only
+     a save that carries something other than a plain object here is cleaned. */
+  if (s.eventLastFired !== undefined && (typeof s.eventLastFired !== "object" || s.eventLastFired === null || Array.isArray(s.eventLastFired))) {
+    delete s.eventLastFired;
+  }
   /* Round 473: branding money you built yourself. Absent on every save
      written before this round, which is right: those careers never had it. */
   const bonus = Number(s.sponsorBonus);
@@ -5772,12 +5786,49 @@ export function getAllEvents(state: CareerState): RandomEvent[] {
   ];
 }
 
+/* ─── Round 725: per event cooldowns ───
+   Before this round the only memory the picker had was lastEventId, one id,
+   so the same wax statue could be unveiled in back to back seasons and the
+   same pigeon adopted twice. Every event now sits out a number of seasons
+   after it fires: its own cooldown if the catalog gives one, otherwise the
+   default for its category. The season an event fired in is written to
+   eventLastFired on the save, keyed by id, and an event is held out while
+   (this season minus that season) is at most its cooldown. Priority beats
+   (200, 201, 500, 501) keep their place at the front of the queue but are
+   held to the same rule. scripts/simCareerLifeCooldowns.mjs measures it. */
+export const EVENT_COOLDOWN_DEFAULT: Record<RandomEvent["category"], number> = {
+  positive: 1,
+  negative: 1,
+  international: 1,
+  life: 2,
+};
+
+export function eventCooldown(e: Pick<RandomEvent, "category" | "cooldown">): number {
+  const c = e.cooldown;
+  if (typeof c === "number" && Number.isFinite(c) && c >= 0) return Math.floor(c);
+  return EVENT_COOLDOWN_DEFAULT[e.category] ?? 1;
+}
+
+/** The season index the picker stamps and compares: the year of the season
+ *  just played, which every save has carried since the first season. */
+export function eventSeasonIndex(s: CareerState): number {
+  return s.seasons[s.seasons.length - 1]?.year ?? 0;
+}
+
+export function isEventOnCooldown(s: CareerState, e: RandomEvent, season: number = eventSeasonIndex(s)): boolean {
+  const last = s.eventLastFired?.[String(e.id)];
+  if (typeof last !== "number" || !Number.isFinite(last)) return false;
+  return season - last <= eventCooldown(e);
+}
+
 /* ─── Generate 2-4 random events for a season ─── */
 function generateRandomEvents(state: CareerState): RandomEvent[] {
   if (state.age < 17) return [];
   const all = getAllEvents(state);
+  const season = eventSeasonIndex(state);
   const eligible = all.filter(e => {
     if (e.id === state.lastEventId) return false;
+    if (isEventOnCooldown(state, e, season)) return false;
     if (e.category === "international") {
       if (e.id === 17 && state.internationalCareer) return false;
       if (e.id === 18 && !state.internationalCareer) return false;
@@ -5818,7 +5869,7 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
   for (const pid of getPriorityLifeEventIds(state)) {
     if (!picked.some(e => e.id === pid)) {
       const ev = all.find(e => e.id === pid);
-      if (ev) picked.unshift(ev);
+      if (ev && !isEventOnCooldown(state, ev, season)) picked.unshift(ev);
     }
   }
   /* Round 473: the column about you is the same kind of beat. It can only
@@ -5827,7 +5878,7 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
      career in sixty five, which is not a story anybody would ever see. */
   if (!picked.some(e => e.id === 500)) {
     const column = all.find(e => e.id === 500);
-    if (column) picked.unshift(column);
+    if (column && !isEventOnCooldown(state, column, season)) picked.unshift(column);
   }
   /* And the signature boot (501), for the same reason: it is gated on being
      an 84 overall at 25 with six seasons behind you and a global following,
@@ -5835,7 +5886,15 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
      then have to win a raffle. */
   if (!picked.some(e => e.id === 501)) {
     const boot = all.find(e => e.id === 501);
-    if (boot) picked.unshift(boot);
+    if (boot && !isEventOnCooldown(state, boot, season)) picked.unshift(boot);
+  }
+  /* Round 725: stamp the season on everything that is about to be shown.
+     Every caller hands in its own shallow copy of the career, and the map is
+     replaced rather than written into, so the previous state is untouched. */
+  if (picked.length > 0) {
+    const fired: Record<string, number> = { ...(state.eventLastFired || {}) };
+    for (const e of picked) fired[String(e.id)] = season;
+    state.eventLastFired = fired;
   }
   return picked;
 }

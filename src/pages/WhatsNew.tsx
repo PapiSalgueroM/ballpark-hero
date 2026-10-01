@@ -24,6 +24,12 @@ const WhatsNew = () => {
 
       <section className="space-y-8 text-sm leading-relaxed text-muted-foreground">
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">October 2026</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">Soccer Career: life events remember what already happened, and twenty new ones.</strong> The same story could turn up two seasons running (a second wax statue, the pigeon adopted again). Every off pitch event now sits out a number of seasons after it fires, and the once in a career ones (the statue vote, the biopic, Gerald) stay once in a career. Eight events that only had one button got a real second choice. And there are twenty new events on the shelves that were empty: your mum in the comments, your brother's academy trial, your grandad's club, a documentary edit, an energy drink called Blue, your first coach's five a side pitch, a sleep study, a niggle you are hiding, the comeback game after a long injury, the fines jar, the rookie's gold car, an agent poaching you at a wedding, a wrong release clause, the anthem clip, an under nines medal night, a banner with your name spelt wrong, and three for the back end of a career: coaching badges, the kid who plays your position, and a body that has started talking. Old saves carry on as they were.</li>
+          </ul>
+        </div>
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">September 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-foreground">New game: Manager Hot Seat, five games to save your job.</strong> You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are gone. Pick a shape and a team talk before every match, handle the press, and watch the board, the fans and the dressing room react. It runs on the Club Manager engine, so every match is the full match sim from that game. There is a daily (same club and target for everyone) and a free play mode for any club you like. It records that you played but puts no points on the leaderboard for now.</li>
