@@ -1,5 +1,12 @@
 # Project state
 
+Codex830 is now accepted:118 actual App checks pass at320px normal/reduced,
+including distinct consecutive feedback, stable rows, original40-point outcome,
+exact save/share/once completion, reset and quiet reload.829 is built and pushed
+with seven positives/five controls; its final browser checks remain pending.
+Keep lane prefixes on overlapping828-835 IDs. Next shared free round836.
+
+
 ## BUILT 2026-10-01: Missing Nine feedback (830)
 
 Fresh puzzles no longer inherit old wrong-answer feedback. Seven actual Page
