@@ -1,5 +1,6 @@
 import type { GameContentMap } from './types';
 import { ACADEMY_MANAGEMENT_CONTENT } from './academyManagement';
+import { AUSSIE_RULES_MANAGEMENT_CONTENT } from './aussieRulesManagement';
 import { STADIUM_MANAGEMENT_CONTENT } from './stadiumManagement';
 import { CLUB_MANAGEMENT_CONTENT } from './clubManagement';
 import { SOCCER_CONTENT_1 } from './soccer1';
@@ -17,6 +18,7 @@ export type { GameContent, GameFaq, GameContentMap } from './types';
 /** Every game's on-page guide, keyed by route path. */
 export const GAME_CONTENT: GameContentMap = {
   ...ACADEMY_MANAGEMENT_CONTENT,
+  ...AUSSIE_RULES_MANAGEMENT_CONTENT,
   ...STADIUM_MANAGEMENT_CONTENT,
   ...CLUB_MANAGEMENT_CONTENT,
   ...SOCCER_CONTENT_1,
