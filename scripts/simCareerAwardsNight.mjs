@@ -275,6 +275,9 @@ console.log('\n2) The shared contract, on a synthetic sport');
   }
 }
 
+/* The en and em dash, by code point, so this file carries neither. */
+const DASHES = new RegExp(`[${String.fromCharCode(0x2013, 0x2014)}]`);
+
 /* ---------- 3. Soccer's speeches are honest ---------- */
 section = 3;
 console.log('\n3) Soccer Career speeches: 2,000 draws on a real save');
@@ -330,7 +333,7 @@ console.log('\n3) Soccer Career speeches: 2,000 draws on a real save');
         check(hits > 0 && hits < 250, `${opt.id}: the gamble only ever landed one way`);
         check(Math.abs(hits / 250 - opt.risk.chance) < 0.1, `${opt.id}: came up ${hits} of 250 against a stated ${opt.risk.chance}`);
       }
-      check(!/[–—]/.test(`${opt.label} ${opt.line(base, 'hit')} ${opt.line(base, 'miss')}`), `${opt.id}: a dash in the copy`);
+      check(!DASHES.test(`${opt.label} ${opt.line(base, 'hit')} ${opt.line(base, 'miss')}`), `${opt.id}: a dash in the copy`);
     }
   }
   console.log(`   ${draws} speeches, ${mentions} numbers in the lines checked against what the speech did`);
