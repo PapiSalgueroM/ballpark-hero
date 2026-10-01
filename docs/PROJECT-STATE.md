@@ -1,5 +1,40 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: lineup fixture cap correction claimed
+
+780 replaces the mocked basketball test's fake fixture-lineup game key with the already capped
+perfect-lineup-nba key/path. No production cap/schema or guard change. Its nine original picker
+outcomes and the live read-only cap/stale-list fence will be rerun.776 through779 acceptance
+continues. Claude's current live I block below supersedes older pending-publication statements.
+Next free number:781. Full392 suite still runs; final combined acceptance remains pending.
+
+## LIVE 2026-09-30: Release I (719, new game Manager Hot Seat), main `c046a45c`
+
+Assembled by the desktop Claude lane in the gate clone (`release-i`) on top of Release H and Codex's
+commits as they stood at the merge, pushed to main as a merge. **douknowball.com is serving it:**
+deployment `148b9e1e-112d-4574-bee7-ce543a9d37a4`, called only after `get_project` showed `latest_commit_sha` `c046a45c`; the live
+entry moved from `index-B5Vwjroo.js` to `index--eNejDlV.js`. Proof by content: C:/Program Files/Git/manager-hot-seat answers 200 with its own snapshot and /whats-new carries the Manager Hot Seat line.
+
+- **719, Manager Hot Seat.** Take over a real club on a bad run: the board gives you five league games
+  and a points target read off the fixture list, hit it or you are sacked, with a reprieve when you fall
+  one point short and the fans are singing. It runs the Club Manager engine unchanged through a seeded
+  random swap (one engine, many games), has a daily and a free play, rules and a worked example before
+  play, a guide, search keywords and a What's New line. The fixer fleet removed the rival name strings
+  and began its harness; a single agent finished it on the merged tree: `simManagerHotSeat` runs 240
+  setups a seed over three arms and holds, with floors set from four samples written in its header, that
+  the target follows the club's strength (Pearson r 0.34 to 0.39, floor 0.15), that reading the room
+  pays (63 to 73 percent of the results the talk flipped went to the reader, floor 55; survival up 5 to 8
+  points, floor 1), that a silent manager survives 69 to 81 percent of the time (band 30 to 92), and that
+  outcomes replay; four controls (`flat`, `deaf`, `drift`, `leak`). The hot seat restores Club Manager's
+  module registrations after every engine call (`onStaticWorld`), so a Club Manager save open in the same
+  tab keeps its custom club and league overrides; the `leak` control proves the wipe without it. The
+  determinism paragraph says what is true (outcomes replay, some engine ids carry `Date.now()`). Its caps
+  row (`manager-hot-seat`, unscored plays) is APPLIED.
+- **Still held:** 653 (its agent was rebasing the namesake fix onto main at publish time; it rides the
+  midnight publish with Round 669's data step if it lands green), 703, 706, 718, 733, 734.
+
+**Gates.** tsc 0 on the assembled tree and after each merge of main; the round's own gates as its agent reported them (simManagerHotSeat green on four seeds with four controls firing, simGuideHeadings with five controls, simNoRivalNames 0, simHarnessAnchors, simSiteSearch, simCompletionSlugs, simScoringCoverage, simClubManager green); build:seo 173 routes prerendered, 0 failed. Not run on this tree, by the weekly meter: the 44 harness gate and the browser walks (Release H's ran 90 minutes earlier on the same base); the next session runs them. Also at 00:1x ET: Round 669's data step APPLIED on production (412 Defensive Midfield rows and 5,862 rows in 2026, every guard green), the World XI report ecdb0e9d resolved, and the Footle pool re-baked to 553 players on branch r669-bake, publishing next.
+
 ## IN PROGRESS 2026-10-01: Budget Builder decisions claimed in the third implementation lane
 
 779 owns only BudgetBuilderBoard and focused tests/CSS for exact signing previews, confirmation,
