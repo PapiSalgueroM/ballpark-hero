@@ -24,6 +24,12 @@ const WhatsNew = () => {
 
       <section className="space-y-8 text-sm leading-relaxed text-muted-foreground">
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">October 2026</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">NBA Front Office: the luxury tax is real, and so is the 14 man floor.</strong> The cap panel now shows the tax line, the two aprons and what your payroll would cost you if the season closed today, using the league's actual bracket rates: a dollar on the first bracket, 1.25 on the second, 3.50 and 4.75 on the next two and half a dollar more per bracket after that, with the steeper repeater schedule once you have paid in three of the last four seasons. At season close the bill is assessed on every club and listed beside the results, ownership holds it against you (one point of trust per 6 million, capped at 20), and the money comes out of next season's cap room. Computer teams that paid tax let their expiring depth walk the next summer, so the line moves the whole league. Above the first apron a trade has to send out at least the salary it brings back. And the season now tips off on a real roster: fewer than 14 under contract and the league fills you to 14 on minimum deals and names them in the feed, more than 15 and the first round waits until you waive down. Old saves carry on exactly where they were. <Link to="/nba-front-office" className="text-primary hover:underline">Open the front office</Link>.</li>
+          </ul>
+        </div>
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">September 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-foreground">New game: Manager Hot Seat, five games to save your job.</strong> You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are gone. Pick a shape and a team talk before every match, handle the press, and watch the board, the fans and the dressing room react. It runs on the Club Manager engine, so every match is the full match sim from that game. There is a daily (same club and target for everyone) and a free play mode for any club you like. It records that you played but puts no points on the leaderboard for now.</li>
