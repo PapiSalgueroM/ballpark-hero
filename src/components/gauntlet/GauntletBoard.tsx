@@ -6,7 +6,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { getTodayET } from '@/lib/dateUtils';
 import { markRestoredFinish } from '@/lib/restoredFinish';
 import {
-  buildDraft, dailySeedFor, displayScore, matchLine, GauntletConfig, GauntletDraftResult,
+  buildDraft, dailySeedFor, decidedNote, displayScore, matchLine, GauntletConfig, GauntletDraftResult,
   GauntletRun, loadDailyRun, runGauntlet, saveDailyRun, squadRatingOf,
 } from '@/lib/gauntletEngine';
 
@@ -198,7 +198,7 @@ export default function GauntletBoard<P>({ config, children }: Props<P>) {
               <div key={i} className={cn('rounded-xl border p-3 text-center animate-fade-in', m.won ? 'border-correct/50 bg-correct/10' : 'border-destructive/50 bg-destructive/10')}>
                 <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">{m.round.name} · they rate {m.round.rating}</p>
                 <p className="text-lg font-black text-foreground">{s.mine} - {s.theirs} <span className="text-sm font-semibold text-muted-foreground">v {m.round.opp}</span></p>
-                {m.wonOnPens !== null && <p className="text-xs text-muted-foreground">{m.wonOnPens ? config.tiebreak.won : config.tiebreak.lost}</p>}
+                {decidedNote(config, m) && <p className="text-xs text-muted-foreground">{decidedNote(config, m)}</p>}
               </div>
             );
           })}

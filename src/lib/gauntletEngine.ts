@@ -94,6 +94,12 @@ export interface GauntletPresentation<P> {
    *  the screen, and Round 522 shipped exactly that on the NFL board.
    *  `phrase` completes "A level game goes to ...". */
   tiebreak: { phrase: string; won: string; lost: string };
+  /** Round 826: a game won or lost by the extra burst itself, before any
+   *  decider, IN THIS SPORT'S OWN WORDS: 'Won after extra time' for soccer,
+   *  'Won in overtime' for the NBA, the NFL and the NHL, 'Won in extra
+   *  innings' for MLB. Before this round such a game had no label at all and
+   *  read as a regulation win. */
+  extraTime: { won: string; lost: string };
   /** The line under a card: 'Oilers · 1980s', 'Kansas City Chiefs'. */
   subtitleOf: (p: P) => string;
   /** The position flash on a card. */
@@ -221,12 +227,25 @@ export function squadRatingOf<P>(config: GauntletConfig<P>, squad: (P | null)[])
   return Math.round(players.reduce((s, p) => s + config.ratingOf(p), 0) / players.length);
 }
 
+/**
+ * Round 826: how a match was settled. 'regulation' is the match itself,
+ * 'extra' the extra burst a level match goes to (extra time, overtime, extra
+ * innings, whatever the sport calls it), 'decider' the weighted decider after
+ * that, the one wonOnPens records. Each sport puts its own words on these
+ * through extraTime and tiebreak.
+ */
+export type GauntletDecidedIn = 'regulation' | 'extra' | 'decider';
+
 export interface GauntletMatch {
   round: GauntletRoundDef;
   yourGoals: number;
   theirGoals: number;
   wonOnPens: boolean | null; /* null = decided in normal or extra time */
   won: boolean;
+  /** Round 826. Optional only because a daily saved before this round has no
+   *  such field and still has to load; runGauntlet always sets it. A match
+   *  without it prints the way it always did. */
+  decidedIn?: GauntletDecidedIn;
 }
 
 export interface GauntletRun {
@@ -270,20 +289,27 @@ export function runGauntlet<P>(config: GauntletConfig<P>, squad: (P | null)[]): 
     let mine = goals(myExp);
     let theirs = goals(theirExp);
     let wonOnPens: boolean | null = null;
+    /* Round 826: recorded as it happens, never inferred from the final score
+       afterwards, because a 2-1 can be a regulation 2-1 or a 1-1 settled by
+       the extra burst and the score alone cannot tell them apart. Nothing
+       here draws from the stream, so every result is exactly what it was. */
+    let decidedIn: GauntletDecidedIn = 'regulation';
     if (mine === theirs) {
       /* extra time: one more short burst each */
       const extraMine = rng() < myExp / 8 ? 1 : 0;
       const extraTheirs = rng() < theirExp / 8 ? 1 : 0;
       mine += extraMine;
       theirs += extraTheirs;
+      decidedIn = 'extra';
       if (mine === theirs) {
         /* the gap still matters, but barely, the way a shootout really is */
         const p = 0.5 + gap / 120;
         wonOnPens = rng() < Math.max(0.25, Math.min(0.75, p));
+        decidedIn = 'decider';
       }
     }
     const won = wonOnPens !== null ? wonOnPens : mine > theirs;
-    matches.push({ round, yourGoals: mine, theirGoals: theirs, wonOnPens, won });
+    matches.push({ round, yourGoals: mine, theirGoals: theirs, wonOnPens, won, decidedIn });
     if (!won) break;
     cleared += 1;
   }
@@ -314,10 +340,24 @@ export function displayScore<P>(config: GauntletConfig<P>, m: GauntletMatch): { 
     : { mine, theirs: theirs + config.tiebreakBump };
 }
 
+/**
+ * Round 826: how a match was settled, in the sport's own words, or null for a
+ * match settled in regulation. A daily saved before this round carries no
+ * record of how and also gets null, so it prints exactly as it always did.
+ * The running card, the result list, the share grid and the soccer page all
+ * read this one function, so no screen can label a match another one does not.
+ */
+export function decidedNote<P>(config: GauntletPresentation<P>, m: GauntletMatch): string | null {
+  if (m.wonOnPens !== null) return m.wonOnPens ? config.tiebreak.won : config.tiebreak.lost;
+  if (m.decidedIn === 'extra') return m.won ? config.extraTime.won : config.extraTime.lost;
+  return null;
+}
+
 /** One match as a line of text, for the result list and the share grid. */
 export function matchLine<P>(config: GauntletConfig<P>, m: GauntletMatch): string {
   const s = displayScore(config, m);
-  const decided = m.wonOnPens === null ? '' : `, ${(m.wonOnPens ? config.tiebreak.won : config.tiebreak.lost).toLowerCase()}`;
+  const note = decidedNote(config, m);
+  const decided = note === null ? '' : `, ${note.toLowerCase()}`;
   return `${m.round.name}: ${s.mine}-${s.theirs} v ${m.round.opp}${decided}`;
 }
 
@@ -350,13 +390,29 @@ function validateDailyRun<P>(config: GauntletConfig<P>, fields: Record<string, u
     if (typeof m.won !== 'boolean') return null;
     /* the run only goes on while it is being won */
     if (!m.won && i < run.matches.length - 1) return null;
-    matches.push({
+    /* Round 826: how the match was settled. A daily saved before this round
+       has no such field and loads exactly as it always did, with no label.
+       When it is there it has to be one of the three and agree with the
+       score: the decider is the match wonOnPens records and starts level,
+       anything else cannot end level, and the extra burst is at most one
+       goal a side from level, so a match it settled ends one apart. */
+    const how = m.decidedIn;
+    if (how !== undefined) {
+      if (how !== 'regulation' && how !== 'extra' && how !== 'decider') return null;
+      if ((how === 'decider') !== (m.wonOnPens !== null)) return null;
+      const apart = Math.abs((m.yourGoals as number) - (m.theirGoals as number));
+      if (how === 'decider' ? apart !== 0 : apart === 0) return null;
+      if (how === 'extra' && apart !== 1) return null;
+    }
+    const match: GauntletMatch = {
       round: config.rounds[i],
       yourGoals: m.yourGoals as number,
       theirGoals: m.theirGoals as number,
       wonOnPens: m.wonOnPens as boolean | null,
       won: m.won,
-    });
+    };
+    if (how !== undefined) match.decidedIn = how as GauntletDecidedIn;
+    matches.push(match);
   }
   const cleared = matches.filter(m => m.won).length;
   const consistent = roundsCleared === cleared

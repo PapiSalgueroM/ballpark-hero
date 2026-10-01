@@ -2905,14 +2905,16 @@ function simulateSeasonFinances(s: CareerState, season: SeasonRecord): void {
     s.lifestyleLevel = "Humble";
     s.lifestyleCostPerYear = 0.05;
     s.properties = [];
-    s.purchasedItems = s.purchasedItems.filter(id => {
-      const item = getSpendingItem(id);
-      return item?.category === "lifestyle"; // keep lifestyle upgrades
-    });
-    s.customYearlyCosts = s.purchasedItems.reduce((sum, id) => {
-      const item = getSpendingItem(id);
-      return sum + (item?.monthlyCost || 0);
-    }, 0);
+    const keep = (id: string) => getSpendingItem(id)?.category === "lifestyle"; // keep lifestyle upgrades
+    /* Round 826: the bill loses the upkeep of what was sold and nothing else.
+       It used to be rebuilt from the items kept, which also wiped every
+       yearly cost that is not an item at all (the private physio, a child, a
+       rescue dog) while the physio, the child and the dog stayed, so the
+       physio worked for free for the rest of the career. */
+    const soldUpkeep = s.purchasedItems.filter(id => !keep(id))
+      .reduce((sum, id) => sum + (getSpendingItem(id)?.monthlyCost || 0), 0);
+    s.purchasedItems = s.purchasedItems.filter(keep);
+    s.customYearlyCosts = Math.max(0, Math.round(((s.customYearlyCosts || 0) - soldUpkeep) * 1000) / 1000);
     s.totalAssetValue = 0;
     s.consecutiveDeficitYears = 0;
     s.morale = clamp(s.morale - 20, 0, 100);
