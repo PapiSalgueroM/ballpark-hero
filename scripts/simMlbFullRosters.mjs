@@ -64,6 +64,11 @@
    210,600 man rounds. Against a 13 man twin (seed 7919) 23 of 30 clubs end a
    season on a different win total, mean 1.9 wins, all of it injured starters
    covered by a real next man instead of the 13 man club playing short.
+   Review, same day, 30 franchises of ten seasons through the board's
+   sequence: before the cut down 104 of 9,000 club seasons opened over 28
+   (up to 33, 55 of them the GM's) and 808 with no catcher; after it, 0 and
+   0, every club 22 to 28. Sections 3c, 3n, 6's roster and catcher lines and
+   9 are exact rules, not bands, so they carry no margin.
 
    Controls, through MLB_FULL_CONTROL. Each edits a bundled copy, refuses to
    run if its anchor is not in the file, and must turn its own section red:
