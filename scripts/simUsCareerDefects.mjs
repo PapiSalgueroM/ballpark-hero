@@ -40,11 +40,14 @@
  * MEASURED, on the shipped code before this round (300 seeded careers a sport,
  * buying the item the first offseason the rating came within one of
  * potential): 5 of 5 NBA buys and 1 of 1 NHL buy left the rating above
- * potential, for 20 and 5 later seasons. After it: 0. Throwback careers
- * played through the engines (200 a sport): the supermax drawable 0 times
- * before 2017 and 335 after over 3,706 offseasons, the qualifying offer 0
- * times before 2013 and 945 after over 3,782. Both gates are rules, so the
- * before counts must be exactly 0 and the after counts above 0.
+ * potential, for 20 and 5 later seasons. After it: 0. Under shoppot the
+ * test's own seeded careers sit above potential for 2 (NFL), 30 (NBA), 67 and
+ * 14 (NHL) seasons. Throwback careers played through the engines (200 a
+ * sport): the supermax drawable 0 times before 2017 and 335 after over 3,706
+ * offseasons (275 before under supermaxera), the qualifying offer 0 times
+ * before 2013 and 945 after over 3,782 (386 before under qoera). Both gates
+ * are rules, so the before counts must be exactly 0 and the after counts
+ * above 0.
  *
  * Run: node scripts/simUsCareerDefects.mjs
  *      SIM_US_CAREER_CONTROL=rpbatting node scripts/simUsCareerDefects.mjs
@@ -166,11 +169,11 @@ const PLANS = {
       'src/lib/nhlMyCareer.ts': [[SHOP_NEW(2), SHOP_OLD(2)], [SHOP_NEW(1), SHOP_OLD(1)]],
     },
     mustFail: [
-      /NFL Vision Training: on the ceiling/, /NBA Biomechanics Team: on the ceiling/, /MLB Biomechanics Team: on the ceiling/,
-      /NHL Biomechanics Team: on the ceiling/, /NHL Home Shooting Room: on the ceiling/,
-      /MLB Biomechanics Team: a save already over its ceiling/, /NBA Biomechanics Team: seeded careers/,
+      /NFL Vision Training'?: on the ceiling/, /NBA Biomechanics Team'?: on the ceiling/, /MLB Biomechanics Team'?: on the ceiling/,
+      /NHL Biomechanics Team'?: on the ceiling/, /NHL Home Shooting Room'?: on the ceiling/,
+      /MLB Biomechanics Team'?: a save already over its ceiling/, /NBA Biomechanics Team'?: seeded careers/,
     ],
-    mustPass: [/NFL Vision Training: with room it pays the full raise/],
+    mustPass: [/NFL Vision Training'?: with room it pays the full raise/],
   },
 };
 
@@ -227,6 +230,7 @@ try {
     assert.equal(passed, 150, `expected 150 tests (116 stat line, 9 era, 25 shop), saw ${passed}\n${tail}`);
     console.log(`simUsCareerDefects: ${passed} tests passed across the stat lines, the era cards and the shop cap.`);
   } else {
+    for (const line of output.split('\n')) if (/drawable|seeded careers came/.test(line)) console.log('   ' + line.trim());
     assert.notEqual(run.status, 0, `control ${control} left the tests green, so they cannot see the old code\n${tail}`);
     for (const re of plan.mustFail) assert.match(output, failedLine(re), `control ${control}: expected a failure matching ${re}\n${tail}`);
     for (const re of plan.mustPass ?? []) assert.match(output, passedLine(re), `control ${control}: expected ${re} to stay green, the control is too broad\n${tail}`);
