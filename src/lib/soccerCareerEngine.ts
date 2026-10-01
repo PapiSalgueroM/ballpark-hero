@@ -5875,7 +5875,18 @@ function generateRandomEvents(state: CareerState): RandomEvent[] {
   });
   const count = rand(2, 4);
   const shuffled = [...eligible].sort(() => Math.random() - 0.5);
-  const picked = shuffled.slice(0, count);
+  /* Round 725: the first `count` of the shuffle, skipping a second event
+     from a story already drawn this batch. Events without a story have
+     unique keys, so for them this is exactly the old slice. */
+  const picked: RandomEvent[] = [];
+  const drawnKeys = new Set<string>();
+  for (const e of shuffled) {
+    if (picked.length >= count) break;
+    const key = eventLedgerKey(e);
+    if (drawnKeys.has(key)) continue;
+    drawnKeys.add(key);
+    picked.push(e);
+  }
   // Round 49: identity beats (personality reveal, agent signing) always show up
   // the season they become due instead of losing the random draw.
   for (const pid of getPriorityLifeEventIds(state)) {

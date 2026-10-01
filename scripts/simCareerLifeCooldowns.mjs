@@ -28,22 +28,47 @@
  *   national team                                                       0  THIN, nothing at all
  *   late career                                                         0  THIN, only 225, 232, 249 age gated
  *
- *   near duplicate text: none. Section 5 measures word overlap over every
- *     pair; the closest pair in the catalog is 226 and 227 (the esports arc,
+ *   "THIN" is about this file only. The same picker also draws from the
+ *   base, eras, realism, corruption, critic and boot catalogs (250 ids in
+ *   all), and the realism files already carry family (469 to 475), body and
+ *   mind (431 to 437), the national team (450 to 457) and the late career
+ *   (458 to 461, 489 to 494). New events here had to be new stories THERE.
+ *
+ *   near duplicate text inside this file: none. Section 5 measures word
+ *     overlap over every pair; the closest is 226 and 227 (the esports arc,
  *     deliberately one story in two parts) at 0.15.
+ *   near duplicates ACROSS the picker: three stories this file told that
+ *     another catalog also told. 220 The Group Chat Leak against eras 63
+ *     Leaked Group Chat and realism 422 (all three: your squad chat message
+ *     about the manager gets out); 232 The Statue Vote against realism 462,
+ *     same title, same story; 244 Start a Podcast? against eras 68 Launch
+ *     Your Own Podcast, two offers to start the same podcast. FIXED with a
+ *     shared story key (STORY in soccerCareerLife.ts): the members share one
+ *     ledger entry, are once a career, and the picker never draws two of one
+ *     story in the same batch, so each story happens once.
  *   identical consequence sets: none.
  *   options without a consequence: none.
  *   real person as a speaker: none. Every speaker is a role (the gaffer, the
  *     kit man, a teammate, your mum) or a generated person (Cousin Ricky,
  *     Marco De Luca, Zara Blackwood, Councilman Dave, Gerald, Gaffer Two).
- *   ids used twice anywhere in the full catalog (base, eras, life,
- *     corruption, realism, critic, boot): none, 250 distinct ids in one draw.
+ *     245 has a "legendary retired striker" answer you, unnamed on purpose.
+ *   ids used twice anywhere in the full catalog: none, 250 distinct ids.
+ *
+ *   life events by category after this round: life 47, negative 16,
+ *   positive 4, international 1 (68 events).
  *
  * WHAT CHANGED. The eight one button events got a real second choice. Ids 253
- * to 272 are new, twenty events on the thin shelves: family (253 254 255),
- * media (256), money and brands (257 258 259), injuries and recovery (260 261
- * 262), the dressing room (263 264), agent and contract (265 266), national
- * team (267), fans and community (268 269), late career (270 271 272).
+ * to 272 are new, twenty events: family (253 254 255), media (256), money and
+ * brands (257 258 259), injuries and recovery (260 261 262), the dressing room
+ * (263 264), agent and contract (265 266), national team (267), fans and
+ * community (268 269), late career (270 271 272). The first draft of five of
+ * them retold events from the other catalogs (a sleep coach, 431; a fines
+ * treasurer, 419; the anthem, 453; a teenager at your position, 459; your
+ * first coach raising money, 416) and was rewritten: 258 The Garden Centre
+ * Charge, 260 The Head Knock, 263 Secret Santa, 267 The Camp Roommate, 271
+ * The Screen Test. 269 was retitled, it shared "The Banner" with rivalry
+ * event 116. 262 The Comeback Game fires only while the serious injury is
+ * this season's or last season's, and as a priority beat, like 200 and 201.
  *
  * THE SECTIONS, all over careers driven through the real engine with a seeded
  * Math.random, three cohorts so the late career is actually reached:
@@ -109,7 +134,11 @@ const CONTROL = process.env.SIM_CAREER_LIFE_COOLDOWNS_CONTROL || '';
 const SEED_OFFSET = Number(process.env.SEED_OFFSET || 0) * 100000;
 
 let failures = 0;
-const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
+/* Which section is running, and which ones failed, so a control is judged on
+   the section it targets and not on any red anywhere. */
+let SECTION = '0';
+const failedSections = new Set();
+const fail = m => { failures += 1; failedSections.add(SECTION); console.error(`  FAIL (section ${SECTION}): ${m}`); };
 const pct = (n, d) => (d === 0 ? '0%' : `${Math.round((n / d) * 1000) / 10}%`);
 const mean = a => (a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0);
 const r2 = v => Math.round(v * 100) / 100;
@@ -122,14 +151,28 @@ const CONTROLS = {
     from: '    if (isEventOnCooldown(state, e, season)) return false;',
     to: '    if (false && isEventOnCooldown(state, e, season)) return false;',
     note: 'the picker no longer reads the cooldown ledger',
-    breaks: 2,
+    breaks: '2',
   },
   oneoption: {
     file: 'src/lib/soccerCareerLife.ts',
     from: '      { label: "Never speak of it again", emoji: "🤐", color: "bg-muted", consequence: "It resurfaces every birthday forever",\n        apply: s => { s.events = [...s.events, "🤐 The karaoke video lives on in the group chat only"]; return s; } },\n',
     to: '',
     note: 'event 221 is back to one button',
-    breaks: 5,
+    breaks: '5',
+  },
+  nostory: {
+    file: 'src/lib/soccerCareerRealismB.ts',
+    from: 'push({ id: 462, story: STORY.statueVote, cooldown: COOLDOWN.once, ',
+    to: 'push({ id: 462, ',
+    note: 'the realism statue vote no longer shares the life one\'s story key',
+    breaks: '5b',
+  },
+  dupetitle: {
+    file: 'src/lib/soccerCareerLife.ts',
+    from: 'emoji: "🎁", title: "Secret Santa",',
+    to: 'emoji: "🎁", title: "The Fines Committee",',
+    note: 'a new event takes the title of an event in another catalog',
+    breaks: '5b',
   },
 };
 if (CONTROL && !CONTROLS[CONTROL]) {
@@ -205,8 +248,9 @@ const {
   dismissSocialMediaPhase, dismissAppealResult, applyBdorSpeech, applyWorldCupSpeech,
   acceptRetirementSuggestion, stayAtClub, signExtension, applyRehabChoice, applySocialMediaAction,
   FALLBACK_CLUBS, repairCareer, getAllEvents, eventCooldown, isEventOnCooldown, eventSeasonIndex,
+  eventLedgerKey,
 } = engine;
-const { getLifeEvents, COOLDOWN } = life;
+const { COOLDOWN, STORY } = life;
 
 /* ─── 1. drive the careers ───────────────────────────────────────────────── */
 
@@ -216,6 +260,15 @@ const { getLifeEvents, COOLDOWN } = life;
    one in a thousand. The floor of 120 (300 careers) is for a run by hand and
    is not the default. */
 const N = Math.max(120, Number(process.argv[2] || 200));
+/* Section 4's bands. Measurement in the header: before this round the life
+   file gave 0.54 to 0.56 events per playing season, after it 0.76 to 0.77,
+   with run to run noise about 0.01. The band excludes the old value, so it
+   fails if the new events stop being drawn, and a fifth more than measured
+   on top, so it fails on a flood. */
+const LIFE_PER_SEASON_BAND = [0.66, 0.88];
+const LIFE_SHARE_BAND = [0.22, 0.31];
+const BATCH_MEAN_BAND = [2.9, 3.5];
+const BATCHES_PER_SEASON_BAND = [0.85, 0.97];
 const NATIONS = ['England', 'Brazil', 'France', 'Japan', 'Nigeria', 'Argentina', 'Morocco', 'Norway'];
 const POSITIONS = ['ST', 'CAM', 'CM', 'CB', 'GK', 'LW', 'RB', 'CDM'];
 const clubs = FALLBACK_CLUBS;
@@ -281,7 +334,7 @@ function drive(seed, mode) {
     while (!s.retired && guard++ < 400) {
       if (s.phase === 'random_events' && prevPhase !== 'random_events') {
         const season = eventSeasonIndex(s);
-        batches.push({ season, events: s.pendingEvents.map(e => ({ id: e.id, category: e.category, cooldown: eventCooldown(e) })) });
+        batches.push({ season, events: s.pendingEvents.map(e => ({ id: e.id, key: eventLedgerKey(e), category: e.category, cooldown: eventCooldown(e) })) });
         for (const e of getAllEvents(s)) if (!catalogById.has(e.id)) catalogById.set(e.id, e);
         for (const e of s.pendingEvents) if (isLife(e.id)) lifeFireCount.set(e.id, (lifeFireCount.get(e.id) || 0) + 1);
         if (!midSave && playingSeasons >= 3 && playingSeasons <= 6) midSave = JSON.parse(JSON.stringify(s));
@@ -357,6 +410,7 @@ function drive(seed, mode) {
   }
 }
 
+SECTION = '1';
 console.log('1) Driving careers through the real engine');
 for (let i = 0; i < N; i += 1) {
   for (const [mode, offset] of [['ordinary', 0], ['elite', 90000], ['loyal', 40000]]) {
@@ -379,9 +433,16 @@ if (totalFired < 1000) fail(`only ${totalFired} events were shown across the sam
 
 /* ─── 2. no event fires twice inside its cooldown ────────────────────────── */
 
+SECTION = '2';
 console.log('2) No event fires twice inside its cooldown');
 {
+  /* Grouped by ledger key: the event id, or the story it shares with events
+     in other catalogs, so a statue vote from the realism file inside the
+     cooldown of the life one counts as the same story told twice. The gap
+     is judged by the LATER event's cooldown, which is the rule the picker
+     applies when it decides whether that later event may be drawn. */
   let pairs = 0;
+  let storyPairs = 0;
   let violations = 0;
   let sameBatch = 0;
   const examples = [];
@@ -390,25 +451,26 @@ console.log('2) No event fires twice inside its cooldown');
     for (const b of c.batches) {
       const seen = new Set();
       for (const e of b.events) {
-        if (seen.has(e.id)) sameBatch += 1;
-        seen.add(e.id);
-        if (!firings.has(e.id)) firings.set(e.id, []);
-        firings.get(e.id).push({ season: b.season, cooldown: e.cooldown });
+        if (seen.has(e.key)) sameBatch += 1;
+        seen.add(e.key);
+        if (!firings.has(e.key)) firings.set(e.key, []);
+        firings.get(e.key).push({ id: e.id, season: b.season, cooldown: e.cooldown });
       }
     }
-    for (const [id, list] of firings) {
+    for (const [key, list] of firings) {
       list.sort((a, b) => a.season - b.season);
       for (let i = 1; i < list.length; i += 1) {
         pairs += 1;
+        if (key.startsWith('story:')) storyPairs += 1;
         const gap = list[i].season - list[i - 1].season;
-        if (gap <= list[i - 1].cooldown) {
+        if (gap <= list[i].cooldown) {
           violations += 1;
-          if (examples.length < 4) examples.push(`id ${id} fired in ${list[i - 1].season} and again in ${list[i].season} (cooldown ${list[i - 1].cooldown}, ${c.mode} ${c.seed})`);
+          if (examples.length < 4) examples.push(`${key} (ids ${list[i - 1].id} then ${list[i].id}) fired in ${list[i - 1].season} and again in ${list[i].season} (cooldown ${list[i].cooldown}, ${c.mode} ${c.seed})`);
         }
       }
     }
   }
-  console.log(`   ${pairs} repeat firings of the same event in the same career checked, ${violations} inside the cooldown, ${sameBatch} duplicated inside one batch`);
+  console.log(`   ${pairs} repeat firings of the same event or story in the same career checked (${storyPairs} of them a shared story), ${violations} inside the cooldown, ${sameBatch} duplicated inside one batch`);
   for (const ex of examples) console.error(`   ${ex}`);
   if (pairs === 0) fail('no event ever fired twice in any career, so this section measured nothing');
   if (violations > 0) fail(`${violations} firings landed inside the event's cooldown`);
@@ -427,6 +489,7 @@ console.log('2) No event fires twice inside its cooldown');
 
 /* ─── 3. every id reachable, every new id fired ──────────────────────────── */
 
+SECTION = '3';
 console.log('3) Every life event is reachable, every new one fired');
 {
   const unreachable = LIFE_IDS_IN_SOURCE.filter(id => !catalogById.has(id));
@@ -446,24 +509,32 @@ console.log('3) Every life event is reachable, every new one fired');
 
 /* ─── 4. the rate ────────────────────────────────────────────────────────── */
 
+SECTION = '4';
 console.log('4) The rate: not flooded, not starved');
 {
   const perBatch = careers.flatMap(c => c.batches.map(b => b.events.length));
   const perSeason = totalPlaying ? totalBatches / totalPlaying : 0;
   const lifeSlots = careers.reduce((a, c) => a + c.batches.reduce((x, b) => x + b.events.filter(e => isLife(e.id)).length, 0), 0);
   const lifeShare = totalFired ? lifeSlots / totalFired : 0;
+  const lifePerSeason = totalPlaying ? lifeSlots / totalPlaying : 0;
   const m = mean(perBatch);
-  console.log(`   mean events per batch ${r2(m)}, batches per playing season ${r2(perSeason)}, life catalog share of slots ${r2(lifeShare)}`);
-  if (m < 2.6 || m > 3.7) fail(`mean events per batch is ${r2(m)}, outside [2.6, 3.7]`);
-  if (perSeason < 0.8 || perSeason > 1.02) fail(`batches per playing season is ${r2(perSeason)}, outside [0.8, 1.02]`);
-  if (lifeShare < 0.15 || lifeShare > 0.45) fail(`the life catalog takes ${r2(lifeShare)} of the slots, outside [0.15, 0.45]`);
+  console.log(`   mean events per batch ${r2(m)}, batches per playing season ${r2(perSeason)}, life catalog share of slots ${r2(lifeShare)}, life events per playing season ${r2(lifePerSeason)}`);
+  const band = (v, [lo, hi], what) => { if (v < lo || v > hi) fail(`${what} is ${r2(v)}, outside [${lo}, ${hi}]`); };
+  band(m, BATCH_MEAN_BAND, 'mean events per batch');
+  band(perSeason, BATCHES_PER_SEASON_BAND, 'batches per playing season');
+  band(lifeShare, LIFE_SHARE_BAND, 'the life catalog share of batch slots');
+  band(lifePerSeason, LIFE_PER_SEASON_BAND, 'life events per playing season');
 }
 
 /* ─── 5. the shape ───────────────────────────────────────────────────────── */
 
+SECTION = '5';
 console.log('5) Catalog shape: two real choices, a consequence each, an explicit cooldown');
 {
   const lifeEvents = [...catalogById.values()].filter(e => isLife(e.id));
+  const byCategory = {};
+  for (const e of lifeEvents) byCategory[e.category] = (byCategory[e.category] || 0) + 1;
+  console.log(`   life events by category: ${Object.entries(byCategory).sort().map(([k, v]) => `${k} ${v}`).join(', ')}`);
   let fewOptions = 0, noConsequence = 0, noApply = 0, noCooldown = 0;
   for (const e of lifeEvents) {
     if (!Array.isArray(e.choices) || e.choices.length < 2) { fewOptions += 1; console.error(`   id ${e.id} "${e.title}" has ${e.choices ? e.choices.length : 0} option(s)`); }
@@ -512,8 +583,127 @@ console.log('5) Catalog shape: two real choices, a consequence each, an explicit
   if (!(COOLDOWN.once >= 60)) fail(`COOLDOWN.once is ${COOLDOWN.once}, which a long career can outlive`);
 }
 
+/* ─── 5b. across the whole picker ────────────────────────────────────────── */
+
+/* The life file is one of six catalogs the same picker draws from, and the
+   first draft of this round's twenty events retold five events that already
+   lived in the realism and eras files (a sleep coach, a fines treasurer, the
+   anthem, a teenager at your position, your boyhood coach's fundraiser),
+   while section 5 above, which only compares the life file with itself,
+   stayed green. Two checks close that:
+     STORY_SETS  the stories known to exist in more than one catalog, each
+                 required to share one story key and to be once a career, so
+                 the picker treats them as one story.
+     REVIEWED    every pair of a life event and an event elsewhere whose
+                 titles share a content word has been read and judged a
+                 different story, with the reason. A pair nobody has read
+                 fails, so the next retold story cannot arrive unread. */
+const STORY_SETS = {
+  squadChatLeak: [220, 63, 422],
+  statueVote: [232, 462],
+  podcastLaunch: [244, 68],
+};
+const REVIEWED = new Map([
+  ['220:46', 'a squad chat message about the manager, against photos from a nightclub before a match'],
+  ['220:473', 'the squad chat, against the FAMILY chat with your father\'s opinions and your baby photos'],
+  ['221:46', 'a team dinner karaoke initiation, against a 3am nightclub two days before a match'],
+  ['224:488', 'the mascot trash talks and races you, against a mascot costume of your own head'],
+  ['230:438', 'a superstition about boots, against a boot sponsorship running out'],
+  ['230:54', 'a superstition about boots, against boot makers bidding for you'],
+  ['230:333', 'a superstition about boots, against fixing the top scorer race'],
+  ['230:501', 'a superstition about boots, against your own signature boot'],
+  ['238:485', 'a pigeon on your shoulder on live television, against a pigeon nesting in the goal as a charm'],
+  ['217:500', 'a column you write, against a critic\'s column about you'],
+  ['265:56', 'a rival agent pitching at a wedding, against your own agent raising his cut'],
+  ['265:471', 'a rival agent pitching at a wedding, against your brother wanting the job'],
+  ['207:56', 'your agent also representing your rival, against your agent raising his cut'],
+  ['207:471', 'your agent also representing your rival, against your brother wanting the job'],
+  ['248:42', 'a fan proposing on the pitch, against proposing to your own partner'],
+  ['256:32', 'the club series editing you into a villain afterwards, against a crew asking to film your season'],
+  ['243:41', 'going on a reality dating show, against tabloid dating rumours'],
+  ['244:409', 'starting your own podcast, against a guest spot on somebody else\'s'],
+  ['245:409', 'the payoff of the podcast you started in 244, a public feud with a retired striker, against naming teammates as a guest'],
+  ['245:68', 'the payoff of 244, which can only follow 244 (68 shares its story key), against the offer to start one'],
+  ['233:462', 'a wax museum figure, against an outdoor statue vote'],
+  ['266:494', 'a paper printing the wrong release clause, against a club actually paying it'],
+  ['232:450', 'a statue vote, against a squad voting to boycott a qualifier'],
+  ['232:310', 'a statue vote, against buying award votes'],
+  ['232:311', 'a statue vote, against the vote broker\'s receipts'],
+  ['208:46', 'your agent leaking fake transfer interest, against nightclub photos'],
+  ['214:436', 'an opponent stamping on your boot in the tunnel, against your own nerves in the tunnel'],
+]);
+
+SECTION = '5b';
+console.log('5b) Across the whole picker: no story told twice, no title shared');
+{
+  const all = [...catalogById.values()];
+  const lifeEvents = all.filter(e => isLife(e.id));
+  const others = all.filter(e => !isLife(e.id));
+  const norm = t => String(t).toLowerCase().replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+  /* Grammar, plus the words that say where or in what format a story
+     happens rather than what it is about (a room, a club, a show, a night,
+     a pitch in either sense, a number). Measured: with only the grammar
+     words, 63 pairs came up and the ones carried by these words were all
+     coincidences of setting ("Film Room Legend" and "The Scan Room"). */
+  const STOP = new Set(['your', 'with', 'that', 'they', 'them', 'from', 'have', 'wants', 'want', 'again', 'after',
+    'what', 'when', 'this', 'more', 'than', 'into', 'about', 'were', 'been', 'every', 'same', 'just', 'only', 'over',
+    'first', 'someone', 'somebody', 'there', 'their', 'nobody', 'everyone',
+    'room', 'club', 'game', 'team', 'show', 'night', 'take', 'talk', 'break', 'need', 'named', 'forty', 'nine',
+    'city', 'centre', 'head', 'contract', 'interview', 'pitch', 'training', 'ground', 'preseason']);
+  const contentWords = t => new Set(norm(t).split(' ')
+    .map(w => (w.length > 4 && w.endsWith('s') ? w.slice(0, -1) : w))
+    .filter(w => w.length > 3 && !STOP.has(w)));
+
+  /* the story sets */
+  let storyProblems = 0;
+  for (const [story, ids] of Object.entries(STORY_SETS)) {
+    if (STORY[story] !== story) { storyProblems += 1; fail(`STORY.${story} is missing from soccerCareerLife.ts`); continue; }
+    for (const id of ids) {
+      const e = catalogById.get(id);
+      if (!e) { storyProblems += 1; fail(`story ${story}: id ${id} never turned up in any career, so its key cannot be checked`); continue; }
+      if (e.story !== story) { storyProblems += 1; fail(`story ${story}: id ${id} "${e.title}" carries story ${e.story ?? 'none'}, so it can retell the story inside the cooldown`); }
+      if (eventCooldown(e) < COOLDOWN.once) { storyProblems += 1; fail(`story ${story}: id ${id} has cooldown ${eventCooldown(e)}, so the story can come round twice`); }
+    }
+  }
+  const keyed = all.filter(e => e.story);
+  const strays = keyed.filter(e => !(STORY_SETS[e.story] || []).includes(e.id));
+  for (const e of strays) fail(`id ${e.id} "${e.title}" carries story ${e.story} but is not in STORY_SETS here, read it and add it`);
+  console.log(`   ${Object.keys(STORY_SETS).length} stories told by more than one catalog, ${keyed.length} events carrying a story key, ${storyProblems + strays.length} problems`);
+
+  /* exact titles */
+  const titleClash = [];
+  /* an identical title is fine only inside one story, where the player can
+     only ever see one of the two */
+  for (const a of lifeEvents) {
+    for (const b of others) {
+      if (norm(a.title) === norm(b.title) && !(a.story && a.story === b.story)) titleClash.push(`${a.id} and ${b.id} are both "${a.title}"`);
+    }
+  }
+  /* shared title words */
+  const shared = [];
+  for (const a of lifeEvents) {
+    const wa = contentWords(a.title);
+    for (const b of others) {
+      const common = [...contentWords(b.title)].filter(w => wa.has(w));
+      if (!common.length) continue;
+      const sameStory = a.story && a.story === b.story;
+      shared.push({ a: a.id, b: b.id, words: common.join(' '), sameStory, at: a.title, bt: b.title });
+    }
+  }
+  const unread = shared.filter(p => !p.sameStory && !REVIEWED.has(`${p.a}:${p.b}`));
+  const staleReviews = [...REVIEWED.keys()].filter(k => !shared.some(p => `${p.a}:${p.b}` === k));
+  console.log(`   ${lifeEvents.length} life events against ${others.length} elsewhere: ${titleClash.length} identical titles, ${shared.length} pairs sharing a title word (${shared.filter(p => p.sameStory).length} of them one shared story, ${REVIEWED.size} read and judged different, ${unread.length} unread)`);
+  for (const t of titleClash) console.error(`   identical title: ${t}`);
+  for (const p of unread) console.error(`   unread pair ${p.a}:${p.b} share "${p.words}": "${p.at}" and "${p.bt}"`);
+  for (const k of staleReviews) console.error(`   REVIEWED carries ${k}, which no longer shares a title word: drop it`);
+  if (titleClash.length) fail(`${titleClash.length} life events share an exact title with an event in another catalog`);
+  if (unread.length) fail(`${unread.length} pairs share a title word and nobody has read them: read both, then add the pair to REVIEWED with the reason, or give them one story key`);
+  if (staleReviews.length) fail(`${staleReviews.length} REVIEWED entries no longer match a pair`);
+}
+
 /* ─── 6. text hygiene ────────────────────────────────────────────────────── */
 
+SECTION = '6';
 console.log('6) Text: no dashes, no rival names, no real person speaking');
 {
   const lifeEvents = [...catalogById.values()].filter(e => isLife(e.id));
@@ -561,10 +751,10 @@ console.log('6) Text: no dashes, no rival names, no real person speaking');
     'Spicy Wings', 'Wings Interview', 'The Training', 'Training Ground', 'Ground Raccoon', 'Pitch Invasion', 'Invasion Proposal',
     'The Biopic', 'Biopic Offer', 'The Teammate', 'Teammate Coin', 'The Pen', 'Pen Pal', 'Your Mum', 'Mum Is', 'Is In',
     'In The', 'The Comments', 'The Sibling', 'Sibling Trial', 'The Documentary', 'Documentary Edit', 'The Energy', 'Energy Drink',
-    'Drink Pitch', 'Your First', 'First Coach', 'The Accountant', 'The Sleep', 'Sleep Study', 'The Niggle', 'The Comeback',
-    'Comeback Game', 'The Fines', 'Fines Jar', 'The Rookie', 'First Car', 'The Agent', 'Agent Poach', 'The Release', 'Release Clause',
-    'Clause Rumour', 'The Anthem', 'Anthem Clip', 'The Under', 'Under Nines', 'Medal Night', 'The Banner', 'The Coaching',
-    'Coaching Badges', 'The Kid', 'Kid Who', 'Who Plays', 'Plays Your', 'Your Position', 'The Body', 'Body Talks', 'Pure Class',
+    'Drink Pitch', 'The Garden', 'Centre Charge', 'The Accountant', 'The Head', 'The Niggle', 'The Comeback',
+    'Comeback Game', 'Secret Santa', 'The Rookie', 'First Car', 'The Agent', 'Agent Poach', 'The Release', 'Release Clause',
+    'Clause Rumour', 'The Camp', 'The Under', 'Under Nines', 'Medal Night', 'Forty Feet', 'One Typo', 'The Coaching',
+    'Coaching Badges', 'The Screen', 'The Body', 'Body Talks', 'Pure Class',
     'Golden Boot', 'Player Of', 'Of The', 'The Month', 'The Shark', 'Super Agent', 'Champions League', 'World Cup', 'Mr Agent',
     /* fragments the regex cuts out of hyphenated titles and a pigeon's name */
     'Adopt Gerald', 'All Book', 'Word Interview',
@@ -585,6 +775,7 @@ console.log('6) Text: no dashes, no rival names, no real person speaking');
 
 /* ─── 7. old saves ───────────────────────────────────────────────────────── */
 
+SECTION = '7';
 console.log('7) A save with no ledger loads and plays; a corrupt ledger is dropped');
 {
   const withMid = careers.filter(c => c.midSave && !c.midSave.retired).slice(0, 25);
@@ -661,11 +852,12 @@ console.log('7) A save with no ledger loads and plays; a corrupt ledger is dropp
 
 if (CONTROL) {
   const c = CONTROLS[CONTROL];
-  if (failures === 0) {
-    console.error(`\nCONTROL DID NOT FIRE: ${CONTROL} put the defect back and section ${c.breaks} stayed green. The check is not checking.`);
+  const others = [...failedSections].filter(s => s !== c.breaks);
+  if (!failedSections.has(c.breaks)) {
+    console.error(`\nCONTROL DID NOT FIRE: ${CONTROL} put the defect back and section ${c.breaks} stayed green${others.length ? ` (sections ${others.join(', ')} failed instead)` : ''}. The check is not checking.`);
     process.exit(1);
   }
-  console.log(`\nCONTROL FIRED: ${failures} failure${failures === 1 ? '' : 's'} with the defect back in, as it should. Section ${c.breaks} was the target.`);
+  console.log(`\nCONTROL FIRED: section ${c.breaks} failed with the defect back in, as it should${others.length ? `; section${others.length === 1 ? '' : 's'} ${others.join(', ')} failed too` : ', and nothing else did'}.`);
   process.exit(0);
 }
 console.log(failures ? `\nsimCareerLifeCooldowns: ${failures} FAILURE${failures === 1 ? '' : 'S'}` : '\nsimCareerLifeCooldowns: green. No event repeats inside its cooldown, every new event fires, the rate held, and the catalog has two real choices everywhere.');

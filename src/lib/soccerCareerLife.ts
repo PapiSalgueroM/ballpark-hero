@@ -161,7 +161,22 @@ export function getPriorityLifeEventIds(state: CareerState): number[] {
   const ids: number[] = [];
   if (!state.personality && state.age >= 18 && !state.retired) ids.push(200);
   else if (state.personality && !state.agentId && state.age >= 19 && !state.retired) ids.push(201);
+  /* Round 725: the comeback game (262) is a beat of the same kind. Left in
+     the general draw it showed up in about one comeback in three, and a
+     return from a long injury is not a story that should lose a raffle. */
+  if (comebackDue(state) && !state.retired) ids.push(262);
   return ids;
+}
+
+/* The comeback game is only news while the serious injury is recent: it
+   happened this season or the one before. Gated on any injury ever, a 33
+   year old could be told about his first start since a layoff at 22. The
+   injury cooldown keeps it to one comeback per injury. */
+function comebackDue(state: CareerState): boolean {
+  const lastSerious = state.seriousInjuries?.[state.seriousInjuries.length - 1];
+  if (!lastSerious) return false;
+  const seasonNow = state.seasons[state.seasons.length - 1]?.year ?? 0;
+  return lastSerious.year >= seasonNow - 1;
 }
 
 /* ─── The life event catalog (ids 200+) ───
@@ -807,13 +822,7 @@ export function getLifeEvents(state: CareerState): RandomEvent[] {
       ] });
   }
 
-  /* Only while the comeback is actually news: the serious injury happened
-     this season or the one before. Gated on any injury ever, a 33 year old
-     could be told about his "first start since the long injury" of age 22.
-     The injury cooldown keeps it to one comeback per injury. */
-  const lastSerious = state.seriousInjuries?.[state.seriousInjuries.length - 1];
-  const seasonNow = state.seasons[state.seasons.length - 1]?.year ?? 0;
-  if (lastSerious && lastSerious.year >= seasonNow - 1) {
+  if (comebackDue(state)) {
     push({ id: 262, cooldown: COOLDOWN.injury, emoji: "🏟️", title: "The Comeback Game",
       description: "First start since the long injury. The warm up felt like a trial. The stadium stood up when your name was read out and your mum is crying on the big screen.",
       category: "positive", choices: [
