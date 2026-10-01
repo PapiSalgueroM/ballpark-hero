@@ -64,6 +64,12 @@ type Tab = 'team' | 'market' | 'trade' | 'round' | 'standings';
 const SAVE_KEY = 'nhl-front-office-save-v1';
 /* Round 631: what the market and the trade screen say about a man you let go this season. */
 const CUT_SAID = 'You waived him this season.';
+/* Round 830 review: a stand in rating wears its star on every list, not just
+   the roster box. A man keeps the mark when he walks into the pool or is
+   traded, so the market and the trade screens showed a bare 68 as if his
+   stats had produced it. */
+const ovrLabel = (p: { ovr: number; partial?: true }): string => `${p.ovr}${p.partial ? '*' : ''}`;
+const PARTIAL_SHORT = '* Stand in rating: no full 2025-26 NHL season to rate him on.';
 
 const NHL_WORDS: FoSportWords = { title: 'the Stanley Cup', playoffs: 'the playoffs', round: 'a series', games: 80 };
 
@@ -956,13 +962,14 @@ export default function NhlFrontOfficeBoard() {
                   {refusal && <span className="block text-[10px] text-destructive">{refusal}</span>}
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
-                  <b className="text-primary">{p.ovr}</b>
+                  <b className="text-primary">{ovrLabel(p)}</b>
                   <button onClick={() => doSign(p.id)} disabled={p.salary > room || !!refusal || !!fullBlock} title={refusal ?? fullBlock ?? undefined} className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40">Sign</button>
                 </span>
               </div>
               );
             })}
           </div>
+          {league.freeAgents.some(p => p.partial) && <p data-partial-note className="mt-2 text-[10px] text-muted-foreground">{PARTIAL_SHORT}</p>}
         </div>
       )}
 
@@ -972,10 +979,12 @@ export default function NhlFrontOfficeBoard() {
           <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2">
             <p className="text-center text-[11px] font-bold text-foreground">🔍 Trade Finder</p>
             <p className="text-center text-[10px] text-muted-foreground">Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked.</p>
-            <div className="grid grid-cols-2 gap-1">
-              {[...my.players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
+            {/* Round 830 review: every man, not the top 8. On 23 man rosters the
+                top 8 hid two thirds of the club, the depth a GM most wants to move. */}
+            <div data-trade-shop-list className="grid max-h-60 grid-cols-2 gap-1 overflow-y-auto">
+              {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
                 <button key={p.id} onClick={() => { setMyTradePiece(p.id); setShopOffers([]); setShopTried(false); }} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
-                  <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
+                  <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{ovrLabel(p)}</b>
                 </button>
               ))}
             </div>
@@ -985,15 +994,18 @@ export default function NhlFrontOfficeBoard() {
             {shopTried && shopOffers.length === 0 && (
               <p className="text-center text-[10px] text-muted-foreground">📵 Nobody bit. Shop a better player or build a deal yourself below.</p>
             )}
-            {shopOffers.map(o => (
+            {shopOffers.map(o => {
+              const offered = league.teams[o.teamId]?.players.find(p => p.id === o.playerId);
+              return (
               <div key={o.teamId + o.playerId} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1.5 text-[11px]">
                 <span className="min-w-0">
-                  <span className="block truncate text-foreground"><b>{o.teamId}</b> offer: {o.playerName} ({o.playerPos}) <b className="text-primary">{o.playerOvr}</b></span>
+                  <span className="block truncate text-foreground"><b>{o.teamId}</b> offer: {o.playerName} ({o.playerPos}) <b className="text-primary">{offered ? ovrLabel(offered) : o.playerOvr}</b></span>
                   <span className="block text-[9px] text-muted-foreground">age {o.playerAge} · ${o.playerSalary}M{o.sweeten ? ' · costs one of your picks' : ''}</span>
                 </span>
                 <button onClick={() => acceptShopOffer(o)} className="shrink-0 rounded-full bg-primary px-2.5 py-1 text-[9px] font-bold text-primary-foreground">Accept</button>
               </div>
-            ))}
+              );
+            })}
           </div>
           <p className="text-center text-[10px] font-bold uppercase text-muted-foreground pt-1">Or build your own deal</p>
           <div className="flex flex-wrap items-center justify-center gap-1">
@@ -1021,23 +1033,23 @@ export default function NhlFrontOfficeBoard() {
             <>
               <p className="text-center text-[10px] text-muted-foreground">1. Pick who YOU send. 2. Tap who you want back and open talks. The other GM counters like a person: a pick to close the gap, a lesser man instead, or the dial tone.</p>
               <div className="grid grid-cols-2 gap-2">
-                <div className="space-y-1">
+                <div data-trade-send-list className="max-h-80 space-y-1 overflow-y-auto">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You send</p>
-                  {[...my.players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => (
+                  {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
                     <button key={p.id} onClick={() => setMyTradePiece(p.id)} className={cn('flex w-full items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
-                      <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
+                      <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{ovrLabel(p)}</b>
                     </button>
                   ))}
                 </div>
-                <div className="space-y-1">
+                <div data-trade-get-list className="max-h-80 space-y-1 overflow-y-auto">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You get ({tradePartner})</p>
-                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).slice(0, 8).map(p => {
+                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).map(p => {
                     /* Round 631: the trade paths refuse a man you let go this season, so the screen says so. */
                     const back = tradeRefusal(my, p.id, CUT_SAID);
                     return (
                     <div key={p.id} data-trade-row={p.id} className="flex items-center justify-between gap-1 rounded-lg border border-border/60 bg-background px-2 py-1 text-[11px]">
                       <span className="min-w-0">
-                        <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{p.ovr}</b></span>
+                        <span className="block truncate text-foreground">{p.name} ({p.pos}) <b className="text-primary">{ovrLabel(p)}</b></span>
                         {back && <span className="block text-[9px] text-destructive">{back}</span>}
                       </span>
                       <button onClick={() => openTradeTalks(p.id)} disabled={!myTradePiece || !!back} title={back ?? undefined} className="shrink-0 rounded-full bg-primary px-2.5 py-0.5 text-[9px] font-bold text-primary-foreground disabled:opacity-40">Open talks</button>
@@ -1047,6 +1059,9 @@ export default function NhlFrontOfficeBoard() {
                 </div>
               </div>
             </>
+          )}
+          {(my.players.some(p => p.partial) || (!!tradePartner && league.teams[tradePartner].players.some(p => p.partial))) && (
+            <p data-partial-note className="text-[10px] text-muted-foreground">{PARTIAL_SHORT}</p>
           )}
         </div>
       )}
