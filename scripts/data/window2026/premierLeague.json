@@ -1211,5 +1211,53 @@
     "window": "2026-summer",
     "checked": "2026-10-01",
     "note": "From Toulouse, September 2026. ESPN's Coventry 2026-27 squad page lists him."
+  },
+  {
+    "name": "Samuel Chukwueze",
+    "to": "AC Milan",
+    "db": "AC Milan",
+    "sources": [
+      "https://www.acmilan.com/en/news/articles/training/2026-07-12/pre-season-2026-27-called-up-players",
+      "https://www.espn.com/soccer/team/squad/_/id/103/ac-milan"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his 2025-26 loan at Fulham; Fulham did not take up the option, he was in Milan's pre-season group on 2026-07-12 and is on ESPN's Milan 2026-27 squad page and not on Fulham's."
+  },
+  {
+    "name": "Christos Mandas",
+    "to": "Lazio",
+    "db": "SS Lazio",
+    "sources": [
+      "https://www.sslazio.it/en/team/lazio/squadra",
+      "https://www.espn.com/soccer/team/squad/_/id/112/lazio"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his January 2026 loan at Bournemouth (sslazio.it announced the loan with an option on 2026-01-27); the loan ended without the option and he is in Lazio's squad at number 35 and on ESPN's Lazio 2026-27 squad page, and not on Bournemouth's."
+  },
+  {
+    "name": "Abdülkadir Ömür",
+    "to": "Hull City",
+    "db": "Hull City",
+    "sources": [
+      "https://www.wearehullcity.co.uk/teams/first-team/abd%C3%BClkadir%C3%B6m%C3%BCr",
+      "https://www.espn.com/soccer/team/squad/_/id/306/hull-city"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his loan at Antalyaspor; the loan ended and he is in Hull's first team and on ESPN's Hull 2026-27 squad page."
+  },
+  {
+    "name": "Fer López",
+    "to": "Wolves",
+    "db": "Wolverhampton Wanderers",
+    "sources": [
+      "https://www.wolves.co.uk/teams/mens-first-team/",
+      "https://www.espn.com/soccer/team/squad/_/id/380/wolverhampton-wanderers"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is his January 2026 loan back at Celta (wolves.co.uk, 2026-01-26); the loan ended and he is in the Wolves first team squad at number 28 and on ESPN's Wolves 2026-27 squad page (as Fernando Lopez)."
   }
 ]
