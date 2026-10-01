@@ -13,7 +13,9 @@ import {
   type NbaLeague, type NbaProspect, type SeriesResult, nbaExecuteTalksTrade,
   ensureNbaLeagueIds, NBA_ROSTER_MIN, NBA_ROSTER_MAX,
   /* Round 722: the luxury tax, the aprons and the fourteen man tip off floor. */
-  nbaTipOff, nbaTipOffRefusal, nbaAssessTax, nbaTaxView, nbaApronNote, NBA_TIPOFF_MIN, NBA_MIN_CONTRACT,
+  nbaTipOff, nbaTipOffRefusal, nbaAssessTax, nbaTaxView, nbaApronNote, NBA_TIPOFF_MIN,
+  /* Round 824: new deals are priced in the money of the season they start in. */
+  nbaMinContract, nbaDraftSigning,
 } from '@/lib/nbaFrontOffice';
 import { FoCapPanel } from '@/components/front-office-shared/FoCapPanel';
 /* Round 631: waiving a man costs dead money and he cannot come back this season. */
@@ -270,7 +272,7 @@ export default function NbaFrontOfficeBoard() {
       const before = lg.teams[myTeam].players.length;
       const tip = nbaTipOff(lg, Math.random, myTeam);
       const mine = tip.filled[myTeam];
-      if (mine?.length) tipLines.push(`📋 You tipped off with ${before} under contract, so the league filled you to ${NBA_TIPOFF_MIN} on minimum deals: ${mine.map(p => p.name).join(', ')}, $${NBA_MIN_CONTRACT}M each.`);
+      if (mine?.length) tipLines.push(`📋 You tipped off with ${before} under contract, so the league filled you to ${NBA_TIPOFF_MIN} on minimum deals: ${mine.map(p => p.name).join(', ')}, $${nbaMinContract(lg.cap)}M each.`);
     }
     const report = simRound(lg, myTeam, Math.random);
     const newFeed = [
@@ -358,7 +360,8 @@ export default function NbaFrontOfficeBoard() {
     const lg: NbaLeague = JSON.parse(JSON.stringify(league));
     const pr = draftClass.find(p => p.id === id);
     if (!pr) return;
-    lg.teams[myTeam].players.push(nbaProspectToPlayer(pr, Math.random));
+    const signing = nbaDraftSigning(lg);
+    lg.teams[myTeam].players.push(nbaProspectToPlayer(pr, Math.random, signing));
     const remaining = draftClass.filter(p => p.id !== id);
     const aiTakes = remaining.slice(0, 5);
     const order = nbaStandings(lg).map(t => t.abbr).reverse().filter(a => a !== myTeam);
@@ -368,7 +371,7 @@ export default function NbaFrontOfficeBoard() {
     const rivalPicks: { team: string; playerName: string; pos: string; grade: number }[] = [];
     aiTakes.forEach((p, i) => {
       const abbr = order[i % order.length];
-      lg.teams[abbr].players.push(nbaProspectToPlayer(p, Math.random));
+      lg.teams[abbr].players.push(nbaProspectToPlayer(p, Math.random, signing));
       rivalPicks.push({ team: abbr, playerName: p.name, pos: String(p.pos), grade: p.grade });
     });
     const nextClass = remaining.filter(p => !aiTakes.includes(p));
@@ -793,7 +796,7 @@ export default function NbaFrontOfficeBoard() {
             dead={dead}
             note={capNote()}
             tax={view}
-            roster={{ count: my.players.length, floor: NBA_TIPOFF_MIN, max: NBA_ROSTER_MAX, minContract: NBA_MIN_CONTRACT }}
+            roster={{ count: my.players.length, floor: NBA_TIPOFF_MIN, max: NBA_ROSTER_MAX, minContract: nbaMinContract(league.cap) }}
           />
           {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
@@ -971,7 +974,7 @@ export default function NbaFrontOfficeBoard() {
           {tipBlock && <p data-tipoff-block className="mb-2 text-[11px] text-destructive">{tipBlock}</p>}
           {!tipBlock && tipShort > 0 && (
             <p data-tipoff-short className="mb-2 text-[11px] text-muted-foreground">
-              {tipShort} short of the {NBA_TIPOFF_MIN} man floor. At tip off the league fills the gap on minimum deals (${NBA_MIN_CONTRACT}M each), so sign who you want first.
+              {tipShort} short of the {NBA_TIPOFF_MIN} man floor. At tip off the league fills the gap on minimum deals (${nbaMinContract(league.cap)}M each), so sign who you want first.
             </p>
           )}
           <button onClick={playRound} disabled={!!tipBlock} title={tipBlock ?? undefined} className="inline-flex items-center gap-2 rounded-full bg-primary px-8 py-2.5 text-sm font-bold text-primary-foreground hover:opacity-90 disabled:opacity-40">

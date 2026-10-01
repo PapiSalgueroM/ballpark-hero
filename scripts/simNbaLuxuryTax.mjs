@@ -573,7 +573,8 @@ function playSeason(E, lg, me, rng, log) {
   if (lg.teams[me].players.length - mine.length < FLOOR) {
     log.fills.push({
       short: FLOOR - (lg.teams[me].players.length - mine.length), got: mine.length,
-      allMinimum: mine.every(p => p.salary === E.NBA_MIN_CONTRACT && p.years === 1),
+      /* Round 824: the minimum of the season being tipped off, which rises with the cap */
+      allMinimum: mine.every(p => p.salary === E.nbaMinContract(lg.cap) && p.years === 1),
       fromPool: poolBefore - lg.freeAgents.length,
     });
   }
@@ -601,12 +602,14 @@ function playSeason(E, lg, me, rng, log) {
   log.closes.push(close);
   /* the draft: the GM takes the best left twice, the CPU takes the next five each time, the way the board does */
   let remaining = E.nbaDraftClass(rng, 24, new Set());
+  /* Round 824: rookie deals priced in next season's money, as the board signs them */
+  const signing = E.nbaDraftSigning(lg);
   for (let k = 0; k < 2; k += 1) {
-    lg.teams[me].players.push(E.nbaProspectToPlayer(remaining[0], rng));
+    lg.teams[me].players.push(E.nbaProspectToPlayer(remaining[0], rng, signing));
     remaining = remaining.slice(1);
     const aiTakes = remaining.slice(0, 5);
     const order = E.nbaStandings(lg).map(t => t.abbr).reverse().filter(a => a !== me);
-    aiTakes.forEach((p, i) => lg.teams[order[i % order.length]].players.push(E.nbaProspectToPlayer(p, rng)));
+    aiTakes.forEach((p, i) => lg.teams[order[i % order.length]].players.push(E.nbaProspectToPlayer(p, rng, signing)));
     remaining = remaining.filter(p => !aiTakes.includes(p));
   }
   E.nbaOffseason(lg, rng, me);
@@ -865,7 +868,7 @@ console.log('7) The league the lines are set from: taxpayers, the biggest bill a
   if (oldSaveAfterSummer) {
     const o = oldSaveAfterSummer;
     const line = nba.nbaTaxLine(o.cap, o.taxScale);
-    const proj = Object.values(o.teams).map(t => nba.nbaTipOffPayroll(t));
+    const proj = Object.values(o.teams).map(t => nba.nbaTipOffPayroll(t, o.cap));
     const over = proj.filter(p => p > line).length;
     const top = Math.max(...proj.map(p => nba.nbaTaxBill(p, o.cap, false, o.taxScale)));
     ok(7, `an old save calibrated at its first summer tips off with ${TAXPAYERS_BAND[0]} to ${TAXPAYERS_BAND[1]} clubs over its line`, over >= TAXPAYERS_BAND[0] && over <= TAXPAYERS_BAND[1], `${over} over a line of ${line}`);
