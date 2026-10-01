@@ -17,9 +17,9 @@
       "date": "2026-09-07"
     },
     "tennis-chain-validate": {
-      "sha256": "1f354eb5698db3cd3df733441e84bcda9db729d080fa6c7c2f80358339150364",
-      "version": 9,
-      "date": "2026-09-07"
+      "sha256": "22fe873a5de546dd1db6a21261a62e47cdd039fe9de3cdc2d00d06228fb4090c",
+      "version": 10,
+      "date": "2026-09-30"
     },
     "nascar-chain-validate": {
       "sha256": "7ce093a7dd3b0b457deed74e5c403717d0a12141cf28255e406fd9abb96e9ecb",
@@ -27,9 +27,9 @@
       "date": "2026-09-07"
     },
     "soccer-grid-validate": {
-      "sha256": "6aad2815f8211560f9d4b3ac2bf74c1704ca0ffa80fd3778909eb15ab1d5d611",
-      "version": 23,
-      "date": "2026-09-07"
+      "sha256": "b795f2361a3aa8ad0f7e824b48bf5806ae7229627460972f8edbef1cdbfc289f",
+      "version": 24,
+      "date": "2026-09-30"
     },
     "college-grid-validate": {
       "sha256": "ce927fee00d00122bd59881b2580b26e918c6f9aada60487c05e3fde187a771f",
@@ -37,9 +37,14 @@
       "date": "2026-09-07"
     },
     "football-connect4-validate": {
-      "sha256": "2c47fb623f91bcfdf30f88a1c20dc545755026ab4710b102239a291b06e500f3",
-      "version": 12,
-      "date": "2026-09-07"
+      "sha256": "173e874f584d64f7c2aeb943263ff50fcfe85d1c2fd42f70e57d0f179c59b844",
+      "version": 13,
+      "date": "2026-09-30"
+    },
+    "scores-poll": {
+      "sha256": "6ba6255c87b79861542a9521c45b19629ef4483d159d49485e9d12e4956283eb",
+      "version": 10,
+      "date": "2026-09-30"
     }
   },
   "unverified": [
@@ -58,7 +63,6 @@
     "nfl-connect4-validate",
     "nhl-connect4-validate",
     "report-relay",
-    "scores-poll",
     "simulate-season",
     "suggest-players",
     "tennis-daily"
