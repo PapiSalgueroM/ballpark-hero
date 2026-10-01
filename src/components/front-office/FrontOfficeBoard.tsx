@@ -17,6 +17,8 @@ import {
   /* Round 723: the depth chart the sim reads, and the franchise tag. */
   DEPTH_GROUPS, depthChart, swapDepth, starterIds, hasSavedDepth, resetDepth, type DepthPos,
   expiringPlayers, tagRefusal, applyFranchiseTag, franchiseTagSalary,
+  /* Round 828: full rosters, the 53 limit and the practice squad. */
+  deepRosterRefusal, promoteFromPractice, DEEP_ROSTER_MAX, STARTER_SLOTS, type GmPlayer,
 } from '@/lib/frontOffice';
 /* Round 631: a cut costs dead money and the man cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
@@ -128,6 +130,14 @@ export default function FrontOfficeBoard() {
      Both transient; the chart itself lives on the save. */
   const [depthView, setDepthView] = useState<'groups' | DepthPos | null>(null);
   const [depthPick, setDepthPick] = useState<string | null>(null);
+  /* Round 828: a full roster is fifty men, so the Roster box opens on one tile
+     per position group (and one for the practice squad), and the trade lists
+     filter by group. Both transient. starting holds the club whose league is
+     loading its bench, startError says the load failed. */
+  const [rosterGroup, setRosterGroup] = useState<DepthPos | 'practice' | null>(null);
+  const [tradeGroup, setTradeGroup] = useState<DepthPos | 'starters'>('starters');
+  const [starting, setStarting] = useState<string | null>(null);
+  const [startError, setStartError] = useState(false);
   /* Round 190: the live phone call. Transient like the market window:
      never persisted, a reload simply ends the call. */
   const [talks, setTalks] = useState<{ state: TalksState; partner: string; myPieceId: string; wantId: string } | null>(null);
@@ -211,8 +221,26 @@ export default function FrontOfficeBoard() {
     } catch { /* storage full: play on */ }
   }, [phase, titles, seasonsPlayed, draftClass, picksLeft, mandate, trust, fired, pressTilt, seasonTradeLine, champion, playoffRounds, gradeLine]);
 
-  const start = (abbr: string) => {
-    const lg = initLeague();
+  /* Round 828: a new league carries every club's whole roster and practice
+     squad. That data is its own chunk, fetched here on the tap rather than
+     with the page, because a saved league already holds its men and never
+     needs it again. A failed fetch says so and starts nothing: handing the
+     player the old fifteen man league in silence would be a different game
+     than the one he picked. */
+  const start = async (abbr: string) => {
+    if (starting) return;
+    setStarting(abbr);
+    setStartError(false);
+    let depth;
+    try {
+      ({ FO_DEPTH: depth } = await import('@/data/frontOfficeDepth'));
+    } catch {
+      setStarting(null);
+      setStartError(true);
+      return;
+    }
+    setStarting(null);
+    const lg = initLeague(Math.random, { depth });
     const m = mandateFor(lg, abbr, false);
     setLeague(lg);
     setMyTeam(abbr);
@@ -449,6 +477,15 @@ export default function FrontOfficeBoard() {
         ...(myTagged ? [`🏷️ ${myTagged.name} plays the season on the tag, $${myTagged.salary}M guaranteed.`] : []),
         ...(news.tagged.length > 0 ? [`🏷️ ${news.tagged.length} rival club${news.tagged.length === 1 ? '' : 's'} used the franchise tag.`] : []),
         ...news.developed.filter(r => r.team === myTeam).map(r => `📈 ${r.player} develops ${r.from} to ${r.to}.`),
+        /* Round 828: a full roster refills off its own practice squad and cuts down to 53. */
+        ...(() => {
+          const up = (news.promoted ?? []).filter(r => r.team === myTeam).map(r => `${r.player} (${r.pos})`);
+          const down = (news.cutDown ?? []).filter(r => r.team === myTeam).map(r => `${r.player} (${r.pos})`);
+          return [
+            ...(up.length ? [`⬆️ Called up from the practice squad: ${up.join(', ')}.`] : []),
+            ...(down.length ? [`⬇️ The cut to ${DEEP_ROSTER_MAX} sends ${down.join(', ')} to the practice squad.`] : []),
+          ];
+        })(),
       ];
       setNewsFeed(feed.slice(0, 8));
       setFeedSlam(null);
@@ -637,21 +674,28 @@ export default function FrontOfficeBoard() {
           <p className="font-display text-lg font-bold text-foreground">Take over a front office</p>
           <p className="mt-1 text-xs text-muted-foreground">
             Real 2026 rosters, rated off the 2025 season and where each man was
-            drafted. Manage the cap, sign free
+            drafted. The whole club too: every man on the 53 and the practice squad
+            (kickers, punters and long snappers sit this one out). Manage the cap, sign free
             agents, swing trades, survive the injury report, draft the future, and chase a dynasty
             across as many seasons as you can. Saves automatically.
           </p>
+          {startError && (
+            <p data-start-error className="mt-2 text-xs text-destructive">
+              The rosters did not load. Check your connection and tap your team again.
+            </p>
+          )}
         </div>
         <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
           {FO_TEAMS.map(t => (
             <button
               key={t.abbr}
               onClick={() => start(t.abbr)}
-              className="rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60"
+              disabled={!!starting}
+              className="rounded-lg border border-border bg-card px-2 py-2 text-left transition-all hover:scale-[1.02] hover:border-primary/60 disabled:opacity-60"
             >
               <span className="block h-1.5 w-full rounded-full" style={{ background: t.color }} />
               <span className="mt-1.5 block truncate text-xs font-bold text-foreground">{t.city} {t.name}</span>
-              <span className="block truncate text-[10px] text-muted-foreground">{t.division}</span>
+              <span className="block truncate text-[10px] text-muted-foreground">{starting === t.abbr ? 'Loading the roster...' : t.division}</span>
             </button>
           ))}
         </div>
@@ -782,6 +826,7 @@ export default function FrontOfficeBoard() {
             <p className="mt-1 text-xs text-muted-foreground">
               You hold <b className="text-gold">{picksLeft}</b> pick{picksLeft === 1 ? '' : 's'}. Scout grades carry error:
               the number on the card is what your scouts THINK. Every pick joins your roster as a player, defenders included.
+              {my.rosterDepth === 2 && ` The roster limit is ${DEEP_ROSTER_MAX}: if the picks take you over it, the offseason sends your lowest rated men who do not start to the practice squad.`}
             </p>
           )}
         </div>
@@ -874,8 +919,15 @@ export default function FrontOfficeBoard() {
   const conf = conferenceOf(myTeam);
   const confTable = standings(league.teams).filter(x => conferenceOf(x.abbr) === conf);
   const myLast = weekResults.find(g => g.home === myTeam || g.away === myTeam);
+  /* Round 828: on a full roster the men on the chart's starting lines, hurt or
+     not, are the ones the boxes talk about; the bench is counted, not quoted. */
+  const deep = my.rosterDepth === 2;
+  const chartNow = depthChart(my);
+  const chartStarters = deep ? DEPTH_GROUPS.flatMap(g => chartNow[g].slice(0, STARTER_SLOTS[g])) : null;
   const tiles = foHubTiles({
     roster: my.players.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    starters: chartStarters?.map(p => ({ name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
+    rosterMax: deep ? DEEP_ROSTER_MAX : undefined,
     freeAgents: league.freeAgents.map(p => ({ id: p.id, name: p.name, pos: p.pos, age: p.age, ovr: p.ovr, salary: p.salary, out: p.out })),
     capRoom: room,
     /* Round 631: the box offers only men the sign path would take. The NFL has no roster ceiling. */
@@ -906,15 +958,114 @@ export default function FrontOfficeBoard() {
     tradeLine: seasonTradeLine,
     titles,
   });
-  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setDepthView(null); setDepthPick(null); setTab(key === 'play' ? 'week' : key); };
+  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setDepthView(null); setDepthPick(null); setRosterGroup(null); setTab(key === 'play' ? 'week' : key); };
   /* Round 723: the chart the sim reads, and who it counts as starting today. */
-  const chart = depthChart(my);
+  const chart = chartNow;
   const starters = starterIds(my);
+  /* Round 828: the roster limit on a full roster, and the line the market box and the Sign buttons show at it. */
+  const fullBlock = deepRosterRefusal(my);
+  const practice = my.practice ?? [];
+  /* Round 828: the opening rating of a man with no season behind him is his
+     draft spot, and the roster says so until the first title is decided. */
+  const noTape = (p: GmPlayer) => p.noSeason && league.champions.length === 0 ? ' · no 2025 season, rated on draft spot' : '';
+  /* Round 828: the trade lists on a full roster, one group at a time, or the men the chart starts. */
+  const tradeFilter = (team: typeof my, list: GmPlayer[]) => {
+    if (team.rosterDepth !== 2) return list;
+    if (tradeGroup === 'starters') {
+      const ch = depthChart(team);
+      const on = new Set(DEPTH_GROUPS.flatMap(g => ch[g].slice(0, STARTER_SLOTS[g]).map(p => p.id)));
+      return list.filter(p => on.has(p.id));
+    }
+    return list.filter(p => p.pos === tradeGroup);
+  };
+  const tradeChips = deep && (
+    <div data-trade-groups className="flex flex-wrap items-center justify-center gap-1">
+      {(['starters', ...DEPTH_GROUPS] as (DepthPos | 'starters')[]).map(g => (
+        <button
+          key={g}
+          onClick={() => setTradeGroup(g)}
+          className={cn(
+            'rounded-full border px-2 py-0.5 text-[10px] font-bold',
+            tradeGroup === g ? 'border-gold bg-gold/10 text-foreground' : 'border-border text-muted-foreground hover:text-foreground',
+          )}
+        >
+          {g === 'starters' ? 'Starters' : g}
+        </button>
+      ))}
+    </div>
+  );
+  /* Round 828: call a practice squad man up. The engine refuses at the limit. */
+  const doPromote = (pid: string) => {
+    if (!league) return;
+    const lg: LeagueState = JSON.parse(JSON.stringify(league));
+    const t = lg.teams[myTeam];
+    const man = t.practice?.find(p => p.id === pid);
+    if (man && promoteFromPractice(t, pid)) {
+      slamFeed(`⬆️ ${man.name} (${man.pos}) is called up from the practice squad.`);
+      setLeague(lg);
+      persist({}, lg, myTeam);
+    }
+  };
   /* Round 631: dead money on the cap line, only when there is any. */
   const dead = deadCapUsed(my);
   /* Round 631: at the roster floor the engine refuses every cut, so every Cut says why and waits. */
   const cutBlock = cutRefusal(my, NFL_ROSTER_MIN);
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'week' : x.key) === tab)?.title ?? '';
+
+  /* Round 631 and 828: one roster row, with its Cut button, shared by the
+     fifteen man list and a full roster's group lists. */
+  const rosterRow = (p: GmPlayer) => {
+    /* Round 631: the cost is on screen before the second tap. */
+    const cost = deadMoneyFor(p);
+    const arming = cutArmed === p.id;
+    return (
+    <div key={p.id} data-roster-row={p.id} className="rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
+      <div className="flex items-center justify-between">
+      <span className="min-w-0">
+        <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>
+          {p.name} {p.out > 0 ? `(out ${p.out}w)` : ''}
+        </span>
+        <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}{p.tagSeason === league.season ? ' · 🏷️ tagged' : ''}{noTape(p)}</span>
+      </span>
+      <span className="ml-2 flex shrink-0 items-center gap-1.5">
+        <b className="text-primary">{p.ovr}</b>
+        <button
+          onClick={() => setCutArmed(arming ? null : p.id)}
+          disabled={!!cutBlock}
+          title={cutBlock ?? `Cut him and $${cost.now}M stays on this season's cap`}
+          className={cn('rounded-full border border-border px-2 py-0.5 text-[10px] disabled:opacity-40',
+            arming ? 'text-foreground' : 'text-muted-foreground hover:border-destructive hover:text-destructive')}
+        >
+          {arming ? 'Keep' : `Cut, $${cost.now}M dead`}
+        </button>
+      </span>
+      </div>
+      {arming && (
+        <div className="mt-1.5 rounded-lg border border-destructive/50 bg-destructive/10 p-2 space-y-1.5" data-cut-confirm>
+          <p className="text-[10px] text-foreground">
+            Cut {p.name}? {p.guaranteed
+              ? `His deal is fully guaranteed, so all $${cost.now}M stays on this season's cap as dead money`
+              : `$${cost.now}M of his $${p.salary}M stays on this season's cap as dead money${cost.next > 0 ? `, and $${cost.next}M lands on next season's` : ''}`}. He goes to the pool and you cannot sign him back until the offseason.
+          </p>
+          <div className="flex gap-1.5">
+            <button
+              onClick={() => doRelease(p.id)}
+              className="flex-1 rounded-lg bg-destructive px-2 py-1 text-[10px] font-bold text-destructive-foreground hover:opacity-90"
+            >
+              Cut him
+            </button>
+            <button
+              onClick={() => setCutArmed(null)}
+              className="flex-1 rounded-lg bg-secondary px-2 py-1 text-[10px] font-bold text-foreground hover:opacity-90"
+            >
+              Keep him
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+    );
+  };
 
   return (
     <div className="space-y-4">
@@ -1066,66 +1217,98 @@ export default function FrontOfficeBoard() {
             );
           })()}
           {cutBlock && depthView === null && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
-          {depthView === null && <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
-            {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => {
-              /* Round 631: the cost is on screen before the second tap. */
-              const cost = deadMoneyFor(p);
-              const arming = cutArmed === p.id;
-              return (
-              <div key={p.id} data-roster-row={p.id} className="rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
-                <div className="flex items-center justify-between">
-                <span className="min-w-0">
-                  <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>
-                    {p.name} {p.out > 0 ? `(out ${p.out}w)` : ''}
-                  </span>
-                  <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}{p.tagSeason === league.season ? ' · 🏷️ tagged' : ''}</span>
-                </span>
-                <span className="ml-2 flex shrink-0 items-center gap-1.5">
-                  <b className="text-primary">{p.ovr}</b>
-                  <button
-                    onClick={() => setCutArmed(arming ? null : p.id)}
-                    disabled={!!cutBlock}
-                    title={cutBlock ?? `Cut him and $${cost.now}M stays on this season's cap`}
-                    className={cn('rounded-full border border-border px-2 py-0.5 text-[10px] disabled:opacity-40',
-                      arming ? 'text-foreground' : 'text-muted-foreground hover:border-destructive hover:text-destructive')}
-                  >
-                    {arming ? 'Keep' : `Cut, $${cost.now}M dead`}
-                  </button>
-                </span>
-                </div>
-                {arming && (
-                  <div className="mt-1.5 rounded-lg border border-destructive/50 bg-destructive/10 p-2 space-y-1.5" data-cut-confirm>
-                    <p className="text-[10px] text-foreground">
-                      Cut {p.name}? {p.guaranteed
-                        ? `His deal is fully guaranteed, so all $${cost.now}M stays on this season's cap as dead money`
-                        : `$${cost.now}M of his $${p.salary}M stays on this season's cap as dead money${cost.next > 0 ? `, and $${cost.next}M lands on next season's` : ''}`}. He goes to the pool and you cannot sign him back until the offseason.
-                    </p>
-                    <div className="flex gap-1.5">
-                      <button
-                        onClick={() => doRelease(p.id)}
-                        className="flex-1 rounded-lg bg-destructive px-2 py-1 text-[10px] font-bold text-destructive-foreground hover:opacity-90"
-                      >
-                        Cut him
-                      </button>
-                      <button
-                        onClick={() => setCutArmed(null)}
-                        className="flex-1 rounded-lg bg-secondary px-2 py-1 text-[10px] font-bold text-foreground hover:opacity-90"
-                      >
-                        Keep him
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-              );
-            })}
+          {depthView === null && !deep && <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
+            {[...my.players].sort((a, b) => b.ovr - a.ovr).map(rosterRow)}
           </div>}
+          {/* Round 828: a full roster opens on one tile per group and one for the practice squad. */}
+          {depthView === null && deep && rosterGroup === null && (
+            <div data-roster-groups className="space-y-2">
+              <p className="text-center text-[10px] text-muted-foreground">
+                {my.players.length} of {DEEP_ROSTER_MAX} on the roster{fullBlock ? ', so signing anybody means a cut first' : ''}. Tap a group to see its men.
+              </p>
+              <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-3">
+                {DEPTH_GROUPS.map(pos => {
+                  const men = my.players.filter(p => p.pos === pos);
+                  const hurt = men.filter(p => p.out > 0).length;
+                  const top = chart[pos][0];
+                  return (
+                    <button
+                      key={pos}
+                      data-roster-group={pos}
+                      onClick={() => { setRosterGroup(pos); setCutArmed(null); }}
+                      className="rounded-lg border border-border/60 bg-background px-2 py-1.5 text-left hover:border-primary/60"
+                    >
+                      <span className="block text-xs font-bold text-foreground">
+                        {pos} <span className="font-normal text-muted-foreground">· {men.length}{hurt > 0 ? `, ${hurt} out` : ''}</span>
+                      </span>
+                      <span className="block truncate text-[10px] text-muted-foreground">{top ? `${top.name} ${top.ovr}` : 'Nobody'}</span>
+                    </button>
+                  );
+                })}
+                <button
+                  data-roster-group="practice"
+                  onClick={() => { setRosterGroup('practice'); setCutArmed(null); }}
+                  className="rounded-lg border border-gold/40 bg-background px-2 py-1.5 text-left hover:border-gold"
+                >
+                  <span className="block text-xs font-bold text-foreground">Practice squad <span className="font-normal text-muted-foreground">· {practice.length}</span></span>
+                  <span className="block truncate text-[10px] text-muted-foreground">Off the roster, off the cap</span>
+                </button>
+              </div>
+            </div>
+          )}
+          {depthView === null && deep && rosterGroup !== null && (
+            <div data-roster-group-open={rosterGroup} className="space-y-2">
+              <div className="flex items-center gap-2">
+                <button onClick={() => { setRosterGroup(null); setCutArmed(null); }} className="inline-flex items-center gap-1 rounded-full border border-border bg-background px-3 py-2 text-xs font-semibold text-muted-foreground hover:border-primary hover:text-foreground">
+                  <ChevronLeft className="h-3.5 w-3.5" /> Groups
+                </button>
+                <span className="font-display text-sm font-bold text-foreground">
+                  {rosterGroup === 'practice' ? `Practice squad, ${practice.length}` : `${rosterGroup}, ${my.players.filter(p => p.pos === rosterGroup).length} men`}
+                </span>
+              </div>
+              {rosterGroup === 'practice' ? (
+                <>
+                  <p className="text-center text-[10px] text-muted-foreground">
+                    Real men who practise with the club. They do not play and do not count against the cap. Call one up when you have a spot on the {DEEP_ROSTER_MAX}.
+                  </p>
+                  {fullBlock && <p data-practice-full className="text-center text-[10px] text-destructive">{fullBlock}</p>}
+                  <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                    {practice.length === 0 && <p className="text-center text-[10px] text-muted-foreground">Nobody left on the practice squad.</p>}
+                    {[...practice].sort((a, b) => b.ovr - a.ovr).map(p => (
+                      <div key={p.id} data-practice-row={p.id} className="flex items-center justify-between rounded-lg border border-border/60 bg-background px-2.5 py-1.5 text-xs">
+                        <span className="min-w-0">
+                          <span className="block truncate font-bold text-foreground">{p.name}</span>
+                          <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y{noTape(p)}</span>
+                        </span>
+                        <span className="ml-2 flex shrink-0 items-center gap-1.5">
+                          <b className="text-primary">{p.ovr}</b>
+                          <button
+                            onClick={() => doPromote(p.id)}
+                            disabled={!!fullBlock}
+                            title={fullBlock ?? `Call ${p.name} up to the roster at $${p.salary}M`}
+                            className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40"
+                          >
+                            Call up
+                          </button>
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              ) : (
+                <div className="grid grid-cols-1 gap-1 sm:grid-cols-2">
+                  {[...my.players].filter(p => p.pos === rosterGroup).sort((a, b) => b.ovr - a.ovr).map(rosterRow)}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
 
       {tab === 'market' && (
         <div className="rounded-2xl border border-border bg-card p-3">
           <p className="mb-2 text-center text-xs text-muted-foreground">Free agents (cap room ${room}M). Cut players land here too, but a man you cut waits until next season.</p>
+          {fullBlock && <p data-market-full className="mb-2 text-center text-[10px] text-destructive">{fullBlock}</p>}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
             {[...league.freeAgents].sort((a, b) => b.ovr - a.ovr).slice(0, 24).map(p => {
               /* Round 631: the engine's own refusal, so the button is never
@@ -1142,7 +1325,7 @@ export default function FrontOfficeBoard() {
                   <b className="text-primary">{p.ovr}</b>
                   <button
                     onClick={() => doSign(p.id)}
-                    disabled={p.salary > room || !!refusal}
+                    disabled={p.salary > room || !!refusal || !!fullBlock}
                     title={refusal ?? undefined}
                     className="rounded-full bg-primary px-2.5 py-0.5 text-[10px] font-bold text-primary-foreground disabled:opacity-40"
                   >
@@ -1162,8 +1345,9 @@ export default function FrontOfficeBoard() {
           <div className="rounded-xl border border-gold/30 bg-gold/5 p-2.5 space-y-2">
             <p className="text-center text-[11px] font-bold text-foreground">🔍 Trade Finder</p>
             <p className="text-center text-[10px] text-muted-foreground">Pick one of your players and shop him. Only deals the AI genuinely accepts show up, cap checked.</p>
+            {tradeChips}
             <div className="grid grid-cols-2 gap-1">
-              {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
+              {tradeFilter(my, [...my.players]).sort((a, b) => b.ovr - a.ovr).map(p => (
                 <button key={p.id} onClick={() => { setMyTradePiece(p.id); setShopOffers([]); setShopTried(false); }} className={cn('flex items-center justify-between rounded-lg border px-2 py-1 text-[11px]', myTradePiece === p.id ? 'border-gold bg-gold/10' : 'border-border/60 bg-background')}>
                   <span className="truncate text-foreground">{p.name} ({p.pos})</span><b className="text-primary">{p.ovr}</b>
                 </button>
@@ -1220,7 +1404,7 @@ export default function FrontOfficeBoard() {
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You send</p>
-                  {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => (
+                  {tradeFilter(my, [...my.players]).sort((a, b) => b.ovr - a.ovr).map(p => (
                     <button
                       key={p.id}
                       onClick={() => setMyTradePiece(p.id)}
@@ -1235,7 +1419,7 @@ export default function FrontOfficeBoard() {
                 </div>
                 <div className="space-y-1">
                   <p className="text-center text-[10px] font-bold uppercase text-muted-foreground">You get ({tradePartner})</p>
-                  {[...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr).map(p => {
+                  {tradeFilter(league.teams[tradePartner], [...league.teams[tradePartner].players]).sort((a, b) => b.ovr - a.ovr).map(p => {
                     /* Round 631: the trade paths refuse a man you cut this season, so the screen says so. */
                     const back = tradeRefusal(my, p.id);
                     return (
