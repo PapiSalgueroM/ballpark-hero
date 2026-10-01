@@ -1,5 +1,15 @@
 # Work board
 
+**2026-10-01, Codex829 CLAIMED: NBA Chain stable timeline (spec97/no-scroll).**
+Own src/pages/NbaChain.tsx, adjacent NbaChainFeedback.module.css,
+src/test/nbaChainFeedback.test.tsx and scripts/simNbaChainFeedback.mjs.
+Replace document-moving scrollIntoView with list-only reveal after accepted
+links. Add finite newest-link feedback, static reduced motion, full-name wrapping
+and44px owned controls. Preserve original validation, scores, saves and share;
+mount, no-op, rejected/unverified responses and resets must stay quiet.
+828/831 active;830 reserved. Claude819-827 unchanged. Next free round832.
+
+
 **2026-10-01, Codex831 CLAIMED: Guess The Nation feedback (spec97).**
 Own GuessTheNationBoard.tsx, local GuessTheNationFeedback.module.css,
 src/test/guessTheNationFeedback.test.tsx and scripts/simGuessTheNationFeedback.mjs.
