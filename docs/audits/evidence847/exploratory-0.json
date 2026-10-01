@@ -1,0 +1,54 @@
+{
+  "findings": [],
+  "skipped": [
+    {
+      "game": "/nba-stat-line",
+      "detail": "played 10 presses then ran out of controls with an answer box still open, so the way on is a real answer the harness cannot invent"
+    }
+  ],
+  "routes": [
+    "/afl-higher-lower",
+    "/baseball-connections",
+    "/buzzer-beater",
+    "/champ-or-not",
+    "/connections",
+    "/conquest-nba",
+    "/dart-draft",
+    "/f1-constructor",
+    "/face-off",
+    "/fight-promoter",
+    "/footle",
+    "/golf-higher-lower",
+    "/guess-tennis-player",
+    "/guess-the-nation",
+    "/higher-lower",
+    "/hof-or-bust",
+    "/minefield",
+    "/missing-nine",
+    "/mlb-gauntlet-draft",
+    "/mystery-box",
+    "/nba-connect-4",
+    "/nba-grid",
+    "/nba-stat-line",
+    "/nfl-gauntlet-draft",
+    "/nhl-connections",
+    "/perfect-lineup-f1",
+    "/perfect-season-mlb",
+    "/perfect-season-nhl",
+    "/puck-detective",
+    "/rarity-round",
+    "/search-and-discard",
+    "/soccer-conquest",
+    "/sports-millionaire",
+    "/stat-detective",
+    "/tennis-higher-lower",
+    "/ufc-chain",
+    "/wonderkid-factory"
+  ],
+  "steps": 14,
+  "viewport": [
+    320,
+    900
+  ],
+  "limitation": "Exploratory UI path only; blocked mutations and unverified validators do not establish game completeness."
+}

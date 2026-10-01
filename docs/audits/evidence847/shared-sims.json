@@ -1,0 +1,367 @@
+{
+  "generated": "2026-10-01T23:03:03.951Z",
+  "mode": "Audit only, no fixes",
+  "scope": "NFL and NHL Front Office live UI, native full seasons/playoffs/drafts, save reloads, rapid actions, trade roster reachability and deliberately corrupted local saves.",
+  "baselines": {
+    "earlierSharedLiveEntry": {
+      "url": "https://douknowball.com/assets/index-Bj5VrkKR.js",
+      "sha256": "6eced98c8c90fd858df03d786ad4d821044e4849abd2b0bc5376bee437a55051",
+      "limit": "Captured by the earlier shared audit. Entry URL was not captured for each full-season context, so it is not asserted as a per-season asset identity."
+    },
+    "currentFindingEntry": {
+      "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+      "status": 200,
+      "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+    },
+    "local": {
+      "url": "http://127.0.0.1:4930",
+      "commit": "8542bf83",
+      "runtime": "40947",
+      "serverOwnedBy": "root"
+    }
+  },
+  "findings": [
+    {
+      "id": "SHARED-SIM-01",
+      "severity": "P2",
+      "title": "NHL trade screen makes roster players below the first eight unreachable",
+      "url": "https://douknowball.com/nhl-front-office",
+      "versions": [
+        "Current live index-E8L0RxXO.js, exact hash recorded below",
+        "Earlier phone and desktop live season runs"
+      ],
+      "steps": [
+        "Start a Florida Panthers franchise, answer the opening press question and open Trades.",
+        "Compare the 13-player roster to Trade Finder and the manual send list.",
+        "Choose Anaheim as the trading partner and inspect the receive list."
+      ],
+      "expected": "The roster players eligible for the existing trade helpers should be reachable, directly or through paging/filter controls.",
+      "actual": "Finder and send list each expose the eight highest-rated Florida players. Aaron Ekblad, Gustav Forsling, Uvis Balinskis, Akira Schmid and Jacob Markstrom are absent, including both available goalies. Anaheim receive rows expose eight IDs from its 13-player roster. There is no paging or targeting control to reveal the remaining players.",
+      "evidence": {
+        "ownPlayers": 13,
+        "hiddenOwn": [
+          {
+            "id": "h1k3fn2k1y5q4do-152",
+            "name": "Aaron Ekblad",
+            "ovr": 85,
+            "pos": "D"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-153",
+            "name": "Gustav Forsling",
+            "ovr": 84,
+            "pos": "D"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-154",
+            "name": "Uvis Balinskis",
+            "ovr": 80,
+            "pos": "D"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-155",
+            "name": "Akira Schmid",
+            "ovr": 78,
+            "pos": "G"
+          },
+          {
+            "id": "h1k3fn2k1y5q4do-156",
+            "name": "Jacob Markstrom",
+            "ovr": 77,
+            "pos": "G"
+          }
+        ],
+        "receiveRows": 8,
+        "partnerPlayers": 13,
+        "receiveIds": [
+          "h1k3fn2k1y5q4do-1",
+          "h1k3fn2k1y5q4do-2",
+          "h1k3fn2k1y5q4do-3",
+          "h1k3fn2k1y5q4do-8",
+          "h1k3fn2k1y5q4do-4",
+          "h1k3fn2k1y5q4do-5",
+          "h1k3fn2k1y5q4do-6",
+          "h1k3fn2k1y5q4do-7"
+        ],
+        "saveQuiet": true,
+        "screenshots": [
+          "sim-current-NHL-trade.png",
+          "sim-NHL-320-trade.png",
+          "sim-NHL-1440-trade.png"
+        ],
+        "receipt": "shared-sims-current-trade.json"
+      },
+      "possibleCause": "Three explicit rating-sorted slice(0, 8) calls in NhlFrontOfficeBoard.tsx bound Finder, manual send and receive.",
+      "limits": "Manual targeting was inspected without accepting a trade. This does not allege that all proposals should be accepted or that injured/invalid proposals must pass."
+    },
+    {
+      "id": "SHARED-SIM-02",
+      "severity": "P2",
+      "title": "Structured corrupted saves trap NFL and NHL in a permanent error/retry loop",
+      "urls": [
+        "https://douknowball.com/front-office",
+        "https://douknowball.com/nhl-front-office"
+      ],
+      "prerequisite": "Deliberately corrupted localStorage save. This was not encountered during ordinary season play.",
+      "steps": [
+        "Create a native saved franchise.",
+        "For NFL, edit front-office-save-v1 so league.week is 0, preserving the rest of its valid JSON. Alternatively delete league.schedule.",
+        "For NHL, delete league.freeAgents in nhl-front-office-save-v1 while preserving the rest of its valid JSON.",
+        "Reload, then activate Try this page again."
+      ],
+      "expected": "Reject the invalid saved shape and permit a fresh franchise or provide a safe clear-save/reset recovery action.",
+      "actual": "Both routes render This page broke. Try this page again reloads into the same error. The raw damaged save is retained and the game reset is unavailable in that error screen. The recovery buttons are retry and Back to the games; neither clears the unusable game state.",
+      "evidence": {
+        "currentLiveBroken": [
+          {
+            "sport": "NFL",
+            "broken": true,
+            "retryBroken": true,
+            "rawHeld": true,
+            "retryRawHeld": true,
+            "entries": [
+              {
+                "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+                "status": 200,
+                "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+              }
+            ]
+          },
+          {
+            "sport": "NHL",
+            "broken": true,
+            "retryBroken": true,
+            "rawHeld": true,
+            "retryRawHeld": true,
+            "entries": [
+              {
+                "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+                "status": 200,
+                "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+              }
+            ]
+          }
+        ],
+        "localReproductions": [
+          {
+            "sport": "NFL",
+            "kind": "zeroPeriod",
+            "broken": true,
+            "retryStillBroken": true,
+            "rawHeld": true,
+            "retryRawHeld": true
+          },
+          {
+            "sport": "NHL",
+            "kind": "missingFreeAgents",
+            "broken": true,
+            "retryStillBroken": true,
+            "rawHeld": true,
+            "retryRawHeld": true
+          }
+        ],
+        "screenshots": [
+          "sim-current-NFL-corrupt.png",
+          "sim-current-NHL-corrupt.png",
+          "sim-corrupt-final-NFL-zeroPeriod-local.png",
+          "sim-corrupt-final-NHL-missingFreeAgents-local.png"
+        ],
+        "receipts": [
+          "shared-sims-current-entry.json",
+          "shared-sims-corruption-final.json"
+        ]
+      },
+      "possibleCause": "Restore accepts any object containing league/myTeam, then renders unchecked nested fields. NFL dereferences schedule[week - 1].find; NHL maps freeAgents. RouteErrorBoundary preserves the broken save but provides no game-specific reset.",
+      "limits": "Malformed JSON safely returns to the club picker in both games. No natural corruption event, legacy migration regression or loss of an otherwise valid save was established."
+    }
+  ],
+  "coverage": {
+    "completedSeasonContexts": [
+      {
+        "sport": "NFL",
+        "url": "https://douknowball.com/front-office",
+        "width": 320,
+        "motion": "no-preference",
+        "periods": 17,
+        "draftPicks": 3,
+        "finishedRecord": {
+          "wins": 10,
+          "losses": 7
+        },
+        "seasonCounter": 1,
+        "championRows": 1,
+        "initialReloadQuiet": true,
+        "recapReloadQuiet": true,
+        "nextSeason": 2027,
+        "nextPhase": "hub",
+        "nextReloadQuiet": true,
+        "errors": [],
+        "overflow": 0
+      },
+      {
+        "sport": "NFL",
+        "url": "https://douknowball.com/front-office",
+        "width": 1440,
+        "motion": "reduce",
+        "periods": 17,
+        "draftPicks": 3,
+        "finishedRecord": {
+          "wins": 11,
+          "losses": 6
+        },
+        "seasonCounter": 1,
+        "championRows": 1,
+        "initialReloadQuiet": true,
+        "recapReloadQuiet": true,
+        "nextSeason": 2027,
+        "nextPhase": "hub",
+        "nextReloadQuiet": true,
+        "errors": [],
+        "overflow": 0
+      },
+      {
+        "sport": "NHL",
+        "url": "https://douknowball.com/nhl-front-office",
+        "width": 320,
+        "motion": "no-preference",
+        "periods": 20,
+        "draftPicks": 2,
+        "finishedRecord": {
+          "wins": 53,
+          "losses": 32,
+          "otLosses": 8
+        },
+        "seasonCounter": 1,
+        "championRows": 1,
+        "initialReloadQuiet": true,
+        "recapReloadQuiet": true,
+        "nextSeason": 2027,
+        "nextPhase": "hub",
+        "nextReloadQuiet": true,
+        "errors": [],
+        "overflow": 0
+      },
+      {
+        "sport": "NHL",
+        "url": "https://douknowball.com/nhl-front-office",
+        "width": 1440,
+        "motion": "reduce",
+        "periods": 20,
+        "draftPicks": 2,
+        "finishedRecord": {
+          "wins": 43,
+          "losses": 34,
+          "otLosses": 6
+        },
+        "seasonCounter": 1,
+        "championRows": 1,
+        "initialReloadQuiet": true,
+        "recapReloadQuiet": true,
+        "nextSeason": 2027,
+        "nextPhase": "hub",
+        "nextReloadQuiet": true,
+        "errors": [],
+        "overflow": 0
+      }
+    ],
+    "periodsTotal": 74,
+    "draftPicksTotal": 10,
+    "rapidActions": [
+      {
+        "sport": "NFL",
+        "receipt": "shared-sims-current-entry.json",
+        "bundle": {
+          "url": "https://douknowball.com/assets/index-E8L0RxXO.js",
+          "status": 200,
+          "sha256": "640820ed3b9ead81190861c4b061326a372e9c942067b3440d16e5e8cdea2e0b"
+        },
+        "finalHeldEnterSeasonCount": 1,
+        "recapReloadQuiet": true,
+        "heldDraftPicksBefore": 3,
+        "heldDraftPicksAfter": 2,
+        "doubleDraftFinal": "hub",
+        "nextSeason": 2027,
+        "uniqueIds": true
+      },
+      {
+        "sport": "NHL",
+        "receipt": "shared-sims-spam-final.json",
+        "finalHeldEnterSeasonCount": 1,
+        "recapReloadQuiet": true,
+        "heldDraftPicksBefore": 2,
+        "heldDraftPicksAfter": 1,
+        "doubleDraftFinal": "hub",
+        "nextSeason": 2027,
+        "uniqueIds": true,
+        "limit": "No per-context entry capture in this rapid-action run."
+      }
+    ],
+    "malformedJson": [
+      {
+        "sport": "NFL",
+        "clubPickerReturned": true,
+        "broken": false,
+        "errors": []
+      },
+      {
+        "sport": "NHL",
+        "clubPickerReturned": true,
+        "broken": false,
+        "errors": []
+      }
+    ],
+    "nflWholeRoster": [
+      {
+        "width": 320,
+        "roster": 15,
+        "exposed": 15,
+        "lowestName": "Drue Tranquill",
+        "lowestSelectable": true,
+        "selectionSaveQuiet": true
+      },
+      {
+        "width": 1440,
+        "roster": 15,
+        "exposed": 15,
+        "lowestName": "Drue Tranquill",
+        "lowestSelectable": true,
+        "selectionSaveQuiet": true
+      }
+    ],
+    "errorsInAcceptedFullSeasons": 0,
+    "horizontalOverflowInAcceptedFullSeasons": 0
+  },
+  "limits": [
+    "No authenticated score, account, signup, report, impression or analytics write was made. All non-GET and vendor requests were aborted in disposable contexts.",
+    "Recorded booking network calls were blocked, so successful remote booking is not credited. Local franchise saves and native game outcomes were inspected.",
+    "Real-player roster/stat correctness was not independently researched in this lane. Generated simulation outcomes were not presented as sports facts.",
+    "One franchise per game was completed at each viewport; unlimited multi-season longevity and every club/offer were not tested.",
+    "The NHL guide explicitly calls the season roughly four games per round / 82-game-shaped, so variable played-game totals are not labeled an absent feature or a defect here.",
+    "Initial failed locators, a slow live fetch and premature reload checks are preserved below as harness limitations. They are not site findings.",
+    "Early rapid-action copies re-injected their initial save on every document; their reload/draft conclusions are invalid and are superseded by one-time injection receipts.",
+    "One late corruption replay observed a loading page before mount; that observation is not recovery credit. Current-entry replay waits for mounted game/error content and confirms both error loops."
+  ],
+  "rawReceipts": [
+    "shared-sims-probe.json",
+    "shared-sims-play.json",
+    "shared-sims-play-retry.json",
+    "shared-sims-corruption.json",
+    "shared-sims-corruption-local.json",
+    "shared-sims-corruption-final.json",
+    "shared-sims-spam.json",
+    "shared-sims-spam-tail.json",
+    "shared-sims-spam-final.json",
+    "shared-sims-current-entry.json",
+    "shared-sims-current-trade.json"
+  ],
+  "cleanup": {
+    "allOwnedBrowsersClosed": true,
+    "allOwnedContextsClosed": true,
+    "ownedServers": 0,
+    "root4930ServerUnchanged": true,
+    "productEdits": 0,
+    "gitMutations": 0,
+    "accountWrites": 0,
+    "adRequestsSent": 0
+  }
+}

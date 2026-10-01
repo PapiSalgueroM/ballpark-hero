@@ -20,6 +20,18 @@ all 64 selected local RAW hashes held. Existing 31 Higher or Lower checks and
 No permanent tests or production data corrections were added. Simulation and
 broader gameplay evidence are still in progress, not credited as complete.
 
+Further audit evidence: seven full Front Office regular-season UI runs and
+14 original draft picks, one Club Manager season into its second, Footle Daily
+and Unlimited completions,111 exploratory short-game routes, and Soccer Career
+creation16 through retirement45. Retirement declines lost six seasons and
+desynchronized age/calendar. NBA/MLB schedules give unequal win opportunities;
+NBA/NHL trade screens omit roster depth. Current-live save/crash and Footle
+currency receipts are delivered. These are findings, not repairs or proof of
+whole-game completeness. Claude's Release P was merged and published during
+the audit; current observed entry is E8L0RxXO, while the clean gate remains old.
+The remaining audit work is the four American career flows, complete reserved
+ad-slot inventory and final recommendations/coverage matrix.
+
 ## Owner priority, clarified 2026-10-01
 
 AdSense approval comes first. Existing games must then have correct data and

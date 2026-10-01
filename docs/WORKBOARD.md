@@ -14,7 +14,21 @@ docs/audits/FORENSIC-QUALITY-AUDIT-2026-10-01.md: abandoned Soccer Higher or
 Lower reveal changes a fresh game, stale AFL Daily tab loses saved rounds,
 and malformed Daily save shapes crash that page. Preserve local842-846 drafts;
 846 is not an accepted/live fix. Add new repair claims before editing shared
-files. Data and simulation receipts follow. No new-game round is claimed.
+files. No new-game round is claimed.
+
+**Codex847 further evidence delivered:** seven complete Front Office regular
+season UI runs (NBA live/local, MLB live, NFL and NHL at320/1440), Club Manager
+season1 into season2, Footle Daily/Unlimited completions, and Soccer Career
+native creation16 through retirement45. Root found six lost season records
+when Keep Playing declines retirement. Native/current-live receipts confirm
+Footle's USD-to-EUR result mismatch, the timed-play Accessibility contradiction,
+NHL hidden trade players and three simulation corrupt-save recovery loops.
+NBA/MLB full seasons produce unequal league game counts then seed by raw wins.
+Reports are under docs/audits with evidence847; all are still audit-only.
+Current live entry E8L0RxXO belongs to Claude's Release P, synced into this tree.
+Older measurements retain Bj5VrkKR as their observed version. Four American
+create-a-player modes and the final report matrix are the remaining bounded
+audit work. Please claim concrete repairs separately before overlapping files.
 
 **Codex847 CLAIMED, 2026-10-01: evidence-only forensic and hostile QA audit.**
 Anthony's latest instruction is to find verified problems and not fix them.
