@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Round 90: index.html must never be cached. The hashed asset files
+         under /assets are immutable and still cache normally; only this
+         document has to stay fresh so a returning player always gets the
+         newest chunk names. -->
+    
+    
+    
+    <title>Aussie Rules Manager: Free Footy Management Game</title>
+    <!-- Round 69: static AdSense account association. The ad script itself stays
+         consent gated below; this meta tag just makes the site-to-account link
+         visible to Google's crawler on the raw HTML, no consent needed. -->
+    <meta name="google-adsense-account" content="ca-pub-2929318086316376">
+    <meta name="msvalidate.01" content="9C0F485E90B6744EF88628240F61B9E1">
+    <meta name="yandex-verification" content="78b02f385cab3272">
+    
+    <!-- Round 265: the home page's canonical, in the template rather than in
+         the app. Every OTHER page carries one because the prerenderer captures
+         the head after React has drawn it, but the home page is deliberately
+         not prerendered (the host regenerates it every build), so its canonical
+         only existed once JavaScript ran. Measured on the live site with
+         JavaScript off and a Googlebot user agent: ten pages checked, ten
+         canonicals, and the one that was missing was the home page. It is also
+         the page most likely to collect tracking parameters from shares, which
+         is exactly what a self referencing canonical is for. -->
+    
+
+    <!-- Round 281: who this site is, in the template rather than at runtime.
+
+         Every other page ships as a snapshot whose head is copied verbatim from
+         the build, so a tag React adds survives. The home page is the one page
+         that cannot work that way, because vite regenerates it from THIS file on
+         whatever machine builds the site, so anything added at runtime never
+         reaches the raw HTML. Measured on 2026-08-24, the shipped home page
+         carried zero structured data blocks: the WebApplication object the app
+         has been generating since Round 53 had never been seen by a crawler,
+         only by a browser that runs JavaScript. Same trap that swallowed the
+         canonical in Round 265 and the readable copy in Round 257.
+
+         WebSite and Organization are the two things Google reads to work out
+         whose domain this is and what to call it, and WebApplication is what
+         says the thing at this address is a free browser game rather than a
+         shop or a blog. All three are claims about the SITE rather than about
+         whichever page is being served, and each carries an @id naming the site
+         root so none of them can be read as a claim about the current page.
+         Putting them here does exactly that: the snapshots copy this head, so
+         all 126 of them carry the pair and a crawler can tie 127 documents to
+         one entity. The page level object, whatever type that page is, is still
+         emitted by PageSeo on top of this.
+
+         KEEP THIS IN STEP WITH SITE_JSON_LD in src/lib/pageSchema.ts.
+         scripts/simSchema.mjs parses this block and compares it against that
+         export, so the two cannot drift apart quietly. -->
+    <script type="application/ld+json">[{"@context":"https://schema.org","@type":"WebSite","@id":"https://douknowball.com/#website","name":"DoUKnowBall","alternateName":"Do U Know Ball","url":"https://douknowball.com/","inLanguage":"en","publisher":{"@id":"https://douknowball.com/#org"}},{"@context":"https://schema.org","@type":"Organization","@id":"https://douknowball.com/#org","name":"DoUKnowBall","url":"https://douknowball.com/","logo":"https://douknowball.com/icon-512.png"},{"@context":"https://schema.org","@type":"WebApplication","@id":"https://douknowball.com/#webapp","name":"DoUKnowBall","url":"https://douknowball.com/","applicationCategory":"GameApplication","operatingSystem":"Web Browser","isAccessibleForFree":true,"offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"publisher":{"@id":"https://douknowball.com/#org"}}]</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"DoUKnowBall","item":"https://douknowball.com"},{"@type":"ListItem","position":2,"name":"Aussie Rules Manager","item":"https://douknowball.com/aussie-rules-manager"}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"Does Aussie Rules Manager use real AFL players or clubs?","acceptedAnswer":{"@type":"Answer","text":"No. Clubs, players, skills and match results are generated for this fictional league. They are labeled as game data rather than passed off as a verified real roster."}},{"@type":"Question","name":"How do goals and behinds work?","acceptedAnswer":{"@type":"Answer","text":"Goals are worth six points and behinds are worth one. The total wins the match. For example, 6.8 and 7.2 both total 44 points."}},{"@type":"Question","name":"Why are there five players on the bench?","acceptedAnswer":{"@type":"Answer","text":"The 2026 AFL matchday setup has eighteen players on the field and five interchange players, making twenty-three. A separate substitute is not part of this setup."}},{"@type":"Question","name":"Does this use the real AFL draw and finals?","acceptedAnswer":{"@type":"Answer","text":"No. This game uses six fictional clubs and a ten-round home-and-away league, with the ladder leader winning. It does not claim to reproduce the actual AFL fixture or finals system."}},{"@type":"Question","name":"Can I resume my season?","acceptedAnswer":{"@type":"Answer","text":"The game keeps its season actions in local browser storage when storage is available. You can resume between quarters. It is not an account cloud save, and clearing site data removes the local record."}},{"@type":"Question","name":"Does finishing add points to the leaderboard?","acceptedAnswer":{"@type":"Answer","text":"This first version records a completed play with no ranked score. A restored completed season is not counted as a second finish."}},{"@type":"Question","name":"Is Aussie Rules Manager free to play?","acceptedAnswer":{"@type":"Answer","text":"Yes. Aussie Rules Manager is free to play on DoUKnowBall, right in your browser. No download and no signup needed."}}]}</script><script type="application/ld+json" data-rh="true">{"@context":"https://schema.org","@type":"Game","name":"Aussie Rules Manager: Free Footy Management Game | DoUKnowBall","description":"Run a fictional Aussie rules club through ten rounds. Pick your squad, train or rest and change tactics between quarters. Free footy management game.","url":"https://douknowball.com/aussie-rules-manager","isAccessibleForFree":true,"gamePlatform":"Web Browser","publisher":{"@id":"https://douknowball.com/#org"}}</script>
+    
+    
+    <!-- Round 286: the site's own social image, on its own domain. The old
+         one lived on the host's upload bucket, which is an external image host
+         (the legal rule allows exactly one, flagcdn.com), said "10+ games" on a
+         site with over a hundred, and had a line of garbled text at the bottom.
+         It is generated from the same source as the favicon and the header
+         mark: scripts/logo/gen_logo.py. -->
+    
+    
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="DoUKnowBall: free daily sports trivia, puzzles and career sims">
+    
+    
+    <!-- Round 286: icons. The SVG is the crisp one and modern browsers take it
+         first; the .ico carries 16, 32 and 48 for everything else; the touch
+         icon is what a phone shows when the site is added to a home screen. -->
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="icon" href="/favicon.ico" sizes="16x16 32x32 48x48">
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" sizes="180x180">
+    <meta name="theme-color" content="#0b0d14">
+    <!-- Round 290: installable. The manifest names the same icons the tab and the home
+         screen already use, so Add to Home Screen on Android and desktop Chrome gets the
+         mark, the name and a standalone window. simBrand section 7 holds the file to the
+         icons on disk and this theme colour. -->
+    <link rel="manifest" href="/manifest.json">
+    <meta name="application-name" content="DoUKnowBall">
+    <meta name="apple-mobile-web-app-title" content="DoUKnowBall">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+    
+    <script>
+      // Owner 2026-08-05: no third-party editor badge should ever show on the
+      // live site. The host injects a floating "Edit with ..." badge into the
+      // published page after load; this watcher removes it (and anything like
+      // it) the moment it appears.
+      (function () {
+        var isBadge = function (el) {
+          if (!(el instanceof HTMLElement)) return false;
+          var idc = ((el.id || '') + ' ' + (el.className || '')).toString().toLowerCase();
+          if (idc.indexOf('lovable') !== -1 || idc.indexOf('gpt-engineer') !== -1 || idc.indexOf('gptengineer') !== -1) return true;
+          if (el.tagName === 'A') {
+            var href = (el.getAttribute('href') || '').toLowerCase();
+            if (href.indexOf('lovable.dev') !== -1 || href.indexOf('gptengineer.app') !== -1) return true;
+          }
+          return false;
+        };
+        var sweep = function () {
+          try {
+            var all = document.querySelectorAll('[id*="lovable" i], [class*="lovable" i], a[href*="lovable.dev"], a[href*="gptengineer"], [id*="gpt-engineer" i]');
+            for (var i = 0; i < all.length; i++) {
+              var el = all[i];
+              if (isBadge(el)) el.remove();
+            }
+          } catch (e) { /* never break the page over badge cleanup */ }
+        };
+        new MutationObserver(sweep).observe(document.documentElement, { childList: true, subtree: true });
+        document.addEventListener('DOMContentLoaded', sweep);
+        window.addEventListener('load', sweep);
+      })();
+    </script>
+    <script>
+      // Google Analytics loads only after Accept. AdSense is intentionally not
+      // global: direct visits to account, reset, fallback, and other screens
+      // without a deliberate slot do not load it. Auto Ads and Auto optimize
+      // stay off in the account. The static verification meta stays global.
+      (function () {
+        try {
+          if (localStorage.getItem('cookie-consent') === 'accepted') {
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+            window.gtag('js', new Date());
+            window.gtag('config', 'G-KZQK2G68YC');
+            var g = document.createElement('script');
+            g.async = true;
+            g.src = 'https://www.googletagmanager.com/gtag/js?id=G-KZQK2G68YC';
+            document.head.appendChild(g);
+          }
+        } catch (e) { /* storage blocked: analytics stays off */ }
+      })();
+    </script>
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  <!-- Round 314: the moment before React mounts used to show this document's
+       full crawler copy as a wall of raw text (the owner filmed it). The block
+       stays completely in the DOM for crawlers and for no-JS visitors (the
+       noscript lifts the cap), but a browser that is about to boot the app
+       sees one dimmed screenful, which reads as the site loading rather than
+       a broken page. React replaces #root's children on mount, so the capped
+       wrapper lives exactly as long as the wait does. -->
+  <!-- Round 448: the dim was not enough. His words, with a screenshot: "that
+       thing still shows when u log in into douknowball with the balck screen
+       and all that text and i dont want taht". Every sign in with Google
+       comes back through a full reload of this document, so the wait before
+       React mounts is the first thing a player sees after choosing an
+       account, and a screenful of grey paragraphs is what it showed. The
+       copy stays exactly where it is for crawlers and for no-JS visitors; a
+       booting browser now sees the mark on the app's own background and
+       nothing else, because #dukb-boot sits over the copy inside #root and
+       React replaces #root's children on mount, so it vanishes at the exact
+       moment the app appears. The cap on the copy stays so the document
+       cannot scroll during the wait. -->
+  
+  <noscript></noscript>
+  
+  
+<link rel="canonical" href="https://douknowball.com/aussie-rules-manager" data-rh="true"><meta property="og:type" content="website" data-rh="true"><meta property="og:url" content="https://douknowball.com/aussie-rules-manager" data-rh="true"><meta property="og:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="twitter:card" content="summary_large_image" data-rh="true"><meta name="twitter:image" content="https://douknowball.com/og-image.png" data-rh="true"><meta name="description" content="Run a fictional Aussie rules club through ten rounds. Pick your squad, train or rest and change tactics between quarters. Free footy management game." data-rh="true"><meta property="og:title" content="Aussie Rules Manager: Free Footy Management Game | DoUKnowBall" data-rh="true"><meta property="og:description" content="Run a fictional Aussie rules club through ten rounds. Pick your squad, train or rest and change tactics between quarters. Free footy management game." data-rh="true"><meta name="twitter:title" content="Aussie Rules Manager: Free Footy Management Game | DoUKnowBall" data-rh="true"><meta name="twitter:description" content="Run a fictional Aussie rules club through ten rounds. Pick your squad, train or rest and change tactics between quarters. Free footy management game." data-rh="true">
+<style>html,body{background:#0a0a0b;color:#fafafa;font-family:system-ui,-apple-system,"Segoe UI",sans-serif;margin:0;padding:0}a{color:#7dd3fc}#dukb-snapshot{padding:16px}</style>
+<style>#dukb-boot{position:fixed;inset:0;z-index:2147483000;display:flex;align-items:center;justify-content:center;background:#0a0a0b}#dukb-boot img{width:72px;height:72px}#dukb-snapshot{max-height:100vh;overflow:hidden}</style>
+<noscript><style>#dukb-boot{display:none}#dukb-snapshot{max-height:none;overflow:visible}</style></noscript>
+<script src="/prerender-boot.js" defer></script>
+</head>
+<body>
+<div id="root">
+<div id="dukb-boot" aria-hidden="true"><img src="/logo-mark.svg" alt="" width="72" height="72" decoding="async"></div>
+<div id="dukb-snapshot">
+<div data-site-chrome>
+<a href="/">DOUKNOWBALL</a>
+</div>
+<h1>Aussie Rules Manager</h1>
+<p>Six fictional clubs. Ten rounds. Your season.</p>
+<h2>Choose your club</h2>
+<p>Six fictional clubs and generated players. A ten-round home-and-away league, with no finals.</p>
+<p>Choose 18 starters and five interchange players, train or rest each week, then pick a tactic for each quarter. Make same-role changes at the breaks.</p>
+<p>Example: 12 goals and 8 behinds make 80 points. That beats 11 goals and 10 behinds (76). A win earns four ladder points, a draw two. Finish top after ten rounds.</p>
+<h2>Aussie Rules Manager: Free Footy Management Game</h2>
+<p>Choose a fictional club, select your 18 starters and five interchange players, manage each quarter and follow an exact goals-and-behinds ladder through ten rounds.</p>
+<p>Aussie Rules Manager gives you a club, a senior squad and ten rounds to climb a six-club ladder. Pick your eighteen starters and five interchange players, prepare for the next opponent and change your approach between quarters. Goals are worth six points, behinds are worth one, and the total decides the match.</p>
+<p>The clubs, players, ratings and results in this game are fictional. The short home-and-away competition is our own format. It is not the real AFL fixture, a real player database or a prediction of actual results. The match uses Aussie Rules scoring and the 2026 eighteen-player field and five-player interchange setup.</p>
+<p>You can play without an account. Your season is kept in this browser when storage is available, including a match paused between quarters. A completed season records a play rather than adding ranked points. Try another club or a different plan after the final round.</p>
+<h2>How to Play Aussie Rules Manager</h2>
+<li>Choose a fictional club to begin a season. Every club has thirty-six generated senior players. Read the player roles, ratings and condition before settling on the team for your next match.</li>
+<li>The matchday group has twenty-three different players: eighteen starters and five on the interchange bench. The remaining senior players sit this match out. A bench player is an available replacement, not an extra player on the oval.</li>
+<li>Make one training or rest decision before the match. In this game, training adds eight preparation points and eight fatigue points. Rest removes up to thirty fatigue points. Moving to the next round removes another twenty fatigue points and resets preparation. These are game mechanics, not claims about real training programs.</li>
+<li>Choose your quarter tactic, then play the quarter. Read the score, the opponent and your players' condition before choosing the next approach. Each quarter represents twenty minutes of active playing time, with stoppages left out of that count.</li>
+<li>Use the bench at quarter breaks to put fresh players on the field. This game allows up to five swaps per break, with each incoming player taking the same role as the outgoing player. Keep eighteen starters and five interchange players after a swap. These are break-time changes, so this game does not display a counted in-play interchange meter.</li>
+<li>Finish all four quarters to settle the match. Review the other results and the ladder, then continue to the next round. The same six clubs meet home and away over ten rounds. The club at the top after round ten wins this fictional league.</li>
+<h2>Aussie Rules Manager Match and Season Rules</h2>
+<li>A goal adds six points and a behind adds one. A displayed score of 6.8 means six goals and eight behinds, for 44 points. Compare total points rather than goals alone.</li>
+<li>A match has four quarters. The 2026 match rules use eighteen players on the field, five interchange players and centre throw-ups. The five bench players do not include a separate substitute.</li>
+<li>A league win earns four ladder points, a draw earns two for each club and a loss earns none. Percentage is total points scored divided by total points conceded, multiplied by one hundred. Clubs are ranked by ladder points, then percentage. An exact tie uses the original generated club order as this fictional league's final tiebreak. This is separate from the six match points awarded for kicking a goal.</li>
+<li>The season schedule, generated ratings, training effects and tactic effects belong to this game. Six clubs and ten rounds are a short fictional league, not the actual AFL competition structure. There is no real-world finals series in this version.</li>
+<li>Our squad selection uses six backs, five midfielders, one ruck and six forwards, plus five bench players. Same-role swaps and the limit of five swaps per break are game constraints. They are not presented as official restrictions on all real-world positional changes.</li>
+<li>Bench changes are offered at quarter breaks. AFL Regulation 12.8 excludes changes during those intervals from the counted interchange limit. There is no pretend 75-change counter for actions that do not count toward it.</li>
+<li>Your local save belongs to this browser. Reloading a finished season does not earn another completion. Private browsing, denied storage or clearing site data can prevent a season from being kept, so the game should not promise a cloud save.</li>
+<h2>Aussie Rules Manager Worked Example</h2>
+<p>Imagine your fictional club reaches half time on 6.8 (44), while the opponent has 7.2 (44). They have kicked one more goal, but the match is level because your six extra behinds make up the difference. Reading only the first number would give you the wrong game state.</p>
+<p>You use the break to move a tired starter onto the bench and bring a fresh player in. The matchday group still contains the same twenty-three players, with eighteen on the field and five on the bench. You choose a tactic for the third quarter and see whether it helps rather than assuming every change guarantees a goal.</p>
+<p>Suppose the match ends 12.10 (82) to 11.12 (78). Your club wins by four points and receives four ladder points. Both totals also enter the season percentage calculation. You then prepare for the next fixture, with the last result and your players' condition still relevant.</p>
+<h2>Aussie Rules Manager Squad and Tactics Tips</h2>
+<li>Read condition alongside rating. A strong player who has done most of the running can be a different choice from a fresh interchange option late in the match.</li>
+<li>Read the tactic matchup before each quarter. In this simulation, Control counters Direct, Direct counters Pressure, and Pressure counters Control. Pressure also costs more condition. These advantages affect chances rather than guaranteeing the final score.</li>
+<li>Check goals, behinds and the total together. A club can kick fewer goals and still be level or ahead through behinds. Ladder points and match points also mean different things.</li>
+<li>Keep a usable bench. The interchange players should give you choices through four quarters rather than simply being the next five names on a list.</li>
+<li>Review your last match before changing the next team. Use the actual score, condition and ladder rather than assuming a new tactic must be better because its name sounds more aggressive.</li>
+<h2>Aussie Rules Manager Questions</h2>
+<h3>Does Aussie Rules Manager use real AFL players or clubs?</h3>
+<p>No. Clubs, players, skills and match results are generated for this fictional league. They are labeled as game data rather than passed off as a verified real roster.</p>
+<h3>How do goals and behinds work?</h3>
+<p>Goals are worth six points and behinds are worth one. The total wins the match. For example, 6.8 and 7.2 both total 44 points.</p>
+<h3>Why are there five players on the bench?</h3>
+<p>The 2026 AFL matchday setup has eighteen players on the field and five interchange players, making twenty-three. A separate substitute is not part of this setup.</p>
+<h3>Does this use the real AFL draw and finals?</h3>
+<p>No. This game uses six fictional clubs and a ten-round home-and-away league, with the ladder leader winning. It does not claim to reproduce the actual AFL fixture or finals system.</p>
+<h3>Can I resume my season?</h3>
+<p>The game keeps its season actions in local browser storage when storage is available. You can resume between quarters. It is not an account cloud save, and clearing site data removes the local record.</p>
+<h3>Does finishing add points to the leaderboard?</h3>
+<p>This first version records a completed play with no ranked score. A restored completed season is not counted as a second finish.</p>
+<h3>Is Aussie Rules Manager free to play?</h3>
+<p>Yes. Aussie Rules Manager is free to play on DoUKnowBall, right in your browser. No download and no signup needed.</p>
+<h2>More games to play</h2>
+<a href="/afl-higher-lower">📊 AFL Higher or Lower Which legend kicked more career goals?</a>
+<a href="/guess-nascar-driver">🏁 Guess The Driver Guess the mystery NASCAR driver from clues</a>
+<a href="/nascar-chain">🔗 NASCAR Chain Build a chain of Cup champions</a>
+<a href="/conquest">🗺️ NFL Conquest The imperialism map: winners annex whole empires until one team rules America</a>
+<a href="/baseball-career">⚾ MLB Career Path Guess the baseball player</a>
+<a href="/free-kick">🥅 Free Kick Aim it, bend it, beat the wall and the keeper</a>
+<div data-site-chrome>
+<p>All team names, competition names, logos and trademarks are property of their respective owners. DoUKnowBall is an independent fan project and is not affiliated with, endorsed by or sponsored by the NFL, NBA, UFC, NHL, MLB, FIFA, UEFA, the Premier League, the English Football League, LaLiga, Serie A, the Bundesliga, Ligue 1, the Eredivisie, MLS, the Saudi Pro League, the IOC, the NCAA, F1, the PGA Tour, NASCAR, the ATP or the WTA. Player names and statistics are used for identification and commentary only. © 2026 DoUKnowBall</p>
+<a href="/soccer">Soccer</a>
+<a href="/pro-basketball">NBA</a>
+<a href="/hockey">NHL</a>
+<a href="/pro-football">NFL</a>
+<a href="/baseball">MLB</a>
+<a href="/college">College</a>
+<a href="/search">Search Games</a>
+<a href="/about">About</a>
+<a href="/contact">Contact</a>
+<a href="/whats-new">What's New</a>
+<a href="/records">Record Books</a>
+<a href="/leaderboard">Leaderboard</a>
+<a href="/privacy">Privacy Policy</a>
+<a href="/terms">Terms of Service</a>
+<a href="/accessibility">Accessibility</a>
+<p>Ads and analytics only run if you press Accept. Essential only keeps them off and every game works the same. <a href="/privacy">Learn more</a></p>
+</div>
+</div>
+</div>
+</body>
+</html>
