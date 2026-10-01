@@ -79,14 +79,15 @@
        lowest prestige) regular season wins -0.00, -0.08, 0.02, -0.04, 0.06
        (spread 0.14); top six prestige programs' title share 96.7 to 98.7%
        legacy and 97.7 to 98.8% with the layer (printed, too few titles to band);
-     the schedule changed the March field in 109 of 209 dynasty seasons
-       (those seeds do not move with the seed base);
+     the schedule changed the March field in 108 of the 200 dynasty seasons
+       section 6 reads (those seeds do not move with the seed base; 0 with
+       the committee blind to the schedule, control rank);
      the first run found 34 schools meeting their rival a second time on
        rivalry night, fixed in this round, 0 in every run since.
    Bands: uplift and drop inside [9, 13] (about 1.8 below and 1.7 above the
    measured range), every step at least STEP_FLOOR 0.5, WIN_BAND [1.9, 3.5]
    (about 0.65 either side of the measured range, so a halved or a doubled
-   effect fails, measured), FIELDS_FLOOR 50 of 209, UPSET_DRIFT_BAND
+   effect fails, measured), FIELDS_FLOOR 50 of 200, UPSET_DRIFT_BAND
    [-3, -0.5] and WEAK_DRIFT_BAND [-0.6, 0.5] (about 1.2 and 0.5 beyond the
    measured ranges). The bound itself is the hard cap in sections 1 and 2,
    not these bands: about 9 of the 11 points is the assistant's shift (1.5 a
@@ -97,8 +98,8 @@
    BUNDLE, never the source, and refuses to run unless its target string is
    in the bundle exactly once:
      CBB_STAFF_CONTROL=unbounded  the edge loses its clamp             -> 1 red
-     CBB_STAFF_CONTROL=inverted   a better rating is worse              -> 1, 2, 3 red
-     CBB_STAFF_CONTROL=nostaff    assistants leave the win model        -> 1, 2, 3 red
+     CBB_STAFF_CONTROL=inverted   a better rating is worse              -> 1, 2, 3, 9 red
+     CBB_STAFF_CONTROL=nostaff    assistants leave the win model        -> 1, 2, 3, 9 red
      CBB_STAFF_CONTROL=doubled    their effect on it doubles            -> 1, 2, 3 red
      CBB_STAFF_CONTROL=halved     their effect on it halves             -> 1, 2, 3 red
      CBB_STAFF_CONTROL=raise      the winner is raised, not the loser   -> 2, 3 red
