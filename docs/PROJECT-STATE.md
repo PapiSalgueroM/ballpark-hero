@@ -63,8 +63,9 @@ displayed 46 points versus two-source 27. Bo Nix remains a source disagreement.
 22 production datasets, 48 local data files and 16 ledgers were inventoried;
 all 64 selected local RAW hashes held. Existing 31 Higher or Lower checks and
 10 sports-facts sections passed, but those do not verify every sports fact.
-No permanent tests or production data corrections were added. Simulation and
-broader gameplay evidence are still in progress, not credited as complete.
+No permanent tests or production data corrections were added. The bounded
+simulation and broader gameplay evidence is delivered below; full-catalog
+end-to-end completeness remains unestablished.
 
 Further audit evidence: seven full Front Office regular-season UI runs and
 14 original draft picks, one Club Manager season into its second, Footle Daily
@@ -75,8 +76,20 @@ NBA/NHL trade screens omit roster depth. Current-live save/crash and Footle
 currency receipts are delivered. These are findings, not repairs or proof of
 whole-game completeness. Claude's Release P was merged and published during
 the audit; current observed entry is E8L0RxXO, while the clean gate remains old.
-The remaining audit work is the four American career flows, complete reserved
-ad-slot inventory and final recommendations/coverage matrix.
+The final bounded pass is delivered: four American career flows each completed
+six native season/decision cycles, manual retirement, midcareer/retired return
+and restart (24cycles total). All170 sitemap pages were measured with stored
+Accept and blocked vendor scripts on Release P:75 pages have one reserved slot,
+all150px upper padding. Filled creatives and later-state ad geometry remain
+untested. The193-row inventory now joins gameplay, data, indexability and ad
+evidence.14 product defect families and seven data findings/flags are ranked
+in docs/audits/QUALITY-REPAIR-BACKLOG-2026-10-01.md with exact repair targets,
+page decisions and a20-item pre-submission checklist. All230 corrupt raw records
+are unchanged and annotated; MLB original53 TEXT reversals are distinguished
+from nine real numeric reversals. No fixes or Google review request were made.
+Claude848 owns three shared fixes; his849 data correction remains separately
+reviewed. Preserve842-846. No whole-game completeness or approval claim follows
+from these bounded measurements; unplayed routes/branches remain open.
 
 ## Owner priority, clarified 2026-10-01
 
