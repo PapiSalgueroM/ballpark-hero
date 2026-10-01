@@ -13,7 +13,7 @@
  * whole match engine and carries the negative controls.
  */
 import { afterEach, describe, expect, it } from 'vitest';
-import { runShootout, shootoutTakerOrder, setShootoutOrder, shootoutOrderOf, startCareer } from '@/lib/clubManager';
+import { runShootout, shootoutTakerOrder, setShootoutOrder, shootoutOrderOf, startCareer, loanOutPlayer } from '@/lib/clubManager';
 import type { CareerState } from '@/lib/clubManager';
 
 const realRandom = Math.random;
@@ -121,9 +121,13 @@ describe('setShootoutOrder', () => {
   it('reads past a man who has left or gone out on loan, and with nobody left it is the old one draw again', () => {
     const ids = base.squad.filter(p => !p.onLoan).slice(0, 3).map(p => p.id);
     const set = setShootoutOrder(base, ids)!;
-    /* The middle man goes out on loan: the order skips him, in the same order otherwise. */
-    const loaned: CareerState = { ...set, squad: set.squad.map(p => (p.id === ids[1] ? { ...p, onLoan: true } as typeof p : p)) };
-    expect(shootoutOrderOf(loaned)).toEqual([ids[0], ids[2]]);
+    /* The middle man goes out on loan for real (he leaves the squad for
+       loanedOut): the order skips him, in the same order otherwise. */
+    const loaned = loanOutPlayer(set, ids[1]);
+    expect(loaned).not.toBeNull();
+    expect(loaned!.squad.some(p => p.id === ids[1])).toBe(false);
+    expect(loaned!.shootoutOrder).toEqual(ids);
+    expect(shootoutOrderOf(loaned!)).toEqual([ids[0], ids[2]]);
     /* All three sold: the field is still on the save, but the whistle reads no order. */
     const sold: CareerState = { ...set, squad: set.squad.filter(p => !ids.includes(p.id)) };
     expect(sold.shootoutOrder).toEqual(ids);
@@ -133,5 +137,15 @@ describe('setShootoutOrder', () => {
   it('refuses a man who is not in the squad and leaves the save alone', () => {
     expect(setShootoutOrder(base, ['nobody-here'])).toBeNull();
     expect('shootoutOrder' in base).toBe(false);
+  });
+
+  it('lists a loan signing like anyone else, because he is in the squad and plays', () => {
+    /* onLoan marks a man on loan TO this club (loan signings go home at the
+       end of the season); he can start, so he can be on the list. */
+    const loanee = { ...base.squad[0], id: 'loanee-782', name: 'Loan Signing', onLoan: true, loanFrom: 'Elsewhere FC' };
+    const withLoanee: CareerState = { ...base, squad: [...base.squad, loanee] };
+    const set = setShootoutOrder(withLoanee, [loanee.id, base.squad[1].id]);
+    expect(set).not.toBeNull();
+    expect(shootoutOrderOf(set!)).toEqual([loanee.id, base.squad[1].id]);
   });
 });

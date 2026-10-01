@@ -12355,30 +12355,32 @@ export function runShootout(args: { mine: ShootoutSide; theirs: ShootoutSide; my
 }
 
 /**
- * The order as the engine and the screens read it: the listed men still at
- * the club and not out on loan, in the manager's order. Null when that
- * leaves nobody (never set, cleared, or every listed man has gone), and then
- * the shootout is the old one draw, so what the tactics tab says and what
- * the whistle does cannot disagree.
+ * The order as the engine and the screens read it: the listed men still in
+ * the squad, in the manager's order. A man sold or sent out on loan has left
+ * the squad (loanedOut holds him), so he drops out here; a loan signing
+ * (onLoan) is in the squad and plays, so he can be listed like anyone else.
+ * Null when that leaves nobody (never set, cleared, or every listed man has
+ * gone), and then the shootout is the old one draw, so what the tactics tab
+ * says and what the whistle does cannot disagree.
  */
 export function shootoutOrderOf(state: CareerState): string[] | null {
   const o = state.shootoutOrder;
   if (!Array.isArray(o)) return null;
-  const ids = o.filter((id): id is string => typeof id === 'string' && state.squad.some(p => p.id === id && !p.onLoan));
+  const ids = o.filter((id): id is string => typeof id === 'string' && state.squad.some(p => p.id === id));
   return ids.length ? ids : null;
 }
 
 /**
  * Set the shootout order, or clear it with an empty list (the field goes,
  * so the save is exactly what it was before an order was ever set). Null
- * back when a name is not in the squad or is out on loan. Names listed
- * twice count once, and the list is held to the eleven. Pure.
+ * back when a name is not in the squad. Names listed twice count once, and
+ * the list is held to the eleven. Pure.
  */
 export function setShootoutOrder(career: CareerState, ids: readonly string[]): CareerState | null {
   const out: string[] = [];
   for (const id of ids) {
     const p = career.squad.find(x => x.id === id);
-    if (!p || p.onLoan) return null;
+    if (!p) return null;
     if (!out.includes(id)) out.push(id);
     if (out.length >= SHOOTOUT_MAX_ORDER) break;
   }

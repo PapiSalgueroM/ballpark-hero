@@ -398,8 +398,8 @@ console.log('2) The order is worth something: five best first beats five worst f
   const worst = share(worstFirst);
   const gap = best - worst;
   console.log(`   synthetic eleven 90..62 vs itself, ${N} shootouts an arm: best five first ${pct(best)}, worst five first ${pct(worst)}, gap ${(gap * 100).toFixed(1)} points`);
-  /* Measured 2026-10-01 over the default seed and SIM_SEED 1..3: see the
-     header. The floor sits well under the lowest run. */
+  /* Measured 2026-10-01 over the default seed and SIM_SEED 1..5: see the
+     header. The floor sits well under the lowest run (9.2). */
   const FLOOR = 0.06;
   if (!(gap >= FLOOR)) fail(`best five first beats worst five first by ${(gap * 100).toFixed(1)} points, under the floor of ${FLOOR * 100}`);
 
@@ -495,11 +495,15 @@ console.log('5) An old save loads with no order, plays the old way, and an order
   const again = loadCareer();
   if (!again || JSON.stringify(again.shootoutOrder) !== JSON.stringify(ids)) fail(`an order of four did not survive save and load: ${JSON.stringify(again?.shootoutOrder)}`);
   if (setShootoutOrder(back, ['not-a-player']) !== null) fail('setShootoutOrder accepted a man who is not in the squad');
-  const loanee = back.squad.find(p => p.onLoan);
-  if (loanee && setShootoutOrder(back, [loanee.id]) !== null) fail('setShootoutOrder accepted a man out on loan');
+  /* onLoan is a loan signing, a man on loan TO the club who can start, so he
+     can be listed; a man sent out on loan has left the squad for loanedOut. */
+  const loanee = { ...back.squad[0], id: 'loanee-782', name: 'Loan Signing', onLoan: true, loanFrom: 'Elsewhere FC' };
+  const withLoanee = { ...back, squad: [...back.squad, loanee] };
+  const listedLoanee = setShootoutOrder(withLoanee, [loanee.id]);
+  if (!listedLoanee || JSON.stringify(shootoutOrderOf(listedLoanee)) !== JSON.stringify([loanee.id])) fail('setShootoutOrder refused a loan signing, who is in the squad and can start');
   const cleared = setShootoutOrder(set, []);
   if (!cleared || 'shootoutOrder' in cleared) fail('clearing the order left the field on the save');
-  console.log(`   order of ${ids.length} kept through save and load, a stranger refused, an empty list takes the field off`);
+  console.log(`   order of ${ids.length} kept through save and load, a stranger refused, a loan signing listed, an empty list takes the field off`);
 }
 
 /* ================================================================== */

@@ -95,4 +95,25 @@ describe('the shootout order tile', () => {
     fireEvent.click(spare);
     expect(onShootoutOrder).not.toHaveBeenCalled();
   });
+
+  it('offers a loan signing in the eleven, so all eleven can be listed', () => {
+    const base: CareerState = startCareer('Real Madrid');
+    /* A loan signing (on loan TO the club) starting in the first slot. */
+    const loanee = { ...base.squad[0], id: 'loanee-782', name: 'Loan Signing', onLoan: true, loanFrom: 'Elsewhere FC' };
+    const career: CareerState = { ...base, squad: [...base.squad, loanee], xiIds: [loanee.id, ...base.xiIds.slice(1)] };
+    const onShootoutOrder = vi.fn();
+    const { container } = render(
+      <TacticsScreen
+        career={career}
+        onFormation={noop} onMentality={noop} onSlot={noop} onSwap={noop} onAutoPick={noop}
+        onDuty={noop} onSetPiece={noop} onAutoSetPieces={noop}
+        onShootoutOrder={onShootoutOrder}
+        openTileRequest="shootout"
+      />,
+    );
+    const opt = container.querySelector(`[data-cm-so-opt="${loanee.id}"]`) as HTMLButtonElement | null;
+    expect(opt).not.toBeNull();
+    fireEvent.click(opt!);
+    expect(onShootoutOrder).toHaveBeenLastCalledWith([loanee.id]);
+  });
 });

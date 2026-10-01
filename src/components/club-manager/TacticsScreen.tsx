@@ -178,12 +178,12 @@ export function TacticsScreen({
      out of the list here and never takes a kick there. */
   const shootoutOrder = useMemo(() => shootoutOrderOf(career) ?? [], [career]);
   /* Who can be listed: the eleven first in slot order, then the rest of the
-     squad by rating, nobody on loan. The keeper is fair game, the eleventh
-     kick is somebody's. */
+     squad by rating. A loan signing plays for you, so he is listed like
+     anyone else. The keeper is fair game, the eleventh kick is somebody's. */
   const shootoutPool = useMemo(() => {
     const xiIds = career.xiIds.filter((id): id is string => !!id);
-    const xiMen = xiIds.map(id => career.squad.find(p => p.id === id)).filter((p): p is CMPlayer => !!p && !p.onLoan);
-    const rest = career.squad.filter(p => !p.onLoan && !xiIds.includes(p.id)).sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
+    const xiMen = xiIds.map(id => career.squad.find(p => p.id === id)).filter((p): p is CMPlayer => !!p);
+    const rest = career.squad.filter(p => !xiIds.includes(p.id)).sort((a, b) => b.rating - a.rating || a.name.localeCompare(b.name));
     return [...xiMen, ...rest];
   }, [career.squad, career.xiIds]);
   const toggleShootout = (id: string) => {
@@ -896,7 +896,7 @@ export function TacticsScreen({
             )}
           </div>
           <p className="text-[9px] text-muted-foreground mb-2">
-            Tap a man to add him next, tap him again to take him off. At the whistle your men step up in this order, anyone off the pitch is skipped, anyone you left out follows by shirt number with the keeper last, and after five each it is sudden death round the eleven.
+            Tap a man to add him next, tap him again to take him off. At the whistle your men step up in this order, anyone off the pitch is skipped, anyone you left out follows by shirt number with the keeper last, and after five each it is sudden death round the eleven. Leave it empty and it stays one draw that leans toward the stronger side; with a list only the takers and the keepers count, which suits an underdog more than a favourite.
           </p>
           {shootoutOrder.length > 0 ? (
             <div className="flex flex-wrap gap-1 mb-2" data-cm-so-list="1">
