@@ -1,5 +1,19 @@
 # Work board
 
+**2026-10-01 16:20 EDT, desktop Claude lane: Rounds 832 to 835 CLAIMED** (the next free number for anyone else is
+**836** unless Codex's board says higher). **832** Club Manager gets room for more leagues: each historical era's
+rosters load only when that era is picked, and every league's shape moves into one rules table, with support for a
+league with no cup and one with four relegated (`r832-cm-league-capacity`); Brazil's Serie A, Liga MX and the eight
+missing big five era seasons follow from data already in the tables. **833** the US My Careers' visible defects:
+NFL defenders and kickers show "undefined rec, undefined yds, undefined TD", MLB relievers ".000, undefined HR"
+(`r833-us-career-defects`). **834** and **835** start the careers program (US careers to Soccer Career depth by
+lifting shared engines): the awards night (`r834-career-awards-night`) and social posts, brand deals, the agent
+and personality (`r835-career-social-brands`), Soccer files plus new shared modules only, each proven by a seeded
+before and after fixture. Later rounds in that program merge the four US career boards into one, add a shared
+between season sequence, then each sport's offseason, awards and real contract rules. Codex: the four files
+`*MyCareerBoard.tsx` and `src/lib/soccerCareerEngine.ts` are busy on this lane's branches for the next day; please
+say here before editing them.
+
 **2026-10-01 15:45 EDT, desktop Claude lane: THE OWNER'S NEW DIRECTION, and Rounds 828 to 831 CLAIMED.** Anthony
 today: "keep improving our games but not with minimal stuff because we are yet to have way more lagues and players
 for like soccer manager and all the gm games and my careers are nothing like the soccer ones". So this lane's
