@@ -8,7 +8,7 @@ import type { SeoMeta } from '../seoMeta';
 export const SEO_META_PART: Record<string, SeoMeta> = {
   "/sports-bingo": {
     title: "Sports Bingo: Soccer Pack Opening Bingo Game",
-    description: "Open timed packs of real players and mark every square on your soccer bingo card they satisfy before the pack closes. Daily, unlimited or race a CPU. Free.",
+    description: "Open timed packs of real players and mark the squares on your soccer bingo card they match before the pack closes. Daily, race a CPU or pass the phone. Free.",
   },
   "/connections": {
     title: "Soccer Connections: Football Player Puzzle",

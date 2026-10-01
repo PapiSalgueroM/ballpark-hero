@@ -2,10 +2,14 @@
    edit this folder: edit src/data/seoMeta.ts. Every vite build rewrites what
    has fallen behind, and simSeoTitles section 6 fails if the committed copy
    is not what the source makes. */
-/* Part 1 of 32: 2 entries. */
+/* Part 1 of 32: 3 entries. */
 import type { SeoMeta } from '../seoMeta';
 
 export const SEO_META_PART: Record<string, SeoMeta> = {
+  "/deadline-day": {
+    title: "Deadline Day: Transfer Window Football Game",
+    description: "Run recruitment at a real club on the last day of the window. Three or four gaps, one budget, twelve hours before it shuts. Free football transfer game.",
+  },
   "/puck-detective": {
     title: "Puck Detective: Guess the NHL Player Game",
     description: "Name the mystery NHL skater in eight guesses. Every guess compares team, position, nationality, age and jersey number. Free daily hockey guessing game.",

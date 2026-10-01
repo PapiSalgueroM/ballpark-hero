@@ -5,7 +5,7 @@ import { TennisPlayerSearch } from './TennisPlayerSearch';
 import { TennisPlayerHowToPlay } from './TennisPlayerHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
-import { MAX_CLUES } from '@/types/tennisPlayer';
+import { MAX_CLUES, POINTS_BY_CLUE } from '@/types/tennisPlayer';
 
 const CLUE_LABELS = ['Vibe', 'Nationality & Era', 'Tour', 'Grand Slam Wins', 'Slams Won', 'Famous Moment'];
 
@@ -90,6 +90,7 @@ export function TennisPlayerBoard() {
   const isOver = gameStatus !== 'playing';
   const hasGuessed = guesses.length > 0;
   const canHint = revealedClues < MAX_CLUES;
+  const nextHintPoints = POINTS_BY_CLUE[revealedClues] ?? 0;
 
   const shareScore = gameStatus === 'won'
     ? `I guessed today's Tennis Player in ${revealedClues} clue${revealedClues > 1 ? 's' : ''}!\nScore: ${score} 🎾`
@@ -154,7 +155,7 @@ export function TennisPlayerBoard() {
                   onClick={handleHint}
                   className="text-sm text-yellow-500/70 hover:text-yellow-400 transition-colors"
                 >
-                  💡 Hint (-100 pts)
+                  💡 Hint ({nextHintPoints} pts next)
                 </button>
               )}
               {hasGuessed && !showGiveUpConfirm && (
@@ -167,7 +168,7 @@ export function TennisPlayerBoard() {
               )}
             </div>
             {hintsUsed > 0 && (
-              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used (-{hintsUsed * 100} pts)</p>
+              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used</p>
             )}
 
             {showGiveUpConfirm && (

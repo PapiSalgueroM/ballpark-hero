@@ -35,6 +35,7 @@ import {
   pickDailyPlayer,
 } from '@/lib/careerLadder';
 import { flagForClub } from '@/lib/careerLadder';
+import ladderRoster from '@/data/careerLadderRoster.json';
 import { searchPlayers, SOCCER_MARKET_VALUE_SOURCE, type PlayerEntity } from '@/lib/playerSearch';
 
 type Phase = 'boot' | 'error' | 'playing' | 'won' | 'lost';
@@ -71,8 +72,18 @@ const CareerLadder = () => {
   // the shared daily has its own harder skew inside pickDailyPlayer. --------
   const [difficulty, setDifficulty] = useState<LadderDifficulty>('standard');
 
-  // ---- Daily: target player is date-seeded once the pool has loaded -------
-  const dailyPlayer = useMemo(() => (pool.length > 0 ? pickDailyPlayer(pool) : null), [pool]);
+  // ---- Daily: target player is picked for the day useDailyPuzzle pinned ----
+  /* Round 718 fix: the day is useDailyPuzzle's own todayStr, the one its save
+     is filed under, so the page reads the clock once per mount and the pin is
+     structural rather than two reads that happen to agree. Read when the pool
+     arrived instead, a page opened just before midnight ET could deal
+     tomorrow's player into today's save. The hook takes the player as
+     supabasePuzzle and the player needs the hook's day, so the player is
+     state, set in the effect below the render after the pool lands; the hook
+     re-selects when supabasePuzzle goes from null to a value, the transition
+     it already waits on. Who the rotation can deal comes from the committed
+     roster, never from the pool (see rotationPick in the lib). */
+  const [dailyPlayer, setDailyPlayer] = useState<CareerPlayer | null>(null);
 
   // dailyPlayer resolves asynchronously (Supabase fetch via boot()), so it is
   // passed as supabasePuzzle rather than via the static puzzles array.
@@ -91,6 +102,7 @@ const CareerLadder = () => {
     addGuess: addDailyAction,
     gameStatus: rawDailyStatus,
     isLoading: isDailyLoading,
+    todayStr: dailyDate,
   } = useDailyPuzzle<CareerPlayer, LadderAction>({
     gameSlug: 'career-ladder',
     puzzles: [],
@@ -101,6 +113,10 @@ const CareerLadder = () => {
     isLost: (g) => g.some((a) => a.t === 'give') || g.filter((a) => a.t === 'wrong').length >= MAX_GUESSES,
     deserializeGuesses: (raw) => raw as LadderAction[],
   });
+
+  useEffect(() => {
+    setDailyPlayer(pool.length > 0 ? pickDailyPlayer(pool, dailyDate, ladderRoster.entries) : null);
+  }, [pool, dailyDate]);
 
   const dailyRevealed = useMemo(
     () => 1 + dailyActions.filter((a) => a.t === 'reveal' || a.t === 'wrong').length,

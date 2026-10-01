@@ -119,17 +119,17 @@ const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
    the other five were over and spent it getting back under. */
 const BUDGETS = [
   ['/', 226],
-  ['/club-manager', 624], /* Round 700: 622.3K measured with the seoMeta split, 630.4K on main; was 630 */ /* release H: 628K measured, the ticker's sport filter menu (711) in the entry chunk; release G: 626K with the match centre (714), the squad rows (715) and the double roster fix (742); was 622 */
-  ['/soccer-career', 729], /* Round 700: 689.0K measured with the seoMeta split, 696.8K on main; was 736 */
-  ['/stadium-tycoon', 283], /* Round 700: 281.2K measured with the seoMeta split, 289.5K on main; was 290 */
+  ['/club-manager', 641], /* release K: 637K measured, the shootout order (782) and job applications (783) in the engine chunk; was 630 */ /* release H: 628K measured, the ticker's sport filter menu (711) in the entry chunk; release G: 626K with the match centre (714), the squad rows (715) and the double roster fix (742); was 622 */
+  ['/soccer-career', 736],
+  ['/stadium-tycoon', 290],
   /* Round 216: the new idle game. Measured 243K on the day it shipped,
      mostly the shared index chunk. */
-  ['/wonderkid-factory', 262], /* Round 700: 260.3K measured with the seoMeta split, 268.4K on main; was 270 */
-  ['/minefield', 278], /* Round 700: 276.0K measured with the seoMeta split, 284.3K on main; was 284 */ /* release G: 280K measured; the shared result moment (710), the native share sheet (744) and the hub trail (654) sit in chunks every game loads; was 276 */
-  ['/footle', 321], /* Round 700: 317.9K measured with the seoMeta split, 325.6K on main; was 328 */ /* release J: 325K measured after the Round 669 re-bake put 15 more players in the bundled pool (538 to 553); before that 324 at release G on 319K measured; was 316 */
-  ['/nfl-my-career', 396], /* Round 700: 393.7K measured with the seoMeta split, 402.1K on main; was 404 */ /* release H: 401K measured; the ticker's sport filter menu (711) and the share sheet (744) sit in the entry chunk every page loads; was 400 */
-  ['/front-office', 297], /* Round 700: 295.5K measured with the seoMeta split, 303.6K on main; was 304 */ /* release H: 302K measured, the entry chunk's ticker menu (711); was 300 */ /* release G: 299K measured, same shared chunks as above; was 296 */
-  ['/soccer-grid', 300], /* Round 700: 295.7K measured with the seoMeta split, 303.9K on main; was 308 */ /* release J: 304K measured; this release changes no soccer grid code, the growth is in the shared chunks every route loads; was 300 */
+  ['/wonderkid-factory', 270],
+  ['/minefield', 288], /* release K: 285K measured, two new games in the registry and the What's New entries in the shared chunks; was 284 */ /* release G: 280K measured; the shared result moment (710), the native share sheet (744) and the hub trail (654) sit in chunks every game loads; was 276 */
+  ['/footle', 333], /* release K: 330K measured, the same shared chunk growth as /minefield; was 328 */ /* release J: 325K measured after the Round 669 re-bake put 15 more players in the bundled pool (538 to 553); before that 324 at release G on 319K measured; was 316 */
+  ['/nfl-my-career', 404], /* release H: 401K measured; the ticker's sport filter menu (711) and the share sheet (744) sit in the entry chunk every page loads; was 400 */
+  ['/front-office', 312], /* release K: 308K measured, the franchise tag and the depth chart (723); was 304 */ /* release H: 302K measured, the entry chunk's ticker menu (711); was 300 */ /* release G: 299K measured, same shared chunks as above; was 296 */
+  ['/soccer-grid', 308], /* release J: 304K measured; this release changes no soccer grid code, the growth is in the shared chunks every route loads; was 300 */
   ['/leaderboard', 266],
 ];
 
@@ -219,9 +219,6 @@ console.log('3) Every guide is still reachable, one sport at a time');
   const loader = fs.readFileSync(path.join(dir, 'loader.ts'), 'utf-8');
   const mapped = new Map();
   for (const m of loader.matchAll(/^\s*'([^']+)': '([a-zA-Z0-9]+)',$/gm)) mapped.set(m[1], m[2]);
-  /* Round 700: aussieRulesManagement joined the list when the merge of main
-     brought Aussie Rules Manager's guide file in (de094cc0), whose loader
-     entry this section read as an unknown bundle. */
   const BUNDLES = ['soccer1', 'soccer2', 'football', 'college', 'basketball', 'baseball', 'hockey', 'moreSports', 'world', 'clubManagement', 'stadiumManagement', 'academyManagement', 'aussieRulesManagement'];
   let keys = 0;
   for (const b of BUNDLES) {

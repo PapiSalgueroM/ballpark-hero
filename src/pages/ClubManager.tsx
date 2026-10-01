@@ -15,7 +15,7 @@ import {
   developingPlayers, INTENSITY_INFO, FOCUS_INFO,
   brokenPromises, CM_ERAS, DEFAULT_ERA_ID, eraById, projectedXIAvg, CM_BASE_YEAR,
   worldSeasonLabel, pressOf, pressHeadline, preMatchRead,
-  nationOfferFor,
+  nationOfferFor, SHOOTOUT_MAX_ORDER, shootoutOrderOf,
 } from '@/lib/clubManager';
 import { FACILITY_IDS, facilitiesOf } from '@/lib/clubManagerFacilities';
 import { projectFinances } from '@/lib/clubManagerFinances';
@@ -145,6 +145,9 @@ const ClubManager = () => {
      window landing on the same tap) left this on, and the next quick sim
      animated ninety minutes at a player who had asked not to watch. */
   const [watchMode, setWatchMode] = useState(false);
+  /* Round 782: the pre match card's shortcut to the shootout order asks the
+     tactics tab to open that tile on arrival; the tab hands the request back. */
+  const [tacticsTile, setTacticsTile] = useState<'shootout' | null>(null);
   const panelRef = useRevealScroll<HTMLDivElement>(`hub:${hubPanel ?? ''}:${clubView ?? ''}`, { skipFirst: true });
 
   /* Round 154: clubDefFor, not clubByName, because a custom club has no
@@ -901,6 +904,17 @@ const ClubManager = () => {
                     📊 Match Centre: form, head to head, odds, team talk
                   </button>
                 )}
+                {/* Round 782: a knockout tie can end on penalties, so the
+                    shootout order is one tap from the pre match card. */}
+                {(fx.competition === 'cup' || fx.competition === 'uclKo') && (
+                  <button
+                    onClick={() => { setTacticsTile('shootout'); g.setActiveTab('tactics'); }}
+                    data-cm-shootout-link="1"
+                    className="mt-2 block mx-auto text-[11px] font-bold text-primary hover:underline"
+                  >
+                    🥅 Shootout order: {(() => { const n = shootoutOrderOf(c)?.length ?? 0; return n ? `${n} of ${SHOOTOUT_MAX_ORDER} listed` : 'not set, tap to pick your takers'; })()}
+                  </button>
+                )}
               </>
             )}
             {fx && fx.kind === 'window' && (
@@ -1040,9 +1054,11 @@ const ClubManager = () => {
                 onClick={() => setHubPanel('options')}
               />
               <HubTile
-                icon="🧢" title="Manager" accent={!!c.approach || !!nationOffer}
-                value={c.approach ? '📞 A club is calling' : nationOffer ? '🌐 Your country is calling' : `${c.careerStats.wins}W ${c.careerStats.losses}L`}
-                sub={c.approach
+                icon="🧢" title="Manager" accent={!!c.approach || !!nationOffer || c.jobHunt?.open?.status === 'accepted'}
+                value={c.jobHunt?.open?.status === 'accepted' ? '✅ A club said yes' : c.approach ? '📞 A club is calling' : nationOffer ? '🌐 Your country is calling' : `${c.careerStats.wins}W ${c.careerStats.losses}L`}
+                sub={c.jobHunt?.open?.status === 'accepted'
+                  ? `${c.jobHunt.open.club}: now or in the summer`
+                  : c.approach
                   ? `${c.approach.club} want you`
                   : nationOffer
                     ? `${nationOffer.nation} want you for the summer`
@@ -1126,6 +1142,24 @@ const ClubManager = () => {
                 <ScreenLoading><ClubManagerBoardPanel club={club} objStatuses={objStatuses} /></ScreenLoading>
               )}
 
+              {/* Round 783: the job hunt's status, readable here as well as on
+                  the Manager panel, because the inbox is where the answer lands. */}
+              {hubPanel === 'inbox' && (c.jobHunt?.open || c.jobHunt?.summerMove) && (
+                <div data-job-hunt-status className="bg-card border border-gold/40 rounded-xl p-3 text-xs text-foreground">
+                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider mb-1">📨 Job hunt</div>
+                  {c.jobHunt?.summerMove
+                    ? <p>Agreed: you take over at <span className="font-bold">{c.jobHunt.summerMove.club}</span> when the season ends.</p>
+                    : c.jobHunt?.open?.status === 'accepted'
+                      ? <p><span className="font-bold">{c.jobHunt.open.club}</span> said yes. Answer them from the message below or the Manager panel: join now, or in the summer.</p>
+                      : <p>Application in at <span className="font-bold">{c.jobHunt?.open?.club}</span>. They answer within about {c.jobHunt?.open?.matchesLeft ?? 0} more match day{(c.jobHunt?.open?.matchesLeft ?? 0) === 1 ? '' : 's'}.</p>}
+                  <button
+                    onClick={() => setHubPanel('manager')}
+                    className="mt-2 text-[11px] font-bold text-primary hover:underline"
+                  >
+                    Open the Manager panel
+                  </button>
+                </div>
+              )}
               {hubPanel === 'inbox' && <ScreenLoading><InboxCard career={c} onAnswer={g.answer} /></ScreenLoading>}
               {hubPanel === 'inbox' && (c.inbox ?? []).length === 0 && (
                 <p className="text-xs text-muted-foreground text-center py-6">Nobody has texted you yet. Play some matches, the drama finds you.</p>
@@ -1296,6 +1330,9 @@ const ClubManager = () => {
             onDuty={g.setSlotDuty}
             onSetPiece={g.assignSetPiece}
             onAutoSetPieces={g.autoPickSetPieces}
+            onShootoutOrder={g.setShootoutOrder}
+            openTileRequest={tacticsTile}
+            onOpenTileRequestDone={() => setTacticsTile(null)}
           /></ScreenLoading>
         </TabsContent>
 

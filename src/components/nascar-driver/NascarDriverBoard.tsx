@@ -1,11 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { useNascarDriver } from '@/hooks/useNascarDriver';
 import { NascarDriverSearch } from './NascarDriverSearch';
 import { NascarDriverHowToPlay } from './NascarDriverHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
-import { MAX_CLUES } from '@/types/nascarDriver';
+import { MAX_CLUES, POINTS_BY_CLUE, type NascarDriverState } from '@/types/nascarDriver';
+import feedbackStyles from './NascarDriverFeedback.module.css';
 
 /* ROUND 374: the hardcoded CLUE_LABELS list that sat here is gone. It named
    the six clue columns the hook used to read off `nascar_drivers`, none of
@@ -18,20 +19,28 @@ import { MAX_CLUES } from '@/types/nascarDriver';
 export function NascarDriverBoard() {
   const { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, pointsForCurrentClue, allDrivers, loading, status } = useNascarDriver();
   const gameRef = useScrollToGame(gameState);
-  const [wrongFlash, setWrongFlash] = useState(false);
+  const [feedback, setFeedback] = useState<{ kind: 'correct' | 'wrong'; turn: number; status: NascarDriverState['gameStatus'] } | null>(null);
+  const previous = useRef(gameState);
   const [hintsUsed, setHintsUsed] = useState(0);
   const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false);
 
-  const handleGuess = (name: string) => {
-    const prevClues = gameState?.revealedClues ?? 0;
-    makeGuess(name);
-    setTimeout(() => {
-      if (gameState?.revealedClues !== prevClues || gameState?.gameStatus === 'playing') {
-        setWrongFlash(true);
-        setTimeout(() => setWrongFlash(false), 500);
-      }
-    }, 50);
-  };
+  useEffect(() => {
+    const prior = previous.current;
+    previous.current = gameState;
+    if (!gameState || !prior || prior.puzzle.id !== gameState.puzzle.id || prior.mode !== gameState.mode || gameState.guesses.length < prior.guesses.length) {
+      setFeedback(null);
+    } else if (prior.gameStatus === 'playing' && gameState.guesses.length === prior.guesses.length + 1 && prior.guesses.every((guess, index) => gameState.guesses[index] === guess)) {
+      setFeedback({ kind: gameState.gameStatus === 'won' ? 'correct' : 'wrong', turn: gameState.guesses.length, status: gameState.gameStatus });
+    } else if (gameState.gameStatus !== prior.gameStatus) {
+      setFeedback(null);
+    }
+  }, [gameState]);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = window.setTimeout(() => setFeedback(null), 600);
+    return () => window.clearTimeout(timer);
+  }, [feedback]);
 
   const handleHint = () => {
     revealHint();
@@ -92,6 +101,8 @@ export function NascarDriverBoard() {
   const isOver = gameStatus !== 'playing';
   const hasGuessed = guesses.length > 0;
   const canHint = revealedClues < MAX_CLUES;
+  const nextHintPoints = POINTS_BY_CLUE[revealedClues] ?? 0;
+  const shownFeedback = feedback && feedback.turn === guesses.length && feedback.status === gameStatus ? feedback : null;
 
   const shareScore = gameStatus === 'won'
     ? `I guessed today's NASCAR Driver in ${revealedClues} clue${revealedClues > 1 ? 's' : ''}!\nScore: ${score} 🏁`
@@ -118,6 +129,7 @@ export function NascarDriverBoard() {
             return (
               <div
                 key={i}
+                data-nascar-driver-clue={i}
                 className={`rounded-xl border px-4 py-3 transition-all duration-300 ${
                   isRevealed
                     ? 'border-red-500/30 bg-neutral-900'
@@ -142,44 +154,48 @@ export function NascarDriverBoard() {
           })}
         </div>
 
-        {wrongFlash && (
-          <p className="text-center text-red-400 text-sm font-semibold animate-pulse">Wrong guess! Try again...</p>
-        )}
+        <div role="status" className={feedbackStyles.status}>
+          {shownFeedback && (
+            <p key={`${shownFeedback.kind}-${shownFeedback.turn}`} data-nascar-driver-feedback={shownFeedback.kind} className={`${feedbackStyles.reply} text-center text-sm font-semibold ${shownFeedback.kind === 'correct' ? 'text-emerald-400' : 'text-red-400'}`}>
+              {shownFeedback.kind === 'correct' ? 'Correct guess. Driver found.' : isOver ? 'Wrong guess. The answer is below.' : 'Wrong guess! Try again...'}
+            </p>
+          )}
+        </div>
 
         {!isOver && (
           <>
-            <NascarDriverSearch onGuess={handleGuess} guesses={guesses} drivers={allDrivers} />
+            <NascarDriverSearch onGuess={makeGuess} guesses={guesses} drivers={allDrivers} />
 
             <div className="flex items-center justify-center gap-4">
               {canHint && (
                 <button
                   onClick={handleHint}
-                  className="text-sm text-yellow-500/70 hover:text-yellow-400 transition-colors"
+                  className={`${feedbackStyles.action} text-sm text-yellow-500/70 hover:text-yellow-400 transition-colors`}
                 >
-                  💡 Hint (-100 pts)
+                  💡 Hint ({nextHintPoints} pts next)
                 </button>
               )}
               {hasGuessed && !showGiveUpConfirm && (
                 <button
                   onClick={() => setShowGiveUpConfirm(true)}
-                  className="text-sm text-neutral-400 hover:text-red-400 transition-colors"
+                  className={`${feedbackStyles.action} text-sm text-neutral-400 hover:text-red-400 transition-colors`}
                 >
                   🏳️ Give Up
                 </button>
               )}
             </div>
             {hintsUsed > 0 && (
-              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used (-{hintsUsed * 100} pts)</p>
+              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used</p>
             )}
 
             {showGiveUpConfirm && (
               <div className="text-center space-y-2 p-3 rounded-xl border border-red-500/20 bg-neutral-900">
                 <p className="text-sm text-neutral-400">Are you sure? You'll reveal the answer and score 0 points.</p>
                 <div className="flex justify-center gap-3">
-                  <button onClick={handleGiveUp} className="px-4 py-1.5 rounded-lg bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-colors">
+                  <button onClick={handleGiveUp} className={`${feedbackStyles.action} px-4 py-1.5 rounded-lg bg-red-600 text-white text-sm font-semibold hover:bg-red-700 transition-colors`}>
                     Yes, Give Up
                   </button>
-                  <button onClick={() => setShowGiveUpConfirm(false)} className="px-4 py-1.5 rounded-lg border border-neutral-700 text-neutral-400 text-sm hover:bg-neutral-800 transition-colors">
+                  <button onClick={() => setShowGiveUpConfirm(false)} className={`${feedbackStyles.action} px-4 py-1.5 rounded-lg border border-neutral-700 text-neutral-400 text-sm hover:bg-neutral-800 transition-colors`}>
                     Cancel
                   </button>
                 </div>
@@ -191,7 +207,7 @@ export function NascarDriverBoard() {
         {guesses.length > 0 && !isOver && (
           <div className="flex flex-wrap gap-2 justify-center">
             {guesses.map((g, i) => (
-              <span key={i} className="px-3 py-1 rounded-full bg-neutral-900 text-neutral-400 text-xs line-through">
+              <span key={i} className={`${feedbackStyles.guessName} px-3 py-1 rounded-full bg-neutral-900 text-neutral-400 text-xs line-through`}>
                 {g}
               </span>
             ))}
@@ -199,11 +215,11 @@ export function NascarDriverBoard() {
         )}
 
         {isOver && (
-          <div className="text-center space-y-4 rounded-2xl border border-red-500/20 bg-neutral-900 p-6">
+          <div data-nascar-driver-result={shownFeedback ? gameStatus : undefined} className={`text-center space-y-4 rounded-2xl border border-red-500/20 bg-neutral-900 p-6 ${shownFeedback ? gameStatus === 'won' ? feedbackStyles.won : feedbackStyles.lost : ''}`}>
             {gameStatus === 'won' ? (
               <>
                 <p className="text-3xl">🏆</p>
-                <p className="text-xl font-bold text-red-400">{puzzle.driver_name}</p>
+                <p className={`${feedbackStyles.guessName} text-xl font-bold text-red-400`}>{puzzle.driver_name}</p>
                 <p className="text-neutral-400">
                   Guessed in {revealedClues} clue{revealedClues > 1 ? 's' : ''}: <span className="text-red-400 font-bold">{score} pts</span>
                 </p>
@@ -211,7 +227,7 @@ export function NascarDriverBoard() {
             ) : (
               <>
                 <p className="text-3xl">😤</p>
-                <p className="text-xl font-bold text-red-400">It was {puzzle.driver_name}</p>
+                <p className={`${feedbackStyles.guessName} text-xl font-bold text-red-400`}>It was {puzzle.driver_name}</p>
                 <p className="text-neutral-400">Better luck next time!</p>
               </>
             )}
@@ -221,7 +237,7 @@ export function NascarDriverBoard() {
             {gameState.mode === 'unlimited' && (
               <button
                 onClick={resetGame}
-                className="mt-2 px-6 py-2 rounded-xl bg-red-600 hover:bg-red-700 font-bold text-white transition-colors"
+                className={`${feedbackStyles.action} mt-2 px-6 py-2 rounded-xl bg-red-600 hover:bg-red-700 font-bold text-white transition-colors`}
               >
                 Play Again
               </button>

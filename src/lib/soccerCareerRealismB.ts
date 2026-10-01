@@ -20,6 +20,9 @@ import type { CareerState, RandomEvent } from "./soccerCareerEngine";
    cannot reach back into the engine and there is no runtime cycle. Nothing
    below is evaluated at module scope. */
 import { fifaRankOf, nationsRankedAbove } from "./soccerInternational";
+/* Round 725: the shared story keys. soccerCareerLife imports only types from
+   the engine as well, so this adds no cycle. */
+import { COOLDOWN, STORY } from "./soccerCareerLife";
 
 /* ─── tiny local helpers (duplicated on purpose: no runtime import cycle) ─── */
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
@@ -239,7 +242,7 @@ export function getRealismEventsB(state: CareerState): RandomEvent[] {
   }
 
   if (state.overall >= 86 && pro >= 10 && flag(state, "statue") === 0) {
-    push({ id: 462, emoji: "🗿", title: "The Statue Vote",
+    push({ id: 462, story: STORY.statueVote, cooldown: COOLDOWN.once, emoji: "🗿", title: "The Statue Vote",
       description: "The supporters' trust has raised enough for a bronze statue outside the west stand. The shortlisted sculptor's last piece was described by the local paper as a man slowly melting.",
       category: "life", choices: [
         { label: "Approve it, melting face and all", emoji: "👍", color: "bg-amber-600", consequence: "Popularity +8, Followers +1.8M, Morale +6",

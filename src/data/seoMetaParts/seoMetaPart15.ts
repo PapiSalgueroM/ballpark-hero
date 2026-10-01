@@ -2,10 +2,14 @@
    edit this folder: edit src/data/seoMeta.ts. Every vite build rewrites what
    has fallen behind, and simSeoTitles section 6 fails if the committed copy
    is not what the source makes. */
-/* Part 15 of 32: 3 entries. */
+/* Part 15 of 32: 4 entries. */
 import type { SeoMeta } from '../seoMeta';
 
 export const SEO_META_PART: Record<string, SeoMeta> = {
+  "/nhl-gauntlet-draft": {
+    title: "Gauntlet Draft: NHL Lines and Goalie Draft Game",
+    description: "Draft two NHL forward lines, two defense pairs and a goalie from five real players a pick, then survive a five round playoff. Free daily hockey draft.",
+  },
   "/guess-nascar-driver": {
     title: "Guess The Driver: NASCAR Cup Series Quiz",
     description: "A mystery NASCAR Cup Series driver hides behind six clues, from winning years and titles to three real race wins. Free daily stock car racing trivia.",

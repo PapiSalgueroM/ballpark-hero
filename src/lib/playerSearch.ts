@@ -1,4 +1,5 @@
 import { foldSpecialLatin } from '@/lib/nameFold';
+import { isPlaceholderName } from '@/lib/placeholderName';
 import { supabase } from '@/integrations/supabase/client';
 
 /**
@@ -445,6 +446,11 @@ function rowToRaw(row: RawRow, source: PlayerSourceConfig): {
      2026-09-28. They are never offered, whatever the cleanup migration has or
      has not removed yet. */
   if (DUP_MARK.test(name)) return null;
+  /* Round 706: a name starting with "_" is a placeholder for a first name the
+     source never had ("_ Johnston" in ncaa_player_stats), never a player, so
+     no search offers one, whatever the cleanup migrations have or have not
+     removed yet. */
+  if (isPlaceholderName(name)) return null;
 
   let prominence = source.prominenceColumn ? Number(row[source.prominenceColumn]) || 0 : 0;
   // Some sources rank prominence by an ASCENDING column (e.g. player_id, where
@@ -683,6 +689,8 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
       prominenceQuery ?? Promise.resolve({ data: [] as RawRow[], error: null }),
     ]);
 
+    if (signal?.aborted) return { results: [], error: null };
+
     if (ilikeRes.error && prominenceRes.error) {
       return { results: [], error: ilikeRes.error.message || 'Search failed' };
     }
@@ -693,7 +701,8 @@ export async function searchPlayers(options: SearchPlayersOptions): Promise<Sear
       normalizedQuery,
       { exclude, boostNames: options.boostNames, limit },
     );
-    return { results, error: null };
+    const error = ilikeRes.error || prominenceRes.error;
+    return { results, error: results.length === 0 && error ? error.message || 'Search failed' : null };
   } catch (err) {
     if (err instanceof DOMException && err.name === 'AbortError') {
       return { results: [], error: null };

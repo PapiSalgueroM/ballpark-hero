@@ -306,19 +306,30 @@
     "/cfb-dynasty": {
       "howToPlay": [
         "Pick a program. Its prestige rating drives your talent pipeline and NIL budget.",
-        "Play one week at a time: 12 games, weeks 1 to 4 out of conference, the rest in it.",
+        "Play one week at a time: 12 games, weeks 1 to 4 out of conference, weeks 5 to 11 in it, and week 12 is rivalry week.",
+        "Week 12 is rivalry week, and every program plays its rival, even one from another conference. Your rival is a school from your own state when one is free to pair with you, otherwise a pairing the game made, and the game tells you which. Florida has three schools on the board, so Florida and Miami get each other and Florida State gets a pairing the game made.",
+        "The rivalry winner carries 0.5 to 1.5 points of extra strength into the title games and the Playoff, the loser drops the same, and a margin of 21 or more swings the full 1.5.",
         "Finish top two in your conference to reach its title game; win it for an automatic Playoff bid.",
+        "The conference table goes by conference winning percentage, not raw wins, because not everyone plays the same number of league games: a program whose rival is in another conference spends week 12 outside the league.",
         "Survive the 12-team bracket, single elimination from the first round to the national championship.",
-        "Spend NIL points across an 18-player high school board and an 8-player portal, then start the next season."
+        "Spend NIL points across an 18-player high school board and an 8-player portal, then start the next season.",
+        "The same offseason screen holds your two coordinators, one for the offense and one for the defense. Each moves his side of the ball by up to 3 rating points either way: 70 is neutral, 95 is the full plus 3, 45 the full minus 3, and an empty chair is called by a grad assistant who counts as a 50.",
+        "In a game each side scores 1.5 more points for every point its offensive coordinator's edge beats the other side's defensive coordinator's.",
+        "Keep your coordinators, let one go and get his pay back, or shop three candidates per chair, one rated below your program's level, one around it and one above it. A hire costs the difference between his pay and the pay of the man he replaces, and is refused if the pot cannot cover it.",
+        "A coordinator rated 85 or better can be hired away as a head coach after any season, and his chair stays empty until you fill it."
       ],
       "rules": [
         "The Playoff field is 12: the 5 conference champions plus 7 at-larges, seeded by ranking, byes for the top four.",
+        "On the same record the better resume ranks higher: strength of schedule, the average strength of every opponent actually played, title game included, plus the team's own strength. The 7 at-large spots and the seeds come off that ranking, and the Schedule tab shows your number and where it ranks.",
         "High school grades carry scouting error of up to 4 points either way. Portal transfers show true ratings and arrive as sophomores.",
         "NIL resets each offseason from prestige plus wins, and every signing spends against it.",
+        "Rivalry week moves that budget: a win adds 3 to 8 points and a loss takes 3 to 8 away, with a margin of 21 or more swinging the full 8.",
+        "Your two coordinators are paid first out of the same budget, from 3 points a season for a 45 to 16 for a 95, and what is left is your NIL money. If the budget cannot cover them, the dearest walks until it can.",
         "Seniors graduate and juniors rated 88 or higher often declare early."
       ],
       "example": [
         "You take Boise State, prestige 78. One September loss, then you run the league, finish 11-1, and win the conference title game for the automatic bid.",
+        "Week 12 is rivalry week against Tulane, a pairing the game made because no other Idaho school is on the board. You win it by 24, so Boise State carries 1.5 extra points of strength into the title game and the Playoff, and the trail opens with 8 more budget points.",
         "You win a first-round game, stun a bye team in the quarterfinals, and lose the semifinal. Then your 89-rated junior quarterback declares, so you sign a portal passer rated exactly 81 and roll the dice on a 5-star scouted at 83 who might really be a 79. Or an 87."
       ],
       "tips": [
@@ -665,6 +676,61 @@
         "Big countries are safe darts, tiny ones pay more accuracy points.",
         "In World Cup mode check the map first. A dart in a non qualified nation is worth nothing.",
         "Out of position picks lose 8 rating, so a misplaced superstar can be worse than a natural fit."
+      ]
+    },
+    "/deadline-day": {
+      "howToPlay": [
+        "Open today's window for the shared daily club, or pick any club in free play, or let the game pick one at random.",
+        "Read the brief. Each need is a place in your current eleven, with who starts there now and the rating that would count as an upgrade.",
+        "Under each need are two or three real players who could fill it, cheapest first, each with what your recruitment desk thinks he is worth.",
+        "Tap a player to open his deal, then call his club. The call is free and their asking price comes straight back.",
+        "Type a bid and watch the meter, or use the quick buttons to lowball, haggle or meet the ask. Sending it takes an hour.",
+        "Once the fee is agreed, his agent names a contract length, a weekly wage and a signing bonus. Offering terms takes an hour too.",
+        "Short of money? Sell one of your bench players to a club that has made an offer. Each sale takes an hour and the fee goes straight into the budget.",
+        "Keep going until every need is filled, or shut the window yourself when you are done."
+      ],
+      "rules": [
+        "The window opens at 11am and shuts at 11pm, so you have 12 hours.",
+        "Calling a club and walking away cost no time. Every bid, every offer of terms and every sale costs one hour.",
+        "The board want 3 or 4 places filled. A need is filled by a signing who can play that place and is rated at or above its line.",
+        "The budget is about what the cheapest man for each need would cost at his listed price plus the signing bonus his agent asks for. The dearest man for every need would cost more than you have.",
+        "Your desk gives a range for what each player is worth, and what he is really worth is always inside it.",
+        "Bid 97 percent of their ask or more and the fee is agreed.",
+        "Between 75 and 97 percent they counter: the ask comes 40 percent of the way down to your bid, and it costs one round of their patience.",
+        "Under 75 percent is an insult. The ask goes up 4 percent and it costs two rounds. Under 55 percent they end the talks on the spot.",
+        "A selling club starts with 4 or 5 rounds of patience. Run it out and the deal is dead.",
+        "His agent hears 3 offers at most. An offer that adds up to what he asked for signs him, a near miss gets a lower wage demand back, and a poor one costs two tries or ends the meeting.",
+        "The board will not go over the wage or the contract length he asks for, so you cannot pay him more a week to skip the signing bonus.",
+        "The signing bonus comes out of the same budget as the fee. A bid or an offer you cannot afford is refused before the hour is spent, so the budget never goes below zero.",
+        "Rival clubs move for players on your list. If a rival is in for a man and you do not push his deal that hour, there is a 30 percent chance they sign him.",
+        "If a rival is in at the fee table, your bid has to beat theirs. Bid at or under their number and there is a 30 percent chance they close the deal there and then.",
+        "Walk away from a deal with a rival circling and they usually take him.",
+        "When the window shuts, any deal still in talks or at the terms table collapses, and none of its money is spent.",
+        "The grade is out of 100: 50 for needs filled, 30 for value for money and 20 for budget left.",
+        "Value for money is full for a fee at or under what the player is really worth and nothing at 1.5 times it, averaged over your signings.",
+        "Budget points are the share of the budget you kept times the share of needs you filled, so a window that signs nobody scores nothing.",
+        "The letters are A+ from 90, A from 80, B from 65, C from 50 and D from 35. Anything lower is an F.",
+        "The daily is the same club, the same list, the same budget and the same dice for everyone on an Eastern day. One go per day, and a refresh picks up where you left off.",
+        "Deadline Day records that you played but puts no points on the leaderboard for now, while the points system is being rebuilt."
+      ],
+      "example": [
+        "Say today's club needs a goalkeeper, a central midfielder, a right winger and a striker, and the board have left you £29m.",
+        "You start with the keeper. His club are asking £3.6m, your desk says he is worth £2.4m to £3.2m, and you bid £3.1m. That is a counter: they come down to £3.4m and one round of patience is gone. It is noon.",
+        "You bid £3.3m, inside 97 percent of their ask, and the fee is agreed. His agent wants 4 years at 10k a week and a £1.8m bonus. You offer exactly that and he signs. It is 2pm and you have £23.9m left.",
+        "While you were on the phone, a rival came in for the dearest keeper on your list at noon and signed him at 2pm. It did not matter this time, but the same thing can happen to the striker you were saving for last.",
+        "By 8pm the midfielder and the winger are in, three hours each. The striker's club will not budge much and a rival is in for him, so you bid over the rival's number and inside 97 percent of the ask. Fee agreed at 9pm, terms signed at 10pm, an hour to spare.",
+        "Four needs out of four. The keeper cost £3.3m for a £3m player, 10 percent over his real worth, which keeps 80 percent of his share of the value points, and say the other three went about 10 percent over too. That is 50 for needs, 24 for value and, with £1m of the £29m left, 0.7 for budget: 75 out of 100, a B."
+      ],
+      "tips": [
+        "Call every club on your list early. The call is free, and it puts every asking price in front of you before you spend an hour.",
+        "Open around the middle of your desk's range, never under 75 percent of their ask, then come about half way up to their number each round. Every fee at or under his real worth keeps your value points whole.",
+        "A haggle costs an hour and a round of patience. With plenty of clock, pitch low and come up. With the window closing, pay near the ask and get it done.",
+        "Do not insult a club unless you mean it. Under 75 percent of the ask costs two rounds and pushes the price up.",
+        "On a cheap player the signing bonus can be more than half the fee, so leave room for it before you agree the fee.",
+        "When a rival comes in, deal with that player next. Every hour you leave him alone they have a 30 percent shot at signing him.",
+        "If the sums do not add up, sell a bench player early, so the money is there when the fee table needs it.",
+        "Money left only scores once the needs are filled, so a full window at a fair price beats a cheap half window.",
+        "Shutting the window early earns nothing for the hours you did not use. Unused money counts, unused time does not."
       ]
     },
     "/emoji-guess": {
@@ -1033,7 +1099,9 @@
         "Read the ownership mandate. A loaded roster is told to win the Super Bowl, a mid one to make the playoffs, a bare one to hit an honest win number. It resets every offseason from where your roster really stands.",
         "Shape the roster: cut bloated deals, sign free agents, and take trades to the phone: the other GM counters like a person, asking for a pick, offering a lesser man, or hanging up.",
         "Play week by week as scores, injuries, and rival moves roll in, with a live read on whether you are on pace for the mandate.",
+        "Open the depth chart from the Roster box: 8 position groups (QB, RB, WR, TE, OL, DL, LB, DB), each in the order the sim reads. Tap a man, then tap the one to swap him with. The men marked starts are the ones team strength counts, so benching a better man costs you and promoting a hidden gem pays. Injured men are skipped and the next man steps up. Anyone who joins later (a signing, a pick, a trade) slots in by his rating, so a better newcomer starts right away, and Sort by rating hands a group back to the sim.",
         "After the Super Bowl, spend 3 picks on a 40 prospect class where scout grades can lie. Defensive picks join the roster as players, the same as any other pick.",
+        "On the draft screen, before your last pick opens free agency, tag one man whose deal is up. The card shows every expiring contract with its tag price, and the button says why when a tag is refused.",
         "Run the offseason, where young players grow and veterans fade, then chase the next title. Seasons are unlimited, as long as ownership keeps you."
       ],
       "rules": [
@@ -1041,7 +1109,9 @@
         "Playoffs use the real 14 team format: 7 seeds per conference, byes for the 1 seeds, four knockout rounds.",
         "Trades are judged on rating, age, and position, with quarterbacks at a premium. The AI only accepts a clear win.",
         "Grades can miss by up to 4 points either way, injuries cost players 1 to 4 weeks, and rosters cannot drop below six players.",
-        "A cut is not free. Half the man's salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason.",
+        "A cut is not free. Half the man's salary stays on this season's cap as dead money, a quarter lands on next season's if he had years left, and you cannot sign him back until the offseason. A tagged man is fully guaranteed, so cutting him puts his whole salary on the cap.",
+        "One franchise tag per offseason, built on the real NFL rule: a one year, fully guaranteed deal at the average of the 5 largest salaries at his position across the league or 120 percent of his current salary, whichever is more. A man tagged two years running costs at least 120 percent of the first tag. A tagged man cannot leave in free agency. Rival clubs tag too, roughly a third of them each offseason. Untagged men whose deals are up can walk: role players rated under 76 half the time, stars 15 percent of the time.",
+        "Team strength reads starters off the depth chart: 1 quarterback, 5 skill men across RB, WR and TE, every healthy lineman and 6 defenders across DL, LB and DB. Rating decides how many of a unit's slots each position group gets; your order decides who fills them. A chart you have not touched is the order by rating, so a save from before the chart opens with the same starters and the same team strength. From its next offseason on, the tags and the walks apply to it like any other.",
         "Trust upstairs runs 0 to 100. Beating the mandate raises it, missing it drops it, a championship fixes almost anything, and at zero you are fired and the save ends. A fresh GM always survives one bad year, never three."
       ],
       "example": [
@@ -2406,6 +2476,34 @@
         "Players 23 and under develop toward their potential every offseason. Hoard them."
       ]
     },
+    "/nhl-gauntlet-draft": {
+      "howToPlay": [
+        "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
+        "For each spot, center, wingers, defense and goal, read the five cards, star to bargain, and tap the one you keep.",
+        "A wing spot takes a winger or a center, because centers slide out to the wing all the time. A center spot only takes a center, and the defense and goalie spots only take their own.",
+        "After the eleventh pick the playoffs start on their own: five rounds, one game each, revealed one at a time.",
+        "Survive a round for 16 points; lift the Cup for exactly 100."
+      ],
+      "rules": [
+        "Every card is a real player off a real 2026-27 roster, 32 clubs and 13 players each, the same data NHL Front Office plays. Every opponent club is invented on purpose.",
+        "Ratings come from real 2025-26 production, not opinion: forwards and defensemen from their points per game against others at their position, goalies from save percentage and wins.",
+        "The roster data gives anyone without a qualifying 2025-26 season a placeholder rating of 68 and does not say which 68s those are, so the four goalies rated 68 are left out of the deal rather than risk dealing a number their play never produced.",
+        "The five cards per spot are spread across the pool's rating range, so a star and a bargain are always both on the table.",
+        "No player is dealt twice in one draft.",
+        "The knockout is deterministic in your lineup: scoring comes from the rating gap, a level game goes to sudden death overtime, and replaying the same eleven replays the same playoffs.",
+        "There are no shootouts, because playoff hockey does not have them. Overtime goes on until somebody scores.",
+        "Opposition ratings climb 77, 84, 89, 94, 98. A bargain lineup usually goes out in the first two rounds, an elite one often reaches the Cup Final, and even a perfect draft lifts the Cup only about one run in seven."
+      ],
+      "example": [
+        "The goalie spot deals a 90 next to an 87, an 83, an 81 and a 70. Nothing costs anything, so the 90 is the pick unless you are collecting one club.",
+        "Your finished lineup rates 91. The Qualifying Round is a 6-0 rout, the First Round a 4-0 shutout, the Second Round goes to overtime and you take it 3-2, and the Conference Final ends the run 4-2. Three rounds survived, 48 points, and the card you would take back is the 82 you settled for on the second defense pair."
+      ],
+      "tips": [
+        "The goalie counts the same as any other card toward the rating, one eleventh of it, so a weak goalie hurts no more than a weak winger, and no less either.",
+        "The wing picks can deal centers, and a center is often the best card in the pick, so do not skip past one in a wing spot.",
+        "The Cup only becomes a real chance once your lineup is in the mid nineties. Watch the running rating under the cards as you fill the lines."
+      ]
+    },
     "/nhl-my-career": {
       "howToPlay": [
         "Create your player: name, one of 5 positions (C, LW, RW, D, G), and one of 17 archetypes, from Generational Talent to The Agitator to The Workhorse in net.",
@@ -2751,8 +2849,8 @@
       "howToPlay": [
         "Check the header for the sport and the stat, like NBA career assists or MLB career home runs.",
         "Tap the five names in order, starting with the player you think has the most.",
-        "Changed your mind? Hit Undo last any time before your fifth pick.",
-        "Your ranking submits automatically the moment the fifth player lands.",
+        "Changed your mind? Move a picked player up or down, remove a name, or use Undo last while you build your order.",
+        "Once all five players are in place, review the order and hit Lock order to submit it.",
         "The reveal shows the true order with each player's real career number beside it."
       ],
       "rules": [
@@ -2769,7 +2867,7 @@
         "Lock in the two ends first. First and fifth are usually the spots you actually know.",
         "Career totals reward longevity. A 20-year grinder often out-counts a shorter, brighter prime.",
         "Think era. Stats like three-pointers and stolen bases skew hard toward certain decades.",
-        "Use undo freely. Nothing counts until the fifth tap."
+        "Edit freely before you hit Lock order. Adding your fifth player leaves the order open for review."
       ]
     },
     "/rarity-round": {
@@ -2967,6 +3065,7 @@
       "tips": [
         "Reroll your potential to 62 or better. The gap between a Promising start and a Gifted one echoes for a decade.",
         "The training ground is the dumbbell button, one session a season. The older sessions (cone slalom, sprint burst, passing gates, penalties or shot stopping) pay +1 at 50 and +2 at 80; the position drill pays the same but stops at your ceiling. Beyond that, growth follows your age curve, and you steer it through event choices, lifestyle purchases, and the social media detox, worth plus 2 to every stat next season.",
+        "In goal the same drills train keeper skills: the cone slalom is footwork and pays Positioning, the sprint burst pays Sweeping Speed, the passing gates pay Distribution and shot stopping pays Reflexes. Outfield players train Dribbling, Pace, Passing and Shooting from the same four tiles.",
         "Money matters: a personal trainer adds a stat point per season, and the recovery clinic halves injury layoffs.",
         "The doping storyline boosts every stat but risks a 20 percent failed test each season it runs, and failing means a 1 season ban and a wrecked reputation.",
         "Your personality and your agent shape the whole run. The Showman grows followers 60 percent faster, The Professor earns brand trust, and super agent Zara Blackwood opens dream club doors for a 10 percent cut.",
@@ -3029,7 +3128,9 @@
     },
     "/sports-bingo": {
       "howToPlay": [
-        "Pick a mode: the daily card (one shared card and pack run per day), unlimited, or versus the CPU at one of three levels.",
+        "Pick a mode: the daily card (one shared card and pack run per day), unlimited, versus the CPU at one of three levels, or pass the device for two to four of you on one phone.",
+        "Choose two to four seats and name them. Any seat can be a CPU instead, at casual, sharp or ruthless. Then pick which families the squares may come from (positions, ages, values, goals and assists, nationalities, leagues), a difficulty (relaxed, standard or quick, which is how long a pack stays open), and what wins: first line or full card.",
+        "Everyone gets their own card and the same ten packs. On every pack each seat takes a turn in order: the hand over screen shows only whose turn is next, you tap ready, turn the pack up one player at a time, claim every square a player turned up satisfies before the clock runs out, then pass the phone. CPU seats take their turn on their own.",
         "Ten packs of five real players open one at a time, each on a fifteen second timer. You can close a pack early once you have milked it.",
         "While a pack is open, tap every square that someone in the pack satisfies. A wrong tap shakes and costs nothing but time.",
         "After the tenth pack the card is scored: squares, lines and the blackout bonus."
@@ -3039,16 +3140,22 @@
         "A square can only be claimed while a pack containing a matching player is open. Closed packs never come back.",
         "Scoring: 3 points per marked square, 2 per completed row, column or diagonal, and a blackout lands exactly 100.",
         "Versus mode: the CPU plays the identical card and packs on its own board, and most squares after pack ten wins.",
-        "Every card is completable: the pack run is checked at deal time so each condition on the card has at least one matching player somewhere in the ten packs."
+        "Every card is completable: the pack run is checked at deal time so each condition on the card has at least one matching player somewhere in the ten packs. At a table that holds for every seat's card against the shared packs.",
+        "First line means a full row, column or diagonal, the free centre counting. Full card means most squares after pack ten, and a blackout ends it early. The game ends after the round in which somebody met the goal, so every seat has heard the same packs.",
+        "Level on the goal, the seat that got there having turned up fewer players wins. Still level, more squares wins. Still level, the win is shared. If nobody met the goal in ten packs, most squares wins, shared when level.",
+        "The bank holds 33 conditions in six families. Only a pick worth 24 or more can fill a card by itself, so you can drop nationalities, or leagues, or positions, or one or two of ages, values and goals and assists. A thinner pick fills what it can and tops every card up from the families you dropped, and both the setup screen and the turn screen say exactly how many squares that is. A card is never dealt short."
       ],
       "example": [
         "Pack three opens: a 21 year old Brazilian winger worth 45M with 11 goals. That one player claims Age 21 or younger, A Brazilian, A winger, Worth 40M plus and 10 plus goals, if all five sit on your card and you spot them in time.",
-        "You tap four of them before the clock runs out, miss the goals square, and the pack closes. Seven packs later you finish on 19 squares and 4 lines: 65 points, and the ruthless CPU beat you by two squares."
+        "You tap four of them before the clock runs out, miss the goals square, and the pack closes. Seven packs later you finish on 19 squares and 4 lines: 65 points, and the ruthless CPU beat you by two squares.",
+        "Sam and Ana set up a two seat table, first line, standard pace, with nationalities dropped: the five remaining families offer 25 conditions, so both cards fill without a top up. Pack four opens for Sam. She turns up three players and the third, a 31 year old Premier League centre back worth 25M, completes her top row through Age 30 or older. That is 18 players turned up in all, three full packs and three of this one, so her card is marked as done at 18.",
+        "Ana takes her turn on the same pack, turns up all five and completes a diagonal off the fifth: 20 players. The round is over and both have a line, so the game ends. Sam got there having turned up fewer players, so Sam wins. Had both needed all five, more squares would have decided it, and level on that too it would be shared."
       ],
       "tips": [
         "Read the card before the first pack opens. Knowing your rare squares (a goalkeeper, worth 100M plus) means you never let one slip by.",
         "One great player can claim four or five squares. Scan every attribute line, not just the name.",
-        "Do not close packs early while broad squares are still open. The timer is generous exactly so the scan is doable."
+        "Do not close packs early while broad squares are still open. The timer is generous exactly so the scan is doable.",
+        "At a table, claim as you go rather than turning the whole pack up first: a line completed on the third player beats one completed on the fifth."
       ]
     },
     "/sports-millionaire": {
@@ -3444,13 +3551,14 @@
         "Hit draw and the reel reveals your nations in random slot order.",
         "Type 2 or more letters and pick a player of that nationality who covers the slot.",
         "Wrong position picks bounce off harmlessly with an explanation. Confirmed picks lock for good.",
-        "Fill all 11 to win, then check squad value and chemistry, and simulate a season if you are curious."
+        "Fill all 11 to win, then check squad value and chemistry, and simulate a season if you are curious. The report has a month by month tab, a player stats tab and a share card with your finish, top scorer and player of the season."
       ],
       "rules": [
         "Every slot gets a different nation, and only countries with depth make the draw: at least 2 goalkeepers, 2 centre backs, 3 defenders, 3 midfielders and 2 strikers in the database.",
         "Respins reroll a nation you cannot solve, shared across all slots. You choose your budget before the draw: none, 3, 5 or 10, with 3 as the default.",
         "Position families count: wingers cover both flanks, central midfielders cover holding and attacking slots, strikers and centre forwards swap freely, full backs cover wing back slots. Front line winger slots take wingers and wide midfielders only, never wing backs.",
-        "The timer covers the whole run, and zero on the clock ends it. The season sim rates your XI out of 100 across a 38 game, 20 team league."
+        "The timer covers the whole run, and zero on the clock ends it. The season sim rates your XI out of 100 across a 38 game, 20 team league.",
+        "The season report runs month by month with a standout each month, gives every player his appearances, goals, assists, average rating and, for the keeper and back line, the clean sheets in the games he played (goals and assists add up to the team totals), hands out player, young player and goal of the season, and names the one shape or respin the sim says would have moved the finish most, as arithmetic on the same rolls and never a promise. Nobody real is quoted in it."
       ],
       "example": [
         "A 4-3-3 on the 90 second clock. Brazil lands on the goalkeeper slot and Alisson is typed before the reel settles. France at striker is just as friendly.",

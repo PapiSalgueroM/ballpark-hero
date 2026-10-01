@@ -1,0 +1,12 @@
+.board { overflow-anchor: none; }
+.fullText { overflow-wrap: anywhere; }
+.action { min-height: 44px; min-width: 44px; }
+.action:focus-visible, .rung:focus-visible, .result h2:focus-visible { outline: 2px solid hsl(var(--primary)); outline-offset: 3px; }
+.ladder { max-height: 200px; overflow-y: auto; overscroll-behavior: contain; }
+.rung { min-height: 104px; }
+.moves { display: flex; flex-basis: 100%; justify-content: flex-end; gap: 4px; }
+.moves button { border: 1px solid hsl(var(--border)); border-radius: 8px; padding: 0 10px; }
+.moves button:disabled { opacity: 0.35; }
+.committed { animation: orderReveal 420ms ease-out 1; }
+@keyframes orderReveal { from { opacity: 0.55; } to { opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .committed { animation: none; } }

@@ -589,6 +589,14 @@ These are not preferences, they are the exposure.
   `scripts/genTransferPathHints.mjs` over a pull of the career tables, and
   `simTransferPathHints` fails if a row disagrees with the search. When a rule changes,
   grep the tables for prose that encodes the old one.
+- **A round that changes `career_players` or `career_seasons` reruns the Career Ladder roster.**
+  Since Round 718 the Career Ladder daily deals from a committed roster,
+  `src/data/careerLadderRoster.json`, that only ever gains lines, each with the date it counts
+  from, so a data edit cannot re-deal somebody a day later. After any change to those two tables
+  run `node scripts/genCareerLadderRoster.mjs` (new lines count from today plus 30 days) and
+  commit the JSON, the same idea as `genSearchKeywords`. Nothing runs it for you. A man who is
+  not on the roster is never dealt, and `simCareerLadderRotation` section 7 stays red while the
+  roster and the live tables disagree. The file has to be live before the date it writes.
 
 
 ### Never reintroduce these specific regressions

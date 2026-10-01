@@ -1,31 +1,38 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useF1Driver } from '@/hooks/useF1Driver';
 import { useScrollToGame } from '@/hooks/useScrollToGame';
 import { F1DriverSearch } from './F1DriverSearch';
 import { F1DriverHowToPlay } from './F1DriverHowToPlay';
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
-import { MAX_CLUES } from '@/types/f1Driver';
-
-const CLUE_LABELS = ['Vibe', 'Era & Nationality', 'Teams', 'Race Wins', 'Championships', 'Famous Moment'];
+import { MAX_CLUES, POINTS_BY_CLUE, type F1DriverState } from '@/types/f1Driver';
+import feedbackStyles from './F1DriverFeedback.module.css';
 
 export function F1DriverBoard() {
   const { gameState, startGame, makeGuess, giveUp, revealHint, resetGame, pointsForCurrentClue } = useF1Driver();
   const gameRef = useScrollToGame(gameState);
-  const [wrongFlash, setWrongFlash] = useState(false);
+  const [feedback, setFeedback] = useState<{ kind: 'correct' | 'wrong'; turn: number; status: F1DriverState['gameStatus'] } | null>(null);
+  const previous = useRef(gameState);
   const [hintsUsed, setHintsUsed] = useState(0);
   const [showGiveUpConfirm, setShowGiveUpConfirm] = useState(false);
 
-  const handleGuess = (name: string) => {
-    const prevClues = gameState?.revealedClues ?? 0;
-    makeGuess(name);
-    setTimeout(() => {
-      if (gameState?.revealedClues !== prevClues || gameState?.gameStatus === 'playing') {
-        setWrongFlash(true);
-        setTimeout(() => setWrongFlash(false), 500);
-      }
-    }, 50);
-  };
+  useEffect(() => {
+    const prior = previous.current;
+    previous.current = gameState;
+    if (!gameState || !prior || prior.puzzle.id !== gameState.puzzle.id || prior.mode !== gameState.mode || gameState.guesses.length < prior.guesses.length) {
+      setFeedback(null);
+    } else if (prior.gameStatus === 'playing' && gameState.guesses.length === prior.guesses.length + 1 && prior.guesses.every((guess, index) => gameState.guesses[index] === guess)) {
+      setFeedback({ kind: gameState.gameStatus === 'won' ? 'correct' : 'wrong', turn: gameState.guesses.length, status: gameState.gameStatus });
+    } else if (gameState.gameStatus !== prior.gameStatus) {
+      setFeedback(null);
+    }
+  }, [gameState]);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = window.setTimeout(() => setFeedback(null), 600);
+    return () => window.clearTimeout(timer);
+  }, [feedback]);
 
   const handleHint = () => {
     revealHint();
@@ -76,6 +83,8 @@ export function F1DriverBoard() {
   const isOver = gameStatus !== 'playing';
   const hasGuessed = guesses.length > 0;
   const canHint = revealedClues < MAX_CLUES;
+  const nextHintPoints = POINTS_BY_CLUE[revealedClues] ?? 0;
+  const shownFeedback = feedback && feedback.turn === guesses.length && feedback.status === gameStatus ? feedback : null;
 
   const shareScore = gameStatus === 'won'
     ? `I guessed today's F1 Driver in ${revealedClues} clue${revealedClues > 1 ? 's' : ''}!\nScore: ${score} 🏎️`
@@ -101,6 +110,7 @@ export function F1DriverBoard() {
             return (
               <div
                 key={i}
+                data-f1-driver-clue={i}
                 className={`rounded-xl border px-4 py-3 transition-all duration-300 ${
                   isRevealed
                     ? 'border-red-500/30 bg-zinc-900'
@@ -109,7 +119,7 @@ export function F1DriverBoard() {
               >
                 <div className="flex items-center gap-2 mb-1">
                   <span className={`text-xs font-semibold uppercase tracking-wider ${isRevealed ? 'text-red-400' : 'text-zinc-400'}`}>
-                    {CLUE_LABELS[i]}
+                    Clue {i + 1}
                   </span>
                   {!isRevealed && (
                     <span className="text-xs text-zinc-400">🔒</span>
@@ -127,15 +137,18 @@ export function F1DriverBoard() {
           })}
         </div>
 
-        {/* Wrong guess flash */}
-        {wrongFlash && (
-          <p className="text-center text-red-400 text-sm font-semibold animate-pulse">Wrong guess! Try again...</p>
-        )}
+        <div role="status" className={feedbackStyles.status}>
+          {shownFeedback && (
+            <p key={`${shownFeedback.kind}-${shownFeedback.turn}`} data-f1-driver-feedback={shownFeedback.kind} className={`${feedbackStyles.reply} text-center text-sm font-semibold ${shownFeedback.kind === 'correct' ? 'text-emerald-400' : 'text-red-400'}`}>
+              {shownFeedback.kind === 'correct' ? 'Correct guess. Driver found.' : isOver ? 'Wrong guess. The answer is below.' : 'Wrong guess! Try again...'}
+            </p>
+          )}
+        </div>
 
         {/* Guess input */}
         {!isOver && (
           <>
-            <F1DriverSearch onGuess={handleGuess} guesses={guesses} currentPuzzle={gameState?.puzzle} />
+            <F1DriverSearch onGuess={makeGuess} guesses={guesses} currentPuzzle={gameState?.puzzle} />
 
             {/* Hint + Give Up row */}
             <div className="flex items-center justify-center gap-4">
@@ -144,7 +157,7 @@ export function F1DriverBoard() {
                   onClick={handleHint}
                   className="text-sm text-yellow-500/70 hover:text-yellow-400 transition-colors"
                 >
-                  💡 Hint (-100 pts)
+                  💡 Hint ({nextHintPoints} pts next)
                 </button>
               )}
               {hasGuessed && !showGiveUpConfirm && (
@@ -157,7 +170,7 @@ export function F1DriverBoard() {
               )}
             </div>
             {hintsUsed > 0 && (
-              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used (-{hintsUsed * 100} pts)</p>
+              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used</p>
             )}
 
             {/* Give Up confirmation */}
@@ -181,7 +194,7 @@ export function F1DriverBoard() {
         {guesses.length > 0 && !isOver && (
           <div className="flex flex-wrap gap-2 justify-center">
             {guesses.map((g, i) => (
-              <span key={i} className="px-3 py-1 rounded-full bg-zinc-800 text-zinc-400 text-xs line-through">
+              <span key={i} className={`${feedbackStyles.guessName} px-3 py-1 rounded-full bg-zinc-800 text-zinc-400 text-xs line-through`}>
                 {g}
               </span>
             ))}
@@ -190,7 +203,7 @@ export function F1DriverBoard() {
 
         {/* Game over */}
         {isOver && (
-          <div className="text-center space-y-4 rounded-2xl border border-red-500/20 bg-zinc-900 p-6">
+          <div data-f1-driver-result={shownFeedback ? gameStatus : undefined} className={`text-center space-y-4 rounded-2xl border border-red-500/20 bg-zinc-900 p-6 ${shownFeedback ? gameStatus === 'won' ? feedbackStyles.won : feedbackStyles.lost : ''}`}>
             {gameStatus === 'won' ? (
               <>
                 <p className="text-3xl">🏆</p>

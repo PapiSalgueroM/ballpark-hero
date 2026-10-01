@@ -83,8 +83,10 @@ const GauntletDraft = lazy(() => import("./pages/GauntletDraft"));
 const NbaGauntletDraft = lazy(() => import("./pages/NbaGauntletDraft"));
 const MlbGauntletDraft = lazy(() => import("./pages/MlbGauntletDraft"));
 const NflGauntletDraft = lazy(() => import("./pages/NflGauntletDraft"));
+const NhlGauntletDraft = lazy(() => import("./pages/NhlGauntletDraft"));
 const ClubManager = lazy(() => import("./pages/ClubManager"));
 const ManagerHotSeat = lazy(() => import("./pages/ManagerHotSeat"));
+const DeadlineDay = lazy(() => import("./pages/DeadlineDay"));
 const StadiumTycoon = lazy(() => import("./pages/StadiumTycoon"));
 const WonderkidFactory = lazy(() => import("./pages/WonderkidFactory"));
 const ContractChaos = lazy(() => import("./pages/ContractChaos"));
@@ -408,8 +410,10 @@ const AppContent = () => {
         <Route path="/nba-gauntlet-draft" element={<NbaGauntletDraft />} />
         <Route path="/mlb-gauntlet-draft" element={<MlbGauntletDraft />} />
         <Route path="/nfl-gauntlet-draft" element={<NflGauntletDraft />} />
+        <Route path="/nhl-gauntlet-draft" element={<NhlGauntletDraft />} />
         <Route path="/club-manager" element={<ClubManager />} />
         <Route path="/manager-hot-seat" element={<ManagerHotSeat />} />
+        <Route path="/deadline-day" element={<DeadlineDay />} />
         <Route path="/stadium-tycoon" element={<StadiumTycoon />} />
         <Route path="/wonderkid-factory" element={<WonderkidFactory />} />
         <Route path="/contract-chaos" element={<ContractChaos />} />

@@ -295,7 +295,7 @@ export function GuessTheNationBoard() {
               )}
             </div>
             {hintsUsed > 0 && (
-              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used (-{hintsUsed * 100} pts)</p>
+              <p className="text-center text-xs text-yellow-600">{hintsUsed} hint{hintsUsed > 1 ? 's' : ''} used</p>
             )}
 
             {showGiveUpConfirm && (
@@ -342,7 +342,7 @@ export function GuessTheNationBoard() {
               gameName: 'Guess The Nation',
               gamePath: '/guess-the-nation',
             }}
-            onPlayAgain={resetGame}
+            onPlayAgain={() => { resetGame(); setHintsUsed(0); }}
             playAgainLabel={gameState.mode === 'daily' ? 'Back to modes' : 'Play Again'}
             playNext={gameState.mode === 'daily' ? <p className="text-sm text-muted-foreground">Come back tomorrow for a new nation.</p> : undefined}
           />

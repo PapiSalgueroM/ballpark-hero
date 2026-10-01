@@ -5,9 +5,11 @@
    with time. Also: named injuries, position starting profiles, and the
    expanded life-event catalog (ids 41+).
    NOTE: this file only imports TYPES from soccerCareerEngine, so the
-   engine -> careerEras runtime import has no cycle.
+   engine -> careerEras runtime import has no cycle. soccerCareerLife is the
+   one runtime import, and it too imports only types from the engine.
    ──────────────────────────────────────────────────────────────────────────── */
 import type { CareerState, RandomEvent, ClubData } from "./soccerCareerEngine";
+import { COOLDOWN, STORY } from "./soccerCareerLife";
 
 /* ─── tiny local helpers (duplicated on purpose: no runtime import cycle) ─── */
 const rand = (min: number, max: number) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -1316,7 +1318,7 @@ export function getExtraEvents(state: CareerState): RandomEvent[] {
   ] });
 
   if (st.age >= 21) {
-    evts.push({ id: 63, emoji: "💬", title: "Leaked Group Chat", description: "A private message where you rate the manager's tactics \"stone age\" leaks to the press.", category: "negative", choices: [
+    evts.push({ id: 63, story: STORY.squadChatLeak, cooldown: COOLDOWN.once, emoji: "💬", title: "Leaked Group Chat", description: "A private message where you rate the manager's tactics \"stone age\" leaks to the press.", category: "negative", choices: [
       { label: "Apologize to the gaffer", emoji: "🙇", color: "bg-emerald-600", consequence: "Awkward but resolved", apply: s => { s.morale = clamp(s.morale + 2, 0, 100); s.events = [...s.events, "💬 Apologized for the leaked message"]; return s; } },
       { label: "Stand by every word", emoji: "🗿", color: "bg-red-600", consequence: "50%: manager respects it · 50%: benched briefly", apply: s => { if (Math.random() < 0.5) { s.morale = clamp(s.morale + 6, 0, 100); s.popularity = clamp(s.popularity + 3, 0, 100); s.events = [...s.events, "🗿 The manager respected the honesty and cleared the air"]; } else { s.morale = clamp(s.morale - 5, 0, 100); s.statBoostNextSeason = { ...s.statBoostNextSeason, passing: (s.statBoostNextSeason.passing || 0) - 1 }; s.events = [...s.events, "🗿 Spent a month on the bench for that one"]; } return s; } },
     ] });
@@ -1351,7 +1353,7 @@ export function getExtraEvents(state: CareerState): RandomEvent[] {
   }
 
   if (st.age >= 25 && st.socialMediaFollowers >= 2) {
-    evts.push({ id: 68, emoji: "🎙️", title: "Launch Your Own Podcast", description: "A production company offers to launch your podcast: tactics, teammates, tea.", category: "life", choices: [
+    evts.push({ id: 68, story: STORY.podcastLaunch, cooldown: COOLDOWN.once, emoji: "🎙️", title: "Launch Your Own Podcast", description: "A production company offers to launch your podcast: tactics, teammates, tea.", category: "life", choices: [
       { label: "Launch it", emoji: "🎧", color: "bg-emerald-600", consequence: "+€0.6M, Followers +1M", apply: s => { s.netWorth = round1(s.netWorth + 0.6); s.socialMediaFollowers = round1(s.socialMediaFollowers + 1); s.morale = clamp(s.morale + 2, 0, 100); s.events = [...s.events, "🎙️ Your podcast topped the charts in week one"]; return s; } },
       { label: "Focus on football", emoji: "⚽", color: "bg-muted", consequence: "Passing +1 next season", apply: s => { s.statBoostNextSeason = { ...s.statBoostNextSeason, passing: (s.statBoostNextSeason.passing || 0) + 1 }; s.events = [...s.events, "⚽ Turned down the podcast. Reps over takes"]; return s; } },
     ] });

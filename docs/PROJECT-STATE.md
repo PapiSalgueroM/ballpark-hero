@@ -1,5 +1,336 @@
 # Project state
 
+## LIVE 2026-10-01: Release K (twelve reviewed rounds, two new games), main `1e0aa2b8`
+
+Assembled by the desktop Claude lane in the gate clone (`release-k`) on top of Release J and Codex's commits as
+they stood at each merge. **douknowball.com is serving it:** deployment `823e6dea`, called only after
+`get_project` showed `latest_commit_sha` `1e0aa2b8`; the live entry moved from `index-jsexOB8y.js` to `index-DH__DSXe.js`.
+Proof by content: the x-deployment-id header read 823e6dea 30 seconds after the deploy; /deadline-day and /nhl-gauntlet-draft answer 200 with their own h1 and are in the live sitemap (170 URLs); /front-office carries the reworded heading Tagged stars and who walks; /whats-new carries the lines for Deadline Day, the shootout order, applying for a job, the franchise tag, the coordinators and Internacional.
+
+**How it was built.** Every round below went builder, one adversarial review, one fix pass, all on Opus, then the
+merged tree was gated here. The reviews found 27 majors across the twelve rounds and every one was fixed or is
+named below as not fixed with its reason. Stage by stage results (findings, fixes, gates, what was left) are in
+`scratchpad/chains-v3.json` of the session and summarised here.
+
+- **721, new game Deadline Day (`/deadline-day`).** A sporting director's last day of the window: a clock in game
+  hours, a budget, squad needs, bids against the Club Manager valuation desk and closeness meter (imported, the
+  engine is not forked and its module registrations are restored after every call), rivals who take players, and a
+  window grade. Daily and free play. Review majors fixed: the wage cost nothing so the agent's terms could be beaten
+  for free; Menu during the daily reset the window; the clock check could not fail; rivals signing players had no
+  harness check. `simDeadlineDay`. Caps row `deadline-day` APPLIED (unscored).
+- **724, Gauntlet Draft NHL (`/nhl-gauntlet-draft`).** The fifth sport on the shared gauntlet engine, pool from the
+  site's own NHL data. Review major fixed: nothing held the NHL position rule or lineup shape. `simGauntletEngine`
+  holds NHL to every section the other four are held to. Caps row `nhl-gauntlet-draft` APPLIED (100). Not fixed, noted
+  for its own round: the shared engine gives no "in overtime" label to a game won by one extra time goal.
+- **782, Club Manager shootout order (report of 2026-09-23).** The manager lists up to eleven takers on the tactics
+  screen; a shootout walks that order over the men still on the pitch, each kick's odds moved by the taker's
+  penalties rating and the keeper facing him inside the existing cap; every kick is listed in the report. Unset
+  means the old behaviour exactly (150 of 150 fixture rows). Review majors fixed: the order tile never scrolled into
+  view, and nothing held the keeper's nudge. `simCmShootoutOrder`. Left as briefed: with an order set a favourite
+  wins fewer shootouts than with none (61.3 against 67.6 percent for the strongest side), because each kick reads
+  only its taker and keeper; a bounded strength lean is a design call.
+- **783, Club Manager apply for a job (report of 2026-09-23).** Apply to any modelled club; an answer in two to five
+  match days from reputation, record, tier gap and how that club's season is going; on a yes, join now or at the
+  rollover; one open application, a season's cooldown after a no, three a season. Review majors fixed (four): a
+  booked summer move overrode a job taken after a sacking; a late season application vanished unanswered at the
+  rollover; the manager could end up promised to two clubs; the cooldown could be broken through the real rollover
+  with every gate green. `simCmApplications`.
+- **723, NFL Front Office franchise tag and depth chart.** One tag an offseason at the greater of the top five
+  average at the position or 120 percent of last year's salary; a depth chart per position group that the sim's
+  strength reads. Review majors fixed: a newcomer went to the bottom of a saved order whatever his rating; two tag
+  rules could be broken with everything green. `simNflTagDepth` (62 checks). Kept on purpose and disclosed in the
+  guide: untagged stars walk 15 percent of the time, which is what gives the tag a use. No phone pass of the tag
+  card and the chart tiles was done in a worktree: owed.
+- **728, College Football Dynasty depth.** Offensive and defensive coordinators (generated, hired and fired in the
+  offseason, a bounded effect on the unit, a salary from the budget), rivalry week, and strength of schedule on the
+  schedule screen and in Playoff selection, in a module the basketball dynasty can share (not bound yet). Review
+  major fixed: the coordinator's effect was never fenced where the sim reads it. `simCfbStaff`. Not fixed, with
+  reasons in the branch: AI coordinators are hired at each program's own level, a three school state can only pair
+  two, and a save from before the round keeps the raw wins conference sort until its offseason.
+- **725, Soccer Career life events.** A cooldown per event, the catalog audited type by type (the table is in the
+  harness header), 20 new events with role speakers only. Review majors fixed: the shared story rule and every
+  cooldown length could be switched off with the harness green. `simCareerLifeCooldowns` (16 controls). One
+  residual: a financial crisis drops the private physio's yearly cost while the flag stays set.
+- **726, World XI season report.** Month by month form with a standout and one narrated moment, per player season
+  stats, young player and goal of the season, a "what would have changed" line that really re-simulates, a share
+  card. Review majors fixed (four): copy claimed stats add up to team totals when they did not; the round turned
+  `simNoInventedConduct` red; lines repeated inside a season; the "nobody real speaks" guard could be beaten.
+  `simWorldXiSeasonReport`, plus the browser fixture `playWorldXiReportFit` for phone widths.
+- **727, Sports Bingo pass the device.** Two to four seats on one phone, each with its own card from the same pack
+  run, a hand over screen, custom condition families with a visible fallback. Review majors fixed: the same packs
+  rule was checked through a field play never reads; nothing checked each seat gets its own card; a flaky page
+  test. `simBingoSeats`. Not fixed on purpose: a refresh mid turn gives the seat a full clock back.
+- **718, Career Ladder no repeat rotation, from 2026-10-15.** The daily deals from a committed, append only roster
+  (`src/data/careerLadderRoster.json`), so a data edit can no longer re-deal a man a day later (the review's major).
+  `simCareerLadderRotation` (8 controls, a golden 800 day walk). STANDING STEP, now in `CLAUDE.md`: a round that
+  changes `career_players` or `career_seasons` runs `node scripts/genCareerLadderRoster.mjs` and commits the JSON.
+  The Clue Auction half of the old claim does not apply (it has no daily).
+- **784, three reports closed as a guess, rechecked.** Soccer Career: a keeper's drills now train keeper skills and
+  the First Touch tile says so (the review found the reported defect still there in that drill); defenders' clean
+  sheets hold (`simCareerCleanSheets`). Perfect Season NBA: the odds on the card are the odds in the sim
+  (`simPerfectSeasonOdds`), with the best record kept. Career quiz: Alisson starts at Internacional in 2013 and 24
+  more first clubs audited; the data is APPLIED (`round_784_career_first_clubs`, 3,612 to 3,640 season rows) and
+  the live tables render the committed `careerPlayers.ts` byte for byte. Left for later rounds: NHL and MLB Perfect
+  Season copy still says "chase the perfect season" (odds one in 3,857 and one in 12.1 million at an 88 overall), a
+  handful of disclosed data rows, and the duplicate Alisson player.
+- **706, the college tables, readers only.** The College Basketball Grid search no longer offers `_ Surname`
+  placeholders and the three twin programs read as one program each. `simCollegeTables` (16 controls) tests the
+  call sites, not just the helpers (the review's major). **Its five migrations are NOT applied:** `cbb_programs` at
+  00:00 ET; `nfl_draft_picks` then regenerate `scripts/data/collegeGridPlayers.json` (the diff must drop exactly the
+  13 `draft:1977` ids), reload `college_grid_players` and regenerate `nfl_grid_players`; HOLD `ncaa_player_stats`
+  until the College Basketball Grid archive's 106 school pool is re-pinned in the same step; `cfb_qb` and `cfb_rb`
+  whenever. Until then the 13 invented 1977 names are still College Grid answers, and What's New says nothing
+  about them.
+- **Gate fixes made at assembly.** Manager Hot Seat's verdict now wears the shared result moment (Round 719 had
+  missed Round 710's rule and `simResultMoment` was red on main); `/aussie-rules-manager` is listed there with its
+  own season complete panel; `simCareerLifeCooldowns` folds line endings on its read; guide headings on Sports
+  Bingo and NFL Front Office no longer repeat a phrase; the frozen guide record follows the reviewed guide changes.
+- **Not in this release:** 700 (the seoMeta split passed review with no majors but restructures the file three of
+  these rounds add to, so it ships alone next), 703 (reviewed and fixed at `67c4e42d`; the site code has to be live
+  before its nine edge functions are redeployed, so it is the next publish), 722 (four majors fixed; sent back to
+  calibrate the tax line, which billed Denver 416 million in season one), 781, 795 and 796 (finishing), 735 to 740.
+
+**Gates.** Type gate 0 on the merged tree and again after each merge of main. Twelve branches merged with only What's New and the generated search index conflicting. build:seo: 176 routes prerendered, 0 failed, 27 lastmod dates rewritten, 2 new, 170 URLs; two pages redrawn alone (PRERENDER_ONLY) after their headings were reworded. Thirty snapshot and release fences in two lanes plus twenty round fences, all green on the final tree; simGridArchive's three controls fire. Reds settled on the way: simResultMoment (Hot Seat wired, Aussie Rules listed), simHarnessAnchors (a raw read in simCareerLifeCooldowns), simGuideHeadings (repeated heading phrases, the frozen record refreshed for /front-office, /sports-bingo and /soccer-career, the floor to 131), simAdsense (80 callers), simIndexNow (floor 170), and one simPrerenderBoot page load timeout that passed twice on rerun. Browser walks: playHomeFold, playSoftFourOhFour, playSnapshotDrift and playWorldXiReportFit green; playRenderStability green on the 32 routes whose saved pages changed; sweepWeight green after four budgets rose with their measured figures (Club Manager 641K on 637K, NFL Front Office 312K on 308K, Minefield 288K on 285K, Footle 333K on 330K) and the Aussie Rules guide bundle was registered. Not done: a phone look at the NFL tag card and depth chart tiles, and scripts/simHalftime.mjs was not part of this gate.
+
+## INTEGRATED 2026-10-01: Claude Release K and current fixes
+
+Main now includes Release K through 1e0aa2b8, with 813 on top at 51934cdf. All
+current claims and earlier accepted work were retained. Fresh unchanged tests
+pass 89/89 across all nine Higher/Lower hooks and shared daily puzzle identity.
+Their save envelope needs no correction. The next 815-817 production gate uses
+this integrated baseline; older gate evidence keeps its original scope. Next free 818.
+
+## ACCEPTED 2026-10-01: eight more Higher/Lower restart fixes
+
+813 cancels stale reveals in AFL, College Football, F1, Golf, Hockey, NBA, NFL
+and Tennis, preserving original rules, RNG, 2000ms reveal and daily saves. All
+72 actual-hook outcomes and seven effective control families pass, including
+original full 325-point games. Types/builds/all artifact guards and eight final
+App routes pass; no page errors, overflow, extra booking or asset drift observed.
+Detailed bounded evidence is on WORKBOARD. Alongside 810, all nine claimed
+Higher/Lower hooks are covered. 811-814 accepted; 815-817 continue. Next free 818.
+
+## CLAIMED 2026-10-01: Tennis and CBB worked help examples
+
+817 owns only both local HowToPlay panels and focused help checks. Add actual-tier
+worked examples and native 44px/focus-return behavior with the existing Dialog.
+815/816 own the corresponding Boards. All game rules/data/shared UI stay held.
+Exact claims are on WORKBOARD. Next free 818.
+
+## ACCEPTED 2026-10-01: NASCAR answer feedback and hint points
+
+812 removes wrong feedback after correct wins, adds finite/static result cues,
+keeps restores quiet and makes names/actions readable and usable. Hint copy now
+uses original payouts. Eleven outcomes, ten effective controls, native checks,
+independent review and combined production/artifact gates pass. Two untouched
+App contexts verify original-bank 1000/600 results, exact saves/share/once booking,
+quiet reload and stable scroll. All evidence and boundaries are on WORKBOARD.
+811/812 accepted; 813 acceptance and 815/816 continue. Next free 817.
+
+## ACCEPTED 2026-10-01: accurate clue-game hint points and counts
+
+811 fixes Constructor/Tennis next-payout copy and all three hint counters, with
+Nation resetting its count for a new round. Eight focused outcomes, six effective
+controls, independent review and combined production/artifact gates pass. Six
+final App phone contexts preserve exact scores/saves/share/once completion and
+quiet reload. Nation's new-round count is verified. Evidence is on WORKBOARD.
+Tennis's separate old wrong cue is reproduced and remains assigned to 816.
+812/813 acceptance and 815/816 continue. No publication claim. Next free 817.
+
+## CLAIMED 2026-10-01: truthful Tennis and CBB answer feedback
+
+815 reserves the CBB Board and local feedback CSS/test/sim. 816 reserves the
+matching Tennis files only after 811 acceptance. Both still use stale delayed
+wrong-guess feedback. Reproduce and replace with committed-result cues, finite
+motion and static reduced motion while preserving rules/data/save/completion.
+Exact boundaries are on WORKBOARD. All Claude claims stand. Next free 817.
+
+811-813 combined production types/build/artifact/affected gates pass; actual-App
+checks are running. Fresh visitor triage still has the same seven open reports
+with existing ownership. No database or report-status changes.
+
+## ACCEPTED 2026-10-01: fail-closed live search verification
+
+814 stops partial request failures from reporting a complete pass or satisfying
+a negative control. Eight isolated actual-harness cases prove the new checks and
+two old false-green mutations. Fresh live verification passes all 16 lookups with
+zero errors and stable repeated results. Product/data files are unchanged.
+
+Claude's separate release-k advanced to f08d0563 with new routes and shared daily
+identity work. Main's newer accepted commits and 811-813 drafts must be preserved
+when integrated. Current physical gate bd3ec0de plus those drafts certifies only
+that captured tree, not release-k. Detailed handoff is on WORKBOARD. Next free 815.
+
+## CLAIMED 2026-10-01: truthful live search verification
+
+814 reserves only the live accented-name harness after a measured 15/16 lookup
+run with one request error exited green. Root will make incomplete verification
+explicit and prove the error path without changing product/data behavior.
+811-813 continue in parallel. Next free 815.
+
+## IN PROGRESS 2026-10-01: fresh Nation counters and live crawl audit
+
+811 also clears Nation's local hint count on the original Play Again reset, after
+the builder found it survives between rounds. Same owned Board, focused lifecycle
+proof before capture. 812/813 continue. Next free 814.
+
+The full live audit passes 167 of 168 planned routes, with no unexpected noindex.
+Only the unpublished /aussie-rules-manager URL returns the home document. Google
+indexing and AdSense approval are still not established by these HTTP checks.
+
+## ACCEPTED 2026-10-01: MLB reveal timer ownership
+
+810 prevents abandoned guesses from awarding points or skipping rounds after a
+reset, protects a newer reveal's full duration and clears timers on unmount.
+Original rules, pairs, RNG, timing and exact 325-point Daily/Unlimited games hold.
+Ten outcomes/eight effective controls and two production App contexts (263 checks)
+pass, including exact saves/full share/one completion/quiet reload. Combined types,
+build, all artifact guards and full NoDoubleRecord pass. Evidence is on WORKBOARD.
+807/809/810 are accepted. 811-813 continue; all Claude claims stand. Next free 814.
+
+## ACCEPTED 2026-10-01: player-search failures and stale requests
+
+809 exposes failed empty lookups with a retry message, preserves useful matches
+and invalidates cleared searches. All 48 focused/existing tests, seven effective
+controls, native checks and two untouched production Puck Detective contexts pass.
+Failed searches consume no guesses or saves; exact selection, clue feedback and
+quiet reload hold. Combined production and artifact gates pass. Receipts and
+limits are on WORKBOARD. 810 acceptance and 811-813 continue.
+
+Lovable is available but not installed here. Desktop tab selection failed after
+one recovery, so no publish occurred. The integration was suggested; code work
+continues independently. Live publication and Google decisions remain separate.
+
+## ACCEPTED 2026-10-01: accurate F1 Driver clues, hints and help
+
+807 fixes misleading clue categories and hint costs, adds an actual-tier worked
+example and restores help focus without scrolling. Original game outcomes hold.
+Ten focused tests, ten existing feedback tests, seven effective controls and native
+checks pass. Combined 807/809/810 types, builds, all 15 artifact guards, full
+NoDoubleRecord and other affected guards pass. All 1800 raw sources and saved
+page/URL content hold. Two untouched production App contexts score 800 and 200
+with exact save/share/once completion and 119 checks. Detailed evidence is on
+WORKBOARD. No publication claim. 809/810 App checks and 811-813 continue.
+
+## CLAIMED 2026-10-01: clue copy, NASCAR feedback and reveal timers
+
+811 owns only Constructor, Tennis and Nation Boards' inaccurate hint copy plus
+focused checks. 812 owns NASCAR Board/local feedback CSS and checks for committed
+answer animations, readable results and accurate hint points. 813 owns the eight
+remaining Higher/Lower hooks and focused checks, reproducing the MLB-style stale
+reveal defect per hook before applying its small cancellation fix. Exact scopes
+and preserved behaviors are on WORKBOARD. 807/809/810 finish their frozen App
+checks. All Claude reservations stand. Next free 814.
+
+At 15:52 UTC the live site still serves the earlier index-jsexOB8y.js release.
+Home, F1 Driver and Rank Em are indexable in raw HTML; live sitemap has 167 URLs.
+Current repo changes still need publication. The automated Lovable browser is
+logged out and this session has no deploy_project tool; the desktop session is
+uninspected. AdSense approval and Google's indexing decisions remain unverified.
+
+## ACCEPTED 2026-10-01: regression harness repairs
+
+808 repairs College's final-verdict boundary and manager cleanup ownership, with
+all original controls plus effective new removed-return/destructive-cleanup
+copies. Default240 engine outcomes and1780 RAW source closures hold;489 syntax/
+anchor and no-rival-name guards pass. No frontend/runtime/snapshot changes.
+The old Aussie timeout does not reproduce in two unchanged10-test runs (season
+3565/4439ms against5000). No timeout was raised. Receipts are on WORKBOARD.
+
+810 claims only the MLB Higher/Lower hook plus focused tests/harness to cancel
+owned stale reveal timers. Actual reset wrongly grants old points/skips a round,
+and an old Daily timer truncates the new Unlimited reveal. Preserve all original
+game/save/share/completion rules and exact2000ms reveal. Claim before code edits.
+807/809 continue; all Claude reservations stand. Next free811.
+
+## CLAIM ADDENDUM 2026-10-01: truthful Driver clue headings
+
+807 also replaces fixed clue categories with numbered headings: original bank
+orders vary and several actual clues appear under wrong headings. Preserve every
+existing clue/data/order/payout; no invented categories or facts. Same owned Board
+scope, explicit claim before implementation. Evidence and checks are on WORKBOARD.
+
+## ACCEPTED 2026-10-01: F1 Driver committed feedback
+
+806 removes stale wrong feedback after correct wins, binds finite420/static cues
+to actual committed turns/status and prevents give-up from borrowing a prior miss.
+Full guesses wrap; hook/actions/data/all payouts/save/share/completion hold. Ten
+outcomes/nineunit controls/8native+4copies (994checks), combined805/806 type/build/
+all15 fences and two actual App contexts (1000/600,84checks) pass with no Y changes/
+errors/overflow/extra writes.1791 inputs/188 saved pages/168 URLs held. No publish.
+The measured original help Escape-to-BODY focus gap is deferred to807, whose scope
+now also includes the isolated HowToPlay opener/close-focus and fictional hint
+example.807/808/809 proceed; all Claude reservations stand. Next free810.
+Full receipts and boundaries are on WORKBOARD.
+
+## ACCEPTED 2026-10-01: Rank Em editable order
+
+802 adds editable five-pick drafts and one explicit Lock, preserving original
+rounds/scoring/save/share/completion. Finite/static cues,44px full-name controls
+and visible focus pass10 outcomes/15unit controls/8native+6copies and two actual
+App contexts (1000/600,229checks,0Y/errors/overflow). Types/final build/all15fences
+plus source guards pass. Only Rank snapshot/derived URL/guide record change,
+187 other saved pages/167 URLs/128 guide records hold. NoDouble copied CSS import
+support and Rank result detection pass targeted proofs; two separate whole-test
+positives refuse an existing MLB timer teardown error and are not credited.
+Detailed receipts/limits are on WORKBOARD. No publication claim.
+
+809 claims shared playerSearch/PlayerAutocomplete plus focused test/sim: failed
+empty lookups must offer retry instead of a false No players found, preserving
+useful partial results, ordering and stale-response guards. No data/DB writes.
+The historical413 accent failure's root cause remains unproven.806 is ready for
+commit;807/808 follow. All Claude reservations stand. Next free810.
+
+## ACCEPTED 2026-10-01: F1 Driver Search keyboard and phone popup
+
+805 fixes ArrowDown resets and offscreen low-input suggestions, preserving the
+original authored bank/matching/order and all gameplay. Eleven outcomes/thirteen
+unit controls and native matrices pass. Combined805/806 types/build/all15 fences
+plus source guards pass;1791 RAW inputs/188 saved pages/168 URLs stay held. Two
+actual App contexts use untouched production JS, preserve the original800point
+daily win/full share/once completion and quiet reload, with0Y/error/overflow.
+The test type correction emits identical JS. Detailed receipts are on WORKBOARD.
+No publication claim.802 commit and806 App finish next;807/808 continue afterward.
+All Claude claims stand. Next free809.
+
+## CLAIMED 2026-10-01: truthful Driver hints and regression repairs
+
+807 reserves Driver Board plus new focused test/sim after806 commits. The current
+-100 hint cost is false against the original clue payout ladder. Show the actual
+next payout and count hints, preserving all game outcomes.808 reserves only the
+College page source guard and manager hot-seat harness cleanup. The former reads
+the namesake judge call instead of the final verdict; the latter deletes its own
+original library in a checkout inside TEMP. Concrete scope is on WORKBOARD.
+
+The older413 scope finished409 PASS/4 FAIL.804 subsequently repaired its stale
+guide records; College drift, Aussie5000ms timeout and live accented-name lookup
+are being investigated.1779 RAW inputs held, one library was removed by the
+manager harness. Frozen gate/output preserved, no full-green/closure claim.
+802/805/806 final production acceptance continues. All Claude claims stand.
+Next free809. Claims pushed before implementation.
+
+## ACCEPTED 2026-10-01: Name Them All feedback and readable reveals
+
+803 adds truthful full-name hit announcements, finite/static answer cues, readable
+answers and44px actions. Retry/More lists now stay in the finished top card, fixing
+the measured phone focus and Retry jump. Original catalog/helpers/180-second timer/
+score/share/completion stay held. Nine outcomes/thirteen unit controls/eight final-CSS
+contexts/three effective browser copies, types/two builds/all15 artifact fences plus
+guide/search/anchor guards and two actual App contexts pass. All1784 source files,
+188 saved pages and168 URL hashes/dates stay held. Full receipts are on WORKBOARD;
+the weaker placeholder control is preserved and not credited. No publication claim.
+802 measured native corrections,805 Search and806 feedback continue. The older413
+regression is still running. All Claude reservations stand. Next free807.
+
+## IN PROGRESS 2026-10-01: F1 Driver feedback after committed guesses
+
+806 reserves the isolated Driver Board/module/tests/harness to fix wrong-guess
+feedback scheduled after a correct win by the stale playing-state closure. Actual
+miss cues become finite and static for reduced motion; hook/data/actions/score/save/
+share/completion stay held.805 owns Search, disjoint from the Board. Exact scope
+and acceptance are on WORKBOARD.803 finishes production proof before its builder
+starts806.802 native corrections and the older413 regression continue. Next free807.
+
 ## IN PROGRESS 2026-10-01: F1 Driver Search keyboard suggestions
 
 805 fixes the actual ArrowDown highlight reset in the isolated search component,
@@ -9,6 +340,7 @@ held. Exact four-file ownership and outcome/control/native/App gates are on WORK
 802 corrects a measured focused-target visibility case before its final recapture;
 803 is frozen for production proof. The older413 regression remains running.
 Next free806; all Claude reservations stand.
+
 ## ACCEPTED 2026-10-01: NBA Stat Line exposes every matching season
 
 801 adds truthful ten-season expansions, full names/44px focusable controls and

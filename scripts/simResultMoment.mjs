@@ -185,6 +185,7 @@ const OWN_SURFACE = {
   '/ball-iq': 'its own finished screen in BallIqBoard, an IQ number, a rank and correct out of the questions',
   '/emoji-guess': "its own Today's result screen in EmojiGuessBoard, solved out of the rounds",
   '/mystery-box': 'its own finished panel in MysteryBoxBoard, the squad rating and best pull',
+  '/aussie-rules-manager': 'its own season complete panel in AussieRulesManagerBoard, the league winner and the final ladder',
 };
 
 /* ---------- 1. wiring, from the AST ---------- */

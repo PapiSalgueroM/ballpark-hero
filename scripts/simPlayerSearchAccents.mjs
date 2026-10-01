@@ -55,6 +55,7 @@ const BUNDLE = path.join(os.tmpdir(), 'playerSearchAccents.bundle.mjs');
 
 let failures = 0;
 let section = 0;
+let searchRequestErrors = 0;
 const bySection = { 1: 0, 2: 0, 3: 0 };
 const fail = m => { failures += 1; bySection[section] += 1; console.error('  FAIL: ' + m); };
 const abort = m => { console.error(m); process.exit(1); };
@@ -120,7 +121,12 @@ console.log(`2) The plain spelling finds the accented man through the real searc
     for (const q of c.typed) {
       queries += 1;
       const res = await searchPlayers({ source, query: q, minChars: 2, limit: 8 });
-      if (res.error) { errors += 1; continue; }
+      if (res.error) {
+        errors += 1;
+        searchRequestErrors += 1;
+        fail(`"${q}" could not be verified: ${res.error}`);
+        continue;
+      }
       if (res.results.some(e => normalizeName(e.rawName) === want)) found += 1;
       else fail(`"${q}" does not surface "${c.name}" (got ${res.results.slice(0, 3).map(e => `"${e.rawName}"`).join(', ') || 'nothing'})`);
     }
@@ -156,6 +162,7 @@ console.log(`3) Ten identical requests, one answer${CONTROL === 'notie' ? ' (poo
 }
 
 if (CONTROL) {
+  if (searchRequestErrors > 0) abort(`\ncontrol "${CONTROL}": ${searchRequestErrors} lookup request error(s); a request failure cannot prove an accent or ordering control worked`);
   const target = { raw: 2, notie: 3 }[CONTROL];
   if (!target) abort(`unknown control "${CONTROL}"`);
   const fired = bySection[target];
