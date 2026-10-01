@@ -45,9 +45,10 @@
 import type { Position } from '@/types/game';
 import { CM_ROSTERS, CM_ROSTER_META } from '@/data/clubManagerRosters';
 import type { BakedPlayer } from '@/data/clubManagerRosters';
-import { ERA2010_ROSTERS, ERA2010_META, ERA2010_PARTIAL } from '@/data/clubManagerEra2010';
-import { ERA2015_ROSTERS, ERA2015_META, ERA2015_PARTIAL } from '@/data/clubManagerEra2015';
-import { ERA2005_ROSTERS, ERA2005_META, ERA2005_PARTIAL } from '@/data/clubManagerEra2005';
+/* Round 832: the three era bakes are no longer imported here. Each one is its
+   own chunk, fetched when its era is picked or an era save is opened (see
+   ensureEraRosters below), so the page stops carrying all three past worlds
+   for a player who only ever plays today's. */
 
 /**
  * The calendar year the baked rosters describe. CM_ROSTER_META.asOf reads
@@ -309,17 +310,30 @@ const ALSO_REAL_ELSEWHERE = [
   'Cesar Ruiz', 'Erik Karlsson', 'Isaac Paredes', 'Rasmus Falk', 'Thiago Silva',
 ];
 
+/**
+ * Round 832: every real player in the three era bakes whose name this
+ * generator could build (a GEN_FIRST name, a space, a GEN_LAST name). The
+ * guard used to read the era rosters themselves, which only ever mattered for
+ * these eleven, because the generator can produce nothing else. The era
+ * rosters now load with their era, so reading them here would make a name
+ * depend on which eras this tab happened to open, and a modern save would
+ * re-roll differently after a look at 2010. This list keeps the guard exactly
+ * what it was without loading anything. simCmLeagueRules recomputes it from
+ * the era files and fails unless it matches exactly, so a new era bake that
+ * adds a colliding name goes red until the name is here.
+ */
+const ERA_NAMES_THE_FILLER_COULD_BUILD = [
+  'Bruno Fernandes', 'Gabriel Silva', 'Hugo Ibarra', 'Javier Garrido', 'Javier Paredes', 'Jorge Andrade',
+  'Lorenzo Reyes', 'Lucas Silva', 'Mateo Kovacic', 'Pedro Mendes', 'Pedro Pereira',
+];
+
 function realNames(): Set<string> {
   if (REAL_NAME_SET) return REAL_NAME_SET;
   const set = new Set<string>();
   for (const roster of Object.values(CM_ROSTERS)) {
     for (const p of roster) set.add(p.n);
   }
-  for (const world of Object.values(HISTORIC_ROSTERS)) {
-    for (const roster of Object.values(world)) {
-      for (const p of roster) set.add(p.n);
-    }
-  }
+  for (const n of ERA_NAMES_THE_FILLER_COULD_BUILD) set.add(n);
   for (const n of ALSO_REAL_ELSEWHERE) set.add(n);
   REAL_NAME_SET = set;
   return set;
@@ -466,20 +480,70 @@ function generateFor(club: string, slot: ProjectedPlayer, year: number, idx: num
  * player rule holds WITHIN each era while Messi exists in both at different
  * ages.
  */
-export const HISTORIC_ROSTERS: Record<string, Record<string, BakedPlayer[]>> = {
-  era2010: ERA2010_ROSTERS,
-  era2015: ERA2015_ROSTERS,
-  era2005: ERA2005_ROSTERS,
+/* Round 832: each era's bake is fetched on demand. One loader per era id,
+   and this table is what makes an era id historic, so an era exists from the
+   first line of code whether or not its squads have arrived yet. A new era is
+   one more row here pointing at its own bake file. */
+interface EraBake { rosters: Record<string, BakedPlayer[]>; partial: string[]; players: number }
+const ERA_BAKES: Record<string, () => Promise<EraBake>> = {
+  era2010: () => import('@/data/clubManagerEra2010').then(m => ({ rosters: m.ERA2010_ROSTERS, partial: m.ERA2010_PARTIAL, players: m.ERA2010_META.players })),
+  era2015: () => import('@/data/clubManagerEra2015').then(m => ({ rosters: m.ERA2015_ROSTERS, partial: m.ERA2015_PARTIAL, players: m.ERA2015_META.players })),
+  era2005: () => import('@/data/clubManagerEra2005').then(m => ({ rosters: m.ERA2005_ROSTERS, partial: m.ERA2005_PARTIAL, players: m.ERA2005_META.players })),
 };
 
-export const HISTORIC_PARTIAL: Record<string, string[]> = {
-  era2010: ERA2010_PARTIAL,
-  era2015: ERA2015_PARTIAL,
-  era2005: ERA2005_PARTIAL,
-};
+/** The era bakes that have arrived, keyed by era id. Filled by
+ *  ensureEraRosters; an era that has not loaded has no entry. */
+export const HISTORIC_ROSTERS: Record<string, Record<string, BakedPlayer[]>> = {};
+
+/** The thin squads of each arrived era (the picker marks them). */
+export const HISTORIC_PARTIAL: Record<string, string[]> = {};
+
+const ERA_PLAYERS: Record<string, number> = {};
+const ERA_LOADING = new Map<string, Promise<void>>();
 
 export function isHistoricEra(id: string | undefined): boolean {
-  return !!id && Object.prototype.hasOwnProperty.call(HISTORIC_ROSTERS, id);
+  return !!id && Object.prototype.hasOwnProperty.call(ERA_BAKES, id);
+}
+
+/** True when the engine can run this era right now: today's world always,
+ *  a historic era once its bake has arrived. */
+export function eraRostersLoaded(id: string | undefined): boolean {
+  return !isHistoricEra(id) || Object.prototype.hasOwnProperty.call(HISTORIC_ROSTERS, id!);
+}
+
+/**
+ * Round 832: fetch an era's squads before anything reads them. Resolves at
+ * once for today's world and for an era already here; two calls for the same
+ * era share one fetch. A failed fetch (offline, a dropped connection, a deploy
+ * that replaced the chunk) rejects and is forgotten, so the next call tries
+ * again, which is what the page's retry button relies on.
+ */
+export function ensureEraRosters(id: string | undefined): Promise<void> {
+  if (eraRostersLoaded(id)) return Promise.resolve();
+  const eraId = id!;
+  const inFlight = ERA_LOADING.get(eraId);
+  if (inFlight) return inFlight;
+  const p = ERA_BAKES[eraId]().then(bake => {
+    HISTORIC_ROSTERS[eraId] = bake.rosters;
+    HISTORIC_PARTIAL[eraId] = bake.partial;
+    ERA_PLAYERS[eraId] = bake.players;
+    ERA_LOADING.delete(eraId);
+  }, err => {
+    ERA_LOADING.delete(eraId);
+    throw err;
+  });
+  ERA_LOADING.set(eraId, p);
+  return p;
+}
+
+/** Every era at once, for the harnesses that walk all the worlds. */
+export function ensureAllEraRosters(): Promise<void> {
+  return Promise.all(Object.keys(ERA_BAKES).map(id => ensureEraRosters(id))).then(() => undefined);
+}
+
+/** The era ids this game offers, historic only, in table order. */
+export function historicEraIds(): string[] {
+  return Object.keys(ERA_BAKES);
 }
 
 /* ---------- Round 166: era legends rate like legends ---------- */
@@ -551,7 +615,16 @@ export function bakedValueForRating(bakeRating: number): number {
 /** The UNtransformed roster source: tiers, budgets and expectations read
  *  this so an era's club stature stays exactly as it calibrated. */
 export function eraRostersRaw(eraId: string | undefined): Record<string, BakedPlayer[]> {
-  return (eraId && HISTORIC_ROSTERS[eraId]) || CM_ROSTERS;
+  /* Round 832: an era whose squads have not arrived fails loudly rather than
+     answering with today's world, which would quietly play a 2010 save on
+     2026 squads and write the result into the save. Every way into an era
+     awaits ensureEraRosters first. */
+  if (isHistoricEra(eraId)) {
+    const world = HISTORIC_ROSTERS[eraId!];
+    if (!world) throw new Error(`Club Manager: the ${eraId} squads are not loaded yet (await ensureEraRosters first)`);
+    return world;
+  }
+  return CM_ROSTERS;
 }
 
 const UPLIFTED_CACHE = new Map<string, Record<string, BakedPlayer[]>>();
@@ -719,6 +792,15 @@ export interface CMEra {
  * so a 2005 era is buildable and an exact 2000 era is NOT, and we say that
  * rather than invent one.
  */
+/* Round 832: an era's player count is read off its own bake, which now
+   arrives with the era, so the honesty line asks for it when it is shown (the
+   team step, after the era has loaded) and says it without the number on any
+   path that reads it earlier. */
+function eraPlayersPhrase(eraId: string): string {
+  const n = ERA_PLAYERS[eraId];
+  return n === undefined ? 'Real players' : `${n} real players`;
+}
+
 export const CM_ERAS: CMEra[] = [
   {
     id: 'now',
@@ -734,7 +816,7 @@ export const CM_ERAS: CMEra[] = [
     startYear: 2015,
     emoji: '\u{1F98A}',
     blurb: 'The Leicester season. MSN Barcelona, Vardy at 5000 to 1, Juventus chasing five straight. Premier League, La Liga and Serie A, 2015-16.',
-    honesty: `Real data. ${ERA2015_META.players} real players with their real 2015 ages and values, all 60 clubs of the 2015-16 Premier League, La Liga and Serie A. Thin squads are padded with made up youth players and say so.`,
+    get honesty() { return `Real data. ${eraPlayersPhrase('era2015')} with their real 2015 ages and values, all 60 clubs of the 2015-16 Premier League, La Liga and Serie A. Thin squads are padded with made up youth players and say so.`; },
   },
   {
     id: 'era2010',
@@ -742,7 +824,7 @@ export const CM_ERAS: CMEra[] = [
     startYear: 2010,
     emoji: '\u{1F570}\u{FE0F}',
     blurb: 'Prime Messi. Mourinho\'s Madrid. Rooney\'s United. Premier League and La Liga, 2010-11.',
-    honesty: `Real data. ${ERA2010_META.players} real players with their real 2010 ages and values, all 40 clubs of the 2010-11 Premier League and La Liga. Thin squads are padded with made up youth players and say so.`,
+    get honesty() { return `Real data. ${eraPlayersPhrase('era2010')} with their real 2010 ages and values, all 40 clubs of the 2010-11 Premier League and La Liga. Thin squads are padded with made up youth players and say so.`; },
   },
   {
     id: 'era2005',
@@ -750,7 +832,7 @@ export const CM_ERAS: CMEra[] = [
     startYear: 2005,
     emoji: '\u{1F4FC}',
     blurb: 'Ronaldinho\'s Ballon d\'Or. Mourinho\'s Chelsea. A 17 year old Messi. Premier League and La Liga, 2005-06.',
-    honesty: `Real data. ${ERA2005_META.players} real players with their real 2005 ages and values, all 40 clubs of the 2005-06 Premier League and La Liga. Thin squads are padded with made up youth players and say so.`,
+    get honesty() { return `Real data. ${eraPlayersPhrase('era2005')} with their real 2005 ages and values, all 40 clubs of the 2005-06 Premier League and La Liga. Thin squads are padded with made up youth players and say so.`; },
   },
 ];
 

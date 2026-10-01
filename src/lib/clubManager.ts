@@ -2981,6 +2981,9 @@ export function boardWantLabel(clubName: string, eraId?: string): string {
 
 // Round 146: the picker needs these era helpers alongside the modern ones.
 export { isHistoricEra } from '@/lib/clubManagerEras';
+/* Round 832: an era's squads arrive with the era. Anything that runs an era
+   (the page, a harness) awaits one of these first; see clubManagerEras.ts. */
+export { ensureEraRosters, ensureAllEraRosters, eraRostersLoaded } from '@/lib/clubManagerEras';
 
 /* ================================================================== */
 /* Round 70: every club is playable. Nations, colors, rivals, defs.   */
@@ -17789,6 +17792,22 @@ export function saveCareer(career: CareerState): boolean {
     return true;
   } catch {
     return false;
+  }
+}
+
+/**
+ * Round 832: which era the saved career plays in, read without opening it, so
+ * the page can fetch that era's squads before loadCareer repairs anything
+ * with them. Null when there is no save, or nothing readable in it.
+ */
+export function savedCareerEraId(): string | null {
+  try {
+    const raw = localStorage.getItem(SAVE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { eraId?: unknown } | null;
+    return parsed && typeof parsed.eraId === 'string' ? parsed.eraId : null;
+  } catch {
+    return null;
   }
 }
 

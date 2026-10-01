@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { lazy, Suspense, useMemo, useState } from 'react';
+import { lazy, Suspense, useCallback, useMemo, useState } from 'react';
 import type { ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import type { MidSeasonEntry } from '@/lib/clubManagerCalendar';
@@ -22,7 +22,7 @@ import { projectFinances } from '@/lib/clubManagerFinances';
 import { fanMeter } from '@/lib/clubManagerMeters';
 import { STAFF_POST_IDS, STAFF_POST_INFO, staffOf } from '@/lib/clubManagerStaff';
 import type { NationDef, CupRound, CustomClubSpec, ManagerSpec } from '@/lib/clubManager';
-import { eraRealShareLabel, eraHonestyLine } from '@/lib/clubManagerEras';
+import { eraRealShareLabel, eraHonestyLine, eraRostersLoaded, ensureEraRosters } from '@/lib/clubManagerEras';
 import { FlagImg } from '@/components/FlagImg';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
@@ -80,6 +80,23 @@ function ScreenLoading({ children, compact = false }: { children: ReactNode; com
   );
 }
 
+/** Round 832: a past era's squads did not arrive (offline, a dropped
+ *  connection, a new deploy). Says so and offers the fetch again. */
+function EraLoadFailed({ label, onRetry }: { label: string; onRetry: () => void }) {
+  return (
+    <div role="alert" data-testid="cm-era-load-failed" className="max-w-md mx-auto my-12 rounded-xl border border-border bg-card p-5 text-center">
+      <div className="text-sm font-bold text-foreground">The {label} squads did not load.</div>
+      <div className="mt-1 text-xs text-muted-foreground">Check your connection, then try again. Nothing has been lost.</div>
+      <button
+        onClick={onRetry}
+        className="mt-4 px-5 py-2.5 rounded-xl font-bold bg-primary text-primary-foreground hover:opacity-90 transition-opacity"
+      >
+        Try again
+      </button>
+    </div>
+  );
+}
+
 const FORM_TONE: Record<'W' | 'D' | 'L', string> = {
   W: 'bg-emerald-500', D: 'bg-yellow-500', L: 'bg-red-500',
 };
@@ -129,6 +146,19 @@ const ClubManager = () => {
   /* Round 303: a founded club waits here while the dugout step runs, so the
      manager spec and the club spec land in startCareer together. */
   const [pendingCustomSpec, setPendingCustomSpec] = useState<CustomClubSpec | null>(null);
+  /* Round 832: a past era's squads are fetched when its tile is picked, while
+     the nation step (which needs none of them) is on screen. This records a
+     fetch still running or one that failed, so the league and team steps can
+     wait for it or offer a retry. Null when nothing is pending. */
+  const [eraLoad, setEraLoad] = useState<{ id: string; failed: boolean } | null>(null);
+  const loadPickedEra = useCallback((id: string) => {
+    if (eraRostersLoaded(id)) { setEraLoad(null); return; }
+    setEraLoad({ id, failed: false });
+    ensureEraRosters(id).then(
+      () => setEraLoad(cur => (cur && cur.id === id ? null : cur)),
+      () => setEraLoad(cur => (cur && cur.id === id ? { id, failed: true } : cur)),
+    );
+  }, []);
   const pickRef = useRevealScroll<HTMLDivElement>(`pick:${pickStep}:${pickEra}:${pickNation?.id ?? ''}:${pickLeagueId ?? ''}`, { skipFirst: true });
   const era = eraById(pickEra);
   const eraYearsOn = Math.max(0, era.startYear - CM_BASE_YEAR);
@@ -250,6 +280,12 @@ const ClubManager = () => {
 
   /* ================= BOOT ================= */
   if (g.phase === 'boot') {
+    /* Round 832: an era save waits for its era's squads, and a failed fetch
+       says so with a way to try again, never a blank page and never a fresh
+       start offered over the career. */
+    if (g.bootError) {
+      return shell(<EraLoadFailed label={g.bootError} onRetry={g.retryBoot} />);
+    }
     return shell(<div className="text-center py-24 text-muted-foreground animate-pulse">Loading…</div>);
   }
 
@@ -298,10 +334,15 @@ const ClubManager = () => {
     /* Round 146: a historic era swaps the whole picker world: its nations,
        its leagues, its clubs, its stature. The modern path is untouched. */
     const historicPick = isHistoricEra(pickEra);
+    /* Round 832: every step past the nations reads the era's squads, so a
+       past era holds those steps on a loading line (or a retry) until they
+       are here. Today's world is always ready. */
+    const eraReady = eraRostersLoaded(pickEra);
+    const waitingForEra = historicPick && !eraReady && pickStep !== 'era' && pickStep !== 'nation';
     const league = pickLeagueId
       ? (historicPick ? eraLeaguesFor(pickEra) : REAL_LEAGUES).find(l => l.id === pickLeagueId)
       : null;
-    const teams = league
+    const teams = league && !waitingForEra
       ? (historicPick ? eraPlayableClubs(pickEra, league.id) : playableClubs(league.id))
       : [];
 
@@ -336,7 +377,7 @@ const ClubManager = () => {
               {CM_ERAS.map(e => (
                 <button
                   key={e.id}
-                  onClick={() => { setPickEra(e.id); setPickStep('nation'); }}
+                  onClick={() => { setPickEra(e.id); setPickStep('nation'); loadPickedEra(e.id); }}
                   className="rounded-xl border bg-card border-border hover:border-primary px-4 py-3 text-left transition-all"
                 >
                   <div className="flex items-center gap-2.5">
@@ -434,8 +475,15 @@ const ClubManager = () => {
           </div>
         )}
 
+        {/* Round 832: the past era's squads are still on their way, or did not come. */}
+        {waitingForEra && (
+          eraLoad?.id === pickEra && eraLoad.failed
+            ? <EraLoadFailed label={era.label} onRetry={() => loadPickedEra(pickEra)} />
+            : <div className="text-center py-16 text-muted-foreground animate-pulse">Loading the {era.label} squads…</div>
+        )}
+
         {/* -------- Step 2: league -------- */}
-        {pickStep === 'league' && pickNation && (
+        {pickStep === 'league' && pickNation && !waitingForEra && (
           <div className="max-w-2xl mx-auto space-y-2.5">
             <button
               onClick={() => { setPickStep('nation'); setPickNation(null); }}
@@ -476,7 +524,7 @@ const ClubManager = () => {
         )}
 
         {/* -------- Step 3: team -------- */}
-        {pickStep === 'team' && pickNation && league && (
+        {pickStep === 'team' && pickNation && league && !waitingForEra && (
           <div className={cn(g.pendingClub && 'pb-24')}>
             <button
               onClick={() => { g.chooseClub(''); setPickStep('league'); }}
@@ -581,7 +629,7 @@ const ClubManager = () => {
         )}
 
         {/* -------- Step 4 (optional): found your own club (Round 154) -------- */}
-        {pickStep === 'custom' && pickNation && league && (
+        {pickStep === 'custom' && pickNation && league && !waitingForEra && (
           <ScreenLoading><CustomClubForm
             leagueName={league.name}
             leagueId={league.id}
@@ -592,7 +640,7 @@ const ClubManager = () => {
         )}
 
         {/* -------- Step 5 (Round 303): who is in the dugout -------- */}
-        {pickStep === 'manager' && (
+        {pickStep === 'manager' && !waitingForEra && (
           <ScreenLoading><ManagerForm
             clubName={pendingCustomSpec?.name || g.pendingClub || 'Back'}
             defaultNation={pickNation?.name ?? 'England'}
