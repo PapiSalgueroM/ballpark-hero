@@ -1,5 +1,33 @@
 # Work board
 
+**2026-10-01, Codex786/787/788/789 final production refresh ACCEPTED.**
+Fresh physical/Git043c59bd checkout passes exact app types, both production builds and
+limited Stat Detective/Clue Auction prerender at all three original clock samples. All15
+built-site fences pass after the second build, including actual existing snapshot boots
+and all11 retired destinations. Entry index-Dcc1ri1G.js; utility CSS remains exactly
+215c948d15767a1c96ae185652cbe2c3b3c264f308033e4f02b040636e8beca9 (184032 bytes).
+This includes787's final phone receipt fix and789's day pin. Earlier gameplay/native proofs
+remain separate;790/791 are not in this frozen artifact. No full current node-suite claim.
+
+Only Stat Detective's saved page text changes. Its derived ledger moves to0d4701e6906d76f6
+and2026-10-01; all other166 hashes/dates and sitemap rows hold. Clue Auction's saved text
+matches the prior page, so its generated line-ending-only write is not copied to main.
+All185 unclaimed raw HTML inputs and186 unrelated logical documents hold. Only three
+generated files are copied: Stat Detective public HTML, ledger and sitemap. Public pages
+stay hash-free, selfcanonical and indexable with four HEAD schema blocks and rich guides.
+The phase-gated local instructions do not appear in the data-hung raw snapshots.
+
+Independent native acceptance passes8 contexts: both pages at320/1440 using actual public
+stable-boot and final-dist asset arrangements. Actual entry/lazy chunks mount the app,
+remove the snapshot cover, apply route CSS and preserve guide/canonical/fit. An asserted
+bootless Stat response keeps text but cannot mount the app, while independent Auction
+boots. No source mutation, gameplay/account-write claim or Supabase data invented.
+Overflow/errors/broken local assets0;13 inputs preserved and browser/server closed.
+Both320 final-dist screenshots inspected. Proof: TEMP/dukb-round791-final-20261001/
+final-build-preservation-receipt.json, final-*-build.log, final-fourteen-node-fences.log,
+final-prerender-boot.log; TEMP/dukb-round791-snapshot-audit/report.json and
+report-control-bootless.json. Published site and Google approval remain separate.
+
 **2026-10-01, Codex790 CLAIMED: Puck Detective stable history and committed feedback.**
 Own only src/pages/PuckDetective.tsx, new PuckDetective.module.css,
 src/test/puckDetectiveFeedback.test.tsx and scripts/simPuckDetectiveFeedback.mjs.

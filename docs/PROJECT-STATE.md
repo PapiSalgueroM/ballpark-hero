@@ -1,5 +1,16 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: completed game rounds pass final production refresh
+
+786/787/788/789 now pass the frozen043c59bd type/build, limited two-page prerender,
+second build and all15 built-site fences. Independent actual-asset boots pass8 cases and
+an effective bootless control. Only Stat Detective's saved text and derived date change;
+Clue Auction and166 other ledger dates hold. Three generated files are pushed, not dist.
+Utility CSS remains the accepted215c948d bytes. Detailed proof/limits are on WORKBOARD.
+790 Puck Detective and791 Soccer Career phone source/test/native work continue outside
+this frozen build. No full current node-suite or publication/Google-approval claim.
+Next free792; all Claude reservations stand.
+
 ## IN PROGRESS 2026-10-01: Puck Detective and Soccer Career phone claimed
 
 790 owns stable Puck Detective history, truthful committed feedback and readable controls.
