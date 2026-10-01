@@ -3,7 +3,7 @@ import { localEvaluateSoccerXI } from '@/lib/localLineupEval';
 import { getRandomTeamAssignments, clubs as ALL_CLUBS, nations as ALL_NATIONS } from '@/data/lineupTeams';
 import type { Formation, FilledSlot, GamePhase, AIVerdict, PickMeta, TeamAssignment } from '@/types/lineupBuilder';
 import { FORMATIONS } from '@/types/lineupBuilder';
-import { checkLineupPick } from '@/lib/positionFit';
+import { checkLineupPick, gradeFit, SLOT_ALLOWED_BY_ROLE } from '@/lib/positionFit';
 import type { Position } from '@/types/game';
 import { normalizePosition } from '@/lib/squadDeal';
 
@@ -153,10 +153,18 @@ export function useLineupBuilder() {
       );
       /* The history is only looked up when the plain rule is about to REFUSE,
          so an ordinary pick still costs no request at all and the Round 442
-         property holds. */
+         property holds.
+         Round 825: and when the plain rule takes him only as next door to the
+         slot, because role fit charges next door and his history may cover
+         the slot outright. Still one read of the curated table, no AI call,
+         and a pick in his own position still costs no request. */
+      const primary = pickMeta?.rawPosition ? normalizePosition(pickMeta.rawPosition.trim()) : null;
+      let played: Position[] = [];
+      if (positionCheck.ok && primary && gradeFit([primary], SLOT_ALLOWED_BY_ROLE[position.role]) === 'family') {
+        played = await verifiedSecondaries(playerName.trim(), primary);
+      }
       if (!positionCheck.ok) {
-        const primary = pickMeta?.rawPosition ? normalizePosition(pickMeta.rawPosition.trim()) : null;
-        const played = await verifiedSecondaries(playerName.trim(), primary);
+        played = await verifiedSecondaries(playerName.trim(), primary);
         if (played.length > 0) {
           positionCheck = checkLineupPick(
             playerName.trim(),
@@ -251,7 +259,7 @@ export function useLineupBuilder() {
         /* Carried on the slot, not in a name-keyed side map: the line above can
            rename this pick to the validator's fullName and a name lookup would
            then miss him. */
-        ...(pickMeta ? { pick: pickMeta } : {}),
+        ...(pickMeta ? { pick: played.length > 0 ? { ...pickMeta, played } : pickMeta } : {}),
       };
 
       setFilledSlots((prev) => {
