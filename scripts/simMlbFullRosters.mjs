@@ -79,6 +79,7 @@
      cutuser       the offseason cuts the GM's club behind his back  -> 9
      catchers      the refill without its two catchers               -> 6
      indexkeyed    injury rolls keyed on the place in the list       -> 5
+     cutreads      the cut down may take a man the sim plays         -> 9
 
    The fixture: node scripts/simMlbFullRosters.mjs --write-legacy-fixture
    writes it with whatever engine is in src. It was written against the engine
@@ -105,7 +106,7 @@ const STATS = path.join(ROOT, 'scripts', 'data', 'mlbStats2026.json');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'mlbLegacySaveFixture.json');
 const CONTROL = process.env.MLB_FULL_CONTROL || '';
 const WRITE_FIXTURE = process.argv.includes('--write-legacy-fixture');
-const EXPECT = { invented: [3, 4], benchread: [5], sharedstream: [5], fullprice: [4], legacylimits: [7], idkeyed: [5], onecatcher: ['3c'], namesake: ['3n'], nocut: [6, 9], cutuser: [9], catchers: [6], indexkeyed: [5] };
+const EXPECT = { invented: [3, 4], benchread: [5], sharedstream: [5], fullprice: [4], legacylimits: [7], idkeyed: [5], onecatcher: ['3c'], namesake: ['3n'], nocut: [6, 9], cutuser: [9], catchers: [6], indexkeyed: [5], cutreads: [9] };
 if (CONTROL && !EXPECT[CONTROL]) { console.error(`MLB_FULL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`); process.exit(1); }
 
 let checks = 0;
@@ -126,6 +127,8 @@ const ENGINE_SWAPS = {
   sharedstream: [['  if (deep) rollDepthInjuries(league, myTeam, rng, notes);\n  else {', '  {']],
   fullprice: [['salary: core.has(i) ? mlbSalaryFor(s.ovr) : MLB_DEPTH_SALARY,', 'salary: mlbSalaryFor(s.ovr),']],
   idkeyed: [['unitHash(roundSeed, p.name, 1)', 'unitHash(roundSeed, p.id, 1)'], ['unitHash(roundSeed, p.name, 2)', 'unitHash(roundSeed, p.id, 2)']],
+  /* the cut down without its one protection for the men the sim plays */
+  cutreads: [['const spare = roster.filter(p => !reads.has(p.id) && keepsSpine(p));', 'const spare = roster.filter(p => keepsSpine(p));']],
   indexkeyed: [['unitHash(roundSeed, p.name, 1)', 'unitHash(roundSeed, t.abbr + t.players.indexOf(p), 1)'], ['unitHash(roundSeed, p.name, 2)', 'unitHash(roundSeed, t.abbr + t.players.indexOf(p), 2)']],
   legacylimits: [['export const mlbRosterMax = (t: { depth?: number }): number => (t.depth ? MLB_ROSTER_MAX : MLB_LEGACY_ROSTER_MAX);', 'export const mlbRosterMax = (t: { depth?: number }): number => (t.depth || true ? MLB_ROSTER_MAX : MLB_LEGACY_ROSTER_MAX);']],
   /* the builder's state: the offseason never cuts, and nothing is held */
@@ -620,6 +623,24 @@ console.log('9) the cut down to 28');
     const over = GAME_TEAMS.filter(a => a !== 'NYY' && lg2.teams[a].players.length > E.MLB_ROSTER_MAX);
     ok(9, `seed ${seed}: the offseason leaves no CPU club over 28`, over.length === 0, over.join(' '));
     ok(9, `seed ${seed}: the offseason leaves the GM's club for him to cut, and says how many`, E.mlbOverLimit(lg2.teams.NYY) === lg2.teams.NYY.players.length - E.MLB_ROSTER_MAX && E.mlbOverLimit(lg2.teams.NYY) > 0, `${lg2.teams.NYY.players.length} men, over by ${E.mlbOverLimit(lg2.teams.NYY)}`);
+    /* (d) a tie, built so that only the rule can save the man the sim plays:
+       every spare hitter rated level with the eighth bat, the eighth bat the
+       oldest of them, and the hitters crowded. By rating and age alone he
+       would go first. Mutation testing showed (a) cannot see this: the men
+       the sim plays are the best, so the lowest rated man is almost never
+       one of them, and the rule only decides ties. */
+    {
+      const u = E.initMlbLeague(lcg(seed)).teams.BOS;
+      const x = u.players.filter(p => !isP(p)).sort((a, b) => b.ovr - a.ovr)[7].ovr;
+      for (const p of u.players) if (!isP(p) && p.ovr <= x) { p.ovr = x; p.age = 20; }
+      for (let k = 0; k < 3; k += 1) u.players.push({ id: `tie${k}`, name: `Tie Hitter ${k}`, pos: '1B', age: 20, ovr: x, salary: 0.7, years: 1, out: 0, pot: x });
+      const reads = new Set(E.mlbSimReads(u));
+      const eighth = u.players.find(p => reads.has(p.id) && !isP(p) && p.ovr === x);
+      eighth.age = 41;
+      ok(9, `seed ${seed}: the tie is built (the eighth bat is read and tied with every spare hitter)`, reads.has(eighth.id) && u.players.length === 29);
+      const cut = E.mlbCutDownToMax(u, []);
+      ok(9, `seed ${seed}: in a tie the man the sim plays is never the one cut`, cut.length === 1 && cut.every(c => c.player !== eighth.name) && u.players.some(p => p.id === eighth.id), cut.map(c => c.player).join(' '));
+    }
     /* (c) a save from before this round is never cut and never held */
     const old = clone(cpu);
     delete old.depth;
