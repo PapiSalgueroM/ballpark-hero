@@ -14,7 +14,7 @@ import {
   teamOverall, randomSeed, ratingTier, squadFillsAny,
   GAME_MODE_LABELS, GAME_MODE_BLURBS, HIDDEN_RATING_DISPLAY, isRatingHidden,
   getDailyDateET, makeDailyPicker, loadDailyAttempt, saveDailyAttempt,
-  msUntilNextDailyET, formatCountdown, DailyAttemptRecord,
+  msUntilNextDailyET, formatCountdown, DailyAttemptRecord, dailyUsesOldWheel,
 } from '@/lib/perfectSeason';
 import {
   NFL_SLOTS, NFL_GAMES, TeamSeasonEntry,
@@ -136,7 +136,8 @@ const PerfectSeasonNfl = () => {
     if (phase !== 'boot') return;
     let alive = true;
     (async () => {
-      const idx = await fetchTeamSeasonIndex();
+      // Round 821: a daily dated before the switch deals from the old wheel.
+      const idx = await fetchTeamSeasonIndex({ oldWheel: mode === 'daily' && dailyUsesOldWheel(todayStr) });
       if (!alive) return;
       if (idx) {
         if (mode === 'daily') {

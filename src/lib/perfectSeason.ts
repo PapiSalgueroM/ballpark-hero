@@ -274,6 +274,31 @@ export function makeDailyPicker(sportKey: string, dateStr: string = getDailyDate
   return (len: number) => Math.floor(rand() * len);
 }
 
+/**
+ * Round 821: the first ET date whose daily deals from the whole wheel.
+ *
+ * Until Round 821 the MLB and NHL wheels were built from the first 1,000 rows
+ * the server returned (the MLB wheel only ever landed on 1901 to 1962), and
+ * the daily picks stops by position in that list and drops any theme with too
+ * few stops in it. A complete wheel is longer, so the same date would deal a
+ * different theme and different stops: a daily already played would change
+ * under the people who played it, and the day the release lands would change
+ * mid day. So a daily dated before this keeps dealing from the old wheel,
+ * rebuilt exactly (each index read is ordered by id, and its first 1,000 rows,
+ * 15,000 for the NBA, are the rows and the order the old read returned,
+ * checked 2026-10-01 for all four sports), and every daily from this date on
+ * deals from the full wheel. Classic and Hard use the full wheel at once.
+ * A week out on purpose: the release has to land before it, or that day's
+ * daily changes when it does. scripts/simPerfectSeasonWheel.mjs proves the
+ * old wheel is rebuilt exactly.
+ */
+export const FULL_WHEEL_DAILY_FROM = '2026-10-08';
+
+/** True when the daily for this ET date deals from the pre Round 821 wheel. */
+export function dailyUsesOldWheel(dateStr: string): boolean {
+  return dateStr < FULL_WHEEL_DAILY_FROM;
+}
+
 // --- One-attempt-per-day persistence ------------------------------------
 
 const DAILY_SCHEMA_VERSION = 1 as const;

@@ -14,7 +14,7 @@ import {
   teamOverall, simulateSeason, randomSeed, ratingTier, squadFillsAny,
   GAME_MODE_LABELS, GAME_MODE_BLURBS, HIDDEN_RATING_DISPLAY, isRatingHidden,
   getDailyDateET, makeDailyPicker, loadDailyAttempt, saveDailyAttempt,
-  msUntilNextDailyET, formatCountdown, DailyAttemptRecord,
+  msUntilNextDailyET, formatCountdown, DailyAttemptRecord, dailyUsesOldWheel,
 } from '@/lib/perfectSeason';
 import {
   NHL_SLOTS, NHL_GAMES, TeamEraIndexEntry,
@@ -124,7 +124,8 @@ const PerfectSeasonNhl = () => {
     if (phase !== 'boot') return;
     let alive = true;
     (async () => {
-      const idx = await fetchTeamEraIndex();
+      // Round 821: a daily dated before the switch deals from the old wheel.
+      const idx = await fetchTeamEraIndex({ oldWheel: mode === 'daily' && dailyUsesOldWheel(todayStr) });
       if (!alive) return;
       if (idx) {
         if (mode === 'daily') {
