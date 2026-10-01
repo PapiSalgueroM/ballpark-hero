@@ -1,5 +1,13 @@
 # Project state
 
+## IN PROGRESS 2026-09-30: both standalone arcade practice lanes claimed
+
+778 root claims the separate BuzzerBeaterBoard for fixed-power unrecorded practice, alongside
+777 Free Kick. Both preserve the authoritative physics and existing recorded modes, with
+native explicit actions and no practice completion writes. Staff776 testing/browser acceptance
+continues. All scopes are on WORKBOARD. Full suite still runs; final build/fences and publication
+of769 onward remain pending. Next unclaimed number:779.
+
 ## IN PROGRESS 2026-09-30: Free Kick steady-input practice claimed
 
 777 claims only FreeKickBoard and scoped tests/CSS for unrecorded power-range practice. Existing

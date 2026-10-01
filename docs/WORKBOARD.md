@@ -1,5 +1,18 @@
 # Work board
 
+**2026-09-30, Codex Round 778 CLAIMED: steady-input Buzzer Beater practice (D51).**
+Root owns only `src/components/buzzer-beater/BuzzerBeaterBoard.tsx`, scoped CSS if needed,
+new actual-board tests and a sim wrapper. Add clearly unrecorded practice with a native fixed
+Power range and Shoot button. Existing aim/fade/arc controls use the same explicit takeShot
+inputs, setup and RNG. Practice aim taps/drags do not shoot or sweep power; delayed input keeps
+the chosen strength. Ten-shot play, replay, pause and help remain reachable. Practice makes
+no completion/record writes and shares no recorded result. Daily/unlimited timing, seeds,
+scores, stores, share and callbacks stay unchanged. Verify paired exact-path/score outcomes,
+native power/Shoot access, pause/input isolation and untouched completed daily bytes with
+asserted controls and four-width/two-motion native browser proof. No shared engine/hook,
+parent/page, data, route/catalog or global-style edits. This is independent of777 Free Kick.
+No Vite build or shared dist/public writes while full392 suite runs. Next unclaimed number:779.
+
 **2026-09-30, Codex Round 777 CLAIMED: steady-input Free Kick practice (D51).**
 Own only `src/components/free-kick/FreeKickBoard.tsx`, its scoped CSS if needed, new actual-board
 tests and a sim wrapper. Add an explicitly unrecorded practice mode with a native power range
