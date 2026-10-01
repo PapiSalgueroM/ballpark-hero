@@ -1,5 +1,28 @@
 # Project state
 
+Codex829 is accepted after actual App checks at320 normal/1440 reduced:
+20 accepted links keep the document still, original score/save/share/completion
+hold and finite/static feedback works. Final receipt is on WORKBOARD.
+Codex837 now holds NBA Stat Line's manual ad while its pool is loading or has
+failed. It is claimed, not yet implemented. Codex836 copy checks continue.
+Club Manager era-copy contradictions were handed to Claude832, which owns
+that file. Next free round838.
+
+## ADSENSE 2026-10-01: owner supplied the Low value content policy card
+
+AdSense approval is unresolved. The screenshot confirms the named rejection,
+not a new technical indexing fault. Prior account evidence and the intentional
+pack-battle noindex exclusion are in audits/GOOGLE-READINESS-2026-09-30.md.
+Codex836 owns a bounded public-copy/content-quality review and corrections,
+starting with unsupported home-page game features. No review was requested.
+Next free round837; Claude's active depth work stays untouched.
+
+Codex832 is accepted: the CFB recruiting feed no longer shifts the recruit
+columns when a signing arrives. Browser checks preserve scroll and original
+signing state; the prior build moves the columns74px under the same test.
+Eight focused tests and the production gates pass. Exact receipts on WORKBOARD.
+
+
 Codex830 is now accepted:118 actual App checks pass at320px normal/reduced,
 including distinct consecutive feedback, stable rows, original40-point outcome,
 exact save/share/once completion, reset and quiet reload.829 is built and pushed
