@@ -480,5 +480,127 @@
     "window": "2026-summer",
     "checked": "2026-10-01",
     "note": "Season long loan from Chelsea, announced by Chelsea (2026-08-11). ESPN's Strasbourg 2026-27 squad page lists him."
+  },
+  {
+    "name": "George Ilenikhena",
+    "to": "Al-Ittihad",
+    "db": "Al-Ittihad Club",
+    "sources": [
+      "https://www.asmonaco.com/en/news/george-ilenikhena-joins-al-ittihad",
+      "https://africa.espn.com/football/player/bio/_/id/357108/george-ilenikhena"
+    ],
+    "window": "2026-01",
+    "checked": "2026-10-01",
+    "note": "Permanent from Monaco, announced by Monaco on 2026-02-03 in the Saudi winter window. ESPN's player page lists him at Al Ittihad with 2026-27 Saudi Pro League stats."
+  },
+  {
+    "name": "Adam Karabec",
+    "to": null,
+    "db": "AC Sparta Prague",
+    "sources": [
+      "https://sparta.cz/en/tymy/1-muzi-a/hraci",
+      "https://www.espn.com/soccer/player/_/id/306895/adam-karabec"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row is the 2025-26 loan at Lyon. The loan ended and he went back to Sparta Prague (engine does not model the club), whose first team list carries him at number 10. ESPN's player page lists him at Sparta Prague with 2026-27 Europa League stats."
+  },
+  {
+    "name": "Ayase Ueda",
+    "to": "Lille",
+    "db": "LOSC Lille",
+    "sources": [
+      "https://www.feyenoord.com/en/news/ayase-ueda-leaves-feyenoord-for-losc-lille-310826",
+      "https://www.espn.com/soccer/team/squad/_/id/166/lille"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Feyenoord, announced by Feyenoord on 2026-08-31 with immediate effect. ESPN's Lille 2026-27 squad page lists him."
+  },
+  {
+    "name": "Arnaud Bodart",
+    "to": "Le Havre",
+    "db": "Le Havre AC",
+    "sources": [
+      "https://hac.football/fr/posts/arnaud-bodart-debarque-au-hac",
+      "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Left Lille by mutual agreement and signed for Le Havre for one season as a medical joker, announced by Le Havre on 2026-09-16 (after the window closed, which the joker rule allows). ESPN's Le Havre 2026-27 squad page lists him."
+  },
+  {
+    "name": "Rayan Fofana",
+    "to": "Le Havre",
+    "db": "Le Havre AC",
+    "loan": true,
+    "sources": [
+      "https://hac.football/fr/posts/rayan-fofana-le-havre-je-pense-que-cest-lendroit-parfait",
+      "https://www.espn.com/soccer/team/squad/_/id/3236/le-havre"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Loan from Lens for the 2026-27 season, presented by Le Havre on 2026-09-10. ESPN's Le Havre 2026-27 squad page lists him and ESPN's Lens page does not."
+  },
+  {
+    "name": "Noah Edjouma",
+    "to": "Brest",
+    "db": "Stade Brestois 29",
+    "loan": true,
+    "sources": [
+      "https://www.losc.fr/actualites/2026-09-01/noah-edjouma-prete-au-stade-brestois-29",
+      "https://www.espn.com/soccer/team/squad/_/id/6997/brest"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "His 2026 row still sits at Toulouse, the club Lille signed him from. Lille loaned him to Brest for 2026-27, announced by Lille on 2026-09-01. ESPN's Brest 2026-27 squad page lists him."
+  },
+  {
+    "name": "Mohamed Bayo",
+    "to": "Samsunspor",
+    "db": "Samsunspor",
+    "sources": [
+      "https://www.losc.fr/actualites/2026-09-05/mohamed-bayo-transfere-samsunspor",
+      "https://www.espn.co.uk/football/player/_/id/267519/mohamed-bayo"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Lille player whose 2026 row sits at Gaziantep, his 2025-26 loan club. Sold by Lille to Samsunspor, announced by Lille on 2026-09-05 (the Turkish window was still open). ESPN's player page lists him at Samsunspor with 2026-27 Super Lig stats."
+  },
+  {
+    "name": "Vincent Burlet",
+    "to": null,
+    "db": "Cracovia",
+    "sources": [
+      "https://www.losc.fr/actualites/2026-07-15/vincent-burlet-transfere-au-ks-cracovia",
+      "https://www.espn.com/soccer/player/_/id/346853/vincent-burlet"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "A Lille player whose 2026 row sits at Boulogne, his 2025-26 loan club. Sold by Lille to Cracovia (engine does not model the club), announced by Lille on 2026-07-15. ESPN's player page lists him at Cracovia."
+  },
+  {
+    "name": "Loun Srdanovic",
+    "to": "Lille",
+    "db": "LOSC Lille",
+    "sources": [
+      "https://www.losc.fr/actualites/2026-07-06/loun-srdanovic-defenseur-international-u19-suisse-rejoint-le-losc",
+      "https://www.espn.com/soccer/team/squad/_/id/166/lille"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from Servette, announced by Lille on 2026-07-06, four year contract to 2030. His 2026 row sits at Servette FC U21. ESPN's Lille 2026-27 squad page lists him."
+  },
+  {
+    "name": "Başar Önal",
+    "to": "Lille",
+    "db": "LOSC Lille",
+    "sources": [
+      "https://ligue1.com/en/articles/l1_article_5504-basar-oenal-continues-losc-s-proud-turkish-tradition",
+      "https://www.espn.com/soccer/team/squad/_/id/166/lille"
+    ],
+    "window": "2026-summer",
+    "checked": "2026-10-01",
+    "note": "Permanent from NEC Nijmegen, four year contract to 2030 (ligue1.com, the league's own site, 2026-07-14). ESPN's Lille 2026-27 squad page lists him as Basar Onal."
   }
 ]
