@@ -1,5 +1,12 @@
 # Project state
 
+## BUILT 2026-10-01: Missing Nine feedback (830)
+
+Fresh puzzles no longer inherit old wrong-answer feedback. Seven actual Page
+outcomes, eight effective controls and combined runtime gates pass. Source is
+pushed; final browser checks remain pending. Exact evidence is on WORKBOARD.
+
+
 ## BUILT 2026-10-01: Nation feedback (831)
 
 Six focused outcomes, three regression controls and combined runtime gates pass.

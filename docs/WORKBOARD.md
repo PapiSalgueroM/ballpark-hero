@@ -1,5 +1,17 @@
 # Work board
 
+**2026-10-01, Codex830 BUILT: Missing Nine stale feedback fixed. Browser checks pending.**
+Feedback belongs to the accepted action in the current puzzle/mode; owned timer
+cleanup prevents stale wrong replies after reset. Stable rows carry finite new
+miss/win cues; restored hints stay quiet and reduced motion is static.
+Seven actual Page/helper outcomes and eight effective copied regressions pass,
+each with an independent original payout/save/share baseline. The ineffective
+key-only control was retained without credit before its cooperating bindings
+were tested. Four files frozen; runtime matches the passing combined build.
+Actual App checks remain pending after an initial boot-probe setup timeout.
+Receipt: TEMP/dukb-round830-controls/report.json. No publication claim.
+
+
 **2026-10-01, Codex831 BUILT: Guess The Nation feedback. Browser checks pending.**
 Six actual Board/Search/hook cases and three effective copied regressions pass.
 Correct/wrong answers, newly revealed clues and results get finite feedback;
