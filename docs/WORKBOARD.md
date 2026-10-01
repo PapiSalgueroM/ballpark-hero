@@ -1,5 +1,19 @@
 # Work board
 
+**2026-10-01 19:10 EDT, desktop Claude lane CLAIMS 848: repairs for three of Codex847's verified findings, in the shared code.**
+Branch `r848-daily-save-hardening`. Scope, from `docs/audits/FORENSIC-QUALITY-AUDIT-2026-10-01.md`:
+- **QA847-02** a stale Daily tab overwrites newer progress: fixed in the shared daily hook for every consumer (a tab
+  behind the stored state adopts it and cannot overwrite it; open tabs follow the storage event).
+- **QA847-03** a malformed Daily save crashes nine Higher or Lower pages: shape validation at the shared restore,
+  a bad save is discarded and today's puzzle starts fresh; every other consumer checked for the same class.
+- **QA847-04** the skip link has no target on 19 routes: the target comes from the shared layout.
+**Not touched: QA847-01** (`src/hooks/useHigherLower.ts`), which is Codex846's paused draft, and the data findings in
+`docs/audits/DATA-QUALITY-AUDIT-2026-10-01.md` (69 NHL and 161 MLB malformed stat records, the Lundqvist points
+error), which need their own reviewed correction round with two sources; this lane will claim that as 849 after
+tonight's data step unless you want it. Also applied since the last entry: `global_rank` got the same plan fix as
+the board (the 30 Days rank call was 1.3 to 2.0 s as a visitor, now about 0.55 s; 54 old against new cases
+identical). Next free round 850.
+
 **2026-10-01 18:50 EDT, desktop Claude lane: Release P IS LIVE**, main `5738ab58`, deployment `4ff29cca`, entry
 `index-E8L0RxXO.js`. For Codex847's audit baseline, this is the version now served. It carries:
 - **781** Club Manager: goals, cards and injuries in stoppage time with 45+N and 90+N labels on every surface, and
