@@ -49,6 +49,10 @@ export const SEO_META: Record<string, SeoMeta> = {
     title: 'Manager Hot Seat: Save Your Job Football Game',
     description: 'Take over a real club on a bad run. Five league games, one points target, and a board ready to sack you. Pick the shape and the talk. Free football game.',
   },
+  '/deadline-day': {
+    title: 'Deadline Day: Transfer Window Football Game',
+    description: 'Run recruitment at a real club on the last day of the window. Three or four gaps, one budget, twelve hours before it shuts. Free football transfer game.',
+  },
   '/club-manager': {
     title: 'Club Manager: Free Football Management Game',
     description: 'Manage any of 330 real clubs across 20 leagues, today or in a real past season. Transfers, tactics, the board and the sack race. Free soccer management sim.',

@@ -156,12 +156,17 @@ export default function ManagerHotSeatBoard() {
         ...(r.verdict ? { kind: r.verdict.kind, points: r.points, target: r.target, dots: dotsOf(r) } : {}),
       });
       if (r.verdict) setDailyDone({ club: r.setup.club, kind: r.verdict.kind, points: r.points, target: r.target, dots: dotsOf(r) });
+      /* Round 721 review fix: the in memory copy moves with the store, or Menu
+         then reopening the daily went back to the brief and the next save
+         overwrote the matches already played. */
+      setDailySaved(r.verdict || !r.actions.length ? null : r.actions);
     } else {
       try {
         localStorage.setItem(FREE_KEY, JSON.stringify({ v: 1, club: r.setup.club, seed: r.setup.seed, actions: r.actions, done: !!r.verdict }));
       } catch {
         /* storage full or blocked: the run still plays, it just will not survive a refresh */
       }
+      setFreeSaved(r.verdict ? null : { setup: r.setup, actions: r.actions });
     }
   }, []);
 
