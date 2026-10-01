@@ -88,6 +88,8 @@ import type { UclGroupRule } from '@/lib/clubManagerUclGroups';
 /* Round 670 review: how a Champions League tie is read, shared with Soccer
    Career. The module imports nothing. */
 import { uclTieOutcome } from '@/lib/uclTieRule';
+/* Round 781: the match clock with the board in it. The module imports nothing. */
+import { clockOrder, playedBy } from '@/lib/clubManagerClock';
 
 /**
  * Club Manager engine.
@@ -1014,31 +1016,10 @@ export interface ScorerLine {
   plus?: number;
 }
 
-/**
- * Round 781: the clock the way a scoreboard writes it. A line in regular
- * time reads 63'; one in the board reads 45+2', 90+5' or 120+1'. Every
- * screen that prints a minute goes through this, so the live banner, the
- * report and the timeline cannot label the same goal three ways.
- */
-export function minuteLabel(e: { minute: number; plus?: number }): string {
-  return e.plus ? `${e.minute}+${e.plus}'` : `${e.minute}'`;
-}
-
-/** Round 781: order on the clock, the board after the minute it extends. */
-export function clockOrder(a: { minute: number; plus?: number }, b: { minute: number; plus?: number }): number {
-  return a.minute - b.minute || (a.plus ?? 0) - (b.plus ?? 0);
-}
-
-/**
- * Round 781: has this line happened by a clock position? With `plus` given
- * the position is inside the board of `minute` (90+2 is minute 90, plus 2)
- * and a line deeper into the board has not. With no `plus` the whole minute
- * counts, board included, which is what every reader before this round
- * meant by "at or before minute m" and what the report still means.
- */
-export function playedBy(minute: number, plus?: number): (e: { minute: number; plus?: number }) => boolean {
-  return e => e.minute < minute || (e.minute === minute && (plus === undefined || (e.plus ?? 0) <= plus));
-}
+/* Round 781: the clock with the board in it (minuteLabel, clockOrder,
+   playedBy), kept in its own small file and re-exported here, so every
+   screen that already imports the engine reads it from one place. */
+export { minuteLabel, clockOrder, playedBy } from './clubManagerClock';
 
 export interface OtherResult { home: string; away: string; hg: number; ag: number; }
 
