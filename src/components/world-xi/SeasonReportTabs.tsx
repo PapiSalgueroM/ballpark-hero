@@ -63,16 +63,21 @@ export function SeasonReportTabs({ report, className, initialPanel = null }: Sea
         )}
       </div>
 
+      {/* Phone widths: measured in Chromium at 320 to 414 inside World XI's
+          two padded cards, the old one line rows cut every standout and the
+          player table left the name column 0px wide. Below sm a month's
+          standout takes its own line and a player's numbers sit under his
+          name; from sm up it is the one line table. */}
       {open === 'months' && (
-        <div className="mt-3 grid gap-1.5 text-left">
+        <div className="mt-3 grid grid-cols-1 gap-1.5 text-left">
           {months.map(m => (
             <div key={m.month} className="bg-background/60 border border-border/50 rounded-lg px-3 py-2">
-              <div className="flex items-baseline gap-2 text-sm">
+              <div className="flex flex-wrap items-baseline gap-x-2 text-sm">
                 <span className="font-bold text-foreground w-9 shrink-0">{m.month.slice(0, 3)}</span>
                 <span className="text-foreground/90">{m.wins}W {m.draws}D {m.losses}L</span>
                 <span className="text-muted-foreground text-xs">{m.goalsFor}-{m.goalsAgainst}</span>
                 {m.standout && (
-                  <span className="ml-auto text-xs text-muted-foreground truncate min-w-0">
+                  <span className="w-full sm:w-auto sm:ml-auto text-xs text-muted-foreground min-w-0 sm:truncate">
                     Standout: <span className="text-foreground/90 font-semibold">{m.standout.name}</span>
                     {m.standout.goals + m.standout.assists > 0
                       ? ` ${m.standout.goals}G ${m.standout.assists}A`
@@ -90,7 +95,7 @@ export function SeasonReportTabs({ report, className, initialPanel = null }: Sea
 
       {open === 'players' && (
         <div className="mt-3 rounded-lg border border-border/50 bg-background/60 overflow-hidden text-left">
-          <div className="grid grid-cols-[2.4rem_1fr_2.2rem_2rem_2rem_2rem_2.6rem] gap-1 px-3 py-1.5 text-[10px] uppercase tracking-wider text-muted-foreground border-b border-border/50">
+          <div className="hidden sm:grid grid-cols-[2.4rem_1fr_2.2rem_2rem_2rem_2rem_2.6rem] gap-1 px-3 py-1.5 text-[10px] uppercase tracking-wider text-muted-foreground border-b border-border/50">
             <span>Pos</span>
             <span>Player</span>
             <span className="text-right">App</span>
@@ -100,14 +105,18 @@ export function SeasonReportTabs({ report, className, initialPanel = null }: Sea
             <span className="text-right">Avg</span>
           </div>
           {ordered.map(p => (
-            <div key={p.name} className="grid grid-cols-[2.4rem_1fr_2.2rem_2rem_2rem_2rem_2.6rem] gap-1 px-3 py-1.5 text-xs border-b border-border/30 last:border-b-0">
+            <div key={p.name} className="grid grid-cols-[2.4rem_minmax(0,1fr)_auto] sm:grid-cols-[2.4rem_1fr_2.2rem_2rem_2rem_2rem_2.6rem] gap-x-1 gap-y-0.5 px-3 py-1.5 text-xs border-b border-border/30 last:border-b-0">
               <span className="font-bold text-muted-foreground">{p.position}</span>
-              <span className="font-semibold text-foreground truncate min-w-0">{p.name}</span>
-              <span className="text-right text-foreground/90">{p.appearances}</span>
-              <span className="text-right text-foreground/90">{p.goals}</span>
-              <span className="text-right text-foreground/90">{p.assists}</span>
-              <span className="text-right text-foreground/90">{p.cleanSheets ?? '-'}</span>
-              <span className="text-right text-foreground/90">{p.avgRating.toFixed(1)}</span>
+              <span className="font-semibold text-foreground min-w-0 break-words sm:truncate">{p.name}</span>
+              <span className="col-start-2 col-span-2 row-start-2 flex flex-wrap gap-x-2 text-muted-foreground sm:contents">
+                <span className="sm:text-right sm:text-foreground/90">{p.appearances}<span className="sm:hidden"> app</span></span>
+                <span className="sm:text-right sm:text-foreground/90">{p.goals}<span className="sm:hidden">G</span></span>
+                <span className="sm:text-right sm:text-foreground/90">{p.assists}<span className="sm:hidden">A</span></span>
+                <span className={cn('sm:text-right sm:text-foreground/90', p.cleanSheets === null && 'hidden sm:inline')}>
+                  {p.cleanSheets ?? '-'}<span className="sm:hidden"> CS</span>
+                </span>
+              </span>
+              <span className="text-right text-foreground/90">{p.avgRating.toFixed(1)}<span className="sm:hidden text-muted-foreground"> avg</span></span>
             </div>
           ))}
           <p className="px-3 py-1.5 text-[10px] text-muted-foreground">
