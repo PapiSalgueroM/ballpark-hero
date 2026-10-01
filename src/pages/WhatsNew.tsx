@@ -24,6 +24,12 @@ const WhatsNew = () => {
 
       <section className="space-y-8 text-sm leading-relaxed text-muted-foreground">
         <div>
+          <h2 className="text-lg font-semibold text-foreground mb-2">October 2026</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            <li><strong className="text-foreground">World XI: a proper season report.</strong> Simulate a season with your eleven and it now runs month by month, August to May, with the results, a standout from your side each month and a line on how the month felt from the people around the club (your assistant, the fans, the board, never a real player speaking). Every one of your eleven gets his appearances, goals, assists, clean sheets for the keeper and back line, and an average rating, and the numbers add up to the team totals. Three awards: player of the season, young player of the season when any pick is 23 or under on our list, and a goal of the season with the scorer, the minute and who it was against. And one line on what would have changed: the sim replays the same season on the same rolls in every other shape and with your lowest rated slot lifted to the side's level, and tells you which one would have moved the finish most, as arithmetic and never a promise. The share card carries the finish, the top scorer and the player of the season. Build Your XI shows the same report. <Link to="/world-xi" className="text-primary hover:underline">Build a World XI</Link>.</li>
+          </ul>
+        </div>
+        <div>
           <h2 className="text-lg font-semibold text-foreground mb-2">September 2026</h2>
           <ul className="list-disc pl-5 space-y-2">
             <li><strong className="text-foreground">New game: Manager Hot Seat, five games to save your job.</strong> You walk into a real club on a bad run, the board give you five league games and a points target, and you either hit it or you are gone. Pick a shape and a team talk before every match, handle the press, and watch the board, the fans and the dressing room react. It runs on the Club Manager engine, so every match is the full match sim from that game. There is a daily (same club and target for everyone) and a free play mode for any club you like. It records that you played but puts no points on the leaderboard for now.</li>

@@ -705,7 +705,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
       {
         heading: "Filling all eleven and simulating a season",
         items: [
-          "Fill all 11 to win, then check squad value and chemistry, and simulate a season if you are curious.",
+          "Fill all 11 to win, then check squad value and chemistry, and simulate a season if you are curious. The report has a month by month tab, a player stats tab and a share card with your finish, top scorer and player of the season.",
         ],
       },
     ],
@@ -727,6 +727,7 @@ export const SOCCER_CONTENT_1: GameContentMap = {
         items: [
           "Position families count: wingers cover both flanks, central midfielders cover holding and attacking slots, strikers and centre forwards swap freely, full backs cover wing back slots. Front line winger slots take wingers and wide midfielders only, never wing backs.",
           "The timer covers the whole run, and zero on the clock ends it. The season sim rates your XI out of 100 across a 38 game, 20 team league.",
+          "The season report runs month by month with a standout each month, gives every player his appearances, goals, assists, clean sheets and average rating (they add up to the team totals), hands out player, young player and goal of the season, and names the one shape or respin the sim says would have moved the finish most, as arithmetic on the same rolls and never a promise. Nobody real is quoted in it.",
         ],
       },
     ],

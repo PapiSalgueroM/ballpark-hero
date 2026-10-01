@@ -1,6 +1,6 @@
 import { supabase } from '@/integrations/supabase/client';
 import { Position } from '@/types/game';
-import { Formation, FormationSlot, normalizePosition, playerRating } from '@/lib/squadDeal';
+import { FORMATIONS, Formation, FormationSlot, normalizePosition, playerRating } from '@/lib/squadDeal';
 import { normalizeName } from '@/lib/whoAmI';
 import { rng, winProbability } from '@/lib/perfectSeason';
 import { ALL_POSITIONS, allowedLabelFor, eligiblePositions, fitsAllowed, slotAllowedPositions } from '@/lib/positionFit';
@@ -412,10 +412,59 @@ export function suggestCountryPlayers(
 
 const LEAGUE_TEAMS = 20;
 const LEAGUE_MATCHES = 38; // round-robin-ish, matches perfectSeason/unbeatenMode convention
+const DRAW_SHARE = 0.26;
 
 export interface SeasonInjury {
   name: string;
   weeksOut: number;
+}
+
+export type MatchResult = 'W' | 'D' | 'L';
+
+/* Round 726, the other half of his "more in the season report". Everything
+   in these four shapes is read off the eleven's real positions, ages and card
+   ratings plus the seeded rolls. Nobody real is quoted anywhere in them: a
+   month's moment speaks through a role (your assistant, the fans, the board)
+   and a standout is a name beside his numbers, which is reporting. */
+export interface MonthReport {
+  month: string;
+  played: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  goalsFor: number;
+  goalsAgainst: number;
+  /** Most goal involvements in the month from the eleven, ties to the higher card rating. */
+  standout: { name: string; goals: number; assists: number; cleanSheets: number } | null;
+  moment: string;
+}
+
+export interface PlayerSeasonStats {
+  name: string;
+  position: Position;
+  appearances: number;
+  goals: number;
+  assists: number;
+  /** Keeper and back line only; null for everyone further forward. */
+  cleanSheets: number | null;
+  avgRating: number;
+}
+
+export interface SeasonAwards {
+  /** Only when a pick is 23 or under on our list; null otherwise. */
+  youngPlayer: { name: string; age: number; rating: number } | null;
+  goalOfSeason: { scorer: string; opponent: string; minute: string; month: string; score: string; line: string } | null;
+}
+
+export interface WhatIf {
+  kind: 'formation' | 'respin' | 'none';
+  /** The alternative formation's name, the lifted slot's role, or '' for none. */
+  alternative: string;
+  finishFrom: number;
+  finishTo: number;
+  pointsFrom: number;
+  pointsTo: number;
+  line: string;
 }
 
 export interface SeasonReport {
@@ -439,6 +488,15 @@ export interface SeasonReport {
   marginAsChampion: number;
   /** The XI's best player by the sim's own rating, a result and never a claim. */
   playerOfSeason: { name: string; rating: number } | null;
+  /* Round 726. All optional so a report built before this round still reads. */
+  goalsFor?: number;
+  goalsAgainst?: number;
+  cleanSheets?: number;
+  assists?: number;
+  months?: MonthReport[];
+  playerStats?: PlayerSeasonStats[];
+  awards?: SeasonAwards;
+  whatIf?: WhatIf;
 }
 
 /** Simple hash of the squad's names into a stable non-negative seed. */
@@ -493,6 +551,514 @@ function sagaRoleFor(position: string | undefined): string {
   return 'starter';
 }
 
+/* ---------------- The league, as one function (Round 726) ---------------- */
+
+interface LeagueRun {
+  results: MatchResult[];
+  points: number;
+  wins: number;
+  draws: number;
+  losses: number;
+  unbeatenRun: number;
+  rivalPoints: number[];
+  tablePosition: number;
+}
+
+/**
+ * The 38 team rolls and the 19 rivals, in exactly the draw order the season
+ * has always used, so a squad's season is byte identical to what it was.
+ * Lifted out of simulateWorldXiSeason in Round 726 so the "what would have
+ * changed" line can replay the same rolls under a different shape or rating.
+ */
+function playLeague(rand: () => number, winP: number): LeagueRun {
+  const drawP = (1 - winP) * DRAW_SHARE;
+  const results: MatchResult[] = [];
+  let points = 0;
+  let wins = 0;
+  let draws = 0;
+  let losses = 0;
+  /* Round 455: the unbeaten run is read off the same rolls, no extra draw. */
+  let unbeatenRun = 0;
+  let currentRun = 0;
+  for (let i = 0; i < LEAGUE_MATCHES; i++) {
+    const roll = rand();
+    if (roll < winP) { points += 3; wins++; currentRun++; }
+    else if (roll < winP + drawP) { points += 1; draws++; currentRun++; }
+    else { losses++; currentRun = 0; }
+    if (currentRun > unbeatenRun) unbeatenRun = currentRun;
+    results.push(roll < winP ? 'W' : roll < winP + drawP ? 'D' : 'L');
+  }
+
+  // Table position: rank this points total against 19 simulated rivals whose
+  // strength is spread around the same league so the position feels earned
+  // rather than a flat lookup table.
+  const rivalPoints: number[] = [];
+  for (let i = 0; i < LEAGUE_TEAMS - 1; i++) {
+    const rivalOverall = 55 + rand() * 40; // spread of a plausible league
+    const rp = winProbability(rivalOverall);
+    const rdp = (1 - rp) * DRAW_SHARE;
+    let rpts = 0;
+    for (let m = 0; m < LEAGUE_MATCHES; m++) {
+      const roll = rand();
+      if (roll < rp) rpts += 3;
+      else if (roll < rp + rdp) rpts += 1;
+    }
+    rivalPoints.push(rpts);
+  }
+  const tablePosition = Math.min(LEAGUE_TEAMS, 1 + rivalPoints.filter(p => p > points).length);
+  return { results, points, wins, draws, losses, unbeatenRun, rivalPoints, tablePosition };
+}
+
+/** The shared age-aware card rating for each man, the number the whole site shows. */
+function ratingsFor(players: WxPlayer[]): number[] {
+  return players.map(p =>
+    playerRating({ marketValue: Math.max(1, p.value / 1_000_000), age: p.age ?? 27 } as Parameters<typeof playerRating>[0]),
+  );
+}
+
+function squadRatingOf(ratings: number[]): number {
+  const avg = ratings.length ? ratings.reduce((a, b) => a + b, 0) / ratings.length : 50;
+  return Math.max(1, Math.min(100, Math.round(avg)));
+}
+
+/* Round 726: a shape costs the side for every man it has no natural slot for.
+   Players are matched to slots with the same fitsSlot rule the game picks
+   with, as a proper matching rather than a greedy pass, so a man who could
+   cover two slots never blocks one. An eleven built through either game
+   fits its own formation by construction, so the chosen set up pays nothing
+   and every season reads as it did; only an alternative shape can be charged,
+   which is what makes the "what would have changed" line a real comparison. */
+const MISFIT_PENALTY = 2.5;
+const MISFIT_CAP = 10;
+
+function misfitPenalty(misfits: number): number {
+  return Math.min(MISFIT_CAP, misfits * MISFIT_PENALTY);
+}
+
+export function formationMisfits(players: WxPlayer[], formationName: string): number {
+  const formation = FORMATIONS.find(f => f.name === formationName);
+  if (!formation) return 0;
+  const slots = formation.slots;
+  const holder: number[] = new Array(slots.length).fill(-1);
+  const place = (pi: number, seen: boolean[]): boolean => {
+    for (let si = 0; si < slots.length; si++) {
+      if (seen[si] || !fitsSlot(players[pi], slots[si])) continue;
+      seen[si] = true;
+      if (holder[si] === -1 || place(holder[si], seen)) {
+        holder[si] = pi;
+        return true;
+      }
+    }
+    return false;
+  };
+  let placed = 0;
+  for (let pi = 0; pi < players.length; pi++) {
+    if (place(pi, new Array(slots.length).fill(false))) placed++;
+  }
+  return players.length - placed;
+}
+
+/**
+ * Round 726: the finish the same rolls give under one change. Either the
+ * same eleven in another formation, or the lowest rated pick lifted to the
+ * level of the other ten (the squad rating becomes their mean), which is
+ * what a respin that landed a pick at the side's level would have done.
+ * With no change it returns exactly the season's own finish, and the harness
+ * holds it to that.
+ */
+export function whatIfFinish(
+  filled: WxPlayer[],
+  formationName: string,
+  alt: { formation?: string; liftWeakest?: boolean } = {},
+): { points: number; tablePosition: number } {
+  const players = filled.filter((p): p is WxPlayer => p !== null);
+  const seed = squadSeed(players);
+  const ratings = ratingsFor(players);
+  let squadRating = squadRatingOf(ratings);
+  if (alt.liftWeakest && ratings.length >= 2) {
+    const weakest = ratings.indexOf(Math.min(...ratings));
+    squadRating = squadRatingOf(ratings.filter((_, i) => i !== weakest));
+  }
+  const misfits = formationMisfits(players, alt.formation ?? formationName);
+  const run = playLeague(rng(seed), winProbability(ratingToOverall(squadRating) - misfitPenalty(misfits)));
+  return { points: run.points, tablePosition: run.tablePosition };
+}
+
+/* ---------------- Round 726: the rest of the report ---------------- */
+
+const MONTHS = ['August', 'September', 'October', 'November', 'December', 'January', 'February', 'March', 'April', 'May'];
+/* A real season's rhythm: short opening month, a short January. Sums to 38. */
+const MONTH_MATCHES = [3, 4, 4, 4, 4, 3, 4, 4, 4, 4];
+
+/* Who scores and who sets up, by position, before the card rating weighs in.
+   A keeper never scores here; a centre back gets the odd header. */
+const GOAL_WEIGHT: Record<string, number> = {
+  ST: 10, CF: 9, LW: 6, RW: 6, CAM: 5, LM: 3.5, RM: 3.5, CM: 2.5, CDM: 1.2, LWB: 1, RWB: 1, LB: 0.8, RB: 0.8, CB: 1, GK: 0,
+};
+const ASSIST_WEIGHT: Record<string, number> = {
+  CAM: 8, LW: 7, RW: 7, LM: 6, RM: 6, CM: 5, ST: 4, CF: 4, LWB: 4, RWB: 4, LB: 3, RB: 3, CDM: 2.5, CB: 1, GK: 0.2,
+};
+
+/* Role voices only. The month and its numbers are the only things filled in,
+   so no real name can end up as the speaker of any of these. */
+const MONTH_UNBEATEN = [
+  'Your assistant said the shape finally made sense in {month}: {w} wins, {d} draws, zero defeats.',
+  'The fans sang through {month}. {p} games, no defeats, and the noise carried into the car park.',
+  'Unbeaten in {month}. The coaching staff let the dressing room enjoy it for exactly one night.',
+  'The board sent a short note after {month}. It said well done and nothing else, which from them is a lot.',
+];
+const MONTH_WINLESS = [
+  'A winless {month}. The door stayed shut after the last one and the press got nothing.',
+  'Your assistant called {month} a reset, which is the polite word for it.',
+  'The fans booed off {month}. {l} defeats in {p} games will do that.',
+  'Not a win all {month}. The dressing room went quiet and the board went quieter.',
+];
+const MONTH_MIXED = [
+  '{month} was a coin toss: {w}W {d}D {l}L, and the dressing room knew it.',
+  'The fans left {month} unsure what they were watching. {w} wins, {l} defeats, no pattern.',
+  'Your assistant filed {month} under fine. {w} wins from {p}.',
+  'A month of two halves in {month}: the good games were very good and the rest were not.',
+];
+const MONTH_BIG_WIN = [
+  'The {gf}-{ga} in {month} is the one the fans will still be bringing up in ten years.',
+  'A {gf}-{ga} in {month}. Your assistant kept the team sheet from that one.',
+];
+
+const GOAL_DESCRIPTIONS: Record<string, string[]> = {
+  GK: ['a clearance from his own half that bounced over everyone'],
+  defender: ['a header from a corner', 'a near post header nobody picked up', 'a drive from the overlap'],
+  midfielder: ['a strike from thirty yards', 'a first time hit from the edge of the box', 'a curler into the top corner'],
+  winger: ['a cut inside and a finish into the far corner', 'a solo run from the halfway line', 'a chip over the keeper'],
+  forward: ['a volley off a cross', 'a first time finish on the turn', 'a header at the back post'],
+};
+
+function goalFamily(position: string): string {
+  if (position === 'GK') return 'GK';
+  if (DEF_SET.has(position as Position)) return 'defender';
+  if (['LW', 'RW', 'LM', 'RM'].includes(position)) return 'winger';
+  if (FW_SET.has(position as Position)) return 'forward';
+  return 'midfielder';
+}
+
+/** Largest remainder split of `total` across `weights`, each share capped where a cap is given. */
+function allocateByWeight(total: number, weights: number[], caps?: number[]): number[] {
+  const out = new Array<number>(weights.length).fill(0);
+  const sum = weights.reduce((s, w) => s + w, 0);
+  if (total <= 0 || sum <= 0) return out;
+  const exact = weights.map(w => (w / sum) * total);
+  let left = total;
+  exact.forEach((e, i) => { out[i] = Math.floor(e); left -= out[i]; });
+  const order = exact.map((e, i) => ({ i, frac: e - Math.floor(e) })).sort((a, b) => b.frac - a.frac || a.i - b.i);
+  for (let k = 0; left > 0 && k < order.length; k++) { out[order[k].i] += 1; left -= 1; }
+  if (caps) {
+    let surplus = 0;
+    for (let i = 0; i < out.length; i++) {
+      if (out[i] > caps[i]) { surplus += out[i] - caps[i]; out[i] = caps[i]; }
+    }
+    /* Hand the surplus to whoever still has room; when nobody does it is
+       dropped and the total simply comes out lower. */
+    for (let pass = 0; surplus > 0 && pass < 60; pass++) {
+      let moved = false;
+      for (let i = 0; i < out.length && surplus > 0; i++) {
+        if (weights[i] > 0 && out[i] < caps[i]) { out[i] += 1; surplus -= 1; moved = true; }
+      }
+      if (!moved) break;
+    }
+  }
+  return out;
+}
+
+function pickWeighted(rand: () => number, weights: number[]): number {
+  const sum = weights.reduce((s, w) => s + w, 0);
+  if (sum <= 0) return 0;
+  let x = rand() * sum;
+  for (let i = 0; i < weights.length; i++) {
+    x -= weights[i];
+    if (x <= 0) return i;
+  }
+  return weights.length - 1;
+}
+
+function shuffleWith<T>(rand: () => number, arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function fillMonth(template: string, v: Record<string, number | string>): string {
+  return template.replace(/\{(w|d|l|p|gf|ga|month)\}/g, (_, k: string) => String(v[k]));
+}
+
+interface SeasonExtras {
+  goalsFor: number;
+  goalsAgainst: number;
+  cleanSheets: number;
+  assists: number;
+  months: MonthReport[];
+  playerStats: PlayerSeasonStats[];
+  awards: SeasonAwards;
+  whatIf: WhatIf;
+}
+
+/**
+ * Everything Round 726 added, drawn AFTER every draw the season already made
+ * so the points, the table, the trophies, the top scorer, the injuries and the
+ * saga line are exactly what they were. The per player numbers are built to
+ * add up: the top scorer keeps the goals the report already printed, the
+ * other ten split the rest by position and rating, and every goal is then
+ * placed in a real match of the season so the months agree with the totals.
+ */
+function buildSeasonExtras(
+  rand: () => number,
+  players: WxPlayer[],
+  ratings: number[],
+  league: LeagueRun,
+  topScorer: { name: string; goals: number } | null,
+  injuries: SeasonInjury[],
+  formationName: string,
+  squadRating: number,
+): SeasonExtras {
+  const n = players.length;
+  const { results, rivalPoints, points, tablePosition } = league;
+  const ratingFactor = ratings.map(r => 0.4 + r / 100);
+
+  /* Goals per player. The top scorer is fixed at the number already printed;
+     everyone else is capped one below him so he stays the top scorer. */
+  const topIdx = topScorer ? players.findIndex(p => p.name === topScorer.name) : -1;
+  const topGoals = topScorer ? topScorer.goals : 0;
+  const goalWeights = players.map((p, i) => (i === topIdx ? 0 : (GOAL_WEIGHT[p.position] ?? 1) * ratingFactor[i]));
+  const othersTarget = topScorer ? Math.round(topGoals * (1.4 + rand() * 0.8)) : Math.round(20 + squadRating / 4);
+  const caps = players.map(() => (topScorer ? Math.max(0, topGoals - 1) : LEAGUE_MATCHES * 2));
+  const playerGoals = allocateByWeight(othersTarget, goalWeights, caps);
+  if (topIdx >= 0) playerGoals[topIdx] = topGoals;
+  /* Every win needs a goal. This cannot bind in practice (the top scorer alone
+     clears eight), but the sum must never contradict the record. */
+  let goalsFor = playerGoals.reduce((s, g) => s + g, 0);
+  while (n > 0 && goalsFor < league.wins) {
+    const best = goalWeights.indexOf(Math.max(...goalWeights));
+    playerGoals[best >= 0 ? best : 0] += 1;
+    goalsFor += 1;
+  }
+
+  /* Assists for the season, about two thirds of the goals. */
+  const assistTotal = Math.round(goalsFor * (0.62 + rand() * 0.18));
+  const assistWeights = players.map((p, i) => (ASSIST_WEIGHT[p.position] ?? 1) * ratingFactor[i]);
+  const playerAssistsTarget = allocateByWeight(assistTotal, assistWeights);
+
+  /* Fixtures: every rival home and away, in a seeded order. */
+  const fixtureDeck = shuffleWith(rand, rivalPoints.flatMap((_, r) => [{ rival: r, home: true }, { rival: r, home: false }]));
+  const fixtures = results.map((_, i) => fixtureDeck[i % Math.max(1, fixtureDeck.length)] ?? { rival: 0, home: true });
+
+  /* Scorelines consistent with the result: a win starts at one goal, the rest
+     of the season's goals land match by match, wins first. */
+  const gf = results.map(r => (r === 'W' ? 1 : 0));
+  const matchWeight = results.map(r => (r === 'W' ? 3 : r === 'D' ? 1.2 : 0.8));
+  for (let left = goalsFor - league.wins; left > 0; left--) gf[pickWeighted(rand, matchWeight)] += 1;
+  const ga = results.map((r, i) => {
+    if (r === 'D') return gf[i];
+    const m = rand();
+    const margin = m < 0.5 ? 1 : m < 0.8 ? 2 : 3;
+    return r === 'W' ? Math.max(0, gf[i] - margin) : gf[i] + margin;
+  });
+  const goalsAgainst = ga.reduce((s, g) => s + g, 0);
+  const cleanSheets = ga.filter(g => g === 0).length;
+
+  /* Place every goal in a match, then every assist on a goal. */
+  const scorerTokens = shuffleWith(rand, playerGoals.flatMap((g, i) => new Array<number>(g).fill(i)));
+  const goals: { match: number; scorer: number; assister: number | null }[] = [];
+  let t = 0;
+  gf.forEach((g, m) => { for (let k = 0; k < g; k++) goals.push({ match: m, scorer: scorerTokens[t++], assister: null }); });
+  const assistTokens = shuffleWith(rand, playerAssistsTarget.flatMap((a, i) => new Array<number>(a).fill(i)));
+  const goalOrder = shuffleWith(rand, goals.map((_, i) => i));
+  for (const a of assistTokens) {
+    let placed = goalOrder.find(gi => goals[gi].assister === null && goals[gi].scorer !== a);
+    if (placed === undefined) placed = goalOrder.find(gi => goals[gi].assister === null);
+    if (placed === undefined) break;
+    goals[placed].assister = a;
+  }
+  const playerAssists = players.map((_, i) => goals.filter(g => g.assister === i).length);
+  const assists = playerAssists.reduce((s, a) => s + a, 0);
+
+  /* Appearances: 38 less the weeks an injury cost, less a rest or two. */
+  const injuredWeeks = new Map(injuries.map(inj => [inj.name, inj.weeksOut]));
+  const appearances = players.map(p => {
+    const rests = p.position === 'GK' ? (rand() < 0.3 ? 1 : 0) : Math.floor(rand() * 4);
+    return Math.max(1, LEAGUE_MATCHES - (injuredWeeks.get(p.name) ?? 0) - rests);
+  });
+  const keepsSheets = (pos: Position) => pos === 'GK' || DEF_SET.has(pos);
+  const playerStats: PlayerSeasonStats[] = players.map((p, i) => {
+    const cs = keepsSheets(p.position) ? Math.min(appearances[i], Math.round((cleanSheets * appearances[i]) / LEAGUE_MATCHES)) : null;
+    const avg = 5.8 + (ratings[i] - 55) / 18 + 0.012 * (playerGoals[i] + playerAssists[i]) + 0.01 * (cs ?? 0);
+    return {
+      name: p.name,
+      position: p.position,
+      appearances: appearances[i],
+      goals: playerGoals[i],
+      assists: playerAssists[i],
+      cleanSheets: cs,
+      avgRating: Math.round(Math.max(5.5, Math.min(9.3, avg)) * 10) / 10,
+    };
+  });
+
+  /* Month by month. */
+  const monthOf: number[] = [];
+  MONTH_MATCHES.forEach((count, mi) => { for (let k = 0; k < count; k++) monthOf.push(mi); });
+  while (monthOf.length < results.length) monthOf.push(MONTHS.length - 1);
+  const months: MonthReport[] = MONTHS.map((month, mi) => {
+    const idx = results.map((_, i) => i).filter(i => monthOf[i] === mi);
+    if (idx.length === 0) return null;
+    const w = idx.filter(i => results[i] === 'W').length;
+    const d = idx.filter(i => results[i] === 'D').length;
+    const l = idx.filter(i => results[i] === 'L').length;
+    const mgf = idx.reduce((s, i) => s + gf[i], 0);
+    const mga = idx.reduce((s, i) => s + ga[i], 0);
+    const monthCs = idx.filter(i => ga[i] === 0).length;
+    const inv = players.map((_, pi) => ({
+      pi,
+      goals: goals.filter(g => idx.includes(g.match) && g.scorer === pi).length,
+      assists: goals.filter(g => idx.includes(g.match) && g.assister === pi).length,
+    }));
+    const scored = inv.filter(x => x.goals + x.assists > 0)
+      .sort((a, b) => (b.goals * 2 + b.assists) - (a.goals * 2 + a.assists) || ratings[b.pi] - ratings[a.pi] || a.pi - b.pi);
+    let standout: MonthReport['standout'] = null;
+    if (scored.length) {
+      const s = scored[0];
+      standout = { name: players[s.pi].name, goals: s.goals, assists: s.assists, cleanSheets: keepsSheets(players[s.pi].position) ? monthCs : 0 };
+    } else if (n > 0) {
+      const gk = players.findIndex(p => p.position === 'GK');
+      const pi = monthCs > 0 && gk >= 0 ? gk : ratings.indexOf(Math.max(...ratings));
+      standout = { name: players[pi].name, goals: 0, assists: 0, cleanSheets: keepsSheets(players[pi].position) ? monthCs : 0 };
+    }
+    const biggest = idx.reduce((best, i) => (results[i] === 'W' && gf[i] - ga[i] > best.margin ? { margin: gf[i] - ga[i], i } : best), { margin: 0, i: -1 });
+    const pool = biggest.margin >= 4 ? MONTH_BIG_WIN : l === 0 && w > 0 ? MONTH_UNBEATEN : w === 0 ? MONTH_WINLESS : MONTH_MIXED;
+    const template = pool[Math.floor(rand() * pool.length)];
+    const moment = fillMonth(template, { month, w, d, l, p: idx.length, gf: biggest.i >= 0 ? gf[biggest.i] : 0, ga: biggest.i >= 0 ? ga[biggest.i] : 0 });
+    return { month, played: idx.length, wins: w, draws: d, losses: l, goalsFor: mgf, goalsAgainst: mga, standout, moment };
+  }).filter((m): m is MonthReport => m !== null);
+
+  /* Awards. */
+  const young = players
+    .map((p, i) => ({ p, i }))
+    .filter(({ p }) => typeof p.age === 'number' && p.age <= 23)
+    .sort((a, b) => ratings[b.i] - ratings[a.i] || (playerGoals[b.i] + playerAssists[b.i]) - (playerGoals[a.i] + playerAssists[a.i]) || a.i - b.i)[0];
+  const youngPlayer = young ? { name: young.p.name, age: young.p.age as number, rating: Math.round(ratings[young.i]) } : null;
+
+  /* Every rival's finish, with ties broken so each label names one side.
+     Our own rank in this ordering is the table position the report prints. */
+  const order = [{ team: -1, pts: points }, ...rivalPoints.map((pts, r) => ({ team: r, pts }))]
+    .sort((a, b) => b.pts - a.pts || (a.team === -1 ? -1 : b.team === -1 ? 1 : a.team - b.team));
+  const rivalRank = new Map<number, number>();
+  order.forEach((o, k) => { if (o.team >= 0) rivalRank.set(o.team, k + 1); });
+  const rivalLabel = (r: number) => {
+    const rank = rivalRank.get(r) ?? LEAGUE_TEAMS;
+    return rank === 1 ? 'the eventual champions' : `the side that finished ${ordinal(rank)}`;
+  };
+
+  let goalOfSeason: SeasonAwards['goalOfSeason'] = null;
+  if (goals.length) {
+    const weights = goals.map(g => {
+      const r = results[g.match];
+      return (r === 'W' ? 10 : r === 'D' ? 4 : 1) + (LEAGUE_TEAMS + 1 - (rivalRank.get(fixtures[g.match].rival) ?? LEAGUE_TEAMS));
+    });
+    const g = goals[pickWeighted(rand, weights)];
+    const scorer = players[g.scorer];
+    const minuteRoll = 1 + Math.floor(rand() * 94);
+    const minute = minuteRoll > 90 ? `90+${minuteRoll - 90}` : `${minuteRoll}`;
+    const family = GOAL_DESCRIPTIONS[goalFamily(scorer.position)] ?? GOAL_DESCRIPTIONS.midfielder;
+    const desc = family[Math.floor(rand() * family.length)];
+    const fx = fixtures[g.match];
+    const opponent = rivalLabel(fx.rival);
+    const month = MONTHS[monthOf[g.match]] ?? MONTHS[MONTHS.length - 1];
+    const res = results[g.match];
+    const score = `${gf[g.match]}-${ga[g.match]}`;
+    const outcome = res === 'W' ? 'win' : res === 'D' ? 'draw' : 'defeat';
+    const line = `Goal of the season: ${scorer.name}, ${minute}', ${fx.home ? 'at home to' : 'away at'} ${opponent} in ${month}, ${desc} in a ${score} ${outcome}.`;
+    goalOfSeason = { scorer: scorer.name, opponent, minute, month, score, line };
+  }
+
+  /* What would have changed. Two alternatives replayed on the same rolls:
+     each other shape with the same eleven, and the lowest rated slot lifted
+     to the level of the other ten. The bigger mover is reported, as the
+     sim's arithmetic and never as a certainty. A shape can only cost the
+     side here, so when the shape is the mover the chosen one was right. */
+  const finish = { points, tablePosition };
+  const swing = (alt: { points: number; tablePosition: number }) =>
+    Math.abs(alt.tablePosition - finish.tablePosition) * 1000 + Math.abs(alt.points - finish.points);
+  let bestShape: { name: string; misfits: number; points: number; tablePosition: number } | null = null;
+  if (FORMATIONS.some(f => f.name === formationName)) {
+    for (const f of FORMATIONS) {
+      if (f.name === formationName) continue;
+      const alt = whatIfFinish(players, formationName, { formation: f.name });
+      if (!bestShape || swing(alt) > swing(bestShape)) bestShape = { name: f.name, misfits: formationMisfits(players, f.name), ...alt };
+    }
+  }
+  const weakest = ratings.length >= 2 ? ratings.indexOf(Math.min(...ratings)) : -1;
+  const lifted = weakest >= 0 ? whatIfFinish(players, formationName, { liftWeakest: true }) : null;
+  const liftedRating = weakest >= 0 ? squadRatingOf(ratings.filter((_, i) => i !== weakest)) : squadRating;
+  const from = ordinal(finish.tablePosition);
+  /* Both alternatives are told, then the bigger mover is named. A shape
+     sentence and a slot sentence, each honest about moving nothing when it
+     moved nothing, and the same close every time. */
+  const shapeSentence = !bestShape
+    ? ''
+    : swing(bestShape) > 0
+    ? `In a ${bestShape.name}, ${bestShape.misfits} of these eleven ${bestShape.misfits === 1 ? 'has' : 'have'} no natural slot, and on the same rolls the finish drops from ${from} to ${ordinal(bestShape.tablePosition)}.`
+    : `Every other shape lands the same ${from} on the same rolls.`;
+  const weakMan = weakest >= 0 ? players[weakest] : null;
+  const slotSentence = !lifted || !weakMan
+    ? ''
+    : swing(lifted) > 0
+    ? `A pick at the rest of the eleven's level in the ${sagaRoleFor(weakMan.position)} slot (${weakMan.name}, the lowest rating at ${Math.round(ratings[weakest])}) takes the squad to ${liftedRating}/100 and the finish from ${from} to ${ordinal(lifted.tablePosition)}.`
+    : `Lifting the ${sagaRoleFor(weakMan.position)} slot, the lowest rating in the side, to the rest of the eleven's level moves nothing.`;
+  const close = 'Same dice, no promises.';
+  let whatIf: WhatIf;
+  if (lifted && weakMan && swing(lifted) > 0 && (!bestShape || swing(lifted) >= swing(bestShape))) {
+    whatIf = {
+      kind: 'respin',
+      alternative: sagaRoleFor(weakMan.position),
+      finishFrom: finish.tablePosition,
+      finishTo: lifted.tablePosition,
+      pointsFrom: finish.points,
+      pointsTo: lifted.points,
+      line: ['What would have changed: one slot, more than the shape.', slotSentence, shapeSentence, close].filter(Boolean).join(' '),
+    };
+  } else if (bestShape && swing(bestShape) > 0) {
+    whatIf = {
+      kind: 'formation',
+      alternative: bestShape.name,
+      finishFrom: finish.tablePosition,
+      finishTo: bestShape.tablePosition,
+      pointsFrom: finish.points,
+      pointsTo: bestShape.points,
+      line: ['What would have changed: the shape, more than any one slot.', shapeSentence, slotSentence, `Your ${formationName} was the right call for this group.`, close].filter(Boolean).join(' '),
+    };
+  } else {
+    whatIf = {
+      kind: 'none',
+      alternative: '',
+      finishFrom: finish.tablePosition,
+      finishTo: finish.tablePosition,
+      pointsFrom: finish.points,
+      pointsTo: finish.points,
+      line: ['What would have changed: nothing the sim can find.', shapeSentence, slotSentence, close].filter(Boolean).join(' '),
+    };
+  }
+
+  return {
+    goalsFor,
+    goalsAgainst,
+    cleanSheets,
+    assists,
+    months,
+    playerStats,
+    awards: { youngPlayer, goalOfSeason },
+    whatIf,
+  };
+}
+
 /**
  * Deterministic season sim seeded by the finished XI. Squad rating comes from
  * average player market value mapped through the same log curve as
@@ -507,51 +1073,14 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
   // Squad rating: the shared age-aware card rating curve from
   // squadDeal.playerRating, averaged across the XI, so ratings here read the
   // same as everywhere else on the site (owner 2026-08-05).
-  const playerRatings = players.map(p =>
-    playerRating({ marketValue: Math.max(1, p.value / 1_000_000), age: p.age ?? 27 } as Parameters<typeof playerRating>[0]),
-  );
-  const avgRating = playerRatings.length
-    ? playerRatings.reduce((a, b) => a + b, 0) / playerRatings.length
-    : 50;
-  const squadRating = Math.max(1, Math.min(100, Math.round(avgRating)));
+  const playerRatings = ratingsFor(players);
+  const squadRating = squadRatingOf(playerRatings);
 
-  const overall = ratingToOverall(squadRating);
+  const misfits = formationMisfits(players, formationName);
+  const overall = ratingToOverall(squadRating) - misfitPenalty(misfits);
   const winP = winProbability(overall);
-  const drawShare = 0.26;
-  const drawP = (1 - winP) * drawShare;
-
-  let points = 0;
-  let wins = 0;
-  let draws = 0;
-  let losses = 0;
-  /* Round 455: the unbeaten run is read off the same rolls, no extra draw. */
-  let unbeatenRun = 0;
-  let currentRun = 0;
-  for (let i = 0; i < LEAGUE_MATCHES; i++) {
-    const roll = rand();
-    if (roll < winP) { points += 3; wins++; currentRun++; }
-    else if (roll < winP + drawP) { points += 1; draws++; currentRun++; }
-    else { losses++; currentRun = 0; }
-    if (currentRun > unbeatenRun) unbeatenRun = currentRun;
-  }
-
-  // Table position: rank this points total against 19 simulated rivals whose
-  // strength is spread around the same league so the position feels earned
-  // rather than a flat lookup table.
-  const rivalPoints: number[] = [];
-  for (let i = 0; i < LEAGUE_TEAMS - 1; i++) {
-    const rivalOverall = 55 + rand() * 40; // spread of a plausible league
-    const rp = winProbability(rivalOverall);
-    const rdp = (1 - rp) * drawShare;
-    let rpts = 0;
-    for (let m = 0; m < LEAGUE_MATCHES; m++) {
-      const roll = rand();
-      if (roll < rp) rpts += 3;
-      else if (roll < rp + rdp) rpts += 1;
-    }
-    rivalPoints.push(rpts);
-  }
-  const tablePosition = Math.min(LEAGUE_TEAMS, 1 + rivalPoints.filter(p => p > points).length);
+  const league = playLeague(rand, winP);
+  const { points, wins, draws, losses, unbeatenRun, rivalPoints, tablePosition } = league;
 
   // Trophies: rating threshold plus a little rng, layered so an elite squad
   // can still miss out on the treble and a mid squad can still nick a cup.
@@ -603,6 +1132,10 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
   const template = TRANSFER_SAGA_TEMPLATES[Math.floor(rand() * TRANSFER_SAGA_TEMPLATES.length)];
   const transferHeadline = sagaPlayer ? template.replace('{role}', sagaRoleFor(sagaPlayer.position)) : 'A quiet transfer window, for once.';
 
+  /* Round 726: every draw below this line comes after every draw above it,
+     so nothing the report already printed can move. */
+  const extras = buildSeasonExtras(rand, players, playerRatings, league, topScorer, injuries, formationName, squadRating);
+
   const positionLine = tablePosition === 1
     ? `${formationName} title winners. Champions of the league.`
     : tablePosition <= 4
@@ -633,12 +1166,16 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
     narrative.push(`${gapToTop} point${gapToTop === 1 ? '' : 's'} off the top.`);
   }
   narrative.push(`Longest unbeaten run: ${unbeatenRun} game${unbeatenRun === 1 ? '' : 's'}.`);
+  narrative.push(`Scored ${extras.goalsFor}, conceded ${extras.goalsAgainst}, ${extras.cleanSheets} clean sheet${extras.cleanSheets === 1 ? '' : 's'}.`);
   if (topScorer) narrative.push(`${topScorer.name} top-scored with ${topScorer.goals} goals.`);
   if (playerOfSeason) narrative.push(`Player of the season: ${playerOfSeason.name} (rating ${playerOfSeason.rating}).`);
+  if (extras.awards.youngPlayer) narrative.push(`Young player of the season: ${extras.awards.youngPlayer.name} (${extras.awards.youngPlayer.age} on our list, rating ${extras.awards.youngPlayer.rating}).`);
+  if (extras.awards.goalOfSeason) narrative.push(extras.awards.goalOfSeason.line);
   if (trophies.length) narrative.push(`Silverware: ${trophies.join(', ')}.`);
   else narrative.push('No silverware this year. There is always next season.');
   for (const inj of injuries) narrative.push(`Injury: ${inj.name} out for ${inj.weeksOut} weeks.`);
   narrative.push(transferHeadline);
+  narrative.push(extras.whatIf.line);
 
   return {
     squadRating,
@@ -654,6 +1191,14 @@ export function simulateWorldXiSeason(filled: WxPlayer[], formationName: string)
     gapToTop,
     marginAsChampion,
     playerOfSeason,
+    goalsFor: extras.goalsFor,
+    goalsAgainst: extras.goalsAgainst,
+    cleanSheets: extras.cleanSheets,
+    assists: extras.assists,
+    months: extras.months,
+    playerStats: extras.playerStats,
+    awards: extras.awards,
+    whatIf: extras.whatIf,
   };
 }
 
