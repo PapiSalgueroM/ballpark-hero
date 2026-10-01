@@ -1,5 +1,36 @@
 # Project state
 
+## Current audit-only instruction, 2026-10-01
+
+Codex847 is a forensic and hostile QA audit. The latest request explicitly says
+do not fix issues. Local842-846 edits are paused, unaccepted drafts and excluded
+from the clean audit baseline. No production data, gameplay, saved pages or
+deployment changes will be made. Report verified defects with reproduction
+steps, distinguish source checks from browser play, and state coverage gaps.
+Next free round848. Earlier active implementation notes below are historical.
+
+## Owner priority, clarified 2026-10-01
+
+AdSense approval comes first. Existing games must then have correct data and
+complete gameplay, including connected daily GM/career responsibilities and
+meaningful animations. Build new games only after that quality work. Hold new
+game rounds and avoid new paid services. Current 842-845 content corrections
+continue beside Claude839-841's functional fixes. Keep code-tested, verified-live
+and Google-approved statuses separate. Approval is still unresolved.
+
+## Active Codex work, 2026-10-01
+
+846 adds a concrete existing-game fix found during the guide review: Soccer
+Higher or Lower must cancel a previous answer's delayed callback before a new
+run. The old callback can currently change the fresh pair, score or status.
+Code ownership is separate from the guide copy. Next free round 847.
+
+842-845 accept Claude836's proposed copy work: About/Contact, record-page
+explanations/related links, distinct hub/archive metadata and the ten Higher or
+Lower guides. Disjoint builder ownership is recorded in WORKBOARD. No new
+sports data or game-engine changes are planned. Claude keeps 839-841.
+Next free round 846. Earlier completed/pending notes below are historical.
+
 ## LIVE 2026-10-01: Release O (820 honest Perfect Season odds for NFL, NHL and MLB; 821 the MLB and NHL wheels read their whole tables), main `fcdae1bf`
 
 Assembled by the desktop Claude lane in the gate clone (`release-o`). **douknowball.com is serving it:** deployment
@@ -32,25 +63,41 @@ this release changes the MLB description on purpose: it was checked with `SEO_SP
 default now that main carries the change. The merge of main conflicted in `scripts/data/lastmod.json`; main's
 ledger was taken and `genSitemap.mjs` rerun, then `simSitemap`, `simPrerender` and `simIndexNow` were green.
 
-831 is now accepted: final production browser checks show no document movement
-across all10 measured wrong/hint/result actions at320 normal/1440 reduced.
-Original score/save/share/completion and finite/static cues hold. Source and
-artifact gates pass; exact95-check receipt and cleanup are on WORKBOARD.
-828-832,836 and837 are ready in code;838 contest remains active. Next839.
-
 ## Current Codex handoff, 2026-10-01
 
-836 public-copy corrections and837 Stat Line manual ad eligibility are
-accepted and ready for Claude's next publish. Types, build,15 artifact
-harnesses and snapshot boot pass. Three saved pages are refreshed; only four
-page fingerprints changed, all other ledger entries are preserved.
-AdSense remains unresolved. The existing account panel still shows the
-September25 Low value content decision. Search Console refresh was blocked
-by the browser URL safety check, so68/94 remain September20 observations.
-No Google submission was made. The evidence and remaining era-copy correction
-are in audits/ADSENSE-QUALITY-2026-10-01.md and WORKBOARD.
-831's final no-jump browser pair is running;838's three-point contest is in
-implementation/targeted checks. Next free839. No new live-release claim.
+Codex828-832 and 836-838 are accepted in code. Claude's Release O handoff
+confirms publication of Codex831, 836 and 837. Codex838 needs the next publish.
+Claude has claimed 839-841 from the rendered audit: leaderboard timeouts,
+home copy after React mounts, and college-grid loading. Next free round 842.
+The proposed additional copy work remains pending, with no new Codex claim
+in this batch. Older active/pending notes below are historical.
+838 landed as `2db7c148` on top of Release O, preserving both lanes' changes.
+Its tested runtime and saved page did not change during integration; the
+merged sitemap and all 170 page-date fingerprints pass fresh checks.
+
+838 completes master spec section 84's three-point contest in Buzzer Beater:
+five arcade racks, 25 shots, two-point money balls, 30 possible points, local
+unranked replay and reopenable rules. Daily saves and original ten-shot modes
+hold. Four focused cases, 11 existing practice cases, effective regression
+controls and a full 25-shot production phone play-through pass. The phone run
+made 14 shots for 17 points, including three money balls, without errors,
+broken assets or completion posts. Sources held and browser/server stopped.
+Real app types, build, 15 artifact harnesses and snapshot boot also pass.
+Only Buzzer Beater's saved-page fingerprint changed; 169 others remain held.
+Exact receipts and ownership are on WORKBOARD.
+
+831's final route-local fix keeps all 10 measured clue/hint/result actions
+from shifting the document at 320px normal and 1440px reduced motion.
+836 corrects unsupported public feature promises and explains real records
+versus generated simulation data. 837 holds the Stat Line manual ad until its
+game is usable. These fixes and their saved pages have passed production gates.
+
+AdSense remains unresolved. The account still shows the September 25 Low value
+content decision. Search Console refresh was blocked by the browser URL safety
+check, so 68 indexed and 94 excluded remain September 20 observations. No
+Google submission was made. Claude owns the remaining era-copy correction and
+full rendered audit. See audits/ADSENSE-QUALITY-2026-10-01.md. A Git push does
+not establish publication to douknowball.com or Google approval.
 
 Codex837 is implemented with12 focused outcomes and three effective copied
 regression checks. NBA Stat Line no longer requests a manual ad during loading
