@@ -31,11 +31,24 @@
  *           moralDilemmasTriggered) is shown, exactly once, in order;
  *        d. never two in one season;
  *        e. the four rival dilemmas are shown at all, at a floor;
- *        f. no career dead ends or throws on any choice of any dilemma.
+ *        f. no career dead ends or throws on any choice of any dilemma;
+ *        g. the choice lands and Continue keeps it: every choice writes its
+ *           outcome line, and after the dilemma's Continue that line and the
+ *           consequence fields (popularity, money, integrity, bans, the drug
+ *           and diving flags, sponsor pot, mafia stage, feud heat, stat boost,
+ *           agent) are exactly what the choice left. Added by the Round 819
+ *           review: a Continue that dismissed from the save as it was before
+ *           the choice, or a choice that changed nothing, left every check
+ *           above green.
  *   2. Rendered. src/test/careerDilemmaReach.test.tsx mounts the real page on
  *      saves at 17, 19, 24 and 30 and presses the buttons on screen for four
- *      seasons. It holds c and d off the DOM itself, and this section holds
- *      the count of dilemmas drawn from 20 up to its own band.
+ *      seasons. It holds c, d and g off the DOM itself, and this section
+ *      holds the count of dilemmas drawn from 20 up to its own band.
+ *      src/test/careerDilemmaSaves.test.tsx (Round 819 review) loads saves
+ *      the page can be sitting on: the social media screen from before the
+ *      round, a dilemma waiting for its choice, a dilemma already decided
+ *      (reloaded between the choice and Continue, the case the card fix is
+ *      for), and a match fixing ban, and plays each on through the page.
  *
  * BANDS, from measured headroom (reruns on 2026-10-01, the fixed tree; the
  * MEASURED block next to each constant has the numbers).
@@ -51,10 +64,24 @@
  *                                the player posts on the social media screen,
  *                                the double offer a fix in the wrong place
  *                                would make. 1c and section 2 go red.
+ *   DILEMMA_REACH_CONTROL=lost   the dilemma's Continue dismisses from the save
+ *                                as it was before the choice, so everything
+ *                                the choice did is thrown away. 1g and the
+ *                                rendered reach cases go red.
+ *   DILEMMA_REACH_CONTROL=noeffect  the choice clears the card and changes
+ *                                nothing else. 1g and the rendered reach cases
+ *                                go red.
+ *   DILEMMA_REACH_CONTROL=chosenflag  puts the pre 819 dilemma card back in
+ *                                the page (it waited on a local "chosen" flag
+ *                                and drew nothing for a decided dilemma it had
+ *                                not seen chosen). The saves test's reloaded
+ *                                decided dilemma goes red.
  * The engine is rewritten in the bundle for section 1 and in a gitignored
  * copy (src/lib/__control_*.ts) that section 2 is pointed at through the
- * NO_DOUBLE_SWAP alias in vitest.config.ts. Each rewrite asserts the text it
- * changes is there exactly once, or the control refuses to run.
+ * NO_DOUBLE_SWAP alias in vitest.config.ts; the page control writes a
+ * gitignored copy of the page (src/pages/__control_*.tsx) the same way. Each
+ * rewrite asserts the text it changes is there exactly once, or the control
+ * refuses to run.
  *
  * Run: node scripts/simCareerDilemmaReach.mjs
  *      DILEMMA_REACH_CONTROL=skip node scripts/simCareerDilemmaReach.mjs
@@ -71,8 +98,10 @@ import { fileURLToPath, pathToFileURL } from 'node:url';
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROOT_URL = ROOT.replaceAll('\\', '/');
 const ENGINE_FILE = path.join(ROOT, 'src', 'lib', 'soccerCareerEngine.ts');
+const PAGE_FILE = path.join(ROOT, 'src', 'pages', 'SoccerCareer.tsx');
 const CONTROL = process.env.DILEMMA_REACH_CONTROL || '';
-const CONTROLS = ['skip', 'twice', 'tworolls'];
+const CONTROLS = ['skip', 'twice', 'tworolls', 'lost', 'noeffect', 'chosenflag'];
+const PAGE_CONTROLS = ['chosenflag'];
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`DILEMMA_REACH_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
   process.exit(1);
@@ -108,8 +137,10 @@ const RENDERED_BAND = [10, 50];
 const TMP = fs.mkdtempSync(path.join(process.env.TEMP || os.tmpdir(), 'dilemmaReach-')).replaceAll('\\', '/');
 const readLF = f => fs.readFileSync(f, 'utf8').split('\r\n').join('\n');
 let controlCopy = null;
+let pageCopy = null;
 function cleanup() {
   try { if (controlCopy) fs.rmSync(controlCopy, { force: true }); } catch { /* best effort */ }
+  try { if (pageCopy) fs.rmSync(pageCopy, { force: true }); } catch { /* best effort */ }
   try { fs.rmSync(TMP, { recursive: true, force: true }); } catch { /* best effort */ }
 }
 const abort = m => { console.error(m); cleanup(); process.exit(1); };
@@ -119,8 +150,25 @@ const ROLL = '  if (tryTriggerMoralDilemma(s)) {\n    s.phase = "moral_dilemma";
 const SOCIAL_HEAD = 'export function dismissSocialMediaPhase(prev: CareerState, clubs: ClubData[]): CareerState {\n';
 const ACTED = '  s.socialMediaActionUsedThisSeason = true;\n';
 const DISMISS_HEAD ='export function dismissMoralDilemma(prev: CareerState, clubs: ClubData[]): CareerState {\n  const s = { ...prev };\n  s.pendingMoralDilemma = null;\n';
+const APPLY_HEAD = 'export function applyMoralDilemmaChoice(prev: CareerState, choiceIndex: number): CareerState {\n  const s = { ...prev };\n';
+const APPLY_TAIL = '  // Stay on moral_dilemma phase, UI calls dismissMoralDilemma to continue\n  s.phase = "moral_dilemma";\n  return s;\n';
 function count(src, needle) { return src.split(needle).length - 1; }
 function rewrite(src) {
+  if (PAGE_CONTROLS.includes(CONTROL)) return src;
+  if (CONTROL === 'lost') {
+    if (count(src, APPLY_HEAD) !== 1) abort(`control lost cannot run: applyMoralDilemmaChoice's opening is not in the engine exactly once`);
+    if (count(src, DISMISS_HEAD) !== 1) abort(`control lost cannot run: dismissMoralDilemma's opening is not in the engine exactly once`);
+    return src
+      .replace(APPLY_HEAD, `${APPLY_HEAD}  (s as any).__beforeChoice = prev;\n`)
+      .replace(DISMISS_HEAD, 'export function dismissMoralDilemma(prev: CareerState, clubs: ClubData[]): CareerState {\n'
+        + '  const s = { ...(((prev as any).__beforeChoice as CareerState | undefined) ?? prev) };\n'
+        + '  delete (s as any).__beforeChoice;\n'
+        + '  s.pendingMoralDilemma = null;\n');
+  }
+  if (CONTROL === 'noeffect') {
+    if (count(src, APPLY_TAIL) !== 1) abort(`control noeffect cannot run: applyMoralDilemmaChoice's closing lines are in the engine ${count(src, APPLY_TAIL)} times, expected 1`);
+    return src.replace(APPLY_TAIL, '  // Stay on moral_dilemma phase, UI calls dismissMoralDilemma to continue\n  s.phase = "moral_dilemma";\n  return { ...prev, pendingMoralDilemma: null, phase: "moral_dilemma" };\n');
+  }
   if (CONTROL === 'skip') {
     if (count(src, SOCIAL_HEAD) !== 1) abort(`control skip cannot run: dismissSocialMediaPhase's header is not in the engine exactly once`);
     const at = src.indexOf(SOCIAL_HEAD);
@@ -143,9 +191,33 @@ function rewrite(src) {
   }
   return src;
 }
+/* The page control: the dilemma card as it was before Round 819, which kept a
+   local "chosen" flag and drew nothing for a decided dilemma it had not seen
+   chosen in this mount, i.e. after a reload. Scoped to the card's own body. */
+const CARD_HEAD = 'function MoralDilemmaCard(';
+const CARD_OPEN = '  if (!dilemma) {\n';
+const CARD_CLICK = 'onClick={() => onChoice(i)}';
+function rewritePage(src) {
+  if (CONTROL !== 'chosenflag') return src;
+  if (count(src, CARD_HEAD) !== 1) abort('control chosenflag cannot run: MoralDilemmaCard is not in the page exactly once');
+  const at = src.indexOf(CARD_HEAD);
+  const end = src.indexOf('\nfunction ', at + CARD_HEAD.length);
+  const body = src.slice(at, end);
+  if (count(body, CARD_OPEN) !== 1) abort(`control chosenflag cannot run: the card's no dilemma branch is in it ${count(body, CARD_OPEN)} times, expected 1`);
+  if (count(body, CARD_CLICK) !== 1) abort(`control chosenflag cannot run: the card's choice handler is in it ${count(body, CARD_CLICK)} times, expected 1`);
+  const broken = body
+    .replace(CARD_OPEN, '  const [chosen, setChosen] = useState(false);\n  if (!dilemma && !chosen) return null;\n' + CARD_OPEN)
+    .replace(CARD_CLICK, 'onClick={() => { onChoice(i); setChosen(true); }}');
+  return src.slice(0, at) + broken + src.slice(end);
+}
 if (CONTROL) {
-  const before = readLF(ENGINE_FILE);
-  if (rewrite(before) === before) abort(`control ${CONTROL} changed nothing in the engine, so a green run would prove nothing`);
+  if (PAGE_CONTROLS.includes(CONTROL)) {
+    const before = readLF(PAGE_FILE);
+    if (rewritePage(before) === before) abort(`control ${CONTROL} changed nothing in the page, so a green run would prove nothing`);
+  } else {
+    const before = readLF(ENGINE_FILE);
+    if (rewrite(before) === before) abort(`control ${CONTROL} changed nothing in the engine, so a green run would prove nothing`);
+  }
   console.log(`NEGATIVE CONTROL ON: ${CONTROL}`);
 }
 
@@ -180,6 +252,12 @@ export const engine = await import('${ROOT_URL}/src/lib/soccerCareerEngine.ts');
   const band = age => age < 20 ? 'under 20' : age < 24 ? '20-23' : age < 30 ? '24-29' : '30+';
   const seasons = {}, shows = {};
   let offersTotal = 0, showsTotal = 0, rivalShows = 0, crashes = 0, deadEnds = 0, orderBreaks = 0, doubleSeasons = 0, under20 = 0;
+  /* 1g: what a choice leaves behind, and whether Continue keeps it. Morale
+     is left out on purpose: the transfer window Continue opens can take 12
+     off it when the club freezes you out, which is that screen's doing. */
+  const fingerprint = x => JSON.stringify([x.popularity, x.netWorth, x.integrityBonus, x.matchFixBanned, x.pedActive, x.divingActive,
+    x.sponsorBonus ?? 0, x.mafiaStage ?? 0, x.rivalryIntensity ?? null, x.statBoostNextSeason ?? null, x.agentId ?? null]);
+  let choicesMade = 0, silentChoices = 0, keptOnContinue = 0, lostOnContinue = 0;
   const choiceSeen = new Map();
   const examples = [];
 
@@ -189,6 +267,7 @@ export const engine = await import('${ROOT_URL}/src/lib/soccerCareerEngine.ts');
     let s;
     const offered = [], shown = [];
     const perSeason = new Map();
+    let decided = null;
     try {
       s = E.initCareer(`Reach ${c}`, NATIONS[c % NATIONS.length], POSITIONS[c % POSITIONS.length], '2020s', st, o, 2020, clubs, null, Math.min(99, o + 10 + (c % 25)));
       let known = s.moralDilemmasTriggered.length;
@@ -228,9 +307,22 @@ export const engine = await import('${ROOT_URL}/src/lib/soccerCareerEngine.ts');
               perSeason.set(season, (perSeason.get(season) || 0) + 1);
               const idx = (c + dilemmasAnswered++) % d.choices.length;
               choiceSeen.set(`${d.id}#${idx}`, true);
+              const eventsBefore = (s.events || []).length;
               s = E.applyMoralDilemmaChoice(s, idx);
+              choicesMade += 1;
+              const ev = s.events || [];
+              if (ev.length <= eventsBefore) {
+                silentChoices += 1;
+                if (examples.length < 8) examples.push(`career ${c}: ${d.id} option ${idx} wrote no outcome`);
+                decided = null;
+              } else decided = { id: `${d.id}#${idx}`, line: ev[ev.length - 1], fp: fingerprint(s) };
             } else {
               s = E.dismissMoralDilemma(s, clubs);
+              if (decided) {
+                if ((s.events || []).includes(decided.line) && fingerprint(s) === decided.fp) keptOnContinue += 1;
+                else { lostOnContinue += 1; if (examples.length < 8) examples.push(`career ${c}: ${decided.id} lost on Continue`); }
+                decided = null;
+              }
             }
             break;
           }
@@ -295,14 +387,26 @@ export const engine = await import('${ROOT_URL}/src/lib/soccerCareerEngine.ts');
   /* f */
   if (crashes || deadEnds) fail(`1f: ${crashes} careers threw and ${deadEnds} dead ended`);
   else ok(`1f: ${CAREERS} careers ran to the end, ${choiceSeen.size} different dilemma choices taken without a throw`);
+  /* g. a rule, not a band: every choice says what it did and Continue keeps
+     all of it. The floor only proves the rule was exercised. */
+  if (choicesMade < 100) fail(`1g: only ${choicesMade} choices made, too few to hold the rule`);
+  else if (silentChoices > 0) fail(`1g: ${silentChoices} of ${choicesMade} choices wrote no outcome line`);
+  else if (lostOnContinue > 0 || keptOnContinue !== choicesMade) fail(`1g: Continue kept ${keptOnContinue} of ${choicesMade} choices and lost ${lostOnContinue}`);
+  else ok(`1g: all ${choicesMade} choices wrote their outcome and Continue kept every one`);
 }
 
 /* ======================= Section 2: rendered ======================= */
 if (SECTIONS.includes('2')) {
-  console.log('\n2) Rendered: src/test/careerDilemmaReach.test.tsx, the real page played by its buttons');
+  console.log('\n2) Rendered: src/test/careerDilemmaReach.test.tsx and src/test/careerDilemmaSaves.test.tsx, the real page played by its buttons');
   const env = { ...process.env, CI: '1', FORCE_COLOR: '0', NO_COLOR: '1', TEMP: TMP, TMP };
   delete env.NO_DOUBLE_SWAP;
-  if (CONTROL) {
+  if (CONTROL && PAGE_CONTROLS.includes(CONTROL)) {
+    /* Inside src/pages under the gitignored __control_ prefix, removed in
+       the finally below. */
+    pageCopy = path.join(ROOT, 'src', 'pages', `__control_dilemmaReach_${process.pid}.tsx`);
+    fs.writeFileSync(pageCopy, rewritePage(readLF(PAGE_FILE)));
+    env.NO_DOUBLE_SWAP = JSON.stringify({ '@/pages/SoccerCareer': pageCopy.replaceAll('\\', '/') });
+  } else if (CONTROL) {
     /* Inside src/lib so the engine's relative imports resolve, under the
        gitignored __control_ prefix, removed in the finally below. */
     controlCopy = path.join(ROOT, 'src', 'lib', `__control_dilemmaReach_${process.pid}.ts`);
@@ -321,10 +425,11 @@ if (SECTIONS.includes('2')) {
   const JSON_OUT = `${TMP}/vitest.json`;
   let run;
   try {
-    run = spawnSync(process.execPath, [VITEST, 'run', 'src/test/careerDilemmaReach.test.tsx', '--reporter=default', '--reporter=json', `--outputFile.json=${JSON_OUT}`],
+    run = spawnSync(process.execPath, [VITEST, 'run', 'src/test/careerDilemmaReach.test.tsx', 'src/test/careerDilemmaSaves.test.tsx', '--reporter=default', '--reporter=json', `--outputFile.json=${JSON_OUT}`],
       { cwd: ROOT, env, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   } finally {
     if (controlCopy) { fs.rmSync(controlCopy, { force: true }); controlCopy = null; }
+    if (pageCopy) { fs.rmSync(pageCopy, { force: true }); pageCopy = null; }
   }
   const ESC = String.fromCharCode(27);
   const out = ((run.stdout || '') + (run.stderr || '')).split(new RegExp(ESC + '\\[[0-9;]*m', 'g')).join('');
@@ -334,7 +439,9 @@ if (SECTIONS.includes('2')) {
   for (const l of reach) console.log('   ' + l);
   const report = JSON.parse(fs.readFileSync(JSON_OUT, 'utf8'));
   const cases = (report.testResults || []).flatMap(f => f.assertionResults || []);
-  if (cases.length !== 5) abort(`the rendered test reported ${cases.length} cases, expected 5:\n` + out.slice(-3000));
+  /* 5 reach cases and 4 saves cases. Both files have to have run: a count
+     short of 9 is a file that did not load, not a check that passed. */
+  if (cases.length !== 9) abort(`the rendered tests reported ${cases.length} cases, expected 9:\n` + out.slice(-3000));
   for (const t of cases) {
     if (t.status === 'passed') ok(`2 ${t.title}`);
     else fail(`2 ${t.title} (${t.status}) ${(t.failureMessages || []).join(' ').split('\n')[0].slice(0, 300)}`);

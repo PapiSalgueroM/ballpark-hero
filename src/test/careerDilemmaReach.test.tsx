@@ -21,6 +21,11 @@
  *   2. No season draws two of them.
  *   3. A player from 20 up sees some. Before this round the count was 0.
  *   4. Nothing below 20 (the engine's own age gate).
+ *   5. (Round 819 review) The choice lands and the card's Continue keeps it:
+ *      the button a player taps writes an outcome line into the save, and
+ *      after Continue that line and the consequence fields are still what
+ *      the choice left. Before this a Continue that threw the choice away
+ *      passed every check here.
  * It prints a REACH line per start age with the counts, which
  * scripts/simCareerDilemmaReach.mjs reads and holds to its bands, and that
  * harness carries the negative controls (it points this file at a broken
@@ -166,11 +171,18 @@ const dilemmaCard = (root: HTMLElement) => {
 interface Showing { title: string; age: number; season: number }
 interface Offer { id: string; title: string; age: number }
 
+/* What a choice leaves behind. Morale is left out: the transfer window the
+   Continue opens can take 12 off it for a freeze out, which is that screen's
+   doing, not the dilemma's. */
+const fingerprint = (x: CareerState) => JSON.stringify([x.popularity, x.netWorth, x.integrityBonus, x.matchFixBanned, x.pedActive, x.divingActive,
+  x.sponsorBonus ?? 0, x.mafiaStage ?? 0, x.rivalryIntensity ?? null, x.statBoostNextSeason ?? null, x.agentId ?? null]);
+
 async function playOne(seed: number, startAge: number) {
   const realRandom = Math.random;
   Math.random = seeded(seed * 7919 + startAge);
   const offers: Offer[] = [];
   const shows: Showing[] = [];
+  const kept: string[] = [];
   let seasonsClosed = 0;
   const closedAt: number[] = [];
   let v: ReturnType<typeof mount> | null = null;
@@ -186,9 +198,27 @@ async function playOne(seed: number, startAge: number) {
     let onScreen: string | null = null;
     let endedBy = 'steps';
     const titleOf = (id: string) => E.MORAL_DILEMMAS.find(d => d.id === id)?.title ?? id;
+    /* 5: set when a choice button is pressed, read on the next screen; then
+       set when the decided card's Continue is pressed, read after it. */
+    let chose: { title: string; events: number } | null = null;
+    let decided: { title: string; line: string; fp: string } | null = null;
+    let continued = false;
     for (let step = 0; step < 400; step++) {
       const s = readSave();
       if (!s) throw new Error('the page holds no save');
+      if (chose) {
+        const ev = s.events || [];
+        if (ev.length <= chose.events) kept.push(`"${chose.title}" at ${s.age}: the choice wrote no outcome into the save`);
+        else decided = { title: chose.title, line: ev[ev.length - 1], fp: fingerprint(s) };
+        chose = null;
+      }
+      if (continued) {
+        if (decided && (!(s.events || []).includes(decided.line) || fingerprint(s) !== decided.fp)) {
+          kept.push(`"${decided.title}" at ${s.age}: Continue lost what the choice did`);
+        }
+        decided = null;
+        continued = false;
+      }
       /* A season closes when a new season record lands. */
       if (s.seasons.length > lastSeasons) { seasonsClosed += s.seasons.length - lastSeasons; closedAt.push(s.age); lastSeasons = s.seasons.length; }
       const trig = s.moralDilemmasTriggered || [];
@@ -207,7 +237,9 @@ async function playOne(seed: number, startAge: number) {
         target = root.querySelector('[data-career-action-bar] button') as HTMLButtonElement | undefined;
       } else if (isChoiceCard) {
         target = choiceButtons[seed % choiceButtons.length] as HTMLButtonElement;
+        chose = { title: title!, events: (s.events || []).length };
       } else {
+        if (s.phase === 'moral_dilemma' && decided) continued = true;
         const area = screenCard(root);
         const usable = area ? Array.from(area.querySelectorAll('button')).filter(b => !b.disabled && (b.textContent ?? '').trim()) : [];
         for (const p of PREFER) { target = usable.find(b => (b.textContent ?? '').trim().startsWith(p)); if (target) break; }
@@ -218,7 +250,7 @@ async function playOne(seed: number, startAge: number) {
       await act(async () => { fireEvent.click(target!); });
       await tick();
     }
-    return { offers, shows, seasonsClosed, closedAt, endedBy, startPhase: start.phase };
+    return { offers, shows, kept, seasonsClosed, closedAt, endedBy, startPhase: start.phase };
   } finally {
     v?.unmount();
     Math.random = realRandom;
@@ -271,6 +303,8 @@ describe('Soccer Career: the moral dilemmas reach the player through the page', 
         for (const [season, n] of perSeason) if (n > 1) problems.push(`seed ${seed}: ${n} dilemmas drawn in season ${season}`);
         /* 4. nothing below 20 */
         for (const x of r.shows) if (x.age < 20) problems.push(`seed ${seed}: "${x.title}" drawn at ${x.age}, under the engine's age gate of 20`);
+        /* 5. the choice lands and Continue keeps it */
+        for (const k of r.kept) problems.push(`seed ${seed}: ${k}`);
       }
       console.log(`REACH start=${startAge} careers=${played} seasons=${seasons} adultSeasons=${adult} offers=${offers} shows=${shows} adultShows=${adultShows}`);
       expect(played, 'careers that reached the start age').toBeGreaterThan(0);
