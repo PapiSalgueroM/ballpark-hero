@@ -111,7 +111,18 @@ export default function ConquestRegionMap({
 }: ConquestRegionMapProps) {
   const uid = useId().replace(/[^A-Za-z0-9_-]/g, '');
   const [hovered, setHovered] = useState<string | null>(null);
+  const [selected, setSelected] = useState<string | null>(null);
+  const selectedTarget = useRef<SVGPathElement | null>(null);
   const caps = labelStyle === 'caps';
+
+  useEffect(() => {
+    if (selected && !sport.regions.some(region => region.id === selected)) setSelected(null);
+  }, [selected, sport.regions]);
+
+  const selectRegion = (regionId: string, target: SVGPathElement) => {
+    selectedTarget.current = target;
+    setSelected(regionId);
+  };
 
   const teamById = useMemo(() => new Map(sport.teams.map(t => [t.id, t])), [sport]);
   const looks = useMemo(() => assignTeamLooks(sport.teams), [sport]);
@@ -245,6 +256,10 @@ export default function ConquestRegionMap({
   const hoveredRegion = hovered ? sport.regions.find(r => r.id === hovered) : null;
   const hoveredTeam = hovered && owners[hovered] ? teamById.get(owners[hovered]!) : null;
   const hoveredLook = hoveredTeam ? looks.get(hoveredTeam.id) : null;
+  const selectedRegion = selected ? sport.regions.find(region => region.id === selected) : null;
+  const selectedOwner = selected ? owners[selected] ?? null : null;
+  const selectedTeam = selectedOwner ? teamById.get(selectedOwner) : null;
+  const selectedLook = selectedTeam ? looks.get(selectedTeam.id) : null;
 
   const ranked = [...counts.entries()].sort((a, b) => b[1] - a[1]);
   const legendTiles = ranked.slice(0, LEGEND_TILES);
@@ -393,10 +408,23 @@ export default function ConquestRegionMap({
           d={region.path}
           fill="transparent"
           stroke="none"
-          className="cursor-pointer"
+          className="cursor-pointer cq-hit"
+          data-layer="hit"
+          data-region={region.id}
+          role="button"
+          tabIndex={0}
+          aria-label={`View ${region.name} details`}
+          aria-expanded={selected === region.id}
+          aria-controls={`${uid}-region-details`}
           onMouseEnter={() => setHovered(region.id)}
           onMouseLeave={() => setHovered(null)}
-          onClick={() => setHovered(h => (h === region.id ? null : region.id))}
+          onClick={event => selectRegion(region.id, event.currentTarget)}
+          onKeyDown={event => {
+            if (event.key === 'Enter' || event.key === ' ') {
+              event.preventDefault();
+              selectRegion(region.id, event.currentTarget);
+            }
+          }}
         />
       ))}
 
@@ -498,7 +526,7 @@ export default function ConquestRegionMap({
         viewBox={`0 0 ${sport.viewBox.width} ${sport.viewBox.height}`}
         className={size === 'stage' ? 'w-full h-auto bg-[#0a0f1a]' : 'w-full h-auto rounded-xl border border-border bg-[#0a0f1a]'}
         preserveAspectRatio="xMidYMid meet"
-        role="img"
+        role="group"
         aria-label={`${sport.key.toUpperCase()} conquest map. Biggest empires: ${summary || 'none yet'}.`}
         data-sport={sport.key}
         data-map="conquest-region-map"
@@ -550,6 +578,7 @@ export default function ConquestRegionMap({
       </svg>
 
       <style>{`
+        .cq-hit:focus-visible { outline: none; stroke: #ffd166; stroke-width: 2; vector-effect: non-scaling-stroke; }
         .cq-label { font-size: calc(var(--fs) * 1px); }
         @media (max-width: 640px) { .cq-label { font-size: calc(var(--fs) * ${PHONE_LABEL_SCALE}px); } }
         @keyframes cq-takeover {
@@ -580,7 +609,7 @@ export default function ConquestRegionMap({
         }
       `}</style>
 
-      {hovered && hoveredRegion && (
+      {!selectedRegion && hovered && hoveredRegion && (
         <div className="absolute top-2 right-2 bg-card/95 backdrop-blur border border-border rounded-lg px-3 py-2 text-xs shadow-lg pointer-events-none z-10">
           <div className="font-bold text-foreground">{hoveredRegion.name}</div>
           {hoveredTeam ? (
@@ -603,6 +632,37 @@ export default function ConquestRegionMap({
             </div>
           )}
         </div>
+      )}
+
+      {selectedRegion && (
+        <section id={`${uid}-region-details`} aria-label="Territory details" data-region-details={selectedRegion.id} className="mt-2 rounded-xl border border-border bg-card p-3 text-xs">
+          <div className="flex items-start justify-between gap-2">
+            <div className="min-w-0 flex-1">
+              <h3 className="break-words font-bold text-foreground">{selectedRegion.name}</h3>
+              {selectedTeam ? (
+                <>
+                  <div className="mt-1 flex items-center gap-1.5">
+                    <span className="h-2.5 w-2.5 shrink-0 rounded-sm" style={{ background: selectedLook ? lookCss(selectedLook) : selectedTeam.color }} />
+                    <span className="min-w-0 break-words text-muted-foreground">{selectedTeam.city ? `${selectedTeam.city} ` : ''}{selectedTeam.name}</span>
+                  </div>
+                  <p className="mt-0.5 text-muted-foreground">
+                    {counts.get(selectedTeam.id) ?? 0} {noun(counts.get(selectedTeam.id) ?? 0)}
+                    {invincibleTeams?.has(selectedTeam.id) && ' 🛡️ Invincible'}
+                  </p>
+                </>
+              ) : (
+                <p className="mt-1 break-words text-muted-foreground">
+                  {selectedOwner ? `Owner: ${selectedOwner}` : 'Unclaimed'}
+                  {!selectedOwner && powerupStates?.has(selectedRegion.id) && ` ${powerupIconByRegion.get(selectedRegion.id) || '⚡'} Power-Up available`}
+                </p>
+              )}
+            </div>
+            <button type="button" aria-label="Close territory details" className="min-h-[44px] shrink-0 rounded-lg border border-border px-3 font-semibold text-foreground hover:bg-secondary" onClick={() => {
+              setSelected(null);
+              if (selectedTarget.current?.isConnected) selectedTarget.current.focus();
+            }}>Close</button>
+          </div>
+        </section>
       )}
 
       {showLegend && legendTiles.length > 0 && (

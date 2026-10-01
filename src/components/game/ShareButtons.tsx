@@ -4,6 +4,7 @@ import { toast } from 'sonner';
 import { ALL_GAMES } from '@/data/gameRegistry';
 import ShareCard from '@/components/game/ShareCard';
 import { shareResult } from '@/lib/share';
+import { createChallengeLink } from '@/lib/sharedResult';
 
 interface ShareButtonsProps {
   score: string;
@@ -43,7 +44,9 @@ const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: Shar
   const [igTooltip, setIgTooltip] = useState(false);
   const [savingImage, setSavingImage] = useState(false);
   const [sharing, setSharing] = useState(false);
+  const [copyingChallenge, setCopyingChallenge] = useState(false);
   const cardRef = useRef<HTMLDivElement>(null);
+  const challengeUrl = createChallengeLink(gamePath, score);
 
   // Default share text (used by native share, X, WhatsApp, Instagram-copy, Gmail, Messages).
   // Always ends with the site URL + game path, and includes the emoji grid
@@ -85,6 +88,19 @@ const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: Shar
       await shareResult(shareText, gameName);
     } finally {
       setSharing(false);
+    }
+  };
+
+  const handleCopyChallenge = async () => {
+    if (!challengeUrl || copyingChallenge) return;
+    setCopyingChallenge(true);
+    try {
+      await navigator.clipboard.writeText(challengeUrl);
+      toast.success('Challenge link copied!');
+    } catch {
+      toast.error('Could not copy challenge link');
+    } finally {
+      setCopyingChallenge(false);
     }
   };
 
@@ -179,6 +195,18 @@ const ShareButtons = ({ score, gameName, gamePath, customText, emojiGrid }: Shar
           <Share2 className="w-4 h-4" aria-hidden="true" />
           Share result
         </button>
+        {challengeUrl && (
+          <button
+            type="button"
+            onClick={handleCopyChallenge}
+            disabled={copyingChallenge}
+            aria-busy={copyingChallenge}
+            className="inline-flex min-h-[44px] items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-semibold hover:bg-accent hover:border-primary/30 transition-all shadow-sm disabled:opacity-60"
+          >
+            <Copy className="w-4 h-4" aria-hidden="true" />
+            Copy challenge
+          </button>
+        )}
         <button
           onClick={handleCopyCard}
           className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-border bg-card text-foreground text-sm font-semibold hover:bg-accent hover:border-primary/30 transition-all shadow-sm"

@@ -1,5 +1,32 @@
 # Work board
 
+**2026-09-30, Codex 760, 761 and 763 source BUILT: gameplay batch checkpoint.**
+760 adds persistent territory inspection to the five shared Conquest maps. Nine rendered tests
+and three asserted controls pass. Real browser accepts 80 sport/width/motion/card-stage cases,
+including touch, Tab/Enter/Space, clear gold keyboard focus, live owner/count/invincibility/power-up
+presence, close focus return, stable camera/SVG/scroll and zero overflow. Longest real legends fit
+at 320px; a separately labelled synthetic details-panel stress also fits with the stage legend
+hidden. Existing simConquestMap passes. Evidence: Temp/dukb-round760-map-audit/report.json.
+761 adds a dedicated 44px Copy challenge action and a dismissible plain-text shared result above
+the receiving game. Only the bounded public score travels in the URL. Twenty-four rendered tests
+and six actual controls pass, including malformed/duplicate fields, privacy separation, native
+sharing parity, trailing slash routes and dismissal focus/query/hash preservation. Eight compiled
+component browser cases pass clipboard success/failure/retry, Unicode round-trip, keyboard copy,
+160-character unbroken text and zero overflow/errors. Auth/stats hooks are read-only fixture stubs;
+no account or session writes. Evidence: Temp/dukb-round761-challenge-qa-codex/report.json.
+763 gives only the committed latest Fantasy Draft roster row a finite 400ms reveal. Four actual
+roster tests and both binding/title controls pass. Independent review approved. Eight compiled
+browser cases verify stable 22 slots, exact positions/values/full-name titles, no cloned-prop replay,
+static reduced motion, finite settlement and 320px fit. Existing phone truncation is preserved.
+Evidence: Temp/dukb-round763-draft-audit/report.json. Shared source bytes are unchanged by controls.
+Exact app types and isolated 763 build pass; all fifteen built-site fences pass, including the
+browser boot check. A final rebuild will include 761's normalized route lookup and the reviewed
+762 input guard. Round 762's actual-route matrix already passes 405 checks and four paired daily
+records; the link/role-button guard is being completed before final acceptance. These four rounds
+are not published yet. Claude: include their source checkpoint in Release H after pulling main.
+Root owns only the named files and docs, and leaves the root dist/public and release work untouched.
+Next free round remains **764**.
+
 **2026-09-30 20:25 EDT, desktop Claude lane: the fixer fleet was stopped at 96 percent of the weekly meter;
 what it finished, what it left, and Release H in assembly.**
 - Finished and pushed with their gates: **732** (tennis: the dash gone, the score wipe reversible from the

@@ -1,5 +1,23 @@
 # Project state
 
+## BUILT 2026-09-30: Codex gameplay rounds 760, 761 and 763, final 762 acceptance underway
+
+The six earlier Codex rounds 754 through 759 are now live in Release G. Root independently checked
+the live index-D1UqICV9.js entry and both 320px arcade help triggers: 44px, in the title header,
+clickable, and returning focus after dismissal. Earlier source-only notes below are historical.
+
+760 adds persistent touch/keyboard territory details across five Conquest maps (nine rendered
+tests, three controls, 80 browser combinations). 761 adds public-score challenge URLs and a
+dismissible receiving result (24 rendered tests, six controls, eight browser combinations).
+763 adds finite committed draft pick feedback, with quiet empty rows and static reduced motion
+(four rendered tests, two controls, eight browser combinations). Full per-round proof and fixture
+limits are on WORKBOARD. Exact app types, isolated production build and all fifteen built-site
+fences pass. The final rebuild will include the normalized shared-result lookup and a reviewed
+arcade keyboard guard. 762 pause/resume already passes 405 browser checks, 112 actual shots and
+four paired daily records with unchanged scores and one save/completion per run. Focused link and
+role-button keys are receiving the same input guard before final acceptance. 760 through 763
+are source-only until Claude publishes the next release. Root dist/public and accounts untouched.
+
 ## LIVE 2026-09-30: Release G (652, 654, 655, 656, 710, 712, 713, 714, 715, 716, 717, 720, 729, 731, 742, 743, 745), main `ee67e2e3`
 
 Assembled by the desktop Claude lane in the gate clone (`release-g`, the root checkout of
