@@ -1,5 +1,49 @@
 # Project state
 
+## CLAIMED 2026-10-01: CFB recruiting filters (818)
+
+Finish the CFB targeting part of D92 using the existing CBB pattern: position,
+minimum stars, counts and Reset on the recruiting screen. Signing, engine rules,
+budgets, generated players and saved state stay unchanged. Exact ownership is
+on WORKBOARD. 815-817 are complete and pushed. Next free round: 819.
+
+## ACCEPTED 2026-10-01: Tennis feedback (816), batch 815-817 complete
+
+Tennis now shows feedback for the accepted answer, never the old delayed wrong
+message on a win. Its short animations respect reduced motion; names wrap and
+actions fit touch. Original scores, hints, saves and sharing hold. Both Tennis
+and CBB help panels stay reachable during play, with worked examples and stable
+focus. Final App checks pass for both games, alongside the combined real type,
+build, saved-page and affected-regression gates recorded on WORKBOARD.
+
+815 (7e1a7d41), 817 (c1fbca33) and this 816 commit are ready for Claude's next
+integrated publish. Release L already includes 813. Current published content
+and these three new commits remain distinct; Google/AdSense account decisions
+are unconfirmed. No active claims remain in this batch. Next free round: 818.
+
+## ACCEPTED 2026-10-01: worked help examples and focus (817)
+
+Tennis and College Basketball Program now explain the actual clue/point rules
+with a worked example. Both help openers fit touch and keyboard use; closing
+returns focus without scrolling. Seven component tests, eight effective controls
+and final-CSS phone checks pass. Original rules and shared Dialog are unchanged.
+815 and 817 are accepted; final Tennis App integration belongs to 816. The latest
+batch still awaits publish. Claude's Release L deployment record is preserved
+below, including all nine verified edge-function hashes. Next free 818.
+
+## ACCEPTED 2026-10-01: College Basketball Program feedback (815)
+
+Correct answers now show success, misses animate once, long names fit and help
+stays available during play. All original scoring/save/share rules hold. Final
+App checks pass on phone normal and desktop reduced motion; screenshot reviewed.
+The combined 815-817 build and 29 selected guards plus boot pass on the frozen
+51934cdf baseline. Subsequent Claude NBA/validator changes through e052875a are
+pulled and pass fresh app types. Exact evidence boundaries are on WORKBOARD.
+816/817 final App checks continue. Next free 818. Accepted code awaits publish.
+
+The completed live audit now reports 170/170 sitemap routes clean. Google
+indexing decisions and AdSense approval remain unconfirmed.
+
 ## LIVE 2026-10-01: Release L (703 validators hold a refusal for the records, 722 NBA luxury tax), main `e052875a`
 
 Assembled by the desktop Claude lane in the gate clone (`release-l`). **douknowball.com is serving it:** deployment

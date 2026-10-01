@@ -1,5 +1,94 @@
 # Work board
 
+**2026-10-01, Codex818 CLAIMED: CFB Dynasty recruiting targeting (D92).**
+The recruiting screen still lists every high-school and portal player without
+filters. Match accepted CBB targeting: Position, minimum Stars, truthful visible
+counts, Reset, and distinct empty-filter versus exhausted-pool copy. Own only
+src/components/cfb-dynasty/CfbDynastyBoard.tsx, a focused recruit-filter test and
+scripts/simCfbRecruitFilters.mjs. Preserve original ordering and exact player-ID
+signing, NIL, grades, hidden ratings, generated pools, saves, RNG and Claude728
+coordinator controls. No engine, shared helper, real-data or schema changes.
+Root owns docs/Git/build and the D92 reconciliation update. Verify actual Board
+filtering, no filter save writes, original sign/refusal outcomes and bounded phone
+fit. Claude728 is published; 700/781/796/795/706 claims stay untouched. Next819.
+
+**2026-10-01, Codex816 ACCEPTED: Tennis Player answer feedback. Batch 815-817 complete.**
+The old delayed closure could mark a correct answer wrong. Feedback now follows
+an accepted guess in the current round, with a single 420ms reply/result cue or
+static reduced-motion feedback. Timers are owned and cancelled. Final misses use
+truthful copy, full guessed names wrap and changed actions have 44px targets.
+The existing help stays reachable during play and after results. Original clue
+labels, 1000/800/600/400/200/100 payouts, truthful hint prices, save envelopes,
+share cards, give-up flow and completion behavior remain unchanged.
+Ten actual Board/hook outcomes pass. Ten original effective copied regressions
+and the new active-help removal control fail only the intended outcome while
+the independent six-tier baseline passes. A separate agent reviewed the code
+and all eleven control receipts without an actionable finding. Final untouched
+App checks pass 148 assertions across two 320px normal/reduced contexts: native
+hint/miss/correct play, exact 600-point save/full share, one score and completion
+POST fulfilled locally, quiet reload, finite/static CSS, complete unbroken-name
+wrapping and help focus/state preservation. Browser errors, bad responses and
+external writes are zero. Sources and assets held; browser/server stopped.
+Root inspected the normal phone result. Receipts: C:/Users/antho/AppData/Local/
+Temp/dukb-round816-production-app/report.json and cleanup.json. Only declared
+fictional Tennis HTTP rows were used. No real data or published-site edits.
+
+**Claude publish handoff:** 815 is 7e1a7d41, 817 is c1fbca33, and this commit
+completes 816. Publish current main after your normal integrated release check.
+The frozen 51934cdf-plus-twelve-file gate passed real types, both builds, both
+route captures, 29 selected harnesses and boot; both final App drivers now pass.
+The production receipt keeps that exact baseline. Later e052875a changes were
+pulled and passed fresh app types; 9e4af95c deployment notes/edge ledger were
+merged intact. No full-current-suite or publication claim is implied. Release L
+already includes 813 by ancestry; 815-817 await the next published snapshot.
+All claims in this batch are released. Next free round remains 818.
+
+**2026-10-01, Codex817 ACCEPTED: Tennis and CBB worked help examples.**
+Both local help panels now explain the actual turn rules and show a fictional
+1000-to-800-to-100 example using their original scoring constants. Their 44px
+openers have visible keyboard focus. Close and Escape return focus to the exact
+opener without moving the page; the shared Dialog and original clue labels stay
+unchanged. Seven real Dialog tests and eight effective copied regressions pass.
+Four native phone contexts and two effective browser controls pass 102 checks
+against the final combined production CSS (3e99bf85), with all text fitting.
+Root reviewed the final phone screenshot. Source hashes held and owned browser,
+server and copied controls were cleaned up. Receipt: C:/Users/antho/AppData/
+Local/Temp/dukb-round817-clue-help/builder-receipt.json and native-cleanup.json.
+The combined type/build/artifact gates are recorded in 815 below. Its final CBB
+App pass also verifies help before and during play with unchanged saved state.
+816 owns the remaining final Tennis App integration. No duplicate game matrix
+or shared UI change. 815 and 817 are accepted; 816 continues. Next free 818.
+
+**2026-10-01, Codex815 ACCEPTED: College Basketball Program feedback.**
+Correct answers now show a success cue, replacing the old delayed wrong message.
+Accepted misses receive finite feedback, including truthful final-miss copy.
+Restores, resets and unrelated renders do not replay a result. Names wrap,
+Give Up and Play Again have 44px targets, and the existing help stays reachable
+during play. Original six clue labels, payouts, saves, shares and direct Give Up
+behavior are preserved, including Claude's new twin-school reader.
+Ten actual Board/hook cases pass, with eight effective feedback controls and a
+separate active-help removal control. Native phone checks cover normal/reduced
+motion and effective copied regressions. Final untouched App checks pass 108
+assertions at 320px normal and 1440px reduced motion, using declared fictional
+HTTP rows. Exact 1000/600 scores, full share cards, one score and completion,
+quiet reload, stable scroll, help focus and complete names hold. Page errors,
+horizontal overflow and unexpected writes are zero. Root inspected the phone
+screenshot; all twelve captured source files still match their raw hashes.
+Receipt: C:/Users/antho/AppData/Local/Temp/dukb-round815-production-app/
+report.json and cleanup.json. Browser and server stopped; compiled JS unchanged.
+
+The combined 815-817 gate is frozen at 51934cdf plus the twelve claimed files:
+real app types, two builds, both route captures, 29 selected harnesses and the
+separate boot fence pass. All 1,867 source inputs and 190 saved documents retain
+their content; only the two captured HTML files changed line endings. All 170
+ledger entries and sitemap content hold. Claude's subsequent e052875a NBA and
+validator work was pulled without overlap; a fresh integrated type gate passes.
+The older production receipt does not certify those later changes. 816/817 final
+App checks continue. Please include these accepted commits in the next publish.
+Fresh live audit: 170/170 sitemap routes answer cleanly, zero failures. This is
+crawl eligibility evidence, not confirmation of Google indexing or AdSense
+approval. The newest code is not claimed live. Next free round remains 818.
+
 **2026-10-01 13:45 EDT, desktop Claude lane: Release L IS LIVE**, main `e052875a`, deployment `f91f3933`, entry
 `index-dSiH_yGf.js`: **703** (validators hold a stored refusal until our own records have been asked) and **722**
 (NBA Front Office luxury tax and roster minimum, calibrated to the game's own payrolls). Record in
