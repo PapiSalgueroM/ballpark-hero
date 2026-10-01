@@ -403,7 +403,7 @@ export const NBA_RIVALRY_CHOICES: RivalryChoiceDef<NbaCareerState, CareerRival>[
 
 /** One season's choice roll, after the beat roll in simNbaSeason, on the
  *  shared tick: only when no beat came up and no choice is already waiting. */
-export function nbaRivalryChoiceTick(c: NbaCareerState, rng: () => number = Math.random): RivalryChoiceCard | null {
+export function nbaRivalryChoiceTick(c: NbaCareerState, rng?: () => number): RivalryChoiceCard | null {
   return rivalryChoiceTick(c, NBA_RIVALRY_CHOICES, NBA_RIVALRY_CHOICE_CHANCE, rng);
 }
 

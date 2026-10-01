@@ -407,7 +407,7 @@ export const NFL_RIVALRY_CHOICES: RivalryChoiceDef<CareerState, CareerRival>[] =
  * One season's choice roll, after the beat roll in simSeason, on the shared
  * tick: only when no beat came up and no choice is already waiting.
  */
-export function nflRivalryChoiceTick(c: CareerState, rng: () => number = Math.random): RivalryChoiceCard | null {
+export function nflRivalryChoiceTick(c: CareerState, rng?: () => number): RivalryChoiceCard | null {
   return rivalryChoiceTick(c, NFL_RIVALRY_CHOICES, NFL_RIVALRY_CHOICE_CHANCE, rng);
 }
 

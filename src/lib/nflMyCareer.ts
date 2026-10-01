@@ -619,8 +619,10 @@ export function simSeason(
   if (rivalryEvent) c.pendingRivalryEvent = rivalryEvent;
   /* Round 796: a season the beat roll left empty can put a rival choice in
      front of you instead. Same rule as the beat: it waits on the save as a
-     card and is answered on the board, never applied here. */
-  else nflRivalryChoiceTick(c, rng);
+     card and is answered on the board, never applied here. It rolls on its
+     own seasonChoiceRng, never this season's stream, so every draw after it
+     is the draw it always was. */
+  else nflRivalryChoiceTick(c);
   c.seasons.push(line);
   return { line, notes };
 }

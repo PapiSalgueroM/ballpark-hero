@@ -139,9 +139,14 @@ export function resolveRivalryChoice<P, R>(
 /* ─── a choice kept on the save: the four American careers ─────────────── */
 
 /** The save fields a career carries when its pending choice waits on the
- *  save as plain data until the board asks it. All optional, so a save from
- *  before the career had choices reads as nothing pending, nothing seen. */
+ *  save as plain data until the board asks it. The choice fields are all
+ *  optional, so a save from before the career had choices reads as nothing
+ *  pending, nothing seen; name, year and seasons every career already has,
+ *  and they key the season's roll. */
 export interface RivalryChoiceHost<R> {
+  name: string;
+  year: number;
+  seasons: unknown[];
   rival?: R | null;
   pendingRivalryEvent?: unknown;
   pendingRivalryChoice?: RivalryChoiceCard | null;
@@ -149,17 +154,40 @@ export interface RivalryChoiceHost<R> {
 }
 
 /**
+ * A generator that belongs to one career's one season. The choice roll runs
+ * inside each sport's season sim, and drawing it from the season's own
+ * stream would shift every draw after it (the next camp, the next season's
+ * line, the awards), so a round that only adds choices would quietly reshuffle
+ * every seeded career on the site and re-roll every harness that reads one.
+ * The roll is keyed to the save instead: the same career in the same season
+ * always rolls the same, and the season's stream is left exactly as it was.
+ */
+export function seasonChoiceRng(key: string): () => number {
+  let h = 0x811c9dc5;
+  for (let i = 0; i < key.length; i += 1) { h ^= key.charCodeAt(i); h = Math.imul(h, 0x01000193); }
+  let a = h >>> 0;
+  return () => {
+    a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
  * One season's choice roll, called after the sport's beat roll: only when
  * no beat came up and no choice is already waiting, so a season never stacks
  * two rival cards. Marks the choice seen at roll time, the same moment Soccer
- * Career marks a dilemma triggered.
+ * Career marks a dilemma triggered. With no `rng` it rolls on
+ * seasonChoiceRng, which is what every season sim does.
  */
-export function rivalryChoiceTick<P extends RivalryChoiceHost<R>, R extends LiveRival>(
-  c: P, defs: RivalryChoiceDef<P, R>[], chance: number, rng: () => number = Math.random,
+export function rivalryChoiceTick<P extends RivalryChoiceHost<R>, R extends LiveRival & { name: string }>(
+  c: P, defs: RivalryChoiceDef<P, R>[], chance: number, rng?: () => number,
 ): RivalryChoiceCard | null {
   if (!c.rival || c.pendingRivalryEvent || c.pendingRivalryChoice) return null;
   const seen = c.rivalryChoicesSeen ?? [];
-  const card = rollRivalryChoice(c, c.rival, seen, defs, chance, rng);
+  const roll = rng ?? seasonChoiceRng(`${c.name}|${c.rival.name}|${c.year}|${c.seasons.length}|${seen.length}`);
+  const card = rollRivalryChoice(c, c.rival, seen, defs, chance, roll);
   if (!card) return null;
   c.pendingRivalryChoice = card;
   c.rivalryChoicesSeen = [...seen, card.id];

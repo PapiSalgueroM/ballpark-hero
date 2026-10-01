@@ -645,8 +645,9 @@ export function simNbaSeason(
   const rivalryEvent = nbaRivalryTick(c, rng);
   if (rivalryEvent) c.pendingRivalryEvent = rivalryEvent;
   /* Round 796: a season the beat roll left empty can put a rival choice in
-     front of you instead, answered on the board, never applied here. */
-  else nbaRivalryChoiceTick(c, rng);
+     front of you instead, answered on the board, never applied here. It
+     rolls on its own seasonChoiceRng, never this season's stream. */
+  else nbaRivalryChoiceTick(c);
   c.seasons.push(line);
   return { line, notes };
 }

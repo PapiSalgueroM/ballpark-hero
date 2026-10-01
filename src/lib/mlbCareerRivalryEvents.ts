@@ -408,7 +408,7 @@ export const MLB_RIVALRY_CHOICES: RivalryChoiceDef<MlbCareerState, CareerRival>[
 
 /** One season's choice roll, after the beat roll in simMlbSeason, on the
  *  shared tick: only when no beat came up and no choice is already waiting. */
-export function mlbRivalryChoiceTick(c: MlbCareerState, rng: () => number = Math.random): RivalryChoiceCard | null {
+export function mlbRivalryChoiceTick(c: MlbCareerState, rng?: () => number): RivalryChoiceCard | null {
   return rivalryChoiceTick(c, MLB_RIVALRY_CHOICES, MLB_RIVALRY_CHOICE_CHANCE, rng);
 }
 

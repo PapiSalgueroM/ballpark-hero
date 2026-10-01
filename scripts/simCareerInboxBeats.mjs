@@ -58,6 +58,15 @@
  *      Their inboxes are NOT on a calendar yet: that needs a beat-tagged text
  *      bank and a season beat reader per sport, which this round leaves as
  *      the binding point (receiveInboxTextsFor's beats argument).
+ *   8. The season stream, HARD. The choice roll runs inside each sport's
+ *      season sim on seasonChoiceRng, a generator keyed to the save, never on
+ *      the season's own stream. Twenty seeded careers a sport, played with
+ *      the roll on and with it blocked: every season line, the final rating
+ *      and the age must be identical. A roll that drew from the stream would
+ *      reshuffle every seeded career on the site, and with it every harness
+ *      that samples them (it did, before this section: it moved simAwards'
+ *      NHL All-Star median, a gate that sits within two points of its line
+ *      on main).
  *
  * BANDS, measured with BEATS_SEED_BASE=0..5 (six seed sets, 40 careers each,
  * about 546 career-seasons a set):
@@ -66,15 +75,15 @@
  *     wants 3 less 1; the rate sits on 2 until a beat's bank runs dry)
  *   share of all texts on each ordinary beat  camp 13.6 to 15.0%, bye 15.4
  *     to 17.3%, deadline 14.6 to 18.4%, offseason 15.9 to 18.6%   floor 8%
- *   rival choices per career-season           0.195 to 0.234   floor 0.12
+ *   rival choices per career-season           0.185 to 0.206   floor 0.12
  *     (one sd of the rate is about 0.017 at this sample size)
  *   gambles, |realized mean - promise|        at most 0.202    tolerance 1.0
  *   gambles, |hit rate - printed odds|        at most 0.0155   tolerance 0.04
  *   stat score per morale point (5c)          0.369 to 0.411   floor 0.15
  *   paired seasons the morale option led      289 to 293 of 300  floor 70%
  *   section 7, same six seed sets, 40 careers (560 career-seasons) a sport:
- *     choices per career-season   NBA 0.189 to 0.243, MLB 0.180 to 0.209,
- *                                 NHL 0.202 to 0.239            floor 0.12
+ *     choices per career-season   NBA 0.204 to 0.236, MLB 0.195 to 0.239,
+ *                                 NHL 0.196 to 0.239            floor 0.12
  *     stat score per morale point NBA 0.139 to 0.151, MLB 0.194 to 0.208,
  *                                 NHL 0.244 to 0.264            floor 0.05
  *       (a lever that stopped reaching the field reads exactly 0, because
@@ -83,8 +92,11 @@
  *                                 to 265 of 300                 floor 60%
  *     gambles                     at most 0.259 off the promise, 0.0185 off
  *                                 the odds (same tolerances as 5b)
- *     choices met by ten pre-796 saves in eight more seasons: NBA 16, MLB 15,
- *     NHL 19 (seeded apart from the seed set)            floor 1
+ *     choices met by ten pre-796 saves in eight more seasons: NBA 15, MLB 14,
+ *     NHL 22 (seeded apart from the seed set)            floor 1
+ *   section 8: 20 of 20 careers identical in every sport and every seed set,
+ *     the roll firing 45 to 69 times a sport along the way   hard, and the
+ *     roll must fire at least once
  *
  * NEGATIVE CONTROLS, BEATS_CONTROL=...
  *
@@ -106,6 +118,8 @@
  *                that sport's rival choice chance is zero. Section 7d and 7e
  *                fail for that sport.
  *   flatnba      the NBA season stops reading morale. Section 7c fails.
+ *   streamnba    the NBA season hands its own stream to the choice roll.
+ *                Section 8 fails for the NBA.
  *
  *   Each control asserts the text it rewrites appears exactly once in the
  *   file first, so a control that rewrites nothing cannot pass for the
@@ -137,6 +151,7 @@ const PATCHES = {
   nochoicemlb: ['src/lib/mlbCareerRivalryEvents.ts', 'export const MLB_RIVALRY_CHOICE_CHANCE = 0.45;', 'export const MLB_RIVALRY_CHOICE_CHANCE = 0;'],
   nochoicenhl: ['src/lib/nhlCareerRivalryEvents.ts', 'export const NHL_RIVALRY_CHOICE_CHANCE = 0.45;', 'export const NHL_RIVALRY_CHOICE_CHANCE = 0;'],
   flatnba: ['src/lib/nbaMyCareer.ts', 'const form = c.ovr + (c.morale - 60) / 12 +', 'const form = c.ovr + (60 - 60) / 12 +'],
+  streamnba: ['src/lib/nbaMyCareer.ts', 'else nbaRivalryChoiceTick(c);', 'else nbaRivalryChoiceTick(c, rng);'],
 };
 if (CONTROL && !PATCHES[CONTROL]) {
   console.error(`BEATS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(PATCHES).join(', ')})`);
@@ -314,18 +329,18 @@ console.log('2) Source: one home for each rule, every binding imported');
     ['src/lib/soccerCareerEngine.ts', /from "\.\/careerRivalryChoices"/, 'the soccer engine binds the shared choices'],
     ['src/lib/soccerCareerEngine.ts', /if \(rivalChoice && !rivalryChoiceOpen\(s, s\.rival, rivalChoice\)\) return false;/, 'the soccer trigger gates the four through the shared gate'],
     ['src/lib/soccerCareerEngine.ts', /resolveRivalryChoice\(s, s\.rival, dilemma\.id, idx, SOCCER_RIVALRY_CHOICES, Math\.random\)/, 'the soccer dilemma resolves the four through the shared engine'],
-    ['src/lib/nflMyCareer.ts', /else nflRivalryChoiceTick\(c, rng\);/, 'the NFL season rolls a choice when no beat came up'],
+    ['src/lib/nflMyCareer.ts', /else nflRivalryChoiceTick\(c\);/, 'the NFL season rolls a choice when no beat came up, off the season stream'],
     ['src/components/nfl-my-career/NflMyCareerBoard.tsx', /nflDraftNightInbox\(c, Math\.random\)/, 'the NFL board delivers draft night'],
     ['src/components/nfl-my-career/NflMyCareerBoard.tsx', /<RivalryChoiceCard/, 'the NFL board draws the choice card'],
     ['src/components/nfl-my-career/NflMyCareerBoard.tsx', /calendar=\{NFL_CALENDAR\}/, 'the NFL inbox panel is handed the calendar'],
     ['src/lib/nbaCareerRivalryEvents.ts', /from "\.\/careerRivalryChoices"/, 'the NBA rivalry file binds the shared choices'],
-    ['src/lib/nbaMyCareer.ts', /else nbaRivalryChoiceTick\(c, rng\);/, 'the NBA season rolls a choice when no beat came up'],
+    ['src/lib/nbaMyCareer.ts', /else nbaRivalryChoiceTick\(c\);/, 'the NBA season rolls a choice when no beat came up, off the season stream'],
     ['src/components/nba-my-career/NbaMyCareerBoard.tsx', /<RivalryChoiceCard/, 'the NBA board draws the choice card'],
     ['src/lib/mlbCareerRivalryEvents.ts', /from "\.\/careerRivalryChoices"/, 'the MLB rivalry file binds the shared choices'],
-    ['src/lib/mlbMyCareer.ts', /else mlbRivalryChoiceTick\(c, rng\);/, 'the MLB season rolls a choice when no beat came up'],
+    ['src/lib/mlbMyCareer.ts', /else mlbRivalryChoiceTick\(c\);/, 'the MLB season rolls a choice when no beat came up, off the season stream'],
     ['src/components/mlb-my-career/MlbMyCareerBoard.tsx', /<RivalryChoiceCard/, 'the MLB board draws the choice card'],
     ['src/lib/nhlCareerRivalryEvents.ts', /from "\.\/careerRivalryChoices"/, 'the NHL rivalry file binds the shared choices'],
-    ['src/lib/nhlMyCareer.ts', /else nhlRivalryChoiceTick\(c, rng\);/, 'the NHL season rolls a choice when no beat came up'],
+    ['src/lib/nhlMyCareer.ts', /else nhlRivalryChoiceTick\(c\);/, 'the NHL season rolls a choice when no beat came up, off the season stream'],
     ['src/components/nhl-my-career/NhlMyCareerBoard.tsx', /<RivalryChoiceCard/, 'the NHL board draws the choice card'],
   ];
   for (const [rel, re, what] of BINDINGS) if (!re.test(code.get(rel) ?? '')) fail(`${what}: not found in ${rel}`);
@@ -638,7 +653,7 @@ function honestOptions(defs) {
   }
   const choiceRate = choiceSeasons / seasonsRun;
   console.log(`   5d: ${careers} careers, ${choiceSeasons} rival choices over ${seasonsRun} career-seasons (rate ${choiceRate.toFixed(3)}), ${resolvedOk} answered, ${doubleRefused} double taps refused, ${badIdxRefused} bad options refused, ${stacked} stacked with a beat, ${repeatsEarly} early repeats`);
-  if (choiceRate < 0.12) fail(`rival choices fire ${choiceRate.toFixed(3)} a career-season, under the 0.12 floor (measured 0.195 to 0.234)`);
+  if (choiceRate < 0.12) fail(`rival choices fire ${choiceRate.toFixed(3)} a career-season, under the 0.12 floor (measured 0.185 to 0.206)`);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════
@@ -831,11 +846,66 @@ for (const sp of US_SPORTS) {
   }
 
   console.log(`   ${tag}: ${reachable} of ${sp.defs.length} choices reachable; ${h.options} options, ${h.exact} exact, ${h.risky} gambles within ${h.worstMean.toFixed(3)} of their promise and ${h.worstOdds.toFixed(4)} of their odds; morale lever ${perPoint.toFixed(3)} a point, ahead in ${ahead} of ${pairs}; ${choiceSeasons} choices over ${seasonsRun} career-seasons (rate ${rate.toFixed(3)}), ${resolvedOk} answered, ${doubleRefused} double taps and ${badIdxRefused} bad options refused, ${stacked} stacked, ${repeatsEarly} early repeats; ${loaded} of 10 pre-796 saves played on with ${choicesAfter} choices after loading`);
-  if (rate < 0.12) fail(`${tag} rival choices fire ${rate.toFixed(3)} a career-season, under the 0.12 floor (measured 0.180 or more in every sport)`);
+  if (rate < 0.12) fail(`${tag} rival choices fire ${rate.toFixed(3)} a career-season, under the 0.12 floor (measured 0.195 or more in every sport)`);
   if (perPoint < 0.05) fail(`${tag}: a morale point is worth ${perPoint.toFixed(3)} of stat score, under the 0.05 floor (measured 0.139 or more in every sport): the promise does not reach the field`);
   if (ahead < pairs * 0.6) fail(`${tag}: the morale option only came out ahead in ${ahead} of ${pairs} paired seasons`);
   if (loaded < 10) fail(`${tag}: a pre-796 save failed to play on`);
   if (choicesAfter === 0) fail(`${tag}: ten pre-796 saves played eight more seasons each and never met a rival choice`);
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   8. The choice roll never touches the season's random stream
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+console.log('8) The season stream: every career plays the same seasons whether the choice roll runs or not');
+{
+  const BLOCK = { id: 'block', emoji: '', title: '', description: '', choices: [] };
+  const FOUR = [
+    {
+      label: 'NFL', arch: nfl.ARCHETYPES, start: nfl.startCareer, roll: nfl.rollTeamQuality, assign: nfl.nflAssignRole,
+      camp: nfl.nflCampBattle, sim: nfl.simSeason, progress: nfl.progress, retire: nfl.shouldRetire,
+    },
+    ...US_SPORTS,
+  ];
+  /* One seeded career, every card left unanswered and cleared, so nothing
+     the player does can move a meter. With `block` a dummy card sits on the
+     save through every season, so the choice roll returns before it draws. */
+  const run = (sp, seed, block) => {
+    const rng = mulberry32(SEED_BASE * 7577 + seed * 389 + sp.label.charCodeAt(2));
+    const positions = Object.keys(sp.arch);
+    const pos = positions[seed % positions.length];
+    const c = sp.start(`Stream ${sp.label} ${seed}`, pos, sp.arch[pos][seed % sp.arch[pos].length], rng, null);
+    let tq = sp.roll(null, rng);
+    sp.assign(c, tq, rng);
+    let rolled = 0;
+    for (let year = 0; year < 14 && !c.retired; year += 1) {
+      if (year > 0) tq = sp.roll(tq, rng);
+      if (sp.label === 'NFL' && c.contractYears <= 0) c.contractYears = 2 + (year % 3);
+      if (block) c.pendingRivalryChoice = BLOCK;
+      sp.camp(c, tq, rng);
+      sp.sim(c, tq, rng);
+      sp.progress(c, rng);
+      if (sp.retire(c)) c.retired = true;
+      if (!block && c.pendingRivalryChoice) rolled += 1;
+      c.pendingRivalryChoice = null;
+      c.pendingRivalryEvent = null;
+    }
+    return { lines: JSON.stringify(c.seasons), ovr: c.ovr, age: c.age, rolled };
+  };
+  for (const sp of FOUR) {
+    let careers = 0, same = 0, rolled = 0;
+    for (let seed = 1; seed <= 20; seed += 1) {
+      const a = run(sp, seed, false);
+      const b = run(sp, seed, true);
+      careers += 1;
+      rolled += a.rolled;
+      if (a.lines === b.lines && a.ovr === b.ovr && a.age === b.age) same += 1;
+      else if (careers - same <= 2) fail(`${sp.label} seed ${seed}: the career played different seasons once the choice roll ran, so the roll is drawing from the season's stream`);
+    }
+    console.log(`   ${sp.label}: ${same} of ${careers} careers played identical seasons with the roll on and off, the roll fired ${rolled} times along the way`);
+    if (careers - same > 2) fail(`${sp.label}: ${careers - same - 2} more careers changed, not printed`);
+    if (rolled === 0) fail(`${sp.label}: the choice roll never fired in twenty careers, so this comparison proves nothing`);
+  }
 }
 
 console.log('');

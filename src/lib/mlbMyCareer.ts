@@ -630,8 +630,9 @@ export function simMlbSeason(
   const rivalryEvent = mlbRivalryTick(c, rng);
   if (rivalryEvent) c.pendingRivalryEvent = rivalryEvent;
   /* Round 796: a season the beat roll left empty can put a rival choice in
-     front of you instead, answered on the board, never applied here. */
-  else mlbRivalryChoiceTick(c, rng);
+     front of you instead, answered on the board, never applied here. It
+     rolls on its own seasonChoiceRng, never this season's stream. */
+  else mlbRivalryChoiceTick(c);
   c.seasons.push(line);
   return { line, notes };
 }
