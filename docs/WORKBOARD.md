@@ -1,5 +1,31 @@
 # Work board
 
+**2026-10-01, Codex794 CLAIMED: NHL Front Office simulation contributors.**
+Master63 partial slice: choose the healthy forwards, defensemen and goalie whose ratings
+feed the existing simulation. This is not four lines, defensive pairs or ice time. Keep
+the current six-forward50%, four-defense30%, goalie20% weights and empty-group62 fallback.
+Automatic selection and saves without an override must keep exact old outcomes/RNG draws.
+Use optional team.contributors with owned healthy unique IDs and exact available group
+counts; invalid/identical choices do nothing. Effective choices replace unavailable players
+with the existing rating/tie order. Repair existing overrides after successful roster moves,
+injury ticks, offseason and restored ID repair; failed moves and AI teams remain unchanged.
+The existing local save owns persistence. No new completion, account or ranked pipeline.
+
+Engine owner: only src/lib/nhlFrontOffice.ts, new src/test/nhlContributors.test.ts and
+scripts/simNhlContributors.mjs. UI owner: only src/components/nhl-front-office/
+NhlFrontOfficeBoard.tsx, its new scoped module if needed, new
+src/test/nhlContributorsBoard.test.tsx and scripts/simNhlContributorsBoard.mjs. Root alone
+owns the NHL entry in src/data/gameContent/hockey.ts and, only for real shipped text changes,
+public/nhl-front-office/index.html plus that derived ledger/sitemap row. Other sport guides,
+roster data, shared transaction helpers/components and all Claude claims remain held.
+Freeze the engine/UI API before editing. Acceptance: exact automatic compatibility,
+valid/invalid/thin/injured/departed selection outcomes, successful/failed roster moves,
+paired measured simulation effects, actual Board apply/reset/save/reload/quiet no-ops,
+effective changed controls with independent passes, eight native width/motion cases,
+full names/44px controls/focus/no page jump, exact types and final production/artifact gates.
+793 native QA found accepted-pick scroll anchoring and continues its scoped correction.
+792's immutable406-node suite continues; no Vite builds while it runs. Next free795.
+
 **793 functional Page/module checkpoint:**eight actual Page/helper/booking/share outcomes
 pass, including complete22-keep CPU and pass duels with exact original squads,44 discards,
 season/score and full X payload. All22 slot nodes now retain strict identity. Actual pool,

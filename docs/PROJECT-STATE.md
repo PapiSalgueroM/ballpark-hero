@@ -1,5 +1,14 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: NHL simulation contributors claimed
+
+794 is a partial master63 slice: player-selected healthy forwards, defensemen and goalie
+feed the existing strength weights and persist in the existing local save. Exact file/API
+boundaries and acceptance are on WORKBOARD. Full lines, defensive pairs and ice time remain
+open. Automatic old saves, real roster data and shared transaction helpers stay held.
+793 native QA caught a real accepted-pick page jump and is correcting it before acceptance.
+792's frozen406-node suite is still running. Next795; all Claude reservations stand.
+
 ## CHECKPOINT 2026-10-01: Search and Discard functional Page/module frozen
 
 793 passes eight actual Page/helper/booking/share outcomes and current app types0.
