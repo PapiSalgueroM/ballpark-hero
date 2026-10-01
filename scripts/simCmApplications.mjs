@@ -23,6 +23,14 @@
         floor. (Over the mixed applications the tier r is real but thin,
         -0.19 to -0.38 over nineteen runs, because the standing spread swamps
         it; a ceiling on it was a coin toss, so it is only reported.)
+        It must RISE with how badly the target club's own season is going,
+        also paired (Round 783 review): the same manager writes once to a
+        club whose season is fine and once to a club of the SAME tier whose
+        season is going badly, both arms on one seeded stream with the roll
+        at 0, and the gap in the odds each club decided on has a floor. The
+        trouble is read off the engine's own applicationInputFor, so an
+        engine that stopped reading the table finds no struggling club and
+        the pairs floor goes red.
         Every answer must land on exactly the match day the application fixed
         when it went out, inside two to five (hard), the inbox must carry the
         answer from the club's board with no quoted speech (hard), and neither
@@ -30,7 +38,9 @@
      2) the limits hold (hard). One open application at a time; a no shuts
         that club's door for the rest of this season and the whole of next
         and opens it the season after; three applications a season and the
-        fourth is refused; the count resets with the season.
+        fourth is refused; the count resets with the season. The cooldown is
+        also held through the REAL rollover (finishSeason and startNextSeason,
+        twice): shut the season after the no, open the season after that.
      3) a summer move fires exactly once (hard). A yes answered with the
         summer books the move, the board goes six points colder and the old
         board writes; the season is played out and the rollover moves the
@@ -51,6 +61,22 @@
         reads as nothing in flight, can apply, and a match played on it
         leaves the field absent. A save WITH an application in flight keeps
         it across a save and load.
+     6) never promised to two clubs (hard, Round 783 review). Three arms per
+        base played fifty of my matches with the form forced hot so the
+        approach roll is live every week: nothing in flight (must draw
+        approaches, floor), an application out and a summer move booked (must
+        draw none). With an application out or a move booked a handshake is
+        refused and the approach stays live, and with an approach live no
+        application goes out.
+     7) the season's end and the sack (hard, Round 783 review). An
+        application goes out with exactly five league games left and is
+        answered before the season ends, and is refused as late one game
+        later. A yes left unanswered, and an application still pending when
+        the season ends, lead the summary's offers and taking one moves the
+        manager. Sacked with a summer move booked, the out of work screen
+        offers the agreed club first and the job taken there, the agreed one
+        or another, is the job the rollover gives, also on a save that never
+        went through enterWilderness.
 
    Negative controls (house rule: prove the checks can fail), each a rewrite
    of a copy of src/lib/clubManagerJobHunt.ts that refuses to run if its
@@ -65,17 +91,43 @@
        booked move at the rollover. Section 3 must go red.
      CM_APPLICATIONS_CONTROL=nocooldown  applyRefusal stops reading cooldowns.
        Section 2 must go red.
+     CM_APPLICATIONS_CONTROL=rollwipe    rollOverHunt drops every cooldown at
+       the rollover. Section 2's real rollover check must go red.
+     CM_APPLICATIONS_CONTROL=troubleblind TROUBLE_WEIGHT goes to zero. Section
+       1's paired trouble gap must go red.
+     CM_APPLICATIONS_CONTROL=courted     huntBusy always reads false and
+       applyRefusal stops reading a live approach. Section 6 must go red.
+     CM_APPLICATIONS_CONTROL=late        applyRefusal stops refusing the last
+       league games. Section 7 must go red.
+     CM_APPLICATIONS_CONTROL=lostyes     waitingYes forgets a yes at the
+       season's end. Section 7 must go red.
+     CM_APPLICATIONS_CONTROL=sackkeeps   dropOnSack keeps the hunt. Section 7
+       must go red.
 
-   Thresholds, measured 2026-10-01 (24 bases, 480 applications and about 220
-   pairs a run) on this harness's own seed and SIM_SEED=1 to 7 for the fixed
-   engine, and on its own seed and SIM_SEED=1, 2, 3 for each control:
+   Thresholds, measured 2026-10-01 (24 bases, 480 applications, about 220
+   tier pairs and 240 trouble pairs a run) on this harness's own seed and
+   SIM_SEED=1 to 7 for the fixed engine (eight runs, all green), and on its
+   own seed and SIM_SEED=1, 2, 3 for the band controls:
      acceptance vs standing, r     fixed 0.398 to 0.509   deaf -0.056 to 0.050       floor 0.25
      paired tier gap, points       fixed 18.2 to 28.1     tierblind -1.8 to 3.7      floor 10
      accepted share, percent       fixed 63.3 to 67.9     deaf 36.7 to 41.3          band 12 to 75
-     pairs answered                fixed 217 to 220                                  floor 100
+     tier pairs answered           fixed 217 to 220                                  floor 100
+     paired trouble gap, points    fixed 4.1 to 5.5       troubleblind 0.0 exactly   floor 3
+       (sd about 0.4 over the eight runs, so the floor sits about four sd
+       under the mean; the blind control is 0.0 by construction, both arms
+       then decide on identical odds)
+     trouble pairs answered        fixed 236 to 240                                  floor 100
+     approaches in section 6's free arm  fixed 9 to 19, the other two arms 0 always  floor 3
      answers inside 2 to 5 matches fixed every one of 479 or 480 answered            hard
-     twice: 8 failures, section 3, all four probes. nocooldown: 3 failures,
-     section 2. Each control's own section goes red and nothing else does.
+   The hard controls, own seed: twice 8 failures (section 3, all four
+   probes), nocooldown 5 (section 2), rollwipe 2 (section 2), courted 26
+   (section 6, every probe base, approaches drawn 18 with an application
+   out and 13 with a move booked), late 2, lostyes 2, sackkeeps 3 (all
+   section 7). Each control's own section goes red and nothing else does.
+   The review's two engine mutations are caught too: a rollover in
+   startNextSeason that wipes cooldowns (rollwipe's shape, and the vitest),
+   and applicationInputFor never reading the table ('if (standing && false)'),
+   which leaves 0 trouble pairs against the floor of 100.
    (The r vs tiers up that is now only reported read -0.192 to -0.307 over
    the same eight seeds, and -0.219 to -0.383 over eleven seeds at ten
    applications a base: nineteen runs, -0.192 the one that broke the old
