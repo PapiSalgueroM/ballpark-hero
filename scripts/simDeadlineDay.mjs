@@ -84,6 +84,9 @@
      DEADLINE_CONTROL=salt     the daily draws a different window for the same
        date, the shape of an engine change under the worked example.
        Section 9 must go red.
+     DEADLINE_CONTROL=curve    the grade's budget points bend to a square root
+       while every constant stays put, so only gradeWindow itself can tell
+       the guide's grade paragraph no longer adds up. Section 9 must go red.
 
    Thresholds: see the THRESHOLDS block in section 2 for the measured runs
    and the margins. The hard sections (3 to 6) have no band: one breach is red.
@@ -105,9 +108,9 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = path.join(ROOT, 'src');
-const CONTROLS = ['blind', 'noclock', 'frozen', 'drift', 'overdraw', 'leak', 'longday', 'norivals', 'walkfree', 'freewage', 'salt'];
+const CONTROLS = ['blind', 'noclock', 'frozen', 'drift', 'overdraw', 'leak', 'longday', 'norivals', 'walkfree', 'freewage', 'salt', 'curve'];
 /* The section each control must turn red. */
-const PREDICTED = { blind: 2, noclock: 3, frozen: 4, drift: 4, overdraw: 5, leak: 6, longday: 3, norivals: 7, walkfree: 7, freewage: 8, salt: 9 };
+const PREDICTED = { blind: 2, noclock: 3, frozen: 4, drift: 4, overdraw: 5, leak: 6, longday: 3, norivals: 7, walkfree: 7, freewage: 8, salt: 9, curve: 9 };
 const CONTROL = process.env.DEADLINE_CONTROL || '';
 if (CONTROL && !CONTROLS.includes(CONTROL)) {
   console.error(`DEADLINE_CONTROL=${CONTROL} is not a control this harness knows (${CONTROLS.join(', ')})`);
@@ -207,6 +210,13 @@ if (CONTROL === 'salt') {
   libPath = rewrite(LIB, [['seed: mixSeed(dailyPrngSeed(date), 721)', 'seed: mixSeed(dailyPrngSeed(date), 722)']], 'deadlineDay.salt.ts', 'the daily seed');
   console.log('NEGATIVE CONTROL ON: the daily draws a different window for the same date, the shape of an engine change under the worked example; section 9 must go red');
 }
+if (CONTROL === 'curve') {
+  libPath = rewrite(LIB, [[
+    '  const budgetPts = BUDGET_POINTS * Math.max(0, Math.min(1, budgetLeft / Math.max(0.1, run.startBudget))) * share;\n',
+    '  const budgetPts = BUDGET_POINTS * Math.sqrt(Math.max(0, Math.min(1, budgetLeft / Math.max(0.1, run.startBudget)))) * share;\n',
+  ]], 'deadlineDay.curve.ts', 'the budget points line of the grade');
+  console.log('NEGATIVE CONTROL ON: the budget points bend to a square root curve while the constants stay put; section 9 must go red');
+}
 
 /* One CommonJS bundle: the lib (or its rewritten copy) and the engine, with
    '@/' resolved here so a swapped file replaces the real one for every
@@ -237,6 +247,7 @@ const {
   startDeadlineDay, openTalks, placeBid, offerPersonalTerms, walkFrom, sellPlayer, endDay, replayDeadlineDay,
   dailyDeadlineDay, deskRead, termsWanted, rivalOn, hoursLeft, DEADLINE_HOURS, CANDIDATES_PER_NEED, BUDGET_SHARE,
   applyAction, clockLabel, valueShare, letterFor, slotWord, RIVAL_CLOSE, NEEDS_POINTS, VALUE_POINTS, BUDGET_POINTS,
+  gradeWindow,
 } = dd;
 const { registerCustomClub, registerLeagueOverrides, engineRegistrations, activeCustomClub, playableClubs, isPartialClub, money } = cm;
 const { hotSeatPool } = hs;
@@ -864,6 +875,7 @@ const keeperIdx = ex.targets.findIndex(t => t.need === 0);
 const keeper = ex.targets[keeperIdx];
 const keeperNeed = ex.needs[0];
 const pageWant = [], guideWant = [];
+let gradeLine = 'the grade paragraph was not reached';
 if (!keeper || keeperNeed.label !== 'GK') fail(`the example's first need is ${keeperNeed?.label}, not a goalkeeper`);
 else {
   const desk = deskRead(ex, keeperIdx);
@@ -904,6 +916,23 @@ else {
   const total = Math.round(NEEDS_POINTS + vp + bp);
   const letter = letterFor(total);
   const article = /^[AEF]/.test(letter) ? 'an' : 'a';
+  /* The same window graded by gradeWindow itself rather than by the sum
+     above: the keeper as signed, the first man for every other need signed at
+     10 percent over his value, and 1m left. A grade formula that moved (the
+     curve control bends the budget points) leaves the paragraph's sum and
+     the engine's grade apart. */
+  const assumed = {
+    ...ex,
+    state: { ...ex.state, budget: 1 },
+    targets: ex.targets.map((t, k) => (t.need !== 0 && ex.targets.findIndex(x => x.need === t.need) === k
+      ? { ...t, status: 'signed', fee: (t.mp.value ?? t.mp.price) * 1.1 }
+      : t)),
+  };
+  const eg = gradeWindow(assumed);
+  gradeLine = `the guide's sum is ${total} (${letter}) and gradeWindow grades that window ${eg.score} (${eg.letter}: needs ${eg.needsPts}, value ${eg.valuePts}, budget ${eg.budgetPts})`;
+  if (eg.filled !== ex.needs.length || eg.needsPts !== NEEDS_POINTS || Math.abs(eg.valuePts - vp) > 0.05 || Math.abs(eg.budgetPts - bp) > 0.05 || eg.score !== total || eg.letter !== letter) {
+    fail(`the guide's grade paragraph sums to ${total} (${letter}), but gradeWindow grades that window ${eg.score} (${eg.letter}): needs ${eg.needsPts} of ${NEEDS_POINTS}, value ${eg.valuePts} against ${fmt(vp, 1)}, budget ${eg.budgetPts} against ${fmt(bp, 1)}, ${eg.filled} of ${ex.needs.length} needs filled`);
+  }
   guideWant.push(
     `needs ${needsPhrase}, and the board have left you ${money(ex.startBudget)}.`,
     `His club are asking ${money(ask0)}, your desk says he is worth ${money(desk.low)} to ${money(desk.high)}, and you bid ${money(3.1)}. That is a counter: they come down to ${money(ask1)} and one round of patience is gone. It is ${clockWord(hour1)}.`,
@@ -917,7 +946,7 @@ const missingPage = pageWant.filter(s => !PAGE_SRC.includes(s));
 const missingGuide = guideWant.filter(s => !GUIDE.includes(s));
 for (const s of missingPage) fail(`the rules screen's example does not say what the engine plays: "${s}"`);
 for (const s of missingGuide) fail(`the guide's example does not say what the engine plays: "${s}"`);
-console.log(`   ${pageWant.length} figures on the rules screen and ${guideWant.length} in the guide checked against the 2026-10-01 daily (${exDay.club}), ${missingPage.length + missingGuide.length} differ`);
+console.log(`   ${pageWant.length} figures on the rules screen and ${guideWant.length} in the guide checked against the 2026-10-01 daily (${exDay.club}), ${missingPage.length + missingGuide.length} differ; ${gradeLine}`);
 if (!failedSections.has(9)) ok('every figure in both worked examples is what the engine plays on the 2026-10-01 daily, and the grade adds up');
 
 /* ---------- verdict ---------- */
