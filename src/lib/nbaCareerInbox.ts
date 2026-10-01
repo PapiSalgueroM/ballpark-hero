@@ -200,6 +200,15 @@ const NBA_INBOX_POOL: InboxMessageDef[] = [
     ],
   },
 
+  {
+    id: "camp_trip_abroad", from: "Team PR", emoji: "✈️", phase: "any", beat: "camp",
+    text: "Preseason trip abroad this year. Long flight, big crowd, and a clinic for local kids. Want to run the clinic?",
+    choices: [
+      { label: "Run the clinic", reply: "Put me down. I'll learn a few words before we land", karma: 7, popularity: 3, morale: -1 },
+      { label: "Sleep off the flight", reply: "I'll be useless after that flight, let someone else take it", karma: -2, morale: 2 },
+    ],
+  },
+
   /* ── the trade deadline ── */
   {
     id: "mom_call", from: "Mom", emoji: "❤️", phase: "any", beat: "deadline",
@@ -276,7 +285,24 @@ const NBA_INBOX_POOL: InboxMessageDef[] = [
     ],
   },
 
+  {
+    id: "deadline_rumor", from: "Old teammate", emoji: "📲", phase: "any", minAge: 22, beat: "deadline",
+    text: "Your name is all over the trade rumor accounts this week lol. You saying anything or nah?",
+    choices: [
+      { label: "Say nothing", reply: "Not touching it. Just hooping", karma: 3, morale: -1 },
+      { label: "Post a laughing emoji", reply: "Posting the crying laughing face and logging off", karma: -1, popularity: 3, morale: 1 },
+    ],
+  },
+
   /* ── the All-Star break ── */
+  {
+    id: "allstar_beach", from: "Teammate", emoji: "🏖️", phase: "any", minAge: 22, beat: "allstar",
+    text: "Couple of us are going somewhere warm for the break. Beach, no basketball, no phones. You coming?",
+    choices: [
+      { label: "Book me a seat", reply: "Book it. I need the sun", karma: 1, morale: 5, cash: -0.05 },
+      { label: "Staying to get shots up", reply: "Gonna stay and get shots up. Have fun", karma: 3, morale: -1 },
+    ],
+  },
   {
     id: "allstar_party", from: "Promoter", emoji: "🎉", phase: "any", minAge: 23, beat: "allstar",
     text: "Biggest party of All-Star weekend tonight. Table's got your name on it. Practice isn't until Friday.",
@@ -475,7 +501,32 @@ const NBA_INBOX_POOL: InboxMessageDef[] = [
     ],
   },
 
+  {
+    id: "offseason_wedding", from: "Cousin", emoji: "💒", phase: "any", beat: "offseason",
+    text: "I'm getting married in July and you're in the wedding. Do not tell me you have a workout.",
+    choices: [
+      { label: "I'll be there", reply: "Front row, suit pressed, no workouts. Congrats cuz", karma: 8, morale: 4, cash: -0.02 },
+      { label: "Reception only", reply: "I can make the reception, I'm sorry about the ceremony", karma: -2, morale: 1 },
+    ],
+  },
+  {
+    id: "offseason_youth_camp", from: "Camp director", emoji: "⛺", phase: "any", minAge: 22, beat: "offseason",
+    text: "Want your name on a three day youth camp this summer? You show up all three days, not just for photos.",
+    choices: [
+      { label: "All three days", reply: "All three days. I'll run the drills myself", karma: 8, popularity: 3, morale: -1 },
+      { label: "Just the photos", reply: "Put my name on it, I'll stop in for pictures", karma: -4, popularity: 2, cash: 0.1 },
+    ],
+  },
+
   /* ── the summer before a contract year ── */
+  {
+    id: "contract_mom", from: "Mom", emoji: "❤️", phase: "any", beat: "contract",
+    text: "Everybody at church keeps asking if you're staying after next season. What do I even tell them?",
+    choices: [
+      { label: "Tell them I love it here", reply: "Tell them I love it here and that's all I'm saying", karma: 4, morale: 2, popularity: 1 },
+      { label: "Tell them nothing", reply: "Tell them you don't know. Because you don't, mama", karma: 1 },
+    ],
+  },
   {
     id: "contract_agent", from: "Agent", emoji: "💼", phase: "any", beat: "contract",
     text: "Last year of the deal coming up. Bet on yourself and play it out, or tell the GM we want to talk now?",

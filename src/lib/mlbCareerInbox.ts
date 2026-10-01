@@ -209,7 +209,24 @@ const MLB_INBOX_POOL: InboxMessageDef[] = [
     ],
   },
 
+  {
+    id: "allstar_lake", from: "Teammate", emoji: "🎣", phase: "any", minAge: 22, beat: "allstar",
+    text: "Three days off. My lake house, fishing at sunrise, phones in a drawer. You coming?",
+    choices: [
+      { label: "Bring the rods", reply: "I'm in. Bringing my own rod, don't laugh", karma: 1, morale: 5 },
+      { label: "Staying to rest", reply: "Couch and ice tub for me this time. Next year", karma: 2, morale: 1 },
+    ],
+  },
+
   /* ── the trade deadline ── */
+  {
+    id: "deadline_rumor", from: "Old teammate", emoji: "📲", phase: "any", minAge: 23, beat: "deadline",
+    text: "Your name is all over the trade rumor accounts this week lol. You saying anything or nah?",
+    choices: [
+      { label: "Say nothing", reply: "Not touching it. Just playing ball", karma: 3, morale: -1 },
+      { label: "Post a laughing emoji", reply: "Posting the crying laughing face and logging off", karma: -1, popularity: 3, morale: 1 },
+    ],
+  },
   {
     id: "mom_call", from: "Mom", emoji: "❤️", phase: "any", beat: "deadline",
     text: "Haven't heard from you in a while sweetheart. Everything okay out on the road? Call me when you get a second.",
@@ -324,6 +341,15 @@ const MLB_INBOX_POOL: InboxMessageDef[] = [
     choices: [
       { label: "Run every lap", reply: "Count me in. I'm letting all of them beat me", karma: 7, popularity: 3 },
       { label: "Wave from the dugout", reply: "I'll wave from the dugout, legs are dead", karma: -1 },
+    ],
+  },
+
+  {
+    id: "sept_bobblehead", from: "Team marketing", emoji: "🎁", phase: "any", beat: "september",
+    text: "Your bobblehead night is next week. The face is... a choice. Want to see it before it goes out?",
+    choices: [
+      { label: "Ship it as is", reply: "Ship it. If it's ugly it's a collector's item", karma: 3, popularity: 3 },
+      { label: "Ask for a redo", reply: "Can we fix the nose at least", karma: -1, morale: 1 },
     ],
   },
 
@@ -457,6 +483,23 @@ const MLB_INBOX_POOL: InboxMessageDef[] = [
     ],
   },
 
+  {
+    id: "offseason_wedding", from: "Cousin", emoji: "💒", phase: "any", beat: "offseason",
+    text: "I'm getting married in December and you're in the wedding. Do not tell me you have a workout.",
+    choices: [
+      { label: "I'll be there", reply: "Front row, suit pressed, no workouts. Congrats cuz", karma: 8, morale: 4, cash: -0.02 },
+      { label: "Reception only", reply: "I can make the reception, I'm sorry about the ceremony", karma: -2, morale: 1 },
+    ],
+  },
+  {
+    id: "offseason_caravan", from: "Team community office", emoji: "🚐", phase: "any", minAge: 22, beat: "offseason",
+    text: "Winter caravan. Five towns in four days, schools and hospitals, a lot of handshakes. You in?",
+    choices: [
+      { label: "All five towns", reply: "All five. Load me up with signed balls", karma: 8, popularity: 4, morale: -1 },
+      { label: "One stop", reply: "I can do one stop, the rest of the week is family", karma: 2, popularity: 1 },
+    ],
+  },
+
   /* ── an arbitration winter ── */
   {
     id: "arb_agent", from: "Agent", emoji: "💼", phase: "any", beat: "arbitration",
@@ -514,6 +557,14 @@ const MLB_INBOX_POOL: InboxMessageDef[] = [
     choices: [
       { label: "Promise visits wherever", reply: "Wherever it is, you two are flying out for opening day", karma: 6, morale: 3, cash: -0.03 },
       { label: "Going where the money is", reply: "Going where the best offer is mama", karma: -2 },
+    ],
+  },
+  {
+    id: "fa_vet", from: "Veteran teammate", emoji: "🧔", phase: "any", beat: "freeagency",
+    text: "Been a free agent twice. Pick the place, not just the number. You have to live there.",
+    choices: [
+      { label: "Thank him", reply: "Good point. Appreciate you", karma: 4, morale: 2 },
+      { label: "It's about the number", reply: "Respect, but the number decides this one", karma: -2, morale: 1 },
     ],
   },
   {

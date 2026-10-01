@@ -223,7 +223,24 @@ const NHL_INBOX_POOL: InboxMessageDef[] = [
     ],
   },
 
+  {
+    id: "allstar_home", from: "Mom", emoji: "🏠", phase: "any", beat: "allstar",
+    text: "A few days off for the break. Your room is exactly how you left it, posters and all. Come home?",
+    choices: [
+      { label: "Fly home", reply: "On the first flight out. Make the good stuff", karma: 6, morale: 5, cash: -0.02 },
+      { label: "Stay and rest", reply: "Body needs the couch this time mom. Next break, promise", karma: 1, morale: 2 },
+    ],
+  },
+
   /* ── the trade deadline ── */
+  {
+    id: "deadline_rumor", from: "Old linemate", emoji: "📲", phase: "any", minAge: 22, beat: "deadline",
+    text: "Your name is all over the trade rumor accounts this week lol. You saying anything or nah?",
+    choices: [
+      { label: "Say nothing", reply: "Not touching it. Just playing", karma: 3, morale: -1 },
+      { label: "Post a laughing emoji", reply: "Posting the crying laughing face and logging off", karma: -1, popularity: 3, morale: 1 },
+    ],
+  },
   {
     id: "mom_call", from: "Mom", emoji: "❤️", phase: "any", beat: "deadline",
     text: "Haven't heard from you since the road trip started sweetheart. Everything okay out there? Call me when you get a second.",
@@ -351,7 +368,32 @@ const NHL_INBOX_POOL: InboxMessageDef[] = [
     ],
   },
 
+  {
+    id: "playoffs_superstition", from: "Teammate", emoji: "🍝", phase: "any", beat: "playoffs",
+    text: "Same pregame meal every game until we lose. Same seat on the bus too. You in on it or are you going to jinx us?",
+    choices: [
+      { label: "I'm in, same everything", reply: "Same pasta, same seat, same socks. Don't talk to me about it", karma: 2, morale: 4 },
+      { label: "Not superstitious", reply: "I'm eating what I want, we'll be fine", karma: -1, morale: -1 },
+    ],
+  },
+
   /* ── the offseason ── */
+  {
+    id: "offseason_wedding", from: "Cousin", emoji: "💒", phase: "any", beat: "offseason",
+    text: "I'm getting married in July and you're in the wedding. Do not tell me you have a skate.",
+    choices: [
+      { label: "I'll be there", reply: "Front row, suit pressed, no skates. Congrats cuz", karma: 8, morale: 4, cash: -0.02 },
+      { label: "Reception only", reply: "I can make the reception, I'm sorry about the ceremony", karma: -2, morale: 1 },
+    ],
+  },
+  {
+    id: "offseason_lake", from: "Old linemate", emoji: "🛶", phase: "any", beat: "offseason",
+    text: "Lake weekend. Fishing, a campfire, and nobody is allowed to talk about hockey. Coming?",
+    choices: [
+      { label: "Bring the canoe", reply: "I'm in. I'll bring the canoe and the bad jokes", karma: 2, morale: 5 },
+      { label: "Training camp prep", reply: "Can't, I'm locked into my summer program. Next one", karma: 1, morale: -1 },
+    ],
+  },
   {
     id: "scam_prize", from: "Unknown", emoji: "🎣", phase: "any", beat: "offseason",
     text: "CONGRATULATIONS! You've won 2 MILLION DOLLARS. Just send your account info plus a small release fee to claim it.",
@@ -448,6 +490,14 @@ const NHL_INBOX_POOL: InboxMessageDef[] = [
   },
 
   /* ── the summer before a contract year ── */
+  {
+    id: "contract_mom", from: "Mom", emoji: "❤️", phase: "any", beat: "contract",
+    text: "Everybody at the rink back home keeps asking if you're staying after next season. What do I tell them?",
+    choices: [
+      { label: "Tell them I love it here", reply: "Tell them I love it here and that's all I'm saying", karma: 4, morale: 2, popularity: 1 },
+      { label: "Tell them nothing", reply: "Tell them you don't know. Because you don't, mom", karma: 1 },
+    ],
+  },
   {
     id: "contract_agent", from: "Agent", emoji: "💼", phase: "any", beat: "contract",
     text: "Last year of the deal coming up. Bet on yourself and play it out, or tell the GM we want to talk now?",
