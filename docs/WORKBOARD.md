@@ -1,5 +1,44 @@
 # Work board
 
+**2026-10-01, Codex786 CLAIMED: Stat Detective committed feedback and native search.**
+Own only src/pages/StatDetective.tsx, scoped StatDetective.module.css, new actual-page tests
+and scripts/simStatDetectiveMotion.mjs. The page has no separate Board/hook; use its actual
+round state and real pickMystery/evaluateGuess/suggestProfiles/hintsFor/buildShareGrid helpers.
+Add finite newest committed guess/new clue/result cues, static reduced motion, stable unique
+guess-row names and native Tab/Enter/Space access to non-first suggestions. Return nonterminal
+commit focus to Search and terminal focus to the result without scrolling. Preserve input
+Enter-first behavior, original player objects, order/duplicate guard, eight-guess limit,
+difficulty/round selection, stats/hints, completion and share. No engine/data/route changes.
+
+The existing next-clue pointer and copy say2/4/6 while actual profile-backed hints can unlock
+on1..6, and copy still claims era/position chips that were already removed. Correct only this
+page's pointer/instructions/SEO wording to actual hintsFor and current franchise feedback;
+derive the next unlock from the existing helper, never change hint timing or invent data.
+Use actual-page tests with only fictional fetch-boundary data plus real helpers/completion,
+named copied controls with independent unchanged outcomes and eight native width/motion
+contexts. Verify exact engine stats/hints/share/completion, node/focus identity, quiet/reset
+behavior,44px/full-name fit and finite/static cues. There is no saved round, so no restore
+claim. Root owns docs/git/build and any later saved-page refresh. Next free787.
+
+**774/771 final-CSS source checkpoint:** Quiz's single form min-w-0 change fixes measured44px
+clipping at320. Seven original hook/unit outcomes and eight actual native contexts now pass,
+including exact25 clues/banks/saves/share/focus and finite420/300/360ms cues/static reduced.
+Both asserted no-fix form controls reproduce44px clipping; existing no-wrap header controls
+still reproduce their12.36/4.84/5.02/11.45px overlaps. Before/fix/failed-sampling receipts and
+screenshots are preserved in TEMP/dukb-round774-quiz-audit. An insertion observer samples
+actual finite animation onset without extending its duration under CPU load.
+
+The771 deterministic retained-intent copy clears successful replies but keeps refused intent,
+so the unchanged no-op/quiet/later-autoResolve protocol reproduces exactly the false message7
+cue (420ms normal/static reduced). Both controls pass; nowrap2 again shows378px overflow.
+Only the portable browser harness changes; app code and all healthy actions/timings stay
+unchanged. Previous passive timeout and unconditional-void replay diagnostics earn no credit
+and remain preserved. Acceptance: TEMP/dukb-round780-final-browser-rereceipt-codex/accepted-report.json.
+This supersedes the earlier scope's proposed unconditional void mutation. Final corrected Quiz
+JS rebuild still waits behind74-harness rerun. Exact final utility CSS215c948d...e8beca9 now
+passes136 healthy contexts across769-779, plus copied geometry/intent controls. Publication
+is separately verified as I at05:41:50UTC; practice/signing features remain absent live.
+
 **2026-10-01, Codex785 COMPLETE: IndexNow coverage ratchet corrected.**
 The offline positive now accepts167 real URLs. An asserted copied old166 floor fails exactly
 the sitemap-growth assertion; key/host checks still pass. The only added URL versus Git

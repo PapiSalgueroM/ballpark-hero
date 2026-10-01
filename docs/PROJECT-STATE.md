@@ -1,5 +1,20 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: Stat Detective claimed, final-style source fixes accepted
+
+786 adds committed guess/clue/result feedback and native suggestion focus within the existing
+page and helpers. It also aligns this page's misleading next-hint/feedback copy with actual
+hint and franchise behavior, preserving game math/data/completion/share. Exact four-file scope
+and real-outcome acceptance are on WORKBOARD;787 next free. All Claude reservations stand.
+
+774's single form minimum-width fix passes seven unit/hook outcomes, eight final-CSS browser
+contexts and four copied geometry controls.771's portable harness now uses a deterministic
+refused-intent control; app behavior/healthy protocol/timings are unchanged, both native modes
+reject the false auto-resolution cue and no-wrap controls pass.136 healthy contexts across
+769-779 accept the exact215c948d final utility stylesheet. Corrected Quiz JS rebuild and the
+74-harness rerun remain pending. Uncached primary HTTP at05:41:50UTC still serves Release I;
+practice/signing source is not live, Quiz feedback is. No publication/Google approval claim.
+
 ## CHECKPOINT 2026-10-01: verified IndexNow count fence accepted
 
 785's literal167 floor passes offline; the copied previous166 floor fails only intended growth.
