@@ -1386,4 +1386,150 @@ export const HOCKEY_CONTENT: GameContentMap = {
       },
     ],
   },
+
+  '/nhl-gauntlet-draft': {
+    intro: [
+      "The draft mode, hockey style: eleven picks, two forward lines, two defense pairs and a goalie, five real players a pick from a genuine star to a bargain, and you keep exactly one.",
+      "Then the playoffs begin. Your finished lineup runs five knockout rounds against ever stronger invented opposition, rated 77 up to 98, with sudden death overtime when the game is level.",
+      "The run is decided entirely by the lineup you drafted: the same eleven always runs the same playoffs, so every pick is the game.",
+    ],
+    headings: {
+      howToPlay: "How to play Gauntlet Draft: NHL, a free daily hockey lineup draft game",
+      rules: "Gauntlet Draft: NHL rules for cards, ratings and the playoffs",
+      example: "Gauntlet Draft: NHL walkthrough: a 91 rated lineup chases the Cup",
+      tips: "Gauntlet Draft: NHL tips for goalies, wings and the lineup rating",
+      faq: "Gauntlet Draft: NHL FAQ: daily drafts, opponents and overtime",
+    },
+    howToPlaySections: [
+      {
+        heading: "Choosing the daily gauntlet or a fresh draft",
+        items: [
+          "Pick the daily gauntlet (the same five card choices for everyone today) or unlimited for a fresh draft.",
+        ],
+      },
+      {
+        heading: "Reading five cards for every spot in the lineup",
+        items: [
+          "For each spot, center, wingers, defense and goal, read the five cards, star to bargain, and tap the one you keep.",
+        ],
+        subsections: [
+          {
+            heading: "Why a center can fill a wing spot",
+            items: [
+              "A wing spot takes a winger or a center, because centers slide out to the wing all the time. A center spot only takes a center, and the defense and goalie spots only take their own.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Watching the playoffs start on their own",
+        items: [
+          "After the eleventh pick the playoffs start on their own: five rounds, one game each, revealed one at a time.",
+        ],
+      },
+      {
+        heading: "Scoring points for every round survived",
+        items: [
+          "Survive a round for 16 points; lift the Cup for exactly 100.",
+        ],
+      },
+    ],
+    ruleSections: [
+      {
+        heading: "Real players off real NHL rosters",
+        items: [
+          "Every card is a real player off a real 2026-27 roster, 32 clubs and 13 players each, the same data NHL Front Office plays. Every opponent club is invented on purpose.",
+        ],
+      },
+      {
+        heading: "How ratings come from real production",
+        items: [
+          "Ratings come from real 2025-26 production, not opinion: forwards and defensemen from their points per game against others at their position, goalies from save percentage and wins.",
+        ],
+        subsections: [
+          {
+            heading: "Why four goalies rated 68 sit out",
+            items: [
+              "The roster data gives anyone without a qualifying 2025-26 season a placeholder rating of 68 and does not say which 68s those are, so the four goalies rated 68 are left out of the deal rather than risk dealing a number their play never produced.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "A star and a bargain at every spot",
+        items: [
+          "The five cards per spot are spread across the pool's rating range, so a star and a bargain are always both on the table.",
+        ],
+        subsections: [
+          {
+            heading: "Nobody dealt twice in one draft",
+            items: [
+              "No player is dealt twice in one draft.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "A knockout decided by the rating gap",
+        items: [
+          "The knockout is deterministic in your lineup: scoring comes from the rating gap, a level game goes to sudden death overtime, and replaying the same eleven replays the same playoffs.",
+        ],
+        subsections: [
+          {
+            heading: "No shootouts in playoff hockey",
+            items: [
+              "There are no shootouts, because playoff hockey does not have them. Overtime goes on until somebody scores.",
+            ],
+          },
+        ],
+      },
+      {
+        heading: "Opposition ratings climbing toward the Cup Final",
+        items: [
+          "Opposition ratings climb 77, 84, 89, 94, 98. A bargain lineup usually goes out in the first two rounds, an elite one often reaches the Cup Final, and even a perfect draft lifts the Cup only about one run in seven.",
+        ],
+      },
+    ],
+    exampleSections: [
+      {
+        heading: "Taking the best goalie card on offer",
+        paragraphs: [
+          "The goalie spot deals a 90 next to an 87, an 83, an 81 and a 70. Nothing costs anything, so the 90 is the pick unless you are collecting one club.",
+        ],
+      },
+      {
+        heading: "A 91 rated lineup runs the playoffs",
+        paragraphs: [
+          "Your finished lineup rates 91. The Qualifying Round is a 6-0 rout, the First Round a 4-0 shutout, the Second Round goes to overtime and you take it 3-2, and the Conference Final ends the run 4-2. Three rounds survived, 48 points, and the card you would take back is the 82 you settled for on the second defense pair.",
+        ],
+      },
+    ],
+    tipSections: [
+      {
+        heading: "Treating the goalie as one card in eleven",
+        items: [
+          "The goalie counts the same as any other card toward the rating, one eleventh of it, so a weak goalie hurts no more than a weak winger, and no less either.",
+        ],
+      },
+      {
+        heading: "Spotting centers in the wing picks",
+        items: [
+          "The wing picks can deal centers, and a center is often the best card in the pick, so do not skip past one in a wing spot.",
+        ],
+      },
+      {
+        heading: "Building toward a lineup in the mid nineties",
+        items: [
+          "The Cup only becomes a real chance once your lineup is in the mid nineties. Watch the running rating under the cards as you fill the lines.",
+        ],
+      },
+    ],
+    faqs: [
+      { q: "Is the daily draft the same for everyone?", a: "Yes. One shared set of five card choices per Eastern Time date, so daily scores compare fairly." },
+      { q: "Are the opponents real teams?", a: "No, and that is deliberate: every opponent is an invented club, so no real logo or name is borrowed. The players you draft are real, off real 2026-27 rosters." },
+      { q: "Why does the card say EDM instead of the club's full name?", a: "The abbreviation is what the roster data itself carries, and it keeps the page light. Any hockey fan reads it at a glance." },
+      { q: "Why does a tied game never go to a shootout?", a: "Because this is the playoffs, and the NHL settles playoff games with sudden death overtime, period after period, until somebody scores." },
+      { q: "Is this the same game as the soccer Gauntlet Draft?", a: "Same engine, hockey's own roster data, lineup and playoff ladder. Eleven picks, the same depth as the soccer XI and the MLB lineup card." },
+    ],
+  },
 };
