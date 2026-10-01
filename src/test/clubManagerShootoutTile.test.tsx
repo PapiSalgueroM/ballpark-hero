@@ -96,6 +96,46 @@ describe('the shootout order tile', () => {
     expect(onShootoutOrder).not.toHaveBeenCalled();
   });
 
+  it('scrolls itself into view when it opens, like the bench and set piece tiles', () => {
+    /* jsdom lays nothing out, so every box is put well below the fold and the
+       reveal hook's two frames run at once. The tile that opened has to be
+       what the page moves to: the review found the pre match shortcut opening
+       it 1091px down a 844px phone with the page left where it was, because
+       the wrapper carried no reveal ref. */
+    vi.stubGlobal('requestAnimationFrame', (cb: FrameRequestCallback) => { cb(0); return 1; });
+    vi.stubGlobal('cancelAnimationFrame', () => {});
+    const rect = vi.spyOn(Element.prototype, 'getBoundingClientRect').mockReturnValue(
+      { top: 2000, bottom: 2600, height: 600, left: 0, right: 390, width: 390, x: 0, y: 2000, toJSON: () => ({}) } as DOMRect,
+    );
+    const doc = document as Document & { elementsFromPoint?: (x: number, y: number) => Element[] };
+    const hadPoint = typeof doc.elementsFromPoint === 'function';
+    if (!hadPoint) doc.elementsFromPoint = () => [];
+    const scrolled: Element[] = [];
+    const before = Element.prototype.scrollIntoView;
+    Element.prototype.scrollIntoView = function (this: Element) { scrolled.push(this); };
+    try {
+      const { container } = render(
+        <TacticsScreen
+          career={startCareer('Real Madrid')}
+          onFormation={noop} onMentality={noop} onSlot={noop} onSwap={noop} onAutoPick={noop}
+          onDuty={noop} onSetPiece={noop} onAutoSetPieces={noop}
+          onShootoutOrder={noop}
+          openTileRequest="shootout"
+        />,
+      );
+      const tile = container.querySelector('[data-cm-tile="shootout"]');
+      expect(tile).not.toBeNull();
+      expect(tile!.getAttribute('data-cm-tile-open')).toBe('1');
+      expect(tile!.querySelector('[data-cm-shootout-order]')).not.toBeNull();
+      expect(scrolled).toContain(tile);
+    } finally {
+      Element.prototype.scrollIntoView = before;
+      if (!hadPoint) delete doc.elementsFromPoint;
+      rect.mockRestore();
+      vi.unstubAllGlobals();
+    }
+  });
+
   it('offers a loan signing in the eleven, so all eleven can be listed', () => {
     const base: CareerState = startCareer('Real Madrid');
     /* A loan signing (on loan TO the club) starting in the first slot. */
