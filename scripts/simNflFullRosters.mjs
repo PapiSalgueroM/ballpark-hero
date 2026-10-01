@@ -102,6 +102,7 @@
      declinefloor a decline lifts a 61 back to the old floor 62    -> 6
      recordedit   the record moves one KC bench man to DEN        -> 1
      noheld       the bake ignores the spot check's held out list -> 1
+     spotstale    the spot check is dated a month before the record -> 1
    Under a control the process exits non zero whether or not the expected
    sections went red, and says which it was.
 
@@ -131,6 +132,7 @@ const EXPECT = {
   bigbench: [6],
   recordedit: [1],
   noheld: [1],
+  spotstale: [1],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NFL_FULL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -179,6 +181,7 @@ const NOTE = {
   bigbench: 'the depth data copy pays every bench man six times his salary',
   recordedit: 'the record moves one KC bench man to DEN, in memory',
   noheld: 'the bake ignores the spot check\'s held out list',
+  spotstale: 'the spot check is dated a month before the record, in memory',
 };
 const SECTION_NAMES = {
   1: 'the data: real, current, second sourced, and agreeing with the engine',
@@ -482,6 +485,11 @@ console.log('1) the data: real, current, second sourced, and agreeing with the e
     ok(1, 'where both sources agree on the list, the bake agrees (specialists left out with the reason)', bad.length === 0, bad.slice(0, 3).join(' | '));
     ok(1, 'where both sources agree on a position the release contradicts, the man is held out with the reason', heldBad.length === 0, heldBad.slice(0, 3).join(' | '));
     ok(1, 'every age is the birth date\'s, and at least one source prints the same', ages.length === 0, ages.slice(0, 3).join(' | '));
+    /* the generator's own refusal: the spot check must be the record's day,
+       with no more than two men the release gets wrong (the NHL bake's bar) */
+    const vouch = gen.spotCheckRefusal(CONTROL === 'spotstale' ? { ...spotCheck, read: '2026-09-01' } : spotCheck, record);
+    if (CONTROL === 'spotstale') console.log('   control spotstale: the spot check claims to have been read a month before the record');
+    ok(1, 'the spot check vouches for the record (same day, at most two men wrong)', vouch === null, vouch ?? '');
   }
 }
 

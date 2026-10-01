@@ -125,6 +125,10 @@
      --check   bakes from the record and compares all three files byte for
                byte, writing nothing. The same record always bakes the same
                bytes: the date on line 1 is the day the record was read.
+   A bake also needs scripts/data/nflRosterSpotCheck.json read on the same
+   day as the record (six clubs, ten men each, against each club's own page
+   and ESPN). Its heldOut men are left out with the reason, and with more
+   than two of them the bake stops: the NHL bake's bar (Round 830).
 
    Output: src/data/frontOfficePlayers.ts and src/data/frontOfficeDepth.ts,
    both committed, plus the record and the left out list in scripts/data.
@@ -928,6 +932,17 @@ export function leftOutList(rec, teams, depth, teamMeta, held = new Map()) {
   return out;
 }
 
+/** Over this many men the release gets wrong in the spot check, stop and report rather than bake. */
+export const SPOT_CHECK_MISMATCH_LIMIT = 2;
+/** Why this spot check cannot vouch for this record, or null. */
+export function spotCheckRefusal(spot, rec) {
+  if (!spot || !Array.isArray(spot.clubs)) return 'the second source spot check (scripts/data/nflRosterSpotCheck.json) is missing';
+  if (spot.read !== rec.read) return `the spot check was read on ${spot.read} and the record on ${rec.read}: check the new record against the clubs' pages before baking it`;
+  const wrong = (spot.heldOut ?? []).length;
+  if (wrong > SPOT_CHECK_MISMATCH_LIMIT) return `the spot check found ${wrong} men the release gets wrong, over the bar of ${SPOT_CHECK_MISMATCH_LIMIT}: stop and report, do not bake`;
+  return null;
+}
+
 /** The whole bake from a record, as strings, so --check and the fence can compare without writing. */
 export function bakeFromRecord(rec, teamMeta, heldOut = []) {
   const { roster: all, stats } = recordRows(rec);
@@ -983,6 +998,12 @@ if (isMain) {
   if (!fs.existsSync(RECORD)) throw new Error(`${path.relative(ROOT, RECORD)} is missing; run with --record to pull the release`);
   const rec = JSON.parse(fs.readFileSync(RECORD, 'utf8'));
   const spot = JSON.parse(fs.readFileSync(SPOT_CHECK, 'utf8'));
+  /* The same bar as the NHL bake (Round 830): no bake from a record whose
+     second source check was made on another day, and none when the check
+     found more than two men the release gets wrong. A fresh --record needs a
+     fresh spot check before it can ship. */
+  const spotProblem = spotCheckRefusal(spot, rec);
+  if (spotProblem) throw new Error(spotProblem);
   const out = bakeFromRecord(rec, teamMeta, spot.heldOut ?? []);
   log(`record read ${rec.read}, week ${rec.week}: ${rec.roster.length} roster rows (${rec.rosterRowsInRelease} in the release), ${rec.stats.length} stats rows (${rec.statRowsInRelease} in the release)`);
   /* say the join out loud: a silent join is how the whole league got rated on
