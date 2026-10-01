@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useRef, useState } from 'react';
 import { DraftNightCard } from '@/components/front-office-shared/DraftNightCard';
 import { buildDraftNight } from '@/lib/draftNight';
 import type { DraftNight } from '@/lib/draftNight';
@@ -12,6 +12,8 @@ import {
   NHL_FO_ROUNDS,
   type NhlLeague, type NhlProspect, type NhlSeriesResult, nhlExecuteTalksTrade,
   ensureNhlLeagueIds, NHL_ROSTER_MIN, NHL_ROSTER_MAX,
+  nhlContributors, nhlSetContributors, nhlResetContributors, repairNhlContributors,
+  type NhlContributors, type NhlGmTeam,
 } from '@/lib/nhlFrontOffice';
 /* Round 631: waiving a man costs dead money and he cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, rosterFullRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
@@ -45,6 +47,7 @@ import { ConfettiBurst, CelebrationStyles, revealDelay } from '@/components/club
    since Round 74. What each box says lives in the engine, not here. */
 import { foHubTiles, type FoPanelKey } from '@/lib/foHub';
 import { FoHubTiles, FoPanelHeader } from '@/components/front-office-shared/FoHubTiles';
+import contributorsStyles from './NhlContributors.module.css';
 
 /* Round 180: 'fired' is new. Zero trust upstairs ends the save. */
 type Phase = 'pick' | 'hub' | 'draft' | 'recap' | 'fired';
@@ -72,6 +75,88 @@ interface SaveShape {
   postseason?: Postseason | null;
 }
 
+function ContributorPicker({ team, onApply, onAuto, onBack }: {
+  team: NhlGmTeam; onApply: (value: NhlContributors) => boolean; onAuto: () => boolean; onBack: () => void;
+}) {
+  const effective = nhlContributors(team);
+  const [draft, setDraft] = useState<NhlContributors>(() => nhlContributors(team));
+  const [receipt, setReceipt] = useState<{ id: number; text: string } | null>(null);
+  const sequence = useRef(0), back = useRef<HTMLButtonElement>(null), notice = useRef<HTMLDivElement>(null);
+  const rosterKey = JSON.stringify(team.players.map(p => [p.id, p.pos, p.out, p.ovr]));
+  const savedKey = JSON.stringify(effective);
+  useEffect(() => { setDraft(nhlContributors(team)); }, [rosterKey, savedKey]);
+  useLayoutEffect(() => { back.current?.focus({ preventScroll: true }); }, []);
+  useLayoutEffect(() => { if (receipt) notice.current?.focus({ preventScroll: true }); }, [receipt]);
+  useEffect(() => {
+    if (!receipt) return;
+    const timer = setTimeout(() => setReceipt(null), 500);
+    return () => clearTimeout(timer);
+  }, [receipt]);
+  const healthy = team.players.filter(p => p.out === 0);
+  const groups = [
+    { key: 'forwards' as const, label: 'Forwards', weight: '50%', players: healthy.filter(p => p.pos === 'C' || p.pos === 'W'), cap: 6 },
+    { key: 'defense' as const, label: 'Defense', weight: '30%', players: healthy.filter(p => p.pos === 'D'), cap: 4 },
+    { key: 'goalie' as const, label: 'Goalie', weight: '20%', players: healthy.filter(p => p.pos === 'G'), cap: 1 },
+  ];
+  const ids = (value: NhlContributors, key: typeof groups[number]['key']) => key === 'goalie' ? value.goalie === null ? [] : [value.goalie] : value[key];
+  const complete = groups.every(group => {
+    const chosen = ids(draft, group.key);
+    return chosen.length === Math.min(group.cap, group.players.length) && new Set(chosen).size === chosen.length && chosen.every(id => group.players.some(p => p.id === id));
+  });
+  const changed = groups.some(group => {
+    const selected = ids(draft, group.key), current = ids(effective, group.key);
+    return selected.length !== current.length || selected.some(id => !current.includes(id));
+  });
+  const preview = complete ? nhlStrength({ ...team, contributors: draft }) : null;
+  const toggle = (key: typeof groups[number]['key'], id: string, cap: number) => {
+    setDraft(previous => {
+      const selected = ids(previous, key);
+      if (key === 'goalie') return { ...previous, goalie: id };
+      if (selected.includes(id)) return { ...previous, [key]: selected.filter(value => value !== id) };
+      if (selected.length >= cap) return previous;
+      return { ...previous, [key]: [...selected, id] };
+    });
+  };
+  const commit = (automatic: boolean) => {
+    if (!(automatic ? onAuto() : complete && changed && onApply(draft))) return;
+    setReceipt({ id: ++sequence.current, text: automatic ? 'Automatic contributors restored.' : 'Simulation contributors applied.' });
+  };
+  return (
+    <section className={contributorsStyles.panel} data-nhl-contributors aria-label="Simulation contributors">
+      <button ref={back} type="button" onClick={onBack} className={cn(contributorsStyles.action, 'rounded-lg border border-border px-3 text-xs font-semibold')}>Back to roster</button>
+      <h3 className="mt-3 font-bold text-foreground">Simulation contributors</h3>
+      <p className="mt-1 text-xs text-muted-foreground">Choose whose ratings feed the simulation. This does not set lines or ice time. Only healthy players can contribute.</p>
+      <p className="mt-2 text-xs text-muted-foreground">Select six forwards, four defensemen and one goalie, or every healthy player when a group is thin. Uncheck a selected forward or defenseman before choosing a replacement. An empty group uses rating 62.</p>
+      <div className="mt-3 grid gap-3 sm:grid-cols-3">
+        {groups.map(group => {
+          const selected = ids(draft, group.key), required = Math.min(group.cap, group.players.length);
+          return <fieldset key={group.key} className="min-w-0 rounded-lg border border-border p-2" data-nhl-group={group.key}>
+            <legend className="px-1 text-xs font-bold">{group.label} {selected.length}/{required} · {group.weight}</legend>
+            <div className={contributorsStyles.choices}>
+              {[...group.players].sort((a, b) => b.ovr - a.ovr).map(player => {
+                const checked = selected.includes(player.id);
+                return <label key={player.id} className={contributorsStyles.choice}>
+                  <input type={group.key === 'goalie' ? 'radio' : 'checkbox'} name={group.key === 'goalie' ? 'nhl-contributor-goalie' : undefined} checked={checked} disabled={group.key !== 'goalie' && !checked && selected.length >= required} onChange={() => toggle(group.key, player.id, required)} data-nhl-contributor={player.id} />
+                  <span className={contributorsStyles.name}>{player.name}<span className="block text-[10px] text-muted-foreground">{player.pos} · rating {player.ovr}</span></span>
+                </label>;
+              })}
+              {group.players.length === 0 && <p className="py-2 text-xs text-muted-foreground">No healthy {group.label.toLowerCase()}.</p>}
+            </div>
+          </fieldset>;
+        })}
+      </div>
+      <p className="mt-3 text-sm font-semibold" data-nhl-strength-preview>{preview === null ? 'Finish your selection to see its strength.' : `Strength preview ${preview.toFixed(1)} · forwards 50%, defense 30%, goalie 20%`}</p>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <button type="button" data-nhl-apply onClick={() => commit(false)} disabled={!complete || !changed} className={cn(contributorsStyles.action, 'rounded-lg bg-primary px-3 text-xs font-bold text-primary-foreground disabled:opacity-40')}>Apply contributors</button>
+        <button type="button" data-nhl-auto onClick={() => commit(true)} disabled={team.contributors === undefined} className={cn(contributorsStyles.action, 'rounded-lg border border-border px-3 text-xs font-semibold disabled:opacity-40')}>Use automatic</button>
+      </div>
+      <div ref={notice} tabIndex={-1} role="status" className={contributorsStyles.receipt} data-nhl-contributor-feedback>
+        {receipt && <span key={receipt.id} className={contributorsStyles.committed}>{receipt.text}</span>}
+      </div>
+    </section>
+  );
+}
+
 export default function NhlFrontOfficeBoard() {
   const [phase, setPhase] = useState<Phase>('pick');
   /* Round 204: the hub is tiles now, so null means the hub itself and a
@@ -80,6 +165,11 @@ export default function NhlFrontOfficeBoard() {
   const [tab, setTab] = useState<Tab | null>(null);
   const [myTeam, setMyTeam] = useState('');
   const [league, setLeague] = useState<NhlLeague | null>(null);
+  const [contributorsOpen, setContributorsOpen] = useState(false);
+  const contributorsOpener = useRef<HTMLButtonElement>(null), contributorReturn = useRef(false), contributorCommit = useRef<NhlLeague | null>(null);
+  useLayoutEffect(() => {
+    if (!contributorsOpen && contributorReturn.current) { contributorReturn.current = false; contributorsOpener.current?.focus({ preventScroll: true }); }
+  }, [contributorsOpen]);
   const [feed, setFeed] = useState<string[]>([]);
   /* Round 530: a done deal or a signing slams in at the top of the feed the
      moment it happens. Matched on the line's text, never its index, so the
@@ -136,6 +226,7 @@ export default function NhlFrontOfficeBoard() {
          id fix can hold two men under one. The draft class is passed too: it
          is minted from the same counter, so it shares the id space. */
       ensureNhlLeagueIds(s.league, s.draftClass);
+      if (s.league.teams[s.myTeam]) repairNhlContributors(s.league.teams[s.myTeam]);
       setLeague(s.league); setMyTeam(s.myTeam);
       setTitles(s.titles ?? 0); setSeasonsPlayed(s.seasonsPlayed ?? 0);
       setDraftClass(s.draftClass ?? null); setPicksLeft(s.picksLeft ?? 0);
@@ -386,6 +477,15 @@ export default function NhlFrontOfficeBoard() {
     setCutArmed(null);
     const lg: NhlLeague = JSON.parse(JSON.stringify(league));
     if (nhlRelease(lg.teams[myTeam], lg.freeAgents, pid)) { setLeague(lg); persist({}, lg, myTeam); }
+  };
+  const changeContributors = (value: NhlContributors | null): boolean => {
+    if (!league || contributorCommit.current === league) return false;
+    const lg: NhlLeague = JSON.parse(JSON.stringify(league));
+    const changed = value === null ? nhlResetContributors(lg.teams[myTeam]) : nhlSetContributors(lg.teams[myTeam], value);
+    if (!changed) return false;
+    contributorCommit.current = league;
+    setLeague(lg); persist({}, lg, myTeam);
+    return true;
   };
   const doSign = (pid: string) => {
     if (!league) return;
@@ -679,7 +779,7 @@ export default function NhlFrontOfficeBoard() {
     tradeLine: seasonTradeLine,
     titles,
   });
-  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setTab(key === 'play' ? 'round' : key); };
+  const openPanel = (key: FoPanelKey) => { setCutArmed(null); setContributorsOpen(false); setTab(key === 'play' ? 'round' : key); };
   /* Round 631: dead money on the cap line, only when there is any. */
   const dead = deadCapUsed(my);
   /* Round 631: at the engine's floor every Waive waits, at its ceiling every Sign does, and both say why. */
@@ -728,6 +828,8 @@ export default function NhlFrontOfficeBoard() {
 
       {tab === 'team' && (
         <div className="rounded-2xl border border-border bg-card p-3">
+          {contributorsOpen ? <ContributorPicker team={my} onApply={value => changeContributors(value)} onAuto={() => changeContributors(null)} onBack={() => { contributorReturn.current = true; setContributorsOpen(false); }} /> : <>
+          <button ref={contributorsOpener} type="button" data-nhl-open-contributors onClick={() => setContributorsOpen(true)} className={cn(contributorsStyles.action, 'mb-3 w-full rounded-lg border border-border px-3 text-xs font-semibold')}>Choose simulation contributors</button>
           <p className="mb-2 text-center text-xs text-muted-foreground">
             Cap hit ${nhlCapUsed(my)}M of the ${league.cap}M ceiling
             {dead > 0 && <> · dead money <b className="text-destructive">${dead}M</b></>}
@@ -785,6 +887,7 @@ export default function NhlFrontOfficeBoard() {
               );
             })}
           </div>
+          </>}
         </div>
       )}
 

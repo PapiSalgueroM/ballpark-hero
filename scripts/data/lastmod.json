@@ -1,8 +1,8 @@
 {
   "__version": 3,
   "/": {
-    "hash": "125e70b85d3276bd",
-    "date": "2026-09-21"
+    "hash": "74a29f76dedea6f6",
+    "date": "2026-10-01"
   },
   "/about": {
     "hash": "e9b17eb973aac3d9",
@@ -19,6 +19,10 @@
   "/alphabet-sprint": {
     "hash": "5fca3b9e05212f90",
     "date": "2026-09-30"
+  },
+  "/aussie-rules-manager": {
+    "hash": "bedc76e9e1844b88",
+    "date": "2026-10-01"
   },
   "/ball-iq": {
     "hash": "6f8a7e00e1863905",
@@ -641,7 +645,7 @@
     "date": "2026-09-19"
   },
   "/whats-new": {
-    "hash": "f3d2e0dcc9717b2d",
+    "hash": "d5d3d027137262b4",
     "date": "2026-10-01"
   },
   "/who-am-i": {
