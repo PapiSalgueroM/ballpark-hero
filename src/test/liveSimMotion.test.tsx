@@ -53,8 +53,16 @@ function findTerminalFixtures() {
     const first = changeLive(base, 0, { kind: 'shape', mentality: 'balanced' })!;
     const second = startSecondHalf(first)!;
     for (const [cap, career] of [[45, first], [90, second]] as const) {
-      const event = [...liveFeed(career.live!)].reverse().find(e => e.minute === cap && ['goal', 'save', 'shot'].includes(e.kind));
+      /* Round 781: the whistle goes at the end of the board, and the terminal
+         action is the last one deepest in it, the way the viewer picks it. */
+      const board = boardAt(career, cap);
+      const feed = liveFeed(career.live!);
+      const event = [...feed].reverse().find(e => e.minute === cap && (e.plus ?? 0) === board && ['goal', 'save', 'shot'].includes(e.kind));
       if (!event || !['goal', 'save'].includes(event.kind)) continue;
+      /* The clock runs through the board before the wind up, so nothing else
+         may still be in the air when the wind up is read: a chance two minutes
+         before the whistle would be. */
+      if (feed.some(e => e !== event && ['goal', 'save', 'shot'].includes(e.kind) && clockPos(e) === cap + board - 2)) continue;
       const key = `${cap}:${event.kind}`;
       if (terminalFixtures.has(key)) continue;
       const copy = structuredClone(career);
@@ -105,6 +113,15 @@ const stageOf = (container: HTMLElement) => container.querySelector('[data-cm-li
 const scoreAt = (career: CareerState, minute: number) => ['me', 'opp'].map(side => liveFeed(career.live!)
   .filter(e => e.kind === 'goal' && e.side === side && e.minute <= minute).length).join(' - ');
 const readScore = (container: HTMLElement) => container.querySelector('[data-cm-live-score]')!.textContent!.trim();
+/* Round 781: a line's place on the clock (45+3 sits at 48 here, inside the
+   first half's board), the board a period's clock runs on past its last
+   minute, and the score off every goal at or before a clock place. */
+const clockPos = (e: { minute: number; plus?: number }) => e.minute + (e.plus ?? 0);
+const boardAt = (career: CareerState, cap: number) => (cap === 45 ? career.live!.added?.h1 : career.live!.added?.h2) ?? 0;
+const scoreBy = (career: CareerState, pos: number) => ['me', 'opp'].map(side => liveFeed(career.live!)
+  .filter(e => e.kind === 'goal' && e.side === side && clockPos(e) <= pos).length).join(' - ');
+/* The default speed is 2x: one match minute a second, so a board of b minutes takes b seconds. */
+const boardMs = (career: CareerState, cap: number) => boardAt(career, cap) * 1000;
 function expectWhistle(mounted: ReturnType<typeof mount>, cap: number, called: boolean) {
   expect(mounted.callbacks.onMark.mock.calls).toEqual(cap === 45 && called ? [[45]] : []);
   expect(mounted.callbacks.onSecondHalf).toHaveBeenCalledTimes(cap === 90 && called ? 1 : 0);
@@ -282,7 +299,10 @@ describe('Live simcast motion', () => {
     const fixture = terminalFixtures.get(`${cap}:${kind}`)!;
     const career = structuredClone(fixture.career);
     const before = JSON.stringify(career);
+    const board = boardAt(career, cap);
     const mounted = mount(career);
+    /* Round 781: the clock runs on through the board first, to 1.2 minutes before its end. */
+    await step(boardMs(career, cap));
     await step(160);
     expect(mounted.container.querySelector('[data-cm-motion]')!.getAttribute('data-cm-motion')).toBe('pass');
     await step(600);
@@ -292,8 +312,8 @@ describe('Live simcast motion', () => {
     expect(pitch.getAttribute('data-cm-motion-phase')).toBe(reduced ? finalPhase : 'flight');
     await step(240);
     expect(pitch.getAttribute('data-cm-motion-phase')).toBe(finalPhase);
-    expect(readScore(mounted.container)).toBe(scoreAt(career, cap - 1));
-    expect(mounted.container.textContent).not.toContain(`${cap}'`);
+    expect(readScore(mounted.container)).toBe(scoreBy(career, cap + board - 1));
+    expect(mounted.container.textContent).not.toContain(`${cap}+${board}'`);
     expectWhistle(mounted, cap, false);
     await step(200);
     expectWhistle(mounted, cap, false);
@@ -315,11 +335,16 @@ describe('Live simcast motion', () => {
     for (reduced of [false, true]) for (const fixture of terminalFixtures.values()) {
       const career = structuredClone(fixture.career);
       const cap = fixture.event.minute;
+      const board = boardAt(career, cap);
       career.live!.minute = cap - .15;
       const mounted = mount(career);
+      /* Round 781: a save never stands inside a board (the mark is capped at
+         the period's last minute), so the resume runs through the board to
+         0.15 minutes before its end, inside the terminal wind up. */
+      await step(boardMs(career, cap));
       expect(mounted.container.querySelector('[data-cm-motion-phase]')!.getAttribute('data-cm-motion-phase'))
         .toBe(fixture.event.kind === 'goal' ? 'net' : 'caught');
-      expect(readScore(mounted.container)).toBe(scoreAt(career, cap - 1));
+      expect(readScore(mounted.container)).toBe(scoreBy(career, cap + board - 1));
       expectWhistle(mounted, cap, false);
       fireEvent.click(mounted.getByRole('button', { name: /Skip/ }));
       expectWhistle(mounted, cap, true);
@@ -328,19 +353,29 @@ describe('Live simcast motion', () => {
       expectWhistle(mounted, cap, true);
       cleanup();
     }
-  }, 30000);
+    /* Round 781 review: 120 seconds, not 30. Each of the eight mounts now
+       walks its whole board frame by frame before the wind up (two to eight
+       match minutes, a second each), where it used to start inside the wind
+       up, so this test does three to five times the stepping it did. It took
+       5 to 13 seconds on a quiet machine and went past 30 when other lanes
+       were compiling, with nothing wrong in the viewer. */
+  }, 120000);
 
   it('a tactics redraw cancels a terminal action that is no longer committed', async () => {
     findTerminalFixtures();
     const career = structuredClone(terminalFixtures.get('45:goal')!.career);
+    const board = boardAt(career, 45);
     career.live!.minute = 44.2;
     const mounted = mount(career);
+    /* Round 781: on through the board to 0.8 minutes before its end, inside the wind up. */
+    await step(boardMs(career, 45));
     expect(mounted.container.querySelector('[data-cm-motion]')!.getAttribute('data-cm-motion')).toBe('goal');
     let changed: CareerState | null = null;
     for (let attempt = 1; attempt <= 30; attempt++) {
       vi.mocked(Math.random).mockImplementation(seeded(6034400 + attempt));
-      const next = changeLive(career, 44, { kind: 'shape', mentality: 'defensive' })!;
-      if (!liveFeed(next.live!).some(e => e.minute === 45 && ['goal', 'save', 'shot'].includes(e.kind))) { changed = next; break; }
+      /* Filed where the clock reads, 45 plus one less than the board; the rest of the board is drawn again. */
+      const next = changeLive(career, 45, { kind: 'shape', mentality: 'defensive' }, board - 1)!;
+      if (boardAt(next, 45) === board && !liveFeed(next.live!).some(e => e.minute === 45 && (e.plus ?? 0) === board && ['goal', 'save', 'shot'].includes(e.kind))) { changed = next; break; }
     }
     expect(changed).not.toBeNull();
     mounted.rerender(<LiveSimScreen career={changed!} live={changed!.live!} report={null} clubColor="#86bced" {...mounted.callbacks} />);
@@ -360,7 +395,8 @@ describe('Live simcast motion', () => {
     expect(isExtraTimeDue(career), 'the career this render is given is level at 90').toBe(true);
     /* onStartExtraTime is a bare spy: the latest save said no, as it does when a change moved the score on its way. */
     const mounted = mount(career);
-    await step(1200);
+    /* Round 781: the question is asked at the end of the second half's board. */
+    await step(1200 + boardMs(career, 90));
     expect(mounted.callbacks.onStartExtraTime).toHaveBeenCalledTimes(1);
     expect(mounted.callbacks.onSecondHalf).toHaveBeenCalledTimes(1);
     expect(stageOf(mounted.container)).not.toBe('extra');
@@ -381,7 +417,10 @@ describe('Live simcast motion', () => {
         onStartExtraTime={() => { callbacks.onStartExtraTime(); setCareer(() => drawn); }} />;
     }
     const mounted = render(<Page />);
-    await step(1200);
+    /* Round 781: asked at the end of this render's board; the latest save is
+       another draw of the decider and its board can run longer, and the clock
+       follows the save it was handed to the end of that board. */
+    await step(1200 + Math.max(boardMs(start, 90), boardMs(drawn, 90)));
     expect(callbacks.onStartExtraTime).toHaveBeenCalledTimes(1);
     expect(callbacks.onSecondHalf).not.toHaveBeenCalled();
     expect(stageOf(mounted.container)).toBe('extra');
@@ -417,10 +456,101 @@ describe('Live simcast motion', () => {
         onStartExtraTime={() => { callbacks.onStartExtraTime(); setCareer(() => drawn); }} />;
     }
     const mounted = render(<Page />);
-    await step(1200);
+    await step(1200 + boardMs(due, 90));
     expect(stageOf(mounted.container)).toBe('extra');
     const text = mounted.container.textContent!;
     expect(text).toContain(`Level ${aggMine}-${aggTheirs} on aggregate`);
     expect(text).not.toContain('Level after 90 minutes');
+  }, 30000);
+
+  /* Round 781: the clock runs on into the board and says so, LIVE 90+1' and
+     never 91', and on a second leg the line under the score is the tie as it
+     stands at that point of the board: the first leg plus every goal the
+     clock has reached. The material is the same real decider as above. */
+  it('the clock runs into the board as 90 plus, with the running aggregate under the score', async () => {
+    const { notDue } = findWhistleMaterial();
+    const career = structuredClone(notDue);
+    const entry = career.calendar[career.live!.week];
+    expect(entry.uclLeg === 2 && uclLegsFor(career.eraId, entry.uclRound!) === 2, 'the decider this walk reached is a second leg').toBe(true);
+    expect(boardAt(career, 90), 'the second half board').toBeGreaterThanOrEqual(2);
+    const mounted = mount(career);
+    const root = () => mounted.container.querySelector('[data-cm-live-stage]')!;
+    for (let t = 0; t < 8000 && root().getAttribute('data-cm-live-plus') !== '1'; t += 100) await step(100);
+    expect(root().getAttribute('data-cm-live-stage')).toBe('second');
+    expect(root().getAttribute('data-cm-live-minute')).toBe('90');
+    expect(root().getAttribute('data-cm-live-plus')).toBe('1');
+    const text = mounted.container.textContent!;
+    expect(text).toContain("LIVE 90+1'");
+    expect(text).not.toContain("LIVE 91'");
+    const tie = career.uclBracket!.find(t => t.round === entry.uclRound && t.mine)!;
+    const iAmHome = tie.home === career.clubName;
+    const [mine, opp] = scoreBy(career, 91).split(' - ').map(Number);
+    const agg = `${(iAmHome ? tie.leg1!.homeGoals : tie.leg1!.awayGoals) + mine}-${(iAmHome ? tie.leg1!.awayGoals : tie.leg1!.homeGoals) + opp}`;
+    expect(mounted.container.querySelector('[data-cm-live-agg]')!.getAttribute('data-cm-live-agg')).toBe(agg);
+  }, 30000);
+
+  /* Round 781 review: the goal banner is the commentary the player actually
+     reads, and nothing held its label: printing the bare minute left every
+     gate green. A real second half, drawn by the engine on its own seeds,
+     with a goal of mine inside the board (not the last thing in it, and
+     nothing else loud at the same point of the clock), is walked to that
+     goal, and the banner says 90+N'. */
+  it('a goal in the board is announced with its plus, GOAL! ... 90+N', async () => {
+    const { notDue } = findWhistleMaterial();
+    /* Back to the restart, so a change there redraws the whole second half, board and all. */
+    const restart = structuredClone(notDue);
+    restart.live!.minute = 46;
+    let career: CareerState | null = null;
+    let goal: LiveFeedEvent | null = null;
+    for (let k = 0; k < 400 && !career; k++) {
+      vi.mocked(Math.random).mockImplementation(seeded(7810000 + k * 7919));
+      const second = changeLive(restart, 46, { kind: 'shape', mentality: 'balanced' });
+      if (!second?.live) continue;
+      const board = boardAt(second, 90);
+      const feed = liveFeed(second.live);
+      const loud = ['goal', 'yellow', 'red', 'injury', 'sub'];
+      const g = feed.find(e => e.kind === 'goal' && e.side === 'me' && e.minute === 90 && (e.plus ?? 0) >= 1 && (e.plus ?? 0) < board
+        && !feed.some(o => o !== e && loud.includes(o.kind) && clockPos(o) === clockPos(e)));
+      if (!g) continue;
+      career = structuredClone(second);
+      career.live!.minute = 89.4;
+      goal = g;
+    }
+    expect(goal, 'no seed put a goal of mine inside the second half board').not.toBeNull();
+    const plus = goal!.plus!;
+    const mounted = mount(career!);
+    const root = () => mounted.container.querySelector('[data-cm-live-stage]')!;
+    for (let t = 0; t < 12000 && root().getAttribute('data-cm-live-plus') !== String(plus); t += 100) await step(100);
+    expect(root().getAttribute('data-cm-live-plus')).toBe(String(plus));
+    const banner = [...mounted.container.querySelectorAll('div')].find(d => d.childElementCount > 0 && (d.textContent ?? '').startsWith('GOAL!') && d.className.includes('truncate'));
+    expect(banner, 'no goal banner on screen at the goal').toBeTruthy();
+    expect(banner!.textContent).toContain(goal!.text);
+    expect(banner!.textContent!.endsWith(` 90+${plus}'`), `the banner reads "${banner!.textContent}"`).toBe(true);
+  }, 30000);
+
+  /* Round 781 review: extra time has its own board at 120, and the clock in
+     it read only through minuteLabel with nothing holding the call: "ET 120'"
+     all through it left every gate green. Extra time drawn by the engine on a
+     real level decider, with a board of two or more, is walked into it. */
+  it('the extra time clock runs into its own board as ET 120 plus', async () => {
+    const { due } = findWhistleMaterial();
+    let drawn: CareerState | null = null;
+    for (let k = 0; k < 200 && !drawn; k++) {
+      vi.mocked(Math.random).mockImplementation(seeded(7820000 + k * 104729));
+      const et = startExtraTime(structuredClone(due));
+      if (et?.live?.et && (et.live.added?.et ?? 0) >= 2) drawn = et;
+    }
+    expect(drawn, 'no seed gave extra time a board of two or more').not.toBeNull();
+    drawn!.live!.minute = 119.4;
+    const mounted = mount(drawn!);
+    const root = () => mounted.container.querySelector('[data-cm-live-stage]')!;
+    expect(root().getAttribute('data-cm-live-stage')).toBe('extra');
+    for (let t = 0; t < 8000 && root().getAttribute('data-cm-live-plus') !== '1'; t += 100) await step(100);
+    expect(root().getAttribute('data-cm-live-minute')).toBe('120');
+    expect(root().getAttribute('data-cm-live-plus')).toBe('1');
+    const text = mounted.container.textContent!;
+    expect(text).toContain("ET 120+1'");
+    expect(text).not.toContain("ET 121'");
+    expect(text).not.toContain("ET 120'");
   }, 30000);
 });

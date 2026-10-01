@@ -3204,16 +3204,25 @@ function MoralDilemmaCard({ career, onChoice, onDismiss }: {
   onChoice: (choiceIndex: number) => void;
   onDismiss: () => void;
 }) {
-  const [chosen, setChosen] = useState(false);
   const dilemma = career.pendingMoralDilemma;
 
-  if (!dilemma && chosen) {
+  /* Round 819: no pending dilemma on this screen means the choice is made.
+     This used to wait on a local "chosen" flag as well, so a save reloaded
+     between the choice and Continue drew nothing at all and could not move. */
+  if (!dilemma) {
+    /* Round 819 review: say what the choice did, right here. Every option
+       writes its outcome as the last line of the season's events, and before
+       this a caught fixer or a failed test only showed in the log at the
+       bottom of the page. */
+    const outcome = career.events.length > 0 ? career.events[career.events.length - 1] : null;
     return (
       <div className="rounded-xl border-2 border-red-500/40 bg-gradient-to-b from-red-500/10 to-transparent p-6 space-y-4">
         <div className="text-center space-y-2">
           <div className="text-3xl">⚠️</div>
           <h3 className="text-lg font-black">Decision Made</h3>
-          <p className="text-xs text-muted-foreground">The consequences of your choice will unfold...</p>
+          {outcome
+            ? <p data-dilemma-outcome className="text-sm text-foreground/80 leading-relaxed max-w-md mx-auto"><TextWithFlags text={money(outcome)} size={14} /></p>
+            : <p className="text-xs text-muted-foreground">The consequences of your choice will unfold...</p>}
         </div>
         <Button onClick={onDismiss} className="w-full h-10 text-sm font-bold bg-red-600 hover:bg-red-500 text-black">
           Continue →
@@ -3221,8 +3230,6 @@ function MoralDilemmaCard({ career, onChoice, onDismiss }: {
       </div>
     );
   }
-
-  if (!dilemma) return null;
 
   return (
     <div className="rounded-xl border-2 border-red-500/60 bg-gradient-to-b from-red-900/30 via-red-500/5 to-transparent p-6 space-y-5 shadow-[0_0_40px_rgba(239,68,68,0.15)]">
@@ -3243,7 +3250,7 @@ function MoralDilemmaCard({ career, onChoice, onDismiss }: {
         {dilemma.choices.map((choice, i) => (
           <button
             key={i}
-            onClick={() => { onChoice(i); setChosen(true); }}
+            onClick={() => onChoice(i)}
             className="w-full rounded-xl border-2 border-red-500/20 bg-red-500/5 p-4 text-left hover:bg-red-500/15 hover:border-red-500/40 transition-all active:scale-[0.98] group"
           >
             <div className="flex items-start gap-3">

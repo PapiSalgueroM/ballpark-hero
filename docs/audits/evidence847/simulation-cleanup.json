@@ -1,0 +1,37 @@
+{
+  "browserStopped": true,
+  "rootServerLeftRunning": true,
+  "auditEditedProductSource": false,
+  "frozenDrafts": [
+    {
+      "file": "src/pages/RecordPage.tsx",
+      "raw": "3c5bc163b3f280ee3563e433925e581599e5d397000055da1c0f8594db16ebb9",
+      "held": true
+    },
+    {
+      "file": "src/lib/records.ts",
+      "raw": "978b0078a0f10b08e8182ebb3c565cf1583e2ee8f6b8cd7eef02a2565f883479",
+      "held": true
+    },
+    {
+      "file": "scripts/simRecordPages.mjs",
+      "raw": "f6ef07e3dcb0c724caf3d5bde93e702e382909d2f065b3f80f20ce5c5cb4dec0",
+      "held": true
+    },
+    {
+      "file": "src/hooks/useHigherLower.ts",
+      "raw": "50198344e3f655951c9c74b12e251e8d5ce1cc1afb373746d7c2aaad50cf693a",
+      "held": true
+    },
+    {
+      "file": "src/test/soccerHigherLowerReveal.test.tsx",
+      "raw": "3cd11724f48dd24e8c8f3e664a6894fd9fcaa09ef7aec74efde0ac7d5b112b3e",
+      "held": true
+    },
+    {
+      "file": "scripts/simSoccerHigherLowerReveal.mjs",
+      "raw": "312943bfde97c08c17adb1bbf78baf738acfff133425f3ee81f061debbdf16cb",
+      "held": true
+    }
+  ]
+}
