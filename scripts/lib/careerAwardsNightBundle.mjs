@@ -69,8 +69,12 @@ export const cards = {
         if (!mine && key !== pageKey) return undefined;
         let src = await fs.promises.readFile(args.path, 'utf8');
         for (const p of mine ?? []) {
-          if (!src.includes(p.from)) throw new Error(`control refused: ${p.file} does not contain ${JSON.stringify(p.from.slice(0, 80))}`);
-          src = src.replace(p.from, p.to);
+          /* A Windows checkout may carry CRLF; the patches are written with LF. */
+          const eol = !src.includes(p.from) && src.includes(p.from.replaceAll('\n', '\r\n')) ? '\r\n' : '\n';
+          const from = p.from.replaceAll('\n', eol), to = p.to.replaceAll('\n', eol);
+          if (!src.includes(from)) throw new Error(`control refused: ${p.file} does not contain ${JSON.stringify(p.from.slice(0, 80))}`);
+          src = src.replace(from, to);
+          if (src.includes(from) && from !== to && !to.includes(from)) throw new Error(`control refused: ${p.file} contains ${JSON.stringify(p.from.slice(0, 80))} more than once`);
           applied.add(p);
         }
         if (key === pageKey) {
