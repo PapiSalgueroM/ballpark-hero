@@ -1,5 +1,21 @@
 # Work board
 
+**793 functional Page/module checkpoint:**eight actual Page/helper/booking/share outcomes
+pass, including complete22-keep CPU and pass duels with exact original squads,44 discards,
+season/score and full X payload. All22 slot nodes now retain strict identity. Actual pool,
+draft/CPU/season/score/shared result helpers remain unchanged. Finite420ms keep/360ms newest
+discard cues clear after500ms; eligible targeting is static and owned targets are44px.
+Squad columns stay bounded, and explicit keyboard targets scroll only their own container.
+Native320 evidence reproduced200px selected-instruction overflow; the same scoped name-wrap
+binding fixes it without changing text. Exact current app types exit0. All four owned files
+are frozen. Twelve asserted copied controls pass, each with one intended assertion failure,
+one independent pass and six explicit skips; removed cleanup produces an actual late
+cpuKeep call and the removed same-frame guard consumes an actual extra trio. Original
+inputs hold and disposable copies are cleaned. Sixteen native mode/width/motion duels and
+final combined production acceptance remain due. No acceptance credit for matcher
+or fixture mistakes. Proof: TEMP/dukb-round793-search-discard/final-positive.txt,
+TEMP/dukb-round793-instruction-probe/report.json and dukb-round793-source-types.log.
+
 **2026-10-01, Codex793 CLAIMED: Search and Discard stable squads and draft feedback.**
 Master96/97, observed source defect: SquadColumn is declared inside the Page, so React
 remounts both columns on each parent render. Eligible slots also pulse indefinitely and

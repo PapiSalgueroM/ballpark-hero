@@ -1,5 +1,14 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: Search and Discard functional Page/module frozen
+
+793 passes eight actual Page/helper/booking/share outcomes and current app types0.
+Complete CPU/pass duels preserve original squads,44 discards, season/score and share;
+all22 slot nodes retain identity. Native-measured selected-name overflow is fixed locally.
+Twelve effective copied controls pass with independent outcomes; sixteen native duels and
+final combined production acceptance remain due.
+792's406-node frozen suite is still running. Exact scopes/proof on WORKBOARD; next794.
+
 ## IN PROGRESS 2026-10-01: Search and Discard stable squads and feedback claimed
 
 793 owns only the Page, new module and focused actual-outcome tests/sim. Fix repeated
