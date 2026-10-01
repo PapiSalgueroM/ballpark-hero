@@ -1,5 +1,18 @@
 # Project state
 
+## ACCEPTED 2026-10-01: F1 Driver committed feedback
+
+806 removes stale wrong feedback after correct wins, binds finite420/static cues
+to actual committed turns/status and prevents give-up from borrowing a prior miss.
+Full guesses wrap; hook/actions/data/all payouts/save/share/completion hold. Ten
+outcomes/nineunit controls/8native+4copies (994checks), combined805/806 type/build/
+all15 fences and two actual App contexts (1000/600,84checks) pass with no Y changes/
+errors/overflow/extra writes.1791 inputs/188 saved pages/168 URLs held. No publish.
+The measured original help Escape-to-BODY focus gap is deferred to807, whose scope
+now also includes the isolated HowToPlay opener/close-focus and fictional hint
+example.807/808/809 proceed; all Claude reservations stand. Next free810.
+Full receipts and boundaries are on WORKBOARD.
+
 ## ACCEPTED 2026-10-01: Rank Em editable order
 
 802 adds editable five-pick drafts and one explicit Lock, preserving original

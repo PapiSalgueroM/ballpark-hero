@@ -1,5 +1,35 @@
 # Work board
 
+**2026-10-01, Codex806 F1 Driver committed feedback ACCEPTED.**
+Remove the stale50ms guess closure. Feedback comes from one actual accepted guess
+append and is bound to its turn/status. Correct wins show correct feedback; misses
+get one420ms cue. Give-up after a miss cannot borrow that animation. Reduced motion
+is static,600ms feedback timers clear, restores/clones/mode changes stay quiet.
+Long submitted names wrap instead of overflowing. Original hook/data/hint/give-up/
+reset actions, all six payouts, saves/full share/completion stay held.
+
+Ten actual outcomes/nine effective unit controls, eight native contexts/four copies
+and994 checks pass. Old status binding reproduces three borrowed loss-animation
+frames; the name copy restores121px overflow; reduced-rule/stale-closure copies
+fail their actual outcomes while original600score/save stays exact. The final CSS
+matches the accepted native boundary byte for byte. Combined805/806 types/build/
+all15 artifact fences plus source guards pass;1791 RAW inputs/188 pages/168 URLs
+held. Two untouched actual App contexts score1000/600 with84 checks, native Enter/
+finite420/static reduce, exact raw save/full clipboard/one actual locally fulfilled
+guest POST and quiet reload. No Y changes/errors/bad HTTP/unrelated writes.
+Source/HTML/assets held; browser/server/copies stopped. No publication claim.
+
+The original help modal closes, but Escape returns focus to BODY. That measured
+pre-existing gap was retained and is not credited as fixed by806.807 now expands
+its claimed scope to F1DriverHowToPlay.tsx: keep the same rules/modal, restore
+close focus with preventScroll, use a44px opener and add one fictional worked hint
+example. The existing next-payout/counter correction remains its primary task.
+Receipts: TEMP/dukb-round806-builder-receipt.json,dukb-round806-native/report.json,
+dukb-round806-production-app/report.json and cleanup.json, and the combined
+dukb-round805-production-20261001/production805-preservation-receipt.json.
+Final entry index-CpG6jSlL.js, SHAde17755024c5f9a3c92d2dffe5c24d878b2a7393bd92545f4c54ab53c1a379e4.
+802 and805 are pushed;807/808/809 and all Claude reservations stand. Next free810.
+
 **2026-10-01, Codex802 Rank Em editable order ACCEPTED.**
 The fifth pick stays a draft. Review, move, remove or undo picks, then Lock order
 once. Original rounds,200-point slot scoring, daily save/share/completion and
