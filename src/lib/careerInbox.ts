@@ -87,6 +87,10 @@ export interface InboxMessageDef {
   /** Round 796: the calendar beat this text belongs to, for a sport that
    *  hands in a calendar. Absent means the Round 80 between-seasons pool. */
   beat?: string;
+  /** Round 796: a text about a season still to come (the 6am offseason
+   *  sessions, a cleat deal, a documentary on next year). A sport never
+   *  sends one in a career's final season. */
+  ahead?: boolean;
 }
 
 /** Round 796: one beat on a sport's calendar. */
@@ -97,6 +101,9 @@ export interface InboxBeat {
   /** A beat that may not come round again (draft night, a contract year, a
    *  playoff run) is offered before the season's ordinary ones. */
   oneOff?: boolean;
+  /** A beat about a season still to come (the summer before a contract
+   *  year): a career that ends this season never has it. */
+  ahead?: boolean;
 }
 
 /** One delivered message, sitting on the save. */

@@ -35,6 +35,12 @@
  *      is the last of a deal, draft night's one text before a down is
  *      played. One-off beats are never skipped when they happened and had a
  *      text left. The four ordinary beats each carry a real share.
+ *      3c. A career's final season carries no text about a season to come:
+ *      no contract year beat (the calendar marks it `ahead`) and no `ahead`
+ *      text (the 6am offseason sessions, a cleat deal, a documentary on next
+ *      year). 120 careers played all the way to retirement; careers that go
+ *      on must still get those texts, so the gate cannot pass by shutting
+ *      them for everybody.
  *   4. Speakers are roles. No sender is a real player's name, none is shaped
  *      like a person's First Last, and no delivered line contains a real
  *      player's full name.
@@ -73,20 +79,33 @@
  *      that samples them (it did, before this section: it moved simAwards'
  *      NHL All-Star median, a gate that sits within two points of its line
  *      on main).
+ *   9. The inbox stream, HARD. The NFL inbox draws from its own generator
+ *      keyed to the save and the moment (nflInboxRng), never the season's.
+ *      Twenty seeded careers played with the inbox open (every text marked
+ *      read the moment it lands, no effect applied, so it delivers every
+ *      season) and shut (six unread texts on the save from draft night, so it
+ *      delivers nothing): every season line, the final rating and the age
+ *      must be identical. Before this section the inbox drew from the season
+ *      stream, and simAwards' NFL figures moved with every text the bank
+ *      gained.
  *
  * BANDS, measured with BEATS_SEED_BASE=0..5 (six seed sets, 40 careers each,
  * about 546 career-seasons a set):
- *   NFL texts per career-season              1.995 to 2.000   floor 1.6
+ *   NFL texts per career-season              1.998 to 2.000   floor 1.6
  *     (the attentive player leaves the newest text unanswered, so a season
  *     wants 3 less 1; the rate sits on 2 until a beat's bank runs dry)
- *   share of all texts on each ordinary beat  camp 13.6 to 15.0%, bye 15.4
- *     to 17.3%, deadline 14.6 to 18.4%, offseason 15.9 to 18.6%   floor 8%
- *   rival choices per career-season           0.185 to 0.206   floor 0.12
+ *   share of all texts on each ordinary beat  camp 14.4 to 15.0%, bye 13.9
+ *     to 17.4%, deadline 15.2 to 17.9%, offseason 15.5 to 18.3%   floor 8%
+ *   rival choices per career-season           0.157 to 0.202   floor 0.12
  *     (one sd of the rate is about 0.017 at this sample size)
  *   gambles, |realized mean - promise|        at most 0.202    tolerance 1.0
  *   gambles, |hit rate - printed odds|        at most 0.0155   tolerance 0.04
  *   stat score per morale point (5c)          0.369 to 0.411   floor 0.15
  *   paired seasons the morale option led      289 to 293 of 300  floor 70%
+ *   3c, 120 careers to retirement: final seasons the summer before a contract
+ *     year 57 to 69 (floor 15), final seasons with an ahead text still unsent
+ *     95 to 104 (floor 30), forward looking texts in a final season 0 (hard)
+ *     (NFL figures re-measured after the inbox moved off the season stream)
  *   section 7, same six seed sets, 40 careers (560 career-seasons) a sport:
  *     choices per career-season   NBA 0.204 to 0.236, MLB 0.195 to 0.239,
  *                                 NHL 0.196 to 0.239            floor 0.12
@@ -103,6 +122,8 @@
  *   section 8: 20 of 20 careers identical in every sport and every seed set,
  *     the roll firing 45 to 69 times a sport along the way   hard, and the
  *     roll must fire at least once
+ *   section 9: 20 of 20 careers identical in every seed set, the open inbox
+ *     delivering 717 to 743 texts along the way (floor 200), the shut one 0
  *
  * NEGATIVE CONTROLS, BEATS_CONTROL=...
  *
@@ -132,6 +153,11 @@
  *   flatnba      the NBA season stops reading morale. Section 7c fails.
  *   streamnba    the NBA season hands its own stream to the choice roll.
  *                Section 8 fails for the NBA.
+ *   inboxstream  the NFL progress hands its own stream to the inbox.
+ *                Section 9 fails.
+ *   aheadretire  the NFL progress tells the inbox every career goes on, so a
+ *                retiring player is sent texts about next season. Section 3c
+ *                fails.
  *
  *   Each control asserts the text it rewrites appears exactly once in the
  *   file first, so a control that rewrites nothing cannot pass for the
@@ -151,7 +177,7 @@ const CONTROL = process.env.BEATS_CONTROL || '';
 const SEED_BASE = Number(process.env.BEATS_SEED_BASE || 0);
 
 const PATCHES = {
-  nobeats: ['src/lib/nflCareerInbox.ts', 'return receiveInboxTextsFor(c, "pro", NFL_INBOX, rng, nflSeasonBeats(c));', 'return receiveInboxTextsFor(c, "pro", NFL_INBOX, rng);'],
+  nobeats: ['src/lib/nflCareerInbox.ts', 'return receiveInboxTextsFor(c, "pro", sport, rng ?? nflInboxRng(c, "season"), nflSeasonBeats(c, goesOn));', 'return receiveInboxTextsFor(c, "pro", sport, rng ?? nflInboxRng(c, "season"));'],
   allbeats: ['src/lib/nflCareerInbox.ts', 'if ((line.poGames ?? 0) > 0) beats.push("playoffs");', 'beats.push("playoffs");'],
   realname: ['src/lib/nflCareerInbox.ts', 'id: "draft_coach", from: "Head coach"', 'id: "draft_coach", from: "Tom Brady"'],
   soccerline: ['src/lib/soccerCareerEngine.ts', '"🤐 You refused quietly. Somewhere', '"🤐 You refused quietly! Somewhere'],
@@ -166,6 +192,8 @@ const PATCHES = {
   nochoicenhl: ['src/lib/nhlCareerRivalryEvents.ts', 'export const NHL_RIVALRY_CHOICE_CHANCE = 0.45;', 'export const NHL_RIVALRY_CHOICE_CHANCE = 0;'],
   flatnba: ['src/lib/nbaMyCareer.ts', 'const form = c.ovr + (c.morale - 60) / 12 +', 'const form = c.ovr + (60 - 60) / 12 +'],
   streamnba: ['src/lib/nbaMyCareer.ts', 'else nbaRivalryChoiceTick(c);', 'else nbaRivalryChoiceTick(c, rng);'],
+  inboxstream: ['src/lib/nflMyCareer.ts', 'receiveNflInboxTexts(c, !shouldRetire(c));', 'receiveNflInboxTexts(c, !shouldRetire(c), rng);'],
+  aheadretire: ['src/lib/nflMyCareer.ts', 'receiveNflInboxTexts(c, !shouldRetire(c));', 'receiveNflInboxTexts(c, true);'],
 };
 if (CONTROL && !PATCHES[CONTROL]) {
   console.error(`BEATS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(PATCHES).join(', ')})`);
@@ -338,13 +366,14 @@ console.log('2) Source: one home for each rule, every binding imported');
   }
   const BINDINGS = [
     ['src/lib/nflCareerInbox.ts', /deliverInboxTexts as deliverInboxTextsFor/, 'the NFL inbox uses the shared delivery for draft night'],
-    ['src/lib/nflCareerInbox.ts', /receiveInboxTextsFor\(c, "pro", NFL_INBOX, rng, nflSeasonBeats\(c\)\)/, 'the NFL season tick passes the season\'s beats'],
+    ['src/lib/nflCareerInbox.ts', /receiveInboxTextsFor\(c, "pro", sport, rng \?\? nflInboxRng\(c, "season"\), nflSeasonBeats\(c, goesOn\)\)/, 'the NFL season tick passes the season\'s beats, on the inbox\'s own stream'],
+    ['src/lib/nflMyCareer.ts', /receiveNflInboxTexts\(c, !shouldRetire\(c\)\);/, 'progress runs the inbox off the season stream and tells it whether the career goes on'],
     ['src/lib/nflCareerRivalryEvents.ts', /from "\.\/careerRivalryChoices"/, 'the NFL rivalry file binds the shared choices'],
     ['src/lib/soccerCareerEngine.ts', /from "\.\/careerRivalryChoices"/, 'the soccer engine binds the shared choices'],
     ['src/lib/soccerCareerEngine.ts', /if \(rivalChoice && !rivalryChoiceOpen\(s, s\.rival, rivalChoice\)\) return false;/, 'the soccer trigger gates the four through the shared gate'],
     ['src/lib/soccerCareerEngine.ts', /resolveRivalryChoice\(s, s\.rival, dilemma\.id, idx, SOCCER_RIVALRY_CHOICES, Math\.random\)/, 'the soccer dilemma resolves the four through the shared engine'],
     ['src/lib/nflMyCareer.ts', /else nflRivalryChoiceTick\(c\);/, 'the NFL season rolls a choice when no beat came up, off the season stream'],
-    ['src/components/nfl-my-career/NflMyCareerBoard.tsx', /nflDraftNightInbox\(c, Math\.random\)/, 'the NFL board delivers draft night'],
+    ['src/components/nfl-my-career/NflMyCareerBoard.tsx', /nflDraftNightInbox\(c\);/, 'the NFL board delivers draft night on the inbox\'s own stream'],
     ['src/components/nfl-my-career/NflMyCareerBoard.tsx', /<RivalryChoiceCard/, 'the NFL board draws the choice card'],
     ['src/components/nfl-my-career/NflMyCareerBoard.tsx', /calendar=\{NFL_CALENDAR\}/, 'the NFL inbox panel is handed the calendar'],
     ['src/lib/nbaCareerRivalryEvents.ts', /from "\.\/careerRivalryChoices"/, 'the NBA rivalry file binds the shared choices'],
@@ -382,17 +411,17 @@ const allDeliveredText = [];
 
 /** Play one NFL career the way the board does, calling `onTick` after every
  *  season's inbox with what the harness needs to judge it. */
-function playNflCareer(seed, { onDraft, onTick, onRival } = {}) {
+function playNflCareer(seed, { onDraft, onTick, onRival, years = 14 } = {}) {
   const rng = mulberry32(SEED_BASE * 100003 + seed * 911 + 7);
   const pos = positions[seed % positions.length];
   const arch = nfl.ARCHETYPES[pos][seed % nfl.ARCHETYPES[pos].length];
   const c = nfl.startCareer(`Beats ${seed}`, pos, arch, rng, null);
   let tq = nfl.rollTeamQuality(null, rng);
   nfl.nflAssignRole(c, tq, rng);
-  const draft = nflInbox.nflDraftNightInbox(c, rng);
+  const draft = nflInbox.nflDraftNightInbox(c);
   onDraft?.(c, draft);
   let state = c;
-  for (let year = 0; year < 14 && !state.retired; year += 1) {
+  for (let year = 0; year < years && !state.retired; year += 1) {
     if (year > 0) tq = nfl.rollTeamQuality(tq, rng);
     if (state.contractYears <= 0) state.contractYears = 2 + (year % 3); /* a new deal, the way free agency would sign one */
     nfl.nflCampBattle(state, tq, rng);
@@ -439,7 +468,9 @@ console.log('3) The NFL inbox: every text on a beat its season really had');
            nflSeasonBeats: a season that missed the playoffs says so. */
         const played = line.teamResult !== 'SUSPENDED';
         const madePlayoffs = played && line.teamResult !== 'Missed the playoffs';
-        const contractAhead = c.contractYears === 1;
+        /* The summer before a contract year, for a career that is not about
+           to end: shouldRetire is the board's own test, asked right after. */
+        const contractAhead = c.contractYears === 1 && !nfl.shouldRetire(c);
         const had = new Set(['offseason']);
         if (played) { had.add('camp'); had.add('bye'); had.add('deadline'); }
         if (madePlayoffs) had.add('playoffs');
@@ -484,6 +515,36 @@ console.log('3) The NFL inbox: every text on a beat its season really had');
   if (playoffSeasons < 40) fail(`only ${playoffSeasons} playoff seasons across the run, too few to judge the playoff beat`);
   if (contractSeasons < 40) fail(`only ${contractSeasons} contract summers across the run, too few to judge the contract beat`);
   if (playoffTexts === 0 || contractTexts === 0) fail('a one-off beat never delivered at all');
+
+  /* 3c. A career's final season never carries a text about a season to
+     come: no contract year beat, no ahead text (the 6am offseason sessions,
+     a cleat deal, a documentary on next year). Careers played all the way
+     to retirement, so the final season is the one shouldRetire ends. */
+  const aheadBeats = new Set(nflInbox.NFL_CALENDAR.filter(b => b.ahead).map(b => b.id));
+  const aheadTexts = new Set(NFL.pool.filter(d => d.ahead).map(d => d.id));
+  let finals = 0, finalsInContractSummer = 0, finalsAheadLeft = 0, finalsWithAhead = 0, finalTexts = 0, goOnAhead = 0;
+  for (let seed = 1; seed <= 120; seed += 1) {
+    playNflCareer(1000 + seed, {
+      years: 22,
+      onTick: (c, { fresh, usedBefore }) => {
+        const ahead = fresh.filter(m => aheadBeats.has(m.beat) || aheadTexts.has(m.defId));
+        if (!nfl.shouldRetire(c)) { goOnAhead += ahead.length; return; }
+        finals += 1;
+        finalTexts += fresh.length;
+        if (c.contractYears === 1) finalsInContractSummer += 1;
+        if (NFL.pool.some(d => (aheadBeats.has(d.beat) || aheadTexts.has(d.id)) && !usedBefore.has(d.id) && fitsAge(d, c.age))) finalsAheadLeft += 1;
+        if (ahead.length > 0) {
+          finalsWithAhead += 1;
+          if (finalsWithAhead <= 3) fail(`seed ${1000 + seed}, final season at ${c.age}: the retiring player was sent ${ahead.map(m => `"${m.defId}" on ${m.beat}`).join(', ')}, a text about a season he will never play`);
+        }
+      },
+    });
+  }
+  console.log(`   3c: ${finals} careers played to retirement, ${finalTexts} texts in their final seasons, ${finalsInContractSummer} of them ending the summer before a contract year, ${finalsAheadLeft} with an ahead text still unsent; ${finalsWithAhead} final seasons carried a forward looking text (careers that go on received ${goOnAhead})`);
+  if (finalsWithAhead > 3) fail(`${finalsWithAhead - 3} more final seasons carried a forward looking text, not printed`);
+  if (finals < 60) fail(`only ${finals} careers reached retirement, too few to judge the final season`);
+  if (finalsInContractSummer < 15 || finalsAheadLeft < 30) fail(`only ${finalsInContractSummer} final seasons fell the summer before a contract year and ${finalsAheadLeft} had an ahead text left, so 3c barely tested the case it exists for`);
+  if (goOnAhead === 0) fail('no career that goes on ever received an ahead text, so the ahead gate is shutting them for everybody');
 
   /* 3b. A suspended year had no football: only the offseason can speak. */
   const c = nfl.startCareer('Suspended', 'QB', nfl.ARCHETYPES.QB[0], mulberry32(5), null);
@@ -988,6 +1049,57 @@ console.log('8) The season stream: every career plays the same seasons whether t
     if (careers - same > 2) fail(`${sp.label}: ${careers - same - 2} more careers changed, not printed`);
     if (rolled === 0) fail(`${sp.label}: the choice roll never fired in twenty careers, so this comparison proves nothing`);
   }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   9. The inbox never touches the season stream
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+console.log('9) The inbox stream: every NFL career plays the same seasons whether its inbox delivers or not');
+{
+  /* Open: every text marked read the moment it lands, with no effect
+     applied, so the inbox wants three more every season and delivers all
+     career long. Shut: six unread texts sit on the save from draft night, so
+     the inbox wants nothing and delivers nothing. Nothing the player does
+     moves a meter in either. If a delivery drew from the season's stream,
+     every season after it would differ between the two. */
+  const run = (seed, shut) => {
+    const rng = mulberry32(SEED_BASE * 7759 + seed * 431 + 5);
+    const pos = positions[seed % positions.length];
+    const c = nfl.startCareer(`Inbox stream ${seed}`, pos, nfl.ARCHETYPES[pos][seed % nfl.ARCHETYPES[pos].length], rng, null);
+    let tq = nfl.rollTeamQuality(null, rng);
+    nfl.nflAssignRole(c, tq, rng);
+    if (shut) c.phoneInbox = Array.from({ length: NFL.maxInbox }, (_, i) => ({ id: `shut-${i}`, defId: `shut-${i}`, from: 'Nobody', emoji: '', text: '', year: c.year, choices: [{ label: 'ok', reply: '', karma: 0 }] }));
+    nflInbox.nflDraftNightInbox(c);
+    let delivered = 0;
+    for (let year = 0; year < 14 && !c.retired; year += 1) {
+      if (year > 0) tq = nfl.rollTeamQuality(tq, rng);
+      if (c.contractYears <= 0) c.contractYears = 2 + (year % 3);
+      nfl.nflCampBattle(c, tq, rng);
+      const before = (c.phoneUsedIds ?? []).length;
+      nfl.simSeason(c, tq, rng);
+      nfl.progress(c, rng);
+      delivered += (c.phoneUsedIds ?? []).length - before;
+      if (nfl.shouldRetire(c)) c.retired = true;
+      c.pendingRivalryEvent = null;
+      c.pendingRivalryChoice = null;
+      if (!shut) for (const m of c.phoneInbox ?? []) if (m.answered === undefined) m.answered = 0;
+    }
+    return { lines: JSON.stringify(c.seasons), ovr: c.ovr, age: c.age, delivered };
+  };
+  let careers = 0, same = 0, delivered = 0, shutDelivered = 0;
+  for (let seed = 1; seed <= 20; seed += 1) {
+    const a = run(seed, false);
+    const b = run(seed, true);
+    careers += 1;
+    delivered += a.delivered;
+    shutDelivered += b.delivered;
+    if (a.lines === b.lines && a.ovr === b.ovr && a.age === b.age) same += 1;
+    else if (careers - same <= 2) fail(`NFL seed ${seed}: the career played different seasons once its inbox delivered, so the inbox is drawing from the season's stream`);
+  }
+  console.log(`   ${same} of ${careers} careers played identical seasons with the inbox open and shut; the open inbox delivered ${delivered} texts along the way, the shut one ${shutDelivered}`);
+  if (careers - same > 2) fail(`${careers - same - 2} more careers changed, not printed`);
+  if (delivered < careers * 10 || shutDelivered !== 0) fail(`the open inbox delivered ${delivered} and the shut one ${shutDelivered}, so this comparison is not open against shut`);
 }
 
 console.log('');

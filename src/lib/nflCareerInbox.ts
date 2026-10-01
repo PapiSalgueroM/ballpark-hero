@@ -44,6 +44,7 @@ import {
   unreadInboxCount as unreadInboxCountFor,
 } from "./careerInbox";
 import type { InboxSport, InboxMessageDef, InboxMessage, InboxBeat } from "./careerInbox";
+import { keyedRng } from "./keyedRng";
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
 
@@ -55,7 +56,7 @@ export const NFL_CALENDAR: InboxBeat[] = [
   { id: "deadline", label: "Trade deadline", emoji: "⏰" },
   { id: "playoffs", label: "Playoffs", emoji: "🏟️", oneOff: true },
   { id: "offseason", label: "Offseason", emoji: "🌴" },
-  { id: "contract", label: "Contract year ahead", emoji: "✍️", oneOff: true },
+  { id: "contract", label: "Contract year ahead", emoji: "✍️", oneOff: true, ahead: true },
 ];
 
 /* The bank. Every template is gated on the role writing it rather than a
@@ -353,7 +354,7 @@ const NFL_INBOX_POOL: InboxMessageDef[] = [
     ],
   },
   {
-    id: "agent_cleats", from: "Agent", emoji: "💼", phase: "any", beat: "offseason",
+    id: "agent_cleats", from: "Agent", emoji: "💼", phase: "any", beat: "offseason", ahead: true,
     text: "Cleat deal on the table. Good money, but the brand got caught running sweatshops last year. Your call.",
     choices: [
       { label: "Take the money", reply: "Money is money. Send the contract", karma: -7, cash: 1.2 },
@@ -388,7 +389,7 @@ const NFL_INBOX_POOL: InboxMessageDef[] = [
     ],
   },
   {
-    id: "training_extra", from: "Strength coach", emoji: "🏋️", phase: "any", beat: "offseason",
+    id: "training_extra", from: "Strength coach", emoji: "🏋️", phase: "any", beat: "offseason", ahead: true,
     text: "Optional 6am sessions all offseason. Brutal but they work. Half the room is skipping them.",
     choices: [
       { label: "Sign up", reply: "Put my name down. First one in, last one out", karma: 5, morale: -2 },
@@ -404,7 +405,7 @@ const NFL_INBOX_POOL: InboxMessageDef[] = [
     ],
   },
   {
-    id: "documentary", from: "Streaming service", emoji: "🎬", phase: "any", minAge: 25, beat: "offseason",
+    id: "documentary", from: "Streaming service", emoji: "🎬", phase: "any", minAge: 25, beat: "offseason", ahead: true,
     text: "All access documentary on your season. Good money. Cameras everywhere, including the bad days.",
     choices: [
       { label: "Do it honestly", reply: "Deal, but you show the real thing, not a highlight reel", karma: 5, popularity: 6, cash: 1.0 },
@@ -495,28 +496,51 @@ export const NFL_INBOX: InboxSport<CareerState> = {
  * playoff run is a playoff game played. The contract beat is the summer
  * before the last year of a deal, which is when that conversation happens
  * (and when the extension card is about to ask about it).
+ *
+ * `goesOn` is false when this season was the career's last (the engine
+ * decides that right after the inbox runs, so progress passes it in): a beat
+ * about a season still to come (`ahead` on the calendar) never happened for
+ * a player who is about to retire.
  */
-export function nflSeasonBeats(c: CareerState): string[] {
+export function nflSeasonBeats(c: CareerState, goesOn = true): string[] {
   const line = c.seasons[c.seasons.length - 1];
   if (!line || line.teamResult === "SUSPENDED") return ["offseason"];
   const beats = ["camp", "bye", "deadline"];
   if ((line.poGames ?? 0) > 0) beats.push("playoffs");
   beats.push("offseason");
   if (!c.retired && c.contractYears === 1) beats.push("contract");
-  return beats;
+  if (goesOn && !c.retired) return beats;
+  return beats.filter(id => !NFL_CALENDAR.find(b => b.id === id)?.ahead);
+}
+
+/**
+ * Round 796: the inbox's own random stream, keyed to the save and the
+ * moment. It used to draw from the season's stream, which meant every text
+ * the bank gained or lost shifted every draw after it (the next camp, the
+ * awards) and reshuffled every seeded NFL career. Now the season's stream
+ * never sees the inbox: the same career at the same point always gets the
+ * same texts, and scripts/simCareerInboxBeats.mjs section 9 plays seeded
+ * careers with the inbox delivering and with it shut and requires every
+ * season to come out identical.
+ */
+function nflInboxRng(c: CareerState, moment: string): () => number {
+  return keyedRng(`${c.name}|${c.pos}|${c.team}|${c.draftPick}|${c.rival?.name ?? ""}|${c.year}|${c.seasons.length}|${(c.phoneUsedIds ?? []).length}|inbox-${moment}`);
 }
 
 /** One season of the inbox. NFL has no youth phase, so it always answers
  *  "pro"; every template above is gated "any" or by age rather than phase
- *  for exactly that reason. */
-export function receiveNflInboxTexts(c: CareerState, rng: () => number = Math.random): InboxMessage[] {
-  return receiveInboxTextsFor(c, "pro", NFL_INBOX, rng, nflSeasonBeats(c));
+ *  for exactly that reason. `goesOn` false (the career ends this season)
+ *  keeps every `ahead` beat and `ahead` text out of it. With no `rng` it
+ *  draws from nflInboxRng, which is what the season tick does. */
+export function receiveNflInboxTexts(c: CareerState, goesOn = true, rng?: () => number): InboxMessage[] {
+  const sport = goesOn && !c.retired ? NFL_INBOX : { ...NFL_INBOX, pool: NFL_INBOX.pool.filter(t => !t.ahead) };
+  return receiveInboxTextsFor(c, "pro", sport, rng ?? nflInboxRng(c, "season"), nflSeasonBeats(c, goesOn));
 }
 
 /** Round 796: draft night. The text that lands the moment your name is
  *  called, before a down is played, so no mood drift: no season has passed. */
-export function nflDraftNightInbox(c: CareerState, rng: () => number = Math.random): InboxMessage[] {
-  return deliverInboxTextsFor(c, "pro", NFL_INBOX, rng, ["draft"]);
+export function nflDraftNightInbox(c: CareerState, rng?: () => number): InboxMessage[] {
+  return deliverInboxTextsFor(c, "pro", NFL_INBOX, rng ?? nflInboxRng(c, "draft"), ["draft"]);
 }
 
 export function nflUnreadInboxCount(c: CareerState): number {

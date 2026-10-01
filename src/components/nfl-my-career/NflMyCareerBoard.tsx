@@ -195,8 +195,9 @@ export default function NflMyCareerBoard() {
     const tq = rollTeamQuality(null, Math.random);
     /* Round 182: the depth chart is set the day you arrive. */
     const roleNote = nflAssignRole(c, tq, Math.random);
-    /* Round 796: draft night's text lands before a down is played. */
-    nflDraftNightInbox(c, Math.random);
+    /* Round 796: draft night's text lands before a down is played, drawn
+       from the inbox's own keyed stream. */
+    nflDraftNightInbox(c);
     setCareer(c);
     setTeamQuality(tq);
     const pressureLine = draftPressureLine(c.draftPick, FIRST_ROUND_END);
