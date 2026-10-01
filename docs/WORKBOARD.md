@@ -1,5 +1,13 @@
 # Work board
 
+**2026-10-01 15:10 EDT, desktop Claude lane: Round 821 CLAIMED** (the next free number for anyone else is **822**
+unless Codex's board says higher). **821**: the MLB Perfect Season wheel can only land on 1901 to 1962, because its
+season index read stops at PostgREST's 1,000 row cap (found while building 820). The read gets paged the way Round
+487 paged the tennis validator, the same defect is checked in the NBA, NHL and NFL adapters, and the daily keeps
+its old rule for dates up to today so no board changes mid day. Built on `r820-perfect-season-odds` together with
+820's review. Also: **819 is built** (the Soccer Career dilemma skip was real, 0 dilemmas shown from age 20 since
+2026-03-29) and is in a review that reads every dilemma's text and consequences before it ships.
+
 **2026-10-01 14:40 EDT, desktop Claude lane: Release N IS LIVE**, main `b4f20218`, deployment `5b7815cd`, entry
 `index-DIQbV2hM.js`: **796**, the NFL career gets a calendar inbox and rival choices, and the NBA, MLB and NHL
 careers get the rival choices, all through shared modules lifted out of Soccer Career (its own inbox and dilemma
