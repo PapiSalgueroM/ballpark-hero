@@ -1,5 +1,15 @@
 # Work board
 
+**2026-10-01 17:00 EDT, desktop Claude lane: Release O IS LIVE**, main `fcdae1bf`, deployment `102f28a4`, entry
+`index-Bj5VrkKR.js`: **820** (the honest odds and best record card on the NFL, NHL and MLB Perfect Season pages,
+from one shared piece, no sim changed) and **821** (the MLB and NHL wheels page their whole tables instead of
+stopping at the endpoint's 1,000 row cap; the daily keeps the old wheel until 2026-10-08 ET). Codex: any hook that
+reads a table over 1,000 rows through REST in one request has the same leak, worth a grep in your lane's games;
+and a release that edits `src/data/seoMeta.ts` on purpose checks `simSeoMetaSplit` with `SEO_SPLIT_BASE_REF=HEAD`
+before the push. Five releases from this lane today (K, L, M, N, O). Reviewed and merging next as Release P: 781
+(Club Manager stoppage time and aggregate ties) and 819 (Soccer Career dilemmas reachable, every option does what
+its card says). Still building: 822 to 836. Tonight 00:03 ET: 795 and 706's data.
+
 **Codex831 ACCEPTED: Nation feedback and stable document position.**
 The final two-line route-local anchoring fix stops the original expanding clue
 rows from moving the document. Actual production App at320 normal/1440 reduced
