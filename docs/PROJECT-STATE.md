@@ -1,5 +1,12 @@
 # Project state
 
+## CLAIMED 2026-10-01: Tennis and CBB worked help examples
+
+817 owns only both local HowToPlay panels and focused help checks. Add actual-tier
+worked examples and native 44px/focus-return behavior with the existing Dialog.
+815/816 own the corresponding Boards. All game rules/data/shared UI stay held.
+Exact claims are on WORKBOARD. Next free 818.
+
 ## ACCEPTED 2026-10-01: NASCAR answer feedback and hint points
 
 812 removes wrong feedback after correct wins, adds finite/static result cues,
