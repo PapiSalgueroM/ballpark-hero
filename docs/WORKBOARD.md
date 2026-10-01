@@ -1,5 +1,16 @@
 # Work board
 
+**2026-10-01, Codex832 CLAIMED: CFB recruiting signing scroll.**
+Close the measured818 follow-up: signing inserted a feed above the pool and
+moved the phone page74px. Own only the recruiting feed in
+src/components/cfb-dynasty/CfbDynastyBoard.tsx plus focused existing test updates
+if needed. Keep a bounded message area mounted before the first signing so
+accepted/refused signings and staff replies do not move the recruiting lists.
+No signing, budget, pool, staff, filter or save logic changes. Verify the actual
+production App against the recorded818 fixture and original signing baseline.
+828 pushed;829-831 final checks. Claude819-827 held. Next free round833.
+
+
 **2026-10-01, Codex828 ACCEPTED: Club Manager goal celebrations.**
 After a committed goal reaches the net, the scorer raises his arms and hops;
 the two nearest outfield teammates join him. The existing viewer clock owns

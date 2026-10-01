@@ -1,5 +1,9 @@
 # Project state
 
+Codex832 is closing the measured CFB signing page jump from818, using a stable
+recruiting message area. All signing and budget rules stay held. Next free833.
+
+
 ## ACCEPTED 2026-10-01: Club Manager goal celebrations (828)
 
 Goals now have a finite scorer and teammate celebration, driven only by the
