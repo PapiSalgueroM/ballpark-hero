@@ -27,7 +27,7 @@ const controls = {
 };
 assert.ok(!control || control in controls, 'Unknown Buzzer practice control');
 const sourcePath = path.join(root, 'src/components/buzzer-beater/BuzzerBeaterBoard.tsx');
-const original = await readFile(sourcePath, 'utf8');
+const original = (await readFile(sourcePath, 'utf8')).replace(/\r\n/g, '\n');
 const source = original.replace(/\r\n/g, '\n');
 let folder;
 try {
@@ -67,7 +67,7 @@ try {
     assert.match(output, /11 passed/);
     console.log('simBuzzerPractice: eleven actual Board checks pass for delayed input, exact paths, continued capture, ten-shot/replay, rules/pause/focus, fresh daily roundtrips and private storage refusal.');
   }
-  assert.equal(await readFile(sourcePath, 'utf8'), original, 'Production source remains unchanged');
+  assert.equal((await readFile(sourcePath, 'utf8')).replace(/\r\n/g, '\n'), original, 'Production source remains unchanged');
   console.log('simBuzzerPractice: real shot/flight and record/completion lifecycle execute; copied controls preserve original sources and rules.');
 } finally {
   if (folder) { await rm(path.join(folder, 'BuzzerBeaterBoard.tsx'), { force: true }); await rmdir(folder); }

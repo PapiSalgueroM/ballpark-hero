@@ -6,12 +6,69 @@
 406-node run (398 pass, eight fail, seventy browser harnesses excluded). It also investigates
 the CRLF anchor fence, selected Budget nationality flag and two old Tycoon control errors.
 Player-pool duplicate/stale-bake triage is read-only; Claude669's data work stays reserved.
-Exact files/evidence are on WORKBOARD.794 source outcomes/controls/types pass; native and
-final production remain due.79316 native duels/eight controls pass within the Page fixture,
+Exact files/evidence are on WORKBOARD.794 source outcomes/controls/types pass, plus eight
+native contexts/five controls/96 zero-scroll samples; final production remains due.
+793's sixteen native duels/eight controls pass within the Page fixture,
 with actual App/Footer acceptance still due. No full-green/publication claim. Next798.
 Claude795/796 and incoming d99b58e4 stand. Merge his refreshed669 player data and both
 practice normalizations before further triage. Retain only our new Aussie metadata row
 across his700 metadata split. No Soccer Career engine or shared Front Office edits here.
+
+## LIVE 2026-10-01: Release J (653 grid answer archives, the 669 Footle re-bake), main `2652f9fa`
+
+Assembled by the desktop Claude lane in the gate clone (`r669-bake`) on top of Release I and Codex's commits as
+they stood at each merge, pushed to main as a merge. **douknowball.com is serving it:** deployment `546d0dc1`,
+called only after `get_project` showed `latest_commit_sha` `2652f9fa`; the live entry moved from
+`index--eNejDlV.js` to `index-jsexOB8y.js`. Proof by content: the `x-deployment-id` header read `546d0dc1` 45
+seconds after the deploy; the four archive pages answer 200 with 440 table rows each; `/whats-new/` carries
+"Grid answers for every past day"; the live chunk `footleEnrichment-BN7X1CZM.js` (the same name the gate build
+produced) contains Morten Hjulmand, who was not in the pool before the re-bake.
+
+- **653, grid answer archives.** Every past day's answers for the NBA, MLB, hockey and college basketball grids on
+  one archive page per sport (`/nba-grid/archive`, `/mlb-grid/archive`, `/hockey-grid/archive`, `/cbb-grid/archive`,
+  all four already in the sitemap). The pages had stuck on August 30 and kept calling themselves the last 14 days;
+  they now run from August 17 to today, generated from the same daily seed the game uses, with the namesake fix in
+  all four grids (a player who shares a name with another is keyed by id, not by display name) and the archive
+  regenerated with 0 names moved. `simGridArchive` holds the archive against the game's own picker day by day, with
+  controls `copyrange`, `isoh2` and `dedupe`.
+- **669, the Footle pool re-baked.** Round 669's data step ran at 00:03 ET today: the 2026 market table has its
+  Defensive Midfield rows back (412 rows, 5,862 in the season, from 46 and 5,496), two sources a row, and
+  `scripts/bakePlayers.mjs` regenerated `src/data/players.ts` from it: 538 to 553 players. The World XI report of
+  2026-09-21 is resolved on the shelf with the fix reference. `simPlayersPool` (controls `handedit`, `agezero`) and
+  `simWorldXiDefensiveMids` are green on the re-baked file.
+- **Data applied ahead of their branches (both fail closed, both verified after):** Round 733's golf majors
+  migration (526 rows to 504: the 25 dash placeholder rows gone, the three dagger marks off Francis Ouimet and Bobby
+  Jones so Jones is one golfer with 7 rows, the three 2026 champions in; end hash `8a97bd0b`), and Round 734's F1
+  standings migration (18 corrected rows such as 1976 Hunt 69, Lauda 68 and the champion spelled Juan Manuel Fangio,
+  plus the 11 scoreless 1952 and 1953 starters the import cut off; 3,106 rows). Their branches
+  (`r733-golf-majors-fix` `d746b2bf` with `simGolfMajors` and 14 controls, `r734-f1-standings-fix` `c1dca470` with
+  `simF1Champions` and 5 controls, the 16 false "drove for more than one team" notes rewritten from evidence) are
+  green, merged with main and ride the next release.
+- **The edge functions Release H owed are settled.** soccer-grid-validate v24, football-connect4-validate v13,
+  tennis-chain-validate v10 and scores-poll v10 were found deployed on 2026-09-30 evening; each deployed source was
+  fetched through the Supabase MCP and equals the repo file by sha256, so `scripts/data/edgeDeployed.json` records
+  them (main `21487709`) and the unverified ratchet dropped to 18.
+- **The session limit cut the fleet at about 01:45 ET.** Twenty one builders went out at 00:35; nineteen were still
+  running when the 5 hour window ran out. Nothing was lost: every worktree's files were committed and pushed to its
+  own branch as a work in progress save at 05:05, and a finishing workflow (six chains at a time, each a finisher,
+  one adversarial review and a fixer when the review finds a major) is running on 706, 718, 782, 722, 723, 725, 783,
+  727, 703, 726, 781, 784, 735 and 739. Branches and heads are on the board.
+- **Still held:** 703, 706, 718 (finishing now), the 735 to 740 transfer window data (one integration round folds
+  the league files into the overlay once 735 and 739 are filled out).
+
+**Gates.** Type gate 0 on the merged tree. `build:seo` on `r669-bake`: 173 routes prerendered, 0 failed, 13 lastmod
+dates rewritten, 167 URLs. Thirty harnesses in two lanes (the snapshot readers CLAUDE.md names plus
+`simGridArchive`, `simPlayersPool`, `simWorldXiDefensiveMids`, `simPrerenderTables`, `simRecordPages`, `simDaily`,
+`simRelatedGames`), all green on the merged tree once four reds were settled: `simIndexNow` (the floor had not
+moved for Manager Hot Seat in Release I; both lanes raised it to 167), `simEdgeSync` (the ledger above),
+`simLeaderboardCaps` (Codex's two fixture keys, fixed by its Round 780), `simSiteSearch` (a keystroke timing band
+read at 100 percent CPU with 21 builders running, green on a quiet machine). `simGridArchive`'s three controls
+fire. `simHarnessAnchors` went red on the last merge for Codex's `simBuzzerPractice` and `simFreeKickPractice`
+(raw reads searched with multi line anchors); both now fold line endings on the read itself and pass, with nothing
+they measure changed. Browser walks: `playHomeFold`, `playSoftFourOhFour` and `playSnapshotDrift` green;
+`sweepWeight` raised two budgets with the measured figure beside them (Footle 328K on 325K measured after the
+re-bake, Soccer Grid 308K on 304K, shared chunks); `playRenderStability` crashed its browser at 100 percent CPU on
+the first run and is being rerun on a quiet machine, so it is NOT yet a green and is recorded when it lands.
 
 ## CHECKPOINT 2026-10-01: Search and Discard scroll correction frozen
 
@@ -393,6 +450,96 @@ rounds are not yet published. Root is scouting the next unclaimed work in parall
 All earlier Codex754 through768 are LIVE in Claude Release H. The top Release H receipt below
 supersedes older historical blocks saying nine of them awaited publishing. Google approval
 and reindexing remain external pending outcomes from741. Next unclaimed number:773.
+## BUILT 2026-09-30: Round 653, the grid answer archives (branch `r653-grid-archives`, not on main)
+- **What was wrong.** The four grid answer pages (`/nba-grid/archive`, `/mlb-grid/archive`,
+  `/hockey-grid/archive`, `/cbb-grid/archive`) stopped at 2026-08-30 while saying "the last 14" and
+  "Today's board is not here": the generator ran by hand only and rolled boards off on every run.
+  The college page printed "_ Eldredge" as a Hofstra guard, listed 13 players twice in one cell
+  (Bradley Beal at Florida and Started 2010 or Later) and ran 76 counts high, because
+  `ncaa_player_stats` holds 1,600 players twice. No heading said "answers", every board heading
+  carried an ISO date.
+- **What changed.** `scripts/genGridArchive.mjs` accumulates: the window starts where the file
+  starts and ends yesterday in America/New_York, and it refuses to write if a published board
+  would roll off or change (rows, columns, and since the fix round every cell's count and names,
+  with `--republish` to write a deliberate recount and print what moved), or if the college
+  pool has moved off the recorded one. Players are
+  counted by the source's own id (each grid lib loads it only when asked, `withIds`, so the games
+  download nothing new); placeholder names still count, since the game accepts them, but never
+  print; ties break by name then id, so a rerun writes the same bytes (checked). Regenerated to
+  2026-09-29: 14 to 44 boards a sport, and the 42 franchise boards already published are byte for
+  byte unchanged. Headings "NBA Grid Answers: Past Daily Boards" and "NBA grid answers for August
+  30, 2026", copy stated from the data only, game page links "NBA grid answers for past days".
+- **The release step.** `npm run archive:grids`, then `build:seo`: the new "The release build"
+  section of `docs/SHIP-PIPELINE.md`. **This branch carries no rebuilt `public/` or
+  `scripts/data/lastmod.json`**, so whoever assembles the release runs both steps.
+  `simGridArchive` sections 6, 10 and 11 read `public/` and stay red until they do.
+- **The fence.** `simGridArchive` counts by id and adds sections 7 to 11 (freshness against the
+  file's own claim, no player twice in a cell, no malformed name, the saved copy's range and
+  counts, no ISO date in a board heading), with the controls `stale`, `repeat`, `malformed`,
+  `copyrange` and `isoh2`; every control, old and new, is now green only when its own section
+  goes red and no other one moves.
+- **For a later database round, reported and not touched (reads only).** The 1,600 extra rows
+  in `ncaa_player_stats` are ids 16201 to 17400 (copies of 15001 to 16200) and 23001 to 23400
+  (copies of 22601 to 23000): same slug, same rank, same stats, written seconds after the
+  originals in the 2026-05-09 load, so two batches of a ranked list were sent twice. The table's
+  only index is the id primary key. The three placeholder rows are 21867 "_ Johnston" (New
+  Hampshire, 1985-87), 32408 "_ Ford" (Maryland Eastern Shore, 1988-89) and 41595 "_ Eldredge"
+  (Hofstra, 1991-95); their slugs carry the underscore too, so the source had no first name. That
+  round should: (1) delete the extra ids after checking each row against its original column by
+  column; (2) add a unique index on `player_slug`; (3) find each placeholder's first name on two
+  sources or leave the row, never guess; (4) **first** give the archive a school pool per board.
+  Counted once per player, Marshall and Rutgers have 9 players with 700+ rebounds and UNC
+  Greensboro 9 with 350+ assists, under the pool's floor of 10, so today the live College Grid
+  can serve those crossings short of what the design promises (none is published yet). Deleting
+  the rows drops those three schools from the pool (106 to 103), which changes every future
+  college board. Without a per board pool, `archive:grids` then refuses to run and
+  `simGridArchive` section 5 goes red. The other three grid tables have no duplicate rows and no
+  placeholder names.
+- **The fix round (same branch, after review).** Three reviewers found the same blocker: the
+  page promised that anything listed would be accepted in the game, and 227 college answers were
+  not. The game resolved a typed name through `byNormalizedName`, which kept ONE player per
+  name (the last row loaded), and 1,697 college names belong to two or more players, so typing
+  "Danny Manning" for Kansas x 1,500+ Career Points was judged on a later Danny Manning with 59
+  games and refused. That was a live game bug since Round 368, not only an archive one. Fixed on
+  the game side, one engine many sports: `byNormalizedName` is `Map<string, P[]>` in
+  `gridEngine.ts` and `cbbGrid.ts`, and the new `pickNamesake` in `gridEngine.ts` judges the
+  namesake who fits the cell; all four grid pages and both grid hooks (`useFootballGrid`,
+  `useCollegeGrid`) read it through that. The generator resolves every name it lists through
+  the same path and refuses otherwise, and `simGridArchive` section 2 types every listed answer
+  into the game's own lookup (control `shadowed`). Also from the review: the generator now
+  compares published cells too and refuses unless `--republish` (the docs said it did and it did
+  not); section 9 carries its own name rule instead of importing the generator's (a broken
+  `malformedName` left it green, measured); section 12 checks "rarest by career games played"
+  (control `notrarest`, and flipping the sort had left every section green); `miscount` control
+  for the distinct id count; the subtitle says "Past boards from August 17, 2026" instead of
+  "Every past board" (the grids have run since July, the archive starts 08-17), fenced in
+  section 10; and the hub links now read "NBA grid answers" with `why` lines that promise the
+  count and the rarest names rather than "every answer". The archive file itself did not move
+  (only its note did): with the game accepting any fitting namesake, every listed name was
+  already one the game takes.
+- **Merged onto main's Release H head (`49be326e`), 2026-09-30, on the same branch.** The
+  branch was cut before Rounds 652 and 654 landed, so four files conflicted and both rounds
+  stand in each: `simGridArchive` section 6 walks the saved tables row by row (Round 652, one
+  `<tr>` per crossing) through the fix round's `snapshotOf`, and the `miscount` control now
+  patches the count in the row's own `<td>`; `sportHub.ts` keeps Round 654's "every change
+  since" labels on the format histories beside the "grid answers" labels; What's New and this
+  file keep both sides, newest first. `cbbGrid.ts` merged clean, main had not touched it.
+  Gates on the merged tree: tsc 0; the archive regenerated to 2026-09-29 (44 boards a sport,
+  0 published cells moved, the bytes equal to the branch's once line endings are folded, so
+  every listed name already goes through the game's lookup); `simGridArchive` sections 1 to 5,
+  7 to 9 and 12 green against the live database (cbb: 3,168 answers typed in, 0 refused, 392 of
+  them names shared by two or more players), sections 6, 10 and 11 red for the one reason above,
+  the saved pages in `public/` are the release build's; of the ten controls, `badanswer`,
+  `shadowed`, `miscount`, `stale`, `repeat`, `malformed` and `notrarest` each turn their own
+  section red (isolation waits on the same rebuild), `dedupe` takes section 6 from 5 findings
+  to 8, and `copyrange` and `isoh2` refuse to run on the old snapshots; `gridNamesakes`,
+  `noDoubleRecord` and `collegeGridOffline` green in vitest, and `dailyReload` is red by the
+  same 12 perfect lineup daily record tests on origin/main itself, so that red is main's;
+  `simCollegeGridKey` green with all 14 controls (run from a copy whose vitest path points at
+  the main tree, a worktree has no `node_modules`); `simNoRivalNames` 0 findings;
+  `simHarnessAnchors` green; no U+2013 or U+2014 in the diff.
+- **Follow ups.** The page's JSON grows by about 13K a day in one chunk (546K now): split it by
+  sport or by month well before a year.
 
 ## LIVE 2026-09-30: Release H (707, 708, 711, 730, 732), main `b8c77dce`
 
