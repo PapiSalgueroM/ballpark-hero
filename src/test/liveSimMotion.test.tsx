@@ -482,4 +482,69 @@ describe('Live simcast motion', () => {
     const agg = `${(iAmHome ? tie.leg1!.homeGoals : tie.leg1!.awayGoals) + mine}-${(iAmHome ? tie.leg1!.awayGoals : tie.leg1!.homeGoals) + opp}`;
     expect(mounted.container.querySelector('[data-cm-live-agg]')!.getAttribute('data-cm-live-agg')).toBe(agg);
   }, 30000);
+
+  /* Round 781 review: the goal banner is the commentary the player actually
+     reads, and nothing held its label: printing the bare minute left every
+     gate green. A real second half, drawn by the engine on its own seeds,
+     with a goal of mine inside the board (not the last thing in it, and
+     nothing else loud at the same point of the clock), is walked to that
+     goal, and the banner says 90+N'. */
+  it('a goal in the board is announced with its plus, GOAL! ... 90+N', async () => {
+    const { notDue } = findWhistleMaterial();
+    /* Back to the restart, so a change there redraws the whole second half, board and all. */
+    const restart = structuredClone(notDue);
+    restart.live!.minute = 46;
+    let career: CareerState | null = null;
+    let goal: LiveFeedEvent | null = null;
+    for (let k = 0; k < 400 && !career; k++) {
+      vi.mocked(Math.random).mockImplementation(seeded(7810000 + k * 7919));
+      const second = changeLive(restart, 46, { kind: 'shape', mentality: 'balanced' });
+      if (!second?.live) continue;
+      const board = boardAt(second, 90);
+      const feed = liveFeed(second.live);
+      const loud = ['goal', 'yellow', 'red', 'injury', 'sub'];
+      const g = feed.find(e => e.kind === 'goal' && e.side === 'me' && e.minute === 90 && (e.plus ?? 0) >= 1 && (e.plus ?? 0) < board
+        && !feed.some(o => o !== e && loud.includes(o.kind) && clockPos(o) === clockPos(e)));
+      if (!g) continue;
+      career = structuredClone(second);
+      career.live!.minute = 89.4;
+      goal = g;
+    }
+    expect(goal, 'no seed put a goal of mine inside the second half board').not.toBeNull();
+    const plus = goal!.plus!;
+    const mounted = mount(career!);
+    const root = () => mounted.container.querySelector('[data-cm-live-stage]')!;
+    for (let t = 0; t < 12000 && root().getAttribute('data-cm-live-plus') !== String(plus); t += 100) await step(100);
+    expect(root().getAttribute('data-cm-live-plus')).toBe(String(plus));
+    const banner = [...mounted.container.querySelectorAll('div')].find(d => d.childElementCount > 0 && (d.textContent ?? '').startsWith('GOAL!') && d.className.includes('truncate'));
+    expect(banner, 'no goal banner on screen at the goal').toBeTruthy();
+    expect(banner!.textContent).toContain(goal!.text);
+    expect(banner!.textContent!.endsWith(` 90+${plus}'`), `the banner reads "${banner!.textContent}"`).toBe(true);
+  }, 30000);
+
+  /* Round 781 review: extra time has its own board at 120, and the clock in
+     it read only through minuteLabel with nothing holding the call: "ET 120'"
+     all through it left every gate green. Extra time drawn by the engine on a
+     real level decider, with a board of two or more, is walked into it. */
+  it('the extra time clock runs into its own board as ET 120 plus', async () => {
+    const { due } = findWhistleMaterial();
+    let drawn: CareerState | null = null;
+    for (let k = 0; k < 200 && !drawn; k++) {
+      vi.mocked(Math.random).mockImplementation(seeded(7820000 + k * 104729));
+      const et = startExtraTime(structuredClone(due));
+      if (et?.live?.et && (et.live.added?.et ?? 0) >= 2) drawn = et;
+    }
+    expect(drawn, 'no seed gave extra time a board of two or more').not.toBeNull();
+    drawn!.live!.minute = 119.4;
+    const mounted = mount(drawn!);
+    const root = () => mounted.container.querySelector('[data-cm-live-stage]')!;
+    expect(root().getAttribute('data-cm-live-stage')).toBe('extra');
+    for (let t = 0; t < 8000 && root().getAttribute('data-cm-live-plus') !== '1'; t += 100) await step(100);
+    expect(root().getAttribute('data-cm-live-minute')).toBe('120');
+    expect(root().getAttribute('data-cm-live-plus')).toBe('1');
+    const text = mounted.container.textContent!;
+    expect(text).toContain("ET 120+1'");
+    expect(text).not.toContain("ET 121'");
+    expect(text).not.toContain("ET 120'");
+  }, 30000);
 });
