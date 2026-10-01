@@ -171,6 +171,22 @@ export function applyMandateResult(trust: number, g: FoGrade): { trust: number; 
   return { trust: next, fired, warning: !fired && next <= 25 };
 }
 
+/* ---------------- Round 722: the tax cheque ---------------- */
+
+/**
+ * How ownership takes a luxury tax bill, in trust. Sport neutral: any GM
+ * sim with a tax line above its cap passes the bill in $M (the NBA does
+ * today). One point of trust per six million, never more than 20 in a
+ * season, nothing at all for a club under the line. A title still outweighs
+ * it (gradeSeason's 40), which is how owners behave about a cheque that
+ * bought a parade. Narrated, never quoted, same rule as the mandates above.
+ */
+export function ownerTaxReaction(bill: number): { trustDelta: number; line: string | null } {
+  if (bill <= 0) return { trustDelta: 0, line: null };
+  const trustDelta = -Math.min(20, Math.max(1, Math.round(bill / 6)));
+  return { trustDelta, line: `💸 Ownership wrote a $${bill}M luxury tax cheque. Trust ${trustDelta}.` };
+}
+
 export function firedLine(seasons: number, titles: number): string {
   const s = `${seasons} season${seasons === 1 ? '' : 's'}`;
   const t = titles === 0 ? 'no titles' : `${titles} title${titles === 1 ? '' : 's'}`;
