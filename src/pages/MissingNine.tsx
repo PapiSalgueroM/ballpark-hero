@@ -1,4 +1,4 @@
-import { useMemo, useState, useCallback } from 'react';
+import { useMemo, useState, useCallback, useEffect, useRef } from 'react';
 import { GameNav } from '@/components/game/GameNav';
 import { GameShell } from '@/components/game/GameShell';
 import { ResultScreen } from '@/components/game/ResultScreen';
@@ -10,6 +10,7 @@ import { useGameCompletion } from '@/hooks/useGameCompletion';
 import { useDailyPuzzle } from '@/hooks/useDailyPuzzle';
 import { cn } from '@/lib/utils';
 import { Trophy, Lightbulb } from 'lucide-react';
+import feedbackStyles from './MissingNineFeedback.module.css';
 import {
   ActiveNinePuzzle,
   ALL_NINE_NAMES,
@@ -67,7 +68,33 @@ const MissingNine = () => {
   const score = won ? NINE_SCORES[Math.min(misses, NINE_SCORES.length - 1)] : 0;
 
   const [input, setInput] = useState('');
-  const [wrongFlash, setWrongFlash] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+  const focusNewLineup = useRef(false);
+  const prior = useRef({ mode, puzzle, actions, ready: !isLoading });
+  const [feedback, setFeedback] = useState<{ mode: Mode; puzzle: ActiveNinePuzzle; turn: number; kind: 'miss' | 'won' } | null>(null);
+  useEffect(() => {
+    const before = prior.current;
+    const sameRun = before.ready && !isLoading && before.mode === mode && before.puzzle === puzzle;
+    const appended = sameRun && actions.length === before.actions.length + 1 && before.actions.every((a, i) => a.t === actions[i].t);
+    const last = actions[actions.length - 1];
+    if (appended && (last.t === 'miss' || last.t === 'won')) {
+      setFeedback({ mode, puzzle, turn: actions.length, kind: last.t });
+    } else if (!sameRun || actions !== before.actions) {
+      setFeedback(null);
+    }
+    prior.current = { mode, puzzle, actions, ready: !isLoading };
+    if (focusNewLineup.current) {
+      focusNewLineup.current = false;
+      inputRef.current?.focus({ preventScroll: true });
+    }
+  }, [mode, puzzle, actions, isLoading]);
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = window.setTimeout(() => setFeedback(null), 600);
+    return () => window.clearTimeout(timer);
+  }, [feedback]);
+  const shownFeedback = feedback?.mode === mode && feedback.puzzle === puzzle && feedback.turn === actions.length ? feedback : null;
+  const wrongFlash = shownFeedback?.kind === 'miss';
   // Hard mode (task #12): no hints, no suggestions, positions hidden until
   // reveal. Presentation-only, scoring and daily persistence are unchanged.
   const [hard, setHard] = useState(false);
@@ -83,8 +110,7 @@ const MissingNine = () => {
       act({ t: 'won' });
     } else {
       act({ t: 'miss' });
-      setWrongFlash(true);
-      setTimeout(() => setWrongFlash(false), 1200);
+      inputRef.current?.focus({ preventScroll: true });
     }
     setInput('');
   }, [over, puzzle, act]);
@@ -92,6 +118,7 @@ const MissingNine = () => {
   const giveUp = useCallback(() => { if (!over) act({ t: 'give' }); }, [over, act]);
 
   const newUnlimited = useCallback(() => {
+    focusNewLineup.current = true;
     setUnlimitedPuzzle(getRandomNinePuzzle());
     setUnlimitedActions([]);
     setInput('');
@@ -141,7 +168,7 @@ const MissingNine = () => {
                   key={m}
                   onClick={() => switchMode(m)}
                   className={cn(
-                    'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
+                    feedbackStyles.action, 'px-5 py-1.5 rounded-full text-sm font-semibold transition-all',
                     mode === m ? 'bg-background text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'
                   )}
                 >
@@ -150,10 +177,10 @@ const MissingNine = () => {
               ))}
             </div>
             <button
-              onClick={() => setHard((h) => !h)}
+              onClick={() => { setHard((h) => !h); setFeedback(null); }}
               title="Hard mode: no hints, no suggestions, positions hidden"
               className={cn(
-                'mt-2 mx-auto block text-xs px-3 py-2 rounded-full border transition-all',
+                feedbackStyles.action, 'mt-2 mx-auto block text-xs px-3 py-2 rounded-full border transition-all',
                 hard ? 'border-destructive text-destructive bg-destructive/10 font-semibold' : 'border-border text-muted-foreground hover:text-foreground'
               )}
             >
@@ -190,23 +217,25 @@ const MissingNine = () => {
                   return (
                     <div
                       key={i}
+                      data-nine-slot={i}
                       className={cn(
-                        'flex items-center gap-3 px-4 py-2',
+                        'relative flex items-center gap-3 px-4 py-2',
                         isBlank && 'bg-primary/10',
                         revealed && (won ? 'bg-correct/15' : 'bg-destructive/10')
                       )}
                     >
+                      {i === candidate.slotIndex && shownFeedback && <span key={shownFeedback.turn} aria-hidden="true" data-nine-cue={shownFeedback.kind} className={cn(feedbackStyles.cue, shownFeedback.kind === 'won' ? feedbackStyles.found : feedbackStyles.miss)} />}
                       <span
                         className={cn(
                           'w-6 h-6 rounded-full flex items-center justify-center text-[11px] font-bold shrink-0',
-                          isBlank ? 'bg-primary text-primary-foreground animate-pulse' : 'bg-secondary text-muted-foreground'
+                          isBlank ? 'bg-primary text-primary-foreground' : 'bg-secondary text-muted-foreground'
                         )}
                       >
                         {i + 1}
                       </span>
                       <span
                         className={cn(
-                          'flex-1 text-sm font-bold leading-tight',
+                          feedbackStyles.fullName, 'flex-1 text-sm font-bold leading-tight',
                           isBlank
                             ? 'text-primary'
                             : revealed
@@ -229,7 +258,7 @@ const MissingNine = () => {
             {!over && hints.length > 0 && (
               <div className="max-w-md mx-auto mb-4 space-y-2">
                 {hints.map((h, i) => (
-                  <div key={i} className="flex items-center gap-2 text-sm px-3 py-2 rounded-lg bg-secondary/60 border border-border animate-cell-reveal">
+                  <div key={i} data-nine-hint={i} className={cn(shownFeedback?.kind === 'miss' && (misses === 1 || (misses === 2 && i > 0)) && feedbackStyles.hint, 'flex items-center gap-2 text-sm px-3 py-2 rounded-lg bg-secondary/60 border border-border')}>
                     <Lightbulb className="w-4 h-4 text-gold shrink-0" /> <span className="text-foreground">{h}</span>
                   </div>
                 ))}
@@ -244,6 +273,7 @@ const MissingNine = () => {
                   className="flex gap-2"
                 >
                   <input
+                    ref={inputRef}
                     type="text"
                     /* Round 274: a placeholder is not an accessible name. */
                     aria-label="Who was the missing starter"
@@ -255,22 +285,22 @@ const MissingNine = () => {
                       wrongFlash ? 'border-destructive ring-destructive/30' : 'border-border focus:ring-primary/40'
                     )}
                   />
-                  <button type="submit" disabled={!input.trim()} className="px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition-opacity disabled:opacity-40">
+                  <button type="submit" disabled={!input.trim()} className={cn(feedbackStyles.action, 'px-6 py-3 rounded-xl bg-primary text-primary-foreground font-bold hover:opacity-90 transition-opacity disabled:opacity-40')}>
                     Guess
                   </button>
                 </form>
                 {suggestions.length > 0 && (
                   <div className="absolute z-20 left-0 right-0 mt-1 bg-card border border-border rounded-xl shadow-lg overflow-hidden">
                     {suggestions.map((name) => (
-                      <button key={name} type="button" onClick={() => submit(name)} className="w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent transition-colors">
+                      <button key={name} type="button" onClick={() => submit(name)} className={cn(feedbackStyles.action, feedbackStyles.fullName, 'w-full text-left px-4 py-2 text-sm text-foreground hover:bg-accent transition-colors')}>
                         {name}
                       </button>
                     ))}
                   </div>
                 )}
-                {wrongFlash && <p className="text-destructive text-sm text-center mt-2 animate-cell-reveal">Not that night. Try again!</p>}
+                {wrongFlash && <p key={shownFeedback.turn} role="status" data-nine-feedback="miss" className={cn(feedbackStyles.reply, 'text-destructive text-sm text-center mt-2')}>Not that night. Try again!</p>}
                 <div className="flex justify-center mt-3">
-                  <button onClick={giveUp} className="inline-flex items-center rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-destructive">Give up</button>
+                  <button onClick={giveUp} className={cn(feedbackStyles.action, 'inline-flex items-center rounded-full px-3 py-2 text-xs text-muted-foreground transition-colors hover:text-destructive')}>Give up</button>
                 </div>
               </div>
             )}
