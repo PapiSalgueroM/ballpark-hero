@@ -1232,6 +1232,12 @@
     "reason": "list status RM on the record date (in the minors or off the major league roster)"
    },
    {
+    "id": 672761,
+    "name": "Wenceel Pérez",
+    "status": "D60",
+    "reason": "outside the 13 position players: 175 plate appearances in 2026"
+   },
+   {
     "id": 676428,
     "name": "Brant Hurter",
     "status": "RM",
@@ -1248,12 +1254,6 @@
     "name": "Parker Meadows",
     "status": "D60",
     "reason": "outside the 13 position players: 39 plate appearances in 2026"
-   },
-   {
-    "id": 680664,
-    "name": "Eduardo Valencia",
-    "status": "A",
-    "reason": "outside the 13 position players: 138 plate appearances in 2026"
    },
    {
     "id": 681857,

@@ -28,13 +28,14 @@
    Usage (each batch merges into the record, so a cut loses one batch at most):
      node scripts/fetchMlbFoRecord.mjs --teams ARI,ATH,ATL,BAL,BOS
      node scripts/fetchMlbFoRecord.mjs --stats
+     node scripts/fetchMlbFoRecord.mjs --fielding   (games caught, after --stats)
      node scripts/fetchMlbFoRecord.mjs --spot
 
    Nothing here is imported by the site. */
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { GAME_TO_API, SPOT_TEAMS, SPOT_PER_TEAM, ESPN_ABBR, selectTwentySix, spotSample, normName } from './lib/mlbFoRecord.mjs';
+import { GAME_TO_API, SPOT_TEAMS, SPOT_PER_TEAM, ESPN_ABBR, selectTwentySix, spotSample, normName, caughtGames } from './lib/mlbFoRecord.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ROSTERS = path.join(ROOT, 'scripts', 'data', 'mlbRosters2026.json');
@@ -156,15 +157,48 @@ async function fetchStats() {
   const pitching = p.stats[0].splits.map(s => ({ id: s.player.id, name: s.player.fullName, ...pitLine(s.stat) })).sort((a, b) => a.id - b.id);
   if (new Set(hitting.map(r => r.id)).size !== hitting.length) throw new Error('hitting: a man appears twice in the league table');
   if (new Set(pitching.map(r => r.id)).size !== pitching.length) throw new Error('pitching: a man appears twice in the league table');
+  /* the games caught table (--fielding) is its own read, kept across this one */
+  const prev = readJson(STATS, null);
   writeRecord(STATS, {
     meta: {
       source: 'MLB Stats API, statsapi.mlb.com, 2026 regular season (gameType R), every man who appeared',
       season: SEASON, read: today(), hittingUrl: hitUrl, pitchingUrl: pitUrl,
-      fields: 'hitting: pa plate appearances, ops. pitching: g games, gs games started, outs recorded, hr, bb, k, sv saves.',
+      ...(prev && prev.caught ? { fieldingUrl: prev.meta.fieldingUrl, fieldingRead: prev.meta.fieldingRead } : {}),
+      fields: `hitting: pa plate appearances, ops. pitching: g games, gs games started, outs recorded, hr, bb, k, sv saves.${prev && prev.caught ? ' caught: g games played at catcher.' : ''}`,
     },
     hitting, pitching,
-  }, ['hitting', 'pitching']);
+    ...(prev && prev.caught ? { caught: prev.caught } : {}),
+  }, ['hitting', 'pitching', 'caught']);
   console.log(`league tables: ${hitting.length} hitters, ${pitching.length} pitchers, read ${today()}`);
+}
+
+/* Round 829 review: games caught. The API's primary position is one label a
+   man, and it calls some real catchers DH (Detroit's Eduardo Valencia caught
+   18 of his starts in 2026 and is listed DH), so a club with fewer than two
+   men listed at C makes up its pair from games caught in the league's
+   fielding table. Merged into the league tables file as "caught". */
+async function fetchFielding() {
+  const stats = readJson(STATS, null);
+  if (!stats) throw new Error('no league tables yet, run --stats first');
+  const url = `${API}/stats?stats=season&group=fielding&season=${SEASON}&sportId=1&gameType=R&playerPool=ALL&limit=10000`;
+  const j = await getJson(url);
+  const byId = new Map();
+  for (const s of j.stats[0].splits) {
+    if (!s.position || s.position.abbreviation !== 'C') continue;
+    const row = byId.get(s.player.id) || { id: s.player.id, name: s.player.fullName, g: 0 };
+    row.g += s.stat.games ?? s.stat.gamesPlayed ?? 0;
+    byId.set(s.player.id, row);
+  }
+  const caught = [...byId.values()].sort((a, b) => a.id - b.id);
+  stats.meta = {
+    ...stats.meta,
+    fieldingUrl: url,
+    fieldingRead: today(),
+    fields: 'hitting: pa plate appearances, ops. pitching: g games, gs games started, outs recorded, hr, bb, k, sv saves. caught: g games played at catcher.',
+  };
+  stats.caught = caught;
+  writeRecord(STATS, stats, ['hitting', 'pitching', 'caught']);
+  console.log(`games caught: ${caught.length} men caught in ${SEASON}, read ${today()}`);
 }
 
 const ymd = s => (s ? String(s).slice(0, 10) : null);
@@ -209,7 +243,7 @@ async function spotCheck() {
     const j = await getJson(jsonUrl);
     const espnMen = (j.athletes || []).flatMap(g => g.items || []);
     const byName = new Map(espnMen.map(a => [normName(a.fullName), a]));
-    const chosen = spotSample(selectTwentySix(rec.players).men);
+    const chosen = spotSample(selectTwentySix(rec.players, caughtGames(stats)).men);
     const checked = [];
     for (const m of chosen) {
       const a = byName.get(normName(m.name));
@@ -256,9 +290,11 @@ if (teamsArg >= 0) {
   await fetchTeams(list);
 } else if (args.includes('--stats')) {
   await fetchStats();
+} else if (args.includes('--fielding')) {
+  await fetchFielding();
 } else if (args.includes('--spot')) {
   await spotCheck();
 } else {
-  console.error('usage: --teams A,B,C | --stats | --spot');
+  console.error('usage: --teams A,B,C | --stats | --fielding | --spot');
   process.exit(1);
 }

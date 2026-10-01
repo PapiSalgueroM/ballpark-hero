@@ -25,6 +25,10 @@
         list on the record date, the age from his birth date, the position,
         rating and partial mark the rule gives, no name twice, and every club
         can field nine hitters, five starters and a bullpen of five
+     3c) every club ships two men at C who caught in 2026, read off the
+        league's games caught table rather than the rule (review finding:
+        the API calls Detroit's backup catcher DH, and he was left out)
+     3n) no two shipped names a reader could confuse (accents, case)
      4) a new league: 26 real men a club and nobody invented, the depth mark,
         and the payroll rule: the 13 the sim reads at the game's own price,
         the rest on depth deals, every club under the tax line
@@ -63,6 +67,8 @@
      fullprice     no depth deals, everyone at the full price      -> 4
      legacylimits  an old save gets the new roster limits          -> 7
      idkeyed       injury rolls keyed on the minted id, not the name -> 5
+     onecatcher    Detroit's backup catcher left out, as first cut  -> 3c
+     namesake      José Fermin (2001) shipped without his year      -> 3n
 
    The fixture: node scripts/simMlbFullRosters.mjs --write-legacy-fixture
    writes it with whatever engine is in src. It was written against the engine
@@ -79,7 +85,7 @@ import crypto from 'node:crypto';
 import { createRequire } from 'node:module';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { GAME_TEAMS, SPOT_TEAMS, SPOT_PER_TEAM, SPOT_LIMIT, selectTwentySix, gameNames, spotSample, buildPools, rateMan, ageOn, onMajorLeagueRoster } from './lib/mlbFoRecord.mjs';
+import { GAME_TEAMS, SPOT_TEAMS, SPOT_PER_TEAM, SPOT_LIMIT, selectTwentySix, gameNames, spotSample, buildPools, rateMan, ageOn, onMajorLeagueRoster, caughtGames } from './lib/mlbFoRecord.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const ENGINE = path.join(ROOT, 'src', 'lib', 'mlbFrontOffice.ts');
@@ -89,7 +95,7 @@ const STATS = path.join(ROOT, 'scripts', 'data', 'mlbStats2026.json');
 const FIXTURE = path.join(ROOT, 'scripts', 'data', 'mlbLegacySaveFixture.json');
 const CONTROL = process.env.MLB_FULL_CONTROL || '';
 const WRITE_FIXTURE = process.argv.includes('--write-legacy-fixture');
-const EXPECT = { invented: [3, 4], benchread: [5], sharedstream: [5], fullprice: [4], legacylimits: [7], idkeyed: [5] };
+const EXPECT = { invented: [3, 4], benchread: [5], sharedstream: [5], fullprice: [4], legacylimits: [7], idkeyed: [5], onecatcher: ['3c'], namesake: ['3n'] };
 if (CONTROL && !EXPECT[CONTROL]) { console.error(`MLB_FULL_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`); process.exit(1); }
 
 let checks = 0;
@@ -112,7 +118,13 @@ const ENGINE_SWAPS = {
   idkeyed: [['unitHash(roundSeed, p.name, 1)', 'unitHash(roundSeed, p.id, 1)'], ['unitHash(roundSeed, p.name, 2)', 'unitHash(roundSeed, p.id, 2)']],
   legacylimits: [['export const mlbRosterMax = (t: { depth?: number }): number => (t.depth ? MLB_ROSTER_MAX : MLB_LEGACY_ROSTER_MAX);', 'export const mlbRosterMax = (t: { depth?: number }): number => (t.depth || true ? MLB_ROSTER_MAX : MLB_LEGACY_ROSTER_MAX);']],
 };
-const DATA_SWAPS = { invented: [['  ATL: [\n    { name: ', '  ATL: [\n    { name: "Harness Inventedman" }, { name: ']] };
+const DATA_SWAPS = {
+  invented: [['  ATL: [\n    { name: ', '  ATL: [\n    { name: "Harness Inventedman" }, { name: ']],
+  /* the first cut of this round: Detroit's backup catcher left out for a 175 PA outfielder */
+  onecatcher: [['    { name: "Eduardo Valencia", pos: "C", age: 26, ovr: 80 },', '    { name: "Wenceel Pérez", pos: "RF", age: 26, ovr: 66 },']],
+  /* the first cut again: the Angels' reliever shipped without his year beside the Cardinals' José Fermín */
+  namesake: [['{ name: "José Fermin (2001)", ', '{ name: "José Fermin", ']],
+};
 const rewrite = (label, src, swaps) => {
   for (const [now] of swaps) if (!src.includes(now)) throw new Error(`control ${CONTROL}: ${JSON.stringify(now.slice(0, 80))} is not in ${label}, so it would change nothing. Refusing to run.`);
   let out = src;
@@ -256,7 +268,8 @@ const PITCH = new Set(['SP', 'RP', 'CL']);
 const isP = p => PITCH.has(p.pos);
 const SEEDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(i => i * 7919);
 /* every club's 26 by the rule, and the name the game shows each of them */
-const selected = Object.fromEntries(GAME_TEAMS.map(a => [a, selectTwentySix(record.teams[a].players).men]));
+const caught = caughtGames(stats);
+const selected = Object.fromEntries(GAME_TEAMS.map(a => [a, selectTwentySix(record.teams[a].players, caught).men]));
 const shownAs = gameNames(selected);
 const recordNames = Object.fromEntries(GAME_TEAMS.map(a => [a, new Set(selected[a].map(m => shownAs.get(m.id)))]));
 
@@ -278,7 +291,7 @@ console.log('1) the record: 30 clubs from the API on the record date, and the sp
     ok(1, 'the spot check read the five clubs its rule names', JSON.stringify(sc.teams.map(t => t.team)) === JSON.stringify(SPOT_TEAMS), sc.teams.map(t => t.team).join(' '));
     let n = 0, bad = 0;
     for (const t of sc.teams) {
-      const want = spotSample(selectTwentySix(record.teams[t.team].players).men).map(m => m.id);
+      const want = spotSample(selectTwentySix(record.teams[t.team].players, caught).men).map(m => m.id);
       ok(1, `${t.team}: the ten checked are the ten the rule picks from today's 26`, JSON.stringify(t.checked.map(c => c.id)) === JSON.stringify(want));
       ok(1, `${t.team}: ESPN's page and data are named`, /espn\.com/.test(t.espnPage) && /espn\.com/.test(t.espnData));
       n += t.checked.length;
@@ -335,6 +348,40 @@ let shipped = 0, partialN = 0;
   ok(3, 'no name is shipped twice', dup === 0, String(dup));
   ok(3, 'MLB_FO_PARTIAL lists exactly the partial ratings', D && JSON.stringify([...D.MLB_FO_PARTIAL].sort()) === JSON.stringify(partialNames.sort()));
   console.log(`   ${shipped} men shipped, ${partialN} ratings marked partial`);
+}
+
+/* ---- 3c. every club ships two real catchers ------------------------------ */
+/* Round 829 review. Read off the league's games caught table, not off the
+   rule, so a rule that keys on the API's one position label cannot vouch for
+   itself: that label calls Detroit's Eduardo Valencia DH, and the first cut of
+   this round shipped Detroit with one catcher while he, 18 starts behind the
+   plate, sat in the left out list. */
+console.log('3c) every club ships two men who caught in 2026, shown at C');
+{
+  const R = D ? D.MLB_FO_ROSTERS_2026 : {};
+  const short = [];
+  for (const a of GAME_TEAMS) {
+    const byName = new Map(selected[a].map(m => [shownAs.get(m.id), m]));
+    const rows = R[a] ?? [];
+    const catchers = rows.filter(r => r.pos === 'C' && byName.get(r.name) && (caught.get(byName.get(r.name).id) || 0) > 0);
+    if (catchers.length < 2) short.push(`${a} (${catchers.map(r => r.name).join(', ') || 'none'})`);
+  }
+  ok('3c', 'every club ships at least two men at C who caught in 2026', short.length === 0, short.join('; '));
+  /* and nobody who caught for his club is left out while it is short */
+  const left = JSON.parse(fs.readFileSync(path.join(ROOT, 'scripts', 'data', 'mlbRostersLeftOut2026.json'), 'utf8'));
+  ok('3c', 'the games caught table names its source', /statsapi\.mlb\.com/.test(stats.meta.fieldingUrl || '') && stats.caught.length > 60, `${stats.caught.length} rows`);
+  console.log(`   ${30 - short.length} of 30 clubs carry two catchers; ${Object.values(left.clubs).flat().filter(m => (caught.get(m.id) || 0) > 0).length} men who caught in 2026 are on the left out list`);
+}
+
+/* ---- 3n. no two shipped names a reader could confuse ---------------------- */
+console.log('3n) no two shipped names the same without accents or case');
+{
+  const fold = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const all = Object.values(D ? D.MLB_FO_ROSTERS_2026 : {}).flat().map(r => r.name);
+  const seen = new Map();
+  const clash = [];
+  for (const n of all) { const k = fold(n); if (seen.has(k)) clash.push(`${seen.get(k)} / ${n}`); else seen.set(k, n); }
+  ok('3n', 'no two shipped names differ only by accents or case', clash.length === 0, clash.join('; '));
 }
 
 /* ---- 4. a new league ----------------------------------------------------- */

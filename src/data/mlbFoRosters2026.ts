@@ -7,9 +7,11 @@
 // THE 26. The September active roster is 28, so the 26 come by one rule from the club's major
 // league roster that day (the active list and every injured list; optioned men are in the minors):
 // the 13 position players and 13 pitchers who carried the most of its 2026. Position players: the
-// two catchers with the most plate appearances, then the most plate appearances. Pitchers: the
-// five with the most games started (the rotation), then the most outs recorded. 580 men on the
-// lists are left out, each with the reason, in scripts/data/mlbRostersLeftOut2026.json.
+// two catchers with the most plate appearances, then the most plate appearances; a club with fewer
+// than two men listed at C makes up the pair with whoever caught the most 2026 games (the API
+// labels some real catchers DH; such a man is shown at C).
+// Pitchers: the five with the most games started (the rotation), then the most outs recorded.
+// 580 men on the lists are left out, each with the reason, in scripts/data/mlbRostersLeftOut2026.json.
 //
 // THE RATINGS, 2026 regular season only, one stat per role for everyone:
 //   position players: OPS percentile among every hitter with 300+ PA, mapped to 66 to 97, pulled
@@ -25,9 +27,9 @@
 //
 // AGES are whole years on 2026-09-27 from the birth date the API gives.
 //
-// NAMESAKES. The game keeps one name to a man in a league. When two shipped men share a name the
-// older keeps it as the API gives it and the younger carries his birth year after it. This round
-// that is Max Muncy (2002).
+// NAMESAKES. The game keeps one name to a man in a league. When two shipped men share a name
+// (compared without accents or case) the older keeps it as the API gives it and the younger carries
+// his birth year after it. This round that is Max Muncy (2002) and José Fermin (2001).
 //
 // SECOND SOURCE: ESPN, as a spot check, not a pipeline. The five clubs at positions 6, 12, 18, 24 and 30 of the 30 game abbreviations sorted alphabetically (CHC, HOU, MIN, SEA, WSN). 50 men compared
 // (membership, birth date, bats, throws), 0 disagree, read 2026-10-01. Full detail in the record.
@@ -335,10 +337,10 @@ export const MLB_FO_ROSTERS_2026: Record<string, MlbFoRosterSeed[]> = {
     { name: "Colt Keith", pos: "3B", age: 25, ovr: 81 },
     { name: "Gleyber Torres", pos: "2B", age: 29, ovr: 81 },
     { name: "Max Clark", pos: "CF", age: 21, ovr: 81 },
+    { name: "Eduardo Valencia", pos: "C", age: 26, ovr: 80 },
     { name: "Kerry Carpenter", pos: "RF", age: 29, ovr: 73 },
     { name: "Javier Báez", pos: "SS", age: 33, ovr: 68 },
     { name: "Matt Vierling", pos: "CF", age: 30, ovr: 66 },
-    { name: "Wenceel Pérez", pos: "RF", age: 26, ovr: 66 },
     { name: "Zach McKinstry", pos: "RF", age: 31, ovr: 66 },
     { name: "Keider Montero", pos: "SP", age: 26, ovr: 82 },
     { name: "Framber Valdez", pos: "SP", age: 32, ovr: 81 },
@@ -432,7 +434,7 @@ export const MLB_FO_ROSTERS_2026: Record<string, MlbFoRosterSeed[]> = {
     { name: "Ryan Johnson", pos: "SP", age: 24, ovr: 68 },
     { name: "George Klassen", pos: "SP", age: 24, ovr: 67, partial: true },
     { name: "Samy Natera Jr.", pos: "RP", age: 26, ovr: 86 },
-    { name: "José Fermin", pos: "RP", age: 24, ovr: 80 },
+    { name: "José Fermin (2001)", pos: "RP", age: 24, ovr: 80 },
     { name: "Ryan Watson", pos: "RP", age: 28, ovr: 78 },
     { name: "Mitch Farris", pos: "RP", age: 25, ovr: 68 },
     { name: "Sam Bachman", pos: "RP", age: 26, ovr: 67 },

@@ -42,17 +42,30 @@ const gs = m => (m.pit ? m.pit.gs : 0);
 const g = m => (m.pit ? m.pit.g : 0);
 const byName = (a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : a.id - b.id);
 
+/* Games caught in 2026 by API id, from the league tables' "caught" list
+   (fetchMlbFoRecord.mjs --fielding). */
+export const caughtGames = stats => {
+  if (!stats || !Array.isArray(stats.caught)) throw new Error('the league tables carry no games caught list, run node scripts/fetchMlbFoRecord.mjs --fielding');
+  return new Map(stats.caught.map(r => [r.id, r.g]));
+};
+
 /* THE 26. The 2026 September active roster is 28, so the real 26 is chosen
    by one rule from the club's major league roster on the last day of the
    regular season: the 13 position players and the 13 pitchers who carried the
    most of the club's 2026, the way a real 26 is built.
      Position players: the two catchers with the most plate appearances (a
-       club always carries two), then the most plate appearances.
+       club always carries two), then the most plate appearances. A club with
+       fewer than two men the API lists at C makes up the pair with the men
+       who caught the most games in 2026, because the API's one position label
+       calls some real catchers DH (Detroit's Eduardo Valencia caught 18 of
+       his starts and is listed DH).
      Pitchers: the five with the most games started (the rotation), then the
        most outs recorded.
    Ties go to the man with more games, then by name. If one side is short the
-   other fills the 26. Everyone else on the list is left out with the reason. */
-export function selectTwentySix(players) {
+   other fills the 26. Everyone else on the list is left out with the reason.
+   caught: Map of API id to games caught (caughtGames above). */
+export function selectTwentySix(players, caught) {
+  if (!(caught instanceof Map)) throw new Error('selectTwentySix needs the games caught map (caughtGames)');
   const leftOut = [];
   const eligible = [];
   for (const m of players) {
@@ -63,7 +76,14 @@ export function selectTwentySix(players) {
   const pitchers = eligible.filter(isPitcherRow).sort((a, b) => outs(b) - outs(a) || g(b) - g(a) || byName(a, b));
 
   const takenH = [];
-  for (const m of hitters.filter(x => x.pos === 'C').slice(0, CATCHERS)) takenH.push(m);
+  const gc = m => caught.get(m.id) || 0;
+  const catchers = hitters.filter(x => x.pos === 'C').slice(0, CATCHERS);
+  /* fewer than two listed at C: the men who caught the most games make it up */
+  for (const m of hitters.filter(x => gc(x) > 0 && x.pos !== 'C').sort((a, b) => gc(b) - gc(a) || pa(b) - pa(a) || byName(a, b))) {
+    if (catchers.length < CATCHERS) catchers.push(m);
+  }
+  const catcherIds = new Set(catchers.map(m => m.id));
+  for (const m of catchers) takenH.push(m);
   for (const m of hitters) { if (takenH.length >= HITTERS) break; if (!takenH.includes(m)) takenH.push(m); }
 
   const takenP = [];
@@ -89,26 +109,30 @@ export function selectTwentySix(players) {
       ? `outside the 13 pitchers: ${gs(m)} starts and ${outs(m)} outs in 2026`
       : `outside the 13 position players: ${pa(m)} plate appearances in 2026` });
   }
-  return { men: men.map(m => ({ ...m, rotation: rotation.has(m.id) })), leftOut };
+  return { men: men.map(m => ({ ...m, rotation: rotation.has(m.id), catcher: catcherIds.has(m.id) })), leftOut };
 }
 
 /* NAMESAKES. Two real men can share a name (2026 has two Max Muncys, the
    Dodgers' born 1990 and the Athletics' born 2002), and the game keeps one
    name to a man in a league. The older keeps the name exactly as the API
    gives it; a younger namesake carries his birth year after it, the way the
-   reference books tell them apart. Nobody is renamed beyond that.
+   reference books tell them apart. Nobody is renamed beyond that. Names are
+   compared without accents or case, because a reader cannot tell José Fermín
+   (Cardinals, born 1999) from José Fermin (Angels, born 2001) on a trade
+   screen either.
    menByClub: { ABBR: men[] } as selectTwentySix returns them.
    Returns Map of API id to the name the game shows. */
 export function gameNames(menByClub) {
   const all = Object.values(menByClub).flat();
   const groups = new Map();
-  for (const m of all) { const k = m.name; if (!groups.has(k)) groups.set(k, []); groups.get(k).push(m); }
+  for (const m of all) { const k = normName(m.name); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(m); }
   const out = new Map();
-  for (const [name, list] of groups) {
+  for (const list of groups.values()) {
     list.sort((a, b) => (a.birthDate < b.birthDate ? -1 : a.birthDate > b.birthDate ? 1 : a.id - b.id));
-    list.forEach((m, i) => out.set(m.id, i === 0 ? name : `${name} (${m.birthDate.slice(0, 4)})`));
+    list.forEach((m, i) => out.set(m.id, i === 0 ? m.name : `${m.name} (${m.birthDate.slice(0, 4)})`));
   }
-  if (new Set(out.values()).size !== out.size) throw new Error('two namesakes share a birth year, the rule cannot tell them apart');
+  const fold = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  if (new Set([...out.values()].map(fold)).size !== out.size) throw new Error('two namesakes share a birth year, the rule cannot tell them apart');
   return out;
 }
 
@@ -160,9 +184,11 @@ export const midRank = (pool, x) => (below(pool, x) + (atOrBelow(pool, x) - belo
 /* The game position for a man: a pitcher is SP if he is in the rotation or
    started at least half his games, CL with 20 or more saves, else RP. A two
    way man is listed where he hits, DH, the way the game has always carried
-   him. Every other position is the API's own primary position. */
+   him. One of the club's two catchers whom the API lists as DH is shown at C,
+   where he played the field (DH is no position in the field). Every other
+   position is the API's own primary position. */
 export function gamePos(m) {
-  if (!isPitcherRow(m)) return m.pos === 'TWP' ? 'DH' : m.pos;
+  if (!isPitcherRow(m)) return m.pos === 'TWP' ? 'DH' : m.catcher && m.pos === 'DH' ? 'C' : m.pos;
   if (m.rotation || startsShare(m.pit) >= 0.5) return 'SP';
   if (m.pit && m.pit.sv >= RULE.closerSaves) return 'CL';
   return 'RP';
