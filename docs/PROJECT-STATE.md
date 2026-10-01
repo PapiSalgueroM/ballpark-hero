@@ -1,5 +1,16 @@
 # Project state
 
+## CHECKPOINT 2026-10-01: verified IndexNow count fence accepted
+
+785's literal167 floor passes offline; the copied previous166 floor fails only intended growth.
+The page delta is exactly Manager Hot Seat. No URLs/data/public files changed or submissions
+made. Final utility CSS passes the Free Kick/Buzzer/First Touch/Constructor/Budget matrices,
+plus24 Soccer Lineup/Staff/Inbox contexts and four no-wrap controls so far.771's protocol-
+dependent scheduling control gets no credit and is being replaced by an asserted retained-
+intent copy, with healthy checks unchanged.774's measured single form minimum-width fix now
+passes its seven actual hook/unit outcomes; native8/control matrices run. Final JS rebuild
+waits behind the74-harness rerun. Full receipts/remaining gates are on WORKBOARD. Next free786.
+
 ## CHECKPOINT 2026-10-01: Free Kick practice accepted, combined CSS exposed two real gates
 
 777 adds fixed-input unrecorded practice with original physics, pre-play rules/help, native

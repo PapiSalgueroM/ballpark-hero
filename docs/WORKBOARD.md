@@ -1,5 +1,25 @@
 # Work board
 
+**2026-10-01, Codex785 COMPLETE: IndexNow coverage ratchet corrected.**
+The offline positive now accepts167 real URLs. An asserted copied old166 floor fails exactly
+the sitemap-growth assertion; key/host checks still pass. The only added URL versus Git
+4153becb's parent is /manager-hot-seat, with its real route/registry/page/lastmod verified.
+Strict growth and shrink checks remain unchanged. No URLs were submitted and no public file
+was edited. Proof: TEMP/dukb-round785-indexnow-810db199c0f242aa8d1930ae457ab524/receipt.json,
+healthy.log,old-floor.log. Next free786. Final combined gates still await774 corrected JS.
+
+**771 browser-control addendum, root owned:** final CSS healthy8, Staff healthy8 and Soccer
+Lineup healthy8 all pass; the no-wrap copies reproduce293px/378px overflow in both320 modes.
+The passive-hook browser copy earns no credit: a quiet-check protocol roundtrip can let the
+passive effect consume no-op intent before the separate later automatic resolution. Preserve
+that failed log. Own only scripts/playInboxCard.mjs control setup/labels: replace passive with
+a deterministic retained-intent copy, asserting exactly one actual setAnswerRequest(null)
+statement and replacing only copied source with void answerRequest. Keep the existing native
+no-op/quiet/later-autoResolve sequence and every healthy check/timing unchanged. It must then
+falsely cue exactly the later automatic message with420ms normal motion/static reduced motion.
+Run both native motion controls, preserve original bytes/clean copies. This directly guards
+discarding refused intent, without claiming a scheduling race. No app/source behavior changes.
+
 **2026-10-01, Codex785 CLAIMED: restore the IndexNow coverage ratchet after719.**
 Root owns only scripts/simIndexNow.mjs and docs. The completed fresh build's fifteen fences
 find a real mismatch: public/sitemap.xml has167 URLs while the unchanged strict floor is166.
