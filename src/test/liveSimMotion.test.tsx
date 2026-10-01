@@ -353,7 +353,13 @@ describe('Live simcast motion', () => {
       expectWhistle(mounted, cap, true);
       cleanup();
     }
-  }, 30000);
+    /* Round 781 review: 120 seconds, not 30. Each of the eight mounts now
+       walks its whole board frame by frame before the wind up (two to eight
+       match minutes, a second each), where it used to start inside the wind
+       up, so this test does three to five times the stepping it did. It took
+       5 to 13 seconds on a quiet machine and went past 30 when other lanes
+       were compiling, with nothing wrong in the viewer. */
+  }, 120000);
 
   it('a tactics redraw cancels a terminal action that is no longer committed', async () => {
     findTerminalFixtures();
