@@ -163,6 +163,14 @@
  *      a crisis and 10 per standing cost. With the old rebuild (crisisdrops,
  *      N=120) all 44 crisis careers fail after; with the dog rounding the
  *      bill to a tenth (roundbill) 27 bills are wrong before and 24 after.
+ *      Then the bills older saves carry: 18 of those saves load (through
+ *      repairCareer) a pre 826 bill the old rounding left out of step with
+ *      its items (a rent with a dog billed at 0, a yacht and rent billed at
+ *      0.3, a chef and rent billed at 0.1) and go into a crisis; the bill
+ *      after must be what the save owed less the upkeep sold, never below 0.
+ *      Measured over seed offsets 0 to 4: 17 crisis careers each time, 12 of
+ *      them owing less than the upkeep sold, 0 wrong. Floor: 6 such bills.
+ *      Without the floor at 0 (noclamp, N=120) all 12 come out at -0.024.
  *
  * NEGATIVE CONTROLS, one or more per section. Each puts a defect back into an
  * in memory copy of one source file (also written to the temp directory for
@@ -211,6 +219,8 @@
  *                as before Round 826: section 8 fails.
  *   roundbill    adopting the rescue dog rounds the whole bill to a tenth
  *                again: section 8 fails.
+ *   noclamp      a financial crisis can take a pre 826 bill below zero:
+ *                section 8 fails.
  *
  * Run: node scripts/simCareerLifeCooldowns.mjs [careers]
  *      SEED_OFFSET=1 node scripts/simCareerLifeCooldowns.mjs   another draw
@@ -362,6 +372,13 @@ const CONTROLS = {
     from: '    s.customYearlyCosts = Math.max(0, Math.round(((s.customYearlyCosts || 0) - soldUpkeep) * 1000) / 1000);',
     to: '    s.customYearlyCosts = s.purchasedItems.reduce((sum, id) => sum + (getSpendingItem(id)?.monthlyCost || 0), 0);',
     note: 'a financial crisis rebuilds the yearly bill from the items it keeps, as it did before Round 826',
+    breaks: '8',
+  },
+  noclamp: {
+    file: 'src/lib/soccerCareerEngine.ts',
+    from: '    s.customYearlyCosts = Math.max(0, Math.round(((s.customYearlyCosts || 0) - soldUpkeep) * 1000) / 1000);',
+    to: '    s.customYearlyCosts = Math.round(((s.customYearlyCosts || 0) - soldUpkeep) * 1000) / 1000;',
+    note: 'a financial crisis can take a pre 826 bill below zero',
     breaks: '8',
   },
   roundbill: {
@@ -1304,6 +1321,54 @@ console.log('8) A financial crisis sells what it sells and keeps every other yea
   if (setupBroken) fail(`${setupBroken} purchases or events in the probe did not happen, so it measured less than it says`);
   if (Math.min(standingKept.physio, standingKept.child, standingKept.dog) < 10) fail(`a standing cost was tested in fewer than 10 careers (physio ${standingKept.physio}, child ${standingKept.child}, dog ${standingKept.dog})`);
   for (const [kind, n] of Object.entries(problems)) if (n) fail(`${n} ${kind} problem(s), first: ${firsts[kind]}`);
+
+  /* The bills saves from before this round carry. The dog and the child used
+     to round the WHOLE bill to a tenth, so a save can owe less than the items
+     it owns: a 0.024 rent with a dog on top (0.034) was billed at 0. Such a
+     save loads as it is (through repairCareer) and goes into a crisis, which
+     takes the sold upkeep off what the save says it owes and never goes below
+     nothing: a bill under zero would pay the player every season. The third
+     shape is a bill the old rounding pushed UP (0.084 billed at 0.1), which
+     the crisis takes the rent off and otherwise leaves alone. */
+  const LEGACY = [
+    { items: ['rent_apartment'], bill: 0 },
+    { items: ['rent_apartment', 'yacht'], bill: 0.3 },
+    { items: ['personal_chef', 'rent_apartment'], bill: 0.1 },
+  ];
+  let legacyProbed = 0;
+  let legacyBelowZero = 0;
+  let legacyNoCrisis = 0;
+  let legacyWrong = 0;
+  let legacyFirst = '';
+  bases.slice(0, 18).forEach((c, k) => {
+    const shape = LEGACY[k % LEGACY.length];
+    Math.random = seeded(82700 + k);
+    try {
+      const raw = JSON.parse(JSON.stringify(c.midSave));
+      const st = repairCareer({ ...raw, netWorth: -50, consecutiveDeficitYears: 2, purchasedItems: [...shape.items],
+        properties: [], customYearlyCosts: shape.bill, lifeFlags: { ...(raw.lifeFlags || {}), privatePhysio: 0 } });
+      /* the bill as the save loads; a later round that reconciles old bills
+         on load drops these below zero cases, and the floor below says so */
+      const loaded = st.customYearlyCosts || 0;
+      const soldUpkeep = st.purchasedItems.filter(id => getSpendingItem(id)?.category !== 'lifestyle')
+        .reduce((a, id) => a + (getSpendingItem(id)?.monthlyCost || 0), 0);
+      const ran = advanceProSeason({ ...st, phase: 'playing', pendingEvents: [], events: [] }, clubs);
+      if (!(ran.events || []).some(e => String(e).includes('FINANCIAL CRISIS'))) { legacyNoCrisis += 1; return; }
+      legacyProbed += 1;
+      if (loaded - soldUpkeep < 0) legacyBelowZero += 1;
+      const want = Math.max(0, r3(loaded - soldUpkeep));
+      const got = ran.customYearlyCosts;
+      if (typeof got !== 'number' || got < 0 || Math.abs(got - want) > 0.0005) {
+        legacyWrong += 1;
+        if (!legacyFirst) legacyFirst = `career ${k}: a pre 826 bill of ${loaded} on ${st.purchasedItems.join(', ')} came out of the crisis at ${got}, it should be ${want}`;
+      }
+    } finally {
+      Math.random = realRandom;
+    }
+  });
+  console.log(`   pre 826 bills: ${legacyProbed} careers through a crisis (${legacyNoCrisis} without one), ${legacyBelowZero} of them owing less than the upkeep sold; bill wrong or below zero after: ${legacyWrong}`);
+  if (legacyBelowZero < 6) fail(`only ${legacyBelowZero} pre 826 bills owing less than the upkeep sold went through a crisis, too few to test the floor`);
+  if (legacyWrong) fail(`${legacyWrong} pre 826 bill(s) wrong after the crisis, first: ${legacyFirst}`);
 }
 
 /* ─── verdict ────────────────────────────────────────────────────────────── */
