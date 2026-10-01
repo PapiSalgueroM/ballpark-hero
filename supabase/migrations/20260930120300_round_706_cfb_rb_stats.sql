@@ -1,8 +1,10 @@
 -- Round 706: cfb_rb_stats, the placeholder names.
 --
 -- NOT APPLIED. Written 2026-09-30 from read only SELECTs; the desktop lane applies it through the
--- Supabase MCP. Fence: scripts/simCollegeTables.mjs mirrors it on a pull of the live table, requires
--- the count to equal the constant below, and requires the result to pass every check.
+-- Supabase MCP. Fence: scripts/simCollegeTables.mjs reads the constants and the rk list out of this
+-- block's code and requires them to agree (rows before minus the list is rows after), runs both
+-- copies of the placeholder name rule over the names this file deletes, and, when the host answers,
+-- requires the live row count to be the one this file was measured at or the one it leaves.
 --
 -- No foreign key points at this table (checked in pg_constraint), so nothing is repointed. The
 -- natural key, player_slug, is already unique (14,800 rows, 14,800 slugs).

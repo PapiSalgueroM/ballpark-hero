@@ -26,9 +26,10 @@
  * The daily pick is pool[date % pool.length] over the pool ordered by id. The
  * hook keeps that index over the rows as they arrive (a twin's slot deals its
  * kept row), so this code moves no daily; the pool only changes length when
- * the migration deletes the rows, at 00:00 America/New_York with Round 653.
- * scripts/simCollegeTables.mjs holds this against the live table and the
- * migration.
+ * the migration deletes the rows, at 00:00 America/New_York.
+ * scripts/simCollegeTables.mjs holds this against the eight live rows the
+ * migration names (scripts/data/cbbProgramTwins.json) and the migration's own
+ * SQL.
  */
 
 export interface CbbProgramRowLike {

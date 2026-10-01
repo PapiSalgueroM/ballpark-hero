@@ -1,9 +1,14 @@
 -- Round 706: nfl_draft_picks, the repeated drafts, the placeholder rows and the unparsed rounds.
 --
 -- NOT APPLIED. Written 2026-09-30 from read only SELECTs; the desktop lane applies it through the
--- Supabase MCP. Fence: scripts/simCollegeTables.mjs, which mirrors every step below on a pull of the
--- live table, requires the counts to equal the constants in this file, and requires the result to
--- pass every check (so it is green before this lands and after).
+-- Supabase MCP. Fence: scripts/simCollegeTables.mjs reads the constants out of this block's code and
+-- requires them to add up (rows before minus every delete is rows after, the invented list as long as
+-- its constant, the per year counts in this header summing to the derived and unknown constants),
+-- holds the rounds the block reads back against the two source pins in
+-- docs/audits/college-tables-2026-09-30.md, runs the draft cleaner over the placeholder shapes step 2
+-- deletes, and, when the host answers, requires the live row count to be the one this file was
+-- measured at or the one it leaves. It does not pull the rows or rerun the steps; the block's own
+-- checks below do that when it runs.
 --
 -- No foreign key points at this table (checked in pg_constraint), so nothing is repointed.
 --
@@ -105,8 +110,10 @@
 --     already read them as names (genCollegeGridData readDraftName).
 --
 -- AFTER THIS LANDS. cleanDraftPicks returns the same rows minus exactly the 13 invented ones, with the
--- same round one boundaries (the fence proves both), so the College Grid key loses its eight 1977
--- draft-only entries and nothing else: regenerate scripts/data/collegeGridPlayers.json.
+-- same round one boundaries (measured 2026-10-01 on a read only pull with steps 1, 2 and 2b replayed in
+-- memory: 26,939 cleaned rows before, 26,926 after, the 13 ids above lost, none gained, 0 boundaries
+-- moved), so the College Grid key loses its eight 1977 draft-only entries and nothing else:
+-- regenerate scripts/data/collegeGridPlayers.json and reload public.college_grid_players from it.
 -- scripts/genNflGridData.mjs --check will differ: the triple loads defeated its "exactly one row" rule
 -- for 2024 and 2025 draftees, and the derived rounds change draft_round for the late picks it copied
 -- as round 1. Regenerate nfl_grid_players after.

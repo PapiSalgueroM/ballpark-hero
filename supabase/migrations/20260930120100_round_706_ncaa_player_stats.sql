@@ -1,8 +1,10 @@
 -- Round 706: ncaa_player_stats, the players loaded twice and the placeholder names.
 --
 -- NOT APPLIED. Written 2026-09-30 from read only SELECTs; the desktop lane applies it through the
--- Supabase MCP. Fence: scripts/simCollegeTables.mjs mirrors both steps on a pull of the live table,
--- requires the counts to equal the constants below, and requires the result to pass every check.
+-- Supabase MCP. Fence: scripts/simCollegeTables.mjs reads the constants out of this block's code and
+-- requires them to add up, runs both copies of the placeholder name rule over the three names step 2
+-- deletes, and, when the host answers, requires the live row count to be the one this file was
+-- measured at or the one it leaves. It does not pull the rows; the block's own checks do that.
 --
 -- No foreign key points at this table (checked in pg_constraint), so nothing is repointed.
 --

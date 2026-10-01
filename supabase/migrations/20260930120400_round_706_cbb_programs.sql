@@ -2,8 +2,10 @@
 --
 -- NOT APPLIED. Written 2026-09-30 from read only SELECTs; the desktop lane applies it through the
 -- Supabase MCP. Fence: scripts/simCollegeTables.mjs runs the game's own rule (src/lib/cbbPrograms.ts
--- dedupePrograms) on a pull of the live table and requires it to hide exactly the rows this file
--- deletes and to merge exactly the common names this file writes.
+-- dedupePrograms) on scripts/data/cbbProgramTwins.json, the eight live rows this file touches or must
+-- leave apart (pulled 2026-09-30, every value this file's WHERE clauses pin checked against them), and
+-- requires it to hide exactly the rows this file deletes and to merge exactly the common names this
+-- file writes. The block's own pair check below is what covers the other 273 rows when it runs.
 --
 -- cbb_daily.program_id has no foreign key and cbb_daily is empty (0 rows); the block below refuses to
 -- run if any cbb_daily row points at a row it deletes.
