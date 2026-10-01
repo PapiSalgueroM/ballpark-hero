@@ -445,7 +445,7 @@ const seeded = seed => {
 
 /* The life file's own id range. Read off the catalog, not typed here, so a
    new id joins the audit the moment it exists. */
-const LIFE_SRC = fs.readFileSync(path.join(ROOT, 'src/lib/soccerCareerLife.ts'), 'utf8')
+const LIFE_SRC = fs.readFileSync(path.join(ROOT, 'src/lib/soccerCareerLife.ts'), 'utf8').replace(/\r\n/g, '\n')
   .replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
 const LIFE_IDS_IN_SOURCE = [...LIFE_SRC.matchAll(/\{ id: (\d+), /g)].map(m => Number(m[1]));
 const NEW_IDS = LIFE_IDS_IN_SOURCE.filter(id => id >= 253 && id <= 272);
