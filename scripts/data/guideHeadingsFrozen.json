@@ -667,6 +667,60 @@
         "Out of position picks lose 8 rating, so a misplaced superstar can be worse than a natural fit."
       ]
     },
+    "/deadline-day": {
+      "howToPlay": [
+        "Open today's window for the shared daily club, or pick any club in free play, or let the game pick one at random.",
+        "Read the brief. Each need is a place in your current eleven, with who starts there now and the rating that would count as an upgrade.",
+        "Under each need are two or three real players who could fill it, cheapest first, each with what your recruitment desk thinks he is worth.",
+        "Tap a player to open his deal, then call his club. The call is free and their asking price comes straight back.",
+        "Type a bid and watch the meter, or use the quick buttons to lowball, haggle or meet the ask. Sending it takes an hour.",
+        "Once the fee is agreed, his agent names a contract length, a weekly wage and a signing bonus. Offering terms takes an hour too.",
+        "Short of money? Sell one of your bench players to a club that has made an offer. Each sale takes an hour and the fee goes straight into the budget.",
+        "Keep going until every need is filled, or shut the window yourself when you are done."
+      ],
+      "rules": [
+        "The window opens at 11am and shuts at 11pm, so you have 12 hours.",
+        "Calling a club and walking away cost no time. Every bid, every offer of terms and every sale costs one hour.",
+        "The board want 3 or 4 places filled. A need is filled by a signing who can play that place and is rated at or above its line.",
+        "The budget is about what the cheapest man for each need would cost at his listed price plus the signing bonus his agent asks for. The dearest man for every need would cost more than you have.",
+        "Your desk gives a range for what each player is worth, and what he is really worth is always inside it.",
+        "Bid 97 percent of their ask or more and the fee is agreed.",
+        "Between 75 and 97 percent they counter: the ask comes 40 percent of the way down to your bid, and it costs one round of their patience.",
+        "Under 75 percent is an insult. The ask goes up 4 percent and it costs two rounds. Under 55 percent they end the talks on the spot.",
+        "A selling club starts with 4 or 5 rounds of patience. Run it out and the deal is dead.",
+        "His agent hears 3 offers at most. An offer that adds up to what he asked for signs him, a near miss gets a lower wage demand back, and a poor one costs two tries or ends the meeting.",
+        "The signing bonus comes out of the same budget as the fee. A bid or an offer you cannot afford is refused before the hour is spent, so the budget never goes below zero.",
+        "Rival clubs move for players on your list. If a rival is in for a man and you do not push his deal that hour, there is a 30 percent chance they sign him.",
+        "If a rival is in at the fee table, your bid has to beat theirs. Bid at or under their number and there is a 30 percent chance they close the deal there and then.",
+        "Walk away from a deal with a rival circling and they usually take him.",
+        "When the window shuts, any deal still in talks or at the terms table collapses, and none of its money is spent.",
+        "The grade is out of 100: 50 for needs filled, 30 for value for money and 20 for budget left.",
+        "Value for money is full for a fee at or under what the player is really worth and nothing at 1.5 times it, averaged over your signings.",
+        "Budget points are the share of the budget you kept times the share of needs you filled, so a window that signs nobody scores nothing.",
+        "The letters are A+ from 90, A from 80, B from 65, C from 50 and D from 35. Anything lower is an F.",
+        "The daily is the same club, the same list, the same budget and the same dice for everyone on an Eastern day. One go per day, and a refresh picks up where you left off.",
+        "Deadline Day records that you played but puts no points on the leaderboard for now, while the points system is being rebuilt."
+      ],
+      "example": [
+        "Say today's club needs a goalkeeper, a central midfielder, a right winger and a striker, and the board have left you £29m.",
+        "You start with the keeper. His club are asking £3.6m, your desk says he is worth £2.4m to £3.2m, and you bid £3.1m. That is a counter: they come down to £3.4m and one round of patience is gone. It is noon.",
+        "You bid £3.3m, inside 97 percent of their ask, and the fee is agreed. His agent wants 4 years at 10k a week and a £1.8m bonus. You offer exactly that and he signs. It is 2pm and you have £23.9m left.",
+        "While you were on the phone, a rival came in for the dearest keeper on your list and signed him an hour later. It did not matter this time, but the same thing can happen to the striker you were saving for last.",
+        "By 8pm the midfielder and the winger are in, three hours each. The striker's club will not budge much and a rival is in for him, so you bid over the rival's number and inside 97 percent of the ask. Fee agreed at 9pm, terms signed at 10pm, an hour to spare.",
+        "Four needs out of four, every fee at or under what the player was worth, and £3m of the £29m left. That is 50 for needs, 30 for value and 2.1 for budget: 82 out of 100, an A."
+      ],
+      "tips": [
+        "Call every club on your list early. The call is free, and it puts every asking price in front of you before you spend an hour.",
+        "Open around the middle of your desk's range, never under 75 percent of their ask, then come about half way up to their number each round. Every fee at or under his real worth keeps your value points whole.",
+        "A haggle costs an hour and a round of patience. With plenty of clock, pitch low and come up. With the window closing, pay near the ask and get it done.",
+        "Do not insult a club unless you mean it. Under 75 percent of the ask costs two rounds and pushes the price up.",
+        "On a cheap player the signing bonus can be more than half the fee, so leave room for it before you agree the fee.",
+        "When a rival comes in, deal with that player next. Every hour you leave him alone they have a 30 percent shot at signing him.",
+        "If the sums do not add up, sell a bench player early, so the money is there when the fee table needs it.",
+        "Money left only scores once the needs are filled, so a full window at a fair price beats a cheap half window.",
+        "Shutting the window early earns nothing for the hours you did not use. Unused money counts, unused time does not."
+      ]
+    },
     "/emoji-guess": {
       "howToPlay": [
         "Look at the emoji string and the category label above it.",
