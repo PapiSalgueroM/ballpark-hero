@@ -1,5 +1,21 @@
 # Work board
 
+**2026-10-01, 815/816 help availability addendum before final capture.**
+Read-only Page/Board inspection found both local HowToPlay panels disappear
+after a game starts, with no shared GameHelp on these routes. Each Board owner
+also renders its existing HowToPlay once in the active Board header. This keeps
+the same instructions re-openable during play and results, as required by the
+standing game rules. 817 still owns only the two panels and focused help checks.
+No new component, rules, route or shared UI. Re-freeze Board checkpoints after
+the small additions and verify opening/closing help preserves the current game.
+
+At 16:59 UTC the live site serves a new index-DH__DSXe.js build. Sampled pages
+have self canonicals and no noindex; Aussie Rules Manager now serves its own
+document, Rank Em includes Lock order, and Deadline Day/NHL draft are present.
+The live sitemap now has 170 URLs and ads.txt has the correct publisher. Full
+live crawl is running. This establishes those published documents, not AdSense
+approval, Google's indexing decisions or publication of the pending 815-817 code.
+
 **2026-10-01 16:57 UTC, Release K integrated without overwriting current work.**
 The required pull fast-forwarded main to 1e0aa2b8, retaining current claims and
 accepted commits. 813 is now 51934cdf above that release. Claude's new games,

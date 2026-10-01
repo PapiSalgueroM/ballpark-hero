@@ -1,5 +1,16 @@
 # Project state
 
+## LIVE UPDATE 2026-10-01 and current help addendum
+
+The live 16:59 UTC sample now serves index-DH__DSXe.js and a 170-URL sitemap.
+Aussie Rules Manager has its own document, Rank Em has Lock order, and both new
+Release K games are present. Sampled canonicals/noindex/ads.txt checks are clean;
+full crawl is running. Google approval/index status remain unconfirmed.
+
+815/816 also keep each existing HowToPlay reachable from the active Board
+header, because the previous opener disappeared at game start. Same owned
+Boards, no new rules/components. Final capture waits updated frozen checkpoints.
+
 ## INTEGRATED 2026-10-01: Claude Release K and current fixes
 
 Main now includes Release K through 1e0aa2b8, with 813 on top at 51934cdf. All
