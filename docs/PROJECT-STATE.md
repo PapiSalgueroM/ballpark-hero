@@ -1,5 +1,21 @@
 # Project state
 
+## ACCEPTED 2026-10-01: Aussie registration, NHL contributors and draft production checks
+
+792 is registered with truthful saved-game resume, lazy metadata, generated search and
+exhaustive fictional-name coverage.797's copied missing/wrong/false-field controls fail
+their real findings while independent outcomes stay green. Budget's selected preview
+has its nationality flag, with nine original actual signing outcomes held.
+The fresh merged production clone has types0/two builds/three-clock saved pages and
+all15 artifact fences green. Only three owned raw files changed,185 other saved files
+held, and only Aussie/NHL content fingerprints changed;166 other URL dates/hashes held.
+Actual App/Header/Footer checks pass four NHL and eight draft contexts, exact saves/
+placement/original22 nodes, finite/static feedback and zero document movement or
+outward writes. Full receipts and boundaries are on WORKBOARD. Live publication is
+still Release J below; no new deployment or current all-node-green claim is made.
+797's new NHL harness read representation and Tycoon runner controls remain underway.
+798 MLB roster access continues. Other Claude claims hold. Next free799.
+
 ## IN PROGRESS 2026-10-01: MLB trade desk roster access claimed
 
 798 removes three UI-only top-eight barriers from the existing MLB Trade Finder and
