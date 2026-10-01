@@ -11,7 +11,8 @@ import {
   mlbRelease, mlbSign, mlbTrade, mlbTradeValue, mlbAiMoves, AL, NL, MLB_DIVISIONS,
   MLB_ROUNDS,
   type MlbLeague, type MlbProspect, type MlbSeriesResult, mlbExecuteTalksTrade,
-  ensureMlbLeagueIds, MLB_ROSTER_MIN, MLB_ROSTER_MAX,
+  ensureMlbLeagueIds, mlbRosterMin, mlbRosterMax, mlbSimReads, isPitcher,
+  type MlbGmPlayer,
 } from '@/lib/mlbFrontOffice';
 /* Round 631: a DFA costs dead money and the man cannot come back this season. */
 import { deadMoneyFor, deadCapUsed, signRefusal, cutRefusal, rosterFullRefusal, tradeRefusal } from '@/lib/frontOfficeCuts';
@@ -486,9 +487,10 @@ export default function MlbFrontOfficeBoard() {
         <div className="rounded-2xl border border-border bg-card p-4 text-center">
           <p className="font-display text-lg font-bold text-foreground">Take over a baseball front office</p>
           <p className="mt-1 text-xs text-muted-foreground">
-            Real 2026 rosters from MLB&apos;s own data, rated off real 2025 stats. Manage the payroll
-            under the tax line, survive the 162, then October: Wild Card, Division Series, LCS,
-            World Series. Saves automatically.
+            Every club&apos;s real 26 from MLB&apos;s own data, as they stood on the last day of the
+            2026 regular season, rated off their 2026 numbers. Manage the payroll under the tax
+            line, survive the 162, then October: Wild Card, Division Series, LCS, World Series.
+            Saves automatically.
           </p>
         </div>
         <div className="grid grid-cols-2 gap-1.5 sm:grid-cols-4">
@@ -666,7 +668,8 @@ export default function MlbFrontOfficeBoard() {
     capRoom: room,
     /* Round 631: the box offers only men the sign path would take. */
     ledger: my,
-    rosterMax: MLB_ROSTER_MAX,
+    /* Round 829: a full roster club's ceiling is 28, an older save's 16. */
+    rosterMax: mlbRosterMax(my),
     wins: my.wins,
     losses: my.losses,
     period: league.round,
@@ -687,8 +690,8 @@ export default function MlbFrontOfficeBoard() {
   /* Round 631: dead money on the payroll line, only when there is any. */
   const dead = deadCapUsed(my);
   /* Round 631: at the engine's floor every DFA waits, at its ceiling every Sign does, and both say why. */
-  const cutBlock = cutRefusal(my, MLB_ROSTER_MIN);
-  const fullBlock = rosterFullRefusal(my, MLB_ROSTER_MAX);
+  const cutBlock = cutRefusal(my, mlbRosterMin(my));
+  const fullBlock = rosterFullRefusal(my, mlbRosterMax(my));
   const panelTitle = tiles.find(x => (x.key === 'play' ? 'round' : x.key) === tab)?.title ?? '';
   const tradeOwnPlayers = [...my.players].sort((a, b) => b.ovr - a.ovr);
   const tradePartnerPlayers = tradePartner ? [...league.teams[tradePartner].players].sort((a, b) => b.ovr - a.ovr) : [];
@@ -755,8 +758,26 @@ export default function MlbFrontOfficeBoard() {
           </p>
           <p className="mb-2 text-center text-[10px] text-muted-foreground">{capNote()}</p>
           {cutBlock && <p data-cut-block className="mb-2 text-center text-[10px] text-destructive">{cutBlock}</p>}
+          {/* Round 829: who the sim plays is a fact the engine decides, so the
+              screen reads it from the engine rather than guessing. */}
+          <p className="mb-2 text-center text-[10px] text-muted-foreground" data-roster-count>
+            {my.players.length} on the roster. The sim plays your best healthy 8 bats, 3 starters and 2 relievers.
+          </p>
+          {/* Round 829: 26 men, so three small groups inside the one box. Every
+              row is still drawn, and the box scrolls, never the page. */}
           <div className="grid max-h-96 grid-cols-1 gap-1 overflow-y-auto sm:grid-cols-2">
-            {[...my.players].sort((a, b) => b.ovr - a.ovr).map(p => {
+            {(() => {
+              const plays = new Set(mlbSimReads(my));
+              const groups: { key: string; title: string; men: MlbGmPlayer[] }[] = [
+                { key: 'bats', title: 'Position players', men: my.players.filter(p => !isPitcher(p)) },
+                { key: 'rot', title: 'Starting pitchers', men: my.players.filter(p => p.pos === 'SP') },
+                { key: 'pen', title: 'Bullpen', men: my.players.filter(p => p.pos === 'RP' || p.pos === 'CL') },
+              ];
+              return groups.filter(g => g.men.length > 0).flatMap(g => [
+                <p key={`h-${g.key}`} data-roster-group={g.key} className="pt-1 text-[10px] font-bold uppercase tracking-wider text-muted-foreground sm:col-span-2">
+                  {g.title} ({g.men.length})
+                </p>,
+                ...[...g.men].sort((a, b) => b.ovr - a.ovr).map(p => {
               /* Round 631: the cost is on screen before the second tap. */
               const cost = deadMoneyFor(p);
               const arming = cutArmed === p.id;
@@ -765,7 +786,11 @@ export default function MlbFrontOfficeBoard() {
                 <div className="flex items-center justify-between">
                 <span className="min-w-0">
                   <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>{p.name} {p.out > 0 ? `(IL ${p.out}r)` : ''}</span>
-                  <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}</span>
+                  <span className="block text-[10px] text-muted-foreground">
+                    {p.pos} · {p.age}y · ${p.salary}M x{p.years}
+                    {' · '}<span data-sim-plays={plays.has(p.id) ? 'yes' : 'no'}>{plays.has(p.id) ? 'plays' : 'depth'}</span>
+                    {p.partial && <span data-partial className="text-gold"> · thin 2026 data</span>}
+                  </span>
                 </span>
                 <span className="ml-2 flex shrink-0 items-center gap-1.5">
                   <b className="text-primary">{p.ovr}</b>
@@ -804,7 +829,9 @@ export default function MlbFrontOfficeBoard() {
                 )}
               </div>
               );
-            })}
+                }),
+              ]);
+            })()}
           </div>
         </div>
       )}
