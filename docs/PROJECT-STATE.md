@@ -1,5 +1,14 @@
 # Project state
 
+## IN PROGRESS 2026-09-30: Codex 768 pool targeting, following built 764 through 767
+
+The 764 through 767 combined production build and exact app types pass; all fifteen built-site
+fences pass. Three-sport lineup targeting passes all 24 final browser cases, with existing dialog
+dismissal to BODY recorded explicitly. Training, Mystery Box and draft winner final acceptance
+continues. The next free agent is taking claimed 768 Fantasy Draft Country/Foot targeting from
+master H, with existing shortlist/eligibility/order preserved. Exact ownership is on WORKBOARD.
+Next unclaimed number: 769. Claude retains release publishing and all its existing claims.
+
 ## IN PROGRESS 2026-09-30: four-agent Codex batch 764 through 767
 
 764 Soccer Career training feedback and 765 NBA/NHL/F1 lineup targeting have stable app source,

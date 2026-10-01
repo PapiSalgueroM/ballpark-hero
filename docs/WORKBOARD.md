@@ -1,5 +1,18 @@
 # Work board
 
+**2026-09-30, Codex Round 768 CLAIMED: Fantasy Draft pool targeting (master H).**
+Own only `src/components/fantasy-draft/PlayerPool.tsx`, focused rendered tests and new sim wrapper.
+Use existing verified nationality and dominant_foot values for combined Country/Foot filters,
+with the existing position/name controls, truthful bounded-shortlist counts and Reset. Preserve
+the existing best-ten/20-search policy, rating order, drafted and ineligible grey states, exact
+chosen identity and selection callbacks. No new data, fields, pool loads, eligibility rules,
+rating math, parent FantasyDraft, AI, budget, save or score changes. Filtering must not mutate
+the pool or call selection, and relevant controls must meet 44px phone targets. Verify actual
+component events, combined filters, reset/no-match, namesake identity, unchanged shortlist behavior,
+keyboard/focus and fit with an asserted real-filter negative control. Root alone owns docs/commits.
+764 through 767 source is built; their final acceptance is being completed in parallel. Next free
+round is **769**.
+
 **2026-09-30, Codex Rounds 766 and 767 CLAIMED: Mystery Box and draft winner feedback.**
 766 owns only `src/components/mystery-box/MysteryBoxBoard.tsx`, new scoped MysteryBoxMotion CSS,
 focused actual-Board tests and a sim wrapper. Reveal the already drawn card using its existing
