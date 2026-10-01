@@ -32,7 +32,7 @@ const NbaFrontOffice = () => {
             howToPlay={[
               'Pick a franchise and inherit its real rotation, rated player by player.',
               'Work the roster: waive contracts, sign free agents, swing trades with pick sweeteners.',
-              'Watch the tax line. Payroll over it is taxed at season close in rising brackets, repeaters pay more, ownership holds the bill against you, and the season cannot tip off with fewer than 14 or more than 15 under contract.',
+              'Watch the tax line, set from your own league\'s payrolls. Payroll over it is taxed at season close in rising brackets, repeaters pay more, ownership holds the bill against you, and the season cannot tip off with fewer than 14 or more than 15 under contract.',
               'Play the season in stretches and watch the conference tables tighten.',
               'Finish 7th to 10th and you are in the play-in. Win a title through four best-of-7 rounds.',
               'Draft, develop, re-sign and go again. Banners are forever.',
@@ -42,7 +42,7 @@ const NbaFrontOffice = () => {
               'Trade an aging star for a rising guard before the deadline',
               'Sneak from the 9 seed through the play-in to a Finals run',
               'Draft a 90-grade prospect who turns out to be a 78',
-              'Close the season $10M over the $200.4M tax line and pay $11M (the first $6.064M at 1.00, the rest at 1.25), or $31M as a repeater',
+              'Open a new league on its $226.7M tax line, close the season $10M over it and pay $10.8M (the first $6.859M at 1.00, the rest at 1.25), or $30.8M as a repeater',
               'Build back-to-back champions and chase a dynasty',
             ]}
           />

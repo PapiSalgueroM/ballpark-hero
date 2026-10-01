@@ -121,7 +121,10 @@
         paid, 188.2 projected), a median of 15 to 70 (real medians 44.9 to
         48.2 over eight payers; a five payer league's median is its third
         bill, and the real third bill in 2023-24 was 68.2), and at least one
-        shed under over the ten seeds.
+        shed under over the ten seeds. The worked example on the page, the
+        guide and What's New quote the opening league (line 226.7, brackets
+        6.859, first apron 236.4, 10M over pays 10.8 or 30.8 as a repeater)
+        and are read here against the engine, so they cannot drift from it.
 
    Controls, through NBA_TAX_CONTROL. None touches src: the rewritten source
    is served to the bundler from memory, and each refuses to run if its
@@ -131,10 +134,13 @@
    not even be bundled:
      zerotax      every rate driven to zero              -> 1, 2, 5 and 7
                   (no bill means no median and nobody sheds)
-     tipoff12     the tip off floor dropped to twelve     -> 3 and 4 (the old
-                  save section reads the fourteen too)
-     norepeater   the repeater schedule made the standard one -> 1 and 2
-     cpupool      every club fills its tip off gap from the pool  -> 3
+     tipoff12     the tip off floor dropped to twelve     -> 3, 4 and 7 (the old
+                  save section reads the fourteen too, and the opening line the
+                  copy quotes moves to 223)
+     norepeater   the repeater schedule made the standard one -> 1, 2 and 7
+                  (the worked example's repeater bill)
+     cpupool      every club fills its tip off gap from the pool  -> 3 and 7
+                  (the old save calibrates on a richer top, three payers)
      viewrepeater the projection never uses repeater rates        -> 2
      noapron      the first apron never binds on a trade           -> 2
      hubfloor     the hub's tip off line for any declared ceiling  -> 6
@@ -159,9 +165,12 @@ const CONTROL = process.env.NBA_TAX_CONTROL || '';
 const EXPECT = {
   /* with no rates at all the median bill is zero and nobody sheds, so section 7 goes too */
   zerotax: [1, 2, 5, 7],
-  /* the old save section reads the fourteen too, so a lower floor reaches it */
-  tipoff12: [3, 4],
-  norepeater: [1, 2],
+  /* the old save section reads the fourteen too, so a lower floor reaches it;
+     and the calibration prices a short roster at the floor, so the opening line
+     moves (223 instead of 226.7) and the copy that quotes it goes red in 7 */
+  tipoff12: [3, 4, 7],
+  /* and 7: the worked example quotes the repeater bill, 30.8, which becomes 10.8 */
+  norepeater: [1, 2, 7],
   /* review fixes: each reaches only the one check written for it */
   /* and 7: the CPU clubs that took the pool's 72 to 81 men re-sign them at full
      salary that summer, so the section 4 old save calibrates on a richer top
@@ -864,6 +873,26 @@ console.log('7) The league the lines are set from: taxpayers, the biggest bill a
     console.log(`   old save after its summer: line ${line} at a cap of ${o.cap}, ${over} clubs over, largest projected bill ${top}`);
   } else {
     ok(7, 'the old save from section 4 reached its summer', false, 'section 4 threw before the summer');
+  }
+  /* The worked example, the guide and What's New quote the opening league's
+     numbers, so they are read against the engine here: a calibration that
+     moves the line has to move the copy with it. */
+  {
+    const fresh = nba.initNbaLeague(lcg(1));
+    const sc = fresh.taxScale;
+    const L = nba.nbaTaxLine(fresh.cap, sc), W = tax.nbaTaxBracket(fresh.cap, sc), A1 = nba.nbaFirstApron(fresh.cap, sc);
+    const b10 = nba.nbaTaxBill(L + 10, fresh.cap, false, sc), r10 = nba.nbaTaxBill(L + 10, fresh.cap, true, sc);
+    const WORDS = ['no', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+    const opening = WORDS[firstTip[0]] ?? String(firstTip[0]);
+    const read = rel => fs.readFileSync(path.join(ROOT, ...rel.split('/')), 'utf8');
+    const page = read('src/pages/NbaFrontOffice.tsx'), guide = read('src/data/gameContent/basketball.ts'), news = read('src/pages/WhatsNew.tsx');
+    const example = `Open a new league on its $${L}M tax line, close the season $10M over it and pay $${b10}M (the first $${W.toFixed(3)}M at 1.00, the rest at 1.25), or $${r10}M as a repeater`;
+    ok(7, 'the worked example quotes the opening league exactly', page.includes(example), example);
+    const guideBits = [`opens on a ${L} million line with ${opening} clubs over it`, `(${W.toFixed(1)} million in a new league)`, `first apron (${A1} million in a new league)`];
+    ok(7, 'the guide quotes the opening line, the bracket width and the first apron', guideBits.every(b => guide.includes(b)), guideBits.filter(b => !guide.includes(b)).join(' | '));
+    const newsBit = `a new league opens on a $${L}M line with ${opening} clubs over it`;
+    ok(7, "What's New quotes the opening line", news.includes(newsBit), newsBit);
+    console.log(`   opening league: line ${L}, bracket ${W.toFixed(3)}, first apron ${A1}, 10M over pays ${b10} or ${r10} as a repeater`);
   }
   /* the scale is set once at creation and kept, so the finished league still carries it */
   console.log(`   scale at creation by seed: ${realRuns.map(r => Number(r.lg.taxScale).toFixed(4)).join(' ')}; first tip off line ${nba.nbaTaxLine(CAP_2026, realRuns[0].lg.taxScale)}`);
