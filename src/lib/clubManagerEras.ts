@@ -807,8 +807,11 @@ export const CM_ERAS: CMEra[] = [
     label: seasonLabel(CM_BASE_YEAR),
     startYear: CM_BASE_YEAR,
     emoji: '\u{1F4C5}',
-    blurb: 'Today. Every squad exactly as it really is.',
-    honesty: 'Real data. Every name, age and value is the real thing as of August 2026.',
+    /* Round 832: the old lines promised every squad exactly as it is and
+       every name real, which the youth padding of thin squads made false.
+       They say what the squads really are now. */
+    blurb: 'Today. Real squads as of August 2026, thin ones topped up with made up youth.',
+    honesty: 'Real data: every real player has his real name, age and value as of August 2026. Thin squads are padded with made up youth players and say so.',
   },
   {
     id: 'era2015',
@@ -852,12 +855,18 @@ export function eraForYear(year: number): CMEra {
  * players in it rather than a guess. Recomputed from the projection, so if the
  * curve is ever retuned the copy retunes itself.
  */
+/* Round 832: the tile used to say every player is real, which a squad padded
+   with made up youth is not. Kept short: the tile line has to fit one line on
+   a phone, and the honesty line one tap on says it in full. */
+const REAL_WITH_PADDING = 'Real players, made up youth fill gaps';
+
 export function eraRealShareLabel(era: CMEra): string {
   // A historic era's year zero is its own bake: real by construction, like
-  // today's. The projection share math only describes futures.
-  if (era.startYear <= CM_BASE_YEAR) return 'Every player is real';
+  // today's, with the thin squads padded. The projection share math only
+  // describes futures.
+  if (era.startYear <= CM_BASE_YEAR) return REAL_WITH_PADDING;
   const pct = Math.round(realStarterShare(era.startYear - CM_BASE_YEAR) * 100);
-  if (pct >= 100) return 'Every player is real';
+  if (pct >= 100) return REAL_WITH_PADDING;
   if (pct <= 2) return 'Real clubs, made up players';
   return `${pct}% of first team players are real`;
 }

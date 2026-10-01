@@ -83,7 +83,7 @@ export const CLUB_MANAGEMENT_CONTENT: GameContentMap = {
           {
             heading: "Each past season is a sealed world",
             items: [
-              "Each past era is a sealed world: real squads and values from its own year, no Conference League because it did not exist back then, and no 2026 player can leak into your market. Each era's giants rate like the legends they were, above anyone today: Messi and Ronaldo in 2015-16 and 2010-11, Ronaldinho and Henry in 2005-06, while Leicester start 2015-16 at their honest pre-title level and 2005-06 boards still call the second European prize the UEFA Cup.",
+              "Each past era is a sealed world: real players and values from its own year, thin squads topped up with marked youth, no Conference League because it did not exist back then, and no 2026 player can leak into your market. Each era's giants rate like the legends they were, above anyone today: Messi and Ronaldo in 2015-16 and 2010-11, Ronaldinho and Henry in 2005-06, while Leicester start 2015-16 at their honest pre-title level and 2005-06 boards still call the second European prize the UEFA Cup.",
             ],
           },
           {
