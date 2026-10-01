@@ -15,12 +15,16 @@
  *      src/lib/gauntletDraft.ts (which now delegates through
  *      src/lib/gauntletEngine.ts) across 300 seeds. Byte identical output,
  *      draft and gauntlet both, or the refactor changed soccer's game.
- *   2. THE DEAL LAW, NBA and NFL separately, over 300 seeded drafts each:
- *      the right number of distinct fitting picks, no duplicate dealt in
+ *   2. THE DEAL LAW, NBA, NFL, MLB and NHL separately, over 300 seeded drafts
+ *      each: the right number of distinct fitting picks, no duplicate dealt in
  *      one draft, and a measured genuine-choice floor (best card vs worst
  *      card in a pick separated by a real measured gap, floor set from
  *      measured headroom, not a number that felt right; see the floor
- *      comments below for the actual measurements).
+ *      comments below for the actual measurements). Since Round 724 also the
+ *      lineup law (LINEUP_LAW below, written here by hand rather than read off
+ *      the binding under test): the sport's slots are the ones it really lines
+ *      up with, every card dealt plays a position its slot takes, and every
+ *      position a slot takes really does get dealt into it.
  *   3. DETERMINISM, NBA and NFL: one seed one draft, one finished squad one
  *      cup run, byte identical on the replay; a year of daily seeds deals a
  *      year of genuinely different drafts.
@@ -76,6 +80,18 @@
  *   SIM_GAUNTLET_ENGINE_CONTROL=forkedsave (Round 724) makes the bundled
  *   engine write one extra field into the NHL save only, and section 8 must
  *   go red.
+ *   Four lineup law controls (Round 724), each on a bundled copy of
+ *   gauntletDraftNhl.ts, each running section 2 for the NHL only and each
+ *   required to turn red the named checks of that section:
+ *     anyfit     fitsSlot lets anybody into any slot (a goalie at centre),
+ *                the fit check must fire.
+ *     nogoalie   the goal slot takes a defenseman instead of a goalie, the
+ *                shape and fit checks must fire.
+ *     wingonly   the wing slots stop taking centres, the shape and reach
+ *                checks must fire.
+ *     narrowfit  fitsSlot quietly keeps centres off the wing while the slot
+ *                list still says they may play there, so only the reach check
+ *                can see it, and it must fire.
  * Every control refuses to run when the text it rewrites is not in the
  * source, so a control can never pass by changing nothing.
  *
@@ -91,7 +107,9 @@ const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..').re
 let failures = 0;
 const fail = m => { failures += 1; console.error('  FAIL: ' + m); };
 const CONTROL = process.env.SIM_GAUNTLET_ENGINE_CONTROL || '';
-if (CONTROL && !['flatdeal', 'blindload', 'badscore', 'invented', 'keepdefault', 'forkedsave'].includes(CONTROL)) {
+/* Round 724: the lineup law controls and the section 2 checks each must fire. */
+const LAW_CONTROLS = { anyfit: ['fit'], nogoalie: ['shape', 'fit'], wingonly: ['shape', 'reach'], narrowfit: ['reach'] };
+if (CONTROL && !['flatdeal', 'blindload', 'badscore', 'invented', 'keepdefault', 'forkedsave', ...Object.keys(LAW_CONTROLS)].includes(CONTROL)) {
   console.error(`SIM_GAUNTLET_ENGINE_CONTROL=${CONTROL} is not a control this harness knows`);
   process.exit(1);
 }
@@ -178,26 +196,48 @@ function patchedEngineBundle(control) {
 
 /**
  * Round 724: the two section 7 controls patch the NHL binding, not the engine,
- * because the pool is built there. Same refusal rule as above.
+ * because the pool is built there, and so do the four lineup law controls,
+ * because the slots and the fit rule live there too. Same refusal rule as
+ * above. wingonly rewrites all four wing slots, so it also refuses unless it
+ * finds exactly four.
  */
 function patchedNhlBinding(control) {
   const src = fs.readFileSync(`${ROOT}/src/lib/gauntletDraftNhl.ts`, 'utf8').replace(/\r\n/g, '\n');
-  let needle, replacement, describe;
+  let needle, replacement, describe, count = 1;
+  const fitNeedle = 'fitsSlot: (p, slot) => slot.allowed.includes(p.pos),';
   if (control === 'invented') {
     needle = '.map(s => ({ name: s.name, pos: s.pos, ovr: s.ovr, team: abbr })));';
     replacement = ".map(s => ({ name: s.name, pos: s.pos, ovr: s.ovr, team: abbr })))\n  .concat([{ name: 'Invented Skater', pos: 'C', ovr: 97, team: 'EDM' }]);";
     describe = 'one made up player is appended to the NHL pool in a bundled copy of gauntletDraftNhl.ts, and section 7 must go red';
+  } else if (control === 'anyfit') {
+    needle = fitNeedle;
+    replacement = 'fitsSlot: () => true,';
+    describe = 'fitsSlot lets any player into any slot in a bundled copy of gauntletDraftNhl.ts, and the section 2 fit check must go red';
+  } else if (control === 'narrowfit') {
+    needle = fitNeedle;
+    replacement = "fitsSlot: (p, slot) => slot.allowed.includes(p.pos) && !(slot.label === 'W' && p.pos === 'C'),";
+    describe = 'fitsSlot keeps centres off the wing while the wing slots still list them, in a bundled copy of gauntletDraftNhl.ts, and the section 2 reach check must go red';
+  } else if (control === 'nogoalie') {
+    needle = "{ label: 'G', allowed: ['G'] },";
+    replacement = "{ label: 'G', allowed: ['D'] },";
+    describe = 'the goal slot takes a defenseman instead of a goalie in a bundled copy of gauntletDraftNhl.ts, and the section 2 shape and fit checks must go red';
+  } else if (control === 'wingonly') {
+    needle = "{ label: 'W', allowed: ['W', 'C'] },";
+    replacement = "{ label: 'W', allowed: ['W'] },";
+    count = 4;
+    describe = 'the four wing slots stop taking centres in a bundled copy of gauntletDraftNhl.ts, and the section 2 shape and reach checks must go red';
   } else {
     needle = '.filter(s => s.ovr !== NHL_NO_SEASON_DEFAULT)';
     replacement = '.filter(s => s.ovr !== -1)';
     describe = 'the 68 placeholder filter is gone from a bundled copy of gauntletDraftNhl.ts, so the goalies at 68 are dealt again, and section 7 must go red';
   }
-  if (!src.includes(needle)) {
-    console.error(`control run: the ${control} needle is not in src/lib/gauntletDraftNhl.ts, refusing to run a dead control`);
+  const found = src.split(needle).length - 1;
+  if (found !== count) {
+    console.error(`control run: the ${control} needle is in src/lib/gauntletDraftNhl.ts ${found} time(s), not ${count}, refusing to run a dead control`);
     process.exit(1);
   }
   const patched = `${TMP}/gauntletDraftNhl.${control}.ts`;
-  fs.writeFileSync(patched, src.replace(needle, replacement));
+  fs.writeFileSync(patched, src.split(needle).join(replacement));
   console.log(`NEGATIVE CONTROL ON: ${describe}`);
   return patched;
 }
@@ -383,21 +423,88 @@ const worstOf = (choices, ratingOf) => [...choices].sort((a, b) => ratingOf(a) -
    real minimum and three over the collapsed maximum. */
 const SPREAD_FLOOR = { nba: 6, nfl: 12, mlb: 5, nhl: 8 };
 
-async function section2(label, config, floor, slots) {
+/* ── THE LINEUP LAW, added Round 724 for section 2 ──
+   Section 2 used to count the cards in a pick and never ask whether they
+   belonged in the slot, so a binding whose fitsSlot let anybody in, or whose
+   goal slot took a defenseman, stayed green. This is each sport's lineup as
+   the sport plays it, transcribed by hand the same way the section 1 golden
+   reference is, and never imported: a check that read the slots off the
+   config under test would agree with whatever that config says. Each row is
+   a slot label and every position a card in that slot may play. A real rules
+   change edits the binding and this table together, on purpose.
+     NBA  the Perfect Lineup starting five, src/data/nbaPerfectLineupPool.ts.
+     NFL  the skill position offense, src/lib/gauntletDraftNfl.ts.
+     MLB  the lineup card, src/lib/gauntletDraftMlb.ts.
+     NHL  two forward lines, two defense pairs and a goalie: a centre may play
+          the wing, a winger does not take the draws, and defense and goal
+          take only their own (src/lib/gauntletDraftNhl.ts says why). */
+const MLB_BATS = ['C', '1B', '2B', '3B', 'SS', 'LF', 'CF', 'RF', 'DH'];
+const LINEUP_LAW = {
+  nba: [['PG', ['PG', 'SG']], ['SG', ['SG', 'PG', 'SF']], ['SF', ['SF', 'SG', 'PF']], ['PF', ['PF', 'SF', 'C']], ['C', ['C', 'PF']]],
+  nfl: [['QB', ['QB']], ['RB', ['RB']], ['RB', ['RB']], ['WR', ['WR']], ['WR', ['WR']], ['WR', ['WR']], ['TE', ['TE']]],
+  mlb: [['C', ['C']], ['1B', ['1B']], ['2B', ['2B']], ['3B', ['3B']], ['SS', ['SS']], ['LF', ['LF', 'RF']], ['CF', ['CF']],
+    ['RF', ['RF', 'LF']], ['DH', MLB_BATS], ['SP', ['SP']], ['CL', ['CL', 'RP']]],
+  nhl: [['C', ['C']], ['W', ['W', 'C']], ['W', ['W', 'C']], ['C', ['C']], ['W', ['W', 'C']], ['W', ['W', 'C']],
+    ['D', ['D']], ['D', ['D']], ['D', ['D']], ['D', ['D']], ['G', ['G']]],
+};
+
+/* Section 2 returns how many problems each lineup law check found, so the
+   law controls can require the exact check they target to fire. Three checks:
+     shape  the sport has the one formation the law says, slot for slot, and
+            every draft's picks come back in that order;
+     fit    every card dealt plays a position the law lets into its slot, and
+            the binding's own fitsSlot agrees it fits;
+     reach  every position the law lets into a slot, and the pool holds, is
+            dealt into that slot at least once over the 300 drafts. This is
+            the one that sees a fitsSlot narrower than the slot list says.
+   The reach counts are fixed by the seeds, so this is not a coin toss. On the
+   shipped code (2026-10-01) the rarest pairing over the 300 drafts is dealt
+   356 times for the NBA (13 pairings), 1500 for the NFL (4), 99 for MLB (22)
+   and 1500 for the NHL (5, the goalie slot being the rarest at one slot times
+   five cards times 300), printed as "the rarest" on the green line; each
+   broken rule the controls below plant takes its pairing to 0. */
+async function section2(label, config, floor, law) {
   console.log(`2) the deal law, ${label}, 300 seeded drafts`);
+  const before = failures;
+  const slots = law.length;
+  const sameSet = (a, b) => a.length === b.length && [...a].sort().join('|') === [...b].sort().join('|');
+  const counts = { shape: 0, fit: 0, reach: 0 };
+  const firsts = {};
+  const note = (kind, what) => { counts[kind] += 1; if (!firsts[kind]) firsts[kind] = what; };
+
+  if (config.formations.length !== 1) note('shape', `${config.formations.length} formations, the law knows one`);
+  const formation = config.formations[0];
+  if (formation.slots.length !== slots) note('shape', `${formation.slots.length} slots, the law has ${slots}`);
+  formation.slots.forEach((slot, i) => {
+    const row = law[i];
+    if (row && (slot.label !== row[0] || !sameSet(slot.allowed, row[1]))) {
+      note('shape', `slot ${i + 1} is ${slot.label} taking ${slot.allowed.join('/')}, the law says ${row[0]} taking ${row[1].join('/')}`);
+    }
+  });
+
   let flat = 0;
   let spreadSum = 0;
   let picks = 0;
+  const dealt = new Map();
   const DRAFTS = 300;
   for (let s = 1; s <= DRAFTS; s += 1) {
     const d = config.__engine.buildDraft(config, s * 9973 + 11);
     if (d.picks.length !== slots) fail(`${label} seed ${s}: ${d.picks.length} picks for ${slots} slots`);
     const names = new Set();
-    for (const pick of d.picks) {
+    for (const [i, pick] of d.picks.entries()) {
+      const row = law[i];
+      if (!row || pick.slot.label !== row[0]) note('shape', `seed ${s} pick ${i + 1} is a ${pick.slot.label} slot, the law says ${row ? row[0] : 'nothing'}`);
       if (pick.choices.length !== 5) { fail(`${label} seed ${s}: a pick dealt ${pick.choices.length} cards`); continue; }
       for (const c of pick.choices) {
         if (names.has(config.nameOf(c))) fail(`${label} seed ${s}: ${config.nameOf(c)} dealt twice in one draft`);
         names.add(config.nameOf(c));
+        if (!row) continue;
+        const pos = config.positionOf(c);
+        if (!row[1].includes(pos) || !config.fitsSlot(c, pick.slot)) {
+          note('fit', `seed ${s}: ${config.nameOf(c)} (${pos}) dealt into the ${row[0]} slot, which takes ${row[1].join('/')}`);
+        } else {
+          dealt.set(`${row[0]}:${pos}`, (dealt.get(`${row[0]}:${pos}`) ?? 0) + 1);
+        }
       }
       const rs = pick.choices.map(config.ratingOf);
       const spread = Math.max(...rs) - Math.min(...rs);
@@ -405,20 +512,32 @@ async function section2(label, config, floor, slots) {
       if (spread < floor) flat += 1;
     }
   }
+
+  const inPool = new Set(config.pool.map(config.positionOf));
+  const pairings = [...new Set(law.flatMap(([slotLabel, allowed]) => allowed.filter(p => inPool.has(p)).map(p => `${slotLabel}:${p}`)))];
+  for (const k of pairings) if (!dealt.get(k)) note('reach', `${k.replace(':', ' slot never dealt a ')} in ${DRAFTS} drafts, though the law lets one in and the pool holds them`);
+  const fewest = Math.min(...pairings.map(k => dealt.get(k) ?? 0));
+
   const meanSpread = spreadSum / picks;
   if (CONTROL === 'flatdeal') {
-    if (flat > DRAFTS) { console.log(`   ${label} control: green. Collapsed, ${flat} of ${picks} picks fell under the ${floor} point floor (mean spread ${meanSpread.toFixed(1)}).`); return true; }
+    if (flat > DRAFTS) { console.log(`   ${label} control: green. Collapsed, ${flat} of ${picks} picks fell under the ${floor} point floor (mean spread ${meanSpread.toFixed(1)}).`); return { ok: true, ...counts }; }
     console.error(`   ${label} control: RED. Only ${flat} of ${picks} picks fell under the floor with the bands collapsed.`);
-    return false;
+    return { ok: false, ...counts };
   }
   if (flat > 0) fail(`${label}: ${flat} of ${picks} picks offered no genuine choice (spread under ${floor})`);
-  console.log(`   ${label}: ${DRAFTS} drafts, ${slots} distinct fitting cards a draft, nobody dealt twice, mean spread ${meanSpread.toFixed(1)} rating points`);
-  return true;
+  if (counts.shape) fail(`${label}: ${counts.shape} lineup shape problem(s), first: ${firsts.shape}`);
+  if (counts.fit) fail(`${label}: ${counts.fit} card(s) dealt into a slot their position cannot play, first: ${firsts.fit}`);
+  if (counts.reach) fail(`${label}: ${counts.reach} slot and position pairing(s) the law allows were never dealt, first: ${firsts.reach}`);
+  if (failures === before) {
+    console.log(`   ${label}: ${DRAFTS} drafts, ${slots} slots exactly as the sport lines up, every card plays a position its slot takes, all ${pairings.length} slot and position pairings dealt (the rarest ${fewest} times), nobody dealt twice, mean spread ${meanSpread.toFixed(1)} rating points`);
+  }
+  return { ok: failures === before, ...counts };
 }
 
 async function section3(label, config, roundsLen) {
   console.log(`3) determinism, ${label}`);
-  const a = config.__engine.buildDraft(config, 823543);
+  const before = failures;
+  const a =config.__engine.buildDraft(config, 823543);
   const b = config.__engine.buildDraft(config, 823543);
   const fp = d => d.formation.name + '|' + d.picks.map(p => p.choices.map(c => config.nameOf(c)).join(',')).join(';');
   if (fp(a) !== fp(b)) fail(`${label}: the same seed dealt two different drafts`);
@@ -445,8 +564,8 @@ async function section3(label, config, roundsLen) {
   if (restable > 0) fail(`${label}: ${restable} dates dealt a different daily the second time they were asked`);
   if (sameAsYesterday > 0) fail(`${label}: ${sameAsYesterday} days dealt the same daily draft as the day before`);
   if (prints.size < 300) fail(`${label}: a year of daily seeds dealt only ${prints.size} distinct drafts`);
-  else console.log(`   ${label}: drafted twice byte identical, ran twice byte identical, 365 dailies gave ${prints.size} distinct drafts, every date dealt the same draft twice and none repeated the day before`);
   if (roundsLen !== 5) fail(`${label}: rounds ladder is length ${roundsLen}, not 5, breaking the shared 16-per-round-plus-20 scoring identity`);
+  if (failures === before) console.log(`   ${label}: drafted twice byte identical, ran twice byte identical, 365 dailies gave ${prints.size} distinct drafts, every date dealt the same draft twice and none repeated the day before`);
 }
 
 /* Measured on the final tuned ladders over 300 seeded drafts, five
@@ -485,6 +604,7 @@ async function section4(label, config) {
 
 async function section5(label, config, dateStr) {
   console.log(`5) the daily lock, ${label}: the saved run comes back, nothing else does`);
+  const before = failures;
   const key = `${config.gameId}-daily-${dateStr}`;
   const engine = config.__engine;
   const run = engine.runGauntlet(config, draftWith(engine.buildDraft(config, engine.dailySeedFor(config, dateStr)), bestOf, config.ratingOf));
@@ -519,7 +639,9 @@ async function section5(label, config, dateStr) {
     try { out = engine.loadDailyRun(config, dateStr); } catch (e) { fail(`${label}: loadDailyRun threw on ${form}: ${e.message}`); continue; }
     if (out !== null) fail(`${label}: a broken record read as a run: ${form}`);
   }
-  console.log(`   ${label}: round trip byte identical, another date null, a tampered run refused, ${wreckage.length} broken records refused without throwing`);
+  /* Round 724: the success line only when this sport's checks all held, so a
+     log never reads green beside a red. */
+  if (failures === before) console.log(`   ${label}: round trip byte identical, another date null, a tampered run refused, ${wreckage.length} broken records refused without throwing`);
   return true;
 }
 
@@ -544,6 +666,7 @@ async function section6(sports) {
   console.log('6) the scoreboard says what happened, every sport');
   for (const [label, config] of sports) {
     const e = config.__engine;
+    const before = failures;
 
     /* Strictly increasing over the full range. The engine draws goals from six
        Bernoulli trials plus one extra time burst, so 0 to 7 is everything it
@@ -603,7 +726,7 @@ async function section6(sports) {
     if (!config.squadNoun || !config.slotsPhrase || !config.gameName || !config.gamePath) {
       fail(`${label}: the presentation half of the config is incomplete, and the shared board draws from it`);
     }
-    console.log(`   ${label}: scoreline strictly increasing over 0..12, ${checked} rendered matches agree with their result, ${decided} reached the decider, none shown level`);
+    if (failures === before) console.log(`   ${label}: scoreline strictly increasing over 0..12, ${checked} rendered matches agree with their result, ${decided} reached the decider, none shown level`);
   }
 }
 
@@ -620,6 +743,7 @@ function section7(sports) {
   console.log('7) the pool is the source: every card is a real row, nothing added, nothing re-rated');
   const before = failures;
   for (const { label, config, rows, eligible, extra } of sports) {
+    const sportBefore = failures;
     const want = new Map();
     for (const r of rows.filter(eligible)) want.set(keyOf(r), (want.get(keyOf(r)) ?? 0) + 1);
     const got = new Map();
@@ -630,7 +754,7 @@ function section7(sports) {
     if (neverDealt.length) fail(`${label}: ${neverDealt.length} eligible source row(s) never reach the pool, first ${neverDealt[0]}`);
     if (config.pool.length < 100) fail(`${label}: the pool holds ${config.pool.length} cards, too few for the check to mean anything`);
     if (extra) extra(config);
-    console.log(`   ${label}: ${config.pool.length} cards, each one a row of ${rows.length} source rows (${rows.filter(eligible).length} eligible) on name, position, rating and club`);
+    if (failures === sportBefore) console.log(`   ${label}: ${config.pool.length} cards, each one a row of ${rows.length} source rows (${rows.filter(eligible).length} eligible) on name, position, rating and club`);
   }
   return failures - before;
 }
@@ -668,7 +792,7 @@ function section8(writers, dateStr) {
     const missing = ref.shape.filter(k => !s.shape.includes(k));
     if (extra.length || missing.length) fail(`${s.label}: the saved record's shape differs from ${ref.label}'s (extra ${extra.join(', ') || 'none'}; missing ${missing.join(', ') || 'none'})`);
   }
-  if (ref) console.log(`   ${shapes.map(s => s.label).join(', ')}: one key each under {gameId}-daily-{date}, ${ref.shape.length} field paths, identical in every sport`);
+  if (ref && failures === before) console.log(`   ${shapes.map(s => s.label).join(', ')}: one key each under {gameId}-daily-{date}, ${ref.shape.length} field paths, identical in every sport`);
   return failures - before;
 }
 
@@ -763,11 +887,28 @@ export * as engine from '${paths.enginePath}';
     const nfl = { ...mod.NFL_GAUNTLET_CONFIG, __engine: mod.engine };
     const mlb = { ...mod.MLB_GAUNTLET_CONFIG, __engine: mod.engine };
     const nhl = { ...mod.NHL_GAUNTLET_CONFIG, __engine: mod.engine };
-    const nbaOk = await section2('NBA', nba, SPREAD_FLOOR.nba, 5);
-    const nflOk = await section2('NFL', nfl, SPREAD_FLOOR.nfl, 7);
-    const mlbOk = await section2('MLB', mlb, SPREAD_FLOOR.mlb, 11);
-    const nhlOk = await section2('NHL', nhl, SPREAD_FLOOR.nhl, 11);
-    if (nbaOk && nflOk && mlbOk && nhlOk) process.exit(0);
+    const results = [
+      await section2('NBA', nba, SPREAD_FLOOR.nba, LINEUP_LAW.nba),
+      await section2('NFL', nfl, SPREAD_FLOOR.nfl, LINEUP_LAW.nfl),
+      await section2('MLB', mlb, SPREAD_FLOOR.mlb, LINEUP_LAW.mlb),
+      await section2('NHL', nhl, SPREAD_FLOOR.nhl, LINEUP_LAW.nhl),
+    ];
+    if (results.every(r => r.ok)) process.exit(0);
+    process.exit(1);
+  }
+  if (LAW_CONTROLS[CONTROL]) {
+    const nhlPath = patchedNhlBinding(CONTROL);
+    const mod = await bundle(`
+export { NHL_GAUNTLET_CONFIG } from '${nhlPath}';
+export * as engine from '${ROOT}/src/lib/gauntletEngine.ts';
+`, CONTROL);
+    const r = await section2('NHL', { ...mod.NHL_GAUNTLET_CONFIG, __engine: mod.engine }, SPREAD_FLOOR.nhl, LINEUP_LAW.nhl);
+    const silent = LAW_CONTROLS[CONTROL].filter(kind => !r[kind]);
+    if (silent.length === 0) {
+      console.log(`\n   control: green. ${LAW_CONTROLS[CONTROL].map(kind => `${kind} ${r[kind]}`).join(', ')}, every check this control targets fired.`);
+      process.exit(0);
+    }
+    console.error(`\n   control: RED. The NHL lineup rule was broken and the ${silent.join(' and ')} check(s) stayed quiet, so they prove nothing.`);
     process.exit(1);
   }
   if (CONTROL === 'badscore') {
@@ -826,10 +967,10 @@ export * as engine from '${ROOT}/src/lib/gauntletEngine.ts';
   const mlb = { ...mod.MLB_GAUNTLET_CONFIG, __engine: mod.engine };
   const nhl = { ...mod.NHL_GAUNTLET_CONFIG, __engine: mod.engine };
 
-  await section2('NBA', nba, SPREAD_FLOOR.nba, 5);
-  await section2('NFL', nfl, SPREAD_FLOOR.nfl, 7);
-  await section2('MLB', mlb, SPREAD_FLOOR.mlb, 11);
-  await section2('NHL', nhl, SPREAD_FLOOR.nhl, 11);
+  await section2('NBA', nba, SPREAD_FLOOR.nba, LINEUP_LAW.nba);
+  await section2('NFL', nfl, SPREAD_FLOOR.nfl, LINEUP_LAW.nfl);
+  await section2('MLB', mlb, SPREAD_FLOOR.mlb, LINEUP_LAW.mlb);
+  await section2('NHL', nhl, SPREAD_FLOOR.nhl, LINEUP_LAW.nhl);
   await section3('NBA', nba, nba.rounds.length);
   await section3('NFL', nfl, nfl.rounds.length);
   await section3('MLB', mlb, mlb.rounds.length);
