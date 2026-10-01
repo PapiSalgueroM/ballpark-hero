@@ -33,7 +33,7 @@ try {
     if (control === 'speed') viewer = replace(viewer, 'c + dt * BASE_RATE * speed', 'c + dt * BASE_RATE');
     if (control === 'reduced') motion = replace(motion, 'reduced ? 1.05 : clock - action.event.at', 'clock - action.event.at');
     if (control === 'terminal') viewer = replace(viewer, 'const terminalWindup = !!terminalAction && clock >= terminalMinute - 1.05 && clock < terminalMinute;', 'const terminalWindup = false;');
-    if (control === 'redraw') viewer = replace(viewer, 'const motionStillCommitted = !motionEvent || motionEvent.event.minute <= clock || feed.includes(motionEvent.event);', 'const motionStillCommitted = true;');
+    if (control === 'redraw') viewer = replace(viewer, 'const motionStillCommitted = !motionEvent || motionEvent.event.minute + (motionEvent.event.plus ?? 0) <= clock || feed.includes(motionEvent.event);', 'const motionStillCommitted = true;');
     if (control === 'whistle') {
       viewer = replace(viewer, '      if (liveNow?.et) {\n', '      if (isExtraTimeDue(career)) {\n');
       viewer = replace(viewer, '  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, MAX_SUBS, liveGoneIds,\n', '  liveFeed, liveStatsAt, myOnPitchAt, oppOnPitchAt, squadNumbers, benchFor, MAX_SUBS, liveGoneIds, isExtraTimeDue,\n');

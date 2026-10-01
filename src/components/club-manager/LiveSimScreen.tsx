@@ -650,7 +650,7 @@ export function LiveSimScreen({
       if (firedRef.current.has(key)) continue;
       firedRef.current.add(key);
       const terminal = e.minute === hi && (e.plus ?? 0) === board;
-      if (!terminalWindup && !terminal && e.minute >= openedAt.current && (e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save')) setMotionEvent({ event: e, key, at: clock });
+      if (!terminalWindup && !terminal && e.minute + (e.plus ?? 0) >= openedAt.current && (e.kind === 'goal' || e.kind === 'shot' || e.kind === 'save')) setMotionEvent({ event: e, key, at: clock });
       const club = e.side === 'me' ? career.clubName : opponent;
       const side: Side = e.side === 'me' ? 'me' : 'opp';
       const who: Seg = e.text ? named(side, e.text) : { t: club };
@@ -758,7 +758,8 @@ export function LiveSimScreen({
   }, [men, beat, eventBall, mentality]);
   useEffect(() => { ballRef.current = scene.ball; }, [scene.ball]);
   // A tactics change can replace a future terminal chance during its wind-up.
-  const motionStillCommitted = !motionEvent || motionEvent.event.minute <= clock || feed.includes(motionEvent.event);
+  // Round 781: "already happened" reads the board too, so a chance at 45+3 is still future at 45+2.
+  const motionStillCommitted = !motionEvent || motionEvent.event.minute + (motionEvent.event.plus ?? 0) <= clock || feed.includes(motionEvent.event);
   const motion = useLiveSimMotion(scene, motionEvent, clock, running && !finished && motionStillCommitted);
 
   /* ---- the change sheet: tap one of your dots ---- */
