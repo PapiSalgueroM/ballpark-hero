@@ -1,1 +1,67 @@
-[]
+[
+  {
+    "name": "Jadon Sancho",
+    "move": "Released by Manchester United in summer 2026 (Sky and ESPN summer lists); his 2026 row sits at Aston Villa, his 2025-26 loan club, and ESPN's Villa 2026-27 squad page no longer lists him.",
+    "why": "No announced new club on 2026-10-01; the Palmeiras deal the overlay's 2026-09-05 pass already held back was never announced, so there is no destination to write."
+  },
+  {
+    "name": "Adama Traoré",
+    "move": "Fulham to West Ham, January 2026 (ESPN's January list), then out of contract at West Ham at the end of June 2026; his 2026 row sits at Fulham.",
+    "why": "Writing West Ham would be wrong now and no new club is confirmed by any source read on 2026-10-01."
+  },
+  {
+    "name": "Cuiabano",
+    "move": "Nottingham Forest to Vasco da Gama, loan for the 2026 Brazilian season with an option; his 2026 row sits at Nottingham Forest.",
+    "why": "Only ESPN Brasil carried it (two articles, one host); the Vasco announcement URL returned 404 on 2026-10-01."
+  },
+  {
+    "name": "Maxwel Cornet",
+    "move": "Back at West Ham after his 2025-26 loan at Genoa; his 2026 row sits at Genoa.",
+    "why": "Only ESPN's West Ham 2026-27 squad page lists him; no West Ham page for 2026-27 naming him was found."
+  },
+  {
+    "name": "Joel Ndala",
+    "move": "Manchester City academy player, on loan at Hull and then Sheffield Wednesday in 2025-26; his 2026 row sits at Hull.",
+    "why": "Not on ESPN's Hull 2026-27 squad page and no source says where he plays in 2026-27."
+  },
+  {
+    "name": "Christantus Uche",
+    "move": "Getafe to Crystal Palace on a one year loan in 2025-26 (cpfc.co.uk); his 2026 row sits at Crystal Palace.",
+    "why": "Not on ESPN's Palace 2026-27 squad page and no source read on 2026-10-01 says where he plays now."
+  },
+  {
+    "name": "Iván Azón",
+    "move": "On loan at Ipswich in 2025-26 (itfc.co.uk, 2025-08-28); his 2026 row sits at Ipswich.",
+    "why": "Not on ESPN's Ipswich 2026-27 squad page and no source says where he plays now."
+  },
+  {
+    "name": "Solly March",
+    "move": "Released by Brighton at the end of June 2026 (brightonandhovealbion.com, Sky); his 2026 row sits at Brighton.",
+    "why": "No new club confirmed by any source read on 2026-10-01."
+  },
+  {
+    "name": "Adam Webster",
+    "move": "Released by Brighton at the end of June 2026 (brightonandhovealbion.com, Sky); his 2026 row sits at Brighton.",
+    "why": "Linked with Sheffield United by one local paper only; no club announcement and not on ESPN's Sheffield United squad page."
+  },
+  {
+    "name": "Tyrell Malacia",
+    "move": "Released by Manchester United in summer 2026 (Sky and ESPN summer lists); his 2026 row sits at Manchester United.",
+    "why": "No new club confirmed by any source read on 2026-10-01."
+  },
+  {
+    "name": "Stefan Ortega",
+    "move": "Released by Nottingham Forest in summer 2026 (Sky and ESPN summer lists); his 2026 row sits at Nottingham Forest.",
+    "why": "No new club confirmed by any source read on 2026-10-01."
+  },
+  {
+    "name": "Jeffrey Schlupp",
+    "move": "Crystal Palace announced he would leave (cpfc.co.uk); his 2026 row sits at Crystal Palace and ESPN's Palace 2026-27 squad page does not list him.",
+    "why": "The departure date could not be pinned to a 2026 window and no new club was found."
+  },
+  {
+    "name": "Ben Johnson",
+    "move": "Ipswich right back; his 2026 row sits at Ipswich and ESPN's Ipswich 2026-27 squad page does not list him.",
+    "why": "No source found for a move or for where he plays now."
+  }
+]
