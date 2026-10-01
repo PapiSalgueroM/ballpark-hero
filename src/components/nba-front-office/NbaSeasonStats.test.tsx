@@ -116,5 +116,8 @@ describe('NBA Front Office: the season in numbers', () => {
     const badge = document.querySelector(`[data-roster-row="${star.id}"] [data-award-badge]`);
     expect(badge).toBeTruthy();
     expect(badge!.textContent).toContain('2026 MVP');
+    /* the names are real, so the card says the award is this save's sim one */
+    expect(badge!.textContent).toContain('Sim 2026 MVP');
+    expect(badge!.getAttribute('title')).toContain('sim awards, not real NBA ones');
   });
 });

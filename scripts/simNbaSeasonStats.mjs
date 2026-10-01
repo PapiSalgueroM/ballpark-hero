@@ -40,7 +40,12 @@
         on score broken by games, and a man traded mid season whose lines sum
         onto the club he played most for. Then over the simulated seasons the
         harness's own typed copy of the rules names the same man for every
-        award, every season.
+        award, every season. Who is a first year man comes from the harness's
+        own record of whom it drafted at each close, never from the line's
+        rookie mark (a review found a mark counting every man ever drafted
+        passed everything while changing the winner in 19 of 20 later
+        seasons), and the mark itself must be exactly the men drafted at the
+        previous close who played.
      4) the leaders tables are the harness's own recount: top three a game in
         points, rebounds and assists among men with four in five of an
         average club's games.
@@ -64,7 +69,14 @@
         and the shared season close test on all four boards.
      8) the copy. The guide states each award rule exactly as the engine does,
         and the board's close screen and history say sim season in code, not
-        in a comment.
+        in a comment. The page's Sixth Man worked example names a points a
+        game figure within 1.5 of the median simulated winner's. Measured
+        2026-10-01 over seed bases 0, 10 and 20 (30 seasons each), winners'
+        points a game at the 10th percentile, median and 90th: 12.4 / 12.7 /
+        13.5, 12.3 / 12.7 / 13.4, 12.3 / 12.9 / 13.4; the page says about
+        13, so the band of 1.5 has room on every set. The first draft promised
+        17 off the bench, which the engine cannot produce, since the GM does
+        not pick starters and a bench man is rated under all five of them.
 
    Controls, through NBA_STATS_CONTROL. None touches src: the rewritten source
    is served to the bundler from memory, and each refuses to run if its anchor
@@ -80,6 +92,11 @@
      doubleclose    a second close names and writes its awards again -> 6
      oldnever       a league saved before the round never keeps lines -> 2 and 7
                     (section 2's no lines league is an old save's shape)
+   Added by the review fix, same day, each run and fired:
+     rookieany      every man ever drafted counts as a rookie         -> 3
+     draftlate      a draft class debuts two seasons after its close  -> 3
+     bench17        the page promises a 17 a game sixth man (copy,
+                    rewritten in memory as section 8 reads it)        -> 8
    (A first draft carried "noreset", the summer keeping last season's lines;
    it turned every section but the copy red, since nothing after the first
    season had lines, so it proved nothing about any one check.)
@@ -115,6 +132,10 @@ const EXPECT = {
   sixthstarters: [3],
   doubleclose: [6],
   oldnever: [2, 7],
+  /* added by the review fix: who counts as a first year man, and the page's sixth man claim */
+  rookieany: [3],
+  draftlate: [3],
+  bench17: [8],
 };
 if (CONTROL && !EXPECT[CONTROL]) {
   console.error(`NBA_STATS_CONTROL=${CONTROL} is not a control this harness knows (${Object.keys(EXPECT).join(', ')})`);
@@ -161,6 +182,8 @@ const BAND = {
   diffWin: 0.75,
   rebGap: 1.5,
   astGap: 0.6,
+  /* section 8: the page's sixth man figure against the median winner */
+  sixthPromise: 1.5,
 };
 
 const round1 = n => Math.round(n * 10) / 10;
@@ -208,6 +231,12 @@ const CONTROL_FILE_SWAPS = {
   sixthstarters: { 'nbaSeasonStats.ts': [['qualified.filter(p => p.gs * 2 < p.g)', 'qualified.filter(p => p.g > 0)']] },
   doubleclose: { 'nbaSeasonStats.ts': [['  if (done) return done;', '  void done;']] },
   oldnever: { 'nbaFrontOffice.ts': [['  league.stats = foNewSeasonStats(league.season);', '  if (league.stats) league.stats = foNewSeasonStats(league.season);']] },
+  rookieany: { 'nbaSeasonStats.ts': [['rookie: p.rookieSeason === season,', 'rookie: p.rookieSeason !== undefined,']] },
+  draftlate: { 'nbaFrontOffice.ts': [['  return { cap: nbaNextCap(league.cap), season: league.season + 1 };', '  return { cap: nbaNextCap(league.cap), season: league.season + 2 };']] },
+};
+/* Copy controls rewrite what section 8 reads, in memory, never the file. */
+const CONTROL_COPY_SWAPS = {
+  bench17: { 'src/pages/NbaFrontOffice.tsx': [['he scores about 13 a game', 'he scores about 17 a game']] },
 };
 const NOTE = {
   nosplit: 'the split hands out the floors only, so the leftover points are lost',
@@ -217,6 +246,9 @@ const NOTE = {
   sixthstarters: 'the sixth man race lets starters in',
   doubleclose: 'a second close of the same season names the awards again and writes them again',
   oldnever: 'a league saved before the round never starts keeping lines',
+  rookieany: 'every man ever drafted in the league counts as a rookie, whatever season he debuted',
+  draftlate: 'a draft class is marked as debuting two seasons after its close, not one',
+  bench17: "the page's worked example promises a 17 a game sixth man (the claim the review found)",
 }[CONTROL];
 if (NOTE) console.log(`   control ${CONTROL}: ${NOTE}`);
 
@@ -269,7 +301,10 @@ for (const fn of ['nbaBoxScore', 'nbaRecordBox', 'nbaSeasonAwards', 'nbaCloseSea
 const SEEDS = Array.from({ length: 10 }, (_, i) => SEED_BASE + i + 1);
 const SEASONS = 3;
 /* Tip off to the morning of the next tip off, as the board runs it. `after`
-   sees the league at close, before the draft and the summer. */
+   sees the league at close, before the draft and the summer. Returns the ids
+   of every man drafted at this close and the season they debut in, read off
+   the harness's own loop (the close it ran plus one), never off the engine's
+   own rookie mark, so section 3 can check that mark against it. */
 function playSeason(lg, me, rng, after) {
   while (lg.teams[me].players.length > 15) {
     const worst = [...lg.teams[me].players].sort((a, b) => a.ovr - b.ovr)[0];
@@ -283,17 +318,26 @@ function playSeason(lg, me, rng, after) {
   nba.nbaAssessTax(lg);
   const closed = st.nbaCloseSeasonStats(lg);
   if (after) after(lg, closed);
+  const debut = lg.season + 1;
+  const drafted = [];
   let remaining = nba.nbaDraftClass(rng, 24, new Set());
   const signing = nba.nbaDraftSigning(lg);
   for (let k = 0; k < 2; k += 1) {
-    lg.teams[me].players.push(nba.nbaProspectToPlayer(remaining[0], rng, signing));
+    const mine = nba.nbaProspectToPlayer(remaining[0], rng, signing);
+    lg.teams[me].players.push(mine);
+    drafted.push(mine.id);
     remaining = remaining.slice(1);
     const ai = remaining.slice(0, 5);
     const order = nba.nbaStandings(lg).map(t => t.abbr).reverse().filter(a => a !== me);
-    ai.forEach((p, i) => lg.teams[order[i % order.length]].players.push(nba.nbaProspectToPlayer(p, rng, signing)));
+    ai.forEach((p, i) => {
+      const man = nba.nbaProspectToPlayer(p, rng, signing);
+      lg.teams[order[i % order.length]].players.push(man);
+      drafted.push(man.id);
+    });
     remaining = remaining.filter(p => !ai.includes(p));
   }
   nba.nbaOffseason(lg, rng, me);
+  return { debut, drafted };
 }
 
 /* Every season's close, kept for sections 1, 3, 4, 5 and 6. */
@@ -303,16 +347,21 @@ for (const seed of SEEDS) {
   const rng = lcg(seed * 7919 + 17);
   const lg = nba.initNbaLeague(rng);
   const me = Object.keys(lg.teams)[seed % 30];
+  /* the men the harness drafted at each close, by the season they debut in */
+  const draftedFor = new Map();
   for (let s = 0; s < SEASONS; s += 1) {
-    playSeason(lg, me, rng, (L, closed) => {
+    const d = playSeason(lg, me, rng, (L, closed) => {
       const again = st.nbaCloseSeasonStats(L);
       const cards = [...Object.values(L.teams).flatMap(t => t.players), ...L.freeAgents];
       closes.push({
         seed, season: L.season, me, closed, again,
         league: clone(L),
         badges: cards.reduce((n, p) => n + (p.awards ?? []).filter(a => a.startsWith(`${L.season} `)).length, 0),
+        /* drafted at the previous close, so first year men this season */
+        rookies: draftedFor.get(L.season) ?? new Set(),
       });
     });
+    draftedFor.set(d.debut, new Set(d.drafted));
     histories.push({ seed, after: s + 1, history: (lg.awards ?? []).map(a => a.season), statsSeason: lg.stats ? lg.stats.season : null, lines: lg.stats ? Object.keys(lg.stats.lines).length : -1, leagueSeason: lg.season });
   }
 }
@@ -424,7 +473,10 @@ console.log('2) The box takes nothing from the league generator: the same seed w
 
 /* ---- 3. the award rules ---------------------------------------------------- */
 console.log('3) The award rules pick who the lines say: fixtures, then every simulated season against a typed copy of the rules');
-const typedAwards = (league) => {
+/* `rookies` is who the harness drafted at the previous close. The typed rules
+   read first year men from it, not from the line's own rookie mark, so a mark
+   that flags the wrong men cannot agree with itself here. */
+const typedAwards = (league, rookies) => {
   const stats = league.stats;
   const clubs = Object.values(stats.teams);
   const minGames = Math.max(1, Math.ceil(clubs.reduce((s, t) => s + t.g, 0) / clubs.length * SHARE));
@@ -440,7 +492,7 @@ const typedAwards = (league) => {
     const sum = k => ls.reduce((s, l) => s + (l.tot[k] ?? 0), 0);
     const g = ls.reduce((s, l) => s + l.g, 0), gs = ls.reduce((s, l) => s + l.gs, 0);
     const pg = k => round1(sum(k) / g);
-    return { id: m.id, team: ls[0].team, g, gs, rookie: ls.some(l => l.rookie), ppg: pg('pts'), rpg: pg('reb'), apg: pg('ast'), spg: pg('stl'), bpg: pg('blk') };
+    return { id: m.id, team: ls[0].team, g, gs, rookie: rookies.has(m.id), ppg: pg('pts'), rpg: pg('reb'), apg: pg('ast'), spg: pg('stl'), bpg: pg('blk') };
   }).filter(m => m.g >= minGames);
   const ws = abbr => { const t = league.teams[abbr]; const g = t.wins + t.losses; return g ? t.wins / g : 0; };
   const avgAllowed = clubs.length ? Object.values(stats.teams).reduce((s, c) => s + (c.g ? c.opp / c.g : 0), 0) / clubs.length : 0;
@@ -524,7 +576,7 @@ const typedAwards = (league) => {
   let agree = 0;
   const off = [];
   for (const c of closes) {
-    const want = typedAwards(c.league);
+    const want = typedAwards(c.league, c.rookies);
     const got = c.closed;
     const gotIds = got ? { mvp: got.mvp?.id ?? null, allLeague: got.allLeague.map(m => m.id), roy: got.roy?.id ?? null, dpoy: got.dpoy?.id ?? null, sixth: got.sixth?.id ?? null } : null;
     const same = gotIds && want.mvp === gotIds.mvp && want.allLeague.join(',') === gotIds.allLeague.join(',') && want.roy === gotIds.roy && want.dpoy === gotIds.dpoy && want.sixth === gotIds.sixth && want.minGames === got.minGames;
@@ -534,7 +586,28 @@ const typedAwards = (league) => {
   const royNamed = closes.filter(c => c.closed && c.closed.roy).length;
   ok(3, 'a rookie of the year is named in a later season at least once (the race is not vacuous)', royNamed > 0, `${royNamed} of ${closes.length}`);
   ok(3, 'no rookie of the year in a league\'s first season, nobody in it was drafted by the league', closes.filter(c => c.season === 2026).every(c => c.closed && c.closed.roy === null));
-  console.log(`   fixtures plus ${closes.length} simulated seasons; rookie of the year named in ${royNamed}`);
+  /* Who is a first year man. The engine marks a line rookie from the man's
+     debut season; the harness knows who it drafted at each close. A line
+     marked rookie must belong to a man drafted at the previous close, and every
+     such man who played must be marked: a mark that counted everyone ever
+     drafted, or a debut season one off, changes the winner most seasons from
+     the third on and agrees with itself everywhere else. */
+  const flagBad = [];
+  let marked = 0, debutsPlayed = 0;
+  const debutsBySeason = new Map();
+  for (const c of closes) {
+    for (const l of Object.values(c.league.stats.lines)) {
+      const drafted = c.rookies.has(l.id);
+      if (l.rookie) marked += 1;
+      if (drafted && l.g > 0) { debutsPlayed += 1; debutsBySeason.set(`${c.seed}|${c.season}`, (debutsBySeason.get(`${c.seed}|${c.season}`) ?? 0) + 1); }
+      if (l.rookie && !drafted) flagBad.push(`seed ${c.seed} ${c.season}: ${l.name} is marked rookie but was not drafted at the ${c.season - 1} close`);
+      if (!l.rookie && drafted && l.g > 0) flagBad.push(`seed ${c.seed} ${c.season}: ${l.name}, drafted at the ${c.season - 1} close, played ${l.g} and is not marked rookie`);
+    }
+  }
+  ok(3, 'the rookie mark is exactly the men drafted at the previous close who played', flagBad.length === 0, `${flagBad.length} wrong, e.g. ${flagBad.slice(0, 3).join(' | ')}`);
+  const later = closes.filter(c => c.season > 2026);
+  ok(3, 'and the check is not vacuous: first year men played in every season after a league\'s first', later.every(c => (debutsBySeason.get(`${c.seed}|${c.season}`) ?? 0) > 0), `${later.filter(c => (debutsBySeason.get(`${c.seed}|${c.season}`) ?? 0) > 0).length} of ${later.length}`);
+  console.log(`   fixtures plus ${closes.length} simulated seasons; rookie of the year named in ${royNamed}; ${debutsPlayed} first year lines, ${marked} marked rookie`);
 }
 
 /* ---- 4. the leaders tables ------------------------------------------------- */
@@ -669,7 +742,11 @@ console.log('7) A save from before the round: no lines this season, lines from t
 /* ---- 8. the copy ----------------------------------------------------------- */
 console.log('8) The copy says what the engine does');
 {
-  const read = rel => fs.readFileSync(path.join(ROOT, ...rel.split('/')), 'utf8');
+  const read = rel => {
+    const text = fs.readFileSync(path.join(ROOT, ...rel.split('/')), 'utf8');
+    const swaps = (CONTROL_COPY_SWAPS[CONTROL] ?? {})[rel];
+    return swaps ? rewrite(rel, text, swaps) : text;
+  };
   const stripComments = t => t.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '').replace(/\{\s*\}/g, '');
   const guide = read('src/data/gameContent/basketball.ts');
   const start = guide.indexOf("'/nba-front-office': {");
@@ -685,6 +762,21 @@ console.log('8) The copy says what the engine does');
   ok(8, "the board's award history says sim seasons in code", board.includes('Sim seasons, not real NBA history.'));
   const news = read('src/pages/WhatsNew.tsx');
   ok(8, "What's New has the round", /Round 824/.test(news) || /season in numbers/i.test(news), 'no entry');
+  /* The page's worked example for the Sixth Man race promises a points line.
+     The GM has no say over who starts (the best five healthy men do), so a
+     bench man is by construction rated under the starters and plays fewer
+     minutes: the number must be one the simulated winners actually reach.
+     Measured 2026-10-01 over the thirty closes here: the median winner. The
+     first draft promised 17, which no measured season came near. */
+  const page = stripComments(read('src/pages/NbaFrontOffice.tsx'));
+  const sixthLine = page.split('\n').find(l => l.includes('Sixth Man of the Year')) ?? '';
+  const promised = Number((sixthLine.match(/(\d+(?:\.\d+)?) a game/) ?? [])[1]);
+  const winners = closes.filter(c => c.closed && c.closed.sixth).map(c => c.closed.sixth.ppg).sort((a, b) => a - b);
+  const q = f => winners.length ? winners[Math.min(winners.length - 1, Math.floor(f * winners.length))] : NaN;
+  const med = q(0.5);
+  ok(8, 'the page has a Sixth Man worked example that names a points a game figure', sixthLine.length > 0 && Number.isFinite(promised), sixthLine.trim().slice(0, 120) || 'no Sixth Man example on the page');
+  ok(8, `the page's Sixth Man example promises what the sim's winners score: within ${BAND.sixthPromise} of the median winner's points a game`, Number.isFinite(promised) && Number.isFinite(med) && Math.abs(promised - med) <= BAND.sixthPromise, `page ${promised}, median winner ${med} (10th to 90th percentile ${q(0.1)} to ${q(0.9)} over ${winners.length} seasons)`);
+  console.log(`   Sixth Man winners, points a game over ${winners.length} seasons: 10th percentile ${q(0.1)}, median ${med}, 90th ${q(0.9)}; the page promises ${promised}`);
 }
 
 /* ---- report ---------------------------------------------------------------- */

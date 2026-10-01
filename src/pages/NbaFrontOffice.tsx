@@ -44,7 +44,7 @@ const NbaFrontOffice = () => {
               'Sneak from the 9 seed through the play-in to a Finals run',
               'Draft a 90-grade prospect who turns out to be a 78',
               'Open a new league on its $226.7M tax line, close the season $10M over it and pay $10.8M (the first $6.859M at 1.00, the rest at 1.25), or $30.8M as a repeater',
-              'Bring a scorer off the bench for 17 a game and watch him take Sixth Man of the Year, because he started fewer than half his games',
+              'Carry a strong sixth man behind your best five: off the bench he scores about 13 a game and can take Sixth Man of the Year, because he started fewer than half his games',
               'Build back-to-back champions and chase a dynasty',
             ]}
           />

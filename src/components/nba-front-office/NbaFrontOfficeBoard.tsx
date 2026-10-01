@@ -872,10 +872,11 @@ export default function NbaFrontOfficeBoard() {
                 <span className="min-w-0">
                   <span className={cn('block truncate font-bold', p.out > 0 ? 'text-destructive' : 'text-foreground')}>{p.name} {p.out > 0 ? `(out ${p.out}r)` : ''}</span>
                   <span className="block text-[10px] text-muted-foreground">{p.pos} · {p.age}y · ${p.salary}M x{p.years}</span>
-                  {/* Round 824: this save's awards, on his card. */}
+                  {/* Round 824: this save's awards, on his card. The names are
+                      real, so each one says it is a sim award, never the real one. */}
                   {p.awards && p.awards.length > 0 && (
-                    <span data-award-badge className="block truncate text-[10px] text-gold" title={p.awards.join(', ')}>
-                      🏅 {p.awards.slice(-2).reverse().join(', ')}{p.awards.length > 2 ? ` +${p.awards.length - 2} more` : ''}
+                    <span data-award-badge className="block truncate text-[10px] text-gold" title={`This save's sim awards, not real NBA ones: ${p.awards.join(', ')}`}>
+                      🏅 {p.awards.slice(-2).reverse().map(a => `Sim ${a}`).join(', ')}{p.awards.length > 2 ? ` +${p.awards.length - 2} more` : ''}
                     </span>
                   )}
                 </span>
