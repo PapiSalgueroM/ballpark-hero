@@ -39,9 +39,12 @@
         the offseason. Every offseason ends at or under 53 on every club,
         every cut costs exactly the dead money the cuts module says, a tagged
         man never reaches the pool, every drafted man is on his club (the
-        roster or the practice squad), the refill calls up practice squad
-        men before it invents anybody, ids and names stay unique, the cap
-        holds for every club, and the save stays inside its size budget.
+        roster or the practice squad) unless the cut to 53 released him, the
+        refill calls up practice squad men before it invents anybody, ids
+        and names stay unique, the cap
+        holds for every club, and the save stays inside its size budget. The
+        cut to 53 is a real cut (cutPlayer: the pool, dead money, no way back
+        this season), checked directly on a club six men over.
      7) AN OLD SAVE LOADS AND PLAYS AS IT DID. A fifteen man league is played
         for three seasons, the board's way, by this engine and by the engine
         as it stood before this round (read from git at BASE), from one seed.
@@ -68,13 +71,14 @@
      gap 0.29 to 0.42 wins a club; spread of wins inside a season 2.81 to
      2.94 full against 2.83 to 2.90 fifteen man. Bands: share above 0.05
      (the bench does play), correlation at least 0.90, gap at most 0.6.
-     Section 6: 50 seasons, 50 cuts with the rule's dead money, 49 signings
-     refused at 53, 50 tags, 1050 draftees all on their clubs; 4486 men
-     called up and 6570 depth men invented over 500 club offseasons, none of
-     them while a practice squad man at his position waited; 46 sent down in
-     the cut to 53; biggest practice squad 20; biggest save 297K (budget
-     700K); highest payroll 91.6 percent of the cap; real men still 62 to 65
-     percent of the active rosters after five seasons.
+     Section 6: 50 seasons, 50 cuts with the rule's dead money, 50 signings
+     refused at 53, 50 tags, 1050 draftees all on their clubs; 4475 men
+     called up and 6544 depth men invented over 500 club offseasons, none of
+     them while a practice squad man at his position waited; 46 released in
+     the cut to 53, none of them draftees; biggest practice squad 18;
+     biggest save 298K (budget 700K); highest payroll 93.5 percent of the
+     cap; real men still 62 to 66 percent of the active rosters after five
+     seasons.
      Section 7: 162 league states over three seeds and three seasons, 0
      different from the engine at 1d2e5d96.
 
@@ -535,18 +539,26 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
     const t = lg.teams.KC;
     const rng = lcg(91);
     for (let i = 0; i < 6; i += 1) {
-      t.players.push({ id: `extra-${i}`, name: `Extra Man ${i}`, pos: engine.DEPTH_GROUPS[i % 8], age: 22, ovr: 60 + Math.floor(rng() * 3), salary: 1, years: 4, out: 0, pot: 70 });
+      t.players.push({ id: `extra-${i}`, name: `Extra Man ${i}`, pos: engine.DEPTH_GROUPS[i % 8], age: 22, ovr: 61 + Math.floor(rng() * 3), salary: 1, years: 4, out: 0, pot: 70 });
     }
     const before = t.players.length;
     const startersBefore = engine.starterIds(t);
     const psBefore = t.practice.length;
+    const poolBefore = lg.freeAgents.length;
+    const deadBefore = cuts.deadCapUsed(t);
+    const owed = new Map(t.players.map(p => [p.id, cuts.deadMoneyFor(p).now]));
     const countsBefore = Object.fromEntries(GROUPS.map(g => [g, t.players.filter(p => p.pos === g).length]));
-    const down = engine.cutDownToMax(t);
+    const down = engine.cutDownToMax(t, lg.freeAgents);
+    const gone = lg.freeAgents.slice(poolBefore);
     ok(6, 'the cut down leaves a full club at 53', t.players.length === engine.DEEP_ROSTER_MAX, `${before} to ${t.players.length}`);
-    ok(6, 'the cut down sends the extra men to the practice squad', t.practice.length === psBefore + (before - engine.DEEP_ROSTER_MAX) && down.length === before - engine.DEEP_ROSTER_MAX,
-      `practice ${psBefore} to ${t.practice.length}, ${down.length} sent`);
-    const sentIds = down.map(d => t.practice.find(p => p.name === d.player)?.id);
-    ok(6, 'the cut down never sends a starter', sentIds.every(id => id && !startersBefore.has(id)));
+    ok(6, 'the cut down releases the extra men to the pool, the practice squad untouched',
+      down.length === before - engine.DEEP_ROSTER_MAX && gone.length === down.length && t.practice.length === psBefore,
+      `${down.length} released, pool +${gone.length}, practice ${psBefore} to ${t.practice.length}`);
+    const charged = Math.round((cuts.deadCapUsed(t) - deadBefore) * 10) / 10;
+    const want = Math.round(gone.reduce((s, p) => s + owed.get(p.id), 0) * 10) / 10;
+    ok(6, 'every man released in the cut down costs the dead money the cuts module says', charged === want && want > 0, `${charged} charged, ${want} owed`);
+    ok(6, 'a man released in the cut down cannot be signed back this season', gone.every(p => cuts.signRefusal(t, p.id)));
+    ok(6, 'the cut down never releases a starter', gone.every(p => !startersBefore.has(p.id)));
     /* a crowded group gives men up before a thin one loses any */
     const thinned = GROUPS.filter(g => countsBefore[g] <= engine.DEEP_GROUP_TARGET[g] && t.players.filter(p => p.pos === g).length < countsBefore[g]);
     ok(6, 'the cut down takes from crowded groups and leaves thin ones alone', thinned.length === 0, thinned.join(', '));
@@ -570,7 +582,7 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
     }
   }
 
-  const stats = { seasons: 0, cuts: 0, deadOk: 0, signs: 0, fullRefused: 0, tags: 0, drafted: 0, cutDowns: 0, promoted: 0, invented: 0, maxSave: 0, maxPs: 0, maxCapShare: 0, realLeft: [] };
+  const stats = { seasons: 0, cuts: 0, deadOk: 0, signs: 0, fullRefused: 0, tags: 0, drafted: 0, cutDowns: 0, promoted: 0, invented: 0, maxSave: 0, maxPs: 0, maxCapShare: 0, realLeft: [], draftCut: 0 };
   const bad = { size: [], groups: [], dead: [], tagPool: [], drafted: [], invent: [], ids: [], cap: [], full: [] };
   for (let f = 0; f < 10; f += 1) {
     const seed = 8280 + f;
@@ -645,12 +657,10 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
         stats.maxCapShare = Math.max(stats.maxCapShare, engine.capUsed(t) / lg.cap);
         if (engine.capUsed(t) > lg.cap) bad.cap.push(`${seed} season ${s} ${t.abbr} ${engine.capUsed(t)} of ${lg.cap}`);
         /* a man the refill invented is new this offseason; his club had nobody at his position left on the squad */
-        /* the men the cut to 53 sent down came after the refill, so they do not count */
-        const sentDown = new Set(news.cutDown.filter(d => d.team === t.abbr).map(d => d.player));
         for (const p of t.players) {
           if (idsBefore.has(p.id)) continue;
           stats.invented += 1;
-          const waiting = t.practice.filter(q => q.pos === p.pos && !sentDown.has(q.name));
+          const waiting = t.practice.filter(q => q.pos === p.pos);
           if (waiting.length) bad.invent.push(`${seed} ${t.abbr} invented a ${p.pos} with ${waiting.length} on the squad`);
         }
       }
@@ -658,7 +668,11 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
       if (tagged && lg.freeAgents.some(p => p.id === tagged.id)) bad.tagPool.push(`${seed} ${tagged.name}`);
       for (const [abbr, id] of draftedIds) {
         const t = lg.teams[abbr];
-        if (!t.players.some(p => p.id === id) && !t.practice.some(p => p.id === id)) bad.drafted.push(`${seed} ${abbr} ${id}`);
+        if (t.players.some(p => p.id === id) || t.practice.some(p => p.id === id)) continue;
+        /* or the cut to 53 released him, which the offseason news names */
+        const pl = lg.freeAgents.find(p => p.id === id);
+        if (pl && news.cutDown.some(d => d.team === abbr && d.player === pl.name)) stats.draftCut += 1;
+        else bad.drafted.push(`${seed} ${abbr} ${id}`);
       }
       const ids = [...Object.values(lg.teams).flatMap(t => [...t.players, ...t.practice]), ...lg.freeAgents].map(p => p.id);
       if (new Set(ids).size !== ids.length) bad.ids.push(`${seed} season ${s}: ${ids.length - new Set(ids).size} repeated ids`);
@@ -669,14 +683,14 @@ const CLUBS = data.FO_TEAMS.map(t => t.abbr);
     stats.realLeft.push(onRosters.filter(p => realNames.has(p.name)).length / onRosters.length);
   }
   console.log(`   ${stats.seasons} seasons: ${stats.cuts} cuts (${stats.deadOk} with the rule's dead money), ${stats.fullRefused} signings refused at 53, ${stats.signs} signings after making room, ${stats.tags} tags, ${stats.drafted} draftees`);
-  console.log(`   offseasons: ${stats.promoted} called up off the practice squad, ${stats.invented} depth men invented, ${stats.cutDowns} sent down in the cut to 53; biggest practice squad ${stats.maxPs}; biggest save ${(stats.maxSave / 1024).toFixed(0)}K; highest payroll ${(stats.maxCapShare * 100).toFixed(1)} percent of the cap`);
+  console.log(`   offseasons: ${stats.promoted} called up off the practice squad, ${stats.invented} depth men invented, ${stats.cutDowns} released in the cut to 53 (${stats.draftCut} of them draftees); biggest practice squad ${stats.maxPs}; biggest save ${(stats.maxSave / 1024).toFixed(0)}K; highest payroll ${(stats.maxCapShare * 100).toFixed(1)} percent of the cap`);
   console.log(`   real men still on the active rosters after five seasons: ${stats.realLeft.map(x => (x * 100).toFixed(0)).join(", ")} percent by franchise`);
   ok(6, 'every club is at or under 53 after every offseason', bad.size.length === 0, bad.size.slice(0, 3).join(', '));
   ok(6, 'every club fields every group\'s starters after every offseason', bad.groups.length === 0, bad.groups.slice(0, 3).join(', '));
   ok(6, 'every cut costs the dead money the cuts module says', bad.dead.length === 0 && stats.cuts >= 40, `${stats.cuts} cuts; ${bad.dead.slice(0, 2).join(' | ')}`);
   ok(6, 'a full roster refuses a signing at 53', bad.full.length === 0 && stats.fullRefused >= 40, `${stats.fullRefused} refusals; ${bad.full.slice(0, 2).join(' | ')}`);
   ok(6, 'a tagged man never reaches the pool', bad.tagPool.length === 0 && stats.tags >= 10, `${stats.tags} tags; ${bad.tagPool.slice(0, 2).join(', ')}`);
-  ok(6, 'every drafted man is on his club after the offseason', bad.drafted.length === 0, `${bad.drafted.length} of ${stats.drafted}: ${bad.drafted.slice(0, 2).join(', ')}`);
+  ok(6, 'every drafted man is on his club after the offseason, or was released in the cut to 53', bad.drafted.length === 0, `${bad.drafted.length} of ${stats.drafted}: ${bad.drafted.slice(0, 2).join(', ')}`);
   ok(6, 'the refill calls up the practice squad before it invents anybody', bad.invent.length === 0, bad.invent.slice(0, 3).join(' | '));
   ok(6, 'ids stay unique across rosters, squads and the pool', bad.ids.length === 0, bad.ids.slice(0, 2).join(' | '));
   ok(6, 'every club fits under the cap, at the start and after every offseason', bad.cap.length === 0, bad.cap.slice(0, 3).join(' | '));

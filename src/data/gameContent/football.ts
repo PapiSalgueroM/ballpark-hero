@@ -241,7 +241,7 @@ export const FOOTBALL_CONTENT: GameContentMap = {
       {
         heading: "The 53 man limit and the offseason refill",
         items: [
-          "Every offseason each position group is refilled to its real size. The club calls up its own practice squad first and only signs a generated depth man when the squad has nobody left at that spot. If the draft takes you over 53, the lowest rated men who do not start go down to the practice squad, never a starter.",
+          "Every offseason each position group is refilled to its real size. The club calls up its own practice squad first and only signs a generated depth man when the squad has nobody left at that spot. If the draft takes you over 53, the lowest rated men who do not start are released, dead money and all, and a starter never is.",
         ],
       },
       {

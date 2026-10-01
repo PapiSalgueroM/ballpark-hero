@@ -483,7 +483,7 @@ export default function FrontOfficeBoard() {
           const down = (news.cutDown ?? []).filter(r => r.team === myTeam).map(r => `${r.player} (${r.pos})`);
           return [
             ...(up.length ? [`⬆️ Called up from the practice squad: ${up.join(', ')}.`] : []),
-            ...(down.length ? [`⬇️ The cut to ${DEEP_ROSTER_MAX} sends ${down.join(', ')} to the practice squad.`] : []),
+            ...(down.length ? [`✂️ The cut to ${DEEP_ROSTER_MAX} releases ${down.join(', ')}, dead money and all.`] : []),
           ];
         })(),
       ];
@@ -826,7 +826,7 @@ export default function FrontOfficeBoard() {
             <p className="mt-1 text-xs text-muted-foreground">
               You hold <b className="text-gold">{picksLeft}</b> pick{picksLeft === 1 ? '' : 's'}. Scout grades carry error:
               the number on the card is what your scouts THINK. Every pick joins your roster as a player, defenders included.
-              {my.rosterDepth === 2 && ` The roster limit is ${DEEP_ROSTER_MAX}: if the picks take you over it, the offseason sends your lowest rated men who do not start to the practice squad.`}
+              {my.rosterDepth === 2 && ` The roster limit is ${DEEP_ROSTER_MAX}: if the picks take you over it, the offseason releases your lowest rated men who do not start, with the usual dead money.`}
             </p>
           )}
         </div>

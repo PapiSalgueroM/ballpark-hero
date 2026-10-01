@@ -1155,7 +1155,7 @@ export interface OffseasonNews {
   tagged: { team: string; player: string; salary: number }[];
   /** Round 828, full rosters only: called up off the practice squad to refill a group. */
   promoted?: { team: string; player: string; pos: string }[];
-  /** Round 828, full rosters only: sent to the practice squad to get down to 53. */
+  /** Round 828, full rosters only: released in the cut to 53 (a real cut, dead money and all). */
   cutDown?: { team: string; player: string; pos: string }[];
 }
 
@@ -1269,7 +1269,7 @@ export function runOffseason(league: LeagueState, rng: () => number, userTeam?: 
     const taken = leagueNames(league);
     for (const t of deep) {
       news.promoted.push(...refillDeepRoster(t, taken, rng));
-      news.cutDown.push(...cutDownToMax(t));
+      news.cutDown.push(...cutDownToMax(t, league.freeAgents));
     }
   }
   replenishRosters(league, rng);
@@ -1366,26 +1366,26 @@ export function refillDeepRoster(t: GmTeamState, taken: Set<string>, rng: () => 
 }
 
 /* Round 828: THE CUT DOWN TO 53. A full club over DEEP_ROSTER_MAX after the
-   draft sends its lowest rated men who do not start to the practice squad
-   until it is at 53. The practice squad rather than the street, because the
-   men over the line are usually the rookies just drafted, and a GM who
-   spent a pick on one should not lose him to arithmetic. A starter is never
-   sent down. */
-export function cutDownToMax(t: GmTeamState): { team: string; player: string; pos: string }[] {
+   draft releases its lowest rated men who do not start until it is at 53.
+   It is a real cut, through cutPlayer like every other: the man goes to the
+   pool, half his salary stays on the cap as dead money, and he cannot come
+   back this season (simFrontOfficeCuts section 7 holds every engine to that,
+   so a quiet move to the practice squad, which would free his salary for
+   nothing, is not on offer). A guaranteed deal is never the one released,
+   and a group carrying more than its share gives a man up before a thin one
+   loses any. A starter is never released. */
+export function cutDownToMax(t: GmTeamState, freeAgents: GmPlayer[]): { team: string; player: string; pos: string }[] {
   const out: { team: string; player: string; pos: string }[] = [];
   if (t.rosterDepth !== 2) return out;
   while (t.players.length > DEEP_ROSTER_MAX) {
+    const roster = [...t.players];
     const starting = starterIds(t);
-    /* a guaranteed deal is a promise to the active roster, so it never goes
-       down; and a group carrying more than its share goes first, so the cut
-       never leaves one group thin to keep another deep */
-    const spare = t.players.filter(p => !starting.has(p.id) && !p.guaranteed);
-    const crowded = spare.filter(p => t.players.filter(q => q.pos === p.pos).length > DEEP_GROUP_TARGET[p.pos]);
+    const count = (pos: DepthPos) => roster.reduce((n, q) => n + (q.pos === pos ? 1 : 0), 0);
+    const spare = roster.filter(p => !starting.has(p.id) && !p.guaranteed);
+    const crowded = spare.filter(p => count(p.pos) > DEEP_GROUP_TARGET[p.pos]);
     const down = (crowded.length ? crowded : spare)
       .sort((a, b) => a.ovr - b.ovr || b.age - a.age || a.name.localeCompare(b.name))[0];
-    if (!down) break;
-    t.players = t.players.filter(p => p.id !== down.id);
-    t.practice = [...(t.practice ?? []), down];
+    if (!down || !cutPlayer(t, freeAgents, down.id, NFL_ROSTER_MIN)) break;
     const saved = t.depth?.[down.pos];
     if (t.depth && saved) { t.depth[down.pos] = saved.filter(id => id !== down.id); settleDepth(t, down.pos); }
     out.push({ team: t.abbr, player: down.name, pos: down.pos });
