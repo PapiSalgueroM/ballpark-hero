@@ -25,13 +25,15 @@ const controls = {
   keys: { changes: [['if (isInteractive(e)) return;', '', 1]], failure: /routes range, button and dialog keys independently/ },
   help: { changes: [["if (mode === 'practice' && (phase === 'aiming' || phase === 'flying') && !paused) pause();", '', 1]], failure: /pauses selected inputs and the real flight/ },
   focus: { changes: [['target?.focus({ preventScroll: true });', '', 1]], failure: /shows rules and a worked example before play/ },
-  restorewrite: { changes: [["if (m === 'daily' && restored) {\n      savedRef.current = true;", "if (m === 'daily' && restored) {\n      savedRef.current = false;", 1]], failure: restored },
+  restorewrite: { changes: [["if (completedDaily) {\n      savedRef.current = true;", "if (completedDaily) {\n      savedRef.current = false;", 1]], failure: restored },
   restoremark: { changes: [
     ["import { getTodayET } from '@/lib/dateUtils';", "import { getTodayET } from '@/lib/dateUtils';\nimport { markRestoredFinish } from '@/lib/restoredFinish';", 1],
-    ["if (m === 'daily' && restored) {\n      savedRef.current = true;", "if (m === 'daily' && restored) {\n      savedRef.current = true;\n      markRestoredFinish(SLUG);", 1],
+    ["if (completedDaily) {\n      savedRef.current = true;", "if (completedDaily) {\n      savedRef.current = true;\n      markRestoredFinish(SLUG);", 1],
   ], failure: restored },
   seed: { changes: [["const seed = m === 'daily' ? daySeed(todayStr) : Math.floor(Math.random() * 2147483645) + 1;", "const seed = m === 'daily' ? daySeed(todayStr) : 1;", 1]], failure: delayed },
   share: { changes: [["{mode !== 'practice' && <ShareButtons", '{<ShareButtons', 1]], failure: isolated },
+  daily: { changes: [["const completedDaily = m === 'daily' ? completedDailyRef.current : null;", "const completedDaily = m === 'daily' ? restored : null;", 1]], failure: /keeps a newly finished daily booked across practice and unlimited/ },
+  booked: { changes: [['setBookedDaily(completedDaily !== null);', 'setBookedDaily(false);', 1]], failure: /keeps a newly finished daily in memory when private storage refuses its write/ },
 };
 assert.ok(!control || control in controls, 'Unknown Free Kick practice control');
 const original = await readFile(source, 'utf8');
@@ -65,14 +67,14 @@ try {
   assert.match(output, /freeKickPractice\.test\.tsx/, 'Actual rendered tests must execute');
   if (control) {
     assert.notEqual(run.status, 0, 'Changed practice behavior must fail an outcome');
-    assert.match(output, /Tests\s+\d+ failed.*\d+ passed/, 'Intended failures and an independent unchanged outcome must both be reported');
+    assert.match(output, /Tests\s+1 failed.*1 passed.*9 skipped/, 'One intended failure and one independent unchanged outcome must both be reported');
     assert.match(output, new RegExp('FAIL[^\\n]*' + controls[control].failure.source), 'The intended outcome must appear in the failure report');
     assert.match(output, /AssertionError|TestingLibraryElementError|expect\(element\)|expected .* to/i, 'A real assertion must fail');
     assert.doesNotMatch(output, /Failed to resolve import|Cannot find module|No test files found|Test timed out|Timeout calling|Unhandled Errors/);
     console.log(`simFreeKickPractice ${control}: its asserted copy failed the intended outcome; the independent actual reduced-motion/cleanup check stayed green.`);
   } else {
-    assert.equal(run.status, 0, output.slice(-6000)); assert.match(output, /9 passed/);
-    console.log('simFreeKickPractice: nine actual Board/engine checks passed for explicit inputs, exact geometry, native key routing, pause/help, ten-shot practice, original modes and isolated records/completion/share.');
+    assert.equal(run.status, 0, output.slice(-6000)); assert.match(output, /11 passed/);
+    console.log('simFreeKickPractice: eleven actual Board/engine checks passed for explicit inputs, exact geometry, native key routing, pause/help, ten-shot practice, fresh daily roundtrips and private storage refusal.');
   }
   assert.equal(await readFile(source, 'utf8'), original, 'Controls must preserve shared production source');
 } finally { if (copy) await rm(copy, { force: true }); if (folder) await rmdir(folder); }

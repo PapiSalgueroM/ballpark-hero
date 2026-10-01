@@ -27,7 +27,8 @@ function status(m: MountedPage): 'playing' | 'finished' {
 }
 
 function dialogOptions(): HTMLButtonElement[] {
-  return Array.from(document.querySelectorAll('[role="dialog"] button')).filter(b => !/^Close$/.test((b.textContent ?? '').trim())) as HTMLButtonElement[];
+  return Array.from(document.querySelectorAll<HTMLButtonElement>('[role="dialog"] button'))
+    .filter(b => b.children.length === 2 && Array.from(b.children).every(child => child.tagName === 'SPAN'));
 }
 
 async function finish(m: MountedPage): Promise<void> {

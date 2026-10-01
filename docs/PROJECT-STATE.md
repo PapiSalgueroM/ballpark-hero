@@ -1,5 +1,195 @@
 # Project state
 
+## IN PROGRESS 2026-10-01: NHL simulation contributors claimed
+
+794 is a partial master63 slice: player-selected healthy forwards, defensemen and goalie
+feed the existing strength weights and persist in the existing local save. Exact file/API
+boundaries and acceptance are on WORKBOARD. Full lines, defensive pairs and ice time remain
+open. Automatic old saves, real roster data and shared transaction helpers stay held.
+793 native QA caught a real accepted-pick page jump and is correcting it before acceptance.
+792's frozen406-node suite is still running. Next795; all Claude reservations stand.
+
+## CHECKPOINT 2026-10-01: Search and Discard functional Page/module frozen
+
+793 passes eight actual Page/helper/booking/share outcomes and current app types0.
+Complete CPU/pass duels preserve original squads,44 discards, season/score and share;
+all22 slot nodes retain identity. Native-measured selected-name overflow is fixed locally.
+Twelve effective copied controls pass with independent outcomes; sixteen native duels and
+final combined production acceptance remain due.
+792's406-node frozen suite is still running. Exact scopes/proof on WORKBOARD; next794.
+
+## IN PROGRESS 2026-10-01: Search and Discard stable squads and feedback claimed
+
+793 owns only the Page, new module and focused actual-outcome tests/sim. Fix repeated
+squad remounts, infinite eligible-slot pulses and truncated names; add truthful finite
+committed keep/discard feedback, static reduced motion and reachable native focus.
+Original draft/season/score/share/completion helpers stay intact. Exact ownership and
+acceptance are on WORKBOARD.792 production native/full-node gates continue on a frozen
+clone; publication and Google approval remain separate. All Claude claims stand. Next794.
+
+## CHECKPOINT 2026-10-01: Aussie Rules source outcomes and controls pass
+
+792 passes14 real engine/hook tests with17 effective copied controls, plus ten actual
+Board/Page outcomes with ten copied controls. All30 matchday cohorts, exact ten-round
+replay and measured squad/tactic/recovery effects pass. Native acceptance and final
+combined production/artifact/full-node gates remain pending. Source stays unrouted until
+its saved page is ready. Proof and all Claude reservations are on WORKBOARD. Next free793.
+
+## CHECKPOINT 2026-10-01: Aussie Rules functional source, final acceptance pending
+
+792's five new engine/hook/Board/Page/module files are frozen for an unrouted checkpoint.
+Initial real-engine/hook13 and actual-Board10 tests pass, including a full ten-round season.
+Review fixed the opponent matchday23 boundary and lineup save coalescing;216 names are unique.
+Final controls/native seasons and the combined build/artifact/full-node gates remain due.
+The new route and saved page will land together. Exact scopes/proof are on WORKBOARD.
+Report88fc0a2b stays open; publication and Google approval are separate. Next free793.
+
+## CHECKPOINT 2026-10-01: Puck Detective and phone source/native accepted
+
+790 passes ten real-page outcomes/twelve effective controls/eight native contexts with831
+checks.791 passes twelve actual-panel outcomes/four controls/eight native contexts plus
+original-source reproduction. Current app types0. Detailed source/fixture limits are on
+WORKBOARD; final combined production build remains required.792's separate fictional Aussie
+Rules season is claimed, with verified match rules and clear fictional format. Next free793.
+Claude reservations, published deployment and Google approval remain separate.
+
+## IN PROGRESS 2026-10-01: Aussie Rules Manager visitor request claimed
+
+792 builds a separate playable fictional six-club/ten-round season with verified Aussie
+Rules scoring/teams, weekly squad/training choices, quarter tactics/break swaps, ladder and
+local resume. Exact engine/UI/registration/generated-file ownership is on WORKBOARD. All
+players/clubs are generated and labeled; actual2026 rosters/draw/finals are not claimed.
+Report88fc0a2b stays open.791 phone passes12 outcomes/four controls/eight native contexts
+and original-source reproduction;790's ten outcomes/twelve controls pass and full native
+matrix continues. Final combined build remains required. Next free793; Claude claims stand.
+
+## CHECKPOINT 2026-10-01: completed game rounds pass final production refresh
+
+786/787/788/789 now pass the frozen043c59bd type/build, limited two-page prerender,
+second build and all15 built-site fences. Independent actual-asset boots pass8 cases and
+an effective bootless control. Only Stat Detective's saved text and derived date change;
+Clue Auction and166 other ledger dates hold. Three generated files are pushed, not dist.
+Utility CSS remains the accepted215c948d bytes. Detailed proof/limits are on WORKBOARD.
+790 Puck Detective and791 Soccer Career phone source/test/native work continue outside
+this frozen build. No full current node-suite or publication/Google-approval claim.
+Next free792; all Claude reservations stand.
+
+## IN PROGRESS 2026-10-01: Puck Detective and Soccer Career phone claimed
+
+790 owns stable Puck Detective history, truthful committed feedback and readable controls.
+791 owns only Soccer Career PhonePanel modal keyboard/focus and44px local controls. Exact
+file scopes and actual-outcome/native acceptance are on WORKBOARD; all Claude reservations
+stand. Root claims only786/787's two generated snapshots and derived ledger/sitemap entries,
+with a fresh combined production build/fifteen fences/targeted boots before acceptance.
+788's missing combined private-store then later Unlimited path now passes22 tests, four
+effective copied controls and four native private flows. Only18 test lines changed; app
+source stays intact. The unchanged affected pause gate also passes16 cases. Next free792.
+Source commits update the preview; publication and Google approval remain separate.
+
+## CHECKPOINT 2026-10-01: durable Hot Seat pin accepted, private-path evidence supplemented
+
+789's two-line pin passes types,240 unchanged engine setups/24 replays, full Daily Reload
+and an asserted old-Memo copied control failing only the strict source fence. Source review
+is clean; final combined build refresh remains pending.788 needs a precise supplemental
+private-store -> later Unlimited proof: existing private returns and later normal-storage
+Unlimited paths pass separately, while source behavior is sound. Extend only two existing
+tests/four private native flows, no app change.786/787 final native acceptance passes; next
+free790 and all Claude reservations stand. Live at06:34:12UTC still serves Release I, with
+new features absent from actual chunks; raw game canonicals/indexability remain clean.
+
+## CHECKPOINT 2026-10-01: Clue Auction final native and visual acceptance passed
+
+787's native selection,44px targets, exact committed clue/guess/result feedback and static
+reduced motion pass nine actual tests/nine effective controls plus eight native contexts
+with813 checks. Its measured phone receipt column fix passes both copied controls and final
+normal/reduced screenshots. Bank/best/completion/share and real helpers stay unchanged.
+Source peer review is clean; WORKBOARD holds all proofs and scope limits. Source is pushed,
+final module rebuild and publication remain pending.786/788 acceptance also passes;789's
+types/engine/source-control and full reload pass. Next free790, scout is read-only.
+
+## CHECKPOINT 2026-10-01: fresh arcade dailies and Stat Detective native acceptance passed
+
+788 is accepted:22 actual tests,30 effective controls,16 native cases/four private-storage
+flows preserve newly earned dailies across practice, with no second write/record and a later
+Unlimited finish still booked once. The full unchanged Daily Reload gate passes107/107 and
+both controls after its test-only player selector repair and789's durable day pin.786's
+eight native cases also pass exact clues, shares, once-only completion sink, focus, finite/
+static motion and phone fit. WORKBOARD carries source boundaries, failed attempts and proofs.
+Current build/fifteen fences pass. The final787 mobile receipt correction and789 day pin
+still need their combined build refresh; live publication remains separate. Next free790.
+
+## IN PROGRESS 2026-10-01: final production build passes, day pin compatibility claimed
+
+Current combined types/build pass in the physical1729c27f checkout with frozen786/787/788
+overlays and corrected Quiz JS. Entry index-CnGiHcn2.js; utility CSS stays byte-identical to
+the accepted215c948d stylesheet. All14 rebuilt-site node fences pass; actual boot browser
+gate follows.789 claims only Hot Seat's two-line durable useRef day pin to match the existing
+strict guard; its previous Memo cache is not an observed runtime midnight failure. Full
+Daily Reload and native matrices continue.787's measured narrow mobile result receipts
+need a scoped layout fix and subsequent rebuild before visual acceptance. Next free790.
+
+## CHECKPOINT 2026-10-01: Stat Detective source and fresh daily regression accepted
+
+786's seven actual-page/helper checks and ten effective copied controls pass, with types0.
+It adds committed finite/static cues, native suggestion focus and accurate page-local clue
+instructions. Native eight-context/final-style acceptance is pending.788's minimal daily
+cache/booking fix passes22 real Board/engine/hook outcomes,30 effective controls and the
+strict67-row completion guard with eight static controls. Full receipts/limits are on
+WORKBOARD. Old source reproduced the daily return as aiming instead of finished.
+
+All six unrelated quiet harness reruns now pass unchanged, including Tycoon's six outcomes
+and eight controls. Buzzer silent reload's raw seven tests pass. Current combined production
+build runs in its own physical/Git checkout; full Daily Reload and rebuilt-site/native
+acceptance follow.787 source is frozen and its tests/controls continue. Publication is
+still pending and the last independently verified live release is I. Next free789.
+
+## IN PROGRESS 2026-10-01: fresh arcade daily replay guard claimed
+
+788 fixes the verified fresh-daily -> practice -> Today replay path in both arcade Boards,
+preserving the earned result and refusing a second write/completion. It also repairs the
+test-only shared lineup reload picker selecting Reset filters. Actual regression/control
+acceptance precedes any narrowly bound source-ratchet exception. Exact eight-file scope is
+on WORKBOARD. Five unchanged quiet gate reruns pass; Tycoon rerun and Buzzer control diagnosis
+continue.786 and787 implementation/native acceptance continue; next free789.
+
+## IN PROGRESS 2026-10-01: Clue Auction claimed, corrected gate narrowed to eight failures
+
+787 owns Clue Auction's native suggestions/44px targets and committed finite/static feedback,
+preserving prices, real helpers, bank, best, completion and share. Exact four-file claim and
+actual-outcome acceptance are on WORKBOARD.786 Stat Detective continues. Next free788.
+
+The frozen physical/Git rerun finishes66 pass/eight fail across the74 previous failures.
+Four are explicit filter-test wall timeouts; the remaining driver/control/static-ratchet
+failures need diagnosis and truthful controls. Quiet unchanged reruns are in progress. This
+does not claim the full suite green. Final corrected Quiz JS/build/fifteen fences and live
+publication remain pending; the last independently verified live release is I.
+
+## IN PROGRESS 2026-10-01: Stat Detective claimed, final-style source fixes accepted
+
+786 adds committed guess/clue/result feedback and native suggestion focus within the existing
+page and helpers. It also aligns this page's misleading next-hint/feedback copy with actual
+hint and franchise behavior, preserving game math/data/completion/share. Exact four-file scope
+and real-outcome acceptance are on WORKBOARD;787 next free. All Claude reservations stand.
+
+774's single form minimum-width fix passes seven unit/hook outcomes, eight final-CSS browser
+contexts and four copied geometry controls.771's portable harness now uses a deterministic
+refused-intent control; app behavior/healthy protocol/timings are unchanged, both native modes
+reject the false auto-resolution cue and no-wrap controls pass.136 healthy contexts across
+769-779 accept the exact215c948d final utility stylesheet. Corrected Quiz JS rebuild and the
+74-harness rerun remain pending. Uncached primary HTTP at05:41:50UTC still serves Release I;
+practice/signing source is not live, Quiz feedback is. No publication/Google approval claim.
+
+## CHECKPOINT 2026-10-01: verified IndexNow count fence accepted
+
+785's literal167 floor passes offline; the copied previous166 floor fails only intended growth.
+The page delta is exactly Manager Hot Seat. No URLs/data/public files changed or submissions
+made. Final utility CSS passes the Free Kick/Buzzer/First Touch/Constructor/Budget matrices,
+plus24 Soccer Lineup/Staff/Inbox contexts and four no-wrap controls so far.771's protocol-
+dependent scheduling control gets no credit and is being replaced by an asserted retained-
+intent copy, with healthy checks unchanged.774's measured single form minimum-width fix now
+passes its seven actual hook/unit outcomes; native8/control matrices run. Final JS rebuild
+waits behind the74-harness rerun. Full receipts/remaining gates are on WORKBOARD. Next free786.
+
 ## CHECKPOINT 2026-10-01: Free Kick practice accepted, combined CSS exposed two real gates
 
 777 adds fixed-input unrecorded practice with original physics, pre-play rules/help, native

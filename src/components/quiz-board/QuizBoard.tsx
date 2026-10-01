@@ -163,7 +163,7 @@ export function QuizBoard() {
                 setPendingAnswer({ category: openTile.clue.category, value: openTile.clue.value, clueId: openTile.clue.clueId });
                 submit();
               }}
-              className="flex gap-2"
+              className="flex min-w-0 gap-2"
             >
               <input
                 autoFocus
