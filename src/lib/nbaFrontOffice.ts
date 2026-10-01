@@ -6,6 +6,12 @@ import { NBA_SALARY_CAP_2026_27 } from './leagueCaps';
 import { makeIdMinter, ensureLeagueEntityIds } from './entityIds';
 /* Round 631: dead money and the no way back rule, shared by the four GM sims. */
 import { type CutLedger, cutPlayer, payrollWithDeadCap, rollDeadCap, rosterFullRefusal, signRefusal, tradeRefusal } from './frontOfficeCuts';
+/* Round 722: the luxury tax, the aprons and the tip off roster floor, sourced in one file. */
+import {
+  NBA_TIPOFF_MIN, NBA_MIN_CONTRACT, nbaTaxLine, nbaFirstApron, nbaSecondApron, nbaTaxBill, nbaIsRepeater,
+  nbaCalibrateTaxScale, type NbaTaxEntry,
+} from './nbaLuxuryTax';
+export { NBA_TIPOFF_MIN, NBA_MIN_CONTRACT, nbaTaxLine, nbaFirstApron, nbaSecondApron, nbaTaxBill } from './nbaLuxuryTax';
 
 /**
  * NBA Front Office engine (2026-08-05). Basketball sibling of
@@ -46,6 +52,12 @@ export interface NbaGmTeam extends CutLedger {
   wins: number;
   losses: number;
   picks: number[];
+  /* Round 722: the tax ledger. Both optional, so every league saved before
+     this round loads and reads as a club that has never paid tax. */
+  /** The last four seasons' assessments, newest last; the repeater rule reads them. */
+  taxHistory?: NbaTaxEntry[];
+  /** The bill assessed at the last season close, $M. Ownership takes it out of this season's room. */
+  taxDue?: number;
 }
 
 export interface NbaLeague {
@@ -55,6 +67,15 @@ export interface NbaLeague {
   freeAgents: NbaGmPlayer[];
   round: number; // 1..NBA_ROUNDS
   champions: { season: number; team: string }[];
+  /**
+   * Round 722: the tax lines' scale, set from this league's own payrolls
+   * (nbaCalibrateLeagueTax, sources in nbaLuxuryTax.ts). A new league gets it
+   * at creation. Optional, because a league saved before the round has none:
+   * that league plays out its current season with no tax at all (no
+   * projection, no bill at close, no apron rule) and is calibrated at its
+   * next summer, so nobody is billed for a season that started untaxed.
+   */
+  taxScale?: number;
 }
 
 /* Round 568: this counter used to live at module scope, which restarts on
@@ -106,7 +127,7 @@ export function initNbaLeague(rng: () => number = Math.random): NbaLeague {
     });
     teams[t.id] = { abbr: t.id, players, wins: 0, losses: 0, picks: [1, 2] };
   }
-  return {
+  const league: NbaLeague = {
     season: 2026,
     cap: NBA_CAP_BASE,
     teams,
@@ -115,6 +136,28 @@ export function initNbaLeague(rng: () => number = Math.random): NbaLeague {
     round: 1,
     champions: [],
   };
+  /* Round 722: the tax lines are set from this league's own payrolls. */
+  nbaCalibrateLeagueTax(league);
+  return league;
+}
+
+/**
+ * Round 722: what a club will carry at tip off. A club short of the floor is
+ * filled on the minimum there, so the shortfall is counted at that price.
+ */
+export function nbaTipOffPayroll(t: NbaGmTeam): number {
+  return Math.round((nbaCapUsed(t) + NBA_MIN_CONTRACT * Math.max(0, NBA_TIPOFF_MIN - t.players.length)) * 10) / 10;
+}
+
+/**
+ * Round 722: set the league's tax scale from every club's tip off payroll at
+ * the league's current cap (the rule and its real world aims are in
+ * nbaLuxuryTax.ts). Called at creation and, for a league saved before the
+ * round, once at the end of its next summer.
+ */
+export function nbaCalibrateLeagueTax(league: NbaLeague): void {
+  const payrolls = Object.values(league.teams).map(nbaTipOffPayroll);
+  league.taxScale = nbaCalibrateTaxScale(payrolls, league.cap);
 }
 
 /* Round 211: widened from 10x10 to 28x28. A hundred possible people is
@@ -160,8 +203,54 @@ function initialFaPool(rng: () => number, taken: Set<string>): NbaGmPlayer[] {
 export function nbaCapUsed(t: NbaGmTeam): number {
   return payrollWithDeadCap(t.players, t);
 }
+/**
+ * Room under the cap, less the tax cheque ownership wrote at the last season
+ * close (Round 722): the bill comes out of this season's spending, so a club
+ * that paid tax has that much less to sign with. Zero on every save written
+ * before the round and on every club that stayed under the line.
+ */
 export function nbaCapRoom(t: NbaGmTeam, cap: number): number {
-  return Math.round((cap - nbaCapUsed(t)) * 10) / 10;
+  return Math.round((cap - nbaCapUsed(t) - (t.taxDue ?? 0)) * 10) / 10;
+}
+
+/** What the cap panel and the hub say about the tax, all season, as a projection off today's payroll. */
+export interface NbaTaxView {
+  payroll: number;
+  line: number;
+  /** Payroll less the line, negative when under it. */
+  over: number;
+  /** The bill the payroll would draw if the season closed today. */
+  bill: number;
+  repeater: boolean;
+  firstApron: number;
+  secondApron: number;
+  aboveFirst: boolean;
+  aboveSecond: boolean;
+  /** Last season's bill, held back from this season's room. */
+  due: number;
+  /** A league saved before Round 722 that has not had its summer yet: no tax this season. */
+  pending?: boolean;
+}
+
+export function nbaTaxView(t: NbaGmTeam, league: Pick<NbaLeague, 'cap' | 'season' | 'taxScale'>): NbaTaxView {
+  const payroll = nbaCapUsed(t);
+  const scale = league.taxScale;
+  if (scale == null) {
+    return {
+      payroll, line: 0, over: 0, bill: 0, repeater: false,
+      firstApron: 0, secondApron: 0, aboveFirst: false, aboveSecond: false, due: t.taxDue ?? 0, pending: true,
+    };
+  }
+  const line = nbaTaxLine(league.cap, scale);
+  const repeater = nbaIsRepeater(t.taxHistory, league.season);
+  const firstApron = nbaFirstApron(league.cap, scale);
+  const secondApron = nbaSecondApron(league.cap, scale);
+  return {
+    payroll, line, over: Math.round((payroll - line) * 10) / 10,
+    bill: nbaTaxBill(payroll, league.cap, repeater, scale), repeater,
+    firstApron, secondApron, aboveFirst: payroll > firstApron, aboveSecond: payroll > secondApron,
+    due: t.taxDue ?? 0,
+  };
 }
 
 /** Strength: best five 72%, next three 28%; injured players excluded. */
@@ -299,20 +388,44 @@ export function nbaTradeValue(p: NbaGmPlayer): number {
   return p.ovr * ageW;
 }
 
+/**
+ * Whether `receiver` may take `incoming` in for `outgoing` under the money
+ * rules. Round 82: NBA style salary matching, so over-cap teams can still
+ * trade when the money roughly lines up (the old room-only check made every
+ * trade between capped-out rosters invalid, which killed the whole trade
+ * screen). Round 722: the apron rule on top. A club whose payroll after the
+ * deal sits above the first apron may take back no more salary than it sends
+ * out, which is the rule the 2023 agreement put on apron teams from 2024-25
+ * (sources in nbaLuxuryTax.ts). Both trade paths and the Trade Finder ask
+ * this one function, so the three can never disagree. `taxScale` is the
+ * league's (NbaLeague.taxScale); without one, a league saved before the round
+ * and not yet calibrated, there is no apron this season.
+ */
+export function nbaSalaryFits(receiver: NbaGmTeam, outgoing: NbaGmPlayer, incoming: NbaGmPlayer, cap: number, taxScale?: number): boolean {
+  const after = nbaCapUsed(receiver) - outgoing.salary + incoming.salary;
+  if (taxScale != null && after > nbaFirstApron(cap, taxScale)) return incoming.salary <= outgoing.salary;
+  return nbaCapRoom(receiver, cap) + outgoing.salary >= incoming.salary || incoming.salary <= outgoing.salary * 1.5 + 5;
+}
+
+/** Round 722: the one line the trade screen shows a club the apron rule binds on, or null. */
+export function nbaApronNote(t: NbaGmTeam, cap: number, taxScale?: number): string | null {
+  if (taxScale == null) return null;
+  const payroll = nbaCapUsed(t);
+  const first = nbaFirstApron(cap, taxScale), second = nbaSecondApron(cap, taxScale);
+  if (payroll > second) return `Over the second apron ($${second}M): any trade must send out at least as much salary as it brings back.`;
+  if (payroll > first) return `Over the first apron ($${first}M): any trade must send out at least as much salary as it brings back.`;
+  return null;
+}
+
 export function nbaTrade(
-  my: NbaGmTeam, their: NbaGmTeam, myId: string, theirId: string, sweeten: boolean, cap: number,
+  my: NbaGmTeam, their: NbaGmTeam, myId: string, theirId: string, sweeten: boolean, cap: number, taxScale?: number,
 ): 'accepted' | 'rejected' | 'invalid' {
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
   if (!mine || !theirs || my.players.length <= 8 || their.players.length <= 8) return 'invalid';
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
-  // Round 82: NBA style salary matching. Over-cap teams can still trade when
-  // the money roughly lines up (the old room-only check made every trade
-  // between capped-out rosters invalid, which killed the whole trade screen).
-  const fitsMe = nbaCapRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
-  const fitsThem = nbaCapRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;
-  if (!fitsMe || !fitsThem) return 'invalid';
+  if (!nbaSalaryFits(my, mine, theirs, cap, taxScale) || !nbaSalaryFits(their, theirs, mine, cap, taxScale)) return 'invalid';
   const pickV = sweeten && my.picks.length ? 12 : 0;
   if (nbaTradeValue(mine) + pickV < nbaTradeValue(theirs) * 1.07) return 'rejected';
   my.players = my.players.filter(p => p.id !== myId);
@@ -328,7 +441,7 @@ export function nbaTrade(
    rules, roster floor and salary matching, exactly nbaTrade's, and
    moves the agreed pick when the package includes one. */
 export function nbaExecuteTalksTrade(
-  my: NbaGmTeam, their: NbaGmTeam, myId: string, theirId: string, addPick: boolean, cap: number,
+  my: NbaGmTeam, their: NbaGmTeam, myId: string, theirId: string, addPick: boolean, cap: number, taxScale?: number,
 ): 'done' | 'invalid' {
   const mine = my.players.find(p => p.id === myId);
   const theirs = their.players.find(p => p.id === theirId);
@@ -336,9 +449,7 @@ export function nbaExecuteTalksTrade(
   /* Round 631: nobody comes back the season he was cut, by trade either. */
   if (tradeRefusal(my, theirId) || tradeRefusal(their, myId)) return 'invalid';
   if (addPick && !my.picks.length) return 'invalid';
-  const fitsMe = nbaCapRoom(my, cap) + mine.salary >= theirs.salary || theirs.salary <= mine.salary * 1.5 + 5;
-  const fitsThem = nbaCapRoom(their, cap) + theirs.salary >= mine.salary || mine.salary <= theirs.salary * 1.5 + 5;
-  if (!fitsMe || !fitsThem) return 'invalid';
+  if (!nbaSalaryFits(my, mine, theirs, cap, taxScale) || !nbaSalaryFits(their, theirs, mine, cap, taxScale)) return 'invalid';
   my.players = my.players.filter(p => p.id !== myId);
   their.players = their.players.filter(p => p.id !== theirId);
   my.players.push(theirs);
@@ -373,12 +484,136 @@ export function nbaProspectToPlayer(pr: NbaProspect, rng: () => number): NbaGmPl
   };
 }
 
-export function nbaOffseason(league: NbaLeague, rng: () => number): string[] {
+/* Round 722: the end of bench. A man on the minimum, one year, no upside:
+   what the league hands a short roster at tip off and what a CPU club fills
+   its fourteen with. Rated under the pool's worst, so he never displaces a
+   real player from the eight who decide games. */
+function nbaMinimumMan(rng: () => number, taken: Set<string>, slot: number): NbaGmPlayer {
+  const ovr = 66 + Math.floor(rng() * 6);
+  return {
+    id: fid(), name: nbaGenName(rng, taken),
+    pos: (['G', 'F', 'C'] as NbaPos[])[slot % 3],
+    age: 23 + Math.floor(rng() * 9), ovr, salary: NBA_MIN_CONTRACT,
+    years: 1, out: 0, pot: ovr,
+  };
+}
+
+/**
+ * Round 722: why this club cannot tip off, or null. Fifteen standard
+ * contracts is the in season ceiling (sources in nbaLuxuryTax.ts), and the
+ * draft can leave a club above it, so the Play button waits on a waiver.
+ * The shared cuts flow (frontOfficeCuts.ts) is how the waiver happens.
+ */
+export function nbaTipOffRefusal(t: NbaGmTeam): string | null {
+  if (t.players.length > NBA_ROSTER_MAX) {
+    return `${t.players.length} under contract. Waive down to ${NBA_ROSTER_MAX} before tip off.`;
+  }
+  return null;
+}
+
+export interface NbaTipOff {
+  /** The men each club was handed on minimum deals, by abbr. Clubs already at the floor are absent. */
+  filled: Record<string, NbaGmPlayer[]>;
+  /** Clubs above the ceiling, untouched: they cannot start the season. */
+  refused: string[];
+}
+
+/**
+ * Round 722: the season cannot tip off below fourteen standard contracts.
+ * The GM's club (myTeam) short of the floor is filled from the pool, lowest
+ * rated first (the men nobody wanted), each signed for one year on the
+ * minimum; when the pool runs dry the league generates the rest. Every other
+ * club short of the floor is handed generated minimum men, the same men the
+ * CPU summer fill signs in nbaOffseason, because the pool is the GM's market
+ * for the season: filling the CPU clubs from it handed the whole ten man pool
+ * of every new league to the first three clubs in table order on the minimum
+ * and left the GM nobody to sign. A club above fifteen is refused and left
+ * exactly as it was. Called by the board once, before the first round of a
+ * season, and by the harness.
+ */
+export function nbaTipOff(league: NbaLeague, rng: () => number, myTeam?: string): NbaTipOff {
+  const filled: Record<string, NbaGmPlayer[]> = {};
+  const refused: string[] = [];
+  const taken = leagueNames(league);
+  for (const t of Object.values(league.teams)) {
+    if (nbaTipOffRefusal(t)) { refused.push(t.abbr); continue; }
+    const added: NbaGmPlayer[] = [];
+    const fromPool = t.abbr === myTeam;
+    while (t.players.length < NBA_TIPOFF_MIN) {
+      /* Round 631's rule holds here too: a man this club let go this season does not come back by the side door. */
+      const pool = fromPool ? league.freeAgents.filter(p => !signRefusal(t, p.id)).sort((a, b) => a.ovr - b.ovr) : [];
+      let man: NbaGmPlayer;
+      if (pool.length) {
+        league.freeAgents.splice(league.freeAgents.indexOf(pool[0]), 1);
+        man = { ...pool[0], salary: NBA_MIN_CONTRACT, years: 1 };
+      } else {
+        man = nbaMinimumMan(rng, taken, t.players.length);
+      }
+      t.players.push(man);
+      added.push(man);
+    }
+    if (added.length) filled[t.abbr] = added;
+  }
+  return { filled, refused };
+}
+
+/** One club's assessment at season close, with the club on it. */
+export interface NbaTaxAssessment extends NbaTaxEntry { team: string }
+
+/**
+ * Round 722: the tax is assessed once, at season close, on the payroll as it
+ * stands (roster salaries plus dead money, the number the tax counts in the
+ * real league too). Each club's entry joins its history, the last four are
+ * kept because that is the repeater window, and the bill becomes taxDue,
+ * which nbaCapRoom holds back from next season's room. A season already in
+ * the history is not assessed twice: the Round 431 rule that a season closes
+ * once applies to the cheque as much as to the games. A league with no scale
+ * yet (saved before the round, still in the season it was saved in) is not
+ * assessed at all: that season started without a tax, so it closes without one.
+ */
+export function nbaAssessTax(league: NbaLeague): NbaTaxAssessment[] {
+  const out: NbaTaxAssessment[] = [];
+  const scale = league.taxScale;
+  if (scale == null) return out;
+  for (const t of Object.values(league.teams)) {
+    const history = t.taxHistory ?? [];
+    let entry = history.find(e => e.season === league.season);
+    if (!entry) {
+      const payroll = nbaCapUsed(t);
+      const repeater = nbaIsRepeater(history, league.season);
+      entry = { season: league.season, payroll, line: nbaTaxLine(league.cap, scale), bill: nbaTaxBill(payroll, league.cap, repeater, scale), repeater };
+      t.taxHistory = [...history, entry].filter(e => e.season > league.season - 4);
+      t.taxDue = entry.bill;
+    }
+    out.push({ team: t.abbr, ...entry });
+  }
+  return out;
+}
+
+/**
+ * The summer. Round 722 added `myTeam`: the GM's own club is left to its GM
+ * (no fill, no trim, no tax driven walk outs), every other club is run by a
+ * CPU front office that fills to fourteen, trims to fifteen and steers under
+ * the tax. Callers that pass no team (the harnesses) get the CPU treatment
+ * on every club, which is what they got before.
+ */
+export function nbaOffseason(league: NbaLeague, rng: () => number, myTeam?: string): string[] {
   const notes: string[] = [];
   /* Round 211: one name book for the whole offseason, so the men who
      arrive to fill rosters cannot duplicate each other or anybody left. */
   const taken = leagueNames(league);
+  /* Round 722: next season's cap, under whose tax line a CPU club that just
+     wrote a cheque, or would write one at today's payroll, steers. */
+  const nextCap = Math.round(league.cap * 1.07);
   for (const t of Object.values(league.teams)) {
+    const cpu = t.abbr !== myTeam;
+    /* Round 722: a CPU club facing a cheque stops re-signing its depth: an
+       expiring man outside the best five walks. The steer is driven by the
+       bill, not the line, so a tax with no teeth steers nobody. The user's
+       club is never steered; the GM pays or sheds himself. */
+    const taxAverse = cpu && ((t.taxDue ?? 0) > 0 || (league.taxScale != null
+      && nbaTaxBill(nbaCapUsed(t), nextCap, nbaIsRepeater(t.taxHistory, league.season + 1), league.taxScale) > 0));
+    const core = new Set([...t.players].sort((a, b) => b.ovr - a.ovr).slice(0, 5).map(p => p.id));
     const keep: NbaGmPlayer[] = [];
     for (const p of t.players) {
       p.age += 1;
@@ -390,21 +625,28 @@ export function nbaOffseason(league: NbaLeague, rng: () => number): string[] {
       if (p.years <= 0) {
         p.years = p.age <= 26 ? 4 : p.age <= 30 ? 3 : 2;
         p.salary = nbaSalaryFor(p.ovr);
+        if (taxAverse && !core.has(p.id)) { league.freeAgents.push({ ...p, years: 1 }); continue; }
         if (p.ovr < 80 && rng() < 0.45) { league.freeAgents.push({ ...p, years: 1 }); continue; }
       }
       keep.push(p);
     }
     t.players = keep;
     t.wins = 0; t.losses = 0; t.picks = [1, 2];
+    /* Round 722: a CPU club above fifteen waives its lowest rated man, through
+       the shared cut (dead money and all) and before the ledger rolls, so the
+       summer still ends with a clean release list on every club. */
+    if (cpu) {
+      while (t.players.length > NBA_ROSTER_MAX) {
+        const worst = [...t.players].sort((a, b) => a.ovr - b.ovr)[0];
+        if (!cutPlayer(t, league.freeAgents, worst.id, NBA_ROSTER_MIN)) break;
+      }
+    }
     rollDeadCap(t);
-    while (t.players.length < 9) {
-      const ovr = 70 + Math.floor(rng() * 7);
-      t.players.push({
-        id: fid(), name: nbaGenName(rng, taken),
-        pos: (['G', 'F', 'C'] as NbaPos[])[t.players.length % 3],
-        age: 23 + Math.floor(rng() * 8), ovr, salary: nbaSalaryFor(ovr),
-        years: 1 + Math.floor(rng() * 2), out: 0, pot: ovr,
-      });
+    /* Round 722: a CPU club fills to the fourteen man floor on minimum deals
+       here; the GM's club is filled at tip off, from the pool, after he has
+       had the summer to sign whom he likes. */
+    if (cpu) {
+      while (t.players.length < NBA_TIPOFF_MIN) t.players.push(nbaMinimumMan(rng, taken, t.players.length));
     }
   }
   league.freeAgents = league.freeAgents.sort((a, b) => b.ovr - a.ovr).slice(0, 30);
@@ -412,5 +654,9 @@ export function nbaOffseason(league: NbaLeague, rng: () => number): string[] {
   league.cap = Math.round(league.cap * 1.07);
   league.season += 1;
   league.round = 1;
+  /* Round 722: a league saved before the round gets its tax lines here, at
+     its first summer, from the payrolls it will tip off with. A calibrated
+     league keeps its scale, and its lines rise with the cap. */
+  if (league.taxScale == null) nbaCalibrateLeagueTax(league);
   return notes;
 }
