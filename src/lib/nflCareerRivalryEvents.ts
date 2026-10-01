@@ -43,7 +43,7 @@ import {
   rollRivalryEvent, forcedRetirementEvent, applyRivalryEvent as applyRivalryEventFor,
 } from "./careerRivalryEvents";
 import type { RivalryEvent, RivalryEventDef } from "./careerRivalryEvents";
-import { rollRivalryChoice, resolveRivalryChoice, meterOption } from "./careerRivalryChoices";
+import { rivalryChoiceTick, resolvePendingRivalryChoice, meterOption } from "./careerRivalryChoices";
 import type { RivalryChoiceDef, RivalryChoiceCard } from "./careerRivalryChoices";
 
 const clamp = (v: number, lo: number, hi: number) => Math.max(lo, Math.min(hi, v));
@@ -404,34 +404,17 @@ export const NFL_RIVALRY_CHOICES: RivalryChoiceDef<CareerState, CareerRival>[] =
 ];
 
 /**
- * One season's choice roll, after the beat roll in simSeason: only when no
- * beat came up and no choice is already waiting, so a season never stacks
- * two rival cards. Marks the choice seen at roll time, the same moment Soccer
- * Career marks a dilemma triggered.
+ * One season's choice roll, after the beat roll in simSeason, on the shared
+ * tick: only when no beat came up and no choice is already waiting.
  */
 export function nflRivalryChoiceTick(c: CareerState, rng: () => number = Math.random): RivalryChoiceCard | null {
-  if (!c.rival || c.pendingRivalryEvent || c.pendingRivalryChoice) return null;
-  const seen = c.rivalryChoicesSeen ?? [];
-  const card = rollRivalryChoice(c, c.rival, seen, NFL_RIVALRY_CHOICES, NFL_RIVALRY_CHOICE_CHANCE, rng);
-  if (!card) return null;
-  c.pendingRivalryChoice = card;
-  c.rivalryChoicesSeen = [...seen, card.id];
-  return card;
+  return rivalryChoiceTick(c, NFL_RIVALRY_CHOICES, NFL_RIVALRY_CHOICE_CHANCE, rng);
 }
 
-/**
- * Answer the pending choice. Returns the new state and the feed line, or
- * null when nothing is pending or the option does not exist (a double tap
- * changes nothing).
- */
+/** Answer the pending choice; null when nothing is pending or the option
+ *  does not exist (a double tap changes nothing). */
 export function resolveNflRivalryChoice(
   c: CareerState, choiceIdx: number, rng: () => number = Math.random,
 ): { state: CareerState; line: string } | null {
-  const card = c.pendingRivalryChoice;
-  if (!card) return null;
-  const s: CareerState = { ...c };
-  const line = resolveRivalryChoice(s, s.rival ?? null, card.id, choiceIdx, NFL_RIVALRY_CHOICES, rng);
-  if (line === null) return null;
-  s.pendingRivalryChoice = null;
-  return { state: s, line };
+  return resolvePendingRivalryChoice(c, choiceIdx, NFL_RIVALRY_CHOICES, rng);
 }

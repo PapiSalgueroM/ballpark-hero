@@ -30,6 +30,10 @@
                         pool of twenty eight and moving them out of that pool
                         would change which dilemma a seed draws.
      resolveRivalryChoice  run one option, return the feed line.
+     rivalryChoiceTick and resolvePendingRivalryChoice
+                        the same two for a career that keeps the pending card
+                        on its save (the four American careers), so each of
+                        them binds with a table and a chance, not a copy.
 
    And for the four American careers, which share their meter names
    (morale, fanbase, netWorth, karma, rivalryIntensity), a small descriptor
@@ -130,6 +134,53 @@ export function resolveRivalryChoice<P, R>(
   const option = def?.choices[choiceIdx];
   if (!option) return null;
   return option.apply(s, r, rng);
+}
+
+/* ─── a choice kept on the save: the four American careers ─────────────── */
+
+/** The save fields a career carries when its pending choice waits on the
+ *  save as plain data until the board asks it. All optional, so a save from
+ *  before the career had choices reads as nothing pending, nothing seen. */
+export interface RivalryChoiceHost<R> {
+  rival?: R | null;
+  pendingRivalryEvent?: unknown;
+  pendingRivalryChoice?: RivalryChoiceCard | null;
+  rivalryChoicesSeen?: string[];
+}
+
+/**
+ * One season's choice roll, called after the sport's beat roll: only when
+ * no beat came up and no choice is already waiting, so a season never stacks
+ * two rival cards. Marks the choice seen at roll time, the same moment Soccer
+ * Career marks a dilemma triggered.
+ */
+export function rivalryChoiceTick<P extends RivalryChoiceHost<R>, R extends LiveRival>(
+  c: P, defs: RivalryChoiceDef<P, R>[], chance: number, rng: () => number = Math.random,
+): RivalryChoiceCard | null {
+  if (!c.rival || c.pendingRivalryEvent || c.pendingRivalryChoice) return null;
+  const seen = c.rivalryChoicesSeen ?? [];
+  const card = rollRivalryChoice(c, c.rival, seen, defs, chance, rng);
+  if (!card) return null;
+  c.pendingRivalryChoice = card;
+  c.rivalryChoicesSeen = [...seen, card.id];
+  return card;
+}
+
+/**
+ * Answer the pending choice. Returns the new state and the feed line, or
+ * null when nothing is pending or the option does not exist (a double tap
+ * changes nothing).
+ */
+export function resolvePendingRivalryChoice<P extends RivalryChoiceHost<R>, R>(
+  c: P, choiceIdx: number, defs: RivalryChoiceDef<P, R>[], rng: () => number = Math.random,
+): { state: P; line: string } | null {
+  const card = c.pendingRivalryChoice;
+  if (!card) return null;
+  const s: P = { ...c };
+  const line = resolveRivalryChoice(s, s.rival ?? null, card.id, choiceIdx, defs, rng);
+  if (line === null) return null;
+  s.pendingRivalryChoice = null;
+  return { state: s, line };
 }
 
 /* ─── written from numbers: the four American careers ───────────────────── */
