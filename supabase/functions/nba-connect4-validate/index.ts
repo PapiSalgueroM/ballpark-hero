@@ -42,8 +42,11 @@ const attrKeyOf = (player: string, attribute: string) => `attr|${attrNorm(player
    nothing here accepts one it could not check.
    The codes are basketball-reference TEAM codes, so each label carries every
    code of its franchise as nba_team_codes records it (Nets = BRK, NJN, NYN).
-   simValidationCacheTruth derives these lists from that table and fails if
-   they drift. */
+   Ten of them (SYR, MLH, STL, TRI, ROC, MNL, FTW, PHW, CHP, CHZ) appear in no
+   row of the table today, so they confirm nothing and are kept only so each
+   list stays the whole lineage. scripts/simConnect4FranchiseCodes.mjs reads
+   this map out of the source and fails if it drifts from nba_team_codes, from
+   the boards, from the grid's own pool or from the prompt below. */
 const RECORDS_TABLE = "nba_player_stats";
 const RECORDS_NAME = "player_name";
 const RECORDS_TEAMS = "teams";

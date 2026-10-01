@@ -39,15 +39,23 @@ const attrKeyOf = (player: string, attribute: string) => `attr|${attrNorm(player
    exactly as before.
    The codes are Lahman franchise IDs, already folded across moves (Brooklyn is
    LAD, the New York Giants SFG, the Expos WSN, the St. Louis Browns BAL), so
-   each label needs one code, except the Athletics, whose 2025 season is filed
-   under ATH beside OAK. */
+   each label needs exactly one code. The Athletics are OAK in every year,
+   Philadelphia and Kansas City included (Ty Cobb's A's seasons are stored as
+   DET,OAK). ATH is NOT this club: in Lahman it is the 1871 to 1876
+   Philadelphia Athletics of the National Association, active N, and in this
+   table it reaches five careers that all ended by 1890. Round 703 first
+   shipped it beside OAK on the belief that the 2025 season was filed under
+   it; this table ends in 2019 and has no such row, and with ATH in the list
+   Ezra Sutton would have been confirmed for the Athletics and cached forever.
+   scripts/simConnect4FranchiseCodes.mjs holds every code here to Lahman's
+   active franchises and to the clubs of the copy's final season. */
 const RECORDS_TABLE = "mlb_grid_players";
 const RECORDS_NAME = "player_name";
 const RECORDS_TEAMS = "franchises";
 const TEAM_CODES: Record<string, string[]> = {
   "angels": ["ANA"],
   "astros": ["HOU"],
-  "athletics": ["ATH", "OAK"],
+  "athletics": ["OAK"],
   "blue jays": ["TOR"],
   "braves": ["ATL"],
   "brewers": ["MIL"],

@@ -41,9 +41,11 @@ const attrKeyOf = (player: string, attribute: string) => `attr|${attrNorm(player
    Oilers are TEN, the Oakland and LA Raiders are LV, the St. Louis Rams are
    LA), so each label needs one code. The Browns stay in Cleveland and the
    Ravens start in 1996, which is what the prompt below says too.
-   The lookup reads the plain name column, not display_name: 1,584 rows share a
-   name with another player and only display_name carries the years that tell
-   them apart, so matching it would hide every one of them. */
+   The lookup reads the plain name column, not display_name and not the indexed
+   name_norm: 1,584 rows share a name with another player, and both of those
+   columns carry the years that tell namesakes apart ("mike williams 1989
+   1995"), so an equality on either would hide every one of them. The imatch
+   prefilter over name is the price of seeing them. */
 const RECORDS_TABLE = "nfl_grid_players";
 const RECORDS_NAME = "name";
 const RECORDS_TEAMS = "teams";
