@@ -15,6 +15,7 @@ import {
   GAME_MODE_LABELS, GAME_MODE_BLURBS, HIDDEN_RATING_DISPLAY, isRatingHidden,
   getDailyDateET, makeDailyPicker, loadDailyAttempt, saveDailyAttempt,
   msUntilNextDailyET, formatCountdown, DailyAttemptRecord,
+  BestRecord, loadBestRecord, saveBestRecord,
 } from '@/lib/perfectSeason';
 import {
   NBA_SLOTS, NBA_GAMES, NbaTeamSeasonEntry,
@@ -23,7 +24,7 @@ import {
 } from '@/lib/perfectSeasonNba';
 import {
   simulateSeasonFair, buildPlayoffRun, playoffSeedForDaily, buildAnalysis,
-  PLAYOFF_THRESHOLD, PlayoffRun,
+  PLAYOFF_THRESHOLD, PlayoffRun, perfectOddsLine,
 } from '@/lib/perfectSeasonExpansion';
 import {
   PerfectSeasonTheme, getDailyTheme, applyTheme, buildVerificationLine, themesForSport,
@@ -80,6 +81,11 @@ const PerfectSeasonNba = () => {
   const [dailyTheme, setDailyTheme] = useState<PerfectSeasonTheme | null>(null);
   const [decade, setDecade] = useState<NbaDecadeDef | null>(null);
   const [poSeed, setPoSeed] = useState<number | null>(null);
+  /* Round 784: the best record this browser has posted, and whether the run on
+     screen set it. Read once at mount; the prerenderer sees an empty store and
+     draws nothing, so the snapshot is stable. */
+  const [best, setBest] = useState<BestRecord | null>(() => loadBestRecord(SPORT_KEY));
+  const [newBest, setNewBest] = useState(false);
   const wheelTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const simTimer = useRef<ReturnType<typeof setInterval> | null>(null);
   const countdownTimer = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -281,12 +287,20 @@ const PerfectSeasonNba = () => {
     if (phase !== 'done' || !sim || completionSaved.current) return;
     completionSaved.current = true;
     recordCompletion('/perfect-season-nba', sim.wins, getCurrentPlayerName());
-  }, [phase, sim]);
+    // Round 784: the best record is the honest target, so every finished run
+    // is weighed against it, in any mode.
+    const outcome = saveBestRecord(SPORT_KEY, {
+      wins: sim.wins, losses: sim.losses, overall: Math.round(overall), date: todayStr, mode,
+    });
+    setBest(outcome.best);
+    setNewBest(outcome.improved);
+  }, [phase, sim, overall, mode, todayStr]);
 
   const skipSim = () => setRevealed(NBA_GAMES);
 
   const restart = () => {
     completionSaved.current = false;
+    setNewBest(false);
     setPicks(Object.fromEntries(NBA_SLOTS.map(s => [s.key, null])));
     setUsedNames(new Set());
     setSelected(null);
@@ -398,7 +412,7 @@ const PerfectSeasonNba = () => {
             <span className="block mt-1 text-sm md:text-base font-semibold tracking-[0.2em] uppercase text-muted-foreground">NBA Perfect Season</span>
           </h1>
           <p className="text-muted-foreground text-sm md:text-base max-w-xl mx-auto">
-            Spin the wheel of NBA history, draft one player per stop, and chase the perfect season.
+            Spin the wheel of NBA history, draft one player per stop, and chase the best record you can. 82-0 takes a 95 plus roster and a lucky sim, and the odds are printed on every result.
           </p>
           {phase !== 'mode-select' && (
             <div className="mt-3 inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full bg-secondary text-muted-foreground font-semibold uppercase tracking-wider">
@@ -462,6 +476,11 @@ const PerfectSeasonNba = () => {
             <p className="text-[11px] text-muted-foreground mt-2">
               Decade Mode: pick an era and every spin lands inside it. Daily mode always uses the full wheel.
             </p>
+            {best && (
+              <p className="text-xs text-muted-foreground mt-3" data-best-record>
+                Your best so far: <span className="font-semibold text-foreground">{best.wins}-{best.losses}</span> at {best.overall} OVR.
+              </p>
+            )}
           </div>
           </>
         )}
@@ -725,6 +744,18 @@ const PerfectSeasonNba = () => {
                   {mode === 'daily' && `Daily · ${todayStr} · `}
                   Team overall {sim.overall} · drafted in {spins} spin{spins === 1 ? '' : 's'}
                 </p>
+                {/* Round 784: the real target, in the page rather than the guide.
+                    The odds come from the same curve that produced the record. */}
+                {!sim.perfect && (
+                  <p className="text-xs text-muted-foreground mb-2" data-perfect-odds>{perfectOddsLine('nba', sim.overall)}</p>
+                )}
+                {best && (
+                  <p className="text-xs mb-3" data-best-record>
+                    {newBest
+                      ? <span className="text-correct font-semibold">New personal best.</span>
+                      : <span className="text-muted-foreground">Your best: <span className="font-semibold text-foreground">{best.wins}-{best.losses}</span> at {best.overall} OVR.</span>}
+                  </p>
+                )}
                 {sim.perfect && (
                   <p className="text-sm text-correct font-semibold mb-2 inline-flex items-center gap-1.5">
                     <Trophy className="w-4 h-4" /> Share this. Nobody will believe you.
