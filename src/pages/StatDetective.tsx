@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef, ReactNode } from 'react';
+import { useState, useEffect, useLayoutEffect, useCallback, useMemo, useRef, ReactNode } from 'react';
 import { cn } from '@/lib/utils';
 import {
   Loader2,
@@ -13,7 +13,7 @@ import {
 import ShareButtons from '@/components/game/ShareButtons';
 import { GameNav } from '@/components/game/GameNav';
 import { GameNavbar } from '@/components/game/GameNavbar';
-import { GameHelp } from '@/components/game/GameHelp';
+import { HowToPlayPopover } from '@/components/game/HowToPlayPopover';
 import AdBanner from '@/components/ads/AdBanner';
 import ReportQuestion from '@/components/game/ReportQuestion';
 import PageSeo from '@/components/seo/PageSeo';
@@ -34,15 +34,19 @@ import {
   evaluateGuess,
   fetchStatDetectiveData,
   hintsFor,
-  nextHintAt,
   normalizeName,
   pickMystery,
   statChips,
   suggestProfiles,
 } from '@/lib/statDetective';
 import { recordCompletion, getCurrentPlayerName } from '@/lib/completions';
+import motion from './StatDetective.module.css';
 
 type Phase = 'boot' | 'error' | 'pick' | 'playing' | 'done';
+type Feedback = { name: string; correct: boolean; clues: string[]; terminal: boolean };
+
+const CLUE_RULES = 'Clues unlock after each of the first six misses when a career profile is available. Without that profile, they unlock after misses 2, 4, 5 and 6.';
+const WORKED_EXAMPLE = 'Example: a Shared franchise chip means your guess played for the mystery team at some point. After a miss, read the new clue and try another name.';
 
 const DIFF_META: Record<Difficulty, { label: string; blurb: string }> = {
   stars: {
@@ -64,7 +68,24 @@ const StatDetective = () => {
   const [won, setWon] = useState(false);
   const [query, setQuery] = useState('');
   const [inputFocused, setInputFocused] = useState(false);
+  const [feedback, setFeedback] = useState<Feedback | null>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
+  const focusRequest = useRef<'search' | 'result' | null>(null);
   const lastKeyRef = useRef<string | null>(null);
+
+  useEffect(() => {
+    if (!feedback) return;
+    const timer = window.setTimeout(() => setFeedback(null), 500);
+    return () => window.clearTimeout(timer);
+  }, [feedback]);
+
+  useLayoutEffect(() => {
+    const target = focusRequest.current === 'result' ? resultRef.current : focusRequest.current === 'search' ? searchRef.current : null;
+    if (!target) return;
+    focusRequest.current = null;
+    target.focus({ preventScroll: true });
+  }, [phase, guesses.length, mystery?.key]);
 
   const boot = useCallback(async () => {
     setPhase('boot');
@@ -99,6 +120,8 @@ const StatDetective = () => {
       setGuesses([]);
       setWon(false);
       setQuery('');
+      setFeedback(null);
+      focusRequest.current = 'search';
       setPhase('playing');
     },
     [data]
@@ -116,8 +139,16 @@ const StatDetective = () => {
     if (guessedKeys.has(normalizeName(p.name))) return;
     const fb = evaluateGuess(p, mystery);
     const next = [...guesses, fb];
+    const profile = data?.profiles.find(pr => normalizeName(pr.name) === normalizeName(mystery.player));
+    const beforeMisses = guesses.filter(g => !g.isCorrect).length;
+    const knownClues = hintsFor(mystery, beforeMisses, profile);
+    const newClues = hintsFor(mystery, beforeMisses + (fb.isCorrect ? 0 : 1), profile)
+      .filter(hint => !knownClues.some(known => known.label === hint.label)).map(hint => hint.label);
+    const terminal = fb.isCorrect || next.length >= GUESS_LIMIT;
     setGuesses(next);
     setQuery('');
+    setFeedback({ name: fb.name, correct: fb.isCorrect, clues: newClues, terminal });
+    focusRequest.current = terminal ? 'result' : 'search';
     if (fb.isCorrect) {
       setWon(true);
       setPhase('done');
@@ -149,7 +180,8 @@ const StatDetective = () => {
     [mystery, data],
   );
   const hints = mystery ? hintsFor(mystery, misses, mysteryProfile) : [];
-  const upcomingHint = nextHintAt(misses);
+  const upcomingHint = mystery ? Array.from({ length: GUESS_LIMIT - misses }, (_, index) => misses + index + 1)
+    .find(count => hintsFor(mystery, count, mysteryProfile).length > hints.length) ?? null : null;
   const chips = mystery ? statChips(mystery) : [];
   const score = `${won ? guesses.length : 'X'}/${GUESS_LIMIT} (${DIFF_META[difficulty].label})`;
   const emojiGrid = buildShareGrid(guesses);
@@ -171,7 +203,14 @@ const StatDetective = () => {
   return (
     <main id="dukb-main" className="min-h-screen bg-background">
       <GameNavbar />
-      <div className="relative z-10 mx-auto w-full max-w-4xl"><GameHelp /></div>
+      <div className="relative z-10 mx-auto w-full max-w-4xl">
+        <HowToPlayPopover title="Stat Detective rules" className="min-h-[44px] min-w-[44px]">
+          <p>Study the era, position and per 36 minute stat line. Type at least two letters and pick a player. You have eight guesses.</p>
+          <p>A miss tells you whether your guess shares a franchise with the mystery player.</p>
+          <p>{CLUE_RULES}</p>
+          <p>{WORKED_EXAMPLE}</p>
+        </HowToPlayPopover>
+      </div>
       <PageSeo
         title="Stat Detective NBA: Guess the Player from the Stat Line | DoUKnowBall"
         description="A real NBA season with the name removed: era, position and per 36 numbers. Crack the case in eight guesses with feedback clues after every miss. Free, no sign-up."
@@ -203,6 +242,12 @@ const StatDetective = () => {
         )}
 
         {phase === 'pick' && data && (
+          <>
+          <div className="bg-card border border-border rounded-2xl p-4 mb-4 text-sm text-muted-foreground space-y-2">
+            <p>Study the stat line, then type at least two letters and pick a player. You have eight guesses.</p>
+            <p>{CLUE_RULES}</p>
+            <p>{WORKED_EXAMPLE}</p>
+          </div>
           <div className="grid gap-3 sm:grid-cols-2">
             {(['stars', 'deep'] as Difficulty[]).map(d => (
               <button
@@ -218,6 +263,7 @@ const StatDetective = () => {
               </button>
             ))}
           </div>
+          </>
         )}
 
         {(phase === 'playing' || phase === 'done') && mystery && (
@@ -264,7 +310,8 @@ const StatDetective = () => {
                   Clues
                 </div>
                 {hints.map(h => (
-                  <p key={h.label} className="text-sm text-foreground">
+                  <p key={h.label} data-stat-clue={h.label} data-stat-feedback={feedback?.clues.includes(h.label) ? 'clue' : undefined}
+                    className={cn('text-sm text-foreground', motion.text, feedback?.clues.includes(h.label) && motion.clue)}>
                     {h.label}: <span className="font-bold text-primary">{h.value}</span>
                   </p>
                 ))}
@@ -278,14 +325,15 @@ const StatDetective = () => {
             )}
 
             {phase === 'playing' && (
-              <div className="relative mb-4">
+              <div className="relative mb-4" onFocus={() => setInputFocused(true)} onBlur={e => {
+                if (!e.currentTarget.contains(e.relatedTarget as Node | null)) setInputFocused(false);
+              }}>
                 <div className="relative">
                   <Search className="w-4 h-4 text-muted-foreground absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
                   <input
+                    ref={searchRef}
                     value={query}
                     onChange={e => setQuery(e.target.value)}
-                    onFocus={() => setInputFocused(true)}
-                    onBlur={() => setInputFocused(false)}
                     onKeyDown={e => {
                       if (e.key === 'Enter' && suggestions.length > 0) {
                         e.preventDefault();
@@ -304,7 +352,7 @@ const StatDetective = () => {
                         <button
                           onMouseDown={e => e.preventDefault()}
                           onClick={() => submitGuess(p)}
-                          className="w-full text-left px-4 py-2.5 hover:bg-secondary transition-colors"
+                          className={cn('w-full text-left px-4 py-2.5 hover:bg-secondary transition-colors', motion.option)}
                         >
                           <span className="font-semibold text-foreground">{p.name}</span>
                           <span className="text-xs text-muted-foreground ml-2">{careerSpan(p)}</span>
@@ -317,17 +365,20 @@ const StatDetective = () => {
             )}
 
             {guesses.length > 0 && (
-              <div className="space-y-2 mb-4">
+              <div className="space-y-2 mb-4" role="log" aria-label="Guesses" aria-live="polite" aria-relevant="additions">
                 {[...guesses].reverse().map((g, i) => (
                   <div
-                    key={`${g.name}-${i}`}
+                    key={g.name}
+                    data-stat-guess={g.name}
+                    data-stat-feedback={feedback?.name === g.name ? (feedback.correct ? 'correct' : 'wrong') : undefined}
                     className={cn(
                       'bg-card border rounded-xl px-4 py-3',
-                      g.isCorrect ? 'border-correct' : 'border-border'
+                      g.isCorrect ? 'border-correct' : 'border-border',
+                      feedback?.name === g.name && (feedback.correct ? motion.correct : motion.wrong)
                     )}
                   >
                     <div className="flex items-center justify-between gap-2 mb-1.5">
-                      <span className="font-bold text-foreground truncate">{g.name}</span>
+                      <span className={cn('font-bold text-foreground', motion.text)}>{g.name}</span>
                       <span className="text-[10px] text-muted-foreground shrink-0">#{guesses.length - i}</span>
                     </div>
                     {g.isCorrect ? (
@@ -348,8 +399,11 @@ const StatDetective = () => {
             )}
 
             {phase === 'done' && (
-              <div className="bg-card border border-border rounded-2xl p-6 text-center mt-2">
+              <div ref={resultRef} role="group" aria-labelledby="stat-detective-result" tabIndex={-1}
+                data-stat-result={won ? 'won' : 'lost'} data-stat-feedback={feedback?.terminal ? 'result' : undefined}
+                className={cn('bg-card border border-border rounded-2xl p-6 text-center mt-2', motion.resultCard, feedback?.terminal && motion.result)}>
                 <h2
+                  id="stat-detective-result"
                   className={cn(
                     'text-2xl font-bold font-display mb-1',
                     won ? 'text-correct' : 'text-destructive'
@@ -405,13 +459,13 @@ const StatDetective = () => {
         <GameSeoContent
           pageHasOwnH1
           title="Stat Detective: Guess the NBA Player from an Anonymized Stat Line"
-          description="Every case file is a real NBA season pulled from the record books, stripped down to its era, position and per 36 minute numbers. Read the line, work the clues and name the player within eight guesses. Feedback chips compare each guess by era, position and franchise history, and extra clues unlock as the misses pile up. Play Stars mode for famous seasons or Deep Cuts for the connoisseur pool."
+          description="Every case file is a real NBA season pulled from the record books, stripped down to its era, position and per 36 minute numbers. Read the line, work the clues and name the player within eight guesses. Each miss tells you whether your guess shares a franchise with the mystery player, and extra clues unlock as the misses pile up. Play Stars mode for famous seasons or Deep Cuts for the connoisseur pool."
           howToPlay={[
             'Pick a difficulty: Stars for famous seasons, Deep Cuts for rotation players.',
             'Study the case file: decade, position and the per 36 minute stat line.',
             'Type 2 or more letters and pick a player from the suggestions.',
-            'Wrong guesses return era, position and franchise feedback chips.',
-            'Extra clues unlock after 2, 4 and 6 misses. Solve it within 8 guesses.',
+            'Wrong guesses tell you whether the player shares a franchise with the mystery player.',
+            CLUE_RULES,
           ]}
           examples={[
             'A 1980s point guard with 11 assists per 36 narrows things down fast.',
