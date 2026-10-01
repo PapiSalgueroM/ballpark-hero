@@ -211,7 +211,7 @@ const PAGE_COPY = {
   },
   quiznegative: {
     file: 'src/components/quiz-board/QuizBoard.tsx', envKey: 'SCORE_SHOWN_QUIZ_BOARD',
-    rewrite: s => swap(s, '            ${banked}\n', '            ${score}\n', 'QuizBoard.tsx (the final card)'),
+    rewrite: s => swap(swap(s, '            ${banked}\n', '            ${score}\n', 'QuizBoard.tsx (the final card)'), "from './QuizBoard.module.css'", "from '@/components/quiz-board/QuizBoard.module.css'", 'QuizBoard.tsx (copied scoped CSS import)'),
   },
   nflshare: {
     file: 'src/pages/NFLCareer.tsx', envKey: 'SCORE_SHOWN_NFL_PAGE',

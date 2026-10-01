@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { RotateCcw, X, Sparkles } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -33,6 +33,9 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
   const game = usePerfectLineupGeneric(config);
   const [openSlot, setOpenSlot] = useState<number | null>(null);
   const [query, setQuery] = useState('');
+  const [filters, setFilters] = useState<Record<string, string>>({});
+  const [visibleLimit, setVisibleLimit] = useState(40);
+  const pickerOpener = useRef<{ trigger: HTMLButtonElement; slot: HTMLElement } | null>(null);
 
   const chemistry = useMemo(
     () => computeChemistry(Object.values(game.picks).map((p) => toChemistryPlayer(p as unknown as MaybeChemFields))),
@@ -40,17 +43,22 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
   );
 
   const activeSlot = openSlot !== null ? game.slots.find((s) => s.id === openSlot) : null;
-  const options =
-    openSlot !== null
-      ? game
-          .eligibleFor(openSlot)
-          .filter((p) => config.nameOf(p).toLowerCase().includes(query.trim().toLowerCase()))
-      : [];
+  const eligible = openSlot !== null ? game.eligibleFor(openSlot) : [];
+  const options = eligible.filter((p) =>
+    config.nameOf(p).toLowerCase().includes(query.trim().toLowerCase()) &&
+    config.dimensions.every((dimension) => !filters[dimension.key] || dimension.valueOf(p) === filters[dimension.key]),
+  );
+
+  const resetFilters = () => {
+    setQuery('');
+    setFilters({});
+    setVisibleLimit(40);
+  };
 
   const choose = (slotId: number, player: P) => {
     game.pickPlayer(slotId, player);
     setOpenSlot(null);
-    setQuery('');
+    resetFilters();
   };
 
   const score = game.result ? config.scoreline(game.result) : null;
@@ -104,6 +112,10 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
           return (
             <div
               key={slot.id}
+              data-lineup-slot={slot.id}
+              role="group"
+              aria-label={`${slot.label} lineup slot`}
+              tabIndex={-1}
               className={`relative w-[150px] rounded-xl border p-3 text-center transition-colors ${
                 picked ? 'bg-card border-primary/40' : 'bg-card/60 border-border border-dashed'
               }`}
@@ -137,9 +149,10 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
               ) : (
                 game.phase === 'picking' && (
                   <button
-                    onClick={() => {
+                    onClick={event => {
+                      pickerOpener.current = { trigger: event.currentTarget, slot: event.currentTarget.parentElement! };
                       setOpenSlot(slot.id);
-                      setQuery('');
+                      resetFilters();
                     }}
                     className="mt-2 w-full py-1.5 rounded-lg bg-primary/10 text-primary text-sm font-semibold hover:bg-primary/20 transition-colors"
                   >
@@ -214,7 +227,12 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
       )}
 
       <Dialog open={openSlot !== null} onOpenChange={(o) => !o && setOpenSlot(null)}>
-        <DialogContent className="max-w-md bg-card border-border text-foreground">
+        <DialogContent onCloseAutoFocus={event => {
+          event.preventDefault();
+          const opener = pickerOpener.current;
+          const target = opener?.trigger.isConnected ? opener.trigger : opener?.slot;
+          if (target?.isConnected) target.focus({ preventScroll: true });
+        }} className="max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto bg-card border-border text-foreground">
           <DialogHeader>
             <DialogTitle className="text-base">
               Pick a {activeSlot?.label}
@@ -223,22 +241,46 @@ function GenericLineupBoard<P>({ config }: Props<P>) {
               )}
             </DialogTitle>
           </DialogHeader>
-          <Input autoFocus placeholder="Search players…" value={query} onChange={(e) => setQuery(e.target.value)} />
+          <Input autoFocus aria-label="Search players" placeholder="Search players…" value={query} onChange={(e) => { setQuery(e.target.value); setVisibleLimit(40); }} className="min-h-[44px]" />
+          <div className="flex flex-wrap items-end gap-2">
+            {config.dimensions.map((dimension) => (
+              <label key={dimension.key} className="min-w-0 flex-1 basis-32 text-xs font-semibold text-muted-foreground">
+                {dimension.label}
+                <select
+                  value={filters[dimension.key] || ''}
+                  onChange={(e) => { setFilters(current => ({ ...current, [dimension.key]: e.target.value })); setVisibleLimit(40); }}
+                  className="mt-1 h-11 w-full rounded-lg border border-border bg-background px-2 text-sm text-foreground"
+                >
+                  <option value="">All</option>
+                  {[...new Set(eligible.map(p => dimension.valueOf(p)))].sort((a, b) => a.localeCompare(b)).map(value => <option key={value} value={value}>{value}</option>)}
+                </select>
+              </label>
+            ))}
+            <button type="button" onClick={resetFilters} disabled={!query && !Object.values(filters).some(Boolean)} className="min-h-[44px] rounded-lg border border-border px-3 text-sm font-semibold hover:bg-accent disabled:opacity-40">
+              Reset filters
+            </button>
+          </div>
+          <p role="status" className="text-xs text-muted-foreground">Showing {Math.min(visibleLimit, options.length)} of {options.length} matching players ({eligible.length} eligible).</p>
           <div className="max-h-72 overflow-y-auto space-y-1 mt-1">
             {options.length === 0 && (
-              <p className="text-sm text-muted-foreground text-center py-4">No matching players.</p>
+              <p className="text-sm text-muted-foreground text-center py-4">{eligible.length === 0 ? 'No eligible players for this slot.' : 'No matching players. Reset filters to see eligible players.'}</p>
             )}
-            {options.slice(0, 40).map((p) => (
+            {options.slice(0, visibleLimit).map((p) => (
               <button
                 key={config.nameOf(p)}
                 onClick={() => openSlot !== null && choose(openSlot, p)}
-                className="w-full px-3 py-2 rounded-lg hover:bg-accent transition-colors text-left flex items-center justify-between gap-2"
+                className="w-full min-h-[44px] min-w-0 px-3 py-2 rounded-lg hover:bg-accent transition-colors text-left flex items-center justify-between gap-2"
               >
-                <span className="text-sm font-medium text-foreground">{config.nameOf(p)}</span>
-                <span className="text-[11px] text-muted-foreground">{config.subtitleOf(p)}</span>
+                <span className="min-w-0 text-sm font-medium text-foreground [overflow-wrap:anywhere]">{config.nameOf(p)}</span>
+                <span className="min-w-0 text-[11px] text-muted-foreground [overflow-wrap:anywhere]">{config.subtitleOf(p)}</span>
               </button>
             ))}
           </div>
+          {visibleLimit < options.length && (
+            <button type="button" onClick={() => setVisibleLimit(limit => limit + 40)} className="min-h-[44px] rounded-lg border border-border px-3 text-sm font-semibold hover:bg-accent">
+              Load more players
+            </button>
+          )}
         </DialogContent>
       </Dialog>
     </div>

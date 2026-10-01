@@ -3,7 +3,7 @@ import { cn } from '@/lib/utils';
 import { ChevronLeft, Eye } from 'lucide-react';
 import {
   money, moneyIn, sortedLeagueTable, isPartialClub, TIER_INFO,
-  projectedRoster, projectedXIAvg, yearsOn, worldSeasonLabel,
+  oppRosterFor, projectedXIAvg, yearsOn, worldSeasonLabel,
   boardWantLabel, careerLeagueOf, eraClubDefFor,
   managerOf, sellValue,
 } from '@/lib/clubManager';
@@ -47,7 +47,9 @@ export function ClubDetailScreen({ clubName, career, onBack }: ClubDetailScreenP
       n: p.name, p: p.position, a: p.age, v: p.value ?? 0, r: p.rating, g: p.generated,
       s: p.founderSaleRatio !== undefined ? sellValue(p) : undefined,
     }))
-    : projectedRoster(clubName, onYears, career.eraId);
+    /* Round 742: minus the men in my squad. A man I signed off this club was
+       still listed here with them, straight off the projection. */
+    : oppRosterFor(career, clubName);
   const saleRatioMen = isMyCustom && career.squad.some(p => p.founderSaleRatio !== undefined);
   const salePays = saleRatioMen ? career.squad.reduce((s, p) => s + sellValue(p), 0) : 0;
   const xiAvg = isMyCustom

@@ -453,6 +453,7 @@ export default function ImperialismBoardShared({ sport, map, game, helpOpen = fa
           battle={stageBattle}
           takeover={stageTakeover}
           focusRegions={stageFocus}
+          exploreEnabled={!sceneActive}
           homeRegions={homeRegions}
           highlightTeam={highlightTeam}
           labelStyle="caps"

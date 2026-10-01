@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import { X, Sparkles } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Input } from '@/components/ui/input';
@@ -19,17 +19,29 @@ const PerfectLineupBoard = () => {
   const game = usePerfectLineup();
   const [openSlot, setOpenSlot] = useState<number | null>(null);
   const [query, setQuery] = useState('');
+  const [league, setLeague] = useState('');
+  const [country, setCountry] = useState('');
+  const [visibleLimit, setVisibleLimit] = useState(40);
+  const pickerOpener = useRef<{ trigger: HTMLButtonElement; slot: HTMLElement } | null>(null);
 
   const activeSlot = openSlot !== null ? game.slots.find((s) => s.id === openSlot) : null;
-  const options =
-    openSlot !== null
-      ? game.eligibleFor(openSlot).filter((p) => p.name.toLowerCase().includes(query.trim().toLowerCase()))
-      : [];
+  const eligible = openSlot !== null ? game.eligibleFor(openSlot) : [];
+  const options = eligible.filter((p) =>
+    p.name.toLowerCase().includes(query.trim().toLowerCase()) &&
+    (!league || p.league === league) && (!country || p.nationality === country),
+  );
+
+  const resetFilters = () => {
+    setQuery('');
+    setLeague('');
+    setCountry('');
+    setVisibleLimit(40);
+  };
 
   const choose = (slotId: number, player: Player) => {
     game.pickPlayer(slotId, player);
     setOpenSlot(null);
-    setQuery('');
+    resetFilters();
   };
 
   const chemistry = useMemo(
@@ -96,6 +108,10 @@ const PerfectLineupBoard = () => {
               return (
                 <div
                   key={id}
+                  data-lineup-slot={id}
+                  role="group"
+                  aria-label={`${slot.label} lineup slot`}
+                  tabIndex={-1}
                   className={`relative w-[150px] rounded-xl border p-3 text-center transition-colors ${
                     picked ? 'bg-card border-primary/40' : 'bg-card/60 border-border border-dashed'
                   }`}
@@ -116,7 +132,7 @@ const PerfectLineupBoard = () => {
 
                   {picked ? (
                     <div className="mt-2">
-                      <div className="text-sm font-semibold text-foreground leading-tight">{picked.name}</div>
+                      <div className="text-sm font-semibold text-foreground leading-tight [overflow-wrap:anywhere]">{picked.name}</div>
                       <div className="text-[11px] text-muted-foreground">€{picked.marketValue}M</div>
                       {game.phase === 'picking' && (
                         <button
@@ -131,9 +147,10 @@ const PerfectLineupBoard = () => {
                   ) : (
                     game.phase === 'picking' && (
                       <button
-                        onClick={() => {
+                        onClick={(event) => {
+                          pickerOpener.current = { trigger: event.currentTarget, slot: event.currentTarget.parentElement! };
                           setOpenSlot(id);
-                          setQuery('');
+                          resetFilters();
                         }}
                         className="mt-2 w-full py-1.5 rounded-lg bg-primary/10 text-primary text-sm font-semibold hover:bg-primary/20 transition-colors"
                       >
@@ -188,7 +205,12 @@ const PerfectLineupBoard = () => {
 
       {/* Pick dialog */}
       <Dialog open={openSlot !== null} onOpenChange={(o) => !o && setOpenSlot(null)}>
-        <DialogContent className="max-w-md bg-card border-border text-foreground">
+        <DialogContent onCloseAutoFocus={(event) => {
+          event.preventDefault();
+          const opener = pickerOpener.current;
+          const target = opener?.trigger.isConnected ? opener.trigger : opener?.slot;
+          if (target?.isConnected) target.focus({ preventScroll: true });
+        }} className="max-w-md max-h-[calc(100dvh-2rem)] overflow-y-auto bg-card border-border text-foreground">
           <DialogHeader>
             <DialogTitle className="text-base">
               Pick a {activeSlot?.label}
@@ -199,27 +221,59 @@ const PerfectLineupBoard = () => {
           </DialogHeader>
           <Input
             autoFocus
+            aria-label="Search players"
             placeholder="Search players…"
             value={query}
-            onChange={(e) => setQuery(e.target.value)}
+            onChange={(e) => { setQuery(e.target.value); setVisibleLimit(40); }}
+            className="min-h-[44px]"
           />
+          <div className="flex flex-wrap items-end gap-2">
+            <label className="min-w-0 flex-1 basis-32 text-xs font-semibold text-muted-foreground">
+              League
+              <select value={league} onChange={(e) => { setLeague(e.target.value); setVisibleLimit(40); }} className="mt-1 h-11 w-full rounded-lg border border-border bg-background px-2 text-sm text-foreground">
+                <option value="">All</option>
+                {[...new Set(eligible.map(p => p.league))].sort((a, b) => a.localeCompare(b)).map(value => <option key={value} value={value}>{value}</option>)}
+              </select>
+            </label>
+            <label className="min-w-0 flex-1 basis-32 text-xs font-semibold text-muted-foreground">
+              Country
+              <select value={country} onChange={(e) => { setCountry(e.target.value); setVisibleLimit(40); }} className="mt-1 h-11 w-full rounded-lg border border-border bg-background px-2 text-sm text-foreground">
+                <option value="">All</option>
+                {[...new Set(eligible.map(p => p.nationality))].sort((a, b) => a.localeCompare(b)).map(value => <option key={value} value={value}>{value}</option>)}
+              </select>
+            </label>
+            <button type="button" onClick={resetFilters} disabled={!query && !league && !country} className="min-h-[44px] rounded-lg border border-border px-3 text-sm font-semibold hover:bg-accent disabled:opacity-40">
+              Reset filters
+            </button>
+          </div>
+          <p role="status" className="text-xs text-muted-foreground">Showing {Math.min(visibleLimit, options.length)} of {options.length} matching players ({eligible.length} eligible).</p>
           <div className="max-h-72 overflow-y-auto space-y-1 mt-1">
             {options.length === 0 && (
-              <p className="text-sm text-muted-foreground text-center py-4">No matching players.</p>
+              <p className="text-sm text-muted-foreground text-center py-4">{eligible.length === 0 ? 'No eligible players for this slot.' : 'No matching players. Reset filters to see eligible players.'}</p>
             )}
-            {options.slice(0, 40).map((p) => (
+            {options.slice(0, visibleLimit).map((p) => (
               <button
                 key={p.name}
                 onClick={() => openSlot !== null && choose(openSlot, p)}
-                className="w-full px-3 py-2 rounded-lg hover:bg-accent transition-colors text-left flex items-center justify-between gap-2"
+                className="w-full min-h-[44px] min-w-0 px-3 py-2 rounded-lg hover:bg-accent transition-colors text-left flex items-center justify-between gap-2"
               >
-                <span className="text-sm font-medium text-foreground">{p.name}</span>
-                <span className="text-[11px] text-muted-foreground">
+                <span className="min-w-0 text-sm font-medium text-foreground [overflow-wrap:anywhere]">{p.name}</span>
+                <span className="min-w-0 text-[11px] text-muted-foreground [overflow-wrap:anywhere]">
                   {p.club} · €{p.marketValue}M
                 </span>
               </button>
             ))}
           </div>
+          {visibleLimit < options.length && (
+            <button type="button" onClick={(event) => {
+              if (visibleLimit + 40 >= options.length && document.activeElement === event.currentTarget) {
+                event.currentTarget.closest<HTMLElement>('[role="dialog"]')?.focus({ preventScroll: true });
+              }
+              setVisibleLimit(limit => Math.min(limit + 40, options.length));
+            }} className="min-h-[44px] rounded-lg border border-border px-3 text-sm font-semibold hover:bg-accent">
+              Load more players
+            </button>
+          )}
         </DialogContent>
       </Dialog>
     </div>

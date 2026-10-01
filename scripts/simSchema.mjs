@@ -67,10 +67,17 @@ const ENTRY = path.join(os.tmpdir(), 'simSchemaEntry.mjs');
 const BUNDLE = path.join(os.tmpdir(), 'simSchema.bundle.mjs');
 fs.writeFileSync(ENTRY, `
 const reg = await import('${ROOT.replaceAll('\\', '/')}/src/data/gameRegistry.ts');
+const hubs = await import('${ROOT.replaceAll('\\', '/')}/src/lib/sportHub.ts');
 export const paths = (reg.ALL_GAMES ?? reg.CATEGORIES.flatMap(c => c.games)).map(g => g.path);
+/* Round 654: each game's label and the hub its category belongs to, from
+   SPORT_HUBS (the authority) rather than the short list the page reads. */
+export const trailOf = () => Object.fromEntries(reg.CATEGORIES.flatMap(c => c.games.map(g => {
+  const hub = hubs.SPORT_HUBS.find(h => h.titles.includes(c.title));
+  return [g.path, { label: g.label, hub: hub ? { name: hub.h1, route: hub.route } : null }];
+})));
 `);
 execSync(`${ROOT}/node_modules/.bin/esbuild ${ENTRY} --bundle --format=esm --platform=node --outfile=${BUNDLE} --log-level=error`, { stdio: 'inherit' });
-const { paths: gamePaths } = await import(pathToFileURL(BUNDLE).href);
+const { paths: gamePaths, trailOf } = await import(pathToFileURL(BUNDLE).href);
 const games = new Set(gamePaths);
 
 console.log('1) every shipped page carries structured data, and it parses');
@@ -122,6 +129,54 @@ console.log('3) the markup a game page generates actually ships');
     }
   }
   console.log(`   ${gamePagesSubmitted.length} game pages, ${noFaq} without FAQ markup, ${noCrumbs} without breadcrumbs, ${badCrumbs} with a broken trail`);
+}
+
+console.log('3b) a game in a sport with a hub ships its trail through that hub');
+{
+  /* Round 654. Every game page shipped DoUKnowBall > game, skipping the sport
+     hub, so a result could not show where a game sits and the six hubs got no
+     vote from the trail. A game whose category has a hub must now ship three
+     steps with the hub at position 2; every other game keeps two. Read from the
+     shipped files, since the head is what reaches a crawler.
+     SCHEMA_CONTROL=flatcrumbs rewrites every three step trail back to the old
+     two step shape in memory, and this section must go red. */
+  const CONTROL = process.env.SCHEMA_CONTROL || '';
+  if (CONTROL && CONTROL !== 'flatcrumbs') { console.error(`SCHEMA_CONTROL=${CONTROL} is not a control this harness knows (flatcrumbs)`); process.exit(2); }
+  const trails = trailOf();
+  const SITE = 'https://douknowball.com';
+  const before = failures;
+  let viaHub = 0, direct = 0, wrong = 0, flattened = 0;
+  for (const r of submitted.filter(x => games.has(x))) {
+    const crumbs = (schemasOf(r) ?? []).find(o => o['@type'] === 'BreadcrumbList');
+    if (!crumbs || !Array.isArray(crumbs.itemListElement)) continue; /* section 3 reports these */
+    let items = crumbs.itemListElement;
+    const t = trails[r];
+    if (CONTROL === 'flatcrumbs' && t?.hub && items.length === 3) {
+      items = [items[0], { ...items[2], position: 2 }];
+      flattened += 1;
+    }
+    const want = [
+      { name: 'DoUKnowBall', item: SITE },
+      ...(t?.hub ? [{ name: t.hub.name, item: `${SITE}${t.hub.route}` }] : []),
+      { name: t?.label, item: `${SITE}${r}` },
+    ];
+    const got = items.map(x => ({ position: x.position, name: x.name, item: x.item }));
+    const ok = got.length === want.length && want.every((w, i) => got[i].position === i + 1 && got[i].name === w.name && got[i].item === w.item);
+    if (!ok) {
+      wrong += 1;
+      if (wrong <= 5) fail(`${r} ships the trail ${got.map(x => `${x.position}:${x.name}`).join(' > ')}, expected ${want.map((w, i) => `${i + 1}:${w.name}`).join(' > ')}`);
+    } else if (t?.hub) viaHub += 1;
+    else direct += 1;
+  }
+  if (wrong > 5) fail(`...and ${wrong - 5} more game pages with the wrong trail`);
+  console.log(`   ${viaHub} game pages trail through their hub, ${direct} have no hub and keep two steps, ${wrong} wrong`);
+  if (viaHub === 0 && !CONTROL) fail('no game page trails through a hub at all, so this section measured nothing');
+  if (CONTROL === 'flatcrumbs') {
+    if (flattened === 0) { console.error('control flatcrumbs: no three step trail to flatten, so it would prove nothing'); process.exit(1); }
+    if (failures > before) { console.log(`\nsimSchema control: green. ${flattened} trails flattened to two steps, ${wrong} reported as wrong.`); process.exit(0); }
+    console.error('\nsimSchema control: RED. Trails were flattened and nothing noticed.');
+    process.exit(1);
+  }
 }
 
 console.log('4) every shipped page says who this site is');

@@ -1,0 +1,2764 @@
+{
+  "round": 731,
+  "table": "public.nascar_champions",
+  "checked": "2026-09-30",
+  "read": "SELECT through the Supabase MCP on 2026-09-30: 77 rows, one per season 1949 to 2025, no duplicate years, no constraints, RLS on.",
+  "columns": {
+    "year": "shown (List Quiz answer set, NASCAR Chain validator, Guess The NASCAR Driver clue text)",
+    "driver_name": "shown (same three readers)",
+    "team": "shown in the Guess The NASCAR Driver \"Title car\" clue, via scripts/genNascarDrivers.mjs",
+    "manufacturer": "shown in the same clue",
+    "wins_that_season": "not read by any file in src, supabase or scripts; checked anyway because the table asserts it",
+    "points": "NULL on every row and read by nothing; left NULL, not filled",
+    "car_number": "the table has no car number column and no reader shows one, so there is nothing to verify"
+  },
+  "sources": {
+    "nascar_com_list": {
+      "url": "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+      "gives": "champion, manufacturer and wins for 1949 to 2023 (last updated after the 2023 season)"
+    },
+    "nascar_com_2024": {
+      "url": "https://www.nascar.com/news-media/2025/01/03/joey-logano-2024-season-in-review/",
+      "gives": "Joey Logano, No. 22 Team Penske Ford, four wins"
+    },
+    "nascar_com_2025": {
+      "url": "https://www.nascar.com/news-media/2026/01/02/cup-series-2025-kyle-larson-season-in-review/",
+      "gives": "Kyle Larson, No. 5 Hendrick Motorsports Chevrolet, 3 wins"
+    },
+    "racing_reference_table": {
+      "url": "https://www.racing-reference.info/nascar-cup-series-stats/",
+      "gives": "champion and car owner for every season"
+    },
+    "racing_reference_seasons": {
+      "url": "https://www.racing-reference.info/driver-season-stats/<id>/<year>/W",
+      "gives": "every start of the champion that season: owner, make, finish (wins counted from finishes of 1, which equals the page's own Win total on all 77 pages)"
+    },
+    "fox_sports": {
+      "url": "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year",
+      "gives": "champion and team for 1949 to 2024 (a second, independent team source; it has two errors, see 2002, 2005, 1955, 1956)"
+    },
+    "espn": {
+      "url": "https://www.espn.com/racing/nascar/story/_/id/42215065/nascar-all-champions-list",
+      "gives": "champion names only, 1949 to 2025; agrees with every driver_name"
+    },
+    "independence": "Racing Reference is part of the NASCAR Digital Media network, so for driver, manufacturer and wins nascar.com and Racing Reference are two datasets from one owner. ESPN (drivers) and Fox Sports (teams) are the independent cross checks."
+  },
+  "team_convention": "The column mixes car owner names (Rick Hendrick, Joe Gibbs, Roger Penske) and team names (Joe Gibbs Racing, Team Penske, Stewart-Haas Racing, Furniture Row). Both are true of the same organisation and this round keeps the stored form wherever it is true; only a spelling found in neither source was corrected.",
+  "fingerprint": {
+    "how": "md5 of the rows ordered by year, each row year|driver_name|team|manufacturer|wins_that_season|points with NULL written as ~, joined by a newline (the same expression the migration evaluates)",
+    "before": "32408421179ab38fbec11829574354f2",
+    "after": "93ab9ecb87af54a52d8aafc828887fe7"
+  },
+  "counts": {
+    "rows_read": 77,
+    "verified": 71,
+    "corrected": 6,
+    "filled": 0,
+    "dropped_rows": 0,
+    "dropped_fields": 3
+  },
+  "unverifiable": [
+    {
+      "year": 1953,
+      "field": "wins_that_season",
+      "why": "nascar.com lists 11 wins; Racing Reference records 12 finishes of first in his 37 starts. No third source of the accepted kinds settles it, so the count is dropped."
+    },
+    {
+      "year": 1959,
+      "field": "wins_that_season",
+      "why": "nascar.com lists 10 wins; Racing Reference records 11; the International Motorsports Hall of Fame (motorsportshalloffame.com/inductees/lee-petty) says 12. Three different numbers, so the count is dropped."
+    },
+    {
+      "year": 1966,
+      "field": "wins_that_season",
+      "why": "nascar.com lists 14 wins; Racing Reference records 15, as does the Cotton Owens Garage site. The league and the reference site disagree, so the count is dropped rather than overriding the league."
+    }
+  ],
+  "rows": [
+    {
+      "year": 1949,
+      "driver_name": "Red Byron",
+      "team": "Raymond Parks",
+      "manufacturer": "Oldsmobile",
+      "wins_that_season": 2,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/byronre01/1949/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/byronre01/1949/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Red Byron",
+          "manufacturer": "Oldsmobile",
+          "wins": 2
+        },
+        "racing_reference": {
+          "driver": "Red Byron",
+          "owner": "Raymond Parks",
+          "starts": 6,
+          "wins": 2,
+          "makes": {
+            "Oldsmobile": 6
+          }
+        },
+        "second_team_source": "Raymond Parks"
+      }
+    },
+    {
+      "year": 1950,
+      "driver_name": "Bill Rexford",
+      "team": "Julian Buesink",
+      "manufacturer": "Oldsmobile",
+      "wins_that_season": 1,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/rexfobi01/1950/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/rexfobi01/1950/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Bill Rexford",
+          "manufacturer": "Oldsmobile",
+          "wins": 1
+        },
+        "racing_reference": {
+          "driver": "Bill Rexford",
+          "owner": "Julian Buesink",
+          "starts": 17,
+          "wins": 1,
+          "makes": {
+            "Oldsmobile": 15,
+            "Mercury": 1,
+            "Ford": 1
+          }
+        },
+        "second_team_source": "Julian Buesink"
+      },
+      "note": "Racing Reference shows Oldsmobile in 15, Mercury in 1, Ford in 1 of his starts."
+    },
+    {
+      "year": 1951,
+      "driver_name": "Herb Thomas",
+      "team": "Herb Thomas",
+      "manufacturer": "Hudson",
+      "wins_that_season": 7,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/thomahe01/1951/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/thomahe01/1951/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Herb Thomas",
+          "manufacturer": "Hudson",
+          "wins": 7
+        },
+        "racing_reference": {
+          "driver": "Herb Thomas",
+          "owner": "Herb Thomas",
+          "starts": 35,
+          "wins": 7,
+          "makes": {
+            "Plymouth": 20,
+            "Hudson": 14,
+            "Oldsmobile": 1
+          }
+        },
+        "second_team_source": "Herb Thomas"
+      },
+      "note": "Racing Reference shows Plymouth in 20, Hudson in 14, Oldsmobile in 1 of his starts; nascar.com credits the title to Hudson."
+    },
+    {
+      "year": 1952,
+      "driver_name": "Tim Flock",
+      "team": "Ted Chester",
+      "manufacturer": "Hudson",
+      "wins_that_season": 8,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/flockti01/1952/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/flockti01/1952/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Tim Flock",
+          "manufacturer": "Hudson",
+          "wins": 8
+        },
+        "racing_reference": {
+          "driver": "Tim Flock",
+          "owner": "Ted Chester",
+          "starts": 33,
+          "wins": 8,
+          "makes": {
+            "Hudson": 33
+          }
+        },
+        "second_team_source": "Ted Chester"
+      }
+    },
+    {
+      "year": 1953,
+      "driver_name": "Herb Thomas",
+      "team": "Herb Thomas",
+      "manufacturer": "Hudson",
+      "wins_that_season": null,
+      "points": null,
+      "status": "corrected",
+      "was": {
+        "wins_that_season": 11
+      },
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/thomahe01/1953/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/thomahe01/1953/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Herb Thomas",
+          "manufacturer": "Hudson",
+          "wins": 11
+        },
+        "racing_reference": {
+          "driver": "Herb Thomas",
+          "owner": "Herb Thomas",
+          "starts": 37,
+          "wins": 12,
+          "makes": {
+            "Hudson": 37
+          }
+        },
+        "second_team_source": "Herb Thomas"
+      },
+      "note": "wins_that_season dropped to NULL: nascar.com lists 11 wins; Racing Reference records 12 finishes of first in his 37 starts. No third source of the accepted kinds settles it, so the count is dropped."
+    },
+    {
+      "year": 1954,
+      "driver_name": "Lee Petty",
+      "team": "Petty Enterprises",
+      "manufacturer": "Chrysler",
+      "wins_that_season": 7,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/pettyle01/1954/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/pettyle01/1954/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Lee Petty",
+          "manufacturer": "Chrysler",
+          "wins": 7
+        },
+        "racing_reference": {
+          "driver": "Lee Petty",
+          "owner": "Petty Enterprises",
+          "starts": 34,
+          "wins": 7,
+          "makes": {
+            "Chrysler": 22,
+            "Dodge": 11,
+            "Oldsmobile": 1
+          }
+        },
+        "second_team_source": "Petty Enterprises"
+      },
+      "note": "Racing Reference shows Chrysler in 22, Dodge in 11, Oldsmobile in 1 of his starts."
+    },
+    {
+      "year": 1955,
+      "driver_name": "Tim Flock",
+      "team": "Carl Kiekhaefer",
+      "manufacturer": "Chrysler",
+      "wins_that_season": 18,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/flockti01/1955/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/flockti01/1955/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year",
+        "https://www.nascarhall.com/blog/buck-bakers-silver-tray"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Tim Flock",
+          "manufacturer": "Chrysler",
+          "wins": 18
+        },
+        "racing_reference": {
+          "driver": "Tim Flock",
+          "owner": "Carl Kiekhaefer",
+          "starts": 39,
+          "wins": 18,
+          "makes": {
+            "Chrysler": 38,
+            "Chevrolet": 1
+          }
+        },
+        "second_team_source": "Carl Hiekhaefer"
+      },
+      "note": "Racing Reference shows Chrysler in 38, Chevrolet in 1 of his starts. Fox Sports misspells the owner as Hiekhaefer. Racing Reference and the NASCAR Hall of Fame both spell Carl Kiekhaefer."
+    },
+    {
+      "year": 1956,
+      "driver_name": "Buck Baker",
+      "team": "Carl Kiekhaefer",
+      "manufacturer": "Chrysler",
+      "wins_that_season": 14,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/bakerbu01/1956/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/bakerbu01/1956/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year",
+        "https://www.nascarhall.com/blog/buck-bakers-silver-tray"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Buck Baker",
+          "manufacturer": "Chrysler",
+          "wins": 14
+        },
+        "racing_reference": {
+          "driver": "Buck Baker",
+          "owner": "Carl Kiekhaefer",
+          "starts": 48,
+          "wins": 14,
+          "makes": {
+            "Chrysler": 30,
+            "Dodge": 14,
+            "Ford": 4
+          }
+        },
+        "second_team_source": "Carl Hiekhaefer"
+      },
+      "note": "Racing Reference shows Chrysler in 30, Dodge in 14, Ford in 4 of his starts. Fox Sports misspells the owner as Hiekhaefer. Racing Reference and the NASCAR Hall of Fame both spell Carl Kiekhaefer."
+    },
+    {
+      "year": 1957,
+      "driver_name": "Buck Baker",
+      "team": "Buck Baker",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 10,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/bakerbu01/1957/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/bakerbu01/1957/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Buck Baker",
+          "manufacturer": "Chevrolet",
+          "wins": 10
+        },
+        "racing_reference": {
+          "driver": "Buck Baker",
+          "owner": "Buck Baker",
+          "starts": 40,
+          "wins": 10,
+          "makes": {
+            "Chevrolet": 40
+          }
+        },
+        "second_team_source": "Buck Baker"
+      }
+    },
+    {
+      "year": 1958,
+      "driver_name": "Lee Petty",
+      "team": "Petty Enterprises",
+      "manufacturer": "Oldsmobile",
+      "wins_that_season": 7,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/pettyle01/1958/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/pettyle01/1958/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Lee Petty",
+          "manufacturer": "Oldsmobile",
+          "wins": 7
+        },
+        "racing_reference": {
+          "driver": "Lee Petty",
+          "owner": "Petty Enterprises",
+          "starts": 50,
+          "wins": 7,
+          "makes": {
+            "Oldsmobile": 50
+          }
+        },
+        "second_team_source": "Petty Enterprises"
+      }
+    },
+    {
+      "year": 1959,
+      "driver_name": "Lee Petty",
+      "team": "Petty Enterprises",
+      "manufacturer": "Plymouth",
+      "wins_that_season": null,
+      "points": null,
+      "status": "corrected",
+      "was": {
+        "wins_that_season": 10
+      },
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/pettyle01/1959/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/pettyle01/1959/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Lee Petty",
+          "manufacturer": "Plymouth",
+          "wins": 10
+        },
+        "racing_reference": {
+          "driver": "Lee Petty",
+          "owner": "Petty Enterprises",
+          "starts": 42,
+          "wins": 11,
+          "makes": {
+            "Plymouth": 25,
+            "Oldsmobile": 17
+          }
+        },
+        "second_team_source": "Petty Enterprises"
+      },
+      "note": "Racing Reference shows Plymouth in 25, Oldsmobile in 17 of his starts. wins_that_season dropped to NULL: nascar.com lists 10 wins; Racing Reference records 11; the International Motorsports Hall of Fame (motorsportshalloffame.com/inductees/lee-petty) says 12. Three different numbers, so the count is dropped."
+    },
+    {
+      "year": 1960,
+      "driver_name": "Rex White",
+      "team": "Rex White",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 6,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/whitere01/1960/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/whitere01/1960/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Rex White",
+          "manufacturer": "Chevrolet",
+          "wins": 6
+        },
+        "racing_reference": {
+          "driver": "Rex White",
+          "owner": "Rex White",
+          "starts": 40,
+          "wins": 6,
+          "makes": {
+            "Chevrolet": 38,
+            "Ford": 2
+          }
+        },
+        "second_team_source": "Rex White"
+      },
+      "note": "Racing Reference shows Chevrolet in 38, Ford in 2 of his starts. Racing Reference's season table writes the owner as White-Clements (Rex White and Louis Clements); its season page for White credits owner Rex White in 37 of his 40 starts, and Fox Sports lists Rex White."
+    },
+    {
+      "year": 1961,
+      "driver_name": "Ned Jarrett",
+      "team": "B.G. Holloway",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 1,
+      "points": null,
+      "status": "corrected",
+      "was": {
+        "team": "Bee Gee Holloway"
+      },
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/jarrene01/1961/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/jarrene01/1961/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Ned Jarrett",
+          "manufacturer": "Chevrolet",
+          "wins": 1
+        },
+        "racing_reference": {
+          "driver": "Ned Jarrett",
+          "owner": "B.G. Holloway",
+          "starts": 46,
+          "wins": 1,
+          "makes": {
+            "Chevrolet": 41,
+            "Ford": 5
+          }
+        },
+        "second_team_source": "B.G. Holloway"
+      },
+      "note": "Racing Reference shows Chevrolet in 41, Ford in 5 of his starts. team corrected from \"Bee Gee Holloway\": Racing Reference and Fox Sports both write \"B.G. Holloway\"."
+    },
+    {
+      "year": 1962,
+      "driver_name": "Joe Weatherly",
+      "team": "Bud Moore",
+      "manufacturer": "Pontiac",
+      "wins_that_season": 9,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/weathjo01/1962/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/weathjo01/1962/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Joe Weatherly",
+          "manufacturer": "Pontiac",
+          "wins": 9
+        },
+        "racing_reference": {
+          "driver": "Joe Weatherly",
+          "owner": "Bud Moore",
+          "starts": 52,
+          "wins": 9,
+          "makes": {
+            "Pontiac": 51,
+            "Ford": 1
+          }
+        },
+        "second_team_source": "Bud Moore"
+      },
+      "note": "Racing Reference shows Pontiac in 51, Ford in 1 of his starts."
+    },
+    {
+      "year": 1963,
+      "driver_name": "Joe Weatherly",
+      "team": "Bud Moore",
+      "manufacturer": "Pontiac",
+      "wins_that_season": 3,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/weathjo01/1963/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/weathjo01/1963/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Joe Weatherly",
+          "manufacturer": "Pontiac",
+          "wins": 3
+        },
+        "racing_reference": {
+          "driver": "Joe Weatherly",
+          "owner": "Bud Moore",
+          "starts": 53,
+          "wins": 3,
+          "makes": {
+            "Pontiac": 40,
+            "Mercury": 9,
+            "Dodge": 2,
+            "Chrysler": 1,
+            "Plymouth": 1
+          }
+        },
+        "second_team_source": "Bud Moore"
+      },
+      "note": "Racing Reference shows Pontiac in 40, Mercury in 9, Dodge in 2, Chrysler in 1, Plymouth in 1 of his starts."
+    },
+    {
+      "year": 1964,
+      "driver_name": "Richard Petty",
+      "team": "Petty Enterprises",
+      "manufacturer": "Plymouth",
+      "wins_that_season": 9,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/pettyri01/1964/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/pettyri01/1964/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Richard Petty",
+          "manufacturer": "Plymouth",
+          "wins": 9
+        },
+        "racing_reference": {
+          "driver": "Richard Petty",
+          "owner": "Petty Enterprises",
+          "starts": 61,
+          "wins": 9,
+          "makes": {
+            "Plymouth": 61
+          }
+        },
+        "second_team_source": "Petty Enterprises"
+      }
+    },
+    {
+      "year": 1965,
+      "driver_name": "Ned Jarrett",
+      "team": "Bondy Long",
+      "manufacturer": "Ford",
+      "wins_that_season": 13,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/jarrene01/1965/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/jarrene01/1965/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Ned Jarrett",
+          "manufacturer": "Ford",
+          "wins": 13
+        },
+        "racing_reference": {
+          "driver": "Ned Jarrett",
+          "owner": "Bondy Long",
+          "starts": 54,
+          "wins": 13,
+          "makes": {
+            "Ford": 54
+          }
+        },
+        "second_team_source": "Bondy Long"
+      }
+    },
+    {
+      "year": 1966,
+      "driver_name": "David Pearson",
+      "team": "Cotton Owens",
+      "manufacturer": "Dodge",
+      "wins_that_season": null,
+      "points": null,
+      "status": "corrected",
+      "was": {
+        "wins_that_season": 14
+      },
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/pearsda01/1966/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/pearsda01/1966/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "David Pearson",
+          "manufacturer": "Dodge",
+          "wins": 14
+        },
+        "racing_reference": {
+          "driver": "David Pearson",
+          "owner": "Cotton Owens",
+          "starts": 43,
+          "wins": 15,
+          "makes": {
+            "Dodge": 43
+          }
+        },
+        "second_team_source": "Cotton Owens"
+      },
+      "note": "wins_that_season dropped to NULL: nascar.com lists 14 wins; Racing Reference records 15, as does the Cotton Owens Garage site. The league and the reference site disagree, so the count is dropped rather than overriding the league."
+    },
+    {
+      "year": 1967,
+      "driver_name": "Richard Petty",
+      "team": "Petty Enterprises",
+      "manufacturer": "Plymouth",
+      "wins_that_season": 27,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/pettyri01/1967/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/pettyri01/1967/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Richard Petty",
+          "manufacturer": "Plymouth",
+          "wins": 27
+        },
+        "racing_reference": {
+          "driver": "Richard Petty",
+          "owner": "Petty Enterprises",
+          "starts": 48,
+          "wins": 27,
+          "makes": {
+            "Plymouth": 48
+          }
+        },
+        "second_team_source": "Petty Enterprises"
+      }
+    },
+    {
+      "year": 1968,
+      "driver_name": "David Pearson",
+      "team": "Holman-Moody",
+      "manufacturer": "Ford",
+      "wins_that_season": 16,
+      "points": null,
+      "status": "corrected",
+      "was": {
+        "team": "Holman Moody"
+      },
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/pearsda01/1968/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/pearsda01/1968/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "David Pearson",
+          "manufacturer": "Ford",
+          "wins": 16
+        },
+        "racing_reference": {
+          "driver": "David Pearson",
+          "owner": "Holman-Moody",
+          "starts": 48,
+          "wins": 16,
+          "makes": {
+            "Ford": 48
+          }
+        },
+        "second_team_source": "Holman-Moody"
+      },
+      "note": "team corrected from \"Holman Moody\": Racing Reference and Fox Sports both write \"Holman-Moody\"."
+    },
+    {
+      "year": 1969,
+      "driver_name": "David Pearson",
+      "team": "Holman-Moody",
+      "manufacturer": "Ford",
+      "wins_that_season": 11,
+      "points": null,
+      "status": "corrected",
+      "was": {
+        "team": "Holman Moody"
+      },
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/pearsda01/1969/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/pearsda01/1969/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "David Pearson",
+          "manufacturer": "Ford",
+          "wins": 11
+        },
+        "racing_reference": {
+          "driver": "David Pearson",
+          "owner": "Holman-Moody",
+          "starts": 51,
+          "wins": 11,
+          "makes": {
+            "Ford": 51
+          }
+        },
+        "second_team_source": "Holman-Moody"
+      },
+      "note": "team corrected from \"Holman Moody\": Racing Reference and Fox Sports both write \"Holman-Moody\"."
+    },
+    {
+      "year": 1970,
+      "driver_name": "Bobby Isaac",
+      "team": "Nord Krauskopf",
+      "manufacturer": "Dodge",
+      "wins_that_season": 11,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/isaacbo01/1970/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/isaacbo01/1970/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Bobby Isaac",
+          "manufacturer": "Dodge",
+          "wins": 11
+        },
+        "racing_reference": {
+          "driver": "Bobby Isaac",
+          "owner": "Nord Krauskopf",
+          "starts": 47,
+          "wins": 11,
+          "makes": {
+            "Dodge": 47
+          }
+        },
+        "second_team_source": "Nord Krauskopf"
+      }
+    },
+    {
+      "year": 1971,
+      "driver_name": "Richard Petty",
+      "team": "Petty Enterprises",
+      "manufacturer": "Plymouth",
+      "wins_that_season": 21,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/pettyri01/1971/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/pettyri01/1971/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Richard Petty",
+          "manufacturer": "Plymouth",
+          "wins": 21
+        },
+        "racing_reference": {
+          "driver": "Richard Petty",
+          "owner": "Petty Enterprises",
+          "starts": 46,
+          "wins": 21,
+          "makes": {
+            "Plymouth": 46
+          }
+        },
+        "second_team_source": "Petty Enterprises"
+      }
+    },
+    {
+      "year": 1972,
+      "driver_name": "Richard Petty",
+      "team": "Petty Enterprises",
+      "manufacturer": "Plymouth",
+      "wins_that_season": 8,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/pettyri01/1972/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/pettyri01/1972/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Richard Petty",
+          "manufacturer": "Plymouth",
+          "wins": 8
+        },
+        "racing_reference": {
+          "driver": "Richard Petty",
+          "owner": "Petty Enterprises",
+          "starts": 31,
+          "wins": 8,
+          "makes": {
+            "Plymouth": 19,
+            "Dodge": 12
+          }
+        },
+        "second_team_source": "Petty Enterprises"
+      },
+      "note": "Racing Reference shows Plymouth in 19, Dodge in 12 of his starts."
+    },
+    {
+      "year": 1973,
+      "driver_name": "Benny Parsons",
+      "team": "L.G. DeWitt",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 1,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/parsobe01/1973/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/parsobe01/1973/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Benny Parsons",
+          "manufacturer": "Chevrolet",
+          "wins": 1
+        },
+        "racing_reference": {
+          "driver": "Benny Parsons",
+          "owner": "L.G. DeWitt",
+          "starts": 28,
+          "wins": 1,
+          "makes": {
+            "Chevrolet": 27,
+            "Mercury": 1
+          }
+        },
+        "second_team_source": "L.G. DeWitt"
+      },
+      "note": "Racing Reference shows Chevrolet in 27, Mercury in 1 of his starts."
+    },
+    {
+      "year": 1974,
+      "driver_name": "Richard Petty",
+      "team": "Petty Enterprises",
+      "manufacturer": "Dodge",
+      "wins_that_season": 10,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/pettyri01/1974/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/pettyri01/1974/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Richard Petty",
+          "manufacturer": "Dodge",
+          "wins": 10
+        },
+        "racing_reference": {
+          "driver": "Richard Petty",
+          "owner": "Petty Enterprises",
+          "starts": 30,
+          "wins": 10,
+          "makes": {
+            "Dodge": 30
+          }
+        },
+        "second_team_source": "Petty Enterprises"
+      }
+    },
+    {
+      "year": 1975,
+      "driver_name": "Richard Petty",
+      "team": "Petty Enterprises",
+      "manufacturer": "Dodge",
+      "wins_that_season": 13,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/pettyri01/1975/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/pettyri01/1975/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Richard Petty",
+          "manufacturer": "Dodge",
+          "wins": 13
+        },
+        "racing_reference": {
+          "driver": "Richard Petty",
+          "owner": "Petty Enterprises",
+          "starts": 30,
+          "wins": 13,
+          "makes": {
+            "Dodge": 30
+          }
+        },
+        "second_team_source": "Petty Enterprises"
+      }
+    },
+    {
+      "year": 1976,
+      "driver_name": "Cale Yarborough",
+      "team": "Junior Johnson",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 9,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/yarboca01/1976/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/yarboca01/1976/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Cale Yarborough",
+          "manufacturer": "Chevrolet",
+          "wins": 9
+        },
+        "racing_reference": {
+          "driver": "Cale Yarborough",
+          "owner": "Junior Johnson",
+          "starts": 30,
+          "wins": 9,
+          "makes": {
+            "Chevrolet": 30
+          }
+        },
+        "second_team_source": "Junior Johnson & Associates"
+      }
+    },
+    {
+      "year": 1977,
+      "driver_name": "Cale Yarborough",
+      "team": "Junior Johnson",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 9,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/yarboca01/1977/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/yarboca01/1977/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Cale Yarborough",
+          "manufacturer": "Chevrolet",
+          "wins": 9
+        },
+        "racing_reference": {
+          "driver": "Cale Yarborough",
+          "owner": "Junior Johnson",
+          "starts": 30,
+          "wins": 9,
+          "makes": {
+            "Chevrolet": 30
+          }
+        },
+        "second_team_source": "Junior Johnson & Associates"
+      }
+    },
+    {
+      "year": 1978,
+      "driver_name": "Cale Yarborough",
+      "team": "Junior Johnson",
+      "manufacturer": "Oldsmobile",
+      "wins_that_season": 10,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/yarboca01/1978/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/yarboca01/1978/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Cale Yarborough",
+          "manufacturer": "Oldsmobile",
+          "wins": 10
+        },
+        "racing_reference": {
+          "driver": "Cale Yarborough",
+          "owner": "Junior Johnson",
+          "starts": 30,
+          "wins": 10,
+          "makes": {
+            "Oldsmobile": 30
+          }
+        },
+        "second_team_source": "Junior Johnson & Associates"
+      }
+    },
+    {
+      "year": 1979,
+      "driver_name": "Richard Petty",
+      "team": "Petty Enterprises",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 5,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/pettyri01/1979/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/pettyri01/1979/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Richard Petty",
+          "manufacturer": "Chevrolet",
+          "wins": 5
+        },
+        "racing_reference": {
+          "driver": "Richard Petty",
+          "owner": "Petty Enterprises",
+          "starts": 31,
+          "wins": 5,
+          "makes": {
+            "Chevrolet": 24,
+            "Oldsmobile": 7
+          }
+        },
+        "second_team_source": "Petty Enterprises"
+      },
+      "note": "Racing Reference shows Chevrolet in 24, Oldsmobile in 7 of his starts."
+    },
+    {
+      "year": 1980,
+      "driver_name": "Dale Earnhardt",
+      "team": "Rod Osterlund",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 5,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/earnhda01/1980/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/earnhda01/1980/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Dale Earnhardt",
+          "manufacturer": "Chevrolet",
+          "wins": 5
+        },
+        "racing_reference": {
+          "driver": "Dale Earnhardt",
+          "owner": "Rod Osterlund",
+          "starts": 31,
+          "wins": 5,
+          "makes": {
+            "Chevrolet": 27,
+            "Oldsmobile": 4
+          }
+        },
+        "second_team_source": "Osterlund Racing"
+      },
+      "note": "Racing Reference shows Chevrolet in 27, Oldsmobile in 4 of his starts."
+    },
+    {
+      "year": 1981,
+      "driver_name": "Darrell Waltrip",
+      "team": "Junior Johnson",
+      "manufacturer": "Buick",
+      "wins_that_season": 12,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/waltrda01/1981/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/waltrda01/1981/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Darrell Waltrip",
+          "manufacturer": "Buick",
+          "wins": 12
+        },
+        "racing_reference": {
+          "driver": "Darrell Waltrip",
+          "owner": "Junior Johnson",
+          "starts": 31,
+          "wins": 12,
+          "makes": {
+            "Buick": 30,
+            "Chevrolet": 1
+          }
+        },
+        "second_team_source": "Junior Johnson & Associates"
+      },
+      "note": "Racing Reference shows Buick in 30, Chevrolet in 1 of his starts."
+    },
+    {
+      "year": 1982,
+      "driver_name": "Darrell Waltrip",
+      "team": "Junior Johnson",
+      "manufacturer": "Buick",
+      "wins_that_season": 12,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/waltrda01/1982/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/waltrda01/1982/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Darrell Waltrip",
+          "manufacturer": "Buick",
+          "wins": 12
+        },
+        "racing_reference": {
+          "driver": "Darrell Waltrip",
+          "owner": "Junior Johnson",
+          "starts": 30,
+          "wins": 12,
+          "makes": {
+            "Buick": 30
+          }
+        },
+        "second_team_source": "Junior Johnson & Associates"
+      }
+    },
+    {
+      "year": 1983,
+      "driver_name": "Bobby Allison",
+      "team": "Bill Gardner",
+      "manufacturer": "Buick",
+      "wins_that_season": 6,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/allisbo01/1983/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/allisbo01/1983/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Bobby Allison",
+          "manufacturer": "Buick",
+          "wins": 6
+        },
+        "racing_reference": {
+          "driver": "Bobby Allison",
+          "owner": "Bill Gardner",
+          "starts": 30,
+          "wins": 6,
+          "makes": {
+            "Buick": 27,
+            "Chevrolet": 3
+          }
+        },
+        "second_team_source": "DiGard Motorsports"
+      },
+      "note": "Racing Reference shows Buick in 27, Chevrolet in 3 of his starts. DiGard, the team Bill Gardner owned: Racing Reference's table names Bill Gardner, its season page DiGard Racing, Fox Sports DiGard Motorsports."
+    },
+    {
+      "year": 1984,
+      "driver_name": "Terry Labonte",
+      "team": "Billy Hagan",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 2,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/labonte01/1984/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/labonte01/1984/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Terry Labonte",
+          "manufacturer": "Chevrolet",
+          "wins": 2
+        },
+        "racing_reference": {
+          "driver": "Terry Labonte",
+          "owner": "Billy Hagan",
+          "starts": 30,
+          "wins": 2,
+          "makes": {
+            "Chevrolet": 30
+          }
+        },
+        "second_team_source": "Hagan Racing"
+      }
+    },
+    {
+      "year": 1985,
+      "driver_name": "Darrell Waltrip",
+      "team": "Junior Johnson",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 3,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/waltrda01/1985/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/waltrda01/1985/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Darrell Waltrip",
+          "manufacturer": "Chevrolet",
+          "wins": 3
+        },
+        "racing_reference": {
+          "driver": "Darrell Waltrip",
+          "owner": "Junior Johnson",
+          "starts": 28,
+          "wins": 3,
+          "makes": {
+            "Chevrolet": 28
+          }
+        },
+        "second_team_source": "Junior Johnson & Associates"
+      }
+    },
+    {
+      "year": 1986,
+      "driver_name": "Dale Earnhardt",
+      "team": "Richard Childress",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 5,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/earnhda01/1986/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/earnhda01/1986/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Dale Earnhardt",
+          "manufacturer": "Chevrolet",
+          "wins": 5
+        },
+        "racing_reference": {
+          "driver": "Dale Earnhardt",
+          "owner": "Richard Childress",
+          "starts": 29,
+          "wins": 5,
+          "makes": {
+            "Chevrolet": 29
+          }
+        },
+        "second_team_source": "Richard Childress Racing"
+      }
+    },
+    {
+      "year": 1987,
+      "driver_name": "Dale Earnhardt",
+      "team": "Richard Childress",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 11,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/earnhda01/1987/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/earnhda01/1987/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Dale Earnhardt",
+          "manufacturer": "Chevrolet",
+          "wins": 11
+        },
+        "racing_reference": {
+          "driver": "Dale Earnhardt",
+          "owner": "Richard Childress",
+          "starts": 29,
+          "wins": 11,
+          "makes": {
+            "Chevrolet": 29
+          }
+        },
+        "second_team_source": "Richard Childress Racing"
+      }
+    },
+    {
+      "year": 1988,
+      "driver_name": "Bill Elliott",
+      "team": "Harry Melling",
+      "manufacturer": "Ford",
+      "wins_that_season": 6,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/elliobi01/1988/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/elliobi01/1988/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Bill Elliott",
+          "manufacturer": "Ford",
+          "wins": 6
+        },
+        "racing_reference": {
+          "driver": "Bill Elliott",
+          "owner": "Harry Melling",
+          "starts": 29,
+          "wins": 6,
+          "makes": {
+            "Ford": 29
+          }
+        },
+        "second_team_source": "Melling Racing"
+      }
+    },
+    {
+      "year": 1989,
+      "driver_name": "Rusty Wallace",
+      "team": "Raymond Beadle",
+      "manufacturer": "Pontiac",
+      "wins_that_season": 6,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/wallaru01/1989/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/wallaru01/1989/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Rusty Wallace",
+          "manufacturer": "Pontiac",
+          "wins": 6
+        },
+        "racing_reference": {
+          "driver": "Rusty Wallace",
+          "owner": "Raymond Beadle",
+          "starts": 29,
+          "wins": 6,
+          "makes": {
+            "Pontiac": 29
+          }
+        },
+        "second_team_source": "Blue Max Racing"
+      }
+    },
+    {
+      "year": 1990,
+      "driver_name": "Dale Earnhardt",
+      "team": "Richard Childress",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 9,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/earnhda01/1990/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/earnhda01/1990/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Dale Earnhardt",
+          "manufacturer": "Chevrolet",
+          "wins": 9
+        },
+        "racing_reference": {
+          "driver": "Dale Earnhardt",
+          "owner": "Richard Childress",
+          "starts": 29,
+          "wins": 9,
+          "makes": {
+            "Chevrolet": 29
+          }
+        },
+        "second_team_source": "Richard Childress Racing"
+      }
+    },
+    {
+      "year": 1991,
+      "driver_name": "Dale Earnhardt",
+      "team": "Richard Childress",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 4,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/earnhda01/1991/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/earnhda01/1991/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Dale Earnhardt",
+          "manufacturer": "Chevrolet",
+          "wins": 4
+        },
+        "racing_reference": {
+          "driver": "Dale Earnhardt",
+          "owner": "Richard Childress",
+          "starts": 29,
+          "wins": 4,
+          "makes": {
+            "Chevrolet": 29
+          }
+        },
+        "second_team_source": "Richard Childress Racing"
+      }
+    },
+    {
+      "year": 1992,
+      "driver_name": "Alan Kulwicki",
+      "team": "Alan Kulwicki",
+      "manufacturer": "Ford",
+      "wins_that_season": 2,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/kulwial01/1992/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/kulwial01/1992/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Alan Kulwicki",
+          "manufacturer": "Ford",
+          "wins": 2
+        },
+        "racing_reference": {
+          "driver": "Alan Kulwicki",
+          "owner": "Alan Kulwicki",
+          "starts": 29,
+          "wins": 2,
+          "makes": {
+            "Ford": 29
+          }
+        },
+        "second_team_source": "AK Racing"
+      }
+    },
+    {
+      "year": 1993,
+      "driver_name": "Dale Earnhardt",
+      "team": "Richard Childress",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 6,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/earnhda01/1993/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/earnhda01/1993/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Dale Earnhardt",
+          "manufacturer": "Chevrolet",
+          "wins": 6
+        },
+        "racing_reference": {
+          "driver": "Dale Earnhardt",
+          "owner": "Richard Childress",
+          "starts": 30,
+          "wins": 6,
+          "makes": {
+            "Chevrolet": 30
+          }
+        },
+        "second_team_source": "Richard Childress Racing"
+      }
+    },
+    {
+      "year": 1994,
+      "driver_name": "Dale Earnhardt",
+      "team": "Richard Childress",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 4,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/earnhda01/1994/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/earnhda01/1994/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Dale Earnhardt",
+          "manufacturer": "Chevrolet",
+          "wins": 4
+        },
+        "racing_reference": {
+          "driver": "Dale Earnhardt",
+          "owner": "Richard Childress",
+          "starts": 31,
+          "wins": 4,
+          "makes": {
+            "Chevrolet": 31
+          }
+        },
+        "second_team_source": "Richard Childress Racing"
+      }
+    },
+    {
+      "year": 1995,
+      "driver_name": "Jeff Gordon",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 7,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/gordoje01/1995/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/gordoje01/1995/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Jeff Gordon",
+          "manufacturer": "Chevrolet",
+          "wins": 7
+        },
+        "racing_reference": {
+          "driver": "Jeff Gordon",
+          "owner": "Rick Hendrick",
+          "starts": 31,
+          "wins": 7,
+          "makes": {
+            "Chevrolet": 31
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    },
+    {
+      "year": 1996,
+      "driver_name": "Terry Labonte",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 2,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/labonte01/1996/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/labonte01/1996/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Terry Labonte",
+          "manufacturer": "Chevrolet",
+          "wins": 2
+        },
+        "racing_reference": {
+          "driver": "Terry Labonte",
+          "owner": "Rick Hendrick",
+          "starts": 31,
+          "wins": 2,
+          "makes": {
+            "Chevrolet": 31
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    },
+    {
+      "year": 1997,
+      "driver_name": "Jeff Gordon",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 10,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/gordoje01/1997/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/gordoje01/1997/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Jeff Gordon",
+          "manufacturer": "Chevrolet",
+          "wins": 10
+        },
+        "racing_reference": {
+          "driver": "Jeff Gordon",
+          "owner": "Rick Hendrick",
+          "starts": 32,
+          "wins": 10,
+          "makes": {
+            "Chevrolet": 32
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    },
+    {
+      "year": 1998,
+      "driver_name": "Jeff Gordon",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 13,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/gordoje01/1998/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/gordoje01/1998/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Jeff Gordon",
+          "manufacturer": "Chevrolet",
+          "wins": 13
+        },
+        "racing_reference": {
+          "driver": "Jeff Gordon",
+          "owner": "Rick Hendrick",
+          "starts": 33,
+          "wins": 13,
+          "makes": {
+            "Chevrolet": 33
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    },
+    {
+      "year": 1999,
+      "driver_name": "Dale Jarrett",
+      "team": "Robert Yates",
+      "manufacturer": "Ford",
+      "wins_that_season": 4,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/jarreda01/1999/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/jarreda01/1999/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Dale Jarrett",
+          "manufacturer": "Ford",
+          "wins": 4
+        },
+        "racing_reference": {
+          "driver": "Dale Jarrett",
+          "owner": "Robert Yates",
+          "starts": 34,
+          "wins": 4,
+          "makes": {
+            "Ford": 34
+          }
+        },
+        "second_team_source": "Robert Yates Racing"
+      }
+    },
+    {
+      "year": 2000,
+      "driver_name": "Bobby Labonte",
+      "team": "Joe Gibbs",
+      "manufacturer": "Pontiac",
+      "wins_that_season": 4,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/labonbo01/2000/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/labonbo01/2000/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Bobby Labonte",
+          "manufacturer": "Pontiac",
+          "wins": 4
+        },
+        "racing_reference": {
+          "driver": "Bobby Labonte",
+          "owner": "Joe Gibbs",
+          "starts": 34,
+          "wins": 4,
+          "makes": {
+            "Pontiac": 34
+          }
+        },
+        "second_team_source": "Joe Gibbs Racing"
+      }
+    },
+    {
+      "year": 2001,
+      "driver_name": "Jeff Gordon",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 6,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/gordoje01/2001/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/gordoje01/2001/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Jeff Gordon",
+          "manufacturer": "Chevrolet",
+          "wins": 6
+        },
+        "racing_reference": {
+          "driver": "Jeff Gordon",
+          "owner": "Rick Hendrick",
+          "starts": 36,
+          "wins": 6,
+          "makes": {
+            "Chevrolet": 36
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    },
+    {
+      "year": 2002,
+      "driver_name": "Tony Stewart",
+      "team": "Joe Gibbs",
+      "manufacturer": "Pontiac",
+      "wins_that_season": 3,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/stewato01/2002/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/stewato01/2002/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year",
+        "https://www.nascar.com/news-media/2019/04/05/tony-stewart-hall-of-fame-nominee-bio/"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Tony Stewart",
+          "manufacturer": "Pontiac",
+          "wins": 3
+        },
+        "racing_reference": {
+          "driver": "Tony Stewart",
+          "owner": "Joe Gibbs",
+          "starts": 36,
+          "wins": 3,
+          "makes": {
+            "Pontiac": 36
+          }
+        },
+        "second_team_source": "Stewart-Haas Racing"
+      },
+      "note": "Fox Sports lists Stewart-Haas Racing, which did not exist until 2009. Racing Reference names Joe Gibbs as owner, and nascar.com's Hall of Fame nominee bio says Stewart won the 2002 title driving for Joe Gibbs Racing and became a team owner with Gene Haas in 2009."
+    },
+    {
+      "year": 2003,
+      "driver_name": "Matt Kenseth",
+      "team": "Jack Roush",
+      "manufacturer": "Ford",
+      "wins_that_season": 1,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/kensema01/2003/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/kensema01/2003/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Matt Kenseth",
+          "manufacturer": "Ford",
+          "wins": 1
+        },
+        "racing_reference": {
+          "driver": "Matt Kenseth",
+          "owner": "Jack Roush",
+          "starts": 36,
+          "wins": 1,
+          "makes": {
+            "Ford": 36
+          }
+        },
+        "second_team_source": "Roush Racing"
+      }
+    },
+    {
+      "year": 2004,
+      "driver_name": "Kurt Busch",
+      "team": "Jack Roush",
+      "manufacturer": "Ford",
+      "wins_that_season": 3,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/buschku01/2004/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/buschku01/2004/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Kurt Busch",
+          "manufacturer": "Ford",
+          "wins": 3
+        },
+        "racing_reference": {
+          "driver": "Kurt Busch",
+          "owner": "Jack Roush",
+          "starts": 36,
+          "wins": 3,
+          "makes": {
+            "Ford": 36
+          }
+        },
+        "second_team_source": "Roush Racing"
+      }
+    },
+    {
+      "year": 2005,
+      "driver_name": "Tony Stewart",
+      "team": "Joe Gibbs",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 5,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/stewato01/2005/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/stewato01/2005/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year",
+        "https://www.nascar.com/news-media/2019/04/05/tony-stewart-hall-of-fame-nominee-bio/"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Tony Stewart",
+          "manufacturer": "Chevrolet",
+          "wins": 5
+        },
+        "racing_reference": {
+          "driver": "Tony Stewart",
+          "owner": "Joe Gibbs",
+          "starts": 36,
+          "wins": 5,
+          "makes": {
+            "Chevrolet": 36
+          }
+        },
+        "second_team_source": "Stewart-Haas Racing"
+      },
+      "note": "Fox Sports lists Stewart-Haas Racing, which did not exist until 2009. Racing Reference names Joe Gibbs as owner, and nascar.com's Hall of Fame nominee bio places the 2005 title before Stewart became an owner in 2009."
+    },
+    {
+      "year": 2006,
+      "driver_name": "Jimmie Johnson",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 5,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/johnsji01/2006/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/johnsji01/2006/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Jimmie Johnson",
+          "manufacturer": "Chevrolet",
+          "wins": 5
+        },
+        "racing_reference": {
+          "driver": "Jimmie Johnson",
+          "owner": "Rick Hendrick",
+          "starts": 36,
+          "wins": 5,
+          "makes": {
+            "Chevrolet": 36
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    },
+    {
+      "year": 2007,
+      "driver_name": "Jimmie Johnson",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 10,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/johnsji01/2007/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/johnsji01/2007/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Jimmie Johnson",
+          "manufacturer": "Chevrolet",
+          "wins": 10
+        },
+        "racing_reference": {
+          "driver": "Jimmie Johnson",
+          "owner": "Rick Hendrick",
+          "starts": 36,
+          "wins": 10,
+          "makes": {
+            "Chevrolet": 36
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    },
+    {
+      "year": 2008,
+      "driver_name": "Jimmie Johnson",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 7,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/johnsji01/2008/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/johnsji01/2008/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Jimmie Johnson",
+          "manufacturer": "Chevrolet",
+          "wins": 7
+        },
+        "racing_reference": {
+          "driver": "Jimmie Johnson",
+          "owner": "Rick Hendrick",
+          "starts": 36,
+          "wins": 7,
+          "makes": {
+            "Chevrolet": 36
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    },
+    {
+      "year": 2009,
+      "driver_name": "Jimmie Johnson",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 7,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/johnsji01/2009/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/johnsji01/2009/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Jimmie Johnson",
+          "manufacturer": "Chevrolet",
+          "wins": 7
+        },
+        "racing_reference": {
+          "driver": "Jimmie Johnson",
+          "owner": "Rick Hendrick",
+          "starts": 36,
+          "wins": 7,
+          "makes": {
+            "Chevrolet": 36
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    },
+    {
+      "year": 2010,
+      "driver_name": "Jimmie Johnson",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 6,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/johnsji01/2010/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/johnsji01/2010/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Jimmie Johnson",
+          "manufacturer": "Chevrolet",
+          "wins": 6
+        },
+        "racing_reference": {
+          "driver": "Jimmie Johnson",
+          "owner": "Rick Hendrick",
+          "starts": 36,
+          "wins": 6,
+          "makes": {
+            "Chevrolet": 36
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    },
+    {
+      "year": 2011,
+      "driver_name": "Tony Stewart",
+      "team": "Stewart-Haas Racing",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 5,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/stewato01/2011/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/stewato01/2011/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Tony Stewart",
+          "manufacturer": "Chevrolet",
+          "wins": 5
+        },
+        "racing_reference": {
+          "driver": "Tony Stewart",
+          "owner": "Stewart Haas Racing",
+          "starts": 36,
+          "wins": 5,
+          "makes": {
+            "Chevrolet": 36
+          }
+        },
+        "second_team_source": "Stewart-Haas Racing"
+      }
+    },
+    {
+      "year": 2012,
+      "driver_name": "Brad Keselowski",
+      "team": "Roger Penske",
+      "manufacturer": "Dodge",
+      "wins_that_season": 5,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/keselbr01/2012/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/keselbr01/2012/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Brad Keselowski",
+          "manufacturer": "Dodge",
+          "wins": 5
+        },
+        "racing_reference": {
+          "driver": "Brad Keselowski",
+          "owner": "Roger Penske",
+          "starts": 36,
+          "wins": 5,
+          "makes": {
+            "Dodge": 36
+          }
+        },
+        "second_team_source": "Penske Racing"
+      }
+    },
+    {
+      "year": 2013,
+      "driver_name": "Jimmie Johnson",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 6,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/johnsji01/2013/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/johnsji01/2013/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Jimmie Johnson",
+          "manufacturer": "Chevrolet",
+          "wins": 6
+        },
+        "racing_reference": {
+          "driver": "Jimmie Johnson",
+          "owner": "Rick Hendrick",
+          "starts": 36,
+          "wins": 6,
+          "makes": {
+            "Chevrolet": 36
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    },
+    {
+      "year": 2014,
+      "driver_name": "Kevin Harvick",
+      "team": "Stewart-Haas Racing",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 5,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/harvike01/2014/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/harvike01/2014/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Kevin Harvick",
+          "manufacturer": "Chevrolet",
+          "wins": 5
+        },
+        "racing_reference": {
+          "driver": "Kevin Harvick",
+          "owner": "Stewart Haas Racing",
+          "starts": 36,
+          "wins": 5,
+          "makes": {
+            "Chevrolet": 36
+          }
+        },
+        "second_team_source": "Stewart-Haas Racing"
+      }
+    },
+    {
+      "year": 2015,
+      "driver_name": "Kyle Busch",
+      "team": "Joe Gibbs Racing",
+      "manufacturer": "Toyota",
+      "wins_that_season": 5,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/buschky01/2015/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/buschky01/2015/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Kyle Busch",
+          "manufacturer": "Toyota",
+          "wins": 5
+        },
+        "racing_reference": {
+          "driver": "Kyle Busch",
+          "owner": "Joe Gibbs",
+          "starts": 25,
+          "wins": 5,
+          "makes": {
+            "Toyota": 25
+          }
+        },
+        "second_team_source": "Joe Gibbs Racing"
+      }
+    },
+    {
+      "year": 2016,
+      "driver_name": "Jimmie Johnson",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 5,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/johnsji01/2016/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/johnsji01/2016/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Jimmie Johnson",
+          "manufacturer": "Chevrolet",
+          "wins": 5
+        },
+        "racing_reference": {
+          "driver": "Jimmie Johnson",
+          "owner": "Rick Hendrick",
+          "starts": 36,
+          "wins": 5,
+          "makes": {
+            "Chevrolet": 36
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    },
+    {
+      "year": 2017,
+      "driver_name": "Martin Truex Jr.",
+      "team": "Furniture Row",
+      "manufacturer": "Toyota",
+      "wins_that_season": 8,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/truexma02/2017/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/truexma02/2017/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Martin Truex Jr.",
+          "manufacturer": "Toyota",
+          "wins": 8
+        },
+        "racing_reference": {
+          "driver": "Martin Truex Jr.",
+          "owner": "Barney Visser",
+          "starts": 36,
+          "wins": 8,
+          "makes": {
+            "Toyota": 36
+          }
+        },
+        "second_team_source": "Furniture Row Racing"
+      }
+    },
+    {
+      "year": 2018,
+      "driver_name": "Joey Logano",
+      "team": "Team Penske",
+      "manufacturer": "Ford",
+      "wins_that_season": 3,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/loganjo01/2018/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/loganjo01/2018/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Joey Logano",
+          "manufacturer": "Ford",
+          "wins": 3
+        },
+        "racing_reference": {
+          "driver": "Joey Logano",
+          "owner": "Roger Penske",
+          "starts": 36,
+          "wins": 3,
+          "makes": {
+            "Ford": 36
+          }
+        },
+        "second_team_source": "Team Penske"
+      }
+    },
+    {
+      "year": 2019,
+      "driver_name": "Kyle Busch",
+      "team": "Joe Gibbs Racing",
+      "manufacturer": "Toyota",
+      "wins_that_season": 5,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/buschky01/2019/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/buschky01/2019/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Kyle Busch",
+          "manufacturer": "Toyota",
+          "wins": 5
+        },
+        "racing_reference": {
+          "driver": "Kyle Busch",
+          "owner": "Joe Gibbs",
+          "starts": 36,
+          "wins": 5,
+          "makes": {
+            "Toyota": 36
+          }
+        },
+        "second_team_source": "Joe Gibbs Racing"
+      }
+    },
+    {
+      "year": 2020,
+      "driver_name": "Chase Elliott",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 5,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/ellioch01/2020/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/ellioch01/2020/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Chase Elliott",
+          "manufacturer": "Chevrolet",
+          "wins": 5
+        },
+        "racing_reference": {
+          "driver": "Chase Elliott",
+          "owner": "Rick Hendrick",
+          "starts": 36,
+          "wins": 5,
+          "makes": {
+            "Chevrolet": 36
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    },
+    {
+      "year": 2021,
+      "driver_name": "Kyle Larson",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 10,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/larsoky01/2021/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/larsoky01/2021/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Kyle Larson",
+          "manufacturer": "Chevrolet",
+          "wins": 10
+        },
+        "racing_reference": {
+          "driver": "Kyle Larson",
+          "owner": "Rick Hendrick",
+          "starts": 36,
+          "wins": 10,
+          "makes": {
+            "Chevrolet": 36
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    },
+    {
+      "year": 2022,
+      "driver_name": "Joey Logano",
+      "team": "Team Penske",
+      "manufacturer": "Ford",
+      "wins_that_season": 4,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/loganjo01/2022/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/loganjo01/2022/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Joey Logano",
+          "manufacturer": "Ford",
+          "wins": 4
+        },
+        "racing_reference": {
+          "driver": "Joey Logano",
+          "owner": "Roger Penske",
+          "starts": 36,
+          "wins": 4,
+          "makes": {
+            "Ford": 36
+          }
+        },
+        "second_team_source": "Team Penske"
+      }
+    },
+    {
+      "year": 2023,
+      "driver_name": "Ryan Blaney",
+      "team": "Team Penske",
+      "manufacturer": "Ford",
+      "wins_that_season": 3,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2020/08/13/all-time-nascar-cup-series-champions/",
+        "https://www.racing-reference.info/driver-season-stats/blanery01/2023/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/blanery01/2023/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Ryan Blaney",
+          "manufacturer": "Ford",
+          "wins": 3
+        },
+        "racing_reference": {
+          "driver": "Ryan Blaney",
+          "owner": "Roger Penske",
+          "starts": 36,
+          "wins": 3,
+          "makes": {
+            "Ford": 36
+          }
+        },
+        "second_team_source": "Team Penske"
+      }
+    },
+    {
+      "year": 2024,
+      "driver_name": "Joey Logano",
+      "team": "Team Penske",
+      "manufacturer": "Ford",
+      "wins_that_season": 4,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2025/01/03/joey-logano-2024-season-in-review/",
+        "https://www.racing-reference.info/driver-season-stats/loganjo01/2024/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/loganjo01/2024/W",
+        "https://www.foxsports.com/stories/nascar/nascar-champions-complete-list-winners-year"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Joey Logano",
+          "manufacturer": "Ford",
+          "wins": 4
+        },
+        "racing_reference": {
+          "driver": "Joey Logano",
+          "owner": "Roger Penske",
+          "starts": 36,
+          "wins": 4,
+          "makes": {
+            "Ford": 36
+          }
+        },
+        "second_team_source": "Team Penske"
+      }
+    },
+    {
+      "year": 2025,
+      "driver_name": "Kyle Larson",
+      "team": "Rick Hendrick",
+      "manufacturer": "Chevrolet",
+      "wins_that_season": 3,
+      "points": null,
+      "status": "verified",
+      "sources": [
+        "https://www.nascar.com/news-media/2026/01/02/cup-series-2025-kyle-larson-season-in-review/",
+        "https://www.racing-reference.info/driver-season-stats/larsoky01/2025/W"
+      ],
+      "team_sources": [
+        "https://www.racing-reference.info/driver-season-stats/larsoky01/2025/W",
+        "https://www.nascar.com/news-media/2026/01/02/cup-series-2025-kyle-larson-season-in-review/"
+      ],
+      "evidence": {
+        "nascar_com": {
+          "driver": "Kyle Larson",
+          "manufacturer": "Chevrolet",
+          "wins": 3
+        },
+        "racing_reference": {
+          "driver": "Kyle Larson",
+          "owner": "Rick Hendrick",
+          "starts": 36,
+          "wins": 3,
+          "makes": {
+            "Chevrolet": 36
+          }
+        },
+        "second_team_source": "Hendrick Motorsports"
+      }
+    }
+  ]
+}

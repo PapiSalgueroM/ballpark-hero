@@ -1,4 +1,4 @@
-import { useState, ReactNode } from 'react';
+import { useState, useRef, ReactNode } from 'react';
 import { HelpCircle } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { cn } from '@/lib/utils';
@@ -42,6 +42,7 @@ export function HowToPlayPopover({
   className,
 }: HowToPlayPopoverProps) {
   const [internalOpen, setInternalOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
   const isControlled = open !== undefined;
   const isOpen = isControlled ? open : internalOpen;
   const setOpen = isControlled ? (onOpenChange ?? (() => {})) : setInternalOpen;
@@ -49,6 +50,7 @@ export function HowToPlayPopover({
   return (
     <>
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen(true)}
         aria-label={triggerLabel}
@@ -62,7 +64,13 @@ export function HowToPlayPopover({
       </button>
 
       <Dialog open={isOpen} onOpenChange={setOpen}>
-        <DialogContent className="max-w-md bg-card border-border text-foreground max-h-[85vh] overflow-y-auto">
+        <DialogContent
+          className="max-w-md bg-card border-border text-foreground max-h-[85vh] overflow-y-auto"
+          onCloseAutoFocus={event => {
+            event.preventDefault();
+            triggerRef.current?.focus();
+          }}
+        >
           <DialogHeader>
             <DialogTitle className="text-2xl font-display text-primary text-center">
               {title}

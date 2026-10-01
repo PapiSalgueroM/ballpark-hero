@@ -45,6 +45,10 @@ export const SEO_META: Record<string, SeoMeta> = {
     title: 'Who Am I? Guess the Secret Soccer Player Game',
     description: 'Name any footballer and get a similarity score from 0 to 100 against the secret player, with clues on club, nation, position, age and value. Free soccer game.',
   },
+  '/manager-hot-seat': {
+    title: 'Manager Hot Seat: Save Your Job Football Game',
+    description: 'Take over a real club on a bad run. Five league games, one points target, and a board ready to sack you. Pick the shape and the talk. Free football game.',
+  },
   '/club-manager': {
     title: 'Club Manager: Free Football Management Game',
     description: 'Manage any of 330 real clubs across 20 leagues, today or in a real past season. Transfers, tactics, the board and the sack race. Free soccer management sim.',
@@ -60,6 +64,10 @@ export const SEO_META: Record<string, SeoMeta> = {
   '/wonderkid-factory': {
     title: 'Wonderkid Factory: Idle Soccer Academy Game',
     description: 'Scout generated kids, coach them toward hidden ceilings and sell each one at the perfect moment. A free idle football academy game with no real players.',
+  },
+  '/contract-chaos': {
+    title: 'Contract Chaos: Soccer Agent Contract Game',
+    description: 'Be the agent for a generated footballer. Compare wages, role, bonuses and release clauses, sign one deal and watch five seasons play out. Free soccer game.',
   },
   '/world-xi': {
     title: 'World XI: International Soccer Squad Quiz',
